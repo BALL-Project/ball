@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.21 2004/10/15 14:09:20 amoll Exp $
+// $Id: molecularStructure.h,v 1.22 2004/11/27 22:14:06 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -47,6 +47,7 @@ namespace BALL
 
 	namespace VIEW
 	{
+		class FDPBDialog;
 
 		/**	MolecularStructure provides means to modify molecular structures and do
 		 		several calculations. To do so, it contains the AMBER and CHARMM forcefields and
@@ -256,6 +257,9 @@ namespace BALL
 				
 			/// Show a dialog to setup the currently selected force field
 			void setupForceField();
+
+			///
+			void calculateFDPB();
 				
 			//@}
 			
@@ -282,7 +286,8 @@ namespace BALL
 			Index	charmm_ff_id_;
 			Index setup_ff_;
 			Index calculate_ramachandran_;
-			
+			Index menu_FPDB_;
+
 			bool use_amber_;
 
 			AmberFF 										amber_;
@@ -291,6 +296,7 @@ namespace BALL
 			CharmmConfigurationDialog 	charmm_dialog_;
 			MinimizationDialog 					minimization_dialog_;
 			MolecularDynamicsDialog 		md_dialog_;
+			FDPBDialog* 								fdpb_dialog_;
 		};
 
 	} // namespace VIEW

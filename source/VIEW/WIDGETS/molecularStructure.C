@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.72 2004/11/27 11:37:57 amoll Exp $
+// $Id: molecularStructure.C,v 1.73 2004/11/27 22:13:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
+#include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -48,7 +49,8 @@ namespace BALL
 				amber_dialog_(this),
 				charmm_dialog_(this),
 				minimization_dialog_(this),
-				md_dialog_(this)
+				md_dialog_(this),
+				fdpb_dialog_(0)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "New MolecularStructure " << this << std::endl;
@@ -139,6 +141,10 @@ namespace BALL
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 
+			hint = "Calculate the Electrostatics with FDPB, if one System selected.";
+			menu_FPDB_ = insertMenuEntry(MainControl::TOOLS , "FDPB Electrostatics", this, 
+																		SLOT(calculateFDPB()), 0, -1, hint);
+				
 			hint = "Create a grid with the distance to the geometric center of a structure.";
 			create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS, 
 																					"&Distance Grid", this, SLOT(createGridFromDistance()), 0, -1, hint);   
@@ -1348,6 +1354,16 @@ namespace BALL
 			msg->setData(*rd);
 			msg->setCompositeName(protein->getName() + " Ramachandran Plot");
 			notify_(msg);
+		}
+
+		void MolecularStructure::calculateFDPB()
+		{
+			if (fdpb_dialog_ == 0)
+			{
+				fdpb_dialog_ = new FDPBDialog(this, "FDPBDialog");
+			}
+
+			fdpb_dialog_->show();
 		}
 
 	} // namespace VIEW
