@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.14 2001/07/07 19:32:44 amoll Exp $
+// $Id: regularData1D.h,v 1.15 2001/07/09 22:06:28 amoll Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -122,14 +122,11 @@ namespace BALL
 		double getUpperBound() const
 			throw();
 
-		/**	Set the upper bound
+		/**	Set the boundaries.
+				If the values for upper and lower boundary dont match, the
+				values are swapped.
 		*/
-		void setUpperBound(double upper)
-			throw();
-
-		/**	Set the lower bound
-		*/
-		void setLowerBound(double lower)
+		void setBoundaries(double lower, double upper)	
 			throw();
 
 		/**	Resize the data.
@@ -320,20 +317,20 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	void TRegularData1D<T>::setLowerBound(double lower)
+	void TRegularData1D<T>::setBoundaries(double lower, double upper)
 		throw()
 	{
+		if (lower > upper)
+		{
+			double temp(lower);
+			lower = upper;
+			upper = temp;
+		}
+		
 		lower_ = lower;
-	}
-	
-	template <typename T>
-	BALL_INLINE
-	void TRegularData1D<T>::setUpperBound(double upper)
-		throw()
-	{
 		upper_ = upper;
 	}
-	
+
 	template <typename T>
 	void TRegularData1D<T>::resize(Size new_size)
 		throw()
@@ -406,6 +403,11 @@ namespace BALL
 			// ...there's nothing to do: a resize was requested
 			data_.resize(new_size);
 			return;
+		}
+		
+		if (lower > upper)
+		{
+			swap(lower, upper);
 		}
 		
 		// if the new boundaries and the old boundaries do not overlap,
