@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Atom_test.C,v 1.12 2002/12/12 11:34:39 oliver Exp $
+// $Id: Atom_test.C,v 1.13 2003/01/15 10:51:35 anhi Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -14,7 +14,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.12 2002/12/12 11:34:39 oliver Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.13 2003/01/15 10:51:35 anhi Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -194,6 +194,7 @@ CHECK(create(bool))
 	TEST_EQUAL(atom2->getType(), atom->getType())
 	TEST_EQUAL(atom2->countBonds(), atom->countBonds())
 	TEST_NOT_EQUAL(atom2->getHandle(), atom->getHandle())
+	//TEST_NOT_EQUAL(atom2->getAttributePtr(), atom->getAttributePtr())
 RESULT
 
 CHECK(destroy())
@@ -223,6 +224,8 @@ CHECK(set(Atom&))
 	TEST_EQUAL(atom2->getType(), atom->getType())
 	TEST_EQUAL(atom2->countBonds(), atom->countBonds())
 	TEST_NOT_EQUAL(atom2->getHandle(), atom->getHandle())
+	TEST_NOT_EQUAL(atom2->getAttributePtr(), atom->getAttributePtr())
+	//TEST_NOT_EQUAL(atom2->getAttributePtr()->ptr, atom->getAttributePtr()->ptr)
 RESULT
 
 CHECK(operator = (Atom&))
@@ -238,6 +241,8 @@ CHECK(operator = (Atom&))
 	TEST_EQUAL(atom2->getType(), atom->getType())
 	TEST_EQUAL(atom2->countBonds(), atom->countBonds())
 	TEST_NOT_EQUAL(atom2->getHandle(), atom->getHandle())
+	TEST_NOT_EQUAL(atom2->getAttributePtr(), atom->getAttributePtr())
+	TEST_NOT_EQUAL(atom2->getAttributePtr()->ptr, atom->getAttributePtr()->ptr)
 RESULT
 
 CHECK(get(Atom&))
@@ -253,6 +258,8 @@ CHECK(get(Atom&))
 	TEST_EQUAL(atom2->getType(), atom->getType())
 	TEST_EQUAL(atom2->countBonds(), atom->countBonds())
 	TEST_NOT_EQUAL(atom2->getHandle(), atom->getHandle())
+	TEST_NOT_EQUAL(atom2->getAttributePtr(), atom->getAttributePtr())
+	//TEST_NOT_EQUAL(atom2->getAttributePtr()->ptr, atom->getAttributePtr()->ptr)
 RESULT
 
 
