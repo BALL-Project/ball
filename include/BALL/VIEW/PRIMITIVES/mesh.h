@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.4 2003/09/04 23:14:13 amoll Exp $
+// $Id: mesh.h,v 1.5 2003/11/29 15:56:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
@@ -41,33 +41,15 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new mesh.
 					The properties of this mesh are set to:
   				  - color - to the color black
-					\par
-					\return      Mesh new constructed mesh
-					\see         GeometricObject
-					\see         Surface
 			*/
 			Mesh()
 				throw();
 
-			/** Copy constructor with cloning facility.
-					\see         GeometricObject
-					\see         Surface
+			/** Copy constructor 
 			*/
 			Mesh(const Mesh& mesh)
-				throw();
-
-			/** Copy constructor from geometricObject.
-					Construct new mesh by copying the internal values from geometricObject 
-					<b> geometric_object</b>.
-					\param       geometric_object the geometricObject which internal value should be copied
-					\return      Mesh new constructed mesh initialized from <b> geometric_object</b>
-					\see         GeometricObject
-					\see         Surface
-			*/
-			Mesh(const GeometricObject& geometric_object)
 				throw();
 
 			//@}
@@ -75,14 +57,12 @@ namespace BALL
 			//@{
 
 			/** Destructor.
-					Default destruction of this mesh.
 			*/
 			virtual ~Mesh()
 				throw();
 
 			/** Explicit default initialization.
 					Calls GeometricObject::clear
-					\see  GeometricObject::clear
 			*/
 			virtual void clear()
 				throw();
@@ -93,8 +73,6 @@ namespace BALL
 			//@{
 
 			/** Assignment.
-					\param       mesh the mesh to be copied
-					\see         Mesh
 			*/
 			void set(const Mesh& mesh)
 				throw();
@@ -118,13 +96,7 @@ namespace BALL
 			//@{
 
 			/** Internal state and consistency self-validation.
-					Initiate self-validation of the internal state and data structure consistencies
-					of this mesh.
-					If the internal state of this mesh is correct (self-validated) and 
-					consistent <tt> true</tt> is returned, <tt> false</tt> otherwise. 
 					Calls GeometricObject::isValid.
-					\return			bool <tt> true</tt> if the internal state of this mesh is correct (self-validated) and consistent, <tt> false</tt> otherwise
-					\see        GeometricObject::isValid
 			*/
 			virtual bool isValid() const
 				throw();
@@ -135,7 +107,6 @@ namespace BALL
 					Calls GeometricObject::dump.
 					\param   s output stream where to output the value of this mesh
 					\param   depth the dumping depth
-					\see     GeometricObject::dump
 			*/
 			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
 				throw();

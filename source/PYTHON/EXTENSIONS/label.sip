@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.sip,v 1.1 2003/11/24 22:46:31 amoll Exp $
+// $Id: label.sip,v 1.2 2003/11/29 15:53:35 amoll Exp $
 //
 
 class Label 
@@ -17,7 +17,6 @@ class Label
 //  void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 //  const Label& operator = (const Label& label) throw();
   Label() throw();
-  Label(const GeometricObject&) throw();
   Label(const Label&) throw();
   String getText() const throw();
   String getTypeName() const throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.C,v 1.4 2003/08/29 15:38:00 amoll Exp $
+// $Id: mesh.C,v 1.5 2003/11/29 15:56:13 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 
@@ -26,14 +26,6 @@ namespace BALL
 			:	GeometricObject(mesh),
 				Surface(mesh),
 				colorList(mesh.colorList)
-		{
-		}
-
-		Mesh::Mesh(const GeometricObject& geometric_object)
-			throw()
-			:	GeometricObject(geometric_object),
-				Surface(),
-				colorList()
 		{
 		}
 

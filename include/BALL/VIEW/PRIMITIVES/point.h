@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.h,v 1.5 2003/09/04 23:14:13 amoll Exp $
+// $Id: point.h,v 1.6 2003/11/29 15:57:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIVES_POINT_H
@@ -42,14 +42,10 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new point.
 					The properties of this point are set to:
   				  - color - to the color black
 		  			- vertex - to the vector (0,0,0)
 					\par
-					\return      Point new constructed point
-					\see         GeometricObject
-					\see         Vertex
 			*/
 			Point()
 				throw();
@@ -64,7 +60,6 @@ namespace BALL
 			//@{
 
 			/** Destructor.
-					Default destruction of this point.
 			*/
 			virtual ~Point()
 				throw();
@@ -72,8 +67,6 @@ namespace BALL
 			/** Explicit default initialization.
 					Calls GeometricObject::clear
 					Calls Vertex::clear
-					\see  GeometricObject::clear
-					\see  Vertex::clear
 			*/
 			virtual void clear()
 				throw();
@@ -106,16 +99,6 @@ namespace BALL
 			//@{
 
 			/** Internal state and consistency self-validation.
-					Initiate self-validation of the internal state and data structure consistencies
-					of this point.
-					If the internal state of this point is correct (self-validated) and 
-					consistent <tt> true</tt> is returned, <tt> false</tt> otherwise. 
-					Calls GeometricObject::isValid.
-					Calls Vertex::isValid.
-					\return			bool <tt> true</tt> if the internal state of this point is correct 
-											(self-validated) and consistent, <tt> false</tt> otherwise
-					\see        GeometricObject::isValid
-					\see        Vertex::isValid
 			*/
 			virtual bool isValid() const
 				throw();

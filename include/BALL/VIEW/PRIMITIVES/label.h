@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.5 2003/09/04 23:14:13 amoll Exp $
+// $Id: label.h,v 1.6 2003/11/29 15:52:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
@@ -65,13 +65,6 @@ namespace BALL
 					\see         Vertex
 			*/
 			Label(const Label& label)
-				throw();
-
-			/** Copy constructor from geometricObject.
-					\see         GeometricObject
-					\see         Vertex
-			*/
-			Label(const GeometricObject& geometric_object)
 				throw();
 
 			//@}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.sip,v 1.1 2003/11/24 22:46:32 amoll Exp $
+// $Id: mesh.sip,v 1.2 2003/11/29 15:56:43 amoll Exp $
 //
 
 class Mesh 
@@ -17,7 +17,6 @@ class Mesh
 //  void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 //  const Mesh& operator = (const Mesh& mesh) throw();
   Mesh() throw();
-  Mesh(const GeometricObject&) throw();
   Mesh(const Mesh&) throw();
   bool isValid() const throw();
   void clear() throw();
