@@ -1,6 +1,7 @@
-// $Id: DCDFile.C,v 1.1 2000/12/15 17:18:37 anker Exp $
+// $Id: DCDFile.C,v 1.2 2000/12/19 13:29:01 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
+#include <BALL/MOLMEC/COMMON/snapShot.h>
 
 namespace BALL
 {
@@ -209,58 +210,19 @@ namespace BALL
 	}
 
 
-	bool DCDFile::updateHeader(const SnapShotManager& /* manager */)
+	bool DCDFile::updateHeader(const SnapShotManager& manager)
 		throw()
 	{
 		// BAUSTELLE
-		header_.number_of_coordinate_sets = manager.getSnapshotCounter();
+		header_.number_of_coordinate_sets = manager.getNumberOfSnapShots();
+		return true;
 	}
 
 
 	bool DCDFile::writeHeader()
 		throw()
 	{
-		// create a large buffer to work with and some local temp vars
-		char* buffer = new char[200];
-		char title1[80];
-		int tmp_int;
-
-		// now build the first header block
-		tmp_int = 84;
-		std::memcpy(buffer, &tmp_int, 4);
-		std::memcpy(buffer + 92, &tmp_int, 4);
-		*(buffer + 4) = 'C';
-		*(buffer + 5) = 'O';
-		*(buffer + 6) = 'R';
-		*(buffer + 7) = 'D';
-		std::memcpy(buffer + 8, &header_.number_of_coordinate_sets, 4);
-		std::memcpy(buffer + 12, &header_.step_number_of_starting_time, 4);
-		std::memcpy(buffer + 16, &header_.steps_between_saves, 4);
-		std::memcpy(buffer + 44, &header_.time_step_length, 8);
-
-		// ... and write it
-		File::write(buffer, 96);
-
-		// now build the second header block
-		// Lets use two title records
-		tmp_int = 164;
-		std::memcpy(buffer, &tmp_int, 4);
-		std::memcpy(buffer + 168, &tmp_int, 4);
-		tmp_int = 2;
-		std::memcpy(buffer + 4, &tmp_int, 4);
-		std::memcpy(buffer + 8, &title1, 80);
-		std::memcpy(buffer + 88, &title1, 80);
-
-		File::write(buffer, 172);
-
-		// now the last block containing the number of atoms
-		tmp_int = 4;
-		std::memcpy(buffer, &tmp_int, 4);
-		std::memcpy(buffer + 4, &header_.number_of_atoms, 4);
-		std::memcpy(buffer + 8, &tmp_int, 4);
-
-		File::write(buffer, 12);
-
+		*this << BinaryFileAdaptor<struct DCDHeader>(header_);
 		return true;
 	}
 
@@ -274,30 +236,45 @@ namespace BALL
 
 
 	bool DCDFile::write(const SnapShotManager& /* manager */)
-		throw()
+		throw(Exception::NotImplemented)
 	{
+		throw Exception::NotImplemented(__FILE__, __LINE__);
 		return false;
 	}
 
 
-	bool DCDFile::append(const SnapShotManager& /* manager */)
+	bool DCDFile::append(const SnapShot& snapshot)
 		throw()
 	{
-		return false;
-	}
+		Size noa = snapshot.getNumberOfAtoms();
+		vector<Vector3> positions = snapshot.getAtomPositions();
+		if (positions.size() == 0)
+		{
+			Log.error() << "DCDFile::append(): "
+				<< "No atom positions available" << endl;
+			return false;
+		}
 
+		*this << BinaryFileAdaptor<Size>(4*noa);
+		for (Size atom = 0; atom < noa; ++atom)
+		{
+			*this << BinaryFileAdaptor<DoubleReal>(positions[atom].x);
+		}
+		*this << BinaryFileAdaptor<Size>(4*noa);
+		*this << BinaryFileAdaptor<Size>(4*noa);
+		for (Size atom = 0; atom < noa; ++atom)
+		{
+			*this << BinaryFileAdaptor<DoubleReal>(positions[atom].y);
+		}
+		*this << BinaryFileAdaptor<Size>(4*noa);
+		*this << BinaryFileAdaptor<Size>(4*noa);
+		for (Size atom = 0; atom < noa; ++atom)
+		{
+			*this << BinaryFileAdaptor<DoubleReal>(positions[atom].z);
+		}
+		*this << BinaryFileAdaptor<Size>(4*noa);
 
-	bool DCDFile::append(const std::vector<SnapShot>& /* buffer */)
-		throw()
-	{
-		return false;
-	}
-
-
-	int swapFourBytes(int x)
-	{
-		// BAUSTELLE
-		return x;
+		return true;
 	}
 
 } // namespace BALL
