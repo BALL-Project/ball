@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.C,v 1.1.2.11 2002/10/17 09:36:38 anker Exp $
+// $Id: fresnoDesolvation.C,v 1.1.2.12 2002/10/22 13:47:25 anker Exp $
 // Molecular Mechanics: Fresno force field, desolvation component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -303,8 +303,10 @@ namespace BALL
 
 				// insert our candidates into the system
 				system.clear();
-				system.insert(*((Molecule*)(protein.create(true))));
-				system.insert(*((Molecule*)(ligand.create(true))));
+				Molecule tmp_ligand(*((Molecule*)(ligand.create(true))));
+				Molecule tmp_protein(*((Molecule*)(protein.create(true))));
+				system.insert(tmp_protein);
+				system.insert(tmp_ligand);
 
 				// calculate the bounding box and make sure we alswayz use the same
 				// grid.
@@ -314,7 +316,7 @@ namespace BALL
 				fdpb_.options.setVector(FDPB::Option::BOUNDING_BOX_UPPER,
 						bb_proc.getUpper());
 
-				result = computeFullCycle_(system, protein, ligand, tmp_energy);
+				result = computeFullCycle_(system, tmp_protein, tmp_ligand, tmp_energy);
 				if (result == false) return false;
 
 				energy_ = tmp_energy;
@@ -634,9 +636,19 @@ namespace BALL
 		for (it = ligand.beginAtom(); +it; ++it)
 		{
 			if (radii.has(&*it)) it->setRadius(radii[&*it]);
-			else Log.error() << "Kapodd" << endl;
+			else 
+			{
+				Log.error() << "Lost radius of ligand atom pointer "
+					<< &*it << ", aborting." << endl;
+				return false;
+			}
 			if (charges.has(&*it)) it->setCharge(charges[&*it]);
-			else Log.error() << "Kapodd" << endl;
+			else 
+			{
+				Log.error() << "Lost charge of ligand atom pointer "
+					<< &*it << ", aborting." << endl;
+				return false;
+			}
 		}
 		result = computeESEnergy_(system, dGes_B);
 		if (result == false) return false;
@@ -649,9 +661,19 @@ namespace BALL
 		for (it = protein.beginAtom(); +it; ++it)
 		{
 			if (radii.has(&*it)) it->setRadius(radii[&*it]);
-			else Log.error() << "Kapodd" << endl;
+			else 
+			{
+				Log.error() << "Lost radius of protein atom pointer "
+					<< &*it << ", aborting." << endl;
+				return false;
+			}
 			if (charges.has(&*it)) it->setCharge(charges[&*it]);
-			else Log.error() << "Kapodd" << endl;
+			else 
+			{
+				Log.error() << "Lost charge of protein atom pointer "
+					<< &*it << ", aborting." << endl;
+				return false;
+			}
 		}
 		ligand.apply(clear_charges);
 		// ligand radii should be correct
@@ -661,7 +683,12 @@ namespace BALL
 		for (it = ligand.beginAtom(); +it; ++it)
 		{
 			if (charges.has(&*it)) it->setCharge(charges[&*it]);
-			else Log.error() << "Kapodd" << endl;
+			else 
+			{
+				Log.error() << "Lost charge of ligand atom pointer "
+					<< &*it << ", aborting." << endl;
+				return false;
+			}
 		}
 		dGint_AB = computeESInteractionEnergy_(ligand);
 
@@ -676,7 +703,12 @@ namespace BALL
 		for (it = ligand.beginAtom(); +it; ++it)
 		{
 			if (charges.has(&*it)) it->setCharge(charges[&*it]);
-			else Log.error() << "Kapodd" << endl;
+			else 
+			{
+				Log.error() << "Lost charge of ligand atom pointer "
+					<< &*it << ", aborting." << endl;
+				return false;
+			}
 		}
 		// ligand radii should be correct.
 		result = computeESEnergy_(system, dGes_B_cav_A);
@@ -685,7 +717,12 @@ namespace BALL
 		for (it = protein.beginAtom(); +it; ++it)
 		{
 			if (charges.has(&*it)) it->setCharge(charges[&*it]);
-			else Log.error() << "Kapodd" << endl;
+			else 
+			{
+				Log.error() << "Lost charge of protein atom pointer "
+					<< &*it << ", aborting." << endl;
+				return false;
+			}
 		}
 		dGint_BA = computeESInteractionEnergy_(protein);
 
@@ -701,13 +738,24 @@ namespace BALL
 		Log.info() << "ddGsolv = " << ddGsolv << endl;
 		// /DEBUG
 
+		// restore radii and charges of the whole system for further usage
 		it = system.beginAtom();
 		for (; +it; ++it)
 		{
 			if (radii.has(&*it)) it->setRadius(radii[&*it]);
-			else Log.error() << "Kapodd" << endl;
+			else 
+			{
+				Log.error() << "Lost radius of system atom pointer "
+					<< &*it << ", aborting." << endl;
+				return false;
+			}
 			if (charges.has(&*it)) it->setCharge(charges[&*it]);
-			else Log.error() << "Kapodd" << endl;
+			else 
+			{
+				Log.error() << "Lost charge of system atom pointer "
+					<< &*it << ", aborting." << endl;
+				return false;
+			}
 		}
 
 		energy = ddGsolv;
