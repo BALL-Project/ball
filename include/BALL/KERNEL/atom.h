@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.43.4.1 2002/02/27 00:32:48 oliver Exp $
+// $Id: atom.h,v 1.43.4.2 2002/05/31 22:41:26 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -1080,7 +1080,8 @@ namespace BALL
 
 		
 		///
-		typedef std::vector<StaticAtomAttributes> AtomAttributeVector;
+		typedef std::vector<StaticAtomAttributes> AttributeVector;
+
 		///
 		typedef std::list<Position> AtomIndexList;
 			
@@ -1093,11 +1094,14 @@ namespace BALL
 
 		/** Access to the static attribute array
 		*/
-		static AtomAttributeVector& getAttributes();
+		static AttributeVector& getAttributes();
 
 		/** Return the index in the static attribute array
 		*/
 		Position getIndex() const;
+
+		StaticAtomAttributes* getAttributePtr();
+		const StaticAtomAttributes* getAttributePtr() const;
 		//@}
 
 
@@ -1106,8 +1110,12 @@ namespace BALL
 		/**	@name Attributes
 		*/
 		//@{
-		static AtomAttributeVector	static_attributes_;
-		static AtomIndexList				free_list_;
+
+		///
+		static AttributeVector	static_attributes_;
+
+		///
+		static AtomIndexList		free_list_;
 
 		///
 		Position				index_;
