@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TextPersistenceManager_test.C,v 1.13 2004/11/02 14:04:22 amoll Exp $
+// $Id: TextPersistenceManager_test.C,v 1.14 2004/11/03 13:53:48 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,10 +12,11 @@
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/HINFile.h>
+#include <BALL/KERNEL/bond.h>
 
 ///////////////////////////
 
-START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.13 2004/11/02 14:04:22 amoll Exp $")
+START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.14 2004/11/03 13:53:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -654,10 +655,24 @@ CHECK([EXTRA] full_test)
 	is.close();
 
 	TEST_EQUAL(s.countAtoms(), s2->countAtoms())
+	AtomIterator ai = s.beginAtom();
+	AtomIterator ai2 = s2->beginAtom();
+	for (; +ai; ai++, ai2++)
+	{
+		TEST_EQUAL((*ai).getPosition(), (*ai2).getPosition())
+		TEST_EQUAL((*ai).getFullName(), (*ai2).getFullName())
+		TEST_EQUAL((*ai).getType(), 		(*ai2).getType())
+		TEST_EQUAL((*ai).getTypeName(), (*ai2).getTypeName())
+		TEST_EQUAL((*ai).getVelocity(), (*ai2).getVelocity())
+		TEST_EQUAL((*ai).getForce(), 		(*ai2).getForce())
+		TEST_EQUAL((*ai2).isValid(), 		true)
+	}
+
 	delete s2;
 RESULT
 
 
+// this time with bonds
 CHECK([Extra] full_test2)
 	String filename;
 	HINFile hin("data/AlaGlySer.hin");
@@ -677,6 +692,37 @@ CHECK([Extra] full_test2)
 
 	TEST_EQUAL(s.countAtoms(), s2->countAtoms())
 	TEST_EQUAL(s.countBonds(), s2->countBonds())
+
+	AtomIterator ai = s.beginAtom();
+	AtomIterator ai2 = s2->beginAtom();
+	for (; +ai; ai++, ai2++)
+	{
+		TEST_EQUAL((*ai).getPosition(), (*ai2).getPosition())
+		TEST_EQUAL((*ai).getFullName(), (*ai2).getFullName())
+		TEST_EQUAL((*ai).getType(), 		(*ai2).getType())
+		TEST_EQUAL((*ai).getTypeName(), (*ai2).getTypeName())
+		TEST_EQUAL((*ai).getVelocity(), (*ai2).getVelocity())
+		TEST_EQUAL((*ai).getForce(), 		(*ai2).getForce())
+		TEST_EQUAL((*ai2).isValid(), 		true)
+
+		// sometimes bonds get switched
+		for (Position p = 0; p < (*ai).countBonds(); p++)
+		{
+			if ((*ai ).getBond(p)->getFirstAtom()->getFullName() ==
+					(*ai2).getBond(p)->getFirstAtom()->getFullName())
+			{
+				TEST_EQUAL((*ai).getBond(p)->getFirstAtom()->getFullName(), 	(*ai2).getBond(p)->getFirstAtom()->getFullName())
+				TEST_EQUAL((*ai).getBond(p)->getSecondAtom()->getFullName(), 	(*ai2).getBond(p)->getSecondAtom()->getFullName())
+			}
+			else
+			{
+				TEST_EQUAL((*ai).getBond(p)->getFirstAtom()->getFullName(), 	(*ai2).getBond(p)->getSecondAtom()->getFullName())
+				TEST_EQUAL((*ai).getBond(p)->getSecondAtom()->getFullName(), 	(*ai2).getBond(p)->getFirstAtom()->getFullName())
+			}
+		}
+	}
+
+ 	delete s2;
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager_test.C,v 1.16 2004/11/02 14:00:08 amoll Exp $
+// $Id: XDRPersistenceManager_test.C,v 1.17 2004/11/03 13:55:14 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.16 2004/11/02 14:00:08 amoll Exp $")
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.17 2004/11/03 13:55:14 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -475,28 +475,9 @@ CHECK([Extra] full_test1)
 	TEST_EQUAL(s1.countAtoms(), s2->countAtoms())
 	delete s2;
 RESULT
-	
-CHECK([Extra] full_test2)
-	String filename;
-	HINFile hin("data/AlaGlySer.hin");
-	System s;
-	hin >> s;
 
-	NEW_TMP_FILE(filename);
-	ofstream os(filename.c_str(), std::ios::out | std::ios::binary);
-	XDRPersistenceManager pm(os);
-	s >> pm;
-	os.close();
 
-	ifstream is(filename.c_str(), std::ios::in);
-	XDRPersistenceManager pm2(is);
-	System* s2 = (System*) pm2.readObject();
-	is.close();
-
-	TEST_EQUAL(s.countAtoms(), s2->countAtoms())
-RESULT
-
-CHECK([Extra] full_test3)
+CHECK([EXTRA] full_test2)
 	String filename;
 	PDBFile in("data/bpti.pdb");
 	System s;
@@ -514,7 +495,74 @@ CHECK([Extra] full_test3)
 	is.close();
 
 	TEST_EQUAL(s.countAtoms(), s2->countAtoms())
+	AtomIterator ai = s.beginAtom();
+	AtomIterator ai2 = s2->beginAtom();
+	for (; +ai; ai++, ai2++)
+	{
+		TEST_EQUAL((*ai).getPosition(), (*ai2).getPosition())
+		TEST_EQUAL((*ai).getFullName(), (*ai2).getFullName())
+		TEST_EQUAL((*ai).getType(), 		(*ai2).getType())
+		TEST_EQUAL((*ai).getTypeName(), (*ai2).getTypeName())
+		TEST_EQUAL((*ai).getVelocity(), (*ai2).getVelocity())
+		TEST_EQUAL((*ai).getForce(), 		(*ai2).getForce())
+		TEST_EQUAL((*ai2).isValid(), 		true)
+	}
+
 	delete s2;
+RESULT
+
+
+// this time with bonds
+CHECK([Extra] full_test3)
+	String filename;
+	HINFile hin("data/AlaGlySer.hin");
+	System s;
+	hin >> s;
+
+	NEW_TMP_FILE(filename);
+	ofstream os(filename.c_str(), std::ios::out | std::ios::binary);
+	XDRPersistenceManager pm(os);
+	s >> pm;
+	os.close();
+
+	ifstream is(filename.c_str(), std::ios::in);
+	XDRPersistenceManager pm2(is);
+	System* s2 = (System*) pm2.readObject();
+	is.close();
+
+	TEST_EQUAL(s.countAtoms(), s2->countAtoms())
+	TEST_EQUAL(s.countBonds(), s2->countBonds())
+
+	AtomIterator ai = s.beginAtom();
+	AtomIterator ai2 = s2->beginAtom();
+	for (; +ai; ai++, ai2++)
+	{
+		TEST_EQUAL((*ai).getPosition(), (*ai2).getPosition())
+		TEST_EQUAL((*ai).getFullName(), (*ai2).getFullName())
+		TEST_EQUAL((*ai).getType(), 		(*ai2).getType())
+		TEST_EQUAL((*ai).getTypeName(), (*ai2).getTypeName())
+		TEST_EQUAL((*ai).getVelocity(), (*ai2).getVelocity())
+		TEST_EQUAL((*ai).getForce(), 		(*ai2).getForce())
+		TEST_EQUAL((*ai2).isValid(), 		true)
+
+		// sometimes bonds get switched
+		for (Position p = 0; p < (*ai).countBonds(); p++)
+		{
+			if ((*ai ).getBond(p)->getFirstAtom()->getFullName() ==
+					(*ai2).getBond(p)->getFirstAtom()->getFullName())
+			{
+				TEST_EQUAL((*ai).getBond(p)->getFirstAtom()->getFullName(), 	(*ai2).getBond(p)->getFirstAtom()->getFullName())
+				TEST_EQUAL((*ai).getBond(p)->getSecondAtom()->getFullName(), 	(*ai2).getBond(p)->getSecondAtom()->getFullName())
+			}
+			else
+			{
+				TEST_EQUAL((*ai).getBond(p)->getFirstAtom()->getFullName(), 	(*ai2).getBond(p)->getSecondAtom()->getFullName())
+				TEST_EQUAL((*ai).getBond(p)->getSecondAtom()->getFullName(), 	(*ai2).getBond(p)->getFirstAtom()->getFullName())
+			}
+		}
+	}
+
+ 	delete s2;
 RESULT
 
 
