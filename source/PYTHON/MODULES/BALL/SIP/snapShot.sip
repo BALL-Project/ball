@@ -1,28 +1,35 @@
-// $Id: snapShot.sip,v 1.2 2000/07/24 22:16:02 oliver Exp $
+// $Id: snapShot.sip,v 1.3 2001/01/16 17:31:51 anker Exp $
 
-// class SnapShot
-// {
-// 	public:
-//   SnapShot(); 
-// 	SnapShot(int); 
-// 	SnapShot(const SnapShot&, bool); 
-// 	// ~SnapShot(); 
-// 	// friend std::fstream& operator<<(std::fstream& os, const SnapShot&  snap_shot); 
-//  // friend std::fstream& operator>>(std::fstream& in, SnapShot& snap_shot);
-// 	// SnapShot &operator=(const SnapShot &rhs); 
-// 	bool isValid();
-// 
-// 	bool valid;   
-// 	int index; 
-// 	int total_length; 
-// 	int data_length; 
-// 	int no_of_atoms; 
-// 	double potential_energy; 
-// 	double kinetic_energy; 
-// 	//vector<Vector3> position;
-// 	//vector<Vector3> velocity;
-// 	//vector<Vector3> force;
-// };
+class SnapShot
+{
+%HeaderCode
+	#include <BALL/MOLMEC/COMMON/snapShot.h>
+	using namespace BALL;
+%End
+	public:
+	SnapShot();
+	SnapShot(const SnapShot& /snapshot/);
+	SnapShot(Size /no_of_atoms/);
+	// virtual ~SnapShot();
+	// const SnapShot& operator = (const SnapShot& /snapshot/);
+	virtual void clear();
+	// bool operator == (const SnapShot& /snapshot/) const;
+	bool isValid() const;
+	void setIndex(Size /index/);
+	Size getIndex() const;
+	void setNumberOfAtoms(Size /number_of_atoms/);
+	Size getNumberOfAtoms() const;
+	Size getDataLength() const;
+	Size getTotalLength() const;
+	double getPotentialEnergy() const;
+	double getKineticEnergy() const;
+	// void setAtomPositions(const std::vector<Vector3>& /atom_postions/);
+	// const std::vector<Vector3>& getAtomPositions() const;
+	// void setAtomVelocitites(const std::vector<Vector3>& /atom_velocities/);
+	// const std::vector<Vector3>& getAtomVelocities() const;
+	// void setAtomForces(const std::vector<Vector3>& /atom_forces/);
+	// const std::vector<Vector3>& getAtomForces() const;
+};
 
 class SnapShotManager
 {
@@ -30,22 +37,24 @@ class SnapShotManager
 	#include <BALL/MOLMEC/COMMON/snapShot.h>
 	using namespace BALL;
 %End
-  public:
-	SnapShotManager(); 
-	SnapShotManager(System& /system/, ForceField& /forcefield/, const String& /filename/, bool /overwrite/ = false); 
-	SnapShotManager(System& /system/, ForceField& /forcefield/, Options& /options/, const String& /filename/, bool /overwrite/ = true);
-	SnapShotManager(const SnapShotManager&, bool);
-	~SnapShotManager(); 
-	bool setup( System&, ForceField&, Options&, const String&, bool);
-	// SnapShotManager &operator=(const SnapShotManager &rhs);
-	bool isValid() const;
-	void setFlushToDiskFrequency(int); 
-	int getFlushToDiskFrequency() const; 
-	void takeSnapShot(); 
-	void flushToDisk(); 
-	void close(); 
-	int getNumberOfSnapShots() const;
-	// SnapShot getSnapShot(int); 
-	System getSnapShotAsSystem(int); 
-	Options options; 
+	public:
+	SnapShotManager();
+	SnapShotManager(const System* /my_system/,
+			const ForceField* /my_force_field/, TrajectoryFile* /my_snapshot_file/,
+			bool /overwrite/ = true);
+	SnapShotManager(const System* /my_system/,
+			const ForceField* /my_force_field/, const Options& /my_options/,
+			TrajectoryFile* /file/, bool /overwrite/ = true);
+	SnapShotManager(const SnapShotManager& /manager/);
+	// virtual ~SnapShotManager();
+	virtual bool setup();
+	// const SnapShotManager& operator = (const SnapShotManager& /manager/);
+	virtual void clear();
+	virtual bool isValid() const;
+	void setFlushToDiskFrequency(Size /number/);
+	Size getFlushToDiskFrequency() const;
+	virtual void takeSnapShot();
+	virtual void flushToDisk();
+	Size getNumberOfSnapShots() const;
+	Size getNumberOfAtoms() const;
 };
