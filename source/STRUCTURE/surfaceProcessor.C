@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.C,v 1.6 2002/12/20 14:01:45 oliver Exp $
+// $Id: surfaceProcessor.C,v 1.7 2003/02/19 16:15:39 amoll Exp $
 
 #include <BALL/STRUCTURE/surfaceProcessor.h>
 
@@ -9,13 +9,15 @@ namespace BALL
 {
 
 	SurfaceProcessor::SurfaceProcessor()
-		:	ses_(true),
+		:	UnaryProcessor<Atom>(),
+			UnaryProcessor<Atom*>(),
+			radius_offset_(0.0),
+			vdw_factor_(1.0),
+			ses_(true),
 			surface_(),
 			spheres_(),
 			density_(4.5),
-			probe_radius_(1.5),
-			radius_offset_(0.0),
-			vdw_factor_(1.0)
+			probe_radius_(1.5)
 	{
 	}
 
@@ -29,21 +31,13 @@ namespace BALL
 
 	Processor::Result SurfaceProcessor::operator () (Atom& atom)
 	{
-		Vector3 float_position(atom.getPosition());
-		TVector3<double> position((double)float_position.x,
-				                      (double)float_position.y,
-				                      (double)float_position.z);
+		TVector3<double> position((double)atom.getPosition().x,
+				                      (double)atom.getPosition().y,
+				                      (double)atom.getPosition().z);
 		
-		if (atom.getElement() != Element::UNKNOWN)
+		if (atom.getElement() != Element::UNKNOWN && atom.getElement().getVanDerWaalsRadius() > 0.0)
 		{
-			if (atom.getElement().getVanDerWaalsRadius() > 0.0)
-			{
-				spheres_.push_back(TSphere3<double>(position, vdw_factor_*atom.getElement().getVanDerWaalsRadius() + radius_offset_));
-			}
-			else
-			{
-				spheres_.push_back(TSphere3<double>(position, radius_offset_+vdw_factor_));
-			}
+			spheres_.push_back(TSphere3<double>(position, vdw_factor_*atom.getElement().getVanDerWaalsRadius() + radius_offset_));
 		}
 		else
 		{
@@ -55,6 +49,12 @@ namespace BALL
 
 	bool SurfaceProcessor::finish()
 	{
+		if (spheres_.size() == 0) 
+		{
+			Log.error() << "empty surface" << std::endl;
+			return true;
+		}
+	
 		ReducedSurface* reduced_surface = new ReducedSurface(spheres_,probe_radius_);
 		reduced_surface->compute();
 
@@ -134,7 +134,7 @@ namespace BALL
 		return density_;
 	}
 
-	vector< TSphere3<double> >& SurfaceProcessor::getSpheres()
+	vector<TSphere3<double> >& SurfaceProcessor::getSpheres()
 	{
 		return spheres_;
 	}
