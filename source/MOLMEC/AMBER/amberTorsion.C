@@ -1,4 +1,4 @@
-// $Id: amberTorsion.C,v 1.13 2000/01/13 22:29:39 oliver Exp $
+// $Id: amberTorsion.C,v 1.14 2000/01/28 16:37:46 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -354,9 +354,7 @@ namespace BALL
 	// calculates the current energy of this component
 	float AmberTorsion::updateEnergy() 
 	{
-		float factor;
 		float cosphi;
-		float cosphi2;
 
 		Vector3	a21;
 		Vector3 a23;
@@ -393,57 +391,23 @@ namespace BALL
 
 					cosphi = cross2321 * cross2334;
 
-					switch(it->f) 
-					{
-						case 1:
-							factor = cosphi;
-							break;
-	
-						case 2:
-							cosphi2 = cosphi * cosphi;
-							factor  = cosphi2 + cosphi2 - 1;
-							break;
-								
-						case 3:
-							cosphi2 = cosphi * cosphi;
-							factor = (4 * cosphi2 - 3) * cosphi;
-							break;
-									
-						case 4:
-							cosphi2 = cosphi * cosphi;
-							factor  = (cosphi2 - 1) * 8 * cosphi2 + 1;
-							break;
-
-						default:
-							if (cosphi > 1.0)
+					if (cosphi > 1.0)
 								cosphi = 1.0;
-							if (cosphi < -1.0)
+					if (cosphi < -1.0)
 								cosphi = -1.0;
 
-							factor = cos(it->f * acos(cosphi));
-					};
-
-					if (it->phase == 0) 
-					{
-						energy_ += it->V * (1 + factor);
-					} else {
-						energy_ += it->V * (1 - factor);
-					}
+					energy_ += it->V * ( 1 + cos(it->f * acos(cosphi) - it->phase));
 				}
 			}
 		}
-
 		return energy_;
 	}
 
 	// calculates and adds its forces to the current forces of the force field
 	void AmberTorsion::updateForces()
 	{
-		float dEdphi;
 		float cosphi;
-		float cosphi2;
-		float sinphi;
-		float sinphi2;
+		float dEdphi;
 
 		Vector3	ab;	// vector from atom2 to atom1
 		Vector3 cb;		// vector from atom2 to atom3
@@ -479,61 +443,27 @@ namespace BALL
 					if (length_t != 0 && length_u != 0) 
 					{
 						cosphi = (t * u) / (length_t * length_u);
-						cosphi2 = cosphi * cosphi;
-						if (cosphi2 > 1.0)
-						{
-							cosphi2 = 1.0;
-						}
-						sinphi = sqrt(1 - cosphi2);
 
-						
-						float direction = (t % u) * cb;
-						if (direction > 0.0)
-						{
-								sinphi = -sinphi;
-						}
-
-						switch (it->f) 
-						{
-							case 1:
-										dEdphi = sinphi;
-										break;
-
-							case 2:
-										dEdphi = 4 * cosphi * sinphi;
-										break;
-									
-							case 3:
-										sinphi2 = 1 - cosphi2;
-										dEdphi = 3 * (sinphi * (3 - 4 * sinphi2));
-										break;
-								
-							case 4:
-										dEdphi  = 16 * (cosphi * sinphi * (2 * cosphi2 - 1));
-										break;
-	
-							default:
-										if (cosphi > 1.0)
-										{
-											cosphi = 1.0;
-										}
-										if (cosphi < -1.0)
-										{
-											cosphi = -1.0;
-										}
-										dEdphi = it->f * sin(it->f * acos(cosphi));
-						};
-
+						if (cosphi > 1.0)
+							{
+								cosphi = 1.0;
+							}
+						if (cosphi < -1.0)
+							{
+								cosphi = -1.0;
+							}
 						// multiply with the barrier height and a factor
 						// for unit conversion: 1e13: kJ/(mol A) -> J/(mol m)
 						//  AVOGADRO: J/mol -> J
-						dEdphi *= - it->V * 1e13 / Constants::AVOGADRO;
-	
-						if (it->phase != 0) 
+						dEdphi = (-it->V) * (1e13 / Constants::AVOGADRO) * it->f * sin(it->f * acos(cosphi) - it->phase);
+
+/*
+						float direction = (t % u) * cb;
+						if (direction > 0.0)
 						{
-							dEdphi = -dEdphi;
+								dEdphi = -dEdphi;
 						}
-	
+*/
 						Vector3 ca = it->atom3->getPosition() - it->atom1->getPosition();
 						Vector3 db = it->atom4->getPosition() - it->atom2->getPosition();
 						Vector3 dEdt =   dEdphi / (length_t2 * cb.getLength()) * (t % cb);
@@ -542,15 +472,15 @@ namespace BALL
 
 						if (getForceField()->getUseSelection() == false)
 						{
-							it->atom1->getForce() += dEdt % cb;
-							it->atom2->getForce() += ca % dEdt + dEdu % dc;
-							it->atom3->getForce() += dEdt % ba + db % dEdu;
-							it->atom4->getForce() += dEdu % cb; 
+							it->atom1->getForce() -= dEdt % cb;
+							it->atom2->getForce() -= ca % dEdt + dEdu % dc;
+							it->atom3->getForce() -= dEdt % ba + db % dEdu;
+							it->atom4->getForce() -= dEdu % cb; 
 						} else {
-							if (it->atom1->isSelected()) it->atom1->getForce() += dEdt % cb;
-							if (it->atom2->isSelected()) it->atom2->getForce() += ca % dEdt + dEdu % dc;
-							if (it->atom3->isSelected()) it->atom3->getForce() += dEdt % ba + db % dEdu;
-							if (it->atom4->isSelected()) it->atom4->getForce() += dEdu % cb;
+							if (it->atom1->isSelected()) it->atom1->getForce() -= dEdt % cb;
+							if (it->atom2->isSelected()) it->atom2->getForce() -= ca % dEdt + dEdu % dc;
+							if (it->atom3->isSelected()) it->atom3->getForce() -= dEdt % ba + db % dEdu;
+							if (it->atom4->isSelected()) it->atom4->getForce() -= dEdu % cb;
 						}
 					}
 				}

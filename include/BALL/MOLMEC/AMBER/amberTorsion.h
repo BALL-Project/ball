@@ -1,4 +1,4 @@
-// $Id: amberTorsion.h,v 1.3 1999/12/04 18:34:22 oliver Exp $
+// $Id: amberTorsion.h,v 1.4 2000/01/28 16:39:42 oliver Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERTORSION_H
@@ -51,9 +51,9 @@ namespace BALL
 			Atom*	atom3;
 			Atom*	atom4;
 
-			float						V;
-			unsigned char		f;
-			unsigned char		phase;
+			float		V;
+			unsigned char	f;
+			float		phase;
 
 			SingleAmberTorsion()
 				:	atom1(0),
@@ -76,14 +76,8 @@ namespace BALL
 
 				V = t.values.V / t.values.n;
 				f = (unsigned char)t.values.f;
+				phase = ((2.0 * BALL::Constants::PI)/360.0) * t.values.phase;
 
-				//if (Maths::isZero(t.values.phase))
-				if (t.values.phase < 90.0)
-				{
-					phase = (unsigned char)0;
-				} else {
-					phase = (unsigned char)1;
-				}
 			}
 		};
 		//@}
