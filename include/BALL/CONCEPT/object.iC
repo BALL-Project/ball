@@ -1,4 +1,4 @@
-// $Id: object.iC,v 1.7 2000/12/19 12:50:49 amoll Exp $
+// $Id: object.iC,v 1.8 2001/01/22 20:50:25 amoll Exp $
 
 BALL_INLINE 
 Handle Object::getHandle () const
@@ -75,24 +75,6 @@ bool Object::operator > (const Object &object) const
   return (object < *this);
 }
 
-BALL_INLINE 
-int Object::compare(const Object & object) const
-	throw()
-{
-  if (*this == object)
-  {
-    return 0;
-  } 
-	if (*this < object)
-  {
-    return -1;
-  } 
-	else 
-	{
-    return 1;
-  }
-}
-
 BALL_INLINE
 bool Object::isValid() const
 	throw()
@@ -114,36 +96,9 @@ void Object::write(::std::ostream& /* s */) const
   throw Exception::NotImplemented(__FILE__, __LINE__);
 }
 
-
-
-#ifdef BALL_SUPPORT_OBJECT_MANAGER
-
 BALL_INLINE 
-Size ObjectManager::countInsertions()
+const Object& Object::operator = (const Object& /* object */)
 	throw()
 {
-  return number_of_insertions_;
+	return *this;
 }
-
-BALL_INLINE 
-Size ObjectManager::countRemovals()
-	throw()
-{
-  return number_of_removals_;
-}
-
-BALL_INLINE 
-Size ObjectManager::countUpdates()
-	throw()
-{
-  return (number_of_insertions_ + number_of_removals_);
-}
-
-BALL_INLINE 
-Size ObjectManager::countObjects()
-	throw()
-{
-  return number_of_objects_;
-}
-
-#endif // BALL_SUPPORT_OBJECT_MANAGER
