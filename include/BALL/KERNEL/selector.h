@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selector.h,v 1.26 2003/08/26 08:04:19 oliver Exp $
+// $Id: selector.h,v 1.27 2003/12/20 16:00:53 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_SELECTOR_H
@@ -11,11 +11,16 @@
 #	include <BALL/KERNEL/expression.h>
 #endif
 
+#ifndef BALL_DATATYPE_LIST_H
+#	include <BALL/DATATYPE/list.h>
+#endif
+
+
 namespace BALL 
 {
-	/**	Kernel Object Selection.
-			These classes allow the convenient selection of kernel objects. \par
-			
+	class Atom;
+
+	/**	Atom Selection from Regular Expression.
     	\ingroup  Predicates
 	*/
 	class Selector
@@ -105,6 +110,10 @@ namespace BALL
 		*/
 		Size getNumberOfSelectedAtoms() const
 			throw();
+
+		/// 
+		List<Atom*>& getSelectedAtoms() 
+			throw();
 		
 		/** Define the expression.
 		*/
@@ -121,9 +130,10 @@ namespace BALL
 			
 		protected:
 
-		Size				number_of_selected_atoms_;
+		List<Atom*>	selected_atoms_;
 		Expression	expression_;
 	};
+
 } // namespace BALL
 
 #endif // BALL_KERNEL_SELECTOR_H

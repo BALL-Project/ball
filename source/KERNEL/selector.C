@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selector.C,v 1.27 2003/08/26 09:17:50 oliver Exp $
+// $Id: selector.C,v 1.28 2003/12/20 16:00:53 amoll Exp $
 //
 
 #include <BALL/KERNEL/selector.h>
@@ -13,7 +13,7 @@ namespace BALL
 	Selector::Selector()
 		throw()
 		:	UnaryProcessor<Composite>(),
-			number_of_selected_atoms_(0),
+			selected_atoms_(),
 			expression_()
 	{
 	}
@@ -21,7 +21,7 @@ namespace BALL
 	Selector::Selector(const String& expression_string)
 		throw()
 		:	UnaryProcessor<Composite>(),
-			number_of_selected_atoms_(0),
+			selected_atoms_(),
 			expression_(expression_string)
 	{
 	}
@@ -29,7 +29,7 @@ namespace BALL
 	Selector::Selector(const Selector& selector)
 		throw()
 		:	UnaryProcessor<Composite>(selector),
-			number_of_selected_atoms_(selector.number_of_selected_atoms_),
+			selected_atoms_(selector.selected_atoms_),
 			expression_(selector.expression_)
 	{
 	}
@@ -43,14 +43,14 @@ namespace BALL
 	void Selector::clear()
 		throw()
 	{
-		number_of_selected_atoms_ = 0;
 		expression_.clear();
+		selected_atoms_.clear();
 	}
 
 	Selector& Selector::operator = (const Selector& selector)
 		throw()
 	{
-		number_of_selected_atoms_ = selector.number_of_selected_atoms_;
+		selected_atoms_ = selector.selected_atoms_;
 		expression_ = selector.expression_;
 		
 		return *this;
@@ -59,14 +59,14 @@ namespace BALL
 	bool Selector::operator == (const Selector& selector) const
 		throw()
 	{
-		return ((number_of_selected_atoms_ == selector.number_of_selected_atoms_)
+		return ((selected_atoms_ == selector.selected_atoms_)
 				&& (expression_ == selector.expression_));
 	}
 
 	Size Selector::getNumberOfSelectedAtoms() const
 		throw()
 	{
-		return number_of_selected_atoms_;
+		return selected_atoms_.size();
 	}
 
 	void Selector::setExpression(const Expression& expression)
@@ -86,7 +86,7 @@ namespace BALL
 		throw()
 	{
 		// reset the number of selected atoms
-		number_of_selected_atoms_ = 0;
+		selected_atoms_.clear();
 
 		// and continue
 		return true;
@@ -103,11 +103,17 @@ namespace BALL
 			{
 				// select the atoms and increase the atom counter
 				atom.select();
-				number_of_selected_atoms_++;
+				selected_atoms_.push_back(&atom);
 			}
 		}
 
     return Processor::CONTINUE;
+	}
+
+	List<Atom*>& Selector::getSelectedAtoms()
+		throw()
+	{
+		return selected_atoms_;
 	}
 
 } // namespace BALL
