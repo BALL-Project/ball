@@ -1,4 +1,4 @@
-// $Id: MOL2File.C,v 1.11 2001/08/01 01:04:14 oliver Exp $
+// $Id: MOL2File.C,v 1.12 2001/08/16 00:32:29 oliver Exp $
 
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/DATATYPE/string.h>
@@ -329,7 +329,7 @@ namespace BALL
 					atom.substructure = fields[6].toUnsignedInt();
 					atom.substructure_name = fields[7];
 					atom.charge = fields[8].toFloat();
-					
+
 					// remember this atom
 					atoms_.push_back(atom);
 				}
@@ -558,7 +558,7 @@ namespace BALL
 			return;
 		}
 
-		// construct the substructures
+		// construct the substructures (if any)
 		vector<AtomContainer*>	sub_ptr(substructures_.size());
 		Position i;
 		for (i = 0; i < substructures_.size(); i++)
@@ -596,7 +596,7 @@ namespace BALL
 
 			// store the pointer to this substructure
 			sub_ptr[i] = frag;
-		}
+ 		}
 		
 
 		// construct the atoms
@@ -609,10 +609,25 @@ namespace BALL
 			atom->setPosition(atoms_[i].position);
 			atom->setTypeName(atoms_[i].type);
 			atom->setCharge(atoms_[i].charge);
+
+			// Try to assign the element. MOL2 format
+      // usually has type names like O.2 or C.ar, so 
+			// we use the portion before the dot or the complete
+			// name if there's no dot in the name. PTE will translate
+			// it to the correct element or Element::UNKNOWN otherwise.
+			if (atoms_[i].type.has('.'))
+			{
+				atom->setElement(PTE[atoms_[i].type.before(".")]);
+			}
+			else
+			{
+				atom->setElement(PTE[atoms_[i].type]);
+			}
 			
 			// store the atom pointer for bond construction
 			atom_ptr[i] = atom;
 		}
+
 		// construct the bonds
 		for (i = 0; i < bonds_.size(); i++)
 		{
@@ -677,6 +692,16 @@ namespace BALL
 		for (i = 0; i < sub_ptr.size(); i++)
 		{
 			molecule->insert(*sub_ptr[i]);
+		}
+		
+		// if there are no substructures, insert the atoms
+    // into the molecule
+		if (substructures_.size() == 0)
+		{
+			for (i = 0; i < atom_ptr.size(); i++)
+			{	
+				molecule->insert(*atom_ptr[i]);
+			}
 		}
 	}
 
