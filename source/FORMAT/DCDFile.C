@@ -1,11 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.33 2004/03/25 12:46:25 amoll Exp $
+// $Id: DCDFile.C,v 1.34 2004/08/27 11:35:48 amoll Exp $
 //
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
+
+#undef BALL_DEBUG
 
 using namespace std;
 
