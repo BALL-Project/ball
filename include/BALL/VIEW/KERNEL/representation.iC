@@ -205,3 +205,10 @@ DrawingMode Representation::getDrawingMode() const
 {
 	return drawing_mode_;
 }
+
+BALL_INLINE 
+void Representation::setNeedsUpdate() 
+	throw()
+{
+	needs_update_ = true;
+}

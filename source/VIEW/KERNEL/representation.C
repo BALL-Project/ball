@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.58 2004/12/14 15:27:35 amoll Exp $
+// $Id: representation.C,v 1.59 2004/12/14 16:12:30 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -271,6 +271,12 @@ namespace BALL
 		void Representation::update_() 
 			throw()
 		{
+			if (isHidden())
+			{
+				needs_update_ = true;
+				return;
+			}
+
 			needs_update_ = false;
 
 #ifdef BALL_BENCHMARKING
@@ -350,10 +356,20 @@ namespace BALL
 			}
 			geometric_objects_.clear();
 
-			if (model_processor_ != 0)
+			// if modelprocessor is removed, copy the geometric object pointers to the Representation's own list
+			if (processor == 0 && model_processor_ != 0)
 			{
-				delete model_processor_;
+				GeometricObjectList::ConstIterator it = model_processor_->getGeometricObjects().begin();
+				for (;it != model_processor_->getGeometricObjects().end(); it++)
+				{
+					geometric_objects_.push_back(*it);
+				}
+
+				model_processor_->getGeometricObjects().clear();
 			}
+
+			if (model_processor_ != 0) delete model_processor_;
+
 			model_processor_ = processor;
 			
 			if (model_processor_ != 0) 

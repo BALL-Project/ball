@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.28 2004/12/13 16:05:25 amoll Exp $
+// $Id: representation.h,v 1.29 2004/12/14 16:12:33 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -273,6 +273,10 @@ namespace BALL
 					Uses needs_update_.
 			*/
 			bool needsUpdate() const
+				throw();
+
+			///
+			void setNeedsUpdate()
 				throw();
 
 			///

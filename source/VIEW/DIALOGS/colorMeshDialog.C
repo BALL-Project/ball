@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.41 2004/12/10 16:14:28 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.42 2004/12/14 16:12:47 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -58,8 +58,9 @@ void ColorMeshDialog::applyPressed()
 		colorByCustomColor_();
 	}
 		
-	// repaint of the scene and the composites needed
-	MainControl::getMainControl(this)->redrawAllRepresentations(true);
+	rep_->setModelProcessor(0);
+	rep_->setColorProcessor(0);
+	rep_->update(true);
 }
 
 
