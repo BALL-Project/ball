@@ -29,7 +29,7 @@ EXECUTABLES = \
 	Composite_test\
 	DefaultProcessors_test\
 	EnergyMinimizer_test\
-	ExpressionTree_test\
+	Expression_test\
 	Fragment_test\
 	FragmentDB_test\
 	Gradient_test\
@@ -130,7 +130,7 @@ DefaultProcessors_test:	DefaultProcessors_test.o
 EnergyMinimizer_test:	EnergyMinimizer_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
-ExpressionTree_test:	ExpressionTree_test.o
+Expression_test:	Expression_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Fragment_test:	Fragment_test.o
