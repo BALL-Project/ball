@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.15 2000/09/05 14:01:24 amoll Exp $ 
+// $Id: hashMap.h,v 1.16 2000/09/14 11:24:31 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -215,7 +215,7 @@ namespace BALL
 		void erase(Iterator pos);
 
 		/**	Erase a range of elements.
-				Erase all elemntes in the range {\tt \[first, last)}.
+				Erase all elements in the range {\tt \[first, last)}.
 		*/
 		void erase(Iterator first, Iterator last);
 		//@}
@@ -707,7 +707,9 @@ namespace BALL
 		if (it == end())
 		{
 			throw IllegalKey(__FILE__, __LINE__);
-		} else {
+		} 
+		else 
+		{
 			return it->second;
 		}
 	}
