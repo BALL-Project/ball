@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.42 2004/07/07 17:19:31 amoll Exp $
+// $Id: representation.C,v 1.43 2004/07/10 16:39:21 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -15,7 +15,11 @@
 
 #include <BALL/KERNEL/atom.h>
 
+#include <BALL/SYSTEM/timer.h>
+
 #include <qapplication.h>
+
+// #define BALL_BENCHMARKING
 
 namespace BALL
 {
@@ -350,6 +354,10 @@ namespace BALL
 		void Representation::update_(bool rebuild) 
 			throw()
 		{
+#ifdef BALL_BENCHMARKING
+	Timer t;
+	t.start();
+#endif
 			update_running_ = true;
 			// if no ModelProcessor was given, there can only exist 
 			// handmade GeometricObjects, which dont need to be updated
@@ -379,6 +387,11 @@ namespace BALL
 			}
 
 			update_running_ = false;
+
+#ifdef BALL_BENCHMARKING
+	Log.info() << "Calculating Representation time: " << t.getCPUTime() << std::endl;
+	t.stop();
+#endif
 		}
 		
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.sip,v 1.3 2004/07/10 15:13:27 amoll Exp $
+// $Id: displayProperties.sip,v 1.4 2004/07/10 16:38:19 amoll Exp $
 //
 
 class DisplayProperties
@@ -47,5 +47,7 @@ static DisplayProperties* getInstance(Position /index/);
 //  void setRepresentation(Representation*) throw();
 //  void transparencySliderChanged();
 //  void writePreferences(INIFile &inifile) throw();
+	void enableCreationForNewMolecules(bool) throw();
+	void setTransparency(int);
   ~DisplayProperties() throw();
 };

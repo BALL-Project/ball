@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.32 2004/07/04 17:04:45 amoll Exp $
+// $Id: displayProperties.h,v 1.33 2004/07/10 16:39:33 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -273,7 +273,7 @@ namespace BALL
 					To insert a new type of model, this is the only method in DisplayProperties you have to
 					change (See also VIEW/KERNEL/common.h).
 			*/
-			virtual void createRepresentation_(const List<Composite*>& composites)
+			virtual Representation* createRepresentation_(const List<Composite*>& composites)
 				throw(InvalidOption);
 
 			//_ Read a inifile entry and set the accoring attribut and ComboBox.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.101 2004/07/05 13:42:04 amoll Exp $
+// $Id: scene.C,v 1.102 2004/07/10 16:39:22 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -22,6 +22,8 @@
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 
+#include <BALL/SYSTEM/timer.h>
+
 #include <qpainter.h>
 #include <qmenubar.h>
 #include <qimage.h>
@@ -29,6 +31,7 @@
 #include <qcursor.h>
 #include <qapp.h>
 
+// #define BALL_BENCHMARKING
 
 using std::endl;
 using std::istream;
@@ -485,6 +488,10 @@ namespace BALL
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
 		{
+#ifdef BALL_BENCHMARKING
+	Timer t;
+	t.start();
+#endif
 			PrimitiveManager::RepresentationList::ConstIterator it;
 			// ============== render Clipping planes ==============================
 			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
@@ -562,6 +569,11 @@ namespace BALL
 				}
 			}
 			glEnable(GL_DEPTH_TEST);
+
+#ifdef BALL_BENCHMARKING
+	Log.info() << "Rendering time: " << t.getCPUTime() << std::endl;
+	t.stop();
+#endif
 		}
 
 

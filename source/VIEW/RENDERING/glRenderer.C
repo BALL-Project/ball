@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.28 2004/06/18 00:04:39 amoll Exp $
+// $Id: glRenderer.C,v 1.29 2004/07/10 16:39:21 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -77,9 +77,10 @@ namespace BALL
 			// While this corrects potential lighting problems introduced by scaling, 
 			// it also slows OpenGL's vertex processing speed since normalization requires extra operations.
 			glEnable(GL_NORMALIZE);   
+
+			glDisable(GL_FOG);
 			
-		  GLint two_side = 1;
- 			glLightModeliv(GL_LIGHT_MODEL_TWO_SIDE, &two_side);
+ 			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
 
 			// do depthcomparisons and update the depth buffer
 			glEnable(GL_DEPTH_TEST);

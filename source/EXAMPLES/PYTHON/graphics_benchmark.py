@@ -1,9 +1,11 @@
 m = MainControl.getInstance(0)
 pm = m.getPrimitiveManager()
 py = PyWidget.getInstance(0)
+dp = DisplayProperties.getInstance(0)
+fd = MolecularFileDialog.getInstance(0)
 
 result = 0
-nr_runs = 5
+nr_runs = 1
 
 def clearRepresentations():
 	nr = pm.getNumberOfRepresentations()
@@ -29,12 +31,11 @@ def runTest(name, model):
 	print name+" "+str(model_result)+" seconds"
 	result += model_result
 
-fd = MolecularFileDialog.getInstance(0)
-fd.openFile("bpti.pdb")
-clearRepresentations()
-dp = DisplayProperties.getInstance(0)
+dp.enableCreationForNewMolecules(0)
 dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
-clearRepresentations()
+dp.selectMode(DRAWING_MODE_SOLID)
+dp.setTransparency(0)
+fd.openFile("bpti.pdb")
 
 runTest("Lines", 		MODEL_LINES)
 runTest("VDW",   		MODEL_VDW)
