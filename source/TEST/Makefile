@@ -8,6 +8,7 @@ EXECUTABLES = \
 	Atom_test\
 	AtomicContactEnergy_test\
 	AtomVector_test\
+	BinarySearchTree_test\
 	BitVector_test\
 	Bond_test\
 	BaseFragment_test\
