@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.36 2000/01/08 20:56:21 oliver Exp $
+dnl    $Id: configure.in,v 1.37 2000/01/09 22:11:24 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -940,13 +940,13 @@ else
 		dnl
 		if test $OS = Solaris ; then
 			dnl
-			dnl		Make sure we use at least Workshop 5.0
-			dnl		(SUNPro 4.x is a mess - hasn't even heard of ANSI C++!)
+			dnl		Make sure we use at least Workshop 6.0
+			dnl		(SUNPro < 6 is a mess - hasn't even heard of ANSI C++!)
 			dnl
-			if test "${CXX_VERSION_1}" -lt 5 ; then
+			if test "${CXX_VERSION_1}" -lt 6 ; then
 				AC_MSG_RESULT()
 				AC_MSG_RESULT(BALL requires an ANSI C++ compliant compiler)
-				AC_MSG_RESULT(SUNPro compilers are ANSI compliant for version 5.0 and above)
+				AC_MSG_RESULT(SUNPro compilers are ANSI compliant for version 6.0 and above)
 				AC_MSG_RESULT(Please upgrade your compiler!)
 				AC_MSG_RESULT()
 				AC_ERROR(Abort)
@@ -955,11 +955,26 @@ else
 			AC_DEFINE(SOLARIS,)
 
 			TEMPLATE_DIR="SunWS_cache"
+
+			dnl	 set the default binary format (if none selected)
+			dnl
+			if test "${BINFMT_64_BIT}" = true ; then
+				SUN_BINFMT=V9
+				CXX_NAME="${CXX_NAME}_V9"
+				LDFLAGS="${LDFLAGS} -xarch=v9"
+				CPPFLAGS="${CPPLAGS} -xarch=v9"
+				AROPTS="${AROPTS} -xarch=v9"
+				DYNAROPTS="${DYNAROPTS} -xarch=v9"
+			else
+				SUN_BINFMT=V8
+				CXX_NAME="${CXX_NAME}_V8"
+			fi
+
 			DEF_BOOL=true
 			AR="${CXX}"
 			DYNAR="${CXX}"
-			AROPTS="-xar -KPIC -pto -o"
-			DYNAROPTS="-G -KPIC -pto -o"
+			AROPTS="${AROPTS} -xar -KPIC -pto -o"
+			DYNAROPTS="${DYNAROPTS} -G -KPIC -pto -o"
 			CXX_MAKEDEPEND="${CXX}"
 			MAKEDEP_CXX_OPTS="-xM1"
 			MAKEDEP_CXX_SUFFIX=" >.Dependencies"
