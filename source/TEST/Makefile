@@ -16,12 +16,16 @@ EXECUTABLES = \
 	Box3_test\
 	Chain_test\
 	CharmmFF_test\
+	Circle3_test\
 	ClassTest_test\
+	ClaverieParameter_test\
+	ComposedEnergyProcessor_test\
 	Composite_test\
 	Directory_test\
 	DefaultProcessors_test\
 	Embeddable_test\
 	EnergyMinimizer_test\
+	EnergyProcessor_test\
 	Enumerator_test\
 	Expression_test\
 	File_test\
@@ -43,11 +47,16 @@ EXECUTABLES = \
 	MOL2File_test\
 	Molecule_test\
 	NumericalSAS_test\
+	NucleicAcid_test\
 	Nucleotide_test\
 	OoiEnergy_test\
 	Options_test\
+	PairExpInteractionEnergyProcessor_test\
+	PairExpRDFIntegrator_test\
 	Path_test\
 	PDBFile_test\
+	PiecewiseFunction_test\
+	PiecewisePolynomial_test\
 	Plane3_test\
 	PointGrid_test\
 	PoissonBoltzmann_test\
@@ -55,6 +64,10 @@ EXECUTABLES = \
 	Protein_test\
 	PTE_test\
 	Quaternion_test\
+	RDFIntegrator_test\
+	RDFParameter_test\
+	RDFSection_test\
+	RadialDistributionFunction_test\
 	RegularExpression_test\
 	Residue_test\
 	ResourceFile_test\
@@ -63,12 +76,16 @@ EXECUTABLES = \
 	SecondaryStructure_test\
 	Selectable_test\
 	Socket_test\
+	SolventDescriptor_test\
+	SolventParameter_test\
 	Sphere3_test\
 	SplayTree_test\
 	StandardPredicates_test\
 	String_test\
 	StructureMapper_test\
+	System_test\
 	Time_test\
+	Timer_test\
 	TimeStamp_test\
 	TransformationApplicator_test\
 	TranslationApplicator_test\
