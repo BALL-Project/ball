@@ -1,4 +1,4 @@
-// $Id: Protein_test.C,v 1.4 2000/07/12 19:36:48 oliver Exp $
+// $Id: Protein_test.C,v 1.5 2000/12/19 23:59:21 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Protein_test.C,v 1.4 2000/07/12 19:36:48 oliver Exp $")
+START_TEST(class_name, "$Id: Protein_test.C,v 1.5 2000/12/19 23:59:21 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -453,6 +453,15 @@ CHECK(persistentRead(PersistenceManager&))
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
 RESULT
+
+CHECK(operator ==)
+	Protein b1;
+	Protein b2;
+	TEST_EQUAL(b1 == b2, false)
+	b1 = b2;
+	TEST_EQUAL(b1 == b1, true)
+RESULT
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

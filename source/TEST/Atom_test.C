@@ -1,4 +1,4 @@
-// $Id: Atom_test.C,v 1.8 2000/07/25 21:24:56 oliver Exp $
+// $Id: Atom_test.C,v 1.9 2000/12/19 23:59:21 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.8 2000/07/25 21:24:56 oliver Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.9 2000/12/19 23:59:21 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -378,6 +378,14 @@ CHECK(persistentRead(TextPersistenceManager()))
 			TEST_NOT_EQUAL(pers_atom->getHandle(), atom->getHandle())
 		}
 	}
+RESULT
+
+CHECK(operator ==)
+	Atom a1;
+	Atom a2;
+	TEST_EQUAL(a1 == a2, false)
+	a1 = a2;
+	TEST_EQUAL(a1 == a1, true)
 RESULT
 
 /////////////////////////////////////////////////////////////

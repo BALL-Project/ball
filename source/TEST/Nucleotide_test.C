@@ -1,4 +1,4 @@
-// $Id: Nucleotide_test.C,v 1.7 2000/07/12 19:36:47 oliver Exp $
+// $Id: Nucleotide_test.C,v 1.8 2000/12/19 23:59:21 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +10,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.7 2000/07/12 19:36:47 oliver Exp $")
+START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.8 2000/12/19 23:59:21 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -440,6 +440,15 @@ CHECK(persistentRead(PersistenceManager&))
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
 RESULT
+
+CHECK(operator ==)
+	Nucleotide b1;
+	Nucleotide b2;
+	TEST_EQUAL(b1 == b2, false)
+	b1 = b2;
+	TEST_EQUAL(b1 == b1, true)
+RESULT
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

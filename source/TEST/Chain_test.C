@@ -1,4 +1,4 @@
-// $Id: Chain_test.C,v 1.7 2000/08/30 19:59:15 oliver Exp $
+// $Id: Chain_test.C,v 1.8 2000/12/19 23:59:21 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.7 2000/08/30 19:59:15 oliver Exp $")
+START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.8 2000/12/19 23:59:21 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -550,6 +550,15 @@ CHECK(persistentRead(PersistenceManager&))
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
 RESULT
+
+CHECK(operator ==)
+	Chain b1;
+	Chain b2;
+	TEST_EQUAL(b1 == b2, false)
+	b1 = b2;
+	TEST_EQUAL(b1 == b1, true)
+RESULT
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

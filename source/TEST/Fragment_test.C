@@ -1,4 +1,4 @@
-// $Id: Fragment_test.C,v 1.10 2000/07/12 19:36:46 oliver Exp $
+// $Id: Fragment_test.C,v 1.11 2000/12/19 23:59:21 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: Fragment_test.C,v 1.10 2000/07/12 19:36:46 oliver Exp $")
+START_TEST(Fragment, "$Id: Fragment_test.C,v 1.11 2000/12/19 23:59:21 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -130,6 +130,15 @@ CHECK(persistentRead(PersistenceManager&))
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
 RESULT
+
+CHECK(operator ==)
+	Fragment b1;
+	Fragment b2;
+	TEST_EQUAL(b1 == b2, false)
+	b1 = b2;
+	TEST_EQUAL(b1 == b1, true)
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
