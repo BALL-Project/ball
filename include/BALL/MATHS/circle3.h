@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.7 2000/02/16 17:06:36 oliver Exp $
+// $Id: circle3.h,v 1.8 2000/02/16 17:25:30 oliver Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -13,10 +13,6 @@
 
 #include <math.h>
 #include <iostream>
-
-#ifndef BALL_MATHS_POINT3_H
-#	include <BALL/MATHS/point3.h>
-#endif
 
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>

@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.6 2000/02/16 17:08:32 oliver Exp $
+// $Id: sphere3.h,v 1.7 2000/02/16 17:25:31 oliver Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -16,10 +16,6 @@
 
 #ifndef BALL_MATHS_PLANE3_H
 #	include <BALL/MATHS/plane3.h>
-#endif
-
-#ifndef BALL_MATHS_POINT3_H
-#	include <BALL/MATHS/point3.h>
 #endif
 
 #ifndef BALL_MATHS_VECTOR3_H

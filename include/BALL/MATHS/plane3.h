@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.6 2000/02/16 17:07:48 oliver Exp $
+// $Id: plane3.h,v 1.7 2000/02/16 17:25:31 oliver Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -16,10 +16,6 @@
 
 #ifndef BALL_MATHS_LINE3_H
 #	include <BALL/MATHS/line3.h>
-#endif
-
-#ifndef BALL_MATHS_POINT3_H
-#	include <BALL/MATHS/point3.h>
 #endif
 
 #ifndef BALL_MATHS_VECTOR3_H

@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.3 2000/02/16 17:04:27 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.4 2000/02/16 17:25:30 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -21,10 +21,6 @@
 
 #ifndef BALL_MATHS_PLANE3_H
 #	include <BALL/MATHS/plane3.h>
-#endif
-
-#ifndef BALL_MATHS_POINT3_H
-#	include <BALL/MATHS/point3.h>
 #endif
 
 #ifndef BALL_MATHS_SPHERE3_H
