@@ -1,4 +1,4 @@
-// $Id: main.C,v 1.8 2000/09/01 10:13:41 anker Exp $
+// $Id: main.C,v 1.9 2002/01/16 02:41:48 oliver Exp $
 
 #include <iomanip>
 
@@ -14,12 +14,11 @@ using namespace std;
 
 void usage()
 {
-	Log.error() << "BALL -- Finite Difference Poisson-Boltzmann Solver" << endl 
+	Log.error() << "BALL -- Finite Difference Poisson Solver" << endl 
 							<< endl
 	            << "PB [<options>]" << endl
 	            <<"   where <options> is one or more of the following possibilities:" << endl
-	            << "     -P                   perform a Finite Difference Poisson Boltzmann" << endl
-							<< "                            calculation" << endl
+	            << "     -P                   perform a Finite Difference Poisson calculation" << endl
 	            << "     -A                   calculate the solvent accessible surface and" << endl
 							<< "                            volume of the solute" << endl
 	            << "     -E                   calculate the solvent excluded surface and" << endl

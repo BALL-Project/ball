@@ -56,8 +56,7 @@ Mainframe::Mainframe
 	// ---------------------
 	// Logstream setup -----
 	// ---------------------
-  // ???
-	//Log.remove(std::cout);
+	Log.remove(std::cout);
 
 	// ---------------------
 	// create widgets ------
