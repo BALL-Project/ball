@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.26 2000/09/16 10:46:21 oliver Exp $
+// $Id: String_test.C,v 1.27 2000/09/19 15:42:55 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.26 2000/09/16 10:46:21 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.27 2000/09/19 15:42:55 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -465,6 +465,7 @@ RESULT
 delete s2;
 
 String s4;
+
 CHECK(String::operator = (String&))
 	String s5("Hallo");
 	s4 = s5;
@@ -831,6 +832,23 @@ CHECK(String::countFields(char*))
 	TEST_EQUAL(s4.countFields(), 1)
 RESULT
 
+CHECK(String::countFieldsQuoted(const char* delimiters, const char* quotes))
+	s4 = "aa b cc b";
+	TEST_EQUAL(s4.countFieldsQuoted(), 4)
+	TEST_EQUAL(s4.countFieldsQuoted("a"), 1)
+	TEST_EQUAL(s4.countFieldsQuoted(" ", "b"), 2)
+	TEST_EQUAL(s4.countFieldsQuoted("c"), 2)
+	s4 = " \t  \t  \"  bb   abc \"  \t\t   ";
+	TEST_EQUAL(s4.countFieldsQuoted(), 1)
+	TEST_EQUAL(s4.countFieldsQuoted("\t"), 4)
+	s4 = "";
+	TEST_EQUAL(s4.countFieldsQuoted(), 0)
+	s4 = "    \t   \t  ";
+	TEST_EQUAL(s4.countFieldsQuoted(), 0)
+	s4 = "  \"  \t \"  \t  a";
+	TEST_EQUAL(s4.countFieldsQuoted(), 2)
+RESULT
+
 CHECK(String::getField(Index, char*, Index*))
 	s4 = "aa bb cc";
 	TEST_EQUAL(s4.getField(0), "aa")
@@ -859,6 +877,71 @@ CHECK(String::getField(Index, char*, Index*))
 	*i = 1;
 	TEST_EXCEPTION(Exception::NullPointer, s4.getField(0, c, i))	
 	TEST_EXCEPTION(Exception::IndexUnderflow, s4.getField(-99, ","))	
+RESULT
+
+CHECK(String::getFieldQuoted(Index field, const char* delimiters, const char* quotes, Index* from))
+	// test the default (unquoted behviour)
+	s4 = "aa bb cc";
+	TEST_EQUAL(s4.getFieldQuoted(0), "aa")
+	TEST_EQUAL(s4.getFieldQuoted(1), "bb")
+	TEST_EQUAL(s4.getFieldQuoted(2), "cc")
+	TEST_EQUAL(s4.getFieldQuoted(3), "")
+	s4 = " aa   bb    cc    ";
+	TEST_EQUAL(s4.getFieldQuoted(0), "aa")
+	TEST_EQUAL(s4.getFieldQuoted(1), "bb")
+	TEST_EQUAL(s4.getFieldQuoted(2), "cc")
+	TEST_EQUAL(s4.getFieldQuoted(3), "")
+
+	// simple quotes
+	s4 = "aa 'bb cc'";
+	TEST_EQUAL(s4.getFieldQuoted(0), "aa")
+	TEST_EQUAL(s4.getFieldQuoted(1), "bb cc")
+	TEST_EQUAL(s4.getFieldQuoted(2), "")
+	TEST_EQUAL(s4.getFieldQuoted(-2), "aa")
+	TEST_EQUAL(s4.getFieldQuoted(-1), "bb cc")
+	TEST_EQUAL(s4.getFieldQuoted(0, "b"), "aa bb cc")
+	TEST_EQUAL(s4.getFieldQuoted(1, "b"), "")
+	s4 = " \t  \t       abc   \t\t   ";
+	TEST_EQUAL(s4.getFieldQuoted(0), "abc")
+	TEST_EQUAL(s4.getFieldQuoted(1, "\t"), "  ")
+	s4 = "";
+	TEST_EQUAL(s4.getFieldQuoted(0), "")
+	s4 = "    \t   \t  ";
+	TEST_EQUAL(s4.getFieldQuoted(0), "")
+	s4 = "    \t   \t  a";
+	TEST_EQUAL(s4.getFieldQuoted(0), "a")
+	Index index = -1;
+	Index* i;
+	i = &index;
+	char* c = 0;
+	TEST_EXCEPTION(Exception::IndexUnderflow, s4.getFieldQuoted(0, ",", "'", i))	
+	*i = 1;
+	TEST_EXCEPTION(Exception::NullPointer, s4.getFieldQuoted(0, c, "'", i))	
+	TEST_EXCEPTION(Exception::NullPointer, s4.getFieldQuoted(0, " ", c, i))	
+	TEST_EXCEPTION(Exception::IndexUnderflow, s4.getFieldQuoted(-99, ","))	
+	s4 = "abcd efg \"jkl\" mno pqr stu vwx";
+	TEST_EQUAL(s4.getFieldQuoted(0), "abcd")
+	TEST_EQUAL(s4.getFieldQuoted(1), "efg")
+	TEST_EQUAL(s4.getFieldQuoted(2), "jkl")
+	TEST_EQUAL(s4.getFieldQuoted(3), "mno")
+	TEST_EQUAL(s4.getFieldQuoted(4), "pqr")
+	TEST_EQUAL(s4.getFieldQuoted(5), "stu")
+	TEST_EQUAL(s4.getFieldQuoted(6), "vwx")
+	s4 = "abcd efg \"jkl 'mno pqr' stu\" vwx";
+	TEST_EQUAL(s4.getFieldQuoted(0), "abcd")
+	TEST_EQUAL(s4.getFieldQuoted(1), "efg")
+	TEST_EQUAL(s4.getFieldQuoted(2), "jkl 'mno pqr' stu")
+	TEST_EQUAL(s4.getFieldQuoted(3), "vwx")
+	TEST_EQUAL(s4.getFieldQuoted(4), "")
+	s4 = "a b c d e f g";
+	TEST_EQUAL(s4.getFieldQuoted(0), "a")
+	TEST_EQUAL(s4.getFieldQuoted(1), "b")
+	TEST_EQUAL(s4.getFieldQuoted(2), "c")
+	TEST_EQUAL(s4.getFieldQuoted(3), "d")
+	TEST_EQUAL(s4.getFieldQuoted(4), "e")
+	TEST_EQUAL(s4.getFieldQuoted(5), "f")
+	TEST_EQUAL(s4.getFieldQuoted(6), "g")
+	TEST_EQUAL(s4.getFieldQuoted(7), "")
 RESULT
 
 CHECK(String::split(String[], Size, char*, Index))
@@ -951,6 +1034,53 @@ CHECK(String::split(vector<String>& strings, const char* delimiters, Index from 
 	TEST_EQUAL(s4.split(arr, c, 2), 2)
 	TEST_EQUAL(arr[0], "c d e")
 	TEST_EQUAL(arr[1], "f g h")
+	TEST_EQUAL(arr.size(), 2)
+RESULT
+
+CHECK(String::splitQuoted(vector<String>& strings, const char* delimiters, const char* quotes, Index from = 0))
+	vector<String> arr;
+	s4 = "a b c d e f g";
+	TEST_EQUAL(s4.splitQuoted(arr), 7)
+	TEST_EQUAL(arr.size(), 7)
+	if (arr.size() > 0)	
+	{
+		TEST_EQUAL(arr[0], "a")
+	}
+	if (arr.size() > 1)	TEST_EQUAL(arr[1], "b")	
+	if (arr.size() > 2)	TEST_EQUAL(arr[2], "c")
+	if (arr.size() > 3)	TEST_EQUAL(arr[3], "d")
+	if (arr.size() > 4)	TEST_EQUAL(arr[4], "e")
+	if (arr.size() > 5)	TEST_EQUAL(arr[5], "f")
+	if (arr.size() > 6)	TEST_EQUAL(arr[6], "g")
+	s4 = "b c d e f g h";
+	TEST_EQUAL(s4.splitQuoted(arr), 7)
+	TEST_EQUAL(arr.size(), 7)
+	if (arr.size() > 0) TEST_EQUAL(arr[0], "b")
+	if (arr.size() > 1) TEST_EQUAL(arr[1], "c")
+	if (arr.size() > 2) TEST_EQUAL(arr[2], "d")
+	if (arr.size() > 3) TEST_EQUAL(arr[3], "e")
+	if (arr.size() > 4) TEST_EQUAL(arr[4], "f")
+	if (arr.size() > 5) TEST_EQUAL(arr[5], "g")
+	if (arr.size() > 6) TEST_EQUAL(arr[6], "h")
+	s4= "";
+	TEST_EQUAL(s4.splitQuoted(arr), 0)
+	TEST_EQUAL(arr.size(), 0)
+
+	s4 = "a/b(cd)e*f-g";
+	char* c = "/()*-";
+	TEST_EQUAL(s4.splitQuoted(arr, c), 6)
+	TEST_EQUAL(arr.size(), 6)
+	if (arr.size() > 0) TEST_EQUAL(arr[0], "a")
+	if (arr.size() > 1) TEST_EQUAL(arr[1], "b")
+	if (arr.size() > 2) TEST_EQUAL(arr[2], "cd")
+	if (arr.size() > 3) TEST_EQUAL(arr[3], "e")
+	if (arr.size() > 4) TEST_EQUAL(arr[4], "f")
+	if (arr.size() > 5) TEST_EQUAL(arr[5], "g")
+
+	s4 = "b/c d e/f g h";
+	TEST_EQUAL(s4.splitQuoted(arr, c, String::CHARACTER_CLASS__QUOTES, 2), 2)
+	if (arr.size() > 0) TEST_EQUAL(arr[0], "c d e")
+	if (arr.size() > 1) TEST_EQUAL(arr[1], "f g h")
 	TEST_EQUAL(arr.size(), 2)
 RESULT
 
