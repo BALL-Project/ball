@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.11 2003/10/05 15:51:37 amoll Exp $
+// $Id: mainControl.h,v 1.12 2003/10/05 16:07:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -117,6 +117,9 @@ class MainControl
 
 		/// Display menu 
 		DISPLAY,
+
+		/// Display Viewpoint submenu
+		DISPLAY_VIEWPOINT,
 
 		/// Tools menu
 		TOOLS,
