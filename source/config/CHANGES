@@ -1,6 +1,6 @@
-changes since 1.0 (02.06.04):
+Changes Since Version 1.0 (02.06.04):
 
-added:
+Added:
 - Documentation for BALLView in the folder BALL/doc/BALLView
 - Stereo Modi: Side-by-Side and for shutter googles 
 - Clipping Planes
@@ -24,7 +24,7 @@ added:
 - Preferences for material parameters in OpenGL
 - added more classes to the Python SIP interface
 
-fixed:
+Fixed:
 - selection in MolecularControl with CRTG and SHIFT modifier
 - Cartoon model had problems with missing atoms 
 - creation of models for several selected items
@@ -48,7 +48,7 @@ fixed:
 - now show the correct number of added bonds
 - prevent flicking on startup from MainControlPreferences dialog
 
-changed:
+Changed:
 - inside of surfaces gets now correctly drawn
 - increased OpenGL performance 
 - .BALLView config files are now always stored in the users homedir
@@ -56,6 +56,8 @@ changed:
 - Scene Preferences
 - disabled Server in BALLView by default
 
+Code Changes:
+- fixed drawing of Boxes
 - GeometricObjects no longe have names
 - removed Information Processor for GeometricObjects
 - interface for the methods ModularWidget::applyPreferences, defaultPreferences, cancelPreferences
@@ -64,4 +66,3 @@ changed:
   from ModularWidget derived classes no longer have to deregister themselves
 - improved the code for the BALLView termination process
 - fixed core dump in RingPerception Processesor
-- fixed drawing of Boxes
