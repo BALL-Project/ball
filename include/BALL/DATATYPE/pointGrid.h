@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.2 1999/09/01 09:41:45 oliver Exp $ 
+// $Id: pointGrid.h,v 1.3 1999/09/06 22:20:59 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -882,7 +882,7 @@ namespace BALL
 		index = i + j * number_of_points_x_ 
 					+ k * number_of_points_x_ * number_of_points_y_;
 
-		if ((index >= (Position)number_of_grid_points_) || (index < 0))
+		if (index >= (Position)number_of_grid_points_)
 		{
 			return 0;
 		}
