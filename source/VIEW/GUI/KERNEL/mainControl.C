@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.22.4.7 2002/12/02 20:57:50 amoll Exp $
+// $Id: mainControl.C,v 1.22.4.8 2002/12/03 15:53:39 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -836,20 +836,19 @@ namespace BALL
 			List<Composite*>& objects = const_cast<List<Composite*>&>(message.getSelection());
 			List<Composite*>::Iterator it = objects.begin();
 
+			Size nr = 0;
 			for (; it != objects.end(); it++)
 			{
-				if (RTTI::isKindOf<GeometricObject>(**it) && (*it)->getParent() == 0) 
-				{
-					continue;
-				}					
 				if (!RTTI::isKindOf<GeometricObject>(*(*it)->getParent()) &&
 						!selection_.has((*it)->getParent())) 
 				{	
-					selection_.insert(*it);
+					selection_.insert((*it)->getParent());;
+					nr++;
 				}				
 			}
 			NewSelectionMessage* new_message = new NewSelectionMessage;
 			notify_(new_message);
+			Log.info() << "Selected " + String(nr) + "items."<< std::endl;
 		}
  
 		const HashSet<Composite*>& MainControl::getSelection() const
@@ -858,10 +857,21 @@ namespace BALL
 			return selection_;
 		}
   
-		bool MainControl::isSystemSelected()
+		System* MainControl::getSelectedSystem()
 			throw()
 		{
-			return (selection_.size() == 1 && RTTI::isKindOf<System>(**selection_.begin()));
+			System* system = NULL;
+			HashSet<Composite*>::Iterator it = selection_.begin();
+			for (; it != selection_.end(); it++)
+			{
+				if (*it == 0) continue;
+				if (RTTI::isKindOf<System>(**it))
+				{
+					if (system != 0) return 0;
+					system = (System*) *it;
+				}
+			}
+			return system;
 		}
 
 		void MainControl::selectComposite(Composite* composite, bool state)
@@ -877,9 +887,9 @@ namespace BALL
 			}				
 		}			
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/KERNEL/mainControl.iC>
-#		endif
+#ifdef BALL_NO_INLINE_FUNCTIONS
+#	include <BALL/VIEW/GUI/KERNEL/mainControl.iC>
+#endif
 
 	} // namespace VIEW
 

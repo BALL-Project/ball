@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.7.4.10 2002/12/03 10:41:20 oliver Exp $
+// $Id: control.C,v 1.7.4.11 2002/12/03 15:55:12 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <BALL/KERNEL/atom.h>
@@ -165,6 +165,30 @@ bool Control::removeComposite(Composite* composite)
 	return false;
 }
 
+Size Control::removeRecursiveComposite(Composite* composite)
+	throw()
+{
+	QListViewItem* item = findListViewItem_(composite);
+	if (item == 0) return 0;
+
+	Size nr = 0;
+
+	for (Size i = 0; i < composite->getDegree(); i++)
+	{
+		Composite* child = composite->getChild(i);
+		nr += removeRecursiveComposite(child);
+	}
+
+	delete item;
+	composite_to_item_.erase(composite);		
+
+	RemovedCompositeMessage *remove_message = new RemovedCompositeMessage;
+	remove_message->setComposite(composite);
+	remove_message->setDeletable(true);
+	notify_(remove_message);
+	return nr;
+}
+
 bool Control::updateComposite(Composite* composite)
 	throw()
 {
@@ -237,7 +261,6 @@ void Control::invalidateSelection()
 void Control::setSelection_()
 	throw(MainControlMissing)
 {	
-//Log.error() << "Control::setSelection_" << std::endl;
 	MainControl* main_control = MainControl::getMainControl(this);	
 	if (main_control == 0) 
 	{
@@ -245,8 +268,17 @@ void Control::setSelection_()
 	}
 
 	const HashSet<Composite*>& selection = main_control->getSelection();
+	if (selection.size() == 0)
+	{
+		QListViewItemIterator it(this);
+		for (; it.current(); ++it)
+		{
+			((QCheckListItem*) it.current())->setOn(false);
+		}
+		return;
+	}
+
 	QListViewItemIterator it(this);
-	
 	for (; it.current(); ++it)
 	{
 		if (selection.has(getCompositeAddress_(it.current())))
@@ -345,7 +377,6 @@ void Control::filterSelection_(Filter& filter)
 bool Control::reactToMessages_(Message* message)
 	throw()
 {
-//Log.error() << "Control::reactToMessages_ " << std::endl;
 	bool update = false;
 	if (RTTI::isKindOf<NewCompositeMessage>(*message))
 	{
@@ -526,22 +557,6 @@ QListViewItem* Control::findListViewItem_(Composite* composite)
 
 void Control::cut()
 {
-	const List<Composite*> selection = getSelection();
-
-	if (selection.size() == 0)
-	{
-		return;
-	}
-
-	QString message;
-
-	// notify the main window
-	WindowMessage *window_message = new WindowMessage;
-	message.sprintf("cutting %d objects ...", selection.size());
-	window_message->setStatusBar(message.ascii());
-	window_message->setDeletable(true);
-	notify_(window_message);
-
 	// delete old composites
 	if (copy_list_.size() > 0)
 	{
@@ -556,30 +571,22 @@ void Control::cut()
 
 	// remove all system composites from the tree and from the scene
 	// but do not delete them from memory
-	List<Composite*>::ConstIterator list_it = selection.begin();	
-	for (; list_it != selection.end(); ++list_it)
-	{
-		if (*list_it == 0)
-			continue;
-
-		// only if selected composite equals root => remove composite from tree and mainControl
-		if (*list_it == &((*list_it)->getRoot()))
-		{
-			// insert deep clone of the composite into the cut list
-			copy_list_.push_back((Composite*)(*list_it)->create());
+	System* system = MainControl::getMainControl(this)->getSelectedSystem();
+	// insert deep clone of the composite into the cut list
+	copy_list_.push_back((Composite*)system->create());
 			
-			// remove composite representation from tree
-			removeComposite(*list_it);
+	// remove composite representation from tree
+	Size nr_of_items = removeRecursiveComposite(system);
 			
-			// remove Composite from from mainControl
-			RemovedCompositeMessage *remove_message = new RemovedCompositeMessage;
-			remove_message->setComposite(*list_it);
-			remove_message->setDeletable(true);
-			notify_(remove_message);
-		}
-	}
+	GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
+	notify_(message);
 
-	updateSelection();	
+	/*
+	RemovedCompositeMessage *remove_message = new RemovedCompositeMessage;
+	remove_message->setComposite(system);
+	remove_message->setDeletable(true);
+	notify_(remove_message);
+	*/
 
 	// update scene
 	SceneMessage *scene_message = new SceneMessage;
@@ -589,7 +596,7 @@ void Control::cut()
 
 	// notify the main window
 	WindowMessage *window_message_2 = new WindowMessage;
-	window_message_2->setStatusBar("");
+	window_message_2->setStatusBar("Deleted " + String(nr_of_items) + " items.");
 	window_message_2->setDeletable(true);
 	notify_(window_message_2);
 }
@@ -769,7 +776,6 @@ void Control::eraseGeometricObject()
 
 void Control::selectedComposite(Composite* composite, bool state)
 {
-	//Log.error() << "Control::selectedComposite " << composite << "  " << state << std::endl;
 	const HashSet<Composite*>& selection =	MainControl::getMainControl(this)->getSelection();
 	if (selection.has(composite) == state)
 	{
@@ -795,8 +801,6 @@ void Control::selectedComposite(Composite* composite, bool state)
 				{				
 					bi->deselect();
 				}					
-
-				MainControl::getMainControl(this)->selectComposite(&(*bi), state);
 			}				
 		}				
 				
@@ -825,8 +829,6 @@ void Control::selectedComposite(Composite* composite, bool state)
 				{				
 					bi->deselect();
 				}					
-								
-				MainControl::getMainControl(this)->selectComposite(&(*bi));
 			}				
 		}						
 	}		
@@ -838,8 +840,9 @@ void Control::selectedComposite(Composite* composite, bool state)
 void Control::selectRecursive_(Composite* composite)
 	throw()
 {
-	if (!composite_to_item_.has(composite)) return;		
+	if (RTTI::isKindOf<GeometricObject> (*composite)) return;
 	MainControl::getMainControl(this)->selectComposite(composite);
+	if (!composite_to_item_.has(composite)) return;		
 	((QCheckListItem*) composite_to_item_[composite])->setOn(true);		
 	for (Size i=0; i< composite->getDegree();i++)
 	{
@@ -850,8 +853,9 @@ void Control::selectRecursive_(Composite* composite)
 void Control::deselectRecursive_(Composite* composite)
 	throw()
 {
-	if (!composite_to_item_.has(composite)) return;		
+	if (RTTI::isKindOf<GeometricObject> (*composite)) return;
 	MainControl::getMainControl(this)->selectComposite(composite, false);
+	if (!composite_to_item_.has(composite)) return;		
 	((QCheckListItem*) composite_to_item_[composite])->setOn(false);
 	for (Size i=0; i< composite->getDegree();i++)
 	{

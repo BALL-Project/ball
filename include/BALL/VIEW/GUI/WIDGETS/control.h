@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.10.4.10 2002/12/03 10:08:49 oliver Exp $
+// $Id: control.h,v 1.10.4.11 2002/12/03 15:55:28 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -191,6 +191,12 @@ namespace BALL
 					@see     updateContents
 			*/
 			bool removeComposite(Composite* composite)
+				throw();
+	
+			/** Recursive removal of composite from control.
+			 		@see removeComposite
+			*/
+			Size removeRecursiveComposite(Composite* composite)
 				throw();
 
 			/** Update a composite.
