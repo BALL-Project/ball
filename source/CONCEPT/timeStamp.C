@@ -1,4 +1,4 @@
-// $Id: timeStamp.C,v 1.10 2000/12/10 21:19:51 amoll Exp $
+// $Id: timeStamp.C,v 1.11 2000/12/13 16:26:51 oliver Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 
@@ -12,14 +12,23 @@ namespace BALL
 	void PreciseTime::write(PersistenceManager& pm) const
 		throw()
   {
-		pm.writePrimitive(secs_, "secs_");
-		pm.writePrimitive(usecs_, "usecs_");
+		Size tmp = secs_;
+		pm.writePrimitive(tmp, "secs_");
+		tmp = usecs_;
+		pm.writePrimitive(tmp, "usecs_");
 	}
 
 	bool PreciseTime::read(PersistenceManager& pm)
 		throw()
 	{
-		return (pm.readPrimitive(secs_, "secs_") && pm.readPrimitive(usecs_, "usecs_"));
+		Size tmp;
+		bool result = pm.readPrimitive(tmp, "secs_");
+		secs_ = tmp;
+
+		result &= pm.readPrimitive(tmp, "usecs_");
+		usecs_ = tmp;
+
+		return result;
 	}
 	
 	PreciseTime PreciseTime::now() 

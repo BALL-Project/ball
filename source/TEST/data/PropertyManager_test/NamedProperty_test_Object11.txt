@@ -25,14 +25,14 @@ START
         unsigned_int number_of_children_containing_selection_ = 0 
         STORABLE BALL::TimeStamp  selection_stamp_ 
           STORABLE BALL::PreciseTime  time_ 
-/            long secs_ = [0-9]+ 
-/            long usecs_ = [0-9]+ 
+/            unsigned_int secs_ = [0-9]+ 
+/            unsigned_int usecs_ = [0-9]+ 
           END_STORABLE
         END_STORABLE
         STORABLE BALL::TimeStamp  modification_stamp_ 
           STORABLE BALL::PreciseTime  time_ 
-/            long secs_ = [0-9]+ 
-/            long usecs_ = [0-9]+ 
+/            unsigned_int secs_ = [0-9]+ 
+/            unsigned_int usecs_ = [0-9]+ 
           END_STORABLE
         END_STORABLE
       END_BASEOBJECT
