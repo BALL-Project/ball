@@ -1,4 +1,4 @@
-// $Id: concept.doc,v 1.3 2000/06/16 10:39:33 anker Exp $
+// $Id: concept.doc,v 1.4 2000/07/16 19:28:10 oliver Exp $
 
 /**@name	Concepts
 	This chapter contains all relevant information on 
@@ -13,6 +13,8 @@
 	//@Include: classTest.h
 	//@Include: comparator.h
 	//@Include: composite.h
+	//@Include: embeddable.h
+	//@Include: enumerator.h
 
 	/**	@name Iterators
 	*/
@@ -25,7 +27,6 @@
 		//@Include: reverseRandomAccessIterator.h
 	//@}
 
-	//@Include: enumerator.h
 	//@Include: notification.h
 	//@Include: object.h
 	
