@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData1D_test.C,v 1.14 2003/05/03 17:29:34 oliver Exp $
+// $Id: RegularData1D_test.C,v 1.15 2003/06/12 14:12:32 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.14 2003/05/03 17:29:34 oliver Exp $")
+START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.15 2003/06/12 14:12:32 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -21,17 +21,17 @@ using namespace BALL;
 using namespace std;
 
 RegularData1D* rd_ptr;
-CHECK(TRegularData1D::TRegularData1D())
+CHECK(TRegularData1D() throw())
 	rd_ptr = new RegularData1D;
 	TEST_NOT_EQUAL(rd_ptr, 0)
 RESULT
 
 
-CHECK(TRegularData1D::~TRegularData1D())
+CHECK(~TRegularData1D() throw())
   delete rd_ptr;
 RESULT
 
-CHECK(BALL_CREATE(TRegularData1D<T>))
+CHECK(BALL_CREATE(TRegularData1D<ValueType>))
 	vector<float> v;
 	v.push_back(1.1);
 	RegularData1D a(v, 1.1, 1.2); 
@@ -48,7 +48,7 @@ RESULT
 		
 
 RegularData1D rd;
-CHECK(TRegularData1D::setOrigin(double origin))
+CHECK(void setOrigin(const CoordinateType& origin) throw())
 	rd.resize(2);
 	rd.setOrigin(1.1);
 	rd.setDimension(1.0);
@@ -57,7 +57,7 @@ CHECK(TRegularData1D::setOrigin(double origin))
 RESULT
 
 
-CHECK(TRegularData1D::setDimension(double dimension))
+CHECK(void setDimension(const CoordinateType& dimension) throw())
 	rd.setDimension(2.2);
 	TEST_REAL_EQUAL(rd.getOrigin(), 1.1)
 	TEST_REAL_EQUAL(rd.getDimension(), 2.2)
@@ -72,7 +72,7 @@ v.push_back(1.2);
 v.push_back(1.3);
 v.push_back(1.4);
 
-CHECK(TRegularData1D(const VectorType& data, double origin, double dimension))
+CHECK(TRegularData1D(const VectorType& data, const CoordinateType& origin = 0.0, const CoordinateType& dimension = 1.0) throw(Exception::OutOfMemory))
 	RegularData1D rd2(v, 1.0, 0.5);
 	TEST_REAL_EQUAL(rd2.getOrigin(), 1.0)
 	TEST_REAL_EQUAL(rd2.getDimension(), 0.5)
@@ -92,7 +92,7 @@ CHECK(TRegularData1D(const VectorType& data, double origin, double dimension))
 RESULT
 
 
-CHECK(TRegularData1D::clear())
+CHECK(void clear() throw())
 	rd.resize(10);
 	rd.setOrigin(0.0);
 	rd.setDimension(2.0);
@@ -112,7 +112,7 @@ CHECK(TRegularData1D::clear())
 RESULT
 
 
-CHECK(TRegularData1D::TRegularData1D& operator = (const TRegularData1D& data))
+CHECK(const TRegularData1D& operator = (const TRegularData1D<ValueType>& data) throw(Exception::OutOfMemory))
 	rd.resize(2);
 	rd.setOrigin(1.1);
 	rd.setDimension(2.1);
@@ -127,7 +127,7 @@ CHECK(TRegularData1D::TRegularData1D& operator = (const TRegularData1D& data))
 RESULT
 
 
-CHECK(TRegularData1D::TRegularData1D& operator = (const VectorType& data))
+CHECK(const TRegularData1D& operator = (const VectorType& data) throw(Exception::OutOfMemory))
 	RegularData1D::VectorType v;
 	v.push_back(1.1);
 	v.push_back(1.2);
@@ -147,7 +147,7 @@ CHECK(TRegularData1D::TRegularData1D& operator = (const VectorType& data))
 RESULT
 
 
-CHECK(TRegularData1D::bool operator == (const TRegularData1D& data) const )
+CHECK(bool operator == (const TRegularData1D& data) const throw())
 	rd.clear();
 	rd.resize(4);
 	rd[0] = 1.1;
@@ -169,14 +169,14 @@ CHECK(TRegularData1D::bool operator == (const TRegularData1D& data) const )
 RESULT
 
 
-CHECK(TRegularData1D::T& operator [] (Position index) const throw())
+CHECK(const ValueType& operator [] (const IndexType& index) const throw())
   TEST_REAL_EQUAL(rd[0], 1.1)
   TEST_REAL_EQUAL(rd[1], 1.2)
   TEST_REAL_EQUAL(rd[2], 1.3)
   TEST_REAL_EQUAL(rd[3], 1.4)
 RESULT
 
-CHECK(TRegularData1D::getData(Position index) const throw(Exception::OutOfGrid))
+CHECK(const ValueType& getData(const IndexType& index) const throw(Exception::OutOfGrid))
 	TEST_REAL_EQUAL(rd.getData(0), 1.1)
 	TEST_REAL_EQUAL(rd.getData(1), 1.2)
 	TEST_REAL_EQUAL(rd.getData(2), 1.3)
@@ -185,7 +185,7 @@ CHECK(TRegularData1D::getData(Position index) const throw(Exception::OutOfGrid))
 RESULT
 
 
-CHECK(TRegularData1D::T& operator [] (Position index))
+CHECK(ValueType& operator [] (const IndexType& index) throw())
   rd[3] = 2.1;
 	TEST_REAL_EQUAL(rd[3], 2.1)
   rd[3] = 2.2;
@@ -197,7 +197,7 @@ CHECK(TRegularData1D::T& operator [] (Position index))
 RESULT
 
 
-CHECK(TRegularData1D::getData(Position index) const throw(Exception::OutOfGrid))
+CHECK(ValueType& getData(const IndexType& index) throw(Exception::OutOfGrid))
 	rd.getData(0) = 3.1;
 	TEST_REAL_EQUAL(rd.getData(0), 3.1)
 	rd.getData(1) = 3.2;
@@ -211,13 +211,13 @@ RESULT
 
 
 RegularData1D rd2;
-CHECK(TRegularData1D::getSize() const )
+CHECK(IndexType getSize() const throw())
   TEST_EQUAL(rd.getSize(), 4)
 	TEST_EQUAL(rd2.getSize(), 0)
 RESULT
 
 
-CHECK(TRegularData1D::getOrigin() const )
+CHECK(const CoordinateType& getOrigin() const throw())
 	rd.setOrigin(1.1);
 	rd.setDimension(1.5);
 	TEST_REAL_EQUAL(rd.getOrigin(), 1.1)
@@ -225,7 +225,7 @@ CHECK(TRegularData1D::getOrigin() const )
 RESULT
 
 
-CHECK(TRegularData1D::getDimension() const )
+CHECK(const CoordinateType& getDimension() const throw())
 	TEST_REAL_EQUAL(rd.getDimension(), 1.5)
 	TEST_REAL_EQUAL(rd2.getDimension(), 0.0)
 RESULT
@@ -243,7 +243,7 @@ CHECK(TRegularData1D::setOrigin())
 RESULT
 
 
-CHECK(TRegularData1D::resize(Size new_size))
+CHECK(void resize(const IndexType& size) throw(Exception::OutOfMemory))
 	TEST_EQUAL(rd.getSize(), 4)
 	rd.resize(99);
 	TEST_EQUAL(rd.getSize(), 99)
@@ -253,7 +253,7 @@ CHECK(TRegularData1D::resize(Size new_size))
 	TEST_REAL_EQUAL(rd[2], 3.3)
 RESULT
 
-CHECK(TRegularData1D::rescale(Size new_size))
+CHECK(void rescale(const IndexType& new_size) throw(Exception::OutOfMemory))
 	TRegularData1D<float>	data;
 	TEST_EQUAL(data.getSize(), 0)
 	data.rescale(1);
@@ -320,6 +320,108 @@ CHECK(TRegularData1D::rescale(double origin, double dimension, Size new_size))
 	TEST_REAL_EQUAL(data[1], 1.5)
 	TEST_REAL_EQUAL(data[2], 2.0)
 RESULT
+
+
+CHECK(ConstIterator begin() const throw())
+  // ???
+RESULT
+
+CHECK(ConstIterator end() const throw())
+  // ???
+RESULT
+
+CHECK(CoordinateType getCoordinates(const IndexType& index) const throw(Exception::OutOfGrid))
+  // ???
+RESULT
+
+CHECK(IndexType getClosestIndex(const CoordinateType& x) const throw(Exception::OutOfGrid))
+  // ???
+RESULT
+
+CHECK(IndexType getLowerIndex(const CoordinateType& x) const throw(Exception::OutOfGrid))
+  // ???
+RESULT
+
+CHECK(Iterator begin() throw())
+  // ???
+RESULT
+
+CHECK(Iterator end() throw())
+  // ???
+RESULT
+
+CHECK(TRegularData1D(const CoordinateType& origin, const CoordinateType& dimension, const CoordinateType& spacing) throw(Exception::OutOfMemory))
+  // ???
+RESULT
+
+CHECK(TRegularData1D(const IndexType& size, const CoordinateType& origin = CoordinateType(0.0), const CoordinateType& dimension = CoordinateType(1.0)) throw(Exception::OutOfMemory))
+  // ???
+RESULT
+
+CHECK(TRegularData1D(const TRegularData1D& data) throw(Exception::OutOfMemory))
+  // ???
+RESULT
+
+CHECK(ValueType getInterpolatedValue(const CoordinateType& x) const throw(Exception::OutOfGrid))
+  // ???
+RESULT
+
+CHECK(ValueType operator () (const CoordinateType& x) const throw())
+  // ???
+RESULT
+
+CHECK(ValueType& getClosestValue(const CoordinateType& x) throw(Exception::OutOfGrid))
+  // ???
+RESULT
+
+CHECK(bool empty() const throw())
+  // ???
+RESULT
+
+CHECK(bool isInside(const CoordinateType& x) const throw())
+  // ???
+RESULT
+
+CHECK(bool operator != (const TRegularData1D& data) const throw())
+  // ???
+RESULT
+
+CHECK(const CoordinateType& getSpacing() const throw())
+  // ???
+RESULT
+
+CHECK(const ValueType& getClosestValue(const CoordinateType& x) const throw(Exception::OutOfGrid))
+  // ???
+RESULT
+
+CHECK(size_type max_size() const throw())
+  // ???
+RESULT
+
+CHECK(size_type size() const throw())
+  // ???
+RESULT
+
+CHECK(void binaryRead(const String& filename) throw())
+  // ???
+RESULT
+
+CHECK(void binaryWrite(const String& filename) const throw())
+  // ???
+RESULT
+
+CHECK(void getEnclosingIndices(const CoordinateType& x, Position& lower, Position& upper) const throw(Exception::OutOfGrid))
+  // ???
+RESULT
+
+CHECK(void getEnclosingValues(const CoordinateType& x, ValueType& lower, ValueType& upper) const throw(Exception::OutOfGrid))
+  // ???
+RESULT
+
+CHECK(void swap(TRegularData1D<ValueType>& data) throw())
+  // ???
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

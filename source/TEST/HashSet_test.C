@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashSet_test.C,v 1.16 2003/05/23 06:47:51 oliver Exp $
+// $Id: HashSet_test.C,v 1.17 2003/06/12 14:12:31 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -46,7 +46,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.16 2003/05/23 06:47:51 oliver Exp $")
+START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.17 2003/06/12 14:12:31 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -716,12 +716,12 @@ CHECK(HashSet::dump(std::ostream&, Size) const)
 	TEST_FILE_REGEXP(filename.c_str(), "data/HashSet_test.txt")
 RESULT
 
-CHECK(HashSet::isValid() const)
+CHECK(bool isValid() const throw())
 	HashSet<int> hs;
 	TEST_EQUAL(hs.isValid(), true)
 RESULT
 
-CHECK(HashSet::apply(UnaryProcessor))
+CHECK([EXTRA] HashSet::apply(UnaryProcessor))
 	HashSet<int> hs;
 	hs.insert(1);
 	hs.insert(2);
@@ -734,7 +734,7 @@ CHECK(HashSet::apply(UnaryProcessor))
 	TEST_EQUAL(*myproc.getPointer(), 2) myproc.forward();
 RESULT
 
-CHECK(HashSet STL compatibility)
+CHECK([EXTRA] HashSet STL compatibility)
 	HashSet<int> hs;
 	std::vector<int> v;
 	v.push_back(4);
