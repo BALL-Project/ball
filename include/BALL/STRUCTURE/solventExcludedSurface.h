@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventExcludedSurface.h,v 1.28 2002/12/12 13:10:36 oliver Exp $
+// $Id: solventExcludedSurface.h,v 1.29 2002/12/12 16:03:01 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -4049,7 +4049,7 @@ else
 				System *system = new System;
 				Molecule molecule(*edge[i]);
 				system->insert(molecule);
-				HINFile hinfile("DATA/SES/edge"+IndexToString(i,0)+".hin",ios::out);
+				HINFile hinfile("DATA/SES/edge"+IndexToString(i,0)+".hin", std::ios::out);
 				hinfile << *system;
 				hinfile.close();
 				delete system;
@@ -4073,10 +4073,10 @@ else
 						face1.insert(*molecule);
 					}
 				}
-				HINFile hinfile("DATA/SES/faceWithOut"+IndexToString(i,0)+".hin",ios::out);
+				HINFile hinfile("DATA/SES/faceWithOut"+IndexToString(i,0)+".hin", std::ios::out);
 				hinfile << face1;
 				hinfile.close();
-				hinfile.open("DATA/SES/faceWith"+IndexToString(i,0)+".hin",ios::out);
+				hinfile.open("DATA/SES/faceWith"+IndexToString(i,0)+".hin", std::ios::out);
 				hinfile << face2;
 				hinfile.close();
 				for (e = spheric_faces_[i]->edge_.begin(); e != spheric_faces_[i]->edge_.end(); e++)

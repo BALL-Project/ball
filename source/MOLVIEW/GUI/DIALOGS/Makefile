@@ -5,6 +5,8 @@ HEADER_DIR=$(BALL_PATH)/include/BALL/$(DIRECTORY)
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
+	atomProperties.C\
+	atomPropertiesData.C\
 	displayProperties.C\
 	displayPropertiesData.C\
 	labelProperties.C\
@@ -16,6 +18,8 @@ CPP_SOURCES=\
 	contourSurfaceDialogData.C
 
 MOC_SOURCES=\
+	atomProperties_moc.C\
+	atomPropertiesData_moc.C\
 	displayProperties_moc.C\
 	displayPropertiesData_moc.C\
 	labelProperties_moc.C\

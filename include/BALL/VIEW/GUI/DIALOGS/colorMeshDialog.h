@@ -16,11 +16,12 @@ namespace BALL
 	namespace VIEW
 	{
 
-class ColorMeshDialog : public ColorMeshDialogData
+class ColorMeshDialog 
+	: public ColorMeshDialogData
 { 
     Q_OBJECT
 
-public:
+	public:
     ColorMeshDialog( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~ColorMeshDialog();
 				

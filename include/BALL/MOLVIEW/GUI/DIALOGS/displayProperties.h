@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.13 2002/12/12 09:48:50 oliver Exp $
+// $Id: displayProperties.h,v 1.14 2002/12/12 16:02:57 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -60,7 +60,8 @@ namespace BALL
 	{
 
 			/// Exception to be thrown if invalid option is given for a modelprocessor
- 			class InvalidOption: public Exception::GeneralException
+ 			class InvalidOption
+				: public Exception::GeneralException
 			{
   			public:
 	   			InvalidOption(const char* file, int line, int option)

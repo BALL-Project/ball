@@ -1,13 +1,10 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>AtomPropertiesData</class>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QDialog">
+    <property name="name">
         <cstring>AtomPropertiesData</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
@@ -15,18 +12,14 @@
             <height>350</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>Atom Properties</string>
     </property>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>TextLabel1</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>10</y>
@@ -34,19 +27,15 @@
                 <height>21</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>name:</string>
         </property>
     </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>TextLabel4</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>160</y>
@@ -54,19 +43,15 @@
                 <height>21</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>charge:</string>
         </property>
     </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>TextLabel8</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>130</y>
@@ -74,19 +59,15 @@
                 <height>21</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>radius:</string>
         </property>
     </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>TextLabel3</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>100</y>
@@ -94,23 +75,18 @@
                 <height>21</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>element:</string>
         </property>
     </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QPushButton">
+        <property name="name">
             <cstring>apply_button</cstring>
         </property>
-        <property stdset="1">
-            <name>enabled</name>
+        <property name="enabled">
             <bool>false</bool>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>60</x>
                 <y>300</y>
@@ -118,19 +94,15 @@
                 <height>34</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>apply</string>
         </property>
     </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QPushButton">
+        <property name="name">
             <cstring>close_button</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>210</x>
                 <y>300</y>
@@ -138,23 +110,18 @@
                 <height>34</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>cancel</string>
         </property>
-        <property stdset="1">
-            <name>default</name>
+        <property name="default">
             <bool>true</bool>
         </property>
     </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>TextLabel6</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>250</y>
@@ -162,19 +129,15 @@
                 <height>21</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>force:</string>
         </property>
     </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>TextLabel5</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>220</y>
@@ -182,19 +145,15 @@
                 <height>21</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>velocity:</string>
         </property>
     </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>TextLabel7</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>190</y>
@@ -202,27 +161,21 @@
                 <height>21</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>frameShape</name>
-            <enum>NoFrame</enum>
+        <property name="frameShape">
+            <enum>MShape</enum>
         </property>
-        <property stdset="1">
-            <name>frameShadow</name>
-            <enum></enum>
+        <property name="frameShadow">
+            <enum>MShadow</enum>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>position:</string>
         </property>
     </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>TextLabel2</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>40</y>
@@ -230,19 +183,15 @@
                 <height>21</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>type name:</string>
         </property>
     </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>TextLabel2_2</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>70</y>
@@ -250,19 +199,15 @@
                 <height>21</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>type:</string>
         </property>
     </widget>
-    <widget>
-        <class>QLineEdit</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLineEdit">
+        <property name="name">
             <cstring>name_edit</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>90</x>
                 <y>10</y>
@@ -271,14 +216,11 @@
             </rect>
         </property>
     </widget>
-    <widget>
-        <class>QLineEdit</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLineEdit">
+        <property name="name">
             <cstring>type_name_edit</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>90</x>
                 <y>40</y>
@@ -287,14 +229,11 @@
             </rect>
         </property>
     </widget>
-    <widget>
-        <class>QLineEdit</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLineEdit">
+        <property name="name">
             <cstring>type_edit</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>90</x>
                 <y>70</y>
@@ -303,14 +242,11 @@
             </rect>
         </property>
     </widget>
-    <widget>
-        <class>QComboBox</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QComboBox">
+        <property name="name">
             <cstring>element_box</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>90</x>
                 <y>100</y>
@@ -319,14 +255,11 @@
             </rect>
         </property>
     </widget>
-    <widget>
-        <class>QLineEdit</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLineEdit">
+        <property name="name">
             <cstring>radius_edit</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>90</x>
                 <y>130</y>
@@ -335,14 +268,11 @@
             </rect>
         </property>
     </widget>
-    <widget>
-        <class>QLineEdit</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLineEdit">
+        <property name="name">
             <cstring>charge_edit</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>90</x>
                 <y>160</y>
@@ -351,18 +281,14 @@
             </rect>
         </property>
     </widget>
-    <widget>
-        <class>QLineEdit</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLineEdit">
+        <property name="name">
             <cstring>position_edit</cstring>
         </property>
-        <property stdset="1">
-            <name>enabled</name>
+        <property name="enabled">
             <bool>false</bool>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>90</x>
                 <y>190</y>
@@ -370,23 +296,18 @@
                 <height>21</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string></string>
         </property>
     </widget>
-    <widget>
-        <class>QLineEdit</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLineEdit">
+        <property name="name">
             <cstring>velocity_edit</cstring>
         </property>
-        <property stdset="1">
-            <name>enabled</name>
+        <property name="enabled">
             <bool>false</bool>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>90</x>
                 <y>220</y>
@@ -395,18 +316,14 @@
             </rect>
         </property>
     </widget>
-    <widget>
-        <class>QLineEdit</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLineEdit">
+        <property name="name">
             <cstring>force_edit</cstring>
         </property>
-        <property stdset="1">
-            <name>enabled</name>
+        <property name="enabled">
             <bool>false</bool>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>90</x>
                 <y>250</y>
@@ -459,8 +376,11 @@
         <receiver>AtomPropertiesData</receiver>
         <slot>changed()</slot>
     </connection>
-    <slot access="public">applyClicked()</slot>
-    <slot access="public">closeClicked()</slot>
-    <slot access="public">changed()</slot>
 </connections>
+<slots>
+    <slot>applyClicked()</slot>
+    <slot>closeClicked()</slot>
+    <slot>changed()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glPrimitiveManager.iC,v 1.7 2002/12/12 09:35:12 oliver Exp $
+// $Id: glPrimitiveManager.iC,v 1.8 2002/12/12 16:03:01 oliver Exp $
 
 BALL_INLINE
 const GLDisplayList& GLDisplayListObject_::operator ()
@@ -46,4 +46,3 @@ void GLPrimitiveManager::clearNames()
 	all_names_ = 0;
 }
 
->>>>>>> 1.5.4.4

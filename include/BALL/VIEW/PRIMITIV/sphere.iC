@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.iC,v 1.4 2002/12/12 09:41:06 oliver Exp $
+// $Id: sphere.iC,v 1.5 2002/12/12 16:03:02 oliver Exp $
 
 BALL_INLINE
 void Sphere::setRadius(Real radius)
@@ -16,4 +16,3 @@ Real Sphere::getRadius() const
 {
 	return radius_;
 }
->>>>>>> 1.2.4.3
