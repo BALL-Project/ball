@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.12 2001/05/17 01:30:52 oliver Exp $
+// $Id: amberNonBonded.C,v 1.13 2001/05/17 18:24:37 anker Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -15,7 +15,27 @@ namespace BALL
 
 	// default constructor
 	AmberNonBonded::AmberNonBonded()
-		:	ForceFieldComponent()
+		throw()
+		:	ForceFieldComponent(),
+			electrostatic_energy_(0.0),
+			vdw_energy_(0.0),
+			non_bonded_(),
+			is_hydrogen_bond_(),
+			number_of_1_4_(0),
+			cut_off_(0.0),
+			cut_off_vdw_(0.0),
+			cut_on_vdw_(0.0),
+			cut_off_electrostatic_(0.0),
+			cut_on_electrostatic_(0.0),
+			inverse_distance_off_on_vdw_3_(0.0),
+			inverse_distance_off_on_electrostatic_3_(0.0),
+			scaling_vdw_1_4_(0.0),
+			scaling_electrostatic_1_4_(0.0),
+			use_dist_depend_dielectric_(false),
+			// BAUSTELLE
+			// algorithm_type_(),
+			van_der_waals_(),
+			hydrogen_bond_()
 	{	
 		// set component name
 		setName("Amber NonBonded");
@@ -24,7 +44,27 @@ namespace BALL
 
 	// constructor
 	AmberNonBonded::AmberNonBonded(ForceField& force_field)
-		:	ForceFieldComponent(force_field)
+		throw()
+		:	ForceFieldComponent(force_field),
+			electrostatic_energy_(0.0),
+			vdw_energy_(0.0),
+			non_bonded_(),
+			is_hydrogen_bond_(),
+			number_of_1_4_(0),
+			cut_off_(0.0),
+			cut_off_vdw_(0.0),
+			cut_on_vdw_(0.0),
+			cut_off_electrostatic_(0.0),
+			cut_on_electrostatic_(0.0),
+			inverse_distance_off_on_vdw_3_(0.0),
+			inverse_distance_off_on_electrostatic_3_(0.0),
+			scaling_vdw_1_4_(0.0),
+			scaling_electrostatic_1_4_(0.0),
+			use_dist_depend_dielectric_(false),
+			// BAUSTELLE
+			// algorithm_type_(),
+			van_der_waals_(),
+			hydrogen_bond_()
 	{
 		// set component name
 		setName("Amber NonBonded");
@@ -33,6 +73,7 @@ namespace BALL
 
 	// copy constructor
 	AmberNonBonded::AmberNonBonded(const AmberNonBonded&	component, bool clone_deep)
+		throw()
 		:	ForceFieldComponent(component, clone_deep),
 			electrostatic_energy_(component.electrostatic_energy_),
 			vdw_energy_(component.vdw_energy_),
@@ -58,9 +99,72 @@ namespace BALL
 
 	// destructor
 	AmberNonBonded::~AmberNonBonded()
+		throw()
 	{
+		clear();
 	}
 
+	const AmberNonBonded& AmberNonBonded::operator = (const AmberNonBonded& anb)
+		throw()
+	{
+		ForceFieldComponent::operator = (anb);
+
+		electrostatic_energy_ = anb.electrostatic_energy_;
+		vdw_energy_ = anb.vdw_energy_;
+		non_bonded_ = anb.non_bonded_;
+		is_hydrogen_bond_ = anb.is_hydrogen_bond_;
+		number_of_1_4_ = anb.number_of_1_4_;
+		cut_off_ = anb.cut_off_;
+		cut_off_vdw_ = anb.cut_off_vdw_;
+		cut_on_vdw_ = anb.cut_on_vdw_;
+		cut_off_electrostatic_ = anb.cut_off_electrostatic_;
+		cut_on_electrostatic_ = anb.cut_on_electrostatic_;
+		inverse_distance_off_on_vdw_3_ = anb.inverse_distance_off_on_vdw_3_;
+		inverse_distance_off_on_electrostatic_3_ = anb.inverse_distance_off_on_electrostatic_3_;
+		scaling_vdw_1_4_ = anb.scaling_vdw_1_4_;
+		scaling_electrostatic_1_4_ = anb.scaling_electrostatic_1_4_;
+		use_dist_depend_dielectric_ = anb.use_dist_depend_dielectric_;
+		algorithm_type_ = anb.algorithm_type_;
+		van_der_waals_ = anb.van_der_waals_;
+		hydrogen_bond_ = anb.hydrogen_bond_;
+
+		return *this;
+	}
+
+
+	void AmberNonBonded::clear()
+		throw()
+	{
+		electrostatic_energy_ = 0.0;
+		vdw_energy_ = 0.0;
+		non_bonded_.clear();
+		is_hydrogen_bond_.clear();
+		number_of_1_4_ = 0;
+		cut_off_ = 0.0;
+		cut_off_vdw_ = 0.0;
+		cut_on_vdw_ = 0.0;
+		cut_off_electrostatic_ = 0.0;
+		cut_on_electrostatic_ = 0.0;
+		inverse_distance_off_on_vdw_3_ = 0.0;
+		inverse_distance_off_on_electrostatic_3_ = 0.0;
+		scaling_vdw_1_4_ = 0.0;
+		scaling_electrostatic_1_4_ = 0.0;
+		use_dist_depend_dielectric_ = false;
+		// BAUSTELLE
+		// algorithm_type_ = anb.algorithm_type_;
+		van_der_waals_.clear();
+		hydrogen_bond_.clear();
+
+		// BAUSTELLE: missing OCI
+		// ForceFieldComponent::clear();
+	}
+
+
+	bool AmberNonBonded::operator == (const AmberNonBonded& /* anb */)
+		throw(Exception::NotImplemented)
+	{
+		throw Exception::NotImplemented(__FILE__, __LINE__);
+	}
 
 	// This function determines the most efficient way to calculate all
 	// non-bonded atom pairs that depends on the number of atoms of the
@@ -69,6 +173,7 @@ namespace BALL
 	// efficient way. Otherwise it returns 1. 
 	MolmecSupport::PairListAlgorithmType
 	AmberNonBonded::determineMethodOfAtomPairGeneration()
+		throw()
 	{
 		MolmecSupport::PairListAlgorithmType algorithm_type 
 			= MolmecSupport::HASH_GRID;
@@ -81,6 +186,7 @@ namespace BALL
 	}
 
 	void AmberNonBonded::update()
+		throw()
 	{
 		if (getForceField() == 0) 
 		{
@@ -110,6 +216,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool AmberNonBonded::setup()
+		throw()
 	{
 		if (getForceField() == 0) 
 		{
@@ -290,6 +397,7 @@ namespace BALL
 		(const vector<pair<Atom*, Atom*> >& atom_vector,
 		 const LennardJones& lennard_jones, 
 		 const Potential1210& hydrogen_bond)
+		throw()
 	{
 		// throw away the old rubbish
 		non_bonded_.clear();
@@ -418,6 +526,7 @@ namespace BALL
 
 	BALL_INLINE
 	void AMBERcalculateMinimumImage(Vector3& difference, const Vector3& period)
+		throw()
 	{
 		Vector3 half_period(period * 0.5);
 
@@ -573,6 +682,7 @@ namespace BALL
      bool is_hydrogen_bond, 
 		 bool use_periodic_boundary, 
 		 bool use_dist_depend)
+		throw()
 	{
     // calculate the difference vector between the two atoms
     Vector3 direction = it->atom1->getPosition() - it->atom2->getPosition(); 
@@ -766,6 +876,7 @@ namespace BALL
 	// This method AMBERcalculates the current energy resulting from
 	// non-bonded interactions 
 	double AmberNonBonded::updateEnergy()
+		throw()
 	{
 		// Calculate squared cut_off values
 		double	cut_off_electrostatic_2 = SQR(cut_off_electrostatic_);
@@ -960,6 +1071,7 @@ namespace BALL
 	// This method AMBERcalculates the current forces resulting from
 	// Van-der-Waals and electrostatic interactions 
 	void AmberNonBonded::updateForces()
+		throw()
 	{
 		// Define variables for the squared cut_offs, the unit factors and so on
 		double	cut_off_electrostatic_2 = SQR(cut_off_electrostatic_);
@@ -1143,11 +1255,13 @@ namespace BALL
 	} // end of method AmberNonBonded::updateForces()
 
 	double AmberNonBonded::getElectrostaticEnergy() const
+		throw()
 	{
 		return electrostatic_energy_;
 	}
 
 	double AmberNonBonded::getVdwEnergy() const
+		throw()
 	{
 		return vdw_energy_;
 	}
