@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.h,v 1.7 2000/09/26 19:29:46 oliver Exp $
+// $Id: createSpectrumProcessor.h,v 1.8 2000/09/27 13:34:15 oliver Exp $
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
 #define BALL_NMR_CREATESPECTRUMPROCESSOR_H
@@ -55,6 +55,10 @@ namespace BALL
 
 		//@{
 
+		/**	Start method.
+		*/
+		virtual bool start() 
+			throw();
 		/**	Application method.
 		*/
 		virtual Processor::Result operator () (Composite& atom)

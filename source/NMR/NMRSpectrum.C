@@ -1,6 +1,11 @@
-// $Id: NMRSpectrum.C,v 1.8 2000/09/27 07:21:10 oliver Exp $
+// $Id: NMRSpectrum.C,v 1.9 2000/09/27 13:34:05 oliver Exp $
 
 #include<BALL/NMR/NMRSpectrum.h>
+#include<BALL/NMR/randomCoilShiftProcessor.h>
+#include<BALL/NMR/johnsonBoveyShiftProcessor.h>
+#include<BALL/NMR/haighMallionShiftProcessor.h>
+#include<BALL/NMR/EFShiftProcessor.h>
+#include<BALL/NMR/anisotropyShiftProcessor.h>
 #include<BALL/FORMAT/PDBFile.h>
 #include<BALL/KERNEL/PTE.h>
 #include<BALL/COMMON/limits.h>
@@ -170,12 +175,17 @@ namespace BALL
 		for (; atom_iter != system_->endAtom(); ++atom_iter)
 		{
 			shift = (*atom_iter).getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
-			if (shift != 0.0)
+			// if (shift != 0.0)
 			{
-				outfile << (*atom_iter).getFullName() << " " << shift << endl;
+				outfile << atom_iter->getResidue()->getName() << atom_iter->getResidue()->getID()
+								<< ":"  << atom_iter->getName() << " " << shift << " ";
+				outfile << atom_iter->getProperty(RandomCoilShiftProcessor::PROPERTY__RANDOM_COIL_SHIFT).getFloat() << " ";
+				outfile << atom_iter->getProperty(AnisotropyShiftProcessor::PROPERTY__ANISOTROPY_SHIFT).getFloat() << " ";
+				outfile << atom_iter->getProperty(EFShiftProcessor::PROPERTY__EF_SHIFT).getFloat() << " ";
+				outfile << atom_iter->getProperty(JohnsonBoveyShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat() << " ";
+				outfile << atom_iter->getProperty(HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat() << " " << endl;
 			}
 		}
-		outfile << "END" << " " << 0.0 << endl;
 	}
 
 	void NMRSpectrum::plotSpectrum(const String& filename) const
@@ -186,8 +196,8 @@ namespace BALL
 
 		// Berechnung der Dichteverteilung:
 
-	  float min = getSpectrumMin();
-	  float max = getSpectrumMax();
+	  float min = 0.0;
+	  float max = 10.0;
 	  float step_size = (max - min) / density_;
 
 		

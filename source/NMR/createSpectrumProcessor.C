@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.C,v 1.6 2000/09/27 07:21:52 oliver Exp $
+// $Id: createSpectrumProcessor.C,v 1.7 2000/09/27 13:34:05 oliver Exp $
 
 #include <BALL/NMR/createSpectrumProcessor.h>
 #include <BALL/NMR/shiftModule.h>
@@ -20,14 +20,20 @@ namespace BALL
 	{
 	}
 
+	bool CreateSpectrumProcessor::start()
+		throw()
+	{
+		// clear the contents of the old peak list
+		peaklist_.clear();
+		
+		return valid_;
+	}
+
 	void CreateSpectrumProcessor::init()
 		throw()
 	{
 		valid_ = false;
 
-		// clear the contents of the old peak list
-		peaklist_.clear();
-		
 		// read the contents of the ignore set
 		// this hash set contains all quickly exchanging protons
 		// -- thos protons are not seen in the spectrum and do
@@ -98,16 +104,23 @@ namespace BALL
 		{
 			if (atom->hasProperty(ShiftModule::PROPERTY__SHIFT))
 			{
+				float shift = atom->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
 				// if the atom is in the ignore table, skip it
 				if (!ignore_atoms_.has(atom->getFullName())
-						&& !ignore_atoms_.has("*:" + atom->getName()))
+						&& !ignore_atoms_.has("*:" + atom->getName())
+						&& (atom->getElement() == PTE[Element::H])
+						&& (shift != 0.0))
 				{
 					Peak1D peak;
 					peak.setAtom(atom);
-					peak.setValue(atom->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat());
+					peak.setValue(shift);
 					peak.setWidth(1.0);
 					peak.setHeight(1.0);
 					peaklist_.push_back(peak);	
+				}
+				else 
+				{
+					Log.info() << "ignoring shift for " << atom->getFullName() << endl;
 				}
 			}	
 		}
