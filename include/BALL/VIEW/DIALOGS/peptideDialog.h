@@ -116,13 +116,13 @@ namespace BALL
 			void insert_seq();
 
 			protected:
-
+ 
+      bool islower_(char ch)
+      	throw();
+ 
 			void insert_(const String& aa)
 				throw();
 
-			//void insert_seq(int seq_size)
-			//	throw();
-				
 			void truncString_(String& data)
 				throw();
 
