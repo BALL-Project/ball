@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.44 2004/04/21 15:06:28 amoll Exp $
+// $Id: mainControl.h,v 1.45 2004/04/30 13:17:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -29,6 +29,10 @@
 
 #ifndef BALL_FORMAT_INIFILE_H
 # include <BALL/FORMAT/INIFile.h>
+#endif
+
+#ifndef BALL_SYSTEM_FILE_H
+#include <BALL/SYSTEM/file.h>
 #endif
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -706,7 +710,23 @@ namespace BALL
 			///
 			void setWorkingDir(const String& dir)
 				throw() { working_dir_ = dir;}
+
+			///
+			void enableLoggingToFile()
+				throw();
 			
+			///
+			void disableLoggingToFile()
+				throw();
+
+			///
+			void setLoggingFilename(const String& string)
+				throw();
+
+			///
+			const String& getLoggingFilename() const
+				throw();
+
 			//@}
 			/**	@name	Debugging and Diagnostics
 			*/
@@ -810,6 +830,10 @@ namespace BALL
 			static const char  *simulation_stoped_xpm_[];
 
 			String 							working_dir_;
+
+			String 							logging_file_name_;
+			bool 								logging_to_file_;
+			File 								logging_file_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.C,v 1.9 2003/10/15 13:47:44 amoll Exp $
+// $Id: mainControlPreferences.C,v 1.10 2004/04/30 13:17:15 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
@@ -73,6 +73,19 @@ bool MainControlPreferences::showLabelsEnabled() const
 	throw()
 {
 	return show_labels->isChecked();
+}
+
+void MainControlPreferences::enableLoggingToFile(bool state)
+	throw()
+{
+	if (state) logging_to_file->setChecked(true);
+	else       logging_to_file->setChecked(false);
+}
+
+bool MainControlPreferences::loggingToFileEnabled() const
+	throw()
+{
+	return logging_to_file->isChecked();
 }
 
 } } // namespaces

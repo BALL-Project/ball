@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.h,v 1.9 2004/02/26 08:41:33 anhi Exp $
+// $Id: mainControlPreferences.h,v 1.10 2004/04/30 13:17:21 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MAINCONTROLPREFERENCES_H
@@ -64,6 +64,15 @@ class BALL_EXPORT MainControlPreferences
 
 	/// Inspection, wheter the name labels in the GenericControl instances should be enabled.
 	bool showLabelsEnabled() const
+		throw();
+
+
+	/// Enable logging to file
+	void enableLoggingToFile(bool state)
+		throw();
+
+	///
+	bool loggingToFileEnabled() const
 		throw();
 	
 	/** Fetch the preferences (the style) from the INIFile <tt>inifile</tt>.

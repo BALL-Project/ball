@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.79 2004/04/21 15:06:14 amoll Exp $
+// $Id: mainControl.C,v 1.80 2004/04/30 13:17:15 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -83,7 +83,9 @@ namespace BALL
 				composites_muteable_(true),
 				stop_simulation_(false),
 				simulation_thread_(0),
-				timer_(new StatusbarTimer(this))
+				timer_(new StatusbarTimer(this)),
+				logging_file_name_("VIEW.log"),
+				logging_to_file_(false)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new MainControl " << this << std::endl;
@@ -679,6 +681,8 @@ namespace BALL
 
 			preferences.insertPage(main_control_preferences_, "General");
 			preferences.showPage(0);
+
+			main_control_preferences_->enableLoggingToFile(logging_to_file_);
 		}
 
 		void MainControl::finalizePreferencesTab(Preferences &preferences)
@@ -701,6 +705,11 @@ namespace BALL
 				QApplication::setStyle(main_control_preferences_->getStyle());
 				BALL_VIEW_DOCKWINDOWS_SHOW_LABELS = main_control_preferences_->showLabelsEnabled();
 				QWidget::update();
+
+				if (!main_control_preferences_->loggingToFileEnabled())
+					disableLoggingToFile();
+				else 	
+					enableLoggingToFile();
 			}
 		}
 
@@ -736,6 +745,11 @@ namespace BALL
 				setWorkingDir(inifile.getValue("WINDOWS", "File::working_dir"));
 			}
 
+			if (inifile.hasEntry("WINDOWS", "File::enable_logging_file"))
+			{
+				enableLoggingToFile();
+			}
+
 		#ifdef BALL_PLATFORM_WINDOWS
 			// workaround for strange microsoft windows behaviour
 			x_pos += 4;
@@ -760,6 +774,11 @@ namespace BALL
 			inifile.insertValue("WINDOWS", "Main::width", String(width()));
 	 		inifile.insertValue("WINDOWS", "Main::height", String(height()));
 			inifile.insertValue("WINDOWS", "File::working_dir", getWorkingDir());
+
+			if (logging_to_file_) 
+			{
+				inifile.insertValue("WINDOWS", "File::enable_logging_file", 1);
+			}
 
 			QString s;
 			QTextStream stream( &s, IO_ReadWrite);
@@ -1425,6 +1444,48 @@ namespace BALL
 			}
 		}
 
+		void MainControl::enableLoggingToFile()
+			throw()
+		{
+			if (logging_to_file_) return;
+			if (logging_file_name_ == "")
+			{
+				Log.error() << "Empty logging file name" << std::endl;
+				return;
+			}
+
+			logging_to_file_ = true;
+			logging_file_.open(logging_file_name_, std::ios::out);
+			Log.insert(logging_file_);
+
+			main_control_preferences_->enableLoggingToFile(true);
+		}
+		
+		void MainControl::disableLoggingToFile()
+			throw()
+		{
+			if (!logging_to_file_) return;
+			logging_to_file_ = false;
+			Log.remove(logging_file_);
+			logging_file_.close();
+		}
+
+		void MainControl::setLoggingFilename(const String& string)
+			throw()
+		{
+			logging_file_name_ = string;
+			if (logging_to_file_) 
+			{
+				disableLoggingToFile();
+				enableLoggingToFile();
+			}
+		}
+
+		const String& MainControl::getLoggingFilename() const
+			throw()
+		{
+			return logging_file_name_;
+		}
 
 		// ======================= StatusbarTimer =========================
 		StatusbarTimer::StatusbarTimer(QObject* parent)
