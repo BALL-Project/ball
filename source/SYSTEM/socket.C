@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.10 2000/01/08 12:18:31 oliver Exp $
+// $Id: socket.C,v 1.11 2000/01/13 22:36:55 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -1108,13 +1108,21 @@ namespace BALL
 	}
 
 	IOStreamSocket::IOStreamSocket(SocketBuf::type ty, int proto)
-		:	BALL_IOS(new SockInetBuf(ty, proto))
+		:	IOSockStream(new SockInetBuf(ty, proto))
 	{
+		if (rdbuf() == 0)
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
 	}
 
 	IOStreamSocket::IOStreamSocket(const SocketBuf& sb)
-		: BALL_IOS(new SockInetBuf(sb))
+		: IOSockStream(new SockInetBuf(sb))
 	{
+		if (rdbuf() == 0)
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
 	}
 
 	IOStreamSocket::~IOStreamSocket()
