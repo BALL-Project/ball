@@ -1,4 +1,4 @@
-// $Id: baseFragment.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: baseFragment.h,v 1.2 1999/09/06 22:21:18 oliver Exp $
 
 #ifndef BALL_KERNEL_BASEFRAGMENT_H
 #define BALL_KERNEL_BASEFRAGMENT_H
@@ -13,10 +13,6 @@
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #	include <BALL/CONCEPT/property.h>
-#endif
-
-#ifndef BALL_CONCEPT_SELECT_H
-#	include <BALL/CONCEPT/selectable.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -48,8 +44,7 @@ namespace BALL
 	*/
 	class BaseFragment
 		: public Composite,
-			public PropertyManager,
-			public Selectable
+			public PropertyManager
 	{
 		public:
 

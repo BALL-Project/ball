@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: bond.C,v 1.2 1999/09/06 22:22:18 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 
@@ -16,7 +16,6 @@ namespace BALL
 	Bond::Bond(void)
 		: Composite(),
 			PropertyManager(),
-			Selectable(),
 			first_(BALL_BOND_DEFAULT_FIRST_ATOM),
 			second_(BALL_BOND_DEFAULT_SECOND_ATOM),
 			name_(BALL_BOND_DEFAULT_NAME),
@@ -28,7 +27,6 @@ namespace BALL
 	Bond::Bond(const Bond& bond, bool deep)
 		: Composite(bond, deep),
 			PropertyManager(bond, deep),
-			Selectable(bond, deep),
 			first_(bond.first_),
 			second_(bond.second_),
 			name_(bond.name_),
@@ -42,7 +40,6 @@ namespace BALL
 		 Atom &second, Bond::Order order,Type type)
 		: Composite(),
 			PropertyManager(),
-			Selectable(),
 			first_(BALL_BOND_DEFAULT_FIRST_ATOM),
 			second_(BALL_BOND_DEFAULT_SECOND_ATOM),
 			name_(name),
@@ -112,7 +109,6 @@ namespace BALL
 	void Bond::clear(void)
 	{
 		PropertyManager::clear();
-		Selectable::clear();
 		
 		arrangeBonds_();
 		clear_();
@@ -121,7 +117,6 @@ namespace BALL
 	void Bond::destroy(void)
 	{
 		PropertyManager::destroy();
-		Selectable::destroy();
 
 		arrangeBonds_();
 		clear_();
@@ -135,7 +130,6 @@ namespace BALL
 			Composite::persistentWrite(pm);
 
       pm.writeStorableObject(*(PropertyManager*)this, "PropertyManager");
-      pm.writeStorableObject(*(Selectable*)this, "Selectable");
  
 			pm.writeObjectPointer(first_, "first_");
 			pm.writeObjectPointer(second_, "second_");
@@ -152,7 +146,6 @@ namespace BALL
 		pm.checkObjectTrailer(0);
 
 		pm.readStorableObject(*(PropertyManager*)this, "PropertyManager");
-		pm.readStorableObject(*(Selectable*)this, "Selectable");
 
 		pm.readObjectPointer(first_, "first_");
 		pm.readObjectPointer(second_, "second_");
@@ -174,7 +167,6 @@ namespace BALL
 	void Bond::set(const Bond &bond,bool deep)
 	{
 		PropertyManager::set(bond, deep);
-		Selectable::set(bond, deep);
 
 		first_ = bond.first_;
 		second_ = bond.second_;
@@ -198,7 +190,6 @@ namespace BALL
 	void Bond::swap(Bond &bond)
 	{
 		PropertyManager::swap(bond);
-		Selectable::swap(bond);
 
 		Atom* temp_atom = first_;
 		first_ = bond.first_;

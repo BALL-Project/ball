@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.2 1999/08/31 22:14:06 oliver Exp $
+// $Id: atom.h,v 1.3 1999/09/06 22:21:18 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -17,10 +17,6 @@
 
 #ifndef BALL_CONCEPT_REVERSERANDOMACCESSITERATOR_H
 #	include <BALL/CONCEPT/reverseRandomAccessIterator.h>
-#endif
-
-#ifndef BALL_CONCEPT_SELECT_H
-#	include <BALL/CONCEPT/selectable.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -88,13 +84,12 @@ namespace BALL {
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.2 $
-			@date    $Date: 1999/08/31 22:14:06 $
+			@version $Revision: 1.3 $
+			@date    $Date: 1999/09/06 22:21:18 $
 	*/
 	class Atom
 		: public Composite,
-			public PropertyManager,
-			public Selectable
+			public PropertyManager
 	{
 		public:
 			/** @name Class friends
@@ -163,7 +158,6 @@ namespace BALL {
 					@return      {\bf Atom} - new constructed atom
 					@see         Composite::Composite
 					@see         PropertyManager::PropertyManager
-					@see         Selectable::Selectable
 			*/
 			Atom();
 		
@@ -178,7 +172,6 @@ namespace BALL {
 					@return      {\bf Atom} - new constructed atom cloned from {\em stom}
 					@see         Composite::Composite
 					@see         PropertyManager::PropertyManager
-					@see         Selectable::Selectable
 			*/
 			Atom(const Atom& atom, bool deep = true);
 		
@@ -211,7 +204,6 @@ namespace BALL {
 					@return      {\bf Atom} - new constructed atom
 					@see         Composite::Composite
 					@see         PropertyManager::PropertyManager
-					@see         Selectable::Selectable
 			*/
 			Atom
 				(Element& element,
@@ -537,6 +529,7 @@ namespace BALL {
 
 			/** Change of the atom's velocity vector.
 					Change the velocity vector of {\em *this} atom to {\em velocity}.
+					
 
 					@param       velocity the new velocity vector of {\em *this} atom
 					@see         Atom::getVelocity
@@ -545,7 +538,7 @@ namespace BALL {
 
 			/** Mutable inspection of the atom's velocity vector.
 					Access a mutable reference to the velocity vector of {\em *this} atom.
-
+					BALL uses units of \TeX{\AA}/ps for the velocity.
 					@return      {\bf Vector3\&} - mutable reference to the velocity vector of {\em *this} atom
 					@see         Atom::setVelocity
 			*/
@@ -553,6 +546,7 @@ namespace BALL {
 
 			/** Constant inspection of the atom's velocity vector.
 					Access a constant reference to the velocity vector of {\em *this} atom.
+					BALL uses units of \TeX{\AA}/ps for the velocity.
 
 					@return      {\bf const Vector3\&} - constant reference to the velocity vector of {\em *this} atom
 					@see         Atom::setVelocity

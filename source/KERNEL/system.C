@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: system.C,v 1.2 1999/09/06 22:22:18 oliver Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -13,7 +13,6 @@ namespace BALL
 	System::System(void)
 		:	Composite(),
 			PropertyManager(),
-			Selectable(),
 			name_(BALL_SYSTEM_DEFAULT_NAME)
 	{
 	}
@@ -26,7 +25,6 @@ namespace BALL
 	System::System(const String& name)
 		:	Composite(),
 			PropertyManager(),
-			Selectable(),
 			name_(name)
 	{
 	}
@@ -37,7 +35,6 @@ namespace BALL
       Composite::persistentWrite(pm);
 
       pm.writeStorableObject(*(PropertyManager*)this, "PropertyManager");
-      pm.writeStorableObject(*(Selectable*)this, "Selectable");
  
       pm.writePrimitive(name_, "name_");
     pm.writeObjectTrailer(name);
@@ -50,7 +47,6 @@ namespace BALL
     pm.checkObjectTrailer(0);
 
 		pm.readStorableObject(*(PropertyManager*)this, "PropertyManager");
-		pm.readStorableObject(*(Selectable*)this, "Selectable");
 
     pm.readPrimitive(name_, "name_");
 	}
@@ -65,7 +61,6 @@ namespace BALL
 	{
 		Composite::clear();
 		PropertyManager::clear();
-		Selectable::clear();
 
 		clear_();
 	}
@@ -74,7 +69,6 @@ namespace BALL
 	{
 		Composite::destroy();
 		PropertyManager::destroy();
-		Selectable::destroy();
 
 		clear_();
 	}
@@ -86,7 +80,6 @@ namespace BALL
 
 		Composite::set(system, deep);
 		PropertyManager::set(system, deep);
-		Selectable::set(system, deep);
 		name_ = system.name_;
 
 		if (clone_them && deep)
@@ -113,7 +106,6 @@ namespace BALL
 	{
 		Composite::swap(system);
 		PropertyManager::swap(system);
-		Selectable::swap(system);
 
 		name_.swap(system.name_);
 	}

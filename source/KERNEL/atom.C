@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.3 1999/09/05 09:02:56 oliver Exp $
+// $Id: atom.C,v 1.4 1999/09/06 22:22:18 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -14,7 +14,6 @@ namespace BALL
 	Atom::Atom(void)
 		:	Composite(),
 			PropertyManager(),
-			Selectable(),
 			element_(BALL_ATOM_DEFAULT_ELEMENT),
 			charge_(BALL_ATOM_DEFAULT_CHARGE),
 			name_(BALL_ATOM_DEFAULT_NAME),
@@ -31,7 +30,6 @@ namespace BALL
 	Atom::Atom(const Atom& atom, bool deep)
 		:	Composite(atom, deep),
 			PropertyManager(atom, deep),
-			Selectable(atom, deep),
 			element_(atom.element_),
 			charge_(atom.charge_),
 			name_(atom.name_),
@@ -51,7 +49,6 @@ namespace BALL
 						 const Vector3& force, float charge, float radius)
 		:	Composite(),
 			PropertyManager(),
-			Selectable(),
 			element_(&element),
 			charge_(charge),
 			name_(name),
@@ -74,7 +71,6 @@ namespace BALL
 	{
 		Composite::clear();
 		PropertyManager::clear();
-		Selectable::clear();
 
 		clear_();
 	}
@@ -83,7 +79,6 @@ namespace BALL
 	{
 		Composite::destroy();
 		PropertyManager::destroy();
-		Selectable::destroy();
 
 		clear_();
 	}
@@ -95,7 +90,6 @@ namespace BALL
 			Composite::persistentWrite(pm);
 
 			pm.writeStorableObject(*(PropertyManager*)this, "PropertyManager");
-			pm.writeStorableObject(*(Selectable*)this, "Selectable");
 
 			pm.writePrimitive((String)element_->getSymbol(), "element_");
 			pm.writePrimitive(charge_, "charge_");
@@ -120,7 +114,6 @@ namespace BALL
 		pm.checkObjectTrailer(0);
 
 		pm.readStorableObject(*(PropertyManager*)this, "PropertyManager");
-		pm.readStorableObject(*(Selectable*)this, "Selectable");
 
 		String s;
 		pm.readPrimitive(s, "element_");	
@@ -157,7 +150,6 @@ namespace BALL
 	{
 		Composite::set(atom, deep);
 		PropertyManager::set(atom, deep);
-		Selectable::set(atom, deep);
 		
 		element_ = atom.element_;
 		charge_ = atom.charge_;
@@ -187,7 +179,6 @@ namespace BALL
 	{
 		Composite::swap(atom);
 		PropertyManager::swap(atom);
-		Selectable::swap(atom);
 
 		Element *temp_element = element_;
 		element_ = atom.element_;

@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: bond.h,v 1.2 1999/09/06 22:21:19 oliver Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -13,10 +13,6 @@
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
-#endif
-
-#ifndef BALL_CONCEPT_SELECT_H
-#	include <BALL/CONCEPT/selectable.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -67,13 +63,12 @@ namespace BALL
 			
 			@memo    Bond class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.1 $
-			@date    $Date: 1999/08/26 07:53:19 $
+			@version $Revision: 1.2 $
+			@date    $Date: 1999/09/06 22:21:19 $
 	*/
 	class Bond
 		: public Composite,
-			public PropertyManager,
-			public Selectable
+			public PropertyManager
 	{
 		public:
 

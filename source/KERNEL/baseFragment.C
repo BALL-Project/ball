@@ -1,4 +1,4 @@
-// $Id: baseFragment.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: baseFragment.C,v 1.2 1999/09/06 22:22:18 oliver Exp $
 
 #include <BALL/KERNEL/baseFragment.h>
 
@@ -16,7 +16,6 @@ namespace BALL
 	BaseFragment::BaseFragment(void)
 		:	Composite(),
 			PropertyManager(),
-			Selectable(),
 			name_(BALL_BASEFRAGMENT_DEFAULT_NAME)
 	{
 	}
@@ -24,7 +23,6 @@ namespace BALL
 	BaseFragment::BaseFragment(const BaseFragment& base_fragment, bool deep)
 		:	Composite(),
 			PropertyManager(),
-			Selectable(),
 			name_()
 	{
 		set(base_fragment, deep);
@@ -33,7 +31,6 @@ namespace BALL
 	BaseFragment::BaseFragment(const String& name)
 		:	Composite(),
 			PropertyManager(),
-			Selectable(),
 			name_(name)
 	{
 	}
@@ -47,7 +44,6 @@ namespace BALL
 	{
 		Composite::clear();
 		PropertyManager::clear();
-		Selectable::clear();
 
 		clear_();
 	}
@@ -56,7 +52,6 @@ namespace BALL
 	{
 		Composite::destroy();
 		PropertyManager::destroy();
-		Selectable::destroy();
 
 		clear_();
 	}
@@ -67,7 +62,6 @@ namespace BALL
 			Composite::persistentWrite(pm);
 
 			pm.writeStorableObject(*(PropertyManager*)this, "PropertyManager");
-			pm.writeStorableObject(*(Selectable*)this, "Selectable");
 
 			pm.writePrimitive(name_, "name_");
 		pm.writeObjectTrailer(name);
@@ -80,7 +74,6 @@ namespace BALL
 		pm.checkObjectTrailer(0);
 
 		pm.readStorableObject(*(PropertyManager*)this, "PropertyManager");
-		pm.readStorableObject(*(Selectable*)this, "Selectable");
 				
 		pm.readPrimitive(name_, "name_");
 	}
@@ -92,7 +85,6 @@ namespace BALL
 
 		Composite::set(base_fragment, deep);
 		PropertyManager::set(base_fragment, deep);
-		Selectable::set(base_fragment, deep);
 		name_ = base_fragment.name_;
 
 		// clone the bonds only of we are the outmost set method
@@ -121,7 +113,6 @@ namespace BALL
 	{
 		Composite::swap(base_fragment);
 		PropertyManager::swap(base_fragment);
-		Selectable::swap(base_fragment);
 
 		name_.swap(base_fragment.name_);
 	}

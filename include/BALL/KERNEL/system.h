@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: system.h,v 1.2 1999/09/06 22:21:19 oliver Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -38,8 +38,7 @@ namespace BALL
 	*/
 	class System
 		: public Composite,
-			public PropertyManager,
-			public Selectable
+			public PropertyManager
 	{
 		public:
 
