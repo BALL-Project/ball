@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: String_test1.C,v 1.3 2002/12/18 16:00:40 sturm Exp $
+// $Id: String_test1.C,v 1.4 2003/03/07 16:33:55 sneumann Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test1.C,v 1.3 2002/12/18 16:00:40 sturm Exp $")
+START_TEST(String,"$Id: String_test1.C,v 1.4 2003/03/07 16:33:55 sneumann Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -194,7 +194,11 @@ CHECK(String::String(Size, char*, ... ))
 RESULT
 
 CHECK(String::String(stringstream))
+#ifdef HAS_SSTREAM
 	std::stringstream instream("ABC DEF");
+#else
+	std::strstream instream("ABC DEF", strlen("ABC DEF"), ios::app);
+#endif
 	s2 = new String(instream);
 	TEST_NOT_EQUAL(s2, 0)
 	TEST_EQUAL(*s2, "ABC")
@@ -364,9 +368,15 @@ RESULT
 delete s2;
 
 CHECK(String::set(stringstream&))
+#ifdef HAS_SSTREAM
 	std::stringstream instream("ABC DEF GHI jkl mno");
+#else
+	std::strstream instream("ABC DEF GHI jkl mno", strlen("ABC DEF GHI jkl mno"), ios::app);
+#endif
+
 	s2 = new String;
 	s2->set(instream);
+std::cerr << "s2 is " << s2 << endl;
 	TEST_EQUAL(*s2, "ABC")
 	s2->set(instream);
 	TEST_EQUAL(*s2, "DEF")
@@ -485,7 +495,12 @@ CHECK(String::operator = (char*))
 RESULT
 
 CHECK(String::operator = (stringstream&))
+#ifdef HAS_SSTREAM
 	std::stringstream instream("ABC DEF GHI jkl mni");
+#else
+	std::strstream instream("ABC DEF GHI jkl mni", strlen("ABC DEF GHI jkl mni"),ios::app);
+#endif
+
 	s2 = new String;
 	*s2 = instream;
 	TEST_EQUAL(*s2, "ABC")
