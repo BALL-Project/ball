@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.106 2000/08/30 19:59:18 oliver Exp $
+dnl    $Id: configure.in,v 1.107 2000/08/31 14:05:41 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -60,6 +60,8 @@ AC_ARG_WITH(mesa,              [  --with-mesa             use MESA instead of Op
 AC_ARG_WITH(libxnet,           [  --without-libxnet       use -lsocket -lnsl rather than -lxnet (under Solaris)])
 AC_ARG_WITH(python,            [  --with-python           enable Python support])
 AC_ARG_WITH(python-incl,       [  --with-python-incl=DIR  Python includes (Python.h) is in DIR])
+AC_ARG_WITH(python-libs,       [  --with-python-libs=DIR  Python library (libpython*.a) is in DIR])
+AC_ARG_WITH(python-ldopts,     [  --with-python-ldopts=X  Use additional options X when linking with the Python library])
 AC_ARG_WITH(sip-lib,   	       [  --with-sip-lib=DIR      the SIP library resides in DIR])
 AC_ARG_WITH(sip-incl,   	     [  --with-sip-incl=DIR     the SIP header file resides in DIR])
 AC_ARG_WITH(sip,   	           [  --with-sip=DIR          the SIP executable resides in DIR])
@@ -155,6 +157,11 @@ fi
 # the path to the python includes (Python.h)
 PYTHON_INCLUDE_PATH=$with_python_incl
 
+# the path to the python library (libpython*.a)
+# and additional linker options (e.g. -ltermcap etc.)
+PYTHON_LIBPATH=$with_python_libs
+PYTHON_LDOPTS=$with_python_ldopts
+
 # the paths to the SIP library, header, and executable
 SIP_LIBPATH=$with_sip_lib
 SIP_INCLUDE_PATH=$with_sip_incl
@@ -179,8 +186,8 @@ dnl
 AC_DEFUN(AC_BASENAME,[
 	TMP__DIR="$1/"
 	while test "${TMP__DIR}" != "" ; do
-		TMP__NAME=`echo ${TMP__DIR}|cut -d/ -f1`
-		TMP__DIR=`echo ${TMP__DIR}|cut -d/ -f2-`
+		TMP__NAME=`echo ${TMP__DIR}|${CUT} -d/ -f1`
+		TMP__DIR=`echo ${TMP__DIR}|${CT} -d/ -f2-`
 		if test "${TMP__DIR}" = "${TMP__NAME}" ; then
 			TMP__DIR=""
 		fi
@@ -585,7 +592,7 @@ dnl
 AC_MSG_RESULT(searching for a C++ compiler:)
 if test "${CXX}" != "" ; then
 	if test -x "${CXX}" ; then
-		AC_MSG_RESULT(predefined in configure: ${CXX})
+		AC_MSG_RESULT(from the command line: ${CXX})
 	else
 		AC_PATH_PROG(CXXPATH,${CXX},no)
 		if test "${CXXPATH}" = no ; then
@@ -646,8 +653,8 @@ else
 	CXX_NAME="${CXX_PATH}"
 fi
 	
-while test "`echo ${CXX_NAME}|grep /`" != "" ; do
-	CXX_NAME=`echo ${CXX_NAME} | cut -d/ -f2-`
+while test "`echo ${CXX_NAME}|  ${GREP} /`" != "" ; do
+	CXX_NAME=`echo ${CXX_NAME} |  ${CUT} -d/ -f2-`
 done
 
 
@@ -702,7 +709,7 @@ dnl
 dnl
 if test "${IS_GXX}" = false -a "${IS_KCC}" = false ; then
 	AC_MSG_CHECKING(for Digital/Compaq C++ compiler)
-	DIGITAL_CXX=`${CXX} -V 2>/dev/null | grep "C++" | cut -d" " -f-2` 
+	DIGITAL_CXX=`${CXX} -V 2>/dev/null | ${GREP} "C++" | ${CUT} -d" " -f-2` 
 	if test "${DIGITAL_CXX}" = "DIGITAL C++" -o "${DIGITAL_CXX}" = "Compaq C++"; then
 		IS_DIGITALCXX=true
 		AC_MSG_RESULT(yes)
@@ -723,7 +730,7 @@ if test "${IS_GXX}" = "true" ; then
 	if test `echo ${CXX_VERSION}|${CUT} -c1-4` = "egcs" ; then
 		IS_EGXX=true
 		CXX_NAME="egcs"
-		CXX_VERSION=`${CXX} -v 2>&1 | grep release | cut -d\( -f2 | cut -d\) -f1 | sed "s/egcs-//" | cut -d" " -f1`
+		CXX_VERSION=`${CXX} -v 2>&1 | grep release | ${CUT} -d\( -f2 | cut -d\) -f1 | ${SED} "s/egcs-//" | ${CUT} -d" " -f1`
 		VERSION_OUTPUT="egcs ${CXX_VERSION}"
 		CXX_COMPILER_NAME="egcs"
 	else
@@ -2155,7 +2162,7 @@ if test "${USE_BALLVIEW}" = true ; then
 		AC_MSG_CHECKING(QT library version)
 		SAVE_LIBS=${LIBS}
 		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
-		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${QT_LIBPATH}
+		LD_LIBRARY_PATH="${X11_LIBPATH}:${OPENGL_LIBPATH}:${QT_LIBPATH}:${LD_LIBRARY_PATH}"
 		export LD_LIBRARY_PATH
 		echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
 		AC_TRY_RUN(
@@ -2280,6 +2287,7 @@ AC_SUBST(SIP_LIB)
 AC_SUBST(SIP_INCLUDES)
 AC_SUBST(PYTHON_INCLUDES)
 AC_SUBST(PYTHON_SUPPORT)
+AC_SUBST(PYTHON_LIBS)
 if test "${PYTHON_SUPPORT}" = true ; then
 	AC_DEFINE(BALL_PYTHON_SUPPORT)
 fi
@@ -2291,7 +2299,7 @@ if test "${PYTHON_SUPPORT}" = true ; then
 	dnl
 	dnl  Python include path
 	dnl
-	AC_MSG_CHECKING(Python.h)
+	AC_MSG_CHECKING(for Python.h)
 	AC_FIND_HEADER(PYTHON_INC_PATH, Python.h, ${PYTHON_INCLUDE_PATH})
 	if test "${PYTHON_INC_PATH}" = "" ; then
 		AC_MSG_RESULT(not found!)
@@ -2304,7 +2312,40 @@ if test "${PYTHON_SUPPORT}" = true ; then
 		PYTHON_INCLUDES="-I${PYTHON_INC_PATH}"
 	fi
 
+	dnl
+	dnl	Python library path
+	dnl
+	AC_MSG_CHECKING(for libpython)
+	PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
+	if test "${PYTHON_LIBS}" = "" ; then
+			AC_MSG_RESULT()
+		AC_MSG_RESULT(No libpython*a found in ${PYTHON_LIBPATH}. Please specify)
+		AC_MSG_RESULT(the path where your Python library resides using)
+		AC_MSG_RESULT( --with-python-libs=DIR)
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(Aborted.)
+	fi
+	AC_MSG_RESULT(${PYTHON_LIBS})
 
+	if test "${PYTHON_LDOPTS}" = "" ; then
+		PYTHON_MAKEFILE=`${FIND} ${PYTHON_LIBPATH} -name Makefile 2>/dev/null`
+		if test "${PYTHON_MAKEFILE}" = "" ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Makefile in the Python lib/config directory not found!)
+			AC_MSG_RESULT(Please specify the correct options needed to link)
+			AC_MSG_RESULT(against the Python library using)
+			AC_MSG_RESULT( --with-python-ldopts=OPTIONS)
+			AC_MSG_RESULT([(e.g. --with-python-ldopts="-ltermcap -lm")])
+			AC_MSG_RESULT()
+			AC_MSG_ERROR(Aborted.)
+		fi
+		PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
+		PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^BASEMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
+		PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LOCALMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-` -lm"
+		PYTHON_LIBS=`echo ${PYTHON_LIBS} | ${TR} -s " "`
+	fi
+	AC_MSG_RESULT(Linker options for Python library: ${PYTHON_LIBS})
+		
 	dnl
 	dnl	 SIP
 	dnl
