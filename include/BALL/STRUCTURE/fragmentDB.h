@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.h,v 1.16 2002/05/12 14:03:21 oliver Exp $
+// $Id: fragmentDB.h,v 1.17 2002/12/22 14:51:56 anker Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -479,12 +479,12 @@ namespace BALL
 		/*_	Expands all include directives in the resource file.
 				This method calls expandFirst_ until it returns true.	
 		*/
-		void expandTree_(ResourceEntry& root_entry, int depth = 10);
+		void expandTree_(ResourceEntry& root_entry);
 	 
 		/*_	Expands the first occuring include directive.
 				If no include directive is found, {\bf false} is returned, otherwise {\bf true}.
 		*/
-		bool expandFirst_(ResourceEntry& root_entry, int depth);
+		bool expandFirst_(ResourceEntry& root_entry);
 
 		bool						valid_;
 

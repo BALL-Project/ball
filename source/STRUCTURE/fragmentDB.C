@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.44 2002/12/20 16:33:48 oliver Exp $
+// $Id: fragmentDB.C,v 1.45 2002/12/22 14:51:56 anker Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -41,7 +41,7 @@ namespace BALL
 	{
 	}
 
-	void FragmentDB::expandTree_(ResourceEntry& root_entry, int depth)
+	void FragmentDB::expandTree_(ResourceEntry& root_entry)
 	{
 		bool expanded_one = true;
 		while (expanded_one)
@@ -52,7 +52,7 @@ namespace BALL
 			{
 				if (entry_iterator->getKey().hasPrefix(FRAGMENT_DB_INCLUDE_TAG))
 				{
-					expandFirst_(*entry_iterator, depth - 1);
+					expandFirst_(*entry_iterator);
 					expanded_one = true;
 					break;
 				}
@@ -60,7 +60,7 @@ namespace BALL
 		}
 	}
 
-	bool FragmentDB::expandFirst_(ResourceEntry& root_entry, int depth)
+	bool FragmentDB::expandFirst_(ResourceEntry& root_entry)
 	{
 		String key = root_entry.getKey();
 		String value = root_entry.getValue();
