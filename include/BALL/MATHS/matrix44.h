@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.17 2000/03/14 09:37:40 oliver Exp $
+// $Id: matrix44.h,v 1.18 2000/03/14 20:01:40 oliver Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -1167,7 +1167,7 @@ namespace BALL
 	}
 
 	template <class T>
-	bool TMatrix4x4<T>::isEqual(const TMatrix4x4<T>& m, T max_diff) const
+	bool TMatrix4x4<T>::isEqual(const TMatrix4x4<T>& m, const T max_diff) const
 	{
 		for (int i=0; i<4; i++ )
 		{
