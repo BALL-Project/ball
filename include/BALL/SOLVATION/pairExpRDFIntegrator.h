@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.h,v 1.1 2000/08/31 18:12:17 anker Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.2 2000/09/01 10:23:55 anker Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
@@ -71,6 +71,9 @@ namespace BALL
 		/** */
 		void setConstants(double alpha, double C1, double C2, double R_ij_o,
 				double k1, double k2);
+
+		/** */
+		void setRDF(const RadialDistributionFunction& rdf);
 
 		/** */
 		double integrateToInf(double from) const;
