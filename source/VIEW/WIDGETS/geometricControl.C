@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.56 2004/10/14 15:21:20 amoll Exp $
+// $Id: geometricControl.C,v 1.57 2004/10/15 11:27:44 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -324,27 +324,27 @@ namespace BALL
 				return;
 			}
 
-			ItemList selected = getSelectedItems();
-			for (ItemList::Iterator it = selected.begin(); it != selected.end(); ++it)
+			List<Representation*> reps = getSelection();
+			List<Representation*>::Iterator it = reps.begin();
+			for (; it != reps.end(); ++it)
 			{
-				Representation* rep = ((SelectableListViewItem*) *it)->getRepresentation();
-				getMainControl()->getPrimitiveManager().remove(*rep);
-				if (rep->hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
+				getMainControl()->getPrimitiveManager().remove(**it);
+				if ((*it)->hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 				{
 					SceneMessage *scene_message = new SceneMessage(SceneMessage::REMOVE_COORDINATE_SYSTEM);
 					notify_(scene_message);
 				}
-				else if (rep->hasProperty("D"))
+				else if ((*it)->hasProperty("D"))
 				{
 					SceneMessage *scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
 					notify_(scene_message);
 				}
 					
-				RepresentationMessage* message = new RepresentationMessage(*rep, 
+				RepresentationMessage* message = new RepresentationMessage(**it, 
 																																	 RepresentationMessage::REMOVE);
 				notify_(message);
 
-				removeRepresentation(*rep);
+				removeRepresentation(**it);
 			}
 
 			setStatusbarText("Deleted representation.");
@@ -642,38 +642,40 @@ namespace BALL
 		void GeometricControl::moveItems(const Matrix4x4& m)
 			throw()
 		{
-			if (context_representation_ == 0 ||
-					!context_representation_->hasProperty("AX")) 
-			{
-				return;
-			}
+			List<Representation*> reps = getSelection();
+			List<Representation*>::Iterator it = reps.begin();
 
-			Vector3 n(context_representation_->getProperty("AX").getDouble(),
-								context_representation_->getProperty("BY").getDouble(),
-								context_representation_->getProperty("CZ").getDouble());
-			float d = context_representation_->getProperty("D").getDouble();
-
-			if (m.m14 == 0 && m.m24 == 0 && m.m34 == 0)
+			for (; it != reps.end(); it++)
 			{
-				if (n.getSquareLength() > 0)
+				if (!(*it)->hasProperty("AX")) continue;
+
+				Vector3 n((**it).getProperty("AX").getDouble(),
+									(**it).getProperty("BY").getDouble(),
+									(**it).getProperty("CZ").getDouble());
+				float d = (**it).getProperty("D").getDouble();
+
+				if (m.m14 == 0 && m.m24 == 0 && m.m34 == 0)
 				{
-					n.normalize();
+					if (n.getSquareLength() > 0)
+					{
+						n.normalize();
+					}
+					n = m * n;
+
+					(**it).setProperty("AX", n.x);
+					(**it).setProperty("BY", n.y);
+					(**it).setProperty("CZ", n.z);
 				}
-				n = m * n;
+				else
+				{
+					Vector3 t(-m.m14, -m.m24, -m.m34);
+					(**it).setProperty("D", d + t * n);
+				}
 
-				context_representation_->setProperty("AX", n.x);
-				context_representation_->setProperty("BY", n.y);
-				context_representation_->setProperty("CZ", n.z);
+				RepresentationMessage* msg = 
+					new RepresentationMessage((**it), RepresentationMessage::UPDATE);
+				notify_(msg);
 			}
-			else
-			{
-				Vector3 t(-m.m14, -m.m24, -m.m34);
-				context_representation_->setProperty("D", d + t * n);
-			}
-
-			RepresentationMessage* msg = 
-				new RepresentationMessage(*context_representation_, RepresentationMessage::UPDATE);
-			notify_(msg);
 		}
 	
 	} // namespace VIEW

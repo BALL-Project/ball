@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.114 2004/10/14 15:21:20 amoll Exp $
+// $Id: mainControl.C,v 1.115 2004/10/15 11:27:43 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1638,6 +1638,7 @@ namespace BALL
 			HashSet<Composite*>::Iterator it = selection.begin();
 			HashSet<Composite*> roots;
 
+			// rotation
 			if (m.m14 == 0 && m.m24 == 0 && m.m34 == 0)
 			{
 				GeometricCenterProcessor center_processor;
@@ -1666,6 +1667,7 @@ namespace BALL
 					roots.insert(&(**it).getRoot());
 				}
 			}
+			// translation
 			else
 			{
 				TransformationProcessor tp(m);
