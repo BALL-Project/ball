@@ -1,4 +1,4 @@
-// $Id: residueChecker.C,v 1.8 2000/05/15 19:18:15 oliver Exp $
+// $Id: residueChecker.C,v 1.9 2000/05/18 09:03:48 oliver Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/forEach.h>
@@ -155,7 +155,8 @@ namespace BALL
 						float deviation = fabs(distance - bond_it->getLength()) / bond_it->getLength();
 						if (deviation > 0.15)
 						{
-							Log.warn() << "ResidueChecker: in residue " << res_name << ": atom distance suspect: " 
+							Log.warn() << "ResidueChecker: in residue " << res_name << ": atom distance " 
+												 << "between " << first->getName() << " and " << second->getName() << " suspect: " 
 												 << distance << " A instead of " << bond_it->getLength() << " A" << endl;
 							status_ = false;
 						}
