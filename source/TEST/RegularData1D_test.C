@@ -1,4 +1,4 @@
-// $Id: RegularData1D_test.C,v 1.3 2001/07/07 19:28:50 amoll Exp $
+// $Id: RegularData1D_test.C,v 1.4 2001/07/09 22:04:21 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: RegularData1D_test.C,v 1.3 2001/07/07 19:28:50 amoll Exp $")
+START_TEST(class_name, "$Id: RegularData1D_test.C,v 1.4 2001/07/09 22:04:21 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -34,8 +34,7 @@ RESULT
 
 RegularData1D rd;
 CHECK(TRegularData1D::TRegularData1D(const TRegularData1D& data))
-	rd.setLowerBound(1.1);
-	rd.setUpperBound(2.1);
+	rd.setBoundaries(1.1, 2.1);
 	rd.resize(1);
 	rd[0] = 1.2;
 	RegularData1D rd2(rd);
@@ -65,8 +64,7 @@ RESULT
 
 
 CHECK(TRegularData1D::TRegularData1D& operator = (const TRegularData1D& data))
-	rd.setLowerBound(1.1);
-	rd.setUpperBound(2.1);
+	rd.setBoundaries(1.1, 2.1);
 	rd.resize(1);
 	rd[0] = 1.2;
 	RegularData1D rd2 = rd;
@@ -77,13 +75,13 @@ CHECK(TRegularData1D::TRegularData1D& operator = (const TRegularData1D& data))
 RESULT
 
 
-CHECK(TRegularData1D::TRegularData1D& operator = (const DataType& data))
+CHECK(TRegularData1D::TRegularData1D& operator = (const VectorType& data))
 	RegularData1D::VectorType v;
 	v.push_back(1.1);
 	v.push_back(1.2);
 	v.push_back(1.3);
 	v.push_back(1.4);
-	RegularData1D rd2;// = v;
+	RegularData1D rd2 = v;
 	TEST_REAL_EQUAL(rd2.getLowerBound(), 1.1)
 	TEST_REAL_EQUAL(rd2.getUpperBound(), 1.4)
 	TEST_EQUAL(rd2.getSize(), 4)
@@ -103,9 +101,9 @@ CHECK(TRegularData1D::bool operator == (const TRegularData1D& data) const )
 	TEST_EQUAL(rd == rd2, false)
 	rd2[3] = 1.4;
 	TEST_EQUAL(rd == rd2, true)
-	rd.setUpperBound(1.4);
+	rd.setBoundaries(1.1, 1.4);
 	TEST_EQUAL(rd == rd2, false)
-	rd2.setUpperBound(1.4);
+	rd2.setBoundaries(1.1, 1.4);
 	TEST_EQUAL(rd == rd2, true)
 RESULT
 
@@ -131,8 +129,7 @@ RESULT
 
 
 CHECK(TRegularData1D::getLowerBound() const )
-	rd.setLowerBound(1.1);
-	rd.setUpperBound(1.5);
+	rd.setBoundaries(1.1, 1.5);
 	TEST_REAL_EQUAL(rd.getLowerBound(), 1.1)
 	TEST_REAL_EQUAL(rd2.getLowerBound(), 0.0)
 RESULT
@@ -144,15 +141,13 @@ CHECK(TRegularData1D::getUpperBound() const )
 RESULT
 
 
-CHECK(TRegularData1D::setUpperBound())
-	rd.setUpperBound(-99.9);
-	TEST_REAL_EQUAL(rd.getUpperBound(), -99.9)
-RESULT
-
-
 CHECK(TRegularData1D::setLowerBound())
-	rd.setLowerBound(99.9);
-	TEST_REAL_EQUAL(rd.getLowerBound(), 99.9)
+	rd.setBoundaries(-99.9, 99.9);
+	TEST_REAL_EQUAL(rd.getLowerBound(), -99.9)
+	TEST_REAL_EQUAL(rd.getUpperBound(), 99.9)
+	rd.setBoundaries(99.9, -99.9);
+	TEST_REAL_EQUAL(rd.getLowerBound(), -99.9)
+	TEST_REAL_EQUAL(rd.getUpperBound(), 99.9)
 RESULT
 
 
@@ -195,8 +190,7 @@ RESULT
 CHECK(TRegularData1D::rescale(double lower, double upper, Size new_size))
 	TRegularData1D<float>	data;
 	data.resize(2);
-	data.setLowerBound(0.0);
-	data.setUpperBound(1.0);
+	data.setBoundaries(0.0, 1.0);
 	data[0] = 1.0;
 	data[1] = 2.0;
 	data.rescale(0.0, 1.0, 3);
