@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.14 2003/11/02 14:57:36 amoll Exp $
+// $Id: displayProperties.h,v 1.15 2003/11/03 00:22:15 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -248,7 +248,7 @@ namespace BALL
 				throw(InvalidOption);
 
 			//_ Read a inifile entry and set the accoring attribut and ComboBox.
-			virtual void getEntry_(INIFile& inifile, const String& key, Index& assign_to, QComboBox& box);
+			virtual void getEntry_(INIFile& inifile, const String& key, QComboBox& box);
 
 			// --------------------------------------------------------------------------------
 			// attributs
@@ -257,11 +257,6 @@ namespace BALL
 			// the menu entry id of the dialog
 			int 				id_;
 			
-			Index 			precision_;
-			Index 			mode_;
-			Index 			coloring_method_;
-			Index 			model_type_;
-
 			// used by GeometricControl to modify an existing representation
 			Representation* rep_;
 
