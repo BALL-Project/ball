@@ -109,6 +109,7 @@ namespace BALL
 						return;
 					}
 					tcp_.set(f, url_);
+					tcp_.transfer();
 				}
 				else
 				{
@@ -123,9 +124,8 @@ namespace BALL
 					stream_.clear();
 
 					tcp_.set(stream_, url_);
+					tcp_.transfer();
 				}
-
-				tcp_.transfer();
 			}
 			catch(...)
 			{

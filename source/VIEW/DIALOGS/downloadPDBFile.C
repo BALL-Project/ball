@@ -230,14 +230,14 @@ void DownloadPDBFile::slotDownload()
 			return;
 		}
 
-		PDBFile pdb_file(url);
+		PDBFile pdb_file(temp_filename);
 #endif
 
 		pdb_file >> *system;
 		pdb_file.close();
 
 #ifdef BALL_QT_HAS_THREADS
-		removeFile_(temp_filename);
+//   		removeFile_(temp_filename);
 #endif
 
 		if (system->countAtoms() == 0)
