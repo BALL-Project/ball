@@ -1,4 +1,4 @@
-// $Id: JCAMPFile.C,v 1.3 2000/11/10 17:19:09 anhi Exp $
+// $Id: JCAMPFile.C,v 1.4 2000/11/15 18:15:39 anhi Exp $
 
 #include <BALL/FORMAT/JCAMPFile.h>
 
@@ -66,12 +66,12 @@ namespace BALL
 		return (title_);
 	}
 
-	double JCAMPFile::parameter( const String& name )
+	double JCAMPFile::parameter( const String& name ) const
 	{
 		return (parameters_[name]);
 	}
 
-	bool JCAMPFile::has( const String& name )
+	bool JCAMPFile::has( const String& name ) const
 	{
 		return (parameters_.has(name));
 	}

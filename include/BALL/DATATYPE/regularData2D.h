@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.1 2000/11/10 17:21:42 anhi Exp $
+// $Id: regularData2D.h,v 1.2 2000/11/15 18:19:01 anhi Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
 #define BALL_DATATYPE_REGULARDATA2D_H
@@ -8,7 +8,6 @@
 #endif
 
 #include <vector>
-
 namespace BALL
 {
 
@@ -98,6 +97,10 @@ namespace BALL
 		*/	
 		T& operator [] (Position index);
 		
+		/**     Return the position of the data point nearest to x, y.
+		 */
+		const pair<Position, Position>& getNearestPosition(double x, double y);
+
 		/**     Return the value at coordinates x, y. If there's no data point at that location, it will be
                         interpolated.
 		*/
@@ -340,10 +343,93 @@ namespace BALL
 	
 	template <typename T>
 	BALL_INLINE
+	const pair<Position, Position>& TRegularData2D<T>::getNearestPosition(double x, double y)
+	{
+	  pair<Position, Position> res;
+	  
+	  if (x > xlower_)
+	  {
+	    if (x < xupper_)
+	    {
+	      res.first = (Position) ((x - xlower_) / (xupper_ - xlower_) * xsize_);
+	    }
+	    else
+	    {
+	      res.first = 0;
+	    }
+	  } 
+	  else 
+	  {
+	    res.first = 0;
+	  }
+
+	  if (y > ylower_)
+	  {
+	    if (y < yupper_)
+	    {
+	      res.second = (Position) ((y - ylower_) / (yupper_ - ylower_) * ysize_);
+	    }
+	    else
+	    {
+	      res.second = 0;
+	    }
+	  } 
+	  else 
+	  {
+	    res.second = 0;
+	  }
+	}
+
+	template <typename T>
+	BALL_INLINE
 	const T& TRegularData2D<T>::getValue(T valx, T valy)
 	{
-	  //	  double stepx, double stepy;
-	  // Insert intelligent code here!
+	  double stepx, stepy;
+	  double correctionx, correctiony;
+	  double shx, shy;
+	  pair<Position, Position> dum;
+	  double res;
+
+	  if (xsize_ && ysize_)
+	  {
+	    stepx = (xupper_ - xlower_) / ((double) xsize_);
+	    stepy = (yupper_ - ylower_) / ((double) ysize_);
+	  };
+	  if (stepx && stepy)
+	  {
+	    Position ax, ay;
+
+	    // Find out where we are in the data
+	    ax = floor((valx - xlower_) / stepx);
+	    ay = floor((valy - ylower_) / stepy);
+	    correctionx = (valx - xlower_) - ax*stepx;
+	    correctiony = (valy - ylower_) - ay*stepy;
+
+	    // upper left corner of surrounding square
+	    shx = valx - correctionx;
+	    shy = valy + (stepy - correctiony);
+	    dum = getNearestPosition(shx, shy);
+	    res += (1./(sqrt(pow(correctionx, 2) + pow(correctiony, 2))) * data_[dum.first + xsize_*dum.second]); // ???
+
+	    // upper right corner of surrounding square
+	    shx = valx + (stepx - correctionx);
+	    shy = valy + (stepy - correctiony);
+	    dum = getNearestPosition(shx, shy);
+	    res += (1./(sqrt(pow(correctionx, 2) + pow(correctiony, 2))) * data_[dum.first + xsize_*dum.second]); // ???
+
+	    // lower right corner of surrounding square
+	    shx = valx + (stepx - correctionx);
+	    shy = valy - correctiony;
+	    dum = getNearestPosition(shx, shy);
+	    res += (1./(sqrt(pow(correctionx, 2) + pow(correctiony, 2))) * data_[dum.first + xsize_*dum.second]); // ???
+
+	    // lower left corner of surrounding square
+	    shx = valx - correctionx;
+	    shy = valy - correctiony;
+	    dum = getNearestPosition(shx, shy);
+	    res += (1./(sqrt(pow(correctionx, 2) + pow(correctiony, 2))) * data_[dum.first + xsize_*dum.second]); // ???
+	  }
+	  return res;
 	}
 
 	template <typename T>
@@ -470,11 +556,11 @@ namespace BALL
 	  Size num;
 	  double ran;
 
-	  srand48(42000);
+	  srand48(rand());
 	  
 	  num = data_.size();
 	  numsamples = (num / 100);
-	  vector<Position> samplevals(numsamples);
+	  vector<double> samplevals(numsamples);
 	  
 
 	  groundState_ = 0;
@@ -484,17 +570,18 @@ namespace BALL
 	  for (actnum = 0; actnum < numsamples; actnum++)
 	  {
 	    ran = drand48();
-	    actval = ran * num;
+	    actval = (Position) ran * num;
 	    samplevals[actnum] = data_[actval];
 	    groundState_ += data_[actval];
-	    cerr << actval << " " <<data_[actval]<<endl;
 	  };
+
 	  groundState_ /= numsamples;
 
 	  // calculation of standard deviation
 	  for (actnum = 0; actnum < numsamples; actnum++)
 	  {
 	    sigmaGroundState_ += pow(samplevals[actnum] - groundState_, 2);
+	    //	    cerr << samplevals[actnum] << " " <<sigmaGroundState_ <<endl;
 	  };
 	  
 	  sigmaGroundState_ /= (numsamples - 1);
