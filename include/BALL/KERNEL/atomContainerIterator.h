@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainerIterator.h,v 1.17 2003/06/19 13:09:54 oliver Exp $ 
+// $Id: atomContainerIterator.h,v 1.18 2003/06/26 15:56:32 anker Exp $ 
 //
 
 #ifndef BALL_KERNEL_ATOMCONTAINERITERATOR_H
@@ -108,4 +108,4 @@ namespace BALL
 	//@}
 } // namespace BALL
 
-#endif // BALL_KERNEL_FRAGMENTITERATOR_H
+#endif // BALL_KERNEL_ATOMCONTAINERITERATOR_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseIterator.h,v 1.31 2003/06/19 13:07:34 oliver Exp $
+// $Id: baseIterator.h,v 1.32 2003/06/26 15:55:28 anker Exp $
 //
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
@@ -23,32 +23,34 @@ namespace BALL
 {
 
 	/**	Generic Iterator Class.
-			This template class implements the basic behaviour of 
-			an iterator. Iterators are basically STL-like iterators. They 
-			provide the full STL iterator interface, but also offer additional
-			features.
+			This template class implements the basic behaviour of an iterator.
+			Iterators are basically STL-like iterators. They provide the full STL
+			iterator interface, but also offer additional features.
 			\par
+
 			BaseIterator itself is a base class to the other iterator classes only
 			and should not be used by itself.
 			\par
 	
 	 		An important difference exists for the iterators of the kernel objects.
-			For most kernel onjects, multiple iterators exist.  Therefore, we could
+			For most kernel objects, multiple iterators exist.  Therefore, we could
 			not simply use <tt>begin()</tt> and <tt>end()</tt> like in STL, but we
 			introduced specialized methods like
-			 \link AtomContainer::beginAtom AtomContainer::beginAtom \endlink and
-			\link AtomContainer::endAtom AtomContainer::endAtom \endlink . For
+			\link AtomContainer::beginAtom AtomContainer::beginAtom \endlink and
+			\link AtomContainer::endAtom AtomContainer::endAtom \endlink. For
 			similar reasons, the iterators for kernel classes are not implemented as
 			nested classes of the respective kernel classes, but as independent
 			classes to avoid code replication. An exception is
-			 \link Atom::BondIterator Atom::BondIterator \endlink , which is
-			 relevant to \link Atom Atom \endlink alone.
+			\link Atom::BondIterator Atom::BondIterator \endlink , which is
+			relevant to \link Atom Atom \endlink alone.
+			\par
 
 			Each BALL iterator can be bound to a container, so once the iteration
-			has started, it "knows" about the end() of the container.
-			Therefore, BALL iterators additionally implement the unary plus operator
-			to check for the validity of the iterator.
-			this allows the convenient implementation of for loops, e.g. as follows: \par
+			has started, it "knows" about the end() of the container.  Therefore,
+			BALL iterators additionally implement the unary plus operator to
+			check for the validity of the iterator.  this allows the convenient
+			implementation of for loops, e.g. as follows: 
+			\par
  
 			\code
 				AtomIterator atom_it = system.beginAtom();
