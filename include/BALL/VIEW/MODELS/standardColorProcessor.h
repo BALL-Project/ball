@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.7 2003/10/19 14:09:34 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.8 2003/10/20 10:45:04 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -200,8 +200,7 @@ namespace BALL
 		/** AtomDistanceColorProcessor class.
 				AtomDistanceColorProcessor can be choosen in the class DisplayProperties
 				to color the atoms in multiple AtomContainer according to their distance. 
-				It is derived from the class ColorProcessor.
-				There can be two colors for the distance of Atom objects. 
+				There are two colors for the distance of Atom objects. 
 				A color for the null distance and a color for the max distance.
 				If a distance of an Atom object to another atom object (stored in different
 				atom containers) lies between the null and the max distance, the resulting 
@@ -299,15 +298,17 @@ namespace BALL
 			void calculateDistances()
 				throw();
 
-			/** Visit method.
-					Calculate the distance color of the given Atom by interpolating
+			/** Calculate the distance color of the given Atom by interpolating
 					the null and max distance color according to the previously calculated 
 					distance color (see calculateDistances()) of the given atom.
 					Access to the calculated color with the method ColorProcessor::getColor.
 					\param  atom the Atom whose distance color should be computed
 			*/
-			virtual void visit(Atom& atom);
+			virtual void addAtom(const Atom& atom);
 
+			///
+			virtual bool finish()
+				throw();
 			//@} 
 			/**	@name Processor specific methods 
 			*/ 
@@ -317,13 +318,19 @@ namespace BALL
 			*/
 			virtual ColorRGBA getColor(const Composite* composite);
 
+			/** Collect all atoms from the geometric objects
+			*/
+			virtual Processor::Result operator() (GeometricObject*& object)
+				throw();
 			//@}
 
 			private:
 
-			typedef HashMap<const Composite*, float> AtomDistanceHashMap;
+			typedef HashMap<const Atom*, float> AtomDistanceHashMap;
+			typedef List<GeometricObject*> GeometricObjectList;
 
 			AtomDistanceHashMap atom_2_distance_;
+			GeometricObjectList list_;
 
 			float 			distance_;
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.6 2003/10/19 14:09:48 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.7 2003/10/20 10:44:00 amoll Exp $
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
@@ -353,7 +353,7 @@ AtomDistanceColorProcessor::AtomDistanceColorProcessor()
 	throw()
 	: ColorProcessor(),
 		atom_2_distance_(),
-		distance_((float)10),
+		distance_((float)20),
 		null_distance_color_("FF0000FF"),
 		full_distance_color_("00FF00FF")
 {
@@ -388,7 +388,7 @@ void AtomDistanceColorProcessor::calculateDistances()
 		{
 			Atom* atom2 = (Atom*)(it2->first);
 
-			if (atom1->getRoot() != atom2->getRoot())
+			if (&atom1->getRoot() != &atom2->getRoot())
 			{
 				float distance = (atom2->getPosition() - atom1->getPosition()).getLength();
 				
@@ -400,7 +400,7 @@ void AtomDistanceColorProcessor::calculateDistances()
 }
 
 
-void AtomDistanceColorProcessor::visit(Atom& atom)
+void AtomDistanceColorProcessor::addAtom(const Atom& atom)
 {
 	AtomDistanceHashMap::Iterator it = atom_2_distance_.find(&atom);
 
@@ -418,9 +418,12 @@ ColorRGBA AtomDistanceColorProcessor::getColor(const Composite* composite)
 		return default_color_;
 	}
 
-	AtomDistanceHashMap::Iterator it = atom_2_distance_.find(composite);
+	AtomDistanceHashMap::Iterator it = atom_2_distance_.find((Atom*)composite);
 
 	float distance = distance_;
+
+	if (distance != distance_) 
+Log.error() << "#~~#   7" << std::endl;
 
 	// atom in hashmap ?
 	if (it != atom_2_distance_.end())
@@ -441,11 +444,40 @@ ColorRGBA AtomDistanceColorProcessor::getColor(const Composite* composite)
 	float green2 = full_distance_color_.getGreen();
 	float blue2  = full_distance_color_.getBlue();
 
+	if (distance != distance_) 
+Log.error() << "#~~#   8" << std::endl;
+
 	return ColorRGBA(red1 + (distance * (red2 - red1)) 			/ distance_,
 									 green1 + (distance * (green2 - green1)) 	/ distance_,
 									 blue1 + (distance * (blue2 - blue1)) 		/ distance_);
 }
 
+bool AtomDistanceColorProcessor::finish()
+	throw()
+{
+Log.error() << "#~~#   4" << std::endl;
+	calculateDistances();
+	GeometricObjectList::Iterator it = list_.begin();
+	for(; it != list_.end(); it++)
+	{
+		ColorProcessor::operator () (*it);
+	}
+	return true;
+}
+
+Processor::Result AtomDistanceColorProcessor::operator() (GeometricObject*& object)
+	throw()
+{
+	if (object->getComposite() == 0 ||
+			!RTTI::isKindOf<Atom>(*object->getComposite()))
+	{
+		return ColorProcessor::operator () (object);
+	}
+
+	addAtom(*dynamic_cast<const Atom*>(object->getComposite()));
+	return Processor::CONTINUE;
+}
+	
 void CustomColorProcessor::colorMeshFromGrid_(Mesh& mesh)
 	throw()
 {
