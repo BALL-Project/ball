@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.17 2000/10/05 22:28:47 oliver Exp $ 
+// $Id: hashMap.h,v 1.18 2000/10/18 16:50:56 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -1034,24 +1034,24 @@ namespace BALL
 		BALL_DUMP_DEPTH(s, depth);
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  size: " << getSize() << std::endl;
+		s << "  size: " << getSize() << ::std::endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  bucket size: " << getBucketSize() << std::endl;
+		s << "  bucket size: " << getBucketSize() << ::std::endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  capacity: " << getCapacity() << std::endl;
+		s << "  capacity: " << getCapacity() << ::std::endl;
 
 		BALL_DUMP_DEPTH(s, depth);
 		if (bucket_.size() != 0)
 		{
-			s << "  load factor: " << (float)size_ / (float)bucket_.size()  << std::endl;
+			s << "  load factor: " << (float)size_ / (float)bucket_.size()  << ::std::endl;
 		}
 
 		for (Position bucket = 0; bucket < (Position)bucket_.size(); ++bucket)
 		{
 			BALL_DUMP_DEPTH(s, depth);
-			s << "    bucket " << bucket << " (" << (void*)bucket_[bucket] << "):" << std::endl;
+			s << "    bucket " << bucket << " (" << (void*)bucket_[bucket] << "):" << ::std::endl;
 		}
 
 		BALL_DUMP_STREAM_SUFFIX(s);
