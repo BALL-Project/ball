@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.14 2004/07/26 13:59:15 amoll Exp $
+// $Id: main.C,v 1.15 2004/11/03 14:19:45 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -230,7 +230,7 @@ int main(int argc, char **argv)
 	Position nr2 = 0;
 
 	DCDFile dcdfile(dcd_file_name);
-	SnapShotManager sm(system, 0, &dcdfile, false);
+	SnapShotManager sm(system, 0, &dcdfile);
 	sm.applyFirstSnapShot();
 
 	vector<String> strings;
