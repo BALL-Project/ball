@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.26.2.3 2004/12/21 14:44:40 amoll Exp $
+// $Id: cartoonModel.h,v 1.26.2.4 2004/12/30 17:14:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -151,10 +151,10 @@ namespace BALL
 				throw();
 
 			void drawHelix_(SecondaryStructure& ss)
-				throw(Exception::OutOfMemory);
+				throw();
 
 			void drawStrand_(SecondaryStructure& ss)
-				throw(Exception::OutOfMemory);
+				throw();
 
 			void drawTube_(SecondaryStructure& ss)
 				throw();
