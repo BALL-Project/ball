@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.161 2005/02/11 17:17:36 amoll Exp $
+// $Id: scene.C,v 1.162 2005/02/13 17:25:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1246,9 +1246,8 @@ namespace BALL
 
 				if (light.isRelativeToCamera())
 				{
-					const Vector3 dest(dir + pos);
 					pos = stage_->calculateRelativeCoordinates(pos);
-					dir = stage_->calculateRelativeCoordinates(dest);
+					dir = stage_->calculateRelativeCoordinates(dir);
 				}
 
 				data = vector3ToString(pos);
@@ -1282,42 +1281,36 @@ namespace BALL
 			throw()
 			{
 				stage_->clearLightSources();
-				String data;
 				vector<String> strings;
+				Position nr = 0;
 
 				try
 				{
-					Position nr = 0;
 					while(inifile.hasEntry("LIGHTING", "Light_" + String(nr) + "_Position"))
 					{
 						LightSource light;
+						Vector3 pos, dir;
 
-						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Relative");
+						String data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Relative");
 						light.setRelativeToCamera(data.toUnsignedInt());
 
 						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Position");
-						data.split(strings, "(,)");
-						Vector3 pos(strings[0].toFloat(), strings[1].toFloat(), strings[2].toFloat());
+						stringToVector3(data, pos);
 
 						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Direction");
-						data.split(strings, "(,)");
-						Vector3 dir(strings[0].toFloat(), strings[1].toFloat(), strings[2].toFloat());
-
+						stringToVector3(data, dir);
 
 						if (light.isRelativeToCamera())
 						{
 							// set position of lightsource from up, right and view vector
-							light.setPosition(stage_->calculateAbsoluteCoordinates(pos));
+							pos = stage_->calculateAbsoluteCoordinates(pos);
 
 							// set direction of lightsource from up, right and view vector
 							dir = stage_->calculateAbsoluteCoordinates(dir);
-							light.setDirection(dir - light.getPosition());
 						}
-						else
-						{
-							light.setPosition(pos);
-							light.setDirection(dir);
-						}
+						
+						light.setPosition(pos);
+						light.setDirection(dir);
 
 						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Angle");
 						light.setAngle(Angle(data.toFloat()));
@@ -1337,7 +1330,6 @@ namespace BALL
 						light.setType((LightSource::Types)data.toUnsignedInt());
 
 						stage_->addLightSource(light);
-
 						nr++;
 					}
 				}
@@ -1347,7 +1339,7 @@ namespace BALL
 					Log.error() << e;
 				}
 
-				if (stage_->getLightSources().size() == 0)
+				if (!stage_->getLightSources().size())
 				{
 					setDefaultLighting(true);
 				}
@@ -1358,7 +1350,7 @@ namespace BALL
 		void Scene::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
+			main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 
 			String hint;
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
@@ -1415,18 +1407,23 @@ namespace BALL
 					SLOT(recordAnimationClicked()), 0, -1, hint);   
  			menuBar()->setItemChecked(record_animation_id_, false) ;
 			
-			clear_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, SLOT(clearRecordedAnimation()));
+			clear_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, 
+					SLOT(clearRecordedAnimation()));
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
-			start_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, SLOT(startAnimation()));
+			start_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, 
+					SLOT(startAnimation()));
 
-			cancel_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, SLOT(stopAnimation()));
+			cancel_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, 
+					SLOT(stopAnimation()));
 			menuBar()->setItemEnabled(cancel_animation_id_, false);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
-			animation_export_PNG_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", this, SLOT(animationExportPNGClicked()));
-			animation_export_POV_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", this, SLOT(animationExportPOVClicked()));
-			animation_repeat_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, SLOT(animationRepeatClicked()));
-
+			animation_export_PNG_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", 
+					this, SLOT(animationExportPNGClicked()));
+			animation_export_POV_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", 
+					this, SLOT(animationExportPOVClicked()));
+			animation_repeat_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
+					SLOT(animationRepeatClicked()));
 
 			setCursor(QCursor(Qt::SizeAllCursor));
 		}
