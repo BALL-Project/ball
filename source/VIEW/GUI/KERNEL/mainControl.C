@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.22.4.12 2002/12/08 23:21:56 amoll Exp $
+// $Id: mainControl.C,v 1.22.4.13 2002/12/09 00:50:38 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -513,15 +513,11 @@ namespace BALL
 			{
 				CompositeSelectedMessage * selection_message = RTTI::castTo<CompositeSelectedMessage>(*message);
 				if (selection_message->selected_ == selection_.has(selection_message->composite_)) return;
-				if (selection_message->selected_) 
-				{
-					selection_.insert(selection_message->composite_);
-				}
-				else
-				{
-					selection_.erase(selection_message->composite_);
-				}
-								
+				selectCompositeRecursive(selection_message->composite_, selection_message->selected_);
+				NewSelectionMessage* nws_message = new NewSelectionMessage;					
+				notify_(nws_message);
+				return;
+
 				// sending of scene message and geometric object selector is done in MolecularProperties, because
 				// ObjectSelector is part of MOLVIEW
 			}
