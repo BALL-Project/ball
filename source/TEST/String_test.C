@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.34 2001/08/22 15:26:51 amoll Exp $
+// $Id: String_test.C,v 1.35 2001/08/22 15:50:45 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.34 2001/08/22 15:26:51 amoll Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.35 2001/08/22 15:50:45 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -826,7 +826,8 @@ CHECK(String::after(String&, Index))
 		}
 	}
 
-	string = string.after("a");
+	String s2 = string.after("a");
+	//string = string.after("a");
 	//string = string.after(string);
 
 RESULT
