@@ -47,7 +47,7 @@ namespace BALL
 
 			/** Assignment operator
 			*/
-			ReadFile& ReadFile::operator = (const ReadFile& rf);
+			ReadFile& operator = (const ReadFile& rf);
 
 			/*_	@name	Help-Methods for File Acces
 			*/
@@ -104,7 +104,7 @@ namespace BALL
 			//_@{
 
 			/// filestream to read
-			ifstream in;
+			std::ifstream in;
 
 			/// buffer for the line in use
 			String line_;
