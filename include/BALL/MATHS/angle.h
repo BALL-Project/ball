@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.43 2004/02/23 15:19:59 anhi Exp $
+// $Id: angle.h,v 1.44 2004/02/23 17:26:02 anhi Exp $
 //
 
 #ifndef BALL_MATHS_ANGLE_H
@@ -26,7 +26,7 @@
 namespace BALL 
 {
 	/** \defgroup Angle Representation of angles.
-	 	  class  \link TAngle TAngle \endlink  and class  \link Angle Angle \endlink 
+	 	  class  \link BALL::TAngle TAngle \endlink  and class  \link Angle Angle \endlink 
 	 		\ingroup Primitives
 	 */
 	//@{
@@ -244,7 +244,7 @@ namespace BALL
 			throw();
 
 		/**	Add a value to this angle.
-				@param value the value to add
+				@param val the value to add
 				@return TAngle, {\em *this}
 		*/
 		TAngle& operator += (const T& val)

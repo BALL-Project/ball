@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSAS.h,v 1.10 2003/11/04 20:10:36 strobel Exp $
+// $Id: triangulatedSAS.h,v 1.11 2004/02/23 17:26:07 anhi Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSAS_H
 #define BALL_STRUCTURE_TRIANGULATEDSAS_H
@@ -111,7 +111,7 @@ namespace BALL
 
 		/** Detailed constructor.
 				Create a new empty TriangulatedSAS object and set its SAS.
-				@param	ses			a pointer to the corresponding SAS
+				@param	sas			a pointer to the corresponding SAS
 				@param	density	the density to use by triangulation
 		*/
 		TriangulatedSAS(SolventAccessibleSurface* sas, const double& density)
@@ -211,8 +211,7 @@ namespace BALL
 
 		/** Detailed constructor.
 				Create a new empty SASTriangulator object and set its SAS.
-				@param	ses			a pointer to the corresponding SAS
-				@param	density	the density to use by triangulation
+				@param	tsas			a pointer to the corresponding SAS
 		*/
 		SASTriangulator(TriangulatedSAS* tsas)
 			throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: anisotropyShiftProcessor.h,v 1.18 2003/08/26 08:04:44 oliver Exp $
+// $Id: anisotropyShiftProcessor.h,v 1.19 2004/02/23 17:26:03 anhi Exp $
 //
 
 #ifndef BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H
@@ -95,9 +95,9 @@ namespace BALL
 				The sinus of the angle between <tt>v2</tt> and <tt>vx</tt> is assigned to <tt>sgamma</tt>.
 				Now preparations have finished and we can start the real shift calculation.  \par
   \par
-				<tt>calc1</tt> = <tt>dX1</tt> * ( ( 3.0 * <tt>stheta</tt> * {\tt stheta} ) - 2.0 ).  \par
-				<tt>calc2</tt> = <tt>dX2</tt> * ( 1.0 - ( 3.0 * <tt>stheta</tt> * {\tt stheta} * {\tt sgamma} * {\tt sgamma} ) )  \par
-				<tt>ts</tt> = ( <tt>calc1</tt> + <tt>calc2</tt> ) / ( 3.0 * {\tt abstand} * {\tt abstand} * {\tt abstand} )  \par
+				<tt>calc1</tt> = <tt>dX1</tt> * ( ( 3.0 * <tt>stheta</tt> * <tt> stheta</tt> ) - 2.0 ).  \par
+				<tt>calc2</tt> = <tt>dX2</tt> * ( 1.0 - ( 3.0 * <tt>stheta</tt> * <tt> stheta</tt> * <tt> sgamma</tt> * <tt> sgamma</tt> ) )  \par
+				<tt>ts</tt> = ( <tt>calc1</tt> + <tt>calc2</tt> ) / ( 3.0 * <tt> distance</tt> * <tt>distance</tt> * <tt>distance</tt> )  \par
 				<tt>ts</tt> is added to <tt>gs</tt>.  \par
   \par
 				<tt>dX1</tt> and <tt>dX2</tt> are some constant floats. 
@@ -111,14 +111,14 @@ namespace BALL
 				<tt>n_pos</tt> position of the Nitrogen bonded to Carbonate.  \par
 				The cartesion coordinate system is built on 
 				<tt>vz</tt> = <tt>n_pos</tt> - <tt>c_pos</tt>  \par
-				<tt>vy</tt> is the vectorproduct of <tt>vz</tt> and the difference vector of <tt>o_pos</tt> and {\tt c_pos}  \par
+				<tt>vy</tt> is the vectorproduct of <tt>vz</tt> and the difference vector of <tt>o_pos</tt> and <tt> c_pos</tt>  \par
 				<tt>vx</tt> is the vectorproduct of <tt>vz</tt> and <tt>vy</tt>.  \par
 				The center of the effector bond is set to:  \par
-				<tt>cen</tt> = <tt>c_pos</tt> + ( <tt>vz</tt> * ( 0.85 * length of {\tt vz} ) )	 \par
+				<tt>cen</tt> = <tt>c_pos</tt> + ( <tt>vz</tt> * ( 0.85 * length of <tt> vz</tt> ) )	 \par
   \par
 				The final calculation is just the same as above, except the use of different constants.
-				Use <tt>ndX1</tt> and <tt>ndX2</tt> instead of <tt>dX1</tt> and {\tt dX2}
-				and <tt>ndXN1</tt> and <tt>ndXN2</tt> intead of <tt>dXN1</tt> and {\tt dXN2}.
+				Use <tt>ndX1</tt> and <tt>ndX2</tt> instead of <tt>dX1</tt> and <tt> dX2</tt>
+				and <tt>ndXN1</tt> and <tt>ndXN2</tt> intead of <tt>dXN1</tt> and <tt> dXN2</tt>.
 				Finally C=N anisotropy has finished and <tt>gs</tt> is added to the actual hydrogen´s shift.
 				Then iteration goes on with the next hydrogen.
 		*/

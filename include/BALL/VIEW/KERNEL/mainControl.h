@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.39 2004/02/23 15:20:03 anhi Exp $
+// $Id: mainControl.h,v 1.40 2004/02/23 17:26:09 anhi Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -363,8 +363,8 @@ namespace BALL
 			/**	Initialize all registered ModularWidget objects.
 					It initializes the menu structure, the preferences dialogs and connects
 					every ModularWidget with the MainControl.
-					This method also creates the first menu entry <b>FILE</b> with its subentry
-					<b>EXIT</b> to exit the application.
+					This method also creates the first menu entry <b> FILE </b> with its subentry
+					<b> EXIT </b> to exit the application.
 					See ModularWidget for further information concerning menu structure creation
 					and preferences handling. \par
 					Calls registerConnectionObject() \par
@@ -378,7 +378,7 @@ namespace BALL
 					Calls ModularWidget::applyPreferences() \par
 					Calls Preferences::fetchPreferences() \par
 					Calls QMainWindow::show() \par
-					<b> Note:<\b> Call this method to start the application.
+					Note: Call this method to start the application.
 			*/
 			virtual void show();
 
@@ -479,6 +479,7 @@ namespace BALL
 					\param slot the function that will be called by activation of the menu entry
 					\param accel the acceleration key
 					\param entry_ID the id for the new menu entry (default: -1, will create a new one)
+					\param hint
 					\return int the new entry_ID
 			*/
 			int insertMenuEntry (int ID, const String& name, const QObject* receiver = 0, 

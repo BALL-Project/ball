@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.5 2004/01/18 21:55:34 oliver Exp $
+// $Id: server.h,v 1.6 2004/02/23 17:26:09 anhi Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_SERVER_H
@@ -197,7 +197,7 @@ namespace BALL
 					the class MainControl.	
 					See ModularWidget for further information concerning menu structure
 					creation of ModularWidget objects.\par
-					{\bf Note:} Because this server has no menu entries this method
+					<b>Note</b> Because this server has no menu entries this method
 					is empty.
 				  \see        ModularWidget
 					\see        checkMenus

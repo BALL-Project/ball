@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.h,v 1.23 2003/08/26 08:04:55 oliver Exp $
+// $Id: directory.h,v 1.24 2004/02/23 17:26:08 anhi Exp $
 //
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
@@ -108,7 +108,7 @@ namespace BALL
 		*/
 		//@{
 
-		/** Assign the Directory with the path {\em directory_path}.
+		/** Assign the Directory with the path <tt>directory_path</tt>.
 				The given directory path can be either absolute or relative. 
 				If the path starts with a path seperator it is set as a absolute path.
 				@param  directory_path the name of the directory to be cloned
@@ -118,8 +118,8 @@ namespace BALL
 		bool set(const String& directory_path, bool set_current = false);
 
 		/** Assignment with cloning facility.
-				Assign the Directory {\em directory} to {\em *this}.
-				@param  directory_path the directory to be cloned
+				Assign the Directory <tt> directory</tt> to <tt> *this</tt>.
+				@param  directory the directory to be cloned
 		*/
 		void set(const Directory& directory);
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESFace.h,v 1.26 2003/08/26 08:04:51 oliver Exp $
+// $Id: SESFace.h,v 1.27 2004/02/23 17:26:05 anhi Exp $
 //
 
 #ifndef BALL_STRUCTURE_SESFACE_H
@@ -155,7 +155,7 @@ namespace BALL
 			throw();
 
 		/** Set the corresponding RSVertex of the SESFace.
-				@param	RSVertex*	a pointer to the new RSVertex
+				@param	rsvertex	a pointer to the new RSVertex
 		*/
 		void setRSVertex(RSVertex* rsvertex)
 			throw();
@@ -167,7 +167,7 @@ namespace BALL
 			throw();
 
 		/** Set the corresponding RSEdge of the SESFace.
-				@param	RSEdge*	a pointer to the new RSFace
+				@param	rsedge	a pointer to the new RSFace
 		*/
 		void setRSEdge(RSEdge* rsedge)
 			throw();
@@ -179,7 +179,7 @@ namespace BALL
 			throw();
 
 		/** Set the corresponding RSFace of the SESFace.
-				@param	RSFace*	a pointer to the new RSFace
+				@param	rsface	a pointer to the new RSFace
 		*/
 		void setRSFace(RSFace* rsface)
 			throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.10 2003/12/15 01:18:59 amoll Exp $
+// $Id: cartoonModel.h,v 1.11 2004/02/23 17:26:09 anhi Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -62,7 +62,7 @@ namespace BALL
 					All previously inserted Atom objects 
 					(inserted in the method operator()) will be used to create a Cartoon.
 					\return bool true if the finish was successful, false otherwise
-					@exeception OutOfMemory thrown if the memory allocation failed
+					@exception OutOfMemory thrown if the memory allocation failed
 			*/
 			virtual bool finish();
 			

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.h,v 1.29 2003/08/26 08:04:53 oliver Exp $
+// $Id: rotamerLibrary.h,v 1.30 2004/02/23 17:26:07 anhi Exp $
 //
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -65,19 +65,19 @@ namespace BALL
 		*/
 		float P;
 		
-		/**	Angle \TeX{$\chi_1$}
+		/**	Angle \f$\chi_1\f$
 		*/
 		Angle chi1;
 
-		/**	Angle \TeX{$\chi_2$}
+		/**	Angle \f$\chi_2\f$
 		*/
 		Angle chi2;
 		
-		/**	Angle \TeX{$\chi_3$}
+		/**	Angle \f$\chi_3\f$
 		*/
 		Angle chi3;
 		
-		/**	Angle \TeX{$\chi_4$}
+		/**	Angle \f$\chi_4\f$
 		*/
 		Angle chi4;
 
@@ -90,7 +90,7 @@ namespace BALL
 		This class stores all potential rotamers for a given side-chain type.
 		By linking a residue rotamer set to a specific side chain, one can iteratively
 		try all possible rotamers for this side chain. These rotamers for a side chain	
-		are typically stored in a \link rotamer library RotamerLibrary \endlink.
+		are typically stored in a \link RotamerLibrary rotamer library \endlink.
 	*/
 	class ResidueRotamerSet
 	{
@@ -244,7 +244,7 @@ namespace BALL
 		Rotamer getRotamer(const Residue& residue) const;
 
 		/**	Return a reference to a given rotamer by number.
-				The index should be in the range [0,  \link getNumberOfRotamers getNumberOfRotamers \endlink ()[,
+				The index should be in the range [0,  \link Rotamer::getNumberOfRotamers getNumberOfRotamers \endlink ()[,
 				however the index is computed modulo the maximum number, so it
 				really doesn't matter.
 		*/

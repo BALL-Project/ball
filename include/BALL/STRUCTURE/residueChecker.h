@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.h,v 1.19 2003/08/26 08:04:53 oliver Exp $
+// $Id: residueChecker.h,v 1.20 2004/02/23 17:26:07 anhi Exp $
 //
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
@@ -27,10 +27,10 @@ namespace BALL
 			and non-integral or extremely large charges on the residue.
 			Atom positions are checked as well: a warning is printed, if any of the 
 			atom's coordinates is not a number (NaN).
-			Warnings are emitted to  \link Log Log \endlink .  \par
-			The individual tests can be enabled/disabled using the \link enable enable \endlink
-			and \link disable disable \endlink methods. Please use the enum
-			\link TestTypes TestTypes \endlink to refer to the appropriate tests.
+			Warnings are emitted to  \link LogStream Log \endlink .  \par
+			The individual tests can be enabled/disabled using the \link ResidueChecker::enable enable \endlink
+			and \link ResidueChecker::disable disable \endlink methods. Please use the enum
+			\link ResidueChecker::TestTypes TestTypes \endlink to refer to the appropriate tests.
 			By default all tests are enabled.
 			
 			The following tests are currently implemented:
@@ -125,8 +125,8 @@ namespace BALL
 		//@{
 			
 		/**	Enum to refer to the individual tests.
-				The values of this enum are used by \link enable enable \endlink,
-				\link disable disable \endlink, and \link isEnabled isEnabled \endlink.
+				The values of this enum are used by \link ResidueChecker::enable enable \endlink,
+				\link ResidueChecker::disable disable \endlink, and \link ResidueChecker::isEnabled isEnabled \endlink.
 		*/
 		enum TestType
 		{

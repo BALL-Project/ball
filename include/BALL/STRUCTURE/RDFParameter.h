@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RDFParameter.h,v 1.16 2003/08/26 08:04:50 oliver Exp $
+// $Id: RDFParameter.h,v 1.17 2004/02/23 17:26:04 anhi Exp $
 //
 
 #ifndef BALL_STRUCTURE_RDFPARAMETER_H
@@ -109,7 +109,7 @@ namespace BALL
 
 		/** Extract the information from the parameter file.
 				@param parameters a ForceFieldParameters instance
-				@param saection_name the name of the section to be parsed
+				@param section_name the name of the section to be parsed
 				@return true if the section could be read, false otherwise
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters,

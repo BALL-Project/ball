@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.h,v 1.16 2003/11/15 12:53:56 oliver Exp $
+// $Id: extractors.h,v 1.17 2004/02/23 17:26:03 anhi Exp $
 //
 
 #ifndef BALL_PYTHON_EXTRACTORS_H
@@ -70,7 +70,7 @@ namespace BALL
 	/**	Extract atoms matching an expression.
 			This method extracts all atoms from an atom list  
       that match the \link Expression Expression \endlink  <tt>expression</tt>.
-			@param fragment the AtomContainer containing the atoms
+			@param atoms the AtomContainer containing the atoms
 			@param expression the expression that selects the atoms
 	*/
 	PyAtomList* atoms(const PyAtomList& atoms, const String& expression);

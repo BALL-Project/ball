@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.9 2004/01/18 21:55:35 oliver Exp $
+// $Id: logView.h,v 1.10 2004/02/23 17:26:11 anhi Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -42,14 +42,14 @@ namespace BALL
 	namespace VIEW
 	{
 		/** LogView class.
-				The class LogView records all messages sent to the  \link Log Log \endlink  object and
+				The class LogView records all messages sent to the  \link BALL::LogStream Log \endlink  object and
 				displays them as a text history. The class is derived from 
 				<b> NotificationTarget<LogStreamNotifier></b> that provides the connection
-				to the  \link Log Log \endlink  object. The class  QTextEdit from the 
+				to the  \link BALL::LogStream Log \endlink  object. The class  QTextEdit from the 
 				qt - library is responsible for the visualization of the text history.
 				Use the class LogView as a widget. There are no initializations necessary.
 				Just create this widget as a child widget of your application and it will
-				record and show all messages sent to the  Log object.
+				record and show all messages sent to the \link BALL::LogStream Log \endlink object.
 				\ingroup ViewWidgets
 		*/
 		class LogView
@@ -68,10 +68,10 @@ namespace BALL
 
 			/** Default Constructor.
 					The contructor connects the own
-					<b> stringstream</b> with the  \link Log Log \endlink  object. If a string is written into
-					 \link Log Log \endlink  this will be notified and the string will be displayed
+					<b> stringstream</b> with the  \link BALL::LogStream Log \endlink  object. If a string is written into
+					 \link BALL::LogStream Log \endlink  this will be notified and the string will be displayed
 					by this logView. 
-					\see         Log
+					\see         BALL::LogStream
 			*/
 			LogView(QWidget *parent = 0, const char *name = 0)
 				throw();
@@ -107,7 +107,7 @@ namespace BALL
 			protected:
 
 			/** Overridden notify call.
-					Will be called by  \link Log Log \endlink  whenever a string is written to it.
+					Will be called by  \link BALL::LogStream Log \endlink  whenever a string is written to it.
 					That string will then be displayed.
 					\param   source the notification source
 					\return  bool returns always <tt>true</tt>

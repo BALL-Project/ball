@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.h,v 1.27 2004/02/23 15:19:56 anhi Exp $
+// $Id: logStream.h,v 1.28 2004/02/23 17:26:01 anhi Exp $
 //
 
 #ifndef BALL_COMMON_LOGSTREAM_H
@@ -94,7 +94,7 @@ namespace BALL
 			the LogStream object. This list contains pointers to the
 			streams and their minimum and maximum log level.
 			Each line entered in the  \link LogStream LogStream \endlink  is marked with its
-			time (in fact, the time  \link sync sync \endlink  was called) and its
+			time (in fact, the time  \link LogStreamBuf::sync sync \endlink  was called) and its
 			loglevel. The loglevel is determined by either the current
 			loglevel (as set by  \link LogStream::setLevel LogStream::setLevel \endlink  or a temporary
 			level (as set by  \link LogStream::level LogStream::level \endlink  for a single line only).
@@ -161,7 +161,7 @@ namespace BALL
 				into a logline if a newline or linefeed character 
 				is found in the buffer ("\n" or "\r" resp.).
 				The line is then removed from the putbuffer.
-				Incomplete lines (not terminated by \n/\r are
+				Incomplete lines (not terminated by "\n" / "\r" are
 				stored in incomplete_line_.
 		*/
 		virtual int sync();
@@ -259,9 +259,9 @@ namespace BALL
 			
 		/** Log levels.
 				Constants for the different predefined log levels.
-				Use  \link ERROR ERROR \endlink  to indicate a severe error,  \link WARNING WARNING \endlink  to 
+				Use  \link LogStream::ERROR ERROR \endlink  to indicate a severe error,  \link LogStream::WARNING WARNING \endlink  to 
 				indicate a problem that could be fixed or is of minor importance, 
-				and  \link INFORMATION INFORMATION \endlink  for messages that do not indicate any problem 
+				and  \link LogStream::INFORMATION INFORMATION \endlink  for messages that do not indicate any problem 
 				(e.g. progress messages).
 		*/
 		enum 
@@ -286,9 +286,11 @@ namespace BALL
 		/** Constructor.
 				Creates a new LogStream object that is not associated with any stream.
 				If the argument <tt>associate_stdio</tt> is set to <b>true</b>,
-				<tt>cout</tt> is associated with all messages of levels  \link INFORMATION INFORMATION \endlink  
-				and  \link WARNING WARNING \endlink , and <tt>cerr</tt> is associated with all messages
-				of level  \link ERROR ERROR \endlink .
+				<tt>cout</tt> is associated with all messages of levels  \link LogStream::INFORMATION INFORMATION \endlink  
+				and  \link LogStream::WARNING WARNING \endlink , and <tt>cerr</tt> is associated with all messages
+				of level  \link LogStream::ERROR ERROR \endlink .
+				@param	buf
+				@param  delete_buf
 				@param	associate_stdio bool, default is false
 		*/
 		LogStream(LogStreamBuf* buf = 0, bool delete_buf = true, bool associate_stdio = false);
@@ -322,7 +324,7 @@ namespace BALL
 				This method assigns a new loglevel which will be used
 				for all messages sent to the LogStream after that call
 				(except for messages which use the temporary loglevel
-				set by  \link level level \endlink ).
+				set by  \link LogStream::level level \endlink ).
 		*/
 		void setLevel(int level);
 
@@ -351,19 +353,19 @@ namespace BALL
 		LogStream& level(int level);
 
 		/**	Log an information message.
-				This method is equivalent to  \link level level \endlink (LogStream::INFORMATION + n). 
+				This method is equivalent to  \link LogStream::level level \endlink (LogStream::INFORMATION + n). 
 				@param	n the channel 
 		*/
 		LogStream& info(int n = 0);
 
 		/**	Log an error message.
-				This method is equivalent to  \link level level \endlink (LogStream::ERROR + n). 
+				This method is equivalent to  \link LogStream::level level \endlink (LogStream::ERROR + n). 
 				@param	n the channel 
 		*/
 		LogStream& error(int n = 0);
 
 		/**	Log an information message.
-				This method is equivalent to  \link level level \endlink (LogStream::WARNING + n). 
+				This method is equivalent to  \link LogStream::level level \endlink (LogStream::WARNING + n). 
 				@param	n the channel 
 		*/
 		LogStream& warn(int n = 0);
@@ -385,8 +387,8 @@ namespace BALL
 				If <tt>min_level</tt>	and <tt>max_level</tt> are equal, this function can be used
 				to listen to a specified channel.
 				@param	s a reference to the stream to be associated
-				@param	min_level the minimum level of messages copied to this stream
-				@param	max_level the maximum level of messages copied to this stream
+				@param	MIN_LEVEL the minimum level of messages copied to this stream
+				@param	MAX_LEVEL the maximum level of messages copied to this stream
 		*/
 		void insert
 			(std::ostream& s, int min_level = LogStreamBuf::MIN_LEVEL, 
@@ -423,7 +425,7 @@ namespace BALL
 				associated stream. However, if the stream is not
 				associated, nothing will happen.
 				@param	s the associated stream
-				@param	min_level the new minimum level
+				@param	max_level the new minimum level
 		*/
 		void setMaxLevel(const std::ostream& s, int max_level);
 

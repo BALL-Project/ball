@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESVertex.h,v 1.20 2003/08/26 08:04:51 oliver Exp $
+// $Id: SESVertex.h,v 1.21 2004/02/23 17:26:06 anhi Exp $
 //
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
@@ -141,7 +141,7 @@ namespace BALL
 			throw();
 
 		/**	Set the normal vector of the SESVertex.
-				@param	point	the new normal vector
+				@param	normal	the new normal vector
 		*/
 		void setNormal(const TVector3<double>& normal)
 			throw(Exception::DivisionByZero);

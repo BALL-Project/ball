@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.22 2004/02/18 18:19:08 anhi Exp $
+// $Id: molecularControl.h,v 1.23 2004/02/23 17:26:11 anhi Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -450,9 +450,8 @@ namespace BALL
 					If an item does not exist a subtree for <b>composite</b>, it will be created with the
 					method generateListViewItem_() and inserted into <b>item</b>.
 					Otherwise the method recurseUpdate_() will iterate over the childrens	of <b> composite</b>.			
-					\param  item a SelectableListViewItem whose subtree of items will be checked against <b>composite
-					\param  composite the Composite object whose subtree will be checked against <b>item
-					\param  default_name the name of the <b>item</b>
+					\param  item a SelectableListViewItem whose subtree of items will be checked against <b>composite</b>
+					\param  composite the Composite object whose subtree will be checked against <b>item</b>
 			*/
 			void updateListViewItem_(SelectableListViewItem* item, Composite& composite)
 				throw();

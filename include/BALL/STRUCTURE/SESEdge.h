@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESEdge.h,v 1.23 2003/08/26 08:04:51 oliver Exp $
+// $Id: SESEdge.h,v 1.24 2004/02/23 17:26:05 anhi Exp $
 //
 
 #ifndef BALL_STRUCTURE_SESEDGE_H
@@ -171,7 +171,7 @@ namespace BALL
 		//@{
 
 		/** Set the circle on wich the SESEdge lies.
-				@param	circle	the new circle
+				@param	center	the new circle
 		*/
 		void setCircle(const TCircle3<double>& center)
 			throw();

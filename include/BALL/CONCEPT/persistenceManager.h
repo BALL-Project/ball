@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.h,v 1.45 2003/08/26 08:04:08 oliver Exp $
+// $Id: persistenceManager.h,v 1.46 2004/02/23 17:26:01 anhi Exp $
 //
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
@@ -36,7 +36,7 @@ namespace BALL
 	/**	Persistence manager class.
 			This class serializes and deserializes persistent objects and
 			provides support for the implementation of the object-specific 
-			serialization methods  \link persistentRead persistentRead \endlink  and  \link persistentWrite persistentWrite \endlink .
+			serialization methods  \link PersistenceManager::persistentRead persistentRead \endlink  and  \link PersistenceManager::persistentWrite persistentWrite \endlink .
 			It defines three different layers:
 				- <b>Layer 0</b> contains the basic I/O routines for primitive
 					data types. All methods of layer 0 are virtual to exchange the 
@@ -74,8 +74,8 @@ namespace BALL
 				This type describes a method to dynamically create a specific
 				object.  It should return a <tt>void</tt> pointer for interface
 				compatibility and doesn't take an argument.  It creates a new
-				object and returns the object's <tt>this</tt> pointer (cast to {\tt
-				void*}).  The  \link getNew getNew \endlink  function (in the RTTI namespace) is an
+				object and returns the object's <tt>this</tt> pointer (cast to <tt>
+				void*</tt>).  The  \link PersistenceManager::getNew getNew \endlink  function (in the RTTI namespace) is an
 				example for such a method.
 				@see registerClass
 				@see RTTI
@@ -120,7 +120,7 @@ namespace BALL
 		/**	Destructor.
 				Destruct the persistence manager and and clear up all data
 				structures. The associated streams or sockets
-				( \link setIStream setIStream \endlink / \link setOStream setOStream \endlink ) are not closed.
+				( \link PersistenceManager::setIStream setIStream \endlink / \link PersistenceManager::setOStream setOStream \endlink ) are not closed.
 		*/
 		virtual ~PersistenceManager()
       throw();
@@ -135,7 +135,7 @@ namespace BALL
 				Each object read by the persistence manager has to be constructed
 				somehow. The persistence manager first reads a class' signature
 				(i.e. a unique identifier in the context of this stream). This is
-				usually the stream name of the class (see  \link getStreamName getStreamName \endlink ), but
+				usually the stream name of the class (see  \link PersistenceManager::getStreamName getStreamName \endlink ), but
 				can be an arbitrary string (without blanks). When reading an
 				object header with a given class signature, the persistence manager
 				tries to find a method to create an instance of this object. For
@@ -143,15 +143,15 @@ namespace BALL
 				classes to be read has to be contained in this hash map together
 				with a method to create an instance of this object. This is done
 				by calling registerClass. The create method is usually the
-				 \link getNew getNew \endlink  method for a class:
-\begin{verbatim}
+				 \link PersistenceManager::getNew getNew \endlink  method for a class:
+\code
 	PersistenceManager pm;
 	pm.registerClass(RTTI::getStreamName<Atom>(), RTTI::getNew<Atom>);
 	pm.registerClass(RTTI::getStreamName<Composite>(), RTTI::getNew<Composite>);
-\end{verbatim}
-				Remember to include the {\em baseclasses} of each class, too! To
+\endcode
+				Remember to include the <b>baseclasses</b> of each class, too! To
 				register all kernel classes, use the
-				 \link BALL_REGISTER_PERSISTENT_KERNEL_CLASSES BALL_REGISTER_PERSISTENT_KERNEL_CLASSES \endlink  macro.
+				 \link PersistenceManager::BALL_REGISTER_PERSISTENT_KERNEL_CLASSES BALL_REGISTER_PERSISTENT_KERNEL_CLASSES \endlink  macro.
 				@param signature the class signatur
 				@param m a dynamic class create method
 		*/
@@ -194,7 +194,7 @@ namespace BALL
 				This method write a start marker to the output stream and prepares
 				the stream and the persistence manager's internal data structures
 				for the output of an object. The start marker is written via the
-				method  \link writeStreamHeader writeStreamHeader \endlink .
+				method  \link PersistenceManager::writeStreamHeader writeStreamHeader \endlink .
 				 \par
 				It need not be called usually, as it is called by <tt>operator >></tt>.
 		*/
@@ -235,7 +235,7 @@ namespace BALL
       throw();
 
 		/**	Read a persistent object from a stream.
-				This method calls  \link readObject readObject \endlink .
+				This method calls  \link PersistenceManager::readObject readObject \endlink .
 		*/
 		PersistenceManager& operator >> (PersistentObject*& object_ptr)
       throw();
@@ -385,9 +385,9 @@ namespace BALL
 			throw();
 
 		/** Write an array of pointers to persistent objects.
-				Thhis method writes <tt>size</tt> persistent objects to the persistent
+				This method writes <tt>size</tt> persistent objects to the persistent
 				stream. It also writes the necessary header and trailer.
-				@param  array the array of persistent object pointers
+				@param  arr the array of persistent object pointers
 				@param  name the name (usually the name of the member variable)
 				@param  size the number of elements in the array
 		*/
@@ -419,7 +419,7 @@ namespace BALL
 				object and member objects or the object itself. If writeHeader is
 				called for a base class, name should be set to 0. <tt>type_name</tt>
 				should refer to the stream name of an object (see
-				 \link getStreamName getStreamName \endlink ).  \par
+				 \link PersistenceManager::getStreamName getStreamName \endlink ).  \par
 				When defining an object (i.e. when writing the first header to a
 				persistent stream), <tt>name</tt> should be set to <tt>""</tt>. For base
 				classes, name has to be set to 0. The exact behaviour of this
@@ -478,8 +478,8 @@ namespace BALL
 
 
 		/**	Get an (unknown) object header.
-				The name (if set) is ignored. The type name is returned in {\tt
-				type\_name} and the address of the object is read but not inserted
+				The name (if set) is ignored. The type name is returned in <tt>
+				type_name</tt> and the address of the object is read but not inserted
 				into the table.
 		*/
 		virtual bool getObjectHeader(String& type_name, PointerSizeUInt& ptr) = 0;

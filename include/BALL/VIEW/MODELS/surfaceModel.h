@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.9 2004/02/04 17:32:01 amoll Exp $
+// $Id: surfaceModel.h,v 1.10 2004/02/23 17:26:10 anhi Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_SURFACEMODEL_H
@@ -83,7 +83,7 @@ namespace BALL
 					This method will be internally called from the processor mechanism when the processor
 					has finished processing the Composite tree.
 					\return bool true if the finish was successful
-					@exeception OutOfMemory thrown if the memory allocation for the Mesh object failed
+					@exception OutOfMemory thrown if the memory allocation for the Mesh object failed
 					\see    Mesh
 			*/
 			virtual bool finish();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: QTTimer.h,v 1.20 2003/10/15 14:21:15 amoll Exp $
+// $Id: QTTimer.h,v 1.21 2004/02/23 17:26:08 anhi Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H
@@ -127,7 +127,7 @@ namespace BALL
 					represented by the parameter <b> interval</b>. This QTTimer will
 					call the method <b> timer</b> every <b> interval</b> msec.
 					\param       interval the new interval of this qtTimer
-					\exception   NoValidInterval thrown if the value of <b> interval</b> is lower or equal <tt> 0</b>
+					\exception   NoValidInterval thrown if the value of <b> interval</b> is lower or equal <tt> 0</tt>
 					\see         startTimer
 					\see         stopTimer
 					\see         timer

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSurface.h,v 1.38 2003/11/04 20:10:02 strobel Exp $
+// $Id: triangulatedSurface.h,v 1.39 2004/02/23 17:26:07 anhi Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -196,7 +196,7 @@ namespace BALL
 
 		/** Remove a triangle from the TriangulatedSurface.
 				If deep is true (not default) the incidence-structure will be updated.
-				@param	p			an iterator into the list of triangles of the
+				@param	t			an iterator into the list of triangles of the
 											TriangulatedSurface which indicates the triangle to
 											delete
 				@param	deep	look above
@@ -444,7 +444,7 @@ namespace BALL
 
 		/** Refine a triangulated sphere.
 				The center of the sphere must be the origin, the radius must be 1.
-				@param	iteration	the number of refinement iterations
+				@param	iterations	the number of refinement iterations
 				@param	out				the orientation of the normal vectors
 		*/
 		void refine(Position iterations, bool out = true);

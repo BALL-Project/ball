@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.27 2004/02/23 15:19:59 anhi Exp $
+// $Id: common.h,v 1.28 2004/02/23 17:26:02 anhi Exp $
 //
 
 #ifndef BALL_MATHS_COMMON_H
@@ -87,7 +87,7 @@ namespace BALL
 		/**	Return the greatest of three numbers.
 				@param	a the first number
 				@param	b the second number
-				@param	c the third number
+				@param	ct the third number
 				@return T the greatest number
 		*/
 		template <typename T>
@@ -116,7 +116,7 @@ namespace BALL
 		/**	Return the smallest of three numbers.
 				@param	a the first number
 				@param	b the second number
-				@param	c the third number
+				@param	ct the third number
 				@return T the smallest number
 		*/
 		template <typename T>

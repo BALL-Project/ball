@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.h,v 1.26 2003/08/26 08:04:16 oliver Exp $
+// $Id: atomContainer.h,v 1.27 2004/02/23 17:26:02 anhi Exp $
 //
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
@@ -276,33 +276,33 @@ namespace BALL
 			throw();
 
 		/** Prepend an atom at position 0.
-				@param atom, the atom to prepend
+				@param atom the atom to prepend
 		*/
 		void prepend(Atom& atom)
 			throw();
 
 		/** Append an atom to the last position.
-				@param atom, the atom to append
+				@param atom the atom to append
 		*/
 		void append(Atom& atom)
 			throw();
 
 		/** Insert an atom to the last position.
-				@param atom, the atom to insert
+				@param atom the atom to insert
 		*/
 		void insert(Atom& atom)
 			throw();
 
 		/** Insert an atom before a given Composite object.
-				@param atom, the atom to insert
-				@param before, the Composite object to insert before
+				@param atom the atom to insert
+				@param before the Composite object to insert before
 		*/
 		void insertBefore(Atom& atom, Composite& before)
 			throw();
 
 		/** Insert an atom after a given Composite object.
-				@param atom, the atom to insert
-				@param after, the Composite object to insert after
+				@param atom the atom to insert
+				@param after the Composite object to insert after
 		*/
 		void insertAfter(Atom& atom, Composite& after)
 			throw();
@@ -314,33 +314,33 @@ namespace BALL
 			throw();
 
 		/** Prepend an AtomContainer at position 0.
-				@param atom_container, the AtomContainer to prepend
+				@param atom_container the AtomContainer to prepend
 		*/
 		void prepend(AtomContainer& atom_container)
 			throw();
 
 		/** Append an AtomContainer at the last position.
-				@param atom_container, the AtomContainer to prepend
+				@param atom_container the AtomContainer to prepend
 		*/
 		void append(AtomContainer& atom_container)
 			throw();
 
 		/** Insert an AtomContainer at the last position.
-				@param atom_container, the AtomContainer to insert
+				@param atom_container the AtomContainer to insert
 		*/
 		void insert(AtomContainer& atom_container)
 			throw();
 
 		/** Insert an AtomContainer before a given Composite object.
-				@param atom_container, the AtomContainer to insert
-				@param before, the Composite object to insert before
+				@param atom_container the AtomContainer to insert
+				@param before the Composite object to insert before
 		*/
 		void insertBefore(AtomContainer& atom_container, Composite& before)
 			throw();
 
 		/** Insert an AtomContainer after a given Composite object.
-				@param atom_container, the AtomContainer to insert
-				@param after, the Composite object to insert after
+				@param atom_container the AtomContainer to insert
+				@param after the Composite object to insert after
 		*/
 		void insertAfter(AtomContainer& atom_container, Composite& after)
 			throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quaternion.h,v 1.39 2004/02/23 15:20:00 anhi Exp $
+// $Id: quaternion.h,v 1.40 2004/02/23 17:26:02 anhi Exp $
 //
 
 #ifndef BALL_MATHS_QUATERNION_H
@@ -582,7 +582,7 @@ namespace BALL
 
 	/**	Output Operator.
 			Write the values of the quaternion to an output stream.
-			The values of <tt>i</tt>, <tt>j</tt>, <tt>k</tt>, and {\tt angle} are written to
+			The values of <tt>i</tt>, <tt>j</tt>, <tt>k</tt>, and <tt> angle</tt> are written to
 			an output stream. They are enclosed in brackets. \par
 			<b>Example:</b> \par
 			<tt>(0.32 0.45 0.12 1.0)</tt>

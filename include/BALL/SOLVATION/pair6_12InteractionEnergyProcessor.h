@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.20 2003/08/26 08:04:48 oliver Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.21 2004/02/23 17:26:03 anhi Exp $
 //
 
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
@@ -224,7 +224,7 @@ namespace BALL
 		const RDFParameter& getRDFParameter() const throw();
 
 		/** Set the integrator of this processor
-				@param rdf_integrator the integrator to be set
+				@param integrator the integrator to be set
 		*/
 		void setRDFIntegrator(const Pair6_12RDFIntegrator& integrator) throw();
 

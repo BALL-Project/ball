@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.21 2004/02/20 11:43:33 amoll Exp $
+// $Id: colorProcessor.h,v 1.22 2004/02/23 17:26:10 anhi Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -92,7 +92,7 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Reset the state of the
-					 <b> default_color_</b> to red (<tt> "FF0000FF"</b>).
+					 <b> default_color_</b> to red (<tt> "FF0000FF"</tt>).
 					The grid is cleared and the pointer to the CompositeSet is set to NULL.
 			*/
 			virtual void clear()

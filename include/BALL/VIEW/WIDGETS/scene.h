@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.20 2004/02/20 11:05:07 amoll Exp $
+// $Id: scene.h,v 1.21 2004/02/23 17:26:12 anhi Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -122,7 +122,7 @@ namespace BALL
 					Calls registerWidget.
 					\param      parent_widget the parent widget of this scene 
 					\param      name the name of this scene 
-					\param      flags the flags the scene widget should have 
+					\param      w_flags the flags the scene widget should have 
 											(See documentation of QT-library for information concerning widget flags) 
 			*/
 			Scene(QWidget* parent_widget, const char* name = NULL, WFlags w_flags = 0)
@@ -139,7 +139,7 @@ namespace BALL
 					\param  scene the scene to be copied
 					\param  parent_widget the parent widget of this scene 
 					\param  name the name of this scene 
-					\param  flags the flags the scene widget should have 
+					\param  wflags the flags the scene widget should have 
 									(See documentation of QT-library for information concerning widget flags) 
 			 */
 			Scene (const Scene& scene, QWidget* parent_widget = NULL, const char* name = NULL, WFlags wflags = 0)

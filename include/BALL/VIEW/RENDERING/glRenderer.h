@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.11 2004/02/17 15:27:52 amoll Exp $
+// $Id: glRenderer.h,v 1.12 2004/02/23 17:26:11 anhi Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
 #define BALL_VIEW_RENDERING_GLRENDERER_H
@@ -117,6 +117,8 @@ namespace BALL
 			/** Pick geometric objects method2.
 			 		Call this method after pickObjects1 and rendering the representations.
 					\param objects returns the picked objects
+					\param width the width
+					\param height the height
 			*/
 			void pickObjects2(List<GeometricObject*>& objects, int width, int height)
 				throw();

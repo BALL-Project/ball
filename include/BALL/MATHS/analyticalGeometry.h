@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalGeometry.h,v 1.62 2004/02/23 15:19:59 anhi Exp $
+// $Id: analyticalGeometry.h,v 1.63 2004/02/23 17:26:02 anhi Exp $
 //
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -159,7 +159,7 @@ namespace BALL
 	}
 
 	/**	Get the determinant of an 3x3 matrix.
-			@param	m00 - m22 the elements of the matrix
+			@param	m00, m01, m02, m10, m11, m12, m20, m21, m22 the elements of the matrix
 	*/
 	template <typename T>
 	BALL_INLINE T 
@@ -291,7 +291,7 @@ namespace BALL
 	/**	Solve a system of two equations of the form
 		  \f$a_1 x_1 + b_1 x_2 = c_1\f$ and 
 		  \f$a_2 x_1 + b_2 x_2 = c_2\f$.
-			@param	a1- c2 constants of the system
+			@param	a1, b1, c1, a2, b2, c2 constants of the system
 			@param x1 the first solution
 			@param x2 the second solution
 			@return bool <tt>true</tt> if a solution is found
@@ -736,7 +736,7 @@ namespace BALL
 	/**	Get the intersection point between a plane and a line.
 			@param	plane the plane
 			@param	line the line
-			@param	point the resulting intersection
+			@param	intersection_point the resulting intersection
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
 	template <typename T>
@@ -759,7 +759,7 @@ namespace BALL
 	/**	Get the intersection point between a line and a plane.
 			@param	line the line
 			@param	plane the plane
-			@param	point the resulting intersection
+			@param	intersection_point the resulting intersection
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
 	template <typename T>
@@ -986,6 +986,7 @@ namespace BALL
 			@param	s3 the third sphere
 			@param	p1 the first intersection point
 			@param	p2 the second intersection point
+			@param	test
 			@return bool, <b>true</b> if an intersection can be calculated, otherwise <b>false</b>
 	*/
 	template <class T>

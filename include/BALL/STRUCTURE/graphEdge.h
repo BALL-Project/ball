@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: graphEdge.h,v 1.11 2003/08/26 08:04:51 oliver Exp $
+// $Id: graphEdge.h,v 1.12 2004/02/23 17:26:06 anhi Exp $
 //
 
 #ifndef BALL_STRUCTURE_GRAPHEDGE_H
@@ -112,10 +112,10 @@ namespace BALL
 			throw();
 
 		/**	Assign from a lot of nice objects
-				@param	vertex1	assigned to the first vertex
-				@param	vertex2	assigned to the second vertex
-				@param	face1		assigned to the first face
-				@param	face2		assigned to the second face
+				@param	vertex0	assigned to the first vertex
+				@param	vertex1	assigned to the second vertex
+				@param	face0		assigned to the first face
+				@param	face1		assigned to the second face
 				@param	index		assigned to the index
 		*/
 		void set(Vertex*	vertex0,
@@ -176,7 +176,7 @@ namespace BALL
 		/** Return a pointer to the other vertex of the GraphEdge.
 				If the given vertex is not incident to the GraphEdge, an exception is
 				thrown.
-				@param	Vertex*	one of the vertices of the GraphEdge
+				@param	vertex	one of the vertices of the GraphEdge
 				@return	Vertex*	the other vertex
 		*/
 		Vertex* other(const Vertex* vertex) const
@@ -185,7 +185,7 @@ namespace BALL
 		/** Return a pointer to the other face of the GraphEdge.
 				If the given face is not neighboured to the GraphEdge, an exception is
 				thrown.
-				@param	Face*	one of the faces of the GraphEdge
+				@param	face	one of the faces of the GraphEdge
 				@return	Face*	the other face
 		*/
 		Face* other(const Face* face) const
@@ -201,8 +201,8 @@ namespace BALL
 			throw();
 
 		/** Substitute a face by an other one.
-				@param	old_face	the face that has to be substituted
-				@param	new_face	the new face
+				@param	old_vertex	the face that has to be substituted
+				@param	new_vertex	the new face
 				@return	bool			<b>true</b>, if the face can be substituted,
 													<b>false</b> otherwise
 		*/

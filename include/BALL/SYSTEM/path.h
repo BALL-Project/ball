@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: path.h,v 1.10 2003/08/26 08:04:56 oliver Exp $
+// $Id: path.h,v 1.11 2004/02/23 17:26:08 anhi Exp $
 //
 
 #ifndef BALL_COMMON_PATH_H
@@ -43,8 +43,8 @@ namespace BALL
 				variable "BALL\_DATA" to the desired value. \par
 				The environment variable always overrides the compiled
 				settings. \par
-				The default path may be accessed using  \link getDefaultDataPath getDefaultDataPath \endlink .
-				The path may also be modified at runtime by calling  \link setDataPath setDataPath \endlink .
+				The default path may be accessed using  \link Path::getDefaultDataPath getDefaultDataPath \endlink .
+				The path may also be modified at runtime by calling  \link Path::setDataPath setDataPath \endlink .
 				The path contains a colon separated list of paths that are searched 
 				in the order of occurence. \par
 		*/		
@@ -77,7 +77,7 @@ namespace BALL
 				Specifying <b>data/test.dat</b> will search for data/test.dat in each
 				data directory first. If this search doesn't yield a match, find will search 
 				for a file named <b>test.dat</b> in each of the directories. \par
-				If this behaviour is not desired, try  \link findStrict findStrict \endlink  instead. \par
+				If this behaviour is not desired, try  \link Path::findStrict findStrict \endlink  instead. \par
 		*/
 		string find(const string& name);
 

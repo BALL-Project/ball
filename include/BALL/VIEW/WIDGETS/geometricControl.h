@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.13 2004/02/18 18:19:07 anhi Exp $
+// $Id: geometricControl.h,v 1.14 2004/02/23 17:26:11 anhi Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -147,7 +147,7 @@ namespace BALL
 					the QListViewItem object.
 					Calls insertContextMenuEntry for each context menu entry that will be
 					created.
-					\param   rep the Representation object for that a context menu should be created
+					\param   representation the Representation object for that a context menu should be created
 					\see     insertContextMenuEntry
 					\see     onContextMenu
 			*/

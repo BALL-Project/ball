@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.h,v 1.6 2003/12/12 17:51:49 amoll Exp $
+// $Id: lineModel.h,v 1.7 2004/02/23 17:26:10 anhi Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_LINEMODEL_H
@@ -61,7 +61,7 @@ namespace BALL
 					with the method buildBondModels_().
 					\param  composite the Composite object that will be processed
 					\return Processor::Result the result 
-					@exeception OutOfMemory thrown if the memory allocation for a Point object failed
+					@exception OutOfMemory thrown if the memory allocation for a Point object failed
 			*/
 			virtual Processor::Result operator() (Composite& composite);
 						

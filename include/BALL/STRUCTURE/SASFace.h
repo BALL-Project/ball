@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SASFace.h,v 1.7 2003/08/26 08:04:50 oliver Exp $
+// $Id: SASFace.h,v 1.8 2004/02/23 17:26:05 anhi Exp $
 //
 
 #ifndef BALL_STRUCTURE_SASFACE_H
@@ -112,7 +112,7 @@ namespace BALL
 		//@{
 
 		/** Set the sphere the GraphFace lies on.
-				@param	spher	the new sphere
+				@param	sphere	the new sphere
 		*/
 		void setSphere(const TSphere3<double>& sphere)
 			throw();

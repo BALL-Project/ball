@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: graphFace.h,v 1.13 2003/08/26 08:04:52 oliver Exp $
+// $Id: graphFace.h,v 1.14 2004/02/23 17:26:06 anhi Exp $
 //
 
 #ifndef BALL_STRUCTURE_GRAPHFACE_H
@@ -897,7 +897,7 @@ namespace BALL
 
 		/** Get the edge of the GraphFace which lies on the opposite side of the
 				given vertex.
-				@param	Vertex*	a pointer to a vertex of the GraphTriangle
+				@param	vertex	a pointer to a vertex of the GraphTriangle
 				@return	Edge*		a pointer to the opposite Edge
 		*/
 		Edge* getOppositeEdge(const Vertex* vertex) const
@@ -906,7 +906,7 @@ namespace BALL
 
 		/** Get the vertex of the GraphFace which lies on the opposite side of the
 				given edge.
-				@param	Edge*		a pointer to an edge of the GraphTriangle
+				@param	edge		a pointer to an edge of the GraphTriangle
 				@return	Vertex*	a pointer to the opposite vertex
 		*/
 		Vertex* getOppositeVertex(const Edge* edge) const

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: createSpectrumProcessor.h,v 1.24 2004/02/18 23:24:05 oliver Exp $
+// $Id: createSpectrumProcessor.h,v 1.25 2004/02/23 17:26:03 anhi Exp $
 //
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
@@ -169,8 +169,8 @@ namespace BALL
 			\f[
 					S(\delta) = \sum_{i} \frac{h_i}{w_i (\delta_i-\delta)^2}
 			\f]  
-			where $\delta$ is the shift coordinate and each peak is defined
-			by its position $\delta_i$, intensity $h_i$, and width $w_i$.
+			where \f$\delta\f$ is the shift coordinate and each peak is defined
+			by its position \f$\delta_i\f$, intensity \f$h_i\f$, and width \f$w_i\f$.
 	\ingroup Spectra
 	*/
 	const RegularData1D& operator << (RegularData1D& data, const PeakList1D& peak_list) throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: uhligCavFreeEnergyProcessor.h,v 1.17 2003/08/26 08:04:49 oliver Exp $
+// $Id: uhligCavFreeEnergyProcessor.h,v 1.18 2004/02/23 17:26:04 anhi Exp $
 //
 
 #ifndef BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
@@ -58,16 +58,16 @@ namespace BALL
 			/** The surface tension.
 					This option sets the surface tension needed for the calculation of
 					the cavitation free energy. Use float values of unit
-					$\mathrm{J}\cdot\mathrm{mol}^{-1}\cdot A^{-2}$ with this option.
+					\f$\mathrm{J}\cdot\mathrm{mol}^{-1}\cdot A^{-2}\f$ with this option.
 					@see Default::SURFACE_TENSION
 					@param surface_tension float;
 			 */
 			static const char* SURFACE_TENSION;
 
 			/** The additive constant.
-					This option represents an adjustable constant $C$ added to the
-					$\gamma A$ term. Use float values of unit
-					$\mathrm{J}\cdot\mathrm{mol}^{-1}$ with this option.
+					This option represents an adjustable constant \f$C\f$ added to the
+					\f$\gamma A\f$ term. Use float values of unit
+					\f$\mathrm{J}\cdot\mathrm{mol}^{-1}\f$ with this option.
 					@see Default::CONSTANT
 					@param constant float;
 			 */
@@ -96,11 +96,11 @@ namespace BALL
 			/** Default surface tension.
 					This is a surface tension obtained by fitting calculated solvation free
 					energies of several small solutes against experimantel data. The
-					value ($5.41 \mathrm{cal}\cdot\mathrm{mol}^{-1}\cdot A^{-2} =
-					22.635 \mathrm{J}\cdot\mathrm{mol}^{-1}\cdot A^{-2}$) slightly
+					value (\f$5.41 \mathrm{cal}\cdot\mathrm{mol}^{-1}\cdot A^{-2} =
+					22.635 \mathrm{J}\cdot\mathrm{mol}^{-1}\cdot A^{-2}\f$) slightly
 					differs from the value suggested by Simonson/Br{\"u}nger in their
-					paper ($6 \mathrm{cal}\cdot\mathrm{mol}^{-1}\cdot A^{-2} = 25.1
-					\mathrm{J}\cdot\mathrm{mol}^{-1}\cdot A^{-2}$).
+					paper (\f$6 \mathrm{cal}\cdot\mathrm{mol}^{-1}\cdot A^{-2} = 25.1
+					\mathrm{J}\cdot\mathrm{mol}^{-1}\cdot A^{-2}\f$).
 					@see Option::SURFACE_TENSION
 			 */
 			static const float SURFACE_TENSION;
@@ -108,9 +108,9 @@ namespace BALL
 			/** Default additive constant.
 					This additive constant was also found by fitting aginst experimental
 					data  \link Default::SURFACE_TENSION Default::SURFACE_TENSION \endlink . 
-					In contrast to Simonson/Br{\"u}nger it is not zero but $0.921
+					In contrast to Simonson/Br{\"u}nger it is not zero but \f$0.921
 					\mathrm{kcal}\cdot\mathrm{mol}^{-1} = 3.855
-					\mathrm{kJ}\cdot\mathrm{mol}^{-1}$.
+					\mathrm{kJ}\cdot\mathrm{mol}^{-1}\f$.
 					@see Option::CONSTANT
 			 */
 			static const float CONSTANT;

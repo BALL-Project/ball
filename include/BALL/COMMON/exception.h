@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.43 2004/02/23 15:19:55 anhi Exp $
+// $Id: exception.h,v 1.44 2004/02/23 17:26:01 anhi Exp $
 //
    
 #ifndef BALL_COMMON_EXCEPTION_H
@@ -40,9 +40,9 @@ namespace BALL
 				<tt>__FILE__</tt> and <tt>__LINE__</tt> are built-in preprocessor
 				macros that hold the desired information.
 				 \par
-				BALL provides its own  \link BALL::Exception::terminate terminate \endlink  handler. This handler
+				BALL provides its own  \link BALL::Exception::GlobalExceptionHandler::terminate terminate \endlink  handler. This handler
 				extracts as much information as possible from the exception, prints
-				it to <tt>cerr</tt> and  \link BALL::Log Log \endlink , and finally calls exits the program
+				it to <tt>cerr</tt> and  \link BALL::LogStream Log \endlink , and finally calls exits the program
 				cleanly (with exit code 1).  This can be rather inconvenient for
 				debugging, since you are told where the exception was thrown, but
 				in general you do not know anything about the context.  Therefore

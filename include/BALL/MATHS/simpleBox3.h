@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox3.h,v 1.5 2004/02/23 15:20:00 anhi Exp $
+// $Id: simpleBox3.h,v 1.6 2004/02/23 17:26:03 anhi Exp $
 //
 
 #ifndef BALL_MATHS_SIMPLEBOX3_H
@@ -625,9 +625,9 @@ namespace BALL
 
 	/**	Output Operator.
 			Writes the two coordinates of the box to an output stream.
-			The vectors are enclosed by brackets.\\
-			{\bf Example:}\\
-			{\tt ((0 1 2) (7.5 3.4 10))}\\
+			The vectors are enclosed by brackets.\par
+			<b> Example</b> \par
+			<tt> ((0 1 2) (7.5 3.4 10)) </tt>\par
 			@see TVector3::operator<<
 	 		\ingroup SimpleBox
 	*/
@@ -638,7 +638,7 @@ namespace BALL
 		return s << "(" << box.a << ' ' << box.b << ')';
 	}
 
-	/**	Default three-dimensional box class of type {\bf float}
+	/**	Default three-dimensional box class of type <b> float</b>
 	 		\ingroup SimpleBox
 	*/
 	typedef TSimpleBox3<float> SimpleBox3;

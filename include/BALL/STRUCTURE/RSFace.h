@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSFace.h,v 1.31 2004/02/18 18:19:06 anhi Exp $
+// $Id: RSFace.h,v 1.32 2004/02/23 17:26:05 anhi Exp $
 //
 
 #ifndef BALL_STRUCTURE_RSFACE_H
@@ -162,8 +162,10 @@ namespace BALL
 		/**	Assign to a lot of nice objects
 				@param	vertex1		assigned to the first vertex
 				@param	vertex2		assigned to the second vertex
+				@param  vertex3   assigned to the third vertex
 				@param	edge1			assigned to the first edge
 				@param	edge2			assigned to the second edge
+				@param  edge3			assigned to the third edge
 				@param	center		assigned to the center
 				@param	normal		assigned to the normal vector
 				@param	singular

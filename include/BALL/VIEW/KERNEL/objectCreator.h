@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: objectCreator.h,v 1.2 2003/08/26 15:26:42 amoll Exp $
+// $Id: objectCreator.h,v 1.3 2004/02/23 17:26:09 anhi Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_OBJECTCREATOR_H
@@ -95,7 +95,7 @@ namespace BALL
 					Composite objects. See TextPersistenceManager for information
 					on how to convert PersistentObject objects into other objects.				
 					\param  po a reference to a PersistentObject to be converted
-					\return Composite* a converted Composite object if <b> po could successfully be converted 
+					\return Composite* a converted Composite object if <b> po</b> could successfully be converted 
 										into a Composite object
 			*/
 			virtual Composite *convertObject(PersistentObject &po)
@@ -116,7 +116,7 @@ namespace BALL
 					Calls initPersistenceManager.
 					Calls convertObject.
 					\param iostream_socket a reference to a IOSocketStream object
-					\return Composite* a pointer to a received Composite object (<tt> 0 if no composite object was received)
+					\return Composite* a pointer to a received Composite object (<tt> 0</tt> if no composite object was received)
 			*/
 			Composite *operator() (IOStreamSocket &iostream_socket)
 				throw();

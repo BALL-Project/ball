@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SASEdge.h,v 1.7 2003/08/26 08:04:50 oliver Exp $
+// $Id: SASEdge.h,v 1.8 2004/02/23 17:26:05 anhi Exp $
 //
 
 #ifndef BALL_STRUCTURE_SASEDGE_H
@@ -144,7 +144,7 @@ namespace BALL
 		//@{
 
 		/** Set the circle on which the SASEdge lies.
-				@param	circle	the new circle
+				@param	center	the new circle
 		*/
 		void setCircle(const TCircle3<double>& center)
 			throw();
@@ -156,7 +156,7 @@ namespace BALL
 			throw();
 
 		/** Set the angle of the SASEdge.
-				@param	circle	the new angle
+				@param	angle	the new angle
 		*/
 		void setAngle(const TAngle<double>& angle)
 			throw();

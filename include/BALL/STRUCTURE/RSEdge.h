@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSEdge.h,v 1.31 2003/08/26 08:04:50 oliver Exp $
+// $Id: RSEdge.h,v 1.32 2004/02/23 17:26:04 anhi Exp $
 //
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
@@ -106,7 +106,7 @@ namespace BALL
 
 		/**	Copy constructor.
 				Create a new RSEdge object from another.
-				@param	rsface	the RSEdge object to be copied
+				@param	rsedge	the RSEdge object to be copied
 				@param	deep		if deep = false, all pointers are set to NULL
 												(default). Otherwise the new RSEdge object is linked
 												to the neighbours of the old RSEdge object.
@@ -177,18 +177,18 @@ namespace BALL
 			throw();
 
 		/**	Assign from a lot of nice objects
-				@param	vertex1							assigned to the first vertex
-				@param	vertex							assigned to the second vertex
-				@param	face1								assigned to the first face
-				@param	face2								assigned to the second face
+				@param	vertex0							assigned to the first vertex
+				@param	vertex1							assigned to the second vertex
+				@param	face0								assigned to the first face
+				@param	face1								assigned to the second face
 				@param	center_of_torus			assigned to the center of the torus
 				@param	radius_of_torus			assigned to the radius of the torus
 				@param	angle								assigned to th angle
-				@param	circle1							assigned to the first contact circle
-				@param	circle2							assigned to the second contact circle
-				@param	intersection_point1	assigned to the first intersection point
+				@param	circle0							assigned to the first contact circle
+				@param	circle1							assigned to the second contact circle
+				@param	intersection_point0	assigned to the first intersection point
 																		(in singular case)
-				@param	intersection_point2	assigned to the second intersection point
+				@param	intersection_point1	assigned to the second intersection point
 																		(in singular case)
 				@param	singular
 				@param	index								assigned to the index

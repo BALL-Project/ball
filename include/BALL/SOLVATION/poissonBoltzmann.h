@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.h,v 1.27 2003/10/31 23:15:47 oliver Exp $ 
+// $Id: poissonBoltzmann.h,v 1.28 2004/02/23 17:26:04 anhi Exp $ 
 //
 
 // Finite Difference Poisson Boltzmann Solver
@@ -75,7 +75,7 @@ namespace BALL
 
 			/**	Unable to create dielectric grid/out of memory.
 					FDPB uses a <tt>TRegularData3D<float></tt> ( \link FDPB::eps_grid FDPB::eps_grid \endlink ) to describe the
-					dielectric constant $\varepsilon$ as a function of space.
+					dielectric constant \f$\varepsilon\f$ as a function of space.
 					This grid is created by calling FDPB::setupEpsGrid().
 					It contains the relative dielectric constant between neighbouring grid points. \par
 					If virtual memory is exhausted and the grid could not be created 
@@ -84,7 +84,7 @@ namespace BALL
 			ERROR__CANNOT_CREATE_EPSILON_GRID,
 
 			/**	Unable to create grid for the modified Debye Hueckel parameter/out of memory.
-					The modified Debye Hueckel parameter $\bar{\kappa}$ is also a function of 
+					The modified Debye Hueckel parameter \f$\bar{\kappa}\f$ is also a function of 
 					space and therefore represented by a TRegularData3D<float> (FDPB::kappa_grid).
 					The grid is created by FDPB::setupKappaGrid(). \par
 					If the creation of this grid fails due to a alack of virtual memory
@@ -240,7 +240,7 @@ namespace BALL
 					and its closest neighbour in units o Angstrom. The default
 					spacing is 0.6 A.
 					@see	Default::SPACING
-					@parameter	spacing float
+					@param	spacing float
 			*/
 			static const String SPACING;
 
@@ -250,7 +250,7 @@ namespace BALL
 					every direction. Use units of Angstrom with this option. The
 					default is 4 A.
 					@see	Default::BORDER
-					@parameter	border float
+					@param	border float
 			*/
 			static const String BORDER;
 
@@ -260,41 +260,41 @@ namespace BALL
 					parameter is given in units of mol/l. The default is 0, i. e.
 					only a Poisson equation will be calculated.
 					@see	Default::IONIC_STRENGTH
-					@parameter ionic_strength float
+					@param ionic_strength float
 			*/
 			static const String IONIC_STRENGTH;
 
 			/** The dielectric constant of the solute. This parameter derfaults
 					to 2.0.
 					@see	Default::SOLUTE_DC
-					@parameter	solute_dielectric_constant float
+					@param	solute_dielectric_constant float
 			*/
 			static const String SOLUTE_DC;
 
 			/** The dielectric constant of the solvent. This parameter defaults
 					to 78.0.
 					@see	Default::SOLVENT_DC
-					@parameter	solvent_dielectric_constant float
+					@param	solvent_dielectric_constant float
 			*/
 			static const String SOLVENT_DC;
 
 			/** The probe radius used for calculating the SAS of the molecule.
 					This parameter defaults to 1.4 A (water).
 					@see	Default::PROBE_RADIUS
-					@parameter	probe_radius float
+					@param	probe_radius float
 			*/
 			static const String PROBE_RADIUS;
 
 			/** The ion exclusion radius.
 					@see	Default::ION_RADIUS
-					@parameter	ion_radius float
+					@param	ion_radius float
 			*/
 			static const String ION_RADIUS;
 
 			/** The temperature of the system. This parameter needs values in
 					units of K. The default temperature is 298.15 K = 25.15 deg C.
 					@see	Default::TEMPERATURE
-					@parameter	temperature float
+					@param	temperature float
 			*/
 			static const String TEMPERATURE;
 
@@ -303,7 +303,7 @@ namespace BALL
 					used for initializing the equation solver. Possible options are:
 					zero, Debye, Coulomb, dipole and focusing. Default is dipole.
 					@see	Default::BOUNDARY
-					@parameter	boundary_condition String
+					@param	boundary_condition String
 			*/
 			static const String BOUNDARY;
 
@@ -312,7 +312,7 @@ namespace BALL
 					oiver grid points. Possible methods are: trilinear and uniform.
 					The default is uniform.
 					@see	Default::BORDER
-					@parameter	border float
+					@param	border float
 			*/
 			static const String CHARGE_DISTRIBUTION;
 
@@ -324,7 +324,7 @@ namespace BALL
 					harmonic. Default is none.
 					different dielectric constant 
 					@see	Default::DIELECTRIC_SMOOTHING
-					@parameter	dielectric_smoothing String
+					@param	dielectric_smoothing String
 			*/
 			static const String DIELECTRIC_SMOOTHING;
 
@@ -333,7 +333,7 @@ namespace BALL
 					defined in thos option. The calculation does not use an offset by
 					default. Use threedimensional vectors in units of Angstrom with
 					this option.
-					@parameter	offset Vector3
+					@param	offset Vector3
 			*/
 			static const String OFFSET;
 
@@ -343,7 +343,7 @@ namespace BALL
 					rms_criterion and the maximum residuals are below max_criterion,
 					the iteration terminates. The default is 1e-5 Angstrom.
 					@see	Default::RMS_CRITERION
-					@parameter	rms_criterion float
+					@param	rms_criterion float
 			*/
 			static const String RMS_CRITERION;
 
@@ -352,7 +352,7 @@ namespace BALL
 					maximum residuals are below this value and the RMS lies below
 					rms_criterion, the iteration terminates. The default is 1e-4.
 					@see	Default::MAX_CRITERION
-					@parameter	max_criterion float
+					@param	max_criterion float
 			*/
 			static const String MAX_CRITERION;
 
@@ -360,7 +360,7 @@ namespace BALL
 					This option defines the number of iterations which will be
 					performed without checking the criterions. The default is 10.
 					@see	Default::CHECK_AFTER_ITERATIONS
-					@parameter	check_after_iterations int
+					@param	check_after_iterations int
 			*/
 			static const String CHECK_AFTER_ITERATIONS;
 
@@ -370,7 +370,7 @@ namespace BALL
 					iterations is reached, the calculation did not converge. The
 					default is 500 interations.
 					@see	Default::MAX_ITERATIONS
-					@parameter	max_iterations int
+					@param	max_iterations int
 			*/
 			static const String MAX_ITERATIONS;
 
@@ -380,26 +380,26 @@ namespace BALL
 					used for initializing the solver gtrid it contains the
 					automatically computed lower corner after the calculation.
 					Use a vector of Angstroms with this option.
-					@parameter	lower Vector3
+					@param lower Vector3
 			*/
 			static const String LOWER;
 
 			/** The upper corner of the grid.
 					This is the analogous option to @see LOWER.
-					@parameter	upper Vector3
+					@param	upper Vector3
 			*/
 			static const String UPPER;
 
 			/** The lower corner of the bounding box of the solute molecule.
 					This option works like @see LOWER for the bounding box of the
 					solvent molecule.
-					@parameter	bounding_box_lower Vector3
+					@param	bounding_box_lower Vector3
 			*/
 			static const String BOUNDING_BOX_LOWER;
 
 			/** The upper corner of the bounding box of the solute molecule.
 					This is the analogous option to @see BOUNDING_BOX_LOWER.
-					@parameter	bounding_box_upper Vector3
+					@param	bounding_box_upper Vector3
 			*/
 			static const String BOUNDING_BOX_UPPER;
 
@@ -422,10 +422,10 @@ namespace BALL
 					estimated using Debye Hueckel theory.
 					The Potential at each point of the grid boundary is estimated
 					as the Debye Hueckel potential according to the following formula: \par
-					\[
+					\f[
 							\phi_{x,y,z} = \sum_i \frac{1}{4 \pi \varepsilon \varepsilon_0}
 													\frac{q_i}{r} e^{-\frac{r}{d}}
-					\]
+					\f]
 					This options tends to become {\em very} slow for large grids.
 			*/
 			static const String DEBYE;
@@ -478,18 +478,18 @@ namespace BALL
 			/**	Uniform smoothing.
 					This method assigns the arithmetic average of the point's value and
 					its 26 next grid neighbours to the grid point: \par
-					\[
+					\f[
 							\varepsilon_0 = \frac{1}{27} \left( \sum_{i=1}^{26} \varepsilon_i + \varepsilon_0 \right)
-					\] \par
+					\f] \par
 			*/
 			static const String UNIFORM;
 
 			/**	Harmonic smoothing.
 					This method assigns the harmonic average of the point's value and 
 					its 26 next grid neighbours to the grid point: \par
-					\[
+					\f[
 							\varepsilon_0 = \frac{1}{\sum_{i=1}^{26} \frac{1}{\varepsilon_i} + \frac{1}{\varepsilon_0}}
-					\] \par
+					\f] \par
 			*/
 			static const String HARMONIC;
 		};
@@ -715,7 +715,7 @@ namespace BALL
 				On successful execution it returns true and the FDPB object is
 				ready to solve the Poisson Boltzmann equation by calling solve().
 				@see	setup(System& system, Options& options)
-				@param 	System&	system the molecular system to be examined.
+				@param 	system the molecular system to be examined.
 				@return	bool true on success, call getErrorCode otherwise
 		*/
 		bool setup(System& system);
@@ -736,7 +736,7 @@ namespace BALL
 				given grid are inside a given solute (with low dielectric constant)
 				and which points are outside (i.e., they are in the high dielectric
 				constant solvent). \par
-				 \link setupEpsGrid setupEpsGrid \endlink  creates a grid containing the dielectric constant
+				<tt>setupEpsGrid</tt> creates a grid containing the dielectric constant
 				between any two neighbouring grid points (i.e., it contains 3 N values).
 				Points inside the molecule (i.i, inside the radius of any atom) are set to
 				the solute dielectric constant, all other points are set to the solvent

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.7 2003/12/15 01:10:51 amoll Exp $
+// $Id: backboneModel.h,v 1.8 2004/02/23 17:26:09 anhi Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -96,7 +96,7 @@ namespace BALL
 					All previously inserted Atom objects 
 					(inserted in the method operator()) will be used to create a backbone.
 					\return bool true if the finish was successful, false otherwise
-					@exeception OutOfMemory thrown if the memory allocation failed
+					@exception OutOfMemory thrown if the memory allocation failed
 			*/
 			virtual bool finish();
 			

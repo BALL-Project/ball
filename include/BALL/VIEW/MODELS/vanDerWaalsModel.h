@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.h,v 1.6 2003/12/12 15:11:17 amoll Exp $
+// $Id: vanDerWaalsModel.h,v 1.7 2004/02/23 17:26:10 anhi Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_VANDERWAALSMODEL_H
@@ -71,7 +71,7 @@ namespace BALL
 					Those models will be created with the method buildBondModels_().
 					\param  composite the Composite object that will be processed
 					\return Processor::Result the result 
-					@exeception OutOfMemory thrown if the memory allocation for a Sphere failed
+					@exception OutOfMemory thrown if the memory allocation for a Sphere failed
 			*/
 			virtual Processor::Result operator() (Composite& composite);
 

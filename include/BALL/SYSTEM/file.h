@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.60 2003/08/26 08:04:55 oliver Exp $
+// $Id: file.h,v 1.61 2004/02/23 17:26:08 anhi Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -72,7 +72,7 @@ namespace BALL
 			\link File File \endlink  can determine whether there
 			is a suitable transformation command available for a given file name.
 			User-defined transformation may be defined at any time using the 
-			\link registerTransformation registerTransformation \endlink  method of the static 
+			\link TransformationManager::registerTransformation registerTransformation \endlink  method of the static 
 			instance of  \link TransformationManager TransformationManager \endlink 
 			accessible through  \link File::getTransformationManager File::getTransformationManager \endlink .
 			\ingroup System

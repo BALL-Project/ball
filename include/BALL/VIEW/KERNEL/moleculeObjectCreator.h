@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeObjectCreator.h,v 1.2 2003/08/26 15:26:42 amoll Exp $
+// $Id: moleculeObjectCreator.h,v 1.3 2004/02/23 17:26:09 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_MOLECULEOBJECTCREATOR_H
 #define BALL_VIEW_KERNEL_MOLECULEOBJECTCREATOR_H
@@ -70,13 +70,13 @@ namespace BALL
 				throw();
 
 			/** Converts persistent objects.
-					If <b> po is an object that represents a molecular structure (an Atom,
+					If <b> po </b> is an object that represents a molecular structure (an Atom,
 					Protein or System) it will be converted into a Composite
 					object and returned. If it is none of the above <tt> 0</tt> will be returned.
 					See TextPersistenceManager for information
 					on how to convert PersistentObject objects into other objects.				
 					\param  po a reference to a PersistentObject to be converted
-					\return Composite* a converted Composite object if <b> po could successfully be converted into a Composite object
+					\return Composite* a converted Composite object if <b> po</b> could successfully be converted into a Composite object
 					\see    initPersistenceManager
 			*/
 			virtual Composite *convertObject(PersistentObject &po)

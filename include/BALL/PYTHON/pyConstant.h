@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyConstant.h,v 1.8 2003/08/26 08:04:46 oliver Exp $
+// $Id: pyConstant.h,v 1.9 2004/02/23 17:26:03 anhi Exp $
 //
 
 #ifndef BALL_PYTHON_PYCONSTANT_H
@@ -31,7 +31,7 @@ namespace BALL
 			*/
 			static double EPSILON;
 			/**	Elementary charge.
-					In units of C ($1.60217738 \cdot 10^{-19} C$).
+					In units of C (\f$1.60217738 \cdot 10^{-19} C\f$).
 			*/
 			static double	ELEMENTARY_CHARGE;  	 // C     
 		
@@ -39,22 +39,22 @@ namespace BALL
 			static double	e0;
 
 			/** Electron mass.
-					In units of kg ($9.1093897 \cdot 10^{-31}$ kg).
+					In units of kg (\f$9.1093897 \cdot 10^{-31}\f$ kg).
 			*/
 			static double	ELECTRON_MASS   	;   	 // kg
 
 			/** Proton mass.
-					In units of kg ($1.6726230 \cdot 10^{-27}$ kg).
+					In units of kg (\f$1.6726230 \cdot 10^{-27}\f$ kg).
 			*/
 			static double	PROTON_MASS     	;   	 // kg
 
 			/** Neutron mass.
-					In units of kg ($1.6749286 \cdot 10^{-27}$ kg).
+					In units of kg (\f$1.6749286 \cdot 10^{-27}\f$ kg).
 			*/
 			static double	NEUTRON_MASS    	;   	 // kg
 
 			/** Avogadro constant.
-					In units of $mol^{-1}$ ($6.0221367 \cdot 10^{23} mol^{-1}$).
+					In units of \f$mol^{-1}\f$ (\f$6.0221367 \cdot 10^{23} mol^{-1}\f$).
 			*/
 			static double	AVOGADRO;
 
@@ -67,7 +67,7 @@ namespace BALL
 			static double	MOL;
 
 			/** Boltzmann constant.
-					In units of J/K ($1.380657 \cdot 10^{-23}$ J/K).
+					In units of J/K (\f$1.380657 \cdot 10^{-23}\f$ J/K).
 			*/
 			static double	BOLTZMANN;
 
@@ -76,7 +76,7 @@ namespace BALL
 			static double	k;
 			
 			/** Planck constant.
-					In units of Js ($6.6260754 \cdot 10^{-34}$ Js).
+					In units of Js (\f$6.6260754 \cdot 10^{-34}\f$ Js).
 			*/
 			static double	PLANCK;
 
@@ -101,7 +101,7 @@ namespace BALL
 			static double	F;
 
 			/** Bohr radius.
-					In units m ($5.29177249 \cdot 10^{-11}$ m).
+					In units m (\f$5.29177249 \cdot 10^{-11}\f$ m).
 			*/
 			static double	BOHR_RADIUS;
 
@@ -118,12 +118,12 @@ namespace BALL
 			static double	VACUUM_PERMITTIVITY;
 
 			/** Vacuum permeability.
-					In units of $Js^2C^{-2}m^{-1}$ ($4\pi \cdot 10^{-7} Js^2C^{-2}m^{-1}$).
+					In units of \f$Js^2C^{-2}m^{-1}\f$ (\f$4\pi \cdot 10^{-7} Js^2C^{-2}m^{-1}\f$).
 			*/
 			static double	VACUUM_PERMEABILITY;
 
 			/** Speed of light.
-					In units of m/s ($2.99792458 \cdot 10^8 ms^{-1}$).
+					In units of m/s (\f$2.99792458 \cdot 10^8 ms^{-1}\f$).
 			*/
 			static double	SPEED_OF_LIGHT;
 
@@ -132,12 +132,12 @@ namespace BALL
 			static double	c;
 
 			/** Gravitational constant.
-					In units of $Nm^2kg^{-2}$ ($6.67259 \cdot 10^{-11} Nm^2kg^{-2}$).
+					In units of \f$Nm^2kg^{-2}\f$ (\f$6.67259 \cdot 10^{-11} Nm^2kg^{-2}\f$).
 			*/
 			static double	GRAVITATIONAL_CONSTANT;
 
 			/** Fine structure constant.
-					Without unit ($7.29735 \cdot 10^{-3}$).
+					Without unit (\f$7.29735 \cdot 10^{-3}\f$).
 			*/
 			static double	FINE_STRUCTURE_CONSTANT;
 				

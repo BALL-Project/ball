@@ -47,8 +47,9 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Calls  \link registerWidget registerWidget \endlink .
+					Calls  \link ModularWidget::registerWidget registerWidget \endlink .
 					@param      parent the parent widget 
+					@param 			name
 					@see        QDialog
 					@see        ModularWidget
 			*/

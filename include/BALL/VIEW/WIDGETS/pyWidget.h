@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.11 2003/12/09 13:32:22 amoll Exp $
+// $Id: pyWidget.h,v 1.12 2004/02/23 17:26:11 anhi Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -179,7 +179,7 @@ namespace BALL
 			//@{
 
 			/** Standard constructor.
-					If the widget is part of a BALL \ref{MainControl} widget, 
+					If the widget is part of a BALL \link MainControl MainControl \endlink widget, 
 					it inserts a menu entry <tt>Tools|Restart Python</tt> into the menu bar.
 					\param parent the parent widget
 					\param name the widget name

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12RDFIntegrator.h,v 1.20 2003/08/26 08:04:48 oliver Exp $
+// $Id: pair6_12RDFIntegrator.h,v 1.21 2004/02/23 17:26:04 anhi Exp $
 //
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
@@ -131,7 +131,7 @@ namespace BALL
 
 		/** Assignment operator 
 				@param integrator the integrator to assign from
-				@return a constant reference to {\rm this}
+				@return a constant reference to <tt>this</tt>
 		*/
 		const Pair6_12RDFIntegrator& operator =
 			(const Pair6_12RDFIntegrator& integrator) 

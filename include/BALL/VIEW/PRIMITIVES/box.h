@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box.h,v 1.4 2003/09/04 23:14:12 amoll Exp $
+// $Id: box.h,v 1.5 2004/02/23 17:26:10 anhi Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_BOX_H
 #define BALL_VIEW_PRIMITIV_BOX_H
@@ -40,8 +40,8 @@ namespace BALL
 					Construct new Box.
 					The properties of this Box are set to:
   				  - color - to the color black
-						\width, depth, height - to zero
-						\rigth_vector to 0, 1, 0
+						- width, depth, height - to zero
+						- rigth_vector to 0, 1, 0
 					\par
 					\return      Box new constructed Box
 			*/

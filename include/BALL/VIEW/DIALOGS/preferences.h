@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.h,v 1.6 2004/01/18 12:43:36 amoll Exp $
+// $Id: preferences.h,v 1.7 2004/02/23 17:26:08 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
@@ -45,8 +45,6 @@ namespace BALL
 					\par
 					\param       parent the parent QWidget (See QTabDialog in the QT documentation)
 					\param       name (See QTabeDialog in the QT documentation)
-					\param       width (Default <tt>width=400</tt>)
-					\param       height (Default <tt>height=300</tt>)
 			*/
 			Preferences(QWidget *parent = NULL,	const char *name = NULL)
 				throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: graphVertex.h,v 1.13 2003/08/26 08:04:52 oliver Exp $
+// $Id: graphVertex.h,v 1.14 2004/02/23 17:26:06 anhi Exp $
 //
 
 #ifndef BALL_STRUCTURE_GRAPHVERTEX_H
@@ -132,7 +132,7 @@ namespace BALL
 			throw();
 
 		/** Remove a face from the HashSet of faces the GraphVertex belongs to.
-				@param	edge	a pointer to the face to remove
+				@param	face	a pointer to the face to remove
 		*/
 		void remove(Face* face)
 			throw();
