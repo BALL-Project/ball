@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.82 2004/09/02 15:04:06 amoll Exp $
+// $Id: displayProperties.C,v 1.83 2004/09/10 15:28:49 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -567,7 +567,7 @@ void DisplayProperties::coloringOptionsPressed()
 	if (preferences_ == 0) return;
 
 	preferences_->showPage(coloring_settings_);
-	coloring_settings_->showPage(coloring_method_combobox->currentItem());
+	coloring_settings_->showPage((ColoringMethod) coloring_method_combobox->currentItem());
 	preferences_->show();
 }
 
@@ -577,7 +577,7 @@ void DisplayProperties::modelOptionsPressed()
 
 	preferences_->showPage(model_settings_);
 
-	model_settings_->showPage(model_type_combobox->currentItem());
+	model_settings_->showPage((ModelType) model_type_combobox->currentItem());
 
 	preferences_->show();
 }

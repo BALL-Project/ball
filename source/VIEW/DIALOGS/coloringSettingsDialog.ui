@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ColoringSettingsDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -8096,12 +8096,6 @@
         <slot>helixColorPressed()</slot>
     </connection>
     <connection>
-        <sender>list_box</sender>
-        <signal>highlighted(int)</signal>
-        <receiver>ColoringSettingsDialog</receiver>
-        <slot>showPage(int)</slot>
-    </connection>
-    <connection>
         <sender>max_distance_button</sender>
         <signal>clicked()</signal>
         <receiver>ColoringSettingsDialog</receiver>
@@ -8222,7 +8216,7 @@
     <slot>coilColorPressed()</slot>
     <slot>turnColorPressed()</slot>
     <slot>maxTFChanged()</slot>
-    <slot>showPage(int)</slot>
+    <slot>showPage_(int)</slot>
     <slot>forceMaxColorPressed()</slot>
     <slot>forceMinColorPressed()</slot>
     <slot>forceMaxValueChanged()</slot>

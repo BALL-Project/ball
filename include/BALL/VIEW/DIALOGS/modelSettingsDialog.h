@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.16 2004/09/02 15:04:10 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.17 2004/09/10 15:28:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -192,7 +192,6 @@ namespace BALL
 			public slots:
 			
 			///
-			void showPage(int nr);
 
 			protected slots:
 			void stickRadiusChanged() {setLabelText_(stick_radius_label, stick_radius_slider);}
@@ -208,9 +207,10 @@ namespace BALL
 			void hbondsRadiusChanged(){setLabelText_(hbonds_radius_label, hbonds_radius_slider);}
 			void forceScalingChanged(){setLabelText_(force_scaling_label, force_scaling_slider);}
 			void forceMaxLengthChanged(){setLabelText_(force_max_length_label, force_max_length_slider);}
+			void showPage_(int nr);
 
 			protected:
-			
+
 			float getFloatValue_(const QSlider* const& le) const
 				throw();
 

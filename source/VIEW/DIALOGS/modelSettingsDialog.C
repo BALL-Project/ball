@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.23 2004/09/10 15:10:58 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.24 2004/09/10 15:28:50 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -185,7 +185,7 @@ namespace BALL
 			setDefaults(false);
 		}
 
-		void ModelSettingsDialog::showPage(int nr)
+		void ModelSettingsDialog::showPage_(int nr)
 		{
 			if (widget_stack->widget(nr) == 0)
 			{
@@ -392,36 +392,36 @@ namespace BALL
 					break;
 					
 				case MODEL_STICK:
-					showPage(0);
+					showPage_(0);
 					break;
-					
+
 				case MODEL_BALL_AND_STICK:
-					showPage(1);
+					showPage_(1);
 					break;
 					
 				case MODEL_SE_SURFACE:
 				case MODEL_SA_SURFACE:
-					showPage(3);
+					showPage_(3);
 					break;
 					
 				case MODEL_VDW:
-					showPage(2);
+					showPage_(2);
 					break;
 
 				case MODEL_BACKBONE:
-					showPage(4);
+					showPage_(4);
 					break;
 
 				case MODEL_CARTOON:
-					showPage(5);
+					showPage_(5);
 					break;
 					
 				case MODEL_HBONDS:
-					showPage(6);
+					showPage_(6);
 					break;
 
 				case MODEL_FORCES:
-					showPage(7);
+					showPage_(7);
 					break;
 
 				default:

@@ -813,7 +813,7 @@ void ColoringSettingsDialog::getSettings(const ColorProcessor& cp)
 	setLabelColorsFromValues_();
 }
 
-void ColoringSettingsDialog::showPage(int nr)
+void ColoringSettingsDialog::showPage_(int nr)
 {
 	if (widget_stack->widget(nr) == 0)
 	{
@@ -834,39 +834,39 @@ void ColoringSettingsDialog::showPage(ColoringMethod method)
 	switch (method)
 	{
 		case COLORING_ELEMENT:
-			showPage(0);
+			showPage_(0);
 			break;
 
 		case COLORING_RESIDUE_NAME:
-			showPage(2);
+			showPage_(2);
 			break;
 
 		case COLORING_RESIDUE_INDEX:
-			showPage(1);
+			showPage_(1);
 			break;
 
 		case COLORING_SECONDARY_STRUCTURE:
-			showPage(7);
+			showPage_(7);
 			break;
 
 		case COLORING_ATOM_CHARGE:
-			showPage(3);
+			showPage_(3);
 			break;
 
 		case COLORING_DISTANCE:
-			showPage(4);
+			showPage_(4);
 			break;
 
 		case COLORING_TEMPERATURE_FACTOR:
-			showPage(5);
+			showPage_(5);
 			break;
 
 		case COLORING_OCCUPANCY:
-			showPage(6);
+			showPage_(6);
 			break;
 
 		case COLORING_FORCES:
-			showPage(7);
+			showPage_(8);
 			break;
 
 		default:

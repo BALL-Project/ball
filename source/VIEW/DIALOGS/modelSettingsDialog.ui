@@ -1541,7 +1541,7 @@
                     <bool>true</bool>
                 </property>
                 <property name="selectedId" stdset="0">
-                    <number>0</number>
+                    <number>1</number>
                 </property>
                 <widget class="QRadioButton">
                     <property name="name">
@@ -2083,12 +2083,6 @@
         <slot>VDWfactorChanged()</slot>
     </connection>
     <connection>
-        <sender>list_box</sender>
-        <signal>highlighted(int)</signal>
-        <receiver>ModelSettingsDialog</receiver>
-        <slot>showPage(int)</slot>
-    </connection>
-    <connection>
         <sender>force_max_length_slider</sender>
         <signal>valueChanged(int)</signal>
         <receiver>ModelSettingsDialog</receiver>
@@ -2116,7 +2110,7 @@
     <slot>cartoonArrowWidthChanged()</slot>
     <slot>cartoonArrowHeightChanged()</slot>
     <slot>hbondsRadiusChanged()</slot>
-    <slot>showPage(int)</slot>
+    <slot>showPage_(int)</slot>
     <slot>forceMaxLengthChanged()</slot>
     <slot>forceScalingChanged()</slot>
 </slots>
