@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.C,v 1.4 2003/10/08 11:56:28 anne Exp $
+// $Id: HBondProcessor.C,v 1.5 2004/03/15 12:55:28 amoll Exp $
 
 #include <BALL/STRUCTURE/HBondProcessor.h>
 
@@ -196,7 +196,14 @@ namespace BALL
 												donor=&*ai;
 											}
 										}		
+										
 										if (!donor || !acceptor) continue;
+										
+										Bond* bond = donor->createBond(*acceptor);
+										bond->setType(Bond::TYPE__HYDROGEN);
+										bond->setOrder(1);
+										bond->setName("calculated H-Bond");
+
 										donor->setProperty("HBOND_DONOR", *acceptor);
 									}
 								}
