@@ -1,12 +1,12 @@
-// $Id: molecularInformation.C,v 1.7 2001/07/15 18:50:28 oliver Exp $
+// $Id: molecularInformation.C,v 1.7.4.1 2002/10/23 14:25:20 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
+#include <BALL/KERNEL/system.h>
 
 using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 

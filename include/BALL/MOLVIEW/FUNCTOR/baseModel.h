@@ -1,18 +1,10 @@
-// $Id: baseModel.h,v 1.11 2001/07/16 14:49:23 amoll Exp $
+// $Id: baseModel.h,v 1.11.4.1 2002/10/23 14:25:02 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
-#endif
-
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
 #endif
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
@@ -27,23 +19,14 @@
 #	include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.h>
 #endif
 
-#ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
-#	include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
-#endif
-
 #ifndef BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
 #	include <BALL/MOLVIEW/KERNEL/extendedProperty.h>
 #endif
 
-using namespace BALL::VIEW;
-
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
-
-
 		/** BaseModelProcessor class.
 				The class BaseModelProcessor is derived from \Ref{UnaryProcessor} and
 				\Ref{ExtendedPropertyManager}. It contains therefore the processor interface

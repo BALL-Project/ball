@@ -1,14 +1,10 @@
-// $Id: extendedProperty.h,v 1.6.4.2 2002/10/19 14:51:06 amoll Exp $
+// $Id: extendedProperty.h,v 1.6.4.3 2002/10/23 14:25:13 amoll Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
 #define BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #	include <BALL/CONCEPT/property.h>
-#endif
-
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
 #endif
 
 namespace BALL

@@ -1,28 +1,26 @@
-// $Id: extendedProperty.C,v 1.8.4.1 2002/10/18 14:48:30 amoll Exp $
+// $Id: extendedProperty.C,v 1.8.4.2 2002/10/23 14:25:30 amoll Exp $
 
 #include <BALL/MOLVIEW/KERNEL/extendedProperty.h>
+#include <BALL/MOLVIEW/COMMON/common.h>
+#include <BALL/VIEW/KERNEL/geometricObject.h>
 
+using BALL::VIEW::GeometricObject;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
-		ExtendedPropertyManager::ExtendedPropertyManager
-			()
+		ExtendedPropertyManager::ExtendedPropertyManager ()
 			throw()
-				:
-				PropertyManager()
+			: PropertyManager()
 		{
 		}
 
 		ExtendedPropertyManager::ExtendedPropertyManager
-			(const ExtendedPropertyManager &__rExtendedPropertyManager,
-			 bool /* deep */)
+			(const ExtendedPropertyManager &__rExtendedPropertyManager, bool /* deep */)
 			throw()
-				:
-				PropertyManager(__rExtendedPropertyManager)
+			: PropertyManager(__rExtendedPropertyManager)
 		{
 		}
 
@@ -31,8 +29,7 @@ namespace BALL
 		{
 		}
 
-		void ExtendedPropertyManager::setProperty
-			(int property)
+		void ExtendedPropertyManager::setProperty(int property)
 			throw()
 		{
 			if (property == GeometricObject::PROPERTY__OBJECT_TRANSPARENT 

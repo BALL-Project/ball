@@ -1,14 +1,13 @@
-// $Id: backboneModel.C,v 1.4.4.1 2002/10/18 14:48:22 amoll Exp $
+// $Id: backboneModel.C,v 1.4.4.2 2002/10/23 14:25:20 amoll Exp $
 
-#ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #include <BALL/MOLVIEW/FUNCTOR/backboneModel.h>
-#endif
+#include <BALL/KERNEL/system.h>
+#include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
 
 using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 

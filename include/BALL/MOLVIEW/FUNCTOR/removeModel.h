@@ -1,27 +1,7 @@
-// $Id: removeModel.h,v 1.9.4.1 2002/10/18 14:48:12 amoll Exp $
+// $Id: removeModel.h,v 1.9.4.2 2002/10/23 14:25:03 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_BOND_H
-#	include <BALL/KERNEL/bond.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#	include <BALL/VIEW/KERNEL/geometricObject.h>
-#endif
-
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
-#endif
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
 #	include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
@@ -69,7 +49,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -94,12 +73,12 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
+
 			//@}
-
-
 			/**	@name Processor specific methods
 			*/
 			//@{
+			
 			/** Start method.
 					Clear the \Ref{FindGeometricObjects}.
 					Calls \Ref{AtomBondModelBaseProcessor::start}.
@@ -153,10 +132,10 @@ namespace BALL
 			virtual Processor::Result operator() (Composite& composite);
 
 			//@}
-
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
+
 			/** Internal value dump.
 					Dump the current state of {\em *this} removeModel to 
 					the output ostream {\em s} with dumping depth {\em depth}.

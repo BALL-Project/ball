@@ -1,34 +1,14 @@
-// $Id: vanDerWaalsModel.h,v 1.11.4.1 2002/10/18 14:48:12 amoll Exp $
+// $Id: vanDerWaalsModel.h,v 1.11.4.2 2002/10/23 14:25:04 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_PTE_H
-#	include <BALL/KERNEL/PTE.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#	include <BALL/VIEW/KERNEL/geometricObject.h>
-#endif
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
 #	include <BALL/VIEW/PRIMITIV/sphere.h>
 #endif
 
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
-#endif
-
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
-#include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
+# include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
 #endif
 
 namespace BALL
@@ -41,10 +21,8 @@ namespace BALL
 				The class AddVanDerWaalsModel is a model processor that is responsible
 				for creating a {\em Van der Waals} model.
 				This processor creates only the primitive objects without openGL implementation.
-				The derived class \Ref{AddGLVanDerWaalsModel} uses the primitives with
-				openGL implementation.
-				For information about the processor concept see \Ref{Processor} in tbe BALL
-				documentation. \\
+				The derived class \Ref{AddGLVanDerWaalsModel} uses the primitives with openGL implementation.
+				For information about the processor concept see \Ref{Processor} in tbe BALL documentation.\\
 				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h}
 		*/
 		class AddVanDerWaalsModel: public AtomBondModelBaseProcessor
@@ -76,7 +54,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -101,12 +78,12 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
+							
 			//@}
-
-			
 			/**	@name Processor specific methods
 			*/
 			//@{
+
 			/** Start method.
 					Initialize the properties of the \Ref{BaseModelConnector} to {\em *this}
 					addVanDerWaalsModel.
@@ -168,7 +145,6 @@ namespace BALL
 			virtual Processor::Result operator() (Composite& composite);
 
 			//@}
-			
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
@@ -183,10 +159,11 @@ namespace BALL
 			virtual void dump
 				(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-			//@}
+							
 
   		protected:
 
+			//@}
 			/** @name Creation methods
 					This methods create primitives without OpenGL implementation.
 					This methods are overridden by the class \Ref{AddGLVanDerWaalsModel}
@@ -195,6 +172,7 @@ namespace BALL
 					@see  AddGLVanDerWaalsModel
 			*/
 			//@{
+
 			/** Create a sphere.
 					Create a \Ref{Sphere} object.
 					This method is overridden by the class \Ref{AddGLVanDerWaalsModel} to

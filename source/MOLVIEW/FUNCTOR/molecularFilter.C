@@ -1,4 +1,4 @@
-// $Id: molecularFilter.C,v 1.5.4.2 2002/10/23 13:19:01 amoll Exp $
+// $Id: molecularFilter.C,v 1.5.4.3 2002/10/23 14:25:20 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/molecularFilter.h>
 #include <BALL/KERNEL/atomContainer.h>
@@ -7,7 +7,6 @@ using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 

@@ -1,4 +1,4 @@
-// $Id: objectSelector.C,v 1.3 2001/07/15 18:50:28 oliver Exp $
+// $Id: objectSelector.C,v 1.3.4.1 2002/10/23 14:25:20 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
 
@@ -6,7 +6,6 @@ using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 

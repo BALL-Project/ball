@@ -1,7 +1,9 @@
-// $Id: molecularControl.C,v 1.6.4.2 2002/10/19 12:07:26 amoll Exp $
+// $Id: molecularControl.C,v 1.6.4.3 2002/10/23 14:25:26 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
+#include <BALL/KERNEL/system.h>
+
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 

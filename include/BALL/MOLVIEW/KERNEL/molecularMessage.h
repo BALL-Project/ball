@@ -1,22 +1,19 @@
-// $Id: molecularMessage.h,v 1.5.4.1 2002/10/18 07:49:42 amoll Exp $
+// $Id: molecularMessage.h,v 1.5.4.2 2002/10/23 14:25:13 amoll Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
 #define BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
-
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #	include <BALL/VIEW/KERNEL/message.h>
 #endif
 
-using namespace BALL::VIEW;
-
+using BALL::VIEW::CompositeMessage;
+using BALL::VIEW::RemovedCompositeMessage;
+using BALL::VIEW::ChangedCompositeMessage;
+using BALL::VIEW::SelectionMessage;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 		/** NewMolecularMessage class.

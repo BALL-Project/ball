@@ -1,13 +1,13 @@
-// $Id: surfaceModel.C,v 1.13.4.4 2002/10/18 14:48:23 amoll Exp $
+// $Id: surfaceModel.C,v 1.13.4.5 2002/10/23 14:25:20 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
+#include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
 
 using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 

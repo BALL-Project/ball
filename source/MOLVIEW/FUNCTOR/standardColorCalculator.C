@@ -1,6 +1,7 @@
-// $Id: standardColorCalculator.C,v 1.12 2001/07/15 18:50:29 oliver Exp $
+// $Id: standardColorCalculator.C,v 1.12.4.1 2002/10/23 14:25:20 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h>
+#include <BALL/KERNEL/residue.h>
 
 namespace BALL
 {

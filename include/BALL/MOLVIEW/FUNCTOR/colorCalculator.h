@@ -1,4 +1,4 @@
-// $Id: colorCalculator.h,v 1.9.4.1 2002/10/21 14:33:29 amoll Exp $
+// $Id: colorCalculator.h,v 1.9.4.2 2002/10/23 14:25:03 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
@@ -21,7 +21,6 @@
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 				

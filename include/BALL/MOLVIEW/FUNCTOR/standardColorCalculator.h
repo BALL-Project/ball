@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.h,v 1.11 2001/07/16 14:49:23 amoll Exp $
+// $Id: standardColorCalculator.h,v 1.11.4.1 2002/10/23 14:25:03 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
@@ -11,14 +11,8 @@
 #	include <BALL/DATATYPE/hashMap.h>
 #endif
 
-#ifndef BALL_KERNEL_RESIDUE_H
-#	include <BALL/KERNEL/residue.h>
-#endif
-
-  
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 			

@@ -1,35 +1,7 @@
-// $Id: objectSelector.h,v 1.3 2001/07/16 14:49:23 amoll Exp $
+// $Id: objectSelector.h,v 1.3.4.1 2002/10/23 14:25:03 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_BOND_H
-#	include <BALL/KERNEL/bond.h>
-#endif
-
-#ifndef BALL_KERNEL_FOREACH_H
-#	include <BALL/KERNEL/forEach.h>
-#endif
-
-#ifndef BALL_VIEW_DATATYPE_COLOR_H
-#	include <BALL/VIEW/DATATYPE/color.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#	include <BALL/VIEW/KERNEL/geometricObject.h>
-#endif
-
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
-#endif
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
 #	include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
@@ -37,8 +9,6 @@
 
 namespace BALL
 {
- 	using namespace VIEW;
-
 	namespace MOLVIEW
 	{
 		/** ObjectSelector class.
@@ -86,7 +56,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -115,9 +84,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
+
 			//@}
-
-
 			/**	@name	Assignment
 			*/
 			//@{
@@ -171,8 +139,8 @@ namespace BALL
 			*/
 			void swap(ObjectSelector& selector)
 				throw();
+			
 			//@}
-
 			/**	@name	Accessors: inspectors and mutators 
 					With these two methods {\em *this} objectSelector can be 
 					switched between selection and deselection of processed objects.
@@ -202,10 +170,10 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/**	@name Processor specific methods
 			*/
 			//@{
+
 			/** Start method.
 					Calls \Ref{AtomBondModelBaseProcessor::start}.
 					@return bool {\tt true} if the start of {\em *this} objectSelector was successful, {\tt false} otherwise
@@ -260,7 +228,7 @@ namespace BALL
 			/** Test if selection mode is enabled.
 					Check if the state of {\em *this} objectSelector is set to
 					select objects.
-					@return  bool {\tt true} if the state of {\em *this} objectSelector is set to select objects, {\tt false} otherwise
+					@return  bool {\tt true} if the state of {\em *this} objectSelector is set to select objects
 					@see     select
 					@see     deselect
 					@see     isDeselectionMode
@@ -272,7 +240,7 @@ namespace BALL
 			/** Test if deselection mode is enabled.
 					Check if the state of {\em *this} objectSelector is set to
 					deselect objects.
-					@return  bool {\tt true} if the state of {\em *this} objectSelector is set to deselect objects, {\tt false} otherwise
+					@return  bool {\tt true} if the state of {\em *this} objectSelector is set to deselect objects
 					@see     select
 					@see     deselect
 					@see     isSelectionMode

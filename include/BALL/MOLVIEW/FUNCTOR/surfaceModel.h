@@ -1,40 +1,22 @@
-// $Id: surfaceModel.h,v 1.5.4.1 2002/10/18 14:48:12 amoll Exp $
+// $Id: surfaceModel.h,v 1.5.4.2 2002/10/23 14:25:03 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_DATATYPE_LIST_H
 #	include <BALL/DATATYPE/list.h>
-#endif
-
-#ifndef BALL_KERNEL_FOREACH_H
-#	include <BALL/KERNEL/forEach.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#	include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #	include <BALL/VIEW/PRIMITIV/mesh.h>
 #endif
 
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
-#endif
-
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #	include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 #endif
 
-
 namespace BALL
 {
-	
 	namespace MOLVIEW
 	{
 

@@ -1,12 +1,17 @@
-// $Id: moleculeObjectCreator.C,v 1.3.4.1 2002/10/18 14:48:28 amoll Exp $
+// $Id: moleculeObjectCreator.C,v 1.3.4.2 2002/10/23 14:25:24 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/protein.h>
+#include <BALL/KERNEL/system.h>
 
 using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 

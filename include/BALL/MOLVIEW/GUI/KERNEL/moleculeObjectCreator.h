@@ -1,35 +1,7 @@
-// $Id: moleculeObjectCreator.h,v 1.4.4.1 2002/10/18 14:48:17 amoll Exp $
+// $Id: moleculeObjectCreator.h,v 1.4.4.2 2002/10/23 14:25:08 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
 #define BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_BOND_H
-#	include <BALL/KERNEL/bond.h>
-#endif
-
-#ifndef BALL_KERNEL_FOREACH_H
-#	include <BALL/KERNEL/forEach.h>
-#endif
-
-#ifndef BALL_KERNEL_MOLECULE_H
-#	include <BALL/KERNEL/molecule.h>
-#endif
-
-#ifndef BALL_KERNEL_PROTEIN_H
-# include <BALL/KERNEL/protein.h>
-#endif
-
-#ifndef BALL_KERNEL_SYSTEM_H
-# include <BALL/KERNEL/system.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
 #	include <BALL/VIEW/GUI/KERNEL/objectCreator.h>
@@ -37,11 +9,8 @@
   
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
-
-		using VIEW::ObjectCreator;
 
 		/** MoleculeObjectCreator class.
 				The class MoleculeObjectCreator is a class for converting \Ref{PersistentObject}
@@ -54,7 +23,7 @@ namespace BALL
 				\Ref{PersistentObject} objects to \Ref{Composite} objects. \\
 				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h}
 		*/
-		class MoleculeObjectCreator: public ObjectCreator
+		class MoleculeObjectCreator: public VIEW::ObjectCreator
 		{
 			public:
 

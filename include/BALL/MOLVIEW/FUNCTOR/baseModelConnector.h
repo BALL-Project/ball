@@ -1,11 +1,7 @@
-// $Id: baseModelConnector.h,v 1.5 2001/07/16 14:49:23 amoll Exp $
+// $Id: baseModelConnector.h,v 1.5.4.1 2002/10/23 14:25:03 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_VISITOR_H
 #	include <BALL/CONCEPT/visitor.h>
@@ -13,10 +9,6 @@
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #	include <BALL/CONCEPT/property.h>
-#endif
-
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
 #endif
 
 #ifndef BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
@@ -30,7 +22,6 @@
  
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 		
