@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.19 2002/01/09 01:14:50 oliver Exp $
+// $Id: expression.h,v 1.20 2002/01/26 21:53:11 oliver Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -19,8 +19,8 @@
 #	include <BALL/KERNEL/expressionTree.h>
 #endif
 
-#ifndef BALL_KERNEL_SYNTAXTREE_H
-#	include <BALL/KERNEL/syntaxTree.h>
+#ifndef BALL_KERNEL_EXPRESSIONPARSER_H
+#	include <BALL/KERNEL/expressionParser.h>
 #endif
 
 namespace BALL 
@@ -162,7 +162,7 @@ namespace BALL
 
 		/*_ Construct the expression tree from the SyntaxTree
 		*/
-		ExpressionTree*	constructExpressionTree_(const SyntaxTree& tree)
+		ExpressionTree*	constructExpressionTree_(const ExpressionParser::SyntaxTree& tree)
 			
 			throw();
 
