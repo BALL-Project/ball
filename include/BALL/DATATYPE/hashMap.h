@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.21 2000/12/01 14:11:43 amoll Exp $ 
+// $Id: hashMap.h,v 1.22 2000/12/01 16:43:24 amoll Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -1029,21 +1029,25 @@ namespace BALL
 	bool HashMap<Key, T>::operator == (const HashMap& hash_map) const
 		throw()
 	{
-		bool identical = (size_ == hash_map.size_);
-		
-		if (!identical)
+		if(size_ != hash_map.size_) 
 		{
-			ConstIterator it = begin();
-			ConstIterator hash_map_it;
-			for (; identical && +it; ++it)
+			return false;
+		}
+		
+		ConstIterator it = begin();
+		ConstIterator hash_map_it;
+
+		for (; +it; ++it)
+		{
+			hash_map_it = hash_map.find(it->first);
+			if (hash_map_it == hash_map.end() ||
+					hash_map_it->second != it->second)
 			{
-				hash_map_it = hash_map.find(it->first);
-				identical = (hash_map_it != hash_map.end()) 
-										&& (hash_map_it->second == it->second);
+				return false;
 			}
 		}
 		
-		return identical;
+		return true;
 	}
 
 	template <class Key, class T>
