@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.7.4.4 2002/11/07 19:04:30 amoll Exp $
+// $Id: control.C,v 1.7.4.5 2002/11/12 19:32:23 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <qpopupmenu.h>
@@ -41,7 +41,7 @@ Control::Control(QWidget* parent, const char* name)
 	// it is then re-determined by getSelection()
 	connect(this, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
 
-	connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)), this,
+	connect(this, SIGNAL(rightButtonPressed(QListViewItem*, const QPoint&, int)), this,
 					SLOT(onContextMenu(QListViewItem*, const QPoint&, int)));
 
 	// register ModularWidget
