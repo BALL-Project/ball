@@ -1,21 +1,24 @@
-// $Id: common.doc,v 1.7 2002/12/22 13:36:54 sturm Exp $
+// $Id: common.doc,v 1.8 2003/02/21 16:15:01 anhi Exp $
 
-/**@name	Common Definitions
+/** \file 
+ */
+
+/** \defgroup Common Common Definitions
+		\ingroup Foundation
 		This chapter contains all relevant information on 
 		very fundamental definitions and classes used throughout BALL
-		(part of the {\bf Foundation Classes}).
+		(part of the <b> Foundation Classes</b>).
+ @{
 */
-//@{
-  //@Include: debug.h
-	//@Include: constants.h
-	//@Include: create.h
-	//@Include: version.h
-	//@Include: exception.h
-	//@Include: global.h
-	//@Include: hash.h
-  //@Include: limits.h
-	//@Include: logStream.h
-	//@Include: macros.h
-	//@Include: rtti.h
+	/// \file constants.h
+	/// \file create.h
+	/// \file version.h
+	/// \file exception.h
+	/// \file global.h
+	/// \file hash.h
+  /// \file limits.h
+	/// \file logStream.h
+	/// \file macros.h
+	/// \file rtti.h
 
-//@}
+/** @} */
