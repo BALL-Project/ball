@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData2D_test.C,v 1.17 2003/08/22 14:28:17 oliver Exp $
+// $Id: RegularData2D_test.C,v 1.18 2003/09/06 07:28:13 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData2D.h>
 
-START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.17 2003/08/22 14:28:17 oliver Exp $")
+START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.18 2003/09/06 07:28:13 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -141,7 +141,6 @@ CHECK(ValueType& operator [] (Position index) throw())
 	TEST_REAL_EQUAL(*it, 12.4)
 	rg[0] = 1.4;
 	TEST_REAL_EQUAL(*it, 1.4)
-	rg[1000] = 1.4;
 RESULT
 
 CHECK(ValueType& operator [] (const IndexType& index) throw())
