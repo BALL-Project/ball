@@ -1,11 +1,11 @@
-// $Id: System_test.C,v 1.1 2000/05/08 13:54:05 amoll Exp $
+// $Id: System_test.C,v 1.2 2000/05/09 16:21:07 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/atom.h>
-START_TEST(System, "$Id: System_test.C,v 1.1 2000/05/08 13:54:05 amoll Exp $")
+START_TEST(System, "$Id: System_test.C,v 1.2 2000/05/09 16:21:07 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -98,6 +98,31 @@ CHECK(operator = (System&))
 	f2 = f1;
 	TEST_EQUAL(f2.getName(), "name1");
 	TEST_EQUAL(f2.countMolecules(), 1);
+RESULT
+
+CHECK(getMolecule(Position))
+	System s1;
+	Molecule m;
+	Molecule* ptr = s1.getMolecule(0);
+	TEST_EQUAL(ptr, 0)
+	s1.insert(m);
+	s1.getMolecule(0)->setName("m1");
+	TEST_EQUAL(m.getName(), "m1")
+	s1.remove(m);
+	TEST_EQUAL(s1.getMolecule(0), 0)
+	TEST_EQUAL(s1.getMolecule(25), 0)
+RESULT
+
+CHECK(getMolecule(Position) const)
+	System s1;
+	Molecule m;
+	Molecule* ptr = s1.getMolecule(0);
+	TEST_EQUAL(ptr, 0)
+	s1.insert(m);
+	TEST_EQUAL(s1.getMolecule(0), &m)
+	s1.remove(m);
+	TEST_EQUAL(s1.getMolecule(0), 0)
+	TEST_EQUAL(s1.getMolecule(25), 0)
 RESULT
 
 CHECK(countMolecules())
