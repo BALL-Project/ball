@@ -1,6 +1,8 @@
-// $Id: objectSelector.C,v 1.3.4.1 2002/10/23 14:25:20 amoll Exp $
+// $Id: objectSelector.C,v 1.3.4.2 2002/10/23 15:20:31 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/bond.h>
 
 using namespace std;
 

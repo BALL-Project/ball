@@ -1,10 +1,14 @@
-// $Id: objectSelector.h,v 1.3.4.1 2002/10/23 14:25:03 amoll Exp $
+// $Id: objectSelector.h,v 1.3.4.2 2002/10/23 15:20:26 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
 #	include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
+#endif
+
+#ifndef BALL_MOLVIEW_COMMON_H
+# include <BALL/MOLVIEW/COMMON/common.h>
 #endif
 
 namespace BALL

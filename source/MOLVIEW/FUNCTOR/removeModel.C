@@ -1,6 +1,8 @@
-// $Id: removeModel.C,v 1.11.4.1 2002/10/18 14:48:23 amoll Exp $
+// $Id: removeModel.C,v 1.11.4.2 2002/10/23 15:20:32 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/bond.h>
 
 using namespace std;
 

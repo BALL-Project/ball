@@ -1,12 +1,13 @@
-// $Id: atomBondModelBaseProcessor.C,v 1.7 2001/07/15 18:50:28 oliver Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.7.4.1 2002/10/23 15:20:31 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
+# include <BALL/KERNEL/forEach.h>
+# include <BALL/KERNEL/bond.h>
 
 using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 

@@ -1,11 +1,7 @@
-// $Id: atomBondModelBaseProcessor.h,v 1.7 2001/07/16 14:49:23 amoll Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.7.4.1 2002/10/23 15:20:25 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -19,30 +15,20 @@
 #	include <BALL/DATATYPE/hashSet.h>
 #endif
 
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_BOND_H
-#	include <BALL/KERNEL/bond.h>
-#endif
-
-#ifndef BALL_KERNEL_FOREACH_H
-#	include <BALL/KERNEL/forEach.h>
-#endif
-
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #	include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 #endif
 
+#ifndef BALL_MOLVIEW_COMMON_H
+# include <BALL/MOLVIEW/COMMON/common.h>
+#endif
 
+class Atom;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
-
 
 		/** AtomBondModelBaseProcessor class.
 				The class AtomBondModelBaseProcessor is the base class for all
@@ -97,7 +83,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -129,9 +114,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-			//@}
 
-			
+			//@}
 			/**	@name	Assignment
 			*/
 			//@{
@@ -191,8 +175,8 @@ namespace BALL
 			void swap
 				(AtomBondModelBaseProcessor& processor)
 				throw();
-			//@}
 
+			//@}
 			/**	@name Processor specific methods
 			*/
 			//@{
@@ -200,7 +184,7 @@ namespace BALL
 					Clear the used \Ref{Atom} objects.
 					Calls \Ref{clearUsedAtoms_}.
 					Calls \Ref{BaseModelProcessor::start}.
-					@return bool {\tt true} if the start of {\em *this} atomBondModelBaseProcessor was successful, {\tt false} otherwise
+					@return bool {\tt true} if the start of {\em *this} atomBondModelBaseProcessor was successful
 					@see    clearUsedAtoms_
 					@see    operator()
 					@see    BaseModelProcessor
@@ -213,7 +197,7 @@ namespace BALL
 					All previously inserted \Ref{Atom} objects (inserted with the method \Ref{insertAtom_})
 					will be processed with the method \Ref{buildBondModels_} to create the graphical 
 					representation of the \Ref{Bond} objects.
-					@return bool {\tt true} if the finish of {\em *this} atomBondModelBaseProcessor was successful, {\tt false} otherwise
+					@return bool {\tt true} if the finish of {\em *this} atomBondModelBaseProcessor was successful
 					@see    buildBondModels_
 					@see    operator()
 					@see    Atom
@@ -239,8 +223,8 @@ namespace BALL
 					@see    Bond
 			*/
 			virtual Processor::Result operator() (Composite& composite);
+						
 			//@}
-				
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
@@ -253,7 +237,7 @@ namespace BALL
 					{\em *this} atomBondModelBaseProcessor is valid if:
 					\Ref{BaseModelProcessor} is valid.
 					Calls \Ref{BaseModelProcessor::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} atomBondModelBaseProcessor is correct (self-validated) and consistent, {\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} atomBondModelBaseProcessor is correct 
 					@see       BaseModelProcessor
 			*/
 			virtual bool isValid() const
@@ -270,11 +254,10 @@ namespace BALL
 			virtual void dump
 				(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-			//@}
-
-
+							
 			protected:
 
+			//@}
 			/** @name Protected members
 					This methods are provided for easy generation of models. With the method 
 					\Ref{insertAtom_} all \Ref{Atom} objects that will be part of the newly created
@@ -284,6 +267,7 @@ namespace BALL
 					The other methods are access method for the stored atoms.			 
 			*/
 			//@{
+
 			/** Insert atom for later processing.
 					Insert \Ref{Atom} {\em atom} into the used atoms structure. 
 					All the inserted atoms will be later processed to generate the graphical representation
