@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.48 2003/12/23 13:09:40 amoll Exp $
+// $Id: mainControl.C,v 1.49 2004/01/13 16:04:01 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -366,11 +366,6 @@ bool MainControl::remove_(Composite& composite)
 		notify_(rr_message);
 	}
 
-	if (removed_representations.size() > 0)
-	{
-		redrawAllRepresentations();
-	}
-
 	composite_manager_.remove(composite);
 
 	if (root != 0) updateRepresentationsOf(*root, true, true);
@@ -407,8 +402,6 @@ bool MainControl::updateRepresentationsOf(const Composite& composite, bool rebui
 		RepresentationMessage* ur_message = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
  		notify_(ur_message);
 	}
-
-	redrawAllRepresentations();
 
 	return true;
 }
@@ -1068,8 +1061,6 @@ bool MainControl::insert(Representation& rep)
 	RepresentationMessage* rm = new RepresentationMessage(rep, RepresentationMessage::ADD);
 	notify_(rm);
 
-	redrawAllRepresentations();
-
 	return true;
 }
 
@@ -1083,8 +1074,6 @@ bool MainControl::update(Representation& rep)
 	RepresentationMessage* rm = new RepresentationMessage(rep, RepresentationMessage::UPDATE);
 	notify_(rm);
 
-	redrawAllRepresentations();
-
 	return true;
 }
 
@@ -1096,8 +1085,6 @@ bool MainControl::remove(Representation& rep)
 	RepresentationMessage* rm = new RepresentationMessage(rep, RepresentationMessage::REMOVE);
 	notify_(rm);
 	primitive_manager_.remove(rep);
-
-	redrawAllRepresentations();
 
 	return true;
 }

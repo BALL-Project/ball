@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.15 2004/01/13 15:16:38 amoll Exp $
+// $Id: molecularProperties.C,v 1.16 2004/01/13 16:04:02 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -347,10 +347,6 @@ void MolecularProperties::select()
 	}
 
 	getMainControl()->printSelectionInfos();
-
-	// we have to send SceneMessage here, because it wont be send in onNotify 
-	SceneMessage* scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
-	notify_(scene_message);
 }
 
 
@@ -375,10 +371,6 @@ void MolecularProperties::deselect()
 	}
 
 	getMainControl()->printSelectionInfos();
-
-	// we have to send SceneMessage here, because it wont be send in onNotify 
-	SceneMessage* scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
-	notify_(scene_message);
 }
 
 

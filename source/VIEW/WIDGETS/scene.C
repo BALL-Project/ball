@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.31 2003/12/17 15:07:49 amoll Exp $
+// $Id: scene.C,v 1.32 2004/01/13 16:04:03 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -260,6 +260,7 @@ void Scene::onNotify(Message *message)
 				break;
 		}
 
+		update(false);
 		return;
 	}
 

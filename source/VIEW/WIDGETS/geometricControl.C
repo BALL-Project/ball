@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.24 2004/01/13 00:44:47 amoll Exp $
+// $Id: geometricControl.C,v 1.25 2004/01/13 16:04:02 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -270,8 +270,6 @@ void GeometricControl::deleteRepresentation_()
 		removeRepresentation(*rep);
 	}
 
-	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
-	notify_(scene_message);
 	setStatusbarText("Deleted representation.");
 }
 
