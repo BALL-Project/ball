@@ -1,4 +1,4 @@
-// $Id: regularData1DWidget.h,v 1.3 2001/05/27 10:26:37 hekl Exp $
+// $Id: regularData1DWidget.h,v 1.4 2001/06/06 14:25:07 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
@@ -30,8 +30,8 @@
 #       include <BALL/VIEW/GUI/KERNEL/mainControl.h>
 #endif
 
-#ifndef BALL_FORMAT_BRUKER1DFILE_H
-#       include <BALL/FORMAT/bruker1DFile.h>
+#ifndef BALL_DATATYPE_REGULARDATA1D_H
+#       include <BALL/DATATYPE/regularData1D.h>
 #endif
 
 using namespace BALL;
@@ -126,10 +126,11 @@ class RegularData1DWidget
 
   //@}
 
+  void onNotify(Message *message)
+  throw();
 
-		void onNotify(Message *message)
-			throw();
-
+public slots:
+	
   bool reactToMessages_(Message *message);
   
   /**    @name    ModularWidget related methods
@@ -139,13 +140,11 @@ class RegularData1DWidget
 	 RegularData1DWidget creates an entry in Tools|RegularData1DWidget and connects
 	 the entry to createPlot()
   */
-  virtual void initializeWidget(MainControl& main_control)
-	throw();
+  virtual void initializeWidget(MainControl& main_control);
 
   /**    Remove menu entries.
    */
-  virtual void finalizeWidget(MainControl& main_control)
-	throw();
+  virtual void finalizeWidget(MainControl& main_control);
   //@}
 
  public slots:
@@ -159,8 +158,8 @@ class RegularData1DWidget
  protected:
       QPixmap pm_;
       Size length_;
-      Size min_;
-      Size max_;
+      double min_;
+      double max_;
       RegularData1D *spec_;
 };
 
