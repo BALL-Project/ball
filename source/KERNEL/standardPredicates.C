@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.43 2003/03/31 17:56:36 anker Exp $
+// $Id: standardPredicates.C,v 1.44 2003/04/01 14:36:15 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -17,6 +17,8 @@
 #include <BALL/KERNEL/bond.h>
 
 #include <algorithm>
+
+// #define DEBUG
 
 using namespace std;
 
@@ -223,10 +225,6 @@ namespace BALL
 	{
 		// the following recursive function performs an ad-hoc dfs and returns
 		// true, if a ring was found and false otherwise.
-
-		// DEBUG
-		// cout << "visited.size() " << visited.size() << endl;
-		// /DEBUG
 
 		if (exact == true)
 		{
@@ -1257,6 +1255,8 @@ namespace BALL
 		const Bond* bond;
 		Size verbosity = 0;
 
+		AxialPredicate isAxial;
+
 		if (current == 0)
 		{
 			// Log.error() << "ConnectedToPredicate::find_():\n"
@@ -1282,7 +1282,9 @@ namespace BALL
 								|| (partner->getElement().getSymbol() == (*child_it)->getSymbol())
 								|| (((*child_it)->getSymbol() == "E") 
 										&& (partner->getElement().getElectronegativity()
-											> atom.getElement().getElectronegativity())))
+											> atom.getElement().getElectronegativity()))
+								|| (((*child_it)->getSymbol() == "A") 
+										&& (isAxial(*partner))))
 						{
 							visited.insert(bond);
 							this_result = find_(*partner, *child_it, visited);
@@ -1499,43 +1501,47 @@ namespace BALL
 		throw()
 	{
 
+#ifdef DEBUG
+		cout << "ATOM: " << atom.getFullName() << endl;
+#endif
+
 		// if it's not a carbon, go home.
 		if (atom.getElement() != PTE[Element::C]) 
 		{
-			// DEBUG
-			// cout << "No carbon." << endl;
-			// /DEBUG
+#ifdef DEBUG
+			cout << "No carbon." << endl;
+#endif
 			return(false);
 		}
 
 		// if atom's not sp3, go away.
-		Sp3HybridizedPredicate isSp3;
-		if (!isSp3(atom)) 
+		Sp3HybridizedPredicate is_sp3;
+		if (!is_sp3(atom)) 
 		{
-			// DEBUG
-			// cout << "Not sp3." << endl;
-			// /DEBUG
+#ifdef DEBUG
+			cout << "Not sp3." << endl;
+#endif
 			return(false);
 		}
 
 		// make sure we are in a 5 or 6 memebered ring.
-		InRingPredicate inRing;
-		if (!inRing(atom) == true)
+		InRingPredicate in_ring;
+		if (!in_ring(atom) == true)
 		{
-			// DEBUG
-			// cout << "Not in a ring." << endl;
-			// /DEBUG
+#ifdef DEBUG
+			cout << "Not in a ring." << endl;
+#endif
 			return(false);
 		}
 
-		const vector<const Atom*>& ring_atoms = inRing.getRingAtoms();
-		const HashSet<const Bond*>& visited_bonds = inRing.getVisitedBonds();
+		const vector<const Atom*>& ring_atoms = in_ring.getRingAtoms();
+		const HashSet<const Bond*>& visited_bonds = in_ring.getVisitedBonds();
 
 		if ((ring_atoms.size() < 5) || (ring_atoms.size() > 6))
 		{
-			// DEBUG
-			// cout << "Wrong ring size " << ring_atoms.size() << "." << endl;
-			// /DEBUG
+#ifdef DEBUG
+			cout << "Wrong ring size " << ring_atoms.size() << "." << endl;
+#endif
 			return(false);
 		}
 
@@ -1564,10 +1570,10 @@ namespace BALL
 		c3 = C3->getPosition();
 		C5 = ring_atoms[1];
 		c5 = C5->getPosition();
-		// DEBUG
-		// cout << "C3: " << C3->getFullName() << endl;
-		// cout << "C5: " << C5->getFullName() << endl;
-		// /DEBUG
+#ifdef DEBUG
+		cout << "C3: " << C3->getFullName() << endl;
+		cout << "C5: " << C5->getFullName() << endl;
+#endif
 		
 		// This code takes the hydrogen as means of measuring the angle. This
 		// is NOT applicable for every sugar.
@@ -1584,17 +1590,17 @@ namespace BALL
 				{
 					H = bond_it->getPartner(atom);
 					h = H->getPosition();
-					// DEBUG
-					// cout << "H: " << H->getFullName() << endl;
-					// /DEBUG
+#ifdef DEBUG
+					cout << "H: " << H->getFullName() << endl;
+#endif
 				}
 				else
 				{
 					R = bond_it->getPartner(atom);
 					r = R->getPosition();
-					// DEBUG
-					// cout << "R: " << R->getFullName() << endl;
-					// /DEBUG
+#ifdef DEBUG
+					cout << "R: " << R->getFullName() << endl;
+#endif
 				}
 			}
 		}
@@ -1603,9 +1609,9 @@ namespace BALL
 		// position... ;)
 		if (H == 0)
 		{
-			// DEBUG
-			// cout << "No hydrogen neighbour." << endl;
-			// /DEBUG
+#ifdef DEBUG
+			cout << "No hydrogen neighbour." << endl;
+#endif
 			return(false);
 		}
 
@@ -1621,22 +1627,19 @@ namespace BALL
 			angle_C1_R -= 180;
 		}
 
-		// DEBUG
-		// cout << "c1: " << c1 << endl;
-		// cout << "c3: " << c3 << endl;
-		// cout << "c5: " << c5 << endl;
-		// cout << "c1 - c3: " << c1 - c3 << endl;
-		// cout << "c1 - c5: " << c1 - c5 << endl;
-		// cout << "h: " << h << endl;
-		// cout << "h - c1: " << h - c1 << endl;
-		// DEBUG
-
-		// DEBUG
-		// Log.info() << "Angle(C1, H): " << angle_C1_H << " " 
-			// << angle_C1_H << endl;
-		// Log.info() << "Angle(C1, R): " << angle_C1_R << " "
-			// << angle_C1_R - 109.5 << endl;
-		// /DEBUG
+#ifdef DEBUG
+		cout << "c1: " << c1 << endl;
+		cout << "c3: " << c3 << endl;
+		cout << "c5: " << c5 << endl;
+		cout << "c1 - c3: " << c1 - c3 << endl;
+		cout << "c1 - c5: " << c1 - c5 << endl;
+		cout << "h: " << h << endl;
+		cout << "h - c1: " << h - c1 << endl;
+		cout << "Angle(C1, H): " << angle_C1_H << " " 
+			<< fabs(angle_C1_H) << endl;
+		cout << "Angle(C1, R): " << angle_C1_R << " "
+			<< fabs(angle_C1_R) - 109.5 << endl;
+#endif
 
 		if ((fabs(angle_C1_H) < 10.0) 
 				&& ((fabs(angle_C1_R) - 109.5) < 10))
@@ -1652,5 +1655,85 @@ namespace BALL
 
 	}
 
+	bool Conformation4C1Predicate::operator () (const Atom& atom) const
+		throw()
+	{
+		InRingPredicate in_6_ring(6);
+		if (!in_6_ring(atom))
+		{
+			// if we are not in a six-membered ring, the predicate doesn't make
+			// any sense.
+			return(false);
+		}
+
+		vector<const Atom*> ring_atoms = in_6_ring.getRingAtoms();
+
+		ConnectedToPredicate isC5;
+		isC5.setArgument("(C)(C)(O)");
+
+		Size O_index = 0;
+		Size C1_index = 0;
+		Size C2_index = 0;
+		Size C5_index = 0;
+
+		while ((ring_atoms[O_index]->getElement() != PTE[Element::O])
+			&& (O_index < 6))
+		{
+			++O_index;
+		}
+
+		if (isC5(*(ring_atoms[((O_index == 5) ? 0 : (O_index + 1) % 6)])))
+		{
+			C1_index = (O_index == 0) ? 5 : (O_index - 1) % 6;
+			C2_index = (C1_index == 0) ? 5 : (C1_index - 1) % 6;
+			C5_index = (O_index == 5) ? 0 : (O_index + 1) % 6;
+		}
+		else
+		{
+			if (isC5(*(ring_atoms[((O_index == 0) ? 5 : (O_index - 1) % 6)])))
+			{
+				C1_index = (O_index == 5) ? 0 : (O_index + 1) % 6;
+				C2_index = (C1_index == 5) ? 0 : (C1_index + 1) % 6;
+				C5_index = (O_index == 0) ? 5 : (O_index - 1) % 6;
+			}
+			else
+			{
+				// could not find the sugar specific structures
+				return(false);
+			}
+		}
+
+		// now compute the halfspace of C1
+
+		Vector3 c1 = ring_atoms[C1_index]->getPosition();
+		Vector3 c2 = ring_atoms[C2_index]->getPosition();
+		Vector3 c5 = ring_atoms[C5_index]->getPosition();
+		Vector3 o = ring_atoms[O_index]->getPosition();
+		Vector3 n = (c5 - o) % (c2 - o);
+		Vector3 d = (c1 - o);
+
+#ifdef DEBUG
+		cout << "C1: " << ring_atoms[C1_index]->getFullName() << endl;
+		cout << "C2: " << ring_atoms[C2_index]->getFullName() << endl;
+		cout << "C5: " << ring_atoms[C5_index]->getFullName() << endl;
+		cout << "O: " << ring_atoms[O_index]->getFullName() << endl;
+		cout << "c1: " << c1 << endl;
+		cout << "c2: " << c2 << endl;
+		cout << "c5: " << c5 << endl;
+		cout << "o: " << o << endl;
+		cout << "n: " << n << endl;
+		cout << "d: " << d << endl;
+		cout << "d * n: " << d * n << endl;
+#endif
+
+		if ((d * n) > 0)
+		{
+			return(false);
+		}
+		else
+		{
+			return(true);
+		}
+	}
 
 } // namespace BALL

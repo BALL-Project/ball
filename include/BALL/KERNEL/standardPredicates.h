@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.33 2003/03/31 17:56:33 anker Exp $
+// $Id: standardPredicates.h,v 1.34 2003/04/01 14:36:14 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -878,6 +878,23 @@ namespace BALL
 				and is connected to an H which is standing perpendicular
 				on the plane containing the atom itself and those two Cs of the
 				ring which are each one atom away.
+				@param atom the atom to test
+				@return true, if the predicate is true, false otherwise
+		*/
+		virtual bool operator () (const Atom& atom) const
+			throw();
+	};
+
+	/** Predicate for determining whether a sugar ring is in 4C1
+			conformation.
+	 */
+	class Conformation4C1Predicate
+		:	public	ExpressionPredicate
+	{
+		public:
+		BALL_CREATE(Conformation4C1Predicate)
+
+		/** 
 				@param atom the atom to test
 				@return true, if the predicate is true, false otherwise
 		*/

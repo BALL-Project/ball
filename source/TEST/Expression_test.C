@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Expression_test.C,v 1.31 2003/04/01 09:46:37 anker Exp $
+// $Id: Expression_test.C,v 1.32 2003/04/01 14:36:15 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -21,7 +21,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.31 2003/04/01 09:46:37 anker Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.32 2003/04/01 14:36:15 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -414,7 +414,7 @@ Expression* e_ptr = 0;
 CHECK(Expression::Expression() throw())
 	e_ptr = new Expression;
 	TEST_NOT_EQUAL(e_ptr, 0)
-	TEST_EQUAL(e_ptr->getCreationMethods().size(), 25)
+	TEST_EQUAL(e_ptr->getCreationMethods().size(), 26)
 RESULT
 
 
@@ -439,7 +439,7 @@ RESULT
 
 CHECK(Expression::Expression(const String& expression_string) throw())
 	Expression e("true()");
-	TEST_EQUAL(e.getCreationMethods().size(), 25)
+	TEST_EQUAL(e.getCreationMethods().size(), 26)
 	TEST_EQUAL(e(Atom()), true)
 RESULT
 

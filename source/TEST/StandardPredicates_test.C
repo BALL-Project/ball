@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StandardPredicates_test.C,v 1.25 2003/03/31 17:56:38 anker Exp $
+// $Id: StandardPredicates_test.C,v 1.26 2003/04/01 14:36:16 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.25 2003/03/31 17:56:38 anker Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.26 2003/04/01 14:36:16 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -996,6 +996,36 @@ CHECK(AxialPredicate::operator () (const Atom& atom) )
 				break;
 			default:
 				TEST_EQUAL(isAxial(*it), false)
+		}
+	}
+RESULT
+
+CHECK(Conformation4C1Predicate::operator () (const Atom& atom) )
+	Conformation4C1Predicate is4C1;
+
+	AtomIterator it = S.beginAtom();
+	for (Size i=1; +it; ++it, ++i)
+	{
+		STATUS(i)
+		STATUS(it->getFullName())
+		switch (i) 
+		{
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 11:
+			case 24:
+			case 25:
+			case 26:
+			case 27:
+			case 28:
+			case 33:
+				TEST_EQUAL(is4C1(*it), true)
+				break;
+			default:
+				TEST_EQUAL(is4C1(*it), false)
 		}
 	}
 RESULT

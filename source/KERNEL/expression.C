@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.C,v 1.37 2003/03/31 17:56:36 anker Exp $
+// $Id: expression.C,v 1.38 2003/04/01 14:36:15 anker Exp $
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/expressionParser.h>
@@ -276,6 +276,7 @@ namespace BALL
 		create_methods_.insert("spHybridized", (PersistenceManager::CreateMethod)Factory<SpHybridizedPredicate>::createVoid);
 		create_methods_.insert("charge", (PersistenceManager::CreateMethod)Factory<ChargePredicate>::createVoid);
 		create_methods_.insert("isAxial", (PersistenceManager::CreateMethod)Factory<AxialPredicate>::createVoid);
+		create_methods_.insert("is4C1", (PersistenceManager::CreateMethod)Factory<Conformation4C1Predicate>::createVoid);
 	}
 
 }
