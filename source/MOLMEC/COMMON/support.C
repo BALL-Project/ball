@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.32 2002/03/14 10:21:09 anker Exp $
+// $Id: support.C,v 1.33 2002/12/12 10:41:54 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -44,16 +44,15 @@ namespace BALL
 			Vector3 difference;
 			
 			// the box width / length / depth
-			double period_x;
-			double period_y;
-			double period_z;
+			double period_x = 0.0;
+			double period_y = 0.0;
+			double period_z = 0.0;
 			Vector3 period;
 
 			// Are there atoms stored in atom_vector at all?
 			if (atom_vector.size() == 0)
 			{
-				Log.warn() << "calculateNonBondedAtomPairs: atom_vector is empty " 
-					<< endl;
+				Log.warn() << "calculateNonBondedAtomPairs: atom_vector is empty " << endl;
 				return 0;
 			}
 
@@ -139,7 +138,7 @@ namespace BALL
 			// we enlarge the box by some constant to be sure not to run into
 			// numerical problems
 			HashGrid3<Atom*> grid(lower - Vector3(0.1),
-					upper - lower + Vector3(0.2), distance);
+					upper - lower + Vector3(0.2F), distance);
 
 			// Iterators and hash box pointer for the grid search
 			HashGridBox3<Atom*>* hbox;
@@ -175,7 +174,7 @@ namespace BALL
 							// calculateMinimumImage(difference, period);
 
 							// ?????: should it be < or <= ? We have to define what
-							// should happen when an antom sits on the border
+							// should happen if an atom sits right on the border
 							// (numerically quite improbable, of course)
 							if (difference.x < -half_period_x) 
 							{
@@ -271,7 +270,7 @@ namespace BALL
 													&& (difference.z <= half_period_z) 
 													&& (difference.getSquareLength() <= squared_distance))
 												{
-													pair_vector.push_back(pair<Atom*, Atom*>(*atom_it, *data_it));
+													pair_vector.push_back(pair<Atom*, Atom*>(*data_it, *atom_it));
 													counter++;
 												}
 											}
@@ -316,7 +315,7 @@ namespace BALL
 					// Algorithm using a 3d hash grid
 					//
 					// Use a hash grid with box length "distance" to determine all
-					// neigboured atom pairs
+					// neighboring atom pairs
 
 					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end();
 							++atom_it) 
@@ -337,7 +336,7 @@ namespace BALL
 											&& !(*data_it)->isBoundTo(**atom_it)
 											&& !(*data_it)->isGeminal(**atom_it))
 									{
-										pair_vector.push_back(pair<Atom*,Atom*>((*atom_it),(*data_it)));
+										pair_vector.push_back(pair<Atom*,Atom*>(*data_it, *atom_it));
 										counter++;
 									}
 								}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberStretch.C,v 1.15 2002/02/27 12:21:30 sturm Exp $
+// $Id: amberStretch.C,v 1.16 2002/12/12 10:40:12 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -76,6 +76,7 @@ namespace BALL
 		// retrieve all stretch parameters
 		Atom::BondIterator bond_iterator;
 		AtomVector::ConstIterator atom_it = getForceField()->getAtoms().begin();
+		Atom::AttributeVector& attributes = Atom::getAttributes();
 		for ( ; atom_it != getForceField()->getAtoms().end(); ++atom_it)
 		{
 			for (Atom::BondIterator it = (*atom_it)->beginBond(); +it ; ++it) 
@@ -91,8 +92,8 @@ namespace BALL
 						Atom::Type atom_type_A = bond.getFirstAtom()->getType();
 						Atom::Type atom_type_B = bond.getSecondAtom()->getType();
 						stretch_.push_back(QuadraticBondStretch::Data());
-						stretch_.back().atom1 = const_cast<Atom*>(bond.getFirstAtom());
-						stretch_.back().atom2 = const_cast<Atom*>(bond.getSecondAtom());
+						stretch_.back().atom1 = &attributes[bond.getFirstAtom()->getIndex()];
+						stretch_.back().atom2 = &attributes[bond.getSecondAtom()->getIndex()];
 			
 						// Pay attention to the symmetric database input
 						if (stretch_parameters_.hasParameters(atom_type_A, atom_type_B)) 
@@ -116,8 +117,8 @@ namespace BALL
 							Log.error() << "cannot find stretch parameters for atom types " 
 													<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_A) << "-" 
 													<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_B)
-													<< " (atoms are: " << stretch_.back().atom1->getFullName() 
-													<< "/" << stretch_.back().atom2->getFullName() << ")" << endl;
+													<< " (atoms are: " << stretch_.back().atom1->ptr->getFullName() 
+													<< "/" << stretch_.back().atom2->ptr->getFullName() << ")" << endl;
 
 							// we don't want to get any force or energy component
 							// from this stretch
@@ -158,7 +159,7 @@ namespace BALL
 		// iterate over all bonds, sum up the energies
 		for (Size i = 0; i < stretch_.size(); i++)
 		{
-			double distance = (stretch_[i].atom1->getPosition()).getDistance(stretch_[i].atom2->getPosition());
+			double distance = (stretch_[i].atom1->position).getDistance(stretch_[i].atom2->position);
 			energy_ += stretch_[i].values.k * (distance - stretch_[i].values.r0) * (distance - stretch_[i].values.r0);
 		}
 		
@@ -178,9 +179,9 @@ namespace BALL
 		// iterate over all bonds, update the forces
 		for (Size i = 0 ; i < stretch_.size(); i++)
 		{
-			Atom& atom1(*stretch_[i].atom1);
-			Atom& atom2(*stretch_[i].atom2);
-			Vector3 direction(atom1.getPosition() - atom2.getPosition());
+			Atom::StaticAtomAttributes& atom1(*stretch_[i].atom1);
+			Atom::StaticAtomAttributes& atom2(*stretch_[i].atom2);
+			Vector3 direction(atom1.position - atom2.position);
 			double distance = direction.getLength(); 
 
 			if (distance != 0.0) 
@@ -191,13 +192,13 @@ namespace BALL
 				//   J/mol -> J: Avogadro
 				direction *= 1e13 / Constants::AVOGADRO * 2 * stretch_[i].values.k * (distance - stretch_[i].values.r0) / distance;
 
-				if (!use_selection || atom1.isSelected()) 
+				if (!use_selection || atom1.ptr->isSelected()) 
 				{
-					atom1.getForce() -= direction;
+					atom1.force -= direction;
 				}
-				if (!use_selection || atom2.isSelected()) 
+				if (!use_selection || atom2.ptr->isSelected()) 
 				{
-					atom2.getForce() += direction;
+					atom2.force += direction;
 				}
 			}
 		}                                                                                                          

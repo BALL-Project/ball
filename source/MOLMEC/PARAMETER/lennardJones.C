@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lennardJones.C,v 1.14 2002/02/27 12:21:42 sturm Exp $
-//
+// $Id: lennardJones.C,v 1.15 2002/12/12 10:44:36 oliver Exp $
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
@@ -97,6 +96,8 @@ namespace BALL
 		
 		// extract the basis information
 		ParameterSection::extractSection(parameters, section_name);
+		bool use_geometric_mean = false;
+
 
 		// check whether all variables we need are defined, terminate otherwise
 		if ((!hasVariable("A") || !hasVariable("B"))
@@ -116,6 +117,22 @@ namespace BALL
 			if (hasVariable("epsilon") && hasVariable("R"))
 			{
 				format_ = EPSILON_R_FORMAT;
+				if (options.has("radius_averaging"))
+				{
+					if (options["radius_averaging"] == "arithmetic")
+					{
+						use_geometric_mean = false;
+					}
+					else if (options["radius_averaging"] == "geometric")
+					{
+						use_geometric_mean = true;
+					}
+					else
+					{
+						Log.warn() << "AmberNonBonded: unknown method for averaging LJ radii: '" 
+								<< options["radius_averaging"] << "'. Using arithmetic mean." << std::endl;
+					}
+				}
 			} 
 			else if (hasVariable("A") && hasVariable("B"))
 			{
@@ -150,9 +167,9 @@ namespace BALL
 			is_defined_[i] = false;
 		}
 
-		// the indices of the colums containing the values
-		Size					index_A;
-		Size					index_B;
+		// the indices of the columns containing the values
+		Size index_A = 0;
+		Size index_B = 0;
 		if (format_ == A_B_FORMAT)
 		{
 			index_A = getColumnIndex("A");
@@ -248,7 +265,6 @@ namespace BALL
 			} 
 			else	
 			{
-
 				Log.warn() << "LennardJones::extractSection: unknown atom type in Lennard Jones parameters: " << key << "   i = " << i << endl;
 			}
 		}
@@ -268,7 +284,15 @@ namespace BALL
 					// calculate the values for A and B if in eps/R format
 					if (format_ == EPSILON_R_FORMAT)
 					{
-						double R = B_[i] + B_[j];
+						double R;
+						if (!use_geometric_mean)
+						{
+							R = B_[i] + B_[j];
+						}
+						else
+						{
+							R = 2.0 * sqrt(B_[i] * B_[j]);
+						}
 						double R3 = R * R * R;
 						double R6 = R3 * R3;
 						double epsilon = sqrt(A_[i] * A_[j]);
@@ -345,10 +369,8 @@ namespace BALL
 	bool LennardJones::operator == (const LennardJones& lj) const throw()
 	{
 		return (ParameterSection::operator == (lj)
-			&& (A_ == lj.A_)
-			&& (B_ == lj.B_)
-			&& (Aij_ == lj.Aij_)
-			&& (Bij_ == lj.Bij_));
+						&& (A_ == lj.A_) && (B_ == lj.B_)
+						&& (Aij_ == lj.Aij_) && (Bij_ == lj.Bij_));
 	}
 	 
 } // namespace BALL

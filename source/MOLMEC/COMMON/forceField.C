@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.C,v 1.28 2002/02/27 12:21:34 sturm Exp $
+// $Id: forceField.C,v 1.29 2002/12/12 10:41:54 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -279,7 +279,7 @@ namespace BALL
 					atoms_[last] = tmp;
 				}
 			}
-			number_of_movable_atoms_ = first - 1;
+			number_of_movable_atoms_ = first;
 		}
 		else
 		{

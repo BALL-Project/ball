@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmStretch.C,v 1.7 2002/02/27 12:21:33 sturm Exp $
+// $Id: charmmStretch.C,v 1.8 2002/12/12 10:41:03 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmStretch.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -135,8 +135,8 @@ namespace BALL
 						Atom::Type atom_type_A = bond.getFirstAtom()->getType();
 						Atom::Type atom_type_B = bond.getSecondAtom()->getType();
 			
-						stretch_[i].atom1 = const_cast<Atom*>(bond.getFirstAtom());
-						stretch_[i].atom2 = const_cast<Atom*>(bond.getSecondAtom());
+						stretch_[i].atom1 = &Atom::getAttributes()[bond.getFirstAtom()->getIndex()];
+						stretch_[i].atom2 = &Atom::getAttributes()[bond.getSecondAtom()->getIndex()];
 			
 						// when retrieving the parameters, order does not matter
 						// first, we try an exact match, than we try wildcards
@@ -149,8 +149,8 @@ namespace BALL
 									if (!stretch_parameters_.assignParameters(values, Atom::ANY_TYPE, Atom::ANY_TYPE))
 									{
 										Log.warn() << "cannot find stretch parameters for atoms " 
-															 << stretch_[i].atom1->getFullName() << " and " 
-															 << stretch_[i].atom2->getFullName() << " (types are "
+															 << stretch_[i].atom1->ptr->getFullName() << " and " 
+															 << stretch_[i].atom2->ptr->getFullName() << " (types are "
 															 << force_field_->getParameters().getAtomTypes().getTypeName(atom_type_A) << "-" 
 															 << force_field_->getParameters().getAtomTypes().getTypeName(atom_type_B) << ")" << endl;
 										// we don`t want to get any force or energy component
@@ -186,9 +186,9 @@ namespace BALL
 		{
 			if (getForceField()->getUseSelection() == false ||
 			   (getForceField()->getUseSelection() == true && 
-			   (stretch_[i].atom1->isSelected() || stretch_[i].atom2->isSelected())))
+			   (stretch_[i].atom1->ptr->isSelected() || stretch_[i].atom2->ptr->isSelected())))
 			{
-				double distance = (stretch_[i].atom1->getPosition()).getDistance(stretch_[i].atom2->getPosition());
+				double distance = (stretch_[i].atom1->position).getDistance(stretch_[i].atom2->position);
 				energy_ += stretch_[i].values.k * (distance - stretch_[i].values.r0) * (distance - stretch_[i].values.r0);
 
 			}
@@ -211,10 +211,10 @@ namespace BALL
 		{
 			if (use_selection == false ||
 			   (use_selection == true && 
-			   (stretch_[i].atom1->isSelected() || stretch_[i].atom2->isSelected())))
+			   (stretch_[i].atom1->ptr->isSelected() || stretch_[i].atom2->ptr->isSelected())))
 			{
 
-				Vector3 direction(stretch_[i].atom1->getPosition() - stretch_[i].atom2->getPosition());
+				Vector3 direction(stretch_[i].atom1->position - stretch_[i].atom2->position);
 				double distance = direction.getLength(); 
 
 				if (distance != 0) 
@@ -227,18 +227,18 @@ namespace BALL
 
 					if (use_selection == false)
 					{
-						stretch_[i].atom1->getForce() -= direction;
-						stretch_[i].atom2->getForce() += direction;
+						stretch_[i].atom1->force -= direction;
+						stretch_[i].atom2->force += direction;
 					} 
 					else 
 					{
-						if (stretch_[i].atom1->isSelected())
+						if (stretch_[i].atom1->ptr->isSelected())
 						{
-							stretch_[i].atom1->getForce() -= direction;
+							stretch_[i].atom1->force -= direction;
 						}
-						if (stretch_[i].atom2->isSelected())
+						if (stretch_[i].atom2->ptr->isSelected())
 						{
-							stretch_[i].atom2->getForce() += direction;
+							stretch_[i].atom2->force += direction;
 						}
 					}
 				}
