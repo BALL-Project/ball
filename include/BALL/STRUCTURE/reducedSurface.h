@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.9 2001/01/10 14:47:28 strobel Exp $
+// $Id: reducedSurface.h,v 1.10 2001/01/15 11:34:44 amoll Exp $
 
 //#define debug_rs
 //#define print cout
@@ -54,6 +54,7 @@
 #include <vector>
 #include <list>
 #include <fstream>
+#include <iostream>
 
 
 namespace BALL
@@ -356,7 +357,7 @@ namespace BALL
 					{
 						clear();
 						indices = all_indices;
-						cout << "\nProbeSphere berührt vier Atome, starte neu ...\n\n";
+//						cout << "\nProbeSphere berührt vier Atome, starte neu ...\n\n";
 						compute();
 						return;
 					}

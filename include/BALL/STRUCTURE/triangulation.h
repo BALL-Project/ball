@@ -1,4 +1,4 @@
-// $Id: triangulation.h,v 1.13 2001/01/10 14:49:56 strobel Exp $
+// $Id: triangulation.h,v 1.14 2001/01/15 11:34:44 amoll Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATION_H
 #define BALL_STRUCTURE_TRIANGULATION_H
@@ -48,8 +48,8 @@
 #include <set>
 #include <fstream>
 #include <BALL/DATATYPE/string.h>
-
-
+#include <iostream>
+using namespace std;
 namespace BALL
 {
 
