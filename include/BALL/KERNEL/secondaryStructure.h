@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.h,v 1.32 2003/03/26 15:59:23 anhi Exp $
+// $Id: secondaryStructure.h,v 1.33 2003/06/11 08:08:55 oliver Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -39,7 +39,6 @@ namespace BALL
 		public:
 
 		BALL_CREATE_DEEP(SecondaryStructure)
-
 
 		/**	@name	Enums
 		*/

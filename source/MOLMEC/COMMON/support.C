@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.38 2003/02/06 12:26:59 anker Exp $
+// $Id: support.C,v 1.39 2003/06/11 08:10:03 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -558,7 +558,7 @@ namespace BALL
 
 			// delete all molecules we gathered
 			HashSet<Molecule*>::Iterator del_it = delete_set.begin();
-			for(; +del_it; ++del_it)
+			for(; del_it.operator + (); ++del_it)
 			{
 				delete *del_it;
 			}

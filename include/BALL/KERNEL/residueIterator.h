@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueIterator.h,v 1.7 2003/03/26 13:56:34 anhi Exp $
+// $Id: residueIterator.h,v 1.8 2003/06/11 08:08:55 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_RESIDUEITERATOR_H
 #define BALL_KERNEL_RESIDUEITERATOR_H
@@ -32,8 +33,6 @@ namespace BALL
 		: public CompositeIteratorTraits_
 	{
 		public:
-
-		BALL_CREATE_DEEP(ResidueIteratorTraits_)
 
 		ResidueIteratorTraits_()
 			:	CompositeIteratorTraits_()
@@ -74,13 +73,9 @@ namespace BALL
 		<Composite, Residue, Composite::SubcompositeIterator, ResidueIteratorTraits_>
 		ResidueConstIterator;
 
-	typedef ReverseBidirectionalIterator
-		<Composite, Residue, Composite::SubcompositeIterator, ResidueIteratorTraits_>
-		ResidueReverseIterator;
+	typedef std::reverse_iterator<ResidueIterator> ResidueReverseIterator;
 
-	typedef ConstReverseBidirectionalIterator
-		<Composite, Residue, Composite::SubcompositeIterator, ResidueIteratorTraits_>
-		ResidueConstReverseIterator;
+	typedef std::reverse_iterator<ResidueConstIterator> ResidueConstReverseIterator;
 } // namespace BALL
 
 #endif // BALL_KERNEL_RESIDUEITERATOR_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashMap.h,v 1.36 2003/05/03 17:29:19 oliver Exp $ 
+// $Id: hashMap.h,v 1.37 2003/06/11 08:08:52 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -1084,19 +1084,15 @@ namespace BALL
 	bool HashMap<Key, T>::operator == (const HashMap& hash_map) const
 		throw()
 	{
-		if(size_ != hash_map.size_) 
+		if (size_ != hash_map.size_) 
 		{
 			return false;
 		}
 		
-		ConstIterator it = begin();
-		ConstIterator hash_map_it;
-
-		for (; +it; ++it)
+		for (ConstIterator it(begin()); it != end(); ++it)
 		{
-			hash_map_it = hash_map.find(it->first);
-			if (hash_map_it == hash_map.end() ||
-					hash_map_it->second != it->second)
+			ConstIterator hash_map_it(hash_map.find(it->first));
+			if ((hash_map_it == hash_map.end()) || (hash_map_it->second != it->second))
 			{
 				return false;
 			}

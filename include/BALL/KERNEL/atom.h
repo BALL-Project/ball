@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.54 2003/05/25 21:38:01 oliver Exp $
+// $Id: atom.h,v 1.55 2003/06/11 08:08:53 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -19,8 +19,8 @@
 #	include <BALL/CONCEPT/property.h>
 #endif
 
-#ifndef BALL_CONCEPT_REVERSERANDOMACCESSITERATOR_H
-#	include <BALL/CONCEPT/reverseRandomAccessIterator.h>
+#ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
+#	include <BALL/CONCEPT/randomAccessIterator.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -1022,41 +1022,37 @@ namespace BALL
 			}
 		
 			/// Reverse random access iterator for bonds.
-			typedef ReverseRandomAccessIterator
-				<Atom, Bond, BondIteratorPosition_, BondIteratorTraits_>
-				BondReverseIterator;
+			typedef std::reverse_iterator<BondIterator>	BondReverseIterator;
 
 			/// Return a reverse bond iterator pointing to the last bond.
 			BondReverseIterator rbeginBond()
 				throw()
 			{
-				return BondReverseIterator::begin(*this);
+				return BondReverseIterator(endBond());
 			}
 
 			/// Return a past-the-end bond iterator for reverse traversal.
 			BondReverseIterator rendBond()
 				throw()
 			{
-				return BondReverseIterator::end(*this);
+				return BondReverseIterator(beginBond());
 			}
 
 			/// Constant reverse random access iterator for bonds.
-			typedef ConstReverseRandomAccessIterator
-				<Atom, Bond, BondIteratorPosition_, BondIteratorTraits_>
-				BondConstReverseIterator;
+			typedef std::reverse_iterator<BondConstIterator> BondConstReverseIterator;
 
 			/// Return a constant reverse bond iterator pointing to the first atom
 			BondConstReverseIterator rbeginBond() const
 				throw()
 			{
-				return BondConstReverseIterator::begin(*this);
+				return BondConstReverseIterator(endBond());
 			}
 
 			/// Return a constant past-the-end bond iterator for reverse traversal
 			BondConstReverseIterator rendBond() const
 				throw()
 			{
-				return BondConstReverseIterator::end(*this);
+				return BondConstReverseIterator(beginBond());
 			}
 
 		//@}

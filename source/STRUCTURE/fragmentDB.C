@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.47 2003/05/23 10:26:03 oliver Exp $
+// $Id: fragmentDB.C,v 1.48 2003/06/11 08:10:03 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -251,7 +251,6 @@ namespace BALL
 
 	void FragmentDB::parseAtoms_(ResourceEntry& entry, Fragment& fragment)
 	{
-
 		ResourceEntry::Iterator	entry_iterator;
 
 		for (entry_iterator = ++entry.begin(); +entry_iterator; ++entry_iterator)

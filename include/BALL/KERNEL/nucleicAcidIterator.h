@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcidIterator.h,v 1.6 2003/03/26 13:56:32 anhi Exp $
+// $Id: nucleicAcidIterator.h,v 1.7 2003/06/11 08:08:54 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_NUCLEICACIDITERATOR_H
 #define BALL_KERNEL_NUCLEICACIDITERATOR_H
@@ -34,8 +35,6 @@ namespace BALL
 		: public CompositeIteratorTraits_
 	{
 		public:
-
-		BALL_CREATE_DEEP(NucleicAcidIteratorTraits_)
 
 		NucleicAcidIteratorTraits_()
 			:	CompositeIteratorTraits_()
@@ -76,13 +75,10 @@ namespace BALL
 		<Composite, NucleicAcid, Composite::SubcompositeIterator, NucleicAcidIteratorTraits_>
 		NucleicAcidConstIterator;
 
-	typedef ReverseBidirectionalIterator
-		<Composite, NucleicAcid, Composite::SubcompositeIterator, NucleicAcidIteratorTraits_>
-		NucleicAcidReverseIterator;
+	typedef std::reverse_iterator<NucleicAcidIterator> NucleicAcidReverseIterator;
 
-	typedef ConstReverseBidirectionalIterator
-		<Composite, NucleicAcid, Composite::SubcompositeIterator, NucleicAcidIteratorTraits_>
-		NucleicAcidConstReverseIterator;
+	typedef std::reverse_iterator<NucleicAcidConstIterator> NucleicAcidConstReverseIterator;
+
 } // namespace BALL
 
 #endif // BALL_KERNEL_NUCLEICACIDITERATOR_H

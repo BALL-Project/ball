@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Chain_test.C,v 1.14 2002/12/12 11:34:39 oliver Exp $
+// $Id: Chain_test.C,v 1.15 2003/06/11 08:10:04 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -15,7 +15,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.14 2002/12/12 11:34:39 oliver Exp $")
+START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.15 2003/06/11 08:10:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -243,6 +243,9 @@ CHECK(Chain::getCTerminal())
 	TEST_EQUAL(c.getCTerminal(), 0)
 	c.insert(r1);
 	c.insert(r2);
+	TEST_EQUAL(&*c.beginResidue(), &r1)
+	TEST_EQUAL(&*--c.endResidue(), &r2)
+	TEST_EQUAL(&*c.rbeginResidue(), &r2)	
 	TEST_NOT_EQUAL(c.getCTerminal(), 0)
 	if (c.getCTerminal() != 0)
 	{

@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.189 2003/06/01 09:13:42 oliver Exp $
+# $Id: Makefile,v 1.190 2003/06/11 08:10:04 oliver Exp $
 #
 
 DIRECTORY=TEST
@@ -84,11 +84,7 @@ EXECUTABLES_CONCEPTS = \
 	PropertyManager_test\
 	Composite_test1\
 	Composite_test2\
-	Embeddable_test\
-	RandomAccessIterator_test\
-	ConstRandomAccessIterator_test\
-	ReverseRandomAccessIterator_test\
-	ConstReverseRandomAccessIterator_test
+	Embeddable_test
 
 EXECUTABLES_KERNEL = \
 	PTE_test\

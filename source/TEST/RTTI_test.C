@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RTTI_test.C,v 1.13 2003/06/09 22:40:53 oliver Exp $
+// $Id: RTTI_test.C,v 1.14 2003/06/11 08:10:05 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -20,7 +20,7 @@ class TC
 {
 };
 
-START_TEST(RTTI, "$Id: RTTI_test.C,v 1.13 2003/06/09 22:40:53 oliver Exp $")
+START_TEST(RTTI, "$Id: RTTI_test.C,v 1.14 2003/06/11 08:10:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -132,12 +132,12 @@ CHECK(RTTI::isInstanceOf<>())
 RESULT											
 
 CHECK(getDefault<>())
-	Protein p;
-	p = getDefault<Protein>();
-	Atom a;
-	a = getDefault<Atom>();
-	System s;
-	s = getDefault<System>();
+	const Protein& p = getDefault<Protein>();
+	TEST_EQUAL(p.isValid(), true)
+	const Atom& a = getDefault<Atom>();
+	TEST_EQUAL(a.isValid(), true)
+	const System& s = getDefault<System>();
+	TEST_EQUAL(s.isValid(), true)
 	PDBAtom pa;
 	pa = getDefault<PDBAtom>();
 	Bond b;

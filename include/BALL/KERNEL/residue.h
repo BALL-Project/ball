@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.h,v 1.35 2003/03/26 15:59:23 anhi Exp $
+// $Id: residue.h,v 1.36 2003/06/11 08:08:55 oliver Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -470,15 +470,14 @@ namespace BALL
 		char 		insertion_code_;
 	};
 
-
   template <class ResidueContainerType>
   const Residue* getNTerminal(const ResidueContainerType& residue_container)
 		throw()
   {
-		ResidueConstIterator res_it;
-    for ( res_it = residue_container.beginResidue(); !res_it.isEnd(); ++res_it)
+		ResidueConstIterator res_it(residue_container.beginResidue());
+    for (; res_it != residue_container.endResidue(); ++res_it)
 		{
-      if ((*res_it).isAminoAcid() == true)
+      if (res_it->isAminoAcid() == true)
 			{
         return &(*res_it);
 			}
@@ -491,9 +490,11 @@ namespace BALL
   const Residue* getCTerminal(const ResidueContainerType& residue_container)
 		throw()
   {
-    for (ResidueConstIterator res_it = residue_container.rbeginResidue(); !res_it.isREnd(); ++res_it)
+		ResidueConstReverseIterator res_it(residue_container.rbeginResidue());
+    for (; res_it != residue_container.rendResidue(); ++res_it)
 		{
-      if ((*res_it).isAminoAcid() == true)
+			// Look for the last residue marked as amino acid
+      if (res_it->isAminoAcid() == true)
 			{
         return &(*res_it);
 			}
@@ -501,6 +502,7 @@ namespace BALL
 
     return 0;
   }
+
 } // namespace BALL
 
 #endif // BALL_KERNEL_RESIDUE_H

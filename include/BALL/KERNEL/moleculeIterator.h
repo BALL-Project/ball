@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeIterator.h,v 1.8 2003/03/26 13:56:32 anhi Exp $
+// $Id: moleculeIterator.h,v 1.9 2003/06/11 08:08:54 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_MOLECULEITERATOR_H
 #define BALL_KERNEL_MOLECULEITERATOR_H
@@ -32,8 +33,6 @@ namespace BALL
 	{
 		public:
 		
-		BALL_CREATE_DEEP(MoleculeIteratorTraits_)
-
 		MoleculeIteratorTraits_()
 			:	CompositeIteratorTraits_()
 		{
@@ -73,13 +72,10 @@ namespace BALL
 		<Composite, Molecule, Composite::SubcompositeIterator, MoleculeIteratorTraits_>
 		MoleculeConstIterator;
 
-	typedef ReverseBidirectionalIterator
-		<Composite, Molecule, Composite::SubcompositeIterator, MoleculeIteratorTraits_>
-		MoleculeReverseIterator;
+	typedef std::reverse_iterator<MoleculeIterator> MoleculeReverseIterator;
 
-	typedef ConstReverseBidirectionalIterator
-		<Composite, Molecule, Composite::SubcompositeIterator, MoleculeIteratorTraits_>
-		MoleculeConstReverseIterator;
+	typedef std::reverse_iterator<MoleculeConstIterator> MoleculeConstReverseIterator;
+
 } // namespace BALL
 
 #endif // BALL_KERNEL_MOLECULEITERATOR_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.C,v 1.22 2002/12/12 10:13:11 oliver Exp $ 
+// $Id: options.C,v 1.23 2003/06/11 08:10:02 oliver Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -412,7 +412,7 @@ namespace BALL
 		return true;
 	}
 
-	void Options::dump (ostream& stream, Size /* depth */) const
+	void Options::dump(ostream& stream, Size /* depth */) const
 	 throw()
 	{
 		std::list<String>		entry_list;

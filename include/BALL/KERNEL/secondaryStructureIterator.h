@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureIterator.h,v 1.8 2003/03/26 13:56:34 anhi Exp $
+// $Id: secondaryStructureIterator.h,v 1.9 2003/06/11 08:08:55 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTUREITERATOR_H
 #define BALL_KERNEL_SECONDARYSTRUCTUREITERATOR_H
@@ -33,8 +34,6 @@ namespace BALL
 	{
 		public:
 		
-		BALL_CREATE_DEEP(SecondaryStructureIteratorTraits_)
-
 		SecondaryStructureIteratorTraits_()
 			:	CompositeIteratorTraits_()
 		{
@@ -74,13 +73,10 @@ namespace BALL
 		<Composite, SecondaryStructure, Composite::SubcompositeIterator, SecondaryStructureIteratorTraits_>
 		SecondaryStructureConstIterator;
 
-	typedef ReverseBidirectionalIterator
-		<Composite, SecondaryStructure, Composite::SubcompositeIterator, SecondaryStructureIteratorTraits_>
-		SecondaryStructureReverseIterator;
+	typedef std::reverse_iterator<SecondaryStructureIterator> SecondaryStructureReverseIterator;
 
-	typedef ConstReverseBidirectionalIterator
-		<Composite, SecondaryStructure, Composite::SubcompositeIterator, SecondaryStructureIteratorTraits_>
-		SecondaryStructureConstReverseIterator;
+	typedef std::reverse_iterator<SecondaryStructureConstIterator> SecondaryStructureConstReverseIterator;
+
 } // namespace BALL 
 
 #endif // BALL_KERNEL_SECONDARYSTRUCTUREITERATOR_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondShiftProcessor.C,v 1.4 2002/02/27 12:23:52 sturm Exp $
+// $Id: HBondShiftProcessor.C,v 1.5 2003/06/11 08:10:03 oliver Exp $
 
 #include <BALL/NMR/HBondShiftProcessor.h>
 #include <stdio.h>
@@ -21,7 +21,7 @@ namespace BALL
   HBondShiftProcessor::HBondShiftProcessor(const HBondShiftProcessor& processor)
     throw()
     : ShiftModule(processor),
-      donator_list_(processor.donator_list_),
+      donor_list_(processor.donor_list_),
       acceptor_list_(processor.acceptor_list_),
       a_(processor.a_),
       b_(processor.b_),
@@ -81,8 +81,8 @@ namespace BALL
       return false;
     }
 
-    // clear the donator list and the acceptor list
-    donator_list_.clear();
+    // clear the donor list and the acceptor list
+    donor_list_.clear();
     acceptor_list_.clear();
 
     return true;
@@ -97,17 +97,17 @@ namespace BALL
       return false;
     }
 
-    // if there were no donators or acceptors, return immediately
-    if ((donator_list_.size() == 0) || acceptor_list_.size() == 0)
+    // if there were no donors or acceptors, return immediately
+    if ((donor_list_.size() == 0) || acceptor_list_.size() == 0)
     {
       return true;
     }
 
-    // iterate over all donators
-    list<Atom*>::iterator donator_it = donator_list_.begin();
-    for (; donator_it != donator_list_.end(); ++donator_it)
+    // iterate over all donors
+    list<Atom*>::iterator donor_it = donor_list_.begin();
+    for (; donor_it != donor_list_.end(); ++donor_it)
     {
-      Vector3 donator_pos = (*donator_it)->getPosition();
+      Vector3 donor_pos = (*donor_it)->getPosition();
       float delta_HBOND = 0.0;
       Size hbond_number = 0;
       float nearest_acc = 0.0;
@@ -118,21 +118,21 @@ namespace BALL
       { 
 
 	// Test: use the distances of the hydrogens instead of the ones of the residues.
-	BALL::Atom::BondConstIterator bi = (*donator_it)->beginBond();
+	BALL::Atom::BondConstIterator bi = (*donor_it)->beginBond();
 	
 	for (; +bi; ++bi)
 	{
-	  Atom* at = (*bi).getPartner(**donator_it);
+	  Atom* at = (*bi).getPartner(**donor_it);
 	  if (at->getElement() == PTE[Element::H])
 	    {
 	      // print the partners of the assumed hydrogen bond
 	      
-	      // compute the euclidian distance between acceptor and donator
+	      // compute the euclidian distance between acceptor and donor
 	      Vector3 acceptor_pos = (*acceptor_it)->getPosition();
-	      Vector3 donator_h_pos = (at)->getPosition();
+	      Vector3 donor_h_pos = (at)->getPosition();
 	      
-	      Vector3 don_h = donator_pos - donator_h_pos;
-	      Vector3 don_h_acc = acceptor_pos - donator_h_pos;
+	      Vector3 don_h = donor_pos - donor_h_pos;
+	      Vector3 don_h_acc = acceptor_pos - donor_h_pos;
 	      
 	      Angle psi = don_h.getAngle(don_h_acc);
 	      	      
@@ -155,10 +155,10 @@ namespace BALL
 		      if (c_partner->getElement() != PTE[Element::H])
 			{
 			  Vector3 c_partner_pos = c_partner->getPosition();
-			  if ((c_partner_pos != c_pos) && (donator_h_pos != acceptor_pos))
+			  if ((c_partner_pos != c_pos) && (donor_h_pos != acceptor_pos))
 			    {
 			      acceptor_plane = (acceptor_pos - c_pos) % (c_partner_pos - c_pos);
-			      Vector3 hbond = (donator_h_pos - acceptor_pos);
+			      Vector3 hbond = (donor_h_pos - acceptor_pos);
 			      if ((acceptor_plane != Vector3(0, 0, 0)) && (((c_pos - acceptor_pos) % acceptor_plane) != Vector3(0, 0, 0)))
 				{
 				  theta = acceptor_plane.getAngle(hbond);
@@ -178,10 +178,10 @@ namespace BALL
 	      
 	      
 	      // this is used to compute the shift	
-	      float b_length = donator_h_pos.getDistance(acceptor_pos);
+	      float b_length = donor_h_pos.getDistance(acceptor_pos);
 	      
 	      // this is used to decide whether there is an hbond or not
-	      float distance = donator_pos.getDistance(acceptor_pos);
+	      float distance = donor_pos.getDistance(acceptor_pos);
 	      
 	      // this is a test! empirical guess
 	      // float b_length = (2. / 3) * distance;
@@ -191,11 +191,11 @@ namespace BALL
 	      //							  - on the same residue
 	      //							  - on neighbouring residues in the chain
 	      if ((minimum_bond_length_ <= distance) && (maximum_bond_length_ >= distance) 
-		  && (*acceptor_it)->getResidue() != (*donator_it)->getResidue()
-		  && (abs((*acceptor_it)->getResidue()->getID().toInt() - (*donator_it)->getResidue()->getID().toInt()) > 1))
+		  && (*acceptor_it)->getResidue() != (*donor_it)->getResidue()
+		  && (abs((*acceptor_it)->getResidue()->getID().toInt() - (*donor_it)->getResidue()->getID().toInt()) > 1))
 		{
-		  // increase the number of found HBonds for this donator
-		  cout << (*donator_it)->getResidue()->getFullName() << ":" << (*donator_it)->getResidue()->getID() << " -> ";
+		  // increase the number of found HBonds for this donor
+		  cout << (*donor_it)->getResidue()->getFullName() << ":" << (*donor_it)->getResidue()->getID() << " -> ";
 		  cout << (*acceptor_it)->getResidue()->getFullName() << ":" << (*acceptor_it)->getResidue()->getID() << " " << endl;
 		  hbond_number++;
 		  if (hbond_number > 1)
@@ -208,13 +208,13 @@ namespace BALL
 			  cout << "#: " << hbond_number << " length: " << b_length << " " << distance << " " << delta_HBOND << endl;
 			  nearest_acc = b_length;
 			  hbond_number = 1;
-			  cerr << (*donator_it)->getResidue()->getFullName() << (*donator_it)->getResidue()->getID() << " " << (*donator_it)->getName() << " -> ";
+			  cerr << (*donor_it)->getResidue()->getFullName() << (*donor_it)->getResidue()->getID() << " " << (*donor_it)->getName() << " -> ";
 			  cerr << (*acceptor_it)->getResidue()->getFullName() << (*acceptor_it)->getResidue()->getID() << " " << (*acceptor_it)->getName() << " " << b_length << " " << distance << " phi, theta, psi: " << phi << " " << theta << " " << psi << endl;
 			}
 		    }
 		  else
 		    {
-		      cerr << (*donator_it)->getResidue()->getFullName() << (*donator_it)->getResidue()->getID() << " " << (*donator_it)->getName() << " -> ";
+		      cerr << (*donor_it)->getResidue()->getFullName() << (*donor_it)->getResidue()->getID() << " " << (*donor_it)->getName() << " -> ";
 		      cerr << (*acceptor_it)->getResidue()->getFullName() << (*acceptor_it)->getResidue()->getID() << " " << (*acceptor_it)->getName() << " " << b_length << " " << distance << " phi, theta, psi: " << phi << " " << theta << " " << psi << endl;
 		      delta_HBOND = a_ * 1./pow(b_length, 3) + b_;
 		      cout << "#: " << hbond_number << " length: " << b_length << " " << distance << " " << delta_HBOND << endl;
@@ -223,16 +223,16 @@ namespace BALL
 		}
 	    }
 	}
-	bi = (*donator_it)->beginBond();
+	bi = (*donor_it)->beginBond();
 	
       }
-      BALL::Atom::BondConstIterator bi = (*donator_it)->beginBond();
+      BALL::Atom::BondConstIterator bi = (*donor_it)->beginBond();
       if (hbond_number != 0)
 	{ 
 	  delta_HBOND /= (float) hbond_number; 
 	  for (; +bi; ++bi)
 	    {
-	      Atom* at = (*bi).getPartner(**donator_it);
+	      Atom* at = (*bi).getPartner(**donor_it);
 	      if (at->getElement() == PTE[Element::H])
 		{
 		  float shift = (at)->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
@@ -249,7 +249,7 @@ namespace BALL
   Processor::Result HBondShiftProcessor::operator () (Composite& object)
     throw()
   {
-    // here, we collect all possible acceptors and donators
+    // here, we collect all possible acceptors and donors
     if (RTTI::isKindOf<Atom>(object))
       {
 	Atom* atom_ptr = RTTI::castTo<Atom>(object);
@@ -279,7 +279,7 @@ namespace BALL
 	       || ((residue_name == "TYR") && ((atom_name == "N") || (atom_name == "OH")))
 	       || ((residue_name == "VAL") && (atom_name == "N")))
 	  {
-	    donator_list_.push_back(atom_ptr);
+	    donor_list_.push_back(atom_ptr);
 	  }
      
 	if (   ((residue_name == "ALA") && (atom_name == "O"))

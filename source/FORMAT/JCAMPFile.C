@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.10 2003/06/01 17:05:57 oliver Exp $
+// $Id: JCAMPFile.C,v 1.11 2003/06/11 08:10:02 oliver Exp $
 //
 
 #include <BALL/FORMAT/JCAMPFile.h>
@@ -136,13 +136,13 @@ namespace BALL
 	void JCAMPFile::write()
 	{
 		HeaderMap::ConstIterator header_it(header_.begin());
-		for (; +header_it; ++header_it)
+		for (; header_it != header_.end(); ++header_it)
 		{
 			(*this) << "##" << header_it->first << "= " << header_it->second << "\n";
 		}
 
 		EntryMap::ConstIterator entry_it(entries_.begin());
-		for (; +entry_it; ++entry_it)
+		for (; entry_it != entries_.end(); ++entry_it)
 		{
 			(*this) << "##$" << entry_it->first << "= ";
 			switch (entry_it->second.type)

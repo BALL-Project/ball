@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondShiftProcessor.h,v 1.11 2003/03/26 13:08:15 sturm Exp $
+// $Id: HBondShiftProcessor.h,v 1.12 2003/06/11 08:08:55 oliver Exp $
 
 #ifndef BALL_NMR_HBONDSHIFTPROCESSOR_H
 #define BALL_NMR_HBONDSHIFTPROCESSOR_H
@@ -90,8 +90,8 @@ namespace BALL
       throw();
 
     /** operator ().
-	      This method adds all acceptors to the <tt>acceptor_list_</tt> and all donators to the
-		    <tt>donator_list_</tt>.
+	      This method adds all acceptors to the <tt>acceptor_list_</tt> and all donors to the
+		    <tt>donor_list_</tt>.
     */
     virtual Processor::Result operator () (Composite& composite)
       throw();
@@ -99,10 +99,10 @@ namespace BALL
     
     /** Finish method.
 	      This method performs the chemical shift calculation.
-				For each donator in  \link donator_list_ donator_list_ \endlink , it looks for acceptors in the  \link acceptor_list_ acceptor_list_ \endlink  that
+				For each donor in  \link donor_list_ donor_list_ \endlink , it looks for acceptors in the  \link acceptor_list_ acceptor_list_ \endlink  that
 				lie inside a spherical shell of inner radius  \link minimum_bond_length_ minimum_bond_length_ \endlink  and outer radius 
 				 \link maximum_bond_length_ maximum_bond_length_ \endlink 
-				with the donator in its center. Then, it calculates the bond length $x$ and
+				with the donor in its center. Then, it calculates the bond length $x$ and
 				calculates the chemical shift as $ delta_{HBond} = a*x + b $
 				The chemical shift is stored in the \emph{acceptor} atom using the named property 
 				 \link ShiftModule::PROPERTY__SHIFT ShiftModule::PROPERTY__SHIFT \endlink 
@@ -116,9 +116,9 @@ namespace BALL
 
     protected:
 
-    /** list of HBond donators collected by <tt>operator ()</tt>
+    /** list of HBond donors collected by <tt>operator ()</tt>
      */
-    std::list<Atom*> donator_list_;
+    std::list<Atom*> donor_list_;
 
     /** list of HBond acceptors collected by <tt>operator ()</tt>
      */

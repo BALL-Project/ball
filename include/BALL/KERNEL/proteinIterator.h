@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: proteinIterator.h,v 1.7 2003/03/26 13:56:33 anhi Exp $
+// $Id: proteinIterator.h,v 1.8 2003/06/11 08:08:54 oliver Exp $
 
 #ifndef BALL_KERNEL_PROTEINITERATOR_H
 #define BALL_KERNEL_PROTEINITERATOR_H
@@ -32,8 +32,6 @@ namespace BALL
 		: public CompositeIteratorTraits_
 	{
 		public:
-
-		BALL_CREATE_DEEP(ProteinIteratorTraits_)
 
 		ProteinIteratorTraits_()
 			:	CompositeIteratorTraits_()
@@ -74,13 +72,9 @@ namespace BALL
 		<Composite, Protein, Composite::SubcompositeIterator, ProteinIteratorTraits_>
 		ProteinConstIterator;
 
-	typedef ReverseBidirectionalIterator
-		<Composite, Protein, Composite::SubcompositeIterator, ProteinIteratorTraits_>
-		ProteinReverseIterator;
+	typedef std::reverse_iterator<ProteinIterator> ProteinReverseIterator;
 
-	typedef ConstReverseBidirectionalIterator
-		<Composite, Protein, Composite::SubcompositeIterator, ProteinIteratorTraits_>
-		ProteinConstReverseIterator;
+	typedef std::reverse_iterator<ProteinConstIterator> ProteinConstReverseIterator;
 } // namespace BALL 
 
 #endif // BALL_KERNEL_PROTEINITERATOR_H

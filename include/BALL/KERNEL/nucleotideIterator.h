@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotideIterator.h,v 1.7 2003/03/26 13:56:32 anhi Exp $
+// $Id: nucleotideIterator.h,v 1.8 2003/06/11 08:08:54 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_NUCLEOTIDEITERATOR_H
 #define BALL_KERNEL_NUCLEOTIDEITERATOR_H
@@ -33,8 +34,6 @@ namespace BALL
 		: public CompositeIteratorTraits_
 	{
 		public:
-
-		BALL_CREATE_DEEP(NucleotideIteratorTraits_)
 
 		NucleotideIteratorTraits_()
 			:	CompositeIteratorTraits_()
@@ -75,13 +74,9 @@ namespace BALL
 		<Composite, Nucleotide, Composite::SubcompositeIterator, NucleotideIteratorTraits_>
 		NucleotideConstIterator;
 
-	typedef ReverseBidirectionalIterator
-		<Composite, Nucleotide, Composite::SubcompositeIterator, NucleotideIteratorTraits_>
-		NucleotideReverseIterator;
+	typedef std::reverse_iterator<NucleotideIterator> NucleotideReverseIterator;
 
-	typedef ConstReverseBidirectionalIterator
-		<Composite, Nucleotide, Composite::SubcompositeIterator, NucleotideIteratorTraits_>
-		NucleotideConstReverseIterator;
+	typedef std::reverse_iterator<NucleotideConstIterator> NucleotideConstReverseIterator;
 } // namespace BALL
 
 #endif // BALL_KERNEL_NUCLEOTIDEITERATOR_H

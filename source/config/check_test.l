@@ -1,5 +1,5 @@
 %{
-	// $Id: check_test.l,v 1.2 2003/06/09 21:19:31 oliver Exp $
+	// $Id: check_test.l,v 1.3 2003/06/11 08:10:06 oliver Exp $
 	// C++ scanner
 
 	#define YY_NO_UNPUT 
@@ -383,7 +383,23 @@
 	}
 
 <Create>")"	{RULE
-		test_set.insert(name + args + ")");
+		if ((test_class == "") || (test_class == getPath()))
+		{
+			// remember the function 
+			while ((args.length() > 0)
+						 && ((args[args.length() - 1] == ' ') || (args[args.length() -1 ] == '\t')
+								 || (args[args.length() - 1] == '\n')))
+			{
+				args.erase(args.length() - 1, 1);
+			}
+								 
+			test_set.insert(name + args + ")");
+		}
+		else	
+		{
+			cout << "skipping " << name + args << ") because " << getPath() << " != " << test_class << std::endl;
+		}
+
 		type.erase();
 		name.erase();
 		args.erase();

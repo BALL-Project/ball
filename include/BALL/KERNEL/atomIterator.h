@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomIterator.h,v 1.15 2003/03/26 13:56:28 anhi Exp $
+// $Id: atomIterator.h,v 1.16 2003/06/11 08:08:54 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_ATOMITERATOR_H
 #define BALL_KERNEL_ATOMITERATOR_H
@@ -45,13 +46,9 @@ namespace BALL
 			:	CompositeIteratorTraits_(traits)
 		{
 		}
-		
 			
-		BALL_CREATE(AtomIteratorTraits_)
-
 		AtomIteratorTraits_(const Composite& composite)
 			throw();
-
 		
 		AtomIteratorTraits_& operator = (const AtomIteratorTraits_& traits)
 			throw();
@@ -61,24 +58,21 @@ namespace BALL
 	};
 
 
-	inline
-	AtomIteratorTraits_::AtomIteratorTraits_(const Composite& composite)
+	inline AtomIteratorTraits_::AtomIteratorTraits_(const Composite& composite)
 		throw()
 		:	CompositeIteratorTraits_(composite)
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
 	}
 		
-	inline
-	AtomIteratorTraits_& AtomIteratorTraits_::operator = (const AtomIteratorTraits_& traits)
+	inline AtomIteratorTraits_& AtomIteratorTraits_::operator = (const AtomIteratorTraits_& traits)
 		throw()
 	{
-		CompositeIteratorTraits_::operator=(traits);
+		CompositeIteratorTraits_::operator = (traits);
 		return *this;
 	}
 
-	inline
-	void AtomIteratorTraits_::resetPredicate()
+	inline void AtomIteratorTraits_::resetPredicate()
 		throw()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
@@ -102,17 +96,11 @@ namespace BALL
 		<Composite, Atom, Composite::SubcompositeIterator, AtomIteratorTraits_>
 		AtomConstIterator;
 
-	/** A mutable reverse bidirectional iterator for the Atom class.
-	*/
-	typedef ReverseBidirectionalIterator
-		<Composite, Atom, Composite::SubcompositeIterator, AtomIteratorTraits_>
-		AtomReverseIterator;
+	/// A mutable reverse bidirectional iterator for the Atom class.
+	typedef std::reverse_iterator<AtomIterator> AtomReverseIterator;
 
-	/** A constant reverse bidirectional iterator for the Atom class.
-	*/
-	typedef ConstReverseBidirectionalIterator
-		<Composite, Atom, Composite::SubcompositeIterator, AtomIteratorTraits_>
-		AtomConstReverseIterator;
+	/// A constant reverse bidirectional iterator for the Atom class.
+	typedef std::reverse_iterator<AtomConstIterator> AtomConstReverseIterator;
 	
 	//@}
 } // namespace BALL

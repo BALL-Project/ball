@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.35 2003/05/23 14:09:58 anker Exp $
+// $Id: PDBFile.C,v 1.36 2003/06/11 08:10:02 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -485,7 +485,7 @@ namespace BALL
 		SecondaryStructureConstIterator sec_struc_it;
 		SecondaryStructureConstIterator sheet_it;
 		ResidueConstIterator residue_it;
-		ResidueConstReverseIterator reverse_residue_it;
+		ResidueConstIterator reverse_residue_it;
 		AtomConstIterator atom_iterator;
 		AtomConstIterator atom_it;
 		Atom::BondConstIterator bond_it;
@@ -676,7 +676,7 @@ namespace BALL
 						{
 							continue;
 						}
-						reverse_residue_it = current_sec_struc->rbeginResidue();
+						reverse_residue_it = --current_sec_struc->endResidue();
 
 						current_sec_struc->getName().get(PDB_secstruc_name, 0, 4);
 
@@ -738,7 +738,7 @@ namespace BALL
 						{
 							continue;
 						}
-						reverse_residue_it = current_sec_struc->rbeginResidue();
+						reverse_residue_it = --current_sec_struc->endResidue();
 
 						++number_of_sheet_records;
 		
@@ -821,7 +821,7 @@ namespace BALL
 						{
 							continue;
 						}
-						reverse_residue_it = current_sec_struc->rbeginResidue();
+						reverse_residue_it = --current_sec_struc->endResidue();
 
 						current_sec_struc->getName().get(PDB_secstruc_name, 0, 4);
 

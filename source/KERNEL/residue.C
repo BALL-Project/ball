@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.C,v 1.23 2003/01/08 09:24:31 oliver Exp $
+// $Id: residue.C,v 1.24 2003/06/11 08:10:02 oliver Exp $
+//
 
 #include <BALL/KERNEL/residue.h>
 
@@ -441,9 +442,8 @@ namespace BALL
 
 			if (chain != 0)
 			{
-				ResidueConstIterator res_it = chain->rbeginResidue();
-				for (; +res_it && &(*res_it) != this && !res_it->isAminoAcid(); --res_it);
-
+				ResidueConstIterator res_it(chain->endResidue());
+				for (--res_it; +res_it && &(*res_it) != this && !res_it->isAminoAcid(); --res_it);
 				return (&(*res_it) == this);
 			}
 		}

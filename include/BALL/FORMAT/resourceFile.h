@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.h,v 1.20 2003/03/26 13:56:26 anhi Exp $
+// $Id: resourceFile.h,v 1.21 2003/06/11 08:08:53 oliver Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -549,30 +549,14 @@ namespace BALL
 		friend class IteratorTraits_;
 
 		typedef ForwardIterator<ResourceEntry, ResourceEntry, ResourceEntry*, IteratorTraits_> Iterator;
-
-		Iterator begin()
-		{
-			return Iterator::begin(*this);
-		}
-
-		Iterator end()
-		{
-			return Iterator::end(*this);
-		}
-
-
 		typedef ConstForwardIterator<ResourceEntry, ResourceEntry, ResourceEntry*, IteratorTraits_> ConstIterator;
 
-		ConstIterator begin() const
-		{
-			return ConstIterator::begin(*this);
-		}
+		Iterator begin() { return Iterator::begin(*this); }
+		Iterator end() { return Iterator::end(*this); }
 
-		ConstIterator end() const
-		{
-			return ConstIterator::end(*this);
-		}
 
+		ConstIterator begin() const	{	return ConstIterator::begin(*this); }
+		ConstIterator end() const	{	return ConstIterator::end(*this); }
 
 		protected:
 
