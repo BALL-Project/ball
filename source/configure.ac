@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.3 2003/01/21 10:50:11 oliver Exp $
+dnl    $Id: configure.ac,v 1.4 2003/01/24 12:10:36 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -35,11 +35,12 @@ AC_ARG_WITH(cxxflags,          [  --with-cxxflags=FLAGS   add FLAGS to the C++ c
 AC_ARG_WITH(ldflags,           [  --with-ldflags=FLAGS    add FLAGS to the linker flags (commas are converted to blanks)])
 AC_ARG_WITH(arflags,           [  --with-arflags=FLAGS    add FLAGS to the flags for the creation of the static libraries])
 AC_ARG_WITH(dynarflags,        [  --with-dynarflags=FLAGS add FLAGS to the flags for the creation of the shared libraries])
+AC_ARG_WITH(qt,                [  --with-qt=QTDIR         QT is installed in QTDIR. Prefer this over the following options.])
 AC_ARG_WITH(qt-incl,           [  --with-qt-incl=DIR      QT header files are in DIR])
 AC_ARG_WITH(qt-libs,           [  --with-qt-libs=DIR      QT libraries are in DIR])
 AC_ARG_WITH(qt-mt,             [  --with-qt-mt            use a threadsafe version of the QT lib (libqt-mt)])
 AC_ARG_WITH(moc,               [  --with-moc=MOC          use MOC as the absolute path to the QT meta object compiler (moc)])
-AC_ARG_WITH(uic,               [  --with-moc=UIC          use UIC as the absolute path to the QT user interface compiler (uic)])
+AC_ARG_WITH(uic,               [  --with-uic=UIC          use UIC as the absolute path to the QT user interface compiler (uic)])
 AC_ARG_WITH(opengl-incl,       [  --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL])
 AC_ARG_WITH(opengl-libs,       [  --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL])
 AC_ARG_WITH(mesa,              [  --with-mesa             use MESA instead of OpenGL])
@@ -99,6 +100,9 @@ if test "$with_arflags" != "" ; then
 	AROPTS="${AROPTS}`echo $with_arflags|tr ,  \  `"
 fi
 
+if test "$with_qt" != "" ; then
+	QTDIR=$with_qt
+fi
 if test "$with_qt_incl" != "" ; then
 	QT_INCPATH=$with_qt_incl
 fi
