@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.8 2003/11/15 12:53:58 oliver Exp $
+// $Id: modelSettingsDialog.C,v 1.9 2003/11/19 02:07:05 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -20,11 +20,6 @@ namespace BALL
 		{
 			setDefaults();
 			show();
-		}
-
-		void ModelSettingsDialog::apply()
-			throw()
-		{
 		}
 
 		void ModelSettingsDialog::setDefaults()
@@ -114,5 +109,4 @@ namespace BALL
 		}
 	
 	} // namespace VIEW
-
 } // namespace BALL

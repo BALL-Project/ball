@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.6 2003/11/15 01:39:28 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.7 2003/11/19 02:09:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -44,10 +44,6 @@ namespace BALL
 
 			///
 			void setDefaults()
-				throw();
-
-			/// Apply the new values to the stage
-			void apply()
 				throw();
 
 			///

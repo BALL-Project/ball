@@ -2,6 +2,7 @@
 // vi: set ts=2:
 //
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
+#include <BALL/VIEW/MODELS/standardColorProcessor.h>
 
 #include <qpainter.h>
 #include <qtabwidget.h>
@@ -82,6 +83,7 @@ void ColoringSettingsDialog::setDefaults()
 {
 	vector<String> 		names;
 	vector<ColorRGBA> colors;
+	ElementColorProcessor elp;
 	for (Position p = 0; p < 112; p++)
 	{
 		names.push_back(PTE.getElement(p).getName());
