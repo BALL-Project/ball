@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.28 2004/12/28 17:48:27 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.29 2004/12/29 15:57:39 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -314,11 +314,10 @@ namespace BALL
 			////////////////////////////////////////////////////////////
 			const Position middle = (Position)(slides / 2.0);
 			vector<Vector3> new_points;
-			new_points.resize(slides + 1);
+			new_points.resize(slides);
 			Vector3 x = r;
-			new_points.push_back(x);
+			new_points[0] = x;
 			new_points[middle] = -x;
-			new_points[slides] = x; // dummy for closing of ring
 
 			Matrix4x4 m;
 			m.setRotation(slides_angle, n % r);
@@ -341,7 +340,7 @@ namespace BALL
 			}
 			geometric_objects_.push_back(mesh);
 
-			for (Position p = 0; p < slides + 1; p++)
+			for (Position p = 0; p < slides; p++)
 			{
 				mesh->vertex.push_back(last_point_ + new_points[p]);
 				mesh->normal.push_back(new_points[p]);
@@ -379,7 +378,6 @@ namespace BALL
 				m.setRotation(slides_angle, dir_new);
 				x = r_new;
 				new_points[0] = x;
-				new_points[slides] = x; // dummy
 
 				// second half of points can be calculated by negating first half
 				new_points[middle] = -x;
@@ -405,8 +403,8 @@ namespace BALL
 					geometric_objects_.push_back(mesh);
 
 					// insert the vertices and normals of the last points again into the new mesh
-					for (Position point_pos = s_new - slides - 1;
-							 					point_pos < old_mesh->vertex.size() - 1; point_pos++)
+					for (Position point_pos = old_mesh->vertex.size() - slides;
+							 					point_pos < old_mesh->vertex.size(); point_pos++)
 					{
 						mesh->vertex.push_back(old_mesh->vertex[point_pos]);
 						mesh->normal.push_back(old_mesh->normal[point_pos]);
@@ -424,20 +422,21 @@ namespace BALL
 				//------------------------------------------------------>
 				// iterate over all points of the circle
 				//------------------------------------------------------>
-				for (Position point_pos = 0; point_pos < slides; point_pos++)
+				for (Position point_pos = 0; point_pos < slides ; point_pos++)
 				{
 					mesh->vertex.push_back(point + new_points[point_pos]);
 					mesh->normal.push_back(new_points[point_pos]);
-				
-					t.v1 = s_old;			// last lower
-					t.v2 = s_old + 1;	// last upper
-					t.v3 = s_new;			// new upper
-					mesh->triangle.push_back(t);
 
-					t.v1 = s_new;			// new upper
-					t.v2 = s_new - 1;	// new lower
-					t.v3 = s_old; 		// last lower
-					mesh->triangle.push_back(t);
+						t.v1 = s_old;			// last lower
+						t.v2 = s_old + 1;	// last upper
+						t.v3 = s_new;			// new upper
+						mesh->triangle.push_back(t);
+
+						
+						t.v1 = s_new;			// new upper
+						t.v2 = s_new - 1;	// new lower
+						t.v3 = s_old; 		// last lower
+						mesh->triangle.push_back(t);
 
 					s_old++;
 					s_new++;
