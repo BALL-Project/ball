@@ -263,7 +263,7 @@ namespace BALL
 
 			/** Return the ranked conformations.
 			 */
-			RankedConformations getRankedConformations(Index total_number = 0)
+			ConformationSet getConformationSet(Index total_number = 0)
 				throw();
 			
       //////////////////////////////////////////

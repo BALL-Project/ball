@@ -290,8 +290,9 @@ usage: docking -a <PDB File name for protein A>\n\
 	 geo_fit.setup(pro_sys_a, pro_sys_b);
 	 geo_fit.start();
 
-	 RankedConformations rc = geo_fit.getRankedConformations(BEST_NUM);
-	 rc.closeTrajectoryFile();
+	 ConformationSet rc = geo_fit.getConformationSet(BEST_NUM);
+	 rc.writeDCDFile("docking.dcd");
+
 	 System S = rc.getSystem();
 	 
 	 PDBFile outfile("docking.pdb", std::ios::out);

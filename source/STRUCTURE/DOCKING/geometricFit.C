@@ -1124,20 +1124,19 @@ namespace BALL
 
 	/** Return the ranked conformations.
 	 */
-	RankedConformations GeometricFit::getRankedConformations(Index total_number)
+	ConformationSet GeometricFit::getConformationSet(Index total_number)
 		throw()
 	{
 		// first see how many conformations we should generate
 		if ( (total_number == 0) || (total_number > options.getInteger(Option::BEST_NUM)) )
 			total_number = options.getInteger(Option::BEST_NUM);
 
-		// TODO: configurable filename!
 		// 			 this can probably be done smarter
 		System S = system_backup_a_;
 		System S2 = system_backup_b_;
 
 		S.splice(S2);
-		RankedConformations rc(S, "docking.dcd");
+		ConformationSet rc(S);
 	
 		// iterate over all peaks
 		int count = 0;

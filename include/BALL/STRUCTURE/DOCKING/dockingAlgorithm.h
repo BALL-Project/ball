@@ -13,8 +13,8 @@
 # include <BALL/KERNEL/system.h>
 #endif
 
-#ifndef BALL_STRUCTURE_DOCKING_RANKEDCONFORMATIONS_H
-# include <BALL/STRUCTURE/DOCKING/rankedConformations.h>
+#ifndef BALL_STRUCTURE_DOCKING_CONFORMATIONSET_H
+# include <BALL/STRUCTURE/DOCKING/conformationSet.h>
 #endif
 
 namespace BALL
@@ -82,7 +82,7 @@ namespace BALL
 			 *  according to their rank.
 			 *  If total_conformations == 0, the option TOP_N is used
 			 */
-			virtual RankedConformations getRankedConformations(Index total_conformations = 0)
+			virtual ConformationSet getConformationSet(Index total_conformations = 0)
 				throw();
 
 		protected:

@@ -65,10 +65,10 @@ namespace BALL
 		return test2;
 	}
 
-	RankedConformations DockingAlgorithm::getRankedConformations(Index /*total_conformations*/)
+	ConformationSet DockingAlgorithm::getConformationSet(Index /*total_conformations*/)
 		throw()
 	{
-		RankedConformations dummy;
+		ConformationSet dummy;
 		return dummy;
 	}
 
