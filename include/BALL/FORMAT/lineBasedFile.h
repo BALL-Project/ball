@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.h,v 1.15 2001/08/01 01:06:28 oliver Exp $
+// $Id: lineBasedFile.h,v 1.16 2001/12/17 01:41:44 oliver Exp $
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
 #define BALL_FORMAT_LINEBASEDFILE_H
 
@@ -96,8 +96,8 @@ namespace BALL
 		*/
 		const LineBasedFile& operator = (const LineBasedFile& file)
 			throw();
-
 		//@}
+
 		/**	@name Accessors
 		*/
 		//@{
@@ -110,7 +110,12 @@ namespace BALL
 		const String& getLine() 
 			const throw();
 
+		/// Return the current line
+		String& getLine() 
+			throw();
 		//@}
+
+
 		/**	@name	Help-Methods for File Acces
 		*/
 		//@{
@@ -128,7 +133,7 @@ namespace BALL
 			throw(LineBasedFile::LineBasedFileError);
 
 		/** Function to search for a line starting with a given String.
-				The search is started at the actual line.
+				The search is started at the current line.
 				@param return_to_point : true -> if line can not be found return to the starting position
 				@return true if line could be found
 		*/
@@ -172,21 +177,28 @@ namespace BALL
 										const String& delimiters = String::CHARACTER_CLASS__WHITESPACE)
 			const	throw(Exception::IndexUnderflow);
 
-		/// Test if the actual line starts with text
+		/// Test if the current line starts with text
 		bool startsWith(const String& text) 
 			const throw();
 
-		/// Return true if the actual line has text
+		/// Return true if the current line has text
 		bool has(const String& text) 
 			const throw();
 
-		/** Switch method of the actual line.
-				Return the position of the actual in data or -1 if it does not exist.
+		/** Switch method of the current line.
+				Return the position of the current line in data or -1 if it does not exist.
 		*/
 		Index switchString(const std::vector<String>& data) 
 			const throw();
 
+		/**	Parse column based formats.
+				Copy the subsection of the current line defined by {\tt index} and {\tt length} into a buffer
+				try to parse it using {\tt sscanf}. The result is stored in {\tt arg} (use with caution: no type checking!).
+		*/
+		bool parseColumnFormat(const char* format, Position index, Size length, void* arg);
+
 		//@}
+
 		/*	@name	Protected Attributes
 		*/
 		//_@{
@@ -198,6 +210,11 @@ namespace BALL
 		Position line_number_;
 		//_@}
 	};
+
+
+# ifndef BALL_NO_INLINE_FUNCTIONS
+#   include <BALL/FORMAT/lineBasedFile.iC>
+# endif
 
 } // namespace BALL
 
