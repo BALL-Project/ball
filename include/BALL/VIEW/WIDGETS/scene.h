@@ -1,13 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.24 2004/03/23 21:32:10 amoll Exp $
+// $Id: scene.h,v 1.25 2004/03/24 14:20:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
 #define BALL_VIEW_WIDGETS_SCENE_H
-
-#include <iostream>
 
 #ifndef BALL_MATHS_QUATERNION_H
 #	include <BALL/MATHS/quaternion.h>
@@ -51,7 +49,8 @@ namespace BALL
 				\ingroup ViewWidgets
 		*/
 		class BALL_EXPORT Scene
-			: public QGLWidget, public ModularWidget
+			: public QGLWidget, 
+				public ModularWidget
 		{
 			Q_OBJECT
 
@@ -428,29 +427,12 @@ namespace BALL
 			virtual void updateCamera_()
 				throw();
 			
-			//@}
-
+			//_
 			virtual void customEvent( QCustomEvent * e );
 
-			protected:
+			//@}
 
 			private:
-
-			enum Event
-			{
-				EVENT__UNKOWN       = 0,
-				EVENT__PRESSED      = 1,
-				EVENT__RELEASED     = 2,
-				EVENT__MOVED        = 3
-			};
-
-			enum MouseButton
-			{
-				MOUSE_BUTTON__NONE  = 0,
-				MOUSE_BUTTON__ONE   = 1,
-				MOUSE_BUTTON__TWO   = 2,
-				MOUSE_BUTTON__THREE = 3
-			};
 
 			void renderView_(RenderMode mode)
 				throw();
@@ -463,24 +445,19 @@ namespace BALL
 			void render_(const Representation& rep, RenderMode mode)
 				throw();
 
-			// --- registerable functions
 
 			void rotateSystem_(Scene* scene);
-
 			void translateSystem_(Scene* scene);
-
 			void zoomSystem_(Scene* scene);
 
 			void selectionPressed_(Scene* scene);
 			void selectionReleased_(Scene* scene);
 			void selectionPressedMoved_(Scene* scene);
-
-// 			void deselectionPressed_(Scene* scene);
 			void deselectionReleased_(Scene* scene);
-// 			void deselectionPressedMoved_(Scene* scene);
 
 			void calculateQuaternion_(Quaternion& quaternion, const Quaternion* rotate = 0);
 
+			//_ called by calculateQuaternion_
 			float sphereProject_(float radius, float x, float y);
 
 			void selectObjects_(bool select = true);
@@ -502,20 +479,16 @@ namespace BALL
 			Vector3 system_origin_;
 			Quaternion quaternion_;
 
-			MouseButton		actual_mouse_button_;
-
 			bool need_update_;
 			bool update_running_;
 
 			float x_window_pos_old_;
 			float y_window_pos_old_;
-
 			float x_window_pos_new_;
 			float y_window_pos_new_;
 
 			float x_window_pick_pos_first_;
 			float y_window_pick_pos_first_;
-
 			float x_window_pick_pos_second_;
 			float y_window_pick_pos_second_;
 
