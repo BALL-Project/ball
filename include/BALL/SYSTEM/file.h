@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.26 2001/04/03 14:06:33 amoll Exp $
+// $Id: file.h,v 1.27 2001/04/30 02:22:49 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -69,41 +69,6 @@ namespace BALL
 		/**	@name	Enums
 		*/
 		//@{
-
-		///
-		enum ProtectionMode
-		{
-			///
-			PROTECTION_MODE__INVALID                   = -1,
-			///
-			PROTECTION_MODE__UNKNOWN                   = 0,
-			///
-			PROTECTION_MODE__MASK                      = S_IRWXU | S_IRWXG | S_IRWXO,
-			///
-			PROTECTION_MODE__OWNER_READ_WRITE_EXECUTE  = S_IRWXU,
-			///
-			PROTECTION_MODE__OWNER_READ                = S_IRUSR,
-			///
-			PROTECTION_MODE__OWNER_WRITE               = S_IWUSR,
-			///
-			PROTECTION_MODE__OWNER_EXECUTE             = S_IXUSR,
-			///
-			PROTECTION_MODE__GROUP_READ_WRITE_EXECUTE  = S_IRWXG,
-			///
-			PROTECTION_MODE__GROUP_READ                = S_IRGRP,
-			///
-			PROTECTION_MODE__GROUP_WRITE               = S_IWGRP,
-			///
-			PROTECTION_MODE__GROUP_EXECUTE             = S_IXGRP,
-			///
-			PROTECTION_MODE__OTHER_READ_WRITE_EXECUTE  = S_IRWXO,
-			///
-			PROTECTION_MODE__OTHER_READ                = S_IROTH,
-			///
-			PROTECTION_MODE__OTHER_WRITE               = S_IWOTH,
-			///
-			PROTECTION_MODE__OTHER_EXECUTE             = S_IXOTH
-		};
 
 		/** Filetype
 		*/
