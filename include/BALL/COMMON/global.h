@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.20 2004/02/18 23:24:03 oliver Exp $
+// $Id: global.h,v 1.21 2004/02/25 21:22:25 oliver Exp $
 //
 
 #ifndef BALL_COMMON_GLOBAL_H
@@ -33,8 +33,19 @@
 #	pragma warning( disable : 4290 )
 #endif
 
+#ifdef BALL_COMPILER_MSVC
+#	ifdef BALL_BUILD_DLL
+#		define BALL_EXPORT __declspec(dllexport)
+#	else
+#		define BALL_EXPORT __declspec(dllimport)
+#	endif
+#else
+# define BALL_EXPORT
+#endif
+
 namespace BALL
 {
+
 	typedef int (*ComparatorType)(const void *, const void *);
 
 
