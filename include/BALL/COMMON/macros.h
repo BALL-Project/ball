@@ -1,4 +1,4 @@
-// $Id: macros.h,v 1.4 2000/05/29 12:53:57 oliver Exp $
+// $Id: macros.h,v 1.5 2000/10/19 20:09:38 oliver Exp $
 
 #ifndef BALL_COMMON_MACROS_H
 #define BALL_COMMON_MACROS_H
@@ -12,7 +12,6 @@
 #endif
 
 #include <math.h>     // needed for fabs
-#include <limits.h>   // needed for CHAR_BIT
 #include <typeinfo>		// needed for typeid
 
 #define BALL_MAX(a, b)                           (((a) < (b)) ? (b) : (a))
@@ -42,12 +41,12 @@
 #define BALL_REAL_ROUND_INT(x)                   ((x) > 0 ? (int)(x + 0.5) : -(int)(0.5 - x))
 
 
-// The following macros assume CHAR_BIT is one of either 8, 16, or 32
-#define BALL_CHAR_BITS                           CHAR_BIT
-#define BALL_CHAR_MASK                           CHAR_BIT - 1
-#define BALL_CHAR_SHIFT                          ((CHAR_BIT == 8) ? 3 : (CHAR_BIT == 16) ? 4 : 5)
-#define BALL_CHAR_ALL_BITS_SET                   ((CHAR_BIT == 8) ? 0xFF : (CHAR_BIT == 16) ? 0xFFFF : 0xFFFFFFFF)
-#define BALL_CHAR_ALL_BITS_CLEARED               ((CHAR_BIT == 8) ? 0x00 : (CHAR_BIT == 16) ? 0x0000 : 0x00000000)
+// The following macros assume BALL_CHAR_BITS is one of either 8, 16, or 32
+#define BALL_CHAR_BITS                           BALL_CHAR_SIZE * 8
+#define BALL_CHAR_MASK                           BALL_CHAR_BITS - 1
+#define BALL_CHAR_SHIFT                          ((BALL_CHAR_BITS == 8) ? 3 : (BALL_CHAR_BITS == 16) ? 4 : 5)
+#define BALL_CHAR_ALL_BITS_SET                   ((BALL_CHAR_BITS == 8) ? 0xFF : (BALL_CHAR_BITS == 16) ? 0xFFFF : 0xFFFFFFFF)
+#define BALL_CHAR_ALL_BITS_CLEARED               ((BALL_CHAR_BITS == 8) ? 0x00 : (BALL_CHAR_BITS == 16) ? 0x0000 : 0x00000000)
 #define BALL_NUMBER_OF_BYTES(bits)               (((bits) + BALL_CHAR_MASK) >> BALL_CHAR_SHIFT)
 
 #define BALL_SIZEOF_ARRAY(a)                     (sizeof(a) / sizeof(*(a)))
