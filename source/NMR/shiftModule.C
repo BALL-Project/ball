@@ -1,4 +1,4 @@
-// $Id: shiftModule.C,v 1.5 2000/09/18 15:42:56 oliver Exp $
+// $Id: shiftModule.C,v 1.6 2000/09/19 19:20:02 oliver Exp $
 
 #include<BALL/NMR/shiftModule.h>
 
@@ -6,6 +6,8 @@ using namespace std;
 
 namespace BALL
 {
+
+	const char* ShiftModule::PROPERTY__SHIFT = "ChemicalShift";
 
 	ShiftModule::ShiftModule()
 		throw()
