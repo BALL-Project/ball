@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.45 2001/06/18 16:43:28 strobel Exp $
+// $Id: analyticalGeometry.h,v 1.46 2001/06/24 01:32:07 amoll Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -36,7 +36,7 @@
 
 namespace BALL 
 {
-	/**	@name Analytical Geometry
+	/**	@name Analytical Geometry.
 			@memo representation of analytical geometry functions,
 						using the classes: TAngle, TCircle3, TLine3, TPlane3, TSphere3, TVector3.
 	*/
@@ -173,24 +173,23 @@ namespace BALL
 
 	/**	Solve a system of linear equations.
 		  Given a system of linear equations
-			\[
+			\begin{verbatim}
 				\begin{aligned}
 				 a_{1,1} x_1 &+& a_{1,2} x_2 &+& \ldots &+& a_{1,n} x_n &=& a_{1,(n+1)}\\
 				 a_{2,1} x_1 &+& a_{2,2} x_2 &+& \ldots &+& a_{2,n} x_n &=& a_{2,(n+1)}\\
-							\cdots &&  \cdots    &&   \ldots &&    \ddots &&   \cdots\\
+				   \cdots &&  \cdots    &&   \ldots &&    \ddots &&   \cdots\\
 				 a_{n,1} x_1 &+& a_{n,2} x_2 &+& \ldots &+& a_{n,n} x_n &=& a_{n,(n+1)}\\
 				\end{aligned}
-			\]
+			\end{verbatim}
 			in matrix form, identify the solution $x = (x_1, x_2,\ldots x_N)$.
 			{\tt m} should point to a C-style array containing the $n\times(n+1)$ matrix {\bf A}.
 			The elements of {\bf A} are row-ordered, i.e., they are ordered like this:
-			\[
+			\begin{verbatim}
 					a_{1,1}, a_{1,2},\cdot,a_{1,(n+1)},a_{2,1},\ldots a_{n,(n+1)}
-			\]
+			\end{verbatim}
 			{\tt x} points to a C-style array that will contain the solution vector {\bf x} 
 			upon successful termination of the function.
 			If there is no solution or the system is under-determined, return {\bf false}.
-			
 			@param	m pointer to the factors in the equations
 			@param	x pointer in which the results are stored
 			@param  dim the dimension of the equation system (number of variables)
