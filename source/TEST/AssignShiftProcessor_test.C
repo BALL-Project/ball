@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AssignShiftProcessor_test.C,v 1.13 2002/02/27 12:24:22 sturm Exp $
+// $Id: AssignShiftProcessor_test.C,v 1.14 2003/05/26 15:58:37 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/FORMAT/NMRStarFile.h>
 #include <BALL/SYSTEM/path.h>
 
-START_TEST(AssignShiftProcessor, "$Id: AssignShiftProcessor_test.C,v 1.13 2002/02/27 12:24:22 sturm Exp $")
+START_TEST(AssignShiftProcessor, "$Id: AssignShiftProcessor_test.C,v 1.14 2003/05/26 15:58:37 amoll Exp $")
 
 using namespace BALL;
 using namespace std;
@@ -28,11 +28,11 @@ RESULT
 
 CHECK(AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atom_data)/apply())
 	NMRStarFile rs("data/AssignShiftProcessor_test.str");
-	TEST_EQUAL(rs.getData()[0]->atom_data.size(), 797)
+	TEST_EQUAL(rs.getData()[0].atom_data.size(), 797)
 	TEST_EQUAL(rs.getNumberOfAtoms(), 797)
 	TEST_EQUAL(s.countAtoms(), 1944)
 
-	AssignShiftProcessor asp(rs.getData()[0]->atom_data);
+	AssignShiftProcessor asp(rs.getData()[0].atom_data);
 	s.apply(asp);
 RESULT
 
@@ -41,6 +41,7 @@ CHECK(results)
 	AtomIterator atom_it = s.beginAtom();
 	for (; +atom_it; ++atom_it)
 	{
+		//Log.error() << atom_it->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat() << std::endl;
 		if (atom_it->hasProperty(ShiftModule::PROPERTY__SHIFT))
 		{
 			number_of_shiftatoms++;
