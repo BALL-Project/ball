@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.19 2004/06/17 10:03:31 amoll Exp $
+// $Id: glRenderer.h,v 1.20 2004/07/14 12:26:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -56,6 +56,22 @@ namespace BALL
 
 				/// Stereo mode for output on two projectors
 				DUAL_VIEW_STEREO
+			};
+
+			///
+			enum RenderMode
+			{
+				///
+				RENDER_MODE_UNDEFINED = 0,
+				
+				///
+				RENDER_MODE_SOLID,
+
+				///
+				RENDER_MODE_TRANSPARENT,
+
+				///
+				RENDER_MODE_ALWAYS_FRONT
 			};
 
 			/** WrongModes Exception class.
@@ -172,6 +188,10 @@ namespace BALL
 			void initSolid()
 				throw();
 			
+			// Initialise always front rendering
+			void initAlwaysFront()
+				throw();
+			
 			///
 			void buildDisplayListFor(const Representation& rep)
 				throw();
@@ -195,6 +215,10 @@ namespace BALL
 			///
 			StereoMode getStereoMode() const
 				throw() { return stereo_;}
+
+			///
+			RenderMode getRenderMode() const
+				throw() { return render_mode_;}
 			
 			///
 			virtual bool render(const Representation& representation)
@@ -356,6 +380,7 @@ namespace BALL
 			Vector3 								normal_vector_;
 
 			StereoMode stereo_;
+			RenderMode render_mode_;
 		};
 
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.33 2004/07/13 15:15:04 amoll Exp $
+// $Id: glRenderer.C,v 1.34 2004/07/14 12:26:52 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -45,7 +45,8 @@ namespace BALL
 				name_to_object_(),
 				object_to_name_(),
 				all_names_(0),
-				stereo_(NO_STEREO)
+				stereo_(NO_STEREO),
+				render_mode_(RENDER_MODE_UNDEFINED)
 		{
 		}
 
@@ -70,7 +71,6 @@ namespace BALL
 
  			glFrontFace(GL_CCW);     // selects counterclockwise polygons as front-facing
  			glCullFace(GL_BACK);		 // specify whether front- or back-facing facets can be culled
- 			glEnable(GL_CULL_FACE);  // enable elimination of back-facing polygons
 
 			// Force OpenGL to normalize transformed normals to be of unit 
 			// length before using the normals in OpenGL's lighting equations
@@ -142,6 +142,8 @@ namespace BALL
 			// if displaylists were already calculated, return
 			if (GL_spheres_list_ != 0) return true;
 
+			initSolid();
+
 			GL_spheres_list_ = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
 			GL_tubes_list_   = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
 			GL_boxes_list_   = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
@@ -157,20 +159,35 @@ namespace BALL
 		void GLRenderer::initTransparent()
 			throw()
 		{
+			if (render_mode_ == RENDER_MODE_TRANSPARENT) return;
+			render_mode_ = RENDER_MODE_TRANSPARENT;
+			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA,  GL_ONE_MINUS_SRC_ALPHA);
 			glDepthMask(GL_FALSE);
-			glCullFace(GL_BACK);
 			glEnable(GL_CULL_FACE);
 		}
 
 		void GLRenderer::initSolid()
 			throw()
 		{
-			glBlendFunc (GL_ONE, GL_ONE);
+			if (render_mode_ == RENDER_MODE_SOLID) return;
+			render_mode_ = RENDER_MODE_SOLID;
+			glEnable(GL_DEPTH_TEST);
 			glDisable(GL_BLEND);
 			glDepthMask(GL_TRUE);
-			glDisable(GL_CULL_FACE);
+		 	glDisable(GL_CULL_FACE);
+		}
+
+		void GLRenderer::initAlwaysFront()
+			throw()
+		{
+			if (render_mode_ == RENDER_MODE_ALWAYS_FRONT) return;
+			render_mode_ = RENDER_MODE_ALWAYS_FRONT;
+			glDisable(GL_DEPTH_TEST);
+			glDisable(GL_BLEND);
+			glDepthMask(GL_TRUE);
+		 	glDisable(GL_CULL_FACE);
 		}
 
 

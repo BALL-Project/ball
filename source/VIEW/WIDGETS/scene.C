@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.102 2004/07/10 16:39:22 amoll Exp $
+// $Id: scene.C,v 1.103 2004/07/14 12:26:50 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -535,10 +535,10 @@ namespace BALL
 			// -------------------------------------------------------------------
 			
 			// render all "normal" (non always front and non transparent models)
-			gl_renderer_.initSolid();
 			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 			for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
 			{
+				gl_renderer_.initSolid();
 				if ((*it)->getTransparency() == 0 &&
 						!(*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
 				{
@@ -547,10 +547,10 @@ namespace BALL
 			}
 
 			// render all transparent models
-			gl_renderer_.initTransparent();
 			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 			for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
 			{
+				gl_renderer_.initTransparent();
 				if ((*it)->getTransparency() != 0)
 				{
 					render_(**it, mode);
@@ -558,17 +558,16 @@ namespace BALL
 			}
 
 			// render all always front models
-			gl_renderer_.initSolid();
-			glDisable(GL_DEPTH_TEST);
 			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 			for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
 			{
+				gl_renderer_.initSolid();
 				if ((*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
 				{
 					render_(**it, mode);
 				}
 			}
-			glEnable(GL_DEPTH_TEST);
+
 
 #ifdef BALL_BENCHMARKING
 	Log.info() << "Rendering time: " << t.getCPUTime() << std::endl;
