@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.C,v 1.15 2002/02/27 12:21:10 sturm Exp $
+// $Id: persistenceManager.C,v 1.16 2002/12/12 10:05:40 oliver Exp $
 
 #include <BALL/CONCEPT/persistenceManager.h>
 #include <BALL/KERNEL/system.h>
@@ -107,7 +107,6 @@ namespace BALL
 		#define REGISTER_CLASS(T) registerClass(RTTI::getStreamName<T>(), T::createDefault);
 		REGISTER_CLASS(AtomContainer)
 		REGISTER_CLASS(NamedProperty)
-		REGISTER_CLASS(Vector3)
 		REGISTER_CLASS(Composite)
 		REGISTER_CLASS(Atom)
 		REGISTER_CLASS(Bond)

@@ -2,9 +2,13 @@
 // vi: set ts=2:
 //
 #include <BALL/common.h>
+
 #include <qapplication.h>
 
+
 #include "mainframe.h"
+
+
 
 int main(int argc, char **argv)
 {

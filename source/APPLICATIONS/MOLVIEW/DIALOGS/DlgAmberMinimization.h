@@ -30,8 +30,8 @@ class DlgAmberMinimization : public DlgAmberMinimizationData
 
     virtual ~DlgAmberMinimization();
 
-		void setPreferences(INIFile& inifile) const;
-		void getPreferences(const INIFile& inifile);
+		void writePreferences(INIFile& inifile) const;
+		void readPreferences(const INIFile& inifile);
 
 		Size getMaxIterations() const;
 		void setMaxIterations(Size n);

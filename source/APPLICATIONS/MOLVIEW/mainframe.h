@@ -1,43 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.32 2002/09/06 10:40:11 aubertin Exp $
+// $Id: mainframe.h,v 1.33 2002/12/12 09:58:28 oliver Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#include <strstream>
-
-#include <qmetaobject.h>
-#include <qmainwindow.h>
-#include <qwidget.h>
-#include <qmenubar.h>
-#include <qkeycode.h>
-#include <qapplication.h>
-#include <qmessagebox.h>
-#include <qpopupmenu.h>
-#include <qlayout.h>
-#include <qbutton.h>
-#include <qstring.h>
-#include <qsplitter.h>
-#include <qstatusbar.h>
-#include <qlabel.h>
-#include <qtooltip.h>
-
-#include <BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h>
-#include <BALL/DATATYPE/regularData3D.h>
-#include <BALL/DATATYPE/contourSurface.h>
-
 #ifndef BALL_VIEW_KERNEL_LOGVIEW_H
 #	include <BALL/VIEW/KERNEL/logView.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
-#	include <BALL/VIEW/KERNEL/connectionObject.h>
 #endif
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -72,9 +42,25 @@
 # include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h>
 #endif  
 
-#include "DIALOGS/DlgPreferences.h"
+#ifndef BALL_VIEW_GUI_FUNCTOR_POVRENDERER_H
+# include <BALL/VIEW/GUI/FUNCTOR/POVRenderer.h>
+#endif
+
+#ifndef BALL_MOLVIEW_GUI_DIALOGS_CONTOURSURFACEDIALOG_H
+# include <BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h>
+#endif
+
+#ifndef BALL_VIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
+# include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
+#endif
+
 #include "DIALOGS/DlgAmberMinimization.h"
 
+class QWidget;
+class QSplitter;
+class QVBoxLayout;
+class QPopupMenu;
+class QLabel;
 
 using namespace BALL;
 using namespace BALL::VIEW;
@@ -90,11 +76,7 @@ class Mainframe
 
 	enum MenuKey
 	{
-		MENU__OPEN_FILE_PDB,
-		MENU__OPEN_FILE_HIN,
-		MENU__OPEN_FILE_MOL2,
-
-		MENU__EXPORT_POVRAY,
+		MENU__FILE_EXPORT_POVRAYFILE,
 		
 		MENU__EDIT_CUT,
 		MENU__EDIT_COPY,
@@ -126,27 +108,27 @@ class Mainframe
 	};
 
 
-	Mainframe
-		(QWidget* parent = 0, const char* name = 0);
+	Mainframe(QWidget* parent = 0, const char* name = 0);
 
 	virtual ~Mainframe()
 		throw();
 
-
 	virtual void fetchPreferences(INIFile& inifile)
 	throw();
+
 	virtual void writePreferences(INIFile& inifile)
 	throw();
 
 	virtual void onNotify(Message *message)
 	throw();
-
 	
 
 	public slots:
 	// active the menu entries
 	// (connected to aboutToShow())
 	void checkMenuEntries();
+
+	void exportPOVRay();
 
 	// Build menu
 	void checkResidue();
@@ -168,6 +150,7 @@ class Mainframe
   ContourSurfaceDialog* surface_dialog_;
 	LabelProperties*	    label_properties_;
 	MolecularProperties*  molecular_properties_;
+	MolecularFileDialog*  file_dialog_;
 	Server*   						server_;
 
 	MoleculeGLObjectCollector		GL_object_collector_;
@@ -180,7 +163,6 @@ class Mainframe
 	QVBoxLayout*	vboxlayout_;
 	
 	List<QPopupMenu*> popup_menus_;
-	List<Composite*>  selection_;
 
 	QLabel*						tool_box_;
 };

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: property.C,v 1.28 2002/02/27 12:21:10 sturm Exp $
+// $Id: property.C,v 1.29 2002/12/12 10:05:40 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -38,7 +38,7 @@ namespace BALL
 	}
  
 	void NamedProperty::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw()
+		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 			pm.writePrimitive((int)type_, "type_");
@@ -61,7 +61,7 @@ namespace BALL
 	}
 	
 	void NamedProperty::persistentRead(PersistenceManager& pm)
-		throw()
+		throw(Exception::GeneralException)
 	{
 		int type;
 		pm.readPrimitive(type, "type_");
@@ -96,114 +96,6 @@ namespace BALL
 		}
 	}
 
-	/// Output operator
-	ostream& operator << (std::ostream& s, const NamedProperty& property)
-		throw()
-  {	
-		s << property.type_;
-		s << std::endl;
-		s << property.name_;
-		s << std::endl;
-
-		switch (property.type_)
-		{
-			case NamedProperty::BOOL:					s << property.data_.b; break;
-			case NamedProperty::INT:					s << property.data_.i; break;
-			case NamedProperty::UNSIGNED_INT: s << property.data_.ui; break;
-			case NamedProperty::FLOAT:				s << property.data_.f; break;
-			case NamedProperty::DOUBLE:				s << property.data_.d; break;
-			case NamedProperty::STRING:				s << *(property.data_.s); break;
-			case NamedProperty::OBJECT:
-				{
-					TextPersistenceManager pm;
-					pm.setOstream(s);
-					pm.writeObjectPointer(property.data_.object, "data_.object");
-					break;
-				}
-			case NamedProperty::NONE : break;
-			default:
-				Log.error() << "Unknown type while writing NamedProperty: " << (int)property.type_ << endl;
-		}
-		return s;
-	}
-
-	/// Input operator
-	istream& operator >> (std::istream& s, NamedProperty& property)
-		throw()
-  {	
-		// delete previous content
-		property.clear();
-		
-		// determine the property type
-		Index tmp;
-		s >> tmp;
-		property.type_ = (NamedProperty::Type)tmp;
-
-		// read the name of the property
-		s >> property.name_;
-
-		// read the value
-		switch (property.type_)
-		{
-			case NamedProperty::BOOL :					s >> property.data_.b; break;
-			case NamedProperty::INT :						s >> property.data_.i; break;
-			case NamedProperty::UNSIGNED_INT : 	s >> property.data_.ui; break;
-			case NamedProperty::FLOAT :					s >> property.data_.f; break;
-			case NamedProperty::DOUBLE :				s >> property.data_.d; break;
-			case NamedProperty::OBJECT :
-				{
-					TextPersistenceManager pm;
-					pm.setIstream(s);
-					pm.readObjectPointer(property.data_.object, "data_.object"); 
-					break;
-				}
-			case NamedProperty::NONE : break;
-			case NamedProperty::STRING :
-				{
-					string str;
-					s >> str;
-					property.data_.s = new string(str);
-					break;
-				}
-			default:
-				Log.error() << "Unknown type while reading NamedProperty: " << (int)property.type_ << endl;
-		}
-
-		return s;
-	}
-
-  ostream& operator << (ostream& s, const PropertyManager& property_manager)
-		throw()
-  {	
-    s << property_manager.bitvector_;		
-		
-		s << endl;
-		s << property_manager.named_properties_.size();
-		s << endl;
-		vector<NamedProperty>::const_iterator it = property_manager.named_properties_.begin();
-		for (; it != property_manager.named_properties_.end(); ++it)
-		{
-			s << *it << endl;
-		}
-		return s;
-	}
-
-  istream& operator >> (istream& s, PropertyManager& property_manager)
-		throw()
-  {	
-		int size;
-    s >> property_manager.bitvector_;
-		s >> size;
-		NamedProperty np;
-		for (int i = 0; i < size; i++)
-		{
-			s >> np;
-			property_manager.setProperty(np);
-		}
-
-		return s;
-	}
- 
   void PropertyManager::write(PersistenceManager& pm) const
 		throw()
   {

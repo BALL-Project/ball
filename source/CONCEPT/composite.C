@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.C,v 1.34 2002/02/27 12:20:39 sturm Exp $
+// $Id: composite.C,v 1.35 2002/12/12 10:05:40 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -55,7 +55,7 @@ namespace BALL
 	{
 		if (deep == true)
 		{
-			composite.clone(*this, Composite::DEFAULT_UNARY_PREDICATE);
+			composite.clone(*this);
 		}
 		properties_ = composite.properties_;
 	}
@@ -73,7 +73,7 @@ namespace BALL
 		if (deep == true)
 		{
 			// predicative cloning
-			composite.clone(*this, Composite::DEFAULT_UNARY_PREDICATE);
+			composite.clone(*this);
 		}
 		else
 		{
@@ -289,7 +289,7 @@ namespace BALL
 		return composite_ptr;
 	}
 
-	void* Composite::clone(Composite& root, UnaryPredicate<Composite>& predicate) const
+	void* Composite::clone(Composite& root) const
 		throw()
 	{
 		// avoid self-cloning
@@ -306,7 +306,7 @@ namespace BALL
 		root.properties_ = properties_;
 
 		// clone everything else
-		clone_(*const_cast<Composite*>(this), root, predicate);
+		clone_(*const_cast<Composite*>(this), root);
 
 		// update the selection of the parent (if it exists)
 		if (root.parent_ != 0)
@@ -1621,7 +1621,7 @@ namespace BALL
 		return hits;
 	}
 
-	void Composite::clone_(Composite& parent, Composite& stack, UnaryPredicate<Composite>& predicate) const
+	void Composite::clone_(Composite& parent, Composite& stack) const
 		throw()
 	{
 		Composite* cloned_ptr = 0;
@@ -1629,24 +1629,14 @@ namespace BALL
 		for (Composite* composite_ptr = parent.first_child_;
 				 composite_ptr != 0; composite_ptr = composite_ptr->next_)
 		{
-			if (predicate(*composite_ptr) == true)
-			{
-				cloned_ptr = (Composite*)composite_ptr->create(false);
-				stack.appendChild(*cloned_ptr);			
-				cloned_ptr->properties_ = composite_ptr->properties_;
+			cloned_ptr = (Composite*)composite_ptr->create(false);
+			stack.appendChild(*cloned_ptr);			
+			cloned_ptr->properties_ = composite_ptr->properties_;
 
-				if (composite_ptr->first_child_ != 0)
-				{
-					clone_(*composite_ptr, *cloned_ptr, predicate);
-				}		
-			}	
-			else 
+			if (composite_ptr->first_child_ != 0)
 			{
-				if (composite_ptr->first_child_ != 0)
-				{
-					clone_(*composite_ptr, stack, predicate);
-				}
-			}
+				clone_(*composite_ptr, *cloned_ptr);
+			}		
 		}
 
 		// create selection information

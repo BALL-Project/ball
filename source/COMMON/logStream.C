@@ -1,13 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.C,v 1.26 2002/02/27 12:20:34 sturm Exp $
+// $Id: logStream.C,v 1.27 2002/12/12 10:03:19 oliver Exp $
 
 #include <limits.h>
 #include <BALL/COMMON/logStream.h>
 #include <BALL/CONCEPT/notification.h>
 
-#include <sys/time.h>
 #include <stdio.h>
 #include <limits.h>
 #include <string.h>

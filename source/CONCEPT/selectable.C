@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selectable.C,v 1.6 2002/02/27 12:21:10 sturm Exp $
+// $Id: selectable.C,v 1.7 2002/12/12 10:05:40 oliver Exp $
 
 #include <BALL/CONCEPT/selectable.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -41,20 +41,6 @@ namespace BALL
 
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}  
-
-  ostream& operator << (ostream& s, const Selectable& selectable)
-		throw()
-  {
-		s << selectable.selected_;
-		return s;
-	}
-
-  istream& operator >> (istream& s, Selectable& selectable)
-		throw()
-  {
-    s >> selectable.selected_;
-		return s;
-	}
 
   void Selectable::write(PersistenceManager& pm) const
 		throw()
