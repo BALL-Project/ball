@@ -1,4 +1,4 @@
-// $Id: surfaceProcessor.h,v 1.8 2000/12/13 15:14:28 strobel Exp $
+// $Id: surfaceProcessor.h,v 1.9 2001/01/10 15:07:46 strobel Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -48,7 +48,6 @@ namespace BALL
 
 	bool SurfaceProcessor::start()
 	{
-		std::cerr << "SurfaceProcessor::start()" << std::endl;
 		spheres_.clear();
 		return true;
 	}
@@ -59,7 +58,6 @@ namespace BALL
 		//spheres_.push_back(Sphere3(atom.getPosition(), atom.getRadius()));
 		//spheres_.push_back(Sphere3(atom.getPosition(), atom.getElement().getVanDerWaalsRadius()));
 		spheres_.push_back(Sphere3(atom.getPosition(), 1.0));
-
 		return Processor::CONTINUE;
 	}
 
@@ -68,8 +66,8 @@ namespace BALL
 	{
 		double old_epsilon = Constants::EPSILON;
 		Constants::EPSILON = 1e-4;
-				probe_radius_ = 1.5;
-				/*cout << "probe radius:    "; cin >> probe_radius_;
+				/*
+				cout << "probe radius:    "; cin >> probe_radius_;
 				spheres_.clear();
 				char* filename;
 				string name;
@@ -98,7 +96,8 @@ namespace BALL
 					{
 						spheres_.push_back(Sphere3(Vector3(x,y,z),std_radius));
 					}
-				}*/
+				}
+				*/
 				std::cerr << "initialising reduced surface ...\n";
 		ReducedSurface* rs = new ReducedSurface(spheres_,probe_radius_);
 				std::cerr << "... ok\ncomputing reduced surface ...\n";
@@ -150,7 +149,7 @@ namespace BALL
 				std::cerr << "... ok\n";
 				//cout << *surface;
 				std::cerr << "exporting surface ...\n";
-		surface->exportSurface(surface_);
+		surface_ = surface->exportSurface();
 				std::cerr << "... ok\ndeleting surface ...\n";
 		delete surface;
 				std::cerr << "... ok\ndeleting solvent excluded surface ...\n";
