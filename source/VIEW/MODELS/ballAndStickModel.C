@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.9 2003/12/15 01:00:40 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.10 2004/03/15 12:54:59 amoll Exp $
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -177,6 +177,9 @@ void AddBallAndStickModel::dump(std::ostream& s, Size depth) const
 void AddBallAndStickModel::visualiseBond_(const Bond& bond)
 	throw()
 {
+	// no visualisation for hydrogen bonds
+	if (bond.getType() == Bond::TYPE__HYDROGEN) return;
+	
 	// generate two colored tube
 	TwoColoredTube *tube = new TwoColoredTube;
 					

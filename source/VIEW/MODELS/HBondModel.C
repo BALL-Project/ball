@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondModel.C,v 1.5 2003/12/15 01:05:00 amoll Exp $
+// $Id: HBondModel.C,v 1.6 2004/03/15 12:54:59 amoll Exp $
 
 #include <BALL/VIEW/MODELS/HBondModel.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/disc.h>
 
@@ -72,15 +73,33 @@ bool HBondModelProcessor::finish()
 		
 Processor::Result HBondModelProcessor::operator() (Composite& composite)
 {
-	if (!RTTI::isKindOf<Atom>(composite) ||
-			!((Atom*)&composite)->hasProperty("HBOND_DONOR"))
+	if (!RTTI::isKindOf<Atom>(composite))
 	{
 		return Processor::CONTINUE;
 	}
 
-	Atom *atom = RTTI::castTo<Atom>(composite);
-	Atom* partner = (Atom*) atom->getProperty("HBOND_DONOR").getObject();
-	if (partner == 0) return Processor::CONTINUE;
+	Atom *atom = RTTI::castTo<Atom>(composite); 
+	Bond* bond = 0;
+
+	for (Position p = 0; p < atom->countBonds(); p++)
+	{
+		if (atom->getBond(p)->getType() == Bond::TYPE__HYDROGEN)
+		{
+			bond = atom->getBond(p);
+			break;
+		}
+	}
+
+	if (bond == 0) return Processor::CONTINUE;
+
+	Atom* partner = bond->getPartner(*atom);
+
+	// only one visualisation for a bond!
+	if (partner == 0  ||
+			partner < atom )
+	{
+		return Processor::CONTINUE;
+	}
 
 	// generate tubes
 	Vector3 v = partner->getPosition() - atom->getPosition();
