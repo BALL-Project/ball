@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Sysinfo_test.C,v 1.2 2005/01/25 14:59:53 amoll Exp $
+// $Id: Sysinfo_test.C,v 1.3 2005/01/25 15:08:50 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.2 2005/01/25 14:59:53 amoll Exp $")
+START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.3 2005/01/25 15:08:50 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -26,6 +26,12 @@ CHECK(getFreeMemory())
 	TEST_EQUAL(getFreeMemory() > 0, true)
 	Log.error() <<getFreeMemory() << std::endl;
 RESULT		
+
+CHECK(getAvailableMemory())
+	TEST_EQUAL(getAvailableMemory() > 0, true)
+	Log.error() <<getAvailableMemory() << std::endl;
+RESULT		
+
 
 CHECK(getTotalMemory())
 	TEST_EQUAL(getTotalMemory() > 0, true)
@@ -61,9 +67,17 @@ CHECK(Extra1)
 	Index i2 = getFreeMemory() + getBufferdMemory();
 	Log.error() <<i2 << std::endl;
 	TEST_EQUAL(i1 > i2, true);
-	delete d;
+	delete[] d;
 RESULT		
 */
+
+CHECK(Extra1)
+	Index i1 = getAvailableMemory();
+	if (i1 > 1000) i1-=1000;
+	char* c = new char[i1];
+	delete[] c;
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
