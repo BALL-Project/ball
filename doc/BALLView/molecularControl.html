@@ -6,38 +6,46 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 <body>
+<center>
+<table width="700" border="0" cellpadding="0">
+  <tr>
+    <td>
 
 <H2>Molecular Control</H2>
 The Molecular Control gives a hierarchical overview of the loaded molecules and provides means 
-to interact with the molecular entities.<br><br>
+  to interact with the molecular entities.<br>  <br>
+  <img src="images/molecularControl2.png" border=0>
+  
+  <br>  <br>
+  Every molecule is part of a System, molecules from different Systems do not interfere with each other, e.g. in
+  MD-Simulations. BALLView creates a new System for every molecular file, that the user loads.
+  
 
-<img src="images/molecularControl2.png" border=0>
-
-<br><br>
-Every molecule is part of a System, molecules from different Systems do not interfere with each other, e.g. in
-MD-Simulations. BALLView creates a new System for every molecular file, that the user loads.
-
-
-
+  
 <H3>Highlighting</H3>
-By clicking with the left mouse button on the names of molecular entities, 
-users can highlight these. To highlight more then one item, use
-the Shift- or Control-modifier.
-A click with the right mouse button will open a context menu, which will operate on the highlighted molecular items:<br><br>
-<img src="images/mc_context_menu.png" width=490 height=276 border=0>
-
-<a name="find_atom"><H3>Selections (or how to find an atom)</H3></a>
-Left from the names of the molecular entities are checkboxes, which show the user which molecular entities are 
-currently selected (picked). The selected objects become colored in the <a href="scene.html">Scene</a>.
-This can be used to find an atom in the three-dimensional structure of its molecule.
-If a user starts a MD-Simulation or a Energy Minimization while some molecular entities are selected, 
-BALLView only operates only on these items. (Which is e.g. usefull for optimising the position of only the hydrogen atoms
-of a protein from a PDB-file.)
+<div align="justify">By clicking with the left mouse button on the names of molecular entities, 
+  users can highlight these. To highlight more then one item, use
+  the Shift- or Control-modifier.
+  A click with the right mouse button will open a context menu, which will operate on the highlighted molecular items:<br>
+  <br>
+  <img src="images/mc_context_menu.png" width=490 height=276 border=0>
+  
+<a name="find_atom"></a></div>
+<a name="find_atom">
+<H3>Selections (or how to find an atom)</H3></a>
+<div align="justify">Left from the names of the molecular entities are checkboxes, which show the user which molecular entities are 
+  currently selected (picked). The selected objects become colored in the <a href="scene.html">Scene</a>.
+  This can be used to find an atom in the three-dimensional structure of its molecule.
+  If a user starts a MD-Simulation or a Energy Minimization while some molecular entities are selected, 
+  BALLView only operates only on these items. (Which is e.g. usefull for optimising the position of only the hydrogen atoms
+  of a protein from a PDB-file.)
+</div>
 <p></p>
 <a name="merge_systems"><H3>Cut, Copy, Paste</H3></a>
-The user can cut or copy any molecular entities in the Molecular Control and also paste them into other objects
-(see the Menu point "Edit"). <br>
-This makes it possible e.g. to merge Systems:
+<div align="justify">The user can cut or copy any molecular entities in the Molecular Control and also paste them into other objects
+  (see the Menu point "Edit"). <br>
+  This makes it possible e.g. to merge Systems:
+</div>
 <ol>
 	<li>Load two molecular files (e.g. PDB files)</li>
 	<li>Highlight the molecules of the first System (they should become blue like in the picture above)</li>
@@ -48,12 +56,14 @@ This makes it possible e.g. to merge Systems:
 </ol>
 
 <a name="regular_expressions"><H3>Regular expressions</H3></a>
-At the bottom of the Molecular Control resides a yellow text field.
-In this text field, the user can enter regular expressions to select molecular entities.
-To apply the typed expression, the Return key has to be pressed. The button next to the text field
-clears the current selection.
-Possible predicates are:
-<br><br>
+<div align="justify">At the bottom of the Molecular Control resides a yellow text field.
+  In this text field, the user can enter regular expressions to select molecular entities.
+  To apply the typed expression, the Return key has to be pressed. The button next to the text field
+  clears the current selection.
+  Possible predicates are:
+    <br>
+    <br>
+</div>
 <table>
   <tbody>
     <tr><td> true() </td><td> this is always true </td></tr>
@@ -92,30 +102,27 @@ Example: <b>!residueID(12) AND (element(N) OR element(C))</b>
 
 <H3>Properties of Molecular Entities</H3>
 To view and modify the properties of molecular entities, BALLView offers a special dialog, which can be opened 
-in the context menu of the MolecularControl under the point "Properties.
-In this dialog the user can e.g. set the name of a Chain or change the charge of atoms.
-(An other fast way to obtain the basic informations for an atom, is to select(pick) exactly one atoms. 
-The informations like charge and position are then shown in the LogView.)
-<br><br>
-<img src="images/atom_properties.png" width=392 height=442 border=0><br><br>
-
-An other dialog enables the user to obtain all informations of any bond. To open this dialog, one atom has to be highlighted and 
-the context menu entry "Show Bonds" has to be clicked. In this dialog, the user can read the bonds order and type. The arrow buttons in the dialog enable the user to 
-identify the partner atoms in the bond.<a name="identify_bond" id="identify_bond"></a><br>
-<br>
-<img src="images/bond_properties.png" width=311 height=286 border=0>
-
+  in the context menu of the MolecularControl under the point "Properties.
+  In this dialog the user can e.g. set the name of a Chain or change the charge of atoms.
+  (An other fast way to obtain the basic informations for an atom, is to select(pick) exactly one atoms. 
+  The informations like charge and position are then shown in the LogView.) <br>  <br>  <img src="images/atom_properties.png" width=392 height=442 border=0><br>  <br>
+  An other dialog enables the user to obtain all informations of any bond. To open this dialog, one atom has to be highlighted and 
+  the context menu entry "Show Bonds" has to be clicked. In this dialog, the user can read the bonds order and type. The arrow buttons in the dialog enable the user to 
+  identify the partner atoms in the bond.<a name="identify_bond" id="identify_bond"></a><br>  <br>  <img src="images/bond_properties.png" width=311 height=286 border=0>
+  
 <H3>Distances and angles between atoms<a name="measure_distance"></a></H3>
-When exactly two atoms are selected(picked) the distance between them is shown in the LogView. For three selected atoms, 
-the angle between them is shown, and for four atoms the torsion angle.
-
+<div align="justify">When exactly two atoms are selected(picked) the distance between them is shown in the LogView. For three selected atoms, 
+  the angle between them is shown, and for four atoms the torsion angle.
+  
+</div>
 <H3>Count atoms and bonds<a name="count_atoms"></a></H3>
-The context menu also has an entry to count the bonds and atoms of the currently selected molecular entity (e.g. a Residue).
-
+<div align="justify">The context menu also has an entry to count the bonds and atoms of the currently selected molecular entity (e.g. a Residue).
+  
+</div>
 <H3>Move molecular entities<a name="move_molecule"></a></H3>
-To move e.g. a Chain or single atoms, the user can highlight them and open an according dialog with the context menu entry "Move".
-This can be useful for simulations or for increasing clearness.
-
+<div align="justify">To move e.g. a Chain or single atoms, the user can highlight them and open an according dialog with the context menu entry "Move".
+  This can be useful for simulations or for increasing clearness. </div>
+  </td></tr></table>
 </body>
 </html>
 

@@ -6,27 +6,37 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 <body>
-
+<center>
+<table width="700" border="0" cellpadding="0">
+  <tr>
+    <td>
+	
 <H2>General tips and hints for BALLView</H2>
 This page gives hints for BALLView, which dont fit somewhere else...
 <h3>View molecules in 3D stereo<a name="3D"></a></h3>
-BALLView provides two different ways to view molecules in 3D: Stereo with shutter glasses and side-by-side stereo.
-Both can be switched on in the menu entry "Display->Stereo".<p></p>
-When BALLView is running in a 3D Stereo modus, users can change the eye distance of the both viewpoints by
-using the cursor keys left and right. Left decreases the eye distance and right increases it. The Shift-modifier 
-boosts the effect of the two keys.  The optimal eye distance varies for every person and view, so it must be adjusted manualy.
-The amount of the eye distance can also be changed in the Preferences:<br><br>
-<img src="images/stereo_settings.png"><br><br>
-The focal distance seems to have no effect on most viewers, so its settings may be removed for future releases of BALLView.<br><br>
-<b>Caveat:</b> Since for 3D viewing two seperate images have to be created for every camera movement, the 3D performance 
-can drop to half, while rotating or zooming the view. Consider buying a fast graphics accelerator card if you want use this feature.
-
-<H4>Shutter glasses</H4>
-To use shutter glasses with BALLView, you have to use a quad buffered graphics accelerator card.
-This  has up to now only been tested with a NVIDIA Quadro card on windows.
-But it should also work well with Linux and ATI Fire cards. If you make any experiences in this field with
-BALLView, please let us know...
-
+<div align="justify">BALLView provides two different ways to view molecules in 3D: Stereo with shutter glasses and side-by-side stereo.
+  Both can be switched on in the menu entry "Display->Stereo".</div>
+<p></p>
+<div align="justify">When BALLView is running in a 3D Stereo modus, users can change the eye distance of the both viewpoints by
+  using the cursor keys left and right. Left decreases the eye distance and right increases it. The Shift-modifier 
+  boosts the effect of the two keys.  The optimal eye distance varies for every person and view, so it must be adjusted manualy.
+  The amount of the eye distance can also be changed in the Preferences:<br>
+  <br>
+  <img src="images/stereo_settings.png"><br>
+  <br>
+  The focal distance seems to have no effect on most viewers, so its settings may be removed for future releases of BALLView.<br>
+  <br>
+  <b>Caveat:</b> Since for 3D viewing two seperate images have to be created for every camera movement, the 3D performance 
+  can drop to half, while rotating or zooming the view. Consider buying a fast graphics accelerator card if you want use this feature.
+  
+</div>
+<H4 align="justify">Shutter glasses</H4>
+<div align="justify">To use shutter glasses with BALLView, you have to use a quad buffered graphics accelerator card.
+  This  has up to now only been tested with a NVIDIA Quadro card on windows.
+  But it should also work well with Linux and ATI Fire cards. If you make any experiences in this field with
+  BALLView, please let us know...
+  
+</div>
 <H4>Side by side</H4>
 For side by side stereo viewing the following hardware is needed: 
 <ul>
@@ -38,26 +48,43 @@ For side by side stereo viewing the following hardware is needed:
 But this form of stereo projection does not require a specific type of graphics accelerator cards.
 
 <h3>Visualise hydrogen bonds<a name="hydrogen_bonds"></a></h3>
-To visualise hydrogen bonds, BALLView first has to calculate their position. This can be done, by highlighting a
-System and clicking on the menu entry "Tools->Calculate H-bonds" (ALT-N). Then a new Representation for them has
-to be created, while using the model "H-Bonds". The result could look like:<br>
-<img src="images/hbonds.png">
-
+<div align="justify">To visualise hydrogen bonds, BALLView first has to calculate their position. This can be done, by highlighting a
+  System and clicking on the menu entry "Tools->Calculate H-bonds" (ALT-N). Then a new Representation for them has
+  to be created, while using the model "H-Bonds". The result could look like:<br>
+  <img src="images/hbonds.png">
+  
+</div>
 <h3>Usage of the POV-RAY export<a name="POVRay"></a></h3>
-<a href="http://www.povray.org/">POV-Ray</a> is an external rendering program which is freely available.
-The POV-Ray files which were created by BALLView contain the command line, with which POV-Ray should be invoked to
-render the image. This line could look like:
+<div align="justify"><a href="http://www.povray.org/">POV-Ray</a> is an external rendering program which is freely available.
+  The POV-Ray files which were created by BALLView contain the command line, with which POV-Ray should be invoked to
+  render the image. This line could look like:
+</div>
 <pre>povray +Imy.pov +FN +Omy.pov.png +QR +W1037 +H922 -UV</pre>
 To use antialiasing in POV-Ray, the flag "+A0.3" can be added.
 
 <h3>Create animations<a name="animations"></a></h3>
-<img src="images/animation_menu.png">
+<div align="justify">BALLView can create fly by animations from the Scene, either for creating on screen presentations of for exporting images, for creation of movies (see below).
+  All functionality for this feature is called in the menu entry "Display->Animations":<br>
+  <br>
+</div>
+<table width="600"  border="0" cellpadding="5">
+  <tr>
+    <td><img src="images/animation_menu.png"></td>
+    <td>
+With the entry "Record" BALLView stores the subsequent sequence of  viewpoints in the Scene. This means, if a user moves the mouse, so that the viewpoint 
+changes, this is recorded and can be reproduced. This is done by calling the menu entry "Start". The animation can be stoped any time, by clicking "Stop".
+"Clear" means, that the recorded sequence is deleted and a new one can be recorded. Click again on "Record" to switch recording off.<br>
+The last three entries can be switched on and off to repeat the animation or export images either directly in the PNG format or throught the POV-Ray renderer.
+</td></tr></table>
 
 <h3>Create movies from pictures<a name="movies"></a></h3>
-To create movies from a set of images, we suggest useage of the GNU program <a href="http://www.mplayerhq.hu/h">mencoder</a>, 
-which is freely available for Linux, MacOS and Windows.
-To create an AVI video with 25 frames per second from all PNG images in the current directory with the codec <a href="http://www.xvid.org/">XviD</a> and a bitrate of 1600 kbit/s invoke
+<div align="justify">To create movies from a set of images, we suggest useage of the GNU program <a href="http://www.mplayerhq.hu/h">mencoder</a>, 
+  which is freely available for Linux, MacOS and Windows.
+  To create an AVI video with 25 frames per second from all PNG images in the current directory with the codec <a href="http://www.xvid.org/">XviD</a> and a bitrate of 1600 kbit/s invoke
+</div>
 <pre>mencoder  "mf://*.png"  -mf fps=25 -o output.avi -ovc xvid  -xvidencopts pass=1:bitrate=1600</pre>
+
+</td></tr></table>
 
 </body>
 </html>

@@ -6,25 +6,35 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 <body>
-
+<center>
+<table width="700" border="0" cellpadding="0">
+  <tr>
+    <td>
+	
 <h2>PythonInterpreter</h2>
 <a name="python_scripts"><h3>Write Python scripts for BALLView</h3></a>
-The easiest way to access objects in BALLView is to use the interface to the ModularWidgets. 
-Every major widget in BALLView, like the Scene or the MolecularControl is such a ModularWidget.
-To get the instance of a ModularWidget in a running BALLView session, call e.g.<br>
+<div align="justify">The easiest way to access objects in BALLView is to use the interface to the ModularWidgets. 
+  Every major widget in BALLView, like the Scene or the MolecularControl is such a ModularWidget.
+  To get the instance of a ModularWidget in a running BALLView session, call e.g.<br>
+</div>
 <pre>MainControl.getInstance(0)</pre>
-The MainControl manages almost all loaded objects, like Molecules or Representations. 
-The documentation of the BALL library gives detailled informations on the syntax of this class.
-Examples for Python script for usage with BALLView can be found in the folder BALL/source/EXAMPLES/PYTHON.
-See also below for an other code example.<br><br>
-<b>Caveat:</b> Not all methods, which are defined in the C++ library are also exportet to the Python interface.
-If a method, which you want to use does not seem to work, have a  look at the *.sip files in
-BALL/source/PYTHON/EXTENSIONS to make sure, this method is exported.<br><br>
-
-<a name="startup_script"><h3>Setup a Python startup script</h3></a>
-BALLView can load a Python script at startup. In this script the user can define 
-variables and methods to simplify usage of the Python interface. 
-The file, which is used as startup script is set in the Preferences:
+<div align="justify">The MainControl manages almost all loaded objects, like Molecules or Representations. 
+  The documentation of the BALL library gives detailled informations on the syntax of this class.
+  Examples for Python script for usage with BALLView can be found in the folder BALL/source/EXAMPLES/PYTHON.
+  See also below for an other code example.<br>
+  <br>
+  <b>Caveat:</b> Not all methods, which are defined in the C++ library are also exportet to the Python interface.
+  If a method, which you want to use does not seem to work, have a  look at the *.sip files in
+  BALL/source/PYTHON/EXTENSIONS to make sure, this method is exported.<br>
+  <br>
+  
+<a name="startup_script"></a></div>
+<a name="startup_script">
+<h3>Setup a Python startup script</h3></a>
+<div align="justify">BALLView can load a Python script at startup. In this script the user can define 
+  variables and methods to simplify usage of the Python interface. 
+  The file, which is used as startup script is set in the Preferences:
+</div>
 <p><img src="images/startup_script1.png" width="631" height="375"> </p>
 <p>An example for a startup script:</p>
 <pre>
@@ -59,7 +69,7 @@ def removeWater():
 </pre>
 
 <h3>Use self written scripts with hotkeys</h3>
-<p><a name="create_hotkeys"></a>
+<p align="justify"><a name="create_hotkeys"></a>
   BALLView can bind any Python command to an hotkey for the F-keys.  This is especially usefull with self defined methods.
   With the startup script above, the user could bind the three methods to different hotkeys (see below). 
   Thereby he can e.g. remove all water molecules in the loaded Systems with one keypress. By using the Shift- and Control-modifier, BALLView can have up to 36 different hotkeys. This enables the user to 
@@ -67,5 +77,6 @@ def removeWater():
 <p><img src="images/hotkeys.png">
     
 </p>
+</td></tr></table>
 </body>
 </html>
