@@ -796,7 +796,7 @@ AC_DEFUN(CF_IDENTIFY_COMPAQ,[
 AC_DEFUN(CF_COMPAQ_OPTIONS, [
 		AC_MSG_CHECKING(compiler version)
 		echo "int main(){}" > conftest.C
-		CXX_VERSION=`${CXX} -V  2>/dev/null| ${GREP} "C++" | ${CUT} -d" " -f3 | tr -d V`
+		CXX_VERSION=`${CXX} -V  2>/dev/null| ${GREP} "C++" | ${SED} "s/^.*C++ //" | ${CUT} -d" " -f1 | ${TR} -d V | ${TR} "-" "."`
 		CXX_NAME=`${CXX} -V | ${GREP} "C++" | ${CUT} -d" " -f1`
 		VERSION_OUTPUT="${CXX_NAME} C++ ${CXX_VERSION}"
 		CXX_COMPILER_NAME="Digital"
@@ -822,7 +822,14 @@ AC_DEFUN(CF_COMPAQ_OPTIONS, [
   MAKEDEP_CXX_OPTS="-M -noimplicit_include"
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-  CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
+	dnl 
+	dnl  CXX 6.2 does not provide the -nopure_cname flag
+	if test "${CXX_VERSION_2}" -lt 3 ; then
+	  CXXFLAGS="${CXXFLAGS} -ieee"
+	else
+	  CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
+	fi
+
   LIB_CXXFLAGS="${LIB_CXXFLAGS} -ptr \$(BALL_PATH)/source/cxx_rep"
   CXXFLAGS_O="${CXXFLAGS_O} -O3"
 
