@@ -1,13 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.19 2002/12/17 18:39:18 amoll Exp $
+// $Id: surfaceModel.C,v 1.20 2002/12/18 03:14:02 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
-#include <BALL/KERNEL/system.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
 #include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
-#include <BALL/KERNEL/system.h>
 
 using namespace std;
 
@@ -86,6 +84,25 @@ namespace BALL
 			mesh->PropertyManager::set(*this);
 
 			SurfaceProcessor sp;
+
+			if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_LOW))
+			{
+				sp.setDensity(2.0);
+			}
+			else if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_MEDIUM))
+			{
+				sp.setDensity(4.5);
+			}
+			else if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH))
+			{
+				sp.setDensity(7.0);
+			}
+			else 
+			{
+				Log.error() << "Unknown precision in " << __FILE__ << "   " << __LINE__ << std::endl;
+			}
+
+
 			try 
 			{
 				start_composite_->apply(sp);
