@@ -1,14 +1,10 @@
-// $Id: genericMolFile.h,v 1.4 2001/06/21 21:26:28 amoll Exp $
+// $Id: genericMolFile.h,v 1.5 2001/12/17 01:42:43 oliver Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
 
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
-
-#ifndef BALL_SYSTEM_FILE_H
-#	include <BALL/SYSTEM/file.h>
+#ifndef BALL_FORMAT_LINEBASEDFILE_H
+#	include <BALL/FORMAT/lineBasedFile.h>
 #endif
 
 namespace BALL 
@@ -20,7 +16,7 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/FORMAT/genericMolFile.h} 
 	*/
 	class GenericMolFile
-		: public File
+		: public LineBasedFile
 	{
 		public:
 
@@ -30,11 +26,13 @@ namespace BALL
 
 		/**	Default constructor
 		*/
-		GenericMolFile();
+		GenericMolFile()
+			throw();
 
 		/** Detailed constructor.
 		*/
-		GenericMolFile(const String& filename, File::OpenMode open_mode = std::ios::in);
+		GenericMolFile(const String& filename, File::OpenMode open_mode = std::ios::in)
+			throw(Exception::FileNotFound);
 
 		/**	Copy constructor
 		*/
@@ -42,7 +40,8 @@ namespace BALL
 
 		/** Destructor
 		*/
-		virtual ~GenericMolFile();
+		virtual ~GenericMolFile()
+			throw();
 		
 		//@}
 		/**	@name Reading and Writing of Kernel Datastructures
@@ -51,49 +50,23 @@ namespace BALL
 		
 		/**	Write a system to the HIN file
 		*/
-		virtual void write(const System&	system);
+		virtual void write(const System& system);
 		
 		/**	Read a system from the HIN file
 		*/
-		virtual void read(System&	system);
+		virtual void read(System&	system)
+			throw(Exception::ParseError);
 
 		/**	Read a system from a HIN file.
 		*/
-		virtual GenericMolFile& operator >> (System& system);
+		virtual GenericMolFile& operator >> (System& system)
+			throw(Exception::ParseError);
 		
 		/**	Write a system to a HIN file.
 		*/
 		virtual GenericMolFile& operator << (const System& system);
 		
 		//@}
-		/**	@name	Accessors
-		*/
-		//@{
-				
-		/**	Check for a periodic boundary in the file.
-		*/
-		bool hasPeriodicBoundary() const;
-
-		/**	Return the periodic boundary of the file.
-				An emptry box is returned if no periodic boundary is defined.
-				@return	the boundary box
-		*/
-		Box3	getPeriodicBoundary() const;
-
-		/**	Return the temperature stored in the file.
-				HIN files may contain a {\tt sys} entry containing the temperature 
-				of the last simulation step. If it is set, it is returned. 
-				Otherwise 0 is returned.
-				@return	the final simulation temperature
-		*/
-		float	getTemperature() const;
-
-		//@}
-
-		protected:
-		
-		Box3		box_;
-		float		temperature_;
 	};
 
 } // namespace BALL
