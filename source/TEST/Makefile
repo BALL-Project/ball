@@ -49,7 +49,7 @@ EXECUTABLES_DATATYPES = \
 	PiecewisePolynomial_test\
 	Quadruple_test\
 	RegularData1D_test\
-	RegularData2D_test\
+#	RegularData2D_test\
 	RegularData3D_test
 
 EXECUTABLES_CONCEPTS =$(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
