@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.1 2000/03/16 22:28:06 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.2 2000/03/20 02:17:04 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.1 2000/03/16 22:28:06 amoll Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.2 2000/03/20 02:17:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -197,17 +197,17 @@ RESULT
 //line1101: method isIntersecting(const TPlane3<T>& a, const TPlane3<T>& b)
 CHECK(isIntersecting(const TPlane3<T>& a, const TPlane3<T>& b))
 	v1.set(1.0, 2.0, 3.0);
-	v2.set(101.0, 102.0, 103.0);
-	v3.set(101.1, 102.1, 103.1);  
+	v2.set(0.0, 0.0, 3.0);
+	v3.set(0.0, 3.0, 0.0);  
 	p1 = Plane3(v1, v2, v3);
 	v1.set(1.0, 2.0, 3.0);
-	v2.set(101.0, 102.0, 103.0);
-	v3.set(101.1, 102.1, 103.1);  
+	v2.set(0.0, 0.0, 2.0);
+	v3.set(0.0, 2.0, 0.0);  
 	p2 = Plane3(v1, v2, v3);
 	TEST_EQUAL(isIntersecting(p1, p2), true)
 	v1.set(100.0, 200.0, 300.0);
 	p2 = Plane3(v1, v2, v3);
-	TEST_EQUAL(isIntersecting(p1, p2), true)
+	TEST_EQUAL(isIntersecting(p1, p2), false)
 RESULT
 
 
@@ -255,3 +255,27 @@ CHECK(isParallel(const TPlane3<T>& a, const TPlane3<T>& b))
 	p2 = Plane3(v1, v2, v3);
 	TEST_EQUAL(isParallel(p1, p2), false)
 RESULT
+
+CHECK(TAngle<T> getTorsionAngle
+		(const T& ax, const T& ay, const T& az,
+		 const T& bx, const T& by, const T& bz,
+		 const T& cx, const T& cy, const T& cz, 
+		 const T& dx, const T& dy, const T& dz))
+	a1 = getTorsionAngle(0.0, 0.0,   0.0,  10.0,   0.0, 0.0,
+											 0.0, -10.0, 0.0,  10.0, -10.0, 0.0);
+	Angle res(-180, false);
+	TEST_EQUAL(a1, res)
+
+	a1 = getTorsionAngle(0.0, 0.0,   0.0,  10.0,   0.0, 0.0,
+											 0.0, -10.0, 0.0,  5.0, -5.0, 10.0);
+	res.set(-90, false);
+	TEST_EQUAL(a1, res)
+
+	a1 = getTorsionAngle(0.0, 0.0,   0.0,  10.0, 0.0, 0.0,
+											 0.0, -10.0, 0.0,   0.0, 0.0, 0.0);
+	res.set(0, false);
+	TEST_EQUAL(a1, res)
+
+RESULT
+
+END_TEST
