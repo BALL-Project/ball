@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.7 2004/12/21 17:48:37 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.8 2004/12/21 19:31:39 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -258,16 +258,6 @@ have_start_point_ = false;
 			}
 			else
 			{
-				/*
-				// create sphere for the point
-				Sphere* sphere = new Sphere;
-				if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
-
-				sphere->setRadius(tube_radius_);
-				sphere->setPosition(last_point_);
-				sphere->setComposite(atoms_of_spline_points_[start]);
-				geometric_objects_.push_back(sphere);
-				*/
 			}
 
  			float slides = 8.0 + drawing_precision_ * 8.0;
@@ -293,7 +283,7 @@ have_start_point_ = false;
 			
 			Matrix4x4 m;
 			m.setRotation(Angle(360.0 / (slides), false), n % r);
-			points.push_back(last_point_ + x);
+			points.push_back(x);
 			// initialise a first set of points in a circle around the start position
 			for (float p = 0; p < slides; p++)
 			{
@@ -303,12 +293,12 @@ have_start_point_ = false;
 			// add also a dummy for closing of ring
 			points.push_back(points[0]);
 
-			for (float p = 0; p < points.size() - 1; p++)
+			for (float p = 0; p < points.size() - 2; p++)
 			{
 				Line* line = new Line();
 				line->setVertex1(last_point_ + points[(Size)p]);
 				line->setVertex2(last_point_ + points[(Size)p+1]);
-				geometric_objects_.push_back(line);
+ 				geometric_objects_.push_back(line);
 			}
 
 				
@@ -338,12 +328,12 @@ have_start_point_ = false;
 				Matrix4x4 m;
 				m.setRotation(angle, dir_new % r_new);
 
-				for (Position p = 0; p < points.size(); p++)
+				for (Position point_pos = 0; point_pos < points.size() - 2; point_pos++)
 				{
 					Line* line = new Line();
-					line->setVertex1(last_point_ + points[p]);
-					points[p] = m * points[p];
-					line->setVertex2(point + points[p]);
+					line->setVertex1(last_point_ + points[point_pos]);
+					points[point_pos] = m * points[point_pos];
+					line->setVertex2(point + points[point_pos]);
  					geometric_objects_.push_back(line);
 				}
 
