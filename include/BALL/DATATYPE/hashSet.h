@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.13 2000/09/04 16:14:17 amoll Exp $ 
+// $Id: hashSet.h,v 1.14 2000/09/04 16:32:42 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -39,6 +39,7 @@ namespace BALL
 
   /** Generic Hash Set Class.
       {\bf Definition:} \URL{BALL/DATATYPE/hashSet.h}
+			\\
   */
  	template <class Key>
 	class HashSet
@@ -64,7 +65,7 @@ namespace BALL
 
 		/**	Illegal key exception.
 				Thrown if access to a non-existent key is required by the constant
-				version of operator \[\].
+				version of \Ref{operator []}.
 		*/
 		class IllegalKey
 			:	public Exception::GeneralException
@@ -154,7 +155,7 @@ namespace BALL
 		/** Assign this HashSet with the contents of another HashSet
 				@param hash_set the HashSet to assign from
 		*/
-		HashSet& operator = (const HashSet& hash_set);
+		const HashSet& operator = (const HashSet& hash_set);
 
 		/** Assing another HashSet with the contents of this HashSet
 				@param hash_set the HashSet to assign to
@@ -538,18 +539,7 @@ namespace BALL
 			capacity_(hash_set.capacity_),
 			bucket_(hash_set.bucket_.size())
 	{
-		Node* item = 0;
-		
-		for (Position bucket = 0; bucket < (Position)bucket_.size(); ++bucket)
-		{
-			bucket_[bucket] = 0;
-
-			for (item = hash_set.bucket_[bucket]; item != 0; item = item->next)
-			{
-				bucket_[bucket]	= newNode_(item->value, bucket_[bucket]);
-			}
-		}
-
+		set(hash_set);
 	}
 
 	template <class Key>
@@ -611,7 +601,7 @@ namespace BALL
 
 	template <class Key>
 	BALL_INLINE 
-	HashSet<Key>& HashSet<Key>::operator = (const HashSet& hash_set)
+	const HashSet<Key>& HashSet<Key>::operator = (const HashSet& hash_set)
 	{
 		set(hash_set);
 		return *this;
