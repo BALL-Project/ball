@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.27 2004/07/03 10:47:31 amoll Exp $
+// $Id: cartoonModel.C,v 1.28 2004/07/20 21:58:39 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -426,7 +426,7 @@ namespace BALL
 			}
 				
 			// add a disc at the beginning and the end of the cylinder to close it
-			Disc* disc = new Disc( Circle3(first->getPosition(), normal, helix_radius_));
+			Disc* disc = new Disc( Circle3(first->getPosition(), -normal, helix_radius_));
 			if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
 			disc->setComposite(first);
 			geometric_objects_.push_back(disc);
