@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File_test.C,v 1.11 2003/03/03 09:53:27 anhi Exp $
+// $Id: MOL2File_test.C,v 1.12 2005/03/02 21:58:50 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -18,7 +18,7 @@
 
 ///////////////////////////
 
-START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.11 2003/03/03 09:53:27 anhi Exp $")
+START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.12 2005/03/02 21:58:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -44,14 +44,7 @@ CHECK(MOL2File::read(System& system))
 	f.read(system);
 	TEST_EQUAL(system.countAtoms(), 30)
 	TEST_EQUAL(system.countResidues(), 3)
-	Size number_of_bonds = 0;
-	Atom::BondIterator bond_it;
-	AtomIterator atom_it;
-	BALL_FOREACH_BOND(system, atom_it, bond_it)
-	{
-		number_of_bonds++;
-	}
-	TEST_EQUAL(number_of_bonds, 29)
+	TEST_EQUAL(system.countBonds(), 29)
 RESULT
 
 CHECK(MOL2File::MOL2File(const String& filename, File::OpenMode open_mode))
@@ -60,14 +53,7 @@ CHECK(MOL2File::MOL2File(const String& filename, File::OpenMode open_mode))
 	f.read(system);
 	TEST_EQUAL(system.countAtoms(), 30)
 	TEST_EQUAL(system.countResidues(), 3)
-	Size number_of_bonds = 0;
-	Atom::BondIterator bond_it;
-	AtomIterator atom_it;
-	BALL_FOREACH_BOND(system, atom_it, bond_it)
-	{
-		number_of_bonds++;
-	}
-	TEST_EQUAL(number_of_bonds, 29)
+	TEST_EQUAL(system.countBonds(), 29)
 
 	// writing is tested below...
 RESULT
@@ -150,7 +136,7 @@ CHECK(MOL2File::MOL2File& operator << (const System& system))
 	TEST_FILE_REGEXP(filename.c_str(), "data/MOL2File_test.mol2")
 RESULT
 
-CHECK(Reading of triple bonds)
+CHECK([Extra]Reading of triple bonds)
 	MOL2File f("data/MOL2File_test2.mol2");
 	System S;
 	CAPTURE_OUTPUT_LEVEL(2000)
@@ -159,15 +145,38 @@ CHECK(Reading of triple bonds)
 	f.close();
 	TEST_EQUAL(S.countAtoms(), 21)
 	TEST_EQUAL(S.countResidues(), 0)
-	Size number_of_bonds = 0;
-	Atom::BondIterator bond_it;
-	AtomIterator atom_it;
-	BALL_FOREACH_BOND(S, atom_it, bond_it)
-	{
-		number_of_bonds++;
-	}
-	TEST_EQUAL(number_of_bonds, 23)
+	TEST_EQUAL(S.countBonds(), 23)
 RESULT
+
+CHECK([Extra]Handling of subfragments)
+	MOL2File f("data/MOL2File_test3.mol2");
+	System S;
+	CAPTURE_OUTPUT_LEVEL(2000)
+	f >> S;
+	COMPARE_OUTPUT("")
+	f.close();
+	TEST_EQUAL(S.countAtoms(), 47)
+	TEST_EQUAL(S.countFragments(), 3)
+	TEST_EQUAL(S.countBonds(), 51)
+
+	Size n = 1;
+	for (FragmentIterator fi(S.beginFragment()); +fi; ++fi, ++n)
+	{
+		Size na = 0;
+		Size nb = 0;
+		switch (n)
+		{
+			case 1:	na = 43; nb = 49; break;
+			case 2:
+			case 3:	na = 2; nb = 1; break;
+			default: break;
+		}
+		TEST_EQUAL(fi->countAtoms(), na) 
+		TEST_EQUAL(fi->countBonds(), nb)
+	}
+RESULT
+
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.C,v 1.23 2004/02/24 13:05:47 anker Exp $
+// $Id: MOL2File.C,v 1.24 2005/03/02 21:58:50 oliver Exp $
 //
 
 #include <BALL/FORMAT/MOL2File.h>
@@ -730,38 +730,11 @@ namespace BALL
 			}
 		}
 
-		// insert all atoms into their proper substructures
-		for (i = 0; i < sub_ptr.size(); i++)
-		{
-			Size last = (Size)atoms_.size();
-			if (i < sub_ptr.size() - 1)
-			{
-				last = substructures_[i + 1].root_atom - 1;
-			}
-
-			for (Size j = substructures_[i].root_atom; j <= last; j++)
-			{
-				if (j < 1)
-				{
-					Log.error() << "MOL2File::read: cannot access atom with index below 1 (root atom of substructure " 
-											<< i + 1 << ")" << endl;
-				}
-				else
-				{
-					sub_ptr[i]->insert(*atom_ptr[j - 1]);
-				}
-			}
-			
-		}
-
-		// insert all substructures into the system
+		// Create a molecule and insert it into the system.	
+		// Then add all the rest: substructures and atoms.
 		Molecule* molecule = new Molecule;
 		system.insert(*molecule);
-		for (i = 0; i < sub_ptr.size(); i++)
-		{
-			molecule->insert(*sub_ptr[i]);
-		}
-		
+
 		// if there are no substructures, insert the atoms
     // into the molecule
 		if (substructures_.size() == 0)
@@ -771,7 +744,29 @@ namespace BALL
 				molecule->insert(*atom_ptr[i]);
 			}
 		}
+		else
+		{	
+			// Otherwise, insert all atoms into their proper substructures.
+			for (i = 0; i < atoms_.size(); i++)
+			{	
+				// MOL2 starts counting at 1, we start at zero, ergo: > instead of >=.
+				if (atoms_[i].substructure > sub_ptr.size())
+				{
+					throw Exception::ParseError(__FILE__, __LINE__, String(atoms_[i].substructure_name), "Could not insert atoms into substructure with illegal index.");
+				}
+				else
+				{
+					sub_ptr[atoms_[i].substructure - 1]->insert(*atom_ptr[i]);
+				}
+			}
 
+			// Finally, insert all substructures into the system.
+			for (i = 0; i < sub_ptr.size(); i++)
+			{
+				molecule->insert(*sub_ptr[i]);
+			}
+		}
+		
 		// name the system
 		system.setName(molecule_.name);
 
