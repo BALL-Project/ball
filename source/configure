@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.40 2000/01/08 12:14:44 oliver Exp $
+#  $Id: configure,v 1.41 2000/01/08 13:14:20 oliver Exp $
 
 
 ##################################################
@@ -4964,7 +4964,7 @@ rm -f conftest*
 			USE_BALLVIEW=false
 		else
 			echo "$ac_t""yes" 1>&6
-			OPENGL_LIBOPTS=${OPENGL_LIBOPT} ${OPENGL_LIBS}"
+			OPENGL_LIBOPTS="${OPENGL_LIBOPT} ${OPENGL_LIBS}"
 		fi
 	fi
 fi
