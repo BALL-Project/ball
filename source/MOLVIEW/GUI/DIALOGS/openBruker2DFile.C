@@ -1,4 +1,4 @@
-// $Id: openBruker2DFile.C,v 1.2 2000/11/28 17:38:31 anhi Exp $
+// $Id: openBruker2DFile.C,v 1.3 2000/12/14 18:45:55 anhi Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h>
 
@@ -13,7 +13,7 @@ namespace BALL
       :     FileDialog("Import Bruker2D File", QFileDialog::ExistingFile, parent, name)
     {
       QStringList string_list;
-      string_list = "Bruker2D-directories (*.*)";
+      string_list = "Bruker2D-files (2rr)";
 
       setFilters(string_list);
     }
@@ -51,11 +51,13 @@ namespace BALL
       // reading the file
       Bruker2D *myfile = new Bruker2D();
       
-      String mydir = getExistingDirectory().latin1();
+      String mydir = dirPath().latin1();
 
       try
 	{
 	  myfile->read(mydir);
+	  // TEST!!!
+	  //	  myfile->save("/home/andreas/nmrtest", 0, 90, 500, 400);
 	}
       catch(...)
 	{
@@ -66,7 +68,7 @@ namespace BALL
 	}
 
       // writing info to log
-      Log.info() << "> Bruker file " << myfile << " succesfully read." << endl;
+      Log.info() << "> Bruker file " << mydir << " succesfully read." << endl;
       
       // notify main window
       NewRegularData2DMessage new_message;
