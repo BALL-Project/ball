@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.h,v 1.20 2002/02/27 12:18:49 sturm Exp $
+// $Id: nucleotide.h,v 1.21 2003/01/08 21:13:25 oliver Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -28,7 +28,11 @@ namespace BALL
 	class NucleicAcid;
 	class Protein;
 
-	/**	Kernel class representing a nucleotide.
+	/**	Nucleotide class.
+			This class is used to represent nucleotides within
+			an \Ref{NucleicAcid} object.
+			\\
+			{\bf Definition:} \URL{BALL/KERNEL/nucleotide.h}
 	*/
 	class Nucleotide
 		: public Fragment

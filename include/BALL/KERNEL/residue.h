@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.h,v 1.28 2002/02/27 12:18:50 sturm Exp $
+// $Id: residue.h,v 1.29 2003/01/08 21:13:26 oliver Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -36,8 +36,9 @@ namespace BALL
 	class Chain;
 	class Protein;
 
-	/** Kernel Residue Class.
-			This class is used to represent residues in proteins.\\
+	/** Residue class.
+			This class is used to represent residues in proteins.
+			\\
 			{\bf Definition:}\URL{BALL/KERNEL/residue.h}
 	*/
 	class Residue

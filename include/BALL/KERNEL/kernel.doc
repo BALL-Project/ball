@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.14 2003/01/08 11:24:01 amoll Exp $
+// $Id: kernel.doc,v 1.15 2003/01/08 21:13:25 oliver Exp $
 
 /**@name	Kernel
 		This chapter contains all relevant information on BALL kernel datastructures. 
@@ -22,7 +22,7 @@
   //@Include: secondaryStructure.h
   //@Include: system.h
 
-	/** @name Iterator classes.
+	/** @name Iterator classes
 			Iterators for KERNEL classes
 	*/
 	//@{

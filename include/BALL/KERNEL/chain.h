@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.h,v 1.25 2002/02/27 12:18:46 sturm Exp $
+// $Id: chain.h,v 1.26 2003/01/08 21:13:25 oliver Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -30,7 +30,10 @@ namespace BALL
 	
 	class Protein;
 
-	/** Protein Chain Class.
+	/** Protein chain class.
+			This class represents a polypeptide chain within a \Ref{Protein}.
+			Chains can contain \Ref{SecondaryStructure}s or \Ref{Residue}s.
+			\\
 			{\bf Definition:}\URL{BALL/KERNEL/chain.h}
 	*/
 	class Chain
