@@ -1,4 +1,4 @@
-// $Id: Quaternion_test.C,v 1.3 2000/03/16 08:24:40 amoll Exp $
+// $Id: Quaternion_test.C,v 1.4 2000/03/17 10:46:50 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/quaternion.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Quaternion_test.C,v 1.3 2000/03/16 08:24:40 amoll Exp $")
+START_TEST(class_name, "$Id: Quaternion_test.C,v 1.4 2000/03/17 10:46:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -290,7 +290,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TQuaternion<T>& q))
 	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << q;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Quaternion_test2.txt", false)
+	TEST_FILE(filename.c_str(), "data/Quaternion_test3.txt", true)
 RESULT
 
 
