@@ -1,4 +1,4 @@
-// $Id: Molecule_test.C,v 1.1 2000/04/12 17:29:29 amoll Exp $
+// $Id: Molecule_test.C,v 1.2 2000/04/12 18:01:48 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Molecule_test.C,v 1.1 2000/04/12 17:29:29 amoll Exp $")
+START_TEST(class_name, "$Id: Molecule_test.C,v 1.2 2000/04/12 18:01:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -70,20 +70,14 @@ CHECK(destroy())
 	TEST_EQUAL(s.countAtoms(), 0)
 RESULT
 
-
-//line 78: method Molecule::persistentWrite(PersistenceManager& pm, const char* name = 0) const 
 CHECK(Molecule::persistentWrite(PersistenceManager& pm, const char* name = 0) const )
   //BAUSTELLE
 RESULT
 
-
-//line 81: method Molecule::persistentRead(PersistenceManager& pm)
 CHECK(Molecule::persistentRead(PersistenceManager& pm))
   //BAUSTELLE
 RESULT
 
-
-//line 90: method Molecule::set(const Molecule& molecule, bool deep = true)
 CHECK(Molecule::set(const Molecule& molecule, bool deep = true))
 	Molecule m("a"), m2;
 	Atom a1;
@@ -93,8 +87,6 @@ CHECK(Molecule::set(const Molecule& molecule, bool deep = true))
 	TEST_EQUAL(m2.countAtoms(), 1)
 RESULT
 
-
-//line 93: method Molecule::Molecule& operator = (const Molecule& molecule)
 CHECK(Molecule::Molecule& operator = (const Molecule& molecule))
 	Molecule m("a"), m2;
 	Atom a1;
@@ -104,8 +96,6 @@ CHECK(Molecule::Molecule& operator = (const Molecule& molecule))
 	TEST_EQUAL(m2.countAtoms(), 1)
 RESULT
 
-
-//line 96: method Molecule::get(Molecule& molecule, bool deep = true) const 
 CHECK(Molecule::get(Molecule& molecule, bool deep = true) const )
 	Molecule m("a"), m2;
 	Atom a1;
@@ -115,8 +105,6 @@ CHECK(Molecule::get(Molecule& molecule, bool deep = true) const )
 	TEST_EQUAL(m2.countAtoms(), 1)
 RESULT
 
-
-//line 99: method Molecule::swap(Molecule& molecule)
 CHECK(Molecule::swap(Molecule& molecule))
 	Molecule m("a");
 	Molecule m2("b");
@@ -131,8 +119,6 @@ CHECK(Molecule::swap(Molecule& molecule))
 	TEST_EQUAL(m2.countAtoms(), 2)
 RESULT
 
-
-//line 108: method Molecule::getSystem()
 CHECK(Molecule::getSystem())
 	System s;
 	Molecule m("a");
@@ -141,8 +127,6 @@ CHECK(Molecule::getSystem())
 	TEST_EQUAL(s.getName(), "b")
 RESULT
 
-
-//line 111: method Molecule::getSystem() const 
 CHECK(Molecule::getSystem() const )
 	System s1("aya");
 	Molecule m("a");
@@ -151,101 +135,194 @@ CHECK(Molecule::getSystem() const )
 	TEST_EQUAL(m.getSystem()->getName(), "aya")
 RESULT
 
-
-//line 114: method Molecule::prepend(Atom& atom)
 CHECK(Molecule::prepend(Atom& atom))
-  //BAUSTELLE
+	Molecule m;
+	Atom a1;
+	Atom a2;
+	m.insert(a1);
+	TEST_EQUAL(m.getAtom(0), &a1)
+	m.prepend(a2);
+	TEST_EQUAL(m.getAtom(0), &a2)
+	TEST_EQUAL(m.getAtom(1), &a1)
 RESULT
 
-
-//line 117: method Molecule::append(Atom& atom)
 CHECK(Molecule::append(Atom& atom))
-  //BAUSTELLE
+	Molecule m;
+	Atom a1;
+	Atom a2;
+	m.insert(a1);
+	m.append(a2);
+	TEST_EQUAL(m.getAtom(0), &a1)
+	TEST_EQUAL(m.getAtom(1), &a2)
 RESULT
 
-
-//line 120: method Molecule::insert(Atom& atom)
 CHECK(Molecule::insert(Atom& atom))
-  //BAUSTELLE
+	Molecule m;
+	Atom a1;
+	Atom a2;
+	m.insert(a1);
+	m.insert(a2);
+	TEST_EQUAL(m.getAtom(0), &a1)
+	TEST_EQUAL(m.getAtom(1), &a2)
 RESULT
 
-//line 123: method Molecule::insertBefore(Atom& atom, Composite& before)
 CHECK(Molecule::insertBefore(Atom& atom, Composite& before))
-  //BAUSTELLE
+	Molecule m;
+	Atom a1;
+	Atom a2;
+	Atom a3;
+	m.insert(a1);
+	m.append(a2);
+	m.insertBefore(a3, a2);
+	TEST_EQUAL(m.getAtom(0), &a1)
+	TEST_EQUAL(m.getAtom(1), &a3)
+	TEST_EQUAL(m.getAtom(2), &a2)
 RESULT
 
-
-//line 126: method Molecule::insertAfter(Atom& atom, Composite& after)
 CHECK(Molecule::insertAfter(Atom& atom, Composite& after))
-  //BAUSTELLE
+	Molecule m;
+	Atom a1;
+	Atom a2;
+	Atom a3;
+	m.insert(a1);
+	m.append(a2);
+	m.insertAfter(a3, a1);
+	TEST_EQUAL(m.getAtom(0), &a1)
+	TEST_EQUAL(m.getAtom(1), &a3)
+	TEST_EQUAL(m.getAtom(2), &a2)
 RESULT
 
-
-//line 129: method Molecule::remove(Atom& atom)
 CHECK(Molecule::remove(Atom& atom))
 	Molecule m("a");
 	Atom a1;
+	Atom a2;
 	m.append(a1);
+	m.append(a2);
 	m.remove(a1);
-	TEST_EQUAL(m.countAtoms(), 0)
+	TEST_EQUAL(m.countAtoms(), 1)
+	TEST_EQUAL(m.getAtom(0), &a2)
 RESULT
 
-
-//line 132: method Molecule::prepend(BaseFragment& base_fragment)
 CHECK(Molecule::prepend(BaseFragment& base_fragment))
-  //BAUSTELLE
+	Molecule m;
+	BaseFragment bf2;
+	BaseFragment bf3;
+	m.prepend(bf2);
+	m.prepend(bf3);
+	TEST_EQUAL(m.getBaseFragment(1), &bf2)
+	TEST_EQUAL(m.getBaseFragment(0), &bf3)
 RESULT
 
-
-//line 135: method Molecule::append(BaseFragment& base_fragment)
 CHECK(Molecule::append(BaseFragment& base_fragment))
-  //BAUSTELLE
+	Molecule m;
+	BaseFragment bf2;
+	BaseFragment bf3;
+	m.append(bf2);
+	m.append(bf3);
+	TEST_EQUAL(m.getBaseFragment(0), &bf2)
+	TEST_EQUAL(m.getBaseFragment(1), &bf3)
 RESULT
 
-
-//line 138: method Molecule::insert(BaseFragment& base_fragment)
 CHECK(Molecule::insert(BaseFragment& base_fragment))
-  //BAUSTELLE
+	Molecule m;
+	BaseFragment bf2;
+	BaseFragment bf3;
+	m.insert(bf2);
+	m.insert(bf3);
+	TEST_EQUAL(m.getBaseFragment(0), &bf2)
+	TEST_EQUAL(m.getBaseFragment(1), &bf3)
 RESULT
 
-
-//line 141: method Molecule::insertBefore(BaseFragment& base_fragment, Composite& before)
 CHECK(Molecule::insertBefore(BaseFragment& base_fragment, Composite& before))
-  //BAUSTELLE
+	Molecule m;
+	BaseFragment bf2;
+	BaseFragment bf3;
+	BaseFragment bf4;
+	m.append(bf2);
+	m.append(bf3);
+	m.insertBefore(bf4, bf3);
+	TEST_EQUAL(m.getBaseFragment(0), &bf2)
+	TEST_EQUAL(m.getBaseFragment(1), &bf4)
+	TEST_EQUAL(m.getBaseFragment(2), &bf3)
 RESULT
 
-
-//line 144: method Molecule::insertAfter(BaseFragment& base_fragment, Composite& after)
 CHECK(Molecule::insertAfter(BaseFragment& base_fragment, Composite& after))
-  //BAUSTELLE
+	Molecule m;
+	BaseFragment bf2;
+	BaseFragment bf3;
+	BaseFragment bf4;
+	m.append(bf2);
+	m.append(bf3);
+	m.insertAfter(bf4, bf2);
+	TEST_EQUAL(m.getBaseFragment(0), &bf2)
+	TEST_EQUAL(m.getBaseFragment(1), &bf4)
+	TEST_EQUAL(m.getBaseFragment(2), &bf3)
 RESULT
 
-
-//line 147: method Molecule::spliceBefore(BaseFragment& base_fragment)
 CHECK(Molecule::spliceBefore(BaseFragment& base_fragment))
-  //BAUSTELLE
+	Molecule m;
+	BaseFragment bf2;
+	BaseFragment bf3;
+	BaseFragment bf4;
+	m.append(bf2);
+	bf4.append(bf3);
+	bf4.spliceBefore(m);
+	TEST_EQUAL(m.getBaseFragment(0), 0)
+	TEST_EQUAL(bf4.getBaseFragment(0), &bf2)
+	TEST_EQUAL(bf4.getBaseFragment(1), &bf3)
+	bf4.spliceBefore(bf4);
+	TEST_EQUAL(bf4.getBaseFragment(0), &bf2)
+	TEST_EQUAL(bf4.getBaseFragment(1), &bf3)
 RESULT
 
-
-//line 150: method Molecule::spliceAfter(BaseFragment& base_fragment)
 CHECK(Molecule::spliceAfter(BaseFragment& base_fragment))
-  //BAUSTELLE
+	Molecule m;
+	BaseFragment bf2;
+	BaseFragment bf3;
+	BaseFragment bf4;
+	m.append(bf2);
+	bf4.append(bf3);
+	bf4.spliceAfter(m);
+	TEST_EQUAL(m.getBaseFragment(0), 0)
+	TEST_EQUAL(bf4.getBaseFragment(1), &bf2)
+	TEST_EQUAL(bf4.getBaseFragment(0), &bf3)
+	bf4.spliceBefore(bf4);
+	TEST_EQUAL(bf4.getBaseFragment(1), &bf2)
+	TEST_EQUAL(bf4.getBaseFragment(0), &bf3)
 RESULT
 
-
-//line 153: method Molecule::splice(BaseFragment& base_fragment)
 CHECK(Molecule::splice(BaseFragment& base_fragment))
-  //BAUSTELLE
+	Molecule m;
+	BaseFragment bf2;
+	BaseFragment bf3;
+	BaseFragment bf4;
+	BaseFragment bf5;
+	BaseFragment bfx;
+	BaseFragment bfy;
+	m.append(bf2);
+	m.append(bfx);
+	m.append(bf3);
+	bfx.append(bfy);
+	bf4.append(bf5);
+	m.splice(bfx);
+	TEST_EQUAL(m.getBaseFragment(0), &bf2)
+	TEST_EQUAL(m.getBaseFragment(1), &bfy)
+	TEST_EQUAL(m.getBaseFragment(2), &bf3)
+	m.splice(bf4);
+	TEST_EQUAL(m.getBaseFragment(0), &bf5)
+	TEST_EQUAL(m.getBaseFragment(1), &bf2)
 RESULT
 
-
-//line 156: method Molecule::remove(BaseFragment& base_fragment)
 CHECK(Molecule::remove(BaseFragment& base_fragment))
-  //BAUSTELLE
+	Molecule m;
+	BaseFragment bf2;
+	BaseFragment bf3;
+	m.append(bf2);
+	m.append(bf3);
+	m.remove(bf2);
+	TEST_EQUAL(m.getBaseFragment(0), &bf3)
 RESULT
 
-
-//line 165: method Molecule::isValid() const 
 CHECK(Molecule::isValid() const )
 	Molecule m("a");
 	Atom a1;
@@ -253,8 +330,6 @@ CHECK(Molecule::isValid() const )
 	TEST_EQUAL(m.isValid(), true)
 RESULT
 
-
-//line 168: method Molecule::dump(std::ostream& s = std::cout, Size depth = 0) const 
 CHECK(Molecule::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Molecule m("molecule1");
 	Atom a1, a2;
@@ -270,90 +345,33 @@ CHECK(Molecule::dump(std::ostream& s = std::cout, Size depth = 0) const )
 RESULT
 
 
-//line 177: method Molecule::read(std::istream& s)
 CHECK(Molecule::read(std::istream& s))
-  //BAUSTELLE
+/*std::ifstream instr("data/Molecule.txt2");
+	Molecule m;
+	m.read(instr);
+	instr.close();
+	TEST_EQUAL(m.getName(), "molecule1")	
+	TEST_EQUAL(m.getBaseFragment(0)->getName(), "BF")	
+	TEST_EQUAL(m.getAtom(0)->getName(), "atom1")	*/
 RESULT
 
-
-//line 180: method Molecule::write(std::ostream& s) const 
-CHECK(Molecule::write(std::ostream& s) const )
-	Molecule m("molecule1");
-	Atom a1, a2;
+CHECK(Molecule::write(std::ostream& s) const ) // NotImplemented
+/*	Molecule m("molecule1");
+	Atom a1;
+	BaseFragment Bf;
+	Bf.setName("BF");
 	a1.setName("atom1");
-	a2.setName("atom2");
 	m.append(a1);
-	m.append(a2);
+	m.append(Bf);
 	std::ofstream outstr(filename.c_str(), std::ios::out);
 	m.write(outstr);
-	outstr.close();
+	outstr.close();*/
 RESULT
 
-
-//line 188: method Molecule::BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Fragment)
 CHECK(Molecule::BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Fragment))
   //BAUSTELLE
 RESULT
 
-
-//line 192: method Molecule::getMolecule() const 
-CHECK(Molecule::getMolecule() const )
-  //BAUSTELLE
-RESULT
-
-
-//line 194: method Molecule::getSuperBaseFragment()
-CHECK(Molecule::getSuperBaseFragment())
-  //BAUSTELLE
-RESULT
-
-
-//line 196: method Molecule::getSuperBaseFragment() const 
-CHECK(Molecule::getSuperBaseFragment() const )
-  //BAUSTELLE
-RESULT
-
-
-//line 198: method Molecule::prepend(Molecule& molecule)
-CHECK(Molecule::prepend(Molecule& molecule))
-  //BAUSTELLE
-RESULT
-
-
-//line 200: method Molecule::append(Molecule& molecule)
-CHECK(Molecule::append(Molecule& molecule))
-  //BAUSTELLE
-RESULT
-
-
-//line 202: method Molecule::insert(Molecule& molecule)
-CHECK(Molecule::insert(Molecule& molecule))
-  //BAUSTELLE
-RESULT
-
-
-//line 204: method Molecule::insertBefore(Molecule& molecule, Composite& composite)
-CHECK(Molecule::insertBefore(Molecule& molecule, Composite& composite))
-  //BAUSTELLE
-RESULT
-
-
-//line 206: method Molecule::insertAfter(Molecule& molecule, Composite& composite)
-CHECK(Molecule::insertAfter(Molecule& molecule, Composite& composite))
-  //BAUSTELLE
-RESULT
-
-
-//line 208: method Molecule::remove(Molecule& molecule)
-CHECK(Molecule::remove(Molecule& molecule))
-  //BAUSTELLE
-RESULT
-
-
-//line 210: method Molecule::isSubBaseFragmentOf(const BaseFragment& base_fragment) const 
-CHECK(Molecule::isSubBaseFragmentOf(const BaseFragment& base_fragment) const )
-  //BAUSTELLE
-RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
