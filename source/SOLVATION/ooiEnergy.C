@@ -1,4 +1,4 @@
-// $Id: ooiEnergy.C,v 1.10 2000/08/30 19:59:12 oliver Exp $
+// $Id: ooiEnergy.C,v 1.11 2000/09/20 07:11:39 oliver Exp $
 
 #include <BALL/SOLVATION/ooiEnergy.h>
 
@@ -110,7 +110,7 @@ namespace BALL
 						}
 					}
 				} 
-				catch (Exception::InvalidFormat e)
+				catch (Exception::InvalidFormat)
 				{
 					Log.error() << "calculateOoiEnergy: cannot convert to a number: " << index_str << endl;
 				}
