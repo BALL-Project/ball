@@ -1,4 +1,4 @@
-// $Id: Pair6_12RDFIntegrator_test.C,v 1.1 2000/10/05 17:16:56 anker Exp $
+// $Id: Pair6_12RDFIntegrator_test.C,v 1.2 2000/10/18 12:00:33 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Pair6_12RDFIntegrator_test.C,v 1.1 2000/10/05 17:16:56 anker Exp $")
+START_TEST(class_name, "$Id: Pair6_12RDFIntegrator_test.C,v 1.2 2000/10/18 12:00:33 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -109,21 +109,6 @@ CHECK(Pair6_12RDFIntegrator::clear())
 	TEST_EQUAL(test, true);
 	vector<Coefficients> naught;
 	test = (integrator.getRDF().getRepresentation().getCoefficients() == naught);
-	TEST_EQUAL(test, true);
-	// BAUSTELLE: Konstanten
-	// BAUSTELLE: false, Spezialfälle
-RESULT
-
-
-CHECK(Pair6_12RDFIntegrator::set(const Pair6_12RDFIntegrator& integrator))
-	Pair6_12RDFIntegrator int1;
-	int1.setRDF(RadialDistributionFunction(poly));
-	int1.setConstants(1.0, 1.0, 1.0, 1.0);
-	Pair6_12RDFIntegrator int2;
-	int2.set(int1);
-	bool test = (int2.getRDF().getRepresentation().getIntervals() == intervals);
-	TEST_EQUAL(test, true);
-	test = (int2.getRDF().getRepresentation().getCoefficients() == coefs);
 	TEST_EQUAL(test, true);
 	// BAUSTELLE: Konstanten
 	// BAUSTELLE: false, Spezialfälle
