@@ -1,5 +1,5 @@
 #!/usr/local/bin/bash
-# $Id: makedoc,v 1.3 2001/07/16 11:40:15 amoll Exp $
+# $Id: makedoc,v 1.4 2001/07/17 01:20:55 amoll Exp $
 
 # This script is used to build the BALL-documentation.
 # It can receive "complete", "html", and "tex" as first parameter to
@@ -18,8 +18,8 @@
 
 makedoc_init ()
 {
-	DOCPP_HTML_OPTIONS_DEFAULT="-u -m -w -W -v -ep amsmath -ep graphicx -G -eo 11pt -d"
-	 DOCPP_TEX_OPTIONS_DEFAULT="-u -m -w -W -v -ep amsmath -ng -X -D 3 -ei -t -o"
+	DOCPP_HTML_OPTIONS_DEFAULT="-u -m -w -W -v -ep amsmath -ei -ep graphicx -G -eo 11pt -d"
+	 DOCPP_TEX_OPTIONS_DEFAULT="-u -m -w -W -v -ep amsmath -ei -ng -X -D 3 -t -o"
 
 	#=================== Path to BALL ==================================
 	if [ -z "$BALL_PATH" ]
@@ -59,7 +59,7 @@ makedoc_init ()
 
 	if [ -z "$DOCPP_TEX_OPTIONS" ]
 	then
-		echo DOCPP_TEX_OPTIONS was not definded, using default [ $DOCPP_TEX_OPTIONS_DEFAULT ].
+		echo DOCPP_TEX_OPTIONS  was not definded, using default [ $DOCPP_TEX_OPTIONS_DEFAULT ].
 		DOCPP_TEX_OPTIONS="$DOCPP_TEX_OPTIONS_DEFAULT"
 	else 
 		echo DOCPP_TEX_OPTIONS was definded, using [ $DOCPP_TEX_OPTIONS ]
@@ -70,10 +70,10 @@ makedoc_init ()
 build_html_docu ()
 {
 	# extract the date for replacing in all html pages
-	USERNAME=`finger ${USER} |grep Login|grep ": ${USER}" | head -1|sed "s/^.*life: //"|sed "s/&/${USER}/"`
-	DATE=`date +"%a %b %e %Y"`
-	RELEASE="`grep BALL_RELEASE_STRING $BALL_PATH/include/BALL/COMMON/version.h | awk '{print $3}' | tr -d \\ `"
-	YEAR=`date +%Y`
+  USERNAME=`finger ${USER} |grep Login|grep ": ${USER}" | head -1|sed "s/^.*: //"|sed "s/&/${USER}/"`
+ 	DATE=`date +"%a %b %e %Y"`
+	RELEASE=`grep 'define BALL_RELEASE_STRING' $BALL_PATH/include/BALL/COMMON/version.h | awk '{print $3}' | tr -d \\" `
+ 	YEAR=`date +%Y`
 
 	cd $BALL_PATH;
 
@@ -108,7 +108,7 @@ build_html_docu ()
 
 	echo "creating start page and html include files..."
 
-	for i in $BALL_PATH/doc/tools/*.inc $BALL_PATH/doc/tools/*.html ; do
+	for i in $BALL_PATH/doc/html_includes/*.inc $BALL_PATH/doc/html_includes/*.html ; do
 		cat $i |\
 			sed "s/@USER@/${USERNAME}/" |\
 			sed "s/@RELEASE@/${RELEASE}/" |\
