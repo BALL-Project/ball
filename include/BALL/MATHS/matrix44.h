@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.h,v 1.46 2003/08/26 08:04:21 oliver Exp $
+// $Id: matrix44.h,v 1.47 2003/11/23 13:46:58 anhi Exp $
 //
 
 #ifndef BALL_MATHS_MATRIX44_H
@@ -2176,6 +2176,13 @@ namespace BALL
 		x /= mag;
 		y /= mag;
 		z /= mag;
+
+		// we need to recalculate xx, yy, zz due to the
+		// normalization. recalculation is probably faster
+		// than normalizing xx, yy, zz
+		xx = x*x;
+		yy = y*y;
+		zz = z*z;
 
 		xy = x * y;
 		yz = y * z;
