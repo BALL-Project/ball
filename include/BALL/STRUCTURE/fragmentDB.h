@@ -1,4 +1,4 @@
-// $Id: fragmentDB.h,v 1.6 2000/02/16 19:15:14 oliver Exp $
+// $Id: fragmentDB.h,v 1.7 2000/08/07 12:53:11 oliver Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -176,14 +176,32 @@ namespace BALL
 		const Residue* getResidue(const String& fragment_name) const;
 
 		/**	Return a copy of a fragment.
+				If a fragment with name {\tt fragment_name} exists in the
+				fragment database, a copy is created and returned. Otherwise,
+				a null pointer is returned. Take care to destruct the copy again
+				to avoid memory leaks.
+				@return a pointer to the copied fragment or 0
+				@param	fragent_name the name of the fragment in the database
 		*/
 		Fragment* getFragmentCopy(const String& fragment_name) const;
 
-		/**	Return a copy of a molecule.
+		/**	Return a copy of a fragment as a molecule.
+				If a fragment with name {\tt fragment_name} exists in the
+				fragment database, a copy is created, inserted into a new molecule, 
+				and returned. Otherwise, a null pointer is returned. Take care 
+				to destruct the copy again to avoid memory leaks.
+				@return a pointer to the copied fragment or 0
+				@param	fragent_name the name of the fragment in the database
 		*/
 		Molecule* getMoleculeCopy(const String& fragment_name) const;
 
 		/**	Return a copy of a residue
+				If a fragment with name {\tt fragment_name} exists in the
+				fragment database, a copy is created and returned as a residue. 
+				Otherwise, a null pointer is returned. Take care to destruct the copy again
+				to avoid memory leaks.
+				@return a pointer to the copied fragment or 0
+				@param	fragent_name the name of the fragment in the database
 		*/
 		Residue* getResidueCopy(const String& fragment_name) const;
 
