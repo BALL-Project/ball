@@ -1,4 +1,4 @@
-// $Id: tutorial1.C,v 1.1 2000/03/09 22:20:45 oliver Exp $
+// $Id: tutorial1.C,v 1.2 2000/03/24 11:14:48 oliver Exp $
 // tutorial example 1
 // ------------------
 // build two water molecules and write them to a file
@@ -77,13 +77,13 @@ int main()
 	water2->apply(translation);
 
 	// We insert our two molecules into a system
-	System S;
+	System* S = new System;
 	S.insert(*water);
 	S.insert(*water2);
 
 	// and write this system to a HyperChem file
 	HINFile outfile("water.hin", ios::out);
-	outfile << S;
+	outfile << *S;
 	outfile.close();
 
 	// We delete the system. This also deletes the molecules
