@@ -268,12 +268,14 @@ namespace BALL
 
 				SnapShotManager manager(ff.getSystem(), &ff, dcd_file_);
 				manager.setFlushToDiskFrequency(10);
+				bool ok = true;
 
 				// iterate until done and refresh the screen every "steps" iterations
-				while (md_->getNumberOfIterations() < steps_ &&
+				while (ok &&
+							 md_->getNumberOfIterations() < steps_ &&
 							 !main_control_->stopedSimulation())
 				{
-					md_->simulateIterations(steps_between_updates_, true);
+					ok = md_->simulateIterations(steps_between_updates_, true);
 					updateScene_();
 
 					waitForUpdateOfRepresentations_();
