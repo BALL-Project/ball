@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.18 2003/08/25 17:04:30 anker Exp $
+// $Id: fresno.h,v 1.1.2.19 2004/04/28 15:36:46 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -31,6 +31,119 @@ namespace BALL
 	{
 
 		public:
+
+		/** Define the interface for the base function
+		*/
+		class BaseFunction
+		{
+
+			public:
+
+			///
+			BaseFunction()
+				throw();
+
+			///
+			BaseFunction(float lower, float upper)
+				throw();
+
+			///
+			virtual void setLower(float lower)
+				throw();
+
+			///
+			virtual void setUpper(float upper)
+				throw();
+
+			///
+			virtual float calculate(float x) const
+				throw();
+
+			///
+			virtual float calculate(float x, float lower, float upper) 
+				throw();
+
+
+			protected:
+
+			//_
+			float lower_;
+
+			//_
+			float upper_;
+
+		};
+
+		/** Linear base function
+		*/
+		class BaseFunctionLinear : public BaseFunction
+		{
+
+			public:
+
+			///
+			BaseFunctionLinear()
+				throw();
+
+			///
+			BaseFunctionLinear(float lower, float upper)
+				throw();
+
+			///
+			float calculate(float x) const
+				throw();
+
+			///
+			float calculate(float x, float lower, float upper)
+				throw();
+
+		};
+
+		/** Sigmoidal base function
+		*/
+		class BaseFunctionSigmoidal: public BaseFunction
+		{
+
+			public:
+
+			/// 
+			BaseFunctionSigmoidal()
+				throw();
+
+			/// 
+			BaseFunctionSigmoidal(float lower, float upper)
+				throw();
+
+			///
+			void setLower(float lower)
+				throw();
+
+			///
+			void setUpper(float upper)
+				throw();
+
+			///
+			float calculate(float x) const
+				throw();
+
+			///
+			float calculate(float x, float lower, float upper)
+				throw();
+
+
+			private:
+
+			//_
+			void computeSigmoidParameters_()
+				throw();
+
+			//_
+			float a_;
+
+			//_
+			float b_;
+
+		};
 
 		/**	@name Constant Definitions
 		*/
@@ -146,6 +259,10 @@ namespace BALL
 
 			/**
 			*/
+			static const char* DESOLV_FOCUS_GRID_AROUND_LIGAND;
+
+			/**
+			*/
 			static const char* PROBE_RADIUS;
 
 			/**
@@ -183,6 +300,10 @@ namespace BALL
 			/**
 			*/
 			static const char* ATOM_TYPE_FILE;
+
+			/**
+			*/
+			static const char* BASE_FUNCTION_TYPE;
 
 
 		};
@@ -293,6 +414,14 @@ namespace BALL
 
 			/**
 			*/
+			static const Size DESOLV_AVG;
+
+			/**
+			*/
+			static const bool DESOLV_FOCUS_GRID_AROUND_LIGAND;
+
+			/**
+			*/
 			static const float PROBE_RADIUS;
 
 			/**
@@ -317,10 +446,6 @@ namespace BALL
 
 			/**
 			*/
-			static const Size DESOLV_AVG;
-
-			/**
-			*/
 			static const Size VERBOSITY;
 
 			/**
@@ -335,7 +460,26 @@ namespace BALL
 			*/
 			static const String ATOM_TYPE_FILE;
 
+			/**
+			*/
+			static const Size BASE_FUNCTION_TYPE;
+
 		};
+
+
+		/**
+		*/
+		enum BaseFunctionType
+		{
+			/**
+			*/
+			BASE_FUNCTION_TYPE__LINEAR,
+
+			/**
+			 */
+			BASE_FUNCTION_TYPE__SIGMOIDAL
+		};
+
 
 		/**
 		*/
@@ -558,11 +702,14 @@ namespace BALL
 		String getFresnoTypeString(short type) const
 			throw();
 
-		/** Calculate a frequently used function of the Fresno force field
+		/**
 		*/
-		static double calculateBaseFunction(double x, double lower, double upper)
+		String getFresnoTypeString(const Atom* atom) const
 			throw();
-		//@}
+
+		/** The base funtion (sigmoidal or linear?)
+		*/
+		BaseFunction* base_function;
 
 
 		protected:
@@ -588,6 +735,8 @@ namespace BALL
 
 		private:
 
+		/*_
+		*/
 		void registerComponents_()
 			throw();
 

@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.22 2003/08/25 17:06:06 anker Exp $
+// $Id: fresno.C,v 1.1.2.23 2004/04/28 15:37:19 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -18,11 +18,169 @@
 #include <BALL/MOLMEC/FRESNO/chemScoreMetal.h>
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/FRESNO/fresnoNonPolar.h>
+#include <BALL/MOLMEC/FRESNO/fresnoRingStacking.h>
 
 using namespace std;
 
 namespace BALL
 {
+
+
+	FresnoFF::BaseFunction::BaseFunction()
+		throw()
+		:	lower_(0.0f),
+			upper_(0.0f)
+	{
+	}
+
+	FresnoFF::BaseFunction::BaseFunction(float lower, float upper)
+		throw()
+		:	lower_(lower),
+			upper_(upper)
+	{
+	}
+
+	void FresnoFF::BaseFunction::setLower(float lower)
+		throw()
+	{
+		lower_ = lower;
+	}
+
+	void FresnoFF::BaseFunction::setUpper(float upper)
+		throw()
+	{
+		upper_ = upper;
+	}
+
+	float FresnoFF::BaseFunction::calculate(float /* x */) const 
+		throw()
+	{
+		return(0.0);
+	}
+
+	float FresnoFF::BaseFunction::calculate(float /* x */, float /* lower */,
+			float /* upper */) 
+		throw()
+	{
+		return(0.0);
+	}
+
+	FresnoFF::BaseFunctionLinear::BaseFunctionLinear()
+		throw()
+	{
+	}
+
+	FresnoFF::BaseFunctionLinear::BaseFunctionLinear(float lower, float upper)
+		throw()
+	{
+		// ????? I wanted to just call the constructor of FresnoFF::BaseFunction,
+		// but that didn't work, because the private variables were not
+		// changed. Maybe I instantiated another one, but I actually believed
+		// that the following call should suffice:
+		//FresnoFF::BaseFunction::FresnoFF::BaseFunction(lower, upper);
+		lower_ = lower;
+		upper_ = upper;
+	}
+
+	float FresnoFF::BaseFunctionLinear::calculate(float x) const
+		throw()
+	{
+
+		float return_value;
+
+		// DEBUG
+		cout << "l = " << lower_ << " u = " << upper_ << " x = " << x << endl;
+		// /DEBUG
+
+		if (x < 0.0)
+		{
+			Log.error() << "FresnoFF::BaseFunctionLinear::calculate(): "
+				<< "negative score, returning 0." << endl;
+			return(0.0);
+		}
+
+		if (x <= lower_)
+		{
+			return_value = 1.0;
+		}
+		else
+		{
+			if (x <= upper_)
+			{
+				return_value = 1.0 - ((x - lower_)/(upper_ - lower_));
+			}
+			else
+			{
+				return_value = 0.0;
+			}
+		}
+		return return_value;
+	}
+
+	float FresnoFF::BaseFunctionLinear::calculate(float x, float lower,
+			float upper) 
+		throw()
+	{
+		setLower(lower);
+		setUpper(upper);
+		return(calculate(x));
+	}
+
+	FresnoFF::BaseFunctionSigmoidal::BaseFunctionSigmoidal()
+		throw()
+		:	a_(0.0),
+			b_(0.0)
+	{
+	}
+
+	FresnoFF::BaseFunctionSigmoidal::BaseFunctionSigmoidal(float lower,
+			float upper)
+		throw()
+	{
+		// ????? see constructor of FresnoFF::BaseFunctionLinear
+		// FresnoFF::BaseFunction::FresnoFF::BaseFunction(lower, upper);
+		lower_ = lower;
+		upper_ = upper;
+		computeSigmoidParameters_();
+	}
+
+	void FresnoFF::BaseFunctionSigmoidal::setLower(float lower)
+		throw()
+	{
+		FresnoFF::BaseFunction::setLower(lower);
+		// computeSigmoidParameters_();
+	}
+
+	void FresnoFF::BaseFunctionSigmoidal::setUpper(float upper)
+		throw()
+	{
+		FresnoFF::BaseFunction::setUpper(upper);
+		// computeSigmoidParameters_();
+	}
+
+	float FresnoFF::BaseFunctionSigmoidal::calculate(float x) const
+		throw()
+	{
+		return(1.0 / (1.0 + exp(-a_ * x + b_)));
+	}
+
+	float FresnoFF::BaseFunctionSigmoidal::calculate(float x, float lower,
+			float upper)
+		throw()
+	{
+		setLower(lower);
+		setUpper(upper);
+		computeSigmoidParameters_();
+		return(calculate(x));
+	}
+
+
+	void FresnoFF::BaseFunctionSigmoidal::computeSigmoidParameters_()
+		throw()
+	{
+		a_ = 4.0 / (lower_ - upper_);
+		b_ = a_ * (lower_ + 0.5 * (upper_ - lower_));
+	}
 
 
 	const char* FresnoFF::Option::CONST = "const";
@@ -51,6 +209,8 @@ namespace BALL
 	const char* FresnoFF::Option::METAL_R2 = "metal_r2";
 	const char* FresnoFF::Option::DESOLV_METHOD = "desolvation_method";
 	const char* FresnoFF::Option::DESOLV_AVG = "desolvation_averaging";
+	const char* FresnoFF::Option::DESOLV_FOCUS_GRID_AROUND_LIGAND 
+		= "desolv_focus_grid_around_ligand";
 	const char* FresnoFF::Option::PROBE_RADIUS = "probe_radius";
 	const char* FresnoFF::Option::SURFACE_TENSION = "surface_tesnion";
 	const char* FresnoFF::Option::UHLIG_CONSTANT = "uhlig_constant";
@@ -65,6 +225,8 @@ namespace BALL
 		= "lj_param_file";
 	const char* FresnoFF::Option::ATOM_TYPE_FILE 
 		= "atom_types_file";
+	const char* FresnoFF::Option::BASE_FUNCTION_TYPE
+		= "base_function_type";
 
 
 	// const float FresnoFF::Default::CONST = -33.614;
@@ -104,6 +266,7 @@ namespace BALL
 	const float FresnoFF::Default::METAL_R2 = 2.6;
 	const Size FresnoFF::Default::DESOLV_METHOD = 0;
 	const Size FresnoFF::Default::DESOLV_AVG = 0;
+	const bool FresnoFF::Default::DESOLV_FOCUS_GRID_AROUND_LIGAND = true;
 	const float FresnoFF::Default::PROBE_RADIUS = 0;
 	const float FresnoFF::Default::SURFACE_TENSION = 0;
 	const float FresnoFF::Default::UHLIG_CONSTANT = 0;
@@ -117,6 +280,8 @@ namespace BALL
 		= "Amber/amber94.ini";
 	const String FresnoFF::Default::ATOM_TYPE_FILE 
 		= "Amber/amber94.types";
+	const Size FresnoFF::Default::BASE_FUNCTION_TYPE
+		= BASE_FUNCTION_TYPE__LINEAR;
 
 	void FresnoFF::registerComponents_()
 		throw()
@@ -131,6 +296,7 @@ namespace BALL
 		insertComponent(new ChemScoreMetal(*this));
 		insertComponent(new CharmmNonBonded(*this));
 		insertComponent(new FresnoNonPolar(*this));
+		insertComponent(new FresnoRingStacking(*this));
 	}
 
 
@@ -273,6 +439,10 @@ namespace BALL
 			= options.setDefaultInteger(FresnoFF::Option::VERBOSITY,
 					FresnoFF::Default::VERBOSITY);
 
+		Size base_function_type 
+			= options.setDefaultInteger(FresnoFF::Option::BASE_FUNCTION_TYPE,
+					FresnoFF::Default::BASE_FUNCTION_TYPE);
+
 		// check whether the system is assigned
 		System* system = getSystem();
 		if (system == 0)
@@ -308,6 +478,18 @@ namespace BALL
 			}
 		}
  
+ 		// Assign base function
+		if (base_function_type == BASE_FUNCTION_TYPE__LINEAR)
+		{
+			base_function = new BaseFunctionLinear;
+		}
+		else
+		{
+			if (base_function_type == BASE_FUNCTION_TYPE__SIGMOIDAL)
+			{
+				base_function = new BaseFunctionSigmoidal;
+			}
+		}
 		// we have to assign those atom types defined in 
 		// Eldrigde et al. JCAMD 11:425-445, 1997, p 431
 		// or the changed version of Rognan et al.
@@ -1007,31 +1189,11 @@ namespace BALL
 		return string;
 	}
 
-	double FresnoFF::calculateBaseFunction(double x, double lower, double upper)
+	String FresnoFF::getFresnoTypeString(const Atom* atom) const
 		throw()
 	{
-		// Quick and dirty. Optimize this.
-
-		double return_value;
-
-		x = fabs(x);
-
-		if (x <= lower)
-		{
-			return_value = 1.0;
-		}
-		else
-		{
-			if (x <= upper)
-			{
-				return_value = 1.0 - ((x - lower)/(upper - lower));
-			}
-			else
-			{
-				return_value = 0.0;
-			}
-		}
-		return return_value;
+		return(getFresnoTypeString(fresno_types_[atom]));
 	}
+	
 
 } // namespace BALL
