@@ -1,4 +1,4 @@
-// $Id: ShiftModule.C,v 1.1 2000/07/03 20:02:19 oliver Exp $
+// $Id: shiftModule.C,v 1.1 2000/07/04 06:56:58 oliver Exp $
 
 #include<BALL/NMR/shiftModule.h>
 

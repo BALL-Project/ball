@@ -1,4 +1,4 @@
-// $Id: RandomCoil.C,v 1.1 2000/07/03 20:02:18 oliver Exp $
+// $Id: randomCoil.C,v 1.1 2000/07/04 06:56:58 oliver Exp $
 
 #include<BALL/NMR/randomCoil.h>
 
