@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.7 2000/09/01 10:13:41 anker Exp $
+// $Id: global.h,v 1.8 2001/07/17 12:51:54 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -56,7 +56,7 @@ extern float total_SES_area;
 extern float total_SES_volume;
 
 // a hash map containing the atom surfaces of the SAS (if calculated)
-extern HashMap<Atom*, float> surface_map;
+extern HashMap<const Atom*, float> surface_map;
 
 //  true, if timing information and final options should be printed
 extern bool verbose;

@@ -1,4 +1,4 @@
-// $Id: global.C,v 1.8 2000/09/01 10:13:37 anker Exp $
+// $Id: global.C,v 1.9 2001/07/17 12:51:54 oliver Exp $
 #include "global.h"
 
 FragmentDB*           frag_db = 0;
@@ -37,7 +37,7 @@ float total_SES_area = 0.0;
 float total_SES_volume = 0.0;
 
 // a hash map containing the atom surfaces of the SAS (if calculated)
-HashMap<Atom*, float> surface_map;
+HashMap<const Atom*, float> surface_map;
 
 
 // further options
