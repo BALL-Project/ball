@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.4 2003/10/17 16:17:34 amoll Exp $
+// $Id: representation.C,v 1.5 2003/10/19 14:10:23 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -223,6 +223,8 @@ namespace BALL
 
 			if (color_processor_ != 0) 
 			{
+				// make sure, that the atom grid is recomputed for meshes
+				color_processor_->setComposites(&composites_);
 				geometric_objects_.apply(*color_processor_);
 			}
 		}
@@ -258,6 +260,11 @@ namespace BALL
 				//delete color_processor_;
 			}
 			color_processor_ = processor;
+			
+			if (color_processor_ != 0)
+			{
+				color_processor_->setComposites(&composites_);
+			}
 		}
 
 		void Representation::setDrawingPrecision(Index precision)
