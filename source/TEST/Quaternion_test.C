@@ -1,4 +1,4 @@
-// $Id: Quaternion_test.C,v 1.6 2000/05/26 19:25:04 amoll Exp $
+// $Id: Quaternion_test.C,v 1.7 2000/06/27 23:29:00 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/quaternion.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Quaternion_test.C,v 1.6 2000/05/26 19:25:04 amoll Exp $")
+START_TEST(class_name, "$Id: Quaternion_test.C,v 1.7 2000/06/27 23:29:00 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -214,9 +214,11 @@ CHECK(TQuaternion::operator = (const TQuaternion<T>& q))
 RESULT	
 
 CHECK(TQuaternion::setIdentity())
-	q1 = Quaternion();  
-  q2.setIdentity();
-  TEST_EQUAL(q2 == q1, true)
+  q1.setIdentity();
+  TEST_EQUAL(q1.i, 0)
+  TEST_EQUAL(q1.j, 0)
+  TEST_EQUAL(q1.k, 0)
+  TEST_EQUAL(q1.angle, 1)
 RESULT
 
 CHECK(TQuaternion operator + (const TQuaternion<T>& a, const TQuaternion<T>& b))
