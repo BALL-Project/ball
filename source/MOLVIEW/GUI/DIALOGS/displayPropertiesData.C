@@ -1,0 +1,286 @@
+// $Id:
+
+#include <qpixmap.h>
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
+#include <qgroupbox.h>
+
+#include <BALL/MOLVIEW/GUI/DIALOGS/displayPropertiesData.h>
+
+namespace BALL
+{
+
+	namespace MOLVIEW
+	{
+
+DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
+                         : QDialog(parent, name, FALSE, 2768)
+{
+    QGroupBox *qtarch_color_groupbox = new QGroupBox(this, "color_groupbox");
+    qtarch_color_groupbox->setGeometry(10, 100, 230, 140);
+    qtarch_color_groupbox->setMinimumSize(0, 0);
+    qtarch_color_groupbox->setMaximumSize(32767, 32767);
+    qtarch_color_groupbox->setFocusPolicy(QWidget::NoFocus);
+    qtarch_color_groupbox->setBackgroundMode(QWidget::PaletteBackground);
+    qtarch_color_groupbox->setFontPropagation(QWidget::SameFont);
+    qtarch_color_groupbox->setPalettePropagation(QWidget::SameFont);
+    qtarch_color_groupbox->setFrameStyle( 51 );
+    qtarch_color_groupbox->setLineWidth( 2 );
+    qtarch_color_groupbox->setMidLineWidth( 0 );
+    qtarch_color_groupbox->QFrame::setMargin( 0 );
+    qtarch_color_groupbox->setTitle( tr( "color" ) );
+    qtarch_color_groupbox->setAlignment( AlignHCenter );
+
+    QGroupBox *qtarch_GroupBox_9 = new QGroupBox(qtarch_color_groupbox, "GroupBox_9");
+    qtarch_GroupBox_9->setGeometry(10, 50, 210, 80);
+    qtarch_GroupBox_9->setMinimumSize(0, 0);
+    qtarch_GroupBox_9->setMaximumSize(32767, 32767);
+    qtarch_GroupBox_9->setFocusPolicy(QWidget::NoFocus);
+    qtarch_GroupBox_9->setBackgroundMode(QWidget::PaletteBackground);
+    qtarch_GroupBox_9->setFontPropagation(QWidget::SameFont);
+    qtarch_GroupBox_9->setPalettePropagation(QWidget::SameFont);
+    qtarch_GroupBox_9->setFrameStyle( 51 );
+    qtarch_GroupBox_9->setLineWidth( 2 );
+    qtarch_GroupBox_9->setMidLineWidth( 0 );
+    qtarch_GroupBox_9->QFrame::setMargin( 0 );
+    qtarch_GroupBox_9->setTitle( tr( "custom color" ) );
+    qtarch_GroupBox_9->setAlignment( AlignLeft );
+
+    QGroupBox *qtarch_model_groupbox = new QGroupBox(this, "model_groupbox");
+    qtarch_model_groupbox->setGeometry(10, 10, 230, 80);
+    qtarch_model_groupbox->setMinimumSize(0, 0);
+    qtarch_model_groupbox->setMaximumSize(32767, 32767);
+    qtarch_model_groupbox->setFocusPolicy(QWidget::NoFocus);
+    qtarch_model_groupbox->setBackgroundMode(QWidget::PaletteBackground);
+    qtarch_model_groupbox->setFontPropagation(QWidget::SameFont);
+    qtarch_model_groupbox->setPalettePropagation(QWidget::SameFont);
+    qtarch_model_groupbox->setFrameStyle( 51 );
+    qtarch_model_groupbox->setLineWidth( 2 );
+    qtarch_model_groupbox->setMidLineWidth( 0 );
+    qtarch_model_groupbox->QFrame::setMargin( 0 );
+    qtarch_model_groupbox->setTitle( tr( "model" ) );
+    qtarch_model_groupbox->setAlignment( AlignHCenter );
+
+    QPushButton *qtarch_apply_button = new QPushButton(this, "apply_button");
+    qtarch_apply_button->setGeometry(10, 250, 110, 30);
+    qtarch_apply_button->setMinimumSize(0, 0);
+    qtarch_apply_button->setMaximumSize(32767, 32767);
+    qtarch_apply_button->setFocusPolicy(QWidget::TabFocus);
+    qtarch_apply_button->setBackgroundMode(QWidget::PaletteButton);
+    qtarch_apply_button->setFontPropagation(QWidget::SameFont);
+    qtarch_apply_button->setPalettePropagation(QWidget::SameFont);
+    qtarch_apply_button->setText( tr( "&Apply" ) );
+    qtarch_apply_button->setAutoRepeat( FALSE );
+    qtarch_apply_button->setAutoResize( FALSE );
+    qtarch_apply_button->setToggleButton( FALSE );
+    qtarch_apply_button->setDefault( FALSE );
+    qtarch_apply_button->setAutoDefault( TRUE );
+    qtarch_apply_button->setIsMenuButton( FALSE );
+    connect(qtarch_apply_button, SIGNAL(clicked()), SLOT(applyButtonClicked()));
+
+    QPushButton *qtarch_close_button = new QPushButton(this, "close_button");
+    qtarch_close_button->setGeometry(130, 250, 107, 30);
+    qtarch_close_button->setMinimumSize(0, 0);
+    qtarch_close_button->setMaximumSize(32767, 32767);
+    qtarch_close_button->setFocusPolicy(QWidget::TabFocus);
+    qtarch_close_button->setBackgroundMode(QWidget::PaletteButton);
+    qtarch_close_button->setFontPropagation(QWidget::SameFont);
+    qtarch_close_button->setPalettePropagation(QWidget::SameFont);
+    qtarch_close_button->setText( tr( "&Close" ) );
+    qtarch_close_button->setAutoRepeat( FALSE );
+    qtarch_close_button->setAutoResize( FALSE );
+    qtarch_close_button->setToggleButton( FALSE );
+    qtarch_close_button->setDefault( FALSE );
+    qtarch_close_button->setAutoDefault( TRUE );
+    qtarch_close_button->setIsMenuButton( FALSE );
+    connect(qtarch_close_button, SIGNAL(clicked()), SLOT(accept()));
+
+    coloring_type_combobox_ = new QComboBox(FALSE, qtarch_color_groupbox, "coloring_type_combo_box");
+    coloring_type_combobox_->setGeometry(10, 20, 210, 24);
+    coloring_type_combobox_->setMinimumSize(210, 24);
+    coloring_type_combobox_->setMaximumSize(210, 24);
+    coloring_type_combobox_->setFocusPolicy(QWidget::StrongFocus);
+    coloring_type_combobox_->setBackgroundMode(QWidget::NoBackground);
+    coloring_type_combobox_->setFontPropagation(QWidget::AllChildren);
+    coloring_type_combobox_->setPalettePropagation(QWidget::AllChildren);
+    coloring_type_combobox_->setSizeLimit( 10 );
+    coloring_type_combobox_->setAutoResize( FALSE );
+    coloring_type_combobox_->insertItem( tr( "by element" ) );
+    coloring_type_combobox_->insertItem( tr( "by residue type" ) );
+    coloring_type_combobox_->insertItem( tr( "by residue name" ) );
+    coloring_type_combobox_->insertItem( tr( "by atom charge" ) );
+    coloring_type_combobox_->insertItem( tr( "by atom distance" ) );
+    coloring_type_combobox_->insertItem( tr( "custom" ) );
+    coloring_type_combobox_->setMaxCount( 2147483647 );
+    coloring_type_combobox_->setAutoCompletion( FALSE );
+    connect(coloring_type_combobox_, SIGNAL(activated(const QString&)), SLOT(selectColoringMethod(const QString&)));
+
+    QLabel *qtarch_model_resolution_label = new QLabel(qtarch_model_groupbox, "model_resolution_label");
+    qtarch_model_resolution_label->setGeometry(10, 50, 70, 22);
+    qtarch_model_resolution_label->setMinimumSize(0, 0);
+    qtarch_model_resolution_label->setMaximumSize(32767, 32767);
+    qtarch_model_resolution_label->setFocusPolicy(QWidget::NoFocus);
+    qtarch_model_resolution_label->setBackgroundMode(QWidget::PaletteBackground);
+    qtarch_model_resolution_label->setFontPropagation(QWidget::SameFont);
+    qtarch_model_resolution_label->setPalettePropagation(QWidget::SameFont);
+    qtarch_model_resolution_label->setFrameStyle( 0 );
+    qtarch_model_resolution_label->setLineWidth( 1 );
+    qtarch_model_resolution_label->setMidLineWidth( 0 );
+    qtarch_model_resolution_label->QFrame::setMargin( 0 );
+    qtarch_model_resolution_label->setText( tr( "resolution" ) );
+    qtarch_model_resolution_label->setAlignment( AlignLeft|AlignVCenter|ExpandTabs );
+    qtarch_model_resolution_label->setMargin( 0 );
+
+    QLabel *qtarch_model_type_label = new QLabel(qtarch_model_groupbox, "model_type_label");
+    qtarch_model_type_label->setGeometry(10, 20, 28, 18);
+    qtarch_model_type_label->setMinimumSize(0, 0);
+    qtarch_model_type_label->setMaximumSize(32767, 32767);
+    qtarch_model_type_label->setFocusPolicy(QWidget::NoFocus);
+    qtarch_model_type_label->setBackgroundMode(QWidget::PaletteBackground);
+    qtarch_model_type_label->setFontPropagation(QWidget::SameFont);
+    qtarch_model_type_label->setPalettePropagation(QWidget::SameFont);
+    qtarch_model_type_label->setFrameStyle( 0 );
+    qtarch_model_type_label->setLineWidth( 1 );
+    qtarch_model_type_label->setMidLineWidth( 0 );
+    qtarch_model_type_label->QFrame::setMargin( 0 );
+    qtarch_model_type_label->setText( tr( "type" ) );
+    qtarch_model_type_label->setAlignment( AlignLeft|AlignVCenter|ExpandTabs );
+    qtarch_model_type_label->setMargin( 0 );
+
+    model_type_combobox_ = new QComboBox(FALSE, qtarch_model_groupbox, "model_type_combobox");
+    model_type_combobox_->setGeometry(80, 20, 140, 24);
+    model_type_combobox_->setMinimumSize(140, 24);
+    model_type_combobox_->setMaximumSize(140, 24);
+    model_type_combobox_->setFocusPolicy(QWidget::StrongFocus);
+    model_type_combobox_->setBackgroundMode(QWidget::NoBackground);
+    model_type_combobox_->setFontPropagation(QWidget::AllChildren);
+    model_type_combobox_->setPalettePropagation(QWidget::AllChildren);
+    model_type_combobox_->setSizeLimit( 10 );
+    model_type_combobox_->setAutoResize( FALSE );
+    model_type_combobox_->insertItem( tr( "none" ) );
+    model_type_combobox_->insertItem( tr( "line" ) );
+    model_type_combobox_->insertItem( tr( "stick" ) );
+    model_type_combobox_->insertItem( tr( "ball and stick" ) );
+    model_type_combobox_->insertItem( tr( "surface" ) );
+    model_type_combobox_->insertItem( tr( "van der Waals" ) );
+    model_type_combobox_->setMaxCount( 2147483647 );
+    model_type_combobox_->setAutoCompletion( FALSE );
+    connect(model_type_combobox_, SIGNAL(activated(const QString&)), SLOT(selectModel(const QString&)));
+
+    mode_resolution_combobox_ = new QComboBox(FALSE, qtarch_model_groupbox, "model_resolution_combobox");
+    mode_resolution_combobox_->setGeometry(80, 50, 140, 24);
+    mode_resolution_combobox_->setMinimumSize(140, 24);
+    mode_resolution_combobox_->setMaximumSize(140, 24);
+    mode_resolution_combobox_->setFocusPolicy(QWidget::StrongFocus);
+    mode_resolution_combobox_->setBackgroundMode(QWidget::NoBackground);
+    mode_resolution_combobox_->setFontPropagation(QWidget::AllChildren);
+    mode_resolution_combobox_->setPalettePropagation(QWidget::AllChildren);
+    mode_resolution_combobox_->setSizeLimit( 10 );
+    mode_resolution_combobox_->setAutoResize( FALSE );
+    mode_resolution_combobox_->insertItem( tr( "low" ) );
+    mode_resolution_combobox_->insertItem( tr( "medium" ) );
+    mode_resolution_combobox_->insertItem( tr( "high" ) );
+    mode_resolution_combobox_->insertItem( tr( "ultra" ) );
+    mode_resolution_combobox_->setMaxCount( 2147483647 );
+    mode_resolution_combobox_->setAutoCompletion( FALSE );
+    connect(mode_resolution_combobox_, SIGNAL(activated(const QString&)), SLOT(selectPrecision(const QString&)));
+
+    QPushButton *qtarch_edit_button = new QPushButton(qtarch_GroupBox_9, "edit_button");
+    qtarch_edit_button->setGeometry(110, 30, 80, 30);
+    qtarch_edit_button->setMinimumSize(80, 30);
+    qtarch_edit_button->setMaximumSize(80, 30);
+    qtarch_edit_button->setFocusPolicy(QWidget::TabFocus);
+    qtarch_edit_button->setBackgroundMode(QWidget::PaletteButton);
+    qtarch_edit_button->setFontPropagation(QWidget::SameFont);
+    qtarch_edit_button->setPalettePropagation(QWidget::SameFont);
+    qtarch_edit_button->setText( tr( "&Edit" ) );
+    qtarch_edit_button->setAutoRepeat( FALSE );
+    qtarch_edit_button->setAutoResize( FALSE );
+    qtarch_edit_button->setToggleButton( FALSE );
+    qtarch_edit_button->setDefault( FALSE );
+    qtarch_edit_button->setAutoDefault( TRUE );
+    qtarch_edit_button->setIsMenuButton( FALSE );
+    connect(qtarch_edit_button, SIGNAL(clicked()), SLOT(editColor()));
+
+    color_sample = new QLabel(qtarch_GroupBox_9, "color_sample_label");
+    color_sample->setGeometry(20, 30, 70, 30);
+    color_sample->setMinimumSize(0, 0);
+    color_sample->setMaximumSize(32767, 32767);
+    {
+        QColorGroup normal;
+        normal.setColor( QColorGroup::Foreground, QColor( QRgb( 0 ) ) );
+        normal.setColor( QColorGroup::Button, QColor( QRgb( 12632256 ) ) );
+        normal.setColor( QColorGroup::Light, QColor( QRgb( 15527148 ) ) );
+        normal.setColor( QColorGroup::Midlight, QColor( QRgb( 14474460 ) ) );
+        normal.setColor( QColorGroup::Dark, QColor( QRgb( 8421504 ) ) );
+        normal.setColor( QColorGroup::Mid, QColor( QRgb( 10526884 ) ) );
+        normal.setColor( QColorGroup::Text, QColor( QRgb( 0 ) ) );
+        normal.setColor( QColorGroup::BrightText, QColor( QRgb( 0 ) ) );
+        normal.setColor( QColorGroup::ButtonText, QColor( QRgb( 0 ) ) );
+        normal.setColor( QColorGroup::Base, QColor( QRgb( 16777215 ) ) );
+        normal.setColor( QColorGroup::Background, QColor( QRgb( 16711680 ) ) );
+        normal.setColor( QColorGroup::Shadow, QColor( QRgb( 0 ) ) );
+        normal.setColor( QColorGroup::Highlight, QColor( QRgb( 0 ) ) );
+        normal.setColor( QColorGroup::HighlightedText, QColor( QRgb( 16777215 ) ) );
+        QColorGroup disabled;
+        disabled.setColor( QColorGroup::Foreground, QColor( QRgb( 8421504 ) ) );
+        disabled.setColor( QColorGroup::Button, QColor( QRgb( 12632256 ) ) );
+        disabled.setColor( QColorGroup::Light, QColor( QRgb( 15527148 ) ) );
+        disabled.setColor( QColorGroup::Midlight, QColor( QRgb( 14474460 ) ) );
+        disabled.setColor( QColorGroup::Dark, QColor( QRgb( 8421504 ) ) );
+        disabled.setColor( QColorGroup::Mid, QColor( QRgb( 10526884 ) ) );
+        disabled.setColor( QColorGroup::Text, QColor( QRgb( 8421504 ) ) );
+        disabled.setColor( QColorGroup::BrightText, QColor( QRgb( 8421504 ) ) );
+        disabled.setColor( QColorGroup::ButtonText, QColor( QRgb( 8421504 ) ) );
+        disabled.setColor( QColorGroup::Base, QColor( QRgb( 12632256 ) ) );
+        disabled.setColor( QColorGroup::Background, QColor( QRgb( 12632256 ) ) );
+        disabled.setColor( QColorGroup::Shadow, QColor( QRgb( 0 ) ) );
+        disabled.setColor( QColorGroup::Highlight, QColor( QRgb( 8421504 ) ) );
+        disabled.setColor( QColorGroup::HighlightedText, QColor( QRgb( 12632256 ) ) );
+        QColorGroup active;
+        active.setColor( QColorGroup::Foreground, QColor( QRgb( 0 ) ) );
+        active.setColor( QColorGroup::Button, QColor( QRgb( 12632256 ) ) );
+        active.setColor( QColorGroup::Light, QColor( QRgb( 15527148 ) ) );
+        active.setColor( QColorGroup::Midlight, QColor( QRgb( 14474460 ) ) );
+        active.setColor( QColorGroup::Dark, QColor( QRgb( 8421504 ) ) );
+        active.setColor( QColorGroup::Mid, QColor( QRgb( 10526884 ) ) );
+        active.setColor( QColorGroup::Text, QColor( QRgb( 0 ) ) );
+        active.setColor( QColorGroup::BrightText, QColor( QRgb( 0 ) ) );
+        active.setColor( QColorGroup::ButtonText, QColor( QRgb( 0 ) ) );
+        active.setColor( QColorGroup::Base, QColor( QRgb( 16777215 ) ) );
+        active.setColor( QColorGroup::Background, QColor( QRgb( 12632256 ) ) );
+        active.setColor( QColorGroup::Shadow, QColor( QRgb( 0 ) ) );
+        active.setColor( QColorGroup::Highlight, QColor( QRgb( 0 ) ) );
+        active.setColor( QColorGroup::HighlightedText, QColor( QRgb( 16777215 ) ) );
+        QPalette palette( normal, disabled, active );
+        color_sample->setPalette( palette );
+    }
+    color_sample->setFocusPolicy(QWidget::NoFocus);
+    color_sample->setBackgroundMode(QWidget::PaletteBackground);
+    color_sample->setFontPropagation(QWidget::SameFont);
+    color_sample->setPalettePropagation(QWidget::SameFont);
+    color_sample->setFrameStyle( 50 );
+    color_sample->setLineWidth( 1 );
+    color_sample->setMidLineWidth( 0 );
+    color_sample->QFrame::setMargin( 0 );
+    color_sample->setText( "" );
+    color_sample->setAlignment( AlignLeft|AlignVCenter|ExpandTabs );
+    color_sample->setMargin( 0 );
+
+    resize(250,290);
+    setMinimumSize(250, 290);
+    setMaximumSize(250, 290);
+}
+
+DisplayPropertiesData::~DisplayPropertiesData()
+{
+}
+
+//#		ifdef BALL_NO_INLINE_FUNCTIONS
+//#			include <BALL/MOLVIEW/GUI/DIALOGS/displayPropertiesData.iC>
+//#		endif
+
+	} // namespace MOLVIEW
+
+} // namespace BALL
