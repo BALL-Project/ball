@@ -1,4 +1,4 @@
-// $Id: peakList.h,v 1.1 2001/06/14 11:44:40 oliver Exp $
+ // $Id: peakList.h,v 1.2 2001/06/22 11:05:05 oliver Exp $
 
 #ifndef BALL_NMR_PEAKLIST_H
 #define BALL_NMR_PEAKLIST_H
@@ -38,6 +38,9 @@ namespace BALL
 
 		/// The peak type
 		typedef	PT										PeakType;
+		
+		typedef List<PT>::Iterator				Iterator;
+		typedef List<PT>::ConstIterator		ConstIterator;
 		//@}
 
 		/** @name	Constructors and Destructors
