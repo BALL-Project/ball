@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.15 2000/03/15 08:58:01 oliver Exp $
+// $Id: angle.h,v 1.16 2000/03/15 22:15:55 oliver Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -480,10 +480,10 @@ namespace BALL
 
 	template <typename T>
 	TAngle<T> TAngle<T>::getTorsionAngle
-		(const T &ax, const T &ay, const T &az,
-		 const T &bx, const T &by, const T &bz,
-		 const T &cx, const T &cy, const T &cz, 
-		 const T &dx, const T &dy, const T &dz)
+		(const T& ax, const T& ay, const T& az,
+		 const T& bx, const T& by, const T& bz,
+		 const T& cx, const T& cy, const T& cz, 
+		 const T& dx, const T& dy, const T& dz)
 	{
 		T abx = ax - bx;
 		T aby = ay - by;
@@ -523,23 +523,28 @@ namespace BALL
 		T bel = ndax * neax + nday * neay + ndaz * neaz;
 		
 		bel /= (bl * el);
-		if (Maths::isGreater(bel, 1)) {
+		if (bel > 1.0) 
+		{
 			bel = 1;
-		} else if (Maths::isLess(bel, -1)) {
+		} 
+		else if (bel < -1.0) 
+		{
 			bel = -1;
 		}
 
 		T acosbel = acos(bel);
 
-		if (Maths::isLess(cbx * (ndaz * neay - nday * neaz) 
-							 + cby * (ndax * neaz - ndaz * neax) 
-							 + cbz * (nday * neax - ndax * neay), 
-							 0))
+		if ((cbx * (ndaz * neay - nday * neaz) 
+				 + cby * (ndax * neaz - ndaz * neax) 
+				 + cbz * (nday * neax - ndax * neay))
+				< 0)
 		{
 			acosbel = -acosbel;
 		}
 		
-		acosbel = (Maths::isGreater(acosbel, 0)) ? Constants::PI - acosbel : -(Constants::PI + acosbel);
+		acosbel = (acosbel > 0.0) 
+			? Constants::PI - acosbel 
+			: -(Constants::PI + acosbel);
 		
 		return TAngle(acosbel);
 	}
