@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.14 2004/02/23 17:26:11 anhi Exp $
+// $Id: geometricControl.h,v 1.15 2004/02/24 13:31:26 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -187,6 +187,9 @@ namespace BALL
 
 			///
 			virtual void updateSelection();
+
+			///
+			virtual void focusRepresentation();
 
 		  protected slots:
 			

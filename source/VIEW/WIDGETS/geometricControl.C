@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.32 2004/02/11 12:52:38 amoll Exp $
+// $Id: geometricControl.C,v 1.33 2004/02/24 13:31:23 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -11,6 +11,18 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/VIEW/DATATYPE/vertex2.h>
+#include <BALL/VIEW/DATATYPE/vertex1.h>
+#include <BALL/VIEW/PRIMITIVES/sphere.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/disc.h>
+#include <BALL/VIEW/PRIMITIVES/point.h>
+#include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
+#include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
+#include <BALL/VIEW/PRIMITIVES/tube.h>
+#include <BALL/MATHS/simpleBox3.h>
+
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 #include <qtooltip.h> 
@@ -159,8 +171,14 @@ void GeometricControl::onNotify(Message *message)
 void GeometricControl::buildContextMenu(Representation& rep)
 	throw()
 {
+	insertContextMenuEntry("Focus", this, SLOT(focusRepresentation()), 5);
 	insertContextMenuEntry("Delete", this, SLOT(deleteRepresentation_()), 10);
 	insertContextMenuEntry("Modify Model", this, SLOT(modifyRepresentation_()), 20);	
+	if (getSelectedItems().size() != 1)
+	{
+		context_menu_.setItemEnabled(5, false); 
+	}
+
 	if (getSelectedItems().size() > 1 ||
 			rep.getModelType() >= MODEL_LABEL)
 	{
@@ -424,5 +442,110 @@ void GeometricControl::checkMenu(MainControl& main_control)
 	ItemList item_list = getSelectedItems(); 
 	if (item_list.size() > 0) main_control.enableDeleteEntry();
 }
+
+void GeometricControl::focusRepresentation()
+{
+	if (getSelectedItems().size() != 1) return;
+	Representation* rep = *getSelection().begin();
+	
+	GeometricCenterProcessor centerp;
+	BoundingBoxProcessor bbox;
+	centerp.start();
+	bbox.start();
+
+	List<GeometricObject*>::Iterator it = rep->getGeometricObjects().begin();
+	for (; it != rep->getGeometricObjects().end(); it++)
+	{
+		GeometricObject& go = **it;
+		Vector3 center;
+
+		// cant use Vertex or Vertex2 here, no idea why
+		if (RTTI::isKindOf<TwoColoredLine>(go))
+		{
+			TwoColoredLine& v = reinterpret_cast<TwoColoredLine&>(go);
+ 			center = (v.getVertex1() + (v.getVertex2() - v.getVertex1()) / 2.0);
+
+			bbox.operator()(v.getVertex1());
+			bbox.operator()(v.getVertex2());
+		}
+		else if (RTTI::isKindOf<TwoColoredTube>(go))
+		{
+			TwoColoredTube& v = reinterpret_cast<TwoColoredTube&>(go);
+ 			center = (v.getVertex1() + (v.getVertex2() - v.getVertex1()) / 2.0);
+
+			bbox.operator()(v.getVertex1());
+			bbox.operator()(v.getVertex2());
+		}
+		else if (RTTI::isKindOf<Tube>(go))
+		{
+			Tube& v = reinterpret_cast<Tube&>(go);
+ 			center = (v.getVertex1() + (v.getVertex2() - v.getVertex1()) / 2.0);
+
+			bbox.operator()(v.getVertex1());
+			bbox.operator()(v.getVertex2());
+		}
+		else if (RTTI::isKindOf<Point> (go))
+		{
+			Point& v = reinterpret_cast<Point&>(go);
+			center = v.getVertex();
+			bbox.operator()(v.getVertex());
+		}
+		else if (RTTI::isKindOf<SimpleBox3>(go))
+		{
+			SimpleBox3& b = reinterpret_cast<SimpleBox3&>(go);
+			center = b.a + (b.b - b.a) /2;
+
+			bbox.operator()(b.a);
+			bbox.operator()(b.b);
+		}
+		else if (RTTI::isKindOf<Sphere>(go))
+		{
+			Sphere& s = reinterpret_cast<Sphere&>(go);
+			center = s.getPosition();
+
+			bbox.operator()(s.getPosition());
+		}
+		else if (RTTI::isKindOf<Disc>(go))
+		{
+			Disc& d = reinterpret_cast<Disc&>(go);
+			center = d.getCircle().p;
+
+			bbox.operator()(d.getCircle().p);
+		}
+		else if (RTTI::isKindOf<Mesh>(go))
+		{
+			Mesh& mesh = reinterpret_cast<Mesh&>(go);
+
+			for (Size index = 0; index < mesh.vertex.size(); ++index)
+			{
+				centerp.operator()(mesh.vertex[index]);
+				bbox.operator()(mesh.vertex[index]);
+			}
+			continue;
+		}
+		else
+		{
+			Log.error() << "Unknown geometric object: " << typeid(go).name() << std::endl;
+			continue;
+		}
+
+		centerp.operator() (center);
+	}
+
+	centerp.finish();
+	bbox.finish();
+	
+	Vector3 vwp = centerp.getCenter();
+	float view_distance = (bbox.getUpper() - bbox.getLower()).getLength() - vwp.z + 3;
+
+	// update scene
+	SceneMessage *scene_message = new SceneMessage(SceneMessage::UPDATE_CAMERA);
+	scene_message->getCamera().setLookAtPosition(vwp);
+	vwp.z += view_distance;
+	scene_message->getCamera().setViewPoint(vwp);
+	notify_(scene_message);
+}
+
+
 
 } } // namespaces
