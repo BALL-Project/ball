@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.46 2004/05/27 19:49:41 oliver Exp $
+// $Id: angle.h,v 1.47 2005/01/03 13:11:08 amoll Exp $
 //
 
 #ifndef BALL_MATHS_ANGLE_H
@@ -529,6 +529,7 @@ namespace BALL
 	T TAngle<T>::toDegree() const
 		throw()
 	{
+		if (value == (T) 0.0) return (T) 0.0;
 		return BALL_ANGLE_RADIAN_TO_DEGREE(value);
 	}
 
@@ -536,6 +537,7 @@ namespace BALL
 	T TAngle<T>::toDegree(const T& radian)
 		throw()
 	{
+		if (radian == (T) 0.0) return (T) 0.0;
 		return BALL_ANGLE_RADIAN_TO_DEGREE(radian);
 	}
 
