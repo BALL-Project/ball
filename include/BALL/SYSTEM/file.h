@@ -1,11 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.58 2003/08/17 20:13:29 oliver Exp $
+// $Id: file.h,v 1.59 2003/08/25 08:09:56 oliver Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
+
+#ifndef BALL_DATATYPE_REGULAREXPRESSION_H
+#	include <BALL/DATATYPE/regularExpression.h>
+#endif
 
 #ifndef BALL_DATATYPE_STRING_H
 #	include <BALL/DATATYPE/string.h>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BidirectionalIterator_test.C,v 1.2 2003/06/19 10:45:50 oliver Exp $
+// $Id: BidirectionalIterator_test.C,v 1.3 2003/08/25 08:09:57 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -357,12 +357,21 @@ class VectorIteratorTraits
 typedef BidirectionalIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits<float> > MyIterator;
 typedef reverse_iterator<BidirectionalIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits<float> > > MyReverseIterator;
 
-START_TEST(BidirectionalIterator, "$Id: BidirectionalIterator_test.C,v 1.2 2003/06/19 10:45:50 oliver Exp $")
+START_TEST(BidirectionalIterator, "$Id: BidirectionalIterator_test.C,v 1.3 2003/08/25 08:09:57 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-MyIterator* m_ptr;
+MyIterator* m_ptr = 0;
+
+CHECK(BidirectionalIterator() throw())
+	m_ptr = new MyIterator;
+	TEST_NOT_EQUAL(m_ptr, 0)
+RESULT
+
+CHECK(~BidirectionalIterator() throw())
+	delete m_ptr;
+RESULT
 
 CHECK(BidirectionalIterator operator ++ (int) throw(Exception::Precondition))
   // ???
@@ -377,10 +386,6 @@ CHECK(BidirectionalIterator& operator ++ () throw(Exception::Precondition))
 RESULT
 
 CHECK(BidirectionalIterator& operator -- () throw(Exception::Precondition))
-  // ???
-RESULT
-
-CHECK(BidirectionalIterator() throw())
   // ???
 RESULT
 
@@ -409,10 +414,6 @@ CHECK(static BidirectionalIterator rbegin(const Container& container) throw(Exce
 RESULT
 
 CHECK(static BidirectionalIterator rend(const Container& container) throw(Exception::Precondition))
-  // ???
-RESULT
-
-CHECK(~BidirectionalIterator() throw())
   // ???
 RESULT
 

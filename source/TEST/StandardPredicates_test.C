@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StandardPredicates_test.C,v 1.29 2003/07/01 14:23:43 amoll Exp $
+// $Id: StandardPredicates_test.C,v 1.30 2003/08/25 08:10:00 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -19,7 +20,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.29 2003/07/01 14:23:43 amoll Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.30 2003/08/25 08:10:00 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -1079,18 +1080,28 @@ ExpressionPredicate* ptr = 0;
 ExpressionPredicate* test = 0;
 Atom atom;
 atom.setName("Grmpfl.");
+STATUS(10)
 CHECK(BALL_CREATE(AromaticBondsPredicate))
-	ptr = new AromaticBondsPredicate();
+STATUS(11)
+	ptr = new AromaticBondsPredicate;
+STATUS(12)
 	test = (ExpressionPredicate*) ptr->create(true, false);
+STATUS(13)
 	TEST_NOT_EQUAL(test, 0)
+STATUS(14)
 	(*test)(atom);
+STATUS(15)
 	delete test;
+STATUS(16)
 	delete ptr;
+STATUS(17)
 	test = ptr = 0;
+STATUS(18)
 RESULT
+STATUS(19)
 
 CHECK(BALL_CREATE(AtomNamePredicate))
-	ptr = new AtomNamePredicate();
+	ptr = new AtomNamePredicate;
 	test = (ExpressionPredicate*) ptr->create(true, false);
 	TEST_NOT_EQUAL(test, 0)
 	(*test)(atom);
@@ -1099,12 +1110,19 @@ CHECK(BALL_CREATE(AtomNamePredicate))
 	test = ptr = 0;
 RESULT
 
+STATUS(1)
 CHECK(BALL_CREATE(AtomTypePredicate))
+STATUS(2)
 	ptr = new AtomTypePredicate();
+STATUS(3)
 	test = (ExpressionPredicate*) ptr->create(true, false);
+STATUS(4)
 	TEST_NOT_EQUAL(test, 0)
+STATUS(5)
 	(*test)(atom);
+STATUS(6)
 	delete test;
+STATUS(7)
 	delete ptr;
 	test = ptr = 0;
 RESULT
@@ -1572,6 +1590,7 @@ RESULT
 CHECK(~CTPNode() throw())
 // Not to be tested
 RESULT
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
