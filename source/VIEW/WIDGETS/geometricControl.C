@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.11 2003/09/18 19:11:30 amoll Exp $
+// $Id: geometricControl.C,v 1.12 2003/09/19 18:18:00 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -44,6 +44,9 @@ GeometricControl::GeometricControl(QWidget* parent, const char* name)
 			context_representation_(0),
 			colorMeshDlg_(new ColorMeshDialog(this, "ColorMeshDialog"))
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "new GeometricControl " << this << std::endl;
+#endif
 	listview->addColumn("[visible] Type");
 	listview->addColumn("Properties");
 	listview->setColumnWidth(0, 60);
@@ -56,8 +59,7 @@ GeometricControl::~GeometricControl()
 	throw()
 {
   #ifdef BALL_VIEW_DEBUG
-	  Log.error() << "Destructing object " << (void *)this << " of class " 
-								<< RTTI::getName<GeometricControl>() << endl;
+	  Log.error() << "Destructing object " << this << " of class GeometricControl" << std::endl;
   #endif 
 
 	delete colorMeshDlg_;
@@ -112,6 +114,9 @@ void GeometricControl::updateRepresentation(Representation& rep)
 void GeometricControl::onNotify(Message *message)
 	throw()
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "GeometricControl " << this << " onNotify " << message << std::endl;
+#endif
 	if (!RTTI::isKindOf<RepresentationMessage> (*message))
 	{
 		return;

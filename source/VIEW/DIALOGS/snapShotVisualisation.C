@@ -15,6 +15,9 @@ SnapshotVisualisationDialog::SnapshotVisualisationDialog
 	(QWidget* parent,  const char* name, bool modal, WFlags fl)
 	: SnapshotVisualisationDialogData(parent, name, modal, fl)
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "new SnapshotVisualisationDialog" << this << std::endl;
+#endif
 	registerWidget(this);
 	tmp_.setNum(1);
 }

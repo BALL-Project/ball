@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.1 2003/09/18 18:56:27 amoll Exp $
+// $Id: datasetControl.C,v 1.2 2003/09/19 18:17:59 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -27,6 +27,9 @@ DatasetControl::DatasetControl(QWidget* parent, const char* name)
 	:	GenericControl(parent, name),
 		dialog_(0)
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "new DatasetControl " << this << std::endl;
+#endif
 	listview->addColumn("Name");
 	listview->addColumn("from");
 	listview->setColumnWidth(0, 120);
@@ -40,8 +43,7 @@ DatasetControl::~DatasetControl()
 	throw()
 {
   #ifdef BALL_VIEW_DEBUG
-	  Log.error() << "Destructing object " << (void *)this << " of class " 
-								<< RTTI::getName<DatasetControl>() << endl;
+	  Log.error() << "Destructing object " << this << " of class DatasetControl" << std::endl;
   #endif 
 
 	if (dialog_) delete dialog_;
@@ -147,6 +149,9 @@ void DatasetControl::insertComposite_(Composite* composite, QListViewItem* item)
 void DatasetControl::onNotify(Message *message)
 	throw()
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "DatasetControl "<<this<<  " onNotify " << message << std::endl;
+#endif
 	if (RTTI::isKindOf<CompositeMessage>(*message))
   {
     CompositeMessage *composite_message = RTTI::castTo<CompositeMessage>(*message);

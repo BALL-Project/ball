@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.4 2003/09/08 16:27:08 amoll Exp $
+// $Id: genericControl.C,v 1.5 2003/09/19 18:17:59 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -21,7 +21,7 @@ GenericControl::GenericControl(QWidget* parent, const char* name)
 	throw()
 		:	DockWidget(parent, name),
 			context_item_(0),
-			listview(new QListView)
+			listview(new QListView(this))
 {
 	// appearance
 	listview->setRootIsDecorated(true);

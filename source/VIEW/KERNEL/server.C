@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.3 2003/09/18 12:51:43 amoll Exp $
+// $Id: server.C,v 1.4 2003/09/19 18:17:59 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -64,6 +64,10 @@ namespace BALL
 				server_preferences_(0),
 				server_icon_(0)
 		{
+
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "new Server " << this << std::endl;
+#endif
 			// register ModularWidget
 			registerWidget(this);
 			
@@ -74,8 +78,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "Destructing object " << (void *)this 
-										<< " of class " << RTTI::getName<Server>() << endl;
+				Log.error() << "Destructing object " << this << " Server" << std::endl;
 			#endif 
 
 			ConnectionObject::destroy();

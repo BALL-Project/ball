@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.10 2003/09/18 12:51:44 amoll Exp $
+// $Id: scene.C,v 1.11 2003/09/19 18:18:01 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -51,9 +51,13 @@ Scene::Scene()
 		update_running_(false),
 		stage_(new Stage),
 		light_settings_(0),
+		stage_settings_(0),
 		screenshot_nr_(10000)
 {
 	gl_renderer_.setSize(600, 600);
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "new Scene (1) " << this << std::endl;
+#endif
 }
 
 Scene::Scene(QWidget* parent_widget, const char* name, WFlags w_flags)
@@ -71,8 +75,12 @@ Scene::Scene(QWidget* parent_widget, const char* name, WFlags w_flags)
 		update_running_(false),
 		stage_(new Stage),
 		light_settings_(0),
+		stage_settings_(0),
 		screenshot_nr_(1)
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "new Scene (2) " << this << std::endl;
+#endif
 	events.RotateSystem.registerRotateSystem(&BALL::VIEW::Scene::rotateSystem_);
 	events.TranslateSystem.registerTranslateSystem(&BALL::VIEW::Scene::translateSystem_);
 	events.ZoomSystem.registerZoomSystem(&BALL::VIEW::Scene::zoomSystem_);
@@ -109,8 +117,12 @@ Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, WFlag
 		key_pressed_(Scene::KEY_PRESSED__NONE),
 		stage_(new Stage(*scene.stage_)),
 		light_settings_(0),
+		stage_settings_(0),
 		screenshot_nr_(1)
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "new Scene (3) " << this << std::endl;
+#endif
 	events.RotateSystem.registerRotateSystem(&BALL::VIEW::Scene::rotateSystem_);
 	events.TranslateSystem.registerTranslateSystem(&BALL::VIEW::Scene::translateSystem_);
 	events.ZoomSystem.registerZoomSystem(&BALL::VIEW::Scene::zoomSystem_);
@@ -137,8 +149,10 @@ Scene::~Scene()
 	throw()
 {
 	#ifdef BALL_VIEW_DEBUG
-		Log.info() << "Destructing object " << (void *)this << " of class " << RTTI::getName<Scene>() << endl;
+		Log.info() << "Destructing object Scene " << this << " of class Scene>" << std::endl;
 	#endif 
+
+	delete stage_;
 }
 
 void Scene::clear()
@@ -214,6 +228,9 @@ void Scene::update(bool rebuild_displaylists)
 void Scene::onNotify(Message *message)
 	throw()
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "Scene " << this  << "onNotify " << message << std::endl;
+#endif
 	if (RTTI::isKindOf<RepresentationMessage>(*message)) 
 	{
 		makeCurrent();
@@ -827,11 +844,18 @@ void Scene::initializePreferencesTab(Preferences &preferences)
 void Scene::finalizePreferencesTab(Preferences &preferences)
 	throw()
 {
-	if (light_settings_ == 0) return;
-	
-	preferences.removeTab(light_settings_);
-	delete light_settings_;
-	light_settings_ = 0;
+	if (light_settings_) 
+	{
+		preferences.removeTab(light_settings_);
+		delete light_settings_;
+		light_settings_ = 0;
+	}
+	if (stage_settings_) 
+	{
+		preferences.removeTab(stage_settings_);
+		delete stage_settings_;
+		stage_settings_= 0;
+	}
 }
 
 

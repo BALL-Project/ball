@@ -1,12 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.11 2003/09/18 19:10:08 amoll Exp $
+// $Id: message.C,v 1.12 2003/09/19 18:17:59 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
 
-#define BALL_VIEW_DEBUG
 using namespace std;
 
 namespace BALL
@@ -40,6 +39,9 @@ CompositeMessage::CompositeMessage()
 		composite_(0),
 		composite_name_()
 {
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new CompositeMessage " << type_ << std::endl;		
+	#endif
 }
 
 CompositeMessage::CompositeMessage(const Composite& composite, Index type)
@@ -87,6 +89,9 @@ SceneMessage::SceneMessage(const SceneMessage& message)
 		type_(message.type_),
 		camera_(message.camera_)
 {
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new SceneMessage" << type_ << std::endl;		
+	#endif
 }
 
 SceneMessage::~SceneMessage()
@@ -229,6 +234,9 @@ RegularData3DMessage::RegularData3DMessage(Type type)
 	: CompositeMessage(),
 		data_(0)
 {
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new RegularData3DMessage" << std::endl;		
+	#endif
 	setType(type);
 }
 
@@ -236,5 +244,4 @@ RegularData3DMessage::RegularData3DMessage(Type type)
 #		include <BALL/VIEW/KERNEL/message.iC>
 #	endif 
 
-#undef BALL_VIEW_DEBUG
 } } // namespaces

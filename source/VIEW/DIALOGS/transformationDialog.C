@@ -14,11 +14,17 @@ TransformationDialog::TransformationDialog(QWidget* parent,  const char* name, b
 		ModularWidget(name),
 		composite_(0)
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "new TransformationDialog " << this << std::endl;
+#endif
 	ModularWidget::registerWidget(this);
 }
 
 TransformationDialog::~TransformationDialog() throw()
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "deleting TransformationDialog " << this << std::endl;
+#endif
 }
 
 
@@ -218,6 +224,9 @@ void TransformationDialog::update_()
 void TransformationDialog::onNotify(Message *message)
 	throw()
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "TransformationDialog " << this << " onNotify " << message << std::endl;
+#endif
 	if (RTTI::isKindOf<ControlSelectionMessage>(*message))
   {
 		if (getMainControl()->getControlSelection().size() > 0)

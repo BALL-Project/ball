@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.5 2003/09/18 12:51:44 amoll Exp $
+// $Id: molecularControl.C,v 1.6 2003/09/19 18:18:00 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -59,6 +59,9 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 			context_composite_(0),
 			transformation_dialog_(0)
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "new MolecularControl " << this << std::endl;
+#endif
 	listview->addColumn("[selected] Name");
 	listview->addColumn("Type");
 	listview->setColumnWidth(0, 120);
@@ -73,6 +76,10 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 MolecularControl::~MolecularControl()
 	throw()
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "Destroying MolecularControl " << this << std::endl;
+#endif
+	if (transformation_dialog_) delete transformation_dialog_;
 }
 
 void MolecularControl::checkMenu(MainControl& main_control)
@@ -243,6 +250,7 @@ void MolecularControl::showFilename()
 
 void MolecularControl::updateSelection()
 {
+Log.error() << "#~~#   3" << std::endl;
 	setStatusbarText("");
 	selected_.clear();
 
@@ -278,23 +286,28 @@ void MolecularControl::updateSelection()
 		}
 	}
 
-	// sent new selection through tree
-	ControlSelectionMessage* message = new ControlSelectionMessage;
-	message->setSelection(selected_);
-
+	
 	if (transformation_dialog_ && selected_.size()>0)
 	{
 		transformation_dialog_->setComposite(*selected_.begin());
 	}
-
-	notify_(message);
-
 
 	if (selected_.size() == 1 && RTTI::isKindOf<System>(**selected_.begin()))
 	{
 		context_composite_ = *selected_.begin();
 		showFilename();
 	}
+Log.error() << "#~~#   4" << std::endl;
+
+	// sent new selection through tree
+	ControlSelectionMessage* message = new ControlSelectionMessage;
+	message->setSelection(selected_);
+Log.error() << "#~~#   61  " << message->isDeletable() << std::endl;
+	message->setDeletable(true);
+Log.error() << "#~~#   62  " << message->isDeletable() << std::endl;
+Log.error() << "#~~#   63  " << message << std::endl;
+	notify_(message);
+Log.error() << "#~~#   5" << std::endl;
 }
 
 void MolecularControl::onContextMenu_(QListViewItem* item,  const QPoint& point, int /* column */)
@@ -465,6 +478,9 @@ Size MolecularControl::removeRecursiveComposite(Composite& composite)
 void MolecularControl::onNotify(Message *message)
 	throw()
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "MolecularControl " << this << " onNotify " << message << std::endl;
+#endif
 	// react accordingly to the given message
 	if (reactToMessages_(message))
 	{
@@ -593,9 +609,6 @@ void MolecularControl::cut()
 		to_delete.erase(*child_it);
 	}
 	
-	CompositeMessage* remove_message = new CompositeMessage;
-	remove_message->setDeletable(false);
-	remove_message->setType(CompositeMessage::REMOVED_COMPOSITE);
 	Size nr_of_items = 0;
 
 	delete_it = to_delete.begin();
@@ -603,7 +616,7 @@ void MolecularControl::cut()
 	{
 		// remove composite representation from tree
 		nr_of_items += removeRecursiveComposite(**delete_it);
-		remove_message->setComposite(*delete_it);
+		CompositeMessage* remove_message = new CompositeMessage(**delete_it, CompositeMessage::REMOVED_COMPOSITE);
 		notify_(remove_message);
 	}
 
@@ -614,17 +627,12 @@ void MolecularControl::cut()
 	notify_(message);
 
 	if (!roots.size()) return;
-	CompositeMessage* ccmessage = new CompositeMessage;
-	ccmessage->setDeletable(false);
-	ccmessage->setType(CompositeMessage::CHANGED_COMPOSITE);
 	HashSet<Composite*>::Iterator roots_it = roots.begin();
 	for (roots_it = roots.begin(); roots_it != roots.end(); roots_it++)
 	{
-		ccmessage->setComposite(*roots_it);
+		CompositeMessage* ccmessage = new CompositeMessage(**roots_it, CompositeMessage::CHANGED_COMPOSITE);
 		notify_(ccmessage);
 	}
-
-	delete ccmessage;
 }
 
 

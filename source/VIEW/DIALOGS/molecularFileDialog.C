@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.8 2003/09/18 12:51:43 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.9 2003/09/19 18:17:58 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -31,6 +31,9 @@ namespace BALL
 				width_(500),
 				height_(500)
 		{
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "new MolecularFileDialog " << this << std::endl;
+#endif
 			// register the widget with the MainControl
 			registerWidget(this);
 			hide();

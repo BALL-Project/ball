@@ -23,17 +23,17 @@ FDPBDialog::FDPBDialog( QWidget* parent,  const char* name, bool modal, WFlags f
 	: FDPBDialogData(parent, name, modal, fl),
 		ModularWidget("FDPBDialog")
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "new FDPBDialog " << this << std::endl;
+#endif
 	registerWidget(this);
 }
 
 FDPBDialog::~FDPBDialog()
 	throw()
 {
-	// no need to delete child widgets, Qt does it all for us
-	
 	#ifdef BALL_VIEW_DEBUG
-		Log.info() << "Destructing object " << (void *)this << " of class " 
-							 << RTTI::getName<FDPBDialog>() << endl;
+		Log.info() << "Destructing object " << this << " of class FDPBDialog" << std::endl;
 	#endif 
 }
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.9 2003/09/18 12:51:43 amoll Exp $
+// $Id: mainControl.C,v 1.10 2003/09/19 18:17:59 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -41,7 +41,6 @@ namespace BALL
 	namespace VIEW
 	{
 
-
 MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 	throw()
 	:	QMainWindow(parent, name),
@@ -54,6 +53,9 @@ MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 		preferences_id_(-1),
 		composites_muteable_(true)
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "new MainControl " << this << std::endl;
+#endif
 	// read the preferences
 	preferences_.setFilename(inifile);
 	preferences_.read();
@@ -81,7 +83,7 @@ MainControl::~MainControl()
 	throw()
 {
 	#ifdef BALL_VIEW_DEBUG
-		Log.info() << "Destructing object " << (void *)this << " of class " << RTTI::getName<MainControl>() << endl;
+		Log.info() << "Destructing object " << (void *)this << " of class MainControl" << endl;
 	#endif 
 
 	clear();
@@ -275,6 +277,9 @@ void MainControl::cancelPreferencesTab()
 
 void MainControl::aboutToExit()
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "MainControl::aboutToExit()" << std::endl;
+#endif
 	preferences_.clear();
 	preferences_.appendSection("WINDOWS");
 
@@ -302,6 +307,9 @@ void MainControl::aboutToExit()
 
 	delete preferences_dialog_;
 	preferences_dialog_ = 0;
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "MainControl::aboutToExit() finished" << std::endl;
+#endif
 }
 
 bool MainControl::remove_(Composite& composite)
@@ -314,14 +322,11 @@ bool MainControl::remove_(Composite& composite)
 	// delete all representations containing the composite
 	List<Representation*> removed_representations;
 	removed_representations = primitive_manager_.removedComposite(composite);
-	RepresentationMessage* rr_message = 0;
 	List<Representation*>::Iterator reps_it = removed_representations.begin();
 	// notify GeometricControl of removed representations
 	for (; reps_it != removed_representations.end(); reps_it++)
 	{
-		rr_message = new RepresentationMessage;
-		rr_message->setType(RepresentationMessage::REMOVE);
-		rr_message->setRepresentation(*reps_it);
+		RepresentationMessage* rr_message = new RepresentationMessage(**reps_it, RepresentationMessage::REMOVE);
 		notify_(rr_message);
 	}
 
@@ -336,22 +341,16 @@ bool MainControl::update(const Composite& composite)
 	if (!composite_manager_.has(composite)) return false;
 	
 	// update all representations containing the composite
-	RepresentationMessage* ur_message = new RepresentationMessage;
-	ur_message->setType(RepresentationMessage::UPDATE);
-	ur_message->setDeletable(false);
-
 	List<Representation*> changed_representations = primitive_manager_.changedComposite(composite);
 	List<Representation*>::Iterator reps_it = changed_representations.begin();
 	// notify GeometricControl of changed representations
 	for (; reps_it != changed_representations.end(); reps_it++)
 	{
-		ur_message->setRepresentation(*reps_it);
+		RepresentationMessage* ur_message = new RepresentationMessage(**reps_it, RepresentationMessage::UPDATE);
 		notify_(ur_message);
 	}
-	delete ur_message;
 
-	SceneMessage *scene_message = new SceneMessage;
-	scene_message->setType(SceneMessage::REDRAW);
+	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
 	notify_(scene_message);
 
 	return true;
@@ -379,6 +378,9 @@ void MainControl::updateAll(bool rebuild_display_lists)
 void MainControl::onNotify(Message *message)
 	throw()
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "MainControl " << this << " onNotify " << message << std::endl;
+#endif
 	if (RTTI::isKindOf<CompositeMessage>(*message))
 	{
 		CompositeMessage* cmessage = RTTI::castTo<CompositeMessage>(*message);
@@ -428,12 +430,6 @@ void MainControl::onNotify(Message *message)
 	}
 }
 
-
-bool MainControl::isValid() const
-	throw()
-{
-	return true;
-}
 
 void MainControl::dump(ostream& s, Size depth) const
 	throw()

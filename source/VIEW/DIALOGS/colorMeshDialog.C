@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.4 2003/09/18 19:07:31 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.5 2003/09/19 18:17:57 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -447,6 +447,9 @@ void ColorMeshDialog::setRepresentation(Representation& rep)
 void ColorMeshDialog::onNotify(Message *message)
 	throw()
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "ColorMeshDialog " << this << " onNotify " << message << std::endl;
+#endif
 	if (!RTTI::isKindOf<RegularData3DMessage>(*message)) return;
 
 	RegularData3DMessage *rm = RTTI::castTo<RegularData3DMessage>(*message);

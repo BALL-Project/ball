@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.7 2003/09/17 22:16:41 amoll Exp $
+// $Id: pyWidget.C,v 1.8 2003/09/19 18:18:00 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/pyWidget.h>
@@ -396,8 +396,11 @@ void PyWidgetData::exportHistory()
 PyWidget::PyWidget(QWidget *parent, const char *name)
 	throw()
 	: DockWidget(parent, name),
-		text_edit_(new PyWidgetData())
+		text_edit_(new PyWidgetData(this))
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "new PyWidget " << this << std::endl;
+#endif
 	default_visible_ = false;
 	setGuest(*text_edit_);
 }

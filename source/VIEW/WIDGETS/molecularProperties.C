@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.5 2003/09/18 12:59:23 amoll Exp $
+// $Id: molecularProperties.C,v 1.6 2003/09/19 18:18:00 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -9,10 +9,10 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
+#include <BALL/KERNEL/system.h>
 
 #include <qmenubar.h>
 
-#define BALL_VIEW_DEBUG
 using namespace std;
 
 namespace BALL
@@ -20,441 +20,471 @@ namespace BALL
 	namespace VIEW
 	{
 
-  	MolecularProperties::MolecularProperties(QWidget* parent, const char* name)
-			throw()
-			:	QWidget(parent, name),
-				ModularWidget(name),
-				view_distance_(25)
-    {
-			registerWidget(this);
-			hide();
+MolecularProperties::MolecularProperties(QWidget* parent, const char* name)
+	throw()
+	:	QWidget(parent, name),
+		ModularWidget(name),
+		view_distance_(25)
+{
+	registerWidget(this);
+	hide();
 
-			// cant use ModularWidget::getMainControl() here, no idea why
-			MainControl& main_control = *MainControl::getMainControl(this);
+	// cant use ModularWidget::getMainControl() here, no idea why
+	MainControl& main_control = *MainControl::getMainControl(this);
 
-			center_camera_id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "&Focus Camera", this, 
-																											 	SLOT(centerCamera()), CTRL+Key_F);
-			build_bonds_id_ = main_control.insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
-																										 		SLOT(buildBonds()), CTRL+Key_B);
-			add_hydrogens_id_ = main_control.insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
-																											 	SLOT(addHydrogens()), CTRL+Key_H);
-			check_structure_id_ = main_control.insertMenuEntry(MainControl::BUILD, "Chec&k Structure", this, 
-																												SLOT(checkResidue()), CTRL+Key_K);
-			select_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Select", this, 
-																												SLOT(select()), ALT+Key_S);   
-			deselect_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Deselect", this, 
-																												SLOT(deselect()), ALT+Key_D);   
-    }
+	center_camera_id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "&Focus Camera", this, 
+																										SLOT(centerCamera()), CTRL+Key_F);
+	build_bonds_id_ = main_control.insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
+																										SLOT(buildBonds()), CTRL+Key_B);
+	add_hydrogens_id_ = main_control.insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
+																										SLOT(addHydrogens()), CTRL+Key_H);
+	check_structure_id_ = main_control.insertMenuEntry(MainControl::BUILD, "Chec&k Structure", this, 
+																										SLOT(checkResidue()), CTRL+Key_K);
+	select_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Select", this, 
+																										SLOT(select()), ALT+Key_S);   
+	deselect_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Deselect", this, 
+																										SLOT(deselect()), ALT+Key_D);   
+	create_distance_grid_id_ = main_control.insertMenuEntry(MainControl::TOOLS, "&Create Distance Grid", this, 
+																										SLOT(createGridFromDistance()));   
+}
 
-  	MolecularProperties::~MolecularProperties()
-			throw()
-    {
-			MainControl& main_control = *getMainControl();
-			main_control.removeMenuEntry(MainControl::DISPLAY, "&Focus Camera", this, 
-																											SLOT(centerCamera()), CTRL+Key_F);
-			main_control.removeMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
-																											SLOT(buildBonds()), CTRL+Key_B);
-			main_control.removeMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
-																											SLOT(addHydrogens()), CTRL+Key_H);
-			main_control.removeMenuEntry(MainControl::BUILD, "Chec&k Structure", this, 
-																											SLOT(checkResidue()), CTRL+Key_K);
-			main_control.removeMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), ALT+Key_S);   
-			main_control.removeMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), ALT+Key_D);   
-		}
+MolecularProperties::~MolecularProperties()
+	throw()
+{
+	MainControl& main_control = *getMainControl();
+	main_control.removeMenuEntry(MainControl::DISPLAY, "&Focus Camera", this, 
+																									SLOT(centerCamera()), CTRL+Key_F);
+	main_control.removeMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
+																									SLOT(buildBonds()), CTRL+Key_B);
+	main_control.removeMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
+																									SLOT(addHydrogens()), CTRL+Key_H);
+	main_control.removeMenuEntry(MainControl::BUILD, "Chec&k Structure", this, 
+																									SLOT(checkResidue()), CTRL+Key_K);
+	main_control.removeMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), ALT+Key_S);   
+	main_control.removeMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), ALT+Key_D);   
+	main_control.removeMenuEntry(MainControl::TOOLS, "&Create Distance Grid", this, SLOT(createGridFromDistance()));   
+}
 
-	  void MolecularProperties::onNotify(Message *message)
-			throw()
-    {
-			if (RTTI::isKindOf<CompositeMessage>(*message))
-			{
-				CompositeMessage* cmessage = RTTI::castTo<CompositeMessage>(*message);
-				switch (cmessage->getType())
-				{
-					case CompositeMessage::NEW_COMPOSITE:
-						addComposite_(*cmessage->getComposite(), cmessage->getCompositeName());
-						return;
-					case CompositeMessage::SELECTED_COMPOSITE:
-					case CompositeMessage::DESELECTED_COMPOSITE:
-					{
-						SceneMessage* scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
-						notify_(scene_message);
-						getMainControl()->printSelectionInfos();
-						return;
-					}
-					case CompositeMessage::CENTER_CAMERA:
-						centerCamera(cmessage->getComposite());
-						return;
-				}
-			}
-			else if (RTTI::isKindOf<GeometricObjectSelectionMessage>(*message))
-			{
-				const List<GeometricObject*>& geometric_selection = 
-					(RTTI::castTo<GeometricObjectSelectionMessage>(*message))->getSelection();
-
-				// geometric selection is not empty
-				if (!geometric_selection.empty())
-				{
-					List<Composite*> selection;
-					
-					// new collection not empty
-					if (!selection.empty())
-					{
-						// create a molecular selection message and sent molecular objects
-						SelectionMessage *molecular_selection = new SelectionMessage;
-						molecular_selection->setSelection(selection);
-
-						notify_(molecular_selection);
-					}
-				}
-			}
-			else if (RTTI::isKindOf<MolecularTaskMessage>(*message))
-			{
-				switch (((RTTI::castTo<MolecularTaskMessage>(*message)))->getType())
-				{
-					case MolecularTaskMessage::BUILD_BONDS:
-						buildBonds();
-						return;
-					case MolecularTaskMessage::CHECK_RESIDUE:
-						checkResidue();
-						return;
-					case MolecularTaskMessage::ADD_HYDROGENS:
-						addHydrogens();
-						return;
-					default:
-						Log.error() << "Unknown type of MolecularTaskMessage in " 
-												<< __FILE__ << "  " << __LINE__ << std::endl;
-				}
-			}
-		}	
-
-
-		bool MolecularProperties::checkResidue()
+void MolecularProperties::onNotify(Message *message)
+	throw()
+{
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "MolecularProperties " << this  << "onNotify " << message << std::endl;
+#endif
+	if (RTTI::isKindOf<CompositeMessage>(*message))
+	{
+		CompositeMessage* cmessage = RTTI::castTo<CompositeMessage>(*message);
+		switch (cmessage->getType())
 		{
-			List<Composite*>& selection = getMainControl()->getControlSelection();
-			if (selection.size() == 0) return false;
-
-			setStatusbarText("checking " + String(selection.size()) + " objects...");
-
-			ResidueChecker res_check(getFragmentDB());
-
-			bool okay = true;
-
-			List<Composite*>::ConstIterator it = selection.begin();	
-			for (; it != selection.end(); ++it)
-			{	
-				if (RTTI::isKindOf<AtomContainer>(**it))
-				{
-					(*it)->apply(res_check);
-					okay = okay && res_check.getStatus();	
-				}
-				else
-				{
-					Log.error() << "ResidueChecker: cannot apply to a " << typeid(**it).name() 
-											<< " object" << std::endl;
-				}
-			}
-
-			if (okay)
+			case CompositeMessage::NEW_COMPOSITE:
+				addComposite_(*cmessage->getComposite(), cmessage->getCompositeName());
+				return;
+			case CompositeMessage::SELECTED_COMPOSITE:
+			case CompositeMessage::DESELECTED_COMPOSITE:
 			{
-				Log.info() << "ResidueChecker: no errors found." << endl;
-				setStatusbarText("no errors.");
-			} 
-			else 
-			{
-				setStatusbarText("errors found!");
-			}
-
-			return okay;
-		}
-
-
-		void MolecularProperties::addHydrogens()
-		{
-			if (getMainControl()->getControlSelection().size() == 0)
-			{
+				SceneMessage* scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
+				notify_(scene_message);
+				getMainControl()->printSelectionInfos();
 				return;
 			}
-
-			// notify the main window
-			setStatusbarText("adding hydrogens ...");
-
-			// copy the selection_, it can change after a changemessage event
-			List<Composite*> temp_selection_ = getMainControl()->getControlSelection();
-			List<Composite*>::ConstIterator it = temp_selection_.begin();	
-
-			CompositeMessage *change_message = new CompositeMessage;
-			change_message->setDeletable(false);
-			change_message->setType(CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
-
-			Size number_of_hydrogens = 0;
-
-			for (; it != temp_selection_.end(); ++it)
-			{	
-				(*it)->apply(getFragmentDB().add_hydrogens);
-				number_of_hydrogens += getFragmentDB().add_hydrogens.getNumberOfInsertedAtoms();
-				(*it)->apply(getFragmentDB().build_bonds);
-
-				change_message->setComposite((*it));
-				notify_(change_message);
-			}
-
-			Log.info() << "added " <<  number_of_hydrogens << " hydrogen atoms." << std::endl;
-
-			setStatusbarText("");
-		}
-
-
-		void MolecularProperties::buildBonds()
-		{
-			if (getMainControl()->getControlSelection().size() == 0)
-			{
+			case CompositeMessage::CENTER_CAMERA:
+				centerCamera(cmessage->getComposite());
 				return;
-			}
-
-			// notify the main window
-			setStatusbarText("building bonds ...");
-
-			// copy the selection_, it can change after a changemessage event
-			List<Composite*> temp_selection_ = getMainControl()->getControlSelection();
-			List<Composite*>::ConstIterator it = temp_selection_.begin();	
-			
-			CompositeMessage *change_message = new CompositeMessage;
-			change_message->setDeletable(false);
-			change_message->setType(CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
-			
-			Size number_of_bonds = 0;
-			for (; it != temp_selection_.end(); ++it)
-			{	
-				(*it)->apply(getFragmentDB().build_bonds);
-				number_of_bonds += getFragmentDB().build_bonds.getNumberOfBondsBuilt();
-
-				change_message->setComposite((*it));
-				notify_(change_message);
-			}
-
-			setStatusbarText("");
-
-			Log.info() << "Added " << number_of_bonds << " bonds." << std::endl;
 		}
+	}
+	else if (RTTI::isKindOf<GeometricObjectSelectionMessage>(*message))
+	{
+		const List<GeometricObject*>& geometric_selection = 
+			(RTTI::castTo<GeometricObjectSelectionMessage>(*message))->getSelection();
 
-		
-		void MolecularProperties::centerCamera(Composite* composite)
+		// geometric selection is not empty
+		if (!geometric_selection.empty())
 		{
-			Composite* to_center_on = composite;
+			List<Composite*> selection;
 			
-			if (to_center_on == 0)
+			// new collection not empty
+			if (!selection.empty())
 			{
-				if (getMainControl()->getControlSelection().size() == 0)
-				{
-					return;
-				}
+				// create a molecular selection message and sent molecular objects
+				SelectionMessage *molecular_selection = new SelectionMessage;
+				molecular_selection->setSelection(selection);
 
-				to_center_on = *getMainControl()->getControlSelection().begin();
+				notify_(molecular_selection);
 			}
-
-			// use specified object processor for calculating the center
-			calculateCenter_(*to_center_on);
-
-			Vector3 view_point = view_center_vector_;
-
-			// update scene
-			SceneMessage *scene_message = new SceneMessage(SceneMessage::UPDATE_CAMERA);
-			scene_message->getCamera().setLookAtPosition(view_point);
-			view_point.z += view_distance_;
-			scene_message->getCamera().setViewPoint(view_point);
-			notify_(scene_message);
 		}
-
-
-		void MolecularProperties::calculateCenter_(Composite &composite)
+	}
+	else if (RTTI::isKindOf<MolecularTaskMessage>(*message))
+	{
+		switch (((RTTI::castTo<MolecularTaskMessage>(*message)))->getType())
 		{
-			GeometricCenterProcessor center;
-			composite.apply((UnaryProcessor<Atom>&) center);			
-					
-			view_center_vector_ = center.getCenter();
-
-			BoundingBoxProcessor bbox;
-			composite.apply(bbox);				
-			view_distance_ = (bbox.getUpper() - bbox.getLower()).getLength() - center.getCenter().z + 3;
+			case MolecularTaskMessage::BUILD_BONDS:
+				buildBonds();
+				return;
+			case MolecularTaskMessage::CHECK_RESIDUE:
+				checkResidue();
+				return;
+			case MolecularTaskMessage::ADD_HYDROGENS:
+				addHydrogens();
+				return;
+			case MolecularTaskMessage::CREATE_DISTANCE_GRID:
+				createGridFromDistance();
+				return;
+			default:
+				Log.error() << "Unknown type of MolecularTaskMessage in " 
+										<< __FILE__ << "  " << __LINE__ << std::endl;
 		}
+	}
+}	
 
 
-		void MolecularProperties::checkMenu(MainControl& main_control)
-			throw()
+bool MolecularProperties::checkResidue()
+{
+	List<Composite*>& selection = getMainControl()->getControlSelection();
+	if (selection.size() == 0) return false;
+
+	setStatusbarText("checking " + String(selection.size()) + " objects...");
+
+	ResidueChecker res_check(getFragmentDB());
+
+	bool okay = true;
+
+	List<Composite*>::ConstIterator it = selection.begin();	
+	for (; it != selection.end(); ++it)
+	{	
+		if (RTTI::isKindOf<AtomContainer>(**it))
 		{
-			List<Composite*>& selection = getMainControl()->getControlSelection();
-			Size number_of_selected_objects = selection.size(); 
-			bool selected = (number_of_selected_objects != 0);
-			selected = selected && getMainControl()->compositesAreMuteable();
-
-			(main_control.menuBar())->setItemEnabled(add_hydrogens_id_, selected);
-			(main_control.menuBar())->setItemEnabled(build_bonds_id_, selected);
-			(main_control.menuBar())->setItemEnabled(check_structure_id_, selected);
-
-			// these menu points for single items only
-			(main_control.menuBar()) ->setItemEnabled(center_camera_id_, number_of_selected_objects == 1);
-
-			if (!selected)
-			{
-				(main_control.menuBar())->setItemEnabled(select_id_, false);
-				(main_control.menuBar())->setItemEnabled(deselect_id_, false);
-				return;
-			}
-
-			bool allow_select = true;
-			bool allow_deselect = true;
-			List<Composite*>::Iterator it = selection.begin();
-			for (; it != selection.end(); it++)
-			{
-				if (!(**it).isSelected())
-				{
-					allow_deselect = false;
-				}
-				else
-				{
-					allow_select = false;
-				}
-			}
-			
-			(main_control.menuBar())->setItemEnabled(select_id_, allow_select);
-			(main_control.menuBar())->setItemEnabled(deselect_id_, allow_deselect);
+			(*it)->apply(res_check);
+			okay = okay && res_check.getStatus();	
 		}
-
-
-		void MolecularProperties::select()
+		else
 		{
-			List<Composite*>& selection = getMainControl()->getControlSelection();
-
-			if (selection.size() == 0)
-			{
-				return;
-			}
-
-			// notify the main window
-			setStatusbarText("selecting " + String(selection.size()) + " objects...");
-
-			// copy list because the selection_ list can change after a changemessage event
-			List<Composite*> temp_selection_ = selection;
-						
-			List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
-			CompositeMessage* cs_message = new CompositeMessage();
-			cs_message->setDeletable(false);
-			cs_message->setType(CompositeMessage::SELECTED_COMPOSITE);
-
-			for (; list_it != temp_selection_.end(); ++list_it)
-			{
-				cs_message->setComposite(*list_it);
-				notify_(cs_message);
-			}
-
-			delete cs_message;
-
-			getMainControl()->printSelectionInfos();
-
-			// we have to send SceneMessage here, because it wont be send in onNotify 
-			SceneMessage* scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
-			notify_(scene_message);
+			Log.error() << "ResidueChecker: cannot apply to a " << typeid(**it).name() 
+									<< " object" << std::endl;
 		}
+	}
+
+	if (okay)
+	{
+		Log.info() << "ResidueChecker: no errors found." << endl;
+		setStatusbarText("no errors.");
+	} 
+	else 
+	{
+		setStatusbarText("errors found!");
+	}
+
+	return okay;
+}
 
 
-		void MolecularProperties::deselect()
+void MolecularProperties::addHydrogens()
+{
+	if (getMainControl()->getControlSelection().size() == 0)
+	{
+		return;
+	}
+
+	// notify the main window
+	setStatusbarText("adding hydrogens ...");
+
+	// copy the selection_, it can change after a changemessage event
+	List<Composite*> temp_selection_ = getMainControl()->getControlSelection();
+	List<Composite*>::ConstIterator it = temp_selection_.begin();	
+
+	Size number_of_hydrogens = 0;
+
+	for (; it != temp_selection_.end(); ++it)
+	{	
+		(*it)->apply(getFragmentDB().add_hydrogens);
+		number_of_hydrogens += getFragmentDB().add_hydrogens.getNumberOfInsertedAtoms();
+		(*it)->apply(getFragmentDB().build_bonds);
+
+		CompositeMessage *change_message = 
+			new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+		notify_(change_message);
+	}
+
+	Log.info() << "added " <<  number_of_hydrogens << " hydrogen atoms." << std::endl;
+	setStatusbarText("");
+}
+
+
+void MolecularProperties::buildBonds()
+{
+	if (getMainControl()->getControlSelection().size() == 0)
+	{
+		return;
+	}
+
+	// notify the main window
+	setStatusbarText("building bonds ...");
+
+	// copy the selection_, it can change after a changemessage event
+	List<Composite*> temp_selection_ = getMainControl()->getControlSelection();
+	List<Composite*>::ConstIterator it = temp_selection_.begin();	
+	
+	Size number_of_bonds = 0;
+	for (; it != temp_selection_.end(); ++it)
+	{	
+		(*it)->apply(getFragmentDB().build_bonds);
+		number_of_bonds += getFragmentDB().build_bonds.getNumberOfBondsBuilt();
+
+		CompositeMessage *change_message = 
+			new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+		notify_(change_message);
+	}
+
+	setStatusbarText("");
+
+	Log.info() << "Added " << number_of_bonds << " bonds." << std::endl;
+}
+
+
+void MolecularProperties::centerCamera(Composite* composite)
+{
+	Composite* to_center_on = composite;
+	
+	if (to_center_on == 0)
+	{
+		if (getMainControl()->getControlSelection().size() == 0)
 		{
-			List<Composite*>& selection = getMainControl()->getControlSelection();
-
-			if (selection.size() == 0)
-			{
-				return;
-			}
-
-			// notify the main window
-			setStatusbarText("deselecting " + String(selection.size()) + "objects...");
-
-			// copy list because the selection_ list can change after a changemessage event
-			List<Composite*> temp_selection_ = selection;
-
-			List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
-			CompositeMessage* cs_message = new CompositeMessage();
-			cs_message->setDeletable(false);
-			cs_message->setType(CompositeMessage::DESELECTED_COMPOSITE);
-			for (; list_it != temp_selection_.end(); ++list_it)
-			{
-				if (!(*list_it)->isSelected()) continue;
-				// mark composite for update
-				cs_message->setComposite(*list_it);
-				notify_(cs_message);
-			}
-
-			delete cs_message;
-
-			getMainControl()->printSelectionInfos();
-
-			// we have to send SceneMessage here, because it wont be send in onNotify 
-			SceneMessage* scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
-			notify_(scene_message);
+			return;
 		}
 
+		to_center_on = *getMainControl()->getControlSelection().begin();
+	}
 
-		void MolecularProperties::addComposite_(Composite& composite, const String& name)
-			throw()
+	// use specified object processor for calculating the center
+	calculateCenter_(*to_center_on);
+
+	Vector3 view_point = view_center_vector_;
+
+	// update scene
+	SceneMessage *scene_message = new SceneMessage(SceneMessage::UPDATE_CAMERA);
+	scene_message->getCamera().setLookAtPosition(view_point);
+	view_point.z += view_distance_;
+	scene_message->getCamera().setViewPoint(view_point);
+	notify_(scene_message);
+}
+
+
+void MolecularProperties::calculateCenter_(Composite &composite)
+{
+	GeometricCenterProcessor center;
+	composite.apply((UnaryProcessor<Atom>&) center);			
+			
+	view_center_vector_ = center.getCenter();
+
+	BoundingBoxProcessor bbox;
+	composite.apply(bbox);				
+	view_distance_ = (bbox.getUpper() - bbox.getLower()).getLength() - center.getCenter().z + 3;
+}
+
+
+void MolecularProperties::checkMenu(MainControl& main_control)
+	throw()
+{
+	List<Composite*>& selection = getMainControl()->getControlSelection();
+	Size number_of_selected_objects = selection.size(); 
+	bool selected = (number_of_selected_objects != 0);
+	selected = selected && getMainControl()->compositesAreMuteable();
+
+	(main_control.menuBar())->setItemEnabled(add_hydrogens_id_, selected);
+	(main_control.menuBar())->setItemEnabled(build_bonds_id_, selected);
+	(main_control.menuBar())->setItemEnabled(check_structure_id_, selected);
+
+	// these menu points for single items only
+	(main_control.menuBar()) ->setItemEnabled(center_camera_id_, number_of_selected_objects == 1);
+
+	if (!selected)
+	{
+		(main_control.menuBar())->setItemEnabled(select_id_, false);
+		(main_control.menuBar())->setItemEnabled(deselect_id_, false);
+		return;
+	}
+
+	bool allow_select = true;
+	bool allow_deselect = true;
+	List<Composite*>::Iterator it = selection.begin();
+	for (; it != selection.end(); it++)
+	{
+		if (!(**it).isSelected())
 		{
-			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "starting applying molecular properties" << std::endl;
-			#endif
-
-			// properties will be used only for atom containers
-			if (!RTTI::isKindOf<AtomContainer>(composite))
-			{
-				return;
-			}
-			
-			Log.info() << "> applying molecular properties ... " << endl;
-			
-			AtomContainer& atom_container = *RTTI::castTo<AtomContainer>(composite);
-			
-			try
-			{
-				atom_container.apply(getFragmentDB().normalize_names);
-			}
-			catch (Exception::GeneralException e)
-			{
-				Log.error() << " > normalize named failed: " <<endl; //<< e << endl;
-			}
-			catch (...)
-			{
-				Log.error() << "  > normalized names failed." << endl;
-				return;
-			}
-			
-			Log.info() << "  > normalized names" << endl;
-			
-			try
-			{
-				atom_container.apply(getFragmentDB().build_bonds);
-			}
-			catch (Exception::GeneralException e)
-			{
-				Log.error() << " > generate missing bonds - failed: " <<endl; //<< e << endl;
-			}
-			catch (...)
-			{
-				Log.error() << "  > generate missing bonds - failed." << endl;
-				return;
-			}
-			
-			Log.info() << "  > generated missing bonds" << endl;
-			
-			if (atom_container.getName() == "")
-			{
-				atom_container.setName(name);
-			}
-			
-			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "finished applying molecular properties" << std::endl;
-			#endif
-			// continue with molecular message
-			CompositeMessage* mol_message = new CompositeMessage(composite, CompositeMessage::NEW_MOLECULE);
-			notify_(mol_message);
+			allow_deselect = false;
 		}
+		else
+		{
+			allow_select = false;
+		}
+	}
+	
+	main_control.menuBar()->setItemEnabled(select_id_, allow_select);
+	main_control.menuBar()->setItemEnabled(deselect_id_, allow_deselect);
+	main_control.menuBar()->setItemEnabled(create_distance_grid_id_, main_control.getSelectedSystem());
+}
 
+
+void MolecularProperties::select()
+{
+	List<Composite*>& selection = getMainControl()->getControlSelection();
+
+	if (selection.size() == 0)
+	{
+		return;
+	}
+
+	// notify the main window
+	setStatusbarText("selecting " + String(selection.size()) + " objects...");
+
+	// copy list because the selection_ list can change after a changemessage event
+	List<Composite*> temp_selection_ = selection;
+				
+	List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
+
+	for (; list_it != temp_selection_.end(); ++list_it)
+	{
+		CompositeMessage* cs_message = new CompositeMessage(**list_it, CompositeMessage::SELECTED_COMPOSITE);
+		notify_(cs_message);
+	}
+
+	getMainControl()->printSelectionInfos();
+
+	// we have to send SceneMessage here, because it wont be send in onNotify 
+	SceneMessage* scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
+	notify_(scene_message);
+}
+
+
+void MolecularProperties::deselect()
+{
+	List<Composite*>& selection = getMainControl()->getControlSelection();
+
+	if (selection.size() == 0)
+	{
+		return;
+	}
+
+	// notify the main window
+	setStatusbarText("deselecting " + String(selection.size()) + "objects...");
+
+	// copy list because the selection_ list can change after a changemessage event
+	List<Composite*> temp_selection_ = selection;
+
+	List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
+	for (; list_it != temp_selection_.end(); ++list_it)
+	{
+		if (!(*list_it)->isSelected()) continue;
+		// mark composite for update
+		CompositeMessage* cs_message = new CompositeMessage(**list_it, CompositeMessage::DESELECTED_COMPOSITE);
+		notify_(cs_message);
+	}
+
+	getMainControl()->printSelectionInfos();
+
+	// we have to send SceneMessage here, because it wont be send in onNotify 
+	SceneMessage* scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
+	notify_(scene_message);
+}
+
+
+void MolecularProperties::addComposite_(Composite& composite, const String& name)
+	throw()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "starting applying molecular properties" << std::endl;
+	#endif
+
+	// properties will be used only for atom containers
+	if (!RTTI::isKindOf<AtomContainer>(composite))
+	{
+		return;
+	}
+	
+	Log.info() << "> applying molecular properties ... " << endl;
+	
+	AtomContainer& atom_container = *RTTI::castTo<AtomContainer>(composite);
+	
+	try
+	{
+		atom_container.apply(getFragmentDB().normalize_names);
+	}
+	catch (Exception::GeneralException e)
+	{
+		Log.error() << " > normalize named failed: " <<endl; //<< e << endl;
+	}
+	catch (...)
+	{
+		Log.error() << "  > normalized names failed." << endl;
+		return;
+	}
+	
+	Log.info() << "  > normalized names" << endl;
+	
+	try
+	{
+		atom_container.apply(getFragmentDB().build_bonds);
+	}
+	catch (Exception::GeneralException e)
+	{
+		Log.error() << " > generate missing bonds - failed: " <<endl; //<< e << endl;
+	}
+	catch (...)
+	{
+		Log.error() << "  > generate missing bonds - failed." << endl;
+		return;
+	}
+	
+	Log.info() << "  > generated missing bonds" << endl;
+	
+	if (atom_container.getName() == "")
+	{
+		atom_container.setName(name);
+	}
+	
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "finished applying molecular properties" << std::endl;
+	#endif
+	// continue with molecular message
+	CompositeMessage* mol_message = new CompositeMessage(composite, CompositeMessage::NEW_MOLECULE);
+	notify_(mol_message);
+}
+
+
+void MolecularProperties::createGridFromDistance()
+{
+	if (!getMainControl()->getSelectedSystem()) return;
+	System& S = *(System*) getMainControl()->getSelectedSystem();
+	
+	Vector3 v(0,0,0);
+	AtomIterator atit = S.beginAtom();
+
+	for (; +atit; ++atit)
+	{
+		v+=atit->getPosition();
+	}
+
+	v /= S.countAtoms();
+
+	BoundingBoxProcessor bs;
+
+	S.apply(bs);
+
+	RegularData3D* regdat = new RegularData3D(RegularData3D::IndexType(50), 
+																						bs.getLower()-Vector3(2,2,2), 
+																						bs.getUpper()-bs.getLower()+Vector3(4,4,4));
+
+	for (Size i=0; i < regdat->size(); i++)
+	{
+		float distance = (regdat->getCoordinates(i) - v).getLength();
+		(*regdat)[i] = distance;
+	}
+
+	RegularData3DMessage* message = new RegularData3DMessage(RegularData3DMessage::NEW);
+	message->setComposite(&S);
+	message->setCompositeName(S.getName() + "_distance");
+	message->setRegularData3D(regdat);
+	notify_(message);
+}
+	
 #undef BALL_VIEW_DEBUG
 } } // namespaces
