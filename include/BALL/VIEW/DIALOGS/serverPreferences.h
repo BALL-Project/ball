@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.h,v 1.6 2004/02/26 08:41:36 anhi Exp $
+// $Id: serverPreferences.h,v 1.6.2.1 2004/05/18 15:01:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_SERVERPREFERENCES_H
@@ -25,6 +25,9 @@ namespace BALL
 				It will be created by the Server
 				object in the Server::initializePreferencesTab and will be inserted
 				into the Preferences dialog by the MainControl.
+				There are currently two settings: The port on which the data will be received and
+				if the server will accept connections. <br>
+				This is one of the view dialogs, that is not implemented by an ui-file!
 				\ingroup ViewDialogs
 		*/
 		class BALL_EXPORT ServerPreferences : public QWidget
