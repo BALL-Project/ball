@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.h,v 1.1.2.4 2002/09/05 10:45:38 anhi Exp $
+// $Id: FFT3D.h,v 1.1.2.5 2002/10/16 11:06:11 amoll Exp $
 
 #ifndef BALL_MATHS_FFT3D_H
 #define BALL_MATHS_FFT3D_H
@@ -229,7 +229,7 @@ namespace BALL
 
 			/** Returns the grid coordinate corresponding to the position.
 			 */
-			Vector3 FFT3D::getGridCoordinates(Position position) const
+			Vector3 getGridCoordinates(Position position) const
 				throw();
 			
 			/** Returns the data at the grid position closest to {\em pos},
