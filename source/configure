@@ -1,6 +1,6 @@
 #! /bin/sh
 # Guess values for system-dependent variables and create Makefiles.
-#  $Id: configure,v 1.154 2001/07/16 13:54:45 oliver Exp $
+#  $Id: configure,v 1.155 2001/07/29 21:33:17 oliver Exp $
 
 
 ##################################################
@@ -9406,10 +9406,18 @@ echo "$as_me: error: Aborted." >&2;}
 echo "${ECHO_T}(${QT_LIBPATH})" >&6
 			fi
 
-			QGL_LIBPATH=${QT_LIBPATH}
-			echo "$as_me:9309: checking for libqgl" >&5
+												QT_VERSION=`${GREP} "#define QT_VERSION[^_]" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
+			QT_VERSION_STR=`${GREP} "#define QT_VERSION_STR" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
+			echo "$as_me:9310: checking for QT version number in qglobal.h" >&5
+echo $ECHO_N "checking for QT version number in qglobal.h... $ECHO_C" >&6
+			echo "$as_me:9312: result: ${QT_VERSION} (${QT_VERSION_STR})" >&5
+echo "${ECHO_T}${QT_VERSION} (${QT_VERSION_STR})" >&6
+
+															if test "${QT_VERSION}" -lt 200 ; then
+				QGL_LIBPATH=${QT_LIBPATH}
+				echo "$as_me:9317: checking for libqgl" >&5
 echo $ECHO_N "checking for libqgl... $ECHO_C" >&6
-			if test "${QTDIR}" != "" ; then
+				if test "${QTDIR}" != "" ; then
 
 	_LIBS=
 
@@ -9483,7 +9491,7 @@ echo $ECHO_N "checking for libqgl... $ECHO_C" >&6
 
 	QGL_LIBPATH="${_LIBS}"
 
-			else
+				else
 
 	_LIBS=
 
@@ -9557,45 +9565,47 @@ echo $ECHO_N "checking for libqgl... $ECHO_C" >&6
 
 	QGL_LIBPATH="${_LIBS}"
 
-			fi
+				fi
 
-			if test "${QGL_LIBPATH}" = "" ; then
-				echo "$as_me:9462: result: (not found!)" >&5
+				if test "${QGL_LIBPATH}" = "" ; then
+					echo "$as_me:9470: result: (not found!)" >&5
 echo "${ECHO_T}(not found!)" >&6
-				echo "$as_me:9464: result: " >&5
+					echo "$as_me:9472: result: " >&5
 echo "${ECHO_T}" >&6
-				echo "$as_me:9466: result: The QT Opengl library libqgl.a could not be found. Please specify" >&5
+					echo "$as_me:9474: result: The QT Opengl library libqgl.a could not be found. Please specify" >&5
 echo "${ECHO_T}The QT Opengl library libqgl.a could not be found. Please specify" >&6
-				echo "$as_me:9468: result: the path to libqt/libqgl by passing the option --with-qt-libs=DIR" >&5
+					echo "$as_me:9476: result: the path to libqt/libqgl by passing the option --with-qt-libs=DIR" >&5
 echo "${ECHO_T}the path to libqt/libqgl by passing the option --with-qt-libs=DIR" >&6
-				echo "$as_me:9470: result: to configure." >&5
+					echo "$as_me:9478: result: to configure." >&5
 echo "${ECHO_T}to configure." >&6
-				echo "$as_me:9472: result: You may also set the environment variable QTDIR to the correct" >&5
+					echo "$as_me:9480: result: You may also set the environment variable QTDIR to the correct" >&5
 echo "${ECHO_T}You may also set the environment variable QTDIR to the correct" >&6
-				echo "$as_me:9474: result: path - configure will recognize this, too." >&5
+					echo "$as_me:9482: result: path - configure will recognize this, too." >&5
 echo "${ECHO_T}path - configure will recognize this, too." >&6
-				echo "$as_me:9476: result: Perhaps you simple forgot to compile the OpenGl extsions, too?" >&5
+					echo "$as_me:9484: result: Perhaps you simple forgot to compile the OpenGl extsions, too?" >&5
 echo "${ECHO_T}Perhaps you simple forgot to compile the OpenGl extsions, too?" >&6
-				echo "$as_me:9478: result: You find these extensions in ${QTDIR}/extensions/opengl" >&5
+					echo "$as_me:9486: result: You find these extensions in ${QTDIR}/extensions/opengl" >&5
 echo "${ECHO_T}You find these extensions in ${QTDIR}/extensions/opengl" >&6
-				echo "$as_me:9480: result: " >&5
+					echo "$as_me:9488: result: " >&5
 echo "${ECHO_T}" >&6
-				echo "$as_me:9482: result: The complete QT package can be found under the following URL:" >&5
+					echo "$as_me:9490: result: The complete QT package can be found under the following URL:" >&5
 echo "${ECHO_T}The complete QT package can be found under the following URL:" >&6
-				echo "$as_me:9484: result:   http://www.troll.no/q" >&5
-echo "${ECHO_T}  http://www.troll.no/q" >&6
-				echo "$as_me:9486: result: " >&5
+					echo "$as_me:9492: result:   http://www.troll.no/qt" >&5
+echo "${ECHO_T}  http://www.troll.no/qt" >&6
+					echo "$as_me:9494: result: " >&5
 echo "${ECHO_T}" >&6
-				echo "$as_me:9488: result: Building of the visualization component BALLVIEW was disabled!" >&5
+					echo "$as_me:9496: result: Building of the visualization component BALLVIEW was disabled!" >&5
 echo "${ECHO_T}Building of the visualization component BALLVIEW was disabled!" >&6
-			else
-				echo "$as_me:9491: result: (${QT_LIBPATH})" >&5
+				else
+					echo "$as_me:9499: result: (${QT_LIBPATH})" >&5
 echo "${ECHO_T}(${QT_LIBPATH})" >&6
-			fi
-			if test "${QGL_PATH}" != "${QT_PATH}" ; then
-				QT_PATH=${QGL_PATH}
-				echo "$as_me:9496: result: using ${QT_PATH} to look for liqt.so and libqgl.s" >&5
+				fi
+				if test "${QGL_PATH}" != "${QT_PATH}" ; then
+					QT_PATH=${QGL_PATH}
+					echo "$as_me:9504: result: using ${QT_PATH} to look for liqt.so and libqgl.s" >&5
 echo "${ECHO_T}using ${QT_PATH} to look for liqt.so and libqgl.s" >&6
+				fi
+
 			fi
 
 			if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
@@ -9607,13 +9617,13 @@ fi
 
 if test "${USE_BALLVIEW}" = true ; then
 
-	echo "$as_me:9509: checking linking against X11 libraries" >&5
+	echo "$as_me:9519: checking linking against X11 libraries" >&5
 echo $ECHO_N "checking linking against X11 libraries... $ECHO_C" >&6
 				if test "${X11_LIBS}" != "" ; then
 		SAVE_LIBS=${LIBS}
 		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 		cat >conftest.$ac_ext <<_ACEOF
-#line 9515 "configure"
+#line 9525 "configure"
 #include "confdefs.h"
 
 int
@@ -9625,16 +9635,16 @@ main ()
 }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:9527: \"$ac_link\"") >&5
+if { (eval echo "$as_me:9537: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:9530: \$? = $ac_status" >&5
+  echo "$as_me:9540: \$? = $ac_status" >&5
   (exit $ac_status); } &&
          { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:9533: \"$ac_try\"") >&5
+  { (eval echo "$as_me:9543: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:9536: \$? = $ac_status" >&5
+  echo "$as_me:9546: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   X_LINKING_OK=1
 else
@@ -9650,7 +9660,7 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 		SAVE_LIBS=${LIBS}
 		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 		cat >conftest.$ac_ext <<_ACEOF
-#line 9552 "configure"
+#line 9562 "configure"
 #include "confdefs.h"
 
 int
@@ -9662,16 +9672,16 @@ main ()
 }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:9564: \"$ac_link\"") >&5
+if { (eval echo "$as_me:9574: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:9567: \$? = $ac_status" >&5
+  echo "$as_me:9577: \$? = $ac_status" >&5
   (exit $ac_status); } &&
          { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:9570: \"$ac_try\"") >&5
+  { (eval echo "$as_me:9580: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:9573: \$? = $ac_status" >&5
+  echo "$as_me:9583: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   X_LINKING_OK=1
 else
@@ -9687,7 +9697,7 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 		SAVE_LIBS=${LIBS}
 		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 		cat >conftest.$ac_ext <<_ACEOF
-#line 9589 "configure"
+#line 9599 "configure"
 #include "confdefs.h"
 
 int
@@ -9699,16 +9709,16 @@ main ()
 }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:9601: \"$ac_link\"") >&5
+if { (eval echo "$as_me:9611: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:9604: \$? = $ac_status" >&5
+  echo "$as_me:9614: \$? = $ac_status" >&5
   (exit $ac_status); } &&
          { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:9607: \"$ac_try\"") >&5
+  { (eval echo "$as_me:9617: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:9610: \$? = $ac_status" >&5
+  echo "$as_me:9620: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   X_LINKING_OK=1
 else
@@ -9724,7 +9734,7 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 		SAVE_LIBS=${LIBS}
 		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 		cat >conftest.$ac_ext <<_ACEOF
-#line 9626 "configure"
+#line 9636 "configure"
 #include "confdefs.h"
 
 int
@@ -9736,16 +9746,16 @@ main ()
 }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:9638: \"$ac_link\"") >&5
+if { (eval echo "$as_me:9648: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:9641: \$? = $ac_status" >&5
+  echo "$as_me:9651: \$? = $ac_status" >&5
   (exit $ac_status); } &&
          { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:9644: \"$ac_try\"") >&5
+  { (eval echo "$as_me:9654: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:9647: \$? = $ac_status" >&5
+  echo "$as_me:9657: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   X_LINKING_OK=1
 else
@@ -9761,7 +9771,7 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 		SAVE_LIBS=${LIBS}
 		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 		cat >conftest.$ac_ext <<_ACEOF
-#line 9663 "configure"
+#line 9673 "configure"
 #include "confdefs.h"
 
 int
@@ -9773,16 +9783,16 @@ main ()
 }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:9675: \"$ac_link\"") >&5
+if { (eval echo "$as_me:9685: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:9678: \$? = $ac_status" >&5
+  echo "$as_me:9688: \$? = $ac_status" >&5
   (exit $ac_status); } &&
          { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:9681: \"$ac_try\"") >&5
+  { (eval echo "$as_me:9691: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:9684: \$? = $ac_status" >&5
+  echo "$as_me:9694: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   X_LINKING_OK=1
 else
@@ -9794,26 +9804,26 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 	fi
 
 				if test "${X_LINKING_OK+set}" = set ; then
-		echo "$as_me:9696: result: yes" >&5
+		echo "$as_me:9706: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 	else
-		echo "$as_me:9699: result: no" >&5
+		echo "$as_me:9709: result: no" >&5
 echo "${ECHO_T}no" >&6
-		echo "$as_me:9701: result: " >&5
+		echo "$as_me:9711: result: " >&5
 echo "${ECHO_T}" >&6
-		echo "$as_me:9703: result: Don't know how to link with X11 libraries." >&5
+		echo "$as_me:9713: result: Don't know how to link with X11 libraries." >&5
 echo "${ECHO_T}Don't know how to link with X11 libraries." >&6
-		echo "$as_me:9705: result: Please specify the correct libraries (e.g. -lXmu -lXt -lX11) in the" >&5
+		echo "$as_me:9715: result: Please specify the correct libraries (e.g. -lXmu -lXt -lX11) in the" >&5
 echo "${ECHO_T}Please specify the correct libraries (e.g. -lXmu -lXt -lX11) in the" >&6
-		echo "$as_me:9707: result: environment variable X11_LIBS" >&5
+		echo "$as_me:9717: result: environment variable X11_LIBS" >&5
 echo "${ECHO_T}environment variable X11_LIBS" >&6
-		echo "$as_me:9709: result: If you are running Solaris 2.x you might also try the option --without-libxnet" >&5
+		echo "$as_me:9719: result: If you are running Solaris 2.x you might also try the option --without-libxnet" >&5
 echo "${ECHO_T}If you are running Solaris 2.x you might also try the option --without-libxnet" >&6
-		echo "$as_me:9711: result: if your X libraries were linked against libsocket and libnsl instead of libxnet." >&5
+		echo "$as_me:9721: result: if your X libraries were linked against libsocket and libnsl instead of libxnet." >&5
 echo "${ECHO_T}if your X libraries were linked against libsocket and libnsl instead of libxnet." >&6
-		echo "$as_me:9713: result: Built of visualization component BALLVIEW disabled." >&5
+		echo "$as_me:9723: result: Built of visualization component BALLVIEW disabled." >&5
 echo "${ECHO_T}Built of visualization component BALLVIEW disabled." >&6
-		echo "$as_me:9715: result: " >&5
+		echo "$as_me:9725: result: " >&5
 echo "${ECHO_T}" >&6
 		USE_BALLVIEW=false
 	fi
@@ -9836,7 +9846,7 @@ if test "${USE_BALLVIEW}" = true ; then
 		if test "${OPENGL_LIBPATH}" != "" ; then
 			LDFLAGS="${LDFLAGS} -L${OPENGL_LIBPATH}"
 		fi
-		echo "$as_me:9738: checking for XMesaGarbageCollect in -lGL" >&5
+		echo "$as_me:9748: checking for XMesaGarbageCollect in -lGL" >&5
 echo $ECHO_N "checking for XMesaGarbageCollect in -lGL... $ECHO_C" >&6
 if test "${ac_cv_lib_GL_XMesaGarbageCollect+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -9844,7 +9854,7 @@ else
   ac_check_lib_save_LIBS=$LIBS
 LIBS="-lGL  $LIBS"
 cat >conftest.$ac_ext <<_ACEOF
-#line 9746 "configure"
+#line 9756 "configure"
 #include "confdefs.h"
 
 /* Override any gcc2 internal prototype to avoid an error.  */
@@ -9863,16 +9873,16 @@ XMesaGarbageCollect ();
 }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:9765: \"$ac_link\"") >&5
+if { (eval echo "$as_me:9775: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:9768: \$? = $ac_status" >&5
+  echo "$as_me:9778: \$? = $ac_status" >&5
   (exit $ac_status); } &&
          { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:9771: \"$ac_try\"") >&5
+  { (eval echo "$as_me:9781: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:9774: \$? = $ac_status" >&5
+  echo "$as_me:9784: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   ac_cv_lib_GL_XMesaGarbageCollect=yes
 else
@@ -9883,7 +9893,7 @@ fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-echo "$as_me:9785: result: $ac_cv_lib_GL_XMesaGarbageCollect" >&5
+echo "$as_me:9795: result: $ac_cv_lib_GL_XMesaGarbageCollect" >&5
 echo "${ECHO_T}$ac_cv_lib_GL_XMesaGarbageCollect" >&6
 if test $ac_cv_lib_GL_XMesaGarbageCollect = yes; then
   BALLVIEW_PLATFORM=Mesa
@@ -9892,12 +9902,12 @@ fi
 		LIBS=${SAVE_LIBS}
 		LDFLAGS=${SAVE_LDFLAGS}
 		if test "${BALLVIEW_PLATFORM}" != Mesa ; then
-			echo "$as_me:9794: checking linking against OpenGL libraries" >&5
+			echo "$as_me:9804: checking linking against OpenGL libraries" >&5
 echo $ECHO_N "checking linking against OpenGL libraries... $ECHO_C" >&6
 			SAVE_LIBS=${LIBS}
 			LIBS="${OPENGL_LIBOPTS} ${LIBS}"
 			cat >conftest.$ac_ext <<_ACEOF
-#line 9799 "configure"
+#line 9809 "configure"
 #include "confdefs.h"
 
 int
@@ -9909,16 +9919,16 @@ main ()
 }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:9811: \"$ac_link\"") >&5
+if { (eval echo "$as_me:9821: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:9814: \$? = $ac_status" >&5
+  echo "$as_me:9824: \$? = $ac_status" >&5
   (exit $ac_status); } &&
          { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:9817: \"$ac_try\"") >&5
+  { (eval echo "$as_me:9827: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:9820: \$? = $ac_status" >&5
+  echo "$as_me:9830: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   OPENGL_LINKING_OK=1
 else
@@ -9928,19 +9938,19 @@ fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 			LIBS=${SAVE_LIBS}
 			if test "${OPENGL_LINKING_OK+set}" != set ; then
-				echo "$as_me:9830: result: no" >&5
+				echo "$as_me:9840: result: no" >&5
 echo "${ECHO_T}no" >&6
-				echo "$as_me:9832: result: " >&5
+				echo "$as_me:9842: result: " >&5
 echo "${ECHO_T}" >&6
-				echo "$as_me:9834: result: Cannot link against libGL/GLU - disabling visualization support!" >&5
+				echo "$as_me:9844: result: Cannot link against libGL/GLU - disabling visualization support!" >&5
 echo "${ECHO_T}Cannot link against libGL/GLU - disabling visualization support!" >&6
-				echo "$as_me:9836: result: Please specify the path to OpenGL libraries using --with-opengl-libs=DIR" >&5
+				echo "$as_me:9846: result: Please specify the path to OpenGL libraries using --with-opengl-libs=DIR" >&5
 echo "${ECHO_T}Please specify the path to OpenGL libraries using --with-opengl-libs=DIR" >&6
-				echo "$as_me:9838: result: " >&5
+				echo "$as_me:9848: result: " >&5
 echo "${ECHO_T}" >&6
 				USE_BALLVIEW=false
 			else
-				echo "$as_me:9842: result: yes" >&5
+				echo "$as_me:9852: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 			fi
 		fi
@@ -9963,12 +9973,12 @@ if test "${USE_BALLVIEW}" = true ; then
 
 								OPENGL_LIBS="-lGLU -lGL"
 
-								echo "$as_me:9865: checking linking against Mesa libs" >&5
+								echo "$as_me:9875: checking linking against Mesa libs" >&5
 echo $ECHO_N "checking linking against Mesa libs... $ECHO_C" >&6
 		SAVE_LIBS=${LIBS}
 		LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
 		cat >conftest.$ac_ext <<_ACEOF
-#line 9870 "configure"
+#line 9880 "configure"
 #include "confdefs.h"
 
 int
@@ -9980,16 +9990,16 @@ main ()
 }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:9882: \"$ac_link\"") >&5
+if { (eval echo "$as_me:9892: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:9885: \$? = $ac_status" >&5
+  echo "$as_me:9895: \$? = $ac_status" >&5
   (exit $ac_status); } &&
          { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:9888: \"$ac_try\"") >&5
+  { (eval echo "$as_me:9898: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:9891: \$? = $ac_status" >&5
+  echo "$as_me:9901: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   HAVE_MESALIBS=1
 else
@@ -10004,7 +10014,7 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 			SAVE_LIBS=${LIBS}
 			LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
 			cat >conftest.$ac_ext <<_ACEOF
-#line 9906 "configure"
+#line 9916 "configure"
 #include "confdefs.h"
 
 int
@@ -10016,16 +10026,16 @@ main ()
 }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:9918: \"$ac_link\"") >&5
+if { (eval echo "$as_me:9928: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:9921: \$? = $ac_status" >&5
+  echo "$as_me:9931: \$? = $ac_status" >&5
   (exit $ac_status); } &&
          { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:9924: \"$ac_try\"") >&5
+  { (eval echo "$as_me:9934: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:9927: \$? = $ac_status" >&5
+  echo "$as_me:9937: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   HAVE_MESALIBS=1
 else
@@ -10037,19 +10047,19 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 		fi
 
 		if test "${HAVE_MESALIBS+set}" != set ; then
-			echo "$as_me:9939: result: no" >&5
+			echo "$as_me:9949: result: no" >&5
 echo "${ECHO_T}no" >&6
-			echo "$as_me:9941: result: " >&5
+			echo "$as_me:9951: result: " >&5
 echo "${ECHO_T}" >&6
-			echo "$as_me:9943: result: Cannot link against libMesaGL/GLU - disabling visualization support!" >&5
+			echo "$as_me:9953: result: Cannot link against libMesaGL/GLU - disabling visualization support!" >&5
 echo "${ECHO_T}Cannot link against libMesaGL/GLU - disabling visualization support!" >&6
-			echo "$as_me:9945: result: Please specify the path to libMesaGL using --with-opengl-libs=DIR" >&5
+			echo "$as_me:9955: result: Please specify the path to libMesaGL using --with-opengl-libs=DIR" >&5
 echo "${ECHO_T}Please specify the path to libMesaGL using --with-opengl-libs=DIR" >&6
-			echo "$as_me:9947: result: " >&5
+			echo "$as_me:9957: result: " >&5
 echo "${ECHO_T}" >&6
 			USE_BALLVIEW=false
 		else
-			echo "$as_me:9951: result: yes" >&5
+			echo "$as_me:9961: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 			OPENGL_LIBOPTS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS}"
 		fi
@@ -10066,13 +10076,13 @@ if test "${USE_BALLVIEW}" = true ; then
 	fi
 fi
 if test "${USE_BALLVIEW}" = true ; then
-	echo "$as_me:9968: checking linking against QT libraries" >&5
+	echo "$as_me:9978: checking linking against QT libraries" >&5
 echo $ECHO_N "checking linking against QT libraries... $ECHO_C" >&6
 
 	SAVE_LIBS=${LIBS}
 	LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 	cat >conftest.$ac_ext <<_ACEOF
-#line 9974 "configure"
+#line 9984 "configure"
 #include "confdefs.h"
 const char* qGLVersion();
 int
@@ -10084,16 +10094,16 @@ qGLVersion();
 }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:9986: \"$ac_link\"") >&5
+if { (eval echo "$as_me:9996: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:9989: \$? = $ac_status" >&5
+  echo "$as_me:9999: \$? = $ac_status" >&5
   (exit $ac_status); } &&
          { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:9992: \"$ac_try\"") >&5
+  { (eval echo "$as_me:10002: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:9995: \$? = $ac_status" >&5
+  echo "$as_me:10005: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   QT_LINKING_OK=1
 else
@@ -10107,7 +10117,7 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 		SAVE_LIBS=${LIBS}
 		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 		cat >conftest.$ac_ext <<_ACEOF
-#line 10009 "configure"
+#line 10019 "configure"
 #include "confdefs.h"
 const char* qGLVersion();
 int
@@ -10119,16 +10129,16 @@ qGLVersion();
 }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:10021: \"$ac_link\"") >&5
+if { (eval echo "$as_me:10031: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:10024: \$? = $ac_status" >&5
+  echo "$as_me:10034: \$? = $ac_status" >&5
   (exit $ac_status); } &&
          { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:10027: \"$ac_try\"") >&5
+  { (eval echo "$as_me:10037: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:10030: \$? = $ac_status" >&5
+  echo "$as_me:10040: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   QT_LINKING_OK=1
 else
@@ -10142,24 +10152,24 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 	fi
 
 	if test "${QT_LINKING_OK+set}" != set ; then
-		echo "$as_me:10044: result: no" >&5
+		echo "$as_me:10054: result: no" >&5
 echo "${ECHO_T}no" >&6
-		echo "$as_me:10046: result: " >&5
+		echo "$as_me:10056: result: " >&5
 echo "${ECHO_T}" >&6
-		echo "$as_me:10048: result: Cannot link against libqgl/qt - disabling support for visualization!" >&5
+		echo "$as_me:10058: result: Cannot link against libqgl/qt - disabling support for visualization!" >&5
 echo "${ECHO_T}Cannot link against libqgl/qt - disabling support for visualization!" >&6
-		echo "$as_me:10050: result: If QT is installed, please specify the path to the library" >&5
+		echo "$as_me:10060: result: If QT is installed, please specify the path to the library" >&5
 echo "${ECHO_T}If QT is installed, please specify the path to the library" >&6
-		echo "$as_me:10052: result: using the option --with-qt-libs=DIR" >&5
+		echo "$as_me:10062: result: using the option --with-qt-libs=DIR" >&5
 echo "${ECHO_T}using the option --with-qt-libs=DIR" >&6
-		echo "$as_me:10054: result: " >&5
+		echo "$as_me:10064: result: " >&5
 echo "${ECHO_T}" >&6
 		USE_BALLVIEW=false
 	else
-		echo "$as_me:10058: result: yes" >&5
+		echo "$as_me:10068: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 
-								echo "$as_me:10061: checking QT library version" >&5
+								echo "$as_me:10071: checking QT library version" >&5
 echo $ECHO_N "checking QT library version... $ECHO_C" >&6
 		SAVE_LIBS=${LIBS}
 		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
@@ -10171,7 +10181,7 @@ echo $ECHO_N "checking QT library version... $ECHO_C" >&6
 
 else
   cat >conftest.$ac_ext <<_ACEOF
-#line 10073 "configure"
+#line 10083 "configure"
 #include "confdefs.h"
 
 				#include <stdio.h>
@@ -10186,15 +10196,15 @@ else
 
 _ACEOF
 rm -f conftest$ac_exeext
-if { (eval echo "$as_me:10088: \"$ac_link\"") >&5
+if { (eval echo "$as_me:10098: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:10091: \$? = $ac_status" >&5
+  echo "$as_me:10101: \$? = $ac_status" >&5
   (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
-  { (eval echo "$as_me:10093: \"$ac_try\"") >&5
+  { (eval echo "$as_me:10103: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:10096: \$? = $ac_status" >&5
+  echo "$as_me:10106: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   QT_VERSION_OK=1
 else
@@ -10208,73 +10218,73 @@ fi
 		LIBS=${SAVE_LIBS}
 
 										if test "${QT_VERSION_OK+set}" != set; then
-			echo "$as_me:10110: result: no" >&5
+			echo "$as_me:10120: result: no" >&5
 echo "${ECHO_T}no" >&6
-			echo "$as_me:10112: result: " >&5
+			echo "$as_me:10122: result: " >&5
 echo "${ECHO_T}" >&6
-			echo "$as_me:10114: result: The execution of a program linked against the QT" >&5
+			echo "$as_me:10124: result: The execution of a program linked against the QT" >&5
 echo "${ECHO_T}The execution of a program linked against the QT" >&6
-			echo "$as_me:10116: result: library failed. Please have a look at config.log" >&5
+			echo "$as_me:10126: result: library failed. Please have a look at config.log" >&5
 echo "${ECHO_T}library failed. Please have a look at config.log" >&6
-			echo "$as_me:10118: result: (the last few lines) to find out what happened." >&5
+			echo "$as_me:10128: result: (the last few lines) to find out what happened." >&5
 echo "${ECHO_T}(the last few lines) to find out what happened." >&6
-			echo "$as_me:10120: result: Perhaps you specified the wrong library or the" >&5
+			echo "$as_me:10130: result: Perhaps you specified the wrong library or the" >&5
 echo "${ECHO_T}Perhaps you specified the wrong library or the" >&6
-			echo "$as_me:10122: result: X11 libraries are in conflict with any other library." >&5
+			echo "$as_me:10132: result: X11 libraries are in conflict with any other library." >&5
 echo "${ECHO_T}X11 libraries are in conflict with any other library." >&6
-			echo "$as_me:10124: result: You might also want to check your LD_LIBRARY_PATH." >&5
+			echo "$as_me:10134: result: You might also want to check your LD_LIBRARY_PATH." >&5
 echo "${ECHO_T}You might also want to check your LD_LIBRARY_PATH." >&6
-			echo "$as_me:10126: result: Support for visualization is disabled." >&5
+			echo "$as_me:10136: result: Support for visualization is disabled." >&5
 echo "${ECHO_T}Support for visualization is disabled." >&6
-			echo "$as_me:10128: result: " >&5
+			echo "$as_me:10138: result: " >&5
 echo "${ECHO_T}" >&6
 			USE_BALLVIEW=false
 		else
 			QT_VERSION_STRING=`cat qt.version`
-			echo "$as_me:10133: result: ${QT_VERSION_STRING}" >&5
+			echo "$as_me:10143: result: ${QT_VERSION_STRING}" >&5
 echo "${ECHO_T}${QT_VERSION_STRING}" >&6
 
 															rm qt.version 2>/dev/null
 			QT_MAJOR=`echo ${QT_VERSION_STRING} | ${CUT} -d. -f1`
 			if test "${QT_MAJOR}" != 2 ; then
-				echo "$as_me:10139: result: " >&5
+				echo "$as_me:10149: result: " >&5
 echo "${ECHO_T}" >&6
-				echo "$as_me:10141: result: QT version 2.x is required." >&5
+				echo "$as_me:10151: result: QT version 2.x is required." >&5
 echo "${ECHO_T}QT version 2.x is required." >&6
-				echo "$as_me:10143: result: Please install version QT Version 2 (at least 2.0.2)" >&5
+				echo "$as_me:10153: result: Please install version QT Version 2 (at least 2.0.2)" >&5
 echo "${ECHO_T}Please install version QT Version 2 (at least 2.0.2)" >&6
-				echo "$as_me:10145: result: which can be obtained from" >&5
+				echo "$as_me:10155: result: which can be obtained from" >&5
 echo "${ECHO_T}which can be obtained from" >&6
-				echo "$as_me:10147: result: " >&5
+				echo "$as_me:10157: result: " >&5
 echo "${ECHO_T}" >&6
-				echo "$as_me:10149: result: www.troll.no/qt" >&5
+				echo "$as_me:10159: result: www.troll.no/qt" >&5
 echo "${ECHO_T}www.troll.no/qt" >&6
-				echo "$as_me:10151: result: " >&5
+				echo "$as_me:10161: result: " >&5
 echo "${ECHO_T}" >&6
-				echo "$as_me:10153: result: Support for visualization is disabled." >&5
+				echo "$as_me:10163: result: Support for visualization is disabled." >&5
 echo "${ECHO_T}Support for visualization is disabled." >&6
-				echo "$as_me:10155: result: " >&5
+				echo "$as_me:10165: result: " >&5
 echo "${ECHO_T}" >&6
 				USE_BALLVIEW=false
 			else
 												        								if test "${QT_VERSION_STRING}" = "2.00" ; then
-					echo "$as_me:10160: result: " >&5
-echo "${ECHO_T}" >&6
-					echo "$as_me:10162: result: QT verison 2.00 is known to contain a bug" >&5
-echo "${ECHO_T}QT verison 2.00 is known to contain a bug" >&6
-					echo "$as_me:10164: result: that affects some features of MOLVIEW." >&5
-echo "${ECHO_T}that affects some features of MOLVIEW." >&6
-					echo "$as_me:10166: result: Please install at least version 2.0.2" >&5
-echo "${ECHO_T}Please install at least version 2.0.2" >&6
-					echo "$as_me:10168: result: which can be obtained from" >&5
-echo "${ECHO_T}which can be obtained from" >&6
 					echo "$as_me:10170: result: " >&5
 echo "${ECHO_T}" >&6
-					echo "$as_me:10172: result: www.troll.no/qt" >&5
-echo "${ECHO_T}www.troll.no/qt" >&6
-					echo "$as_me:10174: result: " >&5
+					echo "$as_me:10172: result: QT verison 2.00 is known to contain a bug" >&5
+echo "${ECHO_T}QT verison 2.00 is known to contain a bug" >&6
+					echo "$as_me:10174: result: that affects some features of MOLVIEW." >&5
+echo "${ECHO_T}that affects some features of MOLVIEW." >&6
+					echo "$as_me:10176: result: Please install at least version 2.0.2" >&5
+echo "${ECHO_T}Please install at least version 2.0.2" >&6
+					echo "$as_me:10178: result: which can be obtained from" >&5
+echo "${ECHO_T}which can be obtained from" >&6
+					echo "$as_me:10180: result: " >&5
 echo "${ECHO_T}" >&6
-					echo "$as_me:10176: result: " >&5
+					echo "$as_me:10182: result: www.troll.no/qt" >&5
+echo "${ECHO_T}www.troll.no/qt" >&6
+					echo "$as_me:10184: result: " >&5
+echo "${ECHO_T}" >&6
+					echo "$as_me:10186: result: " >&5
 echo "${ECHO_T}" >&6
 				fi
 			fi
@@ -10291,7 +10301,7 @@ if test "${USE_BALLVIEW}" = true ; then
 
 				# Extract the first word of "moc", so it can be a program name with args.
 set dummy moc; ac_word=$2
-echo "$as_me:10193: checking for $ac_word" >&5
+echo "$as_me:10203: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_path_MOC+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -10308,7 +10318,7 @@ for ac_dir in $ac_dummy; do
   test -z "$ac_dir" && ac_dir=.
   if $as_executable_p "$ac_dir/$ac_word"; then
    ac_cv_path_MOC="$ac_dir/$ac_word"
-   echo "$as_me:10210: found $ac_dir/$ac_word" >&5
+   echo "$as_me:10220: found $ac_dir/$ac_word" >&5
    break
 fi
 done
@@ -10320,27 +10330,27 @@ fi
 MOC=$ac_cv_path_MOC
 
 if test -n "$MOC"; then
-  echo "$as_me:10222: result: $MOC" >&5
+  echo "$as_me:10232: result: $MOC" >&5
 echo "${ECHO_T}$MOC" >&6
 else
-  echo "$as_me:10225: result: no" >&5
+  echo "$as_me:10235: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
 	if test "${MOC}" = moc ; then
-		echo "$as_me:10230: result: " >&5
+		echo "$as_me:10240: result: " >&5
 echo "${ECHO_T}" >&6
-		echo "$as_me:10232: result: Could not find the QT Meta Object Compiler (moc)!" >&5
+		echo "$as_me:10242: result: Could not find the QT Meta Object Compiler (moc)!" >&5
 echo "${ECHO_T}Could not find the QT Meta Object Compiler (moc)!" >&6
-		echo "$as_me:10234: result: You might run into trouble if you want to compile MolVIEW." >&5
+		echo "$as_me:10244: result: You might run into trouble if you want to compile MolVIEW." >&5
 echo "${ECHO_T}You might run into trouble if you want to compile MolVIEW." >&6
-		echo "$as_me:10236: result: Please include the correct path to moc into your" >&5
+		echo "$as_me:10246: result: Please include the correct path to moc into your" >&5
 echo "${ECHO_T}Please include the correct path to moc into your" >&6
-		echo "$as_me:10238: result: PATH environment variable or specify the path to moc" >&5
+		echo "$as_me:10248: result: PATH environment variable or specify the path to moc" >&5
 echo "${ECHO_T}PATH environment variable or specify the path to moc" >&6
-		echo "$as_me:10240: result: using the option --with-moc=PATH to rerun configure." >&5
+		echo "$as_me:10250: result: using the option --with-moc=PATH to rerun configure." >&5
 echo "${ECHO_T}using the option --with-moc=PATH to rerun configure." >&6
-		echo "$as_me:10242: result: " >&5
+		echo "$as_me:10252: result: " >&5
 echo "${ECHO_T}" >&6
 	fi
 fi
@@ -10360,12 +10370,12 @@ EOF
 fi
 
 if test "${PYTHON_SUPPORT}" = true ; then
-	echo "$as_me:10262: checking stuff required for Python extensions" >&5
+	echo "$as_me:10272: checking stuff required for Python extensions" >&5
 echo $ECHO_N "checking stuff required for Python extensions... $ECHO_C" >&6
-	echo "$as_me:10264: result: ." >&5
+	echo "$as_me:10274: result: ." >&5
 echo "${ECHO_T}." >&6
 
-				echo "$as_me:10267: checking for Python.h" >&5
+				echo "$as_me:10277: checking for Python.h" >&5
 echo $ECHO_N "checking for Python.h... $ECHO_C" >&6
 
 	_INCLUDES=
@@ -10443,62 +10453,62 @@ echo $ECHO_N "checking for Python.h... $ECHO_C" >&6
 	PYTHON_INC_PATH="${_INCLUDES}"
 
 	if test "${PYTHON_INC_PATH}" = "" ; then
-		echo "$as_me:10345: result: not found!" >&5
+		echo "$as_me:10355: result: not found!" >&5
 echo "${ECHO_T}not found!" >&6
-		echo "$as_me:10347: result: " >&5
+		echo "$as_me:10357: result: " >&5
 echo "${ECHO_T}" >&6
-		echo "$as_me:10349: result: Please specify the path to the directory that contains" >&5
+		echo "$as_me:10359: result: Please specify the path to the directory that contains" >&5
 echo "${ECHO_T}Please specify the path to the directory that contains" >&6
-		echo "$as_me:10351: result: Python.h using the option --with-python-incl=DIR" >&5
+		echo "$as_me:10361: result: Python.h using the option --with-python-incl=DIR" >&5
 echo "${ECHO_T}Python.h using the option --with-python-incl=DIR" >&6
-		{ { echo "$as_me:10353: error: Aborted." >&5
+		{ { echo "$as_me:10363: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 	else
-		echo "$as_me:10357: result: ${PYTHON_INC_PATH}" >&5
+		echo "$as_me:10367: result: ${PYTHON_INC_PATH}" >&5
 echo "${ECHO_T}${PYTHON_INC_PATH}" >&6
 		PYTHON_INCLUDES="-I${PYTHON_INC_PATH}"
 	fi
 
-				echo "$as_me:10362: checking for libpython" >&5
+				echo "$as_me:10372: checking for libpython" >&5
 echo $ECHO_N "checking for libpython... $ECHO_C" >&6
 	PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
 	if test "${PYTHON_LIBS}" = "" ; then
-			echo "$as_me:10366: result: " >&5
+			echo "$as_me:10376: result: " >&5
 echo "${ECHO_T}" >&6
-		echo "$as_me:10368: result: No libpython*a found in ${PYTHON_LIBPATH}. Please specify" >&5
+		echo "$as_me:10378: result: No libpython*a found in ${PYTHON_LIBPATH}. Please specify" >&5
 echo "${ECHO_T}No libpython*a found in ${PYTHON_LIBPATH}. Please specify" >&6
-		echo "$as_me:10370: result: the path where your Python library resides using" >&5
+		echo "$as_me:10380: result: the path where your Python library resides using" >&5
 echo "${ECHO_T}the path where your Python library resides using" >&6
-		echo "$as_me:10372: result: --with-python-libs=DIR" >&5
+		echo "$as_me:10382: result: --with-python-libs=DIR" >&5
 echo "${ECHO_T}--with-python-libs=DIR" >&6
-		echo "$as_me:10374: result: " >&5
+		echo "$as_me:10384: result: " >&5
 echo "${ECHO_T}" >&6
-		{ { echo "$as_me:10376: error: Aborted." >&5
+		{ { echo "$as_me:10386: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 	fi
-	echo "$as_me:10380: result: ${PYTHON_LIBS}" >&5
+	echo "$as_me:10390: result: ${PYTHON_LIBS}" >&5
 echo "${ECHO_T}${PYTHON_LIBS}" >&6
 
 	if test "${PYTHON_LDOPTS}" = "" ; then
 		PYTHON_MAKEFILE=`${FIND} ${PYTHON_LIBPATH} -name Makefile 2>/dev/null`
 		if test "${PYTHON_MAKEFILE}" = "" ; then
-			echo "$as_me:10386: result: " >&5
+			echo "$as_me:10396: result: " >&5
 echo "${ECHO_T}" >&6
-			echo "$as_me:10388: result: Makefile in the Python lib/config directory not found!" >&5
+			echo "$as_me:10398: result: Makefile in the Python lib/config directory not found!" >&5
 echo "${ECHO_T}Makefile in the Python lib/config directory not found!" >&6
-			echo "$as_me:10390: result: Please specify the correct options needed to link" >&5
+			echo "$as_me:10400: result: Please specify the correct options needed to link" >&5
 echo "${ECHO_T}Please specify the correct options needed to link" >&6
-			echo "$as_me:10392: result: against the Python library using" >&5
+			echo "$as_me:10402: result: against the Python library using" >&5
 echo "${ECHO_T}against the Python library using" >&6
-			echo "$as_me:10394: result: --with-python-ldopts=OPTIONS" >&5
+			echo "$as_me:10404: result: --with-python-ldopts=OPTIONS" >&5
 echo "${ECHO_T}--with-python-ldopts=OPTIONS" >&6
-			echo "$as_me:10396: result: (e.g. --with-python-ldopts=\"-ltermcap -lm\")" >&5
+			echo "$as_me:10406: result: (e.g. --with-python-ldopts=\"-ltermcap -lm\")" >&5
 echo "${ECHO_T}(e.g. --with-python-ldopts=\"-ltermcap -lm\")" >&6
-			echo "$as_me:10398: result: " >&5
+			echo "$as_me:10408: result: " >&5
 echo "${ECHO_T}" >&6
-			{ { echo "$as_me:10400: error: Aborted." >&5
+			{ { echo "$as_me:10410: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 		fi
@@ -10507,41 +10517,41 @@ echo "$as_me: error: Aborted." >&2;}
 		PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LOCALMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-` -lm"
 		PYTHON_LIBS=`echo ${PYTHON_LIBS} | ${TR} -s " "`
 	fi
-	echo "$as_me:10409: result: Linker options for Python library: ${PYTHON_LIBS}" >&5
+	echo "$as_me:10419: result: Linker options for Python library: ${PYTHON_LIBS}" >&5
 echo "${ECHO_T}Linker options for Python library: ${PYTHON_LIBS}" >&6
 
-				echo "$as_me:10412: checking sip executable" >&5
+				echo "$as_me:10422: checking sip executable" >&5
 echo $ECHO_N "checking sip executable... $ECHO_C" >&6
-	echo "$as_me:10414: result: ${SIP}" >&5
+	echo "$as_me:10424: result: ${SIP}" >&5
 echo "${ECHO_T}${SIP}" >&6
 
-				echo "$as_me:10417: checking libsip.a" >&5
+				echo "$as_me:10427: checking libsip.a" >&5
 echo $ECHO_N "checking libsip.a... $ECHO_C" >&6
 	if test -r "${SIP_LIBPATH}/libsip.a" ; then
 		SIP_LIB=${SIP_LIBPATH}/libsip.a
-		echo "$as_me:10421: result: ${SIP_LIB}" >&5
+		echo "$as_me:10431: result: ${SIP_LIB}" >&5
 echo "${ECHO_T}${SIP_LIB}" >&6
 	else
-		echo "$as_me:10424: result: not found in ${SIP_LIBPATH}" >&5
+		echo "$as_me:10434: result: not found in ${SIP_LIBPATH}" >&5
 echo "${ECHO_T}not found in ${SIP_LIBPATH}" >&6
-		echo "$as_me:10426: result: " >&5
+		echo "$as_me:10436: result: " >&5
 echo "${ECHO_T}" >&6
-		echo "$as_me:10428: result: Please specify the path to the directory that contains" >&5
+		echo "$as_me:10438: result: Please specify the path to the directory that contains" >&5
 echo "${ECHO_T}Please specify the path to the directory that contains" >&6
-		echo "$as_me:10430: result: libsip.a using the option --with-sip-lib=DIR." >&5
+		echo "$as_me:10440: result: libsip.a using the option --with-sip-lib=DIR." >&5
 echo "${ECHO_T}libsip.a using the option --with-sip-lib=DIR." >&6
-		echo "$as_me:10432: result: If you do not have that file, you should obtain SIP" >&5
+		echo "$as_me:10442: result: If you do not have that file, you should obtain SIP" >&5
 echo "${ECHO_T}If you do not have that file, you should obtain SIP" >&6
-		echo "$as_me:10434: result: from" >&5
+		echo "$as_me:10444: result: from" >&5
 echo "${ECHO_T}from" >&6
-		echo "$as_me:10436: result: www.thekompany.com/projects/pykde" >&5
+		echo "$as_me:10446: result: www.thekompany.com/projects/pykde" >&5
 echo "${ECHO_T}www.thekompany.com/projects/pykde" >&6
-		{ { echo "$as_me:10438: error: Aborted." >&5
+		{ { echo "$as_me:10448: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 	fi
 
-				echo "$as_me:10443: checking sip headers (sip.h)" >&5
+				echo "$as_me:10453: checking sip headers (sip.h)" >&5
 echo $ECHO_N "checking sip headers (sip.h)... $ECHO_C" >&6
 
 	_INCLUDES=
@@ -10619,25 +10629,25 @@ echo $ECHO_N "checking sip headers (sip.h)... $ECHO_C" >&6
 	SIP_INC_PATH="${_INCLUDES}"
 
 	if test "${SIP_INC_PATH}" = "" ; then
-		echo "$as_me:10521: result: not found!" >&5
+		echo "$as_me:10531: result: not found!" >&5
 echo "${ECHO_T}not found!" >&6
-		echo "$as_me:10523: result: " >&5
+		echo "$as_me:10533: result: " >&5
 echo "${ECHO_T}" >&6
-		echo "$as_me:10525: result: Please specify the path to the directory that contains" >&5
+		echo "$as_me:10535: result: Please specify the path to the directory that contains" >&5
 echo "${ECHO_T}Please specify the path to the directory that contains" >&6
-		echo "$as_me:10527: result: sip.h using the option --with-sip-incl=DIR." >&5
+		echo "$as_me:10537: result: sip.h using the option --with-sip-incl=DIR." >&5
 echo "${ECHO_T}sip.h using the option --with-sip-incl=DIR." >&6
-		echo "$as_me:10529: result: If you do not have that file, you should obtain SIP" >&5
+		echo "$as_me:10539: result: If you do not have that file, you should obtain SIP" >&5
 echo "${ECHO_T}If you do not have that file, you should obtain SIP" >&6
-		echo "$as_me:10531: result: from" >&5
+		echo "$as_me:10541: result: from" >&5
 echo "${ECHO_T}from" >&6
-		echo "$as_me:10533: result: www.thekompany.com/projects/pykde" >&5
+		echo "$as_me:10543: result: www.thekompany.com/projects/pykde" >&5
 echo "${ECHO_T}www.thekompany.com/projects/pykde" >&6
-		{ { echo "$as_me:10535: error: Aborted." >&5
+		{ { echo "$as_me:10545: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 	else
-		echo "$as_me:10539: result: ${SIP_INC_PATH}" >&5
+		echo "$as_me:10549: result: ${SIP_INC_PATH}" >&5
 echo "${ECHO_T}${SIP_INC_PATH}" >&6
 		SIP_INCLUDES="-I${SIP_INC_PATH}"
 	fi
@@ -10755,7 +10765,7 @@ fi
 SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR SOLVATION STRUCTURE SYSTEM ${BALLVIEW} ${PYTHON}"
 
 if test "${MULTI_BUILD}" = "true" ; then
-	echo "$as_me:10657: result: creating shadow directories..." >&5
+	echo "$as_me:10667: result: creating shadow directories..." >&5
 echo "${ECHO_T}creating shadow directories..." >&6
 	config/shadowsource.sh `pwd`"/${BINFMT}" `pwd` "${SUBDIRS} TEST BENCHMARKS EXAMPLES TUTORIAL APPLICATIONS"
 	${RM} -fr `pwd`/${BINFMT}/TEST/data 2>/dev/null
@@ -10852,7 +10862,7 @@ DEFS=-DHAVE_CONFIG_H
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files $CONFIG_STATUS"
-{ echo "$as_me:10754: creating $CONFIG_STATUS" >&5
+{ echo "$as_me:10764: creating $CONFIG_STATUS" >&5
 echo "$as_me: creating $CONFIG_STATUS" >&6;}
 cat >$CONFIG_STATUS <<_ACEOF
 #! $SHELL
@@ -11024,7 +11034,7 @@ cat >>$CONFIG_STATUS <<\EOF
     echo "$ac_cs_version"; exit 0 ;;
   --he | --h)
     # Conflict between --help and --header
-    { { echo "$as_me:10926: error: ambiguous option: $1
+    { { echo "$as_me:10936: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&2;}
@@ -11049,12 +11059,12 @@ Try \`$0 --help' for more information." >&2;}
   'config.h' ) CONFIG_HEADERS="$CONFIG_HEADERS config.h:config/config.h.in" ;;
 
   # This is an error.
-  -*) { { echo "$as_me:10951: error: unrecognized option: $1
+  -*) { { echo "$as_me:10961: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&2;}
    { (exit 1); exit 1; }; } ;;
-  *) { { echo "$as_me:10956: error: invalid argument: $1" >&5
+  *) { { echo "$as_me:10966: error: invalid argument: $1" >&5
 echo "$as_me: error: invalid argument: $1" >&2;}
    { (exit 1); exit 1; }; };;
   esac
@@ -11335,7 +11345,7 @@ done; }
   esac
 
   if test x"$ac_file" != x-; then
-    { echo "$as_me:11237: creating $ac_file" >&5
+    { echo "$as_me:11247: creating $ac_file" >&5
 echo "$as_me: creating $ac_file" >&6;}
     rm -f "$ac_file"
   fi
@@ -11353,7 +11363,7 @@ echo "$as_me: creating $ac_file" >&6;}
       -) echo $tmp/stdin ;;
       [\\/$]*)
          # Absolute (can't be DOS-style, as IFS=:)
-         test -f "$f" || { { echo "$as_me:11255: error: cannot find input file: $f" >&5
+         test -f "$f" || { { echo "$as_me:11265: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          echo $f;;
@@ -11366,7 +11376,7 @@ echo "$as_me: error: cannot find input file: $f" >&2;}
            echo $srcdir/$f
          else
            # /dev/null tree
-           { { echo "$as_me:11268: error: cannot find input file: $f" >&5
+           { { echo "$as_me:11278: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          fi;;
@@ -11426,7 +11436,7 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
   * )   ac_file_in=$ac_file.in ;;
   esac
 
-  test x"$ac_file" != x- && { echo "$as_me:11328: creating $ac_file" >&5
+  test x"$ac_file" != x- && { echo "$as_me:11338: creating $ac_file" >&5
 echo "$as_me: creating $ac_file" >&6;}
 
   # First look for the input files in the build tree, otherwise in the
@@ -11437,7 +11447,7 @@ echo "$as_me: creating $ac_file" >&6;}
       -) echo $tmp/stdin ;;
       [\\/$]*)
          # Absolute (can't be DOS-style, as IFS=:)
-         test -f "$f" || { { echo "$as_me:11339: error: cannot find input file: $f" >&5
+         test -f "$f" || { { echo "$as_me:11349: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          echo $f;;
@@ -11450,7 +11460,7 @@ echo "$as_me: error: cannot find input file: $f" >&2;}
            echo $srcdir/$f
          else
            # /dev/null tree
-           { { echo "$as_me:11352: error: cannot find input file: $f" >&5
+           { { echo "$as_me:11362: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          fi;;
@@ -11567,7 +11577,7 @@ cat >>$CONFIG_STATUS <<\EOF
   rm -f $tmp/in
   if test x"$ac_file" != x-; then
     if cmp -s $ac_file $tmp/config.h 2>/dev/null; then
-      { echo "$as_me:11469: $ac_file is unchanged" >&5
+      { echo "$as_me:11479: $ac_file is unchanged" >&5
 echo "$as_me: $ac_file is unchanged" >&6;}
     else
       ac_dir=`$as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
@@ -11666,19 +11676,19 @@ else
 	${RM}  lib*.objects 2>/dev/null
 fi
 
-echo "$as_me:11568: result: " >&5
-echo "${ECHO_T}" >&6
-echo "$as_me:11570: result: " >&5
-echo "${ECHO_T}" >&6
-echo "$as_me:11572: result: Your Makefiles have been created. If everything went OK: just type" >&5
-echo "${ECHO_T}Your Makefiles have been created. If everything went OK: just type" >&6
-echo "$as_me:11574: result: " >&5
-echo "${ECHO_T}" >&6
-echo "$as_me:11576: result: make" >&5
-echo "${ECHO_T}make" >&6
 echo "$as_me:11578: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:11580: result: to build BALL." >&5
+echo "$as_me:11580: result: " >&5
+echo "${ECHO_T}" >&6
+echo "$as_me:11582: result: Your Makefiles have been created. If everything went OK: just type" >&5
+echo "${ECHO_T}Your Makefiles have been created. If everything went OK: just type" >&6
+echo "$as_me:11584: result: " >&5
+echo "${ECHO_T}" >&6
+echo "$as_me:11586: result: make" >&5
+echo "${ECHO_T}make" >&6
+echo "$as_me:11588: result: " >&5
+echo "${ECHO_T}" >&6
+echo "$as_me:11590: result: to build BALL." >&5
 echo "${ECHO_T}to build BALL." >&6
-echo "$as_me:11582: result: " >&5
+echo "$as_me:11592: result: " >&5
 echo "${ECHO_T}" >&6

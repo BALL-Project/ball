@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.145 2001/07/16 13:54:42 oliver Exp $
+dnl    $Id: configure.in,v 1.146 2001/07/29 21:33:11 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2344,35 +2344,51 @@ if test "${USE_BALLVIEW}" = true ; then
 			fi
 
 			
-			QGL_LIBPATH=${QT_LIBPATH}
-			AC_MSG_CHECKING(for libqgl)
-			if test "${QTDIR}" != "" ; then
-				AC_FIND_LIB(QGL_LIBPATH,libqgl,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
-			else
-				AC_FIND_LIB(QGL_LIBPATH,libqgl,${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
-			fi
+			dnl
+			dnl extract the QT version number and version number string from include/qglobal.h
+			dnl
+			QT_VERSION=`${GREP} "#define QT_VERSION[^_]" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
+			QT_VERSION_STR=`${GREP} "#define QT_VERSION_STR" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
+			AC_MSG_CHECKING(for QT version number in qglobal.h)
+			AC_MSG_RESULT([${QT_VERSION} (${QT_VERSION_STR})])
+			
+	
+			dnl
+			dnl  QT libraries befor release 2.0 contained the OGL support in a separate
+			dnl   librarie: libqgl.a, so we hav to look for that one as well....
+			dnl
+			if test "${QT_VERSION}" -lt 200 ; then
+				QGL_LIBPATH=${QT_LIBPATH}
+				AC_MSG_CHECKING(for libqgl)
+				if test "${QTDIR}" != "" ; then
+					AC_FIND_LIB(QGL_LIBPATH,libqgl,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
+				else
+					AC_FIND_LIB(QGL_LIBPATH,libqgl,${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
+				fi
 
-			if test "${QGL_LIBPATH}" = "" ; then
-				AC_MSG_RESULT((not found!))
-				AC_MSG_RESULT()
-				AC_MSG_RESULT([The QT Opengl library libqgl.a could not be found. Please specify])
-				AC_MSG_RESULT([the path to libqt/libqgl by passing the option --with-qt-libs=DIR])
-				AC_MSG_RESULT([to configure.])
-				AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
-				AC_MSG_RESULT([path - configure will recognize this, too.])
-				AC_MSG_RESULT([Perhaps you simple forgot to compile the OpenGl extsions, too?])
-				AC_MSG_RESULT([You find these extensions in ${QTDIR}/extensions/opengl])
-				AC_MSG_RESULT()
-				AC_MSG_RESULT([The complete QT package can be found under the following URL:])
-				AC_MSG_RESULT([  http://www.troll.no/q])
-				AC_MSG_RESULT()
-				AC_MSG_RESULT([Building of the visualization component BALLVIEW was disabled!])
-			else
-				AC_MSG_RESULT((${QT_LIBPATH}))	
-			fi
-			if test "${QGL_PATH}" != "${QT_PATH}" ; then
-				QT_PATH=${QGL_PATH}
-				AC_MSG_RESULT(using ${QT_PATH} to look for liqt.so and libqgl.s)
+				if test "${QGL_LIBPATH}" = "" ; then
+					AC_MSG_RESULT((not found!))
+					AC_MSG_RESULT()
+					AC_MSG_RESULT([The QT Opengl library libqgl.a could not be found. Please specify])
+					AC_MSG_RESULT([the path to libqt/libqgl by passing the option --with-qt-libs=DIR])
+					AC_MSG_RESULT([to configure.])
+					AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
+					AC_MSG_RESULT([path - configure will recognize this, too.])
+					AC_MSG_RESULT([Perhaps you simple forgot to compile the OpenGl extsions, too?])
+					AC_MSG_RESULT([You find these extensions in ${QTDIR}/extensions/opengl])
+					AC_MSG_RESULT()
+					AC_MSG_RESULT([The complete QT package can be found under the following URL:])
+					AC_MSG_RESULT([  http://www.troll.no/qt])
+					AC_MSG_RESULT()
+					AC_MSG_RESULT([Building of the visualization component BALLVIEW was disabled!])
+				else
+					AC_MSG_RESULT((${QT_LIBPATH}))	
+				fi
+				if test "${QGL_PATH}" != "${QT_PATH}" ; then
+					QT_PATH=${QGL_PATH}
+					AC_MSG_RESULT(using ${QT_PATH} to look for liqt.so and libqgl.s)
+				fi
+
 			fi
 
 			if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
