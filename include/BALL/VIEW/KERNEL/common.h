@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.17 2003/12/17 15:11:11 amoll Exp $
+// $Id: common.h,v 1.17.2.1 2004/05/18 15:47:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -16,6 +16,28 @@ namespace BALL
 	namespace VIEW
 	{
 
+
+/** @name defines
+		\ingroup ViewKernelOther
+*/
+//@{
+
+/**	The default port for the VIEW::Server.
+		Default port is 20000.
+		\see  Server
+*/
+#define VIEW_DEFAULT_PORT 20000
+
+/// Number of drawing modes
+#define BALL_VIEW_MAXIMAL_DRAWING_MODE 3
+
+/// Number of drawing precisions
+#define BALL_VIEW_MAXIMAL_DRAWING_PRECISION 4
+
+/// MAXIMAL_DRAWING_PRECISION * MAXIMAL_DRAWING_MODE
+#define BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE  12  
+
+//@}
 /** @name General enumerations, methods and typedefs
 		These predefined types are used in VIEW for portability and
 		comprehensibility.
@@ -23,23 +45,7 @@ namespace BALL
 */
 //@{
 
-/// global variable, which defines, if DockWidgets are shown with a Label
-extern bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS;
-
-/** SceneHandle type.
-		Use this type to represent <b>scene handles</b>. Scene handles are used
-		for the non-ambiguous identification of scenes.
-*/
-typedef unsigned long    SceneHandle;      
-
-
-/**	The default port for the VIEW server.
-		Default port is 20000.
-		\see  Server
-*/
-#define VIEW_DEFAULT_PORT 20000
-
-/** Command enums.
+/** Command enums for the VIEW::Server.
 		These enums specify the commands the server is able
 		to understand (at the moment).
 		\see  Server
@@ -56,47 +62,6 @@ enum Command
 	/// next free command.
 	NUMBER_OF_COMMANDS
 };	
-
-
-/// Drawing Modes
-enum DrawingMode
-{
-	///
-	DRAWING_MODE_DOTS = 0,
-
-	///
-	DRAWING_MODE_WIREFRAME,
-
-	///
-	DRAWING_MODE_SOLID
-};
-
-// Number of drawing modes
-#define BALL_VIEW_MAXIMAL_DRAWING_MODE 3
-
-
-/// Drawing Precisions
-enum DrawingPrecision
-{
-	///
-	DRAWING_PRECISION_LOW = 0,
-
-	///
-	DRAWING_PRECISION_MEDIUM,
-
-	///
-	DRAWING_PRECISION_HIGH,
-
-	/// UNUSED AT THE MOMENT !
-	DRAWING_PRECISION_ULTRA
-};
-
-/// Number of drawing precisions
-#define BALL_VIEW_MAXIMAL_DRAWING_PRECISION 4
-
-
-/// MAXIMAL_DRAWING_PRECISION * MAXIMAL_DRAWING_MODE
-#define BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE  12  
 
 /** Enumeration of Events
  		These events are used to communicate between different threads.
@@ -119,12 +84,53 @@ enum EventsIDs
 	UPDATE_COMPOSITE_EVENT
 };
 
+/// global variable, which defines, if DockWidgets are shown with a Label
+extern bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS;
+
+/** SceneHandle type.
+		Use this type to represent <b>scene handles</b>. Scene handles are used
+		for the non-ambiguous identification of scenes.
+*/
+typedef unsigned long    SceneHandle;      
+
+
 //@}
-/** @name Model types
- 		Enums and methods to describe the models.
+/** @name Enumerations for Representations and Renderer
+ 		Enums and methods to describe the models and drawing methods.
 		 \ingroup ViewKernelOther
 */
 //@{
+
+/// Enumeration for Drawing Modes
+enum DrawingMode
+{
+	///
+	DRAWING_MODE_DOTS = 0,
+
+	///
+	DRAWING_MODE_WIREFRAME,
+
+	///
+	DRAWING_MODE_SOLID
+};
+
+
+/// Enumeration for Drawing Precisions.
+enum DrawingPrecision
+{
+	///
+	DRAWING_PRECISION_LOW = 0,
+
+	///
+	DRAWING_PRECISION_MEDIUM,
+
+	///
+	DRAWING_PRECISION_HIGH,
+
+	/// UNUSED AT THE MOMENT !
+	DRAWING_PRECISION_ULTRA
+};
+
 
 /** This properties define the available models.
 		Add new model entries directly before MODEL_LABEL if you want them to show up 
@@ -180,8 +186,8 @@ enum ModelType
 };
 
 
-/** Coloring Methods
-		Add new coloring methods before COLORING_CUSTOM.
+/** Enumeration for Coloring Methods.
+		<b>Add new coloring methods before COLORING_CUSTOM.</b>
 */
 enum ColoringMethod
 {
@@ -222,11 +228,13 @@ enum ColoringMethod
 
 
 
-/// Get a name for a ModelType
+/** Get a name for a ModelType
+*/
 String getModelName(ModelType type) 
 	throw();
 
-/// Get a name for a ColoringMethod
+/** Get a name for a ColoringMethod
+*/
 String getColoringName(ColoringMethod type) 
 	throw();
 
@@ -236,11 +244,13 @@ String getColoringName(ColoringMethod type)
 bool isSurfaceModel(ModelType type)
 	throw();
 
-/// Model can be modified with DisplayProperitesDialog
+/** Model can be modified with DisplayProperitesDialog
+*/
 bool modelMuteableByDisplayProperties(ModelType type)
 	throw();
 
-/// Model must be rebuild, if Composite changes
+/** Model must be rebuild, if Composite changes
+*/
 bool modelMustBeRebuild(ModelType type)
 	throw();
 
