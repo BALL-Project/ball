@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.10 2001/06/27 01:33:51 oliver Exp $
+// $Id: expression.h,v 1.11 2001/07/03 20:49:08 anker Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -27,6 +27,12 @@ namespace BALL
 
 
 	/** ExpressionPredicate. 
+			A class that provides a predicate for expressions that can be used on
+			atoms. 
+			\\
+			There are standard predicates that are predefined for
+			convenient use (\Ref{BAUSTELLE}) when building an expression.
+			\\
 			{\bf Definition} \URL{BALL/KERNEL/expression.h}
 	*/
 	class ExpressionPredicate
@@ -42,11 +48,13 @@ namespace BALL
 
 		/** Default Constructor
 		*/
-		ExpressionPredicate() throw();
+		ExpressionPredicate() 
+			throw();
 		
 		/** Copy constructor 
 		 */
-		ExpressionPredicate(const ExpressionPredicate& predicate) throw();
+		ExpressionPredicate(const ExpressionPredicate& predicate) 
+			throw();
 
 		/** Detailed Constructor.
 				Construct an ExpressionPredicate with a string.
@@ -72,7 +80,8 @@ namespace BALL
 
 		/** Clear method 
 		 */
-		virtual void clear() throw();
+		virtual void clear() 
+			throw();
 
 		//@}
 		/** @name Predicates 
@@ -115,6 +124,7 @@ namespace BALL
 		/*_ The argument of the predicate 
 		 */
 		String argument_;
+
 	};
 
 
@@ -135,17 +145,18 @@ namespace BALL
 		*/
 		//@{
 
-		/**
+		/** The type of an expression node in the tree.
+				The type determines how a node is to be interpreted.
 		*/
 		enum Type
 		{	
-			///
+			/// The node is invalid.
 			INVALID = 0,
-			///
+			/// The node is a leaf.
 			LEAF,
-			///
+			/// The node is a logical OR conjunction.
 			OR,
-			///
+			/// The node is a logical AND conjunction.
 			AND
 		};
 		//@}
@@ -171,7 +182,8 @@ namespace BALL
 				Create an expression node representing a leaf, i.e., a 
 				predicate.
 				@param	predicate the node's predicate
-				@param	negate set to {\bf true} if the node's predicate should be negated
+				@param	negate set to {\bf true} if the node's predicate should be
+								negated
 		*/
 		ExpressionTree(ExpressionPredicate* predicate, bool negate = false)
 			throw();
@@ -260,10 +272,22 @@ namespace BALL
 		
 		protected:
 		
+		/*_ The type of this node.
+		*/
 		Type									type_;
+		
+		/*_ Negation flag. If set, the value of this node will be negated.
+		*/
 		bool									negate_;
+		
+		/*_ A pointer to the predicate that this node represents.
+		*/
 		ExpressionPredicate*	predicate_;
+		
+		/*_ A list containing pointers to the children of this node. 
+		*/
 		list<ExpressionTree*>	children_;
+
 	};
 
 
@@ -280,10 +304,10 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/// BAUSTELLE
 		typedef	list<SyntaxTree*>::iterator				Iterator;
 
-		///
+		/// BAUSTELLE
 		typedef	list<SyntaxTree*>::const_iterator	ConstIterator;
 		
 		//@}
@@ -293,56 +317,99 @@ namespace BALL
 
 		/** Default constructor
 		*/
-		SyntaxTree();
+		SyntaxTree()
+			throw();
 
 		/** Detailed constructor
 		*/
-		SyntaxTree(const String& expression);
+		SyntaxTree(const String& expression)
+			throw();
 
 		/**
 		*/
-		virtual ~SyntaxTree();
+		virtual ~SyntaxTree()
+			throw();
 		
 		//@}
 		/**	@name	Accessors
 		*/
 		//@{
-		//
-		///
-		Iterator begin();
 
-		///
-		Iterator end();
+		/// BAUSTELLE
+		Iterator begin()
+			throw();
 
-		///
-		ConstIterator begin() const;
+		/// BAUSTELLE
+		Iterator end()
+			throw();
 
-		///
-		ConstIterator end() const;	
+		/// BAUSTELLE
+		ConstIterator begin() const
+			throw();
 
-		///
-		void mergeLeft(SyntaxTree* tree);
+		/// BAUSTELLE
+		ConstIterator end() const
+			throw();	
 
-		///
-		void mergeRight(SyntaxTree* tree);
+		/// BAUSTELLE
+		void mergeLeft(SyntaxTree* tree)
+			throw();
 
-		///
-		void parse();
+		/// BAUSTELLE
+		void mergeRight(SyntaxTree* tree)
+			throw();
+
+		/// BAUSTELLE
+		void parse()
+			throw();
 		
 		//@}
+		/** @name Public attributes
+		*/
+		//@{
 
+		/** BAUSTELLE
+		*/
 		String								expression;
+
+		/** BAUSTELLE
+		*/
 		String								argument;
+
+		/** BAUSTELLE
+		*/
 		bool									evaluated;
+
+		/** BAUSTELLE
+		*/
 		bool									negate;
+
+		/** BAUSTELLE
+		*/
 		ExpressionTree::Type	type;
+
+		/** BAUSTELLE
+		*/
 		list<SyntaxTree*>			children;
+
+		//@}
 			
 		protected:
 		
-		void expandBrackets_();
-		void collapseANDs_();
-		void collapseORs_();
+		/*_ BAUSTELLE
+		*/
+		void expandBrackets_()
+			throw();
+		
+		/*_ BAUSTELLE
+		*/
+		void collapseANDs_()
+			throw();
+		
+		/*_ BAUSTELLE
+		*/
+		void collapseORs_()
+			throw();
 
 	};
 
@@ -355,7 +422,6 @@ namespace BALL
 	{
 		public:
 		
-		// BAUSTELLE
 		BALL_CREATE(Expression)
 
 		/**	@name	Type Definitions
@@ -377,15 +443,18 @@ namespace BALL
 
 		/** Copy Constructor.
 		*/
-		Expression(const Expression& expression) throw();
+		Expression(const Expression& expression) 
+			throw();
 
 		/** Construct an Expression with a string
 		*/
-		Expression(const String& expression_string) throw();
+		Expression(const String& expression_string) 
+			throw();
 
 		/** Destructor.
 		*/
-		virtual ~Expression() throw();
+		virtual ~Expression() 
+			throw();
 
 		//@}
 		/**	@name	Predicates
@@ -394,11 +463,13 @@ namespace BALL
 
 		/**
 		*/
-		bool hasPredicate(const String& name) const throw();
+		bool hasPredicate(const String& name) const 
+			throw();
 
 		/** Equality operator 
 		 */
-		bool operator == (const Expression& expression) const throw();
+		bool operator == (const Expression& expression) const 
+			throw();
 
 		//@}
 		/**	@name	Accessors
@@ -408,26 +479,31 @@ namespace BALL
 		/** Evaluate the expression of {\tt atom}
 				@param atom
 		*/
-		virtual bool operator () (const Atom& atom) const throw();
+		virtual bool operator () (const Atom& atom) const 
+			throw();
 
 		/**	Create a new predicate according to the name.
 				If the predicate is not known, return 0.
 		*/
 		ExpressionPredicate* getPredicate(const String& name, 
-				const String& args = "") const throw();
+				const String& args = "") const 
+			throw();
 
 		/**	Register a new predicate class.
 		*/
 		void registerPredicate(const String& name, CreationMethod creation_method)
+			
 			throw();
 
 		/** set the expression string
 		*/
-		void setExpression(const String& expression) throw();
+		void setExpression(const String& expression) 
+			throw();
 
 		/** get the expression string
 		*/
-		const String& getExpression() const throw();
+		const String& getExpression() const 
+			throw();
 
 		//@}
 		/** @name Assignment 
@@ -436,23 +512,51 @@ namespace BALL
 
 		/** Assignment operator 
 		 */
-		const Expression& operator = (const Expression& expression) throw();
+		const Expression& operator = (const Expression& expression) 
+			throw();
 
 		/** Clear method 
 		 */
-		virtual void clear() throw();
+		virtual void clear() 
+			throw();
 
 		//@}
 
 		protected:
 
-		ExpressionTree*	constructExpressionTree_(const SyntaxTree& tree)
-			throw();
-		void registerStandardPredicates_() throw();
+		/*_ @name Protected methods
+		*/
+		//@{
 
+		/*_ BAUSTELLE
+		*/
+		ExpressionTree*	constructExpressionTree_(const SyntaxTree& tree)
+			
+			throw();
+
+		/*_ BAUSTELLE
+		*/
+		void registerStandardPredicates_() 
+			throw();
+
+		//@}
+		/*_ @name Protected attributes
+		*/
+		//@{
+
+		/*_ BAUSTELLE
+		*/
 		StringHashMap<CreationMethod> create_methods_;
+
+		/*_ BAUSTELLE
+		*/
 		ExpressionTree*								expression_tree_;
+
+		/*_ BAUSTELLE
+		*/
 		String												expression_string_;
+
+		//@}
 	};
 	//@}
 }	

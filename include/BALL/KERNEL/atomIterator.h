@@ -1,4 +1,4 @@
-// $Id: atomIterator.h,v 1.4 2000/08/30 19:58:06 oliver Exp $
+// $Id: atomIterator.h,v 1.5 2001/07/03 20:47:28 anker Exp $
 
 #ifndef BALL_KERNEL_ATOMITERATOR_H
 #define BALL_KERNEL_ATOMITERATOR_H
@@ -22,6 +22,8 @@
 namespace BALL 
 {
 
+	/** Traits class for the AtomIterators
+	*/
 	class AtomIteratorTraits_
 		: public CompositeIteratorTraits_ 
 	{
@@ -29,53 +31,92 @@ namespace BALL
 
 		BALL_CREATE_DEEP(AtomIteratorTraits_)
 
+		/// BAUSTELLE
 		AtomIteratorTraits_()
-			:	CompositeIteratorTraits_()
-		{
-			predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
-		}
+			throw();
 			
+		/// BAUSTELLE
 		AtomIteratorTraits_(const Composite& composite)
-			:	CompositeIteratorTraits_(composite)
-		{
-			predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
-		}
-			
-		AtomIteratorTraits_(const AtomIteratorTraits_& traits, bool /* deep */ = true)
-			:	CompositeIteratorTraits_(traits)
-		{
-		}
-			
-		AtomIteratorTraits_& operator = (const AtomIteratorTraits_& traits)
-		{
-			CompositeIteratorTraits_::operator=(traits);
-			return *this;
-		}
+			throw();
 
+		/// BAUSTELLE
+		AtomIteratorTraits_(const AtomIteratorTraits_& traits, bool /* deep */)
+			throw();
+			
+		/// BAUSTELLE
+		AtomIteratorTraits_& operator = (const AtomIteratorTraits_& traits)
+			throw();
+
+		/// BAUSTELLE
 		void resetPredicate()
-		{
-			predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
-		}
+			throw();
 
 	};
 
 
+	AtomIteratorTraits_::AtomIteratorTraits_()
+		throw()
+		:	CompositeIteratorTraits_()
+	{
+		predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
+	}
+		
+	AtomIteratorTraits_::AtomIteratorTraits_(const Composite& composite)
+		throw()
+		:	CompositeIteratorTraits_(composite)
+	{
+		predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
+	}
+		
+	AtomIteratorTraits_::AtomIteratorTraits_(const AtomIteratorTraits_& traits, bool /* deep */ = true)
+		throw()
+		:	CompositeIteratorTraits_(traits)
+	{
+	}
+		
+	AtomIteratorTraits_& AtomIteratorTraits_::operator = (const AtomIteratorTraits_& traits)
+		throw()
+	{
+		CompositeIteratorTraits_::operator=(traits);
+		return *this;
+	}
 
+	void AtomIteratorTraits_::resetPredicate()
+		throw()
+	{
+		predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
+	}
+
+
+	/** @name Iterator type definitions for the various AtomIterators
+	*/
+	//@{
+
+	/** A mutable bidirectional iterator for the Atom class.
+	*/
 	typedef BidirectionalIterator
 		<Composite, Atom, Composite::SubcompositeIterator, AtomIteratorTraits_>
 		AtomIterator;
 
+	/** A constant bidirectional iterator for the Atom class.
+	*/
 	typedef ConstBidirectionalIterator
 		<Composite, Atom, Composite::SubcompositeIterator, AtomIteratorTraits_>
 		AtomConstIterator;
 
+	/** A mutable reverse bidirectional iterator for the Atom class.
+	*/
 	typedef ReverseBidirectionalIterator
 		<Composite, Atom, Composite::SubcompositeIterator, AtomIteratorTraits_>
 		AtomReverseIterator;
 
+	/** A constant reverse bidirectional iterator for the Atom class.
+	*/
 	typedef ConstReverseBidirectionalIterator
 		<Composite, Atom, Composite::SubcompositeIterator, AtomIteratorTraits_>
 		AtomConstReverseIterator;
+	
+	//@}
 
 } // namespace BALL
 

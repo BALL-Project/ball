@@ -1,4 +1,4 @@
-// $Id: atomContainer.h,v 1.8 2001/06/26 19:35:28 amoll Exp $
+// $Id: atomContainer.h,v 1.9 2001/07/03 20:49:09 anker Exp $
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
@@ -42,7 +42,8 @@ namespace BALL
 
 	/**	Atom Container Base Class.
 			The {\tt AtomContainer} class is the base class
-			of all kernel classes containing atoms.\\
+			of all kernel classes containing atoms.
+			\\
 			{\bf Definition:}\URL{BALL/KERNEL/atomContainer.h}
 	*/
 	class AtomContainer
@@ -57,10 +58,10 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/// BAUSTELLE
 		enum Property
 		{	
-			///
+			/// BAUSTELLE
 			NUMBER_OF_PROPERTIES = 0
 		};
 
@@ -75,11 +76,14 @@ namespace BALL
 			throw();
 	
 		/** Copy constructor 
+				@param atom_container the AtomContainer to construct from
+				@param deep a flag indicating cloning
 		*/
 		AtomContainer(const AtomContainer& atom_container, bool deep = true)
 			throw();
 	
-		/** Constructor 
+		/** Detailed Constructor 
+				@param name the name of the AtomContainer
 		*/
 		AtomContainer(const String& name)
 			throw();
@@ -89,13 +93,6 @@ namespace BALL
 		virtual ~AtomContainer()
 			throw();
 
-		/** Clears the contents of this instance of AtomContainer.
-				This methods clears the base fragment's name, destroys all its children
-				(as in \Ref{Composite::clear}), but does not remove it from its parent composite structures.
-		*/
-		virtual void clear()
-			throw();
-	
 		/** Clears the contents of this instance of AtomContainer and removes it from parent composite structures.
 				This methods clears the base fragment's name, destroys all its children
 				(as in \Ref{Composite::destroy}), and removes it from its parent composite structures.
@@ -156,8 +153,19 @@ namespace BALL
 		void swap(AtomContainer& atom_container)
 			throw();
 
-		//@}
+		/** Clears the contents of this instance of AtomContainer.
+				This methods clears the base fragment's name, destroys all its children
+				(as in \Ref{Composite::clear}), but does not remove it from its
+				parent composite structures.
+		*/
+		virtual void clear()
+			throw();
 	
+		//@}
+		/** @name Predicates
+		*/
+		//@{
+
 		/**	Equality operator.
 				Two instance of AtomContainer are equal if they have the same handle.
 				@see Object::operator ==
@@ -171,6 +179,7 @@ namespace BALL
 		bool operator != (const AtomContainer& atom_container) const
 			throw();
 
+		//@}
 		/**	@name	Accessors 
 		*/
 		//@{
@@ -197,26 +206,29 @@ namespace BALL
 			throw();
 
 		/** Mutable inspection of the parent molecule.
-				The pointer is 0 if this instance does not have a parent molecule.\\
-				{\bf Note:} No corresponding mutator AtomContainer::setMolecule exists to
-				consider design of contract - an AtomContainer may not insert into a molecule,
-				it must be inserted via the molecule.
+				The pointer is 0 if this instance does not have a parent molecule.
+				\\
+				{\bf Note:} No corresponding mutator AtomContainer::setMolecule
+				exists to consider design of contract - an AtomContainer may not
+				insert into a molecule, it must be inserted via the molecule.
 				@return  Molecule* - mutable pointer to the parent molecule
 		*/
 		Molecule* getMolecule()
 			throw();
 
-		/** Mutable inspection of the parent molecule.
-				The pointer is 0 if this instance AtomContainer does not have a parent molecule.\\
-				{\bf Note:} No corresponding mutator AtomContainer::setMolecule exists to
-				consider design of contract - an AtomContainer may not insert into a molecule,
-				it must be inserted via the molecule.
+		/** Constant inspection of the parent molecule.
+				The pointer is 0 if this instance AtomContainer does not have a
+				parent molecule.
+				\\
+				{\bf Note:} No corresponding mutator AtomContainer::setMolecule
+				exists to consider design of contract - an AtomContainer may not
+				insert into a molecule, it must be inserted via the molecule.
 				@return  Molecule* - constant pointer to the parent molecule
 		*/
 		const Molecule* getMolecule() const
 			throw();
 
-		/** Get a pointer to the parent AtomContainer.
+		/** Get a mutable pointer to the parent AtomContainer.
 				The pointer is 0 if this instance does not have a parent AtomContainer.
 				@return  AtomContainer* - mutable pointer to the parent AtomContainer
 		*/
@@ -231,7 +243,8 @@ namespace BALL
 			throw();
 
 		/** Get a pointer to a child AtomContainer at a given position.
-				The pointer is 0 if this instance does not have an AtomContainer at the given position.
+				The pointer is 0 if this instance does not have an AtomContainer at
+				the given position.
 				@param   position of the child AtomContainer
 				@return  AtomContainer* - mutable pointer to the child
 		*/
@@ -239,7 +252,8 @@ namespace BALL
 			throw();
 	
 		/** Get a constant pointer to a child AtomContainer at a given position.
-				The pointer is 0 if this instance does not have an AtomContainer at the given position.
+				The pointer is 0 if this instance does not have an AtomContainer at
+				the given position.
 				@param   position of the child AtomContainer
 				@return  AtomContainer* - constant pointer to the child
 		*/
@@ -247,7 +261,8 @@ namespace BALL
 			throw();
 	
 		/** Get a pointer to a child atom at a given position.
-				The pointer is 0 if this instance does not have an atom at the given position.
+				The pointer is 0 if this instance does not have an atom at the
+				given position.
 				@param   position the position of the child atom
 				@return  Atom* - mutable pointer to the child
 		*/
@@ -255,7 +270,8 @@ namespace BALL
 			throw();
 	
 		/** Get a pointer to a child atom at a given position.
-				The pointer is 0 if this instance does not have an atom at the given position.
+				The pointer is 0 if this instance does not have an atom at the
+				given position.
 				@param   position the position of the child atom
 				@return  Atom* - constant pointer to the child
 		*/
@@ -263,7 +279,8 @@ namespace BALL
 			throw();
 	
 		/** Get a pointer to a child atom with the name {\em name}.
-				The pointer is 0 if this instance does not have an atom with this name.
+				The pointer is 0 if this instance does not have an atom with this
+				name.
 				@param   name the name of the child atom
 				@return  Atom* - mutable pointer to the child
 		*/
@@ -271,7 +288,8 @@ namespace BALL
 			throw();
 	
 		/** Get a pointer to a child atom with the name {\em name}.
-				The pointer is 0 if this instance AtomContainer does not have an atom with this name.
+				The pointer is 0 if this instance AtomContainer does not have an
+				atom with this name.
 				@param   name the name of the child atom
 				@return  Atom* - constant pointer to the child
 		*/
@@ -302,7 +320,8 @@ namespace BALL
 		Size countInterBonds() const
 			throw();
 
-		/** Count all bonds which connect atoms in this instance with atoms outside.
+		/** Count all bonds which connect atoms in this instance with atoms
+				outside.
 				@return Size the number of intra bonds
 		*/
 		Size countIntraBonds() const
@@ -378,13 +397,15 @@ namespace BALL
 		void insertAfter(AtomContainer& atom_container, Composite& after)
 			throw();
 
-		/**	Cut all children of {\tt atom_container} and prepend them before the children of this instance.
+		/**	Cut all children of {\tt atom_container} and prepend them before
+				the children of this instance.
 				@param atom_container the AtomContainer to access
 		*/
 		void spliceBefore(AtomContainer& atom_container)
 			throw();
 
-		/**	Cut all children of {\tt atom_container} and append them after the children of this instance.
+		/**	Cut all children of {\tt atom_container} and append them after the 
+				children of this instance.
 				@param atom_container the AtomContainer to access
 		*/
 		void spliceAfter(AtomContainer& atom_container)
@@ -479,8 +500,10 @@ namespace BALL
 
 		private:
 
-		// --- ATTRIBUTES
+		/*_ The name of this container
+		*/
 		String  name_;
+
 	};
 
 } // namespace BALL
