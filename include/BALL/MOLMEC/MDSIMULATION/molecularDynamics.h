@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.h,v 1.18 2001/07/11 23:59:32 amoll Exp $
+// $Id: molecularDynamics.h,v 1.19 2001/09/01 16:08:38 oliver Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
@@ -74,41 +74,41 @@ namespace BALL
 
 			/** The maximal number of iterations to be carried out 
 			 */
-			static const char *MAXIMAL_NUMBER_OF_ITERATIONS;
+			static const char* MAXIMAL_NUMBER_OF_ITERATIONS;
 
       /** The maximal simulation time in ps(equivalent to 
           MAXIMAL_NUMBER_OF_ITERATIONS 
       */ 
-      static const char *MAXIMAL_SIMULATION_TIME; 
+      static const char* MAXIMAL_SIMULATION_TIME; 
 
 			/** The current number of iteration 
 			 */
-			static const char *NUMBER_OF_ITERATION;
+			static const char* NUMBER_OF_ITERATION;
 
 			/** After how many iterations shall energy information be saved 
 			 */
-			static const char *ENERGY_OUTPUT_FREQUENCY;
+			static const char* ENERGY_OUTPUT_FREQUENCY;
 
 			/** After how many iterations shall a snapshot of the system be taken         
 			 */
-			static const char *SNAPSHOT_FREQUENCY;
+			static const char* SNAPSHOT_FREQUENCY;
 
 			/** The time step in picoseconds 
 			 */
-			static const char *TIME_STEP;
+			static const char* TIME_STEP;
 
 			/** The reference temperature in Kelvin
 			 */
-			static const char *REFERENCE_TEMPERATURE;
+			static const char* REFERENCE_TEMPERATURE;
 
 			/** The parameter for heat bath coupling in picoseconds. 
 			 *  It should be greater than 0.1 ps. 
 			 */
-			static const char *BATH_RELAXATION_TIME;
+			static const char* BATH_RELAXATION_TIME;
 
 			/** The current time of the simulation in picoseconds
 			 */
-			static const char *CURRENT_TIME;
+			static const char* CURRENT_TIME;
 		};
 
 		struct Default
@@ -306,23 +306,29 @@ namespace BALL
 		*/
 		ForceField *getForceField() const;
 
-		/** Start the molecular dynamics simulation                      
-				The base class does not provide any
-		    implementation for these methods below. 
+		/** Start the molecular dynamics simulation.
+				This method calls \Ref{simulateIterations} with the maximum 
+				number of iterations.
+				@see setMaximumNumberOfIterations
 		*/
-		virtual void simulate(bool restart = false);
+		void simulate(bool restart = false);
+
+		/**  Simulate a given time interval.
+				 This method determines the number of steps necessary
+				 to simulate a given time interval and executes a
+				 simulation for that interval by calling \Ref{simulateIterations}.
+		*/
+		void simulateTime(double simulation_time, bool restart = false);
 
 		/**  Start the molecular dynamics simulation and carry out
 		     the given number of iterations. 
+				 This is the proper simulation method, which is implemented in 
+				 the derived classes only. The implementation provided
+				 by \Ref{MolecularDynamics} is simply empty.
 		*/
 		virtual void simulateIterations(Size number, bool restart = false);
-
-		/**  Start the molecular dynamics simulation and carry out
-		     the given time in picoseconds    
-		*/
-		virtual void simulateTime(double simulation_time, bool restart = false);
-
 		//@}
+
 		/**  @name Public Attributes
 		*/
 		//@{

@@ -1,4 +1,4 @@
-// $Id: canonicalMD.h,v 1.15 2001/07/11 23:59:32 amoll Exp $
+// $Id: canonicalMD.h,v 1.16 2001/09/01 16:08:38 oliver Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
@@ -176,16 +176,6 @@ namespace BALL
     virtual void setTimeStep(double time)
 			throw();
 
-    /**  This method does the actual simulation stuff.
-         It runs for getMaximalNumberIterations() iterations.
-         If restart is true, the counting of iterations starts with the 
-         number of the last iteration in the previous run.  
-				 @param restart a bool value indicating whether the simulation is 
-								to be run from the beginning
-    */
-    virtual void simulate(bool restart = false)
-			throw();
-
     /**  This method does the actual simulation stuff. 
          It runs for the indicated number of iterations. 
          If restart is true, the counting of iterations starts with the 
@@ -194,16 +184,6 @@ namespace BALL
 				 @param restart flag for restarting the simulation
     */
     virtual void simulateIterations(Size number, bool restart = false)
-			throw();
-
-    /**  This method does the actual simulation stuff. 
-         It runs for the indicated time in picoseconds. 
-         If restart is true, the counting of iterations starts with the 
-         number of the last iteration in the previous run.  
-				 @param simulation_time
-				 @param restart
-    */
-    virtual void simulateTime(double simulation_time, bool restart = false)
 			throw();
 
     //@}
