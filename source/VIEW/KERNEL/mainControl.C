@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.144 2004/11/29 00:43:30 amoll Exp $
+// $Id: mainControl.C,v 1.145 2004/11/29 08:57:34 oliver Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1692,7 +1692,6 @@ Log.error() << "#~~#   2 "   <<
 
 
 	void MainControl::saveBALLViewProjectFile(const String& filename)
-		throw()
 	{
 		INIFile out(filename);
 		out.appendSection("WINDOWS");
