@@ -1,5 +1,5 @@
 
-// $Id: bond.C,v 1.13 2001/01/14 21:57:16 amoll Exp $
+// $Id: bond.C,v 1.14 2001/01/21 21:05:31 amoll Exp $
 
 #include <BALL/KERNEL/bond.h>
 
@@ -183,29 +183,36 @@ namespace BALL
 		}
 	}
 
-	void Bond::set(const Bond &bond,bool deep)
+  void Bond::set(const Bond &bond,bool deep)
+    throw()
+  {
+    PropertyManager::set(bond, deep);
+
+    first_      = bond.first_;
+    second_     = bond.second_;
+    name_       = bond.name_;
+    bond_order_ = bond.bond_order_;
+    bond_type_  = bond.bond_type_;  
+  }
+
+  void Bond::get(Bond &bond, bool deep) const
+    throw()
+  {
+    bond.set(*this, deep);
+  }
+
+	const Bond& Bond::operator = (const Bond& bond)
 		throw()
 	{
-		PropertyManager::set(bond, deep);
+		PropertyManager::operator =(bond);
 
 		first_			=	bond.first_;
 		second_			=	bond.second_;
 		name_				= bond.name_;
 		bond_order_ = bond.bond_order_;
 		bond_type_  = bond.bond_type_;
-	}
 
-	const Bond& Bond::operator = (const Bond& bond)
-		throw()
-	{
-		set(bond);
 		return *this;
-	}
-
-	void Bond::get(Bond &bond, bool deep) const
-		throw()
-	{
-		bond.set(*this, deep);
 	}
 
 	void Bond::swap(Bond &bond)
@@ -497,13 +504,7 @@ namespace BALL
 	bool Bond::operator == (const Bond& bond) const
 		throw()
 	{
-		return(
-			PropertyManager::operator ==(bond) &&
-			*first_			== *bond.first_			&&
-			*second_		== *bond.second_		&&
-			name_				== bond.name_				&&
-			bond_order_	== bond.bond_order_ &&
-			bond_type_	== bond.bond_type_);
+		return(Object::operator ==(bond));
 	}
 
 	bool Bond::operator != (const Bond& bond) const
