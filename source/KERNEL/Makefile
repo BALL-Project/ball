@@ -8,6 +8,8 @@ CPP_SOURCES=\
 	bond.C\
 	chain.C\
 	expression.C\
+	expressionPredicate.C\
+	expressionTree.C\
 	fragment.C\
 	global.C\
 	molecule.C\
@@ -20,6 +22,7 @@ CPP_SOURCES=\
 	secondaryStructure.C\
 	selector.C\
 	standardPredicates.C\
+	syntaxTree.C\
 	system.C
 
 include ../common.mak
