@@ -12,6 +12,8 @@ CPP_SOURCES=\
 	potential1210.C\
 	quadraticAngleBend.C\
 	quadraticBondStretch.C\
+	quadraticImproperTorsion.C\
+	residueTorsions.C\
 	templates.C
 
 include ../../common.mak
