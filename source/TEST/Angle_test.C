@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Angle_test.C,v 1.19 2002/12/12 11:34:39 oliver Exp $
+// $Id: Angle_test.C,v 1.20 2003/04/04 10:25:21 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +9,7 @@
 #	include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(Angle, "$Id: Angle_test.C,v 1.19 2002/12/12 11:34:39 oliver Exp $")
+START_TEST(Angle, "$Id: Angle_test.C,v 1.20 2003/04/04 10:25:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -37,6 +37,8 @@ RESULT
 CHECK(TAngle::TAngle(const T& new_value, bool radian))
 	Angle a = Angle(0.5);
 	TEST_REAL_EQUAL(a, (float)0.5)  
+	Angle b = Angle(180.0, false);
+	TEST_REAL_EQUAL(b, (float)3.141592)  
 RESULT
 
 CHECK(TAngle::TAngle(const TAngle& angle, bool /* deep */))
