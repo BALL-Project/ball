@@ -3075,16 +3075,16 @@ if test "${COMPILER_DONE}" != true -a "${IS_INTELCC}" = true ; then
 	AR="${CXX}"
 	DYNAR="${CXX}"
 	AROPTS="${AROPTS} -o"
-	DYNAROPTS="${DYNAROPTS} -o"
+	DYNAROPTS="${DYNAROPTS} -shared -o"
 	CXX_MAKEDEPEND="${CXX}"
 	MAKEDEP_CXX_OPTS="-M"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
 	CXXFLAGS="${CXXFLAGS} -KPIC"
 
-		CXXFLAGS_O="${CXXFLAGS_O} -O3 -ipo -unroll -openmp"
+		CXXFLAGS_O="${CXXFLAGS_O} -O3 -ip -unroll -openmp"
 
-			CXXFLAGS_D="${CXXFLAGS_D} -g +K0 -w1"
+			CXXFLAGS_D="${CXXFLAGS_D} -g -w1"
 	CXXFLAGS_DI="${CXXFLAGS_DI}"
 
 	COMPILER_DONE=true
