@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.C,v 1.2 2003/10/15 13:52:30 amoll Exp $
+// $Id: VRMLRenderer.C,v 1.3 2004/02/18 16:06:43 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
@@ -164,21 +164,6 @@ void VRMLRenderer::VRMLobjectColor(const GeometricObject& object)
 	current_intend_ --;
 	outfinish_("}");
 	outfinish_("}");
-}
-
-void VRMLRenderer::renderDisc_(const Disc& disc)
-	throw()
-{
-}
-
-void VRMLRenderer::renderTube_(const Tube& tube)
-	throw()
-{
-}	
-
-void VRMLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
-	throw()
-{
 }
 
 void VRMLRenderer::renderMesh_(const Mesh& mesh)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.h,v 1.3 2003/10/15 13:55:04 amoll Exp $
+// $Id: VRMLRenderer.h,v 1.4 2004/02/18 16:06:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_VRMLRENDERER_H
@@ -106,15 +106,6 @@ class VRMLRenderer : public Renderer
 	void renderSphere_(const Sphere& sphere)
 		throw();
 	
-	void renderDisc_(const Disc& disc)
-		throw();
-
-	void renderTube_(const Tube& tube)
-		throw();
-
-	void renderTwoColoredTube_(const TwoColoredTube& tube)
-		throw();
-
 	void renderMesh_(const Mesh& mesh)
 		throw();
 
