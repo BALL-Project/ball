@@ -1,4 +1,4 @@
-// $Id: numericalIntegrator.h,v 1.2 2001/03/06 14:02:59 anker Exp $
+// $Id: numericalIntegrator.h,v 1.3 2001/04/04 14:11:42 anhi Exp $
 
 #ifndef BALL_MATHS_NUMERICALINTEGRATOR_H
 #define BALL_MATHS_NUMERICALINTEGRATOR_H
@@ -95,7 +95,8 @@ namespace BALL
 				@param to upper limit of the integration
 				@return the value of the integral
 		*/
-		DataType integrate(DataType from, DataType to);
+		DataType integrate(DataType from, DataType to)
+			throw();
 
 		//@}
 
@@ -152,7 +153,7 @@ namespace BALL
 		throw()
 	{
 		// BAUSTELLE: Je nach template gibt es clear() in function_ gar nicht.
-		function_.clear();
+		// That's why I commented it out... :-) function_.clear();
 	}
 
 
@@ -207,7 +208,7 @@ namespace BALL
 	template<typename Function, typename DataType>
 	BALL_INLINE
 	DataType NumericalIntegrator<Function, DataType>::integrate
-	(DataType from, DataType to) const
+	(DataType from, DataType to)
 		throw()
 	{
 	}
