@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.34 2004/03/10 20:15:38 oliver Exp $
+// $Id: molecularStructure.C,v 1.35 2004/03/13 12:00:22 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -115,7 +115,7 @@ namespace BALL
 											SLOT(chooseCharmmFF()),0,-1, hint);
 
 		hint = "Configure the force field";
-		insertMenuEntry(MainControl::MOLECULARMECHANICS, "Options", this, 
+		setup_ff_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Options", this, 
 											SLOT(setupForceField()),0,-1, hint);
 		getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 
@@ -382,43 +382,48 @@ namespace BALL
 	void MolecularStructure::checkMenu(MainControl& main_control)
 		throw()
 	{
-		List<Composite*>& selection = main_control.getMolecularControlSelection();
-		Size number_of_selected_objects = selection.size(); 
-
-		bool one_item = (number_of_selected_objects == 1);
-		bool composites_muteable = main_control.compositesAreMuteable();
-
-// 		menuBar()->setItemEnabled(assign_charges_id_, one_item && composites_muteable);
-
-		// AMBER methods are available only for single systems
-		menuBar()->setItemEnabled(amber_energy_id_, one_item);
-		// disable simulation entries, if a simulation is already running
-		menuBar()->setItemEnabled(amber_minimization_id_, one_item && composites_muteable);
-		menuBar()->setItemEnabled(amber_mdsimulation_id_, one_item && composites_muteable);
-		menuBar()->setItemEnabled(build_peptide_id_, composites_muteable);
-
+		Size number_of_selected_objects = main_control.getMolecularControlSelection().size();
 
 		bool selected = (number_of_selected_objects != 0);
-		selected = selected && main_control.compositesAreMuteable();
+		bool one_item = (number_of_selected_objects == 1);
+		bool one_system = (getMainControl()->getSelectedSystem() != 0);
+		bool composites_muteable = main_control.compositesAreMuteable();
 
-		menuBar()->setItemEnabled(add_hydrogens_id_, selected);
-		menuBar()->setItemEnabled(build_bonds_id_, selected);
-		menuBar()->setItemEnabled(check_structure_id_, selected);
+// 		menuBar()->setItemEnabled(assign_charges_id_, one_system && composites_muteable);
 
-		menuBar()->setItemEnabled(calculate_ss_id_, main_control.getSelectedSystem() && composites_muteable);
-		menuBar()->setItemEnabled(calculate_hbonds_id_, selected && composites_muteable);
+		// AMBER methods are available only for single systems
+		// disable calculation entries, if a simulation is running
+		menuBar()->setItemEnabled(amber_energy_id_, one_system && composites_muteable);
+		menuBar()->setItemEnabled(amber_minimization_id_, one_system && composites_muteable);
+		menuBar()->setItemEnabled(amber_mdsimulation_id_, one_system && composites_muteable);
+
+		menuBar()->setItemEnabled(calculate_hbonds_id_, one_system && composites_muteable);
+
+		// prevent changes to forcefields, if simulation is running
+		menuBar()->setItemEnabled(MainControl::CHOOSE_FF, composites_muteable);
+		menuBar()->setItemEnabled(setup_ff_, composites_muteable);
+		
+		menuBar()->setItemEnabled(build_peptide_id_, composites_muteable);
+
+		bool allow = selected && composites_muteable;
+		menuBar()->setItemEnabled(add_hydrogens_id_, allow);
+		menuBar()->setItemEnabled(build_bonds_id_, allow);
+		menuBar()->setItemEnabled(check_structure_id_, allow);
+		menuBar()->setItemEnabled(calculate_ss_id_, allow);
 
 		// these menu point for single items only
-		menuBar() ->setItemEnabled(center_camera_id_, one_item);
-		menuBar()->setItemEnabled(create_distance_grid_id_, one_item);
+		menuBar()->setItemEnabled(center_camera_id_, one_item && composites_muteable);
+		menuBar()->setItemEnabled(create_distance_grid_id_, one_item && composites_muteable);
 
-		menuBar()->setItemEnabled(map_proteins_id_, number_of_selected_objects == 2);
-		menuBar()->setItemEnabled(calculate_RMSD_id_, number_of_selected_objects == 2);
+		menuBar()->setItemEnabled(map_proteins_id_, (number_of_selected_objects == 2) && 
+																								 composites_muteable);
+		menuBar()->setItemEnabled(calculate_RMSD_id_, (number_of_selected_objects == 2) &&
+																									composites_muteable); 
 
 		menuBar()->setItemEnabled(select_id_, selected);
 		menuBar()->setItemEnabled(deselect_id_, selected);
 
-		menuBar()->setItemEnabled(check_overlap_, (getMainControl()->getSelectedSystem() != 0)&& composites_muteable);
+		menuBar()->setItemEnabled(check_overlap_, one_system && composites_muteable);
 	}
 
 

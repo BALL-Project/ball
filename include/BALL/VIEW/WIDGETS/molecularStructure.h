@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.12 2004/03/04 12:41:20 amoll Exp $
+// $Id: molecularStructure.h,v 1.13 2004/03/13 12:00:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -281,6 +281,7 @@ namespace BALL
 			Index	calculate_hbonds_id_;
 			Index	amber_ff_id_;
 			Index	charmm_ff_id_;
+			Index setup_ff_;
 			Index check_overlap_;
 			
 			bool use_amber_;
