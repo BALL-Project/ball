@@ -1,10 +1,12 @@
-// $Id: poissonBoltzmann.C,v 1.13 2000/05/02 08:16:57 anker Exp $ 
+// $Id: poissonBoltzmann.C,v 1.14 2000/05/04 13:37:06 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/DATATYPE/hashGrid.h>
+#include <BALL/MATHS/vector4.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/COMMON/limits.h>
@@ -76,13 +78,14 @@ namespace BALL
 			kappa_grid(0),
 			q_grid(0),
 			phi_grid(0),
-			SES_grid(0),
 			SAS_grid(0),
 			atom_array(0),
 			lower_(0,0,0),
 			upper_(0,0,0),
 			use_offset_(false),
 			energy_(0),
+			reaction_field_energy_(0),
+			boundary_points_(),
 			number_of_iterations_(0),
 			error_code_(0)
 	{
@@ -93,13 +96,14 @@ namespace BALL
 			kappa_grid(0),
 			q_grid(0),
 			phi_grid(0),
-			SES_grid(0),
 			SAS_grid(0),
 			atom_array(0),
 			lower_(0,0,0),
 			upper_(0,0,0),
 			use_offset_(false),
 			energy_(0),
+			reaction_field_energy_(0),
+			boundary_points_(),
 			number_of_iterations_(0),
 			error_code_(0)
 	{
@@ -112,13 +116,14 @@ namespace BALL
 			kappa_grid(0),
 			q_grid(0),
 			phi_grid(0),
-			SES_grid(0),
 			SAS_grid(0),
 			atom_array(0),
 			lower_(0,0,0),
 			upper_(0,0,0),
 			use_offset_(false),
 			energy_(0),
+			reaction_field_energy_(0),
+			boundary_points_(),
 			number_of_iterations_(0),
 			error_code_(0)
 	{
@@ -130,13 +135,14 @@ namespace BALL
 			kappa_grid(0),
 			q_grid(0),
 			phi_grid(0),
-			SES_grid(0),
 			SAS_grid(0),
 			atom_array(0),
 			lower_(0,0,0),
 			upper_(0,0,0),
 			use_offset_(false),
 			energy_(0),
+			reaction_field_energy_(0),
+			boundary_points_(),
 			number_of_iterations_(0),
 			error_code_(0)
 	{
@@ -150,10 +156,14 @@ namespace BALL
 		destroy();
 	}
 
-
-	float FDPB::getEnergy() const 
+	double FDPB::getEnergy() const 
 	{
 		return energy_;
+	}
+
+	double FDPB::getReactionFieldEnergy() const 
+	{
+		return reaction_field_energy_;
 	}
 
 	unsigned long FDPB::getNumberOfIterations() const
@@ -172,13 +182,11 @@ namespace BALL
 		"Not implemented.",
 
 		"The atom array could not be created. You probably ran out of memory. Try a smaller grid size.",
-		"The SES_grid could not be created. You probably ran out of memory. Try a smaller grid size.",
 		"The SAS_grid could not be created. You probably ran out of memory. Try a smaller grid size.",
 		"The grid for the dielectric constant could not be created. You probably ran out of memory. Try a smaller grid size.",
 		"The grid for the Debye parameter could not be created. You probably ran out of memory. Try a smaller grid size.",
 		"The charge grid could not be created. You probably ran out of memory. Try a smaller grid size.",
 		"The potential grid could not be created. You probably ran out of memory. Try a smaller grid size.",
-		"This part of the setup requires a precalculated SES_grid. Run FDPB::setupSESGrid() first.",
 		"This part of the setup requires a precalculated SAS_grid. Run FDPB::setupSASGrid() first.",
 		"This part of the setup requires a precalculated dielectric grid. Run FDPB::setupEpsGrid() first.",
 		"This part of the setup requires a precalculated atom_array. Run FDPB::setupAtomArray() first.",
@@ -192,231 +200,6 @@ namespace BALL
 		"Please execute setup prior to solve." 
 	};
 
-
-	bool FDPB::setupSESGrid(System& system)
-	{
-
-		// the verbosity level
-		int		verbosity;
-
-		// print_timing decides whether timing information for
-		// the different stages of calculation are printed
-		bool	print_timing;
-
-		// the probe radius for the calculation of the
-		// solvent excluded surface on the grid
-		float	probe_radius;
-
-		// the distance between the box and the closest atoms
-		float box_distance;
-
-		// remove an old grid (if it exists)
-		delete SES_grid;
-
-		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
-		options.setDefaultBool(Option::PRINT_TIMING, Default::PRINT_TIMING);
-		options.setDefaultReal(Option::SPACING, Default::SPACING);
-		options.setDefaultReal(Option::BORDER, Default::BORDER);
-		options.setDefaultReal(Option::PROBE_RADIUS, Default::PROBE_RADIUS);
-		options.setDefaultReal(Option::ION_RADIUS, Default::ION_RADIUS);
-
-		// first, check whether we should tell to our user what we`re doing
-		verbosity = (int)options.getInteger(Option::VERBOSITY);
-
-		// ...and whether we should tell him how long it took us...
-		print_timing = options.getInteger(Option::PRINT_TIMING);
-
-		Timer	step_timer;
-		step_timer.start();
-
-		// second, the grid spacing, option name "spacing"
-		spacing_ = options.getReal(Option::SPACING);
-
-		// box_distance is the value between the center of the outmost atom
-		// and the box boundary
-		box_distance = options.getReal(Option::BORDER);
-
-		// set defaults for probe radius,...
-		probe_radius = options.getReal(Option::PROBE_RADIUS);
-
-		// using the keyword "offset" an offset vector may be given	
-		// its units are _ grid _ spacings
-		// i.e. giving "offset=0.0 1.0 0.0" will cause all atomic
-		// centers to be translated by one grid spacing along the y-axis
-		// In fact, not the atoms are translated, but the grid is 
-		// translated in the opposite direction.
-		use_offset_ = false;
-
-		if (options.has(Option::OFFSET))
-		{
-			offset_ = options.getVector(Option::OFFSET);
-			offset_ *= spacing_;
-			use_offset_ = true;
-		}
-
-		if (options.isSet(Option::LOWER) && options.isSet(Option::UPPER))
-		{
-			// the grid dimension is given in the options
-			// first, check whether the entry contains a valid vector
-			if (!options.isVector(Option::LOWER) 
-					|| !options.isVector(Option::LOWER))
-			{
-				error_code_ = FDPB::ERROR__NOT_A_VECTOR_IN_UPPER_LOWER;
-				return false;
-			} else {
-				lower_ = options.getVector(Option::LOWER);
-				upper_ = options.getVector(Option::UPPER);
-
-				// check whether lower is really lower than upper
-				if ((lower_.x >= upper_.x) || (lower_.y >= upper_.y) || (lower_.z >= upper_.z))
-				{
-					error_code_ = FDPB::ERROR__ILLEGAL_VALUE_FOR_LOWER_UPPER;
-					return false;
-				}
-			}
-
-		} else {
-			// determine the molecule`s extent (bounding box)
-				
-			if (options.isSet(Option::BOUNDING_BOX_LOWER)
-					 && options.isSet(Option::BOUNDING_BOX_UPPER))
-			{
-				// read the bounding box from the options
-				lower_ = options.getVector(Option::BOUNDING_BOX_LOWER);
-				upper_ = options.getVector(Option::BOUNDING_BOX_UPPER);
-			} else {
-				if (verbosity > 5)
-				{
-					Log.info(6) << "creating bounding box..." << endl;
-				}
-
-				BoundingBoxProcessor		box_processor;
-				system.apply(box_processor);
-					
-				lower_ = box_processor.getLower();
-				upper_ = box_processor.getUpper();
-				options.setVector(Option::BOUNDING_BOX_LOWER, lower_);
-				options.setVector(Option::BOUNDING_BOX_UPPER, upper_);
-			}
-
-			// closeness: distance between grid and bounding box
-			Vector3			closeness;
-
-			if (verbosity > 70)
-				Log.info(70) << "grid border: " << box_distance << endl;
-
-
-			closeness.set(box_distance, box_distance, box_distance);
-			upper_ += closeness;
-			lower_ -= closeness;
-
-
-			// we need a cubic grid, so calculate the largest dimension of the grid
-			float size = BALL_MAX3(upper_.x - lower_.x, upper_.y - lower_.y, upper_.z - lower_.z);
-
-			// now expand the grid in all three directions. This also changes the origin.
-			// The molecule is centered in the resulting box
-
-			lower_.set(lower_.x + (upper_.x - lower_.x - size) / 2,
-								 lower_.y + (upper_.y - lower_.y - size) / 2,
-								 lower_.z + (upper_.z - lower_.z - size) / 2);
-			
-			upper_.set(size, size, size);
-			upper_ += lower_;
-
-			// store the grid settings in the options
-			options.setVector(Option::LOWER, lower_);
-			options.setVector(Option::UPPER, upper_);
-		}
-
-		if (verbosity > 1)
-			Log.info(2) << "grid:" << lower_ << "/" << upper_ << endl;
-
-		if (use_offset_)
-		{
-			upper_ -= offset_;
-			lower_ -= offset_;
-		}
-		
-		if (verbosity > 1)
-		{
-			Log.info(2) << "calculating SES..." << endl;
-		}
-					
-		SES_grid = calculateSESGrid(lower_, upper_, spacing_, system, probe_radius); 
-		
-		// check whether the grid is really cubic
-		if ((SES_grid->getMaxXIndex() != SES_grid->getMaxYIndex()) 
-				|| (SES_grid->getMaxXIndex() != SES_grid->getMaxZIndex()))
-		{
-			Log.error() << "grid is not cubic - please check dimensions!" << endl;
-			return false;
-		}		
-					
-		if (verbosity > 1)
-		{
-			Log.info(2) << "grid dimensions: " << SES_grid->getMaxXIndex() << "x"
-								  << SES_grid->getMaxYIndex() << "x" << SES_grid->getMaxZIndex() << endl;	
-		}
-
-		step_timer.stop();
-		if (print_timing && (verbosity > 1))
-			Log.info(2) << "setupSESGrid: " << step_timer.getCPUTime() << endl;
-
-
-		if (SES_grid != 0)
-			return true;
-		else 
-		{
-			error_code_ = FDPB::ERROR__CANNOT_CREATE_SES_GRID;
-			return false;
-		}
-	}
-
-	bool FDPB::setupSASGrid(System& system)
-	{
-
-		// timer for run time determination
-		Timer	step_timer; 
-		step_timer.start();
-
-		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
-		options.setDefaultBool(Option::PRINT_TIMING, Default::PRINT_TIMING);
-		options.setDefaultReal(Option::ION_RADIUS, Default::ION_RADIUS);
-		options.setDefaultReal(Option::IONIC_STRENGTH, Default::IONIC_STRENGTH);
-		
-		// first, check whether we should tell to our user what we`re doing
-		int verbosity = (int)options.getInteger(Option::VERBOSITY);
-
-		// ...and whether we should tell how long it took us.
-		bool print_timing = options.getBool(Option::PRINT_TIMING);
-
-		// if an old grid exists, remove it
-		delete SAS_grid;
-			
-		float ionic_strength = options.getReal(Option::IONIC_STRENGTH);
-		// BAUSTELLE: Ionenstaerke fehlt noch!
-		float ion_radius = options.getReal(Option::ION_RADIUS);
-
-		if (ionic_strength == 0.0)
-			return true;
-
-		if (verbosity > 1)
-			Log.info(1) << "calculating SAS..." << endl;
-
-		SAS_grid = calculateSASGrid(lower_, upper_, spacing_, system, ion_radius);
-
-		step_timer.stop();
-		if (print_timing && (verbosity >1))
-			Log.info(2) << "setupSASGrid: " << step_timer.getCPUTime() << endl;
-
-		if (SAS_grid != 0)
-			return true;
-		else {
-			error_code_ = FDPB::ERROR__CANNOT_CREATE_SAS_GRID;
-			return false;
-		}
-	}
 
 	bool FDPB::setupAtomArray(System& system)
 	{
@@ -448,51 +231,178 @@ namespace BALL
 		BALL_FOREACH_ATOM(system, atom_iterator)
 		{
 			fast_atom.q = (*atom_iterator).getCharge();
-			if (fast_atom.q != 0.0)
-			{
-				position = (*atom_iterator).getPosition();
-				fast_atom.x = position.x;
-				fast_atom.y = position.y;
-				fast_atom.z = position.z;
-				fast_atom.r = (*atom_iterator).getRadius();
-				atom_array->push_back(fast_atom);
-			}
+			position = atom_iterator->getPosition();
+			fast_atom.x = position.x;
+			fast_atom.y = position.y;
+			fast_atom.z = position.z;
+			fast_atom.r = atom_iterator->getRadius();
+			atom_array->push_back(fast_atom);
 		}
 		
 		step_timer.stop();
 		if (print_timing && (verbosity > 1))
+		{
 			Log.info(2) << "setupAtomArray: " << step_timer.getCPUTime() << endl;
+		}
 			
 		return true;
 	}
 
-
-	bool FDPB::setupEpsGrid()
+	bool FDPB::setupEpsGrid(System& system)
 	{
-		// create a timer to determine the method's runtime
-		Timer	step_timer;
-		step_timer.start();
+		// precondition: setupAtomArray
+    if (atom_array == 0)
+		{
+      error_code_ = FDPB::ERROR__ATOM_ARRAY_REQUIRED;
+      return false;
+		}                                                                                                                        
+
+		// the verbosity level
+		int	verbosity;
+
+		// print_timing decides whether timing information for
+		// the different stages of calculation are printed
+		bool print_timing;
+
+		// the distance between the box and the closest atoms
+		float box_distance;
+
+		// remove an old grid (if it exists)
+		delete eps_grid;
+		eps_grid = 0;
 
 		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
 		options.setDefaultBool(Option::PRINT_TIMING, Default::PRINT_TIMING);
+		options.setDefaultReal(Option::SPACING, Default::SPACING);
+		options.setDefaultReal(Option::BORDER, Default::BORDER);
+		options.setDefaultReal(Option::PROBE_RADIUS, Default::PROBE_RADIUS);
+		options.setDefaultReal(Option::ION_RADIUS, Default::ION_RADIUS);
 
 		// first, check whether we should tell to our user what we`re doing
-		int verbosity = (int)options.getInteger(Option::VERBOSITY);
+		verbosity = (int)options.getInteger(Option::VERBOSITY);
 
-		// ...and whether we should tell how long it took us.
-		bool print_timing = options.getBool(Option::PRINT_TIMING);
+		// ...and whether we should tell him how long it took us...
+		print_timing = options.getInteger(Option::PRINT_TIMING);
 
-		if (verbosity > 1)
-			Log.info(2) << "creating dielectric grid..." << endl;
-					
-		// check whether all requirements are met			
-		if (SES_grid == 0)
+		Timer	step_timer;
+		step_timer.start();
+
+		// second, the grid spacing, option name "spacing"
+		spacing_ = options.getReal(Option::SPACING);
+
+		// box_distance is the value between the center of the outmost atom
+		// and the box boundary
+		box_distance = options.getReal(Option::BORDER);
+
+		// using the keyword "offset" an offset vector may be given	
+		// its units are _ grid _ spacings
+		// i.e. giving "offset=0.0 1.0 0.0" will cause all atomic
+		// centers to be translated by one grid spacing along the y-axis
+		// In fact, not the atoms are translated, but the grid is 
+		// translated in the opposite direction.
+		use_offset_ = false;
+
+		if (options.has(Option::OFFSET))
 		{
-			error_code_ = FDPB::ERROR__SES_GRID_REQUIRED;
-			return false;
+			offset_ = options.getVector(Option::OFFSET);
+			offset_ *= spacing_;
+			use_offset_ = true;
 		}
 
-		// now retrieve important settings from the options
+		if (options.isSet(Option::LOWER) && options.isSet(Option::UPPER))
+		{
+			// the grid dimension is given in the options
+			// first, check whether the entry contains a valid vector
+			if (!options.isVector(Option::LOWER) 
+					|| !options.isVector(Option::LOWER))
+			{
+				error_code_ = FDPB::ERROR__NOT_A_VECTOR_IN_UPPER_LOWER;
+				return false;
+			} 
+			else 
+			{
+				lower_ = options.getVector(Option::LOWER);
+				upper_ = options.getVector(Option::UPPER);
+
+				// check whether lower is really lower than upper
+				if ((lower_.x >= upper_.x) || (lower_.y >= upper_.y) || (lower_.z >= upper_.z))
+				{
+					error_code_ = FDPB::ERROR__ILLEGAL_VALUE_FOR_LOWER_UPPER;
+					return false;
+				}
+			}
+
+		} 
+		else 
+		{
+			// determine the molecule`s extent (bounding box)
+				
+			if (options.isSet(Option::BOUNDING_BOX_LOWER)
+					 && options.isSet(Option::BOUNDING_BOX_UPPER))
+			{
+				// read the bounding box from the options
+				lower_ = options.getVector(Option::BOUNDING_BOX_LOWER);
+				upper_ = options.getVector(Option::BOUNDING_BOX_UPPER);
+			} 
+			else 
+			{
+				if (verbosity > 5)
+				{
+					Log.info(6) << "creating bounding box..." << endl;
+				}
+
+				BoundingBoxProcessor		box_processor;
+				system.apply(box_processor);
+					
+				lower_ = box_processor.getLower();
+				upper_ = box_processor.getUpper();
+				options.setVector(Option::BOUNDING_BOX_LOWER, lower_);
+				options.setVector(Option::BOUNDING_BOX_UPPER, upper_);
+			}
+
+			// closeness: distance between grid and bounding box
+			Vector3			closeness;
+
+			if (verbosity > 70)
+			{
+				Log.info(70) << "grid border: " << box_distance << endl;
+			}
+
+			closeness.set(box_distance, box_distance, box_distance);
+			upper_ += closeness;
+			lower_ -= closeness;
+
+
+			// we need a cubic grid, so calculate the largest dimension of the grid
+			float size = BALL_MAX3(upper_.x - lower_.x, upper_.y - lower_.y, upper_.z - lower_.z);
+
+			// now expand the grid in all three directions. This also changes the origin.
+			// The molecule is centered in the resulting box
+
+			lower_.set(lower_.x + (upper_.x - lower_.x - size) / 2,
+								 lower_.y + (upper_.y - lower_.y - size) / 2,
+								 lower_.z + (upper_.z - lower_.z - size) / 2);
+			
+			upper_.set(size, size, size);
+			upper_ += lower_;
+
+			// store the grid settings in the options
+			options.setVector(Option::LOWER, lower_);
+			options.setVector(Option::UPPER, upper_);
+		}
+
+		if (verbosity > 1)
+		{
+			Log.info(2) << "grid:" << lower_ << "/" << upper_ << endl;
+		}
+
+		if (use_offset_)
+		{
+			upper_ -= offset_;
+			lower_ -= offset_;
+		}
+		
+		// retrieve important settings for the eps_grid from the options
 		options.setDefaultReal(Option::SOLVENT_DC, Default::SOLVENT_DC);
 		options.setDefaultReal(Option::SOLUTE_DC, Default::SOLUTE_DC);
 		options.setDefault(Option::DIELECTRIC_SMOOTHING, Default::DIELECTRIC_SMOOTHING);
@@ -502,11 +412,17 @@ namespace BALL
 		if (options[Option::DIELECTRIC_SMOOTHING] == FDPB::DielectricSmoothing::HARMONIC)
 		{
 			dielectric_smoothing_method = 1;
-		} else if (options[Option::DIELECTRIC_SMOOTHING] == FDPB::DielectricSmoothing::UNIFORM) {
+		} 
+		else if (options[Option::DIELECTRIC_SMOOTHING] == FDPB::DielectricSmoothing::UNIFORM) 
+		{
 			dielectric_smoothing_method = 2;
-		} else if (options[Option::DIELECTRIC_SMOOTHING] == FDPB::DielectricSmoothing::NONE) {
+		} 
+		else if (options[Option::DIELECTRIC_SMOOTHING] == FDPB::DielectricSmoothing::NONE) 
+		{
 			dielectric_smoothing_method = 0;
-		} else {
+		} 
+		else 
+		{
 			error_code_ = FDPB::ERROR__UNKNOWN_DIELECTRIC_SMOOTHING_METHOD;
 			return false;
 		}
@@ -518,119 +434,332 @@ namespace BALL
 
 		// now, create a new grid containing the dielectric constant of each grid point
 		delete eps_grid;
-		eps_grid = new PointGrid<float>(lower_, upper_, spacing_);
+		eps_grid = new PointGrid<Vector3>(lower_, upper_, spacing_);
 
-		// now assign the correct dielectric constant to each grid point in eps_grid
-		long inside_points;
-		long outside_points;
-		inside_points		= 0;
-		outside_points	= 0;
-
-		// loop variable
-		Index i;
-		for (i = 0; i < (Index)eps_grid->getSize(); i++)
+		// check whether the grid is really cubic
+		if ((eps_grid->getMaxXIndex() != eps_grid->getMaxYIndex()) 
+				|| (eps_grid->getMaxXIndex() != eps_grid->getMaxZIndex()))
 		{
-			if ((*SES_grid)[i] == 0)
+			Log.error() << "grid is not cubic - please check dimensions!" << endl;
+			return false;
+		}		
+					
+		if (verbosity > 1)
+		{
+			Log.info(2) << "grid dimensions: " << eps_grid->getMaxXIndex() << "x"
+								  << eps_grid->getMaxYIndex() << "x" << eps_grid->getMaxZIndex() << endl;	
+		}
+
+		// determine the maximum radius of all atoms
+		vector<FDPB::FastAtom>::iterator atom_array_it= atom_array->begin();
+		float max_radius = 0.0;
+		for (; atom_array_it != atom_array->end(); ++atom_array_it)
+		{
+			if (atom_array_it->r > max_radius)
 			{
-				outside_points++;
-				(*eps_grid)[i] = solvent_dielectric_constant;
-			} else {
-				inside_points++;
-				(*eps_grid)[i] = solute_dielectric_constant;
+				max_radius = atom_array_it->r;
 			}
 		}
-			
+		HashGrid3<Vector4> atom_grid(eps_grid->getOrigin(), eps_grid->getDimension(), max_radius);
+		for (atom_array_it= atom_array->begin(); atom_array_it != atom_array->end(); ++atom_array_it)
+		{
+			Vector4 v(atom_array_it->x, atom_array_it->y, atom_array_it->z, atom_array_it->r * atom_array_it->r);
+			Vector3 r(atom_array_it->x, atom_array_it->y, atom_array_it->z);
+			atom_grid.insert(r, v);
+		}
+
+		// count the points inside and outside (just for curiosity)
+		Size inside_points = 0;
+		Size outside_points = 0;
+
+		// the offsets of the thre eps points in a grid
+		Vector3 offsets[3];
+		offsets[0].set(eps_grid->getXSpacing() / 2.0, 0.0, 0.0);
+		offsets[1].set(0.0, eps_grid->getYSpacing() / 2.0, 0.0);
+		offsets[2].set(0.0, 0.0, eps_grid->getZSpacing() / 2.0);
+		
+		// iterators needed to walk the grid
+		HashGridBox3<Vector4>::BoxIterator box_it;
+		HashGridBox3<Vector4>::DataIterator data_it;
+
+		// walk over all grid points
+		for (Position i = 0; i < eps_grid->getSize(); ++i)	
+		{
+			for (Position j = 0; j < 3; ++j)
+			{
+				// everything is initially outside
+				bool outside = true;
+
+				Vector3 position(eps_grid->getGridCoordinates(i) + offsets[j]);
+				HashGridBox3<Vector4>* box = atom_grid.getBox(position);
+				if (box != 0)
+				{
+					// iterate over all atoms in this box
+					for (data_it = box->beginData(); +data_it; ++data_it)
+					{
+						// is there something in the box that is closer than its radius?
+						if (position.getSquareDistance(Vector3(data_it->x, data_it->y, data_it->z)) <= data_it->h)
+						{
+							// mark the point as inside
+							outside = false; 
+							break;
+						}
+					}
+					if (outside)
+					{
+						// if we didn't find anything, iterate over all 
+						// surrounding boxes as well
+						for (box_it = box->beginBox(); +box_it; ++box_it)
+						{
+							// iterate over all items in the box, abort if we found an atom that is close enough
+							for (data_it = box_it->beginData(); +data_it && outside; ++data_it)
+							{
+								// is there something in the box that is closer than its radius?
+								if (position.getSquareDistance(Vector3(data_it->x, data_it->y, data_it->z)) <= data_it->h)
+								{
+									// mark the point as inside and abort the loop	
+									// the outer loop is aborted by outside == false
+									outside = false; 
+									break;
+								}
+							}
+						}
+					}
+				}
+
+				// mark points inside
+				if (outside)
+				{
+					(*eps_grid)[i][j] = 1.0;
+					outside_points++;
+				} 
+				else
+				{
+					(*eps_grid)[i][j] = 0.0;
+					inside_points++;
+				}
+			}
+		}
+		
 		// document the number of inside and outside points
 		results.setInteger("inside_points", inside_points);
 		results.setInteger("outside_points", outside_points);
-					
-		// now destroy the SES grid. We don`t need it anymore.
-		delete SES_grid;
-		SES_grid = 0;
 
 		// variables for fast index evaluation
-		long Nx		= (long)eps_grid->getMaxXIndex() + 1L;
-		long Nxy	= ((long)eps_grid->getMaxYIndex() + 1L) * Nx;
-		long N		= Nxy * ((long)eps_grid->getMaxZIndex() + 1L);
+		Size Nx = eps_grid->getMaxXIndex() + 1;
+		Size Nxy = (eps_grid->getMaxYIndex() + 1) * Nx;
+		Position s, t, q;
+		unsigned short border;
+		boundary_points_.clear();
+		for (s = 1; s < eps_grid->getMaxZIndex(); s++)
+		{
+		  for (t = 1; t < eps_grid->getMaxYIndex(); t++)	
+			{
+				for (q = 1; q < eps_grid->getMaxXIndex(); q++)
+				{
+					// calculate the absolute grid index the hard way (faster!)
+					Position idx = q + Nx * t + s * Nxy;
+
+					// check for boundary points.
+					// We consider the position of the point itself
+					// and the six neighbouring points.
+					// A point is an the boundary if not all seven
+					// points have the same value, i.e., if the
+					// sum of the seven values is not zero and not seven
+					border = (unsigned short)(((*eps_grid)[idx].x == 0.0)
+										+ ((*eps_grid)[idx].y == 0.0)
+										+ ((*eps_grid)[idx].z == 0.0)
+										+ ((*eps_grid)[idx - 1].x == 0.0)
+										+ ((*eps_grid)[idx - Nx].y == 0.0)
+										+ ((*eps_grid)[idx - Nxy].z == 0.0));
+					if ((border > 0) && (border < 6))
+					{
+						boundary_points_.push_back(idx);
+					}
+				}
+			}
+		}
+
+		if (verbosity > 10)
+		{
+			Log.info() << "Boundary points: " << boundary_points_.size() << endl;
+		}
+		results.set("boundary points", boundary_points_.size());
+
+		// assign the dielectric constants
+		for (Position i = 0; i < eps_grid->getSize(); i++)
+		{
+			// we assign the solvent DC to all points that were outside 
+			// (marked by 1.0) and the solute DC to al points inside (0.0)
+			// We do it in parallel for all three intermediate points...
+			(*eps_grid)[i] *= (solvent_dielectric_constant - solute_dielectric_constant);
+			(*eps_grid)[i] += solute_dielectric_constant;
+		}
 
 		// execute the dielectric smoothing (if any)
 		if (dielectric_smoothing_method != 0)
 		{
 			if (verbosity > 1)
+			{
 				Log.info(2) << "performing dielectric smoothing..." << endl;
-
-			switch (dielectric_smoothing_method) {
-				case 1:		// harmonic smoothing
-					float* tmp_grid;
-					long index;
-
-					tmp_grid = new float[N];
-					if (tmp_grid == 0)
-					{
-						throw Exception::OutOfMemory(__FILE__, __LINE__, N * sizeof(float));
-					}
-
-					// copy the grid to perform the smoothing
-					memcpy(tmp_grid, &((*eps_grid)[0]), N * sizeof(float));
-
-
-					// loop variables;
-					long x, y, z;
-					for (z = 1; z < (long)eps_grid->getMaxZIndex(); z++)
-						for (y = 1; y < (long)eps_grid->getMaxYIndex(); y++)
-							for (x = 1; x < (long)eps_grid->getMaxXIndex(); x++)
-							{
-								index = x + Nx * y + Nxy * z;
-									
-								tmp_grid[index] =	27 / 
-																		( 1 / (*eps_grid)[index - 1 - Nx - Nxy]
-																		+ 1 / (*eps_grid)[index - Nx - Nxy] 
-																		+ 1 / (*eps_grid)[index + 1 - Nx - Nxy]
-																		+ 1 / (*eps_grid)[index - 1 - Nxy]
-																		+ 1 / (*eps_grid)[index - Nxy]
-																		+ 1 / (*eps_grid)[index + 1 - Nxy]
-																		+ 1 / (*eps_grid)[index - 1 + Nx - Nxy]
-																		+ 1 / (*eps_grid)[index + Nx - Nxy]
-																		+ 1 / (*eps_grid)[index + 1 + Nx - Nxy]
-
-																		+ 1 / (*eps_grid)[index - 1 - Nx]
-																		+ 1 / (*eps_grid)[index - Nx] 
-																		+ 1 / (*eps_grid)[index + 1 - Nx]
-																		+ 1 / (*eps_grid)[index - 1]
-																		+ 1 / (*eps_grid)[index]
-																		+ 1 / (*eps_grid)[index + 1]
-																		+ 1 / (*eps_grid)[index - 1 + Nx]
-																		+ 1 / (*eps_grid)[index + Nx]
-																		+ 1 / (*eps_grid)[index + 1 + Nx]
-
-																		+ 1 / (*eps_grid)[index - 1 - Nx + Nxy]
-																		+ 1 / (*eps_grid)[index - Nx + Nxy] 
-																		+ 1 / (*eps_grid)[index + 1 - Nx + Nxy]
-																		+ 1 / (*eps_grid)[index - 1 + Nxy]
-																		+ 1 / (*eps_grid)[index + Nxy]
-																		+ 1 / (*eps_grid)[index + 1 + Nxy]
-																		+ 1 / (*eps_grid)[index - 1 + Nx + Nxy]
-																		+ 1 / (*eps_grid)[index + Nx + Nxy]
-																		+ 1 / (*eps_grid)[index + 1 + Nx + Nxy]);
-							}
-
-					// copy the temporary grid back to the old dielectric grid
-					memcpy(&((*eps_grid)[0]), tmp_grid, sizeof(float) * N);
-
-					// and throw it away
-					delete [] tmp_grid;
-
-					break;
-				case 2:		// uniform smoothing
-					break;
 			}
+
+			// harmonic smoothing
+			PointGrid<Vector3> tmp_grid(*eps_grid);
+
+			// loop variables;
+			Position x, y, z;
+			for (z = 1; z < eps_grid->getMaxZIndex(); z++)
+			{
+				for (y = 1; y < eps_grid->getMaxYIndex(); y++)
+				{
+					for (x = 1; x < eps_grid->getMaxXIndex(); x++)
+					{
+						Position idx = x + Nx * y + Nxy * z;
+							
+						tmp_grid[idx].x =     // the point itself
+																	 1 / (*eps_grid)[idx].x
+																	// then, a tetragonal prism with distance sqrt(2)/2 * spacing_ 
+																	// from the central point
+																 + 1 / (*eps_grid)[idx].y
+																 + 1 / (*eps_grid)[idx].z
+																 + 1 / (*eps_grid)[idx + 1].y
+																 + 1 / (*eps_grid)[idx + 1].z
+																 + 1 / (*eps_grid)[idx - Nx].y
+																 + 1 / (*eps_grid)[idx - Nx + 1].y
+																 + 1 / (*eps_grid)[idx - Nxy].z
+																 + 1 / (*eps_grid)[idx - Nxy + 1].z;
+
+						tmp_grid[idx].y =   	// the point itself
+																	 1 / (*eps_grid)[idx].y
+																	// then, a tetragonal prism with distance sqrt(2)/2 * spacing_
+																	// from the central point
+																 + 1 / (*eps_grid)[idx - 1].x
+																 + 1 / (*eps_grid)[idx].x
+																 + 1 / (*eps_grid)[idx + Nx - 1].x
+																 + 1 / (*eps_grid)[idx + Nx].x
+																 + 1 / (*eps_grid)[idx].z
+																 + 1 / (*eps_grid)[idx - Nxy].z
+																 + 1 / (*eps_grid)[idx + Nx].z
+																 + 1 / (*eps_grid)[idx + Nx - Nxy].z;
+
+						tmp_grid[idx].z =   	// the point itself
+																	 1 / (*eps_grid)[idx].z
+																	// then, a tetragonal prism with distance sqrt(2)/2 * spacing_
+																	// from the central point
+																 + 1 / (*eps_grid)[idx].x
+																 + 1 / (*eps_grid)[idx].y
+																 + 1 / (*eps_grid)[idx - 1].x
+																 + 1 / (*eps_grid)[idx - Nx].y
+																 + 1 / (*eps_grid)[idx + Nxy].y
+																 + 1 / (*eps_grid)[idx + Nxy - 1].x
+																 + 1 / (*eps_grid)[idx + Nxy - Nx].y
+																 + 1 / (*eps_grid)[idx + Nxy].x;
+						/* 
+						// smooth over futher spheres 
+
+															
+														// Y
+																	// second, an octaeder with distance spacing_ from the center
+																 + 1 / (*eps_grid)[idx -   1].y 
+																 + 1 / (*eps_grid)[idx -  Nx].y 
+																 + 1 / (*eps_grid)[idx +   1].y
+																 + 1 / (*eps_grid)[idx +  Nx].y
+																 + 1 / (*eps_grid)[idx - Nxy].y
+																 + 1 / (*eps_grid)[idx + Nxy].y
+																	
+																	// third, a dodecahedron with distance sqrt(2) * spacing_ from the center
+																 + 1 / (*eps_grid)[idx -  Nx -   1].y 
+																 + 1 / (*eps_grid)[idx +  Nx -   1].y 
+																 + 1 / (*eps_grid)[idx +  Nx +   1].y 
+																 + 1 / (*eps_grid)[idx -  Nx +   1].y 
+
+																 + 1 / (*eps_grid)[idx -  Nx - Nxy].y 
+																 + 1 / (*eps_grid)[idx +  Nx - Nxy].y 
+																 + 1 / (*eps_grid)[idx +  Nx + Nxy].y 
+																 + 1 / (*eps_grid)[idx -  Nx + Nxy].y 
+
+																 + 1 / (*eps_grid)[idx - Nxy -   1].y 
+																 + 1 / (*eps_grid)[idx + Nxy -   1].y 
+																 + 1 / (*eps_grid)[idx + Nxy +   1].y 
+																 + 1 / (*eps_grid)[idx - Nxy +   1].y 
+							*/
+						// scale by the number of points used for smoothing
+						float points = 9.0;
+						tmp_grid[idx] = Vector3(points / tmp_grid[idx].x, 
+																		points / tmp_grid[idx].y, 
+																		points / tmp_grid[idx].z);
+				
+					}
+				}
+			}
+
+			// copy the temporary grid back to the old dielectric grid
+			eps_grid->set(tmp_grid);
 		}
 
 		step_timer.stop();
 		if (print_timing && (verbosity > 1))
-			Log.info(2) << "setupEpsGrid: " << step_timer.getCPUTime() << endl;
+		{
+			Log.info(2) << "setupEpsGrid: " << step_timer.getCPUTime() << endl;	
+		}
 				
 		return true;
+	}
+
+	bool FDPB::setupSASGrid(System& system)
+	{
+
+		// timer for run time determination
+		Timer	step_timer; 
+		step_timer.start();
+
+		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
+		options.setDefaultBool(Option::PRINT_TIMING, Default::PRINT_TIMING);
+		options.setDefaultReal(Option::ION_RADIUS, Default::ION_RADIUS);
+		options.setDefaultReal(Option::IONIC_STRENGTH, Default::IONIC_STRENGTH);
+		
+		// first, check whether we should tell to our user what we`re doing
+		int verbosity = (int)options.getInteger(Option::VERBOSITY);
+
+		// ...and whether we should tell how long it took us.
+		bool print_timing = options.getBool(Option::PRINT_TIMING);
+
+		// if an old grid exists, remove it
+		delete SAS_grid;
+		SAS_grid = 0;
+			
+		float ionic_strength = options.getReal(Option::IONIC_STRENGTH);
+		// BAUSTELLE: Ionenstaerke fehlt noch!
+		float ion_radius = options.getReal(Option::ION_RADIUS);
+
+		if (ionic_strength == 0.0)
+		{
+			return true;
+		}
+
+		if (verbosity > 1)
+		{
+			Log.info(1) << "calculating SAS..." << endl;
+		}
+
+		SAS_grid = calculateSASGrid(lower_, upper_, spacing_, system, ion_radius);
+
+		step_timer.stop();
+		if (print_timing && (verbosity >1))
+		{
+			Log.info(2) << "setupSASGrid: " << step_timer.getCPUTime() << endl;
+		}
+
+		if (SAS_grid != 0)
+		{
+			return true;
+		}
+		else 
+		{
+			error_code_ = FDPB::ERROR__CANNOT_CREATE_SAS_GRID;
+			return false;
+		}
 	}
 
 	bool FDPB::setupQGrid()
@@ -649,7 +778,9 @@ namespace BALL
 		bool print_timing = options.getBool(Option::PRINT_TIMING);
 
 		if (verbosity > 1)
+		{
 			Log.info(2) << "creating charge grid..." << endl;
+		}
 					
 		// check whether all requirements are met			
 		if (eps_grid == 0)
@@ -674,10 +805,13 @@ namespace BALL
 		if (options[Option::CHARGE_DISTRIBUTION] == FDPB::ChargeDistribution::TRILINEAR)
 		{
 			charge_distribution_method = 1;
-
-		} else if (options[Option::CHARGE_DISTRIBUTION] == FDPB::ChargeDistribution::UNIFORM) {
+		} 
+		else if (options[Option::CHARGE_DISTRIBUTION] == FDPB::ChargeDistribution::UNIFORM) 
+		{
 			charge_distribution_method = 0;
-		} else {
+		} 
+		else 
+		{
 			error_code_ = FDPB::ERROR__UNKNOWN_CHARGE_DISTRIBUTION_METHOD;
 			return false;
 		}
@@ -689,33 +823,28 @@ namespace BALL
 		// set every grid point to zero
 		Index i;
 		for (i = 0; i < (Index)q_grid->getSize(); (*q_grid)[i++] = 0.0);
-
-
-				
-		// here come`s the charge distribution...
-
+		
 		// fraction of charge assigned in x|y|z-direction
 		// needed for linear interpolation
 		float fraction_x;
 		float fraction_y;
 		float fraction_z;
 
-		
-		float origin_x = (*q_grid).getOrigin().x;
-		float origin_y = (*q_grid).getOrigin().y;
-		float origin_z = (*q_grid).getOrigin().z;
-
+		float origin_x = q_grid->getOrigin().x;
+		float origin_y = q_grid->getOrigin().y;
+		float origin_z = q_grid->getOrigin().z;
 
 		// distribute the charge on the grid
 		
 		// some commonly used variables
-		long					index;
-		long					Nx	= (long)q_grid->getMaxXIndex() + 1L;
-		long					Nxy = ((long)q_grid->getMaxYIndex() + 1L) * Nx;
+		Position index;
+		Size Nx	= q_grid->getMaxXIndex() + 1;
+		Size Nxy = (q_grid->getMaxYIndex() + 1) * Nx;
 		
 		Vector3	position;
 
-		switch (charge_distribution_method) {
+		switch (charge_distribution_method) 
+		{
 			case 1:  
 				// TRILINEAR:
 				// distribute the charge equally upon the eigth 
@@ -735,7 +864,7 @@ namespace BALL
 					
 					
 					// check whether the charge is outside the grid
-					if ((index < 0) || (index >= (Index)((*q_grid).getSize() - Nxy - Nx - 1)))
+					if (index >= ((*q_grid).getSize() - Nxy - Nx - 1))
 					{
 						Log.warn() << "warning: atom outside grid at (" 
 											 << (*atom_array)[i].x << ","
@@ -869,7 +998,9 @@ namespace BALL
 									}
 								}
 									
-					} else { 
+					} 
+					else 
+					{ 
 						// use trilinear charge distribution - radius is too small
 
 
@@ -928,7 +1059,9 @@ namespace BALL
 
 		step_timer.stop();
 		if (print_timing && (verbosity > 1))
+		{
 			Log.info(2) << "setupEpsGrid: " << step_timer.getCPUTime() << endl;
+		}
 				
 		return true;
 	}
@@ -981,7 +1114,9 @@ namespace BALL
 
 		step_timer.stop();
 		if (print_timing && (verbosity > 1))
+		{
 			Log.info(2) << "setupKappaGrid: " << step_timer.getCPUTime() << endl;
+		}
 
 		return true;
 	}
@@ -1045,7 +1180,9 @@ namespace BALL
 		bool print_timing = options.getBool(Option::PRINT_TIMING);
 
 		if (verbosity > 1)
+		{
 			Log.info(2) << "creating boundary..." << endl;
+		}
 					
 		// check whether all requirements are met			
 		if (phi_grid == 0)
@@ -1178,7 +1315,9 @@ namespace BALL
 				// xy-plane of the grid
 		
 				for (z = 0; z < Nz; z += Nz - 1)
+				{
 					for (y = 0; y < Ny; y++)
+					{
 						for (x = 0; x < Nx; x++)
 						{
 							// calculate the current grid point`s index
@@ -1214,7 +1353,9 @@ namespace BALL
 																	 * exp(- distance / beta) / distance;
 							}
 						}
-		
+					}
+				}
+	
 				if (verbosity > 3)
 				{
 				 	Log.info(4) << "setting up xz-planes..." << endl;
@@ -1223,7 +1364,9 @@ namespace BALL
 				// second, calculate the values for the first and last
 				// xz-plane of the grid, 
 				for (y = 0; y < Ny; y += (Nx - 1))
+				{
 					for (z = 0; z < Nz; z++)
+					{
 						for (x = 0; x < Nx; x++)
 						{
 							// calculate the current grid point`s index
@@ -1241,6 +1384,8 @@ namespace BALL
 																	* exp (- distance / beta) / distance;
 							}
 						}
+					}
+				}
 
 				if (verbosity > 3)
 				{
@@ -1250,7 +1395,9 @@ namespace BALL
 				// last, calculate the values for the first and last
 				// yz-plane of the grid, 
 				for (x = 0; x < Nx; x += (Nx - 1))
+				{
 					for (z = 0; z < Nz; z++)
+					{
 						for (y = 0; y < Ny; y++)
 						{
 							// calculate the current grid point`s index
@@ -1271,6 +1418,8 @@ namespace BALL
 																	* exp (- distance / beta) / distance;
 							}
 						}
+					}
+				}
 
 				break;
 
@@ -1300,7 +1449,9 @@ namespace BALL
 						positive_x += (*atom_array)[i].x * charge;
 						positive_y += (*atom_array)[i].y * charge;
 						positive_z += (*atom_array)[i].z * charge;
-					} else {
+					} 
+					else 
+					{
 						negative_charge += charge;
 						negative_x += (*atom_array)[i].x * charge;
 						negative_y += (*atom_array)[i].y * charge;
@@ -1328,9 +1479,9 @@ namespace BALL
 				if (verbosity > 1)
 				{
 					Log.info(2) << "assigned negative charge: " << negative_charge 
-																								<< " at (" << negative_x << "/" << negative_y << "/" << negative_z << ")" << endl;
+											<< " at (" << negative_x << "/" << negative_y << "/" << negative_z << ")" << endl;
 					Log.info(2) << "assigned positive charge: " << positive_charge 
-																								<< " at (" << positive_x << "/" << positive_y << "/" << positive_z << ")" << endl;
+					   					<< " at (" << positive_x << "/" << positive_y << "/" << positive_z << ")" << endl;
 				}
 		
 					
@@ -1342,7 +1493,9 @@ namespace BALL
 				// first, calculate the values for the first and last
 				// xy-plane of the grid
 				for (z = 0; z < Nz; z += Nz - 1)
+				{
 					for (y = 0; y < Ny; y++)
+					{
 						for (x = 0; x < Nx; x++)
 						{
 							// calculate the current grid point`s index
@@ -1378,6 +1531,8 @@ namespace BALL
 																	 * exp(- distance / beta) / distance;
 							} 
 						}
+					}
+				}
 		
 				if (verbosity > 3)
 				{
@@ -1387,7 +1542,9 @@ namespace BALL
 				// second, calculate the values for the first and last
 				// xz-plane of the grid, 
 				for (y = 0; y < Ny; y += (Nx - 1))
+				{
 					for (z = 0; z < Nz; z++)
+					{
 						for (x = 0; x < Nx; x++)
 						{
 							// calculate the current grid point`s index
@@ -1408,6 +1565,8 @@ namespace BALL
 																 * solvent_dielectric_constant * VACUUM_PERMITTIVITY )
 																 * exp(- distance / beta) / distance;
 						}
+					}
+				}
 
 				if (verbosity > 3)
 				{
@@ -1417,7 +1576,9 @@ namespace BALL
 				// last, calculate the values for the first and last
 				// yz-plane of the grid, 
 				for (x = 0; x < Nx; x += (Nx - 1))
+				{
 					for (z = 0; z < Nz; z++)
+					{
 						for (y = 0; y < Ny; y++)
 						{
 							// calculate the current grid point`s index
@@ -1438,7 +1599,9 @@ namespace BALL
 																 * solvent_dielectric_constant * VACUUM_PERMITTIVITY )
 																 * exp(- distance / beta) / distance;
 						}
-					break;
+					}
+				}
+				break;
 
 			case 4:	// use focusing: solve FDPB on a grid with spacing x 4 and dimension x 2
 				
@@ -1545,29 +1708,40 @@ namespace BALL
 		// ...and whether we should tell how long it took us.
 		bool print_timing = options.getBool(Option::PRINT_TIMING);
 
-		if (!setupSESGrid(system))
-			return false;
-
 		if (!setupAtomArray(system))
+		{
 			return false;
+		}
 
-		if (!setupEpsGrid())
+		if (!setupEpsGrid(system))
+		{
 			return false;
+		}
 
 		if (!setupSASGrid(system))
+		{
 			return false;
+		}
 		
 		if (!setupKappaGrid())
+		{
 			return false;
+		}
 				
 		if (!setupPhiGrid())
+		{
 			return false;
+		}
 
 		if (!setupQGrid())
+		{
 			return false;
+		}
 
 		if (!setupBoundary())
+		{
 			return false;
+		}
 
 		setup_timer.stop();
 		if (print_timing)
@@ -1575,7 +1749,9 @@ namespace BALL
 			results["setup_CPU_time"] = setup_timer.getCPUTime();
 			results["setup_wall_time"] = setup_timer.getClockTime();
 			if (verbosity > 0)
+			{
 				Log.info(1) << "setup time: " << setup_timer.getCPUTime() << endl;
+			}
 		}
 
 		return true;
@@ -1634,7 +1810,6 @@ namespace BALL
 		// access
 		phi = phi_grid->data;
 
-
 		if (verbosity > 0)
 		{
 		 	Log.info(1) << "setting up some arrays..." << endl;
@@ -1647,22 +1822,22 @@ namespace BALL
 		using namespace Constants;
 		float d;
 		for (i = 1; i < (Nx - 1); i++)
+		{
 			for (j = 1; j < (Nx - 1); j++)
+			{
 				for (k = 1; k < (Nx - 1); k++)
 				{
-					l = i + j * Nx + k * Nxy;
-					d = 2 / ((6 * (*eps_grid)[(Index)l] 
-											+ (*eps_grid)[(Index)(l - 1)]
-											+ (*eps_grid)[(Index)(l + 1)]
-											+ (*eps_grid)[(Index)(l - Nx)]
-											+ (*eps_grid)[(Index)(l + Nx)]
-											+ (*eps_grid)[(Index)(l - Nxy)]
-											+ (*eps_grid)[(Index)(l + Nxy)]) * VACUUM_PERMITTIVITY);
-
-					Q[l] = e0 * *(q_grid->getData((Index)l)) / (1e-10 * spacing_) * d;
+          l = i + j * Nx + k * Nxy;
+          d = 1 / ((*eps_grid)[(Index)l].x
+									 + (*eps_grid)[(Index)l].y
+									 + (*eps_grid)[(Index)l].z
+									 + (*eps_grid)[(Index)(l - 1)].x
+									 + (*eps_grid)[(Index)(l - Nx)].y
+									 + (*eps_grid)[(Index)(l - Nxy)].z);
+					Q[l] = e0 * *(q_grid->getData((Index)l)) / (1e-10 * VACUUM_PERMITTIVITY * spacing_) * d;
 				}
-
-		float					eps, tmp;
+			}
+		}
 
 		T	= new float[N * 6];
 		if (T == 0)
@@ -1670,38 +1845,38 @@ namespace BALL
 			throw Exception::OutOfMemory(__FILE__, __LINE__, 6 * N * sizeof(float));
 		}
 
-		// T[i] = 0
+		// T[i] = 0   BAUSTELLE: muss das sein?
 		for (i = 0; i < (6 * N); T[i++] = 0.0);
 
 		using namespace Constants;
 		for (i = 1; i < (Nx - 1); i++)
+		{
 			for (j = 1; j < (Nx - 1); j++)
+			{
 				for (k = 1; k < (Nx - 1); k++)
 				{
 					l = i + j * Nx + k * Nxy;
-					eps = (*eps_grid)[(Index)l];
-					d = 2 / ((6 * (*eps_grid)[(Index)l] 
-											+ (*eps_grid)[(Index)(l - 1)]
-											+ (*eps_grid)[(Index)(l + 1)]
-											+ (*eps_grid)[(Index)(l - Nx)]
-											+ (*eps_grid)[(Index)(l + Nx)]
-											+ (*eps_grid)[(Index)(l - Nxy)]
-											+ (*eps_grid)[(Index)(l + Nxy)]) * VACUUM_PERMITTIVITY);
+					d = 1 / ((*eps_grid)[(Index)l].x
+										+ (*eps_grid)[(Index)l].y
+										+ (*eps_grid)[(Index)l].z
+										+ (*eps_grid)[(Index)(l - 1)].x
+										+ (*eps_grid)[(Index)(l - Nx)].y
+										+ (*eps_grid)[(Index)(l - Nxy)].z);
 
-					tmp = d / 2.0 * VACUUM_PERMITTIVITY;
-					T[(Index)(6 * l)    ]  = (eps + (*eps_grid)[(Index)(l + 1)]) * tmp;
-					T[(Index)(6 * l + 1)]  = (eps + (*eps_grid)[(Index)(l - 1)]) * tmp;
-					T[(Index)(6 * l + 2)]  = (eps + (*eps_grid)[(Index)(l + Nx)]) * tmp;
-					T[(Index)(6 * l + 3)]  = (eps + (*eps_grid)[(Index)(l - Nx)]) * tmp;
-					T[(Index)(6 * l + 4)]  = (eps + (*eps_grid)[(Index)(l + Nxy)]) * tmp;
-					T[(Index)(6 * l + 5)]  = (eps + (*eps_grid)[(Index)(l - Nxy)]) * tmp;
+					T[(Index)(6 * l)    ]  = (*eps_grid)[(Index)l].x * d;
+					T[(Index)(6 * l + 1)]  = (*eps_grid)[(Index)(l - 1)].x * d;
+					T[(Index)(6 * l + 2)]  = (*eps_grid)[(Index)l].y * d;
+					T[(Index)(6 * l + 3)]  = (*eps_grid)[(Index)(l - Nx)].y * d;
+					T[(Index)(6 * l + 4)]  = (*eps_grid)[(Index)l].z * d;
+					T[(Index)(6 * l + 5)]  = (*eps_grid)[(Index)(l - Nxy)].z * d;
 				}
-
-		delete eps_grid;
-		eps_grid = 0;
+			}
+		}
 
 		if (verbosity > 0)
+		{
 			Log.info(1) << "calculating charged grid points..." << endl;
+		}
 
 		// Now, find out which grid points are charged and store them (or, 
 		// more precisely, their indices) into two arrays
@@ -1718,18 +1893,26 @@ namespace BALL
 		number_of_charged_white_points = 0;
 		
 		for (k = 1; k < Nz - 1; k++)
+		{
 			for (j = 1; j < Ny - 1; j++)
+			{
 				for (i = 1; i < Nx - 1; i++)
 				{
 					l = i + j * Nx + k * Nxy;
 					if (Q[l] != 0.0)
 					{
 						if ((i + j + k) % 2 == 1)
+						{
 							number_of_charged_black_points++;
+						}
 						else
+						{
 							number_of_charged_white_points++;
+						}
 					}
 				}
+			}
+		}
 		
 		charged_black_points = new long[number_of_charged_black_points];
 		if (charged_black_points == 0)
@@ -1748,18 +1931,26 @@ namespace BALL
 		number_of_charged_white_points = 0;
 		
 		for (k = 1; k < Nz - 1; k++)
+		{
 			for (j = 1; j < Ny - 1; j++)
+			{
 				for (i = 1; i < Nx - 1; i++)
 				{
 					l = i + j * Nx + k * Nxy;
 					if (Q[l] != 0.0)
 					{
 						if ((i + j + k) % 2 == 1)
+						{
 							charged_black_points[number_of_charged_black_points++] = (long)l;
+						}
 						else
+						{
 							charged_white_points[number_of_charged_white_points++] = (long)l;
+						}
 					}
 				}
+			}
+		}
 				
 		if (verbosity > 70)
 		{
@@ -1794,7 +1985,9 @@ namespace BALL
 		if (options.isSet(Option::MAX_ITERATIONS))
 		{
 			max_iterations = options.getInteger(Option::MAX_ITERATIONS);
-		} else {
+		} 
+		else 
+		{
 			max_iterations = Default::MAX_ITERATIONS;
 		}
 
@@ -1802,7 +1995,9 @@ namespace BALL
 		if (options.isSet(Option::CHECK_AFTER_ITERATIONS))
 		{
 			check_after_iterations = options.getInteger(Option::CHECK_AFTER_ITERATIONS);
-		} else {
+		} 
+		else 
+		{
 			check_after_iterations = Default::CHECK_AFTER_ITERATIONS;
 		}
 		
@@ -1976,7 +2171,9 @@ namespace BALL
 
 			results.setBool("converged", true);
 			number_of_iterations_ = iteration;
-		} else {
+		} 
+		else 
+		{
 			if (verbosity > 0)
 			{
 				Log.warn(1) << "Not converged." << endl;
@@ -2010,10 +2207,6 @@ namespace BALL
 		}
 
 
-		// delete the q_grid
-		delete q_grid;
-		q_grid = 0;
-			
 		// throw away the arrays containing the charged points
 		delete [] charged_white_points;
 		delete [] charged_black_points;
@@ -2027,7 +2220,6 @@ namespace BALL
 		using namespace Constants;
 		energy_ *= e0 * NA * 0.5 * 1E-3;
 
-
 		results.setInteger("iterations", iteration);
 		results.setReal("final energy", energy_);
 
@@ -2036,6 +2228,22 @@ namespace BALL
 			Log.info() << "final energy after " << iteration << " iterations: " << energy_ << " kJ/mol" << endl;
 		}
 
+		// calculate the reaction field energy
+		reaction_field_energy_ = calculateReactionFieldEnergy();
+		results.setReal("reaction field energy", reaction_field_energy_);
+		if (verbosity > 0)
+		{
+			Log.info() << "reaction field energy: " << reaction_field_energy_ << " kJ/mol" << endl;
+		}
+
+		// throw away the eps grid
+		delete eps_grid;
+		eps_grid = 0;
+
+		// delete the q_grid
+		delete q_grid;
+		q_grid = 0;
+			
 		solve_timer.stop();
 		if (print_timing)
 		{
@@ -2051,10 +2259,12 @@ namespace BALL
 
 		// return true: everything went well
 		return true;
-}
-void FDPB::destroy()
-{
-		destroy_grids();
+	}
+
+
+	void FDPB::destroy()
+	{
+		destroyGrids();
 		options.destroy();
 		results.destroy();
 
@@ -2068,7 +2278,7 @@ void FDPB::destroy()
 		number_of_iterations_ = 0;
 	}
 
-	void FDPB::destroy_grids()
+	void FDPB::destroyGrids()
 	{
 		if (eps_grid != 0)
 		{
@@ -2094,17 +2304,117 @@ void FDPB::destroy()
 			phi_grid = 0;
 		}
 
-		if (SES_grid != 0)
-		{
-			delete SES_grid;
-			SES_grid = 0;
-		}
-
 		if (SAS_grid != 0)
 		{
 			delete SAS_grid;
 			SAS_grid = 0;
 		}
 	}
+	
+	double FDPB::calculateReactionFieldEnergy() const
+	{
+		// create a timer to determine the method's runtime
+		Timer	step_timer;
+		step_timer.start();
 
+		// If the system does not contain any atoms, there is nothing to calculate
+		// 
+		if (boundary_points_.size() == 0)
+		{
+			return 0.0;
+		}
+
+
+		// the distance between the boundary points and the atom surfaces 
+		Vector3 boundary_point;
+		
+		// the vector from the grid point to the atom center
+		Vector3 distance_vector;
+
+		Vector3 min_distance_vector;
+		float distance;
+		float min_distance;
+
+		// clear the reaction_field energy
+		double energy = 0.0;
+
+		vector<FastAtom>::const_iterator atom_iterator;
+		
+		// the position of the image charge (on the molecular surface)
+		Vector3 image_position;
+		Position i;
+		for (i = 0; i < boundary_points_.size(); i++) 
+		{
+			boundary_point = phi_grid->getGridCoordinates(boundary_points_[i]);
+
+			// 1. Calculate the nearest atom surface and the difference vector
+			min_distance = Limits<float>::max();
+			min_distance_vector = Vector3(0.0);
+			for (atom_iterator = atom_array->begin(); atom_iterator != atom_array->end(); ++atom_iterator)
+			{
+				distance_vector = boundary_point - Vector3(atom_iterator->x, atom_iterator->y, atom_iterator->z);
+				distance = distance_vector.getLength() - atom_iterator->r;
+				if (distance < min_distance) 
+				{
+					min_distance = distance;
+					min_distance_vector = distance_vector;
+				}
+			}
+				
+			// 2. Beam it.
+			if (min_distance < Limits<float>::max())
+			{
+				image_position = boundary_point - min_distance_vector.normalize() * min_distance;
+
+				// 3. compute the electrostatic field 
+
+				Position llf, rlf, luf, ruf, llb, rlb, lub, rub;
+
+				// if the image charge is not inside the grid, it does not contribute to the 
+				// energy of the reaction field
+
+				if (phi_grid->getBoxIndices(image_position, llf, rlf, luf, ruf, llb, rlb, lub, rub)) 
+				{
+					PointGrid<float>::GridIndex grid_index = phi_grid->getIndex(image_position);
+					Size Nx = phi_grid->getMaxXIndex() + 1;
+					Size Nxy = (phi_grid->getMaxYIndex() + 1) * Nx;
+					Position idx = grid_index.x + grid_index.y * Nx + grid_index.z * Nxy;
+
+					double dPhi = phi_grid->data[idx]
+											- (phi_grid->data[idx - 1] + phi_grid->data[idx + 1]
+												 + phi_grid->data[idx - Nx] + phi_grid->data[idx + Nx]
+												 + phi_grid->data[idx - Nxy] + phi_grid->data[idx + Nxy]) / 6.0;
+					double delta_E_dS = dPhi * spacing_ * 1e-10 * 6.0;
+
+					// delta_i is in units of Coulomb (C)
+					double delta_i = Constants::VACUUM_PERMITTIVITY * delta_E_dS;
+					
+					// subtract the grid charge (if any)
+					if (q_grid != 0)
+					{
+						delta_i -= (*q_grid)[boundary_points_[i]] * Constants::e0;
+					}
+					// compute the charge's energy
+					for (atom_iterator = atom_array->begin(); atom_iterator != atom_array->end(); ++atom_iterator)
+					{
+						// calculate the distance of the charge
+						distance_vector.set(atom_iterator->x, atom_iterator->y, atom_iterator->z);
+						distance_vector -= image_position;
+
+						// calculate the coulomb energy caused by this image charge
+						// with every atom charge						
+						double phi_q = delta_i 
+												/ (distance_vector.getLength() * 1e-10 * 4.0 
+													 * Constants::PI * Constants::VACUUM_PERMITTIVITY);
+						energy += atom_iterator->q * Constants::e0 * phi_q;
+					}
+				}
+			}
+		}
+
+		// convert the energy to units of kJ/mol
+		// and scale it by one half (since E = 1/2 \sum \phi q)
+		return 0.5 * energy * 1e-3 * Constants::NA;
+	}
+			
 } // namespace BALL 

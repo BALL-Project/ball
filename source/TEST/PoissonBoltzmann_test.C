@@ -1,4 +1,4 @@
-// $Id: PoissonBoltzmann_test.C,v 1.2 2000/03/14 19:35:46 oliver Exp $
+// $Id: PoissonBoltzmann_test.C,v 1.3 2000/05/04 13:37:07 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -6,7 +6,7 @@
 #undef PRECISION
 #define PRECISION 0.005
 
-START_TEST(FDPB, "$Id: PoissonBoltzmann_test.C,v 1.2 2000/03/14 19:35:46 oliver Exp $")
+START_TEST(FDPB, "$Id: PoissonBoltzmann_test.C,v 1.3 2000/05/04 13:37:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -24,52 +24,61 @@ atom->setCharge(+1.0);
 FDPB*		fdpb;
 
 CHECK(default constructor)
-fdpb = new FDPB;
-TEST_NOT_EQUAL(fdpb, 0)
+	fdpb = new FDPB;
+	TEST_NOT_EQUAL(fdpb, 0)
 RESULT
 
 CHECK(destructor)
-delete fdpb;
+	delete fdpb;
 RESULT
 
 CHECK(constructor/1)
-fdpb = new FDPB(*system);
-TEST_NOT_EQUAL(fdpb, 0)
+	fdpb = new FDPB(*system);
+	TEST_NOT_EQUAL(fdpb, 0)
 RESULT
 
-Options	options;
+Options options;
 CHECK(constructor/2)
-options = fdpb->options;
-delete fdpb;
-fdpb = new FDPB(options);
-TEST_NOT_EQUAL(fdpb, 0)
+	options = fdpb->options;
+	delete fdpb;
+	fdpb = new FDPB(options);
+	TEST_NOT_EQUAL(fdpb, 0)
 RESULT
 
 CHECK(constructor/3)
-delete fdpb;
-options.destroy();
-options.setReal(FDPB::Option::SOLVENT_DC, 78.0);
-options.setReal(FDPB::Option::SOLUTE_DC, 1.0);
-options.setReal(FDPB::Option::SPACING, 0.3);
-options.setReal(FDPB::Option::BORDER, 10.0);
-options["ionic_strength"] = 0.000000001;
-fdpb = new FDPB(*system, options);
-TEST_NOT_EQUAL(fdpb, 0)
+	delete fdpb;
+	options.destroy();
+	options.setReal(FDPB::Option::SOLVENT_DC, 78.0);
+	options.setReal(FDPB::Option::SOLUTE_DC, 1.0);
+	options.setReal(FDPB::Option::SPACING, 0.4);
+	options.setReal(FDPB::Option::BORDER, 10.0);
+	options.set(FDPB::Option::CHARGE_DISTRIBUTION, FDPB::ChargeDistribution::UNIFORM);
+	options.set(FDPB::Option::DIELECTRIC_SMOOTHING, FDPB::DielectricSmoothing::NONE);
+	options[FDPB::Option::IONIC_STRENGTH] = 0.0;
+	options[FDPB::Option::VERBOSITY] = 0;
+	fdpb = new FDPB(*system, options);
+	TEST_NOT_EQUAL(fdpb, 0)
 RESULT
 
 CHECK(solve)
-fdpb->solve();
-TEST_EQUAL(fdpb->results["converged"], "true")
+	fdpb->solve();
+	TEST_EQUAL(fdpb->results["converged"], "true")
 RESULT
 
-CHECK(getEnergy and numerical accuracy)
-float E_water = fdpb->getEnergy();
-fdpb->options.setReal(FDPB::Option::SOLVENT_DC, 1.0);
-fdpb->setup(*system);
-fdpb->solve();
-float E_vacuum = fdpb->getEnergy();
-delete fdpb;
-TEST_REAL_EQUAL(E_water - E_vacuum, -342.031)
+CHECK(energy - reaction field energy - and numerical accuracy)
+	float E_water = fdpb->getEnergy();
+	float E_RF_water = fdpb->getReactionFieldEnergy();
+	
+	fdpb->options.setReal(FDPB::Option::SOLVENT_DC, 1.0);
+	fdpb->setup(*system);
+	fdpb->solve();
+	float E_vacuum = fdpb->getEnergy();
+	float E_RF_vacuum = fdpb->getReactionFieldEnergy();
+
+	TEST_REAL_EQUAL(E_water - E_vacuum, -357.68)
+	TEST_REAL_EQUAL(E_RF_water, -342.897)
+	TEST_REAL_EQUAL(E_RF_vacuum, 0.0)
+	delete fdpb;
 RESULT
 
 /////////////////////////////////////////////////////////////
