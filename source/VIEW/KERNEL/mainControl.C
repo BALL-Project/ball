@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.139 2004/11/15 01:16:51 amoll Exp $
+// $Id: mainControl.C,v 1.140 2004/11/15 16:20:16 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -513,22 +513,16 @@ namespace BALL
 		{
 			if (!composite_manager_.has(composite)) return false;
 			
+			// delete all representations containing the composite
+			primitive_manager_.removedComposite(composite);
+
 			Composite* root = 0;
 			if (composite.getRoot() != composite) root = &composite.getRoot();
 
-			// delete all representations containing the composite
-			List<Representation*> removed_representations;
-			removed_representations = primitive_manager_.removedComposite(composite);
-			List<Representation*>::Iterator reps_it = removed_representations.begin();
-			// notify GeometricControl of removed representations
-			for (; reps_it != removed_representations.end(); reps_it++)
-			{
-				RepresentationMessage* rr_message = new RepresentationMessage(**reps_it, RepresentationMessage::REMOVE);
-				notify_(rr_message);
-			}
-
+			// delete the Composite
 			composite_manager_.remove(composite);
 
+			// update all Representations
 			if (root != 0 && update_representations_of_parent) 
 			{
 				updateRepresentationsOf(*root, true, true);
