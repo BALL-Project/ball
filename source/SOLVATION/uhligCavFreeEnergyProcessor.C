@@ -1,10 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: uhligCavFreeEnergyProcessor.C,v 1.10 2002/12/16 12:14:12 anker Exp $
+// $Id: uhligCavFreeEnergyProcessor.C,v 1.11 2002/12/16 12:30:37 amoll Exp $
 
 #include <BALL/SOLVATION/uhligCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
+
+using std::endl;
 
 namespace BALL
 {
