@@ -110,14 +110,18 @@ while (line and (line.find("BINFMT") == -1)):
 clist = string.split(line, '=')
 
 ldpath = config["remotepath"]+"/BALL/lib/"+clist[1]
+if (ldpath[-1] == '\n'):
+	ldpath=ldpath[:-1]
 
-commandline = " cd ./BALL/source/TEST && "
-commandline += "TEST_OPTIONS=-continue LD_LIBRARY_PATH="+ldpath+" make test >test.log"
+commandline = "cd ./BALL/source/TEST && export TEST_OPTIONS=-continue"
+commandline += " && export LD_LIBRARY_PATH="+ldpath+" && "
+commandline += " make test >test.log"
 
 retval = os.system(commandline)
 
-commandline = " cd ./BALL/source/BENCHMARKS && "
-commandline += "LD_LIBRARY_PATH="+ldpath+" make bench >bench.log"
+commandline = " cd ./BALL/source/BENCHMARKS "
+commandline += " && export LD_LIBRARY_PATH="+ldpath+" && "
+commandline += " make bench >bench.log"
 
 retval = os.system(commandline)
 
