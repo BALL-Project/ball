@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.15 2003/11/03 00:22:15 amoll Exp $
+// $Id: displayProperties.h,v 1.16 2003/11/13 17:47:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -24,6 +24,9 @@ namespace BALL
 	namespace VIEW
 	{
 		class Representation;
+		
+		class ColoringSettingsDialog;
+		class ModelSettingsDialog;
 
 		/**	Dialog for creating and changing representations.
 				for a selection of molecular objects.
@@ -139,6 +142,14 @@ namespace BALL
 			*/
 			virtual void finalizeWidget(MainControl& main_control)
 					throw();
+
+			///
+			virtual void initializePreferencesTab(Preferences &preferences)
+				throw();
+
+			///
+			virtual void finalizePreferencesTab(Preferences &preferences)
+				throw();
 				
 			/**	Menu checking method.
 					This method is called by MainControl::checkMenus before a popup menu is shown.
@@ -253,6 +264,8 @@ namespace BALL
 			// --------------------------------------------------------------------------------
 			// attributs
 			// --------------------------------------------------------------------------------
+			ModelSettingsDialog* 			model_settings_;
+			ColoringSettingsDialog* 	coloring_settings_;
 			
 			// the menu entry id of the dialog
 			int 				id_;

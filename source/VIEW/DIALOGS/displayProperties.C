@@ -1,10 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.34 2003/11/08 16:19:32 amoll Exp $
+// $Id: displayProperties.C,v 1.35 2003/11/13 17:48:11 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
+#include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
+#include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
+#include <BALL/VIEW/DIALOGS/preferences.h>
+
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
@@ -41,6 +45,8 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 	throw()
 	:	DisplayPropertiesData( parent, name ),
 		ModularWidget(name),
+		model_settings_(0),
+		coloring_settings_(0),
 		id_(-1),
 		rep_(0)
 {
@@ -69,6 +75,9 @@ DisplayProperties::~DisplayProperties()
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "deleting DisplayProperties " << this << std::endl;
 #endif
+	
+	if (model_settings_ != 0) delete model_settings_;
+	if (coloring_settings_ != 0) delete coloring_settings_;
 }
 
 
@@ -162,6 +171,32 @@ void DisplayProperties::finalizeWidget(MainControl& main_control)
 {
 	main_control.removeMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
 																									SLOT(show()), CTRL+Key_I);   
+}
+
+void DisplayProperties::initializePreferencesTab(Preferences &preferences)
+	throw()
+{
+	model_settings_ = new ModelSettingsDialog(this);
+	preferences.insertTab(model_settings_, "Model Options");
+	coloring_settings_ = new ColoringSettingsDialog(this);
+	preferences.insertTab(coloring_settings_, "Coloring Options");
+}
+
+void DisplayProperties::finalizePreferencesTab(Preferences &preferences)
+	throw()
+{
+	if (model_settings_) 
+	{
+		preferences.removeTab(model_settings_);
+		delete model_settings_;
+		model_settings_ = 0;
+	}
+	if (coloring_settings_) 
+	{
+		preferences.removeTab(coloring_settings_);
+		delete coloring_settings_;
+		coloring_settings_ = 0;
+	}
 }
 
 
