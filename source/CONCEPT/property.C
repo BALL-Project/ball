@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.8 2000/07/18 08:29:53 oliver Exp $
+// $Id: property.C,v 1.9 2000/08/19 17:24:33 amoll Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -52,7 +52,7 @@ namespace BALL
 			type_(DOUBLE),
 			name_(name)
 	{
-		data_.f = value;
+		data_.d = value;
 	}
 
 	NamedProperty::NamedProperty(const string& name, string& str)
