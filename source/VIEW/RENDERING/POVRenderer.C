@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.11 2004/03/09 10:46:42 anhi Exp $
+// $Id: POVRenderer.C,v 1.12 2004/04/17 15:47:37 oliver Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -209,8 +209,10 @@ namespace BALL
 				// TODO: distinguish between directional / positional light sources
 			}
 			
+			// Add some global blurb for radiosity support
+			outfile_ << "global_settings { radiosity {} }" << std::endl;
 			// Set the background color
-			outfile_ << "background { " << POVColorRGBA(stage_->getBackgroundColor()) << " }" << endl << endl;
+			outfile_ << "background { " << POVColorRGBA(stage_->getBackgroundColor()) << " }" << std::endl << std::endl;
 
 			// Define the finish we will use for our molecular objects (defining the molecular
 			// "material properties"
