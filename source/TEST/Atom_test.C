@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Atom_test.C,v 1.18 2003/06/25 14:35:41 amoll Exp $
+// $Id: Atom_test.C,v 1.19 2003/06/25 16:38:18 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,10 +12,13 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/fragment.h>
+#include <BALL/KERNEL/residue.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
+
+#include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.18 2003/06/25 14:35:41 amoll Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.19 2003/06/25 16:38:18 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -34,18 +37,32 @@ CHECK(void setCharge(float charge) throw())
 	TEST_REAL_EQUAL(atom->getCharge(), 1.23456);
 RESULT
 
+CHECK(float getCharge() const throw())
+  // ???
+RESULT
+
+const Atom ac;
+
 CHECK(void setName(const String& name) throw())
 	TEST_EQUAL(atom->getName(), "")
 	atom->setName("ATOMNAME");
 	TEST_EQUAL(atom->getName(), "ATOMNAME");
 RESULT
 			
+CHECK(const String& getName() const throw())
+	TEST_EQUAL(ac.getName(), BALL_ATOM_DEFAULT_NAME)
+RESULT
+
 CHECK(void setElement(const Element& element) throw())
 	TEST_EQUAL(atom->getElement(), Element::UNKNOWN)
 	atom->setElement(PTE.getElement(1));
 	TEST_EQUAL(atom->getElement(), PTE.getElement(1))
 RESULT
 			
+CHECK(const Element& getElement() const throw())
+	TEST_EQUAL(ac.getElement(), *BALL_ATOM_DEFAULT_ELEMENT)
+RESULT
+
 Vector3	null_vector(0, 0, 0);
 Vector3	test_vector(1, 2, 3);
 CHECK(void setPosition(const Vector3& position) throw())
@@ -54,10 +71,24 @@ CHECK(void setPosition(const Vector3& position) throw())
 	TEST_EQUAL(atom->getPosition(), test_vector)
 RESULT
 			
+CHECK(const Vector3& getPosition() const throw())
+	TEST_EQUAL(ac.getPosition(), BALL_ATOM_DEFAULT_POSITION)
+RESULT
+
+CHECK(Vector3& getPosition() throw())
+	Atom a;
+	a.getPosition() = Vector3(1,2,3);
+	TEST_EQUAL(a.getPosition(), Vector3(1,2,3))
+RESULT
+
 CHECK(void setRadius(float radius) throw())
 	TEST_REAL_EQUAL(atom->getRadius(), 0.0)
 	atom->setRadius(1.23456);
 	TEST_REAL_EQUAL(atom->getRadius(), 1.23456)
+RESULT
+
+CHECK(float getRadius() const throw())
+	TEST_EQUAL(ac.getRadius(), BALL_ATOM_DEFAULT_RADIUS)
 RESULT
 
 CHECK(void setType(Type atom_type) throw())
@@ -66,16 +97,34 @@ CHECK(void setType(Type atom_type) throw())
 	TEST_EQUAL(atom->getType(), 27);
 RESULT
 		
+CHECK(Type getType() const throw())
+	TEST_EQUAL(ac.getType(), BALL_ATOM_DEFAULT_TYPE)
+RESULT
+
 CHECK(void setVelocity(const Vector3& velocity) throw())
 	TEST_EQUAL(atom->getVelocity(), null_vector)
 	atom->setVelocity(test_vector);
 	TEST_EQUAL(atom->getVelocity(), test_vector)
 RESULT
 			
+CHECK(const Vector3& getVelocity() const throw())
+	TEST_EQUAL(ac.getVelocity(), BALL_ATOM_DEFAULT_VELOCITY)
+RESULT
+
 CHECK(void setForce(const Vector3& force) throw())
 	TEST_EQUAL(atom->getForce(), null_vector)
 	atom->setForce(test_vector);
 	TEST_EQUAL(atom->getForce(), test_vector)
+RESULT
+
+CHECK(const Vector3& getForce() const throw())
+	TEST_EQUAL(ac.getForce(), BALL_ATOM_DEFAULT_FORCE)
+RESULT
+
+CHECK(Vector3& getForce() throw())
+	Atom a;
+	a.getForce() = Vector3(1,2,3);
+	TEST_EQUAL(a.getForce(), Vector3(1,2,3))
 RESULT
 
 // the static attributes
@@ -292,18 +341,28 @@ CHECK(void swap(Atom& atom) throw())
 	delete atom2;
 RESULT
 
-Molecule*				molecule;
-Fragment*				fragment;
+Atom atomx;
+const Atom& acx = atomx;
+Molecule molecule;
+Fragment fragment;
+molecule.insert(fragment);
+fragment.insert(atomx);
+CHECK(const Fragment* getFragment() const throw())
+	TEST_EQUAL((atomx.getFragment() == &fragment), true)
+RESULT
+
 CHECK(Fragment* getFragment() throw())
-	molecule = new Molecule;
-	fragment = new Fragment;
-	molecule->insert(*fragment);
-	fragment->insert(*atom);
-	TEST_EQUAL((atom->getFragment() == fragment), true)
+	atomx.getFragment()->setName("1234");
+	TEST_EQUAL(fragment.getName(), "1234")
 RESULT
 
 CHECK(const Molecule* getMolecule() const throw())
-	TEST_EQUAL(atom->getMolecule(), molecule)
+	TEST_EQUAL(acx.getMolecule(), &molecule)
+RESULT
+
+CHECK(Molecule* getMolecule() throw())
+	atomx.getMolecule()->setName("asdff");
+	TEST_EQUAL(molecule.getName(), "asdff")
 RESULT
 
 Bond*		bond;
@@ -378,7 +437,7 @@ CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const t
 	pm.registerClass(getStreamName<Composite>(), Composite::createDefault);
 	pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 	pm.registerClass(getStreamName<Bond>(), Bond::createDefault);
-	fragment->remove(*atom);
+	//fragment->remove(*atom);
 	*atom >> pm;
 	ofile.close();
 RESULT
@@ -505,102 +564,135 @@ CHECK([EXTRA] bond iteration)
 RESULT
 
 CHECK(Bond* cloneBond(Bond& bond, Atom& atom) throw())
-  // ???
+	Atom a,b,c;
+	Bond bond("",a,b);
+	TEST_EQUAL(a.cloneBond(bond, b), &bond)
+	Bond* bond2 = a.cloneBond(bond,c);
+	TEST_EQUAL(bond2 != 0, true)
+	TEST_EQUAL(a.countBonds(), 2)
 RESULT
 
 CHECK(Bond* createBond(Bond& bond, Atom& atom) throw())
-  // ???
+	Atom a,b,c;
+	Bond bond;
+	TEST_EQUAL(a.createBond(bond, a), 0)
+	TEST_EQUAL(a.countBonds(), 0)
+	TEST_EQUAL(a.createBond(bond, b), &bond)
+	TEST_EQUAL(a.countBonds(), 1)
+	TEST_EQUAL(a.isBoundTo(b), true)
+	TEST_EQUAL(a.createBond(bond, b), &bond)
+	TEST_EQUAL(a.countBonds(), 1)
+	TEST_EQUAL(a.isBoundTo(b), true)
+	TEST_EQUAL(a.createBond(bond, c), &bond)
+	TEST_EQUAL(a.countBonds(), 1)
+	TEST_EQUAL(a.isBoundTo(b), false)
+	TEST_EQUAL(a.isBoundTo(c), true)
 RESULT
 
 CHECK(Bond* getBond(Position index) throw(Exception::IndexOverflow))
-  // ???
-RESULT
-
-CHECK(Bond* getBond(const Atom& atom) throw())
-  // ???
-RESULT
-
-CHECK(Molecule* getMolecule() throw())
-  // ???
-RESULT
-
-CHECK(String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const throw())
-  // ???
-RESULT
-
-CHECK(String getTypeName() const throw())
-  // ???
-RESULT
-
-CHECK(Type getType() const throw())
-  // ???
-RESULT
-
-CHECK(Vector3& getForce() throw())
-  // ???
-RESULT
-
-CHECK(Vector3& getPosition() throw())
-  // ???
-RESULT
-
-CHECK(bool applyBonds(UnaryProcessor<Bond>& processor) throw())
-  // ???
-RESULT
-
-CHECK(bool isGeminal(const Atom& atom) const throw())
-  // ???
-RESULT
-
-CHECK(bool isVicinal(const Atom& atom) const throw())
-  // ???
+	Atom a,b;
+	Bond bond("", a,b);
+	a.getBond(0)->setName("1234");
+	TEST_EQUAL(bond.getName(), "1234")
+	TEST_EXCEPTION(Exception::IndexOverflow, a.getBond(12))
 RESULT
 
 CHECK(const Bond* getBond(Position index) const throw(Exception::IndexOverflow))
-  // ???
+	Atom a,b;
+	Bond bond("", a,b);
+	const Atom& ac = a;
+	TEST_EQUAL(ac.getBond(0), &bond)
+	TEST_EQUAL(ac.getBond(1), 0)
+	TEST_EXCEPTION(Exception::IndexOverflow, ac.getBond(12))
+RESULT
+
+CHECK(Bond* getBond(const Atom& atom) throw())
+	Atom a,b;
+	Bond bond("", a,b);
+	a.getBond(b)->setName("asdad");
+	TEST_EQUAL(bond.getName(), "asdad")
 RESULT
 
 CHECK(const Bond* getBond(const Atom& atom) const throw())
-  // ???
+	Atom a,b,c;
+	Bond bond("", a,b);
+	const Atom& ac = a;
+	TEST_EQUAL(ac.getBond(b), &bond)
+	TEST_EQUAL(ac.getBond(c), 0)
 RESULT
 
-CHECK(const Element& getElement() const throw())
-  // ???
+CHECK(String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const throw())
+	Fragment f;
+	f.setName("fragment1");
+	Atom a;
+	a.setName("atom1");
+	f.append(a);
+	TEST_EQUAL(a.getFullName(), "fragment1:atom1")
 RESULT
 
-CHECK(const Fragment* getFragment() const throw())
-  // ???
+CHECK(void setTypeName(const String& name) throw())
+	Atom a;
+	a.setTypeName("asdd");
+	TEST_EQUAL(a.getTypeName(), "asdd")
+RESULT
+
+CHECK(String getTypeName() const throw())
+	TEST_EQUAL(ac.getTypeName(), BALL_ATOM_DEFAULT_TYPE_NAME)
+RESULT
+
+CHECK(bool applyBonds(UnaryProcessor<Bond>& processor) throw())
+	ItemCollector<Bond> ic;
+	Atom a,b,c,x;
+	Bond bond1("", a,b);
+	Bond bond2("", a,c);
+	a.applyBonds(ic);
+	TEST_EQUAL(ic.getList().size(), 2)
+	List<Bond*>::Iterator it = ic.getList().begin();
+	TEST_EQUAL(*it, &bond1)
+	it++;
+	TEST_EQUAL(*it, &bond2)
+	b.applyBonds(ic);
+	TEST_EQUAL(ic.getList().size(), 1)
+	x.applyBonds(ic);
+	TEST_EQUAL(ic.getList().size(), 0)
+RESULT
+
+CHECK(bool isGeminal(const Atom& atom) const throw())
+	Atom a,b,c,d;
+	TEST_EQUAL(a.isGeminal(a), false)
+	TEST_EQUAL(a.isGeminal(b), false)
+	Bond bond1("", a,b);
+	Bond bond2("", b,c);
+	TEST_EQUAL(a.isGeminal(b), false)
+	TEST_EQUAL(a.isGeminal(c), true)
+	TEST_EQUAL(c.isGeminal(a), true)
+RESULT
+
+CHECK(bool isVicinal(const Atom& atom) const throw())
+ 	Atom a,b,c,d;
+	TEST_EQUAL(a.isVicinal(a), false)
+	TEST_EQUAL(a.isVicinal(b), false)
+	Bond bond1("", a,b);
+	Bond bond2("", b,c);
+	Bond bond3("", c,d);
+	TEST_EQUAL(a.isVicinal(b), false)
+	TEST_EQUAL(a.isVicinal(c), false)
+	TEST_EQUAL(a.isVicinal(d), true)
+	TEST_EQUAL(d.isVicinal(a), true)
 RESULT
 
 CHECK(const Residue* getResidue() const throw())
-  // ???
+	Atom a;
+	TEST_EQUAL(a.getResidue(), 0)
+	Fragment f;
+	f.append(a);
+	TEST_EQUAL(a.getResidue(), 0)
+	Residue r;
+	r.append(*(PDBAtom*) &a);
+	TEST_EQUAL(a.getResidue(), &r)
 RESULT
 
 CHECK(const StaticAtomAttributes* getAttributePtr() const)
-  // ???
-RESULT
-
-CHECK(const String& getName() const throw())
-  // ???
-RESULT
-
-CHECK(const Vector3& getForce() const throw())
-  // ???
-RESULT
-
-CHECK(const Vector3& getPosition() const throw())
-  // ???
-RESULT
-
-CHECK(const Vector3& getVelocity() const throw())
-  // ???
-RESULT
-
-CHECK(float getCharge() const throw())
-  // ???
-RESULT
-
-CHECK(float getRadius() const throw())
   // ???
 RESULT
 
@@ -609,10 +701,6 @@ CHECK(static AttributeVector& getAttributes())
 RESULT
 
 CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
-  // ???
-RESULT
-
-CHECK(void setTypeName(const String& name) throw())
   // ???
 RESULT
 
