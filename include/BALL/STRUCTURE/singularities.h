@@ -1,4 +1,4 @@
-// $Id: singularities.h,v 1.5 2000/12/07 15:04:09 strobel Exp $
+// $Id: singularities.h,v 1.6 2001/06/19 21:11:10 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H
@@ -42,46 +42,79 @@
 #include <vector>
 #include <list>
 #include <set>
+
 #include <fstream>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/FORMAT/HINFile.h>
 
 namespace BALL
 {
 
 	template <class T>
-	void TreatSingularities(TSolventExcludedSurface<T>* ses, const T& /*radius_of_probe*/)
+	void TreatSingularities(TSolventExcludedSurface<T>*& ses,
+													TReducedSurface<T>*& rs,
+													const T& radius_of_probe)
 	{
-		list< TSESFace<T>* > singular_faces = GetSingularFaces(ses);
-//		TreatFirstCathegory(ses,singular_faces,radius_of_probe);
-//		TreatSecondCathegory(ses,radius_of_probe);
+		list<TSESFace<T>*> singular_faces;
+		GetSingularFaces(ses,singular_faces);
+		try
+		{
+			TreatFirstCathegory(ses,rs,singular_faces,radius_of_probe);
+		}
+		catch (Exception::GeneralException e)
+		{
+			if (e.getMessage() == "reduced surface modified")
+			{
+				rs->clean();
+						std::cout << *rs;
+				delete ses;
+				ses = new SolventExcludedSurface(rs);
+				ses->get(rs);
+				TreatSingularities(ses,rs,radius_of_probe);
+				return;
+			}
+			else
+			{
+				throw;
+			}
+		}				
+		TreatSecondCathegory(ses,radius_of_probe);
 	}
 	
 	
 	template <class T>
-	list< TSESFace<T>* > GetSingularFaces(TSolventExcludedSurface<T>* ses)
+	void GetSingularFaces(TSolventExcludedSurface<T>* ses,
+												list<TSESFace<T>*>& faces)
 	{
-		list< TSESFace<T>* > back;
 		for (Position i = 0; i < ses->spheric_faces.size(); i++)
 		{
 			if (ses->spheric_faces[i]->rsface->isSingular() == true)
 			{
-				back.push_back(ses->spheric_faces[i]);
+				faces.push_back(ses->spheric_faces[i]);
 			}
 		}
-		return back;
 	}
 
 
 	template <class T>
-	void TreatFirstCathegory(TSolventExcludedSurface<T>* ses, list< TSESFace<T>* >& singular_faces,
+	void TreatFirstCathegory(TSolventExcludedSurface<T>* ses,
+													 TReducedSurface<T>* rs,
+													 list<TSESFace<T>*>& singular_faces,
 													 const T& radius_of_probe)
 	{
-		list< TSESFace<T>* > faces = GetFirstCathegoryFaces(singular_faces);
+		list<TSESFace<T>*> faces;
+				std::cout << "SingularFaces.size() = " << singular_faces.size() << "\n";
+		GetFirstCathegoryFaces(singular_faces,faces);
+				std::cout << "FirstCathegoryFaces.size() = " << faces.size() << "\n";
 		while (faces.size() > 0)
 		{
-			TSESFace<T>* face1 = *faces.begin();
+			TSESFace<T>* face1 = faces.front();
 			faces.pop_front();
 			singular_faces.remove(face1);
-			TSESFace<T>* face2 = *faces.begin();
+			TSESFace<T>* face2 = faces.front();
 			faces.pop_front();
 			singular_faces.remove(face2);
 			Size intersections(0);
@@ -97,9 +130,18 @@ namespace BALL
 				case 0 :	NoCut(face1,face2,radius_of_probe,ses);
 									break;
 				case 1 :	break;
-				case 2 :	TwoCuts(face1,face2,radius_of_probe,ses);
-									break;
-				case 3 :	ThreeCuts(face1,face2,radius_of_probe,ses);
+				//case 2 :	TwoCuts(face1,face2,radius_of_probe,ses);
+				//					break;
+				//case 3 :	ThreeCuts(face1,face2,radius_of_probe,ses);
+				//					break;
+				case 2 :	;
+				case 3 :	rs->deleteSimilarFaces(face1->rsface,face2->rsface);
+									ofstream print("singularities.log");
+									print << *rs;
+									print.close();
+									throw Exception::GeneralException(__FILE__,__LINE__,
+																										"SingularBreak",
+																										"reduced surface modified");
 									break;
 			}
 		}
@@ -107,43 +149,48 @@ namespace BALL
 
 
 	template <class T>
-	void TreatSecondCathegory(TSolventExcludedSurface<T>* ses, const T& radius_of_probe)
+	void TreatSecondCathegory(TSolventExcludedSurface<T>* ses,
+														const T& radius_of_probe)
 	{
-		vector< TSESFace<T>* > faces;
+		vector<TSESFace<T>*> faces;
 		vector< TVector3<T> > points;
-		list<Index> indices;
+		HashSet<Index> indices;
 		for (Position i = 0; i != ses->spheric_faces.size(); i++)
 		{
 			faces.push_back(ses->spheric_faces[i]);
 			points.push_back(ses->spheric_faces[i]->rsface->getCenter());
-			indices.push_back(i);
-//cout << points[i] << "\n";
+			indices.insert(i);
 		}
-		TBSDTree<T>* tree = new TBSDTree<T>(points,indices,"","");
+		TBSDTree<T>* tree = new TBSDTree<T>(points,indices);
 		tree->build();
-		for (Position i = 0; i < ses->singular_edges.size(); i++)
+		list<TSESEdge<T>*>::iterator edge = ses->singular_edges.begin();
+		list<TSESEdge<T>*>::iterator tmp;
+		while (edge != ses->singular_edges.end())
 		{
-			TreatSingularEdge(ses->singular_edges[i],faces,tree,ses,radius_of_probe);
+			tmp = edge;
+			tmp++;
+			TreatSingularEdge(*edge,faces,tree,ses,radius_of_probe);
+			edge = tmp;
 		}
 	}
 
 
 	template <class T>
-	list< TSESFace<T>* > GetFirstCathegoryFaces(const list< TSESFace<T>* >& singular_faces)
+	void GetFirstCathegoryFaces(const list< TSESFace<T>* >& singular_faces,
+															list<TSESFace<T>*>& faces)
 	{
-		list< TSESFace<T>* > back;
-		list< TSESFace<T>* > singular(singular_faces);
+		list<TSESFace<T>*> singular(singular_faces);
 		while (singular.size() > 0)
 		{
 			TSESFace<T>* current = *singular.begin();
 			singular.remove(current);
-			list< TSESFace<T>* >::iterator i = singular.begin();
+			list<TSESFace<T>*>::iterator i = singular.begin();
 			while (i != singular.end())
 			{
 				if (current->rsface->similar(*((*i)->rsface)))
 				{
-					back.push_back(current);
-					back.push_back(*i);
+					faces.push_back(current);
+					faces.push_back(*i);
 					singular.remove(*i);
 					i = singular.end();
 				}
@@ -153,7 +200,6 @@ namespace BALL
 				}
 			}
 		}
-		return back;
 	}
 
 
@@ -181,7 +227,7 @@ namespace BALL
 		}
 	}
 
-
+  /*
 	template <class T>
 	void TwoCuts(TSESFace<T>* face1, TSESFace<T>* face2, const T& radius_of_probe,
 							 TSolventExcludedSurface<T>* ses)
@@ -190,10 +236,14 @@ namespace BALL
 		TSphere3<T> s2(face2->rsface->getCenter(),radius_of_probe);
 		TCircle3<T> circle;
 		GetIntersection(s1,s2,circle);
-		TSESEdge<T>* triangular_edge1    = new TSESEdge<T>(NULL,NULL,face1,NULL,circle,NULL,-1);
-		TSESEdge<T>* triangular_edge2    = new TSESEdge<T>(NULL,NULL,face2,NULL,circle,NULL,-1);
-		TSESEdge<T>* quadrilateral_edge1 = new TSESEdge<T>(NULL,NULL,face1,NULL,circle,NULL,-1);
-		TSESEdge<T>* quadrilateral_edge2 = new TSESEdge<T>(NULL,NULL,face2,NULL,circle,NULL,-1);
+		TSESEdge<T>* triangular_edge1
+				= new TSESEdge<T>(NULL,NULL,face1,NULL,circle,NULL,-1);
+		TSESEdge<T>* triangular_edge2
+				= new TSESEdge<T>(NULL,NULL,face2,NULL,circle,NULL,-1);
+		TSESEdge<T>* quadrilateral_edge1
+				= new TSESEdge<T>(NULL,NULL,face1,NULL,circle,NULL,-1);
+		TSESEdge<T>* quadrilateral_edge2
+				= new TSESEdge<T>(NULL,NULL,face2,NULL,circle,NULL,-1);
 		BuildTwoEdges(face1,ses,triangular_edge1,quadrilateral_edge1);
 		BuildTwoEdges(face2,ses,triangular_edge2,quadrilateral_edge2);
 		triangular_edge1->face2 = face2;
@@ -290,7 +340,8 @@ namespace BALL
 
 
 	template <class T>
-	void BuildThreeEdges(TSESFace<T>* face, const T& radius_of_probe, TSolventExcludedSurface<T>* ses,
+	void BuildThreeEdges(TSESFace<T>* face, const T& ,
+											 TSolventExcludedSurface<T>* ,
 											 vector< TSESEdge<T>* > triangular_edge)
 	{
 		vector< list< TSESVertex<T>* > > ipnv(3);		// ipnv stands for intersection_point_near_vertex
@@ -323,59 +374,113 @@ namespace BALL
 			face->orientation.push_back(1);
 			face->orientation.push_back(1);
 		}
-	}
+	}*/
 
 
 	template <class T>
-	void TreatSingularEdge(TSESEdge<T>* edge, vector< TSESFace<T>* > faces, TBSDTree<T>* tree,
-												 TSolventExcludedSurface<T>* ses, const T& radius_of_probe)
+	void TreatSingularEdge(TSESEdge<T>* edge, vector<TSESFace<T>*> faces,
+												 TBSDTree<T>* tree, TSolventExcludedSurface<T>* ses,
+												 const T& radius_of_probe)
 	{
-//cout << *edge << "\n";
-		list<Index> candidates = tree->get(edge->circle.p,edge->circle.radius+radius_of_probe);
+				std::cout << "TreatSingularEdge( " << *edge << " , [" << faces.size() << "] , tree, ses, "
+									<< radius_of_probe << ")\n";
+		HashSet<Index> candidates;
+		tree->get(edge->circle.p,edge->circle.radius+radius_of_probe,candidates);
 		if (candidates.size() == 0)
 		{
+					std::cout << "end\n";
 			return;
 		}
-		TVector3<T> normal((edge->vertex1->p-edge->circle.p)%(edge->vertex2->p-edge->circle.p));
-		TAngle<T> phi(getOrientedAngle(edge->vertex1->p-edge->circle.p,
-																	 edge->vertex2->p-edge->circle.p, normal));
+		TVector3<T> normal((edge->vertex1->p-edge->circle.p)%
+											 (edge->vertex2->p-edge->circle.p));
+				std::cout << "  Drehvektor: " << normal << "\n";
+		TAngle<T> phi;
+		GetAngle(edge->vertex1->p-edge->circle.p,
+						 edge->vertex2->p-edge->circle.p,
+						 phi);
+				std::cout << "  Winkel der Edge: " << phi << "\n";
 		TAngle<T> min_phi(Constants::PI,true);
-		TAngle<T> max_phi(-Constants::PI,true);
+		TAngle<T> max_phi(0,true);
 		TVector3<T> min_point;
 		TVector3<T> max_point;
 		TSphere3<T> min_probe;
 		TSphere3<T> max_probe;
-		Position min = -1;
-		Position max = -1;
-		list<Index>::iterator i;
+		Index min = -1;
+		Index max = -1;
+		HashSet<Index>::Iterator i;
+		TVector3<T> p1;
+		TVector3<T> p2;
+		TAngle<T> phi1;
+		TAngle<T> phi2;
+		TSphere3<T> probe;
+		probe.radius = radius_of_probe;
+		double epsilon = Constants::EPSILON;
+		Constants::EPSILON = 0.001;
 		for (i = candidates.begin(); i != candidates.end(); i++)
 		{
-//cout << *i << ": ";
-			TVector3<T> p1;
-			TVector3<T> p2;
-			TAngle<T> phi1;
-			TAngle<T> phi2;
-			TSphere3<T> probe(faces[*i]->rsface->getCenter(),radius_of_probe);
+			probe.p = faces[*i]->rsface->getCenter();
+					std::cout << "  Schneide edge mit probe " << *i << " (" << probe << ") ...\n";
 			if (GetIntersectionPointsAndAngles(edge,probe,normal,p1,phi1,p2,phi2))
 			{
-				if (phi1 < min_phi)
+						std::cout << "    " << p1 << "  " << phi1 << "\n";
+						std::cout << "    " << p2 << "  " << phi2 << "\n";
+				if (Maths::isGreater(phi1.value,0) && (phi1 < min_phi))
 				{
 					min_phi = phi1;
 					min_point = p1;
 					min_probe = probe;
-					min = *i;
+					min = (Index)*i;
+							std::cout << "    ... new min\n";
 				}
-				if (phi2 > max_phi)
+				if (Maths::isLess(phi2.value,phi.value) && (phi2 > max_phi))
 				{
 					max_phi = phi2;
 					max_point = p2;
 					max_probe = probe;
-					max = *i;
+					max = (Index)*i;
+							std::cout << "    ... new max\n";
 				}
 			}
+			else
+			{
+						std::cout << "    ... kein Schntt\n";
+			}
 		}
-//cout << min << ":  " << min_probe << "  " << min_phi << "  " << min_point << "\n";
-//cout << max << ":  " << max_probe << "  " << max_phi << "  " << max_point << "\n";
+		Constants::EPSILON = epsilon;
+				std::cout << "  Edge: " << *edge << "\n";
+				if (min != -1)
+				{
+					std::cout << "  minimaler Schnitt:\n"
+										<< "    Probe: " << min << ":  (" << min_probe << ")\n"
+										<< "    Punkt: " << min_point << "  (" << min_phi << ")\n";
+				}
+				if (max != -1)
+				{
+					std::cout << "  maximaler Schnitt:\n"
+										<< "    Probe: " << max << ":  (" << max_probe << ")\n"
+										<< "    Punkt: " << max_point << "  (" << max_phi << ")\n";
+				}
+				/*Molecule* molecule = new Molecule;
+				if (min != -1)
+				{
+					Atom* atom = new Atom;
+					atom->setPosition(min_point);
+					atom->setElement(PTE[Element::O]);
+					molecule->insert(*atom);
+				}
+				if (max != -1)
+				{
+					Atom* atom = new Atom;
+					atom->setPosition(max_point);
+					atom->setElement(PTE[Element::O]);
+					molecule->insert(*atom);
+				}
+				System* system = new System;
+				system->insert(*molecule);
+				HINFile output("HIN/SES/singularPoints"+IndexToString(edge->index,0)+".hin",std::ios::out);
+				output << *system;
+				output.close();
+				delete system;*/
 		if (min_phi > max_phi)
 		{
 			return;
@@ -384,23 +489,23 @@ namespace BALL
 		TSESVertex<T>* ns2;
 		TSESEdge<T>* a(NULL);
 		TSESEdge<T>* na(NULL);
-		if (min_phi == TAngle<T>(0,true))
+		if (Maths::isEqual(min_phi.value,0))
 		{
 			ns1 = edge->vertex1;
 		}
 		else
 		{
-			ns1 = new TSESVertex<T>(min_point,-2,-1);
+			ns1 = new TSESVertex<T>(min_point,TVector3<T>::getZero(),-2,-1);
 			a = new TSESEdge<T>(*edge);
 			a->vertex2 = ns1;
 		}
-		if (max_phi == phi)
+		if (Maths::isEqual(max_phi.value,phi.value))
 		{
 			ns2 = edge->vertex2;
 		}
 		else
 		{
-			ns2 = new TSESVertex<T>(max_point,-2,-1);
+			ns2 = new TSESVertex<T>(max_point,TVector3<T>::getZero(),-2,-1);
 			na = new TSESEdge<T>(*edge);
 			na->vertex1 = ns2;
 		}
@@ -411,94 +516,188 @@ namespace BALL
 		TSESEdge<T>* a2(NULL);
 		TSESEdge<T>* a3(NULL);
 		TSESEdge<T>* a4(NULL);
-		if (edge->face1->isNeighbouredTo(faces[min]) == false)
+				std::cout << "  probe1: " << probe1 << "\n";
+				std::cout << "  probe2: " << probe2 << "\n";
+				std::cout << "  ns1: " << *ns1 << "\n";
+				std::cout << "  ns2: " << *ns2 << "\n  a:   ";
+				if (a == NULL) std::cout << "(nil)\n  na:  "; else std::cout << *a << "\n  na:  ";
+				if (na == NULL) std::cout << "(nil)\n"; else std::cout << *na << "\n";
+				/*Molecule* molecule = new Molecule;
+				Atom* atom = new Atom;
+				atom->setPosition(ns1->p);
+				atom->setElement(PTE[Element::O]);
+				molecule->insert(*atom);
+				atom = new Atom;
+				atom->setPosition(ns2->p);
+				atom->setElement(PTE[Element::O]);
+				molecule->insert(*atom);
+				System* system = new System;
+				system->insert(*molecule);
+				HINFile output("HIN/SES/singularPoints"+IndexToString(edge->index,0)+".hin",std::ios::out);
+				output << *system;
+				output.close();
+				delete system;*/
+		if (min == max)
 		{
-			GetIntersection(probe1,min_probe,circle);
-			a1 = new TSESEdge<T>(ns1,NULL,edge->face1,faces[min],circle,NULL,-1);
+			if (edge->face1->isNeighbouredTo(faces[min]) == false)
+			{
+				GetIntersection(probe1,min_probe,circle);
+				a1 = new TSESEdge<T>(ns1,ns2,edge->face1,faces[min],circle,NULL,-1);
+			}
+			if (edge->face2->isNeighbouredTo(faces[min]) == false)
+			{
+				GetIntersection(probe2,min_probe,circle);
+				a2 = new TSESEdge<T>(ns1,ns2,edge->face2,faces[min],circle,NULL,-1);
+			}
 		}
-		if (edge->face2->isNeighbouredTo(faces[min]) == false)
+		else
 		{
-			GetIntersection(probe2,min_probe,circle);
-			a2 = new TSESEdge<T>(ns1,NULL,edge->face2,faces[min],circle,NULL,-1);
+			if (edge->face1->isNeighbouredTo(faces[min]) == false)
+			{
+				GetIntersection(probe1,min_probe,circle);
+				a1 = new TSESEdge<T>(ns1,NULL,edge->face1,faces[min],circle,NULL,-1);
+			}
+			if (edge->face2->isNeighbouredTo(faces[min]) == false)
+			{
+				GetIntersection(probe2,min_probe,circle);
+				a2 = new TSESEdge<T>(ns1,NULL,edge->face2,faces[min],circle,NULL,-1);
+			}
+			if (edge->face1->isNeighbouredTo(faces[max]) == false)
+			{
+				GetIntersection(probe1,max_probe,circle);
+				a3 = new TSESEdge<T>(ns2,NULL,edge->face1,faces[max],circle,NULL,-1);
+			}
+			if (edge->face2->isNeighbouredTo(faces[max]) == false)
+			{
+				GetIntersection(probe2,max_probe,circle);
+					a4 = new TSESEdge<T>(ns2,NULL,edge->face2,faces[max],circle,NULL,-1);
+			}
+			try
+			{
+				EndEdges(a1,a2,a3,a4,probe1,probe2,min_probe,max_probe,ns1,ns2);
+			}
+			catch (Exception::GeneralException)
+			{
+				if (a1 != NULL)
+				{
+					delete a1;
+				}
+				if (a2 != NULL)
+				{
+					delete a2;
+				}
+				if (a3 != NULL)
+				{
+					delete a3;
+				}
+				if (a4 != NULL)
+				{
+					delete a4;
+				}
+				if (a != NULL)
+				{
+					delete a;
+					delete ns1;
+				}
+				if (na != NULL)
+				{
+					delete na;
+					delete ns2;
+				}
+				return;
+			}
 		}
-		if (edge->face1->isNeighbouredTo(faces[max]) == false)
-		{
-			GetIntersection(probe1,max_probe,circle);
-			a3 = new TSESEdge<T>(ns2,NULL,edge->face1,faces[max],circle,NULL,-1);
-		}
-		if (edge->face2->isNeighbouredTo(faces[max]) == false)
-		{
-			GetIntersection(probe2,max_probe,circle);
-			a4 = new TSESEdge<T>(ns2,NULL,edge->face2,faces[max],circle,NULL,-1);
-		}
-		EndEdges(a1,a3,probe1,min_probe,max_probe);
-		EndEdges(a2,a4,probe2,min_probe,max_probe);
 		if (a != NULL)
 		{
 			a->index = ses->edges.size();
+			a->type = 2;
 			ses->edges.push_back(a);
+			ses->singular_edges.push_front(a);
 			a->face1->edge.push_back(a);
 			a->face1->orientation.push_back(a->face1->orientation[a->face1->getRelativeEdgeIndex(edge->index)]);
 			a->face2->edge.push_back(a);
 			a->face2->orientation.push_back(a->face2->orientation[a->face2->getRelativeEdgeIndex(edge->index)]);
+					std::cout << "  a == " << *a << " != NULL\n";
 		}
 		if (na != NULL)
 		{
 			na->index = ses->edges.size();
+			na->type = 2;
 			ses->edges.push_back(na);
+			ses->singular_edges.push_front(na);
 			na->face1->edge.push_back(na);
 			na->face1->orientation.push_back(na->face1->orientation[na->face1->getRelativeEdgeIndex(edge->index)]);
 			na->face2->edge.push_back(na);
 			na->face2->orientation.push_back(na->face2->orientation[na->face2->getRelativeEdgeIndex(edge->index)]);
+					std::cout << "  na == " << *na << " != NULL\n";
 		}
 		if (a1 != NULL)
 		{
 			a1->index = ses->edges.size();
+			a1->type = 2;
 			ses->edges.push_back(a1);
-//				ses->singular_edges.push_back(a1);
+			ses->singular_edges.push_back(a1);
 			a1->face1->edge.push_back(a1);
 			a1->face1->orientation.push_back(0);
 			a1->face2->edge.push_back(a1);
 			a1->face2->orientation.push_back(1);
+					std::cout << "  a1 == " << *a1 << " != NULL\n";
 		}
 		if (a2 != NULL)
 		{
 			a2->index = ses->edges.size();
+			a2->type = 2;
 			ses->edges.push_back(a2);
-//				ses->singular_edges.push_back(a2);
+			ses->singular_edges.push_back(a2);
 			a2->face1->edge.push_back(a2);
 			a2->face1->orientation.push_back(0);
 			a2->face2->edge.push_back(a2);
 			a2->face2->orientation.push_back(1);
+					std::cout << "  a2 == " << *a2 << " != NULL\n";
 		}
 		if (a3 != NULL)
 		{
 			a3->index = ses->edges.size();
+			a3->type = 2;
 			ses->edges.push_back(a3);
-//				ses->singular_edges.push_back(a3);
+			ses->singular_edges.push_back(a3);
 			a3->face1->edge.push_back(a3);
 			a3->face1->orientation.push_back(0);
 			a3->face2->edge.push_back(a3);
 			a3->face2->orientation.push_back(1);
+					std::cout << "  a3 == " << *a3 << " != NULL\n";
 		}
 		if (a4 != NULL)
 		{
 			a4->index = ses->edges.size();
+			a4->type = 2;
 			ses->edges.push_back(a4);
-//				ses->singular_edges.push_back(a4);
+			ses->singular_edges.push_back(a4);
 			a4->face1->edge.push_back(a4);
 			a4->face1->orientation.push_back(0);
 			a4->face2->edge.push_back(a4);
 			a4->face2->orientation.push_back(1);
+					std::cout << "  a4 == " << *a4 << " != NULL\n";
 		}
 		edge->face1->edge[edge->face1->getRelativeEdgeIndex(edge->index)] = NULL;
 		edge->face2->edge[edge->face2->getRelativeEdgeIndex(edge->index)] = NULL;
 		ses->edges[edge->index] = NULL;
+		ses->singular_edges.remove(edge);
 		delete edge;
-		ns1->index = ses->vertices.size();
-		ses->vertices.push_back(ns1);
-		ns2->index = ses->vertices.size();
-		ses->vertices.push_back(ns2);
+		if (a != NULL)
+		{
+			ns1->index = ses->vertices.size();
+			ses->vertices.push_back(ns1);
+		}
+		if (na != NULL)
+		{
+			ns2->index = ses->vertices.size();
+			ses->vertices.push_back(ns2);
+		}
+		//ofstream print("singular.log");
+		//print << *ses;
+		//print.close();
+		//		std::cout << "\n\n" << *ses << "\n\n";
 	}
 
 
@@ -512,11 +711,42 @@ namespace BALL
 		{
 			phi1 = getOrientedAngle(edge->vertex1->p-edge->circle.p,p1-edge->circle.p,normal);
 			phi2 = getOrientedAngle(edge->vertex1->p-edge->circle.p,p2-edge->circle.p,normal);
+					//TAngle<T> pi(Constants::PI,true);			// ACHTUNG !!!
+					//phi1 += pi;
+					//phi2 += pi;
+			//TAngle<T> two_pi(2*Constants::PI,true);
+					if (phi1.value <= 0)								// ACHTUNG !!!
+					{
+						phi1.value += Constants::PI;
+					}
+					else
+					{
+						phi1.value -= Constants::PI;
+					}
+					if (phi2.value <= 0)
+					{
+						phi2.value += Constants::PI;
+					}
+					else
+					{
+						phi2.value -= Constants::PI;
+					}
+			//double epsilon = Constants::EPSILON;
+			//Constants::EPSILON = 0.0001;
+			//if (phi1 == two_pi)
+			//{
+			//	phi1.set(0);
+			//}
+			//if (phi2 == two_pi)
+			//{
+			//	phi2.set(0);
+			//}
+			//Constants::EPSILON = epsilon;
 			if (phi2 < phi1)
 			{
-				TAngle<T> phi(phi1);
-				phi1 = phi2;
-				phi2 = phi;
+				T phi(phi1.value);
+				phi1.value = phi2.value;
+				phi2.value = phi;
 				TVector3<T> p(p1);
 				p1 = p2;
 				p2 = p;
@@ -531,51 +761,138 @@ namespace BALL
 
 
 	template <class T>
-	void EndEdges(TSESEdge<T>* edge1, TSESEdge<T>* edge2, const TSphere3<T>& probe,
-								const TSphere3<T>& probe1, const TSphere3<T>& probe2)
+	void EndEdges
+		(TSESEdge<T>*				edge1,
+		 TSESEdge<T>*				edge2,
+		 TSESEdge<T>*				edge3,
+		 TSESEdge<T>*				edge4,
+		 const TSphere3<T>& probe1,
+		 const TSphere3<T>& probe2,
+		 const TSphere3<T>& min_probe,
+		 const TSphere3<T>& max_probe,
+		 TSESVertex<T>*			ns1,
+		 TSESVertex<T>*			ns2)
 	{
-		if (edge1 == NULL)
+		if (edge1 != NULL)
 		{
-			if (edge2 == NULL)
-			{
-				return;
-			}
-			TVector3<T> p1;
-			TVector3<T> p2;
-			GetIntersection(probe1,edge2->circle,p1,p2);
-			TVector3<T> test_point = edge2->face1->vertex[0]->p;
-			if (Maths::isLess((test_point*edge2->circle.n),(edge2->circle.p*edge2->circle.n)))
-			{
-				edge2->circle.n.negate();
-			}
-			return;
-		}
-		if (edge2 == NULL)
-		{
-			TVector3<T> p1;
-			TVector3<T> p2;
-			GetIntersection(probe1,edge1->circle,p1,p2);
-			TVector3<T> test_point = edge1->face1->vertex[0]->p;
-			if (Maths::isLess((test_point*edge1->circle.n),(edge1->circle.p*edge1->circle.n)))
+			if (Maths::isGreater(edge1->circle.n*(ns2->p-edge1->circle.p),(T)0))
 			{
 				edge1->circle.n.negate();
 			}
-			return;
 		}
-		TVector3<T> p1;
-		TVector3<T> p2;
-		GetIntersection(edge1->circle,edge2->circle,p1,p2);
-		TVector3<T> test_point = edge1->face1->vertex[0]->p;
-		if (Maths::isLess((test_point*edge1->circle.n),(edge1->circle.p*edge1->circle.n)))
+		if (edge2 != NULL)
 		{
-			edge1->circle.n.negate();
+			if (Maths::isGreater(edge2->circle.n*(ns2->p-edge2->circle.p),(T)0))
+			{
+				edge2->circle.n.negate();
+			}
 		}
-		test_point = edge2->face1->vertex[0]->p;
-		if (Maths::isLess((test_point*edge2->circle.n),(edge2->circle.p*edge2->circle.n)))
+		if (edge3 != NULL)
 		{
-			edge2->circle.n.negate();
+			if (Maths::isGreater(edge3->circle.n*(ns1->p-edge3->circle.p),(T)0))
+			{
+				edge3->circle.n.negate();
+			}
 		}
-		return;
+		if (edge4 != NULL)
+		{
+			if (Maths::isGreater(edge4->circle.n*(ns1->p-edge4->circle.p),(T)0))
+			{
+				edge4->circle.n.negate();
+			}
+		}
+		TAngle<T> phi1;
+		TAngle<T> phi2;
+				TAngle<T> pi(Constants::PI,true);					// Achtung
+		TVector3<T> point1;
+		TVector3<T> point2;
+		TSESVertex<T>* v;
+		if (GetIntersection(probe1,min_probe,max_probe,point1,point2))
+		{
+			if (edge1 != NULL)
+			{
+				phi1 = getOrientedAngle(ns1->p,point1,edge1->circle.n);
+				phi2 = getOrientedAngle(ns1->p,point2,edge1->circle.n);
+							phi1 += pi;													// Achtung
+							phi2 += pi;													// Achtung
+				v = new TSESVertex<T>;
+				if (phi1 < phi2)
+				{
+					v->p = point1;
+				}
+				else
+				{
+					v->p = point2;
+				}
+				edge1->vertex2 = v;
+			}
+			if (edge3 != NULL)
+			{
+				phi1 = getOrientedAngle(ns2->p,point1,edge3->circle.n);
+				phi2 = getOrientedAngle(ns2->p,point2,edge3->circle.n);
+							phi1 += pi;													// Achtung
+							phi2 += pi;													// Achtung
+				v = new TSESVertex<T>;
+				if (phi1 < phi2)
+				{
+					v->p = point1;
+				}
+				else
+				{
+					v->p = point2;
+				}
+				edge3->vertex2 = v;
+			}
+		}
+		else
+		{
+			throw Exception::GeneralException(__FILE__,__LINE__,
+																				"CanNotTreatSingularity",
+																				"no end-point found for SES-edge");
+		}
+		if (GetIntersection(probe2,min_probe,max_probe,point1,point2))
+		{
+			if (edge2 != NULL)
+			{
+				phi1 = getOrientedAngle(ns1->p,point1,edge2->circle.n);
+				phi2 = getOrientedAngle(ns1->p,point2,edge2->circle.n);
+							phi1 += pi;													// Achtung
+							phi2 += pi;													// Achtung
+				TSESVertex<T>* v = new TSESVertex<T>;
+				if (phi1 < phi2)
+				{
+					v->p = point1;
+				}
+				else
+				{
+					v->p = point2;
+				}
+				edge2->vertex2 = v;
+			}
+			if (edge4 != NULL)
+			{
+				phi1 = getOrientedAngle(ns2->p,point1,edge4->circle.n);
+				phi2 = getOrientedAngle(ns2->p,point2,edge4->circle.n);
+							phi1 += pi;													// Achtung
+							phi2 += pi;													// Achtung
+				v = new TSESVertex<T>;
+				if (phi1 < phi2)
+				{
+					v->p = point1;
+				}
+				else
+				{
+					v->p = point2;
+				}
+				edge4->vertex2 = v;
+			}
+		}
+		else
+		{
+			throw Exception::GeneralException(__FILE__,__LINE__,
+																				"CanNotTreatSingularity",
+																				"no end-point found for SES-edge");
+		}
 	}
 
 
@@ -587,7 +904,6 @@ namespace BALL
 		TCircle3<T> intersection_circle;
 		if (GetIntersection(sphere,s2,intersection_circle) == false)
 		{
-//cout << "#1\n";
 			return false;
 		}
 		TPlane3<T> plane1(circle.p,circle.n);
@@ -595,23 +911,21 @@ namespace BALL
 		TLine3<T> line;
 		if (GetIntersection(plane1,plane2,line) == false)
 		{
-//cout << "#2\n";
 			return false;
 		}
 		T a(line.d.getSquareLength());
-		T b(line.d*(circle.p-line.p)*2);
-		T c((circle.p-line.p).getSquareLength()-circle.radius*circle.radius);
+		T b(line.d*(line.p-circle.p)*2);
+		T c((line.p-circle.p).getSquareLength()-circle.radius*circle.radius);
 		T lambda1;
 		T lambda2;
 		if (SolveQuadraticEquation(a,b,c,lambda1,lambda2) == 0)
 		{
-//cout << "#3\n";
 			return false;
 		}
 		p1 = line.p+lambda1*line.d;
 		p2 = line.p+lambda2*line.d;
-//cout << sphere << " * " << circle << "  =  [" << p1 << "," << p2 << "\n";
-		return true;
+		//std::cout << sphere << " * " << circle << "  =  [" << p1 << "," << p2 << "\n";
+		return (circle.has(p1) && circle.has(p2) && sphere.has(p1) && sphere.has(p2));
 	}
 
 
@@ -641,7 +955,7 @@ namespace BALL
 		}
 		if (plane1.has(plane2.p))
 		{
-			TVector3<T> norm((circle2.p-circle1.p)*2);
+			TVector3<T> norm((circle2.p-circle1.p)*2.0);
 			TPlane3<T> plane3(norm.x,norm.y,norm.z,
 												circle1.p.getSquareLength()-circle2.p.getSquareLength()
 												-circle1.radius+circle2.radius);
@@ -664,127 +978,69 @@ namespace BALL
 	}
 
 
-/***********************************************************************************************************/
-/*	
-	void ThreeCuts(TSESFace<T>* face1, TSESFace<T>* face2, const TReducedSurface<T>& rs)
+
+	template <class T>
+	bool getIntersection(const TPlane3<T>& plane1, const TPlane3<T>& plane2,
+											 TLine3<T>& line)
 	{
-		vector<Index> atom(3,-1);
-		for (Position i = 0; i < 3; i++)
+		T u = plane1.p*plane1.n;
+		T v = plane2.p*plane2.n;
+		T det = plane1.n.x*plane2.n.y-plane1.n.y*plane2.n.x;
+		if (Maths::isZero(det))
+		{
+			det = plane1.n.x*plane2.n.z-plane1.n.z*plane2.n.x;
+			if (Maths::isZero(det))
 			{
-				atom[i] = face1->vertex[i]->atom;
+				det = plane1.n.y*plane2.n.z-plane1.n.z*plane2.n.y;
+				if (Maths::isZero(det))
+				{
+					return false;
+				}
+				else
+				{
+					T a = plane2.n.z/det;
+					T b = -plane1.n.z/det;
+					T c = -plane2.n.y/det;
+					T d = plane1.n.y/det;
+					line.p.x = 0;
+					line.p.y = a*u+b*v;
+					line.p.z = c*u+d*v;
+					line.d.x = -1;
+					line.d.y = a*plane1.n.x+b*plane2.n.x;
+					line.d.z = c*plane1.n.x+d*plane2.n.x;
+				}
 			}
-		vector< TRSEdge<T>* > face1_edges(3);
-		vector< TRSEdge<T>* > face2_edges(3);
-		Index edge_index;
-		TRSFace<T>* rsface1(face1->rsface);
-		TRSFace<T>* rsface2(face2->rsface);
-		rsface1->getEdge(atom[0],atom[1],edge_index);
-		face1_edges[0] = rs->edges[edge_index];
-		rsface2->getEdge(atom[0],atom[1],edge_index);
-		face2_edges[0] = rs->edges[edge_index];
-		rsface1->getEdge(atom[1],atom[2],edge_index);
-		face1_edges[1] = rs->edges[edge_index];
-		rsface2->getEdge(atom[1],atom[2],edge_index);
-		face2_edges[1] = rs->edges[edge_index];
-		rsface1->getEdge(atom[2],atom[0],edge_index);
-		face1_edges[2] = rs->edges[edge_index];
-		rsface2->getEdge(atom[2],atom[0],edge_index);
-		face2_edges[2] = rs->edges[edge_index];
-		for (Index i = 0; i < 3; i++)
+			else
 			{
-				if (face1_edges[i] == face2_edges[i])
-					{
-						Position index = face1_edges[i]->index;
-						TSESEdge<T>* sesedge1 = ses->toric_faces[index]->edge[2];
-						TSESEdge<T>* sesedge2 = ses->toric_faces[index]->edge[3];
-						ses->contact_faces[face1_edges[i]->vertex[0]]->edges.remove(sesedge1);
-						ses->contact_faces[face1_edges[i]->vertex[1]]->edges.remove(sesedge1);
-						ses->contact_faces[face1_edges[i]->vertex[0]]->edges.remove(sesedge2);
-						ses->contact_faces[face1_edges[i]->vertex[1]]->edges.remove(sesedge2);
-						delete ses->toric_faces[index];
-						ses->toric_faces[index] = NULL;
-						delete rs->edges[index];
-						rs->edges[index] = NULL;
-					}
-					else
-					{
-						TRSEdge<T>* new_rsedge = new TRSEdge(face1_edges[i]);
-						TSESFace<T>* neighbour_face1 = face1_edges[i]->other(rsface1);
-						TSESFace<T>* neighbour_face2 = face2_edges[i]->other(rsface2);
-						new_rsedge->face[0] = neighbour_face1;
-						new_rsedge->face[1] = neighbour_face2;
-						Position v1 = new_rsedge->vertex[0];
-						Position v2 = new_rsedge->vertex[1];
-						TVector3<T> norm(rs->atom[v1]->atom.p-rs->atom[v2]->atom.p);
-						TVector3<T> test_vector = rsface1->normal%norm;
-						if (Maths::isLess(test_vector*rs->atom[rsface1->thirdVertexIndex(v1,v2)]->atom.p,
-															test_vector*rs->atom[v1]->atom.p))
-							{
-								norm.negate();
-							}
-						new_rsedge->phi = getOrientedAngle(neighbour_face1->center-new_rsedge->center_of_torus,
-																							 neighbour_face2->center-new_rsedge->center_of_torus,
-																							 norm);
-						neighbour_face1->edge.remove(face1_edges[i]);
-						neighbour_face2->edge.remove(face2_edges[i]);
-						neighbour_face1->edge.push_back(new_rsedge);
-						neighbour_face2->edge.push_back(new_rsedge);
-						rs->atom[v1]->edges.remove(face1_edges[i]);
-						rs->atom[v1]->edges.remove(face2_edges[i]);
-						rs->atom[v1]->faces.remove(rsface1);
-						rs->atom[v1]->faces.remove(rsface2);
-						rs->atom[v2]->edges.remove(face1_edges[i]);
-						rs->atom[v2]->edges.remove(face2_edges[i]);
-						rs->atom[v2]->faces.remove(rsface1);
-						rs->atom[v2]->faces.remove(rsface2);
-						rs->atom[v1]->edges.push_back(new_rsedge);
-						rs->atom[v2]->edges.push_back(new_rsedge);
-
-						Position index = face1_edges[i]->index;
-						TSESEdge<T>* sesedge1 = ses->toric_faces[index]->edge[2];
-						TSESEdge<T>* sesedge2 = ses->toric_faces[index]->edge[3];
-						ses->contact_faces[v1]->edges.remove(sesedge1);
-						ses->contact_faces[v2]->edges.remove(sesedge1);
-						ses->contact_faces[v1]->edges.remove(sesedge2);
-						ses->contact_faces[v2]->edges.remove(sesedge2);
-						delete ses->toric_faces[index];
-						ses->toric_faces[index] = NULL;
-						Position index = face2_edges[i]->index;
-						TSESEdge<T>* sesedge1 = ses->toric_faces[index]->edge[2];
-						TSESEdge<T>* sesedge2 = ses->toric_faces[index]->edge[3];
-						ses->contact_faces[v1]->edges.remove(sesedge1);
-						ses->contact_faces[v2]->edges.remove(sesedge1);
-						ses->contact_faces[v1]->edges.remove(sesedge2);
-						ses->contact_faces[v2]->edges.remove(sesedge2);
-						delete ses->toric_faces[index];
-						ses->toric_faces[index] = NULL;
-
-						ses->toric_faces[index] = new TSESFace<T>();
-						ses->spheric_faces[rsface1->index]->getEdge(v1,v2,edge_index);
-						ses->toric_faces[index]->edge.push_back(ses->edges[edge_index]);
-						ses->toric_faces[index]->vertex.push_back(ses->edges[edge_index]->vertex1);
-						ses->toric_faces[index]->vertex.push_back(ses->edges[edge_index]->vertex2);
-						ses->spheric_faces[rsface2->index]->getEdge(v1,v2,edge_index);
-						ses->toric_faces[index]->edge.push_back(ses->edges[edge_index]);
-						ses->toric_faces[index]->vertex.push_back(ses->edges[edge_index]->vertex1);
-						ses->toric_faces[index]->vertex.push_back(ses->edges[edge_index]->vertex2);
-						ses->createToricFace(index,radius_of_probe,rs);;
-					}
+				T a = plane2.n.z/det;
+				T b = -plane1.n.z/det;
+				T c = -plane2.n.x/det;
+				T d = plane1.n.x/det;
+				line.p.x = a*u+b*v;
+				line.p.y = 0;
+				line.p.z = c*u+d*v;
+				line.d.x = a*plane1.n.y+b*plane2.n.y;
+				line.d.y = -1;
+				line.d.z = c*plane1.n.y+d*plane2.n.y;
 			}
-		Position index = rsface1->index;
-		delete rsface1;
-		rs->faces[index] = NULL;
-		Position index = rsface2->index;
-		delete rsface2;
-		rs->faces[index] = NULL;
-		Position index1 = face1->index;
-		Position index2 = face2->index;
-		delete face1;
-		delete face2;
-		ses->spheric_faces[index1] = NULL;
-		ses->spheric_faces[index2] = NULL;
+		}
+		else
+		{
+			T a = plane2.n.y/det;
+			T b = -plane1.n.y/det;
+			T c = -plane2.n.x/det;
+			T d = plane1.n.x/det;
+			line.p.x = a*u+b*v;
+			line.p.y = c*u+d*v;
+			line.p.z = 0;
+			line.d.x = a*plane1.n.z+b*plane2.n.z;
+			line.d.y = c*plane1.n.z+d*plane2.n.z;
+			line.d.z = -1;
+		}
+		return true;
 	}
-*/
+
+
 
 }
 
