@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.4 2003/08/26 16:07:22 amoll Exp $
+# $Id: Makefile,v 1.5 2003/08/26 18:35:36 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -13,13 +13,22 @@ UIC_DIR				=$(BALL_PATH)/include/BALL/VIEW/UIC
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
+	amberMinimizationDialog.C\
 	atomProperties.C\
 	fileDialog.C\
 	preferences.C\
 	colorMeshDialog.C\
 	colorMeshDialogData.C\
+	contourSurfaceDialog.C\
+	contourSurfaceDialogData.C\
+	displayProperties.C\
+	displayPropertiesData.C\
 	dlgMoveOverlay.C\
 	dlgMoveOverlayData.C\
+	molecularDynamicsDialog.C\
+	molecularDynamicsDialogData.C\
+	snapShotVisualisation.C\
+	snapShotVisualisationData.C\
 	mouseSensitivity.C\
 	mouseSensitivityData.C\
 	setCamera.C\
@@ -38,13 +47,21 @@ CPP_SOURCES=\
 	parsedFunctionDialogData.C
 
 MOC_SOURCES=\
+	amberMinimizationDialog_moc.C\
 	atomProperties_moc.C\
+	contourSurfaceDialog_moc.C\
 	fileDialog_moc.C\
 	preferences_moc.C\
 	colorMeshDialog_moc.C\
 	colorMeshDialogData_moc.C\
+	displayProperties_moc.C\
+	displayPropertiesData_moc.C\
 	dlgMoveOverlay_moc.C\
 	dlgMoveOverlayData_moc.C\
+	molecularDynamicsDialog_moc.C\
+	molecularDynamicsDialogData_moc.C\
+	snapShotVisualisation_moc.C\
+	snapShotVisualisationData_moc.C\
 	mouseSensitivity_moc.C\
 	mouseSensitivityData_moc.C\
 	setCamera_moc.C\
@@ -63,8 +80,13 @@ MOC_SOURCES=\
 	parsedFunctionDialogData_moc.C
 
 UIC_SOURCES=\
+	amberMinimizationDialogData.C\
 	atomPropertiesData.C\
 	colorMeshDialogData.C\
+	contourSurfaceDialogData.C\
+	displayPropertiesData.C\
+	molecularDynamicsDialogData.C\
+	snapShotVisualisationData.C\
 	mouseSensitivityData.C\
 	setCameraData.C\
 	lightSettingsData.C\
@@ -85,8 +107,17 @@ $(UIC_SOURCES):	$(UIC_HDR)
 
 depend: $(UIC_SOURCES) $(MOC_SOURCES)
 
+amberMinimizationDialog_moc.C:	$(HEADER_DIR)/amberMinimizationDialog.h
+	$(MOC) $(HEADER_DIR)/amberMinimizationDialog.h -o $@
+
 atomProperties_moc.C:	$(HEADER_DIR)/atomProperties.h
 	$(MOC) $(HEADER_DIR)/atomProperties.h -o $@
+
+contourSurfaceDialog_moc.C:	$(HEADER_DIR)/contourSurfaceDialog.h
+	$(MOC) $(HEADER_DIR)/contourSurfaceDialog.h -o $@
+
+displayProperties_moc.C:	$(HEADER_DIR)/displayProperties.h
+	$(MOC) $(HEADER_DIR)/displayProperties.h -o $@
 
 fileDialog_moc.C:	$(HEADER_DIR)/fileDialog.h
 	$(MOC) $(HEADER_DIR)/fileDialog.h -o $@
@@ -99,3 +130,9 @@ dlgMoveOverlay_moc.C:	$(HEADER_DIR)/dlgMoveOverlay.h
 
 dlgMoveOverlayData_moc.C:	$(HEADER_DIR)/dlgMoveOverlayData.h
 	$(MOC) $(HEADER_DIR)/dlgMoveOverlayData.h -o $@
+
+molecularDynamicsDialog_moc.C:	$(HEADER_DIR)/molecularDynamicsDialog.h
+	$(MOC) $(HEADER_DIR)/molecularDynamicsDialog.h -o $@
+
+snapShotVisualisation_moc.C:	$(HEADER_DIR)/snapShotVisualisation.h
+	$(MOC) $(HEADER_DIR)/snapShotVisualisation.h -o $@

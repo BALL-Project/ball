@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.1 2003/08/26 12:38:38 oliver Exp $
+// $Id: cartoonModel.C,v 1.2 2003/08/26 18:35:37 amoll Exp $
 
-#include <BALL/MOLVIEW/FUNCTOR/cartoonModel.h>
-#include <BALL/VIEW/GUI/FUNCTOR/colorProcessor.h>
-#include <BALL/VIEW/PRIMITIV/tube.h>
-#include <BALL/VIEW/PRIMITIV/disc.h>
-#include <BALL/VIEW/PRIMITIV/mesh.h>
+#include <BALL/VIEW/MODELS/cartoonModel.h>
+#include <BALL/VIEW/MODELS/colorProcessor.h>
+#include <BALL/VIEW/PRIMITIVES/tube.h>
+#include <BALL/VIEW/PRIMITIVES/disc.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/residue.h>
@@ -22,7 +22,7 @@ namespace BALL
 {
 	using namespace VIEW;
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 		AddCartoonModel::AddCartoonModel()
@@ -565,5 +565,5 @@ namespace BALL
 			}
 		}
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL

@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.1 2003/08/26 12:38:37 oliver Exp $
+// $Id: backboneModel.C,v 1.2 2003/08/26 18:35:37 amoll Exp $
 //
 
-#include <BALL/MOLVIEW/FUNCTOR/backboneModel.h>
-#include <BALL/VIEW/GUI/FUNCTOR/colorProcessor.h>
-#include <BALL/VIEW/PRIMITIV/sphere.h>
-#include <BALL/VIEW/PRIMITIV/tube.h>
+#include <BALL/VIEW/MODELS/backboneModel.h>
+#include <BALL/VIEW/MODELS/colorProcessor.h>
+#include <BALL/VIEW/PRIMITIVES/sphere.h>
+#include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/forEach.h>
@@ -19,7 +19,7 @@ namespace BALL
 	using VIEW::Tube;
 	using VIEW::Sphere;
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 		AddBackboneModel::SplinePoint::SplinePoint(const Vector3& point, const ColorRGBA& color)
@@ -250,5 +250,5 @@ namespace BALL
 		}
 
 		
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL

@@ -1,15 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseModelConnector.C,v 1.1 2003/08/26 12:38:38 oliver Exp $
+// $Id: baseModelConnector.C,v 1.2 2003/08/26 18:35:37 amoll Exp $
 
-#include <BALL/MOLVIEW/FUNCTOR/baseModelConnector.h>
+#include <BALL/VIEW/MODELS/baseModelConnector.h>
 
 using namespace std;
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 		BaseModelConnector::BaseModelConnector()
@@ -57,5 +57,5 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL

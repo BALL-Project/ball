@@ -1,33 +1,33 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.1 2003/08/26 12:11:28 oliver Exp $
+// $Id: ballAndStickModel.h,v 1.2 2003/08/26 18:35:33 amoll Exp $
 //
 
-#ifndef BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
-#define BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
+#ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
+#define BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
 
-#ifndef BALL_VIEW_PRIMITIV_SPHERE_H
-#	include <BALL/VIEW/PRIMITIV/sphere.h>
+#ifndef BALL_VIEW_PRIMITIVES_SPHERE_H
+#	include <BALL/VIEW/PRIMITIVES/sphere.h>
 #endif
 
-#ifndef BALL_VIEW_PRIMITIV_TUBE_H
-#	include <BALL/VIEW/PRIMITIV/tube.h>
+#ifndef BALL_VIEW_PRIMITIVES_TUBE_H
+#	include <BALL/VIEW/PRIMITIVES/tube.h>
 #endif
 
-#ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
-#	include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
+#ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
+#	include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
 #endif
 
-#ifndef BALL_VIEW_PRIMITIV_TWOCOLOREDTUBE_H
-#	include <BALL/VIEW/PRIMITIV/twoColoredTube.h>
+#ifndef BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
+#	include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #endif
 
 namespace BALL
 {
 	class Atom;
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 		using VIEW::Sphere;
 		using VIEW::Tube;
@@ -42,7 +42,7 @@ namespace BALL
 				the radi of the ball and the stick components are equal.
 				For information about the processor concept see Processor in the BALL
 				documentation. 
-				\ingroup  MolviewFunctorsModels
+				\ingroup  MolviewModels
 		*/
 		class AddBallAndStickModel: public AtomBondModelBaseProcessor
 		{
@@ -239,10 +239,10 @@ namespace BALL
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.iC>
+#		include <BALL/VIEW/MODELS/ballAndStickModel.iC>
 #	endif
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
+#endif // BALL_VIEW_MODELS_BALLANDSTICKMODEL_H

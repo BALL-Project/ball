@@ -1,26 +1,26 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.1 2003/08/26 12:38:45 oliver Exp $
+// $Id: glRenderer.C,v 1.2 2003/08/26 18:35:39 amoll Exp $
 
-#include <BALL/VIEW/OPENGL/glRenderer.h>
-#include <BALL/VIEW/OPENGL/glQuadricObject.h>
-#include <BALL/VIEW/COMMON/global.h>
-#include <BALL/VIEW/OPENGL/glDisplayList.h>
-#include <BALL/VIEW/GUI/KERNEL/stage.h>
+#include <BALL/VIEW/RENDERING/glRenderer.h>
+#include <BALL/VIEW/RENDERING/glQuadricObject.h>
+#include <BALL/VIEW/RENDERING/glDisplayList.h>
+#include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/KERNEL/stage.h>
 
-#include <BALL/VIEW/PRIMITIV/label.h>
-#include <BALL/VIEW/PRIMITIV/line.h>
-#include <BALL/VIEW/PRIMITIV/mesh.h>
-#include <BALL/VIEW/PRIMITIV/point.h>
-#include <BALL/VIEW/PRIMITIV/box.h>
-#include <BALL/VIEW/PRIMITIV/simpleBox.h>
-#include <BALL/VIEW/PRIMITIV/sphere.h>
-#include <BALL/VIEW/PRIMITIV/disc.h>
-#include <BALL/VIEW/PRIMITIV/tube.h>
-#include <BALL/VIEW/PRIMITIV/twoColoredLine.h>
-#include <BALL/VIEW/PRIMITIV/twoColoredTube.h>
-#include <BALL/VIEW/PRIMITIV/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/label.h>
+#include <BALL/VIEW/PRIMITIVES/line.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/point.h>
+#include <BALL/VIEW/PRIMITIVES/box.h>
+#include <BALL/VIEW/PRIMITIVES/simpleBox.h>
+#include <BALL/VIEW/PRIMITIVES/sphere.h>
+#include <BALL/VIEW/PRIMITIVES/disc.h>
+#include <BALL/VIEW/PRIMITIVES/tube.h>
+#include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
+#include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
 
 #include <qfont.h>
 #include <qpainter.h>
@@ -1402,9 +1402,6 @@ namespace BALL
 				}
 			} 
 			
-			// TEST!!!
-			//glMultMatrixf(&matrix[0][0]);
-
 			// reverse translation
 			glTranslatef(-origin.x, -origin.y, -origin.z);
 		}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.2 2003/08/26 15:01:21 amoll Exp $
+// $Id: displayProperties.h,v 1.3 2003/08/26 18:35:32 amoll Exp $
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -14,24 +14,16 @@
 # include <BALL/VIEW/MODELS/atomBondModelConnector.h>
 #endif
 
-#ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
-# include <BALL/VIEW/WIDGETS/modularWidget.h>
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+# include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIESDATA_H
-# include <BALL/VIEW/DIALOGS/displayPropertiesData.h>
-#endif
+#include <BALL/VIEW/UIC/displayPropertiesData.h>
 
 namespace BALL
 {
-	using VIEW::ModularWidget;
-	using VIEW::Message;
-	using VIEW::MainControl;
-	using VIEW::BALL_SELECTED_COLOR;
-
 	namespace VIEW
 	{
-
 
 /// Exception to be thrown if invalid option is given for a modelprocessor
 class InvalidOption: public Exception::GeneralException

@@ -1,23 +1,23 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.h,v 1.1 2003/08/26 12:11:31 oliver Exp $
+// $Id: vanDerWaalsModel.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
 //
 
-#ifndef BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
-#define BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
+#ifndef BALL_VIEW_MODELS_VANDERWAALSMODEL_H
+#define BALL_VIEW_MODELS_VANDERWAALSMODEL_H
 
-#ifndef BALL_VIEW_PRIMITIV_SPHERE_H
-#	include <BALL/VIEW/PRIMITIV/sphere.h>
+#ifndef BALL_VIEW_PRIMITIVES_SPHERE_H
+#	include <BALL/VIEW/PRIMITIVES/sphere.h>
 #endif
 
-#ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
-# include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
+#ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
+# include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
 #endif
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 		using VIEW::Sphere;
 
@@ -25,7 +25,7 @@ namespace BALL
 				AddVanDerWaalsModel is a model processor that is responsible
 				for creating a <b>Van der Waals</b> model.
 				For information about the processor concept see Processor.
-				\ingroup  MolviewFunctorsModels
+				\ingroup  MolviewModels
 		*/
 		class AddVanDerWaalsModel: public AtomBondModelBaseProcessor
 		{
@@ -110,8 +110,8 @@ namespace BALL
 			//@}
 		};
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 
 } // namespace BALL
 
-#endif // BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
+#endif // BALL_VIEW_MODELS_VANDERWAALSMODEL_H

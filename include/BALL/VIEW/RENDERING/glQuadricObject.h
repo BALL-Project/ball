@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glQuadricObject.h,v 1.1 2003/08/26 12:11:39 oliver Exp $
+// $Id: glQuadricObject.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
 
-#ifndef BALL_VIEW_OPENGL_GLQUADRICOBJECT_H
-#define BALL_VIEW_OPENGL_GLQUADRICOBJECT_H
+#ifndef BALL_VIEW_RENDERING_GLQUADRICOBJECT_H
+#define BALL_VIEW_RENDERING_GLQUADRICOBJECT_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -404,10 +404,10 @@ namespace BALL
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/OPENGL/glQuadricObject.iC>
+#			include <BALL/VIEW/RENDERING/glQuadricObject.iC>
 #		endif
 		
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
+#endif // BALL_VIEW_RENDERING_GLQUADRICOBJECT_H

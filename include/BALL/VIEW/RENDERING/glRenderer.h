@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.1 2003/08/26 12:11:40 oliver Exp $
+// $Id: glRenderer.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
 
-#ifndef BALL_VIEW_OPENGL_GLRENDERER_H
-#define BALL_VIEW_OPENGL_GLRENDERER_H
+#ifndef BALL_VIEW_RENDERING_GLRENDERER_H
+#define BALL_VIEW_RENDERING_GLRENDERER_H
 
-#ifndef BALL_VIEW_GUI_KERNEL_RENDERER_H
-#	include <BALL/VIEW/GUI/KERNEL/renderer.h>
+#ifndef BALL_VIEW_RENDERING_RENDERER_H
+#	include <BALL/VIEW/RENDERING/renderer.h>
 #endif
 
 #ifndef BALL_MATHS_QUATERNION_H
@@ -326,4 +326,4 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_OPENGL_GLDISPLAYLIST_H
+#endif // BALL_VIEW_RENDERING_GLRENDERER_H

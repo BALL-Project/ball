@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.h,v 1.1 2003/08/26 12:11:40 oliver Exp $
+// $Id: renderer.h,v 1.2 2003/08/26 18:35:35 amoll Exp $
 
-#ifndef BALL_VIEW_GUI_KERNEL_RENDERER_H
-#define BALL_VIEW_GUI_KERNEL_RENDERER_H
+#ifndef BALL_VIEW_RENDERING_RENDERER_H
+#define BALL_VIEW_RENDERING_RENDERER_H
 
-#ifndef BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
-#	include <BALL/VIEW/GUI/KERNEL/representation.h>
+#ifndef BALL_VIEW_KERNEL_REPRESENTATION_H
+#	include <BALL/VIEW/KERNEL/representation.h>
 #endif
 
 #ifndef BALL_CONCEPT_OBJECT_H
@@ -177,4 +177,4 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_GUI_KERNEL_RENDERER_H
+#endif // BALL_VIEW_RENDERING_RENDERER_H

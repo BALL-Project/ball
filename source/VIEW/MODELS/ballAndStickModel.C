@@ -1,17 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.1 2003/08/26 12:38:38 oliver Exp $
+// $Id: ballAndStickModel.C,v 1.2 2003/08/26 18:35:37 amoll Exp $
 
-#include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h>
-#include <BALL/VIEW/GUI/FUNCTOR/colorProcessor.h>
+#include <BALL/VIEW/MODELS/ballAndStickModel.h>
+#include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/KERNEL/atom.h>
 
 using namespace std;
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 		AddBallAndStickModel::AddBallAndStickModel()
@@ -193,9 +193,9 @@ namespace BALL
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.iC>
+#			include <BALL/VIEW/MODELS/ballAndStickModel.iC>
 #		endif
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 
 } // namespace BALL

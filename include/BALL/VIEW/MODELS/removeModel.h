@@ -1,18 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: removeModel.h,v 1.1 2003/08/26 12:11:30 oliver Exp $
+// $Id: removeModel.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
 
-#ifndef BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
-#define BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
+#ifndef BALL_VIEW_MODELS_REMOVEMODEL_H
+#define BALL_VIEW_MODELS_REMOVEMODEL_H
 
-#ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
-#	include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
+#ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
+#	include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
 #endif
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 		/** RemoveModel class.
 				The class RemoveModel is a processor that is responsible for removing models.
@@ -22,7 +22,7 @@ namespace BALL
 				For information about the processor concept see  \link Processor Processor \endlink  in tbe BALL
 				documentation.  \par
 				
-    		\ingroup  MolviewFunctorsModels
+    		\ingroup  MolviewModels
 		*/
 		class RemoveModel: 
 			public AtomBondModelBaseProcessor,
@@ -161,8 +161,8 @@ namespace BALL
 
 			private:
 		};
-	} // namespace MOLVIEW
+	} // namespace VIEW
 
 } // namespace BALL
 
-#endif // BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
+#endif // BALL_VIEW_MODELS_REMOVEMODEL_H

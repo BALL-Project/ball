@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.h,v 1.37 2003/08/26 08:04:54 oliver Exp $
+// $Id: surfaceProcessor.h,v 1.38 2003/08/26 18:35:31 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/reducedSurface.h>
@@ -96,12 +96,6 @@ namespace BALL
 		//@}
 
 		protected:
-
-		///
-		double													radius_offset_;
-
-		///
-		double													vdw_factor_;
 
 		///
 		double													radius_offset_;

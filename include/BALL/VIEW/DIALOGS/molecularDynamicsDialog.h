@@ -5,7 +5,7 @@
 #ifndef BALL_VIEW_DIALOGS_MOLECULARDYNAMICSDIALOG_H
 #define BALL_VIEW_DIALOGS_MOLECULARDYNAMICSDIALOG_H
 
-#include "molecularDynamicsDialogData.h"
+#include <BALL/VIEW/UIC/molecularDynamicsDialogData.h>
 
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/SYSTEM/path.h>

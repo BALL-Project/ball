@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelConnector.C,v 1.1 2003/08/26 12:38:37 oliver Exp $
+// $Id: atomBondModelConnector.C,v 1.2 2003/08/26 18:35:36 amoll Exp $
 
-#include <BALL/MOLVIEW/FUNCTOR/atomBondModelConnector.h>
+#include <BALL/VIEW/MODELS/atomBondModelConnector.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
-#include <BALL/MOLVIEW/COMMON/common.h>
-#include <BALL/VIEW/GUI/FUNCTOR/colorProcessor.h>
+#include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/MODELS/colorProcessor.h>
 
 using namespace std;
 
@@ -15,7 +15,7 @@ namespace BALL
 {
 	using VIEW::ColorRGBA;
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 				
 		AtomBondModelConnector::AtomBondModelConnector()
@@ -182,5 +182,5 @@ namespace BALL
 			}
     }
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL

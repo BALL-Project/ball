@@ -1,37 +1,37 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.1 2003/08/26 12:11:31 oliver Exp $
+// $Id: surfaceModel.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
 //
 
-#ifndef BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
-#define BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
+#ifndef BALL_VIEW_MODELS_SURFACEMODEL_H
+#define BALL_VIEW_MODELS_SURFACEMODEL_H
 
 #ifndef BALL_DATATYPE_LIST_H
 #	include <BALL/DATATYPE/list.h>
 #endif
 
-#ifndef BALL_VIEW_PRIMITIV_MESH_H
-#	include <BALL/VIEW/PRIMITIV/mesh.h>
+#ifndef BALL_VIEW_PRIMITIVES_MESH_H
+#	include <BALL/VIEW/PRIMITIVES/mesh.h>
 #endif
 
-#ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARMODEL_H
-#	include <BALL/MOLVIEW/FUNCTOR/molecularModel.h>
+#ifndef BALL_VIEW_MODELS_MOLECULARMODEL_H
+#	include <BALL/VIEW/MODELS/molecularModel.h>
 #endif
 
 namespace BALL
 {
-	namespace MOLVIEW
-	{
-		using VIEW::Mesh;
+	class Atom;
 
+	namespace VIEW
+	{
 		/** AddSurfaceModel class.
 				The class AddSurfaceModel is a model processor that creates a surface model
 				of the given Composite object. 
 				A Mesh object is created and filled with the method SurfaceProcessor::getSurface.
 				\see     Mesh
 				\see     SurfaceProcessor
-				\ingroup  MolviewFunctorsModels
+				\ingroup  MolviewModels
 		*/
 		class AddSurfaceModel
 			: public MolecularModelProcessor
@@ -113,8 +113,7 @@ namespace BALL
 			HashSet<Atom*> 		atoms_;
 		};
 
-	} // namespace MOLVIEW
-
+	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
+#endif // BALL_VIEW_MODELS_SURFACEMODEL_H

@@ -1,15 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularModel.C,v 1.1 2003/08/26 12:38:38 oliver Exp $
+// $Id: molecularModel.C,v 1.2 2003/08/26 18:35:37 amoll Exp $
 
-#include <BALL/MOLVIEW/FUNCTOR/molecularModel.h>
+#include <BALL/VIEW/MODELS/molecularModel.h>
 
 using namespace std;
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 		MolecularModelProcessor::MolecularModelProcessor()
 			throw()
@@ -106,8 +106,8 @@ namespace BALL
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/molecularModel.iC>
+#			include <BALL/VIEW/MODELS/molecularModel.iC>
 #		endif
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL

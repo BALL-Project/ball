@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.1 2003/08/26 12:11:30 oliver Exp $
+// $Id: standardColorProcessor.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
 
-#ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORPROCESSOR_H
-#define BALL_MOLVIEW_FUNCTOR_STANDARDCOLORPROCESSOR_H
+#ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
+#define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 
-#ifndef BALL_VIEW_GUI_FUNCTOR_COLORPROCESSOR_H
-#	include <BALL/VIEW/GUI/FUNCTOR/colorProcessor.h>
+#ifndef BALL_VIEW_GUI_MODELS_COLORPROCESSOR_H
+#	include <BALL/VIEW/MODELS/colorProcessor.h>
 #endif
 
 #ifndef BALL_DATATYPE_HASHMAP_H
@@ -19,7 +19,7 @@ namespace BALL
 	using VIEW::ColorProcessor;
 	using VIEW::ColorRGBA;
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 		/** ElementColorProcessor class.
 				The class ElementColorProcessor is derived from the class ColorProcessor.
@@ -28,7 +28,7 @@ namespace BALL
 				corresponding to the element symbols of atoms, is initialised.
 				The ColorProcessor can be set in the class DisplayProperties
 				to color an entire molecular object in its element colors. 
-				\ingroup  MolviewFunctorsModels
+				\ingroup  MolviewModels
 		*/
 		class ElementColorProcessor
 			: public ColorProcessor
@@ -55,7 +55,7 @@ namespace BALL
 				(A residue color of a given atom is the color of the residue the atom is contained in).
 				In the constructor a ColorMap is initialized that contains all colors
 				corresponding to the names of the residues.
-				\ingroup  MolviewFunctorsModels
+				\ingroup  MolviewModels
 		*/
 		class ResidueNameColorProcessor
 			: public ColorProcessor
@@ -104,7 +104,7 @@ namespace BALL
 				is greater than +1 or lower than -1 it will be set to +1 or -1.
 				The ColorProcessor can be set in the class DisplayProperties
 				to color an entire object in its atom charge colors. 
-				\ingroup  MolviewFunctorsModels
+				\ingroup  MolviewModels
 		*/
 		class AtomChargeColorProcessor
 			: public ColorProcessor
@@ -243,7 +243,7 @@ namespace BALL
 				If a distance of an Atom object to another atom object (stored in different
 				atom containers) lies between the null and the max distance, the resulting 
 				color will be interpolated according to the distance.
-				\ingroup  MolviewFunctorsModels
+				\ingroup  MolviewModels
 		*/
 		class AtomDistanceColorProcessor
 			:  public ColorProcessor
@@ -427,15 +427,15 @@ namespace BALL
 				ColorProcessor::getColor. 
 				The ColorProcessor can be set in the class DisplayProperties to color 
 				an entire object in one color.
-				\ingroup  MolviewFunctorsModels
+				\ingroup  MolviewModels
 		*/
 		typedef ColorProcessor CustomColorProcessor;
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/MOLVIEW/FUNCTOR/standardColorProcessor.iC>
+#		include <BALL/VIEW/MODELS/standardColorProcessor.iC>
 #	endif
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_MOLVIEW_FUNCTOR_STANDARDCOLORPROCESSOR_H
+#endif // BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H

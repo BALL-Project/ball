@@ -1,30 +1,30 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelConnector.h,v 1.1 2003/08/26 12:11:28 oliver Exp $
+// $Id: atomBondModelConnector.h,v 1.2 2003/08/26 18:35:33 amoll Exp $
 //
 
-#ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
-#define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
+#ifndef BALL_VIEW_MODELS_ATOMBONDMODELCONNECTOR_H
+#define BALL_VIEW_MODELS_ATOMBONDMODELCONNECTOR_H
 
-#ifndef BALL_VIEW_PRIMITIV_LINE_H
-#	include <BALL/VIEW/PRIMITIV/line.h>
+#ifndef BALL_VIEW_PRIMITIVES_LINE_H
+#	include <BALL/VIEW/PRIMITIVES/line.h>
 #endif
 
-#ifndef BALL_VIEW_PRIMITIV_TUBE_H
-#	include <BALL/VIEW/PRIMITIV/tube.h>
+#ifndef BALL_VIEW_PRIMITIVES_TUBE_H
+#	include <BALL/VIEW/PRIMITIVES/tube.h>
 #endif
 
-#ifndef BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
-#	include <BALL/MOLVIEW/FUNCTOR/baseModelConnector.h>
+#ifndef BALL_VIEW_MODELS_BASEMODELCONNECTOR_H
+#	include <BALL/VIEW/MODELS/baseModelConnector.h>
 #endif
 
-#ifndef BALL_VIEW_PRIMITIV_TWOCOLOREDLINE_H
-#	include <BALL/VIEW/PRIMITIV/twoColoredLine.h>
+#ifndef BALL_VIEW_PRIMITIVES_TWOCOLOREDLINE_H
+#	include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 #endif
 
-#ifndef BALL_VIEW_PRIMITIV_TWOCOLOREDTUBE_H
-#	include <BALL/VIEW/PRIMITIV/twoColoredTube.h>
+#ifndef BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
+#	include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #endif
 
 using BALL::VIEW::Line;
@@ -37,14 +37,14 @@ namespace BALL
 	class Atom;
 	class Bond;
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 		/** AtomBondModelConnector class.
 				The class AtomBondModelConnector is derived from BaseModelConnector.
 				This class connects different models with each other.
 				The connector model is used for the Bond objects between the various models
 				of the adjacent Atom objects.
-				\ingroup  MolviewFunctorsModels
+				\ingroup  MolviewModels
 		*/
 		class AtomBondModelConnector
 			: public BaseModelConnector
@@ -117,7 +117,7 @@ namespace BALL
 
 		};
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
+#endif // BALL_VIEW_MODELS_ATOMBONDMODELCONNECTOR_H

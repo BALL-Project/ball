@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.C,v 1.1 2003/08/26 12:38:38 oliver Exp $
+// $Id: lineModel.C,v 1.2 2003/08/26 18:35:37 amoll Exp $
 
-#include <BALL/MOLVIEW/FUNCTOR/lineModel.h>
+#include <BALL/VIEW/MODELS/lineModel.h>
 #include <BALL/KERNEL/atom.h>
-#include <BALL/VIEW/GUI/FUNCTOR/colorProcessor.h>
-#include <BALL/VIEW/PRIMITIV/point.h>
+#include <BALL/VIEW/MODELS/colorProcessor.h>
+#include <BALL/VIEW/PRIMITIVES/point.h>
 
 using namespace std;
 
@@ -14,7 +14,7 @@ namespace BALL
 {
 	using VIEW::Point;
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 
@@ -97,5 +97,5 @@ void AddLineModel::dump(ostream& s, Size depth) const
 	BALL_DUMP_STREAM_SUFFIX(s);
 }
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL

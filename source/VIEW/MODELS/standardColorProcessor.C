@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.1 2003/08/26 12:38:38 oliver Exp $
+// $Id: standardColorProcessor.C,v 1.2 2003/08/26 18:35:38 amoll Exp $
 
-#include <BALL/MOLVIEW/FUNCTOR/standardColorProcessor.h>
+#include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/KERNEL/residue.h>
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 		//    ElementColorProcessor
@@ -457,7 +457,7 @@ namespace BALL
 		
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/MOLVIEW/FUNCTOR/standardColorProcessor.iC>
+#		include <BALL/VIEW/MODELS/standardColorProcessor.iC>
 #	endif
 	}
 } // namespace BALL

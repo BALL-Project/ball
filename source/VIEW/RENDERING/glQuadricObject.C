@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glQuadricObject.C,v 1.1 2003/08/26 12:38:45 oliver Exp $
+// $Id: glQuadricObject.C,v 1.2 2003/08/26 18:35:39 amoll Exp $
 
-#include <BALL/VIEW/OPENGL/glQuadricObject.h>
+#include <BALL/VIEW/RENDERING/glQuadricObject.h>
 #include <BALL/COMMON/exception.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/rtti.h>
@@ -342,9 +342,8 @@ namespace BALL
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/OPENGL/glQuadricObject.iC>
+#			include <BALL/VIEW/RENDERING/glQuadricObject.iC>
 #		endif
 
 	} // namespace VIEW
-
 } // namespace BALL

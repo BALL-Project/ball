@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.C,v 1.1 2003/08/26 12:38:37 oliver Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.2 2003/08/26 18:35:36 amoll Exp $
 
-#include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
-#include <BALL/VIEW/PRIMITIV/point.h>
+#include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
+#include <BALL/VIEW/PRIMITIVES/point.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
 
@@ -12,7 +12,7 @@ using namespace std;
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 		AtomBondModelBaseProcessor::AtomBondModelBaseProcessor()
@@ -143,8 +143,8 @@ namespace BALL
     }
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.iC>
+#			include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.iC>
 #		endif
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL

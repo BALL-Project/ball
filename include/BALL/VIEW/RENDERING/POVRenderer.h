@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.1 2003/08/26 12:11:39 oliver Exp $
+// $Id: POVRenderer.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
 //
 
-#ifndef BALL_VIEW_GUI_FUNCTOR_POVRENDERER_H
-#define BALL_VIEW_GUI_FUNCTOR_POVRENDERER_H
+#ifndef BALL_VIEW_RENDERING_POVRENDERER_H
+#define BALL_VIEW_RENDERING_POVRENDERER_H
 
-#ifndef BALL_VIEW_GUI_KERNEL_RENDERER_H
-# include <BALL/VIEW/GUI/KERNEL/renderer.h>
+#ifndef BALL_VIEW_RENDERING_RENDERER_H
+# include <BALL/VIEW/RENDERING/renderer.h>
 #endif
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -34,6 +34,7 @@ namespace BALL
 				and exports them into a data file in the POVRay 1.5 format, which can
 				be used to render the same scene externally.
 			\ingroup ViewGuiFunctors	
+		*/
 		class POVRenderer : public Renderer
 		{
 			public:
@@ -132,4 +133,4 @@ namespace BALL
 	} // namespace BALL
 } // namespace VIEW
 
-#endif // BALL_VIEW_GUI_FUNCTOR_POVRENDERER_H
+#endif // BALL_VIEW_RENDERING_POVRENDERER_H

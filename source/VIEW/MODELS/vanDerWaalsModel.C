@@ -1,18 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.C,v 1.1 2003/08/26 12:38:38 oliver Exp $
+// $Id: vanDerWaalsModel.C,v 1.2 2003/08/26 18:35:38 amoll Exp $
 //
 
-#include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h>
+#include <BALL/VIEW/MODELS/vanDerWaalsModel.h>
 #include <BALL/KERNEL/atom.h>
-#include <BALL/VIEW/GUI/FUNCTOR/colorProcessor.h>
+#include <BALL/VIEW/MODELS/colorProcessor.h>
 
 using namespace std;
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 		AddVanDerWaalsModel::AddVanDerWaalsModel()
@@ -100,5 +100,5 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL

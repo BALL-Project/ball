@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.h,v 1.1 2003/08/26 12:11:39 oliver Exp $
+// $Id: glDisplayList.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
 
-#ifndef BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
-#define BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
+#ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
+#define BALL_VIEW_RENDERING_GLDISPLAYLIST_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -263,10 +263,10 @@ class GLDisplayList
 };
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/VIEW/OPENGL/glDisplayList.iC>
+#		include <BALL/VIEW/RENDERING/glDisplayList.iC>
 #	endif
 
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
+#endif // BALL_VIEW_RENDERING_GLDISPLAYLIST_H

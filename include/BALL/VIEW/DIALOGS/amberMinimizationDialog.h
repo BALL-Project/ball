@@ -5,7 +5,7 @@
 #ifndef BALL_VIEW_DIALOGS_AMBERMINIMIZATIONDIALOG_H
 #define BALL_VIEW_DIALOGS_AMBERMINIMIZATIONDIALOG_H
 
-#include "amberMinimizationDialogData.h"
+#include <BALL/VIEW/UIC/amberMinimizationDialogData.h>
 
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/SYSTEM/path.h>

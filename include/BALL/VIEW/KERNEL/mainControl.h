@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.2 2003/08/26 15:26:42 amoll Exp $
+// $Id: mainControl.h,v 1.3 2003/08/26 18:35:32 amoll Exp $
 //
 
-#ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
-#define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
+#ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
+#define BALL_VIEW_KERNEL_MAINCONTROL_H
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
 #	include <BALL/CONCEPT/embeddable.h>
@@ -600,4 +600,4 @@ namespace BALL
 		} // namespace VIEW
 	} // namespace BALL
 
-#endif // BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
+#endif // BALL_VIEW_KERNEL_MAINCONTROL_H

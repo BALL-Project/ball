@@ -1,21 +1,20 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.2 2003/08/26 15:01:09 amoll Exp $
+// $Id: displayProperties.C,v 1.3 2003/08/26 18:35:36 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
-#include <BALL/VIEW/KERNEL/molecularMessage.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <BALL/VIEWKERNEL/mainControl.h>
-#include <BALL/VIEWKERNEL/primitiveManager.h>
-#include <BALL/VIEW/COMMON/global.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/primitiveManager.h>
+#include <BALL/VIEW/KERNEL/common.h>
 
-#include <BALL/VIEW/FUNCTOR/backboneModel.h>
-#include <BALL/VIEW/FUNCTOR/cartoonModel.h>
-#include <BALL/VIEW/FUNCTOR/ballAndStickModel.h>
-#include <BALL/VIEW/FUNCTOR/lineModel.h>
-#include <BALL/VIEW/FUNCTOR/surfaceModel.h>
-#include <BALL/VIEW/FUNCTOR/vanDerWaalsModel.h>
+#include <BALL/VIEW/MODELS/backboneModel.h>
+#include <BALL/VIEW/MODELS/cartoonModel.h>
+#include <BALL/VIEW/MODELS/ballAndStickModel.h>
+#include <BALL/VIEW/MODELS/lineModel.h>
+#include <BALL/VIEW/MODELS/surfaceModel.h>
+#include <BALL/VIEW/MODELS/vanDerWaalsModel.h>
 
 #include <qcolordialog.h>
 #include <qmenubar.h>
@@ -26,20 +25,6 @@
 
 namespace BALL
 {
-	using VIEW::PrimitiveManager;
-	using VIEW::Representation;
-	using VIEW::CenterCameraMessage;
-	using VIEW::SceneMessage;
-	using VIEW::RepresentationMessage;
-
-	using VIEW::DRAWING_PRECISION_LOW;
-	using VIEW::DRAWING_PRECISION_MEDIUM;
-	using VIEW::DRAWING_PRECISION_HIGH;
-
-	using VIEW::DRAWING_MODE_DOTS;
-	using VIEW::DRAWING_MODE_WIREFRAME;
-	using VIEW::DRAWING_MODE_SOLID;
-
 	namespace VIEW
 	{
 

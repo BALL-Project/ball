@@ -5,7 +5,7 @@
 #include "mainframe.h"
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
-#include <BALL/VIEW/GUI/WIDGETS/scene.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
 
 namespace BALL

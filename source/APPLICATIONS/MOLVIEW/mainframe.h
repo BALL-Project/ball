@@ -1,57 +1,57 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.39 2003/08/26 13:50:15 amoll Exp $
+// $Id: mainframe.h,v 1.40 2003/08/26 18:35:35 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 
-#ifndef BALL_VIEW_KERNEL_LOGVIEW_H
-#	include <BALL/VIEW/KERNEL/logView.h>
+#ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
+#	include <BALL/VIEW/WIDGETS/logView.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
-# include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+#ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
+# include <BALL/VIEW/KERNEL/mainControl.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_KERNEL_SERVER_H
-# include <BALL/VIEW/GUI/KERNEL/server.h>
+#ifndef BALL_VIEW_KERNEL_SERVER_H
+# include <BALL/VIEW/KERNEL/server.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
-# include <BALL/VIEW/GUI/WIDGETS/scene.h>
+#ifndef BALL_VIEW_WIDGETS_SCENE_H
+# include <BALL/VIEW/WIDGETS/scene.h>
 #endif
 
-#ifndef BALL_MOLVIEW_DIALOGS_DISPLAYPROPERTIES_H
+#ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
 # include <BALL/VIEW/DIALOGS/displayProperties.h>
 #endif
 
-#ifndef BALL_MOLVIEW_DIALOGS_LABELPROPERTIES_H
+#ifndef BALL_VIEW_DIALOGS_LABELPROPERTIES_H
 # include <BALL/VIEW/DIALOGS/labelProperties.h>
 #endif
 
-#ifndef BALL_MOLVIEW_WIDGETS_MOLECULARCONTROL_H
+#ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 # include <BALL/VIEW/WIDGETS/molecularControl.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_WIDGETS_GEOMETRICCONTROL_H
-# include <BALL/VIEW/GUI/WIDGETS/geometricControl.h>
+#ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
+# include <BALL/VIEW/WIDGETS/geometricControl.h>
 #endif
 
-#ifndef BALL_MOLVIEW_WIDGETS_MOLECULARPROPERTIES_H
+#ifndef BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
 # include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_FUNCTOR_POVRENDERER_H
-# include <BALL/VIEW/GUI/FUNCTOR/POVRenderer.h>
+#ifndef BALL_VIEW_FUNCTOR_POVRENDERER_H
+# include <BALL/VIEW/FUNCTOR/POVRenderer.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_DIALOGS_FDPBDIALOG_H
-# include <BALL/VIEW/GUI/DIALOGS/FDPBDialog.h>
+#ifndef BALL_VIEW_DIALOGS_FDPBDIALOG_H
+# include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 #endif
 
-#ifndef BALL_MOLVIEW_DIALOGS_CONTOURSURFACEDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_CONTOURSURFACEDIALOG_H
 # include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
 #endif
 
@@ -59,11 +59,11 @@
 # include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #endif
 
-#ifndef BALL_MOLVIEW_DIALOGS_AMBERMINIMIZATIONDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_AMBERMINIMIZATIONDIALOG_H
 # include <BALL/VIEW/DIALOGS/amberMinimizationDialog.h>
 #endif
 
-#ifndef BALL_MOLVIEW_DIALOGS_MOLECULARDYNAMICSDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_MOLECULARDYNAMICSDIALOG_H
 # include <BALL/VIEW/DIALOGS/molecularDynamicsDialog.h>
 #endif
 
@@ -74,9 +74,9 @@ class QThread;
 
 namespace BALL
 {
+	using namespace BALL::VIEW;
 	class AmberFF;
-using namespace BALL::VIEW;
-using namespace BALL::MOLVIEW;
+
 class Mainframe	
 	: public BALL::VIEW::MainControl
 {

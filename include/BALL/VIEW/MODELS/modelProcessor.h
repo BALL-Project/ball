@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.1 2003/08/26 12:11:29 oliver Exp $
+// $Id: modelProcessor.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
 
-#ifndef BALL_VIEW_GUI_FUNCTOR_ModelProcessor_H
-#define BALL_VIEW_GUI_FUNCTOR_ModelProcessor_H
+#ifndef BALL_VIEW_GUI_MODELS_ModelProcessor_H
+#define BALL_VIEW_GUI_MODELS_ModelProcessor_H
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -109,4 +109,4 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_GUI_FUNCTOR_BASEMODEL_H 
+#endif // BALL_VIEW_GUI_MODELS_BASEMODEL_H 

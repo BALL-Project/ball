@@ -1,17 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularModel.h,v 1.1 2003/08/26 12:11:30 oliver Exp $
+// $Id: molecularModel.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
 
-#ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARMODEL_H
-#define BALL_MOLVIEW_FUNCTOR_MOLECULARMODEL_H
+#ifndef BALL_VIEW_MODELS_MOLECULARMODEL_H
+#define BALL_VIEW_MODELS_MOLECULARMODEL_H
 
-#ifndef BALL_VIEW_GUI_FUNCTOR_MODELPROCESSOR_H
-#	include <BALL/VIEW/GUI/FUNCTOR/modelProcessor.h>
+#ifndef BALL_VIEW_GUI_MODELS_MODELPROCESSOR_H
+#	include <BALL/VIEW/MODELS/modelProcessor.h>
 #endif
 
-#ifndef BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
-#	include <BALL/MOLVIEW/FUNCTOR/baseModelConnector.h>
+#ifndef BALL_VIEW_MODELS_BASEMODELCONNECTOR_H
+#	include <BALL/VIEW/MODELS/baseModelConnector.h>
 #endif
 
 namespace BALL
@@ -19,13 +19,13 @@ namespace BALL
 	using VIEW::ModelProcessor;
 	using VIEW::GeometricObject;
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 		/** MolecularModelProcessor class.
 				The class MolecularModelProcessor is base class for all model processors. 
 				Every model must have a MolecularModelConnector object.
 				Some protected helper methods are included, which are used by some derived classes. 
-				\ingroup  MolviewFunctorsModels
+				\ingroup  MolviewModels
 		*/
 		class MolecularModelProcessor
 			: public ModelProcessor
@@ -143,10 +143,10 @@ namespace BALL
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/MOLVIEW/FUNCTOR/molecularModel.iC>
+#		include <BALL/VIEW/MODELS/molecularModel.iC>
 #	endif
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_MOLVIEW_FUNCTOR_MOLECULARMODEL_H 
+#endif // BALL_VIEW_MODELS_MOLECULARMODEL_H 

@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.1 2003/08/26 12:11:29 oliver Exp $
+// $Id: colorProcessor.h,v 1.2 2003/08/26 18:35:33 amoll Exp $
 
-#ifndef BALL_VIEW_FUNCTOR_COLORPROCESSOR_H
-#define BALL_VIEW_FUNCTOR_COLORPROCESSOR_H
+#ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
+#define BALL_VIEW_MODELS_COLORPROCESSOR_H
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #	include <BALL/CONCEPT/processor.h>
@@ -236,4 +236,4 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_FUNCTOR_COLORPROCESSOR_H
+#endif // BALL_VIEW_MODELS_COLORPROCESSOR_H

@@ -1,23 +1,22 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.1 2003/08/26 12:38:38 oliver Exp $
+// $Id: surfaceModel.C,v 1.2 2003/08/26 18:35:38 amoll Exp $
 //
 
-#include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
+#include <BALL/VIEW/MODELS/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
-#include <BALL/VIEW/FUNCTOR/molecularInformation.h>
-#include <BALL/VIEW/GUI/KERNEL/representation.h>
-#include <BALL/VIEW/COMMON/global.h>
+#include <BALL/VIEW/KERNEL/molecularInformation.h>
+#include <BALL/VIEW/KERNEL/representation.h>
+#include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/KERNEL/atomContainer.h>
+#include <BALL/KERNEL/forEach.h>
 
 using namespace std;
 
 namespace BALL
 {
-	using VIEW::Representation;
-	using VIEW::MolecularInformation;
-
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 		AddSurfaceModel::AddSurfaceModel()
@@ -108,7 +107,7 @@ namespace BALL
 			}
 			catch (Exception::GeneralException e)
 			{
-				Log.error() << "SurfaceModel: caught exception while calculating molecular surface: " << e << endl;
+				Log.error() << "SurfaceModel: caught exception while calculating molecular surface "<<endl;// << e << endl;
 			}
 			catch (std::exception e)
 			{
@@ -172,5 +171,5 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL

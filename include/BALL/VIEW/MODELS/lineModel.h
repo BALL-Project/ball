@@ -1,26 +1,26 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.h,v 1.1 2003/08/26 12:11:29 oliver Exp $
+// $Id: lineModel.h,v 1.2 2003/08/26 18:35:33 amoll Exp $
 //
 
-#ifndef BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
-#define BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
+#ifndef BALL_VIEW_MODELS_LINEMODEL_H
+#define BALL_VIEW_MODELS_LINEMODEL_H
 
-#ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
-#	include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
+#ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
+#	include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
 #endif
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 		/** AddLineModel class.
 				The class AddLineModel is a model processor that is responsible
 				for creating a line model.
 				For information about the processor concept see Processor.
-				\ingroup  MolviewFunctorsModels
+				\ingroup  MolviewModels
 		*/
 		class AddLineModel: public AtomBondModelBaseProcessor
 		{
@@ -102,8 +102,8 @@ namespace BALL
 
 		};
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 
 } // namspace BALL
 
-#endif // BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
+#endif // BALL_VIEW_MODELS_LINEMODEL_H

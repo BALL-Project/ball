@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.1 2003/08/26 12:11:27 oliver Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.2 2003/08/26 18:35:32 amoll Exp $
 //
 
-#ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
-#define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
+#ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
+#define BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -19,12 +19,12 @@
 #	include <BALL/DATATYPE/hashSet.h>
 #endif
 
-#ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARMODEL_H
-#	include <BALL/MOLVIEW/FUNCTOR/molecularModel.h>
+#ifndef BALL_VIEW_MODELS_MOLECULARMODEL_H
+#	include <BALL/VIEW/MODELS/molecularModel.h>
 #endif
 
-#ifndef BALL_MOLVIEW_COMMON_H
-# include <BALL/MOLVIEW/COMMON/common.h>
+#ifndef BALL_VIEW_COMMON_H
+# include <BALL/VIEW/KERNEL/common.h>
 #endif
 
 
@@ -32,7 +32,7 @@ namespace BALL
 {
 	class Atom;
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 		/** AtomBondModelBaseProcessor class.
 				The class AtomBondModelBaseProcessor is the base class for all
@@ -47,7 +47,7 @@ namespace BALL
 				that all Bond objects can get their connecting models. This is
 				achieved by the class BaseModelConnector and its derived
 				classes. 
-				\ingroup  MolviewFunctorsModels
+				\ingroup  MolviewModels
 		*/
 		class AtomBondModelBaseProcessor
 			:	public MolecularModelProcessor
@@ -226,11 +226,11 @@ namespace BALL
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.iC>
+#		include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.iC>
 #	endif
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 
 } // namespace BALL
 
-#endif // BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H 
+#endif // BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H 

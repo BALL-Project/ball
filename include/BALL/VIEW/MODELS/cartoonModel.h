@@ -1,17 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.1 2003/08/26 12:11:29 oliver Exp $
+// $Id: cartoonModel.h,v 1.2 2003/08/26 18:35:33 amoll Exp $
 
-#ifndef BALL_MOLVIEW_FUNCTOR_CARTOONMODEL_H
-#define BALL_MOLVIEW_FUNCTOR_CARTOONMODEL_H
+#ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
+#define BALL_VIEW_MODELS_CARTOONMODEL_H
 
-#ifndef BALL_MOLVIEW_FUNCTOR_BACKBONE_MODEL_H
-#	include <BALL/MOLVIEW/FUNCTOR/backboneModel.h>
+#ifndef BALL_VIEW_MODELS_BACKBONE_MODEL_H
+#	include <BALL/VIEW/MODELS/backboneModel.h>
 #endif
 
-#ifndef BALL_VIEW_PRIMITIV_MESH_H
-# include <BALL/VIEW/PRIMITIV/mesh.h>
+#ifndef BALL_VIEW_PRIMITIVES_MESH_H
+# include <BALL/VIEW/PRIMITIVES/mesh.h>
 #endif
 
 namespace BALL
@@ -21,14 +21,14 @@ namespace BALL
 
 	using VIEW::Mesh;
 	
-	namespace MOLVIEW
+	namespace VIEW
 	{
 		/** AddCartoonModel class.
 				The class AddCartoonModel is a model processor that creates a Cartoon model
 				through the <b>CA</b>-atoms of the processed Composite object.
 				For information about the processor concept see Processor in the BALL
 				documentation.
-				\ingroup  MolviewFunctorsModels
+				\ingroup  MolviewModels
 		*/
 		class AddCartoonModel: public AddBackboneModel
 		{
@@ -128,7 +128,7 @@ namespace BALL
 			vector<Vector3> spline_;
 	};
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_MOLVIEW_FUNCTOR_CARTOONMODEL_H
+#endif // BALL_VIEW_MODELS_CARTOONMODEL_H

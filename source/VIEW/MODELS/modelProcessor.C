@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.C,v 1.1 2003/08/26 12:38:38 oliver Exp $
+// $Id: modelProcessor.C,v 1.2 2003/08/26 18:35:37 amoll Exp $
 
-#include <BALL/VIEW/GUI/FUNCTOR/modelProcessor.h>
-#include <BALL/VIEW/GUI/FUNCTOR/colorProcessor.h>
+#include <BALL/VIEW/MODELS/modelProcessor.h>
+#include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/COMMON/global.h>
 
 using namespace std;

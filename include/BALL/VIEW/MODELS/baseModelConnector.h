@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseModelConnector.h,v 1.1 2003/08/26 12:11:29 oliver Exp $
+// $Id: baseModelConnector.h,v 1.2 2003/08/26 18:35:33 amoll Exp $
 //
 
-#ifndef BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
-#define BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
+#ifndef BALL_VIEW_MODELS_BASEMODELCONNECTOR_H
+#define BALL_VIEW_MODELS_BASEMODELCONNECTOR_H
 
 #ifndef BALL_CONCEPT_VISITOR_H
 #	include <BALL/CONCEPT/visitor.h>
@@ -34,7 +34,7 @@ namespace BALL
 		class ColorProcessor;
 	}
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 		using VIEW::GeometricObject;
 		using VIEW::ColorProcessor;
@@ -48,7 +48,7 @@ namespace BALL
 				between different types of models.
 				If a new model is introduced the model connector class must be extended to deal with this
 				new model and its connections to the other models.
-				\ingroup  MolviewFunctorsModels
+				\ingroup  MolviewModels
 		*/
 		class BaseModelConnector
 			: public Visitor<Composite>,
@@ -158,8 +158,8 @@ namespace BALL
 
 		};
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 
 } // namespace BALL
 
-#endif // BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
+#endif // BALL_VIEW_MODELS_BASEMODELCONNECTOR_H

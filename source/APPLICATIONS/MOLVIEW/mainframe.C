@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.58 2003/08/26 13:50:15 amoll Exp $
+// $Id: mainframe.C,v 1.59 2003/08/26 18:35:35 amoll Exp $
 
 
 #include "mainframe.h"
 #include "icons.h"
-#include "DIALOGS/DlgAbout.h"
+//#include "DIALOGS/DlgAbout.h"
 
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
@@ -16,8 +16,8 @@
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
 
-#include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
-#include <BALL/VIEW/GUI/DIALOGS/FDPBDialog.h>
+#include <BALL/VIEW/DIALOGS/fileDialog.h>
+#include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 #include <BALL/VIEW/PRIMITIV/mesh.h>
 #include <BALL/VIEW/KERNEL/moleculeObjectCreator.h>
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
@@ -29,7 +29,7 @@
 #include <BALL/SYSTEM/path.h>
 
 #ifdef BALL_PYTHON_SUPPORT
-#	include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
+#	include <BALL/VIEW/WIDGETS/pyWidget.h>
 #endif
 
 #include <qlabel.h>
@@ -44,7 +44,7 @@
 #endif
 
 // testing
-#include <BALL/VIEW/GUI/DIALOGS/parsedFunctionDialog.h>
+#include <BALL/VIEW/DIALOGS/parsedFunctionDialog.h>
 
 using namespace std;
 namespace BALL

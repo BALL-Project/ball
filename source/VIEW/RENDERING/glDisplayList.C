@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.C,v 1.1 2003/08/26 12:38:45 oliver Exp $
+// $Id: glDisplayList.C,v 1.2 2003/08/26 18:35:38 amoll Exp $
 
-#include <BALL/VIEW/OPENGL/glDisplayList.h>
+#include <BALL/VIEW/RENDERING/glDisplayList.h>
 #include <BALL/COMMON/exception.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/rtti.h>
@@ -131,7 +131,7 @@ void GLDisplayList::dump(ostream& s, Size depth) const
 }
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/VIEW/OPENGL/glDisplayList.iC>
+#		include <BALL/VIEW/RENDERING/glDisplayList.iC>
 #	endif
 
 	} // namespace VIEW
