@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Composite_test1.C,v 1.4 2003/06/11 06:52:42 oliver Exp $
+// $Id: Composite_test1.C,v 1.5 2003/06/12 05:56:55 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -28,7 +30,7 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test1.C,v 1.4 2003/06/11 06:52:42 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test1.C,v 1.5 2003/06/12 05:56:55 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -252,7 +254,7 @@ CHECK(deselect())
 	TEST_EQUAL(e.isSelected(), false);
 RESULT
 
-CHECK(Subcomposite forward iteration)
+CHECK([EXTRA] Subcomposite forward iteration)
   Composite a, b, c, d, e;
   a.appendChild(b);
   b.appendChild(c);
@@ -280,15 +282,43 @@ CHECK(Subcomposite forward iteration)
   TEST_EQUAL(sub_it == a.endSubcomposite(), true)
 RESULT
 
-CHECK(Subcomposite reverse iteration)
+CHECK([EXTRA] Subcomposite forward const iteration)
   Composite a, b, c, d, e;
   a.appendChild(b);
   b.appendChild(c);
   b.appendChild(d);
   c.appendChild(e);
-	Composite::SubcompositeIterator sub_it;
+	Composite::SubcompositeConstIterator sub_it;
   TEST_EQUAL(+sub_it, false)
-  sub_it = a.endSubcomposite();
+  sub_it = const_cast<Composite&>(a).beginSubcomposite();
+  TEST_EQUAL(+sub_it, true)
+  TEST_EQUAL(&*sub_it, &a)
+	++sub_it;
+  TEST_EQUAL(+sub_it, true)
+  TEST_EQUAL(&*sub_it, &b)
+	sub_it++;
+  TEST_EQUAL(+sub_it, true)
+  TEST_EQUAL(&*sub_it, &c)
+	sub_it++;
+  TEST_EQUAL(+sub_it, true)
+  TEST_EQUAL(&*sub_it, &e)
+	sub_it++;
+  TEST_EQUAL(+sub_it, true)
+  TEST_EQUAL(&*sub_it, &d)
+	sub_it++;
+  TEST_EQUAL(+sub_it, false)
+  TEST_EQUAL(sub_it == a.endSubcomposite(), true)
+RESULT
+
+CHECK([EXTRA] Subcomposite backward const iteration)
+  Composite a, b, c, d, e;
+  a.appendChild(b);
+  b.appendChild(c);
+  b.appendChild(d);
+  c.appendChild(e);
+	Composite::SubcompositeConstIterator sub_it;
+  TEST_EQUAL(+sub_it, false)
+  sub_it = const_cast<Composite&>(a).endSubcomposite();
   TEST_EQUAL(sub_it.isValid(), false)
 	--sub_it;
 	TEST_EQUAL(sub_it.isValid(), true)
@@ -307,6 +337,62 @@ CHECK(Subcomposite reverse iteration)
   TEST_EQUAL(&*sub_it, &a)
 	sub_it--;
   TEST_EQUAL(+sub_it, false)
+RESULT
+
+CHECK(Subcomposite forward reverse iteration)
+  Composite a, b, c, d, e;
+  a.appendChild(b);
+  b.appendChild(c);
+  b.appendChild(d);
+  c.appendChild(e);
+	Composite::SubcompositeReverseIterator sub_it;
+  TEST_EQUAL(sub_it.base().isValid(), false)
+  sub_it = a.rbeginSubcomposite();
+  TEST_EQUAL(sub_it.base().isValid(), true)
+  TEST_EQUAL(&*sub_it, &d)
+	++sub_it;
+  TEST_EQUAL(sub_it.base().isValid(), true)
+  TEST_EQUAL(&*sub_it, &e)
+	sub_it++;
+  TEST_EQUAL(sub_it.base().isValid(), true)
+  TEST_EQUAL(&*sub_it, &c)
+	sub_it++;
+  TEST_EQUAL(sub_it.base().isValid(), true)
+  TEST_EQUAL(&*sub_it, &b)
+	sub_it++;
+  TEST_EQUAL(sub_it.base().isValid(), true)
+  TEST_EQUAL(&*sub_it, &a)
+	sub_it++;
+  TEST_EQUAL(sub_it.base().isValid(), false)
+  TEST_EQUAL(sub_it == a.rendSubcomposite(), true)
+RESULT
+
+CHECK(Subcomposite backward reverse iteration)
+  Composite a, b, c, d, e;
+  a.appendChild(b);
+  b.appendChild(c);
+  b.appendChild(d);
+  c.appendChild(e);
+	Composite::SubcompositeReverseIterator sub_it;
+  TEST_EQUAL(sub_it.base().isValid(), false)
+  sub_it = a.rendSubcomposite();
+  TEST_EQUAL(sub_it.base().isValid(), false)
+	--sub_it;
+	TEST_EQUAL(sub_it.base().isValid(), true)
+  TEST_EQUAL(&*sub_it, &a)
+	--sub_it;
+  TEST_EQUAL(sub_it.base().isValid(), true)
+  TEST_EQUAL(&*sub_it, &b)
+	sub_it--;
+  TEST_EQUAL(sub_it.base().isValid(), true)
+  TEST_EQUAL(&*sub_it, &c)
+	sub_it--;
+  TEST_EQUAL(sub_it.base().isValid(), true)
+  TEST_EQUAL(&*sub_it, &e)
+	sub_it--;
+  TEST_EQUAL(sub_it.base().isValid(), true)
+  TEST_EQUAL(&*sub_it, &d)
+	TEST_EQUAL(sub_it == a.rbeginSubcomposite(), true)
 RESULT
 
 TextPersistenceManager  pm;
