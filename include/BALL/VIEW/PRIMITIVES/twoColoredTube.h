@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.h,v 1.6 2003/09/04 23:14:14 amoll Exp $
+// $Id: twoColoredTube.h,v 1.7 2003/11/18 14:47:55 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
 #define BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
@@ -129,9 +129,9 @@ namespace BALL
 
 			/** Inspection of the length of the tube.
 					Access the length of this tube.
-					\return  Real the length of this tube
+					\return  float the length of this tube
 			*/
-			Real getLength() const
+			float getLength() const
 				throw();
 
 			/** Inspection of the middle vector.
@@ -184,18 +184,18 @@ namespace BALL
 			//@{
 
 			///	Get the radius.
-			Real getRadius() const
+			float getRadius() const
 				throw() { return radius_;}
 
 			/// Set the radius.
-			void setRadius(Real radius)
+			void setRadius(float radius)
 				throw() { radius_ = radius;}
 
 			//@}
 			
 			private:
 
-			Real radius_;
+			float radius_;
 		};
 
 	#ifndef BALL_NO_INLINE_FUNCTIONS
