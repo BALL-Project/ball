@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.30.4.1 2002/02/27 00:32:51 oliver Exp $
+// $Id: support.C,v 1.30.4.2 2002/02/27 02:37:11 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -47,7 +47,7 @@ namespace BALL
 			Vector3 period;
 
 			// Are there atoms stored in atom_vector at all?
-			if (atom_vector.empty())
+			if (atom_vector.size() == 0)
 			{
 				Log.warn() << "calculateNonBondedAtomPairs: atom_vector is empty " << endl;
 				return 0;

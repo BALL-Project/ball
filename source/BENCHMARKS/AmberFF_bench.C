@@ -1,4 +1,4 @@
-// $Id: AmberFF_bench.C,v 1.3.4.1 2002/02/27 00:32:50 oliver Exp $
+// $Id: AmberFF_bench.C,v 1.3.4.2 2002/02/27 02:37:11 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(AmberFF, 1.0, "$Id: AmberFF_bench.C,v 1.3.4.1 2002/02/27 00:32:50 oliver Exp $")
+START_BENCHMARK(AmberFF, 1.0, "$Id: AmberFF_bench.C,v 1.3.4.2 2002/02/27 02:37:11 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@ pdb >> S;
 AmberFF amber;
 START_SECTION(Setup, 0.05)
 	START_TIMER
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 20; i++)
 		{
 			amber.setup(S);
 		}
@@ -31,7 +31,7 @@ END_SECTION
 
 START_SECTION(Update w/o selection, 0.2)
 	START_TIMER
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 20; i++)
 		{
 			amber.update();
 		}

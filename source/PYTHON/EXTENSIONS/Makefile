@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.15 2002/02/26 11:48:43 oliver Exp $
+# $Id: Makefile,v 1.15.2.1 2002/02/27 02:37:11 oliver Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -74,6 +74,7 @@ CLEAN_FILES = \
 	sipBALLVersion.h \
 	sip_helper.C \
 	sip_helper \
+	libBALLc.so \
 	$(CPP_OBJECTS) \
 	$(SIP_SOURCES) \
 	$(SIP_HEADERS) \
