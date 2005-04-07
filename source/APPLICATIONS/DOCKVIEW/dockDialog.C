@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.18 2005/04/06 15:25:56 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.19 2005/04/07 17:02:06 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -20,29 +20,14 @@
 #include <qtabwidget.h>
 #include <qtable.h>
 
-#ifndef BALL_KERNEL_SYSTEM_H
-# include <BALL/KERNEL/system.h>
-#endif
-
-#ifndef BALL_FORMAT_INIFILE_H
+#include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/INIFile.h>
-#endif
-
-#ifndef BALL_STRUCTURE_DOCKING_ENERGETICEVALUATION_H
-# include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
-#endif
-
-#ifndef BALL_STRUCTURE_DOCKING_AMBEREVALUATION_H
-# include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
-#endif
-
-#ifndef BALL_STRUCTURE_DOCKING_RANDOMEVALUATION_H
-# include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
-#endif
-
-#ifndef BALL_VIEW_DIALOGS_AMBERCONFIGURATIONDIALOG_H
+#include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
+#include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
+#include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
-#endif
+#include <BALL/VIEW/WIDGETS/molecularStructure.h>
+
 
 namespace BALL
 {
@@ -312,7 +297,6 @@ namespace BALL
 			EnergeticEvaluation* scoring = 0;
 			//check which scoring function is chosen
 			index = scoring_functions->currentItem();
-			AmberFF* ff = 0;
 			switch(index)
 			{
 				case DEFAULT:
@@ -320,16 +304,16 @@ namespace BALL
 					break;
 				case AMBER_FF:
 				{
-					ff = new AmberFF();
+					AmberFF& ff = MolecularStructure::getInstance(0)->getAmberFF();
 					AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
-					dialog->applyTo(*ff);
+					dialog->applyTo(ff);
 					Log.info() << "in DockDialog:: Option of Amber FF:" << std::endl;
-					Options::Iterator it = ff->options.begin();
+					Options::Iterator it = ff.options.begin();
 					for(; +it; ++it)
 					{
 						Log.info() << it->first << " : " << it->second << std::endl;
 					}
-					scoring = new AmberEvaluation(*ff);
+					scoring = new AmberEvaluation(ff);
 					break;
 				}
 				case RANDOM:
@@ -351,8 +335,7 @@ namespace BALL
 
 			DockResult* dock_res = new DockResult(docking_alg,
 																							conformation_set,
-																							options_,
-																							"");
+																							options_);
 																							
 			dock_res->addScoring(scoring_functions->currentText(), options_, scores);
 
@@ -361,7 +344,11 @@ namespace BALL
 			
 			System* docked_system = new System(conformation_set.getSystem());
 			best_result.applySnapShot(*docked_system);
-			
+			//docked_system->deselect();
+			if(docked_system->isSelected())
+			{
+				Log.info() << "system is selcted" << std::endl;
+			}	
 			getMainControl()->insert(*docked_system);
 			
 			// send a DockResultMessage
@@ -371,9 +358,8 @@ namespace BALL
 			notify_(dock_res_m);
 			
 			
-  			delete dock_alg;
-  			delete scoring;
-				delete ff;
+  		delete dock_alg;
+  		delete scoring;
 			
 			Log.info() << "End of calculate" << std::endl;
 			return true;

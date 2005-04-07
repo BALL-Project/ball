@@ -9,12 +9,8 @@
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
+#ifndef BALL_VIEW_KERNEL_MAINCONTROL_H ///////////////////////////////////brauchen wir das???????????????/
 # include <BALL/VIEW/KERNEL/mainControl.h>
-#endif
-
-#ifndef BALL_STRUCTURE_DOCKING_CONFORMATIONSET_H
-# include <BALL/STRUCTURE/DOCKING/conformationSet.h>
 #endif
 
 #include "dockResult.h"
@@ -33,9 +29,8 @@ namespace BALL
 				
 				public:
 				
-					/** if you want to add a new sccoring function extend enum 
-					*/
-					enum ScoringFunction {DEFAULT = 0, RANDOM = 1, AMBER_FF = 2};
+					// if you want to add a new sccoring function extend enum 
+					enum ScoringFunction {DEFAULT = 0, AMBER_FF = 1, RANDOM = 2};
 				
 					//Constructor
 					DockResultDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
@@ -45,8 +40,7 @@ namespace BALL
 					~DockResultDialog()
 						throw();
 					
-					/**  Assignment operator
-					*/
+					//  Assignment operator
 					const DockResultDialog& operator =(const DockResultDialog& res_dialog)
 						throw();
 						
@@ -62,32 +56,37 @@ namespace BALL
 					
 				public slots:
 				
-					// Show and raise result dialog
+					// show and raise result dialog
 					void show();
 				
-					// shows snapshot of selected row
+					// show snapshot of selected row
 					virtual void showSnapshot();
 					
-					// selects and shows the entry above the current selected entry
+					// select and show the entry above the current selected entry
 					virtual void upwardClicked();
 				
-					// selects and shows the entry below the current selected entry
+					// selects and show the entry below the current selected entry
 					virtual void downwardClicked();
 					
-					// shows options dialog of selected scoring function
-					virtual void advancedClicked();
-					
-					// adds a column which contains the sorted scores after reranking
-					virtual void scoringClicked();
-					
-					// sets the advanced button enabled if the selected scoring function has options 
+					// set the advanced button enabled if the selected scoring function has options
+					// otherwise the button is disabled 
 					virtual void scoringFuncChosen();
 					
-					// sorts the result table by clicked column
-					virtual void sortTable(int column);
+					// show options dialog of selected scoring function
+					virtual void advancedClicked();
+					
+					// calculate new scores with the chosen scoring function and add a new score column, 
+					// the table is sorted by this new column
+					virtual void scoringClicked();
+					
+					// delete a score column 
+					virtual void deleteClicked();
+					
+					// sorts the result table by a clicked column
+					void sortTable(int column);
 					
 				protected:
-					
+				
 					/**
 					nested class Compare_ 
 					This class is needed for the sorting of the table;
@@ -115,8 +114,10 @@ namespace BALL
 					
 				private:
 				
+					// DockResult contains all information of the performed docking
 					DockResult* dock_res_;
 					
+					// system which contains the two docked partners
 					System* docked_system_;
 					
 					// key: ScoringFunction(enum), value: advanced options dialog

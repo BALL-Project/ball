@@ -17,7 +17,11 @@
 
 namespace BALL
 {
-
+		/** This class contains the result of an docking calculation, 
+				like what algorithm was used, with which options,
+				the conformation set which was produced by the algorithm
+				and the scores of all scoring functions that where used for the ranking / reranking
+		*/
 		class DockResult
 		{
 			public:
@@ -28,59 +32,65 @@ namespace BALL
 					
 				// Constructor
 				DockResult(const QString& docking_algorithm, const ConformationSet& conformation_set,
-										const Options& docking_options, const String& DCD_file)
+										const Options& docking_options)
 					throw();
 				
 				// Destructor
 				virtual ~DockResult()
 					throw();
 					
-				/** Assignment operator
-				*/
+				//Assignment operator
 				const DockResult& operator =(const DockResult& dock_res)
 					throw();
 				
+					
 				void setConformationSet(const ConformationSet& conformation_set)
 					throw();
 					
 				const QString& getDockingAlgorithm() const
 					throw();
 					
+				const Options& getDockingOptions() const
+					throw();
+				
 				const ConformationSet& getConformationSet() const
 					throw();
 					
 				ConformationSet& getConformationSet()
-					throw();
-					
-				const Options& getDockingOptions() const
 					throw();
 				
 				// returns scores of scoring_ i
 				const vector<float>& getScores(int i) const
 					throw();
 					
+				//returns name of scoring function of scoring_ i
 				const QString& getScoringName(int i) const
 					throw();
 					
+				//returns options of scoring function of scoring_ i
 				const Options& getScoringOptions(int i) const
 					throw();
 					
-				const String& getDCDFile() const
-					throw();
-					
-				//
+				// returns the number of scorings
 				Size numberOfScorings() const
 					throw();
 				
 				// add new Scoring_ to vector scorings_
 				void addScoring(const QString& name, const Options& options, const vector<float>& scores)
 					throw();
-				
+			
+			// delete i-th Scoring_ of vector scorings_
+			void deleteScoring(int i)
+					throw();
+						
 			protected:
 				
 				/**
 				nested class Scoring_ 
-				This class contains information about the scoring: name of the scoring function, options of the function and scores
+				This class contains information about the scoring: 
+				 * name of the scoring function, 
+				 * options of the function and 
+				 * scores
       	*/
       	class Scoring_
 				{
@@ -95,28 +105,27 @@ namespace BALL
 						//Destructor
 						~Scoring_() throw();
 						
-						/**  Assignment operator
-						*/
+						// Assignment operator
 						const Scoring_& operator =(const Scoring_& scoring)
 							throw();
 						
-						QString name_;
+						QString name_;								///////////////////QString oder doch besser String??????????////////////////
 						Options options_;
+						// in this vector score i belongs to the conformation with snapshot number i 
 						vector<float> scores_;
 				};
 				
 			private:
 				
-				// docking algorithm
-				QString docking_algorithm_;
-				//
-				ConformationSet conformation_set_;
+				// name of docking algorithm
+				QString docking_algorithm_;        ///////////////////QString oder doch besser String??????????////////////////
 				// options of the docking algorithm
 				Options docking_options_;
+				// conformation set which was produced by the docking algorithm
+				ConformationSet conformation_set_;
 				// vector contains name, options and scores of each scoring function
+				// the scores of each scoring are sorted by snapshot number
 				vector<Scoring_> scorings_;
-				// name of DCDFile where trajectories are stored
-				String DCD_file_;
 		};
 		
 }

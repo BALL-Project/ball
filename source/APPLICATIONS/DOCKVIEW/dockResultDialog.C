@@ -1,32 +1,18 @@
-// $Id: dockResultDialog.C,v 1.1.2.12 2005/04/06 15:25:57 leonhardt Exp $
+// $Id: dockResultDialog.C,v 1.1.2.13 2005/04/07 17:02:07 leonhardt Exp $
 //
+
+#include "dockResultDialog.h"
 
 #include <qtable.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
 
-#include "dockResultDialog.h"
-
-#ifndef BALL_STRUCTURE_DOCKING_ENERGETICEVALUATION_H
-# include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
-#endif
-
-#ifndef BALL_STRUCTURE_DOCKING_AMBEREVALUATION_H
-# include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
-#endif
-
-#ifndef BALL_STRUCTURE_DOCKING_RANDOMEVALUATION_H
-# include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
-#endif
-
-#ifndef BALL_VIEW_DIALOGS_AMBERCONFIGURATIONDIALOG_H
+#include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
+#include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
+#include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
-#endif
-
-#ifndef BALL_STRUCTURE_DOCKING_GEOMETRICFIT_H
-# include <BALL/STRUCTURE/DOCKING/geometricFit.h>
-#endif
-
+#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
+#include <BALL/VIEW/WIDGETS/molecularStructure.h>
 
 namespace BALL
 {
@@ -44,15 +30,18 @@ namespace BALL
 			// register the widget with the MainControl
 			ModularWidget::registerWidget(this);
 			
-			//build HashMap for scoring function advanced option dialogs
+			//build HashMap and ComboBox for scoring function and its advanced option dialog
+			//make sure the order of added scoring functions is consistent to the enum order
+			//because the scoring function with enum value i should be at position i in the Combobox
+			//otherwise you get the wrong option dialog for a scoring function
 			addScoringFunction("Default", DEFAULT);
-			addScoringFunction("Random", RANDOM);
 			AmberConfigurationDialog* amber = new AmberConfigurationDialog(this); 
 			addScoringFunction("Amber Force Field", AMBER_FF, amber);
-			
+			addScoringFunction("Random", RANDOM);
 		
 			// signals and slots connections
     	QHeader* columns = result_table->horizontalHeader();
+			//the table should be sorted by a column, when this column is clicked
 			connect( columns, SIGNAL( clicked(int) ), this, SLOT( sortTable(int) ) );
 			
 			hide();
@@ -67,8 +56,7 @@ namespace BALL
 			#endif 
 		}
 		
-		/** Assignment operator
-		*/
+		// Assignment operator
 		const DockResultDialog& DockResultDialog::operator =(const DockResultDialog& res_dialog)
 			throw()
 		{
@@ -83,16 +71,23 @@ namespace BALL
 		
 		void DockResultDialog::setDockResult(DockResult* dock_res)
 			throw()
-		{dock_res_ = dock_res;}
+		{
+			dock_res_ = dock_res;
+		}
 		
 		void DockResultDialog::setDockedSystem(System* system)
 			throw()
-		{docked_system_ = system;}
+		{
+			docked_system_ = system;
+		}
 		
 		// add scoring function to ComboBox and its options dialog to HashMap
 		void DockResultDialog::addScoringFunction(const QString& name, const int score_func, QDialog* dialog)
 			throw()
 		{
+			//not all scoring functions have options
+			//for these functions the pointer to an dialog is NULL , 
+			//so there is no entry in the hash map 
 			if(dialog)
 			{
 				// add dialog to HashMap
@@ -105,15 +100,18 @@ namespace BALL
 		// --------------------------------- SLOTS ------------------------------------------------
 		// ----------------------------------------------------------------------------------------
 
-		// Show and raise result dialog
+		// show and raise result dialog
 		void DockResultDialog::show()
 		{
-			// get the number of conformations, to know how many rows the table needs
-			Options dock_options = dock_res_->getDockingOptions();
-			int conformation_num = dock_options.getInteger(GeometricFit::Option::BEST_NUM);
+			Log.info() << "in DockeResultDialog::show()" << std::endl;
+			// before showing the dialog the result table has to be build and filled 
+			// first get the number of conformations, to know how many rows the table needs
+			int conformation_num = (dock_res_->getConformationSet()).size();
+			//int conformation_num = dock_options.getInteger(GeometricFit::Option::BEST_NUM);
 			// insert rows in table
 			result_table->insertRows(0,conformation_num);
 			
+			Log.info() << "in DockeResultDialog::show() before first for" << std::endl;
 			// fill the first column with snapshot numbers
 			for(int i=0; i < conformation_num; i++)
 			{
@@ -121,8 +119,8 @@ namespace BALL
 				result_table->setText(i,0,s.setNum(i));
 			}
 			
+			Log.info() << "in DockeResultDialog::show() before second for" << std::endl;
 			// fill table with scores
-			// 
 			for(unsigned int i = 0; i < dock_res_->numberOfScorings(); i++)
 			{
 				// insert new score column in table; i+1, because first column contains snapshot number
@@ -131,9 +129,8 @@ namespace BALL
 				// set the scoring function name as label of the column
 				result_table->horizontalHeader()->setLabel(i+1, dock_res_->getScoringName(i));
 				
-				/* the scores in the vector are sorted by snapshot number!
-					 the score with snapshot number i is at position i in the vector
-				*/
+				// the scores in the vector are sorted by snapshot number!
+				// the score with snapshot number i is at position i in the vector
 				vector<float> scores = dock_res_->getScores(i);
 				for(unsigned int j = 0; j < scores.size(); j++)
 				{
@@ -142,24 +139,7 @@ namespace BALL
 				}
 			}
 			
-			/*
-			// get the conformations (= pair<Index, float> = Snapshot number & energy value) for the result dialog
-			std::vector<ConformationSet::Conformation> conformations = conformation_set_.getScoring();
-			
-			// fill the table of the result dialog
-			result_table->insertRows(0,conformations.size());
-			
-			for(unsigned int i = 0; i < conformations.size() ; i++)
-			{
-				// 1.column = snapshot number; 2.column = energy value 
-				QString s;
-				result_table->setText(i,0,s.setNum(conformations[i].first));
-				result_table->setText(i,1,s.setNum(conformations[i].second));
-			}
-			// set the scoring function name as label of the column
-			result_table->horizontalHeader()->setLabel(1, scoring_name_);
-			*/
-			
+			Log.info() << "in DockeResultDialog::show() before third for" << std::endl;
 			// adjust column width
 			for(int j = 0; j < result_table->numCols() ; j++)
 			{
@@ -176,22 +156,22 @@ namespace BALL
 			DockResultDialogData::show();
 		}
 		
-		// shows snapshot of selected row
+		// show snapshot of selected row
 		void DockResultDialog::showSnapshot()
 		{
 			// get index of current row
 			int selected_row = result_table->currentRow();
-			// get snapshot number
+			// get snapshot number of this row
 			int snapshot = (result_table->text(selected_row,0)).toInt();
 			// apply snapshot
 			ConformationSet conformation_set = dock_res_->getConformationSet();
 			SnapShot selected_conformation = conformation_set[snapshot];
-			//System& s = conformation_set.getSystem();
 			selected_conformation.applySnapShot(*docked_system_);
+			//inform main control that system has changed
 			getMainControl()->update(*docked_system_, true);
 		}
-		
-		// selects and shows the entry above the current selected entry
+				
+		// select and show the entry above the current selected entry
 		void DockResultDialog::upwardClicked()
 		{
 			int selected_row = result_table->currentRow();
@@ -213,7 +193,22 @@ namespace BALL
 			}
 		}
 		
-		// shows options dialog of selected scoring function
+		// sets the advanced button enabled if the selected scoring function has options
+		// otherwise the button is disabled 
+		void DockResultDialog::scoringFuncChosen()
+		{
+			int index = scoring_functions->currentItem();
+			if(scoring_dialogs_.has(index))
+			{
+				advanced_button->setEnabled(true);
+			}
+			else
+			{
+				advanced_button->setEnabled(false);
+			}
+		}
+		
+		// show options dialog of selected scoring function
 		void DockResultDialog::advancedClicked()
 		{
 			int index = scoring_functions->currentItem();
@@ -223,14 +218,16 @@ namespace BALL
 			}
 		}
 		
-		// adds a column which contains the sorted scores after reranking
+		// calculate new scores with the chosen scoring function and add a new score column, 
+		// the table is sorted by this new column
 		void DockResultDialog::scoringClicked()
 		{
 			// create scoring function object
 			EnergeticEvaluation* scoring = 0;
+			Options scoring_options;  ///////////////////////////////TODO mit new anlegen? ///////////////////////////////
+			
 			// check which scoring function is chosen
 			int index = scoring_functions->currentItem();
-			AmberFF* ff = 0;
 			switch(index)
 			{
 				case DEFAULT:
@@ -241,16 +238,19 @@ namespace BALL
 					break;
 				case AMBER_FF:
 				{
-					ff = new AmberFF();
+					AmberFF& ff = MolecularStructure::getInstance(0)->getAmberFF();
 					AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
-					dialog->applyTo(*ff);
-					Log.info() << "in DockDialog:: Option of Amber FF:" << std::endl;
-					Options::Iterator it = ff->options.begin();
+					//now the Amber force field gets its options
+					dialog->applyTo(ff);
+					Log.info() << "in DockResultDialog:: Option of Amber FF:" << std::endl;
+					Options::Iterator it = ff.options.begin();
 					for(; +it; ++it)
 					{
 						Log.info() << it->first << " : " << it->second << std::endl;
 					}
-					scoring = new AmberEvaluation(*ff);
+					scoring_options = ff.options;
+					//the force field is given to the AmberEvaluation (scoring function) object
+					scoring = new AmberEvaluation(ff);
 					break;
 				}	
 			}
@@ -258,17 +258,17 @@ namespace BALL
 			// apply scoring function; set new scores in the conformation set
 			ConformationSet conformation_set = dock_res_->getConformationSet();
 			std::vector<ConformationSet::Conformation> ranked_conformations = (*scoring)(conformation_set);
+			Log.info() << "in DockResultDialog:: " << std::endl;
 			conformation_set.setScoring(ranked_conformations);
 			dock_res_->setConformationSet(conformation_set);
 			
-			// to add a new scoring to dock_res_ we need the name, options and score vector of the scoring function
+			// add a new scoring to dock_res_ we need the name, options and score vector of the scoring function
 			vector<float> scores;
 			for (unsigned int i = 0; i < ranked_conformations.size(); i++)
 			{
 				scores.push_back(ranked_conformations[i].second);
 			}
-			Options options; ////////// !!!!!!!!!!!!!
-			dock_res_->addScoring(scoring_functions->currentText(), options, scores);
+			dock_res_->addScoring(scoring_functions->currentText(), scoring_options, scores);
 			
 			/*
 			// before filling the table clear it
@@ -287,19 +287,6 @@ namespace BALL
 			result_table->insertColumns(num_column,1);
 			result_table->horizontalHeader()->setLabel(num_column, scoring_functions->currentText());
 			
-			/*
-			// fill table
-			for(int row = 0 ; row < result_table->numRows(); row++)
-			{
-				QString s;
-				result_table->setText(row,0,s.setNum(row));
-				for(unsigned int column = 0; column < scores.size(); column++)
-				{
-				 result_table->setText(row,column+1,s.setNum(scores_[column][row]));
-				}
-			}
-			*/
-			
 			// fill new column
 			for(unsigned int i = 0; i < scores.size(); i++)
 			{
@@ -310,34 +297,36 @@ namespace BALL
 			// sort by new column
 			sortTable(num_column);
 			
+			// adjust column width
 			result_table->adjustColumn(num_column);
 			
 			// adjust the table/dialog size
-			//QSize recommended_size = result_table->sizeHint();
-			//result_table->resize(recommended_size);
 			result_table->adjustSize();
 			adjustSize();
 			
-			delete scoring;
-			delete ff;
+			// delete instances 
+			if (scoring != NULL)
+			{
+				delete scoring;
+				scoring = NULL;
+			}
 			
 		}
 		
-		// sets the advanced button enabled if the selected scoring function has options
-		void DockResultDialog::scoringFuncChosen()
+		// delete last score column 
+		void DockResultDialog::deleteClicked()
 		{
-			int index = scoring_functions->currentItem();
-			if(scoring_dialogs_.has(index))
-			{
-				advanced_button->setEnabled(true);
-			}
-			else
-			{
-				advanced_button->setEnabled(false);
-			}
+			/////////////////////////////////TODO: loeschen einer bestimmten Spalte////////////////////////////  	
+			
+			//result_table->removeColumn(result_table->numCols()-1);
+			//dock_res_->deleteScoring(column);
+				
+			// adjust the table/dialog size
+			result_table->adjustSize();
+			adjustSize();
 		}
 		
-		// sorts the result table by clicked column
+		// sort the result table by clicked column
 		void DockResultDialog::sortTable(int column)
 		{
 			// create vector which contains the rows of the table
@@ -368,7 +357,12 @@ namespace BALL
 					result_table->setText(row_it,column_it,s.setNum(rows[row_it][column_it]));
 				}
 			}
+			
+			//now the current selected row can be different,
+			//so call showSnapshot() of current selected row
+			showSnapshot();
 		}
+		
 		
 		/*implementation of nested class Compare_		
 		*/
@@ -388,5 +382,6 @@ namespace BALL
 		bool DockResultDialog::Compare_::operator() (const vector<float>& a, const vector<float>& b) const
 			throw()
 		{ return a[index_] < b[index_]; }
-	}
-}
+	
+	} // end of namespace VIEW
+} // end of namespace BALL
