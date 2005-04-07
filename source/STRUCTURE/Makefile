@@ -6,6 +6,11 @@ SMILES_SOURCES= \
 	smilesParserParser.C\
 	smilesParserLexer.C
 
+SMARTS_SOURCES=\
+	smartsParser.C\
+	smartsParserParser.C\
+	smartsParserLexer.C
+
 CPP_SOURCES= \
 	molecularGraph.C\
 	analyticalSES.C\
@@ -42,6 +47,9 @@ CPP_SOURCES= \
 	smilesParser.C\
 	smilesParserLexer.C\
 	smilesParserParser.C\
+	smartsParser.C\
+	smartsParserLexer.C\
+	smartsParserParser.C\
 	solventAccessibleSurface.C\
 	solventExcludedSurface.C\
 	structureMapper.C\
@@ -55,24 +63,49 @@ CPP_SOURCES= \
 	HBondProcessor.C\
 	UCK.C
 
-PARSER_PREFIX=SmilesParser
+#PARSER_PREFIX=SmilesParser
+SMILES_PARSER_PREFIX=SmilesParser
+SMARTS_PARSER_PREFIX=SmartsParser
 
 include ../common.mak
 include .Dependencies
 
-depend:	$(SMILES_SOURCES)
+depend:	\
+	$(SMILES_SOURCES)\
+	$(SMARTS_SOURCES)
 
 default_clean:	clean_flex_bison
 
 clean_flex_bison:
-	@-$(RM) smilesParserParser.C smilesParserLexer.C smilesParserParser.h
+	@-$(RM) smilesParserParser.C smilesParserLexer.C smilesParserParser.h smartsParserParser.C smartsParserLexer.C smartsParserParser.h
 
 smilesParserParser.C: smilesParserParser.y
 smilesParserParser.h: smilesParserParser.y
+
+smilesParserLexer.C:  smilesParserLexer.l
+	$(LEX)	-P$(SMILES_PARSER_PREFIX)	-o$@ $*.l
+
+smilesParserParser.C: smilesParserParser.y
+	$(YACC) -p $(SMILES_PARSER_PREFIX) -d $*.y && $(MV) y.tab.h $*.h && $(MV) y.tab.c $@
 
 smilesParserLexer.o: smilesParserLexer.C smilesParserParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
 
 smilesParserParser.o: smilesParserParser.C
+	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
+
+smartsParserParser.C: smartsParserParser.y
+smartsParserParser.h:	smartsParserParser.y
+
+smartsParserLexer.C:	smartsParserLexer.l
+	$(LEX)  -P$(SMARTS_PARSER_PREFIX) -o$@ $*.l
+
+smartsParserParser.C: smartsParserParser.y
+	$(YACC) -p $(SMARTS_PARSER_PREFIX) -d $*.y && $(MV) y.tab.h $*.h && $(MV) y.tab.c $@
+
+smartsParserLexer.o: smartsParserLexer.C smartsParserParser.C
+	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
+
+smartsParserParser.o: smartsParserParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
 
