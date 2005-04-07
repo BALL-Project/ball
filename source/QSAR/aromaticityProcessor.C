@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: aromaticityProcessor.C,v 1.6 2005/03/28 16:09:29 bertsch Exp $
+// $Id: aromaticityProcessor.C,v 1.7 2005/04/07 15:52:17 bertsch Exp $
 //
 
 #include <BALL/QSAR/aromaticityProcessor.h>
@@ -85,6 +85,8 @@ namespace BALL
 	void AromaticityProcessor::aromatizeSimple(vector<vector<Atom*> >& sssr)
 	{
 		vector<HashSet<Atom*> > aromatic_rings;
+		vector<HashSet<Atom*> > can_be_rings;
+		HashSet<Atom*> aromatic_atoms;
 		// for each
 		for (vector<vector<Atom*> >::iterator it=sssr.begin();it!=sssr.end();++it)
 		{
@@ -118,6 +120,13 @@ namespace BALL
 				}
 				else
 				{
+					if ((*ait)->getElement() == PTE[Element::S])
+					{
+						if ((*ait)->countBonds() > 2)
+						{
+							can_be = false;
+						}
+					}
 					if (!(d_bonds == 1 || a_bonds > 1))
 					{
 						destab++;
@@ -133,10 +142,91 @@ namespace BALL
 				if ((num_pi-2)%4 == 0)
 				{
 					aromatic_rings.push_back(ring);
+					aromatic_atoms += ring;
+				}
+			}
+			else
+			{
+				if (!can_be)
+				{
+					can_be = true;
+					// now we try a weaker alternating double bond criterion
+					for (HashSet<Atom*>::Iterator ait=ring.begin(); +ait; ++ait)
+					{
+						Size s_bonds(0), a_bonds(0), d_bonds(0);
+						for (Atom::BondIterator bit=(*ait)->beginBond(); +bit; ++bit)
+						{
+							if (bit->getOrder() == Bond::ORDER__SINGLE) s_bonds++;
+							if (bit->getOrder() == Bond::ORDER__AROMATIC) a_bonds++;
+							if (bit->getOrder() == Bond::ORDER__DOUBLE) d_bonds++;
+						}
+						if ((*ait)->getElement() == PTE[Element::C])
+						{
+							if (!(d_bonds == 1 && s_bonds > 0) || a_bonds > 1)
+							{
+								can_be = false;
+								break;
+							}
+						}
+					}
+
+					if (can_be)
+					{
+						can_be_rings.push_back(ring);
+					}
 				}
 			}
 		}
-	
+
+		// now handle the rings which can be aromatic 
+		for (vector<HashSet<Atom*> >::const_iterator it=can_be_rings.begin(); it!=can_be_rings.end(); ++it)
+		{
+			bool can_be(true);
+			HashSet<Atom*> ring = *it;
+			for (HashSet<Atom*>::ConstIterator ait=ring.begin(); +ait; ++ait)
+			{
+				Size s_bonds(0), a_bonds(0), d_bonds(0);
+				for (Atom::BondIterator bit=(*ait)->beginBond(); +bit; ++bit)
+				{
+					if (it->has(bit->getPartner(**ait)))
+					{
+						if (bit->getOrder() == Bond::ORDER__SINGLE) s_bonds++;
+						if (bit->getOrder() == Bond::ORDER__AROMATIC) a_bonds++;
+						if (bit->getOrder() == Bond::ORDER__DOUBLE) d_bonds++;
+					}
+					else
+					{
+						if (aromatic_atoms.has(bit->getPartner(**ait)))
+						{
+							a_bonds += 2;
+						}
+					}
+				}
+				if ((*ait)->getElement() == PTE[Element::C])
+				{
+					if (!((d_bonds == 1 && s_bonds > 0) || a_bonds > 1))
+					{
+						can_be = false;
+						break;
+					}
+				}
+			}
+			if (can_be)
+			{
+				// intersect the ring with the aromatic rings
+				for (vector<HashSet<Atom*> >::const_iterator aro_it=aromatic_rings.begin(); aro_it!=aromatic_rings.end(); ++aro_it)
+				{
+					HashSet<Atom*> merge = ring + *aro_it;
+					if (merge.size() < ring.size() + aro_it->size() &&
+						(countPiElectrons_(merge)-2)%4 == 0)
+					{
+							aromatic_rings.push_back(ring);
+							break;
+					}
+				}
+			}
+		}
+		
 		// write the aromatic rings back to the sssr set
 		sssr.clear();
 		for (vector<HashSet<Atom*> >::const_iterator it=aromatic_rings.begin();it!=aromatic_rings.end();++it)
