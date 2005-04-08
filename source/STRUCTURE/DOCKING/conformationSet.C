@@ -38,14 +38,12 @@ namespace BALL
 	const System& ConformationSet::getSystem() const
 		throw()
 	{
-		Log.info() << "in ConformationSet::getSystem const" << std::endl;
 		return system_;
 	}
 	
 	System& ConformationSet::getSystem()
 		throw()
 	{
-		Log.info() << "in ConformationSet::getSystem" << std::endl;
 		return system_;
 	}
 
