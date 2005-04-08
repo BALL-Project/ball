@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.19 2005/04/07 17:02:06 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.20 2005/04/08 12:47:28 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -14,7 +14,6 @@
 #include <qmessagebox.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
-#include <qtextedit.h>
 #include <qradiobutton.h>
 #include <qfiledialog.h>
 #include <qtabwidget.h>
@@ -266,22 +265,16 @@ namespace BALL
 				dock_alg->setup(*docking_partner1_, *docking_partner2_, options_);
 			}
 			
-			DockProgressDialog progress;
-			QString s = "Docking partner 1: ";
-			progress.options->append(s.append(docking_partner1_->getName()));
-			s = "Docking partner 2: ";
-			progress.options->append(s.append(docking_partner2_->getName()));
-			s = "Algorithm: ";
-			progress.options->append(s.append(algorithms->currentText()));
-			progress.options->append("\n*** Options ***");
 			
-			Options::Iterator it = options_.begin();
-			for(; +it; ++it)
-			{
-				s = it->first;
-				s.append(" : ");
-				progress.options->append(s.append(it->second));
-			}
+			Options scoring_options;  ///////////////////////////////TODO options sind immer leer ///////////////////////////////
+			DockProgressDialog progress;
+			progress.fillDialog(systems1->currentText(),
+													systems2->currentText(),
+													algorithms->currentText(),
+													scoring_functions->currentText(),
+													options_,
+													scoring_options
+													);
 			progress.exec();
 //   			progress.show(); // to use with multithreading later
 			
@@ -297,6 +290,7 @@ namespace BALL
 			EnergeticEvaluation* scoring = 0;
 			//check which scoring function is chosen
 			index = scoring_functions->currentItem();
+			
 			switch(index)
 			{
 				case DEFAULT:
@@ -313,6 +307,7 @@ namespace BALL
 					{
 						Log.info() << it->first << " : " << it->second << std::endl;
 					}
+					scoring_options = ff.options;
 					scoring = new AmberEvaluation(ff);
 					break;
 				}
@@ -335,9 +330,9 @@ namespace BALL
 
 			DockResult* dock_res = new DockResult(docking_alg,
 																							conformation_set,
-																							options_);
+																							options_); 
 																							
-			dock_res->addScoring(scoring_functions->currentText(), options_, scores);
+			dock_res->addScoring(scoring_functions->currentText(), scoring_options, scores);
 
 			// add docked system to BALLView structures 
 			SnapShot best_result = conformation_set[0];

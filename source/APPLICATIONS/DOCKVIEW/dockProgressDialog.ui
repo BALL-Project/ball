@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>322</width>
-            <height>453</height>
+            <width>628</width>
+            <height>365</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,55 +19,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QProgressBar" row="2" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>progress_bar</cstring>
-            </property>
-        </widget>
-        <widget class="QTextEdit" row="1" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>options</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>1</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>300</width>
-                    <height>300</height>
-                </size>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="wordWrap">
-                <enum>WidgetWidth</enum>
-            </property>
-            <property name="readOnly">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="3" column="1">
-            <property name="name">
-                <cstring>abort_button</cstring>
-            </property>
-            <property name="text">
-                <string>Abort</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="3" column="0">
-            <property name="name">
-                <cstring>pause_button</cstring>
-            </property>
-            <property name="text">
-                <string>Pause</string>
-            </property>
-        </widget>
         <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>textLabel1</cstring>
@@ -84,7 +35,98 @@
                 <string>&lt;b&gt;Chosen Parameters&lt;/b&gt;</string>
             </property>
         </widget>
+        <widget class="QTextEdit" row="1" column="1" rowspan="2" colspan="1">
+            <property name="name">
+                <cstring>options</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>350</width>
+                    <height>300</height>
+                </size>
+            </property>
+            <property name="readOnly">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QTextEdit" row="1" column="0">
+            <property name="name">
+                <cstring>general_params</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>250</width>
+                    <height>150</height>
+                </size>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="wordWrap">
+                <enum>WidgetWidth</enum>
+            </property>
+            <property name="readOnly">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="2" column="0">
+            <property name="name">
+                <cstring>layout1</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QPushButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>pause_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Pause</string>
+                    </property>
+                </widget>
+                <widget class="QProgressBar" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>progress_bar</cstring>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="1">
+                    <property name="name">
+                        <cstring>abort_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Abort</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
     </grid>
 </widget>
+<connections>
+    <connection>
+        <sender>pause_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockProgressDialogData</receiver>
+        <slot>pauseClicked()</slot>
+    </connection>
+    <connection>
+        <sender>abort_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockProgressDialogData</receiver>
+        <slot>abortClicked()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>pauseClicked()</slot>
+    <slot>abortClicked()</slot>
+</slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
