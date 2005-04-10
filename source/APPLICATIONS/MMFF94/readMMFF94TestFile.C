@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.18 2005/04/05 15:43:48 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.19 2005/04/10 23:09:04 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -363,6 +363,10 @@ int runtests(const vector<String>& filenames)
 {
 	MMFF94 mmff;
 
+//   	mmff.removeComponent("MMFF94 Stretch");
+	mmff.removeComponent("MMFF94 Bend");
+	mmff.removeComponent("MMFF94 StretchBend");
+
 	vector<String> not_ok;
 	vector<String> rings_wrong;
 	vector<String> aromatic_rings_wrong;
@@ -386,12 +390,21 @@ int runtests(const vector<String>& filenames)
 
 		mmff.updateEnergy();
 
-		String rings_file_name(dir +FileSystem::PATH_SEPARATOR + filenames[pos] + ".rings");
-		LineBasedFile ring_file(rings_file_name);
-		ring_file.readLine();
-		Size nr_rings = ring_file.getLine().toUnsignedInt();
-		ring_file.readLine();
-		Size nr_aromatic_rings = ring_file.getLine().toUnsignedInt();
+		Size nr_rings = 0;
+		Size nr_aromatic_rings = 0;
+		
+		try
+		{
+			String rings_file_name(dir +FileSystem::PATH_SEPARATOR + filenames[pos] + ".rings");
+			LineBasedFile ring_file(rings_file_name);
+			ring_file.readLine();
+			nr_rings = ring_file.getLine().toUnsignedInt();
+			ring_file.readLine();
+			nr_aromatic_rings = ring_file.getLine().toUnsignedInt();
+		}
+		catch(...)
+		{
+		}
 
 		bool wrong_rings = false;
 		if (mmff.getRings().size() != nr_rings)
@@ -414,10 +427,9 @@ int runtests(const vector<String>& filenames)
 			Log.info() << "We have unassigned atoms: " << mmff.getUnassignedAtoms().size() << std::endl;
 		}
 
-//          		if (testStretch(mmff, filenames[pos], true)) ok++;
-//       result = testBend(mmff, filenames[pos], true);
-//      		testBend(mmff, filenames[pos], false);
-  		result &= testStretchBend(mmff, filenames[pos], true);
+ 		result &= testStretch(mmff, filenames[pos], true);
+//          result &= testBend(mmff, filenames[pos], true);
+//     		result &= testStretchBend(mmff, filenames[pos], true);
 
 
 		if (result) ok++;
