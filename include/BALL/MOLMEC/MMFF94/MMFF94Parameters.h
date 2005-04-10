@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.8 2005/04/02 13:51:14 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.9 2005/04/10 20:18:45 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -285,6 +285,7 @@ namespace BALL
 	};
 
 
+////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
 
 	
