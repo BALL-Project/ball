@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.7 2005/04/10 22:47:59 amoll Exp $
+// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.8 2005/04/10 22:56:02 amoll Exp $
 //
 // A small program for spliting the Optimol log file from the MMFF94 test suite
 // into smaller files, which are better to handle for parsing 
@@ -110,13 +110,13 @@ int main(int argc, char** argv)
 			rings_file.close();
 		}
 
-		else if (infile.getLine() == " ATOM NAME  TYPE    ATOM NAME  TYPE    ATOM NAME   TYPE    ATOM NAME  TYPE")
+		else if (infile.getLine().hasSubstring(" ATOM NAME  TYPE"))
 		{
 			vector<String> atoms, names, types, symbols, charges, fcharges;
 
 			while (infile.readLine())
 			{
-				if (infile.getLine().hasSubstring("energy gradient")) break;
+				if (infile.getLine().hasSubstring("OPTIMOL")) break;
 				vector<String> fields;
 				Size size = infile.getLine().split(fields);
 				Position pos = 0; 
