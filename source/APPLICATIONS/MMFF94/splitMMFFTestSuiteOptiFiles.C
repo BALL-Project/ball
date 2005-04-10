@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.6 2005/04/04 16:56:40 amoll Exp $
+// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.7 2005/04/10 22:47:59 amoll Exp $
 //
 // A small program for spliting the Optimol log file from the MMFF94 test suite
 // into smaller files, which are better to handle for parsing 
@@ -56,60 +56,67 @@ int main(int argc, char** argv)
 	vector<String> file_names;
 
 	LineBasedFile infile(argv[1]);
+
+	Size nr_rings = 0;
+	Size nr_aromatic_rings = 0;
+
+	vector<String> fields;
+
 	while (infile.readLine())
 	{
 		if (infile.getLine().hasSubstring("Structure Name:") ||
 				infile.getLine().hasSubstring("New Structure Name"))
 		{
 			file_name = infile.getLine().after(": ");
+			nr_aromatic_rings = 0; 
+			nr_rings = 0;
+		}
 
-			infile.skipLines(1);
-
-			Size nr_rings = 0;
-			Size nr_aromatic_rings = 0;
-
+		else if (infile.getLine().hasSuffix("SUBRINGS"))
+		{
 			HashSet<String> lines;
-
-			while (!infile.getLine().hasSubstring("ENTER A LIST SUBCOMMAND OR"))
+			
+			while (!infile.getLine().hasSubstring("OPTIMOL-LIST"))
 			{
-				vector<String> fields;
-				infile.getLine().split(fields);
-
-				if (infile.getLine().hasSuffix("SUBRINGS"))
+				if (lines.has(infile.getLine()))
 				{
-				 	if (lines.has(infile.getLine()))
+					while (infile.getLine() != "" && 
+							   !infile.getLine().hasSubstring("OPTIMOL")) 
 					{
-						while (infile.getLine() != "") infile.readLine();
-						infile.skipLines(2);
-						continue;
+						infile.readLine();
 					}
+				}
+
+				else if (infile.getLine().hasSuffix("SUBRINGS"))
+				{
+					infile.getLine().split(fields);
 					nr_rings += fields[3].toUnsignedShort();
 					lines.insert(infile.getLine());
 				}
-
-				if (infile.getLine().hasSuffix("AROMATIC"))
+				else if (infile.getLine().hasSuffix("AROMATIC"))
 				{
 					nr_aromatic_rings++;
 				}
 
 				infile.readLine();
 			}
+		}
 
+		else if (infile.getLine().hasSuffix("****"))
+		{
 			File rings_file(dir + FileSystem::PATH_SEPARATOR + file_name + ".rings", std::ios::out);
 			rings_file << nr_rings << std::endl;
 			rings_file << nr_aromatic_rings << std::endl;
 			rings_file.close();
+		}
 
-			while (!infile.getLine().hasSubstring("ATOM NAME"))
-			{
-				infile.readLine();
-			}
-
+		else if (infile.getLine() == " ATOM NAME  TYPE    ATOM NAME  TYPE    ATOM NAME   TYPE    ATOM NAME  TYPE")
+		{
 			vector<String> atoms, names, types, symbols, charges, fcharges;
 
 			while (infile.readLine())
 			{
-				if (infile.getLine().hasSubstring("OPTIMOL-LIST")) break;
+				if (infile.getLine().hasSubstring("energy gradient")) break;
 				vector<String> fields;
 				Size size = infile.getLine().split(fields);
 				Position pos = 0; 
@@ -150,7 +157,7 @@ int main(int argc, char** argv)
 			outfile.close();
 		}
 
-		if (infile.getLine().hasSubstring("Total ENERGY (Kcal)"))
+		else if (infile.getLine().hasSubstring("Total ENERGY (Kcal)"))
 		{
 			vector<String> fields;
 
@@ -184,7 +191,7 @@ int main(int argc, char** argv)
 		}
 
 		/// stretch 
-		if (infile.getLine() == "   I          J            I    J   CLASS   LENGTH   LENGTH    DIFF.    ENERGY   CONSTANT")
+		else if (infile.getLine() == "   I          J            I    J   CLASS   LENGTH   LENGTH    DIFF.    ENERGY   CONSTANT")
 		{
 			File outfile(dir + FileSystem::PATH_SEPARATOR + file_name + ".stretch", std::ios::out);
 
@@ -201,7 +208,7 @@ int main(int argc, char** argv)
 		}
 		
 		/// bend
-		if (infile.getLine() == "  I       J       K     I    J    K  CLASS    ANGLE       ANGLE      DIFF.      ENERGY   CONSTANT")
+		else if (infile.getLine() == "  I       J       K     I    J    K  CLASS    ANGLE       ANGLE      DIFF.      ENERGY   CONSTANT")
 		{
 			File outfile(dir + FileSystem::PATH_SEPARATOR + file_name + ".bend", std::ios::out);
 
@@ -221,7 +228,7 @@ int main(int argc, char** argv)
 		
 
 		/// stretch bend
-		if (infile.getLine() == "  I       J       K     I    J    K  CLASS    ANGLE       ANGLE      R(I,J)    ENERGY       I-J")
+		else if (infile.getLine() == "  I       J       K     I    J    K  CLASS    ANGLE       ANGLE      R(I,J)    ENERGY       I-J")
 		{
 			File outfile(dir + FileSystem::PATH_SEPARATOR + file_name + ".stretchbend", std::ios::out);
 
