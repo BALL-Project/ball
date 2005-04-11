@@ -19,8 +19,28 @@
 
 namespace BALL
 {
+	class DockingAlgorithm;
+
+	///
+	class DockingApplication
+	{
+		public:
+
+			///
+			DockingApplication();
+
+			///
+			virtual ~DockingApplication();
+
+			///
+			DockingApplication(const DockingApplication& app);
+
+			///
+			virtual void notifyProgress(const DockingAlgorithm& algorithm, float progress) const;
+	};
+
 	/** A class defining the interface for docking algorithms.
-		This is a first iteration.
+			This is a first iteration.
 	*/
 	class DockingAlgorithm
 	{
@@ -85,9 +105,15 @@ namespace BALL
 			virtual ConformationSet getConformationSet(Index total_conformations = 0)
 				throw();
 
+			///
+			void setDockingApplication(const DockingApplication& app);
+
 		protected:
 			System system1_;
 			System system2_;
+			bool   pause_;
+			bool   abort_;
+			const DockingApplication* docking_app_;
 	};
 
 } // namespace BALL

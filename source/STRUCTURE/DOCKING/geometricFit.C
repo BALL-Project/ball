@@ -1008,8 +1008,9 @@ namespace BALL
 														// theta: around y axis, 
                             // psi: around z axis;
 
-		for(int i = 0; i < rotation_num; i++)
+		for(int i = 0; i < rotation_num && !abort_; i++)
 		{
+			// TODO: we should check if pause_ is true and sleep than for a given time
 			current_round_ = i;
 
 			phi   = rotAng.getXAng(i);
@@ -1088,6 +1089,11 @@ namespace BALL
 				temp_p.orientation = Vector3(phi, theta, psi);
 
 				peak_set_.insert(temp_p);
+			}
+
+			if (docking_app_ != 0)
+			{
+				docking_app_->notifyProgress(*this, (float) rotation_num / (float) i);
 			}
 
 		} // loop for all conformations

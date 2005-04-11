@@ -10,6 +10,22 @@ using namespace std;
 
 namespace BALL
 {
+	DockingApplication::DockingApplication()
+	{
+	}
+
+	DockingApplication::~DockingApplication()
+	{
+	}
+
+	DockingApplication::DockingApplication(const DockingApplication&)
+	{
+	}
+
+	void DockingApplication::notifyProgress(const DockingAlgorithm&, float) const
+	{
+	}
+
 	void DockingAlgorithm::setup(System& system1, System& system2, Options& new_options)
 		throw()
 	{
@@ -28,41 +44,41 @@ namespace BALL
 	void DockingAlgorithm::start()
 		throw()
 	{
-		Log.error() << "This is just an interface definition. Check your dynamic binding" << std::endl;
+		pause_ = false;
+		abort_ = false;
 	}
 
 	void DockingAlgorithm::pause()
 		throw()
 	{
-		Log.error() << "This is just an interface definition. Check your dynamic binding" << std::endl;
+		pause_ = true;
 	}
 
 	void DockingAlgorithm::proceed()
 		throw()
 	{
-		Log.error() << "This is just an interface definition. Check your dynamic binding" << std::endl;
+		pause_ = false;
+		abort_ = false;
 	}
 
 	void DockingAlgorithm::abort()
 		throw()
 	{
-		Log.error() << "This is just an interface definition. Check your dynamic binding" << std::endl;
+		abort_ = true;
 	}
 
 	bool DockingAlgorithm::hasFinished() const
 		throw()
 	{
 		Log.error() << "This is just an interface definition. Check your dynamic binding" << std::endl;
-		bool test = true;
-		return test;
+		return true;
 	}
 
 	float DockingAlgorithm::getProgress() const
 		throw()
 	{
 		Log.error() << "This is just an interface definition. Check your dynamic binding" << endl;
-		float test2 = 0;
-		return test2;
+		return 0;
 	}
 
 	ConformationSet DockingAlgorithm::getConformationSet(Index /*total_conformations*/)
@@ -70,6 +86,11 @@ namespace BALL
 	{
 		ConformationSet dummy;
 		return dummy;
+	}
+
+	void DockingAlgorithm::setDockingApplication(const DockingApplication& app)
+	{
+		docking_app_ = &app;
 	}
 
 }
