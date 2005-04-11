@@ -363,6 +363,15 @@ namespace BALL
 			dialog_->calculate_();
 		}
 
+
+
+		void QTDockingApplication::notifyProgress(const DockingAlgorithm&, float progress) const
+		{
+			DockingProgressEvent* se = new DockingProgressEvent;
+			se->setProgress(progress);
+			qApp->postEvent(MainControl::getInstance(0), se);
+		}
+
 	} // namespace VIEW
 } // namespace BALL
 

@@ -19,6 +19,11 @@
 # include <BALL/SYSTEM/TCPTransfer.h>
 #endif
 
+#ifndef BALL_STRUCTURE_DOCKING_DOCKINGALGORITHM_H
+# include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
+#endif
+
+
 #include <qthread.h>
 #include <qevent.h>
 
@@ -311,6 +316,40 @@ namespace VIEW
 				FinishedRepresentionUpdateEvent()
 					:QCustomEvent(FINISHED_REPRESENTATION_UPDATE_EVENT)
 				{}
+		};
+		
+		///
+		class BALL_EXPORT DockingProgressEvent
+			: public QCustomEvent
+		{
+			public:
+				
+				///
+				DockingProgressEvent()
+					:QCustomEvent(DOCKING_PROGRESS_EVENT),
+					 progress_(0.0)
+				{}
+
+				///
+				void setProgress(float progress) { progress_ = progress;}
+
+				protected:
+
+				float progress_;
+		};
+
+
+		///
+		class BALL_EXPORT QTDockingApplication
+			: public DockingApplication
+		{
+			public:
+
+				///
+				QTDockingApplication();
+
+				///
+				virtual void notifyProgress(const DockingAlgorithm& algorithm, float progress) const;
 		};
 
 	}

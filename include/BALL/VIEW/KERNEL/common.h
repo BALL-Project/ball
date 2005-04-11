@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.34 2005/02/13 16:42:42 amoll Exp $
+// $Id: common.h,v 1.34.2.1 2005/04/11 13:00:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -102,7 +102,10 @@ namespace BALL
 			UPDATE_COMPOSITE_EVENT,
 
 			/// see FinishedRepresentionUpdateEvent
-			FINISHED_REPRESENTATION_UPDATE_EVENT
+			FINISHED_REPRESENTATION_UPDATE_EVENT,
+
+			/// see DockingProgressEvent
+			DOCKING_PROGRESS_EVENT
 		};
 
 		/// global variable, which defines, if DockWidgets are shown with a Label
