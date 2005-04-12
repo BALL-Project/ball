@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.C,v 1.7.6.1 2005/04/12 15:00:54 amoll Exp $
+// $Id: label.C,v 1.7.6.2 2005/04/12 22:32:42 amoll Exp $
 //
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
@@ -19,8 +19,7 @@ namespace BALL
 		Label::Label()
 			throw()
 			:	GeometricObject(),
-				Vertex(),
-				size_(12)
+				Vertex()
 		{
 		}
 
@@ -28,8 +27,7 @@ namespace BALL
 			throw()
 			:	GeometricObject(label),
 				Vertex(label),
-				text_(label.text_),
-				size_(label.size_)
+				text_(label.text_)
 		{
 		}
 
@@ -142,6 +140,7 @@ namespace BALL
 				else if (text_[pos] == 'I')
 				{
 					if (residue) result += residue->getID();
+					if (atom) 	 result += ((Residue*)atom->getParent())->getID();
 				}
 
 				// atom type

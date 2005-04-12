@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.10.6.1 2005/04/12 15:00:40 amoll Exp $
+// $Id: label.h,v 1.10.6.2 2005/04/12 22:32:37 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
@@ -14,6 +14,8 @@
 #ifndef BALL_VIEW_DATATYPE_VERTEX1_H
 #	include <BALL/VIEW/DATATYPE/vertex1.h>
 #endif
+
+#include <qfont.h>
 
 namespace BALL
 {
@@ -127,10 +129,10 @@ namespace BALL
 				throw();
 
 			///
-			Size getSize() const { return size_;}
+			const QFont& getFont() const { return font_;}
 
 			///
-			void setSize(Size size) { size_ = size;}
+			void setFont(const QFont& font) { font_ = font;}
 
 			//@}
 			/**	@name	debuggers and diagnostics */
@@ -166,7 +168,7 @@ namespace BALL
 
 			protected:
 				String text_;
-				Size   size_;
+				QFont  font_;
 
 			//@}
 		};

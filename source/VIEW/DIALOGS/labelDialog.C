@@ -17,6 +17,7 @@
 #include <qlineedit.h>
 #include <qcombobox.h>
 #include <qfontdialog.h>
+#include <qradiobutton.h>
 
 namespace BALL
 {
@@ -92,6 +93,8 @@ void LabelDialog::fetchPreferences(INIFile& inifile)
 	{
 		font_ = QFont("Helvetica", 12);
 	}
+
+	font_label->setFont(font_);
 }
 
 void LabelDialog::writePreferences(INIFile& inifile)
@@ -149,24 +152,21 @@ void LabelDialog::show()
 	raise();
 }
 
-void LabelDialog::accept()
+
+Representation* LabelDialog::createOneLabel_()
 {
-	// no selection present => return
-	if (selection_.empty()) return;
+	Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
 
 	// number of objects
 	Size number_of_objects = 0;
 
-	// center processor
 	GeometricCenterProcessor center_processor;
 	
 	// center to which the label will be attached
 	Vector3 center;
 
-	Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
-
 	// process all objects in the selection list
-	List<Composite*>::Iterator list_it = selection_.begin();
+	List<Composite*>::ConstIterator list_it = selection_.begin();
 	for (; list_it != selection_.end(); ++list_it)
 	{
 		(*list_it)->apply(center_processor);
@@ -195,6 +195,51 @@ void LabelDialog::accept()
 	}
 
 	rep->insert(*label);
+
+	return rep;
+}
+
+
+Representation* LabelDialog::createMultipleLabels_()
+{
+	Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
+
+	List<Composite*>::ConstIterator list_it = selection_.begin();
+	for (; list_it != selection_.end(); ++list_it)
+	{
+		GeometricCenterProcessor center_processor;
+		(*list_it)->apply(center_processor);
+
+		// create Label and Representation
+		Label* label = new Label;
+		label->setText(label_edit_->text().ascii());
+		label->setColor(custom_color_);
+		label->setVertex(center_processor.getCenter());
+		label->setFont(font_);
+		label->setComposite(*list_it);
+
+		rep->insert(*label);
+		rep->getComposites().insert(*list_it);
+	}
+
+	return rep;
+}
+
+void LabelDialog::accept()
+{
+	// no selection present => return
+	if (selection_.empty()) return;
+
+	Representation* rep = 0;
+
+	if (all_items->isChecked())
+	{
+		rep = createOneLabel_();
+	}
+	else
+	{
+		rep = createMultipleLabels_();
+	}
 	rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
 	rep->setModelType(MODEL_LABEL);
 
@@ -235,5 +280,15 @@ void LabelDialog::fontSelected()
 	font_ = font;
 }
 
+void LabelDialog::modeChanged()
+{
+  tag_box->setEnabled(!all_items->isChecked());
+  add_tag_button->setEnabled(!all_items->isChecked());
+}
+
+void LabelDialog::textChanged()
+{
+	apply_button_->setEnabled(label_edit_->text() != "");
+}
 
 } } // namespaces
