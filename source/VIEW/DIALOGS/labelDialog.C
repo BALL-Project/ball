@@ -15,6 +15,8 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
+#include <qcombobox.h>
+#include <qslider.h>
 
 namespace BALL
 {
@@ -92,6 +94,9 @@ void LabelDialog::writePreferences(INIFile& inifile)
 
 	// the color value
 	inifile.insertValue("WINDOWS", "Label::customcolor", custom_color_);
+
+	// the font size
+	inifile.insertValue("WINDOWS", "Label::fontsize", size_slider->value());
 }
 
 void LabelDialog::onNotify(Message *message)
@@ -149,6 +154,8 @@ void LabelDialog::accept()
 	// center to which the label will be attached
 	Vector3 center;
 
+	Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
+
 	// process all objects in the selection list
 	List<Composite*>::Iterator list_it = selection_.begin();
 	for (; list_it != selection_.end(); ++list_it)
@@ -157,6 +164,8 @@ void LabelDialog::accept()
 
 		center += center_processor.getCenter();
 		++number_of_objects;
+
+		rep->getComposites().insert(*list_it);
 	}
 
 	if (number_of_objects != 0)
@@ -169,19 +178,17 @@ void LabelDialog::accept()
 	label->setText(label_edit_->text().ascii());
 	label->setColor(custom_color_);
 	label->setVertex(center);
+	label->setSize(size_slider->value());
 
-	Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
+	if (selection_.size() == 1)
+	{
+		label->setComposite(*selection_.begin());
+	}
+
 	rep->insert(*label);
 	rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
 	rep->setModelType(MODEL_LABEL);
 
-	const List<Composite*>& selection = getMainControl()->getMolecularControlSelection();
-	List<Composite*>::ConstIterator cit = selection.begin();
-	for (; cit != selection.end(); ++cit)
-	{
-		rep->getComposites().insert(*cit);
-	}
-	
 	/// MainControl::insert(rep) doesnt work here, no idea why !
 	RepresentationMessage* arm = new RepresentationMessage;
 	arm->setRepresentation(*rep);
@@ -195,5 +202,23 @@ void LabelDialog::editColor()
 {
 	custom_color_.set(chooseColor(color_sample_));
 }
+
+void LabelDialog::addTag()
+{
+	QString tag;
+	if (tag_box->currentText() == "Name")							 	tag = "%N";
+	else if (tag_box->currentText() == "Residue ID") 	 	tag = "%I";
+	else if (tag_box->currentText() == "Atom Type")			tag = "%T";
+	else if (tag_box->currentText() == "Atom Charge") 	tag = "%C";
+
+	label_edit_->setText(label_edit_->text() + tag);
+	label_edit_->update();
+}
+
+void LabelDialog::fontSizeChanged()
+{
+	size_label->setText(String(size_slider->value()).c_str());
+}
+
 
 } } // namespaces

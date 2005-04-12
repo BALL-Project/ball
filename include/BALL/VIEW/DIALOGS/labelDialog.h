@@ -146,6 +146,12 @@ namespace BALL
 					See documentation of QT-library for information concerning QColorDialog widgets.
 			 */ 
 			virtual void editColor();
+
+			///
+			virtual void addTag();
+
+			///
+			virtual void fontSizeChanged();
 						
 			//@}
 			
