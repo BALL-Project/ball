@@ -174,6 +174,15 @@ void LabelDialog::accept()
 	rep->insert(*label);
 	rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
 	rep->setModelType(MODEL_LABEL);
+
+	const List<Composite*>& selection = getMainControl()->getMolecularControlSelection();
+	List<Composite*>::ConstIterator cit = selection.begin();
+	for (; cit != selection.end(); ++cit)
+	{
+		rep->getComposites().insert(*cit);
+	}
+	
+	/// MainControl::insert(rep) doesnt work here, no idea why !
 	RepresentationMessage* arm = new RepresentationMessage;
 	arm->setRepresentation(*rep);
 	arm->setType(RepresentationMessage::ADD);
