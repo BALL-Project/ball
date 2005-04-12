@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.1.2.5 2005/04/07 17:02:06 leonhardt Exp $
+// $Id: dockResult.C,v 1.1.2.6 2005/04/12 11:50:44 haid Exp $
 //
 
 #include "dockResult.h"
@@ -13,10 +13,11 @@ namespace BALL
 		// Default Constructor
 		DockResult::DockResult()
 			throw()
+			: conformation_set_(0)
 		{}
 		
 		// Constructor
-		DockResult::DockResult(const QString& docking_algorithm, const ConformationSet& conformation_set,
+		DockResult::DockResult(const QString& docking_algorithm, ConformationSet* conformation_set,
 														const Options& docking_options)
 			throw()
 		{
@@ -28,7 +29,9 @@ namespace BALL
 		// Destructor
 		DockResult::~DockResult()
 			throw()
-		{}
+		{
+			if (conformation_set_ != 0) delete conformation_set_;
+		}
 		
 		// Assignment operator
 		const DockResult& DockResult::operator =(const DockResult& dock_res)
@@ -44,7 +47,7 @@ namespace BALL
 			return *this;
 		}
 		
-		void DockResult::setConformationSet(const ConformationSet& conformation_set)
+		void DockResult::setConformationSet(ConformationSet* conformation_set)
 			throw()
 		{
 			conformation_set_ = conformation_set;
@@ -62,13 +65,13 @@ namespace BALL
 			return docking_options_;
 		}
 		
-		const ConformationSet& DockResult::getConformationSet() const
+		const ConformationSet* DockResult::getConformationSet() const
 			throw()
 		{
 			return conformation_set_;
 		}
 		
-		ConformationSet& DockResult::getConformationSet()
+		ConformationSet* DockResult::getConformationSet()
 			throw()
 		{
 			return conformation_set_;

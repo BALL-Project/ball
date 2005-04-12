@@ -31,7 +31,7 @@ namespace BALL
 					throw();
 					
 				// Constructor
-				DockResult(const QString& docking_algorithm, const ConformationSet& conformation_set,
+				DockResult(const QString& docking_algorithm, ConformationSet* conformation_set,
 										const Options& docking_options)
 					throw();
 				
@@ -44,7 +44,7 @@ namespace BALL
 					throw();
 				
 					
-				void setConformationSet(const ConformationSet& conformation_set)
+				void setConformationSet(ConformationSet* conformation_set)
 					throw();
 					
 				const QString& getDockingAlgorithm() const
@@ -53,10 +53,10 @@ namespace BALL
 				const Options& getDockingOptions() const
 					throw();
 				
-				const ConformationSet& getConformationSet() const
+				const ConformationSet* getConformationSet() const
 					throw();
 					
-				ConformationSet& getConformationSet()
+				ConformationSet* getConformationSet()
 					throw();
 				
 				// returns scores of scoring_ i
@@ -122,7 +122,7 @@ namespace BALL
 				// options of the docking algorithm
 				Options docking_options_;
 				// conformation set which was produced by the docking algorithm
-				ConformationSet conformation_set_;
+				ConformationSet* conformation_set_;
 				// vector contains name, options and scores of each scoring function
 				// the scores of each scoring are sorted by snapshot number
 				vector<Scoring_> scorings_;

@@ -9,10 +9,6 @@
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
-# include <BALL/VIEW/KERNEL/preferencesEntry.h>
-#endif
-
 #ifndef BALL_DATATYPE_OPTIONS_H
 # include <BALL/DATATYPE/options.h>
 #endif
@@ -25,8 +21,7 @@ namespace BALL
 	{
 		class BALL_EXPORT DockProgressDialog : 
 			public DockProgressDialogData,
-			public ModularWidget,
-			public PreferencesEntry
+			public ModularWidget
 		{ 
 			Q_OBJECT
 			BALL_EMBEDDABLE(DockProgressDialog,ModularWidget)
@@ -44,14 +39,17 @@ namespace BALL
 				//
 				void fillDialog(QString p1, QString p2, QString alg, QString sf, Options& alg_opt, Options& sf_opt)
 					throw();
+				
+				virtual void onNotify(Message *message)
+					throw();
 					
 			public slots:
 			
-			//
-			virtual void pauseClicked();
+				//
+				virtual void pauseClicked();
 			
-			//
-			virtual void abortClicked();
+				//
+				virtual void abortClicked();
 			
 			
 			protected:

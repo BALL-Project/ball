@@ -56,6 +56,7 @@
 #include "dockResultDialog.h"
 #include "dockDialogData.h"
 #include "dockResult.h"
+#include "dockProgressDialog.h"
 
 namespace BALL
 {
@@ -125,6 +126,9 @@ namespace BALL
 				virtual void checkMenu (MainControl& main_control)
 					throw();
 				
+				virtual void onNotify(Message *message)
+					throw();
+					
 				// Read the preferences from a INIFile
 				void fetchPreferences(INIFile& file)
 					throw();
@@ -138,7 +142,7 @@ namespace BALL
 					throw();
 
 				// dock the two systems
-				bool calculate()
+				void calculate()
 					throw();
 					
 					
@@ -201,6 +205,7 @@ namespace BALL
 				// get system which the user has chosen in the dialog as docking partner
 				System* partnerChosen_(QString qstr) throw();
 				
+				void continueCalculate_(ConformationSet& conformation_set) throw();
 				
 			private:
 				
@@ -213,6 +218,9 @@ namespace BALL
 				//pointer to docking partners
 				System* docking_partner1_;
 				System* docking_partner2_;
+				
+				//pointer to progress dialog
+				DockProgressDialog* progress_dialog_;
 			
 				//options for the docking algorithm
 				Options options_;

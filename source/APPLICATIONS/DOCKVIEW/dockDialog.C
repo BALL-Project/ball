@@ -1,12 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.20 2005/04/08 12:47:28 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.21 2005/04/12 11:50:43 haid Exp $
 //
 
 #include "dockDialog.h"
 #include "geometricFitDialog.h"
-#include "dockProgressDialog.h"
 
 #include <qpushbutton.h>
 #include <qcombobox.h>
@@ -26,7 +25,7 @@
 #include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
-
+#include <BALL/VIEW/KERNEL/threads.h>
 
 namespace BALL
 {
@@ -74,6 +73,8 @@ namespace BALL
 			AmberConfigurationDialog* amber = new AmberConfigurationDialog(this); 
 			addScoringFunction("Amber Force Field", AMBER_FF, amber);
 			addScoringFunction("Random", RANDOM);
+			
+			progress_dialog_ = NULL;
 			
 			hide(); 
 		}
@@ -198,6 +199,17 @@ namespace BALL
 			}
 		}
 		
+		void DockDialog::onNotify(Message *message)
+			throw()
+		{
+		 	if (RTTI::isKindOf<DockingFinishedMessage>(*message))
+			{
+				DockingFinishedMessage* dfm = RTTI::castTo<DockingFinishedMessage>(*message);
+				const ConformationSet* cs = dfm->getConformationSet();
+				continueCalculate_(*(ConformationSet*)cs);
+			}
+		}
+		
 		/// Reset the dialog to the standard values
 		void DockDialog::reset()
 			throw()
@@ -236,7 +248,7 @@ namespace BALL
 		}
 		
 		/// Calculate...
-		bool DockDialog::calculate()
+		void DockDialog::calculate()
 			throw()
 		{
 			// get options user has chosen
@@ -255,6 +267,11 @@ namespace BALL
 					break;
 			}
 			
+			//docking_partner1_->deselect();
+			//docking_partner2_->deselect();
+			
+			// Set up the docking algorithm
+			setStatusbarText("setting up docking algorithm...", true);
 			// keep the larger protein in System A and the smaller one in System B
 			if (docking_partner1_->countAtoms() < docking_partner2_->countAtoms())
 			{
@@ -265,31 +282,49 @@ namespace BALL
 				dock_alg->setup(*docking_partner1_, *docking_partner2_, options_);
 			}
 			
-			
 			Options scoring_options;  ///////////////////////////////TODO options sind immer leer ///////////////////////////////
-			DockProgressDialog progress;
-			progress.fillDialog(systems1->currentText(),
-													systems2->currentText(),
-													algorithms->currentText(),
-													scoring_functions->currentText(),
-													options_,
-													scoring_options
-													);
-			progress.exec();
-//   			progress.show(); // to use with multithreading later
 			
-			// start docking
-			Log.error() << "starting docking" << std::endl;
-			dock_alg->start();
-			Log.error() << "finished docking" << std::endl;
+			// ============================= WITH MULTITHREADING ====================================
+			if (!(getMainControl()->lockCompositesFor(this))) return;
+			Log.info() << "vor thread" << std::endl;
+			#ifdef BALL_QT_HAS_THREADS
+				DockingThread* thread = new DockingThread;
+				thread->setDockingAlgorithm(dock_alg);
+				thread->setMainControl(getMainControl());
+				
+				progress_dialog_ = new DockProgressDialog(this);
+				progress_dialog_->fillDialog(systems1->currentText(),
+																		systems2->currentText(),
+																		algorithms->currentText(),
+																		scoring_functions->currentText(),
+																		options_,
+																		scoring_options);
+				progress_dialog_->show();
+				
+				thread->start();
+				
+			// ============================= WITHOUT MULTITHREADING =================================
+			#else
+				// start docking
+				setStatusbarText("starting docking...", true);
+				dock_alg->start();
+				setStatusbarText("Docking finished.", true);
+				continueCalculate_(dock_alg->getConformationSet());
+			#endif
 			
-			///////////////// BEST_NUM ist Option von DockingAlgorithm!!!!!!!!!!!!!!!!
-			ConformationSet conformation_set = dock_alg->getConformationSet(options_.getInteger(GeometricFit::Option::BEST_NUM));
-			
-			// create scoring function object
+		}
+		
+		void DockDialog::continueCalculate_(ConformationSet& conformation_set)
+			throw()
+		{
+			unlockComposites();
+		
+		 	// create scoring function object
 			EnergeticEvaluation* scoring = 0;
 			//check which scoring function is chosen
-			index = scoring_functions->currentItem();
+			int index = scoring_functions->currentItem();
+			
+			Options scoring_options;
 			
 			switch(index)
 			{
@@ -329,7 +364,7 @@ namespace BALL
 			}
 
 			DockResult* dock_res = new DockResult(docking_alg,
-																							conformation_set,
+																							&conformation_set,
 																							options_); 
 																							
 			dock_res->addScoring(scoring_functions->currentText(), scoring_options, scores);
@@ -351,13 +386,10 @@ namespace BALL
 			dock_res_m->setDockResult(*dock_res);
 			dock_res_m->setComposite(*docked_system);
 			notify_(dock_res_m);
-			
-			
-  		delete dock_alg;
+		
   		delete scoring;
 			
 			Log.info() << "End of calculate" << std::endl;
-			return true;
 		}
 		
 		// set options_ with values user has chosen 

@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.13 2005/04/07 17:02:07 leonhardt Exp $
+// $Id: dockResultDialog.C,v 1.1.2.14 2005/04/12 11:50:44 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -106,7 +106,7 @@ namespace BALL
 			Log.info() << "in DockeResultDialog::show()" << std::endl;
 			// before showing the dialog the result table has to be build and filled 
 			// first get the number of conformations, to know how many rows the table needs
-			int conformation_num = (dock_res_->getConformationSet()).size();
+			int conformation_num = dock_res_->getConformationSet()->size();
 			//int conformation_num = dock_options.getInteger(GeometricFit::Option::BEST_NUM);
 			// insert rows in table
 			result_table->insertRows(0,conformation_num);
@@ -164,8 +164,8 @@ namespace BALL
 			// get snapshot number of this row
 			int snapshot = (result_table->text(selected_row,0)).toInt();
 			// apply snapshot
-			ConformationSet conformation_set = dock_res_->getConformationSet();
-			SnapShot selected_conformation = conformation_set[snapshot];
+			const ConformationSet* conformation_set = dock_res_->getConformationSet();
+			SnapShot selected_conformation = (*conformation_set)[snapshot];
 			selected_conformation.applySnapShot(*docked_system_);
 			//inform main control that system has changed
 			getMainControl()->update(*docked_system_, true);
@@ -256,11 +256,11 @@ namespace BALL
 			}
 			
 			// apply scoring function; set new scores in the conformation set
-			ConformationSet conformation_set = dock_res_->getConformationSet();
-			std::vector<ConformationSet::Conformation> ranked_conformations = (*scoring)(conformation_set);
+			ConformationSet* conformation_set = dock_res_->getConformationSet();
+			std::vector<ConformationSet::Conformation> ranked_conformations = (*scoring)(*conformation_set);
 			Log.info() << "in DockResultDialog:: " << std::endl;
-			conformation_set.setScoring(ranked_conformations);
-			dock_res_->setConformationSet(conformation_set);
+			conformation_set->setScoring(ranked_conformations);
+//   			dock_res_->setConformationSet(conformation_set);
 			
 			// add a new scoring to dock_res_ we need the name, options and score vector of the scoring function
 			vector<float> scores;

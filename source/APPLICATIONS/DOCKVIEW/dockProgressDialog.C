@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.3 2005/04/08 12:47:28 leonhardt Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.4 2005/04/12 11:50:44 haid Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -7,6 +7,7 @@
 
 #include <qprogressbar.h>
 #include <qtextedit.h>
+#include <BALL/VIEW/KERNEL/message.h>
 
 namespace BALL
 {
@@ -17,9 +18,15 @@ namespace BALL
 		DockProgressDialog::DockProgressDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
 			throw()
 			: DockProgressDialogData(parent, name, modal, fl),
-				ModularWidget(name),
-				PreferencesEntry()
-		{}
+				ModularWidget(name)
+		{
+			#ifdef BALL_VIEW_DEBUG
+				Log.error() << "new DockProgressDialog " << this << std::endl;
+			#endif
+		
+			// register the widget with the MainControl
+			ModularWidget::registerWidget(this);
+		}
 		
 		// Destructor	
 		DockProgressDialog::~DockProgressDialog()
@@ -55,6 +62,16 @@ namespace BALL
 			}
 		}
 		
+		//
+		void DockProgressDialog::onNotify(Message *message)
+			throw()
+		{
+			if (RTTI::isKindOf<DockingProgressMessage>(*message))
+			{
+				DockingProgressMessage* dpm = RTTI::castTo<DockingProgressMessage>(*message);
+				progress_bar->setProgress((int)dpm->getProgress() * 100, 100);
+			}
+		}
 		
 		//
 		void DockProgressDialog::pauseClicked()
