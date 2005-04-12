@@ -91,6 +91,15 @@ namespace BALL
 
 		private:
 
+		/*_ simple criterion if a ring can be aromatic
+		*/
+		bool simpleCanBeAromatic_(const HashSet<Atom*>& ring);
+
+		/*_ simple criterion if a ring can be aromatic, with weaker condition
+				double bonds not need to be alternating inside the ring
+		*/
+		bool simpleCanBeAromaticWeaker_(const HashSet<Atom*>& ring);
+
 		/*_ Tries to extend an aromatic system. Main method that tries to extend 
 				the aromaticity to intersecting rings.
 				@param SSSR ring set as vector<HashSet<Atom*> >, (vector of rings in HashSet<Atom*>)
