@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67 2005/03/02 09:46:07 oliver Exp $
+// $Id: glRenderer.C,v 1.67.2.1 2005/04/12 15:01:16 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -523,7 +523,7 @@ namespace BALL
 
 			// build bitmap
 			int width, height;
-			GLubyte* text_array = generateBitmapFromText_(label.getText(), width, height);
+			GLubyte* text_array = generateBitmapFromText_(label.getExpandedText(), label.getSize(), width, height);
 
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -863,11 +863,11 @@ namespace BALL
 			glEnable(GL_CULL_FACE);
 		}
 
-		GLubyte* GLRenderer::generateBitmapFromText_(const String& text, int& width, int& height) const
+		GLubyte* GLRenderer::generateBitmapFromText_(const String& text, Size font_size, int& width, int& height) const
 			throw()
 		{
 	#ifndef BALL_PLATFORM_WINDOWS
-			QColor c1(0,0,0);
+			QColor c1(110,0,0);
 			QColor c2(255,255,255);
 	#else
 			// invert colors to fix problem under windows
@@ -875,12 +875,12 @@ namespace BALL
 			QColor c1(255,255,255);
 	#endif
 		
-			int border = 2;
+			int border = 5;
 			
 			QPainter p;
 			QPixmap pm(1,1,1);
 			p.begin(&pm);
-				p.setFont(QFont("helvetica"));
+				p.setFont(QFont("Helvetica", font_size));
 				QRect r = p.fontMetrics().boundingRect(text.c_str());
 			p.end();
 			pm.resize(r.size() + QSize(border * 2, border * 2));

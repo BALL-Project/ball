@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>301</width>
-            <height>161</height>
+            <width>303</width>
+            <height>262</height>
         </rect>
     </property>
     <property name="maximumSize">
@@ -24,14 +24,165 @@
     <property name="sizeGripEnabled">
         <bool>false</bool>
     </property>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>GroupBox1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>2</x>
+                <y>0</y>
+                <width>295</width>
+                <height>96</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Text</string>
+        </property>
+        <widget class="QComboBox">
+            <item>
+                <property name="text">
+                    <string>Name</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Residue ID</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Atom Type</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Atom Charge</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>tag_box</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>52</y>
+                    <width>175</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Select a special text tag to add</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>label_edit_</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>9</x>
+                    <y>18</y>
+                    <width>275</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Enter label text. You can also add special tags: &lt;br&gt;%N Name&lt;br&gt;%I Residue ID&lt;br&gt;%C charge&lt;br&gt;%T type</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>add_tag_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>203</x>
+                    <y>52</y>
+                    <width>80</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Add</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Add the selected text tag</string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>GroupBox1_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>3</x>
+                <y>160</y>
+                <width>295</width>
+                <height>59</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Color</string>
+        </property>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>edit_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>200</x>
+                    <y>19</y>
+                    <width>87</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>Edit</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Edit label color</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>color_sample_</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>20</y>
+                    <width>173</width>
+                    <height>29</height>
+                </rect>
+            </property>
+            <property name="paletteBackgroundColor">
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+        </widget>
+    </widget>
     <widget class="QLayoutWidget">
         <property name="name">
             <cstring>Layout1</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>6</x>
-                <y>122</y>
+                <x>4</x>
+                <y>224</y>
                 <width>292</width>
                 <height>33</height>
             </rect>
@@ -99,97 +250,61 @@
     </widget>
     <widget class="QGroupBox">
         <property name="name">
-            <cstring>GroupBox1</cstring>
+            <cstring>GroupBox1_2_2</cstring>
         </property>
         <property name="geometry">
             <rect>
                 <x>2</x>
-                <y>0</y>
-                <width>295</width>
-                <height>54</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Text</string>
-        </property>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>label_edit_</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>9</x>
-                    <y>18</y>
-                    <width>278</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Enter label text</string>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>GroupBox1_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>3</x>
-                <y>58</y>
+                <y>99</y>
                 <width>295</width>
                 <height>59</height>
             </rect>
         </property>
         <property name="title">
-            <string>Color</string>
+            <string>Font Size</string>
         </property>
         <widget class="QLabel">
             <property name="name">
-                <cstring>color_sample_</cstring>
+                <cstring>size_label</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>11</x>
-                    <y>20</y>
-                    <width>173</width>
-                    <height>29</height>
+                    <x>251</x>
+                    <y>17</y>
+                    <width>34</width>
+                    <height>33</height>
                 </rect>
             </property>
-            <property name="paletteBackgroundColor">
-                <color>
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>0</blue>
-                </color>
+            <property name="frameShape">
+                <enum>ToolBarPanel</enum>
             </property>
             <property name="text">
-                <string></string>
+                <string>12</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
             </property>
         </widget>
-        <widget class="QPushButton">
+        <widget class="QSlider">
             <property name="name">
-                <cstring>edit_button</cstring>
+                <cstring>size_slider</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>200</x>
-                    <y>19</y>
-                    <width>87</width>
-                    <height>30</height>
+                    <x>9</x>
+                    <y>25</y>
+                    <width>234</width>
+                    <height>16</height>
                 </rect>
             </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>30</height>
-                </size>
+            <property name="minValue">
+                <number>1</number>
             </property>
-            <property name="text">
-                <string>Edit</string>
+            <property name="maxValue">
+                <number>72</number>
             </property>
-            <property name="toolTip" stdset="0">
-                <string>Edit label color</string>
+            <property name="orientation">
+                <enum>Horizontal</enum>
             </property>
         </widget>
     </widget>
@@ -213,6 +328,18 @@
         <receiver>LabelDialogData</receiver>
         <slot>editColor()</slot>
     </connection>
+    <connection>
+        <sender>size_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>LabelDialogData</receiver>
+        <slot>fontSizeChanged()</slot>
+    </connection>
+    <connection>
+        <sender>add_tag_button</sender>
+        <signal>clicked()</signal>
+        <receiver>LabelDialogData</receiver>
+        <slot>addTag()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>label_edit_</tabstop>
@@ -225,6 +352,8 @@
 </includes>
 <slots>
     <slot>editColor()</slot>
+    <slot>fontSizeChanged()</slot>
+    <slot>addTag()</slot>
 </slots>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.1 2005/04/12 11:45:59 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.2 2005/04/12 15:01:04 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -235,7 +235,7 @@ namespace BALL
 
 			// This is used to provide the coloring for meshes...
 			insertContextMenuEntry("Color Surface", colorMeshDlg_, SLOT(show()), 30);	
-			insertContextMenuEntry("Divide Surface", this, SLOT(divideSurface()), 34);	
+			insertContextMenuEntry("Divide Surface by selection", this, SLOT(divideSurface()), 34);	
 			if (!isSurfaceModel(rep.getModelType()))
 			{
 				context_menu_.setItemEnabled(30, false);

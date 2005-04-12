@@ -1,10 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.C,v 1.7 2004/07/14 16:37:39 amoll Exp $
+// $Id: label.C,v 1.7.6.1 2005/04/12 15:00:54 amoll Exp $
 //
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/atomContainer.h>
+#include <BALL/KERNEL/residue.h>
 
 using namespace std;
 
@@ -16,7 +19,8 @@ namespace BALL
 		Label::Label()
 			throw()
 			:	GeometricObject(),
-				Vertex()
+				Vertex(),
+				size_(12)
 		{
 		}
 
@@ -24,7 +28,8 @@ namespace BALL
 			throw()
 			:	GeometricObject(label),
 				Vertex(label),
-				text_(label.text_)
+				text_(label.text_),
+				size_(label.size_)
 		{
 		}
 
@@ -91,5 +96,76 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
+
+		String Label::getExpandedText() const
+			throw()
+		{
+			if (!text_.has('%') || getComposite() == 0)
+			{
+				return text_;
+			}
+			
+			String result;
+
+			const Atom* atom = dynamic_cast<const Atom*> (getComposite());
+			const AtomContainer* ac = dynamic_cast<const AtomContainer*> (getComposite());
+			const Residue* residue = dynamic_cast<const Residue*> (getComposite());
+
+			for (Position pos = 0; pos < text_.size(); pos++)
+			{
+				// normal text
+				if (text_[pos] != '%')
+				{
+					result += text_[pos];
+					continue;
+				}
+
+				pos++;
+
+				// dont step over the size of the string
+				if (pos == text_.size()) break;
+
+				// make it possible to escape %
+				if (text_[pos] == '%')
+				{
+					result += '%';
+				}
+
+				// name
+				else if (text_[pos] == 'N')
+				{
+					if (atom) result += atom->getName();
+					else 		  result += ac->getName();
+				}
+
+				// resiude ID
+				else if (text_[pos] == 'I')
+				{
+					if (residue) result += residue->getID();
+				}
+
+				// atom type
+				else if (text_[pos] == 'T')
+				{
+					if (atom) result += String(atom->getType());
+				}
+
+				// atom charge
+				else if (text_[pos] == 'C')
+				{
+					if (atom)
+					{
+						String charge(atom->getCharge());
+						charge.trimRight("0");
+						if (charge.hasSuffix(".")) charge += '0';
+						result += charge;
+					}
+				}
+
+			} // for
+
+			return result;
+		} // getExpandedText
+			
 	} // namespace VIEW
 } // namespace BALL

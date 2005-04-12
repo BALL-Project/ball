@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.10 2004/07/14 16:38:19 amoll Exp $
+// $Id: label.h,v 1.10.6.1 2005/04/12 15:00:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
@@ -121,6 +121,17 @@ namespace BALL
 			String getText() const
 				throw() { return text_;}
 
+			/** Inspection of the expanded text of the label.
+			*/
+			String getExpandedText() const
+				throw();
+
+			///
+			Size getSize() const { return size_;}
+
+			///
+			void setSize(Size size) { size_ = size;}
+
 			//@}
 			/**	@name	debuggers and diagnostics */
 			//@{
@@ -155,6 +166,7 @@ namespace BALL
 
 			protected:
 				String text_;
+				Size   size_;
 
 			//@}
 		};
