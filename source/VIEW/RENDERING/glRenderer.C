@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.1 2005/04/12 15:01:16 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.2 2005/04/12 14:51:16 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -877,10 +877,16 @@ namespace BALL
 		
 			int border = 5;
 			
+			QFont font("Helvetica", font_size);
+			QFontMetrics fm(font);
+			
+			Size width = fm.width(text.c_str());
+			Size height = fm.height(text.c_str());
+
 			QPainter p;
 			QPixmap pm(1,1,1);
 			p.begin(&pm);
-				p.setFont(QFont("Helvetica", font_size));
+				p.setFont(font);
 				QRect r = p.fontMetrics().boundingRect(text.c_str());
 			p.end();
 			pm.resize(r.size() + QSize(border * 2, border * 2));
