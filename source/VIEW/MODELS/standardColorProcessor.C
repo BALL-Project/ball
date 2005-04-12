@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.52 2005/02/24 15:52:34 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.52.2.1 2005/04/12 11:46:22 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -575,7 +575,7 @@ namespace BALL
 
 				if (composite == 0 || composite != last_composite_of_grid_)
 				{
-					createAtomGrid_(composite);
+					createAtomGrid(composite);
 				}
 
 				colorMeshFromGrid_(*mesh);
@@ -673,7 +673,7 @@ namespace BALL
 			{
 				if (last_composite_of_grid_ == 0)
 				{ 
-					createAtomGrid_();
+					createAtomGrid();
 				}
 				CompositeSet::ConstIterator it = composites_->begin();
 				for(; it != composites_->end(); it++)
@@ -730,7 +730,7 @@ namespace BALL
 			for (Position p = 0; p < mesh.vertex.size(); p++)
 			{
 				// make sure we found an atom
-				const Atom* atom = getClosestItem_(mesh.vertex[p]);
+				const Atom* atom = getClosestItem(mesh.vertex[p]);
 
 				if (atom == 0)
 				{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73 2005/02/06 20:57:11 oliver Exp $
+// $Id: geometricControl.C,v 1.73.4.1 2005/04/12 11:45:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -21,6 +21,7 @@
 #include <BALL/VIEW/PRIMITIVES/disc.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
+#include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/MATHS/simpleBox3.h>
 
 #include <qpopupmenu.h>
@@ -234,9 +235,11 @@ namespace BALL
 
 			// This is used to provide the coloring for meshes...
 			insertContextMenuEntry("Color Surface", colorMeshDlg_, SLOT(show()), 30);	
+			insertContextMenuEntry("Divide Surface", this, SLOT(divideSurface()), 34);	
 			if (!isSurfaceModel(rep.getModelType()))
 			{
 				context_menu_.setItemEnabled(30, false);
+				context_menu_.setItemEnabled(34, false);
 			}
 
 			context_menu_.insertSeparator();
@@ -252,6 +255,73 @@ namespace BALL
 				context_menu_.setItemEnabled(40, false);
 				context_menu_.setItemEnabled(50, false);
 			}
+		}
+
+		void GeometricControl::divideSurface()
+		{
+			if (getSelectedItems().size() != 1 ||
+					getMainControl()->getSelection().size() == 0) 
+			{
+				return;
+			}
+
+			Representation* rep = getRepresentation(**getSelectedItems().begin());
+
+			// make sure we have a colorProcessor
+			if (rep->getColorProcessor() == 0) 
+			{
+				rep->setColorProcessor(new CustomColorProcessor);
+				rep->getColorProcessor()->createAtomGrid();
+			}
+			ColorProcessor* cp = rep->getColorProcessor();
+
+			// create a new representation with the subset of the original mesh
+			Representation* new_rep = new Representation;
+			new_rep->getComposites() = rep->getComposites();
+			new_rep->setColorProcessor(new ColorProcessor(*rep->getColorProcessor()));
+			new_rep->setModelType(rep->getModelType());
+			new_rep->setColoringMethod(rep->getColoringMethod());
+
+			Representation::GeometricObjectList::iterator git = rep->getGeometricObjects().begin();
+			for (; git != rep->getGeometricObjects().end(); ++git)
+			{
+				// get the original mesh
+				if (!RTTI::isKindOf<Mesh>(**git)) continue;
+				Mesh& org_mesh = *dynamic_cast<Mesh*>(*git);
+
+				// copy all vertices and colors into a new mesh
+				Mesh* new_mesh = new Mesh;
+				new_mesh->vertex = org_mesh.vertex;
+				new_mesh->colorList = org_mesh.colorList;
+				new_mesh->normal = org_mesh.normal;
+				new_rep->getGeometricObjects().push_back(new_mesh);
+
+				// collect informations which vertices are to be included
+				vector<bool> include_vertex;
+				include_vertex.resize(org_mesh.vertex.size());
+				
+				for (Position p = 0; p < org_mesh.vertex.size(); p++)
+				{
+					// make sure we found an atom
+					const Atom* atom = cp->getClosestItem(org_mesh.vertex[p]);
+
+					include_vertex[p] = (atom != 0 && atom->isSelected());
+				}
+
+				for (Position pos = 0; pos < org_mesh.triangle.size(); pos++)
+				{
+					Surface::Triangle& tri = org_mesh.triangle[pos];
+					if (include_vertex[tri.v1] &&
+							include_vertex[tri.v2] &&
+							include_vertex[tri.v3])
+					{
+						new_mesh->triangle.push_back(tri);
+					}
+				}
+			}
+
+			new_rep->setModelProcessor(0);
+			getMainControl()->insert(*new_rep);
 		}
 
 		void GeometricControl::insertContextMenuEntry(const String& name, const QObject* receiver, const char* slot, int entry_ID, int accel)

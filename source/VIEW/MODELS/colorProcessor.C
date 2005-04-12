@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.34 2005/02/07 20:32:41 amoll Exp $
+// $Id: colorProcessor.C,v 1.34.4.1 2005/04/12 11:46:22 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -110,7 +110,7 @@ namespace BALL
 				if (composite == 0 ||
 						composite != last_composite_of_grid_)
 				{
-					createAtomGrid_(composite);
+					createAtomGrid(composite);
 				}
 
 				colorMeshFromGrid_(*mesh);
@@ -184,7 +184,7 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void ColorProcessor::createAtomGrid_(const Composite* from_mesh)
+		void ColorProcessor::createAtomGrid(const Composite* from_mesh)
 			throw()
 		{
 			atom_grid_.clear();
@@ -288,11 +288,11 @@ namespace BALL
 			for (Position p = 0; p < mesh.vertex.size(); p++)
 			{
 				// make sure we found an atom
-				const Atom* atom = getClosestItem_(mesh.vertex[p]);
+				const Atom* atom = getClosestItem(mesh.vertex[p]);
 
 				if (atom == 0)
 				{
- 					mesh.colorList[p] = default_color_;
+					mesh.colorList[p] = default_color_;
 				}
 				else
 				{
@@ -302,7 +302,7 @@ namespace BALL
 					}
 					else
 					{
- 						getColor(*atom, mesh.colorList[p]);
+						getColor(*atom, mesh.colorList[p]);
 					}
 				}
 			}
@@ -349,7 +349,7 @@ namespace BALL
 		}
 
 
-		const Atom* ColorProcessor::getClosestItem_(const Vector3& point) const
+		const Atom* ColorProcessor::getClosestItem(const Vector3& point) const
 			throw()
 		{
 			const HashGridBox3<const Atom*>* box = atom_grid_.getBox(point);
