@@ -20,6 +20,8 @@
 
 #include <BALL/VIEW/UIC/labelDialogData.h>
 
+#include <qfont.h>
+
 namespace BALL
 {
 	namespace VIEW
@@ -151,7 +153,7 @@ namespace BALL
 			virtual void addTag();
 
 			///
-			virtual void fontSizeChanged();
+			virtual void fontSelected();
 						
 			//@}
 			
@@ -159,8 +161,9 @@ namespace BALL
 			
 			int id_;
 			
-			ColorRGBA custom_color_;
-			List<Composite*> selection_;
+			ColorRGBA 				custom_color_;
+			List<Composite*> 	selection_;
+			QFont 						font_;
 		};
 
 } } // namespaces

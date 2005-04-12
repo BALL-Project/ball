@@ -16,7 +16,7 @@
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
-#include <qslider.h>
+#include <qfontdialog.h>
 
 namespace BALL
 {
@@ -83,6 +83,15 @@ void LabelDialog::fetchPreferences(INIFile& inifile)
 		custom_color_.set(ColorRGBA(1.,1.,0.,1.));
 		color_sample_->setBackgroundColor(custom_color_.getQColor());
 	}			
+
+	if (inifile.hasEntry("WINDOWS", "Label::font"))
+	{
+		font_.fromString(inifile.getValue("WINDOWS", "Label::font").c_str());
+	}
+	else
+	{
+		font_ = QFont("Helvetica", 12);
+	}
 }
 
 void LabelDialog::writePreferences(INIFile& inifile)
@@ -96,7 +105,7 @@ void LabelDialog::writePreferences(INIFile& inifile)
 	inifile.insertValue("WINDOWS", "Label::customcolor", custom_color_);
 
 	// the font size
-	inifile.insertValue("WINDOWS", "Label::fontsize", size_slider->value());
+	inifile.insertValue("WINDOWS", "Label::font", font_.toString().ascii());
 }
 
 void LabelDialog::onNotify(Message *message)
@@ -178,7 +187,7 @@ void LabelDialog::accept()
 	label->setText(label_edit_->text().ascii());
 	label->setColor(custom_color_);
 	label->setVertex(center);
-	label->setSize(size_slider->value());
+	label->setFont(font_);
 
 	if (selection_.size() == 1)
 	{
@@ -215,9 +224,15 @@ void LabelDialog::addTag()
 	label_edit_->update();
 }
 
-void LabelDialog::fontSizeChanged()
+void LabelDialog::fontSelected()
 {
-	size_label->setText(String(size_slider->value()).c_str());
+	bool ok = true;
+	QFont font = QFontDialog::getFont(&ok, font_, 0);
+
+	if (!ok) return;
+
+	font_label->setFont(font);
+	font_ = font;
 }
 
 
