@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: aromaticityProcessor.C,v 1.9 2005/04/13 11:04:03 bertsch Exp $
+// $Id: aromaticityProcessor.C,v 1.10 2005/04/13 12:51:46 bertsch Exp $
 //
 
 #include <BALL/QSAR/aromaticityProcessor.h>
@@ -315,16 +315,24 @@ namespace BALL
 			}
 			else
 			{
-				if ((countPiElectrons_(*it->second.begin())-2)%4 == 0)
+				HashSet<Atom*> ring = *it->second.begin();
+				if (simpleCanBeAromatic_(ring))
 				{
-					aromatic_rings.push_back(*it->second.begin());
-					aromatic_atoms += *it->second.begin();
+					if ((countPiElectrons_(ring)-2)%4 == 0)
+					{
+						aromatic_rings.push_back(ring);
+						aromatic_atoms += ring;
+					}
+				}
+				else
+				{
+					if (simpleCanBeAromaticWeaker_(ring))
+					{
+						can_be_rings.push_back(ring);
+					}
 				}
 			}
 		}
-
-		//cerr << "#can be rings: " << can_be_rings.size() << " " << can_be_rings.begin()->size()
-		//	<< ", #aromatic rings: " << aromatic_rings.size() << endl;
 
 		// now handle the rings which can be aromatic 
 		for (vector<HashSet<Atom*> >::const_iterator it=can_be_rings.begin(); it!=can_be_rings.end(); ++it)
