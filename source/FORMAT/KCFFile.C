@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: KCFFile.C,v 1.2 2005/03/14 21:38:39 oliver Exp $
+// $Id: KCFFile.C,v 1.2.2.1 2005/04/13 10:48:16 oliver Exp $
 //
 
 #include <BALL/FORMAT/KCFFile.h>
@@ -24,7 +24,7 @@ namespace BALL
   const char* KCFFile::NODE_TAG  = "NODE  ";
   const char* KCFFile::EDGE_TAG  = "EDGE  ";
   const char* KCFFile::DELIMITER_TAG = "///";
-	const char* KCFFile::CONTINUED_LINE = "    "; // ??? number of spaces?
+	const char* KCFFile::CONTINUED_LINE = " ";
 	
 	KCFFile::KCFFile() throw()
 		:	GenericMolFile()
@@ -60,28 +60,29 @@ namespace BALL
 		
 		// Write ENTRY block
 		// number of blanks????  properties are not read, written??? Which ones are there?
-		os << ENTRY_TAG << molecule.getName() << std::endl;
+		os << ENTRY_TAG << "      " << molecule.getName() << std::endl;
 		
 		static char buffer[BALL_MAX_LINE_LENGTH];
 
 		// Write NODE block
-		// ??? how to create the KEGG atom types?´
-		// Blanks????
+		// How to create the KEGG atom types? How many blanks?
+		// This is not specified in the KCF format description, so we use what we can
+    // deduce from example files.
 		// First line gets the NODE tag
-		os << NODE_TAG << "    " << molecule.countAtoms() << "\n"; 
+		os << NODE_TAG << "      " << molecule.countAtoms() << "\n"; 
 		Size count = 1;
 		AtomConstIterator ai(molecule.beginAtom());
 		std::map<const Atom*, Position> atom_to_index;
 		for (; +ai; ++ai, ++count)
 		{
-			// Write the atom line´.
+			// Write the atom line.
 			// Blanks????
 			String type = ai->getTypeName();
 			String comment;
 			
 			// Make sure the type is in the set of KEGG types????
 			// Blanks?
-			sprintf(buffer, "            %d %s %s %6.4f %6.4f %s\n", 
+			sprintf(buffer, "             %d %s %s %6.4f %6.4f %s\n", 
 							count, type.c_str(), ai->getElement().getSymbol().c_str(), 
 							ai->getPosition().x, ai->getPosition().y, comment.c_str());
 			os << buffer;
@@ -91,7 +92,7 @@ namespace BALL
 			atom_to_index[&*ai] = count;
 		}
 		
-		// Write EDGE block. WAlk over all bonds.
+		// Write EDGE block. Walk over all bonds to do so.
 		// Blanks????
 		os << "EDGE    " << molecule.countBonds() << "\n";
 		count = 1;
@@ -106,8 +107,9 @@ namespace BALL
 				// Write every bond just once				
 				if (bi->getFirstAtom() == &*ai)
 				{
-					sprintf(buffer, "          %4d %4d %4d %1d %s\n", 
+					sprintf(buffer, "          %4d %4d %4d %1d%s\n", 
 									count, index1, index2, bi->getOrder(), comment.c_str());
+					os << buffer;
 					++count;
 				}
 			}
@@ -138,16 +140,19 @@ namespace BALL
 
 	bool KCFFile::read(System& system) throw(Exception::ParseError)
 	{
-		
-		// read the molecule
 		Molecule* molecule = 0;
+		bool read_anything = false;
+
+		// Read all molecules.
 		try
 		{
 			while ((molecule = read()) != 0)
 			{
 				// add the molecule to the system
 				system.append(*molecule);
-			}	
+				molecule = 0;
+				read_anything = true;
+			}
 		}
 		catch (Exception::ParseError& e)
 		{
@@ -160,7 +165,8 @@ namespace BALL
 			throw e;
 		}
 
-		return true;
+		// Make sure to return false if nothing could be read.
+		return read_anything;
 	}
 
 	Molecule* KCFFile::read()	throw(Exception::ParseError)
@@ -179,29 +185,43 @@ namespace BALL
 		ok &= readNODE_(*mol, index_to_atom);
 		ok &= readEDGE_(index_to_atom);
 		ok &= readDELIMITER_();
-		// ????
+
+		if (!ok)	
+		{
+			throw Exception::ParseError(__FILE__, __LINE__, "unknown", getName());
+		}
+
 		return mol;
 	}
 	
 	bool KCFFile::readENTRY_(Molecule& mol)
 	{
-		bool ok = getLine().hasPrefix(ENTRY_TAG);
-		if (ok)
+		if (!getLine().hasPrefix(ENTRY_TAG))
 		{
-			/// Neglects all comments!
-			mol.setName(getLine().getField(1));
+			throw Exception::ParseError(__FILE__, __LINE__,
+																	String("'") + getLine() + "' (line " + String(getLineNumber()) + " of "  + getName() + "'",
+																	String("Expected ENTRY tag: "));
 		}
-		return (ok && readLine());
+		
+		// The name is just the first field in the entry line.
+		/// Neglects all comments! ????
+		mol.setName(getLine().getField(1));
+		
+		// Read the next line.
+		return readLine();
 	}
 
 	bool KCFFile::readNODE_(Molecule& molecule, KCFFile::IndexAtomMap& index_to_atom)
 	{
-		bool ok = getLine().hasPrefix(NODE_TAG);
-		if (!ok)
+		if (!getLine().hasPrefix(NODE_TAG))
 		{
-			return false;
+			throw Exception::ParseError(__FILE__, __LINE__,
+																	String("'") + getLine() + "' (line " + String(getLineNumber()) + " of "  + getName() + "'",
+																	String("Expected NODE tag: "));
 		}
+
 		Size number_of_nodes = getLine().getField(1).toInt();
+		bool ok = true;
 		for (Position i = 0; ok && (i < number_of_nodes); i++)
 		{
 			ok &= readLine();
@@ -232,12 +252,15 @@ namespace BALL
 
 	bool KCFFile::readEDGE_(KCFFile::IndexAtomMap& index_to_atom)
 	{
-		bool ok = getLine().hasPrefix(EDGE_TAG);
-		if (!ok)
+		if (!getLine().hasPrefix(EDGE_TAG))
 		{
-			return false;
+			throw Exception::ParseError(__FILE__, __LINE__,
+																	String("'") + getLine() + "' (line " + String(getLineNumber()) + " of "  + getName() + "'",
+																	String("Expected EDGE tag: "));
 		}
+
 		Size number_of_edges = getLine().getField(1).toInt();
+		bool ok = true;
 		for (Position i = 0; ok && (i < number_of_edges); i++)
 		{
 			// Get the next line

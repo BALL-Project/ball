@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.44 2004/10/20 12:26:41 amoll Exp $
+# $Id: Makefile,v 1.44.6.1 2005/04/13 10:48:17 oliver Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -166,7 +166,7 @@ openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
 colorChooser_moc.C: $(HEADER_DIR)/colorChooser.h
 	$(MOC) $(HEADER_DIR)/colorChooser.h -o $@
 
-depend: $(UIC_SOURCES) $(MOC_SOURCES)
+depend: $(UIC_HDR) $(UIC_SOURCES) $(MOC_SOURCES)
 
 default_clean: clean_uic
 
