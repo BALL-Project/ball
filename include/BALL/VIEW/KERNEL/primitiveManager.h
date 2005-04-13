@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.20 2005/02/16 17:10:04 amoll Exp $
+// $Id: primitiveManager.h,v 1.20.2.1 2005/04/13 14:09:26 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -151,16 +151,17 @@ namespace BALL
 			 		Method is called in MainControl, after removal of
 					a composite (e.g. a System) and it removes all
 					representations, which contain the Composite.
+					It can also update all Representations, which have still have other Composites than the one to be deleted.
 					\return a list with the pointers of all removed representations.
 			*/
-			List<Representation*> removedComposite(const Composite& composite)
+			RepresentationList removedComposite(const Composite& composite, bool update = true)
 				throw();
 
 			/** Get a list of Representation, which were build for a Composite.
 			 		Method is called in MainControl, after receiving CompositeChangedMessage.
 					\return a list with the pointers of representations, which are to be updated.
 			*/
-			List<Representation*> getRepresentationsOf(const Composite& composite)
+			RepresentationList getRepresentationsOf(const Composite& composite)
 				throw();
 
 			/// Return true if a Representation will be updated

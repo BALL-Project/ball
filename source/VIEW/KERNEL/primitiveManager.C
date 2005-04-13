@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36 2005/02/16 17:09:59 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.1 2005/04/13 14:08:56 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -190,39 +190,86 @@ bool PrimitiveManager::operator == (const PrimitiveManager& pm) const
 }
 
 
-List<Representation*> PrimitiveManager::removedComposite(const Composite& composite)
+PrimitiveManager::RepresentationList PrimitiveManager::removedComposite(const Composite& composite, bool update)
 	throw()
 {
-	List<Representation*> removed_representations;
-	RepresentationsIterator rep_it = begin();
-	for (; rep_it != end(); rep_it++)
-	{
-		Representation::CompositesConstIterator composite_it = (*rep_it)->begin();
-		for(; composite_it != (*rep_it)->end(); composite_it++)
-		{
-			if (&composite == *composite_it ||
-					composite.isAncestorOf(**composite_it))
-			{
-				if ((*rep_it)->getComposites().size() > 1)
-				{
-					(*rep_it)->getComposites().erase(*composite_it);
-					update_(**rep_it);
-					break;
-				}
+	// Representations either to be updated or deleted
+	RepresentationList changed_representations = getRepresentationsOf(composite);
 
-				removed_representations.push_back(*rep_it);
-				break;
+	RepresentationList removed_representations;
+
+	// iterate over all Representations
+	RepresentationsIterator rep_it = changed_representations.begin();
+	for (; rep_it != changed_representations.end(); rep_it++)
+	{
+		Representation& rep = **rep_it;
+
+		// collect childs of composite, which occur in the Representation
+		List<const Composite*> composites_to_remove;
+
+		// test if a Representation has Composites which are (not) to be removed
+		Representation::CompositesConstIterator composite_it = rep.begin();
+		for(; +composite_it; composite_it++)
+		{
+			if (&composite == *composite_it || composite.isAncestorOf(**composite_it))
+			{
+				composites_to_remove.push_back(*composite_it);
 			}
 		}
+
+		// erase the Composites from the Representation
+		List<const Composite*>::Iterator crit = composites_to_remove.begin();
+		for (; crit != composites_to_remove.end(); crit++)
+		{
+			rep.getComposites().erase(*crit);
+		}
+
+		// if we have no more Composites in the Representation, it is to be deleted
+		if (rep.getComposites().size() == 0) 
+		{
+			removed_representations.push_back(&rep);
+			continue;
+		}
+		
+		// if we have no model processor, remove all GeometricObjects for this Composite
+		if (rep.getModelProcessor() == 0)
+		{
+			List<List<GeometricObject*>::Iterator> go_to_remove;
+			Representation::GeometricObjectList::Iterator it = rep.getGeometricObjects().begin();
+			for (;it != rep.getGeometricObjects().end(); it++)
+			{
+				const Composite* go_composite = (*it)->getComposite();
+				if (go_composite == 0) continue;
+
+				if (&composite == go_composite ||
+						composite.isAncestorOf(*go_composite))
+				{
+					go_to_remove.push_back(it);
+				}
+			}
+
+			// erase the GeometricObjects from the Representation
+			List<List<GeometricObject*>::Iterator>::Iterator go_it = go_to_remove.begin();
+			for (; go_it != go_to_remove.end(); go_it++)
+			{
+				rep.getGeometricObjects().erase(*go_it);
+			}
+		}
+
+		// call update for the Representation
+		if (update) update_(rep);
 	}
 
+	// Representations are to be deleted
 	rep_it = removed_representations.begin();
 	for (; rep_it != removed_representations.end(); rep_it++)
 	{
 		remove(**rep_it);
 	}
+
 	return removed_representations;
 }
+
 
 List<Representation*> PrimitiveManager::getRepresentationsOf(const Composite& composite)
 	throw()

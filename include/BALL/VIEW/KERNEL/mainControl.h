@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72 2005/02/14 23:42:30 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.1 2005/04/13 14:09:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -268,9 +268,10 @@ namespace BALL
 			/** Remove a Composite and notify all ModularWidget.
 			 		A CompositeMessage with type REMOVED_COMPOSITE is send and
 					CompositeManager::remove called.
+					@param update update Representations if needed
 					\return false if the CompositeManager doesnt contain the Composite
 			*/
-			bool remove(Composite& composite, bool to_delete = true)
+			bool remove(Composite& composite, bool to_delete = true, bool update = true)
 				throw();
 
 			/** Update a Representation

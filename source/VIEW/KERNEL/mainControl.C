@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169 2005/03/01 15:54:23 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.1 2005/04/13 14:08:55 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -569,21 +569,11 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		bool MainControl::remove_(Composite& composite, bool update_representations_of_parent, bool to_delete)
 			throw()
 		{
-			if (!composite_manager_.has(composite)) return false;
 			// delete all representations containing the composite
-			primitive_manager_.removedComposite(composite);
-
-			Composite* root = 0;
-			if (composite.isRoot()) root = &composite.getRoot();
+			primitive_manager_.removedComposite(composite, update_representations_of_parent);
 
 			// delete the Composite
 			composite_manager_.remove(composite, to_delete);
-
-			// update all Representations
-			if (root != 0 && update_representations_of_parent) 
-			{
-				updateRepresentationsOf(*root, true, true);
-			}
 
 			return true;
 		}
@@ -1389,21 +1379,15 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			return true;
 		}
 
-		bool MainControl::remove(Composite& composite, bool to_delete)
+		bool MainControl::remove(Composite& composite, bool to_delete, bool update)
 			throw()
 		{
-			if (!composite_manager_.has(composite)) 
-			{
-				primitive_manager_.removedComposite(composite);
-				return false;
-			}
-
 			control_selection_.clear();
 
 			CompositeMessage* cm = new CompositeMessage(composite, 
 					CompositeMessage::REMOVED_COMPOSITE);
 			notify_(cm);
-			remove_(composite, true, to_delete);
+			remove_(composite, update, to_delete);
 
 			return true;
 		}
