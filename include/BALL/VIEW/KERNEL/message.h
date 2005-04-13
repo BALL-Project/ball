@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.63.2.1 2005/04/04 16:14:55 haid Exp $
+// $Id: message.h,v 1.63.2.2 2005/04/13 11:01:04 haid Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -25,6 +25,10 @@
 
 #ifndef BALL_DATATYPE_REGULARDATA3D
 # include <BALL/DATATYPE/regularData3D.h>
+#endif
+
+#ifndef BALL_STRUCTURE_DOCKING_CONFORMATIONSET_H
+# include <BALL/STRUCTURE/DOCKING/conformationSet.h>
 #endif
 
 namespace BALL
@@ -708,17 +712,84 @@ class BALL_EXPORT NewDockResultMessage
 		///
 		NewDockResultMessage()
 			throw();
-
+			
 		///
 		void setDockResult(DockResult& dock_res)
-			throw() { dock_res_ = &dock_res;}
+			throw()
+		{
+			dock_res_ = &dock_res;
+		}
 
 		///
 		DockResult* getDockResult()
-			throw() { return dock_res_;}
+			throw()
+		{
+			return dock_res_;
+		}
 
 	protected:
 		DockResult* dock_res_;
+};
+
+/// Message to notify about a new DockProgress
+class BALL_EXPORT DockingProgressMessage
+	:public Message
+{
+	public:
+		///
+		DockingProgressMessage()
+			throw();
+
+		///
+		virtual ~DockingProgressMessage()
+			throw();
+			
+		///
+		void setProgress(float progress)
+			throw()
+		{
+			progress_ = progress;
+		}
+
+		///
+		const float getProgress() const
+			throw()
+		{
+			return progress_;
+		}
+
+	protected:
+		float progress_;
+};
+
+/// Message to notify docking has finished
+class BALL_EXPORT DockingFinishedMessage
+	:public Message
+{
+	public:
+		///
+		DockingFinishedMessage()
+			throw();
+
+		///
+		virtual ~DockingFinishedMessage()
+			throw();
+			
+		///
+		void setConformationSet(const ConformationSet* conformation_set)
+		{
+			conformation_set_ = conformation_set;
+		}
+		
+		//
+		const ConformationSet* getConformationSet() const
+		{
+			return conformation_set_;
+		}
+
+	protected:
+
+		const ConformationSet* conformation_set_;
 };
 
 

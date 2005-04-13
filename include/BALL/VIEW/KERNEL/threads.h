@@ -129,7 +129,7 @@ namespace VIEW
 			///
 			std::stringstream& getStream() { return stream_;}
 
-			protected:
+		protected:
 			String url_;
 			String file_name_;
 			TCPTransfer tcp_;
@@ -274,6 +274,30 @@ namespace VIEW
 				bool save_images_;
 		};
 
+		/// Thread for Docking
+		class BALL_EXPORT DockingThread
+			: public SimulationThread
+		{
+			public:
+				///
+				DockingThread()
+					throw();
+				
+				///
+				virtual ~DockingThread()
+					throw();
+				
+				//
+				void setDockingAlgorithm(DockingAlgorithm* dock_alg)
+					throw();
+					
+				///
+				virtual void run()
+					throw();
+					
+			protected:
+				DockingAlgorithm* dock_alg_;
+		};
 
 		/** This class is only intended for usage with multithreading.
 				It notifies the MainControl, that the thread for simulations has finished and can be deleted.
@@ -317,7 +341,7 @@ namespace VIEW
 					:QCustomEvent(FINISHED_REPRESENTATION_UPDATE_EVENT)
 				{}
 		};
-		
+
 		///
 		class BALL_EXPORT DockingProgressEvent
 			: public QCustomEvent
@@ -332,13 +356,46 @@ namespace VIEW
 
 				///
 				void setProgress(float progress) { progress_ = progress;}
+				
+				//
+				const float getProgress() const
+				{
+					return progress_;
+				}
 
 				protected:
 
 				float progress_;
 		};
 
+		class BALL_EXPORT DockingFinishedEvent
+			: public QCustomEvent
+		{
+			public:
+				
+				///
+				DockingFinishedEvent()
+					:QCustomEvent(DOCKING_FINISHED_EVENT),
+					 conformation_set_(0)
+				{}
 
+				///
+				void setConformationSet(ConformationSet* conformation_set)
+				{
+					conformation_set_ = conformation_set;
+				}
+				
+				//
+				const ConformationSet* getConformationSet() const
+				{
+					return conformation_set_;
+				}
+
+				protected:
+
+				const ConformationSet* conformation_set_;
+		};
+		
 		///
 		class BALL_EXPORT QTDockingApplication
 			: public DockingApplication
