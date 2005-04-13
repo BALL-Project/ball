@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: aromaticityProcessor.C,v 1.8 2005/04/12 13:13:24 bertsch Exp $
+// $Id: aromaticityProcessor.C,v 1.9 2005/04/13 11:04:03 bertsch Exp $
 //
 
 #include <BALL/QSAR/aromaticityProcessor.h>
@@ -190,6 +190,7 @@ namespace BALL
 						if ((countPiElectrons_(ring1)-2)%4 == 0)
 						{
 							aromatic_rings.push_back(ring1);
+							aromatic_atoms += ring1;
 						}
 						else
 						{
@@ -209,6 +210,7 @@ namespace BALL
 							if ((countPiElectrons_(ring2)-2)%4 == 0)
 							{
 								aromatic_rings.push_back(ring2);
+								aromatic_atoms += ring2;
 							}
 							else
 							{
@@ -217,6 +219,7 @@ namespace BALL
 									if ((countPiElectrons_(ring1)-2)%4 == 0)
 									{
 										aromatic_rings.push_back(ring1);
+										aromatic_atoms += ring1;
 									}
 								}
 							}
@@ -228,12 +231,14 @@ namespace BALL
 								if ((countPiElectrons_(ring1)-2)%4 == 0)
 								{
 									aromatic_rings.push_back(ring1);
+									aromatic_atoms += ring1;
 								}
 								else
 								{
 									if ((countPiElectrons_(ring2)-2)%4 == 0)
 									{
 										aromatic_rings.push_back(ring2);
+										aromatic_atoms += ring2;
 									}
 								}
 							}
@@ -267,18 +272,21 @@ namespace BALL
 					if (simpleCanBeAromatic_(ring1) && (countPiElectrons_(ring1)-2)%4 == 0)
 					{
 						aromatic_rings.push_back(ring1);
+						aromatic_atoms += ring1;
 					}
 					else
 					{
 						if (simpleCanBeAromatic_(ring2) && (countPiElectrons_(ring2)-2)%4 == 0)
 						{
 							aromatic_rings.push_back(ring2);
+							aromatic_atoms += ring2;
 						}
 						else
 						{
 							if (simpleCanBeAromatic_(ring3) && (countPiElectrons_(ring3)-2)%4 == 0)
 							{
 								aromatic_rings.push_back(ring3);
+								aromatic_atoms += ring3;
 							}
 							else
 							{
@@ -310,10 +318,13 @@ namespace BALL
 				if ((countPiElectrons_(*it->second.begin())-2)%4 == 0)
 				{
 					aromatic_rings.push_back(*it->second.begin());
+					aromatic_atoms += *it->second.begin();
 				}
 			}
 		}
 
+		//cerr << "#can be rings: " << can_be_rings.size() << " " << can_be_rings.begin()->size()
+		//	<< ", #aromatic rings: " << aromatic_rings.size() << endl;
 
 		// now handle the rings which can be aromatic 
 		for (vector<HashSet<Atom*> >::const_iterator it=can_be_rings.begin(); it!=can_be_rings.end(); ++it)
@@ -339,6 +350,7 @@ namespace BALL
 						}
 					}
 				}
+				//cerr << "\n" << s_bonds << " " << a_bonds << " " << d_bonds << endl;
 				if ((*ait)->getElement() == PTE[Element::C])
 				{
 					if (!((d_bonds == 1 && s_bonds > 0) || a_bonds > 1))
@@ -353,27 +365,9 @@ namespace BALL
 				// intersect the ring with the aromatic rings
 				for (vector<HashSet<Atom*> >::const_iterator aro_it=aromatic_rings.begin(); aro_it!=aromatic_rings.end(); ++aro_it)
 				{
-					HashSet<Atom*> merge = ring + *aro_it;
-					if (merge.size() < ring.size() + aro_it->size() &&
-						(countPiElectrons_(merge)-2)%4 == 0)
+					if ((countPiElectrons_(ring)-2)%4 == 0)
 					{
-						bool has_sp2n(false);
-						for (HashMap<Atom*, Size>::Iterator nit=correct_n.begin(); +nit; ++nit)
-						{
-							if (ring.has(nit->first) && nit->second > 1)
-							{
-								has_sp2n = true;
-								break;
-							}
-						}
-						if (!has_sp2n)
-						{
-							aromatic_rings.push_back(merge);
-						}
-						else
-						{
-							sp2n_rings.push_back(merge);
-						}
+						aromatic_rings.push_back(ring);
 						break;
 					}
 				}
@@ -452,7 +446,15 @@ namespace BALL
 			{
 				if (bit->getOrder() == Bond::ORDER__SINGLE) s_bonds++;
 				if (bit->getOrder() == Bond::ORDER__AROMATIC) a_bonds++;
-				if (bit->getOrder() == Bond::ORDER__DOUBLE) d_bonds++;
+				if (bit->getOrder() == Bond::ORDER__DOUBLE)
+				{
+					// now we check additionally if the partner is in a ring,
+					// else the double bond does _not_ count
+					if (bit->getPartner(**ait)->getProperty("InRing").getBool())
+					{
+						++d_bonds;
+					}
+				}
 			}
 			if ((*ait)->getElement() == PTE[Element::C])
 			{
