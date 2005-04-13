@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.161 2005/02/08 06:09:29 oliver Exp $
+// $Id: mainControl.C,v 1.161.2.1 2005/04/13 10:56:57 haid Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1588,6 +1588,25 @@ namespace BALL
 				{
 					getPrimitiveManager().setUpdatePending(false);
 				}
+			}
+			
+			if (e->type() == (QEvent::Type)DOCKING_PROGRESS_EVENT)
+			{
+				DockingProgressEvent* dock_event = dynamic_cast<DockingProgressEvent*>(e);
+				// send a DockProgressMessage
+				DockingProgressMessage* dock_prog_m = new DockingProgressMessage();
+				dock_prog_m->setProgress(dock_event->getProgress());
+				notify_(dock_prog_m);
+				return;
+			}
+			if (e->type() == (QEvent::Type)DOCKING_FINISHED_EVENT)
+			{
+				DockingFinishedEvent* dock_event = dynamic_cast<DockingFinishedEvent*>(e);
+				// send a DockProgressMessage
+				DockingFinishedMessage* dock_fin_m = new DockingFinishedMessage();
+				dock_fin_m->setConformationSet(dock_event->getConformationSet());
+				notify_(dock_fin_m);
+				return;
 			}
 		#else
 			e->type(); // prevent warning for single thread build

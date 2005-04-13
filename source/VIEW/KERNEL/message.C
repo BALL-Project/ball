@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.27.4.2 2005/04/04 16:29:31 haid Exp $
+// $Id: message.C,v 1.27.4.3 2005/04/13 10:56:57 haid Exp $
 
 #include <../source/APPLICATIONS/DOCKVIEW/dockResult.h>
 
@@ -259,6 +259,41 @@ NewDockResultMessage::NewDockResultMessage()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new NewDockResultMessage" << std::endl;
+	#endif
+}
+
+DockingProgressMessage::DockingProgressMessage()
+	throw()
+	: Message()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new DockingProgressMessage" << std::endl;
+	#endif
+}
+
+DockingProgressMessage::~DockingProgressMessage()
+	throw()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "Destructing " << this << "DockingProgressMessage" << std::endl;
+	#endif
+}
+
+DockingFinishedMessage::DockingFinishedMessage()
+	throw()
+	: Message(),
+		conformation_set_(0)
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new DockingFinishedMessage" << std::endl;
+	#endif
+}
+
+DockingFinishedMessage::~DockingFinishedMessage()
+	throw()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "Destructing " << this << "DockingFinishedMessage" << std::endl;
 	#endif
 }
 

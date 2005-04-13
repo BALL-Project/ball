@@ -349,6 +349,52 @@ namespace BALL
 			md_ = md;
 		}
 
+		// =========================== implementation of class DockingThread ================
+		///
+		DockingThread::DockingThread()
+			throw()
+		{
+			dock_alg_ = NULL;
+		}
+		///
+		DockingThread::~DockingThread()
+			throw()
+		{
+			if(dock_alg_ != 0)
+			{
+				delete dock_alg_;
+				dock_alg_ = NULL;
+			}
+		}
+		
+		//
+		void DockingThread::setDockingAlgorithm(DockingAlgorithm* dock_alg)
+			throw()
+		{
+			if(dock_alg_ != 0)
+			{
+				delete dock_alg_;
+				dock_alg_ = NULL;
+			}
+			dock_alg_ = dock_alg;
+		}
+		
+		///
+		void DockingThread::run()
+			throw()
+		{
+			output_("starting docking...", true);
+
+			dock_alg_->start();
+			
+			DockingFinishedEvent* finished = new DockingFinishedEvent;
+			ConformationSet* cs = new ConformationSet(dock_alg_->getConformationSet());
+			finished->setConformationSet(cs);
+			qApp->postEvent(getMainControl(), finished);
+
+			//output_("Docking finished.", true);
+		}
+		
 		// =================================================0
 		
 		CalculateFDPBThread::CalculateFDPBThread()
