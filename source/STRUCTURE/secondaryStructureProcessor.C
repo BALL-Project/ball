@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.C,v 1.11 2005/03/02 15:18:56 amoll Exp $
+// $Id: secondaryStructureProcessor.C,v 1.12 2005/04/14 12:52:23 anhi Exp $
 //
 
 #include <BALL/STRUCTURE/secondaryStructureProcessor.h>
@@ -21,15 +21,14 @@ namespace BALL
 	{
 	}
 
-	 /***************************************
-	 * find the Secondary Structures
-	 * **************************************/
+  /***************************************
+ 	 * find the Secondary Structures
+ 	 ***************************************/
 	void SecondaryStructureProcessor::compute_()
 	{
 		 /*********************************
 		 *   initialize the summary strings			
 		 **********************************/
-
 		// note that HBonds_.size() is not the number of HBonds but
 		// rather the number of residues in the system.
 	  Size size = HBonds_.size();
@@ -58,7 +57,7 @@ namespace BALL
 				for(Size k=0; k<HBonds_[i].size(); k++)
 				{	
 					//---------- 4 turns
-					if (HBonds_[i][k] == i + 4)
+					if (HBonds_[i][k]==(int)(i+4))
 					{
 						//first sign
 						if( (fourturn_[i]  == '<') || (fourturn_[i] == 'X'))
@@ -82,7 +81,7 @@ namespace BALL
 					}
 
 					//---------- 3 turns
-					else if (HBonds_[i][k] == i + 3)
+					else if (HBonds_[i][k]==(int)(i+3))
 					{
 						//first sign
 						if( (threeturn_[i]  == '<') || (threeturn_[i] == 'X'))
@@ -106,7 +105,7 @@ namespace BALL
 					} 
 
 					//---------- 5 turns
-					else if (HBonds_[i][k] == i + 5)
+					else if (HBonds_[i][k]==(int)(i+5))
 					{
 						//first sign
 						if( (fiveturn_[i]  == '<') || (fiveturn_[i] == 'X'))
@@ -138,10 +137,9 @@ namespace BALL
 
 
 
-		//	/****************************************
-		//	 * secondly  we search bridges
-		//	 ****************************************/
-
+		/****************************************
+		 * in the next step, we search bridges
+		 ****************************************/
 		//initialize posbridges_
 		posbridges_.resize(size);
 		
@@ -159,12 +157,11 @@ namespace BALL
 					// do we have HBP(k, i+2) ? => parallel bridge(i+1,k) 			
 					for (Size s = 0; (s < HBonds_[partner].size()); s++)
 					{
-						if(HBonds_[partner][s]== current_res + 2) 
+						if(HBonds_[partner][s]== (int)(current_res+2)) 
 						{
 							//insert
 							//NOTE: there might be  more than two bridges for this
-							// residue
-							// but this should never happen ;-)
+							// residue but this should never happen ;-)
 							
 							posbridges_[current_res+1].push_back(partner);
 							posbridges_[partner].push_back(current_res+1);
@@ -178,7 +175,7 @@ namespace BALL
 					// do we have HBP(k, i) ? => antiparallel bridge(i,k)
 					for (Size s = 0; (s < HBonds_[partner].size()); s++)
 					{
-						if(HBonds_[partner][s] == current_res) 
+						if(HBonds_[partner][s]== (int)current_res) 
 						{
 		    		  // we aren't allowed to overwrite antiparallel bridges found before!
 							// remember: we have two equal cases: 
@@ -203,7 +200,7 @@ namespace BALL
 						for (Size s = 0;(s < HBonds_[partner-2].size()); s++)
 						{
 
-							if (    (HBonds_[partner-2][s] == current_res + 2)
+							if (    (HBonds_[partner-2][s] == (int)(current_res+2))
 									&& ((int)(current_res+1) != (partner-1)))
 							{
 								//insert
@@ -762,7 +759,7 @@ namespace BALL
 	void SecondaryStructureProcessor::insertTurn_(int turn, int position)
 	{
 		bool correct = true;			
-		String* n_turn = 0;	
+		String *n_turn;	
 		if(turn == 3)
 		{ 
 			n_turn = &threeturn_;
@@ -774,7 +771,7 @@ namespace BALL
 			n_turn = &fiveturn_;
 		}else 
 		{
-			correct = false;//TODO: Error message & return
+			correct = false;//TODO: Error message & return Log.error() << " variable turn was set to a unregular value" << std::endl;
 		}				
 		
 		if(correct)

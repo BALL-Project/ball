@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.h,v 1.8 2005/03/02 15:18:40 amoll Exp $
+// $Id: secondaryStructureProcessor.h,v 1.9 2005/04/14 12:52:23 anhi Exp $
 //
 
 #ifndef BALL_SECONDARY_STRUCTURE_PROCESSOR_H
@@ -21,7 +21,10 @@ namespace BALL
 {
   
   /** Secondary structure extraction from 3D structure.
-			This class implements the STRIDE algorithm (Argos & Frishman).
+			This class implements the DSSP algorithm described in
+			"Kabsch W & Sander C (1983). Dictionary of protein secondary structure: 
+			pattern recognition of hydrogen-bonded and geometrical features. 
+			Biopolymers, 22, 2577-2637."
 			When applied to a protein, it removes the instances of SecondaryStructure
 			from the protein, predicts the secondary structure elements based
 			(mostly) on H-bond patterns and backbone torsions and reinserts the
@@ -62,6 +65,6 @@ namespace BALL
 		String summary_;
 	};
 
-} //namesspace BALL
+} //namespace BALL
 
 #endif // BALL_STRUCTURE_SECONDARYSTRUCTUREPROCESSOR_H
