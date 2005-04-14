@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.35.4.3 2005/04/05 11:34:11 haid Exp $
+// $Id: datasetControl.C,v 1.35.4.4 2005/04/14 16:37:04 leonhardt Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -426,9 +426,10 @@ void DatasetControl::showDockResult_()
 	
 	result_dialog_ = new DockResultDialog(this);
 	
-	// setup result_dialog 
+	// setup result_dialog... 
 	result_dialog_->setDockResult(item_to_dock_result_[context_item_]);
 	result_dialog_->setDockedSystem((System*)(item_to_composite_[context_item_]));
+	//...and show it
 	result_dialog_->show();
 }
 
@@ -503,7 +504,7 @@ void DatasetControl::saveDockTrajectories_()
 
 	setWorkingDirFromFilename_(filename);
 
-	if (!dock_res->getConformationSet().writeDCDFile(filename))
+	if (!dock_res->getConformationSet()->writeDCDFile(filename))
 	{
 		setStatusbarText("Could not write DCDFile.", true);
 		return;
