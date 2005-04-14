@@ -3,10 +3,9 @@
 //
 // $Id:
 
-#include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
-#include <BALL/VIEW/PRIMITIVES/label.h>
+#include <BALL/VIEW/MODELS/labelModel.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
@@ -95,6 +94,17 @@ void LabelDialog::fetchPreferences(INIFile& inifile)
 	}
 
 	font_label->setFont(font_);
+
+	if (inifile.hasEntry("WINDOWS", "Label::manylabels"))
+	{
+		all_items->setChecked(inifile.getValue("WINDOWS", "Label::manylabels").toBool());
+		every_item->setChecked(!inifile.getValue("WINDOWS", "Label::manylabels").toBool());
+	}
+	else
+	{
+		all_items->setChecked(true);
+		every_item->setChecked(false);
+	}
 }
 
 void LabelDialog::writePreferences(INIFile& inifile)
@@ -109,6 +119,9 @@ void LabelDialog::writePreferences(INIFile& inifile)
 
 	// the font size
 	inifile.insertValue("WINDOWS", "Label::font", font_.toString().ascii());
+
+	// many <-> one label
+	inifile.insertValue("WINDOWS", "Label::manylabels", String(!all_items->isChecked()));
 }
 
 void LabelDialog::onNotify(Message *message)
@@ -153,101 +166,32 @@ void LabelDialog::show()
 }
 
 
-Representation* LabelDialog::createOneLabel_()
-{
-	Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
-
-	// number of objects
-	Size number_of_objects = 0;
-
-	GeometricCenterProcessor center_processor;
-	
-	// center to which the label will be attached
-	Vector3 center;
-
-	// process all objects in the selection list
-	List<Composite*>::ConstIterator list_it = selection_.begin();
-	for (; list_it != selection_.end(); ++list_it)
-	{
-		(*list_it)->apply(center_processor);
-
-		center += center_processor.getCenter();
-		++number_of_objects;
-
-		rep->getComposites().insert(*list_it);
-	}
-
-	if (number_of_objects != 0)
-	{
-		center /= number_of_objects;
-	}
-
-	// create Label and Representation
-	Label* label = new Label;
-	label->setText(label_edit_->text().ascii());
-	label->setColor(custom_color_);
-	label->setVertex(center);
-	label->setFont(font_);
-
-	if (selection_.size() == 1)
-	{
-		label->setComposite(*selection_.begin());
-	}
-
-	rep->insert(*label);
-
-	return rep;
-}
-
-
-Representation* LabelDialog::createMultipleLabels_()
-{
-	Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
-
-	List<Composite*>::ConstIterator list_it = selection_.begin();
-	for (; list_it != selection_.end(); ++list_it)
-	{
-		GeometricCenterProcessor center_processor;
-		(*list_it)->apply(center_processor);
-
-		// create Label and Representation
-		Label* label = new Label;
-		label->setText(label_edit_->text().ascii());
-		label->setColor(custom_color_);
-		label->setVertex(center_processor.getCenter());
-		label->setFont(font_);
-		label->setComposite(*list_it);
-
-		rep->insert(*label);
-		rep->getComposites().insert(*list_it);
-	}
-
-	return rep;
-}
-
 void LabelDialog::accept()
 {
 	// no selection present => return
 	if (selection_.empty()) return;
 
-	Representation* rep = 0;
-
-	if (all_items->isChecked())
-	{
-		rep = createOneLabel_();
-	}
-	else
-	{
-		rep = createMultipleLabels_();
-	}
+	Representation* rep = new Representation;
 	rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
 	rep->setModelType(MODEL_LABEL);
 
-	/// MainControl::insert(rep) doesnt work here, no idea why !
-	RepresentationMessage* arm = new RepresentationMessage;
-	arm->setRepresentation(*rep);
-	arm->setType(RepresentationMessage::ADD);
-	notify_(arm);
+	LabelModel* model = new LabelModel;
+	model->setText(label_edit_->text().ascii());
+	model->setColor(custom_color_);
+	model->setFont(font_);
+	model->setManyLabels(!all_items->isChecked());
+
+	rep->setModelProcessor(model);
+
+	// process all objects in the selection list
+	List<Composite*>::ConstIterator list_it = selection_.begin();
+	for (; list_it != selection_.end(); ++list_it)
+	{
+		rep->getComposites().insert(*list_it);
+	}
+
+	getMainControl()->insert(*rep);
+	getMainControl()->update(*rep);
 	
 	setStatusbarText("Label added.");
 }

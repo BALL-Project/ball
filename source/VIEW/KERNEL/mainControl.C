@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.1 2005/04/13 14:08:55 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.2 2005/04/14 10:29:53 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1395,7 +1395,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		bool MainControl::insert(Representation& rep)
 			throw()
 		{
-			return primitive_manager_.insert(rep);
+			return primitive_manager_.insert(rep, true);
 		}
 
 		bool MainControl::update(Representation& rep)
