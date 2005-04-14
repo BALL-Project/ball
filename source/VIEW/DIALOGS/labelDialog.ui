@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>LabelDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,19 +9,19 @@
             <x>0</x>
             <y>0</y>
             <width>308</width>
-            <height>350</height>
+            <height>420</height>
         </rect>
     </property>
     <property name="minimumSize">
         <size>
             <width>308</width>
-            <height>350</height>
+            <height>420</height>
         </size>
     </property>
     <property name="maximumSize">
         <size>
             <width>308</width>
-            <height>350</height>
+            <height>420</height>
         </size>
     </property>
     <property name="caption">
@@ -39,7 +39,7 @@
                 <x>7</x>
                 <y>2</y>
                 <width>294</width>
-                <height>90</height>
+                <height>125</height>
             </rect>
         </property>
         <property name="title">
@@ -106,6 +106,34 @@
                 <string>Select a special text tag to add</string>
             </property>
         </widget>
+        <widget class="QComboBox">
+            <property name="name">
+                <cstring>history_box</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>87</y>
+                    <width>271</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="sizeLimit">
+                <number>50</number>
+            </property>
+            <property name="autoCompletion">
+                <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+                <bool>false</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>History</string>
+            </property>
+        </widget>
         <widget class="QLineEdit">
             <property name="name">
                 <cstring>label_edit_</cstring>
@@ -130,7 +158,7 @@
         <property name="geometry">
             <rect>
                 <x>7</x>
-                <y>98</y>
+                <y>131</y>
                 <width>294</width>
                 <height>59</height>
             </rect>
@@ -184,7 +212,7 @@
         <property name="geometry">
             <rect>
                 <x>7</x>
-                <y>163</y>
+                <y>194</y>
                 <width>294</width>
                 <height>60</height>
             </rect>
@@ -241,65 +269,14 @@
             </property>
         </widget>
     </widget>
-    <widget class="QButtonGroup">
-        <property name="name">
-            <cstring>mode_group</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>7</x>
-                <y>229</y>
-                <width>294</width>
-                <height>79</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Mode</string>
-        </property>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>every_item</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>11</x>
-                    <y>47</y>
-                    <width>201</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>one label for every item</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>all_items</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>11</x>
-                    <y>22</y>
-                    <width>201</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>one label for all items</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
-    </widget>
     <widget class="QLayoutWidget">
         <property name="name">
             <cstring>Layout1</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>6</x>
-                <y>313</y>
+                <x>9</x>
+                <y>385</y>
                 <width>292</width>
                 <height>33</height>
             </rect>
@@ -368,6 +345,101 @@
             </widget>
         </hbox>
     </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>mode_group</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>8</x>
+                <y>259</y>
+                <width>294</width>
+                <height>122</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Mode</string>
+        </property>
+        <property name="exclusive">
+            <bool>true</bool>
+        </property>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>every_atom</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>47</y>
+                    <width>269</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>one label for every atom</string>
+            </property>
+            <property name="buttonGroupId">
+                <number>1</number>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>every_residue</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>70</y>
+                    <width>269</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>one label for every residue</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>every_item</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>93</y>
+                    <width>269</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>one label for every item</string>
+            </property>
+            <property name="buttonGroupId">
+                <number>0</number>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>all_items</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>24</y>
+                    <width>269</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>one label for all items</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>3</number>
+            </property>
+        </widget>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -412,6 +484,12 @@
         <receiver>LabelDialogData</receiver>
         <slot>textChanged()</slot>
     </connection>
+    <connection>
+        <sender>history_box</sender>
+        <signal>activated(int)</signal>
+        <receiver>LabelDialogData</receiver>
+        <slot>historySelected()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>label_edit_</tabstop>
@@ -428,6 +506,7 @@
     <slot>addTag()</slot>
     <slot>modeChanged()</slot>
     <slot>textChanged()</slot>
+    <slot>historySelected()</slot>
 </slots>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>

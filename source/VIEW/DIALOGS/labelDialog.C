@@ -17,6 +17,7 @@
 #include <qcombobox.h>
 #include <qfontdialog.h>
 #include <qradiobutton.h>
+#include <qbuttongroup.h>
 
 namespace BALL
 {
@@ -179,7 +180,10 @@ void LabelDialog::accept()
 	model->setText(label_edit_->text().ascii());
 	model->setColor(custom_color_);
 	model->setFont(font_);
-	model->setManyLabels(!all_items->isChecked());
+			 if (		 all_items->isChecked()) model->setMode(LabelModel::ONE_LABEL);
+	else if (		every_atom->isChecked()) model->setMode(LabelModel::ALL_ATOMS);
+	else if (every_residue->isChecked()) model->setMode(LabelModel::ALL_RESIDUES);
+	else if (	  every_item->isChecked()) model->setMode(LabelModel::ALL_ITEMS);
 
 	rep->setModelProcessor(model);
 
@@ -193,6 +197,9 @@ void LabelDialog::accept()
 	getMainControl()->insert(*rep);
 	getMainControl()->update(*rep);
 	
+	history_box->insertItem(label_edit_->text());
+	history_box->setEnabled(true);
+
 	setStatusbarText("Label added.");
 }
 
@@ -234,5 +241,13 @@ void LabelDialog::textChanged()
 {
 	apply_button_->setEnabled(label_edit_->text() != "");
 }
+
+void LabelDialog::historySelected()
+{
+	if (history_box->currentText() == "") return;
+
+	label_edit_->setText(history_box->currentText());
+}
+
 
 } } // namespaces
