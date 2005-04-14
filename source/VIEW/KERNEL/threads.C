@@ -387,12 +387,12 @@ namespace BALL
 
 			dock_alg_->start();
 			
-			DockingFinishedEvent* finished = new DockingFinishedEvent;
+		 	DockingFinishedEvent* finished = new DockingFinishedEvent(dock_alg_->wasAborted());
 			ConformationSet* cs = new ConformationSet(dock_alg_->getConformationSet());
 			finished->setConformationSet(cs);
 			qApp->postEvent(getMainControl(), finished);
-
-			//output_("Docking finished.", true);
+				
+			output_("Docking finished.", true);
 		}
 		
 		// =================================================0
@@ -407,15 +407,6 @@ namespace BALL
 		{
 			if (dialog_ == 0) return;
 			dialog_->calculate_();
-		}
-
-
-
-		void QTDockingApplication::notifyProgress(const DockingAlgorithm&, float progress) const
-		{
-			DockingProgressEvent* se = new DockingProgressEvent;
-			se->setProgress(progress);
-			qApp->postEvent(MainControl::getInstance(0), se);
 		}
 
 	} // namespace VIEW
