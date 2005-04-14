@@ -52,8 +52,8 @@ namespace BALL
 	const float		GeometricFit::Default::SURFACE_THICKNESS  = 1.0;
 	const int		  GeometricFit::Default::SURFACE_TYPE  = GeometricFit::CONNOLLY;
 	const double	GeometricFit::Default::DEGREE_INTERVAL  = 20.0;
-	const int 		GeometricFit::Default::TOP_N  = 3;                ////which default value ?????????????????
-	const int 		GeometricFit::Default::BEST_NUM  = 2000;                ////which default value ?????????????????
+	const int 		GeometricFit::Default::TOP_N  = 3;
+	const int 		GeometricFit::Default::BEST_NUM  = 2000;
 	const int     GeometricFit::Default::VERBOSITY = 0;
 	
   GeometricFit::GeometricFit()
@@ -1008,14 +1008,17 @@ namespace BALL
 														// theta: around y axis, 
                             // psi: around z axis;
 
-		for(int i = 0; i < rotation_num && !abort_; i++)
+		for (current_round_ = 0; (current_round_ < rotation_num) && !abort_; current_round_++)
 		{
 			// TODO: we should check if pause_ is true and sleep than for a given time
-			current_round_ = i;
-
-			phi   = rotAng.getXAng(i);
-			theta = rotAng.getYAng(i);
-			psi   = rotAng.getZAng(i);
+  		
+			/**while (pause_)
+			{ pause(10); };
+			   **/
+				 
+			phi   = rotAng.getXAng(current_round_);
+			theta = rotAng.getYAng(current_round_);
+			psi   = rotAng.getZAng(current_round_);
      
       loop_timer.reset();
 			if (verbosity > 10)
@@ -1091,11 +1094,6 @@ namespace BALL
 				peak_set_.insert(temp_p);
 			}
 
-			if (docking_app_ != 0)
-			{
-				docking_app_->notifyProgress(*this, (float) rotation_num / (float) i);
-			}
-
 		} // loop for all conformations
 
 
@@ -1117,7 +1115,9 @@ namespace BALL
   float GeometricFit::getProgress() const
     throw()
   {
-    return (float)( current_round_ / total_round_ );
+		if (total_round_ == 0) return 0.0;
+		
+		return (float)current_round_ / (float)total_round_;
   }
   
 	/** Returns true if the docking is already done.
@@ -1125,7 +1125,7 @@ namespace BALL
   bool GeometricFit::hasFinished() const
     throw()
   {
-    return ( current_round_ == total_round_ );
+    return ( (total_round_ != 0) &&  ( current_round_ == total_round_ ) );
   }
 
 	/** Return the translation corresponding to conformation con_num.

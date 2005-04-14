@@ -10,22 +10,6 @@ using namespace std;
 
 namespace BALL
 {
-	DockingApplication::DockingApplication()
-	{
-	}
-
-	DockingApplication::~DockingApplication()
-	{
-	}
-
-	DockingApplication::DockingApplication(const DockingApplication&)
-	{
-	}
-
-	void DockingApplication::notifyProgress(const DockingAlgorithm&, float) const
-	{
-	}
-
 	void DockingAlgorithm::setup(System& system1, System& system2, Options& new_options)
 		throw()
 	{
@@ -86,11 +70,6 @@ namespace BALL
 	{
 		ConformationSet dummy;
 		return dummy;
-	}
-
-	void DockingAlgorithm::setDockingApplication(const DockingApplication& app)
-	{
-		docking_app_ = &app;
 	}
 
 }
