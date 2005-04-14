@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.h,v 1.1.2.1 2005/04/14 13:02:09 amoll Exp $
+// $Id: modifySurfaceDialog.h,v 1.1.2.2 2005/04/14 22:30:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
@@ -113,11 +113,15 @@ namespace BALL
 			void splitMethodChanged();
 
 			protected:
+
+			typedef HashGrid3<const Atom*>  AtomGrid;
+			typedef HashGridBox3<const Atom*> AtomBox;
 			void colorByCustomColor_();
 			bool colorByGrid_();
 			bool insertGrid_(RegularData3D& grid, const String& name);
 			void removeGrid_(RegularData3D& grid);
-			void setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box, const QRadioButton* rbutton);
+			void setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box, 
+										 const QRadioButton* rbutton);
 			void getColor_(const ColorRGBA& color, QLabel* label, QSpinBox* box);
 			void saveSettings_();
 			void loadSettings_();
@@ -127,10 +131,14 @@ namespace BALL
 			void split_();
 			void checkApplyButton_();
 
+			void calculateIncludedVertices_(vector<bool>& include_vertex, const Mesh& org_mesh);
+			inline bool checkInclude_(const AtomGrid& atom_grid, const Vector3& point) const;
+
 			RegularData3D* grid_;
 			float min_value_;
 			float mid_value_;
 			float max_value_;
+			float square_distance_;
 
 			ColorRGBA	 	selected_color, min_min_color, min_color, mid_color, max_color, max_max_color;	
 

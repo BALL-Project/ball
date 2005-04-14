@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.1 2005/04/14 13:02:29 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.2 2005/04/14 22:30:17 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -13,9 +13,12 @@
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/file.h>
 #include <BALL/DATATYPE/regularData3D.h>
+#include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/forEach.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/SYSTEM/sysinfo.h>
 
 #include <qlineedit.h>
 #include <qspinbox.h>
@@ -636,7 +639,8 @@ void ModifySurfaceDialog::setMidValue(float value)
 
 void ModifySurfaceDialog::splitDistanceChanged()
 {
-	split_distance_label->setText(String(((float)split_distance_slider->value()) / 10.0).c_str());
+	String distance = createFloatString(((float)split_distance_slider->value()) / 10.0, 1);
+	split_distance_label->setText(distance.c_str());
 }
 
 void ModifySurfaceDialog::splitMethodChanged()
@@ -647,7 +651,7 @@ void ModifySurfaceDialog::splitMethodChanged()
 void ModifySurfaceDialog::split_()
 {
 	// make sure we have a colorProcessor
-	if (rep_->getColorProcessor() == 0) 
+	if (rep_->getColorProcessor() == 0 && split_by_selection->isChecked()) 
 	{
 		rep_->setColorProcessor(new CustomColorProcessor);
 		rep_->getColorProcessor()->createAtomGrid();
@@ -680,14 +684,22 @@ void ModifySurfaceDialog::split_()
 
 		// collect informations which vertices are to be included
 		vector<bool> include_vertex;
+
 		include_vertex.resize(org_mesh.vertex.size());
 		
-		for (Position p = 0; p < org_mesh.vertex.size(); p++)
+		if (split_by_selection->isChecked())
 		{
-			// make sure we found an atom
-			const Atom* atom = cp->getClosestItem(org_mesh.vertex[p]);
+			for (Position p = 0; p < org_mesh.vertex.size(); p++)
+			{
+				// make sure we found an atom
+				const Atom* atom = cp->getClosestItem(org_mesh.vertex[p]);
 
-			include_vertex[p] = (atom != 0 && atom->isSelected());
+				include_vertex[p] = (atom != 0 && atom->isSelected());
+			}
+		}
+		else
+		{
+			calculateIncludedVertices_(include_vertex, org_mesh);
 		}
 
 		vector<Surface::Triangle> tri_temp = org_mesh.triangle;
@@ -729,6 +741,108 @@ void ModifySurfaceDialog::split_()
 	getMainControl()->update(*rep_);
 }
 
+void ModifySurfaceDialog::calculateIncludedVertices_(vector<bool>& include_vertex, 
+																										 const Mesh& org_mesh)
+{
+	List<const Atom*> atoms;
 
+	Representation::CompositeSet::ConstIterator it = rep_->getComposites().begin();
+	for(; +it; it++)
+	{
+		if (RTTI::isKindOf<AtomContainer>(**it))
+		{
+			AtomConstIterator ait;
+			const AtomContainer* const acont = dynamic_cast<const AtomContainer*>(*it);
+			BALL_FOREACH_ATOM(*acont, ait)
+			{
+				if ((*ait).isSelected()) atoms.push_back(&*ait);
+			}
+		}
+		else if ((**it).isSelected() && RTTI::isKindOf<Atom>(**it))
+		{
+			const Atom* atom = dynamic_cast<const Atom*> (*it);
+			atoms.push_back(atom);
+		}
+	}
+
+	float distance = (float) split_distance_slider->value() / 10.0;
+
+	BoundingBoxProcessor boxp;
+	boxp.start();
+	List<const Atom*>::Iterator lit = atoms.begin();
+	for(;lit != atoms.end(); lit++)
+	{
+		boxp.operator() (*(Atom*)*lit);
+	}
+	boxp.finish();
+
+	const Vector3 diagonal = boxp.getUpper() - boxp.getLower();
+	
+	// grid spacing, tradeoff between speed and memory consumption
+	float grid_spacing = distance;
+
+	float memory = SysInfo::getAvailableMemory();
+	//
+	// if we can not calculate available memory, use around 60 MB for the grid
+	if (memory == -1) memory = 100000000;
+	memory *= 0.6;
+
+	Vector3 overhead(2.5 + distance);
+	float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing((LongIndex)memory, diagonal + 
+																																	overhead * 2.0);		
+	if (min_spacing > grid_spacing) grid_spacing = min_spacing;
+	
+	AtomGrid atom_grid(boxp.getLower() - overhead, diagonal + overhead, grid_spacing); 
+ 
+	for (lit = atoms.begin(); lit != atoms.end(); lit++)
+	{
+		atom_grid.insert((*lit)->getPosition(), *lit);
+	}
+
+	square_distance_ = distance * distance;
+
+	for (Position p = 0; p < org_mesh.vertex.size(); p++)
+	{
+		include_vertex[p] = checkInclude_(atom_grid, org_mesh.vertex[p]);
+	}
+}
+
+
+bool ModifySurfaceDialog::checkInclude_(const AtomGrid& atom_grid, const Vector3& point) const
+{
+	const AtomBox* box = atom_grid.getBox(point);
+
+	if (!box) return false;
+
+	Position x, y, z;
+	atom_grid.getIndices(*box, x, y, z);
+
+	Size dist = 1;
+	// iterator over neighbour boxes
+	for (Index xi = -(Index)dist; xi <= (Index)dist; xi++)
+	{
+		for (Index yi = -(Index)dist; yi <= (Index)dist; yi++)
+		{
+			for (Index zi = -(Index)dist; zi <= (Index)dist; zi++)
+			{
+				// iterate over all data items
+				const AtomBox* box_ptr = atom_grid.getBox(x+xi, y+yi, z+zi);	
+				if (box_ptr != 0 && !box_ptr->isEmpty())
+				{
+					AtomBox::ConstDataIterator hit = box_ptr->beginData();
+					for (;+hit; hit++)
+					{
+						if (((*hit)->getPosition() - point).getSquareLength() <= square_distance_)
+						{
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return false;
+}
 
 } } // namespaces
