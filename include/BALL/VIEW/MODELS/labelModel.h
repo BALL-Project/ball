@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: labelModel.h,v 1.1.2.1 2005/04/14 10:30:03 amoll Exp $
+// $Id: labelModel.h,v 1.1.2.2 2005/04/14 14:28:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_LABELMODEL_H
@@ -36,6 +36,20 @@ namespace BALL
 		{
 			public:
 
+			///
+			enum Mode
+			{
+				///
+				ALL_ITEMS,
+				///
+				ALL_ATOMS,
+				///
+				ALL_RESIDUES,
+				///
+				ONE_LABEL
+			};
+
+
 			/**	@name	Constructors and Destructors
 			*/	
 			//@{
@@ -68,10 +82,10 @@ namespace BALL
 			const ColorRGBA& getColor() const throw() { return color_;}
 
 			///
-			void setManyLabels(bool state) throw() { many_labels_ = state;}
+			void setMode(Mode mode) throw() { mode_ = mode;}
 
 			///
-			bool manyLabels() const throw() { return many_labels_;}
+			Mode getType() const throw() { return mode_;}
 
 			///
 			void setText(const String& text) { text_ = text;}
@@ -98,7 +112,7 @@ namespace BALL
 
 			QFont 										font_;
 			ColorRGBA 								color_;
-			bool 											many_labels_;
+			Mode 											mode_;
 			String 										text_;
 			Size 											nr_objects_;
 			Vector3 									center_;

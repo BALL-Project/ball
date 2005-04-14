@@ -158,8 +158,11 @@ namespace BALL
 			///
 			virtual void modeChanged();
 						
+			///
 			void textChanged();
 
+			///
+			void historySelected();
 			//@}
 			
 			protected:
