@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.44.6.1 2005/04/13 10:48:17 oliver Exp $
+# $Id: Makefile,v 1.44.6.2 2005/04/14 13:02:05 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -21,8 +21,8 @@ CPP_SOURCES=\
 	bondPropertiesData.C\
 	charmmConfigurationDialog.C\
 	charmmConfigurationDialogData.C\
-	colorMeshDialog.C\
-	colorMeshDialogData.C\
+	modifySurfaceDialog.C\
+	modifySurfaceDialogData.C\
 	coloringSettingsDialog.C\
 	coloringSettingsDialogData.C\
 	compositeProperties.C\
@@ -79,8 +79,8 @@ MOC_SOURCES=\
 	charmmConfigurationDialogData_moc.C\
 	coloringSettingsDialog_moc.C\
 	coloringSettingsDialogData_moc.C\
-	colorMeshDialog_moc.C\
-	colorMeshDialogData_moc.C\
+	modifySurfaceDialog_moc.C\
+	modifySurfaceDialogData_moc.C\
 	contourSurfaceDialog_moc.C\
 	contourSurfaceDialogData_moc.C\
 	downloadPDBFile_moc.C\
@@ -126,7 +126,7 @@ UIC_SOURCES=\
 	bondPropertiesData.C\
 	charmmConfigurationDialogData.C\
 	coloringSettingsDialogData.C\
-	colorMeshDialogData.C\
+	modifySurfaceDialogData.C\
 	compositePropertiesData.C\
 	contourSurfaceDialogData.C\
 	downloadPDBFileData.C\

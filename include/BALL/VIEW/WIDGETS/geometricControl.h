@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.24.4.1 2005/04/12 11:46:05 amoll Exp $
+// $Id: geometricControl.h,v 1.24.4.2 2005/04/14 13:02:08 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -35,7 +35,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class Representation;
-		class ColorMeshDialog;
+		class ModifySurfaceDialog;
 
 		/**	GeometricControl is a widget to display the list of representations.
 				There are methods available to modify the representations.
@@ -213,9 +213,6 @@ namespace BALL
 			///
 			virtual void flipClippingPlane();
 
-			///
-			virtual void divideSurface();
-
 		  protected slots:
 			
 			//@} 
@@ -270,7 +267,7 @@ namespace BALL
 
 			HashMap<Representation*, SelectableListViewItem*> representation_to_item_;
 
-			ColorMeshDialog* 	colorMeshDlg_;
+			ModifySurfaceDialog* 	modify_surface_dialog_;
 
 			MolecularInformation information_;
 
