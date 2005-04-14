@@ -45,9 +45,6 @@ namespace BALL
 			#endif 
 		}
 		
-		// ------------------------- helper functions -------------------------------------
-		// --------------------------------------------------------------------------------
-		
 		// Read the preferences from a INIFile
 		void GeometricFitDialog::fetchPreferences(INIFile& file)
 					throw()
@@ -76,7 +73,7 @@ namespace BALL
 			surface_type->setCurrentText("Connolly");
 		}
 		
-		/// Set options of GeometricFit
+		// Fill options with values of the dialog.
 		void GeometricFitDialog::getOptions(Options& options)
 					throw()
 		{
@@ -107,8 +104,9 @@ namespace BALL
 		//
 		void GeometricFitDialog::cancelPressed()
 		{
-			reset();
-			hide();
+			reject();
+			//reset();
+			//hide();
 		}
 		
 	} // namespace VIEW

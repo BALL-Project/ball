@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.14 2005/04/12 11:50:44 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.15 2005/04/14 16:32:13 leonhardt Exp $
 //
 
 #include "dockResultDialog.h"
@@ -81,13 +81,10 @@ namespace BALL
 			docked_system_ = system;
 		}
 		
-		// add scoring function to ComboBox and its options dialog to HashMap
+		// Adds scoring function to Combobox and its advanced option dialogs to HashMap, if it has such an dialog.
 		void DockResultDialog::addScoringFunction(const QString& name, const int score_func, QDialog* dialog)
 			throw()
 		{
-			//not all scoring functions have options
-			//for these functions the pointer to an dialog is NULL , 
-			//so there is no entry in the hash map 
 			if(dialog)
 			{
 				// add dialog to HashMap
@@ -107,7 +104,6 @@ namespace BALL
 			// before showing the dialog the result table has to be build and filled 
 			// first get the number of conformations, to know how many rows the table needs
 			int conformation_num = dock_res_->getConformationSet()->size();
-			//int conformation_num = dock_options.getInteger(GeometricFit::Option::BEST_NUM);
 			// insert rows in table
 			result_table->insertRows(0,conformation_num);
 			
@@ -262,7 +258,7 @@ namespace BALL
 			conformation_set->setScoring(ranked_conformations);
 //   			dock_res_->setConformationSet(conformation_set);
 			
-			// add a new scoring to dock_res_ we need the name, options and score vector of the scoring function
+			// add a new scoring to dock_res_; we need the name, options and score vector of the scoring function
 			vector<float> scores;
 			for (unsigned int i = 0; i < ranked_conformations.size(); i++)
 			{

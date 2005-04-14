@@ -1,13 +1,15 @@
-// $Id: dockProgressDialog.C,v 1.1.2.4 2005/04/12 11:50:44 haid Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.5 2005/04/14 16:32:12 leonhardt Exp $
 //
 
 #include "dockProgressDialog.h"
 
 # include <BALL/STRUCTURE/DOCKING/geometricFit.h>
+#include <BALL/VIEW/KERNEL/message.h>
 
 #include <qprogressbar.h>
 #include <qtextedit.h>
-#include <BALL/VIEW/KERNEL/message.h>
+#include <qpushbutton.h>
+#include <qmessagebox.h>
 
 namespace BALL
 {
@@ -18,7 +20,8 @@ namespace BALL
 		DockProgressDialog::DockProgressDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
 			throw()
 			: DockProgressDialogData(parent, name, modal, fl),
-				ModularWidget(name)
+				ModularWidget(name),
+				alg_(0)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "new DockProgressDialog " << this << std::endl;
@@ -26,6 +29,8 @@ namespace BALL
 		
 			// register the widget with the MainControl
 			ModularWidget::registerWidget(this);
+			
+			connect(&timer_, SIGNAL(timeout()), SLOT(updateProgress_()));
 		}
 		
 		// Destructor	
@@ -35,6 +40,19 @@ namespace BALL
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << this << " of class DockProgressDialog" << std::endl;
 			#endif 
+		}
+		
+		
+		void DockProgressDialog::setDockingAlgorithm(DockingAlgorithm* alg)
+			throw()
+		{
+			 alg_ = alg;
+		}	
+				
+		const DockingAlgorithm* DockProgressDialog::getDockingAlgorithm() const
+			throw()
+		{
+		  return alg_;
 		}
 		
 		//
@@ -63,31 +81,52 @@ namespace BALL
 		}
 		
 		//
-		void DockProgressDialog::onNotify(Message *message)
-			throw()
+		void DockProgressDialog::show()
 		{
-			if (RTTI::isKindOf<DockingProgressMessage>(*message))
-			{
-				DockingProgressMessage* dpm = RTTI::castTo<DockingProgressMessage>(*message);
-				progress_bar->setProgress((int)dpm->getProgress() * 100, 100);
-			}
+			timer_.start(1000, true);
+			//show dialog to user
+			DockProgressDialogData::show();
 		}
 		
 		//
 		void DockProgressDialog::pauseClicked()
 		{
-			unsigned int total = 1000;
-			progress_bar->setTotalSteps(total);
-			for(unsigned int i = 0; i <= total; i++)
+			if (alg_->wasPaused())
 			{
-				progress_bar->setProgress(i);
+				pause_button->setText("Continue");
+				alg_->pause();
+			}
+			else 
+			{
+				pause_button->setText("Pause");
+				alg_->proceed();
 			}
 		}	
 		
 		//
 		void DockProgressDialog::abortClicked()
 		{
+			alg_->abort();
+			close();
+		}
 		
+		
+		//
+		void DockProgressDialog::updateProgress_()
+		{
+			if (alg_->wasAborted()) return;
+			Log.error() << "in DockProgressDialog::updateProgress_" << std::endl;
+			progress_bar->setProgress((int)(alg_->getProgress() * 100.0), 100);
+			
+			//if (!alg_->hasFinished() && !alg_->wasAborted())
+			if (!alg_->hasFinished())
+			{
+			 	timer_.start(1000, true);
+			}
+			else
+			{
+			 	close();
+			}
 		}
 		
 	}

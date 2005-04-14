@@ -51,7 +51,7 @@ namespace BALL
 					void setDockedSystem(System* system)
 						throw();
 						
-					// add scoring function to ComboBox and its options dialog to HashMap
+					// Adds scoring function to Combobox and its advanced option dialogs to HashMap, if it has such an dialog.
 					void addScoringFunction(const QString& name, const int score_func, QDialog* dialog=0)
 						throw();
 					

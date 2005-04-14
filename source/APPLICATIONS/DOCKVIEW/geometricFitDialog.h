@@ -27,6 +27,10 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		/**	Dialog for options of the docking algorithm GeometricFit.
+    		\ingroup  ViewDialogs
+				@see GeometricFit
+		 */
 		class BALL_EXPORT GeometricFitDialog : 
 			public GeometricFitDialogData,
 			public ModularWidget,
@@ -37,36 +41,69 @@ namespace BALL
 			
 			public:
 				
-				/// Constructor
+				/**	@name	Constructors and Destructors
+				 */	
+				//@{
+			
+				/** Default Constructor.
+				 *	Calls  \link ModularWidget::registerWidget registerWidget \endlink and \link PreferencesEntry::registerObject_ registerObject_ \endlink
+				 *	@param      parent the parent widget of the DockDialog
+				 *	@param      name the name of the DockDialog
+				 *	@param			modal the modal flag
+				 *	@param			fl the widget flags
+				 *	@see        QDialog
+				 *	@see        ModularWidget
+				 *	@see				PreferncesEntry
+				 */
 				GeometricFitDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
 					throw();
 
-				/// Destructor
+				/** Destructor.
+				 */
 				virtual ~GeometricFitDialog()
 					throw();
 
-				/// Read the preferences from a INIFile
+				/**	ModularWidget methods
+				 */
+				//@{
+				
+				
+				/** Fetches the preferences from the INIFile.
+				 *	@see    writePreferences
+				 */
 				void fetchPreferences(INIFile& file)
 					throw();
 				
-				/// Write the preferences to a INIFile
+				/** Writes the preferences to the INIFile.
+				 * This method will be called inside the method  MainControl::aboutToExit 
+				 * @see    fetchPreferences
+				 */
 				void writePreferences(INIFile& file)
 					throw();
 
-				/// Reset the dialog to the standard values
+				//@}	
+					
+				/** Resets the dialog to the standard values.
+				 */
 				void reset()
 					throw();
 				
-				/// Set options of GeometricFit
+				/** Fill options with values of the dialog.
+					*	@param      options the options that are filled
+				 */
 				void getOptions(Options& options)
 					throw();
 
 			public slots:
 				
-				//
+				/** Indicates the reset button was pressed.
+				 * Calls QDialog::reset.
+				 */
 				virtual void resetPressed();
 				
-				//
+				/** Indicates the cancel button was pressed.
+				 *	Hides dialog.
+				 */
 				virtual void cancelPressed();
 				
 			protected:
