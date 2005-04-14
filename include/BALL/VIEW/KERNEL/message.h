@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.63.2.2 2005/04/13 11:01:04 haid Exp $
+// $Id: message.h,v 1.63.2.3 2005/04/14 16:38:57 leonhardt Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -731,37 +731,6 @@ class BALL_EXPORT NewDockResultMessage
 		DockResult* dock_res_;
 };
 
-/// Message to notify about a new DockProgress
-class BALL_EXPORT DockingProgressMessage
-	:public Message
-{
-	public:
-		///
-		DockingProgressMessage()
-			throw();
-
-		///
-		virtual ~DockingProgressMessage()
-			throw();
-			
-		///
-		void setProgress(float progress)
-			throw()
-		{
-			progress_ = progress;
-		}
-
-		///
-		const float getProgress() const
-			throw()
-		{
-			return progress_;
-		}
-
-	protected:
-		float progress_;
-};
-
 /// Message to notify docking has finished
 class BALL_EXPORT DockingFinishedMessage
 	:public Message
@@ -771,6 +740,10 @@ class BALL_EXPORT DockingFinishedMessage
 		DockingFinishedMessage()
 			throw();
 
+		///
+		DockingFinishedMessage(bool abort)
+			throw();
+			
 		///
 		virtual ~DockingFinishedMessage()
 			throw();
@@ -786,10 +759,17 @@ class BALL_EXPORT DockingFinishedMessage
 		{
 			return conformation_set_;
 		}
+		
+		///
+		bool wasAborted()
+		{
+		 	return abort_;
+		}
 
 	protected:
 
 		const ConformationSet* conformation_set_;
+		bool abort_;
 };
 
 

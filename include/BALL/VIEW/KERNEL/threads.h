@@ -342,32 +342,6 @@ namespace VIEW
 				{}
 		};
 
-		///
-		class BALL_EXPORT DockingProgressEvent
-			: public QCustomEvent
-		{
-			public:
-				
-				///
-				DockingProgressEvent()
-					:QCustomEvent(DOCKING_PROGRESS_EVENT),
-					 progress_(0.0)
-				{}
-
-				///
-				void setProgress(float progress) { progress_ = progress;}
-				
-				//
-				const float getProgress() const
-				{
-					return progress_;
-				}
-
-				protected:
-
-				float progress_;
-		};
-
 		class BALL_EXPORT DockingFinishedEvent
 			: public QCustomEvent
 		{
@@ -380,6 +354,14 @@ namespace VIEW
 				{}
 
 				///
+				DockingFinishedEvent(bool abort)
+					:QCustomEvent(DOCKING_FINISHED_EVENT),
+					 conformation_set_(0)
+				{
+				 	abort_ = abort;
+				}
+				
+				///
 				void setConformationSet(ConformationSet* conformation_set)
 				{
 					conformation_set_ = conformation_set;
@@ -391,24 +373,18 @@ namespace VIEW
 					return conformation_set_;
 				}
 
+				///
+				bool wasAborted()
+				{
+		 			return abort_;
+				}
+				
 				protected:
 
 				const ConformationSet* conformation_set_;
+				bool abort_;
 		};
 		
-		///
-		class BALL_EXPORT QTDockingApplication
-			: public DockingApplication
-		{
-			public:
-
-				///
-				QTDockingApplication();
-
-				///
-				virtual void notifyProgress(const DockingAlgorithm& algorithm, float progress) const;
-		};
-
 	}
 }
 #endif //BALL_QT_HAS_THREADS
