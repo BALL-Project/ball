@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.2 2005/04/14 22:30:17 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.3 2005/04/15 14:19:57 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -27,6 +27,7 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
+#include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qslider.h>
 
@@ -66,8 +67,8 @@ void ModifySurfaceDialog::applyPressed()
 		return;
 	}
 		
-	rep_->setModelProcessor(0);
-	rep_->setColorProcessor(0);
+	rep_->enableModelUpdate(false);
+	rep_->enableColoringUpdate(false);
 	if (rep_->isHidden())
 	{
 		rep_->setNeedsUpdate();
@@ -276,18 +277,48 @@ void ModifySurfaceDialog::colorByCustomColor_()
 {
 	ColorRGBA col(red_box->value(), green_box->value(), blue_box->value(), alpha_box->value());
 
-	if (transparency_group_custom->selected() == none_button_custom)
+	if (!color_only_selection->isChecked())
 	{
-		col.setAlpha(255);
-		rep_->setTransparency(0);
-	}
-	else if (transparency_group_custom->selected() == alpha_button_custom)
-	{
-		rep_->setTransparency(255 - (int) col.getAlpha());
+		if (transparency_group_custom->selected() == none_button_custom)
+		{
+			col.setAlpha(255);
+			rep_->setTransparency(0);
+		}
+		else if (transparency_group_custom->selected() == alpha_button_custom)
+		{
+			rep_->setTransparency(255 - (int) col.getAlpha());
+		}
+
+		mesh_->colorList.resize(1);
+		mesh_->colorList[0] = col;
+
+		return;
 	}
 
-	mesh_->colorList.resize(1);
-	mesh_->colorList[0] = col;
+	if (mesh_->colorList.size() != mesh_->vertex.size())
+	{
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+		mesh_->colorList.resize(mesh_->vertex.size());
+	}
+
+	// make sure we have a colorProcessor
+	if (rep_->getColorProcessor() == 0)
+	{
+		rep_->setColorProcessor(new CustomColorProcessor);
+		rep_->getColorProcessor()->createAtomGrid();
+	}
+	ColorProcessor* cp = rep_->getColorProcessor();
+
+	// collect informations which vertices are to be colored
+	for (Position p = 0; p < mesh_->vertex.size(); p++)
+	{
+		// make sure we found an atom
+		const Atom* atom = cp->getClosestItem(mesh_->vertex[p]);
+
+		if (atom == 0 || !atom->isSelected()) continue;
+
+		mesh_->colorList[p] = col;
+	}
 }
 
 
@@ -658,7 +689,7 @@ void ModifySurfaceDialog::split_()
 	}
 	ColorProcessor* cp = rep_->getColorProcessor();
 
-	rep_->setModelProcessor(0);
+	rep_->enableModelUpdate(false);
 
 	// create a new representation with the subset of the original mesh
 	Representation* new_rep = new Representation;
@@ -666,7 +697,12 @@ void ModifySurfaceDialog::split_()
 	new_rep->setColorProcessor(new ColorProcessor(*rep_->getColorProcessor()));
 	new_rep->setModelType(rep_->getModelType());
 	new_rep->setColoringMethod(rep_->getColoringMethod());
-	new_rep->setModelProcessor(0);
+	new_rep->enableModelUpdate(false);
+
+	if (rep_->getModelProcessor() != 0)
+	{
+		new_rep->setModelProcessor(new ModelProcessor(*rep_->getModelProcessor()));
+	}
 
 	Representation::GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
 	for (; git != rep_->getGeometricObjects().end(); ++git)
