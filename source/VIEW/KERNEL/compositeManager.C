@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.C,v 1.8 2004/12/16 16:24:19 amoll Exp $
+// $Id: compositeManager.C,v 1.8.6.1 2005/04/15 13:49:29 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/compositeManager.h>
@@ -52,7 +52,7 @@ namespace BALL
 	  bool CompositeManager::insert(Composite& composite)
 			throw()
     {
-			if (has(composite) || !composite.isRoot())
+			if (!composite.isRoot() || hasRoot(&composite))
 			{
 				return false;
 			}
@@ -78,36 +78,43 @@ namespace BALL
 			return true;
 		}
 
-		bool CompositeManager::has(const Composite& composite) const
+		bool CompositeManager::hasRoot(const Composite* composite) const
 			throw()
 		{
 			if (composite_set_.has((Composite*) &composite)) return true;
 
-			CompositeConstIterator it = begin();
-			for(; it != end(); it++)
+			return false;
+		}
+
+
+		bool CompositeManager::has(const Composite* composite) const
+			throw()
+		{
+			if (hasRoot(composite)) return true;
+
+			CompositeConstIterator cit = begin();
+			for(; cit != end(); cit++)
 			{
-				if ((*it)->isAncestorOf(composite)) return true;
+				Composite::CompositeConstIterator sub_it = composite->beginComposite();
+				for (; +sub_it; ++sub_it)
+				{
+					if (composite == &*sub_it) return true;
+				}
 			}
 
 			return false;
 		}
 
-		bool CompositeManager::remove(Composite& composite, bool to_delete) 
+		void CompositeManager::remove(Composite& composite, bool to_delete) 
 			throw()
 		{
-			if (!has(composite)) return false;
-
 			if (composite_set_.has(&composite))
 			{
 				composite_set_.erase(&composite);
 				name_set_.erase(((AtomContainer*) &composite)->getName());
 			}
 
-			if (to_delete)
-			{
-				delete &composite;
-			}
-			return true;
+			if (to_delete) delete &composite;
 		}
 				
 		void CompositeManager::dump(ostream& s, Size depth) const
