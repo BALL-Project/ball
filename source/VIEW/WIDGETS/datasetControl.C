@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.37 2005/03/09 12:41:46 amoll Exp $
+// $Id: datasetControl.C,v 1.37.2.1 2005/04/15 13:30:29 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -62,6 +62,11 @@ DatasetControl::~DatasetControl()
   #endif 
 
 	if (dialog_ != 0) delete dialog_;
+
+	while (listview->firstChild() != 0)
+	{
+		deleteItem_(*listview->firstChild());
+	}
 }
 
 

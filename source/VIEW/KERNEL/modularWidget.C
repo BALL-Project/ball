@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.20 2005/02/08 06:09:30 oliver Exp $
+// $Id: modularWidget.C,v 1.20.4.1 2005/04/15 13:30:17 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -144,6 +144,7 @@ namespace BALL
 		void ModularWidget::setStatusbarText(String text, bool important)
 			throw()
 		{
+			if (getMainControl() == 0) return;
 			getMainControl()->setStatusbarText(text, important);
 		}
 
