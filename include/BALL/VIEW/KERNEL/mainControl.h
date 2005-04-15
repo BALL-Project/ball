@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72.2.1 2005/04/13 14:09:25 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.2 2005/04/15 13:50:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -233,7 +233,7 @@ namespace BALL
 					\param  composite the Composite that should be updated
 					\param  rebuild if set to true, the model is rebuilded, otherwise just the coloring is updated
 					\param  force is set to true, also rebuild non surface models (only usefull with rebuild = true)
-					\return false if the CompositeManager doesnt contain the Composite
+					\return true if an update was performed
 			*/
 			bool updateRepresentationsOf(const Composite& composite, bool rebuild = true, bool force = false)
 				throw();
@@ -253,7 +253,7 @@ namespace BALL
 					updateRepresentationsOf(composite) is called.
 					\return false if the CompositeManager doesnt contain the Composite
 			*/
-			bool update(Composite& composite, bool changed_hierarchy = true)
+			void update(Composite& composite, bool changed_hierarchy = true)
 				throw();
 
 			/** Insert a Composite and notify all ModularWidget.

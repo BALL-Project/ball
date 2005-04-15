@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.h,v 1.7.6.1 2005/04/15 13:49:31 amoll Exp $
+// $Id: compositeManager.h,v 1.7.6.2 2005/04/15 13:49:59 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
 #define BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
@@ -101,7 +101,6 @@ namespace BALL
 
 			/** Remove a Composite.
 			 		The Composite and its descendents will be destroyed if to_delete is true
-			 		\return true if the composite could be removed
 			*/
 			void remove(Composite& composite, bool to_delete = true)
 				throw();

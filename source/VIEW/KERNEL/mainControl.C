@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.2 2005/04/14 10:29:53 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.3 2005/04/15 13:51:55 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -582,10 +582,9 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		bool MainControl::updateRepresentationsOf(const Composite& composite, bool rebuild, bool force)
 			throw()
 		{
-			if (!composite_manager_.has(composite)) return false;
-			
 			// update all representations containing the composite
 			List<Representation*> changed_representations = primitive_manager_.getRepresentationsOf(composite);
+
 			List<Representation*>::Iterator reps_it = changed_representations.begin();
 			// notify GeometricControl of changed representations
 			for (; reps_it != changed_representations.end(); reps_it++)
@@ -615,7 +614,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			#endif
 			}
 
-			return true;
+			return changed_representations.size() != 0;
 		}
 
 
@@ -1341,27 +1340,21 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			BALL_DUMP_STREAM_SUFFIX(s);     
 		}
 
-		bool MainControl::update(Composite& composite, bool changed_hierarchy)
+		void MainControl::update(Composite& composite, bool changed_hierarchy)
 			throw()
 		{
-			if (!composite_manager_.has(composite)) return false;
-
 			CompositeMessage* cm = new CompositeMessage(composite, 
 					CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 			if (!changed_hierarchy) cm->setType(CompositeMessage::CHANGED_COMPOSITE);
 
 			notify_(cm);
 			updateRepresentationsOf(composite.getRoot(), true, changed_hierarchy);
-
-			return true;
 		}
 
 		bool MainControl::insert(Composite& composite, String name)
 			throw()
 		{
-			if (composite_manager_.has(composite)) return false;
-
-			composite_manager_.insert(composite);
+			if (!composite_manager_.insert(composite)) return false;
 			CompositeMessage* cm; 
 		
 			if (MolecularStructure::getInstance(0) != 0)
