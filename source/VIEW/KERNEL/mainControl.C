@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.161.2.2 2005/04/14 16:36:21 leonhardt Exp $
+// $Id: mainControl.C,v 1.161.2.3 2005/04/17 16:33:13 leonhardt Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1592,9 +1592,13 @@ namespace BALL
 			
 			if (e->type() == (QEvent::Type)DOCKING_FINISHED_EVENT)
 			{
-				Log.warn() << "get DOCKING_FINISHED_EVENT " << __FILE__ << " " << __LINE__ << std::endl;
 				DockingFinishedEvent* dock_event = dynamic_cast<DockingFinishedEvent*>(e);
-				// send a DockProgressMessage
+				if (dock_event->getConformationSet() == 0)
+				{
+					Log.warn() << "Could not send docking finished message in " << __FILE__ << " " << __LINE__ << std::endl;
+					return;
+				}
+				// send a DockingFinishedMessage
 				DockingFinishedMessage* dock_fin_m = new DockingFinishedMessage(dock_event->wasAborted());
 				dock_fin_m->setConformationSet(dock_event->getConformationSet());
 				notify_(dock_fin_m);

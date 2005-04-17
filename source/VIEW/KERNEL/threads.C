@@ -353,13 +353,16 @@ namespace BALL
 		///
 		DockingThread::DockingThread()
 			throw()
+			: BALLThread(),
+				dock_alg_(0)
 		{
-			dock_alg_ = NULL;
 		}
 		///
 		DockingThread::~DockingThread()
 			throw()
 		{
+			output_("delete thread", true);
+
 			if(dock_alg_ != 0)
 			{
 				delete dock_alg_;
@@ -371,28 +374,31 @@ namespace BALL
 		void DockingThread::setDockingAlgorithm(DockingAlgorithm* dock_alg)
 			throw()
 		{
-			if(dock_alg_ != 0)
-			{
-				delete dock_alg_;
-				dock_alg_ = NULL;
-			}
 			dock_alg_ = dock_alg;
 		}
 		
 		///
 		void DockingThread::run()
-			throw()
+			throw(Exception::NullPointer)
 		{
-			output_("starting docking...", true);
-
-			dock_alg_->start();
-			
-		 	DockingFinishedEvent* finished = new DockingFinishedEvent(dock_alg_->wasAborted());
-			ConformationSet* cs = new ConformationSet(dock_alg_->getConformationSet());
-			finished->setConformationSet(cs);
-			qApp->postEvent(getMainControl(), finished);
+				if (dock_alg_ == 0 ||
+						main_control_ == 0)
+				{
+					throw Exception::NullPointer(__FILE__, __LINE__);
+				}
 				
-			output_("Docking finished.", true);
+				output_("starting docking...", true);
+
+				dock_alg_->start();
+			
+		 		DockingFinishedEvent* finished = new DockingFinishedEvent(dock_alg_->wasAborted());
+				// Qt will delete event when done
+				ConformationSet* cs = new ConformationSet(dock_alg_->getConformationSet());
+				// conformation set is deleted in DockResult
+				finished->setConformationSet(cs);
+				qApp->postEvent(getMainControl(), finished);
+				
+				output_("Docking finished.", true);
 		}
 		
 		// =================================================0
