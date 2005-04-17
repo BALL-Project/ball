@@ -9,20 +9,24 @@
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_CONCEPT_COMPOSITE_H
-# include <BALL/CONCEPT/composite.h>
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY_H
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
 # include <BALL/VIEW/KERNEL/mainControl.h>
 #endif
 
+#ifndef BALL_FORMAT_INIFILE_H
+#include <BALL/FORMAT/INIFile.h>
+#endif
+
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 # include <BALL/VIEW/KERNEL/message.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
-# include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#ifndef BALL_KERNEL_SYSTEM_H
+#include <BALL/KERNEL/system.h>
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_RADIUSRULEPROCESSOR_H
@@ -37,20 +41,12 @@
 # include <BALL/STRUCTURE/defaultProcessors.h>
 #endif
 
-#ifndef BALL_STRUCTURE_FRAGMENTDB_H
-# include <BALL/STRUCTURE/fragmentDB.h>
-#endif
-
 #ifndef BALL_DATATYPE_OPTIONS_H
 # include <BALL/DATATYPE/options.h>
 #endif
 
-#ifndef BALL_STRUCTURE_DOCKING_DOCKINGALGORITHM_H
-# include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
-#endif
-
-#ifndef BALL_STRUCTURE_DOCKING_GEOMETRICFIT_H
-# include <BALL/STRUCTURE/DOCKING/geometricFit.h>
+#ifndef BALL_STRUCTURE_DOCKING_CONFORMATIONSET_H
+# include <BALL/STRUCTURE/DOCKING/conformationSet.h>
 #endif
 
 #include "dockDialogData.h"
@@ -258,6 +254,11 @@ namespace BALL
 				 */
 				virtual void scoringFuncChosen();
 				
+				/** Indicates an algorithm in the combobox was chosen.
+				 *	If the chosen algorithm has advanced options, the advanced_button will be enabled.
+				 */
+				virtual void algorithmChosen();
+				
 				/** Indicates the browse button to get a charges config file from table was pressed.
 				 */
 				virtual void browseChargesData();
@@ -314,10 +315,15 @@ namespace BALL
 				 */
 				System* docking_partner1_;
 				System* docking_partner2_;
-				
+			
+				/** Pointer to docking algorithm
+					*/
+				DockingAlgorithm* dock_alg_;
+					
 				//pointer to progress dialog
 				DockProgressDialog* progress_dialog_;
 			
+				
 				/** Options for the docking algorithm
 				 */
 				Options options_;

@@ -1,15 +1,15 @@
-// $Id: dockProgressDialog.C,v 1.1.2.5 2005/04/14 16:32:12 leonhardt Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.6 2005/04/17 16:36:43 leonhardt Exp $
 //
 
 #include "dockProgressDialog.h"
 
 # include <BALL/STRUCTURE/DOCKING/geometricFit.h>
-#include <BALL/VIEW/KERNEL/message.h>
 
 #include <qprogressbar.h>
 #include <qtextedit.h>
 #include <qpushbutton.h>
 #include <qmessagebox.h>
+#define BALL_VIEW_DEBUG
 
 namespace BALL
 {
@@ -107,7 +107,8 @@ namespace BALL
 		void DockProgressDialog::abortClicked()
 		{
 			alg_->abort();
-			close();
+			//dialog is closed and deleted
+			close(true);
 		}
 		
 		
@@ -118,14 +119,14 @@ namespace BALL
 			Log.error() << "in DockProgressDialog::updateProgress_" << std::endl;
 			progress_bar->setProgress((int)(alg_->getProgress() * 100.0), 100);
 			
-			//if (!alg_->hasFinished() && !alg_->wasAborted())
 			if (!alg_->hasFinished())
 			{
 			 	timer_.start(1000, true);
 			}
 			else
 			{
-			 	close();
+				//dialog is closed and deleted
+			 	close(true);
 			}
 		}
 		

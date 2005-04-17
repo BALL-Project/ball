@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.15 2005/04/14 16:32:13 leonhardt Exp $
+// $Id: dockResultDialog.C,v 1.1.2.16 2005/04/17 16:36:44 leonhardt Exp $
 //
 
 #include "dockResultDialog.h"
@@ -7,6 +7,7 @@
 #include <qcombobox.h>
 #include <qpushbutton.h>
 
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>

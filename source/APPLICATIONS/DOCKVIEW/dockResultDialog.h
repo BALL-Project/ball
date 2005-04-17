@@ -9,11 +9,6 @@
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-
-#ifndef BALL_VIEW_KERNEL_MAINCONTROL_H ///////////////////////////////////brauchen wir das???????????????/
-# include <BALL/VIEW/KERNEL/mainControl.h>
-#endif
-
 #include "dockResult.h"
 #include "dockResultDialogData.h"
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.22 2005/04/14 16:32:11 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.23 2005/04/17 16:36:42 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -18,14 +18,15 @@
 #include <qtabwidget.h>
 #include <qtable.h>
 
-#include <BALL/KERNEL/system.h>
-#include <BALL/FORMAT/INIFile.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
+#include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
+#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
+#include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
-#include <BALL/VIEW/KERNEL/threads.h>
 
 namespace BALL
 {
@@ -36,7 +37,11 @@ namespace BALL
 			throw()
 			: DockDialogData(parent, name, modal, fl),
 				ModularWidget(name),
-				PreferencesEntry()
+				PreferencesEntry(),
+				docking_partner1_(0),
+				docking_partner2_(0),
+				dock_alg_(0),
+				progress_dialog_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new DockDialog " << this << std::endl;
@@ -124,8 +129,11 @@ namespace BALL
 		void DockDialog::addAlgorithm(const QString& name, const int algorithm, QDialog* dialog)
 			throw()
 		{
-			// add dialog to HashMap
-			algorithm_dialogs_[algorithm] = dialog;
+			if(dialog)
+			{
+				// add dialog to HashMap
+				algorithm_dialogs_[algorithm] = dialog;
+			}
 			// add to ComboBox
 			algorithms->insertItem(name, algorithm);
 		}
@@ -161,8 +169,7 @@ namespace BALL
 					}
 					//setStatusbarText("Warning: Docking was aborted; DockResult may be incorrect!", true);
 				}
-				const ConformationSet* cs = dfm->getConformationSet();
-				continueCalculate_((ConformationSet*)cs);
+				continueCalculate_((ConformationSet*)(dfm->getConformationSet()));
 			}
 		}
 		
@@ -190,8 +197,9 @@ namespace BALL
 			throw()
 		{
 			PreferencesEntry::readPreferenceEntries(file);
-			// call this function to check which scoring function is the current item in the combobox
+			// call this function to check which algorithm / scoring function is the current item in the combobox
 			// and set advanced button enabled if necessary
+			algorithmChosen();
 			scoringFuncChosen();
 		}
 		
@@ -279,12 +287,11 @@ namespace BALL
 			applyProcessors_();
 			
 			// check which algorithm is chosen and create an DockingAlgorithm object
-			DockingAlgorithm* dock_alg = 0;
 			int index = algorithms->currentItem();
 			switch(index)
 			{
 				case GEOMETRIC_FIT:
-					dock_alg =  new GeometricFit();
+					dock_alg_ =  new GeometricFit();
 					break;
 			}
 			
@@ -297,21 +304,21 @@ namespace BALL
 			// and setup the algorithm
 			if (docking_partner1_->countAtoms() < docking_partner2_->countAtoms())
 			{
-				dock_alg->setup(*docking_partner2_, *docking_partner1_, options_);
+				dock_alg_->setup(*docking_partner2_, *docking_partner1_, options_);
 			}
 			else
 			{
-				dock_alg->setup(*docking_partner1_, *docking_partner2_, options_);
+				dock_alg_->setup(*docking_partner1_, *docking_partner2_, options_);
 			}
 			
-			Options scoring_options;  ///////////////////////////////TODO options sind immer leer ///////////////////////////////
+			Options scoring_options;  /////TODO options sind immer leer; als private? applyValues erweitern? ///////////////////////////////
 			
 			// ============================= WITH MULTITHREADING ====================================
 			if (!(getMainControl()->lockCompositesFor(this))) return;
 			Log.info() << "vor thread" << std::endl;
 			#ifdef BALL_QT_HAS_THREADS
 				DockingThread* thread = new DockingThread;
-				thread->setDockingAlgorithm(dock_alg);
+				thread->setDockingAlgorithm(dock_alg_);
 				thread->setMainControl(getMainControl());
 				
 				progress_dialog_ = new DockProgressDialog(this);
@@ -321,7 +328,7 @@ namespace BALL
 																		scoring_functions->currentText(),
 																		options_,
 																		scoring_options);
-				progress_dialog_->setDockingAlgorithm(dock_alg);
+				progress_dialog_->setDockingAlgorithm(dock_alg_);
 				
 				
 				thread->start();
@@ -330,9 +337,15 @@ namespace BALL
 			#else
 				// start docking
 				setStatusbarText("starting docking...", true);
-				dock_alg->start();
+				dock_alg_->start();
 				setStatusbarText("Docking finished.", true);
 				continueCalculate_(dock_alg->getConformationSet());
+				// delete instance 
+				if (dock_alg_ != NULL)
+				{
+					delete dock_alg_;
+					dock_alg_ = NULL;
+				}
 			#endif
 			
 		}
@@ -377,7 +390,6 @@ namespace BALL
 			}
 		
 			// apply scoring function; set new scores in the conformation set
-			//std::vector<ConformationSet::Conformation> ranked_conformations(conformation_set.getScoring()); 
 	   	std::vector<ConformationSet::Conformation> ranked_conformations((*scoring)(*conformation_set));
 			conformation_set->setScoring(ranked_conformations);
 
@@ -412,7 +424,7 @@ namespace BALL
 			dock_res_m->setComposite(*docked_system);
 			notify_(dock_res_m);
 
-			// delete instances 
+			// delete instance 
 			if (scoring != NULL)
 			{
 				delete scoring;
@@ -440,13 +452,6 @@ namespace BALL
 					GeometricFitDialog* dialog = RTTI::castTo<GeometricFitDialog>(*(algorithm_dialogs_[index]));
 					dialog->getOptions(options_);
 					break;
-			}
-			
-			Options::Iterator it = options_.begin();
-			for(; +it; ++it)
-			{
-				Log.info() << "Options:" << std::endl;
-				Log.info() << it->first << " : " << it->second << std::endl;
 			}
 		}
 		
@@ -743,6 +748,21 @@ namespace BALL
 			else
 			{
 				scoring_advanced_button->setEnabled(false);
+			}
+		}
+		
+		// Indicates an algorithm in the combobox was chosen.
+		void DockDialog::algorithmChosen()
+		{
+			// if chosen scoring function has advanced options, enable advanced_button
+			int index = algorithms->currentItem();
+			if(algorithm_dialogs_.has(index))
+			{
+				alg_advanced_button->setEnabled(true);
+			}
+			else
+			{
+				alg_advanced_button->setEnabled(false);
 			}
 		}
 		

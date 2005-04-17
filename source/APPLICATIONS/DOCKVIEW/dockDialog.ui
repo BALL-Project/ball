@@ -538,6 +538,12 @@
         <receiver>DockDialogData</receiver>
         <slot>browseRadiiRules()</slot>
     </connection>
+    <connection>
+        <sender>algorithms</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>algorithmChosen()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>systems1</tabstop>
@@ -563,6 +569,7 @@
     <slot>browseChargesRules()</slot>
     <slot>browseRadiiRules()</slot>
     <slot>scoringFuncChosen()</slot>
+    <slot>algorithmChosen()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
