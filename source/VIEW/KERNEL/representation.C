@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.1 2005/04/15 14:09:09 amoll Exp $
+// $Id: representation.C,v 1.62.4.2 2005/04/17 17:05:18 amoll Exp $
 //
 
 
@@ -309,7 +309,7 @@ namespace BALL
 #endif
 			// if no ModelProcessor was given, there can only exist 
 			// handmade GeometricObjects, which dont need to be updated
-			if (model_update_enabled_ && model_processor_ != 0 && rebuild_)
+			if (model_update_enabled_ && model_processor_ != 0)
 			{
 				// just to be sure we control the composites if they changed after last model.
 				// this shouldnt happen, but maybe someone send the false message after changing the Composite tree
@@ -385,6 +385,7 @@ namespace BALL
 			{
 				changed_color_processor_ = false;
 				model_build_time_ = PreciseTime::now();
+				rebuild_ = false;
 			}
 
 #ifndef BALL_QT_HAS_THREADS

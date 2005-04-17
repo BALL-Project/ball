@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.3 2005/04/15 14:19:57 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.4 2005/04/17 17:05:17 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -297,7 +297,6 @@ void ModifySurfaceDialog::colorByCustomColor_()
 
 	if (mesh_->colorList.size() != mesh_->vertex.size())
 	{
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		mesh_->colorList.resize(mesh_->vertex.size());
 	}
 
@@ -773,6 +772,7 @@ void ModifySurfaceDialog::split_()
 		return;
 	}
 
+	new_rep->enableModelUpdate(false);
 	getMainControl()->insert(*new_rep);
 	getMainControl()->update(*rep_);
 }

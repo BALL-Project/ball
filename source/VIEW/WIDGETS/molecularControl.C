@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.2 2005/04/13 14:08:41 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.3 2005/04/17 17:05:18 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -787,7 +787,7 @@ void MolecularControl::cut()
 	{
 		getMainControl()->deselectCompositeRecursive(*it, false);
 
-		roots.insert(&(**it).getRoot());
+		if (!(**it).isRoot()) roots.insert(&(**it).getRoot());
 
 		getMainControl()->remove(**it, was_delete_, false);
 
