@@ -276,7 +276,7 @@ namespace VIEW
 
 		/// Thread for Docking
 		class BALL_EXPORT DockingThread
-			: public SimulationThread
+			: public BALLThread
 		{
 			public:
 				///
@@ -293,7 +293,7 @@ namespace VIEW
 					
 				///
 				virtual void run()
-					throw();
+					throw(Exception::NullPointer);
 					
 			protected:
 				DockingAlgorithm* dock_alg_;
@@ -362,7 +362,7 @@ namespace VIEW
 				}
 				
 				///
-				void setConformationSet(ConformationSet* conformation_set)
+				void setConformationSet(const ConformationSet* conformation_set)
 				{
 					conformation_set_ = conformation_set;
 				}
@@ -381,6 +381,7 @@ namespace VIEW
 				
 				protected:
 
+				/// this conformation set is deleted in DockResult
 				const ConformationSet* conformation_set_;
 				bool abort_;
 		};
