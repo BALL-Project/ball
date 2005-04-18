@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19 2005/02/06 20:57:11 oliver Exp $
+// $Id: POVRenderer.C,v 1.19.4.1 2005/04/18 13:45:45 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -122,8 +122,6 @@ namespace BALL
 		String POVRenderer::POVFinish(const String& object, const ColorRGBA& input)
 			throw()
 		{
-
-
 			String output = "finish { BALLFinish";
 			output += object;
 
@@ -295,6 +293,8 @@ namespace BALL
 			out << "#declare BALLFinishMesh             = BALLFinish" << endl;
 			out << "#declare BALLFinishWire             = BALLFinish" << endl;
 			out << "#declare wire_radius 								= 0.01;" << std::endl;
+			out << "// enter the path to your desired font here: " << std::endl;
+			out << "#declare BALLLabelFont              = \"arial.ttf\";" << std::endl;
 			out << std::endl;
 			
 			out << "#macro Sphere(Position, Radius, Color)" << endl;
@@ -762,6 +762,16 @@ namespace BALL
 			String color_temp;
 			color.get(color_temp);
 			return String("c") + String(color_map_[color_temp]);
+		}
+
+		void POVRenderer::renderLabel_(const Label& label)
+			throw()
+		{
+			std::ostream& out = *outfile_;
+
+			out << "text{ ttf BALLLabelFont, \"" << label.getExpandedText() << "\",0.2, 0" << std::endl;
+			out << "  texture{ pigment{color rgb" << 	POVColorRGBA(label.getColor()) << " }"<< std::endl;
+			out << "  finish{ambient 0.15 diffuse 0.85} } rotate<0.0,0,0> translate" << POVVector3(label.getVertex()) << "}"<< std::endl;
 		}
 
 	} // namespaces

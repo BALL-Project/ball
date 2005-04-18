@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.8.4.1 2005/04/14 10:31:52 amoll Exp $
+// $Id: POVRenderer.h,v 1.8.4.2 2005/04/18 13:45:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -161,7 +161,7 @@ namespace BALL
 
 			// do nothing
 			void renderLabel_(const Label&)
-				throw() {}
+				throw();
 
 			//@}
 
