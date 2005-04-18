@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.3 2005/04/14 13:02:06 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.4 2005/04/18 12:09:33 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -73,7 +74,8 @@ namespace BALL
 		GeometricControl::GeometricControl(QWidget* parent, const char* name)
 			throw()
 			:	GenericControl(parent, name),
-				context_menu_(),
+				context_menu_(this),
+				clipping_plane_context_menu_(this),
 				context_representation_(0),
 				modify_surface_dialog_(new ModifySurfaceDialog(this, "ModifySurfaceDialog")),
 				creating_representations_(false)
@@ -95,6 +97,12 @@ namespace BALL
 			QToolTip::add(listview, txt.c_str());
 			connect(listview, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
 			registerWidget(this);
+
+			clipping_plane_context_menu_.insertItem("Move Clipping Plane", this, SLOT(moveClippingPlane()));
+			clipping_plane_context_menu_.insertItem("Flip Clipping Plane", this, SLOT(flipClippingPlane()));	
+			clipping_plane_context_menu_.insertItem("Set Clipping Plane to x axis", this, SLOT(setClippingPlaneX()));	
+			clipping_plane_context_menu_.insertItem("Set Clipping Plane to y axis", this, SLOT(setClippingPlaneY()));	
+			clipping_plane_context_menu_.insertItem("Set Clipping Plane to z axis", this, SLOT(setClippingPlaneZ()));	
 		}
 
 		GeometricControl::~GeometricControl()
@@ -242,8 +250,7 @@ namespace BALL
 			}
 
 			context_menu_.insertSeparator();
-			insertContextMenuEntry("Move Clipping Plane", this, SLOT(moveClippingPlane()), 40);	
-			insertContextMenuEntry("Flip Clipping Plane", this, SLOT(flipClippingPlane()), 50);	
+			context_menu_.insertItem("Clipping Plane", &clipping_plane_context_menu_, 40);
 			if (rep.getModelType() == MODEL_CLIPPING_PLANE)
 			{
 				context_menu_.setItemEnabled(5, false);
@@ -252,7 +259,6 @@ namespace BALL
 			else
 			{
 				context_menu_.setItemEnabled(40, false);
-				context_menu_.setItemEnabled(50, false);
 			}
 		}
 
@@ -621,12 +627,16 @@ namespace BALL
 
 		void GeometricControl::moveClippingPlane()
 		{
+			getMainControl()->clearSelection();
+
 			SceneMessage* msg = new SceneMessage(SceneMessage::ENTER_MOVE_MODE);
 			notify_(msg);
 		}
 
 		void GeometricControl::flipClippingPlane()
 		{
+			if (!context_representation_->hasProperty("AX")) return;
+
 			context_representation_->setProperty("AX", -context_representation_->getProperty("AX").getDouble());
 			context_representation_->setProperty("BY", -context_representation_->getProperty("BY").getDouble());
 			context_representation_->setProperty("CZ", -context_representation_->getProperty("CZ").getDouble());
@@ -636,6 +646,39 @@ namespace BALL
 				new RepresentationMessage(*context_representation_, RepresentationMessage::UPDATE);
 			notify_(msg);
 		}
+
+		void GeometricControl::setClippingPlaneX()
+		{
+			if (Scene::getInstance(0) == 0) return;
+			setClippingPlane_(Scene::getInstance(0)->getStage()->getCamera().getLookUpVector());
+		}
+
+		void GeometricControl::setClippingPlaneY()
+		{
+			if (Scene::getInstance(0) == 0) return;
+			setClippingPlane_(Scene::getInstance(0)->getStage()->getCamera().getRightVector());
+		}
+
+		void GeometricControl::setClippingPlaneZ()
+		{
+			if (Scene::getInstance(0) == 0) return;
+			setClippingPlane_(Scene::getInstance(0)->getStage()->getCamera().getViewVector());
+		}
+
+		void GeometricControl::setClippingPlane_(const Vector3& n)
+		{
+			if (!context_representation_->hasProperty("AX")) return;
+
+			context_representation_->setProperty("AX", n.x);
+			context_representation_->setProperty("BY", n.y);
+			context_representation_->setProperty("CZ", n.z);
+			context_representation_->setProperty("D",  1);
+
+			RepresentationMessage* msg = 
+				new RepresentationMessage(*context_representation_, RepresentationMessage::UPDATE);
+			notify_(msg);
+		}
+
 
 		void GeometricControl::moveItems(const Matrix4x4& m)
 			throw()

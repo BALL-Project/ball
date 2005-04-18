@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.24.4.2 2005/04/14 13:02:08 amoll Exp $
+// $Id: geometricControl.h,v 1.24.4.3 2005/04/18 12:09:35 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -213,6 +213,15 @@ namespace BALL
 			///
 			virtual void flipClippingPlane();
 
+			///
+			virtual void setClippingPlaneX();
+
+			///
+			virtual void setClippingPlaneY();
+
+			///
+			virtual void setClippingPlaneZ();
+
 		  protected slots:
 			
 			//@} 
@@ -259,8 +268,11 @@ namespace BALL
 			String 						getRepresentationName_(const Representation& rep)
 				throw();
 
+			void setClippingPlane_(const Vector3& n);
+
 			// the context menu
 			QPopupMenu 				context_menu_;
+			QPopupMenu 				clipping_plane_context_menu_;
 
 			Representation* 	context_representation_;
 			QListViewItem*  	context_item_;
