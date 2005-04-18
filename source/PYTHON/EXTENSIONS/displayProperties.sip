@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.sip,v 1.5 2004/07/25 20:49:40 amoll Exp $
+// $Id: displayProperties.sip,v 1.5.6.1 2005/04/18 13:34:10 amoll Exp $
 //
 
 class DisplayProperties
@@ -36,7 +36,7 @@ static DisplayProperties* getInstance(Position /index/);
 //  void initializePreferencesTab(Preferences &preferences) throw();
 //  void initializeWidget(MainControl&) throw();
   void modelOptionsPressed();
-  void modifyRepresentationMode();
+  void modifyRepresentationMode(Representation*);
 //  void onNotify(Message *message) throw();
   void precisionBoxChanged(int);
   void precisionSliderChanged();

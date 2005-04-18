@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.sip,v 1.4 2003/11/17 18:11:24 amoll Exp $
+// $Id: compositeManager.sip,v 1.4.8.1 2005/04/18 13:34:10 amoll Exp $
 //
 class CompositeManager
 {
@@ -19,9 +19,10 @@ class CompositeManager
   CompositeManager() throw();
   CompositeManager(const CompositeManager& /cm/) throw();
   Size getNumberOfComposites() const throw();
-  bool has(const Composite& /composite/) const throw();
+  bool has(const Composite*) const throw();
+  bool hasRoot(const Composite*) const throw();
   bool insert(Composite& /composite/) throw();
-  bool remove(Composite& /composite/) throw();
+  void remove(Composite& /composite/, bool) throw();
   void clear() throw();
 	PyCompositeList getComposites() throw();
   // void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
