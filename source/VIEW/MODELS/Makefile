@@ -10,6 +10,7 @@ CPP_SOURCES=\
 	colorProcessor.C\
 	forceModel.C\
 	HBondModel.C\
+	labelModel.C\
 	lineModel.C\
 	modelProcessor.C\
 	standardColorProcessor.C\

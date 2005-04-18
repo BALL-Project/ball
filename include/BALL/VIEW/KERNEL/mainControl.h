@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72 2005/02/14 23:42:30 amoll Exp $
+// $Id: mainControl.h,v 1.73 2005/04/18 13:30:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -233,7 +233,7 @@ namespace BALL
 					\param  composite the Composite that should be updated
 					\param  rebuild if set to true, the model is rebuilded, otherwise just the coloring is updated
 					\param  force is set to true, also rebuild non surface models (only usefull with rebuild = true)
-					\return false if the CompositeManager doesnt contain the Composite
+					\return true if an update was performed
 			*/
 			bool updateRepresentationsOf(const Composite& composite, bool rebuild = true, bool force = false)
 				throw();
@@ -253,7 +253,7 @@ namespace BALL
 					updateRepresentationsOf(composite) is called.
 					\return false if the CompositeManager doesnt contain the Composite
 			*/
-			bool update(Composite& composite, bool changed_hierarchy = true)
+			void update(Composite& composite, bool changed_hierarchy = true)
 				throw();
 
 			/** Insert a Composite and notify all ModularWidget.
@@ -268,9 +268,10 @@ namespace BALL
 			/** Remove a Composite and notify all ModularWidget.
 			 		A CompositeMessage with type REMOVED_COMPOSITE is send and
 					CompositeManager::remove called.
+					@param update update Representations if needed
 					\return false if the CompositeManager doesnt contain the Composite
 			*/
-			bool remove(Composite& composite, bool to_delete = true)
+			bool remove(Composite& composite, bool to_delete = true, bool update = true)
 				throw();
 
 			/** Update a Representation

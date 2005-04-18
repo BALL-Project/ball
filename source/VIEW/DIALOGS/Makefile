@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.44 2004/10/20 12:26:41 amoll Exp $
+# $Id: Makefile,v 1.45 2005/04/18 13:30:08 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -21,8 +21,8 @@ CPP_SOURCES=\
 	bondPropertiesData.C\
 	charmmConfigurationDialog.C\
 	charmmConfigurationDialogData.C\
-	colorMeshDialog.C\
-	colorMeshDialogData.C\
+	modifySurfaceDialog.C\
+	modifySurfaceDialogData.C\
 	coloringSettingsDialog.C\
 	coloringSettingsDialogData.C\
 	compositeProperties.C\
@@ -79,8 +79,8 @@ MOC_SOURCES=\
 	charmmConfigurationDialogData_moc.C\
 	coloringSettingsDialog_moc.C\
 	coloringSettingsDialogData_moc.C\
-	colorMeshDialog_moc.C\
-	colorMeshDialogData_moc.C\
+	modifySurfaceDialog_moc.C\
+	modifySurfaceDialogData_moc.C\
 	contourSurfaceDialog_moc.C\
 	contourSurfaceDialogData_moc.C\
 	downloadPDBFile_moc.C\
@@ -126,7 +126,7 @@ UIC_SOURCES=\
 	bondPropertiesData.C\
 	charmmConfigurationDialogData.C\
 	coloringSettingsDialogData.C\
-	colorMeshDialogData.C\
+	modifySurfaceDialogData.C\
 	compositePropertiesData.C\
 	contourSurfaceDialogData.C\
 	downloadPDBFileData.C\
@@ -166,7 +166,7 @@ openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
 colorChooser_moc.C: $(HEADER_DIR)/colorChooser.h
 	$(MOC) $(HEADER_DIR)/colorChooser.h -o $@
 
-depend: $(UIC_SOURCES) $(MOC_SOURCES)
+depend: $(UIC_HDR) $(UIC_SOURCES) $(MOC_SOURCES)
 
 default_clean: clean_uic
 

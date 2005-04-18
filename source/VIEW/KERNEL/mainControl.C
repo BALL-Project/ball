@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169 2005/03/01 15:54:23 amoll Exp $
+// $Id: mainControl.C,v 1.170 2005/04/18 13:30:10 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -569,21 +569,11 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		bool MainControl::remove_(Composite& composite, bool update_representations_of_parent, bool to_delete)
 			throw()
 		{
-			if (!composite_manager_.has(composite)) return false;
 			// delete all representations containing the composite
-			primitive_manager_.removedComposite(composite);
-
-			Composite* root = 0;
-			if (composite.isRoot()) root = &composite.getRoot();
+			primitive_manager_.removedComposite(composite, update_representations_of_parent);
 
 			// delete the Composite
 			composite_manager_.remove(composite, to_delete);
-
-			// update all Representations
-			if (root != 0 && update_representations_of_parent) 
-			{
-				updateRepresentationsOf(*root, true, true);
-			}
 
 			return true;
 		}
@@ -592,10 +582,9 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		bool MainControl::updateRepresentationsOf(const Composite& composite, bool rebuild, bool force)
 			throw()
 		{
-			if (!composite_manager_.has(composite)) return false;
-			
 			// update all representations containing the composite
 			List<Representation*> changed_representations = primitive_manager_.getRepresentationsOf(composite);
+
 			List<Representation*>::Iterator reps_it = changed_representations.begin();
 			// notify GeometricControl of changed representations
 			for (; reps_it != changed_representations.end(); reps_it++)
@@ -625,7 +614,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			#endif
 			}
 
-			return true;
+			return changed_representations.size() != 0;
 		}
 
 
@@ -1351,27 +1340,21 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			BALL_DUMP_STREAM_SUFFIX(s);     
 		}
 
-		bool MainControl::update(Composite& composite, bool changed_hierarchy)
+		void MainControl::update(Composite& composite, bool changed_hierarchy)
 			throw()
 		{
-			if (!composite_manager_.has(composite)) return false;
-
 			CompositeMessage* cm = new CompositeMessage(composite, 
 					CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 			if (!changed_hierarchy) cm->setType(CompositeMessage::CHANGED_COMPOSITE);
 
 			notify_(cm);
 			updateRepresentationsOf(composite.getRoot(), true, changed_hierarchy);
-
-			return true;
 		}
 
 		bool MainControl::insert(Composite& composite, String name)
 			throw()
 		{
-			if (composite_manager_.has(composite)) return false;
-
-			composite_manager_.insert(composite);
+			if (!composite_manager_.insert(composite)) return false;
 			CompositeMessage* cm; 
 		
 			if (MolecularStructure::getInstance(0) != 0)
@@ -1389,21 +1372,15 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			return true;
 		}
 
-		bool MainControl::remove(Composite& composite, bool to_delete)
+		bool MainControl::remove(Composite& composite, bool to_delete, bool update)
 			throw()
 		{
-			if (!composite_manager_.has(composite)) 
-			{
-				primitive_manager_.removedComposite(composite);
-				return false;
-			}
-
 			control_selection_.clear();
 
 			CompositeMessage* cm = new CompositeMessage(composite, 
 					CompositeMessage::REMOVED_COMPOSITE);
 			notify_(cm);
-			remove_(composite, true, to_delete);
+			remove_(composite, update, to_delete);
 
 			return true;
 		}
@@ -1411,7 +1388,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		bool MainControl::insert(Representation& rep)
 			throw()
 		{
-			return primitive_manager_.insert(rep);
+			return primitive_manager_.insert(rep, true);
 		}
 
 		bool MainControl::update(Representation& rep)

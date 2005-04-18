@@ -3,10 +3,9 @@
 //
 // $Id:
 
-#include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
-#include <BALL/VIEW/PRIMITIVES/label.h>
+#include <BALL/VIEW/MODELS/labelModel.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
@@ -15,6 +14,10 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
+#include <qcombobox.h>
+#include <qfontdialog.h>
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
 
 namespace BALL
 {
@@ -81,6 +84,28 @@ void LabelDialog::fetchPreferences(INIFile& inifile)
 		custom_color_.set(ColorRGBA(1.,1.,0.,1.));
 		color_sample_->setBackgroundColor(custom_color_.getQColor());
 	}			
+
+	if (inifile.hasEntry("WINDOWS", "Label::font"))
+	{
+		font_.fromString(inifile.getValue("WINDOWS", "Label::font").c_str());
+	}
+	else
+	{
+		font_ = QFont("Helvetica", 12);
+	}
+
+	font_label->setFont(font_);
+
+	if (inifile.hasEntry("WINDOWS", "Label::manylabels"))
+	{
+		all_items->setChecked(inifile.getValue("WINDOWS", "Label::manylabels").toBool());
+		every_item->setChecked(!inifile.getValue("WINDOWS", "Label::manylabels").toBool());
+	}
+	else
+	{
+		all_items->setChecked(true);
+		every_item->setChecked(false);
+	}
 }
 
 void LabelDialog::writePreferences(INIFile& inifile)
@@ -92,6 +117,12 @@ void LabelDialog::writePreferences(INIFile& inifile)
 
 	// the color value
 	inifile.insertValue("WINDOWS", "Label::customcolor", custom_color_);
+
+	// the font size
+	inifile.insertValue("WINDOWS", "Label::font", font_.toString().ascii());
+
+	// many <-> one label
+	inifile.insertValue("WINDOWS", "Label::manylabels", String(!all_items->isChecked()));
 }
 
 void LabelDialog::onNotify(Message *message)
@@ -135,50 +166,40 @@ void LabelDialog::show()
 	raise();
 }
 
+
 void LabelDialog::accept()
 {
 	// no selection present => return
 	if (selection_.empty()) return;
 
-	// number of objects
-	Size number_of_objects = 0;
-
-	// center processor
-	GeometricCenterProcessor center_processor;
-	
-	// center to which the label will be attached
-	Vector3 center;
-
-	// process all objects in the selection list
-	List<Composite*>::Iterator list_it = selection_.begin();
-	for (; list_it != selection_.end(); ++list_it)
-	{
-		(*list_it)->apply(center_processor);
-
-		center += center_processor.getCenter();
-		++number_of_objects;
-	}
-
-	if (number_of_objects != 0)
-	{
-		center /= number_of_objects;
-	}
-
-	// create Label and Representation
-	Label* label = new Label;
-	label->setText(label_edit_->text().ascii());
-	label->setColor(custom_color_);
-	label->setVertex(center);
-
-	Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
-	rep->insert(*label);
+	Representation* rep = new Representation;
 	rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
 	rep->setModelType(MODEL_LABEL);
-	RepresentationMessage* arm = new RepresentationMessage;
-	arm->setRepresentation(*rep);
-	arm->setType(RepresentationMessage::ADD);
-	notify_(arm);
+
+	LabelModel* model = new LabelModel;
+	model->setText(label_edit_->text().ascii());
+	model->setColor(custom_color_);
+	model->setFont(font_);
+			 if (		 all_items->isChecked()) model->setMode(LabelModel::ONE_LABEL);
+	else if (		every_atom->isChecked()) model->setMode(LabelModel::ALL_ATOMS);
+	else if (every_residue->isChecked()) model->setMode(LabelModel::ALL_RESIDUES);
+	else if (	  every_item->isChecked()) model->setMode(LabelModel::ALL_ITEMS);
+
+	rep->setModelProcessor(model);
+
+	// process all objects in the selection list
+	List<Composite*>::ConstIterator list_it = selection_.begin();
+	for (; list_it != selection_.end(); ++list_it)
+	{
+		rep->getComposites().insert(*list_it);
+	}
+
+	getMainControl()->insert(*rep);
+	getMainControl()->update(*rep);
 	
+	history_box->insertItem(label_edit_->text());
+	history_box->setEnabled(true);
+
 	setStatusbarText("Label added.");
 }
 
@@ -186,5 +207,47 @@ void LabelDialog::editColor()
 {
 	custom_color_.set(chooseColor(color_sample_));
 }
+
+void LabelDialog::addTag()
+{
+	QString tag;
+	if (tag_box->currentText() == "Name")							 	tag = "%N";
+	else if (tag_box->currentText() == "Residue ID") 	 	tag = "%I";
+	else if (tag_box->currentText() == "Atom Type")			tag = "%T";
+	else if (tag_box->currentText() == "Atom Charge") 	tag = "%C";
+
+	label_edit_->setText(label_edit_->text() + tag);
+	label_edit_->update();
+}
+
+void LabelDialog::fontSelected()
+{
+	bool ok = true;
+	QFont font = QFontDialog::getFont(&ok, font_, 0);
+
+	if (!ok) return;
+
+	font_label->setFont(font);
+	font_ = font;
+}
+
+void LabelDialog::modeChanged()
+{
+  tag_box->setEnabled(!all_items->isChecked());
+  add_tag_button->setEnabled(!all_items->isChecked());
+}
+
+void LabelDialog::textChanged()
+{
+	apply_button_->setEnabled(label_edit_->text() != "");
+}
+
+void LabelDialog::historySelected()
+{
+	if (history_box->currentText() == "") return;
+
+	label_edit_->setText(history_box->currentText());
+}
+
 
 } } // namespaces

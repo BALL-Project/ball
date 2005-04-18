@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96 2005/02/14 23:48:32 amoll Exp $
+// $Id: molecularControl.C,v 1.97 2005/04/18 13:30:12 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -780,7 +780,6 @@ void MolecularControl::cut()
 	// remove the selected composites from the tree and from the scene
 	// if !was_delete_, copy them into the copy_list_
 	// for all roots of removed items the representations are rebuild
-	Size nr_of_items = 0;
 	HashSet<Composite*> roots;
 
 	List<Composite*>::Iterator it = selected_.begin();	
@@ -788,23 +787,12 @@ void MolecularControl::cut()
 	{
 		getMainControl()->deselectCompositeRecursive(*it, false);
 
-		if (!(**it).isRoot())
-		{
-			nr_of_items += removeComposite(**it);
-			roots.insert(&(**it).getRoot());
-			(**it).getParent()->removeChild(**it);
- 			if (was_delete_) delete *it;
-		}
-		else
-		{
-			// only update roots this way, otherwise it may take too long for serveral items to be pasted
-			getMainControl()->remove(**it, was_delete_);
-		}
+		if (!(**it).isRoot()) roots.insert(&(**it).getRoot());
+
+		getMainControl()->remove(**it, was_delete_, false);
 
 		if (!was_delete_) copy_list_.push_back(*it);
 	}
-
-	setStatusbarText("Deleted " + String(nr_of_items) + " items.");
 
 	selected_.clear();
 	listview->setUpdatesEnabled(true);
@@ -813,7 +801,7 @@ void MolecularControl::cut()
 	notify_(message);
 
 	HashSet<Composite*>::Iterator roots_it = roots.begin();
-	for (; roots_it != roots.end(); roots_it++)
+	for (; +roots_it; roots_it++)
 	{
 		getMainControl()->update(**roots_it, true);
 	}
@@ -1069,7 +1057,7 @@ void MolecularControl::countItems()
 
 	s+=String(ac.countAtoms()) + " Atoms, ";
 	s+=String(ac.countBonds()) + " Bonds";
-	setStatusbarText(s);
+	setStatusbarText(s, true);
 }
 
 Size MolecularControl::applySelector()

@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>ColorMeshDialogData</class>
+<class>ModifySurfaceDialogData</class>
 <widget class="QDialog">
     <property name="name">
-        <cstring>ColorMeshDialogData</cstring>
+        <cstring>ModifySurfaceDialogData</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -25,7 +25,7 @@
         </size>
     </property>
     <property name="caption">
-        <string>Color Surface</string>
+        <string>Modify Surface</string>
     </property>
     <spacer>
         <property name="name">
@@ -224,10 +224,116 @@
         </property>
         <widget class="QWidget">
             <property name="name">
+                <cstring>split</cstring>
+            </property>
+            <attribute name="title">
+                <string>Split</string>
+            </attribute>
+            <widget class="QButtonGroup">
+                <property name="name">
+                    <cstring>split_group</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>6</x>
+                        <y>8</y>
+                        <width>318</width>
+                        <height>107</height>
+                    </rect>
+                </property>
+                <property name="title">
+                    <string>split this Surface into two parts</string>
+                </property>
+                <property name="exclusive">
+                    <bool>true</bool>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>split_by_selection</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>9</x>
+                            <y>23</y>
+                            <width>297</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>by selection</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>split_distance_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>192</x>
+                            <y>73</y>
+                            <width>32</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="frameShape">
+                        <enum>WinPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="text">
+                        <string>0</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>split_by_distance</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>9</x>
+                            <y>50</y>
+                            <width>297</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>within distance from selection</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>split_distance_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>34</x>
+                            <y>74</y>
+                            <width>152</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                </widget>
+            </widget>
+        </widget>
+        <widget class="QWidget">
+            <property name="name">
                 <cstring>by_grid</cstring>
             </property>
             <attribute name="title">
-                <string>by grid</string>
+                <string>color by grid</string>
             </attribute>
             <widget class="QLabel">
                 <property name="name">
@@ -1322,7 +1428,7 @@
                 <cstring>by_color</cstring>
             </property>
             <attribute name="title">
-                <string>by custom color</string>
+                <string>color by custom color</string>
             </attribute>
             <widget class="QLayoutWidget">
                 <property name="name">
@@ -1578,7 +1684,7 @@
                 <property name="geometry">
                     <rect>
                         <x>5</x>
-                        <y>172</y>
+                        <y>167</y>
                         <width>184</width>
                         <height>74</height>
                     </rect>
@@ -1647,6 +1753,22 @@
                     </property>
                 </widget>
             </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>color_only_selection</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>5</x>
+                        <y>247</y>
+                        <width>189</width>
+                        <height>24</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>apply only on selection</string>
+                </property>
+            </widget>
         </widget>
     </widget>
 </widget>
@@ -1654,98 +1776,110 @@
     <connection>
         <sender>apply_button</sender>
         <signal>clicked()</signal>
-        <receiver>ColorMeshDialogData</receiver>
+        <receiver>ModifySurfaceDialogData</receiver>
         <slot>applyPressed()</slot>
     </connection>
     <connection>
         <sender>blue_box</sender>
         <signal>valueChanged(int)</signal>
-        <receiver>ColorMeshDialogData</receiver>
+        <receiver>ModifySurfaceDialogData</receiver>
         <slot>colorBoxesChanged()</slot>
     </connection>
     <connection>
         <sender>cancel_button</sender>
         <signal>clicked()</signal>
-        <receiver>ColorMeshDialogData</receiver>
+        <receiver>ModifySurfaceDialogData</receiver>
         <slot>cancelPressed()</slot>
     </connection>
     <connection>
         <sender>green_box</sender>
         <signal>valueChanged(int)</signal>
-        <receiver>ColorMeshDialogData</receiver>
+        <receiver>ModifySurfaceDialogData</receiver>
         <slot>colorBoxesChanged()</slot>
     </connection>
     <connection>
         <sender>red_box</sender>
         <signal>valueChanged(int)</signal>
-        <receiver>ColorMeshDialogData</receiver>
+        <receiver>ModifySurfaceDialogData</receiver>
         <slot>colorBoxesChanged()</slot>
     </connection>
     <connection>
         <sender>surface_tab</sender>
         <signal>selected(const QString&amp;)</signal>
-        <receiver>ColorMeshDialogData</receiver>
+        <receiver>ModifySurfaceDialogData</receiver>
         <slot>tabChanged()</slot>
     </connection>
     <connection>
         <sender>autoscale</sender>
         <signal>clicked()</signal>
-        <receiver>ColorMeshDialogData</receiver>
+        <receiver>ModifySurfaceDialogData</receiver>
         <slot>autoScalePressed()</slot>
     </connection>
     <connection>
         <sender>grids</sender>
         <signal>activated(int)</signal>
-        <receiver>ColorMeshDialogData</receiver>
+        <receiver>ModifySurfaceDialogData</receiver>
         <slot>gridSelected()</slot>
     </connection>
     <connection>
         <sender>transparency_group_grid</sender>
         <signal>clicked(int)</signal>
-        <receiver>ColorMeshDialogData</receiver>
+        <receiver>ModifySurfaceDialogData</receiver>
         <slot>gridTransparencyChanged()</slot>
     </connection>
     <connection>
         <sender>transparency_group_custom</sender>
         <signal>clicked(int)</signal>
-        <receiver>ColorMeshDialogData</receiver>
+        <receiver>ModifySurfaceDialogData</receiver>
         <slot>customColorTransparencyChanged()</slot>
     </connection>
     <connection>
         <sender>min_min_button</sender>
         <signal>clicked()</signal>
-        <receiver>ColorMeshDialogData</receiver>
+        <receiver>ModifySurfaceDialogData</receiver>
         <slot>minMinPressed()</slot>
     </connection>
     <connection>
         <sender>min_button</sender>
         <signal>clicked()</signal>
-        <receiver>ColorMeshDialogData</receiver>
+        <receiver>ModifySurfaceDialogData</receiver>
         <slot>minPressed()</slot>
     </connection>
     <connection>
         <sender>mid_button</sender>
         <signal>clicked()</signal>
-        <receiver>ColorMeshDialogData</receiver>
+        <receiver>ModifySurfaceDialogData</receiver>
         <slot>midPressed()</slot>
     </connection>
     <connection>
         <sender>max_button</sender>
         <signal>clicked()</signal>
-        <receiver>ColorMeshDialogData</receiver>
+        <receiver>ModifySurfaceDialogData</receiver>
         <slot>maxPressed()</slot>
     </connection>
     <connection>
         <sender>max_max_button</sender>
         <signal>clicked()</signal>
-        <receiver>ColorMeshDialogData</receiver>
+        <receiver>ModifySurfaceDialogData</receiver>
         <slot>maxMaxPressed()</slot>
     </connection>
     <connection>
         <sender>choose_button</sender>
         <signal>clicked()</signal>
-        <receiver>ColorMeshDialogData</receiver>
+        <receiver>ModifySurfaceDialogData</receiver>
         <slot>choosePressed()</slot>
+    </connection>
+    <connection>
+        <sender>split_group</sender>
+        <signal>clicked(int)</signal>
+        <receiver>ModifySurfaceDialogData</receiver>
+        <slot>splitMethodChanged()</slot>
+    </connection>
+    <connection>
+        <sender>split_distance_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModifySurfaceDialogData</receiver>
+        <slot>splitDistanceChanged()</slot>
     </connection>
 </connections>
 <tabstops>
@@ -1788,6 +1922,8 @@
     <slot>gridSelected()</slot>
     <slot>gridTransparencyChanged()</slot>
     <slot>customColorTransparencyChanged()</slot>
+    <slot>splitMethodChanged()</slot>
+    <slot>splitDistanceChanged()</slot>
 </slots>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>

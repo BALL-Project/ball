@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.28 2005/02/06 20:57:05 oliver Exp $
+// $Id: colorProcessor.h,v 1.29 2005/04/18 13:30:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -202,14 +202,12 @@ class BALL_EXPORT ColorProcessor
 	///
 	void setModelType(ModelType type) {model_type_ = type;}
 
-	protected:
-	
 	//_ Create the threedimensional grid from the CompositeSet, or a given Composite 
-	virtual void createAtomGrid_(const Composite* from_mesh = 0)
+	virtual void createAtomGrid(const Composite* from_mesh = 0)
 		throw();
 
-	//_ Colorize the mesh with the computed grid.
-	virtual void colorMeshFromGrid_(Mesh& mesh)
+	///
+	const Atom* getClosestItem(const Vector3& v) const
 		throw();
 
 	//@} 
@@ -219,7 +217,8 @@ class BALL_EXPORT ColorProcessor
 
 	protected:
 
-	const Atom* getClosestItem_(const Vector3& v) const
+	//_ Colorize the mesh with the computed grid.
+	virtual void colorMeshFromGrid_(Mesh& mesh)
 		throw();
 
 	bool  			update_always_needed_;

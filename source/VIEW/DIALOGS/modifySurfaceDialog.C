@@ -1,20 +1,24 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.49 2005/02/28 21:19:33 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.2 2005/04/18 13:30:10 amoll Exp $
 
-#include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
+#include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/DATATYPE/colorTable.h>
+#include <BALL/VIEW/MODELS/standardColorProcessor.h>
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/file.h>
 #include <BALL/DATATYPE/regularData3D.h>
+#include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/forEach.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/SYSTEM/sysinfo.h>
 
 #include <qlineedit.h>
 #include <qspinbox.h>
@@ -23,30 +27,31 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
+#include <qcheckbox.h>
 #include <qcombobox.h>
+#include <qslider.h>
 
 namespace BALL
 {
 	 namespace VIEW
 	 {
 
-ColorMeshDialog::ColorMeshDialog( QWidget* parent,  const char* name, bool modal, WFlags fl )
-	: ColorMeshDialogData(parent, name, modal, fl),
+ModifySurfaceDialog::ModifySurfaceDialog( QWidget* parent,  const char* name, bool modal, WFlags fl )
+	: ModifySurfaceDialogData(parent, name, modal, fl),
 		ModularWidget(name),
 		grid_(0),
-		mesh_(0),
 		rep_(0)
 {
 	registerWidget(this);
 }
 
-ColorMeshDialog::~ColorMeshDialog()
+ModifySurfaceDialog::~ModifySurfaceDialog()
 	throw()
 {
 }
 
 // ------------------------- SLOTS ------------------------------------------------
-void ColorMeshDialog::applyPressed() 
+void ModifySurfaceDialog::applyPressed() 
 {
 	if (surface_tab->currentPage() == by_grid)
 	{
@@ -56,9 +61,14 @@ void ColorMeshDialog::applyPressed()
 	{
 		colorByCustomColor_();
 	}
+	else if (surface_tab->currentPage() == split)
+	{
+		split_();
+		return;
+	}
 		
-	rep_->setModelProcessor(0);
-	rep_->setColorProcessor(0);
+	rep_->enableModelUpdate(false);
+	rep_->enableColoringUpdate(false);
 	if (rep_->isHidden())
 	{
 		rep_->setNeedsUpdate();
@@ -69,13 +79,13 @@ void ColorMeshDialog::applyPressed()
 }
 
 
-void ColorMeshDialog::cancelPressed()
+void ModifySurfaceDialog::cancelPressed()
 {
 	hide();
 }
 
 
-void ColorMeshDialog::choosePressed()
+void ModifySurfaceDialog::choosePressed()
 {
 	QColor qcolor = chooseColor(custom_color_label);
 	selected_color.set(qcolor);
@@ -85,7 +95,7 @@ void ColorMeshDialog::choosePressed()
 }
 
 
-void ColorMeshDialog::colorBoxesChanged()
+void ModifySurfaceDialog::colorBoxesChanged()
 {
 	selected_color.set(red_box->value(),
 										 green_box->value(),
@@ -96,65 +106,39 @@ void ColorMeshDialog::colorBoxesChanged()
 }
 
 
-void ColorMeshDialog::maxPressed()
+void ModifySurfaceDialog::maxPressed()
 {
 	max_color.set(chooseColor(max_label));
 }
 
-void ColorMeshDialog::midPressed()
+void ModifySurfaceDialog::midPressed()
 {
 	mid_color.set(chooseColor(mid_label));
 }
 
-void ColorMeshDialog::minPressed()
+void ModifySurfaceDialog::minPressed()
 {
 	min_color.set(chooseColor(min_label));
 }
 
-void ColorMeshDialog::minMinPressed()
+void ModifySurfaceDialog::minMinPressed()
 {
 	min_min_color.set(chooseColor(min_min_label));
 }
 
-void ColorMeshDialog::maxMaxPressed()
+void ModifySurfaceDialog::maxMaxPressed()
 {
 	max_max_color.set(chooseColor(max_max_label));
 }
 
 
-void ColorMeshDialog::tabChanged()
+void ModifySurfaceDialog::tabChanged()
 {
-	if (!mesh_ || !rep_)
-	{
-		autoscale->setEnabled(false);
-		apply_button->setEnabled(false);
-		return;
-	}
-
-	if (surface_tab->currentPage() == by_grid)
-	{
-		if (!grid_)
-		{
-			apply_button->setEnabled(false);
-		}
-		else
-		{
-			apply_button->setEnabled(true);
-			autoscale->setEnabled(true);
-		}
-	
-		return;
-	}
-
-	if (surface_tab->currentPage() == by_color)
-	{
-		// if coloring by selected color, always enabled
-		apply_button->setEnabled(true);
-	}
+	checkApplyButton_();
 }
 
 
-void ColorMeshDialog::autoScalePressed()
+void ModifySurfaceDialog::autoScalePressed()
 {
 	min_box->setText(String(min_value_).c_str());
 	mid_box->setText(String(mid_value_).c_str());
@@ -163,18 +147,18 @@ void ColorMeshDialog::autoScalePressed()
 
 
 //--------------------- Helper functions ----------------------------------
-bool ColorMeshDialog::insertGrid_(RegularData3D& grid, const String& name)
+bool ModifySurfaceDialog::insertGrid_(RegularData3D& grid, const String& name)
 {
 	grid_list_.push_back(&grid);
 	grids->insertItem(name.c_str());
 	if (grid_ == 0) grid_ = &grid;
-	if (mesh_ == 0 || !mesh_->vertex.size()) return false;
+	if (rep_ == 0) return false;
 
  	gridSelected();
 	return true;
 }
 
-void ColorMeshDialog::removeGrid_(RegularData3D& grid)
+void ModifySurfaceDialog::removeGrid_(RegularData3D& grid)
 {
 	list<RegularData3D*>::iterator it = grid_list_.begin();
 	Position pos = 0;
@@ -196,9 +180,9 @@ void ColorMeshDialog::removeGrid_(RegularData3D& grid)
 }
 
 
-void ColorMeshDialog::gridSelected()
+void ModifySurfaceDialog::gridSelected()
 {
-	if (mesh_ == 0 || rep_ == 0) return;
+	if (rep_ == 0) return;
 
 	// prevent freezing, if clicking on representation, while
 	// an other is still rendering
@@ -225,17 +209,17 @@ void ColorMeshDialog::gridSelected()
 	calculateValues_();
 }
 
-void ColorMeshDialog::setGrid(RegularData3D* grid)
+void ModifySurfaceDialog::setGrid(RegularData3D* grid)
 	throw()
 {
 	grid_ = grid;
-	if (grid_ != 0 && mesh_ != 0 && rep_ != 0)
+	if (grid_ != 0 && rep_ != 0)
 	{
 		calculateValues_();
 	}
 }
 
-void ColorMeshDialog::calculateValues_()
+void ModifySurfaceDialog::calculateValues_()
 {
 	if (grid_ == 0) return;
 
@@ -270,7 +254,7 @@ void ColorMeshDialog::calculateValues_()
 }
 
 
-void ColorMeshDialog::setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box, const QRadioButton* rbutton)
+void ModifySurfaceDialog::setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box, const QRadioButton* rbutton)
 {
 	color.set(label->backgroundColor());
 	if (rbutton->isChecked())
@@ -283,35 +267,63 @@ void ColorMeshDialog::setColor_(ColorRGBA& color, const QLabel* label, const QSp
 	}
 }
 
-void ColorMeshDialog::getColor_(const ColorRGBA& color, QLabel* label, QSpinBox* box)
+void ModifySurfaceDialog::getColor_(const ColorRGBA& color, QLabel* label, QSpinBox* box)
 {
 	label->setBackgroundColor(color.getQColor());
 	box->setValue(color.getAlpha());
 }
 
-void ColorMeshDialog::colorByCustomColor_()
+void ModifySurfaceDialog::colorByCustomColor_()
 {
 	ColorRGBA col(red_box->value(), green_box->value(), blue_box->value(), alpha_box->value());
 
-	if (transparency_group_custom->selected() == none_button_custom)
+	if (!color_only_selection->isChecked())
 	{
-		col.setAlpha(255);
-		rep_->setTransparency(0);
-	}
-	else if (transparency_group_custom->selected() == alpha_button_custom)
-	{
-		rep_->setTransparency(255 - (int) col.getAlpha());
+		if (transparency_group_custom->selected() == none_button_custom)
+		{
+			col.setAlpha(255);
+			rep_->setTransparency(0);
+		}
+		else if (transparency_group_custom->selected() == alpha_button_custom)
+		{
+			rep_->setTransparency(255 - (int) col.getAlpha());
+		}
+
+		mesh_->colorList.resize(1);
+		mesh_->colorList[0] = col;
+
+		return;
 	}
 
-	mesh_->colorList.resize(1);
-	mesh_->colorList[0] = col;
+	if (mesh_->colorList.size() != mesh_->vertex.size())
+	{
+		mesh_->colorList.resize(mesh_->vertex.size());
+	}
+
+	// make sure we have a colorProcessor
+	if (rep_->getColorProcessor() == 0)
+	{
+		rep_->setColorProcessor(new CustomColorProcessor);
+		rep_->getColorProcessor()->createAtomGrid();
+	}
+	ColorProcessor* cp = rep_->getColorProcessor();
+
+	// collect informations which vertices are to be colored
+	for (Position p = 0; p < mesh_->vertex.size(); p++)
+	{
+		// make sure we found an atom
+		const Atom* atom = cp->getClosestItem(mesh_->vertex[p]);
+
+		if (atom == 0 || !atom->isSelected()) continue;
+
+		mesh_->colorList[p] = col;
+	}
 }
 
 
-bool ColorMeshDialog::colorByGrid_()
+bool ModifySurfaceDialog::colorByGrid_()
 {
 	if (grid_ == 0 ||
-			mesh_ == 0 ||
 			getMainControl()->compositesAreLocked() ||
 			rep_ == 0 ||
 			getMainControl()->updateOfRepresentationRunning())
@@ -397,7 +409,7 @@ bool ColorMeshDialog::colorByGrid_()
 }
 
 
-void ColorMeshDialog::saveSettings_()
+void ModifySurfaceDialog::saveSettings_()
 {
 	if (!configs_.has(rep_))
 	{
@@ -450,7 +462,7 @@ void ColorMeshDialog::saveSettings_()
 }
 
 
-void ColorMeshDialog::loadSettings_()
+void ModifySurfaceDialog::loadSettings_()
 {
 	if (!configs_.has(rep_))
 	{
@@ -499,37 +511,63 @@ void ColorMeshDialog::loadSettings_()
 	QWidget::update();
 }
 
-void ColorMeshDialog::onNotify(Message *message)
+void ModifySurfaceDialog::checkApplyButton_()
+{
+	if (!rep_ || !mesh_)
+	{
+		autoscale->setEnabled(false);
+		apply_button->setEnabled(false);
+		return;
+	}
+
+	if (surface_tab->currentPage() == by_grid)
+	{
+		if (!grid_)
+		{
+			apply_button->setEnabled(false);
+		}
+		else
+		{
+			apply_button->setEnabled(true);
+			autoscale->setEnabled(true);
+		}
+	
+		return;
+	}
+
+	if (surface_tab->currentPage() == by_color ||
+			surface_tab->currentPage() == split)
+	{
+		// if coloring by selected color, always enabled
+		apply_button->setEnabled(true);
+	}
+}
+
+void ModifySurfaceDialog::onNotify(Message *message)
 	throw()
 {
 #ifdef BALL_VIEW_DEBUG
-	Log.error() << "ColorMeshDialog " << this << " onNotify " << message << std::endl;
+	Log.error() << "ModifySurfaceDialog " << this << " onNotify " << message << std::endl;
 #endif
 	if (RTTI::isKindOf<RepresentationMessage>(*message))
 	{
 		RepresentationMessage *rm = RTTI::castTo<RepresentationMessage>(*message);
 		Representation* rep = rm->getRepresentation();
+
+		/// we are only interested into the Representation we currently have
 		if (rep != rep_) return;
 
 		if (rm->getType() == RepresentationMessage::REMOVE)
 		{
 			invalidateMesh_();
-			return;
 		}
 
-		if (rm->getType() == RepresentationMessage::UPDATE)
+		else if (rm->getType() == RepresentationMessage::UPDATE)
 		{
 			// if current Representation changed from Surface to something else, invalidate
-			if (!isSurfaceModel(rep->getModelType()) ||
-					rep->getGeometricObjects().size() == 0)
-			{
-				invalidateMesh_();
-				return;
-			}
-
-			// new Surface in Representation
-			mesh_ = (Mesh*) *rep->getGeometricObjects().begin();
+			setRepresentation(rep);
 		}
+
 		return;
 	}
 
@@ -551,37 +589,37 @@ void ColorMeshDialog::onNotify(Message *message)
 	}
 }
 
-void ColorMeshDialog::invalidateGrid_()
+void ModifySurfaceDialog::invalidateGrid_()
 	throw()
 {
 	grid_ = 0;
 	grids->setCurrentItem(-1);
-	autoscale->setEnabled(false);
-	if (surface_tab->currentPage() == by_grid)
-	{
-		apply_button->setEnabled(false);
-	}
+	checkApplyButton_();
 }
 
-void ColorMeshDialog::invalidateMesh_()
+void ModifySurfaceDialog::invalidateMesh_()
 	throw()
 {
 	mesh_ = 0;
 	rep_ = 0;
-	apply_button->setEnabled(false);
-	autoscale->setEnabled(false);
+	checkApplyButton_();
 }
 
 
-void ColorMeshDialog::setMesh(Mesh* mesh, Representation* rep)
+void ModifySurfaceDialog::setRepresentation(Representation* rep)
 	throw()
 {
-	mesh_ = mesh;
-	rep_ = rep;
-	if (mesh == 0 || rep == 0)
+	if (rep == 0 ||
+	    !isSurfaceModel(rep->getModelType()) ||
+			rep->getGeometricObjects().size() == 0)
 	{
 		apply_button->setEnabled(false);
 		return;
+	}
+	else
+	{
+		rep_ = rep;
+		mesh_ = (Mesh*) *rep->getGeometricObjects().begin();
 	}
 
 	if (grids->currentItem() == -1 && 
@@ -590,16 +628,17 @@ void ColorMeshDialog::setMesh(Mesh* mesh, Representation* rep)
 		grids->setCurrentItem(grids->count()-1);
 	}
  	gridSelected() ;
- 	apply_button->setEnabled(grid_ != 0);
+
+	checkApplyButton_();
 }
 
-void ColorMeshDialog::show()
+void ModifySurfaceDialog::show()
 {
-	ColorMeshDialogData::show();
+	ModifySurfaceDialogData::show();
 	raise();
 }
 
-void ColorMeshDialog::gridTransparencyChanged()
+void ModifySurfaceDialog::gridTransparencyChanged()
 {
 	min_min_alpha->setEnabled(alpha_button_grid->isChecked());
 			min_alpha->setEnabled(alpha_button_grid->isChecked());
@@ -608,26 +647,238 @@ void ColorMeshDialog::gridTransparencyChanged()
 	max_max_alpha->setEnabled(alpha_button_grid->isChecked());
 }
 
-void ColorMeshDialog::customColorTransparencyChanged()
+void ModifySurfaceDialog::customColorTransparencyChanged()
 {
 	alpha_box->setEnabled(alpha_button_custom->isChecked());
 }
 
-void ColorMeshDialog::setMinValue(float value)
+void ModifySurfaceDialog::setMinValue(float value)
 {
 	min_label->setText(String(value).c_str());
 }
 
-void ColorMeshDialog::setMaxValue(float value)
+void ModifySurfaceDialog::setMaxValue(float value)
 {
 	max_label->setText(String(value).c_str());
 }
 
-void ColorMeshDialog::setMidValue(float value)
+void ModifySurfaceDialog::setMidValue(float value)
 {
 	mid_label->setText(String(value).c_str());
 }
 
+void ModifySurfaceDialog::splitDistanceChanged()
+{
+	String distance = createFloatString(((float)split_distance_slider->value()) / 10.0, 1);
+	split_distance_label->setText(distance.c_str());
+}
 
+void ModifySurfaceDialog::splitMethodChanged()
+{
+	split_distance_slider->setEnabled(split_by_distance->isChecked());
+}
+
+void ModifySurfaceDialog::split_()
+{
+	// make sure we have a colorProcessor
+	if (rep_->getColorProcessor() == 0 && split_by_selection->isChecked()) 
+	{
+		rep_->setColorProcessor(new CustomColorProcessor);
+		rep_->getColorProcessor()->createAtomGrid();
+	}
+	ColorProcessor* cp = rep_->getColorProcessor();
+
+	rep_->enableModelUpdate(false);
+
+	// create a new representation with the subset of the original mesh
+	Representation* new_rep = new Representation;
+	new_rep->getComposites() = rep_->getComposites();
+	new_rep->setColorProcessor(new ColorProcessor(*rep_->getColorProcessor()));
+	new_rep->setModelType(rep_->getModelType());
+	new_rep->setColoringMethod(rep_->getColoringMethod());
+	new_rep->enableModelUpdate(false);
+
+	if (rep_->getModelProcessor() != 0)
+	{
+		new_rep->setModelProcessor(new ModelProcessor(*rep_->getModelProcessor()));
+	}
+
+	Representation::GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
+	for (; git != rep_->getGeometricObjects().end(); ++git)
+	{
+		// get the original mesh
+		if (!RTTI::isKindOf<Mesh>(**git)) continue;
+		Mesh& org_mesh = *dynamic_cast<Mesh*>(*git);
+
+		// copy all vertices and colors into a new mesh
+		Mesh* new_mesh = new Mesh;
+		new_mesh->vertex = org_mesh.vertex;
+		new_mesh->colorList = org_mesh.colorList;
+		new_mesh->normal = org_mesh.normal;
+		new_mesh->setComposite(org_mesh.getComposite());
+
+		// collect informations which vertices are to be included
+		vector<bool> include_vertex;
+
+		include_vertex.resize(org_mesh.vertex.size());
+		
+		if (split_by_selection->isChecked())
+		{
+			for (Position p = 0; p < org_mesh.vertex.size(); p++)
+			{
+				// make sure we found an atom
+				const Atom* atom = cp->getClosestItem(org_mesh.vertex[p]);
+
+				include_vertex[p] = (atom != 0 && atom->isSelected());
+			}
+		}
+		else
+		{
+			calculateIncludedVertices_(include_vertex, org_mesh);
+		}
+
+		vector<Surface::Triangle> tri_temp = org_mesh.triangle;
+		org_mesh.triangle.clear();
+		
+		vector<Surface::Triangle>::iterator tit = tri_temp.begin();
+		for (; tit != tri_temp.end(); tit++) 
+		{
+			Surface::Triangle& tri = *tit;
+			if (include_vertex[tri.v1] &&
+					include_vertex[tri.v2] &&
+					include_vertex[tri.v3])
+			{
+				new_mesh->triangle.push_back(tri);
+			}
+			else
+			{
+				org_mesh.triangle.push_back(tri);
+			}
+		}
+
+		if (new_mesh->triangle.size() == 0)
+		{
+			delete new_mesh;
+		}
+		else
+		{
+			new_rep->getGeometricObjects().push_back(new_mesh);
+		}
+	}
+
+	if (new_rep->getGeometricObjects().size() == 0) 
+	{
+		delete new_rep;
+		return;
+	}
+
+	new_rep->enableModelUpdate(false);
+	getMainControl()->insert(*new_rep);
+	getMainControl()->update(*rep_);
+}
+
+void ModifySurfaceDialog::calculateIncludedVertices_(vector<bool>& include_vertex, 
+																										 const Mesh& org_mesh)
+{
+	List<const Atom*> atoms;
+
+	Representation::CompositeSet::ConstIterator it = rep_->getComposites().begin();
+	for(; +it; it++)
+	{
+		if (RTTI::isKindOf<AtomContainer>(**it))
+		{
+			AtomConstIterator ait;
+			const AtomContainer* const acont = dynamic_cast<const AtomContainer*>(*it);
+			BALL_FOREACH_ATOM(*acont, ait)
+			{
+				if ((*ait).isSelected()) atoms.push_back(&*ait);
+			}
+		}
+		else if ((**it).isSelected() && RTTI::isKindOf<Atom>(**it))
+		{
+			const Atom* atom = dynamic_cast<const Atom*> (*it);
+			atoms.push_back(atom);
+		}
+	}
+
+	float distance = (float) split_distance_slider->value() / 10.0;
+
+	BoundingBoxProcessor boxp;
+	boxp.start();
+	List<const Atom*>::Iterator lit = atoms.begin();
+	for(;lit != atoms.end(); lit++)
+	{
+		boxp.operator() (*(Atom*)*lit);
+	}
+	boxp.finish();
+
+	const Vector3 diagonal = boxp.getUpper() - boxp.getLower();
+	
+	// grid spacing, tradeoff between speed and memory consumption
+	float grid_spacing = distance;
+
+	float memory = SysInfo::getAvailableMemory();
+	//
+	// if we can not calculate available memory, use around 60 MB for the grid
+	if (memory == -1) memory = 100000000;
+	memory *= 0.6;
+
+	Vector3 overhead(2.5 + distance);
+	float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing((LongIndex)memory, diagonal + 
+																																	overhead * 2.0);		
+	if (min_spacing > grid_spacing) grid_spacing = min_spacing;
+	
+	AtomGrid atom_grid(boxp.getLower() - overhead, diagonal + overhead, grid_spacing); 
+ 
+	for (lit = atoms.begin(); lit != atoms.end(); lit++)
+	{
+		atom_grid.insert((*lit)->getPosition(), *lit);
+	}
+
+	square_distance_ = distance * distance;
+
+	for (Position p = 0; p < org_mesh.vertex.size(); p++)
+	{
+		include_vertex[p] = checkInclude_(atom_grid, org_mesh.vertex[p]);
+	}
+}
+
+
+bool ModifySurfaceDialog::checkInclude_(const AtomGrid& atom_grid, const Vector3& point) const
+{
+	const AtomBox* box = atom_grid.getBox(point);
+
+	if (!box) return false;
+
+	Position x, y, z;
+	atom_grid.getIndices(*box, x, y, z);
+
+	Size dist = 1;
+	// iterator over neighbour boxes
+	for (Index xi = -(Index)dist; xi <= (Index)dist; xi++)
+	{
+		for (Index yi = -(Index)dist; yi <= (Index)dist; yi++)
+		{
+			for (Index zi = -(Index)dist; zi <= (Index)dist; zi++)
+			{
+				// iterate over all data items
+				const AtomBox* box_ptr = atom_grid.getBox(x+xi, y+yi, z+zi);	
+				if (box_ptr != 0 && !box_ptr->isEmpty())
+				{
+					AtomBox::ConstDataIterator hit = box_ptr->beginData();
+					for (;+hit; hit++)
+					{
+						if (((*hit)->getPosition() - point).getSquareLength() <= square_distance_)
+						{
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return false;
+}
 
 } } // namespaces

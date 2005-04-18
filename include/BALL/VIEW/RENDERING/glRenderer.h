@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.32 2005/02/17 15:30:52 amoll Exp $
+// $Id: glRenderer.h,v 1.33 2005/04/18 13:30:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -38,6 +38,8 @@
 #ifndef BALL_VIEW_RENDERING_VERTEXBUFFER_H
 # include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #endif
+
+class QFont;
 
 namespace BALL
 {
@@ -335,7 +337,7 @@ namespace BALL
 				throw();
 
 			//_
-			GLubyte* generateBitmapFromText_(const String& text, int& width, int& height) const
+			GLubyte* generateBitmapFromText_(const String& text, const QFont& font, int& width, int& height) const
 				throw();
 
 			//_

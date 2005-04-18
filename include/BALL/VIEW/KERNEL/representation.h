@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.30 2005/02/06 20:57:05 oliver Exp $
+// $Id: representation.h,v 1.31 2005/04/18 13:30:40 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -245,6 +245,18 @@ namespace BALL
 				throw();
 
 			///
+			void enableModelUpdate(bool state) { model_update_enabled_ = state;}
+
+			///
+			void enableColoringUpdate(bool state) { coloring_update_enabled_ = state;}
+
+			///
+			bool modelUpdateEnabled() const { return model_update_enabled_;}
+
+			///
+			bool coloringUpdateEnabled() const { return coloring_update_enabled_;}
+
+			///
 			String getProperties() const
 				throw();
 			
@@ -359,11 +371,17 @@ namespace BALL
 			//_
 			bool 								hidden_;
 
-			// prevent usage of geometric_objects_ in derived classes
-			private:
-
 			//_
 			GeometricObjectList geometric_objects_;
+
+			//_
+			bool 								model_update_enabled_;
+
+			//_
+			bool 								coloring_update_enabled_;
+
+			// prevent usage of geometric_objects_ in derived classes
+			private:
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

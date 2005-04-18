@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62 2005/02/07 22:09:47 amoll Exp $
+// $Id: representation.C,v 1.63 2005/04/18 13:30:11 amoll Exp $
 //
 
 
@@ -37,7 +37,9 @@ namespace BALL
 					rebuild_(true),
 					changed_color_processor_(true),
 					hidden_(false),
-					geometric_objects_()
+					geometric_objects_(),
+					model_update_enabled_(true),
+					coloring_update_enabled_(true)
 		{
 		}
 
@@ -58,7 +60,9 @@ namespace BALL
 					rebuild_(rp.rebuild_),
 					changed_color_processor_(true),
 					hidden_(rp.hidden_),
-					geometric_objects_()
+					geometric_objects_(),
+					model_update_enabled_(rp.model_update_enabled_),
+					coloring_update_enabled_(rp.coloring_update_enabled_)
 		{
 			if (rp.model_processor_ != 0)
 			{
@@ -96,7 +100,9 @@ namespace BALL
 					rebuild_(true),
 					changed_color_processor_(true),
 					hidden_(false),
-					geometric_objects_()
+					geometric_objects_(),
+					model_update_enabled_(true),
+					coloring_update_enabled_(true)
 		{
 		}
 
@@ -116,7 +122,9 @@ namespace BALL
 				rebuild_(true),
 				changed_color_processor_(true),
 				hidden_(false),
-				geometric_objects_()
+				geometric_objects_(),
+				model_update_enabled_(true),
+				coloring_update_enabled_(true)
 		{
 		}
 
@@ -166,6 +174,9 @@ namespace BALL
 			rebuild_ = true;
 			hidden_ = representation.hidden_;
 			changed_color_processor_ = true;
+	
+			model_update_enabled_ = true;
+			coloring_update_enabled_ = true;
 
 			return *this;
 		}
@@ -199,6 +210,9 @@ namespace BALL
 
 			rebuild_ = true;
 			hidden_ = false;
+
+			model_update_enabled_ = true;
+			coloring_update_enabled_ = true;
 		}
 
 		
@@ -295,7 +309,7 @@ namespace BALL
 #endif
 			// if no ModelProcessor was given, there can only exist 
 			// handmade GeometricObjects, which dont need to be updated
-			if (model_processor_ != 0 && rebuild_)
+			if (model_update_enabled_ && model_processor_ != 0)
 			{
 				// just to be sure we control the composites if they changed after last model.
 				// this shouldnt happen, but maybe someone send the false message after changing the Composite tree
@@ -334,7 +348,7 @@ namespace BALL
 				}
 			}
 
-			if (color_processor_ != 0)
+			if (coloring_update_enabled_ && color_processor_ != 0)
 			{
 				bool apply_color_processor = 
 						(changed_color_processor_ || rebuild_ || color_processor_->updateAlwaysNeeded());
@@ -367,8 +381,12 @@ namespace BALL
 				}
 			}
 
-			changed_color_processor_ = false;
-			model_build_time_ = PreciseTime::now();
+			if (model_update_enabled_)
+			{
+				changed_color_processor_ = false;
+				model_build_time_ = PreciseTime::now();
+				rebuild_ = false;
+			}
 
 #ifndef BALL_QT_HAS_THREADS
 			// if multithreaded, the PrimitiveManager will send the Update message, otherwise do it here...

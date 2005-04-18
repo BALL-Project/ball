@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67 2005/03/02 09:46:07 oliver Exp $
+// $Id: glRenderer.C,v 1.68 2005/04/18 13:30:12 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -517,24 +517,25 @@ namespace BALL
 		void GLRenderer::renderLabel_(const Label& label)
 			throw()
 		{
-			glPushMatrix();
-			glDisable(GL_LIGHTING);
-			setColor4ub_(label);
+      glPushMatrix();
+      glDisable(GL_LIGHTING);
+      setColor4ub_(label);
 
-			// build bitmap
-			int width, height;
-			GLubyte* text_array = generateBitmapFromText_(label.getText(), width, height);
+      // build bitmap
+      int width, height;
+      GLubyte* text_array = 
+			  generateBitmapFromText_(label.getExpandedText(), label.getFont(), width, height);
 
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-			glRasterPos3f((GLfloat)label.getVertex().x, 
-										(GLfloat)label.getVertex().y, 
-										(GLfloat)label.getVertex().z);
-			// draw bitmap
-			glBitmap(width, height, width/2, height/2.0, 0, 0, text_array);
+      glRasterPos3f((GLfloat)label.getVertex().x,
+                    (GLfloat)label.getVertex().y,
+                    (GLfloat)label.getVertex().z);
+      // draw bitmap
+      glBitmap(width, height, width/2, height/2.0, 0, 0, text_array);
 
-			glPopMatrix();
-			glEnable(GL_LIGHTING);
+      glPopMatrix();
+      glEnable(GL_LIGHTING);
 		}
 
 
@@ -863,39 +864,42 @@ namespace BALL
 			glEnable(GL_CULL_FACE);
 		}
 
-		GLubyte* GLRenderer::generateBitmapFromText_(const String& text, int& width, int& height) const
+		GLubyte* GLRenderer::generateBitmapFromText_(const String& text, const QFont& font, int& width, int& height) const
 			throw()
 		{
 	#ifndef BALL_PLATFORM_WINDOWS
-			QColor c1(0,0,0);
-			QColor c2(255,255,255);
+			QColor c1(110,0,0);
+			QColor c2(255,0,255);
 	#else
 			// invert colors to fix problem under windows
 			QColor c2(0,0,0);
 			QColor c1(255,255,255);
 	#endif
 		
-			int border = 2;
+			QFontMetrics fm(font);
 			
+			width = fm.width(text.c_str());
+			height = fm.height();
+
+			Size leading = fm.leading();
+			height += 2 * leading;
+			width  += 2 * leading;
+
 			QPainter p;
-			QPixmap pm(1,1,1);
-			p.begin(&pm);
-				p.setFont(QFont("helvetica"));
-				QRect r = p.fontMetrics().boundingRect(text.c_str());
-			p.end();
-			pm.resize(r.size() + QSize(border * 2, border * 2));
-			
+			QPixmap pm(width, height, 1);
 			p.begin(&pm);
 				pm.fill(c1);
 				p.setPen(c2);
-				p.drawText(-r.x() + border, -r.y() + border, text.c_str());
+				p.setFont(font);
+ 				p.drawText(leading, height - leading, text.c_str());
 			p.end();
 
 			// convert to image (acces to single pixel is allowed here)
 			QImage image = pm.convertToImage();
+			
 			int pixel_width = image.width();
-			width = (pixel_width + 7) / 8;
-			height = image.height();
+ 			width = (pixel_width + 7) / 8;
+ 			height = image.height();
 			// convert to opengl usable bitmap
 			int array_size = width * height;
 			
@@ -922,7 +926,7 @@ namespace BALL
 			}
 
 			width = pixel_width;
-			return text_array;
+			return text_array; 
 		}
 
 
