@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.h,v 1.17 2005/02/28 20:29:54 amoll Exp $
+// $Id: modifySurfaceDialog.h,v 1.2 2005/04/18 13:30:38 amoll Exp $
 //
 
-#ifndef BALL_VIEW_DIALOGS_COLORMESHDIALOG_H
-#define BALL_VIEW_DIALOGS_COLORMESHDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
+#define BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
 
-#include <BALL/VIEW/UIC/colorMeshDialogData.h>
+#include <BALL/VIEW/UIC/modifySurfaceDialogData.h>
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
@@ -38,15 +38,15 @@ namespace BALL
 				in a RegularData3D grid. You can also set the transparency of the surface.
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT ColorMeshDialog 
-			: public ColorMeshDialogData,
+		class BALL_EXPORT ModifySurfaceDialog 
+			: public ModifySurfaceDialogData,
 				public ModularWidget
 		{ 
 			Q_OBJECT
 
 			public:
 
-			BALL_EMBEDDABLE(ColorMeshDialog,ModularWidget)
+			BALL_EMBEDDABLE(ModifySurfaceDialog, ModularWidget)
 
 			///
 			class ColoringConfig
@@ -62,10 +62,10 @@ namespace BALL
 			};
 
 			///
-			ColorMeshDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
+			ModifySurfaceDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
 
 			///
-			~ColorMeshDialog()
+			~ModifySurfaceDialog()
 				throw();
 					
 			///
@@ -73,7 +73,7 @@ namespace BALL
 				throw();
 
 			/// 
-			void setMesh(Mesh* mesh, Representation* rep)
+			void setRepresentation(Representation* rep)
 				throw();
 
 			///
@@ -109,24 +109,36 @@ namespace BALL
 
 			void gridTransparencyChanged();
 			void customColorTransparencyChanged();
+			void splitDistanceChanged();
+			void splitMethodChanged();
 
 			protected:
+
+			typedef HashGrid3<const Atom*>  AtomGrid;
+			typedef HashGridBox3<const Atom*> AtomBox;
 			void colorByCustomColor_();
 			bool colorByGrid_();
 			bool insertGrid_(RegularData3D& grid, const String& name);
 			void removeGrid_(RegularData3D& grid);
-			void setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box, const QRadioButton* rbutton);
+			void setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box, 
+										 const QRadioButton* rbutton);
 			void getColor_(const ColorRGBA& color, QLabel* label, QSpinBox* box);
 			void saveSettings_();
 			void loadSettings_();
 			void invalidateGrid_() throw();
 			void invalidateMesh_() throw();
 			void calculateValues_();
+			void split_();
+			void checkApplyButton_();
+
+			void calculateIncludedVertices_(vector<bool>& include_vertex, const Mesh& org_mesh);
+			inline bool checkInclude_(const AtomGrid& atom_grid, const Vector3& point) const;
 
 			RegularData3D* grid_;
 			float min_value_;
 			float mid_value_;
 			float max_value_;
+			float square_distance_;
 
 			ColorRGBA	 	selected_color, min_min_color, min_color, mid_color, max_color, max_max_color;	
 

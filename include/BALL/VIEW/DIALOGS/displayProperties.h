@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.39 2005/02/24 15:52:26 amoll Exp $
+// $Id: displayProperties.h,v 1.40 2005/04/18 13:30:37 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -155,10 +155,12 @@ namespace BALL
 			virtual void checkMenu(MainControl& main_control)
 					throw();
 
-			/// Set the selected Representation, which should be modified
-			void setRepresentation(Representation* rep)
-				throw() {rep_ = rep;}
+			/// Switch to the mode, that a new Representation will be created
+			void createRepresentationMode();
 
+			/// Switch to the mode, that an existing Representation will be modified
+			void modifyRepresentationMode(Representation* rep);
+	
 			/// Settings from String
 			bool getSettingsFromString(const String& data)
 				throw();
@@ -179,44 +181,39 @@ namespace BALL
 			*/
 			void show();
 
-			/// Switch to the mode, that a new Representation will be created
-			void createRepresentationMode();
-
-			/// Switch to the mode, that an existing Representation will be modified
-			void modifyRepresentationMode();
-				
+			
 			/** Changes the model.
 					This slot is connected to the model combo box and will be automatically
 					called if the content of this combo box is changed.
 					\param  index the position of the entry in the combobox
 			*/
-			virtual void selectModel(int index);
+			void selectModel(int index);
 
 			/** Changes the drawing mode.
 					This slot is connected to the mode combo box and will be automatically
 					called if the content of this combo box is changed.
 					\param  index the position of the entry in the combobox
 			*/
-			virtual void selectMode(int index);
+			void selectMode(int index);
 
 			/** Changes the coloring method.
 					This slot is connected to the coloring method combo box and will be automatically
 					called if the content of this combo box is changed.
 					\param  index the position of the entry in the combobox
 			*/
-			virtual void selectColoringMethod(int index);
+			void selectColoringMethod(int index);
 
 			///
-			virtual void setSurfaceDrawingPrecision(float value);
+			void setSurfaceDrawingPrecision(float value);
 			
 			///
-			virtual void setDrawingPrecision(int value);
+			void setDrawingPrecision(int value);
 
 			///
-			virtual void setTransparency(int value);
+			void setTransparency(int value);
 
 			///
-			virtual void setCustomColor(const ColorRGBA& color);
+			void setCustomColor(const ColorRGBA& color);
 			
 			/** Indicates the apply button was pressed.
 					Applies the selected model with its selected properties to 
@@ -229,27 +226,33 @@ namespace BALL
 			/** Opens the dialog for editing the custom color.
 					Opens a QColorDialog from the QT-library.
 			 */ 
-			virtual void editColor();
+			void editColor();
 
 			/** Opens the color dialog for the color of selected items.
 					\see BALL_SELECTED_COLOR
 			*/
-			virtual void editSelectionColor();
+			void editSelectionColor();
 
 			///
-			virtual void coloringOptionsPressed();
+			void coloringOptionsPressed();
 
 			///
-			virtual void modelOptionsPressed();
+			void modelOptionsPressed();
 
 			///
-			virtual void precisionBoxChanged(int index);
+			void precisionBoxChanged(int index);
 
 			///
-			virtual void transparencySliderChanged();
+			void transparencySliderChanged();
 
 			///
-			virtual void precisionSliderChanged();
+			void precisionSliderChanged();
+
+			///
+			void coloringUpdatesChanged();
+
+			///
+			void modelUpdatesChanged();
 
 			//@}
 				
@@ -275,6 +278,11 @@ namespace BALL
 			virtual void getAdvancedColoringOptions_()
 				throw();
 
+			//_
+			virtual void applyModelSettings_(Representation& rep);
+			
+			//_
+			virtual void applyColoringSettings_(Representation& rep);
 			// --------------------------------------------------------------------------------
 			// attributs
 			// --------------------------------------------------------------------------------

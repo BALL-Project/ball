@@ -20,19 +20,21 @@
 
 #include <BALL/VIEW/UIC/labelDialogData.h>
 
+#include <qfont.h>
+
 namespace BALL
 {
 	namespace VIEW
 	{
 		/**	Dialog for creating labels for a selection of molecular objects.
 				The class  MolecularControl is responsible for creating such a selection.
- 				The text and color of the labels can be changed.
+ 				The text, color and font of the labels can be changed.
 				If this dialog is used, it should be created with MainControl as parent.
     		\ingroup  ViewDialogs
 		*/
-		class BALL_EXPORT LabelDialog : 
-			public LabelDialogData,
-			public ModularWidget
+		class BALL_EXPORT LabelDialog 
+			: public LabelDialogData,
+				public ModularWidget
 		{
 			Q_OBJECT
 			BALL_EMBEDDABLE(LabelDialog,ModularWidget)
@@ -146,15 +148,35 @@ namespace BALL
 					See documentation of QT-library for information concerning QColorDialog widgets.
 			 */ 
 			virtual void editColor();
+
+			///
+			virtual void addTag();
+
+			///
+			virtual void fontSelected();
+
+			///
+			virtual void modeChanged();
 						
+			///
+			void textChanged();
+
+			///
+			void historySelected();
 			//@}
 			
-		private:
-			
+			protected:
+
+			Representation* createOneLabel_();
+
+			Representation* createMultipleLabels_();
+
+
 			int id_;
 			
-			ColorRGBA custom_color_;
-			List<Composite*> selection_;
+			ColorRGBA 				custom_color_;
+			List<Composite*> 	selection_;
+			QFont 						font_;
 		};
 
 } } // namespaces
