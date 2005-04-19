@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.C,v 1.8.6.1 2005/04/15 13:49:29 amoll Exp $
+// $Id: compositeManager.C,v 1.8.6.2 2005/04/19 13:59:50 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/compositeManager.h>
@@ -112,6 +112,11 @@ namespace BALL
 			{
 				composite_set_.erase(&composite);
 				name_set_.erase(((AtomContainer*) &composite)->getName());
+			}
+
+			if (composite.getParent() != 0)
+			{
+				composite.getParent()->removeChild(composite);
 			}
 
 			if (to_delete) delete &composite;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.1 2005/04/17 17:05:16 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.2 2005/04/19 13:59:43 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -374,9 +374,11 @@ void DisplayProperties::applyModelSettings_(Representation& rep)
 {
 	ModelType current_type = (ModelType) model_type_combobox->currentItem();
 	if (rep.getModelProcessor() == 0 ||
-			rep.getModelType() != current_type)
+			rep.getModelType() != current_type ||
+			!rep.modelUpdateEnabled())
 	{
 		rep.setModelProcessor(model_settings_->createModelProcessor(current_type));
+		rep.setModelType((ModelType)model_type_combobox->currentItem());
 	}
 
 	if (custom_precision_button->isChecked())
@@ -390,7 +392,6 @@ void DisplayProperties::applyModelSettings_(Representation& rep)
 	}
 
 	rep.setDrawingMode((DrawingMode)  mode_combobox->currentItem());
-	rep.setModelType((ModelType)model_type_combobox->currentItem());
 
 	model_settings_->applySettingsTo(*rep.getModelProcessor());
 }
@@ -401,7 +402,8 @@ void DisplayProperties::applyColoringSettings_(Representation& rep)
 	ColoringMethod current_coloring = (ColoringMethod) coloring_method_combobox->currentItem();
 
 	if (rep.getColorProcessor() == 0 ||
-			rep.getColoringMethod() != current_coloring)
+			rep.getColoringMethod() != current_coloring ||
+			!rep.coloringUpdateEnabled())
 	{
 		rep.setColorProcessor(coloring_settings_->createColorProcessor(current_coloring));
 		rep.setColoringMethod(current_coloring);
@@ -575,7 +577,7 @@ void DisplayProperties::checkDrawingPrecision_()
 	}
 	else
 	{
-		precision_slider->setEnabled(true);
+		precision_slider->setEnabled(model_updates_enabled.enable());
 		custom_precision_button->setEnabled(true);
 		if (rep_ != 0 &&
 				rep_->getSurfaceDrawingPrecision() != -1)
