@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ModifySurfaceDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -27,31 +27,6 @@
     <property name="caption">
         <string>Modify Surface</string>
     </property>
-    <spacer>
-        <property name="name">
-            <cstring>spacer1_2_9</cstring>
-        </property>
-        <property name="orientation">
-            <enum>Vertical</enum>
-        </property>
-        <property name="sizeType">
-            <enum>Expanding</enum>
-        </property>
-        <property name="sizeHint">
-            <size>
-                <width>18</width>
-                <height>16</height>
-            </size>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>165</x>
-                <y>185</y>
-                <width>18</width>
-                <height>16</height>
-            </rect>
-        </property>
-    </spacer>
     <spacer>
         <property name="name">
             <cstring>spacer22</cstring>
@@ -1430,202 +1405,24 @@
             <attribute name="title">
                 <string>color by custom color</string>
             </attribute>
-            <widget class="QLayoutWidget">
+            <widget class="QLabel">
                 <property name="name">
-                    <cstring>layout61</cstring>
+                    <cstring>textLabel1_2_2_2</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>7</x>
-                        <y>7</y>
-                        <width>136</width>
-                        <height>154</height>
+                        <x>8</x>
+                        <y>148</y>
+                        <width>260</width>
+                        <height>16</height>
                     </rect>
                 </property>
-                <vbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>layout17</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>TextLabel2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>red</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignVCenter|AlignRight</set>
-                                </property>
-                            </widget>
-                            <widget class="QSpinBox">
-                                <property name="name">
-                                    <cstring>red_box</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>0</width>
-                                        <height>24</height>
-                                    </size>
-                                </property>
-                                <property name="maxValue">
-                                    <number>255</number>
-                                </property>
-                                <property name="value">
-                                    <number>255</number>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>layout18</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>TextLabel3</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>green</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignVCenter|AlignRight</set>
-                                </property>
-                            </widget>
-                            <widget class="QSpinBox">
-                                <property name="name">
-                                    <cstring>green_box</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>0</width>
-                                        <height>24</height>
-                                    </size>
-                                </property>
-                                <property name="maxValue">
-                                    <number>255</number>
-                                </property>
-                                <property name="value">
-                                    <number>255</number>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>layout19</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>TextLabel4</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>blue</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignVCenter|AlignRight</set>
-                                </property>
-                            </widget>
-                            <widget class="QSpinBox">
-                                <property name="name">
-                                    <cstring>blue_box</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>0</width>
-                                        <height>24</height>
-                                    </size>
-                                </property>
-                                <property name="maxValue">
-                                    <number>255</number>
-                                </property>
-                                <property name="value">
-                                    <number>0</number>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>layout20</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>TextLabel5</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>alpha</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignVCenter|AlignRight</set>
-                                </property>
-                            </widget>
-                            <widget class="QSpinBox">
-                                <property name="name">
-                                    <cstring>alpha_box</cstring>
-                                </property>
-                                <property name="enabled">
-                                    <bool>false</bool>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>0</width>
-                                        <height>24</height>
-                                    </size>
-                                </property>
-                                <property name="maxValue">
-                                    <number>255</number>
-                                </property>
-                                <property name="value">
-                                    <number>255</number>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
-                </vbox>
+                <property name="text">
+                    <string>Transparency</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignCenter</set>
+                </property>
             </widget>
             <widget class="QLayoutWidget">
                 <property name="name">
@@ -1633,10 +1430,10 @@
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>230</x>
-                        <y>7</y>
-                        <width>195</width>
-                        <height>232</height>
+                        <x>6</x>
+                        <y>9</y>
+                        <width>285</width>
+                        <height>120</height>
                     </rect>
                 </property>
                 <vbox>
@@ -1677,96 +1474,85 @@
                     </widget>
                 </vbox>
             </widget>
-            <widget class="QButtonGroup">
-                <property name="name">
-                    <cstring>transparency_group_custom</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>5</x>
-                        <y>167</y>
-                        <width>184</width>
-                        <height>74</height>
-                    </rect>
-                </property>
-                <property name="title">
-                    <string>Transparency</string>
-                </property>
-                <property name="exclusive">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string></string>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>none_button_custom</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>24</y>
-                            <width>119</width>
-                            <height>18</height>
-                        </rect>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>none</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>alpha_button_custom</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>48</y>
-                            <width>161</width>
-                            <height>22</height>
-                        </rect>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>alpha-blending</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>If you use alpha-blending, dont forget to reduce the alpha channel</string>
-                    </property>
-                </widget>
-            </widget>
             <widget class="QCheckBox">
                 <property name="name">
                     <cstring>color_only_selection</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>5</x>
-                        <y>247</y>
-                        <width>189</width>
-                        <height>24</height>
+                        <x>11</x>
+                        <y>222</y>
+                        <width>288</width>
+                        <height>28</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>apply only on selection</string>
+                    <string>apply coloring only on selection</string>
+                </property>
+            </widget>
+            <widget class="QSlider">
+                <property name="name">
+                    <cstring>transparency_slider</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>9</x>
+                        <y>170</y>
+                        <width>206</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>21</height>
+                    </size>
+                </property>
+                <property name="minValue">
+                    <number>0</number>
+                </property>
+                <property name="maxValue">
+                    <number>100</number>
+                </property>
+                <property name="lineStep">
+                    <number>1</number>
+                </property>
+                <property name="value">
+                    <number>0</number>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="tickmarks">
+                    <enum>NoMarks</enum>
+                </property>
+                <property name="tickInterval">
+                    <number>10</number>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Select level of transparency</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>transparency_label</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>221</x>
+                        <y>169</y>
+                        <width>50</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>ToolBarPanel</enum>
+                </property>
+                <property name="text">
+                    <string>0%</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignCenter</set>
                 </property>
             </widget>
         </widget>
@@ -1780,28 +1566,10 @@
         <slot>applyPressed()</slot>
     </connection>
     <connection>
-        <sender>blue_box</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>ModifySurfaceDialogData</receiver>
-        <slot>colorBoxesChanged()</slot>
-    </connection>
-    <connection>
         <sender>cancel_button</sender>
         <signal>clicked()</signal>
         <receiver>ModifySurfaceDialogData</receiver>
         <slot>cancelPressed()</slot>
-    </connection>
-    <connection>
-        <sender>green_box</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>ModifySurfaceDialogData</receiver>
-        <slot>colorBoxesChanged()</slot>
-    </connection>
-    <connection>
-        <sender>red_box</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>ModifySurfaceDialogData</receiver>
-        <slot>colorBoxesChanged()</slot>
     </connection>
     <connection>
         <sender>surface_tab</sender>
@@ -1826,12 +1594,6 @@
         <signal>clicked(int)</signal>
         <receiver>ModifySurfaceDialogData</receiver>
         <slot>gridTransparencyChanged()</slot>
-    </connection>
-    <connection>
-        <sender>transparency_group_custom</sender>
-        <signal>clicked(int)</signal>
-        <receiver>ModifySurfaceDialogData</receiver>
-        <slot>customColorTransparencyChanged()</slot>
     </connection>
     <connection>
         <sender>min_min_button</sender>
@@ -1881,6 +1643,12 @@
         <receiver>ModifySurfaceDialogData</receiver>
         <slot>splitDistanceChanged()</slot>
     </connection>
+    <connection>
+        <sender>transparency_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModifySurfaceDialogData</receiver>
+        <slot>customColorTransparencyChanged()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>surface_tab</tabstop>
@@ -1896,11 +1664,6 @@
     <tabstop>autoscale</tabstop>
     <tabstop>levels_box</tabstop>
     <tabstop>none_button_grid</tabstop>
-    <tabstop>red_box</tabstop>
-    <tabstop>green_box</tabstop>
-    <tabstop>blue_box</tabstop>
-    <tabstop>alpha_box</tabstop>
-    <tabstop>none_button_custom</tabstop>
     <tabstop>apply_button</tabstop>
     <tabstop>cancel_button</tabstop>
 </tabstops>
@@ -1910,7 +1673,6 @@
 <slots>
     <slot>applyPressed()</slot>
     <slot>cancelPressed()</slot>
-    <slot>colorBoxesChanged()</slot>
     <slot>maxMaxPressed()</slot>
     <slot>maxPressed()</slot>
     <slot>midPressed()</slot>

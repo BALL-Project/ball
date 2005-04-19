@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.4 2005/04/17 17:05:17 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.5 2005/04/19 11:40:11 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -89,20 +89,6 @@ void ModifySurfaceDialog::choosePressed()
 {
 	QColor qcolor = chooseColor(custom_color_label);
 	selected_color.set(qcolor);
-	red_box->setValue(qcolor.red());
-	blue_box->setValue(qcolor.blue());
-	green_box->setValue(qcolor.green());
-}
-
-
-void ModifySurfaceDialog::colorBoxesChanged()
-{
-	selected_color.set(red_box->value(),
-										 green_box->value(),
-										 blue_box->value(),
-										 alpha_box->value());
-	QColor qcolor(red_box->value(), green_box->value(), blue_box->value());
-	custom_color_label->setBackgroundColor(qcolor);
 }
 
 
@@ -275,23 +261,23 @@ void ModifySurfaceDialog::getColor_(const ColorRGBA& color, QLabel* label, QSpin
 
 void ModifySurfaceDialog::colorByCustomColor_()
 {
-	ColorRGBA col(red_box->value(), green_box->value(), blue_box->value(), alpha_box->value());
+	ColorRGBA col(custom_color_label->backgroundColor());
+
+	if (transparency_slider->value() == 0)
+	{
+		col.setAlpha(255);
+		rep_->setTransparency(0);
+	}
+	else
+	{
+		rep_->setTransparency((Size)((float)transparency_slider->value() * 2.55));
+		col.setAlpha(255 - rep_->getTransparency());
+	}
 
 	if (!color_only_selection->isChecked())
 	{
-		if (transparency_group_custom->selected() == none_button_custom)
-		{
-			col.setAlpha(255);
-			rep_->setTransparency(0);
-		}
-		else if (transparency_group_custom->selected() == alpha_button_custom)
-		{
-			rep_->setTransparency(255 - (int) col.getAlpha());
-		}
-
 		mesh_->colorList.resize(1);
 		mesh_->colorList[0] = col;
-
 		return;
 	}
 
@@ -445,15 +431,6 @@ void ModifySurfaceDialog::saveSettings_()
 	else if (surface_tab->currentPage() == by_color)
 	{
 		config.tab = 1;
-
-		if (transparency_group_custom->selected() == none_button_custom)
-		{
-			config.transparency = 0;
-		}
-		else
-		{
-			config.transparency = 2;
-		}
 	}
 	else
 	{
@@ -498,14 +475,6 @@ void ModifySurfaceDialog::loadSettings_()
 	}
 	else if (config.tab == 1)
 	{
-		if (config.transparency == 0)
-		{
-			none_button_custom->setEnabled(true);
-		}
-		else if (config.transparency == 1)
-		{
-			alpha_button_custom->setEnabled(true);
-		}
 	}
 			
 	QWidget::update();
@@ -645,11 +614,6 @@ void ModifySurfaceDialog::gridTransparencyChanged()
 			mid_alpha->setEnabled(alpha_button_grid->isChecked());
 	    max_alpha->setEnabled(alpha_button_grid->isChecked());
 	max_max_alpha->setEnabled(alpha_button_grid->isChecked());
-}
-
-void ModifySurfaceDialog::customColorTransparencyChanged()
-{
-	alpha_box->setEnabled(alpha_button_custom->isChecked());
 }
 
 void ModifySurfaceDialog::setMinValue(float value)
@@ -879,6 +843,11 @@ bool ModifySurfaceDialog::checkInclude_(const AtomGrid& atom_grid, const Vector3
 	}
 
 	return false;
+}
+
+void ModifySurfaceDialog::customColorTransparencyChanged()
+{
+	transparency_label->setText(String(transparency_slider->value()).c_str());
 }
 
 } } // namespaces

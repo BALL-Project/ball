@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.h,v 1.1.2.2 2005/04/14 22:30:49 amoll Exp $
+// $Id: modifySurfaceDialog.h,v 1.1.2.3 2005/04/19 11:40:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
@@ -93,7 +93,6 @@ namespace BALL
 			
 			void applyPressed();
 			void cancelPressed();
-			void colorBoxesChanged();
 			void maxPressed();
 			void midPressed();
 			void minPressed();
