@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.8.4.2 2005/04/18 13:45:47 amoll Exp $
+// $Id: POVRenderer.h,v 1.8.4.3 2005/04/19 11:07:04 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -183,6 +183,8 @@ namespace BALL
 				vector<const ColorRGBA*> color_vector_;
 				vector<const Representation*> representations_;
 				HashSet<const Mesh*> wireframes_;
+				String font_file_;
+				double m_[12];
 		};
   
 	} // namespace BALL

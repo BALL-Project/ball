@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19.4.1 2005/04/18 13:45:45 amoll Exp $
+// $Id: POVRenderer.C,v 1.19.4.2 2005/04/19 11:07:02 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -36,7 +36,8 @@ namespace BALL
 			throw()
 			: Renderer(),
 				outfile_(&std::cout),
-				human_readable_(true)
+				human_readable_(true),
+				font_file_("/local/amoll/povray-3.5/include/crystal.ttf")
 		{
 		}
 
@@ -52,7 +53,8 @@ namespace BALL
 		POVRenderer::POVRenderer(const String& name)
 			throw(Exception::FileNotFound)
 			: Renderer(),
-				human_readable_(true)
+				human_readable_(true),
+				font_file_("/local/amoll/povray-3.5/include/crystal.ttf")
 		{
 			outfile_ = new File(name, std::ios::out);
 		}
@@ -222,17 +224,30 @@ namespace BALL
 			    << "\ttransform {" << endl
 			    << "\t\tmatrix <" << endl;
 
-			GLdouble m[16];	
+ 			GLdouble m[16];	
 			glGetDoublev(GL_MODELVIEW_MATRIX, m);
 			
 			double norm = sqrt(m[0] * m[0] + m[1] * m[1] + m[2] * m[2]);
-			out << "\t\t" 
-							 << m[0] / norm << ",  " << m[1] / norm << ", " << m[2] / norm << "," << endl;
+			out << "\t\t" << m[0] / norm << ",  " << m[1] / norm << ", " << m[2] / norm << "," << endl;
+			m_[0] = m[0] / norm;
+			m_[1] = m[1] / norm;
+			m_[2] = m[2] / norm;
 			norm = sqrt(m[4] * m[4] + m[5] * m[5] + m[6] * m[6]);
 			out << "\t\t" << m[4] / norm << ",  " << m[5] / norm << ", " << m[6] / norm << "," << endl;
+
+			m_[3] = m[4] / norm;
+			m_[4] = m[5] / norm;
+			m_[5] = m[6] / norm;
 			norm = sqrt(m[8] * m[8] + m[9] * m[9] + m[10] * m[10]);
 			out << "\t\t" << m[8] / norm << ",  " << m[9] / norm << ", " << m[10] / norm << "," << endl;
+
+			m_[6] = m[8] / norm;
+			m_[7] = m[9] / norm;
+			m_[8] = m[10] / norm;
 			out << "\t\t" << m[12] << ",  " << m[13] << ", " << m[14] << endl;
+			m_[9] = m[12];
+			m_[10] = m[13];
+			m_[11] = m[14];
 		  out << "\t\t>" << endl;
 			out << "\tinverse }" << endl;
 			out << "}" << std::setprecision(6) << endl << endl;
@@ -294,7 +309,7 @@ namespace BALL
 			out << "#declare BALLFinishWire             = BALLFinish" << endl;
 			out << "#declare wire_radius 								= 0.01;" << std::endl;
 			out << "// enter the path to your desired font here: " << std::endl;
-			out << "#declare BALLLabelFont              = \"arial.ttf\";" << std::endl;
+			out << "#declare BALLLabelFont              = \"" << font_file_ << "\";" << std::endl;
 			out << std::endl;
 			
 			out << "#macro Sphere(Position, Radius, Color)" << endl;
@@ -771,7 +786,18 @@ namespace BALL
 
 			out << "text{ ttf BALLLabelFont, \"" << label.getExpandedText() << "\",0.2, 0" << std::endl;
 			out << "  texture{ pigment{color rgb" << 	POVColorRGBA(label.getColor()) << " }"<< std::endl;
-			out << "  finish{ambient 0.15 diffuse 0.85} } rotate<0.0,0,0> translate" << POVVector3(label.getVertex()) << "}"<< std::endl;
+			out << "  finish{ambient 0.15 diffuse 0.85} } " << std::endl; //rotate<0.0,0,0> translate" << POVVector3(label.getVertex()) << "}"<< std::endl;
+			out << "  matrix < ";
+			for (Position pos = 0; pos < 9; pos++)
+			{
+				out << m_[pos] << ", ";
+			}
+
+			out << label.getVertex().x << ", ";
+			out << label.getVertex().y << ", ";
+			out << label.getVertex().z << " ";
+			
+			out << " > }" << std::endl;
 		}
 
 	} // namespaces
