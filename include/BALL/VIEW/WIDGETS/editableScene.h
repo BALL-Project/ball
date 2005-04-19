@@ -29,6 +29,15 @@
 # include <BALL/MATHS/vector2.h>
 #endif
 
+#ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
+# include <BALL/VIEW/WIDGETS/molecularControl.h>
+#endif
+
+
+
+
+#include <qpopupmenu.h>
+
 // has to come after BALL includes to prevent problems with Visual Stuio Net
 #include <qgl.h>
 
@@ -72,6 +81,11 @@ namespace BALL
 								virtual ~EditOperation()
 									throw();
 
+
+								/** undo-Operator
+								 */
+								void undo(EditableScene* es);
+								
 								enum OperationType
 								{
 									DEFAULT,
@@ -83,7 +97,7 @@ namespace BALL
 										//CHANGED__SYSTEM
 										//MOVED__ATOM
 								};
-
+								
 								int	operationType;
 								Atom* atom;
 								Bond* bond;
@@ -151,12 +165,26 @@ namespace BALL
 						throw();
 
 
+					void onNotify(Message *message)
+						throw();
+
+					
 					enum EditMode
 					{
 						// inserting atoms
 						EDIT__MODE = PICKING__MODE + 1,
 						// drawing new bonds
 						BOND__MODE	
+					};
+					
+					enum Menu_Entries
+					{
+						SELECT_ATOM = 10,  // MolecularControl::EXPAND_ALL + 1, TODO: This enum is private!!!! 
+						MOVE_ATOM,
+						SET_ATOM_PROPERTIES,
+						SELECT_BOND,
+						SET_BOND_PROPERTIES,
+						SET_BOND_LENGTH
 					};
 
 
@@ -169,6 +197,12 @@ namespace BALL
 
 					void checkMenu(MainControl& main_control)
 						throw();
+
+					/**
+					 * initializes the context_menu_ 
+					 * context_menu_composite_ should be set to the current object   Warum????   
+					 */
+					void popupContextMenu_();
 
 
 					public slots:
@@ -183,6 +217,15 @@ namespace BALL
 
 						virtual void mouseReleaseEvent(QMouseEvent *e);
 
+
+						//slots for contextMenue
+						void moveAtom();
+						void selectAtom();
+						void setAtomProperties();
+						void selectBond();
+					  void setBondProperties();
+						void setBondLength();
+																							
 						// slots for communication with PTEDialog
 						void setEditElementType(int element_number);
 						int getEditElementType();
@@ -199,10 +242,16 @@ namespace BALL
 
 		protected:
 					Index edit_id_;	
-					System system_; // Do we need them?? 
-					Molecule *current_molecule_;	//Do we need them??
+					//System system_;								// Do we need them?? 
+					//Molecule* current_molecule_;	// Do we need them??
+					AtomContainer* current_atomContainer_;
 					Atom* first_atom_for_bond_;
 
+					Composite* context_menu_composite_; //Composite for which Popupmenu was called  
+					QPopupMenu context_menu_;     // Popupmenu for mousclick right
+					//QPopupMenu atom_context_menu;
+					//QPopupMenu bond_context_menu;
+					
 					// used for the bond insert algorithm
 					float x_ewindow_bond_pos_first_;
 					float y_ewindow_bond_pos_first_;
@@ -218,13 +267,11 @@ namespace BALL
 					// ???
 					// search range when looking for atoms/bonds (in angstrom)
 					double atom_limit_;			
-					double bond_limit_;			
-					bool   mouse_has_moved_;
-					int editAtomType_;
+					double bond_limit_;		
+					
+					bool mouse_has_moved_;
+					int editAtomType_;       //store atomtype for nee atoms    
 
-					//undo stack
-					//TODO   list_of_operations
-					vector< EditOperation > undo_;
 
 					/**
 					 * Insert a given Atom in the Scene. Its position is specified by the 2-dim 
@@ -265,8 +312,8 @@ namespace BALL
 					 * initialized.
 					 */
 					bool mapViewplaneToScreen_();
-
-	};
+					
+					};
 
 	}//end of namespace
 } // end of namespace

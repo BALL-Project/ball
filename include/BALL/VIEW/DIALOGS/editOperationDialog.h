@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editOperationDialog.h,v 1.1 2005/02/18 17:58:31 anne Exp $ 
+// $Id: editOperationDialog.h,v 1.2 2005/04/19 13:29:12 anne Exp $ 
 //
 
 #ifndef BALL_VIEW_DIALOGS_EDITOPERATIONDIALOG_H
@@ -16,6 +16,10 @@
 #ifndef BALL_VIEW_WIDGETS_EDITABLESCENE_H
 # include <BALL/VIEW/WIDGETS/editableScene.h>
 #endif
+
+#include <stack>
+
+
 
 namespace BALL
 {
@@ -45,12 +49,14 @@ namespace BALL
 		
 			public slots:
 				
-				void undo(int number_of_undo_steps);
+				void undo();
 				void operationSelected(int operation);
 				void addEditOperation(EditableScene::EditOperation& eo);
 				
 			protected:
-
+				//undo stack
+				std::stack< EditableScene::EditOperation > list_of_operations_;
+				
 		};
 	}
 }

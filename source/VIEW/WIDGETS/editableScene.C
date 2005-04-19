@@ -74,6 +74,57 @@ namespace BALL
 #endif 
 		}
 
+		// undo an EditOperation
+		
+		void EditableScene::EditOperation::undo(EditableScene* es)
+		{	
+			// delete an atom
+			if(operationType == ADDED__ATOM)
+			{
+				CompositeManager& cm = es->getMainControl()->getCompositeManager();
+
+				//does the atom still exist?
+				Log.info()<< cm.has(atom) <<std::endl;
+			  if(cm.has(atom) )	
+				{
+					Composite* parent = atom->getParent();
+					parent->removeChild(*atom);
+					delete(atom);
+				
+					//update representation
+					CompositeMessage *m = 0;
+					m = new CompositeMessage(parent->getRoot(), CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
+					es->notify_(m); 
+
+					Log.info()<< "Atom deleted"  << std::endl;
+				}
+			} 
+			// delete a bond
+			else if(operationType == ADDED__BOND)
+			{
+				Composite* parent = bond->getParent();
+				bond->destroy();
+			
+				//TODO: Die message funktioniert aus irgendeinem Grund nicht!!! 
+				
+				//CompositeMessage *m = 0;
+				//m = new CompositeMessage(parent->getRoot(), CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
+				//es->notify_(m);
+				Log.info()<< "Bond deleted"  << std::endl;
+			}
+			//change type
+			else if(operationType == CHANGED__TYPE)
+			{
+				//TODO: Implementation
+				Log.info()<< "Atomtype rechanged"  << std::endl;
+			}
+			else
+			{
+				Log.error() << "Operation is not undoable! " << std::endl;
+			}
+		}
+
+		
 		//
 		//-------------------- EditableScene -----------------------
 		//
@@ -81,12 +132,13 @@ namespace BALL
 			throw()
 			:	Scene(),
 				edit_id_(-1),
-				system_(),
+				//system_(),
 				first_atom_for_bond_(0),
+				context_menu_composite_(),
+				context_menu_(),
 				atom_limit_(1.5),
 				bond_limit_(2.0),
-				editAtomType_(6),
-				undo_()
+				editAtomType_(6)
 		{
 		}
 
@@ -94,12 +146,13 @@ namespace BALL
 			throw()
 			: Scene(parent_widget, name, w_flags),
 				edit_id_(-1),
-				system_(), 
+				//system_(), 
 				first_atom_for_bond_(0),
-				atom_limit_(1.5),
+				context_menu_composite_(),
+				context_menu_(),
+				atom_limit_(1.5),  
 				bond_limit_(2.0),
-				editAtomType_(6),
-				undo_()
+				editAtomType_(6)
 		{	
 			registerWidget(this); 
 			Log.error() << "EditableScene " << dynamic_cast<ModularWidget*>(this) << std::endl;
@@ -111,12 +164,13 @@ namespace BALL
 			throw()
 			: Scene(eScene, parent_widget, name, w_flags),
 				edit_id_(-1),
-				system_(eScene.system_),
+				//system_(eScene.system_),
 				first_atom_for_bond_(eScene.first_atom_for_bond_),
+				context_menu_composite_(),
+				context_menu_(),
 				atom_limit_(eScene.atom_limit_),
 				bond_limit_(eScene.bond_limit_),
-				editAtomType_(eScene.editAtomType_),
-				undo_()
+				editAtomType_(eScene.editAtomType_)
 		{
 		}
 
@@ -134,6 +188,97 @@ namespace BALL
 			Scene::clear();
 		}
 
+/*
+		void EditableScene::onNotify(Message *message)
+			throw()
+		{
+#ifdef BALL_VIEW_DEBUG
+			Log.error() << "EditableScene " << this  << "onNotify " << message << std::endl;
+#endif
+			
+			//TODO: Implementation
+			
+			if (RTTI::isKindOf<CompositeMessage>(*message)) 
+			{
+				CompositeMessage* cm = RTTI::castTo<CompositeMessage>(*message);
+				switch (cm->getType())
+				{
+					case CompositeMessage::CHANGED_COMPOSITE_HIERARCHY:
+						if() // emited by EditableScene itself? 
+						{
+
+						}
+						break;
+					//other cases
+				  	default: 
+							break;
+					}	
+				}
+					
+			Scene::onNotify(message);	
+		}
+*/	
+		
+		void EditableScene::onNotify(Message *message)
+			throw()
+		{	
+#ifdef BALL_VIEW_DEBUG
+			Log.error() << "EditableScene " << this  << "onNotify " << message << std::endl;
+#endif
+			
+			// react now only to SceneMessage
+			if (RTTI::isKindOf<CompositeMessage>(*message))
+			{
+				CompositeMessage *composite_message = RTTI::castTo<CompositeMessage>(*message);
+				switch (composite_message->getType())
+				{
+					case CompositeMessage::REMOVED_COMPOSITE:
+						// check wheather the removed Composite was an ancestor of the actual atomcontainer
+						// editableScene was working on (current_atomContainer_) 
+							Log.info() << "CCH"<< std::endl;
+
+						if( (composite_message->getComposite())->isAncestorOf(*current_atomContainer_))
+						{ // an ancestor of our current atomcontainer was deleted 
+							Log.info() << "Vorfahr wurde geloescht!!!"<< std::endl;
+							current_atomContainer_=0;
+						}
+						else if(  current_atomContainer_->isAncestorOf( *(composite_message->getComposite())))
+						{	// inheritor of current atomContainer was deleted 
+							Log.info() << "Erbe wurde geloescht!!!"<< std::endl;
+						  // TODO: Delete deleted composite from undolist  
+						}
+						else if(current_atomContainer_==composite_message->getComposite())
+						{ //actual atomContainer was deleted
+							current_atomContainer_=0;
+							Log.info() << "Current atomcontainer was deleted"<< std::endl;
+							// TODO: Delete all inheritors of deleted composite from undolist
+						}
+						else	
+						{
+						  // the deleted composite isnot in relationship to the currend atomContainer
+							// we should make sure, that none of the deleted composites occure any longer in 
+							// our undo list
+							// TODO!!!
+
+						}
+						break;	// no return since we want Scene::onNotify to be performed
+						
+					case CompositeMessage::UNDEFINED:
+						Log.error() << "Unknown type of CompositeMessage in " << __FILE__ << __LINE__ << std::endl;
+						break;
+						
+					default: // in all other cases 	Scene::onNotify(message) is called
+						break;
+				}
+	
+			}
+			
+			// A New Selection -> change of current_atomContainer_ is organized in the atom insertion procedure 
+			
+			Scene::onNotify(message);
+			return;
+		}
+		
 		void EditableScene::initializeWidget(MainControl& main_control)
 			throw()
 		{
@@ -170,6 +315,42 @@ namespace BALL
 			Scene::checkMenu(main_control);
 		}
 
+		// initializes the context_menu
+		void EditableScene::popupContextMenu_()
+		{	
+				context_menu_.clear();
+				if(RTTI::isKindOf<Atom>(*context_menu_composite_))
+				{
+					//Atom* atom  = dynamic_cast<Atom*>(&composite);
+					// context_menu_composite is atom 
+					context_menu_.insertItem("select",     	this, SLOT(selectAtom()), 0, 				SELECT_ATOM);
+					context_menu_.insertItem("properties", 	this, SLOT(setAtomProperties()), 0, SET_ATOM_PROPERTIES);
+					context_menu_.insertItem("move", 				this, SLOT(moveAtom()), 0, 					MOVE_ATOM);
+
+				}
+				else if (RTTI::isKindOf<Bond>(*context_menu_composite_))
+				{
+					//Bond* bond  = dynamic_castTo<Bond*>(composite);
+					// context_menu_composite is bond
+					context_menu_.insertItem("select",			this,  SLOT(selectBond()), 0, 					SELECT_BOND); 
+					context_menu_.insertItem("properites", 	this,  SLOT(setBondProperties()), 0, 	SET_BOND_PROPERTIES);
+					context_menu_.insertItem("set length",  this,  SLOT(setBondLength()), 0, 			SET_BOND_LENGTH);
+				}  
+				
+				//!! zum PopUp sollten die Orginal klick punkte mitgegeben werden
+				//ToDO: Pruefe, ob man schon zum Rand hin rausfaellt! :-)) 
+				//context_menu_.exec(QCursor::pos());
+				context_menu_.exec(QPoint( (int) (x_ewindow_bond_pos_first_ + x()), 
+																	 (int) (y_ewindow_bond_pos_first_ + y())));
+				//!!!! x_ewindow_bond... sind relativ, da nur fuer die Scene muss noch addiert werden!!  
+		}
+
+		
+
+		//    
+		//               SLOTS 
+		//
+				
 		void EditableScene::mousePressEvent(QMouseEvent* e)
 		{
 			// start a new mouse_moved cycle
@@ -197,14 +378,13 @@ namespace BALL
 					first_atom_for_bond_ = a;
 					current_mode_ =(Scene::ModeType)BOND__MODE;
 					
-					//store the Operation in undo_
+					//store the Operation in EditOperationDialog
 					Vector3 atom_position = a->getPosition();
 					
 					EditOperation eo(a, NULL, "Added atom of type " + PTE[editAtomType_].getName() + " at position (" 
 													+ String(atom_position.x) + ", "
 													+ String(atom_position.y) + ", "
 													+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
-					undo_.push_back(eo);
 
 					// tell about the new undo operation
 					emit newEditOperation(eo);
@@ -218,10 +398,11 @@ namespace BALL
 
 					if (atom)
 					{
-						atom->select(); // later we should open a context menu at this point
-						CompositeMessage *m = new CompositeMessage(*atom, CompositeMessage::SELECTED_COMPOSITE);	
-						
-						notify_(m); 
+						context_menu_composite_=atom;
+						popupContextMenu_();
+						//atom->select(); 					
+						//CompositeMessage *m = new CompositeMessage(*atom, CompositeMessage::SELECTED_COMPOSITE);	
+						//notify_(m); 
 					}
 					else
 					{
@@ -230,9 +411,9 @@ namespace BALL
 
 						if (bond)
 						{
+							popupContextMenu_();
 							bond->select();
 							CompositeMessage *m = new CompositeMessage(*bond, CompositeMessage::SELECTED_COMPOSITE);	
-
 							notify_(m); 
 						}
 					}
@@ -269,6 +450,8 @@ namespace BALL
 			Scene::mousePressEvent(e);
 		}
 
+
+		
 		void EditableScene::mouseMoveEvent(QMouseEvent *e)
 		{
 			// save the current mouse position for drawing possible bonds as a line
@@ -382,8 +565,32 @@ namespace BALL
 						//       - if there is already a bond, change it to a double bond
 						Bond* c = new Bond("Bond", *first_atom_for_bond_, *atom, Bond::ORDER__SINGLE);		
 						
-						EditOperation eo( NULL, c, "Added bond of type " , EditOperation::ADDED__BOND);
-						undo_.push_back(eo);
+						String bond_string;
+						int bond_type = c->getOrder();
+
+						switch (bond_type)
+						{
+							case Bond::ORDER__SINGLE:
+								bond_string = "single bond";
+								break;
+							case Bond::ORDER__DOUBLE:
+								bond_string = "double bond";
+								break;
+							case Bond::ORDER__TRIPLE:						
+								bond_string = "triple bond";	
+								break;
+							case Bond::ORDER__QUADRUPLE:
+								bond_string = "quadruple bond";	
+								break;
+							case Bond::ORDER__AROMATIC:
+								bond_string = "aromatic bond";	
+								break;
+							default:					
+								bond_string = "unknown";	
+								break;
+						}
+
+						EditOperation eo( NULL, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
 					
 						// tell about the new undo operation
 						emit newEditOperation(eo);
@@ -404,14 +611,12 @@ namespace BALL
 						PDBAtom* a = new PDBAtom(PTE[editAtomType_], PTE[editAtomType_].getName());
 						insert_(e->x(), e->y(), *a);
 						
-						//store the Operation in undo_
 						Vector3 atom_position = a->getPosition();
 					
 						EditOperation eo(a, NULL, "Added atom of type " + PTE[editAtomType_].getName() + " at position (" 
 														+ String(atom_position.x) + ", "
 														+ String(atom_position.y) + ", "
 														+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
-						undo_.push_back(eo);
 
 						// tell about the new undo operation
 						emit newEditOperation(eo);
@@ -453,9 +658,8 @@ namespace BALL
 								bond_string = "unknown";	
 								break;
 						}
-						
+
 						EditOperation eo2( NULL, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
-						undo_.push_back(eo2);
 						
 						// tell about the new undo operation
 						emit newEditOperation(eo2);
@@ -486,8 +690,64 @@ namespace BALL
 
 			Scene::mouseReleaseEvent(e);
 		}	
+	
 		
+		//     slots for contextMenue
+		void  EditableScene::moveAtom()
+		{
+			Log.error()<< "move atom"<< std::endl;
+		}
+		
+		void  EditableScene::selectAtom()
+		{
+			Log.error()<< "select atom"<< std::endl;
+			
+			Atom* atom  = dynamic_cast<Atom*>(context_menu_composite_);
+			atom->select(); 					
+			CompositeMessage *m = new CompositeMessage(*atom, CompositeMessage::SELECTED_COMPOSITE);	
+			notify_(m); 
+		}
+		
+		void  EditableScene::setAtomProperties()
+		{
+			Log.error()<<"set atom property" << std::endl;
 
+		}
+		
+		void  EditableScene::selectBond()
+		{
+			Log.error()<<"select bond" << std::endl;
+		}
+		
+		void  EditableScene::setBondProperties()
+		{
+			Log.error()<<"set bond property" << std::endl;
+
+		}
+		
+		void  EditableScene::setBondLength()
+		{
+			Log.error()<< "set bond length" << std::endl;
+
+		}
+		
+		
+/*
+		// undo number_of_undo_operation operation 
+		
+		void  EditableScene::undo(int number_of_undo_operation)
+		{
+			for( int i=0; i < number_of_undo_operation; i++)
+			{
+				EditOperation undo_operation = undo_.top();
+				undo_.pop();
+				
+				undo_operation.undo(this);
+			}
+		}
+*/
+
+		
 		/** ******************** Helper Functions ************************* **/
 
 		// Find closest atom to screen position (x,y). If there is none closer than atom_limit_, return NULL
@@ -663,16 +923,19 @@ namespace BALL
 				}
 
 				// Yes? we do not need to create our own system
+				current_atomContainer_ = ai;
 				ai->insert(atom_);
 				getMainControl()->update(*ai, true);
 			}
-			else  // more or less than 1 highlighted
-			{
+			else 
+			{	//  no highlighted composite => we create a new system, including a new molecule
+				//  into which the new atom will be inserted! 
 				System *system = new System();
 				Molecule* current_molecule = new Molecule();
 				system->insert(*current_molecule);
 				current_molecule->insert(atom_);
 				getMainControl()->insert(*system);
+				current_atomContainer_ = current_molecule;
 			}	
 
 			// do we need to refocus the camera?
@@ -844,6 +1107,10 @@ namespace BALL
 			return k_;
 		}	
 
+		//
+		// slots for communication with PTEDialog
+		//
+		
 		// Set the element for the next insert operations
 		void EditableScene::setEditElementType(int element_number)
 		{
@@ -854,7 +1121,9 @@ namespace BALL
 		int EditableScene::getEditElementType()
 		{
 			return editAtomType_;
-		}
+		}	
+		
+	
 
 	}//end of namespace 
 } //end of namespace
