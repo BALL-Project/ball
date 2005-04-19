@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.2 2005/04/19 13:59:43 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.3 2005/04/19 19:05:23 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -577,7 +577,7 @@ void DisplayProperties::checkDrawingPrecision_()
 	}
 	else
 	{
-		precision_slider->setEnabled(model_updates_enabled.enable());
+		precision_slider->setEnabled(model_updates_enabled->isChecked());
 		custom_precision_button->setEnabled(true);
 		if (rep_ != 0 &&
 				rep_->getSurfaceDrawingPrecision() != -1)
