@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.C,v 1.9 2005/04/18 13:30:10 amoll Exp $
+// $Id: compositeManager.C,v 1.10 2005/04/19 15:17:43 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/compositeManager.h>
@@ -95,7 +95,7 @@ namespace BALL
 			CompositeConstIterator cit = begin();
 			for(; cit != end(); cit++)
 			{
-				Composite::CompositeConstIterator sub_it = composite->beginComposite();
+				Composite::CompositeConstIterator sub_it = (*cit)->beginComposite();
 				for (; +sub_it; ++sub_it)
 				{
 					if (composite == &*sub_it) return true;

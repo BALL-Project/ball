@@ -757,7 +757,7 @@ namespace BALL
 			CompositeManager& cm = getMainControl()->getCompositeManager();
 			CompositeManager::iterator it = cm.begin();
 
-			float min_dist = numeric_limits<float>::max();
+			float min_dist = FLT_MAX;
 			Atom* min_atom = 0;
 			float dist;
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62 2005/03/01 16:46:34 amoll Exp $
+// $Id: scene.h,v 1.63 2005/04/19 15:20:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -617,7 +617,7 @@ namespace BALL
 
 			//@}
 
-			private:
+			protected:
 
 			void renderView_(RenderMode mode)
 				throw();
