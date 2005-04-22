@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.h,v 1.8 2005/03/26 11:09:16 bertsch Exp $
+// $Id: ringPerceptionProcessor.h,v 1.9 2005/04/22 15:01:40 amoll Exp $
 //
 
 #ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
@@ -167,7 +167,7 @@ namespace BALL
 			HashSet<EdgeItem<Index, Index>* > visited_bonds_;
 			HashMap<NodeItem<Index, Index>* , Size> P_;
 			HashMap<NodeItem<Index, Index>*, NodeItem<Index, Index>* > parents_;
-			stack<EdgeItem<Index, Index>* > BCC_;
+			std::stack<EdgeItem<Index, Index>* > BCC_;
 	
 	
 			// Balducci and Pearlman algorithm
