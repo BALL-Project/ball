@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19.4.2 2005/04/19 11:07:02 amoll Exp $
+// $Id: POVRenderer.C,v 1.19.4.3 2005/04/24 22:49:50 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -311,7 +311,7 @@ namespace BALL
 			out << "// enter the path to your desired font here: " << std::endl;
 			out << "#declare BALLLabelFont              = \"" << font_file_ << "\";" << std::endl;
 			out << std::endl;
-			
+						
 			out << "#macro Sphere(Position, Radius, Color)" << endl;
 			out << "sphere { Position, Radius pigment { Color } finish { BALLFinishSphereSolid } }" << endl;
 			out << "#end" << endl << endl;
@@ -786,17 +786,18 @@ namespace BALL
 
 			out << "text{ ttf BALLLabelFont, \"" << label.getExpandedText() << "\",0.2, 0" << std::endl;
 			out << "  texture{ pigment{color rgb" << 	POVColorRGBA(label.getColor()) << " }"<< std::endl;
-			out << "  finish{ambient 0.15 diffuse 0.85} } " << std::endl; //rotate<0.0,0,0> translate" << POVVector3(label.getVertex()) << "}"<< std::endl;
+			out << "  finish{ambient 0.15 diffuse 0.85} } " << std::endl;
 			out << "  matrix < ";
 			for (Position pos = 0; pos < 9; pos++)
 			{
 				out << m_[pos] << ", ";
 			}
-
+			out << "0, 0, 0 >";
+			out << " rotate 180*y rotate 180*x " << endl;
+			out << "  translate < ";
 			out << label.getVertex().x << ", ";
 			out << label.getVertex().y << ", ";
 			out << label.getVertex().z << " ";
-			
 			out << " > }" << std::endl;
 		}
 
