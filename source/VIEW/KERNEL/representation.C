@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.2 2005/04/17 17:05:18 amoll Exp $
+// $Id: representation.C,v 1.62.4.3 2005/04/24 18:46:17 amoll Exp $
 //
 
 
@@ -491,6 +491,8 @@ namespace BALL
 			{
 				color_processor_->setTransparency(transparency_);
 			}
+
+//   			needs_update_ = true;
 		}
 
 		bool Representation::needsUpdate() const

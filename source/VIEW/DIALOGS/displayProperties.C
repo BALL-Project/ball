@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.3 2005/04/19 19:05:23 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.4 2005/04/24 18:46:16 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -401,9 +401,9 @@ void DisplayProperties::applyColoringSettings_(Representation& rep)
 {
 	ColoringMethod current_coloring = (ColoringMethod) coloring_method_combobox->currentItem();
 
-	if (rep.getColorProcessor() == 0 ||
-			rep.getColoringMethod() != current_coloring ||
-			!rep.coloringUpdateEnabled())
+ 	if (rep.getColorProcessor() == 0 ||
+ 			rep.getColoringMethod() != current_coloring ||
+ 			!rep.coloringUpdateEnabled())
 	{
 		rep.setColorProcessor(coloring_settings_->createColorProcessor(current_coloring));
 		rep.setColoringMethod(current_coloring);
