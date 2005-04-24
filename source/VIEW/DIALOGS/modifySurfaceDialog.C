@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.5 2005/04/19 11:40:11 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.6 2005/04/24 19:23:33 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -300,9 +300,14 @@ void ModifySurfaceDialog::colorByCustomColor_()
 		// make sure we found an atom
 		const Atom* atom = cp->getClosestItem(mesh_->vertex[p]);
 
-		if (atom == 0 || !atom->isSelected()) continue;
-
-		mesh_->colorList[p] = col;
+		if (atom == 0 || !atom->isSelected())
+		{
+			mesh_->colorList[p].setAlpha(255 - rep_->getTransparency());
+		}
+		else
+		{
+			mesh_->colorList[p] = col;
+		}
 	}
 }
 
