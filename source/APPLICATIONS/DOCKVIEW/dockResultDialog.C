@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.16 2005/04/17 16:36:44 leonhardt Exp $
+// $Id: dockResultDialog.C,v 1.1.2.17 2005/04/25 16:13:27 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -122,10 +122,9 @@ namespace BALL
 			{
 				// insert new score column in table; i+1, because first column contains snapshot number
 				result_table->insertColumns(i+1, 1);
-				
 				// set the scoring function name as label of the column
 				result_table->horizontalHeader()->setLabel(i+1, dock_res_->getScoringName(i));
-				
+				Log.info() << "nach setLabel" << std::endl;
 				// the scores in the vector are sorted by snapshot number!
 				// the score with snapshot number i is at position i in the vector
 				vector<float> scores = dock_res_->getScores(i);
@@ -134,6 +133,7 @@ namespace BALL
 					QString s;
 					result_table->setText(j, i+1, s.setNum(scores[j]));
 				}
+				Log.info() << "nach setText" << std::endl;
 			}
 			
 			Log.info() << "in DockeResultDialog::show() before third for" << std::endl;
@@ -142,15 +142,16 @@ namespace BALL
 			{
 				result_table->adjustColumn(j);
 			}
+			Log.info() << "nach for" << std::endl;
 			// sort by first score column
-			sortTable(1);
-			
+			//sortTable(1);
+			Log.info() << "nach sortTable" << std::endl;
 			// adjust table/dialog size
 			result_table->adjustSize();
 			adjustSize();
-			
 			// show dialog to user
 			DockResultDialogData::show();
+			Log.info() << "DockeResultDialog::show() finished" << std::endl;
 		}
 		
 		// show snapshot of selected row
@@ -265,7 +266,7 @@ namespace BALL
 			{
 				scores.push_back(ranked_conformations[i].second);
 			}
-			dock_res_->addScoring(scoring_functions->currentText(), scoring_options, scores);
+			dock_res_->addScoring(String(scoring_functions->currentText().ascii()), scoring_options, scores);
 			
 			/*
 			// before filling the table clear it
@@ -338,11 +339,10 @@ namespace BALL
 				}
 				rows.push_back(row);
 			}
-			
 			// sort row-vector by the column which the user clicked
 			Compare_ compare_func = Compare_(column);
 			sort(rows.begin(), rows.end(), compare_func);
-			 
+			Log.info() << "vor result table füllen" << std::endl;
 			// fill result table
 			for(int row_it = 0; row_it < result_table->numRows(); row_it++)
 			{
@@ -354,7 +354,7 @@ namespace BALL
 					result_table->setText(row_it,column_it,s.setNum(rows[row_it][column_it]));
 				}
 			}
-			
+			Log.info() << "nach result table füllen" << std::endl;
 			//now the current selected row can be different,
 			//so call showSnapshot() of current selected row
 			showSnapshot();

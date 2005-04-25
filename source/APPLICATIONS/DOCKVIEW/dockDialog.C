@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.23 2005/04/17 16:36:42 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.24 2005/04/25 16:13:25 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -364,6 +364,7 @@ namespace BALL
 			switch(index)
 			{
 				case DEFAULT:
+					Log.error() << "in continueCalculate_::DEFAULT" << std::endl;
 					scoring = new EnergeticEvaluation();
 					break;
 
@@ -385,6 +386,7 @@ namespace BALL
 					break;
 				}
 				case RANDOM:
+					Log.error() << "in continueCalculate_::RANDOM" << std::endl;
 					scoring = new RandomEvaluation();
 					break;
 			}
@@ -400,11 +402,11 @@ namespace BALL
 				scores.push_back(ranked_conformations[i].second);
 			}
 
-			DockResult* dock_res = new DockResult(algorithms->currentText(),
+			DockResult* dock_res = new DockResult(String(algorithms->currentText().ascii()),
 																						conformation_set,
 																						options_); 
 																							
-			dock_res->addScoring(scoring_functions->currentText(), scoring_options, scores);
+			dock_res->addScoring(String(scoring_functions->currentText().ascii()), scoring_options, scores);
 
 			// add docked system to BALLView structures 
 			SnapShot best_result = (*conformation_set)[0];
@@ -414,7 +416,7 @@ namespace BALL
 			//docked_system->deselect();
 			if(docked_system->isSelected())
 			{
-				Log.info() << "system is selcted" << std::endl;
+				Log.info() << "system is selected" << std::endl;
 			}	
 			getMainControl()->insert(*docked_system);
 			

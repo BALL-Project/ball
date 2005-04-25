@@ -37,44 +37,54 @@ namespace BALL
 				
 			public:
 			
-				// Constructor
+				/** Constructor
+				*/
 				DockProgressDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
 					throw();
 					
-				// Destructor	
+				/** Destructor
+				*/
 				~DockProgressDialog()
 					throw();
 			
-				//
+				/**
+				*/
 				void fillDialog(QString p1, QString p2, QString alg, QString sf, Options& alg_opt, Options& sf_opt)
 					throw();
 					
-				///
+				/**
+				*/
 				void setDockingAlgorithm(DockingAlgorithm* alg)
 					throw();	
 				
+				/**
+				*/
 				const DockingAlgorithm* getDockingAlgorithm() const
 					throw();
 			
-							
+				
 			public slots:
 			
-				//
+				/**
+				*/
 				virtual void show();
 			
-				//
+				/**
+				*/
 				virtual void pauseClicked();
 			
-				//
+				/**
+				*/
 				virtual void abortClicked();
 			
+				
 			protected slots:
 			
-				//
+				/**
+				*/
 				virtual void updateProgress_();
 			
 			
-				
 			protected:
 				
 				DockingAlgorithm* alg_;
