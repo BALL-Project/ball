@@ -17,7 +17,7 @@
 #include <BALL/STRUCTURE/HBondProcessor.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/DATATYPE/colorTable.h>
-#include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
+#include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 
 #include <qlabel.h>
@@ -228,10 +228,8 @@ void BALLViewDemo::accept()
 		getMainControl()->getPrimitiveManager().setMultithreadingMode(false);
 
 		Representation* rep = *getMainControl()->getPrimitiveManager().begin();
-		Mesh* mesh = dynamic_cast<Mesh*> (*rep->getGeometricObjects().begin());
-
-		ColorMeshDialog* cdialog = ColorMeshDialog::getInstance(0);
-		cdialog->setMesh(mesh, rep);
+		ModifySurfaceDialog* cdialog = ModifySurfaceDialog::getInstance(0);
+		cdialog->setRepresentation(rep);
 		cdialog->setGrid(grid_);
 		cdialog->setMinValue(-0.7);
 		cdialog->setMaxValue(3.0);
