@@ -84,6 +84,9 @@ namespace BALL
 				 *  with name filename. If num == 0, all results are exported.
 				 */
 				bool writeDCDFile(const String& filename, const Size num=0);
+				
+				bool readDCDFile(const String& filename)
+					throw();
 
 				/** Return the number of conformations.
 				 */
