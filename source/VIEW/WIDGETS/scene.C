@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171 2005/03/09 16:47:29 amoll Exp $
+// $Id: scene.C,v 1.171.2.1 2005/04/25 21:02:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -372,7 +372,6 @@ namespace BALL
 			gl_renderer_.setSize(width, height);
 			gl_renderer_.updateCamera();
 			content_changed_ = true;
-			updateGL();
 		}
 
 
@@ -551,8 +550,6 @@ namespace BALL
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
 		{
-			gl_renderer_.initSolid();
-
 			PrimitiveManager::RepresentationList::ConstIterator it;
 			// ============== render Clipping planes ==============================
 			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
@@ -562,6 +559,7 @@ namespace BALL
 			for(; it != getMainControl()->getPrimitiveManager().end(); it++)
 			{
 				if ((**it).getModelType() != MODEL_CLIPPING_PLANE) continue;
+				gl_renderer_.initSolid();
 				renderClippingPlane_(**it);
 			}
 		
@@ -574,7 +572,6 @@ namespace BALL
 			// show light sources
 			if (show_light_sources_)
 			{
-				gl_renderer_.initSolid();
 				List<LightSource>::ConstIterator lit = stage_->getLightSources().begin();
 				for (; lit != stage_->getLightSources().end(); lit++)
 				{
@@ -600,7 +597,6 @@ namespace BALL
 				if ((*it)->getTransparency() == 0 &&
 						!(*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
 				{
-					gl_renderer_.initSolid();
 					render_(**it, mode);
 				}
 			}
@@ -611,7 +607,6 @@ namespace BALL
 			{
 				if ((*it)->getTransparency() != 0)
 				{
-					gl_renderer_.initTransparent();
 					render_(**it, mode);
 				}
 			}
@@ -622,7 +617,6 @@ namespace BALL
 			{
 				if ((*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
 				{
-					gl_renderer_.initAlwaysFront();
 					render_(**it, mode);
 				}
 			}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.32.2.2 2005/04/12 21:23:11 amoll Exp $
+// $Id: glRenderer.h,v 1.32.2.3 2005/04/25 21:02:15 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -298,7 +298,7 @@ namespace BALL
 			void initDrawingMeshes_();
 
 			///
-			void finishDrawingMeshes_();
+			void initDrawingOthers_();
 
 			///
 			virtual void renderPoint_(const Point& /*point*/)
@@ -450,6 +450,8 @@ namespace BALL
 			ModelType 							model_type_;
 			Position 								display_lists_index_;
 			bool 										single_pick_;
+			bool 										drawed_other_object_;
+			bool 										drawed_mesh_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
