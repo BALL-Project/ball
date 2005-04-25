@@ -46,7 +46,7 @@ namespace BALL
 	{
 		return system_;
 	}
-
+	
 	const std::vector<ConformationSet::Conformation>& ConformationSet::getScoring() const
 		throw()
 	{
@@ -106,6 +106,28 @@ namespace BALL
 			return false;
 		}
 		
+		return true;
+	}
+	
+	bool ConformationSet::readDCDFile(const String& filename)
+		throw()
+	{
+		try
+		{
+			SnapShot snapshot;
+			vector<SnapShot> structures;
+			DCDFile file(filename, ios::in | ios::binary);
+			for (Size i = 0; i < file.getNumberOfSnapShots(); ++i)
+			{
+				file.read(snapshot);
+				structures.push_back(snapshot);
+			}
+			structures_ = structures;
+		}
+		catch(...)
+		{
+			return false;
+		}
 		return true;
 	}
 
