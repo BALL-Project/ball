@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.35.4.4 2005/04/14 16:37:04 leonhardt Exp $
+// $Id: datasetControl.C,v 1.35.4.5 2005/04/25 16:16:25 haid Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -73,6 +73,8 @@ void DatasetControl::initializeWidget(MainControl& main_control)
 	open_trajectory_id_ = 
 		main_control.insertMenuEntry(MainControl::FILE_OPEN, "Trajectory", this, SLOT(addTrajectory()), 0, -1,
 		String("Open a trajectory file (1 System has to be selected)"));
+	main_control.insertMenuEntry(MainControl::FILE_OPEN, "Dock Result", this, SLOT(addDockResult()), 0, -1,
+		String("Open a dock result file"));
 	main_control.insertMenuEntry(MainControl::FILE_OPEN, "1D Grid", this, SLOT(add1DGrid()), 0, -1,
 		String("Open a 1D data grid"));
 	main_control.insertMenuEntry(MainControl::FILE_OPEN, "2D Grid", this, SLOT(add2DGrid()), 0, -1,
@@ -92,6 +94,7 @@ void DatasetControl::finalizeWidget(MainControl& main_control)
 	throw()
 {
 	main_control.removeMenuEntry(MainControl::FILE_OPEN, "Trajectory", this, SLOT(addTrajectory()));
+	main_control.removeMenuEntry(MainControl::FILE_OPEN, "Dock Result", this, SLOT(addDockResult()));
 	main_control.removeMenuEntry(MainControl::FILE_OPEN, "1D Grid", this, SLOT(add1DGrid()));
 	main_control.removeMenuEntry(MainControl::FILE_OPEN, "2D Grid", this, SLOT(add2DGrid()));
 	main_control.removeMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()));
@@ -119,8 +122,8 @@ void DatasetControl::addTrajectory()
 	if (!getMainControl()->getSelectedSystem()) return;
 
 	QString file = QFileDialog::getOpenFileName(
-											"DCD files(*.dcd)",
 											getWorkingDir().c_str(),
+											"DCD files(*.dcd)",
 											this,
 											"Trajectory File Dialog",
 											"Select a DCD file" );
@@ -165,6 +168,35 @@ void DatasetControl::insertTrajectory_(TrajectoryFile* file, System& system)
 void DatasetControl::addDockResult()
 	throw()
 {
+	// open dialog to select result file
+	QString file = QFileDialog::getOpenFileName(
+											getWorkingDir().c_str(),
+											"DockResult files(*.dr)",
+											this,
+											"Dock Result File Dialog",
+											"Select a Dock Result file" );
+											
+	if (file == QString::null) return;
+	setWorkingDirFromFilename_(file.ascii());
+	
+	// read the DockResult from the file
+	DockResult* dock_res = new DockResult();
+	if(!dock_res->readDockResult(file.ascii()))
+	{
+		setStatusbarText("Could not read DockResult file!");
+		return;
+	}
+	// get docked system, set its name to name of file and add it to BALLView structures
+	// apply the first SnapShot to the system to get the positions of the docked structures
+	SnapShot ss = (*(dock_res->getConformationSet()))[0];
+	System* docked_system = new System(dock_res->getConformationSet()->getSystem());
+	String name = file.ascii();
+	vector<String> s;
+	name.split(s, "/");
+	docked_system->setName(s[s.size()-1].before("."));
+	ss.applySnapShot(*docked_system);
+	getMainControl()->insert(*docked_system);
+	insertDockResult_(dock_res, *docked_system);
 }
 
 void DatasetControl::insertDockResult_(DockResult* dock_res, System& system)
@@ -515,7 +547,25 @@ void DatasetControl::saveDockTrajectories_()
 
 void DatasetControl::saveDockResult_()
 {
+	DockResult* dock_res = item_to_dock_result_[context_item_];
 	
+	QString s = QFileDialog::getSaveFileName(getWorkingDir().c_str(),
+																						"DockResult files(*.dr)",
+																						getMainControl(),
+																						"DockResult File Dialog",
+																						"Choose a filename to save" );
+	if (s == QString::null) return;
+	String filename = s.ascii();
+	
+	if (!dock_res->writeDockResult(filename))
+	{
+		setStatusbarText("Could not write DockResultFile.", true);
+		return;
+	}
+	/*std::ofstream file;
+	file.open(filename, std::ios_base::out);
+	file << *dock_res;
+	file.close();*/
 }
 
 String DatasetControl::chooseGridFileForOpen_()
