@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.C,v 1.7.2.3 2005/03/16 13:50:09 amoll Exp $
+// $Id: buildBondsProcessor.C,v 1.7.2.4 2005/05/01 11:37:22 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
@@ -179,7 +179,7 @@ namespace BALL
 											dist >= min_dist &&
 											!atom1.isBoundTo(**ait2))
 									{
-										Bond* const b = atom1.createBond(**ait2);
+										atom1.createBond(**ait2);
 										num_bonds++;
 									}
 								}
@@ -394,9 +394,9 @@ namespace BALL
 		HashMap<Bond::BondOrder, float>::ConstIterator it=bonds.begin();
 		for (; +it; ++it)
 		{
-			if (min_dist > abs(it->second-length))
+			if (min_dist > Maths::abs(it->second-length))
 			{
-				min_dist = abs(it->second-length);
+				min_dist = Maths::abs(it->second-length);
 				order = it->first;
 			}
 		}
