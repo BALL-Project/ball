@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69 2005/03/01 18:33:20 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.1 2005/05/01 14:11:22 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -846,7 +846,7 @@ AC_DEFUN(CF_INTEL_OPTIONS,[
 		if test ${CXX_VERSION_1} -ge 8 ; then
 			if test ${CXX_VERSION_1} = 8 -a ${CXX_VERSION_2} -ge 1 ; then
 				if test `basename ${CXX}` = "icc" ; then
-					AC_MSG_RESULT([WARNING: Starting with version 8.1, ipcp should be used instead of icc.])
+					AC_MSG_RESULT([WARNING: Starting with version 8.1, icpc should be used instead of icc.])
 					AC_MSG_RESULT([Otherwise, linking errors will occur! Please call configure again])
 					AC_MSG_RESULT([with icpc as the compiler.])
 					AC_MSG_RESULT()

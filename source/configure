@@ -4601,8 +4601,8 @@ _ACEOF
 		if test ${CXX_VERSION_1} -ge 8 ; then
 			if test ${CXX_VERSION_1} = 8 -a ${CXX_VERSION_2} -ge 1 ; then
 				if test `basename ${CXX}` = "icc" ; then
-					echo "$as_me:$LINENO: result: WARNING: Starting with version 8.1, ipcp should be used instead of icc." >&5
-echo "${ECHO_T}WARNING: Starting with version 8.1, ipcp should be used instead of icc." >&6
+					echo "$as_me:$LINENO: result: WARNING: Starting with version 8.1, icpc should be used instead of icc." >&5
+echo "${ECHO_T}WARNING: Starting with version 8.1, icpc should be used instead of icc." >&6
 					echo "$as_me:$LINENO: result: Otherwise, linking errors will occur! Please call configure again" >&5
 echo "${ECHO_T}Otherwise, linking errors will occur! Please call configure again" >&6
 					echo "$as_me:$LINENO: result: with icpc as the compiler." >&5
