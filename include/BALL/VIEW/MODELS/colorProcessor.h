@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.28.4.1 2005/04/12 11:46:17 amoll Exp $
+// $Id: colorProcessor.h,v 1.28.4.2 2005/05/02 12:46:18 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -184,6 +184,10 @@ class BALL_EXPORT ColorProcessor
 	///
 	float getAdditionalGridDistance() const
 		throw() { return additional_grid_distance_;}
+
+	///
+	AtomGrid& getAtomGrid() 
+		throw() { return atom_grid_;}
 
 	//@} 
 	/**	@name	debuggers and diagnostics 

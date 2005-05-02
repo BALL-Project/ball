@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.6 2005/04/24 19:23:33 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.7 2005/05/02 12:46:05 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -60,6 +60,10 @@ void ModifySurfaceDialog::applyPressed()
 	else if (surface_tab->currentPage() == by_color)
 	{
 		colorByCustomColor_();
+	}
+	else if (surface_tab->currentPage() == drawing_mode)
+	{
+		changeDrawingMode_();
 	}
 	else if (surface_tab->currentPage() == split)
 	{
@@ -603,6 +607,8 @@ void ModifySurfaceDialog::setRepresentation(Representation* rep)
 	}
  	gridSelected() ;
 
+	mode_combobox->setCurrentItem(rep_->getDrawingMode());
+
 	checkApplyButton_();
 }
 
@@ -650,13 +656,6 @@ void ModifySurfaceDialog::splitMethodChanged()
 void ModifySurfaceDialog::split_()
 {
 	// make sure we have a colorProcessor
-	if (rep_->getColorProcessor() == 0 && split_by_selection->isChecked()) 
-	{
-		rep_->setColorProcessor(new CustomColorProcessor);
-		rep_->getColorProcessor()->createAtomGrid();
-	}
-	ColorProcessor* cp = rep_->getColorProcessor();
-
 	rep_->enableModelUpdate(false);
 
 	// create a new representation with the subset of the original mesh
@@ -670,6 +669,20 @@ void ModifySurfaceDialog::split_()
 	if (rep_->getModelProcessor() != 0)
 	{
 		new_rep->setModelProcessor(new ModelProcessor(*rep_->getModelProcessor()));
+	}
+
+	HashSet<const Composite*> roots;
+	Representation::CompositeSet::ConstIterator cit = rep_->getComposites().begin();
+	for (; +cit; ++cit)
+	{
+		roots.insert(&(*cit)->getRoot());
+	}
+
+	ColorProcessor cp;
+	if (split_by_selection->isChecked())
+	{
+		cp.setComposites(&roots);
+		cp.createAtomGrid();
 	}
 
 	Representation::GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
@@ -696,14 +709,14 @@ void ModifySurfaceDialog::split_()
 			for (Position p = 0; p < org_mesh.vertex.size(); p++)
 			{
 				// make sure we found an atom
-				const Atom* atom = cp->getClosestItem(org_mesh.vertex[p]);
+				const Atom* atom = cp.getClosestItem(org_mesh.vertex[p]);
 
 				include_vertex[p] = (atom != 0 && atom->isSelected());
 			}
 		}
 		else
 		{
-			calculateIncludedVertices_(include_vertex, org_mesh);
+			calculateIncludedVertices_(include_vertex, org_mesh, roots);
 		}
 
 		vector<Surface::Triangle> tri_temp = org_mesh.triangle;
@@ -746,12 +759,11 @@ void ModifySurfaceDialog::split_()
 	getMainControl()->update(*rep_);
 }
 
-void ModifySurfaceDialog::calculateIncludedVertices_(vector<bool>& include_vertex, 
-																										 const Mesh& org_mesh)
+void ModifySurfaceDialog::calculateIncludedVertices_(vector<bool>& include_vertex, const Mesh& org_mesh, HashSet<const Composite*> roots)
 {
 	List<const Atom*> atoms;
 
-	Representation::CompositeSet::ConstIterator it = rep_->getComposites().begin();
+	Representation::CompositeSet::ConstIterator it = roots.begin();
 	for(; +it; it++)
 	{
 		if (RTTI::isKindOf<AtomContainer>(**it))
@@ -853,6 +865,35 @@ bool ModifySurfaceDialog::checkInclude_(const AtomGrid& atom_grid, const Vector3
 void ModifySurfaceDialog::customColorTransparencyChanged()
 {
 	transparency_label->setText(String(transparency_slider->value()).c_str());
+}
+
+void ModifySurfaceDialog::changeDrawingModeTransparencyChanged()
+{
+	transparency_label_2->setText(String(transparency_slider_2->value()).c_str());
+}
+
+void ModifySurfaceDialog::changeDrawingMode_()
+{
+	if (rep_ == 0) return;
+
+	rep_->setDrawingMode((DrawingMode)mode_combobox->currentItem());
+
+	Size transparency = (Size)((float)transparency_slider_2->value() * 2.55);
+
+	rep_->setTransparency(transparency);
+
+	Representation::GeometricObjectList::iterator it = rep_->getGeometricObjects().begin();
+	for (; it != rep_->getGeometricObjects().end(); it++)
+	{
+		if (!RTTI::isKindOf<Mesh> (**it)) continue;
+
+		Mesh* mesh = dynamic_cast<Mesh*> (*it);
+
+		for (Position p = 0; p < mesh->colorList.size(); p++)
+		{
+			mesh->colorList[p].setAlpha(255 - transparency);
+		}
+	}
 }
 
 } } // namespaces

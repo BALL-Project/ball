@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.h,v 1.1.2.3 2005/04/19 11:40:13 amoll Exp $
+// $Id: modifySurfaceDialog.h,v 1.1.2.4 2005/05/02 12:46:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
@@ -47,6 +47,9 @@ namespace BALL
 			public:
 
 			BALL_EMBEDDABLE(ModifySurfaceDialog, ModularWidget)
+
+			///
+			typedef HashGrid3<const Atom*>  AtomGrid;
 
 			///
 			class ColoringConfig
@@ -108,6 +111,7 @@ namespace BALL
 
 			void gridTransparencyChanged();
 			void customColorTransparencyChanged();
+			void changeDrawingModeTransparencyChanged();
 			void splitDistanceChanged();
 			void splitMethodChanged();
 
@@ -128,9 +132,10 @@ namespace BALL
 			void invalidateMesh_() throw();
 			void calculateValues_();
 			void split_();
+			void changeDrawingMode_();
 			void checkApplyButton_();
 
-			void calculateIncludedVertices_(vector<bool>& include_vertex, const Mesh& org_mesh);
+			void calculateIncludedVertices_(vector<bool>& include_vertex, const Mesh& org_mesh, HashSet<const Composite*> roots);
 			inline bool checkInclude_(const AtomGrid& atom_grid, const Vector3& point) const;
 
 			RegularData3D* grid_;
