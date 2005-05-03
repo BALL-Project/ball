@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.7 2005/05/02 12:46:05 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.8 2005/05/03 14:21:52 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -694,14 +694,10 @@ void ModifySurfaceDialog::split_()
 
 		// copy all vertices and colors into a new mesh
 		Mesh* new_mesh = new Mesh;
-		new_mesh->vertex = org_mesh.vertex;
-		new_mesh->colorList = org_mesh.colorList;
-		new_mesh->normal = org_mesh.normal;
 		new_mesh->setComposite(org_mesh.getComposite());
 
-		// collect informations which vertices are to be included
+		// collect informations which vertices are to be included into new mesh
 		vector<bool> include_vertex;
-
 		include_vertex.resize(org_mesh.vertex.size());
 		
 		if (split_by_selection->isChecked())
@@ -719,25 +715,96 @@ void ModifySurfaceDialog::split_()
 			calculateIncludedVertices_(include_vertex, org_mesh, roots);
 		}
 
-		vector<Surface::Triangle> tri_temp = org_mesh.triangle;
+		// make a backup of the old meshs content and clear it
+		vector<Surface::Triangle> triangles = org_mesh.triangle;
+		vector<Vector3> vertices = org_mesh.vertex;
+		vector<Vector3> normals = org_mesh.normal;
+		vector<ColorRGBA> colors = org_mesh.colorList;
 		org_mesh.triangle.clear();
+		org_mesh.vertex.clear();
+		org_mesh.normal.clear();
+		org_mesh.colorList.clear();
+
+		/// store a translation between the vertex position in the vector in the old and the new mesh
+		vector<Position> new_vertex_pos;
+		new_vertex_pos.resize(include_vertex.size());
 		
-		vector<Surface::Triangle>::iterator tit = tri_temp.begin();
-		for (; tit != tri_temp.end(); tit++) 
+		// copy the data to the new mesh
+		for (Position pos = 0; pos < include_vertex.size(); pos++)
 		{
-			Surface::Triangle& tri = *tit;
-			if (include_vertex[tri.v1] &&
-					include_vertex[tri.v2] &&
-					include_vertex[tri.v3])
+			if (include_vertex[pos])
 			{
-				new_mesh->triangle.push_back(tri);
-			}
-			else
-			{
-				org_mesh.triangle.push_back(tri);
+				new_vertex_pos[pos] = new_mesh->vertex.size();
+
+				new_mesh->vertex.push_back(vertices[pos]);
+				new_mesh->normal.push_back(normals[pos]);
+				new_mesh->colorList.push_back(colors[pos]);
 			}
 		}
 
+		vector<Index> old_vertices_map;
+		old_vertices_map.resize(include_vertex.size());
+		for (Position pos = 0; pos < old_vertices_map.size(); pos++) old_vertices_map[pos] = -1;
+		
+		vector<Surface::Triangle>::iterator tit = triangles.begin();
+		Position vpos;
+		for (; tit != triangles.end(); tit++) 
+		{
+			Surface::Triangle& tri = *tit;
+			bool into_new = (include_vertex[tri.v1] && include_vertex[tri.v2] && include_vertex[tri.v3]);
+
+			if (!into_new) 
+			{
+				vpos = tri.v1;
+				if (old_vertices_map[vpos] == -1)
+				{
+					old_vertices_map[vpos] = org_mesh.vertex.size();
+					org_mesh.vertex.push_back(vertices[vpos]);
+					org_mesh.normal.push_back(normals[vpos]);
+					org_mesh.colorList.push_back(colors[vpos]);
+				}
+				
+				vpos = tri.v2;
+				if (old_vertices_map[vpos] == -1)
+				{
+					old_vertices_map[vpos] = org_mesh.vertex.size();
+					org_mesh.vertex.push_back(vertices[vpos]);
+					org_mesh.normal.push_back(normals[vpos]);
+					org_mesh.colorList.push_back(colors[vpos]);
+				}
+
+				vpos = tri.v3;
+				if (old_vertices_map[vpos] == -1)
+				{
+					old_vertices_map[vpos] = org_mesh.vertex.size();
+					org_mesh.vertex.push_back(vertices[vpos]);
+					org_mesh.normal.push_back(normals[vpos]);
+					org_mesh.colorList.push_back(colors[vpos]);
+				}
+				
+				org_mesh.triangle.push_back(tri);
+
+				continue;
+			}
+
+			tri.v1 = new_vertex_pos[tri.v1];
+			tri.v2 = new_vertex_pos[tri.v2];
+			tri.v3 = new_vertex_pos[tri.v3];
+
+			new_mesh->triangle.push_back(tri);
+		}
+
+		// correct the vertex numbers in the triangles
+		for (Position pos = 0; pos < org_mesh.triangle.size(); pos++)
+		{
+			Surface::Triangle& tri = org_mesh.triangle[pos];
+			tri.v1 = old_vertices_map[tri.v1];
+			tri.v2 = old_vertices_map[tri.v2];
+			tri.v3 = old_vertices_map[tri.v3];
+		}
+
+
+		// cleanup
 		if (new_mesh->triangle.size() == 0)
 		{
 			delete new_mesh;
@@ -759,7 +826,7 @@ void ModifySurfaceDialog::split_()
 	getMainControl()->update(*rep_);
 }
 
-void ModifySurfaceDialog::calculateIncludedVertices_(vector<bool>& include_vertex, const Mesh& org_mesh, HashSet<const Composite*> roots)
+void ModifySurfaceDialog::calculateIncludedVertices_(vector<bool>& include_vertex, const Mesh& org_mesh, HashSet<const Composite*>& roots)
 {
 	List<const Atom*> atoms;
 

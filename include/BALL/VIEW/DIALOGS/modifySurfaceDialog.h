@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.h,v 1.1.2.4 2005/05/02 12:46:08 amoll Exp $
+// $Id: modifySurfaceDialog.h,v 1.1.2.5 2005/05/03 14:24:43 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
@@ -135,7 +135,7 @@ namespace BALL
 			void changeDrawingMode_();
 			void checkApplyButton_();
 
-			void calculateIncludedVertices_(vector<bool>& include_vertex, const Mesh& org_mesh, HashSet<const Composite*> roots);
+			void calculateIncludedVertices_(vector<bool>& include_vertex, const Mesh& org_mesh, HashSet<const Composite*>& roots);
 			inline bool checkInclude_(const AtomGrid& atom_grid, const Vector3& point) const;
 
 			RegularData3D* grid_;
