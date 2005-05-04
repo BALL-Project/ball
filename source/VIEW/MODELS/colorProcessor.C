@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.34.4.2 2005/04/14 13:02:06 amoll Exp $
+// $Id: colorProcessor.C,v 1.34.4.3 2005/05/04 14:27:28 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -96,6 +96,7 @@ namespace BALL
 		{
 			const Composite* composite = object->getComposite();
 
+			/// ------------- meshes ----------------------------
 			Mesh* const mesh = dynamic_cast<Mesh*>(object);
 			if (mesh != 0)
 			{
@@ -119,6 +120,7 @@ namespace BALL
 
 			ColorExtension2* const two_colored = dynamic_cast<ColorExtension2*>(object);
 
+			/// ------------- custom objects ----------------------------
 			if (composite == 0 ||
 					composite == &composite_to_be_ignored_for_colorprocessors_)
 			{
@@ -130,6 +132,7 @@ namespace BALL
 				return Processor::CONTINUE;
 			}
 
+			/// ------------- single colored objects ----------------------------
 			if (two_colored == 0)
 			{
 				if (composite->isSelected())
@@ -143,8 +146,11 @@ namespace BALL
 				return Processor::CONTINUE;
 			}
 
-			// ok, we have a two colored object
+			/// ------------- two colored objects ----------------------------
 			const Bond* const bond = dynamic_cast<const Bond*>(composite);
+
+
+			/// ------------- bonds  ----------------------------
 			if (bond != 0)
 			{
 				const Atom* atom = bond->getFirstAtom();
@@ -167,6 +173,7 @@ namespace BALL
 					two_colored->setColor2(selection_color_);
 				}
 			}
+			/// ------------- non bonds  ----------------------------
 			else
 			{
 				if (composite->isSelected())
