@@ -55,6 +55,7 @@ Fixed:
 	  - selection in MolecularControl with CTRL and SHIFT modifier
 	  - several problems in Cartoon and Backbone model
 		- several problems with POVRay export
+		- rendering of twocolored objects, when one part is selected
 	  - creation of models for several selected items
 	  - overall cleanup of RegularDataWidgets
   	- export of PNGs could result in strange problems e.g. with empty images
