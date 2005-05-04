@@ -215,6 +215,8 @@ void LabelDialog::addTag()
 	else if (tag_box->currentText() == "Residue ID") 	 	tag = "%I";
 	else if (tag_box->currentText() == "Atom Type")			tag = "%T";
 	else if (tag_box->currentText() == "Atom Charge") 	tag = "%C";
+	else if (tag_box->currentText() == "Atom Type Name")tag = "%Y";
+	else if (tag_box->currentText() == "Element") 			tag = "%E";
 
 	label_edit_->setText(label_edit_->text() + tag);
 	label_edit_->update();

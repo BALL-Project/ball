@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.C,v 1.7.6.2 2005/04/12 22:32:42 amoll Exp $
+// $Id: label.C,v 1.7.6.3 2005/05/04 15:23:27 amoll Exp $
 //
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/residue.h>
+#include <BALL/KERNEL/PTE.h>
 
 using namespace std;
 
@@ -160,6 +161,26 @@ namespace BALL
 						result += charge;
 					}
 				}
+
+				// element
+				else if (text_[pos] == 'E')
+				{
+					if (atom)
+					{
+						result += atom->getElement().getSymbol();
+					}
+				}
+				
+				// type name
+				else if (text_[pos] == 'Y')
+				{
+					if (atom)
+					{
+						result += atom->getTypeName();
+					}
+				}
+
+
 
 			} // for
 
