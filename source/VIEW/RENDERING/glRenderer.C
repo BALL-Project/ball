@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.5 2005/04/25 21:02:27 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.6 2005/05/04 14:52:09 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -688,12 +688,7 @@ namespace BALL
 							 (GLfloat)tube.getRadius(),
 							 (GLfloat)tube.getLength() / (float)2);
 
-			// draw second half
-			if (tube.getComposite() == 0 ||
-					!tube.getComposite()->isSelected())
-			{
-				setColorRGBA_(tube.getColor2());
-			}
+			setColorRGBA_(tube.getColor2());
 
 			GL_tubes_list_[display_lists_index_].draw();
 
@@ -713,11 +708,7 @@ namespace BALL
 			vertexVector3_(line.getVertex1());
 			vertexVector3_(line.getMiddleVertex());
 
-			if (line.getComposite() == 0 || 
-					!line.getComposite()->isSelected())
-			{
-				setColorRGBA_(line.getColor2());
-			}
+			setColorRGBA_(line.getColor2());
 
 			vertexVector3_(line.getMiddleVertex());
 			vertexVector3_(line.getVertex2());
