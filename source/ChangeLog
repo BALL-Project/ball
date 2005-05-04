@@ -28,6 +28,11 @@ Added:
   	- storing and loading of BALLView project files
   	- support for drag and drop of molecular files
 		- possibility to highlight the selected molecular items
+		- ability to disable model or coloring updates for a Representation
+		- spliting surfaces according to (distance from) selection
+		- ability to change drawing mode and transparency for custom made surfaces
+		- creation of labels, e.g. for all atoms of a molecule together
+			with special tags, e.g. for charge or name
   	- new move mode for (partial) structures (also much less CPU consumption)
   	- Esc key now switches to last used mode in Scene
 		- Enter key now focus on selection or on first loaded system if no selection exists
@@ -68,6 +73,7 @@ Fixed:
 		- several memory leaks, e.g. in OpenGL renderer
 		- problem with linking of C runtime library under windows
 		- HBondModel: showed only first H-bond of an atom and had a problem with the normals of the discs
+		- hotkeys
 		- many other smaller bug fixes...
 
 
