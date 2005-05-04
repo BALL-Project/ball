@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.4 2005/04/18 12:09:33 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.5 2005/05/04 15:11:44 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -238,6 +238,8 @@ namespace BALL
 			{
 				context_menu_.setItemEnabled(20, false); 
 			}
+
+			insertContextMenuEntry("Select Atoms", this, SLOT(selectAtoms()), 25);
 
 			context_menu_.insertSeparator();
 
@@ -717,6 +719,22 @@ namespace BALL
 					new RepresentationMessage((**it), RepresentationMessage::UPDATE);
 				notify_(msg);
 			}
+		}
+
+		void GeometricControl::selectAtoms()
+		{
+			if (context_representation_ == 0) return;
+
+			Representation::CompositeSet::Iterator it = context_representation_->getComposites().begin();
+			for (; +it; ++it)
+			{
+				getMainControl()->selectCompositeRecursive((Composite*)*it, false);
+			}
+
+			NewSelectionMessage* msg = new NewSelectionMessage();
+			notify_(msg);
+
+			context_representation_->update(false);
 		}
 	
 	} // namespace VIEW

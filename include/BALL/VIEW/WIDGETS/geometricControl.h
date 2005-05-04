@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.24.4.3 2005/04/18 12:09:35 amoll Exp $
+// $Id: geometricControl.h,v 1.24.4.4 2005/05/04 15:11:47 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -199,6 +199,9 @@ namespace BALL
 			//@{
 
 			/// 
+			virtual void selectAtoms();
+
+			///
 			virtual void selectedRepresentation(Representation& representation, bool state);
 
 			///

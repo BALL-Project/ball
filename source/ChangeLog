@@ -33,6 +33,7 @@ Added:
 		- ability to change drawing mode and transparency for custom made surfaces
 		- creation of labels, e.g. for all atoms of a molecule together
 			with special tags, e.g. for charge or name
+		- ability to select the atoms of a Representation
   	- new move mode for (partial) structures (also much less CPU consumption)
   	- Esc key now switches to last used mode in Scene
 		- Enter key now focus on selection or on first loaded system if no selection exists

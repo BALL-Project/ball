@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19.4.3 2005/04/24 22:49:50 amoll Exp $
+// $Id: POVRenderer.C,v 1.19.4.4 2005/05/04 15:07:10 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -451,18 +451,8 @@ namespace BALL
 			std::ostream& out = *outfile_;
 
 			// we have found a two colored tube
-			ColorRGBA color1, color2;
-
-			// first, find out its color
-			if (tube.getComposite() && (tube.getComposite()->isSelected()))
-			{
-				color1 = color2 = BALL_SELECTED_COLOR;
-			}
-			else
-			{
-				color1 = tube.getColor();
-				color2 = tube.getColor2();
-			}
+			const ColorRGBA& color1 = tube.getColor();
+			const ColorRGBA& color2 = tube.getColor2();
 
   		if ((Size) color1.getAlpha() == 255) out << "Tube(";
 			else 																 out << "TubeT(";
@@ -519,19 +509,8 @@ namespace BALL
 		{
 			std::ostream& out = *outfile_;
 
-			// we have found a two colored tube
-			ColorRGBA color1, color2;
-
-			// first, find out its color
-			if (tube.getComposite() && tube.getComposite()->isSelected())
-			{
-				color1 = color2 = BALL_SELECTED_COLOR;
-			}
-			else
-			{
-				color1 = tube.getColor();
-				color2 = tube.getColor2();
-			}
+			const ColorRGBA& color1 = tube.getColor();
+			const ColorRGBA& color2 = tube.getColor2();
 
   		if ((Size) color1.getAlpha() == 255) out << "Tube(";
 			else 																 out << "TubeT(";
