@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.4 2005/04/24 18:46:16 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.5 2005/05/04 12:09:16 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -22,6 +22,7 @@
 #include <BALL/VIEW/MODELS/HBondModel.h>
 #include <BALL/VIEW/MODELS/forceModel.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
 
 #include <qmenubar.h>
 #include <qlabel.h>
@@ -391,8 +392,6 @@ void DisplayProperties::applyModelSettings_(Representation& rep)
 		rep.setDrawingPrecision((DrawingPrecision) precision_combobox->currentItem());
 	}
 
-	rep.setDrawingMode((DrawingMode)  mode_combobox->currentItem());
-
 	model_settings_->applySettingsTo(*rep.getModelProcessor());
 }
 
@@ -415,8 +414,6 @@ void DisplayProperties::applyColoringSettings_(Representation& rep)
 	ColorProcessor* cp = rep.getColorProcessor();
 	coloring_settings_->applySettingsTo(*cp);
 	cp->setDefaultColor(custom_color_);
-
-	rep.setTransparency((Size)(transparency_slider->value() * 2.55));
 }
 
 
@@ -479,9 +476,35 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 		}
 	}
 
+	Size transparency = (Size)(transparency_slider->value() * 2.55);
+
 	if (coloring_updates_enabled->isChecked())
 	{
 		applyColoringSettings_(*rep_);
+	}
+	else
+	{
+		if (rep_->getTransparency() != transparency &&
+				!model_updates_enabled->isChecked())
+		{
+			Representation::GeometricObjectList::iterator it = rep_->getGeometricObjects().begin();
+			for (; it != rep_->getGeometricObjects().end(); it++)
+			{
+				if (RTTI::isKindOf<Mesh> (**it))
+				{
+					Mesh* mesh = dynamic_cast<Mesh*> (*it);
+
+					for (Position p = 0; p < mesh->colorList.size(); p++)
+					{
+						mesh->colorList[p].setAlpha(255 - transparency);
+					}
+				}
+				else
+				{
+					(**it).getColor().setAlpha(255 - transparency);
+				}
+			}
+		}
 	}
 
 	if (rebuild_representation && model_updates_enabled->isChecked())
@@ -489,6 +512,10 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 		applyModelSettings_(*rep_);
 		advanced_options_modified_ = false;
 	}
+
+	rep_->setDrawingMode((DrawingMode)  mode_combobox->currentItem());
+
+	rep_->setTransparency(transparency);
 
 	rep_->enableModelUpdate(model_updates_enabled->isChecked());
 	rep_->enableColoringUpdate(coloring_updates_enabled->isChecked());
@@ -692,7 +719,6 @@ void DisplayProperties::coloringUpdatesChanged()
 	bool enabled = coloring_updates_enabled->isChecked();
 
 	coloring_method_combobox->setEnabled(enabled);
-	transparency_slider->setEnabled(enabled);
 	custom_button->setEnabled(enabled);
 	coloring_options->setEnabled(enabled);
 }
@@ -702,13 +728,8 @@ void DisplayProperties::modelUpdatesChanged()
 	bool enabled = model_updates_enabled->isChecked();
 
 	model_type_combobox->setEnabled(enabled);
-	presets_precision_button->setEnabled(enabled);
- 	precision_combobox->setEnabled(enabled);
-	custom_precision_button->setEnabled(enabled);
-	precision_slider->setEnabled(enabled);
-	mode_combobox->setEnabled(enabled);
 	model_options->setEnabled(enabled);
-
+	resolution_group->setEnabled(enabled);
 }
 
 } } // namespaces
