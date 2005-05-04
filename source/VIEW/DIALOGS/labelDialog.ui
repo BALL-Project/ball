@@ -68,45 +68,6 @@
             </property>
         </widget>
         <widget class="QComboBox">
-            <item>
-                <property name="text">
-                    <string>Name</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>Residue ID</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>Atom Type</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>Atom Charge</string>
-                </property>
-            </item>
-            <property name="name">
-                <cstring>tag_box</cstring>
-            </property>
-            <property name="enabled">
-                <bool>false</bool>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>11</x>
-                    <y>52</y>
-                    <width>192</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Select a special text tag to add</string>
-            </property>
-        </widget>
-        <widget class="QComboBox">
             <property name="name">
                 <cstring>history_box</cstring>
             </property>
@@ -132,6 +93,55 @@
             </property>
             <property name="toolTip" stdset="0">
                 <string>History</string>
+            </property>
+        </widget>
+        <widget class="QComboBox">
+            <item>
+                <property name="text">
+                    <string>Name</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Residue ID</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Atom Type</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Atom Type Name</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Atom Charge</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Element</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>tag_box</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>52</y>
+                    <width>192</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Select a special text tag to add</string>
             </property>
         </widget>
         <widget class="QLineEdit">
