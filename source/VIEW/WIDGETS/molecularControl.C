@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.3 2005/04/17 17:05:18 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.4 2005/05/04 12:50:19 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -579,9 +579,9 @@ void MolecularControl::initializeWidget(MainControl& main_control)
 	String hint;
 
 	hint = "Select a molecular object to see its position in the scene or to mark it for a simulation";
-	select_id_ = insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), ALT+Key_S, -1, hint);   
+	select_id_ = insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), 0, -1, hint);   
 	hint = "Deselect a molecular object.";
-	deselect_id_ = insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), ALT+Key_D, -1, hint);
+	deselect_id_ = insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), 0, -1, hint);
 	main_control.insertPopupMenuSeparator(MainControl::EDIT);
 	cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Cu&t", this, SLOT(cut()), CTRL+Key_X);
 	copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Copy", this, SLOT(copy()), CTRL+Key_C);
