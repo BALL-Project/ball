@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.8 2005/05/03 14:21:52 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.9 2005/05/04 12:33:42 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -30,6 +30,7 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qslider.h>
+#include <qmessagebox.h>
 
 namespace BALL
 {
@@ -67,6 +68,19 @@ void ModifySurfaceDialog::applyPressed()
 	}
 	else if (surface_tab->currentPage() == split)
 	{
+		if (split_by_distance->isChecked())
+		{
+			try
+			{
+				String(distance_edit->text().ascii()).toFloat();
+			}
+			catch(...)
+			{
+				QMessageBox::critical(this, "BALLView", "Please enter a correct numerical value for the split distance!", 
+													 QMessageBox::Ok, QMessageBox::NoButton);
+				return;
+			}
+		}
 		split_();
 		return;
 	}
@@ -642,15 +656,9 @@ void ModifySurfaceDialog::setMidValue(float value)
 	mid_label->setText(String(value).c_str());
 }
 
-void ModifySurfaceDialog::splitDistanceChanged()
-{
-	String distance = createFloatString(((float)split_distance_slider->value()) / 10.0, 1);
-	split_distance_label->setText(distance.c_str());
-}
-
 void ModifySurfaceDialog::splitMethodChanged()
 {
-	split_distance_slider->setEnabled(split_by_distance->isChecked());
+	distance_edit->setEnabled(split_by_distance->isChecked());
 }
 
 void ModifySurfaceDialog::split_()
@@ -849,7 +857,7 @@ void ModifySurfaceDialog::calculateIncludedVertices_(vector<bool>& include_verte
 		}
 	}
 
-	float distance = (float) split_distance_slider->value() / 10.0;
+	float distance = String(distance_edit->text().ascii()).toFloat();
 
 	BoundingBoxProcessor boxp;
 	boxp.start();

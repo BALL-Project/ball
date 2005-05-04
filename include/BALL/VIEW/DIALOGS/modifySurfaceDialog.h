@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.h,v 1.1.2.5 2005/05/03 14:24:43 amoll Exp $
+// $Id: modifySurfaceDialog.h,v 1.1.2.6 2005/05/04 12:33:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
@@ -112,7 +112,6 @@ namespace BALL
 			void gridTransparencyChanged();
 			void customColorTransparencyChanged();
 			void changeDrawingModeTransparencyChanged();
-			void splitDistanceChanged();
 			void splitMethodChanged();
 
 			protected:

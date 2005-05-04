@@ -241,40 +241,15 @@
                         <bool>true</bool>
                     </property>
                 </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>split_distance_label</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>192</x>
-                            <y>73</y>
-                            <width>32</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="frameShape">
-                        <enum>WinPanel</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Sunken</enum>
-                    </property>
-                    <property name="text">
-                        <string>0</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignCenter</set>
-                    </property>
-                </widget>
                 <widget class="QRadioButton">
                     <property name="name">
                         <cstring>split_by_distance</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>9</x>
+                            <x>8</x>
                             <y>50</y>
-                            <width>297</width>
+                            <width>217</width>
                             <height>21</height>
                         </rect>
                     </property>
@@ -282,23 +257,51 @@
                         <string>within distance from selection</string>
                     </property>
                 </widget>
-                <widget class="QSlider">
+                <widget class="QLabel">
                     <property name="name">
-                        <cstring>split_distance_slider</cstring>
+                        <cstring>textLabel1</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>34</x>
-                            <y>74</y>
-                            <width>152</width>
-                            <height>16</height>
+                            <x>275</x>
+                            <y>51</y>
+                            <width>19</width>
+                            <height>21</height>
                         </rect>
                     </property>
-                    <property name="minValue">
-                        <number>1</number>
+                    <property name="maximumSize">
+                        <size>
+                            <width>25</width>
+                            <height>32767</height>
+                        </size>
                     </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
+                    <property name="text">
+                        <string>A</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>distance_edit</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>229</x>
+                            <y>50</y>
+                            <width>41</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>50</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>1</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignRight</set>
                     </property>
                 </widget>
             </widget>
@@ -1808,12 +1811,6 @@
         <signal>clicked(int)</signal>
         <receiver>ModifySurfaceDialogData</receiver>
         <slot>splitMethodChanged()</slot>
-    </connection>
-    <connection>
-        <sender>split_distance_slider</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>ModifySurfaceDialogData</receiver>
-        <slot>splitDistanceChanged()</slot>
     </connection>
     <connection>
         <sender>transparency_slider</sender>
