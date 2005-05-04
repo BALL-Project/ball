@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: aromaticityProcessor.C,v 1.2 2004/07/12 19:49:45 amoll Exp $
+// $Id: aromaticityProcessor.C,v 1.2.4.1 2005/05/04 09:54:03 oliver Exp $
 //
 
 #include <BALL/QSAR/aromaticityProcessor.h>
@@ -267,8 +267,7 @@ namespace BALL
 				b_it->getPartner(*(b_it->getSecondAtom()))->setProperty("IsAromatic", true);
 			}
 		}
-	//cerr << "..ended!" << endl;
-}
+	}
 
 	void AromaticityProcessor::extendAromaticSystem_(vector<HashSet<Atom*> >& sssr, HashSet<Atom*> ring)
 	{
