@@ -83,7 +83,7 @@ void DownloadPDBFile::initializeWidget(MainControl& main_control)
 {
 	String hint("Download a PDB file from www.rcsb.org");
 	main_control.insertMenuEntry(MainControl::FILE_OPEN, "Download Structure", (QObject *)this,
-															 SLOT(show()), ALT+Key_I, -1, hint);
+															 SLOT(show()), CTRL+Key_T, -1, hint);
 }
 
 void DownloadPDBFile::finalizeWidget(MainControl& main_control)
