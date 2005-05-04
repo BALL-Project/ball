@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.1 2005/04/25 21:02:28 amoll Exp $
+// $Id: scene.C,v 1.171.2.2 2005/05/04 14:06:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1399,7 +1399,7 @@ namespace BALL
 
 			hint = "Reset the camera to the orgin (0,0,0)";
 			main_control.insertMenuEntry(
-					MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()), CTRL+Key_T, -1, hint);
+					MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()), 0, -1, hint);
 
 			hint = "Export a PNG image file from the Scene";
 			main_control.insertMenuEntry(
