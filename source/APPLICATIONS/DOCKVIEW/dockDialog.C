@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.24 2005/04/25 16:13:25 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.25 2005/05/05 13:22:15 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -42,6 +42,7 @@ namespace BALL
 				docking_partner2_(0),
 				dock_alg_(0),
 				progress_dialog_(0)
+				//amber_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new DockDialog " << this << std::endl;
@@ -81,9 +82,10 @@ namespace BALL
 			//because the scoring function with enum value i should be at position i in the Combobox
 			//otherwise you get the wrong option dialog for a scoring function
 			addScoringFunction("Default", DEFAULT);
-			AmberConfigurationDialog* amber = new AmberConfigurationDialog(this); 
-			addScoringFunction("Amber Force Field", AMBER_FF, amber);
+			addScoringFunction("Amber Force Field", AMBER_FF, &(MolecularStructure::getInstance(0)->getAmberConfigurationDialog()));
 			addScoringFunction("Random", RANDOM);
+			
+			//own_amber = false;
 			
 			hide(); 
 		}
@@ -295,9 +297,6 @@ namespace BALL
 					break;
 			}
 			
-			//docking_partner1_->deselect();
-			//docking_partner2_->deselect();
-			
 			// Set up the docking algorithm
 			setStatusbarText("setting up docking algorithm...", true);
 			// keep the larger protein in System A and the smaller one in System B
@@ -370,11 +369,14 @@ namespace BALL
 
 				case AMBER_FF:
 				{
+					Log.info() << "in DockDialog:: Option of Amber FF:" << std::endl;
 					AmberFF& ff = MolecularStructure::getInstance(0)->getAmberFF();
 					AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
+					Log.info() << "blubb" << std::endl;
 					//now the Amber force field gets its options
 					dialog->applyTo(ff);
-					Log.info() << "in DockDialog:: Option of Amber FF:" << std::endl;
+					Log.info() << "bla" << std::endl;
+					
 					Options::Iterator it = ff.options.begin();
 					for(; +it; ++it)
 					{
@@ -413,11 +415,7 @@ namespace BALL
 			
 			System* docked_system = new System(conformation_set->getSystem());
 			best_result.applySnapShot(*docked_system);
-			//docked_system->deselect();
-			if(docked_system->isSelected())
-			{
-				Log.info() << "system is selected" << std::endl;
-			}	
+			getMainControl()->deselectCompositeRecursive(docked_system, true);
 			getMainControl()->insert(*docked_system);
 			
 			// send a DockResultMessage

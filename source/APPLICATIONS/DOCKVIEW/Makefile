@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1.2.8.2.6 2005/04/01 14:29:12 haid Exp $
+# $Id: Makefile,v 1.1.2.8.2.7 2005/05/05 13:22:14 haid Exp $
 #
 
 EXECUTABLE=DOCKView
@@ -18,6 +18,7 @@ BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 
 CPP_SOURCES=\
 	aboutDialog.C\
+	infoDialog.C\
 	dockDialog.C\
 	geometricFitDialog.C\
 	dockProgressDialog.C\
@@ -33,6 +34,7 @@ CPP_SOURCES=\
 
 MOC_SOURCES=\
 	aboutDialog_moc.C\
+	infoDialog_moc.C\
 	dockDialog_moc.C\
 	dockDialogData_moc.C\
 	geometricFitDialog_moc.C\
@@ -46,6 +48,8 @@ MOC_SOURCES=\
 UIC_FILES=\
 	aboutDialog.C\
 	aboutDialog.h\
+	infoDialog.C\
+	infoDialog.h\
 	dockDialogData.C\
 	dockDialogData.h\
 	geometricFitDialogData.C\
@@ -64,6 +68,9 @@ depend: $(UIC_FILES) $(MOC_SOURCES)
 aboutDialog.h: aboutDialog.ui
 	$(UIC) aboutDialog.ui > aboutDialog.h
 
+infoDialog.h: infoDialog.ui
+	$(UIC) infoDialog.ui > infoDialog.h
+	
 dockDialogData.h: dockDialog.ui
 	$(UIC) dockDialog.ui > dockDialogData.h
 
@@ -82,6 +89,9 @@ mainframe_moc.C:	mainframe.h
 
 aboutDialog_moc.C: aboutDialog.h
 	$(MOC) aboutDialog.h -o $@
+	
+infoDialog_moc.C: infoDialog.h
+	$(MOC) infoDialog.h -o $@
 
 dockDialog_moc.C: dockDialog.h
 	$(MOC) dockDialog.h -o $@
@@ -110,6 +120,9 @@ dockResultDialogData_moc.C: dockResultDialogData.h
 #C files
 aboutDialog.C: aboutDialog.h
 	$(UIC) -impl aboutDialog.h aboutDialog.ui > aboutDialog.C
+	
+infoDialog.C: infoDialog.h
+	$(UIC) -impl infoDialog.h infoDialog.ui > infoDialog.C
 
 dockDialogData.C: dockDialogData.h
 	$(UIC) -impl dockDialogData.h dockDialog.ui > dockDialogData.C

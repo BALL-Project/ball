@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.17 2005/04/25 16:13:27 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.18 2005/05/05 13:22:16 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -6,6 +6,7 @@
 #include <qtable.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
+#include <qtextedit.h>
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
@@ -36,14 +37,15 @@ namespace BALL
 			//because the scoring function with enum value i should be at position i in the Combobox
 			//otherwise you get the wrong option dialog for a scoring function
 			addScoringFunction("Default", DEFAULT);
-			AmberConfigurationDialog* amber = new AmberConfigurationDialog(this); 
-			addScoringFunction("Amber Force Field", AMBER_FF, amber);
+			addScoringFunction("Amber Force Field", AMBER_FF, &(MolecularStructure::getInstance(0)->getAmberConfigurationDialog()));
 			addScoringFunction("Random", RANDOM);
 		
 			// signals and slots connections
     	QHeader* columns = result_table->horizontalHeader();
 			//the table should be sorted by a column, when this column is clicked
 			connect( columns, SIGNAL( clicked(int) ), this, SLOT( sortTable(int) ) );
+			
+			info_dialog_ = new InfoDialog(this);
 			
 			hide();
 		}
@@ -107,8 +109,7 @@ namespace BALL
 			int conformation_num = dock_res_->getConformationSet()->size();
 			// insert rows in table
 			result_table->insertRows(0,conformation_num);
-			
-			Log.info() << "in DockeResultDialog::show() before first for" << std::endl;
+		
 			// fill the first column with snapshot numbers
 			for(int i=0; i < conformation_num; i++)
 			{
@@ -116,7 +117,6 @@ namespace BALL
 				result_table->setText(i,0,s.setNum(i));
 			}
 			
-			Log.info() << "in DockeResultDialog::show() before second for" << std::endl;
 			// fill table with scores
 			for(unsigned int i = 0; i < dock_res_->numberOfScorings(); i++)
 			{
@@ -124,7 +124,6 @@ namespace BALL
 				result_table->insertColumns(i+1, 1);
 				// set the scoring function name as label of the column
 				result_table->horizontalHeader()->setLabel(i+1, dock_res_->getScoringName(i));
-				Log.info() << "nach setLabel" << std::endl;
 				// the scores in the vector are sorted by snapshot number!
 				// the score with snapshot number i is at position i in the vector
 				vector<float> scores = dock_res_->getScores(i);
@@ -133,19 +132,15 @@ namespace BALL
 					QString s;
 					result_table->setText(j, i+1, s.setNum(scores[j]));
 				}
-				Log.info() << "nach setText" << std::endl;
 			}
 			
-			Log.info() << "in DockeResultDialog::show() before third for" << std::endl;
 			// adjust column width
 			for(int j = 0; j < result_table->numCols() ; j++)
 			{
 				result_table->adjustColumn(j);
 			}
-			Log.info() << "nach for" << std::endl;
 			// sort by first score column
-			//sortTable(1);
-			Log.info() << "nach sortTable" << std::endl;
+			sortTable(1);
 			// adjust table/dialog size
 			result_table->adjustSize();
 			adjustSize();
@@ -311,19 +306,6 @@ namespace BALL
 			
 		}
 		
-		// delete last score column 
-		void DockResultDialog::deleteClicked()
-		{
-			/////////////////////////////////TODO: loeschen einer bestimmten Spalte////////////////////////////  	
-			
-			//result_table->removeColumn(result_table->numCols()-1);
-			//dock_res_->deleteScoring(column);
-				
-			// adjust the table/dialog size
-			result_table->adjustSize();
-			adjustSize();
-		}
-		
 		// sort the result table by clicked column
 		void DockResultDialog::sortTable(int column)
 		{
@@ -342,7 +324,6 @@ namespace BALL
 			// sort row-vector by the column which the user clicked
 			Compare_ compare_func = Compare_(column);
 			sort(rows.begin(), rows.end(), compare_func);
-			Log.info() << "vor result table füllen" << std::endl;
 			// fill result table
 			for(int row_it = 0; row_it < result_table->numRows(); row_it++)
 			{
@@ -354,12 +335,78 @@ namespace BALL
 					result_table->setText(row_it,column_it,s.setNum(rows[row_it][column_it]));
 				}
 			}
-			Log.info() << "nach result table füllen" << std::endl;
 			//now the current selected row can be different,
 			//so call showSnapshot() of current selected row
 			showSnapshot();
 		}
 		
+		void DockResultDialog::showDockingOptions()
+		{
+			// clear and refill info dialog
+			info_dialog_->info_box->clear();
+			QString s = "Algorithm: ";
+			info_dialog_->info_box->append(s.append(dock_res_->getDockingAlgorithm()));
+			info_dialog_->info_box->append("*** Options of algorithm ***");
+			s = "number of best docked structures: ";
+			const Options& alg_opt = dock_res_->getDockingOptions();
+			info_dialog_->info_box->append(s.append(alg_opt.get(GeometricFit::Option::BEST_NUM)));
+			Options::ConstIterator it = alg_opt.begin();
+			for(; +it; ++it)
+			{
+				s = it->first;
+				s.append(" : ");
+				info_dialog_->info_box->append(s.append(it->second));
+			}
+			//show dialog
+			info_dialog_->show();
+		}
+		
+		void DockResultDialog::contextMenuRequested(int row, int column, const QPoint& pos)
+		{
+				QPopupMenu context_menu;
+				Position menu_entry_pos; 
+				menu_entry_pos = context_menu.insertItem("Delete Score Column", this, SLOT(deleteColumn_(int)));
+				if (!column) context_menu.setItemEnabled(menu_entry_pos, false);
+				menu_entry_pos = context_menu.insertItem("Scoring Options", this, SLOT(showScoringOptions_(int)));
+				if (!column) context_menu.setItemEnabled(menu_entry_pos, false);
+				context_menu.insertItem("Redock", this, SLOT(redock_(int)));
+				context_menu.exec(pos);
+		}
+		
+		void DockResultDialog::deleteColumn_(int column)
+		{
+			result_table->removeColumn(column);
+			dock_res_->deleteScoring(column-1);
+				
+			// adjust the table/dialog size
+			result_table->adjustSize();
+			adjustSize();
+		}
+		
+		void DockResultDialog::showScoringOptions_(int column)
+		{
+			Log.info() << "in showScoringOptions " << column << std::endl;
+			// clear and refill info dialog
+			info_dialog_->info_box->clear();
+			QString s = "Scoring function: ";
+			info_dialog_->info_box->append(s.append(dock_res_->getScoringName(column-1)));
+			info_dialog_->info_box->append("*** Options of scoring function ***");
+			const Options& scoring_opt = dock_res_->getScoringOptions(column-1);
+			Options::ConstIterator it = scoring_opt.begin();
+			for(; +it; ++it)
+			{
+				s = it->first;
+				s.append(" : ");
+				info_dialog_->info_box->append(s.append(it->second));
+			}
+			//show dialog
+			info_dialog_->show();
+		}
+		
+		void DockResultDialog::redock_(int row)
+		{
+		
+		}
 		
 		/*implementation of nested class Compare_		
 		*/

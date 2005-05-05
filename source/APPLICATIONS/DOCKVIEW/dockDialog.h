@@ -323,6 +323,8 @@ namespace BALL
 				//pointer to progress dialog
 				DockProgressDialog* progress_dialog_;
 			
+				//AmberFF* amber_;
+				//bool own_amber_;
 				
 				/** Options for the docking algorithm
 				 */

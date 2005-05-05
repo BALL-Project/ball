@@ -11,6 +11,7 @@
 
 #include "dockResult.h"
 #include "dockResultDialogData.h"
+#include "infoDialog.h"
 
 namespace BALL
 {
@@ -91,13 +92,24 @@ namespace BALL
 					 */
 					virtual void scoringClicked();
 					
-					/** delete a score column
-					*/
-					virtual void deleteClicked();
-					
 					/** sorts the result table by a clicked column
 					*/
 					void sortTable(int column);
+					
+					/**
+					*/
+					virtual void showDockingOptions();
+					
+					virtual void contextMenuRequested(int row, int column, const QPoint& pos);
+					
+				protected slots:
+					/** delete a score column
+					*/
+					virtual void deleteColumn_(int column);
+					
+					virtual void showScoringOptions_(int column);
+					
+					virtual void redock_(int row);
 					
 				protected:
 				
@@ -143,6 +155,8 @@ namespace BALL
 					/** key: ScoringFunction(enum), value: advanced options dialog
 					*/
 					HashMap<int, QDialog*> scoring_dialogs_;
+					
+					InfoDialog* info_dialog_;
 		};
 		
 } } // Namespaces
