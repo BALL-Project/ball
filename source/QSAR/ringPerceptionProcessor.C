@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.12 2005/03/26 11:09:15 bertsch Exp $
+// $Id: ringPerceptionProcessor.C,v 1.13 2005/05/06 17:22:07 bertsch Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
@@ -20,6 +20,8 @@
 
 #define BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
 #undef  BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
+
+#define BALL_QSAR_RINGPERCEPTIONPROCESSOR_MAX_RUNS 100
 
 using namespace std;
 
@@ -810,9 +812,12 @@ namespace BALL
 		// calculate how many rings we must find
 		Size num_rings = num_bonds - num_atoms + 1;
 
-		// the nodes are forced to talk until they get enough rings 
+		// the nodes are forced to talk until they get enough rings
+		Size count(0);
 		while (rings.size() < num_rings)
 		{
+			count++;
+			
 			// calling all sends 
 			for (MolecularGraph::NodeIterator ait=graph.beginNode(); ait!=graph.endNode(); ++ait)
 			{
@@ -822,7 +827,13 @@ namespace BALL
 			for (MolecularGraph::NodeIterator ait=graph.beginNode(); ait!=graph.endNode(); ++ait)
 			{
 				atom_to_tnode[&*ait]->recieve();
-			}	
+			}
+		
+			// this is just a workaround, due to deficiencies of the balducci pearlman algorithm
+			if (count > BALL_QSAR_RINGPERCEPTIONPROCESSOR_MAX_RUNS)
+			{
+				break;
+			}
 		}
 
 		// now set the named property InRing to true, for the ring bonds
