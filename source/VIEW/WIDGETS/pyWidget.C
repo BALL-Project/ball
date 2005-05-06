@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44 2004/11/15 02:07:04 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.1 2005/05/06 13:11:30 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -548,7 +548,7 @@ namespace BALL
 		void PyWidgetData::exportHistory()
 		{
 			PyWidget* p = (PyWidget*) parent();
-			QString s = QFileDialog::getOpenFileName(
+			QString s = QFileDialog::getSaveFileName(
 										p->getWorkingDir().c_str(),
 										"",
 										p->getMainControl(),
