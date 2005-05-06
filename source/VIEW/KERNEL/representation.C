@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.4 2005/04/25 21:02:27 amoll Exp $
+// $Id: representation.C,v 1.62.4.5 2005/05/06 12:50:06 amoll Exp $
 //
 
 
@@ -11,6 +11,7 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/label.h>
 
 #include <BALL/KERNEL/atom.h>
 #include <BALL/SYSTEM/timer.h>
@@ -403,6 +404,7 @@ namespace BALL
 		String Representation::getProperties() const
 			throw()
 		{
+			String prop;
 			if (VIEW::isSurfaceModel(model_type_))
 			{
 				GeometricObjectList::ConstIterator it = getGeometricObjects().begin();
@@ -415,10 +417,35 @@ namespace BALL
 					}
 				}
 						
-				return String(composites_.size()) + " C, " + String(triangles) + " T";
+				prop = String(composites_.size()) + " C, " + String(triangles) + " T";
 			}
-			
-			return String(composites_.size()) + " C, " + String(getGeometricObjects().size()) + " P";
+			else if (model_type_ == MODEL_LABEL)
+			{
+				if (getGeometricObjects().size() > 0)
+				{
+					prop += ((Label*)*getGeometricObjects().begin())->getText();
+				}
+			}
+			else
+			{
+				prop = String(composites_.size()) + " C, " + String(getGeometricObjects().size()) + " P";
+			}
+
+			if (getTransparency() != 0)
+			{
+				prop += String(getTransparency())+ " % Transparent ";
+			}
+
+			if (getDrawingMode() == DRAWING_MODE_WIREFRAME)
+			{
+				prop += " Wireframe";
+			}
+			else if (getDrawingMode() == DRAWING_MODE_DOTS)
+			{
+				prop += " Dots";
+			}
+
+			return prop;
 		}
 
 		void Representation::setModelProcessor(ModelProcessor* processor)

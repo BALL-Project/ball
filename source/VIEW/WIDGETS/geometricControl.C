@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.5 2005/05/04 15:11:44 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.6 2005/05/06 12:50:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -279,15 +279,12 @@ namespace BALL
 		String GeometricControl::getRepresentationName_(const Representation& rep)
 			throw()
 		{
-			String name;
-			if (!rep.hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
+			if (rep.hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 			{
-				name = rep.getModelName().c_str();
+				return "Coordinate System";
 			}
-			else
-			{
-				name = "Coordinate System";
-			}
+
+			String name = rep.getModelName().c_str();
 
 			if (rep.getComposites().size() > 0)
 			{
