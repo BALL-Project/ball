@@ -76,7 +76,7 @@ Fixed:
 		- potential core dumps and other minor problems in OpenGL renderer
 		- problem with linking of C runtime library under windows
 		- HBondModel: showed only first H-bond of an atom and had a problem with the normals of the discs
-		- hotkeys
+		- some hotkeys didnt work, removed them
 		- many other smaller bug fixes...
 
 
