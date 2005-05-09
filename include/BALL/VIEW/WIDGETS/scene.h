@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.1 2005/05/09 15:38:13 amoll Exp $
+// $Id: scene.h,v 1.62.2.2 2005/05/09 21:56:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -719,7 +719,6 @@ namespace BALL
 			QPoint last_pos_;
 
 			static QGLFormat gl_format_;
-			GLint  current_clipping_plane_;
 			List<Camera> animation_points_;
 			AnimationThread* animation_thread_;
 			bool stop_animation_;

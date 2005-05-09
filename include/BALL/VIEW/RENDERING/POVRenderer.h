@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.8.4.3 2005/04/19 11:07:04 amoll Exp $
+// $Id: POVRenderer.h,v 1.8.4.4 2005/05/09 21:56:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -28,6 +28,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class ColorRGBA;
+		class ClippingPlane;
 
 		/** POVRenderer class.
 		 		This class walks over all the geometric primitives in a Scene
@@ -175,7 +176,7 @@ namespace BALL
 
 				Vector3   origin_;
 				Matrix4x4 rotation_;
-				vector<POVRendererClippingPlane> clipping_planes_;
+				vector<ClippingPlane*> clipping_planes_;
 				bool human_readable_;
 
 				typedef HashMap<String, Position> ColorMap;

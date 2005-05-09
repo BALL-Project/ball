@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19.4.4 2005/05/04 15:07:10 amoll Exp $
+// $Id: POVRenderer.C,v 1.19.4.5 2005/05/09 21:56:09 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
@@ -350,13 +351,15 @@ namespace BALL
 
 			out << endl;
 			
-			// now begin the CSG union containing all the geometric objects
-			out << "union {" << endl;
-
 
 			vector<const Representation*>::iterator rit = representations_.begin();
+
 			for (; rit != representations_.end(); rit++)
 			{
+				
+				// now begin the CSG union containing all the geometric objects of this rep
+				out << "union {" << endl;
+
 				List<GeometricObject*>::ConstIterator it;
 				for (it =  (*rit)->getGeometricObjects().begin();
 						 it != (*rit)->getGeometricObjects().end();
@@ -364,21 +367,29 @@ namespace BALL
 				{
 					render_(*it);
 				}
-			}
 
-			vector<POVRendererClippingPlane>::iterator it = clipping_planes_.begin();
-			for (;it != clipping_planes_.end(); it++)
-			{
-				out << "  clipped_by{" << endl
-								 << "   plane{< -"  // negate normal vector
-					       << (*it).normal.x << ", -" 
-					       << (*it).normal.y << ", -" 
-					       << (*it).normal.z << ">, "
-					       << (*it).translation
-								 << "  }" << endl
-								 << " }" << endl;
-			}
-			out << "}" << endl;
+				vector<ClippingPlane*>::iterator plane_it = clipping_planes_.begin();
+				for (;plane_it != clipping_planes_.end(); plane_it++)
+				{
+					ClippingPlane& plane = **plane_it;
+
+					if (plane.getRepresentations().has((Representation*)*rit))
+					{
+
+						out << "  clipped_by{" << endl
+										 << "   plane{< -"  // negate normal vector
+										 << plane.getX() << ", -" 
+										 << plane.getY() << ", -" 
+										 << plane.getZ() << ">, "
+										 << plane.getD()
+										 << "  }" << endl
+										 << " }" << endl;
+					}
+				} // all clipping planes
+
+				out << "}" << endl; // union
+
+			} // all Representations
 
 
 			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_))
@@ -667,13 +678,9 @@ namespace BALL
 		void POVRenderer::renderClippingPlane_(const Representation& rep)
 			throw()
 		{
-			POVRendererClippingPlane plane;
-			plane.normal = Vector3(rep.getProperty("AX").getDouble(),
-														 rep.getProperty("BY").getDouble(),
-														 rep.getProperty("CZ").getDouble());
-			plane.translation = rep.getProperty("D").getDouble();
-
-			clipping_planes_.push_back(plane);
+			if (!RTTI::isKindOf<ClippingPlane>(rep)) return;
+			ClippingPlane& plane = *(ClippingPlane*) &rep;
+			clipping_planes_.push_back(&plane);
 		}
 
 		const ColorRGBA& POVRenderer::getColor_(const GeometricObject& object)
