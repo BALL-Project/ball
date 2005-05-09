@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.6 2005/05/06 12:50:20 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.7 2005/05/09 15:36:57 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -10,20 +10,28 @@
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
-#include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
+#include <BALL/VIEW/KERNEL/clippingPlane.h>
+
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/atomContainer.h>
+
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
+#include <BALL/VIEW/DIALOGS/clippingDialog.h>
+
 #include <BALL/VIEW/DATATYPE/vertex2.h>
 #include <BALL/VIEW/DATATYPE/vertex1.h>
+
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/disc.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
+
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
+
 #include <BALL/MATHS/simpleBox3.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <qpopupmenu.h>
 #include <qmenubar.h>
@@ -103,6 +111,7 @@ namespace BALL
 			clipping_plane_context_menu_.insertItem("Set Clipping Plane to x axis", this, SLOT(setClippingPlaneX()));	
 			clipping_plane_context_menu_.insertItem("Set Clipping Plane to y axis", this, SLOT(setClippingPlaneY()));	
 			clipping_plane_context_menu_.insertItem("Set Clipping Plane to z axis", this, SLOT(setClippingPlaneZ()));	
+			clipping_plane_context_menu_.insertItem("Select Representations to clip", this, SLOT(selectClipRepresentations()));	
 		}
 
 		GeometricControl::~GeometricControl()
@@ -149,7 +158,7 @@ namespace BALL
 
 			// prevent flickering in GeometricControl, e.g. while a simulation is running
 			// so only update if something changed
-			String new_text = getRepresentationName_(rep);
+			String new_text = rep.getName();
 			bool changed_content = item->text(0).ascii() != new_text;
 			if (changed_content) item->setText(0, new_text.c_str());
 
@@ -276,53 +285,6 @@ namespace BALL
 			return ((SelectableListViewItem*) &item)->getRepresentation();
 		}
 
-		String GeometricControl::getRepresentationName_(const Representation& rep)
-			throw()
-		{
-			if (rep.hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
-			{
-				return "Coordinate System";
-			}
-
-			String name = rep.getModelName().c_str();
-
-			if (rep.getComposites().size() > 0)
-			{
-				const Composite* c_ptr = *rep.getComposites().begin();
-				while (rep.getComposites().has(c_ptr->getParent()))
-				{
-					c_ptr = c_ptr->getParent();
-				}
-				
-				String composite_name;
-				if (RTTI::isKindOf<Atom>(*c_ptr))
-				{
-					if (c_ptr->getParent() != 0)
-					{
-						((Composite*)c_ptr->getParent())->host(information_);
-						composite_name = information_.getName();
-						composite_name += ":";
-						composite_name += ((const Atom*) c_ptr)->getName();
-					}
-					else
-					{
-						composite_name = ((const Atom*) c_ptr)->getFullName();
-					}
-				}
-				else
-				{
-					((Composite*)c_ptr)->host(information_);
-					composite_name = information_.getName();
-				}
-
-				name = name + "  " + composite_name;
-
-				if (rep.getComposites().size() > 1) name += "...";
-			}
-
-			return name;
-		}
-
 		void GeometricControl::generateListViewItem_(Representation& rep)
 			throw()
 		{
@@ -330,7 +292,7 @@ namespace BALL
 
 			// create a new list item
 			SelectableListViewItem* new_item = new SelectableListViewItem(listview, 
-																								getRepresentationName_(rep).c_str(), &rep, *this);
+																								rep.getName().c_str(), &rep, *this);
 
 			CHECK_PTR(new_item);
 
@@ -634,12 +596,13 @@ namespace BALL
 
 		void GeometricControl::flipClippingPlane()
 		{
-			if (!context_representation_->hasProperty("AX")) return;
+			if (!RTTI::isKindOf<ClippingPlane>(*context_representation_)) return;
+			ClippingPlane& plane = *(ClippingPlane*) context_representation_;
 
-			context_representation_->setProperty("AX", -context_representation_->getProperty("AX").getDouble());
-			context_representation_->setProperty("BY", -context_representation_->getProperty("BY").getDouble());
-			context_representation_->setProperty("CZ", -context_representation_->getProperty("CZ").getDouble());
-			context_representation_->setProperty("D",  -context_representation_->getProperty("D").getDouble());
+			plane.setX(-plane.getX());
+			plane.setY(-plane.getY());
+			plane.setZ(-plane.getZ());
+			plane.setD(-plane.getD());
 
 			RepresentationMessage* msg = 
 				new RepresentationMessage(*context_representation_, RepresentationMessage::UPDATE);
@@ -666,12 +629,13 @@ namespace BALL
 
 		void GeometricControl::setClippingPlane_(const Vector3& n)
 		{
-			if (!context_representation_->hasProperty("AX")) return;
+			if (!RTTI::isKindOf<ClippingPlane>(*context_representation_)) return;
+			ClippingPlane& plane = *(ClippingPlane*) context_representation_;
 
-			context_representation_->setProperty("AX", n.x);
-			context_representation_->setProperty("BY", n.y);
-			context_representation_->setProperty("CZ", n.z);
-			context_representation_->setProperty("D",  1);
+			plane.setX(n.x);
+			plane.setY(n.y);
+			plane.setZ(n.z);
+			plane.setD(1);
 
 			RepresentationMessage* msg = 
 				new RepresentationMessage(*context_representation_, RepresentationMessage::UPDATE);
@@ -687,12 +651,13 @@ namespace BALL
 
 			for (; it != reps.end(); it++)
 			{
-				if (!(*it)->hasProperty("AX")) continue;
+				if (!RTTI::isKindOf<ClippingPlane>(**it)) return;
+				ClippingPlane& plane = *(ClippingPlane*) *it ;
 
-				Vector3 n((**it).getProperty("AX").getDouble(),
-									(**it).getProperty("BY").getDouble(),
-									(**it).getProperty("CZ").getDouble());
-				float d = (**it).getProperty("D").getDouble();
+				Vector3 n(plane.getX(),
+									plane.getY(),
+									plane.getZ());
+				float d = plane.getD();
 
 				if (m.m14 == 0 && m.m24 == 0 && m.m34 == 0)
 				{
@@ -702,14 +667,14 @@ namespace BALL
 					}
 					n = m * n;
 
-					(**it).setProperty("AX", n.x);
-					(**it).setProperty("BY", n.y);
-					(**it).setProperty("CZ", n.z);
+					plane.setX(n.x);
+					plane.setX(n.y);
+					plane.setX(n.z);
 				}
 				else
 				{
 					Vector3 t(-m.m14, -m.m24, -m.m34);
-					(**it).setProperty("D", d + t * n);
+					plane.setD(d + t * n);
 				}
 
 				RepresentationMessage* msg = 
@@ -733,6 +698,21 @@ namespace BALL
 
 			context_representation_->update(false);
 		}
+
+		void GeometricControl::selectClipRepresentations()
+		{
+			if (context_representation_ == 0) return;
+			ClippingPlane& plane = *(ClippingPlane*) context_representation_;
+
+			ClippingDialog dialog;
+			dialog.setClippingPlane(&plane);
+			dialog.exec();
+
+			SceneMessage* msg = new SceneMessage(SceneMessage::REDRAW);
+			notify_(msg);
+		}
+
+			
 	
 	} // namespace VIEW
 } // namespace BALL

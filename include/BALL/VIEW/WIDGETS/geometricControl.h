@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.24.4.4 2005/05/04 15:11:47 amoll Exp $
+// $Id: geometricControl.h,v 1.24.4.5 2005/05/09 15:38:12 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -17,10 +17,6 @@
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
 #endif 
-
-#ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
-#	include <BALL/VIEW/KERNEL/molecularInformation.h>
-#endif
 
 #ifndef BALL_MATHS_MATRIX44_H
  #include <BALL/MATHS/matrix44.h>
@@ -225,6 +221,9 @@ namespace BALL
 			///
 			virtual void setClippingPlaneZ();
 
+			///
+			virtual void selectClipRepresentations();
+
 		  protected slots:
 			
 			//@} 
@@ -268,9 +267,6 @@ namespace BALL
 			QString						getName_(QListViewItem& item)
 				throw();
 
-			String 						getRepresentationName_(const Representation& rep)
-				throw();
-
 			void setClippingPlane_(const Vector3& n);
 
 			// the context menu
@@ -283,8 +279,6 @@ namespace BALL
 			HashMap<Representation*, SelectableListViewItem*> representation_to_item_;
 
 			ModifySurfaceDialog* 	modify_surface_dialog_;
-
-			MolecularInformation information_;
 
 			bool  creating_representations_;
 		};

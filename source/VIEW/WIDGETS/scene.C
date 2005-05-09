@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.2 2005/05/04 14:06:08 amoll Exp $
+// $Id: scene.C,v 1.171.2.3 2005/05/09 15:36:57 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/clippingPlane.h>
 
 #include <BALL/VIEW/DIALOGS/setCamera.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -495,18 +496,16 @@ namespace BALL
 		}
 
 
-		void Scene::renderClippingPlane_(const Representation& rep)
+		void Scene::renderClippingPlane_(const ClippingPlane& plane)
 			throw()
 		{
-			Vector3 n(rep.getProperty("AX").getDouble(),
-								rep.getProperty("BY").getDouble(),
-								rep.getProperty("CZ").getDouble());
+			Vector3 n(plane.getX(), plane.getY(), plane.getZ());
 
 			if (n.getSquareLength() != 0) n.normalize();
 
-			float d = rep.getProperty("D").getDouble();
+			float d = plane.getD();
 
-			if (rep.isHidden())
+			if (plane.isHidden())
 			{
 				Vector3 x(1,0,0);
 				Vector3 y(0,1,0);
@@ -539,10 +538,10 @@ namespace BALL
 				return;
 			}
 
-			GLdouble plane[] ={n.x, n.y, n.z, d};
+			GLdouble planef[] ={n.x, n.y, n.z, d};
 
-			glEnable(current_clipping_plane_);
-			glClipPlane(current_clipping_plane_, plane);
+//   			glEnable(current_clipping_plane_);
+			glClipPlane(current_clipping_plane_, planef);
 
 			current_clipping_plane_++;
 		}
@@ -550,6 +549,8 @@ namespace BALL
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
 		{
+			vector<ClippingPlane*> clipping_planes;
+
 			PrimitiveManager::RepresentationList::ConstIterator it;
 			// ============== render Clipping planes ==============================
 			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
@@ -558,15 +559,23 @@ namespace BALL
 
 			for(; it != getMainControl()->getPrimitiveManager().end(); it++)
 			{
-				if ((**it).getModelType() != MODEL_CLIPPING_PLANE) continue;
-				gl_renderer_.initSolid();
-				renderClippingPlane_(**it);
+				if ((**it).getModelType() != MODEL_CLIPPING_PLANE)
+				{
+					continue;
+				}
+					
+				if (!(**it).isHidden())
+				{
+					clipping_planes.push_back((ClippingPlane*)*it);
+				}
+				else
+				{
+					gl_renderer_.initSolid();
+				}
+
+				renderClippingPlane_(*(ClippingPlane*)*it);
 			}
 		
-			for (GLint i = current_clipping_plane_; i <= GL_CLIP_PLANE0 + GL_MAX_CLIP_PLANES; i++)
-			{
-				glDisable(i);
-			}
 
 			// -------------------------------------------------------------------
 			// show light sources
@@ -590,34 +599,55 @@ namespace BALL
 			}
 			// -------------------------------------------------------------------
 			
-			// render all "normal" (non always front and non transparent models)
-			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
-			for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
+			// we draw all the representations in different runs, 
+			// 1. normal reps
+			// 2. transparent reps
+			// 3. allways front
+			for (Position run = 0; run < 3; run++)
 			{
-				if ((*it)->getTransparency() == 0 &&
-						!(*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
-				{
-					render_(**it, mode);
-				}
-			}
+				vector<Position> active_planes; // clipping planes
 
-			// render all transparent models
-			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
-			for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
-			{
-				if ((*it)->getTransparency() != 0)
+				it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
+				for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
 				{
-					render_(**it, mode);
-				}
-			}
+					bool draw_rep = false;
 
-			// render all always front models
-			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
-			for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
-			{
-				if ((*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
-				{
-					render_(**it, mode);
+					Representation& rep = **it;
+
+					if (run == 0)
+					{
+						// render all "normal" (non always front and non transparent models)
+						draw_rep = rep.getTransparency() == 0 && 
+											 !rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT);
+					}
+					else if (run == 1)
+					{
+						// render all transparent models
+						draw_rep = (rep.getTransparency() != 0);
+					}
+					else
+					{
+						// render all always front models
+						draw_rep = rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT);
+					}
+
+					if (!draw_rep) continue;
+					
+					for (Position plane_nr = 0; plane_nr < clipping_planes.size(); plane_nr++)
+					{
+						if (clipping_planes[plane_nr]->getRepresentations().has(*it))
+						{
+							glEnable(plane_nr + GL_CLIP_PLANE0);
+							active_planes.push_back(plane_nr);
+						}
+					}
+
+					render_(rep, mode);
+
+					for (Position p = 0; p < active_planes.size(); p++)
+					{
+						glDisable(active_planes[p] + GL_CLIP_PLANE0);
+					}
 				}
 			}
 		}
@@ -2038,14 +2068,26 @@ namespace BALL
 
 		void Scene::createNewClippingPlane()
 		{
-			Representation* rep = new Representation();
+			MainControl* mc = getMainControl();
+			if (mc == 0) return;
+
+			ClippingPlane* rep = new ClippingPlane();
 			rep->setModelType(MODEL_CLIPPING_PLANE);
 			Vector3 v = stage_->getCamera().getViewVector();
-			rep->setProperty("AX", v.x);
-			rep->setProperty("BY", v.y);
-			rep->setProperty("CZ", v.z);
-			rep->setProperty("D", 10);
+			rep->setX(v.x);
+			rep->setY(v.y);
+			rep->setZ(v.z);
+			rep->setD(10);
 			rep->setHidden(true);
+
+			PrimitiveManager& pm = mc->getPrimitiveManager();
+			PrimitiveManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+			for (; it != pm.getRepresentations().end(); it++)
+			{
+				if (RTTI::isKindOf<ClippingPlane> (**it)) continue;
+
+				rep->getRepresentations().insert(*it);
+			}
 			getMainControl()->insert(*rep);
 		}
 
@@ -2265,5 +2307,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL

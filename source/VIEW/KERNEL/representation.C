@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.5 2005/05/06 12:50:06 amoll Exp $
+// $Id: representation.C,v 1.62.4.6 2005/05/09 15:37:06 amoll Exp $
 //
 
 
@@ -22,6 +22,8 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		MolecularInformation Representation::information_ = MolecularInformation();
+
 		Representation::Representation()
 			throw()
 				: PropertyManager(),
@@ -634,6 +636,58 @@ namespace BALL
 #endif
 
 			update_();
+		}
+
+		String Representation::getName() const
+			throw()
+		{
+			if (hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
+			{
+				return "Coordinate System";
+			}
+
+			if (getModelType() == MODEL_CLIPPING_PLANE)
+			{
+				return "Clipping Plane";
+			}
+
+			String name = getModelName().c_str();
+
+			if (getComposites().size() > 0)
+			{
+				const Composite* c_ptr = *getComposites().begin();
+				while (getComposites().has(c_ptr->getParent()))
+				{
+					c_ptr = c_ptr->getParent();
+				}
+				
+				String composite_name;
+				if (RTTI::isKindOf<Atom>(*c_ptr))
+				{
+					if (c_ptr->getParent() != 0)
+					{
+						((Composite*)c_ptr->getParent())->host(information_);
+						composite_name = information_.getName();
+						composite_name += ":";
+						composite_name += ((const Atom*) c_ptr)->getName();
+					}
+					else
+					{
+						composite_name = ((const Atom*) c_ptr)->getFullName();
+					}
+				}
+				else
+				{
+					((Composite*)c_ptr)->host(information_);
+					composite_name = information_.getName();
+				}
+
+				name = name + "  " + composite_name;
+
+				if (getComposites().size() > 1) name += "...";
+			}
+
+			return name;
 		}
 
 

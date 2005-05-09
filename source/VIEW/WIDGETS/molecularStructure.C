@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.86 2005/03/10 11:14:43 amoll Exp $
+// $Id: molecularStructure.C,v 1.86.2.1 2005/05/09 15:36:57 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -100,7 +100,7 @@ namespace BALL
 
 			hint = "To perform a MD simulation , first select the molecular structures.";
 			mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", this, 
-																SLOT(MDSimulation()), CTRL+Key_D, MainControl::MOLECULARMECHANICS + 11, hint);
+																SLOT(MDSimulation()), CTRL+Key_M, MainControl::MOLECULARMECHANICS + 11, hint);
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 			(main_control.initPopupMenu(MainControl::CHOOSE_FF))->setCheckable(true);

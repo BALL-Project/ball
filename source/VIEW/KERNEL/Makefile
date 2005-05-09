@@ -4,6 +4,7 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
   client.C\
+  clippingPlane.C\
 	common.C\
   compositeManager.C\
   connectionObject.C\

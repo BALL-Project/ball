@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.44.6.2 2005/04/14 13:02:05 amoll Exp $
+# $Id: Makefile,v 1.44.6.3 2005/05/09 15:35:58 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -29,6 +29,8 @@ CPP_SOURCES=\
 	compositePropertiesData.C\
 	contourSurfaceDialog.C\
 	contourSurfaceDialogData.C\
+	clippingDialog.C\
+	clippingDialogData.C\
 	downloadPDBFile.C\
 	downloadPDBFileData.C\
 	displayProperties.C\
@@ -77,6 +79,8 @@ MOC_SOURCES=\
 	bondPropertiesData_moc.C\
 	charmmConfigurationDialog_moc.C\
 	charmmConfigurationDialogData_moc.C\
+	clippingDialog_moc.C\
+	clippingDialogData_moc.C\
 	coloringSettingsDialog_moc.C\
 	coloringSettingsDialogData_moc.C\
 	modifySurfaceDialog_moc.C\
@@ -125,6 +129,7 @@ UIC_SOURCES=\
 	minimizationDialogData.C\
 	bondPropertiesData.C\
 	charmmConfigurationDialogData.C\
+	clippingDialog.C\
 	coloringSettingsDialogData.C\
 	modifySurfaceDialogData.C\
 	compositePropertiesData.C\

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62 2005/03/01 16:46:34 amoll Exp $
+// $Id: scene.h,v 1.62.2.1 2005/05/09 15:38:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -40,6 +40,7 @@ namespace BALL
 		class StageSettings;
 		class MaterialSettings;
 		class AnimationThread;
+		class ClippingPlane;
 
 		/**	Scene is the main visualization widget that shows the graphical Representation 's.
 				To do this, the class Scene must be a child of the MainControl.
@@ -663,7 +664,7 @@ namespace BALL
 			void createCoordinateSystem_()
 				throw();
 			
-			virtual void renderClippingPlane_(const Representation& rep)
+			virtual void renderClippingPlane_(const ClippingPlane& plane)
 				throw();
 			
 			//_ state of the scene: picking or rotate mode?

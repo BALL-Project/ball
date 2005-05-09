@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.30.4.1 2005/04/15 14:09:11 amoll Exp $
+// $Id: representation.h,v 1.30.4.2 2005/05/09 15:37:15 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -34,6 +34,11 @@
 #ifndef BALL_VIEW_KERNEL_COLORPROCESSOR_H
 # include <BALL/VIEW/MODELS/colorProcessor.h>
 #endif
+
+#ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
+#	include <BALL/VIEW/KERNEL/molecularInformation.h>
+#endif
+
 
 namespace BALL
 {
@@ -237,6 +242,10 @@ namespace BALL
 				throw();
 
 			///
+			String getName() const
+				throw();
+
+			///
 			void setColoringMethod(ColoringMethod type)
 				throw();
 
@@ -380,6 +389,7 @@ namespace BALL
 			//_
 			bool 								coloring_update_enabled_;
 
+			static 							MolecularInformation information_;
 			// prevent usage of geometric_objects_ in derived classes
 			private:
 		};
