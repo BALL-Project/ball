@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.7 2005/05/09 15:36:57 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.8 2005/05/09 21:48:23 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -657,24 +657,24 @@ namespace BALL
 				Vector3 n(plane.getX(),
 									plane.getY(),
 									plane.getZ());
-				float d = plane.getD();
 
 				if (m.m14 == 0 && m.m24 == 0 && m.m34 == 0)
 				{
-					if (n.getSquareLength() > 0)
+					if (!Maths::isZero(n.getSquareLength())) 
 					{
 						n.normalize();
 					}
+
 					n = m * n;
 
 					plane.setX(n.x);
-					plane.setX(n.y);
-					plane.setX(n.z);
+					plane.setY(n.y);
+					plane.setZ(n.z);
 				}
 				else
 				{
 					Vector3 t(-m.m14, -m.m24, -m.m34);
-					plane.setD(d + t * n);
+					plane.setD(plane.getD() + t * n);
 				}
 
 				RepresentationMessage* msg = 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.3 2005/05/09 15:36:57 amoll Exp $
+// $Id: scene.C,v 1.171.2.4 2005/05/09 21:50:06 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -402,7 +402,7 @@ namespace BALL
 			Vector3	diff = stage_->getCamera().getRightVector() * (stage_->getEyeDistance() / 2.0);  
 
 			float nearf = 1.5; 
-			float farf = 300;
+			float farf = 600;
 
 			float ndfl    = nearf / stage_->getFocalDistance();
 
@@ -500,50 +500,38 @@ namespace BALL
 			throw()
 		{
 			Vector3 n(plane.getX(), plane.getY(), plane.getZ());
+			if (!Maths::isZero(n.getSquareLength())) n.normalize();
 
-			if (n.getSquareLength() != 0) n.normalize();
+			Vector3 x(1,0,0);
+			Vector3 y(0,1,0);
+			Vector3 z(0,0,1);
 
-			float d = plane.getD();
+			Vector3 v[3];
+			v[0] = x - n.x * n;
+			v[1] = y - n.y * n;
+			v[2] = z - n.z * n;
 
-			if (plane.isHidden())
+			Vector3 e[2];
+			Position i = 0;
+
+			for (Position j = 0; j < 3 && i < 2; j++)
 			{
-				Vector3 x(1,0,0);
-				Vector3 y(0,1,0);
-				Vector3 z(0,0,1);
-
-				Vector3 v[3];
-				v[0] = x - n.x * n;
-				v[1] = y - n.y * n;
-				v[2] = z - n.z * n;
-
-				Vector3 e[2];
-				Position i = 0;
-
-				for (Position j = 0; j < 3 && i < 2; j++)
+				if (v[j].getSquareLength() != 0) 
 				{
-					if (v[j].getSquareLength() != 0) 
-					{
-						e[i] = v[j];
-						e[i].normalize();
-						i++;
-					}
+					e[i] = v[j];
+					e[i].normalize();
+					i++;
 				}
-			
-				n *= -d;
-
-				Box b(n - (e[0] * 1500.0  + e[1] * 1500.0), e[0] * 3000.0, e[1] * 3000.0, 0.01);
-				b.setColor(0,0,255, 255);
-				gl_renderer_.render_(&b);
-
-				return;
 			}
+		
+			n *= -plane.getD();
 
-			GLdouble planef[] ={n.x, n.y, n.z, d};
+			Box b(n - (e[0] * 150.0  + e[1] * 150.0), e[0] * 300.0, e[1] * 300.0, 0.01);
+			ColorRGBA color(0,0,255, 70);
+			b.setColor(color);
 
-//   			glEnable(current_clipping_plane_);
-			glClipPlane(current_clipping_plane_, planef);
-
-			current_clipping_plane_++;
+			gl_renderer_.initTransparent();
+			gl_renderer_.renderBox_(b);
 		}
 
 		void Scene::renderRepresentations_(RenderMode mode)
@@ -552,28 +540,25 @@ namespace BALL
 			vector<ClippingPlane*> clipping_planes;
 
 			PrimitiveManager::RepresentationList::ConstIterator it;
-			// ============== render Clipping planes ==============================
 			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 
-			current_clipping_plane_ = GL_CLIP_PLANE0;
+			// ============== collect active Clipping planes ==============================
+			GLint current_clipping_plane = GL_CLIP_PLANE0;
 
 			for(; it != getMainControl()->getPrimitiveManager().end(); it++)
 			{
-				if ((**it).getModelType() != MODEL_CLIPPING_PLANE)
+				if ((**it).getModelType() == MODEL_CLIPPING_PLANE && !(**it).isHidden())
 				{
-					continue;
-				}
-					
-				if (!(**it).isHidden())
-				{
-					clipping_planes.push_back((ClippingPlane*)*it);
-				}
-				else
-				{
-					gl_renderer_.initSolid();
-				}
+					ClippingPlane& plane = *(ClippingPlane*) *it;
+					clipping_planes.push_back(&plane);
 
-				renderClippingPlane_(*(ClippingPlane*)*it);
+					Vector3 n(plane.getX(), plane.getY(), plane.getZ());
+					if (!Maths::isZero(n.getSquareLength())) n.normalize();
+
+					const GLdouble planef[] ={n.x, n.y, n.z, plane.getD()};
+					glClipPlane(current_clipping_plane, planef);
+					current_clipping_plane++;
+				}
 			}
 		
 
@@ -605,34 +590,42 @@ namespace BALL
 			// 3. allways front
 			for (Position run = 0; run < 3; run++)
 			{
-				vector<Position> active_planes; // clipping planes
-
 				it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 				for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
 				{
-					bool draw_rep = false;
-
 					Representation& rep = **it;
 
 					if (run == 0)
 					{
 						// render all "normal" (non always front and non transparent models)
-						draw_rep = rep.getTransparency() == 0 && 
-											 !rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT);
+						if (rep.getTransparency() != 0 ||
+								rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
+						{
+							continue;
+						}
 					}
 					else if (run == 1)
 					{
+						// render clipping plane
+						if (rep.getModelType() == MODEL_CLIPPING_PLANE && rep.isHidden())
+						{
+							renderClippingPlane_(*(ClippingPlane*) &rep);
+							continue;
+						}
+
 						// render all transparent models
-						draw_rep = (rep.getTransparency() != 0);
+						if (rep.getTransparency() == 0) continue;
 					}
 					else
 					{
 						// render all always front models
-						draw_rep = rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT);
+						if (!rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT)) continue;
 					}
 
-					if (!draw_rep) continue;
-					
+					if (rep.getModelType() == MODEL_CLIPPING_PLANE) continue;
+
+					vector<Position> active_planes; // clipping planes
+
 					for (Position plane_nr = 0; plane_nr < clipping_planes.size(); plane_nr++)
 					{
 						if (clipping_planes[plane_nr]->getRepresentations().has(*it))
@@ -2017,7 +2010,7 @@ namespace BALL
 								 2.0 * gl_renderer_.getXScale(), 
 								-2.0 * gl_renderer_.getYScale(), 
 								 2.0 * gl_renderer_.getYScale(),
-								 1.5, 300);
+								 1.5, 600);
 			glMatrixMode(GL_MODELVIEW);
 
 			hide();

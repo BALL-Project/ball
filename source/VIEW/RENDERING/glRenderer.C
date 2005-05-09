@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.7 2005/05/09 10:42:03 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.8 2005/05/09 21:50:09 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1373,7 +1373,7 @@ namespace BALL
 			gluPickMatrix(center_x, viewport[3] - center_y, width, height, viewport);
 
 			// prepare camera
-			glFrustum(-2.0 * x_scale_, 2.0 * x_scale_, -2.0 * y_scale_, 2.0 * y_scale_, 1.5, 300);
+			glFrustum(-2.0 * x_scale_, 2.0 * x_scale_, -2.0 * y_scale_, 2.0 * y_scale_, 1.5, 600);
 			
 			glMatrixMode(GL_MODELVIEW);
 			updateCamera();
@@ -1476,7 +1476,7 @@ namespace BALL
 									2.0 * x_scale_, 
 								 -2.0 * y_scale_, 
 									2.0 * y_scale_, 
-									1.5, 300);
+									1.5, 600);
 
 			glMatrixMode(GL_MODELVIEW);
 		}
