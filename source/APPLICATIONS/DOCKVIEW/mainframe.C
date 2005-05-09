@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.1.4.2 2005/05/05 13:22:17 haid Exp $
+// $Id: mainframe.C,v 1.1.4.3 2005/05/09 16:37:27 haid Exp $
 //
 
 #include "mainframe.h"
@@ -109,9 +109,9 @@ namespace BALL
 
 		CHECK_PTR(new DownloadPDBFile(this, "DownloadPDBFile", false));
 
-		CHECK_PTR(new MolecularStructure(this, "MolecularStructure"));
-		
 		CHECK_PTR(new DockDialog(this, "DockDialog"));
+		
+		CHECK_PTR(new MolecularStructure(this, "MolecularStructure"));
 
 		// setup the VIEW server
 		Server* server = new Server(this);

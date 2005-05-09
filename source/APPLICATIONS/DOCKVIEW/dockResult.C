@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.1.2.7 2005/04/25 16:13:26 haid Exp $
+// $Id: dockResult.C,v 1.1.2.8 2005/05/09 16:37:26 haid Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -363,7 +363,8 @@ namespace BALL
 			throw()
 		{
 			/////////////////////////////////////// TODO ////////////////////////////////////// 
-			//scorings_.erase(i);	
+			vector<Scoring_>::iterator scoring_it;
+			scorings_.erase(scorings_.begin()+i);	
 		}
 		
 		

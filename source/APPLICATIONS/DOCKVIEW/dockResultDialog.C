@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.18 2005/05/05 13:22:16 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.19 2005/05/09 16:37:26 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -366,10 +366,16 @@ namespace BALL
 				QPopupMenu context_menu;
 				Position menu_entry_pos; 
 				menu_entry_pos = context_menu.insertItem("Delete Score Column", this, SLOT(deleteColumn_(int)));
-				if (!column) context_menu.setItemEnabled(menu_entry_pos, false);
+				context_menu.setItemParameter(menu_entry_pos, column);
+				if (!column || result_table->numCols() < 3)
+				{
+					context_menu.setItemEnabled(menu_entry_pos, false);
+				}
 				menu_entry_pos = context_menu.insertItem("Scoring Options", this, SLOT(showScoringOptions_(int)));
+				context_menu.setItemParameter(menu_entry_pos, column);
 				if (!column) context_menu.setItemEnabled(menu_entry_pos, false);
-				context_menu.insertItem("Redock", this, SLOT(redock_(int)));
+				menu_entry_pos = context_menu.insertItem("Redock", this, SLOT(redock_(int)));
+				context_menu.setItemParameter(menu_entry_pos, row);
 				context_menu.exec(pos);
 		}
 		
@@ -390,14 +396,21 @@ namespace BALL
 			info_dialog_->info_box->clear();
 			QString s = "Scoring function: ";
 			info_dialog_->info_box->append(s.append(dock_res_->getScoringName(column-1)));
-			info_dialog_->info_box->append("*** Options of scoring function ***");
 			const Options& scoring_opt = dock_res_->getScoringOptions(column-1);
-			Options::ConstIterator it = scoring_opt.begin();
-			for(; +it; ++it)
+			if(scoring_opt.isEmpty())
 			{
-				s = it->first;
-				s.append(" : ");
-				info_dialog_->info_box->append(s.append(it->second));
+			 	info_dialog_->info_box->append("\nThere are no options.");
+			}
+			else
+			{
+				info_dialog_->info_box->append("\n*** Options of scoring function ***");
+				Options::ConstIterator it = scoring_opt.begin();
+				for(; +it; ++it)
+				{
+					s = it->first;
+					s.append(" : ");
+					info_dialog_->info_box->append(s.append(it->second));
+				}
 			}
 			//show dialog
 			info_dialog_->show();

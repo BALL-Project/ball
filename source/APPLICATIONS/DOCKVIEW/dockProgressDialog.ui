@@ -12,6 +12,14 @@
             <height>391</height>
         </rect>
     </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
     <property name="caption">
         <string>Docking Progress</string>
     </property>
@@ -44,6 +52,12 @@
                     <width>350</width>
                     <height>300</height>
                 </size>
+            </property>
+            <property name="vScrollBarMode">
+                <enum>Auto</enum>
+            </property>
+            <property name="hScrollBarMode">
+                <enum>Auto</enum>
             </property>
             <property name="wordWrap">
                 <enum>NoWrap</enum>

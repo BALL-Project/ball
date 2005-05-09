@@ -285,7 +285,7 @@ namespace BALL
 			
 			protected:
 			
-				/** Sets options_ with values the user has chosen.  
+				/** Sets options with values the user has chosen.  
 				 */
 				void applyValues_() throw();
 				
@@ -311,6 +311,14 @@ namespace BALL
 				 */
 				HashMap<int, QDialog*> scoring_dialogs_;
 			
+				/** key: Algorithm(enum)
+					* value: vector of scoring functions which can be used with this algorithm
+				 */
+				HashMap<int, vector<int> > allowed_sf_;
+				/**
+					*/
+				HashMap<int, QString> sf_names_;
+				
 				/** Pointer to docking partners
 				 */
 				System* docking_partner1_;
@@ -328,8 +336,8 @@ namespace BALL
 				
 				/** Options for the docking algorithm
 				 */
-				Options options_;
-				
+				Options algorithm_opt_, scoring_opt_;
+		
 				/** Menu entry id
 				 */
 				int id_;

@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.6 2005/04/17 16:36:43 leonhardt Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.7 2005/05/09 16:37:25 haid Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -77,6 +77,22 @@ namespace BALL
 				s = it->first;
 				s.append(" : ");
 				options->append(s.append(it->second));
+			}
+			
+			if(sf_opt.isEmpty())
+			{
+			 	options->append("\nThere are no options for this scoring function.");
+			}
+			else
+			{
+				options->append("\n*** Options of scoring function ***");
+				it = sf_opt.begin();
+				for(; +it; ++it)
+				{
+					s = it->first;
+					s.append(" : ");
+					options->append(s.append(it->second));
+				}
 			}
 		}
 		

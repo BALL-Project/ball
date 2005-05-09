@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>453</width>
-            <height>536</height>
+            <width>437</width>
+            <height>342</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -30,66 +30,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QTable" row="0" column="0" rowspan="5" colspan="1">
-            <column>
-                <property name="text">
-                    <string>snapshot</string>
-                </property>
-            </column>
-            <property name="name">
-                <cstring>result_table</cstring>
-            </property>
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>7</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="mouseTracking">
-                <bool>false</bool>
-            </property>
-            <property name="focusPolicy">
-                <enum>WheelFocus</enum>
-            </property>
-            <property name="acceptDrops">
-                <bool>false</bool>
-            </property>
-            <property name="resizePolicy">
-                <enum>Manual</enum>
-            </property>
-            <property name="numRows">
-                <number>0</number>
-            </property>
-            <property name="numCols">
-                <number>1</number>
-            </property>
-            <property name="rowMovingEnabled">
-                <bool>true</bool>
-            </property>
-            <property name="columnMovingEnabled">
-                <bool>true</bool>
-            </property>
-            <property name="readOnly">
-                <bool>true</bool>
-            </property>
-            <property name="sorting">
-                <bool>false</bool>
-            </property>
-            <property name="selectionMode">
-                <enum>SingleRow</enum>
-            </property>
-        </widget>
         <widget class="QLayoutWidget" row="1" column="1">
             <property name="name">
                 <cstring>layout9</cstring>
@@ -158,39 +98,6 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QPushButton" row="4" column="2">
-            <property name="name">
-                <cstring>close_button</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>Close</string>
-            </property>
-        </widget>
-        <spacer row="2" column="2" rowspan="2" colspan="1">
-            <property name="name">
-                <cstring>spacer16</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>261</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="QButtonGroup" row="0" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>reranking_group</cstring>
@@ -242,6 +149,31 @@
                 </widget>
             </grid>
         </widget>
+        <widget class="QPushButton" row="2" column="1">
+            <property name="name">
+                <cstring>dock_opt_button</cstring>
+            </property>
+            <property name="text">
+                <string>Docking Options</string>
+            </property>
+        </widget>
+        <spacer row="1" column="2" rowspan="3" colspan="1">
+            <property name="name">
+                <cstring>spacer8</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>150</height>
+                </size>
+            </property>
+        </spacer>
         <spacer row="3" column="1" rowspan="2" colspan="1">
             <property name="name">
                 <cstring>spacer14</cstring>
@@ -255,16 +187,84 @@
             <property name="sizeHint">
                 <size>
                     <width>21</width>
-                    <height>220</height>
+                    <height>70</height>
                 </size>
             </property>
         </spacer>
-        <widget class="QPushButton" row="2" column="1">
+        <widget class="QPushButton" row="4" column="2">
             <property name="name">
-                <cstring>dock_opt_button</cstring>
+                <cstring>close_button</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="text">
-                <string>Docking Options</string>
+                <string>Close</string>
+            </property>
+        </widget>
+        <widget class="QTable" row="0" column="0" rowspan="5" colspan="1">
+            <column>
+                <property name="text">
+                    <string>snapshot</string>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>result_table</cstring>
+            </property>
+            <property name="enabled">
+                <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="mouseTracking">
+                <bool>false</bool>
+            </property>
+            <property name="focusPolicy">
+                <enum>WheelFocus</enum>
+            </property>
+            <property name="acceptDrops">
+                <bool>false</bool>
+            </property>
+            <property name="resizePolicy">
+                <enum>Manual</enum>
+            </property>
+            <property name="numRows">
+                <number>0</number>
+            </property>
+            <property name="numCols">
+                <number>1</number>
+            </property>
+            <property name="rowMovingEnabled">
+                <bool>true</bool>
+            </property>
+            <property name="columnMovingEnabled">
+                <bool>true</bool>
+            </property>
+            <property name="readOnly">
+                <bool>true</bool>
+            </property>
+            <property name="sorting">
+                <bool>false</bool>
+            </property>
+            <property name="selectionMode">
+                <enum>SingleRow</enum>
             </property>
         </widget>
     </grid>

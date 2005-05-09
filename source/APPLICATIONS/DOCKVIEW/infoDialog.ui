@@ -23,6 +23,9 @@
             <property name="name">
                 <cstring>info_box</cstring>
             </property>
+            <property name="wordWrap">
+                <enum>NoWrap</enum>
+            </property>
             <property name="readOnly">
                 <bool>true</bool>
             </property>

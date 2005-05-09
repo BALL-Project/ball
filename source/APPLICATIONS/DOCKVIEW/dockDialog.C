@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.25 2005/05/05 13:22:15 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.26 2005/05/09 16:37:24 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -69,23 +69,6 @@ namespace BALL
 			registerObject_(assign_radii);
 			registerObject_(build_bonds);
 			registerObject_(add_hydrogens);
-
-			//build HashMap for algorithm advanced option dialogs
-			//make sure the order of added algorithms is consistent to the enum order
-			//because the algorithm with enum value i should be at position i in the combobox
-			//otherwise you get the wrong option dialog for an algorithm
-			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
-			addAlgorithm("Geometric Fit", GEOMETRIC_FIT, geo_fit);
-			
-			//build HashMap for scoring function advanced option dialogs
-			//make sure the order of added scoring functions is consistent to the enum order
-			//because the scoring function with enum value i should be at position i in the Combobox
-			//otherwise you get the wrong option dialog for a scoring function
-			addScoringFunction("Default", DEFAULT);
-			addScoringFunction("Amber Force Field", AMBER_FF, &(MolecularStructure::getInstance(0)->getAmberConfigurationDialog()));
-			addScoringFunction("Random", RANDOM);
-			
-			//own_amber = false;
 			
 			hide(); 
 		}
@@ -109,7 +92,8 @@ namespace BALL
 				scoring_dialogs_ = dock_dialog.scoring_dialogs_;
 				docking_partner1_ = dock_dialog.docking_partner1_;
 				docking_partner2_ = dock_dialog.docking_partner2_;
-				options_ = dock_dialog.options_;
+				algorithm_opt_ = dock_dialog.algorithm_opt_;
+				scoring_opt_ = dock_dialog.scoring_opt_;
 				id_ = dock_dialog.id_;
 				radius_rule_processor_ = dock_dialog.radius_rule_processor_;
 				charge_rule_processor_ = dock_dialog.charge_rule_processor_;
@@ -146,11 +130,11 @@ namespace BALL
 		{
 			if(dialog)
 			{
-				// add to ComboBox
+				// add to HashMap for scoring dialogs
 				scoring_dialogs_[score_func] = dialog;
 			}
-			// add to ComboBox
-			scoring_functions->insertItem(name, score_func);
+			// add to HashMap for names of scoring functions
+			sf_names_[score_func] = name;
 		}
 		
 		// Message handling method.
@@ -184,6 +168,26 @@ namespace BALL
 			String hint = "Dock two systems.";
 			id_ = main_control.insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Docking", this,
 																				 SLOT(show()), CTRL+Key_D, -1, hint);
+			
+			//build HashMap for algorithm advanced option dialogs
+			//make sure the order of added algorithms is consistent to the enum order
+			//because the algorithm with enum value i should be at position i in the combobox
+			//otherwise you get the wrong option dialog for an algorithm
+			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
+			addAlgorithm("Geometric Fit", GEOMETRIC_FIT, geo_fit);
+			
+			//build HashMap for scoring function advanced option dialogs
+			//make sure the order of added scoring functions is consistent to the enum order
+			//because the scoring function with enum value i should be at position i in the Combobox
+			//otherwise you get the wrong option dialog for a scoring function
+			addScoringFunction("Default", DEFAULT);
+			addScoringFunction("Amber Force Field", AMBER_FF, &(MolecularStructure::getInstance(0)->getAmberConfigurationDialog()));
+			addScoringFunction("Random", RANDOM);
+			
+			vector<int> sf;
+			sf.push_back(DEFAULT);
+			sf.push_back(AMBER_FF);
+			allowed_sf_[GEOMETRIC_FIT] = sf;
 		}
 		
 		//Removes the checkable submenu Docking from the popup menu Molecular Mechanics.
@@ -303,14 +307,13 @@ namespace BALL
 			// and setup the algorithm
 			if (docking_partner1_->countAtoms() < docking_partner2_->countAtoms())
 			{
-				dock_alg_->setup(*docking_partner2_, *docking_partner1_, options_);
+				dock_alg_->setup(*docking_partner2_, *docking_partner1_, algorithm_opt_);
 			}
 			else
 			{
-				dock_alg_->setup(*docking_partner1_, *docking_partner2_, options_);
+				dock_alg_->setup(*docking_partner1_, *docking_partner2_, algorithm_opt_);
 			}
 			
-			Options scoring_options;  /////TODO options sind immer leer; als private? applyValues erweitern? ///////////////////////////////
 			
 			// ============================= WITH MULTITHREADING ====================================
 			if (!(getMainControl()->lockCompositesFor(this))) return;
@@ -325,8 +328,8 @@ namespace BALL
 																		systems2->currentText(),
 																		algorithms->currentText(),
 																		scoring_functions->currentText(),
-																		options_,
-																		scoring_options);
+																		algorithm_opt_,
+																		scoring_opt_);
 				progress_dialog_->setDockingAlgorithm(dock_alg_);
 				
 				
@@ -359,7 +362,6 @@ namespace BALL
 			//check which scoring function is chosen
 			int index = scoring_functions->currentItem();
 			
-			Options scoring_options;
 			switch(index)
 			{
 				case DEFAULT:
@@ -371,18 +373,6 @@ namespace BALL
 				{
 					Log.info() << "in DockDialog:: Option of Amber FF:" << std::endl;
 					AmberFF& ff = MolecularStructure::getInstance(0)->getAmberFF();
-					AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
-					Log.info() << "blubb" << std::endl;
-					//now the Amber force field gets its options
-					dialog->applyTo(ff);
-					Log.info() << "bla" << std::endl;
-					
-					Options::Iterator it = ff.options.begin();
-					for(; +it; ++it)
-					{
-						Log.info() << it->first << " : " << it->second << std::endl;
-					}
-					scoring_options = ff.options;
 					//the force field is given to the AmberEvaluation (scoring function) object
 					scoring = new AmberEvaluation(ff);
 					break;
@@ -406,9 +396,9 @@ namespace BALL
 
 			DockResult* dock_res = new DockResult(String(algorithms->currentText().ascii()),
 																						conformation_set,
-																						options_); 
+																						algorithm_opt_); 
 																							
-			dock_res->addScoring(String(scoring_functions->currentText().ascii()), scoring_options, scores);
+			dock_res->addScoring(String(scoring_functions->currentText().ascii()), scoring_opt_, scores);
 
 			// add docked system to BALLView structures 
 			SnapShot best_result = (*conformation_set)[0];
@@ -434,15 +424,15 @@ namespace BALL
 			Log.info() << "End of calculate" << std::endl;
 		}
 		
-		// set options_ with values user has chosen 
+		// set options with values user has chosen 
 		void DockDialog::applyValues_()
 			throw()
 		{
 			// options for all docking algorithms
 			/////////////////////////////////////// TODO allgemeine Options ////////////////////////////////////////////
 			//options_[DockingAlgorithm::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
-			options_[GeometricFit::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
-			options_[GeometricFit::Option::VERBOSITY] = String(verbosity->text().ascii()).toInt();
+			algorithm_opt_[GeometricFit::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
+			algorithm_opt_[GeometricFit::Option::VERBOSITY] = String(verbosity->text().ascii()).toInt();
 			
 			// options for chosen algorithm; options are filled by the corresponding dialog
 			int index = algorithms->currentItem();
@@ -450,8 +440,22 @@ namespace BALL
 			{
 				case GEOMETRIC_FIT:
 					GeometricFitDialog* dialog = RTTI::castTo<GeometricFitDialog>(*(algorithm_dialogs_[index]));
-					dialog->getOptions(options_);
+					dialog->getOptions(algorithm_opt_);
 					break;
+			}
+			
+			index = scoring_functions->currentItem();
+			switch(index)
+			{
+				case AMBER_FF:
+				{
+					AmberFF& ff = MolecularStructure::getInstance(0)->getAmberFF();
+					AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
+					
+					//now the Amber force field gets its options
+					dialog->applyTo(ff);
+					scoring_opt_ = ff.options;
+				}
 			}
 		}
 		
@@ -754,7 +758,7 @@ namespace BALL
 		// Indicates an algorithm in the combobox was chosen.
 		void DockDialog::algorithmChosen()
 		{
-			// if chosen scoring function has advanced options, enable advanced_button
+			// if chosen algorithm has advanced options, enable advanced_button
 			int index = algorithms->currentItem();
 			if(algorithm_dialogs_.has(index))
 			{
@@ -763,6 +767,23 @@ namespace BALL
 			else
 			{
 				alg_advanced_button->setEnabled(false);
+			}
+			
+			scoring_functions->clear();
+			if(algorithm_dialogs_.has(index))
+			{
+				for(unsigned int j = 0; j < allowed_sf_[index].size(); j++)
+				{
+				 	scoring_functions->insertItem(sf_names_[allowed_sf_[index][j]]);
+				}
+			}
+			else
+			{
+			 	HashMap<int, QString>::Iterator name_it = sf_names_.begin();
+				for(; +name_it; name_it++)
+				{
+				 	scoring_functions->insertItem(name_it->second);
+				}
 			}
 		}
 		
