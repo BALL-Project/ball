@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.6 2005/05/04 14:52:09 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.7 2005/05/09 10:42:03 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -635,13 +635,27 @@ namespace BALL
 			setColor4ub_(tube);
 
 			const Vector3 result = tube.getVertex2() - tube.getVertex1();
+			const float length = result.getLength();
+
+			if (Maths::isZero(length)) return;
 
 			// cross product with z-axis-vector and result
 			const Vector3 rotation_axis(-result.y, result.x, 0.0);
 			// angle between z-axis-vector and result
-			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(result.z / result.getLength()));
+			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(result.z / length));
 
 			translateVector3_(tube.getVertex1());
+
+			// dont rotate if we have to draw in z-axis direction
+			if (!Maths::isZero(rotation_axis.getSquareLength()))
+			{
+				rotateVector3Angle_(rotation_axis, angle);
+			}
+			else
+			{
+				translateVector3_(result);
+			}
+
 			rotateVector3Angle_(rotation_axis, angle);
 
 			glScalef((GLfloat)tube.getRadius(),
@@ -660,17 +674,31 @@ namespace BALL
 			initDrawingOthers_();
 
 			const Vector3 result(tube.getVertex2() - tube.getVertex1());
+			const float length = result.getLength();
+
+			if (Maths::isZero(length)) return;
 
 			// cross product with z-axis-vector and result
 			const Vector3 rotation_axis(-result.y, result.x, 0.0);
 			// angle between z-axis-vector and result
-			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(result.z / result.getLength()));
+			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(result.z / length));
 
 			glPushMatrix();
 			setColor4ub_(tube);
 
 			translateVector3_(tube.getVertex1());
-			rotateVector3Angle_(rotation_axis, angle);
+
+			// dont rotate if we have to draw in z-axis direction
+			const bool to_rotate = !Maths::isZero(rotation_axis.getSquareLength());
+
+			if (to_rotate)
+			{
+				rotateVector3Angle_(rotation_axis, angle);
+			}
+			else
+			{
+				translateVector3_(result / 2.0);
+			}
 
 			glScalef((GLfloat)tube.getRadius(),
 							 (GLfloat)tube.getRadius(),
@@ -682,7 +710,14 @@ namespace BALL
 			glPushMatrix();
 			translateVector3_(tube.getMiddleVertex());
 
-			rotateVector3Angle_(rotation_axis, angle);
+			if (to_rotate)
+			{
+				rotateVector3Angle_(rotation_axis, angle);
+			}
+			else
+			{
+				translateVector3_(result / 2.0);
+			}
 
 			glScalef((GLfloat)tube.getRadius(),
 							 (GLfloat)tube.getRadius(),
