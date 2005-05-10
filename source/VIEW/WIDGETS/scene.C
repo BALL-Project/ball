@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.5 2005/05/10 13:50:32 amoll Exp $
+// $Id: scene.C,v 1.171.2.6 2005/05/10 19:46:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -22,7 +22,7 @@
 
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
-#include <BALL/VIEW/PRIMITIVES/box.h>
+#include <BALL/VIEW/PRIMITIVES/disc.h>
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -502,36 +502,18 @@ namespace BALL
 			Vector3 n = plane.getNormal();
 			if (!Maths::isZero(n.getSquareLength())) n.normalize();
 
-			Vector3 x(1,0,0);
-			Vector3 y(0,1,0);
-			Vector3 z(0,0,1);
+			Vector3 point(n * plane.getDistance());
 
-			Vector3 v[3];
-			v[0] = x - n.x * n;
-			v[1] = y - n.y * n;
-			v[2] = z - n.z * n;
+			Circle3 c(point, plane.getNormal(), 100.0);
+			Disc d(c);
+			d.setColor(ColorRGBA(0,0,255, 190));
 
-			Vector3 e[2];
-			Position i = 0;
-
-			for (Position j = 0; j < 3 && i < 2; j++)
-			{
-				if (v[j].getSquareLength() != 0) 
-				{
-					e[i] = v[j];
-					e[i].normalize();
-					i++;
-				}
-			}
-		
-			n *= -plane.getDistance();
-
-			Box b(n - (e[0] * 150.0  + e[1] * 150.0), e[0] * 300.0, e[1] * 300.0, 0.01);
-			ColorRGBA color(0,0,255, 70);
-			b.setColor(color);
-
+			gl_renderer_.initDrawingOthers_();
 			gl_renderer_.initTransparent();
-			gl_renderer_.renderBox_(b);
+			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
+			glDisable(GL_CULL_FACE);
+			gl_renderer_.renderDisc_(d);
+			glEnable(GL_CULL_FACE);
 		}
 
 		void Scene::renderRepresentations_(RenderMode mode)
