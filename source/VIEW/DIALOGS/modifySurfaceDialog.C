@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.9 2005/05/04 12:33:42 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.10 2005/05/10 13:50:29 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -514,25 +514,13 @@ void ModifySurfaceDialog::checkApplyButton_()
 
 	if (surface_tab->currentPage() == by_grid)
 	{
-		if (!grid_)
-		{
-			apply_button->setEnabled(false);
-		}
-		else
-		{
-			apply_button->setEnabled(true);
-			autoscale->setEnabled(true);
-		}
-	
+		apply_button->setEnabled(grid_ != 0);
+		autoscale->setEnabled(grid_ != 0);
 		return;
 	}
 
-	if (surface_tab->currentPage() == by_color ||
-			surface_tab->currentPage() == split)
-	{
-		// if coloring by selected color, always enabled
-		apply_button->setEnabled(true);
-	}
+	// if coloring by selected color, always enabled
+	apply_button->setEnabled(true);
 }
 
 void ModifySurfaceDialog::onNotify(Message *message)

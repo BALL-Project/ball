@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.20.2.1 2005/04/13 14:09:26 amoll Exp $
+// $Id: primitiveManager.h,v 1.20.2.2 2005/05/10 13:50:32 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -23,6 +23,7 @@ namespace BALL
 	{
 		class MainControl;
 		class UpdateRepresentationThread;
+		class ClippingPlane;
 
 		/** PrimitiveManager manages the graphical Representation objects and all GeometricObject.
 		 		All Representation objects which shall be inserted should be created using createRepresentation().
@@ -215,6 +216,15 @@ namespace BALL
 
 			///
 			HashSet<Representation*>& getRepresentationsBeeingDrawn();
+
+			///
+			const vector<ClippingPlane*>& getClippingPlanes() const { return clipping_planes_;}
+
+			///
+			bool removeClippingPlane(ClippingPlane* plane);
+
+			///
+			void insertClippingPlane(ClippingPlane* plane);
 			
 			protected:
 
@@ -244,6 +254,8 @@ namespace BALL
 			
 			//_ List with all representations, which will be updated
 			RepresentationList representations_to_be_updated_;
+
+			vector<ClippingPlane*> clipping_planes_;
 			
 			#ifdef BALL_QT_HAS_THREADS
 			static UpdateRepresentationThread thread_;

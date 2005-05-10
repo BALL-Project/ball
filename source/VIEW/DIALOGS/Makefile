@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.44.6.3 2005/05/09 15:35:58 amoll Exp $
+# $Id: Makefile,v 1.44.6.4 2005/05/10 13:50:28 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -129,7 +129,7 @@ UIC_SOURCES=\
 	minimizationDialogData.C\
 	bondPropertiesData.C\
 	charmmConfigurationDialogData.C\
-	clippingDialog.C\
+	clippingDialogData.C\
 	coloringSettingsDialogData.C\
 	modifySurfaceDialogData.C\
 	compositePropertiesData.C\

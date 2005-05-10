@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.2 2005/05/09 21:56:08 amoll Exp $
+// $Id: scene.h,v 1.62.2.3 2005/05/10 13:50:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -494,9 +494,6 @@ namespace BALL
 			
 			///
 			void exportPOVRay();
-
-			///
-			virtual void createNewClippingPlane();
 
 			/** Show or hide widget (Called by menu entry in "WINDOWS")
 					If the ModularWidget is not also a QWidget, this method does nothing

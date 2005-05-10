@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.65 2005/02/28 19:36:06 amoll Exp $
+// $Id: message.h,v 1.65.2.1 2005/05/10 13:50:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -849,6 +849,18 @@ class BALL_EXPORT FinishedSimulationMessage
 		throw();
 };
 	
+
+///
+class BALL_EXPORT SyncClippingPlanesMessage
+	: public Message
+{
+	public:
+
+	///
+	SyncClippingPlanesMessage()
+		throw() {};
+};
+
 
 //@}
 

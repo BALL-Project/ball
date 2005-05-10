@@ -54,9 +54,6 @@ String getModelName(ModelType type)
 			return "Forces";
 		case MODEL_LABEL:
 			return "Label";
-		case MODEL_CLIPPING_PLANE:
-			return "Clipping Plane";
-
 		case MODEL_UNKNOWN:
 			return "Unknown";
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.24.4.5 2005/05/09 15:38:12 amoll Exp $
+// $Id: geometricControl.h,v 1.24.4.6 2005/05/10 13:50:32 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -32,6 +32,7 @@ namespace BALL
 	{
 		class Representation;
 		class ModifySurfaceDialog;
+		class ClippingPlane;
 
 		/**	GeometricControl is a widget to display the list of representations.
 				There are methods available to modify the representations.
@@ -59,6 +60,10 @@ namespace BALL
 
 				Representation* getRepresentation() { return representation_;};
 
+				ClippingPlane* getClippingPlane() { return clipping_plane_;};
+
+				void setClippingPlane(ClippingPlane* plane) { clipping_plane_ = plane;}
+
 				protected:
 
 				// overriden function, used to message to Control
@@ -66,6 +71,7 @@ namespace BALL
 					throw();
 
 				Representation* 	representation_;
+				ClippingPlane* 	clipping_plane_;
 				GeometricControl& control_reference_;
 				bool 							ignore_change_;
 
@@ -142,7 +148,7 @@ namespace BALL
 			
 			/** Non-mutable inspection of the selection.
 			*/
-			List<Representation*> getSelection() const
+			List<Representation*> getHighlightedRepresentations() const
 				throw();
 			
 			/** Message handling.
@@ -159,7 +165,7 @@ namespace BALL
 					\see     insertContextMenuEntry
 					\see     onContextMenu
 			*/
-			virtual void buildContextMenu(Representation& representation)
+			virtual void buildContextMenu(SelectableListViewItem* item)
 				throw();
 
 			/** Insert a new context menu entry.
@@ -175,10 +181,6 @@ namespace BALL
 				throw();
 
 			
-			/// Overloaded from GenericControl, calls deleteRepresentation_()
-			virtual void deleteCurrentItems()
-				throw() {deleteRepresentation_();}
-
 			/// Overloaded from ModularWidget
 			virtual void checkMenu(MainControl& main_control)
 				throw();
@@ -186,6 +188,8 @@ namespace BALL
 			///
 			void moveItems(const Matrix4x4& m)
 				throw();
+
+			void updateClippingPlanes();
 
 			public slots:
 				
@@ -224,6 +228,9 @@ namespace BALL
 			///
 			virtual void selectClipRepresentations();
 
+			///
+			void createNewClippingPlane();
+			
 		  protected slots:
 			
 			//@} 
@@ -248,8 +255,9 @@ namespace BALL
 			virtual void generateListViewItem_(Representation& rep)
 				throw();
 			
-			/// Delete a Representation.
-			virtual void deleteRepresentation_();
+			/// Overloaded from GenericControl
+			virtual void deleteCurrentItems()
+				throw();
 
 			//@}
 
@@ -261,9 +269,6 @@ namespace BALL
 				COLUMN_ID__Properties
 			};
 
-			Representation*		getRepresentation(QListViewItem& item)
-				throw();
-
 			QString						getName_(QListViewItem& item)
 				throw();
 
@@ -274,6 +279,7 @@ namespace BALL
 			QPopupMenu 				clipping_plane_context_menu_;
 
 			Representation* 	context_representation_;
+			ClippingPlane* 		context_plane_;
 			QListViewItem*  	context_item_;
 
 			HashMap<Representation*, SelectableListViewItem*> representation_to_item_;

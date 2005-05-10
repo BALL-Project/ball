@@ -1,10 +1,11 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.1 2005/04/13 14:08:56 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.2 2005/05/10 13:50:31 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
@@ -473,6 +474,33 @@ HashSet<Representation*>& PrimitiveManager::getRepresentationsBeeingUpdated()
 HashSet<Representation*>& PrimitiveManager::getRepresentationsBeeingDrawn()
 {
 	return currently_drawing_;
+}
+
+bool PrimitiveManager::removeClippingPlane(ClippingPlane* plane)
+{
+	for (vector<ClippingPlane*>::iterator it = clipping_planes_.begin(); 
+			 it != clipping_planes_.end(); it++)
+	{
+		if (*it == plane)
+		{
+			clipping_planes_.erase(it);
+			delete (*it);
+			getMainControl()->sendMessage(*new SyncClippingPlanesMessage());
+			getMainControl()->sendMessage(*new SceneMessage(SceneMessage::REDRAW));
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void PrimitiveManager::insertClippingPlane(ClippingPlane* plane)
+{
+	clipping_planes_.push_back(plane);
+
+	getMainControl()->sendMessage(*new SyncClippingPlanesMessage());
+	getMainControl()->sendMessage(*new SceneMessage(SceneMessage::REDRAW));
 }
 
 } } // namespaces

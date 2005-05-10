@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.4 2005/05/09 21:50:06 amoll Exp $
+// $Id: scene.C,v 1.171.2.5 2005/05/10 13:50:32 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -499,7 +499,7 @@ namespace BALL
 		void Scene::renderClippingPlane_(const ClippingPlane& plane)
 			throw()
 		{
-			Vector3 n(plane.getX(), plane.getY(), plane.getZ());
+			Vector3 n = plane.getNormal();
 			if (!Maths::isZero(n.getSquareLength())) n.normalize();
 
 			Vector3 x(1,0,0);
@@ -524,7 +524,7 @@ namespace BALL
 				}
 			}
 		
-			n *= -plane.getD();
+			n *= -plane.getDistance();
 
 			Box b(n - (e[0] * 150.0  + e[1] * 150.0), e[0] * 300.0, e[1] * 300.0, 0.01);
 			ColorRGBA color(0,0,255, 70);
@@ -537,30 +537,33 @@ namespace BALL
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
 		{
-			vector<ClippingPlane*> clipping_planes;
-
-			PrimitiveManager::RepresentationList::ConstIterator it;
-			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
-
-			// ============== collect active Clipping planes ==============================
+			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+			
+			// ============== enable active Clipping planes ==============================
 			GLint current_clipping_plane = GL_CLIP_PLANE0;
 
-			for(; it != getMainControl()->getPrimitiveManager().end(); it++)
+			vector<ClippingPlane*> active_planes;
+			vector<ClippingPlane*> inactive_planes;
+			
+			const vector<ClippingPlane*>& vc = pm.getClippingPlanes();
+			vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
+			for (;plane_it != vc.end(); plane_it++)
 			{
-				if ((**it).getModelType() == MODEL_CLIPPING_PLANE && !(**it).isHidden())
+				ClippingPlane& plane = **plane_it;
+				if (!plane.isActive()) 
 				{
-					ClippingPlane& plane = *(ClippingPlane*) *it;
-					clipping_planes.push_back(&plane);
-
-					Vector3 n(plane.getX(), plane.getY(), plane.getZ());
-					if (!Maths::isZero(n.getSquareLength())) n.normalize();
-
-					const GLdouble planef[] ={n.x, n.y, n.z, plane.getD()};
-					glClipPlane(current_clipping_plane, planef);
-					current_clipping_plane++;
+					inactive_planes.push_back(*plane_it);
+					continue;
 				}
+
+				active_planes.push_back(*plane_it);
+				Vector3 n(plane.getNormal());
+				if (!Maths::isZero(n.getSquareLength())) n.normalize();
+
+				const GLdouble planef[] ={n.x, n.y, n.z, plane.getDistance()};
+				glClipPlane(current_clipping_plane, planef);
+				current_clipping_plane++;
 			}
-		
 
 			// -------------------------------------------------------------------
 			// show light sources
@@ -590,8 +593,17 @@ namespace BALL
 			// 3. allways front
 			for (Position run = 0; run < 3; run++)
 			{
-				it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
-				for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
+				if (run == 1)
+				{
+					// render inactive clipping plane
+					for (plane_it = inactive_planes.begin(); plane_it != inactive_planes.end(); plane_it++)
+					{
+						renderClippingPlane_(**plane_it);
+					}
+				}
+
+				PrimitiveManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+				for(; it != pm.getRepresentations().end(); it++)
 				{
 					Representation& rep = **it;
 
@@ -606,13 +618,6 @@ namespace BALL
 					}
 					else if (run == 1)
 					{
-						// render clipping plane
-						if (rep.getModelType() == MODEL_CLIPPING_PLANE && rep.isHidden())
-						{
-							renderClippingPlane_(*(ClippingPlane*) &rep);
-							continue;
-						}
-
 						// render all transparent models
 						if (rep.getTransparency() == 0) continue;
 					}
@@ -622,24 +627,22 @@ namespace BALL
 						if (!rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT)) continue;
 					}
 
-					if (rep.getModelType() == MODEL_CLIPPING_PLANE) continue;
+					vector<Position> rep_active_planes; // clipping planes
 
-					vector<Position> active_planes; // clipping planes
-
-					for (Position plane_nr = 0; plane_nr < clipping_planes.size(); plane_nr++)
+					for (Position plane_nr = 0; plane_nr < active_planes.size(); plane_nr++)
 					{
-						if (clipping_planes[plane_nr]->getRepresentations().has(*it))
+						if (active_planes[plane_nr]->getRepresentations().has(*it))
 						{
 							glEnable(plane_nr + GL_CLIP_PLANE0);
-							active_planes.push_back(plane_nr);
+							rep_active_planes.push_back(plane_nr);
 						}
 					}
 
 					render_(rep, mode);
 
-					for (Position p = 0; p < active_planes.size(); p++)
+					for (Position p = 0; p < rep_active_planes.size(); p++)
 					{
-						glDisable(active_planes[p] + GL_CLIP_PLANE0);
+						glDisable(rep_active_planes[p] + GL_CLIP_PLANE0);
 					}
 				}
 			}
@@ -1432,10 +1435,6 @@ namespace BALL
 				main_control.insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 			menuBar()->setItemChecked(window_menu_entry_id_, true);
 
-			hint = "Add an OpenGL Clipping Plane to the Scene";
-			main_control.insertMenuEntry(MainControl::DISPLAY, "New Clipping Plane", this, 
-					SLOT(createNewClippingPlane()), 0, -1, hint);   
-
 			// ======================== ANIMATION ===============================================
 			hint = "Record an animation for later processing";
 			record_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 
@@ -1477,9 +1476,6 @@ namespace BALL
 			main_control.removeMenuEntry(MainControl::DISPLAY, "& Stereo Mode", this, SLOT( switchStereo()), ALT+Key_Y);		
 			main_control.removeMenuEntry(MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P);		
 			main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
-
-			main_control.removeMenuEntry(MainControl::DISPLAY, "New Clipping Plane", this, 
-					SLOT(createNewClippingPlane()), 0);
 		}
 
 		void Scene::checkMenu(MainControl& /*main_control*/)
@@ -2057,31 +2053,6 @@ namespace BALL
 			getMainControl()->menuBar()->setItemChecked(active_stereo_id_, false);
 			getMainControl()->menuBar()->setItemChecked(dual_stereo_id_, true);
 			update();
-		}
-
-		void Scene::createNewClippingPlane()
-		{
-			MainControl* mc = getMainControl();
-			if (mc == 0) return;
-
-			ClippingPlane* rep = new ClippingPlane();
-			rep->setModelType(MODEL_CLIPPING_PLANE);
-			Vector3 v = stage_->getCamera().getViewVector();
-			rep->setX(v.x);
-			rep->setY(v.y);
-			rep->setZ(v.z);
-			rep->setD(10);
-			rep->setHidden(true);
-
-			PrimitiveManager& pm = mc->getPrimitiveManager();
-			PrimitiveManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
-			for (; it != pm.getRepresentations().end(); it++)
-			{
-				if (RTTI::isKindOf<ClippingPlane> (**it)) continue;
-
-				rep->getRepresentations().insert(*it);
-			}
-			getMainControl()->insert(*rep);
 		}
 
 		void Scene::setCamera(const Camera& camera)

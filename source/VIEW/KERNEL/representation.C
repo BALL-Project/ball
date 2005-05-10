@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.6 2005/05/09 15:37:06 amoll Exp $
+// $Id: representation.C,v 1.62.4.7 2005/05/10 13:50:31 amoll Exp $
 //
 
 
@@ -527,11 +527,6 @@ namespace BALL
 		bool Representation::needsUpdate() const
 			throw()
 		{
-			if (getModelType() == MODEL_CLIPPING_PLANE)
-			{
-				return false;
-			}
-
 			if (needs_update_ || 
 					changed_color_processor_ ||
 					getModelBuildTime() < Atom::getAttributesModificationTime())
@@ -552,15 +547,6 @@ namespace BALL
 			throw()
 		{
 			String result;
-			if (getModelType() == MODEL_CLIPPING_PLANE)
-			{
-				result+= "CP:";
-				result+= String(getProperty("AX").getFloat()) + " ";
-				result+= String(getProperty("BY").getFloat()) + " ";
-				result+= String(getProperty("CZ").getFloat()) + " ";
-				result+= String(getProperty("D").getFloat());
-				return result;
-			}
 
 			result += String(model_type_) + " ";
 			result += String(drawing_mode_) + " ";
@@ -644,11 +630,6 @@ namespace BALL
 			if (hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 			{
 				return "Coordinate System";
-			}
-
-			if (getModelType() == MODEL_CLIPPING_PLANE)
-			{
-				return "Clipping Plane";
 			}
 
 			String name = getModelName().c_str();

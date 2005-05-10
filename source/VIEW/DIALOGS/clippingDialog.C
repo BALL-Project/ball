@@ -65,8 +65,6 @@ void ClippingDialog::show()
 	PrimitiveManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
 	for (; it != pm.getRepresentations().end(); it++)
 	{
-		if (RTTI::isKindOf<ClippingPlane> (**it)) continue;
-
 		SelectableListViewItem* item = new SelectableListViewItem(listview, (**it).getName(), *it);
 
 		if (clipping_plane_->getRepresentations().has(*it)) item->setOn(true);
@@ -90,7 +88,7 @@ void ClippingDialog::accept()
 		}
 	}
 
-	getMainControl()->sendMessage(*new SceneMessage(SceneMessage::REDRAW));
+	getMainControl()->redrawAllRepresentations();
 }
 
 

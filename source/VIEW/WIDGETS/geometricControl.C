@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.8 2005/05/09 21:48:23 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.9 2005/05/10 13:50:31 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -50,13 +50,17 @@ namespace BALL
 			throw()
 			: QCheckListItem(parent, text, QCheckListItem::CheckBox),
 				representation_(representation),
+				clipping_plane_(0),
 				control_reference_(control),
 				ignore_change_(false)
 		{
 			setText(0, text);
-			setText(1, representation->getColoringName().c_str());
-			setText(2, representation->getProperties().c_str());
-			setOn(!representation->isHidden());
+			if (representation_ != 0)
+			{
+				setText(1, representation->getColoringName().c_str());
+				setText(2, representation->getProperties().c_str());
+				setOn(!representation->isHidden());
+			}
 		}
 
 		void GeometricControl::SelectableListViewItem::stateChange(bool state)
@@ -65,6 +69,13 @@ namespace BALL
 			if (ignore_change_)
 			{
 				ignore_change_ = false;
+				return;
+			}
+
+			if (getClippingPlane() != 0)
+			{
+				getClippingPlane()->setActive(!getClippingPlane()->isActive());
+				VIEW::getMainControl()->redrawAllRepresentations();
 				return;
 			}
 
@@ -195,6 +206,12 @@ namespace BALL
 				return;
 			}
 
+			if (RTTI::isKindOf<SyncClippingPlanesMessage>(*message))
+			{
+				updateClippingPlanes();
+				return;
+			}
+
 			if (!RTTI::isKindOf<RepresentationMessage> (*message))
 			{
 				return;
@@ -231,45 +248,47 @@ namespace BALL
 			}
 		}
 
-		void GeometricControl::buildContextMenu(Representation& rep)
+		void GeometricControl::buildContextMenu(SelectableListViewItem* item)
 			throw()
 		{
+			Representation* rep = item->getRepresentation();
+			ClippingPlane* plane = item->getClippingPlane();
+
 			insertContextMenuEntry("Focus", this, SLOT(focusRepresentation()), 5);
-			insertContextMenuEntry("Delete", this, SLOT(deleteRepresentation_()), 10);
+			insertContextMenuEntry("Delete", this, SLOT(deleteCurrentItems()), 10);
+			insertContextMenuEntry("Select Atoms", this, SLOT(selectAtoms()), 25);
 			insertContextMenuEntry("Modify Model", this, SLOT(modifyRepresentation_()), 20);	
+			insertContextMenuEntry("Modifiy Surface", modify_surface_dialog_, SLOT(show()), 30);	
+			context_menu_.insertSeparator();
+			context_menu_.insertItem("Clipping Plane", &clipping_plane_context_menu_, 40);
+
+			if (plane != 0)
+			{
+				context_menu_.setItemEnabled(5, false); 
+				context_menu_.setItemEnabled(10, false); 
+				context_menu_.setItemEnabled(20, false); 
+				context_menu_.setItemEnabled(25, false); 
+				context_menu_.setItemEnabled(30, false); 
+				context_menu_.setItemEnabled(40, true); 
+				return;
+			}
+
+			context_menu_.setItemEnabled(40, false); 
+
 			if (getSelectedItems().size() != 1)
 			{
 				context_menu_.setItemEnabled(5, false); 
 			}
 
 			if (getSelectedItems().size() > 1 ||
-					rep.getModelType() >= MODEL_LABEL)
+					rep->getModelType() >= MODEL_LABEL)
 			{
 				context_menu_.setItemEnabled(20, false); 
 			}
 
-			insertContextMenuEntry("Select Atoms", this, SLOT(selectAtoms()), 25);
-
-			context_menu_.insertSeparator();
-
-			// This is used to provide the coloring for meshes...
-			insertContextMenuEntry("Modifiy Surface", modify_surface_dialog_, SLOT(show()), 30);	
-			if (!isSurfaceModel(rep.getModelType()))
+			if (!isSurfaceModel(rep->getModelType()))
 			{
 				context_menu_.setItemEnabled(30, false);
-				context_menu_.setItemEnabled(34, false);
-			}
-
-			context_menu_.insertSeparator();
-			context_menu_.insertItem("Clipping Plane", &clipping_plane_context_menu_, 40);
-			if (rep.getModelType() == MODEL_CLIPPING_PLANE)
-			{
-				context_menu_.setItemEnabled(5, false);
-				context_menu_.setItemEnabled(20, false);
-			}
-			else
-			{
-				context_menu_.setItemEnabled(40, false);
 			}
 		}
 
@@ -277,12 +296,6 @@ namespace BALL
 			throw()
 		{
 			context_menu_.insertItem(name.c_str(), receiver, slot, accel, entry_ID);
-		}
-
-		Representation* GeometricControl::getRepresentation(QListViewItem& item)
-			throw()
-		{
-			return ((SelectableListViewItem*) &item)->getRepresentation();
 		}
 
 		void GeometricControl::generateListViewItem_(Representation& rep)
@@ -300,9 +313,11 @@ namespace BALL
 		}
 
 
-		void GeometricControl::deleteRepresentation_()
+		void GeometricControl::deleteCurrentItems()
+			throw()
 		{
-			if (getSelection().size() == 0) return;
+			ItemList items = getSelectedItems();
+			if (items.size() == 0) return;
 
 			if (creating_representations_) 
 			{
@@ -310,11 +325,19 @@ namespace BALL
 				return;
 			}
 
-			List<Representation*> reps = getSelection();
-			List<Representation*>::Iterator it = reps.begin();
-			for (; it != reps.end(); ++it)
+			ItemList::Iterator it = items.begin();
+			for (; it != items.end(); ++it)
 			{
-				getMainControl()->remove(**it);
+				SelectableListViewItem* item = (SelectableListViewItem*) *it;
+				Representation* rep = item->getRepresentation();
+				if (rep != 0) 
+				{
+					getMainControl()->remove(*rep);
+					continue;
+				}
+
+				ClippingPlane* plane = item->getClippingPlane();
+				getMainControl()->getPrimitiveManager().removeClippingPlane(plane);
 			}
 
 			setStatusbarText("Deleted representation.");
@@ -356,14 +379,12 @@ namespace BALL
 			// clear the context menu
 			context_menu_.clear();
 
-			// get Representation address
-			Representation* const rep = getRepresentation(*item);
-			if (rep == 0) return;
 			// create the context menu
-			context_representation_ = rep;
+			context_representation_ = ((SelectableListViewItem*)item)->getRepresentation();
+			context_plane_ = 					((SelectableListViewItem*)item)->getClippingPlane();
 			context_item_ = item;
 
-			buildContextMenu(*rep);
+			buildContextMenu((SelectableListViewItem*)item);
 
 			// is the context menu not empty
 			if (context_menu_.count())
@@ -406,13 +427,16 @@ namespace BALL
 				return;
 			}
 
-			Representation* rep = getRepresentation(*item);
+			Representation* rep = ((SelectableListViewItem*)item)->getRepresentation();
+			if (rep == 0) return; 
+
 			modify_surface_dialog_->setRepresentation(rep);
 
 			RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::SELECTED);
 			notify_(message);
 
-			if (rep->getComposites().size() > 0) 
+			if (
+					rep->getComposites().size() > 0) 
 			{
 				String name;
 				const Composite* c_ptr = *rep->getComposites().begin();
@@ -446,14 +470,15 @@ namespace BALL
 		}
 
 
-		List<Representation*> GeometricControl::getSelection() const
+		List<Representation*> GeometricControl::getHighlightedRepresentations() const
 			throw()
 		{
 			List<Representation*> selection;
 			ItemList selected = ((GeometricControl*)this)->getSelectedItems();
 			for (ItemList::Iterator it = selected.begin(); it != selected.end(); ++it)
 			{
-				selection.push_back(((GeometricControl*) this)->getRepresentation(**it));
+				Representation* rep = ((SelectableListViewItem*) *it)->getRepresentation();
+				if (rep != 0) selection.push_back(rep);
 			}
 			return selection;
 		}
@@ -462,11 +487,9 @@ namespace BALL
 		void GeometricControl::checkMenu(MainControl& main_control)
 			throw()
 		{
-			ItemList item_list = getSelectedItems(); 
-			if (item_list.size() > 0 && 
-					!main_control.compositesAreLocked() &&
-					!main_control.updateOfRepresentationRunning()
-					) 
+			if (!main_control.compositesAreLocked() &&
+					!main_control.updateOfRepresentationRunning() &&
+					getSelectedItems().size() > 0)
 			{
 				main_control.setDeleteEntryEnabled(true);
 			}
@@ -474,8 +497,9 @@ namespace BALL
 
 		void GeometricControl::focusRepresentation()
 		{
-			if (getSelectedItems().size() != 1) return;
-			Representation* const rep = *getSelection().begin();
+			List<Representation*> reps = getHighlightedRepresentations();
+			if (reps.size() != 1) return;
+			Representation* const rep = *reps.begin();
 			
 			GeometricCenterProcessor centerp;
 			BoundingBoxProcessor bbox;
@@ -578,12 +602,19 @@ namespace BALL
 			throw()
 		{
 			GenericControl::initializeWidget(main_control);
+
+			String hint = "Add an OpenGL Clipping Plane to the Scene";
+			main_control.insertMenuEntry(MainControl::DISPLAY, "New Clipping Plane", this, 
+					SLOT(createNewClippingPlane()), 0, -1, hint);   
 		}
 
 		void GeometricControl::finalizeWidget(MainControl& main_control)
 			throw()
 		{
 			GenericControl::finalizeWidget(main_control);
+
+			main_control.removeMenuEntry(MainControl::DISPLAY, "New Clipping Plane", this, 
+					SLOT(createNewClippingPlane()), 0);
 		}
 
 		void GeometricControl::moveClippingPlane()
@@ -596,17 +627,11 @@ namespace BALL
 
 		void GeometricControl::flipClippingPlane()
 		{
-			if (!RTTI::isKindOf<ClippingPlane>(*context_representation_)) return;
-			ClippingPlane& plane = *(ClippingPlane*) context_representation_;
+			if (context_plane_ == 0) return;
+			context_plane_->setNormal(-context_plane_->getNormal());
+			context_plane_->setDistance(-context_plane_->getDistance());
 
-			plane.setX(-plane.getX());
-			plane.setY(-plane.getY());
-			plane.setZ(-plane.getZ());
-			plane.setD(-plane.getD());
-
-			RepresentationMessage* msg = 
-				new RepresentationMessage(*context_representation_, RepresentationMessage::UPDATE);
-			notify_(msg);
+			getMainControl()->redrawAllRepresentations();
 		}
 
 		void GeometricControl::setClippingPlaneX()
@@ -629,34 +654,25 @@ namespace BALL
 
 		void GeometricControl::setClippingPlane_(const Vector3& n)
 		{
-			if (!RTTI::isKindOf<ClippingPlane>(*context_representation_)) return;
-			ClippingPlane& plane = *(ClippingPlane*) context_representation_;
+			if (context_plane_ == 0) return;
 
-			plane.setX(n.x);
-			plane.setY(n.y);
-			plane.setZ(n.z);
-			plane.setD(1);
-
-			RepresentationMessage* msg = 
-				new RepresentationMessage(*context_representation_, RepresentationMessage::UPDATE);
-			notify_(msg);
+			context_plane_->setNormal(n);
+			getMainControl()->redrawAllRepresentations();
 		}
 
 
 		void GeometricControl::moveItems(const Matrix4x4& m)
 			throw()
 		{
-			List<Representation*> reps = getSelection();
-			List<Representation*>::Iterator it = reps.begin();
+			ItemList items = getSelectedItems();
+			ItemList::Iterator it = items.begin();
 
-			for (; it != reps.end(); it++)
+			for (; it != items.end(); it++)
 			{
-				if (!RTTI::isKindOf<ClippingPlane>(**it)) return;
-				ClippingPlane& plane = *(ClippingPlane*) *it ;
+				ClippingPlane* plane = ((SelectableListViewItem*) *it)->getClippingPlane();
+				if (plane == 0) continue;
 
-				Vector3 n(plane.getX(),
-									plane.getY(),
-									plane.getZ());
+				Vector3 n(plane->getNormal());
 
 				if (m.m14 == 0 && m.m24 == 0 && m.m34 == 0)
 				{
@@ -665,23 +681,18 @@ namespace BALL
 						n.normalize();
 					}
 
-					n = m * n;
-
-					plane.setX(n.x);
-					plane.setY(n.y);
-					plane.setZ(n.z);
+					plane->setNormal(m * n);
 				}
 				else
 				{
 					Vector3 t(-m.m14, -m.m24, -m.m34);
-					plane.setD(plane.getD() + t * n);
+					plane->setDistance(plane->getDistance() + t * n);
 				}
 
-				RepresentationMessage* msg = 
-					new RepresentationMessage((**it), RepresentationMessage::UPDATE);
-				notify_(msg);
+				getMainControl()->redrawAllRepresentations();
 			}
 		}
+
 
 		void GeometricControl::selectAtoms()
 		{
@@ -701,18 +712,74 @@ namespace BALL
 
 		void GeometricControl::selectClipRepresentations()
 		{
-			if (context_representation_ == 0) return;
-			ClippingPlane& plane = *(ClippingPlane*) context_representation_;
+			if (context_plane_ == 0) return;
 
 			ClippingDialog dialog;
-			dialog.setClippingPlane(&plane);
+			dialog.setClippingPlane(context_plane_);
 			dialog.exec();
-
-			SceneMessage* msg = new SceneMessage(SceneMessage::REDRAW);
-			notify_(msg);
 		}
 
-			
+		void GeometricControl::createNewClippingPlane()
+		{
+			MainControl* mc = getMainControl();
+			Scene* scene = Scene::getInstance(0);
+			if (mc == 0 || scene == 0) return;
+
+			ClippingPlane* plane = new ClippingPlane();
+			plane->setNormal(scene->getStage()->getCamera().getViewVector());
+			plane->setDistance(10);
+
+			PrimitiveManager& pm = mc->getPrimitiveManager();
+			PrimitiveManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+			for (; it != pm.getRepresentations().end(); it++)
+			{
+				plane->getRepresentations().insert(*it);
+			}
+			getMainControl()->getPrimitiveManager().insertClippingPlane(plane);
+		}
+
+
+		void GeometricControl::updateClippingPlanes()
+		{
+			// put the planes from the PrimitiveManager into a hashset
+			HashSet<ClippingPlane*> to_have_planes;
+
+			const vector<ClippingPlane*>& vc = getMainControl()->getPrimitiveManager().getClippingPlanes();
+			vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
+			for (; plane_it != vc.end(); plane_it++)
+			{
+				to_have_planes.insert(*plane_it);
+			}
+
+			// collect all planes, the GeometricControl currently has
+			HashMap<ClippingPlane*, SelectableListViewItem*> plane_map;
+
+			QListViewItemIterator it(listview);
+			for (; it.current(); ++it)
+			{
+				SelectableListViewItem* item = (SelectableListViewItem*)it.current();
+				if (item->getClippingPlane() != 0)
+				{
+					plane_map[item->getClippingPlane()] = item;
+				}
+			}
+
+			HashSet<ClippingPlane*>::Iterator cit = to_have_planes.begin();
+			for (; +cit; ++cit)
+			{
+				if (!plane_map.has(*cit))
+				{
+					SelectableListViewItem* new_item = new SelectableListViewItem(listview, "ClippingPlane", 0, *this);
+					new_item->setClippingPlane(*cit);
+				}
+			}
+
+			HashMap<ClippingPlane*, SelectableListViewItem*>::Iterator mit = plane_map.begin();
+			for (; +mit; ++mit)
+			{
+				if (!to_have_planes.has(mit->first)) removeItem_(mit->second);
+			}
+		}
 	
 	} // namespace VIEW
 } // namespace BALL

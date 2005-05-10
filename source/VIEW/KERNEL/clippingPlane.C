@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clippingPlane.C,v 1.1.2.1 2005/05/09 15:37:09 amoll Exp $
+// $Id: clippingPlane.C,v 1.1.2.2 2005/05/10 13:50:30 amoll Exp $
 //
 
 
@@ -13,18 +13,16 @@ namespace BALL
 	{
 		ClippingPlane::ClippingPlane()
 			throw()
-				: Representation()
+				: active_(false)
 		{
 		}
 
 					
 		ClippingPlane::ClippingPlane(const ClippingPlane& rp)
 			throw()
-				: Representation(rp),
-					x_(rp.x_),
-					y_(rp.y_),
-					z_(rp.z_),
-					d_(rp.d_)
+				: normal_(rp.normal_),
+					d_(rp.d_),
+					active_(rp.active_)
 		{
 			reps_ = rp.reps_;
 		}
@@ -33,13 +31,11 @@ namespace BALL
 		const ClippingPlane& ClippingPlane::operator = (const ClippingPlane& plane)
 			throw()
 		{
-			Representation::operator = (plane);
 			reps_ = plane.reps_;
 
-			x_ = plane.x_;
-			y_ = plane.y_;
-			z_ = plane.z_;
+			normal_ = plane.normal_;
 			d_ = plane.d_;
+			active_ = plane.active_;
 			return *this;
 		}
 

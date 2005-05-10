@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.3 2005/04/15 13:51:55 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.4 2005/05/10 13:50:30 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 #include <BALL/VIEW/KERNEL/modularWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 
@@ -1969,14 +1970,13 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					split_size = data_string.split(string_vector);
 					if (split_size != 4) continue;
 
-					Representation* rep = new Representation();
-					rep->setModelType(MODEL_CLIPPING_PLANE);
-					rep->setProperty("AX", string_vector[0].toFloat());
-					rep->setProperty("BY", string_vector[1].toFloat());
-					rep->setProperty("CZ", string_vector[2].toFloat());
-					rep->setProperty("D", string_vector[3].toFloat());
+					ClippingPlane* plane = new ClippingPlane();
+					plane->setNormal(Vector3(string_vector[0].toFloat(),
+																	 string_vector[1].toFloat(),
+																	 string_vector[2].toFloat()));
+					plane->setDistance(string_vector[3].toFloat());
 
-					insert(*rep);
+					getPrimitiveManager().insertClippingPlane(plane);
 					continue;
 				}
 

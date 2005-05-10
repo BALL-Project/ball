@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clippingPlane.h,v 1.1.2.1 2005/05/09 15:37:20 amoll Exp $
+// $Id: clippingPlane.h,v 1.1.2.2 2005/05/10 13:50:31 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_CLIPPING_PLANE_H
@@ -23,7 +23,6 @@ namespace BALL
 				\ingroup ViewKernelGeometricPrimitives
 		*/
 		class BALL_EXPORT ClippingPlane
-			: public Representation
 		{
 			public:
 
@@ -62,36 +61,31 @@ namespace BALL
 			HashSet<Representation*>& getRepresentations() { return reps_;}
 
 			///
-			float getX() const { return x_;}
+			const Vector3& getNormal() const { return normal_;}
 
 			///
-			float getY() const { return y_;}
+			void setNormal(const Vector3& normal) { normal_ = normal;}
 
 			///
-			float getZ() const { return z_;}
+			bool isActive() { return active_;}
 
 			///
-			float getD() const { return d_;}
+			void setActive(bool state) { active_ = state;}
 
 			///
-			void setX(float x) { x_ = x;}
-
+			void setDistance(float d) { d_ = d;}
+			
 			///
-			void setY(float y) { y_ = y;}
-
-			///
-			void setZ(float z) { z_ = z;}
-
-			///
-			void setD(float d) { d_ = d;}
-
+			float getDistance() const { return d_;}
 
 			//@}
 
 			protected:
 
 			HashSet<Representation*> reps_;
-			float x_, y_, z_, d_;
+			Vector3 normal_;
+			float d_;
+			bool active_;
 		};
 
 	} // namespace VIEW

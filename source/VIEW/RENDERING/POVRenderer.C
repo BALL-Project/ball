@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19.4.5 2005/05/09 21:56:09 amoll Exp $
+// $Id: POVRenderer.C,v 1.19.4.6 2005/05/10 13:50:31 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
@@ -368,8 +369,9 @@ namespace BALL
 					render_(*it);
 				}
 
-				vector<ClippingPlane*>::iterator plane_it = clipping_planes_.begin();
-				for (;plane_it != clipping_planes_.end(); plane_it++)
+				const vector<ClippingPlane*>& vc = getMainControl()->getPrimitiveManager().getClippingPlanes();
+				vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
+				for (;plane_it != vc.end(); plane_it++)
 				{
 					ClippingPlane& plane = **plane_it;
 
@@ -378,10 +380,10 @@ namespace BALL
 
 						out << "  clipped_by{" << endl
 										 << "   plane{< -"  // negate normal vector
-										 << plane.getX() << ", -" 
-										 << plane.getY() << ", -" 
-										 << plane.getZ() << ">, "
-										 << plane.getD()
+										 << plane.getNormal().x << ", -" 
+										 << plane.getNormal().y << ", -" 
+										 << plane.getNormal().z << ">, "
+										 << plane.getDistance()
 										 << "  }" << endl
 										 << " }" << endl;
 					}
@@ -397,7 +399,6 @@ namespace BALL
 				(*(File*)outfile_).close();
 			}
 
-			clipping_planes_.clear();
 			return true;
 		}
 
@@ -675,12 +676,9 @@ namespace BALL
 			out << "\t}" << endl;
 		}
 				
-		void POVRenderer::renderClippingPlane_(const Representation& rep)
+		void POVRenderer::renderClippingPlane_(const Representation&)
 			throw()
 		{
-			if (!RTTI::isKindOf<ClippingPlane>(rep)) return;
-			ClippingPlane& plane = *(ClippingPlane*) &rep;
-			clipping_planes_.push_back(&plane);
 		}
 
 		const ColorRGBA& POVRenderer::getColor_(const GeometricObject& object)
@@ -697,12 +695,6 @@ namespace BALL
 			throw()
 		{
 			if (representation.isHidden()) return true;
-
-			if (representation.getModelType() == MODEL_CLIPPING_PLANE)
-			{
-				renderClippingPlane_(representation);
-				return true;
-			}
 
 			if (!representation.isValid())
 			{
