@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.9 2005/05/10 13:50:31 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.10 2005/05/10 23:08:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -36,6 +36,8 @@
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 #include <qtooltip.h> 
+
+ #include <BALL/MATHS/matrix44.h>
 
 using std::endl;
 
@@ -202,7 +204,7 @@ namespace BALL
 
 			if (RTTI::isKindOf<TransformationMessage> (*message))
 			{
-				moveItems(((TransformationMessage*)message)->getMatrix());
+				moveItems(*(TransformationMessage*)message);
 				return;
 			}
 
@@ -265,7 +267,6 @@ namespace BALL
 			if (plane != 0)
 			{
 				context_menu_.setItemEnabled(5, false); 
-				context_menu_.setItemEnabled(10, false); 
 				context_menu_.setItemEnabled(20, false); 
 				context_menu_.setItemEnabled(25, false); 
 				context_menu_.setItemEnabled(30, false); 
@@ -661,11 +662,19 @@ namespace BALL
 		}
 
 
-		void GeometricControl::moveItems(const Matrix4x4& m)
+		void GeometricControl::moveItems(const TransformationMessage& msg)
 			throw()
 		{
 			ItemList items = getSelectedItems();
 			ItemList::Iterator it = items.begin();
+
+			Scene* scene = Scene::getInstance(0);
+
+			if (scene == 0) return;
+
+			const Camera& camera = Scene::getInstance(0)->getStage()->getCamera();
+
+			const Matrix4x4& m = msg.getMatrix();
 
 			for (; it != items.end(); it++)
 			{
@@ -676,12 +685,35 @@ namespace BALL
 
 				if (m.m14 == 0 && m.m24 == 0 && m.m34 == 0)
 				{
-					if (!Maths::isZero(n.getSquareLength())) 
+					float width  = scene->width();
+					float height = scene->height();
+
+					float ax = (scene->getMousePositionX() - width  / 2.0) / (width  / 2.0);
+					float ay = (scene->getMousePositionY() - height / 2.0) / (height / 2.0);
+
+					ax *= 1.1;
+					ay *= 1.1;
+
+					float a = fabs(ax) + fabs(ay);
+
+					if (ax >  1.0) ax =  1.0;
+					if (ax < -1.0) ax = -1.0;
+					if (ay >  1.0) ay =  1.0;
+					if (ay < -1.0) ay = -1.0;
+
+					if (a < 0.0) a *= -1.0;
+					if (a > 1.0) a  =  1.0;
+
+					Vector3 v = ((float)(1.0 - a)) * camera.getViewVector()  * 0.01+ 
+										  camera.getRightVector()  * ax    +
+											camera.getLookUpVector() * ay;
+
+					if (!Maths::isZero(v.getSquareLength()))
 					{
-						n.normalize();
+						v.normalize();
 					}
 
-					plane->setNormal(m * n);
+					plane->setNormal(v);
 				}
 				else
 				{
@@ -726,7 +758,9 @@ namespace BALL
 			if (mc == 0 || scene == 0) return;
 
 			ClippingPlane* plane = new ClippingPlane();
-			plane->setNormal(scene->getStage()->getCamera().getViewVector());
+			Vector3 n(scene->getStage()->getCamera().getViewVector());
+			if (!Maths::isZero(n.getSquareLength())) n.normalize();
+			plane->setNormal(n);
 			plane->setDistance(10);
 
 			PrimitiveManager& pm = mc->getPrimitiveManager();

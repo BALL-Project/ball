@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.24.4.6 2005/05/10 13:50:32 amoll Exp $
+// $Id: geometricControl.h,v 1.24.4.7 2005/05/10 23:08:36 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -18,9 +18,6 @@
 # include <BALL/VIEW/KERNEL/common.h>
 #endif 
 
-#ifndef BALL_MATHS_MATRIX44_H
- #include <BALL/MATHS/matrix44.h>
-#endif
 
 #include <qpoint.h>
 #include <qpopupmenu.h>
@@ -33,6 +30,7 @@ namespace BALL
 		class Representation;
 		class ModifySurfaceDialog;
 		class ClippingPlane;
+		class TransformationMessage;
 
 		/**	GeometricControl is a widget to display the list of representations.
 				There are methods available to modify the representations.
@@ -186,7 +184,7 @@ namespace BALL
 				throw();
 
 			///
-			void moveItems(const Matrix4x4& m)
+			void moveItems(const TransformationMessage& msg)
 				throw();
 
 			void updateClippingPlanes();

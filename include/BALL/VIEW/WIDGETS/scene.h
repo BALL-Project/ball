@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.3 2005/05/10 13:50:32 amoll Exp $
+// $Id: scene.h,v 1.62.2.4 2005/05/10 23:08:36 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -424,6 +424,12 @@ namespace BALL
 			///
 			static bool stereoBufferSupportTest();
 			
+			///
+			float getMousePositionX() { return x_window_pos_new_;}
+
+			///
+			float getMousePositionY() { return y_window_pos_new_;}
+	
 			protected:
 
 			//@}
@@ -486,7 +492,8 @@ namespace BALL
 
 			/// Catch key events
 			void keyPressEvent(QKeyEvent* e);
-		
+
+	
 			public slots:
 
 			/// Export PNG image and return the filename

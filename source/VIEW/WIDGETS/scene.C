@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.6 2005/05/10 19:46:28 amoll Exp $
+// $Id: scene.C,v 1.171.2.7 2005/05/10 23:08:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -499,10 +499,7 @@ namespace BALL
 		void Scene::renderClippingPlane_(const ClippingPlane& plane)
 			throw()
 		{
-			Vector3 n = plane.getNormal();
-			if (!Maths::isZero(n.getSquareLength())) n.normalize();
-
-			Vector3 point(n * plane.getDistance());
+			const Vector3 point(plane.getNormal() * - plane.getDistance());
 
 			Circle3 c(point, plane.getNormal(), 100.0);
 			Disc d(c);
@@ -539,9 +536,8 @@ namespace BALL
 				}
 
 				active_planes.push_back(*plane_it);
-				Vector3 n(plane.getNormal());
-				if (!Maths::isZero(n.getSquareLength())) n.normalize();
 
+				const Vector3& n(plane.getNormal());
 				const GLdouble planef[] ={n.x, n.y, n.z, plane.getDistance()};
 				glClipPlane(current_clipping_plane, planef);
 				current_clipping_plane++;
@@ -1636,15 +1632,15 @@ namespace BALL
 				// rotate
 				case Qt::LeftButton:
 				{
+					Angle angle_x(delta_x * (mouse_sensitivity_ / (ROTATE_FACTOR * 3)), false);
+					Angle angle_y(delta_y * (mouse_sensitivity_ / (ROTATE_FACTOR * -3)), false);
 					if (delta_x * delta_x > delta_y * delta_y)
 					{
-						Angle angle(delta_x * (mouse_sensitivity_ / (ROTATE_FACTOR * 3)), false);
-						m.rotate(angle, camera.getLookUpVector());
+						m.rotate(angle_x, camera.getLookUpVector());
 					}
 					else
 					{
-						Angle angle(delta_y * (mouse_sensitivity_ / (ROTATE_FACTOR * -3)), false);
-						m.rotate(angle, camera.getRightVector());
+						m.rotate(angle_y, camera.getRightVector());
 					}
 					break;
 				}
