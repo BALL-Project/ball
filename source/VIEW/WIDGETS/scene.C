@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.9 2005/05/11 14:11:58 amoll Exp $
+// $Id: scene.C,v 1.171.2.10 2005/05/11 15:03:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1618,16 +1618,14 @@ namespace BALL
 				// rotate
 				case Qt::LeftButton:
 				{
-					Angle angle_x(delta_x * (mouse_sensitivity_ / (ROTATE_FACTOR * 3)), false);
-					Angle angle_y(delta_y * (mouse_sensitivity_ / (ROTATE_FACTOR * -3)), false);
-					if (delta_x * delta_x > delta_y * delta_y)
-					{
-						m.rotate(angle_x, camera.getLookUpVector());
-					}
-					else
-					{
-						m.rotate(angle_y, camera.getRightVector());
-					}
+					float angle_x = delta_x * (mouse_sensitivity_ / (ROTATE_FACTOR * 3));
+					float angle_y = delta_y * (mouse_sensitivity_ / (ROTATE_FACTOR * -3));
+					float angle_total = fabs(angle_x) + fabs(angle_y);
+
+					Vector3 rotation_axis = (camera.getLookUpVector() * angle_x / angle_total) +
+																	(camera.getRightVector()  * angle_y / angle_total);
+
+					m.rotate(Angle(angle_total, false), rotation_axis);
 					break;
 				}
 
@@ -1635,8 +1633,10 @@ namespace BALL
 				case (Qt::LeftButton | Qt::RightButton):
 				case (Qt::LeftButton | Qt::ShiftButton | Qt::ControlButton):
 				default:
-					delete msg;
-					return;
+					float angle_x = delta_x * (mouse_sensitivity_ / (ROTATE_FACTOR * 3));
+					Vector3 rotation_axis = camera.getViewVector();
+					m.rotate(Angle(angle_x, false), rotation_axis);
+					break;
 			}
 
 			msg->setMatrix(m);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.16 2005/05/11 15:03:49 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.17 2005/05/11 15:07:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -701,7 +701,7 @@ namespace BALL
 										  camera.getRightVector()  * ax    +
 											camera.getLookUpVector() * ay;
 */
-					v = n;
+					Vector3 v = n;
 					v = m * v;
 
 					if (!Maths::isZero(v.getSquareLength()))
