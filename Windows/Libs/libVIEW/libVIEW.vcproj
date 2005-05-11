@@ -422,6 +422,9 @@
 					RelativePath="..\..\..\source\VIEW\KERNEL\client.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\View\Kernel\clippingPlane.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\common.C">
 				</File>
 				<File
@@ -521,6 +524,12 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\charmmConfigurationDialogData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\View\Dialogs\clippingDialog_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\View\Dialogs\clippingDialogData_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialog_moc.C">
@@ -732,6 +741,12 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\charmmConfigurationDialogData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\View\Dialogs\clippingDialog.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\View\Dialogs\clippingDialogData.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialog.C">
@@ -1208,6 +1223,26 @@
 							Description="Running MOC on $(InputFileName)"
 							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\Ball\View\Dialogs\clippingDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\Ball\View\Uic\clippingDialogData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;"
 							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
 					</FileConfiguration>
 				</File>
@@ -2921,6 +2956,18 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(Inp
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\View\Dialogs\clippingDialog.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
 						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
 $(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
 "

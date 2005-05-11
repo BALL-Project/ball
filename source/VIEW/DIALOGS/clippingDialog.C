@@ -65,7 +65,7 @@ void ClippingDialog::show()
 	PrimitiveManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
 	for (; it != pm.getRepresentations().end(); it++)
 	{
-		SelectableListViewItem* item = new SelectableListViewItem(listview, (**it).getName(), *it);
+		SelectableListViewItem* item = new SelectableListViewItem(listview, (**it).getName().c_str(), *it);
 
 		if (clipping_plane_->getRepresentations().has(*it)) item->setOn(true);
 	}
