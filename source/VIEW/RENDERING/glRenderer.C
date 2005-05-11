@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.10 2005/05/11 12:58:00 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.11 2005/05/11 12:58:03 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1684,7 +1684,7 @@ namespace BALL
 			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(n.z / n.getLength()));
 			rotateVector3Angle_(rotation_axis, angle);
 
-			GL_quadric_object_.drawDisk(0, 20, 240, 160);
+			GL_quadric_object_.drawDisk(0, 40, 240, 160);
 
 			glPopMatrix();
 			glEnable(GL_CULL_FACE);
