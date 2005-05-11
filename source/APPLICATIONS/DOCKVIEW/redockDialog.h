@@ -1,9 +1,5 @@
-//   // -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-
-#ifndef BALL_VIEW_DIALOGS_DOCKDIALOG_H
-#define BALL_VIEW_DIALOGS_DOCKDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_REDOCKDIALOG_H
+#define BALL_VIEW_DIALOGS_REDOCKDIALOG_H
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -29,18 +25,6 @@
 #include <BALL/KERNEL/system.h>
 #endif
 
-#ifndef BALL_MOLMEC_COMMON_RADIUSRULEPROCESSOR_H
-# include <BALL/MOLMEC/COMMON/radiusRuleProcessor.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_CHARGERULEPROCESSOR_H
-# include <BALL/MOLMEC/COMMON/chargeRuleProcessor.h>
-#endif
-
-#ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
-# include <BALL/STRUCTURE/defaultProcessors.h>
-#endif
-
 #ifndef BALL_DATATYPE_OPTIONS_H
 # include <BALL/DATATYPE/options.h>
 #endif
@@ -49,29 +33,26 @@
 # include <BALL/STRUCTURE/DOCKING/conformationSet.h>
 #endif
 
-#include "dockDialogData.h"
-#include "dockResult.h"
+#include "redockDialogData.h"
 #include "dockProgressDialog.h"
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		/**	Dialog for docking two systems.
+		/**	Dialog for redocking to systems.
     		\ingroup  ViewDialogs
 		 */
-		class BALL_EXPORT DockDialog : 
-			public DockDialogData,
+		class BALL_EXPORT RedockDialog : 
+			public RedockDialogData,
 			public ModularWidget,
 			public PreferencesEntry
 		{ 
 			Q_OBJECT
-			BALL_EMBEDDABLE(DockDialog,ModularWidget)
+			BALL_EMBEDDABLE(RedockDialog,ModularWidget)
 			
 			public:
-				
-				////// TODO: enum Algorithm und ScoringFunction in DockingAlgorithm bzw. EnergeticEvaluation ///////
-				
+			
 				/** if you want to add a new docking algorithm extend enum 
 				 *	(0 corresponds to <select> item in ComboBox)
 				 */
@@ -88,40 +69,29 @@ namespace BALL
 				/** Default Constructor.
 				 *	Calls  \link ModularWidget::registerWidget registerWidget \endlink and \link PreferencesEntry::registerObject_ registerObject_ \endlink 
 				 *	Builds HashMaps for algorithm advanced option dialogs and for scoring function advanced option dialogs.
-				 *	@param      parent the parent widget of the DockDialog
-				 *	@param      name the name of the DockDialog
+				 *	@param      parent the parent widget of the RedockDialog
+				 *	@param      name the name of the RedockDialog
 				 *	@param			modal the modal flag
 				 *	@param			fl the widget flags
 				 *	@see        QDialog
 				 *	@see        ModularWidget
 				 *	@see				PreferncesEntry
 				 */
-				DockDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
+				RedockDialog(QWidget* parent = 0,  const char* name = 0, bool modal = false, WFlags fl = 0)
 					throw();
-
+					
 				/** Destructor.
 				 */
-				virtual ~DockDialog()
+				virtual ~RedockDialog()
 					throw();
-
+					
 				//@}
 
 				/**  Assignment operator
 				 */
-				const DockDialog& operator =(const DockDialog& dock_dialog)
+				const RedockDialog& operator =(const RedockDialog& redock_dialog)
 					throw();
 					
-				/**	@name	Accessors: inspectors and mutators
-			 	 */
-				//@{
-				
-				/** Sets two systems as docking partners.
-				 *	@param      system1 first docking partner
-				 *	@param      system2 second docking partner
-				 */
-				void setSystem(System* system1, System* system2)
-					throw();
-				
 				/** Adds docking algorithm to Combobox and its advanced option dialogs to HashMap.
 				 *	@param      name the name of the algorithm
 				 *	@param      algorithm the value of enum Algorithm
@@ -137,7 +107,7 @@ namespace BALL
 				 */
 				void addScoringFunction(const QString& name, const int score_func, QDialog* dialog=0)
 					throw();
-				
+					
 				/** Message handling method.
 						Catches only ControlSelectionMessage from MolecularControl.
 						If such a message is catched the apply button will be enabled and labels
@@ -162,16 +132,6 @@ namespace BALL
 				 */
 				virtual void initializeWidget(MainControl& main_control)
 					throw();
-
-				/**	Removes the checkable submenu <b>  Docking </b> from the popup menu <b>  Molecular Mechanics </b>.
-				 *	This method will be called by  MainControl::aboutToExit.
-				 *	@param main_control the  MainControl to be finalized
-				 *	@see   initializeWidget
-				 *	@see   removeMenuEntry
-				 *	@see   aboutToExit 
-				 */
-				virtual void finalizeWidget(MainControl& main_control)
-					throw();	
 				
 				/** Fetches the preferences from the INIFile.
 				 *	@see    writePreferences
@@ -186,34 +146,20 @@ namespace BALL
 				virtual void writePreferences(INIFile& file)
 					throw();
 				
-				/** Updates the state of menu entry Docking in the popup menu <b>  Molecular Mechanics </b>.
-				 */
-				virtual void checkMenu (MainControl& main_control)
-					throw();	
-				
-				//@}	
-					
 				/** Resets the dialog to the standard values.
 				 */
 				void reset()
 					throw();
 
 				/** Docks the two systems.
-				 * Calls \link DockDialog::applyValues_ applyValues_ \endlink.
-				 * Calls \link DockDialog::applyProcessors_ applyProcessors_ \endlink.
+				 * Calls \link RedockDialog::applyValues_ applyValues_ \endlink.
 				 */
 				void calculate()
 					throw();
 					
 					
 			public slots:
-	
-				/** Shows and raises the dialog.
-				 *	The comboboxes for the docking partners are filled with the loaded systems in BALLView.
-				 *	If the user has selected one or two systems, they are the current items in the comboboxes.
-				 */
-				void show();
-				
+			
 				/** Indicates the ok button was pressed.
 				 * 	Checks if two different systems are chosen. Hides the dialog and calls \link DockDialog::calculate calculate \endlink .
 				 */
@@ -239,69 +185,26 @@ namespace BALL
 			 	 */
 				virtual void scoringAdvancedPressed();
 				
-				/** Indicates a system in the combobox was chosen as docking partner 1.
-				 *  Calls \link DockDialog::partnerChosen_ partnerChosen_ \endlink.
+				/** Indicates an algorithm in the combobox was chosen.
+				 *	If the chosen algorithm has advanced options, the advanced_button will be enabled.
 				 */
-				virtual void partner1Chosen();
-				
-				/** Indicates a system in the combobox was chosen as docking partner 2.
-				 *  Calls \link DockDialog::partnerChosen_ partnerChosen_ \endlink.
-				 */
-				virtual void partner2Chosen();
+				virtual void algorithmChosen();
 				
 				/** Indicates a scoring function in the combobox was chosen.
 				 *	If the chosen scoring function has advanced options, the advanced_button will be enabled.
 				 */
 				virtual void scoringFuncChosen();
 				
-				/** Indicates an algorithm in the combobox was chosen.
-				 *	If the chosen algorithm has advanced options, the advanced_button will be enabled.
-				 */
-				virtual void algorithmChosen();
-				
-				/** Indicates the browse button to get a charges config file from table was pressed.
-				 */
-				virtual void browseChargesData();
-				
-				/** Indicates the browse button to get a charges config file by rules was pressed.
-				 *  Calls \link DockDialog::selectFile_ selectFile_ \endlink.
-				 */
-				virtual void browseChargesRules();
-				
-				/** Indicates the browse button to get a radii config file from table was pressed.
-				 *  Calls \link DockDialog::selectFile_ selectFile_ \endlink.
-				 */
-				virtual void browseRadiiData();
-				
-				/** Indicates the browse button to get a radii config file by rules was pressed.
-				 *  Calls \link DockDialog::selectFile_ selectFile_ \endlink.
-				 */
-				virtual void browseRadiiRules();
-				
-			
 			protected:
 			
 				/** Sets options with values the user has chosen.  
 				 */
 				void applyValues_() throw();
-				
-				/** Apply processors to the systems.
-				 */
-				bool applyProcessors_() throw();
-				
-				/** Shows chosen file in the dialog.
-				 */
-				void selectFile_(QLineEdit& lineedit) throw();
-				
-				/** Get system which the user has chosen in the dialog as docking partner.
-				 */
-				System* partnerChosen_(QString qstr) throw();
-				
+			
 				void continueCalculate_(ConformationSet* conformation_set) throw();
 				
-				
 			private:
-				
+			
 				/** key: Algorithm(enum), value: advanced options dialog
 				 */
 				HashMap<int, QDialog*> algorithm_dialogs_;
@@ -314,15 +217,11 @@ namespace BALL
 					* value: vector of scoring functions which can be used with this algorithm
 				 */
 				HashMap<int, vector<int> > allowed_sf_;
+				
 				/**
 					*/
 				HashMap<int, QString> sf_names_;
 				
-				/** Pointer to docking partners
-				 */
-				System* docking_partner1_;
-				System* docking_partner2_;
-			
 				/** Pointer to docking algorithm
 					*/
 				DockingAlgorithm* dock_alg_;
@@ -333,19 +232,7 @@ namespace BALL
 				/** Options for the docking algorithm
 				 */
 				Options algorithm_opt_, scoring_opt_;
-		
-				/** Menu entry id
-				 */
-				int id_;
-				
-				/** Processors
-				 */
-				RadiusRuleProcessor 		radius_rule_processor_;
-				ChargeRuleProcessor 		charge_rule_processor_;
-				AssignRadiusProcessor 	radius_processor_;
-				AssignChargeProcessor 	charge_processor_;
 		};
-			
 	} // end of namespace View
 } // end of namespace BALL
 #endif

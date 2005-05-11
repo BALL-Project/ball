@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.19 2005/05/09 16:37:26 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.20 2005/05/11 16:51:08 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -16,6 +16,8 @@
 #include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 
+#define BALL_VIEW_DEBUG
+
 namespace BALL
 {
 	namespace VIEW
@@ -27,6 +29,9 @@ namespace BALL
 			: DockResultDialogData(parent, name, modal, fl),
 				ModularWidget(name)
 		{
+		#ifdef BALL_VIEW_DEBUG
+			Log.error() << "new DockResultDialog " << this << std::endl;
+		#endif
 			//setWFlags(Qt::WStyle_MinMax | Qt::WStyle_SysMenu);
 		
 			// register the widget with the MainControl
@@ -44,8 +49,6 @@ namespace BALL
     	QHeader* columns = result_table->horizontalHeader();
 			//the table should be sorted by a column, when this column is clicked
 			connect( columns, SIGNAL( clicked(int) ), this, SLOT( sortTable(int) ) );
-			
-			info_dialog_ = new InfoDialog(this);
 			
 			hide();
 		}
@@ -343,22 +346,24 @@ namespace BALL
 		void DockResultDialog::showDockingOptions()
 		{
 			// clear and refill info dialog
-			info_dialog_->info_box->clear();
+			//info_dialog_->info_box->clear();
+			InfoDialog*	info_dialog = new InfoDialog(this,0,false,WDestructiveClose);
+			
 			QString s = "Algorithm: ";
-			info_dialog_->info_box->append(s.append(dock_res_->getDockingAlgorithm()));
-			info_dialog_->info_box->append("*** Options of algorithm ***");
+			info_dialog->info_box->append(s.append(dock_res_->getDockingAlgorithm()));
+			info_dialog->info_box->append("\n*** Options of algorithm ***");
 			s = "number of best docked structures: ";
 			const Options& alg_opt = dock_res_->getDockingOptions();
-			info_dialog_->info_box->append(s.append(alg_opt.get(GeometricFit::Option::BEST_NUM)));
+			info_dialog->info_box->append(s.append(alg_opt.get(GeometricFit::Option::BEST_NUM)));
 			Options::ConstIterator it = alg_opt.begin();
 			for(; +it; ++it)
 			{
 				s = it->first;
 				s.append(" : ");
-				info_dialog_->info_box->append(s.append(it->second));
+				info_dialog->info_box->append(s.append(it->second));
 			}
 			//show dialog
-			info_dialog_->show();
+			info_dialog->show();
 		}
 		
 		void DockResultDialog::contextMenuRequested(int row, int column, const QPoint& pos)
@@ -379,6 +384,11 @@ namespace BALL
 				context_menu.exec(pos);
 		}
 		
+		void DockResultDialog::closeClicked()
+		{
+			close(true);
+		}
+		
 		void DockResultDialog::deleteColumn_(int column)
 		{
 			result_table->removeColumn(column);
@@ -391,34 +401,37 @@ namespace BALL
 		
 		void DockResultDialog::showScoringOptions_(int column)
 		{
-			Log.info() << "in showScoringOptions " << column << std::endl;
 			// clear and refill info dialog
-			info_dialog_->info_box->clear();
+			//info_dialog_->info_box->clear();
+			InfoDialog*	info_dialog = new InfoDialog(this,0,false,WDestructiveClose);
+			
 			QString s = "Scoring function: ";
-			info_dialog_->info_box->append(s.append(dock_res_->getScoringName(column-1)));
+			info_dialog->info_box->append(s.append(dock_res_->getScoringName(column-1)));
 			const Options& scoring_opt = dock_res_->getScoringOptions(column-1);
 			if(scoring_opt.isEmpty())
 			{
-			 	info_dialog_->info_box->append("\nThere are no options.");
+			 	info_dialog->info_box->append("\nThere are no options.");
 			}
 			else
 			{
-				info_dialog_->info_box->append("\n*** Options of scoring function ***");
+				info_dialog->info_box->append("\n*** Options of scoring function ***");
 				Options::ConstIterator it = scoring_opt.begin();
 				for(; +it; ++it)
 				{
 					s = it->first;
 					s.append(" : ");
-					info_dialog_->info_box->append(s.append(it->second));
+					info_dialog->info_box->append(s.append(it->second));
 				}
 			}
 			//show dialog
-			info_dialog_->show();
+			info_dialog->show();
 		}
 		
 		void DockResultDialog::redock_(int row)
 		{
-		
+			RedockDialog* redock_dialog = new RedockDialog(getMainControl());
+			redock_dialog->initializeWidget(*getMainControl());
+			redock_dialog->show();
 		}
 		
 		/*implementation of nested class Compare_		

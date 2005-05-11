@@ -274,7 +274,7 @@
         <sender>close_button</sender>
         <signal>clicked()</signal>
         <receiver>DockResultDialogData</receiver>
-        <slot>close()</slot>
+        <slot>closeClicked()</slot>
     </connection>
     <connection>
         <sender>scoring_button</sender>
@@ -341,6 +341,7 @@
     <slot>rowDoubleClicked()</slot>
     <slot>showDockingOptions()</slot>
     <slot>contextMenuRequested(int, int, const QPoint&amp;)</slot>
+    <slot>closeClicked()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

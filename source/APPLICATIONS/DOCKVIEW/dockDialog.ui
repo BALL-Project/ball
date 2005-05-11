@@ -115,7 +115,7 @@
                     </widget>
                     <widget class="QButtonGroup" row="1" column="0">
                         <property name="name">
-                            <cstring>generator_group</cstring>
+                            <cstring>algorithm_group</cstring>
                         </property>
                         <property name="title">
                             <string>Docking Algorithm</string>

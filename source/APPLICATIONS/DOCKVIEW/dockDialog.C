@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.26 2005/05/09 16:37:24 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.27 2005/05/11 16:51:07 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -16,7 +16,7 @@
 #include <qradiobutton.h>
 #include <qfiledialog.h>
 #include <qtabwidget.h>
-#include <qtable.h>
+//#include <qtable.h>
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
@@ -42,7 +42,6 @@ namespace BALL
 				docking_partner2_(0),
 				dock_alg_(0),
 				progress_dialog_(0)
-				//amber_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new DockDialog " << this << std::endl;
@@ -54,8 +53,6 @@ namespace BALL
 			// register QWidgets of Dialog with PreferenceEntry
 			// entries of them in the INIFile will be generated
 			setINIFileSectionName("DOCKING");
-			registerObject_(systems1);
-			registerObject_(systems2);
 			registerObject_(algorithms);
 			registerObject_(scoring_functions);
 			registerObject_(best_num);

@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1.2.8.2.7 2005/05/05 13:22:14 haid Exp $
+# $Id: Makefile,v 1.1.2.8.2.8 2005/05/11 16:51:06 haid Exp $
 #
 
 EXECUTABLE=DOCKView
@@ -20,10 +20,12 @@ CPP_SOURCES=\
 	aboutDialog.C\
 	infoDialog.C\
 	dockDialog.C\
+	redockDialog.C\
 	geometricFitDialog.C\
 	dockProgressDialog.C\
 	dockResultDialog.C\
 	dockDialogData.C\
+	redockDialogData.C\
 	geometricFitDialogData.C\
 	dockProgressDialogData.C\
 	dockResultDialogData.C\
@@ -37,6 +39,8 @@ MOC_SOURCES=\
 	infoDialog_moc.C\
 	dockDialog_moc.C\
 	dockDialogData_moc.C\
+	redockDialog_moc.C\
+	redockDialogData_moc.C\
 	geometricFitDialog_moc.C\
 	geometricFitDialogData_moc.C\
 	dockProgressDialog_moc.C\
@@ -52,6 +56,8 @@ UIC_FILES=\
 	infoDialog.h\
 	dockDialogData.C\
 	dockDialogData.h\
+	redockDialogData.C\
+	redockDialogData.h\
 	geometricFitDialogData.C\
 	geometricFitDialogData.h\
 	dockProgressDialogData.C\
@@ -74,6 +80,9 @@ infoDialog.h: infoDialog.ui
 dockDialogData.h: dockDialog.ui
 	$(UIC) dockDialog.ui > dockDialogData.h
 
+redockDialogData.h: redockDialog.ui
+	$(UIC) redockDialog.ui > redockDialogData.h
+	
 geometricFitDialogData.h: geometricFitDialog.ui
 	$(UIC) geometricFitDialog.ui > geometricFitDialogData.h
 	
@@ -98,7 +107,13 @@ dockDialog_moc.C: dockDialog.h
 
 dockDialogData_moc.C: dockDialogData.h
 	$(MOC) dockDialogData.h -o $@
+	
+redockDialog_moc.C: redockDialog.h
+	$(MOC) redockDialog.h -o $@
 
+redockDialogData_moc.C: redockDialogData.h
+	$(MOC) redockDialogData.h -o $@
+	
 geometricFitDialog_moc.C: geometricFitDialog.h
 	$(MOC) geometricFitDialog.h -o $@	
 		
@@ -126,6 +141,9 @@ infoDialog.C: infoDialog.h
 
 dockDialogData.C: dockDialogData.h
 	$(UIC) -impl dockDialogData.h dockDialog.ui > dockDialogData.C
+	
+redockDialogData.C: redockDialogData.h
+	$(UIC) -impl redockDialogData.h redockDialog.ui > redockDialogData.C
 
 geometricFitDialogData.C: geometricFitDialogData.h
 	$(UIC) -impl geometricFitDialogData.h geometricFitDialog.ui > geometricFitDialogData.C
