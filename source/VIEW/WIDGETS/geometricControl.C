@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.17 2005/05/11 15:07:47 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.18 2005/05/11 15:10:15 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -668,7 +668,6 @@ namespace BALL
 
 			if (scene == 0) return;
 
-			const Camera& camera = Scene::getInstance(0)->getStage()->getCamera();
 
 			for (; it != items.end(); it++)
 			{
@@ -679,28 +678,6 @@ namespace BALL
 
 				if (m.m14 == 0 && m.m24 == 0 && m.m34 == 0)
 				{
-
-/*
-					float width  = scene->width();
-					float height = scene->height();
-
-					float ax = (scene->getMousePositionX() - width  / 2.0) / (width  / 2.0);
-					float ay = (scene->getMousePositionY() - height / 2.0) / (height / 2.0);
-
-					ax *= 1.1;
-					ay *= 1.1;
-
-					float a = fabs(ax) + fabs(ay);
-
-					if (a < 0.0) a *= -1.0;
-					if (a > 1.0) a  =  1.0;
-
-					const Vector3& vv = camera.getViewVector();
-
-					Vector3 v = ((float)(1.0 - a)) * vv  * 0.01+ 
-										  camera.getRightVector()  * ax    +
-											camera.getLookUpVector() * ay;
-*/
 					Vector3 v = n;
 					v = m * v;
 
