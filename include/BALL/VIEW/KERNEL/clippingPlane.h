@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clippingPlane.h,v 1.1.2.2 2005/05/10 13:50:31 amoll Exp $
+// $Id: clippingPlane.h,v 1.1.2.3 2005/05/11 13:06:56 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_CLIPPING_PLANE_H
@@ -73,10 +73,13 @@ namespace BALL
 			void setActive(bool state) { active_ = state;}
 
 			///
-			void setDistance(float d) { d_ = d;}
-			
+			float getDistance() const;
+
 			///
-			float getDistance() const { return d_;}
+			const Vector3& getPoint() const { return point_;}
+
+			///
+			void setPoint(const Vector3& v) { point_ = v;}
 
 			//@}
 
@@ -84,7 +87,7 @@ namespace BALL
 
 			HashSet<Representation*> reps_;
 			Vector3 normal_;
-			float d_;
+			Vector3 point_;
 			bool active_;
 		};
 

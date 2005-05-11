@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clippingPlane.C,v 1.1.2.2 2005/05/10 13:50:30 amoll Exp $
+// $Id: clippingPlane.C,v 1.1.2.3 2005/05/11 13:07:00 amoll Exp $
 //
 
 
@@ -13,7 +13,9 @@ namespace BALL
 	{
 		ClippingPlane::ClippingPlane()
 			throw()
-				: active_(false)
+				: normal_(Vector3(1.)),
+					point_(),
+					active_(false)
 		{
 		}
 
@@ -21,7 +23,7 @@ namespace BALL
 		ClippingPlane::ClippingPlane(const ClippingPlane& rp)
 			throw()
 				: normal_(rp.normal_),
-					d_(rp.d_),
+					point_(rp.point_),
 					active_(rp.active_)
 		{
 			reps_ = rp.reps_;
@@ -31,11 +33,10 @@ namespace BALL
 		const ClippingPlane& ClippingPlane::operator = (const ClippingPlane& plane)
 			throw()
 		{
-			reps_ = plane.reps_;
-
+			reps_   = plane.reps_;
 			normal_ = plane.normal_;
-			d_ = plane.d_;
 			active_ = plane.active_;
+			point_  = plane.point_;
 			return *this;
 		}
 
@@ -46,11 +47,15 @@ namespace BALL
 			clear();
 		}
 
-		
 		void ClippingPlane::clear()
 			throw()
 		{
 			reps_.clear();
+		}
+
+		float ClippingPlane::getDistance() const
+		{
+			return normal_ * (- point_);
 		}
 
 		
