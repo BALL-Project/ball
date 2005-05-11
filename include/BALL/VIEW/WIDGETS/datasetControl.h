@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.11.4.2 2005/04/05 11:36:34 haid Exp $
+// $Id: datasetControl.h,v 1.11.4.3 2005/05/11 16:53:56 haid Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -205,8 +205,6 @@ namespace BALL
 
 			SnapshotVisualisationDialog* 	dialog_;
 			Index 												open_trajectory_id_;
-			
-			DockResultDialog* result_dialog_;
 
 			HashMap<QListViewItem*	, SnapShotManager*> 					item_to_trajectory_;
 			HashMap<QListViewItem*	, RegularData1D*>   					item_to_grid1_;
