@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.9 2005/05/11 00:27:46 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.10 2005/05/11 12:58:00 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1661,11 +1661,8 @@ namespace BALL
 		void GLRenderer::renderClippingPlane_(const ClippingPlane& plane)
 			throw()
 		{
-			const Vector3 point(plane.getNormal() * - plane.getDistance());
-
-			Circle3 c(point, plane.getNormal(), 100.0);
-			Disc d(c);
-			d.setColor(ColorRGBA(0,0,255, 190));
+			const Vector3& point(plane.getPoint());
+			const Vector3& n(plane.getNormal());
 
 			Tube tube;
 			tube.setVertex1(point);
@@ -1673,13 +1670,23 @@ namespace BALL
 			tube.setColor(ColorRGBA(0,255,255));
 			tube.setRadius(1);
 
-
 			initDrawingOthers_();
 			initTransparent();
 			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
 			glDisable(GL_CULL_FACE);
-			renderDisc_(d);
 			renderTube_(tube);
+
+			glPushMatrix();
+			setColorRGBA_(ColorRGBA(0,0,255, 190));;
+			translateVector3_(point);
+			const Vector3 rotation_axis(-n.y, n.x, 0.0);
+			// angle between z-axis-vector and result
+			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(n.z / n.getLength()));
+			rotateVector3Angle_(rotation_axis, angle);
+
+			GL_quadric_object_.drawDisk(0, 20, 240, 160);
+
+			glPopMatrix();
 			glEnable(GL_CULL_FACE);
 		}
 

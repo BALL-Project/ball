@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.13 2005/05/11 10:26:26 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.14 2005/05/11 12:57:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -623,7 +623,6 @@ namespace BALL
 		{
 			if (context_plane_ == 0) return;
 			context_plane_->setNormal(-context_plane_->getNormal());
-			context_plane_->setDistance(-context_plane_->getDistance());
 
 			getMainControl()->redrawAllRepresentations();
 		}
@@ -691,15 +690,20 @@ namespace BALL
 
 					float a = fabs(ax) + fabs(ay);
 
-					if (ax >  1.0) ax =  1.0;
-					if (ax < -1.0) ax = -1.0;
-					if (ay >  1.0) ay =  1.0;
-					if (ay < -1.0) ay = -1.0;
-
 					if (a < 0.0) a *= -1.0;
 					if (a > 1.0) a  =  1.0;
 
-					Vector3 v = ((float)(1.0 - a)) * camera.getViewVector()  * 0.01+ 
+					Vector3 vv = camera.getViewVector();
+
+					const Vector3& p = plane->getPoint();
+					const Vector3& vp = camera.getViewPoint();
+
+					if (vp.getDistance(p + n) > vp.getDistance(p - n))
+					{
+//   						vv *= -1;
+					}
+
+					Vector3 v = ((float)(1.0 - a)) * vv  * 0.01+ 
 										  camera.getRightVector()  * ax    +
 											camera.getLookUpVector() * ay;
 
@@ -708,18 +712,12 @@ namespace BALL
 						v.normalize();
 					}
 
-					const Vector3 org_point(plane->getNormal() * - plane->getDistance());
-
 					plane->setNormal(v);
-
-					Plane3 plane3(org_point, plane->getNormal());
-					float d = GetDistance(Vector3(0.0), plane3);
-					plane->setDistance(d);
 				}
 				else
 				{
 					Vector3 t(-m.m14, -m.m24, -m.m34);
-					plane->setDistance(plane->getDistance() + t * n);
+					plane->setPoint(plane->getPoint() - t);
 				}
 
 				getMainControl()->redrawAllRepresentations();
@@ -758,11 +756,13 @@ namespace BALL
 			Scene* scene = Scene::getInstance(0);
 			if (mc == 0 || scene == 0) return;
 
+			Camera& camera = scene->getStage()->getCamera();
+
 			ClippingPlane* plane = new ClippingPlane();
-			Vector3 n(scene->getStage()->getCamera().getViewVector());
+			Vector3 n(camera.getViewVector());
 			if (!Maths::isZero(n.getSquareLength())) n.normalize();
 			plane->setNormal(n);
-			plane->setDistance(10);
+			plane->setPoint(camera.getLookAtPosition() + n * 10);
 
 			PrimitiveManager& pm = mc->getPrimitiveManager();
 			PrimitiveManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
