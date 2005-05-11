@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.11 2005/05/11 00:27:46 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.12 2005/05/11 00:33:36 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -666,6 +666,10 @@ namespace BALL
 		void GeometricControl::moveItems(const TransformationMessage& msg)
 			throw()
 		{
+			const Matrix4x4& m = msg.getMatrix();
+
+			if (m.isIdentity()) return;
+
 			ItemList items = getSelectedItems();
 			ItemList::Iterator it = items.begin();
 
@@ -674,8 +678,6 @@ namespace BALL
 			if (scene == 0) return;
 
 			const Camera& camera = Scene::getInstance(0)->getStage()->getCamera();
-
-			const Matrix4x4& m = msg.getMatrix();
 
 			for (; it != items.end(); it++)
 			{
