@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.35.4.5 2005/04/25 16:16:25 haid Exp $
+// $Id: datasetControl.C,v 1.35.4.6 2005/05/11 16:52:32 haid Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -37,7 +37,6 @@ DatasetControl::DatasetControl(QWidget* parent, const char* name)
 	throw()
 	:	GenericControl(parent, name),
 		dialog_(0),
-		result_dialog_(0),
 		surface_dialog_(0),
 		menu_cs_(0)
 {
@@ -448,21 +447,14 @@ void DatasetControl::bufferTrajectory_()
 }
 
 void DatasetControl::showDockResult_()
-{
-	if(result_dialog_ != 0)
-	{
-		result_dialog_->hide();
-		delete result_dialog_;
-		result_dialog_ = 0;
-	}
-	
-	result_dialog_ = new DockResultDialog(this);
+{	
+	DockResultDialog* result_dialog = new DockResultDialog(this);
 	
 	// setup result_dialog... 
-	result_dialog_->setDockResult(item_to_dock_result_[context_item_]);
-	result_dialog_->setDockedSystem((System*)(item_to_composite_[context_item_]));
+	result_dialog->setDockResult(item_to_dock_result_[context_item_]);
+	result_dialog->setDockedSystem((System*)(item_to_composite_[context_item_]));
 	//...and show it
-	result_dialog_->show();
+	result_dialog->show();
 }
 
 void DatasetControl::visualiseGrid_()
