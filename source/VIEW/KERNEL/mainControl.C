@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.4 2005/05/10 13:50:30 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.5 2005/05/11 14:11:57 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1974,7 +1974,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					plane->setNormal(Vector3(string_vector[0].toFloat(),
 																	 string_vector[1].toFloat(),
 																	 string_vector[2].toFloat()));
-					plane->setDistance(string_vector[3].toFloat());
+//   					plane->setDistance(string_vector[3].toFloat());
 
 					getPrimitiveManager().insertClippingPlane(plane);
 					continue;

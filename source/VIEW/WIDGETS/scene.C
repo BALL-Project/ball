@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.8 2005/05/11 00:27:47 amoll Exp $
+// $Id: scene.C,v 1.171.2.9 2005/05/11 14:11:58 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -505,6 +505,8 @@ namespace BALL
 
 			vector<ClippingPlane*> active_planes;
 			vector<ClippingPlane*> inactive_planes;
+
+			bool move_mode = (mouse_button_is_pressed_ && getMode() == MOVE__MODE);
 			
 			const vector<ClippingPlane*>& vc = pm.getClippingPlanes();
 			vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
@@ -514,7 +516,7 @@ namespace BALL
 				if (!plane.isActive()) 
 				{
 					inactive_planes.push_back(*plane_it);
-					continue;
+					if (!move_mode) continue;
 				}
 
 				active_planes.push_back(*plane_it);
@@ -555,7 +557,7 @@ namespace BALL
 			{
 				if (run == 1)
 				{
-					// render inactive clipping plane
+					// render inactive clipping planes
 					for (plane_it = inactive_planes.begin(); plane_it != inactive_planes.end(); plane_it++)
 					{
 						gl_renderer_.renderClippingPlane_(**plane_it);
@@ -586,7 +588,7 @@ namespace BALL
 						// render all always front models
 						if (!rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT)) continue;
 					}
-
+					
 					vector<Position> rep_active_planes; // clipping planes
 
 					for (Position plane_nr = 0; plane_nr < active_planes.size(); plane_nr++)
@@ -1497,6 +1499,8 @@ namespace BALL
 		{
 			makeCurrent();
 
+			mouse_button_is_pressed_ = true;
+
 			x_window_pos_old_ = e->x();
 			y_window_pos_old_ = e->y();
 
@@ -1643,6 +1647,8 @@ namespace BALL
 		void Scene::mouseReleaseEvent(QMouseEvent* e)
 		{
 			makeCurrent();
+
+			mouse_button_is_pressed_ = false;
 
 			// ============ picking mode ================
 			if(current_mode_ == PICKING__MODE)

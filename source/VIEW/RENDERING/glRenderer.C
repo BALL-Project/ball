@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.11 2005/05/11 12:58:03 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.12 2005/05/11 14:11:57 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1666,7 +1666,7 @@ namespace BALL
 
 			Tube tube;
 			tube.setVertex1(point);
-			tube.setVertex2(point + (plane.getNormal() * 10.0));
+			tube.setVertex2(point - (plane.getNormal() * 10.0));
 			tube.setColor(ColorRGBA(0,255,255));
 			tube.setRadius(1);
 
@@ -1676,6 +1676,17 @@ namespace BALL
 			glDisable(GL_CULL_FACE);
 			renderTube_(tube);
 
+			initDrawingOthers_();
+			glEnable(GL_DEPTH_TEST);
+			glEnable(GL_BLEND);
+			glDepthMask(GL_FALSE);
+
+			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
+			glDisable(GL_CULL_FACE);
+
+			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
+			glDisable(GL_CULL_FACE);
+
 			glPushMatrix();
 			setColorRGBA_(ColorRGBA(0,0,255, 190));;
 			translateVector3_(point);
@@ -1684,7 +1695,7 @@ namespace BALL
 			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(n.z / n.getLength()));
 			rotateVector3Angle_(rotation_axis, angle);
 
-			GL_quadric_object_.drawDisk(0, 40, 240, 160);
+			GL_quadric_object_.drawDisk(0, 20, 140, 80);
 
 			glPopMatrix();
 			glEnable(GL_CULL_FACE);

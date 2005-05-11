@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.14 2005/05/11 12:57:52 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.15 2005/05/11 14:11:58 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -693,15 +693,7 @@ namespace BALL
 					if (a < 0.0) a *= -1.0;
 					if (a > 1.0) a  =  1.0;
 
-					Vector3 vv = camera.getViewVector();
-
-					const Vector3& p = plane->getPoint();
-					const Vector3& vp = camera.getViewPoint();
-
-					if (vp.getDistance(p + n) > vp.getDistance(p - n))
-					{
-//   						vv *= -1;
-					}
+					const Vector3& vv = camera.getViewVector();
 
 					Vector3 v = ((float)(1.0 - a)) * vv  * 0.01+ 
 										  camera.getRightVector()  * ax    +
@@ -759,10 +751,15 @@ namespace BALL
 			Camera& camera = scene->getStage()->getCamera();
 
 			ClippingPlane* plane = new ClippingPlane();
-			Vector3 n(camera.getViewVector());
+
+			Vector3 vv = camera.getViewVector();
+			if (!Maths::isZero(vv.getSquareLength())) vv.normalize();
+	
+			Vector3 n(vv + -camera.getRightVector() + camera.getLookUpVector());
 			if (!Maths::isZero(n.getSquareLength())) n.normalize();
+		
 			plane->setNormal(n);
-			plane->setPoint(camera.getLookAtPosition() + n * 10);
+			plane->setPoint(camera.getLookAtPosition() + vv * 10);
 
 			PrimitiveManager& pm = mc->getPrimitiveManager();
 			PrimitiveManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
