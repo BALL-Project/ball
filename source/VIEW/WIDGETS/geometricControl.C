@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.12 2005/05/11 00:33:36 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.13 2005/05/11 10:26:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -407,38 +407,30 @@ namespace BALL
 		{
 			GenericControl::updateSelection();
 
+			context_representation_ = 0;
+			context_plane_ 					= 0;
+
 			QListViewItem* item = 0;
 			QListViewItemIterator it(listview);
 			for (; it.current(); ++it)
 			{
 				if (it.current()->isSelected())
 				{
-					if (item == 0)
-					{
-						item = it.current();
-					}
-					else
-					{
-						return;
-					}
+					item = it.current();
+					break;
 				}
 			}
 
-			if (item == 0) 
-			{
-				return;
-			}
+			if (item == 0) return;
 
 			Representation* rep = ((SelectableListViewItem*)item)->getRepresentation();
-			if (rep == 0) return; 
-
 			modify_surface_dialog_->setRepresentation(rep);
+			if (rep == 0) return; 
 
 			RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::SELECTED);
 			notify_(message);
 
-			if (
-					rep->getComposites().size() > 0) 
+			if (rep->getComposites().size() > 0) 
 			{
 				String name;
 				const Composite* c_ptr = *rep->getComposites().begin();
