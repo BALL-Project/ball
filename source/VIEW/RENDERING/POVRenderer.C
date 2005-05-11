@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19.4.6 2005/05/10 13:50:31 amoll Exp $
+// $Id: POVRenderer.C,v 1.19.4.7 2005/05/11 00:27:46 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -676,11 +676,6 @@ namespace BALL
 			out << "\t}" << endl;
 		}
 				
-		void POVRenderer::renderClippingPlane_(const Representation&)
-			throw()
-		{
-		}
-
 		const ColorRGBA& POVRenderer::getColor_(const GeometricObject& object)
 		{
 			if ((object.getComposite()) && object.getComposite()->isSelected())

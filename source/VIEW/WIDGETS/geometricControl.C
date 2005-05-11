@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.10 2005/05/10 23:08:19 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.11 2005/05/11 00:27:46 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -37,7 +37,8 @@
 #include <qmenubar.h>
 #include <qtooltip.h> 
 
- #include <BALL/MATHS/matrix44.h>
+#include <BALL/MATHS/matrix44.h>
+#include <BALL/MATHS/analyticalGeometry.h>
 
 using std::endl;
 
@@ -713,7 +714,13 @@ namespace BALL
 						v.normalize();
 					}
 
+					const Vector3 org_point(plane->getNormal() * - plane->getDistance());
+
 					plane->setNormal(v);
+
+					Plane3 plane3(org_point, plane->getNormal());
+					float d = GetDistance(Vector3(0.0), plane3);
+					plane->setDistance(d);
 				}
 				else
 				{

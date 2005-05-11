@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.4 2005/05/10 23:08:36 amoll Exp $
+// $Id: scene.h,v 1.62.2.5 2005/05/11 00:27:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -666,9 +666,6 @@ namespace BALL
 				throw();
 
 			void createCoordinateSystem_()
-				throw();
-			
-			virtual void renderClippingPlane_(const ClippingPlane& plane)
 				throw();
 			
 			//_ state of the scene: picking or rotate mode?

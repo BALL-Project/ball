@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.32.2.3 2005/04/25 21:02:15 amoll Exp $
+// $Id: glRenderer.h,v 1.32.2.4 2005/05/11 00:27:09 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -330,6 +330,10 @@ namespace BALL
 
 			///
 			virtual void renderTwoColoredTube_(const TwoColoredTube& /*two_colored_tube*/)
+				throw();
+
+			///
+			virtual void renderClippingPlane_(const ClippingPlane& plane)
 				throw();
 
 			//_

@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.8 2005/05/09 21:50:09 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.9 2005/05/11 00:27:46 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
 #include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/KERNEL/clippingPlane.h>
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
@@ -647,16 +648,14 @@ namespace BALL
 			translateVector3_(tube.getVertex1());
 
 			// dont rotate if we have to draw in z-axis direction
-			if (!Maths::isZero(rotation_axis.getSquareLength()))
-			{
+//   			if (!Maths::isZero(rotation_axis.getSquareLength()))
+//   			{
 				rotateVector3Angle_(rotation_axis, angle);
-			}
-			else
-			{
-				translateVector3_(result);
-			}
-
-			rotateVector3Angle_(rotation_axis, angle);
+//   			}
+//   			else
+//   			{
+//   				translateVector3_(result);
+//   			}
 
 			glScalef((GLfloat)tube.getRadius(),
 							 (GLfloat)tube.getRadius(),
@@ -1657,6 +1656,31 @@ namespace BALL
 			return isExtensionSupported("GL_ARB_vertex_buffer_object");
 			*/
 			return false; // ????
+		}
+
+		void GLRenderer::renderClippingPlane_(const ClippingPlane& plane)
+			throw()
+		{
+			const Vector3 point(plane.getNormal() * - plane.getDistance());
+
+			Circle3 c(point, plane.getNormal(), 100.0);
+			Disc d(c);
+			d.setColor(ColorRGBA(0,0,255, 190));
+
+			Tube tube;
+			tube.setVertex1(point);
+			tube.setVertex2(point + (plane.getNormal() * 10.0));
+			tube.setColor(ColorRGBA(0,255,255));
+			tube.setRadius(1);
+
+
+			initDrawingOthers_();
+			initTransparent();
+			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
+			glDisable(GL_CULL_FACE);
+			renderDisc_(d);
+			renderTube_(tube);
+			glEnable(GL_CULL_FACE);
 		}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

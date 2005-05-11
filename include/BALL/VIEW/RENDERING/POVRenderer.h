@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.8.4.4 2005/05/09 21:56:08 amoll Exp $
+// $Id: POVRenderer.h,v 1.8.4.5 2005/05/11 00:27:09 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -130,10 +130,6 @@ namespace BALL
 			 		This method writes the ending of the file and closes it.
 			 */
 			virtual bool finish()
-				throw();
-
-			///
-			virtual void renderClippingPlane_(const Representation& /*rep*/)
 				throw();
 
 			void renderSphere_(const Sphere& sphere)

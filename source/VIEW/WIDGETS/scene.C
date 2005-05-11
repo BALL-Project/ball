@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.7 2005/05/10 23:08:19 amoll Exp $
+// $Id: scene.C,v 1.171.2.8 2005/05/11 00:27:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -495,24 +495,6 @@ namespace BALL
 			content_changed_ = false;
 		}
 
-
-		void Scene::renderClippingPlane_(const ClippingPlane& plane)
-			throw()
-		{
-			const Vector3 point(plane.getNormal() * - plane.getDistance());
-
-			Circle3 c(point, plane.getNormal(), 100.0);
-			Disc d(c);
-			d.setColor(ColorRGBA(0,0,255, 190));
-
-			gl_renderer_.initDrawingOthers_();
-			gl_renderer_.initTransparent();
-			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
-			glDisable(GL_CULL_FACE);
-			gl_renderer_.renderDisc_(d);
-			glEnable(GL_CULL_FACE);
-		}
-
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
 		{
@@ -576,7 +558,7 @@ namespace BALL
 					// render inactive clipping plane
 					for (plane_it = inactive_planes.begin(); plane_it != inactive_planes.end(); plane_it++)
 					{
-						renderClippingPlane_(**plane_it);
+						gl_renderer_.renderClippingPlane_(**plane_it);
 					}
 				}
 
