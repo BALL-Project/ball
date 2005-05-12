@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.6 2005/05/11 14:12:02 amoll Exp $
+// $Id: scene.h,v 1.62.2.7 2005/05/12 14:36:14 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -30,6 +30,8 @@
  #include <qthread.h>
  #include <qevent.h>
 #endif
+
+#include <qtimer.h>
 
 namespace BALL
 {
@@ -128,7 +130,7 @@ namespace BALL
 
 					Camera camera;
 			};
-			
+
 			/** @name Type definitions 
 			*/
 			//@{
@@ -566,6 +568,8 @@ namespace BALL
 			///
 			static void setPOVNumber(Position pos) { pov_nr_ = pos;}
 
+			void initTimer();
+			
 			protected slots:
 
 			//@}
@@ -620,6 +624,9 @@ namespace BALL
 			///
 			virtual void dragEnterEvent(QDragEnterEvent* e);
 
+			///
+			virtual void timerSignal_();
+
 			//@}
 
 			private:
@@ -667,7 +674,7 @@ namespace BALL
 
 			void createCoordinateSystem_()
 				throw();
-			
+
 			//_ state of the scene: picking or rotate mode?
 			ModeType current_mode_;
 
@@ -726,6 +733,10 @@ namespace BALL
 			bool content_changed_;
 			bool want_to_use_vertex_buffer_;
 			bool mouse_button_is_pressed_;
+			QTimer timer_;
+
+			// Position of mouse cursor for identifying Composite
+			Position last_x_pos_, last_y_pos_;
 		};
 
 

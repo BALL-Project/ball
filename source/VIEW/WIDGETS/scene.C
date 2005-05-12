@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.10 2005/05/11 15:03:59 amoll Exp $
+// $Id: scene.C,v 1.171.2.11 2005/05/12 14:37:03 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -351,6 +351,8 @@ namespace BALL
 			gl_renderer_.updateCamera();
 			gl_renderer_.enableVertexBuffers(want_to_use_vertex_buffer_);
  			stage_settings_->getGLSettings();
+
+			initTimer();
 		}
 
 		void Scene::paintGL()
@@ -1683,6 +1685,89 @@ namespace BALL
 				updateGL();
 				need_update_ = false;
 			}
+		}
+
+		void Scene::initTimer()
+		{
+			connect(&timer_, SIGNAL(timeout()), this, SLOT(timerSignal_()) );			
+			timer_.start(500);
+		}
+
+		void Scene::timerSignal_()
+		{
+			if (mouse_button_is_pressed_ ||
+					getMainControl()->compositesAreLocked() ||
+					getMainControl()->getPrimitiveManager().updateRunning())
+			{
+				return;
+			}
+
+			QPoint point = mapFromGlobal(QCursor::pos());
+
+			if (!rect().contains(point)) return;
+
+			Position pos_x = point.x();
+			Position pos_y = point.y();
+
+			// if the mouse was at on other position 500 ms before, store position and abort
+
+			if (pos_x != last_x_pos_ ||
+					pos_y != last_y_pos_)
+			{
+				last_x_pos_ = pos_x;
+				last_y_pos_ = pos_y;
+				return;
+			}
+
+			// ok, do the picking
+			gl_renderer_.pickObjects1(pos_x - 1, pos_y - 1, pos_x + 1, pos_y + 1);
+			renderView_(DIRECT_RENDERING);
+			List<GeometricObject*> objects;
+ 			gl_renderer_.pickObjects2(objects);
+			if (objects.size() == 0) return;
+
+			// do we have a composite?
+			Composite* composite = (Composite*) (*objects.begin())->getComposite();
+			if (composite == 0) return;
+
+			// get the description
+			String string;
+			MolecularInformation info;
+			info.visit(*composite);
+			string = info.getName();
+			if (composite->getParent() != 0 &&
+					RTTI::isKindOf<Residue>(*composite->getParent()))
+			{
+				info.visit(*composite->getParent());
+				string = info.getName() + " : " + string;
+			}
+
+			if (string == "UNKNOWN") return;
+
+			String string2 = String("Object at cursor is ") + string;
+
+			if (getMainControl()->getStatusbarText() == string2) return;
+
+			setStatusbarText(string2, true);
+
+			QPainter painter(this);
+
+			ColorRGBA color = getStage()->getBackgroundColor();
+			color.set(abs(255 - (Position) color.getRed()),
+								abs(255 - (Position) color.getGreen()),
+								abs(255 - (Position) color.getBlue()));
+
+
+			painter.setBackgroundMode(Qt::OpaqueMode);
+			painter.setBackgroundColor(color.getQColor());
+			painter.setPen(getStage()->getBackgroundColor().getQColor());
+
+			QPoint diff(20, 20);
+			if (pos_x < (Position) width() / 2) diff.setX(-20);
+			if (pos_y < (Position) height() / 2) diff.setY(-20);
+
+			point += diff;
+			painter.drawText(point, string, 0, -1);
 		}
 
 

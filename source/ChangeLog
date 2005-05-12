@@ -25,6 +25,7 @@ Added:
 		- OpenGL rendering now allows for depth cueing, material paramters may be adjusted
   	- Stereo display using side-by-side mode or shutter glasses
   	- Clipping planes
+		- popups in Scene with description of molecular item under cursor
   	- storing and loading of BALLView project files
   	- support for drag and drop of molecular files
 		- possibility to highlight the selected molecular items
