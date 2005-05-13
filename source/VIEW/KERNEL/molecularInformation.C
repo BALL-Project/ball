@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularInformation.C,v 1.4 2004/02/23 17:58:40 oliver Exp $
+// $Id: molecularInformation.C,v 1.4.8.1 2005/05/13 12:41:29 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/molecularInformation.h>
 #include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/bond.h>
 
 using namespace std;
 
@@ -40,15 +41,19 @@ namespace BALL
 		void MolecularInformation::visit(Composite& composite)
 		{
 			getType_(composite);
-			getTypeName_(composite);
+			getTypeName_();
 			getName_(composite);
 		}
 
 	  void MolecularInformation::getType_(Composite& composite)
     {
 			type_ = TYPE__UNKNOWN;
-			
-			if (RTTI::isKindOf<System>(composite))
+
+			if (RTTI::isKindOf<Bond>(composite))
+			{
+				type_ = TYPE__BOND;
+			}			
+			else if (RTTI::isKindOf<System>(composite))
 			{
 				type_ = TYPE__SYSTEM;
 			}	
@@ -82,7 +87,7 @@ namespace BALL
 			}	
     }
 
-	  void MolecularInformation::getTypeName_(Composite& /* composite */)
+	  void MolecularInformation::getTypeName_()
     {
 			type_name_ = "unkown type";
 			switch(type_)
@@ -118,6 +123,10 @@ namespace BALL
   			case TYPE__ATOM:
 					type_name_ = "Atom";
 					break;
+
+	 			case TYPE__BOND:
+					type_name_ = "Bond";
+					break;
 					
   			default:
 					type_name_ = "unknown";
@@ -125,12 +134,42 @@ namespace BALL
 			}
     }
 
+		String MolecularInformation::getBondAtomName_(Atom* atom)
+		{
+			if (atom == 0) return "?";
+
+			MolecularInformation info;
+			info.visit(*atom);
+
+			String temp(info.getName());
+			if (atom->getParent() != 0 &&
+					RTTI::isKindOf<Residue>(*atom->getParent()))
+			{
+				info.visit(*atom->getParent());
+				temp = info.getName() + " : " + temp;
+			}
+
+			return temp;
+		}
+
 	  void MolecularInformation::getName_(Composite& composite)
     {
 			String temp = "UNKNOWN";
 			
 			switch(type_)
 			{
+			  case TYPE__BOND:
+				{
+					temp.clear();
+
+					Bond* bond = RTTI::castTo<Bond>(composite);
+					Atom* a1 = (Atom*) bond->getFirstAtom();
+					Atom* a2 = (Atom*) bond->getSecondAtom();
+
+					temp = getBondAtomName_(a1) + " -> " + getBondAtomName_(a2);
+				}
+				break;
+	
 			  case TYPE__SYSTEM:
 				{
 					System* system = RTTI::castTo<System>(composite);

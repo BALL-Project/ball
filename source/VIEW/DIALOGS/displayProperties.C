@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.5 2005/05/04 12:09:16 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.6 2005/05/13 12:31:38 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -388,7 +388,6 @@ void DisplayProperties::applyModelSettings_(Representation& rep)
 	}
 	else
 	{
-		rep.setSurfaceDrawingPrecision(-1);
 		rep.setDrawingPrecision((DrawingPrecision) precision_combobox->currentItem());
 	}
 
@@ -431,6 +430,11 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 														 (DrawingMode)mode_combobox->currentItem());
 		rebuild_representation = true;
 
+		if (custom_precision_button->isChecked())
+		{
+			rep_->setSurfaceDrawingPrecision((float)precision_slider->value() / 10.0);
+		}
+
 		List<Composite*>::ConstIterator it = composites.begin();
 		for (; it != composites.end(); it++)
 		{
@@ -460,19 +464,19 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 	{
 		rebuild_representation = 
 			(rep_->getModelType() != model_type_combobox->currentItem() ||
-			 rep_->getDrawingPrecision() != precision_combobox->currentItem() ||
-			 rep_->getDrawingMode() != mode_combobox->currentItem() ||
 			 advanced_options_modified_);
 
 		if (custom_precision_button->isChecked())
 		{
+			// workaround, didnt work right otherwise: (just let it this way)
 			rebuild_representation |= 
-				rep_->getSurfaceDrawingPrecision() != (float)precision_slider->value() / 10.0;
+				(String(rep_->getSurfaceDrawingPrecision()) != 
+				 String(((float)precision_slider->value() / 10.0)));
 		}
 		else
 		{
 			rebuild_representation |= 
-				rep_->getDrawingPrecision() != (DrawingPrecision) precision_combobox->currentItem();
+ 				(rep_->getDrawingPrecision() != (DrawingPrecision) precision_combobox->currentItem());
 		}
 	}
 
@@ -610,10 +614,11 @@ void DisplayProperties::checkDrawingPrecision_()
 				rep_->getSurfaceDrawingPrecision() != -1)
 		{
 			custom_precision_button->setChecked(true);
-			precision_slider->setValue((Position)(rep_->getSurfaceDrawingPrecision() * 10.0));
+			setSurfaceDrawingPrecision(rep_->getSurfaceDrawingPrecision());
 		}
 		else
 		{
+			rep_->setSurfaceDrawingPrecision(-1);
 			presets_precision_button->setChecked(true);
 		}
 	}

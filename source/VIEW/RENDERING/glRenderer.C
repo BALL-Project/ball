@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.12 2005/05/11 14:11:57 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.14 2005/05/13 12:41:30 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1396,7 +1396,9 @@ namespace BALL
 				return;
 			}
 
-			number_of_hits--;
+
+			// ????? removed the following line at 13.05.05,  seems to work fine without it, and bonds dont get picked otherwise
+//   			number_of_hits--;
 			
 			Position minimum_z_coord = UINT_MAX;
 			Position names;

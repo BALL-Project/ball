@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.12 2005/05/12 15:40:39 amoll Exp $
+// $Id: scene.C,v 1.171.2.13 2005/05/13 12:41:31 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1719,30 +1719,49 @@ namespace BALL
 				return;
 			}
 
-			// ok, do the picking
-			gl_renderer_.pickObjects1(pos_x - 1, pos_y - 1, pos_x + 1, pos_y + 1);
-			renderView_(DIRECT_RENDERING);
 			List<GeometricObject*> objects;
- 			gl_renderer_.pickObjects2(objects);
-			if (objects.size() == 0) return;
 
-			// do we have a composite?
-			Composite* composite = (Composite*) (*objects.begin())->getComposite();
-			if (composite == 0) return;
+			// ok, do the picking, until we find something
+			for (Position p = 0; p < 8; p++)
+			{
+				gl_renderer_.pickObjects1(pos_x - p, pos_y - p, pos_x + p, pos_y + p);
+				renderView_(DIRECT_RENDERING);
+				gl_renderer_.pickObjects2(objects);
+				if (objects.size() != 0) break;
+			}
+
+			if (objects.size() == 0)
+			{
+				return;
+			}
 
 			// get the description
 			String string;
 			MolecularInformation info;
-			info.visit(*composite);
-			string = info.getName();
-			if (composite->getParent() != 0 &&
-					RTTI::isKindOf<Residue>(*composite->getParent()))
+
+			List<GeometricObject*>::Iterator git = objects.begin();
+			for (; git != objects.end(); git++)
 			{
-				info.visit(*composite->getParent());
-				string = info.getName() + " : " + string;
+				// do we have a composite?
+				Composite* composite = (Composite*) (**git).getComposite();
+				if (composite == 0) continue;
+
+				info.visit(*composite);
+				String this_string(info.getName());
+				if (composite->getParent() != 0 &&
+						RTTI::isKindOf<Residue>(*composite->getParent()))
+				{
+					info.visit(*composite->getParent());
+					this_string = info.getName() + " : " + this_string;
+				}
+
+ 				if (this_string == "UNKNOWN") continue;;
+
+				if (string != "") string += ", ";
+				string += this_string;
 			}
 
-			if (string == "UNKNOWN") return;
+			if (string == "") return;
 
 			String string2 = String("Object at cursor is ") + string;
 
@@ -1763,8 +1782,8 @@ namespace BALL
 			painter.setPen(getStage()->getBackgroundColor().getQColor());
 
 			QPoint diff(20, 20);
-			if (pos_x < (Position) width() / 2) diff.setX(-20);
-			if (pos_y < (Position) height() / 2) diff.setY(-20);
+			if (pos_x > (Position) width() / 2) diff.setX(-20);
+			if (pos_y > (Position) height() / 2) diff.setY(-20);
 
 			point += diff;
 			painter.drawText(point, string.c_str(), 0, -1);

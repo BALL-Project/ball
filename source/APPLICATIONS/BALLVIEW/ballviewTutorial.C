@@ -36,6 +36,7 @@ BALLViewTutorial::BALLViewTutorial(QWidget* parent, const char* name)
 
 	setNextEnabled(page(pageCount() - 1), false);
 	setFinishEnabled(page(pageCount() - 1), true);
+	backButton()->hide();
 
 	hide();
 }

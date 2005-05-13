@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>BALLViewTutorialData</class>
 <widget class="QWizard">
     <property name="name">
@@ -184,7 +184,7 @@ has the caption "Datasets".
 entry &lt;b&gt;"Windows-&gt;Datasets"&lt;/b&gt;.)&lt;br&gt;&lt;br&gt;
 The DatasetControl should have an entry for the trajectory.
 To visualise it, click on the entry and open the context menu with
-the right mouse button. First choose "&lt;b&gt;Load into RAM&lt;/b&gt;" and than 
+the right mouse button. First choose "&lt;b&gt;Load into RAM&lt;/b&gt;" and then 
 "&lt;b&gt;Visualise&lt;/b&gt;". In the Snapshot Visualisation dialog press "&lt;b&gt;Animate&lt;/b&gt;".
 &lt;/blockquote&gt;</string>
             </property>
