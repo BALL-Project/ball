@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.4 2005/05/04 12:50:19 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.5 2005/05/16 16:33:35 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -108,7 +108,8 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 			model_menu_(this),
 			context_composite_(0),
 			was_delete_(false),
-			nr_items_removed_(0)
+			nr_items_removed_(0),
+			show_ss_(false)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new MolecularControl " << this << std::endl;
@@ -591,6 +592,10 @@ void MolecularControl::initializeWidget(MainControl& main_control)
 	hint = "Clear the items in the clipboard";
 	clipboard_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Clear Clipboard", this, 
 																							 SLOT(clearClipboard()), 0, -1, hint);
+
+	hint = "Show entries for Secondary Structures in MolecularControl.";
+	show_ss_id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "Show SS entries", this, SLOT(switchShowSecondaryStructure()), 0, -1, hint);
+
 	GenericControl::initializeWidget(main_control);
 }
 
@@ -906,6 +911,15 @@ MolecularControl::SelectableListViewItem*
 		Log.error() << "Composite " << & composite << " already added!" << std::endl;
 	}
   #endif
+
+	if (!show_ss_)
+	{
+		if (RTTI::isKindOf<SecondaryStructure>(composite))
+		{
+			recurseGeneration_(parent, composite);
+			return 0;
+		}
+	}
 
 	// if getName returns "<xxxx>"  and name contains a valid string
 	// use it instead of the default name
@@ -1263,5 +1277,48 @@ void MolecularControl::highlightSelection()
 	listview->setUpdatesEnabled(true);
 	listview->triggerUpdate();
 }
+
+void MolecularControl::switchShowSecondaryStructure()
+{
+	if (show_ss_) show_ss_ = false;
+	else 					show_ss_ = true;
+
+	menuBar()->setItemChecked(show_ss_id_, show_ss_);
+
+	CompositeManager::CompositeConstIterator cit = getMainControl()->getCompositeManager().begin();
+	for (; +cit; ++cit)
+	{
+		removeComposite(**cit);
+	}
+
+	cit = getMainControl()->getCompositeManager().begin();
+	for (; +cit; ++cit)
+	{
+		addComposite(**cit);
+	}
+}
+
+void MolecularControl::fetchPreferences(INIFile& inifile)
+	throw()
+{
+	DockWidget::fetchPreferences(inifile);
+
+	if (inifile.hasEntry("MOLECULARCONTROL", "ShowSS"))
+	{
+		// following function will negate the value:
+		show_ss_ = !inifile.getValue("MOLECULARCONTROL", "ShowSS").toBool();
+		switchShowSecondaryStructure();
+	}
+}
+
+void MolecularControl::writePreferences(INIFile& inifile)
+	throw()
+{
+	inifile.appendSection("MOLECULARCONTROL");
+	inifile.insertValue("MOLECULARCONTROL", "ShowSS", show_ss_);
+
+	DockWidget::writePreferences(inifile);
+}
+
 
 } } // namespaces

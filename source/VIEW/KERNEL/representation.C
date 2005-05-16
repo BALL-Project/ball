@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.8 2005/05/16 12:24:47 amoll Exp $
+// $Id: representation.C,v 1.62.4.9 2005/05/16 16:37:13 amoll Exp $
 //
 
 
@@ -419,7 +419,7 @@ namespace BALL
 					}
 				}
 						
-				prop = String(composites_.size()) + " C, " + String(triangles) + " T";
+				prop = String(triangles) + " T";
 			}
 			else if (model_type_ == MODEL_LABEL)
 			{
@@ -430,7 +430,7 @@ namespace BALL
 			}
 			else
 			{
-				prop = String(composites_.size()) + " C, " + String(getGeometricObjects().size()) + " P";
+				prop = String(getGeometricObjects().size()) + " P";
 			}
 
 			if (getTransparency() != 0)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.47 2005/02/27 21:39:39 amoll Exp $
+// $Id: molecularControl.h,v 1.47.2.1 2005/05/16 16:34:48 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -223,6 +223,14 @@ class BALL_EXPORT MolecularControl
 	Size applySelector(const String& expression)
 		throw();
 
+	///
+	void writePreferences(INIFile& inifile)
+		throw();
+
+	///
+	void fetchPreferences(INIFile& inifile)
+		throw();
+
 	public slots:
 		
 	//@}
@@ -330,6 +338,8 @@ class BALL_EXPORT MolecularControl
 
 	/// Connected to the clear selection button
 	virtual void clearSelector();
+
+	void switchShowSecondaryStructure();
 	
 	//@} 
 	/** @name Protected members 
@@ -465,19 +475,8 @@ class BALL_EXPORT MolecularControl
 	//@{
 
 	//_
-	int cut_id_;
-	//_
-	int copy_id_;
-	//_
-	int paste_id_;
-	//_
-	int delete_id_;
-	//_
-	int clipboard_id_;
-	//_
-	int select_id_;
-	//_
-	int deselect_id_;
+	int cut_id_, copy_id_, paste_id_, delete_id_, clipboard_id_, select_id_, deselect_id_,
+			show_ss_id_;
 
 	//@}
 	
@@ -506,6 +505,8 @@ class BALL_EXPORT MolecularControl
 	bool 						was_delete_;
 
 	Size 						nr_items_removed_;
+
+	bool 						show_ss_;
 };
 	
 }} // namespaces
