@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.7 2005/05/10 13:50:31 amoll Exp $
+// $Id: representation.C,v 1.62.4.8 2005/05/16 12:24:47 amoll Exp $
 //
 
 
@@ -435,6 +435,7 @@ namespace BALL
 
 			if (getTransparency() != 0)
 			{
+				prop += " ";
 				prop += String(getTransparency())+ " % Transparent ";
 			}
 
