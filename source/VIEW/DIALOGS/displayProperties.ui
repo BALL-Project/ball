@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>DisplayPropertiesData</class>
 <widget class="QDialog">
     <property name="name">
@@ -675,7 +675,7 @@
                 </rect>
             </property>
             <property name="text">
-                <string>enable updates</string>
+                <string>automatic update</string>
             </property>
         </widget>
     </widget>
@@ -2553,7 +2553,7 @@
                 </rect>
             </property>
             <property name="text">
-                <string>enable updates</string>
+                <string>automatic update</string>
             </property>
         </widget>
     </widget>
