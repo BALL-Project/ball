@@ -13,6 +13,7 @@ Added:
   - Python support: added more classes to the Python SIP interface
 	- new application: DCD2PNG to create series of PNG-images from a DCD trajectory file
 	- possibility to abort force field calculations if the assignment of values fails for a given number of atoms
+	- Proxy Support for TCP transfers
   - BALLView
   	- Documentation for BALLView in the folder BALL/doc/BALLView  
 		- Tutorial and demo under Help-menu
@@ -38,6 +39,7 @@ Added:
   	- new move mode for (partial) structures (also much less CPU consumption)
   	- Esc key now switches to last used mode in Scene
 		- Enter key now focus on selection or on first loaded system if no selection exists
+		- its now possible to hide secondary structure entries in the MolecularControl
   	- calculation of Ramachandran plots for proteins
   	- Python scripting
   		- Hotkey support for starting any (BALL-)Python command from BALLView
