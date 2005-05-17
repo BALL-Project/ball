@@ -327,6 +327,8 @@ void DownloadPDBFile::displayHTML(const QString& url)
 		if (size == 0)
 		{
 			setStatusbarText(String("URL ") + filename.ascii() + " does not exist.", true);
+			error_ = true;
+			downloadEnded_();
 			return;
 		}
 
@@ -438,7 +440,7 @@ void DownloadPDBFile::abort()
 
 	try
 	{
-		File::remove(thread_->getFilename());
+ 		File::remove(thread_->getFilename());
 	}
 	catch(...){}
 #endif
