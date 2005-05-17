@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.7 2005/05/12 14:36:14 amoll Exp $
+// $Id: scene.h,v 1.62.2.8 2005/05/17 14:19:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -737,6 +737,8 @@ namespace BALL
 
 			// Position of mouse cursor for identifying Composite
 			Position last_x_pos_, last_y_pos_;
+
+			bool show_info_;
 		};
 
 

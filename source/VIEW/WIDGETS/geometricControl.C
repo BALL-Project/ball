@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.18 2005/05/11 15:10:15 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.19 2005/05/17 14:19:14 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -291,6 +291,10 @@ namespace BALL
 			if (!isSurfaceModel(rep->getModelType()))
 			{
 				context_menu_.setItemEnabled(30, false);
+			}
+			else
+			{
+				modify_surface_dialog_->setRepresentation(rep);
 			}
 		}
 

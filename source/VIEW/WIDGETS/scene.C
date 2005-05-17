@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.14 2005/05/17 12:34:51 amoll Exp $
+// $Id: scene.C,v 1.171.2.15 2005/05/17 14:19:15 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -495,6 +495,8 @@ namespace BALL
 			renderRepresentations_(DISPLAY_LISTS_RENDERING);
 			glPopMatrix();
 			content_changed_ = false;
+
+			show_info_ = true;
 		}
 
 		void Scene::renderRepresentations_(RenderMode mode)
@@ -1716,8 +1718,11 @@ namespace BALL
 			{
 				last_x_pos_ = pos_x;
 				last_y_pos_ = pos_y;
+				show_info_ = true;
 				return;
 			}
+
+			if (!show_info_) return;
 
 			List<GeometricObject*> objects;
 
@@ -1787,6 +1792,8 @@ namespace BALL
 
 			point += diff;
 			painter.drawText(point, string.c_str(), 0, -1);
+
+			show_info_ = false;
 		}
 
 

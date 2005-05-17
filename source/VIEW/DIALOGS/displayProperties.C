@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.7 2005/05/17 13:46:34 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.8 2005/05/17 14:19:13 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -107,6 +107,8 @@ void DisplayProperties::fetchPreferences(INIFile& inifile)
 {
 	ModularWidget::fetchPreferences(inifile);
 	readPreferenceEntries(inifile);
+
+	precisionBoxChanged(precision_combobox->currentItem());
 }
 
 void DisplayProperties::writePreferences(INIFile& inifile)
@@ -624,6 +626,7 @@ void DisplayProperties::checkDrawingPrecision_()
 		else
 		{
 			rep_->setSurfaceDrawingPrecision(-1);
+			precisionBoxChanged(precision_combobox->currentItem());
 		}
 	}
 }
@@ -710,6 +713,7 @@ void DisplayProperties::setSurfaceDrawingPrecision(float value)
 void DisplayProperties::setDrawingPrecision(int value)
 {
 	precision_combobox->setCurrentItem(value);
+	precisionBoxChanged(0);
 }
 
 void DisplayProperties::setTransparency(int value)
