@@ -100,6 +100,12 @@ namespace BALL
 			}
 			try
 			{
+				MainControl* mc = getMainControl();
+				if (mc != 0)
+				{
+					tcp_.setProxy(mc->getProxy(), mc->getProxyPort());
+				}
+
 				if (file_name_ != "")
 				{
 					File f(file_name_, std::ios::out);
@@ -109,6 +115,7 @@ namespace BALL
 						return;
 					}
 					tcp_.set(f, url_);
+					// dont move the transfer() call away from here!
 					tcp_.transfer();
 				}
 				else
@@ -124,6 +131,7 @@ namespace BALL
 					stream_.clear();
 
 					tcp_.set(stream_, url_);
+					// dont move the transfer() call away from here!
 					tcp_.transfer();
 				}
 			}

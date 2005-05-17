@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72.2.2 2005/04/15 13:50:51 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.3 2005/05/17 12:33:26 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -52,6 +52,7 @@ namespace BALL
 		class ModularWidget;
 		class Preferences;
 		class MainControlPreferences;
+		class NetworkPreferences;
 		class GeometricObjectSelectionMessage;
 		class SimulationThread;
 
@@ -727,6 +728,15 @@ namespace BALL
 			void moveItems(const Matrix4x4& m)
 				throw();
 
+			///
+			void setProxy(const String& host, Position port);
+
+			///
+			String getProxy() const { return proxy_;}
+
+			///
+			Position getProxyPort() const { return proxy_port_;}
+
 			#ifdef BALL_QT_HAS_THREADS
 			/// QWaitCondition to wake up threads, after Composites are unlocked
 			QWaitCondition& getCompositesLockedWaitCondition() { return composites_locked_wait_condition_;}
@@ -838,6 +848,7 @@ namespace BALL
 			CompositeManager 						composite_manager_;
 
 			MainControlPreferences* 		main_control_preferences_;
+			NetworkPreferences* 				network_preferences_;
 			Preferences*								preferences_dialog_;
 			int 			 									preferences_id_;
 			int 			 									delete_id_;
@@ -875,6 +886,9 @@ namespace BALL
 			QMutex 							composites_locked_mutex_;
 			QWaitCondition 			composites_locked_wait_condition_;
 			#endif
+
+			String 							proxy_;
+			Position 						proxy_port_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

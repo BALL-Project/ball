@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.44.6.4 2005/05/10 13:50:28 amoll Exp $
+# $Id: Makefile,v 1.44.6.5 2005/05/17 12:33:45 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -50,6 +50,8 @@ CPP_SOURCES=\
 	molecularDynamicsDialog.C\
 	molecularDynamicsDialogData.C\
 	molecularFileDialog.C\
+	networkPreferences.C\
+	networkPreferencesData.C\
 	parsedFunctionDialog.C\
 	parsedFunctionDialogData.C\
 	peptideDialog.C\
@@ -106,6 +108,8 @@ MOC_SOURCES=\
 	molecularFileDialog_moc.C\
 	molecularDynamicsDialog_moc.C\
 	molecularDynamicsDialogData_moc.C\
+	networkPreferences_moc.C\
+	networkPreferencesData_moc.C\
 	parsedFunctionDialog_moc.C\
 	parsedFunctionDialogData_moc.C\
 	peptideDialog_moc.C\
@@ -143,6 +147,7 @@ UIC_SOURCES=\
 	materialSettingsData.C\
 	modelSettingsDialogData.C\
 	molecularDynamicsDialogData.C\
+	networkPreferencesData.C\
 	parsedFunctionDialogData.C\
 	peptideDialogData.C\
 	preferencesData.C\

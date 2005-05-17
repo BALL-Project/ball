@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.5 2005/05/11 14:11:57 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.6 2005/05/17 12:33:15 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -10,6 +10,7 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
+#include <BALL/VIEW/DIALOGS/networkPreferences.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 
 #include <BALL/VIEW/WIDGETS/logView.h>
@@ -94,6 +95,7 @@ namespace BALL
 				primitive_manager_(this),
 				composite_manager_(),
 				main_control_preferences_(0),
+				network_preferences_(0),
 				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
 				preferences_id_(-1),
 				delete_id_(0),
@@ -234,6 +236,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				Embeddable(main_control),
 				selection_(),
 				main_control_preferences_(0),
+				network_preferences_(0),
 				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
 				preferences_id_(-1),
 				delete_id_(0),
@@ -838,6 +841,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			preferences.showEntry(main_control_preferences_);
 
 			main_control_preferences_->enableLoggingToFile(logging_to_file_);
+
+			network_preferences_ = new NetworkPreferences();
+			preferences.insertEntry(network_preferences_);
+			preferences.showEntry(network_preferences_);
 		}
 
 		void MainControl::finalizePreferencesTab(Preferences &preferences)
@@ -847,6 +854,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			{
 				preferences.removeEntry(main_control_preferences_);
 				main_control_preferences_ = 0;
+			}
+
+			if (network_preferences_ != 0)
+			{
+				preferences.removeEntry(network_preferences_);
+				network_preferences_ = 0;
 			}
 		}
 
@@ -863,6 +876,11 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					disableLoggingToFile();
 				else 	
 					enableLoggingToFile();
+			}
+
+			if (network_preferences_ != 0)
+			{
+				network_preferences_->applySettings();
 			}
 		}
 
@@ -2107,6 +2125,18 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		preferences_dialog_->ok_button->setEnabled(state);
 	}
 
+
+	void MainControl::setProxy(const String& host, Position port)
+	{
+		proxy_ = host;
+		proxy_port_ = port;
+
+		if (network_preferences_ != 0)
+		{
+			network_preferences_->getSettings();
+		}
+	}
+	
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>
 #	endif
