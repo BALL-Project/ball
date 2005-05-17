@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: networkPreferences.C,v 1.1.2.1 2005/05/17 12:33:38 amoll Exp $
+// $Id: networkPreferences.C,v 1.1.2.2 2005/05/17 13:37:53 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/networkPreferences.h>
@@ -24,6 +24,7 @@ NetworkPreferences::NetworkPreferences(QWidget* parent, const char* name, WFlags
 	setINIFileSectionName("NETWORK");
 	registerObject_(port_edit);
 	registerObject_(host_edit);
+	registerObject_(enable_proxy);
 
 	insertEntry(this, "Network");
 }
@@ -42,14 +43,18 @@ void NetworkPreferences::getSettings()
 	MainControl* mc = getMainControl();
 	if (mc == 0) return;
 
+	if (mc->getProxy() == "")
+	{
+		enable_proxy->setChecked(false);
+		return;
+	}
+
 	host_edit->setText(mc->getProxy().c_str());
 	port_edit->setText(String(mc->getProxyPort()).c_str());
 
-	if (host_edit->text() != "" &&
-			port_edit->text() != "")
-	{
-		enable_proxy->setChecked(true);
-	}
+	bool use_proxy = host_edit->text() != "" && port_edit->text() != "";
+
+	enable_proxy->setChecked(use_proxy);
 }
 
 void NetworkPreferences::applySettings()
