@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.16 2004/10/21 13:53:35 amoll Exp $
+// $Id: preferences.C,v 1.16.6.1 2005/05/17 11:44:56 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -58,6 +58,7 @@ namespace BALL
 			{
 				Log.error() << "PreferencesEntry not derived from QWidget in " 
 										<< __FILE__ << "  " << __LINE__<< std::endl;
+				Log.error() << "Section name: " << child->getINIFileSectionName() << std::endl;
 				return;
 			
 			}
