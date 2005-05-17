@@ -643,6 +643,12 @@
 					RelativePath="..\..\..\source\VIEW\WIDGETS\molecularStructure_moc.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\View\Dialogs\networkPreferences_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\View\Dialogs\networkPreferencesData_moc.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\parsedFunctionDialog_moc.C">
 				</File>
 				<File
@@ -906,6 +912,12 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\molecularFileDialog.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\View\Dialogs\networkPreferences.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\View\Dialogs\networkPreferencesData.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\parsedFunctionDialog.C">
@@ -1232,7 +1244,8 @@
 						Name="Release|Win32">
 						<Tool
 							Name="VCCustomBuildTool"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
 							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
 					</FileConfiguration>
 				</File>
@@ -1242,7 +1255,8 @@
 						Name="Release|Win32">
 						<Tool
 							Name="VCCustomBuildTool"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
 							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
 					</FileConfiguration>
 				</File>
@@ -2016,6 +2030,29 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\Ball\View\Dialogs\networkPreferences.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\Ball\View\Uic\networkPreferencesData.h">
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Running MOC on $(InputFileName)"
@@ -3377,6 +3414,19 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(Inp
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\View\Dialogs\networkPreferences.ui">
+				<FileConfiguration
+					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running UIC on $(InputPath)"
