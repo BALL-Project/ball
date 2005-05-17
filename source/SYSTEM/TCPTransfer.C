@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.32 2004/12/13 20:30:34 amoll Exp $
+// $Id: TCPTransfer.C,v 1.33 2005/05/17 00:16:20 amoll Exp $
 //
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
@@ -65,7 +65,9 @@ namespace BALL
 		received_bytes_(0),
 		protocol_(UNKNOWN_PROTOCOL),
 		socket_(0),
-		fstream_(0)
+		fstream_(0),
+		proxy_address_(""),
+		proxy_port_(0)
 	{
 		set(file, address);
 
@@ -99,7 +101,9 @@ namespace BALL
 		received_bytes_(0),
 		protocol_(UNKNOWN_PROTOCOL),
 		socket_(0),
-		fstream_(0)
+		fstream_(0),
+		proxy_address_(""),
+		proxy_port_(0)
 	{	
 	}
 
@@ -120,8 +124,10 @@ namespace BALL
 		password_				= password;
 		port_ 					= port;
 		fstream_ 				= &file;
-		status_					= (Status)OK;
+		status_					= OK;
 		received_bytes_ = 0;
+		proxy_port_     = 0;
+		proxy_address_  = "";
 
 		if (socket_ != 0)
 		{
@@ -224,7 +230,7 @@ namespace BALL
 			return false;
 		}
 		
-		status_ = (Status)OK;
+		status_ = OK;
 		
 		return true;
 	}
@@ -279,7 +285,7 @@ namespace BALL
 			return UNKNOWN__ERROR;
 		}
 
-		return (Status)OK;
+		return OK;
 	}
 
 		
@@ -298,7 +304,8 @@ namespace BALL
 			query += "Authorization: Basic "+ auth.encodeBase64() + "\n";
 		}
 		query += "\n";
-		
+
+	
 		// Logon to webserver and send GET-request
 		Status status = logon_(query);
 		if (status != OK)
@@ -341,11 +348,8 @@ namespace BALL
 		// receive the rest
 		do
 		{
-#			ifdef BALL_USE_WINSOCK
-			bytes = (int)::recv(socket_, buffer_, BUFFER_SIZE, 0);
-#			else
-			bytes = read(socket_, buffer_, BUFFER_SIZE);
-#			endif
+			bytes = getReceivedBytes_(socket_);
+
 			if (bytes < 0)
 			{
 				return RECV__ERROR;
@@ -358,32 +362,31 @@ namespace BALL
 		}
 		while (bytes > 0);
 
-		return (Status)OK;
+		return OK;
 	}
 		
 
 	TCPTransfer::Status TCPTransfer::setBlock_(Socket socket, bool block)
 		throw()
 	{
-		
 		// WIN port
 		#ifndef BALL_USE_WINSOCK
 			int temp = !block;
 
 			if (ioctl(socket, FIONBIO, &temp) == -1)
 			{
-				return (Status)CONNECT__ERROR;
+				return CONNECT__ERROR;
 			}
 		#else
 			u_long temp = !block;
 
 			if (ioctlsocket(socket, FIONBIO, &temp) == -1)
 			{
-				return (Status)CONNECT__ERROR;
+				return CONNECT__ERROR;
 			}
 		#endif
 
-		return (Status)OK;
+		return OK;
 	}
 
 
@@ -401,13 +404,31 @@ namespace BALL
 		#endif
 
 		status_ = UNKNOWN__ERROR;
-		
-		struct hostent* ht = gethostbyname(host_address_.c_str());
+
+		// ============ do we use a proxy ? =====================
+		Position port = 0;
+		String host_address = "";
+		bool use_proxy = proxy_address_ != "" &&
+										 proxy_port_    != 0;
+
+		if (use_proxy)
+		{
+			port = proxy_port_;
+			host_address = proxy_address_;
+		}
+		else
+		{
+			port = port_;
+			host_address = host_address_;
+		}
+	
+		struct hostent* ht = gethostbyname(host_address.c_str());
 		if (ht == NULL)
 		{
 			status_ = GETHOSTBYNAME__ERROR;
 			return status_;
 		}  
+
 		if (socket_ != 0)
 		{
 			close(socket_);
@@ -416,40 +437,65 @@ namespace BALL
 		if (socket_ == -1)
 		{
 			socket_ = 0;
-			status_ = (Status)SOCKET__ERROR;
+			status_ = SOCKET__ERROR;
 			return status_;
 		}  
 
 		struct sockaddr_in host;  
 		host.sin_family = AF_INET;
-		host.sin_port	  = htons(port_);
+		host.sin_port	  = htons(port);
 		host.sin_addr 	= *(struct in_addr*)ht->h_addr;  
 
-		if(connect(socket_, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
+		if (connect(socket_, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
 		{
-			status_ = CONNECT__ERROR;
+			if (!use_proxy) status_ = CONNECT__ERROR;
+			else 						status_ = PROXY__ERROR;
+
 			return status_;
 		}
+
+		if (use_proxy)
+		{
+			String proxy_query = "CONNECT ";
+			proxy_query += host_address_ + ":" + String(port_) + " HTTP/1.0\r\n";
+			proxy_query += "Host: " + host_address_ + ":" + String(port_) + " \r\n";
+			proxy_query += "Content-Length: 0\r\n";
+			/*
+			proxy_query += "\r\n";
+			sendData_(proxy_query, socket_);
+
+			if (getReceivedBytes_(socket_) < 0)
+			{
+				status_ = PROXY__ERROR;
+				return status_;
+			}
+
+			if (!String(buffer_).hasSubstring("200"))
+			{
+				status_ = PROXY__ERROR;
+				return status_;
+			}
+			*/
+		}
+	
 		if (!query.isEmpty())
 		{
 			sendData_(query, socket_);
 		}
-#			ifdef BALL_USE_WINSOCK
-			received_bytes_ = (int)::recv(socket_, buffer_, BUFFER_SIZE, 0);
-#			else
-			received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
-#			endif
+		received_bytes_ = getReceivedBytes_(socket_);
+
 		if (received_bytes_ < 0)
 		{
 			status_ = RECV__ERROR;
 			return status_;
 		}
+
 		buffer_[received_bytes_] = '\0';
 		#ifdef DEBUG
 			output_();
 		#endif
-		
-		status_ = (Status)OK;
+
+		status_ = OK;
 		return status_;
 	}	
 
@@ -503,7 +549,7 @@ namespace BALL
 			status_ = SEND__ERROR;
 			return status_;
 		}
-		return (Status)OK;
+		return OK;
 	}
 
 
@@ -515,11 +561,8 @@ namespace BALL
 		timer.start();
 		while (timer.getClockTime() < seconds)
 		{
-#			ifdef BALL_USE_WINSOCK
-			received_bytes_ = (int)::recv(socket_, buffer_, BUFFER_SIZE, 0);
-#			else
-			received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
-#			endif
+			received_bytes_ = getReceivedBytes_(socket_);
+
 			if (received_bytes_ > 0)
 			{
 				buffer_[received_bytes_] = '\0';
@@ -563,11 +606,8 @@ namespace BALL
 		timer.start();
 		do		
 		{	
-#			ifdef BALL_USE_WINSOCK
-			received_bytes_ = (int)::recv(socket_, buffer_, BUFFER_SIZE, 0);
-#			else
-			received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
-#			endif
+			received_bytes_ = getReceivedBytes_(socket_);
+
 			if (received_bytes_ > 0)
 			{
 				buffer_[received_bytes_] = '\0';
@@ -704,7 +744,7 @@ namespace BALL
 		Socket socket2 = socket(AF_INET, SOCK_STREAM, 0); 
 		if (socket2 == -1)
 		{
-			status_ = (Status)SOCKET__ERROR;
+			status_ = SOCKET__ERROR;
 			return status_;
 		}  
 
@@ -756,11 +796,7 @@ namespace BALL
 		int bytes = -1;
 		while (control_bytes < 1 && bytes != 0)
 		{			
-#			ifdef BALL_USE_WINSOCK
-			bytes = (int)::recv(socket2, buffer_, BUFFER_SIZE, 0);
-#			else
-			bytes = read(socket2, buffer_, BUFFER_SIZE);
-#			endif
+			bytes = getReceivedBytes_(socket2);
 
 			if (bytes > 0)
 			{
@@ -770,11 +806,8 @@ namespace BALL
 				}
 				received_bytes_ += bytes;
 			}
-#			ifdef BALL_USE_WINSOCK
-			control_bytes = (int)::recv(socket_, buffer_, BUFFER_SIZE, 0);
-#			else
-			control_bytes = read(socket_, buffer_, BUFFER_SIZE);
-#			endif			
+
+			control_bytes = getReceivedBytes_(socket_);
 			#ifdef DEBUG
 				if (control_bytes > 0)
 				{	
@@ -789,11 +822,7 @@ namespace BALL
 		// we dont need the second socket anymore
 		close(socket2);
 		
-		
-		if (bytes == 0)
-		{
-			return (Status)OK;
-		}
+		if (bytes == 0) return OK;
 		
 		if (control_bytes < 1)
 		{
@@ -805,7 +834,22 @@ namespace BALL
 
 		if (!getFTPMessage_(226)) return status_;
 
-		return (Status)OK;
+		return OK;
+	}
+
+	int TCPTransfer::getReceivedBytes_(Socket& socket)
+	{
+#		ifdef BALL_USE_WINSOCK
+			return (int)::recv(socket, buffer_, BUFFER_SIZE, 0);
+#		else
+			return read(socket, buffer_, BUFFER_SIZE);
+#		endif
+	}
+
+	void TCPTransfer::setProxy(const String proxy_address, Position port)
+	{
+		proxy_address_ = proxy_address;
+		proxy_port_    = port;
 	}
 
 } // namespace BALL

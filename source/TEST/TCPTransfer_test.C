@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer_test.C,v 1.21 2004/12/21 10:37:34 amoll Exp $
+// $Id: TCPTransfer_test.C,v 1.22 2005/05/17 00:18:18 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -22,7 +22,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.21 2004/12/21 10:37:34 amoll Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.22 2005/05/17 00:18:18 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -60,13 +60,13 @@ CHECK(set(ofstream& file, const String& address))
 RESULT
 
 CHECK(http/no login)
-	ABORT_IF(!NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP))
+	ABORT_IF(!NetworkTest::test("www.zbi.uni-saarland.de", NetworkTest::HTTP))
 	NEW_TMP_FILE(filename)
 	std::ofstream os(filename.c_str(), std::ios::out);
 	
-	TCPTransfer tcp_t(os ,"http://www.mpi-sb.mpg.de/BALL/test/http_test.txt");
-	TEST_EQUAL(tcp_t.getHostAddress(), "www.mpi-sb.mpg.de")
-	TEST_EQUAL(tcp_t.getFileAddress(), "/BALL/test/http_test.txt")
+	TCPTransfer tcp_t(os ,"http://www.zbi.uni-saarland.de/zbi/download/http_test.txt");
+	TEST_EQUAL(tcp_t.getHostAddress(), "www.zbi.uni-saarland.de")
+	TEST_EQUAL(tcp_t.getFileAddress(), "/zbi/download/http_test.txt")
 	TEST_EQUAL(tcp_t.getPort(), 80)
 	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::OK)
 	TEST_EQUAL(tcp_t.getReceivedBytes(), 3048)
@@ -121,6 +121,23 @@ CHECK(http/exception)
 	TEST_EXCEPTION(TCPTransfer::TransferFailed, TCPTransfer tcp_t(os, "ftp://xcajsjddnnakadnndakndna.de/ffaadad.caadd"))
 	os.close();
 RESULT
+
+
+CHECK(PROXY)
+	ABORT_IF(!NetworkTest::test("www.zbi.uni-saarland.de", NetworkTest::HTTP))
+	NEW_TMP_FILE(filename);
+	std::ofstream os(filename.c_str(), std::ios::out);
+	
+	TCPTransfer tcp_t;
+	tcp_t.set(os ,"http://www.zbi.uni-saarland.de/zbi/download/http_test.txt");
+	tcp_t.setProxy("localhost", 8888);
+//	 tcp_t.setProxy("217.125.78.118", 80);
+	tcp_t.transfer();
+	os.close();
+
+	TEST_FILE(filename.c_str(), "data/http_test.txt")
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

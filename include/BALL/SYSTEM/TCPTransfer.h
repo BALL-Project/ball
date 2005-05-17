@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.20 2004/12/13 20:31:01 amoll Exp $
+// $Id: TCPTransfer.h,v 1.21 2005/05/17 00:18:03 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
@@ -44,20 +44,21 @@ namespace BALL
 			enum Status
 			{
 				OK  										= 0,
-				GETHOSTBYNAME__ERROR 		= 1,
-				SOCKET__ERROR 					= 2,
-				CONNECT__ERROR 					= 3,
-				RECV__ERROR 						= 4,
-				OUTOFMEMORY__ERROR 			= 5,
-				BODY__ERROR 						= 6,
-				UNKNOWN__ERROR 					= 7,
-				ADDRESS__ERROR 					= 8,
-				UNINITIALIZED__ERROR 		= 9,
-				TRANSFER__ERROR					= 10,
-				SEND__ERROR							= 11,
-				PORT__ERROR							= 12,
-				UNKNOWN_PROTOCOL__ERROR = 13,
-				LOGON__ERROR						= 14,
+				GETHOSTBYNAME__ERROR 		,
+				SOCKET__ERROR 					,
+				CONNECT__ERROR 					,
+				RECV__ERROR 						,
+				OUTOFMEMORY__ERROR 			,
+				BODY__ERROR 						,
+				UNKNOWN__ERROR 					,
+				ADDRESS__ERROR 					,
+				UNINITIALIZED__ERROR 		,
+				TRANSFER__ERROR					,
+				SEND__ERROR							,
+				PORT__ERROR							,
+				UNKNOWN_PROTOCOL__ERROR ,
+				LOGON__ERROR						,
+				PROXY__ERROR 						,	
 				FILENOTFOUND__ERROR 		= 404
 			};
 
@@ -222,6 +223,9 @@ namespace BALL
 			*/
 			Status transfer()
 				throw();
+
+			///
+			void setProxy(const String proxy_address, Position port);
 			
 			protected:
 				
@@ -236,6 +240,8 @@ namespace BALL
 				char				buffer_[BUFFER_SIZE + 1];
 				Socket			socket_;
 				std::ostream*  fstream_;
+				String 			proxy_address_;
+				Position 		proxy_port_;
 				
 				/*_ Send data through the socket.
 				 */
@@ -282,6 +288,9 @@ namespace BALL
 				//_ Debug method
 				void 		output_()
 					throw();
+
+				//_
+				int getReceivedBytes_(Socket& socket);
 
 			private:
 				
