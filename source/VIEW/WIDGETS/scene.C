@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.13 2005/05/13 12:41:31 amoll Exp $
+// $Id: scene.C,v 1.171.2.14 2005/05/17 12:34:51 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1767,7 +1767,7 @@ namespace BALL
 
 			if (getMainControl()->getStatusbarText() == string2) return;
 
-			setStatusbarText(string2, true);
+			setStatusbarText(string2, false);
 
 			QPainter painter(this);
 

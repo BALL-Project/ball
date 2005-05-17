@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.11 2004/12/10 19:08:46 amoll Exp $
+// $Id: downloadPDBFile.h,v 1.11.6.1 2005/05/17 12:35:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -22,6 +22,8 @@
 
 namespace BALL
 {
+	class TCPTransfer;
+
 	namespace VIEW
 	{
 
@@ -93,6 +95,8 @@ namespace BALL
 
 				bool threadedDownload_(const String& url);
 				void removeFile_(const String& filename);
+
+				void setProxyAndTransfer_(TCPTransfer& tcp);
 				
 				QTextBrowser 						*qb_;
 				FetchHTMLThread 				*thread_;
