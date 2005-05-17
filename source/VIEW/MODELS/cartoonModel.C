@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.2 2005/04/25 23:08:01 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.3 2005/05/17 15:23:07 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -682,8 +682,28 @@ void AddCartoonModel::drawTube_(SecondaryStructure& ss)
 	throw()
 {
 	Position start = ss_to_spline_start_[&ss];
-	buildGraphicalRepresentation_(start 												* interpolation_steps_, 
-																(start + ss_nr_splines_[&ss])	* interpolation_steps_);
+	
+	ResidueIterator rit = ss.beginResidue();
+	Position res_pos = 0;
+	
+	for (; +rit; ++rit)
+	{
+		if (rit != ss.beginResidue() &&
+				checkBuildBackboneNow_(*rit))
+		{
+   			buildGraphicalRepresentation_(start 								* interpolation_steps_, 
+   																		(start + res_pos - 1)	* interpolation_steps_);
+
+				last_spline_point_ = -1;
+
+			start += res_pos;
+			res_pos = 0;
+		}
+
+		res_pos++;
+	}
+
+  buildGraphicalRepresentation_(start * interpolation_steps_, (ss_to_spline_start_[&ss] + ss_nr_splines_[&ss]) * interpolation_steps_);
 }
 
 
