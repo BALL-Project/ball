@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.33 2005/05/17 00:16:20 amoll Exp $
+// $Id: TCPTransfer.C,v 1.34 2005/05/17 10:46:01 amoll Exp $
 //
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
@@ -292,11 +292,20 @@ namespace BALL
 	TCPTransfer::Status TCPTransfer::getHTTP_()
 		throw()
 	{
-		String query;
-		query  = "GET " + file_address_ + " HTTP/1.0\n";
+		String query = "GET ";
+		
+		if (usingProxy()) query += "http://" + host_address_;
+
+		query += file_address_ + " HTTP/1.0\n";
 		query += "Accept: */*\n";
 		query += "User-Agent: Mozilla/4.76\n";
 		
+		if (usingProxy()) 
+		{
+			query += "Host: " + host_address_ + "\r\n";
+			query += "Proxy-Connection: close\r\n";
+		}
+
 		// HTTP authentification
 		if (!login_.isEmpty() && !password_.isEmpty())
 		{
@@ -408,10 +417,8 @@ namespace BALL
 		// ============ do we use a proxy ? =====================
 		Position port = 0;
 		String host_address = "";
-		bool use_proxy = proxy_address_ != "" &&
-										 proxy_port_    != 0;
 
-		if (use_proxy)
+		if (usingProxy())
 		{
 			port = proxy_port_;
 			host_address = proxy_address_;
@@ -422,6 +429,7 @@ namespace BALL
 			host_address = host_address_;
 		}
 	
+		// ok, start the connection
 		struct hostent* ht = gethostbyname(host_address.c_str());
 		if (ht == NULL)
 		{
@@ -448,36 +456,12 @@ namespace BALL
 
 		if (connect(socket_, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
 		{
-			if (!use_proxy) status_ = CONNECT__ERROR;
-			else 						status_ = PROXY__ERROR;
+			if (!usingProxy()) status_ = CONNECT__ERROR;
+			else 					     status_ = PROXY__ERROR;
 
 			return status_;
 		}
 
-		if (use_proxy)
-		{
-			String proxy_query = "CONNECT ";
-			proxy_query += host_address_ + ":" + String(port_) + " HTTP/1.0\r\n";
-			proxy_query += "Host: " + host_address_ + ":" + String(port_) + " \r\n";
-			proxy_query += "Content-Length: 0\r\n";
-			/*
-			proxy_query += "\r\n";
-			sendData_(proxy_query, socket_);
-
-			if (getReceivedBytes_(socket_) < 0)
-			{
-				status_ = PROXY__ERROR;
-				return status_;
-			}
-
-			if (!String(buffer_).hasSubstring("200"))
-			{
-				status_ = PROXY__ERROR;
-				return status_;
-			}
-			*/
-		}
-	
 		if (!query.isEmpty())
 		{
 			sendData_(query, socket_);
@@ -850,6 +834,11 @@ namespace BALL
 	{
 		proxy_address_ = proxy_address;
 		proxy_port_    = port;
+	}
+
+	bool TCPTransfer::usingProxy() const
+	{
+		return proxy_address_ != "" && proxy_port_    != 0;
 	}
 
 } // namespace BALL

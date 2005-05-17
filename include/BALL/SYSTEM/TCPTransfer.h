@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.21 2005/05/17 00:18:03 amoll Exp $
+// $Id: TCPTransfer.h,v 1.22 2005/05/17 10:46:11 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
@@ -226,6 +226,9 @@ namespace BALL
 
 			///
 			void setProxy(const String proxy_address, Position port);
+
+			///
+			bool usingProxy() const;
 			
 			protected:
 				
