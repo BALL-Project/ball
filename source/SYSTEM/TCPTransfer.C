@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.34 2005/05/17 10:46:01 amoll Exp $
+// $Id: TCPTransfer.C,v 1.35 2005/05/17 12:34:00 amoll Exp $
 //
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
@@ -126,8 +126,6 @@ namespace BALL
 		fstream_ 				= &file;
 		status_					= OK;
 		received_bytes_ = 0;
-		proxy_port_     = 0;
-		proxy_address_  = "";
 
 		if (socket_ != 0)
 		{

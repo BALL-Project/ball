@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer_test.C,v 1.22 2005/05/17 00:18:18 amoll Exp $
+// $Id: TCPTransfer_test.C,v 1.23 2005/05/17 12:36:02 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -22,7 +22,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.22 2005/05/17 00:18:18 amoll Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.23 2005/05/17 12:36:02 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -94,7 +94,7 @@ CHECK(http/login)
 
 	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
-
+/*
 CHECK(ftp)
 	ABORT_IF(!NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP))
 	NEW_TMP_FILE(filename);
@@ -114,7 +114,7 @@ CHECK(ftp)
 
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT
-
+*/
 CHECK(http/exception)
 	NEW_TMP_FILE(filename)
 	std::ofstream os(filename.c_str(), std::ios::out);
@@ -130,8 +130,7 @@ CHECK(PROXY)
 	
 	TCPTransfer tcp_t;
 	tcp_t.set(os ,"http://www.zbi.uni-saarland.de/zbi/download/http_test.txt");
-	tcp_t.setProxy("localhost", 8888);
-//	 tcp_t.setProxy("217.125.78.118", 80);
+	tcp_t.setProxy("www-proxy.uni-saarland.de", 3128);
 	tcp_t.transfer();
 	os.close();
 
