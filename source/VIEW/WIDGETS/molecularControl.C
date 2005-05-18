@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.5 2005/05/16 16:33:35 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.6 2005/05/18 23:06:05 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -284,14 +284,14 @@ bool MolecularControl::reactToMessages_(Message* message)
 		{
 			case CompositeMessage::NEW_MOLECULE:
 				addComposite(*(Composite *)composite_message->getComposite());
-				return false;
+				return true;
 			
 			case CompositeMessage::REMOVED_COMPOSITE:
 				removeComposite(*(Composite *)composite_message->getComposite());
-				return false;
+				return true;
 			
 			case CompositeMessage::CHANGED_COMPOSITE:
-				return false;
+				return true;
 
 			case CompositeMessage::CHANGED_COMPOSITE_HIERARCHY:
 			{
