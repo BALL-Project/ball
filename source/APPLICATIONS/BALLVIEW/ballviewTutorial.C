@@ -28,15 +28,10 @@ BALLViewTutorial::BALLViewTutorial(QWidget* parent, const char* name)
 	// register the widget with the MainControl
 	ModularWidget::registerWidget(this);
 
-	for (Index p = 0; p < pageCount(); p++)
-	{
-		setBackEnabled(page(p), false);
-		setHelpEnabled(page(p), false);
-	}
-
 	setNextEnabled(page(pageCount() - 1), false);
 	setFinishEnabled(page(pageCount() - 1), true);
 	backButton()->hide();
+	helpButton()->hide();
 
 	hide();
 }
@@ -53,7 +48,20 @@ void BALLViewTutorial::show()
 {
 	showPage(page(0));
 	nextButton()->setEnabled(false);
+
+	// remove all loaded Composites
+	MainControl* mc = getMainControl();
+	CompositeManager& cm = mc->getCompositeManager();
+	HashSet<Composite*> composites = cm.getComposites();
+	HashSet<Composite*>::Iterator it = composites.begin();
+	
+	for (; +it; ++it)
+	{
+		mc->remove(**it, true, false);
+	}
+	
 	DisplayProperties::getInstance(0)->selectModel(MODEL_STICK);
+
 	BALLViewTutorialData::show();
 	raise();
 }
