@@ -75,10 +75,14 @@ void BALLViewDemo::show()
 	// open bpti 
 	try
 	{
-		String ps = String(FileSystem::PATH_SEPARATOR);
-
-		String file_name(Path().getDataPath());
-		file_name += ps + String("structures") + ps + "bpti.pdb";
+		Path path;
+		String file_name(path.getDataPath());
+		file_name = file_name.before("data");
+		file_name += "data";
+		file_name += FileSystem::PATH_SEPARATOR;
+		file_name += String("structures");
+		file_name += FileSystem::PATH_SEPARATOR;
+		file_name += "bpti.pdb";
 
 		MolecularFileDialog* dialog = MolecularFileDialog::getInstance(0);
 		if (dialog == 0) return;
