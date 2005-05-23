@@ -287,7 +287,7 @@ namespace VIEW
 				virtual ~DockingThread()
 					throw();
 				
-				//
+				///
 				void setDockingAlgorithm(DockingAlgorithm* dock_alg)
 					throw();
 					
@@ -360,7 +360,7 @@ namespace VIEW
 				{
 				 	abort_ = abort;
 				}
-				
+				 
 				///
 				void setConformationSet(const ConformationSet* conformation_set)
 				{
@@ -372,7 +372,7 @@ namespace VIEW
 				{
 					return conformation_set_;
 				}
-
+				
 				///
 				bool wasAborted()
 				{

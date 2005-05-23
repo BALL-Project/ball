@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.63.2.4 2005/04/17 16:35:20 leonhardt Exp $
+// $Id: message.h,v 1.63.2.5 2005/05/23 16:16:51 haid Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -743,7 +743,7 @@ class BALL_EXPORT DockingFinishedMessage
 		///
 		DockingFinishedMessage(bool abort)
 			throw();
-			
+			 
 		///
 		virtual ~DockingFinishedMessage()
 			throw();
