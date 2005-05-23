@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1.2.8.2.8 2005/05/11 16:51:06 haid Exp $
+# $Id: Makefile,v 1.1.2.8.2.9 2005/05/23 16:14:30 haid Exp $
 #
 
 EXECUTABLE=DOCKView
@@ -21,6 +21,7 @@ CPP_SOURCES=\
 	infoDialog.C\
 	dockDialog.C\
 	redockDialog.C\
+	dockingController.C\
 	geometricFitDialog.C\
 	dockProgressDialog.C\
 	dockResultDialog.C\
@@ -39,6 +40,7 @@ MOC_SOURCES=\
 	infoDialog_moc.C\
 	dockDialog_moc.C\
 	dockDialogData_moc.C\
+	dockingController_moc.C\
 	redockDialog_moc.C\
 	redockDialogData_moc.C\
 	geometricFitDialog_moc.C\
@@ -101,6 +103,9 @@ aboutDialog_moc.C: aboutDialog.h
 	
 infoDialog_moc.C: infoDialog.h
 	$(MOC) infoDialog.h -o $@
+
+dockingController_moc.C: dockingController.h
+	$(MOC) dockingController.h -o $@
 
 dockDialog_moc.C: dockDialog.h
 	$(MOC) dockDialog.h -o $@

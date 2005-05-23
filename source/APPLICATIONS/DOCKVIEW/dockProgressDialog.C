@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.7 2005/05/09 16:37:25 haid Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.8 2005/05/23 16:14:31 haid Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -132,7 +132,6 @@ namespace BALL
 		void DockProgressDialog::updateProgress_()
 		{
 			if (alg_->wasAborted()) return;
-			Log.error() << "in DockProgressDialog::updateProgress_" << std::endl;
 			progress_bar->setProgress((int)(alg_->getProgress() * 100.0), 100);
 			
 			if (!alg_->hasFinished())

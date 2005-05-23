@@ -106,27 +106,7 @@ namespace BALL
 			// add to HashMap for names of scoring functions
 			sf_names_[score_func] = name;
 		}
-		
-		// Message handling method.
-		void RedockDialog::onNotify(Message *message)
-			throw()
-		{
-			if (RTTI::isKindOf<DockingFinishedMessage>(*message))
-			{
-				unlockComposites();
-				DockingFinishedMessage* dfm = RTTI::castTo<DockingFinishedMessage>(*message);
-				if(dfm->wasAborted())
-				{
-					QMessageBox request_message(0,0);
-					if( request_message.question(0,"Request","Do you want to see the current Result?", 
-																			 "Yes", "No", QString::null, 0, 1))
-					{
-						return;
-					}
-				}
-				continueCalculate_((ConformationSet*)(dfm->getConformationSet()));
-			}
-		}
+	
 		
 		// Initializes the popup menu Molecular Mechanics with its checkable submenu Docking.
 		void RedockDialog::initializeWidget(MainControl& main_control)
@@ -170,6 +150,7 @@ namespace BALL
 		void RedockDialog::writePreferences(INIFile& file)
 			throw()
 		{
+			Log.info() << "in writePreferences! " << std::endl;
 			PreferencesEntry::writePreferenceEntries(file);
 		}
 		
@@ -200,146 +181,13 @@ namespace BALL
 			delta_theta->setText("3");
 		}
 		
-		// Redocks the two systems.
-		void RedockDialog::calculate()
+		void RedockDialog::setSystems(System& s1, System& s2)
 			throw()
 		{
-			// get options user has chosen
-			applyValues_();
-			
-			// check which algorithm is chosen and create an DockingAlgorithm object
-			int index = algorithms->currentItem();
-			switch(index)
-			{
-				case GEOMETRIC_FIT:
-					dock_alg_ =  new GeometricFit();
-					break;
-			}
-			/*
-			/////////////// TODO: gedocktes System in zwei Systeme splitten!!!!!
-			
-			// Set up the docking algorithm
-			setStatusbarText("setting up docking algorithm...", true);
-			// keep the larger protein in System A and the smaller one in System B
-			// and setup the algorithm
-			if (docking_partner1_->countAtoms() < docking_partner2_->countAtoms())
-			{
-				dock_alg_->setup(*docking_partner2_, *docking_partner1_, algorithm_opt_);
-			}
-			else
-			{
-				dock_alg_->setup(*docking_partner1_, *docking_partner2_, algorithm_opt_);
-			}
-			
-			
-			// ============================= WITH MULTITHREADING ====================================
-			if (!(getMainControl()->lockCompositesFor(this))) return;
-			Log.info() << "vor thread" << std::endl;
-			#ifdef BALL_QT_HAS_THREADS
-				DockingThread* thread = new DockingThread;
-				thread->setDockingAlgorithm(dock_alg_);
-				thread->setMainControl(getMainControl());
-				
-				progress_dialog_ = new DockProgressDialog(this);
-				progress_dialog_->fillDialog(systems1->currentText(),
-																		systems2->currentText(),
-																		algorithms->currentText(),
-																		scoring_functions->currentText(),
-																		algorithm_opt_,
-																		scoring_opt_);
-				progress_dialog_->setDockingAlgorithm(dock_alg_);
-				
-				
-				thread->start();
-				progress_dialog_->show();
-			// ============================= WITHOUT MULTITHREADING =================================
-			#else
-				// start docking
-				setStatusbarText("starting docking...", true);
-				dock_alg_->start();
-				setStatusbarText("Redocking finished.", true);
-				continueCalculate_(dock_alg->getConformationSet());
-				// delete instance 
-				if (dock_alg_ != NULL)
-				{
-					delete dock_alg_;
-					dock_alg_ = NULL;
-				}
-			#endif
-			*/
+		 	docking_partner1_ = s1;
+			docking_partner2_ = s2;
 		}
 		
-		void RedockDialog::continueCalculate_(ConformationSet* conformation_set)
-			throw()
-		{
-			Log.error() << "in RedockDialog::continueCalculate_" << std::endl;
-		
-		 	// create scoring function object
-			EnergeticEvaluation* scoring = 0;
-			//check which scoring function is chosen
-			int index = scoring_functions->currentItem();
-			
-			switch(index)
-			{
-				case DEFAULT:
-					Log.error() << "in continueCalculate_::DEFAULT" << std::endl;
-					scoring = new EnergeticEvaluation();
-					break;
-
-				case AMBER_FF:
-				{
-					Log.info() << "in DockDialog:: Option of Amber FF:" << std::endl;
-					AmberFF& ff = MolecularStructure::getInstance(0)->getAmberFF();
-					//the force field is given to the AmberEvaluation (scoring function) object
-					scoring = new AmberEvaluation(ff);
-					break;
-				}
-				case RANDOM:
-					Log.error() << "in continueCalculate_::RANDOM" << std::endl;
-					scoring = new RandomEvaluation();
-					break;
-			}
-		
-			// apply scoring function; set new scores in the conformation set
-	   	std::vector<ConformationSet::Conformation> ranked_conformations((*scoring)(*conformation_set));
-			conformation_set->setScoring(ranked_conformations);
-
-			// add a new scoring to dock_res_; we need the name, options and score vector of the scoring function
-			vector<float> scores;
-			for(unsigned int i = 0; i < ranked_conformations.size(); i++)
-			{
-				scores.push_back(ranked_conformations[i].second);
-			}
-
-			DockResult* dock_res = new DockResult(String(algorithms->currentText().ascii()),
-																						conformation_set,
-																						algorithm_opt_); 
-																							
-			dock_res->addScoring(String(scoring_functions->currentText().ascii()), scoring_opt_, scores);
-
-			// add docked system to BALLView structures 
-			SnapShot best_result = (*conformation_set)[0];
-			
-			System* docked_system = new System(conformation_set->getSystem());
-			best_result.applySnapShot(*docked_system);
-			getMainControl()->deselectCompositeRecursive(docked_system, true);
-			getMainControl()->insert(*docked_system);
-			
-			// send a DockResultMessage
-			NewDockResultMessage* dock_res_m = new NewDockResultMessage();
-			dock_res_m->setDockResult(*dock_res);
-			dock_res_m->setComposite(*docked_system);
-			notify_(dock_res_m);
-
-			// delete instance 
-			if (scoring != NULL)
-			{
-				delete scoring;
-				scoring = NULL;
-			}
-			
-			Log.info() << "End of calculate" << std::endl;
-		}
 		
 		// set options with values user has chosen 
 		void RedockDialog::applyValues_()
@@ -380,7 +228,7 @@ namespace BALL
 		void RedockDialog::okPressed()
 		{
 			hide();
-			calculate();
+			
 		}
 		
 		//

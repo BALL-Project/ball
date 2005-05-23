@@ -66,7 +66,7 @@ namespace BALL
 			public PreferencesEntry
 		{ 
 			Q_OBJECT
-			BALL_EMBEDDABLE(DockDialog,ModularWidget)
+			BALL_EMBEDDABLE(DockDialog, ModularWidget)
 			
 			public:
 				
@@ -121,7 +121,19 @@ namespace BALL
 				 */
 				void setSystem(System* system1, System* system2)
 					throw();
+					
+				System* getSystem1()
+					throw();
+					
+				System* getSystem2()
+					throw();
 				
+				Options& getAlgorithmOptions()
+					throw();
+					
+				Options& getScoringOptions()
+					throw();
+					
 				/** Adds docking algorithm to Combobox and its advanced option dialogs to HashMap.
 				 *	@param      name the name of the algorithm
 				 *	@param      algorithm the value of enum Algorithm
@@ -138,15 +150,6 @@ namespace BALL
 				void addScoringFunction(const QString& name, const int score_func, QDialog* dialog=0)
 					throw();
 				
-				/** Message handling method.
-						Catches only ControlSelectionMessage from MolecularControl.
-						If such a message is catched the apply button will be enabled and labels
-						can be appended onto the selection.
-						@param message the pointer to the message that should be processed
-		  	*/
-				virtual void onNotify(Message *message)
-					throw();
-						
 				//@}
 					
 				/**	ModularWidget methods
@@ -163,16 +166,6 @@ namespace BALL
 				virtual void initializeWidget(MainControl& main_control)
 					throw();
 
-				/**	Removes the checkable submenu <b>  Docking </b> from the popup menu <b>  Molecular Mechanics </b>.
-				 *	This method will be called by  MainControl::aboutToExit.
-				 *	@param main_control the  MainControl to be finalized
-				 *	@see   initializeWidget
-				 *	@see   removeMenuEntry
-				 *	@see   aboutToExit 
-				 */
-				virtual void finalizeWidget(MainControl& main_control)
-					throw();	
-				
 				/** Fetches the preferences from the INIFile.
 				 *	@see    writePreferences
 				 */
@@ -186,23 +179,11 @@ namespace BALL
 				virtual void writePreferences(INIFile& file)
 					throw();
 				
-				/** Updates the state of menu entry Docking in the popup menu <b>  Molecular Mechanics </b>.
-				 */
-				virtual void checkMenu (MainControl& main_control)
-					throw();	
-				
 				//@}	
 					
 				/** Resets the dialog to the standard values.
 				 */
 				void reset()
-					throw();
-
-				/** Docks the two systems.
-				 * Calls \link DockDialog::applyValues_ applyValues_ \endlink.
-				 * Calls \link DockDialog::applyProcessors_ applyProcessors_ \endlink.
-				 */
-				void calculate()
 					throw();
 					
 					
@@ -321,23 +302,12 @@ namespace BALL
 				/** Pointer to docking partners
 				 */
 				System* docking_partner1_;
-				System* docking_partner2_;
-			
-				/** Pointer to docking algorithm
-					*/
-				DockingAlgorithm* dock_alg_;
-					
-				//pointer to progress dialog
-				DockProgressDialog* progress_dialog_;
+				System* docking_partner2_;	
 				
 				/** Options for the docking algorithm
 				 */
 				Options algorithm_opt_, scoring_opt_;
 		
-				/** Menu entry id
-				 */
-				int id_;
-				
 				/** Processors
 				 */
 				RadiusRuleProcessor 		radius_rule_processor_;

@@ -108,14 +108,6 @@ namespace BALL
 				void addScoringFunction(const QString& name, const int score_func, QDialog* dialog=0)
 					throw();
 					
-				/** Message handling method.
-						Catches only ControlSelectionMessage from MolecularControl.
-						If such a message is catched the apply button will be enabled and labels
-						can be appended onto the selection.
-						@param message the pointer to the message that should be processed
-		  	*/
-				virtual void onNotify(Message *message)
-					throw();
 						
 				//@}
 					
@@ -151,12 +143,10 @@ namespace BALL
 				void reset()
 					throw();
 
-				/** Docks the two systems.
-				 * Calls \link RedockDialog::applyValues_ applyValues_ \endlink.
-				 */
-				void calculate()
-					throw();
+			
 					
+				void setSystems(System& s1, System& s2)
+					throw();
 					
 			public slots:
 			
@@ -201,9 +191,11 @@ namespace BALL
 				 */
 				void applyValues_() throw();
 			
-				void continueCalculate_(ConformationSet* conformation_set) throw();
 				
 			private:
+			
+				System docking_partner1_;
+				System docking_partner2_;
 			
 				/** key: Algorithm(enum), value: advanced options dialog
 				 */

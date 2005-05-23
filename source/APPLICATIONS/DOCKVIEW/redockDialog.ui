@@ -599,7 +599,7 @@
         <sender>scoring_functions</sender>
         <signal>activated(const QString&amp;)</signal>
         <receiver>RedockDialogData</receiver>
-        <slot>scoringChosen()</slot>
+        <slot>scoringFuncChosen()</slot>
     </connection>
 </connections>
 <slots>
@@ -608,7 +608,7 @@
     <slot>cancelPressed()</slot>
     <slot>algAdvancedPressed()</slot>
     <slot>algorithmChosen()</slot>
-    <slot>scoringChosen()</slot>
+    <slot>scoringFuncChosen()</slot>
     <slot>scoringAdvancedPressed()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>

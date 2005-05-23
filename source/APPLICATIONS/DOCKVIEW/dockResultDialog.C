@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.20 2005/05/11 16:51:08 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.21 2005/05/23 16:14:31 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -426,11 +426,28 @@ namespace BALL
 			//show dialog
 			info_dialog->show();
 		}
-		
+		 
 		void DockResultDialog::redock_(int row)
 		{
 			RedockDialog* redock_dialog = new RedockDialog(getMainControl());
 			redock_dialog->initializeWidget(*getMainControl());
+			System* s1 = new System();
+			System* s2 = new System();
+			
+			Log.info() << "number of atoms docked_system before appendChild: " << docked_system_->countAtoms() << std::endl;
+			
+			s1->setName(docked_system_->getName());
+			s2->setName("rd");
+			 
+			System s = *docked_system_;
+			s1->appendChild(*(s.getFirstChild()));
+			s2->appendChild(*(s.getLastChild()));
+			redock_dialog->setSystems(*s1, *s2);
+			Log.info() << "number of atoms s1: " << s1->countAtoms() << std::endl;
+			Log.info() << "number of atoms s2: " << s2->countAtoms() << std::endl;
+			Log.info() << "number of atoms docked_system after appendChild: " << docked_system_->countAtoms() << std::endl;
+			delete s1;
+			delete s2;
 			redock_dialog->show();
 		}
 		

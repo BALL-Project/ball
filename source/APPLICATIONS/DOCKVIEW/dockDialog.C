@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.27 2005/05/11 16:51:07 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.28 2005/05/23 16:14:30 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -16,16 +16,8 @@
 #include <qradiobutton.h>
 #include <qfiledialog.h>
 #include <qtabwidget.h>
-//#include <qtable.h>
 
 #include <BALL/STRUCTURE/fragmentDB.h>
-#include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
-#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
-#include <BALL/VIEW/KERNEL/threads.h>
-#include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
-#include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
-#include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
-#include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 
 namespace BALL
@@ -39,9 +31,7 @@ namespace BALL
 				ModularWidget(name),
 				PreferencesEntry(),
 				docking_partner1_(0),
-				docking_partner2_(0),
-				dock_alg_(0),
-				progress_dialog_(0)
+				docking_partner2_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new DockDialog " << this << std::endl;
@@ -91,7 +81,6 @@ namespace BALL
 				docking_partner2_ = dock_dialog.docking_partner2_;
 				algorithm_opt_ = dock_dialog.algorithm_opt_;
 				scoring_opt_ = dock_dialog.scoring_opt_;
-				id_ = dock_dialog.id_;
 				radius_rule_processor_ = dock_dialog.radius_rule_processor_;
 				charge_rule_processor_ = dock_dialog.charge_rule_processor_;
 				radius_processor_ = dock_dialog.radius_processor_;
@@ -106,6 +95,30 @@ namespace BALL
 		{
 			docking_partner1_ = system1;
 			docking_partner2_ = system2;
+		}
+		
+		System* DockDialog::getSystem1()
+			throw()
+		{
+			return docking_partner1_;
+		}
+					
+		System* DockDialog::getSystem2()
+			throw()
+		{
+		 	return docking_partner2_;
+		}
+		
+		Options& DockDialog::getAlgorithmOptions()
+			throw()
+		{
+			return algorithm_opt_;
+		}
+					
+		Options& DockDialog::getScoringOptions()
+			throw()
+		{
+			return scoring_opt_;
 		}
 		
 		// Adds docking algorithm to Combobox and its advanced option dialogs to HashMap.
@@ -134,38 +147,11 @@ namespace BALL
 			sf_names_[score_func] = name;
 		}
 		
-		// Message handling method.
-		void DockDialog::onNotify(Message *message)
-			throw()
-		{
-			if (RTTI::isKindOf<DockingFinishedMessage>(*message))
-			{
-				unlockComposites();
-				DockingFinishedMessage* dfm = RTTI::castTo<DockingFinishedMessage>(*message);
-				if(dfm->wasAborted())
-				{
-					QMessageBox request_message(0,0);
-					if( request_message.question(0,"Request","Do you want to see the current Result?", 
-																			 "Yes", "No", QString::null, 0, 1))
-					{
-						return;
-					}
-					//setStatusbarText("Warning: Docking was aborted; DockResult may be incorrect!", true);
-				}
-				continueCalculate_((ConformationSet*)(dfm->getConformationSet()));
-			}
-		}
 		
 		// Initializes the popup menu Molecular Mechanics with its checkable submenu Docking.
-		void DockDialog::initializeWidget(MainControl& main_control)
+		void DockDialog::initializeWidget(MainControl& /*main_control*/)
 			throw()
-		{
-			main_control.initPopupMenu(MainControl::MOLECULARMECHANICS)->setCheckable(true);
-			
-			String hint = "Dock two systems.";
-			id_ = main_control.insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Docking", this,
-																				 SLOT(show()), CTRL+Key_D, -1, hint);
-			
+		{	
 			//build HashMap for algorithm advanced option dialogs
 			//make sure the order of added algorithms is consistent to the enum order
 			//because the algorithm with enum value i should be at position i in the combobox
@@ -186,14 +172,7 @@ namespace BALL
 			sf.push_back(AMBER_FF);
 			allowed_sf_[GEOMETRIC_FIT] = sf;
 		}
-		
-		//Removes the checkable submenu Docking from the popup menu Molecular Mechanics.
-		void DockDialog::finalizeWidget(MainControl& main_control)
-			throw()
-		{
-			main_control.removeMenuEntry(MainControl::DISPLAY, "&Docking", this,
-																	 SLOT(show()), CTRL+Key_D);
-		}   
+		  
 		
 		// Read the preferences from the INIFile.
 		void DockDialog::fetchPreferences(INIFile& file)
@@ -213,34 +192,6 @@ namespace BALL
 			PreferencesEntry::writePreferenceEntries(file);
 		}
 		
-		// Updates the state of menu entry Docking in the popup menu Molecular Mechanics.
-		void DockDialog::checkMenu (MainControl& main_control)
-			throw()
-		{
-			CompositeManager& composite_manager = main_control.getCompositeManager();
-			
-			//iterate over all composites; get to know if there are systems
-			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();
-
-			Size num_systems = 0;
-			for (; +composite_it; ++composite_it)
-			{
-				if (RTTI::isKindOf<System>(**composite_it))
-				{
-					num_systems++;
-				}
-			}
-
-			//if no or only one system loaded, disable menu entry "Docking"
-			if(num_systems > 1)
-			{
-				menuBar()->setItemEnabled(id_, true);
-			}
-			else
-			{
-				menuBar()->setItemEnabled(id_, false);
-			}
-		}
 	
 		/// Reset the dialog to the standard values
 		void DockDialog::reset()
@@ -279,147 +230,6 @@ namespace BALL
 			}
 		}
 		
-		// Docks the two systems.
-		void DockDialog::calculate()
-			throw()
-		{
-			// get options user has chosen
-			applyValues_();
-			
-			// before docking, apply processors, e.g. add hydrogens
-			applyProcessors_();
-			
-			// check which algorithm is chosen and create an DockingAlgorithm object
-			int index = algorithms->currentItem();
-			switch(index)
-			{
-				case GEOMETRIC_FIT:
-					dock_alg_ =  new GeometricFit();
-					break;
-			}
-			
-			// Set up the docking algorithm
-			setStatusbarText("setting up docking algorithm...", true);
-			// keep the larger protein in System A and the smaller one in System B
-			// and setup the algorithm
-			if (docking_partner1_->countAtoms() < docking_partner2_->countAtoms())
-			{
-				dock_alg_->setup(*docking_partner2_, *docking_partner1_, algorithm_opt_);
-			}
-			else
-			{
-				dock_alg_->setup(*docking_partner1_, *docking_partner2_, algorithm_opt_);
-			}
-			
-			
-			// ============================= WITH MULTITHREADING ====================================
-			if (!(getMainControl()->lockCompositesFor(this))) return;
-			Log.info() << "vor thread" << std::endl;
-			#ifdef BALL_QT_HAS_THREADS
-				DockingThread* thread = new DockingThread;
-				thread->setDockingAlgorithm(dock_alg_);
-				thread->setMainControl(getMainControl());
-				
-				progress_dialog_ = new DockProgressDialog(this);
-				progress_dialog_->fillDialog(systems1->currentText(),
-																		systems2->currentText(),
-																		algorithms->currentText(),
-																		scoring_functions->currentText(),
-																		algorithm_opt_,
-																		scoring_opt_);
-				progress_dialog_->setDockingAlgorithm(dock_alg_);
-				
-				
-				thread->start();
-				progress_dialog_->show();
-			// ============================= WITHOUT MULTITHREADING =================================
-			#else
-				// start docking
-				setStatusbarText("starting docking...", true);
-				dock_alg_->start();
-				setStatusbarText("Docking finished.", true);
-				continueCalculate_(dock_alg->getConformationSet());
-				// delete instance 
-				if (dock_alg_ != NULL)
-				{
-					delete dock_alg_;
-					dock_alg_ = NULL;
-				}
-			#endif
-			
-		}
-		
-		void DockDialog::continueCalculate_(ConformationSet* conformation_set)
-			throw()
-		{
-			Log.error() << "in DockDialog::continueCalculate_" << std::endl;
-		
-		 	// create scoring function object
-			EnergeticEvaluation* scoring = 0;
-			//check which scoring function is chosen
-			int index = scoring_functions->currentItem();
-			
-			switch(index)
-			{
-				case DEFAULT:
-					Log.error() << "in continueCalculate_::DEFAULT" << std::endl;
-					scoring = new EnergeticEvaluation();
-					break;
-
-				case AMBER_FF:
-				{
-					Log.info() << "in DockDialog:: Option of Amber FF:" << std::endl;
-					AmberFF& ff = MolecularStructure::getInstance(0)->getAmberFF();
-					//the force field is given to the AmberEvaluation (scoring function) object
-					scoring = new AmberEvaluation(ff);
-					break;
-				}
-				case RANDOM:
-					Log.error() << "in continueCalculate_::RANDOM" << std::endl;
-					scoring = new RandomEvaluation();
-					break;
-			}
-		
-			// apply scoring function; set new scores in the conformation set
-	   	std::vector<ConformationSet::Conformation> ranked_conformations((*scoring)(*conformation_set));
-			conformation_set->setScoring(ranked_conformations);
-
-			// add a new scoring to dock_res_; we need the name, options and score vector of the scoring function
-			vector<float> scores;
-			for(unsigned int i = 0; i < ranked_conformations.size(); i++)
-			{
-				scores.push_back(ranked_conformations[i].second);
-			}
-
-			DockResult* dock_res = new DockResult(String(algorithms->currentText().ascii()),
-																						conformation_set,
-																						algorithm_opt_); 
-																							
-			dock_res->addScoring(String(scoring_functions->currentText().ascii()), scoring_opt_, scores);
-
-			// add docked system to BALLView structures 
-			SnapShot best_result = (*conformation_set)[0];
-			
-			System* docked_system = new System(conformation_set->getSystem());
-			best_result.applySnapShot(*docked_system);
-			getMainControl()->deselectCompositeRecursive(docked_system, true);
-			getMainControl()->insert(*docked_system);
-			
-			// send a DockResultMessage
-			NewDockResultMessage* dock_res_m = new NewDockResultMessage();
-			dock_res_m->setDockResult(*dock_res);
-			dock_res_m->setComposite(*docked_system);
-			notify_(dock_res_m);
-
-			// delete instance 
-			if (scoring != NULL)
-			{
-				delete scoring;
-				scoring = NULL;
-			}
-			
-			Log.info() << "End of calculate" << std::endl;
-		}
 		
 		// set options with values user has chosen 
 		void DockDialog::applyValues_()
@@ -580,11 +390,12 @@ namespace BALL
 		{
 			MainControl* main_control = getMainControl();
 
+			
 			//get the composites
 			CompositeManager& composite_manager = main_control->getCompositeManager();
 			
 			//iterate over all composites; add systems to list
-			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();
+			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();			
 			
 			//selection lists for systems should be empty
 			systems1->clear();
@@ -608,7 +419,7 @@ namespace BALL
 				
 				//test if the user has selected one or two systems
 				//more than 2 selected systems -> error
-				if (system->isSelected())
+				if(system->isSelected())
 				{
 					if (docking_partner1_ == NULL)
 					{
@@ -626,15 +437,14 @@ namespace BALL
 							#ifdef BALL_VIEW_DEBUG
 								Log.error() << "DockDialog: " << " More than two systems selected! " << std::endl;
 							#endif
-				
+												
 							QMessageBox error_message(0,0);
 							error_message.warning(0,"Error","More than two systems selected!", QMessageBox::Ok, QMessageBox::NoButton);
 							return;
 						}
 					}
-				}
-			}
-			
+				} 	
+			 }
 			//set selection lists of dialog
 			systems1->insertStringList(current_system_list);
 			systems2->insertStringList(current_system_list);
@@ -659,7 +469,7 @@ namespace BALL
 		//
 		void DockDialog::okPressed()
 		{
-			//if less than 2 / more than 2 equal systems are chosen => Error message!
+			// if less than 2 or 2 equal systems are chosen => Error message!
 			if ((systems1->currentText() == "<select>") || 
 					(systems2->currentText() == "<select>") || 
 					(systems1->currentText() == systems2->currentText()))
@@ -686,7 +496,11 @@ namespace BALL
 				else
 				{
 					hide();
-					calculate();
+					// set options user has chosen
+					applyValues_();
+					// apply processors, e.g. add hydrogens
+					applyProcessors_();
+					accept();
 				}
 			}
 		}
@@ -694,7 +508,7 @@ namespace BALL
 		//
 		void DockDialog::cancelPressed()
 		{
-			hide();
+			reject();
 		}
 		
 		//
