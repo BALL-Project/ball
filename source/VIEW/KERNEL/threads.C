@@ -350,13 +350,14 @@ namespace BALL
 		}
 
 		// =========================== implementation of class DockingThread ================
+		
 		///
 		DockingThread::DockingThread()
 			throw()
 			: BALLThread(),
 				dock_alg_(0)
-		{
-		}
+		{} 
+		
 		///
 		DockingThread::~DockingThread()
 			throw()
@@ -377,7 +378,7 @@ namespace BALL
 			dock_alg_ = dock_alg;
 		}
 		
-		///
+		/// 
 		void DockingThread::run()
 			throw(Exception::NullPointer)
 		{
