@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.6 2005/05/18 23:06:05 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.7 2005/05/23 12:58:19 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -284,14 +284,14 @@ bool MolecularControl::reactToMessages_(Message* message)
 		{
 			case CompositeMessage::NEW_MOLECULE:
 				addComposite(*(Composite *)composite_message->getComposite());
-				return true;
+				return false;
 			
 			case CompositeMessage::REMOVED_COMPOSITE:
 				removeComposite(*(Composite *)composite_message->getComposite());
-				return true;
+				return false;
 			
 			case CompositeMessage::CHANGED_COMPOSITE:
-				return true;
+				return false;
 
 			case CompositeMessage::CHANGED_COMPOSITE_HIERARCHY:
 			{
@@ -790,8 +790,6 @@ void MolecularControl::cut()
 	List<Composite*>::Iterator it = selected_.begin();	
 	for (; it != selected_.end(); it++)
 	{
-		getMainControl()->deselectCompositeRecursive(*it, false);
-
 		if (!(**it).isRoot()) roots.insert(&(**it).getRoot());
 
 		getMainControl()->remove(**it, was_delete_, false);
@@ -987,12 +985,6 @@ MolecularInformation& MolecularControl::getInformationVisitor_()
 	throw()
 {
 	return information_;
-}
-
-List<Composite*>& MolecularControl::getSelection()
-	throw()
-{
-	return selected_;
 }
 
 const List<Composite*>& MolecularControl::getSelection() const

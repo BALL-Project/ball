@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.47.2.1 2005/05/16 16:34:48 amoll Exp $
+// $Id: molecularControl.h,v 1.47.2.2 2005/05/23 13:01:22 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -164,11 +164,6 @@ class BALL_EXPORT MolecularControl
 	Size removeComposite(Composite& composite)
 		throw();
 
-	/** Access the mutable reference to the selection list of this control.
-	*/
-	List<Composite*>& getSelection()
-		throw();
-	
 	/** Non-mutable inspection of the selection.
 	*/
 	const List<Composite*>& getSelection() const
