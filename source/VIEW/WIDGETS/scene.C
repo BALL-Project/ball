@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.15 2005/05/17 14:19:15 amoll Exp $
+// $Id: scene.C,v 1.171.2.16 2005/05/24 09:54:18 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -495,8 +495,6 @@ namespace BALL
 			renderRepresentations_(DISPLAY_LISTS_RENDERING);
 			glPopMatrix();
 			content_changed_ = false;
-
-			show_info_ = true;
 		}
 
 		void Scene::renderRepresentations_(RenderMode mode)
@@ -1724,6 +1722,9 @@ namespace BALL
 
 			if (!show_info_) return;
 
+			// we wont show the info again until the mouse moved
+			show_info_ = false;
+
 			List<GeometricObject*> objects;
 
 			// ok, do the picking, until we find something
@@ -1777,9 +1778,9 @@ namespace BALL
 			QPainter painter(this);
 
 			ColorRGBA color = getStage()->getBackgroundColor();
-			color.set(Maths::abs(255 - (Position) color.getRed()),
-								Maths::abs(255 - (Position) color.getGreen()),
-								Maths::abs(255 - (Position) color.getBlue()));
+			color.set(abs(255 - (Position) color.getRed()),
+								abs(255 - (Position) color.getGreen()),
+								abs(255 - (Position) color.getBlue()));
 
 
 			painter.setBackgroundMode(Qt::OpaqueMode);
