@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.4 2005/05/25 00:54:55 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.5 2005/05/25 12:04:30 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -121,11 +121,13 @@ void AddCartoonModel::drawPart_(Position last)
 	if (points_.size() != (splines_.size() - 1) * interpolation_steps_ ||
 			points_.size() != atoms_of_points_.size())
 	{
-		Log.error() << "Invalid spline: " 
-			          << " nr of splines for SS; " << splines_.size() 
-								<< " spline points and " << points_.size() 
-								<< " interpolated points in " 
-								<< __FILE__ << " " << __LINE__ << std::endl;
+   #ifdef BALL_VIEW_DEBUG
+		logString(String("Invalid spline: ") +
+			          " nr of splines for SS; "  + String(splines_.size()) +
+								" spline points and " + String(points_.size()) +
+								" interpolated points in " +
+								 String(__FILE__) + " " + String(__LINE__) + "\n");
+   #endif
 	}
 
 	const Residue* residue = dynamic_cast<const Residue*>(splines_[0].atom->getParent());
