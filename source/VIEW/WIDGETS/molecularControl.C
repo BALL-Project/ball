@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.7 2005/05/23 12:58:19 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.8 2005/05/25 11:33:57 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -720,6 +720,15 @@ void MolecularControl::setHighlighting_(List<Composite*> selection)
 	List<Composite*>::Iterator cit = selection.begin();
 	for (; cit != selection.end(); cit++)
 	{
+		if (*cit == 0 || 
+				!composite_to_item_.has(*cit) ||
+				composite_to_item_[*cit] == 0) 
+		{
+#ifdef BALL_VIEW_DEBUG
+			Log.error() << "Problem in " << __FILE__ << "  " << __LINE__ << std::endl;
+#endif
+			continue;
+		}
 		composite_to_item_[*cit]->setSelected(true);
 	}
 }
