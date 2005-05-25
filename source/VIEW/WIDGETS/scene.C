@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.16 2005/05/24 09:54:18 amoll Exp $
+// $Id: scene.C,v 1.171.2.17 2005/05/25 10:24:42 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1778,9 +1778,9 @@ namespace BALL
 			QPainter painter(this);
 
 			ColorRGBA color = getStage()->getBackgroundColor();
-			color.set(abs(255 - (Position) color.getRed()),
-								abs(255 - (Position) color.getGreen()),
-								abs(255 - (Position) color.getBlue()));
+			color.set(255 - (Position) color.getRed(),
+								255 - (Position) color.getGreen(),
+								255 - (Position) color.getBlue());
 
 
 			painter.setBackgroundMode(Qt::OpaqueMode);
