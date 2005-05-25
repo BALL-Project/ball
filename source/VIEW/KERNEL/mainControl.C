@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.7 2005/05/23 12:58:24 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.8 2005/05/25 13:10:35 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -576,17 +576,24 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			// delete all representations containing the composite
 			primitive_manager_.removedComposite(composite, update_representations_of_parent);
 
+			getSelection().erase(&composite);
+			
 			// remove childs of composite from selection 
+			List<Composite*> to_remove;
 			HashSet<Composite*>::Iterator cit = getSelection().begin();
 			for (; +cit; ++cit)
 			{
-				if ((**cit).isChildOf(composite))
+				if ((**cit).isDescendantOf(composite))
 				{
-					getSelection().erase(cit);
+					to_remove.push_back(*cit);
 				}
 			}
 
-			getSelection().erase(&composite);
+			List<Composite*>::iterator lit = to_remove.begin();
+			for (; lit != to_remove.end(); ++lit)
+			{
+				getSelection().erase(*lit);
+			}
 
 			// delete the Composite
 			composite_manager_.remove(composite, to_delete);
