@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.52.2.1 2005/04/12 11:46:22 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.52.2.2 2005/05/25 13:58:14 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -305,24 +305,21 @@ namespace BALL
 				}
 			}
 				
-			try
+			HashMap<const Residue*, Position>::Iterator it = residue_map_.find(residue);
+			if (!+it)
 			{
-				color_to_be_set.set(table_.map(residue->getID().toUnsignedShort()));
+				color_to_be_set.set(default_color_);
 				return;
 			}
-			catch(...)
-			{
-			}
 
-			color_to_be_set.set(default_color_);
+			color_to_be_set.set(table_.map((*it).second));
 		}
 
 		bool ResidueNumberColorProcessor::start()
 			throw()
 		{
 			ColorProcessor::start();
-			min_ = 999999999;
-			max_ = 0;
+			residue_map_.clear();
 			table_.clear();
 			table_ = ColorTable(500);
 			ColorRGBA base_colors[3];
@@ -356,19 +353,11 @@ namespace BALL
 				{
 					if ((*res_it).getName() == "HOH") continue;
 
-					try
-					{
-						const Position id = (*res_it).getID().toUnsignedInt();
-						if (id < min_) min_ = id;
-						if (id > max_) max_ = id;
-					}
-					catch(...)
-					{
-					}
+					residue_map_[&*res_it] = residue_map_.size() - 1;
 				}
 			}
 
-			table_.setRange((float)min_, (float)max_);
+			table_.setRange(0, residue_map_.size() - 1);
 			table_.createTable();
 
 			for (Position p = 0; p < table_.size(); p++)

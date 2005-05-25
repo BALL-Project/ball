@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.29 2005/02/24 15:52:27 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.29.2.1 2005/05/25 13:58:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -121,9 +121,8 @@ namespace BALL
 				GeometricObjectList list_;
 				ColorRGBA first_color_, middle_color_, last_color_;
 				ColorTable table_;
-				Position min_;
-				Position max_;
 				Residue dummy_residue_;
+				HashMap<const Residue*, Position> residue_map_;
 		};
 
 		class ChainColorProcessor
