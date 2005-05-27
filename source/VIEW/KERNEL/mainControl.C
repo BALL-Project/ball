@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.8 2005/05/25 13:10:35 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.9 2005/05/27 10:35:26 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1891,6 +1891,41 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 											String(system_nr) + String(";") + (**it).toString());
 			nr_of_representations++;
 		}
+
+		// create a numerical id for every representation
+		HashMap<const Representation*, Position> rep_to_pos_map;
+		
+		const PrimitiveManager::RepresentationList& reps = getPrimitiveManager().getRepresentations();
+		PrimitiveManager::RepresentationList::const_iterator rep_it = reps.begin();
+		for (Position i = 0; rep_it != reps.end(); rep_it++)
+		{
+			rep_to_pos_map[*rep_it] = i;
+			i++;
+		}
+
+		const vector<ClippingPlane*> planes = getPrimitiveManager().getClippingPlanes();
+		for (Position plane_pos = 0; plane_pos < planes.size(); plane_pos++)
+		{
+			String data_string;
+
+			data_string += vector3ToString(planes[plane_pos]->getNormal());
+			data_string += " ";
+			data_string += vector3ToString(planes[plane_pos]->getPoint());
+
+			data_string += String(planes[plane_pos]->isActive());
+			data_string += " ";
+
+			HashSet<const Representation*>::ConstIterator rit = 
+				planes[plane_pos]->getRepresentations().begin();
+
+			for (; +rit; ++rit)
+			{
+				data_string += String(rep_to_pos_map[*rit]);
+				data_string += " ";
+			}
+			
+			out.insertValue("BALLVIEW_PROJECT", "ClippingPlane" + String(plane_pos), data_string);
+		}
 				
 		writePreferences(out);
 		INIFile::LineIterator lit = out.getLine(0);
@@ -2100,6 +2135,58 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 #endif
 				}
 			}
+
+			// create a vector with all Representation
+			vector<const Representation*> representations;
+			PrimitiveManager::RepresentationList::const_iterator rit = 
+				getPrimitiveManager().getRepresentations().begin();
+			for (; rit != getPrimitiveManager().getRepresentations().end(); rit++)
+			{
+				representations.push_back(*rit);
+			}
+
+			for (Position p = 0; p < 9999999; p++)
+			{
+				if (!in.hasEntry("BALLVIEW_PROJECT", "ClippingPlane" + String(p))) break;
+
+				String data_string = in.getValue("BALLVIEW_PROJECT", "ClippingPlane" + String(p));
+
+				vector<String> string_vector;
+				Size split_size = data_string.split(string_vector);
+
+				// we have a clipping plane
+				if (split_size < 3) 
+				{
+					Log.error() << "Error in "  << __FILE__ << "  " << __LINE__<< std::endl;
+					continue;
+				}
+
+				ClippingPlane* plane = new ClippingPlane();
+				Vector3 v;
+				stringToVector3(string_vector[0], v);
+				plane->setNormal(v);
+				stringToVector3(string_vector[1], v);
+				plane->setPoint(v);
+
+				bool is_active = string_vector[2].toBool();
+				plane->setActive(is_active);
+
+				for (Position rep_pos = 3; rep_pos < split_size; rep_pos++)
+				{
+					Position rep_nr = string_vector[rep_pos].toUnsignedInt();
+					if (rep_nr > getPrimitiveManager().getNumberOfRepresentations()) 
+					{
+						Log.error() << "Error in "  << __FILE__ << "  " << __LINE__<< std::endl;
+						continue;
+					}
+
+					plane->getRepresentations().insert(representations[rep_nr]);
+				}
+
+				getPrimitiveManager().insertClippingPlane(plane);
+
+			} // for all clipping planes
+
 		}
 		catch(Exception::InvalidFormat e)
 		{
@@ -2107,6 +2194,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			Log.error() << e << std::endl;
 			return;
 		}
+
 
 		getSelection().clear();
 		NewSelectionMessage* msg = new NewSelectionMessage();

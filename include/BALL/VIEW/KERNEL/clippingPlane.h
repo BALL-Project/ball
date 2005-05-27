@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clippingPlane.h,v 1.1.2.3 2005/05/11 13:06:56 amoll Exp $
+// $Id: clippingPlane.h,v 1.1.2.4 2005/05/27 10:35:41 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_CLIPPING_PLANE_H
@@ -58,7 +58,7 @@ namespace BALL
 				throw();
 
 			///
-			HashSet<Representation*>& getRepresentations() { return reps_;}
+			HashSet<const Representation*>& getRepresentations() { return reps_;}
 
 			///
 			const Vector3& getNormal() const { return normal_;}
@@ -85,7 +85,7 @@ namespace BALL
 
 			protected:
 
-			HashSet<Representation*> reps_;
+			HashSet<const Representation*> reps_;
 			Vector3 normal_;
 			Vector3 point_;
 			bool active_;

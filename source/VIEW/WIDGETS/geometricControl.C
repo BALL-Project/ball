@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.19 2005/05/17 14:19:14 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.20 2005/05/27 10:33:30 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -81,6 +81,8 @@ namespace BALL
 				VIEW::getMainControl()->redrawAllRepresentations();
 				return;
 			}
+
+			if (representation_ == 0) return;
 
 			if (control_reference_.getMainControl()->compositesAreLocked())
 			{
@@ -788,6 +790,7 @@ namespace BALL
 				if (!plane_map.has(*cit))
 				{
 					SelectableListViewItem* new_item = new SelectableListViewItem(listview, "ClippingPlane", 0, *this);
+					new_item->setOn((**cit).isActive());
 					new_item->setClippingPlane(*cit);
 				}
 			}

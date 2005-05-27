@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.8 2005/05/25 11:33:57 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.9 2005/05/27 10:35:27 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -812,6 +812,7 @@ void MolecularControl::cut()
 	ControlSelectionMessage* message = new ControlSelectionMessage;
 	notify_(message);
 
+Log.error() << "#~~#   x "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	HashSet<Composite*>::Iterator roots_it = roots.begin();
 	for (; +roots_it; roots_it++)
 	{
