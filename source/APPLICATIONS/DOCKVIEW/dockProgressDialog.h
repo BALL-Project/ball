@@ -33,9 +33,10 @@ namespace BALL
 			public ModularWidget
 		{ 
 			Q_OBJECT
-			BALL_EMBEDDABLE(DockProgressDialog,ModularWidget)
 				
 			public:
+			
+			BALL_EMBEDDABLE(DockProgressDialog,ModularWidget)
 			
 				/** Constructor
 				*/

@@ -1,7 +1,11 @@
-// $Id: dockResultDialog.C,v 1.1.2.21 2005/05/23 16:14:31 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.22 2005/05/27 09:47:54 leonhardt Exp $
 //
 
 #include "dockResultDialog.h"
+//#include "redockDialog.h"
+#include "dockingController.h"
+#include "dockDialog.h"
+#include "infoDialog.h"
 
 #include <qtable.h>
 #include <qcombobox.h>
@@ -41,9 +45,9 @@ namespace BALL
 			//make sure the order of added scoring functions is consistent to the enum order
 			//because the scoring function with enum value i should be at position i in the Combobox
 			//otherwise you get the wrong option dialog for a scoring function
-			addScoringFunction("Default", DEFAULT);
-			addScoringFunction("Amber Force Field", AMBER_FF, &(MolecularStructure::getInstance(0)->getAmberConfigurationDialog()));
-			addScoringFunction("Random", RANDOM);
+			addScoringFunction("Default", DockingController::DEFAULT);
+			addScoringFunction("Amber Force Field", DockingController::AMBER_FF, &(MolecularStructure::getInstance(0)->getAmberConfigurationDialog()));
+			addScoringFunction("Random", DockingController::RANDOM);
 		
 			// signals and slots connections
     	QHeader* columns = result_table->horizontalHeader();
@@ -226,13 +230,13 @@ namespace BALL
 			int index = scoring_functions->currentItem();
 			switch(index)
 			{
-				case DEFAULT:
+				case DockingController::DEFAULT:
 					scoring = new EnergeticEvaluation();
 					break;
-				case RANDOM:
+				case DockingController::RANDOM:
 					scoring = new RandomEvaluation();
 					break;
-				case AMBER_FF:
+				case DockingController::AMBER_FF:
 				{
 					AmberFF& ff = MolecularStructure::getInstance(0)->getAmberFF();
 					AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
@@ -429,6 +433,27 @@ namespace BALL
 		 
 		void DockResultDialog::redock_(int row)
 		{
+			DockDialog& dialog = DockingController::getInstance(0)->getDockDialog();
+			System* s1 = new System();
+			System* s2 = new System();
+			Log.info() << "number of atoms docked_system before appendChild: " << docked_system_->countAtoms() << std::endl;
+			
+			s1->setName(docked_system_->getName());
+			s2->setName("rd");
+			 
+			System s = *docked_system_;
+			s1->appendChild(*(s.getFirstChild()));
+			s2->appendChild(*(s.getLastChild()));
+			dialog.setSystems(s1, s2);
+			
+			Log.info() << "number of atoms s1: " << s1->countAtoms() << std::endl;
+			Log.info() << "number of atoms s2: " << s2->countAtoms() << std::endl;
+			Log.info() << "number of atoms docked_system after appendChild: " << docked_system_->countAtoms() << std::endl;
+			
+			dialog.setSystems(s1,s2);
+			DockingController::getInstance(0)->runDocking(true);
+			
+			/*
 			RedockDialog* redock_dialog = new RedockDialog(getMainControl());
 			redock_dialog->initializeWidget(*getMainControl());
 			System* s1 = new System();
@@ -448,7 +473,7 @@ namespace BALL
 			Log.info() << "number of atoms docked_system after appendChild: " << docked_system_->countAtoms() << std::endl;
 			delete s1;
 			delete s2;
-			redock_dialog->show();
+			redock_dialog->show();*/
 		}
 		
 		/*implementation of nested class Compare_		

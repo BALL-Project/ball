@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.28 2005/05/23 16:14:30 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.29 2005/05/27 09:47:52 leonhardt Exp $
 //
 
 #include "dockDialog.h"
 #include "geometricFitDialog.h"
+#include "dockingController.h"
 
 #include <qpushbutton.h>
 #include <qcombobox.h>
@@ -16,6 +17,7 @@
 #include <qradiobutton.h>
 #include <qfiledialog.h>
 #include <qtabwidget.h>
+#include <qbuttongroup.h>
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -90,7 +92,7 @@ namespace BALL
 		}
 
 		// Sets two systems as docking partners.
-		void DockDialog::setSystem(System* system1, System* system2)
+		void DockDialog::setSystems(System* system1, System* system2)
 			throw() 
 		{
 			docking_partner1_ = system1;
@@ -120,6 +122,12 @@ namespace BALL
 		{
 			return scoring_opt_;
 		}
+		
+		void DockDialog::setFlag(bool is_redock)
+			throw()
+		{
+			is_redock_ = is_redock;	
+		}	
 		
 		// Adds docking algorithm to Combobox and its advanced option dialogs to HashMap.
 		void DockDialog::addAlgorithm(const QString& name, const int algorithm, QDialog* dialog)
@@ -157,20 +165,20 @@ namespace BALL
 			//because the algorithm with enum value i should be at position i in the combobox
 			//otherwise you get the wrong option dialog for an algorithm
 			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
-			addAlgorithm("Geometric Fit", GEOMETRIC_FIT, geo_fit);
+			addAlgorithm("Geometric Fit", DockingController::GEOMETRIC_FIT, geo_fit);
 			
 			//build HashMap for scoring function advanced option dialogs
 			//make sure the order of added scoring functions is consistent to the enum order
 			//because the scoring function with enum value i should be at position i in the Combobox
 			//otherwise you get the wrong option dialog for a scoring function
-			addScoringFunction("Default", DEFAULT);
-			addScoringFunction("Amber Force Field", AMBER_FF, &(MolecularStructure::getInstance(0)->getAmberConfigurationDialog()));
-			addScoringFunction("Random", RANDOM);
+			addScoringFunction("Default", DockingController::DEFAULT);
+			addScoringFunction("Amber Force Field", DockingController::AMBER_FF, &(MolecularStructure::getInstance(0)->getAmberConfigurationDialog()));
+			addScoringFunction("Random", DockingController::RANDOM);
 			
 			vector<int> sf;
-			sf.push_back(DEFAULT);
-			sf.push_back(AMBER_FF);
-			allowed_sf_[GEOMETRIC_FIT] = sf;
+			sf.push_back(DockingController::DEFAULT);
+			sf.push_back(DockingController::AMBER_FF);
+			allowed_sf_[DockingController::GEOMETRIC_FIT] = sf;
 		}
 		  
 		
@@ -245,7 +253,7 @@ namespace BALL
 			int index = algorithms->currentItem();
 			switch(index)
 			{
-				case GEOMETRIC_FIT:
+				case DockingController::GEOMETRIC_FIT:
 					GeometricFitDialog* dialog = RTTI::castTo<GeometricFitDialog>(*(algorithm_dialogs_[index]));
 					dialog->getOptions(algorithm_opt_);
 					break;
@@ -254,7 +262,7 @@ namespace BALL
 			index = scoring_functions->currentItem();
 			switch(index)
 			{
-				case AMBER_FF:
+				case DockingController::AMBER_FF:
 				{
 					AmberFF& ff = MolecularStructure::getInstance(0)->getAmberFF();
 					AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
@@ -380,16 +388,10 @@ namespace BALL
 			return 0;
 		}
 		
-		// -------------------------------- SLOTS ------------------------------------------------
-		// ---------------------------------------------------------------------------------------
-
-		// Shows and raises the dialog.
-		// The comboboxes for the docking partners are filled with the loaded systems in BALLView.
-		// If the user has selected one or two systems, they are the current items in the comboboxes.
-		void DockDialog::show()
+		void DockDialog::fillSystemComboxes_()
+			throw()
 		{
 			MainControl* main_control = getMainControl();
-
 			
 			//get the composites
 			CompositeManager& composite_manager = main_control->getCompositeManager();
@@ -458,6 +460,34 @@ namespace BALL
 			{
 				systems2->setCurrentText(docking_partner2_->getName());
 			}
+		}
+		
+		// -------------------------------- SLOTS ------------------------------------------------
+		// ---------------------------------------------------------------------------------------
+
+		// Shows and raises the dialog.
+		// The comboboxes for the docking partners are filled with the loaded systems in BALLView.
+		// If the user has selected one or two systems, they are the current items in the comboboxes.
+		void DockDialog::show()
+		{
+			if(is_redock_)
+			{
+				tab_pages->setTabEnabled(tab_pages->page(1),false);
+			//tab_pages->setTabLabel(tab_pages->page(0),"General");
+				systems_group->setHidden(true);
+				euler_group->setHidden(false);
+			}
+			else
+			{
+				tab_pages->setTabEnabled(tab_pages->page(1),true);
+				//tab_pages->setTabLabel(tab_pages->page(0),"Redocking");
+				euler_group->setHidden(true);
+				systems_group->setHidden(false);
+				fillSystemComboxes_();
+			}
+			
+			tab_pages->adjustSize();
+			adjustSize();
 			
 			// always show the first tab page
 			tab_pages->setCurrentPage(0);

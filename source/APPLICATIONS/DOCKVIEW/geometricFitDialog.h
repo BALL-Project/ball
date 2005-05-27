@@ -37,10 +37,10 @@ namespace BALL
 			public PreferencesEntry
 		{ 
 			Q_OBJECT
-			BALL_EMBEDDABLE(GeometricFitDialog,ModularWidget)
 			
 			public:
-				
+			
+			BALL_EMBEDDABLE(GeometricFitDialog,ModularWidget)	
 				/**	@name	Constructors and Destructors
 				 */	
 				//@{

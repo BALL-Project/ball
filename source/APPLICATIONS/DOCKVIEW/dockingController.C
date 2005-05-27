@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.1 2005/05/23 16:14:32 haid Exp $
+// $Id: dockingController.C,v 1.1.2.2 2005/05/27 09:47:54 leonhardt Exp $
 //
 
 #include "dockingController.h"
@@ -75,7 +75,7 @@ namespace BALL
 			
 			String hint = "Dock two systems.";
 			id_ = main_control.insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Docking", this,
-																				 SLOT(runDocking()), CTRL+Key_D, -1, hint);
+																				 SLOT(startDocking()), CTRL+Key_D, -1, hint);
 			dock_dialog_.initializeWidget(main_control);
 		}
 		
@@ -84,7 +84,7 @@ namespace BALL
 			throw()
 		{
 			main_control.removeMenuEntry(MainControl::DISPLAY, "&Docking", this,
-																	 SLOT(runDocking()), CTRL+Key_D);
+																	 SLOT(startDocking()), CTRL+Key_D);
 		}   
 		
 		// Read the preferences from the INIFile.
@@ -136,7 +136,19 @@ namespace BALL
 			}
 		}
 		
-		void DockingController::runDocking()
+		DockDialog& DockingController::getDockDialog()	
+			throw()
+		{
+		 return dock_dialog_;
+		}			
+		
+		void DockingController::startDocking()
+		{
+		 runDocking(false);
+		}
+		
+		void DockingController::runDocking(bool isRedock)
+			throw()
 		{
 			// Make sure we run just one instance at a time.
 			if (getMainControl()->compositesAreLocked())
@@ -144,6 +156,8 @@ namespace BALL
 				Log.error() << "Docking already running!" << std::endl;
 				return;
 			}
+			
+			dock_dialog_.setFlag(isRedock);
 			
 			// if cancel was pressed in DockDialog, don't start docking
 			if(!dock_dialog_.exec())
@@ -155,7 +169,7 @@ namespace BALL
 			int index = dock_dialog_.algorithms->currentItem();
 			switch(index)
 			{
-				case DockDialog::GEOMETRIC_FIT:
+				case GEOMETRIC_FIT:
 					dock_alg_ =  new GeometricFit();
 					break;
 			}
@@ -226,12 +240,12 @@ namespace BALL
 			
 			switch(index)
 			{
-				case DockDialog::DEFAULT:
+				case DEFAULT:
 					Log.error() << "in runScoring_::DEFAULT" << std::endl;
 					scoring = new EnergeticEvaluation();
 					break;
 
-				case DockDialog::AMBER_FF:
+				case AMBER_FF:
 				{
 					Log.info() << "in DockingController:: Option of Amber FF:" << std::endl;
 					AmberFF& ff = MolecularStructure::getInstance(0)->getAmberFF();
@@ -239,7 +253,7 @@ namespace BALL
 					scoring = new AmberEvaluation(ff);
 					break;
 				}
-				case DockDialog::RANDOM:
+				case RANDOM:
 					Log.error() << "in runScoring_::RANDOM" << std::endl;
 					scoring = new RandomEvaluation();
 					break;

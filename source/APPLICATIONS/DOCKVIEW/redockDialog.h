@@ -52,15 +52,6 @@ namespace BALL
 			BALL_EMBEDDABLE(RedockDialog,ModularWidget)
 			
 			public:
-			
-				/** if you want to add a new docking algorithm extend enum 
-				 *	(0 corresponds to <select> item in ComboBox)
-				 */
-				enum Algorithm {GEOMETRIC_FIT = 1};
-				
-				/** if you want to add a new sccoring function extend enum 
-				 */
-				enum ScoringFunction {DEFAULT = 0, AMBER_FF = 1, RANDOM = 2};
 				
 				/**	@name	Constructors and Destructors
 				 */	
@@ -122,20 +113,20 @@ namespace BALL
 				 *	@see   finalizeWidget
 				 *	@see   insertMenuEntry
 				 */
-				virtual void initializeWidget(MainControl& main_control)
+				void initializeWidget(MainControl& main_control)
 					throw();
 				
 				/** Fetches the preferences from the INIFile.
 				 *	@see    writePreferences
 				 */
-				virtual void fetchPreferences(INIFile& file)
+				void fetchPreferences(INIFile& file)
 					throw();
 				
 				/** Writes the preferences to the INIFile.
 				 *  This method will be called inside the method  MainControl::aboutToExit 
 				 *  @see    fetchPreferences
 				 */
-				virtual void writePreferences(INIFile& file)
+				void writePreferences(INIFile& file)
 					throw();
 				
 				/** Resets the dialog to the standard values.
@@ -143,8 +134,7 @@ namespace BALL
 				void reset()
 					throw();
 
-			
-					
+							
 				void setSystems(System& s1, System& s2)
 					throw();
 					

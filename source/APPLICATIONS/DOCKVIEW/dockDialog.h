@@ -57,6 +57,8 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		class DockingController;
+	
 		/**	Dialog for docking two systems.
     		\ingroup  ViewDialogs
 		 */
@@ -66,20 +68,10 @@ namespace BALL
 			public PreferencesEntry
 		{ 
 			Q_OBJECT
-			BALL_EMBEDDABLE(DockDialog, ModularWidget)
 			
 			public:
-				
-				////// TODO: enum Algorithm und ScoringFunction in DockingAlgorithm bzw. EnergeticEvaluation ///////
-				
-				/** if you want to add a new docking algorithm extend enum 
-				 *	(0 corresponds to <select> item in ComboBox)
-				 */
-				enum Algorithm {GEOMETRIC_FIT = 1};
-				
-				/** if you want to add a new sccoring function extend enum 
-				 */
-				enum ScoringFunction {DEFAULT = 0, AMBER_FF = 1, RANDOM = 2};
+			
+				BALL_EMBEDDABLE(DockDialog, ModularWidget)
 				
 				/**	@name	Constructors and Destructors
 				 */	
@@ -119,7 +111,7 @@ namespace BALL
 				 *	@param      system1 first docking partner
 				 *	@param      system2 second docking partner
 				 */
-				void setSystem(System* system1, System* system2)
+				void setSystems(System* system1, System* system2)
 					throw();
 					
 				System* getSystem1()
@@ -133,6 +125,10 @@ namespace BALL
 					
 				Options& getScoringOptions()
 					throw();
+				
+				void setFlag(bool is_redock)
+					throw();	
+					
 					
 				/** Adds docking algorithm to Combobox and its advanced option dialogs to HashMap.
 				 *	@param      name the name of the algorithm
@@ -163,20 +159,20 @@ namespace BALL
 				 *	@see   finalizeWidget
 				 *	@see   insertMenuEntry
 				 */
-				virtual void initializeWidget(MainControl& main_control)
+				void initializeWidget(MainControl& main_control)
 					throw();
 
 				/** Fetches the preferences from the INIFile.
 				 *	@see    writePreferences
 				 */
-				virtual void fetchPreferences(INIFile& file)
+				void fetchPreferences(INIFile& file)
 					throw();
 				
 				/** Writes the preferences to the INIFile.
 				 *  This method will be called inside the method  MainControl::aboutToExit 
 				 *  @see    fetchPreferences
 				 */
-				virtual void writePreferences(INIFile& file)
+				void writePreferences(INIFile& file)
 					throw();
 				
 				//@}	
@@ -278,11 +274,12 @@ namespace BALL
 				 */
 				System* partnerChosen_(QString qstr) throw();
 				
-				void continueCalculate_(ConformationSet* conformation_set) throw();
-				
+				void fillSystemComboxes_() throw();
 				
 			private:
 				
+				bool is_redock_;	
+			
 				/** key: Algorithm(enum), value: advanced options dialog
 				 */
 				HashMap<int, QDialog*> algorithm_dialogs_;

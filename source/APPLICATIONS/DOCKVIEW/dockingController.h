@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.1 2005/05/23 16:14:32 haid Exp $
+// $Id: dockingController.h,v 1.1.2.2 2005/05/27 09:47:55 leonhardt Exp $
 //
 
 #ifndef DOCKINGCONTROLLER_H
@@ -54,91 +54,109 @@ namespace BALL
 				public ModularWidget
 		{
 			Q_OBJECT
-      BALL_EMBEDDABLE(DockingController, ModularWidget)
 			
 			public:
 			
-			/**	@name	Constructors
-			*/	
-			//@{
-
-			/** Default Constructor.
-					Calls registerWidget.
-					\see        ModularWidget
-			*/
-		
-			DockingController(QWidget* parent = 0, const char* name = 0)
-				throw();
+			BALL_EMBEDDABLE(DockingController, ModularWidget)
 			
-			//@}
-			/** @name Destructors 
-			*/
-			//@{
-
-			/** Destructor.
-			*/
-			virtual ~DockingController()
-				throw();
-			//@}
-			
-			/** Message handling method.
-						Catches only ControlSelectionMessage from MolecularControl.
-						If such a message is catched the apply button will be enabled and labels
-						can be appended onto the selection.
-						@param message the pointer to the message that should be processed
-		  	*/
-			virtual void onNotify(Message *message)
-				throw();
-					
-				//@}
-					
-				/**	ModularWidget methods
-				 */
-				//@{
+				////// TODO: enum Algorithm und ScoringFunction in DockingAlgorithm bzw. EnergeticEvaluation ///////
 				
-				/**	Initializes the popup menu <b>  Molecular Mechanics </b> with its checkable submenu <b>  Docking </b>;
-				 *	This method is called automatically	immediately before the main application is started.
-				 *	@param main_control the  MainControl object to be initialized
-				 *  @see   openDialog
-				 *	@see   finalizeWidget
-				 *	@see   insertMenuEntry
+				/** if you want to add a new docking algorithm extend enum 
+				 *	(0 corresponds to <select> item in ComboBox)
 				 */
-				virtual void initializeWidget(MainControl& main_control)
+				enum Algorithm {GEOMETRIC_FIT = 1};
+				
+				/** if you want to add a new sccoring function extend enum 
+				 */
+				enum ScoringFunction {DEFAULT = 0, AMBER_FF = 1, RANDOM = 2};
+			
+				/**	@name	Constructors
+				*/	
+				//@{
+
+				/** Default Constructor.
+						Calls registerWidget.
+						\see        ModularWidget
+				*/
+
+				DockingController(QWidget* parent = 0, const char* name = 0)
+					throw();
+
+				//@}
+				/** @name Destructors 
+				*/
+				//@{
+
+				/** Destructor.
+				*/
+				virtual ~DockingController()
+					throw();
+				//@}
+
+				/** Message handling method.
+							Catches only ControlSelectionMessage from MolecularControl.
+							If such a message is catched the apply button will be enabled and labels
+							can be appended onto the selection.
+							@param message the pointer to the message that should be processed
+				*/
+				void onNotify(Message *message)
+					throw();
+
+				//@}
+
+				/**	ModularWidget methods
+				*/
+				//@{
+
+				/**	Initializes the popup menu <b>  Molecular Mechanics </b> with its checkable submenu <b>  Docking </b>;
+				*	This method is called automatically	immediately before the main application is started.
+				*	@param main_control the  MainControl object to be initialized
+				*  @see   openDialog
+				*	@see   finalizeWidget
+				*	@see   insertMenuEntry
+				*/
+				void initializeWidget(MainControl& main_control)
 					throw();
 
 				/**	Removes the checkable submenu <b>  Docking </b> from the popup menu <b>  Molecular Mechanics </b>.
-				 *	This method will be called by  MainControl::aboutToExit.
-				 *	@param main_control the  MainControl to be finalized
-				 *	@see   initializeWidget
-				 *	@see   removeMenuEntry
-				 *	@see   aboutToExit 
-				 */
-				virtual void finalizeWidget(MainControl& main_control)
+				*	This method will be called by  MainControl::aboutToExit.
+				*	@param main_control the  MainControl to be finalized
+				*	@see   initializeWidget
+				*	@see   removeMenuEntry
+				*	@see   aboutToExit 
+				*/
+				void finalizeWidget(MainControl& main_control)
 					throw();	
-				
+
 				/** Fetches the preferences from the INIFile.
-				 *	@see    writePreferences
-				 */
-				virtual void fetchPreferences(INIFile& file)
+				*	@see    writePreferences
+				*/
+				void fetchPreferences(INIFile& file)
 					throw();
-				
+
 				/** Writes the preferences to the INIFile.
-				 *  This method will be called inside the method  MainControl::aboutToExit 
-				 *  @see    fetchPreferences
-				 */
-				virtual void writePreferences(INIFile& file)
+				*  This method will be called inside the method  MainControl::aboutToExit 
+				*  @see    fetchPreferences
+				*/
+				void writePreferences(INIFile& file)
 					throw();
-				
+
 				/** Updates the state of menu entry Docking in the popup menu <b>  Molecular Mechanics </b>.
-				 */
-				virtual void checkMenu (MainControl& main_control)
+				*/
+				void checkMenu (MainControl& main_control)
 					throw();	
-				
+
 				//@}	
-				
+
+				DockDialog& getDockDialog()	
+					throw();
+			
+				void runDocking(bool isRedock)
+					throw();	
+						
 			public slots:
 				
-				void runDocking();
+				void startDocking();
 				
 			protected:
 			

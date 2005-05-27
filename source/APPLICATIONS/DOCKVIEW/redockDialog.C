@@ -1,6 +1,7 @@
 #include "redockDialog.h"
 #include "dockResult.h"
 #include "geometricFitDialog.h"
+#include "dockingController.h"
 
 #include <qpushbutton.h>
 #include <qcombobox.h>
@@ -21,7 +22,7 @@
 namespace BALL
 {
 	namespace VIEW
-	{
+	{	
 		//Default constructor
 		RedockDialog::RedockDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
 			throw()
@@ -117,20 +118,20 @@ namespace BALL
 			//because the algorithm with enum value i should be at position i in the combobox
 			//otherwise you get the wrong option dialog for an algorithm
 			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
-			addAlgorithm("Geometric Fit", GEOMETRIC_FIT, geo_fit);
+			addAlgorithm("Geometric Fit", DockingController::GEOMETRIC_FIT, geo_fit);
 			
 			//build HashMap for scoring function advanced option dialogs
 			//make sure the order of added scoring functions is consistent to the enum order
 			//because the scoring function with enum value i should be at position i in the Combobox
 			//otherwise you get the wrong option dialog for a scoring function
-			addScoringFunction("Default", DEFAULT);
-			addScoringFunction("Amber Force Field", AMBER_FF, &(MolecularStructure::getInstance(0)->getAmberConfigurationDialog()));
-			addScoringFunction("Random", RANDOM);
+			addScoringFunction("Default", DockingController::DEFAULT);
+			addScoringFunction("Amber Force Field", DockingController::AMBER_FF, &(MolecularStructure::getInstance(0)->getAmberConfigurationDialog()));
+			addScoringFunction("Random", DockingController::RANDOM);
 			
 			vector<int> sf;
-			sf.push_back(DEFAULT);
-			sf.push_back(AMBER_FF);
-			allowed_sf_[GEOMETRIC_FIT] = sf;
+			sf.push_back(DockingController::DEFAULT);
+			sf.push_back(DockingController::AMBER_FF);
+			allowed_sf_[DockingController::GEOMETRIC_FIT] = sf;
 			
 			fetchPreferences(main_control.getINIFile());
 		}
@@ -203,7 +204,7 @@ namespace BALL
 			int index = algorithms->currentItem();
 			switch(index)
 			{
-				case GEOMETRIC_FIT:
+				case DockingController::GEOMETRIC_FIT:
 					GeometricFitDialog* dialog = RTTI::castTo<GeometricFitDialog>(*(algorithm_dialogs_[index]));
 					dialog->getOptions(algorithm_opt_);
 					break;
@@ -212,7 +213,7 @@ namespace BALL
 			index = scoring_functions->currentItem();
 			switch(index)
 			{
-				case AMBER_FF:
+				case DockingController::AMBER_FF:
 				{
 					AmberFF& ff = MolecularStructure::getInstance(0)->getAmberFF();
 					AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
