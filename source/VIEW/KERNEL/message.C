@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.27.4.4 2005/04/14 16:36:21 leonhardt Exp $
+// $Id: message.C,v 1.27.4.5 2005/05/27 14:43:29 haid Exp $
 
 #include <../source/APPLICATIONS/DOCKVIEW/dockResult.h>
 
@@ -260,6 +260,29 @@ NewDockResultMessage::NewDockResultMessage()
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new NewDockResultMessage" << std::endl;
 	#endif
+}
+
+ShowDockResultMessage::ShowDockResultMessage()
+	throw()
+	: Message(),
+		dock_res_(0),
+		docked_system_(0)
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new ShowDockResultMessage" << std::endl;
+	#endif
+}
+
+ShowDockResultMessage::ShowDockResultMessage(DockResult* dock_res, System* docked_system)
+	throw()
+	: Message()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new ShowDockResultMessage" << std::endl;
+	#endif
+	
+	dock_res_ = dock_res;
+	docked_system_ = docked_system;
 }
 
 DockingFinishedMessage::DockingFinishedMessage()

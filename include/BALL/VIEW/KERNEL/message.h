@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.63.2.5 2005/05/23 16:16:51 haid Exp $
+// $Id: message.h,v 1.63.2.6 2005/05/27 14:44:20 haid Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -729,6 +729,51 @@ class BALL_EXPORT NewDockResultMessage
 
 	protected:
 		DockResult* dock_res_;
+};
+
+/// Message to notify dock result should be shown
+class BALL_EXPORT ShowDockResultMessage
+	:public Message
+{
+	public:
+		///
+		ShowDockResultMessage()
+			throw();
+			
+		///
+		ShowDockResultMessage(DockResult* dock_res, System* docked_system)
+			throw();
+			
+		///
+		void setDockResult(DockResult* dock_res)
+			throw()
+		{
+			dock_res_ = dock_res;
+		}
+
+		void setDockedSystem(System* docked_system)
+			throw()
+		{
+			docked_system_ = docked_system;
+		}
+		
+		///
+		DockResult* getDockResult()
+			throw()
+		{
+			return dock_res_;
+		}
+		
+		///
+		System* getDockedSystem()
+			throw()
+		{
+			return docked_system_;
+		}
+
+	protected:
+		DockResult* dock_res_;
+		System* docked_system_;
 };
 
 /// Message to notify docking has finished
