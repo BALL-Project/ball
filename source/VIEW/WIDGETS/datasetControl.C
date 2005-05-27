@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.35.4.6 2005/05/11 16:52:32 haid Exp $
+// $Id: datasetControl.C,v 1.35.4.7 2005/05/27 14:42:56 haid Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -448,13 +448,8 @@ void DatasetControl::bufferTrajectory_()
 
 void DatasetControl::showDockResult_()
 {	
-	DockResultDialog* result_dialog = new DockResultDialog(this);
-	
-	// setup result_dialog... 
-	result_dialog->setDockResult(item_to_dock_result_[context_item_]);
-	result_dialog->setDockedSystem((System*)(item_to_composite_[context_item_]));
-	//...and show it
-	result_dialog->show();
+	ShowDockResultMessage* msg = new ShowDockResultMessage(item_to_dock_result_[context_item_], (System*) item_to_composite_[context_item_]);
+	notify_(msg);
 }
 
 void DatasetControl::visualiseGrid_()
