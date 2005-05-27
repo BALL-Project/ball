@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.30.4.2 2005/05/09 15:37:15 amoll Exp $
+// $Id: representation.h,v 1.30.4.3 2005/05/27 10:51:11 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -202,7 +202,11 @@ namespace BALL
 				throw();
 
 			///
-			CompositeSet& getComposites()
+			const List<const Composite*>& getCompositeList() const
+				throw() { return composite_list_;}
+
+			///
+			void setComposites(const List<const Composite*>& composites)
 				throw();
 
 			///
@@ -364,6 +368,9 @@ namespace BALL
 
 			//_
 			CompositeSet 				composites_;
+
+			//_
+			List<const Composite*> composite_list_;
 
 			//_
 			PreciseTime 				model_build_time_;

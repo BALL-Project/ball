@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.20 2005/05/27 10:33:30 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.21 2005/05/27 10:51:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -709,7 +709,7 @@ namespace BALL
 		{
 			if (context_representation_ == 0) return;
 
-			Representation::CompositeSet::Iterator it = context_representation_->getComposites().begin();
+			Representation::CompositeSet::ConstIterator it = context_representation_->getComposites().begin();
 			for (; +it; ++it)
 			{
 				getMainControl()->selectCompositeRecursive((Composite*)*it, false);

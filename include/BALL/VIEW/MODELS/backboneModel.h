@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.17.4.1 2005/05/25 00:54:55 amoll Exp $
+// $Id: backboneModel.h,v 1.17.4.2 2005/05/27 10:51:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -41,13 +41,6 @@ namespace BALL
 
 				SplinePoint();
 				SplinePoint(const Vector3& new_point, const Atom* new_atom);
-
-				/** Needed for sort, sorting is needed for creation of backbone for
-				 		a selection of Residues, because the Processor can get the Residues
-						in wrong order from the Representation.
-				*/
-				bool operator < (const SplinePoint& spline_point) const 
-					throw();
 
 				Vector3 point;
 				Vector3 tangent;

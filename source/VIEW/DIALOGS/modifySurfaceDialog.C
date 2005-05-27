@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.10 2005/05/10 13:50:29 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.11 2005/05/27 10:51:18 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -656,7 +656,7 @@ void ModifySurfaceDialog::split_()
 
 	// create a new representation with the subset of the original mesh
 	Representation* new_rep = new Representation;
-	new_rep->getComposites() = rep_->getComposites();
+	new_rep->setComposites(rep_->getCompositeList());
 	new_rep->setColorProcessor(new ColorProcessor(*rep_->getColorProcessor()));
 	new_rep->setModelType(rep_->getModelType());
 	new_rep->setColoringMethod(rep_->getColoringMethod());

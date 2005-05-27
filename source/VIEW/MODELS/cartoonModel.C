@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.5 2005/05/25 12:04:30 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.6 2005/05/27 10:51:20 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -540,7 +540,6 @@ void AddCartoonModel::buildStrand_(Position first, Position last)
 	}
 
 	// start of points_ of this SS
-//   	const Position start = ss_to_spline_start_[&ss] * interpolation_steps_; ////////////
 	const Position start = last_build_ * interpolation_steps_;
 
 	// put first four points into the mesh (and first two triangles)

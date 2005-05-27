@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.9 2005/05/16 16:37:13 amoll Exp $
+// $Id: representation.C,v 1.62.4.10 2005/05/27 10:51:20 amoll Exp $
 //
 
 
@@ -335,8 +335,8 @@ namespace BALL
 					clearGeometricObjects();
 					model_processor_->clearComposites();
 					
-					CompositeSet::Iterator it = composites_.begin();
-					for (; it!= composites_.end(); it++)
+					List<const Composite*>::const_iterator it = composite_list_.begin();
+					for (; it!= composite_list_.end(); it++)
 					{
 						(const_cast<Composite*>(*it))->apply(*model_processor_);
 					}
@@ -671,6 +671,22 @@ namespace BALL
 
 			return name;
 		}
+
+		void Representation::setComposites(const List<const Composite*>& composites)
+			throw()
+		{
+			composites_.clear();
+			composite_list_ = composites;
+
+			List<const Composite*>::iterator it = composite_list_.begin();
+			for (; it != composite_list_.end(); it++)
+			{
+				composites_.insert(*it);
+			}
+		}
+			
+
+
 
 
   #	ifdef BALL_NO_INLINE_FUNCTIONS

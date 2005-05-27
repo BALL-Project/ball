@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.8 2005/05/17 14:19:13 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.9 2005/05/27 10:51:18 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -437,11 +437,14 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 			rep_->setSurfaceDrawingPrecision((float)precision_slider->value() / 10.0);
 		}
 
+		List<const Composite*> temp_composites;
+
 		List<Composite*>::ConstIterator it = composites.begin();
 		for (; it != composites.end(); it++)
 		{
-			rep_->getComposites().insert(*it);
+			temp_composites.push_back(*it);
 		}
+		rep_->setComposites(temp_composites);
 
 		// this is not straight forward, but we have to prevent a second rendering run in the Scene...
 		// the insertion into the PrimitiveManager is needed to allow the Representation::update

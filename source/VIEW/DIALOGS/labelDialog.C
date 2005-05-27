@@ -28,8 +28,7 @@ LabelDialog::LabelDialog(QWidget* parent, const char* name)
 	throw()
 	:	LabelDialogData( parent, name ),
 		ModularWidget(name),
-		id_(-1),
-		selection_()
+		id_(-1)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new LabelDialog " << this << std::endl;
@@ -135,12 +134,11 @@ void LabelDialog::onNotify(Message *message)
 	if (RTTI::isKindOf<ControlSelectionMessage>(*message))
 	{
 		ControlSelectionMessage* selection = RTTI::castTo<ControlSelectionMessage>(*message);
-		selection_ = selection->getSelection();
+		// disabled apply button, if selection is empty
+		const bool filled = !selection->getSelection().empty();
+		apply_button_->setEnabled(filled);
+		menuBar()->setItemEnabled(id_, filled);
 	}
-
-	// disabled apply button, if selection is empty
-	apply_button_->setEnabled(!selection_.empty());
-	menuBar()->setItemEnabled(id_, !selection_.empty());
 }
 
 void LabelDialog::initializeWidget(MainControl& main_control)
@@ -169,8 +167,10 @@ void LabelDialog::show()
 
 void LabelDialog::accept()
 {
+	List<Composite*> selection = getMainControl()->getMolecularControlSelection();
+
 	// no selection present => return
-	if (selection_.empty()) return;
+	if (selection.empty()) return;
 
 	Representation* rep = new Representation;
 	rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
@@ -188,11 +188,15 @@ void LabelDialog::accept()
 	rep->setModelProcessor(model);
 
 	// process all objects in the selection list
-	List<Composite*>::ConstIterator list_it = selection_.begin();
-	for (; list_it != selection_.end(); ++list_it)
+	List<Composite*>::ConstIterator list_it = selection.begin();
+	List<const Composite*> composites;
+
+	for (; list_it != selection.end(); ++list_it)
 	{
-		rep->getComposites().insert(*list_it);
+		composites.push_back(*list_it);
 	}
+
+	rep->setComposites(composites);
 
 	getMainControl()->insert(*rep);
 	getMainControl()->update(*rep);

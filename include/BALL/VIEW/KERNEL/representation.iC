@@ -76,13 +76,6 @@ const Representation::CompositeSet& Representation::getComposites() const
 }
 
 BALL_INLINE 
-Representation::CompositeSet& Representation::getComposites()
-	throw() 
-{
-	return composites_; 
-}
-
-BALL_INLINE 
 const ModelProcessor* Representation::getModelProcessor() const
 	throw() 
 {

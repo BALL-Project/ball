@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.22.4.1 2005/05/25 00:54:31 amoll Exp $
+// $Id: backboneModel.C,v 1.22.4.2 2005/05/27 10:51:20 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -42,23 +42,6 @@ namespace BALL
 				atom(new_atom)
 		{
 		}
-
-		bool AddBackboneModel::SplinePoint::operator < (const AddBackboneModel::SplinePoint& point) const
-			throw()
-		{
-			try
-			{
-				return ((Residue*) atom->getParent())->getID().toUnsignedInt() <=
-							 ((Residue*) point.atom->getParent())->getID().toUnsignedInt();
-			}
-			catch(...)
-			{
-			}
-
-			return ((Residue*) atom->getParent())->getID() <=
-						 ((Residue*) point.atom->getParent())->getID();
-		}
-
 
 		AddBackboneModel::AddBackboneModel()
 			throw()
@@ -221,9 +204,6 @@ namespace BALL
 			{
 				it++;
 			}
-
-			// we have to sort the spline points, in case that we create a backbone for single residues
- 			sort(splines_.begin(), it);
 
 			createSplinePath_(pos);
 			drawPart_(pos);

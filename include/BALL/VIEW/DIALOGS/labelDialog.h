@@ -175,7 +175,6 @@ namespace BALL
 			int id_;
 			
 			ColorRGBA 				custom_color_;
-			List<Composite*> 	selection_;
 			QFont 						font_;
 		};
 

@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.2 2005/05/10 13:50:31 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.3 2005/05/27 10:51:19 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -205,25 +205,19 @@ PrimitiveManager::RepresentationList PrimitiveManager::removedComposite(const Co
 	{
 		Representation& rep = **rep_it;
 
-		// collect childs of composite, which occur in the Representation
-		List<const Composite*> composites_to_remove;
-
 		// test if a Representation has Composites which are (not) to be removed
-		Representation::CompositesConstIterator composite_it = rep.begin();
-		for(; +composite_it; composite_it++)
+		List<const Composite*> composites = rep.getCompositeList();
+
+		List<const Composite*>::ConstIterator crit = rep.getCompositeList().begin();
+		for(; crit != rep.getCompositeList().end(); crit++)
 		{
-			if (&composite == *composite_it || composite.isAncestorOf(**composite_it))
+			if (&composite != *crit && !composite.isAncestorOf(**crit))
 			{
-				composites_to_remove.push_back(*composite_it);
+				composites.push_back(*crit);
 			}
 		}
 
-		// erase the Composites from the Representation
-		List<const Composite*>::Iterator crit = composites_to_remove.begin();
-		for (; crit != composites_to_remove.end(); crit++)
-		{
-			rep.getComposites().erase(*crit);
-		}
+		rep.setComposites(composites);
 
 		// if we have no more Composites in the Representation, it is to be deleted
 		if (rep.getComposites().size() == 0) 
