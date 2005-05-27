@@ -1,13 +1,15 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.3 2005/05/27 10:51:19 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.4 2005/05/27 11:11:46 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/DIALOGS/displayProperties.h>
+#include <BALL/FORMAT/INIFile.h>
 
 #include <qapplication.h>
 
@@ -495,6 +497,257 @@ void PrimitiveManager::insertClippingPlane(ClippingPlane* plane)
 
 	getMainControl()->sendMessage(*new SyncClippingPlanesMessage());
 	getMainControl()->sendMessage(*new SceneMessage(SceneMessage::REDRAW));
+}
+
+void PrimitiveManager::storeRepresentations(INIFile& out)
+{
+	Position nr_of_representations = 0;
+	RepresentationsConstIterator it = begin();
+	for (; it != end(); it++)
+	{
+		if ((**it).begin() == (**it).end()) 
+		{
+			Log.error() << "Error while writing Project File in " << __FILE__ << " " << __LINE__ << std::endl;
+			continue;
+		}
+
+		bool ok = true;
+
+		Representation::CompositesIterator cit = (**it).begin();
+		const Composite* root = &(**cit).getRoot();
+		for (; cit != (**it).end(); cit++)
+		{
+			if ((**cit).getRoot() != *root)
+			{
+				ok = false;
+				break;
+			}
+		}
+
+		if (!ok) 
+		{	
+			Log.error() << "Error while writing Project File in " << __FILE__ << " " << __LINE__ << std::endl;
+			continue;
+		}
+
+		Index system_nr = -1;
+		CompositeManager& cm = getMainControl()->getCompositeManager();
+		CompositeManager::CompositeIterator cit2 = cm.begin();
+		for (Position nr = 0; cit2 != cm.end(); cit2++)
+		{
+			if (root == *cit2) system_nr = nr;
+
+			nr++;
+		}
+
+		if (system_nr == -1) continue;
+
+		out.insertValue("BALLVIEW_PROJECT", 
+										String("Representation") + String(nr_of_representations),  
+										String(system_nr) + String(";") + (**it).toString());
+		nr_of_representations++;
+	}
+
+	// create a numerical id for every representation
+	HashMap<const Representation*, Position> rep_to_pos_map;
+	
+	const RepresentationList& reps = getRepresentations();
+	PrimitiveManager::RepresentationList::const_iterator rep_it = reps.begin();
+	for (Position i = 0; rep_it != reps.end(); rep_it++)
+	{
+		rep_to_pos_map[*rep_it] = i;
+		i++;
+	}
+
+	for (Position plane_pos = 0; plane_pos < getClippingPlanes().size(); plane_pos++)
+	{
+		ClippingPlane* const plane = getClippingPlanes()[plane_pos];
+		String data_string;
+
+		data_string += vector3ToString(plane->getNormal());
+		data_string += " ";
+		data_string += vector3ToString(plane->getPoint());
+
+		data_string += String(plane->isActive());
+		data_string += " ";
+
+		HashSet<const Representation*>::ConstIterator rit = 
+			plane->getRepresentations().begin();
+
+		for (; +rit; ++rit)
+		{
+			data_string += String(rep_to_pos_map[*rit]);
+			data_string += " ";
+		}
+		
+		out.insertValue("BALLVIEW_PROJECT", "ClippingPlane" + String(plane_pos), data_string);
+	}
+}
+			
+void PrimitiveManager::restoreRepresentations(const INIFile& in)
+{
+	try
+	{
+		for (Position p = 0; p < 9999999; p++)
+		{
+			if (!in.hasEntry("BALLVIEW_PROJECT", "Representation" + String(p))) break;
+
+			String data_string = in.getValue("BALLVIEW_PROJECT", "Representation" + String(p));
+
+			vector<String> string_vector;
+			Size split_size;
+
+			// Representation0=1;3 2 2 6.500000 0 0 [2]|Color|H
+			// 								 ^ 																	System Number
+			// 								         ^            							Model Settings
+			// 								         							 ^            Composites numbers
+			// 								         							     ^        Custom Color
+			// 								         							     			^   Hidden Flag
+
+			// split off information of system number
+			split_size = data_string.split(string_vector, ";");
+			Position system_pos = string_vector[0].toUnsignedInt();
+
+			// split off between representation settings and composite numbers
+			data_string = string_vector[1];
+			vector<String> string_vector2;
+			data_string.split(string_vector2, "[]");
+			data_string = string_vector2[0];
+			if (DisplayProperties::getInstance(0) != 0)
+			{
+				DisplayProperties::getInstance(0)->getSettingsFromString(data_string);
+			}
+
+			// Composite positions
+			data_string = string_vector2[1];
+			data_string.split(string_vector2, ",");
+			HashSet<Position> hash_set;
+			for (Position p = 0; p < string_vector2.size(); p++)
+			{
+				hash_set.insert(string_vector2[p].toUnsignedInt());
+			}
+
+			CompositeManager& cm = getMainControl()->getCompositeManager();
+			Position pos = cm.getNumberOfComposites() - 1;
+			CompositeManager::CompositeIterator cit2 = cm.begin();
+			for (; cit2 != cm.end() && system_pos != pos; cit2++)
+			{
+				pos--;
+			}
+
+			if (cit2 == cm.end())  
+			{
+				Log.error() << "Error while reading project file! Aborting..." << std::endl;
+				continue;
+			}
+
+			data_string = string_vector[1];
+			if (data_string.has('|'))
+			{
+				data_string.split(string_vector2, "|");
+				ColorRGBA color;
+				color = string_vector2[1];
+				if (DisplayProperties::getInstance(0) != 0)
+				{
+					DisplayProperties::getInstance(0)->setCustomColor(color);
+				}
+			}
+
+			ControlSelectionMessage* msg = new ControlSelectionMessage();
+			Position current = 0;
+
+			Composite::CompositeIterator ccit = (*cit2)->beginComposite();
+			for (; +ccit; ++ccit)
+			{
+				if (hash_set.has(current)) msg->getSelection().push_back((Composite*)&*ccit);
+				current++;
+			}
+
+			getMainControl()->sendMessage(*msg);
+		
+			if (DisplayProperties::getInstance(0) != 0)
+			{
+				DisplayProperties::getInstance(0)->apply();
+			}	
+
+			if (string_vector2.size() == 3 && string_vector2[2].has('H'))
+			{
+				Representation* rep = 0;
+				RepresentationsIterator pit = begin();
+				for (; pit != end(); pit++)
+				{
+					rep = *pit;
+				}
+
+				rep->setHidden(true);
+				rep->update(false);
+
+#ifndef BALL_QT_HAS_THREADS
+				RepresentationMessage* msg = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
+				notify_(msg);
+#endif
+			}
+		}
+
+		// create a vector with all Representation
+		vector<const Representation*> representations;
+		PrimitiveManager::RepresentationList::const_iterator rit = 
+			getRepresentations().begin();
+		for (; rit != getRepresentations().end(); rit++)
+		{
+			representations.push_back(*rit);
+		}
+
+		for (Position p = 0; p < 9999999; p++)
+		{
+			if (!in.hasEntry("BALLVIEW_PROJECT", "ClippingPlane" + String(p))) break;
+
+			String data_string = in.getValue("BALLVIEW_PROJECT", "ClippingPlane" + String(p));
+
+			vector<String> string_vector;
+			Size split_size = data_string.split(string_vector);
+
+			// we have a clipping plane
+			if (split_size < 3) 
+			{
+				Log.error() << "Error in "  << __FILE__ << "  " << __LINE__<< std::endl;
+				continue;
+			}
+
+			ClippingPlane* plane = new ClippingPlane();
+			Vector3 v;
+			stringToVector3(string_vector[0], v);
+			plane->setNormal(v);
+			stringToVector3(string_vector[1], v);
+			plane->setPoint(v);
+
+			bool is_active = string_vector[2].toBool();
+			plane->setActive(is_active);
+
+			for (Position rep_pos = 3; rep_pos < split_size; rep_pos++)
+			{
+				Position rep_nr = string_vector[rep_pos].toUnsignedInt();
+				if (rep_nr > getNumberOfRepresentations()) 
+				{
+					Log.error() << "Error in "  << __FILE__ << "  " << __LINE__<< std::endl;
+					continue;
+				}
+
+				plane->getRepresentations().insert(representations[rep_nr]);
+			}
+
+			insertClippingPlane(plane);
+
+		} // for all clipping planes
+
+	}
+	catch(Exception::InvalidFormat e)
+	{
+		Log.error() << "Error while reading project file! Aborting..." << std::endl;
+		Log.error() << e << std::endl;
+		return;
+	}
+
 }
 
 } } // namespaces
