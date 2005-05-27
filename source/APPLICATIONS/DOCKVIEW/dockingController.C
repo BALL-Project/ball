@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.2 2005/05/27 09:47:54 leonhardt Exp $
+// $Id: dockingController.C,v 1.1.2.3 2005/05/27 14:41:42 haid Exp $
 //
 
 #include "dockingController.h"
 #include "geometricFitDialog.h"
+#include "dockResultDialog.h"
 #include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 #include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
@@ -64,6 +65,17 @@ namespace BALL
 					}
 				}
 				runScoring_((ConformationSet*)(dfm->getConformationSet()));
+			}
+			else if (RTTI::isKindOf<ShowDockResultMessage>(*message))
+			{
+			 	DockResultDialog* result_dialog = new DockResultDialog(this);
+	      ShowDockResultMessage* sdrm = RTTI::castTo<ShowDockResultMessage>(*message);
+				
+				// setup result_dialog... 
+				result_dialog->setDockResult(sdrm->getDockResult());
+				result_dialog->setDockedSystem(sdrm->getDockedSystem());
+				//...and show it
+				result_dialog->show();
 			}
 		}
 		

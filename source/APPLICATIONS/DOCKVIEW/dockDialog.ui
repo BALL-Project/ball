@@ -8,14 +8,14 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>430</width>
-            <height>520</height>
+            <width>475</width>
+            <height>587</height>
         </rect>
     </property>
     <property name="sizePolicy">
         <sizepolicy>
             <hsizetype>4</hsizetype>
-            <vsizetype>4</vsizetype>
+            <vsizetype>0</vsizetype>
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
         </sizepolicy>
@@ -29,7 +29,7 @@
     <property name="maximumSize">
         <size>
             <width>650</width>
-            <height>800</height>
+            <height>650</height>
         </size>
     </property>
     <property name="caption">
@@ -88,6 +88,14 @@
                         <property name="name">
                             <cstring>systems_group</cstring>
                         </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
                         <property name="title">
                             <string>Docking Partners</string>
                         </property>
@@ -116,6 +124,14 @@
                     <widget class="QButtonGroup" row="1" column="0">
                         <property name="name">
                             <cstring>algorithm_group</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
                         </property>
                         <property name="title">
                             <string>Docking Algorithm</string>
@@ -148,6 +164,14 @@
                         <property name="name">
                             <cstring>scoring_group</cstring>
                         </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
                         <property name="title">
                             <string>Scoring</string>
                         </property>
@@ -173,411 +197,17 @@
                             </widget>
                         </grid>
                     </widget>
-                    <widget class="QButtonGroup" row="4" column="0">
+                    <widget class="QButtonGroup" row="3" column="0">
                         <property name="name">
-                            <cstring>euler_group</cstring>
-                        </property>
-                        <property name="enabled">
-                            <bool>true</bool>
+                            <cstring>options_group</cstring>
                         </property>
                         <property name="sizePolicy">
                             <sizepolicy>
-                                <hsizetype>0</hsizetype>
+                                <hsizetype>5</hsizetype>
                                 <vsizetype>0</vsizetype>
                                 <horstretch>0</horstretch>
                                 <verstretch>0</verstretch>
                             </sizepolicy>
-                        </property>
-                        <property name="title">
-                            <string>Euler angles</string>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>psi_max_label</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>130</x>
-                                    <y>51</y>
-                                    <width>61</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>psi &lt;font size="-1"&gt;max&lt;/font&gt;</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>delta_psi_label</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>253</x>
-                                    <y>51</y>
-                                    <width>62</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>delta psi</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>delta_theta_label</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>253</x>
-                                    <y>80</y>
-                                    <width>62</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>delta theta</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>delta_phi_label</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>253</x>
-                                    <y>22</y>
-                                    <width>62</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>delta phi</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>phi_min_label</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>11</x>
-                                    <y>22</y>
-                                    <width>57</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>phi &lt;font size="-1"&gt;min&lt;/font&gt;</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>theta_min_label</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>11</x>
-                                    <y>80</y>
-                                    <width>57</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>theta &lt;font size="-1"&gt;min&lt;/font&gt;</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>phi_max_label</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>130</x>
-                                    <y>22</y>
-                                    <width>61</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>phi &lt;font size="-1"&gt;max&lt;/font&gt;</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>theta_max_label</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>130</x>
-                                    <y>80</y>
-                                    <width>61</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>theta &lt;font size="-1"&gt;max&lt;/font&gt;</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>psi_min_label</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>11</x>
-                                    <y>51</y>
-                                    <width>57</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>psi &lt;font size="-1"&gt;min&lt;/font&gt;</string>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>phi_min</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>74</x>
-                                    <y>22</y>
-                                    <width>50</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>50</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>-15</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>psi_min</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>74</x>
-                                    <y>51</y>
-                                    <width>50</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>50</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>-15</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>theta_min</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>74</x>
-                                    <y>80</y>
-                                    <width>50</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>50</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>-15</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>phi_max</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>197</x>
-                                    <y>22</y>
-                                    <width>50</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>50</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>15</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>psi_max</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>197</x>
-                                    <y>51</y>
-                                    <width>50</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>50</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>15</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>theta_max</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>197</x>
-                                    <y>80</y>
-                                    <width>50</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>50</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>15</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>delta_phi</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>321</x>
-                                    <y>22</y>
-                                    <width>50</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>0</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>50</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>3</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>delta_theta</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>321</x>
-                                    <y>80</y>
-                                    <width>50</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>50</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>3</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>delta_psi</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>321</x>
-                                    <y>51</y>
-                                    <width>50</width>
-                                    <height>23</height>
-                                </rect>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>50</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>3</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                    </widget>
-                    <widget class="QButtonGroup" row="3" column="0">
-                        <property name="name">
-                            <cstring>options_group</cstring>
                         </property>
                         <property name="title">
                             <string>Options</string>
@@ -600,7 +230,7 @@
                                 </property>
                                 <property name="sizePolicy">
                                     <sizepolicy>
-                                        <hsizetype>2</hsizetype>
+                                        <hsizetype>0</hsizetype>
                                         <vsizetype>0</vsizetype>
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
@@ -608,8 +238,14 @@
                                 </property>
                                 <property name="minimumSize">
                                     <size>
-                                        <width>50</width>
+                                        <width>0</width>
                                         <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>80</width>
+                                        <height>32767</height>
                                     </size>
                                 </property>
                                 <property name="text">
@@ -631,11 +267,312 @@
                                 <property name="name">
                                     <cstring>verbosity</cstring>
                                 </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>0</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>80</width>
+                                        <height>32767</height>
+                                    </size>
+                                </property>
                                 <property name="text">
                                     <string>1</string>
                                 </property>
                                 <property name="alignment">
                                     <set>AlignRight</set>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QButtonGroup" row="4" column="0">
+                        <property name="name">
+                            <cstring>euler_group</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>true</bool>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>7</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="title">
+                            <string>Euler angles</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="1" column="2">
+                                <property name="name">
+                                    <cstring>psi_max_label</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>psi &lt;font size="-1"&gt;max&lt;/font&gt;</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="4">
+                                <property name="name">
+                                    <cstring>delta_psi_label</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>delta psi</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="4">
+                                <property name="name">
+                                    <cstring>delta_phi_label</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>delta phi</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>phi_min_label</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>phi &lt;font size="-1"&gt;min&lt;/font&gt;</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="2">
+                                <property name="name">
+                                    <cstring>phi_max_label</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>phi &lt;font size="-1"&gt;max&lt;/font&gt;</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="2">
+                                <property name="name">
+                                    <cstring>theta_max_label</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>theta &lt;font size="-1"&gt;max&lt;/font&gt;</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>psi_min_label</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>psi &lt;font size="-1"&gt;min&lt;/font&gt;</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>phi_min</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>50</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>-15</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignRight</set>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>psi_min</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>50</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>-15</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignRight</set>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="2" column="1">
+                                <property name="name">
+                                    <cstring>theta_min</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>50</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>-15</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignRight</set>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="0" column="3">
+                                <property name="name">
+                                    <cstring>phi_max</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>50</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>15</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignRight</set>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="1" column="3">
+                                <property name="name">
+                                    <cstring>psi_max</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>50</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>15</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignRight</set>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="2" column="3">
+                                <property name="name">
+                                    <cstring>theta_max</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>50</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>15</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignRight</set>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="0" column="5">
+                                <property name="name">
+                                    <cstring>delta_phi</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>0</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>50</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>3</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignRight</set>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="2" column="5">
+                                <property name="name">
+                                    <cstring>delta_theta</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>50</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>3</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignRight</set>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="1" column="5">
+                                <property name="name">
+                                    <cstring>delta_psi</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>50</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>3</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignRight</set>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0">
+                                <property name="name">
+                                    <cstring>theta_min_label</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>theta &lt;font size="-1"&gt;min&lt;/font&gt;</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="4">
+                                <property name="name">
+                                    <cstring>delta_theta_label</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>delta theta</string>
                                 </property>
                             </widget>
                         </grid>
@@ -656,6 +593,14 @@
                     <widget class="QButtonGroup" row="1" column="0">
                         <property name="name">
                             <cstring>radii_group</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
                         </property>
                         <property name="title">
                             <string>Radii Config File</string>
@@ -742,6 +687,14 @@
                         <property name="name">
                             <cstring>processors_group</cstring>
                         </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
                         <property name="title">
                             <string>Processors</string>
                         </property>
@@ -800,6 +753,14 @@
                     <widget class="QButtonGroup" row="0" column="0">
                         <property name="name">
                             <cstring>charges_group</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
                         </property>
                         <property name="title">
                             <string>Charges Config File</string>

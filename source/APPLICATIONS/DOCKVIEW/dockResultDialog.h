@@ -150,6 +150,8 @@ namespace BALL
 				/** system which contains the two docked partners
 				*/
 				System* docked_system_;
+				
+				System* redock_partner1_, * redock_partner2_;
 
 				/** key: ScoringFunction(enum), value: advanced options dialog
 				*/

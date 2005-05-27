@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.22 2005/05/27 09:47:54 leonhardt Exp $
+// $Id: dockResultDialog.C,v 1.1.2.23 2005/05/27 14:41:41 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -31,7 +31,11 @@ namespace BALL
 		DockResultDialog::DockResultDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
 			throw()
 			: DockResultDialogData(parent, name, modal, fl),
-				ModularWidget(name)
+				ModularWidget(name),
+				dock_res_(0),
+				docked_system_(0),
+				redock_partner1_(0),
+				redock_partner2_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new DockResultDialog " << this << std::endl;
@@ -64,6 +68,15 @@ namespace BALL
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << this << " of class DockResultDialog" << std::endl;
 			#endif 
+			
+			if(redock_partner1_)
+			{
+				delete redock_partner1_;
+			}
+			if(redock_partner2_)
+			{
+				delete redock_partner2_;
+			}
 		}
 		
 		// Assignment operator
@@ -433,24 +446,38 @@ namespace BALL
 		 
 		void DockResultDialog::redock_(int row)
 		{
-			DockDialog& dialog = DockingController::getInstance(0)->getDockDialog();
-			System* s1 = new System();
-			System* s2 = new System();
+			Log.info() << "row: " << row << std::endl;
+			// get snapshot number of this row
+			int snapshot = (result_table->text(row,0)).toInt();
+			// apply snapshot
+			const ConformationSet* conformation_set = dock_res_->getConformationSet();
+			SnapShot selected_conformation = (*conformation_set)[snapshot];
+			selected_conformation.applySnapShot(*docked_system_);
+			
+			System s = *docked_system_;
+			if(redock_partner1_)
+			{
+				delete redock_partner1_;
+			}
+			if(redock_partner2_)
+			{
+				delete redock_partner2_;
+			}
+			redock_partner1_ = new System();
+			redock_partner2_ = new System();
 			Log.info() << "number of atoms docked_system before appendChild: " << docked_system_->countAtoms() << std::endl;
 			
-			s1->setName(docked_system_->getName());
-			s2->setName("rd");
-			 
-			System s = *docked_system_;
-			s1->appendChild(*(s.getFirstChild()));
-			s2->appendChild(*(s.getLastChild()));
-			dialog.setSystems(s1, s2);
-			
-			Log.info() << "number of atoms s1: " << s1->countAtoms() << std::endl;
-			Log.info() << "number of atoms s2: " << s2->countAtoms() << std::endl;
+			redock_partner1_->setName(docked_system_->getName());
+			redock_partner2_->setName("rd");
+			redock_partner1_->appendChild(*(s.getFirstChild()));
+			redock_partner2_->appendChild(*(s.getLastChild()));
+			Log.info() << "number of atoms redock_partner1_: " << redock_partner1_->countAtoms() << std::endl;
+			Log.info() << "number of atoms redock_partner2_: " << redock_partner2_->countAtoms() << std::endl;
 			Log.info() << "number of atoms docked_system after appendChild: " << docked_system_->countAtoms() << std::endl;
 			
-			dialog.setSystems(s1,s2);
+			DockDialog& dialog = DockingController::getInstance(0)->getDockDialog(); 
+			dialog.setSystems(redock_partner1_, redock_partner2_);
+			
 			DockingController::getInstance(0)->runDocking(true);
 			
 			/*
