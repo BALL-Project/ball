@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.20.2.2 2005/05/10 13:50:32 amoll Exp $
+// $Id: primitiveManager.h,v 1.20.2.3 2005/05/27 11:31:44 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -18,6 +18,7 @@
 namespace BALL
 {
 	class Composite;
+	class INIFile;
 
 	namespace VIEW
 	{
@@ -225,7 +226,13 @@ namespace BALL
 
 			///
 			void insertClippingPlane(ClippingPlane* plane);
+
+			///
+			void storeRepresentations(INIFile& out);
 			
+			///
+			void restoreRepresentations(const INIFile& in);
+
 			protected:
 
 			/*_ Start the UpdateRepresentationThread with one Representation

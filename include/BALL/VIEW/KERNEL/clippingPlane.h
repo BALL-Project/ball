@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clippingPlane.h,v 1.1.2.4 2005/05/27 10:35:41 amoll Exp $
+// $Id: clippingPlane.h,v 1.1.2.5 2005/05/27 11:31:43 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_CLIPPING_PLANE_H
@@ -67,7 +67,7 @@ namespace BALL
 			void setNormal(const Vector3& normal) { normal_ = normal;}
 
 			///
-			bool isActive() { return active_;}
+			bool isActive() const { return active_;}
 
 			///
 			void setActive(bool state) { active_ = state;}
