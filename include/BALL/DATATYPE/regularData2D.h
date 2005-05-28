@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.43 2004/11/18 19:34:14 oliver Exp $
+// $Id: regularData2D.h,v 1.44 2005/05/28 15:46:54 anhi Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
@@ -979,11 +979,15 @@ namespace BALL
     is >> size.x >> size.y;
 		
 		dimension -= origin;
-		size += TRegularData2D<ValueType>::IndexType(1);
+		size.x++;
+		size.y++;
 
-    grid.resize(origin, dimension, size);
+    grid.resize(size);
+		grid.setOrigin(origin);
+		grid.setDimension(dimension);
+
 		std::copy(std::istream_iterator<ValueType>(is), 
-							std::istream_iterator<ValueType>(is)+grid.size(), 
+							std::istream_iterator<ValueType>(), 
 							grid.begin());
 		//		std::copy_n(std::istream_iterator<ValueType>(is), grid.size(), grid.begin());
 		
