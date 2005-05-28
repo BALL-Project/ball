@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.44 2005/05/28 15:46:54 anhi Exp $
+// $Id: regularData2D.h,v 1.45 2005/05/28 15:52:48 anhi Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
@@ -961,7 +961,7 @@ namespace BALL
       << std::endl;
 
     // Write the array contents.
-    std::copy(TRegularData2D<ValueType>::data_.begin(), TRegularData2D<ValueType>::data_.end(), std::ostream_iterator<ValueType>(os, "\n"));
+    std::copy(data.begin(), data.end(), std::ostream_iterator<ValueType>(os, "\n"));
     return os;
 	}
 
