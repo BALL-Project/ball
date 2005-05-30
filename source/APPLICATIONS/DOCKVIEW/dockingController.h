@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.2 2005/05/27 09:47:55 leonhardt Exp $
+// $Id: dockingController.h,v 1.1.2.3 2005/05/30 19:13:22 haid Exp $
 //
 
 #ifndef DOCKINGCONTROLLER_H
@@ -128,18 +128,19 @@ namespace BALL
 				void finalizeWidget(MainControl& main_control)
 					throw();	
 
+				
 				/** Fetches the preferences from the INIFile.
 				*	@see    writePreferences
 				*/
-				void fetchPreferences(INIFile& file)
-					throw();
+				//void fetchPreferences(INIFile& file)
+				//	throw();
 
 				/** Writes the preferences to the INIFile.
 				*  This method will be called inside the method  MainControl::aboutToExit 
 				*  @see    fetchPreferences
 				*/
-				void writePreferences(INIFile& file)
-					throw();
+				//void writePreferences(INIFile& file)
+				//	throw();
 
 				/** Updates the state of menu entry Docking in the popup menu <b>  Molecular Mechanics </b>.
 				*/

@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.23 2005/05/27 14:41:41 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.24 2005/05/30 19:13:21 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -123,7 +123,7 @@ namespace BALL
 		// show and raise result dialog
 		void DockResultDialog::show()
 		{
-			Log.info() << "in DockeResultDialog::show()" << std::endl;
+			Log.info() << "in DockResultDialog::show()" << std::endl;
 			// before showing the dialog the result table has to be build and filled 
 			// first get the number of conformations, to know how many rows the table needs
 			int conformation_num = dock_res_->getConformationSet()->size();
@@ -166,7 +166,7 @@ namespace BALL
 			adjustSize();
 			// show dialog to user
 			DockResultDialogData::show();
-			Log.info() << "DockeResultDialog::show() finished" << std::endl;
+			Log.info() << "DockResultDialog::show() finished" << std::endl;
 		}
 		
 		// show snapshot of selected row
@@ -446,6 +446,7 @@ namespace BALL
 		 
 		void DockResultDialog::redock_(int row)
 		{
+			Log.info() << "in DockResultDialog::redock_: " << std::endl;
 			Log.info() << "row: " << row << std::endl;
 			// get snapshot number of this row
 			int snapshot = (result_table->text(row,0)).toInt();

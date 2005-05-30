@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.29 2005/05/27 09:47:52 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.30 2005/05/30 19:13:20 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -49,6 +49,15 @@ namespace BALL
 			registerObject_(scoring_functions);
 			registerObject_(best_num);
 			registerObject_(verbosity);
+			registerObject_(phi_min);
+			registerObject_(psi_min);
+			registerObject_(theta_min);
+			registerObject_(phi_max);
+			registerObject_(psi_max);
+			registerObject_(theta_max);
+			registerObject_(delta_phi);
+			registerObject_(delta_psi);
+			registerObject_(delta_theta);
 			registerObject_(radii_data_lineedit);
 			registerObject_(radii_rules_lineedit);
 			registerObject_(charges_data_lineedit);
@@ -58,6 +67,8 @@ namespace BALL
 			registerObject_(assign_radii);
 			registerObject_(build_bonds);
 			registerObject_(add_hydrogens);
+			
+			is_redock_ = false;
 			
 			hide(); 
 		}
@@ -126,7 +137,15 @@ namespace BALL
 		void DockDialog::setFlag(bool is_redock)
 			throw()
 		{
-			is_redock_ = is_redock;	
+			if(is_redock_ == is_redock)
+			{
+			 	has_changed_ = false;
+			}
+			else
+			{
+				has_changed_ = true;
+			 	is_redock_ = is_redock;
+			}
 		}	
 		
 		// Adds docking algorithm to Combobox and its advanced option dialogs to HashMap.
@@ -159,7 +178,7 @@ namespace BALL
 		// Initializes the popup menu Molecular Mechanics with its checkable submenu Docking.
 		void DockDialog::initializeWidget(MainControl& /*main_control*/)
 			throw()
-		{	
+		{
 			//build HashMap for algorithm advanced option dialogs
 			//make sure the order of added algorithms is consistent to the enum order
 			//because the algorithm with enum value i should be at position i in the combobox
@@ -186,18 +205,70 @@ namespace BALL
 		void DockDialog::fetchPreferences(INIFile& file)
 			throw()
 		{
+			Log.info() << "in DockDialog::fetchPreferences... " << std::endl;
+			
 			PreferencesEntry::readPreferenceEntries(file);
+			
+			//fetchPreferences_(file, "redock_entry_0", algorithms->currentText());
+			//fetchPreferences_(file, "redock_entry_1", scoring_functions->currentText());
+			//fetchPreferences_(file, "redock_entry_2", best_num->text());
+			//fetchPreferences_(file, "redock_entry_3", verbosity->text());
+			
+			fetchPreferences_(file, "redock_entry_0", "<select>");
+			fetchPreferences_(file, "redock_entry_1", "<select>");
+			fetchPreferences_(file, "redock_entry_2", "100");
+			fetchPreferences_(file, "redock_entry_3", "1");
+			
+			for(unsigned int i = 0; i<backup_.size(); i++)
+			{
+				Log.info() << backup_[i].ascii() << std::endl;
+			}
 			// call this function to check which algorithm / scoring function is the current item in the combobox
 			// and set advanced button enabled if necessary
 			algorithmChosen();
 			scoringFuncChosen();
 		}
 		
+		void DockDialog::fetchPreferences_(INIFile& file, String entry, QString default_value)
+			throw()
+		{
+		 		if (!file.hasEntry("REDOCKING", entry))
+			{
+			 	backup_.push_back(default_value);
+			}
+			else
+			{
+			 	backup_.push_back(QString(file.getValue("REDOCKING", entry).c_str()));
+			}
+			
+		}
+		
 		// Write the preferences to the INIFile.
 		void DockDialog::writePreferences(INIFile& file)
 			throw()
 		{
+			Log.info() << "in DockDialog::writePreferences... " << std::endl;
+			String section;
+			if(is_redock_)
+			{
+				Log.info() << "writePreferences... in then " << std::endl;
+			 	setINIFileSectionName("REDOCKING");
+				section = "DOCKING";
+			}
+			else
+			{
+				Log.info() << "writePreferences... in else " << std::endl;
+			 	setINIFileSectionName("DOCKING");
+				section = String("REDOCKING");
+			}
 			PreferencesEntry::writePreferenceEntries(file);
+			
+			file.appendSection(section);
+			for(unsigned int i = 0; i < 4; i++)
+			{
+				String entry = String("redock_entry_") + String(i);
+				file.insertValue(section, entry, backup_[i].ascii());
+			}
 		}
 		
 	
@@ -243,6 +314,8 @@ namespace BALL
 		void DockDialog::applyValues_()
 			throw()
 		{
+			algorithm_opt_.clear();
+			scoring_opt_.clear();
 			// options for all docking algorithms
 			/////////////////////////////////////// TODO allgemeine Options ////////////////////////////////////////////
 			//options_[DockingAlgorithm::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
@@ -470,20 +543,44 @@ namespace BALL
 		// If the user has selected one or two systems, they are the current items in the comboboxes.
 		void DockDialog::show()
 		{
+			
+		
 			if(is_redock_)
 			{
-				tab_pages->setTabEnabled(tab_pages->page(1),false);
+				tab_pages->setTabEnabled(tab_pages->page(1), false);
 			//tab_pages->setTabLabel(tab_pages->page(0),"General");
 				systems_group->setHidden(true);
 				euler_group->setHidden(false);
 			}
 			else
 			{
-				tab_pages->setTabEnabled(tab_pages->page(1),true);
+				tab_pages->setTabEnabled(tab_pages->page(1), true);
 				//tab_pages->setTabLabel(tab_pages->page(0),"Redocking");
 				euler_group->setHidden(true);
 				systems_group->setHidden(false);
 				fillSystemComboxes_();
+			}
+			
+			if(has_changed_)
+			{
+				QString temp = algorithms->currentText();
+				algorithms->setCurrentText(backup_[0]);
+				backup_[0] = temp;
+				
+				temp = scoring_functions->currentText();
+				scoring_functions->setCurrentText(backup_[1]);
+				backup_[1] = temp;
+				
+				temp = best_num->text();
+				best_num->setText(backup_[2]);
+				backup_[2] = temp;
+				
+				temp = verbosity->text();
+				verbosity->setText(backup_[3]);
+				backup_[3] = temp;
+				
+				algorithmChosen();
+				scoringFuncChosen();
 			}
 			
 			tab_pages->adjustSize();
@@ -499,40 +596,39 @@ namespace BALL
 		//
 		void DockDialog::okPressed()
 		{
-			// if less than 2 or 2 equal systems are chosen => Error message!
-			if ((systems1->currentText() == "<select>") || 
-					(systems2->currentText() == "<select>") || 
-					(systems1->currentText() == systems2->currentText()))
+			if(!is_redock_)
 			{
-				#ifdef BALL_VIEW_DEBUG
-					Log.error() << "DockDialog: " << "Please select two different docking partners!" << std::endl;
-				#endif
-					
-				QMessageBox error_message(0,0);
-				error_message.warning(0,"Error","Please select two different docking partners!", QMessageBox::Ok, QMessageBox::NoButton);
-			}
-			else
-			{
-				//if no algorithm is chosen => Error message!
-				if(algorithms->currentText() == "<select>")
+				// if less than 2 or 2 equal systems are chosen => Error message!
+				if ((systems1->currentText() == "<select>") || 
+						(systems2->currentText() == "<select>") || 
+						(systems1->currentText() == systems2->currentText()))
 				{
 					#ifdef BALL_VIEW_DEBUG
-					Log.error() << "DockDialog: " << "Please select docking algorithm!" << std::endl;
+						Log.error() << "DockDialog: " << "Please select two different docking partners!" << std::endl;
 					#endif
-					
+						
 					QMessageBox error_message(0,0);
-					error_message.warning(0,"Error","Please select docking algorithm!", QMessageBox::Ok, QMessageBox::NoButton);
-				}
-				else
-				{
-					hide();
-					// set options user has chosen
-					applyValues_();
-					// apply processors, e.g. add hydrogens
-					applyProcessors_();
-					accept();
+					error_message.warning(0,"Error","Please select two different docking partners!", QMessageBox::Ok, QMessageBox::NoButton);
+					return;
 				}
 			}
+			//if no algorithm is chosen => Error message!
+			if(algorithms->currentText() == "<select>")
+			{
+				#ifdef BALL_VIEW_DEBUG
+				Log.error() << "DockDialog: " << "Please select docking algorithm!" << std::endl;
+				#endif
+
+				QMessageBox error_message(0,0);
+				error_message.warning(0,"Error","Please select docking algorithm!", QMessageBox::Ok, QMessageBox::NoButton);
+				return;
+			}
+			hide();
+			// set options user has chosen
+			applyValues_();
+			// apply processors, e.g. add hydrogens
+			applyProcessors_();
+			accept();
 		}
 		
 		//
@@ -618,7 +714,7 @@ namespace BALL
 				 	scoring_functions->insertItem(sf_names_[allowed_sf_[index][j]]);
 				}
 			}
-			else
+			else // current item is <select>
 			{
 			 	HashMap<int, QString>::Iterator name_it = sf_names_.begin();
 				for(; +name_it; name_it++)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.3 2005/05/27 14:41:42 haid Exp $
+// $Id: dockingController.C,v 1.1.2.4 2005/05/30 19:13:21 haid Exp $
 //
 
 #include "dockingController.h"
@@ -88,7 +88,6 @@ namespace BALL
 			String hint = "Dock two systems.";
 			id_ = main_control.insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Docking", this,
 																				 SLOT(startDocking()), CTRL+Key_D, -1, hint);
-			dock_dialog_.initializeWidget(main_control);
 		}
 		
 		//Removes the checkable submenu Docking from the popup menu Molecular Mechanics.
@@ -98,7 +97,7 @@ namespace BALL
 			main_control.removeMenuEntry(MainControl::DISPLAY, "&Docking", this,
 																	 SLOT(startDocking()), CTRL+Key_D);
 		}   
-		
+		/*
 		// Read the preferences from the INIFile.
 		void DockingController::fetchPreferences(INIFile& file)
 			throw()
@@ -111,7 +110,7 @@ namespace BALL
 			throw()
 		{
 			dock_dialog_.writePreferences(file);
-		}
+		}*/
 		
 		// Updates the state of menu entry Docking in the popup menu Molecular Mechanics.
 		void DockingController::checkMenu (MainControl& main_control)

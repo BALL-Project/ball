@@ -276,9 +276,13 @@ namespace BALL
 				
 				void fillSystemComboxes_() throw();
 				
+				void fetchPreferences_(INIFile& file, String entry, QString default_value) throw();
+			
+				
 			private:
 				
-				bool is_redock_;	
+				bool is_redock_;
+				bool has_changed_;
 			
 				/** key: Algorithm(enum), value: advanced options dialog
 				 */
@@ -305,6 +309,8 @@ namespace BALL
 				 */
 				Options algorithm_opt_, scoring_opt_;
 		
+				vector<QString> backup_;
+				
 				/** Processors
 				 */
 				RadiusRuleProcessor 		radius_rule_processor_;

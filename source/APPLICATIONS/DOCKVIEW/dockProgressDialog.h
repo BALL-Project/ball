@@ -36,7 +36,7 @@ namespace BALL
 				
 			public:
 			
-			BALL_EMBEDDABLE(DockProgressDialog,ModularWidget)
+			BALL_EMBEDDABLE(DockProgressDialog, ModularWidget)
 			
 				/** Constructor
 				*/
