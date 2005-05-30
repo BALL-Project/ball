@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.17 2005/05/25 10:24:42 oliver Exp $
+// $Id: scene.C,v 1.171.2.18 2005/05/30 14:00:10 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -31,7 +31,7 @@
 #include <qimage.h>
 #include <qmenubar.h>
 #include <qcursor.h>
-#include <qapp.h>
+#include <qapplication.h>
 #include <qdragobject.h>
 #include <qdir.h>
 
