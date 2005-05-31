@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.4 2005/05/27 11:11:46 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.5 2005/05/31 12:14:45 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -208,7 +208,7 @@ PrimitiveManager::RepresentationList PrimitiveManager::removedComposite(const Co
 		Representation& rep = **rep_it;
 
 		// test if a Representation has Composites which are (not) to be removed
-		List<const Composite*> composites = rep.getCompositeList();
+		List<const Composite*> composites;
 
 		List<const Composite*>::ConstIterator crit = rep.getCompositeList().begin();
 		for(; crit != rep.getCompositeList().end(); crit++)
