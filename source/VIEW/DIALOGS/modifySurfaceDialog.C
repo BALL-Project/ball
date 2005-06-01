@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.11 2005/05/27 10:51:18 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.12 2005/06/01 00:03:23 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -657,7 +657,11 @@ void ModifySurfaceDialog::split_()
 	// create a new representation with the subset of the original mesh
 	Representation* new_rep = new Representation;
 	new_rep->setComposites(rep_->getCompositeList());
+if (rep_->getColorProcessor() != 0)
 	new_rep->setColorProcessor(new ColorProcessor(*rep_->getColorProcessor()));
+else
+ new_rep->setColorProcessor(new ColorProcessor());
+
 	new_rep->setModelType(rep_->getModelType());
 	new_rep->setColoringMethod(rep_->getColoringMethod());
 	new_rep->enableModelUpdate(false);
@@ -712,14 +716,27 @@ void ModifySurfaceDialog::split_()
 		}
 
 		// make a backup of the old meshs content and clear it
+		vector<ColorRGBA> colors;
+
+		bool multi_color = (org_mesh.colorList.size() > 1);
+
+		if (multi_color)
+		{
+			colors = org_mesh.colorList;
+			org_mesh.colorList.clear();
+		}
+		else
+		{ 
+			new_mesh->colorList = org_mesh.colorList;
+		}
+
 		vector<Surface::Triangle> triangles = org_mesh.triangle;
 		vector<Vector3> vertices = org_mesh.vertex;
 		vector<Vector3> normals = org_mesh.normal;
-		vector<ColorRGBA> colors = org_mesh.colorList;
+
 		org_mesh.triangle.clear();
 		org_mesh.vertex.clear();
 		org_mesh.normal.clear();
-		org_mesh.colorList.clear();
 
 		/// store a translation between the vertex position in the vector in the old and the new mesh
 		vector<Position> new_vertex_pos;
@@ -751,33 +768,23 @@ void ModifySurfaceDialog::split_()
 
 			if (!into_new) 
 			{
-				vpos = tri.v1;
-				if (old_vertices_map[vpos] == -1)
+				for (Position i = 0; i < 3; i++)
 				{
+					if 			(i == 0) vpos = tri.v1;
+					else if (i == 1) vpos = tri.v2;
+					else if (i == 2) vpos = tri.v3;
+
+					if (old_vertices_map[vpos] != -1) continue;
+
 					old_vertices_map[vpos] = org_mesh.vertex.size();
 					org_mesh.vertex.push_back(vertices[vpos]);
 					org_mesh.normal.push_back(normals[vpos]);
-					org_mesh.colorList.push_back(colors[vpos]);
-				}
-				
-				vpos = tri.v2;
-				if (old_vertices_map[vpos] == -1)
-				{
-					old_vertices_map[vpos] = org_mesh.vertex.size();
-					org_mesh.vertex.push_back(vertices[vpos]);
-					org_mesh.normal.push_back(normals[vpos]);
-					org_mesh.colorList.push_back(colors[vpos]);
+					if (multi_color)
+					{
+						org_mesh.colorList.push_back(colors[vpos]);
+					}
 				}
 
-				vpos = tri.v3;
-				if (old_vertices_map[vpos] == -1)
-				{
-					old_vertices_map[vpos] = org_mesh.vertex.size();
-					org_mesh.vertex.push_back(vertices[vpos]);
-					org_mesh.normal.push_back(normals[vpos]);
-					org_mesh.colorList.push_back(colors[vpos]);
-				}
-				
 				org_mesh.triangle.push_back(tri);
 
 				continue;
