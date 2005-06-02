@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.5 2005/05/31 12:14:45 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.6 2005/06/02 09:53:28 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -682,10 +682,9 @@ void PrimitiveManager::restoreRepresentations(const INIFile& in)
 				rep->setHidden(true);
 				rep->update(false);
 
-#ifndef BALL_QT_HAS_THREADS
-				RepresentationMessage* msg = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
-				notify_(msg);
-#endif
+   #ifndef BALL_QT_HAS_THREADS
+				getMainControl()->sendMessage(*new RepresentationMessage(*rep, RepresentationMessage::UPDATE));
+   #endif
 			}
 		}
 
