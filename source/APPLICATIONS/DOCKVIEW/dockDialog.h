@@ -113,19 +113,29 @@ namespace BALL
 				 */
 				void setSystems(System* system1, System* system2)
 					throw();
-					
+				
+				/**  Get first docking partner
+				 */
 				System* getSystem1()
 					throw();
-					
+				
+				/**  Get second docking partner
+				 */
 				System* getSystem2()
 					throw();
 				
+				/** Get algorithm options
+				 */
 				Options& getAlgorithmOptions()
 					throw();
-					
+				
+				/**  Get scoring options
+				 */
 				Options& getScoringOptions()
 					throw();
 				
+				/** 
+				 */
 				void setFlag(bool is_redock)
 					throw();	
 					
@@ -272,16 +282,28 @@ namespace BALL
 				
 				/** Get system which the user has chosen in the dialog as docking partner.
 				 */
-				System* partnerChosen_(QString qstr) throw();
+				System* partnerChosen_(QString& qstr) throw();
 				
+				/**  
+				 */
 				void fillSystemComboxes_() throw();
 				
-				void fetchPreferences_(INIFile& file, String entry, QString default_value) throw();
+				/**  
+				 */
+				void fetchPreferences_(INIFile& file, const String& entry, const QString& default_value) throw();
 			
+				/**  
+				 */
+				void swapValues_() throw();
+				
 				
 			private:
 				
+				/** flag which indicates if we are docking or redocking
+					*/
 				bool is_redock_;
+				/**  
+				 */
 				bool has_changed_;
 			
 				/** key: Algorithm(enum), value: advanced options dialog
@@ -294,7 +316,7 @@ namespace BALL
 			
 				/** key: Algorithm(enum)
 					* value: vector of scoring functions which can be used with this algorithm
-				 */
+				 	*/
 				HashMap<int, vector<int> > allowed_sf_;
 				/**
 					*/
@@ -309,6 +331,8 @@ namespace BALL
 				 */
 				Options algorithm_opt_, scoring_opt_;
 		
+				/**  
+				 */
 				vector<QString> backup_;
 				
 				/** Processors

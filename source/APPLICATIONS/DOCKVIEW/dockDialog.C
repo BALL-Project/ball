@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.30 2005/05/30 19:13:20 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.31 2005/06/02 10:01:17 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -205,73 +205,50 @@ namespace BALL
 		void DockDialog::fetchPreferences(INIFile& file)
 			throw()
 		{
-			Log.info() << "in DockDialog::fetchPreferences... " << std::endl;
-			
 			PreferencesEntry::readPreferenceEntries(file);
-			
-			//fetchPreferences_(file, "redock_entry_0", algorithms->currentText());
-			//fetchPreferences_(file, "redock_entry_1", scoring_functions->currentText());
-			//fetchPreferences_(file, "redock_entry_2", best_num->text());
-			//fetchPreferences_(file, "redock_entry_3", verbosity->text());
 			
 			fetchPreferences_(file, "redock_entry_0", "<select>");
 			fetchPreferences_(file, "redock_entry_1", "<select>");
 			fetchPreferences_(file, "redock_entry_2", "100");
 			fetchPreferences_(file, "redock_entry_3", "1");
 			
-			for(unsigned int i = 0; i<backup_.size(); i++)
-			{
-				Log.info() << backup_[i].ascii() << std::endl;
-			}
 			// call this function to check which algorithm / scoring function is the current item in the combobox
 			// and set advanced button enabled if necessary
 			algorithmChosen();
 			scoringFuncChosen();
 		}
 		
-		void DockDialog::fetchPreferences_(INIFile& file, String entry, QString default_value)
+		void DockDialog::fetchPreferences_(INIFile& file, const String& entry, const QString& default_value)
 			throw()
 		{
-		 		if (!file.hasEntry("REDOCKING", entry))
+			if (!file.hasEntry("REDOCKING", entry))
 			{
 			 	backup_.push_back(default_value);
 			}
 			else
 			{
-			 	backup_.push_back(QString(file.getValue("REDOCKING", entry).c_str()));
+				backup_.push_back(QString(file.getValue("REDOCKING", entry).c_str()));
 			}
-			
 		}
 		
 		// Write the preferences to the INIFile.
 		void DockDialog::writePreferences(INIFile& file)
 			throw()
 		{
-			Log.info() << "in DockDialog::writePreferences... " << std::endl;
-			String section;
 			if(is_redock_)
 			{
-				Log.info() << "writePreferences... in then " << std::endl;
-			 	setINIFileSectionName("REDOCKING");
-				section = "DOCKING";
-			}
-			else
-			{
-				Log.info() << "writePreferences... in else " << std::endl;
-			 	setINIFileSectionName("DOCKING");
-				section = String("REDOCKING");
+				swapValues_();
 			}
 			PreferencesEntry::writePreferenceEntries(file);
 			
-			file.appendSection(section);
-			for(unsigned int i = 0; i < 4; i++)
+			file.appendSection("REDOCKING");
+			for(unsigned int i = 0; i < backup_.size(); i++)
 			{
 				String entry = String("redock_entry_") + String(i);
-				file.insertValue(section, entry, backup_[i].ascii());
+				file.insertValue("REDOCKING", entry, backup_[i].ascii());
 			}
 		}
 		
-	
 		/// Reset the dialog to the standard values
 		void DockDialog::reset()
 			throw()
@@ -309,7 +286,6 @@ namespace BALL
 			}
 		}
 		
-		
 		// set options with values user has chosen 
 		void DockDialog::applyValues_()
 			throw()
@@ -332,6 +308,7 @@ namespace BALL
 					break;
 			}
 			
+			// options for chosen scoring function
 			index = scoring_functions->currentItem();
 			switch(index)
 			{
@@ -351,8 +328,6 @@ namespace BALL
 		bool DockDialog::applyProcessors_()
 			throw()
 		{
-			Log.error() << "starting apply processors" << std::endl;
-
 			if ((docking_partner1_ == 0) || (docking_partner2_ == 0)) 
 			{
 				Log.error() << "No two systems given! Aborting..." << std::endl;
@@ -427,7 +402,6 @@ namespace BALL
 			getMainControl()->update(*docking_partner1_, true);
 			getMainControl()->update(*docking_partner2_, true);
 			getMainControl()->getPrimitiveManager().setMultithreadingMode(true);
-			Log.error() << "End of applyProcessors" << std::endl;
 			
 			return true;
 		}
@@ -444,7 +418,7 @@ namespace BALL
 		}
 		
 		// get system which the user has chosen in the dialog as docking partner
-		System* DockDialog::partnerChosen_(QString qstr)
+		System* DockDialog::partnerChosen_(QString& qstr)
 			throw()
 		{
 			//iterate over all composites; find chosen system
@@ -470,7 +444,7 @@ namespace BALL
 			CompositeManager& composite_manager = main_control->getCompositeManager();
 			
 			//iterate over all composites; add systems to list
-			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();			
+			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();
 			
 			//selection lists for systems should be empty
 			systems1->clear();
@@ -535,6 +509,30 @@ namespace BALL
 			}
 		}
 		
+		void DockDialog::swapValues_()
+			throw()
+		{
+			QString temp = algorithms->currentText();
+			algorithms->setCurrentText(backup_[0]);
+			backup_[0] = temp;
+
+			temp = scoring_functions->currentText();
+			scoring_functions->setCurrentText(backup_[1]);
+			backup_[1] = temp;
+
+			temp = best_num->text();
+			best_num->setText(backup_[2]);
+			backup_[2] = temp;
+
+			temp = verbosity->text();
+			verbosity->setText(backup_[3]);
+			backup_[3] = temp;
+
+			algorithmChosen();
+			scoringFuncChosen();
+		}
+		
+		
 		// -------------------------------- SLOTS ------------------------------------------------
 		// ---------------------------------------------------------------------------------------
 
@@ -543,19 +541,19 @@ namespace BALL
 		// If the user has selected one or two systems, they are the current items in the comboboxes.
 		void DockDialog::show()
 		{
-			
-		
 			if(is_redock_)
 			{
+				setCaption("Redocking Options");
 				tab_pages->setTabEnabled(tab_pages->page(1), false);
-			//tab_pages->setTabLabel(tab_pages->page(0),"General");
+			//tab_pages->setTabLabel(tab_pages->page(0),"Redocking");
 				systems_group->setHidden(true);
 				euler_group->setHidden(false);
 			}
 			else
 			{
+				setCaption("Docking Options");
 				tab_pages->setTabEnabled(tab_pages->page(1), true);
-				//tab_pages->setTabLabel(tab_pages->page(0),"Redocking");
+				//tab_pages->setTabLabel(tab_pages->page(0),"General");
 				euler_group->setHidden(true);
 				systems_group->setHidden(false);
 				fillSystemComboxes_();
@@ -563,24 +561,7 @@ namespace BALL
 			
 			if(has_changed_)
 			{
-				QString temp = algorithms->currentText();
-				algorithms->setCurrentText(backup_[0]);
-				backup_[0] = temp;
-				
-				temp = scoring_functions->currentText();
-				scoring_functions->setCurrentText(backup_[1]);
-				backup_[1] = temp;
-				
-				temp = best_num->text();
-				best_num->setText(backup_[2]);
-				backup_[2] = temp;
-				
-				temp = verbosity->text();
-				verbosity->setText(backup_[3]);
-				backup_[3] = temp;
-				
-				algorithmChosen();
-				scoringFuncChosen();
+				swapValues_();
 			}
 			
 			tab_pages->adjustSize();
@@ -603,10 +584,6 @@ namespace BALL
 						(systems2->currentText() == "<select>") || 
 						(systems1->currentText() == systems2->currentText()))
 				{
-					#ifdef BALL_VIEW_DEBUG
-						Log.error() << "DockDialog: " << "Please select two different docking partners!" << std::endl;
-					#endif
-						
 					QMessageBox error_message(0,0);
 					error_message.warning(0,"Error","Please select two different docking partners!", QMessageBox::Ok, QMessageBox::NoButton);
 					return;
@@ -615,10 +592,6 @@ namespace BALL
 			//if no algorithm is chosen => Error message!
 			if(algorithms->currentText() == "<select>")
 			{
-				#ifdef BALL_VIEW_DEBUG
-				Log.error() << "DockDialog: " << "Please select docking algorithm!" << std::endl;
-				#endif
-
 				QMessageBox error_message(0,0);
 				error_message.warning(0,"Error","Please select docking algorithm!", QMessageBox::Ok, QMessageBox::NoButton);
 				return;
@@ -631,7 +604,7 @@ namespace BALL
 			accept();
 		}
 		
-		//
+		///////// TODO: take the values which were in the fields when dialog was opened
 		void DockDialog::cancelPressed()
 		{
 			reject();
@@ -648,9 +621,15 @@ namespace BALL
 		{
 			// show corresponding options dialog
 			int index = algorithms->currentItem();
-			if(index)
+			if(algorithm_dialogs_.has(index))
 			{
-				algorithm_dialogs_[index]->exec();
+				switch(index)
+				{
+					case DockingController::GEOMETRIC_FIT:
+						GeometricFitDialog* gfd = dynamic_cast<GeometricFitDialog*> (algorithm_dialogs_[index]);
+						gfd->setFlag(is_redock_);
+						gfd->exec();
+				}
 			}
 		}
 			
@@ -659,7 +638,7 @@ namespace BALL
 		{
 			// show corresponding options dialog
 			int index = scoring_functions->currentItem();
-			if(index)
+			if(scoring_dialogs_.has(index))
 			{
 				scoring_dialogs_[index]->exec();
 			}
@@ -747,7 +726,6 @@ namespace BALL
 		{
 			selectFile_(*radii_rules_lineedit);
 		}
-
 		
 	} // namespace VIEW
 } // namespace BALL

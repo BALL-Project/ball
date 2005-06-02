@@ -40,7 +40,8 @@ namespace BALL
 			
 			public:
 			
-			BALL_EMBEDDABLE(GeometricFitDialog,ModularWidget)	
+				BALL_EMBEDDABLE(GeometricFitDialog,ModularWidget)	
+				
 				/**	@name	Constructors and Destructors
 				 */	
 				//@{
@@ -67,8 +68,7 @@ namespace BALL
 				 */
 				//@{
 				
-				
-				/** Fetches the preferences from the INIFile.
+				/** Fetchs the preferences from the INIFile.
 				 *	@see    writePreferences
 				 */
 				void fetchPreferences(INIFile& file)
@@ -90,26 +90,53 @@ namespace BALL
 				
 				/** Fill options with values of the dialog.
 					*	@param      options the options that are filled
-				 */
+					*/
 				void getOptions(Options& options)
 					throw();
 
+				/** 
+					*
+					*/
+				void setFlag(bool is_redock)
+					throw();
+					
+					
 			public slots:
 				
-				/** Indicates the reset button was pressed.
-				 * Calls QDialog::reset.
+				/** Shows dialog to user
+					*/
+				void show();
+			
+				/** Indicates that the reset button was pressed.
+				 *  Calls QDialog::reset.
 				 */
 				virtual void resetPressed();
 				
-				/** Indicates the cancel button was pressed.
+				/** Indicates that the cancel button was pressed.
 				 *	Hides dialog.
 				 */
 				virtual void cancelPressed();
-				
+		
+			
 			protected:
+			
+				/**
+					*/
+				void fetchPreferences_(INIFile& file, String entry, QString default_value) throw();
+				
+				/**
+					*/
+				void swapValues_() throw();
+			
 				
 			private:
-				
+			
+				///
+				bool has_changed_;
+				/// flag which indicates if we are docking or redocking
+				bool is_redock_;
+				///
+				vector<QString> backup_;
 		};
 		
 } } // Namespaces

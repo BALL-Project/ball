@@ -33,10 +33,12 @@ namespace BALL
 				registerObject_(peak_num);
 				registerObject_(surface_type);
 		
+				is_redock_ = false;
+				
 				hide();
 			}
 	
-		/// Destructor
+		// Destructor
 		GeometricFitDialog::~GeometricFitDialog()
 			throw()
 		{
@@ -50,18 +52,53 @@ namespace BALL
 					throw()
 		{
 			PreferencesEntry::readPreferenceEntries(file);
+			
+			fetchPreferences_(file, "option_entry_0", "1.0");
+			fetchPreferences_(file, "option_entry_1", "1.0");
+			fetchPreferences_(file, "option_entry_2", "-15");
+			fetchPreferences_(file, "option_entry_3", "1");
+			fetchPreferences_(file, "option_entry_4", "1.8");
+			fetchPreferences_(file, "option_entry_5", "20");
+			fetchPreferences_(file, "option_entry_6", "3");
+			fetchPreferences_(file, "option_entry_7", "Connolly");
 		}
-				
+		
+		//
+		void GeometricFitDialog::fetchPreferences_(INIFile& file, String entry, QString default_value)
+			throw()
+		{
+			if (!file.hasEntry("GEOMETRIC_FIT_OPTIONS_REDOCK", entry))
+			{
+			 	backup_.push_back(default_value);
+			}
+			else
+			{
+				backup_.push_back(QString(file.getValue("GEOMETRIC_FIT_OPTIONS_REDOCK", entry).c_str()));
+			}
+		}
+		
 		// Write the preferences to a INIFile
 		void GeometricFitDialog::writePreferences(INIFile& file)
-					throw()
+			throw()
 		{
+			if(is_redock_)
+			{
+				swapValues_();
+			}
 			PreferencesEntry::writePreferenceEntries(file);
+			
+			file.appendSection("GEOMETRIC_FIT_OPTIONS_REDOCK");
+			
+			for(unsigned int i = 0; i < backup_.size(); i++)
+			{
+				String entry = String("option_entry_") + String(i);
+				file.insertValue("GEOMETRIC_FIT_OPTIONS_REDOCK", entry, backup_[i].ascii());
+			}
 		}
 
 		// Reset the dialog to the standard values
 		void GeometricFitDialog::reset()
-					throw()
+			throw()
 		{
     	surface_thickness->setText("1.0");
     	grid_spacing->setText("1.0"); 
@@ -91,9 +128,70 @@ namespace BALL
 				options[GeometricFit::Option::SURFACE_TYPE] = GeometricFit::VAN_DER_WAALS;
 			}
 		}
+		
+		//
+		void GeometricFitDialog::setFlag(bool is_redock)
+			throw()
+		{
+			if(is_redock_ == is_redock)
+			{
+			 	has_changed_ = false;
+			}
+			else
+			{
+				has_changed_ = true;
+			 	is_redock_ = is_redock;
+			}
+		}
+		
+		void GeometricFitDialog::swapValues_()
+			throw()
+		{
+			QString temp = surface_thickness->text();
+			surface_thickness->setText(backup_[0]);
+			backup_[0] = temp;
+
+			temp = grid_spacing->text();
+			grid_spacing->setText(backup_[1]);
+			backup_[1] = temp;
+
+			temp = penalty_value1->text();
+			penalty_value1->setText(backup_[2]);
+			backup_[2] = temp;
+
+			temp = penalty_value2->text();
+			penalty_value2->setText(backup_[3]);
+			backup_[3] = temp;
+
+			temp = near_radius->text();
+			near_radius->setText(backup_[4]);
+			backup_[4] = temp;
+
+			temp = deg_interval->text();
+			deg_interval->setText(backup_[5]);
+			backup_[5] = temp;
+
+			temp = peak_num->text();
+			peak_num->setText(backup_[6]);
+			backup_[6] = temp;
+
+			temp = surface_type->currentText();
+			surface_type->setCurrentText(backup_[7]);
+			backup_[7] = temp;
+		}
+		
+	// --------------------------------- SLOTS ------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	
-	// ------------------------- SLOTS ------------------------------------------------
-	// --------------------------------------------------------------------------------
+		void GeometricFitDialog::show()
+		{
+			if(has_changed_)
+			{
+		 		swapValues_();
+			}
+			//show dialog to user
+			GeometricFitDialogData::show();
+		}
 	
 		//
 		void GeometricFitDialog::resetPressed()
@@ -101,7 +199,7 @@ namespace BALL
 			reset();
 		}
 		
-		//
+		/////// TODO: take the values which were in the fields when dialog was opened
 		void GeometricFitDialog::cancelPressed()
 		{
 			reject();

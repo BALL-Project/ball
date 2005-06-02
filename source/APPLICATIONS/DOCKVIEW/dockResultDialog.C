@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.24 2005/05/30 19:13:21 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.25 2005/06/02 10:01:17 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -237,7 +237,7 @@ namespace BALL
 		{
 			// create scoring function object
 			EnergeticEvaluation* scoring = 0;
-			Options scoring_options;  ///////////////////////////////TODO mit new anlegen? ///////////////////////////////
+			Options scoring_options;  ////////////////////TODO mit new anlegen? ///////////////////////////////
 			
 			// check which scoring function is chosen
 			int index = scoring_functions->currentItem();
@@ -283,14 +283,6 @@ namespace BALL
 			}
 			dock_res_->addScoring(String(scoring_functions->currentText().ascii()), scoring_options, scores);
 			
-			/*
-			// before filling the table clear it
-			result_table->setSelectionMode(QTable::Multi);
-			result_table->selectCells(0,0,result_table->numRows()-1, result_table->numCols()-1);
-			result_table->clearSelection();
-			result_table->setSelectionMode(QTable::SingleRow);
-			*/
-			
 			// before filling the table with a new score column, sort table by snapshot number
 			// because the scores in the vector are also sorted by them
 			sortTable(0);
@@ -323,7 +315,6 @@ namespace BALL
 				delete scoring;
 				scoring = NULL;
 			}
-			
 		}
 		
 		// sort the result table by clicked column
@@ -466,15 +457,15 @@ namespace BALL
 			}
 			redock_partner1_ = new System();
 			redock_partner2_ = new System();
-			Log.info() << "number of atoms docked_system before appendChild: " << docked_system_->countAtoms() << std::endl;
+			//Log.info() << "number of atoms docked_system before appendChild: " << docked_system_->countAtoms() << std::endl;
 			
 			redock_partner1_->setName(docked_system_->getName());
 			redock_partner2_->setName("rd");
 			redock_partner1_->appendChild(*(s.getFirstChild()));
 			redock_partner2_->appendChild(*(s.getLastChild()));
-			Log.info() << "number of atoms redock_partner1_: " << redock_partner1_->countAtoms() << std::endl;
-			Log.info() << "number of atoms redock_partner2_: " << redock_partner2_->countAtoms() << std::endl;
-			Log.info() << "number of atoms docked_system after appendChild: " << docked_system_->countAtoms() << std::endl;
+			//Log.info() << "number of atoms redock_partner1_: " << redock_partner1_->countAtoms() << std::endl;
+			//Log.info() << "number of atoms redock_partner2_: " << redock_partner2_->countAtoms() << std::endl;
+			//Log.info() << "number of atoms docked_system after appendChild: " << docked_system_->countAtoms() << std::endl;
 			
 			DockDialog& dialog = DockingController::getInstance(0)->getDockDialog(); 
 			dialog.setSystems(redock_partner1_, redock_partner2_);
@@ -503,6 +494,7 @@ namespace BALL
 			delete s2;
 			redock_dialog->show();*/
 		}
+		
 		
 		/*implementation of nested class Compare_		
 		*/
