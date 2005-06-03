@@ -28,7 +28,7 @@ Added:
   	- Clipping planes
 		- popups in Scene with description of molecular item under cursor
   	- storing and loading of BALLView project files
-  	- support for drag and drop of molecular files
+  	- support for drag and drop of molecular files and python scripts
 		- possibility to highlight the selected molecular items
 		- ability to disable model or coloring updates for a Representation
 		- spliting surfaces according to (distance from) selection
