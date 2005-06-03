@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.24 2004/10/07 17:12:00 amoll Exp $
+// $Id: dockWidget.C,v 1.24.6.1 2005/06/03 10:31:02 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -78,7 +78,6 @@ namespace BALL
 			setMinimumSize(20, 20);
 			setCloseMode(QDockWindow::Always);
 			setResizeEnabled(true);
- 			guest.setAcceptDrops(true);
 		}
 
 		void DockWidget::initializeWidget(MainControl& main_control)
