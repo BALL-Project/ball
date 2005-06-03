@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72.2.3 2005/05/17 12:33:26 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.4 2005/06/03 21:32:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -149,6 +149,9 @@ namespace BALL
 
 				/// Python submenu in Tools
 				TOOLS_PYTHON,
+
+				/// Options menu
+				OPTIONS = 10550,
 
 				/// Windows menu
 				WINDOWS = 10600,

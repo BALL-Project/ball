@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.8 2005/05/17 14:19:20 amoll Exp $
+// $Id: scene.h,v 1.62.2.9 2005/06/03 21:32:59 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -431,6 +431,8 @@ namespace BALL
 
 			///
 			float getMousePositionY() { return y_window_pos_new_;}
+
+			void setPopupInfosEnabled(bool state);
 	
 			protected:
 
@@ -568,6 +570,8 @@ namespace BALL
 			///
 			static void setPOVNumber(Position pos) { pov_nr_ = pos;}
 
+			void switchPopupInfos();
+
 			void initTimer();
 			
 			protected slots:
@@ -686,6 +690,7 @@ namespace BALL
 			Index no_stereo_id_, active_stereo_id_, dual_stereo_id_;
 			Index record_animation_id_, start_animation_id_, clear_animation_id_, cancel_animation_id_;
 			Index animation_export_POV_id_, animation_export_PNG_id_, animation_repeat_id_;
+			Index show_popup_infos_id_;
 			
 			Vector3 system_origin_;
 			Quaternion quaternion_;

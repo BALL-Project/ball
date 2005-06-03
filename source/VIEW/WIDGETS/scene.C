@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.19 2005/06/03 11:48:40 amoll Exp $
+// $Id: scene.C,v 1.171.2.20 2005/06/03 21:34:18 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1029,6 +1029,9 @@ namespace BALL
 			inifile.insertValue("STAGE", "Fulcrum", vector3ToString(system_origin_));
 			inifile.insertValue("STAGE", "AnimationSmoothness", String(animation_smoothness_));
 
+			inifile.insertValue("STAGE", "ShowPopupInfos", String(
+																										menuBar()->isItemChecked(show_popup_infos_id_)));
+
 			inifile.appendSection("EXPORT");
 			inifile.insertValue("EXPORT", "POVNR", String(pov_nr_));
 			inifile.insertValue("EXPORT", "PNGNR", String(screenshot_nr_));
@@ -1085,6 +1088,13 @@ namespace BALL
 			if (inifile.hasEntry("EXPORT", "PNGNR"))
 			{
 				screenshot_nr_ = inifile.getValue("EXPORT", "PNGNR").toUnsignedInt();
+			}
+
+			if (inifile.hasEntry("STAGE", "ShowPopupInfos"))
+			{
+				bool state = inifile.getValue("STAGE", "ShowPopupInfos").toBool();
+				menuBar()->setItemChecked(show_popup_infos_id_, state);
+				initTimer();
 			}
 
 
@@ -1421,6 +1431,8 @@ namespace BALL
 			animation_repeat_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
 					SLOT(animationRepeatClicked()));
 
+			show_popup_infos_id_ = main_control.insertMenuEntry(MainControl::OPTIONS, "Popup molecular items info", this, SLOT(switchPopupInfos()));
+
 			setCursor(QCursor(Qt::SizeAllCursor));
 		}
 
@@ -1687,6 +1699,13 @@ namespace BALL
 
 		void Scene::initTimer()
 		{
+			bool current = menuBar()->isItemChecked(show_popup_infos_id_);
+			if (!current)
+			{
+				timer_.stop();
+				return;
+			}
+
 			connect(&timer_, SIGNAL(timeout()), this, SLOT(timerSignal_()) );			
 			timer_.start(500);
 		}
@@ -2330,6 +2349,18 @@ namespace BALL
 			}
 			
 			return supports;
+		}
+
+		void Scene::switchPopupInfos()
+		{
+			bool current = menuBar()->isItemChecked(show_popup_infos_id_);
+			setPopupInfosEnabled(!current);
+		}
+
+		void Scene::setPopupInfosEnabled(bool state)
+		{
+			menuBar()->setItemChecked(show_popup_infos_id_, state);
+			initTimer();
 		}
 
 	} // namespace VIEW

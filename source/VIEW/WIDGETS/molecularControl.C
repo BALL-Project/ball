@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.9 2005/05/27 10:35:27 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.10 2005/06/03 21:34:17 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -594,7 +594,7 @@ void MolecularControl::initializeWidget(MainControl& main_control)
 																							 SLOT(clearClipboard()), 0, -1, hint);
 
 	hint = "Show entries for Secondary Structures in MolecularControl.";
-	show_ss_id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "Show SS entries", this, SLOT(switchShowSecondaryStructure()), 0, -1, hint);
+	show_ss_id_ = main_control.insertMenuEntry(MainControl::OPTIONS, "Show SS entries", this, SLOT(switchShowSecondaryStructure()), 0, -1, hint);
 
 	GenericControl::initializeWidget(main_control);
 }
