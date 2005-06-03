@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.12 2005/06/01 00:03:23 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.13 2005/06/03 12:28:50 oliver Exp $
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -760,7 +760,7 @@ else
 		for (Position pos = 0; pos < old_vertices_map.size(); pos++) old_vertices_map[pos] = -1;
 		
 		vector<Surface::Triangle>::iterator tit = triangles.begin();
-		Position vpos;
+		Position vpos = 0;
 		for (; tit != triangles.end(); tit++) 
 		{
 			Surface::Triangle& tri = *tit;
