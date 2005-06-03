@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.1 2005/05/06 13:11:30 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.2 2005/06/03 10:50:47 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -18,6 +18,8 @@
 #include <qscrollbar.h>
 #include <qfiledialog.h>
 #include <qapplication.h>
+#include <qdragobject.h>
+#include <qdir.h>
 
 // currently doesnt work right
 //#undef BALL_QT_HAS_THREADS
@@ -114,6 +116,8 @@ namespace BALL
 			#ifdef BALL_QT_HAS_THREADS
 			  thread_ = new RunPythonThread();
 			#endif
+
+			setAcceptDrops(false);
 		}
 
 		PyWidgetData::PyWidgetData(const PyWidgetData& /*widget*/)
@@ -598,6 +602,32 @@ namespace BALL
 
 			QTextEdit::paste();
 		}
+
+
+		void PyWidgetData::contentsDragEnterEvent(QDragEnterEvent * e)
+		{
+			e->accept(QTextDrag::canDecode(e));
+		}
+
+		void PyWidgetData::contentsDropEvent(QDropEvent *e)
+		{
+			if (!QUriDrag::canDecode(e)) 
+			{
+				e->ignore();
+				return;
+			}
+
+			QStrList lst;
+			QUriDrag::decode(e, lst);
+			e->accept();
+
+			for (Position i = 0; i < lst.count(); ++i )
+			{
+				QString filename = QDir::convertSeparators(QUriDrag::uriToLocalFile(lst.at(i)));
+				getMainControl()->openFile(filename.ascii());
+			}
+		}
+
 // ######################################################################################################
 
 		PyWidget::PyWidget(QWidget *parent, const char *name)
