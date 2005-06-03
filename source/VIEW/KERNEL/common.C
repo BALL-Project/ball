@@ -16,6 +16,9 @@
  #include <qapplication.h>
 #endif
 
+#include <qdragobject.h>
+#include <qdir.h>
+
 namespace BALL
 {
 	namespace VIEW
@@ -312,6 +315,26 @@ QColor chooseColor(QLabel* label)
 	if (!qcolor.isValid()) return label->backgroundColor();
 	label->setBackgroundColor(qcolor);
 	return qcolor;
+}
+
+
+void processDropEvent(QDropEvent* e)
+{
+	if (!QUriDrag::canDecode(e)) 
+	{
+		e->ignore();
+		return;
+	}
+
+	QStrList lst;
+	QUriDrag::decode(e, lst);
+	e->accept();
+
+	for (Position i = 0; i < lst.count(); ++i )
+	{
+		QString filename = QDir::convertSeparators(QUriDrag::uriToLocalFile(lst.at(i)));
+		getMainControl()->openFile(filename.ascii());
+	}
 }
 
 } } //namespaces

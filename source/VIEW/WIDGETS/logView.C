@@ -7,19 +7,45 @@
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
+#include <qdragobject.h>
+
 using namespace std;
 
 namespace BALL
 {
 	namespace VIEW
 	{
-  
+
+DragLogView::DragLogView(QWidget* parent)
+	: QTextEdit(parent)
+{
+}
+
+
+void DragLogView::contentsDragEnterEvent(QDragEnterEvent * e)
+{
+	e->accept(QTextDrag::canDecode(e));
+ 	setReadOnly(false);
+}
+
+void DragLogView::contentsDragLeaveEvent(QDragEnterEvent*)
+{
+ 	setReadOnly(true);
+}
+
+
+void DragLogView::contentsDropEvent(QDropEvent *e)
+{
+	VIEW::processDropEvent(e);
+ 	setReadOnly(true);
+}
+
 
 LogView::LogView(QWidget *parent, const char *name)
 	throw()
 	: DockWidget(parent, name),
 		NotificationTarget<LogStreamNotifier>(),
-		text_edit_(new QTextEdit(this)),
+		text_edit_(new DragLogView(this)),
 		strstream_(),
 		output_running_(false)
 {
@@ -32,7 +58,7 @@ LogView::LogView(const LogView& view)
 	throw()
 	: DockWidget((QWidget*)view.getParent()),
 		NotificationTarget<LogStreamNotifier>(),
-		text_edit_(new QTextEdit(this)),
+		text_edit_(new DragLogView(this)),
 		strstream_(),
 		output_running_(false)
 {
@@ -81,8 +107,9 @@ void LogView::initializeWidget(MainControl& main_control)
 {
 	Log.insert(strstream_);
 	Log.insertNotification(strstream_, *this);
-	text_edit_->setReadOnly(TRUE);
+ 	text_edit_->setReadOnly(true);
 	text_edit_->setTextFormat(PlainText);
+//   	text_edit_->setAcceptDrops(true);
 
 	DockWidget::initializeWidget(main_control);
 	main_control.insertMenuEntry(MainControl::EDIT, "Clear Logs", text_edit_, SLOT(clear()));

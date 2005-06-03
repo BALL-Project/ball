@@ -1,14 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.24.6.1 2005/06/03 10:31:02 amoll Exp $
+// $Id: dockWidget.C,v 1.24.6.2 2005/06/03 11:48:20 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <qmenubar.h>
 #include <qlabel.h>
 #include <qdragobject.h>
-#include <qdir.h>
 
 namespace BALL
 {
@@ -161,21 +160,7 @@ namespace BALL
 
 		void DockWidget::dropEvent(QDropEvent* e)
 		{
-			if (!QUriDrag::canDecode(e)) 
-			{
-				e->ignore();
-				return;
-			}
-
-			QStrList lst;
-			QUriDrag::decode(e, lst);
-			e->accept();
-
-			for (Position i = 0; i < lst.count(); ++i )
-			{
-				QString filename = QDir::convertSeparators(QUriDrag::uriToLocalFile(lst.at(i)));
-				getMainControl()->openFile(filename.ascii());
-			}
+			VIEW::processDropEvent(e);
 		}
 
 		void DockWidget::dragEnterEvent(QDragEnterEvent* event)

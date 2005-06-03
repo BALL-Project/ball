@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.18 2005/05/30 14:00:10 amoll Exp $
+// $Id: scene.C,v 1.171.2.19 2005/06/03 11:48:40 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -33,8 +33,6 @@
 #include <qcursor.h>
 #include <qapplication.h>
 #include <qdragobject.h>
-#include <qdir.h>
-
 
 //    #define BALL_BENCHMARKING
 
@@ -2302,21 +2300,7 @@ namespace BALL
 
 		void Scene::dropEvent(QDropEvent* e)
 		{
-			if (!QUriDrag::canDecode(e)) 
-			{
-				e->ignore();
-				return;
-			}
-
-			QStrList lst;
-			QUriDrag::decode(e, lst);
-			e->accept();
-
-			for (Position i = 0; i < lst.count(); ++i )
-			{
-				QString filename = QDir::convertSeparators(QUriDrag::uriToLocalFile(lst.at(i)));
-				getMainControl()->openFile(filename.ascii());
-			}
+			VIEW::processDropEvent(e);
 		}
 
 		void Scene::dragEnterEvent(QDragEnterEvent* event)
