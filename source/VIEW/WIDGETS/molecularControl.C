@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.10 2005/06/03 21:34:17 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.11 2005/06/04 07:38:58 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -786,6 +786,8 @@ void MolecularControl::setSelection_(bool open, bool force)
 
 void MolecularControl::cut()
 {
+	if (getMainControl()->compositesAreLocked()) return;
+
 	// delete old composites in copy list
 	if (!was_delete_) clearClipboard();
 
@@ -812,7 +814,6 @@ void MolecularControl::cut()
 	ControlSelectionMessage* message = new ControlSelectionMessage;
 	notify_(message);
 
-Log.error() << "#~~#   x "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	HashSet<Composite*>::Iterator roots_it = roots.begin();
 	for (; +roots_it; roots_it++)
 	{
@@ -823,6 +824,8 @@ Log.error() << "#~~#   x "             << " "  << __FILE__ << "  " << __LINE__<<
 
 void MolecularControl::copy()
 {
+	if (getMainControl()->compositesAreLocked()) return;
+
 	const List<Composite*> selection = getSelection();
 	if (selection.size() == 0) return;
 
@@ -842,6 +845,8 @@ void MolecularControl::copy()
 
 void MolecularControl::paste()
 {
+	if (getMainControl()->compositesAreLocked()) return;
+
 	if (copy_list_.size() == 0) return;
 
 	setStatusbarText("Pasted " + String(copy_list_.size()) + " objects...");
