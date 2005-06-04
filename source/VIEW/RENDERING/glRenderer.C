@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.14 2005/05/13 12:41:30 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.15 2005/06/04 07:49:48 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1663,6 +1663,7 @@ namespace BALL
 		void GLRenderer::renderClippingPlane_(const ClippingPlane& plane)
 			throw()
 		{
+			glPushAttrib(GL_LIGHTING_BIT | GL_BLEND);
 			const Vector3& point(plane.getPoint());
 			const Vector3& n(plane.getNormal());
 
@@ -1701,6 +1702,8 @@ namespace BALL
 
 			glPopMatrix();
 			glEnable(GL_CULL_FACE);
+
+			glPopAttrib();
 		}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

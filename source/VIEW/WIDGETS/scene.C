@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.20 2005/06/03 21:34:18 amoll Exp $
+// $Id: scene.C,v 1.171.2.21 2005/06/04 07:49:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -33,6 +33,7 @@
 #include <qcursor.h>
 #include <qapplication.h>
 #include <qdragobject.h>
+#include <qfiledialog.h>
 
 //    #define BALL_BENCHMARKING
 
@@ -1402,6 +1403,8 @@ namespace BALL
 			hint = "Export a PNG image file from the Scene";
 			main_control.insertMenuEntry(
 					MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P, -1, hint);
+			main_control.insertMenuEntry(
+					MainControl::FILE_EXPORT, "PNG...", this, SLOT(showExportPNGDialog()), 0, -1, hint);
 
 			window_menu_entry_id_ = 
 				main_control.insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
@@ -2018,17 +2021,36 @@ namespace BALL
 
 		String Scene::exportPNG()
 		{
-			makeCurrent();
-			QImage image = grabFrameBuffer();
-
 			String filename = String("BALLView_screenshot" + String(screenshot_nr_) +".png");
-			bool result = image.save(filename.c_str(), "PNG");
 			screenshot_nr_ ++;
 
-			if (result) setStatusbarText("Saved screenshot to " + filename);
-			else 				setStatusbarText("Could not save screenshot to " + filename);
+			exportPNG(filename);
 
 			return filename;
+		}
+
+		void Scene::showExportPNGDialog()
+		{
+			QString result = QFileDialog::getSaveFileName("", "", 0, "Select a PNG file");
+
+			if (result.isEmpty()) return;
+
+			exportPNG(result.ascii());
+		}
+
+		bool Scene::exportPNG(const String& filename)
+		{
+			makeCurrent();
+
+			QImage image = grabFrameBuffer();
+			bool ok = image.save(filename.c_str(), "PNG");
+
+			setWorkingDirFromFilename_(filename);
+
+			if (ok) setStatusbarText("Saved PNG to " + filename);
+			else 		setStatusbarText("Could not save PNG", true);
+
+			return ok;
 		}
 
 		void Scene::exportPOVRay()

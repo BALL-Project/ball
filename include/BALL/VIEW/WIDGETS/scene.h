@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.9 2005/06/03 21:32:59 amoll Exp $
+// $Id: scene.h,v 1.62.2.10 2005/06/04 07:50:02 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -432,8 +432,12 @@ namespace BALL
 			///
 			float getMousePositionY() { return y_window_pos_new_;}
 
+			///
 			void setPopupInfosEnabled(bool state);
 	
+			///
+			bool exportPNG(const String& filename);
+
 			protected:
 
 			//@}
@@ -502,6 +506,9 @@ namespace BALL
 
 			/// Export PNG image and return the filename
 			String exportPNG();
+
+			/// show an dialog to save an PNG file to
+			void showExportPNGDialog();
 			
 			///
 			void exportPOVRay();

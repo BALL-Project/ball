@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.sip,v 1.2 2004/06/08 15:29:10 amoll Exp $
+// $Id: scene.sip,v 1.2.4.1 2005/06/04 07:49:38 amoll Exp $
 //
 
 class Scene 
@@ -34,7 +34,10 @@ static Scene* getInstance(Position /index/);
 //  void checkMenu(MainControl&) throw();
 //  void clear() throw();
 //  void defaultPreferences(Preferences&) throw();
-		void exportPNG();
+		void exportPNG(const String&);
+		String exportPNG();
+		void showExportPNGDialog();
+		
   	void exportScene(Renderer&) const throw();
 //  void fetchPreferences(INIFile&) throw();
 //  void finalizePreferencesTab(Preferences &preferences) throw();
