@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.11 2005/06/03 21:34:16 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.12 2005/06/04 07:18:41 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -42,7 +42,6 @@
 #include <qpushbutton.h> // needed for preferences
 #include <qcursor.h>     // wait cursor
 #include <qmessagebox.h> 
-#include <qfiledialog.h> 
 
 #include <algorithm> // sort
 

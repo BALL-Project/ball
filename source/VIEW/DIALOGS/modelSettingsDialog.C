@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.34 2005/02/06 20:57:08 oliver Exp $
+// $Id: modelSettingsDialog.C,v 1.34.4.1 2005/06/04 07:14:04 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -183,7 +183,7 @@ namespace BALL
 				return;
 			}
 
-			if (RTTI::isKindOf<AddVanDerWaalsModel>(mp))
+			if (RTTI::isKindOf<AddBackboneModel>(mp))
 			{
 				((AddBackboneModel*) &mp)->setTubeRadius(getTubeRadius());
 				return;
