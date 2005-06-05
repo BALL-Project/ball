@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.36.2.2 2005/06/03 11:48:45 amoll Exp $
+// $Id: common.h,v 1.36.2.3 2005/06/05 22:01:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -389,7 +389,12 @@ namespace BALL
 
 		/// thread safe output to logview
 		void logString(const String& data);
-		
+
+		/// BALLView Debug macro
+		#define BALLVIEW_DEBUG logString(String("A problem occured in ") + __FILE__ + " " + \
+													 String(__LINE__) + ".  Please notify us per mail: ball@bioinf.uni-sb.de");
+
+	
 		/** Choose a color.
 		 		The colordialog is initialised with the background color of the label.
 				If the colordialog returns a new color, this becomes the new backbground color of the label.
