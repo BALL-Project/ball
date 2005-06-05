@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.6 2005/05/27 10:51:20 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.7 2005/06/05 21:13:29 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -38,8 +38,8 @@ AddCartoonModel::AddCartoonModel()
 	: AddBackboneModel(),
 		last_chain_(0),
 		helix_radius_(2.4),
-		arrow_width_(2.5),
-		arrow_height_(0.3),
+		arrow_width_(2.2),
+		arrow_height_(0.4),
 		DNA_helix_radius_(0.5),
 		DNA_ladder_radius_(0.8),
 		DNA_base_radius_(0.2),

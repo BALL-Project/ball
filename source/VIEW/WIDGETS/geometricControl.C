@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.21 2005/05/27 10:51:20 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.22 2005/06/05 21:13:31 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -324,6 +324,12 @@ namespace BALL
 		void GeometricControl::deleteCurrentItems()
 			throw()
 		{
+			if (getMainControl()->getPrimitiveManager().updateRunning())
+			{
+				setStatusbarText("Could not delete Representation while update is running!", true);
+				return;
+			}
+
 			ItemList items = getSelectedItems();
 			if (items.size() == 0) return;
 

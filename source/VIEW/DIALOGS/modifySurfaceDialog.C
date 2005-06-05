@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.13 2005/06/03 12:28:50 oliver Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.14 2005/06/05 21:13:28 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
+#include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -651,24 +652,36 @@ void ModifySurfaceDialog::splitMethodChanged()
 
 void ModifySurfaceDialog::split_()
 {
-	// make sure we have a colorProcessor
 	rep_->enableModelUpdate(false);
 
 	// create a new representation with the subset of the original mesh
 	Representation* new_rep = new Representation;
 	new_rep->setComposites(rep_->getCompositeList());
-if (rep_->getColorProcessor() != 0)
-	new_rep->setColorProcessor(new ColorProcessor(*rep_->getColorProcessor()));
-else
- new_rep->setColorProcessor(new ColorProcessor());
-
 	new_rep->setModelType(rep_->getModelType());
 	new_rep->setColoringMethod(rep_->getColoringMethod());
 	new_rep->enableModelUpdate(false);
+	getMainControl()->insert(*new_rep);
 
-	if (rep_->getModelProcessor() != 0)
+	// make sure we have a colorProcessor
+	if (rep_->getColorProcessor() != 0)
 	{
-		new_rep->setModelProcessor(new ModelProcessor(*rep_->getModelProcessor()));
+		// make a deep copy of the color processor with help of DisplayProperties
+		DisplayProperties* dp = DisplayProperties::getInstance(0);
+		if (dp != 0)
+		{
+			dp->modifyRepresentationMode(new_rep);
+			dp->apply();
+		}
+		else
+		{
+			new_rep->setColorProcessor(new ColorProcessor(*rep_->getColorProcessor()));
+		}
+	}
+	else
+	{
+ 		new_rep->setColorProcessor(new ColorProcessor());
+		new_rep->enableColoringUpdate(false);
+		rep_->enableColoringUpdate(false);
 	}
 
 	HashSet<const Composite*> roots;
@@ -824,8 +837,6 @@ else
 		return;
 	}
 
-	new_rep->enableModelUpdate(false);
-	getMainControl()->insert(*new_rep);
 	getMainControl()->update(*rep_);
 }
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.12 2005/06/04 07:18:41 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.13 2005/06/05 21:13:28 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1448,6 +1448,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		bool MainControl::remove(Representation& rep)
 			throw()
 		{
+			if (getPrimitiveManager().updateRunning())
+			{
+				setStatusbarText("Could not delete Representation while update is running!", true);
+				return false;
+			}
+
 			if (rep.hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 			{
 				SceneMessage *scene_message = new SceneMessage(SceneMessage::REMOVE_COORDINATE_SYSTEM);

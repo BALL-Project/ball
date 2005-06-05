@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ModelSettingsDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -942,6 +942,22 @@
                 <property name="alignment">
                     <set>AlignHCenter</set>
                 </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>ribbons_enabled</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>150</y>
+                            <width>268</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>enable Ribbons</string>
+                    </property>
+                </widget>
                 <widget class="QLayoutWidget">
                     <property name="name">
                         <cstring>layout5</cstring>
@@ -1321,7 +1337,7 @@
                                         </size>
                                     </property>
                                     <property name="text">
-                                        <string>arrow height</string>
+                                        <string>arrow thickness</string>
                                     </property>
                                 </widget>
                                 <widget class="QSlider">
@@ -1413,23 +1429,7 @@
                         </rect>
                     </property>
                     <property name="text">
-                        <string>enable twocolored Ribbons</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>ribbons_enabled</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>150</y>
-                            <width>268</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>enable Ribbons</string>
+                        <string>enable two-colored Ribbons</string>
                     </property>
                 </widget>
             </widget>
