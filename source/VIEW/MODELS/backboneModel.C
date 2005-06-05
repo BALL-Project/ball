@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.22.4.2 2005/05/27 10:51:20 amoll Exp $
+// $Id: backboneModel.C,v 1.22.4.3 2005/06/05 22:12:55 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -514,7 +514,7 @@ namespace BALL
 			{
 				if ((*sit).atom == 0)
 				{
-					Log.error() << "Problem in " << __FILE__ << " " << __LINE__ << std::endl;
+					BALLVIEW_DEBUG
 					return false;
 				}
 

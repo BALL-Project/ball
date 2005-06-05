@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.6 2005/06/02 09:53:28 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.7 2005/06/05 22:12:54 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -295,7 +295,7 @@ void PrimitiveManager::update_(Representation& rep)
 {
 	if (!has(rep)) 
 	{
-		Log.error() << "Problem in "  << __FILE__ << "  " << __LINE__<< std::endl;
+		BALLVIEW_DEBUG
 		return;
 	}
 #ifdef BALL_QT_HAS_THREADS
@@ -395,7 +395,7 @@ void PrimitiveManager::finishedUpdate_()
 #ifdef BALL_QT_HAS_THREADS
 	if (representations_to_be_updated_.size() == 0)
 	{
-		Log.error() << "Problem in "  << __FILE__ << "  " << __LINE__<< std::endl;
+		BALLVIEW_DEBUG
 		return;
 	}
 

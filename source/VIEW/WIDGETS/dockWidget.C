@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.24.6.2 2005/06/03 11:48:20 amoll Exp $
+// $Id: dockWidget.C,v 1.24.6.3 2005/06/05 22:12:56 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -125,7 +125,7 @@ namespace BALL
 
 			if (!getMainControl()) 
 			{
-				Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
+				BALLVIEW_DEBUG
 				return;
 			}
 

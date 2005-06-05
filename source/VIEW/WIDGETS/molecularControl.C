@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.11 2005/06/04 07:38:58 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.12 2005/06/05 22:12:56 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -725,7 +725,7 @@ void MolecularControl::setHighlighting_(List<Composite*> selection)
 				composite_to_item_[*cit] == 0) 
 		{
 #ifdef BALL_VIEW_DEBUG
-			Log.error() << "Problem in " << __FILE__ << "  " << __LINE__ << std::endl;
+			BALLVIEW_DEBUG
 #endif
 			continue;
 		}

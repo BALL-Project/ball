@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.21 2005/06/04 07:49:49 amoll Exp $
+// $Id: scene.C,v 1.171.2.22 2005/06/05 22:12:57 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2093,7 +2093,7 @@ namespace BALL
 
 			if (!getMainControl()) 
 			{
-				Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
+				BALLVIEW_DEBUG
 				return;
 			}
 

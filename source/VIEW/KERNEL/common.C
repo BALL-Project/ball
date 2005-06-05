@@ -294,7 +294,12 @@ Vector3 getNormal(const Vector3& v)
 
 void logString(const String& data)
 {
-	if (MainControl::getInstance(0) == 0) return;
+	if (MainControl::getInstance(0) == 0) 
+	{
+		Log.error() << data << std::endl;
+		return;
+	}
+
 	LogEvent* su = new LogEvent;
 	su->setMessage(data);
 	su->setShowOnlyInLogView(true);
