@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.1.2.8 2005/05/09 16:37:26 haid Exp $
+// $Id: dockResult.C,v 1.1.2.9 2005/06/06 12:12:05 haid Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -362,7 +362,6 @@ namespace BALL
 		void DockResult::deleteScoring(int i)
 			throw()
 		{
-			/////////////////////////////////////// TODO ////////////////////////////////////// 
 			vector<Scoring_>::iterator scoring_it;
 			scorings_.erase(scorings_.begin()+i);	
 		}
@@ -407,59 +406,10 @@ namespace BALL
 			return *this;
 		}
 
+		
 	std::ostream& operator <<(ostream& out, const DockResult& dock_res)
 		throw()
 	{
-		out << "#ALGORITHM" << std::endl;
-		out << dock_res.docking_algorithm_ << std::endl;
-		out << "#ALGORITHM OPTIONS" << std::endl;
-		Options::ConstIterator it = dock_res.docking_options_.begin();
-		for(; +it; ++it)
-		{
-			out << it->first << " " << it->second << std::endl;
-		}
-		//out << "SCORING" << std::endl;
-		for(unsigned int i = 0; i < dock_res.scorings_.size(); i++)
-		{ 
-			out << "#SCORING NAME" << std::endl;
-			out << dock_res.scorings_[i].name_ << std::endl;
-			out << "#SCORING OPTIONS" << std::endl;
-			it = dock_res.scorings_[i].options_.begin();
-			for(; +it; ++it)
-			{
-				out << it->first << " " << it->second << std::endl;
-			}
-			out << "#SCORES" << std::endl;
-			for(unsigned int j = 0; j < dock_res.scorings_[i].scores_.size(); j++)
-			{
-				out << dock_res.scorings_[i].scores_[j] << std::endl;
-			}
-		}
-		/*out << "#ALGORITHM" << std::endl;
-			out << docking_algorithm_ << std::endl;
-			out << "#ALGORITHM OPTIONS" << std::endl;
-			Options::Iterator it = docking_options_.begin();
-			for(; +it; ++it)
-			{
-			out << it->first << " " << it->second << std::endl;
-			}
-		//out << "SCORING" << std::endl;
-		for(unsigned int i = 0; i < scorings_.size(); i++)
-		{ 
-		out << "#SCORING NAME" << std::endl;
-		out << scorings_[i].name_ << std::endl;
-		out << "#SCORING OPTIONS" << std::endl;
-		it = scorings_[i].options_.begin();
-		for(; +it; ++it)
-		{
-		out << it->first << " " << it->second << std::endl;
-		}
-		out << "#SCORES" << std::endl;
-		for(unsigned int j = 0; j < scorings_[i].scores_.size(); j++)
-		{
-		out << scorings_[i].scores_[j] << std::endl;
-		}
-		}*/
 		return out;
 	}
 	

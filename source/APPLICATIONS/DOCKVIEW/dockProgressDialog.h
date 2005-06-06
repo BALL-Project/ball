@@ -50,7 +50,7 @@ namespace BALL
 			
 				/**
 				*/
-				void fillDialog(QString p1, QString p2, QString alg, QString sf, Options& alg_opt, Options& sf_opt)
+				void fillDialog(const QString& p1, const QString& p2, const QString& alg, const QString& sf, const Options& alg_opt, const Options& sf_opt)
 					throw();
 					
 				/**
@@ -91,7 +91,6 @@ namespace BALL
 				DockingAlgorithm* alg_;
 			
 				QTimer timer_;
-			
 		};
 		
 } } // Namespaces

@@ -122,7 +122,7 @@ namespace BALL
 			
 				/**
 					*/
-				void fetchPreferences_(INIFile& file, String entry, QString default_value) throw();
+				void fetchPreferences_(INIFile& file, const String& entry, const QString& default_value) throw();
 				
 				/**
 					*/

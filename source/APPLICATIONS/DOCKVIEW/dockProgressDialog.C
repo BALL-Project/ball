@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.8 2005/05/23 16:14:31 haid Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.9 2005/06/06 12:12:05 haid Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -47,7 +47,7 @@ namespace BALL
 			throw()
 		{
 			 alg_ = alg;
-		}	
+		}
 				
 		const DockingAlgorithm* DockProgressDialog::getDockingAlgorithm() const
 			throw()
@@ -56,7 +56,8 @@ namespace BALL
 		}
 		
 		//
-		void DockProgressDialog::fillDialog(QString p1, QString p2, QString alg, QString sf, Options& alg_opt, Options& sf_opt)
+		void DockProgressDialog::fillDialog(const QString& p1, const QString& p2, const QString& alg, const QString& sf,
+																				const Options& alg_opt, const Options& sf_opt)
 			throw()
 		{
 			QString s = "Docking partner 1: ";
@@ -71,7 +72,7 @@ namespace BALL
 			options->append("*** Options of algorithm ***");
 			s = "number of best docked structures: ";
 			options->append(s.append(alg_opt.get(GeometricFit::Option::BEST_NUM)));
-			Options::Iterator it = alg_opt.begin();
+			Options::ConstIterator it = alg_opt.begin();
 			for(; +it; ++it)
 			{
 				s = it->first;
@@ -117,7 +118,7 @@ namespace BALL
 				pause_button->setText("Pause");
 				alg_->proceed();
 			}
-		}	
+		}
 		
 		//
 		void DockProgressDialog::abortClicked()
@@ -126,7 +127,6 @@ namespace BALL
 			//dialog is closed and deleted
 			close(true);
 		}
-		
 		
 		//
 		void DockProgressDialog::updateProgress_()

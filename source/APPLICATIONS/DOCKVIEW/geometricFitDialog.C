@@ -64,7 +64,7 @@ namespace BALL
 		}
 		
 		//
-		void GeometricFitDialog::fetchPreferences_(INIFile& file, String entry, QString default_value)
+		void GeometricFitDialog::fetchPreferences_(INIFile& file, const String& entry, const QString& default_value)
 			throw()
 		{
 			if (!file.hasEntry("GEOMETRIC_FIT_OPTIONS_REDOCK", entry))

@@ -282,7 +282,7 @@ namespace BALL
 				
 				/** Get system which the user has chosen in the dialog as docking partner.
 				 */
-				System* partnerChosen_(QString& qstr) throw();
+				System* partnerChosen_(const QString& qstr) throw();
 				
 				/**  
 				 */

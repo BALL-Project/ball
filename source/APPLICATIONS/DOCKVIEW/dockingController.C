@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.4 2005/05/30 19:13:21 haid Exp $
+// $Id: dockingController.C,v 1.1.2.5 2005/06/06 12:12:06 haid Exp $
 //
 
 #include "dockingController.h"
@@ -34,7 +34,8 @@ namespace BALL
 			:	QWidget(parent, name),
 				ModularWidget(name),
 				dock_dialog_(this),
-				dock_alg_(0)
+				dock_alg_(0),
+				progress_dialog_(0)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "New DockingController " << this << std::endl;
@@ -57,6 +58,7 @@ namespace BALL
 				unlockComposites();
 				if(dfm->wasAborted())
 				{
+					Log.info() << "in DockingController::onNotify: " << dfm->wasAborted() << std::endl;
 					QMessageBox request_message(0,0);
 					if( request_message.question(0,"Request","Do you want to see the current Result?", 
 																			 "Yes", "No", QString::null, 0, 1))
@@ -97,20 +99,6 @@ namespace BALL
 			main_control.removeMenuEntry(MainControl::DISPLAY, "&Docking", this,
 																	 SLOT(startDocking()), CTRL+Key_D);
 		}   
-		/*
-		// Read the preferences from the INIFile.
-		void DockingController::fetchPreferences(INIFile& file)
-			throw()
-		{
-			dock_dialog_.fetchPreferences(file);
-		}
-		
-		// Write the preferences to the INIFile.
-		void DockingController::writePreferences(INIFile& file)
-			throw()
-		{
-			dock_dialog_.writePreferences(file);
-		}*/
 		
 		// Updates the state of menu entry Docking in the popup menu Molecular Mechanics.
 		void DockingController::checkMenu (MainControl& main_control)
@@ -185,7 +173,7 @@ namespace BALL
 					break;
 			}
 			
-			if(dock_alg_ == NULL)
+			if(!dock_alg_ || !dock_dialog_.getSystem1() || !dock_dialog_.getSystem2() || dock_dialog_.getAlgorithmOptions().isEmpty())
 			{
 			 	return;
 			}
@@ -219,7 +207,6 @@ namespace BALL
 																		dock_dialog_.getAlgorithmOptions(),
 																		dock_dialog_.getScoringOptions());
 				progress_dialog_->setDockingAlgorithm(dock_alg_);
-				
 				
 				thread->start();
 				progress_dialog_->show();
@@ -270,8 +257,10 @@ namespace BALL
 					break;
 			}
 		
+			if (!scoring) return;
+			
 			// apply scoring function; set new scores in the conformation set
-	   	std::vector<ConformationSet::Conformation> ranked_conformations((*scoring)(*conformation_set));
+	   	vector<ConformationSet::Conformation> ranked_conformations((*scoring)(*conformation_set));
 			conformation_set->setScoring(ranked_conformations);
 
 			// add a new scoring to dock_res_; we need the name, options and score vector of the scoring function

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.31 2005/06/02 10:01:17 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.32 2005/06/06 12:12:05 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -208,7 +208,7 @@ namespace BALL
 			PreferencesEntry::readPreferenceEntries(file);
 			
 			fetchPreferences_(file, "redock_entry_0", "<select>");
-			fetchPreferences_(file, "redock_entry_1", "<select>");
+			fetchPreferences_(file, "redock_entry_1", "Default");
 			fetchPreferences_(file, "redock_entry_2", "100");
 			fetchPreferences_(file, "redock_entry_3", "1");
 			
@@ -418,7 +418,7 @@ namespace BALL
 		}
 		
 		// get system which the user has chosen in the dialog as docking partner
-		System* DockDialog::partnerChosen_(QString& qstr)
+		System* DockDialog::partnerChosen_(const QString& qstr)
 			throw()
 		{
 			//iterate over all composites; find chosen system

@@ -1,8 +1,7 @@
-// $Id: dockResultDialog.C,v 1.1.2.25 2005/06/02 10:01:17 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.26 2005/06/06 12:12:05 haid Exp $
 //
 
 #include "dockResultDialog.h"
-//#include "redockDialog.h"
 #include "dockingController.h"
 #include "dockDialog.h"
 #include "infoDialog.h"
@@ -88,6 +87,8 @@ namespace BALL
 				dock_res_ = res_dialog.dock_res_;
 				docked_system_ = res_dialog.docked_system_;
 				scoring_dialogs_ = res_dialog.scoring_dialogs_;
+				redock_partner1_ = res_dialog.redock_partner1_;
+				redock_partner2_ = res_dialog.redock_partner2_;
 			}
 			return *this;
 		}
@@ -124,6 +125,8 @@ namespace BALL
 		void DockResultDialog::show()
 		{
 			Log.info() << "in DockResultDialog::show()" << std::endl;
+			if(!dock_res_) return;
+			
 			// before showing the dialog the result table has to be build and filled 
 			// first get the number of conformations, to know how many rows the table needs
 			int conformation_num = dock_res_->getConformationSet()->size();
@@ -172,6 +175,8 @@ namespace BALL
 		// show snapshot of selected row
 		void DockResultDialog::showSnapshot()
 		{
+			if(!dock_res_) return;
+		
 			// get index of current row
 			int selected_row = result_table->currentRow();
 			// get snapshot number of this row
@@ -255,25 +260,19 @@ namespace BALL
 					AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
 					//now the Amber force field gets its options
 					dialog->applyTo(ff);
-					Log.info() << "in DockResultDialog:: Option of Amber FF:" << std::endl;
-					Options::Iterator it = ff.options.begin();
-					for(; +it; ++it)
-					{
-						Log.info() << it->first << " : " << it->second << std::endl;
-					}
 					scoring_options = ff.options;
 					//the force field is given to the AmberEvaluation (scoring function) object
 					scoring = new AmberEvaluation(ff);
 					break;
-				}	
+				}
 			}
+			
+			if(!scoring || !dock_res_) return;
 			
 			// apply scoring function; set new scores in the conformation set
 			ConformationSet* conformation_set = dock_res_->getConformationSet();
-			std::vector<ConformationSet::Conformation> ranked_conformations = (*scoring)(*conformation_set);
-			Log.info() << "in DockResultDialog:: " << std::endl;
+			vector<ConformationSet::Conformation> ranked_conformations = (*scoring)(*conformation_set);
 			conformation_set->setScoring(ranked_conformations);
-//   			dock_res_->setConformationSet(conformation_set);
 			
 			// add a new scoring to dock_res_; we need the name, options and score vector of the scoring function
 			vector<float> scores;
@@ -339,6 +338,7 @@ namespace BALL
 			for(int row_it = 0; row_it < result_table->numRows(); row_it++)
 			{
 				QString s;
+				// snapshot number isn't a float!
 				int index = (int) rows[row_it][0];
 				result_table->setText(row_it,0,s.setNum(index));
 				for(int column_it = 1; column_it < result_table->numCols(); column_it++)
@@ -353,16 +353,13 @@ namespace BALL
 		
 		void DockResultDialog::showDockingOptions()
 		{
-			// clear and refill info dialog
-			//info_dialog_->info_box->clear();
-			InfoDialog*	info_dialog = new InfoDialog(this,0,false,WDestructiveClose);
+			if(!dock_res_) return;
+			InfoDialog* info_dialog = new InfoDialog(this,0,false,WDestructiveClose);
 			
 			QString s = "Algorithm: ";
 			info_dialog->info_box->append(s.append(dock_res_->getDockingAlgorithm()));
 			info_dialog->info_box->append("\n*** Options of algorithm ***");
-			s = "number of best docked structures: ";
 			const Options& alg_opt = dock_res_->getDockingOptions();
-			info_dialog->info_box->append(s.append(alg_opt.get(GeometricFit::Option::BEST_NUM)));
 			Options::ConstIterator it = alg_opt.begin();
 			for(; +it; ++it)
 			{
@@ -378,15 +375,18 @@ namespace BALL
 		{
 				QPopupMenu context_menu;
 				Position menu_entry_pos; 
+				
 				menu_entry_pos = context_menu.insertItem("Delete Score Column", this, SLOT(deleteColumn_(int)));
 				context_menu.setItemParameter(menu_entry_pos, column);
 				if (!column || result_table->numCols() < 3)
 				{
 					context_menu.setItemEnabled(menu_entry_pos, false);
 				}
+				
 				menu_entry_pos = context_menu.insertItem("Scoring Options", this, SLOT(showScoringOptions_(int)));
 				context_menu.setItemParameter(menu_entry_pos, column);
 				if (!column) context_menu.setItemEnabled(menu_entry_pos, false);
+				
 				menu_entry_pos = context_menu.insertItem("Redock", this, SLOT(redock_(int)));
 				context_menu.setItemParameter(menu_entry_pos, row);
 				context_menu.exec(pos);
@@ -399,6 +399,7 @@ namespace BALL
 		
 		void DockResultDialog::deleteColumn_(int column)
 		{
+			if(!dock_res_) return;
 			result_table->removeColumn(column);
 			dock_res_->deleteScoring(column-1);
 				
@@ -409,9 +410,8 @@ namespace BALL
 		
 		void DockResultDialog::showScoringOptions_(int column)
 		{
-			// clear and refill info dialog
-			//info_dialog_->info_box->clear();
-			InfoDialog*	info_dialog = new InfoDialog(this,0,false,WDestructiveClose);
+			if(!dock_res_) return;
+			InfoDialog* info_dialog = new InfoDialog(this, 0, false, WDestructiveClose);
 			
 			QString s = "Scoring function: ";
 			info_dialog->info_box->append(s.append(dock_res_->getScoringName(column-1)));
@@ -438,7 +438,8 @@ namespace BALL
 		void DockResultDialog::redock_(int row)
 		{
 			Log.info() << "in DockResultDialog::redock_: " << std::endl;
-			Log.info() << "row: " << row << std::endl;
+			if(!dock_res_) return;
+			
 			// get snapshot number of this row
 			int snapshot = (result_table->text(row,0)).toInt();
 			// apply snapshot
@@ -471,28 +472,6 @@ namespace BALL
 			dialog.setSystems(redock_partner1_, redock_partner2_);
 			
 			DockingController::getInstance(0)->runDocking(true);
-			
-			/*
-			RedockDialog* redock_dialog = new RedockDialog(getMainControl());
-			redock_dialog->initializeWidget(*getMainControl());
-			System* s1 = new System();
-			System* s2 = new System();
-			
-			Log.info() << "number of atoms docked_system before appendChild: " << docked_system_->countAtoms() << std::endl;
-			
-			s1->setName(docked_system_->getName());
-			s2->setName("rd");
-			 
-			System s = *docked_system_;
-			s1->appendChild(*(s.getFirstChild()));
-			s2->appendChild(*(s.getLastChild()));
-			redock_dialog->setSystems(*s1, *s2);
-			Log.info() << "number of atoms s1: " << s1->countAtoms() << std::endl;
-			Log.info() << "number of atoms s2: " << s2->countAtoms() << std::endl;
-			Log.info() << "number of atoms docked_system after appendChild: " << docked_system_->countAtoms() << std::endl;
-			delete s1;
-			delete s2;
-			redock_dialog->show();*/
 		}
 		
 		

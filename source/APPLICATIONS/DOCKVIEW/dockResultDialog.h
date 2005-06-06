@@ -11,7 +11,6 @@
 
 #include "dockResult.h"
 #include "dockResultDialogData.h"
-//#include "infoDialog.h"
 
 namespace BALL
 {
@@ -156,7 +155,6 @@ namespace BALL
 				/** key: ScoringFunction(enum), value: advanced options dialog
 				*/
 				HashMap<int, QDialog*> scoring_dialogs_;
-
 		};
 		
 } } // Namespaces
