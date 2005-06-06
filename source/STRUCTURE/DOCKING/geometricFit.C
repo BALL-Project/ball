@@ -918,6 +918,8 @@ namespace BALL
   void GeometricFit::start()
     throw()
   {
+		DockingAlgorithm::start();
+	
 		int verbosity = options.getInteger(Option::VERBOSITY);
 
   	Timer overall_timer;
