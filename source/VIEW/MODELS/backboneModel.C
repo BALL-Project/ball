@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.22.4.3 2005/06/05 22:12:55 amoll Exp $
+// $Id: backboneModel.C,v 1.22.4.4 2005/06/06 20:25:06 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -300,7 +300,11 @@ namespace BALL
 
 		void AddBackboneModel::buildTube_(Position start, Position end)
 		{
-			if (points_.size() == 0) return;
+			if (points_.size() == 0 || end == 0) 
+			{
+				return;
+			}
+
 			if (points_.size() != atoms_of_points_.size())
 			{
 				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << std::endl;
