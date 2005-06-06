@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.20.2.3 2005/05/27 11:31:44 amoll Exp $
+// $Id: primitiveManager.h,v 1.20.2.4 2005/06/06 13:46:15 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -232,6 +232,9 @@ namespace BALL
 			
 			///
 			void restoreRepresentations(const INIFile& in);
+
+			///
+			void focusRepresentation(const Representation& rep);
 
 			protected:
 

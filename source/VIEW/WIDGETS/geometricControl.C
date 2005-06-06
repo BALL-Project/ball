@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.22 2005/06/05 21:13:31 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.23 2005/06/06 13:46:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -12,26 +12,9 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/atomContainer.h>
-
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/DIALOGS/clippingDialog.h>
-
-#include <BALL/VIEW/DATATYPE/vertex2.h>
-#include <BALL/VIEW/DATATYPE/vertex1.h>
-
-#include <BALL/VIEW/PRIMITIVES/sphere.h>
-#include <BALL/VIEW/PRIMITIVES/mesh.h>
-#include <BALL/VIEW/PRIMITIVES/disc.h>
-#include <BALL/VIEW/PRIMITIVES/box.h>
-#include <BALL/VIEW/PRIMITIVES/label.h>
-
-#include <BALL/VIEW/MODELS/standardColorProcessor.h>
-
-#include <BALL/MATHS/simpleBox3.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <qpopupmenu.h>
 #include <qmenubar.h>
@@ -505,103 +488,8 @@ namespace BALL
 		{
 			List<Representation*> reps = getHighlightedRepresentations();
 			if (reps.size() != 1) return;
-			Representation* const rep = *reps.begin();
 			
-			GeometricCenterProcessor centerp;
-			BoundingBoxProcessor bbox;
-			centerp.start();
-			bbox.start();
-
-			Vector3 center;
-			List<GeometricObject*>::Iterator it = rep->getGeometricObjects().begin();
-			for (; it != rep->getGeometricObjects().end(); it++)
-			{
-				const GeometricObject& go = **it;
-
-				// cant use Vertex or Vertex2 here, no idea why
-				if (RTTI::isKindOf<Vertex2>(go))
-				{
-					const Vertex2& v = *dynamic_cast<const Vertex2*>(&go);
-					center = (v.getVertex1() + (v.getVertex2() - v.getVertex1()) / 2.0);
-
-					bbox.operator()(v.getVertex1());
-					bbox.operator()(v.getVertex2());
-				}
-				else if (RTTI::isKindOf<Vertex>(go))
-				{
-					const Vertex& v = *dynamic_cast<const Vertex*>(&go);
-					center = v.getVertex();
-
-					bbox.operator()(v.getVertex());
-				}
-				else if (RTTI::isKindOf<SimpleBox3>(go))
-				{
-					const SimpleBox3& b = reinterpret_cast<const SimpleBox3&>(go);
-					center = b.a + (b.b - b.a) /2;
-
-					bbox.operator()(b.a);
-					bbox.operator()(b.b);
-				}
-				else if (RTTI::isKindOf<Sphere>(go))
-				{
-					const Sphere& s = reinterpret_cast<const Sphere&>(go);
-					center = s.getPosition();
-
-					bbox.operator()(s.getPosition());
-				}
-				else if (RTTI::isKindOf<Disc>(go))
-				{
-					const Disc& d = reinterpret_cast<const Disc&>(go);
-					center = d.getCircle().p;
-
-					bbox.operator()(d.getCircle().p);
-				}
-				else if (RTTI::isKindOf<Mesh>(go))
-				{
-					const Mesh& mesh = reinterpret_cast<const Mesh&>(go);
-
-					for (Size index = 0; index < mesh.vertex.size(); ++index)
-					{
-						centerp.operator()(mesh.vertex[index]);
-						bbox.operator()(mesh.vertex[index]);
-					}
-					continue;
-				}
-				else if (RTTI::isKindOf<BALL::VIEW::Box>(go))
-				{
-					const BALL::VIEW::Box& box = reinterpret_cast<const BALL::VIEW::Box&>(go);
- 					centerp.operator()(box.getPoint() + box.getHeightVector() * 0.5 + box.getRightVector() * 0.5);
-					bbox.operator()(box.getPoint());
-					bbox.operator()(box.getPoint() + box.getHeightVector());
-					bbox.operator()(box.getPoint() + box.getRightVector());
-					bbox.operator()(box.getPoint() + box.getDiagonalVector());
-				}
-				else if (RTTI::isKindOf<BALL::VIEW::Label>(go))
-				{
-					// do nothing
-				}
-				else
-				{
-					Log.error() << "Unknown geometric object: " << typeid(go).name() 
-											<< "in " << __FILE__ << __LINE__ << std::endl;
-					continue;
-				}
-
-				centerp.operator() (center);
-			}
-
-			centerp.finish();
-			bbox.finish();
-			
-			Vector3 vwp = centerp.getCenter();
-			const float view_distance = (bbox.getUpper() - bbox.getLower()).getLength() - vwp.z + 3;
-
-			// update scene
-			SceneMessage * const scene_message = new SceneMessage(SceneMessage::UPDATE_CAMERA);
-			scene_message->getStage().getCamera().setLookAtPosition(vwp);
-			vwp.z += view_distance;
-			scene_message->getStage().getCamera().setViewPoint(vwp);
-			notify_(scene_message);
+			getMainControl()->getPrimitiveManager().focusRepresentation(**reps.begin());
 		}
 
 		void GeometricControl::initializeWidget(MainControl& main_control)

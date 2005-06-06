@@ -1,5 +1,6 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
 
 #include <BALL/VIEW/PRIMITIVES/line.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
@@ -11,6 +12,8 @@
 #include <BALL/SYSTEM/directory.h>
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/fileSystem.h>
+
+#include <BALL/STRUCTURE/geometricProperties.h>
 
 #ifdef BALL_PLATFORM_WINDOWS
  #include <qapplication.h>
@@ -340,6 +343,73 @@ void processDropEvent(QDropEvent* e)
 		QString filename = QDir::convertSeparators(QUriDrag::uriToLocalFile(lst.at(i)));
 		getMainControl()->openFile(filename.ascii());
 	}
+}
+
+void focusCamera(const List<Vector3>& points)
+{
+	// use processor for calculating the center
+	GeometricCenterProcessor center;
+	center.start();
+
+	List<Vector3>::const_iterator vit = points.begin();
+	for (; vit != points.end(); ++vit)
+	{
+		center.operator()(*vit);
+	}
+
+	center.finish();
+
+	const Vector3 look_at_point = center.getCenter();
+
+	Vector3 max_distance_point;
+	float max_square_distance = -1;
+
+	vit = points.begin();
+	for (; vit != points.end(); ++vit)
+	{
+		float sd = (*vit - look_at_point).getSquareLength();
+		if (sd > max_square_distance)
+		{
+			max_square_distance = sd;
+			max_distance_point = *vit;
+		}
+	}
+
+	Vector3 max_distance_vector(max_distance_point - look_at_point);
+
+	Vector3 up_vector = Vector3(1,0,0);
+	Vector3 view_vector = up_vector % max_distance_vector;
+	if (Maths::isZero(view_vector.getSquareLength())) 
+	{
+		up_vector = Vector3(0,1,0);
+		view_vector = up_vector % max_distance_vector;
+	}
+
+	if (Maths::isZero(view_vector.getSquareLength()))
+	{
+		up_vector = Vector3(0,0,1);
+		view_vector = up_vector % max_distance_vector;
+	}
+
+	if (Maths::isZero(view_vector.getSquareLength()))
+	{
+		view_vector = Vector3(1,0,0);
+	}
+
+	if (!Maths::isZero(view_vector.getSquareLength())) view_vector.normalize();
+
+	float distance = max_distance_vector.getLength() / tan(Angle(31, false).toRadian());
+	if (distance < 5) 	distance = 5;
+	if (distance > 150) distance = 150;
+
+	view_vector *= distance;
+
+	// update scene
+	SceneMessage *scene_message = new SceneMessage(SceneMessage::UPDATE_CAMERA);
+	scene_message->getStage().getCamera().setLookAtPosition(look_at_point);
+	scene_message->getStage().getCamera().setViewPoint(look_at_point- view_vector);
+	scene_message->getStage().getCamera().setLookUpVector(up_vector);
+	getMainControl()->sendMessage(*scene_message);
 }
 
 } } //namespaces

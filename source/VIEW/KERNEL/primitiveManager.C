@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.8 2005/06/06 11:30:01 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.9 2005/06/06 13:46:07 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -10,6 +10,14 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/FORMAT/INIFile.h>
+
+#include <BALL/VIEW/PRIMITIVES/sphere.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/disc.h>
+#include <BALL/VIEW/PRIMITIVES/box.h>
+#include <BALL/VIEW/PRIMITIVES/simpleBox.h>
+#include <BALL/VIEW/DATATYPE/vertex2.h>
+#include <BALL/VIEW/DATATYPE/vertex1.h>
 
 #include <qapplication.h>
 
@@ -745,7 +753,75 @@ void PrimitiveManager::restoreRepresentations(const INIFile& in)
 		Log.error() << e << std::endl;
 		return;
 	}
+}
 
+
+
+void PrimitiveManager::focusRepresentation(const Representation& rep)
+{
+	List<Vector3> positions;
+
+	Vector3 center;
+	List<GeometricObject*>::ConstIterator it = rep.getGeometricObjects().begin();
+	for (; it != rep.getGeometricObjects().end(); it++)
+	{
+		const GeometricObject& go = **it;
+
+		// cant use Vertex or Vertex2 here, no idea why
+		if (RTTI::isKindOf<Vertex2>(go))
+		{
+			const Vertex2& v = *dynamic_cast<const Vertex2*>(&go);
+			positions.push_back(v.getVertex1());
+			positions.push_back(v.getVertex2());
+		}
+		else if (RTTI::isKindOf<Vertex>(go))
+		{
+			const Vertex& v = *dynamic_cast<const Vertex*>(&go);
+			positions.push_back(v.getVertex());
+		}
+		else if (RTTI::isKindOf<SimpleBox3>(go))
+		{
+			const SimpleBox3& b = reinterpret_cast<const SimpleBox3&>(go);
+			positions.push_back(b.a);
+			positions.push_back(b.b);
+		}
+		else if (RTTI::isKindOf<Sphere>(go))
+		{
+			const Sphere& s = reinterpret_cast<const Sphere&>(go);
+			positions.push_back(s.getPosition());
+		}
+		else if (RTTI::isKindOf<Disc>(go))
+		{
+			const Disc& d = reinterpret_cast<const Disc&>(go);
+			positions.push_back(d.getCircle().p);
+		}
+		else if (RTTI::isKindOf<Mesh>(go))
+		{
+			const Mesh& mesh = reinterpret_cast<const Mesh&>(go);
+
+			for (Size index = 0; index < mesh.vertex.size(); ++index)
+			{
+				positions.push_back(mesh.vertex[index]);
+			}
+			continue;
+		}
+		else if (RTTI::isKindOf<BALL::VIEW::Box>(go))
+		{
+			const BALL::VIEW::Box& box = reinterpret_cast<const BALL::VIEW::Box&>(go);
+			positions.push_back(box.getPoint());
+			positions.push_back(box.getPoint() + box.getHeightVector());
+			positions.push_back(box.getPoint() + box.getRightVector());
+			positions.push_back(box.getPoint() + box.getDiagonalVector());
+		}
+		else
+		{
+			Log.error() << "Unknown geometric object: " << typeid(go).name() 
+									<< "in " << __FILE__ << __LINE__ << std::endl;
+			continue;
+		}
+	}
+
+	VIEW::focusCamera(positions);
 }
 
 } } // namespaces

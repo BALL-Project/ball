@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.86.2.1 2005/05/09 15:36:57 amoll Exp $
+// $Id: molecularStructure.C,v 1.86.2.2 2005/06/06 13:46:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -415,70 +415,25 @@ namespace BALL
 				to_center_on = *getMainControl()->getMolecularControlSelection().begin();
 			}
 
-			// use processor for calculating the center
-			GeometricCenterProcessor center;
-			to_center_on->apply((UnaryProcessor<Atom>&) center);			
-			Vector3 view_point = center.getCenter();
+			List<Vector3> positions;
 
-			Vector3 max_distance_point;
-			float max_square_distance = -1;
 			AtomContainer* ai = dynamic_cast<AtomContainer*>(to_center_on);
 			if (ai != 0)
 			{
 				AtomIterator ait = ai->beginAtom();
 				for (; ait != ai->endAtom(); ait++)
 				{
-					float sd = ((*ait).getPosition() - view_point).getSquareLength();
-					if (sd > max_square_distance)
-					{
-						max_square_distance = sd;
-						max_distance_point = (*ait).getPosition();
-					}
+					positions.push_back((*ait).getPosition());
 				}
 			}
 			else
 			{
-				Atom* atom = dynamic_cast<Atom*>(to_center_on);
+				const Atom* atom = dynamic_cast<const Atom*>(to_center_on);
 				if (atom == 0) return;
-				max_distance_point = atom->getPosition() - Vector3(1,1,1);
+				positions.push_back(atom->getPosition());
 			}
 
- 			Vector3 max_distance_vector(max_distance_point - view_point);
-
-			Vector3 up_vector = Vector3(1,0,0);
-			Vector3 view_vector = up_vector % max_distance_vector;
-			if (Maths::isZero(view_vector.getSquareLength())) 
-			{
-				up_vector = Vector3(0,1,0);
-				view_vector = up_vector % max_distance_vector;
-			}
-
-			if (Maths::isZero(view_vector.getSquareLength()))
-			{
-				up_vector = Vector3(0,0,1);
-				view_vector = up_vector % max_distance_vector;
-			}
-
-			if (Maths::isZero(view_vector.getSquareLength()))
-			{
-				view_vector = Vector3(1,0,0);
-			}
-
-			if (!Maths::isZero(view_vector.getSquareLength())) view_vector.normalize();
-
-			float distance = max_distance_vector.getLength() / tan(Angle(31, false).toRadian());
-			if (distance < 4) 	distance = 4;
-			if (distance > 100) distance = 100;
-
-			view_vector *= distance;
-
-
-			// update scene
-			SceneMessage *scene_message = new SceneMessage(SceneMessage::UPDATE_CAMERA);
-			scene_message->getStage().getCamera().setLookAtPosition(view_point);
-			scene_message->getStage().getCamera().setViewPoint(view_point - view_vector);
-			scene_message->getStage().getCamera().setLookUpVector(up_vector);
-			notify_(scene_message);
+			VIEW::focusCamera(positions);
 		}
 
 

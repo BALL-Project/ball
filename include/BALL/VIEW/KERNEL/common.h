@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.36.2.3 2005/06/05 22:01:07 amoll Exp $
+// $Id: common.h,v 1.36.2.4 2005/06/06 13:46:14 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -18,6 +18,11 @@
 #ifndef BALL_CONCEPT_COMPOSITE_H
  #include <BALL/CONCEPT/composite.h>
 #endif
+
+#ifndef BALL_DATATYPE_LIST_H
+ #include <BALL/DATATYPE/list.h>
+#endif
+
 
 #include <qevent.h>
 #include <qcolordialog.h>
@@ -402,6 +407,11 @@ namespace BALL
 		QColor chooseColor(QLabel* label);
 
 		void processDropEvent(QDropEvent* e);
+
+		/** focus the camera on a list of points, e.g. atoms or geometric objects.
+				Sends a SceneMessage.
+		*/
+		void focusCamera(const List<Vector3>& points);
 
 		//@}
 
