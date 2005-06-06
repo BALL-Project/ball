@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: templates.C,v 1.16 2005/01/18 21:31:24 amoll Exp $
+// $Id: templates.C,v 1.16.4.1 2005/06/06 16:33:10 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
@@ -222,29 +222,29 @@ namespace BALL
 			{
 				// retrieve the atom's full name
 				String name(it->getFullName());
-				if (charges_.has(name))
+				if (type_names_.has(name))
 				{	
-					// assign the charge
-					it->setCharge(charges_[name]);
+					// assign the type name
+					it->setTypeName(type_names_[name]);
 				} 
 				else 
 				{
 					// try the residue name without variant extension
 					name = it->getFullName(Atom::NO_VARIANT_EXTENSIONS);
-					if (charges_.has(name))
+					if (type_names_.has(name))
 					{	
-						// assign the charge
-						it->setCharge(charges_[name]);
+						// assign the type name
+						it->setTypeName(type_names_[name]);
 					} 
 					else 
 					{
 						// try a final wildcard match
 						name = "*:" + it->getName();
 						name.trim();
-						if (charges_.has(name))
+						if (type_names_.has(name))
 						{
-							// assign the charge
-							it->setCharge(charges_[name]);
+							// assign the type name
+							it->setTypeName(type_names_[name]);
 						} 
 						else 
 						{
