@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.10 2005/05/27 10:51:20 amoll Exp $
+// $Id: representation.C,v 1.62.4.11 2005/06/06 11:30:02 amoll Exp $
 //
 
 
@@ -373,7 +373,7 @@ namespace BALL
 				if (apply_color_processor)
 				{
 					// make sure, that the atom grid is recomputed for meshes
-					if (rebuild_) color_processor_->setComposites(&composites_);
+					if (rebuild_) color_processor_->setComposites(&getCompositeList());
 					color_processor_->setTransparency(transparency_);
 					color_processor_->setModelType(model_type_);
 					getGeometricObjects().apply(*color_processor_);
@@ -500,7 +500,7 @@ namespace BALL
 			
 			if (color_processor_ != 0)
 			{
-				color_processor_->setComposites(&composites_);
+				color_processor_->setComposites(&getCompositeList());
 				color_processor_->setTransparency(transparency_);
 			}
 

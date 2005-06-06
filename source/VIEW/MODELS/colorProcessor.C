@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.34.4.3 2005/05/04 14:27:28 amoll Exp $
+// $Id: colorProcessor.C,v 1.34.4.4 2005/06/06 11:30:02 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -204,7 +204,7 @@ namespace BALL
 
 			if (from_mesh == 0)
 			{
-				CompositeSet::ConstIterator it = composites_->begin();
+				List<const Composite*>::const_iterator it = composites_->begin();
 				for(; it != composites_->end(); it++)
 				{
 					if (RTTI::isKindOf<AtomContainer>(**it))
@@ -316,7 +316,7 @@ namespace BALL
 			}
 		}
 
-		void ColorProcessor::setComposites(const CompositeSet* composites)
+		void ColorProcessor::setComposites(const List<const Composite*>* composites)
 			throw() 
 		{ 
 			composites_ = composites;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.28.4.2 2005/05/02 12:46:18 amoll Exp $
+// $Id: colorProcessor.h,v 1.28.4.3 2005/06/06 11:30:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -166,11 +166,11 @@ class BALL_EXPORT ColorProcessor
 	/** Set the pointer to the CompositeSet.
 			This method is called by Representation::setColorProcessor and Representation::update.
 	*/
-	void setComposites(const CompositeSet* composites)
+	void setComposites(const List<const Composite*>* composites)
 		throw();
 
-	/// Return a pointer to the CompositeSet.
-	const CompositeSet* getComposites()
+	/// Return a pointer to the Composites.
+	const List<const Composite*>* getComposites()
 		throw() { return composites_;}
 
 	///
@@ -232,7 +232,7 @@ class BALL_EXPORT ColorProcessor
 	ColorRGBA		selection_color_;
 	Size 				transparency_;
 
-	const 			CompositeSet* composites_;
+	const 			List<const Composite*>* composites_;
 
 	AtomGrid 		atom_grid_;
 	ModelType   model_type_;

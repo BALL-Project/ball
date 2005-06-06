@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.7 2005/06/05 22:12:54 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.8 2005/06/06 11:30:01 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -295,7 +295,6 @@ void PrimitiveManager::update_(Representation& rep)
 {
 	if (!has(rep)) 
 	{
-		BALLVIEW_DEBUG
 		return;
 	}
 #ifdef BALL_QT_HAS_THREADS

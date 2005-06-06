@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.14 2005/06/05 21:13:28 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.15 2005/06/06 11:30:01 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -660,7 +660,6 @@ void ModifySurfaceDialog::split_()
 	new_rep->setModelType(rep_->getModelType());
 	new_rep->setColoringMethod(rep_->getColoringMethod());
 	new_rep->enableModelUpdate(false);
-	getMainControl()->insert(*new_rep);
 
 	// make sure we have a colorProcessor
 	if (rep_->getColorProcessor() != 0)
@@ -694,7 +693,14 @@ void ModifySurfaceDialog::split_()
 	ColorProcessor cp;
 	if (split_by_selection->isChecked())
 	{
-		cp.setComposites(&roots);
+		HashSet<const Composite*>::Iterator it = roots.begin();
+		List<const Composite*> roots_list;
+		for (; +it; ++it)
+		{
+			roots_list.push_back(*it);
+		}
+
+		cp.setComposites(&roots_list);
 		cp.createAtomGrid();
 	}
 
@@ -837,6 +843,7 @@ void ModifySurfaceDialog::split_()
 		return;
 	}
 
+	getMainControl()->insert(*new_rep);
 	getMainControl()->update(*rep_);
 }
 

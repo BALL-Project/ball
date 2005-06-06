@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.52.2.2 2005/05/25 13:58:14 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.52.2.3 2005/06/06 11:30:02 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -328,7 +328,7 @@ namespace BALL
 			base_colors[2] = last_color_;
 			table_.setBaseColors(base_colors, 3);
 
-			CompositeSet::ConstIterator it = composites_->begin();
+			List<const Composite*>::const_iterator it = composites_->begin();
 			ResidueIterator res_it;
 			for(; it != composites_->end(); it++)
 			{
@@ -348,14 +348,33 @@ namespace BALL
 				{
 					res_it = ((SecondaryStructure*)*it)->beginResidue();
 				}
+				else if (RTTI::isKindOf<Atom>(**it))
+				{
+					const Residue* residue = dynamic_cast<const Residue*>((**it).getParent());
+					if (residue == 0) continue;
+
+					residue_map_[residue] = residue_map_.size();
+					continue;
+				}
+				else
+				{
+					const Residue* residue = dynamic_cast<const Residue*>((*it));
+					if (residue == 0) continue;
+
+					residue_map_[residue] = residue_map_.size();
+					continue;
+				}
+
 
 				for (; +res_it; ++res_it)
 				{
 					if ((*res_it).getName() == "HOH") continue;
 
-					residue_map_[&*res_it] = residue_map_.size() - 1;
+					residue_map_[&*res_it] = residue_map_.size();
 				}
 			}
+
+			if (residue_map_.size() == 0) return true;
 
 			table_.setRange(0, residue_map_.size() - 1);
 			table_.createTable();
@@ -664,7 +683,7 @@ namespace BALL
 				{ 
 					createAtomGrid();
 				}
-				CompositeSet::ConstIterator it = composites_->begin();
+				List<const Composite*>::const_iterator it = composites_->begin();
 				for(; it != composites_->end(); it++)
 				{
 					if (RTTI::isKindOf<AtomContainer>(**it))
