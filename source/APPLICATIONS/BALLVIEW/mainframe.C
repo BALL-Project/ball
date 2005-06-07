@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.1 2005/06/03 21:32:18 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.2 2005/06/07 14:18:56 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -244,6 +244,12 @@ namespace BALL
 			return;
 		}
 #endif
+
+		if (file.hasSuffix(".dcd"))
+		{
+			DatasetControl::getInstance(0)->addTrajectory(file);
+			return;
+		}
 
 		file_dialog_->openFile(file);
 	}
