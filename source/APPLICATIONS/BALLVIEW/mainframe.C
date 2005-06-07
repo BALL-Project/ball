@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.2 2005/06/07 14:18:56 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.3 2005/06/07 14:31:39 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -229,6 +229,8 @@ namespace BALL
 	void Mainframe::openFile(const String& file)
 		throw()
 	{
+		if (composites_locked_) return;
+
 		setStatusbarText(String("Opening file ") + file + "...");
 
 		if (file.hasSuffix(".bvp"))

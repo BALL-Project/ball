@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.11 2004/11/27 20:48:45 amoll Exp $
+// $Id: datasetControl.h,v 1.11.6.1 2005/06/07 14:31:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -108,7 +108,10 @@ namespace BALL
 			///
 			virtual void checkMenu(MainControl& main_control)
 				throw();
-			
+
+			/// insert a trajectory for the currently selected System
+			void addTrajectory(const String& filename);
+		
 			//@}
 			/** @name Public slots 
 			*/ 

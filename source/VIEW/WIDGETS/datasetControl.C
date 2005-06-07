@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.37.2.1 2005/04/15 13:30:29 amoll Exp $
+// $Id: datasetControl.C,v 1.37.2.2 2005/06/07 14:30:39 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -119,18 +119,25 @@ void DatasetControl::addTrajectory()
 	if (!getMainControl()->getSelectedSystem()) return;
 
 	QString file = QFileDialog::getOpenFileName(
-											"DCD files(*.dcd)",
 											getWorkingDir().c_str(),
+											"DCD files(*.dcd)",
 											this,
 											"Trajectory File Dialog",
 											"Select a DCD file" );
 
 	if (file == QString::null) return;
-	setWorkingDirFromFilename_(file.ascii());
+
+	addTrajectory(file.ascii());
+}
+
+void DatasetControl::addTrajectory(const String& filename)
+{
+	if (getMainControl()->getSelectedSystem() == 0) return;
 
 	// construct a name for the system(the filename without the dir path)
-	DCDFile* dcd = new DCDFile(file.ascii(), std::ios::in);
+	DCDFile* dcd = new DCDFile(filename, std::ios::in);
 	insertTrajectory_(dcd, *getMainControl()->getSelectedSystem());
+	setWorkingDirFromFilename_(filename);
 }
 
 void DatasetControl::insertTrajectory_(TrajectoryFile* file, System& system)
