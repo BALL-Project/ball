@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.sip,v 1.2.4.1 2005/06/04 07:49:38 amoll Exp $
+// $Id: scene.sip,v 1.2.4.2 2005/06/07 10:36:51 amoll Exp $
 //
 
 class Scene 
@@ -27,6 +27,7 @@ static Scene* getInstance(Position /index/);
   bool isValid() const throw();
 //  const Scene& operator =  (const Scene&) throw();
   const Stage* getStage() const throw();
+	void setCamera(const Camera&) throw();
   static float getMouseSensitivity() throw();
   static void setMouseSensitivity(float) throw();
 //  void applyPreferences(Preferences&) throw();
