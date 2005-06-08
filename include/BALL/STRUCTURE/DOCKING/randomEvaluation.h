@@ -1,8 +1,9 @@
-#ifndef ENERGETICEVALUATION_H
-#define ENERGETICEVALUATION_H
+#ifndef RANDOMEVALUATION_H
+#define RANDOMEVALUATION_H
 
 #include <BALL/STRUCTURE/DOCKING/conformationSet.h>
 #include <BALL/DATATYPE/hashMap.h>
+#include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
 
 #include <vector>
 
@@ -12,7 +13,7 @@ namespace BALL
 		 *	This trivial class will return the identity scoring, leaving
 		 *	permutation and score unchanged.
 		 */
-		class RandomEvaluation
+		class RandomEvaluation : public EnergeticEvaluation
 		{
 			public:
 
@@ -24,7 +25,7 @@ namespace BALL
 				
 				/** Operations
 				*/
-				std::vector<ConformationSet::Conformation> operator () (const ConformationSet& conformations)
+				std::vector<ConformationSet::Conformation> operator () (ConformationSet& conformations)
 					throw();
 		};
 }
