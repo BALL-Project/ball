@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT1D.h,v 1.15 2005/02/02 10:49:41 anhi Exp $
+// $Id: FFT1D.h,v 1.15.2.1 2005/06/08 17:01:15 oliver Exp $
 //
 
 #ifndef BALL_MATHS_TFFT1D_H
@@ -41,6 +41,7 @@ namespace BALL
 		public:
 
 		typedef std::complex<typename ComplexTraits::ComplexPrecision> Complex;
+		typedef TRegularData1D<std::complex<typename ComplexTraits::ComplexPrecision> >	ComplexVector;
 
 		BALL_CREATE(TFFT1D)
 
@@ -451,7 +452,7 @@ namespace BALL
 	{
 		if (!inFourierSpace_)
 		{
-			if (position >= size())
+			if (position >= ComplexVector::size())
 			{
 				throw Exception::OutOfGrid(__FILE__, __LINE__);
 			}
@@ -464,7 +465,7 @@ namespace BALL
 		}
 		else
 		{
-			if (position >= size())
+			if (position >= ComplexVector::size())
 			{
 				throw Exception::OutOfGrid(__FILE__, __LINE__);
 			}
