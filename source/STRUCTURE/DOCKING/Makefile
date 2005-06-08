@@ -10,6 +10,7 @@ CPP_SOURCES= \
 	energeticEvaluation.C\
 	forceFieldEvaluation.C\
 	amberEvaluation.C\
+	randomEvaluation.C\
 	$(FFT_DEPENDENT_SOURCES)
 # randomEvaluation.C
 

@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1.2.8.2.10 2005/05/27 14:41:41 haid Exp $
+# $Id: Makefile,v 1.1.2.8.2.11 2005/06/08 17:59:58 oliver Exp $
 #
 
 EXECUTABLE=DOCKView
@@ -12,7 +12,7 @@ all:	$(EXECUTABLE)
 clean:	default_clean
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES) 
 
@@ -62,7 +62,7 @@ UIC_FILES=\
 	dockResultDialogData.C
 
 DOCKView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS) 
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS) $(FFTW_LIBS)
 
 depend: $(UIC_FILES) $(MOC_SOURCES)
 

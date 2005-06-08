@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.5 2005/06/06 12:12:06 haid Exp $
+// $Id: dockingController.C,v 1.1.2.6 2005/06/08 17:59:58 oliver Exp $
 //
 
 #include "dockingController.h"
@@ -253,7 +253,7 @@ namespace BALL
 				}
 				case RANDOM:
 					Log.error() << "in runScoring_::RANDOM" << std::endl;
-					scoring = new RandomEvaluation();
+					scoring = new RandomEvaluation;
 					break;
 			}
 		

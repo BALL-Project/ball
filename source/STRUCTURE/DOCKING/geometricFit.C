@@ -32,7 +32,9 @@
 
 using namespace std;
 
-typedef std::complex<double> Complex;
+// TODO???? Fix it! :)
+//typedef std::complex<double> Complex;
+typedef std::complex<float> Complex;
 
 namespace BALL
 {

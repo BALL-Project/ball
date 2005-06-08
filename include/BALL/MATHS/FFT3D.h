@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.h,v 1.12.2.1 2005/06/08 17:01:16 oliver Exp $
+// $Id: FFT3D.h,v 1.12.2.2 2005/06/08 17:59:50 oliver Exp $
 //
 
 #ifndef BALL_MATHS_TFFT3D_H
@@ -376,7 +376,8 @@ namespace BALL
 	
 	/**	Default type
 	*/
-	typedef TFFT3D<DoubleTraits> FFT3D;
+	typedef TFFT3D<FloatTraits> FFT3D;
+// TODO????
 	
 
 	/** Global assignment operator from TFFT3D to TRegularData3D<Complex>
