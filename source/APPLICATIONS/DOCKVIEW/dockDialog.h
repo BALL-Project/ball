@@ -134,7 +134,7 @@ namespace BALL
 				Options& getScoringOptions()
 					throw();
 				
-				/** 
+				/** Sets the flags 'is_redock_' and 'has_changed_'
 				 */
 				void setFlag(bool is_redock)
 					throw();
@@ -148,7 +148,7 @@ namespace BALL
 				void addAlgorithm(const QString& name, const int algorithm, QDialog* dialog)
 					throw();
 					
-				/** Adds scoring function to Combobox and its advanced option dialogs to HashMap, if it has such an dialog.
+				/** Adds scoring function to Combobox and its advanced option dialogs to HashMap, if it has such a dialog.
 				 *	@param      name the name of the scoring function
 				 *	@param      score_func the value of enum ScoringFunction
 				 *	@param      dialog pointer to an advanced option dialog
@@ -201,13 +201,13 @@ namespace BALL
 				 */
 				void show();
 				
-				/** Indicates the ok button was pressed.
+				/** Indicates the OK button was pressed.
 				 * 	Checks if two different systems are chosen. Hides the dialog and calls \link DockDialog::calculate calculate \endlink .
 				 */
 				virtual void okPressed();
 				
 				/** Indicates the cancel button was pressed.
-				 *	Hides dialog.
+				 *	Hides the dialog.
 				 */
 				virtual void cancelPressed();
 				
@@ -318,11 +318,13 @@ namespace BALL
 				HashMap<int, QDialog*> scoring_dialogs_;
 			
 				/** key: Algorithm(enum)
-					* value: vector of scoring functions which can be used with this algorithm
-				 	*/
+				 *  value: vector of scoring functions which can be used with this algorithm
+				 */
 				HashMap<int, vector<int> > allowed_sf_;
-				/**
-					*/
+
+				/** key: 
+				 *  value: names of the scoring functions
+				 */
 				HashMap<int, QString> sf_names_;
 				
 				/** Pointer to the two docking partners

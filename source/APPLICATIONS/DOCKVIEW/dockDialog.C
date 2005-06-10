@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.33 2005/06/10 11:22:36 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.34 2005/06/10 18:45:24 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -202,7 +202,6 @@ namespace BALL
 			allowed_sf_[DockingController::GEOMETRIC_FIT] = sf;
 		}
 		  
-		
 		// Read the preferences from the INIFile.
 		void DockDialog::fetchPreferences(INIFile& file)
 			throw()
