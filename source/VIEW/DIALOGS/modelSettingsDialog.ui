@@ -1776,7 +1776,7 @@
                                 </widget>
                                 <widget class="QSlider">
                                     <property name="name">
-                                        <cstring>cartoon_arrow_height_slider_2</cstring>
+                                        <cstring>cartoon_arrow_height_slider</cstring>
                                     </property>
                                     <property name="minimumSize">
                                         <size>
@@ -1814,7 +1814,7 @@
                                 </widget>
                                 <widget class="QLabel">
                                     <property name="name">
-                                        <cstring>cartoon_arrow_height_label_2</cstring>
+                                        <cstring>cartoon_arrow_height_label</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
