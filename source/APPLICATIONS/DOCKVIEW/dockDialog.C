@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.32 2005/06/06 12:12:05 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.33 2005/06/10 11:22:36 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -68,6 +68,7 @@ namespace BALL
 			registerObject_(build_bonds);
 			registerObject_(add_hydrogens);
 			
+			//set flag
 			is_redock_ = false;
 			
 			hide(); 
@@ -134,6 +135,7 @@ namespace BALL
 			return scoring_opt_;
 		}
 		
+		// Sets the flags 'is_redock_' and 'has_changed_'
 		void DockDialog::setFlag(bool is_redock)
 			throw()
 		{
@@ -218,6 +220,8 @@ namespace BALL
 			scoringFuncChosen();
 		}
 		
+		// function to read the redocking values from INIFile into vector backup_
+		// if INIFile has not yet a section REDOCKING, fill backup_ vector with default values
 		void DockDialog::fetchPreferences_(INIFile& file, const String& entry, const QString& default_value)
 			throw()
 		{
@@ -264,7 +268,7 @@ namespace BALL
 				// buttons
 				scoring_advanced_button->setEnabled(false);
 				
-				//options
+				// options
 				best_num->setText("100");
 				verbosity->setText("1");
 			}
@@ -317,7 +321,7 @@ namespace BALL
 					AmberFF& ff = MolecularStructure::getInstance(0)->getAmberFF();
 					AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
 					
-					//now the Amber force field gets its options
+					// now the Amber force field gets its options
 					dialog->applyTo(ff);
 					scoring_opt_ = ff.options;
 				}
@@ -435,6 +439,7 @@ namespace BALL
 			return 0;
 		}
 		
+		//
 		void DockDialog::fillSystemComboxes_()
 			throw()
 		{

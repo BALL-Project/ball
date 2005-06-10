@@ -137,7 +137,7 @@ namespace BALL
 				/** 
 				 */
 				void setFlag(bool is_redock)
-					throw();	
+					throw();
 					
 					
 				/** Adds docking algorithm to Combobox and its advanced option dialogs to HashMap.
@@ -299,11 +299,14 @@ namespace BALL
 				
 			private:
 				
-				/** flag which indicates if we are docking or redocking
+				/** flag which indicates if we do docking or redocking
 					*/
 				bool is_redock_;
-				/**  
-				 */
+				
+				/** flag:
+					* true if we now do docking and did redocking before or otherwise
+					* false if we do (re)docking and also did (re)docking before
+					*/
 				bool has_changed_;
 			
 				/** key: Algorithm(enum), value: advanced options dialog
@@ -322,7 +325,7 @@ namespace BALL
 					*/
 				HashMap<int, QString> sf_names_;
 				
-				/** Pointer to docking partners
+				/** Pointer to the two docking partners
 				 */
 				System* docking_partner1_;
 				System* docking_partner2_;	
@@ -331,7 +334,10 @@ namespace BALL
 				 */
 				Options algorithm_opt_, scoring_opt_;
 		
-				/**  
+				/** Needed to guaranty that both, docking and redocking preferences can be written to INIFile
+					* When we do docking, redocking values are in the vector and when we do redocking, the docking values are in there.
+					* In fetchPreferences, we read the last redocking values from INIFile in this vector
+					* and in writePreferences, we write the redocking values in INIFile from this vector
 				 */
 				vector<QString> backup_;
 				

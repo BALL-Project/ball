@@ -22,7 +22,7 @@ namespace BALL
 				ModularWidget::registerWidget(this);
 			
 				// register QWidgets of Dialog with PreferenceEntry
-				// entries of them in the INIFile will be generated
+				// entries of them will be generated in the INIFile
 				setINIFileSectionName("GEOMETRIC_FIT_OPTIONS");
 				registerObject_(surface_thickness);
 				registerObject_(grid_spacing);
@@ -33,6 +33,7 @@ namespace BALL
 				registerObject_(peak_num);
 				registerObject_(surface_type);
 		
+				// set flag
 				is_redock_ = false;
 				
 				hide();
@@ -47,7 +48,9 @@ namespace BALL
 			#endif 
 		}
 		
-		// Read the preferences from a INIFile
+		// Read the preferences from an INIFile
+		// for reading docking preferences call PreferencesEntry::readPreferenceEntries
+		// for reading redocking options call fetchPreferences_
 		void GeometricFitDialog::fetchPreferences(INIFile& file)
 					throw()
 		{
@@ -63,7 +66,8 @@ namespace BALL
 			fetchPreferences_(file, "option_entry_7", "Connolly");
 		}
 		
-		//
+		// function to read the redocking options from INIFile into vector backup_
+		// if INIFile has not yet a section GEOMETRIC_FIT_OPTIONS_REDOCK, fill backup_ vector with default values
 		void GeometricFitDialog::fetchPreferences_(INIFile& file, const String& entry, const QString& default_value)
 			throw()
 		{
@@ -77,7 +81,10 @@ namespace BALL
 			}
 		}
 		
-		// Write the preferences to a INIFile
+		// Write the preferences to an INIFile
+		// If redocking was last action, first swap the option values between backup_ vector and dialog
+		// Calls  PreferencesEntry::writePreferenceEntries for docking preferences
+		// for redocking options: append section and insert the values of backup_ vector as entries
 		void GeometricFitDialog::writePreferences(INIFile& file)
 			throw()
 		{
@@ -129,7 +136,7 @@ namespace BALL
 			}
 		}
 		
-		//
+		// Sets the flags 'is_redock_' and 'has_changed_'
 		void GeometricFitDialog::setFlag(bool is_redock)
 			throw()
 		{
@@ -144,6 +151,9 @@ namespace BALL
 			}
 		}
 		
+		// Swaps the option values between vector backup_ and dialog
+		// Is called in show() if has_changed_ is true
+		// and in writePreferences if is_redock_ is true
 		void GeometricFitDialog::swapValues_()
 			throw()
 		{
@@ -183,13 +193,14 @@ namespace BALL
 	// --------------------------------- SLOTS ------------------------------------------------
 	// ----------------------------------------------------------------------------------------
 	
+		// Shows dialog to user.
+		// Calls swapValues_ if we are now doing docking and did redocking before or otherwise
 		void GeometricFitDialog::show()
 		{
 			if(has_changed_)
 			{
-		 		swapValues_();
+				swapValues_();
 			}
-			//show dialog to user
 			GeometricFitDialogData::show();
 		}
 	

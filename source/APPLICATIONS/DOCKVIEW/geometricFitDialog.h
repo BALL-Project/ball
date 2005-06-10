@@ -69,8 +69,9 @@ namespace BALL
 				//@{
 				
 				/** Fetchs the preferences from the INIFile.
-				 *	@see    writePreferences
-				 */
+					* Calls fetchPreferences_. to read the redocking options 
+				 	*	@see    writePreferences
+				 	*/
 				void fetchPreferences(INIFile& file)
 					throw();
 				
@@ -94,7 +95,7 @@ namespace BALL
 				void getOptions(Options& options)
 					throw();
 
-				/** 
+				/** Sets the flags 'is_redock_' and 'has_changed_'
 					*
 					*/
 				void setFlag(bool is_redock)
@@ -120,22 +121,32 @@ namespace BALL
 			
 			protected:
 			
-				/**
+				/** function to read the redocking options from INIFile into vector backup_
+					* if INIFile has not yet section GEOMETRIC_FIT_OPTIONS_REDOCK, fill backup_ vector with default values
 					*/
 				void fetchPreferences_(INIFile& file, const String& entry, const QString& default_value) throw();
 				
-				/**
+				/** 
 					*/
 				void swapValues_() throw();
 			
 				
 			private:
 			
-				///
+				/** flag:
+					* true if we now do docking and did redocking before or otherwise
+					* false if we do (re)docking and also did (re)docking before
+					*/
 				bool has_changed_;
-				/// flag which indicates if we are docking or redocking
+				
+				/// flag which indicates if we do docking or redocking
 				bool is_redock_;
-				///
+				
+				/** Needed to guaranty that both, docking and redocking preferences can be written to INIFile
+					* When we do docking, redocking options are in the vector and when we do redocking, the docking options are in there.
+					* In fetchPreferences, we read the last redocking options from INIFile in this vector 
+					* and in writePreferences, we write the redocking options in INIFile from this vector
+					*/
 				vector<QString> backup_;
 		};
 		
