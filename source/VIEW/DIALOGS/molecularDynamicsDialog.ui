@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>MolecularDynamicsDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -38,343 +38,6 @@
     <property name="toolTip" stdset="0">
         <string></string>
     </property>
-    <widget class="QButtonGroup">
-        <property name="name">
-            <cstring>dielectric_group_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>251</x>
-                <y>169</y>
-                <width>174</width>
-                <height>100</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Ensemble</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>canonical_button</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>11</x>
-                    <y>21</y>
-                    <width>120</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>120</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>canonical</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>microcanonical_button</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>11</x>
-                    <y>58</y>
-                    <width>157</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>120</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>microcanonical</string>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>GroupBox2_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>8</x>
-                <y>169</y>
-                <width>237</width>
-                <height>100</height>
-            </rect>
-        </property>
-        <property name="frameShadow">
-            <enum>Sunken</enum>
-        </property>
-        <property name="title">
-            <string>Trajectories</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>dcd_file_edit</cstring>
-            </property>
-            <property name="enabled">
-                <bool>false</bool>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>24</x>
-                    <y>39</y>
-                    <width>192</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>150</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>200</width>
-                    <height>32767</height>
-                </size>
-            </property>
-            <property name="backgroundMode">
-                <enum>PaletteBase</enum>
-            </property>
-            <property name="focusPolicy">
-                <enum>StrongFocus</enum>
-            </property>
-            <property name="text">
-                <string>trajectories.dcd</string>
-            </property>
-            <property name="maxLength">
-                <number>32767</number>
-            </property>
-            <property name="frame">
-                <bool>true</bool>
-            </property>
-            <property name="echoMode">
-                <enum>Normal</enum>
-            </property>
-            <property name="alignment">
-                <set>AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>export_images</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>9</x>
-                    <y>70</y>
-                    <width>196</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>export PNG images</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>enable_dcd</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>8</x>
-                    <y>19</y>
-                    <width>209</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>store to DCDFile</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Write trajectories to file in order to be able to watch snapshots</string>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>cancel_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>220</x>
-                <y>374</y>
-                <width>204</width>
-                <height>33</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="backgroundMode">
-            <enum>PaletteButton</enum>
-        </property>
-        <property name="focusPolicy">
-            <enum>TabFocus</enum>
-        </property>
-        <property name="text">
-            <string>Cancel</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-        <property name="autoDefault">
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>start_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>374</y>
-                <width>204</width>
-                <height>33</height>
-            </rect>
-        </property>
-        <property name="backgroundMode">
-            <enum>PaletteButton</enum>
-        </property>
-        <property name="focusPolicy">
-            <enum>TabFocus</enum>
-        </property>
-        <property name="text">
-            <string>&amp;Start</string>
-        </property>
-        <property name="accel">
-            <string>Alt+S</string>
-        </property>
-        <property name="autoDefault">
-            <bool>true</bool>
-        </property>
-        <property name="default">
-            <bool>true</bool>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Start simulation</string>
-        </property>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>groupBox5</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>9</x>
-                <y>269</y>
-                <width>416</width>
-                <height>99</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Force Field Options</string>
-        </property>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>useCharmmRadioButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>183</x>
-                    <y>31</y>
-                    <width>166</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Use CharmmFF</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>useAmberRadioButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>11</x>
-                    <y>31</y>
-                    <width>166</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Use AmberFF</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>advanced_button</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>100</x>
-                    <y>60</y>
-                    <width>166</width>
-                    <height>32</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&amp;ForceField Options</string>
-            </property>
-            <property name="accel">
-                <string>Alt+F</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Alter force field options</string>
-            </property>
-        </widget>
-    </widget>
     <widget class="QGroupBox">
         <property name="name">
             <cstring>GroupBox_3</cstring>
@@ -740,6 +403,333 @@
             </property>
         </widget>
     </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>dielectric_group_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>180</y>
+                <width>210</width>
+                <height>120</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Ensemble</string>
+        </property>
+        <property name="alignment">
+            <set>AlignHCenter</set>
+        </property>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>microcanonical_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>53</y>
+                    <width>120</width>
+                    <height>17</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>120</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>microcanonical</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>canonical_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>21</y>
+                    <width>120</width>
+                    <height>17</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>120</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>canonical</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>GroupBox2_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>300</y>
+                <width>410</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="frameShadow">
+            <enum>Sunken</enum>
+        </property>
+        <property name="title">
+            <string>Trajectory</string>
+        </property>
+        <property name="alignment">
+            <set>AlignHCenter</set>
+        </property>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>enable_dcd</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>25</y>
+                    <width>91</width>
+                    <height>17</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>save trajectory</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Write trajectories to file in order to be able to watch snapshots</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>dcd_file_edit</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>198</x>
+                    <y>21</y>
+                    <width>200</width>
+                    <height>25</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>150</width>
+                    <height>25</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>200</width>
+                    <height>32767</height>
+                </size>
+            </property>
+            <property name="backgroundMode">
+                <enum>PaletteBase</enum>
+            </property>
+            <property name="focusPolicy">
+                <enum>StrongFocus</enum>
+            </property>
+            <property name="text">
+                <string>trajectory.dcd</string>
+            </property>
+            <property name="maxLength">
+                <number>32767</number>
+            </property>
+            <property name="frame">
+                <bool>true</bool>
+            </property>
+            <property name="echoMode">
+                <enum>Normal</enum>
+            </property>
+            <property name="alignment">
+                <set>AlignRight</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>start_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>374</y>
+                <width>204</width>
+                <height>33</height>
+            </rect>
+        </property>
+        <property name="backgroundMode">
+            <enum>PaletteButton</enum>
+        </property>
+        <property name="focusPolicy">
+            <enum>TabFocus</enum>
+        </property>
+        <property name="text">
+            <string>&amp;Simulate</string>
+        </property>
+        <property name="accel">
+            <string>Alt+S</string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Start simulation</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cancel_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>220</x>
+                <y>374</y>
+                <width>204</width>
+                <height>33</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="backgroundMode">
+            <enum>PaletteButton</enum>
+        </property>
+        <property name="focusPolicy">
+            <enum>TabFocus</enum>
+        </property>
+        <property name="text">
+            <string>C&amp;ancel</string>
+        </property>
+        <property name="accel">
+            <string>Alt+A</string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>groupBox5</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>230</x>
+                <y>180</y>
+                <width>190</width>
+                <height>120</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Force Field Options</string>
+        </property>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>useAmberRadioButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>22</y>
+                    <width>100</width>
+                    <height>17</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>AMBER</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>useCharmmRadioButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>54</y>
+                    <width>100</width>
+                    <height>17</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>CHARMM</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>advanced_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>86</y>
+                    <width>170</width>
+                    <height>25</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&amp;ForceField Options</string>
+            </property>
+            <property name="accel">
+                <string>Alt+F</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Alter force field options</string>
+            </property>
+        </widget>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -798,7 +788,6 @@
     <tabstop>refresh_lineedit</tabstop>
     <tabstop>canonical_button</tabstop>
     <tabstop>enable_dcd</tabstop>
-    <tabstop>export_images</tabstop>
     <tabstop>dcd_file_edit</tabstop>
     <tabstop>start_button</tabstop>
     <tabstop>cancel_button</tabstop>

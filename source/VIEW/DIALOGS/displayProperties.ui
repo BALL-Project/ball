@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>DisplayPropertiesData</class>
 <widget class="QDialog">
     <property name="name">
@@ -2435,49 +2435,6 @@
                 </property>
             </widget>
         </widget>
-        <widget class="QComboBox">
-            <property name="name">
-                <cstring>coloring_method_combobox</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>8</x>
-                    <y>33</y>
-                    <width>267</width>
-                    <height>24</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>160</width>
-                    <height>24</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>1600</width>
-                    <height>24</height>
-                </size>
-            </property>
-            <property name="backgroundMode">
-                <enum>NoBackground</enum>
-            </property>
-            <property name="focusPolicy">
-                <enum>StrongFocus</enum>
-            </property>
-            <property name="sizeLimit">
-                <number>10</number>
-            </property>
-            <property name="maxCount">
-                <number>2147483647</number>
-            </property>
-            <property name="insertionPolicy">
-                <enum>AtBottom</enum>
-            </property>
-            <property name="duplicatesEnabled">
-                <bool>true</bool>
-            </property>
-        </widget>
         <widget class="QSlider">
             <property name="name">
                 <cstring>transparency_slider</cstring>
@@ -2554,6 +2511,49 @@
             </property>
             <property name="text">
                 <string>automatic update</string>
+            </property>
+        </widget>
+        <widget class="QComboBox">
+            <property name="name">
+                <cstring>coloring_method_combobox</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>33</y>
+                    <width>267</width>
+                    <height>24</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>160</width>
+                    <height>24</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>1600</width>
+                    <height>24</height>
+                </size>
+            </property>
+            <property name="backgroundMode">
+                <enum>NoBackground</enum>
+            </property>
+            <property name="focusPolicy">
+                <enum>StrongFocus</enum>
+            </property>
+            <property name="sizeLimit">
+                <number>15</number>
+            </property>
+            <property name="maxCount">
+                <number>2147483647</number>
+            </property>
+            <property name="insertionPolicy">
+                <enum>AtBottom</enum>
+            </property>
+            <property name="duplicatesEnabled">
+                <bool>true</bool>
             </property>
         </widget>
     </widget>

@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.2.1 2005/05/01 14:11:22 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.2 2005/06/10 17:55:19 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -241,10 +241,10 @@ AC_DEFUN(CF_FIND_LIB,[
 		if test "${_LIBS}" = "" -a "$3" != ""; then
 			for i in $3 /dev/null; do
 				if test "${_LIBS}" = "" ; then
-					_TMP=`${FIND} $i -name "$2*" -print 2>/dev/null`
+					_TMP=`${FIND} $i -name "$2.*" -print 2>/dev/null`
 					for j in ${_TMP} ; do
 						if test "${_LIBS}" = "" ; then
-							_LIBS=`echo $j|${SED} "s/\/$2.*/\//"`
+							_LIBS=`echo $j|${SED} "s/\/$2\\.*/\//"`
 						fi
 					done
 				fi
@@ -252,19 +252,19 @@ AC_DEFUN(CF_FIND_LIB,[
 		fi
 		
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /opt -name "$2*" -print 2>/dev/null`
+			_TMP=`${FIND} /opt -name "$2.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/$2.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/$2\\.*/\//"`
 				fi
 			done
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /usr -name "$2*" -print 2>/dev/null`
+			_TMP=`${FIND} /usr -name "$2.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/$2.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/$2\\.*/\//"`
 				fi
 			done
 		fi
@@ -2493,7 +2493,6 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 				FFTW_DISABLE_FFTW_FLOAT=true
 			else
 				AC_MSG_RESULT((${FFTW_LIB_F}))
-				LIBS="${LIBS} ${FFTW_LIB_F}/libfftw3f.a"
 				FFTW_DISABLE_FFTW_FLOAT=false
 			fi
 		fi
@@ -2509,14 +2508,13 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 				FFTW_DISABLE_FFTW_DOUBLE=true
 			else
 				AC_MSG_RESULT((${FFTW_LIB_D}))
-				LIBS="${LIBS} ${FFTW_LIB_D}/libfftw3.a"
 				FFTW_DISABLE_FFTW_DOUBLE=false
 			fi
 		fi
 
 		if test "${FFTW_DISABLE_FFTW_LONGDBL}" = false ; then
 			AC_MSG_CHECKING(for FFTW library with long double support)
-			CF_FIND_LIB(FFTW_LIB_L,libfftwl, ${FFTW_LIBPATH})
+			CF_FIND_LIB(FFTW_LIB_L,libfftw3l, ${FFTW_LIBPATH})
 
 			if test "${FFTW_LIB_L}" = "" ; then
 				AC_MSG_RESULT((not found!))
@@ -2525,7 +2523,6 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 				FFTW_DISABLE_FFTW_LONGDBL=true
 			else
 				AC_MSG_RESULT((${FFTW_LIB_L}))
-				LIBS="${LIBS} ${FFTW_LIB_L}/libfftw3l.a"
 				FFTW_DISABLE_FFTW_LONGDBL=false
 			fi
 		fi
@@ -2550,21 +2547,21 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 
 		PROJECT[]_HAS_FFTW_FLOAT=""
 		if test "${FFTW_DISABLE_FFTW_FLOAT}" = "false" ; then
-			AC_MSG_CHECKING(linking against libfftwf)
+			AC_MSG_CHECKING(linking against libfftw3f)
 			SAVE_LIBS=${LIBS}
 			SAVE_LDFLAGS=${LDFLAGS}
-			LIBS="${FFTW_LIB_F}/libfftwf3.a ${LIBS}"
-			LDFLAGS=
+			LIBS="${FFTW_LIB_F}/libfftw3f.a ${LIBS}"
+			LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
 			FFTW_LINKING_OK=0
 			AC_TRY_LINK([
 										#include <fftw3.h>
 									],
 									[
-								     fftw_plan f = fftw_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
+								     fftwf_plan f = fftwf_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
 									], FFTW_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
 			LDFLAGS=${SAVE_LDFLAGS}
-			if test "${FFTW_LINKING_OK+set}" != "set" ; then
+			if test "${FFTW_LINKING_OK}" != "1" ; then
 				AC_MSG_RESULT(no)
 				AC_MSG_RESULT()
 				AC_MSG_RESULT([Cannot link against libfftw3f. Please check config.log and])
@@ -2578,11 +2575,11 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 	
 		PROJECT[]_HAS_FFTW_DOUBLE=""
 		if test "${FFTW_DISABLE_FFTW_DOUBLE}" = "false" ; then
-			AC_MSG_CHECKING(linking against libfftw)
+			AC_MSG_CHECKING(linking against libfftw3)
 			SAVE_LIBS=${LIBS}
 			SAVE_LDFLAGS=${LDFLAGS}
 			LIBS="${FFTW_LIB_D}/libfftw3.a ${LIBS}"
-			LDFLAGS=
+			LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
 			FFTW_LINKING_OK=0
 			AC_TRY_LINK([
 										#include <fftw3.h>
@@ -2592,7 +2589,7 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 									], FFTW_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
 			LDFLAGS=${SAVE_LDFLAGS}
-			if test "${FFTW_LINKING_OK+set}" != "set" ; then
+			if test "${FFTW_LINKING_OK}" != "1" ; then
 				AC_MSG_RESULT(no)
 				AC_MSG_RESULT()
 				AC_MSG_RESULT([Cannot link against libfftw3. Please check config.log and])
@@ -2606,21 +2603,21 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 
 		PROJECT[]_HAS_FFTW_LONG_DOUBLE=""
 		if test "${FFTW_DISABLE_FFTW_LONGDBL}" = "false" ; then
-			AC_MSG_CHECKING(linking against libfftwl)
+			AC_MSG_CHECKING(linking against libfftw3l)
 			SAVE_LIBS=${LIBS}
 			SAVE_LDFLAGS=${LDFLAGS}
 			LIBS="${FFTW_LIB_D}/libfftwl3.a ${LIBS}"
-			LDFLAGS=
+			LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
 			FFTW_LINKING_OK=0
 			AC_TRY_LINK([
 										#include <fftw3.h>
 									],
 									[
-								     fftw_plan f = fftw_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
+								     fftwl_plan f = fftwl_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
 									], FFTW_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
 			LDFLAGS=${SAVE_LDFLAGS}
-			if test "${FFTW_LINKING_OK+set}" != "set" ; then
+			if test "${FFTW_LINKING_OK}" != "1" ; then
 				AC_MSG_RESULT(no)
 				AC_MSG_RESULT()
 				AC_MSG_RESULT([Cannot link against libfftw3l. Please check config.log and])

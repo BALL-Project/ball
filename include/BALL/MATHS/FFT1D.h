@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT1D.h,v 1.15 2005/02/02 10:49:41 anhi Exp $
+// $Id: FFT1D.h,v 1.15.4.1 2005/06/10 17:55:18 oliver Exp $
 //
 
 #ifndef BALL_MATHS_TFFT1D_H
@@ -41,6 +41,7 @@ namespace BALL
 		public:
 
 		typedef std::complex<typename ComplexTraits::ComplexPrecision> Complex;
+		typedef TRegularData1D<std::complex<typename ComplexTraits::ComplexPrecision> >	ComplexVector;
 
 		BALL_CREATE(TFFT1D)
 
@@ -288,14 +289,14 @@ namespace BALL
 	/** Global assignment operator from FFT2D to TRegularData2D<Complex>
 	 */
 //	const TRegularData1D<Complex>& operator << (TRegularData1D<Complex>& to, const TFFT1D& from)
-	//	throw();
+	//	throw(); ?????
 	
 	/** Global assignment operator from FFT3D to TRegularData3D<float>.
 	 		This operator assigns the <b>real</b> part of the complex FFT2D-data to the
 			TRegularData2D<float> to.
 	 */
 //	const RegularData1D& operator << (RegularData1D& to, const TFFT1D& from)
-//		throw();
+//		throw(); ???????
 
 
 
@@ -314,7 +315,7 @@ namespace BALL
 	bool TFFT1D<ComplexTraits>::operator == (const TFFT1D<ComplexTraits>& fft1d) const
 		throw()
 	{
-		if (data_.size() == fft1d.data_.size() &&
+		if (ComplexVector::size() == fft1d.size() &&
 				origin_ == fft1d.origin_ &&
 				stepPhys_ == fft1d.stepPhys_ &&
 				stepFourier_ == fft1d.stepFourier_ &&
@@ -451,7 +452,7 @@ namespace BALL
 	{
 		if (!inFourierSpace_)
 		{
-			if (position >= size())
+			if (position >= ComplexVector::size())
 			{
 				throw Exception::OutOfGrid(__FILE__, __LINE__);
 			}
@@ -464,7 +465,7 @@ namespace BALL
 		}
 		else
 		{
-			if (position >= size())
+			if (position >= ComplexVector::size())
 			{
 				throw Exception::OutOfGrid(__FILE__, __LINE__);
 			}
@@ -591,7 +592,7 @@ namespace BALL
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
 		
-		return data_[internalPos];
+		return operator [] (internalPos);
 	}
 
 	template <typename ComplexTraits>
@@ -619,7 +620,7 @@ namespace BALL
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
 		
-		return data_[internalPos];
+		return operator [] (internalPos);
 	}
 
 	template <typename ComplexTraits>

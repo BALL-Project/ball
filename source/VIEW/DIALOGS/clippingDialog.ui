@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ClippingDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -45,10 +45,10 @@
                     <cstring>buttonOk</cstring>
                 </property>
                 <property name="text">
-                    <string>&amp;Apply</string>
+                    <string>O&amp;K</string>
                 </property>
                 <property name="accel">
-                    <string>Alt+A</string>
+                    <string>Alt+K</string>
                 </property>
                 <property name="autoDefault">
                     <bool>true</bool>
@@ -62,32 +62,16 @@
                     <cstring>buttonCancel</cstring>
                 </property>
                 <property name="text">
-                    <string>&amp;Close</string>
+                    <string>C&amp;ancel</string>
                 </property>
                 <property name="accel">
-                    <string>Alt+C</string>
+                    <string>Alt+A</string>
                 </property>
                 <property name="autoDefault">
                     <bool>true</bool>
                 </property>
             </widget>
         </hbox>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textLabel1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>7</y>
-                <width>484</width>
-                <height>35</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Select the representations to enable clipping for:</string>
-        </property>
     </widget>
     <widget class="QListView">
         <column>
@@ -111,6 +95,22 @@
                 <width>488</width>
                 <height>499</height>
             </rect>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>7</y>
+                <width>484</width>
+                <height>35</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Select the representations to clip:</string>
         </property>
     </widget>
 </widget>

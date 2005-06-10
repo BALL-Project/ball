@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>PreferencesData</class>
 <widget class="QDialog">
     <property name="name">
@@ -6,10 +6,10 @@
     </property>
     <property name="geometry">
         <rect>
-            <x>0</x>
+            <x>10</x>
             <y>0</y>
             <width>730</width>
-            <height>450</height>
+            <height>470</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -23,13 +23,13 @@
     <property name="minimumSize">
         <size>
             <width>730</width>
-            <height>450</height>
+            <height>470</height>
         </size>
     </property>
     <property name="maximumSize">
         <size>
             <width>730</width>
-            <height>450</height>
+            <height>470</height>
         </size>
     </property>
     <property name="caption">
@@ -38,35 +38,28 @@
     <property name="sizeGripEnabled">
         <bool>false</bool>
     </property>
-    <widget class="QWidgetStack">
+    <widget class="QLabel">
         <property name="name">
-            <cstring>widget_stack</cstring>
+            <cstring>textLabel1</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>235</x>
-                <y>6</y>
-                <width>493</width>
-                <height>400</height>
+                <x>237</x>
+                <y>3</y>
+                <width>490</width>
+                <height>21</height>
             </rect>
         </property>
-        <property name="frameShape">
-            <enum>NoFrame</enum>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>33</red>
+                <green>89</green>
+                <blue>255</blue>
+            </color>
         </property>
-        <property name="frameShadow">
-            <enum>Plain</enum>
+        <property name="text">
+            <string></string>
         </property>
-        <property name="lineWidth">
-            <number>0</number>
-        </property>
-        <widget class="QWidget">
-            <property name="name">
-                <cstring>WStackPage</cstring>
-            </property>
-            <attribute name="id">
-                <number>0</number>
-            </attribute>
-        </widget>
     </widget>
     <widget class="QListView">
         <column>
@@ -88,7 +81,7 @@
                 <x>0</x>
                 <y>2</y>
                 <width>230</width>
-                <height>442</height>
+                <height>460</height>
             </rect>
         </property>
         <property name="rootIsDecorated">
@@ -101,9 +94,9 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>281</x>
-                <y>412</y>
-                <width>145</width>
+                <x>245</x>
+                <y>432</y>
+                <width>155</width>
                 <height>30</height>
             </rect>
         </property>
@@ -114,10 +107,10 @@
             </size>
         </property>
         <property name="text">
-            <string>&amp;Apply</string>
+            <string>O&amp;K</string>
         </property>
         <property name="accel">
-            <string>Alt+A</string>
+            <string>Alt+K</string>
         </property>
         <property name="autoDefault">
             <bool>true</bool>
@@ -135,9 +128,9 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>432</x>
-                <y>412</y>
-                <width>127</width>
+                <x>406</x>
+                <y>432</y>
+                <width>156</width>
                 <height>30</height>
             </rect>
         </property>
@@ -166,9 +159,9 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>565</x>
-                <y>412</y>
-                <width>126</width>
+                <x>568</x>
+                <y>432</y>
+                <width>155</width>
                 <height>30</height>
             </rect>
         </property>
@@ -190,6 +183,36 @@
         <property name="toolTip" stdset="0">
             <string>Set settings to default values</string>
         </property>
+    </widget>
+    <widget class="QWidgetStack">
+        <property name="name">
+            <cstring>widget_stack</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>235</x>
+                <y>26</y>
+                <width>500</width>
+                <height>400</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="lineWidth">
+            <number>0</number>
+        </property>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>WStackPage</cstring>
+            </property>
+            <attribute name="id">
+                <number>0</number>
+            </attribute>
+        </widget>
     </widget>
 </widget>
 <connections>

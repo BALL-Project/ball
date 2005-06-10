@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>LightSettingsData</class>
 <widget class="QWidget">
     <property name="name">
@@ -6,8 +6,8 @@
     </property>
     <property name="geometry">
         <rect>
-            <x>39</x>
-            <y>40</y>
+            <x>0</x>
+            <y>0</y>
             <width>500</width>
             <height>330</height>
         </rect>
@@ -789,7 +789,10 @@
                                     </size>
                                 </property>
                                 <property name="text">
-                                    <string>Add Light</string>
+                                    <string>&amp;Add</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+A</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Create a new light</string>
@@ -815,7 +818,10 @@
                                     </size>
                                 </property>
                                 <property name="text">
-                                    <string>Remove</string>
+                                    <string>&amp;Remove</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+R</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Remove a light</string>

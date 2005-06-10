@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>MaterialSettingsData</class>
 <widget class="QWidget">
     <property name="name">
@@ -6,10 +6,10 @@
     </property>
     <property name="geometry">
         <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>624</width>
-            <height>446</height>
+            <x>291</x>
+            <y>204</y>
+            <width>650</width>
+            <height>450</height>
         </rect>
     </property>
     <property name="maximumSize">
@@ -76,7 +76,7 @@
                             </size>
                         </property>
                         <property name="text">
-                            <string>Specular Intensity</string>
+                            <string>Specular intensity</string>
                         </property>
                     </widget>
                     <widget class="QSlider">
@@ -202,7 +202,7 @@
                             </size>
                         </property>
                         <property name="text">
-                            <string>Diffuse Intensity</string>
+                            <string>Diffuse intensity</string>
                         </property>
                     </widget>
                     <widget class="QSlider">
@@ -325,7 +325,7 @@
                             </size>
                         </property>
                         <property name="text">
-                            <string>Ambient Intensity</string>
+                            <string>Ambient intensity</string>
                         </property>
                     </widget>
                     <widget class="QSlider">

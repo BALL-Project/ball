@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.86.2.2 2005/06/06 13:46:08 amoll Exp $
+// $Id: molecularStructure.C,v 1.86.2.3 2005/06/10 17:55:30 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1223,7 +1223,6 @@ namespace BALL
 				thread->setMolecularDynamics(mds);
 				thread->setNumberOfSteps(md_dialog_.getNumberOfSteps());
 				thread->setNumberOfStepsBetweenUpdates(steps);
-				thread->setSaveImages(md_dialog_.saveImages());
 				thread->setDCDFile(dcd);
 				thread->setComposite(system);
 
@@ -1244,11 +1243,6 @@ namespace BALL
 				{
 					ok = mds->simulateIterations(steps, true);
 					getMainControl()->update(*system);
-					if (md_dialog_.saveImages()) 
-					{
-						SceneMessage* msg = new SceneMessage(SceneMessage::EXPORT_PNG);
-						notify_(msg);
-					}
 					
 					if (dcd != 0) 
 					{

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>PythonHotkeysData</class>
 <widget class="QWidget">
     <property name="name">
@@ -15,6 +15,67 @@
     <property name="caption">
         <string>PythonHotkeys</string>
     </property>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>layout81</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>340</y>
+                <width>510</width>
+                <height>32</height>
+            </rect>
+        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>new_button</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>150</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>&amp;Add new</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+A</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Add a new hotkey</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>remove_button</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>100</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>&amp;Remove</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+R</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Remove a hotkey, select the row (with the field to the left)</string>
+                </property>
+            </widget>
+        </hbox>
+    </widget>
     <widget class="QTable">
         <property name="name">
             <cstring>table</cstring>
@@ -24,7 +85,7 @@
                 <x>1</x>
                 <y>0</y>
                 <width>546</width>
-                <height>338</height>
+                <height>330</height>
             </rect>
         </property>
         <property name="numRows">
@@ -41,59 +102,6 @@
         </property>
         <property name="focusStyle">
             <enum>SpreadSheet</enum>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>new_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>282</x>
-                <y>344</y>
-                <width>150</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>150</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Add new Hotkey</string>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Add a new hotkey</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>remove_button</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>130</x>
-                <y>343</y>
-                <width>126</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>100</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Remove</string>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Remove a hotkey, select the row (with the field to the left)</string>
         </property>
     </widget>
 </widget>

@@ -65,9 +65,6 @@ class BALL_EXPORT MolecularDynamicsDialog
 		///
 		float getTemperature() const;
 
-		///
-		bool saveImages() const;
-
 		/// 
 		String getDCDFile() const;
 
