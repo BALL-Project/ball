@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.8 2005/03/01 20:24:11 oliver Exp $
+# $Id: Makefile,v 1.8.2.1 2005/06/10 20:47:43 oliver Exp $
 #
 
 EXECUTABLE=BALLView
@@ -33,7 +33,7 @@ MOC_SOURCES=\
 	ballviewDemo_moc.C\
 	ballviewDemoData_moc.C\
 	mainframe_moc.C
-	
+
 UIC_FILES=\
 	aboutDialog.C\
 	aboutDialog.h\
