@@ -86,7 +86,7 @@ void ContourSurfaceDialog::chooseColor()
 
 ColorRGBA ContourSurfaceDialog::getColor()
 {
-	return ColorRGBA(QColorDialog::getColor(color_label->backgroundColor()));
+	return ColorRGBA(color_label->backgroundColor());
 }
 		
 

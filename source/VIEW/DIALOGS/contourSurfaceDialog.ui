@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ContourSurfaceDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -464,6 +464,48 @@
     </widget>
     <widget class="QPushButton">
         <property name="name">
+            <cstring>buttonCancel</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>198</x>
+                <y>117</y>
+                <width>182</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>133</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>32767</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>&amp;Cancel</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
             <cstring>buttonOk</cstring>
         </property>
         <property name="enabled">
@@ -513,59 +555,17 @@
             <string>Close window and apply changes.</string>
         </property>
     </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>buttonCancel</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>198</x>
-                <y>117</y>
-                <width>182</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>0</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>133</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="maximumSize">
-            <size>
-                <width>32767</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>&amp;Cancel</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-        <property name="autoDefault">
-            <bool>true</bool>
-        </property>
-    </widget>
 </widget>
 <connections>
     <connection>
         <sender>buttonCancel</sender>
-        <signal>pressed()</signal>
+        <signal>clicked()</signal>
         <receiver>ContourSurfaceDialogData</receiver>
         <slot>reject()</slot>
     </connection>
     <connection>
         <sender>buttonOk</sender>
-        <signal>pressed()</signal>
+        <signal>clicked()</signal>
         <receiver>ContourSurfaceDialogData</receiver>
         <slot>accept()</slot>
     </connection>
@@ -583,7 +583,7 @@
     </connection>
     <connection>
         <sender>color_button</sender>
-        <signal>pressed()</signal>
+        <signal>clicked()</signal>
         <receiver>ContourSurfaceDialogData</receiver>
         <slot>chooseColor()</slot>
     </connection>
