@@ -126,8 +126,10 @@ namespace BALL
 					*/
 				void fetchPreferences_(INIFile& file, const String& entry, const QString& default_value) throw();
 				
-				/** 
-					*/
+				/** Swaps the option values between vector backup_ and dialog
+				 *  Is called in show() if has_changed_ is true
+				 *  and in writePreferences if is_redock_ is true
+				 */
 				void swapValues_() throw();
 			
 				

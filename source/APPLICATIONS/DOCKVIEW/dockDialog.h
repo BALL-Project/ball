@@ -202,7 +202,8 @@ namespace BALL
 				void show();
 				
 				/** Indicates the OK button was pressed.
-				 * 	Checks if two different systems are chosen. Hides the dialog and calls \link DockDialog::calculate calculate \endlink .
+				 * 	If we are not doing redocking, it checks if two different systems are chosen.
+				 *  Hides the dialog and calls \link DockDialog::applyValues_ applyValues_ \endlink and \link DockDialog::applyProcessors_ applyProcessors_ \endlink.
 				 */
 				virtual void okPressed();
 				
@@ -284,15 +285,19 @@ namespace BALL
 				 */
 				System* partnerChosen_(const QString& qstr) throw();
 				
-				/**  
+				/** Function to fill the system comboboxes.
+				 *  If the user has already selected one or two systems, they are the current items in the comboboxes. 
 				 */
 				void fillSystemComboxes_() throw();
 				
-				/**  
+				/** function to read the redocking values from INIFile into vector backup_
+				 *	if INIFile has not yet a section REDOCKING, fill backup_ vector with default values 
 				 */
 				void fetchPreferences_(INIFile& file, const String& entry, const QString& default_value) throw();
 			
-				/**  
+				/** Swaps the option values between vector backup_ and dialog
+				 *  Is called in show() if has_changed_ is true
+				 *  and in writePreferences if is_redock_ is true
 				 */
 				void swapValues_() throw();
 				
@@ -309,11 +314,13 @@ namespace BALL
 					*/
 				bool has_changed_;
 			
-				/** key: Algorithm(enum), value: advanced options dialog
+				/** key: Algorithm(enum)
+				 *  value: advanced options dialog
 				 */
 				HashMap<int, QDialog*> algorithm_dialogs_;
 				
-				/** key: ScoringFunction(enum), value: advanced options dialog
+				/** key: ScoringFunction(enum)
+				 *  value: advanced options dialog
 				 */
 				HashMap<int, QDialog*> scoring_dialogs_;
 			
@@ -322,7 +329,7 @@ namespace BALL
 				 */
 				HashMap<int, vector<int> > allowed_sf_;
 
-				/** key: 
+				/** key: ScoringFunction(enum)
 				 *  value: names of the scoring functions
 				 */
 				HashMap<int, QString> sf_names_;

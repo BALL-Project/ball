@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.34 2005/06/10 18:45:24 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.35 2005/06/12 22:28:54 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -169,13 +169,12 @@ namespace BALL
 		{
 			if(dialog)
 			{
-				// add to HashMap for scoring dialogs
+				// add scoring function to HashMap for scoring option dialogs
 				scoring_dialogs_[score_func] = dialog;
 			}
-			// add to HashMap for names of scoring functions
+			// add scoring function to HashMap for names of scoring functions
 			sf_names_[score_func] = name;
 		}
-		
 		
 		// Initializes the popup menu Molecular Mechanics with its checkable submenu Docking.
 		void DockDialog::initializeWidget(MainControl& /*main_control*/)
@@ -218,7 +217,7 @@ namespace BALL
 			algorithmChosen();
 			scoringFuncChosen();
 		}
-		
+		 
 		// function to read the redocking values from INIFile into vector backup_
 		// if INIFile has not yet a section REDOCKING, fill backup_ vector with default values
 		void DockDialog::fetchPreferences_(INIFile& file, const String& entry, const QString& default_value)
@@ -376,8 +375,7 @@ namespace BALL
 						if (!docking_partner1_->apply(charge_rule_processor_)) return false;
 						if (!docking_partner2_->apply(charge_rule_processor_)) return false;
 					}
-				}
-					
+				}	
 				if (assign_radii->isChecked())
 				{
 					if (radii_data_button->isChecked())
@@ -399,8 +397,7 @@ namespace BALL
 			{
 				Log.error() << "Invalid file " << e.getFilename() << std::endl;
 				return false;
-			}
-			
+			}			
 			getMainControl()->getPrimitiveManager().setMultithreadingMode(false);
 			getMainControl()->update(*docking_partner1_, true);
 			getMainControl()->update(*docking_partner2_, true);
@@ -438,18 +435,11 @@ namespace BALL
 			return 0;
 		}
 		
-		//
+		// Function to fill the system comboboxes.
+		// If the user has already selected one or two systems, they are the current items in the comboboxes.
 		void DockDialog::fillSystemComboxes_()
 			throw()
 		{
-			MainControl* main_control = getMainControl();
-			
-			//get the composites
-			CompositeManager& composite_manager = main_control->getCompositeManager();
-			
-			//iterate over all composites; add systems to list
-			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();
-			
 			//selection lists for systems should be empty
 			systems1->clear();
 			systems2->clear();
@@ -461,6 +451,13 @@ namespace BALL
 			QStringList current_system_list;
 			//put <select> in list as the first element
 			current_system_list.append("<select>");
+			
+			//get the composites
+			MainControl* main_control = getMainControl();
+			CompositeManager& composite_manager = main_control->getCompositeManager();
+			
+			//iterate over all composites; add systems to list
+			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();
 			
 			//fill current system list and check if user has already selected two systems
 			for(; +composite_it; ++composite_it)
@@ -513,6 +510,9 @@ namespace BALL
 			}
 		}
 		
+		// Swaps the option values between vector backup_ and dialog
+		// Is called in show() if has_changed_ is true
+		// and in writePreferences if is_redock_ is true
 		void DockDialog::swapValues_()
 			throw()
 		{
@@ -578,7 +578,9 @@ namespace BALL
 			DockDialogData::show();
 		}
 		
-		//
+		// Indicates the OK button was pressed.
+		// If we are not doing redocking it checks if two different systems are chosen.
+		// Hides the dialog and calls \link DockDialog::applyValues_ applyValues_ \endlink and \link DockDialog::applyProcessors_ applyProcessors_ \endlink.
 		void DockDialog::okPressed()
 		{
 			if(!is_redock_)
@@ -660,7 +662,7 @@ namespace BALL
 			docking_partner2_ = partnerChosen_(systems2->currentText());
 		}
 		
-		// Indicates a scoring function in the combobox was chosen.
+		// Indicates that a scoring function in the combobox was chosen.
 		void DockDialog::scoringFuncChosen()
 		{
 			// if chosen scoring function has advanced options, enable advanced_button
@@ -689,6 +691,9 @@ namespace BALL
 				alg_advanced_button->setEnabled(false);
 			}
 			
+			// clear scoring function combobox
+			// and refill it with the functions which are allowed for the chosen algorithm
+			// if no algorithm is chosen fill combobox with all available scoring functions 
 			scoring_functions->clear();
 			if(algorithm_dialogs_.has(index))
 			{
