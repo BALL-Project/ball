@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.10 2005/06/04 07:50:02 amoll Exp $
+// $Id: scene.h,v 1.62.2.11 2005/06/12 17:34:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -291,25 +291,10 @@ namespace BALL
 					This method is called automatically	immediately before the main application is started 
 					by MainControl::show().
 					\param main_control the MainControl object to be initialized with this scene
-					\see   finalizeWidget
-					\see   insertMenuEntry
-					\see   checkMenu
 			*/
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
 		
-			/**	Remove the widget.
-					Reverse all actions performed in initializeWidget (remove menu entries of this scene).
-					This method will be called by aboutToExit from the MainControl object.
-					\param main_control the MainControl object to be finalized with this scene
-					\see   initializeWidget
-					\see   checkMenu
-					\see   removeMenuEntry
-					\see   aboutToExit
-			*/
-			virtual void finalizeWidget(MainControl& main_control)
-				throw();
-				
 			///
 			virtual void fetchPreferences(INIFile& inifile)
 				throw();

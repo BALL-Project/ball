@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.47.2.2 2005/05/23 13:01:22 amoll Exp $
+// $Id: molecularControl.h,v 1.47.2.3 2005/06/12 17:34:27 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -203,15 +203,6 @@ class BALL_EXPORT MolecularControl
 	virtual void initializeWidget(MainControl& main_control)
 		throw();
 
-	/**	Remove the widget.
-			Reverse all actions performed in initializeWidget
-			(remove menu entries of this Control).
-			This method will be called by MainControl::aboutToExit.
-			\param main_control the MainControl object to be finalized with this Control
-	*/
-	virtual void finalizeWidget(MainControl& main_control)
-		throw();
-	
 	/** Apply a given regular expression
 			@return Size number of selected atoms
 	*/

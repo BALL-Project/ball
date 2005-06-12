@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.3 2005/06/03 11:47:56 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.4 2005/06/12 17:38:50 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -633,10 +633,10 @@ namespace BALL
 		void PyWidget::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
-			main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", text_edit_, SLOT(scriptDialog()));
-			main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
-			main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
+			insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
+			insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", text_edit_, SLOT(scriptDialog()));
+			insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
+			insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
 
 			DockWidget::initializeWidget(main_control);
 		}
@@ -647,10 +647,6 @@ namespace BALL
 		{
 			text_edit_->abortScript();
 			stopInterpreter();
-			main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
-			main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", text_edit_, SLOT(scriptDialog()));
-			main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
-			main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
 
 			DockWidget::finalizeWidget(main_control);
 		}

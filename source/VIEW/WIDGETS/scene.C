@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.22 2005/06/05 22:12:57 amoll Exp $
+// $Id: scene.C,v 1.171.2.23 2005/06/12 17:38:50 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1363,96 +1363,83 @@ namespace BALL
 		{
 			main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 
-			String hint;
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
-			hint = "Switch to rotate/zoom mode";
-			rotate_id_ =	main_control.insertMenuEntry(
-					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R, -1, hint);
+			rotate_id_ =	insertMenuEntry(
+					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
+			setMenuHint("Switch to rotate/zoom mode");
 
-			hint = "Switch to picking mode, e.g. to identify singe atoms or groups";
-			picking_id_ = main_control.insertMenuEntry(
-					MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P, -1, hint);
+			picking_id_ = insertMenuEntry( MainControl::DISPLAY, "&Picking Mode", 
+													this, SLOT(pickingMode_()), CTRL+Key_P);
+			setMenuHint("Switch to picking mode, e.g. to identify singe atoms or groups");
 
-			hint = "Move selected items";
-			move_id_ = main_control.insertMenuEntry(
-					MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()), 0, -1, hint);
-
+			move_id_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()));
+			setMenuHint("Move selected items");
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-			no_stereo_id_ = main_control.insertMenuEntry (
+			no_stereo_id_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
  			menuBar()->setItemChecked(no_stereo_id_, true) ;
-			active_stereo_id_ = main_control.insertMenuEntry (
+
+			active_stereo_id_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()));
-			dual_stereo_id_ = main_control.insertMenuEntry (
+
+			dual_stereo_id_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "Side by Side", this, SLOT(enterDualStereo()));
 
-			hint = "Print the coordinates of the current viewpoint";
-			main_control.insertMenuEntry(
-					MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), CTRL+Key_W, -1, hint);
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
+											SLOT(showViewPoint_()), CTRL+Key_W);
+			setMenuHint("Print the coordinates of the current viewpoint");
 
-			hint = "Move the viewpoint to the given coordinates";
-			main_control.insertMenuEntry(
-					MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, SLOT(setViewPoint_()), CTRL+Key_N, -1, hint);
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, 
+											SLOT(setViewPoint_()), CTRL+Key_N);
+			setMenuHint("Move the viewpoint to the given coordinates");
 
-			hint = "Reset the camera to the orgin (0,0,0)";
-			main_control.insertMenuEntry(
-					MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()), 0, -1, hint);
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()));
+			setMenuHint("Reset the camera to the orgin (0,0,0)");
 
-			hint = "Export a PNG image file from the Scene";
-			main_control.insertMenuEntry(
-					MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P, -1, hint);
-			main_control.insertMenuEntry(
-					MainControl::FILE_EXPORT, "PNG...", this, SLOT(showExportPNGDialog()), 0, -1, hint);
+			insertMenuEntry(MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P);
+			setMenuHint("Export a PNG image file from the Scene");
+
+			insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, SLOT(showExportPNGDialog()));
 
 			window_menu_entry_id_ = 
-				main_control.insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
+				insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 			menuBar()->setItemChecked(window_menu_entry_id_, true);
 
 			// ======================== ANIMATION ===============================================
-			hint = "Record an animation for later processing";
-			record_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 
-					SLOT(recordAnimationClicked()), 0, -1, hint);   
+			record_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 
+															SLOT(recordAnimationClicked()));
+			setMenuHint("Record an animation for later processing");
  			menuBar()->setItemChecked(record_animation_id_, false) ;
 			
-			clear_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, 
-					SLOT(clearRecordedAnimation()));
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
-			start_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, 
-					SLOT(startAnimation()));
+			clear_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, 
+															SLOT(clearRecordedAnimation()));
 
-			cancel_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, 
-					SLOT(stopAnimation()));
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
+
+			start_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, 
+															SLOT(startAnimation()));
+
+			cancel_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, 
+															SLOT(stopAnimation()));
 			menuBar()->setItemEnabled(cancel_animation_id_, false);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
-			animation_export_PNG_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", 
-					this, SLOT(animationExportPNGClicked()));
-			animation_export_POV_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", 
-					this, SLOT(animationExportPOVClicked()));
-			animation_repeat_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
-					SLOT(animationRepeatClicked()));
 
-			show_popup_infos_id_ = main_control.insertMenuEntry(MainControl::OPTIONS, "Popup molecular items info", this, SLOT(switchPopupInfos()));
+			animation_export_PNG_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", 
+																	this, SLOT(animationExportPNGClicked()));
+
+			animation_export_POV_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", 
+																	this, SLOT(animationExportPOVClicked()));
+
+			animation_repeat_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
+																	SLOT(animationRepeatClicked()));
+
+			show_popup_infos_id_ = insertMenuEntry(MainControl::OPTIONS, "Popup molecular items info", 
+																	this, SLOT(switchPopupInfos()));
 
 			setCursor(QCursor(Qt::SizeAllCursor));
-		}
-
-		void Scene::finalizeWidget(MainControl& main_control)
-			throw()
-		{
-			main_control.removeMenuEntry(MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
-			main_control.removeMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P);		
-			main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
-					SLOT(showViewPoint_()), CTRL+Key_W);		
-			main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, 
-					SLOT(setViewPoint_()), CTRL+Key_N);		
-			main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, 
-					SLOT(resetCamera_()), CTRL+Key_T);		
-			main_control.removeMenuEntry(MainControl::DISPLAY, "& Stereo Mode", this, SLOT( switchStereo()), ALT+Key_Y);		
-			main_control.removeMenuEntry(MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P);		
-			main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 		}
 
 		void Scene::checkMenu(MainControl& /*main_control*/)

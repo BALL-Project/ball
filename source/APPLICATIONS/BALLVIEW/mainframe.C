@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.3 2005/06/07 14:31:39 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.4 2005/06/12 17:30:56 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -141,7 +141,9 @@ namespace BALL
 
 		insertMenuEntry(MainControl::FILE, "Print", this, SLOT(printScene()));
 
-		insertMenuEntry(MainControl::FILE_OPEN, "Project", this, SLOT(loadBALLViewProjectFile()));
+		insertMenuEntry(MainControl::FILE_OPEN, "Project", this, 
+										SLOT(loadBALLViewProjectFile()), 0, 2);
+
 		insertMenuEntry(MainControl::FILE, "Save Project", this, SLOT(saveBALLViewProjectFile()));
 
 		// Display Menu

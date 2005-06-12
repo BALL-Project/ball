@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.37.2.3 2005/06/08 12:06:27 oliver Exp $
+// $Id: datasetControl.C,v 1.37.2.4 2005/06/12 17:38:46 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -72,32 +72,24 @@ namespace BALL
 		void DatasetControl::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			open_trajectory_id_ = 
-				main_control.insertMenuEntry(MainControl::FILE_OPEN, "Trajectory", this, SLOT(addTrajectory()), 0, -1,
-				String("Open a trajectory file (1 System has to be selected)"));
-			main_control.insertMenuEntry(MainControl::FILE_OPEN, "1D Grid", this, SLOT(add1DGrid()), 0, -1,
-				String("Open a 1D data grid"));
-			main_control.insertMenuEntry(MainControl::FILE_OPEN, "2D Grid", this, SLOT(add2DGrid()), 0, -1,
-				String("Open a 2D data grid"));
-			main_control.insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()), 0, -1,
-				String("Open a 3D data grid"));
+			open_trajectory_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Trajectory", 
+														this, SLOT(addTrajectory()));
+			setMenuHint("Open a trajectory file (1 System has to be selected)");
 
-			String hint("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.");
-			menu_cs_ = main_control.insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  
-																							SLOT(computeIsoContourSurface()), CTRL+Key_U, -1, hint);
+			menu_1D_id_ = insertMenuEntry(MainControl::FILE_OPEN, "1D Grid", this, SLOT(add1DGrid()));
+			setMenuHint("Open a 1D data grid");
+
+			menu_2D_id_ = insertMenuEntry(MainControl::FILE_OPEN, "2D Grid", this, SLOT(add2DGrid()));
+			setMenuHint("Open a 2D data grid");
+
+			menu_3D_id_ = insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()));
+			setMenuHint("Open a 3D data grid");
+
+			menu_cs_ = insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  
+																							SLOT(computeIsoContourSurface()), CTRL+Key_U);
+			setMenuHint("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.");
 
 			GenericControl::initializeWidget(main_control);
-		}
-
-
-		void DatasetControl::finalizeWidget(MainControl& main_control)
-			throw()
-		{
-			main_control.removeMenuEntry(MainControl::FILE_OPEN, "Trajectory", this, SLOT(addTrajectory()));
-			main_control.removeMenuEntry(MainControl::FILE_OPEN, "1D Grid", this, SLOT(add1DGrid()));
-			main_control.removeMenuEntry(MainControl::FILE_OPEN, "2D Grid", this, SLOT(add2DGrid()));
-			main_control.removeMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()));
-			GenericControl::finalizeWidget(main_control);
 		}
 
 
@@ -343,6 +335,9 @@ namespace BALL
 			else if (item_to_grid3_.has(item))
 			{
 				menu_entry_pos = context_menu.insertItem("Save", this, SLOT(save3DGrid_()));
+				if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
+				menu_entry_pos = context_menu.insertItem("Contour Surface", this, 
+																	SLOT(computeIsoContourSurface()));
 				if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
 			}
 			context_menu.insertItem("Delete", this, SLOT(deleteItems_()));
@@ -715,6 +710,9 @@ namespace BALL
 					mesh->normal[i] *= -1;
 				}
 			}
+
+			mesh->colorList.clear(); 
+			mesh->colorList.push_back(surface_dialog_->getColor());
 
 			// Create a new representation containing the contour surface.
 			Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();

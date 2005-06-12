@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.9 2005/05/27 10:51:18 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.10 2005/06/12 17:43:21 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -124,18 +124,11 @@ void DisplayProperties::initializeWidget(MainControl& main_control)
 {
 	(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
 
-	String hint("Create a new representation or modify an existing one");
-	id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
-																		 SLOT(show()), CTRL+Key_I, -1, hint);   
+	id_ = insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
+																		 SLOT(show()), CTRL+Key_I);   
+	setMenuHint("Create a new representation or modify an existing one");
 }
 
-
-void DisplayProperties::finalizeWidget(MainControl& main_control)
-	throw()
-{
-	main_control.removeMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
-																									SLOT(show()), CTRL+Key_I);   
-}
 
 void DisplayProperties::initializePreferencesTab(Preferences &preferences)
 	throw()

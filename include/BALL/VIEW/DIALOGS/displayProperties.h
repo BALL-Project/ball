@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.39.2.1 2005/04/17 17:04:24 amoll Exp $
+// $Id: displayProperties.h,v 1.39.2.2 2005/06/12 17:34:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -127,14 +127,6 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control)
 					throw();
 				
-			/**	Removes the menu entry <b>Display Properties</b> from the 
-					<b> Display</b> menu.
-					This method will be called by MainControl::aboutToExit() 
-					\param main_control the MainControl object to be finalized 
-			*/
-			virtual void finalizeWidget(MainControl& main_control)
-					throw();
-
 			/// Insert the ModelSettingsDialog and the ColoringSettingsDialog into the Preferences
 			virtual void initializePreferencesTab(Preferences &preferences)
 				throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.24.6.3 2005/06/05 22:12:56 amoll Exp $
+// $Id: dockWidget.C,v 1.24.6.4 2005/06/12 17:38:47 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -79,21 +79,14 @@ namespace BALL
 			setResizeEnabled(true);
 		}
 
-		void DockWidget::initializeWidget(MainControl& main_control)
+		void DockWidget::initializeWidget(MainControl&)
 			throw()
 		{
 			window_menu_entry_id_ = 
-				main_control.insertMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(switchShowWidget()));
-			getMainControl()->menuBar()->setItemChecked(window_menu_entry_id_, true);
+				insertMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(switchShowWidget()));
+			menuBar()->setItemChecked(window_menu_entry_id_, true);
 			connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setWindowsMenuEntry(bool)));
 		}
-
-		void DockWidget::finalizeWidget(MainControl& main_control)
-			throw()
-		{
-			main_control.removeMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(switchShowWidget()));
-		}
-
 
 		void DockWidget::writePreferences(INIFile& /* inifile */)
 			throw()

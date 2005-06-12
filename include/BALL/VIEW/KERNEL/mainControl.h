@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72.2.4 2005/06/03 21:32:58 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.5 2005/06/12 17:34:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -479,14 +479,13 @@ namespace BALL
 					\param hint
 					\return int the new entry_ID
 			*/
-			int insertMenuEntry (int parent_id, const String& name, const QObject* receiver = 0, 
-													 const char* slot = 0, int accel = 0, int entry_ID = -1, String hint = "")
+			Index insertMenuEntry (Index parent_id, const String& name, const QObject* receiver = 0, 
+													 const char* slot = 0, Index accel = 0, Index pos = -1)
 				throw();
 
 			/// 
-			void removeMenuEntry (int parent_id, const String& name, const QObject* receiver = 0, 
-												 const char* slot = 0, int accel = 0, int entry_ID = -1)
-			throw();
+			void removeMenuEntry (Index parent_id, Index entry_ID)
+				throw();
 			
 			/**	Initialize a new popup menu <b> ID</b>. 
 					If the MainControl has already the popup menu <b>ID</b> that QPopupMenu is returned.

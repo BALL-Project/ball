@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.23 2005/06/06 13:46:07 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.24 2005/06/12 17:38:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -497,18 +497,9 @@ namespace BALL
 		{
 			GenericControl::initializeWidget(main_control);
 
-			String hint = "Add an OpenGL Clipping Plane to the Scene";
-			main_control.insertMenuEntry(MainControl::DISPLAY, "New Clipping Plane", this, 
-					SLOT(createNewClippingPlane()), 0, -1, hint);   
-		}
-
-		void GeometricControl::finalizeWidget(MainControl& main_control)
-			throw()
-		{
-			GenericControl::finalizeWidget(main_control);
-
-			main_control.removeMenuEntry(MainControl::DISPLAY, "New Clipping Plane", this, 
-					SLOT(createNewClippingPlane()), 0);
+			menu_clipping_plane_id_ = insertMenuEntry(MainControl::DISPLAY, 
+																		"New Clipping Plane", this, SLOT(createNewClippingPlane()));   
+			setMenuHint("Add an OpenGL Clipping Plane to the Scene");
 		}
 
 		void GeometricControl::moveClippingPlane()
@@ -522,7 +513,6 @@ namespace BALL
 		void GeometricControl::flipClippingPlane()
 		{
 			if (context_plane_ == 0) return;
-			context_plane_->setNormal(-context_plane_->getNormal());
 
 			getMainControl()->redrawAllRepresentations();
 		}

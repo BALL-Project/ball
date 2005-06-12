@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.11.6.1 2005/06/07 14:31:57 amoll Exp $
+// $Id: datasetControl.h,v 1.11.6.2 2005/06/12 17:34:26 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -97,14 +97,6 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
 
-			/**	Remove the widget.
-					Reverse all actions performed in initializeWidget
-					(remove menu entries of this DatasetControl).
-					This method will be called by MainControl::aboutToExit.
-			*/
-			virtual void finalizeWidget(MainControl& main_control)
-				throw();
-
 			///
 			virtual void checkMenu(MainControl& main_control)
 				throw();
@@ -195,7 +187,7 @@ namespace BALL
 			QListViewItem* 								context_item_;
 
 			SnapshotVisualisationDialog* 	dialog_;
-			Index 												open_trajectory_id_;
+			Index 												open_trajectory_id_, menu_1D_id_, menu_2D_id_, menu_3D_id_;
 
 			HashMap<QListViewItem*	, SnapShotManager*> 					item_to_trajectory_;
 			HashMap<QListViewItem*	, RegularData1D*>   					item_to_grid1_;

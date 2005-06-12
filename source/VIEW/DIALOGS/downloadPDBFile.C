@@ -78,19 +78,12 @@ DownloadPDBFile::~DownloadPDBFile()
 #endif
 }
 
-void DownloadPDBFile::initializeWidget(MainControl& main_control)
+void DownloadPDBFile::initializeWidget(MainControl&)
 	throw()
 {
-	String hint("Download a PDB file from www.rcsb.org");
-	main_control.insertMenuEntry(MainControl::FILE_OPEN, "Download Structure", (QObject *)this,
-															 SLOT(show()), CTRL+Key_T, -1, hint);
-}
-
-void DownloadPDBFile::finalizeWidget(MainControl& main_control)
-	throw()
-{
-	main_control.removeMenuEntry(MainControl::FILE_OPEN, "Downlo&ad Structure", (QObject *)this, 
-															 SLOT(show()), ALT+Key_A);
+	menu_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Download PDB", this,
+															 SLOT(show()), CTRL+Key_T, 1);
+	setMenuHint("Download a PDB file from www.rcsb.org");
 }
 
 void DownloadPDBFile::slotSearch()

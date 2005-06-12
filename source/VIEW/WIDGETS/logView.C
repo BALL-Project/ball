@@ -109,10 +109,9 @@ namespace BALL
 			Log.insertNotification(strstream_, *this);
 			text_edit_->setReadOnly(true);
 			text_edit_->setTextFormat(PlainText);
-		//   	text_edit_->setAcceptDrops(true);
 
 			DockWidget::initializeWidget(main_control);
-			main_control.insertMenuEntry(MainControl::EDIT, "Clear Logs", text_edit_, SLOT(clear()));
+			insertMenuEntry(MainControl::EDIT, "Clear Logs", text_edit_, SLOT(clear()));
 		}
 
 
@@ -120,10 +119,8 @@ namespace BALL
 			throw()
 		{
 			DockWidget::finalizeWidget(main_control);
-			main_control.removeMenuEntry(MainControl::EDIT, "Clear Logs", text_edit_, SLOT(clear()));
 			Log.remove(strstream_);
 		}
 
 	} // VIEW
-
 } // namespace BALL

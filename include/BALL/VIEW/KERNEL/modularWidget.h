@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.19 2004/11/26 10:47:31 amoll Exp $
+// $Id: modularWidget.h,v 1.19.6.1 2005/06/12 17:34:26 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -121,9 +121,10 @@ namespace BALL
 			*/
 			virtual void initializeWidget(MainControl& main_control);
 			
-			/**	Remove the widget.
+			/**	Remove the widget custom items, e.g all menu entries.
 					This method should reverse all actions performed in initializeWidget
 					(remove menu entries and connections of this ModularWidget).
+					Call this method also in derived classes finalizeWidget to remove the menu entries.
 					This method will be called by MainControl::aboutToExit().
 					\param main_control the MainControl object to be finalized with this ModularWidget
 					\see   initializeWidget
@@ -234,14 +235,16 @@ namespace BALL
 			bool unlockComposites()
 				throw();
 
-			/// Wrapper for MainControl::insertMenuEntry
-			int insertMenuEntry(int ID, const String& name, const QObject* receiver, const char* slot, 
-																 int accel, int entry_ID, String hint)
-				throw();
-
 			/// Wrapper for MainControl::menuBar()
 			QMenuBar* menuBar() 
 				throw();
+
+			Index insertMenuEntry (Index parent_id, const String& name, const QObject* receiver = 0, 
+													 const char* slot = 0, Index accel = 0, Index pos = -1)
+				throw();
+
+			///
+			void setMenuHint(const String& hint);
 
 			//@}
 			/**	@name	Debugging and Diagnostics
@@ -263,8 +266,11 @@ namespace BALL
 
 			void setWorkingDirFromFilename_(String filename)
 				throw();
+
+			void removeMenuEntries();
 			
 			protected:
+
 
 			//_ id in the menubar entry "WINDOWS" for every widget
 			Index window_menu_entry_id_;
@@ -274,6 +280,10 @@ namespace BALL
 
 			//_ should the widget be visible, if no config file entry exists?
 			bool default_visible_;
+
+			vector<std::pair<Index, Index> > menu_ids_;
+
+			Index last_parent_id_, last_id_;
 		}; 
   
 	} // namespace VIEW

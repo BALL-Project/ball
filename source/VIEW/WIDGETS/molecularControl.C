@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.13 2005/06/08 12:06:28 oliver Exp $
+// $Id: molecularControl.C,v 1.96.2.14 2005/06/12 17:38:48 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -578,38 +578,29 @@ namespace BALL
 		{
 			String hint;
 
-			hint = "Select a molecular object to see its position in the scene or to mark it for a simulation";
-			select_id_ = insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), 0, -1, hint);   
-			hint = "Deselect a molecular object.";
-			deselect_id_ = insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), 0, -1, hint);
+			select_id_ = insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()));   
+			setMenuHint("Select a molecular object to see its position in the scene or to mark it for a simulation");
+			deselect_id_ = insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()));
+			setMenuHint("Deselect a molecular object.");
+
 			main_control.insertPopupMenuSeparator(MainControl::EDIT);
+
 			cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Cu&t", this, SLOT(cut()), CTRL+Key_X);
 			copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Copy", this, SLOT(copy()), CTRL+Key_C);
 			paste_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Paste", this, SLOT(paste()), CTRL+Key_V);
+
 			main_control.insertDeleteEntry();
 			main_control.insertPopupMenuSeparator(MainControl::EDIT);
-			hint = "Clear the items in the clipboard";
-			clipboard_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Clear Clipboard", this, 
-																									 SLOT(clearClipboard()), 0, -1, hint);
 
-			hint = "Show entries for Secondary Structures in MolecularControl.";
-			show_ss_id_ = main_control.insertMenuEntry(MainControl::OPTIONS, "Show SS entries", this, SLOT(switchShowSecondaryStructure()), 0, -1, hint);
+			clipboard_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Clear Clipboard", this, 
+																									 SLOT(clearClipboard()));
+			setMenuHint("Clear the items in the clipboard");
+
+
+			show_ss_id_ = main_control.insertMenuEntry(MainControl::OPTIONS, "Show SS entries", this, SLOT(switchShowSecondaryStructure()));
+			setMenuHint("Show entries for Secondary Structures in MolecularControl.");
 
 			GenericControl::initializeWidget(main_control);
-		}
-
-
-		void MolecularControl::finalizeWidget(MainControl& main_control)
-			throw()
-		{
-			main_control.removeMenuEntry(MainControl::EDIT, "Cut", this, SLOT(cut()), CTRL+Key_X);
-			main_control.removeMenuEntry(MainControl::EDIT, "&Copy", this, SLOT(copy()), CTRL+Key_C);
-			main_control.removeMenuEntry(MainControl::EDIT, "Paste", this, SLOT(paste()), CTRL+Key_V);
-			main_control.removeMenuEntry(MainControl::EDIT, "&Delete", this, SLOT(deleteCurrentItems()), 0);
-			main_control.removeMenuEntry(MainControl::EDIT, "Clear Clipboard", this, SLOT(clearClipboard()));
-			main_control.removeMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), ALT+Key_S);   
-			main_control.removeMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), ALT+Key_D);   
-			GenericControl::finalizeWidget(main_control);
 		}
 
 

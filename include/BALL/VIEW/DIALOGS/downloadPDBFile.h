@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.11.6.1 2005/05/17 12:35:12 amoll Exp $
+// $Id: downloadPDBFile.h,v 1.11.6.2 2005/06/12 17:34:24 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -52,14 +52,6 @@ namespace BALL
 				virtual void initializeWidget(VIEW::MainControl& main_control)
 					throw();
 
-			/** Removes the widget.
-					Reverses all actions performed in initializeWidget()
-					This method will be called by MainControl::aboutToExit()
-					\see			removeMenuEntry
-			*/
-			virtual void finalizeWidget(VIEW::MainControl& main_control)
-				throw();
-
 			public slots:
 
 				///
@@ -107,6 +99,8 @@ namespace BALL
 
 				// e.g. gif images if not supported
 				HashSet<String> 				unsupported_images_;
+
+				Index menu_id_;
 		};
 
 	} 

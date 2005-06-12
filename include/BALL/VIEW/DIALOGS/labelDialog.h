@@ -108,16 +108,6 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
 			
-			/**	Removes the checkable submenu <b>  Label Dialog </b> from the popup menu <b>  Display </b>.
-					This method will be called by  MainControl::aboutToExit.
-					@param main_control the  MainControl to be finalized 
-					@see   initializeWidget
-					@see   removeMenuEntry
-					@see   aboutToExit
-			*/
-			virtual void finalizeWidget(MainControl& main_control)
-				throw();
-			
 			//@}
 			
 			public slots:

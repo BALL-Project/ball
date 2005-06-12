@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.13 2005/06/05 21:13:28 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.14 2005/06/12 17:39:36 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -15,7 +15,7 @@
 
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
-#include <BALL/VIEW/WIDGETS/geometricControl.h>
+#include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 
@@ -286,7 +286,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					initPopupMenu(FILE)->insertItem("&Import", menu, FILE_IMPORT);
 					break;
 				case FILE_EXPORT:
-					initPopupMenu(FILE)->insertItem("&Export", menu, FILE_EXPORT);
+					initPopupMenu(FILE)->insertItem("&Export Image", menu, FILE_EXPORT);
 					break;
 				case EDIT:
 					menuBar()->insertItem("&Edit", menu, EDIT, EDIT);
@@ -378,9 +378,9 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 
 			#ifdef BALL_QT_HAS_THREADS
-				String hint = "Abort a running simulation thread";
-				insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, SLOT(stopSimulation()),
-						ALT+Key_C, MENU_STOPSIMULATION, hint);
+				Index id = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
+												SLOT(stopSimulation()), ALT+Key_C, MENU_STOPSIMULATION);
+				setMenuHint(id, "Abort a running simulation thread");
 			#endif
 
 			insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, 
@@ -786,10 +786,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			return mc;
 		}
 
-		int MainControl::current_id_ = 15000;
+		Index MainControl::current_id_ = 15000;
 
-		int MainControl::insertMenuEntry(int parent_id, const String& name, const QObject* receiver, const char* slot, 
-																		 int accel, int entry_ID, String hint)
+		Index MainControl::insertMenuEntry(int parent_id, const String& name, const QObject* receiver, 
+																		 const char* slot, int accel, int pos)
 			throw()
 		{
 			QMenuBar* menu_bar = menuBar();
@@ -804,19 +804,13 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				return -1;
 			}
 
-			if (entry_ID == -1) entry_ID = getNextID_();
-			popup->insertItem(name.c_str(), receiver, slot, accel, entry_ID);
-
-			setMenuHint(entry_ID, hint);
+			Index entry_ID = getNextID_();
+			popup->insertItem(name.c_str(), receiver, slot, accel, entry_ID, pos);
 
 			return entry_ID;
 		}
 
-
-		void MainControl::removeMenuEntry
-			(int parent_id, const String& /* name */, 
-			 const QObject* /* receiver */, const char* /* slot */, 
-			 int /* accel */, int entry_ID)
+		void MainControl::removeMenuEntry(Index parent_id, Index entry_ID)
 			throw()
 		{
 			if (about_to_quit_) return;

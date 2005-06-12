@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.24.4.7 2005/05/10 23:08:36 amoll Exp $
+// $Id: geometricControl.h,v 1.24.4.8 2005/06/12 17:34:27 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -119,10 +119,6 @@ namespace BALL
 			void initializeWidget(MainControl& main_control)
 				throw();
 			
-			///
-			void finalizeWidget(MainControl& main_control)
-				throw();
-
 			//@} /**	@name	Accessors: inspectors and mutators */ 
 			//@{
 
@@ -285,6 +281,8 @@ namespace BALL
 			ModifySurfaceDialog* 	modify_surface_dialog_;
 
 			bool  creating_representations_;
+
+			Index menu_clipping_plane_id_;
 		};
 		
 } } // namespaces

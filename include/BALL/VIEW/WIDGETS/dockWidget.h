@@ -58,11 +58,6 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
 
-			/**	Remove the widget.
-					@see ModularWidget::finalizeWidget
-			*/
-			virtual void finalizeWidget(MainControl& main_control) throw();
-
 			/** Load settings from an INIFile
 					@see ModularWidget::fetchPreferences
 			*/
