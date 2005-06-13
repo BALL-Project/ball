@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.8.2.1 2005/06/10 20:47:43 oliver Exp $
+# $Id: Makefile,v 1.8.2.2 2005/06/13 12:27:56 oliver Exp $
 #
 
 EXECUTABLE=BALLView
@@ -111,6 +111,10 @@ macos_pkg: $(EXECUTABLE)
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL/Library 2>/dev/null | true
+	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Applications 2>/dev/null | true
+	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app 2>/dev/null | true
+	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents 2>/dev/null | true
+	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS 2>/dev/null | true
 	@echo "Copying BALL/data..."
 	@$(CP) -r $(BALL_PATH)/data $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL
 	@echo "Copying BALLView"
