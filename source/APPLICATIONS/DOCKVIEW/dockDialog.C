@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.35 2005/06/12 22:28:54 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.36 2005/06/13 14:14:39 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -18,6 +18,7 @@
 #include <qfiledialog.h>
 #include <qtabwidget.h>
 #include <qbuttongroup.h>
+#include <qlistbox.h>
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -172,8 +173,10 @@ namespace BALL
 				// add scoring function to HashMap for scoring option dialogs
 				scoring_dialogs_[score_func] = dialog;
 			}
+			// add to ComboBox
+			scoring_functions->insertItem(name, score_func);
 			// add scoring function to HashMap for names of scoring functions
-			sf_names_[score_func] = name;
+			//sf_names_[score_func] = name;
 		}
 		
 		// Initializes the popup menu Molecular Mechanics with its checkable submenu Docking.
@@ -607,6 +610,18 @@ namespace BALL
 			applyValues_();
 			// apply processors, e.g. add hydrogens
 			applyProcessors_();
+			
+			// set property for the two docking partners
+			// is needed to identify these original partners for redocking
+			AtomContainerIterator it;
+			for(it = docking_partner1_->beginAtomContainer(); +it; ++it)
+			{
+				it->setProperty("DOCKING_PARTNER_1");
+			}
+			for(it = docking_partner2_->beginAtomContainer(); +it; ++it)
+			{
+				it->setProperty("DOCKING_PARTNER_2");
+			}
 			accept();
 		}
 		
@@ -684,32 +699,36 @@ namespace BALL
 			int index = algorithms->currentItem();
 			if(algorithm_dialogs_.has(index))
 			{
+				//enable advanced button
 				alg_advanced_button->setEnabled(true);
+				// disable scoring functions which aren't allowed for chosen algorithm
+				for(int i = 0; i < scoring_functions->count(); i++)
+				{
+					bool found = false;
+					for(unsigned int j = 0; j < allowed_sf_[index].size(); j++)
+					{
+						if(allowed_sf_[index][j] == i)
+						{
+						 	found = true;
+							break;
+						}
+					}
+					scoring_functions->listBox()->item(i)->setSelectable(found);
+				}
 			}
 			else
 			{
+				// disable advanced button
 				alg_advanced_button->setEnabled(false);
+				// enable all scoring functions
+				for(int i = 0; i < scoring_functions->count(); i++)
+				{
+					scoring_functions->listBox()->item(i)->setSelectable(true);
+				}
 			}
 			
-			// clear scoring function combobox
-			// and refill it with the functions which are allowed for the chosen algorithm
-			// if no algorithm is chosen fill combobox with all available scoring functions 
-			scoring_functions->clear();
-			if(algorithm_dialogs_.has(index))
-			{
-				for(unsigned int j = 0; j < allowed_sf_[index].size(); j++)
-				{
-				 	scoring_functions->insertItem(sf_names_[allowed_sf_[index][j]]);
-				}
-			}
-			else // current item is <select>
-			{
-			 	HashMap<int, QString>::Iterator name_it = sf_names_.begin();
-				for(; +name_it; name_it++)
-				{
-				 	scoring_functions->insertItem(name_it->second);
-				}
-			}
+			//set default scoring function as current item
+			scoring_functions->setCurrentItem(0);
 		}
 		
 		//

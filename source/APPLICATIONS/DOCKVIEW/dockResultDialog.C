@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.26 2005/06/06 12:12:05 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.27 2005/06/13 14:14:41 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -447,7 +447,7 @@ namespace BALL
 			SnapShot selected_conformation = (*conformation_set)[snapshot];
 			selected_conformation.applySnapShot(*docked_system_);
 			
-			System s = *docked_system_;
+			//System s = *docked_system_;
 			if(redock_partner1_)
 			{
 				delete redock_partner1_;
@@ -458,22 +458,35 @@ namespace BALL
 			}
 			redock_partner1_ = new System();
 			redock_partner2_ = new System();
-			//Log.info() << "number of atoms docked_system before appendChild: " << docked_system_->countAtoms() << std::endl;
+			Log.info() << "number of atoms docked_system before append: " << docked_system_->countAtoms() << std::endl;
 			
 			redock_partner1_->setName(docked_system_->getName());
 			redock_partner2_->setName("rd");
-			redock_partner1_->appendChild(*(s.getFirstChild()));
-			redock_partner2_->appendChild(*(s.getLastChild()));
-			//Log.info() << "number of atoms redock_partner1_: " << redock_partner1_->countAtoms() << std::endl;
-			//Log.info() << "number of atoms redock_partner2_: " << redock_partner2_->countAtoms() << std::endl;
-			//Log.info() << "number of atoms docked_system after appendChild: " << docked_system_->countAtoms() << std::endl;
+			
+			AtomContainerIterator it;
+			for(it = docked_system_->beginAtomContainer(); +it; ++it)
+			{
+				if(it->hasProperty("DOCKING_PARTNER_1"))
+				{
+				 	redock_partner1_->AtomContainer::insert(*it);
+				}
+				else if(it->hasProperty("DOCKING_PARTNER_2"))
+				{
+					redock_partner2_->AtomContainer::insert(*it);
+				}
+			}
+			
+		//	redock_partner1_->appendChild(*(s.getFirstChild()));
+		//	redock_partner2_->appendChild(*(s.getLastChild()));
+			Log.info() << "number of atoms redock_partner1_: " << redock_partner1_->countAtoms() << std::endl;
+			Log.info() << "number of atoms redock_partner2_: " << redock_partner2_->countAtoms() << std::endl;
+			Log.info() << "number of atoms docked_system after append: " << docked_system_->countAtoms() << std::endl;
 			
 			DockDialog& dialog = DockingController::getInstance(0)->getDockDialog(); 
 			dialog.setSystems(redock_partner1_, redock_partner2_);
 			
 			DockingController::getInstance(0)->runDocking(true);
 		}
-		
 		
 		/*implementation of nested class Compare_		
 		*/

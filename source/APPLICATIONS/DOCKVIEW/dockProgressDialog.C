@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.9 2005/06/06 12:12:05 haid Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.10 2005/06/13 14:14:40 haid Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -9,13 +9,14 @@
 #include <qtextedit.h>
 #include <qpushbutton.h>
 #include <qmessagebox.h>
+#include <qlabel.h>
+
 #define BALL_VIEW_DEBUG
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		
 		// Constructor
 		DockProgressDialog::DockProgressDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
 			throw()
@@ -41,7 +42,6 @@ namespace BALL
 				Log.info() << "Destructing object " << this << " of class DockProgressDialog" << std::endl;
 			#endif 
 		}
-		
 		
 		void DockProgressDialog::setDockingAlgorithm(DockingAlgorithm* alg)
 			throw()
@@ -101,6 +101,9 @@ namespace BALL
 		void DockProgressDialog::show()
 		{
 			timer_.start(1000, true);
+			
+			start_time_ = QDateTime::currentDateTime();
+			
 			//show dialog to user
 			DockProgressDialogData::show();
 		}
@@ -132,8 +135,29 @@ namespace BALL
 		void DockProgressDialog::updateProgress_()
 		{
 			if (alg_->wasAborted()) return;
-			progress_bar->setProgress((int)(alg_->getProgress() * 100.0), 100);
 			
+			float progress = alg_->getProgress();
+			// set progress
+			progress_bar->setProgress((int)(progress * 100.0), 100);
+			// calculate remaining time
+			int run_time = start_time_.secsTo(QDateTime::currentDateTime());
+			Log.info() << "runtime: " << run_time << std::endl;
+			Log.info() << "progress: " << progress << std::endl;
+			int remain_time = (int)((1.0 - progress)/progress) * run_time;
+			int hours, min, sec;
+			hours = remain_time / 3600;
+			min = (remain_time % 3600) / 60;
+			sec = (remain_time % 3600) % 60;
+			QString s, convert;
+			s.setNum(hours);
+			s.append(":");
+			s.append(convert.setNum(min));
+			s.append(":");
+			s.append(convert.setNum(sec));
+			remaining_time->setText(s);
+			
+			// if docking has finished, close dialog
+			// else restart timer
 			if (!alg_->hasFinished())
 			{
 			 	timer_.start(1000, true);
@@ -145,5 +169,5 @@ namespace BALL
 			}
 		}
 		
-	}
-}
+	} // end of namespace View
+} // end of namespace BALL

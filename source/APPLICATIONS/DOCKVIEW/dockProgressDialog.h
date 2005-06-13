@@ -18,6 +18,7 @@
 #endif
 
 #include <qtimer.h>
+#include <qdatetime.h>
 
 #include "dockProgressDialogData.h"
 
@@ -91,6 +92,8 @@ namespace BALL
 				DockingAlgorithm* alg_;
 			
 				QTimer timer_;
+				
+				QDateTime start_time_;
 		};
 		
 } } // Namespaces
