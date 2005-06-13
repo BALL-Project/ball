@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.8.2.3 2005/06/13 13:22:55 oliver Exp $
+# $Id: Makefile,v 1.8.2.4 2005/06/13 15:03:50 oliver Exp $
 #
 
 EXECUTABLE=BALLView
@@ -42,7 +42,7 @@ UIC_FILES=\
 	ballviewDemoData.C
 
 BALLView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS)
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(PYTHON_LIBS)
 
 depend: $(UIC_FILES) $(MOC_SOURCES)
 
@@ -91,7 +91,7 @@ clean_moc_uic:
 	@$(RM) -f $(UIC_FILES)
 
 macos_app: $(EXECUTABLE) BALLView.app/Contents/MacOS/../PkgInfo BALLView.app/Contents/MacOS/../Info.plist 
-	@mv BALLView BALLView.app/Contents/MacOS
+	@$(CP) BALLView BALLView.app/Contents/MacOS
 
 BALLView.app/Contents/MacOS/../PkgInfo: 
 	@test -d BALLView.app/Contents/MacOS/ || mkdir -p BALLView.app/Contents/MacOS/
@@ -106,8 +106,8 @@ BALLView.app/Contents/MacOS/../Info.plist:
 
 macos_pkg: $(EXECUTABLE)
 	@echo "Cleaning old package contents..."
-	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Library 2>/dev/null | true
-	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Applications 2>/dev/null | true
+	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL 2>/dev/null | true
+	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL 2>/dev/null | true
