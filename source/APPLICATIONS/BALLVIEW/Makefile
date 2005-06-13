@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.8.2.2 2005/06/13 12:27:56 oliver Exp $
+# $Id: Makefile,v 1.8.2.3 2005/06/13 13:22:55 oliver Exp $
 #
 
 EXECUTABLE=BALLView
@@ -106,8 +106,9 @@ BALLView.app/Contents/MacOS/../Info.plist:
 
 macos_pkg: $(EXECUTABLE)
 	@echo "Cleaning old package contents..."
-	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL 2>/dev/null | true
-	@-mkkdir $(BALL_PATH)/MacOSX/BALLPackage 2>/dev/null | true
+	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Library 2>/dev/null | true
+	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Applications 2>/dev/null | true
+	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL/Library 2>/dev/null | true
@@ -118,7 +119,7 @@ macos_pkg: $(EXECUTABLE)
 	@echo "Copying BALL/data..."
 	@$(CP) -r $(BALL_PATH)/data $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL
 	@echo "Copying BALLView"
-	@$(MV) BALLView $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS/
+	@$(CP) BALLView $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS/
 	@echo "Copying QT libraries..."
 	@$(CP) $(QT_LIBPATH)/libqt$(QT_MT_SUFFIX).$(SHARED_LIB_SUFFIX) $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL/Library/
 	
