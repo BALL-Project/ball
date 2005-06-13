@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.6 2005/06/08 17:59:58 oliver Exp $
+// $Id: dockingController.C,v 1.1.2.7 2005/06/13 15:51:33 haid Exp $
 //
 
 #include "dockingController.h"
@@ -42,7 +42,8 @@ namespace BALL
 			#endif
 			registerWidget(this);
 		}
-		
+
+		// Destructor
 		DockingController::~DockingController()
 			throw()
 		{}
@@ -51,6 +52,8 @@ namespace BALL
 		void DockingController::onNotify(Message *message)
 			throw()
 		{
+			// if (re)docking has finished, start scoring
+			// first check if user has aborted (re)docking
 			if (RTTI::isKindOf<DockingFinishedMessage>(*message))
 			{
 				DockingFinishedMessage* dfm = RTTI::castTo<DockingFinishedMessage>(*message);
@@ -92,7 +95,7 @@ namespace BALL
 																				 SLOT(startDocking()), CTRL+Key_D, -1, hint);
 		}
 		
-		//Removes the checkable submenu Docking from the popup menu Molecular Mechanics.
+		// Removes the checkable submenu Docking from the popup menu Molecular Mechanics.
 		void DockingController::finalizeWidget(MainControl& main_control)
 			throw()
 		{
@@ -104,15 +107,14 @@ namespace BALL
 		void DockingController::checkMenu (MainControl& main_control)
 			throw()
 		{
+			// if composites are locked disable menu entry "Docking"
 			if(main_control.compositesAreLocked())
 			{
 				menuBar()->setItemEnabled(id_, false);
 				return;
 			}
-		
+			// iterate over all composites; get to know if there are loaded systems
 			CompositeManager& composite_manager = main_control.getCompositeManager();
-			
-			//iterate over all composites; get to know if there are systems
 			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();
 
 			Size num_systems = 0;
@@ -123,8 +125,7 @@ namespace BALL
 					num_systems++;
 				}
 			}
-
-			//if no or only one system loaded, disable menu entry "Docking"
+			// if no or only one system loaded, disable menu entry "Docking"
 			if(num_systems > 1)
 			{
 				menuBar()->setItemEnabled(id_, true);
@@ -146,6 +147,8 @@ namespace BALL
 		 runDocking(false);
 		}
 		
+		// Check which algorithm is chosen and create new DockingAlgorithm object.
+		// Start new Thread and fill/show ProgressDialog.
 		void DockingController::runDocking(bool isRedock)
 			throw()
 		{
@@ -226,6 +229,10 @@ namespace BALL
 			#endif
 		}
 		
+		// Apply scoring function which user has chosen.
+		// Then, create new DockResult and add new scoring to it.
+		// At the end, add the docked system to BALLView structures
+		// and send a NewDockResultMessage to insert the DockResult in DatasetControl.
 		void DockingController::runScoring_(ConformationSet* conformation_set)
 			throw()
 		{
@@ -263,17 +270,18 @@ namespace BALL
 	   	vector<ConformationSet::Conformation> ranked_conformations((*scoring)(*conformation_set));
 			conformation_set->setScoring(ranked_conformations);
 
-			// add a new scoring to dock_res_; we need the name, options and score vector of the scoring function
+			// create new DockResult and add a new scoring to it;
+			// we need the name, options and score vector of the scoring function
+			DockResult* dock_res = new DockResult(String(dock_dialog_.algorithms->currentText().ascii()),
+																						conformation_set,
+																						dock_dialog_.getAlgorithmOptions()); 
+			
 			vector<float> scores;
 			for(unsigned int i = 0; i < ranked_conformations.size(); i++)
 			{
 				scores.push_back(ranked_conformations[i].second);
 			}
 
-			DockResult* dock_res = new DockResult(String(dock_dialog_.algorithms->currentText().ascii()),
-																						conformation_set,
-																						dock_dialog_.getAlgorithmOptions()); 
-																							
 			dock_res->addScoring(String(dock_dialog_.scoring_functions->currentText().ascii()), dock_dialog_.getScoringOptions(), scores);
 
 			// add docked system to BALLView structures 
@@ -297,8 +305,8 @@ namespace BALL
 				scoring = NULL;
 			}
 			
-			Log.info() << "End of calculate" << std::endl;
+			Log.info() << "End of runScoring_" << std::endl;
 		}
 		
-	}
-}
+	} // end of namespace View
+} // end of namespace BALL

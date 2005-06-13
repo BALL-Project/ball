@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.3 2005/05/30 19:13:22 haid Exp $
+// $Id: dockingController.h,v 1.1.2.4 2005/06/13 15:51:33 haid Exp $
 //
 
 #ifndef DOCKINGCONTROLLER_H
@@ -78,7 +78,6 @@ namespace BALL
 						Calls registerWidget.
 						\see        ModularWidget
 				*/
-
 				DockingController(QWidget* parent = 0, const char* name = 0)
 					throw();
 
@@ -94,11 +93,9 @@ namespace BALL
 				//@}
 
 				/** Message handling method.
-							Catches only ControlSelectionMessage from MolecularControl.
-							If such a message is catched the apply button will be enabled and labels
-							can be appended onto the selection.
-							@param message the pointer to the message that should be processed
-				*/
+				 *	Catches DockingFinishedNessage and ShowDockResultMessage	
+				 * 	@param message the pointer to the message that should be processed
+				 */
 				void onNotify(Message *message)
 					throw();
 
@@ -152,33 +149,46 @@ namespace BALL
 				DockDialog& getDockDialog()	
 					throw();
 			
-				void runDocking(bool isRedock)
+			/** Check which algorithm is chosen and create new DockingAlgorithm object.
+			 *  Start new Thread and fill/show ProgressDialog.
+			 */
+			 void runDocking(bool isRedock)
 					throw();	
 						
 			public slots:
 				
-				void startDocking();
+			/** Function is only called when we start docking (by clicking on menu entry "Docking").
+			 *  Calls runDocking(false).
+			 */
+			 void startDocking();
 				
 			protected:
 			
-				void runScoring_(ConformationSet* conformation_set)
+			/** Apply scoring function which user has chosen.
+			 *  Then, create new DockResult and add new scoring to it.
+			 *  At the end, add the docked system to BALLView structures
+			 *  and send a NewDockResultMessage to insert the DockResult in DatasetControl.
+			 */
+			 void runScoring_(ConformationSet* conformation_set)
 					throw();
 				
 			private:
 				
-				DockDialog dock_dialog_;
+			/** dialog for docking and redocking
+			 */
+			DockDialog dock_dialog_;
 				
 				/** Pointer to docking algorithm
 				*/
 				DockingAlgorithm* dock_alg_;
 				
-				// pointer to progress dialog
+				/// pointer to progress dialog
 				DockProgressDialog* progress_dialog_;
 				
 				/** Menu entry id
 				 */
 				int id_;
 		};
-	}
-}
+	} // end of namespace View
+} // end of namespace BALL
 #endif

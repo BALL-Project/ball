@@ -48,13 +48,8 @@ namespace BALL
 				*/
 				~DockProgressDialog()
 					throw();
-			
-				/**
-				*/
-				void fillDialog(const QString& p1, const QString& p2, const QString& alg, const QString& sf, const Options& alg_opt, const Options& sf_opt)
-					throw();
-					
-				/**
+		
+			/**
 				*/
 				void setDockingAlgorithm(DockingAlgorithm* alg)
 					throw();	
@@ -62,8 +57,13 @@ namespace BALL
 				/**
 				*/
 				const DockingAlgorithm* getDockingAlgorithm() const
+					throw();			
+
+				/**
+				*/
+				void fillDialog(const QString& p1, const QString& p2, const QString& alg, const QString& sf, const Options& alg_opt, const Options& sf_opt)
 					throw();
-			
+					
 				
 			public slots:
 			
