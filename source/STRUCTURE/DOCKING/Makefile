@@ -12,7 +12,6 @@ CPP_SOURCES= \
 	amberEvaluation.C\
 	randomEvaluation.C\
 	$(FFT_DEPENDENT_SOURCES)
-# randomEvaluation.C
 
 include ../../common.mak
 include .Dependencies

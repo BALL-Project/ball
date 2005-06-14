@@ -53,23 +53,15 @@ namespace BALL
 	}
 
 	std::vector<ConformationSet::Conformation> ForceFieldEvaluation::operator () (ConformationSet& conformations)
-		throw()
+		throw(Exception::TooManyErrors)
 	{
 		std::vector<ConformationSet::Conformation> result;
-		Log.info() << "in ForceFieldEvaluation::operator() " << std::endl;
 		if (!ff_)
 			return result;
 
 		System S = conformations.getSystem();
 
 		ff_->setup(S);
-
-		Log.info() << "in ForceField:: Option of Amber FF:" << std::endl;
-		Options::Iterator it = ff_->options.begin();
-		for(; +it; ++it)
-		{
-			Log.info() << it->first << " : " << it->second << std::endl;
-		}
 		
 		for (int i=0; i<(int)conformations.size(); i++)
 		{

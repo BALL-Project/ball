@@ -1283,9 +1283,9 @@ namespace BALL
 	{
 		ang_num_ = 0;
 
-		for(int psipsi = 0; psipsi < 180; psipsi += deg)
-			for(int thetatheta = 0; thetatheta < 360; thetatheta += deg)
-				for(int phiphi = 0; phiphi < 360; phiphi += deg)
+		for(float psipsi = psi_min; psipsi < psi_max; psipsi += deg_psi)
+			for(float thetatheta = theta_min; thetatheta < theta_max; thetatheta += deg_theta)
+				for(float phiphi = phi_min; phiphi < phi_max; phiphi += deg_phi)
 				{
 
 					double x1 = phiphi     * Constants::PI / 180.0;
@@ -1301,9 +1301,9 @@ namespace BALL
 
 					bool degenerate = false;
 
-					for(int k = 0; (k <= psipsi) && (!degenerate); k += deg)
-						for(int j = 0; (j <= thetatheta) && (!degenerate); j += deg)
-							for(int i = 0; (i <= phiphi) && (!degenerate); i += deg)
+					for(float k = 0.0; (k <= psipsi) && (!degenerate); k += deg_psi)
+						for(float j = 0.0; (j <= thetatheta) && (!degenerate); j += deg_theta)
+							for(float i = 0.0; (i <= phiphi) && (!degenerate); i += deg_phi)
 							{
 								if( (i == phiphi) && (j == thetatheta) && (k == psipsi) )
 									continue;

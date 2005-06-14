@@ -14,7 +14,6 @@ EnergeticEvaluation::~EnergeticEvaluation()
 }
 
 vector<ConformationSet::Conformation> EnergeticEvaluation::operator () (ConformationSet& conformations)
-	throw()
 {
 	Log.info() << "in EnergeticEvaluation::operator() " << std::endl;
 	return conformations.getScoring();
