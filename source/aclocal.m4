@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.2.3 2005/06/14 15:39:05 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.4 2005/06/14 20:50:14 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -3420,39 +3420,45 @@ AC_DEFUN(CF_PYTHON, [
 		dnl
 		dnl	Python library path
 		dnl
-		AC_MSG_CHECKING(for libpython)
-		if test "${PYTHON_LIBPATH}" = "" ; then
-			PYTHON_LIBPATH="${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/config/"
-		fi
-		PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
-		if test "${PYTHON_LIBS}" = "" ; then
-			AC_MSG_RESULT()
-			AC_MSG_RESULT(No libpython*a found in ${PYTHON_LIBPATH}. Please specify)
-			AC_MSG_RESULT(the path where your Python library resides using --with-python-libs=DIR)
-			AC_MSG_RESULT(or ensure that libpython is installed in the correct directory)
-			AC_MSG_RESULT([(sys.prefix is ]${PYTHON_PREFIX}[)])
-			CF_ERROR
-		fi
-		AC_MSG_RESULT(${PYTHON_LIBS})
-
-		if test "${PYTHON_LDOPTS}" = "" ; then
-			PYTHON_MAKEFILE=`${FIND} ${PYTHON_LIBPATH} -name Makefile 2>/dev/null`
-			if test "${PYTHON_MAKEFILE}" = "" ; then
+    dnl use framework Python instead for Darwin
+    if test "${OS}" = "Darwin" ; then
+ 			PYTHON_LIBS="-framework Python"
+		else     
+			AC_MSG_CHECKING(for libpython)
+			if test "${PYTHON_LIBPATH}" = "" ; then
+				PYTHON_LIBPATH="${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/config/"
+			fi
+			PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
+			if test "${PYTHON_LIBS}" = "" ; then
 				AC_MSG_RESULT()
-				AC_MSG_RESULT(Makefile in the Python lib/config directory not found!)
-				AC_MSG_RESULT(Please specify the correct options needed to link)
-				AC_MSG_RESULT(against the Python library using)
-				AC_MSG_RESULT( --with-python-ldopts=OPTIONS)
-				AC_MSG_RESULT([(e.g. --with-python-ldopts="-ltermcap -lm")])
+				AC_MSG_RESULT(No libpython*a found in ${PYTHON_LIBPATH}. Please specify)
+				AC_MSG_RESULT(the path where your Python library resides using --with-python-libs=DIR)
+				AC_MSG_RESULT(or ensure that libpython is installed in the correct directory)
+				AC_MSG_RESULT([(sys.prefix is ]${PYTHON_PREFIX}[)])
 				CF_ERROR
 			fi
-			PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
-			PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^BASEMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
-			PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LOCALMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-` -lm"
-			PYTHON_LIBS=`echo ${PYTHON_LIBS} | ${TR} -s " "`
+			AC_MSG_RESULT(${PYTHON_LIBS})
+
+			if test "${PYTHON_LDOPTS}" = "" ; then
+				PYTHON_MAKEFILE=`${FIND} ${PYTHON_LIBPATH} -name Makefile 2>/dev/null`
+				if test "${PYTHON_MAKEFILE}" = "" ; then
+					AC_MSG_RESULT()
+					AC_MSG_RESULT(Makefile in the Python lib/config directory not found!)
+					AC_MSG_RESULT(Please specify the correct options needed to link)
+					AC_MSG_RESULT(against the Python library using)
+					AC_MSG_RESULT( --with-python-ldopts=OPTIONS)
+					AC_MSG_RESULT([(e.g. --with-python-ldopts="-ltermcap -lm")])
+					CF_ERROR
+				fi
+				PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
+				PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^BASEMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
+				PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LOCALMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-` -lm"
+				PYTHON_LIBS=`echo ${PYTHON_LIBS} | ${TR} -s " "`
+			fi
+			AC_MSG_RESULT(Linker options for Python library: ${PYTHON_LIBS})
 		fi
-		AC_MSG_RESULT(Linker options for Python library: ${PYTHON_LIBS})
-			
+
+		
 		dnl
 		dnl	 SIP executable
 		dnl

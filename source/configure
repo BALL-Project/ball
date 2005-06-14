@@ -20269,22 +20269,25 @@ echo "${ECHO_T}${PYTHON_INC_PATH}" >&6
 			PYTHON_INCLUDES="-I${PYTHON_INC_PATH}"
 		fi
 
-								echo "$as_me:$LINENO: checking for libpython" >&5
+						        if test "${OS}" = "Darwin" ; then
+ 			PYTHON_LIBS="-framework Python"
+		else
+			echo "$as_me:$LINENO: checking for libpython" >&5
 echo $ECHO_N "checking for libpython... $ECHO_C" >&6
-		if test "${PYTHON_LIBPATH}" = "" ; then
-			PYTHON_LIBPATH="${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/config/"
-		fi
-		PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
-		if test "${PYTHON_LIBS}" = "" ; then
-			echo "$as_me:$LINENO: result: " >&5
+			if test "${PYTHON_LIBPATH}" = "" ; then
+				PYTHON_LIBPATH="${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/config/"
+			fi
+			PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
+			if test "${PYTHON_LIBS}" = "" ; then
+				echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-			echo "$as_me:$LINENO: result: No libpython*a found in ${PYTHON_LIBPATH}. Please specify" >&5
+				echo "$as_me:$LINENO: result: No libpython*a found in ${PYTHON_LIBPATH}. Please specify" >&5
 echo "${ECHO_T}No libpython*a found in ${PYTHON_LIBPATH}. Please specify" >&6
-			echo "$as_me:$LINENO: result: the path where your Python library resides using --with-python-libs=DIR" >&5
+				echo "$as_me:$LINENO: result: the path where your Python library resides using --with-python-libs=DIR" >&5
 echo "${ECHO_T}the path where your Python library resides using --with-python-libs=DIR" >&6
-			echo "$as_me:$LINENO: result: or ensure that libpython is installed in the correct directory" >&5
+				echo "$as_me:$LINENO: result: or ensure that libpython is installed in the correct directory" >&5
 echo "${ECHO_T}or ensure that libpython is installed in the correct directory" >&6
-			echo "$as_me:$LINENO: result: (sys.prefix is ${PYTHON_PREFIX})" >&5
+				echo "$as_me:$LINENO: result: (sys.prefix is ${PYTHON_PREFIX})" >&5
 echo "${ECHO_T}(sys.prefix is ${PYTHON_PREFIX})" >&6
 
 	echo "$as_me:$LINENO: result: " >&5
@@ -20322,24 +20325,24 @@ echo "${ECHO_T}" >&6
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-		fi
-		echo "$as_me:$LINENO: result: ${PYTHON_LIBS}" >&5
+			fi
+			echo "$as_me:$LINENO: result: ${PYTHON_LIBS}" >&5
 echo "${ECHO_T}${PYTHON_LIBS}" >&6
 
-		if test "${PYTHON_LDOPTS}" = "" ; then
-			PYTHON_MAKEFILE=`${FIND} ${PYTHON_LIBPATH} -name Makefile 2>/dev/null`
-			if test "${PYTHON_MAKEFILE}" = "" ; then
-				echo "$as_me:$LINENO: result: " >&5
+			if test "${PYTHON_LDOPTS}" = "" ; then
+				PYTHON_MAKEFILE=`${FIND} ${PYTHON_LIBPATH} -name Makefile 2>/dev/null`
+				if test "${PYTHON_MAKEFILE}" = "" ; then
+					echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-				echo "$as_me:$LINENO: result: Makefile in the Python lib/config directory not found!" >&5
+					echo "$as_me:$LINENO: result: Makefile in the Python lib/config directory not found!" >&5
 echo "${ECHO_T}Makefile in the Python lib/config directory not found!" >&6
-				echo "$as_me:$LINENO: result: Please specify the correct options needed to link" >&5
+					echo "$as_me:$LINENO: result: Please specify the correct options needed to link" >&5
 echo "${ECHO_T}Please specify the correct options needed to link" >&6
-				echo "$as_me:$LINENO: result: against the Python library using" >&5
+					echo "$as_me:$LINENO: result: against the Python library using" >&5
 echo "${ECHO_T}against the Python library using" >&6
-				echo "$as_me:$LINENO: result: --with-python-ldopts=OPTIONS" >&5
+					echo "$as_me:$LINENO: result: --with-python-ldopts=OPTIONS" >&5
 echo "${ECHO_T}--with-python-ldopts=OPTIONS" >&6
-				echo "$as_me:$LINENO: result: (e.g. --with-python-ldopts=\"-ltermcap -lm\")" >&5
+					echo "$as_me:$LINENO: result: (e.g. --with-python-ldopts=\"-ltermcap -lm\")" >&5
 echo "${ECHO_T}(e.g. --with-python-ldopts=\"-ltermcap -lm\")" >&6
 
 	echo "$as_me:$LINENO: result: " >&5
@@ -20377,14 +20380,16 @@ echo "${ECHO_T}" >&6
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
+				fi
+				PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
+				PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^BASEMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
+				PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LOCALMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-` -lm"
+				PYTHON_LIBS=`echo ${PYTHON_LIBS} | ${TR} -s " "`
 			fi
-			PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
-			PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^BASEMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
-			PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LOCALMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-` -lm"
-			PYTHON_LIBS=`echo ${PYTHON_LIBS} | ${TR} -s " "`
-		fi
-		echo "$as_me:$LINENO: result: Linker options for Python library: ${PYTHON_LIBS}" >&5
+			echo "$as_me:$LINENO: result: Linker options for Python library: ${PYTHON_LIBS}" >&5
 echo "${ECHO_T}Linker options for Python library: ${PYTHON_LIBS}" >&6
+		fi
+
 
 
 	# Extract the first word of "sip", so it can be a program name with args.
