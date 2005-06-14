@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.11 2005/06/14 16:56:24 leonhardt Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.12 2005/06/14 17:36:41 haid Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -21,15 +21,11 @@ namespace BALL
 		DockProgressDialog::DockProgressDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
 			throw()
 			: DockProgressDialogData(parent, name, modal, fl),
-				ModularWidget(name),
 				alg_(0)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "new DockProgressDialog " << this << std::endl;
 			#endif
-		
-			// register the widget with the MainControl
-			ModularWidget::registerWidget(this);
 			
 			connect(&timer_, SIGNAL(timeout()), SLOT(updateProgress_()));
 		}
@@ -41,6 +37,19 @@ namespace BALL
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << this << " of class DockProgressDialog" << std::endl;
 			#endif 
+		}
+		
+		// Assignment operator
+		const DockProgressDialog& DockProgressDialog::operator =(const DockProgressDialog& dock_prog_dialog)
+			throw()
+		{
+			if (&dock_prog_dialog != this)
+			{
+				alg_ = dock_prog_dialog.alg_;
+				//timer_ = dock_prog_dialog.timer_;
+				start_time_ = dock_prog_dialog.start_time_;
+			}
+			return *this;
 		}
 		
 		void DockProgressDialog::setDockingAlgorithm(DockingAlgorithm* alg)
@@ -55,7 +64,8 @@ namespace BALL
 		  return alg_;
 		}
 		
-		//
+		// Fill ProgressDialog with information about the chosen
+		// docking partners, algorithm, scoring function and options
 		void DockProgressDialog::fillDialog(const QString& p1, const QString& p2, const QString& alg, const QString& sf,
 																				const Options& alg_opt, const Options& sf_opt)
 			throw()
@@ -141,8 +151,6 @@ namespace BALL
 			progress_bar->setProgress((int)(progress * 100.0), 100);
 			// calculate remaining time
 			int run_time = start_time_.secsTo(QDateTime::currentDateTime());
-			Log.info() << "runtime: " << run_time << std::endl;
-			Log.info() << "progress: " << progress << std::endl;
 			int remain_time = (int)(((1.0 - progress)/progress) * run_time);
 			int hours, min, sec;
 			hours = remain_time / 3600;

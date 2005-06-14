@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.36 2005/06/13 14:14:39 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.37 2005/06/14 17:36:41 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -90,8 +90,12 @@ namespace BALL
 		{
 			if (&dock_dialog != this)
 			{
+				is_redock_ = dock_dialog.is_redock_;
+				has_changed_ = dock_dialog.has_changed_;
+				backup_ = dock_dialog.backup_;
 				algorithm_dialogs_ = dock_dialog.algorithm_dialogs_;
 				scoring_dialogs_ = dock_dialog.scoring_dialogs_;
+				allowed_sf_ = dock_dialog.allowed_sf_;
 				docking_partner1_ = dock_dialog.docking_partner1_;
 				docking_partner2_ = dock_dialog.docking_partner2_;
 				algorithm_opt_ = dock_dialog.algorithm_opt_;

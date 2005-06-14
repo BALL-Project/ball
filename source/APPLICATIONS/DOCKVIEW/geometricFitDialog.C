@@ -48,6 +48,19 @@ namespace BALL
 			#endif 
 		}
 		
+		// Assignment operator
+		const GeometricFitDialog& GeometricFitDialog::operator =(const GeometricFitDialog& geo_fit_dialog)
+			throw()
+		{
+			if (&geo_fit_dialog != this)
+			{
+				backup_ = geo_fit_dialog.backup_;
+				has_changed_ = geo_fit_dialog.has_changed_;
+				is_redock_ = geo_fit_dialog.is_redock_;
+			}
+			return *this;
+		}
+		
 		// Read the preferences from an INIFile
 		// for reading docking preferences call PreferencesEntry::readPreferenceEntries
 		// for reading redocking options call fetchPreferences_
@@ -214,8 +227,6 @@ namespace BALL
 		void GeometricFitDialog::cancelPressed()
 		{
 			reject();
-			//reset();
-			//hide();
 		}
 		
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.4 2005/06/13 15:51:33 haid Exp $
+// $Id: dockingController.h,v 1.1.2.5 2005/06/14 17:36:42 haid Exp $
 //
 
 #ifndef DOCKINGCONTROLLER_H
@@ -174,9 +174,9 @@ namespace BALL
 				
 			private:
 				
-			/** dialog for docking and redocking
-			 */
-			DockDialog dock_dialog_;
+				/** dialog for docking and redocking
+				 */
+				DockDialog dock_dialog_;
 				
 				/** Pointer to docking algorithm
 				*/

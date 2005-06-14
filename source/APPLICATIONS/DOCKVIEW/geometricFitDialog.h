@@ -64,6 +64,11 @@ namespace BALL
 				virtual ~GeometricFitDialog()
 					throw();
 
+				/**  Assignment operator
+				 */
+				const GeometricFitDialog& operator =(const GeometricFitDialog& geo_fit_dialog)
+					throw();
+					
 				/**	ModularWidget methods
 				 */
 				//@{

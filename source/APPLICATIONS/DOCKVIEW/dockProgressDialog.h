@@ -30,14 +30,11 @@ namespace BALL
     		\ingroup  ViewDialogs
 		 */
 		class BALL_EXPORT DockProgressDialog : 
-			public DockProgressDialogData,
-			public ModularWidget
+			public DockProgressDialogData
 		{ 
 			Q_OBJECT
 				
 			public:
-			
-			BALL_EMBEDDABLE(DockProgressDialog, ModularWidget)
 			
 				/** Constructor
 				*/
@@ -49,6 +46,11 @@ namespace BALL
 				~DockProgressDialog()
 					throw();
 		
+				/**  Assignment operator
+				 */
+				const DockProgressDialog& operator =(const DockProgressDialog& dock_prog_dialog)
+					throw();
+					
 			/**
 				*/
 				void setDockingAlgorithm(DockingAlgorithm* alg)

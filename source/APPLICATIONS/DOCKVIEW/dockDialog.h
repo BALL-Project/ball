@@ -328,11 +328,6 @@ namespace BALL
 				 *  value: vector of scoring functions which can be used with this algorithm
 				 */
 				HashMap<int, vector<int> > allowed_sf_;
-
-				/** key: ScoringFunction(enum)
-				 *  value: names of the scoring functions
-				 */
-				//HashMap<int, QString> sf_names_;
 				
 				/** Pointer to the two docking partners
 				 */
