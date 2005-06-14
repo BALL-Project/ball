@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.13 2005/02/06 20:57:07 oliver Exp $
+// $Id: amberConfigurationDialog.C,v 1.13.4.1 2005/06/14 18:28:00 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
@@ -48,13 +48,13 @@ namespace BALL
 
 		void AmberConfigurationDialog::resetOptions()
 		{
-			nonbonded_cutoff_line_edit->setText("20.000000");
-			vdw_cutoff_line_edit->setText("15.000000");
-			vdw_cuton_line_edit->setText("13.000000");
-			electrostatic_cutoff_line_edit->setText("15.000000");
-			electrostatic_cuton_line_edit->setText("13.000000");
-			scaling_electrostatic_1_4_line_edit->setText("2.000000");
-			scaling_vdw_1_4_line_edit->setText("2.000000");
+			nonbonded_cutoff_line_edit->setText("20.0");
+			vdw_cutoff_line_edit->setText("15.0");
+			vdw_cuton_line_edit->setText("13.0");
+			electrostatic_cutoff_line_edit->setText("15.0");
+			electrostatic_cuton_line_edit->setText("13.0");
+			scaling_electrostatic_1_4_line_edit->setText("2.0");
+			scaling_vdw_1_4_line_edit->setText("2.0");
 
 			distance_button->setChecked(false);
 			constant_button->setChecked(true);
@@ -309,7 +309,7 @@ namespace BALL
 			amber.options[AmberFF::Option::OVERWRITE_CHARGES] = (getOverwriteCharges() ? "true" : "false");
 			amber.options[AmberFF::Option::OVERWRITE_TYPENAMES] = (getOverwriteTypenames() ? "true" : "false");
 
-			amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = getUseDistanceDependentDC();
+			amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = (getUseDistanceDependentDC() ? "true" : "false");
 			amber.options[AmberFF::Option::NONBONDED_CUTOFF] = getNonbondedCutoff();
 			amber.options[AmberFF::Option::VDW_CUTOFF] = getVdwCutoff();
 			amber.options[AmberFF::Option::VDW_CUTON] = getVdwCuton();
@@ -323,7 +323,10 @@ namespace BALL
 			bool error = false;
 			try
 			{
-				if (String(max_unassigned_atoms->text().ascii()).toUnsignedInt() == 0) error = true;
+				if (String(max_unassigned_atoms->text().ascii()).toUnsignedInt() == 0) 
+				{
+					error = true;
+				}
 				amber.setMaximumNumberOfErrors(String(max_unassigned_atoms->text().ascii()).toUnsignedInt());
 			}
 			catch(...)
