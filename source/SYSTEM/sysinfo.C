@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.18 2005/03/11 16:53:37 amoll Exp $
+// $Id: sysinfo.C,v 1.18.2.1 2005/06/14 15:39:13 oliver Exp $
 //
 
 #include <BALL/SYSTEM/sysinfo.h>
@@ -231,12 +231,22 @@ namespace BALL
 
 		LongIndex getTotalMemory()
 		{
+    	unsigned int physmem;
+    	size_t len = sizeof(physmem);
+    	static int mib[2] = { CTL_HW, HW_PHYSMEM };
+
+    	if (sysctl (mib, 2, &physmem, &len, NULL, 0) == 0
+					&& len == sizeof(physmem))
+			{
+    	  return (LongIndex) physmem;
+			}
 			return -1;
 		}
 
 		LongIndex getBufferedMemory()
 		{
 			return -1;
+
 		}
 
 		Time getUptime()

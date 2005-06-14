@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.2.2 2005/06/10 17:55:19 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.3 2005/06/14 15:39:05 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -666,12 +666,12 @@ AC_DEFUN(CF_GXX_OPTIONS, [
   CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 	dnl
 	dnl	Some compiler versions have problems with -O3 unter Darwin (3.3.0),
-	dnl so we go back to -O2.
+	dnl so we go back to -O1.
 	dnl
 	if test "${OS}" = "Darwin" ; then
-	  CXXFLAGS_O="${CXXFLAGS_O} -O2 -Wall -W -pedantic -Wno-long-long -Wno-long-double"		
+	  CXXFLAGS_O="${CXXFLAGS_O} -O1 -Wall -W -pedantic -Wno-long-long -Wno-long-double"		
 	else
-	  CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
+	  CXXFLAGS_O="${CXXFLAGS_O} -O1 -Wall -W -pedantic -Wno-long-long"
 	fi
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
@@ -687,7 +687,7 @@ AC_DEFUN(CF_GXX_OPTIONS, [
     DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
   else 
     if test "${OS}" = "Darwin" ; then
-      DYNAROPTS="${DYNAROPTS} -prebind -dynamiclib -o"
+      DYNAROPTS="${DYNAROPTS} -headerpad_max_install_names -prebind -compatibility_version ${BALL_COMPATIBILITY_VERSION} -current_version ${BALL_CURRENT_VERSION} -dynamiclib -o"
 			ADD_DYNAROPTS_LIBPROJECT[]="-seg1addr 0xb0000000"
 			ADD_DYNAROPTS_LIBVIEW="-seg1addr 0x80000000"
       RANLIB="ranlib -s "
@@ -2675,7 +2675,7 @@ AC_DEFUN(CF_VIEW, [
 			dnl
 			if test "${OS}" = "Darwin" ; then
 				VIEW_PLATFORM="OpenGL-Darwin"
-				OPENGL_LIBOPTS="-framework OpenGL -framework AGL"
+				OPENGL_LIBOPTS="-framework Carbon -framework OpenGL -framework AGL"
 				X11_LIBPATHOPT=""
 				X11_INCPATH=""
 	      OPENGL_INCPATH="-I/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers -I/System/Library/Frameworks/AGL.framework/Versions/A/Headers"
