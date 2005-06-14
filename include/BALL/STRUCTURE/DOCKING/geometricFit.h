@@ -164,6 +164,13 @@ namespace BALL
 
 					// generate all non-degenerate rotation angles.
 					// This algorithm is based on ???
+					bool generateSomeAngles( const float deg_phi,   const float deg_psi, const float deg_theta,
+												 					 const float phi_min,   const float phi_max,
+																	 const float psi_min,   const float psi_max,
+																	 const float theta_min, const float theta_max ) throw();
+
+					// generate all non-degenerate rotation angles.
+					// This algorithm is based on ???
 					bool generateAllAngles( const int deg ) throw();
 
 					int getRotationNum()

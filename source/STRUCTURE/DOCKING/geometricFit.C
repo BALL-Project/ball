@@ -33,8 +33,8 @@
 using namespace std;
 
 // TODO???? Fix it! :)
-//typedef std::complex<double> Complex;
-typedef std::complex<float> Complex;
+typedef std::complex<double> Complex;
+//typedef std::complex<float> Complex;
 
 namespace BALL
 {
@@ -987,6 +987,7 @@ namespace BALL
 		// calculate all the rotation angles
 		RotationAngles_ rotAng;
 
+		// TODO: Per Options regeln in welchem intervall...
 		if(    rotAng.generateAllAngles( (int)options.getReal(Option::DEGREE_INTERVAL) ) == false
 				|| rotAng.getRotationNum() == 0 )
 		{
@@ -1270,6 +1271,101 @@ namespace BALL
 		generateAllAngles( step );
 	}
 
+	/** RotationAngles_ class
+	 *  Generate all non-degenerate rotation angles for the given degree interval.
+	 * 	This algorithm is based on ???
+	 */
+	bool GeometricFit::RotationAngles_::generateSomeAngles( const float deg_phi, const float deg_theta, const float deg_psi,
+								 																					const float phi_min, const float phi_max,
+																													const float psi_min, const float psi_max,
+																													const float theta_min, const float theta_max	) 
+		throw()
+	{
+		ang_num_ = 0;
+
+		for(int psipsi = 0; psipsi < 180; psipsi += deg)
+			for(int thetatheta = 0; thetatheta < 360; thetatheta += deg)
+				for(int phiphi = 0; phiphi < 360; phiphi += deg)
+				{
+
+					double x1 = phiphi     * Constants::PI / 180.0;
+					double y1 = thetatheta * Constants::PI / 180.0;
+					double z1 = psipsi     * Constants::PI / 180.0;
+
+					double sx1 = sin(x1);
+					double sy1 = sin(y1);
+					double sz1 = sin(z1);
+					double cx1 = cos(x1);      
+					double cy1 = cos(y1);
+					double cz1 = cos(z1);
+
+					bool degenerate = false;
+
+					for(int k = 0; (k <= psipsi) && (!degenerate); k += deg)
+						for(int j = 0; (j <= thetatheta) && (!degenerate); j += deg)
+							for(int i = 0; (i <= phiphi) && (!degenerate); i += deg)
+							{
+								if( (i == phiphi) && (j == thetatheta) && (k == psipsi) )
+									continue;
+
+								double x2 = i * Constants::PI / 180.0;
+								double y2 = j * Constants::PI / 180.0;
+								double z2 = k * Constants::PI / 180.0;
+
+								double sx2 = sin(x2);
+								double sy2 = sin(y2);
+								double sz2 = sin(z2);
+								double cx2 = cos(x2);
+								double cy2 = cos(y2);
+								double cz2 = cos(z2);
+
+
+								// Rz * Ry * Rx
+								double trace = 
+									( (     cy1*cz1          ) * (     cy2*cz2          ) + 
+										( sx1*sy1*cz1 - cx1*sz1) * ( sx2*sy2*cz2 - cx2*sz2) + 
+										( cx1*sy1*cz1 + sx1*sz1) * ( cx2*sy2*cz2 + sx2*sz2) ) +
+									( (     cy1*sz1          ) * (     cy2*sz2          ) +
+										( sx1*sy1*sz1 + cx1*cz1) * ( sx2*sy2*sz2 + cx2*cz2) +
+										( cx1*sy1*sz1 - sx1*cz1) * ( cx2*sy2*sz2 - sx2*cz2) ) +
+									( (    -sy1              ) * (    -sy2              ) + 
+										( sx1*cy1              ) * ( sx2*cy2              ) +
+										( cx1*cy1              ) * ( cx2*cy2              ) );
+
+								double v = (trace - 1.0) / 2.0;
+
+								// v should be in the area [-1.0, 1.0]
+								// sometime because of the numerical error, 
+								// v gets out of this area. so we set it like this:
+								if(v < -1.0)
+									v = -1.0;
+								else if(v > 1.0)
+									v = 1.0;
+
+								double alpha = acos( v );
+
+								if(alpha * 180.0 <= 1.0  * Constants::PI) 
+								{
+									degenerate = true;
+									break; 
+								}
+							}
+
+					if( !degenerate )
+					{
+						phi_[ang_num_]   = phiphi;
+						theta_[ang_num_] = thetatheta;
+						psi_[ang_num_]   = psipsi;
+						ang_num_ ++;
+					}
+
+				}
+
+		ang_num_ --;
+
+		return true;
+	}	
+	
 	/** RotationAngles_ class
 	 *  Generate all non-degenerate rotation angles for the given degree interval.
 	 * 	This algorithm is based on ???
