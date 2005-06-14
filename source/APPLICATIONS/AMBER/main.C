@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.4 2003/12/01 07:35:11 oliver Exp $
+// $Id: main.C,v 1.4.6.1 2005/06/14 20:31:47 oliver Exp $
 //
 
 #include <iomanip>
@@ -36,7 +36,7 @@ void usage()
 	            << "     -d                   steepest descent minimizer" << endl
 						  << "     -e <ENERGY>          energy limit per residue in kJ/mol (default: " << energy_limit << " kJ/mol)" << endl
 							<< "     -g <GRAD>            gradient criterion for optimization (in units of kJ/(mol A))" << endl
-							<< "     -i <GRAD>            maximum number of iterations (default: " << max_iterations  << endl
+							<< "     -i <GRAD>            maximum number of iterations (default: " << max_iterations  << ")" << endl
 							<< "     -s <STRING>          select only the atoms that match <STRING> for optimization." << endl
 							<< "                          STRING can contain any of the BALL expression predicates, e.g."<< endl
 							<< "                          'resname(ARG)' would select all arginines, to select their CA and CB only," << endl
@@ -57,6 +57,7 @@ void usage()
 							<< "                          and '!' (in front of a predicate) for negation." <<endl
 							<< "                          In order to avoid shell argument trouble, please enclose any" << endl
 							<< "                          expression string with single quotes (e.g. -s 'residueID(17)')." << endl
+              << "     -o <OPTIONS>         Read options file from <OPTIONS> (advanced users only!)" << endl
 							<< endl
 							<< "     -f <FILE>            force field file (default: "<< FF_filename << ")" << endl
 	            << endl;
@@ -129,6 +130,10 @@ int main(int argc, char** argv)
 		
 			case 'H':		// read a HyperChem file but do not assign chargs
 				readHINFileNoAssignment(argv[++i]);
+				break;
+		
+			case 'o':		// read option file
+				readOptionFile(argv[++i]);
 				break;
 		
 			case 'e':		// energy limit
