@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.7 2005/06/13 15:51:33 haid Exp $
+// $Id: dockingController.C,v 1.1.2.8 2005/06/14 16:56:25 leonhardt Exp $
 //
 
 #include "dockingController.h"
@@ -267,7 +267,22 @@ namespace BALL
 			if (!scoring) return;
 			
 			// apply scoring function; set new scores in the conformation set
-	   	vector<ConformationSet::Conformation> ranked_conformations((*scoring)(*conformation_set));
+			vector<ConformationSet::Conformation> ranked_conformations;
+			try
+	   	{
+				ranked_conformations = (*scoring)(*conformation_set);
+			}
+			catch(...)
+			{
+				Log.error() << "Scoring of docking results failed!" << std::endl;
+				// delete instance 
+				if (scoring != NULL)
+				{
+					delete scoring;
+					scoring = NULL;
+				}
+				return;
+			}
 			conformation_set->setScoring(ranked_conformations);
 
 			// create new DockResult and add a new scoring to it;

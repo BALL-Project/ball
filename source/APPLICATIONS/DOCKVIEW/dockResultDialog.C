@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.27 2005/06/13 14:14:41 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.28 2005/06/14 16:56:24 leonhardt Exp $
 //
 
 #include "dockResultDialog.h"
@@ -447,37 +447,43 @@ namespace BALL
 			SnapShot selected_conformation = (*conformation_set)[snapshot];
 			selected_conformation.applySnapShot(*docked_system_);
 			
-			//System s = *docked_system_;
-			if(redock_partner1_)
+			if (redock_partner1_)
 			{
 				delete redock_partner1_;
 			}
-			if(redock_partner2_)
+			if (redock_partner2_)
 			{
 				delete redock_partner2_;
 			}
-			redock_partner1_ = new System();
-			redock_partner2_ = new System();
+			redock_partner1_ = new System(*docked_system_);
+			redock_partner2_ = new System(*docked_system_);
 			Log.info() << "number of atoms docked_system before append: " << docked_system_->countAtoms() << std::endl;
 			
 			redock_partner1_->setName(docked_system_->getName());
 			redock_partner2_->setName("rd");
 			
-			AtomContainerIterator it;
-			for(it = docked_system_->beginAtomContainer(); +it; ++it)
+			AtomContainerIterator it = redock_partner1_->beginAtomContainer();
+			++it;
+			for ( ; +it; ++it)
 			{
-				if(it->hasProperty("DOCKING_PARTNER_1"))
+				if (!it->hasProperty("DOCKING_PARTNER_1"))
 				{
-				 	redock_partner1_->AtomContainer::insert(*it);
-				}
-				else if(it->hasProperty("DOCKING_PARTNER_2"))
-				{
-					redock_partner2_->AtomContainer::insert(*it);
+					it->getParent()->removeChild(*it);
+					delete &*it;
 				}
 			}
 			
-		//	redock_partner1_->appendChild(*(s.getFirstChild()));
-		//	redock_partner2_->appendChild(*(s.getLastChild()));
+			it = redock_partner2_->beginAtomContainer();
+			++it;
+			for ( ; +it; ++it)
+			{
+				if (!it->hasProperty("DOCKING_PARTNER_2"))
+				{
+					it->getParent()->removeChild(*it);
+					delete &*it;
+				}
+			}
+			
 			Log.info() << "number of atoms redock_partner1_: " << redock_partner1_->countAtoms() << std::endl;
 			Log.info() << "number of atoms redock_partner2_: " << redock_partner2_->countAtoms() << std::endl;
 			Log.info() << "number of atoms docked_system after append: " << docked_system_->countAtoms() << std::endl;

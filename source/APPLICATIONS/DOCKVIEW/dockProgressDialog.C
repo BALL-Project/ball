@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.10 2005/06/13 14:14:40 haid Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.11 2005/06/14 16:56:24 leonhardt Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -143,7 +143,7 @@ namespace BALL
 			int run_time = start_time_.secsTo(QDateTime::currentDateTime());
 			Log.info() << "runtime: " << run_time << std::endl;
 			Log.info() << "progress: " << progress << std::endl;
-			int remain_time = (int)((1.0 - progress)/progress) * run_time;
+			int remain_time = (int)(((1.0 - progress)/progress) * run_time);
 			int hours, min, sec;
 			hours = remain_time / 3600;
 			min = (remain_time % 3600) / 60;
