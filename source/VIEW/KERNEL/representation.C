@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.11 2005/06/06 11:30:02 amoll Exp $
+// $Id: representation.C,v 1.62.4.12 2005/06/14 16:08:39 amoll Exp $
 //
 
 
@@ -69,18 +69,18 @@ namespace BALL
 		{
 			if (rp.model_processor_ != 0)
 			{
-				model_processor_ = new ModelProcessor(*rp.model_processor_);
+				model_processor_ = (ModelProcessor*) rp.model_processor_->create();
 			}
 
 			if (rp.color_processor_ != 0)
 			{
-				color_processor_ = new ColorProcessor(*rp.color_processor_);
+				color_processor_ = (ColorProcessor*) rp.color_processor_->create();
 			}
 
 			GeometricObjectList::ConstIterator it = rp.getGeometricObjects().begin();
 			for (;it != rp.getGeometricObjects().end(); it++)
 			{
-				GeometricObject* object = new GeometricObject(**it);
+				GeometricObject* object = (GeometricObject*)(**it).create();
 				getGeometricObjects().push_back(object);
 			}
 		}

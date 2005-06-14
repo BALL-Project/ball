@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.h,v 1.8.4.1 2005/05/11 00:27:10 amoll Exp $
+// $Id: renderer.h,v 1.8.4.2 2005/06/14 16:08:32 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_RENDERER_H
 #define BALL_VIEW_RENDERING_RENDERER_H
@@ -43,6 +43,8 @@ namespace BALL
 			:	public Object
 		{
 			public:
+
+			BALL_CREATE(Renderer)
 
 			/**	@name	Constructors and Destructors
 			*/	

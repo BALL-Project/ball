@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.h,v 1.7 2004/02/26 08:41:43 anhi Exp $
+// $Id: point.h,v 1.7.8.1 2005/06/14 16:08:29 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIVES_POINT_H
@@ -36,6 +36,8 @@ namespace BALL
 				public Vertex
 		{
 			public:
+
+			BALL_CREATE(Point)
 
 			/**	@name	Constructors
 			*/	

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.h,v 1.8 2004/02/26 08:41:44 anhi Exp $
+// $Id: twoColoredTube.h,v 1.8.8.1 2005/06/14 16:08:31 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
 #define BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
@@ -47,6 +47,8 @@ namespace BALL
    			public Vertex2
 		{
 			public:
+
+			BALL_CREATE(TwoColoredTube)
 
 			/**	@name	Constructors
 			*/	

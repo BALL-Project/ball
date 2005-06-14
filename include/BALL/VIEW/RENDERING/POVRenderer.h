@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.8.4.5 2005/05/11 00:27:09 amoll Exp $
+// $Id: POVRenderer.h,v 1.8.4.6 2005/06/14 16:08:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -39,6 +39,8 @@ namespace BALL
 		class BALL_EXPORT POVRenderer : public Renderer
 		{
 			public:
+
+			BALL_CREATE(POVRenderer)
 
 			struct POVRendererClippingPlane
 			{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.16 2005/06/10 17:55:28 oliver Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.17 2005/06/14 16:08:38 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -656,28 +656,16 @@ namespace BALL
 			rep_->enableModelUpdate(false);
 
 			// create a new representation with the subset of the original mesh
-			Representation* new_rep = new Representation;
+			Representation* new_rep = (Representation*) rep_->create();
 			new_rep->setComposites(rep_->getCompositeList());
 			new_rep->setModelType(rep_->getModelType());
 			new_rep->setColoringMethod(rep_->getColoringMethod());
 			new_rep->enableModelUpdate(false);
 
+			new_rep->clearGeometricObjects();
+
 			// make sure we have a colorProcessor
-			if (rep_->getColorProcessor() != 0)
-			{
-				// make a deep copy of the color processor with help of DisplayProperties
-				DisplayProperties* dp = DisplayProperties::getInstance(0);
-				if (dp != 0)
-				{
-					dp->modifyRepresentationMode(new_rep);
-					dp->apply();
-				}
-				else
-				{
-					new_rep->setColorProcessor(new ColorProcessor(*rep_->getColorProcessor()));
-				}
-			}
-			else
+			if (rep_->getColorProcessor() == 0)
 			{
 				new_rep->setColorProcessor(new ColorProcessor());
 				new_rep->enableColoringUpdate(false);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredLine.h,v 1.7 2004/02/26 08:41:44 anhi Exp $
+// $Id: twoColoredLine.h,v 1.7.8.1 2005/06/14 16:08:30 amoll Exp $
 
 #ifndef BALL_VIEW_VIEW_PRIMITIVES_TWOCOLOREDLINE_H
 #define BALL_VIEW_VIEW_PRIMITIVES_TWOCOLOREDLINE_H
@@ -47,6 +47,8 @@ namespace BALL
 				public Vertex2
 		{
 			public:
+
+			BALL_CREATE(TwoColoredLine)
 
 			/**	@name	Constructors */	
 			//@{

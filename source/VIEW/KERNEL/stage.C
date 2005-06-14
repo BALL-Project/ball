@@ -2,6 +2,8 @@
 #include <BALL/MATHS/plane3.h>
 #include <BALL/MATHS/analyticalGeometry.h>
 
+using std::endl;
+
 namespace BALL
 {
 	namespace VIEW
@@ -67,25 +69,25 @@ namespace BALL
 			BALL_DUMP_HEADER(s, this, this);
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "Position : " << position_ << endl;
+			s << "Position : " << position_ << std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "Direction : " << direction_<< endl;
+			s << "Direction : " << direction_<< std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "Angle : " << angle_ << endl;
+			s << "Angle : " << angle_ << std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "Intensity : " << intensity_ << endl;
+			s << "Intensity : " << intensity_ << std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "Color : " << color_ << endl;
+			s << "Color : " << color_ << std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "Type : " << type_ << endl;
+			s << "Type : " << type_ << std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "Relative : " << relative_ << endl;
+			s << "Relative : " << relative_ << std::endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}

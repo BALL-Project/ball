@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox.h,v 1.5 2004/02/26 08:41:43 anhi Exp $
+// $Id: simpleBox.h,v 1.5.8.1 2005/06/14 16:08:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_SIMPLEBOX_H
@@ -36,6 +36,8 @@ namespace BALL
 			 	public GeometricObject
 		{
 			public:
+
+			BALL_CREATE(SimpleBox)
 
 			/**	@name	Constructors
 			*/	

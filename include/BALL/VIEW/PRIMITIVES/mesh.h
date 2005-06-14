@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.6 2004/02/26 08:41:43 anhi Exp $
+// $Id: mesh.h,v 1.6.8.1 2005/06/14 16:08:29 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
@@ -35,6 +35,8 @@ namespace BALL
 			  public Surface
 		{
 			public:
+
+			BALL_CREATE(Mesh)
 
 			/**	@name	Constructors
 			*/	

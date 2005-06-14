@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex1.h,v 1.7 2004/02/26 08:41:31 anhi Exp $
+// $Id: vertex1.h,v 1.7.8.1 2005/06/14 16:08:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_VERTEX1_H
@@ -31,6 +31,8 @@ namespace BALL
 		class BALL_EXPORT Vertex
 		{
 			public:
+
+			BALL_CREATE(Vertex)
 
 			/**	@name	Constructors
 			*/	

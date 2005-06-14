@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glQuadricObject.h,v 1.6 2004/07/14 17:42:49 amoll Exp $
+// $Id: glQuadricObject.h,v 1.6.6.1 2005/06/14 16:08:32 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLQUADRICOBJECT_H
 #define BALL_VIEW_RENDERING_GLQUADRICOBJECT_H
@@ -30,6 +30,8 @@ namespace BALL
 		class BALL_EXPORT GLQuadricObject
 		{
 			public:
+
+			BALL_CREATE(GLQuadricObject)
 
 			/**	@name	Exceptions
 			*/

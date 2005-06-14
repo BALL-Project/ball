@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.10.6.2 2005/04/12 22:32:37 amoll Exp $
+// $Id: label.h,v 1.10.6.3 2005/06/14 16:08:29 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
@@ -42,6 +42,8 @@ namespace BALL
 				public Vertex
 		{
 			public:
+
+			BALL_CREATE(Label)
 
 			/**	@name	Constructors
 			*/	
