@@ -423,6 +423,31 @@
         </property>
         <widget class="QRadioButton">
             <property name="name">
+                <cstring>canonical_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>21</y>
+                    <width>120</width>
+                    <height>17</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>120</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>canonical</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
                 <cstring>microcanonical_button</cstring>
             </property>
             <property name="geometry">
@@ -449,137 +474,6 @@
             </property>
             <property name="text">
                 <string>microcanonical</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>canonical_button</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>11</x>
-                    <y>21</y>
-                    <width>120</width>
-                    <height>17</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>120</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>canonical</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>GroupBox2_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>300</y>
-                <width>410</width>
-                <height>60</height>
-            </rect>
-        </property>
-        <property name="frameShadow">
-            <enum>Sunken</enum>
-        </property>
-        <property name="title">
-            <string>Trajectory</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>enable_dcd</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>11</x>
-                    <y>25</y>
-                    <width>91</width>
-                    <height>17</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>save trajectory</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Write trajectories to file in order to be able to watch snapshots</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>dcd_file_edit</cstring>
-            </property>
-            <property name="enabled">
-                <bool>false</bool>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>198</x>
-                    <y>21</y>
-                    <width>200</width>
-                    <height>25</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>150</width>
-                    <height>25</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>200</width>
-                    <height>32767</height>
-                </size>
-            </property>
-            <property name="backgroundMode">
-                <enum>PaletteBase</enum>
-            </property>
-            <property name="focusPolicy">
-                <enum>StrongFocus</enum>
-            </property>
-            <property name="text">
-                <string>trajectory.dcd</string>
-            </property>
-            <property name="maxLength">
-                <number>32767</number>
-            </property>
-            <property name="frame">
-                <bool>true</bool>
-            </property>
-            <property name="echoMode">
-                <enum>Normal</enum>
-            </property>
-            <property name="alignment">
-                <set>AlignRight</set>
             </property>
         </widget>
     </widget>
@@ -713,11 +607,17 @@
             </property>
             <property name="geometry">
                 <rect>
-                    <x>11</x>
-                    <y>86</y>
+                    <x>10</x>
+                    <y>82</y>
                     <width>170</width>
-                    <height>25</height>
+                    <height>30</height>
                 </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>30</height>
+                </size>
             </property>
             <property name="text">
                 <string>&amp;ForceField Options</string>
@@ -727,6 +627,112 @@
             </property>
             <property name="toolTip" stdset="0">
                 <string>Alter force field options</string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>GroupBox2_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>300</y>
+                <width>410</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="frameShadow">
+            <enum>Sunken</enum>
+        </property>
+        <property name="title">
+            <string>Trajectory</string>
+        </property>
+        <property name="alignment">
+            <set>AlignHCenter</set>
+        </property>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>enable_dcd</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>25</y>
+                    <width>176</width>
+                    <height>17</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>save trajectory</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Write trajectories to file in order to be able to watch snapshots</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>dcd_file_edit</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>198</x>
+                    <y>21</y>
+                    <width>200</width>
+                    <height>25</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>150</width>
+                    <height>25</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>200</width>
+                    <height>32767</height>
+                </size>
+            </property>
+            <property name="backgroundMode">
+                <enum>PaletteBase</enum>
+            </property>
+            <property name="focusPolicy">
+                <enum>StrongFocus</enum>
+            </property>
+            <property name="text">
+                <string>trajectory.dcd</string>
+            </property>
+            <property name="maxLength">
+                <number>32767</number>
+            </property>
+            <property name="frame">
+                <bool>true</bool>
+            </property>
+            <property name="echoMode">
+                <enum>Normal</enum>
+            </property>
+            <property name="alignment">
+                <set>AlignRight</set>
             </property>
         </widget>
     </widget>
