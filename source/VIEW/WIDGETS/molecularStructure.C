@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.86.2.4 2005/06/12 17:38:49 amoll Exp $
+// $Id: molecularStructure.C,v 1.86.2.5 2005/06/14 17:39:03 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1262,7 +1262,7 @@ namespace BALL
 
 				Log.info() << std::endl << "simulation terminated." << std::endl << endl;
 				Log.info() << ff.getResults();
-				Log.info() << "final RMS gadient    : " << ff.getRMSGradient() << " kJ/(mol A)   after " 
+				Log.info() << "final RMS gradient    : " << ff.getRMSGradient() << " kJ/(mol A)   after " 
 									 << mds->getNumberOfIterations() << " iterations" << endl << endl;
 				setStatusbarText("Final energy: " + String(ff.getEnergy()) + " kJ/mol.", true);
 

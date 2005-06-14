@@ -1,6 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: threads.C,v 1.37.2.2 2005/06/14 17:39:03 oliver Exp $
+//
 
 #include <BALL/VIEW/KERNEL/threads.h>
 
@@ -235,7 +237,7 @@ namespace BALL
 				updateScene_();
 
 				output_(ff.getResults());
-				output_("final RMS gadient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
+				output_("final RMS gradient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
 								+ String(minimizer_->getNumberOfIterations()) + " iterations\n",
 								true);
 				finish_();
@@ -321,7 +323,7 @@ namespace BALL
 				if (dcd_file_) manager.flushToDisk();
 
  				output_(ff.getResults());
-				output_("final RMS gadient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
+				output_("final RMS gradient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
 								+ String(md_->getNumberOfIterations()) + " iterations\n", 
 								true);
 
