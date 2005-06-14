@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.17.4.2 2005/05/27 10:51:12 amoll Exp $
+// $Id: backboneModel.h,v 1.17.4.3 2005/06/14 13:29:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -48,6 +48,8 @@ namespace BALL
 			};
 
 			public:
+
+			BALL_CREATE(AddBackboneModel)
 
 			/**	@name	Constructors and Destructors
 			*/	

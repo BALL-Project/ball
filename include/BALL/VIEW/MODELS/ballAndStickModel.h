@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.14 2005/02/23 12:55:22 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.14.2.1 2005/06/14 13:29:02 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
@@ -35,6 +35,8 @@ namespace BALL
 		class BALL_EXPORT AddBallAndStickModel: public AtomBondModelBaseProcessor
 		{
 			public:
+
+			BALL_CREATE(AddBallAndStickModel)
 
 			/**	@name	Constructors and Destructors
 			*/	

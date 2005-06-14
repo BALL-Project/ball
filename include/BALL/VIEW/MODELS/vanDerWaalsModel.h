@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.h,v 1.9 2004/06/07 10:17:17 amoll Exp $
+// $Id: vanDerWaalsModel.h,v 1.9.6.1 2005/06/14 13:29:04 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_VANDERWAALSMODEL_H
@@ -24,6 +24,8 @@ namespace BALL
 		class BALL_EXPORT AddVanDerWaalsModel: public AtomBondModelBaseProcessor
 		{
 			public:
+
+			BALL_CREATE(AddVanDerWaalsModel)
 
 			/**	@name	Constructors and Destructor
 			*/	

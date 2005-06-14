@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.28.4.3 2005/06/06 11:30:07 amoll Exp $
+// $Id: colorProcessor.h,v 1.28.4.4 2005/06/14 13:29:02 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -55,6 +55,8 @@ class BALL_EXPORT ColorProcessor
 	: public UnaryProcessor<GeometricObject*>
 {
 	public:
+
+	BALL_CREATE(ColorProcessor)
 	
 	/**	@name	Type definitions
 	*/
@@ -249,6 +251,8 @@ class InterpolateColorProcessor
 	: public ColorProcessor
 {
 	public: 
+
+	BALL_CREATE(InterpolateColorProcessor)
 
 	///
 	InterpolateColorProcessor();

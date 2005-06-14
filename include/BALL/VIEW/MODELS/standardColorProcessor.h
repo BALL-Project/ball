@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.29.2.1 2005/05/25 13:58:16 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.29.2.2 2005/06/14 13:29:03 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -48,6 +48,8 @@ namespace BALL
 			: public ColorProcessor
 		{
 			public:
+
+			BALL_CREATE(ElementColorProcessor)
 			
 			/**	@name	Constructors
 			*/
@@ -87,6 +89,8 @@ namespace BALL
 			: public ColorProcessor
 		{
 			public:
+
+				BALL_CREATE(ResidueNumberColorProcessor)
 
 				///
 				ResidueNumberColorProcessor()
@@ -130,6 +134,8 @@ namespace BALL
 		{
 			public:
 
+				BALL_CREATE(ChainColorProcessor)
+
 				///
 				ChainColorProcessor();
 
@@ -165,6 +171,8 @@ namespace BALL
 			: public ColorProcessor
 		{
 			public:
+
+			BALL_CREATE(ResidueNameColorProcessor)
 			
 			/**	@name	Constructors
 			*/
@@ -216,6 +224,8 @@ namespace BALL
 			: public ColorProcessor
 		{
 			public:
+
+			BALL_CREATE(AtomChargeColorProcessor)
 			
 			/**	@name	Constructors 
 			*/	
@@ -308,6 +318,8 @@ namespace BALL
 			:  public ColorProcessor
 		{
 			public:
+
+			BALL_CREATE(AtomDistanceColorProcessor)
 			
 			/**	@name	Constructors 
 			*/	
@@ -454,6 +466,9 @@ namespace BALL
 			: public ColorProcessor
 		{
 			public:
+
+				BALL_CREATE(CustomColorProcessor)
+
 				CustomColorProcessor()
 					: ColorProcessor()
 				{}
@@ -467,6 +482,8 @@ namespace BALL
 			: public InterpolateColorProcessor
 		{
 			public:
+
+			BALL_CREATE(TemperatureFactorColorProcessor)
 
 			///
 			TemperatureFactorColorProcessor();
@@ -484,6 +501,8 @@ namespace BALL
 		{
 			public:
 
+			BALL_CREATE(OccupancyColorProcessor)
+
 			///
 			OccupancyColorProcessor();
 
@@ -498,6 +517,8 @@ namespace BALL
 			: public InterpolateColorProcessor
 		{
 			public:
+
+			BALL_CREATE(ForceColorProcessor)
 
 			///
 			ForceColorProcessor();
@@ -514,6 +535,8 @@ namespace BALL
 			: public ColorProcessor
 		{
 			public:
+
+			BALL_CREATE(SecondaryStructureColorProcessor)
 
 			///
 			SecondaryStructureColorProcessor();
@@ -576,6 +599,8 @@ namespace BALL
 			: public ColorProcessor
 		{
 			public:
+
+			BALL_CREATE(ResidueTypeColorProcessor)
 
 			///
 			ResidueTypeColorProcessor();

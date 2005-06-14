@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: labelModel.h,v 1.1.2.2 2005/04/14 14:28:07 amoll Exp $
+// $Id: labelModel.h,v 1.1.2.3 2005/06/14 13:29:03 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_LABELMODEL_H
@@ -35,6 +35,8 @@ namespace BALL
 		class BALL_EXPORT LabelModel: public ModelProcessor
 		{
 			public:
+
+			BALL_CREATE(LabelModel)
 
 			///
 			enum Mode

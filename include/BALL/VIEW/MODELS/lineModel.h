@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.h,v 1.9 2004/06/07 10:17:17 amoll Exp $
+// $Id: lineModel.h,v 1.9.6.1 2005/06/14 13:29:03 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_LINEMODEL_H
@@ -25,6 +25,8 @@ namespace BALL
 		class BALL_EXPORT AddLineModel: public AtomBondModelBaseProcessor
 		{
 			public:
+
+			BALL_CREATE(AddLineModel)
 
 			/**	@name	Constructors and Destructors
 			*/	

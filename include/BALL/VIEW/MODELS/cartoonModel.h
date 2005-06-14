@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.29.4.1 2005/05/25 00:54:56 amoll Exp $
+// $Id: cartoonModel.h,v 1.29.4.2 2005/06/14 13:29:02 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -33,6 +33,8 @@ namespace BALL
 			: public AddBackboneModel
 		{
 			public:
+
+			BALL_CREATE(AddCartoonModel)
 
 			/**	@name	Constructors and Destructors
 			*/	
