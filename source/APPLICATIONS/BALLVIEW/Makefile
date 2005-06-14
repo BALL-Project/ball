@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.8.2.4 2005/06/13 15:03:50 oliver Exp $
+# $Id: Makefile,v 1.8.2.5 2005/06/14 18:53:45 oliver Exp $
 #
 
 EXECUTABLE=BALLView
@@ -107,7 +107,7 @@ BALLView.app/Contents/MacOS/../Info.plist:
 macos_pkg: $(EXECUTABLE)
 	@echo "Cleaning old package contents..."
 	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL 2>/dev/null | true
-	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS 2>/dev/null | true
+	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS/BALLView 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL 2>/dev/null | true

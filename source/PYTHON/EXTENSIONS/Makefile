@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.33 2004/06/26 20:17:15 oliver Exp $
+# $Id: Makefile,v 1.33.4.1 2005/06/14 18:53:45 oliver Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -31,7 +31,7 @@ SIP_HEADER_FILES =\
 SIP_OPTS=-c SIP -e -s ".C" -b BALL.sbf
 SIPFLAGS += $(PYTHON_INCLUDES) $(SIP_INCLUDES)
 CXXFLAGS += $(SIPFLAGS)
- 
+DYNAROPTS= -headerpad_max_install_names -bundle -framework Python -o
 BALL_INCLUDES+=$(VIEW_INCLUDES)
 BALL_LIBS=$(VIEW_LIBS)
 ADD_INCLUDES=$(PYTHON_INCLUDES) $(SIP_INCLUDES)
