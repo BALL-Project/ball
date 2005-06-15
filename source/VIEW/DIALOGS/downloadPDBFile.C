@@ -171,14 +171,18 @@ bool DownloadPDBFile::threadedDownload_(const String& url)
 	while (thread_->running())
 	{
 		qApp->processEvents();
+		
 		Size bytes = thread_->getTCPTransfer().getReceivedBytes();
 		if (bytes != last_bytes)
 		{
 			setStatusbarText("Downloaded: " + String(bytes) + " bytes", true);
 			last_bytes = bytes;
 		}
+		
 		thread_->wait(200);
 	}
+
+	if (aborted_) return false;
 
 	if (thread_->getTCPTransfer().getReceivedBytes() == 0 ||
 			thread_->getTCPTransfer().getStatusCode() != TCPTransfer::OK) 
@@ -272,12 +276,13 @@ void DownloadPDBFile::slotDownload()
 
 void DownloadPDBFile::slotShowDetail()
 {
+	if (pdbId->text() == "") return;
+
 	setStatusbarText("Downloading information, please wait...", true);
 	QString filename = "http://www.rcsb.org/pdb/cgi/explore.cgi?job=summary&pdbId=";
 	filename += pdbId->text();
 	filename += "&page=";
 
-Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	displayHTML(filename);
 }
 
@@ -288,7 +293,8 @@ void DownloadPDBFile::slotNewId(const QString& new_id)
 
 void DownloadPDBFile::displayHTML(const QString& url)
 {
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+	if (url == "") return;
+
 	try
 	{
 		QString filename;
@@ -412,11 +418,7 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 	}
 
 #ifdef BALL_QT_HAS_THREADS
-	try
-	{
-		File::remove(thread_->getFilename());
-	}
-	catch(...){}
+	removeFile_(thread_->getFilename());
 #endif
 } 
 
@@ -429,17 +431,14 @@ void DownloadPDBFile::idChanged()
 void DownloadPDBFile::abort()
 {
 #ifdef BALL_QT_HAS_THREADS
-	if (thread_ != 0)
-	{
-		thread_->terminate();
-	}
+
+	if (thread_ == 0) return;
 	aborted_ = true;
 
-	try
-	{
- 		File::remove(thread_->getFilename());
-	}
-	catch(...){}
+	thread_->terminate();
+	thread_->wait();
+	removeFile_(thread_->getFilename());
+	
 #endif
 }
 
@@ -485,7 +484,7 @@ void DownloadPDBFile::removeFile_(const String& filename)
 {
 	try
 	{
-		File::remove(filename);
+ 		File::remove(filename);
 	}
 	catch(...) {}
 }
