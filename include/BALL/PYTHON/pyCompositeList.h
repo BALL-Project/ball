@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyCompositeList.h,v 1.4.4.1 2005/06/15 10:31:12 amoll Exp $
+// $Id: pyCompositeList.h,v 1.4.4.2 2005/06/15 11:19:15 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYCOMPOSITELIST_H
@@ -72,7 +72,10 @@ namespace BALL
 
 		/// Copy constructor.
 		PyCompositeList(const List<Composite*>& composite_list);
-			
+		
+		/// Copy constructor.
+		PyCompositeList(const List<const Composite*>& composite_list);
+				
 		/// Construction from a HashSet
 		PyCompositeList(const HashSet<const Composite*>& composite_set);
 			
