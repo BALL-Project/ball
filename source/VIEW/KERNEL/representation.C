@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.14 2005/06/15 09:55:14 amoll Exp $
+// $Id: representation.C,v 1.62.4.15 2005/06/15 14:59:15 amoll Exp $
 //
 
 
@@ -12,9 +12,6 @@
 
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
-
-#include <BALL/VIEW/MODELS/modelProcessor.h>
-#include <BALL/VIEW/MODELS/colorProcessor.h>
 
 #include <BALL/KERNEL/atom.h>
 #include <BALL/SYSTEM/timer.h>

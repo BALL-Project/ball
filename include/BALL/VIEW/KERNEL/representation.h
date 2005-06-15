@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.30.4.5 2005/06/15 09:54:52 amoll Exp $
+// $Id: representation.h,v 1.30.4.6 2005/06/15 14:59:13 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -25,6 +25,15 @@
 
 #ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
 #	include <BALL/VIEW/KERNEL/molecularInformation.h>
+#endif
+
+// next two defines need to be included in header file, because if iC file
+#ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
+# include <BALL/VIEW/MODELS/modelProcessor.h>
+#endif
+
+#ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
+# include <BALL/VIEW/MODELS/colorProcessor.h>
 #endif
 
 
