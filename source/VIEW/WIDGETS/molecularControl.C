@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.15 2005/06/15 11:14:00 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.16 2005/06/15 13:08:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -104,6 +104,7 @@ namespace BALL
 					selector_edit_(new QComboBox(this)),
 					context_menu_(this),
 					model_menu_(this),
+					edit_menu_(this),
 					context_composite_(0),
 					was_delete_(false),
 					nr_items_removed_(0),
@@ -153,28 +154,8 @@ namespace BALL
 			// it is then re-determined by getSelection()
 			connect(listview, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
 
-			model_menu_.insertItem("Custom", this, SLOT(createRepresentation())); 
+			buildContextMenu_();
 
-			Position p = 0;
-			for (Position pos = MODEL_LINES; pos < MODEL_LABEL; pos++)
-			{
-				model_menu_.insertItem(getModelName((ModelType)pos).c_str(), &color_menu_[p], 1000+pos); 
-				p++;
-			}
-
-			// create a new coloring popupmenu for every model entry
-			// otherwise we get into trouble with qt
-			for (Position i = 0; i< p; i++)
-			{
-				for (Position pos = COLORING_ELEMENT; pos < COLORING_UNKNOWN; pos++)
-				{
-					color_menu_[i].insertItem(getColoringName((ColoringMethod)pos).c_str(), this, 
-																								 SLOT(createRepresentation_()), 0,2000 + pos);  
-					connect(&color_menu_[i], SIGNAL(highlighted(int)), this, SLOT(activatedItem_(int)));
-				}
-			}
-
-			connect(&model_menu_, SIGNAL(highlighted(int)), this, SLOT(activatedItem_(int)));
 			registerWidget(this);
 		}
 
@@ -360,45 +341,100 @@ namespace BALL
 
 		}
 
-		void MolecularControl::buildContextMenu(Composite& composite)
-			throw()
+		void MolecularControl::buildContextMenu_()
 		{
-			bool composites_muteable = !getMainControl()->compositesAreLocked();
-			bool one_item = (getSelection().size() == 1);
+
+			// ===============================================================
+			// create representation context menu:
+			// ===============================================================
+
+			model_menu_.insertItem("Custom", this, SLOT(createRepresentation())); 
+
+			Position p = 0;
+			for (Position pos = MODEL_LINES; pos < MODEL_LABEL; pos++)
+			{
+				model_menu_.insertItem(getModelName((ModelType)pos).c_str(), &color_menu_[p], 1000+pos); 
+				p++;
+			}
+
+			// create a new coloring popupmenu for every model entry
+			// otherwise we get into trouble with qt
+			for (Position i = 0; i< p; i++)
+			{
+				for (Position pos = COLORING_ELEMENT; pos < COLORING_UNKNOWN; pos++)
+				{
+					color_menu_[i].insertItem(getColoringName((ColoringMethod)pos).c_str(), this, 
+																								 SLOT(createRepresentation_()), 0,2000 + pos);  
+					connect(&color_menu_[i], SIGNAL(highlighted(int)), this, SLOT(activatedItem_(int)));
+				}
+			}
+
+			connect(&model_menu_, SIGNAL(highlighted(int)), this, SLOT(activatedItem_(int)));
+
+			// ===============================================================
+			// main context menu:
+			// ===============================================================
 
 			context_menu_.insertItem("Create Representation", &model_menu_, 0, CREATE_REPRESENTATION);
 			context_menu_.insertSeparator();
-
-			context_menu_.insertItem("Move", this, SLOT(moveItems()), 0, OBJECT__MOVE);
+			context_menu_.insertItem("Edit", &edit_menu_, 0, EDIT);
+			context_menu_.insertSeparator();
 
 			context_menu_.insertItem("Select", this, SLOT(select()), 0, SELECT);
 			context_menu_.insertItem("Deselect", this, SLOT(deselect()), 0, DESELECT);
-			context_menu_.setItemEnabled(SELECT,   !composite.isSelected() && composites_muteable);
-			context_menu_.setItemEnabled(DESELECT,  composite.isSelected() && composites_muteable);
 
 			context_menu_.insertSeparator();
-			context_menu_.insertItem("Focus camera", this, SLOT(centerCamera()), 0, CAMERA__CENTER);
+			context_menu_.insertItem("Focus", this, SLOT(centerCamera()), 0, CAMERA__CENTER);
 			context_menu_.insertSeparator();
 
 			// -----------------------------------> AtomContainer
 			context_menu_.insertItem("Count items", this, SLOT(countItems()), 0, COUNT__ITEMS);
-			context_menu_.setItemEnabled(COUNT__ITEMS, RTTI::isKindOf<AtomContainer>(composite));
 			// <----------------------------------- AtomContainer
 			
 			context_menu_.insertSeparator();
 			context_menu_.insertItem("Properties", this, SLOT(compositeProperties()), 0, COMPOSITE__PROPERTIES);
-			context_menu_.setItemEnabled(COMPOSITE__PROPERTIES, composites_muteable && one_item);
 
 			// -----------------------------------> Atoms
 			context_menu_.insertItem("Show Bonds", this, SLOT(bondProperties()), 0, BOND__PROPERTIES);
-			context_menu_.setItemEnabled(BOND__PROPERTIES, 
-																	 RTTI::isKindOf<Atom>(composite) && one_item && composites_muteable);
 			// <----------------------------------- Atoms
 
 			context_menu_.insertSeparator();
 			context_menu_.insertItem("Collapse all", this, SLOT(collapseAll()), 0, COLLAPSE_ALL);
 			context_menu_.insertItem("Expand all", this, SLOT(expandAll()), 0, EXPAND_ALL);
 			context_menu_.insertItem("Highlight Selection", this, SLOT(highlightSelection()));
+
+			// ===============================================================
+			// edit context menu:
+			// ===============================================================
+
+			edit_menu_.insertItem("Cut", this, SLOT(cut()), 0, CUT);
+			edit_menu_.insertItem("Copy", this, SLOT(copy()), 0, OBJECT__MOVE);
+			edit_menu_.insertItem("Paste", this, SLOT(paste()), 0, PASTE);
+			edit_menu_.insertItem("Delete", this, SLOT(deleteCurrentItems()), 0, DELETE);
+			edit_menu_.insertSeparator();
+			edit_menu_.insertItem("Move", this, SLOT(moveItems()), 0, OBJECT__MOVE);
+		}
+
+		void MolecularControl::updateContextMenu(Composite& composite)
+			throw()
+		{
+			bool composites_muteable = !getMainControl()->compositesAreLocked();
+			bool one_item = (getSelection().size() == 1);
+
+			context_menu_.setItemEnabled(SELECT,   !composite.isSelected() && composites_muteable);
+			context_menu_.setItemEnabled(DESELECT,  composite.isSelected() && composites_muteable);
+
+			// -----------------------------------> AtomContainer
+			context_menu_.setItemEnabled(COUNT__ITEMS, RTTI::isKindOf<AtomContainer>(composite));
+			// <----------------------------------- AtomContainer
+			
+			// -----------------------------------> Atoms
+			context_menu_.setItemEnabled(BOND__PROPERTIES, 
+																	 RTTI::isKindOf<Atom>(composite) && one_item && composites_muteable);
+			// <----------------------------------- Atoms
+
+			context_menu_.setItemEnabled(EDIT, composites_muteable);
+			context_menu_.setItemEnabled(COMPOSITE__PROPERTIES, composites_muteable && one_item);
 		}
 
 
@@ -517,7 +553,6 @@ namespace BALL
 		void MolecularControl::onContextMenu_(QListViewItem* item,  const QPoint& point, int /* col*/)
 		{
 			// clear the context menu
-			context_menu_.clear();
 			SelectableListViewItem* sitem = dynamic_cast<SelectableListViewItem*>(item);
 
 			if (item == 0 || sitem == 0)
@@ -532,7 +567,7 @@ namespace BALL
 			{
 				context_composite_ = composite;
 				context_item_ = sitem;
-				buildContextMenu(*composite);
+				updateContextMenu(*composite);
 			}
 
 			// show the context menu if it is not empty

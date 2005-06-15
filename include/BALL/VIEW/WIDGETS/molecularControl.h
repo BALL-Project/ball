@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.47.2.4 2005/06/15 11:13:58 amoll Exp $
+// $Id: molecularControl.h,v 1.47.2.5 2005/06/15 13:08:20 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -54,6 +54,12 @@ class BALL_EXPORT MolecularControl
 		OBJECT__MOVE,
 		SELECT,
 		DESELECT,
+		EDIT,
+		CUT,
+		COPY,
+		DELETE,
+		PASTE,
+
 
 		/// Center camera on one Composite (done in MolecularProperites)
 		CAMERA__CENTER,
@@ -187,7 +193,7 @@ class BALL_EXPORT MolecularControl
 			\param   composite the Composite object for that a context menu should be created
 			\see     onContextMenu
 	*/
-	virtual void buildContextMenu(Composite& composite)
+	virtual void updateContextMenu(Composite& composite)
 		throw();
 
 	/**	Initialize the menu entries:
@@ -353,6 +359,9 @@ class BALL_EXPORT MolecularControl
 
 	protected:
 
+	///
+	void buildContextMenu_();
+
 	/*_ Method is called if checkbox of an item is clicked.\par
 			Called by SelectableListViewItem::stateChange
 	*/
@@ -477,6 +486,7 @@ class BALL_EXPORT MolecularControl
 	// the context menus
 	QPopupMenu 							context_menu_, 
 													model_menu_, 
+													edit_menu_,
 													color_menu_[MODEL_LABEL - MODEL_LINES];
 
 	Composite* 							context_composite_;
