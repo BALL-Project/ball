@@ -4,6 +4,7 @@
 // $Id:
 
 #include "ballviewDemo.h"
+#include "mainframe.h"
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
@@ -56,21 +57,9 @@ void BALLViewDemo::show()
 	widget_stack->raiseWidget(0);
 	buttonOk->setEnabled(true);
 	DisplayProperties* dp = DisplayProperties::getInstance(0);
-	dp->setDrawingPrecision(DRAWING_PRECISION_HIGH);
-	dp->setSurfaceDrawingPrecision(6.5);
 	dp->enableCreationForNewMolecules(false);
 
-	// remove all loaded Composites
-	MainControl* mc = getMainControl();
-	CompositeManager& cm = mc->getCompositeManager();
-	HashSet<Composite*> composites = cm.getComposites();
-	HashSet<Composite*>::Iterator it = composites.begin();
-	
-	for (; +it; ++it)
-	{
-		mc->remove(**it, true, false);
-	}
-
+	((Mainframe*)getMainControl())->reset();
 
 	// open bpti 
 	try

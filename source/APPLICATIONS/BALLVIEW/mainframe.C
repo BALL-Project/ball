@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.4 2005/06/12 17:30:56 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.5 2005/06/15 12:36:44 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -337,6 +337,37 @@ namespace BALL
 			PyWidget::getInstance(0)->reactTo(*e);
 			e->accept();
 		#endif
+	}
+
+	void Mainframe::reset()
+	{
+		if (composites_locked_ || getPrimitiveManager().updateRunning()) return;
+
+		DisplayProperties* dp = DisplayProperties::getInstance(0);
+		dp->setDrawingPrecision(DRAWING_PRECISION_HIGH);
+		dp->selectModel(MODEL_STICK);
+		dp->selectColoringMethod(COLORING_ELEMENT);
+		dp->selectMode(DRAWING_MODE_SOLID);
+		dp->setTransparency(0);
+		dp->setSurfaceDrawingPrecision(6.5);
+
+		// remove all loaded Composites
+		HashSet<Composite*> composites = getCompositeManager().getComposites();
+		HashSet<Composite*>::Iterator it = composites.begin();
+		
+		for (; +it; ++it)
+		{
+			remove(**it, true, false);
+		}
+
+		// remove all Representations
+		PrimitiveManager::RepresentationList reps = getPrimitiveManager().getRepresentations();
+		PrimitiveManager::RepresentationList::Iterator rit = reps.begin();
+
+		for (; rit != reps.end(); ++rit)
+		{
+			remove(**rit);
+		}
 	}
 
 }

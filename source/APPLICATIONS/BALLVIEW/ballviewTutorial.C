@@ -4,9 +4,12 @@
 // $Id:
 
 #include "ballviewTutorial.h"
+#include "mainframe.h"
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
-#include <BALL/VIEW/DIALOGS/displayProperties.h>
+#include <BALL/VIEW/WIDGETS/molecularControl.h>
+#include <BALL/VIEW/WIDGETS/geometricControl.h>
+#include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/KERNEL/system.h>
 
 #include <qlabel.h>
@@ -49,18 +52,19 @@ void BALLViewTutorial::show()
 	showPage(page(0));
 	nextButton()->setEnabled(false);
 
-	// remove all loaded Composites
-	MainControl* mc = getMainControl();
-	CompositeManager& cm = mc->getCompositeManager();
-	HashSet<Composite*> composites = cm.getComposites();
-	HashSet<Composite*>::Iterator it = composites.begin();
-	
-	for (; +it; ++it)
-	{
-		mc->remove(**it, true, false);
-	}
-	
-	DisplayProperties::getInstance(0)->selectModel(MODEL_STICK);
+	((Mainframe*)getMainControl())->reset();
+
+	BALL_VIEW_DOCKWINDOWS_SHOW_LABELS = true;
+
+	Scene::getInstance(0)->show();
+	MolecularControl::getInstance(0)->show();
+	MolecularControl::getInstance(0)->applyPreferences();
+	DatasetControl::getInstance(0)->show();
+	DatasetControl::getInstance(0)->applyPreferences();
+	GeometricControl::getInstance(0)->show();
+	GeometricControl::getInstance(0)->applyPreferences();
+
+	LogView::getInstance(0)->hide();
 
 	BALLViewTutorialData::show();
 	raise();
