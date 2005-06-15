@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.10.4.1 2005/06/15 10:24:10 amoll Exp $
+// $Id: representation.sip,v 1.10.4.2 2005/06/15 11:45:10 amoll Exp $
 //
 
 class Representation
@@ -43,7 +43,7 @@ class Representation
 
 	PyCompositeList getComposites() throw();
 	PyCompositeList getComposites() const throw();
-	void setComposites(PyCompositeList) throw();
+//	void setComposites(const List<const Composite*>&) throw();
 
 	ModelProcessor* getModelProcessor() throw();
 	const ModelProcessor* getModelProcessor() const throw();
