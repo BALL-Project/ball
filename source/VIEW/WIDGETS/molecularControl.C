@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.14 2005/06/12 17:38:48 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.15 2005/06/15 11:14:00 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -13,7 +13,6 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
 #include <qmenubar.h>
-#include <qlineedit.h> 
 #include <qpushbutton.h> 
 #include <qmessagebox.h> 
 #include <qtooltip.h> 
@@ -102,7 +101,7 @@ namespace BALL
 					clipboard_id_(-1),
 					selected_(),
 					information_(),
-					selector_edit_(new QLineEdit(this)),
+					selector_edit_(new QComboBox(this)),
 					context_menu_(this),
 					model_menu_(this),
 					context_composite_(0),
@@ -121,9 +120,14 @@ namespace BALL
 			QHBoxLayout* layout2 = new QHBoxLayout();
 			getLayout()->addLayout(layout2);
 
-			selector_edit_->setPaletteBackgroundColor(QColor(255, 255, 0));
+			QPalette pal = selector_edit_->palette();
+			pal.setColor(QColorGroup::Base, QColor(255, 255, 0));
+			selector_edit_->setPalette(pal);
 			selector_edit_->resize(90, 30);
 			selector_edit_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
+			selector_edit_->setAutoCompletion(true);
+			selector_edit_->setDuplicatesEnabled(false);
+			selector_edit_->setEditable(true);
 			layout2->addWidget(selector_edit_);
 
 			QPushButton* clear_button = new QPushButton(this);
@@ -143,8 +147,6 @@ namespace BALL
 			connect(help_button, SIGNAL(clicked()), this, SLOT(showSelectorHelp()));
 			QToolTip::add(help_button, tr("Show a help dialog."));
 			layout2->addWidget(help_button);
-
-			connect(selector_edit_, SIGNAL(returnPressed()), this, SLOT(applySelector()));
 
 			// if the selection of any item changed,
 			// mark the complete selection as invalid
@@ -1074,7 +1076,7 @@ namespace BALL
 		Size MolecularControl::applySelector()
 		{
 			if (parentWidget() == 0) return 0;
-			if (selector_edit_->text() == "")
+			if (selector_edit_->currentText() == "")
 			{
 				getMainControl()->clearSelection();
 				return 0;
@@ -1083,7 +1085,7 @@ namespace BALL
 			Selector s;
 			try
 			{
-				s.setExpression(Expression(selector_edit_->text().ascii()));
+				s.setExpression(Expression(selector_edit_->currentText().ascii()));
 			}
 			catch(Exception::ParseError e)
 			{
@@ -1166,7 +1168,7 @@ namespace BALL
 
 		void MolecularControl::clearSelector()
 		{
-			selector_edit_->setText("");
+			selector_edit_->setCurrentText("");
 			getMainControl()->clearSelection();
 		}
 
@@ -1241,7 +1243,7 @@ namespace BALL
 		Size MolecularControl::applySelector(const String& expression)
 			throw()
 		{
-			selector_edit_->setText(expression.c_str());
+			selector_edit_->setCurrentText(expression.c_str());
 			return applySelector();
 		}
 
@@ -1306,6 +1308,18 @@ namespace BALL
 				show_ss_ = !inifile.getValue("MOLECULARCONTROL", "ShowSS").toBool();
 				switchShowSecondaryStructure();
 			}
+
+			if (inifile.hasEntry("MOLECULARCONTROL", "RegularExpressions"))
+			{
+				vector<String> fields;
+				Size size = inifile.getValue("MOLECULARCONTROL", "RegularExpressions").split(fields, "|");
+				for (Position p = 0; p < size; p++)
+				{
+					selector_edit_->insertItem(fields[p]);
+				}
+			}
+
+			connect(selector_edit_, SIGNAL(activated(int)), this, SLOT(applySelector()));
 		}
 
 		void MolecularControl::writePreferences(INIFile& inifile)
@@ -1314,10 +1328,22 @@ namespace BALL
 			inifile.appendSection("MOLECULARCONTROL");
 			inifile.insertValue("MOLECULARCONTROL", "ShowSS", show_ss_);
 
+			String regexps;
+
+			for (Position p = 0; p < (Position)selector_edit_->count(); p++)
+			{
+				regexps += selector_edit_->text(p).ascii();
+				regexps += "|";
+			}
+
+			if (regexps.size() != 0)
+			{
+				inifile.insertValue("MOLECULARCONTROL", "RegularExpressions", regexps);
+			}
+
 			DockWidget::writePreferences(inifile);
 		}
 
 
 	} // namespace VIEW
-
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.47.2.3 2005/06/12 17:34:27 amoll Exp $
+// $Id: molecularControl.h,v 1.47.2.4 2005/06/15 11:13:58 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -25,6 +25,7 @@
 #include <qlistview.h>
 #include <qpoint.h>
 #include <qpopupmenu.h>
+#include <qcombobox.h>
 
 
 namespace BALL
@@ -471,7 +472,7 @@ class BALL_EXPORT MolecularControl
 	
 	MolecularInformation 		information_;
 	
-	QLineEdit* 							selector_edit_;
+	QComboBox* 							selector_edit_;
 
 	// the context menus
 	QPopupMenu 							context_menu_, 
