@@ -90,7 +90,7 @@ namespace BALL
 				 */
 				DockDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
 					throw();
-
+					
 				/** Destructor.
 				 */
 				virtual ~DockDialog()
@@ -342,7 +342,7 @@ namespace BALL
 					* When we do docking, redocking values are in the vector and when we do redocking, the docking values are in there.
 					* In fetchPreferences, we read the last redocking values from INIFile in this vector
 					* and in writePreferences, we write the redocking values in INIFile from this vector
-				 */
+					*/
 				vector<QString> backup_;
 				
 				/** Processors

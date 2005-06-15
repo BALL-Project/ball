@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.12 2005/06/14 17:36:41 haid Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.13 2005/06/15 14:46:29 haid Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -11,7 +11,7 @@
 #include <qmessagebox.h>
 #include <qlabel.h>
 
-#define BALL_VIEW_DEBUG
+//#define BALL_VIEW_DEBUG
 
 namespace BALL
 {
@@ -83,14 +83,14 @@ namespace BALL
 			s = "number of best docked structures: ";
 			options->append(s.append(alg_opt.get(GeometricFit::Option::BEST_NUM)));
 			Options::ConstIterator it = alg_opt.begin();
-			for(; +it; ++it)
+			for (; +it; ++it)
 			{
 				s = it->first;
 				s.append(" : ");
 				options->append(s.append(it->second));
 			}
 			
-			if(sf_opt.isEmpty())
+			if (sf_opt.isEmpty())
 			{
 			 	options->append("\nThere are no options for this scoring function.");
 			}
@@ -98,7 +98,7 @@ namespace BALL
 			{
 				options->append("\n*** Options of scoring function ***");
 				it = sf_opt.begin();
-				for(; +it; ++it)
+				for (; +it; ++it)
 				{
 					s = it->first;
 					s.append(" : ");
@@ -151,17 +151,37 @@ namespace BALL
 			progress_bar->setProgress((int)(progress * 100.0), 100);
 			// calculate remaining time
 			int run_time = start_time_.secsTo(QDateTime::currentDateTime());
-			int remain_time = (int)(((1.0 - progress)/progress) * run_time);
-			int hours, min, sec;
-			hours = remain_time / 3600;
-			min = (remain_time % 3600) / 60;
-			sec = (remain_time % 3600) % 60;
-			QString s, convert;
-			s.setNum(hours);
-			s.append(":");
-			s.append(convert.setNum(min));
-			s.append(":");
-			s.append(convert.setNum(sec));
+			int remain_time, hours, min, sec;
+			QString s;
+			if (progress > 0.01)
+			{
+				remain_time = (int)(((1.0 - progress)/progress) * run_time);
+				hours = remain_time / 3600;
+				min = (remain_time % 3600) / 60;
+				sec = (remain_time % 3600) % 60;
+				if (!(hours/10))
+				{
+				 	s.append("0");
+				}
+				QString convert;
+				s.setNum(hours);
+				s.append(":");
+				if (!(min/10))
+				{
+				 	s.append("0");
+				}
+				s.append(convert.setNum(min));
+				s.append(":");
+				if (!(sec/10))
+				{
+				 	s.append("0");
+				}
+				s.append(convert.setNum(sec));
+			}
+			else
+			{
+			 	s.append("--:--:--");
+			}
 			remaining_time->setText(s);
 			
 			// if docking has finished, close dialog

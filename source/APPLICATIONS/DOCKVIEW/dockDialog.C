@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.37 2005/06/14 17:36:41 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.38 2005/06/15 14:46:28 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -74,7 +74,7 @@ namespace BALL
 			
 			hide(); 
 		}
-
+		
 		//Destructor
 		DockDialog::~DockDialog()
 			throw()
@@ -144,7 +144,7 @@ namespace BALL
 		void DockDialog::setFlag(bool is_redock)
 			throw()
 		{
-			if(is_redock_ == is_redock)
+			if (is_redock_ == is_redock)
 			{
 			 	has_changed_ = false;
 			}
@@ -159,7 +159,7 @@ namespace BALL
 		void DockDialog::addAlgorithm(const QString& name, const int algorithm, QDialog* dialog)
 			throw()
 		{
-			if(dialog)
+			if (dialog)
 			{
 				// add dialog to HashMap
 				algorithm_dialogs_[algorithm] = dialog;
@@ -172,7 +172,7 @@ namespace BALL
 		void DockDialog::addScoringFunction(const QString& name, const int score_func, QDialog* dialog)
 			throw()
 		{
-			if(dialog)
+			if (dialog)
 			{
 				// add scoring function to HashMap for scoring option dialogs
 				scoring_dialogs_[score_func] = dialog;
@@ -244,14 +244,14 @@ namespace BALL
 		void DockDialog::writePreferences(INIFile& file)
 			throw()
 		{
-			if(is_redock_)
+			if (is_redock_)
 			{
 				swapValues_();
 			}
 			PreferencesEntry::writePreferenceEntries(file);
 			
 			file.appendSection("REDOCKING");
-			for(unsigned int i = 0; i < backup_.size(); i++)
+			for (unsigned int i = 0; i < backup_.size(); i++)
 			{
 				String entry = String("redock_entry_") + String(i);
 				file.insertValue("REDOCKING", entry, backup_[i].ascii());
@@ -431,7 +431,7 @@ namespace BALL
 			//iterate over all composites; find chosen system
 			HashSet<Composite*>::iterator composite_it = getMainControl()->getCompositeManager().begin();
 				
-			for(; +composite_it; ++composite_it)
+			for (; +composite_it; ++composite_it)
 			{
 				System* system = dynamic_cast<System*>(*composite_it);
 				if (system != 0 && system->getName() == qstr.ascii())
@@ -467,7 +467,7 @@ namespace BALL
 			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();
 			
 			//fill current system list and check if user has already selected two systems
-			for(; +composite_it; ++composite_it)
+			for (; +composite_it; ++composite_it)
 			{
 				System* system = dynamic_cast<System*>(*composite_it);
 				if (system == 0) continue;
@@ -476,7 +476,7 @@ namespace BALL
 				
 				//test if the user has selected one or two systems
 				//more than 2 selected systems -> error
-				if(system->isSelected())
+				if (system->isSelected())
 				{
 					if (docking_partner1_ == NULL)
 					{
@@ -507,11 +507,11 @@ namespace BALL
 			systems2->insertStringList(current_system_list);
 		
 			// If the user has selected one or two systems, they are the current items in the comboboxes.
-			if(docking_partner1_ != NULL)
+			if (docking_partner1_ != NULL)
 			{
 				systems1->setCurrentText(docking_partner1_->getName());
 			}
-			if(docking_partner2_ != NULL)
+			if (docking_partner2_ != NULL)
 			{
 				systems2->setCurrentText(docking_partner2_->getName());
 			}
@@ -552,7 +552,7 @@ namespace BALL
 		// If the user has selected one or two systems, they are the current items in the comboboxes.
 		void DockDialog::show()
 		{
-			if(is_redock_)
+			if (is_redock_)
 			{
 				setCaption("Redocking Options");
 				tab_pages->setTabEnabled(tab_pages->page(1), false);
@@ -570,7 +570,7 @@ namespace BALL
 				fillSystemComboxes_();
 			}
 			
-			if(has_changed_)
+			if (has_changed_)
 			{
 				swapValues_();
 			}
@@ -590,7 +590,7 @@ namespace BALL
 		// Hides the dialog and calls \link DockDialog::applyValues_ applyValues_ \endlink and \link DockDialog::applyProcessors_ applyProcessors_ \endlink.
 		void DockDialog::okPressed()
 		{
-			if(!is_redock_)
+			if (!is_redock_)
 			{
 				// if less than 2 or 2 equal systems are chosen => Error message!
 				if ((systems1->currentText() == "<select>") || 
@@ -603,7 +603,7 @@ namespace BALL
 				}
 			}
 			//if no algorithm is chosen => Error message!
-			if(algorithms->currentText() == "<select>")
+			if (algorithms->currentText() == "<select>")
 			{
 				QMessageBox error_message(0,0);
 				error_message.warning(0,"Error","Please select docking algorithm!", QMessageBox::Ok, QMessageBox::NoButton);
@@ -618,11 +618,11 @@ namespace BALL
 			// set property for the two docking partners
 			// is needed to identify these original partners for redocking
 			AtomContainerIterator it;
-			for(it = docking_partner1_->beginAtomContainer(); +it; ++it)
+			for (it = docking_partner1_->beginAtomContainer(); +it; ++it)
 			{
 				it->setProperty("DOCKING_PARTNER_1");
 			}
-			for(it = docking_partner2_->beginAtomContainer(); +it; ++it)
+			for (it = docking_partner2_->beginAtomContainer(); +it; ++it)
 			{
 				it->setProperty("DOCKING_PARTNER_2");
 			}
@@ -646,7 +646,7 @@ namespace BALL
 		{
 			// show corresponding options dialog
 			int index = algorithms->currentItem();
-			if(algorithm_dialogs_.has(index))
+			if (algorithm_dialogs_.has(index))
 			{
 				switch(index)
 				{
@@ -663,7 +663,7 @@ namespace BALL
 		{
 			// show corresponding options dialog
 			int index = scoring_functions->currentItem();
-			if(scoring_dialogs_.has(index))
+			if (scoring_dialogs_.has(index))
 			{
 				scoring_dialogs_[index]->exec();
 			}
@@ -686,7 +686,7 @@ namespace BALL
 		{
 			// if chosen scoring function has advanced options, enable advanced_button
 			int index = scoring_functions->currentItem();
-			if(scoring_dialogs_.has(index))
+			if (scoring_dialogs_.has(index))
 			{
 				scoring_advanced_button->setEnabled(true);
 			}
@@ -701,17 +701,17 @@ namespace BALL
 		{
 			// if chosen algorithm has advanced options, enable advanced_button
 			int index = algorithms->currentItem();
-			if(algorithm_dialogs_.has(index))
+			if (algorithm_dialogs_.has(index))
 			{
 				//enable advanced button
 				alg_advanced_button->setEnabled(true);
 				// disable scoring functions which aren't allowed for chosen algorithm
-				for(int i = 0; i < scoring_functions->count(); i++)
+				for (int i = 0; i < scoring_functions->count(); i++)
 				{
 					bool found = false;
-					for(unsigned int j = 0; j < allowed_sf_[index].size(); j++)
+					for (unsigned int j = 0; j < allowed_sf_[index].size(); j++)
 					{
-						if(allowed_sf_[index][j] == i)
+						if (allowed_sf_[index][j] == i)
 						{
 						 	found = true;
 							break;
@@ -725,7 +725,7 @@ namespace BALL
 				// disable advanced button
 				alg_advanced_button->setEnabled(false);
 				// enable all scoring functions
-				for(int i = 0; i < scoring_functions->count(); i++)
+				for (int i = 0; i < scoring_functions->count(); i++)
 				{
 					scoring_functions->listBox()->item(i)->setSelectable(true);
 				}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.1.2.9 2005/06/06 12:12:05 haid Exp $
+// $Id: dockResult.C,v 1.1.2.10 2005/06/15 14:46:29 haid Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -127,11 +127,11 @@ namespace BALL
 			INI_out.insertValue("ALGORITHM", "name", docking_algorithm_);
 			INI_out.appendSection("ALGORITHM_OPTIONS");
 			Options::ConstIterator it = docking_options_.begin();
-			for(; +it; ++it)
+			for (; +it; ++it)
 			{
 				INI_out.insertValue("ALGORITHM_OPTIONS", it->first, it->second);
 			}
-			for(unsigned int i = 0; i < scorings_.size(); i++)
+			for (unsigned int i = 0; i < scorings_.size(); i++)
 			{
 				String section = String("SCORING_NAME_") + String(i);
 				INI_out.appendSection(section);
@@ -140,14 +140,14 @@ namespace BALL
 				section = String("SCORING_OPTIONS_") + String(i);
 				INI_out.appendSection(section);
 				it = scorings_[i].options_.begin();
-				for(; +it; ++it)
+				for (; +it; ++it)
 				{
 					INI_out.insertValue(section, it->first, it->second);
 				}
 				
 				section = String("SCORES_") + String(i);
 				INI_out.appendSection(section);
-				for(unsigned int j = 0; j < scorings_[i].scores_.size(); j++)
+				for (unsigned int j = 0; j < scorings_[i].scores_.size(); j++)
 				{
 					INI_out.insertValue(section, String(j), scorings_[i].scores_[j]);
 				}
@@ -301,7 +301,7 @@ namespace BALL
 			vector<ConformationSet::Conformation> conformations;
 			ConformationSet::Conformation conf;
 			vector<float> last_scores = scorings_[scorings_.size()-1].scores_;
-			for(unsigned int i = 0; i < last_scores.size(); i++)
+			for (unsigned int i = 0; i < last_scores.size(); i++)
 			{
 			 	conf.first = i;
 				conf.second = last_scores[i];
@@ -321,7 +321,7 @@ namespace BALL
 			}
 			DCD_in.close();
 			// read the snapshots from DCDFile 
-			if(!conformation_set_->readDCDFile(DCD_temp))
+			if (!conformation_set_->readDCDFile(DCD_temp))
 			{
 				Log.error() << "Error while reading Dock Result file, could not read DCD part" << std::endl;
 				return false;
@@ -335,20 +335,20 @@ namespace BALL
 			Log.info() << "---------------------------------------------------------------" << std::endl;
 			Log.info() << "algorithm name: " << docking_algorithm_ << std::endl;
 			Options::Iterator o_it = docking_options_.begin();
-			for(; +o_it; ++o_it)
+			for (; +o_it; ++o_it)
 			{
 				Log.info() << "algorithm options " << o_it->first << " : " << o_it->second << std::endl;
 			}
-			for(unsigned int i = 0; i < scorings_.size(); i++)
+			for (unsigned int i = 0; i < scorings_.size(); i++)
 			{
 			 	Log.info() << "scoring " << i << ":" << std::endl;
 				Log.info() << "name: " << scorings_[i].name_ << std::endl;
 				o_it = scorings_[i].options_.begin();
-				for(; +o_it; ++o_it)
+				for (; +o_it; ++o_it)
 				{
 					Log.info() << "scoring options " << o_it->first << " : " << o_it->second << std::endl;
 				}
-				for(unsigned int j = 0; j < scorings_[i].scores_.size(); j++)
+				for (unsigned int j = 0; j < scorings_[i].scores_.size(); j++)
 				{
 				 	Log.info() << "score " << j << ": " << scorings_[i].scores_[j] << std::endl;
 				}

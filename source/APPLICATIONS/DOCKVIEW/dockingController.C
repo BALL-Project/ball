@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.8 2005/06/14 16:56:25 leonhardt Exp $
+// $Id: dockingController.C,v 1.1.2.9 2005/06/15 14:46:30 haid Exp $
 //
 
 #include "dockingController.h"
@@ -48,6 +48,20 @@ namespace BALL
 			throw()
 		{}
 		
+		// Assignment operator
+		const DockingController& DockingController::operator =(const DockingController& dock_controller)
+			throw()
+		{
+			if (&dock_controller != this)
+			{
+				dock_dialog_ = dock_controller.dock_dialog_;
+				dock_alg_ = dock_controller.dock_alg_;
+				progress_dialog_ = dock_controller.progress_dialog_;
+				id_ = dock_controller.id_;
+			}
+			return *this;
+		}
+		
 		// Message handling method
 		void DockingController::onNotify(Message *message)
 			throw()
@@ -59,11 +73,11 @@ namespace BALL
 				DockingFinishedMessage* dfm = RTTI::castTo<DockingFinishedMessage>(*message);
 			
 				unlockComposites();
-				if(dfm->wasAborted())
+				if (dfm->wasAborted())
 				{
 					Log.info() << "in DockingController::onNotify: " << dfm->wasAborted() << std::endl;
 					QMessageBox request_message(0,0);
-					if( request_message.question(0,"Request","Do you want to see the current Result?", 
+					if ( request_message.question(0,"Request","Do you want to see the current Result?", 
 																			 "Yes", "No", QString::null, 0, 1))
 					{
 						return;
@@ -108,7 +122,7 @@ namespace BALL
 			throw()
 		{
 			// if composites are locked disable menu entry "Docking"
-			if(main_control.compositesAreLocked())
+			if (main_control.compositesAreLocked())
 			{
 				menuBar()->setItemEnabled(id_, false);
 				return;
@@ -126,7 +140,7 @@ namespace BALL
 				}
 			}
 			// if no or only one system loaded, disable menu entry "Docking"
-			if(num_systems > 1)
+			if (num_systems > 1)
 			{
 				menuBar()->setItemEnabled(id_, true);
 			}
@@ -162,7 +176,7 @@ namespace BALL
 			dock_dialog_.setFlag(isRedock);
 			
 			// if cancel was pressed in DockDialog, don't start docking
-			if(!dock_dialog_.exec())
+			if (!dock_dialog_.exec())
 			{
 				return;
 			}
@@ -176,7 +190,7 @@ namespace BALL
 					break;
 			}
 			
-			if(!dock_alg_ || !dock_dialog_.getSystem1() || !dock_dialog_.getSystem2() || dock_dialog_.getAlgorithmOptions().isEmpty())
+			if (!dock_alg_ || !dock_dialog_.getSystem1() || !dock_dialog_.getSystem2() || dock_dialog_.getAlgorithmOptions().isEmpty())
 			{
 			 	return;
 			}
@@ -196,7 +210,7 @@ namespace BALL
 			
 			// ============================= WITH MULTITHREADING ====================================
 			if (!(getMainControl()->lockCompositesFor(this))) return;
-			Log.info() << "vor thread" << std::endl;
+			//Log.info() << "vor thread" << std::endl;
 			#ifdef BALL_QT_HAS_THREADS
 				DockingThread* thread = new DockingThread;
 				thread->setDockingAlgorithm(dock_alg_);
@@ -292,7 +306,7 @@ namespace BALL
 																						dock_dialog_.getAlgorithmOptions()); 
 			
 			vector<float> scores;
-			for(unsigned int i = 0; i < ranked_conformations.size(); i++)
+			for (unsigned int i = 0; i < ranked_conformations.size(); i++)
 			{
 				scores.push_back(ranked_conformations[i].second);
 			}

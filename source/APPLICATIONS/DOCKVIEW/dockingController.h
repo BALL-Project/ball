@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.5 2005/06/14 17:36:42 haid Exp $
+// $Id: dockingController.h,v 1.1.2.6 2005/06/15 14:46:30 haid Exp $
 //
 
 #ifndef DOCKINGCONTROLLER_H
@@ -92,6 +92,11 @@ namespace BALL
 					throw();
 				//@}
 
+				/**  Assignment operator
+				 */
+				const DockingController& operator =(const DockingController& dock_controller)
+					throw();
+				
 				/** Message handling method.
 				 *	Catches DockingFinishedNessage and ShowDockResultMessage	
 				 * 	@param message the pointer to the message that should be processed

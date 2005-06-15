@@ -101,7 +101,7 @@ namespace BALL
 		void GeometricFitDialog::writePreferences(INIFile& file)
 			throw()
 		{
-			if(is_redock_)
+			if (is_redock_)
 			{
 				swapValues_();
 			}
@@ -109,7 +109,7 @@ namespace BALL
 			
 			file.appendSection("GEOMETRIC_FIT_OPTIONS_REDOCK");
 			
-			for(unsigned int i = 0; i < backup_.size(); i++)
+			for (unsigned int i = 0; i < backup_.size(); i++)
 			{
 				String entry = String("option_entry_") + String(i);
 				file.insertValue("GEOMETRIC_FIT_OPTIONS_REDOCK", entry, backup_[i].ascii());
@@ -139,7 +139,7 @@ namespace BALL
 			options[GeometricFit::Option::SURFACE_THICKNESS] = String(surface_thickness->text().ascii()).toFloat();
 			options[GeometricFit::Option::DEGREE_INTERVAL] = String(deg_interval->text().ascii()).toDouble();
 			options[GeometricFit::Option::TOP_N] = String(peak_num->text().ascii()).toInt();
-			if(surface_type->currentText() == "Connolly")
+			if (surface_type->currentText() == "Connolly")
 			{
 				options[GeometricFit::Option::SURFACE_TYPE] = GeometricFit::CONNOLLY;
 			}
@@ -153,7 +153,7 @@ namespace BALL
 		void GeometricFitDialog::setFlag(bool is_redock)
 			throw()
 		{
-			if(is_redock_ == is_redock)
+			if (is_redock_ == is_redock)
 			{
 			 	has_changed_ = false;
 			}
@@ -210,7 +210,7 @@ namespace BALL
 		// Calls swapValues_ if we are now doing docking and did redocking before or otherwise
 		void GeometricFitDialog::show()
 		{
-			if(has_changed_)
+			if (has_changed_)
 			{
 				swapValues_();
 			}
