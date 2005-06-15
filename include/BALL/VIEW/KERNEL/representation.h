@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.30.4.3 2005/05/27 10:51:11 amoll Exp $
+// $Id: representation.h,v 1.30.4.4 2005/06/15 00:02:51 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -113,10 +113,12 @@ namespace BALL
 										 DrawingMode drawing_mode)
 				throw();
 
+			/*
 			///
 			Representation(const CompositeSet& composites, 
 										 ModelProcessor* rep_processor)
 				throw();
+*/
 
 			///
 			Representation(const GeometricObjectList& object_list)
@@ -195,10 +197,6 @@ namespace BALL
 
 			///
 			void insert(GeometricObject& object) 
-				throw();
-
-			///
-			const CompositeSet& getComposites() const
 				throw();
 
 			///
@@ -312,22 +310,6 @@ namespace BALL
 			String toString() const
 				throw();
 
-			///
-			CompositesIterator begin() 
-				throw();
-
-			///
-			CompositesConstIterator begin() const
-				throw();
-			
-			///
-			CompositesIterator end() 
-				throw();
-
-			///
-			CompositesConstIterator end() const
-				throw();
-
 			//@}
 
 			protected:
@@ -365,9 +347,6 @@ namespace BALL
 
 			//_
 			ColorProcessor* 		color_processor_;
-
-			//_
-			CompositeSet 				composites_;
 
 			//_
 			List<const Composite*> composite_list_;

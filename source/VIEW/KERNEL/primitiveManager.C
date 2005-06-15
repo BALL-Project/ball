@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.9 2005/06/06 13:46:07 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.10 2005/06/15 00:02:19 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -230,7 +230,7 @@ PrimitiveManager::RepresentationList PrimitiveManager::removedComposite(const Co
 		rep.setComposites(composites);
 
 		// if we have no more Composites in the Representation, it is to be deleted
-		if (rep.getComposites().size() == 0) 
+		if (rep.getCompositeList().size() == 0) 
 		{
 			removed_representations.push_back(&rep);
 			continue;
@@ -283,11 +283,11 @@ List<Representation*> PrimitiveManager::getRepresentationsOf(const Composite& co
 	RepresentationsIterator rep_it = begin();
 	for (; rep_it != end(); rep_it++)
 	{
-		Representation::CompositesConstIterator composite_it = (*rep_it)->begin();
-		for(; composite_it != (*rep_it)->end(); composite_it++)
+		List<const Composite*>::const_iterator cit = (**rep_it).getCompositeList().begin();
+		for (; cit != (**rep_it).getCompositeList().end(); ++cit)
 		{
-			if (&composite == *composite_it ||
-					composite.isRelatedWith(**composite_it)) 
+			if (&composite == *cit ||
+					composite.isRelatedWith(**cit)) 
 			{
 				changed_representations.push_back(*rep_it);
 				break;
@@ -512,17 +512,16 @@ void PrimitiveManager::storeRepresentations(INIFile& out)
 	RepresentationsConstIterator it = begin();
 	for (; it != end(); it++)
 	{
-		if ((**it).begin() == (**it).end()) 
+		if ((**it).getCompositeList().size() == 0)
 		{
-			Log.error() << "Error while writing Project File in " << __FILE__ << " " << __LINE__ << std::endl;
 			continue;
 		}
 
 		bool ok = true;
 
-		Representation::CompositesIterator cit = (**it).begin();
+		List<const Composite*>::const_iterator cit = (**it).getCompositeList().begin();
 		const Composite* root = &(**cit).getRoot();
-		for (; cit != (**it).end(); cit++)
+		for (; cit != (**it).getCompositeList().end(); cit++)
 		{
 			if ((**cit).getRoot() != *root)
 			{

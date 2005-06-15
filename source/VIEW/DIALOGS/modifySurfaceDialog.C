@@ -1,11 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.17 2005/06/14 16:08:38 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.18 2005/06/15 00:02:18 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
-#include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -673,8 +672,8 @@ namespace BALL
 			}
 
 			HashSet<const Composite*> roots;
-			Representation::CompositeSet::ConstIterator cit = rep_->getComposites().begin();
-			for (; +cit; ++cit)
+			List<const Composite*>::const_iterator cit = rep_->getCompositeList().begin();
+			for (; cit != rep_->getCompositeList().end(); ++cit)
 			{
 				roots.insert(&(*cit)->getRoot());
 			}

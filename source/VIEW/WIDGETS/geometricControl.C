@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.24 2005/06/12 17:38:47 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.25 2005/06/15 00:02:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -244,6 +244,7 @@ namespace BALL
 
 			insertContextMenuEntry("Focus", this, SLOT(focusRepresentation()), 5);
 			insertContextMenuEntry("Delete", this, SLOT(deleteCurrentItems()), 10);
+			insertContextMenuEntry("Duplicate", this, SLOT(duplicateRepresentation()), 15);
 			insertContextMenuEntry("Select Atoms", this, SLOT(selectAtoms()), 25);
 			insertContextMenuEntry("Modify Model", this, SLOT(modifyRepresentation_()), 20);	
 			insertContextMenuEntry("Modifiy Surface", modify_surface_dialog_, SLOT(show()), 30);	
@@ -253,6 +254,7 @@ namespace BALL
 			if (plane != 0)
 			{
 				context_menu_.setItemEnabled(5, false); 
+				context_menu_.setItemEnabled(15, false); 
 				context_menu_.setItemEnabled(20, false); 
 				context_menu_.setItemEnabled(25, false); 
 				context_menu_.setItemEnabled(30, false); 
@@ -265,6 +267,7 @@ namespace BALL
 			if (getSelectedItems().size() != 1)
 			{
 				context_menu_.setItemEnabled(5, false); 
+				context_menu_.setItemEnabled(15, false); 
 			}
 
 			if (getSelectedItems().size() > 1 ||
@@ -425,10 +428,10 @@ namespace BALL
 			RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::SELECTED);
 			notify_(message);
 
-			if (rep->getComposites().size() > 0) 
+			if (rep->getCompositeList().size() > 0) 
 			{
 				String name;
-				const Composite* c_ptr = *rep->getComposites().begin();
+				const Composite* c_ptr = *rep->getCompositeList().begin();
 
 				while (!c_ptr->isRoot())
 				{
@@ -452,7 +455,7 @@ namespace BALL
 				
 				name.trimRight("->");
 
-				if (rep->getComposites().size() > 1) name += "...";
+				if (rep->getCompositeList().size() > 1) name += "...";
 
 				setStatusbarText("Representation from " + name);
 			}
@@ -593,8 +596,10 @@ namespace BALL
 		{
 			if (context_representation_ == 0) return;
 
-			Representation::CompositeSet::ConstIterator it = context_representation_->getComposites().begin();
-			for (; +it; ++it)
+			Representation& rep = *context_representation_;
+
+			List<const Composite*>::const_iterator it = rep.getCompositeList().begin();
+			for (; it != rep.getCompositeList().end(); ++it)
 			{
 				getMainControl()->selectCompositeRecursive((Composite*)*it, false);
 			}
@@ -602,7 +607,8 @@ namespace BALL
 			NewSelectionMessage* msg = new NewSelectionMessage();
 			notify_(msg);
 
-			context_representation_->update(false);
+
+		  rep.update(false);
 		}
 
 		void GeometricControl::selectClipRepresentations()
@@ -684,6 +690,16 @@ namespace BALL
 			{
 				if (!to_have_planes.has(mit->first)) removeItem_(mit->second);
 			}
+		}
+
+		void GeometricControl::duplicateRepresentation()
+		{
+			if (context_representation_ == 0) return;
+
+			Representation* new_rep = (Representation*) context_representation_->create();
+			if (new_rep == 0) return;
+
+			getMainControl()->insert(*new_rep);
 		}
 	
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.24.4.8 2005/06/12 17:34:27 amoll Exp $
+// $Id: geometricControl.h,v 1.24.4.9 2005/06/15 00:02:51 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -224,6 +224,9 @@ namespace BALL
 
 			///
 			void createNewClippingPlane();
+
+			/// 
+			void duplicateRepresentation();
 			
 		  protected slots:
 			
