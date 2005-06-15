@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.33.4.2 2005/06/14 21:27:14 oliver Exp $
+# $Id: Makefile,v 1.33.4.3 2005/06/15 17:39:13 oliver Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -28,7 +28,8 @@ SIP_HEADERS = \
 SIP_HEADER_FILES =\
 	$(headers)
 	
-SIP_OPTS=-c SIP -e -s ".C" -b BALL.sbf
+SIP_DIR=sip_files
+SIP_OPTS=-c $(SIP_DIR) -e -s ".C" -b BALL.sbf
 SIPFLAGS += $(PYTHON_INCLUDES) $(SIP_INCLUDES)
 CXXFLAGS += $(SIPFLAGS)
 
@@ -66,14 +67,14 @@ CPP_OBJECTS = $(SIP_OBJECTS) $(PYBALL_OBJECTS)
 BALLmodule.so: sipBALLcmodule.o
 
 sip:
-	@if test ! -d SIP ; then mkdir SIP 2>/dev/null ; fi
+	@if test ! -d $(SIP_DIR) ; then mkdir $(SIP_DIR) 2>/dev/null ; fi
 	@echo "running SIP..."
 	@$(SIP) $(SIP_OPTS) BALL.sip
 	@echo "removing SIP headers..."
-	@-rm -f SIP/tmp 2>/dev/null
-	@for i in SIP/*; do mv $$i SIP/tmp ; cat SIP/tmp |sed 4d > $$i ; rm -rf SIP/tmp 2>/dev/null ; done
+	@-rm -f $(SIP_DIR)/tmp 2>/dev/null
+	@for i in $(SIP_DIR)/*; do mv $$i $(SIP_DIR)/tmp ; cat $(SIP_DIR)/tmp |sed 4d > $$i ; rm -rf $(SIP_DIR)/tmp 2>/dev/null ; done
 	@echo "updating modified files..."
-	@for i in SIP/*; do if cmp -s $$i `basename $$i`; then true ; else echo " - $$i"; cp $$i . ; fi ; done
+	@for i in $(SIP_DIR)/*; do if cmp -s $$i `basename $$i`; then true ; else echo " - $$i"; cp $$i . ; fi ; done
 
 
 BALLmodule.so:  $(CPP_OBJECTS)
@@ -93,7 +94,7 @@ CLEAN_FILES = \
 clean:
 	@echo "removing object files, libraries, and source/header files produced by SIP..."
 	@-$(RM) -f $(CLEAN_FILES) 2>/dev/null
-	@-$(RM) -fr SIP
+	@-$(RM) -fr $(SIP_DIR)
 
 depend: sip  Makefile.inc .Dependencies
 

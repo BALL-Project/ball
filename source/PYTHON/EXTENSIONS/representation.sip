@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.10.4.2 2005/06/15 11:45:10 amoll Exp $
+// $Id: representation.sip,v 1.10.4.3 2005/06/15 17:39:13 oliver Exp $
 //
 
 class Representation
@@ -69,7 +69,6 @@ class Representation
 	bool isValid() const throw();
 	//	void dump(std::ostream& s, Size depth) const throw();
 	String toString() const throw();
-	
 	void update(bool /rebuild/) throw();
 
 	void clearGeometricObjects() throw();
