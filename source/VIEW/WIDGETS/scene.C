@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.23 2005/06/12 17:38:50 amoll Exp $
+// $Id: scene.C,v 1.171.2.24 2005/06/15 13:36:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -514,6 +514,9 @@ namespace BALL
 			for (;plane_it != vc.end(); plane_it++)
 			{
 				ClippingPlane& plane = **plane_it;
+
+				if (plane.isHidden()) continue;
+
 				if (!plane.isActive()) 
 				{
 					inactive_planes.push_back(*plane_it);

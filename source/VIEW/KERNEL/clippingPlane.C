@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clippingPlane.C,v 1.1.2.3 2005/05/11 13:07:00 amoll Exp $
+// $Id: clippingPlane.C,v 1.1.2.4 2005/06/15 13:36:58 amoll Exp $
 //
 
 
@@ -15,7 +15,8 @@ namespace BALL
 			throw()
 				: normal_(Vector3(1.)),
 					point_(),
-					active_(false)
+					active_(false),
+					hidden_(false)
 		{
 		}
 
@@ -24,7 +25,8 @@ namespace BALL
 			throw()
 				: normal_(rp.normal_),
 					point_(rp.point_),
-					active_(rp.active_)
+					active_(rp.active_),
+					hidden_(rp.hidden_)
 		{
 			reps_ = rp.reps_;
 		}
@@ -37,6 +39,7 @@ namespace BALL
 			normal_ = plane.normal_;
 			active_ = plane.active_;
 			point_  = plane.point_;
+			hidden_ = plane.hidden_;
 			return *this;
 		}
 

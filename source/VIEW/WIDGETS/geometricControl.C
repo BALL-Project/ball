@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.26 2005/06/15 09:55:14 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.27 2005/06/15 13:36:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -105,11 +105,12 @@ namespace BALL
 			connect(listview, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
 			registerWidget(this);
 
-			clipping_plane_context_menu_.insertItem("Move Clipping Plane", this, SLOT(moveClippingPlane()));
-			clipping_plane_context_menu_.insertItem("Flip Clipping Plane", this, SLOT(flipClippingPlane()));	
-			clipping_plane_context_menu_.insertItem("Set Clipping Plane to x axis", this, SLOT(setClippingPlaneX()));	
-			clipping_plane_context_menu_.insertItem("Set Clipping Plane to y axis", this, SLOT(setClippingPlaneY()));	
-			clipping_plane_context_menu_.insertItem("Set Clipping Plane to z axis", this, SLOT(setClippingPlaneZ()));	
+			clipping_plane_context_menu_.insertItem("Hide/Show", this, SLOT(hideShowClippingPlane()));
+			clipping_plane_context_menu_.insertItem("Move", this, SLOT(moveClippingPlane()));
+			clipping_plane_context_menu_.insertItem("Flip", this, SLOT(flipClippingPlane()));	
+			clipping_plane_context_menu_.insertItem("Set to x axis", this, SLOT(setClippingPlaneX()));	
+			clipping_plane_context_menu_.insertItem("Set to y axis", this, SLOT(setClippingPlaneY()));	
+			clipping_plane_context_menu_.insertItem("Set to z axis", this, SLOT(setClippingPlaneZ()));	
 			clipping_plane_context_menu_.insertItem("Select Representations to clip", this, SLOT(selectClipRepresentations()));	
 		}
 
@@ -663,7 +664,6 @@ namespace BALL
 
 			// collect all planes, the GeometricControl currently has
 			HashMap<ClippingPlane*, SelectableListViewItem*> plane_map;
-
 			QListViewItemIterator it(listview);
 			for (; it.current(); ++it)
 			{
@@ -680,6 +680,7 @@ namespace BALL
 				if (!plane_map.has(*cit))
 				{
 					SelectableListViewItem* new_item = new SelectableListViewItem(listview, "ClippingPlane", 0, *this);
+					if ((**cit).isHidden()) new_item->setText(2, "[hidden]");
 					new_item->setOn((**cit).isActive());
 					new_item->setClippingPlane(*cit);
 				}
@@ -690,6 +691,20 @@ namespace BALL
 			{
 				if (!to_have_planes.has(mit->first)) removeItem_(mit->second);
 			}
+		}
+
+		void GeometricControl::hideShowClippingPlane()
+		{
+			if (context_plane_ == 0) return;
+
+			bool hidden = !context_plane_->isHidden();
+
+			context_plane_->setHidden(hidden);
+			VIEW::getMainControl()->redrawAllRepresentations();
+
+			if (context_item_ == 0) return;
+
+			context_item_->setText(2, hidden ? "[hidden]" : "");
 		}
 
 		void GeometricControl::duplicateRepresentation()

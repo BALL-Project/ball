@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19.4.7 2005/05/11 00:27:46 amoll Exp $
+// $Id: POVRenderer.C,v 1.19.4.8 2005/06/15 13:36:59 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -374,6 +374,12 @@ namespace BALL
 				for (;plane_it != vc.end(); plane_it++)
 				{
 					ClippingPlane& plane = **plane_it;
+
+					if (!plane.isActive() ||
+							plane.isHidden())
+					{
+						continue;
+					}
 
 					if (plane.getRepresentations().has((Representation*)*rit))
 					{

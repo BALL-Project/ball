@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clippingPlane.h,v 1.1.2.5 2005/05/27 11:31:43 amoll Exp $
+// $Id: clippingPlane.h,v 1.1.2.6 2005/06/15 13:36:52 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_CLIPPING_PLANE_H
@@ -73,6 +73,12 @@ namespace BALL
 			void setActive(bool state) { active_ = state;}
 
 			///
+			bool isHidden() const { return hidden_;}
+
+			///
+			void setHidden(bool hidden) { hidden_ = hidden;}
+
+			///
 			float getDistance() const;
 
 			///
@@ -89,6 +95,7 @@ namespace BALL
 			Vector3 normal_;
 			Vector3 point_;
 			bool active_;
+			bool hidden_;
 		};
 
 	} // namespace VIEW
