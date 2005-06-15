@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.13 2005/06/15 00:02:19 amoll Exp $
+// $Id: representation.C,v 1.62.4.14 2005/06/15 09:55:14 amoll Exp $
 //
 
 
@@ -9,9 +9,12 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/VIEW/KERNEL/message.h>
+
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
+
+#include <BALL/VIEW/MODELS/modelProcessor.h>
+#include <BALL/VIEW/MODELS/colorProcessor.h>
 
 #include <BALL/KERNEL/atom.h>
 #include <BALL/SYSTEM/timer.h>
@@ -35,7 +38,7 @@ namespace BALL
 					transparency_(0),
 					model_processor_(0),
 					color_processor_(0),
-					composite_list_(),
+					composites_(),
 					model_build_time_(PreciseTime(99999, 9)),
 					rebuild_(true),
 					changed_color_processor_(true),
@@ -58,7 +61,7 @@ namespace BALL
 					transparency_(rp.transparency_),
 					model_processor_(0),
 					color_processor_(0),
-					composite_list_(rp.composite_list_),
+					composites_(rp.composites_),
 					model_build_time_(PreciseTime(99999, 9)),
 					rebuild_(rp.rebuild_),
 					changed_color_processor_(true),
@@ -98,7 +101,7 @@ namespace BALL
 					transparency_(0),
 					model_processor_(0),
 					color_processor_(0),
-					composite_list_(),
+					composites_(),
 					model_build_time_(PreciseTime(99999, 9)),
 					rebuild_(true),
 					changed_color_processor_(true),
@@ -110,30 +113,6 @@ namespace BALL
 		}
 
 
-		/*
-		Representation::Representation(const HashSet<const Composite*>& composites, 
-																	 ModelProcessor* model_processor)
-			throw()
-			:	PropertyManager(),
-				drawing_mode_(DRAWING_MODE_SOLID),
-				drawing_precision_(DRAWING_PRECISION_HIGH),
-				surface_drawing_precision_(-1),
-				transparency_(0),
-				model_processor_(model_processor),
-				color_processor_(0),
-				composites_(composites),
-				model_build_time_(PreciseTime(99999, 9)),
-				rebuild_(true),
-				changed_color_processor_(true),
-				hidden_(false),
-				geometric_objects_(),
-				model_update_enabled_(true),
-				coloring_update_enabled_(true)
-		{
-		}
-		*/
-
-				
 		const Representation& Representation::operator = (const Representation& representation)
 			throw()
 		{
@@ -174,7 +153,7 @@ namespace BALL
 				getGeometricObjects().push_back(object);
 			}
 
-			composite_list_ = representation.composite_list_;
+			composites_ = representation.composites_;
 
 			rebuild_ = true;
 			hidden_ = representation.hidden_;
@@ -197,7 +176,7 @@ namespace BALL
 		void Representation::clear()
 			throw()
 		{
-			composite_list_.clear();
+			composites_.clear();
 
 			if (model_processor_  != 0) delete model_processor_;
 			if (color_processor_  != 0) delete color_processor_;
@@ -257,7 +236,7 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			s << "number of primitives: " << getGeometricObjects().size() << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
-			s << "number of composites: " << composite_list_.size() << std::endl;
+			s << "number of composites: " << composites_.size() << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
 			s << "model processor: " << model_processor_ << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
@@ -321,8 +300,8 @@ namespace BALL
 				// (CompositeMessage::CHANGED_COMPOSITE instead of CHANGED_COMPOSITE_HIERARCHY)
 				if (!rebuild_)
 				{
-					List<const Composite*>::const_iterator it = composite_list_.begin();
-					for (; it!= composite_list_.end(); it++)
+					List<const Composite*>::const_iterator it = composites_.begin();
+					for (; it!= composites_.end(); it++)
 					{
 						if ((*it)->getModificationTime() > last_build_time) 
 						{
@@ -337,8 +316,8 @@ namespace BALL
 					clearGeometricObjects();
 					model_processor_->clearComposites();
 					
-					List<const Composite*>::const_iterator it = composite_list_.begin();
-					for (; it!= composite_list_.end(); it++)
+					List<const Composite*>::const_iterator it = composites_.begin();
+					for (; it!= composites_.end(); it++)
 					{
 						(const_cast<Composite*>(*it))->apply(*model_processor_);
 					}
@@ -361,8 +340,8 @@ namespace BALL
 				// we have to apply the ColorProcessor anyhow if the selection changed since the last model build
 				if (!apply_color_processor)
 				{
-					List<const Composite*>::const_iterator it = composite_list_.begin();
-					for (; it!= composite_list_.end(); it++)
+					List<const Composite*>::const_iterator it = composites_.begin();
+					for (; it!= composites_.end(); it++)
 					{
 						if ((*it)->getSelectionTime() > last_build_time) 
 						{
@@ -375,7 +354,7 @@ namespace BALL
 				if (apply_color_processor)
 				{
 					// make sure, that the atom grid is recomputed for meshes
-					if (rebuild_) color_processor_->setComposites(&getCompositeList());
+					if (rebuild_) color_processor_->setComposites(&getComposites());
 					color_processor_->setTransparency(transparency_);
 					color_processor_->setModelType(model_type_);
 					getGeometricObjects().apply(*color_processor_);
@@ -438,7 +417,7 @@ namespace BALL
 			if (getTransparency() != 0)
 			{
 				prop += " ";
-				prop += String(getTransparency())+ " % Transparent ";
+				prop += String((Size)(getTransparency() / 2.55)) + " % Transparent ";
 			}
 
 			if (getDrawingMode() == DRAWING_MODE_WIREFRAME)
@@ -502,7 +481,7 @@ namespace BALL
 			
 			if (color_processor_ != 0)
 			{
-				color_processor_->setComposites(&getCompositeList());
+				color_processor_->setComposites(&getComposites());
 				color_processor_->setTransparency(transparency_);
 			}
 
@@ -537,8 +516,8 @@ namespace BALL
 				return true;
 			}
 
-			List<const Composite*>::const_iterator it = composite_list_.begin();
-			for (;it != composite_list_.end(); it++)
+			List<const Composite*>::const_iterator it = composites_.begin();
+			for (;it != composites_.end(); it++)
 			{
 				if (getModelBuildTime() < (*it)->getModificationTime()) return true;
 			}
@@ -558,7 +537,7 @@ namespace BALL
 			result += String(coloring_method_) + " ";
 			result += String(transparency_) + " ";
 
-			if (composite_list_.size() == 0)
+			if (composites_.size() == 0)
 			{
 				result += "[]";
 				return result;
@@ -566,12 +545,12 @@ namespace BALL
 
 			result += "[";
 
-			const Composite& root = (*composite_list_.begin())->getRoot();
+			const Composite& root = (*composites_.begin())->getRoot();
 			HashMap<const Composite*, Position> composite_to_index;
 			collectRecursive_(root, composite_to_index);
 
-			List<const Composite*>::const_iterator it = composite_list_.begin();
-			for (; it != composite_list_.end(); it++)
+			List<const Composite*>::const_iterator it = composites_.begin();
+			for (; it != composites_.end(); it++)
 			{
 				if (composite_to_index.has(*it))
 				{
@@ -637,41 +616,34 @@ namespace BALL
 
 			String name = getModelName().c_str();
 
-			if (getCompositeList().size() > 0)
-			{
-				const Composite* c_ptr = *getCompositeList().begin();
-	/*
-				while (getComposites().has(c_ptr->getParent()))
-				{
-					c_ptr = c_ptr->getParent();
-				}
-	*/
+			if (getComposites().size() == 0) return name;
 
-				String composite_name;
-				if (RTTI::isKindOf<Atom>(*c_ptr))
+			const Composite* c_ptr = *getComposites().begin();
+
+			String composite_name;
+			if (RTTI::isKindOf<Atom>(*c_ptr))
+			{
+				if (c_ptr->getParent() != 0)
 				{
-					if (c_ptr->getParent() != 0)
-					{
-						((Composite*)c_ptr->getParent())->host(information_);
-						composite_name = information_.getName();
-						composite_name += ":";
-						composite_name += ((const Atom*) c_ptr)->getName();
-					}
-					else
-					{
-						composite_name = ((const Atom*) c_ptr)->getFullName();
-					}
+					((Composite*)c_ptr->getParent())->host(information_);
+					composite_name = information_.getName();
+					composite_name += ":";
+					composite_name += ((const Atom*) c_ptr)->getName();
 				}
 				else
 				{
-					((Composite*)c_ptr)->host(information_);
-					composite_name = information_.getName();
+					composite_name = ((const Atom*) c_ptr)->getFullName();
 				}
-
-				name = name + "  " + composite_name;
-
-				if (getCompositeList().size() > 1) name += "...";
 			}
+			else
+			{
+				((Composite*)c_ptr)->host(information_);
+				composite_name = information_.getName();
+			}
+
+			name = name + "  " + composite_name;
+
+			if (getComposites().size() > 1) name += "...";
 
 			return name;
 		}
@@ -679,7 +651,7 @@ namespace BALL
 		void Representation::setComposites(const List<const Composite*>& composites)
 			throw()
 		{
-			composite_list_ = composites;
+			composites_ = composites;
 		}
 			
   #	ifdef BALL_NO_INLINE_FUNCTIONS

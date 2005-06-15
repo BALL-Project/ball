@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.30.4.4 2005/06/15 00:02:51 amoll Exp $
+// $Id: representation.h,v 1.30.4.5 2005/06/15 09:54:52 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -15,24 +15,12 @@
 #	include <BALL/DATATYPE/list.h>
 #endif
 
-#ifndef BALL_DATATYPE_HASHSET_H
-#	include <BALL/DATATYPE/hashSet.h>
-#endif
-
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_MODELPROCESSOR_H
-# include <BALL/VIEW/MODELS/modelProcessor.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_COLORPROCESSOR_H
-# include <BALL/VIEW/MODELS/colorProcessor.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
@@ -88,15 +76,6 @@ namespace BALL
 			/// 
 			typedef List<GeometricObject*> 		 GeometricObjectList;
 
-			///
-			typedef HashSet<const Composite*>  CompositeSet;
-
-			///
-			typedef CompositeSet::Iterator CompositesIterator;
-
-			///
-			typedef CompositeSet::ConstIterator CompositesConstIterator;
-
 			//@}
 			/**	@name	Constructors and Destuctor
 			*/	
@@ -112,13 +91,6 @@ namespace BALL
 										 DrawingPrecision drawing_precision,
 										 DrawingMode drawing_mode)
 				throw();
-
-			/*
-			///
-			Representation(const CompositeSet& composites, 
-										 ModelProcessor* rep_processor)
-				throw();
-*/
 
 			///
 			Representation(const GeometricObjectList& object_list)
@@ -179,11 +151,11 @@ namespace BALL
 			DrawingMode getDrawingMode() const
 				throw();
 			
-			///
+			/// get transparency (0 - 255)
 			Size getTransparency() const
 				throw();
 
-			///
+			/// set transparency (0 - 255)
 			void setTransparency(Size value)
 				throw();
 			
@@ -200,8 +172,8 @@ namespace BALL
 				throw();
 
 			///
-			const List<const Composite*>& getCompositeList() const
-				throw() { return composite_list_;}
+			const List<const Composite*>& getComposites() const
+				throw() { return composites_;}
 
 			///
 			void setComposites(const List<const Composite*>& composites)
@@ -267,19 +239,22 @@ namespace BALL
 			///
 			bool coloringUpdateEnabled() const { return coloring_update_enabled_;}
 
-			///
+			/// Get a descpription string (nr triangles and geometric objects, transparency, mode)
 			String getProperties() const
 				throw();
 			
-			///
+			/// Check if drawing mode, transparency and drawing precision have reasonable values.
 			bool isValid() const
 				throw();
 
-			///
+			/** Apply ModelProcessor (if rebuild) and ColorProcessor.
+			 		The usage of these processors can be disabled, either by setting a NULL-pointer
+					accordingly or call enableColoringUpdate(false) and enableModelUpdate(false).
+			*/
 			void update(bool rebuild)
 				throw();
 
-			///
+			/// Clear and destroy all stored GeometricObject.
 			void clearGeometricObjects()
 				throw();
 
@@ -302,11 +277,11 @@ namespace BALL
 			void setNeedsUpdate()
 				throw();
 
-			///
+			/// Dum to ostream for debugging
 			void dump(std::ostream& s, Size depth) const
 				throw();
 
-			///
+			/// Get a String containing all settings for Usage in project files.
 			String toString() const
 				throw();
 
@@ -321,6 +296,8 @@ namespace BALL
 			void update_()
 				throw();
 
+			// Create a hashmap with the numerical position of every composite in its root Composite. 
+			// Needed for toString().
 			void collectRecursive_(const Composite& c, HashMap<const Composite*, Position>& hashmap) const
 				throw();
 
@@ -349,7 +326,7 @@ namespace BALL
 			ColorProcessor* 		color_processor_;
 
 			//_
-			List<const Composite*> composite_list_;
+			List<const Composite*> composites_;
 
 			//_
 			PreciseTime 				model_build_time_;
@@ -375,9 +352,8 @@ namespace BALL
 			//_
 			bool 								coloring_update_enabled_;
 
+			//_ 							  used for getName()
 			static 							MolecularInformation information_;
-			// prevent usage of geometric_objects_ in derived classes
-			private:
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

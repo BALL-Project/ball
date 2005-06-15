@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.25 2005/06/15 00:02:19 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.26 2005/06/15 09:55:14 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -428,10 +428,10 @@ namespace BALL
 			RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::SELECTED);
 			notify_(message);
 
-			if (rep->getCompositeList().size() > 0) 
+			if (rep->getComposites().size() > 0) 
 			{
 				String name;
-				const Composite* c_ptr = *rep->getCompositeList().begin();
+				const Composite* c_ptr = *rep->getComposites().begin();
 
 				while (!c_ptr->isRoot())
 				{
@@ -455,7 +455,7 @@ namespace BALL
 				
 				name.trimRight("->");
 
-				if (rep->getCompositeList().size() > 1) name += "...";
+				if (rep->getComposites().size() > 1) name += "...";
 
 				setStatusbarText("Representation from " + name);
 			}
@@ -598,8 +598,8 @@ namespace BALL
 
 			Representation& rep = *context_representation_;
 
-			List<const Composite*>::const_iterator it = rep.getCompositeList().begin();
-			for (; it != rep.getCompositeList().end(); ++it)
+			List<const Composite*>::const_iterator it = rep.getComposites().begin();
+			for (; it != rep.getComposites().end(); ++it)
 			{
 				getMainControl()->selectCompositeRecursive((Composite*)*it, false);
 			}

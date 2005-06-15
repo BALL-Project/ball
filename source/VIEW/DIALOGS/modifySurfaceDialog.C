@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.18 2005/06/15 00:02:18 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.19 2005/06/15 09:55:13 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -656,7 +656,7 @@ namespace BALL
 
 			// create a new representation with the subset of the original mesh
 			Representation* new_rep = (Representation*) rep_->create();
-			new_rep->setComposites(rep_->getCompositeList());
+			new_rep->setComposites(rep_->getComposites());
 			new_rep->setModelType(rep_->getModelType());
 			new_rep->setColoringMethod(rep_->getColoringMethod());
 			new_rep->enableModelUpdate(false);
@@ -672,8 +672,8 @@ namespace BALL
 			}
 
 			HashSet<const Composite*> roots;
-			List<const Composite*>::const_iterator cit = rep_->getCompositeList().begin();
-			for (; cit != rep_->getCompositeList().end(); ++cit)
+			List<const Composite*>::const_iterator cit = rep_->getComposites().begin();
+			for (; cit != rep_->getComposites().end(); ++cit)
 			{
 				roots.insert(&(*cit)->getRoot());
 			}
@@ -839,7 +839,7 @@ namespace BALL
 		{
 			List<const Atom*> atoms;
 
-			Representation::CompositeSet::ConstIterator it = roots.begin();
+			HashSet<const Composite*>::ConstIterator it = roots.begin();
 			for(; +it; it++)
 			{
 				if (RTTI::isKindOf<AtomContainer>(**it))

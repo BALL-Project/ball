@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.h,v 1.1.2.6 2005/05/04 12:33:44 amoll Exp $
+// $Id: modifySurfaceDialog.h,v 1.1.2.7 2005/06/15 09:54:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
@@ -29,6 +29,10 @@
 # include <BALL/DATATYPE/regularData3D.h>
 #endif 
 
+#ifndef BALL_DATATYPE_HASHGRID_H
+# include <BALL/DATATYPE/hashGrid.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
@@ -47,9 +51,6 @@ namespace BALL
 			public:
 
 			BALL_EMBEDDABLE(ModifySurfaceDialog, ModularWidget)
-
-			///
-			typedef HashGrid3<const Atom*>  AtomGrid;
 
 			///
 			class ColoringConfig
