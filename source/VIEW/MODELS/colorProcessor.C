@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.34.4.4 2005/06/06 11:30:02 amoll Exp $
+// $Id: colorProcessor.C,v 1.34.4.5 2005/06/15 14:21:28 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -34,9 +34,15 @@ namespace BALL
 		ColorProcessor::ColorProcessor(const ColorProcessor& cp)
 			throw()
 			:	UnaryProcessor<GeometricObject*>(cp),
+				update_always_needed_(cp.update_always_needed_),
 				default_color_(cp.default_color_),
 				selection_color_(cp.selection_color_),
-				transparency_(0)
+				transparency_(cp.transparency_),
+				composites_(cp.composites_),
+				atom_grid_(cp.atom_grid_),
+				model_type_(cp.model_type_),
+				last_composite_of_grid_(cp.last_composite_of_grid_),
+				additional_grid_distance_(cp.additional_grid_distance_)
 		{
 		}
 
@@ -63,10 +69,15 @@ namespace BALL
 		void ColorProcessor::set(const ColorProcessor& cp)
 			throw()
 		{
+			update_always_needed_ = cp.update_always_needed_;
 			default_color_ = cp.default_color_;
-			composites_ = cp.composites_;
-			transparency_ = cp.transparency_;
 			selection_color_ = cp.selection_color_;
+			transparency_ = cp.transparency_;
+			composites_ = cp.composites_;
+			atom_grid_ = cp.atom_grid_;
+			model_type_ = cp.model_type_;
+			last_composite_of_grid_ = cp.last_composite_of_grid_;
+			additional_grid_distance_ = cp.additional_grid_distance_;
 		}
 
 
@@ -412,6 +423,11 @@ namespace BALL
 			return *item;
 		}
 
+		bool ColorProcessor::start()
+			throw()
+		{
+			return (getComposites() != 0);
+		}
 
 		//////////////////////////////////////////////////////////////////////
 		InterpolateColorProcessor::InterpolateColorProcessor()
@@ -540,7 +556,10 @@ namespace BALL
 		}
 
 		bool InterpolateColorProcessor::start()
+			throw()
 		{
+			if (!ColorProcessor::start()) return false;
+
 			min_min_color_.setAlpha(255 - transparency_);
 			min_color_.setAlpha(255 - transparency_);
 			max_max_color_.setAlpha(255 - transparency_);

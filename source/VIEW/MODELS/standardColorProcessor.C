@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.52.2.3 2005/06/06 11:30:02 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.52.2.4 2005/06/15 14:21:28 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -327,6 +327,8 @@ namespace BALL
 			base_colors[1] = middle_color_;
 			base_colors[2] = last_color_;
 			table_.setBaseColors(base_colors, 3);
+
+			if (composites_ == 0) return false;
 
 			List<const Composite*>::const_iterator it = composites_->begin();
 			ResidueIterator res_it;

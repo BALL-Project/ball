@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.28.4.4 2005/06/14 13:29:02 amoll Exp $
+// $Id: colorProcessor.h,v 1.28.4.5 2005/06/15 14:21:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -110,6 +110,10 @@ class BALL_EXPORT ColorProcessor
 	/** Assignment
 	*/
 	void set(const ColorProcessor& color_calculator)
+		throw();
+
+	///
+	virtual bool start()
 		throw();
 
 	/** Assignment operator.
@@ -258,7 +262,8 @@ class InterpolateColorProcessor
 	InterpolateColorProcessor();
 
 	///
-	virtual bool start();
+	virtual bool start()
+		throw();
 
 	///
 	void setMinColor(const ColorRGBA& color)
