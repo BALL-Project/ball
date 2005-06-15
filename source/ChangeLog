@@ -36,11 +36,12 @@ Added:
 		- creation of labels, e.g. for all atoms of a molecule together
 			with special tags, e.g. for charge or name
 		- ability to select the atoms of a Representation
+		- cloning of Representations
   	- new move mode for (partial) structures (also much less CPU consumption)
   	- Esc key now switches to last used mode in Scene
 		- Enter key now focus on selection or on first loaded system if no selection exists
 		- its now possible to hide secondary structure entries in the MolecularControl
-  	- calculation of Ramachandran plots for proteins
+		- history for boolean expressions
   	- Python scripting
   		- Hotkey support for starting any (BALL-)Python command from BALLView
 	  	- support to quit program from Python interpreter
