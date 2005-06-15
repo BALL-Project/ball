@@ -24,8 +24,7 @@ namespace BALL
 				
 				/** Operations
 				*/
-				virtual std::vector<ConformationSet::Conformation> operator () (ConformationSet& conformations)
-					throw();
+				virtual std::vector<ConformationSet::Conformation> operator () (ConformationSet& conformations);
 		};
 }
 #endif

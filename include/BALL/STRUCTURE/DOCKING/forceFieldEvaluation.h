@@ -42,7 +42,7 @@ namespace BALL
 					throw();
 				
 				virtual std::vector<ConformationSet::Conformation> operator () (ConformationSet& conformations)
-					throw();
+					throw(Exception::TooManyErrors);
 
 			protected:
 
