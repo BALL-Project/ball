@@ -115,7 +115,10 @@ void Representation::setDrawingPrecision(DrawingPrecision precision)
 	throw() 
 {
 	drawing_precision_ = precision;
-	if (model_processor_ != 0) model_processor_->setDrawingPrecision(drawing_precision_);
+	if (model_processor_ != 0) 
+	{
+		model_processor_->setDrawingPrecision(drawing_precision_);
+	}
 }
 
 BALL_INLINE 
