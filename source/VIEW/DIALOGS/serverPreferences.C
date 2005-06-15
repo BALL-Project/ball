@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.C,v 1.8 2004/10/08 14:49:15 amoll Exp $
+// $Id: serverPreferences.C,v 1.8.6.1 2005/06/15 11:54:40 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/serverPreferences.h>
@@ -66,7 +66,7 @@ namespace BALL
 			registerObject_(server_status_);
 			registerObject_(port_);
 
-			insertEntry(this, "Server");
+			insertEntry(this, "Client/Server");
 		}
 
 		ServerPreferences::~ServerPreferences()

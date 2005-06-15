@@ -30,7 +30,7 @@ PythonHotkeys::PythonHotkeys( QWidget* parent,  const char* name, WFlags fl )
 	}
 	
 	setDefaults();
-	insertEntry(this, "Hotkeys");
+	insertEntry(this, "Python Hotkeys");
 }
 
 
