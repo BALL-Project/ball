@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyCompositeList.h,v 1.4 2004/05/27 19:49:44 oliver Exp $
+// $Id: pyCompositeList.h,v 1.4.4.1 2005/06/15 10:31:12 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYCOMPOSITELIST_H
@@ -82,14 +82,6 @@ namespace BALL
 		///	Destructor
 		virtual ~PyCompositeList() throw();
 		//@}
-		
-		/**	Converters
-		*/
-		//@{
-		/// 
-		operator VIEW::Representation::CompositeSet () const;
-		//@}
-
 	};
    
 } // namespace BALL
