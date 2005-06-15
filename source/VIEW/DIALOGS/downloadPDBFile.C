@@ -277,6 +277,7 @@ void DownloadPDBFile::slotShowDetail()
 	filename += pdbId->text();
 	filename += "&page=";
 
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	displayHTML(filename);
 }
 
@@ -287,6 +288,7 @@ void DownloadPDBFile::slotNewId(const QString& new_id)
 
 void DownloadPDBFile::displayHTML(const QString& url)
 {
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	try
 	{
 		QString filename;
@@ -375,7 +377,11 @@ void DownloadPDBFile::displayHTML(const QString& url)
 			}
 		}
 
- 		if (qb_ == 0) qb_ = new QTextBrowser();
+ 		if (qb_ == 0) 
+		{
+			qb_ = new QTextBrowser();
+			connect(qb_, SIGNAL(linkClicked(const QString&)), this, SLOT(displayHTML(const QString&)));
+		}
 
 		QImage empty;
 		List<String>::Iterator it = images.begin();
@@ -392,8 +398,6 @@ void DownloadPDBFile::displayHTML(const QString& url)
 		}
 
 		qb_->setText(QString(result.c_str()));
-
-		connect(qb_, SIGNAL(linkClicked(const QString&)), this, SLOT(displayHTML(const QString&)));
 
 		downloadEnded_();
 		setStatusbarText("Finished download of HTML page", true);
