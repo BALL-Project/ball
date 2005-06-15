@@ -1283,14 +1283,19 @@ namespace BALL
 	{
 		ang_num_ = 0;
 
-		for(float psipsi = psi_min; psipsi < psi_max; psipsi += deg_psi)
-			for(float thetatheta = theta_min; thetatheta < theta_max; thetatheta += deg_theta)
-				for(float phiphi = phi_min; phiphi < phi_max; phiphi += deg_phi)
+		int phi_num = (int) ceil((phi_max - phi_min) / deg_phi);
+		int psi_num = (int) ceil((psi_max - psi_min) / deg_psi);
+		int theta_num = (int) ceil((theta_max - theta_min) / deg_theta);
+		
+		for(int psipsi = 0; psipsi < psi_num; psipsi++)
+			for(int thetatheta = 0; thetatheta < theta_num; thetatheta++)
+				for(int phiphi = 0; phiphi < phi_num; phiphi++)
 				{
 
-					double x1 = phiphi     * Constants::PI / 180.0;
-					double y1 = thetatheta * Constants::PI / 180.0;
-					double z1 = psipsi     * Constants::PI / 180.0;
+					
+					double x1 = (phi_min + phiphi * deg_phi) * Constants::PI / 180.0;
+					double y1 = (theta_min + thetatheta * deg_theta) * Constants::PI / 180.0;
+					double z1 = (psi_min + psipsi * deg_psi) * Constants::PI / 180.0;
 
 					double sx1 = sin(x1);
 					double sy1 = sin(y1);
@@ -1301,16 +1306,16 @@ namespace BALL
 
 					bool degenerate = false;
 
-					for(float k = 0.0; (k <= psipsi) && (!degenerate); k += deg_psi)
-						for(float j = 0.0; (j <= thetatheta) && (!degenerate); j += deg_theta)
-							for(float i = 0.0; (i <= phiphi) && (!degenerate); i += deg_phi)
+					for(int k = 0; (k <= psipsi) && (!degenerate); k++)
+						for(int j = 0; (j <= thetatheta) && (!degenerate); j++)
+							for(int i = 0; (i <= phiphi) && (!degenerate); i++)
 							{
 								if( (i == phiphi) && (j == thetatheta) && (k == psipsi) )
 									continue;
 
-								double x2 = i * Constants::PI / 180.0;
-								double y2 = j * Constants::PI / 180.0;
-								double z2 = k * Constants::PI / 180.0;
+								double x2 = (phi_min + i * deg_phi) * Constants::PI / 180.0;
+								double y2 = (theta_min + j * deg_theta) * Constants::PI / 180.0;
+								double z2 = (psi_min + k * deg_psi) * Constants::PI / 180.0;
 
 								double sx2 = sin(x2);
 								double sy2 = sin(y2);
