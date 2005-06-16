@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>SnapshotVisualisationDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,1006 +8,861 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>390</width>
-            <height>340</height>
+            <width>411</width>
+            <height>367</height>
         </rect>
     </property>
     <property name="minimumSize">
         <size>
-            <width>390</width>
-            <height>340</height>
+            <width>0</width>
+            <height>0</height>
         </size>
     </property>
     <property name="maximumSize">
         <size>
-            <width>390</width>
-            <height>340</height>
+            <width>3900</width>
+            <height>3400</height>
         </size>
     </property>
     <property name="caption">
         <string>Snapshot Visualisation</string>
     </property>
-    <widget class="QGroupBox">
+    <vbox>
         <property name="name">
-            <cstring>groupBox2</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>4</x>
-                <y>120</y>
-                <width>384</width>
-                <height>178</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Animation</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel2_3</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>19</x>
-                    <y>25</y>
-                    <width>50</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>50</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>Start</string>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel2_4</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>19</x>
-                    <y>65</y>
-                    <width>50</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>50</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>End</string>
-            </property>
-        </widget>
         <widget class="QGroupBox">
             <property name="name">
-                <cstring>groupBox10</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>220</x>
-                    <y>23</y>
-                    <width>130</width>
-                    <height>91</height>
-                </rect>
-            </property>
-            <property name="frameShape">
-                <enum>NoFrame</enum>
+                <cstring>sliderBox</cstring>
             </property>
             <property name="title">
-                <string></string>
-            </property>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>rockLoopButton</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>true</bool>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>5</x>
-                        <y>51</y>
-                        <width>84</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Rock</string>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>noLoopButton</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>5</x>
-                        <y>-3</y>
-                        <width>111</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Don't loop</string>
-                </property>
-                <property name="checked">
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>forwardLoopButton</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>true</bool>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>5</x>
-                        <y>24</y>
-                        <width>84</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Loop</string>
-                </property>
-                <property name="checked">
-                    <bool>false</bool>
-                </property>
-            </widget>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>endSnapshot</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>75</x>
-                    <y>65</y>
-                    <width>110</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>100</width>
-                    <height>0</height>
-                </size>
-            </property>
-        </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>groupBox4</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>4</x>
-                    <y>117</y>
-                    <width>210</width>
-                    <height>54</height>
-                </rect>
-            </property>
-            <property name="frameShape">
-                <enum>NoFrame</enum>
-            </property>
-            <property name="title">
-                <string>Animation Speed</string>
+                <string>Navigation</string>
             </property>
             <property name="alignment">
                 <set>AlignHCenter</set>
             </property>
-            <widget class="QLineEdit">
+            <vbox>
                 <property name="name">
-                    <cstring>animationSpeedLineEdit</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="enabled">
-                    <bool>false</bool>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>11</x>
-                        <y>21</y>
-                        <width>60</width>
-                        <height>23</height>
-                    </rect>
-                </property>
-                <property name="paletteBackgroundColor">
-                    <color>
-                        <red>239</red>
-                        <green>239</green>
-                        <blue>239</blue>
-                    </color>
-                </property>
-                <property name="palette">
-                    <palette>
-                        <active>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>230</red>
-                                <green>230</green>
-                                <blue>230</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>255</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>253</red>
-                                <green>253</green>
-                                <blue>253</blue>
-                            </color>
-                            <color>
-                                <red>206</red>
-                                <green>206</green>
-                                <blue>206</blue>
-                            </color>
-                            <color>
-                                <red>191</red>
-                                <green>191</green>
-                                <blue>191</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>250</red>
-                                <green>250</green>
-                                <blue>250</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>239</red>
-                                <green>239</green>
-                                <blue>239</blue>
-                            </color>
-                            <color>
-                                <red>230</red>
-                                <green>230</green>
-                                <blue>230</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>68</red>
-                                <green>100</green>
-                                <blue>172</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>255</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>0</green>
-                                <blue>255</blue>
-                            </color>
-                        </active>
-                        <disabled>
-                            <color>
-                                <red>128</red>
-                                <green>128</green>
-                                <blue>128</blue>
-                            </color>
-                            <color>
-                                <red>230</red>
-                                <green>230</green>
-                                <blue>230</blue>
-                            </color>
-                            <color>
-                                <red>250</red>
-                                <green>250</green>
-                                <blue>250</blue>
-                            </color>
-                            <color>
-                                <red>253</red>
-                                <green>253</green>
-                                <blue>253</blue>
-                            </color>
-                            <color>
-                                <red>143</red>
-                                <green>143</green>
-                                <blue>143</blue>
-                            </color>
-                            <color>
-                                <red>191</red>
-                                <green>191</green>
-                                <blue>191</blue>
-                            </color>
-                            <color>
-                                <red>191</red>
-                                <green>191</green>
-                                <blue>191</blue>
-                            </color>
-                            <color>
-                                <red>250</red>
-                                <green>250</green>
-                                <blue>250</blue>
-                            </color>
-                            <color>
-                                <red>128</red>
-                                <green>128</green>
-                                <blue>128</blue>
-                            </color>
-                            <color>
-                                <red>239</red>
-                                <green>239</green>
-                                <blue>239</blue>
-                            </color>
-                            <color>
-                                <red>230</red>
-                                <green>230</green>
-                                <blue>230</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>128</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>255</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>0</green>
-                                <blue>255</blue>
-                            </color>
-                        </disabled>
-                        <inactive>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>230</red>
-                                <green>230</green>
-                                <blue>230</blue>
-                            </color>
-                            <color>
-                                <red>250</red>
-                                <green>250</green>
-                                <blue>250</blue>
-                            </color>
-                            <color>
-                                <red>253</red>
-                                <green>253</green>
-                                <blue>253</blue>
-                            </color>
-                            <color>
-                                <red>143</red>
-                                <green>143</green>
-                                <blue>143</blue>
-                            </color>
-                            <color>
-                                <red>191</red>
-                                <green>191</green>
-                                <blue>191</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>250</red>
-                                <green>250</green>
-                                <blue>250</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>239</red>
-                                <green>239</green>
-                                <blue>239</blue>
-                            </color>
-                            <color>
-                                <red>230</red>
-                                <green>230</green>
-                                <blue>230</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>0</blue>
-                            </color>
-                            <color>
-                                <red>94</red>
-                                <green>122</green>
-                                <blue>183</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>255</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>0</red>
-                                <green>0</green>
-                                <blue>255</blue>
-                            </color>
-                            <color>
-                                <red>255</red>
-                                <green>0</green>
-                                <blue>255</blue>
-                            </color>
-                        </inactive>
-                    </palette>
-                </property>
-                <property name="font">
-                    <font>
-                        <bold>1</bold>
-                    </font>
-                </property>
-            </widget>
-            <widget class="QSlider">
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout141</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>TextLabel2</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>70</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Snapshots</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>numberOfSnapshots</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>true</bool>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>90</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="paletteBackgroundColor">
+                                <color>
+                                    <red>239</red>
+                                    <green>239</green>
+                                    <blue>239</blue>
+                                </color>
+                            </property>
+                            <property name="readOnly">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer30</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>21</width>
+                                    <height>21</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>TextLabel2_2</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Current</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>currentSnapshot</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>true</bool>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>90</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="paletteBackgroundColor">
+                                <color>
+                                    <red>239</red>
+                                    <green>239</green>
+                                    <blue>239</blue>
+                                </color>
+                            </property>
+                            <property name="readOnly">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>snapShotSlider</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>360</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="cursor">
+                        <cursor>0</cursor>
+                    </property>
+                    <property name="pageStep">
+                        <number>5</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Both</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>20</number>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout140</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>firstSnapshotButton</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>26</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>|&lt;</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>First snapshot</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>tenBackwardButton</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>26</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>&lt;&lt;</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>oneBackwardButton</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>26</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>&lt;</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>One snapshot backwards</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>oneForwardButton</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>26</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>&gt;</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>One snapshot further</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>tenForwardButton</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>26</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>&gt;&gt;</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>lastSnapshotButton</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>26</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>&gt;|</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Last snapshot</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox2</cstring>
+            </property>
+            <property name="title">
+                <string>Animation</string>
+            </property>
+            <property name="alignment">
+                <set>AlignHCenter</set>
+            </property>
+            <grid>
                 <property name="name">
-                    <cstring>animationSpeedSlider</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="geometry">
-                    <rect>
-                        <x>81</x>
-                        <y>22</y>
-                        <width>120</width>
-                        <height>21</height>
-                    </rect>
+                <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>endSnapshot</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>TextLabel2_3</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>Start</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>startSnapshot</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>TextLabel2_4</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>End</string>
+                    </property>
+                </widget>
+                <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>groupBox4</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="title">
+                        <string>Speed</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignHCenter</set>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>animationSpeedLineEdit</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="paletteBackgroundColor">
+                                <color>
+                                    <red>239</red>
+                                    <green>239</green>
+                                    <blue>239</blue>
+                                </color>
+                            </property>
+                            <property name="palette">
+                                <palette>
+                                    <active>
+                                        <color>
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>0</blue>
+                                        </color>
+                                        <color>
+                                            <red>230</red>
+                                            <green>230</green>
+                                            <blue>230</blue>
+                                        </color>
+                                        <color>
+                                            <red>255</red>
+                                            <green>255</green>
+                                            <blue>255</blue>
+                                        </color>
+                                        <color>
+                                            <red>253</red>
+                                            <green>253</green>
+                                            <blue>253</blue>
+                                        </color>
+                                        <color>
+                                            <red>206</red>
+                                            <green>206</green>
+                                            <blue>206</blue>
+                                        </color>
+                                        <color>
+                                            <red>191</red>
+                                            <green>191</green>
+                                            <blue>191</blue>
+                                        </color>
+                                        <color>
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>0</blue>
+                                        </color>
+                                        <color>
+                                            <red>250</red>
+                                            <green>250</green>
+                                            <blue>250</blue>
+                                        </color>
+                                        <color>
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>0</blue>
+                                        </color>
+                                        <color>
+                                            <red>239</red>
+                                            <green>239</green>
+                                            <blue>239</blue>
+                                        </color>
+                                        <color>
+                                            <red>230</red>
+                                            <green>230</green>
+                                            <blue>230</blue>
+                                        </color>
+                                        <color>
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>0</blue>
+                                        </color>
+                                        <color>
+                                            <red>68</red>
+                                            <green>100</green>
+                                            <blue>172</blue>
+                                        </color>
+                                        <color>
+                                            <red>255</red>
+                                            <green>255</green>
+                                            <blue>255</blue>
+                                        </color>
+                                        <color>
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>255</blue>
+                                        </color>
+                                        <color>
+                                            <red>255</red>
+                                            <green>0</green>
+                                            <blue>255</blue>
+                                        </color>
+                                    </active>
+                                    <disabled>
+                                        <color>
+                                            <red>128</red>
+                                            <green>128</green>
+                                            <blue>128</blue>
+                                        </color>
+                                        <color>
+                                            <red>230</red>
+                                            <green>230</green>
+                                            <blue>230</blue>
+                                        </color>
+                                        <color>
+                                            <red>250</red>
+                                            <green>250</green>
+                                            <blue>250</blue>
+                                        </color>
+                                        <color>
+                                            <red>253</red>
+                                            <green>253</green>
+                                            <blue>253</blue>
+                                        </color>
+                                        <color>
+                                            <red>143</red>
+                                            <green>143</green>
+                                            <blue>143</blue>
+                                        </color>
+                                        <color>
+                                            <red>191</red>
+                                            <green>191</green>
+                                            <blue>191</blue>
+                                        </color>
+                                        <color>
+                                            <red>191</red>
+                                            <green>191</green>
+                                            <blue>191</blue>
+                                        </color>
+                                        <color>
+                                            <red>250</red>
+                                            <green>250</green>
+                                            <blue>250</blue>
+                                        </color>
+                                        <color>
+                                            <red>128</red>
+                                            <green>128</green>
+                                            <blue>128</blue>
+                                        </color>
+                                        <color>
+                                            <red>239</red>
+                                            <green>239</green>
+                                            <blue>239</blue>
+                                        </color>
+                                        <color>
+                                            <red>230</red>
+                                            <green>230</green>
+                                            <blue>230</blue>
+                                        </color>
+                                        <color>
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>0</blue>
+                                        </color>
+                                        <color>
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>128</blue>
+                                        </color>
+                                        <color>
+                                            <red>255</red>
+                                            <green>255</green>
+                                            <blue>255</blue>
+                                        </color>
+                                        <color>
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>255</blue>
+                                        </color>
+                                        <color>
+                                            <red>255</red>
+                                            <green>0</green>
+                                            <blue>255</blue>
+                                        </color>
+                                    </disabled>
+                                    <inactive>
+                                        <color>
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>0</blue>
+                                        </color>
+                                        <color>
+                                            <red>230</red>
+                                            <green>230</green>
+                                            <blue>230</blue>
+                                        </color>
+                                        <color>
+                                            <red>250</red>
+                                            <green>250</green>
+                                            <blue>250</blue>
+                                        </color>
+                                        <color>
+                                            <red>253</red>
+                                            <green>253</green>
+                                            <blue>253</blue>
+                                        </color>
+                                        <color>
+                                            <red>143</red>
+                                            <green>143</green>
+                                            <blue>143</blue>
+                                        </color>
+                                        <color>
+                                            <red>191</red>
+                                            <green>191</green>
+                                            <blue>191</blue>
+                                        </color>
+                                        <color>
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>0</blue>
+                                        </color>
+                                        <color>
+                                            <red>250</red>
+                                            <green>250</green>
+                                            <blue>250</blue>
+                                        </color>
+                                        <color>
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>0</blue>
+                                        </color>
+                                        <color>
+                                            <red>239</red>
+                                            <green>239</green>
+                                            <blue>239</blue>
+                                        </color>
+                                        <color>
+                                            <red>230</red>
+                                            <green>230</green>
+                                            <blue>230</blue>
+                                        </color>
+                                        <color>
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>0</blue>
+                                        </color>
+                                        <color>
+                                            <red>94</red>
+                                            <green>122</green>
+                                            <blue>183</blue>
+                                        </color>
+                                        <color>
+                                            <red>255</red>
+                                            <green>255</green>
+                                            <blue>255</blue>
+                                        </color>
+                                        <color>
+                                            <red>0</red>
+                                            <green>0</green>
+                                            <blue>255</blue>
+                                        </color>
+                                        <color>
+                                            <red>255</red>
+                                            <green>0</green>
+                                            <blue>255</blue>
+                                        </color>
+                                    </inactive>
+                                </palette>
+                            </property>
+                            <property name="font">
+                                <font>
+                                    <bold>1</bold>
+                                </font>
+                            </property>
+                        </widget>
+                        <widget class="QSlider">
+                            <property name="name">
+                                <cstring>animationSpeedSlider</cstring>
+                            </property>
+                            <property name="cursor">
+                                <cursor>6</cursor>
+                            </property>
+                            <property name="minValue">
+                                <number>1</number>
+                            </property>
+                            <property name="maxValue">
+                                <number>10</number>
+                            </property>
+                            <property name="pageStep">
+                                <number>1</number>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="tickmarks">
+                                <enum>Both</enum>
+                            </property>
+                            <property name="tickInterval">
+                                <number>1</number>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Select animation speed</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>export_POV</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>110</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>export POVRay</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Export one PNG image for each Snapshot.</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Export one PNG image for each Snapshot.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="3" column="2">
+                    <property name="name">
+                        <cstring>export_PNG</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>110</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>export PNGs</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Export one PNG image for each Snapshot.</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Export one PNG image for each Snapshot.</string>
+                    </property>
+                </widget>
+                <widget class="QGroupBox" row="0" column="3" rowspan="3" colspan="1">
+                    <property name="name">
+                        <cstring>groupBox10</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="title">
+                        <string></string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>noLoopButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Don't loop</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>forwardLoopButton</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>true</bool>
+                            </property>
+                            <property name="text">
+                                <string>Loop</string>
+                            </property>
+                            <property name="checked">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>rockLoopButton</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>true</bool>
+                            </property>
+                            <property name="text">
+                                <string>Rock</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout142</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="cursor">
-                    <cursor>6</cursor>
-                </property>
-                <property name="minValue">
-                    <number>1</number>
-                </property>
-                <property name="maxValue">
-                    <number>10</number>
-                </property>
-                <property name="pageStep">
-                    <number>1</number>
-                </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="tickmarks">
-                    <enum>Both</enum>
-                </property>
-                <property name="tickInterval">
-                    <number>1</number>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Select animation speed</string>
-                </property>
-            </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer31</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>16</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>animateButton</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>180</width>
+                            <height>32</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>A&amp;nimate</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+N</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Play snapshots </string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer31_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>16</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>cancelButton</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>180</width>
+                            <height>32</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>C&amp;ancel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Close window</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer31_3</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>16</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
         </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>export_PNG</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>227</x>
-                    <y>147</y>
-                    <width>146</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>110</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>export PNGs</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Export one PNG image for each Snapshot.</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Export one PNG image for each Snapshot.</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>export_POV</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>227</x>
-                    <y>121</y>
-                    <width>147</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>110</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>export POVRay</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Export one PNG image for each Snapshot.</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Export one PNG image for each Snapshot.</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>startSnapshot</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>75</x>
-                    <y>25</y>
-                    <width>110</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>100</width>
-                    <height>0</height>
-                </size>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>sliderBox</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>3</x>
-                <y>1</y>
-                <width>384</width>
-                <height>115</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Navigation</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>6</x>
-                    <y>19</y>
-                    <width>90</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>70</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>Snapshots</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>numberOfSnapshots</cstring>
-            </property>
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>100</x>
-                    <y>21</y>
-                    <width>90</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>90</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="paletteBackgroundColor">
-                <color>
-                    <red>239</red>
-                    <green>239</green>
-                    <blue>239</blue>
-                </color>
-            </property>
-            <property name="readOnly">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel2_2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>210</x>
-                    <y>19</y>
-                    <width>72</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>50</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>Current</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>currentSnapshot</cstring>
-            </property>
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>285</x>
-                    <y>20</y>
-                    <width>90</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>90</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="paletteBackgroundColor">
-                <color>
-                    <red>239</red>
-                    <green>239</green>
-                    <blue>239</blue>
-                </color>
-            </property>
-            <property name="readOnly">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QSlider">
-            <property name="name">
-                <cstring>snapShotSlider</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>8</x>
-                    <y>48</y>
-                    <width>365</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>360</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="cursor">
-                <cursor>0</cursor>
-            </property>
-            <property name="pageStep">
-                <number>5</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="tickmarks">
-                <enum>Both</enum>
-            </property>
-            <property name="tickInterval">
-                <number>20</number>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>hundredBackwardButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>48</x>
-                    <y>78</y>
-                    <width>40</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>26</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>&lt;&lt;&lt;</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>tenBackwardButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>98</x>
-                    <y>78</y>
-                    <width>40</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>26</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>&lt;&lt;</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>hundredForwardButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>288</x>
-                    <y>78</y>
-                    <width>40</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>26</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>&gt;&gt;&gt;</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>oneForwardButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>198</x>
-                    <y>78</y>
-                    <width>30</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>26</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>&gt;</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>One snapshot further</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>oneBackwardButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>148</x>
-                    <y>78</y>
-                    <width>30</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>26</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>&lt;</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>One snapshot backwards</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>tenForwardButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>238</x>
-                    <y>78</y>
-                    <width>40</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>26</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>&gt;&gt;</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>lastSnapshotButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>338</x>
-                    <y>78</y>
-                    <width>30</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>26</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>&gt;|</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Last snapshot</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>firstSnapshotButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>8</x>
-                    <y>78</y>
-                    <width>30</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>26</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>|&lt;</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>First snapshot</string>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>cancelButton</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>194</x>
-                <y>303</y>
-                <width>190</width>
-                <height>32</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>180</width>
-                <height>32</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>C&amp;ancel</string>
-        </property>
-        <property name="accel">
-            <string>Alt+A</string>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Close window</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>animateButton</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>4</x>
-                <y>303</y>
-                <width>181</width>
-                <height>32</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>180</width>
-                <height>32</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>A&amp;nimate</string>
-        </property>
-        <property name="accel">
-            <string>Alt+N</string>
-        </property>
-        <property name="default">
-            <bool>true</bool>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Play snapshots </string>
-        </property>
-    </widget>
+    </vbox>
 </widget>
 <connections>
     <connection>
@@ -1027,12 +882,6 @@
         <signal>clicked()</signal>
         <receiver>SnapshotVisualisationDialogData</receiver>
         <slot>firstSnapshotClicked()</slot>
-    </connection>
-    <connection>
-        <sender>hundredBackwardButton</sender>
-        <signal>clicked()</signal>
-        <receiver>SnapshotVisualisationDialogData</receiver>
-        <slot>hundredBackwardClicked()</slot>
     </connection>
     <connection>
         <sender>tenBackwardButton</sender>
@@ -1057,12 +906,6 @@
         <signal>clicked()</signal>
         <receiver>SnapshotVisualisationDialogData</receiver>
         <slot>tenForwardClicked()</slot>
-    </connection>
-    <connection>
-        <sender>hundredForwardButton</sender>
-        <signal>clicked()</signal>
-        <receiver>SnapshotVisualisationDialogData</receiver>
-        <slot>hundredForwardClicked()</slot>
     </connection>
     <connection>
         <sender>lastSnapshotButton</sender>
@@ -1116,12 +959,10 @@
 <tabstops>
     <tabstop>snapShotSlider</tabstop>
     <tabstop>firstSnapshotButton</tabstop>
-    <tabstop>hundredBackwardButton</tabstop>
     <tabstop>tenBackwardButton</tabstop>
     <tabstop>oneBackwardButton</tabstop>
     <tabstop>oneForwardButton</tabstop>
     <tabstop>tenForwardButton</tabstop>
-    <tabstop>hundredForwardButton</tabstop>
     <tabstop>lastSnapshotButton</tabstop>
     <tabstop>startSnapshot</tabstop>
     <tabstop>endSnapshot</tabstop>

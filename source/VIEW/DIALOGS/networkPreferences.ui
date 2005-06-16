@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>NetworkPreferencesData</class>
 <widget class="QWidget">
     <property name="name">
@@ -35,136 +35,168 @@
     <property name="caption">
         <string>NetworkPreferences</string>
     </property>
-    <widget class="QCheckBox">
+    <grid>
         <property name="name">
-            <cstring>enable_proxy</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>5</x>
-                <y>9</y>
-                <width>250</width>
-                <height>23</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>0</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>250</width>
-                <height>23</height>
-            </size>
-        </property>
-        <property name="maximumSize">
-            <size>
-                <width>250</width>
-                <height>23</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Use HTTP proxy</string>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Writes the information from the Logs window into a file</string>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>port_edit</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>410</x>
-                <y>48</y>
-                <width>80</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>25</height>
-            </size>
-        </property>
-        <property name="maximumSize">
-            <size>
-                <width>80</width>
-                <height>32767</height>
-            </size>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textLabel1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>334</x>
-                <y>48</y>
-                <width>70</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>70</width>
-                <height>0</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>port</string>
-        </property>
-        <property name="alignment">
-            <set>AlignVCenter|AlignRight</set>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>host_edit</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>52</x>
-                <y>48</y>
-                <width>276</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>25</width>
-                <height>25</height>
-            </size>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textLabel1_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>20</x>
-                <y>48</y>
-                <width>26</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>host</string>
-        </property>
-    </widget>
+        <widget class="QGroupBox" row="0" column="0">
+            <property name="name">
+                <cstring>groupBox31</cstring>
+            </property>
+            <property name="title">
+                <string>HTTP Transfers</string>
+            </property>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>enable_proxy</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>22</y>
+                        <width>250</width>
+                        <height>23</height>
+                    </rect>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>0</hsizetype>
+                        <vsizetype>0</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>250</width>
+                        <height>23</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>250</width>
+                        <height>23</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>Use proxy</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Writes the information from the Logs window into a file</string>
+                </property>
+            </widget>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>layout124</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>9</x>
+                        <y>49</y>
+                        <width>610</width>
+                        <height>33</height>
+                    </rect>
+                </property>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer26</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Maximum</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>61</width>
+                                <height>31</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout123</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>host</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit">
+                                <property name="name">
+                                    <cstring>host_edit</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>25</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                            </widget>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1</cstring>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>70</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>port</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignVCenter|AlignRight</set>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit">
+                                <property name="name">
+                                    <cstring>port_edit</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>0</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>80</width>
+                                        <height>32767</height>
+                                    </size>
+                                </property>
+                                <property name="frameShape">
+                                    <enum>LineEditPanel</enum>
+                                </property>
+                                <property name="frameShadow">
+                                    <enum>Sunken</enum>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                </hbox>
+            </widget>
+        </widget>
+    </grid>
 </widget>
 <connections>
     <connection>
