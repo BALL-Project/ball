@@ -4459,6 +4459,7 @@ echo "${ECHO_T}yes" >&6
   CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 					if test "${OS}" = "Darwin" ; then
 	  CXXFLAGS_O="${CXXFLAGS_O} -O1 -Wall -W -pedantic -Wno-long-long -Wno-long-double"
+		CXXFLAGS_D="${CXXFLAGS_D} -O1"
 	else
 	  CXXFLAGS_O="${CXXFLAGS_O} -O1 -Wall -W -pedantic -Wno-long-long"
 	fi
