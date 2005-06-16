@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.16 2005/06/15 13:08:09 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.17 2005/06/16 12:57:24 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -14,6 +14,7 @@
 #include <BALL/KERNEL/selector.h>
 #include <qmenubar.h>
 #include <qpushbutton.h> 
+#include <qlineedit.h> 
 #include <qmessagebox.h> 
 #include <qtooltip.h> 
 
@@ -1196,7 +1197,8 @@ namespace BALL
 					"isAxial() \n" +
 					"is4C1() \n\n" +
 					"They can be connected with\n" +
-					"AND and OR, grouped with brackets, and each predicate can be negated with '!'\n"
+					"AND and OR, grouped with brackets, and each predicate can be negated with '!'\n\n" +
+					"You have to press RETURN to apply the selection!"
 					).c_str(),
 					"&OK");
 		}
@@ -1354,7 +1356,7 @@ namespace BALL
 				}
 			}
 
-			connect(selector_edit_, SIGNAL(activated(int)), this, SLOT(applySelector()));
+			connect(selector_edit_->lineEdit(), SIGNAL(returnPressed()), this, SLOT(applySelector()));
 		}
 
 		void MolecularControl::writePreferences(INIFile& inifile)
