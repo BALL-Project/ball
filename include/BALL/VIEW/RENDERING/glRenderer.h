@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.32.2.4 2005/05/11 00:27:09 amoll Exp $
+// $Id: glRenderer.h,v 1.32.2.5 2005/06/16 14:03:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -238,6 +238,9 @@ namespace BALL
 			///
 			RenderMode getRenderMode() const
 				throw();
+
+			///
+			void setRenderMode(RenderMode mode) { render_mode_ = mode;}
 			
 			///
 			virtual bool render(const Representation& representation, bool for_display_list = false)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.15 2005/06/04 07:49:48 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.16 2005/06/16 14:03:21 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1663,6 +1663,8 @@ namespace BALL
 		void GLRenderer::renderClippingPlane_(const ClippingPlane& plane)
 			throw()
 		{
+			display_lists_index_ = DRAWING_MODE_SOLID * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + DRAWING_PRECISION_HIGH;
+
 			glPushAttrib(GL_LIGHTING_BIT | GL_BLEND);
 			const Vector3& point(plane.getPoint());
 			const Vector3& n(plane.getNormal());
