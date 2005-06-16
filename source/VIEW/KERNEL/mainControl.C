@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.14 2005/06/12 17:39:36 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.15 2005/06/16 12:32:10 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -378,13 +378,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 
 			#ifdef BALL_QT_HAS_THREADS
-				Index id = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
-												SLOT(stopSimulation()), ALT+Key_C, MENU_STOPSIMULATION);
-				setMenuHint(id, "Abort a running simulation thread");
+				stop_simulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
+												SLOT(stopSimulation()), ALT+Key_C);
+				setMenuHint(stop_simulation_id_, "Abort a running simulation thread");
 			#endif
 
-			insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, 
-										SLOT(complementSelection()), 0, MainControl::MENU_COMPLEMENT_SELECTION);
+			complement_selection_id_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
 
 			// establish connection 
 			connect(preferences_dialog_->ok_button, SIGNAL(clicked()), 
@@ -464,8 +463,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				(*it)->checkMenu(*this);
 			}
 
-			menuBar()->setItemEnabled(MENU_STOPSIMULATION, simulation_thread_ != 0);
-			menuBar()->setItemEnabled(MENU_COMPLEMENT_SELECTION, !composites_locked_);
+			menuBar()->setItemEnabled(stop_simulation_id_, simulation_thread_ != 0);
+			menuBar()->setItemEnabled(complement_selection_id_, !composites_locked_);
 		}
 
 		void MainControl::applyPreferencesTab()

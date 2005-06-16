@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72.2.5 2005/06/12 17:34:25 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.6 2005/06/16 12:32:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -161,13 +161,6 @@ namespace BALL
 
 				/// Help menu
 				HELP = 10800
-			};
-
-			///
-			enum MenuEntry
-			{
-				MENU_STOPSIMULATION 			= 10450,
-				MENU_COMPLEMENT_SELECTION = 10460
 			};
 
 			//@}
@@ -891,6 +884,8 @@ namespace BALL
 
 			String 							proxy_;
 			Position 						proxy_port_;
+
+			Index 							stop_simulation_id_, complement_selection_id_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
