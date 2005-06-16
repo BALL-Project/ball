@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.10.4.3 2005/06/15 17:39:13 oliver Exp $
+// $Id: representation.sip,v 1.10.4.4 2005/06/16 06:31:41 oliver Exp $
 //
 
 class Representation
@@ -16,7 +16,7 @@ class Representation
 	// BALL_CREATE(Representation);
 	Representation() throw();
 	Representation(ModelType /model_type/, DrawingPrecision /drawing_precision/, DrawingMode /drawing_mode/) throw();
-	Representation(const GeometricObjectList& /object_list/) throw();
+	// Representation(const GeometricObjectList& /object_list/) throw();
 	Representation(const Representation& /representation/) throw();
 	~Representation() throw();
 	// const Representation& operator = (const Representation& /representation/) throw();
