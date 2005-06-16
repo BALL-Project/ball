@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.37.2.4 2005/06/12 17:38:46 amoll Exp $
+// $Id: datasetControl.C,v 1.37.2.5 2005/06/16 15:53:11 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -677,39 +677,45 @@ namespace BALL
 			if (cs.vertex.size() == 0)
 			{
 				setStatusbarText("Could not calculate ContourSurface, no grid points found for threshold!", true);
+				surface_dialog_->show();
 				return;
 			}
 
 			Mesh* mesh = new Mesh;
-			mesh->Surface::operator = (static_cast<Surface&>(cs));
-
-			// fix for the cases, where all normals of the surface are in the wrong direction
-			// calculate center of surface and count normals, which show to the center of the surface,
-			// if this are more than the normals in opposite direction, flip all normals
-			Vector3 center;
-			for (Position i = 0; i < mesh->vertex.size(); i++)
+			
+			// reorient the vertices for OpenGL
+			Position vertex = 0;
+			for (Position t = 0; t < cs.triangle.size(); t++)
 			{
-				center += mesh->vertex[i];
+				Mesh::Triangle tri;
+				tri.v1 = vertex;
+				tri.v2 = vertex + 2;
+				tri.v3 = vertex + 1;
+				mesh->triangle.push_back(tri);
+
+				mesh->vertex.push_back(cs.vertex[cs.triangle[t].v1]);
+				mesh->vertex.push_back(cs.vertex[cs.triangle[t].v2]);
+				mesh->vertex.push_back(cs.vertex[cs.triangle[t].v3]);
+
+				mesh->normal.push_back(cs.normal[cs.triangle[t].v1]);
+				mesh->normal.push_back(cs.normal[cs.triangle[t].v2]);
+				mesh->normal.push_back(cs.normal[cs.triangle[t].v3]);
+
+				vertex += 3;
 			}
 
-			center /= mesh->vertex.size();
-
-			Size nr_of_strange_normals = 0;
-			for (Position i = 0; i < mesh->normal.size(); i++)
+#ifdef BALLVIEW_DEBUG
+			Representation * rep2 = new Representation();
+			for (Position p = 0; p < cs.normal.size(); p++)
 			{
-				if ((mesh->vertex[i] + mesh->normal[i]).getDistance(center) < (mesh->vertex[i] - mesh->normal[i]).getDistance(center))
-				{
-					nr_of_strange_normals ++;
-				}
+				Line* line = new Line();
+				line->setVertex1(cs.vertex[p]);
+				line->setVertex2(cs.vertex[p] + cs.normal[p]);
+				rep2->getGeometricObjects().push_back(line);
 			}
-
-			if (nr_of_strange_normals < mesh->normal.size() / 2.0)
-			{
-				for (Position i = 0; i < mesh->normal.size(); i++)
-				{
-					mesh->normal[i] *= -1;
-				}
-			}
+			getMainControl()->insert(*rep2);
+			getMainControl()->update(*rep2);
+#endif
 
 			mesh->colorList.clear(); 
 			mesh->colorList.push_back(surface_dialog_->getColor());
@@ -725,5 +731,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL
