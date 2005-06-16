@@ -107,7 +107,9 @@ void BALLViewDemo::show()
 	// hide some dockwidgets
 	if (LogView::getInstance(0) != 0) 			 LogView::getInstance(0)->hide();
 	if (DatasetControl::getInstance(0) != 0) DatasetControl::getInstance(0)->hide();
+#ifdef BALL_PYTHON_SUPPORT
 	if (PyWidget::getInstance(0) != 0) 			 PyWidget::getInstance(0)->hide();
+#undef
 }
 
 
