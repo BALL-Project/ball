@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.20.4.1 2005/05/17 13:06:14 amoll Exp $
+// $Id: TCPTransfer.h,v 1.20.4.2 2005/06/16 12:26:31 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
@@ -229,6 +229,9 @@ namespace BALL
 
 			///
 			bool usingProxy() const;
+
+			/// abort a running transfer
+			void abort() { abort_ = true;}
 			
 			protected:
 				
@@ -245,6 +248,7 @@ namespace BALL
 				std::ostream*  fstream_;
 				String 			proxy_address_;
 				Position 		proxy_port_;
+				bool 				abort_;
 				
 				/*_ Send data through the socket.
 				 */

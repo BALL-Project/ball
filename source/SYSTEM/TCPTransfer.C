@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.32.4.1 2005/05/17 13:07:19 amoll Exp $
+// $Id: TCPTransfer.C,v 1.32.4.2 2005/06/16 12:26:22 amoll Exp $
 //
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
@@ -67,7 +67,8 @@ namespace BALL
 		socket_(0),
 		fstream_(0),
 		proxy_address_(""),
-		proxy_port_(0)
+		proxy_port_(0),
+		abort_(false)
 	{
 		set(file, address);
 
@@ -138,6 +139,8 @@ namespace BALL
 	TCPTransfer::Status TCPTransfer::transfer()
 		throw()
 	{
+		abort_ = false;
+
 		if (protocol_ == FTP_PROTOCOL)
 		{
 			status_ =  getFTP_();
@@ -367,7 +370,7 @@ namespace BALL
 			}
 			received_bytes_ += bytes;
 		}
-		while (bytes > 0);
+		while (!abort_ && bytes > 0);
 
 		return OK;
 	}
@@ -620,7 +623,7 @@ namespace BALL
 				}
 			}
 		}
-		while (timer.getClockTime() < 20);
+		while (!abort_ && timer.getClockTime() < 20);
 		
 		if (!last_line2)
 		{
@@ -776,7 +779,7 @@ namespace BALL
 		setBlock_(socket_, false);
 
 		int bytes = -1;
-		while (control_bytes < 1 && bytes != 0)
+		while (!abort_ && control_bytes < 1 && bytes != 0)
 		{			
 			bytes = getReceivedBytes_(socket2);
 
