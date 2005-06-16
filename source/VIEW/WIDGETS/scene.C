@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.24 2005/06/15 13:36:59 amoll Exp $
+// $Id: scene.C,v 1.171.2.25 2005/06/16 13:07:10 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1401,10 +1401,8 @@ namespace BALL
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()));
 			setMenuHint("Reset the camera to the orgin (0,0,0)");
 
-			insertMenuEntry(MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P);
+			insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, SLOT(showExportPNGDialog()), ALT + Key_P);
 			setMenuHint("Export a PNG image file from the Scene");
-
-			insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, SLOT(showExportPNGDialog()));
 
 			window_menu_entry_id_ = 
 				insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
@@ -2021,7 +2019,9 @@ namespace BALL
 
 		void Scene::showExportPNGDialog()
 		{
-			QString result = QFileDialog::getSaveFileName("", "", 0, "Select a PNG file");
+			String start = String(screenshot_nr_) + ".png";
+			screenshot_nr_ ++;
+			QString result = QFileDialog::getSaveFileName(start, "", 0, "Select a PNG file");
 
 			if (result.isEmpty()) return;
 
