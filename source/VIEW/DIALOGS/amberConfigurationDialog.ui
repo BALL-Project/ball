@@ -965,37 +965,6 @@
     </widget>
     <widget class="QPushButton">
         <property name="name">
-            <cstring>close_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>8</x>
-                <y>455</y>
-                <width>206</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>&amp;Close</string>
-        </property>
-        <property name="accel">
-            <string>Alt+C</string>
-        </property>
-        <property name="default">
-            <bool>true</bool>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Close and save options</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
             <cstring>cancel_button</cstring>
         </property>
         <property name="geometry">
@@ -1048,6 +1017,37 @@
         </property>
         <property name="toolTip" stdset="0">
             <string>Reset all settings to default values</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>close_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>8</x>
+                <y>455</y>
+                <width>206</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>&amp;OK</string>
+        </property>
+        <property name="accel">
+            <string>Alt+O</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Close and save options</string>
         </property>
     </widget>
 </widget>

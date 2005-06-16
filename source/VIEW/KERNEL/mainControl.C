@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.15 2005/06/16 12:32:10 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.16 2005/06/16 13:16:06 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -469,6 +469,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 		void MainControl::applyPreferencesTab()
 		{
+			preferences_dialog_->close();
+
 			// apply on own preferences tab
 			applyPreferences();
 			setPreferencesEnabled_(false);

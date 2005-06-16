@@ -452,10 +452,10 @@
                     </size>
                 </property>
                 <property name="text">
-                    <string>&amp;Close</string>
+                    <string>&amp;OK</string>
                 </property>
                 <property name="accel">
-                    <string>Alt+C</string>
+                    <string>Alt+O</string>
                 </property>
                 <property name="default">
                     <bool>true</bool>
