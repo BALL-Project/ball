@@ -435,10 +435,18 @@ void DownloadPDBFile::abort()
 	if (thread_ == 0) return;
 	aborted_ = true;
 
-	thread_->terminate();
-	thread_->wait();
+	thread_->abort();
+	thread_->wait(5500);
+
+	if (thread_->running())
+	{
+		thread_->terminate();
+		thread_->wait();
+	}
 	removeFile_(thread_->getFilename());
 	
+	downloadEnded_();
+
 #endif
 }
 

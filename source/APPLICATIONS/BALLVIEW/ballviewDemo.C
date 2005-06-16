@@ -109,7 +109,7 @@ void BALLViewDemo::show()
 	if (DatasetControl::getInstance(0) != 0) DatasetControl::getInstance(0)->hide();
 #ifdef BALL_PYTHON_SUPPORT
 	if (PyWidget::getInstance(0) != 0) 			 PyWidget::getInstance(0)->hide();
-#undef
+#endif
 }
 
 
