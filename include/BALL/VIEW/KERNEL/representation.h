@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.30.4.6 2005/06/15 14:59:13 amoll Exp $
+// $Id: representation.h,v 1.30.4.7 2005/06/16 13:24:54 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -99,10 +99,6 @@ namespace BALL
 			Representation(ModelType model_type,
 										 DrawingPrecision drawing_precision,
 										 DrawingMode drawing_mode)
-				throw();
-
-			///
-			Representation(const GeometricObjectList& object_list)
 				throw();
 
 			/** Copy constructor
