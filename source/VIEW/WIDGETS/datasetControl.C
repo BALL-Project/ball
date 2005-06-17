@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.37.2.5 2005/06/16 15:53:11 amoll Exp $
+// $Id: datasetControl.C,v 1.37.2.6 2005/06/17 13:37:31 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -704,7 +704,7 @@ namespace BALL
 				vertex += 3;
 			}
 
-#ifdef BALLVIEW_DEBUG
+			/*
 			Representation * rep2 = new Representation();
 			for (Position p = 0; p < cs.normal.size(); p++)
 			{
@@ -715,7 +715,7 @@ namespace BALL
 			}
 			getMainControl()->insert(*rep2);
 			getMainControl()->update(*rep2);
-#endif
+			*/
 
 			mesh->colorList.clear(); 
 			mesh->colorList.push_back(surface_dialog_->getColor());
