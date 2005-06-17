@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.47.2.5 2005/06/15 13:08:20 amoll Exp $
+// $Id: molecularControl.h,v 1.47.2.6 2005/06/17 14:16:15 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -57,7 +57,7 @@ class BALL_EXPORT MolecularControl
 		EDIT,
 		CUT,
 		COPY,
-		DELETE,
+		DELETE_ENTRY,
 		PASTE,
 
 

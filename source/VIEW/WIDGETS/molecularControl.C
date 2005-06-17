@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.17 2005/06/16 12:57:24 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.18 2005/06/17 14:16:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -411,7 +411,7 @@ namespace BALL
 			edit_menu_.insertItem("Cut", this, SLOT(cut()), 0, CUT);
 			edit_menu_.insertItem("Copy", this, SLOT(copy()), 0, OBJECT__MOVE);
 			edit_menu_.insertItem("Paste", this, SLOT(paste()), 0, PASTE);
-			edit_menu_.insertItem("Delete", this, SLOT(deleteCurrentItems()), 0, DELETE);
+			edit_menu_.insertItem("Delete", this, SLOT(deleteCurrentItems()), 0, DELETE_ENTRY);
 			edit_menu_.insertSeparator();
 			edit_menu_.insertItem("Move", this, SLOT(moveItems()), 0, OBJECT__MOVE);
 		}
@@ -1352,7 +1352,7 @@ namespace BALL
 				Size size = inifile.getValue("MOLECULARCONTROL", "RegularExpressions").split(fields, "|");
 				for (Position p = 0; p < size; p++)
 				{
-					selector_edit_->insertItem(fields[p]);
+					selector_edit_->insertItem(fields[p].c_str());
 				}
 			}
 

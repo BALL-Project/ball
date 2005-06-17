@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.36.2.4 2005/06/06 13:46:14 amoll Exp $
+// $Id: common.h,v 1.36.2.5 2005/06/17 14:16:15 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -113,7 +113,7 @@ namespace BALL
 		};
 
 		/// global variable, which defines, if DockWidgets are shown with a Label
-		extern bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS;
+		BALL_EXPORT extern bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS;
 
 		//@}
 		/** @name Enumerations for Representations and Renderer
@@ -263,7 +263,7 @@ namespace BALL
 		 		the GeometricObjects, which have this Composite set, will be colored
 				by the default color.
 		*/
-		extern Composite composite_to_be_ignored_for_colorprocessors_;
+		BALL_EXPORT extern Composite composite_to_be_ignored_for_colorprocessors_;
 
 
 		/// Enumeration of GeometricObject Types
@@ -293,52 +293,52 @@ namespace BALL
 
 		/** Get a name for a ModelType
 		*/
-		String getModelName(ModelType type) 
+		BALL_EXPORT String getModelName(ModelType type) 
 			throw();
 
 		/** Get a name for a ColoringMethod
 		*/
-		String getColoringName(ColoringMethod type) 
+		BALL_EXPORT String getColoringName(ColoringMethod type) 
 			throw();
 
 		/** Define, which Models are Surfaces.
 				Add new kinds of Surfaces to this function!
 		*/
-		bool isSurfaceModel(ModelType type)
+		BALL_EXPORT bool isSurfaceModel(ModelType type)
 			throw();
 
 		/** Model can be modified with DisplayProperitesDialog
 		*/
-		bool modelMuteableByDisplayProperties(ModelType type)
+		BALL_EXPORT bool modelMuteableByDisplayProperties(ModelType type)
 			throw();
 
 		/** Model must be rebuild, if Composite changes
 		*/
-		bool modelMustBeRebuild(ModelType type)
+		BALL_EXPORT bool modelMustBeRebuild(ModelType type)
 			throw();
 
 
 		/////////////////////////////////////////////////////////
 
 		///
-		String getTypeName(GeometricObjectType type);
+		BALL_EXPORT String getTypeName(GeometricObjectType type);
 
 		///
-		GeometricObjectType getGeometricObjectType(const GeometricObject& object);
+		BALL_EXPORT GeometricObjectType getGeometricObjectType(const GeometricObject& object);
 
 		
 		/////////////////////////////////////////////////////////
 
 		///
-		String vector3ToString(const Vector3& v)
+		BALL_EXPORT String vector3ToString(const Vector3& v)
 			throw();
 
 		///
-		bool stringToVector3(const String& data, Vector3& v)
+		BALL_EXPORT bool stringToVector3(const String& data, Vector3& v)
 			throw();
 
 		/// create a string from a float and cut after a given number of digits after the dot
-		String createFloatString(float value, Size precision)
+		BALL_EXPORT String createFloatString(float value, Size precision)
 			throw();
 
 		/** Get MainControl
@@ -348,15 +348,15 @@ namespace BALL
 				MainControl* mc = dynamic_cast<MainControl*>(qApp->mainWidget());\\
 				On all other platforms, it uses MainControl::getInstance(0);
 		*/
-		MainControl* getMainControl()
+		BALL_EXPORT MainControl* getMainControl()
 			throw();
 
 		/// Create a temporary filename in the users home dir
-		String createTemporaryFilename()
+		BALL_EXPORT String createTemporaryFilename()
 			throw();
 
 		///
-		Vector3 getNormal(const Vector3& v)
+		BALL_EXPORT Vector3 getNormal(const Vector3& v)
 			throw();
 
 		/// Event class used for thread safe output to logview
@@ -393,7 +393,7 @@ namespace BALL
 		};
 
 		/// thread safe output to logview
-		void logString(const String& data);
+		BALL_EXPORT void logString(const String& data);
 
 		/// BALLView Debug macro
 		#define BALLVIEW_DEBUG logString(String("A problem occured in ") + __FILE__ + " " + \
@@ -404,14 +404,14 @@ namespace BALL
 		 		The colordialog is initialised with the background color of the label.
 				If the colordialog returns a new color, this becomes the new backbground color of the label.
 		*/
-		QColor chooseColor(QLabel* label);
+		BALL_EXPORT QColor chooseColor(QLabel* label);
 
-		void processDropEvent(QDropEvent* e);
+		BALL_EXPORT void processDropEvent(QDropEvent* e);
 
 		/** focus the camera on a list of points, e.g. atoms or geometric objects.
 				Sends a SceneMessage.
 		*/
-		void focusCamera(const List<Vector3>& points);
+		BALL_EXPORT void focusCamera(const List<Vector3>& points);
 
 		//@}
 
