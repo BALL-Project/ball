@@ -47,6 +47,15 @@ namespace BALL
 	const String GeometricFit::Option::TOP_N = "top_n";
 	const String GeometricFit::Option::BEST_NUM = "best_num";
 	const String GeometricFit::Option::VERBOSITY = "verbosity";
+	const String GeometricFit::Option::PHI_MIN = "phi_min";
+	const String GeometricFit::Option::PHI_MAX = "phi_max";
+	const String GeometricFit::Option::DEG_PHI = "deg_phi";
+	const String GeometricFit::Option::THETA_MIN = "theta_min";
+	const String GeometricFit::Option::THETA_MAX = "theta_max";
+	const String GeometricFit::Option::DEG_THETA = "deg_theta";
+	const String GeometricFit::Option::PSI_MIN = "psi_min";
+	const String GeometricFit::Option::PSI_MAX = "psi_max";
+	const String GeometricFit::Option::DEG_PSI = "deg_psi";
 	
 	const float		GeometricFit::Default::NEAR_RADIUS  = 1.8;
 	const float		GeometricFit::Default::GRID_SPACING  = 1.0;
@@ -57,6 +66,17 @@ namespace BALL
 	const int 		GeometricFit::Default::TOP_N  = 3;
 	const int 		GeometricFit::Default::BEST_NUM  = 2000;
 	const int     GeometricFit::Default::VERBOSITY = 0;
+	const float 	GeometricFit::Default::PHI_MIN = -15.0;
+	const float 	GeometricFit::Default::PHI_MAX = 15.0;
+	const float 	GeometricFit::Default::DEG_PHI = 3.0;
+	const float 	GeometricFit::Default::THETA_MIN = -15.0;
+	const float 	GeometricFit::Default::THETA_MAX = 15.0;
+	const float 	GeometricFit::Default::DEG_THETA = 3.0;
+	const float 	GeometricFit::Default::PSI_MIN = -15.0;
+	const float 	GeometricFit::Default::PSI_MAX = 15.0;
+	const float 	GeometricFit::Default::DEG_PSI = 3.0;
+	
+	
 	
   GeometricFit::GeometricFit()
     throw()
@@ -988,12 +1008,34 @@ namespace BALL
 		RotationAngles_ rotAng;
 
 		// TODO: Per Options regeln in welchem intervall...
-		if(    rotAng.generateAllAngles( (int)options.getReal(Option::DEGREE_INTERVAL) ) == false
-				|| rotAng.getRotationNum() == 0 )
+		if(options.has("phi_min") && options.has("phi_max") && options.has("deg_phi") &&
+			 options.has("theta_min") && options.has("theta_max") && options.has("deg_theta") &&
+			 options.has("psi_min") && options.has("psi_max") && options.has("deg_psi") )
 		{
-    	Log.error() << "Bad degree interval!" << endl;
-     	exit(1);
-   	}
+			if(    rotAng.generateSomeAngles( (float)options.getReal(Option::DEG_PHI), 
+																				(float)options.getReal(Option::DEG_PSI),
+																				(float)options.getReal(Option::DEG_THETA),
+																				(float)options.getReal(Option::PHI_MIN),
+																				(float)options.getReal(Option::PHI_MAX),
+																				(float)options.getReal(Option::PSI_MIN),
+																				(float)options.getReal(Option::PSI_MAX),
+																				(float)options.getReal(Option::THETA_MIN),
+																				(float)options.getReal(Option::THETA_MAX) ) == false
+					|| rotAng.getRotationNum() == 0 )
+			{
+    		Log.error() << "Bad degree interval!" << endl;
+     		exit(1);
+   		}
+		}
+		else
+		{
+			if(    rotAng.generateAllAngles( (int)options.getReal(Option::DEGREE_INTERVAL) ) == false
+					|| rotAng.getRotationNum() == 0 )
+			{
+    		Log.error() << "Bad degree interval!" << endl;
+     		exit(1);
+   		}
+		}	
 
 		int rotation_num = rotAng.getRotationNum();
 		total_round_ = rotAng.getRotationNum();
