@@ -33,9 +33,9 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>-1</x>
-                <y>1</y>
-                <width>500</width>
+                <x>3</x>
+                <y>2</y>
+                <width>536</width>
                 <height>372</height>
             </rect>
         </property>
@@ -930,9 +930,9 @@
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>250</x>
-                        <y>10</y>
-                        <width>240</width>
+                        <x>274</x>
+                        <y>9</y>
+                        <width>253</width>
                         <height>250</height>
                     </rect>
                 </property>
@@ -948,7 +948,7 @@
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>10</x>
+                            <x>7</x>
                             <y>120</y>
                             <width>220</width>
                             <height>80</height>
@@ -1008,8 +1008,8 @@
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>0</x>
-                            <y>20</y>
+                            <x>6</x>
+                            <y>21</y>
                             <width>236</width>
                             <height>95</height>
                         </rect>
@@ -1017,6 +1017,9 @@
                     <vbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
                         </property>
                         <property name="spacing">
                             <number>5</number>
@@ -1351,9 +1354,9 @@
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>0</x>
-                        <y>10</y>
-                        <width>240</width>
+                        <x>5</x>
+                        <y>9</y>
+                        <width>262</width>
                         <height>250</height>
                     </rect>
                 </property>
@@ -1401,15 +1404,18 @@
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>0</x>
+                            <x>5</x>
                             <y>22</y>
-                            <width>236</width>
+                            <width>249</width>
                             <height>161</height>
                         </rect>
                     </property>
                     <vbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
                         </property>
                         <widget class="QLayoutWidget">
                             <property name="name">

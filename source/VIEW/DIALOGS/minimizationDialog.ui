@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>MinimizationDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>451</width>
-            <height>306</height>
+            <width>447</width>
+            <height>311</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -50,6 +50,9 @@
         <vbox>
             <property name="name">
                 <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
             </property>
             <widget class="QGroupBox">
                 <property name="name">
@@ -136,6 +139,18 @@
                         <property name="name">
                             <cstring>energy_difference_lineedit</cstring>
                         </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>130</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>130</width>
+                                <height>32767</height>
+                            </size>
+                        </property>
                         <property name="backgroundMode">
                             <enum>PaletteBase</enum>
                         </property>
@@ -170,6 +185,12 @@
                                 <verstretch>0</verstretch>
                             </sizepolicy>
                         </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>130</width>
+                                <height>0</height>
+                            </size>
+                        </property>
                         <property name="backgroundMode">
                             <enum>PaletteBase</enum>
                         </property>
@@ -196,9 +217,15 @@
                         <property name="name">
                             <cstring>max_grad_lineedit</cstring>
                         </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>130</width>
+                                <height>0</height>
+                            </size>
+                        </property>
                         <property name="maximumSize">
                             <size>
-                                <width>200</width>
+                                <width>130</width>
                                 <height>32767</height>
                             </size>
                         </property>
@@ -304,6 +331,18 @@
                                 <horstretch>0</horstretch>
                                 <verstretch>0</verstretch>
                             </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>130</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>130</width>
+                                <height>32767</height>
+                            </size>
                         </property>
                         <property name="backgroundMode">
                             <enum>PaletteBase</enum>
@@ -531,6 +570,9 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
                     <widget class="QPushButton">
                         <property name="name">
                             <cstring>start_button</cstring>
@@ -538,6 +580,12 @@
                         <property name="minimumSize">
                             <size>
                                 <width>0</width>
+                                <height>30</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>32767</width>
                                 <height>30</height>
                             </size>
                         </property>
@@ -570,6 +618,12 @@
                         <property name="minimumSize">
                             <size>
                                 <width>0</width>
+                                <height>30</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>32767</width>
                                 <height>30</height>
                             </size>
                         </property>

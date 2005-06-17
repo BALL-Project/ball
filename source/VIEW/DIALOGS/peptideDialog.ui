@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>PeptideDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>494</width>
-            <height>266</height>
+            <height>272</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -42,7 +42,7 @@
         <property name="geometry">
             <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>3</y>
                 <width>494</width>
                 <height>266</height>
             </rect>
@@ -50,6 +50,9 @@
         <vbox>
             <property name="name">
                 <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
             </property>
             <widget class="QLayoutWidget">
                 <property name="name">
@@ -812,6 +815,9 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
                     <spacer>
                         <property name="name">
                             <cstring>spacer28</cstring>
@@ -835,14 +841,14 @@
                         </property>
                         <property name="minimumSize">
                             <size>
-                                <width>0</width>
+                                <width>140</width>
                                 <height>30</height>
                             </size>
                         </property>
                         <property name="maximumSize">
                             <size>
                                 <width>32767</width>
-                                <height>27</height>
+                                <height>30</height>
                             </size>
                         </property>
                         <property name="text">
@@ -881,7 +887,13 @@
                         </property>
                         <property name="minimumSize">
                             <size>
-                                <width>0</width>
+                                <width>140</width>
+                                <height>30</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>32767</width>
                                 <height>30</height>
                             </size>
                         </property>

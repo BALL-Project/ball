@@ -31,6 +31,9 @@
             <property name="name">
                 <cstring>unnamed</cstring>
             </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
             <widget class="QPushButton">
                 <property name="name">
                     <cstring>new_button</cstring>
@@ -38,6 +41,12 @@
                 <property name="minimumSize">
                     <size>
                         <width>150</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>32767</width>
                         <height>30</height>
                     </size>
                 </property>
@@ -61,6 +70,12 @@
                 <property name="minimumSize">
                     <size>
                         <width>100</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>32767</width>
                         <height>30</height>
                     </size>
                 </property>

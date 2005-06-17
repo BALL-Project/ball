@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>LabelDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>235</width>
-            <height>441</height>
+            <width>308</width>
+            <height>448</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -38,13 +38,16 @@
             <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>235</width>
+                <width>304</width>
                 <height>441</height>
             </rect>
         </property>
         <vbox>
             <property name="name">
                 <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
             </property>
             <widget class="QGroupBox">
                 <property name="name">
