@@ -358,17 +358,35 @@ namespace BALL
 				dock_alg_(0)
 		{} 
 		
+		// Copy constructor.
+		DockingThread::DockingThread(const DockingThread& dock_thread)
+			throw()
+			: BALLThread(),
+				dock_alg_(dock_thread.dock_alg_)
+		{}
+		
 		///
 		DockingThread::~DockingThread()
 			throw()
 		{
 			output_("delete thread", true);
 
-			if(dock_alg_ != 0)
+			if (dock_alg_ != 0)
 			{
 				delete dock_alg_;
 				dock_alg_ = NULL;
 			}
+		}
+		
+		// Assignment operator
+		const DockingThread& DockingThread::operator =(const DockingThread& dock_thread)
+			throw()
+		{
+			if (&dock_thread != this)
+			{
+				dock_alg_ = dock_thread.dock_alg_;
+			}
+			return *this;
 		}
 		
 		//
@@ -391,7 +409,7 @@ namespace BALL
 				output_("starting docking...", true);
 
 				dock_alg_->start();
-			
+				
 		 		DockingFinishedEvent* finished = new DockingFinishedEvent(dock_alg_->wasAborted());
 				// Qt will delete event when done
 				ConformationSet* cs = new ConformationSet(dock_alg_->getConformationSet());
