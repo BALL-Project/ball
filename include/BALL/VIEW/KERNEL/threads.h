@@ -283,10 +283,20 @@ namespace VIEW
 				DockingThread()
 					throw();
 				
+				/** Copy constructor.
+					*/
+				DockingThread(const DockingThread& dock_thread)
+					throw();
+					
 				///
 				virtual ~DockingThread()
 					throw();
 				
+				/**  Assignment operator
+				 */
+				const DockingThread& operator =(const DockingThread& dock_thread)
+					throw();
+					
 				///
 				void setDockingAlgorithm(DockingAlgorithm* dock_alg)
 					throw();
