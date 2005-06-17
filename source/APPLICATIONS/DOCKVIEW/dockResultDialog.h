@@ -17,14 +17,12 @@ namespace BALL
 	namespace VIEW
 	{
 		class BALL_EXPORT DockResultDialog : 
-				public DockResultDialogData,
-				public ModularWidget
+				public DockResultDialogData
 		{ 
 			Q_OBJECT
 
 			public:
 
-				BALL_EMBEDDABLE(DockResultDialog,ModularWidget)
 			
 				/** Constructor
 				*/

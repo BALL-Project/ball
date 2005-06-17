@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.28 2005/06/14 16:56:24 leonhardt Exp $
+// $Id: dockResultDialog.C,v 1.1.2.29 2005/06/17 10:08:27 leonhardt Exp $
 //
 
 #include "dockResultDialog.h"
@@ -30,7 +30,6 @@ namespace BALL
 		DockResultDialog::DockResultDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
 			throw()
 			: DockResultDialogData(parent, name, modal, fl),
-				ModularWidget(name),
 				dock_res_(0),
 				docked_system_(0),
 				redock_partner1_(0),
@@ -40,9 +39,6 @@ namespace BALL
 			Log.error() << "new DockResultDialog " << this << std::endl;
 		#endif
 			//setWFlags(Qt::WStyle_MinMax | Qt::WStyle_SysMenu);
-		
-			// register the widget with the MainControl
-			ModularWidget::registerWidget(this);
 			
 			//build HashMap and ComboBox for scoring function and its advanced option dialog
 			//make sure the order of added scoring functions is consistent to the enum order
@@ -186,7 +182,7 @@ namespace BALL
 			SnapShot selected_conformation = (*conformation_set)[snapshot];
 			selected_conformation.applySnapShot(*docked_system_);
 			//inform main control that system has changed
-			getMainControl()->update(*docked_system_, true);
+			MainControl::getInstance(0)->update(*docked_system_, true);
 		}
 				
 		// select and show the entry above the current selected entry
