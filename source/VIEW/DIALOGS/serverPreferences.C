@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.C,v 1.8.6.1 2005/06/15 11:54:40 amoll Exp $
+// $Id: serverPreferences.C,v 1.8.6.2 2005/06/17 23:52:21 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/serverPreferences.h>
@@ -37,7 +37,7 @@ namespace BALL
 			port_label->setMargin(0);
 			
 			port_ = new QLineEdit(this, "LineEdit_1");
-			port_->setGeometry(120, 20, 50, 30);
+			port_->setGeometry(120, 20, 90, 30);
 			port_->setMinimumSize(0, 0);
 			port_->setMaximumSize(32767, 32767);
 			port_->setFocusPolicy(QWidget::StrongFocus);

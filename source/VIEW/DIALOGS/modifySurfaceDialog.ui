@@ -1395,7 +1395,7 @@
                     <rect>
                         <x>6</x>
                         <y>8</y>
-                        <width>318</width>
+                        <width>370</width>
                         <height>80</height>
                     </rect>
                 </property>
@@ -1430,10 +1430,10 @@
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>8</x>
+                            <x>10</x>
                             <y>50</y>
-                            <width>217</width>
-                            <height>21</height>
+                            <width>238</width>
+                            <height>23</height>
                         </rect>
                     </property>
                     <property name="text">
@@ -1446,10 +1446,10 @@
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>229</x>
+                            <x>257</x>
                             <y>50</y>
-                            <width>41</width>
-                            <height>21</height>
+                            <width>50</width>
+                            <height>23</height>
                         </rect>
                     </property>
                     <property name="maximumSize">
@@ -1471,10 +1471,10 @@
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>275</x>
-                            <y>51</y>
-                            <width>19</width>
-                            <height>21</height>
+                            <x>316</x>
+                            <y>50</y>
+                            <width>16</width>
+                            <height>23</height>
                         </rect>
                     </property>
                     <property name="maximumSize">

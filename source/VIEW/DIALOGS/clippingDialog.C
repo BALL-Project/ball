@@ -74,8 +74,13 @@ void ClippingDialog::show()
 
 void ClippingDialog::accept()
 {
-	if (clipping_plane_ == 0 ||
-	    getMainControl() == 0) return;
+	hide();
+
+	if (clipping_plane_ == 0 || getMainControl() == 0) 
+	{
+		BALLVIEW_DEBUG
+		return;
+	}
 
 	clipping_plane_->getRepresentations().clear();
 

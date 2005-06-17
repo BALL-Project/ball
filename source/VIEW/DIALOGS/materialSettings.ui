@@ -28,8 +28,8 @@
         <property name="geometry">
             <rect>
                 <x>10</x>
-                <y>10</y>
-                <width>405</width>
+                <y>11</y>
+                <width>424</width>
                 <height>125</height>
             </rect>
         </property>
@@ -142,20 +142,15 @@
                         </property>
                         <property name="minimumSize">
                             <size>
-                                <width>40</width>
+                                <width>60</width>
                                 <height>25</height>
                             </size>
                         </property>
                         <property name="maximumSize">
                             <size>
-                                <width>40</width>
+                                <width>60</width>
                                 <height>25</height>
                             </size>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <bold>1</bold>
-                            </font>
                         </property>
                         <property name="frameShape">
                             <enum>TabWidgetPanel</enum>
@@ -265,20 +260,15 @@
                         </property>
                         <property name="minimumSize">
                             <size>
-                                <width>40</width>
+                                <width>60</width>
                                 <height>25</height>
                             </size>
                         </property>
                         <property name="maximumSize">
                             <size>
-                                <width>40</width>
+                                <width>60</width>
                                 <height>25</height>
                             </size>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <bold>1</bold>
-                            </font>
                         </property>
                         <property name="frameShape">
                             <enum>TabWidgetPanel</enum>
@@ -388,20 +378,15 @@
                         </property>
                         <property name="minimumSize">
                             <size>
-                                <width>40</width>
+                                <width>60</width>
                                 <height>25</height>
                             </size>
                         </property>
                         <property name="maximumSize">
                             <size>
-                                <width>40</width>
+                                <width>60</width>
                                 <height>25</height>
                             </size>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <bold>1</bold>
-                            </font>
                         </property>
                         <property name="frameShape">
                             <enum>TabWidgetPanel</enum>
@@ -511,20 +496,15 @@
                         </property>
                         <property name="minimumSize">
                             <size>
-                                <width>40</width>
+                                <width>60</width>
                                 <height>25</height>
                             </size>
                         </property>
                         <property name="maximumSize">
                             <size>
-                                <width>40</width>
+                                <width>60</width>
                                 <height>25</height>
                             </size>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <bold>1</bold>
-                            </font>
                         </property>
                         <property name="frameShape">
                             <enum>TabWidgetPanel</enum>

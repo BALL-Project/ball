@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>308</width>
-            <height>448</height>
+            <width>353</width>
+            <height>467</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -38,8 +38,8 @@
             <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>304</width>
-                <height>441</height>
+                <width>345</width>
+                <height>464</height>
             </rect>
         </property>
         <vbox>
@@ -167,6 +167,11 @@
                     <widget class="QLabel" row="0" column="0">
                         <property name="name">
                             <cstring>font_label</cstring>
+                        </property>
+                        <property name="font">
+                            <font>
+                                <pointsize>10</pointsize>
+                            </font>
                         </property>
                         <property name="frameShape">
                             <enum>Panel</enum>
@@ -318,6 +323,12 @@
                                 <height>30</height>
                             </size>
                         </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>32767</width>
+                                <height>30</height>
+                            </size>
+                        </property>
                         <property name="text">
                             <string>&amp;Apply</string>
                         </property>
@@ -341,6 +352,12 @@
                         <property name="minimumSize">
                             <size>
                                 <width>0</width>
+                                <height>30</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>32767</width>
                                 <height>30</height>
                             </size>
                         </property>

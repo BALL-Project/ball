@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.4 2005/06/12 17:38:50 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.5 2005/06/17 23:52:21 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -726,6 +726,8 @@ namespace BALL
 		void PyWidget::applyPreferences()
 			throw()
 		{
+			DockWidget::applyPreferences();
+
 			if (text_edit_->python_settings_ == 0) return;
 			text_edit_->startup_script_ = text_edit_->python_settings_->getFilename();
 
