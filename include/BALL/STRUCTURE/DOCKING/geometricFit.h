@@ -79,6 +79,20 @@ namespace BALL
 
 				// Verbosity of the Algorithm (also in DockingAlgorithm)
 				static const String VERBOSITY;
+				
+				// Euler angels for redocking
+				static const String PHI_MIN;
+				static const String PHI_MAX;
+				static const String DEG_PHI;
+				
+				static const String THETA_MIN;
+				static const String THETA_MAX;
+				static const String DEG_THETA;
+				
+				static const String PSI_MIN;
+				static const String PSI_MAX;
+				static const String DEG_PSI;
+				
 			};
     
       struct Default
@@ -120,6 +134,19 @@ namespace BALL
 				// For values > 1, some information is printed on Log
 				// For values > 5, timing information is included
 				static const int VERBOSITY;
+				
+				// Euler angels for redocking
+				static const float PHI_MIN;
+				static const float PHI_MAX;
+				static const float DEG_PHI;
+				
+				static const float THETA_MIN;
+				static const float THETA_MAX;
+				static const float DEG_THETA;
+				
+				static const float PSI_MIN;
+				static const float PSI_MAX;
+				static const float DEG_PSI;
 			};
 
       /**
