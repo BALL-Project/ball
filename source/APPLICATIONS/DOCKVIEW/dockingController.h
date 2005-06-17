@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.6 2005/06/15 14:46:30 haid Exp $
+// $Id: dockingController.h,v 1.1.2.7 2005/06/17 12:01:06 haid Exp $
 //
 
 #ifndef DOCKINGCONTROLLER_H
@@ -81,6 +81,11 @@ namespace BALL
 				DockingController(QWidget* parent = 0, const char* name = 0)
 					throw();
 
+				/** Copy constructor.
+					*/
+				DockingController(const DockingController& dock_controller)
+					throw();
+					
 				//@}
 				/** @name Destructors 
 				*/

@@ -59,6 +59,11 @@ namespace BALL
 				GeometricFitDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
 					throw();
 
+				/** Copy constructor.
+					*/
+				GeometricFitDialog(const GeometricFitDialog& geo_fit_dialog)
+					throw();
+					
 				/** Destructor.
 				 */
 				virtual ~GeometricFitDialog()

@@ -91,6 +91,11 @@ namespace BALL
 				DockDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
 					throw();
 					
+				/** Copy constructor.
+					*/
+				DockDialog(const DockDialog& dock_dialog)
+					throw();
+					
 				/** Destructor.
 				 */
 				virtual ~DockDialog()

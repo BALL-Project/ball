@@ -38,6 +38,11 @@ namespace BALL
 										const Options& docking_options)
 					throw();
 				
+				/** Copy constructor.
+					*/
+				DockResult(const DockResult& dock_res)
+					throw();
+					
 				/** Destructor
 				*/
 				virtual ~DockResult()

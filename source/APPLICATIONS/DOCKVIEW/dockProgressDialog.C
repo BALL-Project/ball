@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.13 2005/06/15 14:46:29 haid Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.14 2005/06/17 12:01:04 haid Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -28,6 +28,16 @@ namespace BALL
 			#endif
 			
 			connect(&timer_, SIGNAL(timeout()), SLOT(updateProgress_()));
+		}
+		
+		// Copy constructor.
+		DockProgressDialog::DockProgressDialog(const DockProgressDialog& dock_prog_dialog)
+			throw()
+			: DockProgressDialogData(), /// ???
+				alg_(dock_prog_dialog.alg_),
+				//timer_(dock_prog_dialog.timer_),
+				start_time_(dock_prog_dialog.start_time_)
+		{
 		}
 		
 		// Destructor	
@@ -159,10 +169,6 @@ namespace BALL
 				hours = remain_time / 3600;
 				min = (remain_time % 3600) / 60;
 				sec = (remain_time % 3600) % 60;
-				if (!(hours/10))
-				{
-				 	s.append("0");
-				}
 				QString convert;
 				s.setNum(hours);
 				s.append(":");

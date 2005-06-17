@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.1.2.10 2005/06/15 14:46:29 haid Exp $
+// $Id: dockResult.C,v 1.1.2.11 2005/06/17 12:01:05 haid Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -27,6 +27,15 @@ namespace BALL
 			conformation_set_ = conformation_set;
 			docking_options_ = docking_options;
 		}
+		
+		// Copy constructor.
+		DockResult::DockResult(const DockResult& dock_res)
+			throw()
+			: docking_algorithm_(dock_res.docking_algorithm_),
+				docking_options_(dock_res.docking_options_),
+				conformation_set_(dock_res.conformation_set_),
+				scorings_(dock_res.scorings_)
+		{}
 		
 		// Destructor
 		DockResult::~DockResult()

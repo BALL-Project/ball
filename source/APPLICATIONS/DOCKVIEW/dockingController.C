@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.9 2005/06/15 14:46:30 haid Exp $
+// $Id: dockingController.C,v 1.1.2.10 2005/06/17 12:01:06 haid Exp $
 //
 
 #include "dockingController.h"
@@ -43,6 +43,18 @@ namespace BALL
 			registerWidget(this);
 		}
 
+		// Copy constructor.
+		DockingController::DockingController(const DockingController& dock_controller)
+			throw()
+			: QWidget(), /// ???
+				ModularWidget(), /// ???
+				dock_dialog_(dock_controller.dock_dialog_),
+				dock_alg_(dock_controller.dock_alg_),
+				progress_dialog_(dock_controller.progress_dialog_),
+				id_(dock_controller.id_)
+		{
+		}
+		
 		// Destructor
 		DockingController::~DockingController()
 			throw()

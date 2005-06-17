@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.39 2005/06/17 09:50:04 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.40 2005/06/17 12:01:04 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -75,6 +75,28 @@ namespace BALL
 			hide(); 
 		}
 		
+		// Copy constructor.
+		DockDialog::DockDialog(const DockDialog& dock_dialog)
+			throw()
+			: DockDialogData(), /// ???
+				PreferencesEntry(),
+				is_redock_(dock_dialog.is_redock_),
+				has_changed_(dock_dialog.has_changed_),
+				algorithm_dialogs_(dock_dialog.algorithm_dialogs_),
+				scoring_dialogs_(dock_dialog.scoring_dialogs_),
+				allowed_sf_(dock_dialog.allowed_sf_),
+				docking_partner1_(dock_dialog.docking_partner1_),
+				docking_partner2_(dock_dialog.docking_partner2_),
+				algorithm_opt_(dock_dialog.algorithm_opt_),
+				scoring_opt_(dock_dialog.scoring_opt_),
+				backup_(dock_dialog.backup_),
+				radius_rule_processor_(dock_dialog.radius_rule_processor_),
+				charge_rule_processor_(dock_dialog.charge_rule_processor_),
+				radius_processor_(dock_dialog.radius_processor_),
+				charge_processor_(dock_dialog.charge_processor_)
+		{
+		}
+		
 		//Destructor
 		DockDialog::~DockDialog()
 			throw()
@@ -92,7 +114,6 @@ namespace BALL
 			{
 				is_redock_ = dock_dialog.is_redock_;
 				has_changed_ = dock_dialog.has_changed_;
-				backup_ = dock_dialog.backup_;
 				algorithm_dialogs_ = dock_dialog.algorithm_dialogs_;
 				scoring_dialogs_ = dock_dialog.scoring_dialogs_;
 				allowed_sf_ = dock_dialog.allowed_sf_;
@@ -100,6 +121,7 @@ namespace BALL
 				docking_partner2_ = dock_dialog.docking_partner2_;
 				algorithm_opt_ = dock_dialog.algorithm_opt_;
 				scoring_opt_ = dock_dialog.scoring_opt_;
+				backup_ = dock_dialog.backup_;
 				radius_rule_processor_ = dock_dialog.radius_rule_processor_;
 				charge_rule_processor_ = dock_dialog.charge_rule_processor_;
 				radius_processor_ = dock_dialog.radius_processor_;

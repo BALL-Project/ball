@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.29 2005/06/17 10:08:27 leonhardt Exp $
+// $Id: dockResultDialog.C,v 1.1.2.30 2005/06/17 12:01:05 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -54,6 +54,18 @@ namespace BALL
 			connect( columns, SIGNAL( clicked(int) ), this, SLOT( sortTable(int) ) );
 			
 			hide();
+		}
+		
+		// Copy constructor.
+		DockResultDialog::DockResultDialog(const DockResultDialog& dock_res_dialog)
+			throw()
+			: DockResultDialogData(), /// ???
+				dock_res_(dock_res_dialog.dock_res_),
+				docked_system_(dock_res_dialog.docked_system_),
+				redock_partner1_(dock_res_dialog.redock_partner1_),
+				redock_partner2_(dock_res_dialog.redock_partner2_),
+				scoring_dialogs_(dock_res_dialog.scoring_dialogs_)
+		{
 		}
 		
 		// Destructor
