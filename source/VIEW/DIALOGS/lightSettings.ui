@@ -199,6 +199,9 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
                     <widget class="QButtonGroup" row="1" column="0">
                         <property name="name">
                             <cstring>relative_to_camera</cstring>
@@ -293,6 +296,9 @@
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
                             </property>
                             <widget class="QLineEdit" row="0" column="3">
                                 <property name="name">
@@ -545,6 +551,9 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
                 <widget class="QLayoutWidget">
                     <property name="name">
                         <cstring>layout54</cstring>
@@ -552,6 +561,9 @@
                     <grid>
                         <property name="name">
                             <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
                         </property>
                         <widget class="QLabel" row="1" column="1">
                             <property name="name">
@@ -813,15 +825,18 @@
                         </property>
                         <property name="geometry">
                             <rect>
-                                <x>8</x>
-                                <y>23</y>
+                                <x>7</x>
+                                <y>20</y>
                                 <width>110</width>
-                                <height>77</height>
+                                <height>92</height>
                             </rect>
                         </property>
                         <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
                             </property>
                             <widget class="QRadioButton">
                                 <property name="name">
