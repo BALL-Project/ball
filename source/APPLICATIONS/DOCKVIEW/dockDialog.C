@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.38 2005/06/15 14:46:28 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.39 2005/06/17 09:50:04 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -221,7 +221,7 @@ namespace BALL
 			
 			// call this function to check which algorithm / scoring function is the current item in the combobox
 			// and set advanced button enabled if necessary
-			algorithmChosen();
+			checkAlgAdvancedButton();
 			scoringFuncChosen();
 		}
 		 
@@ -265,17 +265,37 @@ namespace BALL
 			if (tab_pages->currentPageIndex() == 0)
 			{
 				// comboboxes
-				systems1->setCurrentItem(0);
-				systems2->setCurrentItem(0);
 				algorithms->setCurrentItem(0);
 				scoring_functions->setCurrentItem(0);
 				
 				// buttons
+				alg_advanced_button->setEnabled(false);
 				scoring_advanced_button->setEnabled(false);
 				
 				// options
 				best_num->setText("100");
 				verbosity->setText("1");
+				
+				if(is_redock_)
+				{
+				  phi_min->setText("-15");
+					phi_max->setText("15");
+					delta_phi->setText("3");
+					
+					psi_min->setText("-15");
+					psi_max->setText("15");
+					delta_psi->setText("3");
+					
+					theta_min->setText("-15");
+					theta_max->setText("15");
+					delta_theta->setText("3");
+					 
+				}
+				else
+				{
+					systems1->setCurrentItem(0);
+					systems2->setCurrentItem(0);
+				}
 			}
 			
 			if (tab_pages->currentPageIndex() == 1)
@@ -306,6 +326,20 @@ namespace BALL
 			//options_[DockingAlgorithm::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
 			algorithm_opt_[GeometricFit::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
 			algorithm_opt_[GeometricFit::Option::VERBOSITY] = String(verbosity->text().ascii()).toInt();
+			
+			if(is_redock_)
+			{
+				algorithm_opt_[GeometricFit::Option::PHI_MIN] = String(phi_min->text().ascii()).toFloat();
+				algorithm_opt_[GeometricFit::Option::PHI_MAX] = String(phi_max->text().ascii()).toFloat();
+				algorithm_opt_[GeometricFit::Option::DEG_PHI] = String(delta_phi->text().ascii()).toFloat();
+				algorithm_opt_[GeometricFit::Option::PSI_MIN] = String(psi_min->text().ascii()).toFloat();
+				algorithm_opt_[GeometricFit::Option::PSI_MAX] = String(psi_max->text().ascii()).toFloat();
+				algorithm_opt_[GeometricFit::Option::DEG_PSI] = String(delta_psi->text().ascii()).toFloat();
+				algorithm_opt_[GeometricFit::Option::THETA_MIN] = String(theta_min->text().ascii()).toFloat();
+				algorithm_opt_[GeometricFit::Option::THETA_MAX] = String(theta_max->text().ascii()).toFloat();
+				algorithm_opt_[GeometricFit::Option::DEG_THETA] = String(delta_theta->text().ascii()).toFloat();
+				
+			}
 			
 			// options for chosen algorithm; options are filled by the corresponding dialog
 			int index = algorithms->currentItem();
@@ -696,15 +730,31 @@ namespace BALL
 			}
 		}
 		
-		// Indicates an algorithm in the combobox was chosen.
-		void DockDialog::algorithmChosen()
+		void DockDialog::checkAlgAdvancedButton() 
+			throw()
 		{
 			// if chosen algorithm has advanced options, enable advanced_button
 			int index = algorithms->currentItem();
 			if (algorithm_dialogs_.has(index))
 			{
-				//enable advanced button
 				alg_advanced_button->setEnabled(true);
+			}
+			else
+			{
+				alg_advanced_button->setEnabled(false);
+			}
+		}
+		
+		// Indicates an algorithm in the combobox was chosen.
+		void DockDialog::algorithmChosen()
+		{
+			// check if advanced button has to be enabled / disabled
+		  checkAlgAdvancedButton();
+			
+			// if chosen algorithm has advanced options
+			int index = algorithms->currentItem();
+			if (algorithm_dialogs_.has(index))
+			{
 				// disable scoring functions which aren't allowed for chosen algorithm
 				for (int i = 0; i < scoring_functions->count(); i++)
 				{
@@ -722,8 +772,6 @@ namespace BALL
 			}
 			else
 			{
-				// disable advanced button
-				alg_advanced_button->setEnabled(false);
 				// enable all scoring functions
 				for (int i = 0; i < scoring_functions->count(); i++)
 				{

@@ -301,6 +301,8 @@ namespace BALL
 				 */
 				void swapValues_() throw();
 				
+				void checkAlgAdvancedButton() throw();
+				
 				
 			private:
 				
