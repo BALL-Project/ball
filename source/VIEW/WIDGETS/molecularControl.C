@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.18 2005/06/17 14:16:07 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.19 2005/06/18 21:55:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -378,7 +378,7 @@ namespace BALL
 
 			context_menu_.insertItem("Create Representation", &model_menu_, 0, CREATE_REPRESENTATION);
 			context_menu_.insertSeparator();
-			context_menu_.insertItem("Edit", &edit_menu_, 0, EDIT);
+			context_menu_.insertItem("Edit", &edit_menu_, 0, EDIT_MENU);
 			context_menu_.insertSeparator();
 
 			context_menu_.insertItem("Select", this, SLOT(select()), 0, SELECT);
@@ -409,7 +409,7 @@ namespace BALL
 			// ===============================================================
 
 			edit_menu_.insertItem("Cut", this, SLOT(cut()), 0, CUT);
-			edit_menu_.insertItem("Copy", this, SLOT(copy()), 0, OBJECT__MOVE);
+			edit_menu_.insertItem("Copy", this, SLOT(copy()), 0, COPY);
 			edit_menu_.insertItem("Paste", this, SLOT(paste()), 0, PASTE);
 			edit_menu_.insertItem("Delete", this, SLOT(deleteCurrentItems()), 0, DELETE_ENTRY);
 			edit_menu_.insertSeparator();
@@ -434,7 +434,7 @@ namespace BALL
 																	 RTTI::isKindOf<Atom>(composite) && one_item && composites_muteable);
 			// <----------------------------------- Atoms
 
-			context_menu_.setItemEnabled(EDIT, composites_muteable);
+			context_menu_.setItemEnabled(EDIT_MENU, composites_muteable);
 			context_menu_.setItemEnabled(COMPOSITE__PROPERTIES, composites_muteable && one_item);
 		}
 
