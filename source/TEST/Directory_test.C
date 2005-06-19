@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Directory_test.C,v 1.16 2004/12/07 15:28:15 amoll Exp $
+// $Id: Directory_test.C,v 1.16.4.1 2005/06/19 07:57:38 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 
 
 
-START_TEST(Directory, "$Id: Directory_test.C,v 1.16 2004/12/07 15:28:15 amoll Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.16.4.1 2005/06/19 07:57:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -208,20 +208,20 @@ CHECK(bool getNextEntry(String& entry))
 	Directory d2("test1");
 	String s;	
 	
+	// On some systems, the order (or even the presence!) of "." and ".." is not clear.
+	// To avoid this, we just skip these entries. These are properties of the
+	// Filesystem, not the Directory.
 	bool result = d2.getNextEntry(s);
 	TEST_EQUAL(result, true)
-	TEST_EQUAL(s, ".");
-	
-	result = d2.getNextEntry(s);
-	TEST_EQUAL(result, true)
- 	TEST_EQUAL(s, "..")
-	
-	result = d2.getNextEntry(s);
+	while (((s == ".") || (s == "..")) && (result == true))
+	{
+	  result = d2.getNextEntry(s);
+	}
 	TEST_EQUAL(s, "test2");
 	TEST_EQUAL(result, true)
 	result = d2.getNextEntry(s);
+	TEST_EQUAL(result, true)
 	
-	TEST_EQUAL(result, false)
 	d1.remove("test1" + PS + "test2");
 	d1.remove("test1");
 RESULT
@@ -309,9 +309,9 @@ CHECK(bool getFirstEntry(String& entry))
 	d0.create("test1");
 
 	TEST_EQUAL(d0.getFirstEntry(s), true)
-	TEST_EQUAL(s, ".");
+	TEST_EQUAL((s == ".") || (s == "..") || (s == "test1"), true)
 	TEST_EQUAL(d0.getFirstEntry(s), true)
-	TEST_EQUAL(s, ".");
+	TEST_EQUAL((s == ".") || (s == "..") || (s == "test1"), true)
 	d0.remove("test1");
 RESULT
 
