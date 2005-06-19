@@ -155,6 +155,10 @@ namespace BALL
 			void historySelected();
 			//@}
 			
+			/// Overloaded from ModularWidget
+			virtual void checkMenu(MainControl& main_control)
+				throw();
+				
 			protected:
 
 			Representation* createOneLabel_();

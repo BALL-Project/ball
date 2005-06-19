@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.16 2005/06/16 13:16:06 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.17 2005/06/19 11:28:16 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -465,6 +465,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			menuBar()->setItemEnabled(stop_simulation_id_, simulation_thread_ != 0);
 			menuBar()->setItemEnabled(complement_selection_id_, !composites_locked_);
+
+			menuBar()->setItemEnabled(FILE_OPEN, !composites_locked_);
 		}
 
 		void MainControl::applyPreferencesTab()

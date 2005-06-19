@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72.2.6 2005/06/16 12:32:12 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.7 2005/06/19 11:28:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -111,7 +111,7 @@ namespace BALL
 				/// File menu sub menu open
 				FILE_OPEN,
 
-				/// File menu sub menu import
+				/// File menu sub menu import [currently unused]
 				FILE_IMPORT,
 
 				/// File menu sub menu export
@@ -885,7 +885,7 @@ namespace BALL
 			String 							proxy_;
 			Position 						proxy_port_;
 
-			Index 							stop_simulation_id_, complement_selection_id_;
+			Index 							stop_simulation_id_, complement_selection_id_, open_id_, save_project_id_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.19 2005/06/18 21:55:54 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.20 2005/06/19 11:28:17 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -376,9 +376,9 @@ namespace BALL
 			// main context menu:
 			// ===============================================================
 
-			context_menu_.insertItem("Create Representation", &model_menu_, 0, CREATE_REPRESENTATION);
+			context_menu_.insertItem("Create Representation", &model_menu_, CREATE_REPRESENTATION);
 			context_menu_.insertSeparator();
-			context_menu_.insertItem("Edit", &edit_menu_, 0, EDIT_MENU);
+			context_menu_.insertItem("Edit", &edit_menu_, EDIT_MENU);
 			context_menu_.insertSeparator();
 
 			context_menu_.insertItem("Select", this, SLOT(select()), 0, SELECT);
@@ -434,8 +434,11 @@ namespace BALL
 																	 RTTI::isKindOf<Atom>(composite) && one_item && composites_muteable);
 			// <----------------------------------- Atoms
 
+			context_menu_.setItemEnabled(CREATE_REPRESENTATION, composites_muteable);
 			context_menu_.setItemEnabled(EDIT_MENU, composites_muteable);
 			context_menu_.setItemEnabled(COMPOSITE__PROPERTIES, composites_muteable && one_item);
+			context_menu_.setItemEnabled(CAMERA__CENTER, composites_muteable);
+			context_menu_.setItemEnabled(COUNT__ITEMS, composites_muteable);
 		}
 
 

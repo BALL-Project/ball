@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.10 2005/06/12 17:43:21 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.11 2005/06/19 11:28:15 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -160,6 +160,7 @@ void DisplayProperties::checkMenu(MainControl& main_control)
 	throw()
 {
 	(main_control.menuBar())->setItemChecked(id_, isVisible());
+	(main_control.menuBar())->setItemEnabled(id_, !getMainControl()->compositesAreLocked());
 }
 
 

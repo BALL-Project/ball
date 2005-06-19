@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.26 2005/06/17 14:16:08 amoll Exp $
+// $Id: scene.C,v 1.171.2.27 2005/06/19 11:28:18 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1448,6 +1448,9 @@ namespace BALL
 		{
 			menuBar()->setItemChecked(rotate_id_, 	(current_mode_ == ROTATE__MODE));
 			menuBar()->setItemChecked(picking_id_,  (current_mode_ == PICKING__MODE));		
+
+			menuBar()->setItemEnabled(picking_id_, !getMainControl()->compositesAreLocked());
+			menuBar()->setItemEnabled(move_id_, !getMainControl()->compositesAreLocked());
 
 			bool animation_running = false;
 			#ifdef BALL_QT_HAS_THREADS

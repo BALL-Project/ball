@@ -137,7 +137,6 @@ void LabelDialog::onNotify(Message *message)
 		// disabled apply button, if selection is empty
 		const bool filled = !selection->getSelection().empty();
 		apply_button_->setEnabled(filled);
-		menuBar()->setItemEnabled(id_, filled);
 	}
 }
 
@@ -245,6 +244,13 @@ void LabelDialog::historySelected()
 	if (history_box->currentText() == "") return;
 
 	label_edit_->setText(history_box->currentText());
+}
+
+void LabelDialog::checkMenu(MainControl&)
+	throw()
+{
+	menuBar()->setItemEnabled(id_, getMainControl()->getMolecularControlSelection().size() > 0 &&
+																!getMainControl()->compositesAreLocked());
 }
 
 

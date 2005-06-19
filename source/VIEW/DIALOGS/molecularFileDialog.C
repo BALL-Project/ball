@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.28.4.1 2005/06/12 17:43:30 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.28.4.2 2005/06/19 11:28:16 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -458,7 +458,8 @@ namespace BALL
 		void MolecularFileDialog::checkMenuEntries()
 			throw()
 		{
-			menuBar()->setItemEnabled(save_id_, getMainControl()->getSelectedSystem());
+			menuBar()->setItemEnabled(save_id_, getMainControl()->getSelectedSystem() && 
+																					!getMainControl()->compositesAreLocked());
 		}
 
 
