@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.2.5 2005/06/16 20:50:20 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.6 2005/06/19 08:40:37 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -670,9 +670,9 @@ AC_DEFUN(CF_GXX_OPTIONS, [
 	dnl
 	if test "${OS}" = "Darwin" ; then
 	  CXXFLAGS_O="${CXXFLAGS_O} -O1 -Wall -W -pedantic -Wno-long-long -Wno-long-double"		
-		CXXFLAGS_D="${CXXFLAGS_D} -O1"
+	  CXXFLAGS_D="${CXXFLAGS_D} -O1"
 	else
-	  CXXFLAGS_O="${CXXFLAGS_O} -O1 -Wall -W -pedantic -Wno-long-long"
+	  CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
 	fi
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
