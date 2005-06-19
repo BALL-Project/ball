@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.2.7 2005/06/19 09:24:30 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.8 2005/06/19 11:53:14 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -688,8 +688,8 @@ AC_DEFUN(CF_GXX_OPTIONS, [
     DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
   else 
     if test "${OS}" = "Darwin" ; then
-      DYNAROPTS="${DYNAROPTS} -headerpad_max_install_names -prebind -compatibility_version ${BALL_COMPATIBILITY_VERSION} -current_version ${BALL_CURRENT_VERSION} -dynamiclib -o"
-			ADD_DYNAROPTS_LIBPROJECT[]="-seg1addr 0xb0000000"
+      DYNAROPTS="${DYNAROPTS} -headerpad_max_install_names -compatibility_version ${BALL_COMPATIBILITY_VERSION} -current_version ${BALL_CURRENT_VERSION} -dynamiclib -o"
+			ADD_DYNAROPTS_LIBBALL="-seg1addr 0xb0000000"
 			ADD_DYNAROPTS_LIBVIEW="-seg1addr 0x80000000"
       DYNAROPTS_PYMODULE="-headerpad_max_install_names -bundle -framework Python -o"
       RANLIB="ranlib -s "
