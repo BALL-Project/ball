@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.215 2004/11/18 13:47:33 oliver Exp $
+# $Id: Makefile,v 1.215.4.1 2005/06/19 09:32:50 oliver Exp $
 #
 
 DIRECTORY=TEST
@@ -41,7 +41,7 @@ OBJECTS=$(EXECUTABLES:$(EXEEXT)=.o)
 VALGRINDS=$(EXECUTABLES:$(EXEEXT)=.vgr)
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies
 
 # remove the library specific flags
 # and replace them by the aplication specific

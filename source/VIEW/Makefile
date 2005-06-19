@@ -1,3 +1,9 @@
+#
+#
+#
+#  $Id: Makefile,v 1.6.8.1 2005/06/19 09:32:51 oliver Exp $
+#
+
 include ../config.mak
 
 DIRECTORY=VIEW

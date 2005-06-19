@@ -58,7 +58,7 @@ CPP_SOURCES= \
 PARSER_PREFIX=SmilesParser
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies
 
 depend:	$(SMILES_SOURCES)
 

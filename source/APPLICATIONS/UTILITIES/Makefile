@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.9 2004/05/14 16:16:18 oliver Exp $
+# $Id: Makefile,v 1.9.4.1 2005/06/19 09:32:46 oliver Exp $
 # Makefile for BALL utilities
 #
 
@@ -24,7 +24,7 @@ CPP_SOURCES=$(EXECUTABLES:=.C)
 OBJECTS=$(EXECUTABLES:=.o)
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 # remove the library specific flags
 # and replace them by the application specific

@@ -20,4 +20,4 @@ CPP_SOURCES=\
 	randomCoilShiftProcessor.C
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies

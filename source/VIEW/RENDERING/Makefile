@@ -11,7 +11,7 @@ CPP_SOURCES=\
 	VRMLRenderer.C
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 BALL_INCLUDES=$(VIEW_INCLUDES)
 

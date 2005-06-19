@@ -18,6 +18,6 @@ CPP_SOURCES=\
 	vanDerWaalsModel.C
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 BALL_INCLUDES=$(VIEW_INCLUDES)

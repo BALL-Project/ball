@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.8.2.7 2005/06/19 08:35:45 oliver Exp $
+# $Id: Makefile,v 1.8.2.8 2005/06/19 09:32:45 oliver Exp $
 #
 
 EXECUTABLE=BALLView
@@ -12,7 +12,7 @@ all:	$(EXECUTABLE)
 clean:	default_clean
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 

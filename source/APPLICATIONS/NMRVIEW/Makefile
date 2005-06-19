@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.5 2004/05/27 19:49:56 oliver Exp $
+# $Id: Makefile,v 1.5.4.1 2005/06/19 09:32:46 oliver Exp $
 
 EXECUTABLE=nmrview
 DIRECTORY=APPLICATIONS/NMRVIEW
@@ -11,7 +11,7 @@ clean:	default_clean
 LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 
 BALL_INCLUDES=$(VIEW_INCLUDES)

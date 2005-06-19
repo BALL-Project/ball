@@ -16,4 +16,4 @@ CPP_SOURCES=\
 	templates.C
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies

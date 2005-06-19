@@ -27,7 +27,7 @@ MOC_SOURCES=\
 	mainControl_moc.C
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 BALL_INCLUDES=$(VIEW_INCLUDES)
 

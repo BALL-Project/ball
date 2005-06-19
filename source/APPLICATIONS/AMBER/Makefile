@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.2 2001/05/22 15:44:54 oliver Exp $
+# $Id: Makefile,v 1.2.12.1 2005/06/19 09:32:45 oliver Exp $
 # Makefile for AMBER Application
 #
 
@@ -11,7 +11,7 @@ all:	$(EXECUTABLE)
 clean:	default_clean
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 SOURCES=\
 	main.C\
