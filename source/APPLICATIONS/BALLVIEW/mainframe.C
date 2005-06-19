@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.5 2005/06/15 12:36:44 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.6 2005/06/19 17:24:36 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -72,7 +72,6 @@ namespace BALL
 	#ifdef BALL_PYTHON_SUPPORT
 		initPopupMenu(TOOLS_PYTHON);
 	#endif
-		initPopupMenu(OPTIONS);
 		initPopupMenu(WINDOWS);
 
 		// ---------------------
@@ -144,7 +143,8 @@ namespace BALL
 		insertMenuEntry(MainControl::FILE_OPEN, "Project", this, 
 										SLOT(loadBALLViewProjectFile()), 0, 2);
 
-		insertMenuEntry(MainControl::FILE, "Save Project", this, SLOT(saveBALLViewProjectFile()));
+		save_project_id_ = insertMenuEntry(MainControl::FILE, "Save Project", this, 
+										SLOT(saveBALLViewProjectFile()));
 
 		// Display Menu
 		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
@@ -368,6 +368,12 @@ namespace BALL
 		{
 			remove(**rit);
 		}
+	}
+
+	void Mainframe::checkMenus()
+	{
+		MainControl::checkMenus();
+		menuBar()->setItemEnabled(save_project_id_, !composites_locked_);
 	}
 
 }
