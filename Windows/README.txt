@@ -4,7 +4,7 @@ BALL requires some standard Unix tools and libraries that are not usually
 found on Windows systems. We provide an archive file with all needed files 
 for this tools:
 
-http://voyager.bioinf.uni-sb.de/OK/BALL/Downloads/Contrib/Contrib-1.1.zip
+http://www.ball-project.org/Downloads/Contrib/Contrib-1.1.zip
 
 This file contains:
 
@@ -30,13 +30,18 @@ WARNING: bison 1.875 does not work for the BALL installation!
 Now you can open the BALL project BALL/Windows/BALL.sln
 and (hopefully) compile BALL. 
 
+Currently the Python Support is broken on Windows, but the project file still
+includes the Python libs and includes, so Python has to be installed.
+
 If you want to compile the visualization component of BALL as well,
 you will need a QT license (QT 3.2.0 or higher, commercial or academic license).
-If you install a version different than 3.2.3 you have to adjust the
+If you install a version different than 3.3.4 you have to adjust the
 linker settings to reflect the correct QT library name.
 To do so, open the properties dialog in MSVC for the entry of the libVIEW 
 library. In the field for additional dependencies, adjust the name of the
 QT-library. (See also BALL/WINDOWS/setting_qt_version_in_visual_studio_de.png)
+Also the QTDIR environment variable has to be set to the installation directory of
+QT (this is in general done automatical by the QT installation.)
 
 After you compiled the BALL- and libVIEW-libs, you can compile BALLView.
 The program can be started with the batch-file startBALLView.bat under
@@ -47,7 +52,11 @@ directories for the needed libs.
 If experienced some instabilities with this release, please try to disable all
 optimisations for the MSVC compiler.
 
-Please report any problems you  have with this (still clumsy) setup to
+Known Issues:
+- Currently the Python Support is broken on Windows
+- XDRPersistenceManager fails
+
+Please report any problems you have with this (still clumsy) setup to
 
    ball-bugs@bioinf.uni-sb.de
 
