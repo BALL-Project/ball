@@ -1,24 +1,14 @@
 1.1: 21.06.2005
 
-Added:
-   - Support for Darwin (MacOS X), including support for shared libraries
-     and native QT
+BALL is now provided under the LGPL and BALLView under the GPL.
 
-Changed:
-   - New license model: BALL is under the LGPL, BALLView under the GPL
-   - General overhaul of the user interface of BALLView
-   - Improved the Python support, adapted to SIP 4.2.x
-   - Several bugfixes in the file formats
-   - Tons of bugfixes in BALLView
-
-1.1pre3: 03.11.2004
-
-1.1 mostly features changes related to the Python support, some bugfixes and
-a large numer of prominent fixes and improvements in BALLView.
-Most of these improvements are related to an improved user interface and some
-new models and animation possibilities.
+The version 1.1 brings support for MacOS X and and a large numer of prominent fixes and 
+improvements in BALLView. Most of these improvements are related to an improved user 
+interface and some new models and animation possibilities.
+We also did some features changes related to the Python support.
 
 Added:
+  - Support for Darwin (MacOS X), including support for shared libraries and native QT
   - FragmentDatabase
     - added fragments for nucleotides
     - fixed some minor details in other fragments
@@ -62,6 +52,7 @@ Added:
 
 
 Fixed:
+  - Several bugfixes in the file formats
   - CygWin support was temporarily broken
   - fixed the Python support to work with an official SIP release (4.1.1)  
   - BALLView
@@ -97,7 +88,10 @@ Fixed:
 
 
 Changed:
+  - New license model: BALL is under the LGPL, BALLView under the GPL
+  - Improved the Python support, adapted to SIP 4.2.x
   - BALLView
+		- General overhaul of the user interface of BALLView
 		- accelerated the display of stick models up to 20%
 		- improved focus camera on molecular structures
 	  - general improvements in the user interface
