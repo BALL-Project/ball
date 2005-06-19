@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.17 2005/06/19 11:28:16 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.18 2005/06/19 16:20:36 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -314,9 +314,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					initPopupMenu(MOLECULARMECHANICS)->insertItem("Force Field", menu, CHOOSE_FF);
 					menu->setCheckable(true);
 					break;
-				case OPTIONS:
-					menuBar()->insertItem("&Options", menu, OPTIONS, OPTIONS);
-					break;
 				case TOOLS:
 					menuBar()->insertItem("&Tools", menu, TOOLS, TOOLS);
 					break;
@@ -434,7 +431,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 				
 				insertPopupMenuSeparator(MainControl::EDIT);
-				preferences_id_ = insertMenuEntry(MainControl::OPTIONS, 
+				preferences_id_ = insertMenuEntry(MainControl::EDIT,
 																					"Preferences", 
 																					preferences_dialog_, 
 																					SLOT(show()), CTRL+Key_Z);

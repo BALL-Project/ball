@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.20 2005/06/19 11:28:17 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.21 2005/06/19 16:20:37 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -403,6 +403,9 @@ namespace BALL
 			context_menu_.insertItem("Collapse all", this, SLOT(collapseAll()), 0, COLLAPSE_ALL);
 			context_menu_.insertItem("Expand all", this, SLOT(expandAll()), 0, EXPAND_ALL);
 			context_menu_.insertItem("Highlight Selection", this, SLOT(highlightSelection()));
+			context_menu_.insertSeparator();
+			show_ss_id_ = context_menu_.insertItem("Show Secondary Structures", this, 
+																						SLOT(switchShowSecondaryStructure()));
 
 			// ===============================================================
 			// edit context menu:
@@ -636,10 +639,6 @@ namespace BALL
 			clipboard_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Clear Clipboard", this, 
 																									 SLOT(clearClipboard()));
 			setMenuHint("Clear the items in the clipboard");
-
-
-			show_ss_id_ = main_control.insertMenuEntry(MainControl::OPTIONS, "Show SS entries", this, SLOT(switchShowSecondaryStructure()));
-			setMenuHint("Show entries for Secondary Structures in MolecularControl.");
 
 			GenericControl::initializeWidget(main_control);
 		}
@@ -1322,7 +1321,7 @@ namespace BALL
 			if (show_ss_) show_ss_ = false;
 			else 					show_ss_ = true;
 
-			menuBar()->setItemChecked(show_ss_id_, show_ss_);
+			context_menu_.setItemChecked(show_ss_id_, show_ss_);
 
 			CompositeManager::CompositeConstIterator cit = getMainControl()->getCompositeManager().begin();
 			for (; +cit; ++cit)

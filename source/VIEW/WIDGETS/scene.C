@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.27 2005/06/19 11:28:18 amoll Exp $
+// $Id: scene.C,v 1.171.2.28 2005/06/19 16:20:38 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -350,8 +350,6 @@ namespace BALL
 			gl_renderer_.updateCamera();
 			gl_renderer_.enableVertexBuffers(want_to_use_vertex_buffer_);
  			stage_settings_->getGLSettings();
-
-			initTimer();
 		}
 
 		void Scene::paintGL()
@@ -1097,8 +1095,7 @@ namespace BALL
 			if (inifile.hasEntry("STAGE", "ShowPopupInfos"))
 			{
 				bool state = inifile.getValue("STAGE", "ShowPopupInfos").toBool();
-				menuBar()->setItemChecked(show_popup_infos_id_, state);
-				initTimer();
+				if (state) initTimer();
 			}
 
 
@@ -1437,10 +1434,9 @@ namespace BALL
 			animation_repeat_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
 																	SLOT(animationRepeatClicked()));
 
-			show_popup_infos_id_ = insertMenuEntry(MainControl::OPTIONS, "Popup molecular items info", 
-																	this, SLOT(switchPopupInfos()));
-
 			setCursor(QCursor(Qt::SizeAllCursor));
+
+			connect(&timer_, SIGNAL(timeout()), this, SLOT(timerSignal_()) );			
 		}
 
 		void Scene::checkMenu(MainControl& /*main_control*/)
@@ -1693,14 +1689,6 @@ namespace BALL
 
 		void Scene::initTimer()
 		{
-			bool current = menuBar()->isItemChecked(show_popup_infos_id_);
-			if (!current)
-			{
-				timer_.stop();
-				return;
-			}
-
-			connect(&timer_, SIGNAL(timeout()), this, SLOT(timerSignal_()) );			
 			timer_.start(500);
 		}
 
@@ -2366,16 +2354,16 @@ namespace BALL
 			return supports;
 		}
 
-		void Scene::switchPopupInfos()
-		{
-			bool current = menuBar()->isItemChecked(show_popup_infos_id_);
-			setPopupInfosEnabled(!current);
-		}
-
 		void Scene::setPopupInfosEnabled(bool state)
 		{
-			menuBar()->setItemChecked(show_popup_infos_id_, state);
-			initTimer();
+			if (state)
+			{
+				initTimer();
+			}
+			else
+			{
+				timer_.stop();
+			}
 		}
 
 	} // namespace VIEW

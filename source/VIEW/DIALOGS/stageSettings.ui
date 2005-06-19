@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>StageSettingsData</class>
 <widget class="QDialog">
     <property name="name">
@@ -351,6 +351,22 @@
                         <string></string>
                     </property>
                 </widget>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>popup_names</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>340</y>
+                        <width>370</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>popup names of molecular entities under mouse cursor</string>
+                </property>
             </widget>
         </widget>
         <widget class="QWidget">

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.C,v 1.26 2005/03/02 09:46:06 oliver Exp $
+// $Id: stageSettings.C,v 1.26.2.1 2005/06/19 16:20:34 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
@@ -72,6 +72,11 @@ namespace BALL
 			Scene::setMouseSensitivity(slider_->value() + 1);
 			Scene::setMouseWheelSensitivity(wheel_slider_->value() + 1);
 
+			if (Scene::getInstance(0) != 0)
+			{
+				Scene::getInstance(0)->setPopupInfosEnabled(popup_names->isChecked());
+			}
+
 			stage_->setEyeDistance((float)(eye_distance_slider->value() / 10.0));
 			stage_->setFocalDistance((float)(eye_distance_slider->value()));
 
@@ -126,6 +131,7 @@ namespace BALL
 
 				enable_fog->setChecked(false);
 				fog_slider->setValue(200);
+				popup_names->setChecked(false);
 			}
 
 			if (all || current == 1)
