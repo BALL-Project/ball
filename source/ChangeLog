@@ -1,3 +1,15 @@
+1.1: 21.06.2005
+
+Added:
+   - Support for Darwin (MacOS X), including support for shared libraries
+     and native QT
+
+Changed:
+   - New license model: BALL is under the LGPL, BALLView under the GPL
+   - General overhaul of the user interface of BALLView
+   - Improved the Python support, adapted to SIP 4.2.x
+   - Several bugfixes in the file formats
+   - Tons of bugfixes in BALLView
 
 1.1pre3: 03.11.2004
 
@@ -7,7 +19,7 @@ Most of these improvements are related to an improved user interface and some
 new models and animation possibilities.
 
 Added:
-	- FragmentDatabase
+  - FragmentDatabase
     - added fragments for nucleotides
     - fixed some minor details in other fragments
   - Python support: added more classes to the Python SIP interface

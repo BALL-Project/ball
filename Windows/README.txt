@@ -4,7 +4,7 @@ BALL requires some standard Unix tools and libraries that are not usually
 found on Windows systems. We provide an archive file with all needed files 
 for this tools:
 
-http://voyager.bioinf.uni-sb.de/OK/BALL/Downloads/Contrib/Contrib-1.1pre3.zip
+http://voyager.bioinf.uni-sb.de/OK/BALL/Downloads/Contrib/Contrib-1.1.zip
 
 This file contains:
 

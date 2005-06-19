@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.12.6.1 2005/05/01 11:37:21 oliver Exp $
+// $Id: predicate.h,v 1.12.6.2 2005/06/19 08:35:44 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_PREDICATE_H
@@ -27,8 +27,9 @@ namespace BALL
 		: public unary_function<T, bool> 
 	{
 		public:
+		///
+		virtual ~UnaryPredicate() {}
 
-		virtual ~UnaryPredicate() throw() {}
 		///
 		virtual bool operator() (const T& /* x */) const
 			throw()
@@ -51,6 +52,8 @@ namespace BALL
 		{
 			return true;
 		}
+		///
+    virtual ~BinaryPredicate() {}
 	};
 
 	//@}

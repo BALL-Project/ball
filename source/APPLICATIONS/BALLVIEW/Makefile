@@ -1,7 +1,7 @@
-/ -*- Mode: C++; tab-width: 2; -*-
+# -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.8.2.6 2005/06/17 16:34:19 oliver Exp $
+# $Id: Makefile,v 1.8.2.7 2005/06/19 08:35:45 oliver Exp $
 #
 
 EXECUTABLE=BALLView
