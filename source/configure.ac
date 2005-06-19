@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.22.2.1 2005/06/14 15:39:12 oliver Exp $
+dnl $Id: configure.ac,v 1.22.2.2 2005/06/19 09:24:38 oliver Exp $
 dnl
 dnl
 
@@ -619,10 +619,20 @@ if test "${AROPTS}" = "" ; then
 AROPTS="cru"
 fi
 
+dnl
+dnl  Some platforms (e.g. Darwin) require special flags to build
+dnl  loadable modules. If no specific flags for this were set,
+dnl  we just use the standard settings to create dynamic libraries.
+dnl
+if test "${DYNAROPTS_PYMODULE}" = "" ; then
+  DYNAROPTS_PYMODULE="${DYNAROPTS}"
+fi
+
 AC_SUBST(AR)
 AC_SUBST(AROPTS)
 AC_SUBST(DYNAR)
 AC_SUBST(DYNAROPTS)
+AC_SUBST(DYNAROPTS_PYMODULE)
 AC_SUBST(ADD_DYNAROPTS_LIBBALL)
 AC_SUBST(ADD_DYNAROPTS_LIBVIEW)
 AC_SUBST(RANLIB)

@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.2.6 2005/06/19 08:40:37 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.7 2005/06/19 09:24:30 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -691,10 +691,11 @@ AC_DEFUN(CF_GXX_OPTIONS, [
       DYNAROPTS="${DYNAROPTS} -headerpad_max_install_names -prebind -compatibility_version ${BALL_COMPATIBILITY_VERSION} -current_version ${BALL_CURRENT_VERSION} -dynamiclib -o"
 			ADD_DYNAROPTS_LIBPROJECT[]="-seg1addr 0xb0000000"
 			ADD_DYNAROPTS_LIBVIEW="-seg1addr 0x80000000"
+      DYNAROPTS_PYMODULE="-headerpad_max_install_names -bundle -framework Python -o"
       RANLIB="ranlib -s "
     else	
       DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
-		fi
+    fi
   fi
 
   if test "${IS_EGXX}" = true; then

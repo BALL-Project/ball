@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# $Id: config.mak.in,v 1.35 2005/03/01 19:09:28 oliver Exp $
+# $Id: config.mak.in,v 1.35.2.1 2005/06/19 09:24:38 oliver Exp $
 #
 
 # First, some basic unix commands, including the C++ compiler
@@ -20,6 +20,7 @@ AROPTS  = @AROPTS@
 
 # options for shared library generation
 DYNAROPTS = @DYNAROPTS@
+DYNAROPTS_PYMODULE = @DYNAROPTS_PYMODULE@
 ADD_DYNAROPTS_LIBBALL = @ADD_DYNAROPTS_LIBBALL@
 ADD_DYNAROPTS_LIBVIEW = @ADD_DYNAROPTS_LIBVIEW@
 

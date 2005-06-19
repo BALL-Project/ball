@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.33.4.7 2005/06/18 21:27:16 oliver Exp $
+# $Id: Makefile,v 1.33.4.8 2005/06/19 09:24:38 oliver Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -32,8 +32,6 @@ SIP_DIR=sip_files
 SIP_OPTS=-c $(SIP_DIR) -e -s ".C" -b BALL.sbf
 SIPFLAGS += $(PYTHON_INCLUDES) $(SIP_INCLUDES)
 CXXFLAGS += $(SIPFLAGS)
-
-DYNAROPTS= -headerpad_max_install_names -bundle -framework Python -o
 
 BALL_INCLUDES+=$(VIEW_INCLUDES)
 BALL_LIBS=$(VIEW_LIBS)
@@ -78,7 +76,7 @@ sip:
 
 
 BALLmodule.so:  $(CPP_OBJECTS)
-	$(DYNAR) $(DYNAROPTS) BALLmodule.so $(SIP_OBJECTS) $(PYBALL_OBJECTS) $(SIP_LIB) -L$(BALL_PATH)/lib/$(BINFMT) $(BALL_LIBS) $(PYTHON_LIBS)
+	$(DYNAR) $(DYNAROPTS_PYMODULE) BALLmodule.so $(SIP_OBJECTS) $(PYBALL_OBJECTS) $(SIP_LIB) -L$(BALL_PATH)/lib/$(BINFMT) $(BALL_LIBS) $(PYTHON_LIBS)
 
 install:	BALLmodule.so
 	cp BALLmodule.so  $(BALL_PATH)/lib/$(BINFMT)
