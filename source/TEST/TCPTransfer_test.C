@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer_test.C,v 1.23 2005/05/17 12:36:02 amoll Exp $
+// $Id: TCPTransfer_test.C,v 1.24 2005/06/19 17:12:22 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -22,7 +22,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.23 2005/05/17 12:36:02 amoll Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.24 2005/06/19 17:12:22 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -41,22 +41,23 @@ CHECK(~TCPTransfer_test)
 RESULT
 
 CHECK(set(ofstream& file, const String& address))
-	String filename;
-	NEW_TMP_FILE(filename)
-	std::ofstream os(filename.c_str(), std::ios::out);
-	
-	TCPTransfer tcp_t;
-	tcp_t.set(os, "http://www.mpi-sb.mpg.de/BALL/test/http_test.txt");
-	TEST_EQUAL(tcp_t.getHostAddress(), "www.mpi-sb.mpg.de")
-	TEST_EQUAL(tcp_t.getFileAddress(), "/BALL/test/http_test.txt")
-	TEST_EQUAL(tcp_t.getPort(), 80)
-	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::OK)
-	TEST_EQUAL(tcp_t.getReceivedBytes(), 0)
-	TEST_EQUAL(tcp_t.getLogin(), "")
-	TEST_EQUAL(tcp_t.getPassword(), "")
-	TEST_EQUAL(tcp_t.getStream(), &os)
-	
-	os.close();
+  ABORT_IF(!NetworkTest::test("www.ball-project.org", NetworkTest::HTTP))
+  String filename;
+  NEW_TMP_FILE(filename)
+  std::ofstream os(filename.c_str(), std::ios::out);
+
+  TCPTransfer tcp_t;
+  tcp_t.set(os, "http://www.ball-project.org/Downloads/http_test.txt");
+  TEST_EQUAL(tcp_t.getHostAddress(), "www.ball-project.org")
+  TEST_EQUAL(tcp_t.getFileAddress(), "/Downloads/http_test.txt")
+  TEST_EQUAL(tcp_t.getPort(), 80)
+  TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::OK)
+  TEST_EQUAL(tcp_t.getReceivedBytes(), 0)
+  TEST_EQUAL(tcp_t.getLogin(), "")
+  TEST_EQUAL(tcp_t.getPassword(), "")
+  TEST_EQUAL(tcp_t.getStream(), &os)
+
+  os.close();
 RESULT
 
 CHECK(http/no login)
@@ -94,7 +95,8 @@ CHECK(http/login)
 
 	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
-/*
+
+
 CHECK(ftp)
 	ABORT_IF(!NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP))
 	NEW_TMP_FILE(filename);
@@ -114,7 +116,8 @@ CHECK(ftp)
 
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT
-*/
+
+
 CHECK(http/exception)
 	NEW_TMP_FILE(filename)
 	std::ofstream os(filename.c_str(), std::ios::out);
@@ -130,11 +133,20 @@ CHECK(PROXY)
 	
 	TCPTransfer tcp_t;
 	tcp_t.set(os ,"http://www.zbi.uni-saarland.de/zbi/download/http_test.txt");
+
+	////////////////////////////////////////////////
+	////////// enter YOUR proxy here! //////////////
+	////////////////////////////////////////////////
 	tcp_t.setProxy("www-proxy.uni-saarland.de", 3128);
+	////////////////////////////////////////////////
 	tcp_t.transfer();
 	os.close();
 
-	TEST_FILE(filename.c_str(), "data/http_test.txt")
+	if (tcp_t.getStatusCode() != TCPTransfer::PROXY__ERROR)
+	{
+		TEST_EQUAL(tcp_t.getReceivedBytes(), 3048)
+		TEST_FILE(filename.c_str(), "data/http_test.txt")
+	}
 RESULT
 
 
