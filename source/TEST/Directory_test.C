@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Directory_test.C,v 1.16.4.2 2005/06/20 10:29:45 oliver Exp $
+// $Id: Directory_test.C,v 1.16.4.3 2005/06/20 12:54:42 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 
 
 
-START_TEST(Directory, "$Id: Directory_test.C,v 1.16.4.2 2005/06/20 10:29:45 oliver Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.16.4.3 2005/06/20 12:54:42 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -214,16 +214,18 @@ CHECK(bool getNextEntry(String& entry))
 	bool result = d2.getNextEntry(s);
 	STATUS("getNextEntry : " << result << " = " << s)
 	TEST_EQUAL(result, true)
-	while (((s == ".") || (s == "..")) && (result == true))
+	bool found_test2 = false;
+	while (result == true)
 	{
+		if ((s != ".") && (s != ".."))
+		{
+			TEST_EQUAL(s, "test2")
+			found_test2 = true;
+		}
 	  result = d2.getNextEntry(s);
 	  STATUS("getNextEntry : " << result << " = " << s)
 	}
-	TEST_EQUAL(s, "test2");
-	TEST_EQUAL(result, true)
-	result = d2.getNextEntry(s);
-	STATUS("getNextEntry : " << result << " = " << s)
-	TEST_EQUAL(result, true)
+	TEST_EQUAL(found_test2, true)
 	
 	d1.remove("test1" + PS + "test2");
 	d1.remove("test1");
