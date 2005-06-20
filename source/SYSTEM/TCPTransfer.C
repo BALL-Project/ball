@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.32.4.3 2005/06/19 17:11:46 amoll Exp $
+// $Id: TCPTransfer.C,v 1.32.4.4 2005/06/20 19:35:24 amoll Exp $
 //
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
@@ -485,7 +485,7 @@ namespace BALL
 		buffer_[received_bytes_] = '\0';
 
 		#ifdef DEBUG
-			output_();
+			dump();
  		#endif
 
 		status_ = OK;
@@ -514,20 +514,26 @@ namespace BALL
 	}
 
 
-	void TCPTransfer::output_()
+	void TCPTransfer::dump(std::ostream& s, Size depth) const
 		throw()
 	{
-		Log.info() << "<<" << std::endl;
+		BALL_DUMP_STREAM_PREFIX(s);
+
+		BALL_DUMP_DEPTH(s, depth);
+
+		s << std::endl;
 		for (Position pos = 0; pos < (Position) received_bytes_; pos++)
 		{
 			if (buffer_[pos] == '\0') 
 			{
 				break;
 			}
-			Log.info() << buffer_[pos];
+			s << buffer_[pos];
 		}
-		Log.info() << std::endl;
-		Log.info() << "received bytes: " << received_bytes_ << std::endl;
+		s << std::endl;
+		s << "received bytes: " << received_bytes_ << std::endl;
+
+		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
 
@@ -563,7 +569,7 @@ namespace BALL
 				String temp(buffer_);
 				
 				#ifdef DEBUG
-					output_();			
+					dump();
 				#endif
 						
 				if (key.size() == 0 || temp.hasSubstring(key))
@@ -606,7 +612,7 @@ namespace BALL
 			{
 				buffer_[received_bytes_] = '\0';
 				#ifdef DEBUG
-					output_();			
+					dump();
 				#endif
 								
 				if (!got_data)
