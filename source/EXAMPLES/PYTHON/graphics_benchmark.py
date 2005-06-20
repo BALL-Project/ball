@@ -40,7 +40,7 @@ dp.setSurfaceDrawingPrecision(6.5)
 dp.selectMode(DRAWING_MODE_SOLID)
 dp.selectColoringMethod(COLORING_ELEMENT)
 dp.setTransparency(0)
-fd.openFile("bpti.pdb")
+fd.openFile(Path().find("structures/bpti.pdb"))
 
 runTest("Lines", 		MODEL_LINES)
 runTest("VDW",   		MODEL_VDW)
