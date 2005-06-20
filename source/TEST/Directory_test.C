@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Directory_test.C,v 1.16.4.1 2005/06/19 07:57:38 oliver Exp $
+// $Id: Directory_test.C,v 1.16.4.2 2005/06/20 10:29:45 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 
 
 
-START_TEST(Directory, "$Id: Directory_test.C,v 1.16.4.1 2005/06/19 07:57:38 oliver Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.16.4.2 2005/06/20 10:29:45 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -212,14 +212,17 @@ CHECK(bool getNextEntry(String& entry))
 	// To avoid this, we just skip these entries. These are properties of the
 	// Filesystem, not the Directory.
 	bool result = d2.getNextEntry(s);
+	STATUS("getNextEntry : " << result << " = " << s)
 	TEST_EQUAL(result, true)
 	while (((s == ".") || (s == "..")) && (result == true))
 	{
 	  result = d2.getNextEntry(s);
+	  STATUS("getNextEntry : " << result << " = " << s)
 	}
 	TEST_EQUAL(s, "test2");
 	TEST_EQUAL(result, true)
 	result = d2.getNextEntry(s);
+	STATUS("getNextEntry : " << result << " = " << s)
 	TEST_EQUAL(result, true)
 	
 	d1.remove("test1" + PS + "test2");
