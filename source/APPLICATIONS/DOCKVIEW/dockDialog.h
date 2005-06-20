@@ -306,9 +306,6 @@ namespace BALL
 				 */
 				void swapValues_() throw();
 				
-				void checkAlgAdvancedButton() throw();
-				
-				
 			private:
 				
 				/** flag which indicates if we do docking or redocking

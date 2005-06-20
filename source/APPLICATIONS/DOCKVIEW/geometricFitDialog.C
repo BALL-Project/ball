@@ -11,15 +11,11 @@ namespace BALL
 		GeometricFitDialog::GeometricFitDialog(QWidget* parent, const char* name, bool modal, WFlags fl)
 			throw()
 			: GeometricFitDialogData(parent, name, modal, fl),
-				ModularWidget(name),
 				PreferencesEntry()
 			{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "new GeometricFitDialog " << this << std::endl;
 			#endif
-			
-				// register the widget with the MainControl
-				ModularWidget::registerWidget(this);
 			
 				// register QWidgets of Dialog with PreferenceEntry
 				// entries of them will be generated in the INIFile

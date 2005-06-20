@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.40 2005/06/17 12:01:04 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.41 2005/06/20 12:27:18 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -243,7 +243,7 @@ namespace BALL
 			
 			// call this function to check which algorithm / scoring function is the current item in the combobox
 			// and set advanced button enabled if necessary
-			checkAlgAdvancedButton();
+			algorithmChosen();
 			scoringFuncChosen();
 		}
 		 
@@ -752,31 +752,14 @@ namespace BALL
 			}
 		}
 		
-		void DockDialog::checkAlgAdvancedButton() 
-			throw()
-		{
-			// if chosen algorithm has advanced options, enable advanced_button
-			int index = algorithms->currentItem();
-			if (algorithm_dialogs_.has(index))
-			{
-				alg_advanced_button->setEnabled(true);
-			}
-			else
-			{
-				alg_advanced_button->setEnabled(false);
-			}
-		}
-		
 		// Indicates an algorithm in the combobox was chosen.
 		void DockDialog::algorithmChosen()
 		{
-			// check if advanced button has to be enabled / disabled
-		  checkAlgAdvancedButton();
-			
 			// if chosen algorithm has advanced options
 			int index = algorithms->currentItem();
 			if (algorithm_dialogs_.has(index))
 			{
+				alg_advanced_button->setEnabled(true);
 				// disable scoring functions which aren't allowed for chosen algorithm
 				for (int i = 0; i < scoring_functions->count(); i++)
 				{
@@ -794,6 +777,8 @@ namespace BALL
 			}
 			else
 			{
+				alg_advanced_button->setEnabled(false);
+			
 				// enable all scoring functions
 				for (int i = 0; i < scoring_functions->count(); i++)
 				{
@@ -802,7 +787,11 @@ namespace BALL
 			}
 			
 			//set default scoring function as current item
-			scoring_functions->setCurrentItem(0);
+			// if the current one isn't allowed anymore
+			if(!scoring_functions->listBox()->item(scoring_functions->currentItem())->isSelectable())
+			{
+				scoring_functions->setCurrentItem(0);
+			}
 		}
 		
 		//
