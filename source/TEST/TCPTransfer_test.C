@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer_test.C,v 1.21.4.3 2005/06/20 19:33:21 amoll Exp $
+// $Id: TCPTransfer_test.C,v 1.21.4.4 2005/06/20 19:50:10 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -23,7 +23,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.21.4.3 2005/06/20 19:33:21 amoll Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.21.4.4 2005/06/20 19:50:10 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -79,6 +79,8 @@ CHECK(set(ofstream& file, const String& address))
 	tcp_t.transfer();
 	TEST_EQUAL(tcp_t.getReceivedBytes(), 3048)
 	os.close();
+
+	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
 CHECK(http/login)
