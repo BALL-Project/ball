@@ -74,6 +74,7 @@ namespace BALL
 		void GeometricFitDialog::fetchPreferences(INIFile& file)
 					throw()
 		{
+			//Log.info() << "in GeometricFitDialog::fetchPreferences" << std::endl; 
 			PreferencesEntry::readPreferenceEntries(file);
 			
 			fetchPreferences_(file, "option_entry_0", "1.0");
@@ -108,6 +109,7 @@ namespace BALL
 		void GeometricFitDialog::writePreferences(INIFile& file)
 			throw()
 		{
+			//Log.info() << "in GeometricFitDialog::writePreferences" << std::endl; 
 			if (is_redock_)
 			{
 				swapValues_();

@@ -5,10 +5,6 @@
 #ifndef BALL_VIEW_DIALOGS_GEOMETRICFITDIALOG_H
 #define BALL_VIEW_DIALOGS_GEOMETRICFITDIALOG_H
 
-#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
-# include <BALL/VIEW/KERNEL/modularWidget.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
@@ -71,10 +67,6 @@ namespace BALL
 				const GeometricFitDialog& operator =(const GeometricFitDialog& geo_fit_dialog)
 					throw();
 					
-				/**	ModularWidget methods
-				 */
-				//@{
-				
 				/** Fetchs the preferences from the INIFile.
 					* Calls fetchPreferences_. to read the redocking options 
 				 	*	@see    writePreferences
@@ -89,7 +81,6 @@ namespace BALL
 				void writePreferences(INIFile& file)
 					throw();
 
-				//@}	
 					
 				/** Resets the dialog to the standard values.
 				 */

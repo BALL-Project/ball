@@ -64,36 +64,27 @@ namespace BALL
 		 */
 		class BALL_EXPORT DockDialog : 
 			public DockDialogData,
-			public ModularWidget,
 			public PreferencesEntry
 		{ 
 			Q_OBJECT
 			
 			public:
 			
-				BALL_EMBEDDABLE(DockDialog, ModularWidget)
-				
 				/**	@name	Constructors and Destructors
 				 */	
 				//@{
 			
 				/** Default Constructor.
-				 *	Calls  \link ModularWidget::registerWidget registerWidget \endlink and \link PreferencesEntry::registerObject_ registerObject_ \endlink 
+				 *	Calls  \link PreferencesEntry::registerObject_ registerObject_ \endlink 
 				 *	Builds HashMaps for algorithm advanced option dialogs and for scoring function advanced option dialogs.
 				 *	@param      parent the parent widget of the DockDialog
 				 *	@param      name the name of the DockDialog
 				 *	@param			modal the modal flag
 				 *	@param			fl the widget flags
 				 *	@see        QDialog
-				 *	@see        ModularWidget
 				 *	@see				PreferncesEntry
 				 */
 				DockDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
-					throw();
-					
-				/** Copy constructor.
-					*/
-				DockDialog(const DockDialog& dock_dialog)
 					throw();
 					
 				/** Destructor.
@@ -163,9 +154,7 @@ namespace BALL
 				
 				//@}
 					
-				/**	ModularWidget methods
-				 */
-				//@{
+				
 				
 				/**	Initializes the popup menu <b>  Molecular Mechanics </b> with its checkable submenu <b>  Docking </b>;
 				 *	This method is called automatically	immediately before the main application is started.
@@ -174,7 +163,7 @@ namespace BALL
 				 *	@see   finalizeWidget
 				 *	@see   insertMenuEntry
 				 */
-				void initializeWidget(MainControl& main_control)
+				void initializeWidget()
 					throw();
 
 				/** Fetches the preferences from the INIFile.
@@ -190,7 +179,6 @@ namespace BALL
 				void writePreferences(INIFile& file)
 					throw();
 				
-				//@}	
 					
 				/** Resets the dialog to the standard values.
 				 */
@@ -305,6 +293,7 @@ namespace BALL
 				 *  and in writePreferences if is_redock_ is true
 				 */
 				void swapValues_() throw();
+				
 				
 			private:
 				
