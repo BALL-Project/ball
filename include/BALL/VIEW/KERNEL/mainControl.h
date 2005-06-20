@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72.2.8 2005/06/19 16:20:53 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.9 2005/06/20 00:28:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -435,6 +435,9 @@ namespace BALL
 			///
 			bool isAboutToQuit() { return about_to_quit_;}
 			
+			/// overloaded from QT for Python Interface
+			virtual void resize (int w, int h );
+
 			public:
 			
 			//@}
@@ -728,6 +731,9 @@ namespace BALL
 
 			///
 			Position getProxyPort() const { return proxy_port_;}
+
+			/// Calls QApplication::processEvents
+			void processEvents(int max_time);
 
 			#ifdef BALL_QT_HAS_THREADS
 			/// QWaitCondition to wake up threads, after Composites are unlocked

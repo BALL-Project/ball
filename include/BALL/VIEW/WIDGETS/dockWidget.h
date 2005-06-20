@@ -73,6 +73,9 @@ namespace BALL
 			*/
 			virtual void applyPreferences() throw();				
 
+			///
+			virtual void setVisible(bool state);
+
 			//@}
 			/** @name Public slots 
 			*/ 

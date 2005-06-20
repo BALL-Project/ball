@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.sip,v 1.9 2004/09/22 21:07:05 oliver Exp $
+// $Id: pyWidget.sip,v 1.9.4.1 2005/06/20 00:28:59 amoll Exp $
 //
 
 class PyWidget
-  : ModularWidget
+  : DockWidget
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/WIDGETS/pyWidget.h>

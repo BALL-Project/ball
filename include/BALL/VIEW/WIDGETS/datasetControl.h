@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.11.6.2 2005/06/12 17:34:26 amoll Exp $
+// $Id: datasetControl.h,v 1.11.6.3 2005/06/20 00:28:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -167,6 +167,10 @@ namespace BALL
 			//@}
 
 		  protected:
+			
+			// only for Python Interface
+			DatasetControl(const DatasetControl& control) throw();
+
 
 			void insertTrajectory_(TrajectoryFile* file, System& system)
 				throw();

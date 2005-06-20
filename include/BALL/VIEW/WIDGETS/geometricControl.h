@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.24.4.10 2005/06/15 13:36:52 amoll Exp $
+// $Id: geometricControl.h,v 1.24.4.11 2005/06/20 00:28:57 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -262,6 +262,9 @@ namespace BALL
 			//@}
 
 		  protected:
+			
+			// only for Python Interface
+			GeometricControl(const GeometricControl& control) throw();
 
 			enum ColumnID
 			{

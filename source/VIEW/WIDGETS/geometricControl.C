@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.27 2005/06/15 13:36:59 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.28 2005/06/20 00:29:01 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -716,6 +716,13 @@ namespace BALL
 
 			getMainControl()->insert(*new_rep);
 		}
-	
+
+		GeometricControl::GeometricControl(const GeometricControl& mc)
+			throw()
+			: GenericControl(mc)
+		{
+		}
+
+					
 	} // namespace VIEW
 } // namespace BALL

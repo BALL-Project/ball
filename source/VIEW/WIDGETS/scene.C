@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.28 2005/06/19 16:20:38 amoll Exp $
+// $Id: scene.C,v 1.171.2.29 2005/06/20 00:29:02 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2363,6 +2363,18 @@ namespace BALL
 			else
 			{
 				timer_.stop();
+			}
+		}
+
+		void Scene::setVisible(bool state)
+		{
+			if (state)
+			{
+				show();
+			}
+			else
+			{
+				hide();
 			}
 		}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.18 2005/06/19 16:20:36 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.19 2005/06/20 00:28:59 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -937,7 +937,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				enableLoggingToFile();
 			}
 
-			resize(QSize(w,h));
+			resize(w,h);
 			move(QPoint(x_pos, y_pos));
 
 			restoreWindows(inifile);
@@ -1989,6 +1989,18 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			network_preferences_->getSettings();
 		}
+	}
+
+	void MainControl::resize(int w, int h)
+	{
+		QMainWindow::resize(w, h);
+	}
+
+	void MainControl::processEvents(int max_time)
+	{
+		if (qApp == 0) return;
+
+		qApp->processEvents(max_time);
 	}
 	
 #	ifdef BALL_NO_INLINE_FUNCTIONS

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.37.2.6 2005/06/17 13:37:31 amoll Exp $
+// $Id: datasetControl.C,v 1.37.2.7 2005/06/20 00:29:00 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -728,6 +728,13 @@ namespace BALL
 			// Make sure BALLView knows about the new representation.
 			RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::ADD);
 			notify_(message);
+		}
+
+
+		DatasetControl::DatasetControl(const DatasetControl& control)
+			throw()
+			: GenericControl(control)
+		{
 		}
 
 	} // namespace VIEW

@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.sip,v 1.9.4.1 2005/06/15 17:59:51 oliver Exp $
+// $Id: molecularControl.sip,v 1.9.4.2 2005/06/20 00:28:59 amoll Exp $
 //
 
 class MolecularControl
-  : ModularWidget
+  : DockWidget
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/WIDGETS/molecularControl.h>

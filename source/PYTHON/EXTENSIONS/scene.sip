@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.sip,v 1.2.4.2 2005/06/07 10:36:51 amoll Exp $
+// $Id: scene.sip,v 1.2.4.3 2005/06/20 00:28:59 amoll Exp $
 //
 
 class Scene 
@@ -52,6 +52,7 @@ static Scene* getInstance(Position /index/);
 	void enterDualStereo();
 	void enterActiveStereo();
 	void exitStereo();
+	void setVisible(bool);
 //  void writePreferences(INIFile&) throw();
   ~Scene() throw();
 };

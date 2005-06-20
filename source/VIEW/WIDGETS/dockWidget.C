@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.24.6.4 2005/06/12 17:38:47 amoll Exp $
+// $Id: dockWidget.C,v 1.24.6.5 2005/06/20 00:29:01 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -159,6 +159,18 @@ namespace BALL
 		void DockWidget::dragEnterEvent(QDragEnterEvent* event)
 		{
 			event->accept(QTextDrag::canDecode(event));
+		}
+
+		void DockWidget::setVisible(bool state)
+		{
+			if (state)
+			{
+				show();
+			}
+			else
+			{
+				hide();
+			}
 		}
 
 	} // namespace VIEW 

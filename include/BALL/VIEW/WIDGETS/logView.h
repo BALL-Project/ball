@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.11.8.1 2005/06/03 11:47:43 amoll Exp $
+// $Id: logView.h,v 1.11.8.2 2005/06/20 00:28:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -92,6 +92,7 @@ namespace BALL
 				throw();
 
 			/** Copy constructor.
+				 	Only for Python Interface
 					The text of <b> view</b> will be copied into this logView.
 			*/
 			LogView(const LogView& view)
@@ -131,6 +132,7 @@ namespace BALL
 				throw();
 
 			private:
+
 
 			QTextEdit* text_edit_;
 

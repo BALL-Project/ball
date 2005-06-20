@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.19.4.1 2005/04/17 20:34:15 amoll Exp $
+// $Id: mainControl.sip,v 1.19.4.2 2005/06/20 00:28:58 amoll Exp $
 //
 
 class MainControl
@@ -111,6 +111,9 @@ class MainControl
 	void clearSelection() throw();
 
 	void sendMessage(Message&) throw();
+
+	void resize(int, int);
+	void processEvents(int);
 
 	void quit();
 };

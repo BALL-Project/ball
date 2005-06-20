@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.40.4.1 2005/06/13 15:03:50 oliver Exp $
+// $Id: BALL.sip,v 1.40.4.2 2005/06/20 00:28:58 amoll Exp $
 //
 //
 //
@@ -333,10 +333,14 @@
 
 // VIEW/WIDGETS
 %Include modularWidget.sip
+%Include dockWidget.sip
 %Include pyWidget.sip
 %Include scene.sip
 %Include molecularStructure.sip
 %Include molecularControl.sip
+%Include geometricControl.sip
+%Include logView.sip
+%Include datasetControl.sip
 
 // Makefile
 //%Include Makefile.sip
