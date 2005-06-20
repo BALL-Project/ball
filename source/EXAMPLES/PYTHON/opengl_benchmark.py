@@ -55,7 +55,7 @@ dp.setSurfaceDrawingPrecision(6.5)
 dp.selectMode(DRAWING_MODE_SOLID)
 dp.selectColoringMethod(COLORING_ELEMENT)
 dp.setTransparency(0)
-fd.openFile("bpti.pdb")
+fd.openFile(Path().find("structures/bpti.pdb"))
 
 Scene.getInstance(0).setVisible(1)
 LogView.getInstance(0).setVisible(0)
