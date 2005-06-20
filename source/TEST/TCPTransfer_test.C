@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer_test.C,v 1.21.4.1 2005/06/19 07:57:39 oliver Exp $
+// $Id: TCPTransfer_test.C,v 1.21.4.2 2005/06/20 16:51:07 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -22,7 +23,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.21.4.1 2005/06/19 07:57:39 oliver Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.21.4.2 2005/06/20 16:51:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -40,6 +41,25 @@ CHECK(~TCPTransfer_test)
 	delete tcp_ptr;
 RESULT
 
+CHECK(http/no login)
+	ABORT_IF(!NetworkTest::test("www.ball-project.org", NetworkTest::HTTP))
+	NEW_TMP_FILE(filename)
+	std::ofstream os(filename.c_str(), std::ios::out);
+	
+	TCPTransfer tcp_t(os, "http://www.ball-project.org/Downloads/http_test.txt");
+	TEST_EQUAL(tcp_t.getHostAddress(), "www.ball-project.org")
+	TEST_EQUAL(tcp_t.getFileAddress(), "/Downloads/http_test.txt")
+	TEST_EQUAL(tcp_t.getPort(), 80)
+	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::OK)
+	TEST_EQUAL(tcp_t.getReceivedBytes(), 3048)
+	TEST_EQUAL(tcp_t.getLogin(), "")
+	TEST_EQUAL(tcp_t.getPassword(), "")
+	TEST_EQUAL(tcp_t.getStream(), &os)
+	os.close();
+	
+	TEST_FILE(filename.c_str(), "data/http_test.txt")
+RESULT
+
 CHECK(set(ofstream& file, const String& address))
 	ABORT_IF(!NetworkTest::test("www.ball-project.org", NetworkTest::HTTP))
 	String filename;
@@ -52,30 +72,11 @@ CHECK(set(ofstream& file, const String& address))
 	TEST_EQUAL(tcp_t.getFileAddress(), "/Downloads/http_test.txt")
 	TEST_EQUAL(tcp_t.getPort(), 80)
 	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::OK)
-	TEST_EQUAL(tcp_t.getReceivedBytes(), 0)
-	TEST_EQUAL(tcp_t.getLogin(), "")
-	TEST_EQUAL(tcp_t.getPassword(), "")
-	TEST_EQUAL(tcp_t.getStream(), &os)
-	
-	os.close();
-RESULT
-
-CHECK(http/no login)
-	ABORT_IF(!NetworkTest::test("www.ball-project.org", NetworkTest::HTTP))
-	NEW_TMP_FILE(filename)
-	std::ofstream os(filename.c_str(), std::ios::out);
-	
-	TCPTransfer tcp_t(os ,"http://www.ball-project.org/Downloads/http_test.txt");
-	TEST_EQUAL(tcp_t.getHostAddress(), "www.ball-project.org")
-	TEST_EQUAL(tcp_t.getFileAddress(), "/Downloads/http_test.txt")
-	TEST_EQUAL(tcp_t.getPort(), 80)
-	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::OK)
 	TEST_EQUAL(tcp_t.getReceivedBytes(), 3048)
 	TEST_EQUAL(tcp_t.getLogin(), "")
 	TEST_EQUAL(tcp_t.getPassword(), "")
+	TEST_EQUAL(tcp_t.getStream(), &os)	
 	os.close();
-	
-	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
 CHECK(http/login)
