@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.40.4.2 2005/06/20 00:28:58 amoll Exp $
+// $Id: BALL.sip,v 1.40.4.3 2005/06/20 06:13:28 oliver Exp $
 //
 //
 //
@@ -271,7 +271,7 @@
 // %Include directory.sip
 %Include file.sip
 // %Include fileSystem.sip
-// %Include path.sip
+%Include path.sip
 // %Include socket.sip
 %Include timer.sip
 
@@ -340,7 +340,7 @@
 %Include molecularControl.sip
 %Include geometricControl.sip
 %Include logView.sip
-%Include datasetControl.sip
+//%Include datasetControl.sip
 
 // Makefile
 //%Include Makefile.sip
