@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.8 2005/06/21 11:25:44 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.9 2005/06/21 13:12:03 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -1114,7 +1114,7 @@ void AddCartoonModel::calculateComplementaryBases_(const Composite& composite)
 		for (; rit2 != chain2_residues.end(); rit2++)
 		{
 			if (((*rit1).getName() == "A" && 
-				 ((**rit2).getName() != "T" || (**rit2).getName() != "U")) ||
+				 ((**rit2).getName() != "T" && (**rit2).getName() != "U")) ||
 					((*rit1).getName() == "C" && (**rit2).getName() != "G") ||
 					((*rit1).getName() == "G" && (**rit2).getName() != "C") ||
 					((*rit1).getName() == "T" && (**rit2).getName() != "A") ||
@@ -1138,6 +1138,9 @@ void AddCartoonModel::calculateComplementaryBases_(const Composite& composite)
 			complementary_bases_[&*rit1] =  found_partner;
 			complementary_bases_[found_partner]  = &*rit1;
 			chain2_residues.erase(found_partner);
+		}
+		else
+		{
 		}
 	}
 }
@@ -1509,13 +1512,18 @@ void AddCartoonModel::buildDNA_(Position first, Position)
 			tube->setVertex2(end_atom->getPosition());
 			tube->setComposite(r);
 			tube->setRadius(DNA_ladder_radius_);
-			geometric_objects_.push_back(tube);
+ 			geometric_objects_.push_back(tube);
 
 			Sphere* sphere1 = new Sphere;
 			sphere1->setPosition(end_atom->getPosition());
 			sphere1->setRadius(DNA_ladder_radius_);
 			sphere1->setComposite(r);
 			geometric_objects_.push_back(sphere1);
+
+			Circle3 c(base_atom->getPosition(), -(end_atom->getPosition() - base_atom->getPosition()), DNA_ladder_radius_);
+			Disc* disc = new Disc(c);
+			disc->setComposite(r);
+			geometric_objects_.push_back(disc);
 
 			continue;
 		}
@@ -1577,6 +1585,17 @@ void AddCartoonModel::buildDNA_(Position first, Position)
 		sphere2->setRadius(DNA_ladder_radius_);
 		sphere2->setComposite(partner);
 		geometric_objects_.push_back(sphere2);
+
+
+		Circle3 c(base_atom->getPosition(), v, DNA_ladder_radius_);
+		Disc* disc = new Disc(c);
+		disc->setComposite(r);
+		geometric_objects_.push_back(disc);
+
+		Circle3 c2(partner_base->getPosition(), -v, DNA_ladder_radius_);
+		disc = new Disc(c2);
+		disc->setComposite(partner);
+		geometric_objects_.push_back(disc);
 	}
 }
 
