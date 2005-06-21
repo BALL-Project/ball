@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.7 2005/06/05 21:13:29 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.8 2005/06/21 11:25:44 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -218,6 +218,8 @@ void AddCartoonModel::buildGraphicalRepresentation_(Position start, Position end
 {
 	if 			(type == (Position) SecondaryStructure::UNKNOWN + 1)
 	{
+		buildTube_(start, end);
+
 		if (draw_DNA_as_ladder_)
 		{
 			buildDNA_(start, end);

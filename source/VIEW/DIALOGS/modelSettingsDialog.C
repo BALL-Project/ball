@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.34.4.1 2005/06/04 07:14:04 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.34.4.2 2005/06/21 11:25:37 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -182,12 +182,6 @@ namespace BALL
 				((AddVanDerWaalsModel*) &mp)->setVDWRadiusFactor(getVDWRadiusFactor());
 				return;
 			}
-
-			if (RTTI::isKindOf<AddBackboneModel>(mp))
-			{
-				((AddBackboneModel*) &mp)->setTubeRadius(getTubeRadius());
-				return;
-			}
 					
 			if (RTTI::isKindOf<AddCartoonModel>(mp))
 			{
@@ -202,6 +196,13 @@ namespace BALL
 				cm.setDNAHelixRadius(getDNAHelixRadius());
 				cm.enableRibbons(ribbons_enabled->isChecked());
 				cm.enableTwoColors(two_colored_ribbons->isChecked());
+				return;
+			}
+
+			// backbone model after cartoon model !!!
+			if (RTTI::isKindOf<AddBackboneModel>(mp))
+			{
+				((AddBackboneModel*) &mp)->setTubeRadius(getTubeRadius());
 				return;
 			}
 					
