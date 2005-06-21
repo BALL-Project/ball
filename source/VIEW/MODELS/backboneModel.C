@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.22.4.4 2005/06/06 20:25:06 amoll Exp $
+// $Id: backboneModel.C,v 1.22.4.5 2005/06/21 21:48:54 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -343,7 +343,11 @@ namespace BALL
 					r = dir % n;
 				}
 			}
-			r.normalize();
+			
+			if (!Maths::isZero(r.getSquareLength()))
+			{
+				r.normalize();
+			}
 			r *= tube_radius_;
 
 			////////////////////////////////////////////////////////////
@@ -406,7 +410,11 @@ namespace BALL
 				           (dir_new.x * r.x       + dir_new.y *       r.y + dir_new.z *       r.z)  /
 				           (dir_new.x * dir_new.x + dir_new.y * dir_new.y + dir_new.z * dir_new.z) 
 									 * dir_new);
-				r_new.normalize();
+				
+				if (!Maths::isZero(r_new.getSquareLength())) 
+				{ 
+					r_new.normalize();
+				}
 				r_new *= tube_radius_;
 
 				////////////////////////////////////////////////////////////

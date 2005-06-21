@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.9 2005/06/21 13:12:03 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.10 2005/06/21 21:48:32 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -149,27 +149,41 @@ void AddCartoonModel::drawPart_(Position last)
 				Position pos1 = (pos - 1) * interpolation_steps_;
 				Position pos2 = (pos - 1) * interpolation_steps_ - 1;
 
+				Position apos1 = pos1;
+				Position apos2 = pos2;
+
+				if (atoms_of_points_.size() > apos1 + interpolation_steps_)
+				{
+					apos1 += interpolation_steps_;
+				}
+
+				if (atoms_of_points_.size() > apos2 + interpolation_steps_)
+				{
+					apos2 += interpolation_steps_;
+				}
+
 				Sphere* sphere = new Sphere;
 				sphere->setRadius(tube_radius_);
 				sphere->setPosition(points_[pos1]);
-				sphere->setComposite(atoms_of_points_[pos1]);
+				sphere->setComposite(atoms_of_points_[apos1]);
 				geometric_objects_.push_back(sphere);
  
 				Tube* tube = new Tube();
 				tube->setVertex1(points_[pos1]);
 				tube->setVertex2(points_[pos2]);
-				tube->setComposite(atoms_of_points_[pos1]);
+				tube->setComposite(atoms_of_points_[apos1]);
 				tube->setRadius(tube_radius_);
 				geometric_objects_.push_back(tube);
 				
 				sphere = new Sphere;
 				sphere->setRadius(tube_radius_);
 				sphere->setPosition(points_[pos2]);
-				sphere->setComposite(atoms_of_points_[pos2]);
+				sphere->setComposite(atoms_of_points_[apos2]);
 				geometric_objects_.push_back(sphere);
+				
 			}
 
-			buildGraphicalRepresentation_(last_build_, pos - 1, last_type);
+		 	buildGraphicalRepresentation_(last_build_, pos - 1, last_type);
 			last_build_ = pos - 1;
 		}
 
@@ -246,7 +260,23 @@ void AddCartoonModel::buildGraphicalRepresentation_(Position start, Position end
 	}
 	else
 	{
+		List<GeometricObject*>::Iterator lit = geometric_objects_.end();
+		lit--;
+
 		buildTube_(start, end);
+
+		if (atoms_of_points_.size() < end + 1) return;
+	
+		// prevent problems for SS coloring
+		lit++;
+
+		for (Position p = 0; p < 2; p++)
+		{
+			if (lit == geometric_objects_.end()) return;
+			
+		 	(*lit)->setComposite(splines_[start +1].atom->getParent());
+			lit++;
+		}
 	}
 }
 
@@ -505,7 +535,9 @@ void AddCartoonModel::buildStrand_(Position first, Position last)
 			return;
 		}
 
-		peptide_normals.push_back(normal.normalize());
+		if (!Maths::isZero(normal.getSquareLength())) normal.normalize();
+
+		peptide_normals.push_back(normal);
 
 	} // iteration over all residues of secondary structure
 
@@ -562,6 +594,12 @@ void AddCartoonModel::buildStrand_(Position first, Position last)
 
 	Mesh* mesh = new Mesh;
 	mesh->setComposite(splines_[first].atom->getParent());
+
+	// prevent coloring problems, when coloring by SS
+	if (splines_.size() > first + 1)
+	{
+		mesh->setComposite(splines_[first + 1].atom->getParent());
+	}
 
 	vector<Vector3>& vertices = mesh->vertex;
 	vector<Vector3>& normals  = mesh->normal;
@@ -755,7 +793,11 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 	end   *= interpolation_steps_;
 
 	// overall direction of the helix
-	const Vector3 helix_dir((points_[end] - points_[start]).normalize());
+	Vector3 helix_dir(points_[end] - points_[start]);
+	if (!Maths::isZero(helix_dir.getSquareLength()))
+	{ 
+		helix_dir.normalize();
+	}
 
 	// distance difference vector for growing/shrinking of helix at start/end
 	const Vector3 helix_step = helix_dir * ribbon_width_ / 12;
@@ -801,7 +843,9 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 			r = dir % n;
 		}
 	}
-	r.normalize();
+
+	if (!Maths::isZero(r.getSquareLength())) r.normalize();
+
 	r *= ribbon_radius_;
 
 	////////////////////////////////////////////////////////////
@@ -831,10 +875,18 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 	Mesh* mesh1 = new Mesh(); // the two tubes
 	Mesh* mesh2 = new Mesh(); // connection between tubes 1
 	Mesh* mesh3 = new Mesh(); // connection between tubes 2
+
+	Position astart = start;
+	if (atoms_of_points_.size() > start + 1)
+	{
+		astart += interpolation_steps_;
+	}
+
 	if (atoms_of_points_[start] != 0)
 	{
 		mesh1->setComposite(atoms_of_points_[start]->getParent());
-		mesh2->setComposite(atoms_of_points_[start]->getParent());
+ 		mesh2->setComposite(atoms_of_points_[start]->getParent());
+
 		if (!use_two_colors_)
 		{
 			mesh3->setComposite(atoms_of_points_[start]->getParent());
@@ -844,12 +896,14 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 			mesh3->setComposite(&composite_to_be_ignored_for_colorprocessors_);
 		}
 	}
-	geometric_objects_.push_back(mesh1);
-	geometric_objects_.push_back(mesh2);
+ 	geometric_objects_.push_back(mesh1);
+ 	geometric_objects_.push_back(mesh2);
 	geometric_objects_.push_back(mesh3);
 
 	// distance vector between the two connections
-	Vector3 diff = r.normalize() * 0.1;
+	if (!Maths::isZero(r.getSquareLength())) r.normalize();
+
+	Vector3 diff = r * 0.1;
 	
 	// insert connection between tubes
 	mesh2->vertex.push_back(last_point + tube_diff + diff);
@@ -893,7 +947,9 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 							 (dir_new.x * r.x       + dir_new.y *       r.y + dir_new.z *       r.z)  /
 							 (dir_new.x * dir_new.x + dir_new.y * dir_new.y + dir_new.z * dir_new.z) 
 							 * dir_new);
-		r_new.normalize();
+		
+		if (!Maths::isZero(r_new.getSquareLength())) r_new.normalize();
+
 		r_new *= ribbon_radius_;
 
 		////////////////////////////////////////////////////////////
@@ -909,6 +965,18 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 			x = m * x;
 			new_points[i] = x;
 			new_points[i + middle] = -x;
+		}
+
+		// prevent problems with SS coloring
+		if (p <= start + interpolation_steps_ / 2)
+		{
+			const Composite* c = atoms_of_points_[astart]->getParent();
+			mesh1->setComposite(c);
+			mesh2->setComposite(c);
+			if (!use_two_colors_)
+			{
+				mesh3->setComposite(c);
+			}
 		}
 
 		////////////////////////////////////////////////////////////
@@ -981,7 +1049,10 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 
 		// first band
 		Vector3 vn(-(dir_new % helix_dir));
-		Vector3 diff = vn.normalize() * -0.1;
+		if (!Maths::isZero(vn.getSquareLength())) vn.normalize();
+
+		Vector3 diff = vn * -0.1;
+
 		mesh2->vertex.push_back(point + tube_diff + diff);
 		mesh2->normal.push_back(vn);
 		mesh2->vertex.push_back(point - tube_diff + diff);
@@ -1161,7 +1232,9 @@ void AddCartoonModel::createTriangle_(Mesh& mesh, const Atom& a1, const Atom& a2
 	Vector3 v1 = p1 - p2;
 	Vector3 v2 = p3 - p2;
 	Vector3 normal = v1 % v2;
-	normal.normalize();
+
+	if (!Maths::isZero(normal.getSquareLength())) normal.normalize();
+
 	normal *= -DNA_base_radius_;
 
 	vertices.push_back(p1 + normal);
