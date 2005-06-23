@@ -6,29 +6,39 @@
 
 # The step size in degrees between subsequent frames. 2 obviously leads to 180 frames being generated
 step = 2
+# directory for storing the POVRay files (Warning: these can get HUGE!)
+movie_dir = '/share/usr/oliver/data/movies/Trypsin-Nonlocal'
+# base filename for the movie files. a number and .pob will be appended
+movie_base = 'trypsin_ses_cont'
+
+import os
 
 # Get access to the maincontrol.
 mc = MainControl.getInstance(0)
 cm = mc.getCompositeManager()
 s = Scene.getInstance(0)
-camera = s.getStage().getCamera()
+camera = Camera(s.getStage().getCamera())
+old_viewpoint = Vector3(camera.getViewPoint())
 
+vv = Vector3(camera.getViewPoint())
+la = Vector3(camera.getLookAtPosition())
 
-matrix = Matrix4x4()
+# Compute rotation matrix for rotation about (camera) Y-axis
 frame_angle = Angle(step, 0)
+matrix = Matrix4x4()
 matrix.setRotation(frame_angle, camera.getLookUpVector())
-vv = camera.getViewVector()
-vv.normalize()
-vv *= 10.0
-la = camera.getLookAtPosition()
 
-
-for snap in range(360/step):
-	print snap, step * snap
-	vv = Vector3 (matrix.m11 * vv.x + matrix.m12 * vv.y + matrix.m13 * vv.z + matrix.m14, matrix.m21 * vv.x + matrix.m22 * vv.y + matrix.m23 * vv.z + matrix.m24, matrix.m31 * vv.x + matrix.m32 * vv.y + matrix.m33 * vv.z + matrix.m34);
-	camera.setViewPoint(la - vv)
-	s.getStage().moveCameraTo(camera)
+for snap in range(360. / step):
+	print "writing snapshot",snap, "of", (360 / step)
+	vv = camera.getViewPoint() - la
+	vv = Vector3(matrix.m11 * vv.x + matrix.m12 * vv.y + matrix.m13 * vv.z + matrix.m14, matrix.m21 * vv.x + matrix.m22 * vv.y + matrix.m23 * vv.z + matrix.m24, matrix.m31 * vv.x + matrix.m32 * vv.y + matrix.m33 * vv.z + matrix.m34)
+	camera.setViewPoint(vv + la)
 	s.setCamera(camera)
-	s.exportScene(POVRenderer("movie_%04d.pov" % snap))
+	filename = os.path.join(movie_dir, movie_base + "_%04d.pov" % snap)
+	s.exportScene(POVRenderer(filename))
 
 print "finished"
+
+# Reset the camera.
+camera.setViewPoint(old_viewpoint)
+s.setCamera(camera)
