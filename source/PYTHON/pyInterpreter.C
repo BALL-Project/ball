@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.C,v 1.11 2003/11/17 15:37:36 amoll Exp $
+// $Id: pyInterpreter.C,v 1.11.6.1 2005/06/23 06:08:19 oliver Exp $
 //
 
 #include <Python.h>
@@ -81,9 +81,17 @@ namespace BALL
 		// and the system stuff
 		runSingleString_("import cStringIO, sys", Py_single_input);
 
-		// add the BALL library path to the Python search path
-		// to make sure Python can find the BALL extensions
+		// Add the BALL library path to the Python search path
+		// to make sure Python can find the BALL extensions.
 		runSingleString_("sys.path.append(\"" BALL_PATH "/lib/" BALL_BINFMT "\")", Py_single_input);
+
+		// Add additional paths (user-defined) to the end of the search path.
+		// 
+		std::vector<String>::const_iterator it(sys_path_.begin());
+		for (; it != sys_path_.end(); ++it)
+		{
+			runSingleString_("sys.path.append(\"" + *it + "\")", Py_single_input);
+		}
 		
 		// import the BALL module
 		runSingleString_("from BALL import *", Py_single_input);
@@ -93,8 +101,8 @@ namespace BALL
 	String PyInterpreter::run(const String& s, bool& state)
 	{
 		state = false;
-		if (runSingleString_("OLDSTDOUT=sys.stdout", Py_single_input) == 0) return error_message_;
-		if (runSingleString_("CIO=cStringIO.StringIO()", Py_single_input) == 0) return error_message_;
+		if (runSingleString_("OLDSTDOUT = sys.stdout", Py_single_input) == 0) return error_message_;
+		if (runSingleString_("CIO = cStringIO.StringIO()", Py_single_input) == 0) return error_message_;
 		if (runSingleString_("sys.stdout=CIO", Py_single_input) == 0) return error_message_;
 		if (runSingleString_("sys.stderr=CIO", Py_single_input) == 0) return error_message_;
 		
@@ -119,10 +127,10 @@ namespace BALL
 	String PyInterpreter::runFile(const String& filename)
 		throw(Exception::FileNotFound)
 	{
-		if (runSingleString_("OLDSTDOUT=sys.stdout", Py_single_input) == 0) return error_message_;
-		if (runSingleString_("CIO=cStringIO.StringIO()", Py_single_input) == 0) return error_message_;
-		if (runSingleString_("sys.stdout=CIO", Py_single_input) == 0) return error_message_;
-		if (runSingleString_("sys.stderr=CIO", Py_single_input) == 0) return error_message_;
+		if (runSingleString_("OLDSTDOUT = sys.stdout", Py_single_input) == 0) return error_message_;
+		if (runSingleString_("CIO = cStringIO.StringIO()", Py_single_input) == 0) return error_message_;
+		if (runSingleString_("sys.stdout = CIO", Py_single_input) == 0) return error_message_;
+		if (runSingleString_("sys.stderr = CIO", Py_single_input) == 0) return error_message_;
 		PyErr_Clear();
 		
 		String result_string;
@@ -147,5 +155,17 @@ namespace BALL
 
 		return result_string;
 	}
+
+	void PyInterpreter::setSysPath(const PathStrings& path_strings)
+	{
+		sys_path_ = path_strings;
+	}
+	
+	const PyInterpreter::PathStrings& PyInterpreter::getSysPath()
+	{
+		return sys_path_;
+	}
+
+	PyInterpreter::PathStrings PyInterpreter::sys_path_;
 
 } // namespace BALL

@@ -5,11 +5,11 @@
 #
 
 # The step size in degrees between subsequent frames. 2 obviously leads to 180 frames being generated
-step = 2
+step = 5
 # directory for storing the POVRay files (Warning: these can get HUGE!)
-movie_dir = '/share/usr/oliver/data/movies/Trypsin-Nonlocal'
+movie_dir = '.'
 # base filename for the movie files. a number and .pob will be appended
-movie_base = 'trypsin_ses_cont'
+movie_base = 'movie'
 
 import os
 
@@ -41,4 +41,4 @@ print "finished"
 
 # Reset the camera.
 camera.setViewPoint(old_viewpoint)
-s.setCamera(camera)
+s.setCamera(Camera(camera))
