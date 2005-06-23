@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.13 2005/06/20 00:28:57 amoll Exp $
+// $Id: scene.h,v 1.62.2.14 2005/06/23 16:08:13 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -306,7 +306,7 @@ namespace BALL
 			/**	Menu checking method.
 					This method is called by MainControl::checkMenus before a popup menu is shown.
 					The menus <b>rotate mode</b> and <b>picking mode</b> each will be checked
-					if this scene is in the belonging mode.
+					if this scene is in the corresponding mode.
 					\param main_control the MainControl object whose menus should be checked
 					\see   initializeWidget
 					\see   finalizeWidget
@@ -577,7 +577,7 @@ namespace BALL
 			/** Switch to rotate mode.
 					If this method is called the mouse actions of this scene will
 					perform rotation, translation and zooming the visualization.
-					This method will be called from the belonging menu entry.
+					This method will be called from the corresponding menu entry.
 					\see initializeWidget
 					\see checkMenu
 			*/
@@ -586,7 +586,7 @@ namespace BALL
 			/** Switch to picking mode.
 					If this method is called the mouse actions of this scene will
 					perform object picking.
-					This method will be called from the belonging menu entry.
+					This method will be called from the corresponding menu entry.
 					\see initializeWidget
 					\see checkMenu
 			*/
