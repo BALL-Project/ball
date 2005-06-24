@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.C,v 1.11.6.1 2005/06/23 06:08:19 oliver Exp $
+// $Id: pyInterpreter.C,v 1.11.6.2 2005/06/24 15:30:39 oliver Exp $
 //
 
 #include <Python.h>
@@ -84,6 +84,9 @@ namespace BALL
 		// Add the BALL library path to the Python search path
 		// to make sure Python can find the BALL extensions.
 		runSingleString_("sys.path.append(\"" BALL_PATH "/lib/" BALL_BINFMT "\")", Py_single_input);
+#ifdef BALL_OS_DARWIN // Quick hack for Darwin BALLVIew installer // [20050624/OK]
+		runSingleString_("sys.path.append(\"/Library/BALL/Library/Python\")", Py_single_input);
+#endif
 
 		// Add additional paths (user-defined) to the end of the search path.
 		// 

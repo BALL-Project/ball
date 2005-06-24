@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.21 2005/06/19 16:20:37 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.22 2005/06/24 15:30:39 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -119,13 +119,10 @@ namespace BALL
 			listview->setColumnWidth(0, 120);
 			listview->setColumnWidth(1, 60);
 
-			QHBoxLayout* layout2 = new QHBoxLayout();
+			QVBoxLayout* layout2 = new QVBoxLayout();
 			getLayout()->addLayout(layout2);
 
-			QPalette pal = selector_edit_->palette();
-			pal.setColor(QColorGroup::Base, QColor(255, 255, 0));
-			selector_edit_->setPalette(pal);
-			selector_edit_->resize(90, 30);
+			selector_edit_->resize(90, 45);
 			selector_edit_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
 			selector_edit_->setAutoCompletion(true);
 			selector_edit_->setDuplicatesEnabled(false);
@@ -133,22 +130,24 @@ namespace BALL
 			layout2->addWidget(selector_edit_);
 
 			QPushButton* clear_button = new QPushButton(this);
-			clear_button->resize(30, 30);
-			clear_button->setMaximumSize(30, 30);
-			clear_button->setText("<");
-			clear_button->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed, 0, 0, false));
+			clear_button->resize(60, 25);
+			clear_button->setMaximumSize(60, 36);
+			clear_button->setText("Clear");
+			clear_button->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, false));
 			connect(clear_button, SIGNAL(clicked()), this, SLOT(clearSelector()));
 			QToolTip::add(clear_button, tr("Clear the selection."));
-			layout2->addWidget(clear_button);
+			QHBoxLayout* layout3 = new QHBoxLayout;
+			layout3->addWidget(clear_button);
+			layout2->addLayout(layout3);
 
 			QPushButton* help_button = new QPushButton(this);
-			help_button->resize(30, 30);
-			help_button->setMaximumSize(30, 30);
-			help_button->setText("?");
-			help_button->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed, 0, 0, false));
+			help_button->resize(60, 25);
+			help_button->setMaximumSize(60, 36);
+			help_button->setText("Help");
+			help_button->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, false));
 			connect(help_button, SIGNAL(clicked()), this, SLOT(showSelectorHelp()));
 			QToolTip::add(help_button, tr("Show a help dialog."));
-			layout2->addWidget(help_button);
+			layout3->addWidget(help_button);
 
 			// if the selection of any item changed,
 			// mark the complete selection as invalid
