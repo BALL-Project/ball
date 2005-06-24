@@ -194,7 +194,6 @@ namespace BALL
 					void finalizeWidget(MainControl& main_control)
 						throw();
 
-
 					void checkMenu(MainControl& main_control)
 						throw();
 
@@ -238,7 +237,7 @@ namespace BALL
 					signals:
 						// signal for communication with EditOperationDialog
 						void newEditOperation(EditableScene::EditOperation &eo);
-
+						void invalidComposite(Composite* composite);
 
 		protected:
 					Index edit_id_;	
@@ -260,6 +259,16 @@ namespace BALL
 					float x_ewindow_bond_pos_second_old_;
 					float y_ewindow_bond_pos_second_old_;
 
+				  float x_text_position_;
+					float y_text_position_;
+					float bond_length_;
+					
+					// used for painting the scaling Ruler   //ToDO ist loeschen ueber haupt notwendig?? 
+					float ruler_vertical_scaling_;
+					float ruler_horizontal_scaling_;	 
+					float ruler_vertical_length_;
+					float ruler_horizontal_length_;
+					
 					Vector3 near_left_bot_;  //TODO:: name in XYZ left_bot_mnear
 					Vector3 near_right_bot_;
 					Vector3 near_left_top_;
@@ -270,8 +279,13 @@ namespace BALL
 					double bond_limit_;		
 					
 					bool mouse_has_moved_;
-					int editAtomType_;       //store atomtype for nee atoms    
+					int editAtomType_;       //store atomtype for new atoms     
 
+					//inherited by scene
+					virtual void renderView_(RenderMode mode)
+						throw();
+
+					virtual void paintEvent ( QPaintEvent * );
 
 					/**
 					 * Insert a given Atom in the Scene. Its position is specified by the 2-dim 
@@ -312,6 +326,11 @@ namespace BALL
 					 * initialized.
 					 */
 					bool mapViewplaneToScreen_();
+					
+					/**
+					 * draws a ruler showing the scaling of the insertion plain of the EditableScene 
+					 */
+					void drawRuler_();
 					
 					};
 
