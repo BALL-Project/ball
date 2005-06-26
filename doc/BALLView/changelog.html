@@ -16,69 +16,90 @@
 	<table width="700" border="0" cellpadding="5">
 	  <tr><td>
 
- <h2>Changes Since Version 1.0 (02.06.04):</h2>
-1.1 mostly features changes related to the Python support, some bugfixes and
-a large numer of prominent fixes and improvements in BALLView.
-Most of these improvements are related to an improved user interface and some
-new models and animation possibilities.<br>
-<h4>Added:</h4>
-  - Python support: added more classes to the Python SIP interface<bR>
-	- new application: DCD2PNG to create series of PNG-images from a DCD trajectory file<bR>
-  	- Documentation for BALLView in the folder BALL/doc/BALLView  <bR>
-    - new models for rendering nucleic acids and for visualizing forces<bR>
-  	- calculation of Ramachandran plots for proteins<bR>
-		- improved ball and stick model now renders double-, triple- and aromatic bonds<bR>
-		- ability to create animations, either as on-screen presentations or for movies<bR>
-		- OpenGL rendering now allows for depth cueing, material paramters may be adjusted<bR>
-  	- Stereo display using side-by-side mode or shutter glasses<bR>
-  	- Clipping planes<bR>
-  	- storing and loading of BALLView project files<bR>
-  	- support for drag and drop of molecular files<bR>
-		- possibility to highlight the selected molecular items<bR>
-  	- new move mode for (partial) structures<bR>
-  	- Esc key now switches to last used mode in Scene<bR>
-  	- Python scripting:<bR>
-  		- Hotkey support for starting any (BALL-)Python command from BALLView<bR>
-	  	- support to quit program from Python interpreter<bR>
-  		- support for starting Python script from command line<bR>
-  		- Benchmark scripts for BALLView<bR>
+                <h2>Changes Since Version 1.0 (02.06.04):</h2>1.1
 
-<h4>Fixed:</h4>
-  - CygWin support was temporarily broken<bR>
-  - fixed the Python support to work with an official SIP release (4.1.1)  <bR>
-	  - selection in MolecularControl with CTRL and SHIFT modifier<bR>
-	  - several problems in Cartoon model<bR>
-	  - creation of models for several selected items<bR>
-	  - overall cleanup of RegularDataWidgets<bR>
-  	- export of PNGs could result in strange problems e.g. with empty images<bR>
-	  - its now possible to create transparent wireframe and dot models<bR>
-  	- PeptideDialog: deletion of sequence in entry field<bR>
-  	- increased performance of SnapShot visualisation, especially for large numbers of SnapShots<bR>
-  	- A click on the "default" button in Preferences now only works on currently selected page<bR>
-		- multiple loading of the same file will create enumerated names for the Systems<bR>
-		- it was not possible to reset the by-element coloring scheme to the default values <bR>
-		- issue with restoring window geometry on X11<bR>
-		- MDS dialog: toggling export to trajectory file was broken<bR>
-		- now show the correct number of bonds added when building bonds for a structure<bR>
-		- ResidueIndexColorProcessor now no longer considers water residues <bR>
-		- visualization of contour surfaces had sometimes incorrect normals<bR>
-		- several core dumps related to missing mutex locks<bR>
-		- memory management under Windows
+BALL is now provided under the LGPL and BALLView under the GPL.<br><br>
 
-<h4>Changed:</h4>
-		- improved focus camera on molecular structures<bR>
-	  - general improvements in the user interface<bR>
-		- inside of surfaces is now correctly drawn<bR>
-		- improved the code for the BALLView termination process<bR>
-		- removed the old Move-Dialog<bR>
-		- .BALLView config files are now always stored in the users homedir<bR>
-		- changed Coloring or Model settings are now visible after pressing apply<bR>
-		- disabled Server in BALLView by default<bR>
-		- cleanup for storing of settings from dialogs<bR>
-	- ~ModularWidget now calls MainControl::removeModularWidget, so<bR>
-&nbsp;&nbsp;&nbsp;from ModularWidget derived classes no longer have to deregister themselves<bR>
-</td></tr></table>
- <H2 align="center"><a href="hotkeys_html">&lt;</a> <a href="index_html">Index</a></H2>
+The version 1.1 brings support for MacOS X and and a large numer of prominent fixes and 
+improvements in BALLView. Most of these improvements are related to an improved user 
+interface and some new models and animation possibilities.
+We also did some features changes related to the Python support.
+<br><br>
+Added:<br>
+  - Support for Darwin (MacOS X), including support for shared libraries and native QT<br>
+  - FragmentDatabase<br>
+    - added fragments for nucleotides<br>
+    - fixed some minor details in other fragments<br>
+  - Python support: added more classes to the Python SIP interface<br>
+  - Proxy Support for TCP transfers<br>
+  - BALLView<br>
+  - Documentation for BALLView in the folder BALL/doc/BALLView  <br>
+  - Tutorial and demo under Help-menu<br>
+  - new models for rendering nucleic acids and for visualizing forces<br>
+  - ribbons for Cartoon model<br>
+  - usage of OpenGL vertex buffer objects to accelerate display of triangluated surfaces <br>
+  - highlighting of atoms for which the setup of a force field fails<br>
+  - improved ball and stick model now renders double-, triple- and aromatic bonds<br>
+  - ability to create animations, either as on-screen presentations or for movies<br>
+  - OpenGL rendering now allows for depth cueing, material paramters may be adjusted<br>
+  - Stereo display using side-by-side mode or shutter glasses<br>
+  - Clipping planes<br>
+  - support for drag and drop of molecular files and python scripts<br>
+  - ability to disable model or coloring updates for a representation<br>
+  - spliting surfaces (e.g. to cut out a binding pocket or the like)<br>
+  - improved labels for atoms, residues, etc.<br>
+  - Esc key now switches to last used mode in Scene<br>
+  - Enter key now focus on selection or on first loaded system if no selection exists<br>
+  - its now possible to hide secondary structure entries in the MolecularControl<br>
+  - history for boolean expressions<br>
+  - Python scripting<br>
+    - Hotkey support for starting any (BALL-)Python command from BALLView<br>
+    - support to quit program from Python interpreter<br>
+    - support for starting Python script from command line<br>
+<br><br>
+Fixed:<br>
+  - Several bugfixes in the file formats<br>
+  - CygWin support was temporarily broken<br>
+  - fixed the Python support to work with an official SIP release (4.1.1)  <br>
+  - BALLView<br>
+    - (hopefully) no more crashes from MDSimulations and minimizations, when strange energies occur<br>
+    - handling of light sources positions<br>
+    - selection in MolecularControl with CTRL and SHIFT modifier<br>
+    - several problems in Cartoon and Backbone model<br>
+    - several problems with POVRay export<br>
+    - rendering of two-colored objects, when one part is selected<br>
+    - creation of models for multiple selected items<br>
+    - "default" button in preferences reset settings of the current tab only<br>
+    - multiple loading of the same file will create will result in unique names for the systems<br>
+    - molecular dynamics dialog: toggling export to trajectory file was broken<br>
+    - ResidueIndexColorProcessor now no longer considers water residues <br>
+    - visualization of contour surfaces had sometimes incorrect normals<br>
+    - several core dumps related to missing mutex locks<br>
+    - several memory leaks, e.g. in OpenGL renderer<br>
+    - problem with linking of C runtime library under windows<br>
+    - HBondModel: showed only first H-bond of an atom and had a problem with the normals of the discs<br>
+<br><br>
+Changed:<br>
+  - New license model: BALL is under the LGPL, BALLView under the GPL<br>
+  - Improved the Python support, adapted to SIP 4.2.x<br>
+  - BALLView<br>
+    - General overhaul of the user interface of BALLView<br>
+    - improved focus camera on molecular structures<br>
+    - insides of surfaces is now correctly drawn<br>
+    - PovRay files are now much smaller, especially for meshes and are faster rendered by PovRay<br>
+    - improved Backbone and Cartoon model quality by using a triangulated tube model<br>
+    - .BALLView config files are now always stored in the users homedir<br>
+    - changed coloring or model settings are now visible after pressing apply<br>
+    - disabled Server in BALLView by default<br>
+    - storing PNG and POV export filenames in config file, so no files will be overwritten by accident<br>
+<br>
+              </td>
+            </tr>
+          </table>
 
-</body>
+          <h2 class="c1"><a href="hotkeys_html">&lt;</a> <a href=
+          "index_html">Index</a></h2>
+        </td>
+      </tr>
+    </table>
 </html>
