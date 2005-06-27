@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.10.4.4 2005/06/16 06:31:41 oliver Exp $
+// $Id: representation.sip,v 1.10.4.5 2005/06/27 18:23:32 amoll Exp $
 //
 
 class Representation
@@ -39,7 +39,7 @@ class Representation
 
 	GeometricObjectList& getGeometricObjects() throw();
 	const GeometricObjectList& getGeometricObjects() const throw();
-	void insert(GeometricObject& /object/) throw();
+	void insert(GeometricObject& /Transfer/) throw();
 
 	PyCompositeList getComposites() throw();
 	PyCompositeList getComposites() const throw();
@@ -47,10 +47,10 @@ class Representation
 
 	ModelProcessor* getModelProcessor() throw();
 	const ModelProcessor* getModelProcessor() const throw();
-	void setModelProcessor(ModelProcessor* /processor/) throw();
+	void setModelProcessor(ModelProcessor* /Transfer/) throw();
 
 	ColorProcessor* getColorProcessor() throw();
-	void setColorProcessor(ColorProcessor* /processor/) throw();
+	void setColorProcessor(ColorProcessor* /Transfer/) throw();
 
 	String getModelName() const throw();
 

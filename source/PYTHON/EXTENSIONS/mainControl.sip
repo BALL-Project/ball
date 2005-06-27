@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.19.4.2 2005/06/20 00:28:58 amoll Exp $
+// $Id: mainControl.sip,v 1.19.4.3 2005/06/27 18:23:32 amoll Exp $
 //
 
 class MainControl
@@ -102,15 +102,15 @@ class MainControl
 	void setStatusbarText(const String&, bool = false, bool = false);
 	void redrawAllRepresentations(bool /rebuild_display_lists/ = false) throw();
 	void update(Composite& /composite/, bool /changed_hierarchy/ = true) throw();
-	bool insert(Composite& /composite/) throw();
+	bool insert(Composite& /Transfer/) throw();
 	bool remove(Composite& /composite/, bool = true) throw();
 
 	bool update(Representation& /composite/) throw();
-	bool insert(Representation& /composite/) throw();
+	bool insert(Representation& /Transfer/) throw();
 	bool remove(Representation& /composite/) throw();
 	void clearSelection() throw();
 
-	void sendMessage(Message&) throw();
+	void sendMessage(Message& /Transfer/) throw();
 
 	void resize(int, int);
 	void processEvents(int);
