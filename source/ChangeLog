@@ -1,3 +1,10 @@
+Changes since 1.1:
+
+fixed:
+ - Memory issues with Python objects (e.g. inserting GeometricObjects into Representations)
+ - Saving and Loading of BALLView Project files
+
+
 1.1: 21.06.2005
 
 BALL is now provided under the LGPL and BALLView under the GPL.
