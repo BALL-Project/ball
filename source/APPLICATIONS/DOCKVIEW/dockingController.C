@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.12 2005/06/20 15:30:02 leonhardt Exp $
+// $Id: dockingController.C,v 1.1.2.13 2005/06/29 14:36:59 haid Exp $
 //
 
 #include "dockingController.h"
@@ -48,12 +48,11 @@ namespace BALL
 			throw()
 			: QWidget(), /// ???
 				ModularWidget(), /// ???
-				//dock_dialog_(dock_controller.dock_dialog_),
+				dock_dialog_(dock_controller.dock_dialog_),
 				dock_alg_(dock_controller.dock_alg_),
-				//progress_dialog_(dock_controller.progress_dialog_),
+				progress_dialog_(dock_controller.progress_dialog_),
 				id_(dock_controller.id_)
-		{
-		}
+		{}
 		
 		// Destructor
 		DockingController::~DockingController()
@@ -87,7 +86,6 @@ namespace BALL
 				unlockComposites();
 				if (dfm->wasAborted())
 				{
-					Log.info() << "in DockingController::onNotify: " << dfm->wasAborted() << std::endl;
 					QMessageBox request_message(0,0);
 					if ( request_message.question(0,"Request","Do you want to see the current Result?", 
 																			 "Yes", "No", QString::null, 0, 1))
@@ -277,8 +275,6 @@ namespace BALL
 		void DockingController::runScoring_(ConformationSet* conformation_set)
 			throw()
 		{
-			Log.error() << "in DockingController::runScoring_" << std::endl;
-		
 		 	// create scoring function object
 			EnergeticEvaluation* scoring = 0;
 			//check which scoring function is chosen
@@ -287,20 +283,17 @@ namespace BALL
 			switch(index)
 			{
 				case DEFAULT:
-					Log.error() << "in runScoring_::DEFAULT" << std::endl;
 					scoring = new EnergeticEvaluation();
 					break;
 
 				case AMBER_FF:
 				{
-					Log.info() << "in DockingController:: Option of Amber FF:" << std::endl;
 					AmberFF& ff = MolecularStructure::getInstance(0)->getAmberFF();
 					//the force field is given to the AmberEvaluation (scoring function) object
 					scoring = new AmberEvaluation(ff);
 					break;
 				}
 				case RANDOM:
-					Log.error() << "in runScoring_::RANDOM" << std::endl;
 					scoring = new RandomEvaluation;
 					break;
 			}
@@ -360,8 +353,6 @@ namespace BALL
 				delete scoring;
 				scoring = NULL;
 			}
-			
-			Log.info() << "End of runScoring_" << std::endl;
 		}
 		
 	} // end of namespace View

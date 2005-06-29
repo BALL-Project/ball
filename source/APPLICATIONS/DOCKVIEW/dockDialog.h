@@ -76,7 +76,7 @@ namespace BALL
 			
 				/** Default Constructor.
 				 *	Calls  \link PreferencesEntry::registerObject_ registerObject_ \endlink 
-				 *	Builds HashMaps for algorithm advanced option dialogs and for scoring function advanced option dialogs.
+				 *	Sets flag is_redock_ to false
 				 *	@param      parent the parent widget of the DockDialog
 				 *	@param      name the name of the DockDialog
 				 *	@param			modal the modal flag
@@ -85,6 +85,11 @@ namespace BALL
 				 *	@see				PreferncesEntry
 				 */
 				DockDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
+					throw();
+					
+				/** Copy constructor.
+					*/
+				DockDialog(const DockDialog& dock_dialog)
 					throw();
 					
 				/** Destructor.
@@ -125,7 +130,7 @@ namespace BALL
 				Options& getAlgorithmOptions()
 					throw();
 				
-				/**  Get scoring options
+				/** Get scoring options
 				 */
 				Options& getScoringOptions()
 					throw();
@@ -155,9 +160,9 @@ namespace BALL
 				//@}
 					
 				
-				
-				/**	Initializes the popup menu <b>  Molecular Mechanics </b> with its checkable submenu <b>  Docking </b>;
+				/**	Initializes the popup menu <b>  Molecular Mechanics </b> with its checkable submenu <b> Docking </b>;
 				 *	This method is called automatically	immediately before the main application is started.
+				 *	Builds HashMaps for algorithm advanced option dialogs and for scoring function advanced option dialogs.
 				 *	@param main_control the  MainControl object to be initialized
 				 *  @see   openDialog
 				 *	@see   finalizeWidget

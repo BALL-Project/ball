@@ -94,7 +94,6 @@ namespace BALL
 					throw();
 
 				/** Sets the flags 'is_redock_' and 'has_changed_'
-					*
 					*/
 				void setFlag(bool is_redock)
 					throw();
@@ -139,7 +138,8 @@ namespace BALL
 					*/
 				bool has_changed_;
 				
-				/// flag which indicates if we do docking or redocking
+				/** flag which indicates if we do docking or redocking
+					*/
 				bool is_redock_;
 				
 				/** Needed to guaranty that both, docking and redocking preferences can be written to INIFile

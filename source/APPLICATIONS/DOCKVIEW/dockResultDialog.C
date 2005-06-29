@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.30 2005/06/17 12:01:05 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.31 2005/06/29 14:36:58 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -65,8 +65,7 @@ namespace BALL
 				redock_partner1_(dock_res_dialog.redock_partner1_),
 				redock_partner2_(dock_res_dialog.redock_partner2_),
 				scoring_dialogs_(dock_res_dialog.scoring_dialogs_)
-		{
-		}
+		{}
 		
 		// Destructor
 		DockResultDialog::~DockResultDialog()
@@ -132,7 +131,6 @@ namespace BALL
 		// show and raise result dialog
 		void DockResultDialog::show()
 		{
-			Log.info() << "in DockResultDialog::show()" << std::endl;
 			if(!dock_res_) return;
 			
 			// before showing the dialog the result table has to be build and filled 
@@ -177,7 +175,6 @@ namespace BALL
 			adjustSize();
 			// show dialog to user
 			DockResultDialogData::show();
-			Log.info() << "DockResultDialog::show() finished" << std::endl;
 		}
 		
 		// show snapshot of selected row
@@ -405,6 +402,7 @@ namespace BALL
 			close(true);
 		}
 		
+		//
 		void DockResultDialog::deleteColumn_(int column)
 		{
 			if(!dock_res_) return;
@@ -416,6 +414,7 @@ namespace BALL
 			adjustSize();
 		}
 		
+		//
 		void DockResultDialog::showScoringOptions_(int column)
 		{
 			if(!dock_res_) return;
@@ -443,9 +442,9 @@ namespace BALL
 			info_dialog->show();
 		}
 		 
+		//
 		void DockResultDialog::redock_(int row)
 		{
-			Log.info() << "in DockResultDialog::redock_: " << std::endl;
 			if(!dock_res_) return;
 			
 			// get snapshot number of this row
@@ -465,7 +464,6 @@ namespace BALL
 			}
 			redock_partner1_ = new System(*docked_system_);
 			redock_partner2_ = new System(*docked_system_);
-			Log.info() << "number of atoms docked_system before append: " << docked_system_->countAtoms() << std::endl;
 			
 			redock_partner1_->setName(docked_system_->getName());
 			redock_partner2_->setName("rd");
@@ -491,10 +489,6 @@ namespace BALL
 					delete &*it;
 				}
 			}
-			
-			Log.info() << "number of atoms redock_partner1_: " << redock_partner1_->countAtoms() << std::endl;
-			Log.info() << "number of atoms redock_partner2_: " << redock_partner2_->countAtoms() << std::endl;
-			Log.info() << "number of atoms docked_system after append: " << docked_system_->countAtoms() << std::endl;
 			
 			DockDialog& dialog = DockingController::getInstance(0)->getDockDialog(); 
 			dialog.setSystems(redock_partner1_, redock_partner2_);

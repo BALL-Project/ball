@@ -43,8 +43,7 @@ namespace BALL
 				has_changed_(geo_fit_dialog.has_changed_),
 				is_redock_(geo_fit_dialog.is_redock_),
 				backup_(geo_fit_dialog.backup_)
-		{
-		}
+		{}
 			
 		// Destructor
 		GeometricFitDialog::~GeometricFitDialog()
@@ -74,7 +73,6 @@ namespace BALL
 		void GeometricFitDialog::fetchPreferences(INIFile& file)
 					throw()
 		{
-			//Log.info() << "in GeometricFitDialog::fetchPreferences" << std::endl; 
 			PreferencesEntry::readPreferenceEntries(file);
 			
 			fetchPreferences_(file, "option_entry_0", "1.0");
@@ -109,7 +107,6 @@ namespace BALL
 		void GeometricFitDialog::writePreferences(INIFile& file)
 			throw()
 		{
-			//Log.info() << "in GeometricFitDialog::writePreferences" << std::endl; 
 			if (is_redock_)
 			{
 				swapValues_();

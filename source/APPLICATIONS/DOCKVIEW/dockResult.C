@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.1.2.11 2005/06/17 12:01:05 haid Exp $
+// $Id: dockResult.C,v 1.1.2.12 2005/06/29 14:36:57 haid Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -379,20 +379,30 @@ namespace BALL
 		/** Implementation of the nested class Scoring_ **/
 	
 		/** Scoring_ class
-				Default Constructor
-		*/
+			* Default Constructor
+			*/
 		DockResult::Scoring_::Scoring_() throw()
 		{}
 		
 		/** Scoring_ class
-				Constructor
-		*/
+			* Constructor
+			*/
 		DockResult::Scoring_::Scoring_(const String& name, const Options& options, const vector<float>& scores) throw()
 		{
 			name_ = name;
 			options_ = options;
 			scores_ = scores;
 		}
+		
+		/** Scoring_ class
+			* Copy constructor.
+			*/
+		DockResult::Scoring_::Scoring_(const Scoring_& scoring)
+			throw()
+			: name_(scoring.name_),
+				options_(scoring.options_),
+				scores_(scoring.scores_)
+		{}
 		
 		/** Scoring_ class
 				Destructor

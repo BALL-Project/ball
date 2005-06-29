@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.42 2005/06/20 15:30:01 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.43 2005/06/29 14:36:56 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -27,7 +27,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		//Default constructor
+		// Default constructor
 		DockDialog::DockDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
 			throw()
 			: DockDialogData(parent, name, modal, fl),
@@ -71,7 +71,29 @@ namespace BALL
 			hide(); 
 		}
 		
-		//Destructor
+		// Copy constructor.
+		DockDialog::DockDialog(const DockDialog& dock_dialog)
+			throw()
+			: DockDialogData(), /// ???
+				//DockDialogData(dock_dialog), /// ???
+				PreferencesEntry(),
+				is_redock_(dock_dialog.is_redock_),
+				has_changed_(dock_dialog.has_changed_),
+				algorithm_dialogs_(dock_dialog.algorithm_dialogs_),
+				scoring_dialogs_(dock_dialog.scoring_dialogs_),
+				allowed_sf_(dock_dialog.allowed_sf_),
+				docking_partner1_(dock_dialog.docking_partner1_),
+				docking_partner2_(dock_dialog.docking_partner2_),
+				algorithm_opt_(dock_dialog.algorithm_opt_),
+				scoring_opt_(dock_dialog.scoring_opt_),
+				backup_(dock_dialog.backup_),
+				radius_rule_processor_(dock_dialog.radius_rule_processor_),
+				charge_rule_processor_(dock_dialog.charge_rule_processor_),
+				radius_processor_(dock_dialog.radius_processor_),
+				charge_processor_(dock_dialog.charge_processor_)
+		{}
+		
+		// Destructor
 		DockDialog::~DockDialog()
 			throw()
 		{
@@ -88,7 +110,6 @@ namespace BALL
 			{
 				is_redock_ = dock_dialog.is_redock_;
 				has_changed_ = dock_dialog.has_changed_;
-				backup_ = dock_dialog.backup_;
 				algorithm_dialogs_ = dock_dialog.algorithm_dialogs_;
 				scoring_dialogs_ = dock_dialog.scoring_dialogs_;
 				allowed_sf_ = dock_dialog.allowed_sf_;
@@ -96,6 +117,7 @@ namespace BALL
 				docking_partner2_ = dock_dialog.docking_partner2_;
 				algorithm_opt_ = dock_dialog.algorithm_opt_;
 				scoring_opt_ = dock_dialog.scoring_opt_;
+				backup_ = dock_dialog.backup_;
 				radius_rule_processor_ = dock_dialog.radius_rule_processor_;
 				charge_rule_processor_ = dock_dialog.charge_rule_processor_;
 				radius_processor_ = dock_dialog.radius_processor_;
@@ -149,7 +171,7 @@ namespace BALL
 				has_changed_ = true;
 			 	is_redock_ = is_redock;
 			}
-		}	
+		}
 		
 		// Adds docking algorithm to Combobox and its advanced option dialogs to HashMap.
 		void DockDialog::addAlgorithm(const QString& name, const int algorithm, QDialog* dialog)
@@ -208,7 +230,6 @@ namespace BALL
 		void DockDialog::fetchPreferences(INIFile& file)
 			throw()
 		{
-			//Log.info() << "in DockDialog::fetchPreferences" << std::endl; 
 			PreferencesEntry::readPreferenceEntries(file);
 			
 			fetchPreferences_(file, "redock_entry_0", "<select>");
@@ -252,7 +273,6 @@ namespace BALL
 		void DockDialog::writePreferences(INIFile& file)
 			throw()
 		{
-			//Log.info() << "in DockDialog::writePreferences" << std::endl; 
 			if (is_redock_)
 			{
 				swapValues_();
@@ -298,6 +318,7 @@ namespace BALL
 				
 				if(is_redock_)
 				{
+					// euler angles
 				  phi_min->setText("-15");
 					phi_max->setText("15");
 					delta_phi->setText("3");
@@ -309,10 +330,10 @@ namespace BALL
 					theta_min->setText("-15");
 					theta_max->setText("15");
 					delta_theta->setText("3");
-					 
 				}
 				else
 				{
+					// system comboboxes
 					systems1->setCurrentItem(0);
 					systems2->setCurrentItem(0);
 				}
@@ -358,7 +379,6 @@ namespace BALL
 				algorithm_opt_[GeometricFit::Option::THETA_MIN] = String(theta_min->text().ascii()).toFloat();
 				algorithm_opt_[GeometricFit::Option::THETA_MAX] = String(theta_max->text().ascii()).toFloat();
 				algorithm_opt_[GeometricFit::Option::DEG_THETA] = String(delta_theta->text().ascii()).toFloat();
-				
 			}
 			
 			// options for chosen algorithm; options are filled by the corresponding dialog
@@ -397,7 +417,7 @@ namespace BALL
 				return false;
 			}
 			
-			//add hydrogens to systems and normalize names
+			// add hydrogens to systems and normalize names
 			if (add_hydrogens->isChecked())
 			{
 				if (!docking_partner1_->apply(*(const_cast<ReconstructFragmentProcessor*>(&MainControl::getInstance(0)->getFragmentDB().add_hydrogens)))) return false;
@@ -411,14 +431,14 @@ namespace BALL
 				if (!docking_partner2_->apply(*(const_cast<FragmentDB::NormalizeNamesProcessor*>(&MainControl::getInstance(0)->getFragmentDB().normalize_names)))) return false;
 			}
 			
-			//add bonds to systems
+			// add bonds to systems
 			if (build_bonds->isChecked())
 			{
 				if (!docking_partner1_->apply(*(const_cast<FragmentDB::BuildBondsProcessor*>(&MainControl::getInstance(0)->getFragmentDB().build_bonds)))) return false;
 				if (!docking_partner2_->apply(*(const_cast<FragmentDB::BuildBondsProcessor*>(&MainControl::getInstance(0)->getFragmentDB().build_bonds)))) return false;
 			}
 
-			//assign charges and radii
+			// assign charges and radii
 			try
 			{
 				if (assign_charges->isChecked())
@@ -436,7 +456,7 @@ namespace BALL
 						if (!docking_partner1_->apply(charge_rule_processor_)) return false;
 						if (!docking_partner2_->apply(charge_rule_processor_)) return false;
 					}
-				}	
+				}
 				if (assign_radii->isChecked())
 				{
 					if (radii_data_button->isChecked())
@@ -458,7 +478,7 @@ namespace BALL
 			{
 				Log.error() << "Invalid file " << e.getFilename() << std::endl;
 				return false;
-			}			
+			}
 			MainControl::getInstance(0)->getPrimitiveManager().setMultithreadingMode(false);
 			MainControl::getInstance(0)->update(*docking_partner1_, true);
 			MainControl::getInstance(0)->update(*docking_partner2_, true);
@@ -482,7 +502,7 @@ namespace BALL
 		System* DockDialog::partnerChosen_(const QString& qstr)
 			throw()
 		{
-			//iterate over all composites; find chosen system
+			// iterate over all composites; find chosen system
 			HashSet<Composite*>::iterator composite_it = MainControl::getInstance(0)->getCompositeManager().begin();
 				
 			for (; +composite_it; ++composite_it)
@@ -501,26 +521,26 @@ namespace BALL
 		void DockDialog::fillSystemComboxes_()
 			throw()
 		{
-			//selection lists for systems should be empty
+			// selection lists for systems should be empty
 			systems1->clear();
 			systems2->clear();
 			
-			//pointer to selected systems
+			// pointer to selected systems
 			docking_partner1_ = NULL;
 			docking_partner2_ = NULL;
 			
 			QStringList current_system_list;
-			//put <select> in list as the first element
+			// put <select> in list as the first element
 			current_system_list.append("<select>");
 			
-			//get the composites
+			// get the composites
 			MainControl* main_control = MainControl::getInstance(0);
 			CompositeManager& composite_manager = main_control->getCompositeManager();
 			
-			//iterate over all composites; add systems to list
+			// iterate over all composites; add systems to list
 			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();
 			
-			//fill current system list and check if user has already selected two systems
+			// fill current system list and check if user has already selected two systems
 			for (; +composite_it; ++composite_it)
 			{
 				System* system = dynamic_cast<System*>(*composite_it);
@@ -528,8 +548,8 @@ namespace BALL
 
 				current_system_list.append(system->getName());
 				
-				//test if the user has selected one or two systems
-				//more than 2 selected systems -> error
+				// test if the user has selected one or two systems
+				// more than 2 selected systems -> error
 				if (system->isSelected())
 				{
 					if (docking_partner1_ == NULL)
@@ -544,7 +564,7 @@ namespace BALL
 						}
 						else
 						{
-							//if more than 2 systems are selected => Error message!
+							// if more than 2 systems are selected => Error message!
 							#ifdef BALL_VIEW_DEBUG
 								Log.error() << "DockDialog: " << " More than two systems selected! " << std::endl;
 							#endif
@@ -556,7 +576,7 @@ namespace BALL
 					}
 				} 	
 			 }
-			//set selection lists of dialog
+			// set selection lists of dialog
 			systems1->insertStringList(current_system_list);
 			systems2->insertStringList(current_system_list);
 		
@@ -610,7 +630,7 @@ namespace BALL
 			{
 				setCaption("Redocking Options");
 				tab_pages->setTabEnabled(tab_pages->page(1), false);
-			//tab_pages->setTabLabel(tab_pages->page(0),"Redocking");
+				//tab_pages->setTabLabel(tab_pages->page(0),"Redocking");
 				systems_group->setHidden(true);
 				euler_group->setHidden(false);
 			}
@@ -635,7 +655,7 @@ namespace BALL
 			// always show the first tab page
 			tab_pages->setCurrentPage(0);
 			
-			//show dialog to user
+			// show dialog to user
 			DockDialogData::show();
 		}
 		
@@ -656,7 +676,7 @@ namespace BALL
 					return;
 				}
 			}
-			//if no algorithm is chosen => Error message!
+			// if no algorithm is chosen => Error message!
 			if (algorithms->currentText() == "<select>")
 			{
 				QMessageBox error_message(0,0);
@@ -783,7 +803,7 @@ namespace BALL
 				}
 			}
 			
-			//set default scoring function as current item if the current item isn't an allowed scoring function
+			// set default scoring function as current item if the current item isn't an allowed scoring function
 			if(!scoring_functions->listBox()->item(scoring_functions->currentItem())->isSelectable())
 			{
 				scoring_functions->setCurrentItem(0);

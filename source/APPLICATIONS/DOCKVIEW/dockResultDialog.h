@@ -23,9 +23,16 @@ namespace BALL
 
 			public:
 
+				/**	@name	Constructors and Destructors
+				 */
+				//@{
 			
 				/** Constructor
-				*/
+					*	@param      parent the parent widget of the DockResultDialog
+				 	*	@param      name the name of the DockResultDialog
+				 	*	@param			modal the modal flag
+				 	*	@param			fl the widget flags
+					*/
 				DockResultDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
 					throw();
 
@@ -39,23 +46,30 @@ namespace BALL
 				~DockResultDialog()
 					throw();
 
+				//@}
+					
 				/** Assignment operator
 				*/
 				const DockResultDialog& operator =(const DockResultDialog& res_dialog)
 					throw();
 
-				/**
-				*/
+				/** Sets the dock result
+					* @param			dock_res dock result
+					*/
 				void setDockResult(DockResult* dock_res)
 					throw();
 
-				/**
-				*/
+				/** Sets the docked system
+					* @param			system docked system
+					*/
 				void setDockedSystem(System* system)
 					throw();
 
-				/** Adds scoring function to Combobox and its advanced option dialogs to HashMap, if it has such an dialog.
-				*/
+				/** Adds scoring function to Combobox and its advanced option dialog to HashMap, if it has such a dialog.
+					* @param			name the name of the scoring function
+					* @param			score_func scoring function (enum)
+					* @param			dialog advanced option dialog
+					*/
 				void addScoringFunction(const QString& name, const int score_func, QDialog* dialog=0)
 					throw();
 
@@ -87,8 +101,8 @@ namespace BALL
 				virtual void advancedClicked();
 
 				/** calculate new scores with the chosen scoring function and add a new score column, 
-				*  the table is sorted by this new column
-				*/
+					* the table is sorted by this new column
+					*/
 				virtual void scoringClicked();
 
 				/** sorts the result table by a clicked column
@@ -99,19 +113,36 @@ namespace BALL
 				*/
 				virtual void showDockingOptions();
 
+				/** Shows a context menu with entries "Delete Score Column", "Scoring Options" and "Redock"
+					* @param			row number of the row which the user clicked
+					* @param			column number of the row which the user clicked
+					* @param			pos
+					*/
 				virtual void contextMenuRequested(int row, int column, const QPoint& pos);
 
+				/**
+				*/
 				virtual void closeClicked();
 
+				
 			protected slots:
-				/** delete a score column
-				*/
+			
+				/** Deletes a score column.
+					* @param			column number of the column which should be deleted
+					*/
 				virtual void deleteColumn_(int column);
 
+				/** Shows options of the scoring function in a small dialog.
+					* @param			column number of the column for which the scoring function options should be shown
+					*/
 				virtual void showScoringOptions_(int column);
 
+				/** 
+					* 
+					*/
 				virtual void redock_(int row);
 
+				
 			protected:
 
 				/**
@@ -140,6 +171,8 @@ namespace BALL
 						bool operator() (const vector<float>& a, const vector<float>& b) const
 							throw();
 
+						/**
+						*/
 						int index_;
 				};
 
@@ -150,13 +183,15 @@ namespace BALL
 				DockResult* dock_res_;
 
 				/** system which contains the two docked partners
-				*/
+					*/
 				System* docked_system_;
 				
+				/**
+					*/
 				System* redock_partner1_, * redock_partner2_;
 
 				/** key: ScoringFunction(enum), value: advanced options dialog
-				*/
+					*/
 				HashMap<int, QDialog*> scoring_dialogs_;
 		};
 		

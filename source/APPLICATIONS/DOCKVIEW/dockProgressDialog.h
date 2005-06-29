@@ -36,8 +36,16 @@ namespace BALL
 				
 			public:
 			
+				/**	@name	Constructors and Destructors
+				 */
+				//@{
+			
 				/** Constructor
-				*/
+					* @param      parent the parent widget of the DockProgressDialog
+					*	@param      name the name of the DockProgressDialog
+				 	*	@param			modal the modal flag
+				 	*	@param			fl the widget flags
+					*/
 				DockProgressDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
 					throw();
 					
@@ -47,35 +55,46 @@ namespace BALL
 					throw();
 					
 				/** Destructor
-				*/
+					*/
 				~DockProgressDialog()
 					throw();
 		
-				/**  Assignment operator
-				 */
+				//@}
+					
+				/** Assignment operator
+				 	*/
 				const DockProgressDialog& operator =(const DockProgressDialog& dock_prog_dialog)
 					throw();
 					
-			/**
-				*/
+				/** Set docking algorithm.
+					* @param      alg docking algorithm
+					*/
 				void setDockingAlgorithm(DockingAlgorithm* alg)
-					throw();	
+					throw();
 				
-				/**
-				*/
+				/** Get docking algorithm
+					*/
 				const DockingAlgorithm* getDockingAlgorithm() const
-					throw();			
+					throw();
 
-				/**
-				*/
+				/** Fill ProgressDialog with information about the chosen
+					* docking partners, algorithm, scoring function and options
+					* @param      p1 first docking partner 
+					* @param      p2 second docking partner
+					* @param      alg docking algorithm
+					* @param      sf scoring function
+					* @param      alg_opt algorithm options
+					* @param      sf_opt scoring function options
+					*/
 				void fillDialog(const QString& p1, const QString& p2, const QString& alg, const QString& sf, const Options& alg_opt, const Options& sf_opt)
 					throw();
 					
 				
 			public slots:
 			
-				/**
-				*/
+				/** Start timer and remember start time.
+					* Then show dialog to user.
+					*/
 				virtual void show();
 			
 				/**
@@ -89,8 +108,9 @@ namespace BALL
 				
 			protected slots:
 			
-				/**
-				*/
+				/** Get progress of docking algorithm.
+					* Set progress bar to current progress and calculate remaining time
+					*/
 				virtual void updateProgress_();
 			
 			

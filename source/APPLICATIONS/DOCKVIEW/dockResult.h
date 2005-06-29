@@ -53,8 +53,6 @@ namespace BALL
 				const DockResult& operator =(const DockResult& dock_res)
 					throw();
 					
-				/**
-				*/
 				void setConformationSet(ConformationSet* conformation_set)
 					throw();
 					
@@ -70,17 +68,17 @@ namespace BALL
 				ConformationSet* getConformationSet()
 					throw();
 				
-				/** returns scores of scoring_ i
+				/** returns the scores of scoring_ i
 				*/
 				const vector<float>& getScores(int i) const
 					throw();
 					
-				/** returns name of scoring function of scoring_ i
+				/** returns the name of scoring function of scoring_ i
 				*/
 				const String& getScoringName(int i) const
 					throw();
 					
-				/** returns options of scoring function of scoring_ i
+				/** returns the scoring function options of scoring_ i
 				*/
 				const Options& getScoringOptions(int i) const
 					throw();
@@ -95,11 +93,13 @@ namespace BALL
 				void addScoring(const String& name, const Options& options, const vector<float>& scores)
 					throw();
 				
-				/* store dock result in a file
+				/** store dock result in a file
 				*/
 				bool writeDockResult(const String& filename)
 					throw();
-					
+				
+				/** read dock result from a file
+				*/
 				bool readDockResult(const String& filename)
 					throw();
 					
@@ -124,6 +124,11 @@ namespace BALL
 						/** Default Constructor
 						*/
 						Scoring_() throw();
+						
+						/** Copy constructor.
+						*/
+						Scoring_(const Scoring_& scoring)
+							throw();
 						
 						/** Constructor
 						*/

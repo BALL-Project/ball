@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.14 2005/06/17 12:01:04 haid Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.15 2005/06/29 14:36:57 haid Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -37,8 +37,7 @@ namespace BALL
 				alg_(dock_prog_dialog.alg_),
 				//timer_(dock_prog_dialog.timer_),
 				start_time_(dock_prog_dialog.start_time_)
-		{
-		}
+		{}
 		
 		// Destructor	
 		DockProgressDialog::~DockProgressDialog()
@@ -120,15 +119,17 @@ namespace BALL
 		//
 		void DockProgressDialog::show()
 		{
+			// start timer
 			timer_.start(1000, true);
 			
+			// remember start time
 			start_time_ = QDateTime::currentDateTime();
 			
-			//show dialog to user
+			// show dialog to user
 			DockProgressDialogData::show();
 		}
 		
-		//
+		// TODO: pause algorithm!!!
 		void DockProgressDialog::pauseClicked()
 		{
 			if (alg_->wasPaused())
