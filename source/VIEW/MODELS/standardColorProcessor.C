@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.52.2.4 2005/06/15 14:21:28 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.52.2.5 2005/06/29 13:09:16 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -22,6 +22,29 @@ namespace BALL
 	{
 
 #define BALL_VIEW_NUMBER_ELEMENTS 111
+
+		Processor::Result CustomColorProcessor::operator() (GeometricObject*& object)
+		{
+			object->setColor(default_color_);
+
+			Mesh* const mesh = dynamic_cast<Mesh*>(object);
+			if (mesh != 0)
+			{
+				mesh->colorList.clear();
+				mesh->colorList.push_back(default_color_);
+				return Processor::CONTINUE;
+			}
+
+			ColorExtension2* const two_colored = dynamic_cast<ColorExtension2*>(object);
+
+			if (two_colored != 0)
+			{
+				two_colored->setColor2(default_color_);
+			}
+
+			return Processor::CONTINUE;
+		}
+	
 
 		ElementColorProcessor::ElementColorProcessor()
 			throw()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.29.2.2 2005/06/14 13:29:03 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.29.2.3 2005/06/29 13:09:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -472,6 +472,11 @@ namespace BALL
 				CustomColorProcessor()
 					: ColorProcessor()
 				{}
+
+
+				/** Calculate a color for a GeometricObject.
+				*/
+				virtual Processor::Result operator() (GeometricObject*& object);
 		};
 
 
