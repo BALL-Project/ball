@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.22.4.5 2005/06/21 21:48:54 amoll Exp $
+// $Id: backboneModel.C,v 1.22.4.6 2005/06/29 17:25:35 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -194,7 +194,10 @@ namespace BALL
 		// create the Representation up to spline point number pos
 		void AddBackboneModel::createPart_(Position pos)
 		{
-			if (pos == 0) return;
+			if (pos == 0) 
+			{
+				return;
+			}
 
 			points_.clear();
 			atoms_of_points_.clear();
@@ -533,6 +536,18 @@ namespace BALL
 				const Residue* residue = dynamic_cast<const Residue*>((*sit).atom->getParent());
 				if (residue == 0 || checkBuildNow_(*residue))
 				{
+					if (pos < 2)
+					{
+						// fix problems for very short tubes
+						if (splines_.size() == 0) break;
+
+						sit++;
+						splines_.erase(splines_.begin(), sit);
+						sit = splines_.begin();
+						pos = 0;
+						continue;
+					}
+
 					createPart_(pos - 1);
 					sit = splines_.begin();
 					pos = 0;

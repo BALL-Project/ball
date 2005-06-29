@@ -4,6 +4,7 @@ fixed:
  - Memory issues with Python objects (e.g. inserting GeometricObjects into Representations)
  - Saving and Loading of BALLView Project files
  - accelerated CustomColorProcessor
+ - problem for very short tubes in Cartoon and Backbone model
 
 
 1.1: 21.06.2005
