@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.33 2005/07/01 15:48:56 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.34 2005/07/01 16:13:32 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -54,17 +54,17 @@ namespace BALL
 			
 			hide();
 		}
-		
+		/*
 		// Copy constructor.
 		DockResultDialog::DockResultDialog(const DockResultDialog& dock_res_dialog)
 			throw()
-			: DockResultDialogData(), /// ???
+			: DockResultDialogData(dock_res_dialog),
 				dock_res_(dock_res_dialog.dock_res_),
 				docked_system_(dock_res_dialog.docked_system_),
 				redock_partner1_(dock_res_dialog.redock_partner1_),
 				redock_partner2_(dock_res_dialog.redock_partner2_),
 				scoring_dialogs_(dock_res_dialog.scoring_dialogs_)
-		{}
+		{}*/
 		
 		// Destructor
 		DockResultDialog::~DockResultDialog()

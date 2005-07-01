@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.45 2005/07/01 15:48:54 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.46 2005/07/01 16:13:31 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -77,9 +77,8 @@ namespace BALL
 		// Copy constructor.
 		DockDialog::DockDialog(const DockDialog& dock_dialog)
 			throw()
-			: DockDialogData(), /// ???
-				//DockDialogData(dock_dialog), /// ???
-				PreferencesEntry(),
+			: //DockDialogData(dock_dialog),
+				PreferencesEntry(dock_dialog),
 				is_redock_(dock_dialog.is_redock_),
 				has_changed_(dock_dialog.has_changed_),
 				algorithm_dialogs_(dock_dialog.algorithm_dialogs_),
