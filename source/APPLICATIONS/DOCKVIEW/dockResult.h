@@ -27,6 +27,10 @@ namespace BALL
 				friend std::ostream& operator <<(ostream& out, const DockResult& dock_res)
 					throw();
 				
+				/**	@name	Constructors and Destructors
+				 */	
+				//@{
+					
 				/** Default Constructor
 				*/
 				DockResult()
@@ -47,6 +51,8 @@ namespace BALL
 				*/
 				virtual ~DockResult()
 					throw();
+					
+				//@}
 					
 				/** Assignment operator
 				*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.44 2005/07/01 15:42:33 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.45 2005/07/01 15:48:54 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -22,6 +22,9 @@
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 
 namespace BALL
 {

@@ -3,6 +3,8 @@
 #include <qlineedit.h>
 #include <qcombobox.h>
 
+#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
+
 namespace BALL
 {
 	namespace VIEW

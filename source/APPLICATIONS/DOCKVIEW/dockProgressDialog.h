@@ -5,10 +5,6 @@
 #ifndef BALL_VIEW_DIALOGS_DOCKPROGRESSDIALOG_H
 #define BALL_VIEW_DIALOGS_DOCKPROGRESSDIALOG_H
 
-#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
-# include <BALL/VIEW/KERNEL/modularWidget.h>
-#endif
-
 #ifndef BALL_DATATYPE_OPTIONS_H
 # include <BALL/DATATYPE/options.h>
 #endif
@@ -56,7 +52,7 @@ namespace BALL
 					
 				/** Destructor
 					*/
-				~DockProgressDialog()
+				virtual ~DockProgressDialog()
 					throw();
 		
 				//@}
@@ -95,23 +91,23 @@ namespace BALL
 				/** Start timer and remember start time.
 					* Then show dialog to user.
 					*/
-				virtual void show();
+				void show();
 			
 				/**
 				*/
-				virtual void pauseClicked();
+				void pauseClicked();
 			
 				/**
 				*/
-				virtual void abortClicked();
-			
+				void abortClicked();
+				
 				
 			protected slots:
 			
 				/** Get progress of docking algorithm.
 					* Set progress bar to current progress and calculate remaining time
 					*/
-				virtual void updateProgress_();
+				void updateProgress_();
 			
 			
 			protected:

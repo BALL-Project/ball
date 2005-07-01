@@ -1,9 +1,7 @@
-// $Id: dockProgressDialog.C,v 1.1.2.15 2005/06/29 14:36:57 haid Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.16 2005/07/01 15:48:54 haid Exp $
 //
 
 #include "dockProgressDialog.h"
-
-# include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 
 #include <qprogressbar.h>
 #include <qtextedit.h>
@@ -89,8 +87,6 @@ namespace BALL
 			general_params->append(s.append(sf));
 			
 			options->append("*** Options of algorithm ***");
-			s = "number of best docked structures: ";
-			options->append(s.append(alg_opt.get(GeometricFit::Option::BEST_NUM)));
 			Options::ConstIterator it = alg_opt.begin();
 			for (; +it; ++it)
 			{

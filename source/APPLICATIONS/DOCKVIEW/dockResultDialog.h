@@ -5,10 +5,6 @@
 #ifndef BALL_VIEW_DIALOGS_DOCKRESULTDIALOG_H
 #define BALL_VIEW_DIALOGS_DOCKRESULTDIALOG_H
 
-#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
-# include <BALL/VIEW/KERNEL/modularWidget.h>
-#endif
-
 #include "dockResult.h"
 #include "dockResultDialogData.h"
 
@@ -16,6 +12,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		/** Dialog for showing the docking results.
+			* \ingroup ViewDialogs
+			*/
 		class BALL_EXPORT DockResultDialog : 
 				public DockResultDialogData
 		{ 
@@ -43,7 +42,7 @@ namespace BALL
 					
 				/** Destructor
 				*/
-				~DockResultDialog()
+				virtual ~DockResultDialog()
 					throw();
 
 				//@}
@@ -81,29 +80,7 @@ namespace BALL
 
 				/** show snapshot of selected row
 				*/
-				virtual void showSnapshot();
-
-				/** select and show the entry above the current selected entry
-				*/
-				virtual void upwardClicked();
-
-				/** selects and show the entry below the current selected entry
-				*/
-				virtual void downwardClicked();
-
-				/** set the advanced button enabled if the selected scoring function has options
-				*  otherwise the button is disabled
-				*/
-				virtual void scoringFuncChosen();
-
-				/** show options dialog of selected scoring function
-				*/
-				virtual void advancedClicked();
-
-				/** calculate new scores with the chosen scoring function and add a new score column, 
-					* the table is sorted by this new column
-					*/
-				virtual void scoringClicked();
+				void showSnapshot();
 
 				/** sorts the result table by a clicked column
 				*/
@@ -111,36 +88,58 @@ namespace BALL
 
 				/**
 				*/
-				virtual void showDockingOptions();
+				void showDockingOptions();
 
+				/** select and show the entry above the current selected entry
+				*/
+				void upwardClicked();
+
+				/** selects and show the entry below the current selected entry
+				*/
+				void downwardClicked();
+
+				/** set the advanced button enabled if the selected scoring function has options
+				*  otherwise the button is disabled
+				*/
+				void scoringFuncChosen();
+
+				/** show options dialog of selected scoring function
+				*/
+				void advancedClicked();
+
+				/** calculate new scores with the chosen scoring function and add a new score column, 
+					* the table is sorted by this new column
+					*/
+				void scoringClicked();
+				
 				/** Shows a context menu with entries "Delete Score Column", "Scoring Options" and "Redock"
 					* @param			row number of the row which the user clicked
 					* @param			column number of the row which the user clicked
 					* @param			pos
 					*/
-				virtual void contextMenuRequested(int row, int column, const QPoint& pos);
+				void contextMenuRequested(int row, int column, const QPoint& pos);
 
 				/**
 				*/
-				virtual void closeClicked();
-
+				void closeClicked();
+				
 				
 			protected slots:
 			
 				/** Deletes a score column.
 					* @param			column number of the column which should be deleted
 					*/
-				virtual void deleteColumn_(int column);
+				void deleteColumn_(int column);
 
 				/** Shows options of the scoring function in a small dialog.
 					* @param			column number of the column for which the scoring function options should be shown
 					*/
-				virtual void showScoringOptions_(int column);
+				void showScoringOptions_(int column);
 
 				/** 
 					* 
 					*/
-				virtual void redock_(int row);
+				void redock_(int row);
 
 				
 			protected:

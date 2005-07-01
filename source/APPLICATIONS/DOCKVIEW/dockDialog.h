@@ -5,24 +5,12 @@
 #ifndef BALL_VIEW_DIALOGS_DOCKDIALOG_H
 #define BALL_VIEW_DIALOGS_DOCKDIALOG_H
 
-#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
-# include <BALL/VIEW/KERNEL/modularWidget.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY_H
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
-# include <BALL/VIEW/KERNEL/mainControl.h>
-#endif
-
 #ifndef BALL_FORMAT_INIFILE_H
 #include <BALL/FORMAT/INIFile.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_MESSAGE_H
-# include <BALL/VIEW/KERNEL/message.h>
 #endif
 
 #ifndef BALL_KERNEL_SYSTEM_H
@@ -45,10 +33,6 @@
 # include <BALL/DATATYPE/options.h>
 #endif
 
-#ifndef BALL_STRUCTURE_DOCKING_CONFORMATIONSET_H
-# include <BALL/STRUCTURE/DOCKING/conformationSet.h>
-#endif
-
 #include "dockDialogData.h"
 #include "dockResult.h"
 #include "dockProgressDialog.h"
@@ -59,7 +43,7 @@ namespace BALL
 	{
 		class DockingController;
 	
-		/**	Dialog for docking two systems.
+		/**	Dialog for docking/redocking two systems.
     		\ingroup  ViewDialogs
 		 */
 		class BALL_EXPORT DockDialog : 
@@ -199,72 +183,72 @@ namespace BALL
 				 */
 				void show();
 				
+				/** Indicates the reset button was pressed.
+				 * Calls \link DockDialog::reset reset \endlink.
+				 */
+				void resetPressed();
+			
 				/** Indicates the OK button was pressed.
 				 * 	If we are not doing redocking, it checks if two different systems are chosen.
 				 *  Hides the dialog and calls \link DockDialog::applyValues_ applyValues_ \endlink and \link DockDialog::applyProcessors_ applyProcessors_ \endlink.
 				 */
-				virtual void okPressed();
+				void okPressed();
 				
 				/** Indicates the cancel button was pressed.
 				 *	Hides the dialog.
 				 */
-				virtual void cancelPressed();
-				
-				/** Indicates the reset button was pressed.
-				 * Calls \link DockDialog::reset reset \endlink.
-				 */
-				virtual void resetPressed();
+				void cancelPressed();
 				
 				/** Indicates the advanced button for algorithm option button was pressed.
 			 	 *	Show corresponding options dialog.
 				 */
-				virtual void algAdvancedPressed();
+				void algAdvancedPressed();
 				
 				/** Indicates the advanced button for algorithm option button was pressed.
 			 	 *	Show corresponding options dialog, if it exits.
 			 	 */
-				virtual void scoringAdvancedPressed();
+				void scoringAdvancedPressed();
 				
 				/** Indicates a system in the combobox was chosen as docking partner 1.
 				 *  Calls \link DockDialog::partnerChosen_ partnerChosen_ \endlink.
 				 */
-				virtual void partner1Chosen();
+				void partner1Chosen();
 				
 				/** Indicates a system in the combobox was chosen as docking partner 2.
 				 *  Calls \link DockDialog::partnerChosen_ partnerChosen_ \endlink.
 				 */
-				virtual void partner2Chosen();
+				void partner2Chosen();
 				
 				/** Indicates a scoring function in the combobox was chosen.
 				 *	If the chosen scoring function has advanced options, the advanced_button will be enabled.
 				 */
-				virtual void scoringFuncChosen();
+				void scoringFuncChosen();
 				
 				/** Indicates an algorithm in the combobox was chosen.
 				 *	If the chosen algorithm has advanced options, the advanced_button will be enabled.
 				 */
-				virtual void algorithmChosen();
+				void algorithmChosen();
 				
 				/** Indicates the browse button to get a charges config file from table was pressed.
 				 */
-				virtual void browseChargesData();
+				void browseChargesData();
 				
 				/** Indicates the browse button to get a charges config file by rules was pressed.
 				 *  Calls \link DockDialog::selectFile_ selectFile_ \endlink.
 				 */
-				virtual void browseChargesRules();
+				void browseChargesRules();
 				
 				/** Indicates the browse button to get a radii config file from table was pressed.
 				 *  Calls \link DockDialog::selectFile_ selectFile_ \endlink.
 				 */
-				virtual void browseRadiiData();
+				void browseRadiiData();
 				
 				/** Indicates the browse button to get a radii config file by rules was pressed.
 				 *  Calls \link DockDialog::selectFile_ selectFile_ \endlink.
 				 */
-				virtual void browseRadiiRules();
+				void browseRadiiRules();
 				
-			
+				
 			protected:
 			
 				/** Sets options with values the user has chosen.  

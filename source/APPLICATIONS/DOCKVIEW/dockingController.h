@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.8 2005/06/20 12:27:18 leonhardt Exp $
+// $Id: dockingController.h,v 1.1.2.9 2005/07/01 15:48:57 haid Exp $
 //
 
 #ifndef DOCKINGCONTROLLER_H
@@ -23,16 +23,8 @@
 # include <BALL/VIEW/KERNEL/message.h>
 #endif
 
-#ifndef BALL_KERNEL_SYSTEM_H
-#include <BALL/KERNEL/system.h>
-#endif
-
 #ifndef BALL_STRUCTURE_DOCKING_DOCKINGALGORITHM_H
 #include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
-#endif
-
-#ifndef BALL_DATATYPE_OPTIONS_H
-# include <BALL/DATATYPE/options.h>
 #endif
 
 #ifndef BALL_STRUCTURE_DOCKING_CONFORMATIONSET_H
@@ -48,7 +40,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-	
+		/**	Class for docking two systems.
+    		\ingroup  ViewWidgets
+		 */
 		class BALL_EXPORT DockingController
 			: public QWidget, 
 				public ModularWidget
@@ -70,8 +64,8 @@ namespace BALL
 				 */
 				enum ScoringFunction {DEFAULT = 0, AMBER_FF = 1, RANDOM = 2};
 			
-				/**	@name	Constructors
-				*/	
+				/**	@name	Constructors and Destructors
+				 */
 				//@{
 
 				/** Default Constructor.
@@ -85,11 +79,6 @@ namespace BALL
 					*/
 				DockingController(const DockingController& dock_controller)
 					throw();
-					
-				//@}
-				/** @name Destructors 
-				*/
-				//@{
 
 				/** Destructor.
 				*/
@@ -159,25 +148,25 @@ namespace BALL
 				DockDialog& getDockDialog()	
 					throw();
 			
-			/** Check which algorithm is chosen and create new DockingAlgorithm object.
-			 *  Start new Thread and fill/show ProgressDialog.
-			 */
-			 void runDocking(bool isRedock)
-					throw();	
+				/** Check which algorithm is chosen and create new DockingAlgorithm object.
+				 *  Start new Thread and fill/show ProgressDialog.
+				 */
+				void runDocking(bool isRedock)
+					throw();
 						
 			public slots:
 				
-			/** Function is only called when we start docking (by clicking on menu entry "Docking").
-			 *  Calls runDocking(false).
-			 */
-			 void startDocking();
+				/** Function is only called when we start docking (by clicking on menu entry "Docking").
+				 *  Calls runDocking(false).
+				 */
+				void startDocking();
 				
 			protected:
 			
-			/** Apply scoring function which user has chosen.
-			 *  Then, create new DockResult and add new scoring to it.
-			 *  At the end, add the docked system to BALLView structures
-			 *  and send a NewDockResultMessage to insert the DockResult in DatasetControl.
+				/** Apply scoring function which user has chosen.
+				 *  Then, create new DockResult and add new scoring to it.
+				 *  At the end, add the docked system to BALLView structures
+				 *  and send a NewDockResultMessage to insert the DockResult in DatasetControl.
 			 */
 			 void runScoring_(ConformationSet* conformation_set)
 					throw();

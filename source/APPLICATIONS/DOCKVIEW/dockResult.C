@@ -1,12 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.1.2.12 2005/06/29 14:36:57 haid Exp $
+// $Id: dockResult.C,v 1.1.2.13 2005/07/01 15:48:55 haid Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/FORMAT/PDBFile.h>
-//#include <BALL/VIEW/KERNEL/mainControl.h>
 
 #include "dockResult.h"
 

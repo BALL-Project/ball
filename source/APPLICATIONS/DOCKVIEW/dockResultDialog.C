@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.32 2005/07/01 15:42:34 leonhardt Exp $
+// $Id: dockResultDialog.C,v 1.1.2.33 2005/07/01 15:48:56 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -16,7 +16,6 @@
 #include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
-#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 
 #define BALL_VIEW_DEBUG
@@ -278,6 +277,9 @@ namespace BALL
 			ConformationSet* conformation_set = dock_res_->getConformationSet();
 			vector<ConformationSet::Conformation> ranked_conformations = (*scoring)(*conformation_set);
 			conformation_set->setScoring(ranked_conformations);
+			
+			// sort vector ranked_conformations by snapshot numbers
+			sort(ranked_conformations.begin(), ranked_conformations.end());
 			
 			// add a new scoring to dock_res_; we need the name, options and score vector of the scoring function
 			vector<float> scores;

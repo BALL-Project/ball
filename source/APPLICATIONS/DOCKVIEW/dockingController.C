@@ -1,19 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.14 2005/07/01 15:42:34 leonhardt Exp $
+// $Id: dockingController.C,v 1.1.2.15 2005/07/01 15:48:56 haid Exp $
 //
 
 #include "dockingController.h"
 #include "geometricFitDialog.h"
 #include "dockResultDialog.h"
+
 #include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 #include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
-
+#include <BALL/KERNEL/system.h>
+# include <BALL/DATATYPE/options.h>
 
 #ifdef BALL_QT_HAS_THREADS
 #	include <BALL/VIEW/KERNEL/threads.h>
@@ -324,8 +326,10 @@ namespace BALL
 			DockResult* dock_res = new DockResult(String(dock_dialog_.algorithms->currentText().ascii()),
 																						conformation_set,
 																						dock_dialog_.getAlgorithmOptions()); 
-																						
-			///////////////////////////////////////// TODO check if conformations are sorted by snapshot number!	
+			
+			// sort vector ranked_conformations by snapshot numbers
+			sort(ranked_conformations.begin(), ranked_conformations.end());
+			
 			vector<float> scores;
 			for (unsigned int i = 0; i < ranked_conformations.size(); i++)
 			{

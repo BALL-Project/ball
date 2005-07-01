@@ -13,10 +13,6 @@
 #include <BALL/DATATYPE/options.h>
 #endif
 
-#ifndef BALL_STRUCTURE_DOCKING_GEOMETRICFIT_H
-# include <BALL/STRUCTURE/DOCKING/geometricFit.h>
-#endif
-
 #include "geometricFitDialogData.h"
 
 namespace BALL
@@ -104,18 +100,18 @@ namespace BALL
 				/** Shows dialog to user
 					*/
 				void show();
-			
-				/** Indicates that the reset button was pressed.
+			 
+			 /** Indicates that the reset button was pressed.
 				 *  Calls QDialog::reset.
 				 */
-				virtual void resetPressed();
+				void resetPressed();
 				
 				/** Indicates that the cancel button was pressed.
 				 *	Hides dialog.
 				 */
-				virtual void cancelPressed();
-		
-			
+				void cancelPressed();
+				
+				
 			protected:
 			
 				/** function to read the redocking options from INIFile into vector backup_
