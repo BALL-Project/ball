@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.43 2005/06/29 14:36:56 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.44 2005/07/01 15:42:33 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -367,6 +367,16 @@ namespace BALL
 			//options_[DockingAlgorithm::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
 			algorithm_opt_[GeometricFit::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
 			algorithm_opt_[GeometricFit::Option::VERBOSITY] = String(verbosity->text().ascii()).toInt();
+				
+			// options for chosen algorithm; options are filled by the corresponding dialog
+			int index = algorithms->currentItem();
+			switch(index)
+			{
+				case DockingController::GEOMETRIC_FIT:
+					GeometricFitDialog* dialog = RTTI::castTo<GeometricFitDialog>(*(algorithm_dialogs_[index]));
+					dialog->getOptions(algorithm_opt_);
+					break;
+			}
 			
 			if(is_redock_)
 			{
@@ -380,15 +390,17 @@ namespace BALL
 				algorithm_opt_[GeometricFit::Option::THETA_MAX] = String(theta_max->text().ascii()).toFloat();
 				algorithm_opt_[GeometricFit::Option::DEG_THETA] = String(delta_theta->text().ascii()).toFloat();
 			}
-			
-			// options for chosen algorithm; options are filled by the corresponding dialog
-			int index = algorithms->currentItem();
-			switch(index)
+		  else
 			{
-				case DockingController::GEOMETRIC_FIT:
-					GeometricFitDialog* dialog = RTTI::castTo<GeometricFitDialog>(*(algorithm_dialogs_[index]));
-					dialog->getOptions(algorithm_opt_);
-					break;
+				algorithm_opt_[GeometricFit::Option::PHI_MIN] = GeometricFit::Default::PHI_MIN;
+				algorithm_opt_[GeometricFit::Option::PHI_MAX] = GeometricFit::Default::PHI_MAX;
+				algorithm_opt_[GeometricFit::Option::DEG_PHI] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
+				algorithm_opt_[GeometricFit::Option::PSI_MIN] = GeometricFit::Default::PSI_MIN;
+				algorithm_opt_[GeometricFit::Option::PSI_MAX] = GeometricFit::Default::PSI_MAX;
+				algorithm_opt_[GeometricFit::Option::DEG_PSI] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
+				algorithm_opt_[GeometricFit::Option::THETA_MIN] = GeometricFit::Default::THETA_MIN;
+				algorithm_opt_[GeometricFit::Option::THETA_MAX] = GeometricFit::Default::THETA_MAX;
+				algorithm_opt_[GeometricFit::Option::DEG_THETA] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
 			}
 			
 			// options for chosen scoring function

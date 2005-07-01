@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.31 2005/06/29 14:36:58 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.32 2005/07/01 15:42:34 leonhardt Exp $
 //
 
 #include "dockResultDialog.h"
@@ -247,7 +247,7 @@ namespace BALL
 		{
 			// create scoring function object
 			EnergeticEvaluation* scoring = 0;
-			Options scoring_options;  ////////////////////TODO mit new anlegen? ///////////////////////////////
+			Options scoring_options;
 			
 			// check which scoring function is chosen
 			int index = scoring_functions->currentItem();

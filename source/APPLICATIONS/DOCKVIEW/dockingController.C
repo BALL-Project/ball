@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.13 2005/06/29 14:36:59 haid Exp $
+// $Id: dockingController.C,v 1.1.2.14 2005/07/01 15:42:34 leonhardt Exp $
 //
 
 #include "dockingController.h"
@@ -324,7 +324,8 @@ namespace BALL
 			DockResult* dock_res = new DockResult(String(dock_dialog_.algorithms->currentText().ascii()),
 																						conformation_set,
 																						dock_dialog_.getAlgorithmOptions()); 
-			
+																						
+			///////////////////////////////////////// TODO check if conformations are sorted by snapshot number!	
 			vector<float> scores;
 			for (unsigned int i = 0; i < ranked_conformations.size(); i++)
 			{
