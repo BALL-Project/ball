@@ -66,15 +66,15 @@ namespace BALL
 	const int 		GeometricFit::Default::TOP_N  = 3;
 	const int 		GeometricFit::Default::BEST_NUM  = 2000;
 	const int     GeometricFit::Default::VERBOSITY = 0;
-	const float 	GeometricFit::Default::PHI_MIN = -15.0;
-	const float 	GeometricFit::Default::PHI_MAX = 15.0;
-	const float 	GeometricFit::Default::DEG_PHI = 3.0;
-	const float 	GeometricFit::Default::THETA_MIN = -15.0;
-	const float 	GeometricFit::Default::THETA_MAX = 15.0;
-	const float 	GeometricFit::Default::DEG_THETA = 3.0;
-	const float 	GeometricFit::Default::PSI_MIN = -15.0;
-	const float 	GeometricFit::Default::PSI_MAX = 15.0;
-	const float 	GeometricFit::Default::DEG_PSI = 3.0;
+	const float 	GeometricFit::Default::PHI_MIN = 0.0;
+	const float 	GeometricFit::Default::PHI_MAX = 360.0;
+	const float 	GeometricFit::Default::DEG_PHI = 20.0;
+	const float 	GeometricFit::Default::THETA_MIN = 0.0;
+	const float 	GeometricFit::Default::THETA_MAX = 360.0;
+	const float 	GeometricFit::Default::DEG_THETA = 20.0;
+	const float 	GeometricFit::Default::PSI_MIN = 0.0;
+	const float 	GeometricFit::Default::PSI_MAX = 180.0;
+	const float 	GeometricFit::Default::DEG_PSI = 20.0;
 	
 	
 	
@@ -92,7 +92,17 @@ namespace BALL
 		options.setDefaultInteger(Option::TOP_N, Default::TOP_N);
 		options.setDefaultInteger(Option::BEST_NUM, Default::BEST_NUM);
 		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
-	
+		options.setDefaultReal(Option::PHI_MIN, Default::PHI_MIN);
+		options.setDefaultReal(Option::PHI_MAX, Default::PHI_MAX);
+		options.setDefaultReal(Option::DEG_PHI, Default::DEG_PHI);
+		options.setDefaultReal(Option::THETA_MIN, Default::THETA_MIN);
+		options.setDefaultReal(Option::THETA_MAX, Default::THETA_MAX);
+		options.setDefaultReal(Option::DEG_THETA, Default::DEG_THETA);
+		options.setDefaultReal(Option::PSI_MIN, Default::PSI_MIN);
+		options.setDefaultReal(Option::PSI_MAX, Default::PSI_MAX);
+		options.setDefaultReal(Option::DEG_PSI, Default::DEG_PSI);
+		
+		
     radius_a_ = 0.0;
     radius_b_ = 0.0;
     current_round_ = 0;
@@ -118,7 +128,16 @@ namespace BALL
 		options.setDefaultInteger(Option::TOP_N, Default::TOP_N);
 		options.setDefaultInteger(Option::BEST_NUM, Default::BEST_NUM);
 		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
-
+    options.setDefaultReal(Option::PHI_MIN, Default::PHI_MIN);
+		options.setDefaultReal(Option::PHI_MAX, Default::PHI_MAX);
+		options.setDefaultReal(Option::DEG_PHI, Default::DEG_PHI);
+		options.setDefaultReal(Option::THETA_MIN, Default::THETA_MIN);
+		options.setDefaultReal(Option::THETA_MAX, Default::THETA_MAX);
+		options.setDefaultReal(Option::DEG_THETA, Default::DEG_THETA);
+		options.setDefaultReal(Option::PSI_MIN, Default::PSI_MIN);
+		options.setDefaultReal(Option::PSI_MAX, Default::PSI_MAX);
+		options.setDefaultReal(Option::DEG_PSI, Default::DEG_PSI);
+		
 		setup(system1, system2);
 	}
 
@@ -1007,8 +1026,7 @@ namespace BALL
 		// calculate all the rotation angles
 		RotationAngles_ rotAng;
 
-		// TODO: Per Options regeln in welchem intervall...
-		if(options.has("phi_min") && options.has("phi_max") && options.has("deg_phi") &&
+		/*if(options.has("phi_min") && options.has("phi_max") && options.has("deg_phi") &&
 			 options.has("theta_min") && options.has("theta_max") && options.has("deg_theta") &&
 			 options.has("psi_min") && options.has("psi_max") && options.has("deg_psi") )
 		{
@@ -1035,8 +1053,23 @@ namespace BALL
     		Log.error() << "Bad degree interval!" << endl;
      		exit(1);
    		}
-		}	
+		}	*/
 
+		if(     rotAng.generateSomeAngles( (float)options.getReal(Option::DEG_PHI), 
+																			 (float)options.getReal(Option::DEG_PSI),
+																			 (float)options.getReal(Option::DEG_THETA),
+																			 (float)options.getReal(Option::PHI_MIN),
+																			 (float)options.getReal(Option::PHI_MAX),
+																			 (float)options.getReal(Option::PSI_MIN),
+																			 (float)options.getReal(Option::PSI_MAX),
+																			 (float)options.getReal(Option::THETA_MIN),
+																			 (float)options.getReal(Option::THETA_MAX) ) == false
+				||  rotAng.getRotationNum() == 0 )
+		{
+    	Log.error() << "Bad degree interval!" << endl;
+     	exit(1);
+   	}
+		
 		int rotation_num = rotAng.getRotationNum();
 		total_round_ = rotAng.getRotationNum();
 
@@ -1400,9 +1433,9 @@ namespace BALL
 
 					if( !degenerate )
 					{
-						phi_[ang_num_]   = phiphi;
-						theta_[ang_num_] = thetatheta;
-						psi_[ang_num_]   = psipsi;
+						phi_[ang_num_]   = phi_min + phiphi * deg_phi;
+						theta_[ang_num_] = theta_min + thetatheta * deg_theta;
+						psi_[ang_num_]   = psi_min + psipsi * deg_psi;
 						ang_num_ ++;
 					}
 
