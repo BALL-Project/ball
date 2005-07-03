@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69 2005/03/01 18:33:20 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.70 2005/07/03 09:43:12 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -241,10 +241,10 @@ AC_DEFUN(CF_FIND_LIB,[
 		if test "${_LIBS}" = "" -a "$3" != ""; then
 			for i in $3 /dev/null; do
 				if test "${_LIBS}" = "" ; then
-					_TMP=`${FIND} $i -name "$2*" -print 2>/dev/null`
+					_TMP=`${FIND} $i -name "$2.*" -print 2>/dev/null`
 					for j in ${_TMP} ; do
 						if test "${_LIBS}" = "" ; then
-							_LIBS=`echo $j|${SED} "s/\/$2.*/\//"`
+							_LIBS=`echo $j|${SED} "s/\/$2\\.*/\//"`
 						fi
 					done
 				fi
@@ -252,19 +252,19 @@ AC_DEFUN(CF_FIND_LIB,[
 		fi
 		
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /opt -name "$2*" -print 2>/dev/null`
+			_TMP=`${FIND} /opt -name "$2.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/$2.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/$2\\.*/\//"`
 				fi
 			done
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /usr -name "$2*" -print 2>/dev/null`
+			_TMP=`${FIND} /usr -name "$2.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/$2.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/$2\\.*/\//"`
 				fi
 			done
 		fi
@@ -666,10 +666,11 @@ AC_DEFUN(CF_GXX_OPTIONS, [
   CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 	dnl
 	dnl	Some compiler versions have problems with -O3 unter Darwin (3.3.0),
-	dnl so we go back to -O2.
+	dnl so we go back to -O1.
 	dnl
 	if test "${OS}" = "Darwin" ; then
-	  CXXFLAGS_O="${CXXFLAGS_O} -O2 -Wall -W -pedantic -Wno-long-long -Wno-long-double"		
+	  CXXFLAGS_O="${CXXFLAGS_O} -O1 -Wall -W -pedantic -Wno-long-long -Wno-long-double"		
+	  CXXFLAGS_D="${CXXFLAGS_D} -O1"
 	else
 	  CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
 	fi
@@ -687,13 +688,14 @@ AC_DEFUN(CF_GXX_OPTIONS, [
     DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
   else 
     if test "${OS}" = "Darwin" ; then
-      DYNAROPTS="${DYNAROPTS} -prebind -dynamiclib -o"
-			ADD_DYNAROPTS_LIBPROJECT[]="-seg1addr 0xb0000000"
+      DYNAROPTS="${DYNAROPTS} -headerpad_max_install_names -compatibility_version ${BALL_COMPATIBILITY_VERSION} -current_version ${BALL_CURRENT_VERSION} -dynamiclib -o"
+			ADD_DYNAROPTS_LIBBALL="-seg1addr 0xb0000000"
 			ADD_DYNAROPTS_LIBVIEW="-seg1addr 0x80000000"
+      DYNAROPTS_PYMODULE="-headerpad_max_install_names -bundle -framework Python -o"
       RANLIB="ranlib -s "
     else	
       DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
-		fi
+    fi
   fi
 
   if test "${IS_EGXX}" = true; then
@@ -846,7 +848,7 @@ AC_DEFUN(CF_INTEL_OPTIONS,[
 		if test ${CXX_VERSION_1} -ge 8 ; then
 			if test ${CXX_VERSION_1} = 8 -a ${CXX_VERSION_2} -ge 1 ; then
 				if test `basename ${CXX}` = "icc" ; then
-					AC_MSG_RESULT([WARNING: Starting with version 8.1, ipcp should be used instead of icc.])
+					AC_MSG_RESULT([WARNING: Starting with version 8.1, icpc should be used instead of icc.])
 					AC_MSG_RESULT([Otherwise, linking errors will occur! Please call configure again])
 					AC_MSG_RESULT([with icpc as the compiler.])
 					AC_MSG_RESULT()
@@ -2493,7 +2495,6 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 				FFTW_DISABLE_FFTW_FLOAT=true
 			else
 				AC_MSG_RESULT((${FFTW_LIB_F}))
-				LIBS="${LIBS} ${FFTW_LIB_F}/libfftw3f.a"
 				FFTW_DISABLE_FFTW_FLOAT=false
 			fi
 		fi
@@ -2509,14 +2510,13 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 				FFTW_DISABLE_FFTW_DOUBLE=true
 			else
 				AC_MSG_RESULT((${FFTW_LIB_D}))
-				LIBS="${LIBS} ${FFTW_LIB_D}/libfftw3.a"
 				FFTW_DISABLE_FFTW_DOUBLE=false
 			fi
 		fi
 
 		if test "${FFTW_DISABLE_FFTW_LONGDBL}" = false ; then
 			AC_MSG_CHECKING(for FFTW library with long double support)
-			CF_FIND_LIB(FFTW_LIB_L,libfftwl, ${FFTW_LIBPATH})
+			CF_FIND_LIB(FFTW_LIB_L,libfftw3l, ${FFTW_LIBPATH})
 
 			if test "${FFTW_LIB_L}" = "" ; then
 				AC_MSG_RESULT((not found!))
@@ -2525,7 +2525,6 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 				FFTW_DISABLE_FFTW_LONGDBL=true
 			else
 				AC_MSG_RESULT((${FFTW_LIB_L}))
-				LIBS="${LIBS} ${FFTW_LIB_L}/libfftw3l.a"
 				FFTW_DISABLE_FFTW_LONGDBL=false
 			fi
 		fi
@@ -2550,21 +2549,21 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 
 		PROJECT[]_HAS_FFTW_FLOAT=""
 		if test "${FFTW_DISABLE_FFTW_FLOAT}" = "false" ; then
-			AC_MSG_CHECKING(linking against libfftwf)
+			AC_MSG_CHECKING(linking against libfftw3f)
 			SAVE_LIBS=${LIBS}
 			SAVE_LDFLAGS=${LDFLAGS}
-			LIBS="${FFTW_LIB_F}/libfftwf3.a ${LIBS}"
-			LDFLAGS=
+			LIBS="${FFTW_LIB_F}/libfftw3f.a ${LIBS}"
+			LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
 			FFTW_LINKING_OK=0
 			AC_TRY_LINK([
 										#include <fftw3.h>
 									],
 									[
-								     fftw_plan f = fftw_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
+								     fftwf_plan f = fftwf_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
 									], FFTW_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
 			LDFLAGS=${SAVE_LDFLAGS}
-			if test "${FFTW_LINKING_OK+set}" != "set" ; then
+			if test "${FFTW_LINKING_OK}" != "1" ; then
 				AC_MSG_RESULT(no)
 				AC_MSG_RESULT()
 				AC_MSG_RESULT([Cannot link against libfftw3f. Please check config.log and])
@@ -2578,11 +2577,11 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 	
 		PROJECT[]_HAS_FFTW_DOUBLE=""
 		if test "${FFTW_DISABLE_FFTW_DOUBLE}" = "false" ; then
-			AC_MSG_CHECKING(linking against libfftw)
+			AC_MSG_CHECKING(linking against libfftw3)
 			SAVE_LIBS=${LIBS}
 			SAVE_LDFLAGS=${LDFLAGS}
 			LIBS="${FFTW_LIB_D}/libfftw3.a ${LIBS}"
-			LDFLAGS=
+			LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
 			FFTW_LINKING_OK=0
 			AC_TRY_LINK([
 										#include <fftw3.h>
@@ -2592,7 +2591,7 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 									], FFTW_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
 			LDFLAGS=${SAVE_LDFLAGS}
-			if test "${FFTW_LINKING_OK+set}" != "set" ; then
+			if test "${FFTW_LINKING_OK}" != "1" ; then
 				AC_MSG_RESULT(no)
 				AC_MSG_RESULT()
 				AC_MSG_RESULT([Cannot link against libfftw3. Please check config.log and])
@@ -2606,21 +2605,21 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 
 		PROJECT[]_HAS_FFTW_LONG_DOUBLE=""
 		if test "${FFTW_DISABLE_FFTW_LONGDBL}" = "false" ; then
-			AC_MSG_CHECKING(linking against libfftwl)
+			AC_MSG_CHECKING(linking against libfftw3l)
 			SAVE_LIBS=${LIBS}
 			SAVE_LDFLAGS=${LDFLAGS}
 			LIBS="${FFTW_LIB_D}/libfftwl3.a ${LIBS}"
-			LDFLAGS=
+			LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
 			FFTW_LINKING_OK=0
 			AC_TRY_LINK([
 										#include <fftw3.h>
 									],
 									[
-								     fftw_plan f = fftw_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
+								     fftwl_plan f = fftwl_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
 									], FFTW_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
 			LDFLAGS=${SAVE_LDFLAGS}
-			if test "${FFTW_LINKING_OK+set}" != "set" ; then
+			if test "${FFTW_LINKING_OK}" != "1" ; then
 				AC_MSG_RESULT(no)
 				AC_MSG_RESULT()
 				AC_MSG_RESULT([Cannot link against libfftw3l. Please check config.log and])
@@ -2678,7 +2677,7 @@ AC_DEFUN(CF_VIEW, [
 			dnl
 			if test "${OS}" = "Darwin" ; then
 				VIEW_PLATFORM="OpenGL-Darwin"
-				OPENGL_LIBOPTS="-framework OpenGL -framework AGL"
+				OPENGL_LIBOPTS="-framework Carbon -framework OpenGL -framework AGL"
 				X11_LIBPATHOPT=""
 				X11_INCPATH=""
 	      OPENGL_INCPATH="-I/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers -I/System/Library/Frameworks/AGL.framework/Versions/A/Headers"
@@ -3423,39 +3422,45 @@ AC_DEFUN(CF_PYTHON, [
 		dnl
 		dnl	Python library path
 		dnl
-		AC_MSG_CHECKING(for libpython)
-		if test "${PYTHON_LIBPATH}" = "" ; then
-			PYTHON_LIBPATH="${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/config/"
-		fi
-		PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
-		if test "${PYTHON_LIBS}" = "" ; then
-			AC_MSG_RESULT()
-			AC_MSG_RESULT(No libpython*a found in ${PYTHON_LIBPATH}. Please specify)
-			AC_MSG_RESULT(the path where your Python library resides using --with-python-libs=DIR)
-			AC_MSG_RESULT(or ensure that libpython is installed in the correct directory)
-			AC_MSG_RESULT([(sys.prefix is ]${PYTHON_PREFIX}[)])
-			CF_ERROR
-		fi
-		AC_MSG_RESULT(${PYTHON_LIBS})
-
-		if test "${PYTHON_LDOPTS}" = "" ; then
-			PYTHON_MAKEFILE=`${FIND} ${PYTHON_LIBPATH} -name Makefile 2>/dev/null`
-			if test "${PYTHON_MAKEFILE}" = "" ; then
+    dnl use framework Python instead for Darwin
+    if test "${OS}" = "Darwin" ; then
+ 			PYTHON_LIBS="-framework Python"
+		else     
+			AC_MSG_CHECKING(for libpython)
+			if test "${PYTHON_LIBPATH}" = "" ; then
+				PYTHON_LIBPATH="${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/config/"
+			fi
+			PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
+			if test "${PYTHON_LIBS}" = "" ; then
 				AC_MSG_RESULT()
-				AC_MSG_RESULT(Makefile in the Python lib/config directory not found!)
-				AC_MSG_RESULT(Please specify the correct options needed to link)
-				AC_MSG_RESULT(against the Python library using)
-				AC_MSG_RESULT( --with-python-ldopts=OPTIONS)
-				AC_MSG_RESULT([(e.g. --with-python-ldopts="-ltermcap -lm")])
+				AC_MSG_RESULT(No libpython*a found in ${PYTHON_LIBPATH}. Please specify)
+				AC_MSG_RESULT(the path where your Python library resides using --with-python-libs=DIR)
+				AC_MSG_RESULT(or ensure that libpython is installed in the correct directory)
+				AC_MSG_RESULT([(sys.prefix is ]${PYTHON_PREFIX}[)])
 				CF_ERROR
 			fi
-			PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
-			PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^BASEMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
-			PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LOCALMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-` -lm"
-			PYTHON_LIBS=`echo ${PYTHON_LIBS} | ${TR} -s " "`
+			AC_MSG_RESULT(${PYTHON_LIBS})
+
+			if test "${PYTHON_LDOPTS}" = "" ; then
+				PYTHON_MAKEFILE=`${FIND} ${PYTHON_LIBPATH} -name Makefile 2>/dev/null`
+				if test "${PYTHON_MAKEFILE}" = "" ; then
+					AC_MSG_RESULT()
+					AC_MSG_RESULT(Makefile in the Python lib/config directory not found!)
+					AC_MSG_RESULT(Please specify the correct options needed to link)
+					AC_MSG_RESULT(against the Python library using)
+					AC_MSG_RESULT( --with-python-ldopts=OPTIONS)
+					AC_MSG_RESULT([(e.g. --with-python-ldopts="-ltermcap -lm")])
+					CF_ERROR
+				fi
+				PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
+				PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^BASEMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
+				PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LOCALMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-` -lm"
+				PYTHON_LIBS=`echo ${PYTHON_LIBS} | ${TR} -s " "`
+			fi
+			AC_MSG_RESULT(Linker options for Python library: ${PYTHON_LIBS})
 		fi
-		AC_MSG_RESULT(Linker options for Python library: ${PYTHON_LIBS})
-			
+
+		
 		dnl
 		dnl	 SIP executable
 		dnl

@@ -4,9 +4,12 @@
 // $Id:
 
 #include "ballviewTutorial.h"
+#include "mainframe.h"
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
-#include <BALL/VIEW/DIALOGS/displayProperties.h>
+#include <BALL/VIEW/WIDGETS/molecularControl.h>
+#include <BALL/VIEW/WIDGETS/geometricControl.h>
+#include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/KERNEL/system.h>
 
 #include <qlabel.h>
@@ -28,14 +31,10 @@ BALLViewTutorial::BALLViewTutorial(QWidget* parent, const char* name)
 	// register the widget with the MainControl
 	ModularWidget::registerWidget(this);
 
-	for (Index p = 0; p < pageCount(); p++)
-	{
-		setBackEnabled(page(p), false);
-		setHelpEnabled(page(p), false);
-	}
-
 	setNextEnabled(page(pageCount() - 1), false);
 	setFinishEnabled(page(pageCount() - 1), true);
+	backButton()->hide();
+	helpButton()->hide();
 
 	hide();
 }
@@ -52,7 +51,21 @@ void BALLViewTutorial::show()
 {
 	showPage(page(0));
 	nextButton()->setEnabled(false);
-	DisplayProperties::getInstance(0)->selectModel(MODEL_STICK);
+
+	((Mainframe*)getMainControl())->reset();
+
+	BALL_VIEW_DOCKWINDOWS_SHOW_LABELS = true;
+
+	Scene::getInstance(0)->show();
+	MolecularControl::getInstance(0)->show();
+	MolecularControl::getInstance(0)->applyPreferences();
+	DatasetControl::getInstance(0)->show();
+	DatasetControl::getInstance(0)->applyPreferences();
+	GeometricControl::getInstance(0)->show();
+	GeometricControl::getInstance(0)->applyPreferences();
+
+	LogView::getInstance(0)->hide();
+
 	BALLViewTutorialData::show();
 	raise();
 }

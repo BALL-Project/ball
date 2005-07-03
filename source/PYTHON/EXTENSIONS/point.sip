@@ -1,9 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.sip,v 1.1 2003/11/24 22:46:32 amoll Exp $
+// $Id: point.sip,v 1.4 2005/12/23 17:02:54 amoll Exp $
 //
 
+namespace VIEW
+{
 class Point 
   : GeometricObject,
     Vertex
@@ -11,16 +13,16 @@ class Point
 %TypeHeaderCode
 	#include <BALL/VIEW/PRIMITIVES/point.h>
 	using namespace BALL;
-	using namespace BALL::VIEW;
 %End
   public:
 //  void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 //  const Point& operator = (const Point& point) throw();
   Point() throw();
-  Point(const Point&) throw();
+  Point(const VIEW::Point&) throw();
   bool isValid() const throw();
   void clear() throw();
-  void set(const Point&) throw();
-  void swap(Point&) throw();
+  void set(const VIEW::Point&) throw();
+  void swap(VIEW::Point&) throw();
   ~Point() throw();
+};
 };

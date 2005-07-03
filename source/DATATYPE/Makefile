@@ -14,4 +14,4 @@ CPP_SOURCES=\
 	regularData3D.C
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies

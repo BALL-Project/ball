@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.13 2005/02/06 20:57:06 oliver Exp $
+// $Id: surfaceModel.h,v 1.15 2005/07/16 21:00:35 oliver Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_SURFACEMODEL_H
@@ -35,6 +35,8 @@ namespace BALL
 			: public ModelProcessor
 		{
 			public:
+
+			BALL_CREATE(AddSurfaceModel)
 
 			/**	@name	Constructors and Destructor
 			*/	

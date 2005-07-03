@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.h,v 1.25 2004/02/26 08:41:30 anhi Exp $
+// $Id: colorUnit.h,v 1.27 2005/07/16 21:00:32 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -38,6 +38,8 @@ namespace BALL
 		class BALL_EXPORT ColorUnit
 		{
 			public:
+
+			BALL_CREATE(ColorUnit)
 			
 			/**	@name	Exceptions
 			*/
@@ -158,7 +160,7 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			~ColorUnit()
+			virtual ~ColorUnit()
 				throw();
 
 			/** Explicit default initialization.

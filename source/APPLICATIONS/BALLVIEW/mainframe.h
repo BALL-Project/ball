@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.13 2005/02/28 17:40:48 amoll Exp $
+// $Id: mainframe.h,v 1.15 2005/07/16 21:00:39 oliver Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -60,6 +60,9 @@ namespace BALL
 			
 		void toggleFullScreen();
 
+		/// remove all loaded Molecules and Representations, reset Coloring options
+		void reset();
+
 		// Help menu
 		void about();
 
@@ -73,6 +76,9 @@ namespace BALL
 
 		///
 		void loadBALLViewProjectFile() throw();
+
+		///
+		virtual void checkMenus();
 		
 		protected:
 

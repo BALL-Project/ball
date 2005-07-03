@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker2DFile.C,v 1.3 2003/08/28 15:13:26 amoll Exp $
+// $Id: openBruker2DFile.C,v 1.4 2005/07/03 09:43:37 oliver Exp $
 
 #include <BALL/VIEW/DIALOGS/openBruker2DFile.h>
 #include <BALL/FORMAT/bruker2DFile.h>
@@ -33,15 +33,8 @@ namespace BALL
     void OpenBruker2DFile::initializeWidget(MainControl& main_control)
   		throw()
     {
-      main_control.insertMenuEntry(MainControl::FILE_IMPORT, 
-								"Bruker&2D File", this, SLOT(openFile_()));
+      insertMenuEntry(MainControl::FILE_IMPORT, "Bruker&2D File", this, SLOT(openFile_()));
     }
-
-    void OpenBruker2DFile::finalizeWidget(MainControl& main_control)
-		  throw()
-    {
-      main_control.removeMenuEntry (MainControl::FILE_IMPORT, "Bruker&2D File", this, SLOT(exec()));
-		}
 
 	  void OpenBruker2DFile::openFile_()
 		  throw()

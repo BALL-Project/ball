@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.C,v 1.39 2005/01/18 21:21:36 amoll Exp $
+// $Id: logStream.C,v 1.41 2005/07/16 21:00:40 oliver Exp $
 //
 
 #include <limits>
+#include <string>
 #include <BALL/COMMON/logStream.h>
 #include <BALL/CONCEPT/notification.h>
 
@@ -121,7 +122,9 @@ namespace BALL
 					// remove cr/lf from the end of the line				
 					while (outstring[outstring.size() - 1] == 10 || outstring[outstring.size() - 1] == 13)
 					{
-						outstring.erase(--outstring.end());
+						std::string::iterator p = outstring.end();
+						p--;
+						outstring.erase(p);
 					}
 		
 					// store the line 

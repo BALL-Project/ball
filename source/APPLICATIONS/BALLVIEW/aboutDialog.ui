@@ -317,31 +317,6 @@
             <set>AlignCenter</set>
         </property>
     </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>-3</x>
-                <y>261</y>
-                <width>232</width>
-                <height>71</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Andreas Moll,
-Andreas Hildebrandt, 
-Heiko Klein, 
-Oliver Kohlbacher</string>
-        </property>
-        <property name="textFormat">
-            <enum>AutoText</enum>
-        </property>
-        <property name="alignment">
-            <set>WordBreak|AlignCenter</set>
-        </property>
-    </widget>
     <widget class="QPushButton">
         <property name="name">
             <cstring>PushButton1</cstring>
@@ -422,6 +397,31 @@ Oliver Kohlbacher</string>
         </property>
         <property name="text">
             <string>&lt;h2&gt;&lt;b&gt;BALLView 1.0&lt;/b&gt;&lt;/h2&gt;</string>
+        </property>
+        <property name="textFormat">
+            <enum>AutoText</enum>
+        </property>
+        <property name="alignment">
+            <set>WordBreak|AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>-3</x>
+                <y>261</y>
+                <width>232</width>
+                <height>71</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Andreas Moll
+Andreas Hildebrandt
+Heiko Klein
+Oliver Kohlbacher</string>
         </property>
         <property name="textFormat">
             <enum>AutoText</enum>

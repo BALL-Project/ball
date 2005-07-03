@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.11 2004/02/26 08:41:47 anhi Exp $
+// $Id: logView.h,v 1.13 2005/07/16 21:00:37 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -41,6 +41,21 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		class DragLogView
+			: public QTextEdit
+		{
+			Q_OBJECT
+
+			public:
+
+			DragLogView(QWidget* parent);
+
+			public slots:
+			virtual void contentsDragEnterEvent(QDragEnterEvent* e);
+			virtual void contentsDragLeaveEvent(QDragEnterEvent* e);
+			virtual void contentsDropEvent(QDropEvent* e);
+		};
+
 		/** LogView class.
 				The class LogView records all messages sent to the  \link BALL::LogStream Log \endlink  object and
 				displays them as a text history. The class is derived from 
@@ -77,6 +92,7 @@ namespace BALL
 				throw();
 
 			/** Copy constructor.
+				 	Only for Python Interface
 					The text of <b> view</b> will be copied into this logView.
 			*/
 			LogView(const LogView& view)
@@ -116,6 +132,7 @@ namespace BALL
 				throw();
 
 			private:
+
 
 			QTextEdit* text_edit_;
 

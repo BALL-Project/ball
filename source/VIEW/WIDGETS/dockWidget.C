@@ -1,14 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.24 2004/10/07 17:12:00 amoll Exp $
+// $Id: dockWidget.C,v 1.25 2005/07/03 09:43:42 oliver Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <qmenubar.h>
 #include <qlabel.h>
 #include <qdragobject.h>
-#include <qdir.h>
 
 namespace BALL
 {
@@ -78,24 +77,16 @@ namespace BALL
 			setMinimumSize(20, 20);
 			setCloseMode(QDockWindow::Always);
 			setResizeEnabled(true);
- 			guest.setAcceptDrops(true);
 		}
 
-		void DockWidget::initializeWidget(MainControl& main_control)
+		void DockWidget::initializeWidget(MainControl&)
 			throw()
 		{
 			window_menu_entry_id_ = 
-				main_control.insertMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(switchShowWidget()));
-			getMainControl()->menuBar()->setItemChecked(window_menu_entry_id_, true);
+				insertMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(switchShowWidget()));
+			menuBar()->setItemChecked(window_menu_entry_id_, true);
 			connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setWindowsMenuEntry(bool)));
 		}
-
-		void DockWidget::finalizeWidget(MainControl& main_control)
-			throw()
-		{
-			main_control.removeMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(switchShowWidget()));
-		}
-
 
 		void DockWidget::writePreferences(INIFile& /* inifile */)
 			throw()
@@ -127,7 +118,7 @@ namespace BALL
 
 			if (!getMainControl()) 
 			{
-				Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
+				BALLVIEW_DEBUG
 				return;
 			}
 
@@ -162,26 +153,24 @@ namespace BALL
 
 		void DockWidget::dropEvent(QDropEvent* e)
 		{
-			if (!QUriDrag::canDecode(e)) 
-			{
-				e->ignore();
-				return;
-			}
-
-			QStrList lst;
-			QUriDrag::decode(e, lst);
-			e->accept();
-
-			for (Position i = 0; i < lst.count(); ++i )
-			{
-				QString filename = QDir::convertSeparators(QUriDrag::uriToLocalFile(lst.at(i)));
-				getMainControl()->openFile(filename.ascii());
-			}
+			VIEW::processDropEvent(e);
 		}
 
 		void DockWidget::dragEnterEvent(QDragEnterEvent* event)
 		{
 			event->accept(QTextDrag::canDecode(event));
+		}
+
+		void DockWidget::setVisible(bool state)
+		{
+			if (state)
+			{
+				show();
+			}
+			else
+			{
+				hide();
+			}
 		}
 
 	} // namespace VIEW 

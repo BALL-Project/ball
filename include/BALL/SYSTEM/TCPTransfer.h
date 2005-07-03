@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.22 2005/05/17 10:46:11 amoll Exp $
+// $Id: TCPTransfer.h,v 1.24 2005/07/16 21:00:31 oliver Exp $
 //
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
@@ -229,7 +229,17 @@ namespace BALL
 
 			///
 			bool usingProxy() const;
+
+			/// abort a running transfer
+			void abort() { abort_ = true;}
 			
+			/** Dump the content of the buffer to an ostream.
+					@param	s the stream to which we will dump
+					@param	depth the indentation depth of the output
+			*/
+			void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
+
 			protected:
 				
 				String 			host_address_;
@@ -245,6 +255,7 @@ namespace BALL
 				std::ostream*  fstream_;
 				String 			proxy_address_;
 				Position 		proxy_port_;
+				bool 				abort_;
 				
 				/*_ Send data through the socket.
 				 */
@@ -288,10 +299,6 @@ namespace BALL
 				bool 		waitForOutput_(const String& key, Size seconds)
 					throw();
 				
-				//_ Debug method
-				void 		output_()
-					throw();
-
 				//_
 				int getReceivedBytes_(Socket& socket);
 

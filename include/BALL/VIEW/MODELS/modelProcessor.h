@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.16 2005/02/23 12:55:23 amoll Exp $
+// $Id: modelProcessor.h,v 1.18 2005/07/16 21:00:35 oliver Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
@@ -41,6 +41,8 @@ namespace BALL
 				public PropertyManager
 		{
 			public:
+
+				BALL_CREATE(ModelProcessor)
 				
 				///
 				typedef List<GeometricObject*> GeometricObjectList;

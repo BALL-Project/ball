@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.h,v 1.2 2005/04/18 13:30:38 amoll Exp $
+// $Id: modifySurfaceDialog.h,v 1.3 2005/07/03 09:43:05 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
@@ -28,6 +28,10 @@
 #ifndef BALL_DATATYPE_REGULARDATA3D
 # include <BALL/DATATYPE/regularData3D.h>
 #endif 
+
+#ifndef BALL_DATATYPE_HASHGRID_H
+# include <BALL/DATATYPE/hashGrid.h>
+#endif
 
 namespace BALL
 {
@@ -93,7 +97,6 @@ namespace BALL
 			
 			void applyPressed();
 			void cancelPressed();
-			void colorBoxesChanged();
 			void maxPressed();
 			void midPressed();
 			void minPressed();
@@ -109,7 +112,7 @@ namespace BALL
 
 			void gridTransparencyChanged();
 			void customColorTransparencyChanged();
-			void splitDistanceChanged();
+			void changeDrawingModeTransparencyChanged();
 			void splitMethodChanged();
 
 			protected:
@@ -129,9 +132,10 @@ namespace BALL
 			void invalidateMesh_() throw();
 			void calculateValues_();
 			void split_();
+			void changeDrawingMode_();
 			void checkApplyButton_();
 
-			void calculateIncludedVertices_(vector<bool>& include_vertex, const Mesh& org_mesh);
+			void calculateIncludedVertices_(vector<bool>& include_vertex, const Mesh& org_mesh, HashSet<const Composite*>& roots);
 			inline bool checkInclude_(const AtomGrid& atom_grid, const Vector3& point) const;
 
 			RegularData3D* grid_;

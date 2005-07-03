@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.C,v 1.9 2005/03/26 11:09:15 bertsch Exp $
+// $Id: buildBondsProcessor.C,v 1.12 2005/12/23 17:03:04 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
@@ -9,16 +9,12 @@
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
-#include <BALL/DATATYPE/hashSet.h>
 #include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/path.h>
-#include <BALL/MATHS/common.h>
 #include <BALL/FORMAT/resourceFile.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
-
-#include <cmath>
 
 using namespace std;
 
@@ -213,8 +209,7 @@ namespace BALL
 											dist >= min_dist &&
 											!atom1.isBoundTo(**ait2))
 									{
-										Bond* const b = atom1.createBond(**ait2);
-										b->setOrder(Bond::ORDER__UNKNOWN);
+										atom1.createBond(**ait2);
 										num_bonds++;
 									}
 								}
@@ -291,16 +286,18 @@ namespace BALL
 			// count bonds and aromatic bonds
 			Size num_bonds(0), num_aro(0);
 			HashSet<Bond*> bonds;
-			for (vector<Atom*>::iterator ait1=it->begin();ait1!=it->end();++ait1)
+
+			vector<Atom*>::iterator ait1 = it->begin();
+			for (; ait1 != it->end(); ++ait1)
 			{
-				vector<Atom*>::iterator ait2=ait1;
+				vector<Atom*>::iterator ait2(ait1);
 				++ait2;
-				for (;ait2!=it->end();++ait2)
+				for (; ait2 != it->end(); ++ait2)
 				{
-					if ((*ait1)->isBoundTo(**ait2))
+					if ((**ait1).isBoundTo(**ait2))
 					{
 						++num_bonds;
-						Bond* const b = (*ait1)->getBond(**ait2);
+						Bond* const b = (**ait1).getBond(**ait2);
 						bonds.insert(b);
 						if (b->getOrder() == Bond::ORDER__AROMATIC)
 						{
@@ -311,16 +308,16 @@ namespace BALL
 			}
 
 			// estimate if ring is aromatic or not
-			if (double(num_aro)/double(num_bonds) >= 0.5)
+			if (float(num_aro) / float(num_bonds) >= 0.5)
 			{
-				for (HashSet<Bond*>::Iterator bit=bonds.begin();bit!=bonds.end();++bit)
+				for (HashSet<Bond*>::Iterator bit = bonds.begin(); bit != bonds.end(); ++bit)
 				{
 					(*bit)->setOrder(Bond::ORDER__AROMATIC);
 				}
 			}
 			else
 			{
-				for (HashSet<Bond*>::Iterator bit=bonds.begin(); +bit;++bit)
+				for (HashSet<Bond*>::Iterator bit = bonds.begin(); +bit; ++bit)
 				{
 					if ((*bit)->getOrder() == Bond::ORDER__AROMATIC)
 					{
@@ -354,12 +351,12 @@ namespace BALL
 				}
 				bonds.insert(&*bit);
 			}
+
+			bonds.erase(min_bond);
+
 			for (HashSet<Bond*>::ConstIterator it=bonds.begin(); +it; ++it)
 			{
-				if (*it != min_bond)
-				{
-					(*it)->destroy();
-				}
+				(*it)->destroy();
 			}
 		}
 	}
@@ -427,9 +424,9 @@ namespace BALL
 		HashMap<Bond::BondOrder, float>::ConstIterator it=bonds.begin();
 		for (; +it; ++it)
 		{
-			if (min_dist > abs(it->second-length))
+			if (min_dist > Maths::abs(it->second-length))
 			{
-				min_dist = abs(it->second-length);
+				min_dist = Maths::abs(it->second-length);
 				order = it->first;
 			}
 		}

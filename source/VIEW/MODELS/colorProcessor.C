@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.35 2005/04/18 13:30:11 amoll Exp $
+// $Id: colorProcessor.C,v 1.37 2005/07/16 21:00:50 oliver Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -34,9 +34,15 @@ namespace BALL
 		ColorProcessor::ColorProcessor(const ColorProcessor& cp)
 			throw()
 			:	UnaryProcessor<GeometricObject*>(cp),
+				update_always_needed_(cp.update_always_needed_),
 				default_color_(cp.default_color_),
 				selection_color_(cp.selection_color_),
-				transparency_(0)
+				transparency_(cp.transparency_),
+				composites_(cp.composites_),
+				atom_grid_(cp.atom_grid_),
+				model_type_(cp.model_type_),
+				last_composite_of_grid_(cp.last_composite_of_grid_),
+				additional_grid_distance_(cp.additional_grid_distance_)
 		{
 		}
 
@@ -63,10 +69,15 @@ namespace BALL
 		void ColorProcessor::set(const ColorProcessor& cp)
 			throw()
 		{
+			update_always_needed_ = cp.update_always_needed_;
 			default_color_ = cp.default_color_;
-			composites_ = cp.composites_;
-			transparency_ = cp.transparency_;
 			selection_color_ = cp.selection_color_;
+			transparency_ = cp.transparency_;
+			composites_ = cp.composites_;
+			atom_grid_ = cp.atom_grid_;
+			model_type_ = cp.model_type_;
+			last_composite_of_grid_ = cp.last_composite_of_grid_;
+			additional_grid_distance_ = cp.additional_grid_distance_;
 		}
 
 
@@ -96,6 +107,7 @@ namespace BALL
 		{
 			const Composite* composite = object->getComposite();
 
+			/// ------------- meshes ----------------------------
 			Mesh* const mesh = dynamic_cast<Mesh*>(object);
 			if (mesh != 0)
 			{
@@ -119,6 +131,7 @@ namespace BALL
 
 			ColorExtension2* const two_colored = dynamic_cast<ColorExtension2*>(object);
 
+			/// ------------- custom objects ----------------------------
 			if (composite == 0 ||
 					composite == &composite_to_be_ignored_for_colorprocessors_)
 			{
@@ -130,6 +143,7 @@ namespace BALL
 				return Processor::CONTINUE;
 			}
 
+			/// ------------- single colored objects ----------------------------
 			if (two_colored == 0)
 			{
 				if (composite->isSelected())
@@ -143,8 +157,11 @@ namespace BALL
 				return Processor::CONTINUE;
 			}
 
-			// ok, we have a two colored object
+			/// ------------- two colored objects ----------------------------
 			const Bond* const bond = dynamic_cast<const Bond*>(composite);
+
+
+			/// ------------- bonds  ----------------------------
 			if (bond != 0)
 			{
 				const Atom* atom = bond->getFirstAtom();
@@ -167,6 +184,7 @@ namespace BALL
 					two_colored->setColor2(selection_color_);
 				}
 			}
+			/// ------------- non bonds  ----------------------------
 			else
 			{
 				if (composite->isSelected())
@@ -197,7 +215,7 @@ namespace BALL
 
 			if (from_mesh == 0)
 			{
-				CompositeSet::ConstIterator it = composites_->begin();
+				List<const Composite*>::const_iterator it = composites_->begin();
 				for(; it != composites_->end(); it++)
 				{
 					if (RTTI::isKindOf<AtomContainer>(**it))
@@ -260,7 +278,7 @@ namespace BALL
 			{
 				float memory = SysInfo::getAvailableMemory();
 				// if we can not calculate available memory, use around 60 MB for the grid
-				if (memory == -1) memory = 100000000;
+				if (memory == -1) memory = 10000000;
 				memory *= 0.6;
 				float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing((LongIndex)memory, diagonal + 
 																																						Vector3(2 * (additional_grid_distance_ + 15.0)));
@@ -309,7 +327,7 @@ namespace BALL
 			}
 		}
 
-		void ColorProcessor::setComposites(const CompositeSet* composites)
+		void ColorProcessor::setComposites(const List<const Composite*>* composites)
 			throw() 
 		{ 
 			composites_ = composites;
@@ -405,6 +423,11 @@ namespace BALL
 			return *item;
 		}
 
+		bool ColorProcessor::start()
+			throw()
+		{
+			return (getComposites() != 0);
+		}
 
 		//////////////////////////////////////////////////////////////////////
 		InterpolateColorProcessor::InterpolateColorProcessor()
@@ -533,7 +556,10 @@ namespace BALL
 		}
 
 		bool InterpolateColorProcessor::start()
+			throw()
 		{
+			if (!ColorProcessor::start()) return false;
+
 			min_min_color_.setAlpha(255 - transparency_);
 			min_color_.setAlpha(255 - transparency_);
 			max_max_color_.setAlpha(255 - transparency_);

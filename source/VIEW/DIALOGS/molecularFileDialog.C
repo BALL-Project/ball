@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.28 2005/02/06 20:57:09 oliver Exp $
+// $Id: molecularFileDialog.C,v 1.29 2005/07/03 09:43:36 oliver Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -46,25 +46,16 @@ namespace BALL
 		void MolecularFileDialog::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			String hint("Open a PDB, HIN, MOL or MOL2 file");
-			main_control.insertMenuEntry(MainControl::FILE_OPEN, "&Structure", (QObject *)this, 
-																	 SLOT(readFiles()), CTRL+Key_O, -1, hint);
-			hint = "Save a system as PDB, HIN, MOL or MOL2 file (1 System has to be selected)";
-			save_id_ = main_control.insertMenuEntry(MainControl::FILE, "&Save Structure", (QObject *)this, 
-																	 SLOT(writeFile()), CTRL+Key_S, -1, hint);
+			insertMenuEntry(MainControl::FILE_OPEN, "&Structure", this, SLOT(readFiles()), CTRL+Key_O, 0);
+			setMenuHint("Open a PDB, HIN, MOL or MOL2 file");
+			save_id_ = insertMenuEntry(MainControl::FILE, "&Save Structure", (QObject *)this, 
+																	 SLOT(writeFile()), CTRL+Key_S, -1);
+			setMenuHint("Save a system as PDB, HIN, MOL or MOL2 file (1 System has to be selected)");
 
-			connect(main_control.initPopupMenu(MainControl::FILE), SIGNAL(aboutToShow()), this, SLOT(checkMenuEntries()));
+			connect(main_control.initPopupMenu(MainControl::FILE), SIGNAL(aboutToShow()), 
+							this, SLOT(checkMenuEntries()));
 		}
 		
-		void MolecularFileDialog::finalizeWidget(MainControl& main_control)
-			throw()
-		{
-			main_control.removeMenuEntry(MainControl::FILE_OPEN, "&Open Structure", (QObject *)this, 
-																	 SLOT(readFiles()), CTRL+Key_R);
-			main_control.removeMenuEntry(MainControl::FILE, "&Save Structure", (QObject *)this, 
-																		SLOT(writeFile()), CTRL+Key_S);
-		}
-
 		void MolecularFileDialog::readFiles()
 		{
 			QStringList files = QFileDialog::getOpenFileNames(
@@ -467,8 +458,8 @@ namespace BALL
 		void MolecularFileDialog::checkMenuEntries()
 			throw()
 		{
-			menuBar()->setItemEnabled(save_id_, getMainControl()->getSelectedSystem());
-			menuBar()->setItemEnabled(MainControl::FILE_OPEN, !getMainControl()->compositesAreLocked());
+			menuBar()->setItemEnabled(save_id_, getMainControl()->getSelectedSystem() && 
+																					!getMainControl()->compositesAreLocked());
 		}
 
 

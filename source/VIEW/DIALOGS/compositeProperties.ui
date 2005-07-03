@@ -41,9 +41,9 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>22</x>
+                <x>20</x>
                 <y>10</y>
-                <width>110</width>
+                <width>100</width>
                 <height>24</height>
             </rect>
         </property>
@@ -57,21 +57,42 @@
         </property>
         <property name="minimumSize">
             <size>
-                <width>110</width>
+                <width>100</width>
                 <height>0</height>
             </size>
         </property>
         <property name="maximumSize">
             <size>
-                <width>110</width>
+                <width>100</width>
                 <height>32767</height>
             </size>
         </property>
         <property name="text">
-            <string>name</string>
+            <string>Name</string>
         </property>
         <property name="alignment">
-            <set>AlignVCenter|AlignRight</set>
+            <set>AlignVCenter|AlignLeft</set>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>name_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>130</x>
+                <y>10</y>
+                <width>260</width>
+                <height>24</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
         </property>
     </widget>
     <widget class="QGroupBox">
@@ -83,14 +104,11 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>22</x>
-                <y>50</y>
+                <x>10</x>
+                <y>40</y>
                 <width>380</width>
                 <height>50</height>
             </rect>
-        </property>
-        <property name="frameShape">
-            <enum>NoFrame</enum>
         </property>
         <property name="title">
             <string>Residues</string>
@@ -98,34 +116,13 @@
         <property name="alignment">
             <set>AlignHCenter</set>
         </property>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>id_edit</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>116</x>
-                    <y>20</y>
-                    <width>250</width>
-                    <height>24</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-        </widget>
         <widget class="QLabel">
             <property name="name">
                 <cstring>textLabel1_2</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>0</x>
+                    <x>10</x>
                     <y>20</y>
                     <width>110</width>
                     <height>24</height>
@@ -155,30 +152,30 @@
                 <string>ID</string>
             </property>
             <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
+                <set>AlignVCenter|AlignLeft</set>
             </property>
         </widget>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>name_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>138</x>
-                <y>10</y>
-                <width>250</width>
-                <height>24</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>5</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>id_edit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>120</x>
+                    <y>20</y>
+                    <width>250</width>
+                    <height>24</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+        </widget>
     </widget>
     <widget class="QGroupBox">
         <property name="name">
@@ -186,14 +183,11 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>4</x>
-                <y>110</y>
-                <width>390</width>
+                <x>10</x>
+                <y>100</y>
+                <width>380</width>
                 <height>270</height>
             </rect>
-        </property>
-        <property name="frameShape">
-            <enum>NoFrame</enum>
         </property>
         <property name="title">
             <string>Atoms</string>
@@ -203,13 +197,13 @@
         </property>
         <widget class="QLabel">
             <property name="name">
-                <cstring>TextLabel8</cstring>
+                <cstring>TextLabel4</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>17</x>
-                    <y>111</y>
-                    <width>110</width>
+                    <x>10</x>
+                    <y>140</y>
+                    <width>100</width>
                     <height>24</height>
                 </rect>
             </property>
@@ -223,21 +217,21 @@
             </property>
             <property name="minimumSize">
                 <size>
-                    <width>110</width>
+                    <width>90</width>
                     <height>0</height>
                 </size>
             </property>
             <property name="maximumSize">
                 <size>
-                    <width>110</width>
+                    <width>100</width>
                     <height>32767</height>
                 </size>
             </property>
             <property name="text">
-                <string>radius (Å)</string>
+                <string>Charge (e)</string>
             </property>
             <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
+                <set>AlignVCenter|AlignLeft</set>
             </property>
         </widget>
         <widget class="QLineEdit">
@@ -249,8 +243,8 @@
             </property>
             <property name="geometry">
                 <rect>
-                    <x>133</x>
-                    <y>231</y>
+                    <x>120</x>
+                    <y>230</y>
                     <width>250</width>
                     <height>24</height>
                 </rect>
@@ -265,8 +259,8 @@
             </property>
             <property name="geometry">
                 <rect>
-                    <x>133</x>
-                    <y>51</y>
+                    <x>120</x>
+                    <y>50</y>
                     <width>250</width>
                     <height>24</height>
                 </rect>
@@ -274,13 +268,13 @@
         </widget>
         <widget class="QLabel">
             <property name="name">
-                <cstring>TextLabel2</cstring>
+                <cstring>TextLabel6</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>17</x>
-                    <y>21</y>
-                    <width>110</width>
+                    <x>10</x>
+                    <y>230</y>
+                    <width>100</width>
                     <height>24</height>
                 </rect>
             </property>
@@ -294,34 +288,21 @@
             </property>
             <property name="minimumSize">
                 <size>
-                    <width>110</width>
+                    <width>90</width>
                     <height>0</height>
                 </size>
             </property>
             <property name="maximumSize">
                 <size>
-                    <width>110</width>
+                    <width>100</width>
                     <height>32767</height>
                 </size>
             </property>
             <property name="text">
-                <string>type name</string>
+                <string>Force (pN)</string>
             </property>
             <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>type_name_edit</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>133</x>
-                    <y>21</y>
-                    <width>250</width>
-                    <height>24</height>
-                </rect>
+                <set>AlignVCenter|AlignLeft</set>
             </property>
         </widget>
         <widget class="QLineEdit">
@@ -333,8 +314,8 @@
             </property>
             <property name="geometry">
                 <rect>
-                    <x>133</x>
-                    <y>201</y>
+                    <x>120</x>
+                    <y>200</y>
                     <width>250</width>
                     <height>24</height>
                 </rect>
@@ -343,28 +324,15 @@
                 <bool>true</bool>
             </property>
         </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>radius_edit</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>133</x>
-                    <y>111</y>
-                    <width>250</width>
-                    <height>24</height>
-                </rect>
-            </property>
-        </widget>
         <widget class="QLabel">
             <property name="name">
-                <cstring>TextLabel3</cstring>
+                <cstring>TextLabel8</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>17</x>
-                    <y>81</y>
-                    <width>110</width>
+                    <x>10</x>
+                    <y>110</y>
+                    <width>100</width>
                     <height>24</height>
                 </rect>
             </property>
@@ -378,151 +346,21 @@
             </property>
             <property name="minimumSize">
                 <size>
-                    <width>110</width>
+                    <width>90</width>
                     <height>0</height>
                 </size>
             </property>
             <property name="maximumSize">
                 <size>
-                    <width>110</width>
+                    <width>100</width>
                     <height>32767</height>
                 </size>
             </property>
             <property name="text">
-                <string>element</string>
+                <string>Radius (Å)</string>
             </property>
             <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel6</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>17</x>
-                    <y>231</y>
-                    <width>110</width>
-                    <height>24</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>110</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>110</width>
-                    <height>32767</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>force (pN)</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel2_2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>17</x>
-                    <y>51</y>
-                    <width>110</width>
-                    <height>24</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>110</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>110</width>
-                    <height>32767</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>type</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>charge_edit</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>133</x>
-                    <y>141</y>
-                    <width>250</width>
-                    <height>24</height>
-                </rect>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel4</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>17</x>
-                    <y>141</y>
-                    <width>110</width>
-                    <height>24</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>110</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>110</width>
-                    <height>32767</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>charge (e)</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
+                <set>AlignVCenter|AlignLeft</set>
             </property>
         </widget>
         <widget class="QLabel">
@@ -531,9 +369,9 @@
             </property>
             <property name="geometry">
                 <rect>
-                    <x>17</x>
-                    <y>171</y>
-                    <width>110</width>
+                    <x>10</x>
+                    <y>170</y>
+                    <width>100</width>
                     <height>24</height>
                 </rect>
             </property>
@@ -547,13 +385,13 @@
             </property>
             <property name="minimumSize">
                 <size>
-                    <width>110</width>
+                    <width>90</width>
                     <height>0</height>
                 </size>
             </property>
             <property name="maximumSize">
                 <size>
-                    <width>110</width>
+                    <width>100</width>
                     <height>32767</height>
                 </size>
             </property>
@@ -564,10 +402,205 @@
                 <enum>MShadow</enum>
             </property>
             <property name="text">
-                <string>position (Å)</string>
+                <string>Position (Å)</string>
             </property>
             <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
+                <set>AlignVCenter|AlignLeft</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>80</y>
+                    <width>100</width>
+                    <height>24</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>90</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>100</width>
+                    <height>32767</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>Element</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignLeft</set>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>charge_edit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>120</x>
+                    <y>140</y>
+                    <width>250</width>
+                    <height>24</height>
+                </rect>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel5</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>200</y>
+                    <width>100</width>
+                    <height>24</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>90</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>100</width>
+                    <height>32767</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>Velocity (Å/ps)</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignLeft</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel2_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>50</y>
+                    <width>100</width>
+                    <height>24</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>90</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>100</width>
+                    <height>32767</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>Type</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignLeft</set>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>type_name_edit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>120</x>
+                    <y>20</y>
+                    <width>250</width>
+                    <height>24</height>
+                </rect>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>20</y>
+                    <width>100</width>
+                    <height>24</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>90</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>100</width>
+                    <height>32767</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>Type name</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignLeft</set>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>radius_edit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>120</x>
+                    <y>110</y>
+                    <width>250</width>
+                    <height>24</height>
+                </rect>
             </property>
         </widget>
         <widget class="QLineEdit">
@@ -579,8 +612,8 @@
             </property>
             <property name="geometry">
                 <rect>
-                    <x>133</x>
-                    <y>171</y>
+                    <x>120</x>
+                    <y>170</y>
                     <width>250</width>
                     <height>24</height>
                 </rect>
@@ -592,53 +625,14 @@
                 <bool>true</bool>
             </property>
         </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel5</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>0</x>
-                    <y>200</y>
-                    <width>127</width>
-                    <height>24</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>120</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>140</width>
-                    <height>32767</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>velocity (Å/ps)</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-        </widget>
         <widget class="QComboBox">
             <property name="name">
                 <cstring>element_box</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>133</x>
-                    <y>81</y>
+                    <x>120</x>
+                    <y>80</y>
                     <width>250</width>
                     <height>24</height>
                 </rect>
@@ -654,8 +648,8 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>12</x>
-                <y>383</y>
+                <x>11</x>
+                <y>381</y>
                 <width>186</width>
                 <height>30</height>
             </rect>
@@ -685,8 +679,8 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>204</x>
-                <y>383</y>
+                <x>203</x>
+                <y>381</y>
                 <width>186</width>
                 <height>30</height>
             </rect>

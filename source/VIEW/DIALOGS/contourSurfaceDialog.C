@@ -78,6 +78,16 @@ bool ContourSurfaceDialog::exec()
 
 	return true;
 }
+
+void ContourSurfaceDialog::chooseColor()
+{
+	VIEW::chooseColor(color_label);
+}
+
+ColorRGBA ContourSurfaceDialog::getColor()
+{
+	return ColorRGBA(color_label->backgroundColor());
+}
 		
 
 }} //namespaces

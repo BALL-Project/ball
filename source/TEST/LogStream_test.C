@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LogStream_test.C,v 1.22 2005/01/18 23:00:04 amoll Exp $
+// $Id: LogStream_test.C,v 1.24 2005/07/16 21:00:44 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +17,7 @@
 
 ///////////////////////////
 
-START_TEST(LogStream, "$Id: LogStream_test.C,v 1.22 2005/01/18 23:00:04 amoll Exp $")
+START_TEST(LogStream, "$Id: LogStream_test.C,v 1.24 2005/07/16 21:00:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -157,7 +158,7 @@ CHECK(insertNotification(const std::ostream& s, const Target& target))
 	l1.insertNotification(os, target);
 	target.notified = false;
 	TEST_EQUAL(target.notified, false)
-	l1 << "test" << endl;
+	l1 << "test" << std::endl;
 	TEST_EQUAL(target.notified, true)
 RESULT
 

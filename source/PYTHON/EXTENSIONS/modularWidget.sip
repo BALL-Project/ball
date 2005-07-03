@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.sip,v 1.4 2003/10/31 23:15:49 oliver Exp $
+// $Id: modularWidget.sip,v 1.6 2005/07/16 21:00:42 oliver Exp $
 //
 
 class ModularWidget
@@ -26,7 +26,7 @@ class ModularWidget
 
 	static void registerWidget(ModularWidget* /mwidget/);
 
-	virtual void initializeWidget(MainControl& /main_control/);
- 	virtual void finalizeWidget(MainControl& /main_control/);
+	virtual void initializeWidget(MainControl& /main_control/) throw();
+ 	virtual void finalizeWidget(MainControl& /main_control/) throw();
 	virtual void checkMenu(MainControl& /main_control/) throw();
 }; 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.44 2005/01/31 14:44:17 amoll Exp $
+// $Id: hashGrid.h,v 1.46 2005/07/16 21:00:30 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_HASHGRID_H
@@ -252,6 +252,8 @@ namespace BALL
 
 			BALL_CREATE_DEEP(BoxIteratorTraits)
 
+			virtual ~BoxIteratorTraits() throw () {}
+
 			BoxIteratorTraits()
 				throw()
 				:	bound_(0),
@@ -438,6 +440,8 @@ namespace BALL
 			public:
 
 			BALL_CREATE_DEEP(DataIteratorTraits)
+
+				virtual ~DataIteratorTraits() throw() {}
 
 			DataIteratorTraits()
 				throw()
@@ -1308,6 +1312,8 @@ namespace BALL
 			public:
 
 			BALL_CREATE_DEEP(BoxIteratorTraits)
+
+			virtual ~BoxIteratorTraits() throw() {}
 
 			BoxIteratorTraits()
 				throw()

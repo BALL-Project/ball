@@ -12,4 +12,4 @@ CPP_SOURCES=\
 	MD5Hash.C
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.35 2005/05/17 12:34:00 amoll Exp $
+// $Id: TCPTransfer.C,v 1.36 2005/07/03 09:43:28 oliver Exp $
 //
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
@@ -43,6 +43,7 @@
 #include <fstream>				// ostream
 #include <stdio.h>
 
+// #define DEBUG
 
 namespace BALL
 {
@@ -67,7 +68,8 @@ namespace BALL
 		socket_(0),
 		fstream_(0),
 		proxy_address_(""),
-		proxy_port_(0)
+		proxy_port_(0),
+		abort_(false)
 	{
 		set(file, address);
 
@@ -138,6 +140,8 @@ namespace BALL
 	TCPTransfer::Status TCPTransfer::transfer()
 		throw()
 	{
+		abort_ = false;
+
 		if (protocol_ == FTP_PROTOCOL)
 		{
 			status_ =  getFTP_();
@@ -273,6 +277,12 @@ namespace BALL
 		try
 		{
 			Status status = (Status) first_line.getField(1).toUnsignedInt();
+
+			if (usingProxy() && status == 403)
+			{
+				return PROXY__ERROR;
+			}
+
 			if (status != 200)
 			{
 				return status;
@@ -367,7 +377,7 @@ namespace BALL
 			}
 			received_bytes_ += bytes;
 		}
-		while (bytes > 0);
+		while (!abort_ && bytes > 0);
 
 		return OK;
 	}
@@ -473,6 +483,7 @@ namespace BALL
 		}
 
 		buffer_[received_bytes_] = '\0';
+
 		#ifdef DEBUG
 			output_();
 		#endif
@@ -503,19 +514,26 @@ namespace BALL
 	}
 
 
-	void TCPTransfer::output_()
+	void TCPTransfer::dump(std::ostream& s, Size depth) const
 		throw()
 	{
-		Log.info() << "<<";
+		BALL_DUMP_STREAM_PREFIX(s);
+
+		BALL_DUMP_DEPTH(s, depth);
+
+		s << std::endl;
 		for (Position pos = 0; pos < (Position) received_bytes_; pos++)
 		{
-			if (buffer_[pos] == '\0' || buffer_[pos] == '\n' || buffer_[pos] == '\r') 
+			if (buffer_[pos] == '\0') 
 			{
 				break;
 			}
-			Log.info() << buffer_[pos];
+			s << buffer_[pos];
 		}
-		Log.info() << "|" << received_bytes_;
+		s << std::endl;
+		s << "received bytes: " << received_bytes_ << std::endl;
+
+		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
 
@@ -551,7 +569,7 @@ namespace BALL
 				String temp(buffer_);
 				
 				#ifdef DEBUG
-					output_();			
+					dump();
 				#endif
 						
 				if (key.size() == 0 || temp.hasSubstring(key))
@@ -594,7 +612,7 @@ namespace BALL
 			{
 				buffer_[received_bytes_] = '\0';
 				#ifdef DEBUG
-					output_();			
+					dump();
 				#endif
 								
 				if (!got_data)
@@ -620,7 +638,7 @@ namespace BALL
 				}
 			}
 		}
-		while (timer.getClockTime() < 20);
+		while (!abort_ && timer.getClockTime() < 20);
 		
 		if (!last_line2)
 		{
@@ -776,7 +794,7 @@ namespace BALL
 		setBlock_(socket_, false);
 
 		int bytes = -1;
-		while (control_bytes < 1 && bytes != 0)
+		while (!abort_ && control_bytes < 1 && bytes != 0)
 		{			
 			bytes = getReceivedBytes_(socket2);
 

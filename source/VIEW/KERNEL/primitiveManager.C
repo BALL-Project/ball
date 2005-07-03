@@ -1,12 +1,24 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.37 2005/04/18 13:30:11 amoll Exp $
+// $Id: primitiveManager.C,v 1.38 2005/07/03 09:43:39 oliver Exp $
+//
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/DIALOGS/displayProperties.h>
+#include <BALL/FORMAT/INIFile.h>
+
+#include <BALL/VIEW/PRIMITIVES/sphere.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/disc.h>
+#include <BALL/VIEW/PRIMITIVES/box.h>
+#include <BALL/VIEW/PRIMITIVES/simpleBox.h>
+#include <BALL/VIEW/DATATYPE/vertex2.h>
+#include <BALL/VIEW/DATATYPE/vertex1.h>
 
 #include <qapplication.h>
 
@@ -204,25 +216,19 @@ PrimitiveManager::RepresentationList PrimitiveManager::removedComposite(const Co
 	{
 		Representation& rep = **rep_it;
 
-		// collect childs of composite, which occur in the Representation
-		List<const Composite*> composites_to_remove;
-
 		// test if a Representation has Composites which are (not) to be removed
-		Representation::CompositesConstIterator composite_it = rep.begin();
-		for(; +composite_it; composite_it++)
+		List<const Composite*> composites;
+
+		List<const Composite*>::ConstIterator crit = rep.getComposites().begin();
+		for(; crit != rep.getComposites().end(); crit++)
 		{
-			if (&composite == *composite_it || composite.isAncestorOf(**composite_it))
+			if (&composite != *crit && !composite.isAncestorOf(**crit))
 			{
-				composites_to_remove.push_back(*composite_it);
+				composites.push_back(*crit);
 			}
 		}
 
-		// erase the Composites from the Representation
-		List<const Composite*>::Iterator crit = composites_to_remove.begin();
-		for (; crit != composites_to_remove.end(); crit++)
-		{
-			rep.getComposites().erase(*crit);
-		}
+		rep.setComposites(composites);
 
 		// if we have no more Composites in the Representation, it is to be deleted
 		if (rep.getComposites().size() == 0) 
@@ -278,11 +284,11 @@ List<Representation*> PrimitiveManager::getRepresentationsOf(const Composite& co
 	RepresentationsIterator rep_it = begin();
 	for (; rep_it != end(); rep_it++)
 	{
-		Representation::CompositesConstIterator composite_it = (*rep_it)->begin();
-		for(; composite_it != (*rep_it)->end(); composite_it++)
+		List<const Composite*>::const_iterator cit = (**rep_it).getComposites().begin();
+		for (; cit != (**rep_it).getComposites().end(); ++cit)
 		{
-			if (&composite == *composite_it ||
-					composite.isRelatedWith(**composite_it)) 
+			if (&composite == *cit ||
+					composite.isRelatedWith(**cit)) 
 			{
 				changed_representations.push_back(*rep_it);
 				break;
@@ -298,7 +304,6 @@ void PrimitiveManager::update_(Representation& rep)
 {
 	if (!has(rep)) 
 	{
-		Log.error() << "Problem in "  << __FILE__ << "  " << __LINE__<< std::endl;
 		return;
 	}
 #ifdef BALL_QT_HAS_THREADS
@@ -398,7 +403,7 @@ void PrimitiveManager::finishedUpdate_()
 #ifdef BALL_QT_HAS_THREADS
 	if (representations_to_be_updated_.size() == 0)
 	{
-		Log.error() << "Problem in "  << __FILE__ << "  " << __LINE__<< std::endl;
+		BALLVIEW_DEBUG
 		return;
 	}
 
@@ -473,6 +478,350 @@ HashSet<Representation*>& PrimitiveManager::getRepresentationsBeeingUpdated()
 HashSet<Representation*>& PrimitiveManager::getRepresentationsBeeingDrawn()
 {
 	return currently_drawing_;
+}
+
+bool PrimitiveManager::removeClippingPlane(ClippingPlane* plane)
+{
+	for (vector<ClippingPlane*>::iterator it = clipping_planes_.begin(); 
+			 it != clipping_planes_.end(); it++)
+	{
+		if (*it == plane)
+		{
+			clipping_planes_.erase(it);
+			delete (*it);
+			getMainControl()->sendMessage(*new SyncClippingPlanesMessage());
+			getMainControl()->sendMessage(*new SceneMessage(SceneMessage::REDRAW));
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void PrimitiveManager::insertClippingPlane(ClippingPlane* plane)
+{
+	clipping_planes_.push_back(plane);
+
+	getMainControl()->sendMessage(*new SyncClippingPlanesMessage());
+	getMainControl()->sendMessage(*new SceneMessage(SceneMessage::REDRAW));
+}
+
+void PrimitiveManager::storeRepresentations(INIFile& out)
+{
+	Position nr_of_representations = 0;
+	RepresentationsConstIterator it = begin();
+	for (; it != end(); it++)
+	{
+		if ((**it).getComposites().size() == 0)
+		{
+			continue;
+		}
+
+		bool ok = true;
+
+		List<const Composite*>::const_iterator cit = (**it).getComposites().begin();
+		const Composite* root = &(**cit).getRoot();
+		for (; cit != (**it).getComposites().end(); cit++)
+		{
+			if ((**cit).getRoot() != *root)
+			{
+				ok = false;
+				break;
+			}
+		}
+
+		if (!ok) 
+		{	
+			Log.error() << "Error while writing Project File in " << __FILE__ << " " << __LINE__ << std::endl;
+			continue;
+		}
+
+		Index system_nr = -1;
+		CompositeManager& cm = getMainControl()->getCompositeManager();
+		CompositeManager::CompositeIterator cit2 = cm.begin();
+		for (Position nr = 0; cit2 != cm.end(); cit2++)
+		{
+			if (root == *cit2) system_nr = nr;
+
+			nr++;
+		}
+
+		if (system_nr == -1) continue;
+
+		out.insertValue("BALLVIEW_PROJECT", 
+										String("Representation") + String(nr_of_representations),  
+										String(system_nr) + String(";") + (**it).toString());
+		nr_of_representations++;
+	}
+
+	// create a numerical id for every representation
+	HashMap<const Representation*, Position> rep_to_pos_map;
+	
+	const RepresentationList& reps = getRepresentations();
+	PrimitiveManager::RepresentationList::const_iterator rep_it = reps.begin();
+	for (Position i = 0; rep_it != reps.end(); rep_it++)
+	{
+		rep_to_pos_map[*rep_it] = i;
+		i++;
+	}
+
+	for (Position plane_pos = 0; plane_pos < getClippingPlanes().size(); plane_pos++)
+	{
+		ClippingPlane* const plane = getClippingPlanes()[plane_pos];
+		String data_string;
+
+		data_string += vector3ToString(plane->getNormal());
+		data_string += " ";
+		data_string += vector3ToString(plane->getPoint());
+
+		data_string += String(plane->isActive());
+		data_string += " ";
+
+		HashSet<const Representation*>::ConstIterator rit = 
+			plane->getRepresentations().begin();
+
+		for (; +rit; ++rit)
+		{
+			data_string += String(rep_to_pos_map[*rit]);
+			data_string += " ";
+		}
+		
+		out.insertValue("BALLVIEW_PROJECT", "ClippingPlane" + String(plane_pos), data_string);
+	}
+}
+			
+void PrimitiveManager::restoreRepresentations(const INIFile& in)
+{
+	try
+	{
+		for (Position p = 0; p < 9999999; p++)
+		{
+			if (!in.hasEntry("BALLVIEW_PROJECT", "Representation" + String(p))) break;
+
+			String data_string = in.getValue("BALLVIEW_PROJECT", "Representation" + String(p));
+
+			vector<String> string_vector;
+			Size split_size;
+
+			// Representation0=1;3 2 2 6.500000 0 0 [2]|Color|H
+			// 								 ^ 																	System Number
+			// 								         ^            							Model Settings
+			// 								         							 ^            Composites numbers
+			// 								         							     ^        Custom Color
+			// 								         							     			^   Hidden Flag
+
+			// split off information of system number
+			split_size = data_string.split(string_vector, ";");
+			Position system_pos = string_vector[0].toUnsignedInt();
+
+			// split off between representation settings and composite numbers
+			data_string = string_vector[1];
+			vector<String> string_vector2;
+			data_string.split(string_vector2, "[]");
+			data_string = string_vector2[0];
+			if (DisplayProperties::getInstance(0) != 0)
+			{
+				DisplayProperties::getInstance(0)->getSettingsFromString(data_string);
+			}
+
+			// Composite positions
+			data_string = string_vector2[1];
+			data_string.split(string_vector2, ",");
+			HashSet<Position> hash_set;
+			for (Position p = 0; p < string_vector2.size(); p++)
+			{
+				hash_set.insert(string_vector2[p].toUnsignedInt());
+			}
+
+			CompositeManager& cm = getMainControl()->getCompositeManager();
+			Position pos = cm.getNumberOfComposites() - 1;
+			CompositeManager::CompositeIterator cit2 = cm.begin();
+			for (; cit2 != cm.end() && system_pos != pos; cit2++)
+			{
+				pos--;
+			}
+
+			if (cit2 == cm.end())  
+			{
+				Log.error() << "Error while reading project file! Aborting..." << std::endl;
+				continue;
+			}
+
+			data_string = string_vector[1];
+			if (data_string.has('|'))
+			{
+				data_string.split(string_vector2, "|");
+				ColorRGBA color;
+				color = string_vector2[1];
+				if (DisplayProperties::getInstance(0) != 0)
+				{
+					DisplayProperties::getInstance(0)->setCustomColor(color);
+				}
+			}
+
+			ControlSelectionMessage* msg = new ControlSelectionMessage();
+			Position current = 0;
+
+			Composite::CompositeIterator ccit = (*cit2)->beginComposite();
+			for (; +ccit; ++ccit)
+			{
+				if (hash_set.has(current)) msg->getSelection().push_back((Composite*)&*ccit);
+				current++;
+			}
+
+			getMainControl()->sendMessage(*msg);
+		
+			if (DisplayProperties::getInstance(0) != 0)
+			{
+				DisplayProperties::getInstance(0)->apply();
+			}	
+
+			if (string_vector2.size() == 3 && string_vector2[2].has('H'))
+			{
+				Representation* rep = 0;
+				RepresentationsIterator pit = begin();
+				for (; pit != end(); pit++)
+				{
+					rep = *pit;
+				}
+
+				rep->setHidden(true);
+				rep->update(false);
+
+   #ifndef BALL_QT_HAS_THREADS
+				getMainControl()->sendMessage(*new RepresentationMessage(*rep, RepresentationMessage::UPDATE));
+   #endif
+			}
+		}
+
+		// create a vector with all Representation
+		vector<const Representation*> representations;
+		PrimitiveManager::RepresentationList::const_iterator rit = 
+			getRepresentations().begin();
+		for (; rit != getRepresentations().end(); rit++)
+		{
+			representations.push_back(*rit);
+		}
+
+		for (Position p = 0; p < 9999999; p++)
+		{
+			if (!in.hasEntry("BALLVIEW_PROJECT", "ClippingPlane" + String(p))) break;
+
+			String data_string = in.getValue("BALLVIEW_PROJECT", "ClippingPlane" + String(p));
+
+			vector<String> string_vector;
+			Size split_size = data_string.split(string_vector);
+
+			// we have a clipping plane
+			if (split_size < 3) 
+			{
+				Log.error() << "Error in "  << __FILE__ << "  " << __LINE__<< std::endl;
+				continue;
+			}
+
+			ClippingPlane* plane = new ClippingPlane();
+			Vector3 v;
+			stringToVector3(string_vector[0], v);
+			plane->setNormal(v);
+			stringToVector3(string_vector[1], v);
+			plane->setPoint(v);
+
+			bool is_active = string_vector[2].toBool();
+			plane->setActive(is_active);
+
+			for (Position rep_pos = 3; rep_pos < split_size; rep_pos++)
+			{
+				Position rep_nr = string_vector[rep_pos].toUnsignedInt();
+				if (rep_nr > getNumberOfRepresentations()) 
+				{
+					Log.error() << "Error in "  << __FILE__ << "  " << __LINE__<< std::endl;
+					continue;
+				}
+
+				plane->getRepresentations().insert(representations[rep_nr]);
+			}
+
+			insertClippingPlane(plane);
+
+		} // for all clipping planes
+
+	}
+	catch(Exception::InvalidFormat e)
+	{
+		Log.error() << "Error while reading project file! Aborting..." << std::endl;
+		Log.error() << e << std::endl;
+		return;
+	}
+}
+
+
+
+void PrimitiveManager::focusRepresentation(const Representation& rep)
+{
+	List<Vector3> positions;
+
+	Vector3 center;
+	List<GeometricObject*>::ConstIterator it = rep.getGeometricObjects().begin();
+	for (; it != rep.getGeometricObjects().end(); it++)
+	{
+		const GeometricObject& go = **it;
+
+		// cant use Vertex or Vertex2 here, no idea why
+		if (RTTI::isKindOf<Vertex2>(go))
+		{
+			const Vertex2& v = *dynamic_cast<const Vertex2*>(&go);
+			positions.push_back(v.getVertex1());
+			positions.push_back(v.getVertex2());
+		}
+		else if (RTTI::isKindOf<Vertex>(go))
+		{
+			const Vertex& v = *dynamic_cast<const Vertex*>(&go);
+			positions.push_back(v.getVertex());
+		}
+		else if (RTTI::isKindOf<SimpleBox3>(go))
+		{
+			const SimpleBox3& b = reinterpret_cast<const SimpleBox3&>(go);
+			positions.push_back(b.a);
+			positions.push_back(b.b);
+		}
+		else if (RTTI::isKindOf<Sphere>(go))
+		{
+			const Sphere& s = reinterpret_cast<const Sphere&>(go);
+			positions.push_back(s.getPosition());
+		}
+		else if (RTTI::isKindOf<Disc>(go))
+		{
+			const Disc& d = reinterpret_cast<const Disc&>(go);
+			positions.push_back(d.getCircle().p);
+		}
+		else if (RTTI::isKindOf<Mesh>(go))
+		{
+			const Mesh& mesh = reinterpret_cast<const Mesh&>(go);
+
+			for (Size index = 0; index < mesh.vertex.size(); ++index)
+			{
+				positions.push_back(mesh.vertex[index]);
+			}
+			continue;
+		}
+		else if (RTTI::isKindOf<BALL::VIEW::Box>(go))
+		{
+			const BALL::VIEW::Box& box = reinterpret_cast<const BALL::VIEW::Box&>(go);
+			positions.push_back(box.getPoint());
+			positions.push_back(box.getPoint() + box.getHeightVector());
+			positions.push_back(box.getPoint() + box.getRightVector());
+			positions.push_back(box.getPoint() + box.getDiagonalVector());
+		}
+		else
+		{
+			Log.error() << "Unknown geometric object: " << typeid(go).name() 
+									<< "in " << __FILE__ << __LINE__ << std::endl;
+			continue;
+		}
+	}
+
+	VIEW::focusCamera(positions);
 }
 
 } } // namespaces

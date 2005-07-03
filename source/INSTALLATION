@@ -4,14 +4,12 @@ Compiler:
   BALL requires a more or less ANSI compliant C++ compiler.
   It has been successfully built and tested on the following platforms:
 
-    - Linux/x86 2.x using g++ 3.2.x/3.3.x
-    - Linux/x86 2.x using Intel C++ 8.0
+    - Linux/x86 2.x using g++ 3.2.x/3.3.x/3.4.x (some trouble with 4.0.0!)
     - Solaris/SPARC 8 using g++ 3.2.1
-    - IRIX 6.5 using CC 7.3.1.1m (32 and 64 bit)
+    - MacOS X (Panther) using g++ 3.3
+    - Microsoft Windows XP using Microsoft Visual Studio .NET 2003
 
   We have also successful reports (although with slight problems) for:
-		- Microsoft Windows XP using Microsoft Visual Studio .NET (MSVC 7.0)
-		- MacOS X (Darwin 7.2) using g++ 3.3
     - Microsoft Windows/cygwin
 
   (Please refer to Section 2.6 at the bottom of this file for specific hints
@@ -45,8 +43,11 @@ External software and libraries:
 
     http://www.mesa3d.org 
 
-  If MESA is used, please call configure with the option "--with-mesa"
+  If MESA is used, please call configure with the option "--with-mesa".
 
+  To get decent speed on accelerated graphics hardware, please install
+  the vendor drivers and the provided OpenGL libraries (e.g. from
+  www.nvidia.org if you have NVidia graphics cards).
 
 2) Building the libraries
 =========================
@@ -61,6 +62,10 @@ built by issuing the following commands in the directory BALL/source:
 The following sections give further details on the configuration of the
 library, on the library files created, how to test the library, and how to
 build BALL applications.
+
+If configure fails, please check out the FAQ on our website first before
+you complain about it!
+
 
 2.1 "configure"
 ---------------
@@ -97,6 +102,8 @@ options.  An overview of these options can also be obtained by executing
   --with-qt-incl=DIR      QT header files are in DIR
 
   --with-qt-libs=DIR      QT libraries are in DIR
+
+  --wiht-qt-mt  	  Use the threaded version of QT
 
   --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL
 
@@ -212,15 +219,7 @@ the qt libraries (libqt.so, libqgl.so), and the OpenGL/Mesa libraries
 
 MacOS X: 
   - Make sure you run MacOS X Panther and have g++ 3.3 installed
-  - install QT 3.2.3
-  - Build static libraries instead of dynamic ones: 
-     "make staticlibs"
-  - "ranlib" the libraries
-     "ranlib libBALL.a libVIEW.a" 
-  - install the library:
-     "make install.static"
-  - Not all tests will succeed -- currently TransformationManager_test fails for 
-    some yet unknown reason
+  - install QT 3.3.4 (under Tiger: a 3.3.5 snapshot -- not yet tested!)
 
 Windows/cygwin:
   - should work out of the box without visualization:
@@ -233,4 +232,4 @@ Windows/DOT NET:
     in BALL/Windows/README.txt
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.16 2004/06/14 15:50:41 amoll Exp $
+document revision: $Id: INSTALLATION,v 1.17 2005/07/03 09:43:12 oliver Exp $

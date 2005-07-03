@@ -1,9 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.40 2005/02/11 15:27:13 oliver Exp $
-//
-//
+// $Id: BALL.sip,v 1.41 2005/07/03 09:43:24 oliver Exp $
 //
 
 /////////////////////////
@@ -271,7 +269,7 @@
 // %Include directory.sip
 %Include file.sip
 // %Include fileSystem.sip
-// %Include path.sip
+%Include path.sip
 // %Include socket.sip
 %Include timer.sip
 
@@ -315,7 +313,7 @@
 %Include label.sip
 %Include line.sip
 %Include mesh.sip
-%Include point.sip
+// %Include point.sip
 %Include simpleBox.sip
 %Include sphere.sip
 %Include twoColoredLine.sip
@@ -333,10 +331,14 @@
 
 // VIEW/WIDGETS
 %Include modularWidget.sip
+%Include dockWidget.sip
 %Include pyWidget.sip
 %Include scene.sip
 %Include molecularStructure.sip
 %Include molecularControl.sip
+%Include geometricControl.sip
+%Include logView.sip
+%Include datasetControl.sip
 
 // Makefile
 //%Include Makefile.sip

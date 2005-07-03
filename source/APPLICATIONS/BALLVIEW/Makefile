@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.8 2005/03/01 20:24:11 oliver Exp $
+# $Id: Makefile,v 1.9 2005/07/03 09:43:19 oliver Exp $
 #
 
 EXECUTABLE=BALLView
@@ -12,7 +12,7 @@ all:	$(EXECUTABLE)
 clean:	default_clean
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 
@@ -33,7 +33,7 @@ MOC_SOURCES=\
 	ballviewDemo_moc.C\
 	ballviewDemoData_moc.C\
 	mainframe_moc.C
-	
+
 UIC_FILES=\
 	aboutDialog.C\
 	aboutDialog.h\
@@ -42,7 +42,7 @@ UIC_FILES=\
 	ballviewDemoData.C
 
 BALLView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS)
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(PYTHON_LIBS)
 
 depend: $(UIC_FILES) $(MOC_SOURCES)
 
@@ -91,7 +91,7 @@ clean_moc_uic:
 	@$(RM) -f $(UIC_FILES)
 
 macos_app: $(EXECUTABLE) BALLView.app/Contents/MacOS/../PkgInfo BALLView.app/Contents/MacOS/../Info.plist 
-	@mv BALLView BALLView.app/Contents/MacOS
+	@$(CP) BALLView BALLView.app/Contents/MacOS
 
 BALLView.app/Contents/MacOS/../PkgInfo: 
 	@test -d BALLView.app/Contents/MacOS/ || mkdir -p BALLView.app/Contents/MacOS/
@@ -106,15 +106,20 @@ BALLView.app/Contents/MacOS/../Info.plist:
 
 macos_pkg: $(EXECUTABLE)
 	@echo "Cleaning old package contents..."
-	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL 2>/dev/null | true
-	@-mkkdir $(BALL_PATH)/MacOSX/BALLPackage 2>/dev/null | true
+	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL/Library/lib*dylib 2>/dev/null | true
+	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS/BALLView 2>/dev/null | true
+	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL/Library 2>/dev/null | true
+	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Applications 2>/dev/null | true
+	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app 2>/dev/null | true
+	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents 2>/dev/null | true
+	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS 2>/dev/null | true
 	@echo "Copying BALL/data..."
 	@$(CP) -r $(BALL_PATH)/data $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL
 	@echo "Copying BALLView"
-	@$(MV) BALLView $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS/
+	@$(CP) BALLView $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS/
 	@echo "Copying QT libraries..."
 	@$(CP) $(QT_LIBPATH)/libqt$(QT_MT_SUFFIX).$(SHARED_LIB_SUFFIX) $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL/Library/
 	

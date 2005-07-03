@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.sip,v 1.9 2004/11/30 14:15:48 amoll Exp $
+// $Id: molecularControl.sip,v 1.11 2005/07/16 21:00:42 oliver Exp $
 //
 
 class MolecularControl
-  : ModularWidget
+  : DockWidget
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -30,7 +30,6 @@ class MolecularControl
   Size applySelector(const String&) throw();
   void bondProperties();
   void buildBonds();
-  void buildContextMenu(Composite&) throw();
   void centerCamera();
   //void checkMenu(VIEW::MainControl&) throw();
   void checkResidue();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension2.h,v 1.7 2004/05/27 19:49:47 oliver Exp $
+// $Id: colorExtension2.h,v 1.9 2005/07/16 21:00:31 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLOREXTENSION2_H
@@ -26,6 +26,8 @@ namespace BALL
 		class BALL_EXPORT ColorExtension2
 		{
 			public:
+
+			BALL_CREATE(ColorExtension2)
 			
 			/**	@name	Constructors
 			*/	

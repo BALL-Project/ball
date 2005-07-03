@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.17 2004/07/15 14:01:51 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.18 2005/07/03 09:43:06 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -77,14 +77,6 @@ namespace BALL
 					\see		finalizeWidget
 			 */
 			virtual void initializeWidget(MainControl& main_control)
-				throw();
-
-			/** Removes the widget and its menu entries.
-					This method will be called by MainControl::aboutToExit().
-					\param		main_control the MainControl object to be finalized
-					\see			initializeWidget
-			 */
-			virtual void finalizeWidget(MainControl& main_control)
 				throw();
 
 		public slots:
@@ -182,7 +174,7 @@ namespace BALL
 				MOL2_FILE
 			};
 
-			Index save_id_;
+			Index save_id_, open_id_;
 		};
 
 	} // namespace VIEW

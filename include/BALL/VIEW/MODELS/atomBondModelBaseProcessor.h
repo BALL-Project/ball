@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.15 2005/02/23 12:55:22 amoll Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.17 2005/07/16 21:00:34 oliver Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
@@ -36,6 +36,8 @@ namespace BALL
 			:	public ModelProcessor
 		{
 			public:
+
+			BALL_CREATE(AtomBondModelBaseProcessor)
 
 			/**	@name	Constructors and Destructors
 			*/	

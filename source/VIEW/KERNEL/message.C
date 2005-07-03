@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.28 2005/02/28 19:36:08 amoll Exp $
+// $Id: message.C,v 1.29 2005/07/03 09:43:39 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -344,6 +344,8 @@ FinishedSimulationMessage::FinishedSimulationMessage()
 	: Message()
 {
 }
+
+
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/message.iC>
 #	endif 

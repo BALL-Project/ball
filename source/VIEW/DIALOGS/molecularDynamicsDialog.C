@@ -145,11 +145,6 @@ void MolecularDynamicsDialog::setTemperature(float temperature)
 	temperature_lineedit->setText(String(temperature).c_str());
 }
 
-bool MolecularDynamicsDialog::saveImages() const
-{
-	return export_images->isChecked();
-}
-
 void MolecularDynamicsDialog::enableDCDFileSelected()
 {
 	dcd_file_edit->setEnabled(enable_dcd->isChecked());

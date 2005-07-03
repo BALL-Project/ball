@@ -40,7 +40,7 @@ CPP_SOURCES= \
 PARSER_PREFIX=ExpressionParser
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies
 
 depend: $(PARSER_SOURCES)
 

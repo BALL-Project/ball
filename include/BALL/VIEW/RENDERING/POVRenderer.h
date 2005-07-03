@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.9 2005/04/18 13:30:41 amoll Exp $
+// $Id: POVRenderer.h,v 1.11 2005/07/16 21:00:36 oliver Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -28,6 +28,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class ColorRGBA;
+		class ClippingPlane;
 
 		/** POVRenderer class.
 		 		This class walks over all the geometric primitives in a Scene
@@ -38,6 +39,8 @@ namespace BALL
 		class BALL_EXPORT POVRenderer : public Renderer
 		{
 			public:
+
+			BALL_CREATE(POVRenderer)
 
 			struct POVRendererClippingPlane
 			{
@@ -131,10 +134,6 @@ namespace BALL
 			virtual bool finish()
 				throw();
 
-			///
-			virtual void renderClippingPlane_(const Representation& /*rep*/)
-				throw();
-
 			void renderSphere_(const Sphere& sphere)
 				throw();
 			
@@ -161,7 +160,7 @@ namespace BALL
 
 			// do nothing
 			void renderLabel_(const Label&)
-				throw() {}
+				throw();
 
 			//@}
 
@@ -175,7 +174,7 @@ namespace BALL
 
 				Vector3   origin_;
 				Matrix4x4 rotation_;
-				vector<POVRendererClippingPlane> clipping_planes_;
+				vector<ClippingPlane*> clipping_planes_;
 				bool human_readable_;
 
 				typedef HashMap<String, Position> ColorMap;
@@ -183,6 +182,8 @@ namespace BALL
 				vector<const ColorRGBA*> color_vector_;
 				vector<const Representation*> representations_;
 				HashSet<const Mesh*> wireframes_;
+				String font_file_;
+				double m_[12];
 		};
   
 	} // namespace BALL

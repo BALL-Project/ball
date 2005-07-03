@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.23 2005/02/27 21:39:39 amoll Exp $
+// $Id: pyWidget.h,v 1.25 2005/07/16 21:00:38 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -147,6 +147,9 @@ namespace BALL
 			virtual void exportHistory();			
 
 			void runString(String command);
+
+			virtual void contentsDragEnterEvent(QDragEnterEvent* e);
+			virtual void contentsDropEvent(QDropEvent* e);
 
 			public:
 

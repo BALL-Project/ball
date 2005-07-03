@@ -310,7 +310,7 @@ ac_includes_default="\
 #endif"
 
 ac_default_prefix=`cd ..; pwd`
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PAGER LN_S UNAME CUT TR AR CP RM MV LN SED FIND DIFF TAIL GREP EGREP CAT ECHO_COMMAND ECHO OSMAJOR OS OSREV BINFMT BINFMT_PATH ARCHITECTURE SHARED_LIB_SUFFIX CXXPATH CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXCPP BALL[]_HAS_XDR BALL_HAS_XDR LEX LEXLIB LEX_OUTPUT_ROOT YACC BALL_HAS_FLEX_YACC BALL_HAS_FFTW BALL_HAS_FFTW_H BALL_HAS_FFTW_FLOAT BALL_HAS_FFTW_DOUBLE BALL_HAS_FFTW_LONG_DOUBLE MOC UIC SIP SIP_LIB SIP_INCLUDES PYTHON_INCLUDES PYTHON_SUPPORT PYTHON_LIBS PYTHON_EXECUTABLE VALGRIND VALGRIND_OPTS BALL_PATH BALL_INCLUDES CXX_MAKEDEPEND MAKEDEP_CXX_OPTS MAKEDEP_CXX_SUFFIX DEPENDENCY_GREPS CC ADD_CXXFLAGS LIB_CXXFLAGS NONLIB_CXXFLAGS HAS_GPLUSPLUS STD_CPP_INCLUDES MAKEDEP_OPTS BALL_TYPENAME BINFMT_INDEX VIEW_LIBS OPENGL_LIBOPTS OPENGL_LIBPATH QT_LIBOPTS QT_LIBPATH QT_MT_SUFFIX X11_LIBOPTS X11_LIBPATH X11_LIBS BALL_LIBS DEFINES CXXFLAGS_D CXXFLAGS_O CPP_MODE_FLAGS CPP_MODE_FLAGS_NO_OPTIMIZATION AROPTS DYNAR DYNAROPTS ADD_DYNAROPTS_LIBBALL ADD_DYNAROPTS_LIBVIEW RANLIB ADDITIONAL_COMMENTS USE_VIEW BALL_HAS_VIEW VIEW_PLATFORM VIEW_INCLUDES LIBVIEW TEMPLATE_DIR SUBDIRS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PAGER LN_S UNAME CUT TR AR CP RM MV LN SED FIND DIFF TAIL GREP EGREP CAT ECHO_COMMAND ECHO OSMAJOR OS OSREV BINFMT BINFMT_PATH ARCHITECTURE SHARED_LIB_SUFFIX CXXPATH CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXCPP BALL[]_HAS_XDR BALL_HAS_XDR LEX LEXLIB LEX_OUTPUT_ROOT YACC BALL_HAS_FLEX_YACC BALL_HAS_FFTW BALL_HAS_FFTW_H BALL_HAS_FFTW_FLOAT BALL_HAS_FFTW_DOUBLE BALL_HAS_FFTW_LONG_DOUBLE MOC UIC SIP SIP_LIB SIP_INCLUDES PYTHON_INCLUDES PYTHON_SUPPORT PYTHON_LIBS PYTHON_EXECUTABLE VALGRIND VALGRIND_OPTS BALL_PATH BALL_INCLUDES CXX_MAKEDEPEND MAKEDEP_CXX_OPTS MAKEDEP_CXX_SUFFIX DEPENDENCY_GREPS CC ADD_CXXFLAGS LIB_CXXFLAGS NONLIB_CXXFLAGS HAS_GPLUSPLUS STD_CPP_INCLUDES MAKEDEP_OPTS BALL_TYPENAME BINFMT_INDEX VIEW_LIBS OPENGL_LIBOPTS OPENGL_LIBPATH QT_LIBOPTS QT_LIBPATH QT_MT_SUFFIX X11_LIBOPTS X11_LIBPATH X11_LIBS BALL_LIBS DEFINES CXXFLAGS_D CXXFLAGS_O CPP_MODE_FLAGS CPP_MODE_FLAGS_NO_OPTIMIZATION AROPTS DYNAR DYNAROPTS DYNAROPTS_PYMODULE ADD_DYNAROPTS_LIBBALL ADD_DYNAROPTS_LIBVIEW RANLIB ADDITIONAL_COMMENTS USE_VIEW BALL_HAS_VIEW VIEW_PLATFORM VIEW_INCLUDES LIBVIEW TEMPLATE_DIR SUBDIRS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1323,6 +1323,10 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 PROJECT=BALL
+
+
+BALL_CURRENT_VERSION=1.1
+BALL_COMPATIBILITY_VERSION=1.1
 
 
 
@@ -4454,7 +4458,8 @@ echo "${ECHO_T}yes" >&6
   CXXFLAGS_D="${CXXFLAGS_D} -Wall -W -pedantic -Wno-long-long"
   CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 					if test "${OS}" = "Darwin" ; then
-	  CXXFLAGS_O="${CXXFLAGS_O} -O2 -Wall -W -pedantic -Wno-long-long -Wno-long-double"
+	  CXXFLAGS_O="${CXXFLAGS_O} -O1 -Wall -W -pedantic -Wno-long-long -Wno-long-double"
+	  CXXFLAGS_D="${CXXFLAGS_D} -O1"
 	else
 	  CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
 	fi
@@ -4469,13 +4474,14 @@ echo "${ECHO_T}yes" >&6
     DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
   else
     if test "${OS}" = "Darwin" ; then
-      DYNAROPTS="${DYNAROPTS} -prebind -dynamiclib -o"
-			ADD_DYNAROPTS_LIBPROJECT="-seg1addr 0xb0000000"
+      DYNAROPTS="${DYNAROPTS} -headerpad_max_install_names -compatibility_version ${BALL_COMPATIBILITY_VERSION} -current_version ${BALL_CURRENT_VERSION} -dynamiclib -o"
+			ADD_DYNAROPTS_LIBBALL="-seg1addr 0xb0000000"
 			ADD_DYNAROPTS_LIBVIEW="-seg1addr 0x80000000"
+      DYNAROPTS_PYMODULE="-headerpad_max_install_names -bundle -framework Python -o"
       RANLIB="ranlib -s "
     else
       DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
-		fi
+    fi
   fi
 
   if test "${IS_EGXX}" = true; then
@@ -4601,8 +4607,8 @@ _ACEOF
 		if test ${CXX_VERSION_1} -ge 8 ; then
 			if test ${CXX_VERSION_1} = 8 -a ${CXX_VERSION_2} -ge 1 ; then
 				if test `basename ${CXX}` = "icc" ; then
-					echo "$as_me:$LINENO: result: WARNING: Starting with version 8.1, ipcp should be used instead of icc." >&5
-echo "${ECHO_T}WARNING: Starting with version 8.1, ipcp should be used instead of icc." >&6
+					echo "$as_me:$LINENO: result: WARNING: Starting with version 8.1, icpc should be used instead of icc." >&5
+echo "${ECHO_T}WARNING: Starting with version 8.1, icpc should be used instead of icc." >&6
 					echo "$as_me:$LINENO: result: Otherwise, linking errors will occur! Please call configure again" >&5
 echo "${ECHO_T}Otherwise, linking errors will occur! Please call configure again" >&6
 					echo "$as_me:$LINENO: result: with icpc as the compiler." >&5
@@ -16346,10 +16352,10 @@ echo $ECHO_N "checking for FFTW library with float support... $ECHO_C" >&6
 		if test "${_LIBS}" = "" -a "${FFTW_LIBPATH}" != ""; then
 			for i in ${FFTW_LIBPATH} /dev/null; do
 				if test "${_LIBS}" = "" ; then
-					_TMP=`${FIND} $i -name "libfftw3f*" -print 2>/dev/null`
+					_TMP=`${FIND} $i -name "libfftw3f.*" -print 2>/dev/null`
 					for j in ${_TMP} ; do
 						if test "${_LIBS}" = "" ; then
-							_LIBS=`echo $j|${SED} "s/\/libfftw3f.*/\//"`
+							_LIBS=`echo $j|${SED} "s/\/libfftw3f\\.*/\//"`
 						fi
 					done
 				fi
@@ -16357,19 +16363,19 @@ echo $ECHO_N "checking for FFTW library with float support... $ECHO_C" >&6
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /opt -name "libfftw3f*" -print 2>/dev/null`
+			_TMP=`${FIND} /opt -name "libfftw3f.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libfftw3f.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libfftw3f\\.*/\//"`
 				fi
 			done
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /usr -name "libfftw3f*" -print 2>/dev/null`
+			_TMP=`${FIND} /usr -name "libfftw3f.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libfftw3f.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libfftw3f\\.*/\//"`
 				fi
 			done
 		fi
@@ -16390,7 +16396,6 @@ echo "${ECHO_T}no float support found for FFTW!" >&6
 			else
 				echo "$as_me:$LINENO: result: (${FFTW_LIB_F})" >&5
 echo "${ECHO_T}(${FFTW_LIB_F})" >&6
-				LIBS="${LIBS} ${FFTW_LIB_F}/libfftw3f.a"
 				FFTW_DISABLE_FFTW_FLOAT=false
 			fi
 		fi
@@ -16445,10 +16450,10 @@ echo $ECHO_N "checking for FFTW library with double support... $ECHO_C" >&6
 		if test "${_LIBS}" = "" -a "${FFTW_LIBPATH}" != ""; then
 			for i in ${FFTW_LIBPATH} /dev/null; do
 				if test "${_LIBS}" = "" ; then
-					_TMP=`${FIND} $i -name "libfftw3*" -print 2>/dev/null`
+					_TMP=`${FIND} $i -name "libfftw3.*" -print 2>/dev/null`
 					for j in ${_TMP} ; do
 						if test "${_LIBS}" = "" ; then
-							_LIBS=`echo $j|${SED} "s/\/libfftw3.*/\//"`
+							_LIBS=`echo $j|${SED} "s/\/libfftw3\\.*/\//"`
 						fi
 					done
 				fi
@@ -16456,19 +16461,19 @@ echo $ECHO_N "checking for FFTW library with double support... $ECHO_C" >&6
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /opt -name "libfftw3*" -print 2>/dev/null`
+			_TMP=`${FIND} /opt -name "libfftw3.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libfftw3.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libfftw3\\.*/\//"`
 				fi
 			done
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /usr -name "libfftw3*" -print 2>/dev/null`
+			_TMP=`${FIND} /usr -name "libfftw3.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libfftw3.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libfftw3\\.*/\//"`
 				fi
 			done
 		fi
@@ -16489,7 +16494,6 @@ echo "${ECHO_T}no double support found for FFTW!" >&6
 			else
 				echo "$as_me:$LINENO: result: (${FFTW_LIB_D})" >&5
 echo "${ECHO_T}(${FFTW_LIB_D})" >&6
-				LIBS="${LIBS} ${FFTW_LIB_D}/libfftw3.a"
 				FFTW_DISABLE_FFTW_DOUBLE=false
 			fi
 		fi
@@ -16512,7 +16516,7 @@ echo $ECHO_N "checking for FFTW library with long double support... $ECHO_C" >&6
 
 	if test "${_LIBS}" = "" ; then
 		for i in ${_LIBDIRS} ; do
-			for j in $i/libfftwl.* ; do
+			for j in $i/libfftw3l.* ; do
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -16522,7 +16526,7 @@ echo $ECHO_N "checking for FFTW library with long double support... $ECHO_C" >&6
 
 	if test "${_LIBS}" = "" ; then
 		for i in /usr/lib /opt/lib /usr/*/lib /opt/*/lib ; do
-			for j in $i/libfftwl.* ; do
+			for j in $i/libfftw3l.* ; do
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -16532,7 +16536,7 @@ echo $ECHO_N "checking for FFTW library with long double support... $ECHO_C" >&6
 
 	if test "${_LIBS}" = "" ; then
 		for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
-			for j in $i/libfftwl.* ; do
+			for j in $i/libfftw3l.* ; do
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -16544,10 +16548,10 @@ echo $ECHO_N "checking for FFTW library with long double support... $ECHO_C" >&6
 		if test "${_LIBS}" = "" -a "${FFTW_LIBPATH}" != ""; then
 			for i in ${FFTW_LIBPATH} /dev/null; do
 				if test "${_LIBS}" = "" ; then
-					_TMP=`${FIND} $i -name "libfftwl*" -print 2>/dev/null`
+					_TMP=`${FIND} $i -name "libfftw3l.*" -print 2>/dev/null`
 					for j in ${_TMP} ; do
 						if test "${_LIBS}" = "" ; then
-							_LIBS=`echo $j|${SED} "s/\/libfftwl.*/\//"`
+							_LIBS=`echo $j|${SED} "s/\/libfftw3l\\.*/\//"`
 						fi
 					done
 				fi
@@ -16555,19 +16559,19 @@ echo $ECHO_N "checking for FFTW library with long double support... $ECHO_C" >&6
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /opt -name "libfftwl*" -print 2>/dev/null`
+			_TMP=`${FIND} /opt -name "libfftw3l.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libfftwl.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libfftw3l\\.*/\//"`
 				fi
 			done
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /usr -name "libfftwl*" -print 2>/dev/null`
+			_TMP=`${FIND} /usr -name "libfftw3l.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libfftwl.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libfftw3l\\.*/\//"`
 				fi
 			done
 		fi
@@ -16588,7 +16592,6 @@ echo "${ECHO_T}no long double support found for FFTW!" >&6
 			else
 				echo "$as_me:$LINENO: result: (${FFTW_LIB_L})" >&5
 echo "${ECHO_T}(${FFTW_LIB_L})" >&6
-				LIBS="${LIBS} ${FFTW_LIB_L}/libfftw3l.a"
 				FFTW_DISABLE_FFTW_LONGDBL=false
 			fi
 		fi
@@ -16654,12 +16657,12 @@ _ACEOF
 
 		BALL_HAS_FFTW_FLOAT=""
 		if test "${FFTW_DISABLE_FFTW_FLOAT}" = "false" ; then
-			echo "$as_me:$LINENO: checking linking against libfftwf" >&5
-echo $ECHO_N "checking linking against libfftwf... $ECHO_C" >&6
+			echo "$as_me:$LINENO: checking linking against libfftw3f" >&5
+echo $ECHO_N "checking linking against libfftw3f... $ECHO_C" >&6
 			SAVE_LIBS=${LIBS}
 			SAVE_LDFLAGS=${LDFLAGS}
-			LIBS="${FFTW_LIB_F}/libfftwf3.a ${LIBS}"
-			LDFLAGS=
+			LIBS="${FFTW_LIB_F}/libfftw3f.a ${LIBS}"
+			LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
 			FFTW_LINKING_OK=0
 			cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -16675,7 +16678,7 @@ int
 main ()
 {
 
-								     fftw_plan f = fftw_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
+								     fftwf_plan f = fftwf_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
 
   ;
   return 0;
@@ -16702,7 +16705,7 @@ fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 			LIBS=${SAVE_LIBS}
 			LDFLAGS=${SAVE_LDFLAGS}
-			if test "${FFTW_LINKING_OK+set}" != "set" ; then
+			if test "${FFTW_LINKING_OK}" != "1" ; then
 				echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 				echo "$as_me:$LINENO: result: " >&5
@@ -16756,12 +16759,12 @@ echo "${ECHO_T}yes" >&6
 
 		BALL_HAS_FFTW_DOUBLE=""
 		if test "${FFTW_DISABLE_FFTW_DOUBLE}" = "false" ; then
-			echo "$as_me:$LINENO: checking linking against libfftw" >&5
-echo $ECHO_N "checking linking against libfftw... $ECHO_C" >&6
+			echo "$as_me:$LINENO: checking linking against libfftw3" >&5
+echo $ECHO_N "checking linking against libfftw3... $ECHO_C" >&6
 			SAVE_LIBS=${LIBS}
 			SAVE_LDFLAGS=${LDFLAGS}
 			LIBS="${FFTW_LIB_D}/libfftw3.a ${LIBS}"
-			LDFLAGS=
+			LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
 			FFTW_LINKING_OK=0
 			cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -16804,7 +16807,7 @@ fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 			LIBS=${SAVE_LIBS}
 			LDFLAGS=${SAVE_LDFLAGS}
-			if test "${FFTW_LINKING_OK+set}" != "set" ; then
+			if test "${FFTW_LINKING_OK}" != "1" ; then
 				echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 				echo "$as_me:$LINENO: result: " >&5
@@ -16858,12 +16861,12 @@ echo "${ECHO_T}yes" >&6
 
 		BALL_HAS_FFTW_LONG_DOUBLE=""
 		if test "${FFTW_DISABLE_FFTW_LONGDBL}" = "false" ; then
-			echo "$as_me:$LINENO: checking linking against libfftwl" >&5
-echo $ECHO_N "checking linking against libfftwl... $ECHO_C" >&6
+			echo "$as_me:$LINENO: checking linking against libfftw3l" >&5
+echo $ECHO_N "checking linking against libfftw3l... $ECHO_C" >&6
 			SAVE_LIBS=${LIBS}
 			SAVE_LDFLAGS=${LDFLAGS}
 			LIBS="${FFTW_LIB_D}/libfftwl3.a ${LIBS}"
-			LDFLAGS=
+			LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
 			FFTW_LINKING_OK=0
 			cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -16879,7 +16882,7 @@ int
 main ()
 {
 
-								     fftw_plan f = fftw_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
+								     fftwl_plan f = fftwl_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
 
   ;
   return 0;
@@ -16906,7 +16909,7 @@ fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 			LIBS=${SAVE_LIBS}
 			LDFLAGS=${SAVE_LDFLAGS}
-			if test "${FFTW_LINKING_OK+set}" != "set" ; then
+			if test "${FFTW_LINKING_OK}" != "1" ; then
 				echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 				echo "$as_me:$LINENO: result: " >&5
@@ -17230,7 +17233,7 @@ fi
 		if test "${USE_VIEW}" = true ; then
 												if test "${OS}" = "Darwin" ; then
 				VIEW_PLATFORM="OpenGL-Darwin"
-				OPENGL_LIBOPTS="-framework OpenGL -framework AGL"
+				OPENGL_LIBOPTS="-framework Carbon -framework OpenGL -framework AGL"
 				X11_LIBPATHOPT=""
 				X11_INCPATH=""
 	      OPENGL_INCPATH="-I/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers -I/System/Library/Frameworks/AGL.framework/Versions/A/Headers"
@@ -17417,10 +17420,10 @@ echo $ECHO_N "checking for Mesa library... $ECHO_C" >&6
 		if test "${_LIBS}" = "" -a "${OPENGL_LIBPATH} ${X11_LIBPATH}" != ""; then
 			for i in ${OPENGL_LIBPATH} ${X11_LIBPATH} /dev/null; do
 				if test "${_LIBS}" = "" ; then
-					_TMP=`${FIND} $i -name "libMesaGL*" -print 2>/dev/null`
+					_TMP=`${FIND} $i -name "libMesaGL.*" -print 2>/dev/null`
 					for j in ${_TMP} ; do
 						if test "${_LIBS}" = "" ; then
-							_LIBS=`echo $j|${SED} "s/\/libMesaGL.*/\//"`
+							_LIBS=`echo $j|${SED} "s/\/libMesaGL\\.*/\//"`
 						fi
 					done
 				fi
@@ -17428,19 +17431,19 @@ echo $ECHO_N "checking for Mesa library... $ECHO_C" >&6
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /opt -name "libMesaGL*" -print 2>/dev/null`
+			_TMP=`${FIND} /opt -name "libMesaGL.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libMesaGL.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libMesaGL\\.*/\//"`
 				fi
 			done
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /usr -name "libMesaGL*" -print 2>/dev/null`
+			_TMP=`${FIND} /usr -name "libMesaGL.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libMesaGL.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libMesaGL\\.*/\//"`
 				fi
 			done
 		fi
@@ -17497,10 +17500,10 @@ echo $ECHO_N "checking for Mesa library... $ECHO_C" >&6
 		if test "${_LIBS}" = "" -a "${OPENGL_LIBPATH} ${X11_LIBPATH}" != ""; then
 			for i in ${OPENGL_LIBPATH} ${X11_LIBPATH} /dev/null; do
 				if test "${_LIBS}" = "" ; then
-					_TMP=`${FIND} $i -name "libGL*" -print 2>/dev/null`
+					_TMP=`${FIND} $i -name "libGL.*" -print 2>/dev/null`
 					for j in ${_TMP} ; do
 						if test "${_LIBS}" = "" ; then
-							_LIBS=`echo $j|${SED} "s/\/libGL.*/\//"`
+							_LIBS=`echo $j|${SED} "s/\/libGL\\.*/\//"`
 						fi
 					done
 				fi
@@ -17508,19 +17511,19 @@ echo $ECHO_N "checking for Mesa library... $ECHO_C" >&6
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /opt -name "libGL*" -print 2>/dev/null`
+			_TMP=`${FIND} /opt -name "libGL.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libGL.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libGL\\.*/\//"`
 				fi
 			done
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /usr -name "libGL*" -print 2>/dev/null`
+			_TMP=`${FIND} /usr -name "libGL.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libGL.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libGL\\.*/\//"`
 				fi
 			done
 		fi
@@ -17731,10 +17734,10 @@ echo $ECHO_N "checking for OpenGL library... $ECHO_C" >&6
 		if test "${_LIBS}" = "" -a "" != ""; then
 			for i in  /dev/null; do
 				if test "${_LIBS}" = "" ; then
-					_TMP=`${FIND} $i -name "libGL*" -print 2>/dev/null`
+					_TMP=`${FIND} $i -name "libGL.*" -print 2>/dev/null`
 					for j in ${_TMP} ; do
 						if test "${_LIBS}" = "" ; then
-							_LIBS=`echo $j|${SED} "s/\/libGL.*/\//"`
+							_LIBS=`echo $j|${SED} "s/\/libGL\\.*/\//"`
 						fi
 					done
 				fi
@@ -17742,19 +17745,19 @@ echo $ECHO_N "checking for OpenGL library... $ECHO_C" >&6
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /opt -name "libGL*" -print 2>/dev/null`
+			_TMP=`${FIND} /opt -name "libGL.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libGL.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libGL\\.*/\//"`
 				fi
 			done
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /usr -name "libGL*" -print 2>/dev/null`
+			_TMP=`${FIND} /usr -name "libGL.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libGL.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libGL\\.*/\//"`
 				fi
 			done
 		fi
@@ -18091,10 +18094,10 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 		if test "${_LIBS}" = "" -a "${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include" != ""; then
 			for i in ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include /dev/null; do
 				if test "${_LIBS}" = "" ; then
-					_TMP=`${FIND} $i -name "libqt${QT_MT_SUFFIX}*" -print 2>/dev/null`
+					_TMP=`${FIND} $i -name "libqt${QT_MT_SUFFIX}.*" -print 2>/dev/null`
 					for j in ${_TMP} ; do
 						if test "${_LIBS}" = "" ; then
-							_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}.*/\//"`
+							_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}\\.*/\//"`
 						fi
 					done
 				fi
@@ -18102,19 +18105,19 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /opt -name "libqt${QT_MT_SUFFIX}*" -print 2>/dev/null`
+			_TMP=`${FIND} /opt -name "libqt${QT_MT_SUFFIX}.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}\\.*/\//"`
 				fi
 			done
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /usr -name "libqt${QT_MT_SUFFIX}*" -print 2>/dev/null`
+			_TMP=`${FIND} /usr -name "libqt${QT_MT_SUFFIX}.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}\\.*/\//"`
 				fi
 			done
 		fi
@@ -18179,10 +18182,10 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 		if test "${_LIBS}" = "" -a "${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include" != ""; then
 			for i in ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include /dev/null; do
 				if test "${_LIBS}" = "" ; then
-					_TMP=`${FIND} $i -name "libqt${QT_MT_SUFFIX}*" -print 2>/dev/null`
+					_TMP=`${FIND} $i -name "libqt${QT_MT_SUFFIX}.*" -print 2>/dev/null`
 					for j in ${_TMP} ; do
 						if test "${_LIBS}" = "" ; then
-							_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}.*/\//"`
+							_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}\\.*/\//"`
 						fi
 					done
 				fi
@@ -18190,19 +18193,19 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /opt -name "libqt${QT_MT_SUFFIX}*" -print 2>/dev/null`
+			_TMP=`${FIND} /opt -name "libqt${QT_MT_SUFFIX}.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}\\.*/\//"`
 				fi
 			done
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /usr -name "libqt${QT_MT_SUFFIX}*" -print 2>/dev/null`
+			_TMP=`${FIND} /usr -name "libqt${QT_MT_SUFFIX}.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}\\.*/\//"`
 				fi
 			done
 		fi
@@ -18261,10 +18264,10 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 		if test "${_LIBS}" = "" -a "${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT}" != ""; then
 			for i in ${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT} /dev/null; do
 				if test "${_LIBS}" = "" ; then
-					_TMP=`${FIND} $i -name "libqt${QT_MT_SUFFIX}*" -print 2>/dev/null`
+					_TMP=`${FIND} $i -name "libqt${QT_MT_SUFFIX}.*" -print 2>/dev/null`
 					for j in ${_TMP} ; do
 						if test "${_LIBS}" = "" ; then
-							_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}.*/\//"`
+							_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}\\.*/\//"`
 						fi
 					done
 				fi
@@ -18272,19 +18275,19 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /opt -name "libqt${QT_MT_SUFFIX}*" -print 2>/dev/null`
+			_TMP=`${FIND} /opt -name "libqt${QT_MT_SUFFIX}.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}\\.*/\//"`
 				fi
 			done
 		fi
 
 		if test "${_LIBS}" = "" ; then
-			_TMP=`${FIND} /usr -name "libqt${QT_MT_SUFFIX}*" -print 2>/dev/null`
+			_TMP=`${FIND} /usr -name "libqt${QT_MT_SUFFIX}.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}\\.*/\//"`
 				fi
 			done
 		fi
@@ -20268,22 +20271,25 @@ echo "${ECHO_T}${PYTHON_INC_PATH}" >&6
 			PYTHON_INCLUDES="-I${PYTHON_INC_PATH}"
 		fi
 
-								echo "$as_me:$LINENO: checking for libpython" >&5
+						        if test "${OS}" = "Darwin" ; then
+ 			PYTHON_LIBS="-framework Python"
+		else
+			echo "$as_me:$LINENO: checking for libpython" >&5
 echo $ECHO_N "checking for libpython... $ECHO_C" >&6
-		if test "${PYTHON_LIBPATH}" = "" ; then
-			PYTHON_LIBPATH="${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/config/"
-		fi
-		PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
-		if test "${PYTHON_LIBS}" = "" ; then
-			echo "$as_me:$LINENO: result: " >&5
+			if test "${PYTHON_LIBPATH}" = "" ; then
+				PYTHON_LIBPATH="${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/config/"
+			fi
+			PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
+			if test "${PYTHON_LIBS}" = "" ; then
+				echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-			echo "$as_me:$LINENO: result: No libpython*a found in ${PYTHON_LIBPATH}. Please specify" >&5
+				echo "$as_me:$LINENO: result: No libpython*a found in ${PYTHON_LIBPATH}. Please specify" >&5
 echo "${ECHO_T}No libpython*a found in ${PYTHON_LIBPATH}. Please specify" >&6
-			echo "$as_me:$LINENO: result: the path where your Python library resides using --with-python-libs=DIR" >&5
+				echo "$as_me:$LINENO: result: the path where your Python library resides using --with-python-libs=DIR" >&5
 echo "${ECHO_T}the path where your Python library resides using --with-python-libs=DIR" >&6
-			echo "$as_me:$LINENO: result: or ensure that libpython is installed in the correct directory" >&5
+				echo "$as_me:$LINENO: result: or ensure that libpython is installed in the correct directory" >&5
 echo "${ECHO_T}or ensure that libpython is installed in the correct directory" >&6
-			echo "$as_me:$LINENO: result: (sys.prefix is ${PYTHON_PREFIX})" >&5
+				echo "$as_me:$LINENO: result: (sys.prefix is ${PYTHON_PREFIX})" >&5
 echo "${ECHO_T}(sys.prefix is ${PYTHON_PREFIX})" >&6
 
 	echo "$as_me:$LINENO: result: " >&5
@@ -20321,24 +20327,24 @@ echo "${ECHO_T}" >&6
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-		fi
-		echo "$as_me:$LINENO: result: ${PYTHON_LIBS}" >&5
+			fi
+			echo "$as_me:$LINENO: result: ${PYTHON_LIBS}" >&5
 echo "${ECHO_T}${PYTHON_LIBS}" >&6
 
-		if test "${PYTHON_LDOPTS}" = "" ; then
-			PYTHON_MAKEFILE=`${FIND} ${PYTHON_LIBPATH} -name Makefile 2>/dev/null`
-			if test "${PYTHON_MAKEFILE}" = "" ; then
-				echo "$as_me:$LINENO: result: " >&5
+			if test "${PYTHON_LDOPTS}" = "" ; then
+				PYTHON_MAKEFILE=`${FIND} ${PYTHON_LIBPATH} -name Makefile 2>/dev/null`
+				if test "${PYTHON_MAKEFILE}" = "" ; then
+					echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-				echo "$as_me:$LINENO: result: Makefile in the Python lib/config directory not found!" >&5
+					echo "$as_me:$LINENO: result: Makefile in the Python lib/config directory not found!" >&5
 echo "${ECHO_T}Makefile in the Python lib/config directory not found!" >&6
-				echo "$as_me:$LINENO: result: Please specify the correct options needed to link" >&5
+					echo "$as_me:$LINENO: result: Please specify the correct options needed to link" >&5
 echo "${ECHO_T}Please specify the correct options needed to link" >&6
-				echo "$as_me:$LINENO: result: against the Python library using" >&5
+					echo "$as_me:$LINENO: result: against the Python library using" >&5
 echo "${ECHO_T}against the Python library using" >&6
-				echo "$as_me:$LINENO: result: --with-python-ldopts=OPTIONS" >&5
+					echo "$as_me:$LINENO: result: --with-python-ldopts=OPTIONS" >&5
 echo "${ECHO_T}--with-python-ldopts=OPTIONS" >&6
-				echo "$as_me:$LINENO: result: (e.g. --with-python-ldopts=\"-ltermcap -lm\")" >&5
+					echo "$as_me:$LINENO: result: (e.g. --with-python-ldopts=\"-ltermcap -lm\")" >&5
 echo "${ECHO_T}(e.g. --with-python-ldopts=\"-ltermcap -lm\")" >&6
 
 	echo "$as_me:$LINENO: result: " >&5
@@ -20376,14 +20382,16 @@ echo "${ECHO_T}" >&6
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
+				fi
+				PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
+				PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^BASEMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
+				PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LOCALMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-` -lm"
+				PYTHON_LIBS=`echo ${PYTHON_LIBS} | ${TR} -s " "`
 			fi
-			PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
-			PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^BASEMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
-			PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LOCALMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-` -lm"
-			PYTHON_LIBS=`echo ${PYTHON_LIBS} | ${TR} -s " "`
-		fi
-		echo "$as_me:$LINENO: result: Linker options for Python library: ${PYTHON_LIBS}" >&5
+			echo "$as_me:$LINENO: result: Linker options for Python library: ${PYTHON_LIBS}" >&5
 echo "${ECHO_T}Linker options for Python library: ${PYTHON_LIBS}" >&6
+		fi
+
 
 
 	# Extract the first word of "sip", so it can be a program name with args.
@@ -20961,6 +20969,11 @@ fi
 if test "${AROPTS}" = "" ; then
 AROPTS="cru"
 fi
+
+if test "${DYNAROPTS_PYMODULE}" = "" ; then
+  DYNAROPTS_PYMODULE="${DYNAROPTS}"
+fi
+
 
 
 
@@ -21772,6 +21785,7 @@ s,@CPP_MODE_FLAGS_NO_OPTIMIZATION@,$CPP_MODE_FLAGS_NO_OPTIMIZATION,;t t
 s,@AROPTS@,$AROPTS,;t t
 s,@DYNAR@,$DYNAR,;t t
 s,@DYNAROPTS@,$DYNAROPTS,;t t
+s,@DYNAROPTS_PYMODULE@,$DYNAROPTS_PYMODULE,;t t
 s,@ADD_DYNAROPTS_LIBBALL@,$ADD_DYNAROPTS_LIBBALL,;t t
 s,@ADD_DYNAROPTS_LIBVIEW@,$ADD_DYNAROPTS_LIBVIEW,;t t
 s,@RANLIB@,$RANLIB,;t t

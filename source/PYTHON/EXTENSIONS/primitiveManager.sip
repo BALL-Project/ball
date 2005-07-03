@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.sip,v 1.10 2004/11/15 02:07:01 amoll Exp $
+// $Id: primitiveManager.sip,v 1.12 2005/07/16 21:00:42 oliver Exp $
 //
 
 class PrimitiveManager
@@ -32,6 +32,7 @@ class PrimitiveManager
   // void dump(std::ostream& s, Size depth) const throw();
   void insert(Representation& /representation/, bool) throw();
   void remove(Representation& /representation/, bool) throw();
+	void focusRepresentation(const Representation&);
   ~PrimitiveManager() throw();
 
 	bool willBeUpdated(const Representation&) const throw();

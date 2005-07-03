@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.22 2005/03/10 19:38:30 oliver Exp $
+# $Id: Makefile.lst,v 1.24 2005/07/16 21:00:45 oliver Exp $
 #
 
 XDR_DEPENDENT_EXECUTABLES=\
@@ -253,5 +253,3 @@ EXECUTABLES_QSAR = \
 	SimpleDescriptors_test$(EXEEXT)\
 	SurfaceBase_test$(EXEEXT)\
 	SurfaceDescriptors_test$(EXEEXT)
-	
-

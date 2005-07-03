@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.h,v 1.12 2005/02/02 10:49:42 anhi Exp $
+// $Id: FFT3D.h,v 1.14 2005/07/16 21:00:30 oliver Exp $
 //
 
 #ifndef BALL_MATHS_TFFT3D_H
@@ -38,11 +38,13 @@ namespace BALL
 	 \ingroup FFT
 	 */
 	template <typename ComplexTraits>
-	class TFFT3D : public TRegularData3D<std::complex<typename ComplexTraits::ComplexPrecision> >
+	class TFFT3D 
+		: public TRegularData3D<std::complex<typename ComplexTraits::ComplexPrecision> >
 	{
 		public:
 		
 			typedef std::complex<typename ComplexTraits::ComplexPrecision> Complex;
+			typedef TRegularData3D<std::complex<typename ComplexTraits::ComplexPrecision> >	ComplexVector;
 
       BALL_CREATE(TFFT3D)
 
@@ -374,7 +376,8 @@ namespace BALL
 	
 	/**	Default type
 	*/
-	typedef TFFT3D<DoubleTraits> FFT3D;
+	typedef TFFT3D<FloatTraits> FFT3D;
+// TODO????
 	
 
 	/** Global assignment operator from TFFT3D to TRegularData3D<Complex>
@@ -668,7 +671,7 @@ namespace BALL
 	{
 		if (!inFourierSpace_)
 		{
-			if (position >= size())
+			if (position >= ComplexVector::size())
 			{
 				throw Exception::OutOfGrid(__FILE__, __LINE__);
 			}
@@ -688,7 +691,7 @@ namespace BALL
 		}
 		else
 		{
-			if (position >= size())
+			if (position >= ComplexVector::size())
 			{
 				throw Exception::OutOfGrid(__FILE__, __LINE__);
 			}

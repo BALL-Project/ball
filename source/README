@@ -1,13 +1,12 @@
 
                     BALL  -  Biochemical ALgorithm Library
                     --------------------------------------
-                                version 1.1 pre4
+                                 Release 1.1
 ------------------------------------------------------------------------------
-         T. Aubertin, N. P. Boghossian, A. Burchardt, A. Crauser, 
-          A. Hildebrandt, H. Klein, A. Kerzmann, O. Kohlbacher, 
-			   H.-P. Lenhof, A. Moll, P. Mueller, S. Strobel, M. Sturm
+      T. Aubertin, C. Bender, A. Bertsch, N. P. Boghossian, A. Burchardt, 
+          A. Crauser,  A. Dehof, A. Hildebrandt, H. Klein, A. Kerzmann, 
+     O. Kohlbacher, H.-P. Lenhof, A. Moll, P. Mueller, S. Strobel, M. Sturm
 	
-
 
 To install BALL it should be sufficient to type the following
 commands:
@@ -20,7 +19,7 @@ commands:
 
    make install                - to install the library under BALL/lib
 
-	 export LD_LIBRARY_PATH=...  - set the library search path (sh-like shells)
+   export LD_LIBRARY_PATH=...  - set the library search path (sh-like shells)
 or setenv LD_LIBRARY_PATH ...                                (csh-like shells)
 
    make test                   - to build and run the library test suite

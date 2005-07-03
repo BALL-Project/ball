@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.11 2004/11/27 20:48:45 amoll Exp $
+// $Id: datasetControl.h,v 1.13 2005/07/16 21:00:37 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -97,18 +97,13 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
 
-			/**	Remove the widget.
-					Reverse all actions performed in initializeWidget
-					(remove menu entries of this DatasetControl).
-					This method will be called by MainControl::aboutToExit.
-			*/
-			virtual void finalizeWidget(MainControl& main_control)
-				throw();
-
 			///
 			virtual void checkMenu(MainControl& main_control)
 				throw();
-			
+
+			/// insert a trajectory for the currently selected System
+			void addTrajectory(const String& filename);
+		
 			//@}
 			/** @name Public slots 
 			*/ 
@@ -172,6 +167,10 @@ namespace BALL
 			//@}
 
 		  protected:
+			
+			// only for Python Interface
+			DatasetControl(const DatasetControl& control) throw();
+
 
 			void insertTrajectory_(TrajectoryFile* file, System& system)
 				throw();
@@ -192,7 +191,7 @@ namespace BALL
 			QListViewItem* 								context_item_;
 
 			SnapshotVisualisationDialog* 	dialog_;
-			Index 												open_trajectory_id_;
+			Index 												open_trajectory_id_, menu_1D_id_, menu_2D_id_, menu_3D_id_;
 
 			HashMap<QListViewItem*	, SnapShotManager*> 					item_to_trajectory_;
 			HashMap<QListViewItem*	, RegularData1D*>   					item_to_grid1_;

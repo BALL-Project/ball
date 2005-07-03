@@ -28,8 +28,7 @@ LabelDialog::LabelDialog(QWidget* parent, const char* name)
 	throw()
 	:	LabelDialogData( parent, name ),
 		ModularWidget(name),
-		id_(-1),
-		selection_()
+		id_(-1)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new LabelDialog " << this << std::endl;
@@ -135,12 +134,10 @@ void LabelDialog::onNotify(Message *message)
 	if (RTTI::isKindOf<ControlSelectionMessage>(*message))
 	{
 		ControlSelectionMessage* selection = RTTI::castTo<ControlSelectionMessage>(*message);
-		selection_ = selection->getSelection();
+		// disabled apply button, if selection is empty
+		const bool filled = !selection->getSelection().empty();
+		apply_button_->setEnabled(filled);
 	}
-
-	// disabled apply button, if selection is empty
-	apply_button_->setEnabled(!selection_.empty());
-	menuBar()->setItemEnabled(id_, !selection_.empty());
 }
 
 void LabelDialog::initializeWidget(MainControl& main_control)
@@ -148,16 +145,8 @@ void LabelDialog::initializeWidget(MainControl& main_control)
 {
 	main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 
-	id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "Add &Label", this,
-																		 SLOT(show()), CTRL+Key_L, -1,
-																		 "Add a label for selected molecular objects");   
-}
-
-void LabelDialog::finalizeWidget(MainControl& main_control)
-	throw()
-{
-	main_control.removeMenuEntry(MainControl::DISPLAY, "Add &Label", this,
-															 SLOT(show()), CTRL+Key_L);   
+	id_ = insertMenuEntry(MainControl::DISPLAY, "Add &Label", this, SLOT(show()), CTRL+Key_L);
+	setMenuHint("Add a label for selected molecular objects");   
 }
 
 void LabelDialog::show()
@@ -169,8 +158,10 @@ void LabelDialog::show()
 
 void LabelDialog::accept()
 {
+	List<Composite*> selection = getMainControl()->getMolecularControlSelection();
+
 	// no selection present => return
-	if (selection_.empty()) return;
+	if (selection.empty()) return;
 
 	Representation* rep = new Representation;
 	rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
@@ -188,11 +179,15 @@ void LabelDialog::accept()
 	rep->setModelProcessor(model);
 
 	// process all objects in the selection list
-	List<Composite*>::ConstIterator list_it = selection_.begin();
-	for (; list_it != selection_.end(); ++list_it)
+	List<Composite*>::ConstIterator list_it = selection.begin();
+	List<const Composite*> composites;
+
+	for (; list_it != selection.end(); ++list_it)
 	{
-		rep->getComposites().insert(*list_it);
+		composites.push_back(*list_it);
 	}
+
+	rep->setComposites(composites);
 
 	getMainControl()->insert(*rep);
 	getMainControl()->update(*rep);
@@ -215,6 +210,8 @@ void LabelDialog::addTag()
 	else if (tag_box->currentText() == "Residue ID") 	 	tag = "%I";
 	else if (tag_box->currentText() == "Atom Type")			tag = "%T";
 	else if (tag_box->currentText() == "Atom Charge") 	tag = "%C";
+	else if (tag_box->currentText() == "Atom Type Name")tag = "%Y";
+	else if (tag_box->currentText() == "Element") 			tag = "%E";
 
 	label_edit_->setText(label_edit_->text() + tag);
 	label_edit_->update();
@@ -247,6 +244,13 @@ void LabelDialog::historySelected()
 	if (history_box->currentText() == "") return;
 
 	label_edit_->setText(history_box->currentText());
+}
+
+void LabelDialog::checkMenu(MainControl&)
+	throw()
+{
+	menuBar()->setItemEnabled(id_, getMainControl()->getMolecularControlSelection().size() > 0 &&
+																!getMainControl()->compositesAreLocked());
 }
 
 

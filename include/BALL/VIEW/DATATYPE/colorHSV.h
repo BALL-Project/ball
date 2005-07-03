@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorHSV.h,v 1.18 2004/12/16 16:21:08 amoll Exp $
+// $Id: colorHSV.h,v 1.20 2005/07/16 21:00:31 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORHSV_H
@@ -50,6 +50,8 @@ namespace BALL
 			friend class ColorRGBA;
 
 			public:
+
+			BALL_CREATE(ColorHSV)
 
 			/**	@name	Constructors
 			*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.h,v 1.12 2004/05/27 19:49:45 oliver Exp $ 
+// $Id: pyInterpreter.h,v 1.14 2005/07/16 21:00:31 oliver Exp $ 
 //
 
 #ifndef BALL_PYTHON_PYINTERPRETER_H
@@ -15,6 +15,8 @@
 #	include <BALL/DATATYPE/string.h>
 #endif
 
+#include <vector>
+
 namespace BALL 
 {
 	/** Embedded Python interpreter.
@@ -25,12 +27,28 @@ namespace BALL
 	*/
 	class PyInterpreter
 	{
+		private:
+		// We don't want anybody to instantiate this!
+		PyInterpreter() {}
+		~PyInterpreter() {}
+		
 		public:
+		/**	@name Type definitions */
+		//@{
+		/// Used to encode the individual paths appended to sys.path for dynamic loading of modules.
+		typedef std::vector<String> PathStrings;
+		//@}
+
+		/**	@name Initialization */
+		//@{
 
 		/**	Initialize the interpreter.
-				Initialize the interpreter (by calling <tt>PY_Initialize</tt>) and 
+				Initialize the interpreter (by calling <tt>Py_Initialize</tt>) and 
 				load the modules <tt>sys</tt>, <tt>site</tt>, and <tt>BALL</tt>.
 				A second call to <tt>initialize</tt> may be used to restart the intepreter.
+				Upon start, the paths defined by \link setSysPath \endlink are added to sys.path.
+				If your interpreter cannot load specific modules, add the location of your
+				modules here.
 		*/
 		static void initialize();
 
@@ -45,6 +63,17 @@ namespace BALL
 		*/
 		static bool isInitialized();
 
+		///	Append additional search paths to sys.path upon initialization
+		static void setSysPath(const PathStrings& path_strings);
+
+		/// Get the current paths added to sys.path
+		static const PathStrings& getSysPath();
+		
+		//@}
+
+
+		/**	@name Execution */
+		//@{
 		/**	Execute a string.
 				@param s the string to run (may contain multiple lines with correct indentation)
 				@param result bool reference which contains the result after call of function
@@ -65,6 +94,9 @@ namespace BALL
 				@return true if the modules was found an initialized correctly
 		*/
 		static bool importModule(const String& module_name);
+		//@}
+		protected:
+		static PathStrings sys_path_;
 	};
    
 } // namespace BALL

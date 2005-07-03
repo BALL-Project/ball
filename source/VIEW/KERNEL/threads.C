@@ -1,6 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: threads.C,v 1.38 2005/07/03 09:43:40 oliver Exp $
+//
 
 #include <BALL/VIEW/KERNEL/threads.h>
 
@@ -100,6 +102,12 @@ namespace BALL
 			}
 			try
 			{
+				MainControl* mc = getMainControl();
+				if (mc != 0)
+				{
+					tcp_.setProxy(mc->getProxy(), mc->getProxyPort());
+				}
+
 				if (file_name_ != "")
 				{
 					File f(file_name_, std::ios::out);
@@ -109,6 +117,7 @@ namespace BALL
 						return;
 					}
 					tcp_.set(f, url_);
+					// dont move the transfer() call away from here!
 					tcp_.transfer();
 				}
 				else
@@ -124,6 +133,7 @@ namespace BALL
 					stream_.clear();
 
 					tcp_.set(stream_, url_);
+					// dont move the transfer() call away from here!
 					tcp_.transfer();
 				}
 			}
@@ -227,7 +237,7 @@ namespace BALL
 				updateScene_();
 
 				output_(ff.getResults());
-				output_("final RMS gadient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
+				output_("final RMS gradient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
 								+ String(minimizer_->getNumberOfIterations()) + " iterations\n",
 								true);
 				finish_();
@@ -313,7 +323,7 @@ namespace BALL
 				if (dcd_file_) manager.flushToDisk();
 
  				output_(ff.getResults());
-				output_("final RMS gadient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
+				output_("final RMS gradient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
 								+ String(md_->getNumberOfIterations()) + " iterations\n", 
 								true);
 

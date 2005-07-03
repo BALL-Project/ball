@@ -4,6 +4,7 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
   client.C\
+  clippingPlane.C\
 	common.C\
   compositeManager.C\
   connectionObject.C\
@@ -26,7 +27,7 @@ MOC_SOURCES=\
 	mainControl_moc.C
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 BALL_INCLUDES=$(VIEW_INCLUDES)
 

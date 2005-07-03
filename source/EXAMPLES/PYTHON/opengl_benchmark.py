@@ -55,7 +55,17 @@ dp.setSurfaceDrawingPrecision(6.5)
 dp.selectMode(DRAWING_MODE_SOLID)
 dp.selectColoringMethod(COLORING_ELEMENT)
 dp.setTransparency(0)
-fd.openFile("bpti.pdb")
+fd.openFile(Path().find("structures/bpti.pdb"))
+
+Scene.getInstance(0).setVisible(1)
+LogView.getInstance(0).setVisible(0)
+GeometricControl.getInstance(0).setVisible(0)
+DatasetControl.getInstance(0).setVisible(0)
+MolecularControl.getInstance(0).setVisible(0)
+PyWidget.getInstance(0).setVisible(0)
+
+MainControl.getInstance(0).resize(800, 600)
+MainControl.getInstance(0).processEvents(5000)
 
 runTest("Lines", 		MODEL_LINES)
 runTest("VDW",   		MODEL_VDW)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.h,v 1.18 2004/02/26 08:41:30 anhi Exp $
+// $Id: colorRGBA.h,v 1.20 2005/07/16 21:00:31 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -34,6 +34,8 @@ namespace BALL
 			friend class ColorHSV;
 
 			public:
+
+			BALL_CREATE(ColorRGBA)
 
 			/**	@name	Constructors
 			*/	
@@ -103,7 +105,7 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			~ColorRGBA()
+			virtual ~ColorRGBA()
 				throw();
 
 			/** Explicit default initialization.

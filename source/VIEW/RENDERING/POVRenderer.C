@@ -1,12 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19 2005/02/06 20:57:11 oliver Exp $
+// $Id: POVRenderer.C,v 1.21 2005/07/16 21:00:50 oliver Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/clippingPlane.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
@@ -36,7 +38,8 @@ namespace BALL
 			throw()
 			: Renderer(),
 				outfile_(&std::cout),
-				human_readable_(true)
+				human_readable_(true),
+				font_file_("/local/amoll/povray-3.5/include/crystal.ttf")
 		{
 		}
 
@@ -52,7 +55,8 @@ namespace BALL
 		POVRenderer::POVRenderer(const String& name)
 			throw(Exception::FileNotFound)
 			: Renderer(),
-				human_readable_(true)
+				human_readable_(true),
+				font_file_("/local/amoll/povray-3.5/include/crystal.ttf")
 		{
 			outfile_ = new File(name, std::ios::out);
 		}
@@ -122,8 +126,6 @@ namespace BALL
 		String POVRenderer::POVFinish(const String& object, const ColorRGBA& input)
 			throw()
 		{
-
-
 			String output = "finish { BALLFinish";
 			output += object;
 
@@ -224,17 +226,30 @@ namespace BALL
 			    << "\ttransform {" << endl
 			    << "\t\tmatrix <" << endl;
 
-			GLdouble m[16];	
+ 			GLdouble m[16];	
 			glGetDoublev(GL_MODELVIEW_MATRIX, m);
 			
 			double norm = sqrt(m[0] * m[0] + m[1] * m[1] + m[2] * m[2]);
-			out << "\t\t" 
-							 << m[0] / norm << ",  " << m[1] / norm << ", " << m[2] / norm << "," << endl;
+			out << "\t\t" << m[0] / norm << ",  " << m[1] / norm << ", " << m[2] / norm << "," << endl;
+			m_[0] = m[0] / norm;
+			m_[1] = m[1] / norm;
+			m_[2] = m[2] / norm;
 			norm = sqrt(m[4] * m[4] + m[5] * m[5] + m[6] * m[6]);
 			out << "\t\t" << m[4] / norm << ",  " << m[5] / norm << ", " << m[6] / norm << "," << endl;
+
+			m_[3] = m[4] / norm;
+			m_[4] = m[5] / norm;
+			m_[5] = m[6] / norm;
 			norm = sqrt(m[8] * m[8] + m[9] * m[9] + m[10] * m[10]);
 			out << "\t\t" << m[8] / norm << ",  " << m[9] / norm << ", " << m[10] / norm << "," << endl;
+
+			m_[6] = m[8] / norm;
+			m_[7] = m[9] / norm;
+			m_[8] = m[10] / norm;
 			out << "\t\t" << m[12] << ",  " << m[13] << ", " << m[14] << endl;
+			m_[9] = m[12];
+			m_[10] = m[13];
+			m_[11] = m[14];
 		  out << "\t\t>" << endl;
 			out << "\tinverse }" << endl;
 			out << "}" << std::setprecision(6) << endl << endl;
@@ -295,8 +310,10 @@ namespace BALL
 			out << "#declare BALLFinishMesh             = BALLFinish" << endl;
 			out << "#declare BALLFinishWire             = BALLFinish" << endl;
 			out << "#declare wire_radius 								= 0.01;" << std::endl;
+			out << "// enter the path to your desired font here: " << std::endl;
+			out << "#declare BALLLabelFont              = \"" << font_file_ << "\";" << std::endl;
 			out << std::endl;
-			
+						
 			out << "#macro Sphere(Position, Radius, Color)" << endl;
 			out << "sphere { Position, Radius pigment { Color } finish { BALLFinishSphereSolid } }" << endl;
 			out << "#end" << endl << endl;
@@ -335,13 +352,15 @@ namespace BALL
 
 			out << endl;
 			
-			// now begin the CSG union containing all the geometric objects
-			out << "union {" << endl;
-
 
 			vector<const Representation*>::iterator rit = representations_.begin();
+
 			for (; rit != representations_.end(); rit++)
 			{
+				
+				// now begin the CSG union containing all the geometric objects of this rep
+				out << "union {" << endl;
+
 				List<GeometricObject*>::ConstIterator it;
 				for (it =  (*rit)->getGeometricObjects().begin();
 						 it != (*rit)->getGeometricObjects().end();
@@ -349,21 +368,36 @@ namespace BALL
 				{
 					render_(*it);
 				}
-			}
 
-			vector<POVRendererClippingPlane>::iterator it = clipping_planes_.begin();
-			for (;it != clipping_planes_.end(); it++)
-			{
-				out << "  clipped_by{" << endl
-								 << "   plane{< -"  // negate normal vector
-					       << (*it).normal.x << ", -" 
-					       << (*it).normal.y << ", -" 
-					       << (*it).normal.z << ">, "
-					       << (*it).translation
-								 << "  }" << endl
-								 << " }" << endl;
-			}
-			out << "}" << endl;
+				const vector<ClippingPlane*>& vc = getMainControl()->getPrimitiveManager().getClippingPlanes();
+				vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
+				for (;plane_it != vc.end(); plane_it++)
+				{
+					ClippingPlane& plane = **plane_it;
+
+					if (!plane.isActive() ||
+							plane.isHidden())
+					{
+						continue;
+					}
+
+					if (plane.getRepresentations().has((Representation*)*rit))
+					{
+
+						out << "  clipped_by{" << endl
+										 << "   plane{< -"  // negate normal vector
+										 << plane.getNormal().x << ", -" 
+										 << plane.getNormal().y << ", -" 
+										 << plane.getNormal().z << ">, "
+										 << plane.getDistance()
+										 << "  }" << endl
+										 << " }" << endl;
+					}
+				} // all clipping planes
+
+				out << "}" << endl; // union
+
+			} // all Representations
 
 
 			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_))
@@ -371,7 +405,6 @@ namespace BALL
 				(*(File*)outfile_).close();
 			}
 
-			clipping_planes_.clear();
 			return true;
 		}
 
@@ -436,18 +469,8 @@ namespace BALL
 			std::ostream& out = *outfile_;
 
 			// we have found a two colored tube
-			ColorRGBA color1, color2;
-
-			// first, find out its color
-			if (tube.getComposite() && (tube.getComposite()->isSelected()))
-			{
-				color1 = color2 = BALL_SELECTED_COLOR;
-			}
-			else
-			{
-				color1 = tube.getColor();
-				color2 = tube.getColor2();
-			}
+			const ColorRGBA& color1 = tube.getColor();
+			const ColorRGBA& color2 = tube.getColor2();
 
   		if ((Size) color1.getAlpha() == 255) out << "Tube(";
 			else 																 out << "TubeT(";
@@ -504,19 +527,8 @@ namespace BALL
 		{
 			std::ostream& out = *outfile_;
 
-			// we have found a two colored tube
-			ColorRGBA color1, color2;
-
-			// first, find out its color
-			if (tube.getComposite() && tube.getComposite()->isSelected())
-			{
-				color1 = color2 = BALL_SELECTED_COLOR;
-			}
-			else
-			{
-				color1 = tube.getColor();
-				color2 = tube.getColor2();
-			}
+			const ColorRGBA& color1 = tube.getColor();
+			const ColorRGBA& color2 = tube.getColor2();
 
   		if ((Size) color1.getAlpha() == 255) out << "Tube(";
 			else 																 out << "TubeT(";
@@ -670,18 +682,6 @@ namespace BALL
 			out << "\t}" << endl;
 		}
 				
-		void POVRenderer::renderClippingPlane_(const Representation& rep)
-			throw()
-		{
-			POVRendererClippingPlane plane;
-			plane.normal = Vector3(rep.getProperty("AX").getDouble(),
-														 rep.getProperty("BY").getDouble(),
-														 rep.getProperty("CZ").getDouble());
-			plane.translation = rep.getProperty("D").getDouble();
-
-			clipping_planes_.push_back(plane);
-		}
-
 		const ColorRGBA& POVRenderer::getColor_(const GeometricObject& object)
 		{
 			if ((object.getComposite()) && object.getComposite()->isSelected())
@@ -696,12 +696,6 @@ namespace BALL
 			throw()
 		{
 			if (representation.isHidden()) return true;
-
-			if (representation.getModelType() == MODEL_CLIPPING_PLANE)
-			{
-				renderClippingPlane_(representation);
-				return true;
-			}
 
 			if (!representation.isValid())
 			{
@@ -762,6 +756,28 @@ namespace BALL
 			String color_temp;
 			color.get(color_temp);
 			return String("c") + String(color_map_[color_temp]);
+		}
+
+		void POVRenderer::renderLabel_(const Label& label)
+			throw()
+		{
+			std::ostream& out = *outfile_;
+
+			out << "text{ ttf BALLLabelFont, \"" << label.getExpandedText() << "\",0.2, 0" << std::endl;
+			out << "  texture{ pigment{color rgb" << 	POVColorRGBA(label.getColor()) << " }"<< std::endl;
+			out << "  finish{ambient 0.15 diffuse 0.85} } " << std::endl;
+			out << "  matrix < ";
+			for (Position pos = 0; pos < 9; pos++)
+			{
+				out << m_[pos] << ", ";
+			}
+			out << "0, 0, 0 >";
+			out << " rotate 180*y rotate 180*x " << endl;
+			out << "  translate < ";
+			out << label.getVertex().x << ", ";
+			out << label.getVertex().y << ", ";
+			out << label.getVertex().z << " ";
+			out << " > }" << std::endl;
 		}
 
 	} // namespaces

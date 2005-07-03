@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.68 2005/04/18 13:30:12 amoll Exp $
+// $Id: glRenderer.C,v 1.70 2005/07/16 21:00:50 oliver Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
 #include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/KERNEL/clippingPlane.h>
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
@@ -54,7 +55,9 @@ namespace BALL
 				render_mode_(RENDER_MODE_UNDEFINED),
 				use_vertex_buffer_(false),
 				picking_mode_(false),
-				model_type_(MODEL_LINES)
+				model_type_(MODEL_LINES),
+				drawed_other_object_(false),
+				drawed_mesh_(false)
 		{
 		}
 
@@ -282,10 +285,8 @@ namespace BALL
 			*/
 
 			DisplayListHashMap::Iterator hit = display_lists_.find(&rep);
-			if (hit == display_lists_.end()) 
-			{
-				return;
-			}
+			if (hit == display_lists_.end()) return;
+
 			delete hit->second;
 			display_lists_.erase(hit);
 		}
@@ -354,13 +355,16 @@ namespace BALL
 		bool GLRenderer::render(const Representation& representation, bool for_display_list)
 			throw()
 		{
-			last_color_ = &dummy_color_;
-			glColor4ub(dummy_color_.getRed(), dummy_color_.getGreen(), dummy_color_.getBlue(), dummy_color_.getAlpha());
+ 			last_color_ = &dummy_color_;
+ 			glColor4ub(dummy_color_.getRed(), dummy_color_.getGreen(), dummy_color_.getBlue(), dummy_color_.getAlpha());
 
 			if (representation.isHidden()) return true;
 
 			drawing_precision_  = representation.getDrawingPrecision();
 			drawing_mode_ 		  = representation.getDrawingMode();
+
+			drawed_mesh_ = false;
+			drawed_other_object_ = false;
 
 			display_lists_index_ = drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + drawing_precision_;
 
@@ -371,6 +375,19 @@ namespace BALL
 			else
 			{
 				glEnable(GL_LIGHTING);
+			}
+
+			if (representation.hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
+			{
+				initAlwaysFront();
+			}
+			else if (representation.getTransparency() == 0)
+			{
+				initSolid();
+			}
+			else
+			{
+				initTransparent();
 			}
 
 			model_type_ = representation.getModelType();
@@ -451,6 +468,8 @@ namespace BALL
 		void GLRenderer::renderSphere_(const Sphere& sphere)
 			throw() 
 		{
+			initDrawingOthers_();
+
 			glPushMatrix();
 			setColor4ub_(sphere);
 			translateVector3_(sphere.getPosition());
@@ -481,12 +500,14 @@ namespace BALL
 		void GLRenderer::renderDisc_(const Disc& disc)
 			throw()
 		{
+			initDrawingOthers_();
+
 			glPushMatrix();
 			setColor4ub_(disc);
 			translateVector3_(disc.getCircle().p);
-			Vector3 rotation_axis(-disc.getCircle().n.y, disc.getCircle().n.x, 0.0);
+			const Vector3 rotation_axis(-disc.getCircle().n.y, disc.getCircle().n.x, 0.0);
 			// angle between z-axis-vector and result
-			Real angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(disc.getCircle().n.z / disc.getCircle().n.getLength()));
+			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(disc.getCircle().n.z / disc.getCircle().n.getLength()));
 			rotateVector3Angle_(rotation_axis, angle);
 
 			if (drawing_precision_ == 0)
@@ -502,6 +523,8 @@ namespace BALL
 		void GLRenderer::renderLine_(const Line& line)
 			throw()
 		{
+			initDrawingOthers_();
+
 			glDisable(GL_LIGHTING);
 			setColor4ub_(line);
 
@@ -517,6 +540,8 @@ namespace BALL
 		void GLRenderer::renderLabel_(const Label& label)
 			throw()
 		{
+			initDrawingOthers_();
+
       glPushMatrix();
       glDisable(GL_LIGHTING);
       setColor4ub_(label);
@@ -542,6 +567,8 @@ namespace BALL
 		void GLRenderer::renderPoint_(const Point& point)
 			throw()
 		{
+			initDrawingOthers_();
+
 			glDisable(GL_LIGHTING);
 			setColor4ub_(point);
 			glBegin(GL_POINTS);
@@ -555,6 +582,8 @@ namespace BALL
 		void GLRenderer::renderSimpleBox_(const SimpleBox& box)
 			throw()
 		{
+			initDrawingOthers_();
+
 			glPushMatrix();
 			setColor4ub_(box);
 			translateVector3_(box.a);
@@ -567,6 +596,8 @@ namespace BALL
 		void GLRenderer::renderBox_(const Box& box)
 			throw()
 		{
+			initDrawingOthers_();
+
 			glPushMatrix();
 			setColor4ub_(box);
 			
@@ -599,18 +630,32 @@ namespace BALL
 		void GLRenderer::renderTube_(const Tube& tube)
 			throw()
 		{
+			initDrawingOthers_();
+
 			glPushMatrix();
 			setColor4ub_(tube);
 
-			Vector3 result = tube.getVertex2() - tube.getVertex1();
+			const Vector3 result = tube.getVertex2() - tube.getVertex1();
+			const float length = result.getLength();
+
+			if (Maths::isZero(length)) return;
 
 			// cross product with z-axis-vector and result
-			Vector3 rotation_axis(-result.y, result.x, 0.0);
+			const Vector3 rotation_axis(-result.y, result.x, 0.0);
 			// angle between z-axis-vector and result
-			Real angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(result.z / result.getLength()));
+			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(result.z / length));
 
 			translateVector3_(tube.getVertex1());
-			rotateVector3Angle_(rotation_axis, angle);
+
+			// dont rotate if we have to draw in z-axis direction
+//   			if (!Maths::isZero(rotation_axis.getSquareLength()))
+//   			{
+				rotateVector3Angle_(rotation_axis, angle);
+//   			}
+//   			else
+//   			{
+//   				translateVector3_(result);
+//   			}
 
 			glScalef((GLfloat)tube.getRadius(),
 							 (GLfloat)tube.getRadius(),
@@ -625,22 +670,38 @@ namespace BALL
 		void GLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
 			throw()
 		{
-			Vector3 result = tube.getVertex2() - tube.getVertex1();
+			initDrawingOthers_();
+
+			const Vector3 result(tube.getVertex2() - tube.getVertex1());
+			const float length = result.getLength();
+
+			if (Maths::isZero(length)) return;
 
 			// cross product with z-axis-vector and result
-			Vector3 rotation_axis(-result.y, result.x, 0.0);
+			const Vector3 rotation_axis(-result.y, result.x, 0.0);
 			// angle between z-axis-vector and result
-			Real angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(result.z / result.getLength()));
+			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(result.z / length));
 
 			glPushMatrix();
 			setColor4ub_(tube);
 
 			translateVector3_(tube.getVertex1());
-			rotateVector3Angle_(rotation_axis, angle);
+
+			// dont rotate if we have to draw in z-axis direction
+			const bool to_rotate = !Maths::isZero(rotation_axis.getSquareLength());
+
+			if (to_rotate)
+			{
+				rotateVector3Angle_(rotation_axis, angle);
+			}
+			else
+			{
+				translateVector3_(result / 2.0);
+			}
 
 			glScalef((GLfloat)tube.getRadius(),
 							 (GLfloat)tube.getRadius(),
-							 (GLfloat)tube.getLength() / (Real)2);
+							 (GLfloat)tube.getLength() / (float)2);
 
 			GL_tubes_list_[display_lists_index_].draw();
 
@@ -648,18 +709,20 @@ namespace BALL
 			glPushMatrix();
 			translateVector3_(tube.getMiddleVertex());
 
-			rotateVector3Angle_(rotation_axis, angle);
+			if (to_rotate)
+			{
+				rotateVector3Angle_(rotation_axis, angle);
+			}
+			else
+			{
+				translateVector3_(result / 2.0);
+			}
 
 			glScalef((GLfloat)tube.getRadius(),
 							 (GLfloat)tube.getRadius(),
-							 (GLfloat)tube.getLength() / (Real)2);
+							 (GLfloat)tube.getLength() / (float)2);
 
-			// draw second half
-			if (tube.getComposite() == 0 ||
-					!tube.getComposite()->isSelected())
-			{
-				setColorRGBA_(tube.getColor2());
-			}
+			setColorRGBA_(tube.getColor2());
 
 			GL_tubes_list_[display_lists_index_].draw();
 
@@ -669,6 +732,8 @@ namespace BALL
 		void GLRenderer::renderTwoColoredLine_(const TwoColoredLine& line)
 			throw()
 		{
+			initDrawingOthers_();
+
 			setColor4ub_(line);
 
 			glDisable(GL_LIGHTING);
@@ -677,11 +742,7 @@ namespace BALL
 			vertexVector3_(line.getVertex1());
 			vertexVector3_(line.getMiddleVertex());
 
-			if (line.getComposite() == 0 || 
-					!line.getComposite()->isSelected())
-			{
-				setColorRGBA_(line.getColor2());
-			}
+			setColorRGBA_(line.getColor2());
 
 			vertexVector3_(line.getMiddleVertex());
 			vertexVector3_(line.getVertex2());
@@ -693,6 +754,8 @@ namespace BALL
 		
 		void GLRenderer::initDrawingMeshes_()
 		{
+			if (drawed_mesh_) return;
+
 			if (drawing_mode_ == DRAWING_MODE_DOTS)
 			{
 				glDisable(GL_LIGHTING);
@@ -704,7 +767,8 @@ namespace BALL
 			}
 			else // draw the triangles solid
 			{
-				if (render_mode_ == RENDER_MODE_SOLID)
+				if (render_mode_ == RENDER_MODE_SOLID ||
+						model_type_  == MODEL_CARTOON)
 				{
 					glDisable(GL_CULL_FACE);
 					glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
@@ -714,7 +778,32 @@ namespace BALL
 					glEnable(GL_CULL_FACE);
 				}
 			}
+
+			drawed_mesh_ = true;
+			drawed_other_object_ = false;
 		}
+
+
+		void GLRenderer::initDrawingOthers_()
+		{
+			if (drawed_other_object_) return;
+
+			if (drawing_mode_ == DRAWING_MODE_DOTS ||
+					drawing_mode_ == DRAWING_MODE_WIREFRAME)
+			{
+				glEnable(GL_LIGHTING);
+			}
+			else // solid
+			{
+				glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
+			}
+
+			glEnable(GL_CULL_FACE);
+
+			drawed_other_object_ = true;
+			drawed_mesh_ = false;
+		}
+
 
 		void GLRenderer::renderMesh_(const Mesh& mesh)
 			throw()
@@ -845,24 +934,8 @@ namespace BALL
 
 				glEnd();
 			}
-
-			finishDrawingMeshes_();
 		}
 
-		void GLRenderer::finishDrawingMeshes_()
-		{
-			if (drawing_mode_ == DRAWING_MODE_DOTS ||
-					drawing_mode_ == DRAWING_MODE_WIREFRAME)
-			{
-				glEnable(GL_LIGHTING);
-			}
-			else // solid
-			{
-				glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
-			}
-
-			glEnable(GL_CULL_FACE);
-		}
 
 		GLubyte* GLRenderer::generateBitmapFromText_(const String& text, const QFont& font, int& width, int& height) const
 			throw()
@@ -1299,7 +1372,7 @@ namespace BALL
 			gluPickMatrix(center_x, viewport[3] - center_y, width, height, viewport);
 
 			// prepare camera
-			glFrustum(-2.0 * x_scale_, 2.0 * x_scale_, -2.0 * y_scale_, 2.0 * y_scale_, 1.5, 300);
+			glFrustum(-2.0 * x_scale_, 2.0 * x_scale_, -2.0 * y_scale_, 2.0 * y_scale_, 1.5, 600);
 			
 			glMatrixMode(GL_MODELVIEW);
 			updateCamera();
@@ -1323,7 +1396,9 @@ namespace BALL
 				return;
 			}
 
-			number_of_hits--;
+
+			// ????? removed the following line at 13.05.05,  seems to work fine without it, and bonds dont get picked otherwise
+//   			number_of_hits--;
 			
 			Position minimum_z_coord = UINT_MAX;
 			Position names;
@@ -1402,7 +1477,7 @@ namespace BALL
 									2.0 * x_scale_, 
 								 -2.0 * y_scale_, 
 									2.0 * y_scale_, 
-									1.5, 300);
+									1.5, 600);
 
 			glMatrixMode(GL_MODELVIEW);
 		}
@@ -1585,10 +1660,57 @@ namespace BALL
 			return false; // ????
 		}
 
+		void GLRenderer::renderClippingPlane_(const ClippingPlane& plane)
+			throw()
+		{
+			display_lists_index_ = DRAWING_MODE_SOLID * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + DRAWING_PRECISION_HIGH;
+
+			glPushAttrib(GL_LIGHTING_BIT | GL_BLEND);
+			const Vector3& point(plane.getPoint());
+			const Vector3& n(plane.getNormal());
+
+			Tube tube;
+			tube.setVertex1(point);
+			tube.setVertex2(point - (plane.getNormal() * 10.0));
+			tube.setColor(ColorRGBA(0,255,255));
+			tube.setRadius(1);
+
+			initDrawingOthers_();
+			initTransparent();
+			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
+			glDisable(GL_CULL_FACE);
+			renderTube_(tube);
+
+			initDrawingOthers_();
+			glEnable(GL_DEPTH_TEST);
+			glEnable(GL_BLEND);
+			glDepthMask(GL_FALSE);
+
+			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
+			glDisable(GL_CULL_FACE);
+
+			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
+			glDisable(GL_CULL_FACE);
+
+			glPushMatrix();
+			setColorRGBA_(ColorRGBA(0,0,255, 190));;
+			translateVector3_(point);
+			const Vector3 rotation_axis(-n.y, n.x, 0.0);
+			// angle between z-axis-vector and result
+			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(n.z / n.getLength()));
+			rotateVector3Angle_(rotation_axis, angle);
+
+			GL_quadric_object_.drawDisk(0, 20, 140, 80);
+
+			glPopMatrix();
+			glEnable(GL_CULL_FACE);
+
+			glPopAttrib();
+		}
+
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/RENDERING/glRenderer.iC>
 #	endif
 
 	} // namespace VIEW
-
 } // namespace BALL

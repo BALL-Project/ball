@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.20 2005/02/15 17:33:52 leonhardt Exp $
+// $Id: lightSettings.C,v 1.21 2005/07/03 09:43:34 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -153,7 +153,7 @@ void LightSettings::saveSettingsToLight_()
 	{
 		Vector3 pos = getPosition_();
 		Vector3 dir = getDirection_();
-		bool relative = !not_relative->isChecked();
+		bool relative = LightSettingsData::relative->isChecked();
 		light.setRelativeToCamera(relative);
 
 		// position and direction
@@ -169,20 +169,19 @@ void LightSettings::saveSettingsToLight_()
 
 		/////////////////////////////////////////////////////
 		// type of light
-		if (light_type->selected() == ambient)
+
+		if 			(light_type->selected() == ambient)
 		{
 			light.setType(LightSource::AMBIENT);
-			return;
 		}
-
-		if (light_type->selected() == point)
+		else if (light_type->selected() == point)
 		{
 			light.setType(LightSource::POSITIONAL);
-			return;
 		}
-
-		light.setType(LightSource::DIRECTIONAL);
-
+		else
+		{
+			light.setType(LightSource::DIRECTIONAL);
+		}
 	}
 	catch (Exception::GeneralException e)
 	{
@@ -359,9 +358,8 @@ void LightSettings::positionTypeChanged()
 		}
 		else
 		{
-			pos = stage_->calculateAbsoluteCoordinates(pos);
-			dir = pos +
-						stage_->calculateAbsoluteCoordinates(dir);
+			pos = 			stage_->calculateAbsoluteCoordinates(pos);
+			dir = pos + stage_->calculateAbsoluteCoordinates(dir);
 		}
 
 		setPosition_(pos);
@@ -369,6 +367,7 @@ void LightSettings::positionTypeChanged()
 	}
 	catch(...)
 	{
+		BALLVIEW_DEBUG
 	}
 }
 

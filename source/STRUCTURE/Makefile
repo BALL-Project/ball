@@ -68,7 +68,7 @@ SMILES_PARSER_PREFIX=SmilesParser
 SMARTS_PARSER_PREFIX=SmartsParser
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies
 
 depend:	\
 	$(SMILES_SOURCES)\

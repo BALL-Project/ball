@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.25 2005/04/18 13:30:41 amoll Exp $
+// $Id: geometricControl.h,v 1.26 2005/07/03 09:43:11 oliver Exp $
+//
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -18,13 +19,6 @@
 # include <BALL/VIEW/KERNEL/common.h>
 #endif 
 
-#ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
-#	include <BALL/VIEW/KERNEL/molecularInformation.h>
-#endif
-
-#ifndef BALL_MATHS_MATRIX44_H
- #include <BALL/MATHS/matrix44.h>
-#endif
 
 #include <qpoint.h>
 #include <qpopupmenu.h>
@@ -36,6 +30,8 @@ namespace BALL
 	{
 		class Representation;
 		class ModifySurfaceDialog;
+		class ClippingPlane;
+		class TransformationMessage;
 
 		/**	GeometricControl is a widget to display the list of representations.
 				There are methods available to modify the representations.
@@ -63,6 +59,10 @@ namespace BALL
 
 				Representation* getRepresentation() { return representation_;};
 
+				ClippingPlane* getClippingPlane() { return clipping_plane_;};
+
+				void setClippingPlane(ClippingPlane* plane) { clipping_plane_ = plane;}
+
 				protected:
 
 				// overriden function, used to message to Control
@@ -70,6 +70,7 @@ namespace BALL
 					throw();
 
 				Representation* 	representation_;
+				ClippingPlane* 	clipping_plane_;
 				GeometricControl& control_reference_;
 				bool 							ignore_change_;
 
@@ -119,10 +120,6 @@ namespace BALL
 			void initializeWidget(MainControl& main_control)
 				throw();
 			
-			///
-			void finalizeWidget(MainControl& main_control)
-				throw();
-
 			//@} /**	@name	Accessors: inspectors and mutators */ 
 			//@{
 
@@ -146,7 +143,7 @@ namespace BALL
 			
 			/** Non-mutable inspection of the selection.
 			*/
-			List<Representation*> getSelection() const
+			List<Representation*> getHighlightedRepresentations() const
 				throw();
 			
 			/** Message handling.
@@ -163,7 +160,7 @@ namespace BALL
 					\see     insertContextMenuEntry
 					\see     onContextMenu
 			*/
-			virtual void buildContextMenu(Representation& representation)
+			virtual void buildContextMenu(SelectableListViewItem* item)
 				throw();
 
 			/** Insert a new context menu entry.
@@ -179,17 +176,15 @@ namespace BALL
 				throw();
 
 			
-			/// Overloaded from GenericControl, calls deleteRepresentation_()
-			virtual void deleteCurrentItems()
-				throw() {deleteRepresentation_();}
-
 			/// Overloaded from ModularWidget
 			virtual void checkMenu(MainControl& main_control)
 				throw();
 
 			///
-			void moveItems(const Matrix4x4& m)
+			void moveItems(const TransformationMessage& msg)
 				throw();
+
+			void updateClippingPlanes();
 
 			public slots:
 				
@@ -199,6 +194,9 @@ namespace BALL
 			//@{
 
 			/// 
+			virtual void selectAtoms();
+
+			///
 			virtual void selectedRepresentation(Representation& representation, bool state);
 
 			///
@@ -222,6 +220,18 @@ namespace BALL
 			///
 			virtual void setClippingPlaneZ();
 
+			///
+			void hideShowClippingPlane();
+
+			///
+			virtual void selectClipRepresentations();
+
+			///
+			void createNewClippingPlane();
+
+			/// 
+			void duplicateRepresentation();
+			
 		  protected slots:
 			
 			//@} 
@@ -246,12 +256,16 @@ namespace BALL
 			virtual void generateListViewItem_(Representation& rep)
 				throw();
 			
-			/// Delete a Representation.
-			virtual void deleteRepresentation_();
+			/// Overloaded from GenericControl
+			virtual void deleteCurrentItems()
+				throw();
 
 			//@}
 
 		  protected:
+			
+			// only for Python Interface
+			GeometricControl(const GeometricControl& control) throw();
 
 			enum ColumnID
 			{
@@ -259,13 +273,7 @@ namespace BALL
 				COLUMN_ID__Properties
 			};
 
-			Representation*		getRepresentation(QListViewItem& item)
-				throw();
-
 			QString						getName_(QListViewItem& item)
-				throw();
-
-			String 						getRepresentationName_(const Representation& rep)
 				throw();
 
 			void setClippingPlane_(const Vector3& n);
@@ -275,15 +283,16 @@ namespace BALL
 			QPopupMenu 				clipping_plane_context_menu_;
 
 			Representation* 	context_representation_;
+			ClippingPlane* 		context_plane_;
 			QListViewItem*  	context_item_;
 
 			HashMap<Representation*, SelectableListViewItem*> representation_to_item_;
 
 			ModifySurfaceDialog* 	modify_surface_dialog_;
 
-			MolecularInformation information_;
-
 			bool  creating_representations_;
+
+			Index menu_clipping_plane_id_;
 		};
 		
 } } // namespaces

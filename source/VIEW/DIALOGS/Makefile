@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.45 2005/04/18 13:30:08 amoll Exp $
+# $Id: Makefile,v 1.46 2005/07/03 09:43:30 oliver Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -29,6 +29,8 @@ CPP_SOURCES=\
 	compositePropertiesData.C\
 	contourSurfaceDialog.C\
 	contourSurfaceDialogData.C\
+	clippingDialog.C\
+	clippingDialogData.C\
 	downloadPDBFile.C\
 	downloadPDBFileData.C\
 	displayProperties.C\
@@ -48,6 +50,8 @@ CPP_SOURCES=\
 	molecularDynamicsDialog.C\
 	molecularDynamicsDialogData.C\
 	molecularFileDialog.C\
+	networkPreferences.C\
+	networkPreferencesData.C\
 	parsedFunctionDialog.C\
 	parsedFunctionDialogData.C\
 	peptideDialog.C\
@@ -77,6 +81,8 @@ MOC_SOURCES=\
 	bondPropertiesData_moc.C\
 	charmmConfigurationDialog_moc.C\
 	charmmConfigurationDialogData_moc.C\
+	clippingDialog_moc.C\
+	clippingDialogData_moc.C\
 	coloringSettingsDialog_moc.C\
 	coloringSettingsDialogData_moc.C\
 	modifySurfaceDialog_moc.C\
@@ -102,6 +108,8 @@ MOC_SOURCES=\
 	molecularFileDialog_moc.C\
 	molecularDynamicsDialog_moc.C\
 	molecularDynamicsDialogData_moc.C\
+	networkPreferences_moc.C\
+	networkPreferencesData_moc.C\
 	parsedFunctionDialog_moc.C\
 	parsedFunctionDialogData_moc.C\
 	peptideDialog_moc.C\
@@ -125,6 +133,7 @@ UIC_SOURCES=\
 	minimizationDialogData.C\
 	bondPropertiesData.C\
 	charmmConfigurationDialogData.C\
+	clippingDialogData.C\
 	coloringSettingsDialogData.C\
 	modifySurfaceDialogData.C\
 	compositePropertiesData.C\
@@ -138,6 +147,7 @@ UIC_SOURCES=\
 	materialSettingsData.C\
 	modelSettingsDialogData.C\
 	molecularDynamicsDialogData.C\
+	networkPreferencesData.C\
 	parsedFunctionDialogData.C\
 	peptideDialogData.C\
 	preferencesData.C\
@@ -150,7 +160,7 @@ UIC_SOURCES=\
 UIC_HDR=$(UIC_SOURCES:Data.C=.dh)
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 BALL_INCLUDES=$(VIEW_INCLUDES)
 

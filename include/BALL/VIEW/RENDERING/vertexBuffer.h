@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.h,v 1.3 2005/02/16 17:10:05 amoll Exp $
+// $Id: vertexBuffer.h,v 1.5 2005/07/16 21:00:37 oliver Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_VERTEXBUFFER_H
@@ -41,6 +41,8 @@ namespace BALL
 		{
 			public:
 
+			BALL_CREATE(MeshBuffer)
+
 			typedef GLuint Buffer[4];
 
 			///
@@ -50,7 +52,7 @@ namespace BALL
 			MeshBuffer(const MeshBuffer& mesh_buffer);
 
 			///
-			~MeshBuffer();
+			virtual ~MeshBuffer();
 
 			/** Initialise the GL needed methods.
 			    Call this method one time after having a valid GL context (e.g. in GLRenderer::init).

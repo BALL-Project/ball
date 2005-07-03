@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.C,v 1.24 2005/03/02 21:58:50 oliver Exp $
+// $Id: MOL2File.C,v 1.26 2005/07/16 21:00:41 oliver Exp $
 //
 
 #include <BALL/FORMAT/MOL2File.h>
@@ -784,7 +784,7 @@ namespace BALL
 		if (atom.countBonds() > 1)
 		{
 			name = name + ".";
-			name = name + atom.countBonds();
+			name = name + String(atom.countBonds());
 		}
 		
 		return name;

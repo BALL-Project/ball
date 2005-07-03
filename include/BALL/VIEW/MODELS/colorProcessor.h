@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.29 2005/04/18 13:30:41 amoll Exp $
+// $Id: colorProcessor.h,v 1.31 2005/07/16 21:00:34 oliver Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -55,6 +55,8 @@ class BALL_EXPORT ColorProcessor
 	: public UnaryProcessor<GeometricObject*>
 {
 	public:
+
+	BALL_CREATE(ColorProcessor)
 	
 	/**	@name	Type definitions
 	*/
@@ -108,6 +110,10 @@ class BALL_EXPORT ColorProcessor
 	/** Assignment
 	*/
 	void set(const ColorProcessor& color_calculator)
+		throw();
+
+	///
+	virtual bool start()
 		throw();
 
 	/** Assignment operator.
@@ -166,11 +172,11 @@ class BALL_EXPORT ColorProcessor
 	/** Set the pointer to the CompositeSet.
 			This method is called by Representation::setColorProcessor and Representation::update.
 	*/
-	void setComposites(const CompositeSet* composites)
+	void setComposites(const List<const Composite*>* composites)
 		throw();
 
-	/// Return a pointer to the CompositeSet.
-	const CompositeSet* getComposites()
+	/// Return a pointer to the Composites.
+	const List<const Composite*>* getComposites()
 		throw() { return composites_;}
 
 	///
@@ -184,6 +190,10 @@ class BALL_EXPORT ColorProcessor
 	///
 	float getAdditionalGridDistance() const
 		throw() { return additional_grid_distance_;}
+
+	///
+	AtomGrid& getAtomGrid() 
+		throw() { return atom_grid_;}
 
 	//@} 
 	/**	@name	debuggers and diagnostics 
@@ -228,7 +238,7 @@ class BALL_EXPORT ColorProcessor
 	ColorRGBA		selection_color_;
 	Size 				transparency_;
 
-	const 			CompositeSet* composites_;
+	const 			List<const Composite*>* composites_;
 
 	AtomGrid 		atom_grid_;
 	ModelType   model_type_;
@@ -246,11 +256,14 @@ class InterpolateColorProcessor
 {
 	public: 
 
+	BALL_CREATE(InterpolateColorProcessor)
+
 	///
 	InterpolateColorProcessor();
 
 	///
-	virtual bool start();
+	virtual bool start()
+		throw();
 
 	///
 	void setMinColor(const ColorRGBA& color)

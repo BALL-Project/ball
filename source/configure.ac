@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.22 2005/03/01 19:09:27 oliver Exp $
+dnl $Id: configure.ac,v 1.23 2005/07/03 09:43:18 oliver Exp $
 dnl
 dnl
 
@@ -29,6 +29,10 @@ PROJECT=BALL
 define(PROJECT, BALL)
 dnl this project define is required by (portable) aclocal.m4 file
 dnl being used for BNPP, BALL, and OpenMS
+
+BALL_CURRENT_VERSION=1.1
+BALL_COMPATIBILITY_VERSION=1.1
+
 
 dnl   Require the user to accept the license (once)
 CF_CHECK_LICENSE
@@ -615,10 +619,20 @@ if test "${AROPTS}" = "" ; then
 AROPTS="cru"
 fi
 
+dnl
+dnl  Some platforms (e.g. Darwin) require special flags to build
+dnl  loadable modules. If no specific flags for this were set,
+dnl  we just use the standard settings to create dynamic libraries.
+dnl
+if test "${DYNAROPTS_PYMODULE}" = "" ; then
+  DYNAROPTS_PYMODULE="${DYNAROPTS}"
+fi
+
 AC_SUBST(AR)
 AC_SUBST(AROPTS)
 AC_SUBST(DYNAR)
 AC_SUBST(DYNAROPTS)
+AC_SUBST(DYNAROPTS_PYMODULE)
 AC_SUBST(ADD_DYNAROPTS_LIBBALL)
 AC_SUBST(ADD_DYNAROPTS_LIBVIEW)
 AC_SUBST(RANLIB)

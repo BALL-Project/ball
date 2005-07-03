@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.29 2005/02/24 15:52:27 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.31 2005/07/16 21:00:35 oliver Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -48,6 +48,8 @@ namespace BALL
 			: public ColorProcessor
 		{
 			public:
+
+			BALL_CREATE(ElementColorProcessor)
 			
 			/**	@name	Constructors
 			*/
@@ -88,6 +90,8 @@ namespace BALL
 		{
 			public:
 
+				BALL_CREATE(ResidueNumberColorProcessor)
+
 				///
 				ResidueNumberColorProcessor()
 					throw();
@@ -121,15 +125,16 @@ namespace BALL
 				GeometricObjectList list_;
 				ColorRGBA first_color_, middle_color_, last_color_;
 				ColorTable table_;
-				Position min_;
-				Position max_;
 				Residue dummy_residue_;
+				HashMap<const Residue*, Position> residue_map_;
 		};
 
 		class ChainColorProcessor
 			: public ColorProcessor
 		{
 			public:
+
+				BALL_CREATE(ChainColorProcessor)
 
 				///
 				ChainColorProcessor();
@@ -166,6 +171,8 @@ namespace BALL
 			: public ColorProcessor
 		{
 			public:
+
+			BALL_CREATE(ResidueNameColorProcessor)
 			
 			/**	@name	Constructors
 			*/
@@ -217,6 +224,8 @@ namespace BALL
 			: public ColorProcessor
 		{
 			public:
+
+			BALL_CREATE(AtomChargeColorProcessor)
 			
 			/**	@name	Constructors 
 			*/	
@@ -309,6 +318,8 @@ namespace BALL
 			:  public ColorProcessor
 		{
 			public:
+
+			BALL_CREATE(AtomDistanceColorProcessor)
 			
 			/**	@name	Constructors 
 			*/	
@@ -455,9 +466,17 @@ namespace BALL
 			: public ColorProcessor
 		{
 			public:
+
+				BALL_CREATE(CustomColorProcessor)
+
 				CustomColorProcessor()
 					: ColorProcessor()
 				{}
+
+
+				/** Calculate a color for a GeometricObject.
+				*/
+				virtual Processor::Result operator() (GeometricObject*& object);
 		};
 
 
@@ -468,6 +487,8 @@ namespace BALL
 			: public InterpolateColorProcessor
 		{
 			public:
+
+			BALL_CREATE(TemperatureFactorColorProcessor)
 
 			///
 			TemperatureFactorColorProcessor();
@@ -485,6 +506,8 @@ namespace BALL
 		{
 			public:
 
+			BALL_CREATE(OccupancyColorProcessor)
+
 			///
 			OccupancyColorProcessor();
 
@@ -499,6 +522,8 @@ namespace BALL
 			: public InterpolateColorProcessor
 		{
 			public:
+
+			BALL_CREATE(ForceColorProcessor)
 
 			///
 			ForceColorProcessor();
@@ -515,6 +540,8 @@ namespace BALL
 			: public ColorProcessor
 		{
 			public:
+
+			BALL_CREATE(SecondaryStructureColorProcessor)
 
 			///
 			SecondaryStructureColorProcessor();
@@ -577,6 +604,8 @@ namespace BALL
 			: public ColorProcessor
 		{
 			public:
+
+			BALL_CREATE(ResidueTypeColorProcessor)
 
 			///
 			ResidueTypeColorProcessor();

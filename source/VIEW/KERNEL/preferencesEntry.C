@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.16 2005/02/15 12:35:51 amoll Exp $
+// $Id: preferencesEntry.C,v 1.18 2005/07/16 21:00:49 oliver Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -49,7 +49,10 @@ namespace BALL
 				return;
 			}
 
-			inifile.appendSection(inifile_section_name_);
+			if (!inifile.hasSection(inifile_section_name_))
+			{
+				inifile.appendSection(inifile_section_name_);
+			}
 
 			HashSet<QWidget*>::Iterator it = preferences_objects_.begin();
 			for (; it != preferences_objects_.end(); it++)

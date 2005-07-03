@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line.h,v 1.6 2004/02/26 08:41:43 anhi Exp $
+// $Id: line.h,v 1.8 2005/07/16 21:00:35 oliver Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIVES_LINE_H
@@ -37,6 +37,8 @@ namespace BALL
 				public Vertex2
 		{
 			public:
+
+			BALL_CREATE(Line)
 
 			/**	@name	Constructors
 			*/	

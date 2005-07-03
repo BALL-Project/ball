@@ -1,5 +1,5 @@
 # MOLMEC/CHARMM/Makefile
-# $Id: Makefile,v 1.4 2002/01/15 15:40:13 amoll Exp $
+# $Id: Makefile,v 1.5 2005/07/03 09:43:23 oliver Exp $
 #
 DIRECTORY=MOLMEC/CHARMM
 
@@ -14,4 +14,4 @@ CPP_SOURCES=\
 	charmmTorsion.C
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies

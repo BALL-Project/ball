@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.21 2005/02/27 14:24:56 oliver Exp $
+# $Id: Makefile,v 1.22 2005/07/03 09:43:21 oliver Exp $
 #
 
 #========================
@@ -10,6 +10,7 @@
 
 
 include ../common.mak
+-include .Dependencies
 
 DIRECTORY=EXAMPLES
 EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran PDBChecker addHydrogens

@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1 2004/07/15 15:20:14 amoll Exp $
+# $Id: Makefile,v 1.4 2005/12/23 17:02:30 amoll Exp $
 #
 
 EXECUTABLE=DCD2PNG
@@ -12,7 +12,7 @@ all:	$(EXECUTABLE)
 clean:	default_clean
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 

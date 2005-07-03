@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.h,v 1.5 2004/02/26 08:41:45 anhi Exp $
+// $Id: VRMLRenderer.h,v 1.6 2005/07/03 09:43:10 oliver Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_VRMLRENDERER_H
@@ -38,6 +38,8 @@ namespace BALL
 class BALL_EXPORT VRMLRenderer : public Renderer
 {
 	public:
+
+	BALL_CREATE(VRMLRenderer)
 
 	/** @name Constructors and Destructors.
 	 */

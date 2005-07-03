@@ -13,6 +13,6 @@ CPP_SOURCES=\
 	vertex2.C
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 BALL_INCLUDES=$(VIEW_INCLUDES)

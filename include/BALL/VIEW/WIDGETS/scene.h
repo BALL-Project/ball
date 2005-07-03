@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.63 2005/04/19 15:20:39 amoll Exp $
+// $Id: scene.h,v 1.65 2005/07/16 21:00:38 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -31,6 +31,8 @@
  #include <qevent.h>
 #endif
 
+#include <qtimer.h>
+
 namespace BALL
 {
 	namespace VIEW
@@ -40,6 +42,7 @@ namespace BALL
 		class StageSettings;
 		class MaterialSettings;
 		class AnimationThread;
+		class ClippingPlane;
 
 		/**	Scene is the main visualization widget that shows the graphical Representation 's.
 				To do this, the class Scene must be a child of the MainControl.
@@ -127,7 +130,7 @@ namespace BALL
 
 					Camera camera;
 			};
-			
+
 			/** @name Type definitions 
 			*/
 			//@{
@@ -288,25 +291,10 @@ namespace BALL
 					This method is called automatically	immediately before the main application is started 
 					by MainControl::show().
 					\param main_control the MainControl object to be initialized with this scene
-					\see   finalizeWidget
-					\see   insertMenuEntry
-					\see   checkMenu
 			*/
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
 		
-			/**	Remove the widget.
-					Reverse all actions performed in initializeWidget (remove menu entries of this scene).
-					This method will be called by aboutToExit from the MainControl object.
-					\param main_control the MainControl object to be finalized with this scene
-					\see   initializeWidget
-					\see   checkMenu
-					\see   removeMenuEntry
-					\see   aboutToExit
-			*/
-			virtual void finalizeWidget(MainControl& main_control)
-				throw();
-				
 			///
 			virtual void fetchPreferences(INIFile& inifile)
 				throw();
@@ -318,7 +306,7 @@ namespace BALL
 			/**	Menu checking method.
 					This method is called by MainControl::checkMenus before a popup menu is shown.
 					The menus <b>rotate mode</b> and <b>picking mode</b> each will be checked
-					if this scene is in the belonging mode.
+					if this scene is in the corresponding mode.
 					\param main_control the MainControl object whose menus should be checked
 					\see   initializeWidget
 					\see   finalizeWidget
@@ -423,6 +411,21 @@ namespace BALL
 			///
 			static bool stereoBufferSupportTest();
 			
+			///
+			float getMousePositionX() { return x_window_pos_new_;}
+
+			///
+			float getMousePositionY() { return y_window_pos_new_;}
+
+			///
+			void setPopupInfosEnabled(bool state);
+	
+			///
+			bool exportPNG(const String& filename);
+
+			///
+			virtual void setVisible(bool state);
+
 			protected:
 
 			//@}
@@ -485,17 +488,18 @@ namespace BALL
 
 			/// Catch key events
 			void keyPressEvent(QKeyEvent* e);
-		
+
+	
 			public slots:
 
 			/// Export PNG image and return the filename
 			String exportPNG();
+
+			/// show an dialog to save an PNG file to
+			void showExportPNGDialog();
 			
 			///
 			void exportPOVRay();
-
-			///
-			virtual void createNewClippingPlane();
 
 			/** Show or hide widget (Called by menu entry in "WINDOWS")
 					If the ModularWidget is not also a QWidget, this method does nothing
@@ -561,6 +565,8 @@ namespace BALL
 			///
 			static void setPOVNumber(Position pos) { pov_nr_ = pos;}
 
+			void initTimer();
+			
 			protected slots:
 
 			//@}
@@ -571,7 +577,7 @@ namespace BALL
 			/** Switch to rotate mode.
 					If this method is called the mouse actions of this scene will
 					perform rotation, translation and zooming the visualization.
-					This method will be called from the belonging menu entry.
+					This method will be called from the corresponding menu entry.
 					\see initializeWidget
 					\see checkMenu
 			*/
@@ -580,7 +586,7 @@ namespace BALL
 			/** Switch to picking mode.
 					If this method is called the mouse actions of this scene will
 					perform object picking.
-					This method will be called from the belonging menu entry.
+					This method will be called from the corresponding menu entry.
 					\see initializeWidget
 					\see checkMenu
 			*/
@@ -614,6 +620,9 @@ namespace BALL
 
 			///
 			virtual void dragEnterEvent(QDragEnterEvent* e);
+
+			///
+			virtual void timerSignal_();
 
 			//@}
 
@@ -662,10 +671,7 @@ namespace BALL
 
 			void createCoordinateSystem_()
 				throw();
-			
-			virtual void renderClippingPlane_(const Representation& rep)
-				throw();
-			
+
 			//_ state of the scene: picking or rotate mode?
 			ModeType current_mode_;
 
@@ -677,6 +683,7 @@ namespace BALL
 			Index no_stereo_id_, active_stereo_id_, dual_stereo_id_;
 			Index record_animation_id_, start_animation_id_, clear_animation_id_, cancel_animation_id_;
 			Index animation_export_POV_id_, animation_export_PNG_id_, animation_repeat_id_;
+			Index show_popup_infos_id_;
 			
 			Vector3 system_origin_;
 			Quaternion quaternion_;
@@ -718,12 +725,18 @@ namespace BALL
 			QPoint last_pos_;
 
 			static QGLFormat gl_format_;
-			GLint  current_clipping_plane_;
 			List<Camera> animation_points_;
 			AnimationThread* animation_thread_;
 			bool stop_animation_;
 			bool content_changed_;
 			bool want_to_use_vertex_buffer_;
+			bool mouse_button_is_pressed_;
+			QTimer timer_;
+
+			// Position of mouse cursor for identifying Composite
+			Position last_x_pos_, last_y_pos_;
+
+			bool show_info_;
 		};
 
 

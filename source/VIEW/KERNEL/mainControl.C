@@ -1,19 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.170 2005/04/18 13:30:10 amoll Exp $
+// $Id: mainControl.C,v 1.172 2005/07/16 21:00:48 oliver Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 #include <BALL/VIEW/KERNEL/modularWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
+#include <BALL/VIEW/DIALOGS/networkPreferences.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
-#include <BALL/VIEW/WIDGETS/geometricControl.h>
+#include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 
@@ -40,7 +42,6 @@
 #include <qpushbutton.h> // needed for preferences
 #include <qcursor.h>     // wait cursor
 #include <qmessagebox.h> 
-#include <qfiledialog.h> 
 
 #include <algorithm> // sort
 
@@ -93,6 +94,7 @@ namespace BALL
 				primitive_manager_(this),
 				composite_manager_(),
 				main_control_preferences_(0),
+				network_preferences_(0),
 				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
 				preferences_id_(-1),
 				delete_id_(0),
@@ -233,6 +235,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				Embeddable(main_control),
 				selection_(),
 				main_control_preferences_(0),
+				network_preferences_(0),
 				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
 				preferences_id_(-1),
 				delete_id_(0),
@@ -283,7 +286,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					initPopupMenu(FILE)->insertItem("&Import", menu, FILE_IMPORT);
 					break;
 				case FILE_EXPORT:
-					initPopupMenu(FILE)->insertItem("&Export", menu, FILE_EXPORT);
+					initPopupMenu(FILE)->insertItem("&Export Image", menu, FILE_EXPORT);
 					break;
 				case EDIT:
 					menuBar()->insertItem("&Edit", menu, EDIT, EDIT);
@@ -309,6 +312,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					break;
 				case CHOOSE_FF:
 					initPopupMenu(MOLECULARMECHANICS)->insertItem("Force Field", menu, CHOOSE_FF);
+					menu->setCheckable(true);
 					break;
 				case TOOLS:
 					menuBar()->insertItem("&Tools", menu, TOOLS, TOOLS);
@@ -371,13 +375,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 
 			#ifdef BALL_QT_HAS_THREADS
-				String hint = "Abort a running simulation thread";
-				insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, SLOT(stopSimulation()),
-						ALT+Key_C, MENU_STOPSIMULATION, hint);
+				stop_simulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
+												SLOT(stopSimulation()), ALT+Key_C);
+				setMenuHint(stop_simulation_id_, "Abort a running simulation thread");
 			#endif
 
-			insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, 
-										SLOT(complementSelection()), 0, MainControl::MENU_COMPLEMENT_SELECTION);
+			complement_selection_id_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
 
 			// establish connection 
 			connect(preferences_dialog_->ok_button, SIGNAL(clicked()), 
@@ -428,7 +431,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 				
 				insertPopupMenuSeparator(MainControl::EDIT);
-				preferences_id_ = insertMenuEntry(MainControl::EDIT, 
+				preferences_id_ = insertMenuEntry(MainControl::EDIT,
 																					"Preferences", 
 																					preferences_dialog_, 
 																					SLOT(show()), CTRL+Key_Z);
@@ -457,12 +460,16 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				(*it)->checkMenu(*this);
 			}
 
-			menuBar()->setItemEnabled(MENU_STOPSIMULATION, simulation_thread_ != 0);
-			menuBar()->setItemEnabled(MENU_COMPLEMENT_SELECTION, !composites_locked_);
+			menuBar()->setItemEnabled(stop_simulation_id_, simulation_thread_ != 0);
+			menuBar()->setItemEnabled(complement_selection_id_, !composites_locked_);
+
+			menuBar()->setItemEnabled(FILE_OPEN, !composites_locked_);
 		}
 
 		void MainControl::applyPreferencesTab()
 		{
+			preferences_dialog_->close();
+
 			// apply on own preferences tab
 			applyPreferences();
 			setPreferencesEnabled_(false);
@@ -571,6 +578,25 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			// delete all representations containing the composite
 			primitive_manager_.removedComposite(composite, update_representations_of_parent);
+
+			getSelection().erase(&composite);
+			
+			// remove childs of composite from selection 
+			List<Composite*> to_remove;
+			HashSet<Composite*>::Iterator cit = getSelection().begin();
+			for (; +cit; ++cit)
+			{
+				if ((**cit).isDescendantOf(composite))
+				{
+					to_remove.push_back(*cit);
+				}
+			}
+
+			List<Composite*>::iterator lit = to_remove.begin();
+			for (; lit != to_remove.end(); ++lit)
+			{
+				getSelection().erase(*lit);
+			}
 
 			// delete the Composite
 			composite_manager_.remove(composite, to_delete);
@@ -760,10 +786,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			return mc;
 		}
 
-		int MainControl::current_id_ = 15000;
+		Index MainControl::current_id_ = 15000;
 
-		int MainControl::insertMenuEntry(int parent_id, const String& name, const QObject* receiver, const char* slot, 
-																		 int accel, int entry_ID, String hint)
+		Index MainControl::insertMenuEntry(int parent_id, const String& name, const QObject* receiver, 
+																		 const char* slot, int accel, int pos)
 			throw()
 		{
 			QMenuBar* menu_bar = menuBar();
@@ -778,19 +804,13 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				return -1;
 			}
 
-			if (entry_ID == -1) entry_ID = getNextID_();
-			popup->insertItem(name.c_str(), receiver, slot, accel, entry_ID);
-
-			setMenuHint(entry_ID, hint);
+			Index entry_ID = getNextID_();
+			popup->insertItem(name.c_str(), receiver, slot, accel, entry_ID, pos);
 
 			return entry_ID;
 		}
 
-
-		void MainControl::removeMenuEntry
-			(int parent_id, const String& /* name */, 
-			 const QObject* /* receiver */, const char* /* slot */, 
-			 int /* accel */, int entry_ID)
+		void MainControl::removeMenuEntry(Index parent_id, Index entry_ID)
 			throw()
 		{
 			if (about_to_quit_) return;
@@ -837,6 +857,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			preferences.showEntry(main_control_preferences_);
 
 			main_control_preferences_->enableLoggingToFile(logging_to_file_);
+
+			network_preferences_ = new NetworkPreferences();
+			preferences.insertEntry(network_preferences_);
+			preferences.showEntry(network_preferences_);
 		}
 
 		void MainControl::finalizePreferencesTab(Preferences &preferences)
@@ -846,6 +870,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			{
 				preferences.removeEntry(main_control_preferences_);
 				main_control_preferences_ = 0;
+			}
+
+			if (network_preferences_ != 0)
+			{
+				preferences.removeEntry(network_preferences_);
+				network_preferences_ = 0;
 			}
 		}
 
@@ -862,6 +892,11 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					disableLoggingToFile();
 				else 	
 					enableLoggingToFile();
+			}
+
+			if (network_preferences_ != 0)
+			{
+				network_preferences_->applySettings();
 			}
 		}
 
@@ -902,7 +937,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				enableLoggingToFile();
 			}
 
-			resize(QSize(w,h));
+			resize(w,h);
 			move(QPoint(x_pos, y_pos));
 
 			restoreWindows(inifile);
@@ -1407,6 +1442,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		bool MainControl::remove(Representation& rep)
 			throw()
 		{
+			if (getPrimitiveManager().updateRunning())
+			{
+				setStatusbarText("Could not delete Representation while update is running!", true);
+				return false;
+			}
+
 			if (rep.hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 			{
 				SceneMessage *scene_message = new SceneMessage(SceneMessage::REMOVE_COORDINATE_SYSTEM);
@@ -1808,52 +1849,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			out.insertValue("BALLVIEW_PROJECT", "Camera", Scene::getInstance(0)->getStage()->getCamera().toString());
 		}
 
-		Position nr_of_representations = 0;
-		PrimitiveManager::RepresentationsConstIterator it = getPrimitiveManager().begin();
-		for (; it != getPrimitiveManager().end(); it++)
-		{
-			if ((**it).begin() == (**it).end()) 
-			{
-				Log.error() << "Error while writing Project File in " << __FILE__ << " " << __LINE__ << std::endl;
-				continue;
-			}
+		getPrimitiveManager().storeRepresentations(out);
 
-			bool ok = true;
-
-			Representation::CompositesIterator cit = (**it).begin();
-			const Composite* root = &(**cit).getRoot();
-			for (; cit != (**it).end(); cit++)
-			{
-				if ((**cit).getRoot() != *root)
-				{
-					ok = false;
-					break;
-				}
-			}
-
-			if (!ok) 
-			{	
-				Log.error() << "Error while writing Project File in " << __FILE__ << " " << __LINE__ << std::endl;
-				continue;
-			}
-
-			Index system_nr = -1;
-			CompositeManager::CompositeIterator cit2 = getCompositeManager().begin();
-			for (Position nr = 0; cit2 != getCompositeManager().end(); cit2++)
-			{
-				if (root == *cit2) system_nr = nr;
-
-				nr++;
-			}
-
-			if (system_nr == -1) continue;
-
-			out.insertValue("BALLVIEW_PROJECT", 
-											String("Representation") + String(nr_of_representations),  
-											String(system_nr) + String(";") + (**it).toString());
-			nr_of_representations++;
-		}
-				
 		writePreferences(out);
 		INIFile::LineIterator lit = out.getLine(0);
 		File result(filename, std::ios::out);
@@ -1944,132 +1941,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		file.close();
 		DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
 
-		try
-		{
-			for (Position p = 0; p < 9999999; p++)
-			{
-				if (!in.hasEntry("BALLVIEW_PROJECT", "Representation" + String(p))) break;
-
-				String data_string = in.getValue("BALLVIEW_PROJECT", "Representation" + String(p));
-
-				vector<String> string_vector;
-				Size split_size;
-
-				// Representation0=1;3 2 2 6.500000 0 0 [2]|Color|H
-				// 								 ^ 																	System Number
-				// 								         ^            							Model Settings
-				// 								         							 ^            Composites numbers
-				// 								         							     ^        Custom Color
-				// 								         							     			^   Hidden Flag
-
-				if (data_string.hasPrefix("CP:")) 
-				{
-					data_string = data_string.after("CP:");
-					// we have a clipping plane
-					split_size = data_string.split(string_vector);
-					if (split_size != 4) continue;
-
-					Representation* rep = new Representation();
-					rep->setModelType(MODEL_CLIPPING_PLANE);
-					rep->setProperty("AX", string_vector[0].toFloat());
-					rep->setProperty("BY", string_vector[1].toFloat());
-					rep->setProperty("CZ", string_vector[2].toFloat());
-					rep->setProperty("D", string_vector[3].toFloat());
-
-					insert(*rep);
-					continue;
-				}
-
-				// split off information of system number
-				split_size = data_string.split(string_vector, ";");
-				Position system_pos = string_vector[0].toUnsignedInt();
-
-				// split off between representation settings and composite numbers
-				data_string = string_vector[1];
-				vector<String> string_vector2;
-				data_string.split(string_vector2, "[]");
-				data_string = string_vector2[0];
-				if (DisplayProperties::getInstance(0) != 0)
-				{
-					DisplayProperties::getInstance(0)->getSettingsFromString(data_string);
-				}
-
-				// Composite positions
-				data_string = string_vector2[1];
-				data_string.split(string_vector2, ",");
-				HashSet<Position> hash_set;
-				for (Position p = 0; p < string_vector2.size(); p++)
-				{
-					hash_set.insert(string_vector2[p].toUnsignedInt());
-				}
-
-				Position pos = getCompositeManager().getNumberOfComposites() - 1;
-				CompositeManager::CompositeIterator cit2 = getCompositeManager().begin();
-				for (; cit2 != getCompositeManager().end() && system_pos != pos; cit2++)
-				{
-					pos--;
-				}
-
-				if (cit2 == getCompositeManager().end())  
-				{
-					setStatusbarText("Error while reading project file! Aborting...", true);
-					continue;
-				}
-
-				data_string = string_vector[1];
-				if (data_string.has('|'))
-				{
-					data_string.split(string_vector2, "|");
-					ColorRGBA color;
-					color = string_vector2[1];
-					if (DisplayProperties::getInstance(0) != 0)
-					{
-						DisplayProperties::getInstance(0)->setCustomColor(color);
-					}
-				}
-
-				ControlSelectionMessage* msg = new ControlSelectionMessage();
-				Position current = 0;
-
-				Composite::CompositeIterator ccit = (*cit2)->beginComposite();
-				for (; +ccit; ++ccit)
-				{
-					if (hash_set.has(current)) msg->getSelection().push_back((Composite*)&*ccit);
-					current++;
-				}
-
-				notify_(msg);
-			
-				if (DisplayProperties::getInstance(0) != 0)
-				{
-					DisplayProperties::getInstance(0)->apply();
-				}	
-
-				if (string_vector2.size() == 3 && string_vector2[2].has('H'))
-				{
-					Representation* rep = 0;
-					PrimitiveManager::RepresentationsIterator pit = getPrimitiveManager().begin();
-					for (; pit != getPrimitiveManager().end(); pit++)
-					{
-						rep = *pit;
-					}
-
-					rep->setHidden(true);
-					rep->update(false);
-
-#ifndef BALL_QT_HAS_THREADS
-			 		RepresentationMessage* msg = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
- 					notify_(msg);
-#endif
-				}
-			}
-		}
-		catch(Exception::InvalidFormat e)
-		{
-			setStatusbarText("Error while reading project file, could not read Representation.");
-			Log.error() << e << std::endl;
-			return;
-		}
+		getPrimitiveManager().restoreRepresentations(in);
 
 		getSelection().clear();
 		NewSelectionMessage* msg = new NewSelectionMessage();
@@ -2107,6 +1979,30 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		preferences_dialog_->ok_button->setEnabled(state);
 	}
 
+
+	void MainControl::setProxy(const String& host, Position port)
+	{
+		proxy_ = host;
+		proxy_port_ = port;
+
+		if (network_preferences_ != 0)
+		{
+			network_preferences_->getSettings();
+		}
+	}
+
+	void MainControl::resize(int w, int h)
+	{
+		QMainWindow::resize(w, h);
+	}
+
+	void MainControl::processEvents(int max_time)
+	{
+		if (qApp == 0) return;
+
+		qApp->processEvents(max_time);
+	}
+	
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>
 #	endif

@@ -113,6 +113,9 @@ namespace VIEW
 			virtual void run();
 
 			///
+			virtual void abort() { tcp_.abort();}
+
+			///
 			void setFilename(const String& file_name) { file_name_ = file_name;}
 
 			///

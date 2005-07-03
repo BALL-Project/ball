@@ -78,19 +78,12 @@ DownloadPDBFile::~DownloadPDBFile()
 #endif
 }
 
-void DownloadPDBFile::initializeWidget(MainControl& main_control)
+void DownloadPDBFile::initializeWidget(MainControl&)
 	throw()
 {
-	String hint("Download a PDB file from www.rcsb.org");
-	main_control.insertMenuEntry(MainControl::FILE_OPEN, "Download Structure", (QObject *)this,
-															 SLOT(show()), ALT+Key_I, -1, hint);
-}
-
-void DownloadPDBFile::finalizeWidget(MainControl& main_control)
-	throw()
-{
-	main_control.removeMenuEntry(MainControl::FILE_OPEN, "Downlo&ad Structure", (QObject *)this, 
-															 SLOT(show()), ALT+Key_A);
+	menu_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Download PDB", this,
+															 SLOT(show()), CTRL+Key_T, 1);
+	setMenuHint("Download a PDB file from www.rcsb.org");
 }
 
 void DownloadPDBFile::slotSearch()
@@ -114,7 +107,10 @@ void DownloadPDBFile::slotSearch()
 	{
 #ifndef BALL_QT_HAS_THREADS
 		std::stringstream search_result;
-		TCPTransfer tcp(search_result, filename.latin1());
+		TCPTransfer tcp;
+		tcp.set(search_result, filename.latin1());
+		setProxyAndTransfer_(tcp);
+
 		if (tcp.getStatusCode() != TCPTransfer::OK)
 		{
 			setStatusbarText(String("Failed to download file ") + filename.latin1() + 
@@ -175,14 +171,18 @@ bool DownloadPDBFile::threadedDownload_(const String& url)
 	while (thread_->running())
 	{
 		qApp->processEvents();
+		
 		Size bytes = thread_->getTCPTransfer().getReceivedBytes();
 		if (bytes != last_bytes)
 		{
 			setStatusbarText("Downloaded: " + String(bytes) + " bytes", true);
 			last_bytes = bytes;
 		}
+		
 		thread_->wait(200);
 	}
+
+	if (aborted_) return false;
 
 	if (thread_->getTCPTransfer().getReceivedBytes() == 0 ||
 			thread_->getTCPTransfer().getStatusCode() != TCPTransfer::OK) 
@@ -276,6 +276,8 @@ void DownloadPDBFile::slotDownload()
 
 void DownloadPDBFile::slotShowDetail()
 {
+	if (pdbId->text() == "") return;
+
 	setStatusbarText("Downloading information, please wait...", true);
 	QString filename = "http://www.rcsb.org/pdb/cgi/explore.cgi?job=summary&pdbId=";
 	filename += pdbId->text();
@@ -291,6 +293,8 @@ void DownloadPDBFile::slotNewId(const QString& new_id)
 
 void DownloadPDBFile::displayHTML(const QString& url)
 {
+	if (url == "") return;
+
 	try
 	{
 		QString filename;
@@ -302,7 +306,10 @@ void DownloadPDBFile::displayHTML(const QString& url)
 
 #ifndef BALL_QT_HAS_THREADS
 		std::stringstream search_result;
-		TCPTransfer tcp(search_result, filename.latin1());
+		TCPTransfer tcp;
+		tcp.set(search_result, filename.latin1());
+		setProxyAndTransfer_(tcp);
+
 		if (tcp.getStatusCode() != TCPTransfer::OK)
 		{
 			setStatusbarText(String("Failed to download file ") + filename.latin1() + ". ErrorCode " + String(tcp.getStatusCode()), true);
@@ -321,6 +328,8 @@ void DownloadPDBFile::displayHTML(const QString& url)
 		if (size == 0)
 		{
 			setStatusbarText(String("URL ") + filename.ascii() + " does not exist.", true);
+			error_ = true;
+			downloadEnded_();
 			return;
 		}
 
@@ -353,7 +362,9 @@ void DownloadPDBFile::displayHTML(const QString& url)
 				{
 					String tmp_filename = VIEW::createTemporaryFilename();
 					File img(tmp_filename, std::ios::out);
-					TCPTransfer tcp(img, "http://www.rcsb.org/" + img_url);
+					TCPTransfer tcp;
+					tcp.set(img, "http://www.rcsb.org/" + img_url);
+					setProxyAndTransfer_(tcp);
 					img.close();
 
 					QImage qi;
@@ -372,7 +383,11 @@ void DownloadPDBFile::displayHTML(const QString& url)
 			}
 		}
 
- 		if (qb_ == 0) qb_ = new QTextBrowser();
+ 		if (qb_ == 0) 
+		{
+			qb_ = new QTextBrowser();
+			connect(qb_, SIGNAL(linkClicked(const QString&)), this, SLOT(displayHTML(const QString&)));
+		}
 
 		QImage empty;
 		List<String>::Iterator it = images.begin();
@@ -390,8 +405,6 @@ void DownloadPDBFile::displayHTML(const QString& url)
 
 		qb_->setText(QString(result.c_str()));
 
-		connect(qb_, SIGNAL(linkClicked(const QString&)), this, SLOT(displayHTML(const QString&)));
-
 		downloadEnded_();
 		setStatusbarText("Finished download of HTML page", true);
 
@@ -405,11 +418,7 @@ void DownloadPDBFile::displayHTML(const QString& url)
 	}
 
 #ifdef BALL_QT_HAS_THREADS
-	try
-	{
-		File::remove(thread_->getFilename());
-	}
-	catch(...){}
+	removeFile_(thread_->getFilename());
 #endif
 } 
 
@@ -422,17 +431,22 @@ void DownloadPDBFile::idChanged()
 void DownloadPDBFile::abort()
 {
 #ifdef BALL_QT_HAS_THREADS
-	if (thread_ != 0)
-	{
-		thread_->terminate();
-	}
+
+	if (thread_ == 0) return;
 	aborted_ = true;
 
-	try
+	thread_->abort();
+	thread_->wait(5500);
+
+	if (thread_->running())
 	{
-		File::remove(thread_->getFilename());
+		thread_->terminate();
+		thread_->wait();
 	}
-	catch(...){}
+	removeFile_(thread_->getFilename());
+	
+	downloadEnded_();
+
 #endif
 }
 
@@ -478,9 +492,16 @@ void DownloadPDBFile::removeFile_(const String& filename)
 {
 	try
 	{
-		File::remove(filename);
+ 		File::remove(filename);
 	}
 	catch(...) {}
+}
+
+void DownloadPDBFile::setProxyAndTransfer_(TCPTransfer& tcp)
+{
+	MainControl* mc = getMainControl();
+ 	tcp.setProxy(mc->getProxy(), mc->getProxyPort());
+	tcp.transfer();
 }
 
 	}

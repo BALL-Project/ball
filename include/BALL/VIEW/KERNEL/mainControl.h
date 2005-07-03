@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.73 2005/04/18 13:30:40 amoll Exp $
+// $Id: mainControl.h,v 1.75 2005/07/16 21:00:33 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -52,6 +52,7 @@ namespace BALL
 		class ModularWidget;
 		class Preferences;
 		class MainControlPreferences;
+		class NetworkPreferences;
 		class GeometricObjectSelectionMessage;
 		class SimulationThread;
 
@@ -110,7 +111,7 @@ namespace BALL
 				/// File menu sub menu open
 				FILE_OPEN,
 
-				/// File menu sub menu import
+				/// File menu sub menu import [currently unused]
 				FILE_IMPORT,
 
 				/// File menu sub menu export
@@ -157,13 +158,6 @@ namespace BALL
 
 				/// Help menu
 				HELP = 10800
-			};
-
-			///
-			enum MenuEntry
-			{
-				MENU_STOPSIMULATION 			= 10450,
-				MENU_COMPLEMENT_SELECTION = 10460
 			};
 
 			//@}
@@ -441,6 +435,9 @@ namespace BALL
 			///
 			bool isAboutToQuit() { return about_to_quit_;}
 			
+			/// overloaded from QT for Python Interface
+			virtual void resize (int w, int h );
+
 			public:
 			
 			//@}
@@ -475,14 +472,13 @@ namespace BALL
 					\param hint
 					\return int the new entry_ID
 			*/
-			int insertMenuEntry (int parent_id, const String& name, const QObject* receiver = 0, 
-													 const char* slot = 0, int accel = 0, int entry_ID = -1, String hint = "")
+			Index insertMenuEntry (Index parent_id, const String& name, const QObject* receiver = 0, 
+													 const char* slot = 0, Index accel = 0, Index pos = -1)
 				throw();
 
 			/// 
-			void removeMenuEntry (int parent_id, const String& name, const QObject* receiver = 0, 
-												 const char* slot = 0, int accel = 0, int entry_ID = -1)
-			throw();
+			void removeMenuEntry (Index parent_id, Index entry_ID)
+				throw();
 			
 			/**	Initialize a new popup menu <b> ID</b>. 
 					If the MainControl has already the popup menu <b>ID</b> that QPopupMenu is returned.
@@ -727,6 +723,18 @@ namespace BALL
 			void moveItems(const Matrix4x4& m)
 				throw();
 
+			///
+			void setProxy(const String& host, Position port);
+
+			///
+			String getProxy() const { return proxy_;}
+
+			///
+			Position getProxyPort() const { return proxy_port_;}
+
+			/// Calls QApplication::processEvents
+			void processEvents(int max_time);
+
 			#ifdef BALL_QT_HAS_THREADS
 			/// QWaitCondition to wake up threads, after Composites are unlocked
 			QWaitCondition& getCompositesLockedWaitCondition() { return composites_locked_wait_condition_;}
@@ -838,6 +846,7 @@ namespace BALL
 			CompositeManager 						composite_manager_;
 
 			MainControlPreferences* 		main_control_preferences_;
+			NetworkPreferences* 				network_preferences_;
 			Preferences*								preferences_dialog_;
 			int 			 									preferences_id_;
 			int 			 									delete_id_;
@@ -875,6 +884,11 @@ namespace BALL
 			QMutex 							composites_locked_mutex_;
 			QWaitCondition 			composites_locked_wait_condition_;
 			#endif
+
+			String 							proxy_;
+			Position 						proxy_port_;
+
+			Index 							stop_simulation_id_, complement_selection_id_, open_id_, save_project_id_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: defaultProcessors.C,v 1.17 2002/02/27 12:24:12 sturm Exp $
+// $Id: defaultProcessors.C,v 1.18 2005/07/03 09:43:27 oliver Exp $
 
 #include <BALL/STRUCTURE/defaultProcessors.h>
 
@@ -166,7 +166,10 @@ namespace BALL
       {
         line.getline(infile);
         line.split(fields, 2);
-        table_[fields[0]] = fields[1].toFloat();
+				if (!line.hasPrefix("!") && !line.hasPrefix("#") && !line.hasPrefix(";"))
+				{
+          table_[fields[0]] = fields[1].toFloat();
+				}
 			}
 		}
     catch (Exception::InvalidFormat e)

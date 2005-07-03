@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171 2005/03/09 16:47:29 amoll Exp $
+// $Id: scene.C,v 1.173 2005/07/16 21:00:52 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/clippingPlane.h>
 
 #include <BALL/VIEW/DIALOGS/setCamera.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -21,7 +22,7 @@
 
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
-#include <BALL/VIEW/PRIMITIVES/box.h>
+#include <BALL/VIEW/PRIMITIVES/disc.h>
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -30,10 +31,9 @@
 #include <qimage.h>
 #include <qmenubar.h>
 #include <qcursor.h>
-#include <qapp.h>
+#include <qapplication.h>
 #include <qdragobject.h>
-#include <qdir.h>
-
+#include <qfiledialog.h>
 
 //    #define BALL_BENCHMARKING
 
@@ -372,7 +372,6 @@ namespace BALL
 			gl_renderer_.setSize(width, height);
 			gl_renderer_.updateCamera();
 			content_changed_ = true;
-			updateGL();
 		}
 
 
@@ -402,7 +401,7 @@ namespace BALL
 			Vector3	diff = stage_->getCamera().getRightVector() * (stage_->getEyeDistance() / 2.0);  
 
 			float nearf = 1.5; 
-			float farf = 300;
+			float farf = 600;
 
 			float ndfl    = nearf / stage_->getFocalDistance();
 
@@ -495,86 +494,45 @@ namespace BALL
 			content_changed_ = false;
 		}
 
-
-		void Scene::renderClippingPlane_(const Representation& rep)
-			throw()
-		{
-			Vector3 n(rep.getProperty("AX").getDouble(),
-								rep.getProperty("BY").getDouble(),
-								rep.getProperty("CZ").getDouble());
-
-			if (n.getSquareLength() != 0) n.normalize();
-
-			float d = rep.getProperty("D").getDouble();
-
-			if (rep.isHidden())
-			{
-				Vector3 x(1,0,0);
-				Vector3 y(0,1,0);
-				Vector3 z(0,0,1);
-
-				Vector3 v[3];
-				v[0] = x - n.x * n;
-				v[1] = y - n.y * n;
-				v[2] = z - n.z * n;
-
-				Vector3 e[2];
-				Position i = 0;
-
-				for (Position j = 0; j < 3 && i < 2; j++)
-				{
-					if (v[j].getSquareLength() != 0) 
-					{
-						e[i] = v[j];
-						e[i].normalize();
-						i++;
-					}
-				}
-			
-				n *= -d;
-
-				Box b(n - (e[0] * 1500.0  + e[1] * 1500.0), e[0] * 3000.0, e[1] * 3000.0, 0.01);
-				b.setColor(0,0,255, 255);
-				gl_renderer_.render_(&b);
-
-				return;
-			}
-
-			GLdouble plane[] ={n.x, n.y, n.z, d};
-
-			glEnable(current_clipping_plane_);
-			glClipPlane(current_clipping_plane_, plane);
-
-			current_clipping_plane_++;
-		}
-
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
 		{
-			gl_renderer_.initSolid();
+			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+			
+			// ============== enable active Clipping planes ==============================
+			GLint current_clipping_plane = GL_CLIP_PLANE0;
 
-			PrimitiveManager::RepresentationList::ConstIterator it;
-			// ============== render Clipping planes ==============================
-			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
+			vector<ClippingPlane*> active_planes;
+			vector<ClippingPlane*> inactive_planes;
 
-			current_clipping_plane_ = GL_CLIP_PLANE0;
-
-			for(; it != getMainControl()->getPrimitiveManager().end(); it++)
+			bool move_mode = (mouse_button_is_pressed_ && getMode() == MOVE__MODE);
+			
+			const vector<ClippingPlane*>& vc = pm.getClippingPlanes();
+			vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
+			for (;plane_it != vc.end(); plane_it++)
 			{
-				if ((**it).getModelType() != MODEL_CLIPPING_PLANE) continue;
-				renderClippingPlane_(**it);
-			}
-		
-			for (GLint i = current_clipping_plane_; i <= GL_CLIP_PLANE0 + GL_MAX_CLIP_PLANES; i++)
-			{
-				glDisable(i);
+				ClippingPlane& plane = **plane_it;
+
+				if (plane.isHidden()) continue;
+
+				if (!plane.isActive()) 
+				{
+					inactive_planes.push_back(*plane_it);
+					if (!move_mode) continue;
+				}
+
+				active_planes.push_back(*plane_it);
+
+				const Vector3& n(plane.getNormal());
+				const GLdouble planef[] ={n.x, n.y, n.z, plane.getDistance()};
+				glClipPlane(current_clipping_plane, planef);
+				current_clipping_plane++;
 			}
 
 			// -------------------------------------------------------------------
 			// show light sources
 			if (show_light_sources_)
 			{
-				gl_renderer_.initSolid();
 				List<LightSource>::ConstIterator lit = stage_->getLightSources().begin();
 				for (; lit != stage_->getLightSources().end(); lit++)
 				{
@@ -593,37 +551,63 @@ namespace BALL
 			}
 			// -------------------------------------------------------------------
 			
-			// render all "normal" (non always front and non transparent models)
-			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
-			for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
+			// we draw all the representations in different runs, 
+			// 1. normal reps
+			// 2. transparent reps
+			// 3. allways front
+			for (Position run = 0; run < 3; run++)
 			{
-				if ((*it)->getTransparency() == 0 &&
-						!(*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
+				if (run == 1)
 				{
-					gl_renderer_.initSolid();
-					render_(**it, mode);
+					// render inactive clipping planes
+					for (plane_it = inactive_planes.begin(); plane_it != inactive_planes.end(); plane_it++)
+					{
+						gl_renderer_.renderClippingPlane_(**plane_it);
+					}
 				}
-			}
 
-			// render all transparent models
-			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
-			for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
-			{
-				if ((*it)->getTransparency() != 0)
+				PrimitiveManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+				for(; it != pm.getRepresentations().end(); it++)
 				{
-					gl_renderer_.initTransparent();
-					render_(**it, mode);
-				}
-			}
+					Representation& rep = **it;
 
-			// render all always front models
-			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
-			for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
-			{
-				if ((*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
-				{
-					gl_renderer_.initAlwaysFront();
-					render_(**it, mode);
+					if (run == 0)
+					{
+						// render all "normal" (non always front and non transparent models)
+						if (rep.getTransparency() != 0 ||
+								rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
+						{
+							continue;
+						}
+					}
+					else if (run == 1)
+					{
+						// render all transparent models
+						if (rep.getTransparency() == 0) continue;
+					}
+					else
+					{
+						// render all always front models
+						if (!rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT)) continue;
+					}
+					
+					vector<Position> rep_active_planes; // clipping planes
+
+					for (Position plane_nr = 0; plane_nr < active_planes.size(); plane_nr++)
+					{
+						if (active_planes[plane_nr]->getRepresentations().has(*it))
+						{
+							glEnable(plane_nr + GL_CLIP_PLANE0);
+							rep_active_planes.push_back(plane_nr);
+						}
+					}
+
+					render_(rep, mode);
+
+					for (Position p = 0; p < rep_active_planes.size(); p++)
+					{
+						glDisable(rep_active_planes[p] + GL_CLIP_PLANE0);
+					}
 				}
 			}
 		}
@@ -1047,6 +1031,9 @@ namespace BALL
 			inifile.insertValue("STAGE", "Fulcrum", vector3ToString(system_origin_));
 			inifile.insertValue("STAGE", "AnimationSmoothness", String(animation_smoothness_));
 
+			inifile.insertValue("STAGE", "ShowPopupInfos", String(
+																										menuBar()->isItemChecked(show_popup_infos_id_)));
+
 			inifile.appendSection("EXPORT");
 			inifile.insertValue("EXPORT", "POVNR", String(pov_nr_));
 			inifile.insertValue("EXPORT", "PNGNR", String(screenshot_nr_));
@@ -1103,6 +1090,12 @@ namespace BALL
 			if (inifile.hasEntry("EXPORT", "PNGNR"))
 			{
 				screenshot_nr_ = inifile.getValue("EXPORT", "PNGNR").toUnsignedInt();
+			}
+
+			if (inifile.hasEntry("STAGE", "ShowPopupInfos"))
+			{
+				bool state = inifile.getValue("STAGE", "ShowPopupInfos").toBool();
+				if (state) initTimer();
 			}
 
 
@@ -1370,99 +1363,80 @@ namespace BALL
 		{
 			main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 
-			String hint;
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
-			hint = "Switch to rotate/zoom mode";
-			rotate_id_ =	main_control.insertMenuEntry(
-					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R, -1, hint);
+			rotate_id_ =	insertMenuEntry(
+					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
+			setMenuHint("Switch to rotate/zoom mode");
 
-			hint = "Switch to picking mode, e.g. to identify singe atoms or groups";
-			picking_id_ = main_control.insertMenuEntry(
-					MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P, -1, hint);
+			picking_id_ = insertMenuEntry( MainControl::DISPLAY, "&Picking Mode", 
+													this, SLOT(pickingMode_()), CTRL+Key_P);
+			setMenuHint("Switch to picking mode, e.g. to identify singe atoms or groups");
 
-			hint = "Move selected items";
-			move_id_ = main_control.insertMenuEntry(
-					MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()), 0, -1, hint);
-
+			move_id_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()));
+			setMenuHint("Move selected items");
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-			no_stereo_id_ = main_control.insertMenuEntry (
+			no_stereo_id_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
  			menuBar()->setItemChecked(no_stereo_id_, true) ;
-			active_stereo_id_ = main_control.insertMenuEntry (
+
+			active_stereo_id_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()));
-			dual_stereo_id_ = main_control.insertMenuEntry (
+
+			dual_stereo_id_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "Side by Side", this, SLOT(enterDualStereo()));
 
-			hint = "Print the coordinates of the current viewpoint";
-			main_control.insertMenuEntry(
-					MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), CTRL+Key_W, -1, hint);
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
+											SLOT(showViewPoint_()), CTRL+Key_W);
+			setMenuHint("Print the coordinates of the current viewpoint");
 
-			hint = "Move the viewpoint to the given coordinates";
-			main_control.insertMenuEntry(
-					MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, SLOT(setViewPoint_()), CTRL+Key_N, -1, hint);
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, 
+											SLOT(setViewPoint_()), CTRL+Key_N);
+			setMenuHint("Move the viewpoint to the given coordinates");
 
-			hint = "Reset the camera to the orgin (0,0,0)";
-			main_control.insertMenuEntry(
-					MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()), CTRL+Key_T, -1, hint);
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()));
+			setMenuHint("Reset the camera to the orgin (0,0,0)");
 
-			hint = "Export a PNG image file from the Scene";
-			main_control.insertMenuEntry(
-					MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P, -1, hint);
+			insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, SLOT(showExportPNGDialog()), ALT + Key_P);
+			setMenuHint("Export a PNG image file from the Scene");
 
 			window_menu_entry_id_ = 
-				main_control.insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
+				insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 			menuBar()->setItemChecked(window_menu_entry_id_, true);
 
-			hint = "Add an OpenGL Clipping Plane to the Scene";
-			main_control.insertMenuEntry(MainControl::DISPLAY, "New Clipping Plane", this, 
-					SLOT(createNewClippingPlane()), 0, -1, hint);   
-
 			// ======================== ANIMATION ===============================================
-			hint = "Record an animation for later processing";
-			record_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 
-					SLOT(recordAnimationClicked()), 0, -1, hint);   
+			record_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 
+															SLOT(recordAnimationClicked()));
+			setMenuHint("Record an animation for later processing");
  			menuBar()->setItemChecked(record_animation_id_, false) ;
 			
-			clear_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, 
-					SLOT(clearRecordedAnimation()));
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
-			start_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, 
-					SLOT(startAnimation()));
+			clear_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, 
+															SLOT(clearRecordedAnimation()));
 
-			cancel_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, 
-					SLOT(stopAnimation()));
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
+
+			start_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, 
+															SLOT(startAnimation()));
+
+			cancel_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, 
+															SLOT(stopAnimation()));
 			menuBar()->setItemEnabled(cancel_animation_id_, false);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
-			animation_export_PNG_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", 
-					this, SLOT(animationExportPNGClicked()));
-			animation_export_POV_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", 
-					this, SLOT(animationExportPOVClicked()));
-			animation_repeat_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
-					SLOT(animationRepeatClicked()));
+
+			animation_export_PNG_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", 
+																	this, SLOT(animationExportPNGClicked()));
+
+			animation_export_POV_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", 
+																	this, SLOT(animationExportPOVClicked()));
+
+			animation_repeat_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
+																	SLOT(animationRepeatClicked()));
 
 			setCursor(QCursor(Qt::SizeAllCursor));
-		}
 
-		void Scene::finalizeWidget(MainControl& main_control)
-			throw()
-		{
-			main_control.removeMenuEntry(MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
-			main_control.removeMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P);		
-			main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
-					SLOT(showViewPoint_()), CTRL+Key_W);		
-			main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, 
-					SLOT(setViewPoint_()), CTRL+Key_N);		
-			main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, 
-					SLOT(resetCamera_()), CTRL+Key_T);		
-			main_control.removeMenuEntry(MainControl::DISPLAY, "& Stereo Mode", this, SLOT( switchStereo()), ALT+Key_Y);		
-			main_control.removeMenuEntry(MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P);		
-			main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
-
-			main_control.removeMenuEntry(MainControl::DISPLAY, "New Clipping Plane", this, 
-					SLOT(createNewClippingPlane()), 0);
+			connect(&timer_, SIGNAL(timeout()), this, SLOT(timerSignal_()) );			
 		}
 
 		void Scene::checkMenu(MainControl& /*main_control*/)
@@ -1470,6 +1444,9 @@ namespace BALL
 		{
 			menuBar()->setItemChecked(rotate_id_, 	(current_mode_ == ROTATE__MODE));
 			menuBar()->setItemChecked(picking_id_,  (current_mode_ == PICKING__MODE));		
+
+			menuBar()->setItemEnabled(picking_id_, !getMainControl()->compositesAreLocked());
+			menuBar()->setItemEnabled(move_id_, !getMainControl()->compositesAreLocked());
 
 			bool animation_running = false;
 			#ifdef BALL_QT_HAS_THREADS
@@ -1523,6 +1500,8 @@ namespace BALL
 		void Scene::mousePressEvent(QMouseEvent* e)
 		{
 			makeCurrent();
+
+			mouse_button_is_pressed_ = true;
 
 			x_window_pos_old_ = e->x();
 			y_window_pos_old_ = e->y();
@@ -1641,16 +1620,14 @@ namespace BALL
 				// rotate
 				case Qt::LeftButton:
 				{
-					if (delta_x * delta_x > delta_y * delta_y)
-					{
-						Angle angle(delta_x * (mouse_sensitivity_ / (ROTATE_FACTOR * 3)), false);
-						m.rotate(angle, camera.getLookUpVector());
-					}
-					else
-					{
-						Angle angle(delta_y * (mouse_sensitivity_ / (ROTATE_FACTOR * -3)), false);
-						m.rotate(angle, camera.getRightVector());
-					}
+					float angle_x = delta_x * (mouse_sensitivity_ / (ROTATE_FACTOR * 3));
+					float angle_y = delta_y * (mouse_sensitivity_ / (ROTATE_FACTOR * -3));
+					float angle_total = fabs(angle_x) + fabs(angle_y);
+
+					Vector3 rotation_axis = (camera.getLookUpVector() * angle_x / angle_total) +
+																	(camera.getRightVector()  * angle_y / angle_total);
+
+					m.rotate(Angle(angle_total, false), rotation_axis);
 					break;
 				}
 
@@ -1658,8 +1635,10 @@ namespace BALL
 				case (Qt::LeftButton | Qt::RightButton):
 				case (Qt::LeftButton | Qt::ShiftButton | Qt::ControlButton):
 				default:
-					delete msg;
-					return;
+					float angle_x = delta_x * (mouse_sensitivity_ / (ROTATE_FACTOR * 3));
+					Vector3 rotation_axis = camera.getViewVector();
+					m.rotate(Angle(angle_x, false), rotation_axis);
+					break;
 			}
 
 			msg->setMatrix(m);
@@ -1670,6 +1649,8 @@ namespace BALL
 		void Scene::mouseReleaseEvent(QMouseEvent* e)
 		{
 			makeCurrent();
+
+			mouse_button_is_pressed_ = false;
 
 			// ============ picking mode ================
 			if(current_mode_ == PICKING__MODE)
@@ -1704,6 +1685,115 @@ namespace BALL
 				updateGL();
 				need_update_ = false;
 			}
+		}
+
+		void Scene::initTimer()
+		{
+			timer_.start(500);
+		}
+
+		void Scene::timerSignal_()
+		{
+			if (mouse_button_is_pressed_ ||
+					getMainControl()->compositesAreLocked() ||
+					getMainControl()->getPrimitiveManager().updateRunning())
+			{
+				return;
+			}
+
+			QPoint point = mapFromGlobal(QCursor::pos());
+
+			if (!rect().contains(point)) return;
+
+			Position pos_x = point.x();
+			Position pos_y = point.y();
+
+			// if the mouse was at on other position 500 ms before, store position and abort
+
+			if (pos_x != last_x_pos_ ||
+					pos_y != last_y_pos_)
+			{
+				last_x_pos_ = pos_x;
+				last_y_pos_ = pos_y;
+				show_info_ = true;
+				return;
+			}
+
+			if (!show_info_) return;
+
+			// we wont show the info again until the mouse moved
+			show_info_ = false;
+
+			List<GeometricObject*> objects;
+
+			// ok, do the picking, until we find something
+			for (Position p = 0; p < 8; p++)
+			{
+				gl_renderer_.pickObjects1(pos_x - p, pos_y - p, pos_x + p, pos_y + p);
+				renderView_(DIRECT_RENDERING);
+				gl_renderer_.pickObjects2(objects);
+				if (objects.size() != 0) break;
+			}
+
+			if (objects.size() == 0)
+			{
+				return;
+			}
+
+			// get the description
+			String string;
+			MolecularInformation info;
+
+			List<GeometricObject*>::Iterator git = objects.begin();
+			for (; git != objects.end(); git++)
+			{
+				// do we have a composite?
+				Composite* composite = (Composite*) (**git).getComposite();
+				if (composite == 0) continue;
+
+				info.visit(*composite);
+				String this_string(info.getName());
+				if (composite->getParent() != 0 &&
+						RTTI::isKindOf<Residue>(*composite->getParent()))
+				{
+					info.visit(*composite->getParent());
+					this_string = info.getName() + " : " + this_string;
+				}
+
+ 				if (this_string == "UNKNOWN") continue;;
+
+				if (string != "") string += ", ";
+				string += this_string;
+			}
+
+			if (string == "") return;
+
+			String string2 = String("Object at cursor is ") + string;
+
+			if (getMainControl()->getStatusbarText() == string2) return;
+
+			setStatusbarText(string2, false);
+
+			QPainter painter(this);
+
+			ColorRGBA color = getStage()->getBackgroundColor();
+			color.set(255 - (Position) color.getRed(),
+								255 - (Position) color.getGreen(),
+								255 - (Position) color.getBlue());
+
+
+			painter.setBackgroundMode(Qt::OpaqueMode);
+			painter.setBackgroundColor(color.getQColor());
+			painter.setPen(getStage()->getBackgroundColor().getQColor());
+
+			QPoint diff(20, 20);
+			if (pos_x > (Position) width() / 2) diff.setX(-20);
+			if (pos_y > (Position) height() / 2) diff.setY(-20);
+
+			point += diff;
+			painter.drawText(point, string.c_str(), 0, -1);
+
+			show_info_ = false;
 		}
 
 
@@ -1910,17 +2000,38 @@ namespace BALL
 
 		String Scene::exportPNG()
 		{
-			makeCurrent();
-			QImage image = grabFrameBuffer();
-
 			String filename = String("BALLView_screenshot" + String(screenshot_nr_) +".png");
-			bool result = image.save(filename.c_str(), "PNG");
 			screenshot_nr_ ++;
 
-			if (result) setStatusbarText("Saved screenshot to " + filename);
-			else 				setStatusbarText("Could not save screenshot to " + filename);
+			exportPNG(filename);
 
 			return filename;
+		}
+
+		void Scene::showExportPNGDialog()
+		{
+			String start = String(screenshot_nr_) + ".png";
+			screenshot_nr_ ++;
+			QString result = QFileDialog::getSaveFileName(start.c_str(), "", 0, "Select a PNG file");
+
+			if (result.isEmpty()) return;
+
+			exportPNG(result.ascii());
+		}
+
+		bool Scene::exportPNG(const String& filename)
+		{
+			makeCurrent();
+
+			QImage image = grabFrameBuffer();
+			bool ok = image.save(filename.c_str(), "PNG");
+
+			setWorkingDirFromFilename_(filename);
+
+			if (ok) setStatusbarText("Saved PNG to " + filename);
+			else 		setStatusbarText("Could not save PNG", true);
+
+			return ok;
 		}
 
 		void Scene::exportPOVRay()
@@ -1963,7 +2074,7 @@ namespace BALL
 
 			if (!getMainControl()) 
 			{
-				Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
+				BALLVIEW_DEBUG
 				return;
 			}
 
@@ -1993,7 +2104,7 @@ namespace BALL
 								 2.0 * gl_renderer_.getXScale(), 
 								-2.0 * gl_renderer_.getYScale(), 
 								 2.0 * gl_renderer_.getYScale(),
-								 1.5, 300);
+								 1.5, 600);
 			glMatrixMode(GL_MODELVIEW);
 
 			hide();
@@ -2040,19 +2151,6 @@ namespace BALL
 			getMainControl()->menuBar()->setItemChecked(active_stereo_id_, false);
 			getMainControl()->menuBar()->setItemChecked(dual_stereo_id_, true);
 			update();
-		}
-
-		void Scene::createNewClippingPlane()
-		{
-			Representation* rep = new Representation();
-			rep->setModelType(MODEL_CLIPPING_PLANE);
-			Vector3 v = stage_->getCamera().getViewVector();
-			rep->setProperty("AX", v.x);
-			rep->setProperty("BY", v.y);
-			rep->setProperty("CZ", v.z);
-			rep->setProperty("D", 10);
-			rep->setHidden(true);
-			getMainControl()->insert(*rep);
 		}
 
 		void Scene::setCamera(const Camera& camera)
@@ -2224,21 +2322,7 @@ namespace BALL
 
 		void Scene::dropEvent(QDropEvent* e)
 		{
-			if (!QUriDrag::canDecode(e)) 
-			{
-				e->ignore();
-				return;
-			}
-
-			QStrList lst;
-			QUriDrag::decode(e, lst);
-			e->accept();
-
-			for (Position i = 0; i < lst.count(); ++i )
-			{
-				QString filename = QDir::convertSeparators(QUriDrag::uriToLocalFile(lst.at(i)));
-				getMainControl()->openFile(filename.ascii());
-			}
+			VIEW::processDropEvent(e);
 		}
 
 		void Scene::dragEnterEvent(QDragEnterEvent* event)
@@ -2270,6 +2354,29 @@ namespace BALL
 			return supports;
 		}
 
-	} // namespace VIEW
+		void Scene::setPopupInfosEnabled(bool state)
+		{
+			if (state)
+			{
+				initTimer();
+			}
+			else
+			{
+				timer_.stop();
+			}
+		}
 
+		void Scene::setVisible(bool state)
+		{
+			if (state)
+			{
+				show();
+			}
+			else
+			{
+				hide();
+			}
+		}
+
+	} // namespace VIEW
 } // namespace BALL

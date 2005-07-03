@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.31 2005/04/18 13:30:40 amoll Exp $
+// $Id: representation.h,v 1.33 2005/07/16 21:00:34 oliver Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -15,10 +15,6 @@
 #	include <BALL/DATATYPE/list.h>
 #endif
 
-#ifndef BALL_DATATYPE_HASHSET_H
-#	include <BALL/DATATYPE/hashSet.h>
-#endif
-
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
 #endif
@@ -27,13 +23,19 @@
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_MODELPROCESSOR_H
+#ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
+#	include <BALL/VIEW/KERNEL/molecularInformation.h>
+#endif
+
+// next two defines need to be included in header file, because if iC file
+#ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
 # include <BALL/VIEW/MODELS/modelProcessor.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_COLORPROCESSOR_H
+#ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
 # include <BALL/VIEW/MODELS/colorProcessor.h>
 #endif
+
 
 namespace BALL
 {
@@ -83,15 +85,6 @@ namespace BALL
 			/// 
 			typedef List<GeometricObject*> 		 GeometricObjectList;
 
-			///
-			typedef HashSet<const Composite*>  CompositeSet;
-
-			///
-			typedef CompositeSet::Iterator CompositesIterator;
-
-			///
-			typedef CompositeSet::ConstIterator CompositesConstIterator;
-
 			//@}
 			/**	@name	Constructors and Destuctor
 			*/	
@@ -106,15 +99,6 @@ namespace BALL
 			Representation(ModelType model_type,
 										 DrawingPrecision drawing_precision,
 										 DrawingMode drawing_mode)
-				throw();
-
-			///
-			Representation(const CompositeSet& composites, 
-										 ModelProcessor* rep_processor)
-				throw();
-
-			///
-			Representation(const GeometricObjectList& object_list)
 				throw();
 
 			/** Copy constructor
@@ -172,11 +156,11 @@ namespace BALL
 			DrawingMode getDrawingMode() const
 				throw();
 			
-			///
+			/// get transparency (0 - 255)
 			Size getTransparency() const
 				throw();
 
-			///
+			/// set transparency (0 - 255)
 			void setTransparency(Size value)
 				throw();
 			
@@ -193,11 +177,11 @@ namespace BALL
 				throw();
 
 			///
-			const CompositeSet& getComposites() const
-				throw();
+			const List<const Composite*>& getComposites() const
+				throw() { return composites_;}
 
 			///
-			CompositeSet& getComposites()
+			void setComposites(const List<const Composite*>& composites)
 				throw();
 
 			///
@@ -237,6 +221,10 @@ namespace BALL
 				throw();
 
 			///
+			String getName() const
+				throw();
+
+			///
 			void setColoringMethod(ColoringMethod type)
 				throw();
 
@@ -256,19 +244,22 @@ namespace BALL
 			///
 			bool coloringUpdateEnabled() const { return coloring_update_enabled_;}
 
-			///
+			/// Get a descpription string (nr triangles and geometric objects, transparency, mode)
 			String getProperties() const
 				throw();
 			
-			///
+			/// Check if drawing mode, transparency and drawing precision have reasonable values.
 			bool isValid() const
 				throw();
 
-			///
+			/** Apply ModelProcessor (if rebuild) and ColorProcessor.
+			 		The usage of these processors can be disabled, either by setting a NULL-pointer
+					accordingly or call enableColoringUpdate(false) and enableModelUpdate(false).
+			*/
 			void update(bool rebuild)
 				throw();
 
-			///
+			/// Clear and destroy all stored GeometricObject.
 			void clearGeometricObjects()
 				throw();
 
@@ -291,28 +282,12 @@ namespace BALL
 			void setNeedsUpdate()
 				throw();
 
-			///
+			/// Dum to ostream for debugging
 			void dump(std::ostream& s, Size depth) const
 				throw();
 
-			///
+			/// Get a String containing all settings for Usage in project files.
 			String toString() const
-				throw();
-
-			///
-			CompositesIterator begin() 
-				throw();
-
-			///
-			CompositesConstIterator begin() const
-				throw();
-			
-			///
-			CompositesIterator end() 
-				throw();
-
-			///
-			CompositesConstIterator end() const
 				throw();
 
 			//@}
@@ -326,6 +301,8 @@ namespace BALL
 			void update_()
 				throw();
 
+			// Create a hashmap with the numerical position of every composite in its root Composite. 
+			// Needed for toString().
 			void collectRecursive_(const Composite& c, HashMap<const Composite*, Position>& hashmap) const
 				throw();
 
@@ -354,7 +331,7 @@ namespace BALL
 			ColorProcessor* 		color_processor_;
 
 			//_
-			CompositeSet 				composites_;
+			List<const Composite*> composites_;
 
 			//_
 			PreciseTime 				model_build_time_;
@@ -380,8 +357,8 @@ namespace BALL
 			//_
 			bool 								coloring_update_enabled_;
 
-			// prevent usage of geometric_objects_ in derived classes
-			private:
+			//_ 							  used for getName()
+			static 							MolecularInformation information_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

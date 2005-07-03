@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.86 2005/03/10 11:14:43 amoll Exp $
+// $Id: molecularStructure.C,v 1.88 2005/07/16 21:00:51 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -18,6 +18,7 @@
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/forEach.h>
 #include <BALL/SYSTEM/directory.h>
 
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
@@ -63,90 +64,92 @@ namespace BALL
 		void MolecularStructure::initializeWidget(MainControl& main_control)
 		{
 			// cant use ModularWidget::getMainControl() here, no idea why
-			String hint;
-			
-			hint = "Focus the camera on one or multiple objects."; 
-			center_camera_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
-																												SLOT(centerCamera()), CTRL+Key_F, -1, hint);
+			center_camera_id_ = insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
+																												SLOT(centerCamera()), CTRL+Key_F);
+			setMenuHint("Focus the camera on one or multiple objects.");
 
 			// Build Menu -------------------------------------------------------------------
 	// 		hint = "To assign charges, one System has to be selected.";
 	// 		assign_charges_id_ = insertMenuEntry(MainControl::BUILD, "Assign Char&ges", this, SLOT(assignCharges()),
 	// 										CTRL+Key_G, -1 , hint);
 
-			build_peptide_id_ = insertMenuEntry(MainControl::BUILD, "B&uild Peptide", this, SLOT(buildPeptide()), ALT+Key_U, 
-											-1, "Build a peptide from selected amino acids.");
+			build_peptide_id_ = insertMenuEntry(MainControl::BUILD, "B&uild Peptide", this, 
+													SLOT(buildPeptide()), ALT+Key_U);
+			setMenuHint("Build a peptide from selected amino acids.");
 
-			hint = "Add missing bonds to a selected structure.";
 			build_bonds_id_ = insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
-																												SLOT(buildBonds()), CTRL+Key_B, -1, hint);
-			
-			hint = "Add missing atoms to a selected structure."; 
+																												SLOT(buildBonds()), CTRL+Key_B);
+			setMenuHint("Add missing bonds to a selected structure.");
+
 			add_hydrogens_id_ = insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
-																												SLOT(addHydrogens()), CTRL+Key_H, -1, hint);
+																												SLOT(addHydrogens()), CTRL+Key_H);
+			setMenuHint("Add missing atoms to a selected structure.");
 			
-			hint = "Check a structure against the fragment database.";
 			check_structure_id_ = insertMenuEntry(MainControl::BUILD, "Chec&k Structure", this, 
-																												SLOT(checkResidue()), CTRL+Key_K, -1, hint);
+																												SLOT(checkResidue()), CTRL+Key_K);
+			setMenuHint("Check a structure against the fragment database.");
 			
 			// MOLECULARMECHANICS Menu -------------------------------------------------------------------
-			hint = "Calculate the energy of a System with the AMBER/CHARMM force field.";
 			energy_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Single Point Calculation", this, 
-																				 SLOT(calculateForceFieldEnergy()), CTRL+Key_A, MainControl::MOLECULARMECHANICS + 12, hint);
+								SLOT(calculateForceFieldEnergy()), CTRL+Key_A, MainControl::MOLECULARMECHANICS + 12);
+			setMenuHint("Calculate the energy of a System with the AMBER/CHARMM force field.");
 				
-			hint = "To perform an Energy Minimization, first select the molecular structures.";
-			minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Energy Minimization", this, 
-																SLOT(runMinimization()), CTRL+Key_E, MainControl::MOLECULARMECHANICS+ 10, hint);
+			minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Energy Minimization", 
+							this, SLOT(runMinimization()), CTRL+Key_E, MainControl::MOLECULARMECHANICS+ 10);
+			setMenuHint("To perform an Energy Minimization, first select the molecular structures.");
 
-			hint = "To perform a MD simulation , first select the molecular structures.";
-			mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", this, 
-																SLOT(MDSimulation()), CTRL+Key_D, MainControl::MOLECULARMECHANICS + 11, hint);
+			mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", 
+								this, SLOT(MDSimulation()), CTRL+Key_M, MainControl::MOLECULARMECHANICS + 11);
+			setMenuHint("To perform a MD simulation , first select the molecular structures.");
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 			(main_control.initPopupMenu(MainControl::CHOOSE_FF))->setCheckable(true);
-			hint = "Use Amber Force Field";
-			amber_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Amber", this, SLOT(chooseAmberFF()),0,-1,hint);
+
+			amber_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Amber", this, SLOT(chooseAmberFF()));
+			setMenuHint("Use Amber Force Field");
 			
-			hint = "Use Charmm Force Field";
-			charmm_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Charmm", this, 
-												SLOT(chooseCharmmFF()),0,-1, hint);
+			charmm_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Charmm", this, SLOT(chooseCharmmFF()));
+			setMenuHint("Use Charmm Force Field");
+
 			menuBar()->setItemChecked(charmm_ff_id_, true);
 
-			hint = "Configure the force field";
 			setup_ff_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Options", this, 
-												SLOT(setupForceField()),0,-1, hint);
+												SLOT(setupForceField()));
+			setMenuHint("Configure the force field");
 
 			// Tools Menu -------------------------------------------------------------------
 			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 //			hint = " Map two proteins.";
 // 			map_proteins_id_ = insertMenuEntry(MainControl::TOOLS, "&Map two Proteins", this, SLOT(mapProteins()), 0, -1, hint);
 
-			hint = "Calculate RMSD for two molecules or fragments of molecules.";
-			calculate_RMSD_id_ = insertMenuEntry(MainControl::TOOLS, "&Calculate RMSD", this, SLOT(calculateRMSD()), 0, -1, hint);
+			calculate_RMSD_id_ = insertMenuEntry(MainControl::TOOLS, "&Calculate RMSD", this, 
+													 SLOT(calculateRMSD()));
+			setMenuHint("Highlight two (partial) structures to calculate their RMSD value.");
 			
 			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 
-			hint = "Recalculate the secondary structure for a structure.";
 			calculate_ss_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate sec&ondary structure", this,
-																				 SLOT(calculateSecondaryStructure()), ALT+Key_O, -1, hint);
+																				 SLOT(calculateSecondaryStructure()), ALT+Key_O);
+			setMenuHint("Recalculate the secondary structure for a structure.");
 
-			hint = "Calculate a Ramachandran Plot for a Protein.";
-			calculate_ramachandran_ = insertMenuEntry(MainControl::TOOLS, "Ramachandran Plot", this,
-																				 SLOT(calculateRamachandranPlot()), 0, -1, hint);
+//   			calculate_ramachandran_ = insertMenuEntry(MainControl::TOOLS, "Ramachandran Plot", this,
+//   																				 SLOT(calculateRamachandranPlot()));
+//   			setMenuHint("Calculate a Ramachandran Plot for a Protein.");
 
-			hint = "To assign H-bonds, one System has to be selected.";
-			calculate_hbonds_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate H-B&onds", this, SLOT(calculateHBonds()),
-											ALT+Key_N, -1, hint);
+			calculate_hbonds_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate H-B&onds", this, 
+																		SLOT(calculateHBonds()), ALT+Key_N);
+			setMenuHint("To assign H-bonds, one System has to be selected.");
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 
-			hint = "Calculate the Electrostatics with FDPB, if one System selected.";
 			menu_FPDB_ = insertMenuEntry(MainControl::TOOLS , "FDPB Electrostatics", this, 
-																		SLOT(calculateFDPB()), 0, -1, hint);
+																		SLOT(calculateFDPB()));
+			setMenuHint("Calculate the Electrostatics with FDPB, if one System selected.");
 				
-			hint = "Create a grid with the distance to the geometric center of a structure.";
 			create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS, 
-																					"&Distance Grid", this, SLOT(createGridFromDistance()), 0, -1, hint);   
+																					"&Distance Grid", this, SLOT(createGridFromDistance()));
+			setMenuHint("Create a grid with the distance to the geometric center of a structure.");
+
 			minimization_dialog_.setAmberDialog(&amber_dialog_);
 			minimization_dialog_.setCharmmDialog(&charmm_dialog_);
 			md_dialog_.setAmberDialog(&amber_dialog_);
@@ -167,28 +170,6 @@ namespace BALL
 		MolecularStructure::~MolecularStructure()
 			throw()
 		{
-		}
-
-
-		void MolecularStructure::finalizeWidget(MainControl& main_control)
-		{
-			main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
-																											SLOT(centerCamera()), CTRL+Key_F);
-			main_control.removeMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
-																											SLOT(buildBonds()), CTRL+Key_B);
-			main_control.removeMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
-																											SLOT(addHydrogens()), CTRL+Key_H);
-			main_control.removeMenuEntry(MainControl::BUILD, "Chec&k Structure", this, 
-																											SLOT(checkResidue()), CTRL+Key_K);
-			main_control.removeMenuEntry(MainControl::TOOLS_CREATE_GRID, "&Distance Grid", this, 
-																											SLOT(createGridFromDistance()));   
-			main_control.removeMenuEntry(MainControl::BUILD, "Calculate Secondary Structure", this,
-																											SLOT(calculateSecondaryStructure()));
-			main_control.removeMenuEntry(MainControl::BUILD, "Ramachandran Plot", this,
-																											SLOT(calculateRamachandranPlot()));
-
-//			main_control.removeMenuEntry(MainControl::BUILD, " Map two Proteins", this,
-// 																											SLOT(mapProteins()));
 		}
 
 
@@ -415,70 +396,25 @@ namespace BALL
 				to_center_on = *getMainControl()->getMolecularControlSelection().begin();
 			}
 
-			// use processor for calculating the center
-			GeometricCenterProcessor center;
-			to_center_on->apply((UnaryProcessor<Atom>&) center);			
-			Vector3 view_point = center.getCenter();
+			List<Vector3> positions;
 
-			Vector3 max_distance_point;
-			float max_square_distance = -1;
 			AtomContainer* ai = dynamic_cast<AtomContainer*>(to_center_on);
 			if (ai != 0)
 			{
 				AtomIterator ait = ai->beginAtom();
 				for (; ait != ai->endAtom(); ait++)
 				{
-					float sd = ((*ait).getPosition() - view_point).getSquareLength();
-					if (sd > max_square_distance)
-					{
-						max_square_distance = sd;
-						max_distance_point = (*ait).getPosition();
-					}
+					positions.push_back((*ait).getPosition());
 				}
 			}
 			else
 			{
-				Atom* atom = dynamic_cast<Atom*>(to_center_on);
+				const Atom* atom = dynamic_cast<const Atom*>(to_center_on);
 				if (atom == 0) return;
-				max_distance_point = atom->getPosition() - Vector3(1,1,1);
+				positions.push_back(atom->getPosition());
 			}
 
- 			Vector3 max_distance_vector(max_distance_point - view_point);
-
-			Vector3 up_vector = Vector3(1,0,0);
-			Vector3 view_vector = up_vector % max_distance_vector;
-			if (Maths::isZero(view_vector.getSquareLength())) 
-			{
-				up_vector = Vector3(0,1,0);
-				view_vector = up_vector % max_distance_vector;
-			}
-
-			if (Maths::isZero(view_vector.getSquareLength()))
-			{
-				up_vector = Vector3(0,0,1);
-				view_vector = up_vector % max_distance_vector;
-			}
-
-			if (Maths::isZero(view_vector.getSquareLength()))
-			{
-				view_vector = Vector3(1,0,0);
-			}
-
-			if (!Maths::isZero(view_vector.getSquareLength())) view_vector.normalize();
-
-			float distance = max_distance_vector.getLength() / tan(Angle(31, false).toRadian());
-			if (distance < 4) 	distance = 4;
-			if (distance > 100) distance = 100;
-
-			view_vector *= distance;
-
-
-			// update scene
-			SceneMessage *scene_message = new SceneMessage(SceneMessage::UPDATE_CAMERA);
-			scene_message->getStage().getCamera().setLookAtPosition(view_point);
-			scene_message->getStage().getCamera().setViewPoint(view_point - view_vector);
-			scene_message->getStage().getCamera().setLookUpVector(up_vector);
-			notify_(scene_message);
+			VIEW::focusCamera(positions);
 		}
 
 
@@ -638,10 +574,11 @@ namespace BALL
 			SecondaryStructureProcessor ssp;
 			s.apply(ssp);
 
-			CompositeMessage *change_message = 
-				new CompositeMessage(s, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-			notify_(change_message);
-			setStatusbarText("Calculated Secondary Structure", true);
+			notify_(new CompositeMessage(s, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY));
+
+			Size nr = s.countSecondaryStructures();
+
+			setStatusbarText(String("Calculated ") + String(nr) + " secondary structures.", true);
 		}
 
 
@@ -696,7 +633,7 @@ namespace BALL
 			if (sm.getBijection().size() == a1->countAtoms() &&
 			    sm.getBijection().size() == a2->countAtoms())
 			{
-				setStatusbarText(rmsd_text + ". All atom could be matched.", true);
+				setStatusbarText(rmsd_text + ". All atoms could be matched.", true);
 				return;
 			}
 
@@ -909,17 +846,32 @@ namespace BALL
 
 		void MolecularStructure::calculateHBonds()
 		{
-			if (!getMainControl()->getSelectedSystem())
+			System* system = getMainControl()->getSelectedSystem();
+
+			if (system == 0)
 			{
 				setStatusbarText("To calculate H-bonds, one system has to be selected", true);
 				return;
 			}
 
 			HBondProcessor proc;
-			if (!getMainControl()->getSelectedSystem()) return;
-			getMainControl()->getSelectedSystem()->apply(proc);
-			getMainControl()->update(*getMainControl()->getSelectedSystem());
-			setStatusbarText("Calculated H-bonds", true);
+			system->apply(proc);
+
+			getMainControl()->update(*system);
+
+			AtomBondIterator bit;
+			AtomIterator ait;
+			Size hbonds = 0;
+
+			BALL_FOREACH_BOND(*system, ait, bit)
+			{
+				Bond& bond = *bit;
+				if (bond.getType() == Bond::TYPE__HYDROGEN) hbonds++; 
+			}
+
+			hbonds /= 2;
+			
+			setStatusbarText(String("Calculated ") + String(hbonds) + " H-bonds", true);
 		}
 
 		void MolecularStructure::calculateForceFieldEnergy()
@@ -1268,7 +1220,6 @@ namespace BALL
 				thread->setMolecularDynamics(mds);
 				thread->setNumberOfSteps(md_dialog_.getNumberOfSteps());
 				thread->setNumberOfStepsBetweenUpdates(steps);
-				thread->setSaveImages(md_dialog_.saveImages());
 				thread->setDCDFile(dcd);
 				thread->setComposite(system);
 
@@ -1289,11 +1240,6 @@ namespace BALL
 				{
 					ok = mds->simulateIterations(steps, true);
 					getMainControl()->update(*system);
-					if (md_dialog_.saveImages()) 
-					{
-						SceneMessage* msg = new SceneMessage(SceneMessage::EXPORT_PNG);
-						notify_(msg);
-					}
 					
 					if (dcd != 0) 
 					{
@@ -1316,7 +1262,7 @@ namespace BALL
 
 				Log.info() << std::endl << "simulation terminated." << std::endl << endl;
 				Log.info() << ff.getResults();
-				Log.info() << "final RMS gadient    : " << ff.getRMSGradient() << " kJ/(mol A)   after " 
+				Log.info() << "final RMS gradient    : " << ff.getRMSGradient() << " kJ/(mol A)   after " 
 									 << mds->getNumberOfIterations() << " iterations" << endl << endl;
 				setStatusbarText("Final energy: " + String(ff.getEnergy()) + " kJ/mol.", true);
 

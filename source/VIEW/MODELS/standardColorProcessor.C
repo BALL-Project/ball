@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.53 2005/04/18 13:30:12 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.55 2005/07/16 21:00:50 oliver Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -22,6 +22,29 @@ namespace BALL
 	{
 
 #define BALL_VIEW_NUMBER_ELEMENTS 111
+
+		Processor::Result CustomColorProcessor::operator() (GeometricObject*& object)
+		{
+			object->setColor(default_color_);
+
+			Mesh* const mesh = dynamic_cast<Mesh*>(object);
+			if (mesh != 0)
+			{
+				mesh->colorList.clear();
+				mesh->colorList.push_back(default_color_);
+				return Processor::CONTINUE;
+			}
+
+			ColorExtension2* const two_colored = dynamic_cast<ColorExtension2*>(object);
+
+			if (two_colored != 0)
+			{
+				two_colored->setColor2(default_color_);
+			}
+
+			return Processor::CONTINUE;
+		}
+	
 
 		ElementColorProcessor::ElementColorProcessor()
 			throw()
@@ -305,24 +328,21 @@ namespace BALL
 				}
 			}
 				
-			try
+			HashMap<const Residue*, Position>::Iterator it = residue_map_.find(residue);
+			if (!+it)
 			{
-				color_to_be_set.set(table_.map(residue->getID().toUnsignedShort()));
+				color_to_be_set.set(default_color_);
 				return;
 			}
-			catch(...)
-			{
-			}
 
-			color_to_be_set.set(default_color_);
+			color_to_be_set.set(table_.map((*it).second));
 		}
 
 		bool ResidueNumberColorProcessor::start()
 			throw()
 		{
 			ColorProcessor::start();
-			min_ = 999999999;
-			max_ = 0;
+			residue_map_.clear();
 			table_.clear();
 			table_ = ColorTable(500);
 			ColorRGBA base_colors[3];
@@ -331,7 +351,9 @@ namespace BALL
 			base_colors[2] = last_color_;
 			table_.setBaseColors(base_colors, 3);
 
-			CompositeSet::ConstIterator it = composites_->begin();
+			if (composites_ == 0) return false;
+
+			List<const Composite*>::const_iterator it = composites_->begin();
 			ResidueIterator res_it;
 			for(; it != composites_->end(); it++)
 			{
@@ -351,24 +373,35 @@ namespace BALL
 				{
 					res_it = ((SecondaryStructure*)*it)->beginResidue();
 				}
+				else if (RTTI::isKindOf<Atom>(**it))
+				{
+					const Residue* residue = dynamic_cast<const Residue*>((**it).getParent());
+					if (residue == 0) continue;
+
+					residue_map_[residue] = residue_map_.size();
+					continue;
+				}
+				else
+				{
+					const Residue* residue = dynamic_cast<const Residue*>((*it));
+					if (residue == 0) continue;
+
+					residue_map_[residue] = residue_map_.size();
+					continue;
+				}
+
 
 				for (; +res_it; ++res_it)
 				{
 					if ((*res_it).getName() == "HOH") continue;
 
-					try
-					{
-						const Position id = (*res_it).getID().toUnsignedInt();
-						if (id < min_) min_ = id;
-						if (id > max_) max_ = id;
-					}
-					catch(...)
-					{
-					}
+					residue_map_[&*res_it] = residue_map_.size();
 				}
 			}
 
-			table_.setRange((float)min_, (float)max_);
+			if (residue_map_.size() == 0) return true;
+
+			table_.setRange(0, residue_map_.size() - 1);
 			table_.createTable();
 
 			for (Position p = 0; p < table_.size(); p++)
@@ -675,7 +708,7 @@ namespace BALL
 				{ 
 					createAtomGrid();
 				}
-				CompositeSet::ConstIterator it = composites_->begin();
+				List<const Composite*>::const_iterator it = composites_->begin();
 				for(; it != composites_->end(); it++)
 				{
 					if (RTTI::isKindOf<AtomContainer>(**it))

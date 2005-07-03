@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.C,v 1.3 2004/02/18 16:06:43 amoll Exp $
+// $Id: VRMLRenderer.C,v 1.4 2005/07/03 09:43:41 oliver Exp $
 //
 
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
@@ -243,7 +243,7 @@ void VRMLRenderer::out_(const String& data)
 {
 	if (current_intend_ < 0)
 	{
-		Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
+		BALLVIEW_DEBUG
 	}
 	String out;
 	for (Index p=0; p< current_intend_; p++)

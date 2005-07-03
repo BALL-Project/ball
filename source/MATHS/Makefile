@@ -37,7 +37,7 @@ CPP_SOURCES= $(FFT_SOURCES)\
 PARSER_PREFIX=parsedFunction
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies
 
 depend: $(PARSER_SOURCES)
 

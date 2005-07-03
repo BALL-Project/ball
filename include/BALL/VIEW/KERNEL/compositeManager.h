@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.h,v 1.8 2005/04/18 13:30:40 amoll Exp $
+// $Id: compositeManager.h,v 1.9 2005/07/03 09:43:07 oliver Exp $
+//
 
 #ifndef BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
 #define BALL_VIEW_KERNEL_COMPOSITEMANAGER_H

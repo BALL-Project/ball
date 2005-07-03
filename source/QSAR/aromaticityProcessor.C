@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: aromaticityProcessor.C,v 1.10 2005/04/13 12:51:46 bertsch Exp $
+// $Id: aromaticityProcessor.C,v 1.12 2005/07/16 21:00:43 oliver Exp $
 //
 
 #include <BALL/QSAR/aromaticityProcessor.h>

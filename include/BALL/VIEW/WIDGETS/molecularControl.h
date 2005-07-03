@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.47 2005/02/27 21:39:39 amoll Exp $
+// $Id: molecularControl.h,v 1.48 2005/07/03 09:43:11 oliver Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -25,6 +25,7 @@
 #include <qlistview.h>
 #include <qpoint.h>
 #include <qpopupmenu.h>
+#include <qcombobox.h>
 
 
 namespace BALL
@@ -53,6 +54,12 @@ class BALL_EXPORT MolecularControl
 		OBJECT__MOVE,
 		SELECT,
 		DESELECT,
+		EDIT_MENU,
+		CUT,
+		COPY,
+		DELETE_ENTRY,
+		PASTE,
+
 
 		/// Center camera on one Composite (done in MolecularProperites)
 		CAMERA__CENTER,
@@ -164,11 +171,6 @@ class BALL_EXPORT MolecularControl
 	Size removeComposite(Composite& composite)
 		throw();
 
-	/** Access the mutable reference to the selection list of this control.
-	*/
-	List<Composite*>& getSelection()
-		throw();
-	
 	/** Non-mutable inspection of the selection.
 	*/
 	const List<Composite*>& getSelection() const
@@ -191,7 +193,7 @@ class BALL_EXPORT MolecularControl
 			\param   composite the Composite object for that a context menu should be created
 			\see     onContextMenu
 	*/
-	virtual void buildContextMenu(Composite& composite)
+	virtual void updateContextMenu(Composite& composite)
 		throw();
 
 	/**	Initialize the menu entries:
@@ -208,19 +210,18 @@ class BALL_EXPORT MolecularControl
 	virtual void initializeWidget(MainControl& main_control)
 		throw();
 
-	/**	Remove the widget.
-			Reverse all actions performed in initializeWidget
-			(remove menu entries of this Control).
-			This method will be called by MainControl::aboutToExit.
-			\param main_control the MainControl object to be finalized with this Control
-	*/
-	virtual void finalizeWidget(MainControl& main_control)
-		throw();
-	
 	/** Apply a given regular expression
 			@return Size number of selected atoms
 	*/
 	Size applySelector(const String& expression)
+		throw();
+
+	///
+	void writePreferences(INIFile& inifile)
+		throw();
+
+	///
+	void fetchPreferences(INIFile& inifile)
 		throw();
 
 	public slots:
@@ -330,6 +331,8 @@ class BALL_EXPORT MolecularControl
 
 	/// Connected to the clear selection button
 	virtual void clearSelector();
+
+	void switchShowSecondaryStructure();
 	
 	//@} 
 	/** @name Protected members 
@@ -355,6 +358,9 @@ class BALL_EXPORT MolecularControl
 	void createRepresentation_();
 
 	protected:
+
+	///
+	void buildContextMenu_();
 
 	/*_ Method is called if checkbox of an item is clicked.\par
 			Called by SelectableListViewItem::stateChange
@@ -465,19 +471,8 @@ class BALL_EXPORT MolecularControl
 	//@{
 
 	//_
-	int cut_id_;
-	//_
-	int copy_id_;
-	//_
-	int paste_id_;
-	//_
-	int delete_id_;
-	//_
-	int clipboard_id_;
-	//_
-	int select_id_;
-	//_
-	int deselect_id_;
+	int cut_id_, copy_id_, paste_id_, delete_id_, clipboard_id_, select_id_, deselect_id_,
+			show_ss_id_;
 
 	//@}
 	
@@ -486,11 +481,12 @@ class BALL_EXPORT MolecularControl
 	
 	MolecularInformation 		information_;
 	
-	QLineEdit* 							selector_edit_;
+	QComboBox* 							selector_edit_;
 
 	// the context menus
 	QPopupMenu 							context_menu_, 
 													model_menu_, 
+													edit_menu_,
 													color_menu_[MODEL_LABEL - MODEL_LINES];
 
 	Composite* 							context_composite_;
@@ -506,6 +502,8 @@ class BALL_EXPORT MolecularControl
 	bool 						was_delete_;
 
 	Size 						nr_items_removed_;
+
+	bool 						show_ss_;
 };
 	
 }} // namespaces

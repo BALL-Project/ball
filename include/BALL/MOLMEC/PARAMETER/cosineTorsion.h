@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cosineTorsion.h,v 1.18 2005/03/01 16:41:53 oliver Exp $
+// $Id: cosineTorsion.h,v 1.20 2005/07/16 21:00:31 oliver Exp $
 //
  
 #ifndef BALL_MOLMEC_PARAMETER_COSINETORSION_H
@@ -127,6 +127,11 @@ namespace BALL
 					}
 				}
 				return true;
+			}
+			
+			bool operator != (const Values& rhs) const
+			{
+				return ! operator == (rhs);
 			}
 		};
 

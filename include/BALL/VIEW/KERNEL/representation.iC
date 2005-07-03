@@ -34,52 +34,10 @@ ColoringMethod Representation::getColoringMethod() const
 }
 
 BALL_INLINE 
-Representation::CompositesIterator Representation::begin() 
-	throw()
-{ 
-	return composites_.begin();
-}
-
-BALL_INLINE 
-Representation::CompositesConstIterator Representation::begin() const
-	throw() 
-{ 	
-	return composites_.begin();
-}
-
-BALL_INLINE 
-Representation::CompositesIterator Representation::end() 
-	throw() 
-{ 
-	return composites_.end();
-}
-
-BALL_INLINE 
-Representation::CompositesConstIterator Representation::end() const
-	throw() 
-{ 
-	return composites_.end();
-}
-
-BALL_INLINE 
 void Representation::insert(GeometricObject& object) 
 	throw() 
 {
 	geometric_objects_.push_back(&object); 
-}
-
-BALL_INLINE 
-const Representation::CompositeSet& Representation::getComposites() const
-	throw() 
-{ 
-	return composites_;
-}
-
-BALL_INLINE 
-Representation::CompositeSet& Representation::getComposites()
-	throw() 
-{
-	return composites_; 
 }
 
 BALL_INLINE 
@@ -157,7 +115,10 @@ void Representation::setDrawingPrecision(DrawingPrecision precision)
 	throw() 
 {
 	drawing_precision_ = precision;
-	if (model_processor_ != 0) model_processor_->setDrawingPrecision(drawing_precision_);
+	if (model_processor_ != 0) 
+	{
+		model_processor_->setDrawingPrecision(drawing_precision_);
+	}
 }
 
 BALL_INLINE 

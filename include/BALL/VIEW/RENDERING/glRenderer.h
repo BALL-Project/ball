@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.33 2005/04/18 13:30:41 amoll Exp $
+// $Id: glRenderer.h,v 1.35 2005/07/16 21:00:37 oliver Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -238,6 +238,9 @@ namespace BALL
 			///
 			RenderMode getRenderMode() const
 				throw();
+
+			///
+			void setRenderMode(RenderMode mode) { render_mode_ = mode;}
 			
 			///
 			virtual bool render(const Representation& representation, bool for_display_list = false)
@@ -298,7 +301,7 @@ namespace BALL
 			void initDrawingMeshes_();
 
 			///
-			void finishDrawingMeshes_();
+			void initDrawingOthers_();
 
 			///
 			virtual void renderPoint_(const Point& /*point*/)
@@ -330,6 +333,10 @@ namespace BALL
 
 			///
 			virtual void renderTwoColoredTube_(const TwoColoredTube& /*two_colored_tube*/)
+				throw();
+
+			///
+			virtual void renderClippingPlane_(const ClippingPlane& plane)
 				throw();
 
 			//_
@@ -450,6 +457,8 @@ namespace BALL
 			ModelType 							model_type_;
 			Position 								display_lists_index_;
 			bool 										single_pick_;
+			bool 										drawed_other_object_;
+			bool 										drawed_mesh_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.70 2005/02/13 22:38:49 oliver Exp $
+// $Id: atom.h,v 1.72 2005/07/16 21:00:30 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -776,6 +776,8 @@ namespace BALL
 				public:
 
 				BALL_CREATE_DEEP(BondIteratorTraits)
+
+				virtual ~BondIteratorTraits() throw()  {}
 
 				BondIteratorTraits()
 					throw()

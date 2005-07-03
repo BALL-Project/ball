@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularInformation.h,v 1.6 2004/02/26 08:41:38 anhi Exp $
+// $Id: molecularInformation.h,v 1.7 2005/07/03 09:43:07 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
 #define BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
@@ -12,6 +12,8 @@
 
 namespace BALL
 {
+	class Atom;
+
 	namespace VIEW
 	{
 		/** MolecularInformation class.
@@ -57,7 +59,12 @@ namespace BALL
 				TYPE__SECONDARY_STRUCTURE  = 6,
 
 				/// Atom type.
-				TYPE__ATOM                 = 7
+				TYPE__ATOM                 = 7,
+					
+				/// Bond type.
+				TYPE__BOND 								 = 8
+
+
 			};
 
 			//@} 
@@ -117,8 +124,9 @@ namespace BALL
 			
   		private:
 
+			String getBondAtomName_(Atom* atom);
 			void getType_(Composite& composite);
-			void getTypeName_(Composite& composite);
+			void getTypeName_();
 			void getName_(Composite& composite);
 
 			Type 	 type_;
