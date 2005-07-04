@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.16 2005/07/01 16:13:32 haid Exp $
+// $Id: dockingController.C,v 1.1.2.17 2005/07/04 10:30:48 leonhardt Exp $
 //
 
 #include "dockingController.h"
@@ -59,7 +59,16 @@ namespace BALL
 		// Destructor
 		DockingController::~DockingController()
 			throw()
-		{}
+		{
+			// remark: progress dialog is automatically deleted because its parent is the docking controller
+			
+			if(dock_alg_ != 0)
+			{
+				Log.info() << "dock_alg_ deleted by docking controller" << std::endl; 
+				delete dock_alg_;
+				dock_alg_ = NULL;
+			}
+		}
 		
 		// Assignment operator
 		const DockingController& DockingController::operator =(const DockingController& dock_controller)
@@ -68,6 +77,7 @@ namespace BALL
 			if (&dock_controller != this)
 			{
 				dock_dialog_ = dock_controller.dock_dialog_;
+				// ???? do we have to delete dock_alg_ and progress_dialog_
 				dock_alg_ = dock_controller.dock_alg_;
 				progress_dialog_ = dock_controller.progress_dialog_;
 				id_ = dock_controller.id_;
@@ -84,7 +94,13 @@ namespace BALL
 			if (RTTI::isKindOf<DockingFinishedMessage>(*message))
 			{
 				DockingFinishedMessage* dfm = RTTI::castTo<DockingFinishedMessage>(*message);
-			
+				
+				/*if(dock_alg_ != 0)
+				{
+					Log.info() << "dock_alg_ deleted by docking controller" << std::endl; 
+					delete dock_alg_;
+					dock_alg_ = NULL;
+				}*/
 				unlockComposites();
 				if (dfm->wasAborted())
 				{
@@ -100,6 +116,7 @@ namespace BALL
 			else if (RTTI::isKindOf<ShowDockResultMessage>(*message))
 			{
 			 	DockResultDialog* result_dialog = new DockResultDialog(this);
+				// dialog deletes itself after close-button is pressed
 	      ShowDockResultMessage* sdrm = RTTI::castTo<ShowDockResultMessage>(*message);
 				
 				// setup result_dialog... 
@@ -214,6 +231,7 @@ namespace BALL
 			{
 				case GEOMETRIC_FIT:
 					dock_alg_ =  new GeometricFit();
+					/////// ??? where should we delete it? in this class -> segmenation fault, in thread class???
 					break;
 			}
 			
@@ -240,10 +258,12 @@ namespace BALL
 			//Log.info() << "vor thread" << std::endl;
 			#ifdef BALL_QT_HAS_THREADS
 				DockingThread* thread = new DockingThread;
+				/// ??????? where is thread deleted?
 				thread->setDockingAlgorithm(dock_alg_);
 				thread->setMainControl(getMainControl());
 				
 				progress_dialog_ = new DockProgressDialog(this);
+				// dialog is deleted by itself when it's closed
 				progress_dialog_->fillDialog(dock_dialog_.systems1->currentText(),
 																		dock_dialog_.systems2->currentText(),
 																		dock_dialog_.algorithms->currentText(),
@@ -326,7 +346,8 @@ namespace BALL
 			DockResult* dock_res = new DockResult(String(dock_dialog_.algorithms->currentText().ascii()),
 																						conformation_set,
 																						dock_dialog_.getAlgorithmOptions()); 
-			
+			// dock result is deleted by DatasetControl
+		
 			// sort vector ranked_conformations by snapshot numbers
 			sort(ranked_conformations.begin(), ranked_conformations.end());
 			
@@ -342,12 +363,14 @@ namespace BALL
 			SnapShot best_result = (*conformation_set)[0];
 			
 			System* docked_system = new System(conformation_set->getSystem());
+			// system is deleted by main control, when it is removed from BallView ??????????????
 			best_result.applySnapShot(*docked_system);
 			getMainControl()->deselectCompositeRecursive(docked_system, true);
 			getMainControl()->insert(*docked_system);
 			
 			// send a DockResultMessage
 			NewDockResultMessage* dock_res_m = new NewDockResultMessage();
+			// message is deleted by ConnectionObject
 			dock_res_m->setDockResult(*dock_res);
 			dock_res_m->setComposite(*docked_system);
 			notify_(dock_res_m);

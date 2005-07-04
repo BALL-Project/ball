@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.35 2005/07/04 10:20:36 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.36 2005/07/04 10:30:48 leonhardt Exp $
 //
 
 #include "dockResultDialog.h"
@@ -412,6 +412,7 @@ namespace BALL
 		
 		void DockResultDialog::closeClicked()
 		{
+			// close dialog and destroy it
 			close(true);
 		}
 		

@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.18 2005/07/04 10:20:35 haid Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.19 2005/07/04 10:30:47 leonhardt Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -9,7 +9,7 @@
 #include <qmessagebox.h>
 #include <qlabel.h>
 
-//#define BALL_VIEW_DEBUG
+#define BALL_VIEW_DEBUG
 
 namespace BALL
 {
