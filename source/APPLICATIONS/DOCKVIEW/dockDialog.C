@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.46 2005/07/01 16:13:31 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.47 2005/07/04 10:20:35 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -102,6 +102,9 @@ namespace BALL
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << this << " of class DockDialog" << std::endl;
 			#endif 
+			
+			// remark: QDialogs in HashMaps are deleted automatically because their parent is DockDialog
+			// remark: Systems are deleted by Maincontrol
 		}
 		
 		// Assignment operator
@@ -112,6 +115,7 @@ namespace BALL
 			{
 				is_redock_ = dock_dialog.is_redock_;
 				has_changed_ = dock_dialog.has_changed_;
+				// ??? should we delete the dialogs in the HashMaps ???
 				algorithm_dialogs_ = dock_dialog.algorithm_dialogs_;
 				scoring_dialogs_ = dock_dialog.scoring_dialogs_;
 				allowed_sf_ = dock_dialog.allowed_sf_;

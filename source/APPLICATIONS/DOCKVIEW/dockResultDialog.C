@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.34 2005/07/01 16:13:32 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.35 2005/07/04 10:20:36 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -74,6 +74,8 @@ namespace BALL
 				Log.info() << "Destructing object " << this << " of class DockResultDialog" << std::endl;
 			#endif 
 			
+			// remark: dockResult is deleted by DatasetControl
+			//				 docked system is deleted by MainControl
 			if(redock_partner1_)
 			{
 				delete redock_partner1_;
@@ -93,7 +95,15 @@ namespace BALL
 				dock_res_ = res_dialog.dock_res_;
 				docked_system_ = res_dialog.docked_system_;
 				scoring_dialogs_ = res_dialog.scoring_dialogs_;
+				if(redock_partner1_)
+				{
+					delete redock_partner1_;
+				}
 				redock_partner1_ = res_dialog.redock_partner1_;
+				if(redock_partner2_)
+				{
+					delete redock_partner2_;
+				}
 				redock_partner2_ = res_dialog.redock_partner2_;
 			}
 			return *this;
@@ -361,7 +371,8 @@ namespace BALL
 		void DockResultDialog::showDockingOptions()
 		{
 			if(!dock_res_) return;
-			InfoDialog* info_dialog = new InfoDialog(this,0,false,WDestructiveClose);
+			// InfoDialog is deleted by itself when it is closed
+			InfoDialog* info_dialog = new InfoDialog(this, 0, false, WDestructiveClose);
 			
 			QString s = "Algorithm: ";
 			info_dialog->info_box->append(s.append(dock_res_->getDockingAlgorithm()));
@@ -420,6 +431,7 @@ namespace BALL
 		void DockResultDialog::showScoringOptions_(int column)
 		{
 			if(!dock_res_) return;
+			// InfoDialog deletes itself when it closes
 			InfoDialog* info_dialog = new InfoDialog(this, 0, false, WDestructiveClose);
 			
 			QString s = "Scoring function: ";

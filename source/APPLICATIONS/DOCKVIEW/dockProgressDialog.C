@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.17 2005/07/01 16:13:31 haid Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.18 2005/07/04 10:20:35 haid Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -53,7 +53,7 @@ namespace BALL
 			if (&dock_prog_dialog != this)
 			{
 				alg_ = dock_prog_dialog.alg_;
-				//timer_ = dock_prog_dialog.timer_;
+				//timer_ = dock_prog_dialog.timer_;  // QTimer::operator=(const QTimer&)' is private !
 				start_time_ = dock_prog_dialog.start_time_;
 			}
 			return *this;

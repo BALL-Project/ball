@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.1.2.13 2005/07/01 15:48:55 haid Exp $
+// $Id: dockResult.C,v 1.1.2.14 2005/07/04 10:20:36 haid Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -40,7 +40,10 @@ namespace BALL
 		DockResult::~DockResult()
 			throw()
 		{
-			if (conformation_set_ != 0) delete conformation_set_;
+			if (conformation_set_)
+			{
+				delete conformation_set_;
+			}
 		}
 		
 		// Assignment operator
@@ -50,6 +53,10 @@ namespace BALL
 			if (&dock_res != this)
 			{
 				docking_algorithm_ = dock_res.docking_algorithm_;
+				if (conformation_set_)
+				{
+					delete conformation_set_;
+				}
 				conformation_set_ = dock_res.conformation_set_;
 				docking_options_ = dock_res.docking_options_;
 				scorings_ = dock_res.scorings_;
@@ -304,6 +311,10 @@ namespace BALL
 			System s;
 			PDB_in >> s;
 			// create new ConformationSet and set the docked system
+			if (conformation_set_)
+			{
+				delete conformation_set_;
+			}
 			conformation_set_ = new ConformationSet(s);
 			// set scoring of ConformationSet
 			vector<ConformationSet::Conformation> conformations;

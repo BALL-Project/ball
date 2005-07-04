@@ -5,6 +5,8 @@
 
 #include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 
+//#define BALL_VIEW_DEBUG
+
 namespace BALL
 {
 	namespace VIEW
