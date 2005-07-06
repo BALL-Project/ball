@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.70 2005/07/03 09:43:12 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.71 2005/07/06 07:52:56 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -607,8 +607,11 @@ EOF
 ])
 
 AC_DEFUN(CF_GXX_OPTIONS, [
-	AC_MSG_CHECKING(compiler version)
-	CXX_VERSION=`${CXX} --version | ${SED} -n 1p | ${SED} ["]s/^[[^0-9]]*//["] | ${CUT} -f1 -d" "`
+	AC_MSG_CHECKING(compiler version)	
+	VERSION_FILE=/tmp/$$.gnu_version.C
+	echo "__GNUC__.__GNUC_MINOR__.__GNUC_PATCHLEVEL__" > ${VERSION_FILE}
+	CXX_VERSION=`${CXX} -E ${VERSION_FILE} | ${GREP} -v "^#" | ${TR} -d " "`
+	${RM} ${VERSION_FILE}
 	if test `echo ${CXX_VERSION}|${CUT} -c1-4` = "egcs" ; then
 		IS_EGXX=true
 		CXX_NAME="egcs"
@@ -2179,9 +2182,9 @@ dnl
 AC_DEFUN(CF_CHECK_XDR, [
 	if test "${PROJECT[]_NO_XDR}" = "true" ; then
 		AC_MSG_RESULT([No XDR headers available - building of XDR persistence support disabled])
-		AC_DEFINE(PROJECT[[]]_HAS_XDR, )
+		AC_DEFINE(PROJECT[]_HAS_XDR, )
 		PROJECT[]_HAS_XDR=""
-		AC_SUBST(PROJECT[[]]_HAS_XDR)
+		AC_SUBST(PROJECT[]_HAS_XDR)
 	else
 
 		AC_CHECK_HEADER(rpc/types.h, HAS_RPC_TYPES_H=true, HAS_RPC_TYPES_H=false)
@@ -2271,9 +2274,27 @@ AC_DEFUN(CF_CHECK_XDR, [
 					if test "${PROJECT[]_XDRREC_VOID}" = true ; then
 						AC_MSG_RESULT(())
 					else
-						AC_MSG_RESULT(not found!)
-						CF_ERROR
-					fi
+	          AC_TRY_COMPILE(
+  	          [
+    	          #include <rpc/types.h>
+      	        #include <rpc/xdr.h>
+                extern "C" int dummy(void*, void*, int) {return 0;}
+       	        void foo(){
+       	          XDR xdrs;
+       	          xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+                }
+              ],
+              [
+              ],
+              PROJECT[]_XDRREC_VOID_VOID_INT=true,
+              PROJECT[]_XDRREC_VOID_VOID_INT=false
+            )
+            if test "${PROJECT[]_XDRREC_VOID_VOID_INT}" = true ; then
+              AC_MSG_RESULT((void*, void*, int))
+            else
+              AC_MSG_RESULT(not found!)
+				   	fi 
+          fi
 				fi
 			fi
 		else
@@ -2404,6 +2425,12 @@ AC_DEFUN(CF_CHECK_XDR, [
 		if test "${PROJECT[]_XDRREC_VOID}" = true ; then
 			AC_DEFINE(PROJECT[]_XDRREC_CREATE_VOID)
 		fi
+		if test "${PROJECT[]_XDRREC_VOID_VOID_UINT" = true ; then
+      AC_DEFINE(PROJECT[]_XDRREC_CREATE_VOID_VOID_UINT)
+    fi
+    if test "${PROJECT[]_XDRREC_VOID_VOID_INT" = true ; then
+      AC_DEFINE(PROJECT[]_XDRREC_CREATE_VOID_VOID_INT)
+    fi
 		
 		dnl
 		dnl		Try to guess the library required for the XDR stuff.
