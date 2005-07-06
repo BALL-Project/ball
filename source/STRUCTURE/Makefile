@@ -63,7 +63,6 @@ CPP_SOURCES= \
 	HBondProcessor.C\
 	UCK.C
 
-#PARSER_PREFIX=SmilesParser
 SMILES_PARSER_PREFIX=SmilesParser
 SMARTS_PARSER_PREFIX=SmartsParser
 
@@ -74,9 +73,9 @@ depend:	\
 	$(SMILES_SOURCES)\
 	$(SMARTS_SOURCES)
 
-default_clean:	clean_flex_bison
+default_clean:	clean_parser
 
-clean_flex_bison:
+clean_parser:
 	@-$(RM) smilesParserParser.C smilesParserLexer.C smilesParserParser.h smartsParserParser.C smartsParserLexer.C smartsParserParser.h
 
 smilesParserParser.C: smilesParserParser.y
@@ -94,10 +93,12 @@ smilesParserLexer.o: smilesParserLexer.C smilesParserParser.C
 smilesParserParser.o: smilesParserParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
 
-smartsParserParser.C: smartsParserParser.y
-smartsParserParser.h:	smartsParserParser.y
+# Add smiles parser dependencies to make sure these two won't be
+# build in parallel when calling make -j 
+smartsParserParser.C: smartsParserParser.y smilesParserParser.C
+smartsParserParser.h:	smartsParserParser.y smilesParserParser.h
 
-smartsParserLexer.C:	smartsParserLexer.l
+smartsParserLexer.C:	smartsParserLexer.l smilesParserLexer.C
 	$(LEX)  -P$(SMARTS_PARSER_PREFIX) -o$@ $*.l
 
 smartsParserParser.C: smartsParserParser.y
