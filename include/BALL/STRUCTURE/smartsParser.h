@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.h,v 1.1 2005/04/07 15:57:22 bertsch Exp $
+// $Id: smartsParser.h,v 1.2 2005/07/09 18:35:04 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMARTES_PARSER_H
@@ -23,16 +23,31 @@
 #	include <BALL/KERNEL/system.h>
 #endif
 
+#ifndef BALL_KERNEL_EXPRESSION_H
+#	include <BALL/KERNEL/expression.h>
+#endif
+
+#ifndef BALL_CONCEPT_PROPERTY_H
+#	include <BALL/CONCEPT/property.h>
+#endif
+
+#include <utility>
+#include <vector>
+
 namespace BALL 
 {
 
-	/** @name	SMARTS Parser.
+	/** @name	\brief SMARTS Parser.
 	*/
 	class SmartsParser
 	{
 		public:
+
+		typedef std::list<Size> ConnectionList;
+		
 		enum ZEIsomerType
 		{
+			ANY_ZE,
 			NONE,
 			Z,
 			E
@@ -40,6 +55,7 @@ namespace BALL
 
 		enum ChiralClass
 		{
+			CHIRAL_ANY,
 	    NONCHIRAL,
 			TH,
 			AL,
@@ -48,66 +64,236 @@ namespace BALL
 			OH
 		};
 
+		enum LogicalOperator
+		{
+			AND,
+			OR,
+			AND_LOW
+		};
+/*
 		enum
 		{
 			MAX_CONNECTIONS = 100
 		};
+*/
 
 		typedef std::pair<ChiralClass, Position> ChiralDef;
 
 		class SPAtom;
 		class SPBond 
-			:	public Bond
+/*			:	public Bond*/
 		{
 			public:
-			virtual ~SPBond() throw();
 
-			SPBond(SPAtom* first, SPAtom* second, Index order = 1);
+				enum SPBondOrder
+				{
+					SINGLE,
+					SINGLE_UP,
+					SINGLE_UP_OR_ANY,
+					SINGLE_DOWN,
+					SINGLE_DOWN_OR_ANY,
+					AROMATIC,
+					DOUBLE,
+					TRIPLE,
+					NOT_NECESSARILY_CONNECTED,
+					IN_RING,
+					ANY
+				};
+			
+				SPBond();
+				SPBond(SPBondOrder bond_order);
+				SPBond(SPAtom* first, SPAtom* second, SPBondOrder bond_order);
+				virtual ~SPBond() throw();
 
-			ZEIsomerType getZEType() const;
-			void setZEType(ZEIsomerType type);
+				ZEIsomerType getZEType() const { return ze_type_; }
+				void setZEType(ZEIsomerType type) { ze_type_ = type; }
+				void setBondOrder(SPBondOrder bond_order);
+				SPBondOrder getBondOrder() const;
+				bool getNot() const { return not_; }
+				void setNot(bool is_not) { not_ = is_not; }
+
+				// returns true if the SPBond matches the given bond
+				bool equals(const Bond* bond) const;
 
 			protected:
-			ZEIsomerType	ze_type_;
+				ZEIsomerType	ze_type_;
+				SPBondOrder bond_order_;
+				bool not_;
 		};
 		
 		class SPAtom
-			:	public Atom
+	/*		:	public Atom */
+			: public PropertyManager
 		{
 			public:
+
+				/** Common properties are:
+				 *
+				 * 	bool 		is_not
+				 * 	Size		isotope 
+				 * 	bool		not_isotope
+				 * 	Index		charge
+				 * 	bool 		not_charge
+				 * 	bool		is_aromatic
+				 * 	bool		not_aromatic
+				 * 	bool		aliphatic
+				 * 	bool		not_aliphatic
+				 * 	Index		in_num_rings
+				 * 	bool 		not_in_num_rings
+				 * 	bool 		in_brackets
+				 * 	Index		in_ring_size
+				 * 	bool		not_in_ring_size
+				 * 	Size		connected
+				 * 	bool		not_connected_to
+				 * 	Size		explicit_hydrogens
+				 * 	bool		not_explicit_hydrogens
+				 * 	Size		valence
+				 * 	bool		not_valence
+				 * 	Size		implicit_hydrogens
+				 * 	bool		not_implicit_hydrogens
+				 * 	Size		degree
+				 * 	bool		not_degree
+				 * 	Size		ring_connected
+				 * 	bool		not_ring_connected
+				 * 	bool		not_chirality
+				 * 	String	symbol
+				 *
+				 * 	all this properties can be set
+				 */
 				
-			SPAtom(const String& symbol, bool in_brackets);
-			virtual ~SPAtom() throw();
+				SPAtom();
+				SPAtom(const String& symbol);
+				virtual ~SPAtom() throw();
 
-			Size getDefaultValence() const;
-			Size countRealValences() const;
+				void addAtomProperty(NamedProperty property) throw(Exception::ParseError);
 
-			Size getIsotope() const { return isotope_; }
-			void setIsotope(Size isotope) { isotope_ = isotope; };
+				Size getDefaultValence() const;
+				Size countRealValences() const;
 
-			Index getFormalCharge() const { return formal_charge_; }
-			void setFormalCharge(Index charge) { formal_charge_ = charge; }
+				ChiralDef getChirality() const { return chirality_; }
+				void setChirality(const ChiralDef& chirality) { chirality_ = chirality; }
 			
-			const ChiralDef& getChirality() const { return chirality_; }
-			void setChirality(const ChiralDef& chirality) { chirality_ = chirality; }
-			
-			bool isAromatic() const { return is_aromatic_; }
-			void setAromatic(bool is_aromatic) { is_aromatic_ = is_aromatic; };
-			bool isInBrackets() const { return in_brackets_; }
-			void setInBrackets(bool in_brackets) { in_brackets_ = in_brackets; };
-
+				// returns true if the local properties of the atoms match
+				bool equals(const Atom* atom) const;
+				
 			protected:
-			Size				isotope_;
-			Index				formal_charge_;
-			ChiralDef		chirality_;
-			bool				is_aromatic_;
-			bool				in_brackets_;
+			
+				ChiralDef chirality_;
+				Atom* atom_;
+				void init_();
+		};
+
+	
+		class SPNode;
+
+		class SPEdge
+		{
+			public:
+				SPEdge();
+				SPEdge(const SPEdge& sp_edge);
+				~SPEdge();
+				bool isInternal() const { return internal_; }
+				void setInternal(bool internal) { internal_ = internal; }
+				
+				void setSPBond(SPBond* sp_bond) { bond_ = sp_bond; }
+				SPBond* getSPBond() const { return bond_; }
+				
+				void setFirstSPNode(SPNode* first) { first_ = first; }
+				SPNode* getFirstSPNode() const { return first_; } 
+				
+				void setSecondSPNode(SPNode* second) { second_ = second; }
+				SPNode* getSecondSPNode() const { return second_; }
+				
+				SPNode* getPartnerSPNode(SPNode* node) { return node == first_ ? second_ : first_; }
+				
+				bool getNot() const { return is_not_; }
+				void setNot(bool is_not) { is_not_ = is_not; }
+			
+				void setFirstSPEdge(SPEdge* first) { first_edge_ = first; }
+				SPEdge* getFirstSPEdge() const { return first_edge_; }
+
+				void setSecondSPEdge(SPEdge* second) { second_edge_ = second; }
+				SPEdge* getSecondSPEdge() const { return second_edge_; }
+			
+				void setLogicalOperator(LogicalOperator log_op) { log_op_ = log_op; }
+				LogicalOperator getLogicalOperator() const { return log_op_; }
+			
+			protected:
+				bool internal_;
+				bool is_not_;
+				SPNode* first_;
+				SPNode* second_;
+				SPBond* bond_;
+				SPEdge* first_edge_;
+				SPEdge* second_edge_;
+				LogicalOperator log_op_;
 		};
 	
-
+		class SPNode
+		{
+			public:
 		
-		typedef std::list<Position> ConnectionList;
+				typedef std::vector<SPEdge*>::iterator EdgeIterator;
+				typedef std::vector<SPEdge*>::const_iterator EdgeConstIterator;
+		
+				SPNode();
+				SPNode(SPAtom* atom);
+				SPNode(SPNode* first, LogicalOperator log_op, SPNode* second);
+				SPNode(const SPNode& sp_node);
+				~SPNode();
+				bool isInternal() const { return internal_; }
+				void setInternal(bool internal) { internal_ = internal; }
+				
+				bool isRecursive() const { return recursive_; }
+				void setRecursive(bool recursive) { recursive_ = recursive; }
+				
+				SPAtom* getSPAtom() const { return sp_atom_; }
+				void setSPAtom(SPAtom* sp_atom) { sp_atom_ = sp_atom; }
+		
+				SPEdge* getPreEdge() const { return pre_edge_; }
+				void setPreEdge(SPEdge* pre_edge) { pre_edge_ = pre_edge; }
+				
+				SPEdge* getFirstEdge() const { return first_edge_; }
+				void setFirstEdge(SPEdge* first) { first_edge_ = first; }
 
+				SPEdge* getSecondEdge() const { return second_edge_; }
+				void setSecondEdge(SPEdge* second) { second_edge_ = second; }
+		
+				bool getNot() const { return is_not_; }
+				void setNot(bool is_not) { is_not_ = is_not; }
+
+				void setInBrackets() { in_brackets_ = true; cerr << "SPNode::setInBrackets() " << endl; }
+
+				void addConnections(ConnectionList* list) { connections_.merge(*list); }
+
+				void addSPEdge(SPEdge* sp_edge) { edges_.push_back(sp_edge); }
+
+				void setLogicalOperator(LogicalOperator log_op) { log_op_ = log_op; }
+				LogicalOperator getLogicalOperator() const { return log_op_; }	
+
+				Size countEdges() const { return edges_.size(); }
+
+				EdgeIterator begin() { return edges_.begin(); }
+				EdgeIterator end() { return edges_.end(); }
+				EdgeConstIterator begin() const { return edges_.begin(); }
+				EdgeConstIterator end() const { return edges_.end(); }
+
+			protected:
+				
+				bool internal_;
+				bool is_not_;
+				bool recursive_;
+				bool in_brackets_;
+				LogicalOperator log_op_;
+				std::vector<SPEdge*> edges_;
+				SPEdge* pre_edge_;
+				SPEdge* first_edge_;
+				SPEdge* second_edge_;
+				SPAtom* sp_atom_;
+				ConnectionList connections_;
+		};
+
+	
 		/**	@name Constructors and Destructors
 		*/
 		//@{
@@ -130,11 +316,6 @@ namespace BALL
 		void parse(const String& s)
 			throw(Exception::ParseError);
 
-		/**	Return the parsed system
-		*/
-		const System& getSystem() const;
-		//@}
-		
 		/**	@name Methods required by the underlying YACC parser
 		*/
 		//@{
@@ -145,13 +326,20 @@ namespace BALL
 		void createBonds(SPAtom* atom, const ConnectionList* list);		
 
 		///
-		void createBond(SPAtom* left, SPAtom* right, Index order);
+		void createBond(SPAtom* left, SPAtom* right, SPBond::SPBondOrder bond_order);
+		
+		
+		void setRoot(SPNode* root) { root_ = root; }
 
-		/// 
-		void addMissingHydrogens();
+		SPNode* getRoot() const { return root_; }
+
+		// dumps the tree to cerr
+		void dumpTree();
+		
+		
+		void clear();
 		//@}
 		
-
 		struct State
 		{
 			Size					char_count;
@@ -162,10 +350,20 @@ namespace BALL
 		static State state;
 
 		protected:
-		System								system_;
-		std::vector<SPAtom*>	connections_;
-		std::vector<SPAtom*>	all_atoms_;
-		static SmartsParser*	current_parser_;
+
+			void dumpTreeRecursive_(SPNode* node);
+			
+			
+			
+			std::vector<SPAtom*>	connections_;
+			
+			static SmartsParser*	current_parser_;
+			
+			HashSet<SPEdge*> edges_;
+			
+			HashSet<SPNode*> nodes_;
+			
+			SPNode* root_;
 	};
   
 } // namespace BALL

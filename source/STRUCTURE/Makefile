@@ -50,6 +50,7 @@ CPP_SOURCES= \
 	smartsParser.C\
 	smartsParserLexer.C\
 	smartsParserParser.C\
+	smartsMatcher.C\
 	solventAccessibleSurface.C\
 	solventExcludedSurface.C\
 	structureMapper.C\
@@ -102,7 +103,9 @@ smartsParserLexer.C:	smartsParserLexer.l smilesParserLexer.C
 	$(LEX)  -P$(SMARTS_PARSER_PREFIX) -o$@ $*.l
 
 smartsParserParser.C: smartsParserParser.y
-	$(YACC) -p $(SMARTS_PARSER_PREFIX) -d $*.y && $(MV) y.tab.h $*.h && $(MV) y.tab.c $@
+# this line is just for debugging the parser
+#	$(YACC) -p $(SMARTS_PARSER_PREFIX) --report=state --report=look-ahead -g -d $*.y && $(MV) y.tab.h $*.h && $(MV) y.tab.c $@
+	$(YACC) -p $(SMARTS_PARSER_PREFIX) $*.y && $(MV) y.tab.h $*.h && $(MV) y.tab.c $@
 
 smartsParserLexer.o: smartsParserLexer.C smartsParserParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@

@@ -25,16 +25,54 @@ He|Li|Be|Ne|Na|Mg|Al|Si|Ar|K|Ca|Sc|Ti|V|Cr|Mn|Fe|Co|Ni|Cu|Zn|Ga|Ge|As|Se|Kr|Rb|S
 						return TK_ATOM;
 }
 
-b|c|n|o|p|s|f|i|br|cl {
+br|cl|b|c|n|o|p|s|f|i {
 						SmartsParser::state.current_parser->state.char_count += strlen(yytext);
 						SmartsParserlval.text = yytext;
             return TK_ORG_SUBSET_ATOM;
 }
 
-B|C|N|O|P|S|F|I|Br|Cl {
+Cl|Br|B|C|N|O|P|S|F|I {
 						SmartsParser::state.current_parser->state.char_count += strlen(yytext);
 						SmartsParserlval.text = yytext;
             return TK_ORG_SUBSET_ATOM;
+}
+
+A	{					SmartsParser::state.current_parser->state.char_count += 1;
+						return TK_ALIPHATIC_ATOM;
+}
+
+a	{					SmartsParser::state.current_parser->state.char_count += 1;
+						return TK_AROMATIC_ATOM;
+}
+
+R	{
+						SmartsParser::state.current_parser->state.char_count += 1;
+						return TK_ATOM_NUM_RINGS;
+}
+
+r	{					
+						SmartsParser::state.current_parser->state.char_count += 1;
+						return TK_ATOM_RING_SIZE;
+}
+
+v {					SmartsParser::state.current_parser->state.char_count += 1;
+						return TK_ATOM_VALENCE;
+}
+
+X	{					SmartsParser::state.current_parser->state.char_count += 1;
+						return TK_ATOM_CONNECTED;
+}
+
+x {					SmartsParser::state.current_parser->state.char_count += 1;
+						return TK_ATOM_RING_CONNECTED;
+}
+
+D	{					SmartsParser::state.current_parser->state.char_count += 1;
+						return TK_ATOM_DEGREE;
+}
+
+\*	{				SmartsParser::state.current_parser->state.char_count += 1;
+						return TK_ANY_ATOM;
 }
 
 @TH {
@@ -64,16 +102,22 @@ B|C|N|O|P|S|F|I|Br|Cl {
 
 H	{
 						SmartsParser::state.current_parser->state.char_count++;
-            return TK_HYDROGEN;
+            return TK_HYDROGEN_EXPLICIT;
 }
 
-!|&|,|; {
+h	{
 						SmartsParser::state.current_parser->state.char_count++;
-						return yytext[0];
+						return TK_HYDROGEN_IMPLICIT;
 }
 
--|=|\+|#|:|\.|@|\[|\]|\/|\\|\(|\)	{
+\$ {
 						SmartsParser::state.current_parser->state.char_count++;
+						return TK_RECURSIVE;
+}
+
+\-|=|~|:|\\|\/|\\\?|\/\?|@|#|\[|\]|\(|\)|!|\+|\.|,|;|& {
+						SmartsParser::state.current_parser->state.char_count += strlen(yytext);
+						SmartsParserlval.text = yytext;
 						return yytext[0];
 }
 
