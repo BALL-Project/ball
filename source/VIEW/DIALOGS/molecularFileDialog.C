@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.29 2005/07/03 09:43:36 oliver Exp $
+// $Id: molecularFileDialog.C,v 1.30 2005/07/10 11:06:27 oliver Exp $
+//
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -11,6 +12,7 @@
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/MOLFile.h>
+#include <BALL/FORMAT/SDFile.h>
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/MATHS/simpleBox3.h>
 #include <BALL/KERNEL/system.h>
@@ -131,6 +133,11 @@ namespace BALL
 							 filetype.hasSubstring("mol"))
 			{
 				return readMOLFile(filename, system_name);
+			}
+			else if (filetype.hasSubstring("SDF") ||
+							 filetype.hasSubstring("sdf"))
+			{
+				return readSDFile(filename, system_name);
 			}
 			else
 			{
@@ -393,6 +400,39 @@ namespace BALL
 				delete system;
 				return 0;
 			}
+
+ 			if (!finish_(filename, system_name, system)) return 0;
+			return system;
+		}
+
+
+		System* MolecularFileDialog::readSDFile(String filename, String system_name)
+			throw()
+		{
+			setStatusbarText("reading SD file...", true);
+
+			System* system = new System();
+
+			Size counter = 0;
+			try
+			{
+				SDFile mol_file(filename);
+				Molecule * mol = mol_file.read();
+				while (mol != 0)
+				{
+					system->insert(*mol);
+					counter++;
+					mol = mol_file.read();
+				}
+				mol_file.close();
+			}
+			catch(...)
+			{
+				setStatusbarText("Reading of SD file failed!", true);
+				delete system;
+				return 0;
+			}
+			setStatusbarText("Read " + String(counter) + " molecules from " + filename + ".");
 
  			if (!finish_(filename, system_name, system)) return 0;
 			return system;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.18 2005/07/03 09:43:06 oliver Exp $
+// $Id: molecularFileDialog.h,v 1.19 2005/07/10 11:06:27 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -123,6 +123,13 @@ namespace BALL
 			/** Read a MOL file
 			 */
 			System* readMOLFile(String filename, String system_name)
+				throw();
+
+			/** Read an SD file.
+					This reads <b>all</b> molecules from the file, so it may take a while!
+					Browsing the file contents first be added later on.
+			 */
+			System* readSDFile(String filename, String system_name)
 				throw();
 
 			/** Read a MOL2 file
