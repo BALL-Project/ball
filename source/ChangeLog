@@ -7,6 +7,7 @@ fixed:
  - problem for very short tubes in Cartoon and Backbone model
  - logging improved when opening molecular file formats
  - added support for SD files in BALLView
+ - spliting of surfaces for given distance values
 
 
 1.1: 21.06.2005

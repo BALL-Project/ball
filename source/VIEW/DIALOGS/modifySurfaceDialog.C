@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.19 2005/06/15 09:55:13 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.20 2005/07/11 06:22:21 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -837,7 +837,8 @@ namespace BALL
 
 		void ModifySurfaceDialog::calculateIncludedVertices_(vector<bool>& include_vertex, const Mesh& org_mesh, HashSet<const Composite*>& roots)
 		{
-			List<const Atom*> atoms;
+			List<const Atom*> selected_atoms;
+			List<const Atom*> all_atoms;
 
 			HashSet<const Composite*>::ConstIterator it = roots.begin();
 			for(; +it; it++)
@@ -848,13 +849,17 @@ namespace BALL
 					const AtomContainer* const acont = dynamic_cast<const AtomContainer*>(*it);
 					BALL_FOREACH_ATOM(*acont, ait)
 					{
-						if ((*ait).isSelected()) atoms.push_back(&*ait);
+						all_atoms.push_back(&*ait);
+
+						if ((*ait).isSelected()) selected_atoms.push_back(&*ait);
 					}
 				}
-				else if ((**it).isSelected() && RTTI::isKindOf<Atom>(**it))
+				else if (RTTI::isKindOf<Atom>(**it))
 				{
 					const Atom* atom = dynamic_cast<const Atom*> (*it);
-					atoms.push_back(atom);
+					all_atoms.push_back(atom);
+
+					if (atom->isSelected()) selected_atoms.push_back(atom);
 				}
 			}
 
@@ -862,8 +867,8 @@ namespace BALL
 
 			BoundingBoxProcessor boxp;
 			boxp.start();
-			List<const Atom*>::Iterator lit = atoms.begin();
-			for(;lit != atoms.end(); lit++)
+			List<const Atom*>::Iterator lit = all_atoms.begin();
+			for(;lit != all_atoms.end(); lit++)
 			{
 				boxp.operator() (*(Atom*)*lit);
 			}
@@ -876,8 +881,8 @@ namespace BALL
 
 			float memory = SysInfo::getAvailableMemory();
 			//
-			// if we can not calculate available memory, use around 60 MB for the grid
-			if (memory == -1) memory = 100000000;
+			// if we can not calculate available memory, use around 6 MB for the grid
+			if (memory == -1) memory = 10000000;
 			memory *= 0.6;
 
 			Vector3 overhead(2.5 + distance);
@@ -885,9 +890,9 @@ namespace BALL
 																																			overhead * 2.0);		
 			if (min_spacing > grid_spacing) grid_spacing = min_spacing;
 			
-			AtomGrid atom_grid(boxp.getLower() - overhead, diagonal + overhead, grid_spacing); 
+			AtomGrid atom_grid(boxp.getLower() - overhead, boxp.getUpper() + overhead, grid_spacing); 
 		 
-			for (lit = atoms.begin(); lit != atoms.end(); lit++)
+			for (lit = selected_atoms.begin(); lit != selected_atoms.end(); lit++)
 			{
 				atom_grid.insert((*lit)->getPosition(), *lit);
 			}
