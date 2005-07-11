@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.2.9 2005/07/11 07:38:48 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.10 2005/07/11 10:12:16 oliver Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -2181,13 +2181,12 @@ dnl
 dnl   check for the XDR functions: their interface and the libraries they're hidden in.
 dnl
 AC_DEFUN(CF_CHECK_XDR, [
-	if test "${PROJECT[]_NO_XDR}" = "true" ; then
-		AC_MSG_RESULT([No XDR headers available - building of XDR persistence support disabled])
-		AC_DEFINE(PROJECT[]_HAS_XDR, )
-		PROJECT[]_HAS_XDR=""
-		AC_SUBST(PROJECT[]_HAS_XDR)
-	else
-
+	 if test "${PROJECT[]_NO_XDR}" = "true" ; then
+		  AC_MSG_RESULT([No XDR headers available - building of XDR persistence support disabled])
+		  AC_DEFINE(PROJECT[]_HAS_XDR, )
+		  PROJECT[]_HAS_XDR=""
+		  AC_SUBST(PROJECT[]_HAS_XDR)
+  else
 		AC_CHECK_HEADER(rpc/types.h, HAS_RPC_TYPES_H=true, HAS_RPC_TYPES_H=false)
 		if test "${HAS_RPC_TYPES_H}" = false ; then
 			AC_MSG_RESULT()
@@ -2220,87 +2219,88 @@ AC_DEFUN(CF_CHECK_XDR, [
 				PROJECT[]_XDRREC_VOID_VOID_UINT=true,
 				PROJECT[]_XDRREC_VOID_VOID_UINT=false
 		)
-		if test "${PROJECT[]_XDRREC_VOID_VOID_UINT}" = false ; then
-			AC_TRY_COMPILE(
-					[
-						#include <rpc/types.h>
-						#include <rpc/xdr.h>
-						extern "C" int dummy(void*, char*, int) {return 0;}
-						void foo(){ 
-							XDR xdrs;
-							xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
-						}
-					],
-					[	
-					],
-					PROJECT[]_XDRREC_VOID_CHAR_INT=true,
-					PROJECT[]_XDRREC_VOID_CHAR_INT=false
-			)
-			if test "${PROJECT[]_XDRREC_VOID_CHAR_INT}" = true ; then
-				AC_MSG_RESULT([(void*, char*, int)])
-			else
-				AC_TRY_COMPILE(
-						[
-							#include <rpc/types.h>
-							#include <rpc/xdr.h>
-							extern "C" int dummy(char*, char*, int) {return 0;}
-							void foo(){ 
-								XDR xdrs;
-								xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
-							}
-						],
-						[	
-						],
-						PROJECT[]_XDRREC_CHAR_CHAR_INT=true,
-						PROJECT[]_XDRREC_CHAR_CHAR_INT=false
-				)
-				if test "${PROJECT[]_XDRREC_CHAR_CHAR_INT}" = true ; then
-					AC_MSG_RESULT([(char*, char*, int)])
-				else
-					AC_TRY_COMPILE(
-						[
-							#include <rpc/types.h>
-							#include <rpc/xdr.h>
-							extern "C" int dummy() {return 0;}
-							void foo(){
-								XDR xdrs;
-								xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
-							}
-						],
-						[
-						],
-						PROJECT[]_XDRREC_VOID=true,
-						PROJECT[]_XDRREC_VOID=false
-					)
-					if test "${PROJECT[]_XDRREC_VOID}" = true ; then
-						AC_MSG_RESULT(())
-					else
-	          AC_TRY_COMPILE(
-  	          [
-    	          #include <rpc/types.h>
-      	        #include <rpc/xdr.h>
-                extern "C" int dummy(void*, void*, int) {return 0;}
-       	        void foo(){
-       	          XDR xdrs;
-       	          xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
-                }
-              ],
-              [
-              ],
-              PROJECT[]_XDRREC_VOID_VOID_INT=true,
-              PROJECT[]_XDRREC_VOID_VOID_INT=false
-            )
-            if test "${PROJECT[]_XDRREC_VOID_VOID_INT}" = true ; then
-              AC_MSG_RESULT((void*, void*, int))
-            else
-              AC_MSG_RESULT(not found!)
-				   	fi 
+		if test "${PROJECT[]_XDRREC_VOID_VOID_UINT}" = true ; then
+		  AC_MSG_RESULT([(void*, void*, unsigned int)])
+  else
+		  AC_TRY_COMPILE(
+				  [
+						 #include <rpc/types.h>
+						 #include <rpc/xdr.h>
+						 extern "C" int dummy(void*, char*, int) {return 0;}
+						 void foo(){ 
+						 	XDR xdrs;
+						 	xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+						 }
+					 ],
+					 [	
+					 ],
+					 PROJECT[]_XDRREC_VOID_CHAR_INT=true,
+					 PROJECT[]_XDRREC_VOID_CHAR_INT=false
+			 )
+			 if test "${PROJECT[]_XDRREC_VOID_CHAR_INT}" = true ; then
+			  	AC_MSG_RESULT([(void*, char*, int)])
+			 else
+				  AC_TRY_COMPILE(
+					 	[
+					 		#include <rpc/types.h>
+					 		#include <rpc/xdr.h>
+					 		extern "C" int dummy(char*, char*, int) {return 0;}
+					 		void foo(){ 
+					 			XDR xdrs;
+					 			xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+					 		}
+					 	],
+					 	[	
+					 	],
+					 	PROJECT[]_XDRREC_CHAR_CHAR_INT=true,
+					 	PROJECT[]_XDRREC_CHAR_CHAR_INT=false
+				  )
+				  if test "${PROJECT[]_XDRREC_CHAR_CHAR_INT}" = true ; then
+					   AC_MSG_RESULT([(char*, char*, int)])
+				  else
+					   AC_TRY_COMPILE(
+						   [
+							   #include <rpc/types.h>
+							   #include <rpc/xdr.h>
+							   extern "C" int dummy() {return 0;}
+							   void foo(){
+							  	XDR xdrs;
+								  xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+							  }
+						   ],
+						   [
+						   ],
+						   PROJECT[]_XDRREC_VOID=true,
+						   PROJECT[]_XDRREC_VOID=false
+					   )
+					   if test "${PROJECT[]_XDRREC_VOID}" = true ; then
+						    AC_MSG_RESULT(())
+					   else
+	         AC_TRY_COMPILE(
+  	        [
+    	       #include <rpc/types.h>
+      	     #include <rpc/xdr.h>
+            extern "C" int dummy(void*, void*, int) {return 0;}
+       	    void foo(){
+       	     XDR xdrs;
+       	     xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+            }
+           ],
+           [
+           ],
+           PROJECT[]_XDRREC_VOID_VOID_INT=true,
+           PROJECT[]_XDRREC_VOID_VOID_INT=false
+           )
+          if test "${PROJECT[]_XDRREC_VOID_VOID_INT}" = true ; then
+            AC_MSG_RESULT((void*, void*, int))
+          else
+            AC_MSG_RESULT(not found!)
           fi
+				   	fi 
+      fi
 				fi
-			fi
-		else
-			AC_MSG_RESULT([(void*, void*, unsigned int)])
 		fi
+  fi
 
 		dnl
 		dnl  check whether there is a function to store 64bit

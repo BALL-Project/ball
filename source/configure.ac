@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.22.2.2 2005/06/19 09:24:38 oliver Exp $
+dnl $Id: configure.ac,v 1.22.2.3 2005/07/11 10:12:24 oliver Exp $
 dnl
 dnl
 
@@ -444,7 +444,7 @@ CF_CHECK_SOCKET_ARGS_AND_TYPES
 dnl
 dnl   Check for the XDR functions: their interface and the libraries they're hidden in.
 dnl			XDR is required for a portable, platform-independent data exchange.
-CF_CHECK_XDR
+dnl CF_CHECK_XDR
 
 dnl
 dnl		We need Flex and Bison for a couple of parsers hideen in BALL (SMILES, Expression, ParsedFct)
