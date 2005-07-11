@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: config.h.in,v 1.46 2005/03/01 07:33:10 oliver Exp $ 
+// $Id: config.h.in,v 1.46.2.1 2005/07/11 16:30:08 oliver Exp $ 
 //
 
 #ifndef BALL_CONFIG_CONFIG_H
@@ -124,8 +124,10 @@
 // from platform to platform, so we define some symbols describing the
 // correct arguments: (void*, char*, int), (char*, char*, int), or (void)
 // take arguments of type (void*, char*, int)
+#undef BALL_XDRREC_CREATE_VOID_VOID_INT
 #undef BALL_XDRREC_CREATE_VOID_CHAR_INT
 #undef BALL_XDRREC_CREATE_CHAR_CHAR_INT
+#undef BALL_XDRREC_CREATE_VOID_VOID_UINT
 #undef BALL_XDRREC_CREATE_VOID
 
 // some platforms (e.g. Debian 2.1) do not provide xdr_u_hyper, so we 

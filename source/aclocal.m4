@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.2.10 2005/07/11 10:12:16 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.11 2005/07/11 16:29:59 oliver Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -2299,7 +2299,6 @@ AC_DEFUN(CF_CHECK_XDR, [
 				   	fi 
       fi
 				fi
-		fi
   fi
 
 		dnl
@@ -2426,10 +2425,10 @@ AC_DEFUN(CF_CHECK_XDR, [
 		if test "${PROJECT[]_XDRREC_VOID}" = true ; then
 			AC_DEFINE(PROJECT[]_XDRREC_CREATE_VOID)
 		fi
-		if test "${PROJECT[]_XDRREC_VOID_VOID_UINT" = true ; then
+		if test "${PROJECT[]_XDRREC_VOID_VOID_UINT}" = true ; then
       AC_DEFINE(PROJECT[]_XDRREC_CREATE_VOID_VOID_UINT)
     fi
-    if test "${PROJECT[]_XDRREC_VOID_VOID_INT" = true ; then
+    if test "${PROJECT[]_XDRREC_VOID_VOID_INT}" = true ; then
       AC_DEFINE(PROJECT[]_XDRREC_CREATE_VOID_VOID_INT)
     fi
 		

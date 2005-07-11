@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager.C,v 1.28 2005/02/15 13:49:03 amoll Exp $
+// $Id: XDRPersistenceManager.C,v 1.28.2.1 2005/07/11 16:30:07 oliver Exp $
 //
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
@@ -31,6 +31,14 @@ namespace BALL
 	
   // XDRReadStream_ reads characters from the stream
   // and hands them back to the xdr buffer.
+#ifdef BALL_XDRREC_CREATE_VOID_VOID_INT
+		extern "C" int XDRReadStream_(void* stream_ptr, void* buffer, int number)
+			throw()
+#else
+#ifdef BALL_XDRREC_CREATE_VOID_VOID_UINT
+		extern "C" int XDRReadStream_(void* stream_ptr, void* buffer, unsigned int number)
+			throw()
+#else
 #ifdef BALL_XDRREC_CREATE_VOID_CHAR_INT
 		extern "C" int XDRReadStream_(void* stream_ptr, char* buffer, int number)
 			throw()
@@ -42,6 +50,8 @@ namespace BALL
 		extern "C" int XDRReadStream_(void* stream_ptr, void* buffer, unsigned int number)
 			throw()
 #	endif
+#endif
+#endif
 #endif
 	{
 		istream& is = *(istream*)stream_ptr;
@@ -72,13 +82,23 @@ namespace BALL
 	extern "C" int XDRWriteStream_(void* stream_ptr, char* buffer, int number)
 		throw()
 #else
-#	ifdef BALL_XDRREC_CREATE_CHAR_CHAR_INT
-	extern "C" int XDRWriteStream_(char* stream_ptr, char* buffer, int number)
+#ifdef BALL_XDRREC_CREATE_VOID_VOID_INT
+	extern "C" int XDRWriteStream_(void* stream_ptr, void* buffer, int number)
 		throw()
-#	else
+#else
+#ifdef BALL_XDRREC_CREATE_VOID_VOID_UINT
 	extern "C" int XDRWriteStream_(void* stream_ptr, void* buffer, unsigned int number)
 		throw()
-#	endif
+#else
+#ifdef BALL_XDRREC_CREATE_CHAR_CHAR_INT
+	extern "C" int XDRWriteStream_(char* stream_ptr, char* buffer, int number)
+		throw()
+#else
+	extern "C" int XDRWriteStream_(void* stream_ptr, void* buffer, unsigned int number)
+		throw()
+#endif
+#endif
+#endif
 #endif
 	{
 		ostream& os = *(ostream*)stream_ptr;
@@ -99,13 +119,23 @@ namespace BALL
 	extern "C" int XDRError_(void* , char*, int)
 		throw()
 #else
-#	ifdef BALL_XDRREC_CREATE_CHAR_CHAR_INT
-	extern "C" int XDRError_(char* , char*, int)
+#ifdef BALL_XDRREC_CREATE_VOID_VOID_INT
+	extern "C" int XDRError_(void* , void*, int)
 		throw()
-#	else
+#else
+#ifdef BALL_XDRREC_CREATE_VOID_VOID_UINT
 	extern "C" int XDRError_(void* , void*, unsigned int)
 		throw()
-#	endif
+#else
+#ifdef BALL_XDRREC_CREATE_CHAR_CHAR_INT
+	extern "C" int XDRError_(char* , char*, int)
+		throw()
+#else
+	extern "C" int XDRError_(void* , void*, unsigned int)
+		throw()
+#endif
+#endif
+#endif
 #endif
 	{
 		Log.error() << "XDRPersistenceManager: error wrong access mode for XDR stream." << endl;

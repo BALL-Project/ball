@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.28.4.3 2005/07/11 05:44:26 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.28.4.4 2005/07/11 16:30:07 oliver Exp $$
+//
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -60,7 +61,7 @@ namespace BALL
 		void MolecularFileDialog::readFiles()
 		{
 			QStringList files = QFileDialog::getOpenFileNames(
-													"*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sd",
+													"*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf",
 													getWorkingDir().c_str(),
 													getMainControl(),
 													"Molecular File Dialog",
@@ -133,8 +134,8 @@ namespace BALL
 			{
 				return readMOLFile(filename, system_name);
 			}
-			else if (filetype.hasSubstring("SD") ||
-							 filetype.hasSubstring("sd"))
+			else if (filetype.hasSubstring("SDF") ||
+							 filetype.hasSubstring("sdf"))
 			{
 				return readSDFile(filename, system_name);
 			}
@@ -161,7 +162,7 @@ namespace BALL
 
 			QString s = QFileDialog::getSaveFileName(
 										getWorkingDir().c_str(),
-										"*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sd",
+										"*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf",
 										getMainControl(),
 										"Molecular File Dialog",
 										"Choose a filename to save under" );
@@ -204,7 +205,7 @@ namespace BALL
 			{
 				result = writeMOL2File(filename, system);
 			}
-			else if (filter.hasSubstring("SD") || filter.hasSubstring("sd"))
+			else if (filter.hasSubstring("SDF") || filter.hasSubstring("sdf"))
 			{
 				result = writeSDFile(filename, system);
 			}
