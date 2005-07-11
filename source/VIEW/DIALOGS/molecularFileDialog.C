@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.28.4.2 2005/06/19 11:28:16 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.28.4.3 2005/07/11 05:44:26 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -12,6 +12,7 @@
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/FORMAT/MOL2File.h>
+#include <BALL/FORMAT/SDFile.h>
 #include <BALL/MATHS/simpleBox3.h>
 #include <BALL/KERNEL/system.h>
 
@@ -59,7 +60,7 @@ namespace BALL
 		void MolecularFileDialog::readFiles()
 		{
 			QStringList files = QFileDialog::getOpenFileNames(
-													"*.pdb *.brk *.ent *.hin *.mol *.mol2",
+													"*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sd",
 													getWorkingDir().c_str(),
 													getMainControl(),
 													"Molecular File Dialog",
@@ -132,6 +133,11 @@ namespace BALL
 			{
 				return readMOLFile(filename, system_name);
 			}
+			else if (filetype.hasSubstring("SD") ||
+							 filetype.hasSubstring("sd"))
+			{
+				return readSDFile(filename, system_name);
+			}
 			else
 			{
 				setStatusbarText(String("Unknown filetype: ") + filetype, true);
@@ -155,7 +161,7 @@ namespace BALL
 
 			QString s = QFileDialog::getSaveFileName(
 										getWorkingDir().c_str(),
-										"*.pdb *.brk *.ent *.hin *.mol *.mol2",
+										"*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sd",
 										getMainControl(),
 										"Molecular File Dialog",
 										"Choose a filename to save under" );
@@ -198,6 +204,10 @@ namespace BALL
 			{
 				result = writeMOL2File(filename, system);
 			}
+			else if (filter.hasSubstring("SD") || filter.hasSubstring("sd"))
+			{
+				result = writeSDFile(filename, system);
+			}
 			else
 			{
 				if (filter == filename_without_path)
@@ -230,9 +240,10 @@ namespace BALL
 				file << system;
 				file.close();
 			}
-			catch(...)
+			catch(Exception::GeneralException e)
 			{
-				setStatusbarText("Writing of PDB file failed!", true);
+				Log.error() << e << std::endl;
+				setStatusbarText("Writing of PDB file failed, see logs!", true);
 				return false;
 			}
 
@@ -249,9 +260,10 @@ namespace BALL
 				file << system;
 				file.close();
 			}
-			catch(...)
+			catch(Exception::GeneralException e)
 			{
-				setStatusbarText("Writing of HIN file failed!", true);
+				Log.error() << e << std::endl;
+				setStatusbarText("Writing of HIN file failed, see logs!", true);
 				return false;
 			}
 
@@ -268,9 +280,10 @@ namespace BALL
 				file << system;
 				file.close();
 			}
-			catch(...)
+			catch(Exception::GeneralException e)
 			{
-				setStatusbarText("Writing of MOL file failed!", true);
+				Log.error() << e << std::endl;
+				setStatusbarText("Writing of MOL file failed, see logs!", true);
 				return false;
 			}
 
@@ -287,9 +300,29 @@ namespace BALL
 				file << system;
 				file.close();
 			}
-			catch(...)
+			catch(Exception::GeneralException e)
 			{
-				setStatusbarText("Writing of MOL2 file failed!", true);
+				Log.error() << e << std::endl;
+				setStatusbarText("Writing of MOL2 file failed, see logs!", true);
+				return false;
+			}
+
+			return true;		
+		}
+
+		bool MolecularFileDialog::writeSDFile(String filename, const System& system)
+			throw()
+		{
+			try
+			{
+				SDFile file(filename, std::ios::out);
+				file << system;
+				file.close();
+			}
+			catch(Exception::GeneralException e)
+			{
+				Log.error() << e << std::endl;
+				setStatusbarText("Writing of SD file failed, see logs!", true);
 				return false;
 			}
 
@@ -310,9 +343,10 @@ namespace BALL
 				pdb_file >> *system;
 				pdb_file.close();
 			}
-			catch(...)
+			catch(Exception::GeneralException e)
 			{
-				setStatusbarText("Reading of PDB file failed!", true);
+				Log.error() << e << std::endl;
+				setStatusbarText("Reading of PDB file failed, see logs!", true);
 				delete system;
 				return 0;
 			}
@@ -343,9 +377,10 @@ namespace BALL
 
 				hin_file.close();
 			}
-			catch(...)
+			catch(Exception::GeneralException e)
 			{
-				setStatusbarText("Reading of HIN file failed!", true);
+				Log.error() << e << std::endl;
+				setStatusbarText("Reading of HIN file failed, see logs!", true);
 				delete system;
 				return 0;
 			}
@@ -387,9 +422,10 @@ namespace BALL
 				mol_file >> *system;
 				mol_file.close();
 			}
-			catch(...)
+			catch(Exception::GeneralException e)
 			{
-				setStatusbarText("Reading of MOL file failed!", true);
+				Log.error() << e << std::endl;
+				setStatusbarText("Reading of MOL file failed, see logs!", true);
 				delete system;
 				return 0;
 			}
@@ -412,9 +448,9 @@ namespace BALL
 				mol2_file >> *system;
 				mol2_file.close();
 			}
-			catch(...)
+			catch(Exception::GeneralException e)
 			{
-				setStatusbarText("Reading of MOL2 file failed!", true);
+				setStatusbarText("Reading of MOL2 file failed, see logs!", true);
 				delete system;
 				return 0;
 			}
@@ -423,6 +459,31 @@ namespace BALL
 			return system;
 		}
 		
+
+		System* MolecularFileDialog::readSDFile(String filename, String system_name)
+			throw()
+		{
+			setStatusbarText("reading SD file...", true);
+
+			System* system = new System();
+
+			try
+			{
+				SDFile sd_file(filename);
+				sd_file >> *system;
+				sd_file.close();
+			}
+			catch(Exception::GeneralException e)
+			{
+				setStatusbarText("Reading of SD file failed, see logs!", true);
+				delete system;
+				return 0;
+			}
+
+ 			if (!finish_(filename, system_name, system)) return 0;
+			return system;
+		}
+
 
 		bool MolecularFileDialog::finish_(const String& filename, const String& system_name, System* system)
 			throw()
