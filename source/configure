@@ -310,7 +310,7 @@ ac_includes_default="\
 #endif"
 
 ac_default_prefix=`cd ..; pwd`
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PAGER LN_S UNAME CUT TR AR CP RM MV LN SED FIND DIFF TAIL GREP EGREP CAT ECHO_COMMAND ECHO OSMAJOR OS OSREV BINFMT BINFMT_PATH ARCHITECTURE SHARED_LIB_SUFFIX CXXPATH CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXCPP BALL[]_HAS_XDR BALL_HAS_XDR LEX LEXLIB LEX_OUTPUT_ROOT YACC BALL_HAS_FLEX_YACC BALL_HAS_FFTW BALL_HAS_FFTW_H BALL_HAS_FFTW_FLOAT BALL_HAS_FFTW_DOUBLE BALL_HAS_FFTW_LONG_DOUBLE MOC UIC SIP SIP_LIB SIP_INCLUDES PYTHON_INCLUDES PYTHON_SUPPORT PYTHON_LIBS PYTHON_EXECUTABLE VALGRIND VALGRIND_OPTS BALL_PATH BALL_INCLUDES CXX_MAKEDEPEND MAKEDEP_CXX_OPTS MAKEDEP_CXX_SUFFIX DEPENDENCY_GREPS CC ADD_CXXFLAGS LIB_CXXFLAGS NONLIB_CXXFLAGS HAS_GPLUSPLUS STD_CPP_INCLUDES MAKEDEP_OPTS BALL_TYPENAME BINFMT_INDEX VIEW_LIBS OPENGL_LIBOPTS OPENGL_LIBPATH QT_LIBOPTS QT_LIBPATH QT_MT_SUFFIX X11_LIBOPTS X11_LIBPATH X11_LIBS BALL_LIBS DEFINES CXXFLAGS_D CXXFLAGS_O CPP_MODE_FLAGS CPP_MODE_FLAGS_NO_OPTIMIZATION AROPTS DYNAR DYNAROPTS DYNAROPTS_PYMODULE ADD_DYNAROPTS_LIBBALL ADD_DYNAROPTS_LIBVIEW RANLIB ADDITIONAL_COMMENTS USE_VIEW BALL_HAS_VIEW VIEW_PLATFORM VIEW_INCLUDES LIBVIEW TEMPLATE_DIR SUBDIRS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PAGER LN_S UNAME CUT TR AR CP RM MV LN SED FIND DIFF TAIL GREP EGREP CAT ECHO_COMMAND ECHO OSMAJOR OS OSREV BINFMT BINFMT_PATH ARCHITECTURE SHARED_LIB_SUFFIX CXXPATH CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXCPP BALL_HAS_XDR LEX LEXLIB LEX_OUTPUT_ROOT YACC BALL_HAS_FLEX_YACC BALL_HAS_FFTW BALL_HAS_FFTW_H BALL_HAS_FFTW_FLOAT BALL_HAS_FFTW_DOUBLE BALL_HAS_FFTW_LONG_DOUBLE MOC UIC SIP SIP_LIB SIP_INCLUDES PYTHON_INCLUDES PYTHON_SUPPORT PYTHON_LIBS PYTHON_EXECUTABLE VALGRIND VALGRIND_OPTS BALL_PATH BALL_INCLUDES CXX_MAKEDEPEND MAKEDEP_CXX_OPTS MAKEDEP_CXX_SUFFIX DEPENDENCY_GREPS CC ADD_CXXFLAGS LIB_CXXFLAGS NONLIB_CXXFLAGS HAS_GPLUSPLUS STD_CPP_INCLUDES MAKEDEP_OPTS BALL_TYPENAME BINFMT_INDEX VIEW_LIBS OPENGL_LIBOPTS OPENGL_LIBPATH QT_LIBOPTS QT_LIBPATH QT_MT_SUFFIX X11_LIBOPTS X11_LIBPATH X11_LIBS BALL_LIBS DEFINES CXXFLAGS_D CXXFLAGS_O CPP_MODE_FLAGS CPP_MODE_FLAGS_NO_OPTIMIZATION AROPTS DYNAR DYNAROPTS DYNAROPTS_PYMODULE ADD_DYNAROPTS_LIBBALL ADD_DYNAROPTS_LIBVIEW RANLIB ADDITIONAL_COMMENTS USE_VIEW BALL_HAS_VIEW VIEW_PLATFORM VIEW_INCLUDES LIBVIEW TEMPLATE_DIR SUBDIRS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -4303,7 +4303,10 @@ g++ )
 
 	echo "$as_me:$LINENO: checking compiler version" >&5
 echo $ECHO_N "checking compiler version... $ECHO_C" >&6
-	CXX_VERSION=`${CXX} --version | ${SED} -n 1p | ${SED} "s/^[^0-9]*//" | ${CUT} -f1 -d" "`
+	VERSION_FILE=/tmp/$$.gnu_version.C
+	echo "__GNUC__.__GNUC_MINOR__.__GNUC_PATCHLEVEL__" > ${VERSION_FILE}
+	CXX_VERSION=`${CXX} -E ${VERSION_FILE} | ${GREP} -v "^#" | ${TR} -d " "`
+	${RM} ${VERSION_FILE}
 	if test `echo ${CXX_VERSION}|${CUT} -c1-4` = "egcs" ; then
 		IS_EGXX=true
 		CXX_NAME="egcs"
@@ -15181,45 +15184,60 @@ rm -f conftest.$ac_objext conftest.$ac_ext
 						echo "$as_me:$LINENO: result: ()" >&5
 echo "${ECHO_T}()" >&6
 					else
-						echo "$as_me:$LINENO: result: not found!" >&5
+	          cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+    	          #include <rpc/types.h>
+      	        #include <rpc/xdr.h>
+                extern "C" int dummy(void*, void*, int) {return 0;}
+       	        void foo(){
+       	          XDR xdrs;
+       	          xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+                }
+
+int
+main ()
+{
+
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  BALL_XDRREC_VOID_VOID_INT=true
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+BALL_XDRREC_VOID_VOID_INT=false
+
+fi
+rm -f conftest.$ac_objext conftest.$ac_ext
+            if test "${BALL_XDRREC_VOID_VOID_INT}" = true ; then
+              echo "$as_me:$LINENO: result: (void*, void*, int)" >&5
+echo "${ECHO_T}(void*, void*, int)" >&6
+            else
+              echo "$as_me:$LINENO: result: not found!" >&5
 echo "${ECHO_T}not found!" >&6
-
-	echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-	echo "$as_me:$LINENO: result: Configure failed. If you cannot solve your problem with the aid" >&5
-echo "${ECHO_T}Configure failed. If you cannot solve your problem with the aid" >&6
-	echo "$as_me:$LINENO: result: of the above error message, please contact the BALL mailing list" >&5
-echo "${ECHO_T}of the above error message, please contact the BALL mailing list" >&6
-	echo "$as_me:$LINENO: result: or the BALL developers. Please enclose the file 'conf.diag.tar'" >&5
-echo "${ECHO_T}or the BALL developers. Please enclose the file 'conf.diag.tar'" >&6
-	echo "$as_me:$LINENO: result: which has been created in source. It contains the relevant" >&5
-echo "${ECHO_T}which has been created in source. It contains the relevant" >&6
-	echo "$as_me:$LINENO: result: files from this configure run. In most cases, the information" >&5
-echo "${ECHO_T}files from this configure run. In most cases, the information" >&6
-	echo "$as_me:$LINENO: result: is necessary to diagnose what went wrong. This file contains" >&5
-echo "${ECHO_T}is necessary to diagnose what went wrong. This file contains" >&6
-	echo "$as_me:$LINENO: result: information about your system setup and versions of compilers" >&5
-echo "${ECHO_T}information about your system setup and versions of compilers" >&6
-	echo "$as_me:$LINENO: result: and other tools installed in your system." >&5
-echo "${ECHO_T}and other tools installed in your system." >&6
-	echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-
-	TARFILE=conf.diag.tar
-	if test -f $TARFILE ; then
-		${RM} $TARFILE ;
-	fi
-	FILES="configure configure.ac aclocal.m4 config.log"
-	if test -f config.h ; then FILES="$FILES config.h" ; fi
-	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
-	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
-  tar cf $TARFILE $FILES
-
-	{ { echo "$as_me:$LINENO: error: Aborted." >&5
-echo "$as_me: error: Aborted." >&2;}
-   { (exit 1); exit 1; }; }
-
-					fi
+				   	fi
+          fi
 				fi
 			fi
 		else
@@ -15618,6 +15636,18 @@ _ACEOF
 _ACEOF
 
 		fi
+		if test "${BALL_XDRREC_VOID_VOID_UINT" = true ; then
+      cat >>confdefs.h <<\_ACEOF
+#define BALL_XDRREC_CREATE_VOID_VOID_UINT 1
+_ACEOF
+
+    fi
+    if test "${BALL_XDRREC_VOID_VOID_INT" = true ; then
+      cat >>confdefs.h <<\_ACEOF
+#define BALL_XDRREC_CREATE_VOID_VOID_INT 1
+_ACEOF
+
+    fi
 
 										echo "$as_me:$LINENO: checking for XDR symbols in libc" >&5
 echo $ECHO_N "checking for XDR symbols in libc... $ECHO_C" >&6
@@ -21729,7 +21759,6 @@ s,@ac_ct_CXX@,$ac_ct_CXX,;t t
 s,@EXEEXT@,$EXEEXT,;t t
 s,@OBJEXT@,$OBJEXT,;t t
 s,@CXXCPP@,$CXXCPP,;t t
-s,@BALL_HAS_XDR@,$BALL_HAS_XDR,;t t
 s,@BALL_HAS_XDR@,$BALL_HAS_XDR,;t t
 s,@LEX@,$LEX,;t t
 s,@LEXLIB@,$LEXLIB,;t t
