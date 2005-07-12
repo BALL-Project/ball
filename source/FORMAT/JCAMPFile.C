@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.17 2004/03/07 01:08:16 amoll Exp $
+// $Id: JCAMPFile.C,v 1.17.6.1 2005/07/12 15:05:49 anhi Exp $
 //
 
 
@@ -73,7 +73,14 @@ namespace BALL
 							getLine().split(fields);
 							for (Position i = 0; i < fields.size(); i++)
 							{
-								value.numeric_value.push_back(fields[i].toDouble());
+								if (!fields[i].isFloat())
+								{
+									Log.error() << "Warning: " << fields[i] << " is not a float!" << std::endl;
+								}
+								else
+								{
+									value.numeric_value.push_back(fields[i].toDouble());
+								}
 							}
 						}
 						
@@ -214,7 +221,7 @@ namespace BALL
 		}
 		else if (val.type == STRING)
 		{
-			return val.string_value.toDouble();
+			return val.string_value.trim().toDouble();
 		}
 		else if ((val.type == ARRAY) && (val.numeric_value.size() > 0))
 		{
@@ -232,7 +239,7 @@ namespace BALL
 		const JCAMPValue& val(entries_[name]);
 		if ((val.type == NUMERIC) || (val.type == STRING))
 		{
-			return (Index)val.string_value.toInt();
+			return (Index)val.string_value.trim().toInt();
 		}
 		else if ((val.type == ARRAY) && (val.numeric_value.size() > 0))
 		{
