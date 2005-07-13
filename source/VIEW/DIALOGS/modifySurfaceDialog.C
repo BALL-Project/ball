@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.20 2005/07/11 06:22:21 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.21 2005/07/13 14:08:49 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -758,7 +758,10 @@ namespace BALL
 
 						new_mesh->vertex.push_back(vertices[pos]);
 						new_mesh->normal.push_back(normals[pos]);
-						new_mesh->colorList.push_back(colors[pos]);
+						if (multi_color)
+						{
+							new_mesh->colorList.push_back(colors[pos]);
+						}
 					}
 				}
 
@@ -874,23 +877,23 @@ namespace BALL
 			}
 			boxp.finish();
 
-			const Vector3 diagonal = boxp.getUpper() - boxp.getLower();
+			Vector3 diagonal = boxp.getUpper() - boxp.getLower();
 			
 			// grid spacing, tradeoff between speed and memory consumption
 			float grid_spacing = distance;
 
 			float memory = SysInfo::getAvailableMemory();
 			//
-			// if we can not calculate available memory, use around 6 MB for the grid
+			// if we can not calculate the available memory, use around 6 MB for the grid
 			if (memory == -1) memory = 10000000;
 			memory *= 0.6;
 
 			Vector3 overhead(2.5 + distance);
-			float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing((LongIndex)memory, diagonal + 
-																																			overhead * 2.0);		
+			diagonal += overhead * 2.0;
+			float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing((LongIndex)memory, diagonal);
 			if (min_spacing > grid_spacing) grid_spacing = min_spacing;
 			
-			AtomGrid atom_grid(boxp.getLower() - overhead, boxp.getUpper() + overhead, grid_spacing); 
+			AtomGrid atom_grid(boxp.getLower() - overhead, diagonal, grid_spacing); 
 		 
 			for (lit = selected_atoms.begin(); lit != selected_atoms.end(); lit++)
 			{
