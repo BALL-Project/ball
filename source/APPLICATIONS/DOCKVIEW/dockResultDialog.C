@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.36 2005/07/04 10:30:48 leonhardt Exp $
+// $Id: dockResultDialog.C,v 1.1.2.37 2005/07/13 10:22:11 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -410,13 +410,14 @@ namespace BALL
 				context_menu.exec(pos);
 		}
 		
+		// closes the dialog
 		void DockResultDialog::closeClicked()
 		{
 			// close dialog and destroy it
 			close(true);
 		}
 		
-		//
+		// deletes chosen score column
 		void DockResultDialog::deleteColumn_(int column)
 		{
 			if(!dock_res_) return;
@@ -428,11 +429,11 @@ namespace BALL
 			adjustSize();
 		}
 		
-		//
+		// opens new dialog with scoring options
 		void DockResultDialog::showScoringOptions_(int column)
 		{
 			if(!dock_res_) return;
-			// InfoDialog deletes itself when it closes
+			// InfoDialog deletes itself when it is closed
 			InfoDialog* info_dialog = new InfoDialog(this, 0, false, WDestructiveClose);
 			
 			QString s = "Scoring function: ";
@@ -457,7 +458,7 @@ namespace BALL
 			info_dialog->show();
 		}
 		 
-		//
+		// 
 		void DockResultDialog::redock_(int row)
 		{
 			if(!dock_res_) return;
@@ -469,6 +470,7 @@ namespace BALL
 			SnapShot selected_conformation = (*conformation_set)[snapshot];
 			selected_conformation.applySnapShot(*docked_system_);
 			
+			// split docked system into its original docking partners
 			if (redock_partner1_)
 			{
 				delete redock_partner1_;
@@ -508,6 +510,7 @@ namespace BALL
 			DockDialog& dialog = DockingController::getInstance(0)->getDockDialog(); 
 			dialog.setSystems(redock_partner1_, redock_partner2_);
 			
+			// run redocking
 			DockingController::getInstance(0)->runDocking(true);
 		}
 		

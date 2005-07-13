@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.47 2005/07/04 10:20:35 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.48 2005/07/13 10:22:10 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -384,6 +384,7 @@ namespace BALL
 					break;
 			}
 			
+			// options for redocking (euler angles)
 			if(is_redock_)
 			{
 				algorithm_opt_[GeometricFit::Option::PHI_MIN] = String(phi_min->text().ascii()).toFloat();

@@ -93,7 +93,7 @@ namespace BALL
 					*/
 				void show();
 			
-				/**
+				/** TODO: pause algorithm!!!
 				*/
 				void pauseClicked();
 			

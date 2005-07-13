@@ -24,9 +24,12 @@ namespace BALL
 		{
 			public:
 			
-				friend std::ostream& operator <<(ostream& out, const DockResult& dock_res)
+				friend ostream& operator <<(ostream& out, const DockResult& dock_res)
 					throw();
 				
+				friend istream& operator >>(istream& in, DockResult& dock_res)
+					throw();
+					
 				/**	@name	Constructors and Destructors
 				 */	
 				//@{
@@ -104,9 +107,19 @@ namespace BALL
 				bool writeDockResult(const String& filename)
 					throw();
 				
+				/** store dock result in a file
+				*/
+				bool writeDockResult(std::ostream& file) const
+					throw();
+					
 				/** read dock result from a file
 				*/
 				bool readDockResult(const String& filename)
+					throw();
+					
+				/** read dock result from a file
+				*/
+				bool readDockResult(std::istream& filename)
 					throw();
 					
 				/** delete i-th Scoring_ of vector scorings_
@@ -171,7 +184,10 @@ namespace BALL
 				vector<Scoring_> scorings_;
 		};
 		
-		std::ostream& operator <<(ostream& out, const DockResult& dock_res)
+		std::ostream& operator <<(std::ostream& out, const DockResult& dock_res)
+			throw();
+			
+		std::istream& operator >>(std::istream& in, DockResult& dock_res)
 			throw();
 }
 #endif

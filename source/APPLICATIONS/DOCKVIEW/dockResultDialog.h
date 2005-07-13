@@ -119,7 +119,7 @@ namespace BALL
 					*/
 				void contextMenuRequested(int row, int column, const QPoint& pos);
 
-				/**
+				/** Closes the dialog.
 				*/
 				void closeClicked();
 				

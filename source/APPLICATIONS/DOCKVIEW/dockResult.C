@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.1.2.14 2005/07/04 10:20:36 haid Exp $
+// $Id: dockResult.C,v 1.1.2.15 2005/07/13 10:22:11 haid Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -134,6 +134,16 @@ namespace BALL
 		bool DockResult::writeDockResult(const String& filename)
 			throw()
 		{
+			File result(filename, std::ios::out | std::ios::binary);
+			bool successful = writeDockResult(result);
+			result.close();
+			return successful;
+		}
+		
+		// store dock result in a file
+		bool DockResult::writeDockResult(std::ostream& result) const
+			throw()
+		{
 			// first: store information about algorithm/ scoring function in temporary INIFile
 		 	String INI_temp;
 			File::createTemporaryFilename(INI_temp);
@@ -187,7 +197,6 @@ namespace BALL
 			 	line_nr_PDB++;
 			}
 			// write the number of lines in the first 2 lines of the result file
-			File result(filename, std::ios::out | std::ios::binary);
 			result << INI_out.getNumberOfLines() << std::endl;
 			result << line_nr_PDB << std::endl;
 			
@@ -213,8 +222,7 @@ namespace BALL
 			}
 			DCD_file.close();
 			
-			// close result file; remove the 3 temporary files
-			result.close();
+			// remove the 3 temporary files
 			File::remove(INI_temp);
 			File::remove(PDB_temp);
 			File::remove(DCD_temp);
@@ -222,13 +230,21 @@ namespace BALL
 			return true;
 		}
 		
-		//
+		// read dock result from file
 		bool DockResult::readDockResult(const String& filename)
 			throw()
 		{
-			// open result file for reading
-			// read first two lines with line numbers of INIFile and PDBFile
 			File file(filename, std::ios::in | std::ios::binary);
+			bool successful = readDockResult(file);
+			file.close();
+			return successful;
+		}
+		
+		// read dock result from file
+		bool DockResult::readDockResult(std::istream& file)
+			throw()
+		{
+			// read first two lines with line numbers of INIFile and PDBFile
 			unsigned int INI_lines, PDB_lines;
 			file >> INI_lines;
 			file >> PDB_lines;
@@ -346,33 +362,9 @@ namespace BALL
 				return false;
 			};
 			
-			// close result file and remove temporary files
-			file.close();
+			// remove temporary files
 			File::remove(PDB_temp);
 			File::remove(DCD_temp);
-			
-			Log.info() << "---------------------------------------------------------------" << std::endl;
-			Log.info() << "algorithm name: " << docking_algorithm_ << std::endl;
-			Options::Iterator o_it = docking_options_.begin();
-			for (; +o_it; ++o_it)
-			{
-				Log.info() << "algorithm options " << o_it->first << " : " << o_it->second << std::endl;
-			}
-			for (unsigned int i = 0; i < scorings_.size(); i++)
-			{
-			 	Log.info() << "scoring " << i << ":" << std::endl;
-				Log.info() << "name: " << scorings_[i].name_ << std::endl;
-				o_it = scorings_[i].options_.begin();
-				for (; +o_it; ++o_it)
-				{
-					Log.info() << "scoring options " << o_it->first << " : " << o_it->second << std::endl;
-				}
-				for (unsigned int j = 0; j < scorings_[i].scores_.size(); j++)
-				{
-				 	Log.info() << "score " << j << ": " << scorings_[i].scores_[j] << std::endl;
-				}
-			}
-			Log.info() << "---------------------------------------------------------------" << std::endl;
 			
 			return true;
 		}
@@ -436,10 +428,24 @@ namespace BALL
 		}
 
 		
-	std::ostream& operator <<(ostream& out, const DockResult& dock_res)
+	std::ostream& operator <<(std::ostream& out, const DockResult& dock_res)
 		throw()
 	{
+		if(!dock_res.writeDockResult(out))
+		{
+		 	Log.error() << "Could not write dock result!" << std::endl;
+		}
 		return out;
+	}
+	
+	std::istream& operator >>(std::istream& in, DockResult& dock_res)
+		throw()
+	{
+		if(!dock_res.readDockResult(in))
+		{
+		 	Log.error() << "Could not read dock result file!" << std::endl;
+		}
+		return in;
 	}
 	
 } // end of namespace BALL
