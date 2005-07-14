@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.10 2005/06/21 21:48:32 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.11 2005/07/14 10:36:16 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -540,6 +540,11 @@ void AddCartoonModel::buildStrand_(Position first, Position last)
 		peptide_normals.push_back(normal);
 
 	} // iteration over all residues of secondary structure
+
+
+	// abort if we have no normals
+	if (peptide_normals.size() == 0) return;
+
 
 	Matrix4x4 rotmat;
 	Angle angle_pi(M_PI);
