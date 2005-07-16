@@ -1,8 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.23 2005/07/03 09:43:18 oliver Exp $
-dnl
+dnl $Id: configure.ac,v 1.24 2005/07/16 21:00:38 oliver Exp $
 dnl
 
 dnl

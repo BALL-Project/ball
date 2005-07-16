@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box.h,v 1.7 2005/07/03 09:43:09 oliver Exp $
+// $Id: box.h,v 1.8 2005/07/16 21:00:35 oliver Exp $
+//
 
 #ifndef BALL_VIEW_PRIMITIV_BOX_H
 #define BALL_VIEW_PRIMITIV_BOX_H

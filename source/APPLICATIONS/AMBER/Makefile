@@ -1,4 +1,6 @@
-# $Id: Makefile,v 1.3 2005/07/03 09:43:18 oliver Exp $
+#
+# $Id: Makefile,v 1.4 2005/07/16 21:00:39 oliver Exp $
+#
 # Makefile for AMBER Application
 #
 

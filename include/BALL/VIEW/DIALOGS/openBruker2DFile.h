@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker2DFile.h,v 1.7 2005/07/03 09:43:06 oliver Exp $
+// $Id: openBruker2DFile.h,v 1.8 2005/07/16 21:00:33 oliver Exp $
+//
 
 #ifndef BALL_VIEW_DIALOGS_OPENBRUKER2DFILE_H
 #define BALL_VIEW_DIALOGS_OPENBRUKER2DFILE_H

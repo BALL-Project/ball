@@ -1,6 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: pythonSettings.C,v 1.8 2005/07/16 21:00:48 oliver Exp $
+//
+
 #include <BALL/VIEW/DIALOGS/pythonSettings.h>
 
 #include <qlineedit.h>
@@ -11,41 +14,41 @@ namespace BALL
 	namespace VIEW
 	{
 
-PythonSettings::PythonSettings( QWidget* parent,  const char* name, WFlags fl )
- : PythonSettingsData(parent, name, fl),
-	 PreferencesEntry()
-{
-	insertEntry(this, "Python Settings");
-}
+		PythonSettings::PythonSettings( QWidget* parent,  const char* name, WFlags fl )
+		 : PythonSettingsData(parent, name, fl),
+			 PreferencesEntry()
+		{
+			insertEntry(this, "Python Settings");
+		}
 
 
-void PythonSettings::fileSelected()
-{
-	QString s = QFileDialog::getSaveFileName(
-								"",
-								"Python scripts (*.py)",
-								this,	
-								"Choose a Startup Python Script",
-								"" );
+		void PythonSettings::fileSelected()
+		{
+			QString s = QFileDialog::getSaveFileName(
+										"",
+										"Python scripts (*.py)",
+										this,	
+										"Choose a Startup Python Script",
+										"" );
 
-	if (s == QString::null) return;
-	script_edit->setText(s);
-	QWidget::update();
-}
+			if (s == QString::null) return;
+			script_edit->setText(s);
+			QWidget::update();
+		}
 
-void PythonSettings::setFilename(const String& filename)
-	throw()
-{
-	script_edit->setText(filename.c_str());
-	QWidget::update();
-}
+		void PythonSettings::setFilename(const String& filename)
+			throw()
+		{
+			script_edit->setText(filename.c_str());
+			QWidget::update();
+		}
 
-String PythonSettings::getFilename() const
-	throw()
-{
-	return String(script_edit->text().ascii());
-}
+		String PythonSettings::getFilename() const
+			throw()
+		{
+			return String(script_edit->text().ascii());
+		}
 
+	} // namespace VIEW
 
-// NAMESPACE
-} }
+} // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.75 2005/07/03 09:43:42 oliver Exp $
+// $Id: geometricControl.C,v 1.76 2005/07/16 21:00:51 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -280,7 +280,6 @@ namespace BALL
 			if (!isSurfaceModel(rep->getModelType()))
 			{
 				context_menu_.setItemEnabled(30, false);
-				context_menu_.setItemEnabled(34, false);
 			}
 			else
 			{

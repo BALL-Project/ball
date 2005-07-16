@@ -246,6 +246,7 @@ void BALLViewDemo::accept()
 		getMainControl()->getPrimitiveManager().setMultithreadingMode(false);
 
 		Representation* rep = *getMainControl()->getPrimitiveManager().begin();
+
 		ModifySurfaceDialog* cdialog = ModifySurfaceDialog::getInstance(0);
 		cdialog->setRepresentation(rep);
 		cdialog->setGrid(grid_);

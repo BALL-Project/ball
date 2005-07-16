@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.C,v 1.10 2005/07/03 09:43:42 oliver Exp $
+// $Id: renderer.C,v 1.11 2005/07/16 21:00:51 oliver Exp $
+//
 
 #include <BALL/VIEW/RENDERING/renderer.h>
 #include <BALL/VIEW/KERNEL/stage.h>

@@ -1,8 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.h,v 1.11 2004/06/11 18:04:35 amoll Exp $
+// $Id: regularData2DWidget.h,v 1.12 2005/07/16 21:00:38 oliver Exp $
 //
+
+#ifndef BALL_VIEW_WIDGETS_REGULARDATA2DWIDGET_H
+#define BALL_VIEW_WIDGETS_REGULARDATA2DWIDGET_H
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -115,3 +118,5 @@ namespace BALL
     
 	} //end of namespace VIEW	
 }//end of namespace BALL
+
+#endif // BALL_VIEW_WIDGETS_REGULARDATA2DWIDGET_H

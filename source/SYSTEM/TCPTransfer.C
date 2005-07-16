@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.36 2005/07/03 09:43:28 oliver Exp $
+// $Id: TCPTransfer.C,v 1.39 2005/12/23 17:03:06 amoll Exp $
 //
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
@@ -485,8 +485,8 @@ namespace BALL
 		buffer_[received_bytes_] = '\0';
 
 		#ifdef DEBUG
-			output_();
-		#endif
+			dump();
+ 		#endif
 
 		status_ = OK;
 		return status_;

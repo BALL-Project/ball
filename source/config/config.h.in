@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: config.h.in,v 1.47 2005/07/06 07:53:02 oliver Exp $ 
+// $Id: config.h.in,v 1.49 2005/12/23 17:03:40 amoll Exp $ 
 //
 
 #ifndef BALL_CONFIG_CONFIG_H

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.h,v 1.6 2005/07/03 09:43:10 oliver Exp $
+// $Id: glDisplayList.h,v 1.7 2005/07/16 21:00:36 oliver Exp $
+//
 
 #ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
 #define BALL_VIEW_RENDERING_GLDISPLAYLIST_H

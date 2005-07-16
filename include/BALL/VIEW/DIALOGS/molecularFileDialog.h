@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.19 2005/07/10 11:06:27 oliver Exp $
+// $Id: molecularFileDialog.h,v 1.20 2005/07/16 21:00:32 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -156,6 +156,11 @@ namespace BALL
 			 */
 			bool writeMOL2File(String filename, const System& system)
 				throw();
+
+			/** Write a SD file
+			 */
+			bool writeSDFile(String filename, const System& system)
+				throw();
 			
 			/// Overloaded from ModularWidget
 			virtual void checkMenuEntries()
@@ -178,7 +183,8 @@ namespace BALL
 				PDB_FILE = 0,
 				HIN_FILE,
 				MOL_FILE,
-				MOL2_FILE
+				MOL2_FILE,
+				SD_FILE
 			};
 
 			Index save_id_, open_id_;
