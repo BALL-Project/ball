@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19.4.8 2005/06/15 13:36:59 amoll Exp $
+// $Id: POVRenderer.C,v 1.19.4.9 2005/07/16 20:25:11 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -32,7 +32,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-#define BALLVIEW_POVRAY_LINE_RADIUS 0.05
+#define BALLVIEW_POVRAY_LINE_RADIUS "BALL_LINE_RADIUS"
 
 		POVRenderer::POVRenderer()
 			throw()
@@ -309,7 +309,8 @@ namespace BALL
 			out << "#declare BALLFinishTubeTransp       = BALLFinish" << endl;
 			out << "#declare BALLFinishMesh             = BALLFinish" << endl;
 			out << "#declare BALLFinishWire             = BALLFinish" << endl;
-			out << "#declare wire_radius 								= 0.01;" << std::endl;
+			out << "#declare BALL_WIRE_RADIUS 					= 0.01;" << std::endl;
+			out << "#declare BALL_LINE_RADIUS 					= 0.02;" << std::endl;
 			out << "// enter the path to your desired font here: " << std::endl;
 			out << "#declare BALLLabelFont              = \"" << font_file_ << "\";" << std::endl;
 			out << std::endl;
@@ -454,11 +455,15 @@ namespace BALL
 
 			const ColorRGBA& color = getColor_(line);
 
+			String p1 = POVVector3(line.getVertex1());
+			String p2 = POVVector3(line.getVertex2());
+
+			if (p1 == p2) return;
+
 			if ((Size) color.getAlpha() == 255) out << "Tube(";
 			else 																out << "TubeT(";
 
-		  out << POVVector3(line.getVertex1()) << ", "
-		      << POVVector3(line.getVertex2()) << ", "
+		  out << p1 << ", " << p2 << ", "
 					<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
 					<< getColorIndex_(color) << ")" << endl;
 		}
@@ -472,19 +477,30 @@ namespace BALL
 			const ColorRGBA& color1 = tube.getColor();
 			const ColorRGBA& color2 = tube.getColor2();
 
-  		if ((Size) color1.getAlpha() == 255) out << "Tube(";
-			else 																 out << "TubeT(";
-			
-		  out << POVVector3(tube.getVertex1()) << ", "
-		      << POVVector3(tube.getMiddleVertex()) << ", "
-					<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
-					<< getColorIndex_(color1) << ")" << endl;
+			String p1 = POVVector3(tube.getVertex1());
+			String p2 = POVVector3(tube.getMiddleVertex());
+
+			if (p1 != p2)
+			{
+				if ((Size) color1.getAlpha() == 255) out << "Tube(";
+				else 																 out << "TubeT(";
+				
+				out << p1 << ", "
+						<< p2 << ", "
+						<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
+						<< getColorIndex_(color1) << ")" << endl;
+			}
+
+			p1 = POVVector3(tube.getMiddleVertex());
+			p2 = POVVector3(tube.getVertex2());
+
+			if (p1 == p2) return;
 
   		if ((Size) color1.getAlpha() == 255) out << "Tube(";
 			else 																 out << "TubeT(";
 			
-		  out << POVVector3(tube.getMiddleVertex()) << ", "
-		      << POVVector3(tube.getVertex2()) << ", "
+		  out << p1 << ", "
+		      << p2 << ", "
 					<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
 					<< getColorIndex_(color2) << ")" << endl;
 		}
@@ -495,13 +511,17 @@ namespace BALL
 		{
 			std::ostream& out = *outfile_;
 
+			String p1 = POVVector3(tube.getVertex1());
+			String p2 = POVVector3(tube.getVertex2());
+
+			if (p1 == p2) return;
+
 			const ColorRGBA& color = getColor_(tube);
 
 			if ((Size) color.getAlpha() == 255) out << "Tube(";
 			else 																out << "TubeT(";
 
-		  out << POVVector3(tube.getVertex1()) << ", "
-		      << POVVector3(tube.getVertex2()) << ", "
+		  out << p1 << ", " << p2 << ", "
 					<< tube.getRadius() << ", "
 					<< getColorIndex_(color) << ")" << endl;
 		}	
@@ -530,19 +550,30 @@ namespace BALL
 			const ColorRGBA& color1 = tube.getColor();
 			const ColorRGBA& color2 = tube.getColor2();
 
-  		if ((Size) color1.getAlpha() == 255) out << "Tube(";
-			else 																 out << "TubeT(";
-			
-		  out << POVVector3(tube.getVertex1()) << ", "
-		      << POVVector3(tube.getMiddleVertex()) << ", "
-					<< tube.getRadius() << ", "
-					<< getColorIndex_(color1) << ")" << endl;
+			String p1 = POVVector3(tube.getVertex1());
+			String p2 = POVVector3(tube.getMiddleVertex());
+
+			if (p1 != p2)
+			{
+				if ((Size) color1.getAlpha() == 255) out << "Tube(";
+				else 																 out << "TubeT(";
+				
+				out << p1 << ", "
+						<< p2 << ", "
+						<< tube.getRadius() << ", "
+						<< getColorIndex_(color1) << ")" << endl;
+			}
+
+			p1 = POVVector3(tube.getMiddleVertex());
+			p2 = POVVector3(tube.getVertex2());
+
+			if (p1 == p2) return;
 
   		if ((Size) color1.getAlpha() == 255) out << "Tube(";
 			else 																 out << "TubeT(";
 			
-		  out << POVVector3(tube.getMiddleVertex()) << ", "
-		      << POVVector3(tube.getVertex2()) << ", "
+		  out << p1 << ", "
+		      << p2 << ", "
 					<< tube.getRadius() << ", "
 					<< getColorIndex_(color2) << ")" << endl;
 		}

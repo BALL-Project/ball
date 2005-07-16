@@ -8,6 +8,7 @@ fixed:
  - logging improved when opening molecular file formats
  - added support for SD files in BALLView
  - spliting of surfaces for given distance values
+ - degenerated POVRay objects (with a length of 0)
 
 
 1.1: 21.06.2005
