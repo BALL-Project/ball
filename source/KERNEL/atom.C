@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.55 2005/03/09 16:18:57 amoll Exp $
+// $Id: atom.C,v 1.55.2.1 2005/07/17 13:13:19 oliver Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -195,7 +195,8 @@ namespace BALL
 
 			Composite::persistentWrite(pm);
 
-			pm.writeStorableObject(*(PropertyManager*)this, "PropertyManager");
+			pm.writeStorableObject(dynamic_cast<const PropertyManager&>(*this), 
+														 "PropertyManager");
 
 			pm.writePrimitive((String)element_->getSymbol(), "element_");
 			pm.writePrimitive(static_attributes_[index_].formal_charge, "formal_charge_");
@@ -221,7 +222,8 @@ namespace BALL
 			Composite::persistentRead(pm);
 		pm.checkObjectTrailer(0);
 
-		pm.readStorableObject(*(PropertyManager*)this, "PropertyManager");
+		pm.readStorableObject(dynamic_cast<PropertyManager&>(*this), 
+													"PropertyManager");
 
 		String s;
 		pm.readPrimitive(s, "element_");	

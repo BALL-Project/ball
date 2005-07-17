@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.C,v 1.35 2004/02/25 10:47:12 oliver Exp $
+// $Id: bond.C,v 1.35.6.1 2005/07/17 13:13:20 oliver Exp $
 //
 
 #include <BALL/KERNEL/bond.h>
@@ -144,7 +144,7 @@ namespace BALL
 
 			Composite::persistentWrite(pm);
 
-      pm.writeStorableObject(*(PropertyManager*)this, "PropertyManager");
+      pm.writeStorableObject(dynamic_cast<const PropertyManager&>(*this), "PropertyManager");
  
 			pm.writeObjectPointer(first_, "first_");
 			pm.writeObjectPointer(second_, "second_");
@@ -161,7 +161,7 @@ namespace BALL
 			Composite::persistentRead(pm);
 		pm.checkObjectTrailer(0);
 
-		pm.readStorableObject(*(PropertyManager*)this, "PropertyManager");
+		pm.readStorableObject(dynamic_cast<PropertyManager&>(*this), "PropertyManager");
 
 		pm.readObjectPointer(first_, "first_");
 		pm.readObjectPointer(second_, "second_");

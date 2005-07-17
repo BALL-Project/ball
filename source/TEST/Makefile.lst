@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.22.2.1 2005/06/10 20:47:44 oliver Exp $
+# $Id: Makefile.lst,v 1.22.2.2 2005/07/17 13:13:20 oliver Exp $
 #
 
 XDR_DEPENDENT_EXECUTABLES=\
@@ -45,7 +45,6 @@ EXECUTABLES_SYSTEM = \
 	File_test$(EXEEXT)\
 	Path_test$(EXEEXT)\
 	PreciseTime_test$(EXEEXT)\
-	Socket_test$(EXEEXT)\
 	Sysinfo_test$(EXEEXT)\
 	TCPTransfer_test$(EXEEXT)\
 	Timer_test$(EXEEXT)\
