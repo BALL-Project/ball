@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.h,v 1.30 2004/02/23 17:26:07 anhi Exp $
+// $Id: rotamerLibrary.h,v 1.30.6.1 2005/07/18 09:03:25 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -364,7 +364,7 @@ namespace BALL
 			
 		/**	Assignment operator
 		*/
-		const RotamerLibrary& operator = (const RotamerLibrary& rhs);
+		RotamerLibrary& operator = (const RotamerLibrary& rhs);
 			
 		/**	Read from a file.
 				This method reads rotamer libraries from SQWRL files (Dunbrack et al.).
@@ -388,6 +388,11 @@ namespace BALL
 		/**
 		*/
 		Size getNumberOfRotamers() const;
+
+		/**	Validity of the instance.
+				The instance is invalid, if reading from a file failed.
+		*/
+		bool isValid() const;
 		//@}
 
 		protected:
