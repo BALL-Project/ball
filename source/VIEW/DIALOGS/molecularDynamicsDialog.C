@@ -199,4 +199,11 @@ bool MolecularDynamicsDialog::getUseAmber()
 {
 	return useAmberRadioButton->isChecked();
 }
+
+void MolecularDynamicsDialog::chooseDCDFile()
+{
+	QString result = QFileDialog::getOpenFileName("", "*.dcd", 0, "Choose a DCDFile");
+	if (result != "") dcd_file_edit->setText(result);
+}
+
 }} //namespaces

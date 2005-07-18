@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>MolecularDynamicsDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -373,7 +373,7 @@
                     </widget>
                     <widget class="QPushButton">
                         <property name="name">
-                            <cstring>pushButton58</cstring>
+                            <cstring>browse_button</cstring>
                         </property>
                         <property name="text">
                             <string>Browse</string>
@@ -996,6 +996,12 @@
         <receiver>MolecularDynamicSimulation</receiver>
         <slot>useCharmmFF()</slot>
     </connection>
+    <connection>
+        <sender>browse_button</sender>
+        <signal>clicked()</signal>
+        <receiver>MolecularDynamicSimulation</receiver>
+        <slot>chooseDCDFile()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>steps_lineedit</tabstop>
@@ -1010,7 +1016,7 @@
     <tabstop>dcd_file_edit</tabstop>
     <tabstop>start_button</tabstop>
     <tabstop>cancel_button</tabstop>
-    <tabstop>pushButton58</tabstop>
+    <tabstop>browse_button</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
@@ -1021,6 +1027,7 @@
     <slot>advancedOptions()</slot>
     <slot>useAmberFF()</slot>
     <slot>useCharmmFF()</slot>
+    <slot>chooseDCDFile()</slot>
 </slots>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>

@@ -88,6 +88,9 @@ class BALL_EXPORT MolecularDynamicsDialog
 		
 		///
 		bool getUseAmber();
+
+		///
+		void chooseDCDFile();
 	
 		protected slots:
 
