@@ -1,14 +1,19 @@
-Changes since 1.1:
+1.1.1:
 
 fixed:
  - Memory issues with Python objects (e.g. inserting GeometricObjects into Representations)
- - Saving and Loading of BALLView Project files
+ - Saving and loading of BALLView project files
  - accelerated CustomColorProcessor
  - problem for very short tubes in Cartoon and Backbone model
  - logging improved when opening molecular file formats
- - added support for SD files in BALLView
- - spliting of surfaces for given distance values
+ - splitting of surfaces for given distance values computed incorrect surfaces
  - degenerated POVRay objects (with a length of 0)
+ - Missing assignment operator in RotamerLibrary
+ - Problems in persistence w/ g++ 4.x series
+ - Hangup in socket interface w/ g++ 4.x series
+
+added:
+ - added support for SD files in BALLView
 
 
 1.1: 21.06.2005
