@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.C,v 1.29 2004/06/25 13:07:07 anker Exp $
+// $Id: rotamerLibrary.C,v 1.29.4.1 2005/07/18 08:39:04 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
@@ -64,6 +64,14 @@ namespace BALL
 		:	variants_(library.variants_),
 			valid_(library.valid_)
 	{
+	}
+
+	RotamerLibrary& RotamerLibrary::operator = (const RotamerLibrary& rhs)
+	{
+		variants_ = rhs.variants_;
+		valid_ = rhs.valid_;
+
+		return *this;
 	}
 
 	RotamerLibrary::~RotamerLibrary()
