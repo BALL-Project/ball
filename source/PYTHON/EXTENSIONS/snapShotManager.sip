@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.sip,v 1.4.4.1 2005/07/18 10:16:58 amoll Exp $
+// $Id: snapShotManager.sip,v 1.4.4.2 2005/07/18 13:12:39 amoll Exp $
 //
 
 class SnapShotManager
@@ -83,7 +83,7 @@ class SnapShotManager
 			throw();
 
     virtual void takeSnapShot()
-			throw();
+			throw(File::CannotWrite);
                 
 		virtual bool applySnapShot(Size /number/)
 			throw();
@@ -98,7 +98,7 @@ class SnapShotManager
 			throw();
 
     virtual void flushToDisk()
-			throw();
+			throw(File::CannotWrite);
 
 		Size getNumberOfSnapShotsInBuffer() throw();
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.C,v 1.14.4.1 2005/07/18 13:04:20 amoll Exp $
+// $Id: snapShotManager.C,v 1.14.4.2 2005/07/18 13:12:05 amoll Exp $
 //
 
 #include <BALL/KERNEL/PTE.h>
@@ -393,7 +393,7 @@ namespace BALL
 	// first snapshot taken (and with no other previous snapshots in a file)
 	// has index 1. 
 	void SnapShotManager::takeSnapShot()
-		throw()
+		throw(File::CannotWrite)
 	{
 		if (system_ptr_ == 0) return;
 

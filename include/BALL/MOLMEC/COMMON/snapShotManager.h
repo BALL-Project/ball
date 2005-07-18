@@ -1,7 +1,7 @@
 	// -*- Mode: C++; tab-width: 2; -*-
 	// vi: set ts=2:
 	//
-	// $Id: snapShotManager.h,v 1.18.4.1 2005/07/18 13:04:08 amoll Exp $
+	// $Id: snapShotManager.h,v 1.18.4.2 2005/07/18 13:12:08 amoll Exp $
 	//
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -191,7 +191,7 @@ class SnapShotManager
 			has index 1.
 	*/
 	virtual void takeSnapShot()
-		throw();
+		throw(File::CannotWrite);
 
 	/** Read a certain SnapShot from a TrajectoryFile. This method tries to
 			read SnapShot number <b>number</b> from the file
