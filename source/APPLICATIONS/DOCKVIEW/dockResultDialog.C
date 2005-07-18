@@ -1,15 +1,15 @@
-// $Id: dockResultDialog.C,v 1.1.2.37 2005/07/13 10:22:11 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.38 2005/07/18 13:40:13 leonhardt Exp $
 //
 
 #include "dockResultDialog.h"
 #include "dockingController.h"
 #include "dockDialog.h"
-#include "infoDialog.h"
 
 #include <qtable.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qtextedit.h>
+#include <qmessagebox.h>
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
@@ -371,22 +371,24 @@ namespace BALL
 		void DockResultDialog::showDockingOptions()
 		{
 			if(!dock_res_) return;
-			// InfoDialog is deleted by itself when it is closed
-			InfoDialog* info_dialog = new InfoDialog(this, 0, false, WDestructiveClose);
 			
-			QString s = "Algorithm: ";
-			info_dialog->info_box->append(s.append(dock_res_->getDockingAlgorithm()));
-			info_dialog->info_box->append("\n*** Options of algorithm ***");
+			QString text = "Algorithm: ";
+			text.append(dock_res_->getDockingAlgorithm());
+			text.append("\n\n*** Options of algorithm ***\n");
 			const Options& alg_opt = dock_res_->getDockingOptions();
 			Options::ConstIterator it = alg_opt.begin();
 			for(; +it; ++it)
 			{
-				s = it->first;
-				s.append(" : ");
-				info_dialog->info_box->append(s.append(it->second));
+				text.append(it->first);
+				text.append(" : ");
+				text.append(it->second);
+				text.append("\n");
 			}
-			//show dialog
-			info_dialog->show();
+			
+			QMessageBox* info_message = new QMessageBox("Docking Options", text, QMessageBox::NoIcon, 
+																									QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton,
+																									0,0, false,WDestructiveClose);
+			info_message->show();
 		}
 		
 		void DockResultDialog::contextMenuRequested(int row, int column, const QPoint& pos)
@@ -433,29 +435,31 @@ namespace BALL
 		void DockResultDialog::showScoringOptions_(int column)
 		{
 			if(!dock_res_) return;
-			// InfoDialog deletes itself when it is closed
-			InfoDialog* info_dialog = new InfoDialog(this, 0, false, WDestructiveClose);
 			
-			QString s = "Scoring function: ";
-			info_dialog->info_box->append(s.append(dock_res_->getScoringName(column-1)));
+			QString text = "Scoring function: ";
+			text.append(dock_res_->getScoringName(column-1));
 			const Options& scoring_opt = dock_res_->getScoringOptions(column-1);
 			if(scoring_opt.isEmpty())
 			{
-			 	info_dialog->info_box->append("\nThere are no options.");
+			 	text.append("\n\nThere are no options.");
 			}
 			else
 			{
-				info_dialog->info_box->append("\n*** Options of scoring function ***");
+				text.append("\n\n*** Options of scoring function ***\n");
 				Options::ConstIterator it = scoring_opt.begin();
 				for(; +it; ++it)
 				{
-					s = it->first;
-					s.append(" : ");
-					info_dialog->info_box->append(s.append(it->second));
+					text.append(it->first);
+					text.append(" : ");
+					text.append(it->second);
+					text.append("\n");
 				}
 			}
-			//show dialog
-			info_dialog->show();
+			
+			QMessageBox* info_message = new QMessageBox("Scoring Options", text, QMessageBox::NoIcon, 
+																									QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton,
+																									0,0, false,WDestructiveClose);
+			info_message->show();
 		}
 		 
 		// 

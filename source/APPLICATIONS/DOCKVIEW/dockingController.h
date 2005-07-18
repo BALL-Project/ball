@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.9 2005/07/01 15:48:57 haid Exp $
+// $Id: dockingController.h,v 1.1.2.10 2005/07/18 13:40:14 leonhardt Exp $
 //
 
 #ifndef DOCKINGCONTROLLER_H
@@ -113,17 +113,6 @@ namespace BALL
 				*/
 				void initializeWidget(MainControl& main_control)
 					throw();
-
-				/**	Removes the checkable submenu <b>  Docking </b> from the popup menu <b>  Molecular Mechanics </b>.
-				*	This method will be called by  MainControl::aboutToExit.
-				*	@param main_control the  MainControl to be finalized
-				*	@see   initializeWidget
-				*	@see   removeMenuEntry
-				*	@see   aboutToExit 
-				*/
-				void finalizeWidget(MainControl& main_control)
-					throw();	
-
 				
 				/** Fetches the preferences from the INIFile.
 				*	@see    writePreferences

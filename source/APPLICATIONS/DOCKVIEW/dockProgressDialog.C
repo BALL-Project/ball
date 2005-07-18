@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.20 2005/07/13 10:22:10 haid Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.21 2005/07/18 13:40:13 leonhardt Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -115,7 +115,7 @@ namespace BALL
 		//
 		void DockProgressDialog::show()
 		{
-			// start timer
+			// start timer, true -> it is a single shot
 			timer_.start(1000, true);
 			
 			// remember start time

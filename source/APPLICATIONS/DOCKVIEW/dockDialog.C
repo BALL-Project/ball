@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.48 2005/07/13 10:22:10 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.49 2005/07/18 13:40:12 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -203,8 +203,6 @@ namespace BALL
 			}
 			// add to ComboBox
 			scoring_functions->insertItem(name, score_func);
-			// add scoring function to HashMap for names of scoring functions
-			//sf_names_[score_func] = name;
 		}
 		
 		// Initializes the popup menu Molecular Mechanics with its checkable submenu Docking.
@@ -255,7 +253,6 @@ namespace BALL
 				if(dialog)
 				{
 					dialog->fetchPreferences(file);
-					continue;
 				}
 			}
 		}
@@ -299,7 +296,6 @@ namespace BALL
 				if(dialog)
 				{
 					dialog->writePreferences(file);
-					continue;
 				}
 			}
 		}
@@ -649,7 +645,6 @@ namespace BALL
 			{
 				setCaption("Redocking Options");
 				tab_pages->setTabEnabled(tab_pages->page(1), false);
-				//tab_pages->setTabLabel(tab_pages->page(0),"Redocking");
 				systems_group->setHidden(true);
 				euler_group->setHidden(false);
 			}
@@ -657,7 +652,6 @@ namespace BALL
 			{
 				setCaption("Docking Options");
 				tab_pages->setTabEnabled(tab_pages->page(1), true);
-				//tab_pages->setTabLabel(tab_pages->page(0),"General");
 				euler_group->setHidden(true);
 				systems_group->setHidden(false);
 				fillSystemComboxes_();

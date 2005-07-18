@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.17 2005/07/04 10:30:48 leonhardt Exp $
+// $Id: dockingController.C,v 1.1.2.18 2005/07/18 13:40:14 leonhardt Exp $
 //
 
 #include "dockingController.h"
@@ -64,7 +64,6 @@ namespace BALL
 			
 			if(dock_alg_ != 0)
 			{
-				Log.info() << "dock_alg_ deleted by docking controller" << std::endl; 
 				delete dock_alg_;
 				dock_alg_ = NULL;
 			}
@@ -138,14 +137,6 @@ namespace BALL
 																				 SLOT(startDocking()), CTRL+Key_D, -1, hint);
 			dock_dialog_.initializeWidget();
 		}
-		
-		// Removes the checkable submenu Docking from the popup menu Molecular Mechanics.
-		void DockingController::finalizeWidget(MainControl& main_control)
-			throw()
-		{
-			main_control.removeMenuEntry(MainControl::DISPLAY, "&Docking", this,
-																	 SLOT(startDocking()), CTRL+Key_D);
-		}   
 		
 		//Fetches the preferences from the INIFile
 		void DockingController::fetchPreferences(INIFile& file)
@@ -360,10 +351,10 @@ namespace BALL
 			dock_res->addScoring(String(dock_dialog_.scoring_functions->currentText().ascii()), dock_dialog_.getScoringOptions(), scores);
 
 			// add docked system to BALLView structures 
-			SnapShot best_result = (*conformation_set)[0];
+			const SnapShot& best_result = (*conformation_set)[0];
 			
 			System* docked_system = new System(conformation_set->getSystem());
-			// system is deleted by main control, when it is removed from BallView ??????????????
+			// system is deleted by main control, when it is removed from BallView
 			best_result.applySnapShot(*docked_system);
 			getMainControl()->deselectCompositeRecursive(docked_system, true);
 			getMainControl()->insert(*docked_system);
