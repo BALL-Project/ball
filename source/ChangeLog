@@ -12,6 +12,7 @@ fixed:
  - Problems in persistence w/ g++ 4.x series
  - Hangup in socket interface w/ g++ 4.x series
  - browse button didnt work in Molecular Dynamics Simulation dialog
+ - crash, when performing a MDS with trajectory and file could not be written
 
 added:
  - added support for SD files in BALLView

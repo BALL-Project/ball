@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.sip,v 1.4.4.2 2005/07/18 13:12:39 amoll Exp $
+// $Id: snapShotManager.sip,v 1.4.4.3 2005/07/18 13:40:22 amoll Exp $
 //
 
 class SnapShotManager
@@ -9,6 +9,7 @@ class SnapShotManager
 %TypeHeaderCode
   #include <BALL/CONCEPT/processor.h>
 	#include <BALL/MOLMEC/COMMON/snapShotManager.h>
+  #include <BALL/SYSTEM/file.h>
   using namespace BALL;
 %End
     public:
@@ -83,7 +84,7 @@ class SnapShotManager
 			throw();
 
     virtual void takeSnapShot()
-			throw(File::CannotWrite);
+			throw(CannotWrite);
                 
 		virtual bool applySnapShot(Size /number/)
 			throw();
@@ -98,7 +99,7 @@ class SnapShotManager
 			throw();
 
     virtual void flushToDisk()
-			throw(File::CannotWrite);
+			throw(CannotWrite);
 
 		Size getNumberOfSnapShotsInBuffer() throw();
 

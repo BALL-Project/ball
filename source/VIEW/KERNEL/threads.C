@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.37.2.2 2005/06/14 17:39:03 oliver Exp $
+// $Id: threads.C,v 1.37.2.3 2005/07/18 13:32:31 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -250,9 +250,13 @@ namespace BALL
 			}
 			catch(Exception::GeneralException e)
 			{
-				String txt = String("Exception was thrown during minimization: ")
-											+ __FILE__ + " " + __LINE__ + " " + e.getMessage();
+				delete dcd_file_;
+				dcd_file_ = 0;
+
+				String txt = String("Exception was thrown during minimization: ") + __FILE__ + " " + __LINE__ + " :\n" 
+											+ e.getMessage();
 				output_(txt, true);
+
 				finish_();
 			}
 		}
@@ -337,8 +341,16 @@ namespace BALL
 			catch(Exception::GeneralException e)
 			{
 				String txt = String("Exception was thrown during MD simulation: ")
-											+ __FILE__ + " " + __LINE__ + " " + e.getMessage();
+											+ __FILE__ + " " + __LINE__ + " \n" + e.getMessage();
 				output_(txt, true);
+
+				if (dcd_file_ != 0)
+				{
+					dcd_file_->close();
+					delete dcd_file_;
+					dcd_file_ = 0;
+				}
+
 				finish_();
 			}
 		}

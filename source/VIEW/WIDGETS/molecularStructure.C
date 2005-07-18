@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.86.2.5 2005/06/14 17:39:03 oliver Exp $
+// $Id: molecularStructure.C,v 1.86.2.6 2005/07/18 13:37:15 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1207,7 +1207,13 @@ namespace BALL
 				{
 					Directory d;
 					// use an absolute filename
-					String name = d.getPath() + FileSystem::PATH_SEPARATOR + md_dialog_.getDCDFile();
+					String name = md_dialog_.getDCDFile();
+
+					if (!md_dialog_.getDCDFile().has(FileSystem::PATH_SEPARATOR))
+					{
+						name = d.getPath() + FileSystem::PATH_SEPARATOR + md_dialog_.getDCDFile();
+					}
+
 					dcd = new DCDFile;
 					dcd->open(name, File::OUT);
 					dcd->enableVelocityStorage();
