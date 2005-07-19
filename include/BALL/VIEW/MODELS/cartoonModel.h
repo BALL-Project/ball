@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.29.4.3 2005/07/19 20:24:21 amoll Exp $
+// $Id: cartoonModel.h,v 1.29.4.4 2005/07/19 22:13:54 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -91,12 +91,20 @@ namespace BALL
 				throw() { return arrow_width_;}
 
 			///
-			void setArrowHeight(float heigth)
-				throw() { arrow_height_ = heigth;}
+			void setStrandHeight(float heigth)
+				throw() { strand_height_ = heigth;}
 
 			///
-			float getArrowHeight() const
-				throw() { return arrow_height_;}
+			float getStrandHeight() const
+				throw() { return strand_height_;}
+			
+			///
+			void setStrandWidth(float w)
+				throw() { strand_width_ = w;}
+
+			///
+			float getStrandWidth() const
+				throw() { return strand_width_;}
 
 			///
 			void setDNABaseRadius(float r)
@@ -195,7 +203,8 @@ namespace BALL
 
 			float helix_radius_;
 			float arrow_width_;
-			float arrow_height_;
+			float strand_width_;
+			float strand_height_;
 			float DNA_helix_radius_;
 			float DNA_ladder_radius_;
 			float DNA_base_radius_;

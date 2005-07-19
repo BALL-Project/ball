@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.13 2005/07/19 20:33:19 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.14 2005/07/19 22:14:16 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -38,8 +38,9 @@ AddCartoonModel::AddCartoonModel()
 	: AddBackboneModel(),
 		last_chain_(0),
 		helix_radius_(2.4),
-		arrow_width_(2.2),
-		arrow_height_(0.4),
+		arrow_width_(1.0),
+		strand_width_(2.2),
+		strand_height_(0.4),
 		DNA_helix_radius_(0.5),
 		DNA_ladder_radius_(0.8),
 		DNA_base_radius_(0.2),
@@ -58,7 +59,8 @@ AddCartoonModel::AddCartoonModel(const AddCartoonModel& cartoon)
 		last_chain_(0),
 		helix_radius_(cartoon.helix_radius_),
 		arrow_width_(cartoon.arrow_width_),
-		arrow_height_(cartoon.arrow_height_),
+		strand_width_(cartoon.strand_width_),
+		strand_height_(cartoon.strand_height_),
 		DNA_helix_radius_(cartoon.DNA_helix_radius_),
 		DNA_ladder_radius_(cartoon.DNA_ladder_radius_),
 		DNA_base_radius_(cartoon.DNA_base_radius_),
@@ -599,10 +601,10 @@ void AddCartoonModel::buildStrand_(Position first, Position last)
 	Vector3 perpendic = normal % right; // perpendicular to spline
 	Vector3 last_points[4];
 
-	last_points[0] = points_[start] - (perpendic * arrow_width_/2.) - normal * arrow_height_/2.;
-	last_points[1] = last_points[0] + normal * arrow_height_;
-	last_points[2] = last_points[1] + perpendic * arrow_width_;
-	last_points[3] = last_points[2] - normal * arrow_height_;
+	last_points[0] = points_[start] - (perpendic * strand_width_/2.) - normal * strand_height_/2.;
+	last_points[1] = last_points[0] + normal * strand_height_;
+	last_points[2] = last_points[1] + perpendic * strand_width_;
+	last_points[3] = last_points[2] - normal * strand_height_;
 
 	Mesh* mesh = new Mesh;
 	mesh->setComposite(splines_[first].atom->getParent());
@@ -699,7 +701,7 @@ void AddCartoonModel::buildStrand_(Position first, Position last)
 			normal =   peptide_normals[res    ] *(1 - j * 0.9 / 8.0) 
 							 + peptide_normals[res + 1] *     j * 0.9 / 8.0;
 
-			drawStrand_(points_[spline_point_nr], normal, right, arrow_width_, last_vertices, *mesh);
+			drawStrand_(points_[spline_point_nr], normal, right, strand_width_, last_vertices, *mesh);
 			spline_point_nr ++;
 		}
 
@@ -711,16 +713,30 @@ void AddCartoonModel::buildStrand_(Position first, Position last)
 	mesh->setComposite(atoms_of_points_[spline_point_nr]->getParent()->getParent());
 
 	// finally, we draw the arrow
-	for (Index j = -1; j <= 6; j++)
+
+	Vector3 arrow_dir = points_[spline_point_nr + 6] - points_[spline_point_nr - 1];
+
+	arrow_dir /= 7;
+
+	for (Index j = 0; j <= 7; j++)
 	{
-		// interpolate the depth of the box
-		const float new_arrow_width = 2 * (1 - j * 0.95 / 6.0) * arrow_width_; 
-		
+		Position x = spline_point_nr + j;
+		points_[x] = points_[x - 1] + arrow_dir;
+	}
+
+	float new_arrow_width = arrow_width_ + strand_width_;
+	float arrow_width_diff = new_arrow_width / 7;
+
+	for (Index j = 0; j < 8; j++)
+	{
 		right = points_[spline_point_nr + 1] - points_[spline_point_nr];
 
 		drawStrand_(points_[spline_point_nr], normal, right, new_arrow_width, last_vertices, *mesh);
 
 		spline_point_nr++;
+
+		// interpolate the depth of the box
+		new_arrow_width -= arrow_width_diff;
 	}
 }
 
@@ -738,7 +754,7 @@ void AddCartoonModel::insertTriangle_(Position v1, Position v2, Position v3, Mes
 void AddCartoonModel::drawStrand_(const Vector3& start,
 																	Vector3& normal,
 																	Vector3& right,
-																	float arrow_width,
+																	float strand_width,
 																	Position& last_vertices,
 																	Mesh& mesh)
 {
@@ -753,11 +769,11 @@ void AddCartoonModel::drawStrand_(const Vector3& start,
 	if (!Maths::isZero(perpendic.getSquareLength())) perpendic.normalize();
 
 	Vector3 current_points[4];
-	current_points[0] = start - (perpendic * arrow_width   / 2.0) 
-														- (normal    * arrow_height_ / 2.0);
-	current_points[1] = current_points[0] + normal * arrow_height_;
-	current_points[2] = current_points[1] + perpendic * arrow_width;
-	current_points[3] = current_points[2] - normal * arrow_height_;
+	current_points[0] = start - (perpendic * strand_width  / 2.0) 
+														- (normal    * strand_height_ / 2.0);
+	current_points[1] = current_points[0] + normal * strand_height_;
+	current_points[2] = current_points[1] + perpendic * strand_width;
+	current_points[3] = current_points[2] - normal * strand_height_;
 
 	// put the next 4 points and 8 triangles into the mesh
 	for (Position p = 0; p < 4; p++)
