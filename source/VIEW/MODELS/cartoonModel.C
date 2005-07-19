@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.12 2005/07/19 14:18:49 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.13 2005/07/19 20:33:19 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -102,6 +102,13 @@ Processor::Result AddCartoonModel::operator() (Composite& composite)
 
 	if (!RTTI::isKindOf<SecondaryStructure>(composite))  return Processor::CONTINUE;
 	SecondaryStructure& ss = *RTTI::castTo<SecondaryStructure>(composite);
+
+	// fix for some strange PDB files, like 1cfp where a SS is inside a SS:
+	if (composite.getParent() != 0 &&
+			RTTI::isKindOf<SecondaryStructure>(*composite.getParent()))
+	{
+		return Processor::CONTINUE;
+	}
 
 	if (ss.countResidues() == 0) return Processor::CONTINUE;
 
