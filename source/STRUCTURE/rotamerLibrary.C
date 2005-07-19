@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.C,v 1.29.4.2 2005/07/18 09:03:25 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.29.4.3 2005/07/19 14:04:57 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
@@ -68,8 +68,12 @@ namespace BALL
 
 	RotamerLibrary& RotamerLibrary::operator = (const RotamerLibrary& rhs)
 	{
-		variants_ = rhs.variants_;
-		valid_ = rhs.valid_;
+		// Avoid self assignment...
+		if (&rhs != this)
+		{ // ...and copy all attributes.
+			variants_ = rhs.variants_;
+			valid_ = rhs.valid_;
+		}
 
 		return *this;
 	}
