@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.11 2005/07/14 10:36:16 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.12 2005/07/19 14:18:49 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -1330,9 +1330,8 @@ void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 		mesh->setComposite(r);
 		geometric_objects_.push_back(mesh);
 
-		Vector3 connection_point;
+		Atom* connection_atom = 0;
 		Atom* atoms[9];
-		for (Position p = 0; p < 9; p++) atoms[p] = 0;
 
 		vector<Atom*> hbond_atoms;
 
@@ -1355,7 +1354,7 @@ void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 				hbond_atoms.push_back(atoms[10]);
 			}
 
-			connection_point = atoms[0]->getPosition();
+			connection_atom = atoms[0];
 			createTriangle_(*mesh, *atoms[1], *atoms[0], *atoms[8], atoms[1], atoms[0], atoms[8]); 	// C4,N9,C8
 			createTriangle_(*mesh, *atoms[6], *atoms[1], *atoms[8], 0, 0, 0); 										 	// C5,C4,C8
 			createTriangle_(*mesh, *atoms[6], *atoms[7], *atoms[8], atoms[6], atoms[7], atoms[8]); 	// C5,N7,C8
@@ -1376,7 +1375,7 @@ void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 			String atom_names[9] = {"N1", "C2", "N3", "C4", "C5", "C6", "N4", "O2", ""};
 			if (!assignNucleotideAtoms_(*r, 8, atom_names, atoms)) continue;
 
-			connection_point = atoms[0]->getPosition();
+			connection_atom = atoms[0];
 			createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[3], atoms[1], atoms[2], atoms[3]); 	// C2,N3,C4
 			createTriangle_(*mesh, *atoms[0], *atoms[1], *atoms[3], atoms[0], atoms[1], 0); 			  // N1,C2,C4
 			createTriangle_(*mesh, *atoms[0], *atoms[3], *atoms[4], atoms[3], atoms[4], 0); 				// N1,C4,C5
@@ -1391,7 +1390,7 @@ void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 			String atom_names[9] = {"C2", "N3", "C4", "C5", "C6", "N1", "O4", "", ""};
 			if (!assignNucleotideAtoms_(*r, 7, atom_names, atoms)) continue;
 
-			connection_point = atoms[5]->getPosition();
+			connection_atom = atoms[5];
 			createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[3], atoms[1], atoms[2], atoms[3]); 	// N3,C4,C5
 			createTriangle_(*mesh, *atoms[0], *atoms[1], *atoms[3], atoms[0], atoms[1], 0); 			  // C2,N3,C5
 			createTriangle_(*mesh, *atoms[0], *atoms[3], *atoms[4], atoms[3], atoms[4], 0); 				// C2,C5,C6
@@ -1405,7 +1404,7 @@ void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 			String atom_names[9] = {"C2", "N3", "C4", "C5", "C6", "N1", "O4", "O2", ""};
 			if (!assignNucleotideAtoms_(*r, 7, atom_names, atoms)) continue;
 
-			connection_point = atoms[5]->getPosition();
+			connection_atom = atoms[5];
 			createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[3], atoms[1], atoms[2], atoms[3]); 	// N3,C4,C5
 			createTriangle_(*mesh, *atoms[0], *atoms[1], *atoms[3], atoms[0], atoms[1], 0); 			  // C2,N3,C5
 			createTriangle_(*mesh, *atoms[0], *atoms[3], *atoms[4], atoms[3], atoms[4], 0); 				// C2,C5,C6
@@ -1419,36 +1418,153 @@ void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 			continue;
 		}
 
+		
 		// --------------------------------------------
-		// draw connection to backbone
+		// draw ribose
 		// --------------------------------------------
-		float distance = 256;
+
+		String atom_names[9] = {"C1*", "C2*", "C3*", "C4*", "O4*", "", "", "", ""};
+		if (!assignNucleotideAtoms_(*r, 5, atom_names, atoms)) continue;
+
+		Vector3 n ((atoms[0]->getPosition() - atoms[2]->getPosition()) % 
+							 (atoms[0]->getPosition() - atoms[3]->getPosition()));
+
+		if (Maths::isZero(n.getSquareLength())) return;
+
+		Plane3 plane(atoms[0]->getPosition(), n);
+
+		const float length = n.getLength();
+		Vector3 p1 = ((plane.n * (atoms[1]->getPosition() - plane.p)) / length) * plane.n;
+		Vector3 p4 = ((plane.n * (atoms[4]->getPosition() - plane.p)) / length) * plane.n;
+
+		drawRiboseAtoms_(atoms[0], atoms[1], 0, &p1);
+		drawRiboseAtoms_(atoms[1], atoms[2], &p1);
+		drawRiboseAtoms_(atoms[2], atoms[3]);
+		drawRiboseAtoms_(atoms[3], atoms[4], 0, &p4);
+		drawRiboseAtoms_(atoms[4], atoms[0], &p4);
+
+		drawRiboseAtoms_(atoms[0], connection_atom);
+
+		connection_atom = atoms[2];
+
+		/*
+		////////////////////////////////
+		// draw 6 triangles
+		vector<Vector3>& vertices = mesh->vertex;
+		vector<Vector3>& normals  = mesh->normal;
+		vector<Surface::Triangle>& triangles = mesh->triangle;
+
+		Position v0 = vertices.size();
+
+		n.normalize();
+		n *= DNA_base_radius_ / 2;
+
+		// lower vertices
+		vertices.push_back(atoms[0]->getPosition() - n);
+		vertices.push_back(p1 - n);
+		vertices.push_back(atoms[2]->getPosition() - n);
+		vertices.push_back(atoms[3]->getPosition() - n);
+		vertices.push_back(p4 - n);
+		
+		// upper vertices
+		vertices.push_back(atoms[0]->getPosition() + n);
+		vertices.push_back(p1 + n);
+		vertices.push_back(atoms[2]->getPosition() + n);
+		vertices.push_back(atoms[3]->getPosition() + n);
+		vertices.push_back(p4 + n);
+
+		normals.push_back(-n);
+		normals.push_back(-n);
+		normals.push_back(-n);
+		normals.push_back(n);
+		normals.push_back(n);
+		normals.push_back(n);
+
+		Surface::Triangle t;
+
+		for (Position p = 0; p < 2; p++)
+		{
+			t.v1 = v0; 
+			t.v2 = v0 + 1; 
+			t.v3 = v0 + 2;
+			triangles.push_back(t);
+
+			t.v1 = v0 + 2; 
+			t.v2 = v0 + 3; 
+			t.v3 = v0 + 4;
+			triangles.push_back(t);
+						
+			t.v1 = v0 + 3; 
+			t.v2 = v0 + 4; 
+			t.v3 = v0;
+			triangles.push_back(t);
+
+			v0 += 5;
+		}
+		*/
+
+
+		// --------------------------------------------
+		// draw connection to backbone from C3*-Atom
+		// --------------------------------------------
+		// search if we have a spline point near the atom
+		const Vector3& c3pos = connection_atom->getPosition();
+		Vector3 spline_pos;
+		float distance = 26;
 		vector<Vector3>::iterator sit = old_spline_point;
 		for (; sit != points_.end(); sit++)
 		{
-			float new_distance = ((*sit) - connection_point).getSquareLength();
+			float new_distance = ((*sit) - c3pos).getSquareLength();
 			if (new_distance < distance)
 			{
 				distance = new_distance;
-				old_spline_point = sit;
+				spline_pos = *sit;
 			}
 		}
 
-		if (distance < 256)
+		if (distance < 26)
 		{
 			Tube* tube = new Tube;
 			tube->setComposite(r);
-			tube->setVertex1(connection_point);
-			tube->setVertex2(*old_spline_point);
+			tube->setVertex1(c3pos);
+			tube->setVertex2(spline_pos);
 			tube->setRadius(DNA_base_radius_);
 			geometric_objects_.push_back(tube);
 		}
-		else
+
+		/*
+		// --------------------------------------------
+		// draw connection to backbone from C4*-Atom
+		// --------------------------------------------
+		// search if we have a spline point near the atom
+		const Vector3& c4pos = atoms[3]->getPosition();
+		distance = 26;
+		sit = old_spline_point;
+		for (; sit != points_.end(); sit++)
 		{
-			Log.error() << "Could not draw connection to backbone of DNA in " 
-									<< __FILE__ << " " << __LINE__ << std::endl;
+			float new_distance = ((*sit) - c4pos).getSquareLength();
+			if (new_distance < distance)
+			{
+				distance = new_distance;
+				spline_pos = *sit;
+			}
 		}
 
+		if (distance < 26)
+		{
+			Tube* tube = new Tube;
+			tube->setComposite(r);
+			tube->setVertex1(c4pos);
+			tube->setVertex2(spline_pos);
+			tube->setRadius(DNA_base_radius_);
+			geometric_objects_.push_back(tube);
+		}
+		*/
+
+
+		//////////////////////////////////////////////////////////////////
+		// draw hydrogen bonds and bonds between the two acids of one pair
+		//////////////////////////////////////////////////////////////////
 		for (Position p = 0; p < hbond_atoms.size(); p++)
 		{
 			Atom* a1 = hbond_atoms[p];
@@ -1493,11 +1609,37 @@ void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 	}
 }
 
+void AddCartoonModel::drawRiboseAtoms_(const Atom* atom1, const Atom* atom2, const Vector3* vp1, const Vector3* vp2)
+{
+	const Bond* bond = atom1->getBond(*atom2);
+	if (bond == 0) return;
+
+	Vector3 v1, v2;
+
+	(vp1 == 0) ? v1 = atom1->getPosition() : v1 = *vp1; 
+	(vp2 == 0) ? v2 = atom2->getPosition() : v2 = *vp2; 
+
+	TwoColoredTube* tube= new TwoColoredTube;
+	tube->setVertex2(atom1->getPosition());
+	tube->setVertex1(atom2->getPosition());
+	tube->setRadius(DNA_base_radius_);
+	tube->setComposite(bond);
+	geometric_objects_.push_back(tube);
+
+	Sphere* s = new Sphere;
+	s->setComposite(atom1);
+	s->setPosition(atom1->getPosition());
+	s->setRadius(DNA_base_radius_);
+	geometric_objects_.push_back(s);
+}
+
 
 bool AddCartoonModel::assignNucleotideAtoms_(Residue& r, Size nr_atoms, 
 																						 String atom_names[9], Atom* atoms[9])
 	throw()
 {
+	for (Position p = 0; p < 9; p++) atoms[p] = 0;
+
 	AtomIterator it;
 	BALL_FOREACH_ATOM(r, it)
 	{

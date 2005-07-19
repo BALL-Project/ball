@@ -1,18 +1,23 @@
 1.1.1:
 
+Version 1.1.1 is mainly a bugfix release.
+
 fixed:
  - Memory issues with Python objects (e.g. inserting GeometricObjects into Representations)
  - Saving and loading of BALLView project files
- - accelerated CustomColorProcessor
- - problem for very short tubes in Cartoon and Backbone model
- - logging improved when opening molecular file formats
- - splitting of surfaces for given distance values computed incorrect surfaces
- - degenerated POVRay objects (with a length of 0)
+ - several problems with Cartoon and Backbone models
+ - splitting of surfaces for given distance: computed incorrect surfaces
+ - POVRay export: degenerated objects (with a length of 0)
  - Missing assignment operator in RotamerLibrary
  - Problems in persistence w/ g++ 4.x series
  - Hangup in socket interface w/ g++ 4.x series
  - browse button didnt work in Molecular Dynamics Simulation dialog
- - crash, when performing a MDS with trajectory and file could not be written
+ - crash, when performing a MDS with trajectory and DCD file could not be written
+
+improved:
+ - DNA cartoon model
+ - logging when opening molecular file formats
+ - CustomColorProcessor: accelerated 
 
 added:
  - added support for SD files in BALLView
