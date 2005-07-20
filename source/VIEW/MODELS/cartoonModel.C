@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.14 2005/07/19 22:14:16 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.15 2005/07/20 15:50:03 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -239,6 +239,8 @@ Position AddCartoonModel::getType_(const Residue& residue)
 
 void AddCartoonModel::buildGraphicalRepresentation_(Position start, Position end, Position type)
 {
+	if (end == 0 || start > end) return;
+
 	if 			(type == (Position) SecondaryStructure::UNKNOWN + 1)
 	{
 		buildTube_(start, end);
@@ -698,8 +700,8 @@ void AddCartoonModel::buildStrand_(Position first, Position last)
 				continue;
 			}
 
-			normal =   peptide_normals[res    ] *(1 - j * 0.9 / 8.0) 
-							 + peptide_normals[res + 1] *     j * 0.9 / 8.0;
+			normal =   peptide_normals[res    ] *(1 - j * 0.9 / (interpolation_steps_ - 1)) 
+							 + peptide_normals[res + 1] *     j * 0.9 / (interpolation_steps_ - 1);
 
 			drawStrand_(points_[spline_point_nr], normal, right, strand_width_, last_vertices, *mesh);
 			spline_point_nr ++;
@@ -822,57 +824,86 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 
 	// overall direction of the helix
 	Vector3 helix_dir(points_[end] - points_[start]);
-	if (!Maths::isZero(helix_dir.getSquareLength()))
+	if (Maths::isZero(helix_dir.getSquareLength()))
 	{ 
-		helix_dir.normalize();
+		return;
 	}
 
+	helix_dir.normalize();
+
 	// distance difference vector for growing/shrinking of helix at start/end
-	const Vector3 helix_step = helix_dir * ribbon_width_ / 12;
+	float helix_step = ribbon_width_ / 12;
 
 	// distance vector changes dynamicaly later by helix_step
-	Vector3 tube_diff;
+	float tube_diff = 0;
 	
 	// calculate the number of slides for the circles and the angle in between them
 	Size slides = (Size)(8 + drawing_precision_ * 4);
 	Angle slides_angle = Angle(360.0 / slides, false);
 
-	// direction vector of the two current spline points
-	Vector3 dir;
 	Vector3 last_point(points_[start]);
+	
 
-	// prevent problems if last point is the same as the start point
-	while (true)
+	/////////////////////////////////////////
+	/// calculate band direction and smooth it
+	/////////////////////////////////////////
+	
+	vector<Vector3> middle_points;
+	middle_points.resize(end);
+
+	const Index nr_steps = (Size)(interpolation_steps_ * 3.0);
+
+	for (Index p = (Index) start; p < (Index) end; p++)
 	{
-		dir = points_[start] - last_point;
-		if (Maths::isZero(dir.getSquareLength()))
+		Size nr = 0;
+		for (Index i = -nr_steps; i < nr_steps; i++)
 		{
-			start++;
+			if (p + i < (Index) start || p + i + 1>= (Index) end)
+			{
+				continue;
+			}
+
+			middle_points[p] += points_[((Index)p) + i];
+			nr++;
 		}
-		else
-		{
-			break;
-		}
+
+		middle_points[p] /= (float) nr;
+
+		/*
+		// for debbuging:
+		Sphere* s = new Sphere;
+		s->setPosition(middle_points[p]);
+		s->setRadius(0.2);
+		geometric_objects_.push_back(s);
+		*/
 	}
 
-	if (start >= atoms_of_points_.size()) return;
-			
+
+	// ok, now the bands:
+	vector<Vector3> band_dirs;
+	band_dirs.resize(end);
+
+	for (Position p = start; p < end - 1; p++)
+	{
+		Vector3 dir = points_[p + 1] - points_[p];
+
+		Vector3 normal = (points_[p] - middle_points[p]) % dir;
+
+		if (Maths::isZero(normal.getSquareLength())) 
+		{
+			band_dirs[p] = band_dirs[p - 1];
+			continue;
+		}
+		normal.normalize();
+
+		band_dirs[p] = normal;
+	}
+
 	////////////////////////////////////////////////////////////
 	// calculate normal vector r to direction vector dir, with length of radius
 	////////////////////////////////////////////////////////////
-	Vector3 n = Vector3(0,1,0);
-	Vector3 r = dir % n;
-	if (Maths::isZero(r.getSquareLength())) 
-	{ 
-		r = dir % n;
-		if (Maths::isZero(r.getSquareLength())) 
-		{
-			n = Vector3(0,0,1);
-			r = dir % n;
-		}
-	}
-
-	if (!Maths::isZero(r.getSquareLength())) r.normalize();
+	Vector3 r = getNormal(helix_dir);
+	Vector3 n = r % helix_dir;
 
 	r *= ribbon_radius_;
 
@@ -934,23 +965,23 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 	Vector3 diff = r * 0.1;
 	
 	// insert connection between tubes
-	mesh2->vertex.push_back(last_point + tube_diff + diff);
-	mesh2->vertex.push_back(last_point - tube_diff + diff);
-	Vector3 vn(-(dir % helix_dir));
+	mesh2->vertex.push_back(last_point + diff);
+	mesh2->vertex.push_back(last_point + diff);
+	Vector3 vn(-r);
 	mesh2->normal.push_back(vn);
 	mesh2->normal.push_back(vn);
 	
 	// insert connection between tubes
-	mesh3->vertex.push_back(last_point + tube_diff - diff);
-	mesh3->vertex.push_back(last_point - tube_diff - diff);
+	mesh3->vertex.push_back(last_point - diff);
+	mesh3->vertex.push_back(last_point - diff);
 	mesh3->normal.push_back(-vn);
 	mesh3->normal.push_back(-vn);
 
 
 	for (Position p = 0; p < slides; p++)
 	{
-		mesh1->vertex.push_back(last_point + tube_diff + new_points[p]);
-		mesh1->vertex.push_back(last_point - tube_diff + new_points[p]);
+		mesh1->vertex.push_back(last_point + new_points[p]);
+		mesh1->vertex.push_back(last_point + new_points[p]);
 		mesh1->normal.push_back(new_points[p]);
 		mesh1->normal.push_back(new_points[p]);
 	}
@@ -958,6 +989,7 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 	// same data structures for faster access
 	Mesh::Triangle t;
 	Size s_old = 0;  // start position of the last points of the mesh1 vertices
+
 
 	//------------------------------------------------------>
 	// iterate over all points_
@@ -968,16 +1000,27 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 		const Vector3 point = points_[p];
 		
 		// new direction vector: new point - last point
-		const Vector3 dir_new = point - last_point;
+		Vector3 dir_new(point - last_point);
 
-		// new normal vector
-		Vector3 r_new = r - (
-							 (dir_new.x * r.x       + dir_new.y *       r.y + dir_new.z *       r.z)  /
-							 (dir_new.x * dir_new.x + dir_new.y * dir_new.y + dir_new.z * dir_new.z) 
-							 * dir_new);
+		// new normal in "height" direction
+		Vector3 r_new = point - middle_points[p];
+
+		/**
+		// for debugging:
+		Line* line = new Line();
+		line->setVertex1(point);
+		line->setVertex2(point + r_new);
+		geometric_objects_.push_back(line);
+		*/
+
+		if (Maths::isZero(dir_new.getSquareLength()) ||
+		    Maths::isZero(r_new.getSquareLength()))
+		{
+			last_point = point;
+			continue;
+		}
 		
-		if (!Maths::isZero(r_new.getSquareLength())) r_new.normalize();
-
+		r_new.normalize();
 		r_new *= ribbon_radius_;
 
 		////////////////////////////////////////////////////////////
@@ -996,7 +1039,8 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 		}
 
 		// prevent problems with SS coloring
-		if (p <= start + interpolation_steps_ / 2)
+		if (p <= start + interpolation_steps_ / 2 &&
+				astart < atoms_of_points_.size())
 		{
 			const Composite* c = atoms_of_points_[astart]->getParent();
 			mesh1->setComposite(c);
@@ -1073,17 +1117,32 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 			tube_diff -= helix_step;
 		}
 
+		Vector3 overall_dir = helix_dir;
+
+		if (p + interpolation_steps_ < end)
+		{
+			overall_dir = points_[p + interpolation_steps_] - point;
+		}
+
+		if (Maths::isZero(overall_dir.getSquareLength())) continue;
+
+		overall_dir.normalize();
+
 		// distance between the two bands
+		Vector3 band_dir = band_dirs[p];
+		band_dir *= tube_diff;
 
 		// first band
-		Vector3 vn(-(dir_new % helix_dir));
+		// normal vector in "height" direction
+		Vector3 vn(-r_new);
 		if (!Maths::isZero(vn.getSquareLength())) vn.normalize();
 
+		// difference between upper and lower side of bands
 		Vector3 diff = vn * -0.1;
 
-		mesh2->vertex.push_back(point + tube_diff + diff);
+		mesh2->vertex.push_back(point + band_dir + diff);
 		mesh2->normal.push_back(vn);
-		mesh2->vertex.push_back(point - tube_diff + diff);
+		mesh2->vertex.push_back(point - band_dir + diff);
 		mesh2->normal.push_back(vn);
 
 		const Size sn = mesh2->vertex.size() - 1;
@@ -1098,9 +1157,9 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 		mesh2->triangle.push_back(t);
 		
 		// second band
-		mesh3->vertex.push_back(point + tube_diff - diff);
+		mesh3->vertex.push_back(point + band_dir - diff);
 		mesh3->normal.push_back(vn);
-		mesh3->vertex.push_back(point - tube_diff - diff);
+		mesh3->vertex.push_back(point - band_dir - diff);
 		mesh3->normal.push_back(vn);
 
 		t.v1 = sn - 1;
@@ -1125,7 +1184,7 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 		//------------------------------------------------------>
 		for (Position point_pos = 0; point_pos < slides ; point_pos++)
 		{
-			mesh1->vertex.push_back(point + tube_diff + new_points[point_pos]);
+			mesh1->vertex.push_back(point + band_dir + new_points[point_pos]);
 			mesh1->normal.push_back(new_points[point_pos]);
 
 			t.v1 = s_old;			// last lower
@@ -1141,7 +1200,7 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 			s_old++;
 			s_new++;
 
-			mesh1->vertex.push_back(point - tube_diff + new_points[point_pos]);
+			mesh1->vertex.push_back(point - band_dir + new_points[point_pos]);
 			mesh1->normal.push_back(new_points[point_pos]);
 
 			t.v1 = s_old;			// last lower
