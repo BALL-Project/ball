@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.17 2005/07/20 22:04:46 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.18 2005/07/20 22:21:21 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -921,6 +921,14 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 		}
 
 		band_dirs[p] /= (float) nr;
+		band_dirs[p].normalize();
+	}
+
+	for (Index p = (Index) start; p < (Index) end; p++)
+	{
+ 		band_dirs[p] = band_dirs[p] * 0.666;
+		const Vector3 v = helix_dir * 0.333;
+		band_dirs[p] = band_dirs[p] + v;
 		band_dirs[p].normalize();
 	}
 		
