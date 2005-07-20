@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.sip,v 1.11 2005/02/25 13:22:39 amoll Exp $
+// $Id: PDBFile.sip,v 1.11.2.1 2005/07/20 18:54:35 oliver Exp $
 //
 
 class PDBFile
@@ -27,4 +27,5 @@ class PDBFile
   void operator << (const Protein& /protein/);
   void operator << (const Molecule& /molecule/);
   void operator << (const System& /system/);
+	void close();
 };

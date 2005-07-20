@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.sip,v 1.15 2003/11/12 18:20:28 oliver Exp $
+// $Id: file.sip,v 1.15.6.1 2005/07/20 18:54:35 oliver Exp $
 //
 
 class std__openmode
@@ -111,7 +111,10 @@ class OpenMode
 %End
 
 %ConvertToTypeCode
-  if (PyInt_Check(sipPy))
+  if (sipIsErr == NULL)
+    return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_OpenMode));
+
+	if (PyInt_Check(sipPy))
   {
 		int mode = PyInt_AS_LONG(sipPy);
 		File::OpenMode result;
