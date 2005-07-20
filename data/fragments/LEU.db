@@ -34,7 +34,7 @@
     <node>6<value>CA N s</value></node>
     <node>10<value>HA CA s</value></node>
     <node>11<value>C CA s</value></node>
-    <node>14<value>O C a</value></node>
+    <node>14<value>O C d</value></node>
     <node>15<value>CB CA s</value></node>
     <node>19<value>1HB CB s</value></node>
     <node>20<value>2HB CB s</value></node>
@@ -48,7 +48,7 @@
     <node>37<value>1HD2 CD2 s</value></node>
     <node>38<value>2HD2 CD2 s</value></node>
     <node>39<value>3HD2 CD2 s</value></node>
-    <node>40<value>OXT C a</value></node>
+    <node>40<value>OXT C s</value></node>
     <node>41<value>1H N s</value></node>
     <node>42<value>2H N s</value></node>
   </node>

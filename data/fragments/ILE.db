@@ -34,7 +34,7 @@
 		<node>6<value>CA N s</value></node>
 		<node>10<value>HA CA s</value></node>
 		<node>11<value>C CA s</value></node>
-		<node>14<value>O C a</value></node>
+		<node>14<value>O C d</value></node>
 		<node>15<value>CB CA s</value></node>
 		<node>19<value>HB CB s</value></node>
 		<node>20<value>CG1 CB s</value></node>
@@ -50,7 +50,7 @@
 		<node>39<value>3HD1 CD1 s</value></node>
 		<node>40<value>1H N s</value></node>
 		<node>41<value>2H N s</value></node>
-		<node>42<value>OXT C a</value></node>
+		<node>42<value>OXT C s</value></node>
 	</node>
 	<node>Connections
 		<node>N-term<value>N C-term s 1.33 0.5</value></node>
