@@ -21,8 +21,8 @@
 		<node>CD<value>C 1.757013 3.318817 3.588054</value></node>
 		<node>OE1<value>O 2.263759 3.493683 4.689262</value></node>
 		<node>NE2<value>N 2.607646 3.349533 2.459146</value></node>
-		<node>2HE2<value>H 3.477299 3.817072 2.582659</value></node>
-		<node>1HE2<value>H 2.15634 3.571291 1.601313</value></node>
+		<node>2HE2<value>H 3.553186 3.659591 2.602335</value></node>
+		<node>1HE2<value>H 2.182977 3.3032491 1.543895</value></node>
 		<node>OXT<value>O -2.00241 -0.02523248 1.056456</value></node>
 		<node>2H<value>H -2.440811 -0.2844597 4.149324</value></node>
 		<node>1H<value>H -0.9086809 -0.7656706 3.887856</value></node>
