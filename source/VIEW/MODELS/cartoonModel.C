@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.16 2005/07/20 15:59:17 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.17 2005/07/20 22:04:46 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -848,6 +848,8 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 	/// calculate band direction and smooth it
 	/////////////////////////////////////////
 	
+	/////////////////////////////////////////
+	// first calculate a line of points in the middle of the helix
 	vector<Vector3> middle_points;
 	middle_points.resize(end);
 
@@ -858,7 +860,7 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 		Size nr = 0;
 		for (Index i = -nr_steps; i < nr_steps; i++)
 		{
-			if (p + i < (Index) start || p + i + 1>= (Index) end)
+			if (p + i < (Index) 0 || p + i + 1>= (Index) points_.size())
 			{
 				continue;
 			}
@@ -870,16 +872,17 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 		middle_points[p] /= (float) nr;
 
 		
+		/*
 		// for debugging:
 		Sphere* s = new Sphere;
 		s->setPosition(middle_points[p]);
 		s->setRadius(0.2);
 		geometric_objects_.push_back(s);
-		
+		*/
 	}
 
-
-	// ok, now the bands:
+	/////////////////////////////////////////
+	// ok, now the bands directions
 	vector<Vector3> band_dirs;
 	band_dirs.resize(end);
 
@@ -899,6 +902,51 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 		band_dirs[p] = normal;
 	}
 
+	// smooth all directions
+	Angle max_angle(3, false);
+	for (Index p = (Index)(start + 1); p < ((Index) end) - 1; p++)
+	{
+		if (band_dirs[p].getAngle(band_dirs[p-1]) < max_angle) continue;
+
+		Size nr = 0;
+		for (Index i = -nr_steps; i < nr_steps; i++)
+		{
+			if (p + i < (Index) start || p + i + 1>= (Index) end)
+			{
+				continue;
+			}
+
+			band_dirs[p] += band_dirs[((Index)p) + i];
+			nr++;
+		}
+
+		band_dirs[p] /= (float) nr;
+		band_dirs[p].normalize();
+	}
+		
+	/*
+	// one extra smooth run for first 15 band directions
+	for (Index p = (Index)(start + 15); p >= ((Index) start); p--)
+	{
+		if (band_dirs[p].getAngle(band_dirs[p+1]) < max_angle) continue;
+
+		Size nr = 0;
+		for (Index i = -nr_steps; i < nr_steps; i++)
+		{
+			if (p + i < (Index) start || p + i + 1>= (Index) end)
+			{
+				continue;
+			}
+
+			band_dirs[p] += band_dirs[((Index)p) + i];
+			nr++;
+		}
+
+		band_dirs[p] /= (float) nr;
+		band_dirs[p].normalize();
+	}
+	*/
+	
 	////////////////////////////////////////////////////////////
 	// calculate normal vector r to direction vector dir, with length of radius
 	////////////////////////////////////////////////////////////
@@ -1112,7 +1160,7 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 		{
 			tube_diff += helix_step;
 		}
-		else if (p > end - 12)
+		else if (p > end - 11)
 		{
 			tube_diff -= helix_step;
 		}
