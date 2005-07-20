@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.15 2005/07/20 15:50:03 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.16 2005/07/20 15:59:17 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -869,13 +869,13 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 
 		middle_points[p] /= (float) nr;
 
-		/*
-		// for debbuging:
+		
+		// for debugging:
 		Sphere* s = new Sphere;
 		s->setPosition(middle_points[p]);
 		s->setRadius(0.2);
 		geometric_objects_.push_back(s);
-		*/
+		
 	}
 
 
