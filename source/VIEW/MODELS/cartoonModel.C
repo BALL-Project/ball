@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.19 2005/07/21 13:04:15 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.20 2005/07/21 13:08:49 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -1642,35 +1642,6 @@ void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 			tube->setRadius(DNA_base_radius_);
 			geometric_objects_.push_back(tube);
 		}
-
-		/*
-		// --------------------------------------------
-		// draw connection to backbone from C4*-Atom
-		// --------------------------------------------
-		// search if we have a spline point near the atom
-		const Vector3& c4pos = atoms[3]->getPosition();
-		distance = 26;
-		sit = old_spline_point;
-		for (; sit != points_.end(); sit++)
-		{
-			float new_distance = ((*sit) - c4pos).getSquareLength();
-			if (new_distance < distance)
-			{
-				distance = new_distance;
-				spline_pos = *sit;
-			}
-		}
-
-		if (distance < 26)
-		{
-			Tube* tube = new Tube;
-			tube->setComposite(r);
-			tube->setVertex1(c4pos);
-			tube->setVertex2(spline_pos);
-			tube->setRadius(DNA_base_radius_);
-			geometric_objects_.push_back(tube);
-		}
-		*/
 
 
 		//////////////////////////////////////////////////////////////////
