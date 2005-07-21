@@ -13,11 +13,10 @@ fixed:
  - Hangup in socket interface w/ g++ 4.x series
  - browse button didnt work in Molecular Dynamics Simulation dialog
  - crash, when performing a MDS with trajectory and DCD file could not be written
+ - incorrect bond orders and GLN amide group planarity in fragment database
 
 improved:
  - DNA cartoon model
- - logging when opening molecular file formats
- - CustomColorProcessor: accelerated 
 
 added:
  - added support for SD files in BALLView
