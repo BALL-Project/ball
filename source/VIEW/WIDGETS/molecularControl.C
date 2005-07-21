@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.22 2005/06/24 15:30:39 oliver Exp $
+// $Id: molecularControl.C,v 1.96.2.23 2005/07/21 05:35:14 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -148,6 +148,15 @@ namespace BALL
 			connect(help_button, SIGNAL(clicked()), this, SLOT(showSelectorHelp()));
 			QToolTip::add(help_button, tr("Show a help dialog."));
 			layout3->addWidget(help_button);
+
+			QPushButton* select_button = new QPushButton(this);
+			select_button->resize(60, 25);
+			select_button->setMaximumSize(60, 36);
+			select_button->setText("Select");
+			select_button->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, false));
+			connect(select_button, SIGNAL(clicked()), this, SLOT(applySelector()));
+			QToolTip::add(select_button, tr("Apply the current expression."));
+			layout3->addWidget(select_button);
 
 			// if the selection of any item changed,
 			// mark the complete selection as invalid
@@ -1105,8 +1114,8 @@ namespace BALL
 				s+= " Residues, ";
 			}
 
-			s+=String(ac.countAtoms()) + " Atoms, ";
-			s+=String(ac.countBonds()) + " Bonds";
+			s += String(ac.countAtoms()) + " Atoms, ";
+			s += String(ac.countBonds()) + " Bonds";
 			setStatusbarText(s, true);
 		}
 
