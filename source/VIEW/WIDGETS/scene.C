@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.29 2005/06/20 00:29:02 amoll Exp $
+// $Id: scene.C,v 1.171.2.30 2005/07/21 12:08:14 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2012,7 +2012,7 @@ namespace BALL
 		{
 			String start = String(screenshot_nr_) + ".png";
 			screenshot_nr_ ++;
-			QString result = QFileDialog::getSaveFileName(start.c_str(), "", 0, "Select a PNG file");
+			QString result = QFileDialog::getSaveFileName(start.c_str(), "*.png", 0, "Select a PNG file");
 
 			if (result.isEmpty()) return;
 
