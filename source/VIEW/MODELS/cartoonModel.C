@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.20 2005/07/21 13:08:49 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.21 2005/07/22 12:58:34 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -1537,89 +1537,110 @@ void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 		String atom_names[9] = {"C1*", "C2*", "C3*", "C4*", "O4*", "", "", "", ""};
 		if (!assignNucleotideAtoms_(*r, 5, atom_names, atoms)) continue;
 
-		Vector3 n ((atoms[0]->getPosition() - atoms[2]->getPosition()) % 
-							 (atoms[0]->getPosition() - atoms[3]->getPosition()));
+		atoms[5] = atoms[0];
 
-		if (Maths::isZero(n.getSquareLength())) return;
-
-		Plane3 plane(atoms[0]->getPosition(), n);
-
-		const float length = n.getLength();
-		Vector3 p1 = ((plane.n * (atoms[1]->getPosition() - plane.p)) / length) * plane.n;
-		Vector3 p4 = ((plane.n * (atoms[4]->getPosition() - plane.p)) / length) * plane.n;
-
-		drawRiboseAtoms_(atoms[0], atoms[1], 0, &p1);
-		drawRiboseAtoms_(atoms[1], atoms[2], &p1);
-		drawRiboseAtoms_(atoms[2], atoms[3]);
-		drawRiboseAtoms_(atoms[3], atoms[4], 0, &p4);
-		drawRiboseAtoms_(atoms[4], atoms[0], &p4);
-
-		drawRiboseAtoms_(atoms[0], connection_atom);
-
-		connection_atom = atoms[2];
-
-		/*
-		////////////////////////////////
-		// draw 6 triangles
-		vector<Vector3>& vertices = mesh->vertex;
-		vector<Vector3>& normals  = mesh->normal;
-		vector<Surface::Triangle>& triangles = mesh->triangle;
-
-		Position v0 = vertices.size();
-
-		n.normalize();
-		n *= DNA_base_radius_ / 2;
-
-		// lower vertices
-		vertices.push_back(atoms[0]->getPosition() - n);
-		vertices.push_back(p1 - n);
-		vertices.push_back(atoms[2]->getPosition() - n);
-		vertices.push_back(atoms[3]->getPosition() - n);
-		vertices.push_back(p4 - n);
+		// calculate middle point
+		Vector3 middle;
 		
-		// upper vertices
-		vertices.push_back(atoms[0]->getPosition() + n);
-		vertices.push_back(p1 + n);
-		vertices.push_back(atoms[2]->getPosition() + n);
-		vertices.push_back(atoms[3]->getPosition() + n);
-		vertices.push_back(p4 + n);
+		for (Position p = 0; p < 5; p++)
+		{
+			middle += atoms[p]->getPosition();
+		}
 
-		normals.push_back(-n);
-		normals.push_back(-n);
-		normals.push_back(-n);
-		normals.push_back(n);
-		normals.push_back(n);
-		normals.push_back(n);
+		middle /= 5.0;
+		
+		/// create an array with the position of the pentagram
+		Vector3 pos[6];
+		pos[2] = atoms[2]->getPosition();
+		pos[3] = atoms[3]->getPosition();
+
+		Vector3 c3_c4 = atoms[3]->getPosition() - atoms[2]->getPosition();
+		
+		Vector3 axis((atoms[2]->getPosition() - middle) % c3_c4);
+
+		Angle angle = Angle(72.0, false);
+		Matrix4x4 m1;
+		m1.setRotation(angle, axis);
+
+		Matrix4x4 m2;
+		m2.setRotation(-angle, axis);
+
+		// calculate Position of C2 point
+		Vector3 c3_c2 = -(m2 * c3_c4);
+
+		pos[1] = atoms[2]->getPosition() + c3_c2;
+
+		// calculate Position of O4 point
+		Vector3 c4_o4 = -(m1 * -c3_c4);
+
+		pos[4] = atoms[3]->getPosition() + c4_o4;
+
+		// calculate Position of C1 point
+		Vector3 o4_c1 = m1 * (pos[4] - atoms[3]->getPosition());
+
+		pos[0] = pos[4] + o4_c1;
+
+		// first one again
+		pos[5] = pos[0];
+
+		for (Position p = 0; p < 5; p++)
+		{
+			drawRiboseAtoms_(atoms[p], atoms[p + 1], pos[p], pos[p + 1]);
+		}
+
+		
+		TwoColoredTube* tube = new TwoColoredTube;
+		tube->setVertex1(pos[0]);
+		tube->setVertex2(connection_atom->getPosition());
+		tube->setComposite(atoms[0]->getBond(*connection_atom));
+		tube->setRadius(DNA_base_radius_);
+		geometric_objects_.push_back(tube);
+
+		// draw triangles
+		
+		axis.normalize();
+		axis *= DNA_base_radius_;
+
+		mesh = new Mesh;
+		mesh->setComposite(atoms[0]->getParent());
+		geometric_objects_.push_back(mesh);
 
 		Surface::Triangle t;
 
-		for (Position p = 0; p < 2; p++)
+		mesh->vertex.push_back(middle - axis);
+		mesh->vertex.push_back(middle + axis);
+
+		mesh->vertex.push_back(pos[0] - axis);
+		mesh->vertex.push_back(pos[0] + axis);
+
+		for (Position p = 0; p < 6; p++)
 		{
-			t.v1 = v0; 
-			t.v2 = v0 + 1; 
-			t.v3 = v0 + 2;
-			triangles.push_back(t);
+			mesh->vertex.push_back(pos[p] - axis);
+			mesh->vertex.push_back(pos[p] + axis);
 
-			t.v1 = v0 + 2; 
-			t.v2 = v0 + 3; 
-			t.v3 = v0 + 4;
-			triangles.push_back(t);
-						
-			t.v1 = v0 + 3; 
-			t.v2 = v0 + 4; 
-			t.v3 = v0;
-			triangles.push_back(t);
+			const Size n = mesh->vertex.size();
+			
+			t.v1 = 0;
+			t.v2 = n - 4;
+			t.v3 = n - 2;
+			mesh->triangle.push_back(t);
 
-			v0 += 5;
+			t.v1 = 1;
+			t.v2 = n - 3;
+			t.v3 = n - 1;
+			mesh->triangle.push_back(t);
 		}
-		*/
 
+		for (Position p = 0; p < mesh->vertex.size(); p++)
+		{
+			mesh->normal.push_back(axis);
+		}
 
 		// --------------------------------------------
 		// draw connection to backbone from C3*-Atom
 		// --------------------------------------------
 		// search if we have a spline point near the atom
-		const Vector3& c3pos = connection_atom->getPosition();
+		const Vector3& c3pos = atoms[2]->getPosition();
 		Vector3 spline_pos;
 		float distance = 26;
 		vector<Vector3>::iterator sit = old_spline_point;
@@ -1691,26 +1712,25 @@ void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 	}
 }
 
-void AddCartoonModel::drawRiboseAtoms_(const Atom* atom1, const Atom* atom2, const Vector3* vp1, const Vector3* vp2)
+void AddCartoonModel::drawRiboseAtoms_(const Atom* atom1, const Atom* atom2, const Vector3& v1, const Vector3& v2)
 {
 	const Bond* bond = atom1->getBond(*atom2);
-	if (bond == 0) return;
-
-	Vector3 v1, v2;
-
-	(vp1 == 0) ? v1 = atom1->getPosition() : v1 = *vp1; 
-	(vp2 == 0) ? v2 = atom2->getPosition() : v2 = *vp2; 
+	if (bond == 0)
+	{
+	  BALLVIEW_DEBUG
+		return;
+	}
 
 	TwoColoredTube* tube= new TwoColoredTube;
-	tube->setVertex2(atom1->getPosition());
-	tube->setVertex1(atom2->getPosition());
+	tube->setVertex2(v1);
+	tube->setVertex1(v2);
 	tube->setRadius(DNA_base_radius_);
 	tube->setComposite(bond);
 	geometric_objects_.push_back(tube);
 
 	Sphere* s = new Sphere;
 	s->setComposite(atom1);
-	s->setPosition(atom1->getPosition());
+	s->setPosition(v1);
 	s->setRadius(DNA_base_radius_);
 	geometric_objects_.push_back(s);
 }
