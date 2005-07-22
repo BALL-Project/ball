@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.29.4.4 2005/07/19 22:13:54 amoll Exp $
+// $Id: cartoonModel.h,v 1.29.4.5 2005/07/22 19:59:53 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -194,7 +194,7 @@ namespace BALL
 			bool assignNucleotideAtoms_(Residue& r, Size nr_atoms, String atom_names[10], Atom* atoms[10])
 				throw();
 
-			void drawRiboseAtoms_(const Atom* atom1, const Atom* atom2, const Vector3* vp1 = 0, const Vector3* vp2 = 0);
+			void drawRiboseAtoms_(const Atom* atom1, const Atom* atom2, const Vector3& v1, const Vector3& v2);
 
 			virtual void drawPart_(Position pos);
 			Position getType_(const Residue& residue);
