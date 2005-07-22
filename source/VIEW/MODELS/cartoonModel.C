@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.21 2005/07/22 12:58:34 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.22 2005/07/22 14:20:11 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -546,8 +546,7 @@ void AddCartoonModel::buildStrand_(Position first, Position last)
 			return;
 		}
 
-		if (!Maths::isZero(normal.getSquareLength())) normal.normalize();
-
+		normal.normalize();
 		peptide_normals.push_back(normal);
 
 	} // iteration over all residues of secondary structure
@@ -571,24 +570,47 @@ void AddCartoonModel::buildStrand_(Position first, Position last)
 			peptide_normals[i + 1] = rotmat * peptide_normals[i + 1];
 		}
 	}
+
+	const Angle max_angle(30, false);
+
+	// an additional smoothing run...
+	for (Index i = 0; i < (Index) peptide_normals.size(); i++)
+	{
+		Angle diff(0, false);
+		Size nr = 0;
+		Vector3 median(peptide_normals[i]);
+
+		for (Index j = -2; j < 2; j++)
+		{
+			if (i + j < 0 || i + j + 1 >= (Index) peptide_normals.size()) continue;
+
+			diff += peptide_normals[i].getAngle(peptide_normals[i + j]);
+			median += peptide_normals[i + j];
+			nr++;
+		}
+
+		diff /= (float) nr;
+
+		if (diff > max_angle)
+		{
+			median /= (float) nr;
+			peptide_normals[i] = median;
+		}
+ 	}
 	
 	// an additional smoothing run...
-	for (Position i = 0; i < peptide_normals.size() - 1; i++)
+	for (Index i = 1; i < (Index) peptide_normals.size(); i++)
 	{
-		// To smooth the strand representation a bit, we iterate over all normal
-		// vectors and compute the angle in between them.
-		// Then we reduce the angle by an appropriate rotation to a third of the
-		// original angle.
-		const Vector3 rotaxis = (peptide_normals[i] % peptide_normals[i+1]);
-
-		if (rotaxis.getSquareLength() > 1e-3)
+		if (peptide_normals[i].getAngle(peptide_normals[i - 1]) > max_angle) 
 		{
-			const Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i+1])));
-			rotmat.rotate(Angle(1.0 / 3.0 * current) - current, rotaxis);
-			peptide_normals[i + 1] = rotmat * peptide_normals[i + 1];
+			peptide_normals[i] = peptide_normals[i - 1];
 		}
-	}
+ 	}
 
+
+	////////////////////////////////////////////
+	// now for the real thing: create the meshes
+	
 	// start of points_ of this SS
 	const Position start = last_build_ * interpolation_steps_;
 
@@ -671,9 +693,9 @@ void AddCartoonModel::buildStrand_(Position first, Position last)
 		{
 			mesh = new Mesh();
 
-			if (spline_point_nr > atoms_of_points_.size() - 1) 
+			if (spline_point_nr >= atoms_of_points_.size()) 
 			{
-				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << std::endl; 
+				BALLVIEW_DEBUG
 				break;
 			}
 
@@ -695,7 +717,7 @@ void AddCartoonModel::buildStrand_(Position first, Position last)
 			right  = points_[spline_point_nr + 1] - points_[spline_point_nr];
 			if (right.getSquareLength() == 0)
 			{
-				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << std::endl; 
+				BALLVIEW_DEBUG
 				spline_point_nr++;
 				continue;
 			}
