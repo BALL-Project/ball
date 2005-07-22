@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.23 2005/07/21 05:35:14 oliver Exp $
+// $Id: molecularControl.C,v 1.96.2.24 2005/07/22 08:27:15 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -131,7 +131,6 @@ namespace BALL
 
 			QPushButton* clear_button = new QPushButton(this);
 			clear_button->resize(60, 25);
-			clear_button->setMaximumSize(60, 36);
 			clear_button->setText("Clear");
 			clear_button->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, false));
 			connect(clear_button, SIGNAL(clicked()), this, SLOT(clearSelector()));
@@ -142,7 +141,6 @@ namespace BALL
 
 			QPushButton* help_button = new QPushButton(this);
 			help_button->resize(60, 25);
-			help_button->setMaximumSize(60, 36);
 			help_button->setText("Help");
 			help_button->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, false));
 			connect(help_button, SIGNAL(clicked()), this, SLOT(showSelectorHelp()));
@@ -151,7 +149,6 @@ namespace BALL
 
 			QPushButton* select_button = new QPushButton(this);
 			select_button->resize(60, 25);
-			select_button->setMaximumSize(60, 36);
 			select_button->setText("Select");
 			select_button->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, false));
 			connect(select_button, SIGNAL(clicked()), this, SLOT(applySelector()));
