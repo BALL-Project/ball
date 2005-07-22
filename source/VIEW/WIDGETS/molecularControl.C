@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.24 2005/07/22 08:27:15 oliver Exp $
+// $Id: molecularControl.C,v 1.96.2.25 2005/07/22 08:35:23 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -150,6 +150,7 @@ namespace BALL
 			QPushButton* select_button = new QPushButton(this);
 			select_button->resize(60, 25);
 			select_button->setText("Select");
+			select_button->setDefault(true);
 			select_button->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, false));
 			connect(select_button, SIGNAL(clicked()), this, SLOT(applySelector()));
 			QToolTip::add(select_button, tr("Apply the current expression."));
