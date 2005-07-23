@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.19 2005/07/23 12:27:06 haid Exp $
+// $Id: dockingController.C,v 1.1.2.20 2005/07/23 12:50:56 haid Exp $
 //
 
 #include "dockingController.h"
@@ -129,9 +129,7 @@ namespace BALL
 		// Initializes the popup menu Molecular Mechanics with its checkable submenu Docking.
 		void DockingController::initializeWidget(MainControl& main_control)
 			throw()
-		{
-			//main_control.initPopupMenu(MainControl::MOLECULARMECHANICS)->setCheckable(true);
-			
+		{			
 			String hint = "Dock two systems.";
 			id_ = main_control.insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Docking", this,
 																				 SLOT(startDocking()), CTRL+Key_D, -1, hint);
@@ -219,8 +217,13 @@ namespace BALL
 			// check which algorithm is chosen and create a DockingAlgorithm object
 			Index index = dock_dialog_.algorithms->currentItem();
 			switch(index)
-			{
+				{
 				case GEOMETRIC_FIT:
+					if(dock_alg_ != 0)
+						{
+							delete dock_alg_;
+							dock_alg_ = NULL;
+						}
 					dock_alg_ =  new GeometricFit();
 					/////// ??? where should we delete it? in this class -> segmenation fault, in thread class???
 					break;
