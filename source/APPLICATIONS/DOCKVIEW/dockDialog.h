@@ -121,7 +121,7 @@ namespace BALL
 				
 				/** Sets the flags 'is_redock_' and 'has_changed_'
 				 */
-				void setFlag(bool is_redock)
+				void isRedock(bool is_redock)
 					throw();
 					
 					

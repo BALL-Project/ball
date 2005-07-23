@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.49 2005/07/18 13:40:12 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.50 2005/07/23 12:27:04 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -39,7 +39,7 @@ namespace BALL
 				docking_partner2_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
-			Log.error() << "new DockDialog " << this << std::endl;
+			Log.info() << "new DockDialog " << this << std::endl;
 		#endif
 			
 			// register QWidgets of Dialog with PreferenceEntry
@@ -68,7 +68,7 @@ namespace BALL
 			registerObject_(build_bonds);
 			registerObject_(add_hydrogens);
 			
-			//set flag
+			// set flag
 			is_redock_ = false;
 			
 			hide(); 
@@ -165,7 +165,7 @@ namespace BALL
 		}
 		
 		// Sets the flags 'is_redock_' and 'has_changed_'
-		void DockDialog::setFlag(bool is_redock)
+		void DockDialog::isRedock(bool is_redock)
 			throw()
 		{
 			if (is_redock_ == is_redock)
@@ -221,7 +221,13 @@ namespace BALL
 			//because the scoring function with enum value i should be at position i in the Combobox
 			//otherwise you get the wrong option dialog for a scoring function
 			addScoringFunction("Default", DockingController::DEFAULT);
-			addScoringFunction("Amber Force Field", DockingController::AMBER_FF, &(MolecularStructure::getInstance(0)->getAmberConfigurationDialog()));
+			MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
+			if (!mol_struct)
+				{
+					Log.error() << "Error while building HashMap for scoring function advanced option dialogs! " << __FILE__ << " " << __LINE__ << std::endl;
+					return;
+				}
+			addScoringFunction("Amber Force Field", DockingController::AMBER_FF, &(mol_struct->getAmberConfigurationDialog()));
 			addScoringFunction("Random", DockingController::RANDOM);
 			
 			vector<int> sf;
@@ -367,11 +373,18 @@ namespace BALL
 			// options for all docking algorithms
 			/////////////////////////////////////// TODO allgemeine Options ////////////////////////////////////////////
 			//options_[DockingAlgorithm::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
-			algorithm_opt_[GeometricFit::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
-			algorithm_opt_[GeometricFit::Option::VERBOSITY] = String(verbosity->text().ascii()).toInt();
-				
+			try
+				{
+					algorithm_opt_[GeometricFit::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
+					algorithm_opt_[GeometricFit::Option::VERBOSITY] = String(verbosity->text().ascii()).toInt();
+				}
+			catch (Exception::InvalidFormat)
+				{
+					Log.error() << "Conversion from String to int failed: invalid format! " << __FILE__ << " " << __LINE__<< std::endl;
+					return;
+				}
 			// options for chosen algorithm; options are filled by the corresponding dialog
-			int index = algorithms->currentItem();
+			Index index = algorithms->currentItem();
 			switch(index)
 			{
 				case DockingController::GEOMETRIC_FIT:
@@ -383,28 +396,36 @@ namespace BALL
 			// options for redocking (euler angles)
 			if(is_redock_)
 			{
-				algorithm_opt_[GeometricFit::Option::PHI_MIN] = String(phi_min->text().ascii()).toFloat();
-				algorithm_opt_[GeometricFit::Option::PHI_MAX] = String(phi_max->text().ascii()).toFloat();
-				algorithm_opt_[GeometricFit::Option::DEG_PHI] = String(delta_phi->text().ascii()).toFloat();
-				algorithm_opt_[GeometricFit::Option::PSI_MIN] = String(psi_min->text().ascii()).toFloat();
-				algorithm_opt_[GeometricFit::Option::PSI_MAX] = String(psi_max->text().ascii()).toFloat();
-				algorithm_opt_[GeometricFit::Option::DEG_PSI] = String(delta_psi->text().ascii()).toFloat();
-				algorithm_opt_[GeometricFit::Option::THETA_MIN] = String(theta_min->text().ascii()).toFloat();
-				algorithm_opt_[GeometricFit::Option::THETA_MAX] = String(theta_max->text().ascii()).toFloat();
-				algorithm_opt_[GeometricFit::Option::DEG_THETA] = String(delta_theta->text().ascii()).toFloat();
+				try
+					{
+						algorithm_opt_[GeometricFit::Option::PHI_MIN] = String(phi_min->text().ascii()).toFloat();
+						algorithm_opt_[GeometricFit::Option::PHI_MAX] = String(phi_max->text().ascii()).toFloat();
+						algorithm_opt_[GeometricFit::Option::DEG_PHI] = String(delta_phi->text().ascii()).toFloat();
+						algorithm_opt_[GeometricFit::Option::PSI_MIN] = String(psi_min->text().ascii()).toFloat();
+						algorithm_opt_[GeometricFit::Option::PSI_MAX] = String(psi_max->text().ascii()).toFloat();
+						algorithm_opt_[GeometricFit::Option::DEG_PSI] = String(delta_psi->text().ascii()).toFloat();
+						algorithm_opt_[GeometricFit::Option::THETA_MIN] = String(theta_min->text().ascii()).toFloat();
+						algorithm_opt_[GeometricFit::Option::THETA_MAX] = String(theta_max->text().ascii()).toFloat();
+						algorithm_opt_[GeometricFit::Option::DEG_THETA] = String(delta_theta->text().ascii()).toFloat();
+					}
+				catch(Exception::InvalidFormat)
+					{
+						Log.error() << "Conversion from String to float failed: invalid format! " << __FILE__ << " " << __LINE__<< std::endl;
+						return;
+					}
 			}
-		  else
-			{
-				algorithm_opt_[GeometricFit::Option::PHI_MIN] = GeometricFit::Default::PHI_MIN;
-				algorithm_opt_[GeometricFit::Option::PHI_MAX] = GeometricFit::Default::PHI_MAX;
-				algorithm_opt_[GeometricFit::Option::DEG_PHI] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
-				algorithm_opt_[GeometricFit::Option::PSI_MIN] = GeometricFit::Default::PSI_MIN;
-				algorithm_opt_[GeometricFit::Option::PSI_MAX] = GeometricFit::Default::PSI_MAX;
-				algorithm_opt_[GeometricFit::Option::DEG_PSI] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
-				algorithm_opt_[GeometricFit::Option::THETA_MIN] = GeometricFit::Default::THETA_MIN;
-				algorithm_opt_[GeometricFit::Option::THETA_MAX] = GeometricFit::Default::THETA_MAX;
-				algorithm_opt_[GeometricFit::Option::DEG_THETA] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
-			}
+			else
+				{
+					algorithm_opt_[GeometricFit::Option::PHI_MIN] = GeometricFit::Default::PHI_MIN;
+					algorithm_opt_[GeometricFit::Option::PHI_MAX] = GeometricFit::Default::PHI_MAX;
+					algorithm_opt_[GeometricFit::Option::DEG_PHI] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
+					algorithm_opt_[GeometricFit::Option::PSI_MIN] = GeometricFit::Default::PSI_MIN;
+					algorithm_opt_[GeometricFit::Option::PSI_MAX] = GeometricFit::Default::PSI_MAX;
+					algorithm_opt_[GeometricFit::Option::DEG_PSI] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
+					algorithm_opt_[GeometricFit::Option::THETA_MIN] = GeometricFit::Default::THETA_MIN;
+					algorithm_opt_[GeometricFit::Option::THETA_MAX] = GeometricFit::Default::THETA_MAX;
+					algorithm_opt_[GeometricFit::Option::DEG_THETA] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
+				}
 			
 			// options for chosen scoring function
 			index = scoring_functions->currentItem();
@@ -412,7 +433,13 @@ namespace BALL
 			{
 				case DockingController::AMBER_FF:
 				{
-					AmberFF& ff = MolecularStructure::getInstance(0)->getAmberFF();
+					MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
+					if (!mol_struct)
+						{
+							Log.error() << "Error while applying options of AMBER_FF scoring function! " << __FILE__ << " " << __LINE__<< std::endl;
+							return;
+						}
+					AmberFF& ff = mol_struct->getAmberFF();
 					AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
 					
 					// now the Amber force field gets its options
@@ -428,29 +455,37 @@ namespace BALL
 		{
 			if ((docking_partner1_ == 0) || (docking_partner2_ == 0)) 
 			{
-				Log.error() << "No two systems given! Aborting..." << std::endl;
+				Log.error() << "No two systems given! Aborting... " << __FILE__ << " " << __LINE__<< std::endl;
 				return false;
 			}
+			
+			MainControl* main_control = MainControl::getInstance(0);
+			if (!main_control)
+				{
+					Log.error() << "Error while adding hydrogens! " << __FILE__ << " " << __LINE__ << std::endl;
+					return false;
+				}
+			const FragmentDB& frag_db = main_control->getFragmentDB();
 			
 			// add hydrogens to systems and normalize names
 			if (add_hydrogens->isChecked())
 			{
-				if (!docking_partner1_->apply(*(const_cast<ReconstructFragmentProcessor*>(&MainControl::getInstance(0)->getFragmentDB().add_hydrogens)))) return false;
-				if (!docking_partner2_->apply(*(const_cast<ReconstructFragmentProcessor*>(&MainControl::getInstance(0)->getFragmentDB().add_hydrogens)))) return false;
-				if (!docking_partner1_->apply(*(const_cast<FragmentDB::NormalizeNamesProcessor*>(&MainControl::getInstance(0)->getFragmentDB().normalize_names)))) return false;
-				if (!docking_partner2_->apply(*(const_cast<FragmentDB::NormalizeNamesProcessor*>(&MainControl::getInstance(0)->getFragmentDB().normalize_names)))) return false;
+				if (!docking_partner1_->apply(*(const_cast<ReconstructFragmentProcessor*>(&frag_db.add_hydrogens)))) return false;
+				if (!docking_partner2_->apply(*(const_cast<ReconstructFragmentProcessor*>(&frag_db.add_hydrogens)))) return false;
+				if (!docking_partner1_->apply(*(const_cast<FragmentDB::NormalizeNamesProcessor*>(&frag_db.normalize_names)))) return false;
+				if (!docking_partner2_->apply(*(const_cast<FragmentDB::NormalizeNamesProcessor*>(&frag_db.normalize_names)))) return false;
 			}
 			else if (normalize_names->isChecked())
 			{
-				if (!docking_partner1_->apply(*(const_cast<FragmentDB::NormalizeNamesProcessor*>(&MainControl::getInstance(0)->getFragmentDB().normalize_names)))) return false;
-				if (!docking_partner2_->apply(*(const_cast<FragmentDB::NormalizeNamesProcessor*>(&MainControl::getInstance(0)->getFragmentDB().normalize_names)))) return false;
+				if (!docking_partner1_->apply(*(const_cast<FragmentDB::NormalizeNamesProcessor*>(&frag_db.normalize_names)))) return false;
+				if (!docking_partner2_->apply(*(const_cast<FragmentDB::NormalizeNamesProcessor*>(&frag_db.normalize_names)))) return false;
 			}
 			
 			// add bonds to systems
 			if (build_bonds->isChecked())
 			{
-				if (!docking_partner1_->apply(*(const_cast<FragmentDB::BuildBondsProcessor*>(&MainControl::getInstance(0)->getFragmentDB().build_bonds)))) return false;
-				if (!docking_partner2_->apply(*(const_cast<FragmentDB::BuildBondsProcessor*>(&MainControl::getInstance(0)->getFragmentDB().build_bonds)))) return false;
+				if (!docking_partner1_->apply(*(const_cast<FragmentDB::BuildBondsProcessor*>(&frag_db.build_bonds)))) return false;
+				if (!docking_partner2_->apply(*(const_cast<FragmentDB::BuildBondsProcessor*>(&frag_db.build_bonds)))) return false;
 			}
 
 			// assign charges and radii
@@ -491,14 +526,14 @@ namespace BALL
 			}
 			catch (Exception::FileNotFound e)
 			{
-				Log.error() << "Invalid file " << e.getFilename() << std::endl;
+				Log.error() << "Invalid file " << e.getFilename() << " " << __FILE__ << " " << __LINE__ << std::endl;
 				return false;
 			}
-			MainControl::getInstance(0)->getPrimitiveManager().setMultithreadingMode(false);
-			MainControl::getInstance(0)->update(*docking_partner1_, true);
-			MainControl::getInstance(0)->update(*docking_partner2_, true);
-			MainControl::getInstance(0)->getPrimitiveManager().setMultithreadingMode(true);
-			
+		
+			main_control->getPrimitiveManager().setMultithreadingMode(false);
+			main_control->update(*docking_partner1_, true);
+			main_control->update(*docking_partner2_, true);
+			main_control->getPrimitiveManager().setMultithreadingMode(true);
 			return true;
 		}
 		
@@ -565,36 +600,37 @@ namespace BALL
 				
 				// test if the user has selected one or two systems
 				// more than 2 selected systems -> error
-				if (system->isSelected())
+				if (!system->isSelected())
 				{
-					if (docking_partner1_ == NULL)
+					continue;
+				}
+				if (docking_partner1_ == NULL)
 					{
 						docking_partner1_ = system;
 					}
-					else
+				else
 					{
 						if (docking_partner2_ == NULL)
-						{
-							docking_partner2_ = system;
-						}
+							{
+								docking_partner2_ = system;
+							}
 						else
-						{
-							// if more than 2 systems are selected => Error message!
-							#ifdef BALL_VIEW_DEBUG
-								Log.error() << "DockDialog: " << " More than two systems selected! " << std::endl;
-							#endif
-												
-							QMessageBox error_message(0,0);
-							error_message.warning(0,"Error","More than two systems selected!", QMessageBox::Ok, QMessageBox::NoButton);
-							return;
-						}
+							{
+								// if more than 2 systems are selected => Error message!
+#ifdef BALL_VIEW_DEBUG
+								Log.error() << "More than two systems selected! " << __FILE__ << " " << __LINE__ << std::endl;
+#endif
+								
+								QMessageBox error_message(0,0);
+								error_message.warning(0, "Error", "More than two systems selected!", QMessageBox::Ok, QMessageBox::NoButton);
+								return;
+							}
 					}
-				} 	
-			 }
+			} 	
 			// set selection lists of dialog
 			systems1->insertStringList(current_system_list);
 			systems2->insertStringList(current_system_list);
-		
+			
 			// If the user has selected one or two systems, they are the current items in the comboboxes.
 			if (docking_partner1_ != NULL)
 			{
@@ -732,14 +768,14 @@ namespace BALL
 		void DockDialog::algAdvancedPressed()
 		{
 			// show corresponding options dialog
-			int index = algorithms->currentItem();
+			Index index = algorithms->currentItem();
 			if (algorithm_dialogs_.has(index))
 			{
 				switch(index)
 				{
 					case DockingController::GEOMETRIC_FIT:
 						GeometricFitDialog* gfd = dynamic_cast<GeometricFitDialog*> (algorithm_dialogs_[index]);
-						gfd->setFlag(is_redock_);
+						gfd->isRedock(is_redock_);
 						gfd->exec();
 				}
 			}
@@ -749,7 +785,7 @@ namespace BALL
 		void DockDialog::scoringAdvancedPressed()
 		{
 			// show corresponding options dialog
-			int index = scoring_functions->currentItem();
+			Index index = scoring_functions->currentItem();
 			if (scoring_dialogs_.has(index))
 			{
 				scoring_dialogs_[index]->exec();
@@ -772,7 +808,7 @@ namespace BALL
 		void DockDialog::scoringFuncChosen()
 		{
 			// if chosen scoring function has advanced options, enable advanced_button
-			int index = scoring_functions->currentItem();
+			Index index = scoring_functions->currentItem();
 			if (scoring_dialogs_.has(index))
 			{
 				scoring_advanced_button->setEnabled(true);
@@ -787,7 +823,7 @@ namespace BALL
 		void DockDialog::algorithmChosen()
 		{
 			// if chosen algorithm has advanced options
-			int index = algorithms->currentItem();
+			Index index = algorithms->currentItem();
 			if (algorithm_dialogs_.has(index))
 			{
 				alg_advanced_button->setEnabled(true);

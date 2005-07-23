@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.18 2005/07/18 13:40:14 leonhardt Exp $
+// $Id: dockingController.C,v 1.1.2.19 2005/07/23 12:27:06 haid Exp $
 //
 
 #include "dockingController.h"
@@ -40,7 +40,7 @@ namespace BALL
 				progress_dialog_(0)
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "New DockingController " << this << std::endl;
+				Log.info() << "New DockingController " << this << std::endl;
 			#endif
 			registerWidget(this);
 		}
@@ -130,7 +130,7 @@ namespace BALL
 		void DockingController::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.initPopupMenu(MainControl::MOLECULARMECHANICS)->setCheckable(true);
+			//main_control.initPopupMenu(MainControl::MOLECULARMECHANICS)->setCheckable(true);
 			
 			String hint = "Dock two systems.";
 			id_ = main_control.insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Docking", this,
@@ -204,11 +204,11 @@ namespace BALL
 			// Make sure we run just one instance at a time.
 			if (getMainControl()->compositesAreLocked())
 			{
-				Log.error() << "Docking already running!" << std::endl;
+				Log.error() << "Docking already running! " << __FILE__ << " " << __LINE__ << std::endl;
 				return;
 			}
 			
-			dock_dialog_.setFlag(isRedock);
+			dock_dialog_.isRedock(isRedock);
 			
 			// if cancel was pressed in DockDialog, don't start docking
 			if (!dock_dialog_.exec())
@@ -217,7 +217,7 @@ namespace BALL
 			}
 			
 			// check which algorithm is chosen and create a DockingAlgorithm object
-			int index = dock_dialog_.algorithms->currentItem();
+			Index index = dock_dialog_.algorithms->currentItem();
 			switch(index)
 			{
 				case GEOMETRIC_FIT:
@@ -226,7 +226,10 @@ namespace BALL
 					break;
 			}
 			
-			if (!dock_alg_ || !dock_dialog_.getSystem1() || !dock_dialog_.getSystem2() || dock_dialog_.getAlgorithmOptions().isEmpty())
+			if (!dock_alg_
+					|| !dock_dialog_.getSystem1()
+					|| !dock_dialog_.getSystem2()
+					|| dock_dialog_.getAlgorithmOptions().isEmpty())
 			{
 			 	return;
 			}
@@ -246,7 +249,6 @@ namespace BALL
 			
 			// ============================= WITH MULTITHREADING ====================================
 			if (!(getMainControl()->lockCompositesFor(this))) return;
-			//Log.info() << "vor thread" << std::endl;
 			#ifdef BALL_QT_HAS_THREADS
 				DockingThread* thread = new DockingThread;
 				/// ??????? where is thread deleted?
@@ -291,7 +293,7 @@ namespace BALL
 		 	// create scoring function object
 			EnergeticEvaluation* scoring = 0;
 			//check which scoring function is chosen
-			int index = dock_dialog_.scoring_functions->currentItem();
+			Index index = dock_dialog_.scoring_functions->currentItem();
 			
 			switch(index)
 			{
@@ -301,7 +303,13 @@ namespace BALL
 
 				case AMBER_FF:
 				{
-					AmberFF& ff = MolecularStructure::getInstance(0)->getAmberFF();
+					MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
+					if (!mol_struct)
+						{
+							Log.error() << "Error while scoring with AMBER_FF! " << __FILE__ << " " << __LINE__ << std::endl;
+							return;
+						}
+					AmberFF& ff = mol_struct->getAmberFF();
 					//the force field is given to the AmberEvaluation (scoring function) object
 					scoring = new AmberEvaluation(ff);
 					break;
@@ -321,7 +329,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				Log.error() << "Scoring of docking results failed!" << std::endl;
+				Log.error() << "Scoring of docking results failed! " << __FILE__ << " " << __LINE__ << std::endl;
 				// delete instance 
 				if (scoring != NULL)
 				{
@@ -350,9 +358,20 @@ namespace BALL
 
 			dock_res->addScoring(String(dock_dialog_.scoring_functions->currentText().ascii()), dock_dialog_.getScoringOptions(), scores);
 
-			// add docked system to BALLView structures 
+			// add docked system to BALLView structures
+			if (!conformation_set->size())
+			{
+				Log.error() << "Scoring of docking results failed! " << __FILE__ << " " << __LINE__ << std::endl;
+				// delete instance 
+				if (scoring != NULL)
+				{
+					delete scoring;
+					scoring = NULL;
+				}
+				return;
+			}
 			const SnapShot& best_result = (*conformation_set)[0];
-			
+
 			System* docked_system = new System(conformation_set->getSystem());
 			// system is deleted by main control, when it is removed from BallView
 			best_result.applySnapShot(*docked_system);

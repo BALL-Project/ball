@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.38 2005/07/18 13:40:13 leonhardt Exp $
+// $Id: dockResultDialog.C,v 1.1.2.39 2005/07/23 12:27:05 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -18,7 +18,7 @@
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 
-#define BALL_VIEW_DEBUG
+//#define BALL_VIEW_DEBUG
 
 namespace BALL
 {
@@ -35,7 +35,7 @@ namespace BALL
 				redock_partner2_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
-			Log.error() << "new DockResultDialog " << this << std::endl;
+			Log.info() << "new DockResultDialog " << this << std::endl;
 		#endif
 			//setWFlags(Qt::WStyle_MinMax | Qt::WStyle_SysMenu);
 			
@@ -44,7 +44,13 @@ namespace BALL
 			//because the scoring function with enum value i should be at position i in the Combobox
 			//otherwise you get the wrong option dialog for a scoring function
 			addScoringFunction("Default", DockingController::DEFAULT);
-			addScoringFunction("Amber Force Field", DockingController::AMBER_FF, &(MolecularStructure::getInstance(0)->getAmberConfigurationDialog()));
+			MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
+			if (!mol_struct)
+			  {
+			    Log.error() << "Error while filling HashMap for scoring function advanced option dialogs! " << __FILE__ << " " << __LINE__ << std::endl;
+			    return;
+			  }
+			addScoringFunction("Amber Force Field", DockingController::AMBER_FF, &(mol_struct->getAmberConfigurationDialog()));
 			addScoringFunction("Random", DockingController::RANDOM);
 		
 			// signals and slots connections
@@ -194,13 +200,19 @@ namespace BALL
 			// get index of current row
 			int selected_row = result_table->currentRow();
 			// get snapshot number of this row
-			int snapshot = (result_table->text(selected_row,0)).toInt();
+			int snapshot = (result_table->text(selected_row, 0)).toInt();
 			// apply snapshot
 			const ConformationSet* conformation_set = dock_res_->getConformationSet();
 			SnapShot selected_conformation = (*conformation_set)[snapshot];
 			selected_conformation.applySnapShot(*docked_system_);
 			//inform main control that system has changed
-			MainControl::getInstance(0)->update(*docked_system_, true);
+			MainControl* main_control = MainControl::getInstance(0);
+			if (!main_control)
+			  {
+			    Log.error() << "Error while informing MainControl about changed system! " << __FILE__ << " " << __LINE__ << std::endl;
+			    return;
+			  }
+			main_control->update(*docked_system_, true);
 		}
 				
 		// select and show the entry above the current selected entry
@@ -261,25 +273,31 @@ namespace BALL
 			// check which scoring function is chosen
 			int index = scoring_functions->currentItem();
 			switch(index)
-			{
-				case DockingController::DEFAULT:
-					scoring = new EnergeticEvaluation();
-					break;
-				case DockingController::RANDOM:
-					scoring = new RandomEvaluation();
-					break;
-				case DockingController::AMBER_FF:
+			  {
+			  case DockingController::DEFAULT:
+			    scoring = new EnergeticEvaluation();
+			    break;
+			  case DockingController::RANDOM:
+			    scoring = new RandomEvaluation();
+			    break;
+			  case DockingController::AMBER_FF:
+			    {
+			      MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
+			      if (!mol_struct)
 				{
-					AmberFF& ff = MolecularStructure::getInstance(0)->getAmberFF();
-					AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
-					//now the Amber force field gets its options
-					dialog->applyTo(ff);
-					scoring_options = ff.options;
-					//the force field is given to the AmberEvaluation (scoring function) object
-					scoring = new AmberEvaluation(ff);
-					break;
+				  Log.error() << "Error while rescoring with AMBER_FF! " << __FILE__ << " " << __LINE__ << std::endl;
+				  return;
 				}
-			}
+			      AmberFF& ff = mol_struct->getAmberFF();
+			      AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
+			      // now the Amber force field gets its options
+			      dialog->applyTo(ff);
+			      scoring_options = ff.options;
+			      // the force field is given to the AmberEvaluation (scoring function) object
+			      scoring = new AmberEvaluation(ff);
+			      break;
+			    }
+			  }
 			
 			if(!scoring || !dock_res_) return;
 			
@@ -343,7 +361,7 @@ namespace BALL
 				vector<float> row;
 				for(int column_it = 0; column_it < result_table->numCols(); column_it++)
 				{
-					QString s = result_table->text(row_it,column_it);
+					QString s = result_table->text(row_it, column_it);
 					row.push_back(s.toFloat());
 				}
 				rows.push_back(row);
@@ -468,7 +486,7 @@ namespace BALL
 			if(!dock_res_) return;
 			
 			// get snapshot number of this row
-			int snapshot = (result_table->text(row,0)).toInt();
+			int snapshot = (result_table->text(row, 0)).toInt();
 			// apply snapshot
 			const ConformationSet* conformation_set = dock_res_->getConformationSet();
 			SnapShot selected_conformation = (*conformation_set)[snapshot];
@@ -510,12 +528,17 @@ namespace BALL
 					delete &*it;
 				}
 			}
-			
-			DockDialog& dialog = DockingController::getInstance(0)->getDockDialog(); 
+			DockingController* dock_control = DockingController::getInstance(0);
+			if (!dock_control)
+			  {
+			    Log.error() << "Error while getting instance of DockingController! " << __FILE__ << " " << __LINE__ << std::endl;
+			    return;
+			  }
+			DockDialog& dialog = dock_control->getDockDialog(); 
 			dialog.setSystems(redock_partner1_, redock_partner2_);
 			
 			// run redocking
-			DockingController::getInstance(0)->runDocking(true);
+			dock_control->runDocking(true);
 		}
 		
 		/*implementation of nested class Compare_		

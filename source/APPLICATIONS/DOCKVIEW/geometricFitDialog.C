@@ -18,7 +18,7 @@ namespace BALL
 				PreferencesEntry()
 			{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "new GeometricFitDialog " << this << std::endl;
+				Log.info() << "new GeometricFitDialog " << this << std::endl;
 			#endif
 			
 				// register QWidgets of Dialog with PreferenceEntry
@@ -144,23 +144,31 @@ namespace BALL
 		void GeometricFitDialog::getOptions(Options& options)
 					throw()
 		{
-			options[GeometricFit::Option::NEAR_RADIUS] = String(near_radius->text().ascii()).toFloat();
-			options[GeometricFit::Option::GRID_SPACING] = String(grid_spacing->text().ascii()).toFloat();
-			options[GeometricFit::Option::SURFACE_THICKNESS] = String(surface_thickness->text().ascii()).toFloat();
-			options[GeometricFit::Option::DEGREE_INTERVAL] = String(deg_interval->text().ascii()).toDouble();
-			options[GeometricFit::Option::TOP_N] = String(peak_num->text().ascii()).toInt();
-			if (surface_type->currentText() == "Connolly")
+		  try
+		    {
+		      options[GeometricFit::Option::NEAR_RADIUS] = String(near_radius->text().ascii()).toFloat();
+		      options[GeometricFit::Option::GRID_SPACING] = String(grid_spacing->text().ascii()).toFloat();
+		      options[GeometricFit::Option::SURFACE_THICKNESS] = String(surface_thickness->text().ascii()).toFloat();
+		      options[GeometricFit::Option::DEGREE_INTERVAL] = String(deg_interval->text().ascii()).toDouble();
+		      options[GeometricFit::Option::TOP_N] = String(peak_num->text().ascii()).toInt();
+		    }
+		  catch (Exception::InvalidFormat)
+		    {
+		      Log.error() << "Conversion from String to float, double or int failed: invalid format! " << __FILE__ << " " << __LINE__ << std::endl;
+		      return;
+		    }
+		      if (surface_type->currentText() == "Connolly")
 			{
-				options[GeometricFit::Option::SURFACE_TYPE] = GeometricFit::CONNOLLY;
+			  options[GeometricFit::Option::SURFACE_TYPE] = GeometricFit::CONNOLLY;
 			}
-			else
+		      else
 			{
-				options[GeometricFit::Option::SURFACE_TYPE] = GeometricFit::VAN_DER_WAALS;
+			  options[GeometricFit::Option::SURFACE_TYPE] = GeometricFit::VAN_DER_WAALS;
 			}
-		}
-		
+		    }
+		  
 		// Sets the flags 'is_redock_' and 'has_changed_'
-		void GeometricFitDialog::setFlag(bool is_redock)
+		void GeometricFitDialog::isRedock(bool is_redock)
 			throw()
 		{
 			if (is_redock_ == is_redock)

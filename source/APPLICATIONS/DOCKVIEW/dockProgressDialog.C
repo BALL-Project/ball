@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.21 2005/07/18 13:40:13 leonhardt Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.22 2005/07/23 12:27:05 haid Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -9,7 +9,7 @@
 #include <qmessagebox.h>
 #include <qlabel.h>
 
-#define BALL_VIEW_DEBUG
+//#define BALL_VIEW_DEBUG
 
 namespace BALL
 {
@@ -22,7 +22,7 @@ namespace BALL
 				alg_(0)
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "new DockProgressDialog " << this << std::endl;
+				Log.info() << "new DockProgressDialog " << this << std::endl;
 			#endif
 			
 			connect(&timer_, SIGNAL(timeout()), SLOT(updateProgress_()));

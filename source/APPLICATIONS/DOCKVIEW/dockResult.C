@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.1.2.15 2005/07/13 10:22:11 haid Exp $
+// $Id: dockResult.C,v 1.1.2.16 2005/07/23 12:27:05 haid Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -255,13 +255,13 @@ namespace BALL
 			{
 				if (!file.getline(&(buffer[0]), 2000))
 				{
-					Log.error() << "Error while reading Dock Result file, could not read INI part" << std::endl;
+					Log.error() << "Error while reading Dock Result file, could not read INI part! " << __FILE__ << " " << __LINE__ << std::endl;
 					return false;
 				}
     	
 				if (!INI_in.appendLine(buffer)) 
 				{
-					Log.error() << "Error while reading Dock Result file, could not read INI part" << std::endl;
+					Log.error() << "Error while reading Dock Result file, could not read INI part! "  << __FILE__ << " " << __LINE__<< std::endl;
 					return false;
 				}
 			}
@@ -302,7 +302,15 @@ namespace BALL
 				for (; +it; it.getSectionNextLine())
 				{
 					String line(*it);
-				 	scores.push_back(((line.after("=")).toString()).toFloat());
+					try
+						{
+							scores.push_back(((line.after("=")).toString()).toFloat());
+						}
+					catch (Exception::InvalidFormat)
+						{
+							Log.error() << "Conversion from String to float faoled: invalid format! " << __FILE__ << " " << __LINE__ << std::endl;
+							return false;
+						} 
 				}
 				// add new Scoring_ to vector scorings_
         addScoring(name, options, scores);
@@ -316,7 +324,7 @@ namespace BALL
 			{
 				if (!file.getline(&(buffer[0]), 2000))
 				{
-					Log.error() << "Error while reading Dock Result file, could not read PDB part" << std::endl;
+					Log.error() << "Error while reading Dock Result file, could not read PDB part! " << __FILE__ << " " << __LINE__ << std::endl;
 					return false;
 				}
 				PDB_in << buffer << std::endl;
@@ -358,7 +366,7 @@ namespace BALL
 			// read the snapshots from DCDFile 
 			if (!conformation_set_->readDCDFile(DCD_temp))
 			{
-				Log.error() << "Error while reading Dock Result file, could not read DCD part" << std::endl;
+				Log.error() << "Error while reading Dock Result file, could not read DCD part! " << __FILE__ << " " << __LINE__ << std::endl;
 				return false;
 			};
 			
@@ -433,7 +441,7 @@ namespace BALL
 	{
 		if(!dock_res.writeDockResult(out))
 		{
-		 	Log.error() << "Could not write dock result!" << std::endl;
+		 	Log.error() << "Could not write dock result! " << __FILE__ << " " << __LINE__ << std::endl;
 		}
 		return out;
 	}
@@ -443,7 +451,7 @@ namespace BALL
 	{
 		if(!dock_res.readDockResult(in))
 		{
-		 	Log.error() << "Could not read dock result file!" << std::endl;
+		 	Log.error() << "Could not read dock result file! " << __FILE__ << " " << __LINE__ << std::endl;
 		}
 		return in;
 	}
