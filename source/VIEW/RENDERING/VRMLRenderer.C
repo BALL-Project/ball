@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.C,v 1.3.8.1 2005/06/05 22:12:55 amoll Exp $
+// $Id: VRMLRenderer.C,v 1.3.8.2 2005/07/25 12:37:21 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
@@ -213,17 +213,17 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 // print colors ========================================
 	outheader_("color Color {");
 	outheader_("color [");
-	if (mesh.colorList.size() == 0)
+	if (mesh.colors.size() == 0)
 	{
 		out_(VRMLColorRGBA(ColorRGBA(1.,1,1)));
 	}
 	else
 	{
-		vector<ColorRGBA>::const_iterator itc = mesh.colorList.begin(); 
-		for (; itc != mesh.colorList.end(); itc++)
+		vector<ColorRGBA>::const_iterator itc = mesh.colors.begin(); 
+		for (; itc != mesh.colors.end(); itc++)
 		{
 			String out = VRMLColorRGBA(*itc);
-			if (itc != mesh.colorList.end()) 
+			if (itc != mesh.colors.end()) 
 			{
 				out += ",";
 			}

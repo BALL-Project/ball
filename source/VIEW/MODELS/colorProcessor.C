@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.34.4.6 2005/06/29 13:26:37 amoll Exp $
+// $Id: colorProcessor.C,v 1.34.4.7 2005/07/25 12:37:20 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -111,11 +111,11 @@ namespace BALL
 			Mesh* const mesh = dynamic_cast<Mesh*>(object);
 			if (mesh != 0)
 			{
-				mesh->colorList.clear();
+				mesh->colors.clear();
 				if (composite == &composite_to_be_ignored_for_colorprocessors_ ||
 						composites_ == 0)
 				{
-					mesh->colorList.push_back(default_color_);
+					mesh->colors.push_back(default_color_);
 					return Processor::CONTINUE;
 				}
 
@@ -302,7 +302,7 @@ namespace BALL
 		{
 			if (atom_grid_.isEmpty()) return;
 			
-			mesh.colorList.resize(mesh.vertex.size());
+			mesh.colors.resize(mesh.vertex.size());
 			
 			for (Position p = 0; p < mesh.vertex.size(); p++)
 			{
@@ -311,17 +311,17 @@ namespace BALL
 
 				if (atom == 0)
 				{
-					mesh.colorList[p] = default_color_;
+					mesh.colors[p] = default_color_;
 				}
 				else
 				{
 					if (atom->isSelected())
 					{
-						mesh.colorList[p] = selection_color_;
+						mesh.colors[p] = selection_color_;
 					}
 					else
 					{
-						getColor(*atom, mesh.colorList[p]);
+						getColor(*atom, mesh.colors[p]);
 					}
 				}
 			}

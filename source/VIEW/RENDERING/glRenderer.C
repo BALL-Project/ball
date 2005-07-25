@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.16 2005/06/16 14:03:21 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.17 2005/07/25 12:37:21 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -813,9 +813,9 @@ namespace BALL
 			// If we have only one color for the whole mesh, this can
 			// be assigned efficiently
 			bool multiple_colors = true;
-			if (mesh.colorList.size() < mesh.vertex.size())
+			if (mesh.colors.size() < mesh.vertex.size())
 			{	
-				if (mesh.colorList.size() == 0)
+				if (mesh.colors.size() == 0)
 				{
 					dummy_color_.set(255,255,255,255);
 					last_color_ = &dummy_color_;
@@ -823,7 +823,7 @@ namespace BALL
 				}
 				else
 				{
-					setColorRGBA_(mesh.colorList[0]);
+					setColorRGBA_(mesh.colors[0]);
 				}
 				multiple_colors = false;
 			}
@@ -844,7 +844,7 @@ namespace BALL
 				{
 					for (Size index = 0; index < mesh.vertex.size(); ++index)
 					{
-						setColorRGBA_(mesh.colorList[index]);
+						setColorRGBA_(mesh.colors[index]);
 						vertexVector3_(mesh.vertex[index]);
 					}
 				}
@@ -877,13 +877,13 @@ namespace BALL
 						
 						normalVector3_(normal_vector_);
 
-						setColorRGBA_(mesh.colorList[mesh.triangle[index].v1]);
+						setColorRGBA_(mesh.colors[mesh.triangle[index].v1]);
 						vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
 
-						setColorRGBA_(mesh.colorList[mesh.triangle[index].v2]);
+						setColorRGBA_(mesh.colors[mesh.triangle[index].v2]);
 						vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
 
-						setColorRGBA_(mesh.colorList[mesh.triangle[index].v3]);
+						setColorRGBA_(mesh.colors[mesh.triangle[index].v3]);
 						vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
 						
 						glEnd();
@@ -916,17 +916,17 @@ namespace BALL
 					for (Size index = 0; index < nr_triangles; ++index)
 					{
 						Position p = mesh.triangle[index].v1;
-						setColorRGBA_(mesh.colorList[p]);
+						setColorRGBA_(mesh.colors[p]);
 						normalVector3_(  mesh.normal[p]);
 						vertexVector3_(  mesh.vertex[p]);
 
 						p = mesh.triangle[index].v2;
-						setColorRGBA_(mesh.colorList[p]);
+						setColorRGBA_(mesh.colors[p]);
 						normalVector3_(  mesh.normal[p]);
 						vertexVector3_(  mesh.vertex[p]);
 
 						p = mesh.triangle[index].v3;
-						setColorRGBA_(mesh.colorList[p]);
+						setColorRGBA_(mesh.colors[p]);
 						normalVector3_(  mesh.normal[p]);
 						vertexVector3_(  mesh.vertex[p]);
 					}

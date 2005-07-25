@@ -2,7 +2,13 @@
 
 Version 1.1.1 is mainly a bugfix release.
 
-fixed:
+Added:
+ - added support for SD files in BALLView
+
+Changed:
+ - Renamed Mesh::colorList to Mesh::colors
+
+Fixed:
  - Memory issues with Python objects (e.g. inserting GeometricObjects into Representations)
  - Saving and loading of BALLView project files
  - several problems with Cartoon and Backbone models
@@ -15,12 +21,8 @@ fixed:
  - crash, when performing a MDS with trajectory and DCD file could not be written
  - incorrect bond orders and GLN amide group planarity in fragment database
 
-improved:
+Improved:
  - DNA cartoon model
-
-added:
- - added support for SD files in BALLView
-
 
 1.1: 21.06.2005
 

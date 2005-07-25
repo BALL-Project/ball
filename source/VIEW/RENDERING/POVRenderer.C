@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19.4.9 2005/07/16 20:25:11 amoll Exp $
+// $Id: POVRenderer.C,v 1.19.4.10 2005/07/25 12:37:21 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -594,7 +594,7 @@ namespace BALL
 			// is this a mesh in wireframe mode?
 			if (wireframes_.has(&mesh))
 			{
-				if (mesh.colorList.size() == 0) return;
+				if (mesh.colors.size() == 0) return;
 
 				String pre = "Wire(";
 
@@ -606,9 +606,9 @@ namespace BALL
 					if (v1 != v2 && v2 != v3 && v3!= v1)
 					{
 						out << pre << v1 << ", " << v2 << ", " << v3 << ", "
-								<< getColorIndex_(mesh.colorList[mesh.triangle[tri].v1]) << ","
-								<< getColorIndex_(mesh.colorList[mesh.triangle[tri].v2]) << ","
-								<< getColorIndex_(mesh.colorList[mesh.triangle[tri].v3]) << ")" << endl;
+								<< getColorIndex_(mesh.colors[mesh.triangle[tri].v1]) << ","
+								<< getColorIndex_(mesh.colors[mesh.triangle[tri].v2]) << ","
+								<< getColorIndex_(mesh.colors[mesh.triangle[tri].v3]) << ")" << endl;
 					}
 				}
 				return;
@@ -647,13 +647,13 @@ namespace BALL
 			vector<const ColorRGBA*> color_vector;
 			String color_string;
 			Position pos = 0;
-			for (Position i = 0; i < mesh.colorList.size(); i++)
+			for (Position i = 0; i < mesh.colors.size(); i++)
 			{
-				mesh.colorList[i].get(color_string);
+				mesh.colors[i].get(color_string);
 				if (!colors.has(color_string))
 				{
 					colors.insert(ColorMap::ValueType(color_string, pos));
-					color_vector.push_back(&mesh.colorList[i]);
+					color_vector.push_back(&mesh.colors[i]);
 					pos++;
 				}
 			}
@@ -700,11 +700,11 @@ namespace BALL
 					out << mesh.triangle[i].v2 << ", ";
 					out << mesh.triangle[i].v3 << ">, ";
 					// color index
-					mesh.colorList[mesh.triangle[i].v1].get(color_temp);
+					mesh.colors[mesh.triangle[i].v1].get(color_temp);
 					out << colors[color_temp] << ", ";
-					mesh.colorList[mesh.triangle[i].v2].get(color_temp);
+					mesh.colors[mesh.triangle[i].v2].get(color_temp);
 					out << colors[color_temp] << ", ";
-					mesh.colorList[mesh.triangle[i].v3].get(color_temp);
+					mesh.colors[mesh.triangle[i].v3].get(color_temp);
 					out << colors[color_temp] << endl;
 				}
 			}
@@ -754,13 +754,13 @@ namespace BALL
 
 					Mesh& mesh = *dynamic_cast<Mesh*>(*it);
 					String color_string;
-					for (Position i = 0; i < mesh.colorList.size(); i++)
+					for (Position i = 0; i < mesh.colors.size(); i++)
 					{
-						mesh.colorList[i].get(color_string);
+						mesh.colors[i].get(color_string);
 						if (!color_map_.has(color_string))
 						{
 							color_map_.insert(ColorMap::ValueType(color_string, color_map_.size()));
-							color_vector_.push_back(&mesh.colorList[i]);
+							color_vector_.push_back(&mesh.colors[i]);
 						}
 					}
 				}

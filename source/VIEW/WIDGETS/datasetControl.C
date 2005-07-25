@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.37.2.7 2005/06/20 00:29:00 amoll Exp $
+// $Id: datasetControl.C,v 1.37.2.8 2005/07/25 12:37:21 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -717,8 +717,8 @@ namespace BALL
 			getMainControl()->update(*rep2);
 			*/
 
-			mesh->colorList.clear(); 
-			mesh->colorList.push_back(surface_dialog_->getColor());
+			mesh->colors.clear(); 
+			mesh->colors.push_back(surface_dialog_->getColor());
 
 			// Create a new representation containing the contour surface.
 			Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();

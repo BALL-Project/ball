@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.21 2005/07/13 14:08:49 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.24 2005/07/25 12:37:19 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -295,14 +295,14 @@ namespace BALL
 
 			if (!color_only_selection->isChecked())
 			{
-				mesh_->colorList.resize(1);
-				mesh_->colorList[0] = col;
+				mesh_->colors.resize(1);
+				mesh_->colors[0] = col;
 				return;
 			}
 
-			if (mesh_->colorList.size() != mesh_->vertex.size())
+			if (mesh_->colors.size() != mesh_->vertex.size())
 			{
-				mesh_->colorList.resize(mesh_->vertex.size());
+				mesh_->colors.resize(mesh_->vertex.size());
 			}
 
 			// make sure we have a colorProcessor
@@ -321,11 +321,11 @@ namespace BALL
 
 				if (atom == 0 || !atom->isSelected())
 				{
-					mesh_->colorList[p].setAlpha(255 - rep_->getTransparency());
+					mesh_->colors[p].setAlpha(255 - rep_->getTransparency());
 				}
 				else
 				{
-					mesh_->colorList[p] = col;
+					mesh_->colors[p] = col;
 				}
 			}
 		}
@@ -361,7 +361,7 @@ namespace BALL
 			setColor_(max_max_color, max_max_label, max_max_alpha, alpha_button_grid);
 
 			// now do the colorizing stuff...
-			mesh_->colorList.resize(mesh_->vertex.size());
+			mesh_->colors.resize(mesh_->vertex.size());
 			ColorRGBA list[2];
 
 			list[0] = min_color;
@@ -387,16 +387,16 @@ namespace BALL
 			try 
 			{
 				const float mid_value = String(mid_box->text().ascii()).toFloat();
-				for (Position i = 0; i < mesh_->colorList.size(); i++)
+				for (Position i = 0; i < mesh_->colors.size(); i++)
 				{
 					const float grid_value = grid_->getInterpolatedValue(mesh_->vertex[i]);
 					if (grid_value <= mid_value)
 					{
-						mesh_->colorList[i].set(lower_table.map(grid_value));
+						mesh_->colors[i].set(lower_table.map(grid_value));
 					}
 					else
 					{
-						mesh_->colorList[i].set(upper_table.map(grid_value));
+						mesh_->colors[i].set(upper_table.map(grid_value));
 					}
 				}
 			}	
@@ -725,16 +725,16 @@ namespace BALL
 				// make a backup of the old meshs content and clear it
 				vector<ColorRGBA> colors;
 
-				bool multi_color = (org_mesh.colorList.size() > 1);
+				bool multi_color = (org_mesh.colors.size() > 1);
 
 				if (multi_color)
 				{
-					colors = org_mesh.colorList;
-					org_mesh.colorList.clear();
+					colors = org_mesh.colors;
+					org_mesh.colors.clear();
 				}
 				else
 				{ 
-					new_mesh->colorList = org_mesh.colorList;
+					new_mesh->colors = org_mesh.colors;
 				}
 
 				vector<Surface::Triangle> triangles = org_mesh.triangle;
@@ -760,7 +760,7 @@ namespace BALL
 						new_mesh->normal.push_back(normals[pos]);
 						if (multi_color)
 						{
-							new_mesh->colorList.push_back(colors[pos]);
+							new_mesh->colors.push_back(colors[pos]);
 						}
 					}
 				}
@@ -791,7 +791,7 @@ namespace BALL
 							org_mesh.normal.push_back(normals[vpos]);
 							if (multi_color)
 							{
-								org_mesh.colorList.push_back(colors[vpos]);
+								org_mesh.colors.push_back(colors[vpos]);
 							}
 						}
 
@@ -973,9 +973,9 @@ namespace BALL
 
 				Mesh* mesh = dynamic_cast<Mesh*> (*it);
 
-				for (Position p = 0; p < mesh->colorList.size(); p++)
+				for (Position p = 0; p < mesh->colors.size(); p++)
 				{
-					mesh->colorList[p].setAlpha(255 - transparency);
+					mesh->colors[p].setAlpha(255 - transparency);
 				}
 			}
 		}

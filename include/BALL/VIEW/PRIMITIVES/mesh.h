@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.6.8.1 2005/06/14 16:08:29 amoll Exp $
+// $Id: mesh.h,v 1.6.8.2 2005/07/25 12:37:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
@@ -122,7 +122,7 @@ namespace BALL
 					there are vertices in this mesh, we take the first element to color the whole
 					mesh. If it is *empty*, we use the color white.
 			 */
-			vector<ColorRGBA> colorList;
+			vector<ColorRGBA> colors;
 			//@}
 
 		};

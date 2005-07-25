@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.52.2.5 2005/06/29 13:09:16 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.52.2.6 2005/07/25 12:37:20 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -30,8 +30,8 @@ namespace BALL
 			Mesh* const mesh = dynamic_cast<Mesh*>(object);
 			if (mesh != 0)
 			{
-				mesh->colorList.clear();
-				mesh->colorList.push_back(default_color_);
+				mesh->colors.clear();
+				mesh->colors.push_back(default_color_);
 				return Processor::CONTINUE;
 			}
 
@@ -599,10 +599,10 @@ namespace BALL
 			Mesh* const mesh = dynamic_cast<Mesh*>(&object);
 			if (mesh != 0)
 			{
-				mesh->colorList.clear();
+				mesh->colors.clear();
 				if (composite == &composite_to_be_ignored_for_colorprocessors_ || composites_ == 0)
 				{
-					mesh->colorList.push_back(default_color_);
+					mesh->colors.push_back(default_color_);
 					return;
 				}
 
@@ -758,7 +758,7 @@ namespace BALL
 		{
 			if (atom_grid_.isEmpty()) return;
 			
-			mesh.colorList.resize(mesh.vertex.size());
+			mesh.colors.resize(mesh.vertex.size());
 			
 			for (Position p = 0; p < mesh.vertex.size(); p++)
 			{
@@ -767,17 +767,17 @@ namespace BALL
 
 				if (atom == 0)
 				{
- 					mesh.colorList[p] = default_color_;
+ 					mesh.colors[p] = default_color_;
 				}
 				else
 				{
 					if (show_selection_ && atom->isSelected())
 					{
-						mesh.colorList[p] = selection_color_;
+						mesh.colors[p] = selection_color_;
 					}
 					else
 					{
- 						getColor(*atom, mesh.colorList[p]);
+ 						getColor(*atom, mesh.colors[p]);
 					}
 				}
 			}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.C,v 1.5 2003/11/29 15:56:13 amoll Exp $
+// $Id: mesh.C,v 1.5.8.1 2005/07/25 12:37:20 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 
@@ -16,7 +16,7 @@ namespace BALL
 			throw()
 			:	GeometricObject(),
 				Surface(),
-				colorList()
+				colors()
 
 		{
 		}
@@ -25,7 +25,7 @@ namespace BALL
 			throw()
 			:	GeometricObject(mesh),
 				Surface(mesh),
-				colorList(mesh.colorList)
+				colors(mesh.colors)
 		{
 		}
 
@@ -42,14 +42,14 @@ namespace BALL
 			throw()
 		{
 			GeometricObject::clear();
-	//		colorList.clear();
+	//		colors.clear();
 		}
 
 		void Mesh::set(const Mesh& mesh)
 			throw()
 		{
 			GeometricObject::set(mesh);
-			colorList = mesh.colorList;
+			colors = mesh.colors;
 		}
 
 		const Mesh& Mesh::operator = (const Mesh& mesh)
@@ -64,9 +64,9 @@ namespace BALL
 		{
 			GeometricObject::swap(mesh);
 			//			Surface::swap(mesh);
-			vector<ColorRGBA> dummy = mesh.colorList;
-			mesh.colorList = colorList;
-			colorList = dummy;
+			vector<ColorRGBA> dummy = mesh.colors;
+			mesh.colors = colors;
+			colors = dummy;
 		}
 
 		bool Mesh::isValid() const
@@ -85,7 +85,7 @@ namespace BALL
 			BALL_DUMP_HEADER(s, this, this);
 
 			GeometricObject::dump(s, depth + 1);
-			//colorList.dump();
+			//colors.dump();
 			
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
