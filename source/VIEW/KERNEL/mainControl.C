@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.19 2005/06/20 00:28:59 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.20 2005/07/25 15:09:18 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -373,15 +373,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				return;
 			}
 
-
-			#ifdef BALL_QT_HAS_THREADS
-				stop_simulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
-												SLOT(stopSimulation()), ALT+Key_C);
-				setMenuHint(stop_simulation_id_, "Abort a running simulation thread");
-			#endif
-
-			complement_selection_id_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
-
 			// establish connection 
 			connect(preferences_dialog_->ok_button, SIGNAL(clicked()), 
 					this, SLOT(applyPreferencesTab()));
@@ -428,8 +419,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			// if the preferences dialog has any tabs then show it
 			if (preferences_dialog_->hasPages())
 			{
-				initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
-				
 				insertPopupMenuSeparator(MainControl::EDIT);
 				preferences_id_ = insertMenuEntry(MainControl::EDIT,
 																					"Preferences", 

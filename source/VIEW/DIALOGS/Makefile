@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.44.6.6 2005/06/19 09:32:51 oliver Exp $
+# $Id: Makefile,v 1.44.6.7 2005/07/25 15:09:16 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -50,6 +50,8 @@ CPP_SOURCES=\
 	molecularDynamicsDialog.C\
 	molecularDynamicsDialogData.C\
 	molecularFileDialog.C\
+	openBruker1DFile.C\
+	openBruker2DFile.C\
 	networkPreferences.C\
 	networkPreferencesData.C\
 	parsedFunctionDialog.C\
@@ -110,6 +112,8 @@ MOC_SOURCES=\
 	molecularDynamicsDialogData_moc.C\
 	networkPreferences_moc.C\
 	networkPreferencesData_moc.C\
+	openBruker1DFile_moc.C\
+	openBruker2DFile_moc.C\
 	parsedFunctionDialog_moc.C\
 	parsedFunctionDialogData_moc.C\
 	peptideDialog_moc.C\
@@ -172,6 +176,9 @@ serverPreferences_moc.C: $(HEADER_DIR)/serverPreferences.h
 
 openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
 	$(MOC) $(HEADER_DIR)/openBruker1DFile.h -o $@
+
+openBruker2DFile_moc.C: $(HEADER_DIR)/openBruker2DFile.h
+	$(MOC) $(HEADER_DIR)/openBruker2DFile.h -o $@
 
 colorChooser_moc.C: $(HEADER_DIR)/colorChooser.h
 	$(MOC) $(HEADER_DIR)/colorChooser.h -o $@
