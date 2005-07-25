@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.11 2005/06/19 11:28:15 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.12 2005/07/25 12:45:44 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -497,9 +497,9 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 				{
 					Mesh* mesh = dynamic_cast<Mesh*> (*it);
 
-					for (Position p = 0; p < mesh->colorList.size(); p++)
+					for (Position p = 0; p < mesh->colors.size(); p++)
 					{
-						mesh->colorList[p].setAlpha(255 - transparency);
+						mesh->colors[p].setAlpha(255 - transparency);
 					}
 				}
 				else
