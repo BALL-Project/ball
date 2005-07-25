@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.22 2005/07/22 14:20:11 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.23 2005/07/25 11:19:31 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -571,7 +571,7 @@ void AddCartoonModel::buildStrand_(Position first, Position last)
 		}
 	}
 
-	const Angle max_angle(30, false);
+	const Angle max_angle(15, false);
 
 	// an additional smoothing run...
 	for (Index i = 0; i < (Index) peptide_normals.size(); i++)
