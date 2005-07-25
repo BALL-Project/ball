@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.6 2005/06/19 17:24:36 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.7 2005/07/25 20:46:05 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -157,6 +157,15 @@ namespace BALL
 
 		// Menu ------------------------------------------------------------------------
 		menuBar()->setSeparator(QMenuBar::InWindowsStyle);
+
+//   		#ifdef BALL_QT_HAS_THREADS
+			stop_simulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
+											SLOT(stopSimulation()), ALT+Key_C);
+			insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
+			setMenuHint(stop_simulation_id_, "Abort a running simulation thread");
+//   		#endif
+
+		complement_selection_id_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
 
 		setStatusbarText("Ready.");
 	}
