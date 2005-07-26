@@ -5,6 +5,7 @@ Version 1.1.1 is mainly a bugfix release.
 Added:
  - added support for SD files in BALLView
  - picking support for bonds
+ - coloring by molecule
 
 Changed:
  - Renamed Mesh::colorList to Mesh::colors

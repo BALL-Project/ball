@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.C,v 1.37.2.2 2005/07/26 22:00:47 amoll Exp $
+// $Id: coloringSettingsDialog.C,v 1.37.2.3 2005/07/26 22:35:50 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
@@ -50,6 +50,12 @@ namespace BALL
 			throw()
 		{
 			horizontalHeader()->setLabel(0, name.c_str());
+		}
+
+		String QColorTable::getNamesTitle() const
+			throw()
+		{
+			return horizontalHeader()->label(0).ascii();
 		}
 			
 		void QColorTable::setContent(const vector<String>& names, const vector<ColorRGBA>& colors)
@@ -106,6 +112,7 @@ namespace BALL
 			element_table_ = new QColorTable(widget_stack->widget(0));
 			residue_table_ = new QColorTable(widget_stack->widget(2));
 			chain_table_   = new QColorTable(widget_stack->widget(10));
+			molecule_table_= new QColorTable(widget_stack->widget(11));
 			setDefaultValues(true);
 
 			registerObject_(first_residue_label);
@@ -157,13 +164,14 @@ namespace BALL
 			writeColorTable(*element_table_, inifile);
 			writeColorTable(*residue_table_, inifile);
 			writeColorTable(*chain_table_,   inifile);
+			writeColorTable(*molecule_table_,inifile);
 		}
 
 		void ColoringSettingsDialog::writeColorTable(const QColorTable& table, INIFile& inifile)
 		{
 			for (Position p = 0; p < table.getColors().size(); p ++)
 			{
-				inifile.insertValue(inifile_section_name_, table.getNames()[p].c_str(), table.getColors()[p]);
+				inifile.insertValue(inifile_section_name_, table.getNamesTitle() + "_" + table.getNames()[p].c_str(), table.getColors()[p]);
 			}
 		}
 
@@ -173,7 +181,7 @@ namespace BALL
 			for (Position p = 0; p < table.getColors().size(); p ++)
 			{
 				ColorRGBA color;
-				if (!fetchPreference_(inifile, table.getNames()[p], color)) break;
+				if (!fetchPreference_(inifile, table.getNamesTitle() + "_" + table.getNames()[p], color)) break;
 				colors.push_back(color);
 			}
 
@@ -194,6 +202,7 @@ namespace BALL
 			readColorTable(*element_table_, inifile);
 			readColorTable(*chain_table_, 	inifile);
 			readColorTable(*residue_table_, inifile);
+			readColorTable(*molecule_table_,inifile);
 		}
 
 		void ColoringSettingsDialog::setDefaultValues(bool all)
@@ -265,6 +274,12 @@ namespace BALL
 			{
 				getSettings(ChainColorProcessor());
 			}
+			// =============================================================
+			// setting molecule colors
+			if (all || current == 11)
+			{
+				getSettings(MoleculeColorProcessor());
+			}
 
 		}
 
@@ -286,6 +301,7 @@ namespace BALL
 				}
 				case COLORING_RESIDUE_INDEX: 	table = residue_table_; break;
 				case COLORING_CHAIN: 					table = chain_table_  ; break;
+				case COLORING_MOLECULE: 			table = molecule_table_; break;
 				default: return colors;
 			}
 					
@@ -408,6 +424,13 @@ namespace BALL
 				((ChainColorProcessor*)&cp)->setColors(getColors(COLORING_CHAIN));
 				return;
 			}
+
+			if (RTTI::isKindOf<MoleculeColorProcessor>(cp))
+			{
+				((MoleculeColorProcessor*)&cp)->setColors(getColors(COLORING_MOLECULE));
+				return;
+			}
+
 		}
 			
 		void ColoringSettingsDialog::maxDistanceChanged()
@@ -498,6 +521,9 @@ namespace BALL
 					color_processor = new ChainColorProcessor;
 					break;
 
+				case COLORING_MOLECULE:
+					color_processor = new MoleculeColorProcessor;
+					break;
 
 				default:
 					throw(Exception::InvalidOption(__FILE__, __LINE__, method));
@@ -608,7 +634,24 @@ namespace BALL
 
 				chain_table_->setNamesTitle("Chain");
 				chain_table_->setContent(names, colors);
+			} else
+
+			if (RTTI::isKindOf<MoleculeColorProcessor>(cp))
+			{
+ 				MoleculeColorProcessor& dp = (*(MoleculeColorProcessor*)&cp);
+				vector<String> 		names;
+				vector<ColorRGBA> colors;
+
+				for (Position p = 0; p < dp.getColors().size(); p++)
+				{
+					colors.push_back(dp.getColors()[p]);
+					names.push_back(p);
+				}
+
+				molecule_table_->setNamesTitle("Molecule");
+				molecule_table_->setContent(names, colors);
 			}
+
 		}
 
 		QWidget* ColoringSettingsDialog::getEntryFor(ColoringMethod method)

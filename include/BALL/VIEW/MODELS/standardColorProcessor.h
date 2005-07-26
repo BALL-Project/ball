@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.29.2.5 2005/07/26 22:00:08 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.29.2.6 2005/07/26 22:34:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -21,6 +21,10 @@
 
 #ifndef BALL_KERNEL_CHAIN_H
 # include<BALL/KERNEL/chain.h>
+#endif
+
+#ifndef BALL_KERNEL_MOLECULE_H
+# include<BALL/KERNEL/molecule.h>
 #endif
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -158,6 +162,35 @@ namespace BALL
 			HashMap<const Chain*, Position> chain_to_position_;
 		};
 
+
+		class MoleculeColorProcessor
+			: public ColorProcessor
+		{
+			public:
+
+				BALL_CREATE(MoleculeColorProcessor)
+
+				///
+				MoleculeColorProcessor();
+
+				///
+				virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
+
+				///
+				void setColors(const vector<ColorRGBA>& colors) { colors_ = colors;}
+
+				///
+				vector<ColorRGBA>& getColors() { return colors_;}
+
+				///
+				const vector<ColorRGBA>& getColors() const { return colors_;}
+
+			protected:
+
+			Molecule 												dummy_molecule_;
+			vector<ColorRGBA> 							colors_;
+			HashMap<const Molecule*, Position> molecule_to_position_;
+		};
 
 
 		/** ResidueNameColorProcessor is derived from the class ColorProcessor.

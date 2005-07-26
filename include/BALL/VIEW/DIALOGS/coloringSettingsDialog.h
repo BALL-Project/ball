@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.21 2005/02/24 15:52:26 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.21.2.1 2005/07/26 22:34:19 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -58,6 +58,9 @@ namespace BALL
 					throw();
 				
 				void setNamesTitle(const String& string)
+					throw();
+
+				String getNamesTitle() const
 					throw();
 				
 				void setContent(const vector<String>& names, const vector<ColorRGBA>& colors)
@@ -185,6 +188,7 @@ namespace BALL
 			QColorTable* element_table_;
 			QColorTable* residue_table_;
 			QColorTable* chain_table_;
+			QColorTable* molecule_table_;
 		};
 
 } }
