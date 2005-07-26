@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.25 2005/07/22 08:35:23 oliver Exp $
+// $Id: molecularControl.C,v 1.96.2.26 2005/07/26 23:04:15 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -272,7 +272,8 @@ namespace BALL
 				switch (composite_message->getType())
 				{
 					case CompositeMessage::NEW_MOLECULE:
-						addComposite(*(Composite *)composite_message->getComposite());
+						addComposite(*(Composite *)composite_message->getComposite(), 
+																			 composite_message->getCompositeName());
 						return false;
 					
 					case CompositeMessage::REMOVED_COMPOSITE:
@@ -650,19 +651,19 @@ namespace BALL
 		}
 
 
-		void MolecularControl::addComposite(Composite& composite, QString* own_name)
+		void MolecularControl::addComposite(Composite& composite, String given_name)
 			throw()
 		{
 			// get information about the composite
 			composite.host(getInformationVisitor_());
 
-			// if the own name is empty use name as name
-			QString name = getInformationVisitor_().getName().c_str();
-
-			if ((name[0] == '<') && (own_name != 0))
+			// if the own name is empty use name from information visitor
+			if (given_name == "")
 			{
-				name = *own_name;
+				given_name = getInformationVisitor_().getName();
 			}
+
+			QString name = given_name.c_str();
 
 			// generate ListViewItem and insert it into the ListView
 			generateListViewItem_(0, composite, &name);

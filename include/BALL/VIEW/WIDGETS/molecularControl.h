@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.47.2.7 2005/06/18 21:56:05 amoll Exp $
+// $Id: molecularControl.h,v 1.47.2.8 2005/07/26 23:03:55 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -157,13 +157,13 @@ class BALL_EXPORT MolecularControl
 		throw();
 
 	/** Insert a Composite object into this Control.
-			If <tt>name == 0</tt> than the Information visitor is used for determining
+			If <tt>name == ""</tt> than the Information visitor is used for determining
 			a name for the Composite.\par
 			Calls generateListViewItem_() for the Composite.
 			\param   composite a pointer to the Composite to be inserted into the Control
-			\param   name a name, the SelectableListViewItem for the Composite should receive
+			\param   name for the SelectableListViewItem
 	*/
-	void addComposite(Composite& composite, QString* name = 0)
+	void addComposite(Composite& composite, String given_name = "")
 		throw();
 
 	/** Recursive removal of a Composite from the Control.

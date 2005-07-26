@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.86.2.6 2005/07/18 13:37:15 amoll Exp $
+// $Id: molecularStructure.C,v 1.86.2.7 2005/07/26 23:04:15 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1314,6 +1314,7 @@ namespace BALL
 
 			System* system = new System;
 			system->insert(*protein);
+			system->setName(dialog.getSequence());
 			getMainControl()->insert(*system, dialog.getSequence());
 		}
 
