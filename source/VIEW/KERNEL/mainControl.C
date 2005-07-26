@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.20 2005/07/25 15:09:18 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.21 2005/07/26 13:29:12 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -996,49 +996,38 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			HashSet<Composite*> roots;
 
-			Size nr = 0;
 			List<GeometricObject*>& objects = const_cast<List<GeometricObject*>&>(message.getSelection());
 			List<GeometricObject*>::Iterator it_objects = objects.begin();
+			
+			const bool to_select = message.isSelected();
 
-			if (message.isSelected())
+			// use a function pointer to (de)selectCompositeRecursive
+			void (MainControl::*func_ptr) (Composite*, bool);
+
+			if (to_select) func_ptr = &MainControl::selectCompositeRecursive;
+			else 					 func_ptr = &MainControl::deselectCompositeRecursive;
+
+			for (; it_objects != objects.end(); it_objects++)
 			{
-				for (; it_objects != objects.end(); it_objects++)
-				{
-					Composite* composite = const_cast<Composite*>((**it_objects).getComposite());
+				Composite* composite = const_cast<Composite*>((**it_objects).getComposite());
 
-					if (composite != 0  && !composite->isSelected())
-					{	
-						nr++;
-						roots.insert(&composite->getRoot());
-						if (RTTI::isKindOf<Bond>(*composite))
-						{
-							composite->select();
-						}
-						else
-						{
-							selectCompositeRecursive(composite , true);
-						}
+				if (composite != 0  && composite->isSelected() != to_select)
+				{	
+					Bond* const bond = dynamic_cast<Bond*>(composite);
+					if (bond !=0)
+					{
+						Atom* first  = (Atom*) bond->getFirstAtom();
+						Atom* second = (Atom*) bond->getSecondAtom();
+						
+						roots.insert(&first->getRoot());
+						
+						(this->*func_ptr)(first, true);
+						(this->*func_ptr)(second, true);
 					}
-				}
-			}
-			else
-			{
-				for (; it_objects != objects.end(); it_objects++)
-				{
-					Composite* composite = const_cast<Composite*>((**it_objects).getComposite());
-
-					if (composite != 0  && composite->isSelected())
-					{	
-						nr++;
+					else
+					{
 						roots.insert(&composite->getRoot());
-						if (RTTI::isKindOf<Bond>(*composite))
-						{
-							composite->deselect();
-						}
-						else
-						{
-							deselectCompositeRecursive(composite , true);
-						}
+						(this->*func_ptr)(composite, true);
 					}
 				}
 			}
@@ -1048,12 +1037,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			HashSet<Composite*>::Iterator it = roots.begin();
 			for(; it != roots.end(); it++)
 			{
-				updateRepresentationsOf(**it, false);
+ 				updateRepresentationsOf(**it, false);
 			}
-
-			#ifdef BALL_DEBUG_VIEW
-				Log.info() << "Selected " + String(nr) + " items."<< std::endl;
-			#endif
 
 			NewSelectionMessage* new_message = new NewSelectionMessage;
 			notify_(new_message);
