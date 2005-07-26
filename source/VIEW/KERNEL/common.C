@@ -93,6 +93,8 @@ namespace BALL
 					return "by residue type";
 				case COLORING_CHAIN:
 					return "by chain";
+				case COLORING_MOLECULE:
+					return "by molecule";
 				case COLORING_CUSTOM:
 					return "custom";
 				case COLORING_UNKNOWN:
@@ -413,5 +415,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } //namespace BALL
