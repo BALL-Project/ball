@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.49 2004/12/27 17:05:51 amoll Exp $
+// $Id: exception.h,v 1.49.4.1 2005/07/26 19:59:31 amoll Exp $
 //
    
 #ifndef BALL_COMMON_EXCEPTION_H
@@ -190,7 +190,7 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			InvalidRange(const char* file, int line)
+			InvalidRange(const char* file, int line, float value)
 				throw();
 		};
 
