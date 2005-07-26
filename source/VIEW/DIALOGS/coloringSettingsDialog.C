@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.C,v 1.37 2005/02/24 15:52:32 amoll Exp $
+// $Id: coloringSettingsDialog.C,v 1.37.2.1 2005/07/26 20:02:25 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
@@ -334,9 +334,9 @@ namespace BALL
 			if (RTTI::isKindOf<AtomChargeColorProcessor>(cp))
 			{
 				AtomChargeColorProcessor& dp = (*(AtomChargeColorProcessor*)&cp);
-				dp.setPositiveColor(getLabelColor_(positive_charge_label));
-				dp.setNegativeColor(getLabelColor_(negative_charge_label));
-				dp.setNeutralColor(getLabelColor_(neutral_charge_label));
+				dp.getColors()[0] = (getLabelColor_(negative_charge_label));
+				dp.getColors()[1] = (getLabelColor_(neutral_charge_label));
+				dp.getColors()[2] = (getLabelColor_(positive_charge_label));
 				return;
 			}
 
@@ -373,10 +373,10 @@ namespace BALL
 			if (RTTI::isKindOf<TemperatureFactorColorProcessor>(cp))
 			{
 				TemperatureFactorColorProcessor& dp = (*(TemperatureFactorColorProcessor*)&cp);
-				dp.setMinMinColor(getLabelColor_(unassigned_tf_label));
-				dp.setMinColor(getLabelColor_(minimum_tf_label));
-				dp.setMaxColor(getLabelColor_(maximum_tf_label));
-				dp.setMaxMaxColor(getLabelColor_(unassigned_tf_label));
+				dp.setMinColor(getLabelColor_(unassigned_tf_label));
+				dp.getColors()[0] = (getLabelColor_(minimum_tf_label));
+				dp.getColors()[1] = (getLabelColor_(maximum_tf_label));
+				dp.setMaxColor(getLabelColor_(unassigned_tf_label));
 				dp.setMaxValue(((float)max_tf_slider->value()) / 10.0);
 				return;
 			}
@@ -535,9 +535,9 @@ namespace BALL
 			if (RTTI::isKindOf<AtomChargeColorProcessor>(cp))
 			{
 				AtomChargeColorProcessor& dp = (*(AtomChargeColorProcessor*)&cp);
-				setLabelColor_(positive_charge_label, dp.getPositiveColor());
-				setLabelColor_(negative_charge_label, dp.getNegativeColor());
-				setLabelColor_(neutral_charge_label, dp.getNeutralColor());
+				setLabelColor_(negative_charge_label, dp.getColors()[0]);
+				setLabelColor_(neutral_charge_label, dp.getColors()[1]);
+				setLabelColor_(positive_charge_label, dp.getColors()[2]);
 			} else
 
 			if (RTTI::isKindOf<AtomDistanceColorProcessor>(cp))
@@ -568,9 +568,9 @@ namespace BALL
 			if (RTTI::isKindOf<TemperatureFactorColorProcessor>(cp))
 			{
 				TemperatureFactorColorProcessor& dp = (*(TemperatureFactorColorProcessor*)&cp);
-				setLabelColor_(unassigned_tf_label, dp.getMinMinColor());
-				setLabelColor_(minimum_tf_label, dp.getMinColor());
-				setLabelColor_(maximum_tf_label, dp.getMaxColor());
+				setLabelColor_(unassigned_tf_label, dp.getDefaultColor());
+				setLabelColor_(minimum_tf_label, dp.getColors()[0]);
+				setLabelColor_(maximum_tf_label, dp.getColors()[1]);
 				max_tf_slider->setValue((Size)(dp.getMaxValue() * 10.0));
 			} else
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.29.2.3 2005/06/29 13:09:41 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.29.2.4 2005/07/26 19:59:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -221,7 +221,7 @@ namespace BALL
 				\ingroup  ViewModels
 		*/
 		class AtomChargeColorProcessor
-			: public ColorProcessor
+			: public InterpolateColorProcessor
 		{
 			public:
 
@@ -250,57 +250,10 @@ namespace BALL
 			*/ 
 			//@{
 
-			/** Change the positive color.
-					If the charge of the given Atom object is greater +1, this color will be
-					used. This positive color is used in the visit() method to calculate the
-					actual charge color of the given Atom object.
-					\param color the new positive color.
-			*/
-			void setPositiveColor(const ColorRGBA& color)
-				throw();
-
-			/** Non-mutable inspection of the positive color.
-					\return  ColorRGBA& a constant reference to the positive color
-			*/
-			const ColorRGBA& getPositiveColor() const
-				throw();
-
-			/** Change the neutral color.
-					If the charge of the given Atom object is = 0 than this color will be
-					used. This neutral color is used in the visit method to calculate the
-					actual charge color of the given Atom object.
-			*/
-			void setNeutralColor(const ColorRGBA& color)
-				throw();
-
-			/** Non-mutable inspection of the neutral color.
-					\return  ColorRGBA& a constant reference to the neutral color
-			*/
-			const ColorRGBA& getNeutralColor() const
-				throw();
-
-			/** Change the negative color.
-					If the charge of the given Atom object is = 0 than this color will be
-					used. This negative color is used in the visit() method to calculate the
-					actual charge color of the given Atom object.
-			*/
-			void setNegativeColor(const ColorRGBA& color)
-				throw();
-
-			/** Non-mutable inspection of the negative color.
-					\return  ColorRGBA& a constant reference to the negative color
-			*/
-			const ColorRGBA& getNegativeColor() const
-				throw();
-
 			///
 			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 
 			//@}
-
-			private:
-
-			ColorRGBA		positive_color_, neutral_color_, negative_color_;
 		};
 
 

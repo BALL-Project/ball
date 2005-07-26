@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.34.4.7 2005/07/25 12:37:20 amoll Exp $
+// $Id: colorProcessor.C,v 1.34.4.8 2005/07/26 20:00:09 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -432,24 +432,51 @@ namespace BALL
 		//////////////////////////////////////////////////////////////////////
 		InterpolateColorProcessor::InterpolateColorProcessor()
 			: ColorProcessor(),
-				min_color_(ColorRGBA(0,0,1.0)),
-				max_color_(ColorRGBA(1.0,1.0,0)),
-				min_min_color_(ColorRGBA(1.0,1.0,1.0)),
-				max_max_color_(ColorRGBA(1.0,0.0,0)),
+				min_color_(ColorRGBA(1.0,1.0,1.0)),
+				max_color_(ColorRGBA(1.0,0.0,0)),
+				use_outside_colors_(true),
 				max_value_(1),
 				min_value_(0)
 		{
 			default_color_ = ColorRGBA(1.0,1.0,1.0);
 		}
 
-		void InterpolateColorProcessor::setTransparency(Size value)
-			throw() 
-		{ 
-			ColorProcessor::setTransparency(value);
-			min_color_.setAlpha(255 - value);
-			max_color_.setAlpha(255 - value);
-			min_min_color_.setAlpha(255 - value);
-			max_max_color_.setAlpha(255 - value);
+
+		InterpolateColorProcessor::InterpolateColorProcessor(const InterpolateColorProcessor& pro)
+			: ColorProcessor(pro)
+		{
+		}
+
+		
+		bool InterpolateColorProcessor::InterpolateColorProcessor::start()
+			throw()
+		{
+			if (!ColorProcessor::start()) return false;
+
+			if (colors_.size() < 2 ||
+					max_value_ <= min_value_)
+			{
+				return false;
+			}
+
+			x_ = (max_value_ - min_value_) / (colors_.size() - 1);
+
+			min_color_.setAlpha(255 - transparency_);
+			max_color_.setAlpha(255 - transparency_);
+			default_color_.setAlpha(255 - transparency_);
+
+			for (Position p = 0; p < colors_.size(); p++)
+			{
+				colors_[p].setAlpha(255 - transparency_);
+			}
+
+			if (!use_outside_colors_)
+			{
+				min_color_ = colors_[0];
+				max_color_ = colors_[colors_.size() - 1];
+			}
+
+			return true;
 		}
 
 		void InterpolateColorProcessor::interpolateColor(float value, ColorRGBA& color_to_be_set)
@@ -457,30 +484,33 @@ namespace BALL
 		{
 			if (value < min_value_)
 			{
-				color_to_be_set.set(min_min_color_);
+				color_to_be_set.set(min_color_);
 				return;
 			}
 			
 			if (value > max_value_) 
 			{
-				max_max_color_.set(max_max_color_);
+				color_to_be_set.set(max_color_);
 				return;
 			}
 
-			float red1   = min_color_.getRed();
-			float green1 = min_color_.getGreen();
-			float blue1  = min_color_.getBlue();
+			const float& red1   = min_color_.getRed();
+			const float& green1 = min_color_.getGreen();
+			const float& blue1  = min_color_.getBlue();
 
-			float red2   = max_color_.getRed();
-			float green2 = max_color_.getGreen();
-			float blue2  = max_color_.getBlue();
+			const float red2   = (float) max_color_.getRed() - red1;
+			const float green2 = (float) max_color_.getGreen() - green2;
+			const float blue2  = (float) max_color_.getBlue() - blue2;
 
-			value -= min_value_;
+			const Position z1 = (Position)floor(value / x_);
+//   			const Position z2 = (Position)ceil(value / x_);
 
-			color_to_be_set.set(red1 + (value * (red2 - red1)) 			/ max_value_,
-													 green1 + (value * (green2 - green1))	/ max_value_,
-													 blue1 + (value * (blue2 - blue1)) 		/ max_value_,
-													 255 - transparency_);
+			const float dz1 = (value - ((float)z1) * x_) / x_;
+//   			const float dz2 = (value - ((float)z2) * x_) / x_;
+
+			color_to_be_set.set(red1   + dz1 * red2,
+													green1 + dz1 * green2,
+													blue1  + dz1 * blue2);
 		}
 
 		void InterpolateColorProcessor::setMinColor(const ColorRGBA& color)
@@ -505,68 +535,6 @@ namespace BALL
 			throw()
 		{
 			return max_color_;
-		}
-
-		float InterpolateColorProcessor::getMaxValue() const
-			throw()
-		{
-			return max_value_;
-		}
-
-		void InterpolateColorProcessor::setMaxValue(float value)
-			throw()
-		{
-			max_value_ = value;
-		}
-
-		float InterpolateColorProcessor::getMinValue() const
-			throw()
-		{
-			return min_value_;
-		}
-
-		void InterpolateColorProcessor::setMinValue(float value)
-			throw()
-		{
-			min_value_ = value;
-		}
-
-		void InterpolateColorProcessor::setMinMinColor(const ColorRGBA& color)
-			throw()
-		{
-			min_min_color_ = color;
-		}
-
-		void InterpolateColorProcessor::setMaxMaxColor(const ColorRGBA& color)
-			throw()
-		{
-			max_max_color_ = color;
-		}
-
-		const ColorRGBA& InterpolateColorProcessor::getMinMinColor() const
-			throw()
-		{
-			return min_min_color_;
-		}
-
-		const ColorRGBA& InterpolateColorProcessor::getMaxMaxColor() const
-			throw()
-		{
-			return max_max_color_;
-		}
-
-		bool InterpolateColorProcessor::start()
-			throw()
-		{
-			if (!ColorProcessor::start()) return false;
-
-			min_min_color_.setAlpha(255 - transparency_);
-			min_color_.setAlpha(255 - transparency_);
-			max_max_color_.setAlpha(255 - transparency_);
-			max_color_.setAlpha(255 - transparency_);
-			default_color_.setAlpha(255 - transparency_);
-
-			return true;
 		}
 
 	} // namespace VIEW

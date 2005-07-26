@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.52.2.6 2005/07/25 12:37:20 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.52.2.7 2005/07/26 20:00:09 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -415,66 +415,40 @@ namespace BALL
 		////////////////////////////////////////////////////////////////////
 		AtomChargeColorProcessor::AtomChargeColorProcessor()
 			throw()
-			:	ColorProcessor(),
-				positive_color_("0000FFFF"),
-				neutral_color_("FFFFFFFF"),
-				negative_color_("FF0000FF")
+			:	InterpolateColorProcessor()
 		{
+			use_outside_colors_ = false;
+
+			colors_.resize(3);
+
+			min_value_ = -1.0;
+			max_value_ =  1.0;
+
+			colors_[0] = "0000FFFF";
+			colors_[1] = "FFFFFFFF";
+			colors_[2] = "FF0000FF";
+
 			update_always_needed_ = true;
 		}
 
+
 		AtomChargeColorProcessor::AtomChargeColorProcessor(const AtomChargeColorProcessor& color_processor)
 			throw()
-			: ColorProcessor(color_processor),
-				positive_color_(color_processor.positive_color_),
-				neutral_color_(color_processor.neutral_color_),
-				negative_color_(color_processor.negative_color_)
+			: InterpolateColorProcessor(color_processor)
 		{
 		}
 
 		void AtomChargeColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
 		{
 			const Atom* atom = dynamic_cast<const Atom*>(&composite);
+
 			if (atom == 0)
 			{
 				color_to_be_set.set(default_color_);
 				return;
 			}
 
-			float charge = atom->getCharge();
-
-			// clip the charges to +/- 1.0
-			if 			(charge > 1.0) charge =  1.0;
-			else if (charge < -1.0) charge = -1.0;
-
-			float red1, green1, blue1;
-
-			// interpolate the color
-			if (charge >= 0)
-			{
-				red1   = positive_color_.getRed();
-				green1 = positive_color_.getGreen();
-				blue1  = positive_color_.getBlue();
-			} 
-			else 
-			{
-				red1   = negative_color_.getRed();
-				green1 = negative_color_.getGreen();
-				blue1  = negative_color_.getBlue();
-			
-				charge *= -1.0;
-			}
-
-			const float red2   = neutral_color_.getRed();
-			const float green2 = neutral_color_.getGreen();
-			const float blue2  = neutral_color_.getBlue();
-
-			const float f = 1.0 - charge;
-
-			color_to_be_set.set(red1 	* charge + f * red2,
-													 green1 * charge + f * green2,
-													 blue1 	* charge + f * blue2,
-													 255 - transparency_);
+			interpolateColor(atom->getCharge(), color_to_be_set);
 		}
 
 
@@ -787,10 +761,12 @@ namespace BALL
 		TemperatureFactorColorProcessor::TemperatureFactorColorProcessor()
 			: InterpolateColorProcessor()
 		{
+			use_outside_colors_ = false;
+			colors_.resize(2);
 			default_color_ = ColorRGBA(1.0,1.0,1.0);
-			min_color_.set(0,0,1.0),
-			max_color_.set(1.0,1.0,0),
-			min_value_ = (float) 0.00001;
+			colors_[0].set(0,0,1.0),
+			colors_[1].set(1.0,1.0,0),
+			min_value_ = 0.0;
 			max_value_ = 50;
 		}
 
@@ -810,9 +786,12 @@ namespace BALL
 		OccupancyColorProcessor::OccupancyColorProcessor()
 			: InterpolateColorProcessor()
 		{
+			use_outside_colors_ = false;
+			colors_.resize(2);
+
 			default_color_ = ColorRGBA(1.0, 1.0, 1.0);
-			min_color_.set(0, 0, 1.0),
-			max_color_.set(1.0, 1.0, 0),
+			colors_[0].set(0, 0, 1.0),
+			colors_[1].set(1.0,1.0,0),
 			min_value_ = 0;
 			max_value_ = 1;
 		}
@@ -834,11 +813,16 @@ namespace BALL
 		ForceColorProcessor::ForceColorProcessor()
 			: InterpolateColorProcessor()
 		{
+			use_outside_colors_ = false;
+			colors_.resize(2);
+
 			default_color_ = ColorRGBA(1.0, 1.0, 1.0);
-			min_color_.set(0, 0, 1.0),
-			max_color_.set(1.0, 0, 0),
+
+			colors_[0].set(0, 0, 1.0),
+			colors_[1].set(1.0, 0, 0),
 			min_value_ = 0;
 			max_value_ = 10;
+
 			update_always_needed_ = true;
 		}
 

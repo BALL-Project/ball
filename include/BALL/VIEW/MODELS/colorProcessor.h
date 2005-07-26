@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.28.4.5 2005/06/15 14:21:31 amoll Exp $
+// $Id: colorProcessor.h,v 1.28.4.6 2005/07/26 19:59:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -260,10 +260,22 @@ class InterpolateColorProcessor
 
 	///
 	InterpolateColorProcessor();
+	
+	///
+	InterpolateColorProcessor(const InterpolateColorProcessor& pro);
 
 	///
 	virtual bool start()
 		throw();
+
+	///
+	vector<ColorRGBA>& getColors() throw() { return colors_;}
+	
+	///
+	const vector<ColorRGBA>& getColors() const throw() { return colors_;}
+
+	///
+	void setColors(const vector<ColorRGBA>& colors) throw() { colors_ = colors;}
 
 	///
 	void setMinColor(const ColorRGBA& color)
@@ -280,38 +292,18 @@ class InterpolateColorProcessor
 	///
 	const ColorRGBA& getMaxColor() const
 		throw();
-	
-	///
-	void setMinMinColor(const ColorRGBA& color)
-		throw();
 
 	///
-	void setMaxMaxColor(const ColorRGBA& color)
-		throw();
+	void setMaxValue(float value) throw() {max_value_ = value;}
 
 	///
-	const ColorRGBA& getMinMinColor() const
-		throw();
-	
-	///
-	const ColorRGBA& getMaxMaxColor() const
-		throw();
+	float getMaxValue() const throw() { return max_value_;}
 
 	///
-	void setMaxValue(float value)
-		throw();
+	void setMinValue(float value) throw() { min_value_ = value;}
 
 	///
-	float getMaxValue() const
-		throw();
-
-	///
-	void setMinValue(float value)
-		throw();
-
-	///
-	float getMinValue() const
-		throw();
+	float getMinValue() const throw() { return min_value_;}
 
 	/** Interpolate a color between the given colors.
 			To be overloaded in derived classes.
@@ -319,19 +311,22 @@ class InterpolateColorProcessor
 	virtual void interpolateColor(float value, ColorRGBA& color_to_be_set)
 		throw();
 
-	/** Set the transparency.
-	*/
-	virtual void setTransparency(Size value)
-		throw();
-
 	protected:
 
+	// out of range colors
 	ColorRGBA min_color_,
-						max_color_,
-						min_min_color_,
-						max_max_color_;
+						max_color_;
+
+	// standard colors
+	vector<ColorRGBA> colors_;
+
+	bool 			use_outside_colors_;
+
 	float 		max_value_;
 	float 		min_value_;
+	
+	// value distance between two colors
+	float 		x_;
 };
 
 } } // namespaces
