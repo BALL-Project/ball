@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.34.4.8 2005/07/26 20:00:09 amoll Exp $
+// $Id: colorProcessor.C,v 1.34.4.9 2005/07/26 22:00:04 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -434,7 +434,7 @@ namespace BALL
 			: ColorProcessor(),
 				min_color_(ColorRGBA(1.0,1.0,1.0)),
 				max_color_(ColorRGBA(1.0,0.0,0)),
-				use_outside_colors_(true),
+				mode_(NO_OUTSIDE_COLORS),
 				max_value_(1),
 				min_value_(0)
 		{
@@ -470,10 +470,15 @@ namespace BALL
 				colors_[p].setAlpha(255 - transparency_);
 			}
 
-			if (!use_outside_colors_)
+			if (mode_ == NO_OUTSIDE_COLORS)
 			{
 				min_color_ = colors_[0];
 				max_color_ = colors_[colors_.size() - 1];
+			}
+			else if (mode_ == DEFAULT_COLOR_FOR_OUTSIDE_COLORS)
+			{
+				min_color_ = default_color_;
+				max_color_ = default_color_;
 			}
 
 			return true;
@@ -494,19 +499,18 @@ namespace BALL
 				return;
 			}
 
-			const float& red1   = min_color_.getRed();
-			const float& green1 = min_color_.getGreen();
-			const float& blue1  = min_color_.getBlue();
+			const Position z1 = (Position)floor((value - min_value_)/ x_);
+ 			const Position z2 = (Position)ceil((value - min_value_)/ x_);
 
-			const float red2   = (float) max_color_.getRed() - red1;
-			const float green2 = (float) max_color_.getGreen() - green2;
-			const float blue2  = (float) max_color_.getBlue() - blue2;
+			const float& red1   = colors_[z1].getRed();
+			const float& green1 = colors_[z1].getGreen();
+			const float& blue1  = colors_[z1].getBlue();
 
-			const Position z1 = (Position)floor(value / x_);
-//   			const Position z2 = (Position)ceil(value / x_);
+			const float red2   = (float) colors_[z2].getRed()   - (float) colors_[z1].getRed();
+			const float green2 = (float) colors_[z2].getGreen() - (float) colors_[z1].getGreen();
+			const float blue2  = (float) colors_[z2].getBlue()  - (float) colors_[z1].getBlue();
 
-			const float dz1 = (value - ((float)z1) * x_) / x_;
-//   			const float dz2 = (value - ((float)z2) * x_) / x_;
+			const float dz1 = (value - min_value_ - ((float)z1) * x_) / x_;
 
 			color_to_be_set.set(red1   + dz1 * red2,
 													green1 + dz1 * green2,

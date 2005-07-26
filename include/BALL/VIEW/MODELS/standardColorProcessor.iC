@@ -1,13 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.iC,v 1.1.8.1 2005/07/26 19:59:57 amoll Exp $
-
-void AtomDistanceColorProcessor::setDistance(float distance)
-  throw()
-{
-	distance_ = distance;
-}
+// $Id: standardColorProcessor.iC,v 1.1.8.2 2005/07/26 22:00:09 amoll Exp $
 
 BALL_INLINE
 float AtomDistanceColorProcessor::getDistance() const

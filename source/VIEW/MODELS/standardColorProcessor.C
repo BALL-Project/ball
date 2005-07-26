@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.52.2.7 2005/07/26 20:00:09 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.52.2.8 2005/07/26 22:00:04 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -417,7 +417,7 @@ namespace BALL
 			throw()
 			:	InterpolateColorProcessor()
 		{
-			use_outside_colors_ = false;
+			mode_ = NO_OUTSIDE_COLORS;
 
 			colors_.resize(3);
 
@@ -761,12 +761,13 @@ namespace BALL
 		TemperatureFactorColorProcessor::TemperatureFactorColorProcessor()
 			: InterpolateColorProcessor()
 		{
-			use_outside_colors_ = false;
+			mode_ = DEFAULT_COLOR_FOR_OUTSIDE_COLORS;
+
 			colors_.resize(2);
 			default_color_ = ColorRGBA(1.0,1.0,1.0);
 			colors_[0].set(0,0,1.0),
 			colors_[1].set(1.0,1.0,0),
-			min_value_ = 0.0;
+			min_value_ = 0.0001;
 			max_value_ = 50;
 		}
 
@@ -786,14 +787,15 @@ namespace BALL
 		OccupancyColorProcessor::OccupancyColorProcessor()
 			: InterpolateColorProcessor()
 		{
-			use_outside_colors_ = false;
+			mode_ = DEFAULT_COLOR_FOR_OUTSIDE_COLORS;
+
 			colors_.resize(2);
 
 			default_color_ = ColorRGBA(1.0, 1.0, 1.0);
 			colors_[0].set(0, 0, 1.0),
 			colors_[1].set(1.0,1.0,0),
-			min_value_ = 0;
-			max_value_ = 1;
+			min_value_ = 0.0;
+			max_value_ = 1.0;
 		}
 
 		void OccupancyColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
@@ -813,7 +815,8 @@ namespace BALL
 		ForceColorProcessor::ForceColorProcessor()
 			: InterpolateColorProcessor()
 		{
-			use_outside_colors_ = false;
+			mode_ = NO_OUTSIDE_COLORS;
+
 			colors_.resize(2);
 
 			default_color_ = ColorRGBA(1.0, 1.0, 1.0);

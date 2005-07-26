@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.29.2.4 2005/07/26 19:59:57 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.29.2.5 2005/07/26 22:00:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -304,8 +304,7 @@ namespace BALL
 					the distances of the inserted atoms are calculated.
 					\param distance the new max distance 
 			*/
-			void setDistance(float distance)
-				throw();
+			void setDistance(float distance) throw() { distance_ = distance;}
 
 			/** Inspection of the max distance.
 			*/

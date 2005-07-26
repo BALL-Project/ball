@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.28.4.6 2005/07/26 19:59:57 amoll Exp $
+// $Id: colorProcessor.h,v 1.28.4.7 2005/07/26 22:00:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -256,6 +256,20 @@ class InterpolateColorProcessor
 {
 	public: 
 
+	///
+	enum Mode
+	{
+		///
+		USE_OUTSIDE_COLOR = 0,
+
+		///
+		DEFAULT_COLOR_FOR_OUTSIDE_COLORS,
+
+		///
+		NO_OUTSIDE_COLORS
+	};
+		
+
 	BALL_CREATE(InterpolateColorProcessor)
 
 	///
@@ -267,6 +281,12 @@ class InterpolateColorProcessor
 	///
 	virtual bool start()
 		throw();
+
+	///
+	void setMode(Mode mode) { mode_ = mode;}
+
+	///
+	Mode getMode() const { return mode_;}
 
 	///
 	vector<ColorRGBA>& getColors() throw() { return colors_;}
@@ -320,7 +340,7 @@ class InterpolateColorProcessor
 	// standard colors
 	vector<ColorRGBA> colors_;
 
-	bool 			use_outside_colors_;
+	Mode 			mode_;
 
 	float 		max_value_;
 	float 		min_value_;

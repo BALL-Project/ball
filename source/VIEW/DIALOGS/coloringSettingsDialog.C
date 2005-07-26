@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.C,v 1.37.2.1 2005/07/26 20:02:25 amoll Exp $
+// $Id: coloringSettingsDialog.C,v 1.37.2.2 2005/07/26 22:00:47 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
@@ -353,8 +353,8 @@ namespace BALL
 			if (RTTI::isKindOf<OccupancyColorProcessor>(cp))
 			{
 				OccupancyColorProcessor& dp = (*(OccupancyColorProcessor*)&cp);
-				dp.setMinColor(getLabelColor_(minimum_o_label));
-				dp.setMaxColor(getLabelColor_(maximum_o_label));
+				dp.getColors()[0] = (getLabelColor_(minimum_o_label));
+				dp.getColors()[1] = (getLabelColor_(maximum_o_label));
 				return;
 			}
 
@@ -384,8 +384,8 @@ namespace BALL
 			if (RTTI::isKindOf<ForceColorProcessor>(cp))
 			{
 				ForceColorProcessor& dp = (*(ForceColorProcessor*)&cp);
-				dp.setMinColor(getLabelColor_(force_min_color_label));
-				dp.setMaxColor(getLabelColor_(force_max_color_label));
+				dp.getColors()[0] = (getLabelColor_(force_min_color_label));
+				dp.getColors()[1] = (getLabelColor_(force_max_color_label));
 				dp.setMaxValue(((float)force_max_value_slider->value()) / 10.0);
 				dp.setMinValue(((float)force_min_value_slider->value()) / 10.0);
 				return;
@@ -552,8 +552,8 @@ namespace BALL
 			if (RTTI::isKindOf<OccupancyColorProcessor>(cp))
 			{
 				OccupancyColorProcessor& dp = (*(OccupancyColorProcessor*)&cp);
-				setLabelColor_(minimum_o_label, dp.getMinColor());
-				setLabelColor_(maximum_o_label, dp.getMaxColor());
+				setLabelColor_(minimum_o_label, dp.getColors()[0]);
+				setLabelColor_(maximum_o_label, dp.getColors()[1]);
 			} else
 
 			if (RTTI::isKindOf<SecondaryStructureColorProcessor>(cp))
@@ -577,8 +577,8 @@ namespace BALL
 			if (RTTI::isKindOf<ForceColorProcessor>(cp))
 			{
 				ForceColorProcessor& dp = (*(ForceColorProcessor*)&cp);
-				setLabelColor_(force_min_color_label, dp.getMinColor());
-				setLabelColor_(force_max_color_label, dp.getMaxColor());
+				setLabelColor_(force_min_color_label, dp.getColors()[0]);
+				setLabelColor_(force_max_color_label, dp.getColors()[1]);
 				force_max_value_slider->setValue((Size)(dp.getMaxValue() * 10.0));
 				force_min_value_slider->setValue((Size)(dp.getMinValue() * 10.0));
 			} else
