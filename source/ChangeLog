@@ -11,6 +11,7 @@ Changed:
 
 Fixed:
  - NMRViewer und underlying widgets
+ - Mouse sensitivity changed in Rotate mode when focusing on small structures
  - Memory issues with Python objects (e.g. inserting GeometricObjects into Representations)
  - Saving and loading of BALLView project files
  - several problems with Cartoon and Backbone models

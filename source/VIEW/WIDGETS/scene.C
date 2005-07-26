@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.30 2005/07/21 12:08:14 amoll Exp $
+// $Id: scene.C,v 1.171.2.31 2005/07/26 14:23:15 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -751,15 +751,19 @@ namespace BALL
 			float up2 = 	 (gl_renderer_.getHeight() - y_window_pos_new_) / 
 				gl_renderer_.getHeight() * mouse_sensitivity_ / -ROTATE_FACTOR;
 
-			Camera& camera = stage_->getCamera();
+			const Camera& camera = stage_->getCamera();
+
+			Vector3 vv = camera.getViewVector();
+			vv.normalize();
+			vv *= 20.0;
 
 			Vector3 a = camera.getRightVector()  * right1
 				+ camera.getLookUpVector() * up1
-				+ camera.getViewVector()   * sphereProject_(0.8, right1, up1);
+				+ vv * sphereProject_(0.8, right1, up1);
 
 			Vector3 b = camera.getRightVector()  * right2
 				+ camera.getLookUpVector() * up2
-				+ camera.getViewVector()   * sphereProject_(0.8, right2, up2);
+				+ vv * sphereProject_(0.8, right2, up2);
 
 			Vector3 cross = a % b;
 
