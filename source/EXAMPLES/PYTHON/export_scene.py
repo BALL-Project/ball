@@ -1,4 +1,3 @@
-s = Scene.getInstance(0)
-s.exportPNG()
+getScene().exportPNG()
 pov = POVRenderer("test.pov")
-s.exportScene(pov)
+getScene().exportScene(pov)
