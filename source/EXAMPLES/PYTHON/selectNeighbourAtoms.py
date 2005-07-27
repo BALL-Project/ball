@@ -1,10 +1,7 @@
 # select all atoms in proximity of less than maxdistance from a selected atom
 maxdistance = 4
 
-mc = MainControl.getInstance(0)
-cm = mc.getCompositeManager()
-
-system = cm.getComposites()[0]
+system = getComposites()[0]
 
 cl = []
 
@@ -21,5 +18,5 @@ system.deselect()
 for atom in cl:
 	atom.select()
 
-mc.update(system)
+getMainControl().update(system)
 
