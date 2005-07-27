@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.26 2005/07/26 23:04:15 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.27 2005/07/27 22:00:31 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -131,6 +131,7 @@ namespace BALL
 
 			QPushButton* clear_button = new QPushButton(this);
 			clear_button->resize(60, 25);
+			clear_button->setMinimumSize(40, 25);
 			clear_button->setText("Clear");
 			clear_button->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, false));
 			connect(clear_button, SIGNAL(clicked()), this, SLOT(clearSelector()));
@@ -141,6 +142,7 @@ namespace BALL
 
 			QPushButton* help_button = new QPushButton(this);
 			help_button->resize(60, 25);
+			help_button->setMinimumSize(40, 25);
 			help_button->setText("Help");
 			help_button->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, false));
 			connect(help_button, SIGNAL(clicked()), this, SLOT(showSelectorHelp()));
@@ -151,6 +153,7 @@ namespace BALL
 			select_button->resize(60, 25);
 			select_button->setText("Select");
 			select_button->setDefault(true);
+			select_button->setMinimumSize(40, 25);
 			select_button->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, false));
 			connect(select_button, SIGNAL(clicked()), this, SLOT(applySelector()));
 			QToolTip::add(select_button, tr("Apply the current expression."));
