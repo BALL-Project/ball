@@ -1,7 +1,5 @@
-m = MainControl.getInstance(0)
-pm = m.getPrimitiveManager()
-py = PyWidget.getInstance(0)
-dp = DisplayProperties.getInstance(0)
+pm = getMainControl().getPrimitiveManager()
+dp = getDisplayProperties()
 fd = MolecularFileDialog.getInstance(0)
 
 result = 0
@@ -12,7 +10,7 @@ def clearRepresentations():
 	rl = pm.getRepresentations()
 	i = 0
 	while i < nr:
-		m.remove(rl[i])
+		getMainControl().remove(rl[i])
 		i = i + 1
 
 def runTest(name, model):
@@ -21,7 +19,7 @@ def runTest(name, model):
 	model_result = 0
 	timer = Timer();
 	timer.start();
-	while run < nr_runs and not py.toAbortScript():
+	while run < nr_runs
 		dp.selectModel(model)
 		dp.apply()
 		run += 1
@@ -33,7 +31,7 @@ def runTest(name, model):
 	result += model_result
 
 clearRepresentations()
-m.getPrimitiveManager().setMultithreadingMode(0)
+pm.setMultithreadingMode(0)
 dp.enableCreationForNewMolecules(0)
 dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
 dp.setSurfaceDrawingPrecision(6.5)
@@ -52,4 +50,4 @@ print "Result: "+str(result)+" seconds"
 result /= nr_runs
 result = 3 / result
 print "Result: "+str(result)+" BALLView stones"
-m.getPrimitiveManager().setMultithreadingMode(1)
+pm.setMultithreadingMode(1)
