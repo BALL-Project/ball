@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19.4.11 2005/07/27 13:45:44 amoll Exp $
+// $Id: POVRenderer.C,v 1.19.4.12 2005/07/27 21:54:07 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -598,17 +598,27 @@ namespace BALL
 
 				String pre = "Wire(";
 
+				String color_index = getColorIndex_(mesh.colors[0]);
+
 				for (Position tri = 0; tri < mesh.triangle.size(); tri++)
 				{
 					String v1 = POVVector3(mesh.vertex[mesh.triangle[tri].v1]);
 					String v2 = POVVector3(mesh.vertex[mesh.triangle[tri].v2]);
 					String v3 = POVVector3(mesh.vertex[mesh.triangle[tri].v3]);
-					if (v1 != v2 && v2 != v3 && v3!= v1)
+
+					if (v1 == v2 || v2 == v3 || v3 == v1) continue;
+
+					out << pre << v1 << ", " << v2 << ", " << v3 << ", ";
+
+					if (mesh.colors.size() > 1)
 					{
-						out << pre << v1 << ", " << v2 << ", " << v3 << ", "
-								<< getColorIndex_(mesh.colors[mesh.triangle[tri].v1]) << ","
+						out	<< getColorIndex_(mesh.colors[mesh.triangle[tri].v1]) << ","
 								<< getColorIndex_(mesh.colors[mesh.triangle[tri].v2]) << ","
 								<< getColorIndex_(mesh.colors[mesh.triangle[tri].v3]) << ")" << endl;
+					}
+					else
+					{
+						out << color_index << "," << color_index << "," << color_index <<")" << std::endl;
 					}
 				}
 				return;
@@ -646,15 +656,13 @@ namespace BALL
 			ColorMap colors;
 			vector<const ColorRGBA*> color_vector;
 			String color_string;
-			Position pos = 0;
 			for (Position i = 0; i < mesh.colors.size(); i++)
 			{
 				mesh.colors[i].get(color_string);
 				if (!colors.has(color_string))
 				{
-					colors.insert(ColorMap::ValueType(color_string, pos));
+					colors.insert(ColorMap::ValueType(color_string, colors.size()));
 					color_vector.push_back(&mesh.colors[i]);
-					pos++;
 				}
 			}
 
@@ -786,6 +794,14 @@ namespace BALL
 		{
 			String color_temp;
 			color.get(color_temp);
+#ifdef BALL_VIEW_DEBUG
+			if (!color_map_.has(color_temp))
+			{
+				BALLVIEW_DEBUG
+				return "";
+			}
+#endif
+
 			return String("c") + String(color_map_[color_temp]);
 		}
 

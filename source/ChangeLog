@@ -19,7 +19,7 @@ Fixed:
  - Saving and loading of BALLView project files
  - several problems with Cartoon and Backbone models
  - splitting of surfaces for given distance: computed incorrect surfaces
- - POVRay export: degenerated objects (with a length of 0)
+ - POVRay export: degenerated objects (with a length of 0) and meshes with only one color
  - Missing assignment operator in RotamerLibrary
  - Problems in persistence w/ g++ 4.x series
  - Hangup in socket interface w/ g++ 4.x series
