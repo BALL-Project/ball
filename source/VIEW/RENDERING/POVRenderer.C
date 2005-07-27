@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19.4.10 2005/07/25 12:37:21 amoll Exp $
+// $Id: POVRenderer.C,v 1.19.4.11 2005/07/27 13:45:44 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -332,9 +332,9 @@ namespace BALL
 			out << "#end" << endl << endl;
 
 			out << "#macro Wire(Position1, Position2, Position3, Color1, Color2, Color3)" << endl;
-			out << "cylinder { Position1, Position2, wire_radius pigment { Color1 } finish { BALLFinishWire} }" << endl;
-			out << "cylinder { Position2, Position3, wire_radius pigment { Color2 } finish { BALLFinishWire} }" << endl;
-			out << "cylinder { Position3, Position1, wire_radius pigment { Color3 } finish { BALLFinishWire} }" << endl;
+			out << "cylinder { Position1, Position2, BALL_WIRE_RADIUS pigment { Color1 } finish { BALLFinishWire} }" << endl;
+			out << "cylinder { Position2, Position3, BALL_WIRE_RADIUS pigment { Color2 } finish { BALLFinishWire} }" << endl;
+			out << "cylinder { Position3, Position1, BALL_WIRE_RADIUS pigment { Color3 } finish { BALLFinishWire} }" << endl;
 			out << "#end" << endl << endl;
 
 
