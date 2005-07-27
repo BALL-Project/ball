@@ -1,6 +1,4 @@
-m = MainControl.getInstance(0)
-pm = m.getPrimitiveManager()
-py = PyWidget.getInstance(0)
+pm = getMainControl().getPrimitiveManager()
 dp = DisplayProperties.getInstance(0)
 fd = MolecularFileDialog.getInstance(0)
 pm.setMultithreadingMode(0)
@@ -33,7 +31,7 @@ def runTest(name, model):
 	m.sendMessage(sm)
 	timer = Timer();
 	timer.start();
-	while run < nr_runs and not py.toAbortScript():
+	while run < nr_runs
 		run += 1
 		v = v + Vector3(0,0,1)
 		l = l + Vector3(0,0,1)
@@ -48,7 +46,7 @@ def runTest(name, model):
 	result += model_result
 
 clearRepresentations()
-m.getPrimitiveManager().setMultithreadingMode(0)
+pm.setMultithreadingMode(0)
 dp.enableCreationForNewMolecules(0)
 dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
 dp.setSurfaceDrawingPrecision(6.5)
@@ -64,8 +62,8 @@ DatasetControl.getInstance(0).setVisible(0)
 MolecularControl.getInstance(0).setVisible(0)
 PyWidget.getInstance(0).setVisible(0)
 
-MainControl.getInstance(0).resize(800, 600)
-MainControl.getInstance(0).processEvents(5000)
+getMainControl().resize(800, 600)
+getMainControl().processEvents(5000)
 
 runTest("Lines", 		MODEL_LINES)
 runTest("VDW",   		MODEL_VDW)
@@ -79,4 +77,4 @@ result = 1 / result
 #scale results to the graphics_benchmark.py script
 result /= 5
 print "Result: "+str(result)+" BALLView OpenGL stones"
-m.getPrimitiveManager().setMultithreadingMode(1)
+pm.setMultithreadingMode(1)
