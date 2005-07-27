@@ -9,6 +9,8 @@ Added:
 
 Changed:
  - Renamed Mesh::colorList to Mesh::colors
+ - Exception::InvalidRange now has an float value
+ - changed ColorProcessor hierarchy
 
 Fixed:
  - NMRViewer und underlying widgets
