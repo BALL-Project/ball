@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.sip,v 1.2 2005/01/14 00:26:22 amoll Exp $
+// $Id: standardColorProcessor.sip,v 1.2.4.1 2005/07/27 13:20:23 amoll Exp $
 //
 
 class AtomChargeColorProcessor
-  : ColorProcessor
+  : InterpolateColorProcessor
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -16,12 +16,6 @@ class AtomChargeColorProcessor
   AtomChargeColorProcessor() throw();
   AtomChargeColorProcessor(const AtomChargeColorProcessor&) throw();
 	void getColor(const Composite&, ColorRGBA&);
-  const ColorRGBA& getNegativeColor() const throw();
-  const ColorRGBA& getPositiveColor() const throw();
-  const ColorRGBA& getNeutralColor() const throw();
-  void setNegativeColor(const ColorRGBA&) throw();
-  void setNeutralColor(const ColorRGBA&) throw();
-  void setPositiveColor(const ColorRGBA&) throw();
 };
 
 
@@ -95,6 +89,36 @@ class OccupancyColorProcessor
   OccupancyColorProcessor();
 	void getColor(const Composite&, ColorRGBA&);
 };
+
+class ChainColorProcessor
+  : ColorProcessor
+{
+%TypeHeaderCode
+	#include <BALL/VIEW/MODELS/standardColorProcessor.h>
+	using namespace BALL;
+	using namespace BALL::VIEW;
+%End
+	public:
+
+  ChainColorProcessor();
+	void getColor(const Composite&, ColorRGBA&);
+};
+
+
+class MoleculeColorProcessor
+  : ColorProcessor
+{
+%TypeHeaderCode
+	#include <BALL/VIEW/MODELS/standardColorProcessor.h>
+	using namespace BALL;
+	using namespace BALL::VIEW;
+%End
+	public:
+
+  MoleculeColorProcessor();
+	void getColor(const Composite&, ColorRGBA&);
+};
+
 
   
 class ResidueNameColorProcessor
@@ -170,4 +194,32 @@ class SecondaryStructureColorProcessor
   void setHelixColor(const ColorRGBA&) throw();
   void setStrandColor(const ColorRGBA&) throw();
   void setTurnColor(const ColorRGBA&) throw();
+};
+
+
+class ResidueTypeColorProcessor
+	: ColorProcessor
+{
+%TypeHeaderCode
+	#include <BALL/VIEW/MODELS/standardColorProcessor.h>
+	using namespace BALL;
+	using namespace BALL::VIEW;
+%End
+
+	ResidueTypeColorProcessor();
+	void getColor(const Composite&, ColorRGBA&);
+
+	void setBasicColor(const ColorRGBA&) throw();
+	void setAcidicColor(const ColorRGBA& ) throw();
+	void setPolarColor(const ColorRGBA& ) throw();
+	void setHydrophobicColor(const ColorRGBA& ) throw();
+	void setAromaticColor(const ColorRGBA& ) throw();
+	void setOtherColor(const ColorRGBA& ) throw();
+	const ColorRGBA& getBasicColor() const throw();
+	const ColorRGBA& getAcidicColor() const throw();
+	const ColorRGBA& getPolarColor() const throw();
+	const ColorRGBA& getHydrophobicColor() const throw();
+	const ColorRGBA& getAromaticColor() const throw();
+	const ColorRGBA& getOtherColor() const throw();
+	void setTransparency(Size ) throw();
 };
