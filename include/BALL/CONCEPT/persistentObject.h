@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistentObject.h,v 1.15 2004/02/23 15:19:57 anhi Exp $
+// $Id: persistentObject.h,v 1.15.6.1 2005/07/28 13:26:18 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_PERSISTENTOBJECT_H
@@ -26,7 +26,7 @@ namespace BALL
 			
 	 	 \ingroup  Persistence
 	*/
-	class PersistentObject
+	BALL_EXPORT class PersistentObject
 		:	public Object
 	{	
 		public:

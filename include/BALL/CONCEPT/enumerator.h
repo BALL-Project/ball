@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: enumerator.h,v 1.33 2004/02/23 15:19:57 anhi Exp $
+// $Id: enumerator.h,v 1.33.6.1 2005/07/28 13:26:17 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
@@ -44,7 +44,7 @@ namespace BALL
 			
 	 	 \ingroup ConceptsMiscellaneous
 	*/
-	class EnumeratorIndex
+	BALL_EXPORT class EnumeratorIndex
 		: private std::vector<Position>
 	{
 		public:
@@ -292,7 +292,7 @@ namespace BALL
 			
 	*/
 	template <class Container, class SiteIterator, class Variant>
-	class Enumerator
+	BALL_EXPORT class Enumerator
 	{	
 		protected:
 		class IteratorTraits_;

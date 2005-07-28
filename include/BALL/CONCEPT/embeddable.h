@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: embeddable.h,v 1.20 2004/02/13 15:50:03 oliver Exp $
+// $Id: embeddable.h,v 1.20.6.1 2005/07/28 13:26:17 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
@@ -84,7 +84,7 @@ namespace BALL
 			@see ModularWidget
 	 	 \ingroup ConceptsMiscellaneous
 	*/
-	class Embeddable
+	BALL_EXPORT class Embeddable
 	{
 		public:
 

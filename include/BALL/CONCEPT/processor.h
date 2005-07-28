@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: processor.h,v 1.17 2003/08/26 08:04:08 oliver Exp $
+// $Id: processor.h,v 1.17.6.1 2005/07/28 13:26:19 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
@@ -15,6 +15,10 @@
 #	include <BALL/CONCEPT/baseFunctor.h>
 #endif
 
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 namespace BALL 
 {
 
@@ -26,7 +30,7 @@ namespace BALL
 
 	/**	Global Types and Enums for Processors
 	*/
-	class Processor
+	BALL_EXPORT class Processor
 	{
 		public:
 		/**	Result type
@@ -53,7 +57,7 @@ namespace BALL
 	/**	Generic Unary Processor Class
 	*/
 	template <typename T>
-	class UnaryProcessor
+	BALL_EXPORT class UnaryProcessor
 		: public UnaryFunctor<T, Processor::Result>
 	{
 		public:
@@ -111,7 +115,7 @@ namespace BALL
 	/**	Generic Binary Processor Class
 	*/
 	template <typename T1, typename T2>
-	class BinaryProcessor
+	BALL_EXPORT class BinaryProcessor
 		: public BinaryFunctor<T1, T2, Processor::Result>
 	{
 		public:

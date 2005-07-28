@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timeStamp.h,v 1.23 2003/08/26 08:04:09 oliver Exp $
+// $Id: timeStamp.h,v 1.23.6.1 2005/07/28 13:26:20 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
@@ -32,8 +32,6 @@
 namespace BALL 
 {
 
-//	class PersistenceManager;
-
 	/**	Time class.
 			Used to store a point of time.
 			This class  provides a higher precision than  \link Time Time \endlink 
@@ -42,7 +40,7 @@ namespace BALL
 			
 			\ingroup ConceptsMiscellaneous
 	*/
-	class PreciseTime
+	BALL_EXPORT class PreciseTime
 	{
 
 		public:
@@ -191,7 +189,7 @@ namespace BALL
 			<b>Interface:</b> <tt>Storable</tt>	 \par
 			
 	*/
-	class TimeStamp
+	BALL_EXPORT class TimeStamp
 	{
 		public:
 

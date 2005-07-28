@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: textPersistenceManager.h,v 1.20 2005/02/06 09:44:54 oliver Exp $
+// $Id: textPersistenceManager.h,v 1.20.4.1 2005/07/28 13:26:20 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
@@ -24,7 +24,7 @@ namespace BALL
 			
 			\ingroup  Persistence
 	*/
-	class TextPersistenceManager
+	BALL_EXPORT class TextPersistenceManager
 		:	public PersistenceManager
 	{
 		public:

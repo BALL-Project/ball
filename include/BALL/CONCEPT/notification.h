@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: notification.h,v 1.20.6.1 2005/05/01 11:37:21 oliver Exp $
+// $Id: notification.h,v 1.20.6.2 2005/07/28 13:26:18 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
@@ -34,7 +34,7 @@ namespace BALL
 	class NotificationSource_;
 
 	///
-	class NotificationTarget_
+	BALL_EXPORT class NotificationTarget_
 	{
 		friend class NotificationManager_;
 		friend class NotificationSource_;
@@ -69,7 +69,7 @@ namespace BALL
 	};
 
 	///
-	class NotificationSource_
+	BALL_EXPORT class NotificationSource_
 	{
 		friend class NotificationManager_;
 
@@ -118,7 +118,7 @@ namespace BALL
 	};
 
 	///
-	class NotificationSlot_
+	BALL_EXPORT class NotificationSlot_
 	{
 		friend class NotificationManager_;
 
@@ -138,7 +138,7 @@ namespace BALL
 	};
 
 	///
-	class NotificationManager_
+	BALL_EXPORT class NotificationManager_
 	{
 		friend NotificationManager_& NotificationManager()
 			throw();
@@ -311,7 +311,7 @@ namespace BALL
 	/**	Notification Target Class.
 	*/
 	template <class NotificationSource>
-	class NotificationTarget
+	BALL_EXPORT class NotificationTarget
 	{
 		public:
 		virtual ~NotificationTarget() throw() {}
@@ -347,7 +347,7 @@ namespace BALL
 
 	///
 	template <class NotificationSource, class T1>
-	class NotificationTarget1
+	BALL_EXPORT class NotificationTarget1
 	{
 		public:
 
@@ -378,7 +378,7 @@ namespace BALL
 
 	///
 	template <class NotificationSource, class T1, class T2>
-	class NotificationTarget2
+	BALL_EXPORT class NotificationTarget2
 	{
 		public:
 

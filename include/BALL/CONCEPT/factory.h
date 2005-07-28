@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: factory.h,v 1.10 2003/08/26 08:04:07 oliver Exp $
+// $Id: factory.h,v 1.10.6.1 2005/07/28 13:26:17 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_FACTORY_H
@@ -23,7 +23,7 @@ namespace BALL
 	 	 \ingroup ConceptsMiscellaneous
 	*/
 	template <typename T>
-	class Factory
+	BALL_EXPORT class Factory
 	{
 		public:
 		

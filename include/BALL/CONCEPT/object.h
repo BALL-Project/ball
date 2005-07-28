@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: object.h,v 1.24 2003/08/26 08:04:08 oliver Exp $ 
+// $Id: object.h,v 1.24.6.1 2005/07/28 13:26:18 amoll Exp $ 
 //
 
 #ifndef BALL_CONCEPT_OBJECT_H
@@ -19,6 +19,10 @@
 #	include <BALL/CONCEPT/bidirectionalIterator.h>
 #endif
 
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 namespace BALL 
 {
 
@@ -29,7 +33,7 @@ namespace BALL
 			
 	 	 \ingroup ConceptsMiscellaneous
 	*/
-	class Object
+	BALL_EXPORT class Object
 		: public AutoDeletable
 	{
 		public:
