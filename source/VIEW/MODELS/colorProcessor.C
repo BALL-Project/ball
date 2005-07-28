@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.34.4.9 2005/07/26 22:00:04 amoll Exp $
+// $Id: colorProcessor.C,v 1.34.4.10 2005/07/28 14:38:46 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -448,7 +448,7 @@ namespace BALL
 		}
 
 		
-		bool InterpolateColorProcessor::InterpolateColorProcessor::start()
+		bool InterpolateColorProcessor::start()
 			throw()
 		{
 			if (!ColorProcessor::start()) return false;
