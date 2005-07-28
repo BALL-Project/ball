@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.C,v 1.37 2004/12/07 13:34:33 amoll Exp $
+// $Id: INIFile.C,v 1.37.4.1 2005/07/28 15:05:04 amoll Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -837,5 +837,17 @@ namespace BALL
 		(*position_) = line;
 	}
 
+
+	bool INIFile::Section::operator < (const Section& section) const
+		throw()
+	{
+		return name_ < section.name_;
+	}
+
+	bool INIFile::Section::operator > (const Section& section) const
+		throw()
+	{
+		return name_ < section.name_;
+	}
 
 } // namespace BALL

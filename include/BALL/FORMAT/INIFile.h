@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.40.4.1 2005/07/28 13:52:54 amoll Exp $
+// $Id: INIFile.h,v 1.40.4.2 2005/07/28 15:05:12 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_INIFILE_H
@@ -64,6 +64,14 @@ namespace BALL
 				return (name_		 == section.name_		&&
 								lines_	 == section.lines_);
 			}
+
+			///
+			bool operator < (const Section& section) const
+				throw();
+
+			///
+			bool operator > (const Section& section) const
+				throw();
 
 			protected:
 
