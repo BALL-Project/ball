@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.h,v 1.36 2004/05/27 19:49:39 oliver Exp $
+// $Id: nucleotide.h,v 1.36.4.1 2005/07/28 14:01:57 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
@@ -34,7 +34,7 @@ namespace BALL
 			
     	\ingroup KernelContainers 
 	*/
-	class Nucleotide
+	class BALL_EXPORT Nucleotide
 		: public Fragment
 	{
 		public:
@@ -358,7 +358,7 @@ namespace BALL
 
 
   template <class NucleotideContainerType>
-  const Nucleotide* get5Prime(const NucleotideContainerType& nucleotide_container)
+  BALL_EXPORT const Nucleotide* get5Prime(const NucleotideContainerType& nucleotide_container)
   {
 		NucleotideConstIterator res_it;
     for ( res_it = nucleotide_container.beginNucleotide(); !res_it.isEnd(); ++res_it)
@@ -370,7 +370,7 @@ namespace BALL
   }
 
   template <class NucleotideContainerType>
-  const Nucleotide* get3Prime(const NucleotideContainerType& nucleotide_container)
+  BALL_EXPORT const Nucleotide* get3Prime(const NucleotideContainerType& nucleotide_container)
   {
     for (NucleotideConstIterator res_it = nucleotide_container.rbeginNucleotide(); !res_it.isREnd(); ++res_it)
 		{

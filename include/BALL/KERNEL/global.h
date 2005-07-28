@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.24 2004/05/27 19:49:39 oliver Exp $
+// $Id: global.h,v 1.24.4.1 2005/07/28 14:01:56 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_GLOBAL_H
@@ -54,7 +54,7 @@ namespace BALL
 			\ingroup  KernelMiscellaneous
 	*/
 	template <class AtomContainerType>
-	void cloneBonds(const AtomContainerType& atom_container, AtomContainerType& cloned)
+	BALL_EXPORT void cloneBonds(const AtomContainerType& atom_container, AtomContainerType& cloned)
 	{
 		typedef HashMap<const Atom*, Atom*>	AtomMap;
 		AtomMap atom_map;

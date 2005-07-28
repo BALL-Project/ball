@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.h,v 1.44 2004/05/27 19:49:38 oliver Exp $
+// $Id: bond.h,v 1.44.4.1 2005/07/28 14:01:53 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_BOND_H
@@ -52,7 +52,7 @@ namespace BALL
 			
     	\ingroup KernelMiscellaneous 
 	*/
-	class Bond
+	class BALL_EXPORT Bond
 		: public Composite,
 			public PropertyManager
 	{
@@ -71,7 +71,7 @@ namespace BALL
 				This exception may be thrown by  \link createBond createBond \endlink  if the maximum number
 				of bonds (8 bonds) is exceeded.
 		*/
-		class TooManyBonds
+		class BALL_EXPORT TooManyBonds
 			:	public Exception::GeneralException
 		{
 			public:
@@ -82,7 +82,7 @@ namespace BALL
 		/**	Not bound to two atoms.
 				This exception may be thrown by  \link getLength getLength \endlink  if this instance is not bound.
 		*/
-		class NotBound
+		class BALL_EXPORT NotBound
 			:	public Exception::GeneralException
 		{
 			public:

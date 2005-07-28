@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.h,v 1.37 2004/05/27 19:49:40 oliver Exp $
+// $Id: system.h,v 1.37.4.1 2005/07/28 14:02:00 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_SYSTEM_H
@@ -37,7 +37,7 @@ namespace BALL
 			
     	\ingroup KernelContainers 
 	*/
-	class System
+	class BALL_EXPORT System
 		: public AtomContainer
 	{
 		public:

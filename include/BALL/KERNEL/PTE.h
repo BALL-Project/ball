@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.h,v 1.29 2004/05/27 19:49:38 oliver Exp $
+// $Id: PTE.h,v 1.29.4.1 2005/07/28 14:01:52 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_PTE_H
@@ -50,7 +50,7 @@ namespace BALL
 	/**	Element class.
 			\ingroup KernelMiscellaneous	
 	*/
-	class Element
+	class BALL_EXPORT Element
 	{
 		public:
 
@@ -666,7 +666,7 @@ namespace BALL
 
 	/**	Periodic Table of Elements Class
 	*/
-	class PTE_
+	class BALL_EXPORT PTE_
 	{
 		public:
 
@@ -827,7 +827,7 @@ namespace BALL
 	/**	Global static instance of the periodic table.
 			\ingroup KernelMiscellaneous
 	*/
-	extern PTE_ PTE;
+	BALL_EXPORT extern PTE_ PTE;
 
 
 

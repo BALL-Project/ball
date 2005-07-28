@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.h,v 1.44 2004/05/27 19:49:40 oliver Exp $
+// $Id: residue.h,v 1.44.4.1 2005/07/28 14:01:58 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_RESIDUE_H
@@ -35,7 +35,7 @@ namespace BALL
 			
     	\ingroup KernelContainers 
 	*/
-	class Residue
+	class BALL_EXPORT Residue
 		: public Fragment
 	{
 		public:
@@ -476,7 +476,7 @@ namespace BALL
 	};
 
   template <class ResidueContainerType>
-  const Residue* getNTerminal(const ResidueContainerType& residue_container)
+  BALL_EXPORT const Residue* getNTerminal(const ResidueContainerType& residue_container)
 		throw()
   {
 		ResidueConstIterator res_it(residue_container.beginResidue());
@@ -492,7 +492,7 @@ namespace BALL
   }
 
   template <class ResidueContainerType>
-  const Residue* getCTerminal(const ResidueContainerType& residue_container)
+  BALL_EXPORT const Residue* getCTerminal(const ResidueContainerType& residue_container)
 		throw()
   {
 		ResidueConstReverseIterator res_it(residue_container.rbeginResidue());

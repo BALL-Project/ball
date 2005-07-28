@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueIterator.h,v 1.14 2004/05/27 19:49:40 oliver Exp $
+// $Id: residueIterator.h,v 1.14.4.1 2005/07/28 14:01:58 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_RESIDUEITERATOR_H
@@ -21,7 +21,7 @@ namespace BALL
     
 			\ingroup  KernelIterators
 	*/
-	class ResidueIteratorTraits
+	class BALL_EXPORT ResidueIteratorTraits
 		: public CompositeIteratorTraits
 	{
 		public:

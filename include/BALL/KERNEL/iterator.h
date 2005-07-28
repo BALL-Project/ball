@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: iterator.h,v 1.27 2004/05/27 19:49:39 oliver Exp $
+// $Id: iterator.h,v 1.27.4.1 2005/07/28 14:01:56 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_ITERATOR_H
@@ -82,7 +82,7 @@ namespace BALL
 			
     	\ingroup  KernelIterators
 	*/
-	class CompositeIteratorTraits
+	class BALL_EXPORT CompositeIteratorTraits
 	{
 		public:
 

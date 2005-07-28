@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.70.4.1 2005/05/01 11:37:22 oliver Exp $
+// $Id: atom.h,v 1.70.4.2 2005/07/28 14:01:52 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -85,7 +85,7 @@ namespace BALL
 			@see AtomContainer
 			\ingroup KernelContainers 
 	*/
-	class Atom
+	class BALL_EXPORT Atom
 		: public Composite,
 			public PropertyManager
 	{
@@ -771,7 +771,7 @@ namespace BALL
 
 			typedef Index BondIteratorPosition;
 
-			class BondIteratorTraits
+			class BALL_EXPORT BondIteratorTraits
 			{
 				public:
 
@@ -1020,7 +1020,7 @@ namespace BALL
 		//@{
 		
 		///
-		class StaticAtomAttributes
+		class BALL_EXPORT StaticAtomAttributes
 		{
 			public:
 			///
@@ -1058,7 +1058,7 @@ namespace BALL
 		};
 
 		///
-		class AttributeVector
+		class BALL_EXPORT AttributeVector
 			:	public std::vector<StaticAtomAttributes>
 		{
 			public:
