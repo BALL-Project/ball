@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.23.4.1 2005/07/28 13:04:09 amoll Exp $
+// $Id: global.h,v 1.23.4.2 2005/07/28 15:13:45 amoll Exp $
 //
 
 #ifndef BALL_COMMON_GLOBAL_H
@@ -248,26 +248,26 @@ namespace BALL
 		ASCII__SEMICOLON        = ';'
 	};
 
-	BALL_EXPORT static const Distance INVALID_DISTANCE = INT_MIN;
-	BALL_EXPORT static const Distance DISTANCE_MIN = (INT_MIN + 1);
-	BALL_EXPORT static const Distance DISTANCE_MAX = INT_MAX;
+	static const Distance INVALID_DISTANCE = INT_MIN;
+	static const Distance DISTANCE_MIN = (INT_MIN + 1);
+	static const Distance DISTANCE_MAX = INT_MAX;
 
-	BALL_EXPORT static const Handle INVALID_HANDLE = INT_MAX;
-	BALL_EXPORT static const Handle HANDLE_MIN = 0 ;
-	BALL_EXPORT static const Handle HANDLE_MAX = INT_MAX - 1;
+	static const Handle INVALID_HANDLE = INT_MAX;
+	static const Handle HANDLE_MIN = 0 ;
+	static const Handle HANDLE_MAX = INT_MAX - 1;
 
-	BALL_EXPORT static const Index INVALID_INDEX = -1;
-	BALL_EXPORT static const Index INDEX_MIN = 0;
-	BALL_EXPORT static const Index INDEX_MAX = INT_MAX;
+	static const Index INVALID_INDEX = -1;
+	static const Index INDEX_MIN = 0;
+	static const Index INDEX_MAX = INT_MAX;
 
-	BALL_EXPORT static const Position INVALID_POSITION = INT_MAX;
-	BALL_EXPORT static const Position POSITION_MIN = 0;
-	BALL_EXPORT static const Position POSITION_MAX = INT_MAX - 1;
+	static const Position INVALID_POSITION = INT_MAX;
+	static const Position POSITION_MIN = 0;
+	static const Position POSITION_MAX = INT_MAX - 1;
 
 #	undef SIZE_MAX
-	BALL_EXPORT static const Size INVALID_SIZE = INT_MAX;
-	BALL_EXPORT static const Size SIZE_MIN = 0;
-	BALL_EXPORT static const Size SIZE_MAX = INT_MAX - 1;
+	static const Size INVALID_SIZE = INT_MAX;
+	static const Size SIZE_MIN = 0;
+	static const Size SIZE_MAX = INT_MAX - 1;
 	
 	
 }
