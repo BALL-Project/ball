@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forwardIterator.h,v 1.28.6.1 2005/07/28 13:26:17 amoll Exp $
+// $Id: forwardIterator.h,v 1.28.6.2 2005/07/28 13:50:50 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_FORWARDITERATOR_H
@@ -23,7 +23,7 @@ namespace BALL
 	/**	Generic non-mutable forward itterator
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	BALL_EXPORT class ConstForwardIterator
+	class BALL_EXPORT ConstForwardIterator
 		: public BaseIterator<Container, DataType, Position, Traits>
 	{
 		public:
@@ -190,7 +190,7 @@ namespace BALL
 	/**	Generic mutable forward iterator class
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	BALL_EXPORT class ForwardIterator
+	class BALL_EXPORT ForwardIterator
 		: public ConstForwardIterator<Container, DataType, Position, Traits>
 	{
 		public:

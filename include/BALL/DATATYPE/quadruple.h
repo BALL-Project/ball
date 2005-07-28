@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadruple.h,v 1.13.6.1 2005/07/28 13:35:18 amoll Exp $
+// $Id: quadruple.h,v 1.13.6.2 2005/07/28 13:51:07 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_QUADRUPLE_H
@@ -19,7 +19,7 @@ namespace BALL
     	\ingroup  DatatypeMiscellaneous
 	*/
 	template <typename T1, typename T2, typename T3, typename T4>
-	BALL_EXPORT class Quadruple
+	class BALL_EXPORT Quadruple
 	{
 		public:
 

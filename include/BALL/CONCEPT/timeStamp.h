@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timeStamp.h,v 1.23.6.1 2005/07/28 13:26:20 amoll Exp $
+// $Id: timeStamp.h,v 1.23.6.2 2005/07/28 13:50:53 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
@@ -40,7 +40,7 @@ namespace BALL
 			
 			\ingroup ConceptsMiscellaneous
 	*/
-	BALL_EXPORT class PreciseTime
+	class BALL_EXPORT PreciseTime
 	{
 
 		public:
@@ -189,7 +189,7 @@ namespace BALL
 			<b>Interface:</b> <tt>Storable</tt>	 \par
 			
 	*/
-	BALL_EXPORT class TimeStamp
+	class BALL_EXPORT TimeStamp
 	{
 		public:
 

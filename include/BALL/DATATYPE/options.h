@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.h,v 1.24.4.1 2005/07/28 13:35:18 amoll Exp $
+// $Id: options.h,v 1.24.4.2 2005/07/28 13:51:07 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_OPTIONS_H
@@ -37,7 +37,7 @@ namespace BALL
 				
     		\ingroup  Generic
 	*/
-	BALL_EXPORT class Options
+	class BALL_EXPORT Options
 		: public StringHashMap<String> 
 	{
 		

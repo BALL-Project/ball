@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: limits.h,v 1.18.6.1 2005/07/28 13:04:10 amoll Exp $
+// $Id: limits.h,v 1.18.6.2 2005/07/28 13:50:30 amoll Exp $
 //
 
 #ifndef BALL_COMMON_LIMITS_H
@@ -45,7 +45,7 @@ namespace BALL
 	    \ingroup Common
 	*/
 	template <typename T>
-	BALL_EXPORT class Limits
+	class BALL_EXPORT Limits
 	{
 		public:
 
@@ -82,7 +82,7 @@ namespace BALL
 #ifndef BALL_HAVE_NUMERIC_LIMITS
 	
 	template <> 
-	BALL_EXPORT class Limits<float>
+	class BALL_EXPORT Limits<float>
 	{
 		public:
 			
@@ -98,7 +98,7 @@ namespace BALL
 	};
 
 	template <> 
-	BALL_EXPORT class Limits<double>
+	class BALL_EXPORT Limits<double>
 	{
 		public:
 			
@@ -114,7 +114,7 @@ namespace BALL
 	};
 
 	template <> 
-	BALL_EXPORT class Limits<bool>
+	class BALL_EXPORT Limits<bool>
 	{
 		public:
 			
@@ -130,7 +130,7 @@ namespace BALL
 	};
 
 	template <> 
-	BALL_EXPORT class Limits<char>
+	class BALL_EXPORT Limits<char>
 	{
 		public:
 			
@@ -146,7 +146,7 @@ namespace BALL
 	};
 
 	template <> 
-	BALL_EXPORT class Limits<signed char>
+	class BALL_EXPORT Limits<signed char>
 	{
 		public:
 			
@@ -162,7 +162,7 @@ namespace BALL
 	};
 
 	template <> 
-	BALL_EXPORT class Limits<unsigned char>
+	class BALL_EXPORT Limits<unsigned char>
 	{
 		public:
 			
@@ -178,7 +178,7 @@ namespace BALL
 	};
 
 	template <> 
-	BALL_EXPORT class Limits<short>
+	class BALL_EXPORT Limits<short>
 	{
 		public:
 			
@@ -194,7 +194,7 @@ namespace BALL
 	};
 
 	template <> 
-	BALL_EXPORT class Limits<unsigned short>
+	class BALL_EXPORT Limits<unsigned short>
 	{
 		public:
 			
@@ -210,7 +210,7 @@ namespace BALL
 	};
 
 	template <> 
-	BALL_EXPORT class Limits<int>
+	class BALL_EXPORT Limits<int>
 	{
 		public:
 			
@@ -226,7 +226,7 @@ namespace BALL
 	};
 
 	template <> 
-	BALL_EXPORT class Limits<unsigned int>
+	class BALL_EXPORT Limits<unsigned int>
 	{
 		public:
 			
@@ -242,7 +242,7 @@ namespace BALL
 	};
 
 	template <> 
-	BALL_EXPORT class Limits<long>
+	class BALL_EXPORT Limits<long>
 	{
 		public:
 			
@@ -258,7 +258,7 @@ namespace BALL
 	};
 
 	template <> 
-	BALL_EXPORT class Limits<unsigned long>
+	class BALL_EXPORT Limits<unsigned long>
 	{
 		public:
 			

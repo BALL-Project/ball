@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.43.4.1 2005/07/28 13:35:18 amoll Exp $
+// $Id: regularData2D.h,v 1.43.4.2 2005/07/28 13:51:08 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
@@ -32,7 +32,7 @@ namespace BALL
 			\ingroup  RegularData
 	*/
 	template <typename ValueType>
-	BALL_EXPORT class TRegularData2D 
+	class BALL_EXPORT TRegularData2D 
 	{
 		public:
 
@@ -43,7 +43,7 @@ namespace BALL
 		//@{
 
 		/// The index type used to refer to a specific element in the grid (x-, and y-index)
-		BALL_EXPORT class IndexType
+		class BALL_EXPORT IndexType
 		{
 			public:
 			inline IndexType() : x(0), y(0) {}

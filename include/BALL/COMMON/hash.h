@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hash.h,v 1.22.4.1 2005/07/28 13:04:09 amoll Exp $
+// $Id: hash.h,v 1.22.4.2 2005/07/28 13:50:29 amoll Exp $
 //
 
 #ifndef BALL_COMMON_HASH_H
@@ -25,7 +25,7 @@ namespace BALL
 	\ingroup Common
 	*/
   template <typename T>
-  BALL_EXPORT class HashFunction
+  class BALL_EXPORT HashFunction
   {
     public:
 		

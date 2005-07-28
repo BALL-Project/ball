@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: autoDeletable.h,v 1.24.4.1 2005/07/28 13:26:16 amoll Exp $
+// $Id: autoDeletable.h,v 1.24.4.2 2005/07/28 13:50:48 amoll Exp $
 //
 
 
@@ -57,7 +57,7 @@ namespace BALL
 			
 	 	 \ingroup ConceptsMiscellaneous
 	*/
-	BALL_EXPORT class AutoDeletable
+	class BALL_EXPORT AutoDeletable
 	{
 		public:
 

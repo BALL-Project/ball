@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.49.4.2 2005/07/28 13:04:09 amoll Exp $
+// $Id: exception.h,v 1.49.4.3 2005/07/28 13:50:29 amoll Exp $
 //
    
 #ifndef BALL_COMMON_EXCEPTION_H
@@ -56,7 +56,7 @@ namespace BALL
 		\ingroup Common
 		*/
 		
-		BALL_EXPORT class GeneralException 
+		class BALL_EXPORT GeneralException 
 			:	public std::exception
 		{
 			public:
@@ -128,7 +128,7 @@ namespace BALL
 				@param	index the value of the index causing the problem
 				@param	size	smallest value allowed for index
 		*/
-		 BALL_EXPORT class IndexUnderflow 
+		 class BALL_EXPORT IndexUnderflow 
 			: public GeneralException
 		{
 			public:
@@ -150,7 +150,7 @@ namespace BALL
 				insufficient.
 				@param	size the size causing the problem
 		*/
-		 BALL_EXPORT class SizeUnderflow 
+		 class BALL_EXPORT SizeUnderflow 
 			: public GeneralException
 		{
 			public:
@@ -170,7 +170,7 @@ namespace BALL
 				@param	index the value of the index causing the problem
 				@param	size	largest value allowed for index
 		*/
-		 BALL_EXPORT class IndexOverflow 
+		 class BALL_EXPORT IndexOverflow 
 			: public GeneralException
 		{
 			public:
@@ -186,7 +186,7 @@ namespace BALL
 		/**	Invalid range.
 				Use this exception to indicate a general range problems.
 		*/
-		 BALL_EXPORT class InvalidRange 
+		 class BALL_EXPORT InvalidRange 
 			: public GeneralException
 		{
 			public:
@@ -201,7 +201,7 @@ namespace BALL
 				requested size. 
 				@param	size the size causing the problem
 		*/
-		 BALL_EXPORT class InvalidSize 
+		 class BALL_EXPORT InvalidSize 
 			: public GeneralException
 		{
 			public:
@@ -218,7 +218,7 @@ namespace BALL
 				Use this exception to indicate that a given value is out of a
 				defined range, i. e. not within the domain of a function.
 		*/
-		 BALL_EXPORT class OutOfRange 
+		 class BALL_EXPORT OutOfRange 
 			: public GeneralException
 		{
 			public:
@@ -231,7 +231,7 @@ namespace BALL
 				one type to another. It is thrown, if a conversion from ascii to
 				numeric formats or vice versa failed.
 		*/
-		 BALL_EXPORT class InvalidFormat 
+		 class BALL_EXPORT InvalidFormat 
 			: public GeneralException
 		{
 			public:
@@ -251,7 +251,7 @@ namespace BALL
 				itself. In general these operations are self assignments or related
 				methods.
 		*/
-		 BALL_EXPORT class IllegalSelfOperation
+		 class BALL_EXPORT IllegalSelfOperation
 			: public GeneralException
 		{
 			public:
@@ -263,7 +263,7 @@ namespace BALL
 				Use this exception to indicate a failure due to an argument not
 				containing a pointer to a valid object, but a null pointer.
 		*/
-		 BALL_EXPORT class NullPointer 
+		 class BALL_EXPORT NullPointer 
 			: public GeneralException
 		{
 			public:
@@ -274,7 +274,7 @@ namespace BALL
 		/**	Invalid iterator.
 				The iterator on which an operation should be performed was invalid.
 		*/
-		 BALL_EXPORT class InvalidIterator
+		 class BALL_EXPORT InvalidIterator
 			: public GeneralException
 		{
 			public:
@@ -286,7 +286,7 @@ namespace BALL
 				The iterators could not be assigned because they are bound to
 				different containers.
 		*/
-		 BALL_EXPORT class IncompatibleIterators
+		 class BALL_EXPORT IncompatibleIterators
 			: public GeneralException
 		{
 			public:
@@ -300,7 +300,7 @@ namespace BALL
 				instead of the default constructor, identification of the concerned
 				source will get <b>  much </b> easier!
 		*/
-		 BALL_EXPORT class NotImplemented
+		 class BALL_EXPORT NotImplemented
 			: public GeneralException
 		{
 			public:
@@ -312,7 +312,7 @@ namespace BALL
 				This exception is thrown to indicate that an illegal tree operation
 				i.e. node->setLeftChild(node) was requested.
 		*/
-		 BALL_EXPORT class IllegalTreeOperation
+		 class BALL_EXPORT IllegalTreeOperation
 			: public GeneralException
 		{
 			public:
@@ -326,7 +326,7 @@ namespace BALL
 				@param	size	the number of bytes that should have been allocated
 				@see GlobalException::newHandler
 		*/
-		 BALL_EXPORT class OutOfMemory
+		 class BALL_EXPORT OutOfMemory
 			: public GeneralException, public std::bad_alloc
 		{
 			public:
@@ -342,7 +342,7 @@ namespace BALL
 
 		/**	Buffer overflow exception.	
 		*/
-		 BALL_EXPORT class BufferOverflow 
+		 class BALL_EXPORT BufferOverflow 
 			: public GeneralException
 		{
 			public:
@@ -352,7 +352,7 @@ namespace BALL
 
 		/**	Division by zero error.
 		*/
-		 BALL_EXPORT class DivisionByZero 
+		 class BALL_EXPORT DivisionByZero 
 			: public GeneralException
 		{
 			public:
@@ -362,7 +362,7 @@ namespace BALL
 
 		/**	Out of grid error.
 		*/
-		 BALL_EXPORT class OutOfGrid 
+		 class BALL_EXPORT OutOfGrid 
 			: public GeneralException
 		{
 			public:
@@ -373,7 +373,7 @@ namespace BALL
 		/**	File not found.
 				A given file could not be found.
 		*/
-		 BALL_EXPORT class FileNotFound 
+		 class BALL_EXPORT FileNotFound 
 			: public GeneralException
 		{
 			public:
@@ -392,7 +392,7 @@ namespace BALL
 		/**	Invalid Position.
 				A given position in three dimensional is invalid.
 		*/
-		 BALL_EXPORT class IllegalPosition 
+		 class BALL_EXPORT IllegalPosition 
 			: public GeneralException
 		{
 			public:
@@ -403,7 +403,7 @@ namespace BALL
 		/**	Parse Error.
 				A given expression could not be parsed.
 		*/
-		 BALL_EXPORT class ParseError
+		 class BALL_EXPORT ParseError
 			: public GeneralException
 		{
 			public:
@@ -416,7 +416,7 @@ namespace BALL
 		/**	Precondition failed.
 				A precondition (as defined by BALL_PRECONDITION_EXCEPTION) has failed.
 		*/
-		 BALL_EXPORT class Precondition
+		 class BALL_EXPORT Precondition
 			: public GeneralException
 		{
 			public:
@@ -427,7 +427,7 @@ namespace BALL
 		/**	Postcondition failed.
 				A postcondition (as defined by BALL_POSTCONDITION_EXCEPTION) has failed.
 		*/
-		 BALL_EXPORT class Postcondition
+		 class BALL_EXPORT Postcondition
 			: public GeneralException
 		{
 			public:
@@ -436,7 +436,7 @@ namespace BALL
 		};
 
 		/// Exception to be thrown if an invalid option is given
-		 BALL_EXPORT class InvalidOption: public Exception::GeneralException
+		 class BALL_EXPORT InvalidOption: public Exception::GeneralException
 		{
 			public:
 
@@ -446,7 +446,7 @@ namespace BALL
 		};
 		
 		/// Exception to be thrown if too many errors occur, e.g. in ForceField
-		 BALL_EXPORT class TooManyErrors: public Exception::GeneralException
+		 class BALL_EXPORT TooManyErrors: public Exception::GeneralException
 		{
 			public:
 
@@ -457,7 +457,7 @@ namespace BALL
 
 		/**
 		*/
-		 BALL_EXPORT class GlobalExceptionHandler
+		 class BALL_EXPORT GlobalExceptionHandler
 		{
 			public:
 			/**	@name	Constructors

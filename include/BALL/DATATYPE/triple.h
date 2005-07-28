@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triple.h,v 1.9.6.1 2005/07/28 13:35:20 amoll Exp $
+// $Id: triple.h,v 1.9.6.2 2005/07/28 13:51:09 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_TRIPLE_H
@@ -21,7 +21,7 @@ namespace BALL
 			\ingroup  DatatypeMiscellaneous
 	*/
 	template <typename T1, typename T2, typename T3>
-	BALL_EXPORT class Triple
+	class BALL_EXPORT Triple
 	{
 		public:
 

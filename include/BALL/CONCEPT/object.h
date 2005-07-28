@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: object.h,v 1.24.6.1 2005/07/28 13:26:18 amoll Exp $ 
+// $Id: object.h,v 1.24.6.2 2005/07/28 13:50:51 amoll Exp $ 
 //
 
 #ifndef BALL_CONCEPT_OBJECT_H
@@ -33,7 +33,7 @@ namespace BALL
 			
 	 	 \ingroup ConceptsMiscellaneous
 	*/
-	BALL_EXPORT class Object
+	class BALL_EXPORT Object
 		: public AutoDeletable
 	{
 		public:

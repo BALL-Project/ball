@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.h,v 1.31.4.1 2005/07/28 13:04:10 amoll Exp $
+// $Id: logStream.h,v 1.31.4.2 2005/07/28 13:50:30 amoll Exp $
 //
 
 #ifndef BALL_COMMON_LOGSTREAM_H
@@ -72,7 +72,7 @@ namespace BALL
 	class NotificationTarget;
 
 	
-	BALL_EXPORT class LogStreamNotifier
+	class BALL_EXPORT LogStreamNotifier
 	{
 		public:
 		
@@ -105,7 +105,7 @@ namespace BALL
 			is also copied to the associated stream and this stream is 
 			flushed, too.
 	*/
-	BALL_EXPORT class LogStreamBuf
+	class BALL_EXPORT LogStreamBuf
 		: public std::streambuf
 	{
 
@@ -239,7 +239,7 @@ namespace BALL
 			
 			 \par
 	*/
-	BALL_EXPORT class LogStream
+	class BALL_EXPORT LogStream
 		: public std::ostream
 	{
 		public:

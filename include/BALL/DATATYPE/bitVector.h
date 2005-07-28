@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.h,v 1.46.4.1 2005/07/28 13:35:16 amoll Exp $
+// $Id: bitVector.h,v 1.46.4.2 2005/07/28 13:51:05 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
@@ -41,7 +41,7 @@ namespace BALL
 			@see BitVector. 
     	\ingroup  DatatypeMiscellaneous
 	*/
-	BALL_EXPORT class Bit
+	class BALL_EXPORT Bit
 	{
 		public:
 
@@ -51,7 +51,7 @@ namespace BALL
 
 		/** Exception thrown if a file could not be processed right.
 		*/
-		BALL_EXPORT class IllegalOperation
+		class BALL_EXPORT IllegalOperation
 			: public Exception::GeneralException
 		{
 			public:
@@ -175,7 +175,7 @@ namespace BALL
 
     	\ingroup  DatatypeMiscellaneous
 	*/
-	BALL_EXPORT class BitVector
+	class BALL_EXPORT BitVector
 	{
 		public:
 

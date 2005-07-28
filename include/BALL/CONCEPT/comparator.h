@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: comparator.h,v 1.13.6.1 2005/07/28 13:26:16 amoll Exp $
+// $Id: comparator.h,v 1.13.6.2 2005/07/28 13:50:49 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_COMPARATOR_H
@@ -20,7 +20,7 @@ namespace BALL
 	 	 \ingroup ConceptsMiscellaneous
 	*/
 	template <typename T>
-	BALL_EXPORT class Comparator
+	class BALL_EXPORT Comparator
 	{
 		public:
 

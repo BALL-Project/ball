@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyProcessor.h,v 1.16.6.1 2005/07/28 13:36:41 amoll Exp $
+// $Id: energyProcessor.h,v 1.16.6.2 2005/07/28 13:51:18 amoll Exp $
 //
 
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
@@ -27,7 +27,7 @@ namespace BALL
 			
 	 		\ingroup EnergyMiscellaneous
 	*/
-	BALL_EXPORT class EnergyProcessor
+	class BALL_EXPORT EnergyProcessor
 		:	public UnaryProcessor<AtomContainer>
 	{
 

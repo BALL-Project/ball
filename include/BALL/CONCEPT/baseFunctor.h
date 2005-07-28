@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseFunctor.h,v 1.10.6.1 2005/07/28 13:26:16 amoll Exp $
+// $Id: baseFunctor.h,v 1.10.6.2 2005/07/28 13:50:49 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_BASEFUNCTOR_H
@@ -24,7 +24,7 @@ namespace BALL
 			
 	*/
 	template <class ArgumentType, class ResultType>
-	BALL_EXPORT class UnaryFunctor
+	class BALL_EXPORT UnaryFunctor
 	{
 		public:
 		
@@ -63,7 +63,7 @@ namespace BALL
 			
 	*/
 	template <class FirstArgumentType, class SecondArgumentType, class ResultType>
-	BALL_EXPORT class BinaryFunctor
+	class BALL_EXPORT BinaryFunctor
 	{
 		public:
 		

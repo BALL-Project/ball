@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager.h,v 1.24.2.1 2005/07/28 13:26:15 amoll Exp $
+// $Id: XDRPersistenceManager.h,v 1.24.2.2 2005/07/28 13:50:48 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -23,7 +23,7 @@ namespace BALL
 			
 			\ingroup  Persistence
 	*/
-	BALL_EXPORT class XDRPersistenceManager
+	class BALL_EXPORT XDRPersistenceManager
 		:	public PersistenceManager
 	{
 		public:
