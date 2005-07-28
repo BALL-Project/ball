@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.h,v 1.14 2003/08/26 08:04:14 oliver Exp $
+// $Id: SDFile.h,v 1.14.6.1 2005/07/28 13:52:56 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_SDFILE_H
@@ -21,7 +21,7 @@ namespace BALL
 			
     	\ingroup  StructureFormats
 	*/
-	class SDFile
+	class BALL_EXPORT SDFile
 		: public MOLFile
 	{
 		public:

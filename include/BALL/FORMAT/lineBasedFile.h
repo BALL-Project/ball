@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.h,v 1.31 2004/02/17 16:07:18 oliver Exp $
+// $Id: lineBasedFile.h,v 1.31.6.1 2005/07/28 13:52:57 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
@@ -19,7 +19,7 @@ namespace BALL
 			
     	\ingroup  General
 	*/
-	class LineBasedFile
+	class BALL_EXPORT LineBasedFile
 		:	public File
 	{
 		public:

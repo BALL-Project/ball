@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NMRStarFile.h,v 1.28 2003/08/26 08:04:13 oliver Exp $
+// $Id: NMRStarFile.h,v 1.28.6.1 2005/07/28 13:52:55 amoll Exp $
 //
 
 #ifndef BALL_NMR_READ_STAR_H
@@ -26,7 +26,7 @@ namespace BALL
 			delivered by a NMR-Star-File.
 			All members are public for easy access.
 	*/
-	struct NMRAtomData
+	BALL_EXPORT struct NMRAtomData
 	{
 		NMRAtomData() throw();
 
@@ -45,7 +45,7 @@ namespace BALL
 			delivered by a NMR-Star-File.
 			All members are public for easy access.
 	*/
-	struct SampleCondition
+	BALL_EXPORT struct SampleCondition
 	{
 		SampleCondition() throw();
 
@@ -60,7 +60,7 @@ namespace BALL
 			for one atom type delivered by a NMR-Star-File.
 			All members are public for easy access.
 	*/
-	struct ShiftReferenceElement
+	BALL_EXPORT struct ShiftReferenceElement
 	{
 		ShiftReferenceElement() throw();
 
@@ -80,14 +80,14 @@ namespace BALL
 			for several atom types delivered by a NMR-Star-File.
 			All members are public for easy access.
 	*/
-	struct ShiftReferenceSet
+	BALL_EXPORT struct ShiftReferenceSet
 	{
 		ShiftReferenceSet() throw();
 		String name;
 		std::vector<ShiftReferenceElement> elements;
 	};
 
-	struct NMRAtomDataSet
+	BALL_EXPORT struct NMRAtomDataSet
 	{
 		NMRAtomDataSet() throw();
 
@@ -113,7 +113,7 @@ namespace BALL
 			
 	*/
 	//@{
-	class NMRStarFile
+	class BALL_EXPORT NMRStarFile
 		: public LineBasedFile
 	{
 		public:

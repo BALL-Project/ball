@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.h,v 1.26 2004/05/27 19:49:38 oliver Exp $
+// $Id: resourceFile.h,v 1.26.4.1 2005/07/28 13:52:58 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
@@ -40,7 +40,7 @@ namespace BALL
 	/**	Resource entry class
     	\ingroup  GeneralHierarchical
 	*/	
-	class ResourceEntry
+	class BALL_EXPORT ResourceEntry
 		:	public AutoDeletable
 	{
 		public:
@@ -321,7 +321,7 @@ namespace BALL
 
 		typedef ResourceEntry* IteratorPosition;
 	
-		class IteratorTraits_
+		class BALL_EXPORT IteratorTraits_
 		{
 			public:
 
@@ -581,7 +581,7 @@ namespace BALL
 	/**	Resource file class
     	\ingroup  GeneralHierarchical
 	*/
-	class ResourceFile
+	class BALL_EXPORT ResourceFile
 		: public File
 	{
 		public:

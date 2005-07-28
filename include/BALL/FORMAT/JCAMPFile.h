@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.h,v 1.19 2003/08/26 08:04:13 oliver Exp $
+// $Id: JCAMPFile.h,v 1.19.6.1 2005/07/28 13:52:54 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
@@ -27,7 +27,7 @@ namespace BALL
 			
     	\ingroup  NMRFileFormats
 	*/
-	class JCAMPFile 
+	class BALL_EXPORT JCAMPFile 
 		: public LineBasedFile
 	{
 		public:
@@ -47,7 +47,7 @@ namespace BALL
 		};
 
 		///
-		class JCAMPValue
+		class BALL_EXPORT JCAMPValue
 		{
 		  public:
 			///

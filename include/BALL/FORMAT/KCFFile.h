@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: KCFFile.h,v 1.1 2005/03/10 19:38:29 oliver Exp $
+// $Id: KCFFile.h,v 1.1.2.1 2005/07/28 13:52:54 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_KCFFILE_H
@@ -26,7 +26,7 @@ namespace BALL
 			
     	\ingroup  StructureFormats
 	*/
-	class KCFFile
+	class BALL_EXPORT KCFFile
 		: public GenericMolFile
 	{
 		public:

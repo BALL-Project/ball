@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.h,v 1.22 2003/08/26 08:04:13 oliver Exp $
+// $Id: MOL2File.h,v 1.22.6.1 2005/07/28 13:52:54 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_MOL2FILE_H
@@ -25,7 +25,7 @@ namespace BALL
 			
     	\ingroup  StructureFormats
 	*/
-	class MOL2File
+	class BALL_EXPORT MOL2File
 		: public GenericMolFile
 	{
 		public:
@@ -109,7 +109,7 @@ namespace BALL
 		
 		bool buildAll_(System& system);
 
-		struct AtomStruct
+		BALL_EXPORT struct AtomStruct
 		{
 			String		name;
 			Vector3		position;
@@ -119,14 +119,14 @@ namespace BALL
 			float			charge;
 		};
 
-		struct BondStruct
+		BALL_EXPORT struct BondStruct
 		{
 			Position	atom1;
 			Position	atom2;
 			String		type;
 		};
 
-		struct MoleculeStruct
+		BALL_EXPORT struct MoleculeStruct
 		{
 			String			name;
 			Size				number_of_atoms;
@@ -139,7 +139,7 @@ namespace BALL
 			String			comment;
 		};
 
-		struct SetStruct
+		BALL_EXPORT struct SetStruct
 		{
 			String			name;
 			String			type;
@@ -149,7 +149,7 @@ namespace BALL
 			vector<int>	members;
 		};
 		
-		struct SubstructureStruct
+		BALL_EXPORT struct SubstructureStruct
 		{
 			String			name;
 			Size				root_atom;

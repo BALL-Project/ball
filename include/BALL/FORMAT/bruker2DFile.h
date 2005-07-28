@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker2DFile.h,v 1.25 2003/08/26 08:04:14 oliver Exp $
+// $Id: bruker2DFile.h,v 1.25.6.1 2005/07/28 13:52:57 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_BRUKER2DFILE_H
@@ -23,7 +23,7 @@ namespace BALL
 			
     	\ingroup  NMRFileFormats
 	*/
-	class Bruker2DFile
+	class BALL_EXPORT Bruker2DFile
 		: public File
 	{
 	 public:
