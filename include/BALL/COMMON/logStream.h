@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.h,v 1.31 2005/01/18 21:21:53 amoll Exp $
+// $Id: logStream.h,v 1.31.4.1 2005/07/28 13:04:10 amoll Exp $
 //
 
 #ifndef BALL_COMMON_LOGSTREAM_H
@@ -72,7 +72,7 @@ namespace BALL
 	class NotificationTarget;
 
 	
-	class LogStreamNotifier
+	BALL_EXPORT class LogStreamNotifier
 	{
 		public:
 		
@@ -105,7 +105,7 @@ namespace BALL
 			is also copied to the associated stream and this stream is 
 			flushed, too.
 	*/
-	class LogStreamBuf
+	BALL_EXPORT class LogStreamBuf
 		: public std::streambuf
 	{
 
@@ -173,7 +173,7 @@ namespace BALL
 		virtual int overflow(int c = -1);
 		//@}
 
-		struct Stream 
+		BALL_EXPORT struct Stream 
 		{
 			std::ostream*				stream;
 			string							prefix;
@@ -239,7 +239,7 @@ namespace BALL
 			
 			 \par
 	*/
-	class LogStream
+	BALL_EXPORT class LogStream
 		: public std::ostream
 	{
 		public:
@@ -538,7 +538,7 @@ namespace BALL
 			This instance of LogStream is by default bound to <b>cout</b> <b>cerr</b> by calling
 			the default constructor.
 	*/
-	extern LogStream	Log;
+	BALL_EXPORT extern LogStream	Log;
 
 	//@}
 	
