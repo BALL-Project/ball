@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stringHashMap.h,v 1.25 2004/05/06 21:39:37 oliver Exp $
+// $Id: stringHashMap.h,v 1.25.4.1 2005/07/28 13:35:20 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
@@ -35,7 +35,7 @@ namespace BALL
 	    \ingroup  GenericHash
 	*/
 	template <typename Value>
-	class StringHashMap
+	BALL_EXPORT class StringHashMap
 		:	public HashMap<String, Value>
 	{
 		public:

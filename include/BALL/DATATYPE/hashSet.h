@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashSet.h,v 1.43 2004/04/22 10:08:19 oliver Exp $ 
+// $Id: hashSet.h,v 1.43.6.1 2005/07/28 13:35:17 amoll Exp $ 
 //
 
 #ifndef BALL_DATATYPE_HASHSET_H
@@ -44,7 +44,7 @@ namespace BALL
     	\ingroup  GenericHash
   */
  	template <class Key>
-	class HashSet
+	BALL_EXPORT class HashSet
 	{
 		public:
 
@@ -76,7 +76,7 @@ namespace BALL
 
 		typedef Node* IteratorPosition;
 	
-		class IteratorTraits
+		BALL_EXPORT class IteratorTraits
 		{
 
 			friend class HashSet<Key>;
@@ -264,7 +264,7 @@ namespace BALL
 				Thrown if access to a non-existent key is required by the constant
 				version of  \link operator [] operator [] \endlink .
 		*/
-		class IllegalKey
+		BALL_EXPORT class IllegalKey
 			:	public Exception::GeneralException
 		{
 			public:

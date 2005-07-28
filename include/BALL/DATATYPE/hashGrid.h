@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.44.4.1 2005/05/01 11:37:22 oliver Exp $
+// $Id: hashGrid.h,v 1.44.4.2 2005/07/28 13:35:17 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_HASHGRID_H
@@ -47,7 +47,7 @@ namespace BALL
 			\ingroup GenericHash3D
 	*/
 	template <typename Item>
-	class HashGridBox3
+	BALL_EXPORT class HashGridBox3
 	{
 		public:
 
@@ -200,7 +200,7 @@ namespace BALL
 		//@{
 
 		/// ?????
-		class DataItem
+		BALL_EXPORT class DataItem
 		{
 			public:
 		
@@ -222,7 +222,7 @@ namespace BALL
 		};
 			
 		/// ?????
-		class NeighborBoxItem
+		BALL_EXPORT class NeighborBoxItem
 		{
 			public:
 		
@@ -246,7 +246,7 @@ namespace BALL
 
 		typedef NeighborBoxItem* BoxIteratorPosition;
 		
-		class BoxIteratorTraits
+		BALL_EXPORT class BoxIteratorTraits
 		{
 			public:
 
@@ -435,7 +435,7 @@ namespace BALL
 
 		typedef DataItem* DataIteratorPosition;
 		
-		class DataIteratorTraits
+	BALL_EXPORT class DataIteratorTraits
 		{
 			public:
 
@@ -1045,7 +1045,7 @@ namespace BALL
 			
 	*/
 	template <typename Item>
-	class HashGrid3
+BALL_EXPORT class HashGrid3
 	{
 		public:
 
@@ -1307,7 +1307,7 @@ namespace BALL
 
 		typedef HashGridBox3<Item>* BoxIteratorPosition;
 		
-		class BoxIteratorTraits
+		BALL_EXPORT class BoxIteratorTraits
 		{
 			public:
 

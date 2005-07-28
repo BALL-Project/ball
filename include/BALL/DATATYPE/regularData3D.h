@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.33 2004/05/14 11:48:19 amoll Exp $ 
+// $Id: regularData3D.h,v 1.33.4.1 2005/07/28 13:35:19 amoll Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -33,7 +33,7 @@ namespace BALL
 			\ingroup  RegularData
 	*/
 	template <typename ValueType>
-	class TRegularData3D 
+	BALL_EXPORT class TRegularData3D 
 	{
 		public:
 
@@ -44,7 +44,7 @@ namespace BALL
 		//@{
 
     /// The index type used to refer to a specific element in the grid (x-, y-, and z-index)
-		class IndexType
+		BALL_EXPORT class IndexType
 		{
 			public:
 			inline IndexType() : x(0), y(0), z(0) {}

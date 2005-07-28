@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.19 2004/10/27 10:28:58 amoll Exp $
+// $Id: contourSurface.h,v 1.19.4.1 2005/07/28 13:35:16 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
@@ -29,13 +29,13 @@
 namespace BALL
 {
 	template<>
-	HashIndex Hash(const std::pair<Position, Position>& p) throw();
+	BALL_EXPORT HashIndex Hash(const std::pair<Position, Position>& p) throw();
 
 	// 
 	typedef Index FacetArray[256][12];
 
 	// function defined in contourSurface.C to precompute some tables.
-	extern const FacetArray& getContourSurfaceFacetData(double threshold);
+	BALL_EXPORT extern const FacetArray& getContourSurfaceFacetData(double threshold);
 
   /** This class contains a contour surface.
 			Contour surfaces are created from 3D (volume) data sets, in general from 
@@ -44,7 +44,7 @@ namespace BALL
     	\ingroup  DatatypeMiscellaneous
   */
   template <typename T>  
-  class TContourSurface 
+  BALL_EXPORT class TContourSurface 
 		: public Surface
   {
     public:
@@ -120,7 +120,7 @@ namespace BALL
 				store the values of the eight corners of a cube, and 
 				determine the topology and the triangles in the cube.
 		*/
-		class Cube
+		BALL_EXPORT class Cube
 		{	
 			public:
 

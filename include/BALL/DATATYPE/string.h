@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.h,v 1.55 2005/02/15 19:19:02 oliver Exp $
+// $Id: string.h,v 1.55.2.1 2005/07/28 13:35:19 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -57,7 +57,7 @@ namespace BALL
 	/**	Extended String class.
 			\ingroup String
 	*/
- 	class String
+ 	BALL_EXPORT class String
 		: public string
 	{
 		///
@@ -976,7 +976,7 @@ namespace BALL
 			
 			\ingroup String
 	*/
-	class Substring
+	BALL_EXPORT class Substring
 	{
 		friend class String;
 
@@ -992,7 +992,7 @@ namespace BALL
 				This exception is thrown by most accessors and predicates of
 				Substring if the substring is not bound to a string.
 		*/
-		class UnboundSubstring
+		BALL_EXPORT class UnboundSubstring
 			:	public Exception::GeneralException
 		{
 			public:
@@ -1004,7 +1004,7 @@ namespace BALL
 				is to be used.
 				@see isValid
 		*/
-		class InvalidSubstring
+		BALL_EXPORT class InvalidSubstring
 			:	public Exception::GeneralException
 		{
 			public:

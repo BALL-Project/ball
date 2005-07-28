@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: list.h,v 1.23 2004/04/22 10:08:19 oliver Exp $
+// $Id: list.h,v 1.23.6.1 2005/07/28 13:35:17 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_LIST_H
@@ -29,7 +29,7 @@ namespace BALL
     \ingroup  DatatypeMiscellaneous
 	*/
  	template <typename Value>
-	class List
+	BALL_EXPORT class List
 		:	public std::list<Value>
 	{
 		public:
