@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBdefs.h,v 1.7.2.1 2005/07/28 13:52:56 amoll Exp $
+// $Id: PDBdefs.h,v 1.7.2.2 2005/07/28 15:14:12 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_PDBDEFS_H
@@ -312,7 +312,7 @@ namespace BALL
 
 		/**
 		*/
-		BALL_EXPORT struct RecordTypeFormat
+		struct BALL_EXPORT RecordTypeFormat
 		{
 			public:
 			RecordType		record_type;
@@ -320,7 +320,7 @@ namespace BALL
 			const char*		format_string;
 		};
 
-		BALL_EXPORT struct Residue
+		struct BALL_EXPORT Residue
 		{
 			ResidueName name;
 			Character   chain_ID;
@@ -348,14 +348,14 @@ namespace BALL
 
 		/**
 		*/
-		BALL_EXPORT struct RecordUNKNOWN
+		struct BALL_EXPORT RecordUNKNOWN
 		{
 			Real max_record_size[SIZE_OF_PDB_RECORD_LINE];
 		};
 		
 		/**
 		*/
-		BALL_EXPORT struct RecordANISOU
+		struct BALL_EXPORT RecordANISOU
 		{
 			RecordType  record_type;
 			RecordName  record_name;
@@ -376,7 +376,7 @@ namespace BALL
 
 		/**
 		*/
-		BALL_EXPORT struct RecordATOM
+		struct BALL_EXPORT RecordATOM
 		{
 			RecordType  record_type;
 			RecordName  record_name;
@@ -395,7 +395,7 @@ namespace BALL
 
 		/**
 		*/
-		BALL_EXPORT struct RecordAUTHOR
+		struct BALL_EXPORT RecordAUTHOR
 		{
 			RecordType   record_type;
 			RecordName   record_name;
@@ -405,7 +405,7 @@ namespace BALL
 
 		/**
 		*/
-		BALL_EXPORT struct RecordCAVEAT
+		struct BALL_EXPORT RecordCAVEAT
 		{
 			RecordType   record_type;
 			RecordName   record_name;
@@ -416,7 +416,7 @@ namespace BALL
 
 		/**
 		*/
-		BALL_EXPORT struct RecordCISPEP
+		struct BALL_EXPORT RecordCISPEP
 		{
 			///
 			RecordType     record_type;
@@ -429,7 +429,7 @@ namespace BALL
 
 		/**
 		*/
-		BALL_EXPORT struct RecordCOMPND
+		struct BALL_EXPORT RecordCOMPND
 		{
 			RecordType        record_type;
 			RecordName        record_name;
@@ -439,7 +439,7 @@ namespace BALL
 		
 		/**
 		*/
-		BALL_EXPORT struct RecordCONECT
+		struct BALL_EXPORT RecordCONECT
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -461,7 +461,7 @@ namespace BALL
 
 		/**
 		*/
-		BALL_EXPORT struct RecordCRYST1
+		struct BALL_EXPORT RecordCRYST1
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -481,7 +481,7 @@ namespace BALL
 
 		/**
 		*/
-		BALL_EXPORT struct RecordDBREF
+		struct BALL_EXPORT RecordDBREF
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -517,21 +517,21 @@ namespace BALL
 		};
 
 		///
-		BALL_EXPORT struct RecordEND
+		struct BALL_EXPORT RecordEND
 		{
 			RecordType record_type;
 			RecordName record_name;
 		};
 
 		///
-		BALL_EXPORT struct RecordENDMDL
+		struct BALL_EXPORT RecordENDMDL
 		{
 			RecordType record_type;
 			RecordName record_name;
 		};
 		
 		///
-		BALL_EXPORT struct RecordEXPDTA
+		struct BALL_EXPORT RecordEXPDTA
 		{
 			RecordType   record_type;
 			RecordName   record_name;
@@ -540,7 +540,7 @@ namespace BALL
 		};
 		
 		///
-		BALL_EXPORT struct RecordFORMUL
+		struct BALL_EXPORT RecordFORMUL
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -552,7 +552,7 @@ namespace BALL
 		};
 		
 		///
-		BALL_EXPORT struct RecordFTNOTE
+		struct BALL_EXPORT RecordFTNOTE
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -561,7 +561,7 @@ namespace BALL
 		};
 		
 		///
-		BALL_EXPORT struct RecordHEADER
+		struct BALL_EXPORT RecordHEADER
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -571,7 +571,7 @@ namespace BALL
 		};
 		
 		///
-		BALL_EXPORT struct RecordHELIX
+		struct BALL_EXPORT RecordHELIX
 		{
 			RecordType    record_type;
 			RecordName    record_name;
@@ -599,7 +599,7 @@ namespace BALL
 		};
 		
 		///
-		BALL_EXPORT struct RecordHET
+		struct BALL_EXPORT RecordHET
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -609,7 +609,7 @@ namespace BALL
 		};
 		
 		///
-		BALL_EXPORT struct RecordHETATM
+		struct BALL_EXPORT RecordHETATM
 		{
 			RecordType  record_type;
 			RecordName  record_name;
@@ -626,7 +626,7 @@ namespace BALL
 		};
 		
 		///
-		BALL_EXPORT struct RecordHETNAM
+		struct BALL_EXPORT RecordHETNAM
 		{
 			RecordType   record_type;
 			RecordName   record_name;
@@ -636,7 +636,7 @@ namespace BALL
 		};
 		
 		///
-		BALL_EXPORT struct RecordHETSYN
+		struct BALL_EXPORT RecordHETSYN
 		{
 			RecordType   record_type;
 			RecordName   record_name;
@@ -646,37 +646,40 @@ namespace BALL
 		};
 		
 		///
-		BALL_EXPORT struct RecordHYDBND
+		struct BALL_EXPORT RecordHYDBND
 		{
 			RecordType       record_type;
 			RecordName       record_name;
 			///
-			BALL_EXPORT struct HydrogenPartnerAtom
+			struct BALL_EXPORT HydrogenPartnerAtom
 			{
 				Atom           atom_name;
 				Character      alternate_location_indicator;
 				Residue				 residue;
-			} hydrogen_partner_atom[2];
+			};
+
+			HydrogenPartnerAtom hydrogen_partner_atom[2];
 			///
-			BALL_EXPORT struct HydrogenAtom
+			struct BALL_EXPORT HydrogenAtom
 			{
 				Atom           atom_name;
 				Character      alternate_location_indicator;
 				Residue				 residue;
-			} hydrogen_atom;
+			};
+			HydrogenAtom hydrogen_atom;
 			SymmetryOperator first_non_hydrogen_atom;
 			SymmetryOperator second_non_hydrogen_atom;
 		};
 		
 		///
-		BALL_EXPORT struct RecordJRNL
+		struct BALL_EXPORT RecordJRNL
 		{
 			RecordType record_type;
 			RecordName record_name;
 			LString    text;
 		};
 		///
-		BALL_EXPORT struct RecordKEYWDS
+		struct BALL_EXPORT RecordKEYWDS
 		{
 			RecordType   record_type;
 			RecordName   record_name;
@@ -684,22 +687,23 @@ namespace BALL
 			PDBList      keywords;
 		};
 		///
-		BALL_EXPORT struct RecordLINK
+		struct BALL_EXPORT RecordLINK
 		{
 			RecordType      record_type;
 			RecordName      record_name;
 			///			
-			BALL_EXPORT struct LinkPartner
+			struct BALL_EXPORT LinkPartner
 			{
 				Atom          atom_name;
 				Character     alternate_location_indicator;
 				Residue				residue;
-			} link_partner[2];
+			};
+			LinkPartner link_partner[2];
 			SymmetryOperator first_atom;
 			SymmetryOperator second_atom;
 		};
 		///
-		BALL_EXPORT struct RecordMASTER
+		struct BALL_EXPORT RecordMASTER
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -729,14 +733,14 @@ namespace BALL
 			}
 		};
 		///
-		BALL_EXPORT struct RecordMODEL
+		struct BALL_EXPORT RecordMODEL
 		{
 			RecordType record_type;
 			RecordName record_name;
 			Integer    model_serial_number;
 		};
 		///
-		BALL_EXPORT struct RecordMODRES
+		struct BALL_EXPORT RecordMODRES
 		{
 			RecordType  record_type;
 			RecordName  record_name;
@@ -746,7 +750,7 @@ namespace BALL
 			PDBString   comment;
 		};
 		///
-		BALL_EXPORT struct RecordMTRIX1
+		struct BALL_EXPORT RecordMTRIX1
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -755,7 +759,7 @@ namespace BALL
 			Integer    is_given;
 		};
 		///
-		BALL_EXPORT struct RecordMTRIX2
+		struct BALL_EXPORT RecordMTRIX2
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -764,7 +768,7 @@ namespace BALL
 			Integer    is_given;
 		};
 		///
-		BALL_EXPORT struct RecordMTRIX3
+		struct BALL_EXPORT RecordMTRIX3
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -773,7 +777,7 @@ namespace BALL
 			Integer    is_given;
 		};
 		///
-		BALL_EXPORT struct RecordOBSLTE
+		struct BALL_EXPORT RecordOBSLTE
 		{
 			RecordType	 record_type;
 			RecordName	 record_name;
@@ -783,28 +787,28 @@ namespace BALL
 			IDcode       replacing_entry_code[8];
 		};
 		///
-		BALL_EXPORT struct RecordORIGX1
+		struct BALL_EXPORT RecordORIGX1
 		{
 			RecordType record_type;
 			RecordName record_name;
 			Real       transformation_matrix[4];
 		};
 		///
-		BALL_EXPORT struct RecordORIGX2
+		struct BALL_EXPORT RecordORIGX2
 		{
 			RecordType record_type;
 			RecordName record_name;
 			Real       transformation_matrix[4];
 		};
 		///
-		BALL_EXPORT struct RecordORIGX3
+		struct BALL_EXPORT RecordORIGX3
 		{
 			RecordType record_type;
 			RecordName record_name;
 			Real       transformation_matrix[4];
 		};
 		///
-		BALL_EXPORT struct RecordREMARK
+		struct BALL_EXPORT RecordREMARK
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -812,7 +816,7 @@ namespace BALL
 			LString    text;
 		};
 		///
-		BALL_EXPORT struct RecordREVDAT
+		struct BALL_EXPORT RecordREVDAT
 		{
 			RecordType   record_type;
 			RecordName   record_name;
@@ -825,7 +829,7 @@ namespace BALL
 		};
 
 		///
-		BALL_EXPORT struct RecordSCALE1
+		struct BALL_EXPORT RecordSCALE1
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -833,7 +837,7 @@ namespace BALL
 		};
 
 		///
-		BALL_EXPORT struct RecordSCALE2
+		struct BALL_EXPORT RecordSCALE2
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -841,7 +845,7 @@ namespace BALL
 		};
 
 		///
-		BALL_EXPORT struct RecordSCALE3
+		struct BALL_EXPORT RecordSCALE3
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -849,7 +853,7 @@ namespace BALL
 		};
 
 		///
-		BALL_EXPORT struct RecordSEQADV
+		struct BALL_EXPORT RecordSEQADV
 		{
 			RecordType	record_type;
 			RecordName	record_name;
@@ -863,7 +867,7 @@ namespace BALL
 		};
 
 		///
-		BALL_EXPORT struct RecordSEQRES
+		struct BALL_EXPORT RecordSEQRES
 		{
 			RecordType  record_type;
 			RecordName  record_name;
@@ -901,7 +905,7 @@ namespace BALL
 		};
 
 		///
-		BALL_EXPORT struct RecordSHEET
+		struct BALL_EXPORT RecordSHEET
 		{
 			RecordType    record_type;
 			RecordName    record_name;
@@ -935,7 +939,7 @@ namespace BALL
 		};
 
 		///
-		BALL_EXPORT struct RecordSIGATM
+		struct BALL_EXPORT RecordSIGATM
 		{
 			RecordType  record_type;
 			RecordName  record_name;
@@ -952,7 +956,7 @@ namespace BALL
 		};
 
 		///
-		BALL_EXPORT struct RecordSIGUIJ
+		struct BALL_EXPORT RecordSIGUIJ
 		{
 			RecordType  record_type;
 			RecordName  record_name;
@@ -972,7 +976,7 @@ namespace BALL
 		};
 
 		///
-		BALL_EXPORT struct RecordSITE
+		struct BALL_EXPORT RecordSITE
 		{
 			RecordType    record_type;
 			RecordName    record_name;
@@ -983,23 +987,25 @@ namespace BALL
 		};
 
 		///
-		BALL_EXPORT struct RecordSLTBRG
+		struct BALL_EXPORT RecordSLTBRG
 		{
 			RecordType      record_type;
 			RecordName      record_name;
 			///
-			BALL_EXPORT struct PartnerAtom
+			struct BALL_EXPORT PartnerAtom
 			{
 				Atom          atom_name;
 				Character     alternate_location_indicator;
 				Residue				residue;
-			} partner_atom[2];
+			};
+			
+			PartnerAtom partner_atom[2];
 			SymmetryOperator first_atom;
 			SymmetryOperator second_atom;
 		};
 
 		///
-		BALL_EXPORT struct RecordSOURCE
+		struct BALL_EXPORT RecordSOURCE
 		{
 			RecordType        record_type;
 			RecordName        record_name;
@@ -1008,7 +1014,7 @@ namespace BALL
 		};
 
 		///
-		BALL_EXPORT struct RecordSPRSDE
+		struct BALL_EXPORT RecordSPRSDE
 		{
 			RecordType        record_type;
 			RecordName        record_name;
@@ -1019,7 +1025,7 @@ namespace BALL
 		};
 
 		///
-		BALL_EXPORT struct RecordSSBOND
+		struct BALL_EXPORT RecordSSBOND
 		{
 			RecordType    record_type;
 			RecordName    record_name;
@@ -1042,7 +1048,7 @@ namespace BALL
 
 		/**
 		*/
-		BALL_EXPORT struct RecordTER
+		struct BALL_EXPORT RecordTER
 		{
 			RecordType  record_type;
 			RecordName  record_name;
@@ -1052,7 +1058,7 @@ namespace BALL
 
 		/**
 		*/
-		BALL_EXPORT struct RecordTITLE
+		struct BALL_EXPORT RecordTITLE
 		{
 			RecordType   record_type;
 			RecordName   record_name;
@@ -1062,7 +1068,7 @@ namespace BALL
 
 		/**
 		*/
-		BALL_EXPORT struct RecordTURN
+		struct BALL_EXPORT RecordTURN
 		{
 			RecordType    record_type;
 			RecordName    record_name;
@@ -1087,7 +1093,7 @@ namespace BALL
 
 		/**
 		*/
-		BALL_EXPORT struct RecordTVECT
+		struct BALL_EXPORT RecordTVECT
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -1100,7 +1106,7 @@ namespace BALL
 		/** This struct contains the number of records in a PDB file
 				as required for the MASTER record.		
 		*/
-		BALL_EXPORT struct BookKeeping
+		struct BALL_EXPORT BookKeeping
 		{
 			Size remark_records;
 			Size het_records;
@@ -1136,9 +1142,9 @@ namespace BALL
 		};
 
 
-		BALL_EXPORT struct Structure	
+		struct BALL_EXPORT Structure	
 		{
-			BALL_EXPORT struct AtomEntry
+			struct BALL_EXPORT AtomEntry
 			{
 				const BALL::Atom* atom;
 				const BALL::Residue* residue;
@@ -1154,7 +1160,7 @@ namespace BALL
 			};
 			
 
-			BALL_EXPORT struct ConectAtomList
+			struct BALL_EXPORT ConectAtomList
 			{
 				Position serial_number;
 				std::list<Position> bonds;
@@ -1186,7 +1192,7 @@ namespace BALL
 		/**	A structure tracking the current values of all auxiliary information required to write ATOM or HETATM records.
 				This is used for keeping track of chain and residue names while writing multiple atoms.
 		*/
-		BALL_EXPORT struct AdditionalAtomInfo
+		struct BALL_EXPORT AdditionalAtomInfo
 		{
 			const Chain* current_chain;
 			const ::BALL::Residue* current_residue;
