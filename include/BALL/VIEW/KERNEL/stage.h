@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.18.4.1 2005/07/29 14:42:58 amoll Exp $
+// $Id: stage.h,v 1.18.4.2 2005/07/29 14:49:14 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -316,6 +316,10 @@ namespace BALL
 			
 			///
 			bool operator == (const Camera& camera) const
+				throw();
+
+			/// Needed for MSVC
+			bool operator < (const Camera& camera) const
 				throw();
 
 			//@}

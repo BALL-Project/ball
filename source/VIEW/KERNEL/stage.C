@@ -137,6 +137,14 @@ namespace BALL
 			calculateVectors_();
 			return *this;
 		}
+		
+	
+		bool Camera::operator < (const Camera& camera) const
+			throw()
+		{
+			return this < &camera;
+		}
+
 
 		bool Camera::operator == (const Camera& camera) const
 			throw()
