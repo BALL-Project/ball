@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.65 2004/05/27 19:49:47 oliver Exp $
+// $Id: file.h,v 1.65.4.1 2005/07/29 13:52:18 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -77,7 +77,7 @@ namespace BALL
 			accessible through  \link File::getTransformationManager File::getTransformationManager \endlink .
 			\ingroup System
 	*/
-	class TransformationManager
+	class BALL_EXPORT TransformationManager
 	{	
 		public:
 			
@@ -134,7 +134,7 @@ namespace BALL
 	/**	File Class.	
 			\ingroup System		
 	*/
-	class File
+	class BALL_EXPORT File
 		: public std::fstream
 	{
 		public:
@@ -645,7 +645,7 @@ namespace BALL
 			\ingroup System		
 	*/
 	template <typename T>
-	class BinaryFileAdaptor
+	class BALL_EXPORT BinaryFileAdaptor
 	{
 
 		public:
