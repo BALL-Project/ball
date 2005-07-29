@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: graphFace.h,v 1.14 2004/02/23 17:26:06 anhi Exp $
+// $Id: graphFace.h,v 1.14.6.1 2005/07/29 12:38:08 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_GRAPHFACE_H
@@ -27,7 +27,7 @@ namespace BALL
 		\ingroup StructureMiscellaneous		
 	*/
 	template <typename Vertex, typename Edge, typename Face>
-	class GraphFace
+	class BALL_EXPORT GraphFace
 	{
 		public:
 
@@ -685,7 +685,7 @@ namespace BALL
 		\ingroup StructureMiscellaneous		
 	*/
 	template <typename Vertex, typename Edge, typename Face>
-	class GraphTriangle
+	class BALL_EXPORT GraphTriangle
 	{
 		public:
 

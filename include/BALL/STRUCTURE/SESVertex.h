@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESVertex.h,v 1.21 2004/02/23 17:26:06 anhi Exp $
+// $Id: SESVertex.h,v 1.21.6.1 2005/07/29 12:38:06 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
@@ -28,7 +28,7 @@ namespace BALL
 	/** Generic SESVertex Class.
    \ingroup Surface   
 	*/
-	class SESVertex : public GraphVertex< SESVertex,SESEdge,SESFace >
+	BALL_EXPORT class SESVertex : public GraphVertex< SESVertex,SESEdge,SESFace >
 	{
 		public:
 
@@ -215,7 +215,7 @@ namespace BALL
 
 	/**	Output- Operator
 	*/
-	std::ostream& operator << (std::ostream& s, const SESVertex& sesvertex);
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const SESVertex& sesvertex);
 
 	//@}
 

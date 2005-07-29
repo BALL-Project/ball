@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideBuilder.h,v 1.6 2004/05/27 19:49:47 oliver Exp $
+// $Id: peptideBuilder.h,v 1.6.4.1 2005/07/29 12:38:09 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_PEPTIDEBUILDER_H
@@ -19,7 +19,7 @@ namespace BALL
 	{
 		/** This class represents one amino acid in the sequence.
 		*/
-		class AminoAcidDescriptor
+		class BALL_EXPORT AminoAcidDescriptor
 		{
 			public:
 	   

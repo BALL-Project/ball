@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: createSpectrumProcessor.h,v 1.25 2004/02/23 17:26:03 anhi Exp $
+// $Id: createSpectrumProcessor.h,v 1.25.6.1 2005/07/29 12:37:52 amoll Exp $
 //
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
@@ -44,7 +44,7 @@ namespace BALL
 			Thist peak´s <tt>atomlist_</tt> will contain the corresponding atom.  \par
 	\ingroup Spectra
 	*/
-	class CreateSpectrumProcessor
+	class BALL_EXPORT CreateSpectrumProcessor
 		:	public ShiftModule
 	{
 		public:
@@ -173,7 +173,7 @@ namespace BALL
 			by its position \f$\delta_i\f$, intensity \f$h_i\f$, and width \f$w_i\f$.
 	\ingroup Spectra
 	*/
-	const RegularData1D& operator << (RegularData1D& data, const PeakList1D& peak_list) throw();
+	BALL_EXPORT const RegularData1D& operator << (RegularData1D& data, const PeakList1D& peak_list) throw();
   
 } //namespace BALL
 	 

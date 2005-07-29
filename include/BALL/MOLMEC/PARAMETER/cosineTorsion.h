@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cosineTorsion.h,v 1.18.2.1 2005/06/10 20:47:36 oliver Exp $
+// $Id: cosineTorsion.h,v 1.18.2.2 2005/07/29 12:37:49 amoll Exp $
 //
  
 #ifndef BALL_MOLMEC_PARAMETER_COSINETORSION_H
@@ -24,7 +24,7 @@ namespace BALL
     	
 			\ingroup  MolmecParameters
 	*/
-	class CosineTorsion 
+	class BALL_EXPORT CosineTorsion 
 		:	public ParameterSection
 	{
 		public:
@@ -64,7 +64,7 @@ namespace BALL
 			}
 		};
 
-		struct Values 
+		struct BALL_EXPORT Values 
 		{
 			///
 			Size 	n;
@@ -135,7 +135,7 @@ namespace BALL
 			}
 		};
 
-		struct Data
+		struct BALL_EXPORT Data
 		{
 			Atom*		atom1;
 			Atom*		atom2;
@@ -145,7 +145,7 @@ namespace BALL
 			Values	values;
 		};
 
-		struct SingleData
+		struct BALL_EXPORT SingleData
 		{
 			Atom*			atom1;
 			Atom*			atom2;

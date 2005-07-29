@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.h,v 1.8 2005/03/14 16:20:59 amoll Exp $
+// $Id: buildBondsProcessor.h,v 1.8.2.1 2005/07/29 12:38:07 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_BUILDBONDSPROCESSOR_H
@@ -39,7 +39,7 @@ namespace BALL
 
 	/**	Bond creation processor
 	*/
-	class BuildBondsProcessor 
+	class BALL_EXPORT BuildBondsProcessor 
 		: public UnaryProcessor<AtomContainer> 
 	{
 

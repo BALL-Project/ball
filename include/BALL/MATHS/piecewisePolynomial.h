@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewisePolynomial.h,v 1.18 2003/08/26 08:04:22 oliver Exp $
+// $Id: piecewisePolynomial.h,v 1.18.6.1 2005/07/29 12:37:39 amoll Exp $
 //
 
 #ifndef BALL_MATHS_PPOLYNOMIAL_H
@@ -24,7 +24,7 @@ namespace BALL
 		\ingroup 	FunctionClasses
 	 */
 
-	class PiecewisePolynomial
+	class BALL_EXPORT PiecewisePolynomial
 		:	public PiecewiseFunction
 	{
 		public:

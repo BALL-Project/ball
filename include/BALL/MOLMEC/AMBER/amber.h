@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.h,v 1.25 2004/12/27 17:06:28 amoll Exp $ 
+// $Id: amber.h,v 1.25.4.1 2005/07/29 12:37:44 amoll Exp $ 
 //
 
 // Molecular Mechanics: Amber force field class
@@ -31,7 +31,7 @@ namespace BALL
 			
       \ingroup  AMBER
 	*/
-	class AmberFF 
+	class BALL_EXPORT AmberFF 
 		: public ForceField
 	{
 		public:

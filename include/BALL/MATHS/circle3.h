@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: circle3.h,v 1.42 2004/07/05 20:57:28 oliver Exp $
+// $Id: circle3.h,v 1.42.4.1 2005/07/29 12:37:37 amoll Exp $
 //
 
 #ifndef BALL_MATHS_CIRCLE3_H
@@ -44,7 +44,7 @@ namespace BALL
 	/**	Generic Circle in Three-Dimensional Space.
 	*/
 	template <typename T>
-	class TCircle3
+	class BALL_EXPORT TCircle3
 	{
 		public:
 
@@ -316,7 +316,7 @@ namespace BALL
 			Reads in two TVector3 and a <b>T</b> value: p, n, radius
 	*/
 	template <typename T>
-	std::istream& operator >> (std::istream& s, TCircle3<T>& circle)
+	BALL_EXPORT std::istream& operator >> (std::istream& s, TCircle3<T>& circle)
 		throw()
 	{
 		  char c;
@@ -334,7 +334,7 @@ namespace BALL
 			@see TVector3::operator<<
 	*/
 	template <typename T>
-	std::ostream& operator << (std::ostream& s, const TCircle3<T>& circle)
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const TCircle3<T>& circle)
 		throw()
 	{
 			return s << '(' << circle.p 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyRepresentationList.h,v 1.4 2004/05/27 19:49:45 oliver Exp $
+// $Id: pyRepresentationList.h,v 1.4.4.1 2005/07/29 12:37:58 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYREPRESENTATIONLIST_H
@@ -28,7 +28,7 @@ namespace BALL
 	/** Equivalent for a STL::List of Representation Pointers in Python
 			\ingroup PythonExtensions
 	*/
-	class PyRepresentationList
+	class BALL_EXPORT PyRepresentationList
 			:	public VIEW::PrimitiveManager::RepresentationList
 	{
 		public:

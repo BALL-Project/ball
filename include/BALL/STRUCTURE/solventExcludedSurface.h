@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventExcludedSurface.h,v 1.38 2003/08/26 08:04:53 oliver Exp $
+// $Id: solventExcludedSurface.h,v 1.38.6.1 2005/07/29 12:38:12 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -65,7 +65,7 @@ namespace BALL
 	/** Generic SolventExcludedSurface Class.
 	\ingroup Surface			
 	*/
-	class SolventExcludedSurface
+	class BALL_EXPORT SolventExcludedSurface
 	{
 		public:
 
@@ -319,7 +319,7 @@ namespace BALL
 	/** Generic SESComputer Class.
 	\ingroup Surface			
 	*/
-	class SESComputer
+	class BALL_EXPORT SESComputer
 	{
 		public:
 
@@ -461,7 +461,7 @@ namespace BALL
 	/** Generic SESComputer Class.
 	\ingroup Surface			
 	*/
-	class SESSingularityCleaner
+	class BALL_EXPORT SESSingularityCleaner
 	{
 		public:
 

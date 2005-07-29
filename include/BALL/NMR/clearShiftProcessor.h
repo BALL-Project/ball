@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clearShiftProcessor.h,v 1.12 2003/08/26 08:04:44 oliver Exp $
+// $Id: clearShiftProcessor.h,v 1.12.6.1 2005/07/29 12:37:52 amoll Exp $
 //
 
 #ifndef BALL_NMR_CLEARSHIFTPROCESSOR_H
@@ -18,7 +18,7 @@ namespace BALL
 			in the atoms of all data structures it is applied to.  \par
 	\ingroup ShiftModulesNMR		
 	*/
-	class ClearShiftProcessor
+	class BALL_EXPORT ClearShiftProcessor
 		:	public ShiftModule
 	{
 		public:

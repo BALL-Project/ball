@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSVertex.h,v 1.32 2003/08/26 08:04:50 oliver Exp $
+// $Id: RSVertex.h,v 1.32.6.1 2005/07/29 12:38:05 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
@@ -36,7 +36,7 @@ namespace BALL
 	/** Generic RSVertex Class.
 	\ingroup Surface			
 	*/
-	class RSVertex	:	public GraphVertex< RSVertex,RSEdge,RSFace >
+	BALL_EXPORT class RSVertex	:	public GraphVertex< RSVertex,RSEdge,RSFace >
 	{
 		public:
 
@@ -204,7 +204,7 @@ namespace BALL
 	/**	Output- Operator
 			prints out a rsvertex
 	*/
-	std::ostream& operator << (std::ostream& s, const RSVertex& rsvertex);
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const RSVertex& rsvertex);
 
 	//@}
 

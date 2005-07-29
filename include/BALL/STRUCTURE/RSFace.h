@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSFace.h,v 1.32 2004/02/23 17:26:05 anhi Exp $
+// $Id: RSFace.h,v 1.32.6.1 2005/07/29 12:38:05 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_RSFACE_H
@@ -39,7 +39,7 @@ namespace BALL
 	/** Generic RSFace Class.	
 	\ingroup Surface		
 	*/
-	class RSFace	:	public GraphTriangle< RSVertex,RSEdge,RSFace >
+	BALL_EXPORT class RSFace	:	public GraphTriangle< RSVertex,RSEdge,RSFace >
 	{
 		public:
 
@@ -292,7 +292,7 @@ namespace BALL
 
 	/**	Output- Operator
 	*/
-	std::ostream& operator << (std::ostream& s, const RSFace& rsface);
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const RSFace& rsface);
 
 	//@}
 

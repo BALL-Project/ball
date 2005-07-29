@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularGraph.h,v 1.11 2003/08/26 08:04:52 oliver Exp $
+// $Id: molecularGraph.h,v 1.11.6.1 2005/07/29 12:38:09 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
@@ -40,7 +40,7 @@ namespace BALL
 		\ingroup StructureMiscellaneous
 	*/
 	template <typename Node, typename Edge>
-	class NodeItem
+	class BALL_EXPORT NodeItem
 	{
 		public:
 		/**	@name	Type definitions
@@ -92,7 +92,7 @@ namespace BALL
 
 
 	template <typename Node, typename Edge>
-	class EdgeItem
+	class BALL_EXPORT EdgeItem
 	{
 		public:
 		typedef NodeItem<Node, Edge> NodeItemType;
@@ -144,7 +144,7 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	class TMolecularGraph
+	class BALL_EXPORT TMolecularGraph
 	{
 		public:
 		typedef NodeItem<Node, Edge> NodeItemType;

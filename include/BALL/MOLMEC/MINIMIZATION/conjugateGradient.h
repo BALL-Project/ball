@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.28 2004/04/20 11:40:31 amoll Exp $ 
+// $Id: conjugateGradient.h,v 1.28.6.1 2005/07/29 12:37:47 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -17,7 +17,7 @@ namespace BALL
 			A conjugate gradient minimizer for geometry optimisation.
 			\ingroup  MolmecEnergyMinimizer
 	*/
-  class ConjugateGradientMinimizer 
+  class BALL_EXPORT ConjugateGradientMinimizer 
 		: public EnergyMinimizer
 	{
     public:
@@ -60,7 +60,7 @@ namespace BALL
 
 		/**	Defaults for all options
 		*/
-    struct Default
+    struct BALL_EXPORT Default
     {
       /** The initial step length used in the line search 
       */

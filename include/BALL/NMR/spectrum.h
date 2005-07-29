@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: spectrum.h,v 1.14 2003/08/26 08:04:45 oliver Exp $
+// $Id: spectrum.h,v 1.14.6.1 2005/07/29 12:37:54 amoll Exp $
 //
 
 #ifndef BALL_NMR_SPECTRUM_H
@@ -33,7 +33,7 @@ namespace BALL
 	\ingroup Spectra
 	*/
 	template <typename DataT, typename PeakT, typename PositionT = typename PeakT::Position>
-	class Spectrum
+	class BALL_EXPORT Spectrum
 	{
 		public:
 		

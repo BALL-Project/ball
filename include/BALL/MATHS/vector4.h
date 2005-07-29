@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.h,v 1.53 2004/07/05 20:57:29 oliver Exp $
+// $Id: vector4.h,v 1.53.4.1 2005/07/29 12:37:41 amoll Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR4_H
@@ -55,7 +55,7 @@ namespace BALL
 			Representation of points and vectors in four-dimensional space.
 	*/
 	template <typename T>
-	class TVector4
+	class BALL_EXPORT TVector4
 	{
 		public:
 
@@ -951,7 +951,7 @@ namespace BALL
 			the components x, y, z and h of the vector.
 	*/
 	template <typename T>
-	std::istream& operator >> (std::istream& s, TVector4<T>& v)
+	BALL_EXPORT std::istream& operator >> (std::istream& s, TVector4<T>& v)
 		throw()
 	{
 		char c;
@@ -966,7 +966,7 @@ namespace BALL
 			<tt>(0.1 2.0 0 1)</tt>
 	*/
 	template <typename T>
-	std::ostream& operator << (std::ostream& s, const TVector4<T>& v)
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const TVector4<T>& v)
 		throw()
 	{
 		s << '(' <<v.x << ' ' << v.y << ' ' << v.z << ' ' << v.h << ')';

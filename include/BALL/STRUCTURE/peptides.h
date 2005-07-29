@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptides.h,v 1.9 2003/08/26 08:04:52 oliver Exp $
+// $Id: peptides.h,v 1.9.6.1 2005/07/29 12:38:09 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_PEPTIDES_H
@@ -41,31 +41,31 @@ namespace BALL
 				If the string given is not the three-letter code of one of the twenty
 				amino acids, <tt>'?'</tt> is returned. This method is not case sensitive.
 		*/
-		char OneLetterCode(const String& aa);
+		BALL_EXPORT char OneLetterCode(const String& aa);
 
 		/**	Convert a one-letter amino acid abbreviation to its three-letter code.
 				If the character given is not the code for one of the twenty amino acids,
 				<tt>'UNK'</tt> is returned.
 				This method is not case sensitive. The strings returned are all upper cases.
 		*/
-		String ThreeLetterCode(char aa);
+		BALL_EXPORT String ThreeLetterCode(char aa);
 
 		/**	Convert an amino acid sequence from three-letter code to one-letter code.
 				Call  \link OneLetterCode OneLetterCode \endlink  for each of the amino acids in the sequence.
 		*/
-		OneLetterAASequence ThreeLetterToOneLetter(const ThreeLetterAASequence& sequence);
+		BALL_EXPORT OneLetterAASequence ThreeLetterToOneLetter(const ThreeLetterAASequence& sequence);
 	
 		/**	Convert an amino acid sequence from one-letter code to three-letter code.
 				Call  \link ThreeLetterCode ThreeLetterCode \endlink  for each of the characters in the string.
 		*/
-		ThreeLetterAASequence OneLetterToThreeLetter(const OneLetterAASequence& sequence);
+		BALL_EXPORT ThreeLetterAASequence OneLetterToThreeLetter(const OneLetterAASequence& sequence);
 
 		/**	Get amino acid sequence from an protein.
 				This method iterates over all residues of the protein, calls
 				 \link OneLetterCode OneLetterCode \endlink  for each of the residue names, and returns
 				the concatenation of all results.
 		*/
-		OneLetterAASequence GetSequence(const Protein& protein);
+		BALL_EXPORT OneLetterAASequence GetSequence(const Protein& protein);
 		//@}
 	  
 	}  // namespace Peptides

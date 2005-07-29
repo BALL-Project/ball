@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: templates.h,v 1.14 2004/12/17 15:29:22 amoll Exp $
+// $Id: templates.h,v 1.14.4.1 2005/07/29 12:37:51 amoll Exp $
 //
 
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
@@ -30,7 +30,7 @@ namespace BALL
 	/**	Force Field Residue Template Class.	
     	\ingroup  MolmecParameters
 	*/
-	class Templates 
+	class BALL_EXPORT Templates 
 		:	public ParameterSection
 	{
 		public:

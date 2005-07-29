@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyGeometricObjectList.h,v 1.4 2004/05/27 19:49:45 oliver Exp $
+// $Id: pyGeometricObjectList.h,v 1.4.4.1 2005/07/29 12:37:57 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYGEOMETRICOBJECTLIST_H
@@ -26,7 +26,7 @@ namespace BALL
 	/** Equivalent for a STL::List of GeometricObject Pointers in Python
 			\ingroup PythonExtensions
 	*/
-	class PyGeometricObjectList
+	class BALL_EXPORT PyGeometricObjectList
 		:	public List<GeometricObject*>
 	{
 		public:

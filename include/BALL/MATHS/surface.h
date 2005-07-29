@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surface.h,v 1.29 2004/10/22 20:11:54 amoll Exp $
+// $Id: surface.h,v 1.29.4.1 2005/07/29 12:37:40 amoll Exp $
 //
 
 #ifndef BALL_MATHS_SURFACE_H
@@ -26,7 +26,7 @@ namespace BALL
 			a position and possibly a normal vector associated.
 	*/
 	template <typename T>
-	class TSurface
+	class BALL_EXPORT TSurface
 	{
 		public:
 
@@ -38,7 +38,7 @@ namespace BALL
 
 		/**
 		*/
-		class Triangle
+		class BALL_EXPORT Triangle
 		{
 			public:
 			Index	v1;

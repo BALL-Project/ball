@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyBALLSipHelper.h,v 1.8 2004/05/27 19:49:44 oliver Exp $
+// $Id: pyBALLSipHelper.h,v 1.8.4.1 2005/07/29 12:37:55 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYBALLSIPHELPER_H
@@ -16,7 +16,7 @@ namespace BALL
 	/**	Virtual mapping of BALL objects to their true class.
     	\ingroup  PythonExtensions
 	*/
-	PyObject* pyMapBALLObjectToSip(Composite& object);
+	BALL_EXPORT PyObject* pyMapBALLObjectToSip(Composite& object);
    
 } // namespace BALL
 

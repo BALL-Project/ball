@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyMoleculeList.h,v 1.11 2004/05/27 19:49:45 oliver Exp $
+// $Id: pyMoleculeList.h,v 1.11.4.1 2005/07/29 12:37:57 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYMOLECULELIST_H
@@ -23,7 +23,7 @@ namespace BALL
 	/** Equivalent for a STL::List of Molecule Pointers in Python
 			\ingroup PythonExtensions		
 	*/
-	class PyMoleculeList
+	class BALL_EXPORT PyMoleculeList
 		:	public List<Molecule*>
 	{
 		public:

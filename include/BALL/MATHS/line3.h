@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line3.h,v 1.48 2004/07/05 20:57:28 oliver Exp $
+// $Id: line3.h,v 1.48.4.1 2005/07/29 12:37:38 amoll Exp $
 //
 
 #ifndef BALL_MATHS_LINE3_H
@@ -43,7 +43,7 @@ namespace BALL
 	/**	Generic Line in Three-Dimensional Space.
 	*/
 	template <typename T>
-	class TLine3
+	class BALL_EXPORT TLine3
 	{
 		public:
 
@@ -363,7 +363,7 @@ namespace BALL
 			assigns them to <tt>d</tt> and <tt>p</tt>.
 	*/
 	template <typename T>
-	std::istream& operator >> (std::istream& s, TLine3<T>& line)
+	BALL_EXPORT std::istream& operator >> (std::istream& s, TLine3<T>& line)
 		throw()
 	{
 		char c;
@@ -379,7 +379,7 @@ namespace BALL
 			@see TVector3::operator<<
 	*/
 	template <typename T>
-	std::ostream& operator << (std::ostream& s, const TLine3<T>& line)
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const TLine3<T>& line)
 		throw()
 	{
 		s << '(' << line.p << ' ' << line.d << ')';

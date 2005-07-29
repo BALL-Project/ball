@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.h,v 1.30.6.1 2005/07/18 09:03:25 oliver Exp $
+// $Id: rotamerLibrary.h,v 1.30.6.2 2005/07/29 12:38:11 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -34,7 +34,7 @@ namespace BALL
 		In principle, a rotamer is just a list containing the side chain torsion angles (up to four)
 		and the probability for that angle (useful only in the context of rotamer libraries).
 	*/
-	class Rotamer
+	class BALL_EXPORT Rotamer
 	{
 		public:
 
@@ -92,7 +92,7 @@ namespace BALL
 		try all possible rotamers for this side chain. These rotamers for a side chain	
 		are typically stored in a \link RotamerLibrary rotamer library \endlink.
 	*/
-	class ResidueRotamerSet
+	class BALL_EXPORT ResidueRotamerSet
 	{
 		public:
 
@@ -330,7 +330,7 @@ namespace BALL
 		observed for each of the 19 amino acid side chains (GLY does not have any
 		useful rotamers). 
 	*/
-	class RotamerLibrary
+	class BALL_EXPORT RotamerLibrary
 	{
 		public:
 

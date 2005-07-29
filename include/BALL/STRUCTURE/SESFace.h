@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESFace.h,v 1.27 2004/02/23 17:26:05 anhi Exp $
+// $Id: SESFace.h,v 1.27.6.1 2005/07/29 12:38:06 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SESFACE_H
@@ -36,7 +36,7 @@ namespace BALL
 	/** Generic SESFace Class.
 	\ingroup Surface		
 	*/
-	class SESFace	:	public GraphFace< SESVertex,SESEdge,SESFace >
+	BALL_EXPORT class SESFace	:	public GraphFace< SESVertex,SESEdge,SESFace >
 	{
 		public:
 
@@ -297,7 +297,7 @@ namespace BALL
 
 	/**	Output- Operator
 	*/
-	std::ostream& operator << (std::ostream& s, const SESFace& sesface);
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const SESFace& sesface);
 
 	//@}
 

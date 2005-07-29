@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: graphVertex.h,v 1.14 2004/02/23 17:26:06 anhi Exp $
+// $Id: graphVertex.h,v 1.14.6.1 2005/07/29 12:38:08 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_GRAPHVERTEX_H
@@ -31,7 +31,7 @@ namespace BALL
 		\ingroup StructureMiscellaneous		
 	*/
 	template <typename Vertex, typename Edge, typename Face>
-	class GraphVertex
+	class BALL_EXPORT GraphVertex
 	{
 		public:
 

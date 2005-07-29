@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PCMCavFreeEnergyProcessor.h,v 1.17 2003/08/26 08:04:48 oliver Exp $
+// $Id: PCMCavFreeEnergyProcessor.h,v 1.17.6.1 2005/07/29 12:38:01 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
@@ -29,7 +29,7 @@ namespace BALL
 			The energy value is returned in units of kJ/mol.  \par
 			\ingroup Solvation
 	 */
-	class PCMCavFreeEnergyProcessor
+	class BALL_EXPORT PCMCavFreeEnergyProcessor
 		:	public EnergyProcessor
 	{
 		

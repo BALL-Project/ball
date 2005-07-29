@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lennardJones.h,v 1.26 2003/08/26 08:04:27 oliver Exp $
+// $Id: lennardJones.h,v 1.26.6.1 2005/07/29 12:37:49 amoll Exp $
 //
 
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
@@ -41,7 +41,7 @@ namespace BALL
 			
     	\ingroup  MolmecParameters
 	*/
-	class LennardJones 
+	class BALL_EXPORT LennardJones 
 		:	public ParameterSection
 	{
 		public:
@@ -64,13 +64,13 @@ namespace BALL
 
 		/**
 		*/
-		struct Values 
+		struct BALL_EXPORT Values 
 		{
 			float A;
 			float B;
 		};
 
-		struct Data
+		struct BALL_EXPORT Data
 		{
 			Atom::StaticAtomAttributes* atom1;
 			Atom::StaticAtomAttributes* atom2;

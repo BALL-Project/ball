@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: plane3.h,v 1.38 2004/05/27 19:49:42 oliver Exp $
+// $Id: plane3.h,v 1.38.4.1 2005/07/29 12:37:39 amoll Exp $
 //
 
 #ifndef BALL_MATHS_PLANE3_H
@@ -53,7 +53,7 @@ namespace BALL
 			A plane is defined by a point and its normal.
 	*/
 	template <typename T>
-	class TPlane3
+	class BALL_EXPORT TPlane3
 	{
 		public:
 
@@ -382,7 +382,7 @@ namespace BALL
 			reads in two instances of TVector3: <b>p, n</b>
 	*/
 	template <typename T>
-	std::istream& operator >> (std::istream& s, TPlane3<T>& plane)
+	BALL_EXPORT std::istream& operator >> (std::istream& s, TPlane3<T>& plane)
 		throw()
 	{
 		char c;
@@ -394,7 +394,7 @@ namespace BALL
 			Prints two instances of TVector3: <b>p, n</b>
 	*/
 	template <typename T>
-	std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane)
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane)
 		throw()
 	{
 		return (s << '(' << plane.p << ' '  << plane.n << ')');

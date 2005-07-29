@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.28.6.1 2005/07/11 16:29:59 oliver Exp $
+// $Id: common.h,v 1.28.6.2 2005/07/29 12:37:37 amoll Exp $
 //
 
 #ifndef BALL_MATHS_COMMON_H
@@ -50,7 +50,7 @@ namespace BALL
 				@return T the absolute value
 		*/
 		template <typename T>
-		inline 
+		BALL_EXPORT inline 
 		T abs(const T& t)
 			throw()
 		{
@@ -62,7 +62,7 @@ namespace BALL
 				@return T the fraction
 		*/
 		template <typename T>
-		inline 
+		BALL_EXPORT inline 
 		T frac(const T& t)
 			throw()
 		{ 
@@ -77,7 +77,7 @@ namespace BALL
 				@return T the greatest number
 		*/
 		template <typename T>
-		inline 
+		BALL_EXPORT inline 
 		T max(const T& a, const T& b)
 			throw()
 		{ 
@@ -91,7 +91,7 @@ namespace BALL
 				@return T the greatest number
 		*/
 		template <typename T>
-		inline 
+		BALL_EXPORT inline 
 		T max(const T& a, const T& b, const T &ct)
 			throw()
 		{ 
@@ -106,7 +106,7 @@ namespace BALL
 				@return T the smallest number
 		*/
 		template <typename T>
-		inline 
+		BALL_EXPORT inline 
 		T min(const T& a, const T& b)
 			throw()
 		{ 
@@ -120,7 +120,7 @@ namespace BALL
 				@return T the smallest number
 		*/
 		template <typename T>
-		inline 
+		BALL_EXPORT inline 
 		T min(const T& a, const T& b, const T &ct)
 			throw()
 		{ 
@@ -133,7 +133,7 @@ namespace BALL
 				@return T the result
 		*/
 		template <typename T>
-		inline 
+		BALL_EXPORT inline 
 		T round(const T& t)               
 			throw()
 		{ 
@@ -145,7 +145,7 @@ namespace BALL
 				@return Index <tt>-1</tt> t < 0;  <tt>0</tt> t = 0; <tt>1</tt> t > 0
 		*/
 		template <typename T>
-		inline 
+		BALL_EXPORT inline 
 		T sgn(const T& t)
 			throw()
 		{
@@ -157,7 +157,7 @@ namespace BALL
 				@return bool, <b>true</b> if <tt>t</tt> is finite
 		*/
 		template <typename T>
-		inline 
+		BALL_EXPORT inline 
 		bool isFinite(const T& t)
 			throw()
 		{
@@ -173,7 +173,7 @@ namespace BALL
 				@return bool, <b>true</b> if t equals <tt>nan</tt>
 		*/
 		template <typename T>
-		inline 
+		BALL_EXPORT inline 
 		bool isNan(const T& t)
 			throw()
 		{
@@ -193,7 +193,7 @@ namespace BALL
 				@return bool, <b>true</b> if <tt>t</tt> equals <tt>inf</tt> or <tt>-inf</tt>
 		*/
 		template <typename T>
-		inline 
+		BALL_EXPORT inline 
 		bool isInfinite(const T& t)
 			throw()
 		{
@@ -205,7 +205,7 @@ namespace BALL
 				@return bool, <b>true</b> if the absolute value of <tt>t</tt> is below  \link Constants::EPSILON Constants::EPSILON \endlink 
 		*/
 		template <typename T>
-		inline 
+		BALL_EXPORT inline 
 		bool isZero(const T& t)
 			throw()
 		{
@@ -217,7 +217,7 @@ namespace BALL
 				@return bool, <b>true</b>, if the absolute value of <tt>t</tt> is at least  \link Constants::EPSILON Constants::EPSILON \endlink 
 		*/
 		template <typename T>
-		inline 
+		BALL_EXPORT inline 
 		bool isNotZero(const T& t)
 			throw()
 		{
@@ -230,7 +230,7 @@ namespace BALL
 				@return bool, <b>true</b> if the absolute distance of <tt>a</tt> and <tt>b</tt> is below  \link Constants::EPSILON Constants::EPSILON \endlink 
 		*/
 		template <typename T1, typename T2>
-		inline 
+		BALL_EXPORT inline 
 		bool isEqual(const T1& a, const T2& b)
 			throw()
 		{
@@ -243,7 +243,7 @@ namespace BALL
 				@return bool, <b>true</b> if the absolute distance of <tt>a</tt> and <tt>b</tt> is at least  \link Constants::EPSILON Constants::EPSILON \endlink 
 		*/
 		template <typename T1, typename T2>
-		inline 
+		BALL_EXPORT inline 
 		bool isNotEqual(const T1& a, const T2& b)
 			throw()
 		{
@@ -256,7 +256,7 @@ namespace BALL
 				@return bool, <b>true</b> if <tt>a</tt> is smaller than <tt>b</tt>
 		*/
 		template <typename T1, typename T2>
-		inline 
+		BALL_EXPORT inline 
 		bool isLess(const T1& a, const T2& b)
 			throw()
 		{
@@ -269,7 +269,7 @@ namespace BALL
 				@return bool, <b>true</b> if <tt>a</tt> is less or equal <tt>b</tt>
 		*/
 		template <typename T1, typename T2>
-		inline 
+		BALL_EXPORT inline 
 		bool isLessOrEqual(const T1& a, const T2& b)
 			throw()
 		{
@@ -282,7 +282,7 @@ namespace BALL
 				@return bool, <b>true</b> if <tt>a</tt> is greater or equal than <tt>b</tt>
 		*/
 		template <typename T1, typename T2>
-		inline 
+		BALL_EXPORT inline 
 		bool isGreaterOrEqual(const T1& a, const T2& b)
 			throw()
 		{
@@ -295,7 +295,7 @@ namespace BALL
 				@return bool, <b>true</b> if <tt>a</tt> is greater than <tt>b</tt>
 		*/
 		template <typename T1, typename T2>
-		inline 
+		BALL_EXPORT inline 
 		bool isGreater(const T1& a, const T2& b)
 			throw()
 		{
@@ -307,7 +307,7 @@ namespace BALL
 				@return T the floor
 		*/
 		template <typename T>
-		inline 
+		BALL_EXPORT inline 
 		long floor(const T& t)
 			throw()
 		{
@@ -319,7 +319,7 @@ namespace BALL
 				@return T the ceiling
 		*/
 		template <typename T>
-		inline 
+		BALL_EXPORT inline 
 		long ceiling(const T& t)
 			throw()
 		{
@@ -332,7 +332,7 @@ namespace BALL
 				@return Index <tt>-1</tt> a < b; <tt>0</tt> a = b; <tt>1</tt> a > b
 		*/
 		template <typename T1, typename T2>
-		inline 
+		BALL_EXPORT inline 
 		Index compare(const T1& a, const T2& b)
 			throw()
 		{
@@ -346,7 +346,7 @@ namespace BALL
 				@return bool, <b>true</b> if the absolute distance between <tt>a</tt> and <tt>b</tt> is below <tt>max_diff</tt>
 		*/
 		template <typename T>
-		inline 
+		BALL_EXPORT inline 
 		bool isNear(const T& a, const T& b, const T& max_diff)
 			throw()
 		{

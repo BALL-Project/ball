@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueTorsions.h,v 1.19 2004/05/27 19:49:43 oliver Exp $
+// $Id: residueTorsions.h,v 1.19.4.1 2005/07/29 12:37:50 amoll Exp $
 //
 
 // Molecular Mechanics Parameter: class describing the ResidueTorsions section of a parameter file
@@ -31,7 +31,7 @@ namespace BALL
 			
     	\ingroup  MolmecParameters
 	*/
-	class ResidueTorsions 
+	class BALL_EXPORT ResidueTorsions 
 		:	public ParameterSection
 	{
 		public:
@@ -42,7 +42,7 @@ namespace BALL
 
 		/**	Strcuture containing the names of the residue and the atoms for a torsion.	
 		*/
-		struct Data
+		struct BALL_EXPORT Data
 		{
 			String	residue_name;
 			String	atom_name_A;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyProteinList.h,v 1.11 2004/05/27 19:49:45 oliver Exp $
+// $Id: pyProteinList.h,v 1.11.4.1 2005/07/29 12:37:58 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYPROTEINLIST_H
@@ -23,7 +23,7 @@ namespace BALL
 	/** Equivalent for a STL::List of Protein Pointers in Python
 			\ingroup PythonExtensions
 	*/
-	class PyProteinList
+	class BALL_EXPORT PyProteinList
 		:	public List<Protein*>
 	{
 		public:

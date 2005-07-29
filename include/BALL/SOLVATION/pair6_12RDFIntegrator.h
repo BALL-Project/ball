@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12RDFIntegrator.h,v 1.23 2004/05/27 19:49:46 oliver Exp $
+// $Id: pair6_12RDFIntegrator.h,v 1.23.4.1 2005/07/29 12:38:02 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
@@ -31,7 +31,7 @@ namespace BALL
 			(@see	RadialDistributionFunction) into the computaion. \par
 \ingroup Solvation
 	*/
-	class Pair6_12RDFIntegrator
+	class BALL_EXPORT Pair6_12RDFIntegrator
 		:	public RDFIntegrator
 	{
 		public:

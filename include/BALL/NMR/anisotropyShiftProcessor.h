@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: anisotropyShiftProcessor.h,v 1.19 2004/02/23 17:26:03 anhi Exp $
+// $Id: anisotropyShiftProcessor.h,v 1.19.6.1 2005/07/29 12:37:51 amoll Exp $
 //
 
 #ifndef BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H
@@ -26,7 +26,7 @@ namespace BALL
 	/**	Shift assignment processor implementing Anisotropy.
 		\ingroup ShiftModulesNMR	
 	*/
-	class AnisotropyShiftProcessor
+	class BALL_EXPORT AnisotropyShiftProcessor
 		:	public ShiftModule
 	{
 		public:

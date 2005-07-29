@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.h,v 1.12.4.1 2005/06/10 17:55:18 oliver Exp $
+// $Id: FFT2D.h,v 1.12.4.2 2005/07/29 12:37:36 amoll Exp $
 //
 
 #ifndef BALL_MATHS_TFFT2D_H
@@ -40,7 +40,7 @@ namespace BALL
 	 */
 
 	template <typename ComplexTraits>
-	class TFFT2D 
+	class BALL_EXPORT TFFT2D 
 		: public TRegularData2D<std::complex<typename ComplexTraits::ComplexPrecision> >
 	{
 		public:

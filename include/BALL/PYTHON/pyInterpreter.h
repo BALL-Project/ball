@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.h,v 1.12.4.1 2005/06/23 06:08:18 oliver Exp $ 
+// $Id: pyInterpreter.h,v 1.12.4.2 2005/07/29 12:37:57 amoll Exp $ 
 //
 
 #ifndef BALL_PYTHON_PYINTERPRETER_H
@@ -25,7 +25,7 @@ namespace BALL
 			is not yet supported.
 			\ingroup PythonExtensions
 	*/
-	class PyInterpreter
+	class BALL_EXPORT PyInterpreter
 	{
 		private:
 		// We don't want anybody to instantiate this!

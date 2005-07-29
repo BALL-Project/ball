@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.21 2004/02/23 17:26:03 anhi Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.21.6.1 2005/07/29 12:38:02 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
@@ -45,7 +45,7 @@ namespace BALL
 \ingroup Solvation
 	 */
 	
-	class Pair6_12InteractionEnergyProcessor
+	class BALL_EXPORT Pair6_12InteractionEnergyProcessor
 		:	public EnergyProcessor
 	{
 

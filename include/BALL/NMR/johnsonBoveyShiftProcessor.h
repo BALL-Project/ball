@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: johnsonBoveyShiftProcessor.h,v 1.17 2004/11/18 19:34:14 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.h,v 1.17.4.1 2005/07/29 12:37:53 amoll Exp $
 //
 
 #ifndef BALL_COMMON_H
@@ -35,7 +35,7 @@ namespace BALL
 	/**	Shift assignment processor implementing Johnson Bovey theory. 
 	\ingroup ShiftModulesNMR		
 	*/
-	class JohnsonBoveyShiftProcessor
+	class BALL_EXPORT JohnsonBoveyShiftProcessor
 		:	public ShiftModule
 	{
 		public:
@@ -47,7 +47,7 @@ namespace BALL
 		//@{
 
 		///
-		struct Ring
+		struct BALL_EXPORT Ring
     {
 			double							radius;
 			double							intensity;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.h,v 1.21 2004/03/20 13:22:25 oliver Exp $
+// $Id: residueChecker.h,v 1.21.6.1 2005/07/29 12:38:10 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
@@ -118,7 +118,7 @@ namespace BALL
 			</ul>
 	\ingroup StructureMiscellaneous		
 	*/
-	class ResidueChecker
+	class BALL_EXPORT ResidueChecker
 		:	public UnaryProcessor<Residue>
 	{
 		public:

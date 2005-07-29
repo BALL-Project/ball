@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pairExpRDFIntegrator.h,v 1.23 2004/05/27 19:49:46 oliver Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.23.4.1 2005/07/29 12:38:02 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
@@ -34,7 +34,7 @@ namespace BALL
 		\ingroup Solvation	
 	 */
 
-	class PairExpRDFIntegrator
+	class BALL_EXPORT PairExpRDFIntegrator
 		:	public RDFIntegrator
 	{
 

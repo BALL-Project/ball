@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox3.h,v 1.9 2004/05/27 19:49:42 oliver Exp $
+// $Id: simpleBox3.h,v 1.9.4.1 2005/07/29 12:37:40 amoll Exp $
 //
 
 #ifndef BALL_MATHS_SIMPLEBOX3_H
@@ -28,7 +28,7 @@ namespace BALL
 			the lower left front corner and ther upper right back corner.\\
 	*/
 	template <typename T>
-	class TSimpleBox3
+	class BALL_EXPORT TSimpleBox3
 	{
 		public:
 
@@ -614,7 +614,7 @@ namespace BALL
 	 		\ingroup SimpleBox
 	*/
 	template <typename T>
-	std::istream& operator >> (std::istream& s, TSimpleBox3<T>& box)
+	BALL_EXPORT std::istream& operator >> (std::istream& s, TSimpleBox3<T>& box)
 		throw()
 	{
 		char c;
@@ -631,7 +631,7 @@ namespace BALL
 	 		\ingroup SimpleBox
 	*/
 	template <typename T>
-	std::ostream& operator << (std::ostream& s, const TSimpleBox3<T>& box)
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const TSimpleBox3<T>& box)
 		throw()
 	{
 		return s << "(" << box.a << ' ' << box.b << ')';

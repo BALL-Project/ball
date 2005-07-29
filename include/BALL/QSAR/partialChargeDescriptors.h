@@ -18,7 +18,7 @@ namespace BALL
 	/** This descriptor adds up all positive partial charges
 			over all atoms.
 	*/
-	class TotalPositivePartialCharge
+	class BALL_EXPORT TotalPositivePartialCharge
 		: public PartialChargeBase
 	{
 		public:
@@ -53,7 +53,7 @@ namespace BALL
 	/** This descriptor adds up all negative partial charges
 			over all atoms.
 	*/
-	class TotalNegativePartialCharge
+	class BALL_EXPORT TotalNegativePartialCharge
 		:	public PartialChargeBase
 	{
 		public:
@@ -90,7 +90,7 @@ namespace BALL
 			the biggest partial charges value by the sum of 
 			positive partial charges.
 	*/
-	class RelPositivePartialCharge
+	class BALL_EXPORT RelPositivePartialCharge
 		:	public PartialChargeBase
 	{
 		public:
@@ -127,7 +127,7 @@ namespace BALL
 			the most negative partial charge value by the sum
 			of negative partial charges.
 	*/
-	class RelNegativePartialCharge
+	class BALL_EXPORT RelNegativePartialCharge
 		:	public PartialChargeBase
 	{
 		public:

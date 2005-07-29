@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.h,v 1.5 2005/03/02 15:18:40 amoll Exp $
+// $Id: HBondProcessor.h,v 1.5.2.1 2005/07/29 12:38:03 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_HBONDPROCESSOR_H
@@ -26,7 +26,7 @@ namespace BALL
 
   /** Computes hydrogen bonds
    */
-  class HBondProcessor 
+  BALL_EXPORT class HBondProcessor 
 		:	public UnaryProcessor<Composite>
   {
  
