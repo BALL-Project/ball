@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: plane3.h,v 1.38.4.1 2005/07/29 12:37:39 amoll Exp $
+// $Id: plane3.h,v 1.38.4.2 2005/07/29 14:10:42 amoll Exp $
 //
 
 #ifndef BALL_MATHS_PLANE3_H
@@ -382,7 +382,7 @@ namespace BALL
 			reads in two instances of TVector3: <b>p, n</b>
 	*/
 	template <typename T>
-	BALL_EXPORT std::istream& operator >> (std::istream& s, TPlane3<T>& plane)
+	std::istream& operator >> (std::istream& s, TPlane3<T>& plane)
 		throw()
 	{
 		char c;
@@ -394,7 +394,7 @@ namespace BALL
 			Prints two instances of TVector3: <b>p, n</b>
 	*/
 	template <typename T>
-	BALL_EXPORT std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane)
+	std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane)
 		throw()
 	{
 		return (s << '(' << plane.p << ' '  << plane.n << ')');

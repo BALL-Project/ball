@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.h,v 1.19.6.1 2005/07/28 13:52:54 amoll Exp $
+// $Id: JCAMPFile.h,v 1.19.6.2 2005/07/29 14:10:41 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
 #define BALL_FORMAT_JCAMPFILE_H
 
-#ifndef BALL_FORMAT_LINEBASEDFILE__H
+#ifndef BALL_FORMAT_LINEBASEDFILE_H
 #	include <BALL/FORMAT/lineBasedFile.h>
 #endif
 

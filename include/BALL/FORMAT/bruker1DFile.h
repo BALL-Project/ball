@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker1DFile.h,v 1.25.6.1 2005/07/28 13:52:56 amoll Exp $
+// $Id: bruker1DFile.h,v 1.25.6.2 2005/07/29 14:10:41 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
@@ -67,9 +67,9 @@ namespace BALL
 		const RegularData1D& getData() const { return spectrum_; }
 
 		///
-		const JCAMPFile::EntryMap& getParameters() const;
+		const JCAMPFile::EntryMap& getParameters() const { return pars_.getEntries();}
 		///
-		const JCAMPFile::HeaderMap& getHeader() const;
+		const JCAMPFile::HeaderMap& getHeader() const { return pars_.getHeader();}
 
 		//@}
 

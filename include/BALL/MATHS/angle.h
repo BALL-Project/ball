@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.47.4.1 2005/07/29 12:37:36 amoll Exp $
+// $Id: angle.h,v 1.47.4.2 2005/07/29 14:10:41 amoll Exp $
 //
 
 #ifndef BALL_MATHS_ANGLE_H
@@ -55,7 +55,7 @@ namespace BALL
 			angles.
 	*/
 	template <typename T>
-	BALL_EXPORT class TAngle
+	class BALL_EXPORT TAngle
 	{
 		public:
 
