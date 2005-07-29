@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.18 2005/02/13 17:02:39 amoll Exp $
+// $Id: stage.h,v 1.18.4.1 2005/07/29 14:42:58 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -163,6 +163,10 @@ namespace BALL
 
 			///
 			LightSource& operator = (const LightSource& light) throw();
+
+			/// needed for MSVC, dont use it otherwise!
+			bool operator < (const LightSource& light) const
+				throw();
 
 			//@}
 			/**	@name Predicates

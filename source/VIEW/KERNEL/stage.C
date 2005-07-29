@@ -59,6 +59,13 @@ namespace BALL
 						 type_ 				== light_source.type_ 			&&
 						 relative_ 		== light_source.relative_;
 		}
+		
+		bool LightSource::operator < (const LightSource& light) const
+			throw()
+		{
+			return this < &light;
+		}
+
 
 		void LightSource::dump(std::ostream& s, Size depth) const
 			throw()
