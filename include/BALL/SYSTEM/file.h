@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.65 2004/05/27 19:49:47 oliver Exp $
+// $Id: file.h,v 1.66 2005/07/29 12:38:14 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -134,7 +134,7 @@ namespace BALL
 	/**	File Class.	
 			\ingroup System		
 	*/
-	class File
+	class BALL_EXPORT File
 		: public std::fstream
 	{
 		public:
@@ -142,7 +142,7 @@ namespace BALL
 		/**	Exception CannotWrite
 				A given file could not be written, either because its not open or it has a wrong open mode.
 		*/
-		class CannotWrite
+		class BALL_EXPORT CannotWrite
 			: public Exception::GeneralException
 		{
 			public:
@@ -645,7 +645,7 @@ namespace BALL
 			\ingroup System		
 	*/
 	template <typename T>
-	class BinaryFileAdaptor
+	class BALL_EXPORT BinaryFileAdaptor
 	{
 
 		public:

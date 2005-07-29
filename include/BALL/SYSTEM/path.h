@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: path.h,v 1.11 2004/02/23 17:26:08 anhi Exp $
+// $Id: path.h,v 1.12 2005/07/29 12:38:15 amoll Exp $
 //
 
 #ifndef BALL_COMMON_PATH_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_CONFIG_CONFIG_H
 #	include <BALL/CONFIG/config.h>
+#endif
+
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
 #endif
 
 #include <string>
@@ -24,7 +28,7 @@ namespace BALL
 			directories where the data files needed by BALL reside.	 \par
 	\ingroup System		
 	*/
-	class Path 
+	class BALL_EXPORT Path 
 	{
 		public:
 		/**	@name Constructors and Destructors

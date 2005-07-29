@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.h,v 1.27 2004/12/07 15:28:36 amoll Exp $
+// $Id: directory.h,v 1.28 2005/07/29 12:38:14 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
@@ -45,7 +45,7 @@ namespace BALL
 	/**	Directory class. 
 	\ingroup System		
 	*/
-	class Directory
+	class BALL_EXPORT Directory
 	{
 		public:
 
