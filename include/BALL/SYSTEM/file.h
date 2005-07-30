@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.65.4.1 2005/07/29 13:52:18 amoll Exp $
+// $Id: file.h,v 1.65.4.2 2005/07/30 21:53:07 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -142,7 +142,7 @@ namespace BALL
 		/**	Exception CannotWrite
 				A given file could not be written, either because its not open or it has a wrong open mode.
 		*/
-		class CannotWrite
+		class BALL_EXPORT CannotWrite
 			: public Exception::GeneralException
 		{
 			public:

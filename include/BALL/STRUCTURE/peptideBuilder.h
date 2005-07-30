@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideBuilder.h,v 1.6.4.1 2005/07/29 12:38:09 amoll Exp $
+// $Id: peptideBuilder.h,v 1.6.4.2 2005/07/30 21:53:06 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_PEPTIDEBUILDER_H
@@ -89,7 +89,7 @@ namespace BALL
    /** Build a Peptide from a sequence and the corresponing angles.
 			 Dont forget to call setFragmentDB() before using this class.
    */
-   class PeptideBuilder
+   class BALL_EXPORT PeptideBuilder
 	 {
 		 public:
 

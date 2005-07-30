@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.h,v 1.5 2004/11/03 20:33:25 oliver Exp $
+// $Id: ringPerceptionProcessor.h,v 1.5.4.1 2005/07/30 21:53:05 amoll Exp $
 //
 
 #ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
@@ -22,7 +22,7 @@ namespace BALL
 			The processor is an implementation of Figueras algorithm, described in:
 			J. Figueras, J. Chem. Inf. Comput. Sci., 1996, 36(5), 986-991
 	*/
-	class RingPerceptionProcessor
+	class BALL_EXPORT RingPerceptionProcessor
 		:	public UnaryProcessor<AtomContainer>
 	{
 		public:

@@ -1,7 +1,7 @@
 	// -*- Mode: C++; tab-width: 2; -*-
 	// vi: set ts=2:
 	//
-	// $Id: snapShotManager.h,v 1.18.4.2 2005/07/18 13:12:08 amoll Exp $
+	// $Id: snapShotManager.h,v 1.18.4.3 2005/07/30 21:53:04 amoll Exp $
 	//
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -30,7 +30,7 @@ namespace BALL
 		Snapshots are numbered starting with 1.	 \par
 		\ingroup  MolmecCommon
 */
-class SnapShotManager
+class BALL_EXPORT SnapShotManager
 {
 	public:
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.20.2.4 2005/06/06 13:46:15 amoll Exp $
+// $Id: primitiveManager.h,v 1.20.2.5 2005/07/30 21:53:08 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -14,6 +14,8 @@
 # include <qmutex.h>
 # include <qwaitcondition.h>
 #endif
+
+
 
 namespace BALL
 {

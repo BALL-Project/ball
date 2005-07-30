@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.h,v 1.27 2005/01/24 21:55:54 amoll Exp $
+// $Id: support.h,v 1.27.4.1 2005/07/30 21:53:05 amoll Exp $
 //
 
 
@@ -82,7 +82,7 @@ namespace BALL
 				@param	type	the type of algorithm used to calculate the pair vector
 				@return	the number of pairs generated (<tt>pair_vector.size()</tt>)
 		*/
-		BALL::Size calculateNonBondedAtomPairs
+		BALL_EXPORT BALL::Size calculateNonBondedAtomPairs
 			(ForceField::PairVector& pair_vector, 
 			 const AtomVector& atom_vector, const SimpleBox3& box, 
 			 double distance,	bool periodic_boundary_enabled, 
@@ -96,7 +96,7 @@ namespace BALL
 				@return number of atom pairs in the list, where at least one atom is selected
 				@param pair_vector the unsorted pair_list (modified during the sorting)
 		*/
-		Size sortNonBondedAtomPairsAfterSelection(ForceField::PairVector& pair_vector);
+		BALL_EXPORT Size sortNonBondedAtomPairsAfterSelection(ForceField::PairVector& pair_vector);
 
 		/**	Merge the non-overlapping molecules of a system into another system.
 				Fills <tt>system</tt> with copies of the solvent molecules stored in	<tt>solvent</tt>. 
@@ -111,7 +111,7 @@ namespace BALL
 				@param	distance used to determine overlaps between two atoms
 				@return	the number of molecules added to <tt>system</tt>
 		*/
-		BALL::Size addNonOverlappingMolecules
+		BALL_EXPORT BALL::Size addNonOverlappingMolecules
 			(System& system, const HashGrid3<const Atom*>& solute_grid,
 			 const System& solvent, const SimpleBox3& box, double distance);
 
@@ -127,12 +127,12 @@ namespace BALL
 				@param system the system containing the water box which is to be adapted
 				@param box the box definition for the periodic boundary
 		*/
-		void adaptWaterBox(System& system, const SimpleBox3& box);
+		BALL_EXPORT void adaptWaterBox(System& system, const SimpleBox3& box);
 
 		/** Compute the minimum image
 		*/
 		// ?????
-		void calculateMinimumImage
+		BALL_EXPORT void calculateMinimumImage
 			(Vector3& distance, const Vector3& period);
 
 		/**	Compute all torsions in a given set of molecules.
@@ -143,14 +143,14 @@ namespace BALL
 				@param use_selection if set to <b>true</b>, a torsion will be added only if all four atoms are selected
 		*/
     template <typename TorsionType, typename AtomIteratorType>
-    Size computeTorsions
+    BALL_EXPORT Size computeTorsions
 			(const AtomIteratorType& start, const AtomIteratorType& end,
 			 std::vector<TorsionType>& torsions, bool use_selection = false);
 
 
 		// 
 		template <typename TorsionType, typename AtomIteratorType>
-		Size computeTorsions
+		BALL_EXPORT Size computeTorsions
 			(const AtomIteratorType& start, const AtomIteratorType& end, 
 			 std::vector<TorsionType>& torsions, bool use_selection)
 		{

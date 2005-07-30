@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: periodicBoundary.h,v 1.21 2003/08/26 08:04:25 oliver Exp $
+// $Id: periodicBoundary.h,v 1.21.6.1 2005/07/30 21:53:03 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -31,7 +31,7 @@ namespace BALL
 			
     	\ingroup  MolmecCommon
 	*/
-	class PeriodicBoundary
+	class BALL_EXPORT PeriodicBoundary
 	{
 		public:
 

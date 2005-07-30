@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.30.4.7 2005/06/16 13:24:54 amoll Exp $
+// $Id: representation.h,v 1.30.4.8 2005/07/30 21:53:09 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -289,6 +289,15 @@ namespace BALL
 			/// Get a String containing all settings for Usage in project files.
 			String toString() const
 				throw();
+
+			/// Needed for MSVC
+			bool operator == (const Representation& object) const
+				throw() { return this == &object;}
+
+		
+			/// Needed for MSVC
+			bool operator < (const Representation& object) const
+				throw() { return this < &object;}
 
 			//@}
 

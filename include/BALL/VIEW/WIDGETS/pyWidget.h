@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.23.2.2 2005/06/03 11:48:04 amoll Exp $
+// $Id: pyWidget.h,v 1.23.2.3 2005/07/30 21:53:09 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -70,6 +70,9 @@ namespace BALL
 			/// 
 			const Hotkey& operator = (const Hotkey& s)
 				throw();
+
+			/// Needed for MSVC
+			bool operator < (const Hotkey& key) { return this < &key;}
 
 			///
 			bool set(const String& data) throw();

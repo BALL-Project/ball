@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.h,v 1.5.2.1 2005/07/29 12:38:03 amoll Exp $
+// $Id: HBondProcessor.h,v 1.5.2.2 2005/07/30 21:53:06 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_HBONDPROCESSOR_H
@@ -26,7 +26,7 @@ namespace BALL
 
   /** Computes hydrogen bonds
    */
-  BALL_EXPORT class HBondProcessor 
+  class BALL_EXPORT HBondProcessor 
 		:	public UnaryProcessor<Composite>
   {
  
@@ -42,7 +42,7 @@ namespace BALL
 		const float BOND_LENGTH_C_O;
 
     ///
-		struct ResidueData
+		struct BALL_EXPORT ResidueData
 		{
 			Vector3 pos_C;
 			Vector3 pos_N;
@@ -101,7 +101,6 @@ namespace BALL
     std::vector<std::vector<Position> > h_bond_pairs_;
 
   }; //class HBondProcessor
-
 } //namesspace BALL
 
 

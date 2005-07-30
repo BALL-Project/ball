@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.40.4.2 2005/07/28 15:05:12 amoll Exp $
+// $Id: INIFile.h,v 1.40.4.3 2005/07/30 21:53:00 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_INIFILE_H
@@ -65,11 +65,11 @@ namespace BALL
 								lines_	 == section.lines_);
 			}
 
-			///
+			/// Needed for MSVC
 			bool operator < (const Section& section) const
 				throw();
 
-			///
+			/// Needed for MSVC
 			bool operator > (const Section& section) const
 				throw();
 
@@ -377,6 +377,10 @@ namespace BALL
 					- <b>false</b> if key or section do not exist
 		*/
 		bool insertValue(const String& section, const String& key, const String& value);
+
+		///
+		const INIFile& operator = (const INIFile& file)
+			throw();
 
 		//@}
 		/** @name Predicates

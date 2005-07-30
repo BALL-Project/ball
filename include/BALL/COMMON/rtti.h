@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rtti.h,v 1.26 2005/02/06 09:44:53 oliver Exp $
+// $Id: rtti.h,v 1.26.4.1 2005/07/30 21:53:00 amoll Exp $
 //
 
 #ifndef BALL_COMMON_RTTI_H
@@ -27,7 +27,7 @@ namespace BALL
 	// further interpretation
 	namespace GNUDemangling 
 	{
-		string demangle(string s);
+		BALL_EXPORT string demangle(string s);
 	}
 #	endif
 
@@ -41,7 +41,7 @@ namespace BALL
 			
 			\ingroup Common
 	*/ 
-	string streamClassName(const std::type_info& t);
+	BALL_EXPORT string streamClassName(const std::type_info& t);
 
 	/**	Simplified RunTime Type Identification.
 			ANSI C++ provides support for runtime type identification (RTTI). However, the support
@@ -74,7 +74,7 @@ namespace BALL
 				It is mainly used inside the RTTI class.
 		*/
 		template <typename T>
-		const T& getDefault() 
+		BALL_EXPORT const T& getDefault() 
 		{
 			static T t;
 			return t;
@@ -86,7 +86,7 @@ namespace BALL
 				needs a function for the dynamic creation of objects.
 		*/
 		template <typename T>
-		void* getNew()
+		BALL_EXPORT void* getNew()
 		{
 			return static_cast<void*>(new T);
 		}
@@ -96,7 +96,7 @@ namespace BALL
 				No additional name demangling and whitespace substitution are performed.
 		*/
 		template <typename T>
-		const char* getName()
+		BALL_EXPORT const char* getName()
 		{
 			return typeid(getDefault<T>()).name();
 		}
@@ -104,7 +104,7 @@ namespace BALL
 		/**	Return a void pointer that is unique for each class.
 		*/
 		template <typename T>
-		void* getClassID()
+		BALL_EXPORT void* getClassID()
 		{
 			static char dummy;
 			return (void*)&dummy;
@@ -121,7 +121,7 @@ namespace BALL
 				\endcode
 		*/
 		template <typename T>
-		const char* getStreamName()
+		BALL_EXPORT const char* getStreamName()
 		{
 			// define portable names for the portable
 			// types (some platforms use Size, some unsigned int, 
@@ -191,7 +191,7 @@ namespace BALL
 				\endcode
 		*/
 		template <typename T, typename U>
-		bool isKindOf(const U&  u)
+		BALL_EXPORT bool isKindOf(const U&  u)
 		{
 			return (0 != dynamic_cast<const T*>(&u));
 		}
@@ -214,7 +214,7 @@ namespace BALL
 				\endcode
 		*/
 		template <typename T, typename U>
-		T* castTo(const U& u)
+		BALL_EXPORT T* castTo(const U& u)
 		{
 			return const_cast<T*>(dynamic_cast<const T*>(&u));
 		}
@@ -225,13 +225,13 @@ namespace BALL
 				a base class of <tt>T</tt>, it returns false.
 		*/
 		template <typename T, typename U>
-		bool isInstanceOf(const U& u)
+		BALL_EXPORT bool isInstanceOf(const U& u)
 		{
 			T		t;
 			return (typeid(u) == typeid(t));
 		}
-	} // namespace RTTI
 
+	} // namespace RTTI
 } // namespace BALL
 
 #endif // BALL_COMMON_RTTI_H
