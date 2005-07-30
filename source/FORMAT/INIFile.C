@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.C,v 1.37.4.1 2005/07/28 15:05:04 amoll Exp $
+// $Id: INIFile.C,v 1.37.4.2 2005/07/30 21:54:35 amoll Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -33,6 +33,17 @@ namespace BALL
 	{
     appendSection(HEADER);
 	}
+
+	const INIFile& INIFile::operator = (const INIFile& file)
+		throw()
+	{
+		check_duplicate_keys_ = file.check_duplicate_keys_;
+		valid_ = file.valid_;
+		filename_ = file.filename_;
+		appendSection(HEADER);
+		return *this;
+	}
+
 
 	void INIFile::clear()
 	{
