@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.11 2005/06/15 09:55:13 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.12 2005/07/30 12:11:21 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -53,14 +53,18 @@ PrimitiveManager::~PrimitiveManager()
 
 PrimitiveManager::PrimitiveManager(const PrimitiveManager& pm)
 	throw()
+{}
+/*
 	: Object(pm)
 {
 	*this = pm;
 }
+*/
 
 void PrimitiveManager::clear()
 	throw()
 {
+	/*
 	representations_to_be_updated_.clear();
 
 #ifdef BALL_QT_HAS_THREADS
@@ -78,6 +82,7 @@ void PrimitiveManager::clear()
 		(*it)->clear();
 	}
 	representations_.clear();
+	*/
 }
 
 
@@ -173,6 +178,7 @@ Representation* PrimitiveManager::createRepresentation()
 const PrimitiveManager& PrimitiveManager::operator = (const PrimitiveManager& pm)
 	throw()
 {
+	/*
 	RepresentationsConstIterator it = pm.begin();
 
 	for (; it != pm.end(); it++)
@@ -180,13 +186,14 @@ const PrimitiveManager& PrimitiveManager::operator = (const PrimitiveManager& pm
 		Representation* rp = new Representation(**it);
 		representations_.push_back(rp);
 	}
-
+*/
 	return *this;
 }
 
 bool PrimitiveManager::operator == (const PrimitiveManager& pm) const
 	throw()
 {
+	/*
 	if (pm.getNumberOfRepresentations() != getNumberOfRepresentations()) return false;
 
 	RepresentationsConstIterator it1 = begin();
@@ -196,7 +203,7 @@ bool PrimitiveManager::operator == (const PrimitiveManager& pm) const
 		if (**it1 != **it2) return false;
 		it2++;
 	}
-
+*/
 	return true;
 }
 
@@ -226,6 +233,7 @@ PrimitiveManager::RepresentationList PrimitiveManager::removedComposite(const Co
 				composites.push_back(*crit);
 			}
 		}
+	
 
 		rep.setComposites(composites);
 
@@ -236,34 +244,17 @@ PrimitiveManager::RepresentationList PrimitiveManager::removedComposite(const Co
 			continue;
 		}
 		
-		// if we have no model processor, remove all GeometricObjects for this Composite
+		
+		// if we have no model processor, remove all GeometricObjects
 		if (rep.getModelProcessor() == 0)
 		{
-			List<List<GeometricObject*>::Iterator> go_to_remove;
-			Representation::GeometricObjectList::Iterator it = rep.getGeometricObjects().begin();
-			for (;it != rep.getGeometricObjects().end(); it++)
-			{
-				const Composite* go_composite = (*it)->getComposite();
-				if (go_composite == 0) continue;
-
-				if (&composite == go_composite ||
-						composite.isAncestorOf(*go_composite))
-				{
-					go_to_remove.push_back(it);
-				}
-			}
-
-			// erase the GeometricObjects from the Representation
-			List<List<GeometricObject*>::Iterator>::Iterator go_it = go_to_remove.begin();
-			for (; go_it != go_to_remove.end(); go_it++)
-			{
-				rep.getGeometricObjects().erase(*go_it);
-			}
+			rep.clearGeometricObjects();
 		}
 
 		// call update for the Representation
 		if (update) update_(rep);
 	}
+
 
 	// Representations are to be deleted
 	rep_it = removed_representations.begin();
