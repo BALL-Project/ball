@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.12 2005/07/30 12:11:21 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.13 2005/08/01 11:10:27 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -53,18 +53,14 @@ PrimitiveManager::~PrimitiveManager()
 
 PrimitiveManager::PrimitiveManager(const PrimitiveManager& pm)
 	throw()
-{}
-/*
 	: Object(pm)
 {
-	*this = pm;
 }
-*/
+
 
 void PrimitiveManager::clear()
 	throw()
 {
-	/*
 	representations_to_be_updated_.clear();
 
 #ifdef BALL_QT_HAS_THREADS
@@ -82,7 +78,6 @@ void PrimitiveManager::clear()
 		(*it)->clear();
 	}
 	representations_.clear();
-	*/
 }
 
 
@@ -178,7 +173,6 @@ Representation* PrimitiveManager::createRepresentation()
 const PrimitiveManager& PrimitiveManager::operator = (const PrimitiveManager& pm)
 	throw()
 {
-	/*
 	RepresentationsConstIterator it = pm.begin();
 
 	for (; it != pm.end(); it++)
@@ -186,14 +180,13 @@ const PrimitiveManager& PrimitiveManager::operator = (const PrimitiveManager& pm
 		Representation* rp = new Representation(**it);
 		representations_.push_back(rp);
 	}
-*/
+
 	return *this;
 }
 
 bool PrimitiveManager::operator == (const PrimitiveManager& pm) const
 	throw()
 {
-	/*
 	if (pm.getNumberOfRepresentations() != getNumberOfRepresentations()) return false;
 
 	RepresentationsConstIterator it1 = begin();
@@ -203,7 +196,7 @@ bool PrimitiveManager::operator == (const PrimitiveManager& pm) const
 		if (**it1 != **it2) return false;
 		it2++;
 	}
-*/
+
 	return true;
 }
 
