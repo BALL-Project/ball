@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.24 2005/08/01 12:19:59 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.25 2005/08/01 14:51:39 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -588,6 +588,8 @@ void AddCartoonModel::buildStrand_(Position first, Position last)
 			median += peptide_normals[i + j];
 			nr++;
 		}
+
+		if (nr == 0) continue;
 
 		diff /= (float) nr;
 
