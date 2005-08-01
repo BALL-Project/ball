@@ -38,3 +38,6 @@ def removeWater():
 		return
 	moc.cut()
 
+def setMultithreading(mode):
+	getMainControl().getPrimitiveManager().setMultithreadingMode(mode)
+
