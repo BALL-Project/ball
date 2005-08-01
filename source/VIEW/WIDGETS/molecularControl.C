@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.27 2005/07/27 22:00:31 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.28 2005/08/01 11:31:22 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -1377,11 +1377,19 @@ namespace BALL
 			inifile.appendSection("MOLECULARCONTROL");
 			inifile.insertValue("MOLECULARCONTROL", "ShowSS", show_ss_);
 
-			String regexps;
+			HashSet<String> set;
 
 			for (Position p = 0; p < (Position)selector_edit_->count(); p++)
 			{
-				regexps += selector_edit_->text(p).ascii();
+				set.insert(selector_edit_->text(p).ascii());
+			}
+
+			String regexps;
+			
+			HashSet<String>::ConstIterator it = set.begin();
+			for (; +it; ++it)
+			{
+				regexps += *it;
 				regexps += "|";
 			}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.22 2005/08/01 11:15:54 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.23 2005/08/01 11:31:52 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1867,10 +1867,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		file >> nr_lines;
 		file >> nr_composites;
  		INIFile in;
-		char buffer[5000];
+		char buffer[50000];
 		for (Position p = 0; p <= nr_lines; p++)
 		{
-			if (!file.getline(&(buffer[0]), 5000))
+			if (!file.getline(&(buffer[0]), 50000))
 			{
 				setStatusbarText("Error while reading project file, could not read INIFile", true);
 				BALLVIEW_DEBUG
