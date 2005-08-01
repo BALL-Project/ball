@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.23 2005/07/25 11:19:31 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.24 2005/08/01 12:19:59 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -904,46 +904,79 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 	// smooth all band direction vectors
 	Angle max_angle(2, false);
 
-	for (Index p = (Index)(start + 1); p < ((Index) end) - 1; p++)
-	{
-		if (band_dirs[p].getAngle(band_dirs[p-1]) < max_angle) continue;
 
-		Size nr = 0;
-		for (Index i = -nr_steps; i < nr_steps; i++)
+	// catch problems when no angle can be calculated:
+	try
+	{
+		for (Index p = (Index)(start + 1); p < ((Index) end) - 1; p++)
 		{
-			if (p + i < (Index) start || p + i + 1>= (Index) end)
+			if (band_dirs[p].getAngle(band_dirs[p-1]) < max_angle) continue;
+
+			Size nr = 0;
+			for (Index i = -nr_steps; i < nr_steps; i++)
+			{
+				if (p + i < (Index) start || p + i + 1>= (Index) end)
+				{
+					continue;
+				}
+
+				band_dirs[p] += band_dirs[((Index)p) + i];
+				nr++;
+			}
+
+			if (nr == 0) 
 			{
 				continue;
 			}
 
-			band_dirs[p] += band_dirs[((Index)p) + i];
-			nr++;
+
+			band_dirs[p] /= (float) nr;
+
+			if (Maths::isZero(band_dirs[p].getSquareLength())) 
+			{
+				band_dirs[p] = band_dirs[p - 1];
+				continue;
+			}
+
+			band_dirs[p].normalize();
 		}
 
-		band_dirs[p] /= (float) nr;
-		band_dirs[p].normalize();
+		
+		// one extra smooth run for first 15 band directions
+		for (Index p = (Index)(start + 15); p >= ((Index) start); p--)
+		{
+			if (band_dirs[p].getAngle(band_dirs[p+1]) < max_angle) continue;
+
+			Size nr = 0;
+			for (Index i = -nr_steps; i < nr_steps; i++)
+			{
+				if (p + i < (Index) start || p + i + 1>= (Index) end)
+				{
+					continue;
+				}
+
+				band_dirs[p] += band_dirs[((Index)p) + i];
+				nr++;
+			}
+
+			if (nr == 0) 
+			{
+				continue;
+			}
+
+			band_dirs[p] /= (float) nr;
+
+			if (Maths::isZero(band_dirs[p].getSquareLength()))
+			{
+				band_dirs[p] = band_dirs[p - 1];
+				continue;
+			}
+
+			band_dirs[p].normalize();
+		}
 	}
-
-	
-	// one extra smooth run for first 15 band directions
-	for (Index p = (Index)(start + 15); p >= ((Index) start); p--)
+	catch(...)
 	{
-		if (band_dirs[p].getAngle(band_dirs[p+1]) < max_angle) continue;
-
-		Size nr = 0;
-		for (Index i = -nr_steps; i < nr_steps; i++)
-		{
-			if (p + i < (Index) start || p + i + 1>= (Index) end)
-			{
-				continue;
-			}
-
-			band_dirs[p] += band_dirs[((Index)p) + i];
-			nr++;
-		}
-
-		band_dirs[p] /= (float) nr;
-		band_dirs[p].normalize();
 	}
 	
 	middle_points.clear();
@@ -1620,6 +1653,8 @@ void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 
 		// draw triangles
 		
+		if (Maths::isZero(axis.getSquareLength())) axis = Vector3(1,0,0);
+
 		axis.normalize();
 		axis *= DNA_base_radius_;
 
