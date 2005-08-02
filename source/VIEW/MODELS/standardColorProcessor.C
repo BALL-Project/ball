@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.52.2.9 2005/07/26 22:34:32 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.52.2.10 2005/08/02 13:27:45 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -1120,10 +1120,8 @@ namespace BALL
 		}
 
 		////////////////////////////////////////////////////////////////////
-		
-		ChainColorProcessor::ChainColorProcessor()
-			: ColorProcessor(),
-				colors_()
+		PositionColorProcessor::PositionColorProcessor()
+			: ColorProcessor()
 		{
 			colors_.resize(20);
 			colors_[ 0].set(1.0, 0.0, 0.0);
@@ -1147,27 +1145,27 @@ namespace BALL
 			colors_[18].set(0.2, 0.7, 0.7);
 			colors_[19].set(0.7, 0.7, 0.2);
 		}
-
-		void ChainColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
+		
+		void PositionColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
 		{
-			const Chain* chain = composite.getAncestor(dummy_chain_);
-			if (chain == 0)
+			const Composite* c = getAncestor_(composite);
+			if (c == 0)
 			{
 				color_to_be_set.set(default_color_);
 				return;
 			}
 
-			HashMap<const Chain*, Position>::Iterator it = chain_to_position_.find(chain);
-			if (it != chain_to_position_.end())
+			HashMap<const Composite*, Position>::Iterator it = composite_to_position_.find(c);
+			if (it != composite_to_position_.end())
 			{
 				color_to_be_set.set(colors_[it->second]);
 				return;
 			}
 
- 			const Composite* parent = chain->getParent();
+ 			const Composite* parent = c->getParent();
 			if (parent == 0) 
 			{
-				chain_to_position_[chain] = 0;
+				composite_to_position_[c] = 0;
 				color_to_be_set.set(colors_[0]);
 				return;
 			}
@@ -1176,89 +1174,47 @@ namespace BALL
 		 	Position pos = 0;
 		 	while (child != 0)
 		 	{
-				const Chain* current_chain = dynamic_cast<const Chain*>(child);
-				if (current_chain != 0)
+				if (isOK_(*child))
 				{
-				 	chain_to_position_[current_chain] = pos;
+				 	composite_to_position_[child] = pos;
 			 	}
 
 			 	child = child->getSibling(1);
 				pos++;
-				if (pos >= colors_.size()) pos -= colors_.size();
+				if (pos >= colors_.size() - 1) pos -= (colors_.size() - 1);
 		 	}
 
-			color_to_be_set.set(colors_[chain_to_position_[chain]]);
+			color_to_be_set.set(colors_[composite_to_position_[c]]);
+		}
+
+		bool PositionColorProcessor::start() 
+			throw()
+		{
+			if (!ColorProcessor::start()) return false;
+
+			if (colors_.size() < 2) return false;
+
+			for (Position p = 0; p < colors_.size(); p++)
+			{
+				colors_[p].setAlpha(255 - transparency_);
+			}
+
+			return true;
 		}
 		
 		////////////////////////////////////////////////////////////////////
 		
-		MoleculeColorProcessor::MoleculeColorProcessor()
-			: ColorProcessor(),
-				colors_()
+		ChainColorProcessor::ChainColorProcessor()
+			: PositionColorProcessor()
 		{
-			colors_.resize(20);
-			colors_[ 0].set(1.0, 0.0, 0.0);
-			colors_[ 1].set(0.0, 1.0, 0.0);
-			colors_[ 2].set(0.0, 0.0, 1.0);
-			colors_[ 3].set(1.0, 1.0, 0.0);
-			colors_[ 4].set(0.0, 1.0, 1.0);
-			colors_[ 5].set(1.0, 0.0, 1.0);
-			colors_[ 6].set(0.5, 0.5, 0.5);
-			colors_[ 7].set(1.0, 0.5, 0.5);
-			colors_[ 8].set(1.0, 1.0, 1.0);
-			colors_[ 9].set(0.5, 0.5, 0.0);
-			colors_[10].set(1.0, 0.2, 0.2);
-			colors_[11].set(0.9, 0.1, 0.9);
-			colors_[12].set(0.0, 0.9, 0.0);
-			colors_[13].set(0.9, 0.0, 0.2);
-			colors_[14].set(1.0, 1.0, 0.5);
-			colors_[15].set(0.5, 1.0, 1.0);
-			colors_[16].set(1.0, 0.5, 1.0);
-			colors_[17].set(0.7, 0.2, 0.7);
-			colors_[18].set(0.2, 0.7, 0.7);
-			colors_[19].set(0.7, 0.7, 0.2);
 		}
 
-		void MoleculeColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
+
+		////////////////////////////////////////////////////////////////////
+		
+		MoleculeColorProcessor::MoleculeColorProcessor()
+			: PositionColorProcessor()
 		{
-			const Molecule* molecule = composite.getAncestor(dummy_molecule_);
-			if (molecule == 0)
-			{
-				color_to_be_set.set(default_color_);
-				return;
-			}
-
-			HashMap<const Molecule*, Position>::Iterator it = molecule_to_position_.find(molecule);
-			if (it != molecule_to_position_.end())
-			{
-				color_to_be_set.set(colors_[it->second]);
-				return;
-			}
-
- 			const Composite* parent = molecule->getParent();
-			if (parent == 0) 
-			{
-				molecule_to_position_[molecule] = 0;
-				color_to_be_set.set(colors_[0]);
-				return;
-			}
-
-		 	const Composite* child = parent->getFirstChild();
-		 	Position pos = 0;
-		 	while (child != 0)
-		 	{
-				const Molecule* current_molecule = dynamic_cast<const Molecule*>(child);
-				if (current_molecule != 0)
-				{
-				 	molecule_to_position_[current_molecule] = pos;
-			 	}
-
-			 	child = child->getSibling(1);
-				pos++;
-				if (pos >= colors_.size()) pos -= colors_.size();
-		 	}
-
-			color_to_be_set.set(colors_[molecule_to_position_[molecule]]);
 		}
 
 

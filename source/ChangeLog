@@ -10,7 +10,7 @@ Added:
 Changed:
  - Renamed Mesh::colorList to Mesh::colors
  - Exception::InvalidRange now has an float value
- - Changed ColorProcessor hierarchy
+ - ColorProcessor hierarchy
 
 Fixed:
  - NMRViewer und underlying widgets
@@ -21,8 +21,8 @@ Fixed:
  - Splitting of surfaces for given distance: computed incorrect surfaces
  - POVRay export: degenerated objects (with a length of 0) and meshes with only one color
  - Missing assignment operator in RotamerLibrary
- - Problems in persistence w/ g++ 4.x series
- - Hangup in socket interface w/ g++ 4.x series
+ - Problems in persistence with g++ 4.x series
+ - Hangup in socket interface with g++ 4.x series
  - Browse button didnt work in Molecular Dynamics Simulation dialog
  - Crash, when performing a MDS with trajectory and DCD file could not be written
  - Incorrect bond orders and GLN amide group planarity in fragment database

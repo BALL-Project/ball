@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.34.4.10 2005/07/28 14:38:46 amoll Exp $
+// $Id: colorProcessor.C,v 1.34.4.11 2005/08/02 13:27:52 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -514,7 +514,8 @@ namespace BALL
 
 			color_to_be_set.set(red1   + dz1 * red2,
 													green1 + dz1 * green2,
-													blue1  + dz1 * blue2);
+													blue1  + dz1 * blue2,
+													255 - transparency_);
 		}
 
 		void InterpolateColorProcessor::setMinColor(const ColorRGBA& color)

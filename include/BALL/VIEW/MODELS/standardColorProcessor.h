@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.29.2.6 2005/07/26 22:34:52 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.29.2.7 2005/08/02 13:27:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -133,63 +133,84 @@ namespace BALL
 				HashMap<const Residue*, Position> residue_map_;
 		};
 
-		class ChainColorProcessor
+		///
+		class PositionColorProcessor
 			: public ColorProcessor
 		{
 			public:
 
-				BALL_CREATE(ChainColorProcessor)
+			BALL_CREATE(PositionColorProcessor)
 
-				///
-				ChainColorProcessor();
+			///
+			PositionColorProcessor();
 
-				///
-				virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
+			///
+			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 
-				///
-				void setColors(const vector<ColorRGBA>& colors) { colors_ = colors;}
+			///
+			void setColors(const vector<ColorRGBA>& colors) { colors_ = colors;}
 
-				///
-				vector<ColorRGBA>& getColors() { return colors_;}
+			///
+			vector<ColorRGBA>& getColors() { return colors_;}
 
-				///
-				const vector<ColorRGBA>& getColors() const { return colors_;}
+			///
+			const vector<ColorRGBA>& getColors() const { return colors_;}
+
+			///
+			bool start() throw();
 
 			protected:
 
-			Chain 													dummy_chain_;
-			vector<ColorRGBA> 							colors_;
-			HashMap<const Chain*, Position> chain_to_position_;
+			virtual const Composite* getAncestor_(const Composite&) { return 0;}
+
+			virtual bool isOK_(const Composite&) { return false;}
+
+			vector<ColorRGBA> 										colors_;
+			HashMap<const Composite*, Position> 	composite_to_position_;
 		};
 
 
-		class MoleculeColorProcessor
-			: public ColorProcessor
+		///
+		class ChainColorProcessor
+			: public PositionColorProcessor
 		{
 			public:
 
-				BALL_CREATE(MoleculeColorProcessor)
+			BALL_CREATE(ChainColorProcessor)
 
-				///
-				MoleculeColorProcessor();
-
-				///
-				virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
-
-				///
-				void setColors(const vector<ColorRGBA>& colors) { colors_ = colors;}
-
-				///
-				vector<ColorRGBA>& getColors() { return colors_;}
-
-				///
-				const vector<ColorRGBA>& getColors() const { return colors_;}
+			///
+			ChainColorProcessor();
 
 			protected:
 
-			Molecule 												dummy_molecule_;
-			vector<ColorRGBA> 							colors_;
-			HashMap<const Molecule*, Position> molecule_to_position_;
+			virtual const Composite* getAncestor_(const Composite& composite) 
+				{ return composite.getAncestor(dummy_chain_);}
+
+			virtual bool isOK_(const Composite& composite) { return RTTI::isKindOf<Chain>(composite);}
+
+ 			Chain 	dummy_chain_;
+		};
+
+
+		///
+		class MoleculeColorProcessor
+			: public PositionColorProcessor
+		{
+			public:
+
+			BALL_CREATE(MoleculeColorProcessor)
+
+			///
+			MoleculeColorProcessor();
+
+			protected:
+
+			virtual const Composite* getAncestor_(const Composite& composite) 
+				{ return composite.getAncestor(dummy_molecule_);}
+
+			virtual bool isOK_(const Composite& composite) { return RTTI::isKindOf<Molecule>(composite);}
+
+ 			Molecule 	dummy_molecule_;
 		};
 
 
