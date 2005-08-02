@@ -13,6 +13,7 @@ Changed:
  - ColorProcessor hierarchy
 
 Fixed:
+ - Segfault in CalculateSecondaryStructureProcessor, when one SS is part of another
  - NMRViewer und underlying widgets
  - Mouse sensitivity changed in Rotate mode when focusing on small structures
  - Memory issues with Python objects (e.g. inserting GeometricObjects into Representations)
