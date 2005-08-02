@@ -3,30 +3,31 @@
 Version 1.1.1 is mainly a bugfix release.
 
 Added:
- - added support for SD files in BALLView
- - picking support for bonds
- - coloring by molecule
+ - Support for SD files in BALLView
+ - Picking support for bonds
+ - Coloring by molecule
 
 Changed:
  - Renamed Mesh::colorList to Mesh::colors
  - Exception::InvalidRange now has an float value
- - changed ColorProcessor hierarchy
+ - Changed ColorProcessor hierarchy
 
 Fixed:
  - NMRViewer und underlying widgets
  - Mouse sensitivity changed in Rotate mode when focusing on small structures
  - Memory issues with Python objects (e.g. inserting GeometricObjects into Representations)
  - Saving and loading of BALLView project files
- - several problems with Cartoon and Backbone models
- - splitting of surfaces for given distance: computed incorrect surfaces
+ - Several problems with Cartoon and Backbone models
+ - Splitting of surfaces for given distance: computed incorrect surfaces
  - POVRay export: degenerated objects (with a length of 0) and meshes with only one color
  - Missing assignment operator in RotamerLibrary
  - Problems in persistence w/ g++ 4.x series
  - Hangup in socket interface w/ g++ 4.x series
- - browse button didnt work in Molecular Dynamics Simulation dialog
- - crash, when performing a MDS with trajectory and DCD file could not be written
- - incorrect bond orders and GLN amide group planarity in fragment database
- - fixed naming of build peptides
+ - Browse button didnt work in Molecular Dynamics Simulation dialog
+ - Crash, when performing a MDS with trajectory and DCD file could not be written
+ - Incorrect bond orders and GLN amide group planarity in fragment database
+ - Naming of build peptides
+ - Opening of files in current directory per command line with BALLView
 
 Improved:
  - DNA cartoon model

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.23 2005/08/01 11:31:52 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.24 2005/08/02 12:18:03 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1712,7 +1712,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			throw() 
 		{ 
 			Directory directory(dir);
-			if (directory.setCurrent())
+			if (directory.isValid())
 			{
 				working_dir_ = dir;
 			}
