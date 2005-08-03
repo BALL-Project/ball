@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.sip,v 1.2.4.1 2005/08/03 15:43:50 amoll Exp $
+// $Id: stage.sip,v 1.2.4.2 2005/08/03 16:02:21 amoll Exp $
 //
 
 class LightSource
@@ -37,7 +37,6 @@ class LightSource
 	void setType(Types) throw();
 	void setRelativeToCamera(bool) throw();
 	bool isRelativeToCamera() const throw();
-	void translate(const Vector3&) throw();
 	//bool operator == (const LightSource&) const throw();
 	//virtual void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 };
