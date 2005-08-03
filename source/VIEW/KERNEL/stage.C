@@ -216,9 +216,10 @@ namespace BALL
 		}
 				
 
-		void Camera::rotate(const Quaternion& q)
+		void Camera::rotate(const Quaternion& q, const Vector3& origin)
 			throw()
 		{
+			translate(-origin);
 			Matrix4x4  m;
 			q.getRotationMatrix(m);
 
@@ -227,6 +228,7 @@ namespace BALL
 			look_up_vector_ = m*look_up_vector_;
 
 			calculateVectors_();
+			translate(origin);
 		}
 
 		Stage::Stage()
@@ -340,54 +342,9 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		void Stage::rotate(const Quaternion& q, const Vector3& origin)
-			throw()
+		Vector3 Stage::calculateRelativeCoordinates(Vector3 pos) const
 		{
-			camera_.translate(-origin);
-			camera_.rotate(q);
-			camera_.translate(origin);
-
-			Matrix4x4  m;
-			q.getRotationMatrix(m);
-
-			List<LightSource>::Iterator it = light_sources_.begin();
-			for (; it != light_sources_.end(); it++)
-			{
-				if (it->isRelativeToCamera()) 
-				{
-					Vector3 v = it->getPosition();
-					v -= origin;
-					v = m * v;
-					v += origin;
-					it->setPosition(v);
-
-					v = it->getDirection();
-					v -= origin;
-					v = m * v;
-					v += origin;
-
-					it->setDirection(v);
-				}
-			}
-		}
-
-		void Stage::translate(const Vector3& v3)
-			throw()
-		{
-			camera_.translate(v3);
-			List<LightSource>::Iterator it = light_sources_.begin();
-			for (; it != light_sources_.end(); it++)
-			{
-				if (it->isRelativeToCamera()) 
-				{
-					it->translate(v3);
-				}
-			}
-		}
-
-		Vector3 Stage::calculateRelativeCoordinates(Vector3 pos)
-		{
-			// relative in units of view_vector, right_vector and look_up_vector
+			// relative in units of right_vector , look_up_vector , view_vector
 			// by calculating the normals to three planes
 			
 			// make sure the three planes are far enough, to be always on one side of them
@@ -427,17 +384,16 @@ namespace BALL
 			return Vector3(1.0);
 		}
 
-		Vector3 Stage::calculateAbsoluteCoordinates(Vector3 pos)
+		Vector3 Stage::calculateAbsoluteCoordinates(Vector3 pos) const
 		{
 			try
 			{
 				Vector3 dv(camera_.getViewVector());
 				dv.normalize();
 
-				return camera_.getViewPoint() + 
-					(pos.x * camera_.getRightVector() + 
-					 pos.y * camera_.getLookUpVector() +
-					 pos.z * dv);
+				return (pos.x * camera_.getRightVector() + 
+							  pos.y * camera_.getLookUpVector() +
+								pos.z * dv);
 			}
 			catch(...)
 			{
@@ -445,39 +401,7 @@ namespace BALL
 			}
 
 			return Vector3(1.0);
-
 		}
-
-		void Stage::moveCameraTo(const Camera& new_camera)
-			throw()
-		{
-			// we will calculate the distances of all lightsources position and destination points,
-			// relative in units of view_vector, right_vector and look_up_vector
-			// by calculating the normals to three planes
-			
-			list<Vector3> dirs, poss;
-
-			// iterate over all light sources
-			List<LightSource>::Iterator it = light_sources_.begin();
-			for (; it != light_sources_.end(); it++)
-			{
-				if (!it->isRelativeToCamera()) continue;
-				poss.push_back(calculateRelativeCoordinates(it->getPosition()));
-				dirs.push_back(calculateRelativeCoordinates(it->getDirection()));
-			}
-
-			camera_ = new_camera;
-
-			for (it = light_sources_.begin(); it != light_sources_.end(); it++)
-			{
-				if (!it->isRelativeToCamera()) continue;
-				it->setPosition(calculateAbsoluteCoordinates(*poss.begin()));
-				it->setDirection(calculateAbsoluteCoordinates(*dirs.begin()));
-				poss.pop_front();
-				dirs.pop_front();
-			}
-		}
-
 
 		void Stage::addLightSource(const LightSource& light_source)
 			throw()
@@ -506,5 +430,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL

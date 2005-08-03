@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.31 2005/07/26 14:23:15 amoll Exp $
+// $Id: scene.C,v 1.171.2.32 2005/08/03 15:38:10 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -301,7 +301,7 @@ namespace BALL
 
 				case SceneMessage::UPDATE_CAMERA:
 					content_changed_ = true;
-					stage_->moveCameraTo(scene_message->getStage().getCamera());
+					stage_->getCamera() == scene_message->getStage().getCamera();
 					system_origin_ = scene_message->getStage().getCamera().getLookAtPosition();
 					updateCamera_();
 					light_settings_->updateFromStage();
@@ -488,7 +488,6 @@ namespace BALL
 			stereo_camera_.setLookAtPosition(old_look_at - diff);
 			gl_renderer_.updateCamera(&stereo_camera_);
  			gl_renderer_.setLights(true);
- 			light_settings_->updateFromStage();
 			renderRepresentations_(DISPLAY_LISTS_RENDERING);
 			glPopMatrix();
 			content_changed_ = false;
@@ -536,15 +535,28 @@ namespace BALL
 				List<LightSource>::ConstIterator lit = stage_->getLightSources().begin();
 				for (; lit != stage_->getLightSources().end(); lit++)
 				{
+					Vector3 pos = (*lit).getPosition();
+					Vector3 dir = (*lit).getDirection();
+
+					if ((*lit).isRelativeToCamera())
+					{
+						pos = stage_->getCamera().getViewPoint() + stage_->calculateAbsoluteCoordinates(pos);
+						dir = pos + stage_->calculateAbsoluteCoordinates(dir);
+					}
+
+					Vector3 diff = dir - pos;
+					if (!Maths::isZero(diff.getSquareLength())) diff.normalize();
+					diff *= 100.0;
+
 					Sphere s;
-					s.setPosition((*lit).getPosition());
+					s.setPosition(pos);
 					s.setRadius(5);
 					s.setColor(ColorRGBA(255,255,255));
 					gl_renderer_.renderSphere_(s);
 
 					Tube t;
-					t.setVertex1((*lit).getPosition());
-					t.setVertex2((*lit).getDirection());
+					t.setVertex1(pos);
+					t.setVertex2(pos + diff);
 					t.setColor(ColorRGBA(255,255,255));
 					gl_renderer_.renderTube_(t);
 				}
@@ -669,7 +681,7 @@ namespace BALL
 			m.setRotation(angle, camera.getViewVector());
 
 			camera.setLookUpVector(m * camera.getLookUpVector());
-			stage_->moveCameraTo(camera);
+			stage_->getCamera() = camera;
 			updateCamera_();
 		}
 
@@ -677,7 +689,7 @@ namespace BALL
 		void Scene::rotateSystem_(Scene* scene)
 		{
 			scene->calculateQuaternion_(quaternion_);
-			stage_->rotate(quaternion_, system_origin_);
+			stage_->getCamera().rotate(quaternion_, system_origin_);
 			updateCamera_();
 		}
 
@@ -707,7 +719,7 @@ namespace BALL
 
 			Vector3 v(right_translate + up_translate);
 
-			stage_->translate(v);
+			stage_->getCamera().translate(v);
 			updateCamera_();
 		}
 
@@ -727,7 +739,7 @@ namespace BALL
 					* scene->stage_->getCamera().getViewVector()
 					* mouse_sensitivity_ / ZOOM_FACTOR);  
 
-			stage_->translate(v);
+			stage_->getCamera().translate(v);
 			updateCamera_();
 		}
 
@@ -875,8 +887,7 @@ namespace BALL
 			throw()
 		{
 			// new instance for default values
-			Camera camera;
-			stage_->moveCameraTo(camera);
+			stage_->getCamera().clear();
 			updateCamera_();
  			light_settings_->updateFromStage();
 		}
@@ -902,10 +913,9 @@ namespace BALL
 		{
 			LightSource light;
 			light.setType(LightSource::POSITIONAL);
-			light.setPosition((stage_->getCamera().getViewPoint() - 
-												stage_->getCamera().getViewVector() * 4) 
-												+ stage_->getCamera().getLookUpVector() * 20);
-			light.setDirection(stage_->getCamera().getLookAtPosition());
+			light.setRelativeToCamera(true);
+			light.setPosition(Vector3(0, 4, 20));
+			light.setDirection(Vector3(0, 0, 1));
 
 			stage_->clearLightSources();
 			stage_->addLightSource(light);
@@ -2160,7 +2170,7 @@ namespace BALL
 		void Scene::setCamera(const Camera& camera)
 			throw()
 		{
-			stage_->moveCameraTo(camera);
+			stage_->getCamera() = camera;
 			updateCamera_();
  			light_settings_->updateFromStage();
 		}

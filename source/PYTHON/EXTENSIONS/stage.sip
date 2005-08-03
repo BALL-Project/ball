@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.sip,v 1.2 2005/01/22 00:46:13 amoll Exp $
+// $Id: stage.sip,v 1.2.4.1 2005/08/03 15:43:50 amoll Exp $
 //
 
 class LightSource
@@ -65,7 +65,7 @@ class Camera
 	Vector3 getViewVector() const throw() ;
 	Vector3 getRightVector() const throw() ;
 	void translate(const Vector3& ) throw() ;
-	void rotate(const Quaternion& ) throw();
+	void rotate(const Quaternion&, const Vector3&) throw();
 	virtual void clear() throw();
 	//bool operator == (const Camera& ) const throw();
 	//virtual void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
@@ -96,9 +96,6 @@ class Stage
 	void setBackgroundColor(const ColorRGBA& ) throw();
 	void showCoordinateSystem(bool ) throw();
 	bool coordinateSystemEnabled() const throw();
-	void translate(const Vector3& ) throw();
-	void rotate(const Quaternion&, const Vector3&) throw();
-	void moveCameraTo(const Camera& ) throw();
 	//bool operator == (const Stage& ) const throw();
 	//void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 };

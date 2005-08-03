@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19.4.12 2005/07/27 21:54:07 amoll Exp $
+// $Id: POVRenderer.C,v 1.19.4.13 2005/08/03 15:42:59 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -284,7 +284,13 @@ namespace BALL
 				}
 
 				out << "light_source { ";
-				out << POVVector3(it->getPosition()) << ", " << POVColorRGBA(light_col) << "}" << endl;
+				Vector3 pos = it->getPosition();
+				if (it->isRelativeToCamera())
+				{
+					pos = stage_->calculateAbsoluteCoordinates(pos) + stage_->getCamera().getViewPoint();
+				}
+
+				out << POVVector3(pos) << ", " << POVColorRGBA(light_col) << "}" << endl;
 
 				// TODO: distinguish between directional / positional light sources
 			}

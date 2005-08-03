@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.17 2005/07/25 12:37:21 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.18 2005/08/03 15:38:24 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -222,48 +222,45 @@ namespace BALL
 				glLightfv(light_nr, GL_AMBIENT, zero);
 				glLightfv(light_nr, GL_DIFFUSE, intensity);
 				glLightfv(light_nr, GL_SPECULAR, intensity);
-				// setup the direction of the light
-				GLfloat dir[] = { it->getDirection().x,
-													it->getDirection().y,
-													it->getDirection().z};
-				glLightfv(light_nr, GL_SPOT_DIRECTION, dir);
-				// setup the angle of the light cone
+
+				Vector3 light_pos;
+				Vector3 light_dir;
+
+				if (it->isRelativeToCamera())
+				{
+					light_pos = stage_->calculateAbsoluteCoordinates(it->getPosition());
+					light_dir = stage_->calculateAbsoluteCoordinates(it->getDirection());
+				}
+				else
+				{
+					light_pos = it->getPosition();
+					light_dir = it->getDirection() - light_pos;
+				}
 				
-				GLfloat angle;
+				// setup the direction of the light
+				GLfloat dir[] = { light_dir.x,
+													light_dir.y,
+													light_dir.z};
+				glLightfv(light_nr, GL_SPOT_DIRECTION, dir);
+
+				// setup the angle of the light cone
+				GLfloat angle = 180;
 				if (it->getAngle() <= 90)
 				{
 					angle = it->getAngle().toDegree();
 				}
-				else
-				{
-					angle = 180;
-				}
+				
 				glLightfv(light_nr, GL_SPOT_CUTOFF, &angle);
-				// ---------------------------------------------------------------
-				if (it->getType() == LightSource::POSITIONAL)
+
+				// setup the position of the lightsource
+				GLfloat pos[]  = { light_pos.x,
+													 light_pos.y,
+													 light_pos.z,
+													 1.0};  // the 1 is for positional lights
+
+				if (it->getType() == LightSource::DIRECTIONAL)
 				{
-					// setup the position of the lightsource
-					GLfloat pos[]  = {it->getPosition().x, 
-														it->getPosition().y, 
-														it->getPosition().z, 
-														1.0};  // the 1 is important
-					glLightfv(light_nr, GL_POSITION, pos);
-				}
-				// ---------------------------------------------------------------
-				else if (it->getType() == LightSource::DIRECTIONAL)
-				{
-					GLfloat pos[]  = {it->getPosition().x, 
-														it->getPosition().y, 
-														it->getPosition().z, 
-														0.0};
-					glLightfv(light_nr, GL_POSITION, pos);
-				}
-				// ---------------------------------------------------------------
-				else
-				{
-					Log.error() << "Unknown type of light in " << __FILE__ << "  " << __LINE__ << " : " 
-											<< it->getType() << std::endl;
-					return;
+					pos[3] = 0.0;
 				}
 
 				glEnable(light_nr);
