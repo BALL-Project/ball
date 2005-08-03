@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.20.2.1 2005/06/17 22:52:34 amoll Exp $
+// $Id: lightSettings.C,v 1.20.2.2 2005/08/03 15:28:28 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -101,21 +101,12 @@ void LightSettings::addLightPressed()
 	light.setIntensity(0.8);
 	light.setType(LightSource::POSITIONAL);
 
-	// position light 20 space units behind camera position
-	const Camera& camera = stage_->getCamera();
-	Vector3 pos = camera.getViewVector();
-	pos.normalize();
-	pos *= -20;
-	pos += camera.getViewPoint();
-	
 	// create a kind of headlight
-	Vector3 up = camera.getLookUpVector();
-	up.normalize();
-	up *= 4;
- 	pos += up;
+	// position light 20 space units behind camera position
 	
-	light.setPosition(pos);
-	light.setDirection(camera.getViewPoint());
+	light.setRelativeToCamera(true);
+	light.setPosition(Vector3(0, 4, -20));
+	light.setDirection(Vector3(0, 0, 1));
 
 	lights_.push_back(light);
 	update();
@@ -157,11 +148,13 @@ void LightSettings::saveSettingsToLight_()
 		light.setRelativeToCamera(relative);
 
 		// position and direction
-		if (relative)
+		
+		if (!relative)
 		{
-			pos = stage_->calculateAbsoluteCoordinates(pos);
-			dir = stage_->calculateAbsoluteCoordinates(dir);
+			Vector3 diff = dir - pos;
+			dir = diff;
 		}
+		
 		light.setPosition(pos);
 		light.setDirection(dir);
 
@@ -248,8 +241,12 @@ void LightSettings::getValues_()
 
 	if (light.isRelativeToCamera())
 	{
-		pos = stage_->calculateRelativeCoordinates(pos);
-		dir = stage_->calculateRelativeCoordinates(dir);
+		relative->setChecked(true);
+	}
+	else
+	{
+		not_relative->setChecked(true);
+		dir = pos + dir;
 	}
 
 	setPosition_(pos);
@@ -266,15 +263,6 @@ void LightSettings::getValues_()
 	relative_to_camera->setEnabled(!is_ambient);
 	not_relative->setEnabled(!is_ambient);
 	
-	if (light.isRelativeToCamera())
-	{
-		relative->setChecked(true);
-	}
-	else
-	{
-		not_relative->setChecked(true);
-	}
-
 	light_type->setButton(light.getType());
 	intensity->setValue((Index)(light.getIntensity() * 100.0));
 }
@@ -350,15 +338,19 @@ void LightSettings::positionTypeChanged()
 		Vector3 pos = getPosition_();
 		Vector3 dir = getDirection_();
 
+		const Vector3& vp = stage_->getCamera().getViewPoint();
+
 		if (relative->isChecked())
 		{
 			Vector3 diff = dir - pos;
-			pos = stage_->calculateRelativeCoordinates(pos);
 			dir = stage_->calculateRelativeCoordinates(diff);
+
+			pos -= vp;
+			pos = stage_->calculateRelativeCoordinates(pos);
 		}
 		else
 		{
-			pos = 			stage_->calculateAbsoluteCoordinates(pos);
+			pos = stage_->calculateAbsoluteCoordinates(pos) + vp;
 			dir = pos + stage_->calculateAbsoluteCoordinates(dir);
 		}
 
