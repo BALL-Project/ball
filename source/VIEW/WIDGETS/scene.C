@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.32 2005/08/03 15:38:10 amoll Exp $
+// $Id: scene.C,v 1.171.2.33 2005/08/03 16:07:27 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -301,7 +301,7 @@ namespace BALL
 
 				case SceneMessage::UPDATE_CAMERA:
 					content_changed_ = true;
-					stage_->getCamera() == scene_message->getStage().getCamera();
+					stage_->getCamera() = scene_message->getStage().getCamera();
 					system_origin_ = scene_message->getStage().getCamera().getLookAtPosition();
 					updateCamera_();
 					light_settings_->updateFromStage();

@@ -29,6 +29,7 @@ Fixed:
  - Incorrect bond orders and GLN amide group planarity in fragment database
  - Naming of build peptides
  - Opening of files in current directory per command line with BALLView
+ - Cleanup of the lighting source code
 
 Improved:
  - DNA cartoon model
