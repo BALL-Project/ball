@@ -39,10 +39,8 @@ namespace BALL
 			move(20,20);
 			setMinimumSize(800, 600);
 
-			// unfortunately doesnt work: (see below)
-			// browser_->setSource(default_page_);
-
-  		browser_->mimeSourceFactory()->setFilePath("/local/amoll/BALL/doc/BALLView");
+  		browser_->mimeSourceFactory()->setFilePath(base_dir_.c_str());
+			browser_->setSource((base_dir_ + default_page_).c_str());
 
 			registerWidget(this);
 		}
@@ -69,36 +67,7 @@ namespace BALL
 
 		void HelpViewer::showHelp(const String& url)
 		{
-			// the line below would be sufficient, if QT would work right and not have the following problem
-			// Warning: QTextBrowser: no mimesource for index.html
-			//
-			// browser_->setSource(url.c_str());
-
-			String base_url = url;
-			String anchor;
-
-			if (url.has('#'))
-			{
-				base_url = url.before("#");
-				anchor = url.after("#");
-			}
-				
-			
-			List<String> images;
-			String result;
-			char buffer[10000];
-
-			File file(base_dir_ + base_url);
-			while (!file.eof())
-			{
-				file.getline(buffer, 10000);
-				String current_line(buffer);
-				result += current_line + "\n";
-			}
-
-			browser_->setText(QString(result.c_str()));
-			browser_->scrollToAnchor(anchor);
-
+			browser_->setSource((base_dir_ + url).c_str());
 			show();
 		}
 
@@ -137,7 +106,7 @@ namespace BALL
 		{
 			base_dir_ = dir;
 			browser_->mimeSourceFactory()->setFilePath(base_dir_.c_str());
-			browser_->setSource(default_page_);
+			browser_->setSource(base_dir_ + default_page_);
 		}
 
 	} // VIEW

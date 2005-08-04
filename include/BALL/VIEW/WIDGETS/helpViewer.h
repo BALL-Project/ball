@@ -1,15 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.1.2.2 2005/08/04 16:02:46 amoll Exp $
+// $Id: helpViewer.h,v 1.1.2.3 2005/08/04 23:14:46 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
 #define BALL_VIEW_WIDGETS_HELPVIEWER_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_WIDGETS_DOCKWIDGET_H
 #	include <BALL/VIEW/WIDGETS/dockWidget.h>
@@ -25,6 +21,9 @@ namespace BALL
 		/** DockWidget to show online help texts e.g. the BALLView documentation
 		 		To show a help page, just call ModularWidget::showHelp(String) or send
 				a ShowHelpMessage.
+				Per default the HelpViewer looks for index.html in $BALL_DATA_PATH/../doc/BALLView .
+				You can change this behavior by using setDefaultDir() and setDefaultPage().
+				Links to pages on the www wont work!
 		*/
 		BALL_EXPORT class HelpViewer
 			: public DockWidget
@@ -74,7 +73,7 @@ namespace BALL
 
 			public slots:
 
-			///
+			/// Show default page
 			virtual void showHelp();
 
 			protected:
