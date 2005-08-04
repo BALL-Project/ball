@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.1.2.1 2005/08/04 14:46:53 amoll Exp $
+// $Id: helpViewer.h,v 1.1.2.2 2005/08/04 16:02:46 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -21,6 +21,11 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
+		/** DockWidget to show online help texts e.g. the BALLView documentation
+		 		To show a help page, just call ModularWidget::showHelp(String) or send
+				a ShowHelpMessage.
+		*/
 		BALL_EXPORT class HelpViewer
 			: public DockWidget
 		{

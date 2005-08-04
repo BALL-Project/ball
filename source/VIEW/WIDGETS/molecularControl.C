@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.28 2005/08/01 11:31:22 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.29 2005/08/04 16:07:15 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -1176,43 +1176,7 @@ namespace BALL
 
 		void MolecularControl::showSelectorHelp()
 		{
-			QMessageBox::information( this, "BALLView",
-					String(
-					String("In this text field, you can enter regular expressions to select molecular entities.\n")+
-					"To apply your selection, just press Return key after you are finished. If you want to\n"+
-					"clear your selection, just click on the button next to the help button.\n\n"+
-					"Possible predicates are: \n"+
-					"true() \t this is always true\n" +
-					"false() \t this is always false\n" +
-					"selected() \t this is true for already selected atoms\n" +
-					"name(string) \t the name of the atom \n" +
-					"type(string) \t the type name of the atom\n" +
-					"element(char) \t the element (abbreviated by its symbol)\n" +
-					"residue(string) \t the name of the residue containing the atom\n" +
-					"residueID(int) \t the PDB ID of the residue (usally a number)\n" +
-					"protein() \t the name of the protein the atom is contained in\n" +
-					"secondaryStruct() \t the name of the secondary structure the atom is contained in\n" +
-					"solvent() \t true if the atom is a solvent atom added by BALL\n" +
-					"backbone() \t true for backbone atoms\n" +
-					"chain() \n" +
-					"nucleotide() \n" +
-					"inRing() \n" +
-					"doubleBonds() \n" +
-					"tripleBonds() \n" +
-					"aromaticBonds() \n" +
-					"numberOfBonds(int) \n" +
-					"connectedTo(char) \n" +
-					"sp3Hybridized() \n" +
-					"sp2Hybridized() \n" +
-					"spHybridized() \n" +
-					"charge() \n" +
-					"isAxial() \n" +
-					"is4C1() \n\n" +
-					"They can be connected with\n" +
-					"AND and OR, grouped with brackets, and each predicate can be negated with '!'\n\n" +
-					"You have to press RETURN to apply the selection!"
-					).c_str(),
-					"&OK");
+			showHelp("molecularControl.html#regular_expressions");
 		}
 
 		void MolecularControl::clearSelector()

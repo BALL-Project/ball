@@ -73,12 +73,22 @@ namespace BALL
 			// Warning: QTextBrowser: no mimesource for index.html
 			//
 			// browser_->setSource(url.c_str());
+
+			String base_url = url;
+			String anchor;
+
+			if (url.has('#'))
+			{
+				base_url = url.before("#");
+				anchor = url.after("#");
+			}
+				
 			
 			List<String> images;
 			String result;
 			char buffer[10000];
 
-			File file(base_dir_ + url);
+			File file(base_dir_ + base_url);
 			while (!file.eof())
 			{
 				file.getline(buffer, 10000);
@@ -87,6 +97,7 @@ namespace BALL
 			}
 
 			browser_->setText(QString(result.c_str()));
+			browser_->scrollToAnchor(anchor);
 
 			show();
 		}
@@ -102,7 +113,7 @@ namespace BALL
 				return;
 			}
 
-			ShowHelpMessage* msg = dynamic_cast<ShowHelpMessage*>(msg);
+			ShowHelpMessage* msg = RTTI::castTo<ShowHelpMessage>(*message);
 			showHelp(msg->getURL());
 		}
 
