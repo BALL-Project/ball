@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.19.6.1 2005/06/12 17:34:26 amoll Exp $
+// $Id: modularWidget.h,v 1.19.6.2 2005/08/04 14:46:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -268,6 +268,8 @@ namespace BALL
 				throw();
 
 			void removeMenuEntries();
+
+			virtual void showHelp(const String& url);
 			
 			protected:
 

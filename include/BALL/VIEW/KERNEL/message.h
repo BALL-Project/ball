@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.65.2.1 2005/05/10 13:50:31 amoll Exp $
+// $Id: message.h,v 1.65.2.2 2005/08/04 14:46:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -860,6 +860,24 @@ class BALL_EXPORT SyncClippingPlanesMessage
 	SyncClippingPlanesMessage()
 		throw() {};
 };
+
+///
+class BALL_EXPORT ShowHelpMessage
+	: public Message
+{
+	public:
+
+	///
+	ShowHelpMessage(String url = "")
+		throw();
+
+	String getURL() const { return url_;}
+
+	protected:
+
+	String url_;
+};
+
 
 
 //@}

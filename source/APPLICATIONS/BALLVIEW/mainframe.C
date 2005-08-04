@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.7 2005/07/25 20:46:05 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.8 2005/08/04 14:47:16 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -18,6 +18,7 @@
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/WIDGETS/logView.h>
+#include <BALL/VIEW/WIDGETS/helpViewer.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -105,6 +106,8 @@ namespace BALL
 		CHECK_PTR(new DownloadPDBFile(this, "DownloadPDBFile", false));
 
 		CHECK_PTR(new MolecularStructure(this, "MolecularStructure"));
+
+		CHECK_PTR(new HelpViewer(this, "Documentation"));
 
 		// setup the VIEW server
 		Server* server = new Server(this);

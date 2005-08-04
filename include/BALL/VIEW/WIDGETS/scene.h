@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.14 2005/06/23 16:08:13 oliver Exp $
+// $Id: scene.h,v 1.62.2.15 2005/08/04 14:48:14 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -176,7 +176,7 @@ namespace BALL
 			};
 				
 			//@} 
-			/**	@name	Constructors 
+			/**	@name	Constructors and Destructor
 			*/	
 			//@{
 
@@ -185,10 +185,7 @@ namespace BALL
 
 			/** Default Constructor.
 					Initialize the width and height of this scene to <tt> 600</tt> and sets
-					the camera position to:
-					  - camera position set to <tt> Vector(1,0,0)</tt>
-					  - camera look at position set to <tt> Vector(0,0,0)</tt>
-						- camera look up vector to <tt> Vector(0,0,-1)</tt>
+					the camera position.
 					\par
 					Calls registerWidget.
 					\param      parent_widget the parent widget of this scene 
@@ -211,11 +208,6 @@ namespace BALL
 			 */
 			Scene (const Scene& scene, QWidget* parent_widget = NULL, const char* name = NULL, WFlags wflags = 0)
 				throw();
-
-			//@} 
-			/** @name Destructors 
-			*/ 
-			//@{
 
 			/** Destructor.
 			*/

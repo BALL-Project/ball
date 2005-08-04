@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.28.2.1 2005/05/10 13:50:30 amoll Exp $
+// $Id: message.C,v 1.28.2.2 2005/08/04 14:47:01 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -342,6 +342,13 @@ TransformationMessage::TransformationMessage(const Matrix4x4& m)
 FinishedSimulationMessage::FinishedSimulationMessage()
 	throw()
 	: Message()
+{
+}
+
+ShowHelpMessage::ShowHelpMessage(String url)
+	throw()
+	: Message(),
+		url_(url)
 {
 }
 

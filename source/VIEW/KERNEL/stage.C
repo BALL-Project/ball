@@ -133,8 +133,9 @@ namespace BALL
 					 view_point_ = camera.view_point_;
 							look_at_ = camera.look_at_;
 			 look_up_vector_ = camera.look_up_vector_;
+					view_vector_ = camera.view_vector_;
+				 right_vector_ = camera.right_vector_;
 
-			calculateVectors_();
 			return *this;
 		}
 		
