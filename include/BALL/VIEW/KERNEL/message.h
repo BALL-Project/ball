@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.65.2.2 2005/08/04 14:46:58 amoll Exp $
+// $Id: message.h,v 1.65.2.3 2005/08/05 10:18:15 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -26,6 +26,8 @@
 #ifndef BALL_DATATYPE_REGULARDATA3D
 # include <BALL/DATATYPE/regularData3D.h>
 #endif
+
+class QWidget;
 
 namespace BALL
 {
@@ -876,6 +878,43 @@ class BALL_EXPORT ShowHelpMessage
 	protected:
 
 	String url_;
+};
+
+///
+class BALL_EXPORT RegisterWidgetForHelpSystemMessage
+	: public Message
+{
+	public:
+
+	///
+	RegisterWidgetForHelpSystemMessage()
+		throw();
+
+	///
+	void setWidget(const QWidget* widget) { widget_ = widget;}
+
+	///
+	const QWidget* getWidget() const { return widget_;}
+
+	///
+	void setDocumentationEntry(const String& docu) { docu_ = docu;}
+
+	///
+	const String& getDocumentationEntry() const { return docu_;}
+
+	///
+	void setUnregister(bool state) { unregister_ = state;}
+
+	///
+	bool isUnregister() const { return unregister_;}
+
+	protected:
+
+	const QWidget* widget_;
+
+	String docu_;
+
+	bool unregister_;
 };
 
 

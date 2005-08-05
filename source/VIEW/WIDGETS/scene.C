@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.33 2005/08/03 16:07:27 amoll Exp $
+// $Id: scene.C,v 1.171.2.34 2005/08/05 10:19:39 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1451,6 +1451,8 @@ namespace BALL
 			setCursor(QCursor(Qt::SizeAllCursor));
 
 			connect(&timer_, SIGNAL(timeout()), this, SLOT(timerSignal_()) );			
+
+			registerWidgetForHelpSystem(this, "scene.html");
 		}
 
 		void Scene::checkMenu(MainControl& /*main_control*/)

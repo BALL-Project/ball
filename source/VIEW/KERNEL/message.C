@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.28.2.2 2005/08/04 14:47:01 amoll Exp $
+// $Id: message.C,v 1.28.2.3 2005/08/05 10:18:13 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -349,6 +349,15 @@ ShowHelpMessage::ShowHelpMessage(String url)
 	throw()
 	: Message(),
 		url_(url)
+{
+}
+
+RegisterWidgetForHelpSystemMessage::RegisterWidgetForHelpSystemMessage()
+	throw()
+	: Message(),
+	  widget_(0),
+		docu_(""),
+		unregister_(false)
 {
 }
 

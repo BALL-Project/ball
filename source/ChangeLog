@@ -6,6 +6,7 @@ Added:
  - Support for SD files in BALLView
  - Picking support for bonds
  - Coloring by molecule
+ - online html documentation in BALLView
 
 Changed:
  - Renamed Mesh::colorList to Mesh::colors
