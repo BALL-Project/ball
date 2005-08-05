@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.8 2005/08/04 14:47:16 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.9 2005/08/05 10:03:08 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -154,8 +154,10 @@ namespace BALL
 										ALT+Key_X);
 
 		// Help-Menu -------------------------------------------------------------------
+		insertPopupMenuSeparator(MainControl::HELP);
 		insertMenuEntry(MainControl::HELP, "Demo", demo, SLOT(show()));
 		insertMenuEntry(MainControl::HELP, "Tutorial", tutorial, SLOT(show()));
+		insertPopupMenuSeparator(MainControl::HELP);
 		insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()));
 
 		// Menu ------------------------------------------------------------------------

@@ -57,7 +57,7 @@ namespace BALL
 			throw()
 		{
 			DockWidget::initializeWidget(main_control);
-			insertMenuEntry(MainControl::HELP, "Documentation", this, SLOT(showHelp()));
+			insertMenuEntry(MainControl::HELP, "Documentation", this, SLOT(showHelp()), 0, 0);
 		}
 
 		void HelpViewer::showHelp()
