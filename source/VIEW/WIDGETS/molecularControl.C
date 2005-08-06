@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.29 2005/08/04 16:07:15 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.30 2005/08/06 00:07:13 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -651,6 +651,10 @@ namespace BALL
 			setMenuHint("Clear the items in the clipboard");
 
 			GenericControl::initializeWidget(main_control);
+
+			getMainControl()->registerWidgetForHelpSystem(this, "molecularControl.html");
+			getMainControl()->registerWidgetForHelpSystem(selector_edit_, 
+					"molecularControl.html#regular_expressions"); 
 		}
 
 

@@ -112,6 +112,8 @@ namespace BALL
 
 			DockWidget::initializeWidget(main_control);
 			insertMenuEntry(MainControl::EDIT, "Clear Logs", text_edit_, SLOT(clear()));
+
+			getMainControl()->registerWidgetForHelpSystem(this, "logView.html");
 		}
 
 

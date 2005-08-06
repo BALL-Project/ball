@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.9 2005/08/05 10:03:08 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.10 2005/08/06 00:12:04 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -36,6 +36,7 @@
 #include <qpainter.h>
 #include <qimage.h>
 #include <qmessagebox.h>
+#include <qcursor.h>
 
 #include <sstream>
 
@@ -50,7 +51,8 @@ namespace BALL
 			dataset_control_(0),
 			display_properties_(0),
 			file_dialog_(0),
-			fullscreen_(false)
+			fullscreen_(false),
+			whats_this_mode_(false)
 	{
 		#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new Mainframe " << this << std::endl;
@@ -154,6 +156,7 @@ namespace BALL
 										ALT+Key_X);
 
 		// Help-Menu -------------------------------------------------------------------
+		insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(enterWhatsThisMode()));	
 		insertPopupMenuSeparator(MainControl::HELP);
 		insertMenuEntry(MainControl::HELP, "Demo", demo, SLOT(show()));
 		insertMenuEntry(MainControl::HELP, "Tutorial", tutorial, SLOT(show()));
@@ -172,12 +175,17 @@ namespace BALL
 
 		complement_selection_id_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
 
+		qApp->installEventFilter(this);
+	 	qApp->setGlobalMouseTracking(TRUE);
+
 		setStatusbarText("Ready.");
 	}
 
 	Mainframe::~Mainframe()
 		throw()
 	{
+		qApp->setGlobalMouseTracking(FALSE);
+		qApp->removeEventFilter(this);
 	}
 
 	void Mainframe::exportPOVRay()
@@ -330,6 +338,12 @@ namespace BALL
 	{
 		if (e->key() == Key_Escape) 
 		{
+			if (whats_this_mode_)
+			{
+				exitWhatsThisMode();
+				return;
+			}
+
 			Scene::getInstance(0)->switchToLastMode();
 			return;
 		}
@@ -353,6 +367,7 @@ namespace BALL
 		#endif
 	}
 
+	
 	void Mainframe::reset()
 	{
 		if (composites_locked_ || getPrimitiveManager().updateRunning()) return;
@@ -384,10 +399,54 @@ namespace BALL
 		}
 	}
 
+	
 	void Mainframe::checkMenus()
 	{
 		MainControl::checkMenus();
 		menuBar()->setItemEnabled(save_project_id_, !composites_locked_);
+	}
+
+	
+	bool Mainframe::eventFilter(QObject*, QEvent* e) 
+	{
+		if (e->type() != QEvent::MouseButtonPress ||
+				!whats_this_mode_)
+		{
+			return false;
+		}
+
+		QMouseEvent* me = (QMouseEvent*) e;
+		if (me->button() == Qt::RightButton)
+		{
+			exitWhatsThisMode();
+			return true;
+		}
+
+		if (me->button() != Qt::LeftButton) return false;
+
+		QPoint point = QCursor::pos();
+		QWidget* widget = qApp->widgetAt(point, true);
+
+		if (showHelpFor(widget)) 
+		{
+			exitWhatsThisMode();
+		}
+
+		return true;
+	}
+	
+
+	void Mainframe::enterWhatsThisMode()
+	{
+		qApp->setOverrideCursor(Qt::WhatsThisCursor);
+		whats_this_mode_ = true;
+	}
+
+	
+	void Mainframe::exitWhatsThisMode()
+	{
+		whats_this_mode_ = false;
+		qApp->restoreOverrideCursor();
 	}
 
 }

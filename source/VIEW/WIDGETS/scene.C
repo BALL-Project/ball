@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.34 2005/08/05 10:19:39 amoll Exp $
+// $Id: scene.C,v 1.171.2.35 2005/08/06 00:07:14 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1452,7 +1452,7 @@ namespace BALL
 
 			connect(&timer_, SIGNAL(timeout()), this, SLOT(timerSignal_()) );			
 
-			registerWidgetForHelpSystem(this, "scene.html");
+			getMainControl()->registerWidgetForHelpSystem(this, "scene.html");
 		}
 
 		void Scene::checkMenu(MainControl& /*main_control*/)

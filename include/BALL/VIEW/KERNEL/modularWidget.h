@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.19.6.3 2005/08/05 10:18:00 amoll Exp $
+// $Id: modularWidget.h,v 1.19.6.4 2005/08/06 00:06:53 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -16,7 +16,6 @@
 #endif
 
 class QObject;
-class QWidget;
 class QMenuBar;
 
 namespace BALL
@@ -262,14 +261,7 @@ namespace BALL
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 
-			///
-			void registerWidgetForHelpSystem(const QWidget* widget, const String& docu_entry);
-
-			///
-			void unregisterWidgetForHelpSystem(const QWidget* widget);
-					
 			//@}
-
 
 			void setWorkingDirFromFilename_(String filename)
 				throw();
@@ -291,8 +283,6 @@ namespace BALL
 			bool default_visible_;
 
 			vector<std::pair<Index, Index> > menu_ids_;
-
-			vector<const QWidget*> widgets_registered_for_help_system_;
 
 			Index last_parent_id_, last_id_;
 		}; 

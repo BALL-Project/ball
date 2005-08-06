@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72.2.9 2005/06/20 00:28:55 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.10 2005/08/06 00:06:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -765,6 +765,15 @@ namespace BALL
 			///
 			void loadBALLViewProjectFile(const String& filename) throw();
 
+			///
+			void registerWidgetForHelpSystem(const QWidget* widget, const String& docu_entry);
+
+			///
+			void unregisterWidgetForHelpSystem(const QWidget* widget);
+
+			///
+			bool showHelpFor(const QWidget* widget);
+					
 			//@}
 			
 			protected slots:
@@ -889,6 +898,8 @@ namespace BALL
 			Position 						proxy_port_;
 
 			Index 							stop_simulation_id_, complement_selection_id_, open_id_, save_project_id_;
+
+			HashMap<const QWidget*, String> docu_for_widget_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
