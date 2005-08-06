@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.5 2005/06/17 23:52:21 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.6 2005/08/06 00:30:33 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -639,6 +639,8 @@ namespace BALL
 			insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
 
 			DockWidget::initializeWidget(main_control);
+
+			getMainControl()->registerWidgetForHelpSystem(this, "pythonInterpreter.html");
 		}
 
 

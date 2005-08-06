@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.13.2.2 2005/06/19 17:24:36 amoll Exp $
+// $Id: mainframe.h,v 1.13.2.3 2005/08/06 00:35:11 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -32,8 +32,6 @@
 namespace BALL
 {
 	using namespace BALL::VIEW;
-	class AmberFF;
-	class SimulationThread;
 
 	class Mainframe	
 		: public BALL::VIEW::MainControl
@@ -42,22 +40,33 @@ namespace BALL
 
 		public:
 
+		///
 		BALL_EMBEDDABLE(Mainframe, MainControl)
 
+		///
 		Mainframe(QWidget* parent = 0, const char* name = 0);
 
+		///
 		virtual ~Mainframe() throw();
-
 
 		public slots:
 
+		///
+		void enterWhatsThisMode();
+
+		///
+		void exitWhatsThisMode();
+
+		///
 		void exportPOVRay();
 
+		///
 		void printScene();
 
 		/// Catch key events
 		void keyPressEvent(QKeyEvent* e);
 			
+		///
 		void toggleFullScreen();
 
 		/// remove all loaded Molecules and Representations, reset Coloring options
@@ -79,6 +88,9 @@ namespace BALL
 
 		///
 		virtual void checkMenus();
+
+		/// Event filter for the whats this mode
+		bool eventFilter(QObject*, QEvent*);
 		
 		protected:
 
@@ -88,6 +100,7 @@ namespace BALL
 		MolecularFileDialog*  		file_dialog_;
 		bool 											fullscreen_;
 		QRect 										last_size_;
+		bool 											whats_this_mode_;
 	};
 
 } // namespace BALL

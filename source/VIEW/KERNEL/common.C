@@ -21,6 +21,7 @@
 
 #include <qdragobject.h>
 #include <qdir.h>
+#include <qwhatsthis.h>
 
 namespace BALL
 {

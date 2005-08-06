@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.20.4.4 2005/08/05 10:17:58 amoll Exp $
+// $Id: modularWidget.C,v 1.20.4.5 2005/08/06 00:34:46 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -94,13 +94,6 @@ namespace BALL
 		void ModularWidget::finalizeWidget(MainControl& /* main_control */)
 		{
 			removeMenuEntries();
-
-			for (Position p = 0; p < widgets_registered_for_help_system_.size(); p++)
-			{
-				unregisterWidgetForHelpSystem(widgets_registered_for_help_system_[p]);
-			}
-
-			widgets_registered_for_help_system_.clear();
 		}
 
 		void ModularWidget::checkMenu(MainControl& /* main_control */)
@@ -276,23 +269,5 @@ namespace BALL
 			notify_(msg);
 		}
 
-		void ModularWidget::registerWidgetForHelpSystem(const QWidget* widget, const String& docu_entry)
-		{
-			RegisterWidgetForHelpSystemMessage* msg = new RegisterWidgetForHelpSystemMessage();
-			msg->setWidget(widget);
-			msg->setDocumentationEntry(docu_entry);
-			notify_(msg);
-
-			widgets_registered_for_help_system_.push_back(widget);
-		}
-
-		void ModularWidget::unregisterWidgetForHelpSystem(const QWidget* widget)
-		{
-			RegisterWidgetForHelpSystemMessage* msg = new RegisterWidgetForHelpSystemMessage();
-			msg->setWidget(widget);
-			msg->setUnregister(true);
-			notify_(msg);
-		}
-	
 	} // namespace VIEW
 } // namespace BALL

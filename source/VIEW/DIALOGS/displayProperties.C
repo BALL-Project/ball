@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.12 2005/07/25 12:45:44 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.13 2005/08/06 00:34:46 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -127,6 +127,8 @@ void DisplayProperties::initializeWidget(MainControl& main_control)
 	id_ = insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
 																		 SLOT(show()), CTRL+Key_I);   
 	setMenuHint("Create a new representation or modify an existing one");
+
+	getMainControl()->registerWidgetForHelpSystem(this, "displayProperties.html");
 }
 
 

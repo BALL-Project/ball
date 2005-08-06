@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.28 2005/06/20 00:29:01 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.29 2005/08/06 00:30:33 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -504,6 +504,8 @@ namespace BALL
 			menu_clipping_plane_id_ = insertMenuEntry(MainControl::DISPLAY, 
 																		"New Clipping Plane", this, SLOT(createNewClippingPlane()));   
 			setMenuHint("Add an OpenGL Clipping Plane to the Scene");
+
+			getMainControl()->registerWidgetForHelpSystem(this, "geometricControl.html");
 		}
 
 		void GeometricControl::moveClippingPlane()

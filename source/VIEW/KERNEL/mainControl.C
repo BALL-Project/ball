@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.24 2005/08/02 12:18:03 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.25 2005/08/06 00:34:30 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -414,7 +414,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			// own menu entries
 			insertPopupMenuSeparator(MainControl::FILE);
 			insertMenuEntry(MainControl::FILE, "&Quit", qApp, SLOT(quit()), CTRL+Key_Q);	
-			//insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(whatsThis()));	
 
 			// if the preferences dialog has any tabs then show it
 			if (preferences_dialog_->hasPages())
@@ -689,12 +688,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 						{
 							deselectCompositeRecursive(cmessage->getComposite(), true);
 						}
-						/*
-						if (cmessage->showSelectionInfos())
-						{
-							printSelectionInfos();
-						}
-						*/
 
 						if (cmessage->updateRepresentations())
 						{
@@ -758,8 +751,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			MainControl* mc = 0;
 			if (parent != 0)
 			{
-				// check whether the top-level widget
-				// is a MainControl
+				// check whether the top-level widget is a MainControl
 				mc = dynamic_cast<MainControl*>(parent);
 			}
 			else 
@@ -1978,6 +1970,43 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 		qApp->processEvents(max_time);
 	}
+	
+	void MainControl::registerWidgetForHelpSystem(const QWidget* widget, const String& docu_entry)
+	{
+		docu_for_widget_[widget] = docu_entry;
+	}
+
+	void MainControl::unregisterWidgetForHelpSystem(const QWidget* widget)
+	{
+		docu_for_widget_.erase(widget);
+	}
+
+	bool MainControl::showHelpFor(const QWidget* widget)
+	{
+		HashMap<const QWidget*, String>::Iterator to_find;
+		to_find = docu_for_widget_.find(widget);
+
+		QWidget* widget2 = (QWidget*) widget;
+
+		while (to_find == docu_for_widget_.end() && widget2 != 0)
+		{
+			if (widget2->parent() == 0) return false;
+
+			widget2 = dynamic_cast<QWidget*>(widget2->parent());
+
+			if (widget2->parent() == 0) return false;
+
+			to_find = docu_for_widget_.find(widget2);
+		}
+
+		if (widget2 == 0) return false;
+
+		ShowHelpMessage* msg = new ShowHelpMessage(to_find->second);
+		notify_(msg);
+
+		return true;
+	}
+
 	
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>
