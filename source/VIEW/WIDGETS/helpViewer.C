@@ -9,6 +9,8 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/SYSTEM/path.h>
 
+#include <qpopupmenu.h>
+
 using namespace std;
 
 namespace BALL
@@ -16,11 +18,49 @@ namespace BALL
 	namespace VIEW
 	{
 
+		MyTextBrowser::MyTextBrowser(QWidget* parent, const char*)
+			: QTextBrowser(parent),
+				forward_(false),
+				backward_(false)
+		{
+			connect(this, SIGNAL(backwardAvailable(bool)), this, SLOT(setBackwardAvailable(bool)));
+			connect(this, SIGNAL(forwardAvailable(bool)), this, SLOT(setForwardAvailable(bool)));
+		}
+
+		QPopupMenu* MyTextBrowser::createPopupMenu(const QPoint&)
+		{
+			QPopupMenu* cm = new QPopupMenu(this);
+			cm->insertItem("Home", this, SLOT(home()));
+
+			Index back 		= cm->insertItem("Back", this, SLOT(backward()));
+			cm->setItemEnabled(back, backward_);
+
+			Index forward = cm->insertItem("Forward", this, SLOT(forward()));
+			cm->setItemEnabled(forward, forward_);
+
+			cm->insertSeparator();
+			Index copy_a = cm->insertItem("Copy", this, SLOT(copy()));
+			cm->setItemEnabled(copy_a, hasSelectedText());
+
+			return cm;
+		}
+
+		void MyTextBrowser::setBackwardAvailable(bool b)
+		{
+			backward_ = b;
+		}
+
+		void MyTextBrowser::setForwardAvailable(bool b)
+		{
+			forward_ = b;
+		}
+
+
 		HelpViewer::HelpViewer(QWidget *parent, const char *name)
 			throw()
 			: DockWidget(parent, name),
 				default_page_("index.html"),
-				browser_( new QTextBrowser(this))
+				browser_( new MyTextBrowser(this))
 		{
 			Path path;
 			base_dir_ = path.getDataPath() + 

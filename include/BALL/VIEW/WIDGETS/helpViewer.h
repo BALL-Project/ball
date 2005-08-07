@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.1.2.3 2005/08/04 23:14:46 amoll Exp $
+// $Id: helpViewer.h,v 1.1.2.4 2005/08/07 19:01:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -17,6 +17,28 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
+		class MyTextBrowser
+			: public QTextBrowser
+		{
+			Q_OBJECT
+
+			public:
+
+			MyTextBrowser(QWidget* parent, const char* name = 0);
+
+			public slots:
+
+			void setBackwardAvailable(bool b);
+
+			void setForwardAvailable(bool b);
+
+			protected:
+
+			QPopupMenu* createPopupMenu(const QPoint& pos);
+
+			bool forward_, backward_;
+		};
 
 		/** DockWidget to show online help texts e.g. the BALLView documentation
 		 		To show a help page, just call ModularWidget::showHelp(String) or send
@@ -78,9 +100,9 @@ namespace BALL
 
 			protected:
 
-			String default_page_;
-			String base_dir_;
-			QTextBrowser* browser_;
+			String 				default_page_;
+			String 				base_dir_;
+			MyTextBrowser* browser_;
 		};
   	
 } } // namespaces
