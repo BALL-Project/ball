@@ -3,6 +3,7 @@
 //
 #include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 
 #include <qlineedit.h>
 #include <qpushbutton.h>
@@ -17,6 +18,7 @@ namespace BALL
 ContourSurfaceDialog::ContourSurfaceDialog( QWidget* parent,  const char* name )
     : ContourSurfaceDialogData( parent, name, TRUE, 0 )
 {
+	getMainControl()->registerWidgetForHelpSystem(this, "datasetControl.html#isocontour_surfaces");
 }
 
 ContourSurfaceDialog::~ContourSurfaceDialog()
