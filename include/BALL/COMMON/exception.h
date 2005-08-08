@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.49.4.3 2005/07/28 13:50:29 amoll Exp $
+// $Id: exception.h,v 1.49.4.4 2005/08/08 11:53:58 amoll Exp $
 //
    
 #ifndef BALL_COMMON_EXCEPTION_H
@@ -454,6 +454,17 @@ namespace BALL
 				TooManyErrors(const char* file, int line)
 					throw();
 		};
+		 
+		/// Exception to be thrown if too many bonds for one atom
+		 class BALL_EXPORT TooManyBonds: public Exception::GeneralException
+		{
+			public:
+
+				///
+				TooManyBonds(const char* file, int line, String error)
+					throw();
+		};
+
 
 		/**
 		*/

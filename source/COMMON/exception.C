@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.C,v 1.37.4.1 2005/07/26 19:59:32 amoll Exp $
+// $Id: exception.C,v 1.37.4.2 2005/08/08 11:54:06 amoll Exp $
 //
 
 #include <BALL/COMMON/exception.h>
@@ -299,6 +299,14 @@ namespace BALL
 				: GeneralException(file, line, "Too many errors", "")
 			{
 			}
+
+			TooManyBonds::TooManyBonds(const char* file, int line, String error)
+				throw()
+				: GeneralException(file, line, 
+						String("Unable to create additional bond between ") + error, "")
+			{
+			}
+
 
 			InvalidRange::InvalidRange(const char* file, int line, float value)
 				throw()
