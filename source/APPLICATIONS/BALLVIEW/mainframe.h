@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.13.2.3 2005/08/06 00:35:11 amoll Exp $
+// $Id: mainframe.h,v 1.13.2.4 2005/08/08 13:29:07 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -89,6 +89,8 @@ namespace BALL
 		///
 		virtual void checkMenus();
 
+		bool showDocumentation();
+
 		/// Event filter for the whats this mode
 		bool eventFilter(QObject*, QEvent*);
 		
@@ -101,6 +103,7 @@ namespace BALL
 		bool 											fullscreen_;
 		QRect 										last_size_;
 		bool 											whats_this_mode_;
+		bool ignore_event_;
 	};
 
 } // namespace BALL

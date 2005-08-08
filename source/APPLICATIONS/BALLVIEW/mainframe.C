@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.13 2005/08/08 12:52:32 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.14 2005/08/08 13:29:07 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -427,14 +427,29 @@ namespace BALL
 		}
 		
 		/////////////////////////////////////////////
+		// Show Documentation if Shift-F1 is pressed
+		/////////////////////////////////////////////
+		if (e->type() == QEvent::KeyPress)
+		{
+			QKeyEvent* ke = (QKeyEvent*) e;
+			if (ke->key() != Qt::Key_F1 ||
+					ke->state() != Qt::ShiftButton)
+			{
+				return false;
+			}
 
-		if (e->type() != QEvent::MouseButtonPress &&
-				e->type() != QEvent::MouseButtonRelease)
+			showDocumentation();
+			return true;
+		}
+
+		/////////////////////////////////////////////
+		// now react only in whats this mode and if a mouse button is pressed
+		/////////////////////////////////////////////
+		if (!whats_this_mode_ ||
+				e->type() != QEvent::MouseButtonPress)
 		{
 			return false;
 		}
-
-		if (!whats_this_mode_) return false;
 
 		/////////////////////////////////////////////
 		// exit whats this mode with right mouse click
@@ -447,13 +462,19 @@ namespace BALL
 		}
 
 		if (me->button() != Qt::LeftButton) return false;
+	
+		return showDocumentation();
+	}
 
+
+	bool Mainframe::showDocumentation()
+	{
+		QPoint point = QCursor::pos();
+		QWidget* widget = qApp->widgetAt(point, true);
+		
 		/////////////////////////////////////////////
 		// show help for widget
 		/////////////////////////////////////////////
-		QPoint point = QCursor::pos();
-		QWidget* widget = qApp->widgetAt(point, true);
-
 		if (showHelpFor(widget)) 
 		{
 			exitWhatsThisMode();
@@ -475,7 +496,7 @@ namespace BALL
 
 			return true;
 		}
-		
+
 		return false;
 	}
 	
