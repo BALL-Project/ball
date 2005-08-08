@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.13.2.4 2005/08/08 13:29:07 amoll Exp $
+// $Id: mainframe.h,v 1.13.2.5 2005/08/08 15:04:23 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -89,6 +89,7 @@ namespace BALL
 		///
 		virtual void checkMenus();
 
+		///
 		bool showDocumentation();
 
 		/// Event filter for the whats this mode
