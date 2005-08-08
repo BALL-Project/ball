@@ -3,6 +3,8 @@
 //
 #include <BALL/VIEW/DIALOGS/pythonSettings.h>
 
+#include <BALL/VIEW/KERNEL/mainControl.h>
+
 #include <qlineedit.h>
 #include <qfiledialog.h>
 
@@ -16,6 +18,7 @@ PythonSettings::PythonSettings( QWidget* parent,  const char* name, WFlags fl )
 	 PreferencesEntry()
 {
 	insertEntry(this, "Python Settings");
+	getMainControl()->registerWidgetForHelpSystem(this, "pythonInterpreter.html#startup_script");
 }
 
 

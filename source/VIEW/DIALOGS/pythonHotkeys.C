@@ -2,6 +2,7 @@
 // vi: set ts=2:
 //
 #include <BALL/VIEW/DIALOGS/pythonHotkeys.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 
 #include <qtable.h>
 #include <qpushbutton.h>
@@ -31,6 +32,7 @@ PythonHotkeys::PythonHotkeys( QWidget* parent,  const char* name, WFlags fl )
 	
 	setDefaults();
 	insertEntry(this, "Python Hotkeys");
+	getMainControl()->registerWidgetForHelpSystem(this, "pythonInterpreter.html#create_hotkeys");
 }
 
 

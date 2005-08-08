@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.36 2005/08/08 00:42:18 amoll Exp $
+// $Id: scene.C,v 1.171.2.37 2005/08/08 14:27:48 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1388,6 +1388,7 @@ namespace BALL
 
 			move_id_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()));
 			setMenuHint("Move selected items");
+			setMenuHelp("molecularControl.html#move_molecule");
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
