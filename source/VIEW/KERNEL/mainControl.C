@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.26 2005/08/08 00:42:16 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.27 2005/08/08 14:53:19 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -2013,6 +2013,17 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 		return true;
 	}
+
+	bool MainControl::hasHelpFor(const QWidget* widget) const
+	{
+		return docu_for_widget_.has(widget);
+	}
+
+	bool MainControl::hasHelpFor(Index id) const
+	{
+		return docu_for_menu_entry_.has(id);
+	}
+
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>
