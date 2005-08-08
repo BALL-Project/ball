@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.12 2005/08/08 11:54:32 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.13 2005/08/08 12:52:32 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -52,7 +52,8 @@ namespace BALL
 			display_properties_(0),
 			file_dialog_(0),
 			fullscreen_(false),
-			whats_this_mode_(false)
+			whats_this_mode_(false),
+			ignore_event_(false)
 	{
 		#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new Mainframe " << this << std::endl;
@@ -409,12 +410,35 @@ namespace BALL
 	
 	bool Mainframe::eventFilter(QObject*, QEvent* e) 
 	{
-		if (e->type() != QEvent::MouseButtonPress ||
-				!whats_this_mode_)
+		/////////////////////////////////////////////
+		// Prevent opening a menu entry when obtaining whats this info for a menu entry
+		/////////////////////////////////////////////
+		if (ignore_event_)
+		{
+			if (e->type() == QEvent::MouseButtonRelease)
+			{
+				ignore_event_ = false;
+				menuBar()->hide();
+				menuBar()->show();
+				return true;
+			}
+
+			return false;
+		}
+		
+		/////////////////////////////////////////////
+
+		if (e->type() != QEvent::MouseButtonPress &&
+				e->type() != QEvent::MouseButtonRelease)
 		{
 			return false;
 		}
 
+		if (!whats_this_mode_) return false;
+
+		/////////////////////////////////////////////
+		// exit whats this mode with right mouse click
+		/////////////////////////////////////////////
 		QMouseEvent* me = (QMouseEvent*) e;
 		if (me->button() == Qt::RightButton)
 		{
@@ -424,19 +448,30 @@ namespace BALL
 
 		if (me->button() != Qt::LeftButton) return false;
 
+		/////////////////////////////////////////////
+		// show help for widget
+		/////////////////////////////////////////////
 		QPoint point = QCursor::pos();
 		QWidget* widget = qApp->widgetAt(point, true);
 
 		if (showHelpFor(widget)) 
 		{
 			exitWhatsThisMode();
+			return true;
 		}
 
+		/////////////////////////////////////////////
+		// show help for menu entry 
+		/////////////////////////////////////////////
 		if (RTTI::isKindOf<QPopupMenu>(*widget))
 		{
+			// nothing happens if we dont have a docu entry
+			if (!docu_for_menu_entry_.has(last_highlighted_menu_entry_)) return true;
+
 			ShowHelpMessage* msg = new ShowHelpMessage(docu_for_menu_entry_[last_highlighted_menu_entry_]);
 			notify_(msg);
 			exitWhatsThisMode();
+			ignore_event_ = true;
 
 			return true;
 		}
