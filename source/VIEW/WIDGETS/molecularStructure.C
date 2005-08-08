@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.86.2.7 2005/07/26 23:04:15 amoll Exp $
+// $Id: molecularStructure.C,v 1.86.2.8 2005/08/08 11:53:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -316,22 +316,36 @@ namespace BALL
 
 			Size number_of_hydrogens = 0;
 
+			bool hydrogen_ok = true;
+			bool bond_ok = true;
+
 			for (; it != temp_selection_.end(); ++it)
 			{	
-				(*it)->apply(getFragmentDB().add_hydrogens);
+				hydrogen_ok &= (*it)->apply(getFragmentDB().add_hydrogens);
 				number_of_hydrogens += getFragmentDB().add_hydrogens.getNumberOfInsertedAtoms();
 				
 				if (getFragmentDB().add_hydrogens.getNumberOfInsertedAtoms() == 0) continue;
 				
-				(*it)->apply(getFragmentDB().build_bonds);
+				bond_ok &= (*it)->apply(getFragmentDB().build_bonds);
 
 				CompositeMessage *change_message = 
 					new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 				notify_(change_message);
 			}
 
-			setStatusbarText(String("added ") +  String(number_of_hydrogens) + 
-											 " hydrogen atoms.", true);
+			String result =	String("added ") + String(number_of_hydrogens) + " hydrogen atoms.";
+
+			if (!bond_ok) 
+			{
+				result += " An error occured, while adding the bonds. Too many bonds for one atom?";
+			}
+
+			if (!hydrogen_ok) 
+			{
+				result += " An error occured, while adding the hydrogens. Too many bonds for one atom?";
+			}
+
+			setStatusbarText(result, true);
 		}
 
 
@@ -361,9 +375,11 @@ namespace BALL
 				}
 			}
 
+			bool ok = true;
+
 			for (; it != temp_selection_.end(); ++it)
 			{	
-				(*it)->apply(getFragmentDB().build_bonds);
+				ok &= (*it)->apply(getFragmentDB().build_bonds);
 
 				CompositeMessage *change_message = 
 					new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
@@ -378,6 +394,8 @@ namespace BALL
 
 			String result = "added " + String(new_number_of_bonds - old_number_of_bonds) + 
 										  " bonds (total " + String(new_number_of_bonds) + ").";
+
+			if (!ok) result += " An error occured. Too many bonds for one atom?";
 			setStatusbarText(result, true);
 		}
 

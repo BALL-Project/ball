@@ -12,8 +12,10 @@ Changed:
  - Renamed Mesh::colorList to Mesh::colors
  - Exception::InvalidRange now has an float value
  - ColorProcessor hierarchy
+ - Bond::TooManyBonds moved to Exception namespace
 
 Fixed:
+ - Crashes, when reading PDB files with too many bonds
  - Segfault in CalculateSecondaryStructureProcessor, when one SS is part of another
  - NMRViewer und underlying widgets
  - Mouse sensitivity changed in Rotate mode when focusing on small structures

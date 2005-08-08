@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.11 2005/08/08 00:41:50 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.12 2005/08/08 11:54:32 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -140,9 +140,9 @@ namespace BALL
 		String hint;
 
 		// File Menu
-		insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, SLOT(exportPOVRay()), 
-										CTRL+Key_Y);
-		setMenuHelp("tips.html#povray");
+		Index entry = insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, SLOT(exportPOVRay()), CTRL+Key_Y);
+
+		registerMenuEntryForHelpSystem(entry, "tips.html#povray");
 
 		insertMenuEntry(MainControl::FILE, "Print", this, SLOT(printScene()));
 
