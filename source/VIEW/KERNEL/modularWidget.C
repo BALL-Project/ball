@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.20.4.5 2005/08/06 00:34:46 amoll Exp $
+// $Id: modularWidget.C,v 1.20.4.6 2005/08/08 00:42:17 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -261,6 +261,17 @@ namespace BALL
 			}
 
 			getMainControl()->setMenuHint(last_id_, hint);
+		}
+
+		void ModularWidget::setMenuHelp(const String& url)
+		{
+			if (last_id_ 				== -1 ||
+					getMainControl() == 0)
+			{
+				return;
+			}
+
+			getMainControl()->registerMenuEntryForHelpSystem(last_id_, url);
 		}
 
 		void ModularWidget::showHelp(const String& url)

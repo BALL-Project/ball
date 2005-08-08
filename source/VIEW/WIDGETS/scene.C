@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.35 2005/08/06 00:07:14 amoll Exp $
+// $Id: scene.C,v 1.171.2.36 2005/08/08 00:42:18 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1420,33 +1420,42 @@ namespace BALL
 			menuBar()->setItemChecked(window_menu_entry_id_, true);
 
 			// ======================== ANIMATION ===============================================
+			String help_url = "tips.html#animations";
+
 			record_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 
 															SLOT(recordAnimationClicked()));
 			setMenuHint("Record an animation for later processing");
  			menuBar()->setItemChecked(record_animation_id_, false) ;
+			setMenuHelp(help_url);
 			
 			clear_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, 
 															SLOT(clearRecordedAnimation()));
+			setMenuHelp(help_url);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
 			start_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, 
 															SLOT(startAnimation()));
+			setMenuHelp(help_url);
 
 			cancel_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, 
 															SLOT(stopAnimation()));
 			menuBar()->setItemEnabled(cancel_animation_id_, false);
+			setMenuHelp(help_url);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
 			animation_export_PNG_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", 
 																	this, SLOT(animationExportPNGClicked()));
+			setMenuHelp(help_url);
 
 			animation_export_POV_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", 
 																	this, SLOT(animationExportPOVClicked()));
+			setMenuHelp(help_url);
 
 			animation_repeat_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
 																	SLOT(animationRepeatClicked()));
+			setMenuHelp(help_url);
 
 			setCursor(QCursor(Qt::SizeAllCursor));
 

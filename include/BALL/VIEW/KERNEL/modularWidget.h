@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.19.6.4 2005/08/06 00:06:53 amoll Exp $
+// $Id: modularWidget.h,v 1.19.6.5 2005/08/08 00:41:48 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -246,6 +246,9 @@ namespace BALL
 			///
 			void setMenuHint(const String& hint);
 
+			///
+			void setMenuHelp(const String& url);
+
 			//@}
 			/**	@name	Debugging and Diagnostics
 			*/
@@ -269,9 +272,8 @@ namespace BALL
 			void removeMenuEntries();
 
 			virtual void showHelp(const String& url);
-			
-			protected:
 
+			protected:
 
 			//_ id in the menubar entry "WINDOWS" for every widget
 			Index window_menu_entry_id_;

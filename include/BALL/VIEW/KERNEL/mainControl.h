@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72.2.10 2005/08/06 00:06:52 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.11 2005/08/08 00:41:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -772,6 +772,9 @@ namespace BALL
 			void unregisterWidgetForHelpSystem(const QWidget* widget);
 
 			///
+			void registerMenuEntryForHelpSystem(Index entry, const String& docu_entry);
+
+			///
 			bool showHelpFor(const QWidget* widget);
 					
 			//@}
@@ -900,6 +903,10 @@ namespace BALL
 			Index 							stop_simulation_id_, complement_selection_id_, open_id_, save_project_id_;
 
 			HashMap<const QWidget*, String> docu_for_widget_;
+
+			HashMap<Index, String> docu_for_menu_entry_;
+
+			Index last_highlighted_menu_entry_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

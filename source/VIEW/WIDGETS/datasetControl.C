@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.37.2.9 2005/08/06 00:30:32 amoll Exp $
+// $Id: datasetControl.C,v 1.37.2.10 2005/08/08 00:42:17 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -88,6 +88,7 @@ namespace BALL
 			menu_cs_ = insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  
 																							SLOT(computeIsoContourSurface()), CTRL+Key_U);
 			setMenuHint("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.");
+			setMenuHelp("datasetControl.html#isocontour_surfaces");
 
 			GenericControl::initializeWidget(main_control);
 

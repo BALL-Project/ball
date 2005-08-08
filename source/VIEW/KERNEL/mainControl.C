@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.25 2005/08/06 00:34:30 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.26 2005/08/08 00:42:16 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1329,6 +1329,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			{
 				setStatusbarText("");
 			}
+
+			last_highlighted_menu_entry_ = id;
 		}
 
 		void MainControl::dump(ostream& s, Size depth) const
@@ -1976,6 +1978,11 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		docu_for_widget_[widget] = docu_entry;
 	}
 
+	void MainControl::registerMenuEntryForHelpSystem(Index entry, const String& docu_entry)
+	{
+		docu_for_menu_entry_[entry] = docu_entry;
+	}
+
 	void MainControl::unregisterWidgetForHelpSystem(const QWidget* widget)
 	{
 		docu_for_widget_.erase(widget);
@@ -2007,7 +2014,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		return true;
 	}
 
-	
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>
 #	endif

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.10 2005/08/06 00:12:04 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.11 2005/08/08 00:41:50 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -142,6 +142,7 @@ namespace BALL
 		// File Menu
 		insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, SLOT(exportPOVRay()), 
 										CTRL+Key_Y);
+		setMenuHelp("tips.html#povray");
 
 		insertMenuEntry(MainControl::FILE, "Print", this, SLOT(printScene()));
 
@@ -360,7 +361,6 @@ namespace BALL
 			return;
 		}
 
-
 		#ifdef BALL_PYTHON_SUPPORT
 			PyWidget::getInstance(0)->reactTo(*e);
 			e->accept();
@@ -432,7 +432,16 @@ namespace BALL
 			exitWhatsThisMode();
 		}
 
-		return true;
+		if (RTTI::isKindOf<QPopupMenu>(*widget))
+		{
+			ShowHelpMessage* msg = new ShowHelpMessage(docu_for_menu_entry_[last_highlighted_menu_entry_]);
+			notify_(msg);
+			exitWhatsThisMode();
+
+			return true;
+		}
+		
+		return false;
 	}
 	
 
