@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.70.4.2 2005/07/28 14:01:52 amoll Exp $
+// $Id: atom.h,v 1.70.4.3 2005/08/08 11:51:49 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -631,7 +631,7 @@ namespace BALL
 					@see     Bond::createBond
 			*/
 			Bond* createBond(Atom& atom)
-				throw();
+				throw(Exception::TooManyBonds);
 
 			/** Extended bond creation.
 					Initialize the bond <b>  bond </b> to connect this instance to <b>  atom </b>.
@@ -643,7 +643,7 @@ namespace BALL
 					@see     Bond::createBond
 			*/
 			Bond* createBond(Bond& bond, Atom& atom)
-				throw();
+				throw(Exception::TooManyBonds);
 
 			/**	Create a copy of a bond.
 			*/

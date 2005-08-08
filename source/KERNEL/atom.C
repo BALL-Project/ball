@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.55.2.1 2005/07/17 13:13:19 oliver Exp $
+// $Id: atom.C,v 1.55.2.2 2005/08/08 11:51:57 amoll Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -428,7 +428,7 @@ namespace BALL
 	}
 
 	Bond* Atom::createBond(Atom& atom)
-		throw()
+		throw(Exception::TooManyBonds)
 	{
 		// Check whether this bond exists already
 		Bond* bond = getBond(atom);
@@ -444,7 +444,7 @@ namespace BALL
 	}
 
 	Bond* Atom::createBond(Bond& bond, Atom& atom)
-		throw()
+		throw(Exception::TooManyBonds)
 	{
 		return Bond::createBond(bond, *this, atom);
 	}
@@ -464,7 +464,7 @@ namespace BALL
 			{
 				bond_ptr = Bond::createBond(*bond_ptr, *this, atom);
 			}
-			catch (Bond::TooManyBonds&)
+			catch (Exception::TooManyBonds&)
 			{
 				// Clear up the mess we made.
 				delete bond_ptr;

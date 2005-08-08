@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.h,v 1.44.4.1 2005/07/28 14:01:53 amoll Exp $
+// $Id: bond.h,v 1.44.4.2 2005/08/08 11:51:49 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_BOND_H
@@ -67,18 +67,6 @@ namespace BALL
 		*/
 		//@{
 			
-		/**	Too many bonds created.
-				This exception may be thrown by  \link createBond createBond \endlink  if the maximum number
-				of bonds (8 bonds) is exceeded.
-		*/
-		class BALL_EXPORT TooManyBonds
-			:	public Exception::GeneralException
-		{
-			public:
-			TooManyBonds(const char* file, int line) throw();
-			TooManyBonds(const char* file, int line, const Atom& atom1, const Atom& atom2) throw();
-		};
-
 		/**	Not bound to two atoms.
 				This exception may be thrown by  \link getLength getLength \endlink  if this instance is not bound.
 		*/
@@ -199,7 +187,7 @@ namespace BALL
 		*/
 		Bond(const String& name, Atom& first, Atom& second, Order order = BALL_BOND_DEFAULT_ORDER,
 				 Type type = BALL_BOND_DEFAULT_TYPE)
-			throw(TooManyBonds);
+			throw(Exception::TooManyBonds);
 
 		/** Create a bond.
 				Connect the two atoms <tt>first</tt> and <tt>second</tt> via a bond.
@@ -211,7 +199,7 @@ namespace BALL
 				@exception TooManyBonds if one of the atom already possesses  \link Atom::MAX_NUMBER_OF_BONDS Atom::MAX_NUMBER_OF_BONDS \endlink  bonds.
 		*/
 		static Bond* createBond(Bond& bond, Atom& first, Atom& second)
-			throw(TooManyBonds);
+			throw(Exception::TooManyBonds);
 
 		/** Destructor.
 				Default destruction of this bond.
