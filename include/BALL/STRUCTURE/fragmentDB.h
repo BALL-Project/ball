@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.h,v 1.34.4.1 2005/07/29 12:38:07 amoll Exp $
+// $Id: fragmentDB.h,v 1.34.4.2 2005/08/08 11:52:40 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
@@ -397,14 +397,16 @@ namespace BALL
 					in manually provided template.
 					@return the number of bonds built
 			*/
-			Size buildFragmentBonds(Fragment& fragment, const Fragment& tplate) const;
+			Size buildFragmentBonds(Fragment& fragment, const Fragment& tplate) const
+				throw(Exception::TooManyBonds);
 
 			/**	Build all possible bonds between two fragments.
 					This method builds all bonds that are allowed by
 					the <b>Connections</b> entries in a resource database.
 					@return the number of bonds built
 			*/
-			Size buildInterFragmentBonds(Fragment& first, Fragment& second) const;
+			Size buildInterFragmentBonds(Fragment& first, Fragment& second) const
+				throw(Exception::TooManyBonds);
 
 			//@}
 
@@ -419,7 +421,8 @@ namespace BALL
 
 			/**	Build a connection between two atoms, if possible
 			*/
-			bool buildConnection_(Connection& con1, Connection& con2);
+			bool buildConnection_(Connection& con1, Connection& con2)
+				throw(Exception::TooManyBonds);
 		
 			/**	A pointer to the fragment database 
 			*/

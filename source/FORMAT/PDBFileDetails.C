@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileDetails.C,v 1.11 2005/02/24 14:50:18 oliver Exp $
+// $Id: PDBFileDetails.C,v 1.11.2.1 2005/08/08 11:52:51 amoll Exp $
 //
 
 // This file contains the more or less implementation specific portion of PDBFile.
@@ -492,62 +492,64 @@ namespace BALL
 		{
 			PDB_atom = atom_map_it->second; // retrieve the pointer
 		}
-		
-		// read the entries for the bonds
-		for (i = 0; i < 4; ++i)
+			
+		try
 		{
-			if (record.bond_atom[i] != 0)
+			// read the entries for the bonds
+			for (i = 0; i < 4; ++i)
 			{
+				if (record.bond_atom[i] == 0) continue;
+				
 				// retrieve the second atom via the hash table
 				atom_map_it = PDB_atom_map_.find(record.bond_atom[i]);				
-				if (atom_map_it != PDB_atom_map_.end())
+				if (atom_map_it == PDB_atom_map_.end()) continue;
+
+				// create the new bond
+				bond = PDB_atom->createBond(*atom_map_it->second);
+	
+				if (bond != 0)
 				{
-					// create the new bond
-					bond = PDB_atom->createBond(*atom_map_it->second);
-		
-					if (bond != 0)
-					{
-						bond->setType(Bond::TYPE__COVALENT);
-						bond->setOrder(Bond::ORDER__SINGLE);
-					}
+					bond->setType(Bond::TYPE__COVALENT);
+					bond->setOrder(Bond::ORDER__SINGLE);
 				}
 			}
-		}
+					
+			for (i = 0; i < 4; ++i)
+			{
+				if (record.hbond_atom[i] == 0) continue;
 				
-		for (i = 0; i < 4; ++i)
-		{
-			if (record.hbond_atom[i] != 0)
-			{
 				atom_map_it = PDB_atom_map_.find(record.hbond_atom[i]);
-				if (atom_map_it != PDB_atom_map_.end())
+				if (atom_map_it == PDB_atom_map_.end()) continue;
+				
+				bond = PDB_atom->createBond(*atom_map_it->second);
+	
+				if (bond != 0)
 				{
-					bond = PDB_atom->createBond(*atom_map_it->second);
-		
-					if (bond != 0)
-					{
-						bond->setType(Bond::TYPE__HYDROGEN);
-						bond->setOrder(Bond::ORDER__SINGLE);
-					}
+					bond->setType(Bond::TYPE__HYDROGEN);
+					bond->setOrder(Bond::ORDER__SINGLE);
+				}
+			}
+			
+			for (i = 0; i < 2; ++i)
+			{
+				if (record.salt_bridge_atom[i] == 0) continue;
+				
+				atom_map_it = PDB_atom_map_.find(record.salt_bridge_atom[i]);
+				if (atom_map_it == PDB_atom_map_.end()) continue;
+			
+				bond = PDB_atom->createBond(*atom_map_it->second);
+	
+				if (bond != 0)
+				{
+					bond->setType(Bond::TYPE__SALT_BRIDGE);
+					bond->setOrder(Bond::ORDER__SINGLE);
 				}
 			}
 		}
-		
-		for (i = 0; i < 2; ++i)
+		catch (Exception::TooManyBonds e)
 		{
-			if (record.salt_bridge_atom[i] != 0)
-			{
-				atom_map_it = PDB_atom_map_.find(record.salt_bridge_atom[i]);
-				if (atom_map_it != PDB_atom_map_.end())
-				{
-					bond = PDB_atom->createBond(*atom_map_it->second);
-		
-					if (bond != 0)
-					{
-						bond->setType(Bond::TYPE__SALT_BRIDGE);
-						bond->setOrder(Bond::ORDER__SINGLE);
-					}
-				}
-			}
+			Log.error() << e << std::endl;
+			return false;
 		}
 		
 		return true;
