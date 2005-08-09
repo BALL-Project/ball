@@ -7,13 +7,14 @@
 </head>
 <body>
 <center>
-<H2 align="center"><a href="datasetControl.html">&lt;</a> <a href="index.html">Index</a> <a href="displayProperties.html">&gt;</a></H2>
-
 <table width="700" border="0" cellpadding="0">
   <tr>
     <td align="left">
-	
+
+<H2 align="center"><a href="datasetControl.html">&lt;</a> <a href="index.html">Index</a> <a href="displayProperties.html">&gt;</a></H2>
+
 <h2>PythonInterpreter</h2>
+
 <a name="python_scripts"><h3>Write Python scripts for BALLView</h3></a>
 <div align="justify">The easiest way to access objects in BALLView is to use the interface to the ModularWidgets. 
   Every major widget in BALLView, like the Scene or the MolecularControl is such a ModularWidget.
@@ -28,9 +29,9 @@
   <b>Caveat:</b> Not all methods, which are defined in the C++ library are also exportet to the Python interface.
   If a method, which you want to use does not seem to work, have a  look at the *.sip files in
   BALL/source/PYTHON/EXTENSIONS to make sure, this method is exported.<br>
-  <br>
-  
-<a name="startup_script"></a></div>
+</div>
+<br>
+
 <a name="startup_script">
 <h3>Setup a Python startup script</h3></a>
 <div align="justify">BALLView can load a Python script at startup. In this script the user can define 
@@ -77,6 +78,7 @@ def removeWater():
   Thereby he can e.g. remove all water molecules in the loaded Systems with one keypress. By using the Shift- and Control-modifier, BALLView can have up to 36 different hotkeys. This enables the user to 
   accelerate repetitive tasks dramatically.</p>
 <p><img src="images/hotkeys.png"></p>
+
 </td></tr></table>
 
 <H2 align="center"><a href="datasetControl.html">&lt;</a> <a href="index.html">Index</a> <a href="displayProperties.html">&gt;</a></H2>
