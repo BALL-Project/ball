@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.37 2005/08/08 14:27:48 amoll Exp $
+// $Id: scene.C,v 1.171.2.38 2005/08/09 13:59:04 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1385,6 +1385,7 @@ namespace BALL
 			picking_id_ = insertMenuEntry( MainControl::DISPLAY, "&Picking Mode", 
 													this, SLOT(pickingMode_()), CTRL+Key_P);
 			setMenuHint("Switch to picking mode, e.g. to identify singe atoms or groups");
+			setMenuHelp("scene.html#identify_atoms");
 
 			move_id_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()));
 			setMenuHint("Move selected items");
@@ -1395,12 +1396,15 @@ namespace BALL
 			no_stereo_id_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
  			menuBar()->setItemChecked(no_stereo_id_, true) ;
+			setMenuHelp("tips.html#3D");
 
 			active_stereo_id_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()));
+			setMenuHelp("tips.html#3D");
 
 			dual_stereo_id_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "Side by Side", this, SLOT(enterDualStereo()));
+			setMenuHelp("tips.html#3D");
 
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
 											SLOT(showViewPoint_()), CTRL+Key_W);

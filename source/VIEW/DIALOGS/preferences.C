@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.16.6.2 2005/08/08 15:01:41 amoll Exp $
+// $Id: preferences.C,v 1.16.6.3 2005/08/09 13:58:52 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -236,7 +236,7 @@ namespace BALL
 
 		void Preferences::showHelp()
 		{
-			getMainControl()->showHelpFor(widget_stack->visibleWidget());
+			getMainControl()->showHelpFor(item_to_widget_[entries_listview->selectedItem()]);
 		}
 
 	} // namespace VIEW
