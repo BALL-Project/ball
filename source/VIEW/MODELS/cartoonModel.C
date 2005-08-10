@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.25 2005/08/01 14:51:39 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.26 2005/08/10 13:45:43 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -98,6 +98,17 @@ Processor::Result AddCartoonModel::operator() (Composite& composite)
 
 	if (RTTI::isKindOf<Protein>(composite))
 	{
+		Protein* protein = dynamic_cast<Protein*>(&composite);
+		if (protein->countSecondaryStructures() == 0)
+		{
+			ResidueIterator rit = protein->beginResidue();
+			for(; +rit; ++rit)
+			{
+				AddBackboneModel::operator()(*rit);
+			}
+			return Processor::CONTINUE;
+		}
+
 		calculateComplementaryBases_(composite);
 		return Processor::CONTINUE;
 	}
