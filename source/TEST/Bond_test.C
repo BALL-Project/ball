@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Bond_test.C,v 1.34 2004/11/07 08:25:37 oliver Exp $
+// $Id: Bond_test.C,v 1.34.4.1 2005/08/10 10:52:15 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.34 2004/11/07 08:25:37 oliver Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.34.4.1 2005/08/10 10:52:15 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -97,7 +97,7 @@ CHECK(static Bond* createBond(Bond& bond, Atom& first, Atom& second) throw(TooMa
 		}
 		else
 		{
-			TEST_EXCEPTION(Bond::TooManyBonds, bonds[i].createBond(bonds[i], atoms[0], atoms[i + 1]))
+			TEST_EXCEPTION(Exception::TooManyBonds, bonds[i].createBond(bonds[i], atoms[0], atoms[i + 1]))
 			TEST_EQUAL(atoms[0].countBonds(), Atom::MAX_NUMBER_OF_BONDS);
 		}
 	}		
@@ -510,15 +510,6 @@ RESULT
 
 CHECK(NotBound(const char* file, int line) throw())
 	TEST_EXCEPTION(Bond::NotBound, throw(Bond::NotBound(__FILE__, __LINE__)))
-RESULT
-
-CHECK(TooManyBonds(const char* file, int line) throw())
-	TEST_EXCEPTION(Bond::TooManyBonds, throw(Bond::TooManyBonds(__FILE__, __LINE__)));
-RESULT
-
-CHECK(TooManyBonds(const char* file, int line, const Atom& atom1, const Atom& atom2) throw())
-	Atom a,b;
-	TEST_EXCEPTION(Bond::TooManyBonds, throw(Bond::TooManyBonds(__FILE__, __LINE__, a,b)))
 RESULT
 
 /////////////////////////////////////////////////////////////
