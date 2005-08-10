@@ -129,7 +129,7 @@ namespace BALL
 		void HelpViewer::setDefaultPage(const String& url)
 		{
 			default_page_ = url;
-			browser_->setSource(default_page_);
+			browser_->setSource(default_page_.c_str());
 		}
 
 		const String& HelpViewer::getDefaultPage() const
@@ -146,7 +146,7 @@ namespace BALL
 		{
 			base_dir_ = dir;
 			browser_->mimeSourceFactory()->setFilePath(base_dir_.c_str());
-			browser_->setSource(base_dir_ + default_page_);
+			browser_->setSource((base_dir_ + default_page_).c_str());
 		}
 
 	} // VIEW
