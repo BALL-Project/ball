@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueTorsions.h,v 1.19.4.1 2005/07/29 12:37:50 amoll Exp $
+// $Id: residueTorsions.h,v 1.19.4.2 2005/08/11 14:15:55 amoll Exp $
 //
 
 // Molecular Mechanics Parameter: class describing the ResidueTorsions section of a parameter file
@@ -67,6 +67,9 @@ namespace BALL
 					atom_name_D("")
 			{
 			}
+
+			bool operator == (const Data& data) const;
+			bool operator != (const Data& data) const;
 		};
 
 		//@}

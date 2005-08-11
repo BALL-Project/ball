@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: johnsonBoveyShiftProcessor.h,v 1.17.4.1 2005/07/29 12:37:53 amoll Exp $
+// $Id: johnsonBoveyShiftProcessor.h,v 1.17.4.2 2005/08/11 14:12:46 amoll Exp $
 //
 
 #ifndef BALL_COMMON_H
@@ -53,6 +53,9 @@ namespace BALL
 			double							intensity;
 			Size								electrons;
 			std::vector<String>	atom_names;
+
+			bool operator == (Ring ring);
+			bool operator != (Ring ring) { return !(*this == ring);}
 		} ;
   
 		//@}

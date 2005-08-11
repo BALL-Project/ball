@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: johnsonBoveyShiftProcessor.C,v 1.18 2004/11/18 19:34:14 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.C,v 1.18.4.1 2005/08/11 14:12:52 amoll Exp $
 //
 
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
@@ -25,6 +25,16 @@ namespace BALL
 	{
 		return (x*x);
 	}
+
+
+	bool JohnsonBoveyShiftProcessor::Ring::operator == (Ring ring)
+	{
+		return  radius == ring.radius &&
+						intensity == ring.intensity &&
+						electrons == ring.electrons &&
+						atom_names == ring.atom_names;
+	}
+
 		
 	double JohnsonBoveyShiftProcessor::carlsonEllipticalIntegral1_(double x,double y,double z)
 	{
