@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.17.6.2 2005/08/11 14:40:47 amoll Exp $
+// $Id: JCAMPFile.C,v 1.17.6.3 2005/08/11 14:41:35 amoll Exp $
 //
 
 
@@ -262,5 +262,18 @@ namespace BALL
 
 		return 0;
 	}
+
+	bool JCAMPFile::operator == (const JCAMPFile& f)  const throw()
+	{
+		return header_ == f.header_ &&
+					 entries_ == f.entries_;
+
+	}
+
+	bool JCAMPFile::operator != (const JCAMPFile& f)  const throw()
+	{
+		return ! (*this == f);
+	}
+			
 
 } // namespace BALL
