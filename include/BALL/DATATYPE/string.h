@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.h,v 1.55.2.2 2005/07/28 13:51:09 amoll Exp $
+// $Id: string.h,v 1.55.2.3 2005/08/11 15:29:14 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -628,10 +628,12 @@ namespace BALL
 			throw();
 
 		/// Concatenates a C type string and a string
+		BALL_EXPORT
 		friend String operator + (const char* char_ptr, const String& s)
 			throw();
 
 		/// Concatenates a character and a string
+		BALL_EXPORT
 		friend String operator + (char c, const String& s)
 			throw();
 
@@ -807,26 +809,32 @@ namespace BALL
 			throw();
 
 		///
+		BALL_EXPORT
 		friend bool operator == (const char* char_ptr, const String& string)
 			throw(Exception::NullPointer);
 
 		///
+		BALL_EXPORT
 		friend bool operator != (const char* char_ptr, const String& string)
 			throw(Exception::NullPointer);
 
 		///
+		BALL_EXPORT
 		friend bool operator < (const char* char_ptr, const String& string)
 			throw(Exception::NullPointer);
 
 		///
+		BALL_EXPORT
 		friend bool operator <= (const char* char_ptr, const String& string)
 			throw(Exception::NullPointer);
 		
 		///
+		BALL_EXPORT
 		friend bool operator > (const char* char_ptr, const String& string)
 			throw(Exception::NullPointer);
 
 		///
+		BALL_EXPORT
 		friend bool operator >= (const char* char_ptr, const String& string)
 			throw(Exception::NullPointer);
 
@@ -855,22 +863,27 @@ namespace BALL
 			throw(Exception::NullPointer);
 
 		///
+		BALL_EXPORT
 		friend bool operator == (char c, const String& string)
 			throw();
 
 		///
+		BALL_EXPORT
 		friend bool operator != (char c, const String& string)
 			throw();
 
 		///
+		BALL_EXPORT
 		friend bool operator < (char c, const String& string)
 			throw();
 
 		///
+		BALL_EXPORT
 		friend bool operator <= (char c, const String& string)
 			throw();
 		
 		///
+		BALL_EXPORT
 		friend bool operator > (char c, const String& string)
 			throw();
 
@@ -1217,10 +1230,12 @@ namespace BALL
 			throw(Substring::UnboundSubstring);
 
 		/// Returns true, if the contents of the substring and the string are equal
+		BALL_EXPORT
 		friend bool operator == (const String& string, const Substring& substring)
 			throw(Substring::UnboundSubstring);
 
 		/// Returns true, if the contents of the substring and the string are not equal
+		BALL_EXPORT
 		friend bool operator != (const String& string, const Substring& substring)
 			throw(Substring::UnboundSubstring);
 
@@ -1246,6 +1261,7 @@ namespace BALL
 		//@{
 
 		/// Writes the substring to a stream
+		BALL_EXPORT
 		friend std::ostream& operator << (std::ostream& s, const Substring& substring)
 			throw();
 

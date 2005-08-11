@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.12.6.5 2005/08/11 14:53:36 amoll Exp $
+// $Id: predicate.h,v 1.12.6.6 2005/08/11 15:29:12 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_PREDICATE_H
@@ -45,7 +45,7 @@ namespace BALL
 	/**	Generic Binary Predicate Class
 	*/
 	template <typename T1, typename T2> 
-	class BALL_EXPORT BinaryPredicate 
+	class BinaryPredicate 
 		: public binary_function<T1, T2, bool> 
 	{
 		public:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashMap.h,v 1.40.4.2 2005/07/28 13:51:06 amoll Exp $ 
+// $Id: hashMap.h,v 1.40.4.3 2005/08/11 15:29:13 amoll Exp $ 
 //
 
 #ifndef BALL_DATATYPE_HASHMAP_H
@@ -48,7 +48,7 @@ namespace BALL
     	\ingroup  GenericHash
 	*/
 	template <class Key, class T>
-	class BALL_EXPORT HashMap
+	class HashMap
 	{
 		public:
 
@@ -81,7 +81,7 @@ namespace BALL
 
 		typedef Node* IteratorPosition;
 
-		class BALL_EXPORT IteratorTraits_
+		class IteratorTraits_
 		{
 			friend class HashMap<Key, T>;
 			public:
@@ -304,7 +304,7 @@ namespace BALL
 			
 		/**	IllegalKey exception
 		*/
-		class BALL_EXPORT IllegalKey
+		class IllegalKey
 			:	public Exception::GeneralException
 		{
 			public:

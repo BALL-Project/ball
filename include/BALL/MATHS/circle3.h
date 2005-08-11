@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: circle3.h,v 1.42.4.2 2005/07/29 14:10:42 amoll Exp $
+// $Id: circle3.h,v 1.42.4.3 2005/08/11 15:29:14 amoll Exp $
 //
 
 #ifndef BALL_MATHS_CIRCLE3_H
@@ -44,7 +44,7 @@ namespace BALL
 	/**	Generic Circle in Three-Dimensional Space.
 	*/
 	template <typename T>
-	class BALL_EXPORT TCircle3
+	class TCircle3
 	{
 		public:
 

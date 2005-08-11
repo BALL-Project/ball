@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.47.4.2 2005/07/29 14:10:41 amoll Exp $
+// $Id: angle.h,v 1.47.4.3 2005/08/11 15:29:14 amoll Exp $
 //
 
 #ifndef BALL_MATHS_ANGLE_H
@@ -824,7 +824,7 @@ namespace BALL
 			Reads the value (in radians) of an angle from an instream using T::operator >>
 	*/
 	template <typename T>
-	BALL_EXPORT std::istream& operator >> (std::istream& s, TAngle<T>& angle)
+	std::istream& operator >> (std::istream& s, TAngle<T>& angle)
 		throw()
 	{
 		char c;
@@ -838,7 +838,7 @@ namespace BALL
 			for the template parameter <tt>T</tt>.
 	*/
 	template <typename T>
-	BALL_EXPORT std::ostream& operator << (std::ostream& s, const TAngle<T>& angle)
+	std::ostream& operator << (std::ostream& s, const TAngle<T>& angle)
 		throw()
 	{
 		s << '(' << angle.value << ')';

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rtti.h,v 1.26.4.1 2005/07/30 21:53:00 amoll Exp $
+// $Id: rtti.h,v 1.26.4.2 2005/08/11 15:29:12 amoll Exp $
 //
 
 #ifndef BALL_COMMON_RTTI_H
@@ -74,7 +74,7 @@ namespace BALL
 				It is mainly used inside the RTTI class.
 		*/
 		template <typename T>
-		BALL_EXPORT const T& getDefault() 
+		const T& getDefault() 
 		{
 			static T t;
 			return t;
@@ -86,7 +86,7 @@ namespace BALL
 				needs a function for the dynamic creation of objects.
 		*/
 		template <typename T>
-		BALL_EXPORT void* getNew()
+		void* getNew()
 		{
 			return static_cast<void*>(new T);
 		}
@@ -96,7 +96,7 @@ namespace BALL
 				No additional name demangling and whitespace substitution are performed.
 		*/
 		template <typename T>
-		BALL_EXPORT const char* getName()
+		const char* getName()
 		{
 			return typeid(getDefault<T>()).name();
 		}
@@ -104,7 +104,7 @@ namespace BALL
 		/**	Return a void pointer that is unique for each class.
 		*/
 		template <typename T>
-		BALL_EXPORT void* getClassID()
+		void* getClassID()
 		{
 			static char dummy;
 			return (void*)&dummy;
@@ -121,7 +121,7 @@ namespace BALL
 				\endcode
 		*/
 		template <typename T>
-		BALL_EXPORT const char* getStreamName()
+		const char* getStreamName()
 		{
 			// define portable names for the portable
 			// types (some platforms use Size, some unsigned int, 
@@ -191,7 +191,7 @@ namespace BALL
 				\endcode
 		*/
 		template <typename T, typename U>
-		BALL_EXPORT bool isKindOf(const U&  u)
+		bool isKindOf(const U&  u)
 		{
 			return (0 != dynamic_cast<const T*>(&u));
 		}
@@ -214,7 +214,7 @@ namespace BALL
 				\endcode
 		*/
 		template <typename T, typename U>
-		BALL_EXPORT T* castTo(const U& u)
+		T* castTo(const U& u)
 		{
 			return const_cast<T*>(dynamic_cast<const T*>(&u));
 		}
@@ -225,7 +225,7 @@ namespace BALL
 				a base class of <tt>T</tt>, it returns false.
 		*/
 		template <typename T, typename U>
-		BALL_EXPORT bool isInstanceOf(const U& u)
+		bool isInstanceOf(const U& u)
 		{
 			T		t;
 			return (typeid(u) == typeid(t));

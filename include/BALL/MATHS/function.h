@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: function.h,v 1.24.6.1 2005/07/29 12:37:38 amoll Exp $
+// $Id: function.h,v 1.24.6.2 2005/08/11 15:29:15 amoll Exp $
 //
 
 #ifndef BALL_MATHS_FUNCTION_H
@@ -19,7 +19,7 @@ namespace BALL
 	\ingroup FunctionClasses
 	*/
 	template <int constant_template>
-	class BALL_EXPORT ConstantFunction
+	class ConstantFunction
 	{
 		public:
 
@@ -52,7 +52,7 @@ namespace BALL
 			
 	*/
 	template <typename DataType = float>
-	class BALL_EXPORT MutableConstant
+	class MutableConstant
 	{
 		public:
 
@@ -155,7 +155,7 @@ namespace BALL
 			
 	*/
 	template <typename First, typename Second, typename DataType = float>
-	class BALL_EXPORT Addition
+	class Addition
 	{
 		public:
 
@@ -290,7 +290,7 @@ namespace BALL
 			
 	*/
 	template <typename First, typename Second, typename DataType = float>
-	class BALL_EXPORT Subtraction
+	class Subtraction
 	{
 		public:
 
@@ -409,7 +409,7 @@ namespace BALL
 			
 	*/
 	template <typename First, typename Second, typename DataType = float>
-	class BALL_EXPORT Product
+	class Product
 	{
 		public:
 
@@ -538,7 +538,7 @@ namespace BALL
 			
 	*/
 	template <typename First, typename Second, typename DataType = float>
-	class BALL_EXPORT Division
+	class Division
 	{
 		public:
 
@@ -665,7 +665,7 @@ namespace BALL
 			
 	*/
 	template <typename Function, typename DataType = float>
-	class BALL_EXPORT Reciprocal
+	class Reciprocal
 	{
 		public:
 
@@ -771,7 +771,7 @@ namespace BALL
 			
 	*/
 	template <typename Function, typename DataType = float>
-	class BALL_EXPORT SquareFunction
+	class SquareFunction
 	{
 		public:
 
@@ -871,7 +871,7 @@ namespace BALL
 			
 	*/
 	template <typename Function, typename DataType = float>
-	class BALL_EXPORT CubicFunction
+	class CubicFunction
 	{
 		public:
 
@@ -970,7 +970,7 @@ namespace BALL
 			
 	*/
 	template <typename Function, typename DataType = float>
-	class BALL_EXPORT MutablePower
+	class MutablePower
 	{
 		public:
 

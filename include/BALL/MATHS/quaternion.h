@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quaternion.h,v 1.43.4.1 2005/07/29 12:37:39 amoll Exp $
+// $Id: quaternion.h,v 1.43.4.2 2005/08/11 15:29:15 amoll Exp $
 //
 
 #ifndef BALL_MATHS_QUATERNION_H
@@ -30,7 +30,7 @@ namespace BALL
 			Representing a rotation in three dimensional space.
 	*/
 	template <typename T>
-	class BALL_EXPORT TQuaternion
+	class TQuaternion
 	{
 		public:
 
@@ -572,7 +572,7 @@ namespace BALL
 	 		\ingroup Quaternions
 	*/	
 	template <typename T>
-	BALL_EXPORT std::istream& operator >>(std::istream& s, TQuaternion<T>& q)
+	std::istream& operator >>(std::istream& s, TQuaternion<T>& q)
 		throw()
 	{
 		char c;
@@ -591,7 +591,7 @@ namespace BALL
 	 		\ingroup Quaternions
 	*/	
 	template <typename T>
-	BALL_EXPORT std::ostream& operator << (std::ostream& s, const TQuaternion<T>& q)
+	std::ostream& operator << (std::ostream& s, const TQuaternion<T>& q)
 		throw()
 	{
 		s << '(' << q.i << ' ' << q.j << ' '

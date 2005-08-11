@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.65.4.2 2005/07/30 21:53:07 amoll Exp $
+// $Id: file.h,v 1.65.4.3 2005/08/11 15:29:15 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -645,7 +645,7 @@ namespace BALL
 			\ingroup System		
 	*/
 	template <typename T>
-	class BALL_EXPORT BinaryFileAdaptor
+	class BinaryFileAdaptor
 	{
 
 		public:

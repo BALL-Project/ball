@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT1D.h,v 1.15.4.2 2005/07/29 12:37:35 amoll Exp $
+// $Id: FFT1D.h,v 1.15.4.3 2005/08/11 15:29:14 amoll Exp $
 //
 
 #ifndef BALL_MATHS_TFFT1D_H
@@ -35,7 +35,7 @@ namespace BALL
 			symmetrically.
 	 */
 	template <typename ComplexTraits>
-	class BALL_EXPORT TFFT1D 
+	class TFFT1D 
 		: public TRegularData1D<std::complex<typename ComplexTraits::ComplexPrecision> >
 	{
 		public:
