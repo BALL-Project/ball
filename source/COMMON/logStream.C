@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.C,v 1.39.4.1 2005/06/10 20:47:43 oliver Exp $
+// $Id: logStream.C,v 1.39.4.2 2005/08/11 15:29:35 amoll Exp $
 //
 
 #include <limits>
@@ -611,7 +611,7 @@ namespace BALL
 	}
 
 	// global default logstream
-	LogStream	Log(new LogStreamBuf, true, true);
+	BALL_EXPORT		LogStream	Log(new LogStreamBuf, true, true);
 
 #	ifdef	BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/COMMON/logStream.iC>
