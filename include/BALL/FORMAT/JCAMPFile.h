@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.h,v 1.19.6.2 2005/07/29 14:10:41 amoll Exp $
+// $Id: JCAMPFile.h,v 1.19.6.3 2005/08/11 14:40:40 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
@@ -58,6 +58,12 @@ namespace BALL
 			ContentType type;
 			
 			JCAMPValue() : string_value(""), numeric_value(), type(STRING) {}
+			
+			bool operator == (const JCAMPValue& value) const
+				throw();
+
+			bool operator != (const JCAMPValue& value) const
+				throw();
 		};
 
 		/// a key-value pair

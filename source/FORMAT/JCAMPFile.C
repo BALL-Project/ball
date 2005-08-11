@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.17.6.1 2005/07/12 15:05:49 anhi Exp $
+// $Id: JCAMPFile.C,v 1.17.6.2 2005/08/11 14:40:47 amoll Exp $
 //
 
 
@@ -10,6 +10,20 @@
 
 namespace BALL
 {
+
+	bool JCAMPFile::JCAMPValue::operator == (const JCAMPValue& value) const
+		throw()
+	{
+		return string_value  	== value.string_value &&
+					 numeric_value  == value.numeric_value && 
+					 type 				  == value.type;
+	}
+
+	bool JCAMPFile::JCAMPValue::operator != (const JCAMPValue& value) const
+		throw()
+	{
+		return !(*this == value);
+	}
 
 	JCAMPFile::JCAMPFile(const String& name, OpenMode open_mode) 
 		throw(Exception::FileNotFound)
