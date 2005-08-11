@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.21.4.2 2005/07/28 14:01:57 amoll Exp $
+// $Id: predicate.h,v 1.21.4.3 2005/08/11 23:26:19 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_PREDICATE_H
@@ -54,7 +54,7 @@ namespace BALL
 
 	/// Kernel predicate class
 	template <class T>
-	class BALL_EXPORT KernelPredicate
+	class KernelPredicate
 		: public UnaryPredicate<Composite>
 	{
 		public:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timeStamp.h,v 1.23.6.2 2005/07/28 13:50:53 amoll Exp $
+// $Id: timeStamp.h,v 1.23.6.3 2005/08/11 23:26:18 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
@@ -312,11 +312,13 @@ namespace BALL
 
 	/**	Print the contents of a PreciseTime object to a stream.
 	*/
+	BALL_EXPORT
 	std::ostream& operator << (std::ostream& os, const PreciseTime& time)
 		throw();
 
 	/**	Print the contents of a TimeStamp object to a stream.
 	*/
+	BALL_EXPORT
 	std::ostream& operator << (std::ostream& os, const TimeStamp& stamp)
 		throw();
 

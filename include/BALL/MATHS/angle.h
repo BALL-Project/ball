@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.47.4.3 2005/08/11 15:29:14 amoll Exp $
+// $Id: angle.h,v 1.47.4.4 2005/08/11 23:26:20 amoll Exp $
 //
 
 #ifndef BALL_MATHS_ANGLE_H
@@ -427,14 +427,14 @@ namespace BALL
 	template <typename T>
 	TAngle<T>::TAngle()
 		throw()
-		: value(0)
+		: value((T)0)
 	{
 	}
 
 	template <typename T>
 	TAngle<T>::TAngle(const TAngle& angle)
 		throw()
-		:	value(angle.value)
+		:	value((T)angle.value)
 	{
 	}
 

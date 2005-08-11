@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.12.6.6 2005/08/11 15:29:12 amoll Exp $
+// $Id: predicate.h,v 1.12.6.7 2005/08/11 23:26:18 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_PREDICATE_H
@@ -36,10 +36,7 @@ namespace BALL
 
 		///
 		virtual bool operator() (const T& /* x */) const
-			throw()
-		{
-			return true;
-		}
+			throw();
 	};
 
 	/**	Generic Binary Predicate Class
@@ -52,14 +49,25 @@ namespace BALL
 
 		///
 		virtual bool operator() (const T1& x, const T2& y) const
-			throw()
-		{
-			return true;
-		}
+			throw();
+
 		///
     virtual ~BinaryPredicate() {}
 	};
 
+	template <typename T> 
+	bool UnaryPredicate<T>::operator() (const T& /* x */) const
+		throw()
+	{
+		return true;
+	}
+
+	template <typename T1, typename T2> 
+	bool BinaryPredicate<T1, T2>::operator() (const T1&, const T2&) const
+		throw()
+	{
+		return true;
+	}
 	//@}
 } // namespace BALL
 

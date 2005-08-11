@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timer.h,v 1.16.2.1 2005/07/30 21:53:08 amoll Exp $
+// $Id: timer.h,v 1.16.2.2 2005/08/11 23:26:21 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_TIMER_H
@@ -27,7 +27,7 @@ namespace BALL
 	/**	Timer Class
 	\ingroup System
 	*/
-	BALL_EXPORT class Timer
+	class BALL_EXPORT Timer
 	{
 		public:
 		

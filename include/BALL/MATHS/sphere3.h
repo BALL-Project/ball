@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere3.h,v 1.39.4.1 2005/07/29 12:37:40 amoll Exp $
+// $Id: sphere3.h,v 1.39.4.2 2005/08/11 23:26:20 amoll Exp $
 //
 
 #ifndef BALL_MATHS_SPHERE3_H
@@ -284,7 +284,7 @@ namespace BALL
 			Reads in an instance of TVector3 and a <b>T</b> value : p, radius.
 	*/
 	template <typename T>
-	BALL_EXPORT std::istream& operator >> (std::istream& s, TSphere3<T>& sphere)
+	std::istream& operator >> (std::istream& s, TSphere3<T>& sphere)
 		throw()
 	{
 		char c;
@@ -299,7 +299,7 @@ namespace BALL
 			<tt>((0 1 1.5) 0.4)</tt>
 	*/
 	template <typename T>
-	BALL_EXPORT std::ostream& operator << (std::ostream& s, const TSphere3<T>& sphere)
+	std::ostream& operator << (std::ostream& s, const TSphere3<T>& sphere)
 		throw()
 	{
 		s << '(' << sphere.p << ' ' << sphere.radius << ')';
