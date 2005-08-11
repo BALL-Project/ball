@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: visitor.h,v 1.14.6.2 2005/07/28 13:50:53 amoll Exp $
+// $Id: visitor.h,v 1.14.6.3 2005/08/11 14:53:37 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_VISITOR_H
@@ -21,7 +21,7 @@ namespace BALL
 	*/
 	//@{
 	template <typename Host>
-	class BALL_EXPORT Visitor
+	class Visitor
 	{
 		public:
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.12.6.4 2005/07/28 13:50:51 amoll Exp $
+// $Id: predicate.h,v 1.12.6.5 2005/08/11 14:53:36 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_PREDICATE_H
@@ -27,7 +27,7 @@ namespace BALL
 	/**	Generic Unary Predicate Class
 	*/
 	template <typename T> 
-	class BALL_EXPORT UnaryPredicate 
+	class UnaryPredicate 
 		: public unary_function<T, bool> 
 	{
 		public:

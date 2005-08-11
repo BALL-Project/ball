@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: randomAccessIterator.h,v 1.30.6.2 2005/07/28 13:50:52 amoll Exp $ 
+// $Id: randomAccessIterator.h,v 1.30.6.3 2005/08/11 14:50:21 amoll Exp $ 
 //
 
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
@@ -23,7 +23,7 @@ namespace BALL
 	*/
 	//@{
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	class BALL_EXPORT ConstRandomAccessIterator
+	class ConstRandomAccessIterator
 		: public ConstBidirectionalIterator<Container, DataType, Position, Traits>
 	{
 		public:
@@ -427,7 +427,7 @@ namespace BALL
 	/**	Random Access Iterator Class
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	class BALL_EXPORT RandomAccessIterator
+	class RandomAccessIterator
 		: public ConstRandomAccessIterator<Container, DataType, Position, Traits>
 	{
 		public:
