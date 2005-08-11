@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.2.11 2005/07/11 16:29:59 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.12 2005/08/11 12:10:09 anhi Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -2635,7 +2635,7 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 			AC_MSG_CHECKING(linking against libfftw3l)
 			SAVE_LIBS=${LIBS}
 			SAVE_LDFLAGS=${LDFLAGS}
-			LIBS="${FFTW_LIB_D}/libfftwl3.a ${LIBS}"
+			LIBS="${FFTW_LIB_D}/libfftw3l.a ${LIBS}"
 			LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
 			FFTW_LINKING_OK=0
 			AC_TRY_LINK([
