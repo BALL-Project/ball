@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: johnsonBoveyShiftProcessor.C,v 1.18.4.1 2005/08/11 14:12:52 amoll Exp $
+// $Id: johnsonBoveyShiftProcessor.C,v 1.18.4.2 2005/08/11 15:30:01 amoll Exp $
 //
 
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
@@ -27,7 +27,7 @@ namespace BALL
 	}
 
 
-	bool JohnsonBoveyShiftProcessor::Ring::operator == (Ring ring)
+	bool JohnsonBoveyShiftProcessor::Ring::operator == (const Ring& ring) const
 	{
 		return  radius == ring.radius &&
 						intensity == ring.intensity &&
