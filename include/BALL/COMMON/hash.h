@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hash.h,v 1.22.4.2 2005/07/28 13:50:29 amoll Exp $
+// $Id: hash.h,v 1.22.4.3 2005/08/12 00:45:35 amoll Exp $
 //
 
 #ifndef BALL_COMMON_HASH_H
@@ -25,7 +25,7 @@ namespace BALL
 	\ingroup Common
 	*/
   template <typename T>
-  class BALL_EXPORT HashFunction
+  class HashFunction
   {
     public:
 		
@@ -64,7 +64,7 @@ namespace BALL
 			@return	HashIndex the hash index
 	*/
 	template <typename T>
-	BALL_EXPORT inline HashIndex Hash(const T& key) throw()
+	inline HashIndex Hash(const T& key) throw()
 	{
 		return static_cast<HashIndex>((PointerSizeUInt)key);
 	}
