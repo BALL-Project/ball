@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.h,v 1.27.4.1 2005/07/30 21:53:05 amoll Exp $
+// $Id: support.h,v 1.27.4.2 2005/08/12 14:19:56 amoll Exp $
 //
 
 
@@ -143,14 +143,14 @@ namespace BALL
 				@param use_selection if set to <b>true</b>, a torsion will be added only if all four atoms are selected
 		*/
     template <typename TorsionType, typename AtomIteratorType>
-    BALL_EXPORT Size computeTorsions
+    Size computeTorsions
 			(const AtomIteratorType& start, const AtomIteratorType& end,
 			 std::vector<TorsionType>& torsions, bool use_selection = false);
 
 
 		// 
 		template <typename TorsionType, typename AtomIteratorType>
-		BALL_EXPORT Size computeTorsions
+		Size computeTorsions
 			(const AtomIteratorType& start, const AtomIteratorType& end, 
 			 std::vector<TorsionType>& torsions, bool use_selection)
 		{
