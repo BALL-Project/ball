@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peak.h,v 1.18.6.1 2005/07/29 12:37:53 amoll Exp $
+// $Id: peak.h,v 1.18.6.2 2005/08/12 14:59:09 amoll Exp $
 //
 
 #ifndef BALL_NMR_PEAK_H
@@ -32,7 +32,7 @@ namespace BALL
 			\ingroup Spectra		
 	*/
 	template <typename PositionType>
-	class BALL_EXPORT Peak
+	class Peak
 		:	public PropertyManager
 	{
 		public:

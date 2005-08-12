@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peakList.h,v 1.17.6.1 2005/07/29 12:37:53 amoll Exp $
+// $Id: peakList.h,v 1.17.6.2 2005/08/12 14:58:26 amoll Exp $
 //
 
 #ifndef BALL_NMR_PEAKLIST_H
@@ -27,7 +27,7 @@ namespace BALL
 	\ingroup Spectra		
 	*/
 	template <typename PT>
-	class BALL_EXPORT PeakList
+	class PeakList
 		:	public List<PT>
 	{
 		public:
