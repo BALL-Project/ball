@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.h,v 1.13.6.1 2005/07/28 13:52:54 amoll Exp $
+// $Id: MOLFile.h,v 1.13.6.2 2005/08/12 12:49:44 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_MOLFILE_H
@@ -173,6 +173,9 @@ namespace BALL
 		virtual Molecule* read()
 			throw(Exception::ParseError);
 			
+		///
+		const MOLFile& operator = (const MOLFile& file) throw();
+
 		//@}
 
 		protected:
