@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.24 2005/07/16 21:00:31 oliver Exp $
+// $Id: TCPTransfer.h,v 1.25 2005/08/12 15:26:50 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
@@ -30,7 +30,7 @@ namespace BALL
 	 
 	 \ingroup System
 	 */
-	class TCPTransfer
+	class BALL_EXPORT TCPTransfer
 	{
 		public:
 
