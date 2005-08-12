@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: KCFFile.h,v 1.1.2.1 2005/07/28 13:52:54 amoll Exp $
+// $Id: KCFFile.h,v 1.1.2.2 2005/08/12 12:26:57 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_KCFFILE_H
@@ -89,6 +89,11 @@ namespace BALL
    			If unscuccesful, a NULL pointer is returned.
 		*/
 		virtual Molecule* read() throw(Exception::ParseError);
+
+		///
+		const KCFFile& operator = (const KCFFile& file)
+			throw();
+
 		//@}
 
 		protected:

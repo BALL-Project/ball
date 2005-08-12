@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.h,v 1.16 2003/08/26 08:04:14 oliver Exp $
+// $Id: XYZFile.h,v 1.16.6.1 2005/08/12 12:26:58 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_XYZFILE_H
@@ -90,6 +90,15 @@ namespace BALL
 			write(system);
 			return *this;
 		}
+
+		const XYZFile& operator = (const XYZFile& file)
+			throw()
+		{
+			File::operator = (file);
+
+			return *this;
+		}
+
 		
 		//@}
 	};

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.h,v 1.19.6.4 2005/08/11 14:41:43 amoll Exp $
+// $Id: JCAMPFile.h,v 1.19.6.5 2005/08/12 12:26:57 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
@@ -135,6 +135,9 @@ namespace BALL
 
 		/// 
 		bool hasHeader(const String& name) const throw() { return header_.has(name); }
+
+		/// 
+		const JCAMPFile& operator = (const JCAMPFile& file) throw();
 
 		//@}
 		/**	@name Equality operators

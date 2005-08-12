@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.17.6.3 2005/08/11 14:41:35 amoll Exp $
+// $Id: JCAMPFile.C,v 1.17.6.4 2005/08/12 12:26:50 amoll Exp $
 //
 
 
@@ -261,6 +261,16 @@ namespace BALL
 		}
 
 		return 0;
+	}
+
+	const JCAMPFile& JCAMPFile::operator = (const JCAMPFile& file)
+		throw()
+	{
+		header_  = file.header_;
+		entries_ = file.entries_;
+		LineBasedFile::operator = (file);
+
+		return *this;
 	}
 
 	bool JCAMPFile::operator == (const JCAMPFile& f)  const throw()

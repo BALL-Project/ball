@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.h,v 1.14.6.1 2005/07/28 13:52:56 amoll Exp $
+// $Id: SDFile.h,v 1.14.6.2 2005/08/12 12:26:58 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_SDFILE_H
@@ -98,6 +98,11 @@ namespace BALL
 		*/
 		void enableAtoms()
 			throw();
+
+		///
+		const SDFile& operator = (const SDFile& file)
+			throw();
+
 		//@}
 
 		protected:

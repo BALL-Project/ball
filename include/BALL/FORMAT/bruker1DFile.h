@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker1DFile.h,v 1.25.6.2 2005/07/29 14:10:41 amoll Exp $
+// $Id: bruker1DFile.h,v 1.25.6.3 2005/08/12 12:26:58 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
@@ -19,8 +19,6 @@ namespace BALL
 {
 	/**	Bruker 1D spectrum format.
 			A class for handling Bruker one-dimensional NMR spectra.
-			 \par
-			
     	\ingroup  NMRFileFormats
 	*/
 	class BALL_EXPORT Bruker1DFile 
@@ -36,7 +34,7 @@ namespace BALL
 		*/
     Bruker1DFile();
 
-		/**	Constructor.
+		/**	Constructor
 				@param name important: name of the Bruker-*directory*
 		*/
 		Bruker1DFile(const String& name, OpenMode open_mode = std::ios::in | std::ios::binary)
@@ -60,6 +58,7 @@ namespace BALL
 		*/
 		void read(const String& name);
 
+		///
 		void read();
 
 	  /** Return a pointer to the spectrum.
@@ -68,8 +67,12 @@ namespace BALL
 
 		///
 		const JCAMPFile::EntryMap& getParameters() const { return pars_.getEntries();}
+
 		///
 		const JCAMPFile::HeaderMap& getHeader() const { return pars_.getHeader();}
+
+		///
+		const Bruker1DFile& operator = (const Bruker1DFile& file) throw();
 
 		//@}
 
