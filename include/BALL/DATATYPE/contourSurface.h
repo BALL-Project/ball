@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.19.4.3 2005/08/12 00:32:45 amoll Exp $
+// $Id: contourSurface.h,v 1.19.4.4 2005/08/12 12:52:43 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
@@ -120,7 +120,7 @@ namespace BALL
 				store the values of the eight corners of a cube, and 
 				determine the topology and the triangles in the cube.
 		*/
-		class BALL_EXPORT Cube
+		class Cube
 		{	
 			public:
 
