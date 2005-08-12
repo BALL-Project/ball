@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: periodicBoundary.h,v 1.21.6.1 2005/07/30 21:53:03 amoll Exp $
+// $Id: periodicBoundary.h,v 1.21.6.2 2005/08/12 14:28:30 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -53,7 +53,7 @@ namespace BALL
 		//@{
 
 		///
-		struct Option 
+		struct BALL_EXPORT Option 
 		{
 			///	Vector containing the lower corner of the box
 			static const char* PERIODIC_BOX_LOWER;
@@ -87,7 +87,7 @@ namespace BALL
 			};
 		
 		/// Default values
-		struct Default 
+		struct BALL_EXPORT Default 
 		{
 			///	Default vector for the lower corner of the box
 			static const Vector3 PERIODIC_BOX_LOWER; 
@@ -266,8 +266,7 @@ namespace BALL
 		//_@}
 
 	};
+
 } // namespace BALL
-
-
 
 #endif // BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
