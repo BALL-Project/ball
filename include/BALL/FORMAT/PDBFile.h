@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.34.2.1 2005/07/28 13:52:55 amoll Exp $
+// $Id: PDBFile.h,v 1.34.2.2 2005/08/12 13:54:21 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_PDBFILE_H
@@ -65,7 +65,7 @@ namespace BALL
 				for each recognized key in PDBFile::options. \par
 				For each symbol the required type is given under parameters.
 		*/
-		struct Option 
+		struct BALL_EXPORT Option 
 		{
 			/**	The verbosity level.
 					Use integer values with this option.
@@ -116,7 +116,7 @@ namespace BALL
 
 		/** Default values for PDBFile options.  
 		*/
-		struct Default 
+		struct BALL_EXPORT Default 
 		{
 			/** Default verbosity level.
 					0 - shut up!
