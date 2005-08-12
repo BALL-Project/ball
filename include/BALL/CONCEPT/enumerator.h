@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: enumerator.h,v 1.33.6.2 2005/07/28 13:50:50 amoll Exp $
+// $Id: enumerator.h,v 1.33.6.3 2005/08/12 15:23:06 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
@@ -55,7 +55,7 @@ namespace BALL
 		/** Exception for reporting incompatible EnumeratorIndex instances, 
 				i.e. instances with different moduli.
 		*/	 
-		class IncompatibleIndex
+		class BALL_EXPORT IncompatibleIndex
 			: public Exception::GeneralException
 		{
 			public:
