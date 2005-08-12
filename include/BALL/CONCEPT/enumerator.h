@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: enumerator.h,v 1.33.6.3 2005/08/12 15:23:06 amoll Exp $
+// $Id: enumerator.h,v 1.33.6.4 2005/08/12 15:23:35 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
@@ -292,7 +292,7 @@ namespace BALL
 			
 	*/
 	template <class Container, class SiteIterator, class Variant>
-	class BALL_EXPORT Enumerator
+	class Enumerator
 	{	
 		protected:
 		class IteratorTraits_;
