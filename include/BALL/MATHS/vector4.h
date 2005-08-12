@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.h,v 1.53.4.2 2005/07/29 14:10:42 amoll Exp $
+// $Id: vector4.h,v 1.53.4.3 2005/08/12 00:32:55 amoll Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR4_H
@@ -55,7 +55,7 @@ namespace BALL
 			Representation of points and vectors in four-dimensional space.
 	*/
 	template <typename T>
-	class BALL_EXPORT TVector4
+	class TVector4
 	{
 		public:
 

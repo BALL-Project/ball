@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalIntegrator.h,v 1.18.4.1 2005/07/29 12:37:38 amoll Exp $
+// $Id: numericalIntegrator.h,v 1.18.4.2 2005/08/12 00:32:52 amoll Exp $
 //
 
 #ifndef BALL_MATHS_NUMERICALINTEGRATOR_H
@@ -17,7 +17,7 @@ namespace BALL
 		\ingroup FunctionClasses
 	*/
 	template <typename Function, typename DataType = float>
-	class BALL_EXPORT NumericalIntegrator
+	class NumericalIntegrator
 	{
 
 		public:

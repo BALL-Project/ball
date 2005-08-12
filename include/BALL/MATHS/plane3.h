@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: plane3.h,v 1.38.4.2 2005/07/29 14:10:42 amoll Exp $
+// $Id: plane3.h,v 1.38.4.3 2005/08/12 00:32:52 amoll Exp $
 //
 
 #ifndef BALL_MATHS_PLANE3_H
@@ -53,7 +53,7 @@ namespace BALL
 			A plane is defined by a point and its normal.
 	*/
 	template <typename T>
-	class BALL_EXPORT TPlane3
+	class TPlane3
 	{
 		public:
 

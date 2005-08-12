@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.47.4.4 2005/08/11 23:26:20 amoll Exp $
+// $Id: angle.h,v 1.47.4.5 2005/08/12 00:32:50 amoll Exp $
 //
 
 #ifndef BALL_MATHS_ANGLE_H
@@ -34,17 +34,17 @@ namespace BALL
 	class TAngle;
 
 	template <typename T>
-	BALL_EXPORT BALL_INLINE
+	BALL_INLINE
 	TAngle<T> operator * (const T& val, const TAngle<T>& angle)
 		throw();
 
 	template <typename T>
-	BALL_EXPORT BALL_INLINE
+	BALL_INLINE
 	TAngle<T> operator + (const T& val, const TAngle<T>& angle)
 		throw();
 
 	template <typename T>
-	BALL_EXPORT BALL_INLINE
+	BALL_INLINE
 	TAngle<T> operator - (const T& val, const TAngle<T>& angle)
 		throw();
 
@@ -55,7 +55,7 @@ namespace BALL
 			angles.
 	*/
 	template <typename T>
-	class BALL_EXPORT TAngle
+	class TAngle
 	{
 		public:
 

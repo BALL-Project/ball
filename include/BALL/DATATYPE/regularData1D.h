@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.45.6.2 2005/07/28 13:51:08 amoll Exp $
+// $Id: regularData1D.h,v 1.45.6.3 2005/08/12 00:32:46 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
@@ -31,7 +31,7 @@ namespace BALL
 			\ingroup  RegularData
 	*/
 	template <typename ValueType>
-	class BALL_EXPORT TRegularData1D
+	class TRegularData1D
 	{
 		public:
 			

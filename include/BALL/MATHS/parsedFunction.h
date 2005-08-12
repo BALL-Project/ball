@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parsedFunction.h,v 1.9.6.1 2005/07/29 12:37:39 amoll Exp $
+// $Id: parsedFunction.h,v 1.9.6.2 2005/08/12 00:32:52 amoll Exp $
 //
 
 #ifndef BALL_MATHS_PARSEDFUNCTION_H
@@ -31,7 +31,7 @@ namespace BALL
 			is parsed and evaluated.
 	*/
 	template <typename arg> 
-	class BALL_EXPORT ParsedFunction 
+	class ParsedFunction 
 		: public unary_function<arg, double> 
 	{
 		public:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.h,v 1.46.4.2 2005/07/28 13:51:05 amoll Exp $
+// $Id: bitVector.h,v 1.46.4.3 2005/08/12 00:32:44 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
@@ -515,13 +515,13 @@ namespace BALL
 		/**	Input operator.
 				Reads the values of type <b>  bool </b> from an istream.
 		*/
-		friend std::istream& operator >> (std::istream& s, BitVector& bit_vector)
+		BALL_EXPORT friend std::istream& operator >> (std::istream& s, BitVector& bit_vector)
 			throw(Exception::OutOfMemory);
 
 		/**	Output operator.
 				Writes the values of type <b>  bool </b> to an ostream.
 		*/
-		friend std::ostream& operator << (std::ostream& s, const BitVector& bit_vector)
+		BALL_EXPORT friend std::ostream& operator << (std::ostream& s, const BitVector& bit_vector)
 			throw();
 
 		/**	Read the values of of type <b>  bool </b> from an istream.

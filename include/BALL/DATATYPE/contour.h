@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contour.h,v 1.17.6.2 2005/07/28 13:51:05 amoll Exp $
+// $Id: contour.h,v 1.17.6.3 2005/08/12 00:32:45 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_CONTOUR_H
@@ -24,7 +24,7 @@ namespace BALL
     	\ingroup  DatatypeMiscellaneous
 	*/
 	template <typename T>
-	class BALL_EXPORT TContour
+	class TContour
 	{
 		public:
 

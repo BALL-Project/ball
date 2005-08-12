@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.19.4.2 2005/07/28 13:51:06 amoll Exp $
+// $Id: contourSurface.h,v 1.19.4.3 2005/08/12 00:32:45 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
@@ -44,7 +44,7 @@ namespace BALL
     	\ingroup  DatatypeMiscellaneous
   */
   template <typename T>  
-  class BALL_EXPORT TContourSurface 
+  class TContourSurface 
 		: public Surface
   {
     public:

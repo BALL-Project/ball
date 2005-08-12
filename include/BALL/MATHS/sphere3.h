@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere3.h,v 1.39.4.2 2005/08/11 23:26:20 amoll Exp $
+// $Id: sphere3.h,v 1.39.4.3 2005/08/12 00:32:53 amoll Exp $
 //
 
 #ifndef BALL_MATHS_SPHERE3_H
@@ -31,7 +31,7 @@ namespace BALL
 	/** Generic Sphere Class.
 	*/
 	template <typename T>
-	class BALL_EXPORT TSphere3
+	class TSphere3
 	{
 		public:
 

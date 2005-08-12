@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.h,v 1.51.4.1 2005/07/29 12:37:38 amoll Exp $
+// $Id: matrix44.h,v 1.51.4.2 2005/08/12 00:32:51 amoll Exp $
 //
 
 #ifndef BALL_MATHS_MATRIX44_H
@@ -48,7 +48,7 @@ namespace BALL
 			@param m the matrix to read 
 	*/
 	template <typename T>
-	BALL_EXPORT std::istream& operator >> (std::istream& s, TMatrix4x4<T>& m)
+	std::istream& operator >> (std::istream& s, TMatrix4x4<T>& m)
 		throw();
 
 	/**	Output Operator
@@ -57,14 +57,14 @@ namespace BALL
 			@param m  the matrix to write 
 	*/
 	template <typename T>
-	BALL_EXPORT std::ostream& operator << (std::ostream& s, const TMatrix4x4<T>& m)
+	std::ostream& operator << (std::ostream& s, const TMatrix4x4<T>& m)
 		throw();
 	//@}
 	
 	/**	Generic 4x4 Matrix Class.
  	*/
 	template <typename T>
-	class BALL_EXPORT TMatrix4x4
+	class TMatrix4x4
 	{
 		public:
 	

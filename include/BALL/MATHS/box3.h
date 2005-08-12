@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box3.h,v 1.45.4.1 2005/07/29 12:37:37 amoll Exp $
+// $Id: box3.h,v 1.45.4.2 2005/08/12 00:32:50 amoll Exp $
 //
 
 #ifndef BALL_MATHS_BOX3_H
@@ -29,7 +29,7 @@ namespace BALL
 			width, height, depth and the right vector.\\
 	*/
 	template <typename T>
-	class BALL_EXPORT TBox3
+	class TBox3
 	{
 		public:
 
@@ -463,7 +463,7 @@ namespace BALL
 			Reads in two objects of type TVector3 a and b 
 	*/
 	template <typename T>
-	BALL_EXPORT std::istream& operator >> (std::istream& s, TBox3<T>& box)
+	std::istream& operator >> (std::istream& s, TBox3<T>& box)
 		throw()
 	{
 		TVector3<T> point, right, height;
@@ -484,7 +484,7 @@ namespace BALL
 			@see TVector3::operator<<
 	*/
 	template <typename T>
-	BALL_EXPORT std::ostream& operator << (std::ostream& s, const TBox3<T>& box)
+	std::ostream& operator << (std::ostream& s, const TBox3<T>& box)
 		throw()
 	{
 		return s << box.getPoint() << " " 

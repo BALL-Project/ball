@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.h,v 1.22.4.1 2005/07/29 12:37:41 amoll Exp $
+// $Id: vector2.h,v 1.22.4.2 2005/08/12 00:32:54 amoll Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR2_H
@@ -63,7 +63,7 @@ namespace BALL
 	/** Generic Two-Dimensional Vector.
 	*/
 	template <typename T>
-	class BALL_EXPORT TVector2
+	class TVector2
 		: public PersistentObject
 	{
 		public:
