@@ -13,7 +13,7 @@
 		
 <H2 align="center"><a href="index.html">&lt;</a> <a href="index.html">Index</a> <a href="molecularControl.html">&gt;</a></H2>
 		
-<h2>3D Scene</h2>
+<h2>3D View </h2>
 
 The Scene widget provides the three-dimensional visualisation of the loaded molecules.<br>
 All activated Representations are shown here.
@@ -22,22 +22,23 @@ All activated Representations are shown here.
 <br>
 
 <br><br>
-The Scene has two distinct modes:
+The 3D View has several distinct modes:
 <ol>
   <li>Rotate Mode  (Hotkey CTRL-R)</li>
   <li>Picking Mode (Hotkey CTRL-P)</li>
+  <li>Move Mode </li>
 </ol>
-The user can switch between the two modes, either by selecting the according menu entries in the "Display" menu,
+The user can switch between the different modes, either by selecting the according menu entries in the "Display" menu,
 or use of the hotkeys.
 
 <H3>Rotate Mode</H3>
 In the Rotate Mode, the user can zoom, rotate or translate the view by pressing the mouse buttons and moving the mouse:
 <br><br>
-
+<center>
 <table border="1" cellpadding="5" width=500>
   <tbody>
     <tr>
-      <td width=50%>Button</td>
+      <td width=50%>Mouse Button</td>
       <td>Effect</td>
     </tr>
     <tr>
@@ -58,10 +59,10 @@ In the Rotate Mode, the user can zoom, rotate or translate the view by pressing 
     </tr>	
   </tbody>
 </table>
-
-<br><br>
-For users with less then three mouse buttons exist special combinations, so that BALLView also works well with only one mouse button:
-
+</center>
+<p><br>
+    Special key combinations are recognized to allow all the operations described above on systems with one- or two-button mice. Just hold the respective keys on the keyboard and press the (left) mouse button: </p>
+<center>
 <table border="1" cellpadding="5" width=500>
   <tbody>
     <tr>
@@ -86,22 +87,22 @@ For users with less then three mouse buttons exist special combinations, so that
     </tr>	
   </tbody>
 </table>
-
+</center>
 <br>
 <a name="identify_atoms"><H3>Picking Mode (Identifying parts of molecules)</H3>
 </a>
-<div align="justify">The Picking Mode is designed to identify parts of molecules or to select them for special tasks. 
-  Once you entered the picking mode the cursor will change to a cross. Now you are able to select a single items. 
-	Multiple items are selected using a selection rectangle(hold left-mouse-button while moving the mouse over the area you want to select).
+The Picking mode is designed to identify parts of molecules or to select them for special tasks. 
+  Once you entered the picking mode the cursor will change to a cross. Now you are able to select single items. 
+	Multiple items are selected using a selection rectangle (hold left-mouse-button while moving the mouse over the area you want to select).
   Any selected objects become instantly colored 
-  (normally yellow, see image above). In the <a href="molecularControl.html">MolecularControl</a>, 
+  (normally yellow, see image above). In the <a href="molecularControl.html">structure window</a>, 
   the checkboxes for the entries of these items become checked. The user can also deselect picked objects
   by using the right button (or for users with only one mouse button, by using the left mouse button and the Shift-modifier).
   
 <br>
   <br>
-</div>
-<table border="1" cellpadding="5" width=500>
+ <center> 
+  <table border="1" cellpadding="5" width=500>
   <tbody>
     <tr>
       <td widht=50%>Mouse button + key pressed</td>
@@ -117,12 +118,15 @@ For users with less then three mouse buttons exist special combinations, so that
     </tr>
   </tbody>
 </table>
-
+</center>
+<h3>Move Mode <a name="move_mode"></a></h3>
+<p>In the Move mode, selected atoms can be moved by using the mouse just the same way as the view is manipulated in the Rotate mode. It can also be used to position Clipping Planes (select Move in the context menu of the Clipping Plane in the Representations list). </p>
 <H3>Selection Color</H3>
-The color for selected objects can be changed in the <a href="displayProperties.html">DisplayProperties dialog</a>.<br><br>
+The color for selected objects can be changed in the <a href="displayProperties.html">model properties dialog.</a><br>
+<br>
 
 <a name=background_color><H3>Background Color</H3></a>
-<p>The background color can be changed in the Preferences under the point "3D View"->"Common".<br>
+<p>The background color can be changed in the preferences dialog under the point "3D View"->"Common".<br>
     <br>
     <img src="images/scene_preferences_common.png" width=630 height=372 border=0>
   </p>

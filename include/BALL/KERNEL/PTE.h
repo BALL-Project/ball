@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.h,v 1.29.4.2 2005/08/12 13:18:09 amoll Exp $
+// $Id: PTE.h,v 1.29.4.3 2005/08/12 13:23:09 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_PTE_H
@@ -548,6 +548,7 @@ namespace BALL
 			/**	Output operator
 					Prints <b>  this </b> instance of Element.
 			*/
+			BALL_EXPORT
 			friend std::ostream& operator << (std::ostream& s, const Element& element)
 				throw();
 
@@ -660,7 +661,6 @@ namespace BALL
 	/**	Element output operator.
 			Prints the contents of an instance of  \link Element Element \endlink  to an <tt>ostream</tt>.
 	*/
-	BALL_EXPORT
 	std::ostream& operator << (std::ostream& s, const Element& element)
 		throw();
 
