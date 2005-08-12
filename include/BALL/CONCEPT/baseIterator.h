@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseIterator.h,v 1.33.6.2 2005/07/28 13:50:49 amoll Exp $
+// $Id: baseIterator.h,v 1.33.6.3 2005/08/12 09:40:11 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
@@ -63,7 +63,7 @@ namespace BALL
 	 	 \ingroup  ConceptsIterators
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	class BALL_EXPORT BaseIterator
+	class BaseIterator
 	{
 		public:
 
