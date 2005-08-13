@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESVertex.h,v 1.21.6.1 2005/07/29 12:38:06 amoll Exp $
+// $Id: SESVertex.h,v 1.21.6.2 2005/08/13 15:58:22 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
@@ -28,7 +28,7 @@ namespace BALL
 	/** Generic SESVertex Class.
    \ingroup Surface   
 	*/
-	BALL_EXPORT class SESVertex : public GraphVertex< SESVertex,SESEdge,SESFace >
+	class BALL_EXPORT SESVertex : public GraphVertex< SESVertex,SESEdge,SESFace >
 	{
 		public:
 

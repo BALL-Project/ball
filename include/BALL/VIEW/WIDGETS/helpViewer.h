@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.1.2.4 2005/08/07 19:01:28 amoll Exp $
+// $Id: helpViewer.h,v 1.1.2.5 2005/08/13 15:58:29 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -18,7 +18,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		class MyTextBrowser
+		class BALL_EXPORT MyTextBrowser
 			: public QTextBrowser
 		{
 			Q_OBJECT
@@ -47,7 +47,7 @@ namespace BALL
 				You can change this behavior by using setDefaultDir() and setDefaultPage().
 				Links to pages on the www wont work!
 		*/
-		BALL_EXPORT class HelpViewer
+		class BALL_EXPORT HelpViewer
 			: public DockWidget
 		{
 			Q_OBJECT

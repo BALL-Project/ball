@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESEdge.h,v 1.24.6.1 2005/07/29 12:38:06 amoll Exp $
+// $Id: SESEdge.h,v 1.24.6.2 2005/08/13 15:58:21 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SESEDGE_H
@@ -32,7 +32,7 @@ namespace BALL
 	/** Generic SESEdge Class.
 	\ingroup Surface		
 	*/
-	BALL_EXPORT class SESEdge	:	public GraphEdge< SESVertex,SESEdge,SESFace >
+	class BALL_EXPORT SESEdge	:	public GraphEdge< SESVertex,SESEdge,SESFace >
 	{
 		public:
 

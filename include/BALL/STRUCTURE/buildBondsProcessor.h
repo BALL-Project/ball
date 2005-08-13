@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.h,v 1.8.2.1 2005/07/29 12:38:07 amoll Exp $
+// $Id: buildBondsProcessor.h,v 1.8.2.2 2005/08/13 15:58:23 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_BUILDBONDSPROCESSOR_H
@@ -49,7 +49,7 @@ namespace BALL
 			*/
 			//@{
 			/// Option names
-			struct Option
+			struct BALL_EXPORT Option
 			{
 				/** Name to the file where the bonds lengths, max and
 				 *  min bond lengths are stored in.
@@ -80,7 +80,7 @@ namespace BALL
 			};
 
 			/// Default values for options
-			struct Default
+			struct BALL_EXPORT Default
 			{
 				/// default file name for the bond lengths
 				static const char* BONDLENGTHS_FILENAME;

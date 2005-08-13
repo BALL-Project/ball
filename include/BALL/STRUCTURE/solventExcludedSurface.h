@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventExcludedSurface.h,v 1.38.6.1 2005/07/29 12:38:12 amoll Exp $
+// $Id: solventExcludedSurface.h,v 1.38.6.2 2005/08/13 15:58:25 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -309,7 +309,7 @@ namespace BALL
 
 	/**	Output- Operator
 	*/
-	std::ostream& operator <<
+	BALL_EXPORT std::ostream& operator <<
 			(std::ostream& s, const SolventExcludedSurface& ses);
 
 	//@}

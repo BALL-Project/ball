@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12RDFIntegrator.h,v 1.23.4.1 2005/07/29 12:38:02 amoll Exp $
+// $Id: pair6_12RDFIntegrator.h,v 1.23.4.2 2005/08/13 15:58:18 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
@@ -42,7 +42,7 @@ namespace BALL
 				This struct contains a symbolic name for each recognized key in
 				Pair6_12RDFIntegrator::options.
 		 */
-		struct Option
+		struct BALL_EXPORT Option
 		{
 			/** The integration method.
 					Use integer values with this option.
@@ -66,7 +66,7 @@ namespace BALL
 			static const char* VERBOSITY;
 		};
 
-		struct Default
+		struct BALL_EXPORT Default
 		{
 			/** Default verbosity level.
 					@see Option::VERBOSITY

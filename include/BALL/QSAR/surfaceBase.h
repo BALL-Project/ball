@@ -19,7 +19,7 @@ namespace BALL
 	/** Generic QSAR molecular surface descriptors class
 		\\
 	*/
-	class SurfaceBase
+	class BALL_EXPORT SurfaceBase
 		:	public Descriptor
 	{
 		public:

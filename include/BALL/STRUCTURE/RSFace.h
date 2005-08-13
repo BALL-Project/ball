@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSFace.h,v 1.32.6.1 2005/07/29 12:38:05 amoll Exp $
+// $Id: RSFace.h,v 1.32.6.2 2005/08/13 15:58:20 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_RSFACE_H
@@ -39,7 +39,7 @@ namespace BALL
 	/** Generic RSFace Class.	
 	\ingroup Surface		
 	*/
-	BALL_EXPORT class RSFace	:	public GraphTriangle< RSVertex,RSEdge,RSFace >
+	class BALL_EXPORT RSFace	:	public GraphTriangle< RSVertex,RSEdge,RSFace >
 	{
 		public:
 

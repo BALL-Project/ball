@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SASFace.h,v 1.8.6.1 2005/07/29 12:38:05 amoll Exp $
+// $Id: SASFace.h,v 1.8.6.2 2005/08/13 15:58:21 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SASFACE_H
@@ -29,7 +29,7 @@ namespace BALL
 	/** Generic SASFace Class.
 	\ingroup Surface			
 	*/
-	BALL_EXPORT class SASFace	:	public GraphFace< SASVertex,SASEdge,SASFace >
+	class BALL_EXPORT SASFace	:	public GraphFace< SASVertex,SASEdge,SASFace >
 	{
 		public:
 
@@ -187,8 +187,6 @@ namespace BALL
 	BALL_EXPORT std::ostream& operator << (std::ostream& s, const SASFace& sasface);
 
 	//@}
-
-
 
 } // namespace BALL
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SASEdge.h,v 1.8.6.1 2005/07/29 12:38:05 amoll Exp $
+// $Id: SASEdge.h,v 1.8.6.2 2005/08/13 15:58:20 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SASEDGE_H
@@ -32,7 +32,7 @@ namespace BALL
 	/** Generic SASEdge Class.
 	\ingroup Surface			
 	*/
-	BALL_EXPORT class SASEdge	:	public GraphEdge< SASVertex,SASEdge,SASFace >
+	class BALL_EXPORT SASEdge	:	public GraphEdge< SASVertex,SASEdge,SASFace >
 	{
 		public:
 
