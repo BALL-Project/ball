@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Directory_test.C,v 1.16.4.3 2005/06/20 12:54:42 oliver Exp $
+// $Id: Directory_test.C,v 1.16.4.4 2005/08/15 13:13:17 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 
 
 
-START_TEST(Directory, "$Id: Directory_test.C,v 1.16.4.3 2005/06/20 12:54:42 oliver Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.16.4.4 2005/08/15 13:13:17 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ START_TEST(Directory, "$Id: Directory_test.C,v 1.16.4.3 2005/06/20 12:54:42 oliv
 using namespace BALL;
 
 String PS = FileSystem::PATH_SEPARATOR;
-Directory* dd;
+Directory* dd = 0;
 String test_dir;
 char buffer[10000];
 CHECK([EXTRA]prerequisites)
