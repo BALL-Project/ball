@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box3.h,v 1.45.4.2 2005/08/12 00:32:50 amoll Exp $
+// $Id: box3.h,v 1.45.4.3 2005/08/15 21:53:46 amoll Exp $
 //
 
 #ifndef BALL_MATHS_BOX3_H
@@ -81,25 +81,11 @@ namespace BALL
 		void set(const TBox3& box)
 			throw();
 
-		/**	Assign from two points.
-				@param lower the lower corner of the box
-				@param upper the upper corner of the box
-		*/
-		void set(const TVector3<T>& lower, const TVector3<T>& upper)
-			throw();
-
 		/**	Assignment operator.
 				Assign the box components from another instance of TBox3.
 				@param box the TBox3 to assign from
 		**/
 		const TBox3& operator = (const TBox3& box)
-			throw();
-
-		/**	Assign to another instance of TBox3.
-				Assigns the box components to another box.
-				@param box	the box to be assigned to
-		*/
-		void get(TBox3& box) const
 			throw();
 
 		/**	Swap the contents of two instances.
