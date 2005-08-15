@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.20.2.3 2005/08/09 13:58:52 amoll Exp $
+// $Id: lightSettings.C,v 1.20.2.4 2005/08/15 22:02:26 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -100,7 +100,7 @@ void LightSettings::addLightPressed()
 	saveSettingsToLight_();
 
 	LightSource light;
-	light.setIntensity(0.8);
+	light.setIntensity((float) 0.8);
 	light.setType(LightSource::POSITIONAL);
 
 	// create a kind of headlight

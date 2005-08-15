@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnitHue.C,v 1.12.8.1 2005/07/26 19:59:35 amoll Exp $
+// $Id: colorUnitHue.C,v 1.12.8.2 2005/08/15 22:02:58 amoll Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/colorUnitHue.h>
@@ -67,7 +67,7 @@ namespace BALL
 		{
       if ((i < 0) || (i > 360))
       {
-        throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, i);
+        throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, (float) i);
 			}
 
 			value_ = (float)i / (float)360;
@@ -78,7 +78,7 @@ namespace BALL
 		{
       if (i > 360)
       {
-        throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, i);
+        throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, (float) i);
 			}
 
 			value_ = (float)i / (float)360;

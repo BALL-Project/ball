@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.24 2005/07/25 12:37:19 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.25 2005/08/15 22:02:27 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -886,7 +886,7 @@ namespace BALL
 			//
 			// if we can not calculate the available memory, use around 6 MB for the grid
 			if (memory == -1) memory = 10000000;
-			memory *= 0.6;
+			memory *= (float) 0.6;
 
 			Vector3 overhead(2.5 + distance);
 			diagonal += overhead * 2.0;

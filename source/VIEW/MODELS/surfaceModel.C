@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.12 2004/09/27 15:29:16 oliver Exp $
+// $Id: surfaceModel.C,v 1.12.6.1 2005/08/15 22:01:06 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/surfaceModel.h>
@@ -94,7 +94,7 @@ namespace BALL
 			ModelProcessor::createGeometricObjects();
 			Mesh* mesh = new Mesh;
 
-			if (mesh == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Mesh));
+			if (mesh == 0) return false;
 
 			SurfaceProcessor sp;
 			sp.setType(getType());
