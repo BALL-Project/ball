@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.21.2.1 2005/07/26 22:34:19 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.21.2.2 2005/08/17 14:49:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -49,7 +49,7 @@ namespace BALL
 		};
 
 
-		class QColorTable : public QTable
+		class BALL_EXPORT QColorTable : public QTable
 		{
 				Q_OBJECT
 
@@ -90,7 +90,7 @@ namespace BALL
 		 		It is inserted to the Preferences.
 				\ingroup ViewDialogs
 		*/
-		class ColoringSettingsDialog 
+		class BALL_EXPORT ColoringSettingsDialog 
 			: public ColoringSettingsDialogData,
 				public PreferencesEntry
 		{ 

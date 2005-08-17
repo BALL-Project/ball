@@ -97,7 +97,7 @@ namespace VIEW
 	 		The result can either be stored in a file or in a stringstream.
 			This is the default, if no filename is given.
 	*/
-	class FetchHTMLThread
+	class BALL_EXPORT FetchHTMLThread
 		: public BALLThread
 	{
 		public:
@@ -135,7 +135,7 @@ namespace VIEW
 	};
 	
 	///
-	class CalculateFDPBThread
+	class BALL_EXPORT CalculateFDPBThread
 		: public BALLThread
 	{
 		public:
@@ -157,7 +157,7 @@ namespace VIEW
 
 
 	///
-	class UpdateRepresentationThread
+	class BALL_EXPORT UpdateRepresentationThread
 		: public BALLThread
 	{
 		public:
