@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.30 2005/08/06 00:07:13 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.31 2005/08/17 15:25:03 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -691,7 +691,7 @@ namespace BALL
 			if (to_find == composite_to_item_.end())
 			{
 				setStatusbarText(String("Tried to remove an invalid Composite in ") 
-																 + __FILE__ + " " + __LINE__, true);
+																 + String(__FILE__) + " " + String(__LINE__), true);
 				return 0;
 			}
 
