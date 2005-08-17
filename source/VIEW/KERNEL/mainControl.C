@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.27 2005/08/08 14:53:19 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.28 2005/08/17 14:35:36 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1892,7 +1892,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			DisplayProperties::getInstance(0)->enableCreationForNewMolecules(false);
 		}
 
-		List<Composite*> selection;
+		vector<const Composite*> new_systems;
 		Position current_composite = 0;
 		while (file.good() && !file.eof() && current_composite < nr_composites)
 		{
@@ -1904,14 +1904,16 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				return;
 			}
 
-			insert(*dynamic_cast<System*>(po));
+			System* system = dynamic_cast<System*>(po);
+			insert(*system);
+			new_systems.push_back(system);
 			current_composite++;
 		}
 
 		file.close();
 		DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
 
-		getPrimitiveManager().restoreRepresentations(in);
+		getPrimitiveManager().restoreRepresentations(in, new_systems);
 
 		getSelection().clear();
 		NewSelectionMessage* msg = new NewSelectionMessage();

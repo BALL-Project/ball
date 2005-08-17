@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.20.2.5 2005/07/30 21:53:08 amoll Exp $
+// $Id: primitiveManager.h,v 1.20.2.6 2005/08/17 14:35:21 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -15,7 +15,9 @@
 # include <qwaitcondition.h>
 #endif
 
+#include <vector>
 
+using std::vector;
 
 namespace BALL
 {
@@ -233,7 +235,7 @@ namespace BALL
 			void storeRepresentations(INIFile& out);
 			
 			///
-			void restoreRepresentations(const INIFile& in);
+			void restoreRepresentations(const INIFile& in, const vector<const Composite*>& new_systems);
 
 			///
 			void focusRepresentation(const Representation& rep);

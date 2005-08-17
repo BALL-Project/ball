@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.29.2.7 2005/08/02 13:27:42 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.29.2.8 2005/08/17 14:38:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -89,7 +89,7 @@ namespace BALL
 		/** ColorProcessor for coloring by the numbers of the Residue 's.
 				\ingroup  ViewModels
 		*/
-		class ResidueNumberColorProcessor
+		class BALL_EXPORT ResidueNumberColorProcessor
 			: public ColorProcessor
 		{
 			public:
@@ -134,7 +134,7 @@ namespace BALL
 		};
 
 		///
-		class PositionColorProcessor
+		class BALL_EXPORT PositionColorProcessor
 			: public ColorProcessor
 		{
 			public:
@@ -171,7 +171,7 @@ namespace BALL
 
 
 		///
-		class ChainColorProcessor
+		class BALL_EXPORT ChainColorProcessor
 			: public PositionColorProcessor
 		{
 			public:
@@ -193,7 +193,7 @@ namespace BALL
 
 
 		///
-		class MoleculeColorProcessor
+		class BALL_EXPORT MoleculeColorProcessor
 			: public PositionColorProcessor
 		{
 			public:
@@ -221,7 +221,7 @@ namespace BALL
 				corresponding to the names of the residues.
 				\ingroup  ViewModels
 		*/
-		class ResidueNameColorProcessor
+		class BALL_EXPORT ResidueNameColorProcessor
 			: public ColorProcessor
 		{
 			public:
@@ -274,7 +274,7 @@ namespace BALL
 				is greater than +1 or lower than -1 it will be set to +1 or -1.
 				\ingroup  ViewModels
 		*/
-		class AtomChargeColorProcessor
+		class BALL_EXPORT AtomChargeColorProcessor
 			: public InterpolateColorProcessor
 		{
 			public:
@@ -321,7 +321,7 @@ namespace BALL
 				color will be interpolated according to the distance.
 				\ingroup  ViewModels
 		*/
-		class AtomDistanceColorProcessor
+		class BALL_EXPORT AtomDistanceColorProcessor
 			:  public ColorProcessor
 		{
 			public:
@@ -468,7 +468,7 @@ namespace BALL
 		/** CustomColorProcessor colorizes every GeometricObject with the default color.
 				\ingroup  ViewModels
 		*/
-		class CustomColorProcessor
+		class BALL_EXPORT CustomColorProcessor
 			: public ColorProcessor
 		{
 			public:
@@ -489,7 +489,7 @@ namespace BALL
 		/** Coloring by the temperature factor of atoms from a PDBFile
 				\ingroup  ViewModels
 		*/
-		class TemperatureFactorColorProcessor
+		class BALL_EXPORT TemperatureFactorColorProcessor
 			: public InterpolateColorProcessor
 		{
 			public:
@@ -507,7 +507,7 @@ namespace BALL
 		/** Coloring by the occupancy of atoms from a PDBFile
 				\ingroup  ViewModels
 		*/
-		class OccupancyColorProcessor
+		class BALL_EXPORT OccupancyColorProcessor
 			: public InterpolateColorProcessor
 		{
 			public:
@@ -524,7 +524,7 @@ namespace BALL
 		/** Coloring by the forces, acting on atoms.
 				\ingroup  ViewModels
 		*/
-		class ForceColorProcessor
+		class BALL_EXPORT ForceColorProcessor
 			: public InterpolateColorProcessor
 		{
 			public:
@@ -542,7 +542,7 @@ namespace BALL
 		/** Coloring by the secondary structure, a Composite is in
 				\ingroup  ViewModels
 		*/
-		class SecondaryStructureColorProcessor
+		class BALL_EXPORT SecondaryStructureColorProcessor
 			: public ColorProcessor
 		{
 			public:
@@ -606,7 +606,7 @@ namespace BALL
 		/** Coloring by the type of a Residue
 				\ingroup  ViewModels
 		*/
-		class ResidueTypeColorProcessor
+		class BALL_EXPORT ResidueTypeColorProcessor
 			: public ColorProcessor
 		{
 			public:

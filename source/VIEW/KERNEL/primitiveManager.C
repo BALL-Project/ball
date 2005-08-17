@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.13 2005/08/01 11:10:27 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.14 2005/08/17 14:35:36 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -574,7 +574,7 @@ void PrimitiveManager::storeRepresentations(INIFile& out)
 	}
 }
 			
-void PrimitiveManager::restoreRepresentations(const INIFile& in)
+void PrimitiveManager::restoreRepresentations(const INIFile& in, const vector<const Composite*>& new_systems)
 {
 	try
 	{
@@ -617,19 +617,13 @@ void PrimitiveManager::restoreRepresentations(const INIFile& in)
 				hash_set.insert(string_vector2[p].toUnsignedInt());
 			}
 
-			CompositeManager& cm = getMainControl()->getCompositeManager();
-			Position pos = cm.getNumberOfComposites() - 1;
-			CompositeManager::CompositeIterator cit2 = cm.begin();
-			for (; cit2 != cm.end() && system_pos != pos; cit2++)
+			if (system_pos >= new_systems.size())
 			{
-				pos--;
-			}
-
-			if (cit2 == cm.end())  
-			{
-				Log.error() << "Error while reading project file! Aborting..." << std::endl;
+				Log.error() << "Error while reading project file, invalid structure for Representation! Aborting..." << std::endl;
 				continue;
 			}
+
+			const Composite* composite = new_systems[system_pos];
 
 			data_string = string_vector[1];
 			if (data_string.has('|'))
@@ -646,7 +640,7 @@ void PrimitiveManager::restoreRepresentations(const INIFile& in)
 			ControlSelectionMessage* msg = new ControlSelectionMessage();
 			Position current = 0;
 
-			Composite::CompositeIterator ccit = (*cit2)->beginComposite();
+			Composite::CompositeIterator ccit = ((Composite*)composite)->beginComposite();
 			for (; +ccit; ++ccit)
 			{
 				if (hash_set.has(current)) msg->getSelection().push_back((Composite*)&*ccit);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.28.4.7 2005/07/26 22:00:08 amoll Exp $
+// $Id: colorProcessor.h,v 1.28.4.8 2005/08/17 14:39:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -251,7 +251,7 @@ class BALL_EXPORT ColorProcessor
 /** Base class for ColorProcessors, that interpolate between two values
 		\ingroup  ViewModels
 */
-class InterpolateColorProcessor
+class BALL_EXPORT InterpolateColorProcessor
 	: public ColorProcessor
 {
 	public: 
