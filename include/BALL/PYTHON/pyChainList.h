@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyChainList.h,v 1.11.4.1 2005/07/29 12:37:56 amoll Exp $
+// $Id: pyChainList.h,v 1.11.4.2 2005/08/19 11:25:55 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYCHAINLIST_H
@@ -23,7 +23,7 @@ namespace BALL
 	/** Equivalent for a STL::List of Chain Pointers in Python
 			\ingroup PythonExtensions
 	*/
-	class BALL_EXPORT PyChainList
+	class PyChainList
 		:	public List<Chain*>
 	{
 		public:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyNucleicAcidList.h,v 1.11.4.1 2005/07/29 12:37:58 amoll Exp $
+// $Id: pyNucleicAcidList.h,v 1.11.4.2 2005/08/19 11:25:56 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYNUCLEICACIDLIST_H
@@ -24,7 +24,7 @@ namespace BALL
 	/** Equivalent for a STL::List of NucleicAcid Pointers in Python
 			\ingroup PythonExtensions
 	*/
-	class BALL_EXPORT PyNucleicAcidList
+	class PyNucleicAcidList
 		:	public List<NucleicAcid*>
 	{
 		public:

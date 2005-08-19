@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.C,v 1.37.4.2 2005/08/08 11:54:06 amoll Exp $
+// $Id: exception.C,v 1.37.4.3 2005/08/19 11:25:24 amoll Exp $
 //
 
 #include <BALL/COMMON/exception.h>
@@ -431,7 +431,7 @@ namespace BALL
 
 
 			// create a global instance of the exception handler
-			GlobalExceptionHandler globalHandler;
+			BALL_EXPORT GlobalExceptionHandler globalHandler;
 
 	} // namespace Exception
 

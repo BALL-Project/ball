@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyPDBAtomList.h,v 1.13.4.1 2005/07/29 12:37:58 amoll Exp $
+// $Id: pyPDBAtomList.h,v 1.13.4.2 2005/08/19 11:25:57 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYPDBATOMLIST_H
@@ -27,7 +27,7 @@ namespace BALL
 	/** Equivalent for a STL::List of PDBAtom Pointers in Python
 			\ingroup PythonExtensions
 	*/
-	class BALL_EXPORT PyPDBAtomList
+	class PyPDBAtomList
 		:	public List<PDBAtom*>
 	{
 		public:

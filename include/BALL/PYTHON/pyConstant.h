@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyConstant.h,v 1.11.4.1 2005/07/29 12:37:56 amoll Exp $
+// $Id: pyConstant.h,v 1.11.4.2 2005/08/19 11:25:55 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYCONSTANT_H
@@ -23,93 +23,93 @@ namespace BALL
 		public:
 		
 			// PI
-			BALL_EXPORT static double  PI;
+			static double  PI;
 
 			/// Euler's number - base of the natural logarithm
-			BALL_EXPORT static double  E;
+			static double  E;
 
 			/**	Internal theshold for equality comparisons.
 					Default value is 1e-6.
 			*/
-			BALL_EXPORT static double EPSILON;
+			static double EPSILON;
 			/**	Elementary charge.
 					In units of C (\f$1.60217738 \cdot 10^{-19} C\f$).
 			*/
-			BALL_EXPORT static double	ELEMENTARY_CHARGE;  	 // C     
+			static double	ELEMENTARY_CHARGE;  	 // C     
 		
 			/// Elementary charge (alias)
-			BALL_EXPORT static double	e0;
+			static double	e0;
 
 			/** Electron mass.
 					In units of kg (\f$9.1093897 \cdot 10^{-31}\f$ kg).
 			*/
-			BALL_EXPORT static double	ELECTRON_MASS   	;   	 // kg
+			static double	ELECTRON_MASS   	;   	 // kg
 
 			/** Proton mass.
 					In units of kg (\f$1.6726230 \cdot 10^{-27}\f$ kg).
 			*/
-			BALL_EXPORT static double	PROTON_MASS     	;   	 // kg
+			static double	PROTON_MASS     	;   	 // kg
 
 			/** Neutron mass.
 					In units of kg (\f$1.6749286 \cdot 10^{-27}\f$ kg).
 			*/
-			BALL_EXPORT static double	NEUTRON_MASS    	;   	 // kg
+			static double	NEUTRON_MASS    	;   	 // kg
 
 			/** Avogadro constant.
 					In units of \f$mol^{-1}\f$ (\f$6.0221367 \cdot 10^{23} mol^{-1}\f$).
 			*/
-			BALL_EXPORT static double	AVOGADRO;
+			static double	AVOGADRO;
 
 			/** Avogadro constant (alias)
 			*/
-			BALL_EXPORT static double	NA;
+			static double	NA;
 
 			/** Avogadro constant (alias)
 			*/
-			BALL_EXPORT static double	MOL;
+			static double	MOL;
 
 			/** Boltzmann constant.
 					In units of J/K (\f$1.380657 \cdot 10^{-23}\f$ J/K).
 			*/
-			BALL_EXPORT static double	BOLTZMANN;
+			static double	BOLTZMANN;
 
 			/** Boltzmann constant (alias)
 			*/
-			BALL_EXPORT static double	k;
+			static double	k;
 			
 			/** Planck constant.
 					In units of Js (\f$6.6260754 \cdot 10^{-34}\f$ Js).
 			*/
-			BALL_EXPORT static double	PLANCK;
+			static double	PLANCK;
 
 			/** Planck constant (alias)
 			*/
-			BALL_EXPORT static double	h;
+			static double	h;
 
 			/** Gas constant (= NA * k)	
 			*/
-			BALL_EXPORT static double	GAS_CONSTANT;
+			static double	GAS_CONSTANT;
 
 			/** Gas constant (alias)
 			*/
-			BALL_EXPORT static double R;
+			static double R;
 
 			/** Faraday constant (= NA * e0)
 			*/
-			BALL_EXPORT static double	FARADAY;
+			static double	FARADAY;
 
 			/** Faraday constant (alias)
 			*/
-			BALL_EXPORT static double	F;
+			static double	F;
 
 			/** Bohr radius.
 					In units m (\f$5.29177249 \cdot 10^{-11}\f$ m).
 			*/
-			BALL_EXPORT static double	BOHR_RADIUS;
+			static double	BOHR_RADIUS;
 
 			/** Bohr radius (alias)
 			*/
-			BALL_EXPORT static double	a0;
+			static double	a0;
 
 			//  the following values from: 
 			//  P.W.Atkins: Physical Chemistry, 5th ed., Oxford University Press, 1995
@@ -117,61 +117,61 @@ namespace BALL
 			/** Vacuum permittivity.
 					In units of $C^2J^{-1}m^{-1}$ ($8.85419 \cdot 10^{-12} C^2J^{-1}m^{-1}$).
 			*/
-			BALL_EXPORT static double	VACUUM_PERMITTIVITY;
+			static double	VACUUM_PERMITTIVITY;
 
 			/** Vacuum permeability.
 					In units of \f$Js^2C^{-2}m^{-1}\f$ (\f$4\pi \cdot 10^{-7} Js^2C^{-2}m^{-1}\f$).
 			*/
-			BALL_EXPORT static double	VACUUM_PERMEABILITY;
+			static double	VACUUM_PERMEABILITY;
 
 			/** Speed of light.
 					In units of m/s (\f$2.99792458 \cdot 10^8 ms^{-1}\f$).
 			*/
-			BALL_EXPORT static double	SPEED_OF_LIGHT;
+			static double	SPEED_OF_LIGHT;
 
 			/** Speed of Light (alias)
 			*/
-			BALL_EXPORT static double	c;
+			static double	c;
 
 			/** Gravitational constant.
 					In units of \f$Nm^2kg^{-2}\f$ (\f$6.67259 \cdot 10^{-11} Nm^2kg^{-2}\f$).
 			*/
-			BALL_EXPORT static double	GRAVITATIONAL_CONSTANT;
+			static double	GRAVITATIONAL_CONSTANT;
 
 			/** Fine structure constant.
 					Without unit (\f$7.29735 \cdot 10^{-3}\f$).
 			*/
-			BALL_EXPORT static double	FINE_STRUCTURE_CONSTANT;
+			static double	FINE_STRUCTURE_CONSTANT;
 				
 			/** Degree per rad.
 					57.2957795130823209
 			*/
-			BALL_EXPORT static double	DEG_PER_RAD;
+			static double	DEG_PER_RAD;
 
 			/** Rad per degree.
 					0.0174532925199432957
 			*/
-			BALL_EXPORT static double	RAD_PER_DEG;
+			static double	RAD_PER_DEG;
 
 			/** mm per inch.
 					25.4
 			*/
-			BALL_EXPORT static double	MM_PER_INCH 			;
+			static double	MM_PER_INCH 			;
 
 			/** m per foot.
 					3.048
 			*/
-			BALL_EXPORT static double	M_PER_FOOT  			;
+			static double	M_PER_FOOT  			;
 
 			/** Joules per calorie.
 					4.184
 			*/
-			BALL_EXPORT static double	JOULE_PER_CAL;
+			static double	JOULE_PER_CAL;
 
 			/** Calories per Joule.
 					1/JOULE_PER_CAL
 			*/
-			BALL_EXPORT static double	CAL_PER_JOULE;
+			static double	CAL_PER_JOULE;
 	};
    
 } // namespace BALL

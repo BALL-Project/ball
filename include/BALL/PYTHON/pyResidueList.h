@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyResidueList.h,v 1.12.4.1 2005/07/29 12:37:59 amoll Exp $
+// $Id: pyResidueList.h,v 1.12.4.2 2005/08/19 11:25:57 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYRESIDUELIST_H
@@ -23,7 +23,7 @@ namespace BALL
 	/** Equivalent for a STL::List of Residue Pointers in Python
 			\ingroup PythonExtensions
 	*/
-	class BALL_EXPORT PyResidueList
+	class PyResidueList
 		:	public List<Residue*>
 	{
 		public:

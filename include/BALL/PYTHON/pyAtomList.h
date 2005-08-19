@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyAtomList.h,v 1.13.4.1 2005/07/29 12:37:55 amoll Exp $
+// $Id: pyAtomList.h,v 1.13.4.2 2005/08/19 11:25:54 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYATOMLIST_H
@@ -27,7 +27,7 @@ namespace BALL
 	/** Equivalent for a STL::List of Atom Pointers in Python
 			\ingroup PythonExtensions		
 	*/
-	class BALL_EXPORT PyAtomList
+	class PyAtomList
 		:	public List<Atom*>
 	{
 		public:

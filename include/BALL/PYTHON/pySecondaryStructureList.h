@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pySecondaryStructureList.h,v 1.11.4.1 2005/07/29 12:37:59 amoll Exp $
+// $Id: pySecondaryStructureList.h,v 1.11.4.2 2005/08/19 11:25:57 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYSECONDARYSTRUCTURELIST_H
@@ -24,7 +24,7 @@ namespace BALL
 	/** Equivalent for a STL::List of SecondaryStructure Pointers in Python
 			\ingroup PythonExtensions
 	*/
-	class BALL_EXPORT PySecondaryStructureList
+	class PySecondaryStructureList
 		:	public List<SecondaryStructure*>
 	{
 		public:

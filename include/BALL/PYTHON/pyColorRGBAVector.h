@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyColorRGBAVector.h,v 1.1.2.2 2005/07/29 12:37:56 amoll Exp $
+// $Id: pyColorRGBAVector.h,v 1.1.2.3 2005/08/19 11:25:55 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYCOLORRGBAVECTOR_H
@@ -24,7 +24,7 @@ namespace BALL
 	/** Equivalent for a STL::vector of ColorRGBA in Python
 			\ingroup PythonExtensions
 	*/
-	class BALL_EXPORT PyColorRGBAVector
+	class PyColorRGBAVector
 		:	public vector<ColorRGBA>
 	{
 		public:
