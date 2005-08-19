@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.h,v 1.12.4.2 2005/07/29 12:37:57 amoll Exp $ 
+// $Id: pyInterpreter.h,v 1.12.4.3 2005/08/19 14:07:12 amoll Exp $ 
 //
 
 #ifndef BALL_PYTHON_PYINTERPRETER_H
@@ -29,7 +29,7 @@ namespace BALL
 	{
 		private:
 		// We don't want anybody to instantiate this!
-		PyInterpreter() {}
+		PyInterpreter();
 		~PyInterpreter() {}
 		
 		public:
@@ -68,6 +68,9 @@ namespace BALL
 
 		/// Get the current paths added to sys.path
 		static const PathStrings& getSysPath();
+
+		///
+		static bool isValid() { return valid_;}
 		
 		//@}
 
@@ -97,6 +100,7 @@ namespace BALL
 		//@}
 		protected:
 		static PathStrings sys_path_;
+		static bool   valid_;
 	};
    
 } // namespace BALL
