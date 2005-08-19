@@ -13,6 +13,9 @@ def getDisplayProperties():
 def getComposites():
 	return getMainControl().getCompositeManager().getComposites()
 
+def getSystem(nr):
+	return getComposites()[nr]
+
 def getRepresentations():
 	return getMainControl().getPrimitiveManager().getRepresentations()
 
