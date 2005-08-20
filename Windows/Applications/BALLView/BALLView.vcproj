@@ -81,11 +81,11 @@
 				OptimizeForProcessor="0"
 				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;;&quot;$(QTDIR)\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG;BALL_QT_HAS_THREADS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG;BALL_QT_HAS_THREADS;BALL_PYTHON_SUPPORT"
 				MinimalRebuild="FALSE"
-				BasicRuntimeChecks="0"
+				BasicRuntimeChecks="3"
 				RuntimeLibrary="2"
-				BufferSecurityCheck="FALSE"
+				BufferSecurityCheck="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="0"
@@ -95,12 +95,16 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt334.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libview.lib libball.lib"
+				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt334.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib &quot;libBALL with VIEW.lib&quot;"
 				OutputFile="$(OutDir)/BALLView.exe"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;&quot;$(ProjectDir)..\..\Libs\libView\$(OutDir)&quot;;&quot;$(ProjectDir)..\..\..\lib\&quot;"
-				GenerateDebugInformation="FALSE"
+				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;&quot;$(ProjectDir)..\..\Libs\libBALL\$(OutDir)&quot;;&quot;$(ProjectDir)..\..\..\lib\&quot;;D:\BALL\Windows\Libs\libVIEW\Release"
+				GenerateDebugInformation="TRUE"
+				AssemblyDebug="2"
+				GenerateMapFile="TRUE"
+				MapExports="TRUE"
+				MapLines="TRUE"
 				TerminalServerAware="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -421,7 +425,8 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;"
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;
+"
 						Outputs="$(InputDir)\$(InputName)_moc.C"/>
 				</FileConfiguration>
 			</File>
@@ -431,7 +436,8 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;"
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;
+"
 						Outputs="$(InputDir)\$(InputName)_moc.C"/>
 				</FileConfiguration>
 			</File>
@@ -441,7 +447,8 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;"
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;
+"
 						Outputs="$(InputDir)\$(InputName)_moc.C"/>
 				</FileConfiguration>
 			</File>
@@ -451,7 +458,8 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;"
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;
+"
 						Outputs="$(InputDir)\$(InputName)_moc.C"/>
 				</FileConfiguration>
 			</File>
