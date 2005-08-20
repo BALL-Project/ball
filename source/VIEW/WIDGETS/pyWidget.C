@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.6 2005/08/06 00:30:33 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.7 2005/08/20 12:15:09 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -148,6 +148,13 @@ namespace BALL
 			stop_script_ = false;
 			// initialize the interpreter
 			PyInterpreter::initialize();
+
+			if (!PyInterpreter::isValid())
+			{
+				setText("No Python Support available!");
+				setEnabled(false);
+				return;
+			}
 
 			// print the PyBALL version and clear
 			// the widget's contents in case of a restart
