@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileDetails.C,v 1.11.2.1 2005/08/08 11:52:51 amoll Exp $
+// $Id: PDBFileDetails.C,v 1.11.2.2 2005/08/21 18:30:52 amoll Exp $
 //
 
 // This file contains the more or less implementation specific portion of PDBFile.
@@ -373,7 +373,7 @@ namespace BALL
 				catch (Exception::InvalidFormat)
 				{
 				}
-				current_PDB_atom_->setCharge(current_PDB_atom_->getFormalCharge());
+				current_PDB_atom_->setCharge((float)current_PDB_atom_->getFormalCharge());
 			}
 		}
 		
