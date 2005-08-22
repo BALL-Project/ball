@@ -66,7 +66,7 @@ namespace BALL
 				ignore_event_(false)
 		{
 			Path path;
-			base_dir_ = path.getDataPath() + 
+			String dir = path.getDataPath() + 
 									FileSystem::PATH_SEPARATOR + 
 									".." + 
 									FileSystem::PATH_SEPARATOR + 
@@ -75,15 +75,14 @@ namespace BALL
 									"BALLView" +
 									FileSystem::PATH_SEPARATOR;
 
+			setBaseDirectory(dir);
+
 			hide();
 			setGuest(*browser_);
 			undock();
 			resize(800, 700);
 			move(20,20);
 			setMinimumSize(800, 600);
-
-  		browser_->mimeSourceFactory()->setFilePath(base_dir_.c_str());
-			browser_->setSource((base_dir_ + default_page_).c_str());
 
 			registerWidget(this);
 		}
@@ -186,7 +185,23 @@ namespace BALL
 
 		void HelpViewer::setBaseDirectory(const String& dir)
 		{
-			base_dir_ = dir;
+			if (dir == "") return;
+
+			base_dir_ = "";
+			base_dir_ += dir[0];
+
+			for (Position p = 1; p < dir.size(); p++)
+			{
+				if (dir[p - 1] == FileSystem::PATH_SEPARATOR &&
+						dir[p] 		 == FileSystem::PATH_SEPARATOR)
+				{
+					continue;
+				}
+
+				base_dir_ += dir [p];
+			}
+				
+
 			browser_->mimeSourceFactory()->setFilePath(base_dir_.c_str());
 			browser_->setSource((base_dir_ + default_page_).c_str());
 		}
