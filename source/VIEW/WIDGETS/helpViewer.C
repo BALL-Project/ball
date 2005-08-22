@@ -10,6 +10,7 @@
 #include <BALL/SYSTEM/path.h>
 
 #include <qpopupmenu.h>
+#include <qcursor.h>
 
 using namespace std;
 
@@ -60,7 +61,9 @@ namespace BALL
 			throw()
 			: DockWidget(parent, name),
 				default_page_("index.html"),
-				browser_( new MyTextBrowser(this))
+				browser_( new MyTextBrowser(this)),
+				whats_this_mode_(false),
+				ignore_event_(false)
 		{
 			Path path;
 			base_dir_ = path.getDataPath() + 
@@ -91,6 +94,9 @@ namespace BALL
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << this << " of class HelpViewer" << endl;
 			#endif 
+
+			qApp->setGlobalMouseTracking(FALSE);
+			qApp->removeEventFilter(this);
 		}
 
 		void HelpViewer::initializeWidget(MainControl& main_control)
@@ -98,6 +104,11 @@ namespace BALL
 		{
 			DockWidget::initializeWidget(main_control);
 			insertMenuEntry(MainControl::HELP, "Documentation", this, SLOT(showHelp()), 0, 0);
+			insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(enterWhatsThisMode()));	
+			getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
+
+			qApp->installEventFilter(this);
+			qApp->setGlobalMouseTracking(TRUE);
 		}
 
 		void HelpViewer::showHelp()
@@ -117,6 +128,37 @@ namespace BALL
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "HelpViewer" << this  << "onNotify " << message << std::endl;
 #endif
+
+			if (RTTI::isKindOf<RegisterHelpSystemMessage>(*message)) 
+			{
+				RegisterHelpSystemMessage* msg = RTTI::castTo<RegisterHelpSystemMessage>(*message);
+				if (msg->getWidget() != 0)
+				{
+					if (msg->isRegister())
+					{
+						registerWidgetForHelpSystem(msg->getWidget(), msg->getURL());
+					}
+					else
+					{
+						unregisterWidgetForHelpSystem(msg->getWidget());
+					}
+				}
+
+				else if (msg->getMenuEntry() != -1)
+				{
+					if (msg->isRegister())
+					{
+						registerMenuEntryForHelpSystem(msg->getMenuEntry(), msg->getURL());
+					}
+					else
+					{
+						unregisterMenuEntryForHelpSystem(msg->getMenuEntry());
+					}
+				}
+
+				return;
+			}
+
 			if (!RTTI::isKindOf<ShowHelpMessage>(*message)) 
 			{
 				return;
@@ -147,6 +189,174 @@ namespace BALL
 			base_dir_ = dir;
 			browser_->mimeSourceFactory()->setFilePath(base_dir_.c_str());
 			browser_->setSource((base_dir_ + default_page_).c_str());
+		}
+
+		void HelpViewer::enterWhatsThisMode()
+		{
+			qApp->setOverrideCursor(Qt::WhatsThisCursor);
+			whats_this_mode_ = true;
+		}
+
+		
+		void HelpViewer::exitWhatsThisMode()
+		{
+			whats_this_mode_ = false;
+			qApp->restoreOverrideCursor();
+		}
+
+		bool HelpViewer::showDocumentationForObject()
+		{
+			QPoint point = QCursor::pos();
+			QWidget* widget = qApp->widgetAt(point, true);
+			
+			/////////////////////////////////////////////
+			// show help for widget
+			/////////////////////////////////////////////
+			if (showHelpFor(widget)) 
+			{
+				exitWhatsThisMode();
+				return true;
+			}
+
+			/////////////////////////////////////////////
+			// show help for menu entry 
+			/////////////////////////////////////////////
+			if (RTTI::isKindOf<QPopupMenu>(*widget))
+			{
+				// nothing happens if we dont have a docu entry
+				Index id = getMainControl()->getLastHighLightedMenuEntry();
+				if (!docu_for_menu_entry_.has(id)) return true;
+
+				showHelp(docu_for_menu_entry_[id]);
+				exitWhatsThisMode();
+				ignore_event_ = true;
+
+				return true;
+			}
+
+			return false;
+		}
+	
+		bool HelpViewer::eventFilter(QObject*, QEvent* e) 
+		{
+			/////////////////////////////////////////////
+			// Prevent opening a menu entry when obtaining whats this info for a menu entry
+			/////////////////////////////////////////////
+			if (ignore_event_)
+			{
+				if (e->type() == QEvent::MouseButtonRelease)
+				{
+					ignore_event_ = false;
+					getMainControl()->menuBar()->hide();
+					getMainControl()->menuBar()->show();
+					return true;
+				}
+
+				return false;
+			}
+			
+			/////////////////////////////////////////////
+			// Show Documentation if Shift-F1 is pressed
+			/////////////////////////////////////////////
+			if (e->type() == QEvent::KeyPress)
+			{
+				QKeyEvent* ke = (QKeyEvent*) e;
+				if (ke->key() != Qt::Key_F1 ||
+						ke->state() != Qt::ShiftButton)
+				{
+					return false;
+				}
+
+				if (ke->key() == Key_Escape) 
+				{
+					if (whats_this_mode_)
+					{
+						exitWhatsThisMode();
+						return true;
+					}
+				}
+
+				showDocumentationForObject();
+				return true;
+			}
+
+			/////////////////////////////////////////////
+			// now react only in whats this mode and if a mouse button is pressed
+			/////////////////////////////////////////////
+			if (!whats_this_mode_ ||
+					e->type() != QEvent::MouseButtonPress)
+			{
+				return false;
+			}
+
+			/////////////////////////////////////////////
+			// exit whats this mode with right mouse click
+			/////////////////////////////////////////////
+			QMouseEvent* me = (QMouseEvent*) e;
+			if (me->button() == Qt::RightButton)
+			{
+				exitWhatsThisMode();
+				return true;
+			}
+
+			if (me->button() != Qt::LeftButton) return false;
+		
+			return showDocumentationForObject();
+		}
+
+		void HelpViewer::registerWidgetForHelpSystem(const QWidget* widget, const String& docu_entry)
+		{
+			docu_for_widget_[widget] = docu_entry;
+		}
+
+		void HelpViewer::registerMenuEntryForHelpSystem(Index entry, const String& docu_entry)
+		{
+			docu_for_menu_entry_[entry] = docu_entry;
+		}
+
+		void HelpViewer::unregisterWidgetForHelpSystem(const QWidget* widget)
+		{
+			docu_for_widget_.erase(widget);
+		}
+
+		void HelpViewer::unregisterMenuEntryForHelpSystem(Index id)
+		{
+			docu_for_menu_entry_.erase(id);
+		}
+
+		bool HelpViewer::showHelpFor(const QWidget* widget)
+		{
+			HashMap<const QWidget*, String>::Iterator to_find;
+			to_find = docu_for_widget_.find(widget);
+
+			QWidget* widget2 = (QWidget*) widget;
+
+			while (to_find == docu_for_widget_.end() && widget2 != 0)
+			{
+				if (widget2->parent() == 0) return false;
+
+				widget2 = dynamic_cast<QWidget*>(widget2->parent());
+
+				if (widget2->parent() == 0) return false;
+
+				to_find = docu_for_widget_.find(widget2);
+			}
+
+			if (widget2 == 0) return false;
+
+			showHelp(docu_for_widget_[widget2]);
+
+			return true;
+		}
+
+		bool HelpViewer::hasHelpFor(const QWidget* widget) const
+		{
+			return docu_for_widget_.has(widget);
+		}
+
+		bool HelpViewer::hasHelpFor(Index id) const
+		{
+			return docu_for_menu_entry_.has(id);
 		}
 
 	} // VIEW

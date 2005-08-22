@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.C,v 1.26.2.2 2005/08/09 13:58:52 amoll Exp $
+// $Id: stageSettings.C,v 1.26.2.3 2005/08/22 13:16:06 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
@@ -33,7 +33,7 @@ namespace BALL
 			insertEntry(this, "Display");
 			setWidgetStack(widget_stack);
 
-			getMainControl()->registerWidgetForHelpSystem(widget_stack->widget(2), "tips.html#3D");
+			registerWidgetForHelpSystem_(widget_stack->widget(2), "tips.html#3D");
 		}
 
 

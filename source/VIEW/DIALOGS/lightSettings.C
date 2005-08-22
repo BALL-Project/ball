@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.20.2.4 2005/08/15 22:02:26 amoll Exp $
+// $Id: lightSettings.C,v 1.20.2.5 2005/08/22 13:16:24 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -43,7 +43,7 @@ LightSettings::LightSettings(QWidget* parent, const char* name, WFlags fl)
 	relative_to_camera->setChecked(true);
 	updateFromStage();
 	insertEntry(this, "Lighting");
-	getMainControl()->registerWidgetForHelpSystem(this, "scene.html#lightsources");
+	registerWidgetForHelpSystem_(this, "scene.html#lightsources");
 }
 
 

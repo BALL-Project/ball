@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.37.2.10 2005/08/08 00:42:17 amoll Exp $
+// $Id: datasetControl.C,v 1.37.2.11 2005/08/22 13:15:39 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -92,7 +92,7 @@ namespace BALL
 
 			GenericControl::initializeWidget(main_control);
 
-			getMainControl()->registerWidgetForHelpSystem(this, "datasetControl.html");
+			registerWidgetForHelpSystem(this, "datasetControl.html");
 		}
 
 
@@ -671,6 +671,7 @@ namespace BALL
 			{
 				surface_dialog_ = new ContourSurfaceDialog(this, "ContourSurfaceDialog");
 				surface_dialog_->setDatasetControl(this);
+				registerWidgetForHelpSystem(surface_dialog_, "datasetControl.html#isocontour_surfaces");
 			}
 			if (!surface_dialog_->exec()) return;
 

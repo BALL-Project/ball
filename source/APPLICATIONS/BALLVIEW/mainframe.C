@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.14 2005/08/08 13:29:07 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.15 2005/08/22 13:17:30 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -51,9 +51,7 @@ namespace BALL
 			dataset_control_(0),
 			display_properties_(0),
 			file_dialog_(0),
-			fullscreen_(false),
-			whats_this_mode_(false),
-			ignore_event_(false)
+			fullscreen_(false)
 	{
 		#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new Mainframe " << this << std::endl;
@@ -158,8 +156,6 @@ namespace BALL
 										ALT+Key_X);
 
 		// Help-Menu -------------------------------------------------------------------
-		insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(enterWhatsThisMode()));	
-		insertPopupMenuSeparator(MainControl::HELP);
 		insertMenuEntry(MainControl::HELP, "Demo", demo, SLOT(show()));
 		insertMenuEntry(MainControl::HELP, "Tutorial", tutorial, SLOT(show()));
 		insertPopupMenuSeparator(MainControl::HELP);
@@ -177,17 +173,12 @@ namespace BALL
 
 		complement_selection_id_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
 
-		qApp->installEventFilter(this);
-	 	qApp->setGlobalMouseTracking(TRUE);
-
 		setStatusbarText("Ready.");
 	}
 
 	Mainframe::~Mainframe()
 		throw()
 	{
-		qApp->setGlobalMouseTracking(FALSE);
-		qApp->removeEventFilter(this);
 	}
 
 	void Mainframe::exportPOVRay()
@@ -340,12 +331,6 @@ namespace BALL
 	{
 		if (e->key() == Key_Escape) 
 		{
-			if (whats_this_mode_)
-			{
-				exitWhatsThisMode();
-				return;
-			}
-
 			Scene::getInstance(0)->switchToLastMode();
 			return;
 		}
@@ -353,6 +338,7 @@ namespace BALL
 		if (e->key() == Key_Enter) 
 		{
 			if (composite_manager_.getNumberOfComposites() == 0) return;
+
 			if (getMolecularControlSelection().size() == 0)
 			{
 				control_selection_.push_back(*composite_manager_.begin());
@@ -405,113 +391,6 @@ namespace BALL
 	{
 		MainControl::checkMenus();
 		menuBar()->setItemEnabled(save_project_id_, !composites_locked_);
-	}
-
-	
-	bool Mainframe::eventFilter(QObject*, QEvent* e) 
-	{
-		/////////////////////////////////////////////
-		// Prevent opening a menu entry when obtaining whats this info for a menu entry
-		/////////////////////////////////////////////
-		if (ignore_event_)
-		{
-			if (e->type() == QEvent::MouseButtonRelease)
-			{
-				ignore_event_ = false;
-				menuBar()->hide();
-				menuBar()->show();
-				return true;
-			}
-
-			return false;
-		}
-		
-		/////////////////////////////////////////////
-		// Show Documentation if Shift-F1 is pressed
-		/////////////////////////////////////////////
-		if (e->type() == QEvent::KeyPress)
-		{
-			QKeyEvent* ke = (QKeyEvent*) e;
-			if (ke->key() != Qt::Key_F1 ||
-					ke->state() != Qt::ShiftButton)
-			{
-				return false;
-			}
-
-			showDocumentation();
-			return true;
-		}
-
-		/////////////////////////////////////////////
-		// now react only in whats this mode and if a mouse button is pressed
-		/////////////////////////////////////////////
-		if (!whats_this_mode_ ||
-				e->type() != QEvent::MouseButtonPress)
-		{
-			return false;
-		}
-
-		/////////////////////////////////////////////
-		// exit whats this mode with right mouse click
-		/////////////////////////////////////////////
-		QMouseEvent* me = (QMouseEvent*) e;
-		if (me->button() == Qt::RightButton)
-		{
-			exitWhatsThisMode();
-			return true;
-		}
-
-		if (me->button() != Qt::LeftButton) return false;
-	
-		return showDocumentation();
-	}
-
-
-	bool Mainframe::showDocumentation()
-	{
-		QPoint point = QCursor::pos();
-		QWidget* widget = qApp->widgetAt(point, true);
-		
-		/////////////////////////////////////////////
-		// show help for widget
-		/////////////////////////////////////////////
-		if (showHelpFor(widget)) 
-		{
-			exitWhatsThisMode();
-			return true;
-		}
-
-		/////////////////////////////////////////////
-		// show help for menu entry 
-		/////////////////////////////////////////////
-		if (RTTI::isKindOf<QPopupMenu>(*widget))
-		{
-			// nothing happens if we dont have a docu entry
-			if (!docu_for_menu_entry_.has(last_highlighted_menu_entry_)) return true;
-
-			ShowHelpMessage* msg = new ShowHelpMessage(docu_for_menu_entry_[last_highlighted_menu_entry_]);
-			notify_(msg);
-			exitWhatsThisMode();
-			ignore_event_ = true;
-
-			return true;
-		}
-
-		return false;
-	}
-	
-
-	void Mainframe::enterWhatsThisMode()
-	{
-		qApp->setOverrideCursor(Qt::WhatsThisCursor);
-		whats_this_mode_ = true;
-	}
-
-	
-	void Mainframe::exitWhatsThisMode()
-	{
-		whats_this_mode_ = false;
-		qApp->restoreOverrideCursor();
 	}
 
 }

@@ -1,10 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.16.2.1 2005/05/17 11:42:37 amoll Exp $
+// $Id: preferencesEntry.C,v 1.16.2.2 2005/08/22 13:16:49 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 
 #include <qslider.h>
@@ -246,6 +248,16 @@ namespace BALL
 		{
 			if (widget_stack_ == 0) return 0;
 			return widget_stack_->id(widget_stack_->visibleWidget());
+		}
+
+		void PreferencesEntry::registerWidgetForHelpSystem_(const QWidget* widget, const String& url)
+		{
+			if (getMainControl() == 0) return;
+
+			RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
+			msg->setWidget(widget);
+			msg->setURL(url);
+			getMainControl()->sendMessage(*msg);
 		}
 
 	} // namespace VIEW

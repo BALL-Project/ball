@@ -17,7 +17,7 @@ PythonSettings::PythonSettings( QWidget* parent,  const char* name, WFlags fl )
 	 PreferencesEntry()
 {
 	insertEntry(this, "Python Settings");
-	getMainControl()->registerWidgetForHelpSystem(this, "pythonInterpreter.html#startup_script");
+	registerWidgetForHelpSystem_(this, "pythonInterpreter.html#startup_script");
 }
 
 

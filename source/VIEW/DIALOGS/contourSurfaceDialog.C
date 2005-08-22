@@ -18,7 +18,6 @@ namespace BALL
 ContourSurfaceDialog::ContourSurfaceDialog( QWidget* parent,  const char* name )
     : ContourSurfaceDialogData( parent, name, TRUE, 0 )
 {
-	getMainControl()->registerWidgetForHelpSystem(this, "datasetControl.html#isocontour_surfaces");
 }
 
 ContourSurfaceDialog::~ContourSurfaceDialog()

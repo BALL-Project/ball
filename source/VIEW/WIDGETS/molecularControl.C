@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.31 2005/08/17 15:25:03 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.32 2005/08/22 13:15:23 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -652,9 +652,8 @@ namespace BALL
 
 			GenericControl::initializeWidget(main_control);
 
-			getMainControl()->registerWidgetForHelpSystem(this, "molecularControl.html");
-			getMainControl()->registerWidgetForHelpSystem(selector_edit_, 
-					"molecularControl.html#regular_expressions"); 
+			registerWidgetForHelpSystem(this, "molecularControl.html");
+			registerWidgetForHelpSystem(selector_edit_, "molecularControl.html#regular_expressions"); 
 		}
 
 

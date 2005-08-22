@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.28 2005/08/17 14:35:36 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.29 2005/08/22 13:16:48 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1975,57 +1975,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		qApp->processEvents(max_time);
 	}
 	
-	void MainControl::registerWidgetForHelpSystem(const QWidget* widget, const String& docu_entry)
-	{
-		docu_for_widget_[widget] = docu_entry;
-	}
-
-	void MainControl::registerMenuEntryForHelpSystem(Index entry, const String& docu_entry)
-	{
-		docu_for_menu_entry_[entry] = docu_entry;
-	}
-
-	void MainControl::unregisterWidgetForHelpSystem(const QWidget* widget)
-	{
-		docu_for_widget_.erase(widget);
-	}
-
-	bool MainControl::showHelpFor(const QWidget* widget)
-	{
-		HashMap<const QWidget*, String>::Iterator to_find;
-		to_find = docu_for_widget_.find(widget);
-
-		QWidget* widget2 = (QWidget*) widget;
-
-		while (to_find == docu_for_widget_.end() && widget2 != 0)
-		{
-			if (widget2->parent() == 0) return false;
-
-			widget2 = dynamic_cast<QWidget*>(widget2->parent());
-
-			if (widget2->parent() == 0) return false;
-
-			to_find = docu_for_widget_.find(widget2);
-		}
-
-		if (widget2 == 0) return false;
-
-		ShowHelpMessage* msg = new ShowHelpMessage(to_find->second);
-		notify_(msg);
-
-		return true;
-	}
-
-	bool MainControl::hasHelpFor(const QWidget* widget) const
-	{
-		return docu_for_widget_.has(widget);
-	}
-
-	bool MainControl::hasHelpFor(Index id) const
-	{
-		return docu_for_menu_entry_.has(id);
-	}
-
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.13.2.5 2005/08/08 15:04:23 amoll Exp $
+// $Id: mainframe.h,v 1.13.2.6 2005/08/22 13:17:30 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -52,12 +52,6 @@ namespace BALL
 		public slots:
 
 		///
-		void enterWhatsThisMode();
-
-		///
-		void exitWhatsThisMode();
-
-		///
 		void exportPOVRay();
 
 		///
@@ -89,12 +83,6 @@ namespace BALL
 		///
 		virtual void checkMenus();
 
-		///
-		bool showDocumentation();
-
-		/// Event filter for the whats this mode
-		bool eventFilter(QObject*, QEvent*);
-		
 		protected:
 
 		Scene*										scene_;
@@ -103,8 +91,6 @@ namespace BALL
 		MolecularFileDialog*  		file_dialog_;
 		bool 											fullscreen_;
 		QRect 										last_size_;
-		bool 											whats_this_mode_;
-		bool ignore_event_;
 	};
 
 } // namespace BALL

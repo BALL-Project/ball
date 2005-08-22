@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.7 2005/08/20 12:15:09 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.8 2005/08/22 13:15:23 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -647,7 +647,7 @@ namespace BALL
 
 			DockWidget::initializeWidget(main_control);
 
-			getMainControl()->registerWidgetForHelpSystem(this, "pythonInterpreter.html");
+			registerWidgetForHelpSystem(this, "pythonInterpreter.html");
 		}
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.28.2.4 2005/08/06 00:34:46 amoll Exp $
+// $Id: message.C,v 1.28.2.5 2005/08/22 13:16:55 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -352,6 +352,16 @@ ShowHelpMessage::ShowHelpMessage(String url)
 {
 }
 
+RegisterHelpSystemMessage::RegisterHelpSystemMessage()
+	throw()
+	: Message(),
+		widget_(0),
+		menu_entry_(-1),
+		url_(""),
+		register_(true)
+{
+}
+		
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/message.iC>
 #	endif 

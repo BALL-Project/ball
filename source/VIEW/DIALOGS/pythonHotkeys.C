@@ -32,7 +32,7 @@ PythonHotkeys::PythonHotkeys( QWidget* parent,  const char* name, WFlags fl )
 	
 	setDefaults();
 	insertEntry(this, "Python Hotkeys");
-	getMainControl()->registerWidgetForHelpSystem(this, "pythonInterpreter.html#create_hotkeys");
+	registerWidgetForHelpSystem_(this, "pythonInterpreter.html#create_hotkeys");
 }
 
 

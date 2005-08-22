@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72.2.12 2005/08/08 14:53:14 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.13 2005/08/22 13:17:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -74,11 +74,6 @@ namespace BALL
 				registered ModularWidget objects if the preferences have changed. \par
 				The preferences of the application are stored in an INIFile.
 				The default name of this file is ".BALLView".\par
-				The MainControl also servers as registration server for the online documentation.
-				QWidgets and menu entries can be registered with a link into the HTML documentation.
-				See registerWidgetForHelpSystem and the documentation for HelpViewer.
-				The implemention for opening the documentation per "Whats this?" menu entry and
-				the hotkey "Shift-F1" is done in Mainframe.
 				\par
 				<b>Caveat:</b> Due to a peculiarity of the QT Meta Object Compiler (MOC)
 				you have to specify the full namespace qualified name of this class when deriving from it. \par
@@ -337,6 +332,9 @@ namespace BALL
 			void sendMessage(Message& message)
 				throw();
 
+			/// Get the ID of the last highlighted menu entry (used for the HelpViewer)
+			Index getLastHighLightedMenuEntry() { return last_highlighted_menu_entry_;}
+			
 			public slots:
 
 			//@}
@@ -771,25 +769,6 @@ namespace BALL
 			///
 			void loadBALLViewProjectFile(const String& filename) throw();
 
-
-			/// Register a widget for showing its documentation
-			void registerWidgetForHelpSystem(const QWidget* widget, const String& docu_entry);
-
-			/// Unregister a widget for showing its documentation
-			void unregisterWidgetForHelpSystem(const QWidget* widget);
-
-			/// Register a menu entry for showing its documentation
-			void registerMenuEntryForHelpSystem(Index entry, const String& docu_entry);
-			
-			/// Test if we have a documentation entry for the menu entry id
-			bool hasHelpFor(Index id) const;
-
-			/// Show the documentation entry for a given widget
-			bool showHelpFor(const QWidget* widget);
-
-			/// Check wheter we have a documentation entry for a given widget
-			bool hasHelpFor(const QWidget* widget) const;
-					
 			//@}
 			
 			protected slots:
@@ -914,10 +893,6 @@ namespace BALL
 			Position 						proxy_port_;
 
 			Index 							stop_simulation_id_, complement_selection_id_, open_id_, save_project_id_;
-
-			HashMap<const QWidget*, String> docu_for_widget_;
-
-			HashMap<Index, String> docu_for_menu_entry_;
 
 			Index last_highlighted_menu_entry_;
 };

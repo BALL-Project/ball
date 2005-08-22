@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.1.2.5 2005/08/13 15:58:29 amoll Exp $
+// $Id: helpViewer.h,v 1.1.2.6 2005/08/22 13:15:04 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -46,6 +46,11 @@ namespace BALL
 				Per default the HelpViewer looks for index.html in $BALL_DATA_PATH/../doc/BALLView .
 				You can change this behavior by using setDefaultDir() and setDefaultPage().
 				Links to pages on the www wont work!
+				The HelpViewer also servers as registration server for the online documentation.
+				QWidgets and menu entries can be registered with a link into the HTML documentation.
+				See registerWidgetForHelpSystem.
+				The implemention for opening the documentation per "Whats this?" menu entry and
+				the hotkey "Shift-F1" is also done here.
 		*/
 		class BALL_EXPORT HelpViewer
 			: public DockWidget
@@ -93,16 +98,56 @@ namespace BALL
 			///
 			const String& getBaseDirectory() const;
 
+			/// Register a widget for showing its documentation
+			virtual void registerWidgetForHelpSystem(const QWidget* widget, const String& docu_entry);
+
+			/// Unregister a widget for showing its documentation
+			void unregisterWidgetForHelpSystem(const QWidget* widget);
+
+			/// Register a menu entry for showing its documentation
+			virtual void registerMenuEntryForHelpSystem(Index entry, const String& docu_entry);
+			
+			/// Unregister a menu entry for showing its documentation
+			void unregisterMenuEntryForHelpSystem(Index id);
+			
+			/// Test if we have a documentation entry for the menu entry id
+			bool hasHelpFor(Index id) const;
+
+			/// Show the documentation entry for a given widget
+			bool showHelpFor(const QWidget* widget);
+
+			/// Show documentation for object under cursor
+			bool showDocumentationForObject();
+
+			/// Check wheter we have a documentation entry for a given widget
+			bool hasHelpFor(const QWidget* widget) const;
+					
 			public slots:
 
 			/// Show default page
 			virtual void showHelp();
 
+			///
+			void enterWhatsThisMode();
+
+			///
+			void exitWhatsThisMode();
+
+			/// Event filter for the whats this mode
+			bool eventFilter(QObject*, QEvent*);
+		
 			protected:
 
-			String 				default_page_;
-			String 				base_dir_;
-			MyTextBrowser* browser_;
+			String 					default_page_;
+			String 					base_dir_;
+			MyTextBrowser* 	browser_;
+			bool 						whats_this_mode_;
+			bool 						ignore_event_;
+
+			HashMap<const QWidget*, String> docu_for_widget_;
+
+			HashMap<Index, String> docu_for_menu_entry_;
+
 		};
   	
 } } // namespaces
