@@ -238,17 +238,29 @@ namespace BALL
 			/////////////////////////////////////////////
 			// show help for menu entry 
 			/////////////////////////////////////////////
-			if (RTTI::isKindOf<QPopupMenu>(*widget))
+			
+			// catch block is needed on windows, 
+			// otherwise we get a uncaught exception, no idea why
+			// maybe the library has a bug under windows
+			try
 			{
-				// nothing happens if we dont have a docu entry
-				Index id = getMainControl()->getLastHighLightedMenuEntry();
-				if (!docu_for_menu_entry_.has(id)) return true;
+				if (RTTI::isKindOf<QPopupMenu>(*widget))
+				{
+					ignore_event_ = true;
 
-				showHelp(docu_for_menu_entry_[id]);
-				exitWhatsThisMode();
-				ignore_event_ = true;
+					// nothing happens if we dont have a docu entry
+					Index id = getMainControl()->getLastHighLightedMenuEntry();
+					if (docu_for_menu_entry_.has(id))
+					{
+						showHelp(docu_for_menu_entry_[id]);
+						exitWhatsThisMode();
+					}
 
-				return true;
+					return true;
+				}
+			}
+			catch(...)
+			{
 			}
 
 			return false;
