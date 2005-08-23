@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.8 2005/08/22 13:15:23 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.9 2005/08/23 15:07:53 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -640,7 +640,9 @@ namespace BALL
 		void PyWidget::initializeWidget(MainControl& main_control)
 			throw()
 		{
+#ifndef BALL_PLATFORM_WINDOWS
 			insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
+#endif
 			insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", text_edit_, SLOT(scriptDialog()));
 			insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
 			insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
