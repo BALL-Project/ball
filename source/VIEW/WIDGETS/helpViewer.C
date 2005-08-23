@@ -106,7 +106,7 @@ namespace BALL
 			insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(enterWhatsThisMode()));	
 			getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
 
-			qApp->installEventFilter(this);
+ 			qApp->installEventFilter(this);
 			qApp->setGlobalMouseTracking(TRUE);
 		}
 
@@ -223,6 +223,8 @@ namespace BALL
 		{
 			QPoint point = QCursor::pos();
 			QWidget* widget = qApp->widgetAt(point, true);
+
+			if (widget == 0) return false;
 			
 			/////////////////////////////////////////////
 			// show help for widget
