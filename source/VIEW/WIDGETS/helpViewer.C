@@ -65,15 +65,20 @@ namespace BALL
 				whats_this_mode_(false),
 				ignore_event_(false)
 		{
+
+			// we set the base directory to the first stored data path in the Path class
+			// this should be equal to the BALLVIEW_DATA_PATH environment variable
+			// (if it was set, otherwise the compiled data path)
 			Path path;
-			String dir = path.getDataPath() + 
-									FileSystem::PATH_SEPARATOR + 
-									".." + 
-									FileSystem::PATH_SEPARATOR + 
-									"doc" + 
-									FileSystem::PATH_SEPARATOR +
-									"BALLView" +
-									FileSystem::PATH_SEPARATOR;
+			String dir = path.getDataPath();
+			dir = dir.before(String('\n'));
+			dir += 	String(FileSystem::PATH_SEPARATOR) +
+						 	".." + 
+							FileSystem::PATH_SEPARATOR + 
+							"doc" + 
+							FileSystem::PATH_SEPARATOR +
+							"BALLView" +
+							FileSystem::PATH_SEPARATOR;
 
 			setBaseDirectory(dir);
 
