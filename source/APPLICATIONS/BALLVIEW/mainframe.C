@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.16 2005/08/22 13:51:40 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.17 2005/08/24 14:33:56 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -48,9 +48,6 @@ namespace BALL
 	Mainframe::Mainframe(QWidget* parent, const char* name)
 		:	MainControl(parent, name, ".BALLView"),
 			scene_(0),
-			dataset_control_(0),
-			display_properties_(0),
-			file_dialog_(0),
 			fullscreen_(false)
 	{
 		#ifdef BALL_VIEW_DEBUG
@@ -62,7 +59,7 @@ namespace BALL
 		// ---------------------
 		setCaption("BALLView");
 		setIcon(QPixmap(bucky_64x64_xpm));
-		resize(640,400);
+		resize(800,600);
 		// make sure submenus are the first 
 		initPopupMenu(FILE_OPEN);
 		initPopupMenu(EDIT);
@@ -84,31 +81,21 @@ namespace BALL
 		setLoggingFilename("BALLView.log");
 		setAcceptDrops(true);
 
-		CHECK_PTR(new MolecularControl(this, "Structures"));
-		CHECK_PTR(new GeometricControl(this, "Representations"));
-
-		dataset_control_ = new DatasetControl(this, "Datasets");
-		CHECK_PTR(dataset_control_);
+		CHECK_PTR(new MolecularControl(		this, "Structures"));
+		CHECK_PTR(new GeometricControl(		this, "Representations"));
+		CHECK_PTR(new DatasetControl(			this, "Datasets"));
+		CHECK_PTR(new DisplayProperties(	this, "DisplayProperties"));
+		CHECK_PTR(new LabelDialog(				this, "LabelDialog"));
+		CHECK_PTR(new MolecularFileDialog(this, "MolecularFileDialog"));
+		CHECK_PTR(new DownloadPDBFile(		this, "DownloadPDBFile", false));
+		CHECK_PTR(new MolecularStructure(	this, "MolecularStructure"));
+		CHECK_PTR(new HelpViewer(					this, "Documentation"));
+		CHECK_PTR(new LogView(						this, "Logs"));
 
 		Scene::stereoBufferSupportTest();
 		scene_ = new Scene(this, "3D View");
 		CHECK_PTR(scene_);
-		scene_->setMinimumSize(10, 10);
 		setCentralWidget(scene_);
-
-		display_properties_ = new DisplayProperties(this, "DisplayProperties");
-		CHECK_PTR(display_properties_);
-
-		CHECK_PTR(new LabelDialog(this, "LabelDialog"));
-		
-		file_dialog_ = new MolecularFileDialog(this, "MolecularFileDialog");
-		CHECK_PTR(file_dialog_);
-
-		CHECK_PTR(new DownloadPDBFile(this, "DownloadPDBFile", false));
-
-		CHECK_PTR(new MolecularStructure(this, "MolecularStructure"));
-
-		CHECK_PTR(new HelpViewer(this, "Documentation"));
 
 		// setup the VIEW server
 		Server* server = new Server(this);
@@ -117,10 +104,6 @@ namespace BALL
 		MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
 		server->registerObjectCreator(*object_creator);
 
-		LogView* logview = new LogView(this, "Logs");
-		CHECK_PTR(logview);
-		logview->setMinimumSize(10, 10);
-
 		BALLViewTutorial* tutorial = new BALLViewTutorial(this, "BALLViewTutorial");
 		CHECK_PTR(tutorial);
 
@@ -128,9 +111,7 @@ namespace BALL
 		CHECK_PTR(demo);
 
 		#ifdef BALL_PYTHON_SUPPORT
-			PyWidget* pywidget = new PyWidget(this, "Python Interpreter");
-			CHECK_PTR(pywidget);
-			pywidget->startInterpreter();
+			new PyWidget(this, "Python Interpreter");
 		#endif
 
 		// ---------------------
@@ -274,7 +255,7 @@ namespace BALL
 			return;
 		}
 
-		file_dialog_->openFile(file);
+		MolecularFileDialog::getInstance(0)->openFile(file);
 	}
 
 

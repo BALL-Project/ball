@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.9 2005/08/23 15:07:53 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.10 2005/08/24 14:33:44 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -137,12 +137,6 @@ namespace BALL
 		}
 
 
-		void PyWidgetData::stopInterpreter()
-		{
-			PyInterpreter::finalize();
-		}
-
-
 		void PyWidgetData::startInterpreter()
 		{
 			stop_script_ = false;
@@ -263,7 +257,7 @@ namespace BALL
 			if (line == "quit" || line == "quit()")
 			{
 				stop_script_ = true;
-				stopInterpreter();
+				PyInterpreter::finalize();
 				getMainControl()->quit();
 				return true;
 			}
@@ -536,21 +530,20 @@ namespace BALL
 			newPrompt_();
 		}
 
-		void PyWidgetData::scriptDialog()
+		void PyWidget::scriptDialog()
 		{
-			PyWidget* p = (PyWidget*) parent();
 			// no throw specifier because of that #$%@* moc
 			QString s = QFileDialog::getOpenFileName(
-										p->getWorkingDir().c_str(),
+										getWorkingDir().c_str(),
 										"Python Scripts(*.py)",
-										p->getMainControl(),
+										getMainControl(),
 										"Run Python Script",
 										"Choose a file" );
 
 		 	if (s == QString::null) return;
-			p->setWorkingDirFromFilename_(s.ascii());
+			setWorkingDirFromFilename_(s.ascii());
 
-			runFile(s.ascii());
+			text_edit_->runFile(s.ascii());
 		}
 
 		void PyWidgetData::exportHistory()
@@ -581,11 +574,6 @@ namespace BALL
 			}
 
 			file.close();
-		}
-
-		void PyWidgetData::cut()
-		{
-			QTextEdit::cut();
 		}
 
 		void PyWidgetData::clear()
@@ -640,16 +628,17 @@ namespace BALL
 		void PyWidget::initializeWidget(MainControl& main_control)
 			throw()
 		{
-#ifndef BALL_PLATFORM_WINDOWS
-			insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
-#endif
-			insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", text_edit_, SLOT(scriptDialog()));
+//   			insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
+
+			insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", this , SLOT(scriptDialog()));
 			insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
 			insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
 
 			DockWidget::initializeWidget(main_control);
 
 			registerWidgetForHelpSystem(this, "pythonInterpreter.html");
+
+			text_edit_->startInterpreter();
 		}
 
 
@@ -657,7 +646,7 @@ namespace BALL
 			throw()
 		{
 			text_edit_->abortScript();
-			stopInterpreter();
+			PyInterpreter::finalize();
 
 			DockWidget::finalizeWidget(main_control);
 		}
@@ -752,16 +741,6 @@ namespace BALL
 			{
 				text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
 			}
-		}
-
-		void PyWidget::startInterpreter()
-		{
-			text_edit_->startInterpreter();
-		}
-
-		void PyWidget::stopInterpreter()
-		{
-			text_edit_->stopInterpreter();
 		}
 
 		void PyWidgetData::abortScript()

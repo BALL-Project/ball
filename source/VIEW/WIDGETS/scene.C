@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.39 2005/08/22 13:15:23 amoll Exp $
+// $Id: scene.C,v 1.171.2.40 2005/08/24 14:33:44 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1375,6 +1375,8 @@ namespace BALL
 		void Scene::initializeWidget(MainControl& main_control)
 			throw()
 		{
+			setMinimumSize(10, 10);
+
 			main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.23.2.3 2005/07/30 21:53:09 amoll Exp $
+// $Id: pyWidget.h,v 1.23.2.4 2005/08/24 14:33:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -130,14 +130,6 @@ namespace BALL
 			*/
 			virtual void startInterpreter();
 
-			/**	Stop the interpreter.
-					The interpreter is stoped by calling <tt>Py_Finish()</tt>.
-			*/
-			virtual void stopInterpreter();
-
-			/// Open a dialog to select a start up script
-			virtual void scriptDialog();
-
 			///
 			virtual void abortScript();
 
@@ -184,8 +176,6 @@ namespace BALL
 			virtual void keyPressEvent(QKeyEvent* e);
 
 			virtual void clear();
-			
-			virtual void cut();
 			
 			virtual void paste();
 
@@ -268,8 +258,6 @@ namespace BALL
 			//@{
 
 			/**	Setup the menu entries.
-					PyWidget creates an entry in Tools|Restart Python and connects
-					the entry to startInterpreter().
 			*/
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
@@ -304,12 +292,6 @@ namespace BALL
 				throw();
 
 			///
-			virtual void startInterpreter();
-			
-			///
-			virtual void stopInterpreter();
-			
-			///
 			bool toAbortScript() throw();
 
 			///
@@ -323,6 +305,12 @@ namespace BALL
 
 			/// run a Python script from a given file
 			void run(const String& filename) throw() {text_edit_->runFile(filename);}
+
+			public slots:
+
+			/// Open a dialog to select a start up script
+			virtual void scriptDialog();
+
 
 			protected:
 
