@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: path.h,v 1.11.6.1 2005/07/30 21:53:07 amoll Exp $
+// $Id: path.h,v 1.11.6.2 2005/08/24 17:36:11 amoll Exp $
 //
 
 #ifndef BALL_COMMON_PATH_H
@@ -49,13 +49,13 @@ namespace BALL
 				settings. \par
 				The default path may be accessed using  \link Path::getDefaultDataPath getDefaultDataPath \endlink .
 				The path may also be modified at runtime by calling  \link Path::setDataPath setDataPath \endlink .
-				The path contains a colon separated list of paths that are searched 
+				The path contains a newline ("\n") separated list of paths that are searched 
 				in the order of occurence. \par
 		*/		
 		string getDataPath();
 
 		/**	Modify the data path.
-				This method accepts a colon separated list of paths to
+				This method accepts a newline separated list of paths to
 				specify data paths.
 		*/
 		void setDataPath(const string& path);
