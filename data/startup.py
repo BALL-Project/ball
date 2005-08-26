@@ -10,6 +10,10 @@ def getMolecularControl():
 def getDisplayProperties():
 	return DisplayProperties.getInstance(0)
 
+def getScene():
+	return Scene.getInstance(0)
+	
+	
 def getComposites():
 	return getMainControl().getCompositeManager().getComposites()
 
