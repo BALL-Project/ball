@@ -20,14 +20,11 @@ def getRepresentations():
 	return getMainControl().getPrimitiveManager().getRepresentations()
 
 def clearRepresentations():
-	nr = pm.getNumberOfRepresentations()
-	rl = pm.getRepresentations()
-	i = 0
-	while i < nr:
-		mc.remove(rl[i])
-		i = i + 1
+	while len(getRepresentations()) > 0:
+		getMainControl().remove(getRepresentations()[0])
 
 def createStickModel():
+	dp = getDisplayProperties()
 	dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
 	dp.selectMode(DRAWING_MODE_SOLID)
 	dp.selectModel(MODEL_STICK)
@@ -36,10 +33,10 @@ def createStickModel():
 	dp.apply()
 
 def removeWater():
-	mc.clearSelection()
-	if moc.applySelector("residue(HOH)") == 0:
+	getMainControl().clearSelection()
+	if getMolecularControl().applySelector("residue(HOH)") == 0:
 		return
-	moc.cut()
+	getMolecularControl().cut()
 
 def setMultithreading(mode):
 	getMainControl().getPrimitiveManager().setMultithreadingMode(mode)
