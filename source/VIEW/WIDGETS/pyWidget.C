@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.10 2005/08/24 14:33:44 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.11 2005/08/26 12:55:40 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -532,16 +532,18 @@ namespace BALL
 
 		void PyWidget::scriptDialog()
 		{
-			// no throw specifier because of that #$%@* moc
+			if (working_dir_ == "") working_dir_ = getWorkingDir();
+
 			QString s = QFileDialog::getOpenFileName(
-										getWorkingDir().c_str(),
+										working_dir_.c_str(),
 										"Python Scripts(*.py)",
 										getMainControl(),
 										"Run Python Script",
-										"Choose a file" );
+										"Choose a Python script" );
 
 		 	if (s == QString::null) return;
 			setWorkingDirFromFilename_(s.ascii());
+			working_dir_ = getWorkingDir();
 
 			text_edit_->runFile(s.ascii());
 		}
@@ -611,7 +613,8 @@ namespace BALL
 		PyWidget::PyWidget(QWidget *parent, const char *name)
 			throw()
 			: DockWidget(parent, name),
-				text_edit_(new PyWidgetData(this))
+				text_edit_(new PyWidgetData(this)),
+				working_dir_("")
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new PyWidget " << this << std::endl;

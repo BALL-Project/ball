@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.23.2.4 2005/08/24 14:33:31 amoll Exp $
+// $Id: pyWidget.h,v 1.23.2.5 2005/08/26 12:55:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -317,6 +317,8 @@ namespace BALL
 			PyWidgetData* 		text_edit_;
 			PythonHotkeys* 		python_hotkeys_;
 			List<Hotkey> 			hotkeys_;
+			// 								we use an own working dir to find Python Scripts
+			String 						working_dir_;
 		};
 
 	} // namespaces	
