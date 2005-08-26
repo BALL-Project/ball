@@ -3,12 +3,14 @@
 Version 1.1.1 is mainly a bugfix release.
 
 Added:
+ - Support for Python under Windows
  - Support for SD files in BALLView
  - Picking support for bonds
  - Coloring by molecule
  - Online HTML documentation in BALLView
 
 Changed:
+ - BALL and BALLView libraries are now build as DLLs under Windows
  - Renamed Mesh::colorList to Mesh::colors
  - Exception::InvalidRange now has an float value
  - ColorProcessor hierarchy
