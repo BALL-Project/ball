@@ -6,13 +6,16 @@ Added:
  - Support for SD files in BALLView
  - Picking support for bonds
  - Coloring by molecule
- - online html documentation in BALLView
+ - Online HTML documentation in BALLView
 
 Changed:
  - Renamed Mesh::colorList to Mesh::colors
  - Exception::InvalidRange now has an float value
  - ColorProcessor hierarchy
  - Bond::TooManyBonds moved to Exception namespace
+ - Now the standard BALLView Python startup script will be executed in any case.
+ 	 It can be found in BALL/data/startup.py.
+   Users can choose an addition startup script, that will run afterwards.
 
 Fixed:
  - Crashes, when reading PDB files with too many bonds
@@ -33,6 +36,7 @@ Fixed:
  - Naming of build peptides
  - Opening of files in current directory per command line with BALLView
  - Cleanup of the lighting source code
+ - Cleanup of the PyWidget source code
 
 Improved:
  - DNA cartoon model

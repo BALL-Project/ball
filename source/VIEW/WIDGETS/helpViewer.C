@@ -65,15 +65,8 @@ namespace BALL
 				whats_this_mode_(false),
 				ignore_event_(false)
 		{
-
-			// we set the base directory to the first stored data path in the Path class
-			// this should be equal to the BALLVIEW_DATA_PATH environment variable
-			// (if it was set, otherwise the compiled data path)
-			Path path;
-			String dir = path.getDataPath();
-			dir = dir.before(String('\n'));
-			dir += 	String(FileSystem::PATH_SEPARATOR) +
-						 	".." + 
+			String dir = getDataPath();
+			dir += 	String("..") + 
 							FileSystem::PATH_SEPARATOR + 
 							"doc" + 
 							FileSystem::PATH_SEPARATOR +
@@ -192,20 +185,7 @@ namespace BALL
 		{
 			if (dir == "") return;
 
-			base_dir_ = "";
-			base_dir_ += dir[0];
-
-			for (Position p = 1; p < dir.size(); p++)
-			{
-				if (dir[p - 1] == FileSystem::PATH_SEPARATOR &&
-						dir[p] 		 == FileSystem::PATH_SEPARATOR)
-				{
-					continue;
-				}
-
-				base_dir_ += dir [p];
-			}
-				
+			base_dir_ = dir;
 
 			browser_->mimeSourceFactory()->setFilePath(base_dir_.c_str());
 			browser_->setSource((base_dir_ + default_page_).c_str());

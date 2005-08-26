@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.23.2.6 2005/08/26 13:43:30 amoll Exp $
+// $Id: pyWidget.h,v 1.23.2.7 2005/08/26 13:44:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -304,7 +304,7 @@ namespace BALL
 			void reactTo(const QKeyEvent& e) throw();
 
 			/// run a Python script from a given file
-			void run(const String& filename) throw() {text_edit_->runFile(filename);}
+			bool run(const String& filename) throw() {return text_edit_->runFile(filename);}
 
 			public slots:
 
