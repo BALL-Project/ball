@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.11 2005/08/26 12:55:40 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.12 2005/08/26 13:43:27 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -490,7 +490,7 @@ namespace BALL
 		}
 
 
-		void PyWidgetData::runFile(const String& filename)
+		bool PyWidgetData::runFile(const String& filename)
 		{
 			stop_script_ = false;
 			append(String("> running File " + filename + "\n").c_str());
@@ -503,7 +503,7 @@ namespace BALL
 			{
 				append(String("> Could not find file " + filename + "\n").c_str());
 				newPrompt_();
-				return;
+				return false;
 			}
 
 			while (file.readLine())
@@ -513,7 +513,7 @@ namespace BALL
 					String result_string = "> Error in Line " + String(file.getLineNumber()) + " in file " + filename + "\n";
 					append(result_string.c_str());
 					newPrompt_();
-					return;
+					return false;
 				}
 
 				if (stop_script_) 
@@ -522,12 +522,13 @@ namespace BALL
  					((PyWidget*)parent())->setStatusbarText("Aborted script");
 					append("> aborted...");
 					newPrompt_();
-					return;
+					return false;
 				}
 			}
 			append("> finished...");
 			((PyWidget*)parent())->setStatusbarText("finished script");
 			newPrompt_();
+			return true;
 		}
 
 		void PyWidget::scriptDialog()
@@ -671,6 +672,21 @@ namespace BALL
 			}
 
 			python_hotkeys_->setContent(hotkeys_);
+
+			// dont set startup script if we are loading a project file
+			if (inifile.getFilename() == "" || 
+					inifile.getFilename().hasSuffix(".bvp")) 
+			{
+				return;
+			}
+
+			String startup = getDataPath();
+			startup += "startup.py";
+			if (!text_edit_->runFile(startup))
+			{
+				Log.error() << "Could not find startup script. Please set the correct path to the data path!" << std::endl;
+				Log.error() << "To do so set the environment variable BALL_DATA_PATH or BALLVIEW_DATA_PATH." << std::endl;
+			}
 
 			if (!inifile.hasEntry("PYTHON", "StartupScript")) return;
 
