@@ -24,7 +24,10 @@ def getPyWidget():
 
 def getDatasetControl():
 	return DatasetControl.getInstance(0)
-	
+
+
+def openFile(file):
+	return MolecularFileDialog.getInstance(0).openFile(file)
 	
 def getComposites():
 	return getMainControl().getCompositeManager().getComposites()
@@ -38,6 +41,10 @@ def getRepresentations():
 def clearRepresentations():
 	while len(getRepresentations()) > 0:
 		getMainControl().remove(getRepresentations()[0])
+
+def setMultithreading(mode):
+	getMainControl().getPrimitiveManager().setMultithreadingMode(mode)
+
 
 def createStickModel():
 	dp = getDisplayProperties()
@@ -54,6 +61,4 @@ def removeWater():
 		return
 	getMolecularControl().cut()
 
-def setMultithreading(mode):
-	getMainControl().getPrimitiveManager().setMultithreadingMode(mode)
 
