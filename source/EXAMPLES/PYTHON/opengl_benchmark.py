@@ -1,52 +1,44 @@
-pm = getMainControl().getPrimitiveManager()
-dp = DisplayProperties.getInstance(0)
 fd = MolecularFileDialog.getInstance(0)
+pm = getMainControl().getPrimitiveManager()
 pm.setMultithreadingMode(0)
 
 result = 0
 nr_runs = 70
 
-def clearRepresentations():
-	nr = pm.getNumberOfRepresentations()
-	rl = pm.getRepresentations()
-	i = 0
-	while i < nr:
-		m.remove(rl[i])
-		i = i + 1
-
 def runTest(name, model):
 	global result
 	run = 0
-	dp.selectModel(model)
-	dp.apply()
+	getDisplayProperties().selectModel(model)
+	getDisplayProperties().apply()
 	v = Vector3(13, 84, 41)
 	l = Vector3(13, 84, -7)
 	u = Vector3(0, -1, 0)
-	s = Scene.getInstance(0).getStage()
+	s = getScene().getStage()
 	s.getCamera().setViewPoint(v)
 	s.getCamera().setLookAtPosition(l)
 	s.getCamera().setLookUpVector(v)
 	sm = SceneMessage(SceneMessage.UPDATE_CAMERA)
 	sm.setStage(s)
-	m.sendMessage(sm)
-	timer = Timer();
-	timer.start();
-	while run < nr_runs
+	getMainControl().sendMessage(sm)
+	timer = Timer()
+	timer.start()
+	while run < nr_runs:
 		run += 1
 		v = v + Vector3(0,0,1)
 		l = l + Vector3(0,0,1)
 		s.getCamera().setViewPoint(v)
 		sm = SceneMessage(SceneMessage.UPDATE_CAMERA)
 		sm.setStage(s)
-		m.sendMessage(sm)
+		getMainControl().sendMessage(sm)
 	timer.stop()
 	model_result = timer.getClockTime()
 	clearRepresentations()
 	print name+" "+str(model_result)+" seconds"
 	result += model_result
 
-clearRepresentations()
+#clearRepresentations()
 pm.setMultithreadingMode(0)
+dp = getDisplayProperties()
 dp.enableCreationForNewMolecules(0)
 dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
 dp.setSurfaceDrawingPrecision(6.5)
@@ -55,11 +47,11 @@ dp.selectColoringMethod(COLORING_ELEMENT)
 dp.setTransparency(0)
 fd.openFile(Path().find("structures/bpti.pdb"))
 
-Scene.getInstance(0).setVisible(1)
-LogView.getInstance(0).setVisible(0)
-GeometricControl.getInstance(0).setVisible(0)
-DatasetControl.getInstance(0).setVisible(0)
-MolecularControl.getInstance(0).setVisible(0)
+getScene().setVisible(1)
+getGeometricControl().getInstance(0).setVisible(0)
+getMolecularControl().getInstance(0).setVisible(0)
+getLogView().setVisible(0)
+getDatasetControl().setVisible(0)
 PyWidget.getInstance(0).setVisible(0)
 
 getMainControl().resize(800, 600)

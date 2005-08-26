@@ -12,6 +12,18 @@ def getDisplayProperties():
 
 def getScene():
 	return Scene.getInstance(0)
+
+def getGeometricControl():
+	return GeometricControl.getInstance(0)
+
+def getLogView():
+	return LogView.getInstance(0)
+
+def getPyWidget():
+	return PyWidget.getInstance(0)
+
+def getDatasetControl():
+	return DatasetControl.getInstance(0)
 	
 	
 def getComposites():
