@@ -18,7 +18,7 @@ for residue1 in residues(system1):
 						line.setColor(ColorRGBA(0,0,1.0))
 						rep.insert(line)
 						break
-				break
+			break
 
 getMainControl().insert(rep)
 getMainControl().update(rep)
