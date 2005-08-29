@@ -1,3 +1,4 @@
+###################### MAIN WIDGETS: #######################
 def getMainControl():
 	return MainControl.getInstance(0)
 
@@ -26,26 +27,41 @@ def getDatasetControl():
 	return DatasetControl.getInstance(0)
 
 
+###################### SHORTCUTS: #######################
 def openFile(file):
 	return MolecularFileDialog.getInstance(0).openFile(file)
 	
-def getComposites():
+def getSystems():
 	return getMainControl().getCompositeManager().getComposites()
 
 def getSystem(nr):
-	return getComposites()[nr]
+	return getSystems()[nr]
+
+def getSelection():
+	return getMainControl().getSelection()
+
+def getMolecularControlSelection():
+	return getMainControl().getMolecularControlSelection()
 
 def getRepresentations():
 	return getMainControl().getPrimitiveManager().getRepresentations()
+
+def getForceField():
+	return getMolecularStructure().getForceField()
 
 def clearRepresentations():
 	while len(getRepresentations()) > 0:
 		getMainControl().remove(getRepresentations()[0])
 
+def clearMolecules():
+	while len(getSystems()) > 0:
+		getMainControl().remove(getSystem(0))
+
 def setMultithreading(mode):
 	getMainControl().getPrimitiveManager().setMultithreadingMode(mode)
 
 
+###################### EXAMPLES: #######################
 def createStickModel():
 	dp = getDisplayProperties()
 	dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
