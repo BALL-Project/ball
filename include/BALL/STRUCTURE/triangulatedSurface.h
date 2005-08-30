@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSurface.h,v 1.39 2004/02/23 17:26:07 anhi Exp $
+// $Id: triangulatedSurface.h,v 1.39.6.2 2005/08/13 15:58:28 amoll Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -41,7 +41,7 @@ namespace BALL
 			 \par
 	\ingroup Surface
 	*/
-	class TriangulatedSurface
+	class BALL_EXPORT TriangulatedSurface
 	{
 
 		public:
@@ -357,8 +357,8 @@ namespace BALL
 
 	/**	Output- Operator
 	*/
-	std::ostream& operator << (std::ostream& s,
-														 const TriangulatedSurface& surface);
+	BALL_EXPORT std::ostream& operator << (std::ostream& s,
+																				 const TriangulatedSurface& surface);
 
 	//@}
 
@@ -371,7 +371,7 @@ namespace BALL
 			 \par
 	\ingroup Surface
 	*/
-	class TriangulatedSphere	:	public TriangulatedSurface
+	class BALL_EXPORT TriangulatedSphere	:	public TriangulatedSurface
 	{
 
 		public:

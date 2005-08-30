@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.35 2005/07/16 21:00:37 oliver Exp $
+// $Id: glRenderer.h,v 1.32.2.6 2005/08/17 14:49:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -94,7 +94,7 @@ namespace BALL
 					<b> drawing_mode_</b> are not allowed. 
 					\see         GeneralException			
 			*/
-			class WrongModes:	public Exception::GeneralException
+			class BALL_EXPORT WrongModes:	public Exception::GeneralException
 			{
 				public:
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: networkPreferences.h,v 1.2 2005/07/03 09:43:06 oliver Exp $
+// $Id: networkPreferences.h,v 1.1.2.1 2005/05/17 12:33:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_NETWORKPREFERENCES_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: files.C,v 1.12 2005/12/23 17:02:27 amoll Exp $
+// $Id: files.C,v 1.9.6.1 2005/06/14 20:31:47 oliver Exp $
 //
 
 #include <BALL/FORMAT/PDBFile.h>

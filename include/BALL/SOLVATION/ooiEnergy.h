@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ooiEnergy.h,v 1.13 2004/02/18 23:24:05 oliver Exp $
+// $Id: ooiEnergy.h,v 1.13.6.1 2005/07/29 12:38:02 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_OOIENERGY_H
@@ -37,7 +37,7 @@ namespace BALL
 			\par
 	\ingroup Solvation	
 	*/ 
-	double calculateOoiEnergy(AtomContainer& atoms);
+	BALL_EXPORT double calculateOoiEnergy(AtomContainer& atoms);
    	
 } // namespace BALL
 

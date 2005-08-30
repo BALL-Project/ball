@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ruleEvaluator.h,v 1.15 2003/08/26 08:04:25 oliver Exp $
+// $Id: ruleEvaluator.h,v 1.15.6.1 2005/07/30 21:53:03 amoll Exp $
 //
 
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
@@ -34,7 +34,7 @@ namespace BALL
 
     	\ingroup  MolmecAssignment
 	*/
-	class RuleEvaluator
+	class BALL_EXPORT RuleEvaluator
 	{
 		public:
 

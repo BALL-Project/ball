@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricTransformations.h,v 1.15 2003/08/26 08:04:51 oliver Exp $
+// $Id: geometricTransformations.h,v 1.15.6.1 2005/07/29 12:38:08 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
@@ -40,7 +40,7 @@ namespace BALL
 			translation vector to the coordinates of each Atom object (and derived classes). \par
 		\ingroup StructureMiscellaneous		
 	*/
-	class TranslationProcessor
+	class BALL_EXPORT TranslationProcessor
 		:	public UnaryProcessor<Atom> 
 	{
 		public:
@@ -86,7 +86,7 @@ namespace BALL
 			matrix. \par
 		\ingroup StructureMiscellaneous		
 	*/
-	class TransformationProcessor
+	class BALL_EXPORT TransformationProcessor
 		:public UnaryProcessor<Atom> 
 	{
 		public:

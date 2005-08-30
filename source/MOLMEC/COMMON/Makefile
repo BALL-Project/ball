@@ -1,6 +1,4 @@
-#
-# $Id: Makefile,v 1.15 2005/07/16 21:00:41 oliver Exp $
-#
+# $Id: Makefile,v 1.13.12.1 2005/06/19 09:32:48 oliver Exp $
 
 DIRECTORY=MOLMEC/COMMON
 

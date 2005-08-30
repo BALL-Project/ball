@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.7 2005/12/23 17:02:28 amoll Exp $
+// $Id: main.C,v 1.4.6.1 2005/06/14 20:31:47 oliver Exp $
 //
 
 #include <iomanip>

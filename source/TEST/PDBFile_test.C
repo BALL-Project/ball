@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.31 2005/07/16 21:00:45 oliver Exp $
+// $Id: PDBFile_test.C,v 1.29.2.1 2005/03/16 16:04:36 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -33,7 +33,7 @@ namespace BALL
 
 }
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.31 2005/07/16 21:00:45 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.29.2.1 2005/03/16 16:04:36 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

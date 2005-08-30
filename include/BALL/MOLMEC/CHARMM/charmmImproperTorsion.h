@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmImproperTorsion.h,v 1.21 2004/12/27 17:06:31 amoll Exp $
+// $Id: charmmImproperTorsion.h,v 1.21.4.1 2005/07/29 12:37:46 amoll Exp $
 //
 
 // Molecular Mechanics: Charmm force field, bond stretch component
@@ -44,7 +44,7 @@ namespace BALL
 			
     	\ingroup  CHARMM
 	*/
-	class CharmmImproperTorsion 
+	class BALL_EXPORT CharmmImproperTorsion 
 		: public ForceFieldComponent
 	{
 		public:

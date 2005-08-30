@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.sip,v 1.2 2003/11/29 15:56:43 amoll Exp $
+// $Id: mesh.sip,v 1.2.6.1 2005/07/25 20:46:52 amoll Exp $
 //
 
 class Mesh 
@@ -10,6 +10,7 @@ class Mesh
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/PRIMITIVES/mesh.h>
+	#include <BALL/PYTHON/pyColorRGBAVector.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End
@@ -23,4 +24,6 @@ class Mesh
   void set(const Mesh&) throw();
   void swap(Mesh&) throw();
   ~Mesh() throw();
+	PyColorRGBAVector getColors();
+//	PyColorRGBAVector colors;
 };

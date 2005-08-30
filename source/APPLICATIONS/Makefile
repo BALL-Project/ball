@@ -1,5 +1,5 @@
 # 
-# $Id: Makefile,v 1.8 2005/07/16 21:00:39 oliver Exp $
+# $Id: Makefile,v 1.7.4.1 2005/07/21 12:23:36 oliver Exp $
 #
 #
 # APPLICATIONS/Makefile
@@ -14,8 +14,7 @@ THISLIB=$(LIBNAME)
 
 OPTIONAL_DIRS=\
 	BALLVIEW\
-	NMRVIEW\
-	DCD2PNG
+	NMRVIEW
 
 VIEW_DIRS=$(BALL_HAS_VIEW:true=$(OPTIONAL_DIRS))
 
@@ -28,7 +27,7 @@ DIRS=$(VIEW_DIRS)\
 default:	dirs
 
 dirs:	dummy
-	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET="default"
+	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET="all"
 
 depend:	dummy
 	@for i in $(DIRS) ; do ( cd $$i ; echo "" >.Dependencies ) ; done

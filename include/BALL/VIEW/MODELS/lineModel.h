@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.h,v 1.11 2005/07/16 21:00:34 oliver Exp $
+// $Id: lineModel.h,v 1.9.6.1 2005/06/14 13:29:03 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_LINEMODEL_H

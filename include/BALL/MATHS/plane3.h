@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: plane3.h,v 1.38 2004/05/27 19:49:42 oliver Exp $
+// $Id: plane3.h,v 1.38.4.3 2005/08/12 00:32:52 amoll Exp $
 //
 
 #ifndef BALL_MATHS_PLANE3_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: uhligCavFreeEnergyProcessor.h,v 1.18 2004/02/23 17:26:04 anhi Exp $
+// $Id: uhligCavFreeEnergyProcessor.h,v 1.18.6.1 2005/07/29 12:38:03 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
@@ -27,7 +27,7 @@ namespace BALL
 			41(9):1215--1225, 1937.  \par
 	\ingroup Solvation		
 	 */
-	class UhligCavFreeEnergyProcessor
+	class BALL_EXPORT UhligCavFreeEnergyProcessor
 		:	public EnergyProcessor
 	{
 		

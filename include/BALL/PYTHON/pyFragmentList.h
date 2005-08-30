@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyFragmentList.h,v 1.11 2004/05/27 19:49:45 oliver Exp $
+// $Id: pyFragmentList.h,v 1.11.4.2 2005/08/19 11:25:56 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYFRAGMENTLIST_H

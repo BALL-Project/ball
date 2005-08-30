@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: disc.h,v 1.7 2005/07/16 21:00:35 oliver Exp $
-//
+// $Id: disc.h,v 1.5.8.1 2005/06/14 16:08:29 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_DISC_H
 #define BALL_VIEW_PRIMITIV_DISC_H

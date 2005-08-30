@@ -1,6 +1,4 @@
-#
-# $Id: Makefile,v 1.26 2005/07/16 21:00:42 oliver Exp $
-#
+# $Id: Makefile,v 1.24.10.1 2005/06/19 09:32:49 oliver Exp $
 
 DIRECTORY=PYTHON
 

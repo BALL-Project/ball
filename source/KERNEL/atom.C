@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.55 2005/03/09 16:18:57 amoll Exp $
+// $Id: atom.C,v 1.55.2.2 2005/08/08 11:51:57 amoll Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -195,7 +195,8 @@ namespace BALL
 
 			Composite::persistentWrite(pm);
 
-			pm.writeStorableObject(*(PropertyManager*)this, "PropertyManager");
+			pm.writeStorableObject(dynamic_cast<const PropertyManager&>(*this), 
+														 "PropertyManager");
 
 			pm.writePrimitive((String)element_->getSymbol(), "element_");
 			pm.writePrimitive(static_attributes_[index_].formal_charge, "formal_charge_");
@@ -221,7 +222,8 @@ namespace BALL
 			Composite::persistentRead(pm);
 		pm.checkObjectTrailer(0);
 
-		pm.readStorableObject(*(PropertyManager*)this, "PropertyManager");
+		pm.readStorableObject(dynamic_cast<PropertyManager&>(*this), 
+													"PropertyManager");
 
 		String s;
 		pm.readPrimitive(s, "element_");	
@@ -426,7 +428,7 @@ namespace BALL
 	}
 
 	Bond* Atom::createBond(Atom& atom)
-		throw()
+		throw(Exception::TooManyBonds)
 	{
 		// Check whether this bond exists already
 		Bond* bond = getBond(atom);
@@ -442,7 +444,7 @@ namespace BALL
 	}
 
 	Bond* Atom::createBond(Bond& bond, Atom& atom)
-		throw()
+		throw(Exception::TooManyBonds)
 	{
 		return Bond::createBond(bond, *this, atom);
 	}
@@ -462,7 +464,7 @@ namespace BALL
 			{
 				bond_ptr = Bond::createBond(*bond_ptr, *this, atom);
 			}
-			catch (Bond::TooManyBonds&)
+			catch (Exception::TooManyBonds&)
 			{
 				// Clear up the mess we made.
 				delete bond_ptr;

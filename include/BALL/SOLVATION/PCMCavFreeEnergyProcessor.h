@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PCMCavFreeEnergyProcessor.h,v 1.17 2003/08/26 08:04:48 oliver Exp $
+// $Id: PCMCavFreeEnergyProcessor.h,v 1.17.6.2 2005/08/13 15:58:17 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
@@ -29,7 +29,7 @@ namespace BALL
 			The energy value is returned in units of kJ/mol.  \par
 			\ingroup Solvation
 	 */
-	class PCMCavFreeEnergyProcessor
+	class BALL_EXPORT PCMCavFreeEnergyProcessor
 		:	public EnergyProcessor
 	{
 		
@@ -39,7 +39,7 @@ namespace BALL
 				This struct contains a symbolic name for each recognized key in
 				PCMCavFreeEnergyProcessor::options.
 		 */
-		struct Option
+		struct BALL_EXPORT Option
 		{
 			/** The verbosity level.
 					Use integer values with this option.
@@ -78,7 +78,7 @@ namespace BALL
 				These values represent the default settings for the calculations of the
 				cavitation free energy.
 		 */
-		struct Default
+		struct BALL_EXPORT Default
 		{
 			/** Default verbosity level.
 					@see Option::VERBOSITY

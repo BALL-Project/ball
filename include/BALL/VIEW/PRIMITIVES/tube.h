@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.h,v 1.10 2005/07/16 21:00:36 oliver Exp $
+// $Id: tube.h,v 1.8.8.1 2005/06/14 16:08:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H

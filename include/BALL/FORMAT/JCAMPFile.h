@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.h,v 1.19 2003/08/26 08:04:13 oliver Exp $
+// $Id: JCAMPFile.h,v 1.19.6.5 2005/08/12 12:26:57 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
 #define BALL_FORMAT_JCAMPFILE_H
 
-#ifndef BALL_FORMAT_LINEBASEDFILE__H
+#ifndef BALL_FORMAT_LINEBASEDFILE_H
 #	include <BALL/FORMAT/lineBasedFile.h>
 #endif
 
@@ -27,7 +27,7 @@ namespace BALL
 			
     	\ingroup  NMRFileFormats
 	*/
-	class JCAMPFile 
+	class BALL_EXPORT JCAMPFile 
 		: public LineBasedFile
 	{
 		public:
@@ -47,7 +47,7 @@ namespace BALL
 		};
 
 		///
-		class JCAMPValue
+		class BALL_EXPORT JCAMPValue
 		{
 		  public:
 			///
@@ -58,6 +58,12 @@ namespace BALL
 			ContentType type;
 			
 			JCAMPValue() : string_value(""), numeric_value(), type(STRING) {}
+			
+			bool operator == (const JCAMPValue& value) const
+				throw();
+
+			bool operator != (const JCAMPValue& value) const
+				throw();
 		};
 
 		/// a key-value pair
@@ -129,7 +135,24 @@ namespace BALL
 
 		/// 
 		bool hasHeader(const String& name) const throw() { return header_.has(name); }
+
+		/// 
+		const JCAMPFile& operator = (const JCAMPFile& file) throw();
+
 		//@}
+		/**	@name Equality operators
+		*/
+		//@{
+
+		/** Equality operator
+		*/
+		bool operator == (const JCAMPFile& f)  const throw();
+
+		/** Inequality operator
+		*/
+		bool operator != (const JCAMPFile& f)  const throw();
+		//@}
+
 		
 		protected:
 

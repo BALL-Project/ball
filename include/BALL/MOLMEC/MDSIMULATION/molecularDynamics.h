@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.h,v 1.32 2005/02/07 19:29:57 amoll Exp $
+// $Id: molecularDynamics.h,v 1.32.4.1 2005/07/29 12:37:47 amoll Exp $
 //
 
 // MolecularDynamics: A base class for molecular dynamics simulations    
@@ -39,14 +39,14 @@ namespace BALL
 		
 		\ingroup  MDSimulation
 	*/
-	class MolecularDynamics
+	class BALL_EXPORT MolecularDynamics
 	{
 		public:
 		
 		/** Local classes for option names and default option values 
 				for all MD(sub)classes.
 		*/
-		struct Option
+		struct BALL_EXPORT Option
 		{
 
 			/** The maximal number of iterations to be carried out 
@@ -88,7 +88,7 @@ namespace BALL
 			static const char* CURRENT_TIME;
 		};
 
-		struct Default
+		struct BALL_EXPORT Default
 		{
 
 			/** The maximal number of iterations to be simulated. 

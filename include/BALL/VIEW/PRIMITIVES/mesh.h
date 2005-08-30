@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.8 2005/07/16 21:00:35 oliver Exp $
+// $Id: mesh.h,v 1.6.8.3 2005/07/25 16:00:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
@@ -113,6 +113,9 @@ namespace BALL
 			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
 				throw();
 
+			///
+			vector<ColorRGBA>& getColors() { return colors;}
+
 			//@}
 			/** @name Attributes
 			 */
@@ -122,7 +125,7 @@ namespace BALL
 					there are vertices in this mesh, we take the first element to color the whole
 					mesh. If it is *empty*, we use the color white.
 			 */
-			vector<ColorRGBA> colorList;
+			vector<ColorRGBA> colors;
 			//@}
 
 		};

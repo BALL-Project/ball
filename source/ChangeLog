@@ -1,14 +1,47 @@
-Changes since 1.1:
+1.1.1:
 
-fixed:
+Version 1.1.1 is mainly a bugfix release.
+
+Added:
+ - Support for Python under Windows
+ - Support for SD files in BALLView
+ - Picking support for bonds
+ - Coloring by molecule
+ - Online HTML documentation in BALLView
+
+Changed:
+ - BALL and BALLView libraries are now build as DLLs under Windows
+ - Renamed Mesh::colorList to Mesh::colors
+ - Exception::InvalidRange now has an float value
+ - ColorProcessor hierarchy
+ - Bond::TooManyBonds moved to Exception namespace
+ - Now the standard BALLView Python startup script will be executed in any case.
+ 	 It can be found in BALL/data/startup.py.
+   Users can choose an addition startup script, that will run afterwards.
+
+Fixed:
+ - Crashes, when reading PDB files with too many bonds
+ - Segfault in CalculateSecondaryStructureProcessor, when one SS is part of another
+ - NMRViewer und underlying widgets
+ - Mouse sensitivity changed in Rotate mode when focusing on small structures
  - Memory issues with Python objects (e.g. inserting GeometricObjects into Representations)
- - Saving and Loading of BALLView Project files
- - accelerated CustomColorProcessor
- - problem for very short tubes in Cartoon and Backbone model
- - logging improved when opening molecular file formats
- - added support for SD files in BALLView
- - spliting of surfaces for given distance values
+ - Saving and loading of BALLView project files
+ - Several problems with Cartoon and Backbone models
+ - Splitting of surfaces for given distance: computed incorrect surfaces
+ - POVRay export: degenerated objects (with a length of 0) and meshes with only one color
+ - Missing assignment operator in RotamerLibrary
+ - Problems in persistence with g++ 4.x series
+ - Hangup in socket interface with g++ 4.x series
+ - Browse button didnt work in Molecular Dynamics Simulation dialog
+ - Crash, when performing a MDS with trajectory and DCD file could not be written
+ - Incorrect bond orders and GLN amide group planarity in fragment database
+ - Naming of build peptides
+ - Opening of files in current directory per command line with BALLView
+ - Cleanup of the lighting source code
+ - Cleanup of the PyWidget source code
 
+Improved:
+ - DNA cartoon model
 
 1.1: 21.06.2005
 

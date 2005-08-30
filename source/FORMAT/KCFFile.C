@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: KCFFile.C,v 1.4 2005/07/16 21:00:41 oliver Exp $
+// $Id: KCFFile.C,v 1.2.2.2 2005/08/12 12:26:51 amoll Exp $
 //
 
 #include <BALL/FORMAT/KCFFile.h>
@@ -291,4 +291,12 @@ namespace BALL
 		return (getLine() == DELIMITER_TAG);
   }
 	
+
+	const KCFFile& KCFFile::operator = (const KCFFile& file)
+		throw()
+	{
+		GenericMolFile::operator = (file);
+		return *this;
+	}
+
 } // namespace BALL

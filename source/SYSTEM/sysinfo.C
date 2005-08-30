@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.21 2005/10/23 12:02:29 oliver Exp $
+// $Id: sysinfo.C,v 1.18.2.2 2005/06/20 10:06:28 oliver Exp $
 //
 
 #include <BALL/SYSTEM/sysinfo.h>

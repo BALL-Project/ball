@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.36 2005/07/16 21:00:47 oliver Exp $
+// $Id: modelSettingsDialog.C,v 1.34.4.3 2005/07/19 22:14:16 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -51,8 +51,9 @@ namespace BALL
 			
 			registerObject_(cartoon_tube_radius_slider);
 			registerObject_(cartoon_helix_radius_slider);
-			registerObject_(cartoon_arrow_height_slider);
-			registerObject_(cartoon_arrow_width_slider);
+			registerObject_(strand_arrow_width_slider);
+			registerObject_(strand_height_slider);
+			registerObject_(strand_width_slider);
 			registerObject_(cartoon_dna_helix_radius_slider);
 			registerObject_(cartoon_dna_ladder_radius_slider);
 			registerObject_(cartoon_dna_base_radius_slider);
@@ -189,7 +190,8 @@ namespace BALL
 				cm.setTubeRadius(getCartoonTubeRadius());
 				cm.setHelixRadius(getCartoonHelixRadius());
 				cm.setArrowWidth(getCartoonArrowWidth());
-				cm.setArrowHeight(getCartoonArrowHeight());
+				cm.setStrandHeight(getCartoonStrandHeight());
+				cm.setStrandWidth(getCartoonStrandWidth());
 				cm.setDrawDNAAsLadderModel(cartoon_dna_ladder->isChecked());
 				cm.setDNALadderRadius(getDNALadderRadius());
 				cm.setDNABaseRadius(getDNABaseRadius());
@@ -319,7 +321,8 @@ namespace BALL
 				setCartoonTubeRadius(cm.getTubeRadius());
 				setCartoonHelixRadius(cm.getHelixRadius());
 				setCartoonArrowWidth(cm.getArrowWidth());
-				setCartoonArrowHeight(cm.getArrowHeight());
+				setCartoonStrandHeight(cm.getStrandHeight());
+				setCartoonStrandWidth(cm.getStrandWidth());
 				setCartoonDNAHelixRadius(cm.getDNAHelixRadius());
 				setCartoonDNALadderRadius(cm.getDNALadderRadius());
 				setCartoonDNABaseRadius(cm.getDNABaseRadius());

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.15 2005/07/16 21:00:45 oliver Exp $
+// $Id: amberConfigurationDialog.C,v 1.13.4.1 2005/06/14 18:28:00 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>

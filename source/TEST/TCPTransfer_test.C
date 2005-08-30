@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer_test.C,v 1.26 2005/07/16 21:00:45 oliver Exp $
+// $Id: TCPTransfer_test.C,v 1.21.4.4 2005/06/20 19:50:10 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -23,7 +23,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.26 2005/07/16 21:00:45 oliver Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.21.4.4 2005/06/20 19:50:10 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -101,7 +101,6 @@ CHECK(http/login)
 	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
-
 CHECK(ftp)
 	ABORT_IF(!NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP))
 	NEW_TMP_FILE(filename);
@@ -122,38 +121,12 @@ CHECK(ftp)
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT
 
-
 CHECK(http/exception)
 	NEW_TMP_FILE(filename)
 	std::ofstream os(filename.c_str(), std::ios::out);
 	TEST_EXCEPTION(TCPTransfer::TransferFailed, TCPTransfer tcp_t(os, "ftp://xcajsjddnnakadnndakndna.de/ffaadad.caadd"))
 	os.close();
 RESULT
-
-
-CHECK(PROXY)
-	ABORT_IF(!NetworkTest::test("www.zbi.uni-saarland.de", NetworkTest::HTTP))
-	NEW_TMP_FILE(filename);
-	std::ofstream os(filename.c_str(), std::ios::out);
-	
-	TCPTransfer tcp_t;
-	tcp_t.set(os ,"http://www.zbi.uni-saarland.de/zbi/download/http_test.txt");
-
-	////////////////////////////////////////////////
-	////////// enter YOUR proxy here! //////////////
-	////////////////////////////////////////////////
-	tcp_t.setProxy("www-proxy.uni-saarland.de", 3128);
-	////////////////////////////////////////////////
-	tcp_t.transfer();
-	os.close();
-
-	if (tcp_t.getStatusCode() != TCPTransfer::PROXY__ERROR)
-	{
-		TEST_EQUAL(tcp_t.getReceivedBytes(), 3048)
-		TEST_FILE(filename.c_str(), "data/http_test.txt")
-	}
-RESULT
-
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

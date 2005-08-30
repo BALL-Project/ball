@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.h,v 1.10 2005/07/16 21:00:33 oliver Exp $
-//
+// $Id: compositeManager.h,v 1.7.6.2 2005/04/15 13:49:59 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
 #define BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
@@ -87,8 +86,8 @@ namespace BALL
 			*/
 			bool hasRoot(const Composite* composite) const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{

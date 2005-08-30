@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.72 2005/07/16 21:00:30 oliver Exp $
+// $Id: atom.h,v 1.70.4.3 2005/08/08 11:51:49 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -85,7 +85,7 @@ namespace BALL
 			@see AtomContainer
 			\ingroup KernelContainers 
 	*/
-	class Atom
+	class BALL_EXPORT Atom
 		: public Composite,
 			public PropertyManager
 	{
@@ -631,7 +631,7 @@ namespace BALL
 					@see     Bond::createBond
 			*/
 			Bond* createBond(Atom& atom)
-				throw();
+				throw(Exception::TooManyBonds);
 
 			/** Extended bond creation.
 					Initialize the bond <b>  bond </b> to connect this instance to <b>  atom </b>.
@@ -643,7 +643,7 @@ namespace BALL
 					@see     Bond::createBond
 			*/
 			Bond* createBond(Bond& bond, Atom& atom)
-				throw();
+				throw(Exception::TooManyBonds);
 
 			/**	Create a copy of a bond.
 			*/
@@ -771,7 +771,7 @@ namespace BALL
 
 			typedef Index BondIteratorPosition;
 
-			class BondIteratorTraits
+			class BALL_EXPORT BondIteratorTraits
 			{
 				public:
 
@@ -1020,7 +1020,7 @@ namespace BALL
 		//@{
 		
 		///
-		class StaticAtomAttributes
+		class BALL_EXPORT StaticAtomAttributes
 		{
 			public:
 			///
@@ -1058,7 +1058,7 @@ namespace BALL
 		};
 
 		///
-		class AttributeVector
+		class BALL_EXPORT AttributeVector
 			:	public std::vector<StaticAtomAttributes>
 		{
 			public:

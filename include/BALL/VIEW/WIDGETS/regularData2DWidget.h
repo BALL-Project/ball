@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.h,v 1.12 2005/07/16 21:00:38 oliver Exp $
+// $Id: regularData2DWidget.h,v 1.11.6.1 2005/07/25 15:09:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_REGULARDATA2DWIDGET_H
@@ -119,4 +119,4 @@ namespace BALL
 	} //end of namespace VIEW	
 }//end of namespace BALL
 
-#endif // BALL_VIEW_WIDGETS_REGULARDATA2DWIDGET_H
+#endif // BALL_VIEW_WIDGETS_DOCKWIDGET_H

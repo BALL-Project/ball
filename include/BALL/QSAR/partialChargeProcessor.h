@@ -22,7 +22,7 @@ namespace BALL
 	/**	Generic .
 			\\
 	*/
-	class PartialChargeProcessor
+	class BALL_EXPORT PartialChargeProcessor
     : public UnaryProcessor<Molecule>
 	{
 		public:

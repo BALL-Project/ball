@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.13 2005/07/16 21:00:32 oliver Exp $
+// $Id: downloadPDBFile.h,v 1.11.6.2 2005/06/12 17:34:24 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H

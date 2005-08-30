@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.42 2005/07/16 21:00:32 oliver Exp $
+// $Id: displayProperties.h,v 1.39.2.2 2005/06/12 17:34:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H

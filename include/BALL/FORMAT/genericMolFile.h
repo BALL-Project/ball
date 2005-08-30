@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.h,v 1.24 2004/05/27 19:49:37 oliver Exp $
+// $Id: genericMolFile.h,v 1.24.4.1 2005/07/28 13:52:57 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
@@ -55,7 +55,7 @@ namespace BALL
 			
     	\ingroup  StructureFormats
 	*/
-	class GenericMolFile
+	class BALL_EXPORT GenericMolFile
 		: public LineBasedFile
 	{
 		public:

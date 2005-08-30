@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.sip,v 1.7 2005/07/16 21:00:42 oliver Exp $
+// $Id: displayProperties.sip,v 1.5.4.1 2005/04/17 20:34:15 amoll Exp $
 //
 
 class DisplayProperties

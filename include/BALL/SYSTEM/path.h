@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: path.h,v 1.11 2004/02/23 17:26:08 anhi Exp $
+// $Id: path.h,v 1.11.6.2 2005/08/24 17:36:11 amoll Exp $
 //
 
 #ifndef BALL_COMMON_PATH_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_CONFIG_CONFIG_H
 #	include <BALL/CONFIG/config.h>
+#endif
+
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
 #endif
 
 #include <string>
@@ -24,7 +28,7 @@ namespace BALL
 			directories where the data files needed by BALL reside.	 \par
 	\ingroup System		
 	*/
-	class Path 
+	class BALL_EXPORT Path 
 	{
 		public:
 		/**	@name Constructors and Destructors
@@ -45,13 +49,13 @@ namespace BALL
 				settings. \par
 				The default path may be accessed using  \link Path::getDefaultDataPath getDefaultDataPath \endlink .
 				The path may also be modified at runtime by calling  \link Path::setDataPath setDataPath \endlink .
-				The path contains a colon separated list of paths that are searched 
+				The path contains a newline ("\n") separated list of paths that are searched 
 				in the order of occurence. \par
 		*/		
 		string getDataPath();
 
 		/**	Modify the data path.
-				This method accepts a colon separated list of paths to
+				This method accepts a newline separated list of paths to
 				specify data paths.
 		*/
 		void setDataPath(const string& path);

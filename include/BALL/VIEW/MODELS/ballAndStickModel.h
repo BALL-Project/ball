@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.16 2005/07/16 21:00:34 oliver Exp $
+// $Id: ballAndStickModel.h,v 1.14.2.1 2005/06/14 13:29:02 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H

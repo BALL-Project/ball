@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.h,v 1.55 2005/02/15 19:19:02 oliver Exp $
+// $Id: string.h,v 1.55.2.3 2005/08/11 15:29:14 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -57,7 +57,7 @@ namespace BALL
 	/**	Extended String class.
 			\ingroup String
 	*/
- 	class String
+ 	class BALL_EXPORT String
 		: public string
 	{
 		///
@@ -628,10 +628,12 @@ namespace BALL
 			throw();
 
 		/// Concatenates a C type string and a string
+		BALL_EXPORT
 		friend String operator + (const char* char_ptr, const String& s)
 			throw();
 
 		/// Concatenates a character and a string
+		BALL_EXPORT
 		friend String operator + (char c, const String& s)
 			throw();
 
@@ -807,26 +809,32 @@ namespace BALL
 			throw();
 
 		///
+		BALL_EXPORT
 		friend bool operator == (const char* char_ptr, const String& string)
 			throw(Exception::NullPointer);
 
 		///
+		BALL_EXPORT
 		friend bool operator != (const char* char_ptr, const String& string)
 			throw(Exception::NullPointer);
 
 		///
+		BALL_EXPORT
 		friend bool operator < (const char* char_ptr, const String& string)
 			throw(Exception::NullPointer);
 
 		///
+		BALL_EXPORT
 		friend bool operator <= (const char* char_ptr, const String& string)
 			throw(Exception::NullPointer);
 		
 		///
+		BALL_EXPORT
 		friend bool operator > (const char* char_ptr, const String& string)
 			throw(Exception::NullPointer);
 
 		///
+		BALL_EXPORT
 		friend bool operator >= (const char* char_ptr, const String& string)
 			throw(Exception::NullPointer);
 
@@ -855,22 +863,27 @@ namespace BALL
 			throw(Exception::NullPointer);
 
 		///
+		BALL_EXPORT
 		friend bool operator == (char c, const String& string)
 			throw();
 
 		///
+		BALL_EXPORT
 		friend bool operator != (char c, const String& string)
 			throw();
 
 		///
+		BALL_EXPORT
 		friend bool operator < (char c, const String& string)
 			throw();
 
 		///
+		BALL_EXPORT
 		friend bool operator <= (char c, const String& string)
 			throw();
 		
 		///
+		BALL_EXPORT
 		friend bool operator > (char c, const String& string)
 			throw();
 
@@ -976,7 +989,7 @@ namespace BALL
 			
 			\ingroup String
 	*/
-	class Substring
+	class BALL_EXPORT Substring
 	{
 		friend class String;
 
@@ -992,7 +1005,7 @@ namespace BALL
 				This exception is thrown by most accessors and predicates of
 				Substring if the substring is not bound to a string.
 		*/
-		class UnboundSubstring
+		class BALL_EXPORT UnboundSubstring
 			:	public Exception::GeneralException
 		{
 			public:
@@ -1004,7 +1017,7 @@ namespace BALL
 				is to be used.
 				@see isValid
 		*/
-		class InvalidSubstring
+		class BALL_EXPORT InvalidSubstring
 			:	public Exception::GeneralException
 		{
 			public:
@@ -1217,10 +1230,12 @@ namespace BALL
 			throw(Substring::UnboundSubstring);
 
 		/// Returns true, if the contents of the substring and the string are equal
+		BALL_EXPORT
 		friend bool operator == (const String& string, const Substring& substring)
 			throw(Substring::UnboundSubstring);
 
 		/// Returns true, if the contents of the substring and the string are not equal
+		BALL_EXPORT
 		friend bool operator != (const String& string, const Substring& substring)
 			throw(Substring::UnboundSubstring);
 
@@ -1246,6 +1261,7 @@ namespace BALL
 		//@{
 
 		/// Writes the substring to a stream
+		BALL_EXPORT
 		friend std::ostream& operator << (std::ostream& s, const Substring& substring)
 			throw();
 

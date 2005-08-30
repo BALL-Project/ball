@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.21 2005/07/16 21:00:50 oliver Exp $
+// $Id: POVRenderer.C,v 1.19.4.13 2005/08/03 15:42:59 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -32,7 +32,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-#define BALLVIEW_POVRAY_LINE_RADIUS 0.05
+#define BALLVIEW_POVRAY_LINE_RADIUS "BALL_LINE_RADIUS"
 
 		POVRenderer::POVRenderer()
 			throw()
@@ -284,7 +284,13 @@ namespace BALL
 				}
 
 				out << "light_source { ";
-				out << POVVector3(it->getPosition()) << ", " << POVColorRGBA(light_col) << "}" << endl;
+				Vector3 pos = it->getPosition();
+				if (it->isRelativeToCamera())
+				{
+					pos = stage_->calculateAbsoluteCoordinates(pos) + stage_->getCamera().getViewPoint();
+				}
+
+				out << POVVector3(pos) << ", " << POVColorRGBA(light_col) << "}" << endl;
 
 				// TODO: distinguish between directional / positional light sources
 			}
@@ -309,7 +315,8 @@ namespace BALL
 			out << "#declare BALLFinishTubeTransp       = BALLFinish" << endl;
 			out << "#declare BALLFinishMesh             = BALLFinish" << endl;
 			out << "#declare BALLFinishWire             = BALLFinish" << endl;
-			out << "#declare wire_radius 								= 0.01;" << std::endl;
+			out << "#declare BALL_WIRE_RADIUS 					= 0.01;" << std::endl;
+			out << "#declare BALL_LINE_RADIUS 					= 0.02;" << std::endl;
 			out << "// enter the path to your desired font here: " << std::endl;
 			out << "#declare BALLLabelFont              = \"" << font_file_ << "\";" << std::endl;
 			out << std::endl;
@@ -331,9 +338,9 @@ namespace BALL
 			out << "#end" << endl << endl;
 
 			out << "#macro Wire(Position1, Position2, Position3, Color1, Color2, Color3)" << endl;
-			out << "cylinder { Position1, Position2, wire_radius pigment { Color1 } finish { BALLFinishWire} }" << endl;
-			out << "cylinder { Position2, Position3, wire_radius pigment { Color2 } finish { BALLFinishWire} }" << endl;
-			out << "cylinder { Position3, Position1, wire_radius pigment { Color3 } finish { BALLFinishWire} }" << endl;
+			out << "cylinder { Position1, Position2, BALL_WIRE_RADIUS pigment { Color1 } finish { BALLFinishWire} }" << endl;
+			out << "cylinder { Position2, Position3, BALL_WIRE_RADIUS pigment { Color2 } finish { BALLFinishWire} }" << endl;
+			out << "cylinder { Position3, Position1, BALL_WIRE_RADIUS pigment { Color3 } finish { BALLFinishWire} }" << endl;
 			out << "#end" << endl << endl;
 
 
@@ -454,11 +461,15 @@ namespace BALL
 
 			const ColorRGBA& color = getColor_(line);
 
+			String p1 = POVVector3(line.getVertex1());
+			String p2 = POVVector3(line.getVertex2());
+
+			if (p1 == p2) return;
+
 			if ((Size) color.getAlpha() == 255) out << "Tube(";
 			else 																out << "TubeT(";
 
-		  out << POVVector3(line.getVertex1()) << ", "
-		      << POVVector3(line.getVertex2()) << ", "
+		  out << p1 << ", " << p2 << ", "
 					<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
 					<< getColorIndex_(color) << ")" << endl;
 		}
@@ -472,19 +483,30 @@ namespace BALL
 			const ColorRGBA& color1 = tube.getColor();
 			const ColorRGBA& color2 = tube.getColor2();
 
-  		if ((Size) color1.getAlpha() == 255) out << "Tube(";
-			else 																 out << "TubeT(";
-			
-		  out << POVVector3(tube.getVertex1()) << ", "
-		      << POVVector3(tube.getMiddleVertex()) << ", "
-					<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
-					<< getColorIndex_(color1) << ")" << endl;
+			String p1 = POVVector3(tube.getVertex1());
+			String p2 = POVVector3(tube.getMiddleVertex());
+
+			if (p1 != p2)
+			{
+				if ((Size) color1.getAlpha() == 255) out << "Tube(";
+				else 																 out << "TubeT(";
+				
+				out << p1 << ", "
+						<< p2 << ", "
+						<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
+						<< getColorIndex_(color1) << ")" << endl;
+			}
+
+			p1 = POVVector3(tube.getMiddleVertex());
+			p2 = POVVector3(tube.getVertex2());
+
+			if (p1 == p2) return;
 
   		if ((Size) color1.getAlpha() == 255) out << "Tube(";
 			else 																 out << "TubeT(";
 			
-		  out << POVVector3(tube.getMiddleVertex()) << ", "
-		      << POVVector3(tube.getVertex2()) << ", "
+		  out << p1 << ", "
+		      << p2 << ", "
 					<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
 					<< getColorIndex_(color2) << ")" << endl;
 		}
@@ -495,13 +517,17 @@ namespace BALL
 		{
 			std::ostream& out = *outfile_;
 
+			String p1 = POVVector3(tube.getVertex1());
+			String p2 = POVVector3(tube.getVertex2());
+
+			if (p1 == p2) return;
+
 			const ColorRGBA& color = getColor_(tube);
 
 			if ((Size) color.getAlpha() == 255) out << "Tube(";
 			else 																out << "TubeT(";
 
-		  out << POVVector3(tube.getVertex1()) << ", "
-		      << POVVector3(tube.getVertex2()) << ", "
+		  out << p1 << ", " << p2 << ", "
 					<< tube.getRadius() << ", "
 					<< getColorIndex_(color) << ")" << endl;
 		}	
@@ -530,19 +556,30 @@ namespace BALL
 			const ColorRGBA& color1 = tube.getColor();
 			const ColorRGBA& color2 = tube.getColor2();
 
-  		if ((Size) color1.getAlpha() == 255) out << "Tube(";
-			else 																 out << "TubeT(";
-			
-		  out << POVVector3(tube.getVertex1()) << ", "
-		      << POVVector3(tube.getMiddleVertex()) << ", "
-					<< tube.getRadius() << ", "
-					<< getColorIndex_(color1) << ")" << endl;
+			String p1 = POVVector3(tube.getVertex1());
+			String p2 = POVVector3(tube.getMiddleVertex());
+
+			if (p1 != p2)
+			{
+				if ((Size) color1.getAlpha() == 255) out << "Tube(";
+				else 																 out << "TubeT(";
+				
+				out << p1 << ", "
+						<< p2 << ", "
+						<< tube.getRadius() << ", "
+						<< getColorIndex_(color1) << ")" << endl;
+			}
+
+			p1 = POVVector3(tube.getMiddleVertex());
+			p2 = POVVector3(tube.getVertex2());
+
+			if (p1 == p2) return;
 
   		if ((Size) color1.getAlpha() == 255) out << "Tube(";
 			else 																 out << "TubeT(";
 			
-		  out << POVVector3(tube.getMiddleVertex()) << ", "
-		      << POVVector3(tube.getVertex2()) << ", "
+		  out << p1 << ", "
+		      << p2 << ", "
 					<< tube.getRadius() << ", "
 					<< getColorIndex_(color2) << ")" << endl;
 		}
@@ -563,21 +600,31 @@ namespace BALL
 			// is this a mesh in wireframe mode?
 			if (wireframes_.has(&mesh))
 			{
-				if (mesh.colorList.size() == 0) return;
+				if (mesh.colors.size() == 0) return;
 
 				String pre = "Wire(";
+
+				String color_index = getColorIndex_(mesh.colors[0]);
 
 				for (Position tri = 0; tri < mesh.triangle.size(); tri++)
 				{
 					String v1 = POVVector3(mesh.vertex[mesh.triangle[tri].v1]);
 					String v2 = POVVector3(mesh.vertex[mesh.triangle[tri].v2]);
 					String v3 = POVVector3(mesh.vertex[mesh.triangle[tri].v3]);
-					if (v1 != v2 && v2 != v3 && v3!= v1)
+
+					if (v1 == v2 || v2 == v3 || v3 == v1) continue;
+
+					out << pre << v1 << ", " << v2 << ", " << v3 << ", ";
+
+					if (mesh.colors.size() > 1)
 					{
-						out << pre << v1 << ", " << v2 << ", " << v3 << ", "
-								<< getColorIndex_(mesh.colorList[mesh.triangle[tri].v1]) << ","
-								<< getColorIndex_(mesh.colorList[mesh.triangle[tri].v2]) << ","
-								<< getColorIndex_(mesh.colorList[mesh.triangle[tri].v3]) << ")" << endl;
+						out	<< getColorIndex_(mesh.colors[mesh.triangle[tri].v1]) << ","
+								<< getColorIndex_(mesh.colors[mesh.triangle[tri].v2]) << ","
+								<< getColorIndex_(mesh.colors[mesh.triangle[tri].v3]) << ")" << endl;
+					}
+					else
+					{
+						out << color_index << "," << color_index << "," << color_index <<")" << std::endl;
 					}
 				}
 				return;
@@ -615,15 +662,13 @@ namespace BALL
 			ColorMap colors;
 			vector<const ColorRGBA*> color_vector;
 			String color_string;
-			Position pos = 0;
-			for (Position i = 0; i < mesh.colorList.size(); i++)
+			for (Position i = 0; i < mesh.colors.size(); i++)
 			{
-				mesh.colorList[i].get(color_string);
+				mesh.colors[i].get(color_string);
 				if (!colors.has(color_string))
 				{
-					colors.insert(ColorMap::ValueType(color_string, pos));
-					color_vector.push_back(&mesh.colorList[i]);
-					pos++;
+					colors.insert(ColorMap::ValueType(color_string, colors.size()));
+					color_vector.push_back(&mesh.colors[i]);
 				}
 			}
 
@@ -669,11 +714,11 @@ namespace BALL
 					out << mesh.triangle[i].v2 << ", ";
 					out << mesh.triangle[i].v3 << ">, ";
 					// color index
-					mesh.colorList[mesh.triangle[i].v1].get(color_temp);
+					mesh.colors[mesh.triangle[i].v1].get(color_temp);
 					out << colors[color_temp] << ", ";
-					mesh.colorList[mesh.triangle[i].v2].get(color_temp);
+					mesh.colors[mesh.triangle[i].v2].get(color_temp);
 					out << colors[color_temp] << ", ";
-					mesh.colorList[mesh.triangle[i].v3].get(color_temp);
+					mesh.colors[mesh.triangle[i].v3].get(color_temp);
 					out << colors[color_temp] << endl;
 				}
 			}
@@ -723,13 +768,13 @@ namespace BALL
 
 					Mesh& mesh = *dynamic_cast<Mesh*>(*it);
 					String color_string;
-					for (Position i = 0; i < mesh.colorList.size(); i++)
+					for (Position i = 0; i < mesh.colors.size(); i++)
 					{
-						mesh.colorList[i].get(color_string);
+						mesh.colors[i].get(color_string);
 						if (!color_map_.has(color_string))
 						{
 							color_map_.insert(ColorMap::ValueType(color_string, color_map_.size()));
-							color_vector_.push_back(&mesh.colorList[i]);
+							color_vector_.push_back(&mesh.colors[i]);
 						}
 					}
 				}
@@ -755,6 +800,14 @@ namespace BALL
 		{
 			String color_temp;
 			color.get(color_temp);
+#ifdef BALL_VIEW_DEBUG
+			if (!color_map_.has(color_temp))
+			{
+				BALLVIEW_DEBUG
+				return "";
+			}
+#endif
+
 			return String("c") + String(color_map_[color_temp]);
 		}
 

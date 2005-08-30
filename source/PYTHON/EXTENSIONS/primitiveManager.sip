@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.sip,v 1.12 2005/07/16 21:00:42 oliver Exp $
+// $Id: primitiveManager.sip,v 1.10.4.1 2005/06/06 14:00:35 amoll Exp $
 //
 
 class PrimitiveManager

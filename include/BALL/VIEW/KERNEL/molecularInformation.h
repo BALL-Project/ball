@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularInformation.h,v 1.8 2005/07/16 21:00:33 oliver Exp $
-//
+// $Id: molecularInformation.h,v 1.6.8.1 2005/05/13 11:59:09 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
 #define BALL_VIEW_KERNEL_MOLECULARINFORMATION_H

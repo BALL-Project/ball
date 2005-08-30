@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clippingPlane.h,v 1.2 2005/07/03 09:43:06 oliver Exp $
+// $Id: clippingPlane.h,v 1.1.2.6 2005/06/15 13:36:52 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_CLIPPING_PLANE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.13 2005/05/06 17:22:07 bertsch Exp $
+// $Id: ringPerceptionProcessor.C,v 1.9 2004/11/03 20:33:25 oliver Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
@@ -11,29 +11,20 @@
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/COMMON/limits.h>
-#include <BALL/STRUCTURE/molecularGraph.h>
 
 // needed for MSVC
 #include <BALL/KERNEL/fragment.h>
 
 #include <vector>
-
-#define BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
-#undef  BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
-
-#define BALL_QSAR_RINGPERCEPTIONPROCESSOR_MAX_RUNS 100
+#include <queue>
 
 using namespace std;
 
 namespace BALL
 {
-	const char* RingPerceptionProcessor::Option::ALGORITHM_NAME = "algorithm_name";
-	const char* RingPerceptionProcessor::Default::ALGORITHM_NAME = "Balducci";
-
 	RingPerceptionProcessor::RingPerceptionProcessor()
 		:	UnaryProcessor<AtomContainer>()
 	{
-		setDefaultOptions();
 	}
 
 	RingPerceptionProcessor::RingPerceptionProcessor(const RingPerceptionProcessor& rp)
@@ -48,88 +39,16 @@ namespace BALL
 
 	RingPerceptionProcessor::~RingPerceptionProcessor()
 	{
-		setDefaultOptions();
-	}
-
-	void RingPerceptionProcessor::setDefaultOptions()
-	{
-		options.setDefault(Option::ALGORITHM_NAME, Default::ALGORITHM_NAME);
 	}
 
 	Processor::Result RingPerceptionProcessor::operator () (AtomContainer& ac)
 	{
-		// call the calculate function
 		vector<vector<Atom*> > sssr;
 		calculateSSSR(sssr, ac);
-	
-		// set all atom and bonds which are not in a ring (for consistence)
-		AtomIterator a_it;
-		BALL_FOREACH_ATOM(ac, a_it)
-		{
-			if (!a_it->hasProperty("InRing"))
-			{
-				a_it->setProperty("InRing", false);
-			}
-		}
-		
-		Atom::BondIterator b_it;
-		BALL_FOREACH_BOND(ac, a_it, b_it)
-		{
-			if (!b_it->hasProperty("InRing"))
-			{
-				b_it->setProperty("InRing", false);
-			}
-		}
-		return Processor::BREAK;
+		return Processor::CONTINUE;
 	}
 
 	Size RingPerceptionProcessor::calculateSSSR(vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
-	{
-		String algorithm_name = options.get(Option::ALGORITHM_NAME);
-		if (algorithm_name == "Balducci")
-		{
-			// build molecular graph
-			Molecule * mol = static_cast<Molecule*>(&ac);
-			MolecularGraph mol_graph(*mol);
-			
-			// detect the bccs
-			vector<MolecularGraph*> bccs;
-			findAllBCC(bccs, mol_graph);
-
-			Size num_rings(0);
-
-			// for each bcc that potentially contains rings do the Balducci/Pearlman ring perception
-			for (vector<MolecularGraph*>::iterator it=bccs.begin();it!=bccs.end();++it)
-			{
-				if ((*it)->getNumberOfNodes() > 2 && (*it)->getNumberOfEdges() > 2)
-				{
-					num_rings += BalducciPearlmanAlgorithm_(sssr_orig, **it);
-				}
-			}
-
-			// now delete the bccs
-			for (vector<MolecularGraph*>::iterator it=bccs.begin();it!=bccs.end();++it)
-			{
-				delete *it;
-			}
-
-			return num_rings;
-		}
-		else
-		{
-			if (algorithm_name == "Figueras")
-			{
-				return FiguerasAlgorithm_(sssr_orig, ac);
-			}
-			else
-			{
-				Log.error() << "Unknown ring perception algorithm: " << algorithm_name << endl;
-				return 0;
-			}
-		}
-	}
-
-	Size RingPerceptionProcessor::FiguerasAlgorithm_(vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
 	{
 		// the algorithm runs on a copy, bc bonds and maybe atoms are destroyed!
 		AtomContainer ac_copy(ac);
@@ -389,7 +308,7 @@ namespace BALL
 				}
 			}
 
-			// delete bond on a copy, mapping needed
+// delete bond on a copy, mapping needed
 			AtomContainer ac_copy(ac);
 	    HashMap<Atom*, Atom*> orig_to_copy;
 	    AtomIterator orig = ac.beginAtom();
@@ -438,440 +357,6 @@ namespace BALL
 		// destroy the selected bond
 		incident_edges[smallest_ring_it].first->destroyBond(* incident_edges[smallest_ring_it].second);
 		
-	}
-
-
-	// bcc code
-
-	Size RingPerceptionProcessor::findAllBCC(vector<MolecularGraph*>& bccs, MolecularGraph& graph)
-	{
-		// delete all content from the strcutures
-		visited_.clear();
-		Size dfbi(0);
-		HashMap<NodeItem<Index, Index>*, Size> DFBIndex;
-		P_.clear();
-		parents_.clear();
-		BCC_ = stack<EdgeItem<Index, Index>* >();
-		visited_bonds_.clear();
-
-		// for each node in the graph apply the recursive function
-		for (MolecularGraph::NodeIterator ait=graph.beginNode(); ait!=graph.endNode(); ++ait)
-		{
-			NodeItem<Index, Index> * v = &*ait;
-			if (!visited_.has(v))
-			{
-				DFSBCC_(bccs, dfbi, DFBIndex, v);
-			}
-		}
-
-		return bccs.size();
-	}
-
-	void RingPerceptionProcessor::DFSBCC_(vector<MolecularGraph*>& bccs, Size dfbi, 
-																				HashMap<NodeItem<Index, Index>*, Size> DFBIndex, 
-																				NodeItem<Index, Index>* v)
-	{
-		visited_.insert(v);
-		dfbi++;
-		DFBIndex[v] = dfbi;
-		P_[v] = dfbi;
-	
-		for (NodeItem<Index, Index>::Iterator bit=v->begin(); bit!=v->end(); ++bit)
-		{
-			if (!visited_bonds_.has(*bit))
-			{
-				BCC_.push(*bit);
-				visited_bonds_.insert(*bit);
-
-				#ifdef BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
-				cerr << String('\t', dfbi) << "pushed: " << *bit << " (stack size: " << BCC_.size() << endl;
-				#endif
-
-				NodeItem<Index, Index> * v_prime = 0;
-				if (&(*bit)->getSource() == v)
-				{				
-					v_prime = &(*bit)->getTarget();
-				}
-				else
-				{
-					v_prime = &(*bit)->getSource();
-				}
-
-				if (!visited_.has(v_prime))
-				{
-					parents_[v_prime] = v;
-					
-					#ifdef BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
-					cerr << String('\t', dfbi) << "Calling DFSBCC_" << endl;
-					#endif
-					
-					DFSBCC_(bccs, dfbi, DFBIndex, v_prime);
-					#ifdef BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
-					cerr << String('\t', dfbi) << "returned DFSBCC_ " << P_[v_prime] << " " << DFBIndex[v] << endl;
-					#endif 
-					
-					if (P_[v_prime] >= DFBIndex[v])
-					{
-						// we found a bcc
-						#ifdef BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
-						cerr << String('\t', dfbi) << "> found bcc (stack size: " << BCC_.size() << ")" << endl;
-						#endif
-
-						// pop all the bcc member bonds from the stack
-						HashSet<Atom* > ac;
-						HashSet<Bond* > add_edges;
-						while (BCC_.top() != *bit)
-						{
-							EdgeItem<Index, Index>* bond = BCC_.top();
-							add_edges.insert(bond->getBond());
-							ac.insert(bond->getSource().getAtom());
-							ac.insert(bond->getTarget().getAtom());
-							BCC_.pop();
-						}
-						
-						EdgeItem<Index, Index> * bond = BCC_.top();
-						ac.insert(bond->getSource().getAtom());
-						ac.insert(bond->getTarget().getAtom());
-						add_edges.insert(bond->getBond());
-						BCC_.pop();
-						
-						// now all items are collected, lets build the new graph						
-						// first adding the nodes!!!
-						MolecularGraph * new_graph = new MolecularGraph;
-						for (HashSet<Atom* >::Iterator it=ac.begin();it!=ac.end();++it)
-						{
-							new_graph->newNode(**it);
-						}
-
-						// second add the edges
-						for (HashSet<Bond* >::Iterator it=add_edges.begin(); +it; ++it)
-						{
-							new_graph->newEdge(**it);
-						}
-
-						bccs.push_back(new_graph);							
-					}
-					#ifdef BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
-					cerr << String('\t', dfbi) << "setting P[v] to min(" << P_[v] << 
-						", " << P_[v_prime] << "); v_prime not visited before" << endl;
-					#endif
-
-					P_[v] = min(P_[v], P_[v_prime]);
-				}
-				else
-				{
-					if (v_prime != parents_[v])
-					{
-						#ifdef BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
-						cerr << String('\t', dfbi) << " setting P[v] to min(" << P_[v] << 
-							", " << DFBIndex[v_prime] << "); v_prime visited before && v_prime != Father[v]" << endl;
-						#endif
-						P_[v] = min(P_[v], DFBIndex[v_prime]);
-					}
-				}
-			}
-			#ifdef BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
-			else
-			{
-				cerr << String('\t', dfbi) << "bond already visited" << endl;
-			}
-			#endif
-		}	
-	}
-
-
-	// Balducci, Pearlman algorithm
-
-	HashMap<RingPerceptionProcessor::TNode*, NodeItem<Index, Index> *> RingPerceptionProcessor::tnode_to_atom;
-	HashMap<NodeItem<Index, Index>* , RingPerceptionProcessor::TNode*> RingPerceptionProcessor::atom_to_tnode;
-	HashMap<EdgeItem<Index, Index> *, Size> RingPerceptionProcessor::bond_to_index;
-	HashMap<Size, EdgeItem<Index, Index> *> RingPerceptionProcessor::index_to_bond;
-	vector<BitVector> RingPerceptionProcessor::rings;
-	vector<BitVector> RingPerceptionProcessor::matrix;
-
-	void RingPerceptionProcessor::TNode::recieve()
-	{
-		vector<BitVector> do_not_forward;
-
-		// build the A array
-		HashMap<EdgeItem<Index, Index>*, HashMap<TNode*, vector<PathMessage> > > array_A;
-		for (vector<PathMessage>::iterator it=recieve_buffer.begin(); it!=recieve_buffer.end();++it)
-		{
-			array_A[it->efirst][it->nfirst].push_back(*it);
-		}
-
-		// merge the messages
-		for (HashMap<EdgeItem<Index, Index>*, HashMap<TNode*, vector<PathMessage> > >::Iterator it1=array_A.begin(); +it1; ++it1)
-		{
-			for (HashMap<TNode*, vector<PathMessage> >::Iterator it2=it1->second.begin(); +it2; ++it2)
-			{
-				if (it2->second.size() > 1)
-				{
-					vector<PathMessage> new_message;
-					new_message.push_back(it2->second[0]);
-					for (Size i=1;i!=it2->second.size();++i)
-					{
-						do_not_forward.push_back(it2->second[i].beep);
-					}
-					it2->second = new_message;
-				}
-			}
-		}
-
-		HashMap<TNode*, vector<PathMessage> > array_B;
-
-		// handle inverse-edge collisions
-		for (HashMap<EdgeItem<Index, Index>*, HashMap<TNode*, vector<PathMessage> > >::Iterator it1=array_A.begin(); +it1; ++it1)
-		{
-			for (HashMap<TNode*, vector<PathMessage> >::Iterator it2=it1->second.begin(); +it2; ++it2)
-			{
-				HashMap<TNode*, vector<PathMessage> >::Iterator it3=it2;
-				for(++it3; +it3; ++it3)
-				{
-					BitVector beer = it2->second[0].beep | it3->second[0].beep;
-					do_not_forward.push_back(it2->second[0].beep);
-					do_not_forward.push_back(it3->second[0].beep);
-					BalducciPearlmanRingSelector_(beer);
-				}
-				array_B[it2->first].push_back(it2->second[0]);
-			}
-		}
-
-		// handle collisions
-		for (HashMap<TNode*, vector<PathMessage> >::Iterator it1=array_B.begin(); +it1; ++it1)
-		{
-			for (vector<PathMessage>::iterator it2=it1->second.begin();it2!=it1->second.end();++it2)
-			{
-				for (vector<PathMessage>::iterator it3=it2+1;it3!=it1->second.end();++it3)
-				{
-					BitVector beer = it2->beep | it3->beep;
-					do_not_forward.push_back(it2->beep);
-					do_not_forward.push_back(it3->beep);
-					BalducciPearlmanRingSelector_(beer);
-				}
-			}
-		}
-
-		// store all non-collided path messages in the send buffer
-		for (vector<PathMessage>::iterator it1=recieve_buffer.begin();it1!=recieve_buffer.end();++it1)
-		{
-			bool has(false);
-			for (vector<BitVector>::iterator it2=do_not_forward.begin();it2!=do_not_forward.end();++it2)
-			{
-				if (it1->beep == *it2)
-				{
-					has = true;
-					break;
-				}
-			}
-			if (!has)
-			{
-				send_buffer.push_back(*it1);
-			}
-		}
-
-		// delete all messages in the recieve buffer
-		recieve_buffer.clear();
-	}
-
-	void RingPerceptionProcessor::TNode::send()
-	{
-		for (Size i=0;i!=send_buffer.size();++i)
-		{
-			PathMessage pm = send_buffer[i];
-			NodeItem<Index, Index> * a = tnode_to_atom[this];
-			for (NodeItem<Index, Index>::Iterator bit=a->begin(); bit!=a->end(); ++bit)
-			{
-				TNode * node = 0;
-				// determine which node
-				if (&(*bit)->getSource() == a)
-				{
-					node = atom_to_tnode[&(*bit)->getTarget()];
-				}
-				else
-				{
-					node = atom_to_tnode[&(*bit)->getSource()];
-				}
-				if (node != pm.nlast)
-				{
-					// build new message
-					PathMessage new_pm;
-					new_pm.nfirst = pm.nfirst;
-					new_pm.efirst = pm.efirst;
-					new_pm.beep = pm.beep;
-					new_pm.push(*bit, this);
-					// append it to the recieve buffer of the target node
-					node->recieve_buffer.push_back(new_pm);
-				}
-			}
-		}
-		
-		// delete the messages in the send buffer
-		send_buffer.clear();
-	}
-
-	void RingPerceptionProcessor::PathMessage::push(EdgeItem<Index, Index>* bond, TNode* node)
-	{
-		// set the bit, and the node the message arives from
-		beep.setBit(bond_to_index[bond]);
-		nlast = node;
-	}
-
-	void RingPerceptionProcessor::BalducciPearlmanRingSelector_(BitVector beer)
-	{
-		// linear independency tests
-		if (rings.size() ==  0)
-		{
-			rings.push_back(beer);
-			matrix.push_back(beer);
-			return;
-		}
-		// walk through all columns of the new entry
-		for (Size i=0;i!=beer.getSize();++i)
-		{
-			// has bit set?
-			if (beer[i])
-			{
-				for (Size j=0;j!=matrix.size();++j)
-				{
-					if (matrix[j][i])
-					{
-						break;
-					}
-					if (j == matrix.size()-1 && !matrix[j][i])
-					{
-						rings.push_back(beer);
-						matrix.push_back(beer);
-						return;
-					}
-				}
-			}
-		}
-	}
-
-	Size RingPerceptionProcessor::BalducciPearlmanAlgorithm_(vector<vector<Atom*> >& sssr, MolecularGraph& graph)
-	{
-		Size num_atoms = graph.getNumberOfNodes();
-		Size num_bonds = graph.getNumberOfEdges();
-		
-		// clear the old data from the static variables
-		bond_to_index.clear();
-		index_to_bond.clear();
-		atom_to_tnode.clear();
-		tnode_to_atom.clear();
-		rings.clear();
-		matrix.clear();
-	
-		// 1. init the flow-network
-
-		// do the node to tnode mapping
-		for (MolecularGraph::NodeIterator ait=graph.beginNode(); ait!=graph.endNode(); ++ait)
-		{
-			TNode * node = new TNode();
-			atom_to_tnode[&*ait] = node;
-			tnode_to_atom[node] = &*ait;
-		}
-
-		// do the bond to index mapping for the bitvector
-		Size bond_num(0);
-		for (MolecularGraph::EdgeIterator bit=graph.beginEdge(); bit!=graph.endEdge(); ++bit)
-		{
-			bond_to_index[&*bit] = bond_num;
-			index_to_bond[bond_num++] = &*bit;
-		}
-
-		// fill in the messages
-		for (MolecularGraph::NodeIterator ait=graph.beginNode(); ait!=graph.endNode(); ++ait)
-		{
-			for (NodeItem<Index, Index>::Iterator bit=ait->begin(); bit!=ait->end(); ++bit)
-			{
-				PathMessage pm;
-				BitVector beep(num_bonds);
-				beep.fill(false);
-				// set the bit for the first (outgoing) edge
-				beep.toggleBit(bond_to_index[*bit]);
-				pm.beep = beep;
-				TNode * tnode = 0;
-				// determine which node to set
-				if ((*bit)->getSource() == *ait)
-				{
-					tnode = atom_to_tnode[&(*bit)->getTarget()];
-				}
-				else
-				{
-					tnode = atom_to_tnode[&(*bit)->getSource()];
-				}
-				pm.nfirst = tnode;
-				pm.nlast = tnode;
-				pm.efirst = *bit;
-				// append the message to the send_buff this node
-				atom_to_tnode[&*ait]->send_buffer.push_back(pm);
-			}
-		}
-	
-		// calculate how many rings we must find
-		Size num_rings = num_bonds - num_atoms + 1;
-
-		// the nodes are forced to talk until they get enough rings
-		Size count(0);
-		while (rings.size() < num_rings)
-		{
-			count++;
-			
-			// calling all sends 
-			for (MolecularGraph::NodeIterator ait=graph.beginNode(); ait!=graph.endNode(); ++ait)
-			{
-				atom_to_tnode[&*ait]->send();
-			}
-			// calling all recieves
-			for (MolecularGraph::NodeIterator ait=graph.beginNode(); ait!=graph.endNode(); ++ait)
-			{
-				atom_to_tnode[&*ait]->recieve();
-			}
-		
-			// this is just a workaround, due to deficiencies of the balducci pearlman algorithm
-			if (count > BALL_QSAR_RINGPERCEPTIONPROCESSOR_MAX_RUNS)
-			{
-				break;
-			}
-		}
-
-		// now set the named property InRing to true, for the ring bonds
-		for (Size i=0;i!=rings.size();++i)
-		{
-			HashSet<Atom*> in_ring;
-			vector<Atom*> ring;
-			for (Size j=0;j!=rings[i].getSize();++j)
-			{
-				if (rings[i][j])
-				{
-					Bond * b = index_to_bond[j]->getBond();
-					b->setProperty("InRing", true);
-					Atom * a = b->getPartner(*b->getFirstAtom());
-					a->setProperty("InRing", true);
-					if (!in_ring.has(a))
-					{
-						in_ring.insert(a);
-						ring.push_back(a);
-					}
-					a = b->getPartner(*b->getSecondAtom());
-					a->setProperty("InRing", true);
-					if (!in_ring.has(a))
-					{
-						in_ring.insert(a);
-						ring.push_back(a);
-					}
-				}
-			}
-			sssr.push_back(ring);
-		}
-
-		// delete TNodes
-		for (HashMap<NodeItem<Index, Index>* , TNode*>::Iterator it=atom_to_tnode.begin(); +it; ++it)
-		{
-			delete it->second;
-		}
-		return rings.size();
 	}
 
 } // namespace BALL

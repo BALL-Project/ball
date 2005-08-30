@@ -1,7 +1,4 @@
-#
-# $Id: Makefile,v 1.5 2005/07/16 21:00:52 oliver Exp $
-#
-
+# $Id: Makefile,v 1.3.6.1 2005/06/19 09:32:52 oliver Exp $
 #========================
 # BALL/EXAMPLES Makefile
 #========================
@@ -28,3 +25,4 @@ clean_flex_bison:
 
 check_test.o: check_test.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) -c $*.C -o $@
+

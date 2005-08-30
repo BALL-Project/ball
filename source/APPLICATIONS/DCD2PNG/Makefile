@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.4 2005/12/23 17:02:30 amoll Exp $
+# $Id: Makefile,v 1.1.4.1 2005/06/19 09:32:45 oliver Exp $
 #
 
 EXECUTABLE=DCD2PNG

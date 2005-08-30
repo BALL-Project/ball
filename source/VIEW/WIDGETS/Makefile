@@ -19,7 +19,8 @@ CPP_SOURCES=\
 	scene.C\
 	canvasWidget.C\
 	regularData2DWidget.C\
-	regularData1DWidget.C
+	regularData1DWidget.C\
+	helpViewer.C
 
 
 PYTHON_CPP_SOURCES=\
@@ -36,7 +37,8 @@ MOC_SOURCES=\
 	scene_moc.C\
 	canvasWidget_moc.C\
 	regularData1DWidget_moc.C\
-	regularData2DWidget_moc.C
+	regularData2DWidget_moc.C\
+	helpViewer_moc.C
 
 PYTHON_MOC_SOURCES=\
 	pyWidget_moc.C
@@ -83,4 +85,7 @@ canvasWidget_moc.C:	$(HEADER_DIR)/canvasWidget.h
 
 datasetControl_moc.C:	$(HEADER_DIR)/datasetControl.h
 	$(MOC) $(HEADER_DIR)/datasetControl.h -o $@
+
+helpViewer_moc.C:	$(HEADER_DIR)/helpViewer.h
+	$(MOC) $(HEADER_DIR)/helpViewer.h -o $@
 

@@ -1,6 +1,4 @@
-#
-# $Id: Makefile,v 1.7 2005/07/16 21:00:39 oliver Exp $
-#
+# $Id: Makefile,v 1.5.4.1 2005/06/19 09:32:46 oliver Exp $
 
 EXECUTABLE=nmrview
 DIRECTORY=APPLICATIONS/NMRVIEW

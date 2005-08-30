@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK.C,v 1.6 2005/02/23 13:46:58 oliver Exp $
+// $Id: UCK.C,v 1.6.2.2 2005/07/29 14:13:12 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/UCK.h>
+
 #include <BALL/COMMON/MD5Hash.h>
 #include <BALL/COMMON/limits.h>
-#include <BALL/COMMON/limits.h>
-#include <BALL/FORMAT/SDFile.h>
+
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/PTE.h>

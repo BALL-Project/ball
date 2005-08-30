@@ -4,9 +4,9 @@ Compiler:
   BALL requires a more or less ANSI compliant C++ compiler.
   It has been successfully built and tested on the following platforms:
 
-    - Linux/x86 2.x using g++ 3.2.x/3.3.x/3.4.x (some trouble with 4.0.0!)
+    - Linux/x86 2.x using g++ 3.2.x/3.3.x/3.4.x/4.0.x
     - Solaris/SPARC 8 using g++ 3.2.1
-    - MacOS X (Panther) using g++ 3.3
+    - MacOS X (Tiger) using g++ 4.0.1
     - Microsoft Windows XP using Microsoft Visual Studio .NET 2003
 
   We have also successful reports (although with slight problems) for:
@@ -218,8 +218,18 @@ the qt libraries (libqt.so, libqgl.so), and the OpenGL/Mesa libraries
 ---------------------------
 
 MacOS X: 
-  - Make sure you run MacOS X Panther and have g++ 3.3 installed
-  - install QT 3.3.4 (under Tiger: a 3.3.5 snapshot -- not yet tested!)
+  - Make sure you run MacOS X Tiger and have g++ 4.0 installed
+    (check this by calling 'g++ --version')
+  - install QT 3.3.5 (only snapshots are currently available!)
+    make sure it is the Mac *native* version, not the X11 one
+    (which should work as well, but is ugly an not supported!)
+  - call configure with '--with-qt-mt'
+  - For Python support: make sure you have *framework installation*
+    of Python. Install SIP 4.2.0 or 4.2.1 together with the
+    patch provided from our website!
+  - To produce a MacOS-compliant BALLView application, use
+    'make macos_app' in source/BALLVIEW
+  - Make sure you set your DYLD_LIBRARY_PATH correctly!
 
 Windows/cygwin:
   - should work out of the box without visualization:
@@ -232,4 +242,4 @@ Windows/DOT NET:
     in BALL/Windows/README.txt
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.17 2005/07/03 09:43:12 oliver Exp $
+document revision: $Id: INSTALLATION,v 1.16.4.2 2005/07/21 12:23:36 oliver Exp $

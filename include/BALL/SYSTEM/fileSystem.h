@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileSystem.h,v 1.13 2004/02/23 15:20:02 anhi Exp $
+// $Id: fileSystem.h,v 1.13.6.1 2005/07/30 21:53:07 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_FILESYSTEM_H
@@ -39,7 +39,7 @@ namespace BALL
 			of a path.
 \ingroup System
 	*/
-	class FileSystem
+	class BALL_EXPORT FileSystem
 	{
 		public:
 			

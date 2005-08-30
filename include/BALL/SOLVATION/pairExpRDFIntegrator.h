@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pairExpRDFIntegrator.h,v 1.23 2004/05/27 19:49:46 oliver Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.23.4.2 2005/08/13 15:58:19 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
@@ -34,7 +34,7 @@ namespace BALL
 		\ingroup Solvation	
 	 */
 
-	class PairExpRDFIntegrator
+	class BALL_EXPORT PairExpRDFIntegrator
 		:	public RDFIntegrator
 	{
 
@@ -46,7 +46,7 @@ namespace BALL
 				This struct contains a symbolic name for each recognized key in
 				PairExpRDFIntegrator::options.
 		 */
-		struct Option
+		struct BALL_EXPORT Option
 		{
 			/** The verbosity level.
 					Use integer values with this option.
@@ -62,7 +62,7 @@ namespace BALL
 			static const char* SAMPLES;
 		};
 
-		struct Default
+		struct BALL_EXPORT Default
 		{
 			/** Default verbosity level.
 					@see Option::VERBOSITY

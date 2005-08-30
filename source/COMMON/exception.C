@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.C,v 1.37 2004/12/27 18:08:51 amoll Exp $
+// $Id: exception.C,v 1.37.4.3 2005/08/19 11:25:24 amoll Exp $
 //
 
 #include <BALL/COMMON/exception.h>
@@ -300,12 +300,24 @@ namespace BALL
 			{
 			}
 
+			TooManyBonds::TooManyBonds(const char* file, int line, String error)
+				throw()
+				: GeneralException(file, line, 
+						String("Unable to create additional bond between ") + error, "")
+			{
+			}
+
+
+			InvalidRange::InvalidRange(const char* file, int line, float value)
+				throw()
+				: GeneralException(file, line, "The argument was out of range: ", String(value))
+			{
+			}
+
+
+			DEF_EXCEPTION(OutOfRange, "the range of the operation was invalid")
 
 			DEF_EXCEPTION(DivisionByZero, "a division by zero was requested")
-
-			DEF_EXCEPTION(InvalidRange, "the range of the operation was invalid")
-
-			DEF_EXCEPTION(OutOfRange, "the argument was not in range")
 
 			DEF_EXCEPTION(NullPointer, "a null pointer was specified")
 
@@ -419,7 +431,7 @@ namespace BALL
 
 
 			// create a global instance of the exception handler
-			GlobalExceptionHandler globalHandler;
+			BALL_EXPORT GlobalExceptionHandler globalHandler;
 
 	} // namespace Exception
 

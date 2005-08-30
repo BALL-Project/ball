@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.18 2005/02/13 17:02:39 amoll Exp $
+// $Id: stage.h,v 1.18.4.3 2005/08/03 15:35:36 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -38,7 +38,12 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		/** Light source
+		/** Light source is mainly used for Renderer classes (e.g. OpenGL and POVRay).
+		 		Currently we support ambient, positional and directional light sources.
+		 		The Position and direction of lights can be stored twofold:
+				Either with absolute room coordinates, and a direction vector or relative to a Camera.
+				In this case, the position and direction vector are stored as multiples of
+				look right, look up and view vector.
 				\ingroup  ViewKernelStage
 		 */
 		class BALL_EXPORT LightSource
@@ -97,11 +102,11 @@ namespace BALL
 			void setPosition(const Vector3& position)
 				throw() { position_ = position; }
 
-			/// Get the direction of the light
+			/// Get the direction vector of the light
 			const Vector3& getDirection() const
 				throw() { return direction_;}
 
-			/// Set the direction of the light
+			/// Set the direction vector of the light
 			void setDirection(const Vector3& direction)
 				throw() { direction_ = direction;}
 
@@ -157,12 +162,12 @@ namespace BALL
 			bool isRelativeToCamera() const
 				throw() { return relative_;}
 
-			/// Translate the LightSource
-			void translate(const Vector3& v3)
-				throw() { position_+=v3; direction_+=v3;}
-
 			///
 			LightSource& operator = (const LightSource& light) throw();
+
+			/// needed for MSVC, dont use it otherwise!
+			bool operator < (const LightSource& light) const
+				throw();
 
 			//@}
 			/**	@name Predicates
@@ -290,7 +295,7 @@ namespace BALL
 				throw() { view_point_ += v; look_at_ += v; calculateVectors_();}
 
 			/// Rotate the camera
-			void rotate(const Quaternion& q)
+			void rotate(const Quaternion& q, const Vector3& origin)
 				throw();
 
 			/// Reset Camera to standard values
@@ -312,6 +317,10 @@ namespace BALL
 			
 			///
 			bool operator == (const Camera& camera) const
+				throw();
+
+			/// Needed for MSVC
+			bool operator < (const Camera& camera) const
 				throw();
 
 			//@}
@@ -431,18 +440,6 @@ namespace BALL
 			bool coordinateSystemEnabled() const
 				throw() { return show_coordinate_system_;}
 
-			/// Translate camera and lightsources, if these are set relative to camera
-			virtual void translate(const Vector3& v3)
-				throw();
-
-			/// Rotate camera and lightsources
-			virtual void rotate(const Quaternion& q, const Vector3& origin)
-				throw();
-
-			/// Move camera and lightsources, if these are set relative to camera
-			virtual void moveCameraTo(const Camera& camera)
-				throw();
-
 			/// Set the eye distance for the stereo view
 			void setEyeDistance(float value) 
 				throw() { eye_distance_ = value;}
@@ -523,12 +520,12 @@ namespace BALL
 					or in the LightSettings dialog.
 					@return Vector3(times right_vector, times look_up_vector, times view_vector)
 			*/
-			Vector3 calculateRelativeCoordinates(Vector3 pos);
+			Vector3 calculateRelativeCoordinates(Vector3 pos) const;
 
 			/** Calculate absolute room coordinates from relative coordinates.
 			 		@see calculateRelativeCoordinates
 			*/
-			Vector3 calculateAbsoluteCoordinates(Vector3 pos);
+			Vector3 calculateAbsoluteCoordinates(Vector3 pos) const;
 
 			//@}
 			

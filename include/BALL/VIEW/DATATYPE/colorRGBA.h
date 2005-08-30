@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.h,v 1.20 2005/07/16 21:00:31 oliver Exp $
+// $Id: colorRGBA.h,v 1.18.8.1 2005/06/14 16:08:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H

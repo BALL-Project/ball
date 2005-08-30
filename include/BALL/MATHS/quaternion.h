@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quaternion.h,v 1.43 2004/10/22 20:18:05 amoll Exp $
+// $Id: quaternion.h,v 1.43.4.2 2005/08/11 15:29:15 amoll Exp $
 //
 
 #ifndef BALL_MATHS_QUATERNION_H

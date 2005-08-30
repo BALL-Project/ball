@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondModel.h,v 1.7 2005/07/16 21:00:34 oliver Exp $
+// $Id: HBondModel.h,v 1.5.4.1 2005/06/14 13:29:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_HBONDMODELPROCESSOR_H

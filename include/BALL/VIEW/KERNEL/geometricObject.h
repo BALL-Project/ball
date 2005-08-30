@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.38 2005/02/06 20:57:04 oliver Exp $
+// $Id: geometricObject.h,v 1.38.4.2 2005/07/30 21:53:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -152,6 +152,16 @@ namespace BALL
 			void getColor(ColorUnit& red,  ColorUnit& green,
 										ColorUnit& blue, ColorUnit& alpha) const
 				throw() { color_.get(red, green, blue, alpha); }
+			
+			/// Needed for MSVC
+			bool operator == (const GeometricObject& object) const
+				throw() { return this == &object;}
+
+		
+			/// Needed for MSVC
+			bool operator < (const GeometricObject& object) const
+				throw() { return this < &object;}
+
 
 			//@}
 

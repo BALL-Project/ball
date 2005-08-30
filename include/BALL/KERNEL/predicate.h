@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.23 2005/07/16 21:00:30 oliver Exp $
+// $Id: predicate.h,v 1.21.4.3 2005/08/11 23:26:19 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_PREDICATE_H

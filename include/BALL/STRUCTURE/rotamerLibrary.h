@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.h,v 1.30 2004/02/23 17:26:07 anhi Exp $
+// $Id: rotamerLibrary.h,v 1.30.6.2 2005/07/29 12:38:11 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -34,7 +34,7 @@ namespace BALL
 		In principle, a rotamer is just a list containing the side chain torsion angles (up to four)
 		and the probability for that angle (useful only in the context of rotamer libraries).
 	*/
-	class Rotamer
+	class BALL_EXPORT Rotamer
 	{
 		public:
 
@@ -92,7 +92,7 @@ namespace BALL
 		try all possible rotamers for this side chain. These rotamers for a side chain	
 		are typically stored in a \link RotamerLibrary rotamer library \endlink.
 	*/
-	class ResidueRotamerSet
+	class BALL_EXPORT ResidueRotamerSet
 	{
 		public:
 
@@ -330,7 +330,7 @@ namespace BALL
 		observed for each of the 19 amino acid side chains (GLY does not have any
 		useful rotamers). 
 	*/
-	class RotamerLibrary
+	class BALL_EXPORT RotamerLibrary
 	{
 		public:
 
@@ -364,7 +364,7 @@ namespace BALL
 			
 		/**	Assignment operator
 		*/
-		const RotamerLibrary& operator = (const RotamerLibrary& rhs);
+		RotamerLibrary& operator = (const RotamerLibrary& rhs);
 			
 		/**	Read from a file.
 				This method reads rotamer libraries from SQWRL files (Dunbrack et al.).
@@ -388,6 +388,11 @@ namespace BALL
 		/**
 		*/
 		Size getNumberOfRotamers() const;
+
+		/**	Validity of the instance.
+				The instance is invalid, if reading from a file failed.
+		*/
+		bool isValid() const;
 		//@}
 
 		protected:

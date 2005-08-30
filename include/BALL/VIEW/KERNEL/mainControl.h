@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.75 2005/07/16 21:00:33 oliver Exp $
+// $Id: mainControl.h,v 1.72.2.13 2005/08/22 13:17:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -73,7 +73,8 @@ namespace BALL
 				It handles also the general preferences tab Preferences of the main application and notifies all
 				registered ModularWidget objects if the preferences have changed. \par
 				The preferences of the application are stored in an INIFile.
-				The default name of this file is ".BALLView".
+				The default name of this file is ".BALLView".\par
+				\par
 				<b>Caveat:</b> Due to a peculiarity of the QT Meta Object Compiler (MOC)
 				you have to specify the full namespace qualified name of this class when deriving from it. \par
 				So don't use\par 
@@ -331,6 +332,9 @@ namespace BALL
 			void sendMessage(Message& message)
 				throw();
 
+			/// Get the ID of the last highlighted menu entry (used for the HelpViewer)
+			Index getLastHighLightedMenuEntry() { return last_highlighted_menu_entry_;}
+			
 			public slots:
 
 			//@}
@@ -889,6 +893,8 @@ namespace BALL
 			Position 						proxy_port_;
 
 			Index 							stop_simulation_id_, complement_selection_id_, open_id_, save_project_id_;
+
+			Index last_highlighted_menu_entry_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

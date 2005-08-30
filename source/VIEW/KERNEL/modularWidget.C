@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.23 2005/07/16 21:00:49 oliver Exp $
+// $Id: modularWidget.C,v 1.20.4.7 2005/08/22 13:16:48 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -262,6 +262,40 @@ namespace BALL
 
 			getMainControl()->setMenuHint(last_id_, hint);
 		}
+
+		void ModularWidget::setMenuHelp(const String& url)
+		{
+			if (last_id_ 				== -1 ||
+					getMainControl() == 0)
+			{
+				return;
+			}
+
+			registerMenuEntryForHelpSystem(last_id_, url);
+		}
+
+		void ModularWidget::showHelp(const String& url)
+		{
+			ShowHelpMessage* msg = new ShowHelpMessage(url);
+			notify_(msg);
+		}
+
+		void ModularWidget::registerWidgetForHelpSystem(const QWidget* widget, const String& url)
+		{
+			RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
+			msg->setWidget(widget);
+			msg->setURL(url);
+			notify_(msg);
+		}
+
+		void ModularWidget::registerMenuEntryForHelpSystem(Index entry, const String& docu_entry)
+		{
+			RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
+			msg->setMenuEntry(entry);
+			msg->setURL(docu_entry);
+			notify_(msg);
+		}
+
 
 	} // namespace VIEW
 } // namespace BALL

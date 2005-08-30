@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionParser.h,v 1.12 2003/08/26 08:04:17 oliver Exp $
+// $Id: expressionParser.h,v 1.12.6.1 2005/07/28 14:01:54 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_EXPRESSIONPARSER_H
@@ -21,7 +21,7 @@ namespace BALL
 			
 			\ingroup KernelMiscellaneous 
 	*/
-	class ExpressionParser
+	class BALL_EXPORT ExpressionParser
 	{
 		public:
 
@@ -30,7 +30,7 @@ namespace BALL
 				of  \link ExpressionParser ExpressionParser \endlink  only.
 				 \par
 		*/
-		class SyntaxTree
+		class BALL_EXPORT SyntaxTree
 		{
 			public:
 			

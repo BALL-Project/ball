@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.46 2005/07/16 21:00:30 oliver Exp $
+// $Id: hashGrid.h,v 1.44.4.4 2005/08/11 15:29:13 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_HASHGRID_H
@@ -435,7 +435,7 @@ namespace BALL
 
 		typedef DataItem* DataIteratorPosition;
 		
-		class DataIteratorTraits
+	class DataIteratorTraits
 		{
 			public:
 
@@ -1045,7 +1045,7 @@ namespace BALL
 			
 	*/
 	template <typename Item>
-	class HashGrid3
+class HashGrid3
 	{
 		public:
 

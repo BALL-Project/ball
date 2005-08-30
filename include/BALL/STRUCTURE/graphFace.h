@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: graphFace.h,v 1.14 2004/02/23 17:26:06 anhi Exp $
+// $Id: graphFace.h,v 1.14.6.3 2005/08/17 13:35:52 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_GRAPHFACE_H

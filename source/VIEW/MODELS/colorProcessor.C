@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.37 2005/07/16 21:00:50 oliver Exp $
+// $Id: colorProcessor.C,v 1.34.4.11 2005/08/02 13:27:52 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -111,11 +111,11 @@ namespace BALL
 			Mesh* const mesh = dynamic_cast<Mesh*>(object);
 			if (mesh != 0)
 			{
-				mesh->colorList.clear();
+				mesh->colors.clear();
 				if (composite == &composite_to_be_ignored_for_colorprocessors_ ||
 						composites_ == 0)
 				{
-					mesh->colorList.push_back(default_color_);
+					mesh->colors.push_back(default_color_);
 					return Processor::CONTINUE;
 				}
 
@@ -302,7 +302,7 @@ namespace BALL
 		{
 			if (atom_grid_.isEmpty()) return;
 			
-			mesh.colorList.resize(mesh.vertex.size());
+			mesh.colors.resize(mesh.vertex.size());
 			
 			for (Position p = 0; p < mesh.vertex.size(); p++)
 			{
@@ -311,17 +311,17 @@ namespace BALL
 
 				if (atom == 0)
 				{
-					mesh.colorList[p] = default_color_;
+					mesh.colors[p] = default_color_;
 				}
 				else
 				{
 					if (atom->isSelected())
 					{
-						mesh.colorList[p] = selection_color_;
+						mesh.colors[p] = selection_color_;
 					}
 					else
 					{
-						getColor(*atom, mesh.colorList[p]);
+						getColor(*atom, mesh.colors[p]);
 					}
 				}
 			}
@@ -432,24 +432,56 @@ namespace BALL
 		//////////////////////////////////////////////////////////////////////
 		InterpolateColorProcessor::InterpolateColorProcessor()
 			: ColorProcessor(),
-				min_color_(ColorRGBA(0,0,1.0)),
-				max_color_(ColorRGBA(1.0,1.0,0)),
-				min_min_color_(ColorRGBA(1.0,1.0,1.0)),
-				max_max_color_(ColorRGBA(1.0,0.0,0)),
+				min_color_(ColorRGBA(1.0,1.0,1.0)),
+				max_color_(ColorRGBA(1.0,0.0,0)),
+				mode_(NO_OUTSIDE_COLORS),
 				max_value_(1),
 				min_value_(0)
 		{
 			default_color_ = ColorRGBA(1.0,1.0,1.0);
 		}
 
-		void InterpolateColorProcessor::setTransparency(Size value)
-			throw() 
-		{ 
-			ColorProcessor::setTransparency(value);
-			min_color_.setAlpha(255 - value);
-			max_color_.setAlpha(255 - value);
-			min_min_color_.setAlpha(255 - value);
-			max_max_color_.setAlpha(255 - value);
+
+		InterpolateColorProcessor::InterpolateColorProcessor(const InterpolateColorProcessor& pro)
+			: ColorProcessor(pro)
+		{
+		}
+
+		
+		bool InterpolateColorProcessor::start()
+			throw()
+		{
+			if (!ColorProcessor::start()) return false;
+
+			if (colors_.size() < 2 ||
+					max_value_ <= min_value_)
+			{
+				return false;
+			}
+
+			x_ = (max_value_ - min_value_) / (colors_.size() - 1);
+
+			min_color_.setAlpha(255 - transparency_);
+			max_color_.setAlpha(255 - transparency_);
+			default_color_.setAlpha(255 - transparency_);
+
+			for (Position p = 0; p < colors_.size(); p++)
+			{
+				colors_[p].setAlpha(255 - transparency_);
+			}
+
+			if (mode_ == NO_OUTSIDE_COLORS)
+			{
+				min_color_ = colors_[0];
+				max_color_ = colors_[colors_.size() - 1];
+			}
+			else if (mode_ == DEFAULT_COLOR_FOR_OUTSIDE_COLORS)
+			{
+				min_color_ = default_color_;
+				max_color_ = default_color_;
+			}
+
+			return true;
 		}
 
 		void InterpolateColorProcessor::interpolateColor(float value, ColorRGBA& color_to_be_set)
@@ -457,30 +489,33 @@ namespace BALL
 		{
 			if (value < min_value_)
 			{
-				color_to_be_set.set(min_min_color_);
+				color_to_be_set.set(min_color_);
 				return;
 			}
 			
 			if (value > max_value_) 
 			{
-				max_max_color_.set(max_max_color_);
+				color_to_be_set.set(max_color_);
 				return;
 			}
 
-			float red1   = min_color_.getRed();
-			float green1 = min_color_.getGreen();
-			float blue1  = min_color_.getBlue();
+			const Position z1 = (Position)floor((value - min_value_)/ x_);
+ 			const Position z2 = (Position)ceil((value - min_value_)/ x_);
 
-			float red2   = max_color_.getRed();
-			float green2 = max_color_.getGreen();
-			float blue2  = max_color_.getBlue();
+			const float& red1   = colors_[z1].getRed();
+			const float& green1 = colors_[z1].getGreen();
+			const float& blue1  = colors_[z1].getBlue();
 
-			value -= min_value_;
+			const float red2   = (float) colors_[z2].getRed()   - (float) colors_[z1].getRed();
+			const float green2 = (float) colors_[z2].getGreen() - (float) colors_[z1].getGreen();
+			const float blue2  = (float) colors_[z2].getBlue()  - (float) colors_[z1].getBlue();
 
-			color_to_be_set.set(red1 + (value * (red2 - red1)) 			/ max_value_,
-													 green1 + (value * (green2 - green1))	/ max_value_,
-													 blue1 + (value * (blue2 - blue1)) 		/ max_value_,
-													 255 - transparency_);
+			const float dz1 = (value - min_value_ - ((float)z1) * x_) / x_;
+
+			color_to_be_set.set(red1   + dz1 * red2,
+													green1 + dz1 * green2,
+													blue1  + dz1 * blue2,
+													255 - transparency_);
 		}
 
 		void InterpolateColorProcessor::setMinColor(const ColorRGBA& color)
@@ -505,68 +540,6 @@ namespace BALL
 			throw()
 		{
 			return max_color_;
-		}
-
-		float InterpolateColorProcessor::getMaxValue() const
-			throw()
-		{
-			return max_value_;
-		}
-
-		void InterpolateColorProcessor::setMaxValue(float value)
-			throw()
-		{
-			max_value_ = value;
-		}
-
-		float InterpolateColorProcessor::getMinValue() const
-			throw()
-		{
-			return min_value_;
-		}
-
-		void InterpolateColorProcessor::setMinValue(float value)
-			throw()
-		{
-			min_value_ = value;
-		}
-
-		void InterpolateColorProcessor::setMinMinColor(const ColorRGBA& color)
-			throw()
-		{
-			min_min_color_ = color;
-		}
-
-		void InterpolateColorProcessor::setMaxMaxColor(const ColorRGBA& color)
-			throw()
-		{
-			max_max_color_ = color;
-		}
-
-		const ColorRGBA& InterpolateColorProcessor::getMinMinColor() const
-			throw()
-		{
-			return min_min_color_;
-		}
-
-		const ColorRGBA& InterpolateColorProcessor::getMaxMaxColor() const
-			throw()
-		{
-			return max_max_color_;
-		}
-
-		bool InterpolateColorProcessor::start()
-			throw()
-		{
-			if (!ColorProcessor::start()) return false;
-
-			min_min_color_.setAlpha(255 - transparency_);
-			min_color_.setAlpha(255 - transparency_);
-			max_max_color_.setAlpha(255 - transparency_);
-			max_color_.setAlpha(255 - transparency_);
-			default_color_.setAlpha(255 - transparency_);
-
-			return true;
 		}
 
 	} // namespace VIEW

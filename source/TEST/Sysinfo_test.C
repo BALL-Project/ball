@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Sysinfo_test.C,v 1.13 2005/01/29 18:02:02 oliver Exp $
+// $Id: Sysinfo_test.C,v 1.13.4.1 2005/08/15 13:13:18 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 #include <utility>
 ///////////////////////////
 
-START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.13 2005/01/29 18:02:02 oliver Exp $")
+START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.13.4.1 2005/08/15 13:13:18 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -40,7 +40,6 @@ RESULT
 
 
 CHECK(getBufferedMemory())
-	LongIndex buffered = getBufferedMemory();
 	STATUS(" buffered mem: " << (Size)(getBufferedMemory() / 1024) << " kiB")
 RESULT		
 

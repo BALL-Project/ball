@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reconstructFragmentProcessor.h,v 1.10 2003/08/26 08:04:52 oliver Exp $
+// $Id: reconstructFragmentProcessor.h,v 1.10.6.2 2005/07/29 12:38:10 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H
@@ -32,7 +32,7 @@ namespace BALL
 	/** ReconstructFragmentProcessor.
 	\ingroup StructureMiscellaneous		
 	*/
-	class ReconstructFragmentProcessor 
+	class BALL_EXPORT ReconstructFragmentProcessor 
 		: public UnaryProcessor<Fragment> 
 	{	
 		
@@ -160,6 +160,4 @@ namespace BALL
   
 } // namespace BALL
 
-#endif // BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H_
-
-
+#endif // BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H

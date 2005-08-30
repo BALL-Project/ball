@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.h,v 1.9 2005/02/15 12:36:08 amoll Exp $
+// $Id: preferencesEntry.h,v 1.9.2.1 2005/08/22 13:17:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCES_ENTRY
@@ -88,6 +88,8 @@ namespace BALL
 			//_
       bool fetchPreference_(const INIFile& inifile, const String& entry, ColorRGBA& color)
 				        throw();
+
+			void registerWidgetForHelpSystem_(const QWidget* widget, const String& url);
 
 			String 							inifile_section_name_;
 			HashSet<QWidget*> 	preferences_objects_;

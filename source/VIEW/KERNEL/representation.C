@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.65 2005/07/16 21:00:49 oliver Exp $
+// $Id: representation.C,v 1.62.4.15 2005/06/15 14:59:15 amoll Exp $
 //
 
 

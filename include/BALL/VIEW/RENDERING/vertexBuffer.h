@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.h,v 1.5 2005/07/16 21:00:37 oliver Exp $
+// $Id: vertexBuffer.h,v 1.3.2.1 2005/06/14 16:08:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_VERTEXBUFFER_H

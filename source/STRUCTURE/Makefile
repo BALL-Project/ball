@@ -6,11 +6,6 @@ SMILES_SOURCES= \
 	smilesParserParser.C\
 	smilesParserLexer.C
 
-SMARTS_SOURCES=\
-	smartsParser.C\
-	smartsParserParser.C\
-	smartsParserLexer.C
-
 CPP_SOURCES= \
 	molecularGraph.C\
 	analyticalSES.C\
@@ -47,10 +42,6 @@ CPP_SOURCES= \
 	smilesParser.C\
 	smilesParserLexer.C\
 	smilesParserParser.C\
-	smartsParser.C\
-	smartsParserLexer.C\
-	smartsParserParser.C\
-	smartsMatcher.C\
 	solventAccessibleSurface.C\
 	solventExcludedSurface.C\
 	structureMapper.C\
@@ -64,52 +55,24 @@ CPP_SOURCES= \
 	HBondProcessor.C\
 	UCK.C
 
-SMILES_PARSER_PREFIX=SmilesParser
-SMARTS_PARSER_PREFIX=SmartsParser
+PARSER_PREFIX=SmilesParser
 
 include ../common.mak
 -include .Dependencies
 
-depend:	\
-	$(SMILES_SOURCES)\
-	$(SMARTS_SOURCES)
+depend:	$(SMILES_SOURCES)
 
-default_clean:	clean_parser
+default_clean:	clean_flex_bison
 
-clean_parser:
-	@-$(RM) smilesParserParser.C smilesParserLexer.C smilesParserParser.h smartsParserParser.C smartsParserLexer.C smartsParserParser.h
+clean_flex_bison:
+	@-$(RM) smilesParserParser.C smilesParserLexer.C smilesParserParser.h
 
 smilesParserParser.C: smilesParserParser.y
 smilesParserParser.h: smilesParserParser.y
-
-smilesParserLexer.C:  smilesParserLexer.l
-	$(LEX)	-P$(SMILES_PARSER_PREFIX)	-o$@ $*.l
-
-smilesParserParser.C: smilesParserParser.y
-	$(YACC) -p $(SMILES_PARSER_PREFIX) -d $*.y && $(MV) y.tab.h $*.h && $(MV) y.tab.c $@
 
 smilesParserLexer.o: smilesParserLexer.C smilesParserParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
 
 smilesParserParser.o: smilesParserParser.C
-	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
-
-# Add smiles parser dependencies to make sure these two won't be
-# build in parallel when calling make -j 
-smartsParserParser.C: smartsParserParser.y smilesParserParser.C
-smartsParserParser.h:	smartsParserParser.y smilesParserParser.h
-
-smartsParserLexer.C:	smartsParserLexer.l smilesParserLexer.C
-	$(LEX)  -P$(SMARTS_PARSER_PREFIX) -o$@ $*.l
-
-smartsParserParser.C: smartsParserParser.y
-# this line is just for debugging the parser
-#	$(YACC) -p $(SMARTS_PARSER_PREFIX) --report=state --report=look-ahead -g -d $*.y && $(MV) y.tab.h $*.h && $(MV) y.tab.c $@
-	$(YACC) -p $(SMARTS_PARSER_PREFIX) -d $*.y && $(MV) y.tab.h $*.h && $(MV) y.tab.c $@
-
-smartsParserLexer.o: smartsParserLexer.C smartsParserParser.C
-	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
-
-smartsParserParser.o: smartsParserParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
 

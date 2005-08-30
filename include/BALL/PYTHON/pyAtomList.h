@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyAtomList.h,v 1.13 2004/05/27 19:49:44 oliver Exp $
+// $Id: pyAtomList.h,v 1.13.4.2 2005/08/19 11:25:54 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYATOMLIST_H

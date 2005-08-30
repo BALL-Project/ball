@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.19 2005/07/16 21:00:34 oliver Exp $
+// $Id: backboneModel.h,v 1.17.4.3 2005/06/14 13:29:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H

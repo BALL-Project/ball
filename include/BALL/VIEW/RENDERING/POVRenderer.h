@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.11 2005/07/16 21:00:36 oliver Exp $
+// $Id: POVRenderer.h,v 1.8.4.6 2005/06/14 16:08:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H

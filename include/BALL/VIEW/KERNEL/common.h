@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.38 2005/07/16 21:00:33 oliver Exp $
+// $Id: common.h,v 1.36.2.7 2005/08/26 13:43:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -247,6 +247,9 @@ namespace BALL
 
 			///
 			COLORING_CHAIN,
+			
+			///
+			COLORING_MOLECULE,
 
 			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 			// add new coloring types before this comment!!!!
@@ -412,6 +415,12 @@ namespace BALL
 				Sends a SceneMessage.
 		*/
 		BALL_EXPORT void focusCamera(const List<Vector3>& points);
+
+		/** Get the first defined data path, this should be the content of the environment variable BALLVIEW_DATA_PATH.
+		 		We also sort out double slashes and make sure a slash is at the end.
+		*/
+		BALL_EXPORT String getDataPath();
+		
 
 		//@}
 

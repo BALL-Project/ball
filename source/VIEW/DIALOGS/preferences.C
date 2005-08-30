@@ -1,14 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.18 2005/07/16 21:00:47 oliver Exp $
+// $Id: preferences.C,v 1.16.6.4 2005/08/22 13:16:06 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/WIDGETS/helpViewer.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <qwidgetstack.h>
 #include <qlistview.h>
+#include <qpushbutton.h>
 
 namespace BALL
 {
@@ -150,9 +153,12 @@ namespace BALL
 
 		void Preferences::showEntry(QWidget* child)
 		{
-			if (!widget_to_item_.has(child)) 
+			if (!widget_to_item_.has(child)) return;
+
+			HelpViewer* hv = HelpViewer::getInstance(0);
+			if (hv != 0)
 			{
-				return;
+				help_button->setEnabled(hv->hasHelpFor(child));
 			}
 
 			QListViewItem* item = widget_to_item_[child];
@@ -179,7 +185,8 @@ namespace BALL
 			if (!item_to_entry_.has(item->parent())) return;
 			PreferencesEntry* entry= item_to_entry_[item->parent()];
 
-			widget_stack->raiseWidget(item_to_widget_[item->parent()]);
+			QWidget* widget = item_to_widget_[item->parent()];
+			widget_stack->raiseWidget(widget);
 
 			entry->showEntry(child);
 		}	
@@ -230,6 +237,15 @@ namespace BALL
 			delete item;
 
 			if (update) entries_listview->triggerUpdate();
+		}
+
+		void Preferences::showHelp()
+		{
+			HelpViewer* hv = HelpViewer::getInstance(0);
+			if (hv != 0)
+			{
+				hv->showHelpFor(item_to_widget_[entries_listview->selectedItem()]);
+			}
 		}
 
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularInformation.C,v 1.7 2005/12/23 17:03:32 amoll Exp $
+// $Id: molecularInformation.C,v 1.4.8.1 2005/05/13 12:41:29 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/molecularInformation.h>

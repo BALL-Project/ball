@@ -1,6 +1,4 @@
-#
-# $Id: Makefile,v 1.8 2005/07/16 21:00:40 oliver Exp $
-#
+# $Id: Makefile,v 1.6.12.1 2005/06/19 09:32:46 oliver Exp $
 # Makefile for Finite Difference Poisson-Boltzmann Application
 #
 

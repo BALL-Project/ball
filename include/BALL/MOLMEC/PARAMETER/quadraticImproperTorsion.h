@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadraticImproperTorsion.h,v 1.14 2003/08/26 08:04:28 oliver Exp $
+// $Id: quadraticImproperTorsion.h,v 1.14.6.1 2005/07/29 12:37:50 amoll Exp $
 //
 
 // Molecular Mechanics Parameter: class describing the parameters required to
@@ -26,7 +26,7 @@ namespace BALL
 	/** QuadraticImproperTorsion.
 			
 	*/
-	class QuadraticImproperTorsion 
+	class BALL_EXPORT QuadraticImproperTorsion 
 		:	public ParameterSection
 	{
 		public:
@@ -36,7 +36,7 @@ namespace BALL
 			UNKNOWN
 		};
 
-		struct Values
+		struct BALL_EXPORT Values
 		{
 			float phase;
 			float k;

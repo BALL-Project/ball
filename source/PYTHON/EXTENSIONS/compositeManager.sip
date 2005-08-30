@@ -1,9 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.sip,v 1.6 2005/07/16 21:00:42 oliver Exp $
+// $Id: compositeManager.sip,v 1.4.6.1 2005/04/17 20:34:15 amoll Exp $
 //
-
 class CompositeManager
 {
 %TypeHeaderCode

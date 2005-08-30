@@ -17,7 +17,7 @@ namespace BALL
 			called before, to calculate a ring set. It can be called explicitely
 			with aromatize with a ringset as parameter.
 	*/
-	class AromaticityProcessor
+	class BALL_EXPORT AromaticityProcessor
 		:	public UnaryProcessor<AtomContainer>
 	{
 		public:
@@ -56,20 +56,10 @@ namespace BALL
 		/** Calculated the aromaticity of the molcule and sets the properties
 				"IsAromatic" for aromatic atoms, and Bond::ORDER__AROMATIC for 
 				bonds which are aromatic. 
-				@param SSSR ring set as vector<vector<Atom*> >, (vector of rings in vector<Atom*>) 
-				after the processing this variable holds all aromatic systems, which are not necessarily single rings!
+				@param SSSR ring set as vector<vector<Atom*> >, (vector of rings in vector<Atom*>)
 		*/
-  	void aromatize(const vector<vector<Atom*> >& sssr, AtomContainer& ac);
+  	void aromatize(vector<vector<Atom*> >& sssr, AtomContainer& ac);
 
-		/** Method to set aromaticity with the use of simple rules. Each ring from the given SSSR set
-		 * 	(which needs just to be a set of rings) is examined for itself. (needed for the implementation
-		 * 	of the MMFF94 force field which does not agree with the advanced araomtaticity definition of
-		 * 	the default method.). \par
-		 * 	It does not set any aromaticity flags, neither at the atoms nor bonds to bond order aromatic!
-		 * 	@Param sssr is the set to be examined, only aromatic rings will stay 
-		 */
-		void aromatizeSimple(vector<vector<Atom*> >& sssr);
-		
 		//@}
 		/** @name Processor-related methods
 		*/
@@ -90,15 +80,6 @@ namespace BALL
 
 
 		private:
-
-		/*_ simple criterion if a ring can be aromatic
-		*/
-		bool simpleCanBeAromatic_(const HashSet<Atom*>& ring);
-
-		/*_ simple criterion if a ring can be aromatic, with weaker condition
-				double bonds not need to be alternating inside the ring
-		*/
-		bool simpleCanBeAromaticWeaker_(const HashSet<Atom*>& ring);
 
 		/*_ Tries to extend an aromatic system. Main method that tries to extend 
 				the aromaticity to intersecting rings.

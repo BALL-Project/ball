@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.h,v 1.10 2005/07/16 21:00:36 oliver Exp $
-//
+// $Id: twoColoredTube.h,v 1.8.8.1 2005/06/14 16:08:31 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
 #define BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H

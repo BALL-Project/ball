@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.34 2005/02/16 14:09:40 oliver Exp $
+// $Id: PDBFile.h,v 1.34.2.2 2005/08/12 13:54:21 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_PDBFILE_H
@@ -54,7 +54,7 @@ namespace BALL
 			 \par
 			
 	*/
-	class PDBFile
+	class BALL_EXPORT PDBFile
 		: public GenericMolFile,
 			public PropertyManager
 	{
@@ -65,7 +65,7 @@ namespace BALL
 				for each recognized key in PDBFile::options. \par
 				For each symbol the required type is given under parameters.
 		*/
-		struct Option 
+		struct BALL_EXPORT Option 
 		{
 			/**	The verbosity level.
 					Use integer values with this option.
@@ -116,7 +116,7 @@ namespace BALL
 
 		/** Default values for PDBFile options.  
 		*/
-		struct Default 
+		struct BALL_EXPORT Default 
 		{
 			/** Default verbosity level.
 					0 - shut up!
@@ -794,7 +794,7 @@ namespace BALL
 	* \ingroup  StructureFormats
   */
 	inline
-	HashIndex Hash(const PDBFile::ResidueQuadruple& quadruple)
+	BALL_EXPORT HashIndex Hash(const PDBFile::ResidueQuadruple& quadruple)
 		throw()
 	{
 		return (Index)quadruple.third;
@@ -804,7 +804,7 @@ namespace BALL
 	 		\ingroup StructureFormats
 	*/
 	inline
-	std::ostream& operator << (std::ostream& s, const Quadruple<String,PDB::Character,PDB::Integer,PDB::AChar>& /* q */)
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const Quadruple<String,PDB::Character,PDB::Integer,PDB::AChar>& /* q */)
 	{
 		return s;
 	}

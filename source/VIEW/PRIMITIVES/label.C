@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.C,v 1.10 2005/07/16 21:00:50 oliver Exp $
+// $Id: label.C,v 1.7.6.3 2005/05/04 15:23:27 amoll Exp $
 //
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
@@ -188,5 +188,4 @@ namespace BALL
 		} // getExpandedText
 			
 	} // namespace VIEW
-
 } // namespace BALL

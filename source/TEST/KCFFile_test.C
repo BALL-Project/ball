@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: KCFFile_test.C,v 1.4 2005/07/16 21:00:44 oliver Exp $
+// $Id: KCFFile_test.C,v 1.2.2.1 2005/04/13 10:48:16 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(KCFFile, "$Id: KCFFile_test.C,v 1.4 2005/07/16 21:00:44 oliver Exp $")
+START_TEST(KCFFile, "$Id: KCFFile_test.C,v 1.2.2.1 2005/04/13 10:48:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

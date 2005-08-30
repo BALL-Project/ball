@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.sip,v 1.2 2005/07/03 09:43:25 oliver Exp $
+// $Id: logView.sip,v 1.1.2.1 2005/06/20 00:29:19 amoll Exp $
 //
 
 class LogView

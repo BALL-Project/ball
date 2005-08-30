@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.67 2005/07/16 21:00:33 oliver Exp $
+// $Id: message.h,v 1.65.2.5 2005/08/22 13:17:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -26,6 +26,8 @@
 #ifndef BALL_DATATYPE_REGULARDATA3D
 # include <BALL/DATATYPE/regularData3D.h>
 #endif
+
+class QWidget;
 
 namespace BALL
 {
@@ -859,6 +861,65 @@ class BALL_EXPORT SyncClippingPlanesMessage
 	///
 	SyncClippingPlanesMessage()
 		throw() {};
+};
+
+///
+class BALL_EXPORT ShowHelpMessage
+	: public Message
+{
+	public:
+
+	///
+	ShowHelpMessage(String url = "")
+		throw();
+
+	String getURL() const { return url_;}
+
+	protected:
+
+	String url_;
+};
+
+///
+class BALL_EXPORT RegisterHelpSystemMessage
+	: public Message
+{
+	public:
+
+	///
+	RegisterHelpSystemMessage()
+		throw();
+
+	///
+	void setWidget(const QWidget* widget) { widget_ = widget;}
+
+	///
+	void setMenuEntry(Index id) { menu_entry_ = id;}
+
+	///
+	void setURL(const String& url) { url_ = url;}
+
+	///
+	void setRegisterMode(bool state) { register_ = state;}
+
+	///
+	const QWidget* getWidget() const { return widget_;}
+
+	///
+	Index getMenuEntry() const { return menu_entry_;}
+
+	///
+	const String& getURL() const { return url_;}
+
+	///
+	bool isRegister() const { return register_;}
+
+	protected:
+
+	const QWidget* widget_;
+	Index 	 menu_entry_;
+	String 	 url_;
+	bool  	 register_;
 };
 
 

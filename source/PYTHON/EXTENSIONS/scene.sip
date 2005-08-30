@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.sip,v 1.4 2005/07/16 21:00:43 oliver Exp $
+// $Id: scene.sip,v 1.2.4.3 2005/06/20 00:28:59 amoll Exp $
 //
 
 class Scene 

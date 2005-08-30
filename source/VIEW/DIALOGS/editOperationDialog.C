@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editOperationDialog.C,v 1.4 2005/07/03 09:43:34 oliver Exp $
+// $Id: editOperationDialog.C,v 1.1 2005/02/18 17:57:09 anne Exp $
 
 #include <BALL/VIEW/DIALOGS/editOperationDialog.h>
 #include <BALL/VIEW/WIDGETS/editableScene.h>

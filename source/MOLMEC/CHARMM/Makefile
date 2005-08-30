@@ -1,8 +1,6 @@
 # MOLMEC/CHARMM/Makefile
+# $Id: Makefile,v 1.4.12.1 2005/06/19 09:32:48 oliver Exp $
 #
-# $Id: Makefile,v 1.6 2005/07/16 21:00:41 oliver Exp $
-#
-
 DIRECTORY=MOLMEC/CHARMM
 
 THISLIB=$(LIBNAME)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.173 2005/07/16 21:00:52 oliver Exp $
+// $Id: scene.C,v 1.171.2.40 2005/08/24 14:33:44 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -301,7 +301,7 @@ namespace BALL
 
 				case SceneMessage::UPDATE_CAMERA:
 					content_changed_ = true;
-					stage_->moveCameraTo(scene_message->getStage().getCamera());
+					stage_->getCamera() = scene_message->getStage().getCamera();
 					system_origin_ = scene_message->getStage().getCamera().getLookAtPosition();
 					updateCamera_();
 					light_settings_->updateFromStage();
@@ -488,7 +488,6 @@ namespace BALL
 			stereo_camera_.setLookAtPosition(old_look_at - diff);
 			gl_renderer_.updateCamera(&stereo_camera_);
  			gl_renderer_.setLights(true);
- 			light_settings_->updateFromStage();
 			renderRepresentations_(DISPLAY_LISTS_RENDERING);
 			glPopMatrix();
 			content_changed_ = false;
@@ -536,15 +535,28 @@ namespace BALL
 				List<LightSource>::ConstIterator lit = stage_->getLightSources().begin();
 				for (; lit != stage_->getLightSources().end(); lit++)
 				{
+					Vector3 pos = (*lit).getPosition();
+					Vector3 dir = (*lit).getDirection();
+
+					if ((*lit).isRelativeToCamera())
+					{
+						pos = stage_->getCamera().getViewPoint() + stage_->calculateAbsoluteCoordinates(pos);
+						dir = pos + stage_->calculateAbsoluteCoordinates(dir);
+					}
+
+					Vector3 diff = dir - pos;
+					if (!Maths::isZero(diff.getSquareLength())) diff.normalize();
+					diff *= 100.0;
+
 					Sphere s;
-					s.setPosition((*lit).getPosition());
+					s.setPosition(pos);
 					s.setRadius(5);
 					s.setColor(ColorRGBA(255,255,255));
 					gl_renderer_.renderSphere_(s);
 
 					Tube t;
-					t.setVertex1((*lit).getPosition());
-					t.setVertex2((*lit).getDirection());
+					t.setVertex1(pos);
+					t.setVertex2(pos + diff);
 					t.setColor(ColorRGBA(255,255,255));
 					gl_renderer_.renderTube_(t);
 				}
@@ -669,7 +681,7 @@ namespace BALL
 			m.setRotation(angle, camera.getViewVector());
 
 			camera.setLookUpVector(m * camera.getLookUpVector());
-			stage_->moveCameraTo(camera);
+			stage_->getCamera() = camera;
 			updateCamera_();
 		}
 
@@ -677,7 +689,7 @@ namespace BALL
 		void Scene::rotateSystem_(Scene* scene)
 		{
 			scene->calculateQuaternion_(quaternion_);
-			stage_->rotate(quaternion_, system_origin_);
+			stage_->getCamera().rotate(quaternion_, system_origin_);
 			updateCamera_();
 		}
 
@@ -707,7 +719,7 @@ namespace BALL
 
 			Vector3 v(right_translate + up_translate);
 
-			stage_->translate(v);
+			stage_->getCamera().translate(v);
 			updateCamera_();
 		}
 
@@ -727,7 +739,7 @@ namespace BALL
 					* scene->stage_->getCamera().getViewVector()
 					* mouse_sensitivity_ / ZOOM_FACTOR);  
 
-			stage_->translate(v);
+			stage_->getCamera().translate(v);
 			updateCamera_();
 		}
 
@@ -751,15 +763,19 @@ namespace BALL
 			float up2 = 	 (gl_renderer_.getHeight() - y_window_pos_new_) / 
 				gl_renderer_.getHeight() * mouse_sensitivity_ / -ROTATE_FACTOR;
 
-			Camera& camera = stage_->getCamera();
+			const Camera& camera = stage_->getCamera();
+
+			Vector3 vv = camera.getViewVector();
+			vv.normalize();
+			vv *= 20.0;
 
 			Vector3 a = camera.getRightVector()  * right1
 				+ camera.getLookUpVector() * up1
-				+ camera.getViewVector()   * sphereProject_(0.8, right1, up1);
+				+ vv * sphereProject_(0.8, right1, up1);
 
 			Vector3 b = camera.getRightVector()  * right2
 				+ camera.getLookUpVector() * up2
-				+ camera.getViewVector()   * sphereProject_(0.8, right2, up2);
+				+ vv * sphereProject_(0.8, right2, up2);
 
 			Vector3 cross = a % b;
 
@@ -871,8 +887,7 @@ namespace BALL
 			throw()
 		{
 			// new instance for default values
-			Camera camera;
-			stage_->moveCameraTo(camera);
+			stage_->getCamera().clear();
 			updateCamera_();
  			light_settings_->updateFromStage();
 		}
@@ -898,10 +913,9 @@ namespace BALL
 		{
 			LightSource light;
 			light.setType(LightSource::POSITIONAL);
-			light.setPosition((stage_->getCamera().getViewPoint() - 
-												stage_->getCamera().getViewVector() * 4) 
-												+ stage_->getCamera().getLookUpVector() * 20);
-			light.setDirection(stage_->getCamera().getLookAtPosition());
+			light.setRelativeToCamera(true);
+			light.setPosition(Vector3(0, 4, 20));
+			light.setDirection(Vector3(0, 0, 1));
 
 			stage_->clearLightSources();
 			stage_->addLightSource(light);
@@ -1361,6 +1375,8 @@ namespace BALL
 		void Scene::initializeWidget(MainControl& main_control)
 			throw()
 		{
+			setMinimumSize(10, 10);
+
 			main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
@@ -1371,21 +1387,26 @@ namespace BALL
 			picking_id_ = insertMenuEntry( MainControl::DISPLAY, "&Picking Mode", 
 													this, SLOT(pickingMode_()), CTRL+Key_P);
 			setMenuHint("Switch to picking mode, e.g. to identify singe atoms or groups");
+			setMenuHelp("scene.html#identify_atoms");
 
 			move_id_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()));
 			setMenuHint("Move selected items");
+			setMenuHelp("molecularControl.html#move_molecule");
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
 			no_stereo_id_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
  			menuBar()->setItemChecked(no_stereo_id_, true) ;
+			setMenuHelp("tips.html#3D");
 
 			active_stereo_id_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()));
+			setMenuHelp("tips.html#3D");
 
 			dual_stereo_id_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "Side by Side", this, SLOT(enterDualStereo()));
+			setMenuHelp("tips.html#3D");
 
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
 											SLOT(showViewPoint_()), CTRL+Key_W);
@@ -1406,37 +1427,48 @@ namespace BALL
 			menuBar()->setItemChecked(window_menu_entry_id_, true);
 
 			// ======================== ANIMATION ===============================================
+			String help_url = "tips.html#animations";
+
 			record_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 
 															SLOT(recordAnimationClicked()));
 			setMenuHint("Record an animation for later processing");
  			menuBar()->setItemChecked(record_animation_id_, false) ;
+			setMenuHelp(help_url);
 			
 			clear_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, 
 															SLOT(clearRecordedAnimation()));
+			setMenuHelp(help_url);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
 			start_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, 
 															SLOT(startAnimation()));
+			setMenuHelp(help_url);
 
 			cancel_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, 
 															SLOT(stopAnimation()));
 			menuBar()->setItemEnabled(cancel_animation_id_, false);
+			setMenuHelp(help_url);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
 			animation_export_PNG_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", 
 																	this, SLOT(animationExportPNGClicked()));
+			setMenuHelp(help_url);
 
 			animation_export_POV_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", 
 																	this, SLOT(animationExportPOVClicked()));
+			setMenuHelp(help_url);
 
 			animation_repeat_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
 																	SLOT(animationRepeatClicked()));
+			setMenuHelp(help_url);
 
 			setCursor(QCursor(Qt::SizeAllCursor));
 
 			connect(&timer_, SIGNAL(timeout()), this, SLOT(timerSignal_()) );			
+
+			registerWidgetForHelpSystem(this, "scene.html");
 		}
 
 		void Scene::checkMenu(MainControl& /*main_control*/)
@@ -2012,7 +2044,7 @@ namespace BALL
 		{
 			String start = String(screenshot_nr_) + ".png";
 			screenshot_nr_ ++;
-			QString result = QFileDialog::getSaveFileName(start.c_str(), "", 0, "Select a PNG file");
+			QString result = QFileDialog::getSaveFileName(start.c_str(), "*.png", 0, "Select a PNG file");
 
 			if (result.isEmpty()) return;
 
@@ -2156,7 +2188,7 @@ namespace BALL
 		void Scene::setCamera(const Camera& camera)
 			throw()
 		{
-			stage_->moveCameraTo(camera);
+			stage_->getCamera() = camera;
 			updateCamera_();
  			light_settings_->updateFromStage();
 		}

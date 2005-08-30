@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.h,v 1.27 2005/07/16 21:00:32 oliver Exp $
+// $Id: colorUnit.h,v 1.25.8.2 2005/08/17 14:49:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -51,7 +51,7 @@ namespace BALL
 
 					\see         Exception::GeneralException			
 			*/
-			class NotInHexFormat:	public Exception::GeneralException
+			class BALL_EXPORT NotInHexFormat:	public Exception::GeneralException
 			{
 				public:
 

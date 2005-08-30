@@ -15674,17 +15674,16 @@ _ACEOF
 
 
 
-	if test "${BALL_NO_XDR}" = "true" ; then
-		echo "$as_me:$LINENO: result: No XDR headers available - building of XDR persistence support disabled" >&5
+	 if test "${BALL_NO_XDR}" = "true" ; then
+		  echo "$as_me:$LINENO: result: No XDR headers available - building of XDR persistence support disabled" >&5
 echo "${ECHO_T}No XDR headers available - building of XDR persistence support disabled" >&6
-		cat >>confdefs.h <<\_ACEOF
+		  cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_XDR
 _ACEOF
 
-		BALL_HAS_XDR=""
+		  BALL_HAS_XDR=""
 
-	else
-
+  else
 		if test "${ac_cv_header_rpc_types_h+set}" = set; then
   echo "$as_me:$LINENO: checking for rpc/types.h" >&5
 echo $ECHO_N "checking for rpc/types.h... $ECHO_C" >&6
@@ -16120,21 +16119,24 @@ BALL_XDRREC_VOID_VOID_UINT=false
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-		if test "${BALL_XDRREC_VOID_VOID_UINT}" = false ; then
-			cat >conftest.$ac_ext <<_ACEOF
+		if test "${BALL_XDRREC_VOID_VOID_UINT}" = true ; then
+		  echo "$as_me:$LINENO: result: (void*, void*, unsigned int)" >&5
+echo "${ECHO_T}(void*, void*, unsigned int)" >&6
+  else
+		  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-						#include <rpc/types.h>
-						#include <rpc/xdr.h>
-						extern "C" int dummy(void*, char*, int) {return 0;}
-						void foo(){
-							XDR xdrs;
-							xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
-						}
+						 #include <rpc/types.h>
+						 #include <rpc/xdr.h>
+						 extern "C" int dummy(void*, char*, int) {return 0;}
+						 void foo(){
+						 	XDR xdrs;
+						 	xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+						 }
 
 int
 main ()
@@ -16176,24 +16178,24 @@ BALL_XDRREC_VOID_CHAR_INT=false
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-			if test "${BALL_XDRREC_VOID_CHAR_INT}" = true ; then
-				echo "$as_me:$LINENO: result: (void*, char*, int)" >&5
+			 if test "${BALL_XDRREC_VOID_CHAR_INT}" = true ; then
+			  	echo "$as_me:$LINENO: result: (void*, char*, int)" >&5
 echo "${ECHO_T}(void*, char*, int)" >&6
-			else
-				cat >conftest.$ac_ext <<_ACEOF
+			 else
+				  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-							#include <rpc/types.h>
-							#include <rpc/xdr.h>
-							extern "C" int dummy(char*, char*, int) {return 0;}
-							void foo(){
-								XDR xdrs;
-								xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
-							}
+					 		#include <rpc/types.h>
+					 		#include <rpc/xdr.h>
+					 		extern "C" int dummy(char*, char*, int) {return 0;}
+					 		void foo(){
+					 			XDR xdrs;
+					 			xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+					 		}
 
 int
 main ()
@@ -16235,24 +16237,24 @@ BALL_XDRREC_CHAR_CHAR_INT=false
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-				if test "${BALL_XDRREC_CHAR_CHAR_INT}" = true ; then
-					echo "$as_me:$LINENO: result: (char*, char*, int)" >&5
+				  if test "${BALL_XDRREC_CHAR_CHAR_INT}" = true ; then
+					   echo "$as_me:$LINENO: result: (char*, char*, int)" >&5
 echo "${ECHO_T}(char*, char*, int)" >&6
-				else
-					cat >conftest.$ac_ext <<_ACEOF
+				  else
+					   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-							#include <rpc/types.h>
-							#include <rpc/xdr.h>
-							extern "C" int dummy() {return 0;}
-							void foo(){
-								XDR xdrs;
-								xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
-							}
+							   #include <rpc/types.h>
+							   #include <rpc/xdr.h>
+							   extern "C" int dummy() {return 0;}
+							   void foo(){
+							  	XDR xdrs;
+								  xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+							  }
 
 int
 main ()
@@ -16294,24 +16296,24 @@ BALL_XDRREC_VOID=false
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-					if test "${BALL_XDRREC_VOID}" = true ; then
-						echo "$as_me:$LINENO: result: ()" >&5
+					   if test "${BALL_XDRREC_VOID}" = true ; then
+						    echo "$as_me:$LINENO: result: ()" >&5
 echo "${ECHO_T}()" >&6
-					else
-	          cat >conftest.$ac_ext <<_ACEOF
+					   else
+	         cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-    	          #include <rpc/types.h>
-      	        #include <rpc/xdr.h>
-                extern "C" int dummy(void*, void*, int) {return 0;}
-       	        void foo(){
-       	          XDR xdrs;
-       	          xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
-                }
+    	       #include <rpc/types.h>
+      	     #include <rpc/xdr.h>
+            extern "C" int dummy(void*, void*, int) {return 0;}
+       	    void foo(){
+       	     XDR xdrs;
+       	     xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+            }
 
 int
 main ()
@@ -16353,20 +16355,17 @@ BALL_XDRREC_VOID_VOID_INT=false
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-            if test "${BALL_XDRREC_VOID_VOID_INT}" = true ; then
-              echo "$as_me:$LINENO: result: (void*, void*, int)" >&5
+          if test "${BALL_XDRREC_VOID_VOID_INT}" = true ; then
+            echo "$as_me:$LINENO: result: (void*, void*, int)" >&5
 echo "${ECHO_T}(void*, void*, int)" >&6
-            else
-              echo "$as_me:$LINENO: result: not found!" >&5
+          else
+            echo "$as_me:$LINENO: result: not found!" >&5
 echo "${ECHO_T}not found!" >&6
-				   	fi
           fi
+				   	fi
+      fi
 				fi
-			fi
-		else
-			echo "$as_me:$LINENO: result: (void*, void*, unsigned int)" >&5
-echo "${ECHO_T}(void*, void*, unsigned int)" >&6
-		fi
+  fi
 
 										echo "$as_me:$LINENO: checking for xdr_u_hyper function" >&5
 echo $ECHO_N "checking for xdr_u_hyper function... $ECHO_C" >&6
@@ -16813,13 +16812,13 @@ _ACEOF
 _ACEOF
 
 		fi
-		if test "${BALL_XDRREC_VOID_VOID_UINT" = true ; then
+		if test "${BALL_XDRREC_VOID_VOID_UINT}" = true ; then
       cat >>confdefs.h <<\_ACEOF
 #define BALL_XDRREC_CREATE_VOID_VOID_UINT 1
 _ACEOF
 
     fi
-    if test "${BALL_XDRREC_VOID_VOID_INT" = true ; then
+    if test "${BALL_XDRREC_VOID_VOID_INT}" = true ; then
       cat >>confdefs.h <<\_ACEOF
 #define BALL_XDRREC_CREATE_VOID_VOID_INT 1
 _ACEOF
@@ -22920,7 +22919,7 @@ $config_headers
 Report bugs to <bug-autoconf@gnu.org>."
 _ACEOF
 
-cat >>$CONFIG_STATUS <<\_ACEOF
+cat >>$CONFIG_STATUS <<_ACEOF
 ac_cs_version="\\
 BALL config.status 1.0
 configured by $0, generated by GNU Autoconf 2.59,

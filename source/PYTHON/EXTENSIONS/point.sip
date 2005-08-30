@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.sip,v 1.4 2005/12/23 17:02:54 amoll Exp $
+// $Id: point.sip,v 1.1.6.1 2005/06/13 15:03:51 oliver Exp $
 //
 
 namespace VIEW

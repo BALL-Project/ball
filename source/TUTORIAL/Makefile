@@ -1,7 +1,4 @@
-#
-# $Id: Makefile,v 1.13 2005/07/16 21:00:45 oliver Exp $
-#
-
+# $Id: Makefile,v 1.11.6.1 2005/06/19 09:32:51 oliver Exp $
 #========================
 # BALL/TUTORIAL Makefile
 #========================

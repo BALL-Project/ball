@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalSAS.h,v 1.27 2004/05/27 19:49:47 oliver Exp $
+// $Id: numericalSAS.h,v 1.27.4.1 2005/07/29 12:38:09 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
@@ -47,7 +47,7 @@ namespace BALL
 			@param  number_of_dots the number of dots used per atom
 			@return the total SAS area in $ A^2$
 	*/
-	float calculateSASArea(const AtomContainer& fragment, float probe_radius = 1.5,
+	BALL_EXPORT float calculateSASArea(const AtomContainer& fragment, float probe_radius = 1.5,
 												 Size number_of_dots = 400); 
 
 	/** Calculate the solvent accessible volume numerically.
@@ -59,7 +59,7 @@ namespace BALL
 			@param  number_of_dots the number of dots used per atom
 			@return the volume in $ A^3$
 	*/
-	float calculateSASVolume(const AtomContainer& fragment, float probe_radius = 1.5,
+	BALL_EXPORT float calculateSASVolume(const AtomContainer& fragment, float probe_radius = 1.5,
 													 Size number_of_dots = 400); 
 
 	/**	Calculate the Solvent Accessible Surface area for each atom.
@@ -72,7 +72,7 @@ namespace BALL
 			@param	number_of_dots the number of dots used per atom
 			@return the total SAS area in $ A^2$
 	*/
-	float calculateSASAtomAreas(const AtomContainer& fragment, HashMap<const Atom*,float>& atom_areas,
+	BALL_EXPORT float calculateSASAtomAreas(const AtomContainer& fragment, HashMap<const Atom*,float>& atom_areas,
 															float probe_radius = 1.5, Size number_of_dots = 400);
 	
 	/**	Calculate a point set on the Solvent Accessible Surface.
@@ -92,7 +92,7 @@ namespace BALL
 			@param	number_of_dots the number of dots used per atom
 			@return the total SAS area in $ A^2$
 	*/
-	float calculateSASPoints(const AtomContainer& fragment, Surface& surface_points,
+	BALL_EXPORT float calculateSASPoints(const AtomContainer& fragment, Surface& surface_points,
 													 float probe_radius = 1.5,  Size number_of_dots = 400);
 
 	/** Calculate a point set on the Solvent Accessible Surface for each
@@ -105,7 +105,7 @@ namespace BALL
 			@param	number_of_dots the number of dots used per atom
 			@return the total SAS area in $ A^2$
 	 */
-	float calculateSASAtomPoints(const AtomContainer& fragment, 
+	BALL_EXPORT float calculateSASAtomPoints(const AtomContainer& fragment, 
 											 				 std::vector< std::pair<Vector3, Surface> >& atom_surfaces,
 															 float probe_radius = 1.5,  Size number_of_dots = 400);
    /** @} */

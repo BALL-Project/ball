@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.h,v 1.25 2004/12/27 17:06:28 amoll Exp $ 
+// $Id: amber.h,v 1.25.4.2 2005/07/30 21:53:01 amoll Exp $ 
 //
 
 // Molecular Mechanics: Amber force field class
@@ -31,7 +31,7 @@ namespace BALL
 			
       \ingroup  AMBER
 	*/
-	class AmberFF 
+	class BALL_EXPORT AmberFF 
 		: public ForceField
 	{
 		public:
@@ -42,7 +42,7 @@ namespace BALL
 
 		/**	Option names
 		*/
-		struct Option
+		struct BALL_EXPORT Option
 		{
 			/**	The parameter file name (@see Default::FILENAME)
 			*/
@@ -105,7 +105,7 @@ namespace BALL
 
 		/** Default values for AMBER options.
 		*/
-		struct Default
+		struct BALL_EXPORT Default
 		{
 			/**	Default filename for the parameter file (@see Option::FILENAME).
 			*/

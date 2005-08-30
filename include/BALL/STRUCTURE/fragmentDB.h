@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.h,v 1.34 2004/11/07 14:44:09 oliver Exp $
+// $Id: fragmentDB.h,v 1.34.4.2 2005/08/08 11:52:40 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
@@ -43,7 +43,7 @@ namespace BALL
 			<a href="../../../data/fragments/Fragments.db">data/fragments/Fragments.db</a>.  \par
 	\ingroup StructureMiscellaneous		
 	*/
-	class FragmentDB 
+	class BALL_EXPORT FragmentDB 
 	{
 		public:
 
@@ -86,7 +86,7 @@ namespace BALL
 				This exception is thrown by  \link init init \endlink  if the resource database
 				does not contain a <tt>Fragments</tt> entry.
 		*/
-		class NoFragmentNode
+		class BALL_EXPORT NoFragmentNode
 			:	public Exception::GeneralException
 		{
 			public:
@@ -238,7 +238,7 @@ namespace BALL
 				This class is used to adopt all names in a molecular system 
 				to a given naming standard (usually the PDB standard).
 		*/
-		class NormalizeNamesProcessor 
+		class BALL_EXPORT NormalizeNamesProcessor 
 			: public UnaryProcessor<Fragment>
 		{
 		
@@ -315,7 +315,7 @@ namespace BALL
 
 		/**	Bond creation processor
 		*/
-		class BuildBondsProcessor 
+		class BALL_EXPORT BuildBondsProcessor 
 			: public UnaryProcessor<Fragment> 
 		{
 
@@ -397,14 +397,16 @@ namespace BALL
 					in manually provided template.
 					@return the number of bonds built
 			*/
-			Size buildFragmentBonds(Fragment& fragment, const Fragment& tplate) const;
+			Size buildFragmentBonds(Fragment& fragment, const Fragment& tplate) const
+				throw(Exception::TooManyBonds);
 
 			/**	Build all possible bonds between two fragments.
 					This method builds all bonds that are allowed by
 					the <b>Connections</b> entries in a resource database.
 					@return the number of bonds built
 			*/
-			Size buildInterFragmentBonds(Fragment& first, Fragment& second) const;
+			Size buildInterFragmentBonds(Fragment& first, Fragment& second) const
+				throw(Exception::TooManyBonds);
 
 			//@}
 
@@ -419,7 +421,8 @@ namespace BALL
 
 			/**	Build a connection between two atoms, if possible
 			*/
-			bool buildConnection_(Connection& con1, Connection& con2);
+			bool buildConnection_(Connection& con1, Connection& con2)
+				throw(Exception::TooManyBonds);
 		
 			/**	A pointer to the fragment database 
 			*/

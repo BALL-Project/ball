@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyCompositeList.h,v 1.6 2005/07/16 21:00:31 oliver Exp $
+// $Id: pyCompositeList.h,v 1.4.4.4 2005/08/19 11:25:55 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYCOMPOSITELIST_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.21 2005/07/16 21:00:33 oliver Exp $
+// $Id: modularWidget.h,v 1.19.6.6 2005/08/22 13:17:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -17,6 +17,7 @@
 
 class QObject;
 class QMenuBar;
+class QWidget;
 
 namespace BALL
 {
@@ -246,6 +247,15 @@ namespace BALL
 			///
 			void setMenuHint(const String& hint);
 
+			///
+			void setMenuHelp(const String& url);
+
+			///
+			virtual void registerWidgetForHelpSystem(const QWidget* widget, const String& url);
+
+			///
+			virtual void registerMenuEntryForHelpSystem(Index entry, const String& docu_entry);
+
 			//@}
 			/**	@name	Debugging and Diagnostics
 			*/
@@ -260,17 +270,17 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-					
-			//@}
 
+			//@}
 
 			void setWorkingDirFromFilename_(String filename)
 				throw();
 
 			void removeMenuEntries();
-			
-			protected:
 
+			virtual void showHelp(const String& url);
+
+			protected:
 
 			//_ id in the menubar entry "WINDOWS" for every widget
 			Index window_menu_entry_id_;

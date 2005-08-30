@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parameters.h,v 1.17 2003/08/26 08:04:15 oliver Exp $
+// $Id: parameters.h,v 1.17.6.1 2005/07/28 13:52:58 amoll Exp $
 // general parameter file class
 //
 
@@ -21,7 +21,7 @@ namespace BALL
     
 			\ingroup  General
 	*/
-	class Parameters
+	class BALL_EXPORT Parameters
 	{
 		public:
 

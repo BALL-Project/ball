@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyRepresentationList.h,v 1.4 2004/05/27 19:49:45 oliver Exp $
+// $Id: pyRepresentationList.h,v 1.4.4.2 2005/08/19 11:25:57 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYREPRESENTATIONLIST_H

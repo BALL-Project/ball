@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.21 2005/02/24 15:52:26 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.21.2.2 2005/08/17 14:49:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -49,7 +49,7 @@ namespace BALL
 		};
 
 
-		class QColorTable : public QTable
+		class BALL_EXPORT QColorTable : public QTable
 		{
 				Q_OBJECT
 
@@ -58,6 +58,9 @@ namespace BALL
 					throw();
 				
 				void setNamesTitle(const String& string)
+					throw();
+
+				String getNamesTitle() const
 					throw();
 				
 				void setContent(const vector<String>& names, const vector<ColorRGBA>& colors)
@@ -87,7 +90,7 @@ namespace BALL
 		 		It is inserted to the Preferences.
 				\ingroup ViewDialogs
 		*/
-		class ColoringSettingsDialog 
+		class BALL_EXPORT ColoringSettingsDialog 
 			: public ColoringSettingsDialogData,
 				public PreferencesEntry
 		{ 
@@ -185,6 +188,7 @@ namespace BALL
 			QColorTable* element_table_;
 			QColorTable* residue_table_;
 			QColorTable* chain_table_;
+			QColorTable* molecule_table_;
 		};
 
 } }

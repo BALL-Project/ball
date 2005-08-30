@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.C,v 1.12 2005/07/03 09:43:24 oliver Exp $
+// $Id: pyInterpreter.C,v 1.11.6.3 2005/08/19 14:07:29 amoll Exp $
 //
 
 #include <Python.h>
@@ -13,6 +13,12 @@ namespace BALL
 
 	String error_message_;
 	PyObject* context_;
+
+	bool PyInterpreter::valid_ = false;
+
+	PyInterpreter::PyInterpreter()
+	{
+	}
 
 	PyObject* runSingleString_(const String& str, int mode)
 	{
@@ -60,6 +66,8 @@ namespace BALL
 		{
 			Py_Finalize();
 		}
+
+		valid_ = false;
 	}
 
 	void PyInterpreter::initialize()
@@ -74,7 +82,20 @@ namespace BALL
 		Py_Initialize();
 
 		PyObject *module = PyImport_ImportModule("site");
+		if (module == 0) 
+		{
+			Log.error() << "Could not import Python module \"site\"! No Python support available." << std::endl;
+			return;
+		}
+
 		context_ = PyModule_GetDict(module);
+
+		if (context_ == 0) 
+		{
+			Log.error() << "Could not get dict for Python module \"site\"! No Python support available." << std::endl;
+			return;
+		}
+
 		Py_DECREF(module);
 
 		// import the modules required for the output redirection
@@ -98,11 +119,15 @@ namespace BALL
 		
 		// import the BALL module
 		runSingleString_("from BALL import *", Py_single_input);
+
+		valid_ = true;
 	}
 
 
 	String PyInterpreter::run(const String& s, bool& state)
 	{
+		if (!valid_) return "";
+
 		state = false;
 		if (runSingleString_("OLDSTDOUT = sys.stdout", Py_single_input) == 0) return error_message_;
 		if (runSingleString_("CIO = cStringIO.StringIO()", Py_single_input) == 0) return error_message_;
@@ -130,6 +155,8 @@ namespace BALL
 	String PyInterpreter::runFile(const String& filename)
 		throw(Exception::FileNotFound)
 	{
+		if (!valid_) return "";
+
 		if (runSingleString_("OLDSTDOUT = sys.stdout", Py_single_input) == 0) return error_message_;
 		if (runSingleString_("CIO = cStringIO.StringIO()", Py_single_input) == 0) return error_message_;
 		if (runSingleString_("sys.stdout = CIO", Py_single_input) == 0) return error_message_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: circle3.h,v 1.42 2004/07/05 20:57:28 oliver Exp $
+// $Id: circle3.h,v 1.42.4.3 2005/08/11 15:29:14 amoll Exp $
 //
 
 #ifndef BALL_MATHS_CIRCLE3_H

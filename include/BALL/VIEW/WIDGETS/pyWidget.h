@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.25 2005/07/16 21:00:38 oliver Exp $
+// $Id: pyWidget.h,v 1.23.2.7 2005/08/26 13:44:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -71,6 +71,9 @@ namespace BALL
 			const Hotkey& operator = (const Hotkey& s)
 				throw();
 
+			/// Needed for MSVC
+			bool operator < (const Hotkey& key) { return this < &key;}
+
 			///
 			bool set(const String& data) throw();
 
@@ -127,21 +130,13 @@ namespace BALL
 			*/
 			virtual void startInterpreter();
 
-			/**	Stop the interpreter.
-					The interpreter is stoped by calling <tt>Py_Finish()</tt>.
-			*/
-			virtual void stopInterpreter();
-
-			/// Open a dialog to select a start up script
-			virtual void scriptDialog();
-
 			///
 			virtual void abortScript();
 
 			/**	Run a Python program from a file.
 					\param filename the name of the program file
 			*/
-			virtual void runFile(const String& filename);
+			virtual bool runFile(const String& filename);
 
 			///
 			virtual void exportHistory();			
@@ -181,8 +176,6 @@ namespace BALL
 			virtual void keyPressEvent(QKeyEvent* e);
 
 			virtual void clear();
-			
-			virtual void cut();
 			
 			virtual void paste();
 
@@ -265,8 +258,6 @@ namespace BALL
 			//@{
 
 			/**	Setup the menu entries.
-					PyWidget creates an entry in Tools|Restart Python and connects
-					the entry to startInterpreter().
 			*/
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
@@ -301,12 +292,6 @@ namespace BALL
 				throw();
 
 			///
-			virtual void startInterpreter();
-			
-			///
-			virtual void stopInterpreter();
-			
-			///
 			bool toAbortScript() throw();
 
 			///
@@ -319,13 +304,21 @@ namespace BALL
 			void reactTo(const QKeyEvent& e) throw();
 
 			/// run a Python script from a given file
-			void run(const String& filename) throw() {text_edit_->runFile(filename);}
+			bool run(const String& filename) throw() {return text_edit_->runFile(filename);}
+
+			public slots:
+
+			/// Open a dialog to select a start up script
+			virtual void scriptDialog();
+
 
 			protected:
 
 			PyWidgetData* 		text_edit_;
 			PythonHotkeys* 		python_hotkeys_;
 			List<Hotkey> 			hotkeys_;
+			// 								we use an own working dir to find Python Scripts
+			String 						working_dir_;
 		};
 
 	} // namespaces	

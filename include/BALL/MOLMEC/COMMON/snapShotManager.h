@@ -1,7 +1,7 @@
 	// -*- Mode: C++; tab-width: 2; -*-
 	// vi: set ts=2:
 	//
-	// $Id: snapShotManager.h,v 1.18 2004/08/29 16:23:31 amoll Exp $
+	// $Id: snapShotManager.h,v 1.18.4.3 2005/07/30 21:53:04 amoll Exp $
 	//
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -15,6 +15,10 @@
 #	include <BALL/DATATYPE/options.h>
 #endif
 
+#ifndef BALL_SYSTEM_FILE_H
+# include <BALL/SYSTEM/file.h>
+#endif
+
 namespace BALL
 {
 	class TrajectoryFile;
@@ -26,7 +30,7 @@ namespace BALL
 		Snapshots are numbered starting with 1.	 \par
 		\ingroup  MolmecCommon
 */
-class SnapShotManager
+class BALL_EXPORT SnapShotManager
 {
 	public:
 
@@ -187,7 +191,7 @@ class SnapShotManager
 			has index 1.
 	*/
 	virtual void takeSnapShot()
-		throw();
+		throw(File::CannotWrite);
 
 	/** Read a certain SnapShot from a TrajectoryFile. This method tries to
 			read SnapShot number <b>number</b> from the file
@@ -223,7 +227,7 @@ class SnapShotManager
 
 	/// This method writes all snapshots taken so far to hard disk
 	virtual void flushToDisk()
-		throw();
+		throw(File::CannotWrite);
 
 	Size getNumberOfSnapShotsInBuffer()
 		throw() { return  snapshot_buffer_.size();}

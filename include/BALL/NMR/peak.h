@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peak.h,v 1.18 2003/08/26 08:04:45 oliver Exp $
+// $Id: peak.h,v 1.18.6.2 2005/08/12 14:59:09 amoll Exp $
 //
 
 #ifndef BALL_NMR_PEAK_H

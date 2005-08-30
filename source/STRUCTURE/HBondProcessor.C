@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.C,v 1.13 2005/04/14 12:40:17 anhi Exp $
+// $Id: HBondProcessor.C,v 1.12 2005/03/02 15:18:55 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/HBondProcessor.h>
@@ -25,22 +25,14 @@ namespace BALL
 	{
 	}
 
-	/*********************************************************
-  *  preComputeBonds identifies characteristic amino acid
-	*  atoms (C, N, O), and stores them in residue_data_ 
-  *********************************************************/
 	void HBondProcessor::preComputeBonds_(ResidueIterator& resit)
 	{
-		// index to enumerate the residues. Unfortunately, we cannot use
-		// the residueID, which is not monotonous
+		// index to serially the residues 
 		Position j = 0;  
 	
 		// iteration over all residues of the protein
 		// to find the C,N,O atoms
-		//
-		// since the N-terminus is special, we treat it differently
-		// we also have to take care of residues with missing atoms 
-		// we find the first complete residue and use it instead 
+
 		for (; +resit ; ++resit)
 		{	
 			if (!resit->isAminoAcid()) continue;
@@ -85,7 +77,7 @@ namespace BALL
 			pos.res = &(*resit);
 
 			// the N-terminus is special
-			if (pos.is_complete && !(pos.res->isNTerminal()))
+			if (pos.is_complete && j != 0)
 			{
 				// evaluate the position of H 
 				const Vector3 OC(residue_data_[j-1].pos_O - residue_data_[j-1].pos_C);
@@ -108,10 +100,6 @@ namespace BALL
 
 
 
-  /*************************************************** 
-	 * Finish computes all hbonds of the composite 
-	 * and stores them in h_bond_pairs_.
-   ***************************************************/
 	bool HBondProcessor::finish()
 	{
 		if (residue_data_.size() == 0) return true;
@@ -122,7 +110,8 @@ namespace BALL
 		//create a grid inside the bounding box
 		HashGrid3<ResidueData*> atom_grid(lower_, upper_ - lower_, MAX_LENGTH);
 
-		// insert all protein-residues at the position of their N-atom
+		// insert all protein-residues in respect of N-atom
+		// the last residue does not _have_ an O.  = > don't use it
 		for (Size i = 0; i < residue_data_.size(); i++) 
 		{
 			if (residue_data_[i].is_complete)
@@ -170,7 +159,7 @@ namespace BALL
 						{
 							// TODO: We don't want H-bonds between neighboring residues!
 							//       Does this criterion always work? We should check for
-							//       an existing bond between data_it and residue_data_[i] instead!
+							//       an existing bond between data_it and vec[i] instead!
 
 							// data from neighbouring residue
 							const ResidueData& ndata = **data_it;
@@ -232,14 +221,13 @@ namespace BALL
 		return true;
 	}
 
-	/*********************************************************
-	 *  Compute all HBonds for a given composite 
-	 *********************************************************/
+
+
 	Processor::Result HBondProcessor::operator() (Composite &composite)
 	{
 		ResidueIterator ri;
 		
-	  // create a bounding box which should include the composite
+	  // create a mantel box (bounding box)  which should include the composite
 		BoundingBoxProcessor bp;
 
 		// do we have a system?
@@ -248,25 +236,21 @@ namespace BALL
 			System *s = RTTI::castTo<System>(composite);
 			s->apply(bp);
       ri = s->beginResidue();
-		}
-		else if (RTTI::isKindOf<Protein>(composite))
+		}else
+		if (RTTI::isKindOf<Protein>(composite))
 		{
 			Protein *s = RTTI::castTo<Protein>(composite);
 			s->apply(bp);
       ri = s->beginResidue();
-		}
-		else if (RTTI::isKindOf<Chain>(composite))
+		}else
+		if (RTTI::isKindOf<Chain>(composite))
 		{
 			Chain *s = RTTI::castTo<Chain>(composite);
 			s->apply(bp);
 			ri = s->beginResidue();
 		}
 		
-		// ri doesn't seem to exist
-		if (!(+ri)) 
-		{
-			return Processor::CONTINUE;
-		}
+		if (!(+ri)) return Processor::CONTINUE;
 
 		upper_ = bp.getUpper();
 		lower_ = bp.getLower();

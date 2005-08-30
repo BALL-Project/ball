@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.172 2005/07/16 21:00:48 oliver Exp $
+// $Id: mainControl.C,v 1.169.2.30 2005/08/30 14:24:03 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -373,15 +373,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				return;
 			}
 
-
-			#ifdef BALL_QT_HAS_THREADS
-				stop_simulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
-												SLOT(stopSimulation()), ALT+Key_C);
-				setMenuHint(stop_simulation_id_, "Abort a running simulation thread");
-			#endif
-
-			complement_selection_id_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
-
 			// establish connection 
 			connect(preferences_dialog_->ok_button, SIGNAL(clicked()), 
 					this, SLOT(applyPreferencesTab()));
@@ -423,13 +414,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			// own menu entries
 			insertPopupMenuSeparator(MainControl::FILE);
 			insertMenuEntry(MainControl::FILE, "&Quit", qApp, SLOT(quit()), CTRL+Key_Q);	
-			//insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(whatsThis()));	
 
 			// if the preferences dialog has any tabs then show it
 			if (preferences_dialog_->hasPages())
 			{
-				initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
-				
 				insertPopupMenuSeparator(MainControl::EDIT);
 				preferences_id_ = insertMenuEntry(MainControl::EDIT,
 																					"Preferences", 
@@ -635,8 +623,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				
 			#ifndef BALL_QT_HAS_THREADS
 				// if build multithreaded, the Representation will send the message itself
-				RepresentationMessage* ur_message = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
-				notify_(ur_message);
+				notify_(new RepresentationMessage(*rep, RepresentationMessage::UPDATE));
 			#endif
 			}
 
@@ -648,17 +635,14 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			throw()
 		{
 			// update scene
-			SceneMessage *scene_message = new SceneMessage;
 			if (rebuild_display_lists)
 			{
-				scene_message->setType(SceneMessage::REBUILD_DISPLAY_LISTS);
+				notify_(new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS));
 			}
 			else
 			{
-				scene_message->setType(SceneMessage::REDRAW);
+				notify_(new SceneMessage(SceneMessage::REDRAW));
 			}
-
-			notify_(scene_message); 
 		}
 
 
@@ -700,20 +684,14 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 						{
 							deselectCompositeRecursive(cmessage->getComposite(), true);
 						}
-						/*
-						if (cmessage->showSelectionInfos())
-						{
-							printSelectionInfos();
-						}
-						*/
 
 						if (cmessage->updateRepresentations())
 						{
 							updateRepresentationsOf(*cmessage->getComposite(), false);
 						}
 
-						NewSelectionMessage* nws_message = new NewSelectionMessage;					
-						notify_(nws_message); // send to MolecularControl
+						// send to MolecularControl
+						notify_(new NewSelectionMessage);
 					}
 
 					default:
@@ -769,8 +747,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			MainControl* mc = 0;
 			if (parent != 0)
 			{
-				// check whether the top-level widget
-				// is a MainControl
+				// check whether the top-level widget is a MainControl
 				mc = dynamic_cast<MainControl*>(parent);
 			}
 			else 
@@ -1007,49 +984,38 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			HashSet<Composite*> roots;
 
-			Size nr = 0;
 			List<GeometricObject*>& objects = const_cast<List<GeometricObject*>&>(message.getSelection());
 			List<GeometricObject*>::Iterator it_objects = objects.begin();
+			
+			const bool to_select = message.isSelected();
 
-			if (message.isSelected())
+			// use a function pointer to (de)selectCompositeRecursive
+			void (MainControl::*func_ptr) (Composite*, bool);
+
+			if (to_select) func_ptr = &MainControl::selectCompositeRecursive;
+			else 					 func_ptr = &MainControl::deselectCompositeRecursive;
+
+			for (; it_objects != objects.end(); it_objects++)
 			{
-				for (; it_objects != objects.end(); it_objects++)
-				{
-					Composite* composite = const_cast<Composite*>((**it_objects).getComposite());
+				Composite* composite = const_cast<Composite*>((**it_objects).getComposite());
 
-					if (composite != 0  && !composite->isSelected())
-					{	
-						nr++;
-						roots.insert(&composite->getRoot());
-						if (RTTI::isKindOf<Bond>(*composite))
-						{
-							composite->select();
-						}
-						else
-						{
-							selectCompositeRecursive(composite , true);
-						}
+				if (composite != 0  && composite->isSelected() != to_select)
+				{	
+					Bond* const bond = dynamic_cast<Bond*>(composite);
+					if (bond !=0)
+					{
+						Atom* first  = (Atom*) bond->getFirstAtom();
+						Atom* second = (Atom*) bond->getSecondAtom();
+						
+						roots.insert(&first->getRoot());
+						
+						(this->*func_ptr)(first, true);
+						(this->*func_ptr)(second, true);
 					}
-				}
-			}
-			else
-			{
-				for (; it_objects != objects.end(); it_objects++)
-				{
-					Composite* composite = const_cast<Composite*>((**it_objects).getComposite());
-
-					if (composite != 0  && composite->isSelected())
-					{	
-						nr++;
+					else
+					{
 						roots.insert(&composite->getRoot());
-						if (RTTI::isKindOf<Bond>(*composite))
-						{
-							composite->deselect();
-						}
-						else
-						{
-							deselectCompositeRecursive(composite , true);
-						}
+						(this->*func_ptr)(composite, true);
 					}
 				}
 			}
@@ -1059,15 +1025,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			HashSet<Composite*>::Iterator it = roots.begin();
 			for(; it != roots.end(); it++)
 			{
-				updateRepresentationsOf(**it, false);
+ 				updateRepresentationsOf(**it, false);
 			}
 
-			#ifdef BALL_DEBUG_VIEW
-				Log.info() << "Selected " + String(nr) + " items."<< std::endl;
-			#endif
-
-			NewSelectionMessage* new_message = new NewSelectionMessage;
-			notify_(new_message);
+			notify_(new NewSelectionMessage);
 		}
 
 
@@ -1363,6 +1324,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			{
 				setStatusbarText("");
 			}
+
+			last_highlighted_menu_entry_ = id;
 		}
 
 		void MainControl::dump(ostream& s, Size depth) const
@@ -1412,9 +1375,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			control_selection_.clear();
 
-			CompositeMessage* cm = new CompositeMessage(composite, 
-					CompositeMessage::REMOVED_COMPOSITE);
-			notify_(cm);
+			notify_(new CompositeMessage(composite, CompositeMessage::REMOVED_COMPOSITE));
 			remove_(composite, update, to_delete);
 
 			return true;
@@ -1433,8 +1394,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			rep.update(true);
 
-			RepresentationMessage* rm = new RepresentationMessage(rep, RepresentationMessage::UPDATE);
-			notify_(rm);
+			notify_(new RepresentationMessage(rep, RepresentationMessage::UPDATE));
 
 			return true;
 		}
@@ -1450,17 +1410,14 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			if (rep.hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 			{
-				SceneMessage *scene_message = new SceneMessage(SceneMessage::REMOVE_COORDINATE_SYSTEM);
-				notify_(scene_message);
+				notify_(new SceneMessage(SceneMessage::REMOVE_COORDINATE_SYSTEM));
 			}
 			else if (rep.hasProperty("AX"))
 			{
-				SceneMessage *scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
-				notify_(scene_message);
+				notify_(new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS));
 			}
 					
-			RepresentationMessage* message = new RepresentationMessage(rep, RepresentationMessage::REMOVE);
-			notify_(message);
+			notify_(new RepresentationMessage(rep, RepresentationMessage::REMOVE));
 
 			return primitive_manager_.remove(rep);
 		}
@@ -1487,8 +1444,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			redrawAllRepresentations(true);
 
-			NewSelectionMessage* nm = new NewSelectionMessage;
-			sendMessage(*nm);
+			sendMessage(*new NewSelectionMessage());
 		}
 
 		void MainControl::deleteClicked()
@@ -1579,8 +1535,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			stop_simulation_ = false;
 			unlockCompositesFor(locking_widget_);
 
-			FinishedSimulationMessage* msg = new FinishedSimulationMessage();
-			notify_(msg);
+			notify_(new FinishedSimulationMessage);
 			#endif
 		}
 
@@ -1673,8 +1628,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				updateRepresentationsOf(**it, false);
 			}
 
-			NewSelectionMessage* new_message = new NewSelectionMessage;
-			notify_(new_message);
+			notify_(new NewSelectionMessage);
 			printSelectionInfos();
 		}
 
@@ -1738,7 +1692,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			throw() 
 		{ 
 			Directory directory(dir);
-			if (directory.setCurrent())
+			if (directory.isValid())
 			{
 				working_dir_ = dir;
 			}
@@ -1893,18 +1847,20 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		file >> nr_lines;
 		file >> nr_composites;
  		INIFile in;
-		char buffer[2000];
+		char buffer[50000];
 		for (Position p = 0; p <= nr_lines; p++)
 		{
-			if (!file.getline(&(buffer[0]), 2000))
+			if (!file.getline(&(buffer[0]), 50000))
 			{
 				setStatusbarText("Error while reading project file, could not read INIFile", true);
+				BALLVIEW_DEBUG
 				return;
 			}
 
 			if (!in.appendLine(buffer)) 
 			{
 				setStatusbarText("Error while reading project file, could not read INIFile", true);
+				BALLVIEW_DEBUG
 				return;
 			}
 		}
@@ -1922,7 +1878,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			DisplayProperties::getInstance(0)->enableCreationForNewMolecules(false);
 		}
 
-		List<Composite*> selection;
+		vector<const Composite*> new_systems;
 		Position current_composite = 0;
 		while (file.good() && !file.eof() && current_composite < nr_composites)
 		{
@@ -1934,18 +1890,19 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				return;
 			}
 
-			insert(*dynamic_cast<System*>(po));
+			System* system = dynamic_cast<System*>(po);
+			insert(*system);
+			new_systems.push_back(system);
 			current_composite++;
 		}
 
 		file.close();
 		DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
 
-		getPrimitiveManager().restoreRepresentations(in);
+		getPrimitiveManager().restoreRepresentations(in, new_systems);
 
 		getSelection().clear();
-		NewSelectionMessage* msg = new NewSelectionMessage();
-		notify_(msg);
+		notify_(new NewSelectionMessage);
  	
 		fetchPreferences(in);
 
@@ -2003,6 +1960,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		qApp->processEvents(max_time);
 	}
 	
+
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>
 #	endif

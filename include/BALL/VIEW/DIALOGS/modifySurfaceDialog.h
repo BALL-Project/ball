@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.h,v 1.3 2005/07/03 09:43:05 oliver Exp $
+// $Id: modifySurfaceDialog.h,v 1.1.2.7 2005/06/15 09:54:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H

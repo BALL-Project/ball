@@ -1,31 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.h,v 1.9 2005/04/22 15:01:40 amoll Exp $
+// $Id: ringPerceptionProcessor.h,v 1.5.4.1 2005/07/30 21:53:05 amoll Exp $
 //
 
 #ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
 #define BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
 
-#ifndef BALL_KERNEL_ATOMCONTAINER_H
-	#include <BALL/KERNEL/atomContainer.h>
-#endif
-
-#ifndef BALL_DATATYPE_BITVECTOR_H
-	#include <BALL/DATATYPE/bitVector.h>
-#endif
-
-#ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
-	#include <BALL/STRUCTURE/molecularGraph.h>
-#endif
-
-#ifndef BALL_DATATYPE_OPTIONS_H
-	#include <BALL/DATATYPE/options.h>
+#ifndef BALL_KERNEL_MOLECULE_H
+#	include <BALL/KERNEL/molecule.h>
 #endif
 
 #include <queue>
-#include <stack>
-#include <vector>
 
 namespace BALL
 {
@@ -35,199 +21,76 @@ namespace BALL
 			
 			The processor is an implementation of Figueras algorithm, described in:
 			J. Figueras, J. Chem. Inf. Comput. Sci., 1996, 36(5), 986-991
-
-			and the Balducci Pearlman algorithm described in:
-			Renzo Balducci, Robert S. Pearlman, J. Chem. Inf. Comput. Sci., 34:822-831, 1994
 	*/
-	class RingPerceptionProcessor
+	class BALL_EXPORT RingPerceptionProcessor
 		:	public UnaryProcessor<AtomContainer>
 	{
 		public:
 
-			/** @name Constants and Definitions
-			*/
-			//@{
-			/// Option names
-			struct Option
-			{
-				/** The name of the algorithm which sould be used 
-				 *	for the ring perception. At the moment this can be 
-				 *	either Figueras algorithm or as default the Balducci/
-				 *	Pearlman algorithm. \par
-				 *	Valid values are <b> Figueras <b> for the Figueras and
-				 *	<b> Balducci <b> for the Balducci Pearlman algorithm (default)
-				 */
-				static const char* ALGORITHM_NAME;
-			};
+		BALL_CREATE(RingPerceptionProcessor)
 
-			/// default options for the ring perception
-			struct Default
-			{
-				/** Default name of the algorithm. This is set to the
-				 *	provable correct Balducci/Pearlman algorithm,
-				 *	<b> Balducci <b>
-				 */
-				static const char* ALGORITHM_NAME;
-			};
+		/** @name Constrcutors and Destructors
+		*/
+		//@{
+		/** Default constructor
+		*/
+		RingPerceptionProcessor();
 
+		/** Copy constructor
+		*/
+		RingPerceptionProcessor(const RingPerceptionProcessor& rp);
 
-			BALL_CREATE(RingPerceptionProcessor)
-	
-			/** @name Constrcutors and Destructors
-			*/
-			//@{
-			/** Default constructor
-			*/
-			RingPerceptionProcessor();
+		/** Destructor
+		*/
+		~RingPerceptionProcessor();
 
-			/** Copy constructor
-			*/
-			RingPerceptionProcessor(const RingPerceptionProcessor& rp);
+		//@}
+		/** @name Assignment
+		*/
+		//@{
 
-			/** Destructor
-			*/
-			~RingPerceptionProcessor();
+		/** Assignment operator
+		*/
+		RingPerceptionProcessor& operator = (const RingPerceptionProcessor& rp);
 
-			//@}
-			/** @name Assignment
-			*/
-			//@{
+		//@}
+		/** @name Accessors
+		*/
+		//@{
 
-			/** Assignment operator
-			*/
-			RingPerceptionProcessor& operator = (const RingPerceptionProcessor& rp);
+		/** Method to get a smallest set of smallest rings (SSSR) from a molecule.
+				@param SSSR, vector of rings, where the rings are stored in vector<Atom*>
+				@param AtomContiner, from which AtomContainer the rings are to be percepted
+		*/
+		Size calculateSSSR(vector<vector<Atom*> >& sssr, AtomContainer& ac);
 
-			//@}
-			/** @name Accessors
-			*/
-			//@{
+		//@}
+		/** @name Processor-realted methods
+		*/
+		//@{
 
-			/** Method to get a smallest set of smallest rings (SSSR) from a molecule.
-					@param SSSR, vector of rings, where the rings are stored in vector<Atom*>
-					@param AtomContiner, from which AtomContainer the rings are to be percepted
-			*/
-			Size calculateSSSR(vector<vector<Atom*> >& sssr, AtomContainer& ac);
-			//@}
+		Processor::Result operator () (AtomContainer& ac);
+		//@}
 		
-			/** @name Processor-related methods
-			*/
-			//@{
-			Processor::Result operator () (AtomContainer& ac);
-			//@}
-	
-			/** Method that finds all biconnected components, the algorithm is freely
-					adapted from a standard bcc algorithm. Returns the number of bccs found.
-			*/
-			Size findAllBCC(std::vector<MolecularGraph*>& bcc, MolecularGraph& graph);
+		private:
 
-			/*_ Options for the ring perception
-			*/
-			Options options;									
+		/*_ @name Accessors
+		*/
+		//@{
 
-			/** sets the default options of this processor
-			*/
-			void setDefaultOptions();
+		/*_ Method that return the smallest ring which atom n participates
+				@param atom from which the search is started
+				@param ring set in which the found ring is stored (if any)
+		*/
+		Size getRing_(Atom* n, HashSet<Atom*>& ring_set);
 
-		protected:
-	
-			/*_ @name Accessors
-			*/
-			//@{
-			/*_ Implementation of the Figueras algorithm. This algorithm has some build
-					in bugs, and should not be used any more. Hence as default the provable
-					correct Balducci/Pearlman algorithm is used.
-			*/
-			Size FiguerasAlgorithm_(vector<vector<Atom*> >& sssr, AtomContainer& ac);
-
-			/*_ Method that return the smallest ring which atom n participates
-					@param atom from which the search is started
-					@param ring set in which the found ring is stored (if any)
-			*/
-			Size getRing_(Atom* n, HashSet<Atom*>& ring_set);
-
-			/*_ A bond, which when deleted leads to the smallest ring
-					is deleted. 
-					@param ring_set atoms to test
-					@param ac the atom container the algorithm works on
-			*/
-			void checkEdges_(HashSet<Atom*>& ring_set, AtomContainer& ac);
-	
-			/*_ Method that finds all biconnected components, the algorithm is freely 
-					adapted from a standard bcc algorithm.
-			*/
-			Size findAllBCC_(std::vector<MolecularGraph*>& bcc, MolecularGraph& graph);
-	
-			/*_ recursive function that finds bccs
-			*/
-			void DFSBCC_( std::vector<MolecularGraph*>& bccs, Size dfbi, 
-										HashMap<NodeItem<Index, Index>*, Size> DFBIndex, 
-										NodeItem<Index, Index>* v);
-																						
-			HashSet<NodeItem<Index, Index>* > visited_;
-			HashSet<EdgeItem<Index, Index>* > visited_bonds_;
-			HashMap<NodeItem<Index, Index>* , Size> P_;
-			HashMap<NodeItem<Index, Index>*, NodeItem<Index, Index>* > parents_;
-			std::stack<EdgeItem<Index, Index>* > BCC_;
-	
-	
-			// Balducci and Pearlman algorithm
-			struct PathMessage;
-			
-			/*_ The tnode structure described in the paper
-			*/
-			struct TNode
-			{
-				/// method to process the messages in the recieve buffer
-				void recieve();
-				
-				/// method to process the messages in the send buffer
-				void send();
-	
-				/// the recieve buffer, where messages are stored in
-				std::vector<PathMessage> recieve_buffer;
-	
-				/// the send buffer, where messages are stored in
-				std::vector<PathMessage> send_buffer;
-			};
-		
-			/*_ The pathMsg structure described in the paper
-			*/
-			struct PathMessage
-			{
-				void push(EdgeItem<Index, Index>* bond, TNode* node);
-			
-				// path of the message
-				BitVector beep;
-				
-				/// pointer to the first node this message was sent from
-				TNode * nfirst;
-			
-				// pointer to the last node of the messages' path
-				TNode * nlast;
-
-				/// pointer to the first edge of the message path
-				EdgeItem<Index, Index>* efirst;
-			};
-
-			/// mapping for internal TNode structure and the nodes of the molecular graph
-			static HashMap<TNode*, NodeItem<Index, Index>* > tnode_to_atom;
-			static HashMap<NodeItem<Index, Index>* , TNode*> atom_to_tnode;
-			/// mapping for the path representation as bitvectors
-			static HashMap<EdgeItem<Index, Index>*, Size> bond_to_index;
-			static HashMap<Size, EdgeItem<Index, Index>*> index_to_bond;
-			/// hte SSSR detected by the algorithm
-			static std::vector<BitVector> rings;
-			/// the matrix for the independency tests
-			static std::vector<BitVector> matrix;
-
-			/*_ function that gets a binary edge-encoded ring as a BitVector
-					and adds it to the ringset if its linearly independend
-			*/
-			static void BalducciPearlmanRingSelector_(BitVector);
-	
-			/*_ Implementation of the Balducci/Pearlman algorithm 
-			*/
-			Size BalducciPearlmanAlgorithm_(std::vector<std::vector<Atom*> >& sssr, MolecularGraph& graph);
+		/*_ A bond, which when deleted leads to the smallest ring
+				is deleted. 
+				@param ring_set atoms to test
+				@param ac the atom container the algorithm works on
+		*/
+		void checkEdges_(HashSet<Atom*>& ring_set, AtomContainer& ac);
+		//@}
 	};
 } // namespace BALL
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.46 2005/07/16 21:00:51 oliver Exp $
+// $Id: pyWidget.C,v 1.44.6.12 2005/08/26 13:43:27 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -137,17 +137,18 @@ namespace BALL
 		}
 
 
-		void PyWidgetData::stopInterpreter()
-		{
-			PyInterpreter::finalize();
-		}
-
-
 		void PyWidgetData::startInterpreter()
 		{
 			stop_script_ = false;
 			// initialize the interpreter
 			PyInterpreter::initialize();
+
+			if (!PyInterpreter::isValid())
+			{
+				setText("No Python Support available!");
+				setEnabled(false);
+				return;
+			}
 
 			// print the PyBALL version and clear
 			// the widget's contents in case of a restart
@@ -256,7 +257,7 @@ namespace BALL
 			if (line == "quit" || line == "quit()")
 			{
 				stop_script_ = true;
-				stopInterpreter();
+				PyInterpreter::finalize();
 				getMainControl()->quit();
 				return true;
 			}
@@ -489,7 +490,7 @@ namespace BALL
 		}
 
 
-		void PyWidgetData::runFile(const String& filename)
+		bool PyWidgetData::runFile(const String& filename)
 		{
 			stop_script_ = false;
 			append(String("> running File " + filename + "\n").c_str());
@@ -502,7 +503,7 @@ namespace BALL
 			{
 				append(String("> Could not find file " + filename + "\n").c_str());
 				newPrompt_();
-				return;
+				return false;
 			}
 
 			while (file.readLine())
@@ -512,7 +513,7 @@ namespace BALL
 					String result_string = "> Error in Line " + String(file.getLineNumber()) + " in file " + filename + "\n";
 					append(result_string.c_str());
 					newPrompt_();
-					return;
+					return false;
 				}
 
 				if (stop_script_) 
@@ -521,29 +522,31 @@ namespace BALL
  					((PyWidget*)parent())->setStatusbarText("Aborted script");
 					append("> aborted...");
 					newPrompt_();
-					return;
+					return false;
 				}
 			}
 			append("> finished...");
 			((PyWidget*)parent())->setStatusbarText("finished script");
 			newPrompt_();
+			return true;
 		}
 
-		void PyWidgetData::scriptDialog()
+		void PyWidget::scriptDialog()
 		{
-			PyWidget* p = (PyWidget*) parent();
-			// no throw specifier because of that #$%@* moc
+			if (working_dir_ == "") working_dir_ = getWorkingDir();
+
 			QString s = QFileDialog::getOpenFileName(
-										p->getWorkingDir().c_str(),
+										working_dir_.c_str(),
 										"Python Scripts(*.py)",
-										p->getMainControl(),
+										getMainControl(),
 										"Run Python Script",
-										"Choose a file" );
+										"Choose a Python script" );
 
 		 	if (s == QString::null) return;
-			p->setWorkingDirFromFilename_(s.ascii());
+			setWorkingDirFromFilename_(s.ascii());
+			working_dir_ = getWorkingDir();
 
-			runFile(s.ascii());
+			text_edit_->runFile(s.ascii());
 		}
 
 		void PyWidgetData::exportHistory()
@@ -574,11 +577,6 @@ namespace BALL
 			}
 
 			file.close();
-		}
-
-		void PyWidgetData::cut()
-		{
-			QTextEdit::cut();
 		}
 
 		void PyWidgetData::clear()
@@ -616,7 +614,8 @@ namespace BALL
 		PyWidget::PyWidget(QWidget *parent, const char *name)
 			throw()
 			: DockWidget(parent, name),
-				text_edit_(new PyWidgetData(this))
+				text_edit_(new PyWidgetData(this)),
+				working_dir_("")
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new PyWidget " << this << std::endl;
@@ -633,12 +632,17 @@ namespace BALL
 		void PyWidget::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
-			insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", text_edit_, SLOT(scriptDialog()));
+//   			insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
+
+			insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", this , SLOT(scriptDialog()));
 			insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
 			insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
 
 			DockWidget::initializeWidget(main_control);
+
+			registerWidgetForHelpSystem(this, "pythonInterpreter.html");
+
+			text_edit_->startInterpreter();
 		}
 
 
@@ -646,7 +650,7 @@ namespace BALL
 			throw()
 		{
 			text_edit_->abortScript();
-			stopInterpreter();
+			PyInterpreter::finalize();
 
 			DockWidget::finalizeWidget(main_control);
 		}
@@ -668,6 +672,21 @@ namespace BALL
 			}
 
 			python_hotkeys_->setContent(hotkeys_);
+
+			// dont set startup script if we are loading a project file
+			if (inifile.getFilename() == "" || 
+					inifile.getFilename().hasSuffix(".bvp")) 
+			{
+				return;
+			}
+
+			String startup = getDataPath();
+			startup += "startup.py";
+			if (!text_edit_->runFile(startup))
+			{
+				Log.error() << "Could not find startup script. Please set the correct path to the data path!" << std::endl;
+				Log.error() << "To do so set the environment variable BALL_DATA_PATH or BALLVIEW_DATA_PATH." << std::endl;
+			}
 
 			if (!inifile.hasEntry("PYTHON", "StartupScript")) return;
 
@@ -741,16 +760,6 @@ namespace BALL
 			{
 				text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
 			}
-		}
-
-		void PyWidget::startInterpreter()
-		{
-			text_edit_->startInterpreter();
-		}
-
-		void PyWidget::stopInterpreter()
-		{
-			text_edit_->stopInterpreter();
 		}
 
 		void PyWidgetData::abortScript()

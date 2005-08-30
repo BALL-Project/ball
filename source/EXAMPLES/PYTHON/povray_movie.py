@@ -14,10 +14,7 @@ movie_base = 'movie'
 import os
 
 # Get access to the maincontrol.
-mc = MainControl.getInstance(0)
-cm = mc.getCompositeManager()
-s = Scene.getInstance(0)
-camera = Camera(s.getStage().getCamera())
+camera = Camera(getScene().getStage().getCamera())
 old_viewpoint = Vector3(camera.getViewPoint())
 
 vv = Vector3(camera.getViewPoint())
@@ -33,12 +30,12 @@ for snap in range(360. / step):
 	vv = camera.getViewPoint() - la
 	vv = Vector3(matrix.m11 * vv.x + matrix.m12 * vv.y + matrix.m13 * vv.z + matrix.m14, matrix.m21 * vv.x + matrix.m22 * vv.y + matrix.m23 * vv.z + matrix.m24, matrix.m31 * vv.x + matrix.m32 * vv.y + matrix.m33 * vv.z + matrix.m34)
 	camera.setViewPoint(vv + la)
-	s.setCamera(camera)
+	getScene().setCamera(camera)
 	filename = os.path.join(movie_dir, movie_base + "_%04d.pov" % snap)
-	s.exportScene(POVRenderer(filename))
+	getScene().exportScene(POVRenderer(filename))
 
 print "finished"
 
 # Reset the camera.
 camera.setViewPoint(old_viewpoint)
-s.setCamera(Camera(camera))
+getScene().setCamera(Camera(camera))

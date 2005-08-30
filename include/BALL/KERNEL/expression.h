@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.h,v 1.32 2004/05/18 11:54:42 amoll Exp $
+// $Id: expression.h,v 1.32.4.1 2005/07/28 14:01:54 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_EXPRESSION_H
@@ -35,7 +35,7 @@ namespace BALL
 
     	\ingroup  Predicates
 	*/
-	class Expression
+	class BALL_EXPORT Expression
 	{
 		public:
 		

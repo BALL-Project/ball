@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: spectrum.h,v 1.14 2003/08/26 08:04:45 oliver Exp $
+// $Id: spectrum.h,v 1.14.6.2 2005/08/12 14:59:09 amoll Exp $
 //
 
 #ifndef BALL_NMR_SPECTRUM_H

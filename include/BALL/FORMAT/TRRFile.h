@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TRRFile.h,v 1.12 2003/08/26 08:04:14 oliver Exp $
+// $Id: TRRFile.h,v 1.12.6.1 2005/07/28 13:52:56 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_TRRFILE_H
@@ -21,7 +21,7 @@ namespace BALL
 			
     	\ingroup  MDFormats
 	*/
-	class TRRFile
+	class BALL_EXPORT TRRFile
 	  :	public TrajectoryFile
 	{
 
@@ -37,7 +37,7 @@ namespace BALL
 				The header consists of several records that are stored sequentially.  \par
 				
 		*/
-		class TRRHeader
+		class BALL_EXPORT TRRHeader
 		{
 
 			public: 

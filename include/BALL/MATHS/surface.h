@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surface.h,v 1.29 2004/10/22 20:11:54 amoll Exp $
+// $Id: surface.h,v 1.29.4.2 2005/08/12 00:32:54 amoll Exp $
 //
 
 #ifndef BALL_MATHS_SURFACE_H

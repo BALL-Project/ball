@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triple.h,v 1.9 2003/08/26 08:04:12 oliver Exp $
+// $Id: triple.h,v 1.9.6.3 2005/08/12 00:32:48 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_TRIPLE_H

@@ -1,18 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.39 2005/07/03 09:43:42 oliver Exp $
+// $Id: datasetControl.C,v 1.37.2.12 2005/08/30 14:29:16 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <BALL/KERNEL/system.h>
-#include <BALL/FORMAT/DCDFile.h>
-
-#include <BALL/DATATYPE/contourSurface.h>
-#include <BALL/VIEW/PRIMITIVES/mesh.h>
-#include <BALL/VIEW/PRIMITIVES/line.h>
 
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
@@ -20,11 +14,15 @@
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
 #include <BALL/VIEW/WIDGETS/regularData2DWidget.h>
 
-#include <qpopupmenu.h>
-#include <qmenubar.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/line.h>
+
+#include <BALL/FORMAT/DCDFile.h>
+#include <BALL/MOLMEC/COMMON/snapShotManager.h>
+#include <BALL/DATATYPE/contourSurface.h>
+
 #include <qfiledialog.h>
 #include <qlistview.h>
-#include <qtooltip.h>
 
 namespace BALL
 {
@@ -35,8 +33,7 @@ namespace BALL
 			throw()
 			:	GenericControl(parent, name),
 				dialog_(0),
-				surface_dialog_(0),
-				menu_cs_(0)
+				surface_dialog_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new DatasetControl " << this << std::endl;
@@ -76,20 +73,23 @@ namespace BALL
 														this, SLOT(addTrajectory()));
 			setMenuHint("Open a trajectory file (1 System has to be selected)");
 
-			menu_1D_id_ = insertMenuEntry(MainControl::FILE_OPEN, "1D Grid", this, SLOT(add1DGrid()));
+			insertMenuEntry(MainControl::FILE_OPEN, "1D Grid", this, SLOT(add1DGrid()));
 			setMenuHint("Open a 1D data grid");
 
-			menu_2D_id_ = insertMenuEntry(MainControl::FILE_OPEN, "2D Grid", this, SLOT(add2DGrid()));
+			insertMenuEntry(MainControl::FILE_OPEN, "2D Grid", this, SLOT(add2DGrid()));
 			setMenuHint("Open a 2D data grid");
 
-			menu_3D_id_ = insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()));
+			insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()));
 			setMenuHint("Open a 3D data grid");
 
 			menu_cs_ = insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  
 																							SLOT(computeIsoContourSurface()), CTRL+Key_U);
 			setMenuHint("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.");
+			setMenuHelp("datasetControl.html#isocontour_surfaces");
 
 			GenericControl::initializeWidget(main_control);
+
+			registerWidgetForHelpSystem(this, "datasetControl.html");
 		}
 
 
@@ -240,16 +240,8 @@ namespace BALL
 			}
 		}
 
-		void DatasetControl::deleteItem_(QListViewItem& item)
+		bool DatasetControl::deleteItem_(QListViewItem& item)
 		{
-			if (!item_to_trajectory_.has(&item) &&
-					!item_to_grid1_.has(&item) &&
-					!item_to_grid2_.has(&item) &&
-					!item_to_grid3_.has(&item))
-			{
-				return;
-			}
-
 			if (item_to_trajectory_.has(&item))
 			{
 				SnapShotManager* ssm = item_to_trajectory_[&item];
@@ -281,7 +273,7 @@ namespace BALL
 				delete ssm;
 				setStatusbarText("deleted 2D grid");
 			}
-			else
+			else if (item_to_grid3_.has(&item))
 			{
 				RegularData3D* ssm = item_to_grid3_[&item];
 
@@ -293,11 +285,16 @@ namespace BALL
 				delete ssm;
 				setStatusbarText("deleted 3D grid");
 			}
+			else
+			{
+				return false;
+			}
 
 			Composite* composite = item_to_composite_[&item];
 			composite_to_items_[composite].erase(&item);
 			item_to_composite_.erase(&item);
 			GenericControl::removeItem_(&item, true);
+			return true;
 		}
 
 
@@ -306,45 +303,42 @@ namespace BALL
 			if (item == 0) return;
 			context_item_ = item;
 			
-			Position menu_entry_pos; 
-			Size nr_items = getSelectedItems().size();
-			QPopupMenu context_menu;
-			if (item_to_trajectory_.has(item))
-			{
-				menu_entry_pos = context_menu.insertItem("Save", this, SLOT(saveTrajectory_()));
-				if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
-				menu_entry_pos = context_menu.insertItem("Visualise/Export", this, SLOT(visualiseTrajectory_()));
-				if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
-				menu_entry_pos = context_menu.insertItem("Load into RAM", this, SLOT(bufferTrajectory_()));
-				if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
-			}
-			else if (item_to_grid1_.has(item))
-			{
-				menu_entry_pos = context_menu.insertItem("Save", this, SLOT(save1DGrid_()));
-				if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
-				menu_entry_pos = context_menu.insertItem("Visualise", this, SLOT(visualiseGrid_()));
-				if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
-			}
-			else if (item_to_grid2_.has(item))
-			{
-				menu_entry_pos = context_menu.insertItem("Save", this, SLOT(save2DGrid_()));
-				if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
-				menu_entry_pos = context_menu.insertItem("Visualise", this, SLOT(visualiseGrid_()));
-				if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
-			}
-			else if (item_to_grid3_.has(item))
-			{
-				menu_entry_pos = context_menu.insertItem("Save", this, SLOT(save3DGrid_()));
-				if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
-				menu_entry_pos = context_menu.insertItem("Contour Surface", this, 
-																	SLOT(computeIsoContourSurface()));
-				if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
-			}
-			context_menu.insertItem("Delete", this, SLOT(deleteItems_()));
+			context_menu_.clear();
+			createContextMenu_();
 
-			// show the context menu if it is not empty
-			//if (context_menu.count()) context_menu.popup(point);
-			if (context_menu.count()) context_menu.exec(point);
+			insertContextMenuEntry_("Delete", SLOT(deleteItems_()));
+			context_menu_.exec(point);
+		}
+
+		void DatasetControl::createContextMenu_()
+		{
+			if (item_to_trajectory_.has(context_item_))
+			{
+				insertContextMenuEntry_("Visualise/Export", SLOT(visualiseTrajectory_()));
+				insertContextMenuEntry_("Load into RAM", SLOT(bufferTrajectory_()));
+				return;
+			}
+
+			if (item_to_grid1_.has(context_item_) ||
+		      item_to_grid2_.has(context_item_) ||
+					item_to_grid3_.has(context_item_))
+			{
+				insertContextMenuEntry_("Save", SLOT(saveGrid_()));
+				if (!item_to_grid3_.has(context_item_))
+				{
+					insertContextMenuEntry_("Visualise", SLOT(visualiseGrid_()));
+				}
+				else
+				{
+					insertContextMenuEntry_("ContourSurface", SLOT(computeIsoContourSurface()));
+				}
+			}
+		}
+
+		void DatasetControl::insertContextMenuEntry_(const QString & text, const char* member)
+		{
+			Index menu_entry_pos = context_menu_.insertItem(text, this, member);
+			if (getSelectedItems().size() > 1) context_menu_.setItemEnabled(menu_entry_pos, false);
 		}
 
 		void DatasetControl::visualiseTrajectory_()
@@ -505,50 +499,40 @@ namespace BALL
 		void DatasetControl::insertGrid_(RegularData1D* data, System* system, const String& name)
 			throw()
 		{
-			QListViewItem* item;
-			if (system != 0) 
-			{
-				item = new QListViewItem(listview, name.c_str(), system->getName().c_str(), "1D Grid");
-			}
-			else
-			{ 	
-				item = new QListViewItem(listview, name.c_str(), "", "1D Grid");
-			}
+			QListViewItem* item = createListViewItem_(system, name, "1D Grid");
 			item_to_grid1_[item] = data;
-			insertComposite_(system, item);
 		}
 
 		void DatasetControl::insertGrid_(RegularData2D* data, System* system, const String& name)
 			throw()
 		{
-			QListViewItem* item;
-			if (system != 0) 
-			{
-				item = new QListViewItem(listview, name.c_str(), system->getName().c_str(), "2D Grid");
-			}
-			else
-			{ 	
-				item = new QListViewItem(listview, name.c_str(), "", "2D Grid");
-			}
+			QListViewItem* item = createListViewItem_(system, name, "2D Grid");
 			item_to_grid2_[item] = data;
-			insertComposite_(system, item);
+		}
+
+		void DatasetControl::insertGrid_(RegularData3D* data, System* system, const String& name)
+			throw()
+		{
+			QListViewItem* item = createListViewItem_(system, name, "3D Grid");
+			item_to_grid3_[item] = data;
 		}
 
 
-		void DatasetControl::insertGrid_(RegularData3D* data, System* system, const String& name)
+		QListViewItem* DatasetControl::createListViewItem_(System* system, const String& name, const String& type)
 			throw()
 		{
 			QListViewItem* item;
 			if (system != 0) 
 			{
-				item = new QListViewItem(listview, name.c_str(), system->getName().c_str(), "3D Grid");
+				item = new QListViewItem(listview, name.c_str(), system->getName().c_str(), type);
+				insertComposite_(system, item);
 			}
 			else
 			{ 	
-				item = new QListViewItem(listview, name.c_str(), "", "3D Grid");
+				item = new QListViewItem(listview, name.c_str(), "", type);
 			}
-			item_to_grid3_[item] = data;
-			insertComposite_(system, item);
+
+			return item;
 		}
 
 
@@ -577,33 +561,25 @@ namespace BALL
 			return result;
 		}
 
-		void DatasetControl::save1DGrid_()
+		void DatasetControl::saveGrid_()
 			throw()
 		{ 
 			String filename = chooseGridFileForSave_();
 			if (filename == "") return;
 
-			item_to_grid1_[context_item_]->binaryWrite(filename);
-			setStatusbarText("Grid successfully written...");
-		}
+			if (item_to_grid1_.has(context_item_))
+			{
+				item_to_grid1_[context_item_]->binaryWrite(filename);
+			}
+			else if (item_to_grid2_.has(context_item_))
+			{
+				item_to_grid2_[context_item_]->binaryWrite(filename);
+			}
+			else if (item_to_grid3_.has(context_item_))
+			{
+				item_to_grid3_[context_item_]->binaryWrite(filename);
+			}
 
-		void DatasetControl::save2DGrid_()
-			throw()
-		{
-			String filename = chooseGridFileForSave_();
-			if (filename == "") return;
-
-			item_to_grid2_[context_item_]->binaryWrite(filename);
-			setStatusbarText("Grid successfully written...");
-		}
-
-		void DatasetControl::save3DGrid_()
-			throw()
-		{
-			String filename = chooseGridFileForSave_();
-			if (filename == "") return;
-
-			item_to_grid3_[context_item_]->binaryWrite(filename);
 			setStatusbarText("Grid successfully written...");
 		}
 
@@ -668,6 +644,7 @@ namespace BALL
 			{
 				surface_dialog_ = new ContourSurfaceDialog(this, "ContourSurfaceDialog");
 				surface_dialog_->setDatasetControl(this);
+				registerWidgetForHelpSystem(surface_dialog_, "datasetControl.html#isocontour_surfaces");
 			}
 			if (!surface_dialog_->exec()) return;
 
@@ -717,8 +694,8 @@ namespace BALL
 			getMainControl()->update(*rep2);
 			*/
 
-			mesh->colorList.clear(); 
-			mesh->colorList.push_back(surface_dialog_->getColor());
+			mesh->colors.clear(); 
+			mesh->colors.push_back(surface_dialog_->getColor());
 
 			// Create a new representation containing the contour surface.
 			Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
@@ -738,5 +715,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL

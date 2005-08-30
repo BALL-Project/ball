@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.51 2004/11/17 22:25:05 anker Exp $
+// $Id: standardPredicates.h,v 1.51.4.1 2005/07/28 14:01:59 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
@@ -39,7 +39,7 @@ namespace BALL
 			This predicate may be used to implement
 			default rules. It is always <b>true</b>.
 	 */
-	class TruePredicate
+	class BALL_EXPORT TruePredicate
 		:	public ExpressionPredicate
 	{
 		public:
@@ -57,7 +57,7 @@ namespace BALL
 			This predicate may be used to implement
 			default rules. It is always <b>false</b>.
 	 */
-	class FalsePredicate
+	class BALL_EXPORT FalsePredicate
 		:	public ExpressionPredicate
 	{
 		public:
@@ -75,7 +75,7 @@ namespace BALL
 			This predicate is <b>true</b>, if the atom is selected, <b>false</b>
 			otherwise.
 	 */
-	class SelectedPredicate
+	class BALL_EXPORT SelectedPredicate
 		:	public ExpressionPredicate
 	{
 		public:
@@ -93,7 +93,7 @@ namespace BALL
 			the atom matches the argument of this predicate. This is an exact
 			match.
 	 */
-	class AtomNamePredicate
+	class BALL_EXPORT AtomNamePredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -110,7 +110,7 @@ namespace BALL
 	/** Predicate for matching atom types. Returns <tt>true</tt>, if the type name
 			of the atom matches exactly the argument of this predicate. 
 	 */
-	class AtomTypePredicate
+	class BALL_EXPORT AtomTypePredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -127,7 +127,7 @@ namespace BALL
 	/** Predicate for matching elements. Returns <tt>true</tt>, if the element
 			symbol of the atom matches exactly the argument  of this predicate.
 	 */
-	class ElementPredicate
+	class BALL_EXPORT ElementPredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -145,7 +145,7 @@ namespace BALL
 			residue that the atom belongs to matches exactly the argument of this
 			predicate.
 	 */
-	class ResiduePredicate
+	class BALL_EXPORT ResiduePredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -163,7 +163,7 @@ namespace BALL
 			the residue that the atom belongs to matches exactly the argument of
 			this predicate.
 	 */
-	class ResidueIDPredicate
+	class BALL_EXPORT ResidueIDPredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -181,7 +181,7 @@ namespace BALL
 			protein that the atom belongs to matches exactly the argument of this
 			predicate.
 	 */
-	class ProteinPredicate
+	class BALL_EXPORT ProteinPredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -199,7 +199,7 @@ namespace BALL
 			chain that the atom belongs to matches exactly the argument of this
 			expression.
 	 */
-	class ChainPredicate
+	class BALL_EXPORT ChainPredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -217,7 +217,7 @@ namespace BALL
 			name of the secondary structure that the atom belongs to matches
 			exactly the argument of this predicate.
 	 */
-	class SecondaryStructurePredicate
+	class BALL_EXPORT SecondaryStructurePredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -239,7 +239,7 @@ namespace BALL
 			force field.
 			@see PeriodicBoundary::addSolvent
 	 */
-	class SolventPredicate
+	class BALL_EXPORT SolventPredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -256,7 +256,7 @@ namespace BALL
 	/** Predicate for matching molecules. Returns <tt>true</tt>, if the atom
 			belongs to the molecule defined by the expression of this predicate.
 	 */
-	class MoleculePredicate
+	class BALL_EXPORT MoleculePredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -274,7 +274,7 @@ namespace BALL
 			belongs to the backbone of a protein, i. e. is one of the members of
 			the peptide bond.
 	 */
-	class BackBonePredicate
+	class BALL_EXPORT BackBonePredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -290,7 +290,7 @@ namespace BALL
 
 	/**
 	 */
-	class NucleicAcidPredicate
+	class BALL_EXPORT NucleicAcidPredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -307,7 +307,7 @@ namespace BALL
 	/** Predicate indicating nucleotide atoms. Returns <tt>true</tt>, if the
 			atom belongs to a nucleotide.
 	 */
-	class NucleotidePredicate
+	class BALL_EXPORT NucleotidePredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -323,7 +323,7 @@ namespace BALL
 
 	/** Predicate for atoms being included in rings of a certain number.
 	 */
-	class InRingPredicate
+	class BALL_EXPORT InRingPredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -358,7 +358,7 @@ namespace BALL
 			at least one bond to make this predicate's operator () () return
 			true.
 	 */
-	class NumberOfBondsPredicate
+	class BALL_EXPORT NumberOfBondsPredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -386,7 +386,7 @@ namespace BALL
 			Arguments of this class are	<b> required </b> to consist 
 			of an relational operator and a number between 1 and 8.
 	 */
-	class SingleBondsPredicate
+	class BALL_EXPORT SingleBondsPredicate
 		:	public NumberOfBondsPredicate
 	{
 		public:
@@ -405,7 +405,7 @@ namespace BALL
 			Arguments of this class are	<b> required </b> to consist 
 			of an relational operator and a number between 1 and 8.
 	 */
-	class DoubleBondsPredicate
+	class BALL_EXPORT DoubleBondsPredicate
 		:	public NumberOfBondsPredicate
 	{
 		public:
@@ -425,7 +425,7 @@ namespace BALL
 			Arguments of this class are	<b> required </b> to consist 
 			of an relational operator and a number between 1 and 8.
 	 */
-	class TripleBondsPredicate
+	class BALL_EXPORT TripleBondsPredicate
 		:	public DoubleBondsPredicate
 	{
 		public:
@@ -444,7 +444,7 @@ namespace BALL
 			Arguments of this class are	<b> required </b> to consist 
 			of an relational operator and a number between 1 and 8.
 	 */
-	class AromaticBondsPredicate
+	class BALL_EXPORT AromaticBondsPredicate
 		:	public NumberOfBondsPredicate
 	{
 		public:
@@ -483,13 +483,13 @@ namespace BALL
    
       \end{tabular}
 	*/
-	class ConnectedToPredicate
+	class BALL_EXPORT ConnectedToPredicate
 		:	public	ExpressionPredicate
 	{
 
 		public:
 
-			class CTPNode
+			class BALL_EXPORT CTPNode
 			{
 				public:
 
@@ -773,7 +773,7 @@ namespace BALL
 
 	/** Predicate indicating sp hybridized atoms.
 	 */
-	class SpHybridizedPredicate
+	class BALL_EXPORT SpHybridizedPredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -789,7 +789,7 @@ namespace BALL
 
 	/** Predicate indicating sp2 hybridized atoms.
 	 */
-	class Sp2HybridizedPredicate
+	class BALL_EXPORT Sp2HybridizedPredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -806,7 +806,7 @@ namespace BALL
 
 	/** Predicate indicating sp3 hybridized atoms.
 	 */
-	class Sp3HybridizedPredicate
+	class BALL_EXPORT Sp3HybridizedPredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -822,7 +822,7 @@ namespace BALL
 
 	/** Charge predicate
 	 */
-	class ChargePredicate
+	class BALL_EXPORT ChargePredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -845,7 +845,7 @@ namespace BALL
 			This predicate tries to tell whether a C1 of a sugar is in axial
 			position. 
 	 */
-	class AxialPredicate
+	class BALL_EXPORT AxialPredicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -867,7 +867,7 @@ namespace BALL
 	/** Predicate for determining whether a sugar ring is in 4C1
 			conformation.
 	 */
-	class Conformation4C1Predicate
+	class BALL_EXPORT Conformation4C1Predicate
 		:	public	ExpressionPredicate
 	{
 		public:
@@ -883,7 +883,7 @@ namespace BALL
 
 	/** Helper class for all predicates that need ring information.
 	*/
-	class RingFinder
+	class BALL_EXPORT RingFinder
 	{
 		public:
 

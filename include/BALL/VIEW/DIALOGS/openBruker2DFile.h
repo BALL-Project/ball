@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker2DFile.h,v 1.8 2005/07/16 21:00:33 oliver Exp $
-//
+// $Id: openBruker2DFile.h,v 1.6.8.2 2005/07/25 15:09:25 amoll Exp $
 
 #ifndef BALL_VIEW_DIALOGS_OPENBRUKER2DFILE_H
 #define BALL_VIEW_DIALOGS_OPENBRUKER2DFILE_H
@@ -56,11 +55,11 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
 
-			protected slots:
+			public slots:
 
 			/** Open the bruker2DFile.
 			 */
-			virtual void openFile_()
+			virtual void openFile()
 				throw();
 
 		};

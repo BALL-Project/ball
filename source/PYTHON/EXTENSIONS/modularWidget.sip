@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.sip,v 1.6 2005/07/16 21:00:42 oliver Exp $
+// $Id: modularWidget.sip,v 1.4.6.1 2005/06/20 00:28:58 amoll Exp $
 //
 
 class ModularWidget

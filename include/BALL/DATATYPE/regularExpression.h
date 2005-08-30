@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularExpression.h,v 1.2 2003/08/26 08:04:11 oliver Exp $
+// $Id: regularExpression.h,v 1.2.6.3 2005/08/11 15:29:13 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULAREXPRESSION_H
@@ -48,7 +48,7 @@ namespace BALL
 	/**	Regular expression class
     	\ingroup  DatatypeMiscellaneous
 	*/
-	class RegularExpression
+	class BALL_EXPORT RegularExpression
 	{
 		public:
 
@@ -291,11 +291,13 @@ namespace BALL
 
 		/**	output operator
 		*/
+		BALL_EXPORT
 		friend std::ostream& operator << (std::ostream& s, const RegularExpression& regular_expression)
 			throw();
 
 		/**	input operator
 		*/
+		BALL_EXPORT
 		friend std::istream& operator >> (std::istream& s, RegularExpression& regular_expression)
 			throw();
 

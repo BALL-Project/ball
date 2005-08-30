@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.h,v 1.46 2003/08/26 08:04:53 oliver Exp $
+// $Id: reducedSurface.h,v 1.46.6.1 2005/07/29 12:38:10 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -69,7 +69,7 @@ namespace BALL
 	/** Generic ReducedSurface Class.
 	\ingroup StructureMiscellaneous		
 	*/
-	class ReducedSurface
+	class BALL_EXPORT ReducedSurface
 	{
 		public:
 
@@ -374,7 +374,7 @@ namespace BALL
 	/**	Output- Operator.
 			Prints out a ReducedSurface
 	*/
-	std::ostream& operator << (std::ostream& s, const ReducedSurface& rs);
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const ReducedSurface& rs);
 
 	//@}
 
@@ -384,7 +384,7 @@ namespace BALL
 	/** Generic RSComputer Class.
 	\ingroup StructureMiscellaneous		
 	*/
-	class RSComputer
+	class BALL_EXPORT RSComputer
 	{
 		public:
 
