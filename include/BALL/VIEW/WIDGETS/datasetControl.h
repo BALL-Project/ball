@@ -1,18 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.11.6.3 2005/06/20 00:28:56 amoll Exp $
+// $Id: datasetControl.h,v 1.11.6.4 2005/08/30 14:26:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
 #define BALL_VIEW_WIDGETS_DATASETCONTROL_H
 
-#ifndef BALL_VIEW_KERNEL_COMMON_H
-# include <BALL/VIEW/KERNEL/common.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
-# include <BALL/MOLMEC/COMMON/snapShotManager.h>
+#ifndef BALL_KERNEL_SYSTEM_H
+# include <BALL/KERNEL/system.h>
 #endif
 
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
@@ -31,14 +27,12 @@
 # include <BALL/DATATYPE/regularData3D.h>
 #endif 
 
-#ifndef BALL_DATATYPE_LIST_H
-# include <BALL/DATATYPE/list.h>
-#endif 
+#include <qpopupmenu.h>
 
 namespace BALL
 {
 	class TrajectoryFile;
-	class Composite;
+	class SnapShotManager;
 
 	namespace VIEW
 	{
@@ -46,11 +40,9 @@ namespace BALL
 		class ContourSurfaceDialog;
 
 		/**	DatasetControl is a widget to manipulate Trajectories and RegularData instances.
-		 		It is derived from GenricControl.
-				There are two columns. The <b>Name</b> column and the
-				<b>Type</b> column. In the Name column the item tree will be shown and in 
-				the Type column the type of each item.
-				The method buildContextMenu() can create a customizable context menu.
+		 		To add further datatypes, derive from this class and add further HashMaps for types
+				and overload deleteItem_(), createContextMenu_() and checkMenu().
+				The DatasetControl has three columns: Name, from (Composite) and Type.
 				\ingroup ViewWidgets
 		*/
 		class BALL_EXPORT DatasetControl
@@ -67,10 +59,6 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					There is a connection from the signal rightButtonClicked from the
-					QT-library to the method onContextMenu(). 
-					(See documentation of QT-library for information concerning widgets and 
-					signal/slot mechanism.) \par
 					Calls registerWidget().
 					\param      parent the parent widget of the DatasetControl 
 					\param      name the name of the DatasetControl 
@@ -89,6 +77,7 @@ namespace BALL
 			*/ 
 			//@{
 
+			/// Overload this method to react to further messages
 			virtual void onNotify(Message *message)
 				throw();
 
@@ -103,7 +92,12 @@ namespace BALL
 
 			/// insert a trajectory for the currently selected System
 			void addTrajectory(const String& filename);
-		
+			
+			///
+			List<std::pair<RegularData3D*, String> > get3DGrids()
+				throw();
+
+
 			//@}
 			/** @name Public slots 
 			*/ 
@@ -117,29 +111,17 @@ namespace BALL
 			///
 			void add1DGrid() throw();
 
-
 			///
 			void add2DGrid() throw();
-
 
 			///
 			void add3DGrid() throw();
 
 			///
-			void updateSelection()
-				throw();
-
-			///
-			List<std::pair<RegularData3D*, String> > get3DGrids()
-				throw();
-
-			///
-			Size count3DGrids() const
-				throw() { return item_to_grid3_.size();}
+			void updateSelection() throw();
 
 			/// Overloaded from GenericControl, calls cut
-			virtual void deleteCurrentItems()
-				throw() {deleteItems_();}
+			virtual void deleteCurrentItems() throw() {deleteItems_();}
 
 			///
 			void computeIsoContourSurface();
@@ -150,15 +132,15 @@ namespace BALL
 			//@{
 		  protected slots:
 
-			void deleteItem_(QListViewItem& item);
+			// overload this method to add furter data types
+			virtual bool deleteItem_(QListViewItem& item);
+
 			void deleteItems_();
 			void visualiseTrajectory_();
 			void bufferTrajectory_();
 			void saveTrajectory_();
 			void visualiseGrid_();
-			void save1DGrid_() throw();
-			void save2DGrid_() throw();
-			void save3DGrid_() throw();
+			void saveGrid_() throw();
 			String chooseGridFileForSave_() throw();
 			String chooseGridFileForOpen_() throw();
 	
@@ -171,6 +153,9 @@ namespace BALL
 			// only for Python Interface
 			DatasetControl(const DatasetControl& control) throw();
 
+			// overload this method to add further types of data to the context menu.
+			// Use context_item_ and the Hashmaps to differ between the different types.
+			virtual void createContextMenu_();
 
 			void insertTrajectory_(TrajectoryFile* file, System& system)
 				throw();
@@ -183,24 +168,31 @@ namespace BALL
 		
 			void insertGrid_(RegularData3D* file, System* system, const String& name)
 				throw();
+
+			QListViewItem* createListViewItem_(System* system, const String& name, const String& type)
+				throw();
 			
 			void insertComposite_(Composite* composite, QListViewItem* item)
 				throw();
 
-			SnapShotManager* 							context_trajectory_;
+			void insertContextMenuEntry_(const QString & text, const char* member);
+
+			QPopupMenu 							 			context_menu_;
 			QListViewItem* 								context_item_;
 
 			SnapshotVisualisationDialog* 	dialog_;
-			Index 												open_trajectory_id_, menu_1D_id_, menu_2D_id_, menu_3D_id_;
+			ContourSurfaceDialog* 				surface_dialog_;
 
 			HashMap<QListViewItem*	, SnapShotManager*> 					item_to_trajectory_;
 			HashMap<QListViewItem*	, RegularData1D*>   					item_to_grid1_;
 			HashMap<QListViewItem*	, RegularData2D*>   					item_to_grid2_;
 			HashMap<QListViewItem*	, RegularData3D*>   					item_to_grid3_;
+			// insert new HashMaps like above for new data type objects.
+			
 			HashMap<Composite*      , HashSet<QListViewItem*> > 	composite_to_items_;
 			HashMap<QListViewItem*  , Composite*>  								item_to_composite_;
-			ContourSurfaceDialog* 		surface_dialog_;
-			Index menu_cs_;
+
+			Index menu_cs_, open_trajectory_id_;
 		};
 		
 } } // namespaces

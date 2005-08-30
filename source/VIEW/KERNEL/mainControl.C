@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.29 2005/08/22 13:16:48 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.30 2005/08/30 14:24:03 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -623,8 +623,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				
 			#ifndef BALL_QT_HAS_THREADS
 				// if build multithreaded, the Representation will send the message itself
-				RepresentationMessage* ur_message = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
-				notify_(ur_message);
+				notify_(new RepresentationMessage(*rep, RepresentationMessage::UPDATE));
 			#endif
 			}
 
@@ -636,17 +635,14 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			throw()
 		{
 			// update scene
-			SceneMessage *scene_message = new SceneMessage;
 			if (rebuild_display_lists)
 			{
-				scene_message->setType(SceneMessage::REBUILD_DISPLAY_LISTS);
+				notify_(new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS));
 			}
 			else
 			{
-				scene_message->setType(SceneMessage::REDRAW);
+				notify_(new SceneMessage(SceneMessage::REDRAW));
 			}
-
-			notify_(scene_message); 
 		}
 
 
@@ -694,8 +690,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 							updateRepresentationsOf(*cmessage->getComposite(), false);
 						}
 
-						NewSelectionMessage* nws_message = new NewSelectionMessage;					
-						notify_(nws_message); // send to MolecularControl
+						// send to MolecularControl
+						notify_(new NewSelectionMessage);
 					}
 
 					default:
@@ -1032,8 +1028,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
  				updateRepresentationsOf(**it, false);
 			}
 
-			NewSelectionMessage* new_message = new NewSelectionMessage;
-			notify_(new_message);
+			notify_(new NewSelectionMessage);
 		}
 
 
@@ -1380,9 +1375,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			control_selection_.clear();
 
-			CompositeMessage* cm = new CompositeMessage(composite, 
-					CompositeMessage::REMOVED_COMPOSITE);
-			notify_(cm);
+			notify_(new CompositeMessage(composite, CompositeMessage::REMOVED_COMPOSITE));
 			remove_(composite, update, to_delete);
 
 			return true;
@@ -1401,8 +1394,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			rep.update(true);
 
-			RepresentationMessage* rm = new RepresentationMessage(rep, RepresentationMessage::UPDATE);
-			notify_(rm);
+			notify_(new RepresentationMessage(rep, RepresentationMessage::UPDATE));
 
 			return true;
 		}
@@ -1418,17 +1410,14 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			if (rep.hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 			{
-				SceneMessage *scene_message = new SceneMessage(SceneMessage::REMOVE_COORDINATE_SYSTEM);
-				notify_(scene_message);
+				notify_(new SceneMessage(SceneMessage::REMOVE_COORDINATE_SYSTEM));
 			}
 			else if (rep.hasProperty("AX"))
 			{
-				SceneMessage *scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
-				notify_(scene_message);
+				notify_(new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS));
 			}
 					
-			RepresentationMessage* message = new RepresentationMessage(rep, RepresentationMessage::REMOVE);
-			notify_(message);
+			notify_(new RepresentationMessage(rep, RepresentationMessage::REMOVE));
 
 			return primitive_manager_.remove(rep);
 		}
@@ -1455,8 +1444,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			redrawAllRepresentations(true);
 
-			NewSelectionMessage* nm = new NewSelectionMessage;
-			sendMessage(*nm);
+			sendMessage(*new NewSelectionMessage());
 		}
 
 		void MainControl::deleteClicked()
@@ -1547,8 +1535,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			stop_simulation_ = false;
 			unlockCompositesFor(locking_widget_);
 
-			FinishedSimulationMessage* msg = new FinishedSimulationMessage();
-			notify_(msg);
+			notify_(new FinishedSimulationMessage);
 			#endif
 		}
 
@@ -1641,8 +1628,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				updateRepresentationsOf(**it, false);
 			}
 
-			NewSelectionMessage* new_message = new NewSelectionMessage;
-			notify_(new_message);
+			notify_(new NewSelectionMessage);
 			printSelectionInfos();
 		}
 
@@ -1916,8 +1902,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		getPrimitiveManager().restoreRepresentations(in, new_systems);
 
 		getSelection().clear();
-		NewSelectionMessage* msg = new NewSelectionMessage();
-		notify_(msg);
+		notify_(new NewSelectionMessage);
  	
 		fetchPreferences(in);
 
