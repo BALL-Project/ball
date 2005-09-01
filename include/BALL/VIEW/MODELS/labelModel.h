@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: labelModel.h,v 1.1.2.3 2005/06/14 13:29:03 amoll Exp $
+// $Id: labelModel.h,v 1.1.2.4 2005/09/01 22:17:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_LABELMODEL_H
@@ -32,7 +32,7 @@ namespace BALL
 				for creating and updateing Labels.
 				\ingroup  ViewModels
 		*/
-		class BALL_EXPORT LabelModel: public ModelProcessor
+		class BALL_VIEW_EXPORT LabelModel: public ModelProcessor
 		{
 			public:
 

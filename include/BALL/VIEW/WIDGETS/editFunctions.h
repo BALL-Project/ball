@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editFunctions.h,v 1.2 2005/02/18 17:57:52 anne Exp $
+// $Id: editFunctions.h,v 1.2.2.1 2005/09/01 22:18:04 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_EDITFUNCTIONS_H
@@ -29,7 +29,7 @@ namespace BALL
 				\link BALL::EditableScene EditableScene. \endlink
 		 		\ingroups ViewWidgets
 		 */
-		class BALL_EXPORT EditFunctions
+		class BALL_VIEW_EXPORT EditFunctions
 			: public DockWidget
 		{
 			Q_OBJECT

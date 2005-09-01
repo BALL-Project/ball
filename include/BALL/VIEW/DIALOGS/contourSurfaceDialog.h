@@ -23,7 +23,7 @@ namespace BALL
 /** Dialog for creating contour surfaces from RegularData3D
     \ingroup  ViewDialogs
  */
-class BALL_EXPORT ContourSurfaceDialog 
+class BALL_VIEW_EXPORT ContourSurfaceDialog 
 	: public ContourSurfaceDialogData
 { 
     Q_OBJECT

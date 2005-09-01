@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.11 2004/10/21 12:37:25 amoll Exp $
+// $Id: server.h,v 1.11.6.1 2005/09/01 22:17:54 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_SERVER_H
@@ -52,7 +52,7 @@ namespace BALL
 				received composite will be sent.
 			\ingroup ViewKernelClient
 		*/
-		class BALL_EXPORT Server
+		class BALL_VIEW_EXPORT Server
 			: public QTTimer,
    			public ModularWidget
 		{
@@ -104,7 +104,7 @@ namespace BALL
 					that was not a Composite object.
 					\see         GeneralException			
 			*/
-			class BALL_EXPORT NotCompositeObject:	public Exception::GeneralException
+			class BALL_VIEW_EXPORT NotCompositeObject:	public Exception::GeneralException
 			{
 				public:
 

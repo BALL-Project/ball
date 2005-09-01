@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.38.4.2 2005/07/30 21:53:08 amoll Exp $
+// $Id: geometricObject.h,v 1.38.4.3 2005/09/01 22:17:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -25,7 +25,7 @@ namespace BALL
 				color, name and the composite pointer.
 				\ingroup ViewKernelGeometricPrimitives
 		*/
-		class BALL_EXPORT GeometricObject
+		class BALL_VIEW_EXPORT GeometricObject
 		{
 			public:
 

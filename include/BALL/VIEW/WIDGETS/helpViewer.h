@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.1.2.6 2005/08/22 13:15:04 amoll Exp $
+// $Id: helpViewer.h,v 1.1.2.7 2005/09/01 22:18:05 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -18,7 +18,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		class BALL_EXPORT MyTextBrowser
+		class BALL_VIEW_EXPORT MyTextBrowser
 			: public QTextBrowser
 		{
 			Q_OBJECT
@@ -52,7 +52,7 @@ namespace BALL
 				The implemention for opening the documentation per "Whats this?" menu entry and
 				the hotkey "Shift-F1" is also done here.
 		*/
-		class BALL_EXPORT HelpViewer
+		class BALL_VIEW_EXPORT HelpViewer
 			: public DockWidget
 		{
 			Q_OBJECT

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.h,v 1.9.8.1 2005/06/14 16:08:28 amoll Exp $
+// $Id: vertex2.h,v 1.9.8.2 2005/09/01 22:17:42 amoll Exp $
 
 #ifndef BALL_VIEW_DATATYPE_VERTEX2_H
 #define BALL_VIEW_DATATYPE_VERTEX2_H
@@ -28,7 +28,7 @@ namespace BALL
 				valid as long as the Vertex2 exists. \par
 				\ingroup ViewDatatypeGeometricObject
 		*/
-		class BALL_EXPORT Vertex2
+		class BALL_VIEW_EXPORT Vertex2
 		{
 			public:
 

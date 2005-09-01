@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.h,v 1.8.8.1 2005/06/14 16:08:30 amoll Exp $
+// $Id: tube.h,v 1.8.8.2 2005/09/01 22:18:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
@@ -34,7 +34,7 @@ namespace BALL
 				interface and additional methods. \par
 				\ingroup ViewPrimitives
 		*/
-		class BALL_EXPORT Tube
+		class BALL_VIEW_EXPORT Tube
 			: public GeometricObject,
    			public Vertex2
 		{

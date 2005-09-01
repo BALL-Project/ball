@@ -68,7 +68,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="&quot;$(SIPDIR)\siplib&quot;;&quot;$(SolutionDir)\..\include&quot;;&quot;$(PYTHONDIR)\include&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(QTDIR)\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG"
+				PreprocessorDefinitions="WIN32;NDEBUG;BALL_PLATFORM_WINDOWS;BALL_COMPILER_MSVC"
 				MinimalRebuild="FALSE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -81,7 +81,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/FORCE:UNRESOLVED  /FORCE:MULTIPLE /EXPORT:initBALL"
-				AdditionalDependencies="&quot;libBALL with VIEW.lib&quot; &quot;$(PYTHONDIR)\libs\python23.lib&quot; &quot;$(SOLUTIONDIR)\Contrib\ONC_RPC\librpc\oncrpc.lib&quot; &quot;$(QTDIR)\lib\qt-mt334.lib&quot; &quot;$(QTDIR)\lib\qtmain.lib&quot;"
+				AdditionalDependencies="&quot;$(PYTHONDIR)\libs\python23.lib&quot; &quot;$(SOLUTIONDIR)\Contrib\ONC_RPC\librpc\oncrpc.lib&quot; &quot;$(QTDIR)\lib\qt-mt334.lib&quot; &quot;$(QTDIR)\lib\qtmain.lib&quot; $(SolutionDir)\Libs\libBALL\$(OutDir)\libBALL.lib $(SolutionDir)\Libs\libVIEW\$(OutDir)\libVIEW.lib"
 				OutputFile="$(OutDir)/BALL.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(ProjectDir)..\..\Libs\libView\$(OutDir)"

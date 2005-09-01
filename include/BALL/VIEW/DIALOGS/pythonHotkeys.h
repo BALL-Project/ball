@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pythonHotkeys.h,v 1.3.6.1 2005/08/17 14:49:12 amoll Exp $
+// $Id: pythonHotkeys.h,v 1.3.6.2 2005/09/01 22:17:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PYTHONHOTKEYS_H
@@ -26,7 +26,7 @@ namespace BALL
 		 		It is inserted to the Preferences.
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT PythonHotkeys 
+		class BALL_VIEW_EXPORT PythonHotkeys 
 			: public PythonHotkeysData,
 				public PreferencesEntry
 		{ 

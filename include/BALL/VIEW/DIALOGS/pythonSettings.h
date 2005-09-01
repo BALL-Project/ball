@@ -19,7 +19,7 @@ namespace BALL
 				when the application has loaded and a PyWidget instance is added.
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT PythonSettings 
+		class BALL_VIEW_EXPORT PythonSettings 
 			: public PythonSettingsData,
 				public PreferencesEntry
 		{ 

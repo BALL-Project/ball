@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.h,v 1.7.6.2 2005/04/15 13:49:59 amoll Exp $
+// $Id: compositeManager.h,v 1.7.6.3 2005/09/01 22:17:51 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
 #define BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
@@ -24,7 +24,7 @@ namespace BALL
 				When the CompositeManager is destroyed, all inserted Composites are deleted.
 				\ingroup ViewKernelOther
 		*/
-		class BALL_EXPORT CompositeManager
+		class BALL_VIEW_EXPORT CompositeManager
 		{
 			public:
 			/**	@name	Typedefs for STL compliance

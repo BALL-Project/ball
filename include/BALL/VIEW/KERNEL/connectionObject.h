@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connectionObject.h,v 1.22 2004/02/26 08:41:37 anhi Exp $
+// $Id: connectionObject.h,v 1.22.8.1 2005/09/01 22:17:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
@@ -38,7 +38,7 @@ namespace BALL
 				that the message is already destroyed when it should be processed.
 				\ingroup ViewKernelConnectivity
 		*/
-		class BALL_EXPORT ConnectionObject
+		class BALL_VIEW_EXPORT ConnectionObject
 		{
 			public:
 			

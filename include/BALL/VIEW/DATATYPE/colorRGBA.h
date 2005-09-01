@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.h,v 1.18.8.1 2005/06/14 16:08:27 amoll Exp $
+// $Id: colorRGBA.h,v 1.18.8.2 2005/09/01 22:17:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -26,7 +26,7 @@ namespace BALL
 				informations.  \par
 		\ingroup ViewDatatypeColors		
 		*/
-		class BALL_EXPORT ColorRGBA
+		class BALL_VIEW_EXPORT ColorRGBA
 		{
 			/** @name Class friends
 						- class ColorHSV

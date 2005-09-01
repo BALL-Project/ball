@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.39.2.2 2005/06/12 17:34:23 amoll Exp $
+// $Id: displayProperties.h,v 1.39.2.3 2005/09/01 22:17:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -46,7 +46,7 @@ namespace BALL
 				VIEW/KERNEL/common.h.
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT DisplayProperties 
+		class BALL_VIEW_EXPORT DisplayProperties 
 			: public DisplayPropertiesData,
 				public ModularWidget,
 				public PreferencesEntry

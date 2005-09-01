@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTEDialog.h,v 1.2 2005/02/18 17:58:19 anne Exp $ 
+// $Id: PTEDialog.h,v 1.2.2.1 2005/09/01 22:17:42 amoll Exp $ 
 //
 
 #ifndef BALL_VIEW_DIALOGS_PTEDIALOG_H
@@ -20,7 +20,7 @@ namespace BALL
 		/** Dialog for choosing the element type for the edit mode of scene.
 		 		\ingroups ViewDialogs
 		*/
-		class BALL_EXPORT PTEDialog
+		class BALL_VIEW_EXPORT PTEDialog
 			: public PTEDialogData,
 				public ModularWidget
 	  {

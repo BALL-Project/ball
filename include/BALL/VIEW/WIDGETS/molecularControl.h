@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.47.2.8 2005/07/26 23:03:55 amoll Exp $
+// $Id: molecularControl.h,v 1.47.2.9 2005/09/01 22:18:06 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -43,7 +43,7 @@ class BondProperties;
 		For further informations on this topic have a look at the class Selector.
 		\ingroup ViewWidgets
 */
-class BALL_EXPORT MolecularControl
+class BALL_VIEW_EXPORT MolecularControl
 	: public GenericControl
 {			
 	///
@@ -82,7 +82,7 @@ class BALL_EXPORT MolecularControl
 	BALL_EMBEDDABLE(MolecularControl,GenericControl)
 	
 	/// A selectable list view item with a pointer to a Composite
-	class BALL_EXPORT SelectableListViewItem
+	class BALL_VIEW_EXPORT SelectableListViewItem
 		: public QCheckListItem
 	{
 		public:

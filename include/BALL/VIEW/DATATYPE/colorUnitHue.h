@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnitHue.h,v 1.23.8.1 2005/06/14 16:08:28 amoll Exp $
+// $Id: colorUnitHue.h,v 1.23.8.2 2005/09/01 22:17:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNITHUE_H
@@ -35,7 +35,7 @@ namespace BALL
 				its value to the needed type.
 				\ingroup ViewDatatypeFormat
 		*/
-		class BALL_EXPORT ColorUnitHue
+		class BALL_VIEW_EXPORT ColorUnitHue
 		{
 			public:
 

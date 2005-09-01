@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72.2.13 2005/08/22 13:17:11 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.14 2005/09/01 22:17:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -82,7 +82,7 @@ namespace BALL
 				<tt> class foo : public BALL::VIEW::MainControl </tt> instead. 
 		\ingroup ViewKernelConnectivity
 		*/
-		class BALL_EXPORT MainControl
+		class BALL_VIEW_EXPORT MainControl
 			: public QMainWindow,
 				public ConnectionObject,
 				public Embeddable

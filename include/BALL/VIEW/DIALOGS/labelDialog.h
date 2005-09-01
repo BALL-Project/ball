@@ -32,7 +32,7 @@ namespace BALL
 				If this dialog is used, it should be created with MainControl as parent.
     		\ingroup  ViewDialogs
 		*/
-		class BALL_EXPORT LabelDialog 
+		class BALL_VIEW_EXPORT LabelDialog 
 			: public LabelDialogData,
 				public ModularWidget
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.h,v 1.13 2004/06/11 18:04:34 amoll Exp $
+// $Id: regularData1DWidget.h,v 1.13.6.1 2005/09/01 22:18:06 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
@@ -29,7 +29,7 @@ namespace BALL
 		/** Widget used to display one-dimensional data.
 		 		\ingroup ViewWidgets
 		 */
-		class BALL_EXPORT RegularData1DWidget
+		class BALL_VIEW_EXPORT RegularData1DWidget
 			: public CanvasWidget,
 				public ModularWidget
 		{
@@ -75,7 +75,7 @@ namespace BALL
 
 
 		///
-    class BALL_EXPORT DockableRegularData1DWidget
+    class BALL_VIEW_EXPORT DockableRegularData1DWidget
       : public DockWidget
     {
  	    Q_OBJECT 

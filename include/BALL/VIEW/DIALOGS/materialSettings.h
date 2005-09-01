@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.h,v 1.5 2005/02/06 20:57:04 oliver Exp $
+// $Id: materialSettings.h,v 1.5.4.1 2005/09/01 22:17:46 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MATERIALSETTINGS_H
@@ -28,7 +28,7 @@ namespace BALL
 				Materials can be added, removed and adjusted.
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT MaterialSettings 
+		class BALL_VIEW_EXPORT MaterialSettings 
 			: public MaterialSettingsData,
 				public PreferencesEntry
 		{ 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox.h,v 1.5.8.2 2005/08/19 13:31:59 amoll Exp $
+// $Id: simpleBox.h,v 1.5.8.3 2005/09/01 22:18:00 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_SIMPLEBOX_H
@@ -30,7 +30,7 @@ namespace BALL
 				\ingroup ViewPrimitives
 		*/
 // Export doesn't work for some reason...
-		class BALL_EXPORT SimpleBox
+		class BALL_VIEW_EXPORT SimpleBox
 // 		class SimpleBox
 			: public SimpleBox3,
 			 	public GeometricObject

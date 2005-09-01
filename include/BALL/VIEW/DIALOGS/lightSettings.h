@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.h,v 1.10 2005/02/11 17:06:55 amoll Exp $
+// $Id: lightSettings.h,v 1.10.4.1 2005/09/01 22:17:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_LIGHTSETTINGS_H
@@ -30,7 +30,7 @@ namespace BALL
 				to reset the lighting can be stored.
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT LightSettings 
+		class BALL_VIEW_EXPORT LightSettings 
 			: public LightSettingsData,
 				public PreferencesEntry
 		{ 

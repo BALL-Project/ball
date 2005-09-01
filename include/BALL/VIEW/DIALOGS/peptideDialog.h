@@ -19,7 +19,7 @@ namespace BALL
 		/** Dialog for building peptides
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT PeptideDialog
+		class BALL_VIEW_EXPORT PeptideDialog
 			: public PeptideDialogData,
 				public Peptides::PeptideBuilder
 		{ 

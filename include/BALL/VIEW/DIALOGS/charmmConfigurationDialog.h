@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.h,v 1.5 2004/04/23 13:08:13 amoll Exp $
+// $Id: charmmConfigurationDialog.h,v 1.5.8.1 2005/09/01 22:17:43 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_CHARMMCONFIGURATIONDIALOG_H
@@ -23,7 +23,7 @@ namespace BALL
 		/** Dialog for changing the options of the CHARMM forcefield
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT CharmmConfigurationDialog
+		class BALL_VIEW_EXPORT CharmmConfigurationDialog
 			: public CharmmConfigurationDialogData
 		{
 			friend class MolecularStructure;

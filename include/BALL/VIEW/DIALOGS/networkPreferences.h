@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: networkPreferences.h,v 1.1.2.1 2005/05/17 12:33:50 amoll Exp $
+// $Id: networkPreferences.h,v 1.1.2.2 2005/09/01 22:17:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_NETWORKPREFERENCES_H
@@ -25,7 +25,7 @@ namespace BALL
 		- if logging to a file is enabled
 		\ingroup ViewDialogs
 */
-class BALL_EXPORT NetworkPreferences 
+class BALL_VIEW_EXPORT NetworkPreferences 
 	: public NetworkPreferencesData,
 		public PreferencesEntry
 {

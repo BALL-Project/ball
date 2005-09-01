@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.h,v 1.11.6.1 2005/07/25 15:09:25 amoll Exp $
+// $Id: regularData2DWidget.h,v 1.11.6.2 2005/09/01 22:18:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_REGULARDATA2DWIDGET_H
@@ -32,7 +32,7 @@ namespace BALL
 		/** Widget used to display two-dimensional data.
 				\ingroup ViewWidgets
 		 */
-		class BALL_EXPORT RegularData2DWidget
+		class BALL_VIEW_EXPORT RegularData2DWidget
 			: public CanvasWidget,
 		 		public ModularWidget
 		{
@@ -75,7 +75,7 @@ namespace BALL
 
 
 		///
-    class BALL_EXPORT DockableRegularData2DWidget
+    class BALL_VIEW_EXPORT DockableRegularData2DWidget
       : public DockWidget
     {
  	    Q_OBJECT 

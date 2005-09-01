@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editOperationDialog.h,v 1.1 2005/02/18 17:58:31 anne Exp $ 
+// $Id: editOperationDialog.h,v 1.1.2.1 2005/09/01 22:17:45 amoll Exp $ 
 //
 
 #ifndef BALL_VIEW_DIALOGS_EDITOPERATIONDIALOG_H
@@ -25,7 +25,7 @@ namespace BALL
 		 		\ingroups ViewDialogs
 		*/
 
-		class BALL_EXPORT EditOperationDialog
+		class BALL_VIEW_EXPORT EditOperationDialog
 			: public EditOperationDialogData,
 				public ModularWidget
 	  {

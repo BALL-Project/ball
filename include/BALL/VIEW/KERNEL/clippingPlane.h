@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clippingPlane.h,v 1.1.2.6 2005/06/15 13:36:52 amoll Exp $
+// $Id: clippingPlane.h,v 1.1.2.7 2005/09/01 22:17:51 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_CLIPPING_PLANE_H
@@ -22,7 +22,7 @@ namespace BALL
 		/** Representation
 				\ingroup ViewKernelGeometricPrimitives
 		*/
-		class BALL_EXPORT ClippingPlane
+		class BALL_VIEW_EXPORT ClippingPlane
 		{
 			public:
 

@@ -21,12 +21,12 @@ namespace BALL
 		/**	Dialog for selcting which Representations are clipped by one clipping plane.
     		\ingroup  ViewDialogs
 		*/
-		class BALL_EXPORT ClippingDialog 
+		class BALL_VIEW_EXPORT ClippingDialog 
 			: public ClippingDialogData
 		{
 			Q_OBJECT
 				
-			class BALL_EXPORT SelectableListViewItem
+			class BALL_VIEW_EXPORT SelectableListViewItem
 				: public QCheckListItem
 			{
 				public:

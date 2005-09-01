@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.10.6.3 2005/06/14 16:08:29 amoll Exp $
+// $Id: label.h,v 1.10.6.4 2005/09/01 22:17:59 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
@@ -37,7 +37,7 @@ namespace BALL
 				interface and additional methods. \par
 				\ingroup ViewPrimitives
 		*/
-		class BALL_EXPORT Label
+		class BALL_VIEW_EXPORT Label
 			: public GeometricObject,
 				public Vertex
 		{

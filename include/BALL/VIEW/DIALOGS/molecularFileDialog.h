@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.17.6.2 2005/07/11 05:44:35 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.17.6.3 2005/09/01 22:17:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -37,7 +37,7 @@ namespace BALL
 				@see PDBFile
 				\ingroup ViewDialogs
 		 */
-		class BALL_EXPORT MolecularFileDialog
+		class BALL_VIEW_EXPORT MolecularFileDialog
 			: public QWidget,
 				public ModularWidget
 		{

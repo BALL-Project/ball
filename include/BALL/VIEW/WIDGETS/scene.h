@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.15 2005/08/04 14:48:14 amoll Exp $
+// $Id: scene.h,v 1.62.2.16 2005/09/01 22:18:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -87,7 +87,7 @@ namespace BALL
 				Scenes. These other Scenes can have different Camera angles or other properties.
 				\ingroup ViewWidgets
 		*/
-		class BALL_EXPORT Scene
+		class BALL_VIEW_EXPORT Scene
 			: public QGLWidget, 
 				public ModularWidget
 		{
@@ -102,7 +102,7 @@ namespace BALL
 			/** This class is only intended for usage with multithreading.
 			 		It provides a mean for other threads to make the Scene export a PNG.
 			*/
-			class BALL_EXPORT SceneExportPNGEvent : public QCustomEvent
+			class BALL_VIEW_EXPORT SceneExportPNGEvent : public QCustomEvent
 			{
 				public:
 					SceneExportPNGEvent()
@@ -112,7 +112,7 @@ namespace BALL
 			/** This class is only intended for usage with multithreading.
 			 		It provides a mean for other threads to make the Scene export a POVRay file.
 			*/
-			class BALL_EXPORT SceneExportPOVEvent : public QCustomEvent
+			class BALL_VIEW_EXPORT SceneExportPOVEvent : public QCustomEvent
 			{
 				public:
 					SceneExportPOVEvent()
@@ -122,7 +122,7 @@ namespace BALL
 			/** This class is only intended for usage with multithreading.
 			 		It provides a mean for other threads to set the camera position.
 			*/
-			class BALL_EXPORT SceneSetCameraEvent : public QCustomEvent
+			class BALL_VIEW_EXPORT SceneSetCameraEvent : public QCustomEvent
 			{
 				public:
 					SceneSetCameraEvent()
@@ -734,7 +734,7 @@ namespace BALL
 
 #ifdef BALL_QT_HAS_THREADS
 		///
-		class BALL_EXPORT AnimationThread
+		class BALL_VIEW_EXPORT AnimationThread
 			: public QThread
 		{
 			public:

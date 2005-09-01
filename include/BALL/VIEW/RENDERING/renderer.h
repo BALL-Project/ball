@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.h,v 1.8.4.2 2005/06/14 16:08:32 amoll Exp $
+// $Id: renderer.h,v 1.8.4.3 2005/09/01 22:18:03 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_RENDERER_H
 #define BALL_VIEW_RENDERING_RENDERER_H
@@ -39,7 +39,7 @@ namespace BALL
 				render.
 				\ingroup ViewRendering
 		*/
-		class BALL_EXPORT Renderer
+		class BALL_VIEW_EXPORT Renderer
 			:	public Object
 		{
 			public:

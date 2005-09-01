@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glQuadricObject.h,v 1.6.6.2 2005/08/17 14:49:13 amoll Exp $
+// $Id: glQuadricObject.h,v 1.6.6.3 2005/09/01 22:18:02 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLQUADRICOBJECT_H
 #define BALL_VIEW_RENDERING_GLQUADRICOBJECT_H
@@ -27,7 +27,7 @@ namespace BALL
 				concerning quadric objects.
 				\ingroup ViewRendering
 		*/
-		class BALL_EXPORT GLQuadricObject
+		class BALL_VIEW_EXPORT GLQuadricObject
 		{
 			public:
 
@@ -43,7 +43,7 @@ namespace BALL
 					graphical library for drawing styles of quadric objects.
 					\see         GeneralException			
 			*/
-			class BALL_EXPORT WrongDrawingStyle:	public Exception::GeneralException
+			class BALL_VIEW_EXPORT WrongDrawingStyle:	public Exception::GeneralException
 			{
 				public:
 
@@ -57,7 +57,7 @@ namespace BALL
 					graphical library for orientation styles of quadric objects.
 					\see         GeneralException			
 			*/
-			class BALL_EXPORT WrongOrientationStyle:	public Exception::GeneralException
+			class BALL_VIEW_EXPORT WrongOrientationStyle:	public Exception::GeneralException
 			{
 				public:
 
@@ -71,7 +71,7 @@ namespace BALL
 					graphical library for normal styles of quadric objects.
 					\see         GeneralException			
 			*/
-			class BALL_EXPORT WrongNormalStyle:	public Exception::GeneralException
+			class BALL_VIEW_EXPORT WrongNormalStyle:	public Exception::GeneralException
 			{
 				public:
 
@@ -85,7 +85,7 @@ namespace BALL
 					is available.
 					\see         GeneralException			
 			*/
-			class BALL_EXPORT NoQuadricObjectAvailable:	public Exception::GeneralException
+			class BALL_VIEW_EXPORT NoQuadricObjectAvailable:	public Exception::GeneralException
 			{
 				public:
 

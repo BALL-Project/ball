@@ -70,16 +70,15 @@
 			ConfigurationType="1"
 			CharacterSet="2"
 			ManagedExtensions="FALSE"
-			WholeProgramOptimization="TRUE">
+			WholeProgramOptimization="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="4"
+				Optimization="0"
 				GlobalOptimizations="FALSE"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="FALSE"
 				FavorSizeOrSpeed="1"
-				OptimizeForProcessor="0"
-				OptimizeForWindowsApplication="TRUE"
+				OptimizeForWindowsApplication="FALSE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;;&quot;$(QTDIR)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG;BALL_QT_HAS_THREADS;BALL_PYTHON_SUPPORT"
 				MinimalRebuild="FALSE"
@@ -95,7 +94,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt334.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib &quot;libBALL with VIEW.lib&quot;"
+				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt334.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib $(SolutionDir)\Libs\libBALL\$(OutDir)\libBALL.lib $(SolutionDir)\Libs\libVIEW\$(OutDir)\libVIEW.lib"
 				OutputFile="$(OutDir)/BALLView.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"

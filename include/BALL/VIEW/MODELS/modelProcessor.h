@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.16.2.1 2005/06/14 13:29:03 amoll Exp $
+// $Id: modelProcessor.h,v 1.16.2.2 2005/09/01 22:17:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
@@ -36,7 +36,7 @@ namespace BALL
 				\endverbatim
 				\ingroup  ViewModels
 		*/
-		class BALL_EXPORT ModelProcessor
+		class BALL_VIEW_EXPORT ModelProcessor
 			: public UnaryProcessor<Composite>,
 				public PropertyManager
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.20.2.6 2005/08/17 14:35:21 amoll Exp $
+// $Id: primitiveManager.h,v 1.20.2.7 2005/09/01 22:17:54 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -40,7 +40,7 @@ namespace BALL
 				is done in an instance of UpdateRepresentationThread.
 				\ingroup ViewKernelGeometricPrimitives
 		*/
-		class BALL_EXPORT PrimitiveManager
+		class BALL_VIEW_EXPORT PrimitiveManager
 			:	public Object
 		{
 			friend class Representation;

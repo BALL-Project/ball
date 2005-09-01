@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.14.2.1 2005/06/14 13:29:02 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.14.2.2 2005/09/01 22:17:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
@@ -32,7 +32,7 @@ namespace BALL
 				documentation. 
 				\ingroup  ViewModels
 		*/
-		class BALL_EXPORT AddBallAndStickModel: public AtomBondModelBaseProcessor
+		class BALL_VIEW_EXPORT AddBallAndStickModel: public AtomBondModelBaseProcessor
 		{
 			public:
 

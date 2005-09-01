@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.h,v 1.5.8.1 2005/06/14 16:08:31 amoll Exp $
+// $Id: VRMLRenderer.h,v 1.5.8.2 2005/09/01 22:18:02 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_VRMLRENDERER_H
@@ -35,7 +35,7 @@ namespace BALL
 		be used to render the same scene externally.
 		\ingroup ViewRendering
 */
-class BALL_EXPORT VRMLRenderer : public Renderer
+class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 {
 	public:
 

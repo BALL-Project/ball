@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: setCamera.h,v 1.4 2004/02/26 08:41:36 anhi Exp $
+// $Id: setCamera.h,v 1.4.8.1 2005/09/01 22:17:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_SETCAMERA_H
@@ -22,7 +22,7 @@ namespace BALL
 		/** Dialog to set the camera to a given value
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT SetCamera 
+		class BALL_VIEW_EXPORT SetCamera 
 			: public SetCameraData
 		{ 
 				Q_OBJECT

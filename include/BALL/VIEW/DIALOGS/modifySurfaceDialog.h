@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.h,v 1.1.2.7 2005/06/15 09:54:52 amoll Exp $
+// $Id: modifySurfaceDialog.h,v 1.1.2.8 2005/09/01 22:17:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
@@ -42,7 +42,7 @@ namespace BALL
 				in a RegularData3D grid. You can also set the transparency of the surface.
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT ModifySurfaceDialog 
+		class BALL_VIEW_EXPORT ModifySurfaceDialog 
 			: public ModifySurfaceDialogData,
 				public ModularWidget
 		{ 

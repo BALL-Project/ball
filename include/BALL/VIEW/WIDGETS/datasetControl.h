@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.11.6.4 2005/08/30 14:26:38 amoll Exp $
+// $Id: datasetControl.h,v 1.11.6.5 2005/09/01 22:18:04 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -45,7 +45,7 @@ namespace BALL
 				The DatasetControl has three columns: Name, from (Composite) and Type.
 				\ingroup ViewWidgets
 		*/
-		class BALL_EXPORT DatasetControl
+		class BALL_VIEW_EXPORT DatasetControl
 			: public GenericControl
 		{
 			Q_OBJECT

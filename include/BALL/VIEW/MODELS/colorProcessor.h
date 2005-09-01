@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.28.4.8 2005/08/17 14:39:12 amoll Exp $
+// $Id: colorProcessor.h,v 1.28.4.9 2005/09/01 22:17:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -51,7 +51,7 @@ namespace BALL
 		Representation.
 		\ingroup  ViewModels
 */
-class BALL_EXPORT ColorProcessor
+class BALL_VIEW_EXPORT ColorProcessor
 	: public UnaryProcessor<GeometricObject*>
 {
 	public:
@@ -251,7 +251,7 @@ class BALL_EXPORT ColorProcessor
 /** Base class for ColorProcessors, that interpolate between two values
 		\ingroup  ViewModels
 */
-class BALL_EXPORT InterpolateColorProcessor
+class BALL_VIEW_EXPORT InterpolateColorProcessor
 	: public ColorProcessor
 {
 	public: 

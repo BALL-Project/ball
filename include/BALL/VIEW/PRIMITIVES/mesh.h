@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.6.8.3 2005/07/25 16:00:17 amoll Exp $
+// $Id: mesh.h,v 1.6.8.4 2005/09/01 22:18:00 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
@@ -30,7 +30,7 @@ namespace BALL
 				same fashion as Surface. \par
 				\ingroup ViewPrimitives
 		*/
-		class BALL_EXPORT Mesh
+		class BALL_VIEW_EXPORT Mesh
 			: public GeometricObject,
 			  public Surface
 		{

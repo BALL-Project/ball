@@ -49,7 +49,7 @@ namespace VIEW
 			If you dont pay attention to these rules, dont wonder if BALLView freezes
 			or crashes!
 	*/
-	class BALL_EXPORT BALLThread
+	class BALL_VIEW_EXPORT BALLThread
 		: public QThread
 	{
 		public:
@@ -97,7 +97,7 @@ namespace VIEW
 	 		The result can either be stored in a file or in a stringstream.
 			This is the default, if no filename is given.
 	*/
-	class BALL_EXPORT FetchHTMLThread
+	class BALL_VIEW_EXPORT FetchHTMLThread
 		: public BALLThread
 	{
 		public:
@@ -135,7 +135,7 @@ namespace VIEW
 	};
 	
 	///
-	class BALL_EXPORT CalculateFDPBThread
+	class BALL_VIEW_EXPORT CalculateFDPBThread
 		: public BALLThread
 	{
 		public:
@@ -157,7 +157,7 @@ namespace VIEW
 
 
 	///
-	class BALL_EXPORT UpdateRepresentationThread
+	class BALL_VIEW_EXPORT UpdateRepresentationThread
 		: public BALLThread
 	{
 		public:
@@ -187,7 +187,7 @@ namespace VIEW
 			main thread to delete the simulation thread, otherwise there will be 
 			a memory leak.
 	*/
-	class BALL_EXPORT SimulationThread
+	class BALL_VIEW_EXPORT SimulationThread
 		: public BALLThread
 	{
 		public:
@@ -219,7 +219,7 @@ namespace VIEW
 
 
 		/// Thread for EnergyMinimization
-		class BALL_EXPORT EnergyMinimizerThread
+		class BALL_VIEW_EXPORT EnergyMinimizerThread
 			: public SimulationThread
 		{
 			public:
@@ -242,7 +242,7 @@ namespace VIEW
 
 
 		/// Thread for MDSimulation
-		class BALL_EXPORT MDSimulationThread
+		class BALL_VIEW_EXPORT MDSimulationThread
 			: public SimulationThread
 		{
 			public:
@@ -277,7 +277,7 @@ namespace VIEW
 				It notifies the MainControl, that the thread for simulations has finished and can be deleted.
 				This should only be used internaly.
 		*/
-		class BALL_EXPORT SimulationThreadFinished
+		class BALL_VIEW_EXPORT SimulationThreadFinished
 			: public QCustomEvent
 		{
 			public:
@@ -286,7 +286,7 @@ namespace VIEW
 		};
 
 		///
-		class BALL_EXPORT UpdateCompositeEvent
+		class BALL_VIEW_EXPORT UpdateCompositeEvent
 			: public QCustomEvent
 		{
 			public:
@@ -306,7 +306,7 @@ namespace VIEW
 		};
 		
 		///
-		class BALL_EXPORT FinishedRepresentionUpdateEvent
+		class BALL_VIEW_EXPORT FinishedRepresentionUpdateEvent
 			: public QCustomEvent
 		{
 			public:
