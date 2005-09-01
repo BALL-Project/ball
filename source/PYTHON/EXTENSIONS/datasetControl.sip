@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.sip,v 1.1.2.1 2005/06/20 10:23:08 amoll Exp $
+// $Id: datasetControl.sip,v 1.1.2.2 2005/09/01 22:46:40 amoll Exp $
 //
 
 class DatasetControl
@@ -33,8 +33,6 @@ class DatasetControl
 	void updateSelection() throw();
 
 //		List<std::pair<RegularData3D*, String> > get3DGrids() throw();
-
-	Size count3DGrids() const throw();
 
 	virtual void deleteCurrentItems() throw();
 
