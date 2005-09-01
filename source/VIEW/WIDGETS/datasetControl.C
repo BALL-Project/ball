@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.37.2.12 2005/08/30 14:29:16 amoll Exp $
+// $Id: datasetControl.C,v 1.37.2.13 2005/09/01 14:25:24 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -524,12 +524,12 @@ namespace BALL
 			QListViewItem* item;
 			if (system != 0) 
 			{
-				item = new QListViewItem(listview, name.c_str(), system->getName().c_str(), type);
+				item = new QListViewItem(listview, name.c_str(), system->getName().c_str(), type.c_str());
 				insertComposite_(system, item);
 			}
 			else
 			{ 	
-				item = new QListViewItem(listview, name.c_str(), "", type);
+				item = new QListViewItem(listview, name.c_str(), "", type.c_str());
 			}
 
 			return item;
