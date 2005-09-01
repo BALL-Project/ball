@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomVector.h,v 1.23.4.1 2005/07/30 21:53:02 amoll Exp $
+// $Id: atomVector.h,v 1.23.4.2 2005/09/01 14:25:02 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -26,7 +26,7 @@ namespace BALL
 			
     	\ingroup MolmecCommon
 	*/
-	class BALL_EXPORT AtomVector
+	class AtomVector
 		:	private std::vector<Atom*>
 	{
     public:
