@@ -15,11 +15,15 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/compositeManager.h>
+#include <BALL/VIEW/DIALOGS/compositeProperties.h>
+
 
 #include <qpainter.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 #include <qcursor.h>
+#include <qimage.h>
+#include <qbitmap.h>
 
 #include <BALL/MATHS/vector3.h>
 #include <BALL/MATHS/matrix44.h>
@@ -34,6 +38,11 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
+
+		#define  ZOOM_FACTOR 			55
+		#define  ROTATE_FACTOR    22
+		#define  TRANSLATE_FACTOR 10
 
 		//
 		//-------------------- EditOperation -----------------------
@@ -84,7 +93,6 @@ namespace BALL
 				CompositeManager& cm = es->getMainControl()->getCompositeManager();
 
 				//does the atom still exist?
-				Log.info()<< cm.has(atom) <<std::endl;
 			  if(cm.has(atom) )	
 				{
 					Composite* parent = atom->getParent();
@@ -96,27 +104,23 @@ namespace BALL
 					m = new CompositeMessage(parent->getRoot(), CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
 					es->notify_(m); 
 
-					Log.info()<< "Atom deleted"  << std::endl;
+					//Log.info()<< "Atom deleted"  << std::endl;
 				}
 			} 
 			// delete a bond
 			else if(operationType == ADDED__BOND)
 			{
-				//Composite* parent = bond->getParent();
+				// Since we hope the onNotify-operation works correctly in 
+				// updating the undo_list, when something has changed concerning 
+				// the bond, we can just destroy the bond! 
 				bond->destroy();
-			
-				//TODO: Die message funktioniert aus irgendeinem Grund nicht!!! 
-				
-				//CompositeMessage *m = 0;
-				//m = new CompositeMessage(parent->getRoot(), CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
-				//es->notify_(m);
-				Log.info()<< "Bond deleted"  << std::endl;
+				//Log.info()<< "Bond deleted"  << std::endl;
 			}
 			//change type
 			else if(operationType == CHANGED__TYPE)
 			{
 				//TODO: Implementation
-				Log.info()<< "Atomtype rechanged"  << std::endl;
+				//Log.info()<< "Atomtype rechanged"  << std::endl;
 			}
 			else
 			{
@@ -132,30 +136,35 @@ namespace BALL
 			throw()
 			:	Scene(),
 				edit_id_(-1),
+				scaling_id_(-1),
 				//system_(),
 				first_atom_for_bond_(0),
 				context_menu_composite_(),
 				context_menu_(),
 				atom_limit_(1.5),
 				bond_limit_(2.0),
-				editAtomType_(6)
+				move_an_atom_(false),
+				edit_atom_type_(6),
+				show_scaling_axes_(false)
 		{
 		}
 
 		EditableScene::EditableScene(QWidget* parent_widget, const char* name, WFlags w_flags)
 			throw()
 			: Scene(parent_widget, name, w_flags),
-				edit_id_(-1),
+				edit_id_(-1),	
+				scaling_id_(-1),
 				//system_(), 
 				first_atom_for_bond_(0),
 				context_menu_composite_(),
 				context_menu_(),
 				atom_limit_(1.5),  
-				bond_limit_(2.0),
-				editAtomType_(6)
+				bond_limit_(2.0),	
+				move_an_atom_(false),
+				edit_atom_type_(6),
+				show_scaling_axes_(false)
 		{	
 			registerWidget(this); 
-			Log.error() << "EditableScene " << dynamic_cast<ModularWidget*>(this) << std::endl;
 		}
 
 		// TODO: Was sollte ein Copyconstructor sinnvolles tun?
@@ -164,13 +173,16 @@ namespace BALL
 			throw()
 			: Scene(eScene, parent_widget, name, w_flags),
 				edit_id_(-1),
+				scaling_id_(-1),
 				//system_(eScene.system_),
 				first_atom_for_bond_(eScene.first_atom_for_bond_),
 				context_menu_composite_(),
 				context_menu_(),
 				atom_limit_(eScene.atom_limit_),
 				bond_limit_(eScene.bond_limit_),
-				editAtomType_(eScene.editAtomType_)
+				move_an_atom_(false),
+				edit_atom_type_(eScene.edit_atom_type_),
+				show_scaling_axes_(eScene.show_scaling_axes_)
 		{
 		}
 
@@ -187,38 +199,7 @@ namespace BALL
 		{
 			Scene::clear();
 		}
-
-/*
-		void EditableScene::onNotify(Message *message)
-			throw()
-		{
-#ifdef BALL_VIEW_DEBUG
-			Log.error() << "EditableScene " << this  << "onNotify " << message << std::endl;
-#endif
-			
-			//TODO: Implementation
-			
-			if (RTTI::isKindOf<CompositeMessage>(*message)) 
-			{
-				CompositeMessage* cm = RTTI::castTo<CompositeMessage>(*message);
-				switch (cm->getType())
-				{
-					case CompositeMessage::CHANGED_COMPOSITE_HIERARCHY:
-						if() // emited by EditableScene itself? 
-						{
-
-						}
-						break;
-					//other cases
-				  	default: 
-							break;
-					}	
-				}
-					
-			Scene::onNotify(message);	
-		}
-*/	
-		
+	
 		void EditableScene::onNotify(Message *message)
 			throw()
 		{	
@@ -237,39 +218,12 @@ namespace BALL
 				switch (composite_message->getType())
 				{
 					case CompositeMessage::REMOVED_COMPOSITE:
-						// check wheather the removed Composite was an ancestor of the actual atomcontainer
-						// editableScene was working on (current_atomContainer_) 
-/*
-						if( (composite_message->getComposite())->isAncestorOf(*current_atomContainer_))
-						{ // an ancestor of our current atomcontainer was deleted 
-							//TODO: Dieser Fall tritt irgendwie nie ein, KONTROLLIEREN!! Da immer oberstes System gehighlighted wird! 
-							Log.info() << "Vorfahr wurde geloescht!!!"<< std::endl;
-							current_atomContainer_=0;
-						}
-						else if(  current_atomContainer_->isAncestorOf( *(composite_message->getComposite())))
-						{	// inheritor of current atomContainer was deleted 
-							Log.info() << "Erbe wurde geloescht!!!"<< std::endl;
-						  // TODO: Delete deleted composite from undolist 
-						}
-						else if(current_atomContainer_==composite_message->getComposite())
-						{ //actual atomContainer was deleted
-							current_atomContainer_=0;
-							Log.info() << "Current atomcontainer was deleted"<< std::endl;
-							// TODO: Delete all inheritors of deleted composite from undolist
-						}
-						else	
-						{
-						  // the deleted composite is not in relationship to the currend atomContainer
-							// we should make sure, that none of the deleted composites occure any longer in 
-							// our undo list
-							Composite* deleted_composite = composite_message->getComposite();
-							emit invalidComposite(deleted_composite);
-	//	 ----> funktioniert noch nicht !!! EditOperationDialog::invalidateComposite
-						
-						}*/	
+						// checking of the type of removed composite and handling of  
+						// updating the undo-list is done via the signal invalidComposite
+						// EditOperationDialog::invalidateComposite() is called 
+							
 						deleted_composite = composite_message->getComposite();
 						emit invalidComposite(deleted_composite);
-						Log.info() << " invalid Composite angezeigt! "<< std::endl;
 						break;	// no return since we want Scene::onNotify to be performed
 						
 					case CompositeMessage::UNDEFINED:
@@ -282,7 +236,7 @@ namespace BALL
 	
 			}
 			
-			// A New Selection -> change of current_atomContainer_ is organized in the atom insertion procedure 
+			// A New Selection -> change of current_atomContainer_ is organized in the atom insertion procedure   ?? 
 			
 			Scene::onNotify(message);
 			return;
@@ -302,6 +256,17 @@ namespace BALL
 
 			Scene::initializeWidget(main_control);
 
+			hint= "Display scaling axes";
+			scaling_id_ =	main_control.insertMenuEntry(
+					MainControl::DISPLAY, "&Show Scaling", this, SLOT(showScaling_()), CTRL+Key_A, -1, hint);
+
+			
+			
+			/** Prepare the pixmap for the edit cursor **/
+			// the cursor as an xpm
+			QImage qimg(edit_cursor_xpm_);
+			edit_cursor_.convertFromImage(qimg);
+
 			return;
 		}
 
@@ -312,6 +277,8 @@ namespace BALL
 			if (current_mode_ == (Scene::ModeType)EDIT__MODE)
 			{
 				main_control.removeMenuEntry(MainControl::DISPLAY, "&Edit Mode", this, SLOT(editMode_()), CTRL+Key_E);
+				main_control.removeMenuEntry(MainControl::DISPLAY, "&Show Scaling", this, SLOT(showScaling_()), CTRL+Key_E);
+			
 			}
 			Scene::finalizeWidget(main_control);	
 		}
@@ -321,6 +288,7 @@ namespace BALL
 			throw()
 		{
 			menuBar()->setItemChecked(edit_id_,(current_mode_ == (Scene::ModeType)EDIT__MODE));
+			menuBar()->setItemChecked(scaling_id_,show_scaling_axes_);
 			Scene::checkMenu(main_control);
 		}
 
@@ -330,28 +298,40 @@ namespace BALL
 				context_menu_.clear();
 				if(RTTI::isKindOf<Atom>(*context_menu_composite_))
 				{
-					//Atom* atom  = dynamic_cast<Atom*>(&composite);
+					Atom* atom  = dynamic_cast<Atom*>(context_menu_composite_);
 					// context_menu_composite is atom 
-					context_menu_.insertItem("select",     	this, SLOT(selectAtom()), 0, 				SELECT_ATOM);
+					if(atom->isSelected())
+					{
+						context_menu_.insertItem("deselect",  this, SLOT(deselectAtom()), 0,    	DESELECT_ATOM);
+					}
+					else
+					{
+						context_menu_.insertItem("select",    this, SLOT(selectAtom()), 0, 		  	SELECT_ATOM);
+					}
 					context_menu_.insertItem("properties", 	this, SLOT(setAtomProperties()), 0, SET_ATOM_PROPERTIES);
 					context_menu_.insertItem("move", 				this, SLOT(moveAtom()), 0, 					MOVE_ATOM);
-
+					context_menu_.insertItem("delete", 			this, SLOT(deleteAtom()), 0, 				DELETE_ATOM);
+				
+					context_menu_.exec(QPoint( (int) (x_ewindow_bond_pos_first_ + x()), 
+																	 (int) (y_ewindow_bond_pos_first_ + y())));
 				}
+				/*  ------  work in progress  ---------  
 				else if (RTTI::isKindOf<Bond>(*context_menu_composite_))
 				{
-					//Bond* bond  = dynamic_castTo<Bond*>(composite);
+					//Bond* bond  = dynamic_cast<Bond*>(context_menu_composite_);
 					// context_menu_composite is bond
+					//if(bond->isSelected())
+					{
+
+					}
 					context_menu_.insertItem("select",			this,  SLOT(selectBond()), 0, 					SELECT_BOND); 
 					context_menu_.insertItem("properites", 	this,  SLOT(setBondProperties()), 0, 	SET_BOND_PROPERTIES);
-					context_menu_.insertItem("set length",  this,  SLOT(setBondLength()), 0, 			SET_BOND_LENGTH);
-				}  
+					//context_menu_.insertItem("set length",  this,  SLOT(setBondLength()), 0, 			SET_BOND_LENGTH);
+				  
 				
-				//!! zum PopUp sollten die Orginal klick punkte mitgegeben werden
-				//ToDO: Pruefe, ob man schon zum Rand hin rausfaellt! :-)) 
-				//context_menu_.exec(QCursor::pos());
 				context_menu_.exec(QPoint( (int) (x_ewindow_bond_pos_first_ + x()), 
 																	 (int) (y_ewindow_bond_pos_first_ + y())));
-				//!!!! x_ewindow_bond... sind relativ, da nur fuer die Scene muss noch addiert werden!!  
+				}*/
 		}
 
 		
@@ -365,6 +345,13 @@ namespace BALL
 			// start a new mouse_moved cycle
 			mouse_has_moved_ = false;
 
+			if(move_an_atom_)
+			{	
+				move_an_atom_= false;
+				setMouseTracking(false);
+				return;
+			}
+					
 			//store the old positions of the press Event
 			x_ewindow_bond_pos_first_ = e->x();
 			y_ewindow_bond_pos_first_ = e->y();
@@ -382,7 +369,7 @@ namespace BALL
 					// ToDo: Is the representation ok? Can the user see all actual atoms?
 
 					// if no atom is selected
-					PDBAtom* a = new PDBAtom(PTE[editAtomType_], PTE[editAtomType_].getName());
+					PDBAtom* a = new PDBAtom(PTE[edit_atom_type_], PTE[edit_atom_type_].getName());
 					insert_(e->x(), e->y(), *a);		
 					first_atom_for_bond_ = a;
 					current_mode_ =(Scene::ModeType)BOND__MODE;
@@ -396,7 +383,7 @@ namespace BALL
 					//store the Operation in EditOperationDialog
 					Vector3 atom_position = a->getPosition();
 					
-					EditOperation eo(a, NULL, "Added atom of type " + PTE[editAtomType_].getName() + " at position (" 
+					EditOperation eo(a, NULL, "Added atom of type " + PTE[edit_atom_type_].getName() + " at position (" 
 													+ String(atom_position.x) + ", "
 													+ String(atom_position.y) + ", "
 													+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
@@ -408,20 +395,19 @@ namespace BALL
 				}
 				if(e->button() == Qt::RightButton )
 				{
-					// find an atom in a radius of limit_ around the current mouse position
+					// find an atom in a radius of select_atom_limit_= 0.7 around the current mouse position
 					Atom *atom = getClickedAtom_(e->x(), e->y());
 
 					if (atom)
 					{
 						context_menu_composite_=atom;
 						popupContextMenu_();
-						//atom->select(); 					
-						//CompositeMessage *m = new CompositeMessage(*atom, CompositeMessage::SELECTED_COMPOSITE);	
-						//notify_(m); 
 					}
 					else
 					{
+						/* under Progress 
 						// try to find a bond
+						// select_bond_limit_
 						Bond *bond = getClickedBond_(e->x(), e->y());
 
 						if (bond)
@@ -430,14 +416,14 @@ namespace BALL
 							bond->select();
 							CompositeMessage *m = new CompositeMessage(*bond, CompositeMessage::SELECTED_COMPOSITE);	
 							notify_(m); 
-						}
+						}*/
 					}
 
 					return;
 				}
 				if(e->button() == Qt::MidButton)
 				{
-					//is there an atom in radius <= limit_  Anstroem? 
+					//is there an atom in radius <= select_atom_limit_  Anstroem? 
 					Atom *atom = getClickedAtom_(e->x(), e->y());
 
 					// if so, start a new bond from this atom
@@ -451,6 +437,8 @@ namespace BALL
 					 	y_text_position_ = coords.y + 30;
 					
 						current_mode_ =(Scene::ModeType)BOND__MODE;
+						
+						////////////////////////////current_atomContainer_=
 						TVector2<Position> pos =  getScreenPosition_(atom->getPosition());
 
 						// start position for the putative bond
@@ -481,6 +469,10 @@ namespace BALL
 			x_ewindow_bond_pos_second_new_ = e->x();
 			y_ewindow_bond_pos_second_new_ = e->y();
 
+			
+			Scene::x_window_pos_new_ = e->x();
+			Scene::y_window_pos_new_ = e->y();
+
 
 			// ============ bond mode ================
 			if (current_mode_ == (Scene::ModeType)BOND__MODE)
@@ -492,7 +484,9 @@ namespace BALL
 					mouse_has_moved_ = true;
 
 					//is there an atom nearby the actual mouse position? 
-					Atom *atom = getClickedAtom_(e->x(), e->y());
+					Atom *atom = getClickedAtom_(e->x(), e->y()); 
+					// limit should be the atom->radius of of first_atom_for_bond_ 
+					// since we cant get this average_atom_radius_limit_ = 0.5 
 
 					// have we found such an atom? if so, is it different from the one we started with? (self bonds make no sense :-) )
 					if (atom && (atom != first_atom_for_bond_))
@@ -548,10 +542,65 @@ namespace BALL
 					bondstring.setNum(bond_length_, 'f', 2);
 					// don't do this for really short bonds...
 					if (bond_length_ > 0.3)
-					  painter.drawText(x_text_position_, y_text_position_, bondstring);
+					  painter.drawText((int)x_text_position_, (int)y_text_position_, bondstring);
 				
 					
 					painter.end();
+				}
+			}
+
+			// ============ edit mode ================
+			//if (current_mode_ == (Scene::ModeType)EDIT__MODE)
+			{
+				if(move_an_atom_)
+				{
+					if(RTTI::isKindOf<Atom>(*context_menu_composite_))
+					{
+						Atom* atom  = dynamic_cast<Atom*>(context_menu_composite_);
+						
+						//determine the new position
+					
+						Camera& camera = stage_->getCamera();
+
+						// Difference between the old and new position in the window 
+						float delta_x = x_window_pos_new_ - x_window_pos_old_;
+						float delta_y = y_window_pos_new_ - y_window_pos_old_;
+					
+						// stop if no movement
+						if (!   (((delta_x == 0) && (delta_y == 0 )) 
+								  ||  (x_window_pos_old_ + y_window_pos_old_)== 0))
+						{
+
+							// we just allow moving in 
+
+							// calculate translation in x-axis direction
+							Vector3 right_translate = camera.getRightVector()
+								* (delta_x / gl_renderer_.getWidth()) 
+								* 1.4 * camera.getDistance()   
+								* 2.0 * gl_renderer_.getXScale()
+								* Scene::mouse_sensitivity_ / TRANSLATE_FACTOR;
+
+							// calculate translation in y-axis direction
+							Vector3 up_translate 		= camera.getLookUpVector() 
+								* (delta_y / gl_renderer_.getHeight()) 
+								* 1.4 * camera.getDistance() 
+								* 2.0 * gl_renderer_.getYScale()
+								* Scene::mouse_sensitivity_ / TRANSLATE_FACTOR;
+							
+
+							
+								atom->setPosition( atom->getPosition() - right_translate - up_translate);
+
+								Composite* parent = atom->getParent();
+							  getMainControl()->update(*parent, true);
+								
+								// send a message of changed composite
+								CompositeMessage *m = new CompositeMessage(*atom, CompositeMessage::CHANGED_COMPOSITE);	
+								//m = new RepresentationMessage(parent, RepresentationMessage::UPDATE);	
+								notify_(m); 
+
+						}					
+					}
 				}
 			}
 
@@ -561,6 +610,10 @@ namespace BALL
 
 			x_ewindow_bond_pos_second_new_ = e->x();
 			y_ewindow_bond_pos_second_new_ = e->y();
+
+			Scene::x_window_pos_old_ = x_window_pos_new_;
+			Scene::y_window_pos_old_ = y_window_pos_new_;
+
 
 			// maybe Scene wants to do anything with this event as well. and if we're not in BOND__MODE, we let it... :-)
 			if (current_mode_ != (Scene::ModeType)BOND__MODE)
@@ -595,13 +648,13 @@ namespace BALL
 					bondstring.setNum(bond_length_, 'f', 2);
 					// don't do this for really short bonds...
 					if (bond_length_ > 0.3)
-						painter.drawText(x_text_position_, y_text_position_,bondstring);
+						painter.drawText((int)x_text_position_, (int)y_text_position_,bondstring);
 				
 				}
 				
 				painter.end();	
 				
-				//is there an atom in radius "limit_" Angstroem?
+				//is there an atom in  select_atom_limit_ Angstroem?
 				Atom *atom = getClickedAtom_(e->x(), e->y());
 
 				// decide what to do... did we find an atom at all?
@@ -655,6 +708,13 @@ namespace BALL
 						m = new CompositeMessage(*atom, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
 						
 						notify_(m); 
+
+						// TODO: Since this operation leads to a isolated 2 atom molecule, 
+						// it is not inserted in other molecules, but in the systems.
+						// Later on if bonds to another molecule were created, it
+						// should be moved into this molecule/atomContainer... 
+
+						
 					}	
 				}
 				else // no atom found
@@ -662,64 +722,89 @@ namespace BALL
 					//did we find a first atom?
 					if(first_atom_for_bond_!=0)
 					{
-						// build a new atom...
-						PDBAtom* a = new PDBAtom(PTE[editAtomType_], PTE[editAtomType_].getName());
-						insert_(e->x(), e->y(), *a);
+						// we have to fix the atomContainer, in which the Atom should be inserted 
+						/*
+						if( RTTI::isKindOf<AtomContainer>(*(first_atom_for_bond_->getParent())) ) 
+							current_atomContainer_ = RTTI::castTo<AtomContainer>(*(first_atom_for_bond_->getParent()));
+						else if ( RTTI::isKindOf<AtomContainer> (first_atom_for_bond_->getRoot()) )
+						{
+							current_atomContainer_ = RTTI::castTo<AtomContainer>(first_atom_for_bond_->getRoot());
+						}
+						*/
+						if( getAtomContainer_(first_atom_for_bond_))
+						{
+							Log.error() << "No valid AtomContainer selected" << std::endl;
+							return;
+						}
 						
-						Vector3 atom_position = a->getPosition();
-					
-						EditOperation eo(a, NULL, "Added atom of type " + PTE[editAtomType_].getName() + " at position (" 
-														+ String(atom_position.x) + ", "
-														+ String(atom_position.y) + ", "
-														+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
+						// the new atom should not be in the atom-radius of the first_atom_for_bond_
+						// or the average_atom_radius_limit_
+						if(! (getClickedAtom_(e->x(), e->y()) == first_atom_for_bond_ ))
+						{		
 
-						// tell about the new undo operation
-						emit newEditOperation(eo);
-	
-						//TODO: test if they have the same position, i.e. a and first_atom_for_bond!
-						if (a->getPosition() == first_atom_for_bond_->getPosition())
+							// build a new atom...
+							PDBAtom* a = new PDBAtom(PTE[edit_atom_type_], PTE[edit_atom_type_].getName());
+							insert_(e->x(), e->y(), *a);
+
+							Vector3 atom_position = a->getPosition();
+
+							EditOperation eo(a, NULL, "Added atom of type " + PTE[edit_atom_type_].getName() + " at position (" 
+									+ String(atom_position.x) + ", "
+									+ String(atom_position.y) + ", "
+									+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
+
+							// tell about the new undo operation
+							emit newEditOperation(eo);
+
+							/* else //	alternativly : create and test this : 
+							//   if (a->getPosition() == first_atom_for_bond_->getPosition())
+							{
+							Log.error() << "Warning: inserted two atoms at the same position!" << endl;
+							}*/
+
+							// set the bond
+							// update representation
+							CompositeMessage *m = 0;
+							Bond* c = new Bond("Bond", *first_atom_for_bond_, *a, Bond::ORDER__SINGLE);		
+							m = new CompositeMessage(*a, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
+
+							String bond_string;
+							int bond_type = c->getOrder();
+
+							switch (bond_type)
+							{
+								case Bond::ORDER__SINGLE:
+									bond_string = "single bond";
+									break;
+								case Bond::ORDER__DOUBLE:
+									bond_string = "double bond";
+									break;
+								case Bond::ORDER__TRIPLE:						
+									bond_string = "triple bond";	
+									break;
+								case Bond::ORDER__QUADRUPLE:
+									bond_string = "quadruple bond";	
+									break;
+								case Bond::ORDER__AROMATIC:
+									bond_string = "aromatic bond";	
+									break;
+								default:					
+									bond_string = "unknown";	
+									break;
+							}
+
+							EditOperation eo2( NULL, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
+
+							// tell about the new undo operation
+							emit newEditOperation(eo2);
+
+							notify_(m);
+						}
+						else
 						{
 							Log.error() << "Warning: inserted two atoms at the same position!" << endl;
 						}
-	
-						//set the bond
-						//update representation
-						// TODO: bond_oder
-						CompositeMessage *m = 0;
-						Bond* c = new Bond("Bond", *first_atom_for_bond_, *a, Bond::ORDER__SINGLE);		
-						m = new CompositeMessage(*a, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
-					
-						String bond_string;
-						int bond_type = c->getOrder();
-
-						switch (bond_type)
-						{
-							case Bond::ORDER__SINGLE:
-								bond_string = "single bond";
-								break;
-							case Bond::ORDER__DOUBLE:
-								bond_string = "double bond";
-								break;
-							case Bond::ORDER__TRIPLE:						
-								bond_string = "triple bond";	
-								break;
-							case Bond::ORDER__QUADRUPLE:
-								bond_string = "quadruple bond";	
-								break;
-							case Bond::ORDER__AROMATIC:
-								bond_string = "aromatic bond";	
-								break;
-							default:					
-								bond_string = "unknown";	
-								break;
-						}
-
-						EditOperation eo2( NULL, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
-						
-						// tell about the new undo operation
-						emit newEditOperation(eo2);
-
-						notify_(m);
+							
 					}
 					else // we did not find a first atom!
 					{	
@@ -747,62 +832,209 @@ namespace BALL
 		}	
 
 
+		void EditableScene::setCurrentCursor_(int element_type)
+		{
+			//convert the elementtype into a string
+			Element e = PTE[element_type];
+		 	QString sign(e.getSymbol());
+
+			//draw the sign into the pixmap
+			QPainter painter;
+			QPixmap  new_cursor(edit_cursor_);
+			
+			painter.begin(&new_cursor);
+			
+			painter.setFont(QFont("Helvetica", 12, QFont::Bold));
+			painter.setPen(color0);
+			//12, 22
+			painter.drawText(10, 24, sign);
+			painter.end();
+
+			QImage qimg = new_cursor.convertToImage();
+			qimg = qimg.convertDepth(8);
+			
+			// Now we build the final cursor. For this we have to paint directly 
+			// into our bitmaps 
+			
+			QPainter pcursor, pmask;
+			QBitmap cursor(32, 32, TRUE);
+			QBitmap mask(32, 32, TRUE);
+
+			pcursor.begin(&cursor);
+			pmask.begin(&mask);
+
+			for (int i=0; i<32; i++)
+			{
+				for (int j=0; j<32; j++)
+				{
+					// if this pixel is BLACK, we paint it black ;)
+					int index = qimg.pixelIndex(i,j);
+
+					if (index == 1)
+					{
+						pcursor.setPen(color1);
+						pmask.setPen(color1);
+					}
+					else if (index > 0) // this pixel is WHITE, and we paint it white
+					{
+						pcursor.setPen(color0);
+						pmask.setPen(color1);
+					}
+					else // this pixel was supposed to be transparent, but we want a black border
+					{
+						bool should_be_black = false;
+						// have a look at the points above, below, left, and right
+						if ( (j > 0) && (qimg.pixelIndex(i, j-1) > 1) )
+								should_be_black = true;
+
+						if (!should_be_black && (j < 31) && (qimg.pixelIndex(i, j+1) > 1) )
+								should_be_black = true;
+							
+						if (!should_be_black && (i > 0) && (qimg.pixelIndex(i-1, j) > 1) )
+							should_be_black = true;
+
+						if (!should_be_black && (i < 31) && (qimg.pixelIndex(i+1, j) > 1) )
+							should_be_black = true;
+
+						if (should_be_black)
+						{
+							pcursor.setPen(color1);
+							pmask.setPen(color1);
+						}
+						else
+						{
+							pcursor.setPen(color0);
+							pmask.setPen(color0);
+						}
+					}
+
+					pcursor.drawPoint(i, j);
+					pmask.drawPoint(i, j);
+				}
+			}
+
+			pcursor.end();
+			pmask.end();
+
+			setCursor(QCursor(cursor, mask, 2, 2));
+			return;
+			
+		}
+		
+
+		//
+		// inherited from Scene to draw the editableScene 
+		//
+		
 		void EditableScene::renderView_(RenderMode mode)
 			throw()
 		{
 			Scene::renderView_(mode);
+			if(show_scaling_axes_)
+			{	
 				drawRuler_();	
-				Log.info() << "render" << std::endl;
+			}
 
 		}
 
-		void EditableScene::paintEvent(QPaintEvent*e)
+		void EditableScene::glDraw()
+			throw()
 		{
-			Scene::paintEvent(e);
-			static int i=0;
-		//	if (current_mode_ == (Scene::ModeType)EDIT__MODE)
+			Scene::glDraw();
+			if(show_scaling_axes_)
 			{
 				drawRuler_();
-				Log.info() << "paint" << std::endl;
 			}
+
 		}
-		
+
+
+		//
 		//     slots for contextMenue
-		void  EditableScene::moveAtom()
-		{
-			Log.error()<< "move atom"<< std::endl;
-		}
+		//     
+		
 		
 		void  EditableScene::selectAtom()
 		{
-			Log.error()<< "select atom"<< std::endl;
-			
 			Atom* atom  = dynamic_cast<Atom*>(context_menu_composite_);
-			atom->select(); 					
-			CompositeMessage *m = new CompositeMessage(*atom, CompositeMessage::SELECTED_COMPOSITE);	
-			notify_(m); 
+			if(atom)
+			{
+				atom->select(); 					
+				CompositeMessage *m = new CompositeMessage(*atom, CompositeMessage::SELECTED_COMPOSITE);	
+				notify_(m);
+			}
+		}
+		
+		void  EditableScene::deselectAtom()
+		{
+			Atom* atom  = dynamic_cast<Atom*>(context_menu_composite_);
+			if(atom)
+			{
+				atom->deselect(); 					
+				CompositeMessage *m = new CompositeMessage(*atom, CompositeMessage::DESELECTED_COMPOSITE);	
+				notify_(m); 
+			}
+		}
+
+		void  EditableScene::moveAtom()
+		{
+			Atom* atom  = dynamic_cast<Atom*>(context_menu_composite_);
+			if(atom)
+			{	
+				move_an_atom_ = true;
+				setMouseTracking(true);
+				Scene::x_window_pos_old_ = 0;
+				Scene::y_window_pos_old_ = 0;
+
+			}
+			return;
 		}
 		
 		void  EditableScene::setAtomProperties()
 		{
-			Log.error()<<"set atom property" << std::endl;
+			CompositeProperties as(context_menu_composite_, this);
+  		as.exec();
 
+  		CompositeMessage* message = new CompositeMessage(
+      *context_menu_composite_, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
+  		getMainControl()->sendMessage(*message);
+			return;
 		}
+		
+		void  EditableScene::deleteAtom()
+		{
+			Atom* atom  = dynamic_cast<Atom*>(context_menu_composite_);
+			if(atom)
+			{
+				CompositeManager& cm = getMainControl()->getCompositeManager();
+
+				//does the atom still exist?
+			  if(cm.has(atom) )	
+				{
+					//update representation and clean the undo -list 
+					Composite* parent = atom->getParent();
+				
+					getMainControl()->remove(*atom, true, true);	
+				
+					CompositeMessage *m = new CompositeMessage(parent->getRoot(), CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
+				  notify_(m); 
+				}	
+			}
+		}
+		
 		
 		void  EditableScene::selectBond()
 		{
-			Log.error()<<"select bond" << std::endl;
+			// 
 		}
 		
 		void  EditableScene::setBondProperties()
 		{
-			Log.error()<<"set bond property" << std::endl;
 
 		}
 		
 		void  EditableScene::setBondLength()
 		{
-			Log.error()<< "set bond length" << std::endl;
 
 		}
 				
@@ -926,27 +1158,65 @@ namespace BALL
 			return 0;
 		}
 
+
+		//******************** protected slots
+		
+		
+		void EditableScene::showScaling_()
+		{
+			show_scaling_axes_=! show_scaling_axes_;
+		}
+		
 		// Slot to change to BOND__MODE
 		void EditableScene::bondMode_()
 		{
 			current_mode_ = (Scene::ModeType)BOND__MODE;		
-			setCursor(QCursor(Qt::SizeAllCursor));
-			//ToDo:: Cursor should look different
+			
+			return;
 		}
 
 
 		// Slot to change to EDIT__MODE
 		void EditableScene::editMode_()
 		{
+			if(current_mode_ == (Scene::ModeType)EDIT__MODE) return;
+			last_mode_ = current_mode_;
 			current_mode_ = (Scene::ModeType)EDIT__MODE;		
-			setCursor(QCursor(Qt::SizeAllCursor));
-			//ToDo:: Cursor should look different
+			//drawRuler_();
+			
+			menuBar()->setItemChecked(rotate_id_, false);
+			menuBar()->setItemChecked(picking_id_, false);
+			menuBar()->setItemChecked(move_id_, false);
+			
+			setCurrentCursor_(getEditElementType());
+			return;
+		}
+
+		void EditableScene::rotateMode_()
+		{
+			Scene::rotateMode_();
+			//show_scaling_axes_= false;
+			return;
+		}
+		
+		void EditableScene::pickingMode_()
+		{
+			Scene::pickingMode_();	
+			show_scaling_axes_= false;
+			return;
+		}
+
+		void EditableScene::moveMode_()
+		{
+			Scene::moveMode_();
+			//	show_scaling_axes_= false;
+			return;
 		}
 
 
-
-
-
+		
+		//************* operational functions
+		
 		
 		// insert an atom at screen positions (x,y) on the view plane
 		void EditableScene::insert_(int x, int y, PDBAtom &atom_)
@@ -987,6 +1257,7 @@ namespace BALL
 				}
 
 				// Yes? we do not need to create our own system
+				Log.info() << "es gab ein gehighlighteten AC"<< std::endl;
 				current_atomContainer_ = ai;
 				ai->insert(atom_);
 				getMainControl()->update(*ai, true);
@@ -1000,6 +1271,7 @@ namespace BALL
 				current_molecule->insert(atom_);
 				getMainControl()->insert(*system);
 				current_atomContainer_ = current_molecule;
+				Log.info() << "wir haben ihn neu gesetzt"<< std::endl;
 			}	
 
 			// do we need to refocus the camera?
@@ -1015,23 +1287,15 @@ namespace BALL
 				y_ewindow_bond_pos_second_old_ = height() / 2.;
 			
 							
-		/*		//we need to draw the ruler axis
-				//install the painter	
-				QPainter painter(this);
-				painter.setPen(white);
-						 
-				// this erases the old line from the last move event
-				painter.drawLine(
-							(int) (5),  
-							(int) (0),   
-							(int) (width()),
-							(int) (height()));
-
-				painter.end();
-				Log.info()<< "height() " <<  height()<< std::endl;
-			*/
 			}
 
+			// highligth the actual atom container 
+			List < Composite * > cl;
+			cl.push_back(current_atomContainer_);
+			ControlSelectionMessage* m = new ControlSelectionMessage();
+			m->setSelection(cl);
+			notify_(m);
+			return;
 		}	
 
 
@@ -1098,7 +1362,7 @@ namespace BALL
 			double ys_ = height(); 
 
 			// vectors for arithmetics
-			// first we compute the projection of the given atom on the Viewplane
+			// first we compute the projection of the given atom on the nearplane
 			Vector3 cam = getStage()->getCamera().getViewPoint();
 			Vector3 look_at = getStage()->getCamera().getLookAtPosition() -  cam ;
 			Vector3 cam_to_atom = vec - cam;
@@ -1195,18 +1459,19 @@ namespace BALL
 		// Set the element for the next insert operations
 		void EditableScene::setEditElementType(int element_number)
 		{
-			editAtomType_=element_number;
+			edit_atom_type_=element_number;
+			setCurrentCursor_(element_number);
+
 		}
 		
 	  // Get the element for the next insert operations
 		int EditableScene::getEditElementType()
 		{
-			return editAtomType_;
+			return edit_atom_type_;
 		}	
 		
 		void EditableScene::drawRuler_()
 		{
-			Log.info() << "Draw Ruler " << std::endl;
 			
 			// the lines for the ruler are always the same => storing not needed
 			// for each angstroem we paint a stick on each axis of the ruler
@@ -1219,45 +1484,20 @@ namespace BALL
 			
 			//install the painter	
 			QPainter painter(this);
-			painter.setPen(white);
+			ColorRGBA color;
+			const ColorRGBA bg_color = getStage()->getBackgroundColor();
+			color.setRed(255 - (int) bg_color.getRed());
+			color.setGreen(255 - (int) bg_color.getGreen());
+			color.setBlue(255 - (int) bg_color.getBlue());
+
+			QColor qcolor;
+			color.get(qcolor);
+			painter.setPen(qcolor);
 			// this allows to (a) draw or (b) erase, depending if a line was already drawn on 
 			// the same position
-	 	 // painter.setRasterOp(XorROP);
-
-			
-			/*
-			 	painter.setRasterOp(XorROP);
-
-					// this erases the old line from the last move event
-					painter.drawLine(
-							(int) (x_ewindow_bond_pos_second_old_) ,  
-							(int) (y_ewindow_bond_pos_second_old_),   
-							(int) (x_ewindow_bond_pos_first_),
-							(int) (y_ewindow_bond_pos_first_));
-
-						painter.end();	 
-			*/
-			
-			//delete the old ticks
-			//vertical
-		/*		for(unsigned i = 1; i < (unsigned int) ruler_vertical_length_; i++)
-			{
-				painter.drawLine( (int) (0),
-													(int) (i * ruler_vertical_scaling_),
-													(int) (10),
-													(int) (i * ruler_vertical_scaling_)
-					              );
-			}
-			//horizontal
-			for(unsigned i = 1; i < (unsigned int) ruler_horizontal_length_; i++)
-			{
-				painter.drawLine( (int) (0),
-													(int) (i * ruler_horizontal_scaling_),
-													(int) (10),
-													(int) (i * ruler_horizontal_scaling_)
-					              );
-			}
-	*/
+	
+			// painter.setRasterOp(XorROP) is not necessary 
+	
 
 			//compute the new scaling
 			
@@ -1289,21 +1529,41 @@ namespace BALL
 			//draw the vertical scaling ticks
 			for(unsigned i = 1; i < (unsigned int) horizontal_distance +1; i++)
 			{
-				painter.drawLine( (int) (i * horizontal_d),
+				if(i % 5 == 0)
+				{
+					QString s;
+					s.sprintf("%dA", i);
+					
+					painter.drawText((int)(i*horizontal_d-3), height()-10,s);
+				}
+				else
+				{	
+					painter.drawLine( (int) (i * horizontal_d),
 													(int) (height()-10),
 													(int) (i * horizontal_d),
 													(int) (height())
 					              );
+				}
 			}
 			
 			//draw the horizontal scaling
 			for(unsigned i = 1; i < (unsigned int) vertical_distance +1; i++)
 			{
-				painter.drawLine( (int) (2),
+				if(i % 5 == 0)
+				{
+					QString s;
+					s.sprintf("%dA", i);
+					
+					painter.drawText( 8 , (int)(height()-3 -(i*vertical_d )), s);
+				}
+				else
+				{
+					painter.drawLine( (int) (2),
 													(int) (height()-5-(i * vertical_d)),
 													(int) (8),
 													(int) (height()-5-(i * vertical_d))
 					              );
+				}
 			}
 
 			//store the old scaling
@@ -1316,8 +1576,60 @@ namespace BALL
 		}
 
 
-
+	 	AtomContainer* EditableScene::getAtomContainer_(const Atom* atom)
+	 	{
+			AtomContainer * ac = 0;
+		 	
+			if( RTTI::isKindOf<AtomContainer>(*(atom->getParent())) ) 
+			{
+				current_atomContainer_ = RTTI::castTo<AtomContainer>(*(atom->getParent()));
+			}
+			else if ( RTTI::isKindOf<AtomContainer> (atom->getRoot()) )
+			{
+				current_atomContainer_ = RTTI::castTo<AtomContainer>(atom->getRoot());
+	
+			}
+			return ac;
+	 }
 		
+
+		const char* const EditableScene::edit_cursor_xpm_[] = {
+			"32 32 3 1",
+			" 	c None",
+			".	c #000000",
+			"+	c #FFFFFF",
+			"                                ",
+			" .............                  ",
+			" .+++++++++++.                  ",
+			" .++++++++++.                   ",
+			" .+++++++++.                    ",
+			" .++++++++.                     ",
+			" .++++++++.                     ",
+			" .+++++++++.                    ",
+			" .++++++++++.                   ",
+			" .+++++++++++.                  ",
+			" .+++..+++++.                   ",
+			" .++.  .+++.                    ",
+			" .+.    .+.                     ",
+			" ..      ..                     ",
+			"                                ",
+			"                                ",
+			"                                ",
+			"                                ",
+			"                                ",
+			"                                ",
+			"                                ",
+			"                                ",
+			"                                ",
+			"                                ",
+			"                                ",
+			"                                ",
+			"                                ",
+			"                                ",
+			"                                ",
+			"                                ",
+			"                                ",
+			"                                "};
 
 	}//end of namespace 
 } //end of namespace
