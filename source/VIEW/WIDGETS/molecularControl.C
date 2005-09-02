@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.32 2005/08/22 13:15:23 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.33 2005/09/02 13:47:05 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -479,20 +479,17 @@ namespace BALL
 			
 		void MolecularControl::buildBonds()
 		{
-			MolecularTaskMessage* message = new MolecularTaskMessage(MolecularTaskMessage::BUILD_BONDS);
-			notify_(message);
+			notify_(new MolecularTaskMessage(MolecularTaskMessage::BUILD_BONDS));
 		}
 			
 		void MolecularControl::centerCamera()
 		{
-			CompositeMessage* message = new CompositeMessage(*context_composite_, CompositeMessage::CENTER_CAMERA);
-			notify_(message);
+			notify_(new CompositeMessage(*context_composite_, CompositeMessage::CENTER_CAMERA));
 		}
 
 		void MolecularControl::checkResidue()
 		{
-			MolecularTaskMessage* message = new MolecularTaskMessage(MolecularTaskMessage::CHECK_RESIDUE);
-			notify_(message);
+			notify_(new MolecularTaskMessage(MolecularTaskMessage::CHECK_RESIDUE));
 		}
 
 		void MolecularControl::showFilename()
@@ -600,9 +597,10 @@ namespace BALL
 			if (composite->isSelected() == state) return;
 			
 			CompositeMessage::CompositeMessageType id = CompositeMessage::DESELECTED_COMPOSITE;
+
 			if (state) id = CompositeMessage::SELECTED_COMPOSITE;
-			CompositeMessage* message = new CompositeMessage(*composite, id);
-			notify_(message);
+
+			notify_(new CompositeMessage(*composite, id));
 		}
 
 
@@ -854,8 +852,8 @@ namespace BALL
 			selected_.clear();
 			listview->setUpdatesEnabled(true);
 			listview->triggerUpdate();
-			ControlSelectionMessage* message = new ControlSelectionMessage;
-			notify_(message);
+
+			notify_(new ControlSelectionMessage);
 
 			HashSet<Composite*>::Iterator roots_it = roots.begin();
 			for (; +roots_it; roots_it++)
@@ -951,8 +949,8 @@ namespace BALL
 		void MolecularControl::moveItems()
 		{
 			select();
-			SceneMessage* msg = new SceneMessage(SceneMessage::ENTER_MOVE_MODE);
-			notify_(msg);
+
+			notify_(new SceneMessage(SceneMessage::ENTER_MOVE_MODE));
 		}
 
 
@@ -1058,8 +1056,7 @@ namespace BALL
 			message->setSelection(selected_);
 			notify_(message);
 
-			ShowDisplayPropertiesMessage* msg = new ShowDisplayPropertiesMessage;
-			notify_(msg);
+			notify_(new ShowDisplayPropertiesMessage);
 		}
 
 		void MolecularControl::collapseAll()
@@ -1082,9 +1079,7 @@ namespace BALL
 
 		void MolecularControl::createRepresentation_()
 		{
-			CreateRepresentationMessage* crm = new CreateRepresentationMessage(selected_, 
-					selected_model_, selected_coloring_method_);
-			notify_(crm);
+			notify_(new CreateRepresentationMessage(selected_, selected_model_, selected_coloring_method_));
 		}
 
 		void MolecularControl::countItems()

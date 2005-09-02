@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.30 2005/08/22 13:15:40 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.31 2005/09/02 13:48:56 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -398,8 +398,8 @@ namespace BALL
 			throw()
 		{
 			if (context_representation_ == 0) return;
-			ShowDisplayPropertiesMessage* message = new ShowDisplayPropertiesMessage;
-			notify_(message);
+
+			notify_(new ShowDisplayPropertiesMessage);
 		}
 
 		void GeometricControl::updateSelection()
@@ -426,8 +426,7 @@ namespace BALL
 			modify_surface_dialog_->setRepresentation(rep);
 			if (rep == 0) return; 
 
-			RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::SELECTED);
-			notify_(message);
+			notify_(new RepresentationMessage(*rep, RepresentationMessage::SELECTED));
 
 			if (rep->getComposites().size() > 0) 
 			{
@@ -512,8 +511,7 @@ namespace BALL
 		{
 			getMainControl()->clearSelection();
 
-			SceneMessage* msg = new SceneMessage(SceneMessage::ENTER_MOVE_MODE);
-			notify_(msg);
+			notify_(new SceneMessage(SceneMessage::ENTER_MOVE_MODE));
 		}
 
 		void GeometricControl::flipClippingPlane()
@@ -607,9 +605,7 @@ namespace BALL
 				getMainControl()->selectCompositeRecursive((Composite*)*it, false);
 			}
 
-			NewSelectionMessage* msg = new NewSelectionMessage();
-			notify_(msg);
-
+			notify_(new NewSelectionMessage);
 
 		  rep.update(false);
 		}
