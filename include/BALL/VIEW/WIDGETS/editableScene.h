@@ -33,10 +33,8 @@
 # include <BALL/VIEW/WIDGETS/molecularControl.h>
 #endif
 
-
-
-
 #include <qpopupmenu.h>
+#include <qbitmap.h>
 
 // has to come after BALL includes to prevent problems with Visual Stuio Net
 #include <qgl.h>
@@ -177,12 +175,16 @@ namespace BALL
 						BOND__MODE	
 					};
 					
+					//Mouse menue /Context menu entries
 					enum Menu_Entries
 					{
 						SELECT_ATOM = 10,  // MolecularControl::EXPAND_ALL + 1, TODO: This enum is private!!!! 
+						DESELECT_ATOM,
 						MOVE_ATOM,
 						SET_ATOM_PROPERTIES,
+						DELETE_ATOM,
 						SELECT_BOND,
+						DESELECT_BOND,
 						SET_BOND_PROPERTIES,
 						SET_BOND_LENGTH
 					};
@@ -220,7 +222,9 @@ namespace BALL
 						//slots for contextMenue
 						void moveAtom();
 						void selectAtom();
+						void deselectAtom();
 						void setAtomProperties();
+						void deleteAtom();
 						void selectBond();
 					  void setBondProperties();
 						void setBondLength();
@@ -233,16 +237,24 @@ namespace BALL
 					protected slots:
 						virtual void editMode_();
 						virtual void bondMode_();
-
+						virtual void rotateMode_();
+						virtual void pickingMode_();
+						virtual void moveMode_();
+						virtual void showScaling_();
+						
 					signals:
 						// signal for communication with EditOperationDialog
 						void newEditOperation(EditableScene::EditOperation &eo);
 						void invalidComposite(Composite* composite);
 
 		protected:
-					Index edit_id_;	
+
+					Index edit_id_;
+					Index scaling_id_;
+					
 					//System system_;								// Do we need them?? 
 					//Molecule* current_molecule_;	// Do we need them??
+					
 					AtomContainer* current_atomContainer_;
 					Atom* first_atom_for_bond_;
 
@@ -277,15 +289,22 @@ namespace BALL
 					// search range when looking for atoms/bonds (in angstrom)
 					double atom_limit_;			
 					double bond_limit_;		
+				
+					//double select_atom_limit_; 
+					//double select_bond_limit_;
+					//average_atom_radius_limit_;
 					
+					bool move_an_atom_;   // flag to move an atom in EDIT__MODE
 					bool mouse_has_moved_;
-					int editAtomType_;       //store atomtype for new atoms     
-
+					int edit_atom_type_;        //store atomtype for new atoms     
+					bool show_scaling_axes_;  //regulates display of thedisplay of the  scaling axes
+					
 					//inherited by scene
 					virtual void renderView_(RenderMode mode)
 						throw();
 
-					virtual void paintEvent ( QPaintEvent * );
+					virtual void glDraw()
+						throw();
 
 					/**
 					 * Insert a given Atom in the Scene. Its position is specified by the 2-dim 
@@ -320,17 +339,36 @@ namespace BALL
 					 */
 					Bond* getClickedBond_(int x, int y);
 
+					/***
+					 * returns an atomContainer of the given atom
+					 * according to the rules of atom_insertion
+					 * central point to change these rules
+					 */
+					AtomContainer* getAtomContainer_(const Atom* atom);
+					
 					/**
 					 * Maps the current viewplane to screen coordinates.
 					 * Returns false if the projection matrix is not correctly
 					 * initialized.
 					 */
 					bool mapViewplaneToScreen_();
+				
+					/**
+					 * sets the cursor on the actual atom element type
+					 */
+					void setCurrentCursor_(int element_type);
+
 					
 					/**
 					 * draws a ruler showing the scaling of the insertion plain of the EditableScene 
 					 */
 					void drawRuler_();
+					
+					/**
+					 * stores the arrow on which the edit cursor is based
+					 */
+					static const char * const edit_cursor_xpm_[];
+					QPixmap edit_cursor_;
 					
 					};
 
