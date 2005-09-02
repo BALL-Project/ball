@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurfaceDialog.C,v 1.7 2005/07/16 21:00:46 oliver Exp $ 
+// $Id: contourSurfaceDialog.C,v 1.8 2005/09/02 14:39:29 amoll Exp $ 
 //
 
 #include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
+#include <BALL/VIEW/KERNEL/common.h>
 
 #include <qlineedit.h>
 #include <qpushbutton.h>
