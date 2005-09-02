@@ -67,7 +67,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;$(SIPDIR)\siplib&quot;;&quot;$(SolutionDir)\..\include&quot;;&quot;$(PYTHONDIR)\include&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(QTDIR)\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\Contrib\sip\siplib&quot;;&quot;$(SolutionDir)\..\include&quot;;&quot;$(PYTHONDIR)\include&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(QTDIR)\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;BALL_PLATFORM_WINDOWS;BALL_COMPILER_MSVC"
 				MinimalRebuild="FALSE"
 				RuntimeLibrary="2"
@@ -2686,8 +2686,9 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
+						Description="Calling sip..."
 						CommandLine="cd $(InputDir)
-$(SIPDIR)\sipgen\sip.exe -e -s &quot;.C&quot;  -c .  BALL.sip
+$(SolutionDir)\Contrib\sip\sipgen\sip.exe -e -s &quot;.C&quot;  -c .  BALL.sip
 "
 						Outputs="dummy.log"/>
 				</FileConfiguration>
