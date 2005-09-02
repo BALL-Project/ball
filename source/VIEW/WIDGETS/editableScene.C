@@ -438,7 +438,12 @@ namespace BALL
 					
 						current_mode_ =(Scene::ModeType)BOND__MODE;
 						
-						////////////////////////////current_atomContainer_=
+						if( getAtomContainer_(first_atom_for_bond_))
+						{
+							Log.error() << "No valid AtomContainer selected" << std::endl;
+							return;
+						}
+						current_atomContainer_= getAtomContainer_(first_atom_for_bond_);
 						TVector2<Position> pos =  getScreenPosition_(atom->getPosition());
 
 						// start position for the putative bond
@@ -611,13 +616,15 @@ namespace BALL
 			x_ewindow_bond_pos_second_new_ = e->x();
 			y_ewindow_bond_pos_second_new_ = e->y();
 
-			Scene::x_window_pos_old_ = x_window_pos_new_;
-			Scene::y_window_pos_old_ = y_window_pos_new_;
-
 
 			// maybe Scene wants to do anything with this event as well. and if we're not in BOND__MODE, we let it... :-)
 			if (current_mode_ != (Scene::ModeType)BOND__MODE)
 				Scene::mouseMoveEvent(e);
+			else
+			{
+				Scene::x_window_pos_old_ = Scene::x_window_pos_new_;
+				Scene::y_window_pos_old_ = Scene::y_window_pos_new_;
+			}
 		}
 
 		void EditableScene::mouseReleaseEvent(QMouseEvent *e)
@@ -714,6 +721,7 @@ namespace BALL
 						// Later on if bonds to another molecule were created, it
 						// should be moved into this molecule/atomContainer... 
 
+						//////// TODO: we have to merge the connected molecules
 						
 					}	
 				}
@@ -731,16 +739,18 @@ namespace BALL
 							current_atomContainer_ = RTTI::castTo<AtomContainer>(first_atom_for_bond_->getRoot());
 						}
 						*/
-						if( getAtomContainer_(first_atom_for_bond_))
+						if( !(getAtomContainer_(first_atom_for_bond_)))
 						{
 							Log.error() << "No valid AtomContainer selected" << std::endl;
 							return;
 						}
+						current_atomContainer_ = getAtomContainer_(first_atom_for_bond_);
 						
 						// the new atom should not be in the atom-radius of the first_atom_for_bond_
 						// or the average_atom_radius_limit_
 						if(! (getClickedAtom_(e->x(), e->y()) == first_atom_for_bond_ ))
 						{		
+							highligthAtomContainer_(current_atomContainer_);
 
 							// build a new atom...
 							PDBAtom* a = new PDBAtom(PTE[edit_atom_type_], PTE[edit_atom_type_].getName());
@@ -1257,7 +1267,6 @@ namespace BALL
 				}
 
 				// Yes? we do not need to create our own system
-				Log.info() << "es gab ein gehighlighteten AC"<< std::endl;
 				current_atomContainer_ = ai;
 				ai->insert(atom_);
 				getMainControl()->update(*ai, true);
@@ -1271,7 +1280,6 @@ namespace BALL
 				current_molecule->insert(atom_);
 				getMainControl()->insert(*system);
 				current_atomContainer_ = current_molecule;
-				Log.info() << "wir haben ihn neu gesetzt"<< std::endl;
 			}	
 
 			// do we need to refocus the camera?
@@ -1289,15 +1297,30 @@ namespace BALL
 							
 			}
 
-			// highligth the actual atom container 
+			
+			// highligth the actual atom container
+			highligthAtomContainer_(current_atomContainer_);
+
+			/*
 			List < Composite * > cl;
 			cl.push_back(current_atomContainer_);
 			ControlSelectionMessage* m = new ControlSelectionMessage();
 			m->setSelection(cl);
 			notify_(m);
+			*/
 			return;
 		}	
 
+		void EditableScene::highligthAtomContainer_(AtomContainer* ac)
+		{
+			List < Composite * > cl;
+			cl.push_back(ac);
+			ControlSelectionMessage* m = new ControlSelectionMessage();
+			m->setSelection(cl);
+			notify_(m);
+
+		}
+		
 
 		// this code projects the 3D view plane to 2D screen coordinates
 		bool EditableScene::mapViewplaneToScreen_()
@@ -1581,14 +1604,8 @@ namespace BALL
 			AtomContainer * ac = 0;
 		 	
 			if( RTTI::isKindOf<AtomContainer>(*(atom->getParent())) ) 
-			{
-				current_atomContainer_ = RTTI::castTo<AtomContainer>(*(atom->getParent()));
-			}
-			else if ( RTTI::isKindOf<AtomContainer> (atom->getRoot()) )
-			{
-				current_atomContainer_ = RTTI::castTo<AtomContainer>(atom->getRoot());
-	
-			}
+				ac = RTTI::castTo<AtomContainer>(*(atom->getParent()));
+
 			return ac;
 	 }
 		

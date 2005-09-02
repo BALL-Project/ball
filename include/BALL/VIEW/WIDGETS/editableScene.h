@@ -345,7 +345,9 @@ namespace BALL
 					 * central point to change these rules
 					 */
 					AtomContainer* getAtomContainer_(const Atom* atom);
-					
+				
+					void highligthAtomContainer_(AtomContainer* ac);
+
 					/**
 					 * Maps the current viewplane to screen coordinates.
 					 * Returns false if the projection matrix is not correctly
