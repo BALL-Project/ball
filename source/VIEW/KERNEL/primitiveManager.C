@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.14 2005/08/17 14:35:36 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.15 2005/09/02 14:20:27 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -89,8 +89,7 @@ bool PrimitiveManager::insert(Representation& representation, bool send_message)
 
 	if (!send_message) return true;
 
-	RepresentationMessage* rm = new RepresentationMessage(representation, RepresentationMessage::ADD);
-	main_control_->notify_(*rm);
+	main_control_->notify_(new RepresentationMessage(representation, RepresentationMessage::ADD));
 
 	return true;
 }
@@ -128,8 +127,7 @@ bool PrimitiveManager::remove(Representation& representation, bool send_message)
 
 	if (send_message)
 	{
-		RepresentationMessage* rm = new RepresentationMessage(representation, RepresentationMessage::REMOVE);
-		main_control_->notify_(*rm);
+		main_control_->notify_(new RepresentationMessage(representation, RepresentationMessage::REMOVE));
 	}
 
 	if (!willBeUpdated(representation))
@@ -294,18 +292,14 @@ void PrimitiveManager::update_(Representation& rep)
 	{
 		rep.needs_update_ = true;
 		// update of GeometricControl, also if Representation is hidden
-		RepresentationMessage* msg = new RepresentationMessage(rep, 
-																				RepresentationMessage::UPDATE);
-		main_control_->notify_(*msg);
+		main_control_->notify_(new RepresentationMessage(rep, RepresentationMessage::UPDATE));
 		return;
 	}
 
 	if (!multi_threading_mode_)
 	{
 		rep.update_();
-		RepresentationMessage* msg = new RepresentationMessage(rep, 
-																	RepresentationMessage::UPDATE);
-		main_control_->notify_(*msg);
+		main_control_->notify_(new RepresentationMessage(rep, RepresentationMessage::UPDATE));	
 		return;
 	}
 
@@ -397,8 +391,7 @@ void PrimitiveManager::finishedUpdate_()
 	if (has(*rep))
 	{
 		// no it wasnt, so update all widgets, that this Representation was rebuild
-		RepresentationMessage* msg = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
-		main_control_->notify_(*msg);
+		main_control_->notify_(new RepresentationMessage(*rep, RepresentationMessage::UPDATE));
 	}
 	else
 	{

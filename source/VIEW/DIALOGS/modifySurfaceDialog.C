@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.25 2005/08/15 22:02:27 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.26 2005/09/02 14:22:01 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -93,8 +93,8 @@ namespace BALL
 				rep_->setNeedsUpdate();
 				return;
 			}
-			RepresentationMessage* msg = new RepresentationMessage(*rep_, RepresentationMessage::UPDATE);
-			notify_(*msg);
+
+			notify_(new RepresentationMessage(*rep_, RepresentationMessage::UPDATE));
 		}
 
 

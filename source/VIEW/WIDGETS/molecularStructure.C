@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.86.2.8 2005/08/08 11:53:26 amoll Exp $
+// $Id: molecularStructure.C,v 1.86.2.9 2005/09/02 14:17:55 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -292,8 +292,7 @@ namespace BALL
 				HashSet<Composite*>::Iterator it = changed_roots.begin();
 				for (; it != changed_roots.end(); it++)
 				{
-					CompositeMessage* msg = new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE);
-					notify_(msg);
+					notify_(new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE));
 				}
 			}
 

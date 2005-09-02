@@ -109,14 +109,12 @@ void SnapshotVisualisationDialog::animateClicked()
 
 		if (export_PNG->isChecked())
 		{
-			SceneMessage* message = new SceneMessage(SceneMessage::EXPORT_PNG);
-			notify_(message);
+			notify_(new SceneMessage(SceneMessage::EXPORT_PNG));
 		}
 
 		if (export_POV->isChecked())
 		{
-			SceneMessage* message = new SceneMessage(SceneMessage::EXPORT_POVRAY);
-			notify_(message);
+			notify_(new SceneMessage(SceneMessage::EXPORT_POVRAY));
 		}
 
 		tmp_.setNum(i, 10);
@@ -141,13 +139,11 @@ void SnapshotVisualisationDialog::animateClicked()
 				
 				if (export_PNG->isChecked())
 				{
-					SceneMessage* message = new SceneMessage(SceneMessage::EXPORT_PNG);
-					notify_(message);
+					notify_(new SceneMessage(SceneMessage::EXPORT_PNG));
 				}
 				if (export_POV->isChecked())
 				{
-					SceneMessage* message = new SceneMessage(SceneMessage::EXPORT_POVRAY);
-					notify_(message);
+					notify_(new SceneMessage(SceneMessage::EXPORT_POVRAY));
 				}
 				
 				if (forwardLoopButton->isChecked())
@@ -273,9 +269,7 @@ void SnapshotVisualisationDialog::update_()
 {
   currentSnapshot->setText(tmp_);
 	update();
-	const Composite* const composite = snap_shot_manager_ ->getSystem();
-	CompositeMessage* msg = new CompositeMessage(*composite, CompositeMessage::CHANGED_COMPOSITE);
-	notify_(msg);
+	notify_(new CompositeMessage(*snap_shot_manager_->getSystem(), CompositeMessage::CHANGED_COMPOSITE));
 }
 
 void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_manager)  

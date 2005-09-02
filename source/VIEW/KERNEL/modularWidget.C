@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.20.4.7 2005/08/22 13:16:48 amoll Exp $
+// $Id: modularWidget.C,v 1.20.4.8 2005/09/02 14:25:22 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -276,8 +276,7 @@ namespace BALL
 
 		void ModularWidget::showHelp(const String& url)
 		{
-			ShowHelpMessage* msg = new ShowHelpMessage(url);
-			notify_(msg);
+			notify_(new ShowHelpMessage(url));
 		}
 
 		void ModularWidget::registerWidgetForHelpSystem(const QWidget* widget, const String& url)

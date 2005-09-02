@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.15 2005/08/22 13:16:25 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.16 2005/09/02 14:21:19 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -448,9 +448,7 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 		getMainControl()->getPrimitiveManager().insert(*rep_, false);
 		
 		// now we can add the Representation to the GeometricControl
-		RepresentationMessage* rm = new RepresentationMessage(*rep_, 
-																			RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL);
-		notify_(rm);
+		notify_(new RepresentationMessage(*rep_, RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL));
 
 		// no refocus, if a this is not the only Representation
 		if ((getMainControl()->getPrimitiveManager().getRepresentations().size() < 2) && 
