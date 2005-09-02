@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTEDialog.C,v 1.2 2005/02/18 17:58:46 anne Exp $
+// $Id: PTEDialog.C,v 1.3 2005/09/02 19:56:14 anne Exp $
 
 #include <BALL/VIEW/DIALOGS/PTEDialog.h>
 #include <BALL/KERNEL/PTE.h>
@@ -20,8 +20,6 @@ namespace BALL
 				ModularWidget(name)
 		{
 			//registerWidget(this);
-			Log.error() << "PTEDialog " << dynamic_cast<ModularWidget*>(this) << std::endl;
-			
 			// iterate over all buttons in the button group
 			int i=1;
 			int highest_id = Element::NUMBER_OF_ELEMENTS; // the maximal id in the button group
