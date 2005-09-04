@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.42 2005/09/04 13:28:16 amoll Exp $
+// $Id: scene.C,v 1.171.2.43 2005/09/04 14:07:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -59,7 +59,10 @@ namespace BALL
 		#define  ROTATE_FACTOR    22
 		#define  TRANSLATE_FACTOR 10
 
-	  QGLFormat Scene::gl_format_(QGL::DepthBuffer | QGL::StereoBuffers | QGL::DoubleBuffer);
+	  QGLFormat Scene::gl_format_(QGL::DepthBuffer 		| 
+																QGL::StereoBuffers 	| 
+																QGL::DoubleBuffer 	| 
+																QGL::DirectRendering);
 
 		Scene::Scene()
 			throw()
