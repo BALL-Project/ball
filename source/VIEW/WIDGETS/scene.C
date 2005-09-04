@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.40 2005/08/24 14:33:44 amoll Exp $
+// $Id: scene.C,v 1.171.2.41 2005/09/04 11:07:18 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -35,7 +35,7 @@
 #include <qdragobject.h>
 #include <qfiledialog.h>
 
-//    #define BALL_BENCHMARKING
+//       #define BALL_BENCHMARKING
 
 using std::endl;
 using std::istream;
@@ -86,7 +86,8 @@ namespace BALL
 				stage_settings_(0),
 				animation_thread_(0),
 				stop_animation_(false),
-				content_changed_(true)
+				content_changed_(true),
+				time_()
 		{
 			gl_renderer_.setSize(600, 600);
 			setAcceptDrops(true);
@@ -360,9 +361,8 @@ namespace BALL
 	t.start();
 #endif
 			// cannot call update here, because it calls updateGL
-			renderView_(DISPLAY_LISTS_RENDERING);
+   			renderView_(DISPLAY_LISTS_RENDERING);
 #ifdef BALL_BENCHMARKING
-	t.stop();
 	logString("Scene painting time: " + String(t.getClockTime()));
 #endif
 		}
@@ -378,6 +378,10 @@ namespace BALL
 		void Scene::renderView_(RenderMode mode)
 			throw()
 		{
+if (mode != DISPLAY_LISTS_RENDERING)
+{
+}
+
 			makeCurrent();
 
 			glDepthMask(GL_TRUE);
@@ -387,6 +391,7 @@ namespace BALL
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 				renderRepresentations_(mode);
 				content_changed_ = false;
+
 				return;
 			}
 
@@ -622,6 +627,7 @@ namespace BALL
 					}
 				}
 			}
+
 		}
 
 
@@ -2408,6 +2414,35 @@ namespace BALL
 			{
 				hide();
 			}
+		}
+
+		void Scene::updateGL()
+		{
+ 			QGLWidget::updateGL();
+
+#ifdef BALL_BENCHMARKING
+
+			float ti = 100000.0 / (PreciseTime::now().getMicroSeconds() - time_.getMicroSeconds());
+
+			String temp = createFloatString(ti, 1);
+			temp = String("FPS ") + temp;
+
+			QPainter painter(this);
+
+			ColorRGBA color = getStage()->getBackgroundColor();
+			color.set(255 - (Position) color.getRed(),
+								255 - (Position) color.getGreen(),
+								255 - (Position) color.getBlue());
+
+			painter.setBackgroundMode(Qt::OpaqueMode);
+			painter.setPen(color.getQColor());
+			painter.setBackgroundColor(getStage()->getBackgroundColor().getQColor());
+
+			QPoint point(width() - 70, 20);
+			painter.drawText(point, temp.c_str(), 0, -1);
+
+			time_ = PreciseTime::now();
+#endif
 		}
 
 	} // namespace VIEW

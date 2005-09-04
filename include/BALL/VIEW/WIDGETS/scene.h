@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.16 2005/09/01 22:18:07 amoll Exp $
+// $Id: scene.h,v 1.62.2.17 2005/09/04 11:07:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -618,7 +618,9 @@ namespace BALL
 
 			//@}
 
-			private:
+			protected:
+			
+			virtual void updateGL();
 
 			void renderView_(RenderMode mode)
 				throw();
@@ -729,6 +731,7 @@ namespace BALL
 			Position last_x_pos_, last_y_pos_;
 
 			bool show_info_;
+			PreciseTime time_;
 		};
 
 
