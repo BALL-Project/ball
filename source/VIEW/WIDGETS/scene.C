@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.41 2005/09/04 11:07:18 amoll Exp $
+// $Id: scene.C,v 1.171.2.42 2005/09/04 13:28:16 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -35,7 +35,7 @@
 #include <qdragobject.h>
 #include <qfiledialog.h>
 
-//       #define BALL_BENCHMARKING
+      #define BALL_BENCHMARKING
 
 using std::endl;
 using std::istream;
@@ -87,7 +87,8 @@ namespace BALL
 				animation_thread_(0),
 				stop_animation_(false),
 				content_changed_(true),
-				time_()
+				time_(),
+				last_fps_(0)
 		{
 			gl_renderer_.setSize(600, 600);
 			setAcceptDrops(true);
@@ -355,16 +356,10 @@ namespace BALL
 
 		void Scene::paintGL()
 		{
-//    			if (!content_changed_) return;
-#ifdef BALL_BENCHMARKING
-	Timer t;
-	t.start();
-#endif
+ 			if (!content_changed_) return;
+
 			// cannot call update here, because it calls updateGL
-   			renderView_(DISPLAY_LISTS_RENDERING);
-#ifdef BALL_BENCHMARKING
-	logString("Scene painting time: " + String(t.getClockTime()));
-#endif
+   		renderView_(DISPLAY_LISTS_RENDERING);
 		}
 
 		void Scene::resizeGL(int width, int height)
@@ -2424,7 +2419,20 @@ if (mode != DISPLAY_LISTS_RENDERING)
 
 			float ti = 100000.0 / (PreciseTime::now().getMicroSeconds() - time_.getMicroSeconds());
 
-			String temp = createFloatString(ti, 1);
+			if (ti < 0)
+			{
+				time_ = PreciseTime::now();
+				return;
+			}
+
+			float fps = (ti + last_fps_) / 2.;
+			String temp = createFloatString(fps, 1);
+			last_fps_ = fps;
+
+			if (fps < 10.0) temp = String(" ") + temp;
+
+			if (!temp.has('.')) temp = temp + ".0";
+
 			temp = String("FPS ") + temp;
 
 			QPainter painter(this);

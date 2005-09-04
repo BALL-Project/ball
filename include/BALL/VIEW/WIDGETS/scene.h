@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.17 2005/09/04 11:07:44 amoll Exp $
+// $Id: scene.h,v 1.62.2.18 2005/09/04 13:29:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -732,6 +732,7 @@ namespace BALL
 
 			bool show_info_;
 			PreciseTime time_;
+			float last_fps_;
 		};
 
 
