@@ -1,16 +1,22 @@
-																		CAVEATS:
-------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+------------------------------------ CAVEATS: --------------------------------------
+------------------------------------------------------------------------------------
 
 1.) You need a version of Microsoft Visual Studio .NET.
 
 2.) BALL can only be installed on Windows if Python is installed!
+		Currently we advise you to use the release 2.3.5.
 
-3.) Python support can only be used with an installed QT lib!
+3.) Python support can only be used with an installed QT lib!  
+		(You need QT version: 3.2.X or 3.3.X.)
 
-																	INSTALLATION:
-------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
+------------------------------------ INSTALLATION: --------------------------------
+-----------------------------------------------------------------------------------
 
-1.) BALL requires some standard Unix tools and libraries that are not usually 
+1.) Install the Contrib files:
+
+BALL requires some standard Unix tools and libraries that are not usually 
 found on Windows systems. We provide an archive file with all needed files 
 for this tools:
 
@@ -24,56 +30,61 @@ This file contains:
   - RPC: the remote procedure call library (for XDR)
 	- sip: a Python binding generator
 
-2.) Python must be installed. Currently we advise you to use the release 2.3.5.
+2.) Set the following environment variables: 
+		
+	- "PYTHONDIR" to the path of your Python installation
+	- "PYTHONPATH" to the Python module path (e.g. C:\Python\Lib\site-packages)
+	- "BALL_DATA_PATH" to the "data" subdirectory in the BALL installation 
+										 path (e.g. C:\BALL\data)
+	- "QTDIR" (this is in general done automatical by the QT installation)
 
-3.) Set the environment variable "PYTHONDIR" to the path of your Python installation.
+3.) Install the sip module:
 
-4.) Set the environment variable "PYTHONPATH" to the Python module path
-(e.g. C:\Python\Lib\site-packages).
+Open a Microsoft Visual Studio NET Command prompt (see Windows Start Menu) and 
+change the directory to "BALL\Windows\Contrib\sip" . Next call 
 
-5.) Install the sip module:
-Open a Microsoft Visual Studio NET Command prompt and change the directory
-to BALL\Windows\Contrib\sip . Then call 
 python configure.py
 nmake
 nmake install
 
-6.) The visualization component needs a QT library (3.2.0 <= QT < 4.0).
-Also the QTDIR environment variable has to be set to the installation directory of
-QT (this is in general done automatical by the QT installation.)
+4.) Now you can open the BALL MSVC project (BALL/Windows/BALL.sln).
 
-7.) Now you can open the BALL project (BALL/Windows/BALL.sln)
+5.) Set the correct library versions for the linker:
 
-8.) If you install a QT version different than 3.3.4 you have to adjust the
+If you install a QT version other than 3.3.4 you have to adjust the
 linker settings to reflect the correct QT library name.
 To do so, open the properties dialog in MSVC for the entry of the libVIEW 
 library. In the field for additional dependencies, adjust the name of the
 QT-library. (See also BALL/WINDOWS/setting_qt_version_in_visual_studio_de.png)
-Do the same for the BALLView and Python Module entries.
-(The same applies to the Python library if you dont use a Python release of the 
-2.3 version tree.)
+Repeat this for the BALLView and Python Module project entries.
+(The same applies to the Python library if you dont use Python 2.3.X.)
 
-9.) Compile the BALL library.
+6.) Compile the BALL library.
 
-10.) Build the "VIEW UIC MOC" project"
+7.) Build the "VIEW UIC MOC" project.
 
-11.) Build the libVIEW project.
+8.) Build the libVIEW project.
 
-12.) After you compiled the BALL- and libVIEW-libs, you can compile BALLView.
+9.) Compile BALLView.
+
 The program can be started with the batch-file startBALLView.bat under
 BALL/Windows/APPLICATIONS/BALLVIEW/ 
 This batch file ensures, that the PATH environment variable contains the
 directories for the needed libs.
 
-																KNOWN ISSUES:
-------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+-------------------------------	KNOWN ISSUES: -----------------------------------
+---------------------------------------------------------------------------------
 
 - If experienced some instabilities with this release, please try to disable all
 	optimisations for the MSVC compiler.
+
 - XDRPersistenceManager fails
+
 
 Please report any problems you have with this (still clumsy) setup to
 
    ball-bugs@bioinf.uni-sb.de
 
 Thank you!
+

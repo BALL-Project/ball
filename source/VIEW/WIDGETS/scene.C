@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.43 2005/09/04 14:07:19 amoll Exp $
+// $Id: scene.C,v 1.171.2.44 2005/09/05 11:44:00 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -35,7 +35,7 @@
 #include <qdragobject.h>
 #include <qfiledialog.h>
 
-      #define BALL_BENCHMARKING
+//         #define BALL_BENCHMARKING
 
 using std::endl;
 using std::istream;
