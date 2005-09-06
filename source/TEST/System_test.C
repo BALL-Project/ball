@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: System_test.C,v 1.14 2003/07/03 13:20:05 amoll Exp $
+// $Id: System_test.C,v 1.14.6.1 2005/09/06 12:52:00 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(System, "$Id: System_test.C,v 1.14 2003/07/03 13:20:05 amoll Exp $")
+START_TEST(System, "$Id: System_test.C,v 1.14.6.1 2005/09/06 12:52:00 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -138,6 +138,7 @@ CHECK(const Molecule* getMolecule(Position position) const throw())
 	TEST_EQUAL(ptr, 0)
 	s1.insert(m);
 	TEST_EQUAL(s1.getMolecule(0), &m)
+	TEST_EQUAL(s1.getMolecule(1), 0)
 	s1.remove(m);
 	TEST_EQUAL(s1.getMolecule(0), 0)
 	TEST_EQUAL(s1.getMolecule(25), 0)
