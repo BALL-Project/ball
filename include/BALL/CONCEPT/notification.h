@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: notification.h,v 1.20.6.3 2005/07/28 13:50:50 amoll Exp $
+// $Id: notification.h,v 1.20.6.4 2005/09/06 13:49:20 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
@@ -250,23 +250,23 @@ namespace BALL
 	};
 
 	///	
-  NotificationManager_& NotificationManager()
+  BALL_EXPORT NotificationManager_& NotificationManager()
 		throw();
  
 	///
-	void NotificationManagerEnable()
+	BALL_EXPORT void NotificationManagerEnable()
 		throw();
 
 	///
-	void NotificationManagerDisable()
+	BALL_EXPORT void NotificationManagerDisable()
 		throw();
 
 	///
-	bool NotificationManagerIsEnabled()
+	BALL_EXPORT bool NotificationManagerIsEnabled()
 		throw();
 
 	///
-	bool NotificationManagerIsDisabled()
+	BALL_EXPORT bool NotificationManagerIsDisabled()
 		throw();
 
 	template <class NotificationSource>
