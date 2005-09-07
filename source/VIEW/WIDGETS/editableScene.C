@@ -53,15 +53,17 @@ namespace BALL
 			: operationType(),
 				atom(),
 				bond(),
+				molecule(),
 				description()
 		{ 
 		}
 
-		EditableScene::EditOperation::EditOperation(Atom* new_atom, Bond* new_bond, String new_description, int new_operation)
+		EditableScene::EditOperation::EditOperation(Atom* new_atom, Bond* new_bond, vector <Atom* > new_molecule, String new_description, int new_operation)
 			throw()
 			: operationType((EditableScene::EditOperation::OperationType)new_operation),
 				atom(new_atom),
 				bond(new_bond),
+				molecule(new_molecule),
 				description(new_description)
 		{
 		}
@@ -71,6 +73,7 @@ namespace BALL
 			: operationType(eOperation.operationType),
 				atom(eOperation.atom),
 				bond(eOperation.bond),
+				molecule(eOperation.molecule),
 				description(eOperation.description)
 		{	
 		}
@@ -104,7 +107,6 @@ namespace BALL
 					m = new CompositeMessage(parent->getRoot(), CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
 					es->notify_(m); 
 
-					//Log.info()<< "Atom deleted"  << std::endl;
 				}
 			} 
 			// delete a bond
@@ -113,14 +115,100 @@ namespace BALL
 				// Since we hope the onNotify-operation works correctly in 
 				// updating the undo_list, when something has changed concerning 
 				// the bond, we can just destroy the bond! 
+			//	Composite& root = bond->getRoot();
+				const Atom* atom = bond->getFirstAtom();
 				bond->destroy();
-				//Log.info()<< "Bond deleted"  << std::endl;
+				
+				CompositeMessage *m = 0;
+				m = new CompositeMessage(*atom, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
+				es->notify_(m);
+				
 			}
 			//change type
-			else if(operationType == CHANGED__TYPE)
+			else if(operationType == MERGED__MOLECULES)
 			{
-				//TODO: Implementation
-				//Log.info()<< "Atomtype rechanged"  << std::endl;
+
+				// In general we also want to merge and remerge residues, proteins... 
+				// this can be done similar to this case   
+
+				// create a new molecule
+				Molecule* new_molecule = new Molecule();	
+
+				// get a valid system 
+				// there has to be at least one atom in the molecule
+				if(molecule.size() == 0)
+				{
+					Log.error() << "molecule contains no atoms" << std::endl;
+					return;
+				}	
+
+				Composite* root = &(molecule[0]->getRoot());
+				System* s = dynamic_cast<System*>(root);
+				if(!s)
+					return;
+
+				EditableScene* scene = EditableScene::getInstance(0);
+
+				if (scene == 0)
+				{
+					Log.error() << "Expected an EditableScene, but found none!" << std::endl;
+				}
+				else
+				{
+					s->insert(*new_molecule);
+
+					// add the atoms to the new molecule and remove them from the actual molecule
+					std::vector<Atom*>::iterator it = molecule.begin();
+
+					for( ; it != molecule.end(); it++)
+					{
+						(*it)->getParent()->removeChild(**it);
+						new_molecule->insert(**it);
+					}
+
+					//update representation
+					CompositeMessage *m = 0;
+					m = new CompositeMessage(new_molecule->getRoot(), CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
+					es->notify_(m);
+
+					// find the connecting bond there can be more than one connecting bond!! 
+					vector <Bond *> connecting_bonds;
+
+					// for all atoms
+					for(unsigned int i=0 ;(i < molecule.size()); i++)
+					{
+						// for all bonds
+						AtomBondIterator bit = molecule[i]->beginBond();
+						//Bond::Iterator bit = molecule[i]->begin();
+						for( ; +bit; bit++)
+						{
+							if( bit->getPartner(*(molecule[i]))->getParent() != new_molecule )
+							{	
+								connecting_bonds.push_back (&(*bit));
+								continue;
+							}
+						}
+					}
+
+					// do we have connecting bonds?
+					if(connecting_bonds.size() > 0)
+					{
+						// delete all bonds
+						for(unsigned int i=0; i< connecting_bonds.size(); i++) 
+						{
+							const Atom* atom = connecting_bonds[i]->getFirstAtom();
+							// delete the bond
+							connecting_bonds[i]->destroy();
+							//clean the undo list
+							Composite* composite = dynamic_cast<Composite* >(connecting_bonds[i]);
+							scene->invalidateComposite(composite);
+							// update representation
+							CompositeMessage *m = 0;
+							m = new CompositeMessage(*atom, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
+							scene->notify_(m);
+						}
+					}
+				}
 			}
 			else
 			{
@@ -137,12 +225,14 @@ namespace BALL
 			:	Scene(),
 				edit_id_(-1),
 				scaling_id_(-1),
-				//system_(),
 				first_atom_for_bond_(0),
 				context_menu_composite_(),
 				context_menu_(),
-				atom_limit_(1.5),
-				bond_limit_(2.0),
+				select_atom_limit_(0.5),
+				select_bond_limit_(0.9),
+			  average_atom_radius_limit_(0.7),
+				//atom_limit_(1.5),
+				//bond_limit_(2.0),
 				move_an_atom_(false),
 				edit_atom_type_(6),
 				show_scaling_axes_(false)
@@ -154,12 +244,14 @@ namespace BALL
 			: Scene(parent_widget, name, w_flags),
 				edit_id_(-1),	
 				scaling_id_(-1),
-				//system_(), 
 				first_atom_for_bond_(0),
 				context_menu_composite_(),
 				context_menu_(),
-				atom_limit_(1.5),  
-				bond_limit_(2.0),	
+				select_atom_limit_(0.5),
+				select_bond_limit_(0.9),
+			  average_atom_radius_limit_(0.7),
+				//atom_limit_(1.5),  
+				//bond_limit_(2.0),	
 				move_an_atom_(false),
 				edit_atom_type_(6),
 				show_scaling_axes_(false)
@@ -174,12 +266,14 @@ namespace BALL
 			: Scene(eScene, parent_widget, name, w_flags),
 				edit_id_(-1),
 				scaling_id_(-1),
-				//system_(eScene.system_),
 				first_atom_for_bond_(eScene.first_atom_for_bond_),
 				context_menu_composite_(),
 				context_menu_(),
-				atom_limit_(eScene.atom_limit_),
-				bond_limit_(eScene.bond_limit_),
+				select_atom_limit_(eScene.select_atom_limit_),
+				select_bond_limit_(eScene.select_bond_limit_),
+			  average_atom_radius_limit_(eScene.average_atom_radius_limit_),
+				//atom_limit_(eScene.atom_limit_),
+				//bond_limit_(eScene.bond_limit_),
 				move_an_atom_(false),
 				edit_atom_type_(eScene.edit_atom_type_),
 				show_scaling_axes_(eScene.show_scaling_axes_)
@@ -204,15 +298,11 @@ namespace BALL
 			throw()
 		{	
 #ifdef BALL_VIEW_DEBUG
-			Log.error() << "EditableScene " << this  << "onNotify " << message << std::endl;
+			Log.error() << "EditableScene " << this  << "onNotify " << std::endl;
 #endif
-			
 			// react now only to SceneMessage
 			if (RTTI::isKindOf<CompositeMessage>(*message))
 			{
-				//
-				// ToDO: Ueberpruefen, wie es sich bei geändertem higehlighten verhaelt! 
-				//
 				Composite* deleted_composite; 
 				CompositeMessage *composite_message = RTTI::castTo<CompositeMessage>(*message);
 				switch (composite_message->getType())
@@ -366,24 +456,22 @@ namespace BALL
 			{
 				if(e->button() == Qt::LeftButton)
 				{	
-					// ToDo: Is the representation ok? Can the user see all actual atoms?
-
 					// if no atom is selected
 					PDBAtom* a = new PDBAtom(PTE[edit_atom_type_], PTE[edit_atom_type_].getName());
-					insert_(e->x(), e->y(), *a);		
+					insert_(e->x(), e->y(), *a);
 					first_atom_for_bond_ = a;
 					current_mode_ =(Scene::ModeType)BOND__MODE;
 					bond_length_ = 0;
 					TVector2<Position>	coords = getScreenPosition_(first_atom_for_bond_->getPosition());
-					//ToDO: change the 30 to half height of mousecursor
+					
 					x_text_position_ = coords.x + 30;
 					y_text_position_ = coords.y + 30;
 
 					
 					//store the Operation in EditOperationDialog
 					Vector3 atom_position = a->getPosition();
-					
-					EditOperation eo(a, NULL, "Added atom of type " + PTE[edit_atom_type_].getName() + " at position (" 
+					std::vector<Atom*> v; 
+					EditOperation eo(a, NULL, v, "Added atom of type " + PTE[edit_atom_type_].getName() + " at position (" 
 													+ String(atom_position.x) + ", "
 													+ String(atom_position.y) + ", "
 													+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
@@ -395,8 +483,8 @@ namespace BALL
 				}
 				if(e->button() == Qt::RightButton )
 				{
-					// find an atom in a radius of select_atom_limit_= 0.7 around the current mouse position
-					Atom *atom = getClickedAtom_(e->x(), e->y());
+					// find an atom in a radius of select_atom_limit_=  around the current mouse position
+					Atom *atom = getClickedAtom_(e->x(), e->y(), select_atom_limit_);
 
 					if (atom)
 					{
@@ -408,7 +496,7 @@ namespace BALL
 						/* under Progress 
 						// try to find a bond
 						// select_bond_limit_
-						Bond *bond = getClickedBond_(e->x(), e->y());
+						Bond *bond = getClickedBond_(e->x(), e->y(), select_bond_limit_);
 
 						if (bond)
 						{
@@ -424,7 +512,7 @@ namespace BALL
 				if(e->button() == Qt::MidButton)
 				{
 					//is there an atom in radius <= select_atom_limit_  Anstroem? 
-					Atom *atom = getClickedAtom_(e->x(), e->y());
+					Atom *atom = getClickedAtom_(e->x(), e->y(), select_atom_limit_);
 
 					// if so, start a new bond from this atom
 					if (atom)
@@ -438,12 +526,13 @@ namespace BALL
 					
 						current_mode_ =(Scene::ModeType)BOND__MODE;
 						
-						if( getAtomContainer_(first_atom_for_bond_))
+						if( !getAtomContainer_(first_atom_for_bond_))
 						{
 							Log.error() << "No valid AtomContainer selected" << std::endl;
 							return;
 						}
 						current_atomContainer_= getAtomContainer_(first_atom_for_bond_);
+						highligthAtomContainer_(current_atomContainer_);
 						TVector2<Position> pos =  getScreenPosition_(atom->getPosition());
 
 						// start position for the putative bond
@@ -489,7 +578,7 @@ namespace BALL
 					mouse_has_moved_ = true;
 
 					//is there an atom nearby the actual mouse position? 
-					Atom *atom = getClickedAtom_(e->x(), e->y()); 
+					Atom *atom = getClickedAtom_(e->x(), e->y(), average_atom_radius_limit_); 
 					// limit should be the atom->radius of of first_atom_for_bond_ 
 					// since we cant get this average_atom_radius_limit_ = 0.5 
 
@@ -662,7 +751,7 @@ namespace BALL
 				painter.end();	
 				
 				//is there an atom in  select_atom_limit_ Angstroem?
-				Atom *atom = getClickedAtom_(e->x(), e->y());
+				Atom *atom = getClickedAtom_(e->x(), e->y(), select_atom_limit_);
 
 				// decide what to do... did we find an atom at all?
 				if (atom)
@@ -705,7 +794,8 @@ namespace BALL
 								break;
 						}
 
-						EditOperation eo( NULL, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
+						std::vector<Atom*> v; 
+						EditOperation eo( NULL, c, v, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
 					
 						// tell about the new undo operation
 						emit newEditOperation(eo);
@@ -713,16 +803,63 @@ namespace BALL
 						//update representation
 						CompositeMessage *m = 0;
 						m = new CompositeMessage(*atom, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
-						
 						notify_(m); 
 
-						// TODO: Since this operation leads to a isolated 2 atom molecule, 
-						// it is not inserted in other molecules, but in the systems.
-						// Later on if bonds to another molecule were created, it
-						// should be moved into this molecule/atomContainer... 
-
-						//////// TODO: we have to merge the connected molecules
+						// It may be that this operation leads to an isolated two-atom molecule, 
+						// which is not inserted in other molecules, but in the system.
+						// if a bond between differnet molecules ( do not share common ancestor) 
+						// were created, the molecules
+						// should be merged, and an EditOperation will be created, which stores the atoms
+						// belonging to the old molecule
+						// by convention the molecule given by atom (the second bond partner) is deleted
+						// and all atoms where inserted into the molecule given by first_atom_for_bond_.
 						
+						// if the new atom is the only element of its AtomContainer
+						// no editoperation is needed
+
+						
+						// do the atoms share a common atom container
+						Composite* ancestor = first_atom_for_bond_->getLowestCommonAncestor(*atom);
+						
+						if( RTTI::isKindOf<System>(*ancestor) || ( !ancestor  ))
+						{
+							// we have to create the undo operation before executing
+							// the splice, since we need the moved atoms :)
+							// we only need to construct an undo operation if the moved molecule contains
+							// more than one atom
+							Composite* parent= atom->getParent();
+							if(parent->getChild( (Index)1 )  )
+							{
+								Composite* nextChild = parent->getChild((Index)0);
+								std::vector<Atom*> old_molecule;
+							
+								for (Index i=(Index)1; (nextChild) ; i++)
+								{
+									Atom* atom= dynamic_cast<Atom*>(nextChild);
+									old_molecule.push_back(atom);
+									nextChild = parent->getChild(i);
+								}
+										
+								EditOperation eo( NULL, NULL, old_molecule, "Merged two molecules ", EditOperation::MERGED__MOLECULES);
+								// tell about the new undo operation
+								emit newEditOperation(eo);
+							}
+							
+							// we always splice the second atom container into the first one
+							// this can be easily changed for example the smaller into bigger one ... 
+							AtomContainer* ai1 = dynamic_cast<AtomContainer*>(first_atom_for_bond_->getParent());
+							AtomContainer* ai2 = dynamic_cast<AtomContainer*>(atom->getParent());
+							
+							ai1->spliceAfter(*ai2);
+							//update representation
+							CompositeMessage *m = 0;
+							m = new CompositeMessage(ai1->getRoot(), CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
+							notify_(m);
+				
+						
+						}
+						
+						highligthAtomContainer_(current_atomContainer_);
 					}	
 				}
 				else // no atom found
@@ -748,7 +885,7 @@ namespace BALL
 						
 						// the new atom should not be in the atom-radius of the first_atom_for_bond_
 						// or the average_atom_radius_limit_
-						if(! (getClickedAtom_(e->x(), e->y()) == first_atom_for_bond_ ))
+						if(! (getClickedAtom_(e->x(), e->y(), average_atom_radius_limit_) == first_atom_for_bond_ ))
 						{		
 							highligthAtomContainer_(current_atomContainer_);
 
@@ -757,8 +894,9 @@ namespace BALL
 							insert_(e->x(), e->y(), *a);
 
 							Vector3 atom_position = a->getPosition();
+							std::vector<Atom*> v; 
 
-							EditOperation eo(a, NULL, "Added atom of type " + PTE[edit_atom_type_].getName() + " at position (" 
+							EditOperation eo(a, NULL, v, "Added atom of type " + PTE[edit_atom_type_].getName() + " at position (" 
 									+ String(atom_position.x) + ", "
 									+ String(atom_position.y) + ", "
 									+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
@@ -803,7 +941,7 @@ namespace BALL
 									break;
 							}
 
-							EditOperation eo2( NULL, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
+							EditOperation eo2( NULL, c, v, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
 
 							// tell about the new undo operation
 							emit newEditOperation(eo2);
@@ -842,6 +980,12 @@ namespace BALL
 		}	
 
 
+		// This function is more complicated than we would like it to be,
+		// but this is due to QT's strange cursor handling. You can't draw
+		// text into a cursor pixmap so you have to convert it, draw, and
+		// convert it back. The automatic conversion doesn't work properly
+		// (noise in the cursor), so we do it ourselves and create a proper
+		// mask
 		void EditableScene::setCurrentCursor_(int element_type)
 		{
 			//convert the elementtype into a string
@@ -1052,15 +1196,15 @@ namespace BALL
 		/** ******************** Helper Functions ************************* **/
 
 		// Find closest atom to screen position (x,y). If there is none closer than atom_limit_, return NULL
-		Atom* EditableScene::getClickedAtom_(int x, int y)
+		Atom* EditableScene::getClickedAtom_(int x, int y, double radius)
 		{
 			//get the AtomContainer
 			CompositeManager& cm = getMainControl()->getCompositeManager();
 			CompositeManager::iterator it = cm.begin();
 
-			float min_dist = numeric_limits<float>::max();
+	    double min_dist = numeric_limits<double>::max();
 			Atom* min_atom = 0;
-			float dist;
+			double dist;
 
 			for (; it != cm.end(); it++)
 			{
@@ -1095,7 +1239,7 @@ namespace BALL
 			}
 
 			//is the minimal distance beyond the threshold?
-			if (min_dist < atom_limit_)
+			if (min_dist < radius)
 			{
 				return min_atom;
 			}
@@ -1105,7 +1249,7 @@ namespace BALL
 
 		// Find closest bond to screen position (x,y). If there is none closer than bond_limit_, return NULL
 		// Note: this code is very similar to getClickedAtom. Maybe those two should be united.
-		Bond* EditableScene::getClickedBond_(int x, int y)
+		Bond* EditableScene::getClickedBond_(int x, int y, float radius)
 		{
 			//get the AtomContainer
 			CompositeManager& cm = getMainControl()->getCompositeManager();
@@ -1160,7 +1304,7 @@ namespace BALL
 			}
 
 			//is the minimal distance beyond the threshold?
-			if (min_dist < bond_limit_)
+			if (min_dist < radius)
 			{
 				return closest;
 			}
@@ -1247,7 +1391,7 @@ namespace BALL
 	
 			// get all highlighted composites
 			List <Composite * > compositeList = getMainControl()->getMolecularControlSelection(); 
-			List <Composite *>::iterator it = compositeList.begin();
+			List <Composite *>::Iterator it = compositeList.begin();
 			
 			if(compositeList.size() > 1 )
 			{
@@ -1265,10 +1409,19 @@ namespace BALL
 					Log.error() <<"Please highlight exactly one AtomContainer for insertion of the created atoms!" << endl;
 					return;
 				}
-
+				if(RTTI::isKindOf<System>(**it))
+				{
+						System *s = dynamic_cast<System*>(*it);
+						Molecule* current_molecule = new Molecule();	
+						s->insert(*current_molecule);
+						current_atomContainer_ = current_molecule;
+				}	
+				else
+				{
+					current_atomContainer_ = ai;
+				}
 				// Yes? we do not need to create our own system
-				current_atomContainer_ = ai;
-				ai->insert(atom_);
+				current_atomContainer_->insert(atom_);
 				getMainControl()->update(*ai, true);
 			}
 			else 
@@ -1293,21 +1446,11 @@ namespace BALL
 				y_ewindow_bond_pos_first_  = height() / 2.;
 				x_ewindow_bond_pos_second_old_ = width() / 2.;
 				y_ewindow_bond_pos_second_old_ = height() / 2.;
-			
-							
 			}
 
-			
 			// highligth the actual atom container
 			highligthAtomContainer_(current_atomContainer_);
 
-			/*
-			List < Composite * > cl;
-			cl.push_back(current_atomContainer_);
-			ControlSelectionMessage* m = new ControlSelectionMessage();
-			m->setSelection(cl);
-			notify_(m);
-			*/
 			return;
 		}	
 
@@ -1607,8 +1750,12 @@ namespace BALL
 				ac = RTTI::castTo<AtomContainer>(*(atom->getParent()));
 
 			return ac;
-	 }
-		
+	  }
+	
+		void EditableScene::invalidateComposite(Composite* deleted_composite)
+		{
+			emit invalidComposite(deleted_composite);
+		}
 
 		const char* const EditableScene::edit_cursor_xpm_[] = {
 			"32 32 3 1",

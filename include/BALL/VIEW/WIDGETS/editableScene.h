@@ -36,6 +36,8 @@
 #include <qpopupmenu.h>
 #include <qbitmap.h>
 
+#include <vector>
+
 // has to come after BALL includes to prevent problems with Visual Stuio Net
 #include <qgl.h>
 
@@ -67,7 +69,7 @@ namespace BALL
 								EditOperation()
 									throw();
 
-								EditOperation(Atom* atom, Bond* bond, String description= "Added Object", int operation=0)
+								EditOperation(Atom* atom, Bond* bond, std::vector <Atom* > molecule, String description= "Added Object", int operation=0)
 									throw();
 
 								EditOperation(const EditOperation& eOperation)
@@ -80,7 +82,7 @@ namespace BALL
 									throw();
 
 
-								/** undo-Operator
+								/** undo-Operator undoes special operations, offered by undo dialog
 								 */
 								void undo(EditableScene* es);
 								
@@ -89,17 +91,19 @@ namespace BALL
 									DEFAULT,
 									ADDED__ATOM,
 									ADDED__BOND,
-									CHANGED__TYPE
+									MERGED__MOLECULES
+									//MOVED__ATOM
 										// DELETED__ATOM
 										// DELETED__BOND
-										//CHANGED__SYSTEM
-										//MOVED__ATOM
+										// CHANGED__SYSTEM
 								};
 								
 								int	operationType;
 								Atom* atom;
 								Bond* bond;
+								std::vector <Atom* > molecule;
 								String description;
+							//	Vector3 position;
 
 						};
 
@@ -252,16 +256,11 @@ namespace BALL
 					Index edit_id_;
 					Index scaling_id_;
 					
-					//System system_;								// Do we need them?? 
-					//Molecule* current_molecule_;	// Do we need them??
-					
-					AtomContainer* current_atomContainer_;
+					AtomContainer* current_atomContainer_; // currentAtomContainer in which new atoms should be inserted
 					Atom* first_atom_for_bond_;
 
 					Composite* context_menu_composite_; //Composite for which Popupmenu was called  
 					QPopupMenu context_menu_;     // Popupmenu for mousclick right
-					//QPopupMenu atom_context_menu;
-					//QPopupMenu bond_context_menu;
 					
 					// used for the bond insert algorithm
 					float x_ewindow_bond_pos_first_;
@@ -285,14 +284,13 @@ namespace BALL
 					Vector3 near_right_bot_;
 					Vector3 near_left_top_;
 
-					// ???
 					// search range when looking for atoms/bonds (in angstrom)
-					double atom_limit_;			
-					double bond_limit_;		
+					//double atom_limit_;			
+					//double bond_limit_;		
 				
-					//double select_atom_limit_; 
-					//double select_bond_limit_;
-					//average_atom_radius_limit_;
+					double select_atom_limit_; 
+					double select_bond_limit_;
+					double average_atom_radius_limit_;
 					
 					bool move_an_atom_;   // flag to move an atom in EDIT__MODE
 					bool mouse_has_moved_;
@@ -329,7 +327,7 @@ namespace BALL
 					 * Given 2-dim Coordinates of Screen, getCLickedAtom_ returns the nearest Atom 
 					 * within a special radius. If no atom is found, getClickedAtom returns NULL.
 					 */
-					Atom* getClickedAtom_(int x, int y);
+					Atom* getClickedAtom_(int x, int y, double radius);
 
 					/**
 					 * Given 2-dim Coordinates of Screen, getCLickedBond returns the nearest Bond
@@ -337,7 +335,7 @@ namespace BALL
 					 * Note: This code is very similar to that of getClickedAtom and the two might
 					 *       be joined in the future.
 					 */
-					Bond* getClickedBond_(int x, int y);
+					Bond* getClickedBond_(int x, int y, float radius);
 
 					/***
 					 * returns an atomContainer of the given atom
@@ -365,6 +363,9 @@ namespace BALL
 					 * draws a ruler showing the scaling of the insertion plain of the EditableScene 
 					 */
 					void drawRuler_();
+					
+					/* enables EditOperations like MERGED__MOLECULES do invalidate bonds or atoms*/
+					void invalidateComposite(Composite* deleted_composite);
 					
 					/**
 					 * stores the arrow on which the edit cursor is based
