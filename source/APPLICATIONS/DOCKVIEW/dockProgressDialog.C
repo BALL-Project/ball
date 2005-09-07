@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.22 2005/07/23 12:27:05 haid Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.23 2005/09/07 18:56:32 haid Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -13,52 +13,52 @@
 
 namespace BALL
 {
-	namespace VIEW
+  namespace VIEW
+  {
+    // Constructor
+    DockProgressDialog::DockProgressDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
+      throw()
+      : DockProgressDialogData(parent, name, modal, fl),
+	alg_(0)
+    {
+#ifdef BALL_VIEW_DEBUG
+      Log.info() << "new DockProgressDialog " << this << std::endl;
+#endif
+      
+      connect(&timer_, SIGNAL(timeout()), SLOT(updateProgress_()));
+    }
+    /*
+    // Copy constructor.
+    DockProgressDialog::DockProgressDialog(const DockProgressDialog& dock_prog_dialog)
+    throw()
+    : DockProgressDialogData(dock_prog_dialog),
+    alg_(dock_prog_dialog.alg_),
+    //timer_(dock_prog_dialog.timer_),
+    start_time_(dock_prog_dialog.start_time_)
+    {}*/
+    
+    // Destructor	
+    DockProgressDialog::~DockProgressDialog()
+      throw()
+    {
+#ifdef BALL_VIEW_DEBUG
+      Log.info() << "Destructing object " << this << " of class DockProgressDialog" << std::endl;
+#endif 
+    }
+    
+    // Assignment operator
+    const DockProgressDialog& DockProgressDialog::operator =(const DockProgressDialog& dock_prog_dialog)
+      throw()
+    {
+      if (&dock_prog_dialog != this)
 	{
-		// Constructor
-		DockProgressDialog::DockProgressDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
-			throw()
-			: DockProgressDialogData(parent, name, modal, fl),
-				alg_(0)
-		{
-			#ifdef BALL_VIEW_DEBUG
-				Log.info() << "new DockProgressDialog " << this << std::endl;
-			#endif
-			
-			connect(&timer_, SIGNAL(timeout()), SLOT(updateProgress_()));
-		}
-		/*
-		// Copy constructor.
-		DockProgressDialog::DockProgressDialog(const DockProgressDialog& dock_prog_dialog)
-			throw()
-			: DockProgressDialogData(dock_prog_dialog),
-				alg_(dock_prog_dialog.alg_),
-				//timer_(dock_prog_dialog.timer_),
-				start_time_(dock_prog_dialog.start_time_)
-		{}*/
-		
-		// Destructor	
-		DockProgressDialog::~DockProgressDialog()
-			throw()
-		{
-			#ifdef BALL_VIEW_DEBUG
-				Log.info() << "Destructing object " << this << " of class DockProgressDialog" << std::endl;
-			#endif 
-		}
-		
-		// Assignment operator
-		const DockProgressDialog& DockProgressDialog::operator =(const DockProgressDialog& dock_prog_dialog)
-			throw()
-		{
-			if (&dock_prog_dialog != this)
-			{
-				alg_ = dock_prog_dialog.alg_;
-				//timer_ = dock_prog_dialog.timer_;           // QTimer::operator=(const QTimer&)' is private !
-				start_time_ = dock_prog_dialog.start_time_;
-			}
-			return *this;
-		}
-		
+	  alg_ = dock_prog_dialog.alg_;
+	  //timer_ = dock_prog_dialog.timer_;           // QTimer::operator=(const QTimer&)' is private !
+	  start_time_ = dock_prog_dialog.start_time_;
+	}
+      return *this;
+    }
+    
 		void DockProgressDialog::setDockingAlgorithm(DockingAlgorithm* alg)
 			throw()
 		{

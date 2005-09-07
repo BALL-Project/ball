@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.20 2005/07/23 12:50:56 haid Exp $
+// $Id: dockingController.C,v 1.1.2.21 2005/09/07 18:56:33 haid Exp $
 //
 
 #include "dockingController.h"
@@ -160,18 +160,26 @@ namespace BALL
 				menuBar()->setItemEnabled(id_, false);
 				return;
 			}
-			// iterate over all composites; get to know if there are loaded systems
+
+			/* *** alt ***
+			// iterate over all composites; get to know how many loaded systems there are
 			CompositeManager& composite_manager = main_control.getCompositeManager();
-			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();
+			HashSet<Composite*>::Iterator composite_it = composite_manager().begin();
 
 			Size num_systems = 0;
 			for (; +composite_it; ++composite_it)
 			{
-				if (RTTI::isKindOf<System>(**composite_it))
-				{
-					num_systems++;
-				}
+			if (RTTI::isKindOf<System>(**composite_it))
+			{
+			num_systems++;
 			}
+			}
+			*/
+
+			// get to know how many composites are loaded
+			CompositeManager& composite_manager = main_control.getCompositeManager();
+			Size num_systems = composite_manager.getNumberOfComposites();			
+
 			// if no or only one system loaded, disable menu entry "Docking"
 			if (num_systems > 1)
 			{
@@ -189,6 +197,7 @@ namespace BALL
 		 return dock_dialog_;
 		}			
 		
+		// is called when user clicks on menu entry "Docking"
 		void DockingController::startDocking()
 		{
 		 runDocking(false);
@@ -208,7 +217,8 @@ namespace BALL
 			
 			dock_dialog_.isRedock(isRedock);
 			
-			// if cancel was pressed in DockDialog, don't start docking
+			// QDialog::Accepted = 1; QDialog::Rejected = 0 
+			//if cancel was pressed in DockDialog, don't start docking
 			if (!dock_dialog_.exec())
 			{
 				return;
@@ -267,7 +277,9 @@ namespace BALL
 																		dock_dialog_.getAlgorithmOptions(),
 																		dock_dialog_.getScoringOptions());
 				progress_dialog_->setDockingAlgorithm(dock_alg_);
-				
+			
+				// start thread
+				// function calls DockingThread::run()	
 				thread->start();
 				progress_dialog_->show();
 			// ============================= WITHOUT MULTITHREADING =================================
