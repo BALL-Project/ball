@@ -51,7 +51,7 @@ nmake install
 
 5.) Set the correct library versions for the linker:
 
-If you install a QT version other than 3.3.4 you have to adjust the
+If you install a QT version other than 3.3.5 you have to adjust the
 linker settings to reflect the correct QT library name.
 To do so, open the properties dialog in MSVC for the entry of the libVIEW 
 library. In the field for additional dependencies, adjust the name of the
