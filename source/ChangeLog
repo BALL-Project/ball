@@ -1,6 +1,11 @@
 1.1.1:
 
-Version 1.1.1 is mainly a bugfix release.
+The version 1.1.1 finaly brings full Python and DLL support under Windows.
+Furthermore there is a large number of prominent fixes (especialy for g++ 4.x) 
+and some new functionality for BALLView. 
+
+This version will probably be the last one that supports QT 3.X. Future versions
+of BALLView will be based on QT 4.X.
 
 Added:
  - Support for Python under Windows
@@ -11,6 +16,8 @@ Added:
 
 Changed:
  - BALL and BALLView libraries are now build as DLLs under Windows
+ - Both libraries are now stable with optimizations switched on under Windows
+ - DNA cartoon model now looks better
  - Renamed Mesh::colorList to Mesh::colors
  - Exception::InvalidRange now has an float value
  - ColorProcessor hierarchy
@@ -40,14 +47,12 @@ Fixed:
  - Cleanup of the lighting source code
  - Cleanup of the PyWidget source code
 
-Improved:
- - DNA cartoon model
 
 1.1: 21.06.2005
 
 BALL is now provided under the LGPL and BALLView under the GPL.
 
-The version 1.1 brings support for MacOS X and and a large numer of prominent fixes and 
+The version 1.1 brings support for MacOS X and and a large number of prominent fixes and 
 improvements in BALLView. Most of these improvements are related to an improved user 
 interface and some new models and animation possibilities.
 We also did some features changes related to the Python support.
@@ -60,29 +65,29 @@ Added:
   - Python support: added more classes to the Python SIP interface
   - Proxy Support for TCP transfers
   - BALLView
-  - Documentation for BALLView in the folder BALL/doc/BALLView  
-  - Tutorial and demo under Help-menu
-  - new models for rendering nucleic acids and for visualizing forces
-  - ribbons for Cartoon model
-  - usage of OpenGL vertex buffer objects to accelerate display of triangluated surfaces 
-  - highlighting of atoms for which the setup of a force field fails
-  - improved ball&stick model now renders double-, triple- and aromatic bonds
-  - ability to create animations, either as on-screen presentations or for movies
-  - OpenGL rendering now allows for depth cueing, material paramters may be adjusted
-  - Stereo display using side-by-side mode or shutter glasses
-  - Clipping planes
-  - support for drag and drop of molecular files and python scripts
-  - ability to disable model or coloring updates for a representation
-  - spliting surfaces (e.g. to cut out a binding pocket or the like)
-  - improved labels for atoms, residues, etc.
-  - Esc key now switches to last used mode in Scene
-  - Enter key now focus on selection or on first loaded system if no selection exists
-  - its now possible to hide secondary structure entries in the MolecularControl
-  - history for boolean expressions
-  - Python scripting
-    - Hotkey support for starting any (BALL-)Python command from BALLView
-    - support to quit program from Python interpreter
-    - support for starting Python script from command line
+		- Documentation for BALLView in the folder BALL/doc/BALLView  
+		- Tutorial and demo under Help-menu
+		- new models for rendering nucleic acids and for visualizing forces
+		- ribbons for Cartoon model
+		- usage of OpenGL vertex buffer objects to accelerate display of triangluated surfaces 
+		- highlighting of atoms for which the setup of a force field fails
+		- improved ball&stick model now renders double-, triple- and aromatic bonds
+		- ability to create animations, either as on-screen presentations or for movies
+		- OpenGL rendering now allows for depth cueing, material paramters may be adjusted
+		- Stereo display using side-by-side mode or shutter glasses
+		- Clipping planes
+		- support for drag and drop of molecular files and python scripts
+		- ability to disable model or coloring updates for a representation
+		- spliting surfaces (e.g. to cut out a binding pocket or the like)
+		- improved labels for atoms, residues, etc.
+		- Esc key now switches to last used mode in Scene
+		- Enter key now focus on selection or on first loaded system if no selection exists
+		- its now possible to hide secondary structure entries in the MolecularControl
+		- history for boolean expressions
+		- Python scripting
+			- Hotkey support for starting any (BALL-)Python command from BALLView
+			- support to quit program from Python interpreter
+			- support for starting Python script from command line
 
 Fixed:
   - Several bugfixes in the file formats
