@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.50 2005/07/23 12:27:04 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.51 2005/09/18 16:52:31 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -205,7 +205,9 @@ namespace BALL
 			scoring_functions->insertItem(name, score_func);
 		}
 		
-		// Initializes the popup menu Molecular Mechanics with its checkable submenu Docking.
+		// is called by DockingControler::initializeWidget()
+		// HashMaps for algorithm advanced option dialogs and scoring function advanced option dialogs are built
+		// also HashMap with the allowed scoring functions for the different algorithms
 		void DockDialog::initializeWidget()
 			throw()
 		{
