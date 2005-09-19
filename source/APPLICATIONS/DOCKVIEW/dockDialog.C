@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.52 2005/09/19 10:03:30 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.53 2005/09/19 14:44:14 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -582,7 +582,7 @@ namespace BALL
 		
 		// Function to fill the system comboboxes.
 		// If the user has already selected one or two systems, they are the current items in the comboboxes.
-		void DockDialog::fillSystemComboxes_()
+		void DockDialog::fillSystemComboboxes_()
 			throw()
 		{
 			// selection lists for systems should be empty
@@ -599,6 +599,11 @@ namespace BALL
 			
 			// get the composites
 			MainControl* main_control = MainControl::getInstance(0);
+			if (!main_control)
+				{
+					Log.error() << "Error while filling system comboboxes! " << __FILE__ << " " << __LINE__ << std::endl;
+					return;
+				}
 			CompositeManager& composite_manager = main_control->getCompositeManager();
 			
 			// iterate over all composites; add systems to list
@@ -704,7 +709,7 @@ namespace BALL
 				tab_pages->setTabEnabled(tab_pages->page(1), true);
 				euler_group->setHidden(true);
 				systems_group->setHidden(false);
-				fillSystemComboxes_();
+				fillSystemComboboxes_();
 			}
 			
 			if (has_changed_)

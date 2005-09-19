@@ -270,7 +270,7 @@ namespace BALL
 				/** Function to fill the system comboboxes.
 				 *  If the user has already selected one or two systems, they are the current items in the comboboxes. 
 				 */
-				void fillSystemComboxes_() throw();
+				void fillSystemComboboxes_() throw();
 				
 				/** function to read the redocking values from INIFile into vector backup_
 				 *	if INIFile has not yet a section REDOCKING, fill backup_ vector with default values 
