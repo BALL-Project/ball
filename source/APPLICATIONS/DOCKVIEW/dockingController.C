@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.22 2005/09/19 10:03:31 haid Exp $
+// $Id: dockingController.C,v 1.1.2.23 2005/09/19 12:46:19 haid Exp $
 //
 
 #include "dockingController.h"
@@ -94,13 +94,7 @@ namespace BALL
 			if (RTTI::isKindOf<DockingFinishedMessage>(*message))
 			{
 				DockingFinishedMessage* dfm = RTTI::castTo<DockingFinishedMessage>(*message);
-				
-				/*if(dock_alg_ != 0)
-				{
-					Log.info() << "dock_alg_ deleted by docking controller" << std::endl; 
-					delete dock_alg_;
-					dock_alg_ = NULL;
-				}*/
+
 				unlockComposites();
 				if (dfm->wasAborted())
 				{
