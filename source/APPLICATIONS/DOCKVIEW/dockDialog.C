@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.51 2005/09/18 16:52:31 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.52 2005/09/19 10:03:30 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -543,10 +543,16 @@ namespace BALL
 		void DockDialog::selectFile_(QLineEdit& lineedit)
 			throw()
 		{
-			QString s = QFileDialog::getOpenFileName(MainControl::getInstance(0)->getWorkingDir().c_str(), "", MainControl::getInstance(0), "", "Choose a file");
+			MainControl* main_control = MainControl::getInstance(0);
+			if (!main_control)
+				{
+					Log.error() << "Error while selecting file! " << __FILE__ << " " << __LINE__ << std::endl;
+					return;
+				}
+			QString s = QFileDialog::getOpenFileName(main_control->getWorkingDir().c_str(), "", main_control, "", "Choose a file");
 
 			if (s == QString::null) return;
-			MainControl::getInstance(0)->setWorkingDir(s.ascii());
+			main_control->setWorkingDir(s.ascii());
 			lineedit.setText(s);
 		}
 		
@@ -554,8 +560,14 @@ namespace BALL
 		System* DockDialog::partnerChosen_(const QString& qstr)
 			throw()
 		{
+			MainControl* main_control = MainControl::getInstance(0);
+			if (!main_control)
+				{
+					Log.error() << "Error while getting chosen system! " << __FILE__ << " " << __LINE__ << std::endl;
+					return NULL;
+				}
 			// iterate over all composites; find chosen system
-			HashSet<Composite*>::iterator composite_it = MainControl::getInstance(0)->getCompositeManager().begin();
+			HashSet<Composite*>::iterator composite_it = main_control->getCompositeManager().begin();
 				
 			for (; +composite_it; ++composite_it)
 			{

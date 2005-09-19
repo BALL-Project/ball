@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.21 2005/09/07 18:56:33 haid Exp $
+// $Id: dockingController.C,v 1.1.2.22 2005/09/19 10:03:31 haid Exp $
 //
 
 #include "dockingController.h"
@@ -76,8 +76,9 @@ namespace BALL
 			if (&dock_controller != this)
 			{
 				dock_dialog_ = dock_controller.dock_dialog_;
-				// ???? do we have to delete dock_alg_ and progress_dialog_
+				// ???? do we have to delete dock_alg_ here ?
 				dock_alg_ = dock_controller.dock_alg_;
+				delete progress_dialog_;
 				progress_dialog_ = dock_controller.progress_dialog_;
 				id_ = dock_controller.id_;
 			}
@@ -161,24 +162,9 @@ namespace BALL
 				return;
 			}
 
-			/* *** alt ***
-			// iterate over all composites; get to know how many loaded systems there are
-			CompositeManager& composite_manager = main_control.getCompositeManager();
-			HashSet<Composite*>::Iterator composite_it = composite_manager().begin();
-
-			Size num_systems = 0;
-			for (; +composite_it; ++composite_it)
-			{
-			if (RTTI::isKindOf<System>(**composite_it))
-			{
-			num_systems++;
-			}
-			}
-			*/
-
 			// get to know how many composites are loaded
 			CompositeManager& composite_manager = main_control.getCompositeManager();
-			Size num_systems = composite_manager.getNumberOfComposites();			
+			Size num_systems = composite_manager.getNumberOfComposites();
 
 			// if no or only one system loaded, disable menu entry "Docking"
 			if (num_systems > 1)
@@ -235,7 +221,6 @@ namespace BALL
 							dock_alg_ = NULL;
 						}
 					dock_alg_ =  new GeometricFit();
-					/////// ??? where should we delete it? in this class -> segmenation fault, in thread class???
 					break;
 			}
 			

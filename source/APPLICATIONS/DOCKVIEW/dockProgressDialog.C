@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.23 2005/09/07 18:56:32 haid Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.24 2005/09/19 10:03:30 haid Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -59,89 +59,89 @@ namespace BALL
       return *this;
     }
     
-		void DockProgressDialog::setDockingAlgorithm(DockingAlgorithm* alg)
-			throw()
-		{
-			 alg_ = alg;
-		}
-				
-		const DockingAlgorithm* DockProgressDialog::getDockingAlgorithm() const
-			throw()
-		{
-		  return alg_;
-		}
-		
-		// Fill ProgressDialog with information about the chosen
-		// docking partners, algorithm, scoring function and options
-		void DockProgressDialog::fillDialog(const QString& p1, const QString& p2, const QString& alg, const QString& sf,
-																				const Options& alg_opt, const Options& sf_opt)
-			throw()
-		{
-			QString s = "Docking partner 1: ";
-			general_params->append(s.append(p1));
-			s = "Docking partner 2: ";
-			general_params->append(s.append(p2));
-			s = "Algorithm: ";
-			general_params->append(s.append(alg));
-			s = "Scoring function: ";
-			general_params->append(s.append(sf));
-			
-			options->append("*** Options of algorithm ***");
-			Options::ConstIterator it = alg_opt.begin();
-			for (; +it; ++it)
+    void DockProgressDialog::setDockingAlgorithm(DockingAlgorithm* alg)
+      throw()
+    {
+      alg_ = alg;
+    }
+    
+    const DockingAlgorithm* DockProgressDialog::getDockingAlgorithm() const
+      throw()
+    {
+      return alg_;
+    }
+    
+    // Fill ProgressDialog with information about the chosen
+    // docking partners, algorithm, scoring function and options
+    void DockProgressDialog::fillDialog(const QString& p1, const QString& p2, const QString& alg, const QString& sf,
+					const Options& alg_opt, const Options& sf_opt)
+      throw()
+    {
+      QString s = "Docking partner 1: ";
+      general_params->append(s.append(p1));
+      s = "Docking partner 2: ";
+      general_params->append(s.append(p2));
+      s = "Algorithm: ";
+      general_params->append(s.append(alg));
+      s = "Scoring function: ";
+      general_params->append(s.append(sf));
+      
+      options->append("*** Options of algorithm ***");
+      Options::ConstIterator it = alg_opt.begin();
+      for (; +it; ++it)
+	{
+	  s = it->first;
+	  s.append(" : ");
+	  options->append(s.append(it->second));
+	}
+      
+      if (sf_opt.isEmpty())
+	{
+	  options->append("\nThere are no options for this scoring function.");
+	}
+      else
+	{
+	  options->append("\n*** Options of scoring function ***");
+	  it = sf_opt.begin();
+	  for (; +it; ++it)
+	    {
+	      s = it->first;
+	      s.append(" : ");
+	      options->append(s.append(it->second));
+	    }
+	}
+    }
+    
+    //
+    void DockProgressDialog::show()
+    {
+      // start timer, true -> it is a single shot
+      timer_.start(1000, true);
+      
+      // remember start time
+      start_time_ = QDateTime::currentDateTime();
+      
+      // show dialog to user
+      DockProgressDialogData::show();
+    }
+    
+    // TODO: pause algorithm!!!
+    void DockProgressDialog::pauseClicked()
+    {
+      if(pause_button->text() == "Pause")
 			{
-				s = it->first;
-				s.append(" : ");
-				options->append(s.append(it->second));
-			}
-			
-			if (sf_opt.isEmpty())
-			{
-			 	options->append("\nThere are no options for this scoring function.");
-			}
-			else
-			{
-				options->append("\n*** Options of scoring function ***");
-				it = sf_opt.begin();
-				for (; +it; ++it)
-				{
-					s = it->first;
-					s.append(" : ");
-					options->append(s.append(it->second));
-				}
-			}
-		}
-		
-		//
-		void DockProgressDialog::show()
-		{
-			// start timer, true -> it is a single shot
-			timer_.start(1000, true);
-			
-			// remember start time
-			start_time_ = QDateTime::currentDateTime();
-			
-			// show dialog to user
-			DockProgressDialogData::show();
-		}
-		
-		// TODO: pause algorithm!!!
-		void DockProgressDialog::pauseClicked()
-		{
-			if (alg_->wasPaused())
-			{
-				pause_button->setText("Continue");
-				alg_->pause();
-			}
-			else 
-			{
-				pause_button->setText("Pause");
-				alg_->proceed();
-			}
-		}
-		
-		//
-		void DockProgressDialog::abortClicked()
+	  pause_button->setText("Continue");
+	  alg_->pause();
+	}
+      else
+	{
+	  pause_button->setText("Pause");
+	  alg_->proceed();    
+	}
+    }
+    
+    //
+    void DockProgressDialog::abortClicked()
 		{
 			alg_->abort();
 			//dialog is closed and deleted
