@@ -7,6 +7,7 @@
 
 #include "dockResult.h"
 #include "dockResultDialogData.h"
+#include "dockingController.h"
 
 namespace BALL
 {
@@ -69,7 +70,7 @@ namespace BALL
 					* @param			score_func scoring function (enum)
 					* @param			dialog advanced option dialog
 					*/
-				void addScoringFunction(const QString& name, const int score_func, QDialog* dialog=0)
+				void addScoringFunction(const QString& name, DockingController::ScoringFunction score_func, QDialog* dialog=0)
 					throw();
 
 			public slots:

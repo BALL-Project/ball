@@ -1,8 +1,7 @@
-// $Id: dockResultDialog.C,v 1.1.2.39 2005/07/23 12:27:05 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.40 2005/09/20 08:59:08 leonhardt Exp $
 //
 
 #include "dockResultDialog.h"
-#include "dockingController.h"
 #include "dockDialog.h"
 
 #include <qtable.h>
@@ -37,8 +36,7 @@ namespace BALL
 		#ifdef BALL_VIEW_DEBUG
 			Log.info() << "new DockResultDialog " << this << std::endl;
 		#endif
-			//setWFlags(Qt::WStyle_MinMax | Qt::WStyle_SysMenu);
-			
+		
 			//build HashMap and ComboBox for scoring function and its advanced option dialog
 			//make sure the order of added scoring functions is consistent to the enum order
 			//because the scoring function with enum value i should be at position i in the Combobox
@@ -128,7 +126,7 @@ namespace BALL
 		}
 		
 		// Adds scoring function to Combobox and its advanced option dialogs to HashMap, if it has such an dialog.
-		void DockResultDialog::addScoringFunction(const QString& name, const int score_func, QDialog* dialog)
+		void DockResultDialog::addScoringFunction(const QString& name, DockingController::ScoringFunction score_func, QDialog* dialog)
 			throw()
 		{
 			if(dialog)
@@ -150,19 +148,19 @@ namespace BALL
 			
 			// before showing the dialog the result table has to be build and filled 
 			// first get the number of conformations, to know how many rows the table needs
-			int conformation_num = dock_res_->getConformationSet()->size();
+			Size conformation_num = dock_res_->getConformationSet()->size();
 			// insert rows in table
 			result_table->insertRows(0,conformation_num);
 		
 			// fill the first column with snapshot numbers
-			for(int i=0; i < conformation_num; i++)
+			for(Position i=0; i < conformation_num; i++)
 			{
 				QString s;
 				result_table->setText(i,0,s.setNum(i));
 			}
 			
 			// fill table with scores
-			for(unsigned int i = 0; i < dock_res_->numberOfScorings(); i++)
+			for(Position i = 0; i < dock_res_->numberOfScorings(); i++)
 			{
 				// insert new score column in table; i+1, because first column contains snapshot number
 				result_table->insertColumns(i+1, 1);
@@ -171,7 +169,7 @@ namespace BALL
 				// the scores in the vector are sorted by snapshot number!
 				// the score with snapshot number i is at position i in the vector
 				vector<float> scores = dock_res_->getScores(i);
-				for(unsigned int j = 0; j < scores.size(); j++)
+				for(Position j = 0; j < scores.size(); j++)
 				{
 					QString s;
 					result_table->setText(j, i+1, s.setNum(scores[j]));
@@ -179,7 +177,7 @@ namespace BALL
 			}
 			
 			// adjust column width
-			for(int j = 0; j < result_table->numCols() ; j++)
+			for(Index j = 0; j < result_table->numCols() ; j++)
 			{
 				result_table->adjustColumn(j);
 			}
@@ -198,9 +196,10 @@ namespace BALL
 			if(!dock_res_) return;
 		
 			// get index of current row
-			int selected_row = result_table->currentRow();
+			Index selected_row = result_table->currentRow();
 			// get snapshot number of this row
-			int snapshot = (result_table->text(selected_row, 0)).toInt();
+			Index snapshot;
+			snapshot = (result_table->text(selected_row, 0)).toInt();
 			// apply snapshot
 			const ConformationSet* conformation_set = dock_res_->getConformationSet();
 			SnapShot selected_conformation = (*conformation_set)[snapshot];
@@ -208,17 +207,17 @@ namespace BALL
 			//inform main control that system has changed
 			MainControl* main_control = MainControl::getInstance(0);
 			if (!main_control)
-			  {
-			    Log.error() << "Error while informing MainControl about changed system! " << __FILE__ << " " << __LINE__ << std::endl;
-			    return;
-			  }
+			{
+				Log.error() << "Error while informing MainControl about changed system! " << __FILE__ << " " << __LINE__ << std::endl;
+				return;
+			}
 			main_control->update(*docked_system_, true);
 		}
 				
 		// select and show the entry above the current selected entry
 		void DockResultDialog::upwardClicked()
 		{
-			int selected_row = result_table->currentRow();
+			Index selected_row = result_table->currentRow();
 			if(selected_row > 0)
 			{
 				result_table->selectRow(selected_row-1);
@@ -229,7 +228,7 @@ namespace BALL
 		// selects and shows the entry below the current selected entry
 		void DockResultDialog::downwardClicked()
 		{
-			int selected_row = result_table->currentRow();
+			Index selected_row = result_table->currentRow();
 			if(selected_row < result_table->numRows()-1)
 			{
 				result_table->selectRow(selected_row+1);
@@ -241,7 +240,7 @@ namespace BALL
 		// otherwise the button is disabled 
 		void DockResultDialog::scoringFuncChosen()
 		{
-			int index = scoring_functions->currentItem();
+			Index index = scoring_functions->currentItem();
 			if(scoring_dialogs_.has(index))
 			{
 				advanced_button->setEnabled(true);
@@ -255,7 +254,7 @@ namespace BALL
 		// show options dialog of selected scoring function
 		void DockResultDialog::advancedClicked()
 		{
-			int index = scoring_functions->currentItem();
+			Index index = scoring_functions->currentItem();
 			if(index)
 			{
 				scoring_dialogs_[index]->exec();
@@ -271,7 +270,7 @@ namespace BALL
 			Options scoring_options;
 			
 			// check which scoring function is chosen
-			int index = scoring_functions->currentItem();
+			Index index = scoring_functions->currentItem();
 			switch(index)
 			  {
 			  case DockingController::DEFAULT:
@@ -284,10 +283,10 @@ namespace BALL
 			    {
 			      MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
 			      if (!mol_struct)
-				{
-				  Log.error() << "Error while rescoring with AMBER_FF! " << __FILE__ << " " << __LINE__ << std::endl;
-				  return;
-				}
+						{
+							Log.error() << "Error while rescoring with AMBER_FF! " << __FILE__ << " " << __LINE__ << std::endl;
+							return;
+						}
 			      AmberFF& ff = mol_struct->getAmberFF();
 			      AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
 			      // now the Amber force field gets its options
@@ -311,7 +310,7 @@ namespace BALL
 			
 			// add a new scoring to dock_res_; we need the name, options and score vector of the scoring function
 			vector<float> scores;
-			for (unsigned int i = 0; i < ranked_conformations.size(); i++)
+			for (Position i = 0; i < ranked_conformations.size(); i++)
 			{
 				scores.push_back(ranked_conformations[i].second);
 			}
@@ -322,12 +321,12 @@ namespace BALL
 			sortTable(0);
 			
 			// add new column to the table of the result dialog, where the new scores are shown
-			int num_column = result_table->numCols();
+			Size num_column = result_table->numCols();
 			result_table->insertColumns(num_column,1);
 			result_table->horizontalHeader()->setLabel(num_column, scoring_functions->currentText());
 			
 			// fill new column
-			for(unsigned int i = 0; i < scores.size(); i++)
+			for(Position i = 0; i < scores.size(); i++)
 			{
 				QString s;
 				result_table->setText(i, num_column, s.setNum(scores[i]));
@@ -356,10 +355,10 @@ namespace BALL
 		{
 			// create vector which contains the rows of the table
 			vector<vector<float> > rows;
-			for(int row_it = 0; row_it < result_table->numRows(); row_it++)
+			for(Index row_it = 0; row_it < result_table->numRows(); row_it++)
 			{
 				vector<float> row;
-				for(int column_it = 0; column_it < result_table->numCols(); column_it++)
+				for(Index column_it = 0; column_it < result_table->numCols(); column_it++)
 				{
 					QString s = result_table->text(row_it, column_it);
 					row.push_back(s.toFloat());
@@ -370,13 +369,13 @@ namespace BALL
 			Compare_ compare_func = Compare_(column);
 			sort(rows.begin(), rows.end(), compare_func);
 			// fill result table
-			for(int row_it = 0; row_it < result_table->numRows(); row_it++)
+			for(Index row_it = 0; row_it < result_table->numRows(); row_it++)
 			{
 				QString s;
 				// snapshot number isn't a float!
 				int index = (int) rows[row_it][0];
 				result_table->setText(row_it,0,s.setNum(index));
-				for(int column_it = 1; column_it < result_table->numCols(); column_it++)
+				for(Index column_it = 1; column_it < result_table->numCols(); column_it++)
 				{
 					result_table->setText(row_it,column_it,s.setNum(rows[row_it][column_it]));
 				}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.1.2.16 2005/07/23 12:27:05 haid Exp $
+// $Id: dockResult.C,v 1.1.2.17 2005/09/20 08:59:08 leonhardt Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -96,21 +96,21 @@ namespace BALL
 		}
 		
 		// returns scores of scoring_ i
-		const vector<float>& DockResult::getScores(int i) const
+		const vector<float>& DockResult::getScores(Position i) const
 			throw()
 		{
 			return scorings_[i].scores_;
 		}
 		
 		//returns name of scoring function of scoring_ i
-		const String& DockResult::getScoringName(int i) const
+		const String& DockResult::getScoringName(Position i) const
 			throw()
 		{
 			return scorings_[i].name_;
 		}
 		
 		//returns options of scoring function of scoring_ i
-		const Options& DockResult::getScoringOptions(int i) const
+		const Options& DockResult::getScoringOptions(Position i) const
 			throw()
 		{
 			return scorings_[i].options_;
@@ -128,6 +128,14 @@ namespace BALL
 			throw()
 		{
 			scorings_.push_back(Scoring_(name, options, scores));
+		}
+		
+		/// delete i-th Scoring_ of vector scorings_
+		void DockResult::deleteScoring(Position i)
+			throw()
+		{
+			vector<Scoring_>::iterator scoring_it;
+			scorings_.erase(scorings_.begin()+i);	
 		}
 		
 		// store dock result in a file
@@ -156,7 +164,7 @@ namespace BALL
 			{
 				INI_out.insertValue("ALGORITHM_OPTIONS", it->first, it->second);
 			}
-			for (unsigned int i = 0; i < scorings_.size(); i++)
+			for (Position i = 0; i < scorings_.size(); i++)
 			{
 				String section = String("SCORING_NAME_") + String(i);
 				INI_out.appendSection(section);
@@ -172,18 +180,18 @@ namespace BALL
 				
 				section = String("SCORES_") + String(i);
 				INI_out.appendSection(section);
-				for (unsigned int j = 0; j < scorings_[i].scores_.size(); j++)
+				for (Position j = 0; j < scorings_[i].scores_.size(); j++)
 				{
 					INI_out.insertValue(section, String(j), scorings_[i].scores_[j]);
 				}
 			}
-			/// second: store docked system in a temporary PDBFile
+			// second: store docked system in a temporary PDBFile
 			String PDB_temp;
 			File::createTemporaryFilename(PDB_temp);
 			PDBFile PDB_out(PDB_temp, std::ios::out);
 			PDB_out << conformation_set_->getSystem();
 			
-			/// third: store trajectories in a temporary DCDFile
+			// third: store trajectories in a temporary DCDFile
 			String DCD_temp;
 			File::createTemporaryFilename(DCD_temp);
 			conformation_set_->writeDCDFile(DCD_temp);
@@ -191,7 +199,7 @@ namespace BALL
 			// before putting these 3 files into one, we need to know
 			// how many lines the INIFile and PDBFile have
 			PDB_out.reopen(std::ios::in);
-			int line_nr_PDB = 0;
+			Size line_nr_PDB = 0;
 			while(PDB_out.LineBasedFile::readLine())
 			{
 			 	line_nr_PDB++;
@@ -245,7 +253,7 @@ namespace BALL
 			throw()
 		{
 			// read first two lines with line numbers of INIFile and PDBFile
-			unsigned int INI_lines, PDB_lines;
+			Size INI_lines, PDB_lines;
 			file >> INI_lines;
 			file >> PDB_lines;
 			// first: read INI part from result file in INIFile
@@ -344,7 +352,7 @@ namespace BALL
 			vector<ConformationSet::Conformation> conformations;
 			ConformationSet::Conformation conf;
 			vector<float> last_scores = scorings_[scorings_.size()-1].scores_;
-			for (unsigned int i = 0; i < last_scores.size(); i++)
+			for (Position i = 0; i < last_scores.size(); i++)
 			{
 			 	conf.first = i;
 				conf.second = last_scores[i];
@@ -376,15 +384,6 @@ namespace BALL
 			
 			return true;
 		}
-		
-		/// delete i-th Scoring_ of vector scorings_
-		void DockResult::deleteScoring(int i)
-			throw()
-		{
-			vector<Scoring_>::iterator scoring_it;
-			scorings_.erase(scorings_.begin()+i);	
-		}
-		
 		
 		/** Implementation of the nested class Scoring_ **/
 	

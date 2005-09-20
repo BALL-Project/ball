@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.23 2005/09/19 12:46:19 haid Exp $
+// $Id: dockingController.C,v 1.1.2.24 2005/09/20 08:59:09 leonhardt Exp $
 //
 
 #include "dockingController.h"
@@ -107,12 +107,14 @@ namespace BALL
 				}
 				runScoring_((ConformationSet*)(dfm->getConformationSet()));
 			}
+			// DatasetControl sends this messages, when user wants to have a look at a DockResult
 			else if (RTTI::isKindOf<ShowDockResultMessage>(*message))
 			{
-			 	DockResultDialog* result_dialog = new DockResultDialog(this);
-				// dialog deletes itself after close-button is pressed
 	      ShowDockResultMessage* sdrm = RTTI::castTo<ShowDockResultMessage>(*message);
 				
+				DockResultDialog* result_dialog = new DockResultDialog(this);
+				// dialog deletes itself after close-button is pressed
+					
 				// setup result_dialog... 
 				result_dialog->setDockResult(sdrm->getDockResult());
 				result_dialog->setDockedSystem(sdrm->getDockedSystem());
@@ -180,10 +182,11 @@ namespace BALL
 		// is called when user clicks on menu entry "Docking"
 		void DockingController::startDocking()
 		{
-		 runDocking(false);
+			// Dialog is called in docking-modus, not in redocking-modus
+			runDocking(false);
 		}
 		
-		// Check which algorithm is chosen and create new DockingAlgorithm object.
+		// Show docking dialog, check which algorithm is chosen and create new DockingAlgorithm object.
 		// Start new Thread and fill/show ProgressDialog.
 		void DockingController::runDocking(bool isRedock)
 			throw()
@@ -207,7 +210,7 @@ namespace BALL
 			// check which algorithm is chosen and create a DockingAlgorithm object
 			Index index = dock_dialog_.algorithms->currentItem();
 			switch(index)
-				{
+			{
 				case GEOMETRIC_FIT:
 					if(dock_alg_ != 0)
 						{
@@ -227,7 +230,7 @@ namespace BALL
 			}
 			
 			// Set up the docking algorithm
-			setStatusbarText("setting up docking algorithm...", true);
+			setStatusbarText("Setting up docking algorithm...", true);
 			// keep the larger protein in System A and the smaller one in System B
 			// and setup the algorithm
 			if (dock_dialog_.getSystem1()->countAtoms() < dock_dialog_.getSystem2()->countAtoms())
@@ -258,13 +261,13 @@ namespace BALL
 				progress_dialog_->setDockingAlgorithm(dock_alg_);
 			
 				// start thread
-				// function calls DockingThread::run()	
+				// function calls DockingThread::run()
 				thread->start();
 				progress_dialog_->show();
 			// ============================= WITHOUT MULTITHREADING =================================
 			#else
 				// start docking
-				setStatusbarText("starting docking...", true);
+				setStatusbarText("Starting docking...", true);
 				dock_alg_->start();
 				setStatusbarText("Docking finished.", true);
 				runScoring_(dock_alg_->getConformationSet());
@@ -294,7 +297,6 @@ namespace BALL
 				case DEFAULT:
 					scoring = new EnergeticEvaluation();
 					break;
-
 				case AMBER_FF:
 				{
 					MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
@@ -345,17 +347,17 @@ namespace BALL
 			sort(ranked_conformations.begin(), ranked_conformations.end());
 			
 			vector<float> scores;
-			for (unsigned int i = 0; i < ranked_conformations.size(); i++)
+			for (Position i = 0; i < ranked_conformations.size(); i++)
 			{
 				scores.push_back(ranked_conformations[i].second);
 			}
 
 			dock_res->addScoring(String(dock_dialog_.scoring_functions->currentText().ascii()), dock_dialog_.getScoringOptions(), scores);
 
-			// add docked system to BALLView structures
+			// add docked system to BALLView structures /////////////////////////////////////////////////////////////////
 			if (!conformation_set->size())
 			{
-				Log.error() << "Scoring of docking results failed! " << __FILE__ << " " << __LINE__ << std::endl;
+				Log.error() << "There are no docking results! " << __FILE__ << " " << __LINE__ << std::endl;
 				// delete instance 
 				if (scoring != NULL)
 				{

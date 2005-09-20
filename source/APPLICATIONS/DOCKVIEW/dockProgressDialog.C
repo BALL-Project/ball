@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.24 2005/09/19 10:03:30 haid Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.25 2005/09/20 08:59:08 leonhardt Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -89,27 +89,27 @@ namespace BALL
       options->append("*** Options of algorithm ***");
       Options::ConstIterator it = alg_opt.begin();
       for (; +it; ++it)
-	{
-	  s = it->first;
-	  s.append(" : ");
-	  options->append(s.append(it->second));
-	}
+			{
+				s = it->first;
+				s.append(" : ");
+				options->append(s.append(it->second));
+			}
       
       if (sf_opt.isEmpty())
-	{
-	  options->append("\nThere are no options for this scoring function.");
-	}
+			{
+				options->append("\nThere are no options for this scoring function.");
+			}
       else
-	{
-	  options->append("\n*** Options of scoring function ***");
-	  it = sf_opt.begin();
-	  for (; +it; ++it)
-	    {
-	      s = it->first;
-	      s.append(" : ");
-	      options->append(s.append(it->second));
-	    }
-	}
+			{
+				options->append("\n*** Options of scoring function ***");
+				it = sf_opt.begin();
+				for (; +it; ++it)
+					{
+						s = it->first;
+						s.append(" : ");
+						options->append(s.append(it->second));
+					}
+			}
     }
     
     //
@@ -130,14 +130,14 @@ namespace BALL
     {
       if(pause_button->text() == "Pause")
 			{
-	  pause_button->setText("Continue");
-	  alg_->pause();
-	}
+				pause_button->setText("Continue");
+				alg_->pause();
+			}
       else
-	{
-	  pause_button->setText("Pause");
-	  alg_->proceed();    
-	}
+			{
+				pause_button->setText("Pause");
+				alg_->proceed();    
+			}
     }
     
     //

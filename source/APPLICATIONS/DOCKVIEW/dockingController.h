@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.10 2005/07/18 13:40:14 leonhardt Exp $
+// $Id: dockingController.h,v 1.1.2.11 2005/09/20 08:59:09 leonhardt Exp $
 //
 
 #ifndef DOCKINGCONTROLLER_H
@@ -133,16 +133,16 @@ namespace BALL
 					throw();	
 
 				//@}	
-
-				DockDialog& getDockDialog()	
-					throw();
 			
-				/** Check which algorithm is chosen and create new DockingAlgorithm object.
+				/** Show docking dialog, check which algorithm is chosen and create new DockingAlgorithm object.
 				 *  Start new Thread and fill/show ProgressDialog.
 				 */
 				void runDocking(bool isRedock)
 					throw();
 						
+				DockDialog& getDockDialog()	
+					throw();
+					
 			public slots:
 				
 				/** Function is only called when we start docking (by clicking on menu entry "Docking").

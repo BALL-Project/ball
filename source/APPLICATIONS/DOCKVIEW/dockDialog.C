@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.53 2005/09/19 14:44:14 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.54 2005/09/20 08:59:07 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -180,6 +180,7 @@ namespace BALL
 		}
 		
 		// Adds docking algorithm to Combobox and its advanced option dialogs to HashMap.
+		//void DockDialog::addAlgorithm(const QString& name, DockingController::Algorithm algorithm, QDialog* dialog)
 		void DockDialog::addAlgorithm(const QString& name, const int algorithm, QDialog* dialog)
 			throw()
 		{
@@ -193,6 +194,7 @@ namespace BALL
 		}
 		
 		// Adds scoring function to Combobox and its advanced option dialogs to HashMap, if it has such an dialog.
+		//void DockDialog::addScoringFunction(const QString& name, DockingController::ScoringFunction score_func, QDialog* dialog)
 		void DockDialog::addScoringFunction(const QString& name, const int score_func, QDialog* dialog)
 			throw()
 		{
@@ -205,7 +207,7 @@ namespace BALL
 			scoring_functions->insertItem(name, score_func);
 		}
 		
-		// is called by DockingControler::initializeWidget()
+		// is called by DockingController::initializeWidget()
 		// HashMaps for algorithm advanced option dialogs and scoring function advanced option dialogs are built
 		// also HashMap with the allowed scoring functions for the different algorithms
 		void DockDialog::initializeWidget()
@@ -230,7 +232,6 @@ namespace BALL
 					return;
 				}
 			addScoringFunction("Amber Force Field", DockingController::AMBER_FF, &(mol_struct->getAmberConfigurationDialog()));
-			addScoringFunction("Random", DockingController::RANDOM);
 			
 			vector<int> sf;
 			sf.push_back(DockingController::DEFAULT);
@@ -242,8 +243,10 @@ namespace BALL
 		void DockDialog::fetchPreferences(INIFile& file)
 			throw()
 		{
+			// read preferences of INI-section docking into the QWidget of the dialog
 			PreferencesEntry::readPreferenceEntries(file);
-			
+			// read the redocking values from INIFile into vector backup_
+			// if INIFile has not yet a section REDOCKING, fill backup_ vector with default values 
 			fetchPreferences_(file, "redock_entry_0", "<select>");
 			fetchPreferences_(file, "redock_entry_1", "Default");
 			fetchPreferences_(file, "redock_entry_2", "100");
@@ -284,6 +287,8 @@ namespace BALL
 		void DockDialog::writePreferences(INIFile& file)
 			throw()
 		{
+			// swap values if dialog is in redocking-modus, because for PreferencesEntry::writePreferenceEntries 
+			// the dialog's widgets has to contain the docking values
 			if (is_redock_)
 			{
 				swapValues_();
@@ -291,7 +296,7 @@ namespace BALL
 			PreferencesEntry::writePreferenceEntries(file);
 			
 			file.appendSection("REDOCKING");
-			for (unsigned int i = 0; i < backup_.size(); i++)
+			for (Position i = 0; i < backup_.size(); i++)
 			{
 				String entry = String("redock_entry_") + String(i);
 				file.insertValue("REDOCKING", entry, backup_[i].ascii());
@@ -373,18 +378,18 @@ namespace BALL
 			algorithm_opt_.clear();
 			scoring_opt_.clear();
 			// options for all docking algorithms
-			/////////////////////////////////////// TODO allgemeine Options ////////////////////////////////////////////
+			///////////////// TODO common options should be in docking algorithm ////////////////////////////////////////////
 			//options_[DockingAlgorithm::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
 			try
-				{
-					algorithm_opt_[GeometricFit::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
-					algorithm_opt_[GeometricFit::Option::VERBOSITY] = String(verbosity->text().ascii()).toInt();
-				}
+			{
+				algorithm_opt_[GeometricFit::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
+				algorithm_opt_[GeometricFit::Option::VERBOSITY] = String(verbosity->text().ascii()).toInt();
+			}
 			catch (Exception::InvalidFormat)
-				{
-					Log.error() << "Conversion from String to int failed: invalid format! " << __FILE__ << " " << __LINE__<< std::endl;
-					return;
-				}
+			{
+				Log.error() << "Conversion from String to int failed: invalid format! " << __FILE__ << " " << __LINE__<< std::endl;
+				return;
+			}
 			// options for chosen algorithm; options are filled by the corresponding dialog
 			Index index = algorithms->currentItem();
 			switch(index)
@@ -618,7 +623,6 @@ namespace BALL
 				current_system_list.append(system->getName());
 				
 				// test if the user has selected one or two systems
-				// more than 2 selected systems -> error
 				if (!system->isSelected())
 				{
 					continue;
@@ -847,10 +851,10 @@ namespace BALL
 			{
 				alg_advanced_button->setEnabled(true);
 				// disable scoring functions which aren't allowed for chosen algorithm
-				for (int i = 0; i < scoring_functions->count(); i++)
+				for (Index i = 0; i < scoring_functions->count(); i++)
 				{
 					bool found = false;
-					for (unsigned int j = 0; j < allowed_sf_[index].size(); j++)
+					for (Position j = 0; j < allowed_sf_[index].size(); j++)
 					{
 						if (allowed_sf_[index][j] == i)
 						{

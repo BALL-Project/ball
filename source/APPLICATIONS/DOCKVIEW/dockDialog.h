@@ -36,6 +36,8 @@
 #include "dockDialogData.h"
 #include "dockResult.h"
 #include "dockProgressDialog.h"
+//#include "dockingController.h"
+
 
 namespace BALL
 {
@@ -130,6 +132,7 @@ namespace BALL
 				 *	@param      algorithm the value of enum Algorithm
 				 *	@param      dialog pointer to an advanced option dialog
 				 */
+				//void addAlgorithm(const QString& name, DockingController::Algorithm algorithm, QDialog* dialog)
 				void addAlgorithm(const QString& name, const int algorithm, QDialog* dialog)
 					throw();
 					
@@ -138,6 +141,7 @@ namespace BALL
 				 *	@param      score_func the value of enum ScoringFunction
 				 *	@param      dialog pointer to an advanced option dialog
 				 */
+				//void addScoringFunction(const QString& name, DockingController::ScoringFunction score_func, QDialog* dialog=0)
 				void addScoringFunction(const QString& name, const int score_func, QDialog* dialog=0)
 					throw();
 				

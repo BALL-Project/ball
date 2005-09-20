@@ -119,7 +119,7 @@ namespace BALL
 			
 			file.appendSection("GEOMETRIC_FIT_OPTIONS_REDOCK");
 			
-			for (unsigned int i = 0; i < backup_.size(); i++)
+			for (Position i = 0; i < backup_.size(); i++)
 			{
 				String entry = String("option_entry_") + String(i);
 				file.insertValue("GEOMETRIC_FIT_OPTIONS_REDOCK", entry, backup_[i].ascii());
@@ -145,23 +145,24 @@ namespace BALL
 					throw()
 		{
 		  try
-		    {
-		      options[GeometricFit::Option::NEAR_RADIUS] = String(near_radius->text().ascii()).toFloat();
-		      options[GeometricFit::Option::GRID_SPACING] = String(grid_spacing->text().ascii()).toFloat();
-		      options[GeometricFit::Option::SURFACE_THICKNESS] = String(surface_thickness->text().ascii()).toFloat();
-		      options[GeometricFit::Option::DEGREE_INTERVAL] = String(deg_interval->text().ascii()).toDouble();
-		      options[GeometricFit::Option::TOP_N] = String(peak_num->text().ascii()).toInt();
-		    }
+			{
+				options[GeometricFit::Option::NEAR_RADIUS] = String(near_radius->text().ascii()).toFloat();
+				options[GeometricFit::Option::GRID_SPACING] = String(grid_spacing->text().ascii()).toFloat();
+				options[GeometricFit::Option::SURFACE_THICKNESS] = String(surface_thickness->text().ascii()).toFloat();
+				options[GeometricFit::Option::DEGREE_INTERVAL] = String(deg_interval->text().ascii()).toDouble();
+				options[GeometricFit::Option::TOP_N] = String(peak_num->text().ascii()).toInt();
+			}
 		  catch (Exception::InvalidFormat)
-		    {
-		      Log.error() << "Conversion from String to float, double or int failed: invalid format! " << __FILE__ << " " << __LINE__ << std::endl;
-		      return;
-		    }
-		      if (surface_type->currentText() == "Connolly")
+			{
+				Log.error() << "Conversion from String to float, double or int failed: invalid format! " << __FILE__ << " " << __LINE__ << std::endl;
+				return;
+			}
+		  
+			if (surface_type->currentText() == "Connolly")
 			{
 			  options[GeometricFit::Option::SURFACE_TYPE] = GeometricFit::CONNOLLY;
 			}
-		      else
+		  else
 			{
 			  options[GeometricFit::Option::SURFACE_TYPE] = GeometricFit::VAN_DER_WAALS;
 			}

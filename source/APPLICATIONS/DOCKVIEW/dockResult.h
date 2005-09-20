@@ -16,19 +16,13 @@
 namespace BALL
 {
 		/** This class contains the result of an docking calculation, 
-		 *  like what algorithm was used, with which options,
+		 *  like the used algorithm, with which options,
 		 * 	the conformation set which was produced by the algorithm
 		 *	and the scores of all scoring functions that where used for the ranking / reranking
 		 */
 		class DockResult
 		{
 			public:
-			
-				friend ostream& operator <<(ostream& out, const DockResult& dock_res)
-					throw();
-				
-				friend istream& operator >>(istream& in, DockResult& dock_res)
-					throw();
 					
 				/**	@name	Constructors and Destructors
 				 */	
@@ -56,12 +50,22 @@ namespace BALL
 					throw();
 					
 				//@}
-					
+				
+				/**	@name	Assignment
+				 */	
+				//@{
+				
 				/** Assignment operator
 				*/
 				const DockResult& operator =(const DockResult& dock_res)
 					throw();
 					
+				//@}
+				
+				/**	@name	Accessors
+				 */	
+				//@{
+				
 				void setConformationSet(ConformationSet* conformation_set)
 					throw();
 					
@@ -79,17 +83,17 @@ namespace BALL
 				
 				/** returns the scores of scoring_ i
 				*/
-				const vector<float>& getScores(int i) const
+				const vector<float>& getScores(Position i) const
 					throw();
 					
 				/** returns the name of scoring function of scoring_ i
 				*/
-				const String& getScoringName(int i) const
+				const String& getScoringName(Position i) const
 					throw();
 					
 				/** returns the scoring function options of scoring_ i
 				*/
-				const Options& getScoringOptions(int i) const
+				const Options& getScoringOptions(Position i) const
 					throw();
 					
 				/** returns the number of scorings
@@ -97,11 +101,22 @@ namespace BALL
 				Size numberOfScorings() const
 					throw();
 				
+				//@}
+					
 				/** add new Scoring_ to vector scorings_
 				*/
 				void addScoring(const String& name, const Options& options, const vector<float>& scores)
 					throw();
+					
+				/** delete i-th Scoring_ of vector scorings_
+				*/
+				void deleteScoring(Position i)
+					throw();
 				
+				/**	@name	Reading and writing
+				 */	
+				//@{
+					
 				/** store dock result in a file
 				*/
 				bool writeDockResult(const String& filename)
@@ -121,12 +136,15 @@ namespace BALL
 				*/
 				bool readDockResult(std::istream& filename)
 					throw();
-					
-				/** delete i-th Scoring_ of vector scorings_
-				*/
-				void deleteScoring(int i)
+				
+				friend ostream& operator <<(ostream& out, const DockResult& dock_res)
 					throw();
-						
+				
+				friend istream& operator >>(istream& in, DockResult& dock_res)
+					throw();
+				
+				//@}
+				
 			protected:
 				
 				/**
