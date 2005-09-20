@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.35.4.8 2005/07/13 10:23:56 haid Exp $
+// $Id: datasetControl.C,v 1.35.4.9 2005/09/20 09:16:58 haid Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -180,16 +180,17 @@ void DatasetControl::addDockResult()
 	
 	// read the DockResult from the file
 	DockResult* dock_res = new DockResult();
-	/*if (!dock_res->readDockResult(file.ascii()))
+	if (!dock_res->readDockResult(file.ascii()))
 	{
 		setStatusbarText("Could not read DockResult file!");
 		return;
-	}*/
+	}
 	
-	// you can also use the operator>>
+	/* // you can also use the operator>>
 	File input(file.ascii(), std::ios::in | std::ios::binary);
 	input >> *dock_res;
 	input.close();
+	*/
 	
 	// get docked system, set its name to name of file and add it to BALLView structures
 	// apply the first SnapShot to the system to get the positions of the docked structures
@@ -535,7 +536,7 @@ void DatasetControl::saveDockTrajectories_()
 		return;
 	}
 
-	setStatusbarText("Written DCDFile", true);
+	setStatusbarText("Written DCDFile.", true);
 }
 
 void DatasetControl::saveDockResult_()
@@ -550,15 +551,19 @@ void DatasetControl::saveDockResult_()
 	if (s == QString::null) return;
 	String filename = s.ascii();
 	
-	/*if (!dock_res->writeDockResult(filename))
+	if (!dock_res->writeDockResult(filename))
 	{
 		setStatusbarText("Could not write DockResultFile.", true);
 		return;
-	}*/
-	// you can also use the operator<<
+	}
+	
+	/* // you can also use the operator<<
 	File file(filename, std::ios_base::out | std::ios::binary);
 	file << *dock_res;
 	file.close();
+	*/
+	
+	setStatusbarText("Written DockResultFile.", true);
 }
 
 String DatasetControl::chooseGridFileForOpen_()
