@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.54 2005/09/20 08:59:07 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.55 2005/09/20 14:09:55 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -696,8 +696,7 @@ namespace BALL
 		// ---------------------------------------------------------------------------------------
 
 		// Shows and raises the dialog.
-		// The comboboxes for the docking partners are filled with the loaded systems in BALLView.
-		// If the user has selected one or two systems, they are the current items in the comboboxes.
+		// In case of docking, the comboboxes for the docking partners are filled with the loaded systems in BALLView.
 		void DockDialog::show()
 		{
 			if (is_redock_)
@@ -867,6 +866,7 @@ namespace BALL
 			}
 			else
 			{
+				// current item is <select>
 				alg_advanced_button->setEnabled(false);
 				// enable all scoring functions
 				for (int i = 0; i < scoring_functions->count(); i++)

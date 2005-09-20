@@ -36,7 +36,7 @@ namespace BALL
 				DockResultDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
 					throw();
 
-				/** Copy constructor.
+				/** Copy constructor
 					*/
 				DockResultDialog(const DockResultDialog& dock_res_dialog)
 					throw();
@@ -45,21 +45,29 @@ namespace BALL
 				*/
 				virtual ~DockResultDialog()
 					throw();
-
 				//@}
 					
+				/**	@name	Assignment
+				 */
+				//@{
+				
 				/** Assignment operator
 				*/
 				const DockResultDialog& operator =(const DockResultDialog& res_dialog)
 					throw();
-
-				/** Sets the dock result
+				//@}
+				
+				/**	@name	Accessors: mutators
+				 */
+				//@{
+				
+				/** Sets the dock result.
 					* @param			dock_res dock result
 					*/
 				void setDockResult(DockResult* dock_res)
 					throw();
 
-				/** Sets the docked system
+				/** Sets the docked system.
 					* @param			system docked system
 					*/
 				void setDockedSystem(System* system)
@@ -67,78 +75,94 @@ namespace BALL
 
 				/** Adds scoring function to Combobox and its advanced option dialog to HashMap, if it has such a dialog.
 					* @param			name the name of the scoring function
-					* @param			score_func scoring function (enum)
+					* @param			score_func the value of enum DockingController::ScoringFunction
 					* @param			dialog advanced option dialog
 					*/
 				void addScoringFunction(const QString& name, DockingController::ScoringFunction score_func, QDialog* dialog=0)
 					throw();
-
+				//@}
+					
 			public slots:
 
-				/** show and raise result dialog
+				/** Shows and raises result dialog.
+					* Fills the result table in the dialog with the values stored in dock_res_.
 				*/
 				void show();
 
-				/** show snapshot of selected row
+				/** Is called when show snapshot button is pressed or when a row of the table is double-clicked.
+					* Shows snapshot of selected row.
 				*/
 				void showSnapshot();
 
-				/** sorts the result table by a clicked column
+				/** Is called when header of a column in the result table is pressed.
+					* Sorts the result table by a clicked column.
+					* Uses nested class Compare_ for sorting.
 				*/
 				void sortTable(int column);
 
-				/**
+				/** Is called when docking options button is pressed.
+					* Shows docking options in a small dialog.
 				*/
 				void showDockingOptions();
 
-				/** select and show the entry above the current selected entry
+				/** Is called when upward button is pressed.
+					* Selects the row above the current selected row and shows its snapshot.
 				*/
 				void upwardClicked();
 
-				/** selects and show the entry below the current selected entry
+				/** Is called when downward button is pressed.
+					* Selects the row below the current selected row and shows its snapshot.
 				*/
 				void downwardClicked();
 
-				/** set the advanced button enabled if the selected scoring function has options
-				*  otherwise the button is disabled
+				/** Is called when a scoring function is chosen in the combobox. 
+					* Sets the advanced button enabled if the selected scoring function has options
+				*  otherwise the button is disabled.
 				*/
 				void scoringFuncChosen();
 
-				/** show options dialog of selected scoring function
-				*/
+				/** Is called when advanced button for scoring function options is pressed.
+			 	 *	Shows corresponding options dialog, if it exits.
+			 	 */
 				void advancedClicked();
 
-				/** calculate new scores with the chosen scoring function and add a new score column, 
-					* the table is sorted by this new column
+				/** Is called when new scoring button is pressed.
+					* Calculates new scores with the chosen scoring function and adds a new score column. 
+					* Calls \link DockResultDialog::sortTable sortTable \endlink to sort the table by this new column.
 					*/
 				void scoringClicked();
 				
-				/** Shows a context menu with entries "Delete Score Column", "Scoring Options" and "Redock"
+				/** Is called when the result table is right-clicked.
+					* Shows a context menu with entries "Delete Score Column", "Scoring Options" and "Redock"
 					* @param			row number of the row which the user clicked
 					* @param			column number of the row which the user clicked
 					* @param			pos
 					*/
 				void contextMenuRequested(int row, int column, const QPoint& pos);
 
-				/** Closes the dialog.
+				/** Is called when close button is pressed.
+					* Closes and deletes the dialog.
 				*/
 				void closeClicked();
 				
 				
 			protected slots:
 			
-				/** Deletes a score column.
+				/** Is called when context menu entry "Delete Score Column" is pressed.
+					* Deletes a score column.
 					* @param			column number of the column which should be deleted
 					*/
 				void deleteColumn_(int column);
 
-				/** Shows options of the scoring function in a small dialog.
+				/** Is called when context menu entry "Scoring Options" is pressed.
+					* Shows options of the scoring function in a small dialog.
 					* @param			column number of the column for which the scoring function options should be shown
 					*/
 				void showScoringOptions_(int column);
 
-				/** 
-					* 
+				/** Is called when context menu entry "Redock" is pressed.
+					* Calls \link DockingController::runDocking runDocking \endlink for redocking.
+					* @param			row number of the row for which redocking should be started
 					*/
 				void redock_(int row);
 
@@ -146,51 +170,52 @@ namespace BALL
 			protected:
 
 				/**
-				* nested class Compare_ 
-				* This class is needed for the sorting of the table;
-				* the rows of the table should be sorted by a certain column
+				* Nested class Compare_ 
+				* This class is needed for the sorting of the table.
+				* The rows of the table should be sorted by a certain column.
 				*/
 				class Compare_
 				{
 					public:
 
-						/** default constructor
+						/** Default constructor
 						*/
 						Compare_() throw();
 
-						/** constructor
+						/** Constructor
 						*/
-						Compare_(int index) throw();
+						Compare_(Position index) throw();
 
-						/** destructor
+						/** Destructor
 						*/
 						~Compare_() throw();
 
-						/** operator ()
+						/** Operator ()
 						*/
 						bool operator() (const vector<float>& a, const vector<float>& b) const
 							throw();
 
-						/**
+						/** Index of the entry by which the two vectors in operator() are compared.
 						*/
-						int index_;
+						Position index_;
 				};
 
 			private:
 
-				/** DockResult contains all information of the performed docking
+				/** DockResult contains all information of the performed docking.
+					* @see DockResult
 				*/
 				DockResult* dock_res_;
 
-				/** system which contains the two docked partners
+				/** System which contains the two docked partners.
 					*/
 				System* docked_system_;
 				
-				/**
+				/** The two redocking partners.
 					*/
 				System* redock_partner1_, * redock_partner2_;
 
-				/** key: ScoringFunction(enum), value: advanced options dialog
+				/** key: DockingController::ScoringFunction, value: advanced options dialog
 					*/
 				HashMap<int, QDialog*> scoring_dialogs_;
 		};

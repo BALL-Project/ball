@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.40 2005/09/20 08:59:08 leonhardt Exp $
+// $Id: dockResultDialog.C,v 1.1.2.41 2005/09/20 14:09:56 haid Exp $
 //
 
 #include "dockResultDialog.h"
@@ -426,6 +426,17 @@ namespace BALL
 				
 				menu_entry_pos = context_menu.insertItem("Redock", this, SLOT(redock_(int)));
 				context_menu.setItemParameter(menu_entry_pos, row);
+				MainControl* main_control = MainControl::getInstance(0);
+				if (!main_control)
+				{
+					Log.error() << "Error while showing context menu! " << __FILE__ << " " << __LINE__ << std::endl;
+					return;
+				}
+				if (main_control->compositesAreLocked())
+				{
+					context_menu.setItemEnabled(menu_entry_pos, false);
+				}
+				
 				context_menu.exec(pos);
 		}
 		
@@ -547,7 +558,7 @@ namespace BALL
 		{}
 		
 		// constructor
-		DockResultDialog::Compare_::Compare_(int index) throw()
+		DockResultDialog::Compare_::Compare_(Position index) throw()
 		{ index_ = index; }
 		
 		// destructor

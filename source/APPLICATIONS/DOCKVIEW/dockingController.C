@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.24 2005/09/20 08:59:09 leonhardt Exp $
+// $Id: dockingController.C,v 1.1.2.25 2005/09/20 14:09:57 haid Exp $
 //
 
 #include "dockingController.h"
@@ -287,6 +287,12 @@ namespace BALL
 		void DockingController::runScoring_(ConformationSet* conformation_set)
 			throw()
 		{
+			if (!conformation_set->size())
+			{
+				Log.error() << "There are no docking results! " << __FILE__ << " " << __LINE__ << std::endl;
+				return;
+			}
+		
 		 	// create scoring function object
 			EnergeticEvaluation* scoring = 0;
 			//check which scoring function is chosen
@@ -354,18 +360,7 @@ namespace BALL
 
 			dock_res->addScoring(String(dock_dialog_.scoring_functions->currentText().ascii()), dock_dialog_.getScoringOptions(), scores);
 
-			// add docked system to BALLView structures /////////////////////////////////////////////////////////////////
-			if (!conformation_set->size())
-			{
-				Log.error() << "There are no docking results! " << __FILE__ << " " << __LINE__ << std::endl;
-				// delete instance 
-				if (scoring != NULL)
-				{
-					delete scoring;
-					scoring = NULL;
-				}
-				return;
-			}
+			// add docked system to BALLView structures
 			const SnapShot& best_result = (*conformation_set)[0];
 
 			System* docked_system = new System(conformation_set->getSystem());

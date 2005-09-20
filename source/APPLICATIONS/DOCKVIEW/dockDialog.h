@@ -61,8 +61,8 @@ namespace BALL
 				//@{
 			
 				/** Default Constructor.
-				 *	Calls  \link PreferencesEntry::registerObject_ registerObject_ \endlink 
-				 *	Sets flag is_redock_ to false
+				 *	Calls  \link PreferencesEntry::registerObject_ registerObject_ \endlink.
+				 *	Sets flag is_redock_ to false.
 				 *	@param      parent the parent widget of the DockDialog
 				 *	@param      name the name of the DockDialog
 				 *	@param			modal the modal flag
@@ -82,13 +82,17 @@ namespace BALL
 				 */
 				virtual ~DockDialog()
 					throw();
-
 				//@}
 
+				/**	@name	Assignment
+				 */	
+				//@{
+				
 				/**  Assignment operator
 				 */
 				const DockDialog& operator =(const DockDialog& dock_dialog)
 					throw();
+				//@}
 					
 				/**	@name	Accessors: inspectors and mutators
 			 	 */
@@ -101,74 +105,72 @@ namespace BALL
 				void setSystems(System* system1, System* system2)
 					throw();
 				
-				/**  Get first docking partner
+				/**  Get first docking partner.
 				 */
 				System* getSystem1()
 					throw();
 				
-				/**  Get second docking partner
+				/**  Get second docking partner.
 				 */
 				System* getSystem2()
 					throw();
 				
-				/** Get algorithm options
+				/** Get algorithm options.
 				 */
 				Options& getAlgorithmOptions()
 					throw();
 				
-				/** Get scoring options
+				/** Get scoring options.
 				 */
 				Options& getScoringOptions()
 					throw();
 				
-				/** Sets the flags 'is_redock_' and 'has_changed_'
+				/** Sets the flags 'is_redock_' and 'has_changed_'.
 				 */
 				void isRedock(bool is_redock)
 					throw();
 					
-					
-				/** Adds docking algorithm to Combobox and its advanced option dialogs to HashMap.
+				/** Adds docking algorithm to Combobox and its advanced option dialog to HashMap.
 				 *	@param      name the name of the algorithm
-				 *	@param      algorithm the value of enum Algorithm
+				 *	@param      algorithm the value of enum DockingController::Algorithm
 				 *	@param      dialog pointer to an advanced option dialog
 				 */
 				//void addAlgorithm(const QString& name, DockingController::Algorithm algorithm, QDialog* dialog)
 				void addAlgorithm(const QString& name, const int algorithm, QDialog* dialog)
 					throw();
 					
-				/** Adds scoring function to Combobox and its advanced option dialogs to HashMap, if it has such a dialog.
+				/** Adds scoring function to Combobox and its advanced option dialog to HashMap, if it has such a dialog.
 				 *	@param      name the name of the scoring function
-				 *	@param      score_func the value of enum ScoringFunction
+				 *	@param      score_func the value of enum DockingController::ScoringFunction
 				 *	@param      dialog pointer to an advanced option dialog
 				 */
 				//void addScoringFunction(const QString& name, DockingController::ScoringFunction score_func, QDialog* dialog=0)
 				void addScoringFunction(const QString& name, const int score_func, QDialog* dialog=0)
 					throw();
 				
-				//@}
-					
-				
-				/**	Initializes the popup menu <b>  Molecular Mechanics </b> with its checkable submenu <b> Docking </b>;
-				 *	This method is called automatically	immediately before the main application is started.
-				 *	Builds HashMaps for algorithm advanced option dialogs and for scoring function advanced option dialogs.
-				 *	@param main_control the  MainControl object to be initialized
-				 *  @see   openDialog
-				 *	@see   finalizeWidget
-				 *	@see   insertMenuEntry
+				/**	Builds HashMaps for algorithm advanced option dialogs and for scoring function advanced option dialogs.
+				 *	Also builds HashMap with the allowed scoring functions for the different algorithms.
+				 *  Is called by \link DockingController::initializeWidget initializeWidget \endlink.
+				 *	@see				addAlgorithm
+				 *	@see				addScoringFunction
 				 */
 				void initializeWidget()
 					throw();
 
-				/** Fetches the preferences from the INIFile.
-				 *	@see    writePreferences
-				 */
+				/** Fetchs the preferences from the INIFile.
+					* Calls \link PreferencesEntry::readPreferenceEntries readPreferenceEntries \endlink.
+					* Calls \link fetchPreferences_ fetchPreferences_ \endlink to read the redocking options.
+					* This method is called in \link DockingController::fetchPreferences fetchPreferences \endlink.
+				 	*	@see    writePreferences
+				 	*/
 				void fetchPreferences(INIFile& file)
 					throw();
 				
 				/** Writes the preferences to the INIFile.
-				 *  This method will be called inside the method  MainControl::aboutToExit 
-				 *  @see    fetchPreferences
-				 */
+					* Calls \link PreferencesEntry::writePreferenceEntries writePreferenceEntries \endlink.
+				  * This method is called in \link DockingController::writePreferences writePreferences \endlink.
+				  * @see    fetchPreferences
+				  */
 				void writePreferences(INIFile& file)
 					throw();
 				
@@ -177,77 +179,78 @@ namespace BALL
 				 */
 				void reset()
 					throw();
-					
+				//@}
 					
 			public slots:
 	
 				/** Shows and raises the dialog.
-				 *	The comboboxes for the docking partners are filled with the loaded systems in BALLView.
-				 *	If the user has selected one or two systems, they are the current items in the comboboxes.
+					* Dialog is adapted for docking / redocking.
+				 *	Calls \link fillSystemComboboxes_ fillSystemComboboxes_ \endlink in case of docking.
 				 */
 				void show();
 				
-				/** Indicates the reset button was pressed.
+				/** Is called when reset button is pressed.
 				 * Calls \link DockDialog::reset reset \endlink.
 				 */
 				void resetPressed();
 			
-				/** Indicates the OK button was pressed.
-				 * 	If we are not doing redocking, it checks if two different systems are chosen.
+				/** Is called when OK button is pressed.
+				 * 	For docking, it checks if two different systems are chosen.
 				 *  Hides the dialog and calls \link DockDialog::applyValues_ applyValues_ \endlink and \link DockDialog::applyProcessors_ applyProcessors_ \endlink.
 				 */
 				void okPressed();
 				
-				/** Indicates the cancel button was pressed.
+				/** Is called when cancel button is pressed.
 				 *	Hides the dialog.
 				 */
 				void cancelPressed();
 				
-				/** Indicates the advanced button for algorithm option button was pressed.
-			 	 *	Show corresponding options dialog.
+				/** Is called when advanced button for algorithm options is pressed.
+			 	 *	Shows corresponding options dialog.
 				 */
 				void algAdvancedPressed();
 				
-				/** Indicates the advanced button for algorithm option button was pressed.
-			 	 *	Show corresponding options dialog, if it exits.
+				/** Is called when advanced button for scoring function options is pressed.
+			 	 *	Shows corresponding options dialog, if it exits.
 			 	 */
 				void scoringAdvancedPressed();
 				
-				/** Indicates a system in the combobox was chosen as docking partner 1.
+				/** Is called when a system in the combobox is chosen as docking partner 1.
 				 *  Calls \link DockDialog::partnerChosen_ partnerChosen_ \endlink.
 				 */
 				void partner1Chosen();
 				
-				/** Indicates a system in the combobox was chosen as docking partner 2.
+				/** Is called when a system in the combobox is chosen as docking partner 2.
 				 *  Calls \link DockDialog::partnerChosen_ partnerChosen_ \endlink.
 				 */
 				void partner2Chosen();
 				
-				/** Indicates a scoring function in the combobox was chosen.
+				/** Is called when a scoring function in the combobox is chosen.
 				 *	If the chosen scoring function has advanced options, the advanced_button will be enabled.
 				 */
 				void scoringFuncChosen();
 				
-				/** Indicates an algorithm in the combobox was chosen.
+				/** Is called when an algorithm in the combobox is chosen.
 				 *	If the chosen algorithm has advanced options, the advanced_button will be enabled.
 				 */
 				void algorithmChosen();
 				
-				/** Indicates the browse button to get a charges config file from table was pressed.
+				/** Is called when browse button to get a charges config file from table is pressed.
+					*  Calls \link DockDialog::selectFile_ selectFile_ \endlink.
 				 */
 				void browseChargesData();
 				
-				/** Indicates the browse button to get a charges config file by rules was pressed.
+				/** Is called when browse button to get a charges config file by rules is pressed.
 				 *  Calls \link DockDialog::selectFile_ selectFile_ \endlink.
 				 */
 				void browseChargesRules();
 				
-				/** Indicates the browse button to get a radii config file from table was pressed.
+				/** Is called when browse button to get a radii config file from table is pressed.
 				 *  Calls \link DockDialog::selectFile_ selectFile_ \endlink.
 				 */
 				void browseRadiiData();
 				
-				/** Indicates the browse button to get a radii config file by rules was pressed.
+				/** Is called when browse button to get a radii config file by rules s pressed.
 				 *  Calls \link DockDialog::selectFile_ selectFile_ \endlink.
 				 */
 				void browseRadiiRules();
@@ -255,11 +258,11 @@ namespace BALL
 				
 			protected:
 			
-				/** Sets options with values the user has chosen.  
+				/** Sets options algorithm_opt_ and scoring_opt_ with values the user has chosen.  
 				 */
 				void applyValues_() throw();
 				
-				/** Apply processors to the systems.
+				/** Applies processors to the systems.
 				 */
 				bool applyProcessors_() throw();
 				
@@ -268,66 +271,74 @@ namespace BALL
 				void selectFile_(QLineEdit& lineedit) throw();
 				
 				/** Get system which the user has chosen in the dialog as docking partner.
+					* @param				qstr name of the docking partner
 				 */
 				System* partnerChosen_(const QString& qstr) throw();
 				
-				/** Function to fill the system comboboxes.
+				/** Fills the system comboboxes.
 				 *  If the user has already selected one or two systems, they are the current items in the comboboxes. 
 				 */
 				void fillSystemComboboxes_() throw();
 				
-				/** function to read the redocking values from INIFile into vector backup_
-				 *	if INIFile has not yet a section REDOCKING, fill backup_ vector with default values 
+				/** Reads the redocking values from INIFile into vector backup_.
+				 	*	If INIFile has not yet a section REDOCKING, fill backup_ vector with default values.
+				 	*	@param    	file the INIFile that is read
+					*	@param     	entry key of entry that is read
+					*	@param    	default_value default value
+					* @see				fetchPreferences
 				 */
 				void fetchPreferences_(INIFile& file, const String& entry, const QString& default_value) throw();
 			
-				/** Swaps the option values between vector backup_ and dialog
-				 *  Is called in show() if has_changed_ is true
-				 *  and in writePreferences if is_redock_ is true
+				/** Swaps the option values between vector backup_ and dialog.
+				 *  Is called in \link DockDialog::show show \endlink if has_changed_ is true
+				 *  and in \link DockDialog::writePreferences writePreferences \endlink if is_redock_ is true
 				 */
 				void swapValues_() throw();
 				
 				
 			private:
 				
-				/** flag which indicates if we do docking or redocking
+				/** Flag which indicates if we do docking or redocking.
 					*/
 				bool is_redock_;
 				
-				/** flag:
-					* true if we now do docking and did redocking before or otherwise
-					* false if we do (re)docking and also did (re)docking before
+				/** Flag:
+					* True if we do docking and did redocking before or otherwise.
+					* False if we do (re)docking and also did (re)docking before.
 					*/
 				bool has_changed_;
 			
-				/** key: Algorithm(enum)
+				/** key: DockingController::Algorithm
 				 *  value: advanced options dialog
 				 */
 				HashMap<int, QDialog*> algorithm_dialogs_;
 				
-				/** key: ScoringFunction(enum)
+				/** key: DockingController::ScoringFunction
 				 *  value: advanced options dialog
 				 */
 				HashMap<int, QDialog*> scoring_dialogs_;
 			
-				/** key: Algorithm(enum)
+				/** key: DockingController::Algorithm
 				 *  value: vector of scoring functions which can be used with this algorithm
 				 */
 				HashMap<int, vector<int> > allowed_sf_;
 				
-				/** Pointer to the two docking partners
+				/** Pointer to docking partner 1
 				 */
 				System* docking_partner1_;
+				
+				/** Pointer to docking partner 2
+				 */
 				System* docking_partner2_;	
 				
-				/** Options for the docking algorithm
+				/** Options for the docking algorithm and scoring function
 				 */
 				Options algorithm_opt_, scoring_opt_;
 		
-				/** Needed to guaranty that both, docking and redocking preferences can be written to INIFile
+				/** Needed to guarantee that both, docking and redocking preferences can be written to INIFile
 					* When we do docking, redocking values are in the vector and when we do redocking, the docking values are in there.
-					* In fetchPreferences, we read the last redocking values from INIFile in this vector
-					* and in writePreferences, we write the redocking values in INIFile from this vector
+					* In \link DockDialog::fetchPreferences fetchPreferences \endlink, we read the last redocking values from INIFile in this vector
+					* and in \link DockDialog::writePreferences writePreferences \endlink, we write the redocking values in INIFile from this vector
 					*/
 				vector<QString> backup_;
 				

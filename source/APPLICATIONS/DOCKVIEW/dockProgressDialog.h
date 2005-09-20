@@ -45,7 +45,7 @@ namespace BALL
 				DockProgressDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
 					throw();
 					
-				/** Copy constructor.
+				/** Copy constructor
 					*/
 				DockProgressDialog(const DockProgressDialog& dock_prog_dialog)
 					throw();
@@ -54,27 +54,35 @@ namespace BALL
 					*/
 				virtual ~DockProgressDialog()
 					throw();
-		
 				//@}
 					
+				/**	@name	Assignment
+				 */
+				//@{
+				
 				/** Assignment operator
 				 	*/
 				const DockProgressDialog& operator =(const DockProgressDialog& dock_prog_dialog)
 					throw();
+				//@}
 					
-				/** Set docking algorithm.
+				/**	@name	Accessors: inspectors and mutators
+				 */
+				//@{
+				
+				/** Sets docking algorithm.
 					* @param      alg docking algorithm
 					*/
 				void setDockingAlgorithm(DockingAlgorithm* alg)
 					throw();
 				
-				/** Get docking algorithm
+				/** Get docking algorithm.
 					*/
 				const DockingAlgorithm* getDockingAlgorithm() const
 					throw();
 
-				/** Fill ProgressDialog with information about the chosen
-					* docking partners, algorithm, scoring function and options
+				/** Fills ProgressDialog with information about the chosen
+					* docking partners, algorithm, scoring function and options.
 					* @param      p1 first docking partner 
 					* @param      p2 second docking partner
 					* @param      alg docking algorithm
@@ -84,38 +92,49 @@ namespace BALL
 					*/
 				void fillDialog(const QString& p1, const QString& p2, const QString& alg, const QString& sf, const Options& alg_opt, const Options& sf_opt)
 					throw();
-					
+				//@}
 				
 			public slots:
 			
-				/** Start timer and remember start time.
-					* Then show dialog to user.
+				/** Starts timer and shows dialog to user.
 					*/
 				void show();
 			
-				/** TODO: pause algorithm!!!
-				*/
+				// TODO: pause algorithm!!!
+				/** Is called when pause button / continue button is pressed.
+					* Pauses / continues docking calculations.
+					*/
 				void pauseClicked();
 			
-				/**
+				/** Is called when abort button is pressed.
+					* Aborts docking calculations.
+					* Closes and deletes the dialog.
 				*/
 				void abortClicked();
 				
 				
 			protected slots:
 			
-				/** Get progress of docking algorithm.
-					* Set progress bar to current progress and calculate remaining time
+				/** Is called when timer elapses.
+					* Gets current progress of docking algorithm.
+					* Sets progress bar to current progress and calculates remaining time.
+					* Closes and deletes the dialog when calculations have finished.
 					*/
 				void updateProgress_();
 			
 			
 			protected:
 				
+				/** Pointer to docking algorithm.
+					*/
 				DockingAlgorithm* alg_;
 			
+				/** Timer to call \link DockProgressDialog::updateProgress_ updateProgress_ \endlink regularly while calculation is running.
+					*/
 				QTimer timer_;
 				
+				/** Start time of docking calculations.
+					*/
 				QDateTime start_time_;
 		};
 		
