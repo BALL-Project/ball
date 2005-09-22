@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.25 2005/09/20 14:09:57 haid Exp $
+// $Id: dockingController.C,v 1.1.2.26 2005/09/22 09:32:19 leonhardt Exp $
 //
 
 #include "dockingController.h"
@@ -23,7 +23,7 @@
 
 #include <qmessagebox.h>
 #include <qcombobox.h>
-
+//#define BALL_VIEW_DEBUG
 using namespace std;
 
 namespace BALL
@@ -76,9 +76,16 @@ namespace BALL
 			if (&dock_controller != this)
 			{
 				dock_dialog_ = dock_controller.dock_dialog_;
-				// ???? do we have to delete dock_alg_ here ?
+				if(dock_alg_ != 0)
+				{
+					// remark: there might be troubles if doing an assignment when the docking thread is still running
+					delete dock_alg_;
+				}
 				dock_alg_ = dock_controller.dock_alg_;
-				delete progress_dialog_;
+				if(progress_dialog_ != 0)
+				{
+					delete progress_dialog_;
+				}
 				progress_dialog_ = dock_controller.progress_dialog_;
 				id_ = dock_controller.id_;
 			}
@@ -188,7 +195,7 @@ namespace BALL
 		
 		// Show docking dialog, check which algorithm is chosen and create new DockingAlgorithm object.
 		// Start new Thread and fill/show ProgressDialog.
-		void DockingController::runDocking(bool isRedock)
+		void DockingController::runDocking(bool is_redock)
 			throw()
 		{
 			// Make sure we run just one instance at a time.
@@ -198,7 +205,7 @@ namespace BALL
 				return;
 			}
 			
-			dock_dialog_.isRedock(isRedock);
+			dock_dialog_.isRedock(is_redock);
 			
 			// QDialog::Accepted = 1; QDialog::Rejected = 0 
 			//if cancel was pressed in DockDialog, don't start docking
@@ -213,10 +220,10 @@ namespace BALL
 			{
 				case GEOMETRIC_FIT:
 					if(dock_alg_ != 0)
-						{
-							delete dock_alg_;
-							dock_alg_ = NULL;
-						}
+					{
+						delete dock_alg_;
+						dock_alg_ = NULL;
+					}
 					dock_alg_ =  new GeometricFit();
 					break;
 			}
@@ -307,10 +314,10 @@ namespace BALL
 				{
 					MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
 					if (!mol_struct)
-						{
-							Log.error() << "Error while scoring with AMBER_FF! " << __FILE__ << " " << __LINE__ << std::endl;
-							return;
-						}
+					{
+						Log.error() << "Error while scoring with AMBER_FF! " << __FILE__ << " " << __LINE__ << std::endl;
+						return;
+					}
 					AmberFF& ff = mol_struct->getAmberFF();
 					//the force field is given to the AmberEvaluation (scoring function) object
 					scoring = new AmberEvaluation(ff);

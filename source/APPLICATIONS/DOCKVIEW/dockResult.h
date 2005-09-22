@@ -15,10 +15,10 @@
 
 namespace BALL
 {
-		/** This class contains the result of an docking calculation, 
-		 *  like the used algorithm, with which options,
+		/** This class contains the result of a (re)docking calculation: 
+		 *  the used algorithm and its options,
 		 * 	the conformation set which was produced by the algorithm
-		 *	and the scores of all scoring functions that where used for the ranking / reranking
+		 *	and the scores, names and options of all scoring functions that were used for the ranking / reranking.
 		 */
 		class DockResult
 		{
@@ -39,7 +39,7 @@ namespace BALL
 										const Options& docking_options)
 					throw();
 				
-				/** Copy constructor.
+				/** Copy constructor
 					*/
 				DockResult(const DockResult& dock_res)
 					throw();
@@ -62,84 +62,117 @@ namespace BALL
 					
 				//@}
 				
-				/**	@name	Accessors
+				/**	@name	Accessors: inspectors and mutators
 				 */	
 				//@{
 				
+				/** Sets the conformation set.
+				*/
 				void setConformationSet(ConformationSet* conformation_set)
 					throw();
-					
+				
+				/** Get the docking algorithm.
+				*/
 				const String& getDockingAlgorithm() const
 					throw();
 					
+				/** Get the options of the docking algorithm.
+				*/
 				const Options& getDockingOptions() const
 					throw();
 				
+				/** Get the conformation set.
+				*/
 				const ConformationSet* getConformationSet() const
 					throw();
-					
+				
+				/** Get the conformation set.
+				*/
 				ConformationSet* getConformationSet()
 					throw();
 				
-				/** returns the scores of scoring_ i
+				/** Returns the scores of \link DockResult::scorings_ scorings_ \endlink i.
 				*/
 				const vector<float>& getScores(Position i) const
 					throw();
 					
-				/** returns the name of scoring function of scoring_ i
+				/** Returns the name of scoring function of \link DockResult::scorings_ scorings_ \endlink i.
 				*/
 				const String& getScoringName(Position i) const
 					throw();
 					
-				/** returns the scoring function options of scoring_ i
+				/** Returns the scoring function options of \link DockResult::scorings_ scorings_ \endlink i.
 				*/
 				const Options& getScoringOptions(Position i) const
 					throw();
 					
-				/** returns the number of scorings
+				/** Returns the number of scorings.
 				*/
 				Size numberOfScorings() const
 					throw();
-				
-				//@}
 					
-				/** add new Scoring_ to vector scorings_
+				/** Add  a new Scoring_ to vector \link DockResult::scorings_ scorings_ \endlink.
+				 *  @param			name name of the scoring function
+				 *  @param			options options of the scoring function
+				 *  @param			scores scores calculated by the scoring function
 				*/
 				void addScoring(const String& name, const Options& options, const vector<float>& scores)
 					throw();
 					
-				/** delete i-th Scoring_ of vector scorings_
+				/** Deletes Scoring_ i of vector \link DockResult::scorings_ scorings_ \endlink.
 				*/
 				void deleteScoring(Position i)
 					throw();
 				
+				//@}	
+					
 				/**	@name	Reading and writing
 				 */	
 				//@{
 					
-				/** store dock result in a file
+				/** Stores dock result in a file.
+					* Calls \link DockResult::writeDockResult writeDockResult(std::ostream& file) \endlink.
+					* @param 	  filename name of the file 
+				  * @return 	true if writing was successful.
+					* @return 	false otherwise
 				*/
 				bool writeDockResult(const String& filename)
 					throw();
 				
-				/** store dock result in a file
+				/** Stores dock result in an ostream.
+					* @param 	  file ostream 
+				  * @return 	true if writing was successful.
+					* @return 	false otherwise
 				*/
 				bool writeDockResult(std::ostream& file) const
 					throw();
 					
-				/** read dock result from a file
+				/** Reads dock result from a file.
+					* Calls \link DockResult::readDockResult readDockResult(std::istream& file) \endlink.
+					* @param 	  filename name of the file 
+				  * @return 	true if reading was successful.
+					* @return 	false otherwise
 				*/
 				bool readDockResult(const String& filename)
 					throw();
 					
-				/** read dock result from a file
+				/** Read dock result from an istream.
+					* @param 	  file istream 
+				  * @return 	true if reading was successful.
+					* @return 	false otherwise
 				*/
 				bool readDockResult(std::istream& filename)
 					throw();
 				
+				/** Operator to write dock result into an ostream.
+					* Calls \link DockResult::writeDockResult writeDockResult(std::ostream& file)\endlink.
+				*/
 				friend ostream& operator <<(ostream& out, const DockResult& dock_res)
 					throw();
 				
+				/** Operator to read dock result into an istream.
+					* Calls \link DockResult::readDockResult readDockResult(std::istream& file) \endlink.
+				*/
 				friend istream& operator >>(istream& in, DockResult& dock_res)
 					throw();
 				
@@ -147,8 +180,7 @@ namespace BALL
 				
 			protected:
 				
-				/**
-				 *	nested class Scoring_ 
+				/** Nested class in DockResult.
 				 *	This class contains information about the scoring: 
 				 * 	name of the scoring function, 
 				 * 	options of the function and 
@@ -162,7 +194,7 @@ namespace BALL
 						*/
 						Scoring_() throw();
 						
-						/** Copy constructor.
+						/** Copy constructor
 						*/
 						Scoring_(const Scoring_& scoring)
 							throw();
@@ -180,24 +212,29 @@ namespace BALL
 						const Scoring_& operator =(const Scoring_& scoring)
 							throw();
 						
+						/** name of scoring function
+						*/
 						String name_;
+						/** options of scoring function
+						*/
 						Options options_;
-						/** in this vector score i belongs to the conformation with snapshot number i
+						/** Vector of scores.
+							* In this vector score i belongs to the conformation with snapshot number i.
 						*/
 						vector<float> scores_;
 				};
 				
-				/** name of docking algorithm
+				/** Name of docking algorithm
 				*/
 				String docking_algorithm_;
-				/** options of the docking algorithm
+				/** Options of the docking algorithm
 				*/
 				Options docking_options_;
-				/** conformation set which was produced by the docking algorithm
+				/** Conformation set which was produced by the docking algorithm.
 				*/
 				ConformationSet* conformation_set_;
-				/** vector contains name, options and scores of each scoring function
-				 *	the scores of each scoring are sorted by snapshot number
+				/** Vector contains name, options and scores of each scoring function.
+				 *	The scores of each scoring are sorted by snapshot number.
 				 */
 				vector<Scoring_> scorings_;
 		};

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.11 2005/09/20 08:59:09 leonhardt Exp $
+// $Id: dockingController.h,v 1.1.2.12 2005/09/22 09:32:19 leonhardt Exp $
 //
 
 #ifndef DOCKINGCONTROLLER_H
@@ -41,6 +41,10 @@ namespace BALL
 	namespace VIEW
 	{
 		/**	Class for docking two systems.
+			* It is responsible to show the docking dialog. It starts a docking caluclation with the options 
+			* of the dialog. 
+			* If BALLView was compiled with multithreading support it simultaneously shows the progress dialog.
+			* Finally it shows the result dialog.
     		\ingroup  ViewWidgets
 		 */
 		class BALL_EXPORT DockingController
@@ -55,59 +59,75 @@ namespace BALL
 			
 				////// TODO: enum Algorithm und ScoringFunction in DockingAlgorithm bzw. EnergeticEvaluation ///////
 				
-				/** if you want to add a new docking algorithm extend enum 
+				/**	@name	Enumerations
+				 */
+				//@{
+				
+				/** Enumeration which contains the docking algorithms.
+					* The numbering corresponds to the order in the combobox of \link DockingController::dock_dialog_ dock_dialog_ \endlink.
+				 *  If you want to add a new docking algorithm extend enumeration 
 				 *	(0 corresponds to <select> item in ComboBox)
 				 */
 				enum Algorithm {GEOMETRIC_FIT = 1};
 				
-				/** if you want to add a new sccoring function extend enum 
+				/** Enumeration which contains the scoring functions.
+					* The numbering corresponds to the order in the combobox of \link DockingController::dock_dialog_ dock_dialog_ \endlink. 
+					* If you want to add a new scoring function extend enumeration 
 				 */
 				enum ScoringFunction {DEFAULT = 0, AMBER_FF = 1, RANDOM = 2};
-			
+			  //@}
+				
 				/**	@name	Constructors and Destructors
 				 */
 				//@{
 
 				/** Default Constructor.
-						Calls registerWidget.
+						Calls \link ModularWidget::registerWidget ModularWidget::registerWidget \endlink.
 						\see        ModularWidget
 				*/
 				DockingController(QWidget* parent = 0, const char* name = 0)
 					throw();
 
-				/** Copy constructor.
+				/** Copy constructor
 					*/
 				DockingController(const DockingController& dock_controller)
 					throw();
 
-				/** Destructor.
+				/** Destructor
 				*/
 				virtual ~DockingController()
 					throw();
 				//@}
 
+				/**	@name	Assignment
+				 */
+				//@{
+				
 				/**  Assignment operator
 				 */
 				const DockingController& operator =(const DockingController& dock_controller)
 					throw();
-				
-				/** Message handling method.
-				 *	Catches DockingFinishedNessage and ShowDockResultMessage	
-				 * 	@param message the pointer to the message that should be processed
-				 */
-				void onNotify(Message *message)
-					throw();
-
 				//@}
-
-				/**	ModularWidget methods
+				
+				/**	@name	Accessors
+				 */
+				//@{
+				
+				/**  Get docking dialog. 
+				 */
+				DockDialog& getDockDialog()	
+				throw();
+       //@}
+				
+				/**	@name ModularWidget methods
 				*/
 				//@{
-
-				/**	Initializes the popup menu <b>  Molecular Mechanics </b> with its checkable submenu <b>  Docking </b>;
-				*	This method is called automatically	immediately before the main application is started.
+				
+				/**	Initializes the popup menu <b>  Molecular Mechanics </b> with its checkable submenu <b>  Docking </b>.
+				*		Calls \link DockDialog::initializeWidget DockDialog::initializeWidget \endlink.
+				*	 	It is called automatically	immediately before the main application is started.
 				*	@param main_control the  MainControl object to be initialized
-				*  @see   openDialog
+				* @see   openDialog
 				*	@see   finalizeWidget
 				*	@see   insertMenuEntry
 				*/
@@ -115,54 +135,66 @@ namespace BALL
 					throw();
 				
 				/** Fetches the preferences from the INIFile.
+				* 	Calls \link DockDialog::fetchPreferences DockDialog::fetchPreferences \endlink.
+				*  This method will be called inside the method \link MainControl::show MainControl::show \endlink. 
 				*	@see    writePreferences
 				*/
 				void fetchPreferences(INIFile& file)
 					throw();
 
 				/** Writes the preferences to the INIFile.
-				*  This method will be called inside the method  MainControl::aboutToExit 
+				* 	Calls \link DockDialog::writePreferences DockDialog::writePreferences \endlink.
+				*  This method will be called inside the method \link MainControl::aboutToExit MainControl::aboutToExit \endlink. 
 				*  @see    fetchPreferences
 				*/
 				void writePreferences(INIFile& file)
 					throw();
 
 				/** Updates the state of menu entry Docking in the popup menu <b>  Molecular Mechanics </b>.
+				*   Enables the menu entry if more than two composites are loaded.
+				*   Disables the menu entry if less composites are loaded or if a simulation / calculation is running.
 				*/
 				void checkMenu (MainControl& main_control)
 					throw();	
 
+				/** Message handling method.
+				 *	Catches <b> DockingFinishedMessage </b> and <b> ShowDockResultMessage </b>.
+				 * 	@param message the pointer to the message that should be processed
+				 */
+				void onNotify(Message *message)
+					throw();	
+					
 				//@}	
 			
-				/** Show docking dialog, check which algorithm is chosen and create new DockingAlgorithm object.
-				 *  Start new Thread and fill/show ProgressDialog.
+				/** Shows docking dialog, checks which algorithm is chosen and creates new DockingAlgorithm object.
+				 *  Starts new Thread and fills/shows \link DockingController::progress_dialog_ progress_dialog_ \endlink.
+				 *  @param			is_redock flag that indicates if a docking or redocking should be run
 				 */
-				void runDocking(bool isRedock)
-					throw();
-						
-				DockDialog& getDockDialog()	
+				void runDocking(bool is_redock)
 					throw();
 					
 			public slots:
 				
-				/** Function is only called when we start docking (by clicking on menu entry "Docking").
-				 *  Calls runDocking(false).
+				/** Is called when docking is started by clicking on menu entry  <b> Docking </b>.
+				 *  Calls \link DockingController::runDocking runDocking(false) \endlink.
 				 */
 				void startDocking();
 				
 			protected:
 			
-				/** Apply scoring function which user has chosen.
-				 *  Then, create new DockResult and add new scoring to it.
-				 *  At the end, add the docked system to BALLView structures
-				 *  and send a NewDockResultMessage to insert the DockResult in DatasetControl.
+				/** Applies scoring function which user has chosen.
+				 *  Then, creates new DockResult and adds new scoring to it.
+				 *  At the end, adds the docked system to BALLView structures
+				 *  and sends a <b> NewDockResultMessage </b> to insert the DockResult in DatasetControl.
+				 *  Is called in \link DockingController::onNotify onNotify \endlink.
+				 * @param			conformation_set conformation set that contains the result of the docking algorithm
 			 */
 			 void runScoring_(ConformationSet* conformation_set)
 					throw();
 				
 			private:
 				
-				/** dialog for docking and redocking
+				/** Dialog for docking and redocking
 				 */
 				DockDialog dock_dialog_;
 				
@@ -170,7 +202,8 @@ namespace BALL
 				*/
 				DockingAlgorithm* dock_alg_;
 				
-				/// pointer to progress dialog
+				/** Pointer to progress dialog
+				*/
 				DockProgressDialog* progress_dialog_;
 				
 				/** Menu entry id

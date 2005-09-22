@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.55 2005/09/20 14:09:55 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.56 2005/09/22 09:32:17 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -25,7 +25,7 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/STRUCTURE/DOCKING/geometricFit.h>
-
+//#define BALL_VIEW_DEBUG
 namespace BALL
 {
 	namespace VIEW
@@ -180,7 +180,6 @@ namespace BALL
 		}
 		
 		// Adds docking algorithm to Combobox and its advanced option dialogs to HashMap.
-		//void DockDialog::addAlgorithm(const QString& name, DockingController::Algorithm algorithm, QDialog* dialog)
 		void DockDialog::addAlgorithm(const QString& name, const int algorithm, QDialog* dialog)
 			throw()
 		{
@@ -194,7 +193,6 @@ namespace BALL
 		}
 		
 		// Adds scoring function to Combobox and its advanced option dialogs to HashMap, if it has such an dialog.
-		//void DockDialog::addScoringFunction(const QString& name, DockingController::ScoringFunction score_func, QDialog* dialog)
 		void DockDialog::addScoringFunction(const QString& name, const int score_func, QDialog* dialog)
 			throw()
 		{
@@ -378,7 +376,7 @@ namespace BALL
 			algorithm_opt_.clear();
 			scoring_opt_.clear();
 			// options for all docking algorithms
-			///////////////// TODO common options should be in docking algorithm ////////////////////////////////////////////
+			///////////////// TODO common options should be in class DockingAlgorithm ////////////////////////////////////////////
 			//options_[DockingAlgorithm::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
 			try
 			{

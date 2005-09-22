@@ -37,7 +37,7 @@ namespace BALL
 				//@{
 			
 				/** Default Constructor.
-				 *	Calls \link PreferencesEntry::registerObject_ registerObject_ \endlink
+				 *	Calls \link PreferencesEntry::registerObject_ PreferencesEntry::registerObject_ \endlink
 				 *	@param      parent the parent widget of the GeometricFitDialog
 				 *	@param      name the name of the GeometricFitDialog
 				 *	@param			modal the modal flag
@@ -78,23 +78,24 @@ namespace BALL
 				void getOptions(Options& options)
 					throw();
 
-				/** Sets the flags 'is_redock_' and 'has_changed_'.
+				/** Sets the flags \link GeometricFitDialog::is_redock_ is_redock_ \endlink and 
+				  * \link GeometricFitDialog::has_changed_ has_changed_ \endlink.
 					*/
 				void isRedock(bool is_redock)
 					throw();
 				
 				/** Fetchs the preferences from the INIFile.
-					* Calls \link PreferencesEntry::readPreferenceEntries readPreferenceEntries \endlink.
-					* Calls \link fetchPreferences_ fetchPreferences_ \endlink to read the redocking options.
-					* This method is called in \link DockDialog::fetchPreferences fetchPreferences \endlink.
+					* Calls \link PreferencesEntry::readPreferenceEntries PreferencesEntry::readPreferenceEntries \endlink.
+					* Calls \link GeometricFitDialog::fetchPreferences_ fetchPreferences_ \endlink to read the redocking options.
+					* This method is called in \link DockDialog::fetchPreferences DockDialog::fetchPreferences \endlink.
 				 	*	@see    writePreferences
 				 	*/
 				void fetchPreferences(INIFile& file)
 					throw();
 				
 				/** Writes the preferences to the INIFile.
-					* Calls \link PreferencesEntry::writePreferenceEntries writePreferenceEntries \endlink.
-				 * This method is called in \link DockDialog::writePreferences writePreferences \endlink.
+					* Calls \link PreferencesEntry::writePreferenceEntries PreferencesEntry::writePreferenceEntries \endlink.
+				 * This method is called in \link DockDialog::writePreferences DockDialog::writePreferences \endlink.
 				 * @see    fetchPreferences
 				 */
 				void writePreferences(INIFile& file)
@@ -126,7 +127,7 @@ namespace BALL
 			protected:
 			
 				/** Function to read the redocking options from INIFile into vector backup_.
-					* If INIFile has not yet section GEOMETRIC_FIT_OPTIONS_REDOCK, fill backup_ vector with default values.
+					* If INIFile has not yet section <b> GEOMETRIC_FIT_OPTIONS_REDOCK </b>, fill vector \link DockDialog::backup_ backup_ \endlink with default values.
 					*	@param    	file the INIFile that is read
 					*	@param     	entry key of entry that is read
 					*	@param    	default_value default value
@@ -135,8 +136,9 @@ namespace BALL
 				void fetchPreferences_(INIFile& file, const String& entry, const QString& default_value) throw();
 				
 				/** Swaps the option values between vector backup_ and dialog.
-				 *  Is called in \link show show \endlink if has_changed_ is true
-				 *  and in \link writePreferences writePreferences \endlink if is_redock_ is true.
+				 *  Is called in \link GeometricFitDialog::show show \endlink if \link GeometricFitDialog::has_changed_ has_changed_ \endlink 
+				 *  is true and in \link GeometricFitDialog::writePreferences writePreferences \endlink if 
+				 *  \link GeometricFitDialog::is_redock_ is redock_ \endlink is true.
 				 */
 				void swapValues_() throw();
 			

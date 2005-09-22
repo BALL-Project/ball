@@ -73,7 +73,7 @@ namespace BALL
 				void setDockedSystem(System* system)
 					throw();
 
-				/** Adds scoring function to Combobox and its advanced option dialog to HashMap, if it has such a dialog.
+				/** Adds scoring function to combobox and its advanced option dialog to hashmap, if it has such a dialog.
 					* @param			name the name of the scoring function
 					* @param			score_func the value of enum DockingController::ScoringFunction
 					* @param			dialog advanced option dialog
@@ -85,7 +85,7 @@ namespace BALL
 			public slots:
 
 				/** Shows and raises result dialog.
-					* Fills the result table in the dialog with the values stored in dock_res_.
+					* Fills the result table in the dialog with the values stored in \link DockResultDialog::dock_res_ dock_res_ \endlink .
 				*/
 				void show();
 
@@ -133,7 +133,7 @@ namespace BALL
 				void scoringClicked();
 				
 				/** Is called when the result table is right-clicked.
-					* Shows a context menu with entries "Delete Score Column", "Scoring Options" and "Redock"
+					* Shows a context menu with entries <b>Delete Score Column</b>, <b>Scoring Options</b> and <b>Redock</b>
 					* @param			row number of the row which the user clicked
 					* @param			column number of the row which the user clicked
 					* @param			pos
@@ -148,20 +148,20 @@ namespace BALL
 				
 			protected slots:
 			
-				/** Is called when context menu entry "Delete Score Column" is pressed.
+				/** Is called when context menu entry <b> Delete Score Column </b> is pressed.
 					* Deletes a score column.
 					* @param			column number of the column which should be deleted
 					*/
 				void deleteColumn_(int column);
 
-				/** Is called when context menu entry "Scoring Options" is pressed.
+				/** Is called when context menu entry <b> Scoring Options </b> is pressed.
 					* Shows options of the scoring function in a small dialog.
 					* @param			column number of the column for which the scoring function options should be shown
 					*/
 				void showScoringOptions_(int column);
 
-				/** Is called when context menu entry "Redock" is pressed.
-					* Calls \link DockingController::runDocking runDocking \endlink for redocking.
+				/** Is called when context menu entry <b> Redock </b> is pressed.
+					* Calls \link DockingController::runDocking DockingController::runDocking \endlink for redocking.
 					* @param			row number of the row for which redocking should be started
 					*/
 				void redock_(int row);
@@ -170,7 +170,7 @@ namespace BALL
 			protected:
 
 				/**
-				* Nested class Compare_ 
+				* Nested class in DockResultDialog.
 				* This class is needed for the sorting of the table.
 				* The rows of the table should be sorted by a certain column.
 				*/
@@ -195,7 +195,7 @@ namespace BALL
 						bool operator() (const vector<float>& a, const vector<float>& b) const
 							throw();
 
-						/** Index of the entry by which the two vectors in operator() are compared.
+						/** Index of the entry by which the two vectors in \link Compare::operator() operator() \endlink are compared.
 						*/
 						Position index_;
 				};

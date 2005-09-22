@@ -44,8 +44,12 @@ namespace BALL
 	namespace VIEW
 	{
 		class DockingController;
+		
 	
-		/**	Dialog for docking/redocking two systems.
+		/**	Dialog for docking / redocking two systems. 
+		  * In this dialog the user choose the two docking partners, the docking algorithm and the scoring function.
+			* Furthermore he can set the options for the algorithm and scroing function and can apply processors to the docking parnters.
+			* For redocking he can specify the euler angles.
     		\ingroup  ViewDialogs
 		 */
 		class BALL_EXPORT DockDialog : 
@@ -61,8 +65,8 @@ namespace BALL
 				//@{
 			
 				/** Default Constructor.
-				 *	Calls  \link PreferencesEntry::registerObject_ registerObject_ \endlink.
-				 *	Sets flag is_redock_ to false.
+				 *	Calls  \link PreferencesEntry::registerObject_ PreferencesEntry::registerObject_ \endlink.
+				 *	Sets flag \link DockDialog::is_redock_ is_redock_ \endlink to false.
 				 *	@param      parent the parent widget of the DockDialog
 				 *	@param      name the name of the DockDialog
 				 *	@param			modal the modal flag
@@ -125,32 +129,32 @@ namespace BALL
 				Options& getScoringOptions()
 					throw();
 				
-				/** Sets the flags 'is_redock_' and 'has_changed_'.
+				/** Sets the flags \link DockDialog::is_redock_ is_redock_ \endlink and \link DockDialog::has_changed_ has_changed_ \endlink.
 				 */
 				void isRedock(bool is_redock)
 					throw();
 					
-				/** Adds docking algorithm to Combobox and its advanced option dialog to HashMap.
+				/** Adds docking algorithm to combobox and its advanced option dialog to hashmap.
 				 *	@param      name the name of the algorithm
 				 *	@param      algorithm the value of enum DockingController::Algorithm
 				 *	@param      dialog pointer to an advanced option dialog
 				 */
-				//void addAlgorithm(const QString& name, DockingController::Algorithm algorithm, QDialog* dialog)
+				// remark: score_func isn't enum type because we then have cyclic includes of DockDialog and DockingController
 				void addAlgorithm(const QString& name, const int algorithm, QDialog* dialog)
 					throw();
 					
-				/** Adds scoring function to Combobox and its advanced option dialog to HashMap, if it has such a dialog.
+				/** Adds scoring function to combobox and its advanced option dialog to hashmap, if it has such a dialog.
 				 *	@param      name the name of the scoring function
 				 *	@param      score_func the value of enum DockingController::ScoringFunction
 				 *	@param      dialog pointer to an advanced option dialog
 				 */
-				//void addScoringFunction(const QString& name, DockingController::ScoringFunction score_func, QDialog* dialog=0)
+				// remark: score_func isn't enum type because we then have cyclic includes of DockDialog and DockingController
 				void addScoringFunction(const QString& name, const int score_func, QDialog* dialog=0)
 					throw();
 				
-				/**	Builds HashMaps for algorithm advanced option dialogs and for scoring function advanced option dialogs.
-				 *	Also builds HashMap with the allowed scoring functions for the different algorithms.
-				 *  Is called by \link DockingController::initializeWidget initializeWidget \endlink.
+				/**	Builds hashmaps for algorithm advanced option dialogs and for scoring function advanced option dialogs.
+				 *	Also builds hashmap with the allowed scoring functions for the different algorithms.
+				 *  Is called by \link DockingController::initializeWidget DockingController::initializeWidget \endlink.
 				 *	@see				addAlgorithm
 				 *	@see				addScoringFunction
 				 */
@@ -158,17 +162,17 @@ namespace BALL
 					throw();
 
 				/** Fetchs the preferences from the INIFile.
-					* Calls \link PreferencesEntry::readPreferenceEntries readPreferenceEntries \endlink.
-					* Calls \link fetchPreferences_ fetchPreferences_ \endlink to read the redocking options.
-					* This method is called in \link DockingController::fetchPreferences fetchPreferences \endlink.
+					* Calls \link PreferencesEntry::readPreferenceEntries PreferencesEntry::readPreferenceEntries \endlink.
+					* Calls \link DockDialog::fetchPreferences_ fetchPreferences_ \endlink to read the redocking options.
+					* This method is called in \link DockingController::fetchPreferences DockingController::fetchPreferences \endlink.
 				 	*	@see    writePreferences
 				 	*/
 				void fetchPreferences(INIFile& file)
 					throw();
 				
 				/** Writes the preferences to the INIFile.
-					* Calls \link PreferencesEntry::writePreferenceEntries writePreferenceEntries \endlink.
-				  * This method is called in \link DockingController::writePreferences writePreferences \endlink.
+					* Calls \link PreferencesEntry::writePreferenceEntries PreferencesEntry::writePreferenceEntries \endlink.
+				  * This method is called in \link DockingController::writePreferences DockingController::writePreferences \endlink.
 				  * @see    fetchPreferences
 				  */
 				void writePreferences(INIFile& file)
@@ -258,7 +262,8 @@ namespace BALL
 				
 			protected:
 			
-				/** Sets options algorithm_opt_ and scoring_opt_ with values the user has chosen.  
+				/** Sets options \link DockDialog::algorithm_opt_ algorithm_opt_ \endlink and 
+				  * \link DockDialog::scoring_opt_ scoring_opt_ \endlink with values the user has chosen.  
 				 */
 				void applyValues_() throw();
 				
@@ -281,7 +286,7 @@ namespace BALL
 				void fillSystemComboboxes_() throw();
 				
 				/** Reads the redocking values from INIFile into vector backup_.
-				 	*	If INIFile has not yet a section REDOCKING, fill backup_ vector with default values.
+				 	*	If INIFile has not yet a section <b> REDOCKING </b>, fill vector \link DockDialog::backup_ backup_ \endlink with default values.
 				 	*	@param    	file the INIFile that is read
 					*	@param     	entry key of entry that is read
 					*	@param    	default_value default value
@@ -290,8 +295,8 @@ namespace BALL
 				void fetchPreferences_(INIFile& file, const String& entry, const QString& default_value) throw();
 			
 				/** Swaps the option values between vector backup_ and dialog.
-				 *  Is called in \link DockDialog::show show \endlink if has_changed_ is true
-				 *  and in \link DockDialog::writePreferences writePreferences \endlink if is_redock_ is true
+				 *  Is called in \link DockDialog::show show \endlink if \link DockDialog::has_changed_ has_changed_ \endlink is true
+				 *  and in \link DockDialog::writePreferences writePreferences \endlink if \link DockDialog::is_redock_ is_redock_ \endlink is true
 				 */
 				void swapValues_() throw();
 				
