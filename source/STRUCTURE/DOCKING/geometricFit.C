@@ -368,7 +368,7 @@ namespace BALL
     int   r_idx;
 
 		int grid_size = options.getInteger(Option::GRID_SIZE);
-		int grid_spacing = options.getInteger(Option::GRID_SPACING);
+		float grid_spacing = options.getReal(Option::GRID_SPACING);
 
     if(grid_size % 2 == 0)
     {
