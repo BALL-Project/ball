@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.h,v 1.2 2005/07/09 18:35:04 bertsch Exp $
+// $Id: smartsParser.h,v 1.3 2005/09/26 00:21:53 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMARTES_PARSER_H
@@ -43,8 +43,6 @@ namespace BALL
 	{
 		public:
 
-		typedef std::list<Size> ConnectionList;
-		
 		enum ZEIsomerType
 		{
 			ANY_ZE,
@@ -68,14 +66,9 @@ namespace BALL
 		{
 			AND,
 			OR,
-			AND_LOW
+			AND_LOW,
+			NOOP
 		};
-/*
-		enum
-		{
-			MAX_CONNECTIONS = 100
-		};
-*/
 
 		typedef std::pair<ChiralClass, Position> ChiralDef;
 
@@ -87,7 +80,7 @@ namespace BALL
 
 				enum SPBondOrder
 				{
-					SINGLE,
+					SINGLE = 1,
 					SINGLE_UP,
 					SINGLE_UP_OR_ANY,
 					SINGLE_DOWN,
@@ -108,7 +101,7 @@ namespace BALL
 				ZEIsomerType getZEType() const { return ze_type_; }
 				void setZEType(ZEIsomerType type) { ze_type_ = type; }
 				void setBondOrder(SPBondOrder bond_order);
-				SPBondOrder getBondOrder() const;
+				SPBondOrder getBondOrder() const { return bond_order_; }
 				bool getNot() const { return not_; }
 				void setNot(bool is_not) { not_ = is_not; }
 
@@ -167,8 +160,9 @@ namespace BALL
 
 				void addAtomProperty(NamedProperty property) throw(Exception::ParseError);
 
-				Size getDefaultValence() const;
-				Size countRealValences() const;
+				Size getDefaultValence(const Atom* atom) const;
+				Size countRealValences(const Atom* atom) const;
+				Size getNumberOfImplicitHydrogens(const Atom* atom) const;
 
 				ChiralDef getChirality() const { return chirality_; }
 				void setChirality(const ChiralDef& chirality) { chirality_ = chirality; }
@@ -262,9 +256,7 @@ namespace BALL
 				bool getNot() const { return is_not_; }
 				void setNot(bool is_not) { is_not_ = is_not; }
 
-				void setInBrackets() { in_brackets_ = true; cerr << "SPNode::setInBrackets() " << endl; }
-
-				void addConnections(ConnectionList* list) { connections_.merge(*list); }
+				void setInBrackets() { in_brackets_ = true; }
 
 				void addSPEdge(SPEdge* sp_edge) { edges_.push_back(sp_edge); }
 
@@ -290,7 +282,6 @@ namespace BALL
 				SPEdge* first_edge_;
 				SPEdge* second_edge_;
 				SPAtom* sp_atom_;
-				ConnectionList connections_;
 		};
 
 	
@@ -311,7 +302,7 @@ namespace BALL
 		/**	@name	Parsing
 		*/
 		//@{
-		/**	Parse a SMILES string.
+		/**	Parse a SMARTS string.
 		*/
 		void parse(const String& s)
 			throw(Exception::ParseError);
@@ -321,9 +312,6 @@ namespace BALL
 		//@{
 		///
 		SPAtom* createAtom(const String& symbol, bool in_bracket = false);
-
-		///
-		void createBonds(SPAtom* atom, const ConnectionList* list);		
 
 		///
 		void createBond(SPAtom* left, SPAtom* right, SPBond::SPBondOrder bond_order);
@@ -340,6 +328,12 @@ namespace BALL
 		void clear();
 		//@}
 		
+		void addRingConnection(SPNode* spnode, Size index);
+		
+		HashMap<Size, std::vector<SPNode*> > getRingConnections() const;
+	
+		void setSSSR(const std::vector<std::vector<Atom*> >& sssr);
+	
 		struct State
 		{
 			Size					char_count;
@@ -351,11 +345,15 @@ namespace BALL
 
 		protected:
 
-			void dumpTreeRecursive_(SPNode* node);
+			bool needs_SSSR_;
+
+			static vector<HashSet<const Atom*> >* sssr_;
+
+			void dumpTreeRecursive_(SPNode* node, Size depth);
+
+			void dumpTreeRecursive_(SPEdge* edge, Size depth);
 			
-			
-			
-			std::vector<SPAtom*>	connections_;
+			HashMap<Size, std::vector<SPNode*>	> ring_connections_;
 			
 			static SmartsParser*	current_parser_;
 			

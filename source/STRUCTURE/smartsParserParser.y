@@ -25,7 +25,6 @@ extern void yyerror(char* s);
 	SmartsParser::SPAtom*						atom;
 	SmartsParser::SPNode*						node;
 	SmartsParser::SPEdge*						edge;
-	SmartsParser::ConnectionList*		conns;
 	SmartsParser::ChiralDef*				chiral;
 	SmartsParser::SPBond*						sp_bond;
 	SmartsParser::LogicalOperator		logical;
@@ -75,7 +74,7 @@ extern void yyerror(char* s);
 %type		<number>	pos_charge
 %type		<number>	neg_charge
 
-%type		<conns>		connection_list
+%type		<number>	connection_list
 
 %type		<number>	isotope
 %type		<number>	atomic_number
@@ -105,7 +104,6 @@ extern void yyerror(char* s);
 %start smarts
 
 %%
-
 
 smarts:
 		node_expression
@@ -150,7 +148,6 @@ node_expression:
 			e->setFirstSPNode($1);
 			e->setSecondSPNode($2);
 			$1->addSPEdge(e);
-			//$2->addSPEdge(e);
 			$$ = $1;
 		}
 	|	sp_node sp_edge node_expression
@@ -158,7 +155,6 @@ node_expression:
 			$2->setFirstSPNode($1);
 			$2->setSecondSPNode($3);
 			$1->addSPEdge($2);
-			//$3->addSPEdge($2);
 			$$ = $1;
 		}
 	;
@@ -176,7 +172,6 @@ sp_node:
 			e->setFirstSPNode($1);
 			e->setSecondSPNode($3);
 			$1->addSPEdge(e);
-			//$3->addSPEdge(e);
 			$$ = $1;
 		}
 	| sp_node '(' sp_edge node_expression ')'
@@ -184,7 +179,6 @@ sp_node:
 			$3->setFirstSPNode($1);
 			$3->setSecondSPNode($4);
 			$1->addSPEdge($3);
-			//$4->addSPEdge($3);
 			$$ = $1;
 		}
 	;
@@ -225,7 +219,7 @@ sp_edge:
 			e->setLogicalOperator($2);
 			$$ = e;
 		}
-	|	sp_edge '!' ring_bond
+/*	|	sp_edge '!' ring_bond
 		{
 			SmartsParser::SPEdge* e1 = new SmartsParser::SPEdge();
 			e1->setSPBond($3);
@@ -236,8 +230,8 @@ sp_edge:
 			e->setSecondSPEdge(e1);
 			e->setLogicalOperator(SmartsParser::AND);
 			$$ = e;
-		}
-	|	sp_edge ring_bond
+		}*/
+/*	|	sp_edge ring_bond
 		{
 			SmartsParser::SPEdge* e1 = new SmartsParser::SPEdge();
 			e1->setSPBond($2);
@@ -247,7 +241,7 @@ sp_edge:
 			e->setSecondSPEdge(e1);
 			e->setLogicalOperator(SmartsParser::AND);
 			$$ = e;
-		}
+		}*/
 	;
 
 bond:
@@ -300,7 +294,7 @@ atom_node:
 		'[' node ']' connection_list
 		{
 			$2->setInBrackets();
-			$2->addConnections($4);
+			SmartsParser::state.current_parser->addRingConnection($2, $4);
 			$$ = $2;
 		}
 	| '[' node ']'
@@ -311,7 +305,7 @@ atom_node:
 	| unbraced_atom connection_list
 		{
 			$$ = new SmartsParser::SPNode($1);
-			$$->addConnections($2);
+			SmartsParser::state.current_parser->addRingConnection($$, $2);
 		}
 	|	unbraced_atom
 		{
@@ -511,7 +505,8 @@ atom:
 	|	atom '!' atom_property
 		{
 			$1->addAtomProperty(NamedProperty("Not"+$3->getName(), $3->getUnsignedInt()));
-			$1->addAtomProperty(*$3);
+			//$1->addAtomProperty(*$3); ???
+			delete $3;
 			$$ = $1;
 		}
 	;
@@ -531,7 +526,7 @@ atom_property:
 		}
 	|	connected
 		{
-			$$ = new NamedProperty("Connected", Size($1));
+			$$ = new NamedProperty("Connectivity", Size($1));
 		}
 	|	implicit_hydrogens
 		{
@@ -730,13 +725,11 @@ neg_charge:
 connection_list:
 		TK_DIGIT 
 		{
-			$$ = new SmartsParser::ConnectionList;
-			$$->push_back($1);
+			$$ = $1;
 		}
 	|	connection_list TK_DIGIT
 		{
-			$$ = $1;
-			$$->push_back($2);
+			$$ = $1 + 10 * $2;
 		}
 	;
 
