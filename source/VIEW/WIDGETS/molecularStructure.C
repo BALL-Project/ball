@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.86.2.9 2005/09/02 14:17:55 amoll Exp $
+// $Id: molecularStructure.C,v 1.86.2.10 2005/09/29 14:01:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -820,10 +820,10 @@ namespace BALL
 		void MolecularStructure::fetchPreferences(INIFile& inifile)
 			throw()
 		{
-			minimization_dialog_.readPreferences(inifile);
-			md_dialog_.readPreferences(inifile);
-			amber_dialog_.fetchPreferences(inifile);
-			charmm_dialog_.fetchPreferences(inifile);
+			minimization_dialog_.readPreferenceEntries(inifile);
+			md_dialog_.readPreferenceEntries(inifile);
+			amber_dialog_.readPreferenceEntries(inifile);
+			charmm_dialog_.readPreferenceEntries(inifile);
 			if (inifile.hasEntry("FORCEFIELD", "selected"))
 			{
 				if (inifile.getValue("FORCEFIELD", "selected") == "AMBER")
@@ -841,10 +841,10 @@ namespace BALL
 		void MolecularStructure::writePreferences(INIFile& inifile)
 			throw()
 		{
-			minimization_dialog_.writePreferences(inifile);
-			md_dialog_.writePreferences(inifile);
-			amber_dialog_.writePreferences(inifile);
-			charmm_dialog_.writePreferences(inifile);
+			minimization_dialog_.writePreferenceEntries(inifile);
+			md_dialog_.writePreferenceEntries(inifile);
+			amber_dialog_.writePreferenceEntries(inifile);
+			charmm_dialog_.writePreferenceEntries(inifile);
 			inifile.appendSection("FORCEFIELD");
 			if (use_amber_)
 			{

@@ -132,7 +132,6 @@ namespace BALL
 							type == MODEL_LABEL);
 		}
 
-
 		bool modelMuteableByDisplayProperties(ModelType type)
 			throw()
 		{ 

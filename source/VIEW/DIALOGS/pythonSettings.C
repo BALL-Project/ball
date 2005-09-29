@@ -16,8 +16,11 @@ PythonSettings::PythonSettings( QWidget* parent,  const char* name, WFlags fl )
  : PythonSettingsData(parent, name, fl),
 	 PreferencesEntry()
 {
-	insertEntry(this, "Python Settings");
+	setWidgetStackName("Python Settings");
+	setINIFileSectionName("PYTHON");
 	registerWidgetForHelpSystem_(this, "pythonInterpreter.html#startup_script");
+
+	registerObject_(script_edit);
 }
 
 

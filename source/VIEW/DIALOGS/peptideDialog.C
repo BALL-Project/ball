@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideDialog.C,v 1.9 2004/06/26 15:33:58 amoll Exp $
+// $Id: peptideDialog.C,v 1.9.6.1 2005/09/29 14:01:25 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
 #include <BALL/COMMON/logStream.h>
@@ -14,7 +14,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		String PeptideDialog::all_amino_acids_ = "ACDEFGHIKLMNOPQRSTUVWY";
+		String PeptideDialog::all_amino_acids_ = "ACDEFGHIKLMNPQRSTVWY";
 
 		PeptideDialog::PeptideDialog( QWidget* parent, const char* name, WFlags fl )
 		 : PeptideDialogData( parent, name, fl ),

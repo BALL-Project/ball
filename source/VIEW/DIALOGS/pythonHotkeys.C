@@ -23,15 +23,13 @@ PythonHotkeys::PythonHotkeys( QWidget* parent,  const char* name, WFlags fl )
   table->setNumRows(0);
 	table->setColumnWidth(2, 240);
 
-	//modifier_ << "None" << "Shift" << "Ctrl" << "Alt";
 	modifier_ << "None" << "Shift" << "Alt";
 	for (Position p = 1; p < 13; p++)
 	{
 		keys_ << (String("F") + String(p)).c_str();
 	}
 	
-	setDefaults();
-	insertEntry(this, "Python Hotkeys");
+	setWidgetStackName("Python Hotkeys");
 	registerWidgetForHelpSystem_(this, "pythonInterpreter.html#create_hotkeys");
 }
 
@@ -119,12 +117,6 @@ void PythonHotkeys::setContent(const List<Hotkey>& hotkeys)
 
 		p++;
 	}
-}
-
-				
-void PythonHotkeys::setDefaults(bool /*all*/)
-	throw()
-{
 }
 
 void PythonHotkeys::addEmtpyLine_()

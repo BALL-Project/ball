@@ -5,10 +5,12 @@
 #include <BALL/VIEW/DIALOGS/molecularDynamicsDialog.h>
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
+#include <BALL/SYSTEM/path.h>
 
 #include <qfiledialog.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 
@@ -22,42 +24,16 @@ MolecularDynamicsDialog::MolecularDynamicsDialog(QWidget* parent, const char* na
 		amber_dialog_(0),
 		charmm_dialog_(0)
 {
+	setINIFileSectionName("MDSIMULATION");
+
+	registerObject_(temperature_lineedit);
+	registerObject_(timestep_linedit);
+	registerObject_(steps_lineedit);
+ 	registerObject_(dielectric_group_2);
 }
 
 MolecularDynamicsDialog::~MolecularDynamicsDialog()
 {
-}
-
-void MolecularDynamicsDialog::writePreferences(INIFile& inifile) const
-{
-	// the minimizer options
-	if (!inifile.hasSection("MDSIMULATION")) inifile.appendSection("MDSIMULATION");
-	inifile.insertValue("MDSIMULATION", "MicroCanonical", useMicroCanonical());
-	inifile.insertValue("MDSIMULATION", "NumberOfSteps", getNumberOfSteps());
-	inifile.insertValue("MDSIMULATION", "Timestep", getTimeStep());
-	inifile.insertValue("MDSIMULATION", "Temperature", getTemperature());
-}
-
-
-void MolecularDynamicsDialog::readPreferences(const INIFile& inifile)
-{
-	// the minimizer options
-	if (inifile.hasEntry("MDSIMULATION", "MicroCanonical"))
-	{
-		setMicroCanonical((Size)inifile.getValue("MDSIMULATION", "MicroCanonical").toUnsignedInt());
-	}
-	if (inifile.hasEntry("MDSIMULATION", "NumberOfSteps"))
-	{
-		 setNumberOfSteps(inifile.getValue("MDSIMULATION", "NumberOfSteps").toUnsignedInt());
-	}
-	if (inifile.hasEntry("MDSIMULATION", "Timestep"))
-	{
-		 setTimeStep(inifile.getValue("MDSIMULATION", "Timestep").toFloat());
-	}
-	if (inifile.hasEntry("MDSIMULATION", "Temperature"))
-	{
-		 setTemperature(inifile.getValue("MDSIMULATION", "Temperature").toFloat());
-	}
 }
 
 float MolecularDynamicsDialog::getSimulationTime() const

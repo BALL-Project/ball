@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.11.6.1 2005/09/01 22:17:54 amoll Exp $
+// $Id: server.h,v 1.11.6.2 2005/09/29 14:01:33 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_SERVER_H
@@ -235,10 +235,6 @@ namespace BALL
 			virtual void applyPreferences()
 				throw();
 
-			///
-			virtual void defaultPreferences()
-				throw();
-			
 			//@}
 			/**	@name	debuggers and diagnostics
 			*/

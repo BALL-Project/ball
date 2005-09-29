@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.h,v 1.14.4.1 2005/09/01 22:17:50 amoll Exp $
+// $Id: stageSettings.h,v 1.14.4.2 2005/09/29 14:01:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_STAGESETTINGS_H
@@ -50,10 +50,6 @@ namespace BALL
 			void apply()
 				throw();
 
-			/// 
-			void setDefaultValues(bool /*all*/ = false)
-				throw();
-
 			///
 			void getGLSettings()
 				throw();
@@ -65,6 +61,9 @@ namespace BALL
 
 			private:
 
+			///
+			void setDefaultValues_();
+				
 			///
 			void eyeDistanceChanged();
 

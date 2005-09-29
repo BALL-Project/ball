@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.19.6.7 2005/09/01 22:17:53 amoll Exp $
+// $Id: modularWidget.h,v 1.19.6.8 2005/09/29 14:01:33 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -172,16 +172,6 @@ namespace BALL
 			virtual void applyPreferences()
 				throw() {};
 
-			/// Method is called when the Cancel button of the Preferences is pressed.
-			virtual void cancelPreferences()
-				throw() {};
-
-			/** Set default values for the current page in Preferences
-					Automatically called by the default button in thre Preferences dialog.)
-			*/
-			virtual void defaultPreferences()
-				throw() {};
-			
 			/** Fetch the widgets preferences from the INIFile.
 					This method is called automatically by MainControl::show() at the start of the application.
 					\param  inifile the INIFile that contains the needed values

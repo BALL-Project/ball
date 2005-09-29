@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.44 2005/09/05 11:44:00 amoll Exp $
+// $Id: scene.C,v 1.171.2.45 2005/09/29 14:01:29 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1031,34 +1031,11 @@ if (mode != DISPLAY_LISTS_RENDERING)
 			throw()
 		{
 			ModularWidget::writePreferences(inifile);
-			// write mouse sensitivity
-			inifile.insertValue("WINDOWS", "Main::mouseSensitivity", String(mouse_sensitivity_));
-			inifile.insertValue("WINDOWS", "Main::mouseWheelSensitivity", String(mouse_wheel_sensitivity_));
-			inifile.appendSection("STAGE");
-
-			String data = "(" + String((Index)stage_->getBackgroundColor().getRed()) +
-				"," + String((Index)stage_->getBackgroundColor().getGreen()) +
-				"," + String((Index)stage_->getBackgroundColor().getBlue()) +
-				"," + String((Index)stage_->getBackgroundColor().getAlpha()) + ")";
-
-			inifile.insertValue("STAGE", "EyeDistance", String(stage_->getEyeDistance()));
-			inifile.insertValue("STAGE", "FocalDistance", String(stage_->getFocalDistance()));
-			inifile.insertValue("STAGE", "FogIntensity", String(stage_->getFogIntensity()));
-			inifile.insertValue("STAGE", "BackgroundColor", String(data));
-			inifile.insertValue("STAGE", "ShowCoordinateSystem", String(stage_->coordinateSystemEnabled()));
-			inifile.insertValue("STAGE", "Fulcrum", vector3ToString(system_origin_));
-			inifile.insertValue("STAGE", "AnimationSmoothness", String(animation_smoothness_));
-
-			inifile.insertValue("STAGE", "ShowPopupInfos", String(
-																										menuBar()->isItemChecked(show_popup_infos_id_)));
 
 			inifile.appendSection("EXPORT");
 			inifile.insertValue("EXPORT", "POVNR", String(pov_nr_));
 			inifile.insertValue("EXPORT", "PNGNR", String(screenshot_nr_));
 			writeLights_(inifile);
-
-			inifile.appendSection("OPENGL");
-			inifile.insertValue("OPENGL", "UseVertexBuffers", String(want_to_use_vertex_buffer_));
 		}
 
 
@@ -1066,40 +1043,6 @@ if (mode != DISPLAY_LISTS_RENDERING)
 			throw()
 		{
 			ModularWidget::fetchPreferences(inifile);
-			if (inifile.hasEntry("WINDOWS", "Main::mouseSensitivity"))
-			{
-				mouse_sensitivity_= inifile.getValue("WINDOWS", "Main::mouseSensitivity").toFloat();
-			}
-			if (inifile.hasEntry("WINDOWS", "Main::mouseWheelSensitivity"))
-			{
-				mouse_wheel_sensitivity_= inifile.getValue("WINDOWS", "Main::mouseWheelSensitivity").toFloat();
-			}
-
-			if (inifile.hasEntry("STAGE", "EyeDistance"))
-			{
-				stage_->setEyeDistance(inifile.getValue("STAGE", "EyeDistance").toFloat());
-			}
-
-			if (inifile.hasEntry("STAGE", "FocalDistance"))
-			{
-				stage_->setFocalDistance(inifile.getValue("STAGE", "FocalDistance").toFloat());
-			}
-
-			if (inifile.hasEntry("STAGE", "FogIntensity"))
-			{
-				stage_->setFogIntensity(inifile.getValue("STAGE", "FogIntensity").toFloat());
-			}
-
-			if (inifile.hasEntry("STAGE", "Fulcrum"))
-			{
-				stringToVector3(inifile.getValue("STAGE", "Fulcrum"), system_origin_);
-			}
-
-			if (inifile.hasEntry("STAGE", "AnimationSmoothness"))
-			{
-				setAnimationSmoothness(inifile.getValue("STAGE", "AnimationSmoothness").toFloat());
-			}
-
 			if (inifile.hasEntry("EXPORT", "POVNR"))
 			{
 				pov_nr_ = inifile.getValue("EXPORT", "POVNR").toUnsignedInt();
@@ -1110,34 +1053,10 @@ if (mode != DISPLAY_LISTS_RENDERING)
 				screenshot_nr_ = inifile.getValue("EXPORT", "PNGNR").toUnsignedInt();
 			}
 
-			if (inifile.hasEntry("STAGE", "ShowPopupInfos"))
-			{
-				bool state = inifile.getValue("STAGE", "ShowPopupInfos").toBool();
-				if (state) initTimer();
-			}
-
-
-			if (inifile.hasEntry("STAGE", "BackgroundColor"))
-			{
-				String data = inifile.getValue("STAGE", "BackgroundColor");
-				vector<String> strings;
-				data.split(strings, "(,)");
-				ColorRGBA color(strings[0].toUnsignedInt(),
-						strings[1].toUnsignedInt(),
-						strings[2].toUnsignedInt(),
-						strings[3].toUnsignedInt());
-				stage_->setBackgroundColor(color);
-			}
-
 			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on") &&
 					!inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt())
 			{
 				switchShowWidget();
-			}
-
-			if (inifile.hasEntry("OPENGL", "UseVertexBuffers"))
-			{
-				want_to_use_vertex_buffer_ = inifile.getValue("OPENGL", "UseVertexBuffers").toBool();
 			}
 
 			readLights_(inifile);
@@ -1240,21 +1159,6 @@ if (mode != DISPLAY_LISTS_RENDERING)
 
 			renderView_(REBUILD_DISPLAY_LISTS);
 			updateGL();
-		}
-
-
-		void Scene::cancelPreferences()
-			throw()
-		{
-			if (light_settings_ != 0)
-			{
-				light_settings_->updateFromStage();
-			}
-
-			if (stage_settings_ != 0)
-			{
-				stage_settings_->updateFromStage();
-			}
 		}
 
 

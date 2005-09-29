@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.19 2005/02/06 20:57:07 oliver Exp $
+// $Id: FDPBDialog.C,v 1.19.4.1 2005/09/29 14:01:22 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -33,6 +33,32 @@ namespace BALL
 			Log.error() << "new FDPBDialog " << this << std::endl;
 		#endif
 			registerWidget(this);
+
+			setINIFileSectionName("FDPB");
+
+			registerObject_(radii_data_lineedit);
+			registerObject_(radii_rules_lineedit);
+			registerObject_(charges_data_lineedit);
+			registerObject_(charges_rules_lineedit);
+			registerObject_(dc_solvent);
+			registerObject_(dc_interior);
+			registerObject_(probe_radius);
+			registerObject_(ionic_strenght);
+			registerObject_(ion_radius);
+			registerObject_(spacing);
+			registerObject_(border);
+			registerObject_(temperature);
+			registerObject_(max_iterations);
+			registerObject_(boundary_group);
+			registerObject_(smoothing_group);
+			registerObject_(charge_distribution_group);
+			registerObject_(radii_group);
+			registerObject_(charges_group);
+			registerObject_(normalize_names);
+			registerObject_(assign_charges);
+			registerObject_(assign_radii);
+			registerObject_(build_bonds);
+			registerObject_(add_hydrogens);
 		}
 
 		FDPBDialog::~FDPBDialog()
@@ -88,7 +114,7 @@ namespace BALL
 
 		void FDPBDialog::resetPressed()
 		{
-			reset();
+			restoreDefaultValues();
 		}
 
 		// ------------------------- helper functions -------------------------------------
@@ -109,147 +135,6 @@ namespace BALL
 			lineedit.setText(s);
 
 			QWidget::update();
-		}
-
-		void FDPBDialog::fetchPreferences(INIFile& file)
-			throw()
-		{
-			fetchPreference_(file, "radii_data_file", *radii_data_lineedit);
-			fetchPreference_(file, "radii_rules_file", *radii_rules_lineedit);
-			fetchPreference_(file, "charges_data_file", *charges_data_lineedit);
-			fetchPreference_(file, "charges_rules_file", *charges_rules_lineedit);
-			
-			fetchPreference_(file, "dc_solvent", *dc_solvent);
-			fetchPreference_(file, "dc_interior", *dc_interior);
-			fetchPreference_(file, "probe_radius", *probe_radius);
-			fetchPreference_(file, "ionic_strenght", *ionic_strenght);
-			fetchPreference_(file, "ion_radius", *ion_radius);
-			fetchPreference_(file, "spacing", *spacing);
-			fetchPreference_(file, "border", *border);
-			fetchPreference_(file, "temperature", *temperature);
-			fetchPreference_(file, "max_iterations", *max_iterations);
-
-			charges_rules_button->setChecked(file.hasEntry("FDPB", "charges_from_rules"));
-			radii_rules_button->setChecked(file.hasEntry("FDPB", "radii_from_rules"));
-
-			if (file.hasEntry("FDPB", "boundary"))
-			{
-				boundary_group->setButton(file.getValue("FDPB", "boundary").toUnsignedInt());
-			}
-
-			if (file.hasEntry("FDPB", "smoothing"))
-			{
-				smoothing_group->setButton(file.getValue("FDPB", "smoothing").toUnsignedInt());
-			}
-			if (file.hasEntry("FDPB", "charge_distribution"))
-			{
-				charge_distribution_group->setButton(file.getValue("FDPB", "charge_distribution").toUnsignedInt());
-			}
-			
-			normalize_names->setChecked(file.hasEntry("FDPB", "normalize_names"));
-			assign_charges->setChecked(file.hasEntry("FDPB", "assign_charges"));
-			assign_radii->setChecked(file.hasEntry("FDPB", "assign_radii"));
-			build_bonds->setChecked(file.hasEntry("FDPB", "build_bonds"));
-			add_hydrogens->setChecked(file.hasEntry("FDPB", "add_hydrogens"));
-		}
-
-		void FDPBDialog::fetchPreference_(INIFile& inifile, const String& entry, 
-																			QLineEdit& lineedit)
-			throw()
-		{
-			if (!inifile.hasEntry("FDPB", entry)) return;
-			lineedit.setText(inifile.getValue("FDPB", entry).c_str());
-		}
-
-		void FDPBDialog::writePreference_(INIFile& inifile, const String& entry, 
-																			const QLineEdit& lineedit) const
-			throw()
-		{
-			inifile.insertValue("FDPB", entry, lineedit.text().ascii());
-		}
-
-
-		void FDPBDialog::writePreferences(INIFile& file)
-			throw()
-		{
-			file.appendSection("FDPB");
-			writePreference_(file, "radii_data_file", *radii_data_lineedit);
-			writePreference_(file, "radii_rules_file", *radii_rules_lineedit);
-			writePreference_(file, "charges_data_file", *charges_data_lineedit);
-			writePreference_(file, "charges_rules_file", *charges_rules_lineedit);
-			
-			writePreference_(file, "dc_solvent", *dc_solvent);
-			writePreference_(file, "dc_interior", *dc_interior);
-			writePreference_(file, "probe_radius", *probe_radius);
-			writePreference_(file, "ionic_strenght", *ionic_strenght);
-			writePreference_(file, "ion_radius", *ion_radius);
-			writePreference_(file, "spacing", *spacing);
-			writePreference_(file, "border", *border);
-			writePreference_(file, "temperature", *temperature);
-			writePreference_(file, "max_iterations", *max_iterations);
-
-			if (charges_rules_button->isChecked())
-			{
-				file.insertValue("FDPB", "charges_from_rules", "1");
-			}
-			if (radii_rules_button->isChecked())
-			{
-				file.insertValue("FDPB", "radii_from_rules", "1");
-			}
-
-			Position pos = 0;
-			if (boundary_zero->isChecked())
-			{
-				pos = 0;
-			}
-			else if (boundary_debye->isChecked())
-			{
-				pos = 1;
-			}
-			else if (boundary_coulomb->isChecked())
-			{
-				pos = 2;
-			}
-			else 
-			{
-				pos = 3;
-			}
-			file.insertValue("FDPB", "boundary", String(pos));
-
-			// ----------- smoothing ---------------------------
-			pos = 0;
-			if (smoothing_none->isChecked())
-			{
-				pos = 0;
-			}
-			else if (smoothing_uniform->isChecked())
-			{
-				pos = 1;
-			}
-			else 
-			{
-				pos = 2;
-			}
-			file.insertValue("FDPB", "smoothing", String(pos));
-
-			// ----------- charge distribution -----------------
-			pos = 1;
-			if (charge_uniform->isChecked())
-			{
-				pos = 0;
-			}
-			else if (charge_trilinear->isChecked())
-			{
-				pos = 1;
-			}
-			file.insertValue("FDPB", "charge_distribution", String(pos));
-
-			// ----------- processors ---------------------------
-			if (normalize_names->isChecked()) file.insertValue("FDPB", "normalize_names", "1");
-			if (assign_charges->isChecked()) file.insertValue("FDPB", "assign_charges", "1");
-			if (assign_radii->isChecked()) file.insertValue("FDPB", "assign_radii", "1");
-			if (build_bonds->isChecked()) file.insertValue("FDPB", "build_bonds", "1");
-			if (add_hydrogens->isChecked()) file.insertValue("FDPB", "add_hydrogens", "1");
 		}
 
 		bool FDPBDialog::calculate()
@@ -323,35 +208,6 @@ namespace BALL
 			applyProcessors_();
 			fdpb_.setup(*system_, options_);
 			fdpb_.solve();
-		}
-
-		void FDPBDialog::reset()
-			throw()
-		{
-			radii_data_lineedit->setText("radii/PARSE.siz");
-			radii_rules_lineedit->setText("solvation/PARSE.rul");
-			charges_data_lineedit->setText("charges/PARSE.crg");
-			charges_rules_lineedit->setText("solvation/PARSE.rul");
-
-			dc_solvent->setText("78.0");
-			dc_interior->setText("2.0");
-			probe_radius->setText("1.4");
-			ionic_strenght->setText("0.0");
-			ion_radius->setText("2.0");
-			spacing->setText("1.0");
-			border->setText("5.0");
-			temperature->setText("298");
-			max_iterations->setText("1000");
-
-			boundary_zero->setChecked(true);
-			smoothing_none->setChecked(true);
-			charge_trilinear->setChecked(true);
-
-			normalize_names->setChecked(false);
-			assign_charges->setChecked(true);
-			assign_radii->setChecked(true);
-			build_bonds->setChecked(false);
-			add_hydrogens->setChecked(false);
 		}
 
 		void FDPBDialog::applyValues_()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.30 2005/08/30 14:24:03 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.31 2005/09/29 14:01:27 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -376,13 +376,16 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			// establish connection 
 			connect(preferences_dialog_->ok_button, SIGNAL(clicked()), 
 					this, SLOT(applyPreferencesTab()));
-			
-			connect(preferences_dialog_->cancel_button, SIGNAL(clicked()), 
-					this, SLOT(cancelPreferencesTab()));
-			
-			connect(preferences_dialog_->defaults_button, SIGNAL(clicked()), 
-					this, SLOT(defaultPreferencesTab()));
 
+
+			/// ?????? do this in the designer for the preferences
+				connect(preferences_dialog_->ok_button, SIGNAL(clicked()), 
+					preferences_dialog_, SLOT(applyPreferences()));
+			
+			/// ?????? do this in the designer for the preferences
+			connect(preferences_dialog_->cancel_button, SIGNAL(clicked()), 
+					preferences_dialog_, SLOT(cancelPreferences()));
+			
 			// initialize own preferences tab
 			initializePreferencesTab(*preferences_dialog_);
 
@@ -472,29 +475,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			if (!updateOfRepresentationRunning())
 			{
 				setPreferencesEnabled_(true);
-			}
-		}
-
-
-		void MainControl::cancelPreferencesTab()
-			throw()
-		{
-			// checks all modular widgets 
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-			for (; it != modular_widgets_.end(); ++it)
-			{
-				(*it)->cancelPreferences();
-			}
-		}
-
-		void MainControl::defaultPreferencesTab()
-			throw()
-		{
-			// checks all modular widgets if one of their preferences is the current page
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-			for (; it != modular_widgets_.end(); ++it)
-			{
-				(*it)->defaultPreferences();
 			}
 		}
 

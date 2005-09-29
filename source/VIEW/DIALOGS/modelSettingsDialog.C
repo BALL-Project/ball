@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.34.4.3 2005/07/19 22:14:16 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.34.4.4 2005/09/29 14:01:25 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -37,6 +37,8 @@ namespace BALL
 		{
 			setINIFileSectionName("MODEL_OPTIONS");
 
+			setDefaultValues_();
+
 			registerObject_(stick_radius_slider);
 
 			registerObject_(ball_stick_cylinder_radius_slider);
@@ -66,65 +68,36 @@ namespace BALL
 
 			registerObject_(hbonds_radius_slider);
 
-			setDefaultValues(true);
-
-			insertEntry(this, "Models");
+			setWidgetStackName("Models");
 			setWidgetStack(widget_stack);
 		}
 
-		void ModelSettingsDialog::setDefaultValues(bool all)
-			throw()
+		void ModelSettingsDialog::setDefaultValues_()
 		{
-			Position current = widget_stack->id(widget_stack->visibleWidget());
+			AddBallAndStickModel dummy1;
+			dummy1.enableStickModel();
+			getSettings(dummy1);
+			
+			AddBallAndStickModel dummy2;
+			getSettings(dummy2);
+			
+			AddVanDerWaalsModel dummy3;
+			getSettings(dummy3);
+			
+			AddSurfaceModel dummy4;
+			getSettings(dummy4);
 
-			if (all || current == 0)
-			{
-				AddBallAndStickModel dummy;
-				dummy.enableStickModel();
-				getSettings(dummy);
-			}
-			
-			if (all || current == 1)
-			{
-				AddBallAndStickModel dummy;
-				getSettings(dummy);
-			}
-			
-			if (all || current == 2)
-			{
-				AddVanDerWaalsModel dummy;
-				getSettings(dummy);
-			}
-			
-			if (all || current == 3)
-			{
-				AddSurfaceModel dummy;
-				getSettings(dummy);
-			}
-			
-			if (all || current == 4)
-			{
-				AddBackboneModel dummy;
-				getSettings(dummy);
-			}
+			AddBackboneModel dummy5;
+			getSettings(dummy5);
 
-			if (all || current == 5)
-			{
-				AddCartoonModel dummy;
-				getSettings(dummy);
-			}
+			AddCartoonModel dummy6;
+			getSettings(dummy6);
+		
+			HBondModelProcessor dummy7;
+			getSettings(dummy7);
 			
-			if (all || current == 6)
-			{
-				HBondModelProcessor dummy;
-				getSettings(dummy);
-			}
-			
-			if (all || current == 7)
-			{
-				ForceModel dummy;
-				getSettings(dummy);
-			}
+			ForceModel dummy8;
+			getSettings(dummy8);
 		}
 
 		float ModelSettingsDialog::getFloatValue_(const QSlider* const& slider) const

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.21.2.3 2005/09/01 22:17:44 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.21.2.4 2005/09/29 14:01:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -27,13 +27,13 @@
 namespace BALL
 {
 	class PTE;
-	class INIFile;
 
 	namespace VIEW
 	{
 		class ColorProcessor;
 
-		class BALL_VIEW_EXPORT QColorTableItem : public QTableItem
+		class BALL_VIEW_EXPORT QColorTableItem 
+			: public QTableItem
 		{
 			public:
 				QColorTableItem(QTable* t, EditType et, const ColorRGBA& color);
@@ -49,12 +49,15 @@ namespace BALL
 		};
 
 
-		class BALL_VIEW_EXPORT QColorTable : public QTable
+		///
+		class BALL_VIEW_EXPORT QColorTable
+			:	public QTable,
+				public PreferencesEntry::ExtendedPreferencesObject
 		{
 				Q_OBJECT
 
 			public:
-				QColorTable(QWidget* parent = 0)
+				QColorTable(QWidget* parent = 0, const char* name = 0)
 					throw();
 				
 				void setNamesTitle(const String& string)
@@ -74,6 +77,12 @@ namespace BALL
 
 				const vector<String>& getNames() const
 					throw() { return names_;}
+
+				///
+				virtual bool getValue(String&) const;
+
+				///
+				virtual bool setValue(const String& value);
 
 			private slots:
 				
@@ -105,16 +114,6 @@ namespace BALL
 			~ColoringSettingsDialog() {}
 
 			///
-			void writePreferenceEntries(INIFile& inifile);
-
-			///
-			void readPreferenceEntries(const INIFile& inifile);
-
-			/// Called when defaults is pressed in Preferences, calls setDefaults
-			virtual void setDefaultValues(bool all = false)
-				throw();
-
-			///
 			void applySettingsTo(ColorProcessor& cp) const
 				throw();
 
@@ -133,12 +132,6 @@ namespace BALL
 			///
 			vector<ColorRGBA> getColors(ColoringMethod method) const
 				throw();
-
-			///
-			void writeColorTable(const QColorTable& table, INIFile& inifile);
-
-			///
-			void readColorTable(QColorTable& table, const INIFile& inifile);
 
 			protected slots:
 
@@ -184,6 +177,8 @@ namespace BALL
 			virtual void forceMinValueChanged();
 
 			protected:
+
+			virtual void setDefaultValues_();
 
 			QColorTable* element_table_;
 			QColorTable* residue_table_;

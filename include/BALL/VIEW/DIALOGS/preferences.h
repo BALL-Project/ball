@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.h,v 1.16.6.2 2005/09/01 22:17:49 amoll Exp $
+// $Id: preferences.h,v 1.16.6.3 2005/09/29 14:01:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
@@ -134,6 +134,13 @@ namespace BALL
 			///
 			void setDefaultValues();
 
+			///
+			void cancelPreferences();
+
+			/// Store the last applied values for undo
+			void applyPreferences();
+
+			///
 			void showHelp();
 
 			protected:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.h,v 1.6.8.1 2005/09/01 22:17:42 amoll Exp $
+// $Id: amberConfigurationDialog.h,v 1.6.8.2 2005/09/29 14:01:29 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_AMBERCONFIGURATIONDIALOG_H
@@ -9,8 +9,9 @@
 
 #include <BALL/VIEW/UIC/amberConfigurationDialogData.h>
 
-#include <BALL/FORMAT/INIFile.h>
-#include <BALL/SYSTEM/path.h>
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#endif
 
 namespace BALL
 {
@@ -24,7 +25,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT AmberConfigurationDialog
-			: public AmberConfigurationDialogData
+			: public AmberConfigurationDialogData,
+				public PreferencesEntry
 		{
 			friend class MolecularStructure;
 
@@ -38,59 +40,6 @@ namespace BALL
 			/// Destructor
 			virtual ~AmberConfigurationDialog();
 			
-			///
-			const String& getFilename() const;
-			
-			///
-			void setFilename(const String& filename);
-
-			///
-			bool getUseDistanceDependentDC() const;
-			
-			///
-			float getNonbondedCutoff() const;
-
-			///
-			float getVdwCutoff() const;
-
-			///
-			float getVdwCuton() const;
-
-			///
-			float getElectrostaticCutoff() const;
-
-			///
-			float getElectrostaticCuton() const;
-
-			///
-			float getScalingElectrostatic_1_4() const;
-
-			///
-			float getScalingVdw_1_4() const;
-			
-			///
-			bool getAssignCharges() const;
-			
-			///
-			bool getAssignTypenames() const;
-			
-			///
-			bool getAssignTypes() const;
-			
-			///
-			bool getOverwriteCharges() const;
-			
-			///
-			bool getOverwriteTypenames() const;
-
-			///
-			void writePreferences(INIFile& inifile) const
-				throw();
-				
-			///
-			void fetchPreferences(const INIFile& inifile)
-				throw();
-
 			public slots:
 
 			///
@@ -121,10 +70,10 @@ namespace BALL
 
 			private:
 
-			bool 		use_dddc_, assign_charges_, assign_typenames_, assign_types_, overwrite_charges_, overwrite_typenames_;
-			String 	ini_;
-			float 	nonbonded_cutoff_, vdw_cutoff_, vdw_cuton_, electrostatic_cutoff_, electrostatic_cuton_,
-							scaling_electrostatic_1_4_, scaling_vdw_1_4_;
+			String getValue_(const QCheckBox* box) const;
+
+			float getValue_(const QLineEdit* edit) const
+				throw(Exception::InvalidFormat);
 
 			AmberFF* amber_;
 		};

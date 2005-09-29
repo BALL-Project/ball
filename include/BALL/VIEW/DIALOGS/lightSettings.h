@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.h,v 1.10.4.1 2005/09/01 22:17:45 amoll Exp $
+// $Id: lightSettings.h,v 1.10.4.2 2005/09/29 14:01:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_LIGHTSETTINGS_H
@@ -57,9 +57,12 @@ namespace BALL
 				throw();
 
 			/// Called when defaults is pressed in Preferences, calls setDefaults
-			virtual void setDefaultValues(bool /*all*/ = false)
+			virtual void restoreDefaultValues(bool /*all*/ = false)
 				throw();
 
+			///
+			void restoreValues(bool all);
+			
 			public slots:
 
 			/// Slot for the AddLight button
@@ -95,6 +98,7 @@ namespace BALL
 			void setControlsEnabled_(bool state);
 			Index getCurrentLightNumber_() const;
 
+		
 			//_ apply values to a light
 			void saveSettingsToLight_()
 				throw();

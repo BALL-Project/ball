@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pythonHotkeys.h,v 1.3.6.2 2005/09/01 22:17:49 amoll Exp $
+// $Id: pythonHotkeys.h,v 1.3.6.3 2005/09/29 14:01:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PYTHONHOTKEYS_H
@@ -39,10 +39,6 @@ namespace BALL
 
 			/// Destructor
 			~PythonHotkeys() {}
-
-			/// 
-			virtual void setDefaults(bool /*all*/ = true)
-				throw();
 
 			///
 			void setContent(const List<Hotkey>& hotkeys)

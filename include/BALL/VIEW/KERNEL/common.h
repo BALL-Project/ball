@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.36.2.8 2005/09/01 22:17:51 amoll Exp $
+// $Id: common.h,v 1.36.2.9 2005/09/29 14:01:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -316,10 +316,10 @@ namespace BALL
 			throw();
 
 		/** Model must be rebuild, if Composite changes
+		 		but hierarchy is unchanged.
 		*/
 		BALL_VIEW_EXPORT bool modelMustBeRebuild(ModelType type)
 			throw();
-
 
 		/////////////////////////////////////////////////////////
 

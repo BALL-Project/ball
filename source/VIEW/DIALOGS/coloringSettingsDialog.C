@@ -1,12 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.C,v 1.37.2.3 2005/07/26 22:35:50 amoll Exp $
+// $Id: coloringSettingsDialog.C,v 1.37.2.4 2005/09/29 14:01:23 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
-#include <BALL/FORMAT/INIFile.h>
 #include <BALL/KERNEL/PTE.h>
 
 #include <qcolordialog.h>
@@ -34,9 +33,9 @@ namespace BALL
 		}
 
 		// ==============================================================================================
-		QColorTable::QColorTable(QWidget* parent) 
+		QColorTable::QColorTable(QWidget* parent, const char* name) 
 			throw()
-			: QTable(parent),
+			: QTable(parent, name),
 				setting_content_(false)
 		{
 			setNumCols(2);
@@ -78,6 +77,7 @@ namespace BALL
 		void QColorTable::setColors(const vector<ColorRGBA>& colors)
 			throw()
 		{
+			setting_content_ = true;
 			colors_ = colors;
 
 			setNumRows(colors_.size());
@@ -86,6 +86,7 @@ namespace BALL
 				QColorTableItem* c2 = new QColorTableItem(this, QTableItem::WhenCurrent, colors_[p]);
 				setItem(p, 1, c2 );
 			}
+			setting_content_ = false;
 		}
 
 		QWidget* QColorTable::beginEdit(int row, int col, bool)
@@ -101,7 +102,49 @@ namespace BALL
 			colors_[row] = new_color;
 			return 0;
 		}
-						
+		
+		bool QColorTable::getValue(String& value) const
+		{
+			value.clear();
+
+			vector<ColorRGBA> colors = getColors();
+
+			for (Position p = 0; p < colors.size(); p ++)
+			{
+				value += colors[p];
+				value += ";";
+			}
+
+			return true;
+		}
+
+		bool QColorTable::setValue(const String& value)
+		{
+			vector<String> fields;
+			vector<ColorRGBA> colors;
+
+			Size nr = value.split(fields, ";");
+
+			ColorRGBA color;
+
+			for (Position p = 0; p < nr; p ++)
+			{
+				color = fields[p];
+				colors.push_back(color);
+			}
+			
+			if (colors.size() != getNames().size())
+			{
+				BALLVIEW_DEBUG;
+				return false;
+			}
+
+			setColors(colors);
+
+			return true;
+		}
+
+					
 		// =========================================================================================
 		ColoringSettingsDialog::ColoringSettingsDialog( QWidget* parent,  const char* name, WFlags fl )
 			: ColoringSettingsDialogData(parent, name, fl),
@@ -109,11 +152,11 @@ namespace BALL
 		{
 			setINIFileSectionName("COLORING_OPTIONS");
 
-			element_table_ = new QColorTable(widget_stack->widget(0));
-			residue_table_ = new QColorTable(widget_stack->widget(2));
-			chain_table_   = new QColorTable(widget_stack->widget(10));
-			molecule_table_= new QColorTable(widget_stack->widget(11));
-			setDefaultValues(true);
+			element_table_ = new QColorTable(widget_stack->widget(0), "Elements");
+			residue_table_ = new QColorTable(widget_stack->widget(2), "Residues");
+			chain_table_   = new QColorTable(widget_stack->widget(10), "Chains");
+			molecule_table_= new QColorTable(widget_stack->widget(11), "Molecules");
+			setDefaultValues_();
 
 			registerObject_(first_residue_label);
 			registerObject_(middle_residue_label);
@@ -154,68 +197,22 @@ namespace BALL
 			registerObject_(other_color_label);
 			registerObject_(polar_color_label);
 
-			insertEntry(this, "Colors");
+			registerObject_(element_table_);
+			registerObject_(chain_table_);
+			registerObject_(residue_table_);
+			registerObject_(molecule_table_);
+
+			setWidgetStackName("Colors");
 			setWidgetStack(widget_stack);
 		}
 
-		void ColoringSettingsDialog::writePreferenceEntries(INIFile& inifile)
-		{
-			PreferencesEntry::writePreferenceEntries(inifile);
-			writeColorTable(*element_table_, inifile);
-			writeColorTable(*residue_table_, inifile);
-			writeColorTable(*chain_table_,   inifile);
-			writeColorTable(*molecule_table_,inifile);
-		}
-
-		void ColoringSettingsDialog::writeColorTable(const QColorTable& table, INIFile& inifile)
-		{
-			for (Position p = 0; p < table.getColors().size(); p ++)
-			{
-				inifile.insertValue(inifile_section_name_, table.getNamesTitle() + "_" + table.getNames()[p].c_str(), table.getColors()[p]);
-			}
-		}
-
-		void ColoringSettingsDialog::readColorTable(QColorTable& table, const INIFile& inifile)
-		{
-			vector<ColorRGBA> colors;
-			for (Position p = 0; p < table.getColors().size(); p ++)
-			{
-				ColorRGBA color;
-				if (!fetchPreference_(inifile, table.getNamesTitle() + "_" + table.getNames()[p], color)) break;
-				colors.push_back(color);
-			}
-
-			if (colors.size() == table.getNames().size())
-			{
-				table.setColors(colors);
-			}
-			else
-			{
-				Log.error() << "Could not read color table from INIFile, maybe config file is corrupted?" << std::endl;
-			}
-		}
-
-
-		void ColoringSettingsDialog::readPreferenceEntries(const INIFile& inifile)
-		{
-			PreferencesEntry::readPreferenceEntries(inifile);
-			readColorTable(*element_table_, inifile);
-			readColorTable(*chain_table_, 	inifile);
-			readColorTable(*residue_table_, inifile);
-			readColorTable(*molecule_table_,inifile);
-		}
-
-		void ColoringSettingsDialog::setDefaultValues(bool all)
-			throw()
+		void ColoringSettingsDialog::setDefaultValues_()
 		{
 			vector<String> 		names;
 			vector<ColorRGBA> colors;
 
-			Position current = widget_stack->id(widget_stack->visibleWidget());
-
 			// =============================================================
 			// setting element colors
-			if (all || current == 0)
 			{
 				// create a dummy processor to get the default values
 				ElementColorProcessor elp;
@@ -240,7 +237,6 @@ namespace BALL
 			// =============================================================
 			// setting residue name colors
 			// create a dummy processor to get the default values
-			if (all || current == 2)
 			{
 				ResidueNameColorProcessor rcp;
 				const StringHashMap<ColorRGBA>& color_map = rcp.getColorMap();
@@ -257,30 +253,16 @@ namespace BALL
 			}
 				
 			// =============================================================
-			if (all || current == 1) getSettings(ResidueNumberColorProcessor());
-			if (all || current == 3) getSettings(AtomChargeColorProcessor());
-			if (all || current == 4) getSettings(AtomDistanceColorProcessor());
-			if (all || current == 5) getSettings(TemperatureFactorColorProcessor());
-			if (all || current == 6) getSettings(OccupancyColorProcessor());
-			if (all || current == 7) getSettings(SecondaryStructureColorProcessor());
-			if (all || current == 8) getSettings(ForceColorProcessor());
-			if (all || current == 9)
-			{
-				getSettings(ResidueTypeColorProcessor());
-			}
-			// =============================================================
-			// setting chain colors
-			if (all || current == 10)
-			{
-				getSettings(ChainColorProcessor());
-			}
-			// =============================================================
-			// setting molecule colors
-			if (all || current == 11)
-			{
-				getSettings(MoleculeColorProcessor());
-			}
-
+			getSettings(ResidueNumberColorProcessor());
+			getSettings(AtomChargeColorProcessor());
+			getSettings(AtomDistanceColorProcessor());
+			getSettings(TemperatureFactorColorProcessor());
+			getSettings(OccupancyColorProcessor());
+			getSettings(SecondaryStructureColorProcessor());
+			getSettings(ForceColorProcessor());
+			getSettings(ResidueTypeColorProcessor());
+			getSettings(ChainColorProcessor());
+			getSettings(MoleculeColorProcessor());
 		}
 
 		vector<ColorRGBA> ColoringSettingsDialog::getColors(ColoringMethod method) const

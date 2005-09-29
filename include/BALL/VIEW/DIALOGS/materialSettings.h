@@ -1,17 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.h,v 1.5.4.1 2005/09/01 22:17:46 amoll Exp $
+// $Id: materialSettings.h,v 1.5.4.2 2005/09/29 14:01:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MATERIALSETTINGS_H
 #define BALL_VIEW_DIALOGS_MATERIALSETTINGS_H
 
 #include <BALL/VIEW/UIC/materialSettingsData.h>
-
-#ifndef BALL_COMMON_GLOBAL_H
-// # include <BALL/COMMON/global.h>
-#endif
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -44,10 +40,6 @@ namespace BALL
 
 			/// Apply the new values to the stage
 			void apply()
-				throw();
-
-			/// Called when defaults is pressed in Preferences, calls setDefaults
-			virtual void setDefaultValues(bool /*all*/ = false)
 				throw();
 
 			public slots:

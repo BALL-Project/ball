@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.16.6.4 2005/08/22 13:16:06 amoll Exp $
+// $Id: preferences.C,v 1.16.6.5 2005/09/29 14:01:26 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -66,7 +66,7 @@ namespace BALL
 			
 			}
 
-			if (child->getEntries().size() == 0) return;
+			if (child->getStackPages().size() == 0) return;
 
 			QWidget* widget = dynamic_cast<QWidget*>(child);
 
@@ -79,14 +79,14 @@ namespace BALL
 
 			entries_.insert(child);
 
-			PreferencesEntry::EntriesList::Iterator it = child->getEntries().begin();
+			PreferencesEntry::StackPages::Iterator it = child->getStackPages().begin();
 			QListViewItem* item = new QListViewItem(entries_listview, (*it).second.c_str());
 			entries_listview->insertItem(item);
 			item_to_widget_[item] = (*it).first;
 			item_to_entry_[item] = child;
 			widget_to_item_[widget] = item;
 			it++;
-			for (; it != child->getEntries().end(); it++)
+			for (; it != child->getStackPages().end(); it++)
 			{
 				QListViewItem* new_item = new QListViewItem(item, (*it).second.c_str());
 				item->insertItem(new_item);
@@ -188,7 +188,7 @@ namespace BALL
 			QWidget* widget = item_to_widget_[item->parent()];
 			widget_stack->raiseWidget(widget);
 
-			entry->showEntry(child);
+			entry->showStackPage(child);
 		}	
 
 		const QWidget* Preferences::currentPage() const
@@ -218,11 +218,11 @@ namespace BALL
 			
 			if (item_to_entry_.has(item))
 			{
-				item_to_entry_[item]->setDefaultValues();
+				item_to_entry_[item]->restoreDefaultValues();
 			}
 			else
 			{
-				item_to_entry_[item->parent()]->setDefaultValues();
+				item_to_entry_[item->parent()]->restoreDefaultValues();
 			}
 		}
 
@@ -245,6 +245,24 @@ namespace BALL
 			if (hv != 0)
 			{
 				hv->showHelpFor(item_to_widget_[entries_listview->selectedItem()]);
+			}
+		}
+
+		void Preferences::cancelPreferences()
+		{
+			HashSet<PreferencesEntry*>::Iterator it = entries_.begin();
+			for (; +it; ++it)
+			{
+				(**it).restoreValues(true);
+			}
+		}
+
+		void Preferences::applyPreferences()
+		{
+			HashSet<PreferencesEntry*>::Iterator it = entries_.begin();
+			for (; +it; ++it)
+			{
+				(**it).storeValues();
 			}
 		}
 

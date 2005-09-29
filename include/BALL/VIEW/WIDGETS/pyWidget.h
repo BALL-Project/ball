@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.23.2.8 2005/09/01 22:18:06 amoll Exp $
+// $Id: pyWidget.h,v 1.23.2.9 2005/09/29 14:01:34 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -285,10 +285,6 @@ namespace BALL
 
 			///
 			virtual void applyPreferences()
-				throw();
-
-			///
-			virtual void cancelPreferences()
 				throw();
 
 			///

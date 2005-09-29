@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.20.4.8 2005/09/02 14:25:22 amoll Exp $
+// $Id: modularWidget.C,v 1.20.4.9 2005/09/29 14:01:27 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/FORMAT/INIFile.h>
-#include <BALL/VIEW/DIALOGS/preferences.h>
+#include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #include <qmenubar.h>
 
 using namespace std;
@@ -124,6 +124,10 @@ namespace BALL
 				widget->resize(inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt(),
 											 inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt());
 			} 
+
+			PreferencesEntry* entry = dynamic_cast<PreferencesEntry*>(this);
+			if (entry == 0) return;
+			entry->readPreferenceEntries(inifile);
 		}
 
 		void ModularWidget::writePreferences(INIFile& inifile)
@@ -142,6 +146,10 @@ namespace BALL
 			inifile.insertValue("WINDOWS", getIdentifier() + "::y", String(widget->y()));
 			inifile.insertValue("WINDOWS", getIdentifier() + "::width", String(widget->width()));
 			inifile.insertValue("WINDOWS", getIdentifier() + "::height", String(widget->height()));
+
+			PreferencesEntry* entry = dynamic_cast<PreferencesEntry*>(this);
+			if (entry == 0) return;
+			entry->writePreferenceEntries(inifile);
 		}
 
 		void ModularWidget::setStatusbarText(String text, bool important)

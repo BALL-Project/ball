@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.39.2.3 2005/09/01 22:17:44 amoll Exp $
+// $Id: displayProperties.h,v 1.39.2.4 2005/09/29 14:01:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -100,24 +100,6 @@ namespace BALL
 			*/ 
 			//@{
 			
-			/** Fetches the preferences (the position, custom color, model, drawing 
-					precision, drawing mode and the coloring method from the INIFile.
-					This method will be called inside MainControl::show().
-					\param  inifile the INIFile that contains the needed information 
-					\see    writePreferences
-			*/
-			virtual void fetchPreferences(INIFile &inifile)
-					throw();
-				
-			/** Writes the preferences (the position, custom color, model, drawing 
-					precision, drawing mode and the coloring method to the INIFile.
-					This method will be called inside MainControl::aboutToExit()
-					\param  inifile the INIFile to be written into
-					\see    fetchPreferences
-			*/
-			virtual void writePreferences(INIFile &inifile)
-					throw();
-				
 			/**	Initialize the popup menu <b>Display</b> with the entry
 					<b>Display Properties</b>, which opens the dialog.
 					This method is called automatically	immediately before the main application is started

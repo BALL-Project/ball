@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.23.6.2 2005/09/01 22:17:46 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.23.6.3 2005/09/29 14:01:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -50,10 +50,6 @@ namespace BALL
 			/// Destructor
 			~ModelSettingsDialog() {}
 
-			///
-			void setDefaultValues(bool all = true)
-				throw();
-			
 			///
 			void applySettingsTo(ModelProcessor& cp) const
 				throw();
@@ -248,6 +244,8 @@ namespace BALL
 
 			void setLabelText_(QLabel* label, const QSlider* const from)
 				throw();
+
+			void setDefaultValues_();
 		};
 
 } }

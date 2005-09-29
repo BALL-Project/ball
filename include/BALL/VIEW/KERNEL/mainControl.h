@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72.2.14 2005/09/01 22:17:52 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.15 2005/09/29 14:01:33 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -393,18 +393,6 @@ namespace BALL
 					\see        applyPreferences()
 			*/
 			virtual void applyPreferencesTab();
-
-			/** Called after canceling the Preferences dialog.
-					Resets all in the Preferences dialog inserted tabs.
-			*/
-			virtual void cancelPreferencesTab()
-				throw();
-
-			/** Set default values in the current Preferences tab.
-			 		Called by defaults button in Preferences.
-			*/
-			virtual void defaultPreferencesTab()
-				throw();
 
 			/** Last second cleanup.
 					This method will be called internally if the MainControl is about to be destroyed.

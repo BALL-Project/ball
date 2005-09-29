@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.20.2.5 2005/08/22 13:16:24 amoll Exp $
+// $Id: lightSettings.C,v 1.20.2.6 2005/09/29 14:01:24 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -42,7 +42,7 @@ LightSettings::LightSettings(QWidget* parent, const char* name, WFlags fl)
 	
 	relative_to_camera->setChecked(true);
 	updateFromStage();
-	insertEntry(this, "Lighting");
+	setWidgetStackName("Lighting");
 	registerWidgetForHelpSystem_(this, "scene.html#lightsources");
 }
 
@@ -320,7 +320,7 @@ void LightSettings::intensityChanged()
 }
 
 
-void LightSettings::setDefaultValues(bool /*all*/)
+void LightSettings::restoreDefaultValues(bool /*all*/)
 	throw()
 {
 	defaultsPressed();
@@ -400,4 +400,9 @@ Index LightSettings::getCurrentLightNumber_() const
 	return lights_list->currentItem();
 }
 
+void LightSettings::restoreValues(bool)
+{
+	updateFromStage();
+}
+		
 } } // NAMESPACE

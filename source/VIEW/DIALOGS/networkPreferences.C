@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: networkPreferences.C,v 1.1.2.2 2005/05/17 13:37:53 amoll Exp $
+// $Id: networkPreferences.C,v 1.1.2.3 2005/09/29 14:01:25 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/networkPreferences.h>
@@ -26,7 +26,7 @@ NetworkPreferences::NetworkPreferences(QWidget* parent, const char* name, WFlags
 	registerObject_(host_edit);
 	registerObject_(enable_proxy);
 
-	insertEntry(this, "Network");
+	setWidgetStackName("Network");
 }
 
 NetworkPreferences::~NetworkPreferences()

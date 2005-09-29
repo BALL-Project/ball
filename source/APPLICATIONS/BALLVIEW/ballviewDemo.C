@@ -9,7 +9,6 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
-#include <BALL/DATATYPE/contourSurface.h>
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -21,6 +20,9 @@
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
+
+#include <BALL/DATATYPE/contourSurface.h>
+#include <BALL/SYSTEM/path.h>
 
 #include <qpushbutton.h>
 #include <qwidgetstack.h>

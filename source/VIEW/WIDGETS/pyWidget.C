@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.12 2005/08/26 13:43:27 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.13 2005/09/29 14:01:29 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -699,8 +699,10 @@ namespace BALL
 		void PyWidget::writePreferences(INIFile& inifile)
 			throw()
 		{
-			inifile.appendSection("PYTHON");
-			inifile.insertValue("PYTHON", "StartupScript", text_edit_->startup_script_);
+			if (!inifile.hasSection("PYTHON"))
+			{
+				inifile.appendSection("PYTHON");
+			}
 
 			DockWidget::writePreferences(inifile);
 
@@ -751,15 +753,6 @@ namespace BALL
 			text_edit_->startup_script_ = text_edit_->python_settings_->getFilename();
 
 			hotkeys_ = (python_hotkeys_->getContent());
-		}
-
-		void PyWidget::cancelPreferences()
-			throw()
-		{
-			if (text_edit_->python_settings_ != 0)
-			{
-				text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
-			}
 		}
 
 		void PyWidgetData::abortScript()

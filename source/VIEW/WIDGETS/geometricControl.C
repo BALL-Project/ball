@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.31 2005/09/02 13:48:56 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.32 2005/09/29 14:01:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -65,7 +65,11 @@ namespace BALL
 				return;
 			}
 
-			if (representation_ == 0) return;
+			if (representation_ == 0)
+			{
+				BALLVIEW_DEBUG;
+				return;
+			}
 
 			if (control_reference_.getMainControl()->compositesAreLocked())
 			{
@@ -346,7 +350,10 @@ namespace BALL
 
 		void GeometricControl::selectedRepresentation(Representation& representation, bool state)
 		{
-			if (state != representation.isHidden()) return;
+			if (state != representation.isHidden()) 
+			{
+				return;
+			}
 
 			if (!state)
 			{
@@ -359,10 +366,7 @@ namespace BALL
 				
 			representation.setHidden(!representation.isHidden());
 
-			if (representation.needsUpdate()) 
-			{
-				representation.update(true);
-			}
+			representation.update(false);
 		}
 
 

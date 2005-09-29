@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.10 2005/02/06 20:57:08 oliver Exp $
+// $Id: materialSettings.C,v 1.10.4.1 2005/09/29 14:01:24 amoll Exp $
 // 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
@@ -20,12 +20,17 @@ namespace BALL
 				PreferencesEntry()
 		{
 			setINIFileSectionName("MATERIAL_SETTINGS");
-			setDefaultValues(true);
+
+			specular_slider->setValue((Index)(0.774 * 10.0));
+			diffuse_slider->setValue((Index)(0.4   	* 10.0));
+			ambient_slider->setValue((Index)(0.25 	* 10.0));
+			shininess_slider->setValue((Index)(76.8 * 10.0));
+
 			registerObject_(specular_slider);
 			registerObject_(diffuse_slider);
 			registerObject_(ambient_slider);
 			registerObject_(shininess_slider);
-			insertEntry(this, "Materials");
+			setWidgetStackName("Materials");
 		}
 
 
@@ -43,16 +48,6 @@ namespace BALL
 			glMaterialf(GL_FRONT, GL_AMBIENT,   stage.getAmbientIntensity());
 
 		}
-
-		void MaterialSettings::setDefaultValues(bool /*all*/)
-			throw()
-		{
-			specular_slider->setValue((Index)(0.774 * 10.0));
-			diffuse_slider->setValue((Index)(0.4   	* 10.0));
-			ambient_slider->setValue((Index)(0.25 	* 10.0));
-			shininess_slider->setValue((Index)(76.8 * 10.0));
-		}
-
 
 		void MaterialSettings::ambientChanged()
 		{

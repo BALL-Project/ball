@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.16 2005/09/02 14:21:19 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.17 2005/09/29 14:01:23 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -88,6 +88,15 @@ DisplayProperties::DisplayProperties(const DisplayProperties& /*dp*/)
 		ModularWidget(*this),
 		PreferencesEntry()
 {
+	registerObject_(precision_combobox);
+	registerObject_(precision_slider);
+	registerObject_(model_type_combobox);
+	registerObject_(mode_combobox);
+	registerObject_(custom_color_label);
+	registerObject_(selection_color_label);
+	registerObject_(transparency_slider);
+	registerObject_(coloring_method_combobox);
+	registerObject_(resolution_group);
 }
 
 DisplayProperties::~DisplayProperties()
@@ -99,23 +108,6 @@ DisplayProperties::~DisplayProperties()
 	
 	if (model_settings_ != 0) delete model_settings_;
 	if (coloring_settings_ != 0) delete coloring_settings_;
-}
-
-
-void DisplayProperties::fetchPreferences(INIFile& inifile)
-	throw()
-{
-	ModularWidget::fetchPreferences(inifile);
-	readPreferenceEntries(inifile);
-
-	precisionBoxChanged(precision_combobox->currentItem());
-}
-
-void DisplayProperties::writePreferences(INIFile& inifile)
-	throw()
-{
-	ModularWidget::writePreferences(inifile);
-	writePreferenceEntries(inifile);
 }
 
 
@@ -610,11 +602,7 @@ void DisplayProperties::checkDrawingPrecision_()
 	{
 		precision_slider->setEnabled(model_updates_enabled->isChecked());
 		custom_precision_button->setEnabled(true);
-		if (rep_ == 0)
-		{
-			presets_precision_button->setChecked(true);
-			return;
-		}
+		if (rep_ == 0) return;
 		
 		if (rep_->getSurfaceDrawingPrecision() != -1)
 		{

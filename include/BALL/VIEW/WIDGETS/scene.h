@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.18 2005/09/04 13:29:45 amoll Exp $
+// $Id: scene.h,v 1.62.2.19 2005/09/29 14:01:34 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -366,10 +366,6 @@ namespace BALL
 
 			///
 			virtual void applyPreferences()
-				throw();
-				
-			///
-			virtual void cancelPreferences()
 				throw();
 				
 			///

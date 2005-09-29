@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.15 2005/06/15 14:59:15 amoll Exp $
+// $Id: representation.C,v 1.62.4.16 2005/09/29 14:01:28 amoll Exp $
 //
 
 
@@ -282,8 +282,6 @@ namespace BALL
 
 			needs_update_ = false;
 
- 			const PreciseTime last_build_time = model_build_time_;
-
 #ifdef BALL_BENCHMARKING
 			Timer t;
 			t.start();
@@ -300,7 +298,7 @@ namespace BALL
 					List<const Composite*>::const_iterator it = composites_.begin();
 					for (; it!= composites_.end(); it++)
 					{
-						if ((*it)->getModificationTime() > last_build_time) 
+						if ((*it)->getModificationTime() > model_build_time_) 
 						{
 							rebuild_ = true;
 							break;
@@ -340,7 +338,7 @@ namespace BALL
 					List<const Composite*>::const_iterator it = composites_.begin();
 					for (; it!= composites_.end(); it++)
 					{
-						if ((*it)->getSelectionTime() > last_build_time) 
+						if ((*it)->getSelectionTime() > model_build_time_) 
 						{
 							apply_color_processor = true;
 							break;
@@ -355,6 +353,7 @@ namespace BALL
 					color_processor_->setTransparency(transparency_);
 					color_processor_->setModelType(model_type_);
 					getGeometricObjects().apply(*color_processor_);
+					changed_color_processor_ = false;
 #ifdef BALL_BENCHMARKING
 					t.stop();
 					logString("Calculating Coloring time: " + String(t.getClockTime()));
@@ -374,8 +373,7 @@ namespace BALL
 			MainControl* mc = getMainControl();
 			if (mc != 0)
 			{
-				RepresentationMessage* message = new RepresentationMessage(*this, RepresentationMessage::UPDATE);
-				mc->sendMessage(*message);
+				mc->sendMessage(*new RepresentationMessage(*this, RepresentationMessage::UPDATE));
 			}
 #endif
 		}
