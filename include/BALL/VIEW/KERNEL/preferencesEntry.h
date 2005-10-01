@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.h,v 1.9.2.3 2005/09/29 14:01:33 amoll Exp $
+// $Id: preferencesEntry.h,v 1.9.2.4 2005/10/01 14:20:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCES_ENTRY
@@ -72,7 +72,7 @@ namespace BALL
 			public:
 
 			/** Base class for more sophisticated GUI elements in a dialog,
-					to support e.g. reading and storing of its state.
+					to support e.g. reading and (re)storing of its state.
 					Make sure to name all derived objects, so that (re-)storing the
 					values from the INIFile works!
 					@see QColorTable
@@ -83,11 +83,14 @@ namespace BALL
 
 				///
 				ExtendedPreferencesObject() {};
-
+				
 				///
+				virtual ~ExtendedPreferencesObject() {};
+
+				/// Overload this in derived classes!
 				virtual bool getValue(String&) const { return true;}
 
-				///
+				/// Overload this in derived classes!
 				virtual bool setValue(const String&) { return true;}
 			};
 			
