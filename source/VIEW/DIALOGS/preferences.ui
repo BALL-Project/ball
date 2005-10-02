@@ -269,6 +269,8 @@
     <slot>entrySelected(QListViewItem*)</slot>
     <slot>setDefaultValues()</slot>
     <slot>showHelp()</slot>
+    <slot>applyPreferences()</slot>
+    <slot>cancelPreferences()</slot>
 </slots>
 <exportmacro>BALL_VIEW_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>

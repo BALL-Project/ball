@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.45 2005/09/29 14:01:29 amoll Exp $
+// $Id: scene.C,v 1.171.2.46 2005/10/02 21:24:29 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -359,7 +359,7 @@ namespace BALL
 
 		void Scene::paintGL()
 		{
- 			if (!content_changed_) return;
+//    			if (!content_changed_) return;
 
 			// cannot call update here, because it calls updateGL
    		renderView_(DISPLAY_LISTS_RENDERING);
@@ -376,10 +376,6 @@ namespace BALL
 		void Scene::renderView_(RenderMode mode)
 			throw()
 		{
-if (mode != DISPLAY_LISTS_RENDERING)
-{
-}
-
 			makeCurrent();
 
 			glDepthMask(GL_TRUE);

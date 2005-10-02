@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.31 2005/09/29 14:01:27 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.32 2005/10/02 21:22:51 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -377,15 +377,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			connect(preferences_dialog_->ok_button, SIGNAL(clicked()), 
 					this, SLOT(applyPreferencesTab()));
 
-
-			/// ?????? do this in the designer for the preferences
-				connect(preferences_dialog_->ok_button, SIGNAL(clicked()), 
-					preferences_dialog_, SLOT(applyPreferences()));
-			
-			/// ?????? do this in the designer for the preferences
-			connect(preferences_dialog_->cancel_button, SIGNAL(clicked()), 
-					preferences_dialog_, SLOT(cancelPreferences()));
-			
 			// initialize own preferences tab
 			initializePreferencesTab(*preferences_dialog_);
 
