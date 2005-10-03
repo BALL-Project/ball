@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.8.2.9 2005/10/03 22:21:00 amoll Exp $
+# $Id: Makefile,v 1.8.2.10 2005/10/03 22:28:17 amoll Exp $
 #
 
 EXECUTABLE=BALLView
@@ -68,10 +68,9 @@ ballviewDemoData_moc.C: demoTutorialDialogData.h
 
 
 
-clean: clean_moc_uic
-
-clean_moc_uic:
+clean: 
 	@$(RM) -f $(UIC_FILES)
+	@$(RM) -f *.o *moc*
 
 macos_app: $(EXECUTABLE) BALLView.app/Contents/MacOS/../PkgInfo BALLView.app/Contents/MacOS/../Info.plist 
 	@$(CP) BALLView BALLView.app/Contents/MacOS
