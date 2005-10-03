@@ -1,14 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.17 2005/08/24 14:33:56 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.18 2005/10/03 22:22:15 amoll Exp $
 //
 
 #include "mainframe.h"
 #include "aboutDialog.h"
 #include "icons.h"
-#include "ballviewTutorial.h"
-#include "ballviewDemo.h"
+#include "demoTutorialDialog.h"
 
 #include <BALL/VIEW/KERNEL/moleculeObjectCreator.h>
 #include <BALL/VIEW/KERNEL/server.h>
@@ -104,10 +103,7 @@ namespace BALL
 		MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
 		server->registerObjectCreator(*object_creator);
 
-		BALLViewTutorial* tutorial = new BALLViewTutorial(this, "BALLViewTutorial");
-		CHECK_PTR(tutorial);
-
-		BALLViewDemo* demo = new BALLViewDemo(this, "BALLViewDemo");
+		DemoTutorialDialog* demo = new DemoTutorialDialog(this, "BALLViewDemo");
 		CHECK_PTR(demo);
 
 		#ifdef BALL_PYTHON_SUPPORT
@@ -141,8 +137,8 @@ namespace BALL
 										ALT+Key_X);
 
 		// Help-Menu -------------------------------------------------------------------
-		insertMenuEntry(MainControl::HELP, "Demo", demo, SLOT(show()));
-		insertMenuEntry(MainControl::HELP, "Tutorial", tutorial, SLOT(show()));
+		insertMenuEntry(MainControl::HELP, "Demo", demo, SLOT(showDemo()));
+		insertMenuEntry(MainControl::HELP, "Tutorial", demo, SLOT(showTutorial()));
 		insertPopupMenuSeparator(MainControl::HELP);
 		insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()));
 
@@ -193,23 +189,6 @@ namespace BALL
 		{
 			setStatusbarText("Exported POV to " + result);
 		}
-	}
-
-	void Mainframe::about()
-	{
-		// Display about dialog
-		AboutDialog about;
-		QString version = QString("QT ") + qVersion();
-#ifdef BALL_QT_HAS_THREADS
-		version += "(mt)";
-#endif
-		about.qt_version_label->setText(version);
-		QFont font = about.BALLView_version_label->font();
-		about.BALLView_version_label->setText(QString("BALLView ") + BALL_RELEASE_STRING);
-		font.setPixelSize(18);
-		about.BALLView_version_label->setFont(font);
-		about.BALL_version_label->setText(__DATE__);
-		about.exec(); 
 	}
 
 	void Mainframe::toggleFullScreen()
@@ -376,6 +355,23 @@ namespace BALL
 	{
 		MainControl::checkMenus();
 		menuBar()->setItemEnabled(save_project_id_, !composites_locked_);
+	}
+
+	void Mainframe::about()
+	{
+		// Display about dialog
+		AboutDialog about;
+		QString version = QString("QT ") + qVersion();
+#ifdef BALL_QT_HAS_THREADS
+		version += "(mt)";
+#endif
+		about.qt_version_label->setText(version);
+		QFont font = about.BALLView_version_label->font();
+		about.BALLView_version_label->setText(QString("BALLView ") + BALL_RELEASE_STRING);
+		font.setPixelSize(18);
+		about.BALLView_version_label->setFont(font);
+		about.BALL_version_label->setText(__DATE__);
+		about.exec(); 
 	}
 
 }

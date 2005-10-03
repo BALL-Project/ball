@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.8.2.8 2005/06/19 09:32:45 oliver Exp $
+# $Id: Makefile,v 1.8.2.9 2005/10/03 22:21:00 amoll Exp $
 #
 
 EXECUTABLE=BALLView
@@ -18,28 +18,23 @@ BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 
 CPP_SOURCES=\
 	aboutDialog.C\
-	ballviewTutorial.C\
-	ballviewTutorialData.C\
-	ballviewDemo.C\
-	ballviewDemoData.C\
+	demoTutorialDialog.C\
+	demoTutorialDialogData.C\
 	icons.C\
 	main.C\
 	mainframe.C
 
 MOC_SOURCES=\
 	aboutDialog_moc.C\
-	ballviewTutorial_moc.C\
-	ballviewTutorialData_moc.C\
-	ballviewDemo_moc.C\
-	ballviewDemoData_moc.C\
+	demoTutorialDialog_moc.C\
+	demoTutorialDialogData_moc.C\
 	mainframe_moc.C
 
 UIC_FILES=\
 	aboutDialog.C\
 	aboutDialog.h\
-	ballviewTutorialData.C\
-	ballviewTutorialData.h\
-	ballviewDemoData.C
+	demoTutorialDialogData.C\
+	demoTutorialDialogData.h
 
 BALLView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(PYTHON_LIBS)
@@ -59,30 +54,18 @@ aboutDialog.C: aboutDialog.h
 	$(UIC) -impl aboutDialog.h aboutDialog.ui > aboutDialog.C
 
 
-ballviewTutorialData.h: ballviewTutorial.ui
-	$(UIC) ballviewTutorial.ui > ballviewTutorialData.h
+demoTutorialDialogData.h: demoTutorialDialog.ui
+	$(UIC) demoTutorialDialog.ui > demoTutorialDialogData.h
 				
-ballviewTutorialData.C: ballviewTutorial.h
-	$(UIC) -impl ballviewTutorialData.h ballviewTutorial.ui > ballviewTutorialData.C
+demoTutorialDialogData.C: demoTutorialDialogData.h
+	$(UIC) -impl demoTutorialDialogData.h demoTutorialDialog.ui > demoTutorialDialogData.C
 
-ballviewTutorial_moc.C: ballviewTutorial.h
-	$(MOC) ballviewTutorial.h -o $@
+demoTutorialDialog_moc.C: demoTutorialDialog.h
+	$(MOC) demoTutorialDialog.h -o $@
 
-ballviewTutorialData_moc.C: ballviewTutorialData.h
-	$(MOC) ballviewTutorialData.h -o $@
+ballviewDemoData_moc.C: demoTutorialDialogData.h
+	$(MOC) demoTutorialDialogData.h -o $@
 
-
-ballviewDemoData.h: ballviewDemo.ui
-	$(UIC) ballviewDemo.ui > ballviewDemoData.h
-				
-ballviewDemoData.C: ballviewDemo.h
-	$(UIC) -impl ballviewDemoData.h ballviewDemo.ui > ballviewDemoData.C
-
-ballviewDemo_moc.C: ballviewDemo.h
-	$(MOC) ballviewDemo.h -o $@
-
-ballviewDemoData_moc.C: ballviewDemoData.h
-	$(MOC) ballviewDemoData.h -o $@
 
 
 clean: clean_moc_uic
