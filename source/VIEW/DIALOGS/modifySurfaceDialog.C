@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.26 2005/09/02 14:22:01 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.27 2005/10/04 12:38:24 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -406,13 +406,19 @@ namespace BALL
 				return false;
 			}
 
-			if (transparency_group_grid->selected() == none_button_grid)
+			rep_->setTransparency(0);
+
+			if (transparency_group_grid->selected() != none_button_grid)
 			{
-				rep_->setTransparency(0);
-			}
-			else if (transparency_group_grid->selected() == alpha_button_grid)
-			{
-				rep_->setTransparency(255 - (int) min_min_color.getAlpha());
+				if ((Size)min_min_color.getAlpha() 	!= 255 ||
+						(Size)min_color.getAlpha() 			!= 255 ||
+						(Size)mid_color.getAlpha() 			!= 255 ||
+						(Size)max_color.getAlpha() 			!= 255 ||
+						(Size)max_max_color.getAlpha() 	!= 255)
+				{
+					// if we use Transparency, just tell the Representation
+					rep_->setTransparency(80);
+				}
 			}
 
 			return true;
