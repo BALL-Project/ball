@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.h,v 1.10.4.2 2005/09/29 14:01:30 amoll Exp $
+// $Id: lightSettings.h,v 1.10.4.3 2005/10/04 15:50:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_LIGHTSETTINGS_H
@@ -9,19 +9,18 @@
 
 #include <BALL/VIEW/UIC/lightSettingsData.h>
 
-#ifndef BALL_VIEW_KERNEL_STAGE_H
-# include <BALL/VIEW/KERNEL/stage.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_STAGE_H
+# include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		class Stage;
 		class Scene;
 
 		/** Dialog for setting the lighting, which is added to the Preferences.

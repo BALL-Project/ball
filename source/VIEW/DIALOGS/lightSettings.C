@@ -1,12 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.20.2.6 2005/09/29 14:01:24 amoll Exp $
+// $Id: lightSettings.C,v 1.20.2.7 2005/10/04 15:47:01 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
-#include <BALL/VIEW/KERNEL/mainControl.h>
 
 #include <qpushbutton.h>
 #include <qlineedit.h> 
