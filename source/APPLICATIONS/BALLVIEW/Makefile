@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.8.2.11 2005/10/04 11:46:06 amoll Exp $
+# $Id: Makefile,v 1.8.2.12 2005/10/04 11:46:41 amoll Exp $
 #
 
 EXECUTABLE=BALLView
@@ -12,7 +12,7 @@ all:	$(EXECUTABLE)
 clean:	default_clean
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 UIC_DIR=.
 
