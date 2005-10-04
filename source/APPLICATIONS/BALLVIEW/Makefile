@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.8.2.10 2005/10/03 22:28:17 amoll Exp $
+# $Id: Makefile,v 1.8.2.11 2005/10/04 11:46:06 amoll Exp $
 #
 
 EXECUTABLE=BALLView
@@ -12,7 +12,9 @@ all:	$(EXECUTABLE)
 clean:	default_clean
 
 include ../../common.mak
--include .Dependencies
+include .Dependencies
+
+UIC_DIR=.
 
 BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 
@@ -33,8 +35,8 @@ MOC_SOURCES=\
 UIC_FILES=\
 	aboutDialog.C\
 	aboutDialog.h\
-	demoTutorialDialogData.C\
-	demoTutorialDialogData.h
+	demoTutorialDialogData.h\
+	demoTutorialDialogData.C
 
 BALLView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(PYTHON_LIBS)
