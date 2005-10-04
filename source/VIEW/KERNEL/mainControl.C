@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.32 2005/10/02 21:22:51 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.33 2005/10/04 13:17:43 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -327,7 +327,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					menuBar()->insertItem("&User", menu, USER, USER);
 					break;
 				case HELP:
-					menuBar()->insertSeparator();
 					menuBar()->insertItem("&Help", menu, HELP, HELP);
 					break;
 				default:
