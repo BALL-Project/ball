@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.13 2005/09/29 14:01:29 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.14 2005/10/04 14:50:20 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -634,9 +634,16 @@ namespace BALL
 		{
 //   			insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
 
-			insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", this , SLOT(scriptDialog()));
-			insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
-			insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
+			Index id1 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", this , SLOT(scriptDialog()));
+			Index id2 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
+			Index id3 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
+
+			if (!PyInterpreter::isValid())
+			{
+				menuBar()->setItemEnabled(id1, false);
+				menuBar()->setItemEnabled(id2, false);
+				menuBar()->setItemEnabled(id3, false);
+			}
 
 			DockWidget::initializeWidget(main_control);
 
@@ -679,6 +686,8 @@ namespace BALL
 			{
 				return;
 			}
+
+			if (!PyInterpreter::isValid()) return;
 
 			String startup = getDataPath();
 			startup += "startup.py";
