@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72.2.15 2005/09/29 14:01:33 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.16 2005/10/04 16:16:37 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -356,9 +356,6 @@ namespace BALL
 					Calls insertMenuEntry() \par
 					Calls ModularWidget::initializeWidget() \par
 					Calls ModularWidget::initializePreferencesTab() \par
-					Calls ModularWidget::fetchPreferences() \par
-					Calls ModularWidget::applyPreferences() \par
-					Calls Preferences::fetchPreferences() \par
 					Calls QMainWindow::show() \par
 					Note: Call this method to start the application.
 			*/
@@ -383,26 +380,20 @@ namespace BALL
 			void complementSelection();
 
 			/** Apply preferences.
-					This method calls the method <b>ModularWidget::applyPreferences</b> of all registered
-					ModularWidget objects if the apply button of the Preferences dialog is pressed. 
-					<b>Note:</b> This method will be called internally whenever the apply button
+					This slot is called internally whenever the apply button
 					of the Preferences dialog	is pressed.  \par
-					Calls ModularWidget::applyPreferences\par
-					Calls applyPreferences\par
-					\see        ModularWidget::applyPreferences
+					It calls among other things the method applyPreferences().
 					\see        applyPreferences()
 			*/
-			virtual void applyPreferencesTab();
+			virtual void applyPreferencesClicked();
 
 			/** Last second cleanup.
 					This method will be called internally if the MainControl is about to be destroyed.
 					This method stores the preferences and finalizes all ModularWidget objects
 					and the MainControl.
 					Must be called after your own cleanup routine if you override this method.\par
-					Calls ModularWidget::writePreferences \par
 					Calls ModularWidget::finalizePreferencesTab \par
 					Calls ModularWidget::finalizeWidget \par
-					Calls Preferences::writePreferences \par
 					Calls writePreferences \par
 					Calls finalizePreferencesTab \par
 					Calls removeModularWidget \par
@@ -521,24 +512,19 @@ namespace BALL
 			virtual void finalizePreferencesTab(Preferences &preferences)
 				throw();
 			
-			/** Apply the preferences of the own tab MainControlPreferences.
-					This method is called automatically by applyPreferencesTab().
-					It is used in the same manner as the
-					corresponding method in the ModularWidget class. See ModularWidget
-					for more information concerning preferences tabs.\par
+			/** Apply all preferences.
+					This method is called automatically by applyPreferencesClicked() and calls
+					applyPreferences() for all registered ModularWidgets.
 					<b>Note:</b> If this method is overridden, call this method at the end of the
 					overriden method to make sure that the general preferences are applied.
-					\param  preferences the Preferences dialog for this MainControl
-					\see    applyPreferencesTab
-					\see    MainControlPreferences
+					\see    ModularWidget
 					\see    Preferences
 			*/
 			virtual void applyPreferences()
 				throw();
 			
-			/** Fetch the widgets preferences from the INIfile.
-					This method fetches the general preferences of the MainControl and
-					the preferences of MainControlPreferences from <tt>inifile</tt>.\par
+			/** Fetch the preferences from the INIfile.
+					Calls fetchPreferences() for all registered ModularWidgets.
 					<b>Note:</b>If this method is overridden, call this method at the end of the
 					overriden method to make sure that the general preferences are fetched.
 					\param  inifile the INIFile that contains the needed values
@@ -547,6 +533,8 @@ namespace BALL
 				throw();
 			
 			/** Writes the widgets preferences to the INIFile.
+					Calls writePreferences() for all registered ModularWidgets and
+					Preferences::savePreferences().
 					<b>Note:</b> If this method is overridden, call this method at the end of the
 					overriden method to make sure that the general preferences are written.
 					\param  inifile the INIFile that contains the needed values
@@ -554,7 +542,7 @@ namespace BALL
 			virtual void writePreferences(INIFile &inifile)
 				throw();
 			
-			/// Restore the positions of all DockWindow's from the INIFile
+			/// Restore the positions the main window and of all DockWindow's from the INIFile
 			virtual void restoreWindows(const INIFile& inifile)
 				throw();
 			
@@ -842,7 +830,7 @@ namespace BALL
 			Preferences*								preferences_dialog_;
 			int 			 									preferences_id_;
 			int 			 									delete_id_;
-			INIFile		 									preferences_;
+			INIFile		 									preferences_file_;
 			
 			static int 									current_id_;
 			bool 												composites_locked_;

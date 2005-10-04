@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.47 2005/10/04 15:59:21 amoll Exp $
+// $Id: scene.C,v 1.171.2.49 2005/10/04 16:20:32 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -986,8 +986,7 @@ namespace BALL
 			gl_renderer_.bufferRepresentation(*rp);
 
 			// notify GeometricControl
-			RepresentationMessage* message = new RepresentationMessage(*rp, RepresentationMessage::ADD);
-			notify_(message);
+			notify_(new RepresentationMessage(*rp, RepresentationMessage::ADD));
 		}
 
 
@@ -1033,7 +1032,6 @@ namespace BALL
 			inifile.insertValue("EXPORT", "PNGNR", String(screenshot_nr_));
 			writeLights_(inifile);
 
-
 			if (inifile.hasSection("BALLVIEW_PROJECT"))
 			{
 				inifile.insertValue("BALLVIEW_PROJECT", "Camera", getStage()->getCamera().toString());
@@ -1062,9 +1060,6 @@ namespace BALL
 			}
 
 			readLights_(inifile);
-			light_settings_->updateFromStage();
-			stage_settings_->updateFromStage();
- 			applyPreferences();
 		}
 
 
@@ -1131,9 +1126,7 @@ namespace BALL
 				if (coordinate_rep != 0)
 				{
 					pm.remove(*coordinate_rep);
-					RepresentationMessage* message = new 
-						RepresentationMessage(*coordinate_rep, RepresentationMessage::REMOVE);
-					notify_(message);
+					notify_(new RepresentationMessage(*coordinate_rep, RepresentationMessage::REMOVE));
 				}
 			}
 			else if (!showed_coordinate && stage_->coordinateSystemEnabled()) 

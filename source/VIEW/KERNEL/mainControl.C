@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.33 2005/10/04 13:17:43 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.34 2005/10/04 16:16:29 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -13,8 +13,6 @@
 #include <BALL/VIEW/DIALOGS/networkPreferences.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 
-#include <BALL/VIEW/WIDGETS/logView.h>
-#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -98,7 +96,7 @@ namespace BALL
 				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
 				preferences_id_(-1),
 				delete_id_(0),
-				preferences_(),
+				preferences_file_(),
 				composites_locked_(false),
 				locking_widget_(0),
 				stop_simulation_(false),
@@ -142,7 +140,7 @@ namespace BALL
 				inifile = home_dir + String(FileSystem::PATH_SEPARATOR) + inifile;
 			}
 
-			preferences_.setFilename(inifile);
+			preferences_file_.setFilename(inifile);
 			setup_();
 		}
 
@@ -199,7 +197,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				exit(-1);
 			}
 
-			preferences_.read();
+			preferences_file_.read();
 
 			statusBar()->setMinimumSize(2, 25);
 			statusBar()->addWidget(message_label_, 20);
@@ -372,9 +370,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				return;
 			}
 
-			// establish connection 
-			connect(preferences_dialog_->ok_button, SIGNAL(clicked()), 
-					this, SLOT(applyPreferencesTab()));
+			// connect apply button in Preferences dialog to slot
+			connect(preferences_dialog_->ok_button, SIGNAL(clicked()), this, SLOT(applyPreferencesClicked()));
 
 			// initialize own preferences tab
 			initializePreferencesTab(*preferences_dialog_);
@@ -385,23 +382,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			{
 				(*it)->initializeWidget(*this);
 				(*it)->initializePreferencesTab(*preferences_dialog_);
-			}
-
-			// check own preferences 
-			preferences_dialog_->fetchPreferences(preferences_);
-
-			// fetch own preferences tab
-			fetchPreferences(preferences_);
-
-			// apply on own preferences tab
-			applyPreferences();
-
-			// check menu entries, fetch and apply preferences
-			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
-			{
-				(*it)->checkMenu(*this);
-				(*it)->fetchPreferences(preferences_);
-				(*it)->applyPreferences();
 			}
 
 			// own menu entries
@@ -418,7 +398,9 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 																					SLOT(show()), CTRL+Key_Z);
 			}
 
-			restoreWindows(preferences_);
+			fetchPreferences(preferences_file_);
+			applyPreferences();
+
 			QMainWindow::show();
 		}
 
@@ -447,27 +429,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			menuBar()->setItemEnabled(FILE_OPEN, !composites_locked_);
 		}
 
-		void MainControl::applyPreferencesTab()
-		{
-			preferences_dialog_->close();
-
-			// apply on own preferences tab
-			applyPreferences();
-			setPreferencesEnabled_(false);
-
-			// checks all modular widgets 
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-			for (; it != modular_widgets_.end(); ++it)
-			{
-				(*it)->applyPreferences();
-			}
-
-			if (!updateOfRepresentationRunning())
-			{
-				setPreferencesEnabled_(true);
-			}
-		}
-
 
 		void MainControl::aboutToExit()
 		{
@@ -479,20 +440,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			stopSimulation();
 
 			// write the preferences
-			preferences_.clear();
-			preferences_.appendSection("WINDOWS");
-			preferences_dialog_->writePreferences(preferences_);
+			preferences_file_.clear();
+			writePreferences(preferences_file_);
 
-			// finalizes all modular widgets
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-			for (; it != modular_widgets_.end(); ++it)
-			{
-				(*it)->writePreferences(preferences_);
-			}
-
-			writePreferences(preferences_);
-
-			it = modular_widgets_.begin(); 
 			for (; it != modular_widgets_.end(); ++it)
 			{
 				(*it)->finalizePreferencesTab(*preferences_dialog_);
@@ -826,54 +777,58 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			}
 		}
 
+		void MainControl::applyPreferencesClicked()
+		{
+			preferences_dialog_->close();
+			setPreferencesEnabled_(false);
+			applyPreferences();
+
+			if (!updateOfRepresentationRunning())
+			{
+				setPreferencesEnabled_(true);
+			}
+		}
+
 		void MainControl::applyPreferences()
 			throw()
 		{
+			// MainControls own preferences
+			
 			if (main_control_preferences_ != 0)
 			{
 				QApplication::setStyle(main_control_preferences_->getStyle());
 				BALL_VIEW_DOCKWINDOWS_SHOW_LABELS = main_control_preferences_->showLabelsEnabled();
 				QWidget::update();
 
-				if (!main_control_preferences_->loggingToFileEnabled())
+				if (!main_control_preferences_->loggingToFileEnabled()) 
+				{
 					disableLoggingToFile();
+				}
 				else 	
+				{
 					enableLoggingToFile();
+				}
 			}
 
 			if (network_preferences_ != 0)
 			{
 				network_preferences_->applySettings();
 			}
+
+			// all other preferences
+			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			for (; it != modular_widgets_.end(); ++it)
+			{
+				(*it)->applyPreferences();
+				(*it)->checkMenu(*this);
+			}
+
+			preferences_dialog_->applyPreferences();
 		}
 
 		void MainControl::fetchPreferences(INIFile &inifile)
 			throw()
 		{
-			// 
-			// the geometry of the main window
-			//
-			int x_pos = x();
-			int y_pos = y();
-			int w = 640;
-			int h = 480;
-			if (inifile.hasEntry("WINDOWS", "Main::x"))
-			{
-				x_pos = inifile.getValue("WINDOWS", "Main::x").toInt();
-			}
-			if (inifile.hasEntry("WINDOWS", "Main::y"))
-			{
-				y_pos = inifile.getValue("WINDOWS", "Main::y").toInt();
-			}
-			if (inifile.hasEntry("WINDOWS", "Main::height"))
-			{
-				h = inifile.getValue("WINDOWS", "Main::height").toInt();
-			}
-			if (inifile.hasEntry("WINDOWS", "Main::width"))
-			{
-				w = inifile.getValue("WINDOWS", "Main::width").toInt();
-			}
-
 			if (inifile.hasEntry("WINDOWS", "File::working_dir"))
 			{
 				setWorkingDir(inifile.getValue("WINDOWS", "File::working_dir"));
@@ -884,16 +839,23 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				enableLoggingToFile();
 			}
 
-			resize(w,h);
-			move(QPoint(x_pos, y_pos));
-
 			restoreWindows(inifile);
+			
+			preferences_dialog_->fetchPreferences(inifile);
+
+			// check menu entries, fetch and apply preferences
+			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			for (; it != modular_widgets_.end(); ++it)
+			{
+				(*it)->fetchPreferences(inifile);
+			}
 		}
 
 		void MainControl::writePreferences(INIFile &inifile)
 			throw()
 		{
 			// the main window position
+			inifile.appendSection("WINDOWS");
 			inifile.insertValue("WINDOWS", "Main::x", String(x()));
 			inifile.insertValue("WINDOWS", "Main::y", String(y()));
 			inifile.insertValue("WINDOWS", "Main::width", String(width()));
@@ -918,6 +880,15 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				}
 			}
 			inifile.insertValue("WINDOWS", "Main::dockwidgets", mys);
+
+			// finalizes all modular widgets
+			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			for (; it != modular_widgets_.end(); ++it)
+			{
+				(*it)->writePreferences(inifile);
+			}
+
+			preferences_dialog_->writePreferences(inifile);
 
 			inifile.write();
 		}
@@ -1271,6 +1242,32 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		void MainControl::restoreWindows(const INIFile& inifile)
 			throw()
 		{
+			// the geometry of the main window
+			int x_pos = x();
+			int y_pos = y();
+			int w = 640;
+			int h = 480;
+			if (inifile.hasEntry("WINDOWS", "Main::x"))
+			{
+				x_pos = inifile.getValue("WINDOWS", "Main::x").toInt();
+			}
+			if (inifile.hasEntry("WINDOWS", "Main::y"))
+			{
+				y_pos = inifile.getValue("WINDOWS", "Main::y").toInt();
+			}
+			if (inifile.hasEntry("WINDOWS", "Main::height"))
+			{
+				h = inifile.getValue("WINDOWS", "Main::height").toInt();
+			}
+			if (inifile.hasEntry("WINDOWS", "Main::width"))
+			{
+				w = inifile.getValue("WINDOWS", "Main::width").toInt();
+			}
+
+			resize(w,h);
+			move(QPoint(x_pos, y_pos));
+
+			// now the dockwidgets
 			if (!inifile.hasEntry("WINDOWS", "Main::dockwidgets")) return;
 
 			String mys(inifile.getValue("WINDOWS", "Main::dockwidgets"));
@@ -1758,24 +1755,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		String temp;
 		File::createTemporaryFilename(temp);
 		INIFile out(temp);
-		out.appendSection("WINDOWS");
 		out.appendSection("BALLVIEW_PROJECT");
-
-		// check menu entries, fetch and apply preferences
-		List<ModularWidget*>::Iterator mit = modular_widgets_.begin(); 
-		for (; mit != modular_widgets_.end(); ++mit)
-		{
-			(*mit)->writePreferences(out);
-		}
-
-		if (Scene::getInstance(0) != 0)
-		{
-			out.insertValue("BALLVIEW_PROJECT", "Camera", Scene::getInstance(0)->getStage()->getCamera().toString());
-		}
 
 		getPrimitiveManager().storeRepresentations(out);
 
 		writePreferences(out);
+
 		INIFile::LineIterator lit = out.getLine(0);
 		File result(filename, std::ios::out);
 		result << out.getNumberOfLines() << std::endl;
@@ -1835,15 +1820,11 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			}
 		}
 
-		// check menu entries, fetch and apply preferences
-		List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-		for (; it != modular_widgets_.end(); ++it)
-		{
-			(*it)->fetchPreferences(in);
-			(*it)->applyPreferences();
-		}
+		fetchPreferences(in);
 
-		if (DisplayProperties::getInstance(0) != 0)
+		bool has_dp = (DisplayProperties::getInstance(0) != 0);
+
+		if (has_dp)
 		{
 			DisplayProperties::getInstance(0)->enableCreationForNewMolecules(false);
 		}
@@ -1857,25 +1838,26 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			if (!RTTI::isKindOf<System>(*po))
 			{
 				setStatusbarText("Error while reading project file, could not read molecule", true);
+				if (has_dp)	DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
 				return;
 			}
 
 			System* system = dynamic_cast<System*>(po);
+			if (system == 0) continue;
+
 			insert(*system);
 			new_systems.push_back(system);
 			current_composite++;
 		}
 
 		file.close();
-		DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
+		if (has_dp) DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
 
 		getPrimitiveManager().restoreRepresentations(in, new_systems);
 
 		getSelection().clear();
 		notify_(new NewSelectionMessage);
  	
-		fetchPreferences(in);
-
 		if (in.hasEntry("BALLVIEW_PROJECT", "Camera"))
 		{
 			Stage stage;
@@ -1891,14 +1873,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			msg->setStage(stage);
 			notify_(msg);
 		}
-
-		if (DisplayProperties::getInstance(0) != 0)
-		{
-			DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
-		}
-
-		Scene::getInstance(0)->fetchPreferences(in);
-		Scene::getInstance(0)->applyPreferences();
 	}
 
 	void MainControl::setPreferencesEnabled_(bool state)
