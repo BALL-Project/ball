@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.46 2005/10/02 21:24:29 amoll Exp $
+// $Id: scene.C,v 1.171.2.47 2005/10/04 15:59:21 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1032,6 +1032,12 @@ namespace BALL
 			inifile.insertValue("EXPORT", "POVNR", String(pov_nr_));
 			inifile.insertValue("EXPORT", "PNGNR", String(screenshot_nr_));
 			writeLights_(inifile);
+
+
+			if (inifile.hasSection("BALLVIEW_PROJECT"))
+			{
+				inifile.insertValue("BALLVIEW_PROJECT", "Camera", getStage()->getCamera().toString());
+			}
 		}
 
 
