@@ -51,11 +51,15 @@ non_blocked:
 		| TK_LINE {};
 
 block:
-		TK_BLOCK_START dataset TK_BLOCK_END { }
+		start_block dataset TK_BLOCK_END { }
 	|	TK_DATA_BLOCK_START mol_name mol_symmetry atom_data TK_BLOCK_END {
 		}
 	|	TK_ZMAT_BLOCK_START TK_GROUP zmat_block TK_BLOCK_END {}
 	|	TK_VEC_BLOCK_START vec_block TK_BLOCK_END {}
+	;
+
+start_block:
+	TK_BLOCK_START { GAMESSDatFile::state.current_parser->inBlock($1); }
 	;
 
 mol_name:
@@ -100,7 +104,7 @@ atom_data:
 	;
 
 data:
-		TK_DATA	TK_EQUALS	TK_DATA	{ }
+		TK_DATA	TK_EQUALS	TK_DATA	{ GAMESSDatFile::state.current_parser->insertBlockedData($1, $3); free($1); free($3); }
 	;
 
 atom_line:

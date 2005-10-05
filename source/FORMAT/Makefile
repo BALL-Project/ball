@@ -81,5 +81,8 @@ GAMESSLogParserParser.o: GAMESSLogParserParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
 
 # TEST
+gamess_dat: gamess_dat.o GAMESSDatFile.o GAMESSDatParserLexer.o GAMESSDatParserParser.o GAMESSLogFile.o GAMESSLogParserLexer.o GAMESSLogParserParser.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS) GAMESSDatFile.o GAMESSDatParserLexer.o GAMESSDatParserParser.o 
+
 gamess: gamess.o GAMESSDatFile.o GAMESSDatParserLexer.o GAMESSDatParserParser.o GAMESSLogFile.o GAMESSLogParserLexer.o GAMESSLogParserParser.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS) GAMESSLogFile.o GAMESSLogParserLexer.o GAMESSLogParserParser.o 

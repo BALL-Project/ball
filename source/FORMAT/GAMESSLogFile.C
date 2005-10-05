@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GAMESSLogFile.C,v 1.1 2005/08/23 18:19:36 anhi Exp $
+// $Id: GAMESSLogFile.C,v 1.2 2005/10/05 10:08:20 anhi Exp $
 //
 
 #include <BALL/FORMAT/GAMESSLogFile.h>
@@ -27,7 +27,8 @@ namespace BALL
 	GAMESSLogFile::GAMESSLogFile(const GAMESSLogFile& file)
 		throw(Exception::FileNotFound)
 		:	GenericMolFile(),
-			factor_(file.factor_)
+			factor_(file.factor_),
+			qmbs_(file.qmbs_)
 	{
 		if (file.getName() != "")
 		{
@@ -135,7 +136,7 @@ namespace BALL
 			molecule_->setName(name);
 	}
 
-	void GAMESSLogFile::insertAtom(const String& element, float charge, float x, float y, float z)
+	void GAMESSLogFile::insertAtom(const String& element, float /*charge*/, float x, float y, float z)
 		throw()
 	{
 		if (!molecule_already_defined)
@@ -170,6 +171,14 @@ namespace BALL
 
 		at1->createBond(*at2);
 	}
+
+	void GAMESSLogFile::clearBonds()
+		throw()
+	{
+		AtomIterator ai;
+		for (ai = molecule_->beginAtom(); +ai; ++ai)
+			ai->destroyBonds();
+	}
 	
 	void GAMESSLogFile::setCurrentCharge(float charge)
 		throw()
@@ -181,6 +190,78 @@ namespace BALL
 		throw()
 	{
 		factor_ = factor;
+	}
+
+	void GAMESSLogFile::addCoefficient(float coefficient)
+		throw()
+	{
+		qmbs_.addCoefficient(coefficient);
+	}
+
+	void GAMESSLogFile::initializeBasisSet()
+		throw()
+	{
+		String basisfilename = "basis_";
+
+		/** Construct the correct data file name from the basis set options **/
+		if (!basis_options_.has("gbasis"))
+		{
+			Log.error() << "Cannot initialize basis set: options incomplete!" << std::endl;
+			return;
+		}
+
+		String basis_type = basis_options_["gbasis"].trim();
+
+		/** TODO: quite a lot!!! **/
+		if ( (basis_type == "n31") || (basis_type == "n21") )
+		{
+				basisfilename += basis_options_["igauss"].trim() + basis_type.getSubstring(1) + "G";
+
+				if (basis_options_["ndfunc"].toInt() > 0)
+				{
+					basisfilename += "*";
+					if (basis_options_["npfunc"].toInt() > 0)
+						basisfilename += "*";
+				}
+		}
+
+		Log.info() << basisfilename << std::endl;
+		qmbs_.readBasisSetData("/local/andreas/BALL_main/BALL/source/FORMAT/"+basisfilename);
+	}
+	
+	QMBasisSet& GAMESSLogFile::getBasisSet()
+		throw()
+	{
+		return qmbs_;
+	}
+
+	const QMBasisSet& GAMESSLogFile::getBasisSet() const 
+		throw()
+	{
+		return qmbs_;
+	}
+
+	void GAMESSLogFile::addBasisOption(const String& key, const String& value)
+		throw()
+	{
+		String new_key = key;
+		String new_value = value;
+		new_key.toLower();
+		new_value.toLower();
+		basis_options_[new_key.trim()] = new_value.trim();
+	}
+	
+	String GAMESSLogFile::getBasisOption(const String& key)
+		throw()
+	{
+		String new_key = key;
+		String result;
+
+		new_key.toLower();
+		if (basis_options_.has(new_key))
+			result = basis_options_[new_key];
+
+		return result;
 	}
 
 	struct GAMESSLogFile::State GAMESSLogFile::state;

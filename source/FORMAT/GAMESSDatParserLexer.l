@@ -60,7 +60,7 @@ ZMAT_SIX_NUM	  ([[:space:]]*({INT}|{FLOAT})[[:space:]]*,){5}[[:space:]]*({INT}|{
 {ZMAT_BLOCK_START}/{VALID_END}		{BEGIN(in_zmat_block); return(TK_ZMAT_BLOCK_START);}
 {VEC_BLOCK_START}/{VALID_END}		{BEGIN(in_vec_block); return(TK_VEC_BLOCK_START);}
 {BLOCK_START}/{VALID_END}					{GAMESSDatParserlval.text = yytext+1; BEGIN(in_block); return(TK_BLOCK_START);}
-<in_block>[[:alnum:]\.()+\-]*	{GAMESSDatParserlval.text = yytext; return(TK_DATA);}
+<in_block>[[:alnum:]\.()+\-]*	{GAMESSDatParserlval.text = strdup(yytext); return(TK_DATA);}
 <in_block>=							{return(TK_EQUALS);}
 <in_block>^[^=\n]*$				{GAMESSDatParserlval.text = yytext; return(TK_LINE);}
 <in_data_block>{ATOM_START}/{ATOM_LINE} {BEGIN(in_coord_line);GAMESSDatParserlval.text = strdup(yytext); return TK_ATOM;}
