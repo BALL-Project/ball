@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.14 2005/09/02 13:37:48 anhi Exp $
+// $Id: datasetControl.h,v 1.15 2005/10/05 10:00:29 anhi Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -27,12 +27,17 @@
 # include <BALL/DATATYPE/regularData3D.h>
 #endif 
 
+#ifndef BALL_FORMAT_GAMESSLOGFILE_H
+# include <BALL/FORMAT/GAMESSLogFile.h>
+#endif
+
 #include <qpopupmenu.h>
 
 namespace BALL
 {
 	class TrajectoryFile;
 	class SnapShotManager;
+	class GAMESSLogFile;
 
 	namespace VIEW
 	{
@@ -90,6 +95,9 @@ namespace BALL
 			virtual void checkMenu(MainControl& main_control)
 				throw();
 
+			/// insert a GAMESS dataset
+			void addGAMESSData(const String& filename);
+
 			/// insert a trajectory for the currently selected System
 			void addTrajectory(const String& filename);
 			
@@ -103,6 +111,10 @@ namespace BALL
 			*/ 
 			//@{
 			public slots:
+
+			///
+			void addGAMESSData()
+				throw();
 
 			///
 			void addTrajectory()
@@ -125,6 +137,9 @@ namespace BALL
 
 			///
 			void computeIsoContourSurface();
+
+			///
+			void createElectronDensity_();
 
 			//@} 
 			/** @name Protected members 
@@ -157,6 +172,9 @@ namespace BALL
 			// Use context_item_ and the Hashmaps to differ between the different types.
 			virtual void createContextMenu_();
 
+			void insertGAMESSData_(GAMESSLogFile* file)
+				throw();
+
 			void insertTrajectory_(TrajectoryFile* file, System& system)
 				throw();
 
@@ -187,6 +205,7 @@ namespace BALL
 			HashMap<QListViewItem*	, RegularData1D*>   					item_to_grid1_;
 			HashMap<QListViewItem*	, RegularData2D*>   					item_to_grid2_;
 			HashMap<QListViewItem*	, RegularData3D*>   					item_to_grid3_;
+			HashMap<QListViewItem*	, GAMESSLogFile*>   					item_to_gamess_;
 			// insert new HashMaps like above for new data type objects.
 			
 			HashMap<Composite*      , HashSet<QListViewItem*> > 	composite_to_items_;
