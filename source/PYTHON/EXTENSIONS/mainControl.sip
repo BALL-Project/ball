@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.19.4.4 2005/09/29 14:01:55 amoll Exp $
+// $Id: mainControl.sip,v 1.19.4.5 2005/10/05 12:14:53 amoll Exp $
 //
 
 class MainControl
@@ -78,7 +78,6 @@ class MainControl
 
 
 	void applyPreferences() throw();
-	void applyPreferencesTab();
 	void fetchPreferences(INIFile& /inifile/) throw();
 	void finalizePreferencesTab(Preferences& /preferences/) throw();
 	void initializePreferencesTab(Preferences& /preferences/) throw();
