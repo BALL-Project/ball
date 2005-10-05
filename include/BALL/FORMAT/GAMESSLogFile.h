@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GAMESSLogFile.h,v 1.1 2005/08/23 18:20:05 anhi Exp $
+// $Id: GAMESSLogFile.h,v 1.2 2005/10/05 09:59:46 anhi Exp $
 //
 
 #ifndef BALL_FORMAT_GAMESSLOGFILE_H
@@ -9,6 +9,14 @@
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #	include <BALL/FORMAT/genericMolFile.h>
+#endif
+
+#ifndef BALL_STRUCTURE_QMBASISSET_H
+# include <BALL/STRUCTURE/QMBasisSet.h>
+#endif
+
+#ifndef BALL_STRUCTURE_SPLITVALENCESET_H
+# include <BALL/STRUCTURE/splitValenceSet.h>
 #endif
 
 namespace BALL
@@ -117,22 +125,55 @@ namespace BALL
 			void insertBond(Index a1, Index a2)
 				throw();
 
+			void clearBonds()
+				throw();
+
 			void setCurrentCharge(float charge)
 				throw();
 
 			void setUnitConversionFactor(float factor)
 				throw();
+
+			void addCoefficient(float coefficient)
+				throw();
+
+			void initializeBasisSet()
+				throw();
+
+			QMBasisSet& getBasisSet()
+				throw();
+
+			const QMBasisSet& getBasisSet() const
+				throw();
+
+			void addBasisOption(const String& key, const String& value)
+				throw();
+
+			String getBasisOption(const String& key)
+				throw();
 			//@}
 			
 			static State state;
 			Index  current_atom;
+			Index  current_set;
+			Index  current_coefficient_line;
+			Size	 basis_size;
 			bool	 molecule_already_defined;
 			
+			/** All of this stuff should not really be placed _here_...
+			 *  we need a data structure for QM data sets that stores
+			 *  all the stuff here.
+			 */
+			System *system; // needed for the datasetControl stuff
 		protected:
 			virtual void initRead_();
 
-			Molecule*	molecule_;
-			float			factor_;
+			Molecule*		molecule_;
+			float				factor_;
+			//QMBasisSet  qmbs_;
+			splitValenceSet  qmbs_;
+
+			StringHashMap<String> basis_options_;
 	};
 }
 

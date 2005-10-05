@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GAMESSDatFile.h,v 1.1 2005/08/23 18:20:04 anhi Exp $
+// $Id: GAMESSDatFile.h,v 1.2 2005/10/05 09:59:45 anhi Exp $
 //
 
 #ifndef BALL_FORMAT_GAMESSDATFILE_H
@@ -11,6 +11,9 @@
 #	include <BALL/FORMAT/genericMolFile.h>
 #endif
 
+#ifndef BALL_DATATYPE_STRINGHASHMAP_H
+# include <BALL/DATATYPE/stringHashMap.h>
+#endif
 namespace BALL
 {
 	/** GAMESSDat file class.
@@ -26,6 +29,20 @@ namespace BALL
 
 			BALL_CREATE(GAMESSDatFile)
 
+			/** Nested class for the data blocks of the GAMESSFile **/
+			class block
+			{
+				public:
+					/** The name of this block **/
+					String blockname;
+					/** Stores the data in key - value format **/
+					StringHashMap<String> data;
+
+					void operator >> (std::ostream& os) const
+						throw();
+					
+			};
+			
 			/** State of the parser **/
 			struct State
 			{
@@ -116,6 +133,24 @@ namespace BALL
 
 			void insertBond(Index a1, Index a2)
 				throw();
+			
+			void inBlock(const char* blockname)
+				throw();
+
+			void insertBlockedData(const char* key, const char* value)
+				throw();
+
+			void insertBlockedData(const String& key, const String& value)
+				throw();
+
+			String& getBlockedData(const String& block, const String& key)
+				throw();
+
+			const String& getBlockedData(const String& block, const String& key) const
+				throw();
+
+			void clearParameters()
+				throw();
 			//@}
 			
 			static State state;
@@ -124,6 +159,10 @@ namespace BALL
 			virtual void initRead_();
 
 			Molecule*	molecule_;
+			
+			String current_block_;
+			StringHashMap<block> blocks_;
+			String	symmetry_group_;
 	};
 }
 
