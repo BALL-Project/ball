@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.40 2005/09/02 13:38:08 anhi Exp $
+// $Id: datasetControl.C,v 1.41 2005/10/05 10:11:42 anhi Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -20,6 +20,7 @@
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/DATATYPE/contourSurface.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <qfiledialog.h>
 #include <qlistview.h>
@@ -81,6 +82,9 @@ namespace BALL
 			insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()));
 			setMenuHint("Open a 3D data grid");
 
+			insertMenuEntry(MainControl::FILE_OPEN, "GAMESS output", this, SLOT(addGAMESSData()));
+			setMenuHint("Open the results of a GAMESS run");
+
 			menu_cs_ = insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  
 																							SLOT(computeIsoContourSurface()), CTRL+Key_U);
 			setMenuHint("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.");
@@ -102,6 +106,23 @@ namespace BALL
 												!getMainControl()->compositesAreLocked() && item_to_grid3_.size() > 0);
 		}
 
+		void DatasetControl::addGAMESSData()
+			throw()
+		{
+			// TODO: do we need to ensure that a system is selected here?
+			// if (!getMainControl()->getSelectedSystem()) return;
+
+			QString file = QFileDialog::getOpenFileName(
+													getWorkingDir().c_str(),
+													"GAMESS logfiles(*.log)",
+													this,
+													"GAMESS Logfile Dialog",
+													"Select a GAMESS logfile");
+
+			if (file == QString::null) return;
+
+			addGAMESSData(file.ascii());
+		}		
 
 		void DatasetControl::addTrajectory()
 			throw()
@@ -120,6 +141,16 @@ namespace BALL
 			addTrajectory(file.ascii());
 		}
 
+		void DatasetControl::addGAMESSData(const String& filename)
+		{
+			// do we need to ensure that a system is selected?
+			// if (!getMainControl()->getSelectedSystem() == 0) return;
+
+			GAMESSLogFile* log = new GAMESSLogFile(filename, std::ios::in);
+			insertGAMESSData_(log);
+			setWorkingDirFromFilename_(filename);
+		}
+		
 		void DatasetControl::addTrajectory(const String& filename)
 		{
 			if (getMainControl()->getSelectedSystem() == 0) return;
@@ -130,6 +161,43 @@ namespace BALL
 			setWorkingDirFromFilename_(filename);
 		}
 
+		void DatasetControl::insertGAMESSData_(GAMESSLogFile* file)
+			throw()
+		{
+			// Read the GAMESS - Data into a new System
+			System *system = new System;
+			setStatusbarText("Reading GAMESS data...");
+			*file >> *system;
+
+			file->system = system;
+			
+			String filename = file->getName();
+			// The following has been borrowed from MolecularFileDialog::finish_()		
+			setStatusbarText(String("Read ") + String(system->countAtoms()) + " atoms from file \"" + filename + "\"", true);
+
+			if (filename[0] != FileSystem::PATH_SEPARATOR)
+			{
+				system->setProperty("FROM_FILE", getWorkingDir() + FileSystem::PATH_SEPARATOR + filename);
+			}
+			else
+			{
+				system->setProperty("FROM_FILE", filename);
+			}
+
+			system->setName(filename);
+
+			// notify tree of a new composite
+			CompositeMessage* new_message = new CompositeMessage;
+			new_message->setComposite(*system);
+			new_message->setCompositeName(system->getName());
+			new_message->setType(CompositeMessage::NEW_COMPOSITE);
+			notify_(new_message);
+
+			QListViewItem* item = new QListViewItem(listview, filename.c_str(), system->getName().c_str(), "QM Data Set");
+			item_to_gamess_[item] = file;
+			insertComposite_(system, item);
+		}
+		
 		void DatasetControl::insertTrajectory_(TrajectoryFile* file, System& system)
 			throw()
 		{
@@ -284,6 +352,15 @@ namespace BALL
 				delete ssm;
 				setStatusbarText("deleted 3D grid");
 			}
+			else if (item_to_gamess_.has(&item))
+			{
+				GAMESSLogFile* f = item_to_gamess_[&item];
+
+				/** Later, we will probably need a message for that... **/
+				item_to_gamess_.erase(&item);
+				delete f;
+				setStatusbarText("deleted GAMESS data");
+			}
 			else
 			{
 				return false;
@@ -331,6 +408,11 @@ namespace BALL
 				{
 					insertContextMenuEntry_("ContourSurface", SLOT(computeIsoContourSurface()));
 				}
+			}
+
+			if (item_to_gamess_.has(context_item_))
+			{
+				insertContextMenuEntry_("Create electron density grid", SLOT(createElectronDensity_()));
 			}
 		}
 
@@ -706,6 +788,43 @@ namespace BALL
 			notify_(message);
 		}
 
+		void DatasetControl::createElectronDensity_()
+		{
+			if (!item_to_gamess_.has(context_item_))
+				return;
+
+			GAMESSLogFile* file = item_to_gamess_[context_item_];
+			System *system = file->system;
+
+			// TODO: we should ask about the size of the boundary to be added
+			file->initializeBasisSet();
+			QMBasisSet& qmbs = file->getBasisSet();
+
+			/** TODO: This is really important! We need to put the files somewhere where we find them,
+			 * 				and we need to automatically decide upon the chosen basis set!!!
+			 */
+//			qmbs.readBasisSetData(getWorkingDir() + FileSystem::PATH_SEPARATOR + "basisset_631g*");
+			qmbs.setup(*system);
+
+			BoundingBoxProcessor bp;
+			system->apply(bp);
+
+			RegularData3D *density = new RegularData3D(bp.getLower() - Vector3(5., 5., 5.), 
+																								(bp.getUpper() - bp.getLower()) + Vector3(10., 10., 10.), 
+																								Vector3(0.2,0.2,0.2));
+
+			for (Size i=0; i<density->size(); i++)
+			{
+				(*density)[i] = qmbs(density->getCoordinates(i));
+			}
+
+			insertGrid_(density, system, system->getName());
+			RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::NEW);
+			msg->setData(*density);
+			msg->setComposite(*system);
+			msg->setCompositeName("Electron density for"+system->getName());
+			notify_(msg);
+		}
 
 		DatasetControl::DatasetControl(const DatasetControl& control)
 			throw()
