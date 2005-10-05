@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.46 2005/07/03 09:43:30 oliver Exp $
+# $Id: Makefile,v 1.47 2005/10/05 10:09:09 anhi Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -68,7 +68,9 @@ CPP_SOURCES=\
 	snapShotVisualisation.C\
 	snapShotVisualisationData.C\
 	stageSettings.C\
-	stageSettingsData.C
+	stageSettingsData.C\
+	runGAMESSDialog.C\
+	runGAMESSDialogData.C
 
 MOC_SOURCES=\
 	amberConfigurationDialog_moc.C\
@@ -126,7 +128,9 @@ MOC_SOURCES=\
 	snapShotVisualisation_moc.C\
 	snapShotVisualisationData_moc.C\
 	stageSettings_moc.C\
-	stageSettingsData_moc.C
+	stageSettingsData_moc.C\
+	runGAMESSDialog_moc.C\
+	runGAMESSDialogData_moc.C
 
 UIC_SOURCES=\
 	amberConfigurationDialogData.C\
@@ -155,7 +159,8 @@ UIC_SOURCES=\
 	pythonHotkeysData.C\
 	setCameraData.C\
 	snapShotVisualisationData.C\
-	stageSettingsData.C
+	stageSettingsData.C\
+	runGAMESSDialogData.C
 
 UIC_HDR=$(UIC_SOURCES:Data.C=.dh)
 
