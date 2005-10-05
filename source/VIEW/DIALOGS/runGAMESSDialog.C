@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: runGAMESSDialog.C,v 1.1 2005/09/02 13:36:38 anhi Exp $
+// $Id: runGAMESSDialog.C,v 1.2 2005/10/05 10:09:37 anhi Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/runGAMESSDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/WIDGETS/datasetControl.h>
 
 #include <qfiledialog.h>
 #include <qcombobox.h>
@@ -84,6 +85,8 @@ namespace BALL
 			Log.info() << "Done! " << std::endl;
 
 			File::remove(filename+".inp");
+
+			DatasetControl::getInstance(0)->addGAMESSData();
 		}
 
 		void RunGAMESSDialog::saveGAMESSInput()
