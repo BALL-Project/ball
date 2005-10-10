@@ -1,7 +1,7 @@
 %{
 
 #include <BALL/STRUCTURE/smartsParser.h>
-#include <iostream>
+//#include <iostream>
 #include <BALL/KERNEL/PTE.h>
 
 using namespace BALL;
@@ -27,10 +27,11 @@ extern void yyerror(char* s);
 	SmartsParser::SPEdge*						edge;
 	SmartsParser::ChiralDef*				chiral;
 	SmartsParser::SPBond*						sp_bond;
-	SmartsParser::LogicalOperator		logical;
+	/*SmartsParser::LogicalOperator		logical;*/
 	NamedProperty*									property;
 }
 
+%token ';' ',' '&' '!' '#' '-' '+' '@'
 %token	<text>		TK_ATOM
 %token	<text>		TK_ORG_SUBSET_ATOM
 %token	<text>		TK_HYDROGEN_EXPLICIT
@@ -89,17 +90,19 @@ extern void yyerror(char* s);
 
 %type		<chiral>	chirality
 
-%type		<logical>	log_op
+//%type		<logical>	log_op
 
-%left ';'
+%left ';' 
 %left ',' 
 %left '&'
-%left '+' PREC_NEG_CHARGE
-%left PREC_CHIRALITY
-%left '-' '@'
-%left TK_DIGIT
+//%left '+' PREC_NEG_CHARGE
+//%left PREC_CHIRALITY
+//%left '-' '@'
+//%left TK_DIGIT
 
-%right '!'
+//%right '+' PREC_NEG_CHARGE
+
+//%left '!'
 
 %start smarts
 
@@ -126,6 +129,7 @@ rec_expression:
 		TK_RECURSIVE '(' node_expression ')'
 		{
 			$3->setRecursive(true);
+			SmartsParser::state.current_parser->setRecursive(true);
 			$$ = $3;
 		}
 	| '!' rec_expression
@@ -210,13 +214,31 @@ sp_edge:
 			e->setNot(true);
 			$$ = e;
 		}
-	|	sp_edge log_op sp_edge
+	|	sp_edge ';' sp_edge
 		{
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
 			e->setInternal(true);
 			e->setFirstSPEdge($1);
 			e->setSecondSPEdge($3);
-			e->setLogicalOperator($2);
+			e->setLogicalOperator(SmartsParser::AND_LOW);
+			$$ = e;
+		}
+	| sp_edge ',' sp_edge
+		{
+			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
+			e->setInternal(true);
+			e->setFirstSPEdge($1);
+			e->setSecondSPEdge($3);
+			e->setLogicalOperator(SmartsParser::OR);
+			$$ = e;
+		}
+	|	sp_edge '&' sp_edge
+		{
+			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
+			e->setInternal(true);
+			e->setFirstSPEdge($1);
+			e->setSecondSPEdge($3);
+			e->setLogicalOperator(SmartsParser::OR);
 			$$ = e;
 		}
 /*	|	sp_edge '!' ring_bond
@@ -317,6 +339,7 @@ atom_node:
 		}
 	;
 
+
 node:
 		atom
 		{
@@ -330,23 +353,63 @@ node:
 		{
 			$$ = $1;
 		}
-	| node log_op atom
+/*	| node ';' atom
 		{
 			SmartsParser::SPNode* n = new SmartsParser::SPNode($3);
-			$$ = new SmartsParser::SPNode($1, $2, n);
+			$$ = new SmartsParser::SPNode($1, SmartsParser::AND_LOW, n);
 		}
-	|	node log_op unbraced_atom
+	|	node ',' atom
 		{
 			SmartsParser::SPNode* n = new SmartsParser::SPNode($3);
-			$$ = new SmartsParser::SPNode($1, $2, n);
+			$$ = new SmartsParser::SPNode($1, SmartsParser::OR, n);
 		}
-	|	node log_op rec_expression
+	|	node '&' atom
 		{
-			$$ = new SmartsParser::SPNode($1, $2, $3);
+			SmartsParser::SPNode* n = new SmartsParser::SPNode($3);
+			$$ = new SmartsParser::SPNode($1, SmartsParser::AND, n);
+		}
+	|	node ';' unbraced_atom
+		{
+			SmartsParser::SPNode* n = new SmartsParser::SPNode($3);
+			$$ = new SmartsParser::SPNode($1, SmartsParser::AND_LOW, n);
+		}
+	|	node ',' unbraced_atom
+		{
+			SmartsParser::SPNode* n = new SmartsParser::SPNode($3);
+			$$ = new SmartsParser::SPNode($1, SmartsParser::OR, n);
+		}
+	|	node '&' unbraced_atom
+		{
+			SmartsParser::SPNode* n = new SmartsParser::SPNode($3);
+			$$ = new SmartsParser::SPNode($1, SmartsParser::AND, n);
+		}
+	|	node ';' rec_expression
+		{
+			$$ = new SmartsParser::SPNode($1, SmartsParser::AND_LOW, $3);
+		}
+	|	node ',' rec_expression
+		{
+			$$ = new SmartsParser::SPNode($1, SmartsParser::OR, $3);
+		}
+	|	node '&' rec_expression
+		{
+			$$ = new SmartsParser::SPNode($1, SmartsParser::AND, $3);
+		}*/
+	|	node ';' node
+		{
+			$$ = new SmartsParser::SPNode($1, SmartsParser::AND_LOW, $3);
+		}
+	|	node ',' node
+		{
+			$$ = new SmartsParser::SPNode($1, SmartsParser::OR, $3);
+		}
+	|	node '&' node
+		{
+			$$ = new SmartsParser::SPNode($1, SmartsParser::AND, $3);
 		}
 	;
 
-
+/*
 log_op:
 		'&'
 		{
@@ -361,7 +424,7 @@ log_op:
 			$$ = SmartsParser::OR;
 		}
 	;
-
+*/
 unbraced_atom:
 		'!' unbraced_atom_symbol
 		{
@@ -716,9 +779,9 @@ pos_charge:
 	;
 
 neg_charge:
-		'-' %prec PREC_NEG_CHARGE {	$$ = -1; }
-	|	'-' '-' %prec PREC_NEG_CHARGE { $$ = -2; }
-	|	'-' '-' '-' %prec PREC_NEG_CHARGE { $$ = -3; }
+		'-' {	$$ = -1; }
+	|	'-' '-' { $$ = -2; }
+	|	'-' '-' '-' { $$ = -3; }
 	|	'-' TK_DIGIT { $$ = -$2; }
 	;
 
@@ -739,11 +802,11 @@ isotope:
 	;
 
 chirality:
-		'@' %prec PREC_CHIRALITY
+		'@' /*%prec PREC_CHIRALITY*/
 		{ 
 			$$ = new SmartsParser::ChiralDef(SmartsParser::TH, 1); 
 		}
-	|	'@' '@' %prec PREC_CHIRALITY
+	|	'@' '@' /*%prec PREC_CHIRALITY*/
 		{ 
 			$$ = new SmartsParser::ChiralDef(SmartsParser::TH, 1); 
 		}

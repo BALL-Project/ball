@@ -104,8 +104,8 @@ smartsParserLexer.C:	smartsParserLexer.l smilesParserLexer.C
 
 smartsParserParser.C: smartsParserParser.y
 # this line is just for debugging the parser
-#	$(YACC) -p $(SMARTS_PARSER_PREFIX) --report=state --report=look-ahead -g -d $*.y && $(MV) y.tab.h $*.h && $(MV) y.tab.c $@
-	$(YACC) -p $(SMARTS_PARSER_PREFIX) -d $*.y && $(MV) y.tab.h $*.h && $(MV) y.tab.c $@
+	$(YACC) -p $(SMARTS_PARSER_PREFIX) --report=state --report=look-ahead -g -d $*.y && $(MV) y.tab.h $*.h && $(MV) y.tab.c $@
+#	$(YACC) -p $(SMARTS_PARSER_PREFIX) -d $*.y && $(MV) y.tab.h $*.h && $(MV) y.tab.c $@
 
 smartsParserLexer.o: smartsParserLexer.C smartsParserParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@

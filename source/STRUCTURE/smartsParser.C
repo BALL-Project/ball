@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.C,v 1.3 2005/09/26 00:21:54 bertsch Exp $
+// $Id: smartsParser.C,v 1.4 2005/10/10 10:40:47 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/smartsParser.h>
@@ -32,10 +32,11 @@ namespace BALL
 		:	internal_(false),
 			is_not_(false),
 			recursive_(false),
+			in_brackets_(false),
+			log_op_(SmartsParser::NOOP),
 			first_edge_((SPEdge*)0),
 			second_edge_((SPEdge*)0),
-			sp_atom_((SPAtom*)0),
-			log_op_(SmartsParser::NOOP)
+			sp_atom_((SPAtom*)0)
 	{
 	}
 
@@ -43,10 +44,11 @@ namespace BALL
 		:	internal_(false),
 			is_not_(false),
 			recursive_(false),
+			in_brackets_(false),
+			log_op_(SmartsParser::NOOP),
 			first_edge_((SPEdge*)0),
 			second_edge_((SPEdge*)0),
-			sp_atom_(atom),
-			log_op_(SmartsParser::NOOP)
+			sp_atom_(atom)
 	{
 		#ifdef SMARTS_PARSER_DEBUG
 		cerr << "SmartsParser::SPNode::SPNode(SPAtom* " << atom << "), this=" << this << endl;
@@ -59,7 +61,6 @@ namespace BALL
 			recursive_(false),
 			in_brackets_(false),
 			log_op_(log_op),
-			pre_edge_((SPEdge*)0),
 			first_edge_(new SmartsParser::SPEdge()),
 			second_edge_(new SmartsParser::SPEdge()),
 			sp_atom_((SPAtom*)0)
@@ -111,7 +112,7 @@ namespace BALL
 	bool SmartsParser::SPBond::equals(const Bond* bond) const
 	{
 		// TODO - Z/E isomer types
-		// 			- additional type, inRing, not nec. con. ...
+		// TODO errors in error log
 		
 		bool matches(false);
 		switch (bond_order_)
@@ -120,6 +121,34 @@ namespace BALL
 				if (bond->getOrder() == Bond::ORDER__SINGLE)
 				{
 					matches = true;
+				}
+				break;
+			case SINGLE_UP:
+				if (bond->getOrder() == Bond::ORDER__SINGLE)
+				{
+					matches = true;
+					cerr << "chiral bond definitions are not implemented yet" << endl;
+				}
+				break;
+			case SINGLE_UP_OR_ANY:
+				if (bond->getOrder() == Bond::ORDER__SINGLE)
+				{
+					matches = true;
+					cerr << "chiral bond definitions are not implemented yet" << endl;
+				}
+				break;
+			case SINGLE_DOWN:
+				if (bond->getOrder() == Bond::ORDER__SINGLE)
+				{
+					matches = true;
+					cerr << "chiral bond definitions are not implemented yet" << endl;
+				}
+				break;
+			case SINGLE_DOWN_OR_ANY:
+				if (bond->getOrder() == Bond::ORDER__SINGLE)
+				{
+					matches = true;
+					cerr << "chiral bond definitions are not implemented yet" << endl;
 				}
 				break;
 			case DOUBLE:
@@ -143,8 +172,16 @@ namespace BALL
 			case ANY:
 				matches = true;
 				break;
+			case NOT_NECESSARILY_CONNECTED:
+				matches = true;
+				break;
+			case IN_RING:
+				if (bond->getProperty("InRing").getBool())
+				{
+					matches = true;
+				}
+				break;
 			default:
-				// TODO error message to log stream
 				cerr << "unknown or not implemented bond order: " << bond_order_ << endl;
 		}
 		
@@ -169,9 +206,19 @@ namespace BALL
 		if (symbol != "*" && symbol != "")
 		{
 			String s(symbol);
+			//cerr << "'" << s << "'" << endl;
 			if (symbol.isDigit())
 			{
-				s = PTE[symbol.toUnsignedInt()-1].getSymbol();
+				s = PTE[symbol.toUnsignedInt()].getSymbol();
+			}
+			if (islower(symbol[0]))
+			{
+				s.toUpper(0, 1);
+				setProperty("Aromatic", true);
+			}
+			else
+			{
+				setProperty("Aliphatic", true);
 			}
 			setProperty("Symbol", s);
 #ifdef SMARTS_PARSER_DEBUG
@@ -295,10 +342,11 @@ namespace BALL
 				//cerr << p.getString() << endl;
 				String property_value = p.getString();
 				String s(property_value);
-				if (property_value.size() > 0 && islower(property_value[i]))
+/*				if (property_value.size() > 0 && islower(property_value[i]))
 				{
+					addAtomProperty(NamedProperty("Aromatic", true));
 					s.toUpper(0, 1);
-				}
+				}*/
 				if (s.size() > 0 && s != atom->getElement().getSymbol()) // and not not :)
 				{
 					if (!isnot)
@@ -698,13 +746,17 @@ namespace BALL
 	 
 	SmartsParser::SmartsParser()
 		:	needs_SSSR_(false),
+			recursive_(false),
 			root_((SPNode*)0)
 	{
 	}
 
-	SmartsParser::SmartsParser(const SmartsParser& /* parser */)
+	SmartsParser::SmartsParser(const SmartsParser& parser)
+		:	needs_SSSR_(parser.needs_SSSR_),
+			recursive_(parser.recursive_),
+			root_(parser.root_)
 	{
-		// TODO
+		// TODO new states!
 	}
 
 	SmartsParser::~SmartsParser()
@@ -774,7 +826,7 @@ namespace BALL
 			throw e;
 		}
 
-		dumpTree();
+		//dumpTree();
 	}
 	
 	void SmartsParser::addRingConnection(SPNode* spnode, Size index)
@@ -835,7 +887,7 @@ namespace BALL
 	{
 		// TODO
 		cerr << "The current tree is: " << endl;
-		
+		bool consider_as_noninternal(false);
 		if (root_->isInternal())
 		{
 			cerr << "root is internal: " << endl;
@@ -844,21 +896,23 @@ namespace BALL
 			if (root_->getLogicalOperator() == AND) cerr << "AND" << endl;
 			if (root_->getLogicalOperator() == OR) cerr << "OR" << endl;
 			dumpTreeRecursive_(root_->getSecondEdge(), 1);
+			if (root_->countEdges() != 0)
+			{
+				consider_as_noninternal = true;
+			}
 		}
-		else
+		
+		if (!root_->isInternal() || consider_as_noninternal)
 		{
-			cerr << "root (#properties=" << root_->getSPAtom()->countNamedProperties();
-			if (root_->getSPAtom()->hasProperty("Symbol"))
+			if (!consider_as_noninternal)
 			{
-				cerr << ", Symbol=" << root_->getSPAtom()->getProperty("Symbol").getString();
-			}		
-			cerr << ")" << endl;
-			/*for (Size i = 0; i != root_->getSPAtom()->countNamedProperties(); ++i)
-			{
-				root_->getSPAtom()->getNamedProperty(i).dump(cerr);
-				cerr << " ";
-			}*/
-			//cerr << endl;
+				cerr << "root (#properties=" << root_->getSPAtom()->countNamedProperties();
+				if (root_->getSPAtom()->hasProperty("Symbol"))
+				{
+					cerr << ", Symbol=" << root_->getSPAtom()->getProperty("Symbol").getString();
+				}		
+				cerr << ")" << endl;
+			}
 			Size count(1);
 			for (SPNode::EdgeIterator eit = root_->begin(); eit != root_->end(); ++eit, ++count)
 			{
@@ -872,6 +926,8 @@ namespace BALL
 	void SmartsParser::dumpTreeRecursive_(SPNode* node, Size depth)
 	{
 		//cerr << String('\t', depth) << "dumpTreeRecursive_(SPNode*=" << node << ", " << depth << ")" << endl;
+		bool consider_as_noninternal(false);
+		//cerr << node << " " << node->countEdges() << endl;
 		if (node->isInternal())
 		{
 			cerr << String('\t', depth) << "node (internal): " << node << endl;
@@ -879,18 +935,26 @@ namespace BALL
 			if (node->getLogicalOperator() == AND_LOW) cerr << String('\t', depth) << "AND_LOW" << endl;
 			if (node->getLogicalOperator() == AND) cerr << String('\t', depth) << "AND" << endl;
 			if (node->getLogicalOperator() == OR) cerr << String('\t', depth) << "OR" << endl;
-			dumpTreeRecursive_(node->getSecondEdge(), depth+1);
-		}
-		else
-		{
-			cerr << String('\t', depth) << "node (#properties=" << node->getSPAtom()->countNamedProperties();
-			if (node->getSPAtom()->hasProperty("Symbol"))
+			dumpTreeRecursive_(node->getSecondEdge(), depth + 1);
+			if (node->countEdges() != 0)
 			{
-				cerr << ", Symbol=" << node->getSPAtom()->getProperty("Symbol").getString();
+				consider_as_noninternal = true;
 			}
-			cerr << ") " << node << endl;
+		}
+		
+		if (!node->isInternal() || consider_as_noninternal)
+		{
+			if (!consider_as_noninternal)
+			{
+				cerr << String('\t', depth) << "node (#properties=" << node->getSPAtom()->countNamedProperties();
+				if (node->getSPAtom()->hasProperty("Symbol"))
+				{
+					cerr << ", Symbol=" << node->getSPAtom()->getProperty("Symbol").getString();
+				}
+				cerr << ") " << node << endl;
+			}
 			Size count(1);
-			for (SPNode::EdgeIterator eit = node->begin(); eit != node->end(); ++eit)
+			for (SPNode::EdgeIterator eit = node->begin(); eit != node->end(); ++eit, ++count)
 			{
 				cerr << String('\t', depth) << count << "." << endl;
 				dumpTreeRecursive_(*eit, depth + 1);

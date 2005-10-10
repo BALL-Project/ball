@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.h,v 1.3 2005/09/26 00:21:53 bertsch Exp $
+// $Id: smartsParser.h,v 1.4 2005/10/10 10:40:47 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMARTES_PARSER_H
@@ -244,8 +244,8 @@ namespace BALL
 				SPAtom* getSPAtom() const { return sp_atom_; }
 				void setSPAtom(SPAtom* sp_atom) { sp_atom_ = sp_atom; }
 		
-				SPEdge* getPreEdge() const { return pre_edge_; }
-				void setPreEdge(SPEdge* pre_edge) { pre_edge_ = pre_edge; }
+				//SPEdge* getPreEdge() const { return pre_edge_; }
+				//void setPreEdge(SPEdge* pre_edge) { pre_edge_ = pre_edge; }
 				
 				SPEdge* getFirstEdge() const { return first_edge_; }
 				void setFirstEdge(SPEdge* first) { first_edge_ = first; }
@@ -278,7 +278,7 @@ namespace BALL
 				bool in_brackets_;
 				LogicalOperator log_op_;
 				std::vector<SPEdge*> edges_;
-				SPEdge* pre_edge_;
+				//SPEdge* pre_edge_;
 				SPEdge* first_edge_;
 				SPEdge* second_edge_;
 				SPAtom* sp_atom_;
@@ -314,9 +314,8 @@ namespace BALL
 		SPAtom* createAtom(const String& symbol, bool in_bracket = false);
 
 		///
-		void createBond(SPAtom* left, SPAtom* right, SPBond::SPBondOrder bond_order);
-		
-		
+		//void createBond(SPAtom* left, SPAtom* right, SPBond::SPBondOrder bond_order);
+			
 		void setRoot(SPNode* root) { root_ = root; }
 
 		SPNode* getRoot() const { return root_; }
@@ -333,7 +332,15 @@ namespace BALL
 		HashMap<Size, std::vector<SPNode*> > getRingConnections() const;
 	
 		void setSSSR(const std::vector<std::vector<Atom*> >& sssr);
-	
+
+		void setNeedsSSSR(bool need_sssr);
+
+		bool getNeedsSSSR() const;
+
+		void setRecursive(bool recursive) { recursive_ = recursive; }
+
+		bool isRecursive() const { return recursive_; }
+
 		struct State
 		{
 			Size					char_count;
@@ -346,6 +353,8 @@ namespace BALL
 		protected:
 
 			bool needs_SSSR_;
+
+			bool recursive_;
 
 			static vector<HashSet<const Atom*> >* sssr_;
 
