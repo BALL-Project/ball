@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.33 2005/10/11 14:39:47 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.34 2005/10/11 14:43:23 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -489,6 +489,10 @@ namespace BALL
 			{
 				main_control.setDeleteEntryEnabled(true);
 			}
+
+			menuBar()->setItemEnabled(menu_clipping_plane_id_, 
+										!main_control.compositesAreLocked() &&
+										!main_control.updateOfRepresentationRunning());
 		}
 
 		void GeometricControl::focusRepresentation()
