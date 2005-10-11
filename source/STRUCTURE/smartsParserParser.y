@@ -568,7 +568,6 @@ atom:
 	|	atom '!' atom_property
 		{
 			$1->addAtomProperty(NamedProperty("Not"+$3->getName(), $3->getUnsignedInt()));
-			//$1->addAtomProperty(*$3); ???
 			delete $3;
 			$$ = $1;
 		}
@@ -578,6 +577,7 @@ atom_property:
 		num_rings
 		{
 			$$ = new NamedProperty("InNumRings", Size($1));
+			SmartsParser::state.current_parser->setNeedsSSSR(true);
 		}
 	|	ring_size
 		{
@@ -752,7 +752,7 @@ degree:
 num_rings:
 		TK_ATOM_NUM_RINGS
 		{
-			$$ = 0;
+			$$ = 999;
 		}
 	|	TK_ATOM_NUM_RINGS TK_DIGIT
 		{

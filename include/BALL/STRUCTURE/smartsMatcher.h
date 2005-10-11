@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.h,v 1.2 2005/09/26 00:21:53 bertsch Exp $
+// $Id: smartsMatcher.h,v 1.3 2005/10/11 16:03:44 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMARTSMATCHER_H
@@ -42,7 +42,7 @@ namespace BALL
 			SmartsMatcher(const SmartsMatcher& matcher);
 
 			/// method to match a SMARTS pattern given as a string to given molecule
-			std::vector<HashSet<const Atom*> > match(const Molecule& mol, const String& smarts)
+			std::vector<HashSet<const Atom*> > match(Molecule& mol, const String& smarts)
 				throw(Exception::ParseError);
 
 			/// destructor

@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.C,v 1.3 2005/10/10 10:40:46 bertsch Exp $
+// $Id: smartsMatcher.C,v 1.4 2005/10/11 16:03:44 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/smartsMatcher.h>
 #include <BALL/STRUCTURE/smartsParser.h>
 #include <BALL/KERNEL/PTE.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
 
 #include <stack>
 
@@ -34,7 +35,7 @@ namespace BALL
 		return *this;
 	}
 	
-	vector<HashSet<const Atom*> > SmartsMatcher::match(const Molecule& molecule, const String& smarts) 
+	vector<HashSet<const Atom*> > SmartsMatcher::match(Molecule& molecule, const String& smarts) 
 		throw(Exception::ParseError)
 	{
 		// TODO what attributes of the molecule must be set?
@@ -43,6 +44,14 @@ namespace BALL
 		SmartsParser parser;
 		parser.parse(smarts);
 		SmartsParser::SPNode* root = parser.getRoot();
+
+		if (parser.getNeedsSSSR())
+		{
+			RingPerceptionProcessor rpp;
+			std::vector<std::vector<Atom*> > sssr;
+			rpp.calculateSSSR(sssr, molecule);
+			parser.setSSSR(sssr);
+		}
 
 		//if (parser.isRecursive())
 		//{
@@ -423,11 +432,13 @@ namespace BALL
 						}
 					}
 
+					HashSet<SPEdge*> visited_edges;
 					for (SmartsParser::SPNode::EdgeIterator eit = start_node->begin(); eit != start_node->end(); ++eit)
 					{
 						if (new_rs.visited_edges[i].has(*eit))
 						{
 							matched_edges++;
+							visited_edges.insert(*eit);
 						}
 					}
 					
@@ -437,21 +448,23 @@ namespace BALL
 						cerr << "#matched_bonds=" << matched_bonds << ", #matched_edges=" << matched_edges << endl;
 					}
 #endif
+					//cerr << "#matched_bonds=" << matched_bonds << ", #matched_edges=" << matched_edges
+					//	<< ", #edges=" << start_node->countEdges() << ", #bonds=" << start_atom->countBonds() << endl;
 					
-					if (matched_bonds != 0 && matched_bonds == matched_edges && matched_edges == start_node->countEdges())
+					if (start_node->countEdges() != 0 && matched_edges != 0 && matched_edges == start_node->countEdges())
 					{
-#ifdef SMARTS_MATCHER_DEBUG
-					if (consider_as_noninternal)
-					{
-						cerr << "all bonds matched" << endl;
+						if (matched_bonds == matched_edges)
+						{
+							result_rs.add(new_rs, i);
+						}
+						else
+						{
+							if (matched_bonds - 1 == matched_edges)
+							{
+								result_rs.add(new_rs, i);
+							}
+						}
 					}
-#endif
-						result_rs.add(new_rs, i);
-					}
-				}
-				if (consider_as_noninternal)
-				{
-					//cerr << result_rs.matched_atoms.size() << " " << result_rs.mapped_atoms.size() << endl;
 				}
 			}
 		}

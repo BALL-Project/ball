@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.C,v 1.4 2005/10/10 10:40:47 bertsch Exp $
+// $Id: smartsParser.C,v 1.5 2005/10/11 16:03:44 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/smartsParser.h>
@@ -321,7 +321,6 @@ namespace BALL
 		cerr << "bool SmartsParser::SPAtom::equals(const Atom * atom " << atom << ") const (this=" << this << ", #properties="<< countProperties() << ")" << endl;
 		#endif
 		// TODO 
-		// InNumRings
 		// all chirality options!
 
 		bool isnot(false);
@@ -379,10 +378,11 @@ namespace BALL
 			// in num rings
 			if (property_name == "InNumRings" || property_name == "NotInNumRings")
 			{
-				//Size ring_count(0);
-				cerr << "SP: TODO InNumRings" << endl;
-				return false;
-				/*
+				Size ring_count(0);
+				//cerr << "SP: TODO InNumRings" << endl;
+				//return false;
+				
+				//cerr << SmartsParser::sssr_ << endl;
 				for (vector<HashSet<const Atom*> >::const_iterator it = SmartsParser::sssr_->begin(); it != SmartsParser::sssr_->end(); ++it)
 				{
 					if (it->has(atom))
@@ -390,6 +390,32 @@ namespace BALL
 						++ring_count;
 					}
 				}
+				if (p.getUnsignedInt() == 999)
+				{
+					if (property_name == "InNumRings")
+					{
+						if (ring_count == 0)
+						{
+							return false;
+						}
+						else
+						{
+							continue;
+						}
+					}
+					else
+					{
+						if (ring_count != 0)
+						{
+							return false;
+						}
+						else
+						{
+							continue;
+						}
+					}
+				}
+				//cerr << "SP: ring_count=" << ring_count << endl;
 				if (property_name == "InNumRings")
 				{
 					if (ring_count != p.getUnsignedInt())
@@ -411,7 +437,7 @@ namespace BALL
 					{
 						continue;
 					}
-				}*/
+				}
 			}
 
 			// isotopes

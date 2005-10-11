@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.h,v 1.4 2005/10/10 10:40:47 bertsch Exp $
+// $Id: smartsParser.h,v 1.5 2005/10/11 16:03:44 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMARTES_PARSER_H
@@ -333,9 +333,9 @@ namespace BALL
 	
 		void setSSSR(const std::vector<std::vector<Atom*> >& sssr);
 
-		void setNeedsSSSR(bool need_sssr);
+		void setNeedsSSSR(bool needs_sssr) { needs_SSSR_ = needs_sssr; }
 
-		bool getNeedsSSSR() const;
+		bool getNeedsSSSR() const { return needs_SSSR_; }
 
 		void setRecursive(bool recursive) { recursive_ = recursive; }
 
