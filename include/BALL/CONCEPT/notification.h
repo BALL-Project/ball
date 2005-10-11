@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: notification.h,v 1.20.6.4 2005/09/06 13:49:20 amoll Exp $
+// $Id: notification.h,v 1.20.6.5 2005/10/11 00:06:58 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
@@ -250,7 +250,7 @@ namespace BALL
 	};
 
 	///	
-  BALL_EXPORT NotificationManager_& NotificationManager()
+   NotificationManager_& NotificationManager()
 		throw();
  
 	///
