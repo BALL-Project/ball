@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.32 2005/09/29 14:01:28 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.33 2005/10/11 14:39:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -522,6 +522,7 @@ namespace BALL
 		{
 			if (context_plane_ == 0) return;
 
+			context_plane_->flip();
 			getMainControl()->redrawAllRepresentations();
 		}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clippingPlane.h,v 1.1.2.7 2005/09/01 22:17:51 amoll Exp $
+// $Id: clippingPlane.h,v 1.1.2.8 2005/10/11 14:39:18 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_CLIPPING_PLANE_H
@@ -86,6 +86,9 @@ namespace BALL
 
 			///
 			void setPoint(const Vector3& v) { point_ = v;}
+
+			///
+			void flip() { normal_ = -normal_;}
 
 			//@}
 
