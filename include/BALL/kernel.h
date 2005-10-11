@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kernel.h,v 1.4 2002/02/27 12:18:18 sturm Exp $
+// $Id: kernel.h,v 1.4.8.1 2005/10/11 11:51:00 oliver Exp $
 // BALL collective kernel header file
-// includes all kernel headers
+// includes the key kernel headers
+
 #ifndef BALL_KERNEL_H
 #define BALL_KERNEL_H
 
@@ -77,10 +78,6 @@
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #	include <BALL/KERNEL/system.h>
-#endif
-
-#ifndef BALL_KERNEL_UNIVERSE_H
-#	include <BALL/KERNEL/universe.h>
 #endif
 
 #endif // BALL_KERNEL_H

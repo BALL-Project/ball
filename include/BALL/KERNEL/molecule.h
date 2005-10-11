@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecule.h,v 1.34.4.1 2005/07/28 14:01:56 amoll Exp $
+// $Id: molecule.h,v 1.34.4.2 2005/10/11 11:51:00 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_MOLECULE_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #	include <BALL/KERNEL/atomContainer.h>
+#endif
+
+#ifndef BALL_KERNEL_FRAGMENT_H
+#	include <BALL/KERNEL/fragment.h>
 #endif
 
 #ifndef BALL_KERNEL_FRAGMENTITERATOR_H

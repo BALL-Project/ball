@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.2.12 2005/08/11 12:10:09 anhi Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.13 2005/10/11 11:51:00 oliver Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -1242,6 +1242,7 @@ AC_DEFUN(CF_C_BIGENDIAN, [
       {
     ] ${PROJECT[]_SIZE_TYPE} endian_one = 1; [
       std::ofstream os("config.endian.log", std::ios::out);
+
 
       if (*(char*)&endian_one == '\001')
       {
@@ -2660,13 +2661,19 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 	fi
 	AC_DEFINE_UNQUOTED(PROJECT[]_COMPLEX_TYPE, ${PROJECT[]_COMPLEX_TYPE})
 	if test "${PROJECT[]_HAS_FFTW_FLOAT}" != "" ; then
+		LIBS="${FFTW_LIB_F}/libfftw3f.a ${LIBS}"
 		AC_DEFINE(PROJECT[]_HAS_FFTW_FLOAT,)
 	fi
 	if test "${PROJECT[]_HAS_FFTW_DOUBLE}" != "" ; then
+		LIBS="${FFTW_LIB_D}/libfftw3.a ${LIBS}"
 		AC_DEFINE(PROJECT[]_HAS_FFTW_DOUBLE,)
 	fi
 	if test "${PROJECT[]_HAS_FFTW_LONG_DOUBLE}" != "" ; then
+		LIBS="${FFTW_LIB_L}/libfftw3l.a ${LIBS}"
 		AC_DEFINE(PROJECT[]_HAS_FFTW_LONG_DOUBLE,)
+	fi
+	if test "${PROJECT[]_HAS_FFTW_H}" != "" ; then
+		LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
 	fi
 	AC_SUBST(PROJECT[]_HAS_FFTW_FLOAT,)
 	AC_SUBST(PROJECT[]_HAS_FFTW_DOUBLE,)
