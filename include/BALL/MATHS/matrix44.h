@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.h,v 1.53 2005/10/12 12:43:07 anhi Exp $
+// $Id: matrix44.h,v 1.54 2005/10/12 12:46:19 anhi Exp $
 //
 
 #ifndef BALL_MATHS_MATRIX44_H
@@ -1738,7 +1738,7 @@ namespace BALL
 			scale = (T)0;
 			// find the maximum in a
 			for (i=k; i<4; i++)
-				scale = Maths::max(fabs(a[i][k]), scale);
+				scale = Maths::max((T)fabs(a[i][k]), scale);
 
 			// is the matrix singular?
 			if (scale == (T)0)
