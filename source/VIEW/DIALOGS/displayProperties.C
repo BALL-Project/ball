@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.17 2005/09/29 14:01:23 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.18 2005/10/12 15:30:13 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -560,7 +560,7 @@ void DisplayProperties::precisionBoxChanged(int index)
 {
 	presets_precision_button->setChecked(true);
 
-	if (index > DRAWING_PRECISION_HIGH)
+	if (index > DRAWING_PRECISION_ULTRA)
 	{
 		throw(Exception::InvalidOption(__FILE__, __LINE__, index));
 	}
@@ -577,6 +577,10 @@ void DisplayProperties::precisionBoxChanged(int index)
 
 		case VIEW::DRAWING_PRECISION_HIGH:
 			presets_precision_label->setText("6.5");
+			break;
+
+		case VIEW::DRAWING_PRECISION_ULTRA:
+			presets_precision_label->setText("12");
 			break;
 
 		default:

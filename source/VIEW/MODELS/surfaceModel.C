@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.12.6.1 2005/08/15 22:01:06 amoll Exp $
+// $Id: surfaceModel.C,v 1.12.6.2 2005/10/12 15:26:24 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/surfaceModel.h>
@@ -117,7 +117,11 @@ namespace BALL
 						break;
 
 					case VIEW::DRAWING_PRECISION_HIGH:
-						sp.setDensity(6.0);
+						sp.setDensity(6.5);
+						break;
+
+					case VIEW::DRAWING_PRECISION_ULTRA:
+						sp.setDensity(12);
 						break;
 
 					default:

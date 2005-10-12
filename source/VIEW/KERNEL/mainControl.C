@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.34 2005/10/04 16:16:29 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.35 2005/10/12 15:30:03 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1400,6 +1400,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		void MainControl::clearSelection()
 			throw()
 		{
+			if (getSelection().size() == 0) return;
+
 			CompositeManager::CompositeIterator it = getCompositeManager().begin();
 			for (; it != getCompositeManager().end(); it++)
 			{
