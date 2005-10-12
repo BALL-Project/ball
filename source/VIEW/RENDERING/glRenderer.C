@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.19 2005/10/12 15:15:05 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.20 2005/10/12 15:56:22 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -125,6 +125,7 @@ namespace BALL
 			glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 			glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 			glEnable(GL_LINE_SMOOTH);
+			glEnable(GL_POLYGON_SMOOTH);
 
 			glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
@@ -1028,8 +1029,8 @@ namespace BALL
 		{
 			glPushMatrix();
 
-			Position slices[4] = {6, 14, 24, 40};
-			Position stacks[4] = {4, 8, 16, 32};
+			Position slices[4] = {6, 14, 24, 64};
+			Position stacks[4] = {4, 8, 16, 64};
 
 			for (Position mode = DRAWING_MODE_DOTS; mode <= DRAWING_MODE_SOLID; mode++)
 			{
@@ -1132,7 +1133,7 @@ namespace BALL
 		{
 			glPushMatrix();
 
-			Position slices[4] = {6, 10, 20, 40};
+			Position slices[4] = {6, 10, 20, 64};
 
 			for (Position mode = DRAWING_MODE_DOTS; mode <= DRAWING_MODE_SOLID; mode++)
 			{
