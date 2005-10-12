@@ -49,6 +49,7 @@ Fixed:
  - Naming of build peptides
  - Opening of files in current directory per command line with BALLView
  - Some minor problems with the clipping planes
+ - Some minor problems with dashed bonds in the Ball-and-Stick model
  - Cleanup of the lighting source code
  - Cleanup of the PyWidget source code
 

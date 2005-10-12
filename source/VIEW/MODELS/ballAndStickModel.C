@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.22 2005/02/23 12:43:46 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.22.2.1 2005/10/12 16:14:45 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
@@ -287,12 +287,14 @@ namespace BALL
 		void AddBallAndStickModel::renderDashedBond_(const Atom& a1, const Atom& a2, Vector3 n1, Vector3 n2)
 			throw(Exception::DivisionByZero)
 		{
+			const Bond& bond = *a1.getBond(a2);
+
+			if (bond.getOrder() != Bond::ORDER__AROMATIC) return;
+
 			n1.normalize();
 			n2.normalize();
 			n1 *= stick_radius_ / (float) 1.5;
 			n2 *= stick_radius_ / (float) 1.5;
-
-			const Bond& bond = *a1.getBond(a2);
 
 			// render one tube with full length			
 			TwoColoredTube *tube = new TwoColoredTube;
@@ -317,7 +319,7 @@ namespace BALL
 					tube->setVertex2(middle + (v / 8) + n2);
 					geometric_objects_.push_back(tube);
 
-					Disc* disc = new Disc(Circle3(middle - (v / 8) + n1, v, stick_radius_ / (float) 2.4));
+					Disc* disc = new Disc(Circle3(middle - (v / 8) + n1, -v, stick_radius_ / (float) 2.4));
 					disc->setComposite(&a1);
 					geometric_objects_.push_back(disc);
 
