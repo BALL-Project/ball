@@ -13,6 +13,8 @@ Added:
  - Picking support for bonds
  - Coloring by molecule
  - Online HTML documentation in BALLView
+ - BALLView now again has a fourth drawing precision "ultra" for real 
+   fast graphics accelerator cards
 
 Changed:
  - BALL and BALLView libraries are now build as DLLs under Windows
@@ -25,6 +27,8 @@ Changed:
  - Now the standard BALLView Python startup script will be executed in any case.
  	 It can be found in BALL/data/startup.py.
    Users can choose an addition startup script, that will run afterwards.
+ - Remove GLQuadricObject, this functionality is available through GLRenderer
+   now with much less overhead.
 
 Fixed:
  - Crashes, when reading PDB files with too many bonds
