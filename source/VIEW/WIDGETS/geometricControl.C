@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.34 2005/10/11 14:43:23 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.35 2005/10/12 11:43:30 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -67,7 +67,6 @@ namespace BALL
 
 			if (representation_ == 0)
 			{
-				BALLVIEW_DEBUG;
 				return;
 			}
 
