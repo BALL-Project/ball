@@ -1,7 +1,7 @@
 % -*- Mode: C++; tab-width: 2; -*-
 % vi: set ts=2:
 %
-% $Id: coding_style.tex,v 1.7 2004/02/23 17:02:10 oliver Exp $
+% $Id: coding_style.tex,v 1.7.6.1 2005/10/12 15:16:25 oliver Exp $
 %
                                                                                                                                                              
 \documentclass[a4paper,10pt]{article}
@@ -11,7 +11,7 @@
 \title{BALL coding conventions}
 \author{Oliver Kohlbacher}
 
-\date{$ $Revision: 1.7 $ $}
+\date{$ $Revision: 1.7.6.1 $ $}
 
 \newtheorem{example}{Example}
 
@@ -222,7 +222,7 @@ comments. Comments should be written in plain english and describe the
 functionality of the next few lines.
 
 To check whether a header or source file fulfils this requirement, use the
-script {\tt check\_coding} in \directory{source/config}. Invoke {\tt check\_coding} with the
+script {\tt check\_coding} in {\tt source/config}. Invoke {\tt check\_coding} with the
 filename to check (or a list of files) and it will print the percentage of
 comments (including Doxygen comments) for each file.
 
@@ -237,7 +237,7 @@ or source file should start with this header:
   // -*- Mode: C++; tab-width: 2; -*-
   // vi: set ts=2:
   //
-  // $Id: coding_style.tex,v 1.7 2004/02/23 17:02:10 oliver Exp $
+  // $Id: coding_style.tex,v 1.7.6.1 2005/10/12 15:16:25 oliver Exp $
   //                                                                                                                                                             
 \end{verbatim}
 In non-C++ files (Makefiles, TeX-Files, etc.) the C++ comments are replaced
