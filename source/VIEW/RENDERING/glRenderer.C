@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.20 2005/10/12 15:56:22 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.21 2005/10/12 16:01:30 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -23,11 +23,8 @@
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/KERNEL/system.h>
 
-#include <unistd.h> // sleep
-
 #include <qfont.h>
 #include <qpainter.h>
-#include <qbitmap.h>
 #include <qimage.h>
 
 using namespace std;
@@ -1643,9 +1640,6 @@ namespace BALL
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_BLEND);
 			glDepthMask(GL_FALSE);
-
-			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
-			glDisable(GL_CULL_FACE);
 
 			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
 			glDisable(GL_CULL_FACE);
