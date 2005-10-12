@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.h,v 1.51 2004/10/22 20:16:41 amoll Exp $
+// $Id: matrix44.h,v 1.52 2005/10/12 12:40:15 anhi Exp $
 //
 
 #ifndef BALL_MATHS_MATRIX44_H
@@ -498,6 +498,7 @@ namespace BALL
 		bool invert()
 			throw();
 
+		
 		/**	Compute the determinant.
 				@return T the determinant.
 		*/
@@ -1712,75 +1713,114 @@ namespace BALL
 	bool TMatrix4x4<T>::invert(TMatrix4x4<T>& inverse) const
 		throw()
 	{
-		Position k;
-		Position i;
-		Position j;
-		T a[4][4];
-		T b[4][4] =
+		/** First, we compute a QR decomposition, then we use it to solve
+		 *  the system A*A^-1 = I <=> R * A^-1 = Q^t, where R is upper
+		 *  triangular.
+		 *
+		 *  This is based on the Householder transform algorithm given in 
+		 *  the Numerical Recipes.
+		 */
+		Index i, j, k;
+
+		T a[4][4] = // holds the matrix we want to invert
 		{
 			{ m11, m12, m13, m14 },
 			{ m21, m22, m23, m24 },
 			{ m31, m32, m33, m34 },
 			{ m41, m42, m43, m44 }
 		};
-		T tmp;
-		T *k_ptr = 0;
-		T *j_ptr = 0;
-		
-		a[0][0] = 1; a[0][1] = 0; a[0][2] = 0; a[0][3] = 0;
-		a[1][0] = 0; a[1][1] = 1; a[1][2] = 0; a[1][3] = 0;
-		a[2][0] = 0; a[2][1] = 0; a[2][2] = 1; a[2][3] = 0;
-		a[3][0] = 0; a[3][1] = 0; a[3][2] = 0; a[3][3] = 1;
-
-		for (k = 0; k < 4; k++)
+	
+		// holds the maximum in the part of A we still have to work with
+		T scale, sum_of_squares, sigma, tau;
+		T c[4], d[4];
+		for (k=0; k<3; k++)
 		{
-			if (b[k][k] == (T)0)
-			{
-				for (j = k + 1; j < 4 && b[j][k] == (T)0; j++);
+			scale = (T)0;
+			// find the maximum in a
+			for (i=k; i<4; i++)
+				scale = std::max(fabs(a[i][k]), scale);
 
-				if (j < 4)
-				{
-					for (i = 0; i < 4; i++)
-						{
-							tmp = *(k_ptr = &b[k][i]); 
-							*k_ptr = *(j_ptr = &b[j][i]);
-							*j_ptr = tmp;
+			// is the matrix singular?
+			if (scale == (T)0)
+				return false;
 
-							tmp = *(k_ptr = &a[k][i]); 
-							*k_ptr = *(j_ptr = &a[j][i]);
-							*j_ptr = tmp;
-						}
-				} 
-				else 
-				{
-					return false; // singular 4x4-matrix
-				}
-			}
-
-			tmp = (T)1 / b[k][k];
-
-			for(j = 0; j < 4; j++)
-			{
-				a[k][j] *= tmp;
-				b[k][j] *= tmp;
-			}
+			// nope. we can normalize the remaining rows
+			for (i=k; i<4; i++)
+				a[i][k] /= scale;
 			
-			for(i = 0; i < 4; i++)
-			{
-				if (i != k)
-				{
-					tmp = b[i][k];
+			sum_of_squares = (T)0;
+			for (i=k; i<4; i++)
+				sum_of_squares += a[i][k]*a[i][k];
 
-					for (j = 0; j < 4; j++)
-					{
-						a[i][j] -= a[k][j] * tmp;
-						b[i][j] -= b[k][j] * tmp;
-					}
-				}
+			// shift the diagonal element
+			sigma = (a[k][k] >= 0) ? sqrt(sum_of_squares) : -sqrt(sum_of_squares);
+			a[k][k] += sigma;
+
+			c[k] =  sigma*a[k][k];
+			d[k] = -scale*sigma;
+
+			for (j = k+1; j<4; j++)
+			{
+				// store the scalar product of a_[k] and a_[j]
+				sum_of_squares = (T)0;
+				for (i = k; i<4; i++)
+					sum_of_squares += a[i][k] * a[i][j];
+
+				tau = sum_of_squares / c[k];
+
+				// prepare the matrix
+				for (i=k; i<4; i++)
+					a[i][j] -= tau*a[i][k];
 			}
 		}
+		d[3] = a[3][3];
+		
+		// is the matrix singular?
+		if (d[3] == (T)0)
+			return 1;
 
-		k_ptr = *a;
+		// now we have the QR decomposition. The upper triangle of A contains
+		// R, except for the diagonal elements, which are stored in d. c contains
+		// the values needed to compute the Householder matrices Q, and the vectors
+		// u needed for the determination of the Qs are stored in the lower triangle
+		// of A
+		//
+		// now we need to solve four linear systems of equations, one for each column
+		// of the resulting matrix
+		T result[4][4];
+		result[0][0] = 1; result[0][1] = 0; result[0][2] = 0; result[0][3] = 0;
+		result[1][0] = 0; result[1][1] = 1; result[1][2] = 0; result[1][3] = 0;
+		result[2][0] = 0; result[2][1] = 0; result[2][2] = 1; result[2][3] = 0;
+		result[3][0] = 0; result[3][1] = 0; result[3][2] = 0; result[3][3] = 1;
+
+		for (k=0; k<4; k++) // k generates the k-th column of the inverse
+		{
+			// form the vector Q^t * b, which is simple, since b = e_k
+			for (j=0; j<3; j++)
+			{
+				sum_of_squares = (T)0;
+				for (i=j; i<4; i++)
+					sum_of_squares += a[i][j]*result[i][k];
+				
+				tau = sum_of_squares / c[j];
+				
+				for (i=j; i<4; i++)
+					result[i][k] -= tau*a[i][j];
+			}
+
+			// and solve the resulting system
+			result[3][k] /= d[3];
+			for (i=2; i>=0; i--)
+			{
+				sum_of_squares = (T)0;
+				for (j=i+1; j<4; j++)
+					sum_of_squares += a[i][j] * result[j][k];
+
+				result[i][k] = (result[i][k] - sum_of_squares) / d[i];
+			}
+		}
+		
+		T* k_ptr = *result;
 		inverse.m11 = *k_ptr++;
 		inverse.m12 = *k_ptr++;
 		inverse.m13 = *k_ptr++;
