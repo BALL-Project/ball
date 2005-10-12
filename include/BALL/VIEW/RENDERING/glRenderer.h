@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.32.2.7 2005/09/01 22:18:03 amoll Exp $
+// $Id: glRenderer.h,v 1.32.2.8 2005/10/12 15:14:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -28,7 +28,7 @@
 #endif
 
 #ifndef BALL_VIEW_RENDERING_GLQUADRICOBJECT_H
-# include <BALL/VIEW/RENDERING/glQuadricObject.h>
+//   # include <BALL/VIEW/RENDERING/glQuadricObject.h>
 #endif
 
 #ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
@@ -411,6 +411,8 @@ namespace BALL
 			void setColorRGBA_(const ColorRGBA& color)
 				throw();
 
+			void initGLU_(DrawingMode mode);
+
 			///
 			DrawingMode 					drawing_mode_;
 
@@ -423,7 +425,6 @@ namespace BALL
 			//_
 			float 								y_scale_;
 
-			GLQuadricObject 			GL_quadric_object_;
 			GLDisplayList* 				GL_spheres_list_;
 			GLDisplayList* 				GL_tubes_list_;
 			GLDisplayList* 				GL_boxes_list_;
@@ -459,6 +460,7 @@ namespace BALL
 			bool 										single_pick_;
 			bool 										drawed_other_object_;
 			bool 										drawed_mesh_;
+			GLUquadricObj*  GLU_quadric_obj_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
