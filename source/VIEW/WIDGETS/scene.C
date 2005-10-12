@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.49 2005/10/04 16:20:32 amoll Exp $
+// $Id: scene.C,v 1.171.2.50 2005/10/12 12:24:10 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1945,13 +1945,26 @@ namespace BALL
 
 		void Scene::showExportPNGDialog()
 		{
+			// first create the image, otherwise we get the dialog into the image!!!
+			QImage image = grabFrameBuffer();
+
 			String start = String(screenshot_nr_) + ".png";
 			screenshot_nr_ ++;
-			QString result = QFileDialog::getSaveFileName(start.c_str(), "*.png", 0, "Select a PNG file");
+			QFileDialog fd("", "*.png", 0, "Select a PNG file", true);
+			fd.setSelection(start.c_str());
+			fd.setMode(QFileDialog::AnyFile);
+			if (fd.exec() != QDialog::Accepted ||
+					fd.selectedFile() == "")
+			{
+				return;
+			}
 
-			if (result.isEmpty()) return;
+			bool ok = image.save(fd.selectedFile(), "PNG");
 
-			exportPNG(result.ascii());
+			setWorkingDirFromFilename_(fd.selectedFile().ascii());
+
+			if (ok) setStatusbarText("Saved PNG to " + String(fd.selectedFile().ascii()));
+			else 		setStatusbarText("Could not save PNG", true);
 		}
 
 		bool Scene::exportPNG(const String& filename)
