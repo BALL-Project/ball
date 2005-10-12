@@ -4,7 +4,6 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	glDisplayList.C\
-	glQuadricObject.C\
 	glRenderer.C\
 	renderer.C\
 	POVRenderer.C\

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.18 2005/08/03 15:38:24 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.19 2005/10/12 15:15:05 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -59,6 +59,9 @@ namespace BALL
 				drawed_other_object_(false),
 				drawed_mesh_(false)
 		{
+			GLU_quadric_obj_ = gluNewQuadric();
+			gluQuadricOrientation(GLU_quadric_obj_, GLU_OUTSIDE);
+			gluQuadricNormals(GLU_quadric_obj_, GLU_SMOOTH);
 		}
 
 		GLRenderer::~GLRenderer()
@@ -507,12 +510,13 @@ namespace BALL
 			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(disc.getCircle().n.z / disc.getCircle().n.getLength()));
 			rotateVector3Angle_(rotation_axis, angle);
 
-			if (drawing_precision_ == 0)
-				GL_quadric_object_.drawDisk(0, disc.getCircle().radius, 6, 4);
-			else if (drawing_precision_ == 1)
-				GL_quadric_object_.drawDisk(0, disc.getCircle().radius, 14, 8);
-			else
-				GL_quadric_object_.drawDisk(0, disc.getCircle().radius, 24, 16);
+			static Position slices[4] = {6, 14, 24, 40};
+			static Position rings[4]  = {4, 8, 16, 32};
+
+			initGLU_(drawing_mode_);
+
+			gluDisk(GLU_quadric_obj_, 0, disc.getCircle().radius, slices[drawing_precision_], rings[drawing_precision_]);
+
 			glPopMatrix();
 		}
 
@@ -999,58 +1003,46 @@ namespace BALL
 			return text_array; 
 		}
 
+		void GLRenderer::initGLU_(DrawingMode mode)
+		{
+			if (mode == DRAWING_MODE_WIREFRAME)
+			{
+				gluQuadricDrawStyle(GLU_quadric_obj_, GLU_LINE);
+			}
+			else if (mode == DRAWING_MODE_SOLID)
+			{
+				gluQuadricDrawStyle(GLU_quadric_obj_, GLU_FILL);
+			}
+			else if (mode == DRAWING_MODE_DOTS)
+			{
+				gluQuadricDrawStyle(GLU_quadric_obj_, GLU_POINT);
+			}
+			else
+			{	
+				BALLVIEW_DEBUG;
+			}
+		}
 
 		void GLRenderer::createSpheres_()
 			throw()
 		{
 			glPushMatrix();
-			// building point display list
-			GL_spheres_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].startDefinition();
-			createDottedSphere_(1); // Precision 0 is far too evil here
-			GL_spheres_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].endDefinition();
 
-			GL_spheres_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 1].startDefinition();
-			createDottedSphere_(2);
-			GL_spheres_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 1].endDefinition();
+			Position slices[4] = {6, 14, 24, 40};
+			Position stacks[4] = {4, 8, 16, 32};
 
-			GL_spheres_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 2].startDefinition();
-			createDottedSphere_(3);
-			GL_spheres_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 2].endDefinition();
+			for (Position mode = DRAWING_MODE_DOTS; mode <= DRAWING_MODE_SOLID; mode++)
+			{
+				initGLU_((DrawingMode)mode);
 
-			// create quadric object
-			GLQuadricObject GL_quadric_object;
+				for (Position dp = DRAWING_PRECISION_LOW; dp <= DRAWING_PRECISION_ULTRA; dp++)
+				{
+					GL_spheres_list_[mode * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + dp].startDefinition();
+					gluSphere(GLU_quadric_obj_, 1, slices[dp], stacks[dp]);
+					GL_spheres_list_[mode * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + dp].endDefinition();
+				}
+			}
 
-			GL_quadric_object.setDrawStyle(GLU_LINE);
-			GL_quadric_object.setNormals(GLU_SMOOTH);
-			GL_quadric_object.setOrientation(GLU_OUTSIDE);
-
-			// building wireframe display list
-			GL_spheres_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].startDefinition();
-			GL_quadric_object.drawSphere(1, 6, 4);
-			GL_spheres_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].endDefinition();
-			
-			GL_spheres_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 1].startDefinition();
-			GL_quadric_object.drawSphere(1, 14, 8);
-			GL_spheres_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 1].endDefinition();
-			
-			GL_spheres_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 2].startDefinition();
-			GL_quadric_object.drawSphere(1, 24, 16);
-			GL_spheres_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 2].endDefinition();
-			
-			GL_quadric_object.setDrawStyle(GLU_FILL);
-
-			// building solid display list
-			GL_spheres_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].startDefinition();
-			GL_quadric_object.drawSphere(1, 6, 4);
-			GL_spheres_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].endDefinition();
-			
-			GL_spheres_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 1].startDefinition();
-			GL_quadric_object.drawSphere(1, 14, 8);
-			GL_spheres_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 1].endDefinition();
-			
-			GL_spheres_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 2].startDefinition();
-			GL_quadric_object.drawSphere(1, 24, 16);
-			GL_spheres_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 2].endDefinition();
 			glPopMatrix();
 		}
 
@@ -1138,55 +1130,23 @@ namespace BALL
 		void GLRenderer::createTubes_()
 			throw()
 		{
-			// create quadric object
-			GLQuadricObject GL_quadric_object;
+			glPushMatrix();
 
-			GL_quadric_object.setDrawStyle(GLU_POINT);
-			GL_quadric_object.setNormals(GLU_SMOOTH);
-			GL_quadric_object.setOrientation(GLU_OUTSIDE);
+			Position slices[4] = {6, 10, 20, 40};
 
-			// building point display list
-			GL_tubes_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].startDefinition();
-			GL_quadric_object.drawCylinder(1, 1, 1, 6, 1);
-			GL_tubes_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].endDefinition();
+			for (Position mode = DRAWING_MODE_DOTS; mode <= DRAWING_MODE_SOLID; mode++)
+			{
+				initGLU_((DrawingMode)mode);
 
-			GL_tubes_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 1].startDefinition();
-			GL_quadric_object.drawCylinder(1, 1, 1, 10, 1);
-			GL_tubes_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 1].endDefinition();
+				for (Position dp = DRAWING_PRECISION_LOW; dp <= DRAWING_PRECISION_ULTRA; dp++)
+				{
+					GL_tubes_list_[mode * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + dp].startDefinition();
+					gluCylinder(GLU_quadric_obj_, 1, 1, 1, slices[dp], 1);  
+					GL_tubes_list_[mode * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + dp].endDefinition();
+				}
+			}
 
-			GL_tubes_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 2].startDefinition();
-			GL_quadric_object.drawCylinder(1, 1, 1, 20, 1);
-			GL_tubes_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 2].endDefinition();
-
-			// building wireframe display list
-			GL_quadric_object.setDrawStyle(GLU_LINE);
-
-			GL_tubes_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].startDefinition();
-			GL_quadric_object.drawCylinder(1, 1, 1, 6, 1);
-			GL_tubes_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].endDefinition();
-			
-			GL_tubes_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 1].startDefinition();
-			GL_quadric_object.drawCylinder(1, 1, 1, 10, 1);
-			GL_tubes_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 1].endDefinition();
-			
-			GL_tubes_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 2].startDefinition();
-			GL_quadric_object.drawCylinder(1, 1, 1, 20, 1);
-			GL_tubes_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 2].endDefinition();
-			
-			// building solid display list
-			GL_quadric_object.setDrawStyle(GLU_FILL);
-
-			GL_tubes_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].startDefinition();
-			GL_quadric_object.drawCylinder(1, 1, 1, 6, 1);
-			GL_tubes_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].endDefinition();
-			
-			GL_tubes_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 1].startDefinition();
-			GL_quadric_object.drawCylinder(1, 1, 1, 10, 1);
-			GL_tubes_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 1].endDefinition();
-			
-			GL_tubes_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 2].startDefinition();
-			GL_quadric_object.drawCylinder(1, 1, 1, 20, 1);
-			GL_tubes_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 2].endDefinition();
+			glPopMatrix();
 		}
 
 
@@ -1697,7 +1657,8 @@ namespace BALL
 			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(n.z / n.getLength()));
 			rotateVector3Angle_(rotation_axis, angle);
 
-			GL_quadric_object_.drawDisk(0, 20, 140, 80);
+			initGLU_(DRAWING_MODE_SOLID);
+			gluDisk(GLU_quadric_obj_, 0, 20 , 140, 80);
 
 			glPopMatrix();
 			glEnable(GL_CULL_FACE);
