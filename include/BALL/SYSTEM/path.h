@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: path.h,v 1.11.6.2 2005/08/24 17:36:11 amoll Exp $
+// $Id: path.h,v 1.11.6.3 2005/10/12 07:18:13 oliver Exp $
 //
 
 #ifndef BALL_COMMON_PATH_H
@@ -40,15 +40,20 @@ namespace BALL
 		Path();
 		//@}
 
-		/** Returns the path to the current BALL data directory.
+		/** Return a list of paths to the BALL data directories.
 				This directory is set to a default value at compile time
-				of the library (see configure to change this setting).
+				of the library.
 				It may be overridden at runtime by setting the environment
-				variable "BALL\_DATA" to the desired value. \par
-				The environment variable always overrides the compiled
-				settings. \par
+				variable "BALL_DATA" to the desired value. This value
+        is then prepended to the list of directories. 
+        Directories are separated by linefeeds and returned 
+        as a single string. To locate files in these directories,
+        \link Path::find find \endlink will search the directories
+        in the specified order.\par
+
 				The default path may be accessed using  \link Path::getDefaultDataPath getDefaultDataPath \endlink .
-				The path may also be modified at runtime by calling  \link Path::setDataPath setDataPath \endlink .
+				The path may also be modified at runtime by calling  \link Path::setDataPath setDataPath \endlink .\par
+
 				The path contains a newline ("\n") separated list of paths that are searched 
 				in the order of occurence. \par
 		*/		
