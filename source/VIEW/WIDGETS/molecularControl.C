@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.33 2005/09/02 13:47:05 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.34 2005/10/13 17:18:10 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -1145,7 +1145,15 @@ namespace BALL
 			CompositeManager::CompositeIterator it = getMainControl()->getCompositeManager().begin();
 			for(; it != getMainControl()->getCompositeManager().end(); it++)
 			{
-				(*it)->apply(s);
+				try
+				{
+					(*it)->apply(s);
+				}
+				catch(Exception::GeneralException e)
+				{
+					setStatusbarText(String("Invalid expression ") + e.getMessage());
+				}
+
 				List<Atom*>::Iterator ait = s.getSelectedAtoms().begin();
 				for (; ait != s.getSelectedAtoms().end(); ait++)
 				{
