@@ -38,16 +38,16 @@ namespace BALL
 				
 				hide();
 			}
-		/*
+		
 		// Copy constructor.
 		GeometricFitDialog::GeometricFitDialog(const GeometricFitDialog& geo_fit_dialog)
 			throw()
-			: GeometricFitDialogData(geo_fit_dialog),
+			: //GeometricFitDialogData(geo_fit_dialog),
 				PreferencesEntry(),
 				has_changed_(geo_fit_dialog.has_changed_),
 				is_redock_(geo_fit_dialog.is_redock_),
 				backup_(geo_fit_dialog.backup_)
-		{}*/
+		{}
 			
 		// Destructor
 		GeometricFitDialog::~GeometricFitDialog()

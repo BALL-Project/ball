@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.56 2005/09/22 09:32:17 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.57 2005/10/13 11:52:39 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -115,8 +115,19 @@ namespace BALL
 			{
 				is_redock_ = dock_dialog.is_redock_;
 				has_changed_ = dock_dialog.has_changed_;
-				// ??? should we delete the dialogs in the HashMaps ???
+				// dialogs in hashmaps are dynamically allocated in method initializeWidget()
+				HashMap<int, QDialog*>::Iterator it = algorithm_dialogs_.begin();
+				for (; +it; ++it)
+				{
+					delete it->second;
+					algorithm_dialogs_.erase(it);
+				}
 				algorithm_dialogs_ = dock_dialog.algorithm_dialogs_;
+				for (it = scoring_dialogs_.begin(); +it; ++it)
+				{
+					delete it->second;
+					scoring_dialogs_.erase(it);
+				}
 				scoring_dialogs_ = dock_dialog.scoring_dialogs_;
 				allowed_sf_ = dock_dialog.allowed_sf_;
 				docking_partner1_ = dock_dialog.docking_partner1_;
@@ -470,27 +481,27 @@ namespace BALL
 					Log.error() << "Error while adding hydrogens! " << __FILE__ << " " << __LINE__ << std::endl;
 					return false;
 				}
-			const FragmentDB& frag_db = main_control->getFragmentDB();
+			FragmentDB& frag_db = const_cast<FragmentDB&>(main_control->getFragmentDB());
 			
 			// add hydrogens to systems and normalize names
 			if (add_hydrogens->isChecked())
 			{
-				if (!docking_partner1_->apply(*(const_cast<ReconstructFragmentProcessor*>(&frag_db.add_hydrogens)))) return false;
-				if (!docking_partner2_->apply(*(const_cast<ReconstructFragmentProcessor*>(&frag_db.add_hydrogens)))) return false;
-				if (!docking_partner1_->apply(*(const_cast<FragmentDB::NormalizeNamesProcessor*>(&frag_db.normalize_names)))) return false;
-				if (!docking_partner2_->apply(*(const_cast<FragmentDB::NormalizeNamesProcessor*>(&frag_db.normalize_names)))) return false;
+				if (!docking_partner1_->apply(frag_db.add_hydrogens)) return false;
+				if (!docking_partner2_->apply(frag_db.add_hydrogens)) return false;
+				if (!docking_partner1_->apply(frag_db.normalize_names)) return false;
+				if (!docking_partner2_->apply(frag_db.normalize_names)) return false;
 			}
 			else if (normalize_names->isChecked())
 			{
-				if (!docking_partner1_->apply(*(const_cast<FragmentDB::NormalizeNamesProcessor*>(&frag_db.normalize_names)))) return false;
-				if (!docking_partner2_->apply(*(const_cast<FragmentDB::NormalizeNamesProcessor*>(&frag_db.normalize_names)))) return false;
+				if (!docking_partner1_->apply(frag_db.normalize_names)) return false;
+				if (!docking_partner2_->apply(frag_db.normalize_names)) return false;
 			}
 			
 			// add bonds to systems
 			if (build_bonds->isChecked())
 			{
-				if (!docking_partner1_->apply(*(const_cast<FragmentDB::BuildBondsProcessor*>(&frag_db.build_bonds)))) return false;
-				if (!docking_partner2_->apply(*(const_cast<FragmentDB::BuildBondsProcessor*>(&frag_db.build_bonds)))) return false;
+				if (!docking_partner1_->apply(frag_db.build_bonds)) return false;
+				if (!docking_partner2_->apply(frag_db.build_bonds)) return false;
 			}
 
 			// assign charges and radii

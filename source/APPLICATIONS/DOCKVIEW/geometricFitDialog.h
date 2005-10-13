@@ -47,11 +47,6 @@ namespace BALL
 				 */
 				GeometricFitDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
 					throw();
-
-				/** Copy constructor.    
-					*/
-				GeometricFitDialog(const GeometricFitDialog& geo_fit_dialog)
-					throw();
 					
 				/** Destructor.
 				 */
@@ -144,6 +139,13 @@ namespace BALL
 			
 				
 			private:
+			
+				/** Copy constructor.
+				 	* Remark: Copy contructor is private because it is not completed. 
+					* The copy constuctor of the QT widgets is private and cannot be called.    
+					*/
+				GeometricFitDialog(const GeometricFitDialog& geo_fit_dialog)
+					throw();
 			
 				/** Flag:
 					* True if we do docking and did redocking before or otherwise.

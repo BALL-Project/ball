@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.26 2005/09/22 09:32:19 leonhardt Exp $
+// $Id: dockingController.C,v 1.1.2.27 2005/10/13 11:52:40 leonhardt Exp $
 //
 
 #include "dockingController.h"
@@ -24,6 +24,7 @@
 #include <qmessagebox.h>
 #include <qcombobox.h>
 //#define BALL_VIEW_DEBUG
+#undef BALL_QT_HAS_THREADS
 using namespace std;
 
 namespace BALL
@@ -50,7 +51,7 @@ namespace BALL
 			throw()
 			: //QWidget(dock_controller),
 				ModularWidget(dock_controller),
-				dock_dialog_(dock_controller.dock_dialog_),
+				//dock_dialog_(dock_controller.dock_dialog_),
 				dock_alg_(dock_controller.dock_alg_),
 				progress_dialog_(dock_controller.progress_dialog_),
 				id_(dock_controller.id_)
@@ -112,7 +113,10 @@ namespace BALL
 						return;
 					}
 				}
-				runScoring_((ConformationSet*)(dfm->getConformationSet()));
+				if(!runScoring_((ConformationSet*)(dfm->getConformationSet())))
+				{
+				 delete dfm->getConformationSet();
+				}
 			}
 			// DatasetControl sends this messages, when user wants to have a look at a DockResult
 			else if (RTTI::isKindOf<ShowDockResultMessage>(*message))
@@ -250,8 +254,8 @@ namespace BALL
 			}
 			
 			// ============================= WITH MULTITHREADING ====================================
-			if (!(getMainControl()->lockCompositesFor(this))) return;
 			#ifdef BALL_QT_HAS_THREADS
+				if (!(getMainControl()->lockCompositesFor(this))) return;
 				DockingThread* thread = new DockingThread;
 				/// ??????? where is thread deleted?
 				thread->setDockingAlgorithm(dock_alg_);
@@ -277,8 +281,14 @@ namespace BALL
 				setStatusbarText("Starting docking...", true);
 				dock_alg_->start();
 				setStatusbarText("Docking finished.", true);
-				runScoring_(dock_alg_->getConformationSet());
+				ConformationSet* cs = new ConformationSet(dock_alg_->getConformationSet());
+				if(!runScoring_(cs))
+				{
+				 delete cs;
+				 cs = NULL;
+				}
 				// delete instance 
+				// conformationSet is deleted by dockResult
 				if (dock_alg_ != NULL)
 				{
 					delete dock_alg_;
@@ -291,13 +301,13 @@ namespace BALL
 		// Then, create new DockResult and add new scoring to it.
 		// At the end, add the docked system to BALLView structures
 		// and send a NewDockResultMessage to insert the DockResult in DatasetControl.
-		void DockingController::runScoring_(ConformationSet* conformation_set)
+		bool DockingController::runScoring_(ConformationSet* conformation_set)
 			throw()
 		{
 			if (!conformation_set->size())
 			{
 				Log.error() << "There are no docking results! " << __FILE__ << " " << __LINE__ << std::endl;
-				return;
+				return false;
 			}
 		
 		 	// create scoring function object
@@ -316,7 +326,7 @@ namespace BALL
 					if (!mol_struct)
 					{
 						Log.error() << "Error while scoring with AMBER_FF! " << __FILE__ << " " << __LINE__ << std::endl;
-						return;
+						return false;
 					}
 					AmberFF& ff = mol_struct->getAmberFF();
 					//the force field is given to the AmberEvaluation (scoring function) object
@@ -328,7 +338,7 @@ namespace BALL
 					break;
 			}
 		
-			if (!scoring) return;
+			if (!scoring) return false;
 			
 			// apply scoring function; set new scores in the conformation set
 			vector<ConformationSet::Conformation> ranked_conformations;
@@ -345,7 +355,7 @@ namespace BALL
 					delete scoring;
 					scoring = NULL;
 				}
-				return;
+				return false;
 			}
 			conformation_set->setScoring(ranked_conformations);
 
@@ -389,6 +399,7 @@ namespace BALL
 				delete scoring;
 				scoring = NULL;
 			}
+			return true;
 		}
 		
 	} // end of namespace View

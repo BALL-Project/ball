@@ -45,24 +45,9 @@ namespace BALL
 				DockProgressDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
 					throw();
 					
-				/** Copy constructor
-					*/
-				DockProgressDialog(const DockProgressDialog& dock_prog_dialog)
-					throw();
-					
 				/** Destructor
 					*/
 				virtual ~DockProgressDialog()
-					throw();
-				//@}
-					
-				/**	@name	Assignment
-				 */
-				//@{
-				
-				/** Assignment operator
-				 	*/
-				const DockProgressDialog& operator =(const DockProgressDialog& dock_prog_dialog)
 					throw();
 				//@}
 					
@@ -123,8 +108,27 @@ namespace BALL
 				void updateProgress_();
 			
 			
-			protected:
+			private:
+			
+				/** Copy constructor
+					* Remark: Copy contructor is private because it is not completed. 
+					* The copy constuctor of the QT widgets is private and cannot be called.  
+					*/
+				DockProgressDialog(const DockProgressDialog& dock_prog_dialog)
+					throw();
 				
+				/**	@name	Assignment
+					* Remark: Operator is private because it is not completed. 
+					* The assignment operator of the QT widgets is private and cannot be called.  
+				 */
+				//@{
+				
+				/** Assignment operator
+				 	*/
+				const DockProgressDialog& operator =(const DockProgressDialog& dock_prog_dialog)
+					throw();
+				//@}
+					
 				/** Pointer to docking algorithm.
 					*/
 				DockingAlgorithm* alg_;

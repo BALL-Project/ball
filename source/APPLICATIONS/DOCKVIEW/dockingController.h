@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.12 2005/09/22 09:32:19 leonhardt Exp $
+// $Id: dockingController.h,v 1.1.2.13 2005/10/13 11:52:40 leonhardt Exp $
 //
 
 #ifndef DOCKINGCONTROLLER_H
@@ -86,11 +86,6 @@ namespace BALL
 						\see        ModularWidget
 				*/
 				DockingController(QWidget* parent = 0, const char* name = 0)
-					throw();
-
-				/** Copy constructor
-					*/
-				DockingController(const DockingController& dock_controller)
 					throw();
 
 				/** Destructor
@@ -188,12 +183,21 @@ namespace BALL
 				 *  and sends a <b> NewDockResultMessage </b> to insert the DockResult in DatasetControl.
 				 *  Is called in \link DockingController::onNotify onNotify \endlink.
 				 * @param			conformation_set conformation set that contains the result of the docking algorithm
+				 * @return		true if scoring function was succesfully applied
+				 * @return		false if scoring function was not succesfully applied
 			 */
-			 void runScoring_(ConformationSet* conformation_set)
+			 bool runScoring_(ConformationSet* conformation_set)
 					throw();
 				
 			private:
 				
+				/** Copy constructor
+					* Remark: Copy contructor is private because it is not completed. 
+					* The copy constuctor of the QT widgets is private and cannot be called.  
+					*/
+				DockingController(const DockingController& dock_controller)
+					throw();
+			
 				/** Dialog for docking and redocking
 				 */
 				DockDialog dock_dialog_;

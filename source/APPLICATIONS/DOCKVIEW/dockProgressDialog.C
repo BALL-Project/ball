@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.25 2005/09/20 08:59:08 leonhardt Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.26 2005/10/13 11:52:39 leonhardt Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -27,15 +27,15 @@ namespace BALL
       
       connect(&timer_, SIGNAL(timeout()), SLOT(updateProgress_()));
     }
-    /*
+    
     // Copy constructor.
     DockProgressDialog::DockProgressDialog(const DockProgressDialog& dock_prog_dialog)
     throw()
-    : DockProgressDialogData(dock_prog_dialog),
+    : //DockProgressDialogData(dock_prog_dialog),
     alg_(dock_prog_dialog.alg_),
     //timer_(dock_prog_dialog.timer_),
     start_time_(dock_prog_dialog.start_time_)
-    {}*/
+    {}
     
     // Destructor	
     DockProgressDialog::~DockProgressDialog()

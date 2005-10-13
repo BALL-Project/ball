@@ -161,7 +161,7 @@ namespace BALL
 				  * @return 	true if reading was successful.
 					* @return 	false otherwise
 				*/
-				bool readDockResult(std::istream& filename)
+				bool readDockResult(std::istream& file)
 					throw();
 				
 				/** Operator to write dock result into an ostream.

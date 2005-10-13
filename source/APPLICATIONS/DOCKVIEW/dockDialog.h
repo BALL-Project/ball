@@ -77,11 +77,6 @@ namespace BALL
 				DockDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
 					throw();
 					
-				/** Copy constructor.
-					*/
-				DockDialog(const DockDialog& dock_dialog)
-					throw();
-					
 				/** Destructor.
 				 */
 				virtual ~DockDialog()
@@ -303,6 +298,13 @@ namespace BALL
 				
 			private:
 				
+				/** Copy constructor.
+					* Remark: Copy contructor is private because it is not completed. 
+					* The copy constuctor of the QT widgets is private and cannot be called.  
+					*/
+				DockDialog(const DockDialog& dock_dialog)
+					throw();
+			
 				/** Flag which indicates if we do docking or redocking.
 					*/
 				bool is_redock_;
