@@ -15,6 +15,7 @@ Added:
  - Online HTML documentation in BALLView
  - BALLView now again has a fourth drawing precision "ultra" for real 
    fast graphics accelerator cards
+ - Amber charges and radii values for nucleotides
 
 Changed:
  - BALL and BALLView libraries are now build as DLLs under Windows
