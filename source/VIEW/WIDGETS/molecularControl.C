@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.34 2005/10/13 17:18:10 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.35 2005/10/13 17:20:00 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -1135,7 +1135,7 @@ namespace BALL
 			}
 			catch(Exception::ParseError e)
 			{
-				setStatusbarText(String("Invalid expression ") + e.getMessage());
+				setStatusbarText(String("Invalid expression ") + e.getMessage(), true);
 				return 0;
 			}
 
@@ -1151,7 +1151,7 @@ namespace BALL
 				}
 				catch(Exception::GeneralException e)
 				{
-					setStatusbarText(String("Invalid expression ") + e.getMessage());
+					setStatusbarText(String("Invalid expression ") + e.getMessage(), true);
 				}
 
 				List<Atom*>::Iterator ait = s.getSelectedAtoms().begin();
