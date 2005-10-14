@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.20.2.7 2005/09/01 22:17:54 amoll Exp $
+// $Id: primitiveManager.h,v 1.20.2.8 2005/10/14 11:49:56 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -209,14 +209,6 @@ namespace BALL
 			bool updatePending() { return update_pending_;}
 
 			///
-			void setMultithreadingMode(bool state)
-				throw() { multi_threading_mode_ = state;}
-
-			///
-			bool usesMultithreading()
-				throw();
-
-			///
 			HashSet<Representation*>& getRepresentationsBeeingUpdated();
 
 			///
@@ -281,7 +273,6 @@ namespace BALL
 			MainControl* 	main_control_;
 			bool 					update_running_;
 			bool 					update_pending_;
-			bool 					multi_threading_mode_;
 
 			HashSet<Representation*> currently_drawing_;
 			HashSet<Representation*> currently_updateing_;
