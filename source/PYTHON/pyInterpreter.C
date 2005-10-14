@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.C,v 1.11.6.3 2005/08/19 14:07:29 amoll Exp $
+// $Id: pyInterpreter.C,v 1.11.6.4 2005/10/14 13:16:42 amoll Exp $
 //
 
 #include <Python.h>
@@ -72,6 +72,8 @@ namespace BALL
 
 	void PyInterpreter::initialize()
 	{
+		valid_ = false;
+
 		// finalize the interpreter if it is already running
 		if (Py_IsInitialized())
 		{
@@ -116,11 +118,21 @@ namespace BALL
 		{
 			runSingleString_("sys.path.append(\"" + *it + "\")", Py_single_input);
 		}
-		
-		// import the BALL module
-		runSingleString_("from BALL import *", Py_single_input);
 
-		valid_ = true;
+		PyObject *sip_module = PyImport_ImportModule("sip");
+		if (sip_module== 0) 
+		{
+			Log.error() << "Could not import Python module \"sip\"! No Python support available." << std::endl;
+			return;
+		}
+	
+		// import the BALL module
+		valid_ = runSingleString_("from BALL import *", Py_single_input);
+
+		if (!valid_) 
+		{
+			Log.error() << "Could not import the BALL library! No Python support available." << std::endl;
+		}
 	}
 
 
