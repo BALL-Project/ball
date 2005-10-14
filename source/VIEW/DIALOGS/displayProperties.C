@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.18 2005/10/12 15:30:13 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.19 2005/10/14 11:38:49 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -129,9 +129,9 @@ void DisplayProperties::initializePreferencesTab(Preferences &preferences)
 	throw()
 {
 	preferences_ = &preferences;
-	model_settings_ = new ModelSettingsDialog(this);
+	model_settings_ = new ModelSettingsDialog(this, "ModelSettings");
 	preferences.insertEntry(model_settings_);
-	coloring_settings_ = new ColoringSettingsDialog(this);
+	coloring_settings_ = new ColoringSettingsDialog(this, "ColoringSettings");
 	preferences.insertEntry(coloring_settings_);
 }
 

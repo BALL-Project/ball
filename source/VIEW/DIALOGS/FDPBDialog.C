@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.19.4.1 2005/09/29 14:01:22 amoll Exp $
+// $Id: FDPBDialog.C,v 1.19.4.2 2005/10/14 11:39:42 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -23,7 +23,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		FDPBDialog::FDPBDialog( QWidget* parent,  const char* name, bool modal, WFlags fl )
+		FDPBDialog::FDPBDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
 			: FDPBDialogData(parent, name, modal, fl),
 				ModularWidget("FDPBDialog"),
 				system_(0),
@@ -124,17 +124,14 @@ namespace BALL
 			throw()
 		{
 			QString s = QFileDialog::getOpenFileName(
-										getWorkingDir().c_str(),
+										"",
 										"",
 										getMainControl(),
 										"",
 										"Choose a file" );
 
 			if (s == QString::null) return;
-			setWorkingDirFromFilename_(s.ascii());
 			lineedit.setText(s);
-
-			QWidget::update();
 		}
 
 		bool FDPBDialog::calculate()

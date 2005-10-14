@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.86.2.10 2005/09/29 14:01:28 amoll Exp $
+// $Id: molecularStructure.C,v 1.86.2.11 2005/10/14 11:42:30 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1433,6 +1433,7 @@ namespace BALL
 			if (fdpb_dialog_ == 0)
 			{
 				fdpb_dialog_ = new FDPBDialog(this, "FDPBDialog");
+				fdpb_dialog_->fetchPreferences(getMainControl()->getINIFile());
 			}
 
 			fdpb_dialog_->show();
