@@ -32,6 +32,8 @@ Changed:
  - Remove GLQuadricObject, this functionality is available through GLRenderer
    now with much less overhead.
  - Improved PreferenceEntry class and reading/storing code for preferences
+ - PyInterpreter and PyWidget will now report the reason, if the Python module
+   can not be loaded.
 
 Fixed:
  - Crashes, when reading PDB files with too many bonds

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.sip,v 1.10.4.1 2005/06/06 14:00:35 amoll Exp $
+// $Id: primitiveManager.sip,v 1.10.4.2 2005/10/14 13:20:29 amoll Exp $
 //
 
 class PrimitiveManager
@@ -37,6 +37,4 @@ class PrimitiveManager
 
 	bool willBeUpdated(const Representation&) const throw();
 	bool updateRunning() const throw();
-	void setMultithreadingMode(bool) throw();
-	bool usesMultithreading() throw();
 };

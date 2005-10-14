@@ -58,7 +58,7 @@ def clearMolecules():
 		getMainControl().remove(getSystem(0))
 
 def setMultithreading(mode):
-	getMainControl().getPrimitiveManager().setMultithreadingMode(mode)
+	getMainControl().setMultithreading(mode)
 
 
 ###################### EXAMPLES: #######################

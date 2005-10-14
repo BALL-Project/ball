@@ -50,7 +50,6 @@ getDatasetControl().setVisible(0)
 getPyWidget().setVisible(0)
 
 getMainControl().resize(800, 600)
-getMainControl().processEvents(5000)
 
 runTest("Lines", 		MODEL_LINES)
 runTest("VDW",   		MODEL_VDW)

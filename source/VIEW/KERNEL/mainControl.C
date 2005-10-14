@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.35 2005/10/12 15:30:03 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.36 2005/10/14 13:19:48 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -101,6 +101,7 @@ namespace BALL
 				locking_widget_(0),
 				stop_simulation_(false),
 				simulation_thread_(0),
+				multi_threading_mode_(true),
 				modular_widgets_(),
 				menu_entries_hints_(),
 				simulation_icon_(0),
@@ -112,6 +113,10 @@ namespace BALL
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new MainControl " << this << std::endl;
+		#endif
+
+		#ifndef BALL_QT_HAS_THREADS
+			multi_threading_mode_ = false;
 		#endif
 
 			// store and load the INIFile from the Users homedir
@@ -371,10 +376,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			}
 
 			// connect apply button in Preferences dialog to slot
-			connect(preferences_dialog_->ok_button, SIGNAL(clicked()), this, SLOT(applyPreferencesClicked()));
+			connect(preferences_dialog_->ok_button, SIGNAL(clicked()), this, SLOT(applyPreferencesClicked_()));
 
 			// initialize own preferences tab
-			initializePreferencesTab(*preferences_dialog_);
+			initializePreferencesTab_();
 
 			// initialize all modular widgets 
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
@@ -470,9 +475,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			#endif
 
 			modular_widgets_.clear();
-
-			// finalize own preferences tab
-			finalizePreferencesTab(*preferences_dialog_);
 
 			delete preferences_dialog_;
 			preferences_dialog_ = 0;
@@ -746,38 +748,22 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 
-		void MainControl::initializePreferencesTab(Preferences &preferences)
+		void MainControl::initializePreferencesTab_()
 			throw()
 		{
 			main_control_preferences_ = new MainControlPreferences();
 
-			preferences.insertEntry(main_control_preferences_);
-			preferences.showEntry(main_control_preferences_);
+			preferences_dialog_->insertEntry(main_control_preferences_);
+			preferences_dialog_->showEntry(main_control_preferences_);
 
 			main_control_preferences_->enableLoggingToFile(logging_to_file_);
 
 			network_preferences_ = new NetworkPreferences();
-			preferences.insertEntry(network_preferences_);
-			preferences.showEntry(network_preferences_);
+			preferences_dialog_->insertEntry(network_preferences_);
+			preferences_dialog_->showEntry(network_preferences_);
 		}
 
-		void MainControl::finalizePreferencesTab(Preferences &preferences)
-			throw()
-		{
-			if (main_control_preferences_ != 0)
-			{
-				preferences.removeEntry(main_control_preferences_);
-				main_control_preferences_ = 0;
-			}
-
-			if (network_preferences_ != 0)
-			{
-				preferences.removeEntry(network_preferences_);
-				network_preferences_ = 0;
-			}
-		}
-
-		void MainControl::applyPreferencesClicked()
+		void MainControl::applyPreferencesClicked_()
 		{
 			preferences_dialog_->close();
 			setPreferencesEnabled_(false);
@@ -1392,7 +1378,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		void MainControl::sendMessage(Message& message)
 			throw()
 		{
-			message.setDeletable(false);
 			onNotify(&message);
 			notify_(&message);
 		}
@@ -1899,13 +1884,15 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		QMainWindow::resize(w, h);
 	}
 
-	void MainControl::processEvents(int max_time)
-	{
-		if (qApp == 0) return;
-
-		qApp->processEvents(max_time);
+	bool MainControl::useMultithreading()
+		throw() 
+	{ 
+#ifndef BALL_QT_HAS_THREADS
+		return false;
+#endif
+		return multi_threading_mode_;
 	}
-	
+			
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>

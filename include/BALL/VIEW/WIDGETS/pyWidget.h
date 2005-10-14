@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.23.2.9 2005/09/29 14:01:34 amoll Exp $
+// $Id: pyWidget.h,v 1.23.2.10 2005/10/14 13:19:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -88,7 +88,7 @@ namespace BALL
 
 		/** Python Widget base class.
 		 		This class was added, because we had to overwrite some qt-methods.
-				Use the derived PyWidget class for your application!
+				Use the PyWidget class for your application!!!
 				\ingroup ViewWidgets
 		*/
 		class BALL_VIEW_EXPORT PyWidgetData
@@ -116,50 +116,6 @@ namespace BALL
 			virtual ~PyWidgetData()
 				throw();
 
-			public slots:
-
-			//@}
-			/**	@name QT Slots
-			*/
-			//@{
-			
-			/** Start the interpreter.
-					This method initializes the interpreter if it is not yet running. 
-					An already running interpreter is reinitialized.
-					This method calls <tt>PyInitialize()</tt> to create an interpreter.
-			*/
-			virtual void startInterpreter();
-
-			///
-			virtual void abortScript();
-
-			/**	Run a Python program from a file.
-					\param filename the name of the program file
-			*/
-			virtual bool runFile(const String& filename);
-
-			///
-			virtual void exportHistory();			
-
-			void runString(String command);
-
-			virtual void contentsDragEnterEvent(QDragEnterEvent* e);
-			virtual void contentsDropEvent(QDropEvent* e);
-
-			public:
-
-			//@}
-			/** @name	Widget related methods
-					These methods implement the basic behaviour of the edit window by 
-					overwriting the corresponding methods of <tt>QTextEdit</tt>.
-					You should not call them immediately, but you might want to
-					overwrite them in derived classes.
-			*/
-			//@{
-
-			///
-			virtual bool returnPressed();
-
 			/** Internal state dump.
 					Dump the current internal state of this to 
 					the output ostream <b> s</b> with dumping depth <b> depth</b>.
@@ -169,9 +125,45 @@ namespace BALL
 			void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 
+			///
+			bool runString(String command);
+
+			/**	Run a Python program from a file.
+					\param filename the name of the program file
+			*/
+			virtual bool runFile(const String& filename);
+			
+			public slots:
+
+			//@}
+			/**	@name QT Slots
+			*/
+			//@{
+			
+			///
+			virtual void abortScript();
+
+			///
+			virtual void exportHistory();			
+
 			//@}
 
+			protected slots:
+
+			virtual void contentsDragEnterEvent(QDragEnterEvent* e);
+
+			virtual void contentsDropEvent(QDropEvent* e);
+
 			protected:
+
+			virtual bool returnPressed();
+
+			/** Start the interpreter.
+					This method initializes the interpreter if it is not yet running. 
+					An already running interpreter is reinitialized.
+					This method calls <tt>PyInitialize()</tt> to create an interpreter.
+			*/
+			virtual void startInterpreter();
 
 			virtual void keyPressEvent(QKeyEvent* e);
 
@@ -252,6 +244,10 @@ namespace BALL
 			///
 			~PyWidget()
 				throw();
+			
+			/// Is full Python support available?
+			bool isValid() const 
+				throw() { return valid_;}
 
 			/**	@name	ModularWidget related methods
 			*/
@@ -315,6 +311,7 @@ namespace BALL
 			List<Hotkey> 			hotkeys_;
 			// 								we use an own working dir to find Python Scripts
 			String 						working_dir_;
+			bool 							valid_;
 		};
 
 	} // namespaces	

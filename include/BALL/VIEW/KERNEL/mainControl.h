@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72.2.16 2005/10/04 16:16:37 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.17 2005/10/14 13:19:29 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -322,9 +322,7 @@ namespace BALL
 			virtual void onNotify(Message *message)
 				throw();
 
-
 			/** Send a Message from Python.
-			 		This Method should only be used from the Python Interface. 
 					Otherwise, you should prefer to use ModularWidget::notify_.
 					The MainControl itself also reacts to a Message, send with this method.
 					The Message will not be deleted, after it was send to all ModularWidget's.
@@ -350,12 +348,10 @@ namespace BALL
 					See ModularWidget for further information concerning menu structure creation
 					and preferences handling. \par
 					Calls registerConnectionObject() \par
-					Calls initializePreferencesTab() \par
 					Calls fetchPreferences() \par
 					Calls applyPreferences() \par
 					Calls insertMenuEntry() \par
 					Calls ModularWidget::initializeWidget() \par
-					Calls ModularWidget::initializePreferencesTab() \par
 					Calls QMainWindow::show() \par
 					Note: Call this method to start the application.
 			*/
@@ -378,14 +374,6 @@ namespace BALL
 	
 			///
 			void complementSelection();
-
-			/** Apply preferences.
-					This slot is called internally whenever the apply button
-					of the Preferences dialog	is pressed.  \par
-					It calls among other things the method applyPreferences().
-					\see        applyPreferences()
-			*/
-			virtual void applyPreferencesClicked();
 
 			/** Last second cleanup.
 					This method will be called internally if the MainControl is about to be destroyed.
@@ -479,37 +467,6 @@ namespace BALL
 					\see   PopUpID
 			*/
 			void insertPopupMenuSeparator(int ID)
-				throw();
-
-			/** Create the preferences tab MainControlPreferences for
-					the MainControl and inserts it into the Preferences dialog.
-					It is called automatically by the show method at the
-					start of the application. This method is used in the same manner as the
-					corresponding method in the ModularWidget class. See ModularWidget
-					for more information concerning preferences tabs.\par
-					<b>Note:</b> If this method is overridden, call this method at the end of the
-					overriden method to make sure that the general preferences are initialized.
-					\param  preferences the Preferences dialog for the MainControl
-					\see    show
-					\see    MainControlPreferences
-					\see    Preferences
-			*/
-			virtual void initializePreferencesTab(Preferences &preferences)
-				throw();
-			
-			/**	Remove the MainControlPreferences tab from the 
-					Preferences dialog of the MainControl.
-					This method is called automatically by aboutToExit()
-					at the end of the application. It is used in the same manner as the
-					corresponding method in the ModularWidget class. See ModularWidget
-					for more information concerning preferences tabs.\par
-					<b>Note:</b> If this method is overridden, call this method at the end of the
-					overriden method to make sure that the general preferences are finalized.
-					\param  preferences the Preferences dialog for this MainControl
-					\see    MainControlPreferences
-					\see    Preferences
-			*/
-			virtual void finalizePreferencesTab(Preferences &preferences)
 				throw();
 			
 			/** Apply all preferences.
@@ -712,13 +669,27 @@ namespace BALL
 			///
 			Position getProxyPort() const { return proxy_port_;}
 
-			/// Calls QApplication::processEvents
-			void processEvents(int max_time);
-
 			#ifdef BALL_QT_HAS_THREADS
 			/// QWaitCondition to wake up threads, after Composites are unlocked
 			QWaitCondition& getCompositesLockedWaitCondition() { return composites_locked_wait_condition_;}
 			#endif
+
+			/** Multithreaded code is used for serveral functions:
+			    - Update of Representations
+					- Simulations
+					- Download PDB files
+					To debug such code it is often usefull to to be able to run it in
+					a singlethreaded mode. Every piece of multithreaded code should
+					therefore call this method and decide if it should run without multiple threads.
+					Furthermore most of the time, valid benchmark results can only be achived 
+					with one single thread.
+			*/
+			bool useMultithreading()
+				throw();
+
+			/// See above
+			void setMultithreading(bool state)
+				throw() { multi_threading_mode_ = state;}
 
 			//@}
 			/**	@name	Debugging and Diagnostics
@@ -749,6 +720,12 @@ namespace BALL
 			
 			protected slots:
 
+			/*_ This slot is called internally whenever the apply button
+					of the Preferences dialog	is pressed.
+					It calls among other things the method applyPreferences().
+			*/
+			virtual void applyPreferencesClicked_();
+
 			//_ Called by timer to clear the text in the statusbar
 			void clearStatusBarText_();
 
@@ -756,6 +733,9 @@ namespace BALL
 			virtual void deleteClicked();
 
 			protected:
+
+			virtual void initializePreferencesTab_()
+				throw();
 
 			//_  Called after receiving an SimulationThreadFinished event
 			void stopedSimulation_();
@@ -838,6 +818,8 @@ namespace BALL
 			bool 											  stop_simulation_;
 
 			SimulationThread* 					simulation_thread_;
+
+			bool 												multi_threading_mode_;
 
 			/*_	A list containing all modular widgets.
 					This list is modified by addModularWidget and

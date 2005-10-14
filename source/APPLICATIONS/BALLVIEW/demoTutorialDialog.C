@@ -349,10 +349,10 @@ void DemoTutorialDialog::nextStepDemo_()
 	}
 	else if (current_step_ == 16) // SES colored 
 	{
-		getMainControl()->getPrimitiveManager().setMultithreadingMode(false);
+		getMainControl()->setMultithreading(false);
 		notify_(new CreateRepresentationMessage(composites_, MODEL_SE_SURFACE, COLORING_ELEMENT));
 
-		getMainControl()->getPrimitiveManager().setMultithreadingMode(false);
+		getMainControl()->setMultithreading(false);
 
 		Representation* rep = *getMainControl()->getPrimitiveManager().begin();
 

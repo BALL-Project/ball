@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.14 2005/10/04 14:50:20 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.15 2005/10/14 13:19:38 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -145,8 +145,6 @@ namespace BALL
 
 			if (!PyInterpreter::isValid())
 			{
-				setText("No Python Support available!");
-				setEnabled(false);
 				return;
 			}
 
@@ -358,20 +356,21 @@ namespace BALL
 			return ok;
 		}
 
-		void PyWidgetData::runString(String command)
+		bool PyWidgetData::runString(String command)
 		{
 			if (!command.has('\n'))
 			{
-				parseLine_(command);
-				return;
+				return parseLine_(command);
 			}
 
 			vector<String> lines;
 			Size nr = command.split(lines, String('\n').c_str());
 			for (Position p = 0; p < nr; p++)
 			{
-				parseLine_(lines[p]);
+				if (!parseLine_(lines[p])) return false;
 			}
+
+			return true;
 		}
 		
 
@@ -615,7 +614,8 @@ namespace BALL
 			throw()
 			: DockWidget(parent, name),
 				text_edit_(new PyWidgetData(this)),
-				working_dir_("")
+				working_dir_(""),
+				valid_(false)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new PyWidget " << this << std::endl;
@@ -634,22 +634,28 @@ namespace BALL
 		{
 //   			insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
 
+			DockWidget::initializeWidget(main_control);
+			registerWidgetForHelpSystem(this, "pythonInterpreter.html");
+
 			Index id1 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", this , SLOT(scriptDialog()));
 			Index id2 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
 			Index id3 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
 
-			if (!PyInterpreter::isValid())
+			text_edit_->startInterpreter();
+
+			valid_ = PyInterpreter::isValid();
+	
+			if (!valid_)
 			{
 				menuBar()->setItemEnabled(id1, false);
 				menuBar()->setItemEnabled(id2, false);
 				menuBar()->setItemEnabled(id3, false);
+				text_edit_->setText("No Python support available:");
+				text_edit_->runString("import BALL");
+				text_edit_->setEnabled(false);
+				setStatusbarText("No Python support available! (See PyWidget)", true);
+				return;
 			}
-
-			DockWidget::initializeWidget(main_control);
-
-			registerWidgetForHelpSystem(this, "pythonInterpreter.html");
-
-			text_edit_->startInterpreter();
 		}
 
 
@@ -680,27 +686,26 @@ namespace BALL
 
 			python_hotkeys_->setContent(hotkeys_);
 
-			// dont set startup script if we are loading a project file
-			if (inifile.getFilename() == "" || 
-					inifile.getFilename().hasSuffix(".bvp")) 
-			{
-				return;
-			}
-
-			if (!PyInterpreter::isValid()) return;
-
-			String startup = getDataPath();
-			startup += "startup.py";
-			if (!text_edit_->runFile(startup))
+			String startup = getDataPath() + "startup.py";
+			if (isValid() && !text_edit_->runFile(startup))
 			{
 				Log.error() << "Could not find startup script. Please set the correct path to the data path!" << std::endl;
 				Log.error() << "To do so set the environment variable BALL_DATA_PATH or BALLVIEW_DATA_PATH." << std::endl;
 			}
-
-			if (!inifile.hasEntry("PYTHON", "StartupScript")) return;
+			
+			// dont set startup script if we are loading a project file
+			if (inifile.getFilename() == "" || 
+					inifile.getFilename().hasSuffix(".bvp") ||
+					!inifile.hasEntry("PYTHON", "StartupScript"))
+			{
+				return;
+			}
 
 			text_edit_->startup_script_ =	inifile.getValue("PYTHON", "StartupScript");
 			text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
+
+			if (!isValid()) return;
+
 			if (text_edit_->startup_script_ != "") text_edit_->runFile(text_edit_->startup_script_);
 		}
 

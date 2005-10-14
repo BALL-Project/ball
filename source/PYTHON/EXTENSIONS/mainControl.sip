@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.19.4.5 2005/10/05 12:14:53 amoll Exp $
+// $Id: mainControl.sip,v 1.19.4.6 2005/10/14 13:20:27 amoll Exp $
 //
 
 class MainControl
@@ -79,8 +79,6 @@ class MainControl
 
 	void applyPreferences() throw();
 	void fetchPreferences(INIFile& /inifile/) throw();
-	void finalizePreferencesTab(Preferences& /preferences/) throw();
-	void initializePreferencesTab(Preferences& /preferences/) throw();
 	void writePreferences(INIFile& /inifile/) throw();
 
 	void insertPopupMenuSeparator(int /ID/) throw();
@@ -111,7 +109,8 @@ class MainControl
 	void sendMessage(Message& /Transfer/) throw();
 
 	void resize(int, int);
-	void processEvents(int);
+	void setMultithreading(bool) throw();
+	bool useMultithreading() throw();
 
 	void quit();
 };
