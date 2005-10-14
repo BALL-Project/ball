@@ -2,7 +2,8 @@
 
 The version 1.1.1 finaly brings full Python and DLL support under Windows.
 Furthermore there is a large number of prominent fixes (especialy for g++ 4.x) 
-and some new functionality for BALLView. 
+and some new functionality for BALLView. The BALLView code has become much slimer 
+and stable with this release.
 
 This version will probably be the last one that supports QT 3.X. Future versions
 of BALLView will be based on QT 4.X.
@@ -30,9 +31,11 @@ Changed:
    Users can choose an addition startup script, that will run afterwards.
  - Remove GLQuadricObject, this functionality is available through GLRenderer
    now with much less overhead.
+ - Improved PreferenceEntry class and reading/storing code for preferences
 
 Fixed:
  - Crashes, when reading PDB files with too many bonds
+ - Crash, when wrongly using boolean expression resiudeId("blub")
  - Segfault in CalculateSecondaryStructureProcessor, when one SS is part of another
  - NMRViewer und underlying widgets
  - Mouse sensitivity changed in Rotate mode when focusing on small structures
