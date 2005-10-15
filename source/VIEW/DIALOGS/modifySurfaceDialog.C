@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.27 2005/10/04 12:38:24 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.28 2005/10/15 15:46:32 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -561,18 +561,14 @@ namespace BALL
 			if (!RTTI::isKindOf<RegularData3DMessage>(*message)) return;
 
 			RegularData3DMessage *rm = RTTI::castTo<RegularData3DMessage>(*message);
-			switch (rm->getType())
-			{
-				case (CompositeMessage::CompositeMessageType) RegularData3DMessage::NEW:
-					insertGrid_(*rm->getData(), rm->getCompositeName());
-					return;
 
-				case (CompositeMessage::CompositeMessageType) RegularData3DMessage::REMOVE:
-					removeGrid_(*rm->getData());
-					return;
-				
-				default:
-					return;
+			if 			(rm->getType() == RegularData3DMessage::NEW)
+			{
+				insertGrid_(*rm->getData(), rm->getCompositeName());
+			}
+			else if (rm->getType() == RegularData3DMessage::REMOVE)
+			{
+				removeGrid_(*rm->getData());
 			}
 		}
 
