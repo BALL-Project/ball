@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.36.2.10 2005/10/16 23:13:28 amoll Exp $
+// $Id: common.h,v 1.36.2.11 2005/10/16 23:18:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -153,6 +153,15 @@ namespace BALL
 
 			/// UNUSED AT THE MOMENT !
 			DRAWING_PRECISION_ULTRA
+		};
+
+		/// Mapping from the enum to the float values of Surfaces
+		float SurfaceDrawingPrecisions[4] =
+		{
+			1.5,
+			3.5,
+			6.5,
+			12
 		};
 
 
