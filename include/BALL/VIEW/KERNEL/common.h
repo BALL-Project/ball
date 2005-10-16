@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.36.2.9 2005/09/29 14:01:32 amoll Exp $
+// $Id: common.h,v 1.36.2.10 2005/10/16 23:13:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -139,6 +139,9 @@ namespace BALL
 		/// Enumeration for Drawing Precisions.
 		enum DrawingPrecision
 		{
+			///
+			DRAWING_PRECISION_INVALID = -1,
+
 			///
 			DRAWING_PRECISION_LOW = 0,
 
