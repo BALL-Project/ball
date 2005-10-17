@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.36.2.12 2005/10/17 00:43:53 amoll Exp $
+// $Id: common.h,v 1.36.2.13 2005/10/17 14:29:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -54,7 +54,7 @@ namespace BALL
 		#define BALL_VIEW_MAXIMAL_DRAWING_PRECISION 4
 
 		/// MAXIMAL_DRAWING_PRECISION * MAXIMAL_DRAWING_MODE
-		#define BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE  12  
+		#define BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE  BALL_VIEW_MAXIMAL_DRAWING_PRECISION * BALL_VIEW_MAXIMAL_DRAWING_MODE
 
 		//@}
 		/** @name General enumerations, methods and typedefs
