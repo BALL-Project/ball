@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.23.2.10 2005/10/14 13:19:30 amoll Exp $
+// $Id: pyWidget.h,v 1.23.2.11 2005/10/17 19:18:53 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -312,6 +312,7 @@ namespace BALL
 			// 								we use an own working dir to find Python Scripts
 			String 						working_dir_;
 			bool 							valid_;
+			bool 							started_startup_script_;
 		};
 
 	} // namespaces	

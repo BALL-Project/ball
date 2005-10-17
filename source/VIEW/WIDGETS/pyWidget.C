@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.15 2005/10/14 13:19:38 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.16 2005/10/17 19:18:43 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -615,7 +615,8 @@ namespace BALL
 			: DockWidget(parent, name),
 				text_edit_(new PyWidgetData(this)),
 				working_dir_(""),
-				valid_(false)
+				valid_(false),
+				started_startup_script_(false)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new PyWidget " << this << std::endl;
@@ -685,28 +686,6 @@ namespace BALL
 			}
 
 			python_hotkeys_->setContent(hotkeys_);
-
-			String startup = getDataPath() + "startup.py";
-			if (isValid() && !text_edit_->runFile(startup))
-			{
-				Log.error() << "Could not find startup script. Please set the correct path to the data path!" << std::endl;
-				Log.error() << "To do so set the environment variable BALL_DATA_PATH or BALLVIEW_DATA_PATH." << std::endl;
-			}
-			
-			// dont set startup script if we are loading a project file
-			if (inifile.getFilename() == "" || 
-					inifile.getFilename().hasSuffix(".bvp") ||
-					!inifile.hasEntry("PYTHON", "StartupScript"))
-			{
-				return;
-			}
-
-			text_edit_->startup_script_ =	inifile.getValue("PYTHON", "StartupScript");
-			text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
-
-			if (!isValid()) return;
-
-			if (text_edit_->startup_script_ != "") text_edit_->runFile(text_edit_->startup_script_);
 		}
 
 
@@ -728,7 +707,6 @@ namespace BALL
 				inifile.insertValue("PYTHON", "Hotkey" + String(p), data);
 				p++;
 			}
-
 		}
 
 
@@ -736,7 +714,6 @@ namespace BALL
 			throw()
 		{
 			text_edit_->python_settings_= new PythonSettings();
-			text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
 			preferences.insertEntry(text_edit_->python_settings_);
 			python_hotkeys_ = new PythonHotkeys();
 			preferences.insertEntry(python_hotkeys_);
@@ -764,9 +741,24 @@ namespace BALL
 			DockWidget::applyPreferences();
 
 			if (text_edit_->python_settings_ == 0) return;
-			text_edit_->startup_script_ = text_edit_->python_settings_->getFilename();
 
 			hotkeys_ = (python_hotkeys_->getContent());
+
+			if (started_startup_script_ || !isValid()) return;
+
+			started_startup_script_ = true;
+
+			String startup = getDataPath() + "startup.py";
+			if (!text_edit_->runFile(startup))
+			{
+				Log.error() << "Could not find startup script. Please set the correct path to the data path!" << std::endl;
+				Log.error() << "To do so set the environment variable BALL_DATA_PATH or BALLVIEW_DATA_PATH." << std::endl;
+			}
+			
+			String user_startup = text_edit_->python_settings_->getFilename();
+			if (user_startup == "") return;
+
+			text_edit_->runFile(user_startup);
 		}
 
 		void PyWidgetData::abortScript()
