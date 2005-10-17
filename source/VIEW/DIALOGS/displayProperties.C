@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.23 2005/10/17 15:45:50 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.24 2005/10/17 15:56:35 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -473,7 +473,6 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 		}
 	}
 
-Log.error() << "#~~#   3 "  << rebuild_representation           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	Size transparency = (Size)(transparency_slider->value() * 2.55);
 
 	if (coloring_updates_enabled->isChecked())
@@ -583,7 +582,6 @@ void DisplayProperties::checkDrawingPrecision_()
 		return;
 	}
 
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	bool is_surface = isSurfaceModel(mt);
 	custom_precision_button->setEnabled(is_surface);
 	precision_slider->setEnabled(is_surface);
@@ -591,7 +589,6 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 	if (!is_surface)
 	{
 		presets_precision_button->setChecked(true);
-Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	}
 
 	if (rep_ == 0) return;
