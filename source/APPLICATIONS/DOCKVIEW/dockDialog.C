@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.57 2005/10/13 11:52:39 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.58 2005/10/17 19:28:22 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -570,30 +570,6 @@ namespace BALL
 			lineedit.setText(s);
 		}
 		
-		// get system which the user has chosen in the dialog as docking partner
-		System* DockDialog::partnerChosen_(const QString& qstr)
-			throw()
-		{
-			MainControl* main_control = MainControl::getInstance(0);
-			if (!main_control)
-				{
-					Log.error() << "Error while getting chosen system! " << __FILE__ << " " << __LINE__ << std::endl;
-					return NULL;
-				}
-			// iterate over all composites; find chosen system
-			HashSet<Composite*>::iterator composite_it = main_control->getCompositeManager().begin();
-				
-			for (; +composite_it; ++composite_it)
-			{
-				System* system = dynamic_cast<System*>(*composite_it);
-				if (system != 0 && system->getName() == qstr.ascii())
-				{
-					return system;
-				}
-			}
-			return 0;
-		}
-		
 		// Function to fill the system comboboxes.
 		// If the user has already selected one or two systems, they are the current items in the comboboxes.
 		void DockDialog::fillSystemComboboxes_()
@@ -607,6 +583,9 @@ namespace BALL
 			docking_partner1_ = NULL;
 			docking_partner2_ = NULL;
 			
+			// vector of pointers to the loaded systems
+			loaded_systems_.clear();
+
 			QStringList current_system_list;
 			// put <select> in list as the first element
 			current_system_list.append("<select>");
@@ -623,14 +602,16 @@ namespace BALL
 			// iterate over all composites; add systems to list
 			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();
 			
-			// fill current system list and check if user has already selected two systems
+			// fill current system list and check if user has already selected two systems;
+			// vector of pointers to all loaded systems is also filled (same order as current system list)
 			for (; +composite_it; ++composite_it)
 			{
 				System* system = dynamic_cast<System*>(*composite_it);
 				if (system == 0) continue;
 
 				current_system_list.append(system->getName());
-				
+				loaded_systems_.push_back(system);			
+
 				// test if the user has selected one or two systems
 				if (!system->isSelected())
 				{
@@ -658,7 +639,7 @@ namespace BALL
 								return;
 							}
 					}
-			} 	
+			}
 			// set selection lists of dialog
 			systems1->insertStringList(current_system_list);
 			systems2->insertStringList(current_system_list);
@@ -826,13 +807,23 @@ namespace BALL
 		// Indicates a system in the combobox was chosen as docking partner 1.
 		void DockDialog::partner1Chosen()
 		{
-			docking_partner1_ = partnerChosen_(systems1->currentText());
+			int chosen_system = systems1->currentItem();
+			// if item 0 (<select>) is chosen, do nothing
+			if(chosen_system)
+				{
+					docking_partner1_ = loaded_systems_[chosen_system - 1];
+				}
 		}
 		
 		// Indicates a system in the combobox was chosen as docking partner 2.
 		void DockDialog::partner2Chosen()
 		{
-			docking_partner2_ = partnerChosen_(systems2->currentText());
+			int chosen_system = systems2->currentItem();
+			// if item 0 (<select>) is chosen, do nothing
+			if(chosen_system)
+				{
+					docking_partner2_ = loaded_systems_[chosen_system - 1];
+				}
 		}
 		
 		// Indicates that a scoring function in the combobox was chosen.

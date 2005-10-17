@@ -195,7 +195,8 @@ namespace BALL
 			
 				/** Is called when OK button is pressed.
 				 * 	For docking, it checks if two different systems are chosen.
-				 *  Hides the dialog and calls \link DockDialog::applyValues_ applyValues_ \endlink and \link DockDialog::applyProcessors_ applyProcessors_ \endlink.
+				 *  Hides the dialog and calls \link DockDialog::applyValues_ applyValues_ \endlink
+				 *  and \link DockDialog::applyProcessors_ applyProcessors_ \endlink.
 				 */
 				void okPressed();
 				
@@ -269,12 +270,7 @@ namespace BALL
 				/** Shows chosen file in the dialog.
 				 */
 				void selectFile_(QLineEdit& lineedit) throw();
-				
-				/** Get system which the user has chosen in the dialog as docking partner.
-					* @param				qstr name of the docking partner
-				 */
-				System* partnerChosen_(const QString& qstr) throw();
-				
+					
 				/** Fills the system comboboxes.
 				 *  If the user has already selected one or two systems, they are the current items in the comboboxes. 
 				 */
@@ -330,6 +326,10 @@ namespace BALL
 				 */
 				HashMap<int, vector<int> > allowed_sf_;
 				
+			  /** vector contains pointers to all systems that are loaded into BALLView
+			   */
+			  vector<System*> loaded_systems_;
+
 				/** Pointer to docking partner 1
 				 */
 				System* docking_partner1_;
