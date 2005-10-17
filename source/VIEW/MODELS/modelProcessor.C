@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.C,v 1.12 2005/02/23 12:55:19 amoll Exp $
+// $Id: modelProcessor.C,v 1.12.2.1 2005/10/17 00:43:43 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -29,7 +29,7 @@ namespace BALL
 			: UnaryProcessor<Composite>(model_processor),
 				PropertyManager(model_processor),
 				drawing_precision_(model_processor.drawing_precision_),
-				surface_drawing_precision_(-1)
+				surface_drawing_precision_(model_processor.surface_drawing_precision_)
 		{
 		}
 
@@ -55,6 +55,33 @@ namespace BALL
 			surface_drawing_precision_ = -1;
 			clearComposites();
 		}
+		
+		void ModelProcessor::setDrawingPrecision(Index precision)
+			throw() 
+		{ 
+			drawing_precision_ = precision;
+			surface_drawing_precision_ = -1;
+		}
+
+		Index ModelProcessor::getDrawingPrecision() const
+			throw() 
+		{ 
+			return drawing_precision_;
+		}
+
+		void ModelProcessor::setSurfaceDrawingPrecision(float precision)
+			throw() 
+		{ 
+			surface_drawing_precision_ = precision;
+			drawing_precision_ = DRAWING_PRECISION_INVALID;
+		}
+
+		float ModelProcessor::getSurfaceDrawingPrecision() const
+			throw() 
+		{ 
+			return surface_drawing_precision_;
+		}
+
 
 	} // namespace VIEW
 } // namespace BALL

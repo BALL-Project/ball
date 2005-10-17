@@ -29,6 +29,15 @@ namespace BALL
 	namespace VIEW
 	{
 
+		float SurfaceDrawingPrecisions[4] = 
+		{
+			1.5,
+			3.5,
+			6.5,
+			12
+		};
+
+
 		bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS = true;
 
 		Composite composite_to_be_ignored_for_colorprocessors_;

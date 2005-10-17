@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.19 2005/10/14 11:38:49 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.21 2005/10/17 00:43:41 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -88,15 +88,6 @@ DisplayProperties::DisplayProperties(const DisplayProperties& /*dp*/)
 		ModularWidget(*this),
 		PreferencesEntry()
 {
-	registerObject_(precision_combobox);
-	registerObject_(precision_slider);
-	registerObject_(model_type_combobox);
-	registerObject_(mode_combobox);
-	registerObject_(custom_color_label);
-	registerObject_(selection_color_label);
-	registerObject_(transparency_slider);
-	registerObject_(coloring_method_combobox);
-	registerObject_(resolution_group);
 }
 
 DisplayProperties::~DisplayProperties()
@@ -560,32 +551,14 @@ void DisplayProperties::precisionBoxChanged(int index)
 {
 	presets_precision_button->setChecked(true);
 
-	if (index > DRAWING_PRECISION_ULTRA)
+	if (index < DRAWING_PRECISION_LOW ||
+			index > DRAWING_PRECISION_ULTRA)
 	{
 		throw(Exception::InvalidOption(__FILE__, __LINE__, index));
 	}
 
-	switch (index)
-	{
-		case VIEW::DRAWING_PRECISION_LOW:
-			presets_precision_label->setText("1.5");
-			break;
-
-		case VIEW::DRAWING_PRECISION_MEDIUM:
-			presets_precision_label->setText("3.5");
-			break;
-
-		case VIEW::DRAWING_PRECISION_HIGH:
-			presets_precision_label->setText("6.5");
-			break;
-
-		case VIEW::DRAWING_PRECISION_ULTRA:
-			presets_precision_label->setText("12");
-			break;
-
-		default:
-			Log.error() << "Unknown precision in " << __FILE__ << "   " << __LINE__ << std::endl;
-	}
+	String label = createFloatString(SurfaceDrawingPrecisions[index], 1);
+	presets_precision_label->setText(label.c_str());
 }
 
 void DisplayProperties::checkDrawingPrecision_()
@@ -698,12 +671,16 @@ void DisplayProperties::setSurfaceDrawingPrecision(float value)
 {
 	if (value < 0.1) return;
 	precision_slider->setValue((int)(value * 10.0));
+	presets_precision_button->setChecked(false);
+	custom_precision_button->setChecked(true);
 }
 		
 void DisplayProperties::setDrawingPrecision(int value)
 {
 	precision_combobox->setCurrentItem(value);
-	precisionBoxChanged(0);
+	precisionBoxChanged(value);
+	presets_precision_button->setChecked(true);
+	custom_precision_button->setChecked(false);
 }
 
 void DisplayProperties::setTransparency(int value)

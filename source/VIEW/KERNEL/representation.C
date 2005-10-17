@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.16 2005/09/29 14:01:28 amoll Exp $
+// $Id: representation.C,v 1.62.4.17 2005/10/17 00:43:43 amoll Exp $
 //
 
 
@@ -457,8 +457,14 @@ namespace BALL
 			
 			if (model_processor_ != 0) 
 			{
-				model_processor_->setDrawingPrecision(drawing_precision_);
-				model_processor_->setSurfaceDrawingPrecision(surface_drawing_precision_);
+				if (surface_drawing_precision_ >= 0.1)
+				{
+					model_processor_->setSurfaceDrawingPrecision(surface_drawing_precision_);
+				}
+				else
+				{
+					model_processor_->setDrawingPrecision(drawing_precision_);
+				}
 			}
 
 			changed_color_processor_ = true;

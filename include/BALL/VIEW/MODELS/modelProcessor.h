@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.16.2.2 2005/09/01 22:17:58 amoll Exp $
+// $Id: modelProcessor.h,v 1.16.2.3 2005/10/17 00:43:54 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
@@ -88,19 +88,19 @@ namespace BALL
 				
 				///
 				void setDrawingPrecision(Index precision)
-					throw() { drawing_precision_ = precision;}
+					throw();
 
 				///
 				Index getDrawingPrecision() const
-					throw() { return drawing_precision_;}
+					throw();
 
 				///
 				void setSurfaceDrawingPrecision(float precision)
-					throw() { surface_drawing_precision_ = precision;}
+					throw();
 
 				///
 				float getSurfaceDrawingPrecision() const
-					throw() { return surface_drawing_precision_;}
+					throw();
 
 				/** Method to create geometric objects.
 				 		This method is called in Representation::update() after

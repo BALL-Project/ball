@@ -115,6 +115,7 @@ void Representation::setDrawingPrecision(DrawingPrecision precision)
 	throw() 
 {
 	drawing_precision_ = precision;
+	surface_drawing_precision_ = -1;
 	if (model_processor_ != 0) 
 	{
 		model_processor_->setDrawingPrecision(drawing_precision_);
@@ -126,6 +127,7 @@ void Representation::setSurfaceDrawingPrecision(float precision)
 	throw() 
 {
 	surface_drawing_precision_ = precision;
+	drawing_precision_ = DRAWING_PRECISION_INVALID;
 	if (model_processor_ != 0) model_processor_->setSurfaceDrawingPrecision(surface_drawing_precision_);
 }
 

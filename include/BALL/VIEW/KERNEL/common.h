@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.36.2.11 2005/10/16 23:18:51 amoll Exp $
+// $Id: common.h,v 1.36.2.12 2005/10/17 00:43:53 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -156,14 +156,7 @@ namespace BALL
 		};
 
 		/// Mapping from the enum to the float values of Surfaces
-		float SurfaceDrawingPrecisions[4] =
-		{
-			1.5,
-			3.5,
-			6.5,
-			12
-		};
-
+		BALL_VIEW_EXPORT extern float SurfaceDrawingPrecisions[4];
 
 		/** This properties define the available models.
 				Add new model entries directly before MODEL_LABEL if you want them to show up 

@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.16 2005/10/14 11:49:53 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.17 2005/10/17 00:43:42 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -475,13 +475,12 @@ void PrimitiveManager::storeRepresentations(INIFile& out)
 	RepresentationsConstIterator it = begin();
 	for (; it != end(); it++)
 	{
-		if ((**it).getComposites().size() == 0)
-		{
-			continue;
-		}
+		// only store representations with composites!
+		if (!(**it).getComposites().size()) continue;
 
 		bool ok = true;
 
+		// we can only store reps for one system!
 		List<const Composite*>::const_iterator cit = (**it).getComposites().begin();
 		const Composite* root = &(**cit).getRoot();
 		for (; cit != (**it).getComposites().end(); cit++)
@@ -495,7 +494,7 @@ void PrimitiveManager::storeRepresentations(INIFile& out)
 
 		if (!ok) 
 		{	
-			Log.error() << "Error while writing Project File in " << __FILE__ << " " << __LINE__ << std::endl;
+			Log.error() << "Can not store a representation for items of multiple systems." << std::endl;
 			continue;
 		}
 
@@ -504,7 +503,11 @@ void PrimitiveManager::storeRepresentations(INIFile& out)
 		CompositeManager::CompositeIterator cit2 = cm.begin();
 		for (Position nr = 0; cit2 != cm.end(); cit2++)
 		{
-			if (root == *cit2) system_nr = nr;
+			if (root == *cit2) 
+			{ 
+				system_nr = nr;
+				break;
+			}
 
 			nr++;
 		}
