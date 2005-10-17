@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.21 2005/10/17 00:43:41 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.22 2005/10/17 14:50:01 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -407,12 +407,14 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 	if (new_representation)
 	{
 		// create a new Representation
-		rep_ = new Representation((ModelType)model_type_combobox->currentItem(), 
+		ModelType mt = (ModelType) model_type_combobox->currentItem();
+		rep_ = new Representation(mt,
 														 (DrawingPrecision)precision_combobox->currentItem(), 
 														 (DrawingMode)mode_combobox->currentItem());
 		rebuild_representation = true;
 
-		if (custom_precision_button->isChecked())
+		if (custom_precision_button->isChecked() &&
+				isSurfaceModel(mt))
 		{
 			rep_->setSurfaceDrawingPrecision((float)precision_slider->value() / 10.0);
 		}

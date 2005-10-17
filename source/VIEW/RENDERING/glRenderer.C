@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.21 2005/10/12 16:01:30 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.22 2005/10/17 14:50:03 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -357,6 +357,13 @@ namespace BALL
  			glColor4ub(dummy_color_.getRed(), dummy_color_.getGreen(), dummy_color_.getBlue(), dummy_color_.getAlpha());
 
 			if (representation.isHidden()) return true;
+
+			if (!representation.isValid())
+			{
+				BALLVIEW_DEBUG;
+				representation.dump(std::cout, 0);
+				return false;
+			}
 
 			drawing_precision_  = representation.getDrawingPrecision();
 			drawing_mode_ 		  = representation.getDrawingMode();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.17 2005/10/17 00:43:43 amoll Exp $
+// $Id: representation.C,v 1.62.4.18 2005/10/17 14:50:02 amoll Exp $
 //
 
 
@@ -52,7 +52,7 @@ namespace BALL
 				: PropertyManager(rp),
 					drawing_mode_(rp.drawing_mode_),
 					drawing_precision_(rp.drawing_precision_),
-					surface_drawing_precision_(rp.drawing_precision_),
+					surface_drawing_precision_(rp.surface_drawing_precision_),
 					model_type_(rp.model_type_),
 					coloring_method_(rp.coloring_method_),
 					transparency_(rp.transparency_),
@@ -227,6 +227,8 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			s << "drawing precision: " << drawing_precision_<< std::endl;
 			BALL_DUMP_DEPTH(s, depth);
+			s << "surface drawing precision: " << surface_drawing_precision_<< std::endl;
+			BALL_DUMP_DEPTH(s, depth);
 			s << "model type : " << model_type_ << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
 			s << "coloring type : " << coloring_method_ << std::endl;
@@ -250,6 +252,18 @@ namespace BALL
 		bool Representation::isValid() const
 			throw()
 		{
+			if (!isSurfaceModel(model_type_))
+			{
+				if (drawing_precision_  < 0 || drawing_precision_ > BALL_VIEW_MAXIMAL_DRAWING_PRECISION)
+				{
+					return false;
+				}
+			}
+			else
+			{
+				if (surface_drawing_precision_ < 0.1) return false;
+			}
+				
 			if (drawing_precision_  < 0 || drawing_precision_ > BALL_VIEW_MAXIMAL_DRAWING_PRECISION ||
 					drawing_mode_ 			< 0 || drawing_mode_ > BALL_VIEW_MAXIMAL_DRAWING_MODE ||
 					transparency_ 			> 255)

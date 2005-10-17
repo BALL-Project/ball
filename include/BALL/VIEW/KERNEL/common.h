@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.36.2.13 2005/10/17 14:29:38 amoll Exp $
+// $Id: common.h,v 1.36.2.14 2005/10/17 14:51:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -46,15 +46,6 @@ namespace BALL
 				\see  Server
 		*/
 		#define VIEW_DEFAULT_PORT 20000
-
-		/// Number of drawing modes
-		#define BALL_VIEW_MAXIMAL_DRAWING_MODE 3
-
-		/// Number of drawing precisions
-		#define BALL_VIEW_MAXIMAL_DRAWING_PRECISION 4
-
-		/// MAXIMAL_DRAWING_PRECISION * MAXIMAL_DRAWING_MODE
-		#define BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE  BALL_VIEW_MAXIMAL_DRAWING_PRECISION * BALL_VIEW_MAXIMAL_DRAWING_MODE
 
 		//@}
 		/** @name General enumerations, methods and typedefs
@@ -135,6 +126,8 @@ namespace BALL
 			DRAWING_MODE_SOLID
 		};
 
+		/// Number of drawing modes
+		#define BALL_VIEW_MAXIMAL_DRAWING_MODE 3
 
 		/// Enumeration for Drawing Precisions.
 		enum DrawingPrecision
@@ -151,9 +144,15 @@ namespace BALL
 			///
 			DRAWING_PRECISION_HIGH,
 
-			/// UNUSED AT THE MOMENT !
+			/// 
 			DRAWING_PRECISION_ULTRA
 		};
+		
+		/// Number of drawing precisions
+		#define BALL_VIEW_MAXIMAL_DRAWING_PRECISION 4
+
+		/// MAXIMAL_DRAWING_PRECISION * MAXIMAL_DRAWING_MODE
+		#define BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE  BALL_VIEW_MAXIMAL_DRAWING_PRECISION * BALL_VIEW_MAXIMAL_DRAWING_MODE
 
 		/// Mapping from the enum to the float values of Surfaces
 		BALL_VIEW_EXPORT extern float SurfaceDrawingPrecisions[4];
