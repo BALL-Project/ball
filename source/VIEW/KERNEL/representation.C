@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.18 2005/10/17 14:50:02 amoll Exp $
+// $Id: representation.C,v 1.62.4.19 2005/10/17 15:45:51 amoll Exp $
 //
 
 
@@ -29,7 +29,7 @@ namespace BALL
 				: PropertyManager(),
 					drawing_mode_(DRAWING_MODE_SOLID),
 					drawing_precision_(DRAWING_PRECISION_HIGH),
-					surface_drawing_precision_(-1),
+					surface_drawing_precision_(3.5),
 					model_type_(MODEL_UNKNOWN),
 					coloring_method_(COLORING_UNKNOWN),
 					transparency_(0),
@@ -93,7 +93,7 @@ namespace BALL
 				: PropertyManager(),
 					drawing_mode_(drawing_mode),
 					drawing_precision_(drawing_precision),
-					surface_drawing_precision_(-1),
+					surface_drawing_precision_(3.5),
 					model_type_(model_type),
 					transparency_(0),
 					model_processor_(0),
@@ -187,7 +187,7 @@ namespace BALL
 			model_type_ = MODEL_UNKNOWN;
 			coloring_method_ = COLORING_UNKNOWN;
 			transparency_ = 0;
-			surface_drawing_precision_ = -1;
+			surface_drawing_precision_ = 3.5;
 
 			rebuild_ = true;
 			hidden_ = false;
@@ -471,14 +471,8 @@ namespace BALL
 			
 			if (model_processor_ != 0) 
 			{
-				if (surface_drawing_precision_ >= 0.1)
-				{
-					model_processor_->setSurfaceDrawingPrecision(surface_drawing_precision_);
-				}
-				else
-				{
-					model_processor_->setDrawingPrecision(drawing_precision_);
-				}
+				model_processor_->setSurfaceDrawingPrecision(surface_drawing_precision_);
+				model_processor_->setDrawingPrecision(drawing_precision_);
 			}
 
 			changed_color_processor_ = true;

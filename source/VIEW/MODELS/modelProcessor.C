@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.C,v 1.12.2.1 2005/10/17 00:43:43 amoll Exp $
+// $Id: modelProcessor.C,v 1.12.2.2 2005/10/17 15:45:52 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -60,7 +60,6 @@ namespace BALL
 			throw() 
 		{ 
 			drawing_precision_ = precision;
-			surface_drawing_precision_ = -1;
 		}
 
 		Index ModelProcessor::getDrawingPrecision() const
@@ -73,7 +72,6 @@ namespace BALL
 			throw() 
 		{ 
 			surface_drawing_precision_ = precision;
-			drawing_precision_ = DRAWING_PRECISION_INVALID;
 		}
 
 		float ModelProcessor::getSurfaceDrawingPrecision() const

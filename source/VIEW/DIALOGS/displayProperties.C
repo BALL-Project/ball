@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.22 2005/10/17 14:50:01 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.23 2005/10/17 15:45:50 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -371,6 +371,11 @@ void DisplayProperties::applyModelSettings_(Representation& rep)
 	else
 	{
 		rep.setDrawingPrecision((DrawingPrecision) precision_combobox->currentItem());
+
+		if (isSurfaceModel(current_type))
+		{
+			rep.setSurfaceDrawingPrecision(SurfaceDrawingPrecisions[precision_combobox->currentItem()]);
+		}
 	}
 
 	model_settings_->applySettingsTo(*rep.getModelProcessor());
@@ -404,19 +409,25 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 	bool rebuild_representation = false;
 	bool new_representation = (rep_ == 0);
 
+	ModelType mt = (ModelType) model_type_combobox->currentItem();
+	DrawingPrecision dp = (DrawingPrecision)precision_combobox->currentItem();
+
 	if (new_representation)
 	{
 		// create a new Representation
-		ModelType mt = (ModelType) model_type_combobox->currentItem();
-		rep_ = new Representation(mt,
-														 (DrawingPrecision)precision_combobox->currentItem(), 
-														 (DrawingMode)mode_combobox->currentItem());
+		rep_ = new Representation(mt, dp, (DrawingMode)mode_combobox->currentItem());
 		rebuild_representation = true;
 
-		if (custom_precision_button->isChecked() &&
-				isSurfaceModel(mt))
+		if (isSurfaceModel(mt))
 		{
-			rep_->setSurfaceDrawingPrecision((float)precision_slider->value() / 10.0);
+			if (custom_precision_button->isChecked())
+			{
+				rep_->setSurfaceDrawingPrecision((float)precision_slider->value() / 10.0);
+			}
+			else
+			{
+				rep_->setSurfaceDrawingPrecision(SurfaceDrawingPrecisions[dp]);
+			}
 		}
 
 		List<const Composite*> temp_composites;
@@ -447,9 +458,7 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 	}
 	else
 	{
-		rebuild_representation = 
-			(rep_->getModelType() != model_type_combobox->currentItem() ||
-			 advanced_options_modified_);
+		rebuild_representation = (rep_->getModelType() != mt | advanced_options_modified_);
 
 		if (custom_precision_button->isChecked())
 		{
@@ -460,11 +469,11 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 		}
 		else
 		{
-			rebuild_representation |= 
- 				(rep_->getDrawingPrecision() != (DrawingPrecision) precision_combobox->currentItem());
+			rebuild_representation |= (rep_->getDrawingPrecision() != dp);
 		}
 	}
 
+Log.error() << "#~~#   3 "  << rebuild_representation           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	Size transparency = (Size)(transparency_slider->value() * 2.55);
 
 	if (coloring_updates_enabled->isChecked())
@@ -566,33 +575,38 @@ void DisplayProperties::precisionBoxChanged(int index)
 void DisplayProperties::checkDrawingPrecision_()
 	throw()
 {
-	if (!modelMuteableByDisplayProperties((ModelType)model_type_combobox->currentItem()))
+	ModelType mt = (ModelType)model_type_combobox->currentItem();
+
+	if (!modelMuteableByDisplayProperties(mt) ||
+	    !model_updates_enabled->isChecked())
 	{
 		return;
 	}
 
-	if (!isSurfaceModel((ModelType)model_type_combobox->currentItem()))
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+	bool is_surface = isSurfaceModel(mt);
+	custom_precision_button->setEnabled(is_surface);
+	precision_slider->setEnabled(is_surface);
+
+	if (!is_surface)
 	{
 		presets_precision_button->setChecked(true);
-		custom_precision_button->setEnabled(false);
-		precision_slider->setEnabled(false);
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	}
-	else
-	{
-		precision_slider->setEnabled(model_updates_enabled->isChecked());
-		custom_precision_button->setEnabled(true);
-		if (rep_ == 0) return;
+
+	if (rep_ == 0) return;
 		
-		if (rep_->getSurfaceDrawingPrecision() != -1)
-		{
-			custom_precision_button->setChecked(true);
-			setSurfaceDrawingPrecision(rep_->getSurfaceDrawingPrecision());
-		}
-		else
-		{
-			rep_->setSurfaceDrawingPrecision(-1);
-			precisionBoxChanged(precision_combobox->currentItem());
-		}
+	if (is_surface &&
+			rep_->getSurfaceDrawingPrecision() != -1)
+	{
+		custom_precision_button->setChecked(true);
+		setSurfaceDrawingPrecision(rep_->getSurfaceDrawingPrecision());
+		return;
+	}
+	
+	if (rep_->getDrawingPrecision() != DRAWING_PRECISION_INVALID)
+	{
+		setDrawingPrecision(rep_->getDrawingPrecision());
 	}
 }
 
@@ -673,8 +687,9 @@ void DisplayProperties::setSurfaceDrawingPrecision(float value)
 {
 	if (value < 0.1) return;
 	precision_slider->setValue((int)(value * 10.0));
-	presets_precision_button->setChecked(false);
-	custom_precision_button->setChecked(true);
+	
+	ModelType mt = (ModelType) model_type_combobox->currentItem();
+	custom_precision_button->setChecked(isSurfaceModel(mt));	
 }
 		
 void DisplayProperties::setDrawingPrecision(int value)
@@ -682,7 +697,6 @@ void DisplayProperties::setDrawingPrecision(int value)
 	precision_combobox->setCurrentItem(value);
 	precisionBoxChanged(value);
 	presets_precision_button->setChecked(true);
-	custom_precision_button->setChecked(false);
 }
 
 void DisplayProperties::setTransparency(int value)
