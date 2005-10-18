@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.28 2005/10/15 15:46:32 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.29 2005/10/18 11:11:15 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -425,91 +425,6 @@ namespace BALL
 		}
 
 
-		void ModifySurfaceDialog::saveSettings_()
-		{
-			if (!configs_.has(rep_))
-			{
-				configs_[rep_] = ColoringConfig();
-			}
-			ColoringConfig& config = configs_[rep_];
-
-			setColor_(config.min_min_color, min_min_label, min_min_alpha, alpha_button_grid);
-			setColor_(config.min_color, min_label, min_alpha, alpha_button_grid);
-			setColor_(config.mid_color, mid_label, mid_alpha, alpha_button_grid);
-			setColor_(config.max_color, max_label, max_alpha, alpha_button_grid);
-			setColor_(config.max_max_color, max_max_label, max_max_alpha, alpha_button_grid);
-
-			config.min_value = String(min_box->text().ascii()).toFloat();
-			config.mid_value = String(mid_box->text().ascii()).toFloat();
-			config.max_value = String(max_box->text().ascii()).toFloat();
-
-			config.number_of_levels = levels_box->value();
-
-			config.transparency = 0;
-			if (surface_tab->currentPage() == by_grid)
-			{
-				config.tab = 0;
-				if (transparency_group_grid->selected() == none_button_grid)
-				{
-					config.transparency = 0;
-				}
-				else
-				{
-					config.transparency = 2;
-				}
-			}
-			else if (surface_tab->currentPage() == by_color)
-			{
-				config.tab = 1;
-			}
-			else
-			{
-				config.tab = 2;
-			}
-		}
-
-
-		void ModifySurfaceDialog::loadSettings_()
-		{
-			if (!configs_.has(rep_))
-			{
-				return;
-			}
-			ColoringConfig& config = configs_[rep_];
-
-			getColor_(config.min_min_color, min_min_label, min_min_alpha);
-			getColor_(config.min_color, min_label, min_alpha);
-			getColor_(config.mid_color, mid_label, mid_alpha);
-			getColor_(config.max_color, max_label, max_alpha);
-			getColor_(config.max_max_color, max_max_label, max_max_alpha);
-
-			min_box->setText(String(config.min_value).c_str());
-			mid_box->setText(String(config.mid_value).c_str());
-			max_box->setText(String(config.max_value).c_str());
-
-			levels_box->setValue(config.number_of_levels);
-
-
-			surface_tab->setCurrentPage(config.tab);
-
-			if (config.tab == 0)
-			{
-				if (config.transparency == 0)
-				{
-					none_button_grid->setEnabled(true);
-				}
-				else if (config.transparency == 1)
-				{
-					alpha_button_grid->setEnabled(true);
-				}
-			}
-			else if (config.tab == 1)
-			{
-			}
-					
-			QWidget::update();
-		}
-
 		void ModifySurfaceDialog::checkApplyButton_()
 		{
 			if (!rep_ || !mesh_)
@@ -562,11 +477,11 @@ namespace BALL
 
 			RegularData3DMessage *rm = RTTI::castTo<RegularData3DMessage>(*message);
 
-			if 			(rm->getType() == RegularData3DMessage::NEW)
+			if 			((Index)rm->getType() == (Index)RegularData3DMessage::NEW)
 			{
 				insertGrid_(*rm->getData(), rm->getCompositeName());
 			}
-			else if (rm->getType() == RegularData3DMessage::REMOVE)
+			else if ((Index)rm->getType() == (Index)RegularData3DMessage::REMOVE)
 			{
 				removeGrid_(*rm->getData());
 			}
@@ -983,5 +898,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
- 
 } // namespace BALL

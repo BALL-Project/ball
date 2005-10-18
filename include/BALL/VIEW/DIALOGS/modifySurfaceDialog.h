@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.h,v 1.1.2.8 2005/09/01 22:17:47 amoll Exp $
+// $Id: modifySurfaceDialog.h,v 1.1.2.9 2005/10/18 11:11:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
@@ -51,19 +51,6 @@ namespace BALL
 			public:
 
 			BALL_EMBEDDABLE(ModifySurfaceDialog, ModularWidget)
-
-			///
-			class ColoringConfig
-			{
-				public:
-
-				ColorRGBA min_min_color, min_color, mid_color, max_color, max_max_color, custom_color;
-				float min_value, mid_value, max_value;
-				Size number_of_levels;
-				Position transparency;
-				Position tab;
-				String selected_grid;
-			};
 
 			///
 			ModifySurfaceDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
@@ -126,8 +113,6 @@ namespace BALL
 			void setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box, 
 										 const QRadioButton* rbutton);
 			void getColor_(const ColorRGBA& color, QLabel* label, QSpinBox* box);
-			void saveSettings_();
-			void loadSettings_();
 			void invalidateGrid_() throw();
 			void invalidateMesh_() throw();
 			void calculateValues_();
@@ -146,7 +131,6 @@ namespace BALL
 
 			ColorRGBA	 	selected_color, min_min_color, min_color, mid_color, max_color, max_max_color;	
 
-			HashMap<Representation*, ColoringConfig> configs_;
 			Mesh* mesh_;		
 			Representation* rep_;
 			List<RegularData3D*> grid_list_;
