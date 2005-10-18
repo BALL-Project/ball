@@ -959,6 +959,27 @@ namespace BALL
   void GeometricFit::start()
     throw()
   {
+		cerr << "in GeometricFit::start() " << __FILE__ << " " << __LINE__ << std::endl;
+		cerr << "Options:\n";
+		cerr << "NEAR_RADIUS " << options.getReal(Option::NEAR_RADIUS) << std::endl;
+		cerr << "GRID_SPACING " << options.getReal(Option::GRID_SPACING) << std::endl;
+		cerr << "GRID_SIZE " << options.getInteger(Option::GRID_SIZE) << std::endl;
+		cerr << "SURFACE_THICKNESS " << options.getReal(Option::SURFACE_THICKNESS) << std::endl;
+		cerr << "DEGREE_INTERVAL " << options.getReal(Option::DEGREE_INTERVAL) << std::endl;
+		cerr << "SURFACE_TYPE " << options.getInteger(Option::SURFACE_TYPE) << std::endl;
+		cerr << "TOP_N " << options.getInteger(Option::TOP_N) << std::endl;
+		cerr << "BEST_NUM " << options.getInteger(Option::BEST_NUM) << std::endl;
+		cerr << "VERBOSITY " << options.getInteger(Option::VERBOSITY) << std::endl;
+		cerr << "PHI_MIN " << options.getReal(Option::PHI_MIN) << std::endl;
+		cerr << "PHI_MAX " << options.getReal(Option::PHI_MAX) << std::endl;
+		cerr << "DEG_PHI " << options.getReal(Option::DEG_PHI) << std::endl;
+		cerr << "PSI_MIN " << options.getReal(Option::PSI_MIN) << std::endl;
+		cerr << "PSI_MAX " << options.getReal(Option::PSI_MAX) << std::endl;
+		cerr << "DEG_PSI " << options.getReal(Option::DEG_PSI) << std::endl;
+		cerr << "THETA_MIN " << options.getReal(Option::THETA_MIN) << std::endl;
+		cerr << "THETA_MAX " << options.getReal(Option::THETA_MAX) << std::endl;
+		cerr << "DEG_THETA " << options.getReal(Option::DEG_THETA) << std::endl;
+		cerr << "--------------------------\n";
 		DockingAlgorithm::start();
 	
 		int verbosity = options.getInteger(Option::VERBOSITY);
@@ -1077,17 +1098,23 @@ namespace BALL
 		{
    		Log << "Number of rotations to compute: " << rotation_num << endl;
 		}
-   
+   	cerr << "bla " << __FILE__ << " " << __LINE__ << std::endl;
     Timer loop_timer;
-    loop_timer.start();
+   	cerr << "bla " << __FILE__ << " " << __LINE__ << std::endl;
+		loop_timer.start();
+		cerr << "bla " << __FILE__ << " " << __LINE__ << std::endl;
 
 		// TODO: Use a vector
+		cerr << "top_n1 " << options[Option::TOP_N] << std::endl;
+		cerr.flush();
+		cerr << "top_n2 " << options.getInteger(Option::TOP_N) << std::endl;
+		cerr.flush();
 		Peak_* top_n_peaks = new Peak_[options.getInteger(Option::TOP_N)];
-	 
+		if(!top_n_peaks) cerr << "NULL" << __FILE__ << " " << __LINE__ << std::endl;
 		double phi, theta, psi; // phi: around x axis, 
 														// theta: around y axis, 
                             // psi: around z axis;
-
+		cerr << "before for " << __FILE__ << " " << __LINE__ << std::endl;
 		for (current_round_ = 0; (current_round_ < rotation_num) && !abort_; current_round_++)
 		{
 			// TODO: we should check if pause_ is true and sleep than for a given time
@@ -1095,12 +1122,15 @@ namespace BALL
 			/**while (pause_)
 			{ pause(10); };
 			   **/
-				 
+	//		cerr << "bla " << __FILE__ << " " << __LINE__ << std::endl;	 
 			phi   = rotAng.getXAng(current_round_);
+	//		cerr << "bla " << __FILE__ << " " << __LINE__ << std::endl;
 			theta = rotAng.getYAng(current_round_);
+		//	cerr << "bla " << __FILE__ << " " << __LINE__ << std::endl;
 			psi   = rotAng.getZAng(current_round_);
-     
+     //	cerr << "bla " << __FILE__ << " " << __LINE__ << std::endl;
       loop_timer.reset();
+		//	cerr << "bla " << __FILE__ << " " << __LINE__ << std::endl;
 			if (verbosity > 10)
 			{
 		  	Log << "rotation = " << phi << ";" << theta << ";" << psi << endl;
@@ -1175,15 +1205,16 @@ namespace BALL
 			}
 
 		} // loop for all conformations
-
+		cerr << "after for " << __FILE__ << " " << __LINE__ << std::endl;
 
 		if( top_n_peaks != NULL )
 		{
+			cerr << "delete top_n_peaks " << __FILE__ << " " << __LINE__ << std::endl;
 			delete [] top_n_peaks;
 			top_n_peaks = NULL;
 		}
 
-
+		cerr << "end " << __FILE__ << " " << __LINE__ << std::endl;
 		if (verbosity > 5)
 		{
 			cout << "CPU time needed for docking: " << overall_timer.getCPUTime() << endl;
