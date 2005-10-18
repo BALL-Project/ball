@@ -76,7 +76,7 @@
 				OmitFramePointers="TRUE"
 				OptimizeForWindowsApplication="FALSE"
 				AdditionalIncludeDirectories="&quot;$(PYTHONDIR)\include&quot;;&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;;&quot;$(QTDIR)\include&quot;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;YY_NEVER_INTERACTIVE;BALL_VIEW_BUILD_DLL"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;YY_NEVER_INTERACTIVE;BALL_VIEW_BUILD_DLL;BALL_QT_HAS_THREADS;QT_THREAD_SUPPORT"
 				StringPooling="TRUE"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
@@ -464,9 +464,6 @@
 					Name="RENDERING">
 					<File
 						RelativePath="..\..\..\source\View\Rendering\glDisplayList.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\View\Rendering\glQuadricObject.C">
 					</File>
 					<File
 						RelativePath="..\..\..\source\View\Rendering\glRenderer.C">
