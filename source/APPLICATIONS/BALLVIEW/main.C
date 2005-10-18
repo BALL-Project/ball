@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.18.2.1 2005/08/02 12:15:52 amoll Exp $
+// $Id: main.C,v 1.18.2.2 2005/10/18 23:28:00 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -29,6 +29,10 @@ void myMessageOutput( QtMsgType type, const char *msg )
 				abort();                    // deliberately core dump
 	}
 }
+
+
+// uncomment this to use debugging to std::cout!
+//#undef BALL_PLATFORM_WINDOWS
 
 #ifndef BALL_PLATFORM_WINDOWS
 int main(int argc, char **argv)
