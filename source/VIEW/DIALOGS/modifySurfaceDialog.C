@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.29 2005/10/18 11:11:15 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.30 2005/10/19 12:35:07 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -228,19 +228,19 @@ namespace BALL
 		{
 			if (grid_ == 0) return;
 
-			min_value_  = Limits<float>::max();
-			max_value_  = Limits<float>::min(); 
+			min_value_  = 0;
+			max_value_  = 0;
 			mid_value_  = 0;
+
+			float extr = 0;
+			float value = 0;
 
 			try
 			{
 				for(Position p = 0; p < mesh_->vertex.size(); p++)
 				{
-					const float& value = grid_->getInterpolatedValue(mesh_->vertex[p]);
-
-					mid_value_ += value;
-					if (value < min_value_) min_value_ = value;
-					if (value > max_value_) max_value_ = value;
+					value = fabs(grid_->getInterpolatedValue(mesh_->vertex[p]));
+					if (value > extr) extr = value;
 				}
 			}
 			catch(Exception::OutOfGrid)
@@ -249,7 +249,8 @@ namespace BALL
 				return;
 			}
 
-			mid_value_ /= mesh_->vertex.size();
+			min_value_  = -extr;
+			max_value_  = +extr;
 
 			apply_button->setEnabled(true);
 			autoscale->setEnabled(true);
