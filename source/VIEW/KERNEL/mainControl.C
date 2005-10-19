@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.36 2005/10/14 13:19:48 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.37 2005/10/19 22:09:04 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -15,6 +15,7 @@
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 
 #include <BALL/KERNEL/system.h>
@@ -820,11 +821,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				setWorkingDir(inifile.getValue("WINDOWS", "File::working_dir"));
 			}
 
-			if (inifile.hasEntry("WINDOWS", "File::enable_logging_file"))
-			{
-				enableLoggingToFile();
-			}
-
 			restoreWindows(inifile);
 			
 			preferences_dialog_->fetchPreferences(inifile);
@@ -847,11 +843,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			inifile.insertValue("WINDOWS", "Main::width", String(width()));
 	 		inifile.insertValue("WINDOWS", "Main::height", String(height()));
 			inifile.insertValue("WINDOWS", "File::working_dir", working_dir_);
-
-			if (logging_to_file_) 
-			{
-				inifile.insertValue("WINDOWS", "File::enable_logging_file", 1);
-			}
 
 			QString s;
 			QTextStream stream( &s, IO_ReadWrite);
@@ -1808,6 +1799,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		fetchPreferences(in);
+		applyPreferences();
 
 		bool has_dp = (DisplayProperties::getInstance(0) != 0);
 
@@ -1848,6 +1840,13 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		if (in.hasEntry("BALLVIEW_PROJECT", "Camera"))
 		{
 			Stage stage;
+
+			Scene* scene = Scene::getInstance(0);
+			if (scene != 0)
+			{
+				stage = *Scene::getInstance(0)->getStage();
+			}
+
 			Camera c;
 			if (!c.readFromString(in.getValue("BALLVIEW_PROJECT", "Camera")))
 			{
