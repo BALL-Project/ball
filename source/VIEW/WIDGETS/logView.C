@@ -83,7 +83,6 @@ namespace BALL
 			char c;
 			strstream_.get(c);
 
-			text_edit_->setUpdatesEnabled(false);
 			String line;
 			while (strstream_.gcount() > 0)
 			{
@@ -98,8 +97,6 @@ namespace BALL
 				text_edit_->append(line.c_str());
 				text_edit_->scrollToBottom();
 			}
-
-			text_edit_->setUpdatesEnabled(true);
 
 			output_running_ = false;
 			return true;
