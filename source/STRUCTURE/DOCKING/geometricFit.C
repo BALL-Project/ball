@@ -33,7 +33,7 @@
 using namespace std;
 
 // TODO???? Fix it! :)
-typedef std::complex<double> Complex;
+   typedef std::complex<double> Complex;
 //typedef std::complex<float> Complex;
 
 namespace BALL
@@ -314,6 +314,7 @@ namespace BALL
     {
       for(list<int>::iterator it = size_list.begin(); it!=size_list.end(); it++)
       {
+				// todo: is this really necessary: ?
 				list<int>::iterator temp_it = it;
 				temp_it++;
 
@@ -1357,10 +1358,13 @@ namespace BALL
 		throw()
 	: max_rotation_(50000),
 		ang_num_(0),
-		phi_(max_rotation_),
-		theta_(max_rotation_),
-		psi_(max_rotation_)
+		phi_(),
+		theta_(),
+		psi_()
 	{
+		phi_.reserve(max_rotation_);
+		theta_.reserve(max_rotation_);
+		psi_.reserve(max_rotation_);
 	}
 
 	/** RotationAngles_ class
@@ -1370,10 +1374,14 @@ namespace BALL
 		throw()
 	: max_rotation_(50000),
 		ang_num_(0),
-		phi_(max_rotation_),
-		theta_(max_rotation_),
-		psi_(max_rotation_)
+		phi_(),
+		theta_(),
+		psi_()
 	{
+		phi_.reserve(max_rotation_);
+		theta_.reserve(max_rotation_);
+		psi_.reserve(max_rotation_);
+
 		generateAllAngles( step );
 	}
 
@@ -1464,10 +1472,17 @@ namespace BALL
 
 					if( !degenerate )
 					{
-						phi_[ang_num_]   = phi_min + phiphi * deg_phi;
-						theta_[ang_num_] = theta_min + thetatheta * deg_theta;
-						psi_[ang_num_]   = psi_min + psipsi * deg_psi;
+						phi_.push_back((Index)(phi_min + phiphi * deg_phi));
+						theta_.push_back((Index)(theta_min + thetatheta * deg_theta));
+						psi_.push_back((Index)(psi_min + psipsi * deg_psi));
 						ang_num_ ++;
+
+						/*
+						if (ang_num_ % 1000 == 0)
+						{
+							Log.info() << "Calculated angle step: " << ang_num_ << std::endl;
+						}
+						*/
 					}
 
 				}
@@ -1556,9 +1571,9 @@ namespace BALL
 
 					if( !degenerate )
 					{
-						phi_[ang_num_]   = phiphi;
-						theta_[ang_num_] = thetatheta;
-						psi_[ang_num_]   = psipsi;
+						phi_.push_back(phiphi);
+						theta_.push_back(thetatheta);
+						psi_.push_back(psipsi);
 						ang_num_ ++;
 					}
 
