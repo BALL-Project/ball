@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.11.8.3 2005/09/01 22:18:05 amoll Exp $
+// $Id: logView.h,v 1.11.8.4 2005/10/20 19:45:53 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -69,7 +69,7 @@ namespace BALL
 		*/
 		class BALL_VIEW_EXPORT LogView
 			: public DockWidget,
-			  public NotificationTarget<LogStreamNotifier>
+			  public LogStreamNotifier
 		{
 			Q_OBJECT
 
@@ -128,15 +128,12 @@ namespace BALL
 					\param   source the notification source
 					\return  bool returns always <tt>true</tt>
 			*/
-			virtual bool onNotify(LogStreamNotifier &source)
-				throw();
+			void logNotify();
 
 			private:
 
 
 			QTextEdit* text_edit_;
-
-			std::stringstream strstream_;
 
 			bool output_running_;
 		};
