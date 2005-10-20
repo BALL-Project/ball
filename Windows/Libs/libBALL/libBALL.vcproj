@@ -545,33 +545,6 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\CONCEPT\notification.C">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\..\..\source\CONCEPT\object.C">
 					<FileConfiguration
 						Name="Debug|Win32">
