@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.h,v 1.31.4.2 2005/07/28 13:50:30 amoll Exp $
+// $Id: logStream.h,v 1.31.4.3 2005/10/20 19:44:16 amoll Exp $
 //
 
 #ifndef BALL_COMMON_LOGSTREAM_H
@@ -25,6 +25,12 @@
 
 #ifdef BALL_HAS_TIME_H
 #	include <time.h>
+#endif
+
+#ifdef BALL_HAS_SSTREAM
+# include <sstream>
+#else
+# include <strstream>
 #endif
 
 #include <iostream>
@@ -67,24 +73,7 @@ namespace BALL
 
 	// forward declarations
 	class LogStream;
-
-	template <typename T>
-	class NotificationTarget;
-
-	
-	class BALL_EXPORT LogStreamNotifier
-	{
-		public:
-		
-		LogStreamNotifier();
-			
-		LogStreamNotifier(const NotificationTarget<LogStreamNotifier>& target);
-		
-		~LogStreamNotifier();
-
-		void notify() const;
-	};
-
+	class LogStreamNotifier;
 
 	/** Stream buffer used by LogStream.
 			This class implements the low level behaviour of
@@ -173,7 +162,7 @@ namespace BALL
 		virtual int overflow(int c = -1);
 		//@}
 
-		BALL_EXPORT struct Stream 
+		BALL_EXPORT struct StreamStruct
 		{
 			std::ostream*				stream;
 			string							prefix;
@@ -181,7 +170,7 @@ namespace BALL
 			int									max_level;
 			LogStreamNotifier*	target;
 		
-			Stream()
+			StreamStruct()
 				:	stream(0),
 					min_level(MIN_LEVEL),
 					max_level(MAX_LEVEL),
@@ -190,14 +179,11 @@ namespace BALL
 			}
 			
 			// Delete the notification target.
-			~Stream()
+			~StreamStruct()
 			{
-				delete target;
 			}
 		};
 
-		typedef struct Stream StreamStruct;
-		
 
 		protected:
 
@@ -234,6 +220,36 @@ namespace BALL
 	};
 
 
+	///
+	class BALL_EXPORT LogStreamNotifier
+	{
+		public:
+		
+		///
+		LogStreamNotifier();
+			
+		///
+		virtual ~LogStreamNotifier();
+
+		///
+		virtual void logNotify();
+
+		///
+		void registerAt(LogStream& log_stream,
+										int min_level = LogStreamBuf::MIN_LEVEL, 
+										int max_level = LogStreamBuf::MAX_LEVEL);
+		///
+		void unregister();
+
+		protected:
+
+		std::stringstream stream_;
+
+		LogStream* registered_at_;
+	};
+
+
+
 	/**	Log Stream Class.
 			 \par
 			
@@ -244,14 +260,6 @@ namespace BALL
 	{
 		public:
 
-		/**	@name	Type definitions
-		*/
-		//@{
-			
-		/**
-		*/
-		typedef NotificationTarget<LogStreamNotifier>	Target;
-		//@}
 
 		/**	@name Enums
 		*/
@@ -394,7 +402,7 @@ namespace BALL
 		*/
 		void insert
 			(std::ostream& s, int min_level = LogStreamBuf::MIN_LEVEL, 
-			 int MAX_LEVEL = LogStreamBuf::MAX_LEVEL);
+			 int max_level = LogStreamBuf::MAX_LEVEL);
 
 		/**	Remove an association with a stream.
 				Remove a stream from the stream list and avoid the copying of new messages to
@@ -405,13 +413,12 @@ namespace BALL
 		*/
 		void remove(std::ostream& s);
 
-		/**	Add a notification target for the stream.	
+		/**	Add a notification target
 		*/
-		void insertNotification(const std::ostream& s, const Target& target);
-
-		/**	Remove a notification target for the stream.
-		*/
-		void removeNotification(const std::ostream& s);
+		void insertNotification(std::ostream& s, 
+														LogStreamNotifier& target,
+														int min_level = LogStreamBuf::MIN_LEVEL, 
+														int max_level = LogStreamBuf::MAX_LEVEL);
 
 		/**	Set the minimum log level of an associated stream.
 				This method changes the minimum log level of an already
@@ -524,6 +531,12 @@ namespace BALL
 		//@}
 
 		private:
+
+		typedef std::list<LogStreamBuf::StreamStruct>::iterator StreamIterator;
+		
+		StreamIterator findStream_(const std::ostream& stream);
+		bool hasStream_(std::ostream& stream);
+		bool bound_() const;
 
 		// flag needed by the destructor to decide whether the streambuf
 		// has to be deleted. If the default ctor is used to create
