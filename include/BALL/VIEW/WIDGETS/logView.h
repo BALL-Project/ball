@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.11.8.4 2005/10/20 19:45:53 amoll Exp $
+// $Id: logView.h,v 1.11.8.5 2005/10/20 20:09:53 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -27,10 +27,6 @@
 
 #ifndef QTEXTEDIT_H
 # include <qtextedit.h>
-#endif
-
-#ifndef BALL_CONCEPT_NOTIFICATION_h
-# include <BALL/CONCEPT/notification.h>
 #endif
 
 #ifndef BALL_VIEW_WIDGETS_DOCKWIDGET_H
