@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LogStream_test.C,v 1.22.4.3 2005/10/21 12:59:46 amoll Exp $
+// $Id: LogStream_test.C,v 1.22.4.4 2005/10/21 13:01:01 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(LogStream, "$Id: LogStream_test.C,v 1.22.4.3 2005/10/21 12:59:46 amoll Exp $")
+START_TEST(LogStream, "$Id: LogStream_test.C,v 1.22.4.4 2005/10/21 13:01:01 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -158,13 +158,6 @@ CHECK(void insertNotification())
 	TEST_EQUAL(target.notified, false)
 	l1 << "test" << std::endl;
 	TEST_EQUAL(target.notified, true)
-
-	cout << NotificationManager().isEnabled() << " asdddd" <<std::endl;
-	cout << NotificationManager().isInserted((void*)&os) << " a" <<std::endl;
-	cout << NotificationManager().isInserted((void*)&target) << " as" <<std::endl;
-	cout << NotificationManager().isInserted(&os, &target) << " asdddd" <<std::endl;
-	cout << NotificationManager().number_of_targets_ << " d" <<std::endl;
-	cout << NotificationManager().number_of_slots_<< " dd" <<std::endl;
 RESULT
 
 CHECK(removeNotification)
