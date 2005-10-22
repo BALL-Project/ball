@@ -52,37 +52,14 @@ LabelDialog::~LabelDialog()
 void LabelDialog::fetchPreferences(INIFile& inifile)
 	throw()
 {
-	// 
-	// the geometry of the main window
-	//
-	int x_pos = x();
-	int y_pos = y();
+	ModularWidget::fetchPreferences(inifile);
 
-	if (inifile.hasEntry("WINDOWS", "Label::x"))
-	{
-		x_pos = inifile.getValue("WINDOWS", "Label::x").toInt();
-	}
-	if (inifile.hasEntry("WINDOWS", "Label::y"))
-	{
-		y_pos = inifile.getValue("WINDOWS", "Label::y").toInt();
-	}
-
-	move(x_pos, y_pos);
-
-	// 
 	// the color value
-	//
-
 	if (inifile.hasEntry("WINDOWS", "Label::customcolor"))
 	{
 		custom_color_.set(inifile.getValue("WINDOWS", "Label::customcolor"));
 		color_sample_->setBackgroundColor(custom_color_.getQColor());
 	}
-	else
-	{
-		custom_color_.set(ColorRGBA(1.,1.,0.,1.));
-		color_sample_->setBackgroundColor(custom_color_.getQColor());
-	}			
 
 	if (inifile.hasEntry("WINDOWS", "Label::font"))
 	{
@@ -100,19 +77,12 @@ void LabelDialog::fetchPreferences(INIFile& inifile)
 		all_items->setChecked(inifile.getValue("WINDOWS", "Label::manylabels").toBool());
 		every_item->setChecked(!inifile.getValue("WINDOWS", "Label::manylabels").toBool());
 	}
-	else
-	{
-		all_items->setChecked(true);
-		every_item->setChecked(false);
-	}
 }
 
 void LabelDialog::writePreferences(INIFile& inifile)
 	throw()
 {
-	// the label window position
-	inifile.insertValue("WINDOWS", "Label::x", String(x()));
-	inifile.insertValue("WINDOWS", "Label::y", String(y()));
+	ModularWidget::writePreferences(inifile);
 
 	// the color value
 	inifile.insertValue("WINDOWS", "Label::customcolor", custom_color_);
