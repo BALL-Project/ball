@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.32.2.9 2005/10/12 15:18:27 amoll Exp $
+// $Id: glRenderer.h,v 1.32.2.10 2005/10/22 13:54:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -142,10 +142,14 @@ namespace BALL
 			GeometricObject* getObject(GLRenderer::Name name) const
 				throw();
 
-			/** Initialise the display lists.
+			/** Initialise the renderer, by calling the init method below
 			 		This method is called by Scene::initializeGL.
 			*/
-			virtual bool init(const Stage& stage, float width, float height)
+			virtual bool init(Scene& scene)
+				throw();
+
+			/// Initialise the renderer, e.g. the display lists.
+			virtual bool init(const Stage& stage, float height, float width)
 				throw();
 
 			/// Set the light sources according to the stage
@@ -340,10 +344,6 @@ namespace BALL
 				throw();
 
 			//_
-			GLubyte* generateBitmapFromText_(const String& text, const QFont& font, int& width, int& height) const
-				throw();
-
-			//_
 			void createSpheres_()
 				throw();
 			
@@ -408,6 +408,8 @@ namespace BALL
 				throw();
 
 			void initGLU_(DrawingMode mode);
+
+			Scene* 								scene_;
 
 			///
 			DrawingMode 					drawing_mode_;

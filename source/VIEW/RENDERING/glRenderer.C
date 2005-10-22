@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.22 2005/10/17 14:50:03 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.23 2005/10/22 13:54:26 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 
+#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
@@ -21,11 +22,7 @@
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 
 #include <BALL/SYSTEM/timer.h>
-#include <BALL/KERNEL/system.h>
-
-#include <qfont.h>
-#include <qpainter.h>
-#include <qimage.h>
+#include <BALL/KERNEL/atom.h>
 
 using namespace std;
 
@@ -39,6 +36,7 @@ namespace BALL
 		GLRenderer::GLRenderer()
 			throw()
 			: Renderer(),
+				scene_(0),
 				drawing_mode_(DRAWING_MODE_SOLID),
 				drawing_precision_(DRAWING_PRECISION_HIGH),
 				GL_spheres_list_(0),
@@ -87,10 +85,30 @@ namespace BALL
 			last_color_ = &dummy_color_;
 		}
 
-		bool GLRenderer::init(const Stage& stage, float width, float height)
+		bool GLRenderer::init(Scene& scene)
 			throw()
 		{
-			Renderer::init(stage, width, height);
+			scene_ = &scene;
+
+			Stage* stage = scene.getStage();
+			if (stage == 0)
+			{
+				init(Stage(), scene.width(), scene.height());
+			}
+			else
+			{
+				init(*stage, scene.width(), scene.height());
+			}
+
+			return true;
+		}
+
+
+		bool GLRenderer::init(const Stage& stage, float height, float width)
+			throw()
+		{
+			Renderer::init(stage, height, width);
+
 			glColor4ub(dummy_color_.getRed(), dummy_color_.getGreen(), 
 								 dummy_color_.getBlue(), dummy_color_.getAlpha());
 			last_color_ = &dummy_color_;
@@ -480,19 +498,21 @@ namespace BALL
 			translateVector3_(sphere.getPosition());
 			scale_(sphere.getRadius());
 
-			if (model_type_ == MODEL_STICK)
+			// render spheres of stick models with less precision for atoms with 
+			// more than 2 bonds:
+			if (model_type_ == MODEL_STICK &&
+					drawing_precision_ > DRAWING_PRECISION_LOW)
 			{
 				Index precision = drawing_precision_;
-				const Composite* const composite = sphere.getComposite();
-				if (composite != 0 && ((Atom*)composite)->countBonds() > 2)
+				const Atom* const atom = dynamic_cast<const Atom*>(sphere.getComposite());
+
+				if (atom != 0 && atom->countBonds() > 2)
 				{
-					if (precision > DRAWING_PRECISION_LOW)
-					{
-						precision--;
-					}
+					precision--;
 				}
+
 				GL_spheres_list_[drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 
-													 precision].draw();
+												 precision].draw();
 			}
 			else
 			{
@@ -546,25 +566,19 @@ namespace BALL
 		void GLRenderer::renderLabel_(const Label& label)
 			throw()
 		{
+			if (scene_ == 0) return;
+
 			initDrawingOthers_();
 
       glPushMatrix();
       glDisable(GL_LIGHTING);
       setColor4ub_(label);
 
-      // build bitmap
-      int width, height;
-      GLubyte* text_array = 
-			  generateBitmapFromText_(label.getExpandedText(), label.getFont(), width, height);
-
-      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-      glRasterPos3f((GLfloat)label.getVertex().x,
-                    (GLfloat)label.getVertex().y,
-                    (GLfloat)label.getVertex().z);
-      // draw bitmap
-      glBitmap(width, height, width/2, height/2.0, 0, 0, text_array);
-
+			scene_->renderText(label.getVertex().x,
+												 label.getVertex().y,
+												 label.getVertex().z,
+												 label.getExpandedText(),
+												 label.getFont());
       glPopMatrix();
       glEnable(GL_LIGHTING);
 		}
@@ -942,71 +956,6 @@ namespace BALL
 			}
 		}
 
-
-		GLubyte* GLRenderer::generateBitmapFromText_(const String& text, const QFont& font, int& width, int& height) const
-			throw()
-		{
-	#ifndef BALL_PLATFORM_WINDOWS
-			QColor c1(110,0,0);
-			QColor c2(255,0,255);
-	#else
-			// invert colors to fix problem under windows
-			QColor c2(0,0,0);
-			QColor c1(255,255,255);
-	#endif
-		
-			QFontMetrics fm(font);
-			
-			width = fm.width(text.c_str());
-			height = fm.height();
-
-			Size leading = fm.leading();
-			height += 2 * leading;
-			width  += 2 * leading;
-
-			QPainter p;
-			QPixmap pm(width, height, 1);
-			p.begin(&pm);
-				pm.fill(c1);
-				p.setPen(c2);
-				p.setFont(font);
- 				p.drawText(leading, height - leading, text.c_str());
-			p.end();
-
-			// convert to image (acces to single pixel is allowed here)
-			QImage image = pm.convertToImage();
-			
-			int pixel_width = image.width();
- 			width = (pixel_width + 7) / 8;
- 			height = image.height();
-			// convert to opengl usable bitmap
-			int array_size = width * height;
-			
-			GLubyte* text_array = new GLubyte[array_size];
-			
-			// clear char array
-			for (int i = 0; i < array_size; ++i)
-			{
-				*(text_array + i) = 0;
-			}
-			
-			// copy image to char array
-			int offset = (height - 1) * width;
-
-			for (int i = 0; i < height; ++i, offset -= width)
-			{
-				for (int j = 0; j < pixel_width; ++j)
-				{
-					if (qGray(image.pixel(j,i)) != 255)
-					{
-						*(text_array + (j>>3) + offset) |= (128 >> (j&7)); 
-					}
-				}
-			}
-
-			width = pixel_width;
-			return text_array; 
-		}
 
 		void GLRenderer::initGLU_(DrawingMode mode)
 		{

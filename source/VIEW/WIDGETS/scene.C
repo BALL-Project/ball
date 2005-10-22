@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.50 2005/10/12 12:24:10 amoll Exp $
+// $Id: scene.C,v 1.171.2.51 2005/10/22 13:55:18 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -349,7 +349,7 @@ namespace BALL
 			QGLWidget::initializeGL();
 			if (!format().rgba())  Log.error() << "no rgba mode for OpenGL available." << endl;
 
-			gl_renderer_.init(*stage_, (float) width(), (float) height());
+			gl_renderer_.init(*this);
 			gl_renderer_.initSolid();
 			if (stage_->getLightSources().size() == 0) setDefaultLighting(false);
 			gl_renderer_.updateCamera();
