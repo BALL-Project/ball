@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.16.2.3 2005/09/29 14:01:27 amoll Exp $
+// $Id: preferencesEntry.C,v 1.16.2.4 2005/10/22 07:29:10 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -39,14 +39,16 @@ namespace BALL
 		{
 			if (registered_objects_.size() == 0) return;
 
+			QWidget* widget = dynamic_cast<QWidget*>(this);
+			if (widget == 0)
+			{
+				Log.error() << "This PreferencesEntry is not a QWidget! " << std::endl;
+				return;
+			}
+
 			if (inifile_section_name_ == "") 
 			{
-				Log.error() << "INIFile section name not set in " << this << " :"<< std::endl;
-				HashSet<QWidget*>::Iterator it = registered_objects_.begin();
-				for (; it != registered_objects_.end(); it++)
-				{
-					Log.error() << "   " << (**it).name() << std::endl;
-				}
+				Log.error() << "INIFile section name not set in " << widget->name() << std::endl;
 				return;
 			}
 
@@ -55,23 +57,23 @@ namespace BALL
 				inifile.appendSection(inifile_section_name_);
 			}
 
-			String value;
+			String value, name;
 			
 			HashSet<QWidget*>::Iterator it = registered_objects_.begin();
 			for (; it != registered_objects_.end(); it++)
 			{
-				String name = (**it).name();
+				name = (**it).name();
 
-				if (name == "")
+				if (name == "" || !getValue_(*it, value))
 				{
-					Log.error() << "Unnamed Preferences object!" << std::endl;
-					continue;
-				}
+					if (name == "")
+					{
+						Log.error() << "Unnamed Preferences object!";
+					}
 
-				if (!getValue_(*it, value))
-				{
-					Log.error() << "Unknown QWidget " << name << " in " 
-											<< __FILE__ << " " << __LINE__ << std::endl;
+					Log.error() << " in PreferencesEntry: " << widget->name() << " ";
+				  Log.error() << __FILE__ << " " << __LINE__ << std::endl;
+
 					continue;
 				}
 
@@ -82,10 +84,10 @@ namespace BALL
 
 		bool PreferencesEntry::getValue_(const QWidget* widget, String& value)
 		{
-			if (RTTI::isKindOf<ExtendedPreferencesObject>(*widget))
+			const ExtendedPreferencesObject* epo = dynamic_cast<const ExtendedPreferencesObject*>(widget);
+			if (epo != 0)
 			{
-				const ExtendedPreferencesObject& epo = *dynamic_cast<const ExtendedPreferencesObject*>(widget);
-				if (!epo.getValue(value))
+				if (!epo->getValue(value))
 				{
 					BALLVIEW_DEBUG;
 				}
@@ -96,8 +98,7 @@ namespace BALL
 			}
 			else if (RTTI::isKindOf<QLabel>(*widget))
 			{
-				const QLabel& label = *(dynamic_cast<const QLabel*>(widget));
-				value = ColorRGBA(label.backgroundColor());	
+				value = ColorRGBA((dynamic_cast<const QLabel*>(widget))->backgroundColor());	
 			}
 			else if (RTTI::isKindOf<QLineEdit>(*widget))
 			{
@@ -115,16 +116,18 @@ namespace BALL
 			{
 				const QButtonGroup* qbg = dynamic_cast<const QButtonGroup*>(widget);
 
-				if (qbg->selected() == 0)
+				// no button selected (should not happen) -> select first
+				if (qbg->selectedId() == -1)
 				{
-					BALLVIEW_DEBUG;
-					return false;
+					value="0";
+					return true;
 				}
 
-				value = String(qbg->id(qbg->selected()));
+				value = String(qbg->selectedId());
 			}
 			else
 			{
+				Log.error() << "Unknown Preferences object " << widget->name() << std::endl;
 				return false;
 			}
 
@@ -153,10 +156,10 @@ namespace BALL
 		{
 			try
 			{
-				if (RTTI::isKindOf<ExtendedPreferencesObject>(*widget))
+				ExtendedPreferencesObject* epo = dynamic_cast<ExtendedPreferencesObject*>(widget);
+				if (epo != 0)
 				{
-					ExtendedPreferencesObject& epo = *dynamic_cast<ExtendedPreferencesObject*>(widget);
-					if (!epo.setValue(value))
+					if (!epo->setValue(value))
 					{
 						BALLVIEW_DEBUG;
 					}
@@ -189,7 +192,8 @@ namespace BALL
 				}
 				else 
 				{
-					Log.error() << "Unknown QWidget in " << __FILE__ << __LINE__ << std::endl;
+					Log.error() << "Unknown QWidget " << widget->name() << " in " 
+											<< __FILE__ << __LINE__ << std::endl;
 					return false;
 				}
 			}
@@ -206,7 +210,7 @@ namespace BALL
 		{
 			if (widget == 0) return;
 
-			if (String(widget->name()) == "")
+			if (widget->name() == "")
 			{
 				Log.error() << "Unnamed Preferences object!" << std::endl;
 				return;
@@ -214,19 +218,15 @@ namespace BALL
 
 			if (registered_objects_.has(widget))
 			{
-				Log.error() << "Widget " << widget << " with name " << widget->name() << " was already added!" << std::endl;
+				Log.error() << "Widget " << widget << " with name " << widget->name() 
+										<< " was already added!" << std::endl;
 				return;
 			}
 
 			registered_objects_.insert(widget);
 
 			String value;
-
-			if (!getValue_(widget, value))
-			{
-				Log.error() << "Unknown object " << widget->name() 
-					 					<< " in " << __FILE__ << " " << __LINE__ << std::endl;
-			}
+			getValue_(widget, value);
 			
 			default_values_[widget] = value;
 			last_values_[widget] = value;

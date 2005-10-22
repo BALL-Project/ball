@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.24 2005/10/17 15:56:35 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.25 2005/10/22 07:29:17 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -685,8 +685,9 @@ void DisplayProperties::setSurfaceDrawingPrecision(float value)
 	if (value < 0.1) return;
 	precision_slider->setValue((int)(value * 10.0));
 	
-	ModelType mt = (ModelType) model_type_combobox->currentItem();
-	custom_precision_button->setChecked(isSurfaceModel(mt));	
+	bool is_s = isSurfaceModel((ModelType)model_type_combobox->currentItem());
+	custom_precision_button->setChecked(is_s);
+	presets_precision_button->setChecked(!is_s);
 }
 		
 void DisplayProperties::setDrawingPrecision(int value)
