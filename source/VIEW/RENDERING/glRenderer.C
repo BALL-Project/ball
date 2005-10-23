@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.24 2005/10/23 22:23:14 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.25 2005/10/23 22:37:35 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -589,7 +589,7 @@ namespace BALL
 
 			// build bitmap
 			int width, height;
- 			GLubyte* text_array = generateBitmapFromText_(label.getText(), 
+ 			GLubyte* text_array = generateBitmapFromText_(label.getExpandedText(), 
 																										label.getFont(), 
 																										width, height);
 
