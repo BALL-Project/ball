@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomIterator.h,v 1.20 2003/08/26 08:04:16 oliver Exp $
+// $Id: atomIterator.h,v 1.21 2005/10/23 12:02:17 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ATOMITERATOR_H
@@ -25,7 +25,7 @@ namespace BALL
 			
     	\ingroup  KernelIterators
 	*/
-	class AtomIteratorTraits
+	class BALL_EXPORT AtomIteratorTraits
 		: public CompositeIteratorTraits 
 	{
 		public:

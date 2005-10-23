@@ -1,6 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: contourSurfaceDialog.h,v 1.9 2005/10/23 12:02:21 oliver Exp $
+//
+
 #ifndef BALL_VIEW_DIALOGS_CONTOURSURFACEDIALOG_H
 #define BALL_VIEW_DIALOGS_CONTOURSURFACEDIALOG_H
 
@@ -20,34 +23,37 @@ namespace BALL
  {
 	 class DatasetControl;
 
-/** Dialog for creating contour surfaces from RegularData3D
-    \ingroup  ViewDialogs
- */
-class BALL_EXPORT ContourSurfaceDialog 
-	: public ContourSurfaceDialogData
-{ 
-    Q_OBJECT
+		/** Dialog for creating contour surfaces from RegularData3D
+				\ingroup  ViewDialogs
+		 */
+		class BALL_EXPORT ContourSurfaceDialog 
+			: public ContourSurfaceDialogData
+		{ 
+				Q_OBJECT
 
-	public:
-    ContourSurfaceDialog( QWidget* parent = 0, const char* name = 0);
-    ~ContourSurfaceDialog();
+			public:
+				ContourSurfaceDialog( QWidget* parent = 0, const char* name = 0);
+				~ContourSurfaceDialog();
 
-    RegularData3D* getGrid();
-    double getThreshold() const;
-		void setDatasetControl(DatasetControl* control) {control_ = control;}
-		ColorRGBA getColor();
+				RegularData3D* getGrid();
+				double getThreshold() const;
+				void setDatasetControl(DatasetControl* control) {control_ = control;}
+				ColorRGBA getColor();
 
-	public slots:
-		virtual bool exec();
+			public slots:
+				virtual bool exec();
 
-	protected slots: 
-		virtual void valuesChanged();
-		virtual void chooseColor();
-	
-	private:
-		RegularData3D* grid_;
-		DatasetControl* control_;
-};
+			protected slots: 
+				virtual void valuesChanged();
+				virtual void chooseColor();
+			
+			private:
+				RegularData3D* grid_;
+				DatasetControl* control_;
+		};
 
-} } // namespaces
+	} // namespace VIEW
+
+} // namespace BALL
+
 #endif // CONTOURSURFACEDIALOG_H

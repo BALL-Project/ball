@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotideIterator.h,v 1.12 2003/08/26 08:04:19 oliver Exp $
+// $Id: nucleotideIterator.h,v 1.13 2005/10/23 12:02:19 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_NUCLEOTIDEITERATOR_H
@@ -22,7 +22,7 @@ namespace BALL
 	/** NucleotideIteratorTraits
 	 	  \ingroup  KernelIterators
 	*/
-	class NucleotideIteratorTraits
+	class BALL_EXPORT NucleotideIteratorTraits
 		: public CompositeIteratorTraits
 	{
 		public:

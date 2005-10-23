@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.h,v 1.41 2004/05/27 19:49:40 oliver Exp $
+// $Id: secondaryStructure.h,v 1.42 2005/10/23 12:02:20 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -28,7 +28,7 @@ namespace BALL
 			
 	 		\ingroup KernelMiscellaneous 
 	*/
-	class SecondaryStructure
+	class BALL_EXPORT SecondaryStructure
 		: public AtomContainer
 	{
 		public:

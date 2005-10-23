@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.C,v 1.41 2004/04/25 12:02:55 oliver Exp $
+// $Id: composite.C,v 1.43 2005/12/23 17:02:33 amoll Exp $
 //
 
 #include <BALL/CONCEPT/composite.h>
@@ -95,7 +95,7 @@ namespace BALL
 		throw(Exception::GeneralException)
   {
 		pm.writeObjectHeader(this, name);
-			pm.writeStorableObject(*(Selectable*)this, "Selectable");
+			pm.writeStorableObject(dynamic_cast<const Selectable&>(*this), "Selectable");
 
 			pm.writePrimitive(number_of_children_, "number_of_children_");
 			pm.writeObjectPointer(parent_, "parent_");
@@ -115,7 +115,7 @@ namespace BALL
   void Composite::persistentRead(PersistenceManager& pm)
 		throw(Exception::GeneralException)
   {
-		pm.readStorableObject(*(Selectable*)this, "Selectable");
+		pm.readStorableObject(dynamic_cast<Selectable&>(*this), "Selectable");
 
 		pm.readPrimitive(number_of_children_, "number_of_children_");
 		pm.readObjectPointer(parent_, "parent_");

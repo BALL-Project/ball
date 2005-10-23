@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.h,v 1.44 2004/05/27 19:49:40 oliver Exp $
+// $Id: residue.h,v 1.45 2005/10/23 12:02:20 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_RESIDUE_H
@@ -35,7 +35,7 @@ namespace BALL
 			
     	\ingroup KernelContainers 
 	*/
-	class Residue
+	class BALL_EXPORT Residue
 		: public Fragment
 	{
 		public:

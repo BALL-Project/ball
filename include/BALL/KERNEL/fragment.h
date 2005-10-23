@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragment.h,v 1.28 2004/05/27 19:49:39 oliver Exp $
+// $Id: fragment.h,v 1.29 2005/10/23 12:02:18 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_FRAGMENT_H
@@ -19,7 +19,7 @@ namespace BALL
 			
     	\ingroup KernelContainers 
 	*/
-	class Fragment
+	class BALL_EXPORT Fragment
 		: public AtomContainer
 	{
 		public:

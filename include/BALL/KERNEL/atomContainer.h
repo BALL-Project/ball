@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.h,v 1.31 2004/05/27 19:49:38 oliver Exp $
+// $Id: atomContainer.h,v 1.32 2005/10/23 12:02:17 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
@@ -29,7 +29,7 @@ namespace BALL
 			
     	\ingroup KernelContainers 
 	*/
-	class AtomContainer
+	class BALL_EXPORT AtomContainer
 		: public Composite,
 			public PropertyManager
 	{

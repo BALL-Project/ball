@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: path.C,v 1.4 2002/12/12 11:10:06 oliver Exp $
+// $Id: path.C,v 1.6 2005/12/23 17:03:06 amoll Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/file.h>
+#include <BALL/SYSTEM/fileSystem.h>
 #include <fstream>
 
 using std::ifstream;
@@ -14,11 +15,12 @@ namespace BALL
 {
 
 	Path::Path()
-		:	path_(BALL_PATH "/data/"),
+		:	path_(BALL_PATH),
 			path_array_valid_(false),
 			environment_checked_(false),
 			path_array_()
 	{
+		path_ = getDefaultDataPath();
 	}
 
 	string Path::getDataPath()
@@ -42,7 +44,9 @@ namespace BALL
 
 	string Path::getDefaultDataPath()
 	{	
-		return BALL_PATH "/data/";
+		string path = BALL_PATH;
+		path = path + FileSystem::PATH_SEPARATOR + "data" + FileSystem::PATH_SEPARATOR;
+		return path;
 	}
 
 	void Path::buildPathArray_() 

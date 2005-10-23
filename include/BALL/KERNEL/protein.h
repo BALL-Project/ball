@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: protein.h,v 1.31 2004/05/27 19:49:40 oliver Exp $ 
+// $Id: protein.h,v 1.32 2005/10/23 12:02:20 oliver Exp $ 
 //
 
 #ifndef BALL_KERNEL_PROTEIN_H
@@ -27,7 +27,7 @@ namespace BALL
 			
     	\ingroup KernelContainers 
 	*/
-	class Protein
+	class BALL_EXPORT Protein
 		: public Molecule
 	{
 		public:

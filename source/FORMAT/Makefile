@@ -16,12 +16,6 @@ CPP_SOURCES=\
 	bruker2DFile.C\
 	DCDFile.C\
 	genericMolFile.C\
-	GAMESSDatFile.C\
-	GAMESSDatParserParser.C\
-	GAMESSDatParserLexer.C\
-	GAMESSLogFile.C\
-	GAMESSLogParserParser.C\
-	GAMESSLogParserLexer.C\
 	HINFile.C\
 	INIFile.C\
 	JCAMPFile.C\
@@ -46,7 +40,7 @@ CPP_SOURCES=\
 include ../common.mak
 -include .Dependencies
 
-depend: $(PARSER_SOURCES)
+#depend: $(PARSER_SOURCES)
 
 default_clean:	clean_flex_bison
 

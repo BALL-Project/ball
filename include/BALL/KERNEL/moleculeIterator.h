@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeIterator.h,v 1.15 2004/05/27 19:49:39 oliver Exp $
+// $Id: moleculeIterator.h,v 1.16 2005/10/23 12:02:19 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_MOLECULEITERATOR_H
@@ -20,7 +20,7 @@ namespace BALL
 	/** MoleculeIteratorTratis_
 	 		\ingroup KernelIterators
 	*/
-	class MoleculeIteratorTraits
+	class BALL_EXPORT MoleculeIteratorTraits
 		: public CompositeIteratorTraits
 	{
 		public:

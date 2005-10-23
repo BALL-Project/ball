@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureIterator.h,v 1.14 2004/05/27 19:49:40 oliver Exp $
+// $Id: secondaryStructureIterator.h,v 1.15 2005/10/23 12:02:20 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTUREITERATOR_H
@@ -29,7 +29,7 @@ namespace BALL
 	 		
 			\ingroup KernelIterators
 	*/
-	class SecondaryStructureIteratorTraits
+	class BALL_EXPORT SecondaryStructureIteratorTraits
 		: public CompositeIteratorTraits
 	{
 		public:

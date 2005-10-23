@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.41 2005/10/05 10:11:42 anhi Exp $
+// $Id: datasetControl.C,v 1.42 2005/10/23 12:02:30 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -106,6 +106,7 @@ namespace BALL
 												!getMainControl()->compositesAreLocked() && item_to_grid3_.size() > 0);
 		}
 
+/*  ????
 		void DatasetControl::addGAMESSData()
 			throw()
 		{
@@ -123,7 +124,7 @@ namespace BALL
 
 			addGAMESSData(file.ascii());
 		}		
-
+*/
 		void DatasetControl::addTrajectory()
 			throw()
 		{
@@ -140,7 +141,7 @@ namespace BALL
 
 			addTrajectory(file.ascii());
 		}
-
+/*  ?????????
 		void DatasetControl::addGAMESSData(const String& filename)
 		{
 			// do we need to ensure that a system is selected?
@@ -150,7 +151,8 @@ namespace BALL
 			insertGAMESSData_(log);
 			setWorkingDirFromFilename_(filename);
 		}
-		
+*/
+
 		void DatasetControl::addTrajectory(const String& filename)
 		{
 			if (getMainControl()->getSelectedSystem() == 0) return;
@@ -161,6 +163,7 @@ namespace BALL
 			setWorkingDirFromFilename_(filename);
 		}
 
+/* ?????
 		void DatasetControl::insertGAMESSData_(GAMESSLogFile* file)
 			throw()
 		{
@@ -197,7 +200,7 @@ namespace BALL
 			item_to_gamess_[item] = file;
 			insertComposite_(system, item);
 		}
-		
+*/
 		void DatasetControl::insertTrajectory_(TrajectoryFile* file, System& system)
 			throw()
 		{
@@ -352,15 +355,17 @@ namespace BALL
 				delete ssm;
 				setStatusbarText("deleted 3D grid");
 			}
+/* ????
 			else if (item_to_gamess_.has(&item))
 			{
 				GAMESSLogFile* f = item_to_gamess_[&item];
 
-				/** Later, we will probably need a message for that... **/
+				// Later, we will probably need a message for that... 
 				item_to_gamess_.erase(&item);
 				delete f;
 				setStatusbarText("deleted GAMESS data");
 			}
+*/
 			else
 			{
 				return false;
@@ -409,11 +414,12 @@ namespace BALL
 					insertContextMenuEntry_("ContourSurface", SLOT(computeIsoContourSurface()));
 				}
 			}
-
+/*
 			if (item_to_gamess_.has(context_item_))
 			{
 				insertContextMenuEntry_("Create electron density grid", SLOT(createElectronDensity_()));
 			}
+*/
 		}
 
 		void DatasetControl::insertContextMenuEntry_(const QString & text, const char* member)
@@ -787,7 +793,7 @@ namespace BALL
 			RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::ADD);
 			notify_(message);
 		}
-
+/*
 		void DatasetControl::createElectronDensity_()
 		{
 			if (!item_to_gamess_.has(context_item_))
@@ -800,9 +806,9 @@ namespace BALL
 			file->initializeBasisSet();
 			QMBasisSet& qmbs = file->getBasisSet();
 
-			/** TODO: This is really important! We need to put the files somewhere where we find them,
-			 * 				and we need to automatically decide upon the chosen basis set!!!
-			 */
+			// TODO: This is really important! We need to put the files somewhere where we find them,
+			// 				and we need to automatically decide upon the chosen basis set!!!
+			//
 //			qmbs.readBasisSetData(getWorkingDir() + FileSystem::PATH_SEPARATOR + "basisset_631g*");
 			qmbs.setup(*system);
 
@@ -825,7 +831,7 @@ namespace BALL
 			msg->setCompositeName("Electron density for"+system->getName());
 			notify_(msg);
 		}
-
+*/
 		DatasetControl::DatasetControl(const DatasetControl& control)
 			throw()
 			: GenericControl(control)

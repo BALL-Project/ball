@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.h,v 1.47 2005/02/06 09:44:54 oliver Exp $
+// $Id: persistenceManager.h,v 1.48 2005/10/23 12:02:16 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
@@ -25,6 +25,10 @@
 
 #ifndef BALL_CONCEPT_PERSISTENTOBJECT_H
 #	include <BALL/CONCEPT/persistentObject.h>
+#endif
+
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
 #endif
 
 #include <fstream>
@@ -62,7 +66,7 @@ namespace BALL
 			@see	TextPersistenceManager
 		 \ingroup  Persistence
 	*/		
-	class PersistenceManager
+	class BALL_EXPORT PersistenceManager
 	{
 		public:
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.C,v 1.18 2003/08/26 09:17:48 oliver Exp $
+// $Id: atomContainer.C,v 1.20 2005/12/23 17:02:41 amoll Exp $
 //
 
 #include <BALL/KERNEL/atomContainer.h>
@@ -67,7 +67,7 @@ namespace BALL
 		pm.writeObjectHeader(this, name);
 			Composite::persistentWrite(pm);
 
-			pm.writeStorableObject(*(PropertyManager*)this, "PropertyManager");
+			pm.writeStorableObject(dynamic_cast<const PropertyManager&>(*this), "PropertyManager");
 
 			pm.writePrimitive(name_, "name_");
 		pm.writeObjectTrailer(name);
@@ -80,7 +80,7 @@ namespace BALL
 			Composite::persistentRead(pm);
 		pm.checkObjectTrailer(0);
 
-		pm.readStorableObject(*(PropertyManager*)this, "PropertyManager");
+		pm.readStorableObject(dynamic_cast<PropertyManager&>(*this), "PropertyManager");
 				
 		pm.readPrimitive(name_, "name_");
 	}

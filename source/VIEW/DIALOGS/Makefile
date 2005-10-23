@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.47 2005/10/05 10:09:09 anhi Exp $
+# $Id: Makefile,v 1.48 2005/10/23 12:02:30 oliver Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -69,8 +69,8 @@ CPP_SOURCES=\
 	snapShotVisualisationData.C\
 	stageSettings.C\
 	stageSettingsData.C\
-	runGAMESSDialog.C\
-	runGAMESSDialogData.C
+#	runGAMESSDialog.C\
+#	runGAMESSDialogData.C
 
 MOC_SOURCES=\
 	amberConfigurationDialog_moc.C\
