@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.23 2005/10/22 13:54:26 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.24 2005/10/23 22:23:14 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -23,6 +23,10 @@
 
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/KERNEL/atom.h>
+
+#include <qpixmap.h>
+#include <qpainter.h>
+#include <qimage.h>
 
 using namespace std;
 
@@ -574,15 +578,92 @@ namespace BALL
       glDisable(GL_LIGHTING);
       setColor4ub_(label);
 
+			/*
+			// unfortunately this doesnt work as expected on all platforms:
 			scene_->renderText(label.getVertex().x,
 												 label.getVertex().y,
 												 label.getVertex().z,
 												 label.getExpandedText(),
-												 label.getFont());
+												 label.getFont()); 
+			*/
+
+			// build bitmap
+			int width, height;
+ 			GLubyte* text_array = generateBitmapFromText_(label.getText(), 
+																										label.getFont(), 
+																										width, height);
+
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+			glRasterPos3f((GLfloat)label.getVertex().x, 
+										(GLfloat)label.getVertex().y, 
+										(GLfloat)label.getVertex().z);
+			// draw bitmap
+ 			glBitmap(width, height, width/2, height/2.0, 0, 0, text_array);
+
       glPopMatrix();
       glEnable(GL_LIGHTING);
 		}
 
+		GLubyte* GLRenderer::generateBitmapFromText_(const String& text, 
+																								 const QFont& font, 
+																								 int& width, int& height) const
+			throw()
+		{
+			QColor c1(0,0,0);
+			QColor c2(255,255,255);
+		
+			int border = 2;
+			
+			QPixmap pm(1,1,1);
+			QFontMetrics fm(font);
+			QRect r = fm.boundingRect(text.c_str());
+			pm.resize(r.size() + QSize(border * 2, border * 2));
+
+			QPainter p;
+			p.begin(&pm);
+				p.setFont(font);
+				pm.fill(c1);
+				p.setPen(c2);
+				p.drawText(-r.x() + border, -r.y() + border, text.c_str());
+			p.end();
+
+			// convert to image (acces to single pixel is allowed here)
+			QImage image = pm.convertToImage();
+
+			int pixel_width = image.width();
+			width = (pixel_width + 7) / 8;
+			height = image.height();
+			// convert to opengl usable bitmap
+			Index array_size = width * height;
+			
+			GLubyte* text_array = new GLubyte[array_size];
+			
+			// clear char array
+			for (Index i = 0; i < array_size; ++i)
+			{
+				*(text_array + i) = 0;
+			}
+
+			Index backg = qRed(image.pixel(0,0));
+			
+			// copy image to char array
+			int offset = (height - 1) * width;
+
+			for (int i = 0; i < height; ++i, offset -= width)
+			{
+				for (int j = 0; j < pixel_width; ++j)
+				{
+					if (qRed(image.pixel(j,i)) != backg)
+					{
+						*(text_array + (j>>3) + offset) |= (128 >> (j&7)); 
+					}
+				}
+			}
+
+			width = pixel_width;
+			return text_array;
+		}
 
 		void GLRenderer::renderPoint_(const Point& point)
 			throw()
