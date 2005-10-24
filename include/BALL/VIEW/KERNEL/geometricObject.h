@@ -1,15 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.38.4.4 2005/10/24 10:53:53 amoll Exp $
+// $Id: geometricObject.h,v 1.38.4.5 2005/10/24 11:03:09 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-
-#ifndef BALL_CONCEPT_PERSISTENTOBJECT_H
-#	include <BALL/CONCEPT/persistentObject.h>
-#endif
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 #	include <BALL/VIEW/DATATYPE/colorRGBA.h>
@@ -30,7 +26,6 @@ namespace BALL
 				\ingroup ViewKernelGeometricPrimitives
 		*/
 		class BALL_VIEW_EXPORT GeometricObject
-			: public PersistentObject
 		{
 			public:
 

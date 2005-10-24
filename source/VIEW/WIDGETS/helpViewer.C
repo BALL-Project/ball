@@ -102,7 +102,6 @@ namespace BALL
 			DockWidget::initializeWidget(main_control);
 			insertMenuEntry(MainControl::HELP, "Documentation", this, SLOT(showHelp()), 0, 0);
 			insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(enterWhatsThisMode()));	
-			getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
 
  			qApp->installEventFilter(this);
 			qApp->setGlobalMouseTracking(TRUE);

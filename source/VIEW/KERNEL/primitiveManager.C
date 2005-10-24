@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.17 2005/10/17 00:43:42 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.18 2005/10/24 11:08:01 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -476,7 +476,11 @@ void PrimitiveManager::storeRepresentations(INIFile& out)
 	for (; it != end(); it++)
 	{
 		// only store representations with composites!
-		if (!(**it).getComposites().size()) continue;
+		if (!(**it).getComposites().size() ||
+				!modelMuteableByDisplayProperties((**it).getModelType())) 
+		{
+			continue;
+		}
 
 		bool ok = true;
 

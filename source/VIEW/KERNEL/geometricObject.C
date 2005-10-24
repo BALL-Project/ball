@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.C,v 1.24.6.1 2005/10/24 10:53:50 amoll Exp $
+// $Id: geometricObject.C,v 1.24.6.2 2005/10/24 11:03:07 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
@@ -24,8 +24,7 @@ namespace BALL
 
 		GeometricObject::GeometricObject(const GeometricObject& geometric_object)
 			throw()
-			: PersistentObject(geometric_object),
-			 	color_(geometric_object.color_),
+			: color_(geometric_object.color_),
 				composite_(geometric_object.composite_)
 		{
 		}
