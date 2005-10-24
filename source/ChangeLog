@@ -2,11 +2,7 @@
 
 The version 1.1.1 finaly brings full Python and DLL support under Windows.
 Furthermore there is a large number of prominent fixes (especialy for g++ 4.x) 
-and some new functionality for BALLView. The BALLView code has become much slimer 
-and stable with this release.
-
-This version will probably be the last one that supports QT 3.X. Future versions
-of BALLView will be based on QT 4.X.
+and some new functionality for BALLView.
 
 Added:
  - Support for Python under Windows
@@ -19,45 +15,41 @@ Added:
  - Amber charges and radii values for nucleotides
 
 Changed:
- - BALL and BALLView libraries are now build as DLLs under Windows
- - Both libraries are now stable with optimizations switched on under Windows
- - DNA cartoon model now looks better
+ - BALL and BALLView libraries are now built as DLLs under Windows
+ - Both libraries are now compiled with optimization under Windows
+ - visual improvements of the DNA cartoon model
  - Renamed Mesh::colorList to Mesh::colors
- - Exception::InvalidRange now has an float value
- - ColorProcessor hierarchy
+ - Exception::InvalidRange now has a float value
  - Bond::TooManyBonds moved to Exception namespace
  - Now the standard BALLView Python startup script will be executed in any case.
  	 It can be found in BALL/data/startup.py.
-   Users can choose an addition startup script, that will run afterwards.
- - Remove GLQuadricObject, this functionality is available through GLRenderer
+   Users can choose an additional startup script, that will run afterwards.
+ - Removed GLQuadricObject. This functionality is available through GLRenderer
    now with much less overhead.
  - Improved PreferenceEntry class and reading/storing code for preferences
  - PyInterpreter and PyWidget will now report the reason, if the Python module
    can not be loaded.
 
 Fixed:
- - Crashes, when reading PDB files with too many bonds
- - Crash, when wrongly using boolean expression resiudeId("blub")
+ - Crash while reading PDB files with too many bonds
+ - Crash while wrongly using malformed boolean expression "residueID(...)"
  - Segfault in CalculateSecondaryStructureProcessor, when one SS is part of another
- - NMRViewer und underlying widgets
+ - NMRViewer und underlying widgets did not compile
  - Mouse sensitivity changed in Rotate mode when focusing on small structures
  - Memory issues with Python objects (e.g. inserting GeometricObjects into Representations)
  - Saving and loading of BALLView project files
- - Several problems with Cartoon and Backbone models
  - Splitting of surfaces for given distance: computed incorrect surfaces
  - POVRay export: degenerated objects (with a length of 0) and meshes with only one color
  - Missing assignment operator in RotamerLibrary
  - Problems in persistence with g++ 4.x series
  - Hangup in socket interface with g++ 4.x series
  - Browse button didnt work in Molecular Dynamics Simulation dialog
- - Crash, when performing a MDS with trajectory and DCD file could not be written
+ - Crash while running an MDS with trajectory if the DCD file could not be written
  - Incorrect bond orders and GLN amide group planarity in fragment database
- - Naming of build peptides
+ - Naming of peptides built.
  - Opening of files in current directory per command line with BALLView
  - Some minor problems with the clipping planes
  - Some minor problems with dashed bonds in the Ball-and-Stick model
- - Cleanup of the lighting source code
- - Cleanup of the PyWidget source code
 
 
 1.1: 21.06.2005
