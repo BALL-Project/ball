@@ -1,4 +1,4 @@
-system = getComposites()[0]
+system = getSystem(0)
 for atom1 in atoms(system):
 	for atom2 in atoms(system):
 		v = atom1.getPosition() - atom2.getPosition()
