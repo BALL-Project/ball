@@ -10,44 +10,45 @@ Added:
  - Picking support for bonds
  - Coloring by molecule
  - Online HTML documentation in BALLView
- - BALLView now again has a fourth drawing precision "ultra" for real 
+ - BALLView again has a fourth drawing precision "ultra" for real 
    fast graphics accelerator cards
  - Amber charges and radii values for nucleotides
 
 Changed:
  - BALL and BALLView libraries are now built as DLLs under Windows
  - Both libraries are now compiled with optimization under Windows
- - visual improvements of the DNA cartoon model
+ - Visual improvements of the DNA cartoon model
  - Renamed Mesh::colorList to Mesh::colors
  - Exception::InvalidRange now has a float value
  - Bond::TooManyBonds moved to Exception namespace
- - Now the standard BALLView Python startup script will be executed in any case.
+ - A standard BALLView Python startup script will be executed in any case.
  	 It can be found in BALL/data/startup.py.
    Users can choose an additional startup script, that will run afterwards.
+ - Removed Notification and changed the way to register for Log access 
  - Removed GLQuadricObject. This functionality is available through GLRenderer
-   now with much less overhead.
  - Improved PreferenceEntry class and reading/storing code for preferences
- - PyInterpreter and PyWidget will now report the reason, if the Python module
-   can not be loaded.
+ - PyInterpreter and PyWidget report the reason if the Python module can not be loaded
+ - Coloring of surfaces by grid: the way autoscale works and the default colors
 
 Fixed:
  - Crash while reading PDB files with too many bonds
  - Crash while wrongly using malformed boolean expression "residueID(...)"
- - Segfault in CalculateSecondaryStructureProcessor, when one SS is part of another
+ - Crash in CalculateSecondaryStructureProcessor, when one SS is part of another
+ - Crash while running an MDS with trajectory if the DCD file could not be written
  - NMRViewer und underlying widgets did not compile
+ - Problems in persistence with g++ 4.x series
+ - Hangup in socket interface with g++ 4.x series
  - Mouse sensitivity changed in Rotate mode when focusing on small structures
  - Memory issues with Python objects (e.g. inserting GeometricObjects into Representations)
  - Saving and loading of BALLView project files
  - Splitting of surfaces for given distance: computed incorrect surfaces
  - POVRay export: degenerated objects (with a length of 0) and meshes with only one color
  - Missing assignment operator in RotamerLibrary
- - Problems in persistence with g++ 4.x series
- - Hangup in socket interface with g++ 4.x series
  - Browse button didnt work in Molecular Dynamics Simulation dialog
- - Crash while running an MDS with trajectory if the DCD file could not be written
  - Incorrect bond orders and GLN amide group planarity in fragment database
  - Naming of peptides built.
  - Opening of files in current directory per command line with BALLView
+ - Some problems with rendering Labels on Windows and MacOS
  - Some minor problems with the clipping planes
  - Some minor problems with dashed bonds in the Ball-and-Stick model
 
