@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>277</width>
-            <height>410</height>
+            <height>425</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -221,9 +221,14 @@
                                     <verstretch>0</verstretch>
                                 </sizepolicy>
                             </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>150</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
                             <property name="font">
                                 <font>
-                                    <pointsize>10</pointsize>
                                 </font>
                             </property>
                             <property name="frameShape">
