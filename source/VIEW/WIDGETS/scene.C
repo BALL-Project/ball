@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.52 2005/10/24 13:20:50 amoll Exp $
+// $Id: scene.C,v 1.171.2.53 2005/10/24 14:04:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -264,11 +264,6 @@ namespace BALL
 				Representation* rep = rm->getRepresentation();
 				switch (rm->getType())
 				{
- 					case RepresentationMessage::ADD:
-						if (gl_renderer_.hasDisplayListFor(*rep)) return;
-						gl_renderer_.bufferRepresentation(*rep);
-						break;
-
 					case RepresentationMessage::UPDATE:
 						gl_renderer_.bufferRepresentation(*rep);
 						break;
