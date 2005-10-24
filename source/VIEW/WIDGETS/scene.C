@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.51 2005/10/22 13:55:18 amoll Exp $
+// $Id: scene.C,v 1.171.2.52 2005/10/24 13:20:50 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -594,7 +594,11 @@ namespace BALL
 					else if (run == 1)
 					{
 						// render all transparent models
-						if (rep.getTransparency() == 0) continue;
+						if (rep.getTransparency() == 0 ||
+								rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
+						{
+							continue;
+						}
 					}
 					else
 					{
