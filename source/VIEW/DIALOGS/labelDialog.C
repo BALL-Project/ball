@@ -159,7 +159,7 @@ void LabelDialog::accept()
 
 	rep->setComposites(composites);
 
-	getMainControl()->insert(*rep);
+	getMainControl()->getPrimitiveManager().insert(*rep, false);
 	getMainControl()->update(*rep);
 	
 	history_box->insertItem(label_edit_->text());
