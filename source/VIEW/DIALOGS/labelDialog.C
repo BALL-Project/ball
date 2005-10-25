@@ -107,6 +107,7 @@ void LabelDialog::onNotify(Message *message)
 		// disabled apply button, if selection is empty
 		const bool filled = !selection->getSelection().empty();
 		apply_button_->setEnabled(filled);
+		checkMenu(*getMainControl());
 	}
 }
 
@@ -159,7 +160,7 @@ void LabelDialog::accept()
 
 	rep->setComposites(composites);
 
-	getMainControl()->getPrimitiveManager().insert(*rep, false);
+	getMainControl()->insert(*rep);
 	getMainControl()->update(*rep);
 	
 	history_box->insertItem(label_edit_->text());
