@@ -31,6 +31,7 @@ Changed:
  - Coloring of surfaces by grid: the way autoscale works and the default colors
 
 Fixed:
+ - Problems with POSIX compliance of socket classes
  - Crash while reading PDB files with too many bonds
  - Crash while wrongly using malformed boolean expression "residueID(...)"
  - Crash in CalculateSecondaryStructureProcessor, when one SS is part of another
