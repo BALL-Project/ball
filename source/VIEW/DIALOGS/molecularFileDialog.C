@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.28.4.4 2005/07/11 16:30:07 oliver Exp $$
+// $Id: molecularFileDialog.C,v 1.28.4.5 2005/10/25 13:58:27 amoll Exp $$
 //
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -65,7 +65,7 @@ namespace BALL
 													getWorkingDir().c_str(),
 													getMainControl(),
 													"Molecular File Dialog",
-													"Choose a file to open" );
+													"Choose a molecular file to open" );
 
  		  for (QStringList::Iterator it = files.begin(); it != files.end(); ++it) 
 			{
@@ -165,7 +165,7 @@ namespace BALL
 										"*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf",
 										getMainControl(),
 										"Molecular File Dialog",
-										"Choose a filename to save under" );
+										"Choose a filename to save the selected system" );
 
 		 	if (s == QString::null) return false;
 			String filename = s.ascii();

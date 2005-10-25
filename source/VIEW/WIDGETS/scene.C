@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.53 2005/10/24 14:04:19 amoll Exp $
+// $Id: scene.C,v 1.171.2.54 2005/10/25 13:57:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1949,7 +1949,7 @@ namespace BALL
 
 			String start = String(screenshot_nr_) + ".png";
 			screenshot_nr_ ++;
-			QFileDialog fd("", "*.png", 0, "Select a PNG file", true);
+			QFileDialog fd("Export a screenshot to a PNG file", "*.png", 0, "Select a PNG file", true);
 			fd.setSelection(start.c_str());
 			fd.setMode(QFileDialog::AnyFile);
 			if (fd.exec() != QDialog::Accepted ||
