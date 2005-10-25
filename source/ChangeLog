@@ -41,6 +41,7 @@ Fixed:
  - Mouse sensitivity changed in Rotate mode when focusing on small structures
  - Memory issues with Python objects (e.g. inserting GeometricObjects into Representations)
  - Saving and loading of BALLView project files
+ - Accelerators for menu entries didnt always work
  - Splitting of surfaces for given distance: computed incorrect surfaces
  - POVRay export: degenerated objects (with a length of 0) and meshes with only one color
  - Missing assignment operator in RotamerLibrary
