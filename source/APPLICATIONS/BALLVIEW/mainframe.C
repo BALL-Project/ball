@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.2.18 2005/10/03 22:22:15 amoll Exp $
+// $Id: mainframe.C,v 1.55.2.19 2005/10/25 14:16:13 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -309,6 +309,14 @@ namespace BALL
 			}
 				
 			MolecularStructure::getInstance(0)->centerCamera();
+			return;
+		}
+
+		// check all menu entries if Alt or CTRL is pressed to enable shortcuts
+		if (e->key() == Qt::Key_Alt ||
+				e->key() == Qt::Key_Control)				
+		{
+			checkMenus();
 			return;
 		}
 
