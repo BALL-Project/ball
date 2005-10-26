@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.73.4.35 2005/10/12 11:43:30 amoll Exp $
+// $Id: geometricControl.C,v 1.73.4.36 2005/10/26 15:40:12 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -250,7 +250,7 @@ namespace BALL
 			insertContextMenuEntry("Delete", this, SLOT(deleteCurrentItems()), 10);
 			insertContextMenuEntry("Duplicate", this, SLOT(duplicateRepresentation()), 15);
 			insertContextMenuEntry("Select Atoms", this, SLOT(selectAtoms()), 25);
-			insertContextMenuEntry("Modify Model", this, SLOT(modifyRepresentation_()), 20);	
+			insertContextMenuEntry("Modifiy Model", this, SLOT(modifyRepresentation_()), 20);	
 			insertContextMenuEntry("Modifiy Surface", modify_surface_dialog_, SLOT(show()), 30);	
 			context_menu_.insertSeparator();
 			context_menu_.insertItem("Clipping Plane", &clipping_plane_context_menu_, 40);
