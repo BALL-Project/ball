@@ -49,7 +49,7 @@ all: flex_bison regex $(TARGET).dll
 
 
 clean:
-	$(BINPATH)\rm.exe -fi  asd $(TARGETDIR)\\*.* $(OBJS) $(NO_OPTIMIZATION_OBJS)
+	$(BINPATH)\rm.exe -f  $(TARGETDIR)/*.* $(OBJS) $(NO_OPTIMIZATION_OBJS)
 
 $(TARGET).dll:   $(NO_OPTIMIZATION_OBJS)  $(OBJS) 
 	$(LINK)
