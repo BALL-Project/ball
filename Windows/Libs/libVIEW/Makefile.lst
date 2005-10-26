@@ -1,5 +1,6 @@
 
 OBJS = \
+libVIEW.obj\
 ..\..\..\source\VIEW\DATATYPE\colorExtension2.obj\
 ..\..\..\source\VIEW\DATATYPE\colorHSV.obj\
 ..\..\..\source\VIEW\DATATYPE\colorRGBA.obj\
@@ -16,7 +17,7 @@ OBJS = \
 ..\..\..\source\VIEW\DIALOGS\charmmConfigurationDialogData.obj\
 ..\..\..\source\VIEW\DIALOGS\clippingDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\clippingDialogData.obj\
-..\..\..\source\VIEW\DIALOGS\colorChooser.obj\
+#..\..\..\source\VIEW\DIALOGS\colorChooser.obj\
 ..\..\..\source\VIEW\DIALOGS\coloringSettingsDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\coloringSettingsDialogData.obj\
 ..\..\..\source\VIEW\DIALOGS\compositeProperties.obj\
@@ -27,8 +28,8 @@ OBJS = \
 ..\..\..\source\VIEW\DIALOGS\displayPropertiesData.obj\
 ..\..\..\source\VIEW\DIALOGS\downloadPDBFile.obj\
 ..\..\..\source\VIEW\DIALOGS\downloadPDBFileData.obj\
-..\..\..\source\VIEW\DIALOGS\editOperationDialog.obj\
-..\..\..\source\VIEW\DIALOGS\editOperationDialogData.obj\
+#..\..\..\source\VIEW\DIALOGS\editOperationDialog.obj\
+#..\..\..\source\VIEW\DIALOGS\editOperationDialogData.obj\
 ..\..\..\source\VIEW\DIALOGS\FDPBDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\FDPBDialogData.obj\
 ..\..\..\source\VIEW\DIALOGS\labelDialog.obj\
@@ -124,7 +125,7 @@ OBJS = \
 ..\..\..\source\VIEW\WIDGETS\datasetControl.obj\
 ..\..\..\source\VIEW\WIDGETS\dockWidget.obj\
 #..\..\..\source\VIEW\WIDGETS\editableScene.obj\
-..\..\..\source\VIEW\WIDGETS\editFunctions.obj\
+#..\..\..\source\VIEW\WIDGETS\editFunctions.obj\
 ..\..\..\source\VIEW\WIDGETS\genericControl.obj\
 ..\..\..\source\VIEW\WIDGETS\geometricControl.obj\
 ..\..\..\source\VIEW\WIDGETS\helpViewer.obj\
@@ -153,8 +154,8 @@ mocfiles\displayPropertiesData_moc.obj\
 mocfiles\displayProperties_moc.obj\
 mocfiles\downloadPDBFileData_moc.obj\
 mocfiles\downloadPDBFile_moc.obj\
-mocfiles\editOperationDialogData_moc.obj\
-mocfiles\editOperationDialog_moc.obj\
+#mocfiles\editOperationDialogData_moc.obj\
+#mocfiles\editOperationDialog_moc.obj\
 mocfiles\FDPBDialogData_moc.obj\
 mocfiles\FDPBDialog_moc.obj\
 mocfiles\labelDialogData_moc.obj\
@@ -182,8 +183,8 @@ mocfiles\peptideDialogData_moc.obj\
 mocfiles\peptideDialog_moc.obj\
 mocfiles\preferencesData_moc.obj\
 mocfiles\preferences_moc.obj\
-mocfiles\PTEDialogData_moc.obj\
-mocfiles\PTEDialog_moc.obj\
+#mocfiles\PTEDialogData_moc.obj\
+#mocfiles\PTEDialog_moc.obj\
 mocfiles\pythonHotkeysData_moc.obj\
 mocfiles\pythonHotkeys_moc.obj\
 mocfiles\pythonSettingsData_moc.obj\
@@ -208,7 +209,9 @@ mocfiles\molecularStructure_moc.obj\
 mocfiles\pyWidget_moc.obj\
 mocfiles\regularData1DWidget_moc.obj\
 mocfiles\regularData2DWidget_moc.obj\
-mocfiles\scene_moc.C
+mocfiles\scene_moc.obj\
+mocfiles\openBruker1DFile_moc.obj\
+mocfiles\openBruker2DFile_moc.obj
 
 UICS = \
 ..\..\..\source\VIEW\DIALOGS\amberConfigurationDialog.myui\
@@ -220,7 +223,7 @@ UICS = \
 ..\..\..\source\VIEW\DIALOGS\contourSurfaceDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\displayProperties.myui\
 ..\..\..\source\VIEW\DIALOGS\downloadPDBFile.myui\
-..\..\..\source\VIEW\DIALOGS\editOperationDialog.myui\
+#..\..\..\source\VIEW\DIALOGS\editOperationDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\FDPBDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\labelDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\lightSettings.myui\
@@ -234,7 +237,7 @@ UICS = \
 ..\..\..\source\VIEW\DIALOGS\parsedFunctionDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\peptideDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\preferences.myui\
-..\..\..\source\VIEW\DIALOGS\PTEDialog.myui\
+#..\..\..\source\VIEW\DIALOGS\PTEDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\pythonHotkeys.myui\
 ..\..\..\source\VIEW\DIALOGS\pythonSettings.myui\
 ..\..\..\source\VIEW\DIALOGS\setCamera.myui\
@@ -246,7 +249,7 @@ MOCS = \
 ..\..\..\include\BALL\VIEW\WIDGETS\datasetControl.mymoc\
 ..\..\..\include\BALL\VIEW\WIDGETS\dockWidget.mymoc\
 ..\..\..\include\BALL\VIEW\WIDGETS\editableScene.mymoc\
-..\..\..\include\BALL\VIEW\WIDGETS\editFunctions.mymoc\
+#..\..\..\include\BALL\VIEW\WIDGETS\editFunctions.mymoc\
 ..\..\..\include\BALL\VIEW\WIDGETS\genericControl.mymoc\
 ..\..\..\include\BALL\VIEW\WIDGETS\geometricControl.mymoc\
 ..\..\..\include\BALL\VIEW\WIDGETS\helpViewer.mymoc\
