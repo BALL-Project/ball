@@ -1,32 +1,47 @@
 
-TARGETDIR = "TEST"
+TARGETDIR = TEST
 TARGET = libBALL
 SDIR= ..\..\..\source
 
 ########################
 # options for Compiler #
 ########################
+
 OPT = /O2 /Ot /GA
+
 INCLUDES = /I "..\..\..\include" /I "..\..\include" /I "..\..\Contrib\regex-0.12" /I "..\..\Contrib\ONC_RPC" /I "$(PYTHONDIR)\include"
-DEFINES = /D WIN32 /D _WINDOWS /D _USRDLL /D YY_NEVER_INTERACTIVE /D BALL_BUILD_DLL /D _WINDLL /D _MBCS /D HAVE_STRING_H /D __STDC__ /D REGEX_MALLOC /U ERROR /U IN /U OUT
+
+DEFINES = /D WIN32 /D _WINDOWS /D _USRDLL /D YY_NEVER_INTERACTIVE /D BALL_BUILD_DLL /D _WINDLL  /U ERROR /U IN /U OUT
+
+BALL_DEFINES = /D _MBCS /D HAVE_STRING_H /D __STDC__ /D REGEX_MALLOC
+
 CCOPTIONS = /FD /EHsc /MD /GR /W0 /nologo -c /Zm800 /Fo"$(TARGETDIR)\\"
+
 # options for C++ files
-CC =  cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(OPT) /TP
+CC		= cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(BALL_DEFINES) $(OPT) /TP
+
 # options for C files
-CCC =  cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(OPT) /TC
-NOOPT_CC =  cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) /TP
+CCC		= cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(BALL_DEFINES) $(OPT) /TC
+
+# options for C++ without optimization
+NOOPT_CC	= cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(BALL_DEFINES) /TP
 
 ########################
 # options for Linker   #
 ########################
+
 LIBS = $(PYTHONDIR)\libs\python23.lib ..\..\Contrib\ONC_RPC\librpc\oncrpc.lib imm32.lib winmm.lib ws2_32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
+
 LINKOPTIONS = -nologo /OUT:$(TARGETDIR)\$(TARGET).dll /NOLOGO /DLL $(LIBS)  /FORCE:UNRESOLVED
+
 LINK = link  $(LINKOPTIONS) $(TARGETDIR)\*.obj
 
-FLEX = ..\..\Contrib\bin\flex
+BINPATH = $(MAKEDIR)\..\..\Contrib\bin
+
+FLEX = $(BINPATH)\flex
 
 # bison will crash if not run with absolute path!!!
-BISON = $(BALLPATH)\Windows\Contrib\\bin\bison
+BISON = $(BINPATH)\bison
 
 include Makefile.lst
 
@@ -34,18 +49,18 @@ all: flex_bison regex $(TARGET).dll
 
 
 clean:
-	del $(TARGETDIR)\$(TARGET).lib $(TARGETDIR)\$(TARGET).dll $(TARGETDIR)\$(TARGET).exp $(TARGETDIR)\*.pdb $(TARGETDIR)\*.obj $(OBJS) $(NO_OPTIMIZATION_OBJS)
+	$(BINPATH)\rm.exe -fi  asd $(TARGETDIR)\\*.* $(OBJS) $(NO_OPTIMIZATION_OBJS)
 
 $(TARGET).dll:   $(NO_OPTIMIZATION_OBJS)  $(OBJS) 
 	$(LINK)
 
 .c.obj:
 	$(CC)  $(*).C
-	copy dummy.txt $(*).obj > ausgabe
+	echo A > $(*).obj
 
 .c._obj:
 	$(NOOPT_CC)  $(*).C
-	copy dummy.txt $(*)._obj > ausgabe
+	echo A > $(*)._obj
 
 flex_bison: 
 	echo ------------------------

@@ -69,14 +69,14 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/Zm800"
-				Optimization="0"
+				Optimization="2"
 				GlobalOptimizations="FALSE"
-				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="TRUE"
+				InlineFunctionExpansion="0"
+				EnableIntrinsicFunctions="FALSE"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
-				OptimizeForProcessor="2"
-				OptimizeForWindowsApplication="FALSE"
+				OptimizeForProcessor="0"
+				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;YY_NEVER_INTERACTIVE;BALL_BUILD_DLL"
 				StringPooling="TRUE"
@@ -1059,18 +1059,48 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\Format\PDBdefs.C">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="0"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\Format\PDBFileDetails.C">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\Format\PDBFileGeneral.C">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\Format\PDBInfo.C">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\Format\PDBRecords.C">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\FORMAT\resourceFile.C">
@@ -1893,9 +1923,9 @@
 						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							Optimization="0"
+							Optimization="1"
 							GlobalOptimizations="FALSE"
-							InlineFunctionExpansion="1"/>
+							InlineFunctionExpansion="2"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
