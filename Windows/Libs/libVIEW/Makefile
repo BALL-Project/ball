@@ -17,9 +17,13 @@ CC =  cl $(CCOPTIONS) $(INCLUDES) $(VIEW_INCLUDES) $(DEFINES) $(VIEW_DEFINES) $(
 # options for Linker   #
 ########################
 
-LINK = link  $(LINKOPTIONS) $(VIEW_LIBS) $(TARGETDIR)\*.obj
+LINK = link  $(LINKOPTIONS) $(VIEW_LIBS) $(TARGETDIR)\*.obj  /EXPORT:initBALL
 
 UICDIR = "$(INC_DIR)\BALL\VIEW\UIC"
+
+.c.obj:
+	$(CC)  $(*).C
+	echo A > $(*).obj
 
 .ui.myui:
 	echo running uic and moc for $(*B)

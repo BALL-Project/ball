@@ -38,6 +38,11 @@ clean:
 $(TARGET).dll:   $(NO_OPTIMIZATION_OBJS)  $(OBJS) 
 	$(LINK)
 
+.c.obj:
+	$(CC)  $(*).C
+	echo A > $(*).obj
+
+
 # rule to create non optimized C++ files:
 .c._obj:
 	$(NOOPT_CC)  $(*).C

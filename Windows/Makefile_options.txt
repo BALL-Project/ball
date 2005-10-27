@@ -19,7 +19,7 @@ INCLUDES = /I "$(BALL_WIN_DIR)\include" /I "$(INC_DIR)" /I "$(BALL_CONTRIB)\rege
 
 DEFINES = /D WIN32 /D _WINDOWS /D _USRDLL /D YY_NEVER_INTERACTIVE /D _WINDLL /U ERROR /U IN /U OUT
 
-CCOPTIONS = /EHsc /MD /GR /W0 /nologo -c /Zm800 /Fo"$(TARGETDIR)\\"
+CCOPTIONS = /EHsc /MD /GR /W0 /nologo -c /Zm1200 /Fo"$(TARGETDIR)\\"
 
 ########## link options #################
 

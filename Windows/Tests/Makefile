@@ -4,7 +4,7 @@ include ..\Makefile_options.txt
 include ..\..\source\TEST\Makefile.lst
 
 # options for C++ files
-CC		= cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(BALL_DEFINES) $(OPT) /TP
+CC		= cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(BALL_DEFINES) /TP
 
 LINK = link  $(LINKOPTIONS_EXE) $(BALL_WIN_DIR)\Libs\libBALL\$(TARGETDIR)\libBALL.lib
 
