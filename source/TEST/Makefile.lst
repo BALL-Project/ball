@@ -1,255 +1,255 @@
 #
-# $Id: Makefile.lst,v 1.22.2.3 2005/07/17 16:12:50 oliver Exp $
+# $Id: Makefile.lst,v 1.22.2.4 2005/10/27 15:01:12 amoll Exp $
 #
 
-XDR_DEPENDENT_EXECUTABLES=\
-	XDRPersistenceManager_test$(EXEEXT)
+XDR_DEPENDENT_EXECUTABLES = \
+$(PREFIX)XDRPersistenceManager_test$(EXEEXT)
 
 VIEW_DEPENDENT_EXECUTABLES=\
 
-EXECUTABLES_BASIC =	\
-	ClassTest_test$(EXEEXT)\
-	Debug_test$(EXEEXT)\
-	RegularExpression_test$(EXEEXT)\
-	GlobalTypes_test$(EXEEXT)\
-	Limits_test$(EXEEXT)\
-	VersionInfo_test$(EXEEXT)\
-	RTTI_test$(EXEEXT)
+EXECUTABLES_BASIC = \
+$(PREFIX)ClassTest_test$(EXEEXT)\
+$(PREFIX)Debug_test$(EXEEXT)\
+$(PREFIX)RegularExpression_test$(EXEEXT)\
+$(PREFIX)GlobalTypes_test$(EXEEXT)\
+$(PREFIX)Limits_test$(EXEEXT)\
+$(PREFIX)VersionInfo_test$(EXEEXT)\
+$(PREFIX)RTTI_test$(EXEEXT)
 
 
 EXECUTABLES_MATHS = \
-	MathsCommon_test$(EXEEXT)\
-	AnalyticalGeometry_test$(EXEEXT)\
-	Angle_test$(EXEEXT)\
-	Vector2_test$(EXEEXT)\
-	Vector3_test$(EXEEXT)\
-	Vector4_test$(EXEEXT)\
-	Quaternion_test$(EXEEXT)\
-	Matrix44_test$(EXEEXT)\
-	NumericalIntegrator_test$(EXEEXT)\
-	Line3_test$(EXEEXT)\
-	Circle3_test$(EXEEXT)\
-	SimpleBox3_test$(EXEEXT)\
-	Box3_test$(EXEEXT)\
-	Plane3_test$(EXEEXT)\
-	Sphere3_test$(EXEEXT)\
-	Surface_test$(EXEEXT)\
-	Function_test$(EXEEXT)\
-	PiecewiseFunction_test$(EXEEXT)\
-	PiecewisePolynomial_test$(EXEEXT)
+$(PREFIX)MathsCommon_test$(EXEEXT)\
+$(PREFIX)AnalyticalGeometry_test$(EXEEXT)\
+$(PREFIX)Angle_test$(EXEEXT)\
+$(PREFIX)Vector2_test$(EXEEXT)\
+$(PREFIX)Vector3_test$(EXEEXT)\
+$(PREFIX)Vector4_test$(EXEEXT)\
+$(PREFIX)Quaternion_test$(EXEEXT)\
+$(PREFIX)Matrix44_test$(EXEEXT)\
+$(PREFIX)NumericalIntegrator_test$(EXEEXT)\
+$(PREFIX)Line3_test$(EXEEXT)\
+$(PREFIX)Circle3_test$(EXEEXT)\
+$(PREFIX)SimpleBox3_test$(EXEEXT)\
+$(PREFIX)Box3_test$(EXEEXT)\
+$(PREFIX)Plane3_test$(EXEEXT)\
+$(PREFIX)Sphere3_test$(EXEEXT)\
+$(PREFIX)Surface_test$(EXEEXT)\
+$(PREFIX)Function_test$(EXEEXT)\
+$(PREFIX)PiecewiseFunction_test$(EXEEXT)\
+$(PREFIX)PiecewisePolynomial_test$(EXEEXT)
 
 EXECUTABLES_SYSTEM = \
-	BinaryFileAdaptor_test$(EXEEXT)\
-	Directory_test$(EXEEXT)\
-	FileSystem_test$(EXEEXT)\
-	File_test$(EXEEXT)\
-	Path_test$(EXEEXT)\
-	PreciseTime_test$(EXEEXT)\
-	Socket_test$(EXEEXT)\
-	Sysinfo_test$(EXEEXT)\
-	TCPTransfer_test$(EXEEXT)\
-	Timer_test$(EXEEXT)\
-	TimeStamp_test$(EXEEXT)\
-	TransformationManager_test$(EXEEXT)
+$(PREFIX)BinaryFileAdaptor_test$(EXEEXT)\
+$(PREFIX)Directory_test$(EXEEXT)\
+$(PREFIX)FileSystem_test$(EXEEXT)\
+$(PREFIX)File_test$(EXEEXT)\
+$(PREFIX)Path_test$(EXEEXT)\
+$(PREFIX)PreciseTime_test$(EXEEXT)\
+$(PREFIX)Socket_test$(EXEEXT)\
+$(PREFIX)Sysinfo_test$(EXEEXT)\
+$(PREFIX)TCPTransfer_test$(EXEEXT)\
+$(PREFIX)Timer_test$(EXEEXT)\
+$(PREFIX)TimeStamp_test$(EXEEXT)\
+$(PREFIX)TransformationManager_test$(EXEEXT)
 
 EXECUTABLES_DATATYPES = \
-	Bit_test$(EXEEXT)\
-	BitVector_test$(EXEEXT)\
-	Contour_test$(EXEEXT)\
-	ContourLine_test$(EXEEXT)\
-	List_test$(EXEEXT)\
-	Hash_test$(EXEEXT)\
-	HashMap_test$(EXEEXT)\
-	StringHashMap_test$(EXEEXT)\
-	HashSet_test$(EXEEXT)\
-	HashGrid3_test$(EXEEXT)\
-	HashGridBox3_test$(EXEEXT)\
-	HashGrid3DataIteratorTraits_test$(EXEEXT)\
-	HashGrid3BoxIteratorTraits_test$(EXEEXT)\
-	HashGrid3DataItem_test$(EXEEXT)\
-	HashGrid3NeighborBoxItem_test$(EXEEXT)\
-	Options_test$(EXEEXT)\
-	String_test1$(EXEEXT)\
-	String_test2$(EXEEXT)\
-	String_test3$(EXEEXT)\
-	String_test4$(EXEEXT)\
-	Substring_test$(EXEEXT)\
-	Triple_test$(EXEEXT)\
-	Quadruple_test$(EXEEXT)\
-	RegularData1D_test$(EXEEXT)\
-	RegularData2D_test$(EXEEXT)\
-	RegularData3D_test$(EXEEXT)\
-	ContourSurface_test$(EXEEXT)
+$(PREFIX)Bit_test$(EXEEXT)\
+$(PREFIX)BitVector_test$(EXEEXT)\
+$(PREFIX)Contour_test$(EXEEXT)\
+$(PREFIX)ContourLine_test$(EXEEXT)\
+$(PREFIX)List_test$(EXEEXT)\
+$(PREFIX)Hash_test$(EXEEXT)\
+$(PREFIX)HashMap_test$(EXEEXT)\
+$(PREFIX)StringHashMap_test$(EXEEXT)\
+$(PREFIX)HashSet_test$(EXEEXT)\
+$(PREFIX)HashGrid3_test$(EXEEXT)\
+$(PREFIX)HashGridBox3_test$(EXEEXT)\
+$(PREFIX)HashGrid3DataIteratorTraits_test$(EXEEXT)\
+$(PREFIX)HashGrid3BoxIteratorTraits_test$(EXEEXT)\
+$(PREFIX)HashGrid3DataItem_test$(EXEEXT)\
+$(PREFIX)HashGrid3NeighborBoxItem_test$(EXEEXT)\
+$(PREFIX)Options_test$(EXEEXT)\
+$(PREFIX)String_test1$(EXEEXT)\
+$(PREFIX)String_test2$(EXEEXT)\
+$(PREFIX)String_test3$(EXEEXT)\
+$(PREFIX)String_test4$(EXEEXT)\
+$(PREFIX)Substring_test$(EXEEXT)\
+$(PREFIX)Triple_test$(EXEEXT)\
+$(PREFIX)Quadruple_test$(EXEEXT)\
+$(PREFIX)RegularData1D_test$(EXEEXT)\
+$(PREFIX)RegularData2D_test$(EXEEXT)\
+$(PREFIX)RegularData3D_test$(EXEEXT)\
+$(PREFIX)ContourSurface_test$(EXEEXT)
 
 EXECUTABLES_CONCEPTS = \
-	LogStream_test$(EXEEXT)\
-	AutoDeletable_test$(EXEEXT)\
-	Factory_test$(EXEEXT)\
-	Object_test$(EXEEXT)\
-	PersistentObject_test$(EXEEXT)\
-	PersistenceManager_test$(EXEEXT)\
-	TextPersistenceManager_test$(EXEEXT)\
-	Selectable_test$(EXEEXT)\
-	NamedProperty_test$(EXEEXT)\
-	PropertyManager_test$(EXEEXT)\
-	Composite_test1$(EXEEXT)\
-	Composite_test2$(EXEEXT)\
-	CompositeCompositeIteratorTraits_test$(EXEEXT)\
-	CompositeChildcompositeIteratorTraits_test$(EXEEXT)\
-	CompositeAncestorIteratorTraits_test$(EXEEXT)\
-	Embeddable_test$(EXEEXT)\
-	BaseIterator_test$(EXEEXT)\
-	ConstForwardIterator_test$(EXEEXT)\
-	ForwardIterator_test$(EXEEXT)\
-	ConstBidirectionalIterator_test$(EXEEXT)\
-	BidirectionalIterator_test$(EXEEXT)\
-	ConstRandomAccessIterator_test$(EXEEXT)\
-	RandomAccessIterator_test$(EXEEXT)
+$(PREFIX)LogStream_test$(EXEEXT)\
+$(PREFIX)AutoDeletable_test$(EXEEXT)\
+$(PREFIX)Factory_test$(EXEEXT)\
+$(PREFIX)Object_test$(EXEEXT)\
+$(PREFIX)PersistentObject_test$(EXEEXT)\
+$(PREFIX)PersistenceManager_test$(EXEEXT)\
+$(PREFIX)TextPersistenceManager_test$(EXEEXT)\
+$(PREFIX)Selectable_test$(EXEEXT)\
+$(PREFIX)NamedProperty_test$(EXEEXT)\
+$(PREFIX)PropertyManager_test$(EXEEXT)\
+$(PREFIX)Composite_test1$(EXEEXT)\
+$(PREFIX)Composite_test2$(EXEEXT)\
+$(PREFIX)CompositeCompositeIteratorTraits_test$(EXEEXT)\
+$(PREFIX)CompositeChildcompositeIteratorTraits_test$(EXEEXT)\
+$(PREFIX)CompositeAncestorIteratorTraits_test$(EXEEXT)\
+$(PREFIX)Embeddable_test$(EXEEXT)\
+$(PREFIX)BaseIterator_test$(EXEEXT)\
+$(PREFIX)ConstForwardIterator_test$(EXEEXT)\
+$(PREFIX)ForwardIterator_test$(EXEEXT)\
+$(PREFIX)ConstBidirectionalIterator_test$(EXEEXT)\
+$(PREFIX)BidirectionalIterator_test$(EXEEXT)\
+$(PREFIX)ConstRandomAccessIterator_test$(EXEEXT)\
+$(PREFIX)RandomAccessIterator_test$(EXEEXT)
 
 EXECUTABLES_KERNEL = \
-	PTE_test$(EXEEXT)\
-	Atom_test$(EXEEXT)\
-	AtomStaticAtomAttributes_test$(EXEEXT)\
-	AtomAttributeVector_test$(EXEEXT)\
-	Bond_test$(EXEEXT)\
-	AtomContainer_test$(EXEEXT)\
-	Fragment_test$(EXEEXT)\
-	Chain_test$(EXEEXT)\
-	Molecule_test$(EXEEXT)\
-	SecondaryStructure_test$(EXEEXT)\
-	System_test$(EXEEXT)\
-	Protein_test$(EXEEXT)\
-	PDBAtom_test$(EXEEXT)\
-	NucleicAcid_test$(EXEEXT)\
-	Nucleotide_test$(EXEEXT)\
-	Residue_test$(EXEEXT)\
-	Expression_test$(EXEEXT)\
-	ExpressionParser_test$(EXEEXT)\
-	ExpressionPredicate_test$(EXEEXT)\
-	ExpressionTree_test$(EXEEXT)\
-	KernelPredicate_test$(EXEEXT)\
-	Selector_test$(EXEEXT)\
-	RuleEvaluator_test$(EXEEXT)\
-	StandardPredicates_test$(EXEEXT)\
-	DefaultProcessors_test$(EXEEXT)\
-	FragmentDB_test$(EXEEXT)\
-	NormalizeNamesProcessor_test$(EXEEXT)\
-	ForEach_test$(EXEEXT)\
-	GlobalKernel_test$(EXEEXT)\
-	CompositeIteratorTraits_test$(EXEEXT)\
-	AtomIterator_test$(EXEEXT)\
-	AtomBondIteratorTraits_test$(EXEEXT)
+$(PREFIX)PTE_test$(EXEEXT)\
+$(PREFIX)Atom_test$(EXEEXT)\
+$(PREFIX)AtomStaticAtomAttributes_test$(EXEEXT)\
+$(PREFIX)AtomAttributeVector_test$(EXEEXT)\
+$(PREFIX)Bond_test$(EXEEXT)\
+$(PREFIX)AtomContainer_test$(EXEEXT)\
+$(PREFIX)Fragment_test$(EXEEXT)\
+$(PREFIX)Chain_test$(EXEEXT)\
+$(PREFIX)Molecule_test$(EXEEXT)\
+$(PREFIX)SecondaryStructure_test$(EXEEXT)\
+$(PREFIX)System_test$(EXEEXT)\
+$(PREFIX)Protein_test$(EXEEXT)\
+$(PREFIX)PDBAtom_test$(EXEEXT)\
+$(PREFIX)NucleicAcid_test$(EXEEXT)\
+$(PREFIX)Nucleotide_test$(EXEEXT)\
+$(PREFIX)Residue_test$(EXEEXT)\
+$(PREFIX)Expression_test$(EXEEXT)\
+$(PREFIX)ExpressionParser_test$(EXEEXT)\
+$(PREFIX)ExpressionPredicate_test$(EXEEXT)\
+$(PREFIX)ExpressionTree_test$(EXEEXT)\
+$(PREFIX)KernelPredicate_test$(EXEEXT)\
+$(PREFIX)Selector_test$(EXEEXT)\
+$(PREFIX)RuleEvaluator_test$(EXEEXT)\
+$(PREFIX)StandardPredicates_test$(EXEEXT)\
+$(PREFIX)DefaultProcessors_test$(EXEEXT)\
+$(PREFIX)FragmentDB_test$(EXEEXT)\
+$(PREFIX)NormalizeNamesProcessor_test$(EXEEXT)\
+$(PREFIX)ForEach_test$(EXEEXT)\
+$(PREFIX)GlobalKernel_test$(EXEEXT)\
+$(PREFIX)CompositeIteratorTraits_test$(EXEEXT)\
+$(PREFIX)AtomIterator_test$(EXEEXT)\
+$(PREFIX)AtomBondIteratorTraits_test$(EXEEXT)
 
 
 EXECUTABLES_MOLMEC = \
-	Gradient_test$(EXEEXT)\
-	AtomVector_test$(EXEEXT)\
-	MolmecSupport_test$(EXEEXT)\
-	SnapShot_test$(EXEEXT)\
-	SnapShotManager_test$(EXEEXT)\
-	ForceField_test$(EXEEXT)\
-	AmberFF_test$(EXEEXT)\
-	CharmmFF_test$(EXEEXT)\
-	EnergyMinimizer_test$(EXEEXT)\
-	LineSearch_test$(EXEEXT)\
-	SteepestDescentMinimizer_test$(EXEEXT)\
-	ConjugateGradientMinimizer_test$(EXEEXT)\
-	AtomTypes_test$(EXEEXT)
+$(PREFIX)Gradient_test$(EXEEXT)\
+$(PREFIX)AtomVector_test$(EXEEXT)\
+$(PREFIX)MolmecSupport_test$(EXEEXT)\
+$(PREFIX)SnapShot_test$(EXEEXT)\
+$(PREFIX)SnapShotManager_test$(EXEEXT)\
+$(PREFIX)ForceField_test$(EXEEXT)\
+$(PREFIX)AmberFF_test$(EXEEXT)\
+$(PREFIX)CharmmFF_test$(EXEEXT)\
+$(PREFIX)EnergyMinimizer_test$(EXEEXT)\
+$(PREFIX)LineSearch_test$(EXEEXT)\
+$(PREFIX)SteepestDescentMinimizer_test$(EXEEXT)\
+$(PREFIX)ConjugateGradientMinimizer_test$(EXEEXT)\
+$(PREFIX)AtomTypes_test$(EXEEXT)
 
 EXECUTABLES_NMR = \
-	AssignShiftProcessor_test$(EXEEXT)\
-	RandomCoilShiftProcessor_test$(EXEEXT)\
-	AnisotropyShiftProcessor_test$(EXEEXT)\
-	ClearShiftProcessor_test$(EXEEXT)\
-	CreateSpectrumProcessor_test$(EXEEXT)\
-	EFShiftProcessor_test$(EXEEXT)\
-	HaighMallionShiftProcessor_test$(EXEEXT)\
-	JohnsonBoveyShiftProcessor_test$(EXEEXT)\
-	ShiftModel_test$(EXEEXT)\
-	ShiftModule_test$(EXEEXT)\
-	Spectrum_test$(EXEEXT)\
-	Peak_test$(EXEEXT)\
-	PeakList_test$(EXEEXT)
+$(PREFIX)AssignShiftProcessor_test$(EXEEXT)\
+$(PREFIX)RandomCoilShiftProcessor_test$(EXEEXT)\
+$(PREFIX)AnisotropyShiftProcessor_test$(EXEEXT)\
+$(PREFIX)ClearShiftProcessor_test$(EXEEXT)\
+$(PREFIX)CreateSpectrumProcessor_test$(EXEEXT)\
+$(PREFIX)EFShiftProcessor_test$(EXEEXT)\
+$(PREFIX)HaighMallionShiftProcessor_test$(EXEEXT)\
+$(PREFIX)JohnsonBoveyShiftProcessor_test$(EXEEXT)\
+$(PREFIX)ShiftModel_test$(EXEEXT)\
+$(PREFIX)ShiftModule_test$(EXEEXT)\
+$(PREFIX)Spectrum_test$(EXEEXT)\
+$(PREFIX)Peak_test$(EXEEXT)\
+$(PREFIX)PeakList_test$(EXEEXT)
 
-EXECUTABLES_FORMATS =\
-	LineBasedFile_test$(EXEEXT)\
-	BinaryFileAdaptor_test$(EXEEXT)\
-	Bruker1DFile_test$(EXEEXT)\
-	Bruker2DFile_test$(EXEEXT)\
-	INIFile_test$(EXEEXT)\
-	JCAMPFile_test$(EXEEXT)\
-	KCFFile_test$(EXEEXT)\
-	Parameters_test$(EXEEXT)\
-	ParameterSection_test$(EXEEXT)\
-	ResourceFile_test$(EXEEXT)\
-	GenericMolFile_test$(EXEEXT)\
-	HINFile_test$(EXEEXT)\
-	MOLFile_test$(EXEEXT)\
-	SDFile_test$(EXEEXT)\
-	MOL2File_test$(EXEEXT)\
-	NMRStarFile_test$(EXEEXT)\
-	DCDFile_test$(EXEEXT)\
-	PDBRecords_test$(EXEEXT)\
-	PDBInfo_test$(EXEEXT)\
-	PDBFile_test$(EXEEXT)\
-	TrajectoryFile_test$(EXEEXT)\
-	XYZFile_test$(EXEEXT)
+EXECUTABLES_FORMATS = \
+$(PREFIX)LineBasedFile_test$(EXEEXT)\
+$(PREFIX)BinaryFileAdaptor_test$(EXEEXT)\
+$(PREFIX)Bruker1DFile_test$(EXEEXT)\
+$(PREFIX)Bruker2DFile_test$(EXEEXT)\
+$(PREFIX)INIFile_test$(EXEEXT)\
+$(PREFIX)JCAMPFile_test$(EXEEXT)\
+$(PREFIX)KCFFile_test$(EXEEXT)\
+$(PREFIX)Parameters_test$(EXEEXT)\
+$(PREFIX)ParameterSection_test$(EXEEXT)\
+$(PREFIX)ResourceFile_test$(EXEEXT)\
+$(PREFIX)GenericMolFile_test$(EXEEXT)\
+$(PREFIX)HINFile_test$(EXEEXT)\
+$(PREFIX)MOLFile_test$(EXEEXT)\
+$(PREFIX)SDFile_test$(EXEEXT)\
+$(PREFIX)MOL2File_test$(EXEEXT)\
+$(PREFIX)NMRStarFile_test$(EXEEXT)\
+$(PREFIX)DCDFile_test$(EXEEXT)\
+$(PREFIX)PDBRecords_test$(EXEEXT)\
+$(PREFIX)PDBInfo_test$(EXEEXT)\
+$(PREFIX)PDBFile_test$(EXEEXT)\
+$(PREFIX)TrajectoryFile_test$(EXEEXT)\
+$(PREFIX)XYZFile_test$(EXEEXT)
 
 EXECUTABLES_ENERGY = \
-	AtomicContactEnergy_test$(EXEEXT)\
-	ComposedEnergyProcessor_test$(EXEEXT)\
-	EnergyProcessor_test$(EXEEXT)\
-	OoiEnergy_test$(EXEEXT)
+$(PREFIX)AtomicContactEnergy_test$(EXEEXT)\
+$(PREFIX)ComposedEnergyProcessor_test$(EXEEXT)\
+$(PREFIX)EnergyProcessor_test$(EXEEXT)\
+$(PREFIX)OoiEnergy_test$(EXEEXT)
 
 EXECUTABLES_STRUCTURE = \
-	Enumerator_test$(EXEEXT)\
-	EnumeratorIndex_test$(EXEEXT)\
-	AnalyticalSES_test$(EXEEXT)\
-	MolecularGraph_test$(EXEEXT)\
-	NumericalSAS_test$(EXEEXT)\
-	PeptideBuilder_test$(EXEEXT)\
-	Peptides_test$(EXEEXT)\
-	RadialDistributionFunction_test$(EXEEXT)\
-	RDFIntegrator_test$(EXEEXT)\
-	RDFParameter_test$(EXEEXT)\
-	RDFSection_test$(EXEEXT)\
-	ReconstructFragmentProcessor_test$(EXEEXT)\
-	ResidueChecker_test$(EXEEXT)\
-	RotamerLibrary_test$(EXEEXT)\
-	SmilesParser_test$(EXEEXT)\
-	StructureMapper_test$(EXEEXT)\
-	TransformationProcessor_test$(EXEEXT)\
-	TranslationProcessor_test$(EXEEXT)\
-	SurfaceProcessor_test$(EXEEXT)\
-	SecondaryStructureProcessor_test$(EXEEXT)\
-	UCK_test$(EXEEXT)\
-	BuildBondsProcessor_test$(EXEEXT)
+$(PREFIX)Enumerator_test$(EXEEXT)\
+$(PREFIX)EnumeratorIndex_test$(EXEEXT)\
+$(PREFIX)AnalyticalSES_test$(EXEEXT)\
+$(PREFIX)MolecularGraph_test$(EXEEXT)\
+$(PREFIX)NumericalSAS_test$(EXEEXT)\
+$(PREFIX)PeptideBuilder_test$(EXEEXT)\
+$(PREFIX)Peptides_test$(EXEEXT)\
+$(PREFIX)RadialDistributionFunction_test$(EXEEXT)\
+$(PREFIX)RDFIntegrator_test$(EXEEXT)\
+$(PREFIX)RDFParameter_test$(EXEEXT)\
+$(PREFIX)RDFSection_test$(EXEEXT)\
+$(PREFIX)ReconstructFragmentProcessor_test$(EXEEXT)\
+$(PREFIX)ResidueChecker_test$(EXEEXT)\
+$(PREFIX)RotamerLibrary_test$(EXEEXT)\
+$(PREFIX)SmilesParser_test$(EXEEXT)\
+$(PREFIX)StructureMapper_test$(EXEEXT)\
+$(PREFIX)TransformationProcessor_test$(EXEEXT)\
+$(PREFIX)TranslationProcessor_test$(EXEEXT)\
+$(PREFIX)SurfaceProcessor_test$(EXEEXT)\
+$(PREFIX)SecondaryStructureProcessor_test$(EXEEXT)\
+$(PREFIX)UCK_test$(EXEEXT)\
+$(PREFIX)BuildBondsProcessor_test$(EXEEXT)
 
 EXECUTABLES_SOLVATION = \
-	PoissonBoltzmann_test$(EXEEXT)\
-	SolventDescriptor_test$(EXEEXT)\
-	SolventParameter_test$(EXEEXT)\
-	ClaverieParameter_test$(EXEEXT)\
-	ReissCavFreeEnergyProcessor_test$(EXEEXT)\
-  UhligCavFreeEnergyProcessor_test$(EXEEXT)\
-  PCMCavFreeEnergyProcessor_test$(EXEEXT)\
-  PierottiCavFreeEnergyProcessor_test$(EXEEXT)\
-	Pair6_12RDFIntegrator_test$(EXEEXT)\
-	Pair6_12InteractionEnergyProcessor_test$(EXEEXT)\
-	PairExpInteractionEnergyProcessor_test$(EXEEXT)\
-	PairExpRDFIntegrator_test$(EXEEXT)\
-	PARSE_test$(EXEEXT)
+$(PREFIX)PoissonBoltzmann_test$(EXEEXT)\
+$(PREFIX)SolventDescriptor_test$(EXEEXT)\
+$(PREFIX)SolventParameter_test$(EXEEXT)\
+$(PREFIX)ClaverieParameter_test$(EXEEXT)\
+$(PREFIX)ReissCavFreeEnergyProcessor_test$(EXEEXT)\
+$(PREFIX)UhligCavFreeEnergyProcessor_test$(EXEEXT)\
+$(PREFIX)PCMCavFreeEnergyProcessor_test$(EXEEXT)\
+$(PREFIX)PierottiCavFreeEnergyProcessor_test$(EXEEXT)\
+$(PREFIX)Pair6_12RDFIntegrator_test$(EXEEXT)\
+$(PREFIX)Pair6_12InteractionEnergyProcessor_test$(EXEEXT)\
+$(PREFIX)PairExpInteractionEnergyProcessor_test$(EXEEXT)\
+$(PREFIX)PairExpRDFIntegrator_test$(EXEEXT)\
+$(PREFIX)PARSE_test$(EXEEXT)
 
 EXECUTABLES_QSAR = \
-	AromaticityProcessor_test$(EXEEXT)\
-	ConnectivityBase_test$(EXEEXT)\
-	ConnectivityDescriptors_test$(EXEEXT)\
-	Descriptor_test$(EXEEXT)\
-	PartialChargeProcessor_test$(EXEEXT)\
-	PartialChargeBase_test$(EXEEXT)\
-	PartialChargeDescriptors_test$(EXEEXT)\
-	RingPerceptionProcessor_test$(EXEEXT)\
-	SimpleBase_test$(EXEEXT)\
-	SimpleDescriptors_test$(EXEEXT)\
-	SurfaceBase_test$(EXEEXT)\
-	SurfaceDescriptors_test$(EXEEXT)
+$(PREFIX)AromaticityProcessor_test$(EXEEXT)\
+$(PREFIX)ConnectivityBase_test$(EXEEXT)\
+$(PREFIX)ConnectivityDescriptors_test$(EXEEXT)\
+$(PREFIX)Descriptor_test$(EXEEXT)\
+$(PREFIX)PartialChargeProcessor_test$(EXEEXT)\
+$(PREFIX)PartialChargeBase_test$(EXEEXT)\
+$(PREFIX)PartialChargeDescriptors_test$(EXEEXT)\
+$(PREFIX)RingPerceptionProcessor_test$(EXEEXT)\
+$(PREFIX)SimpleBase_test$(EXEEXT)\
+$(PREFIX)SimpleDescriptors_test$(EXEEXT)\
+$(PREFIX)SurfaceBase_test$(EXEEXT)\
+$(PREFIX)SurfaceDescriptors_test$(EXEEXT)
