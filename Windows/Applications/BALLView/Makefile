@@ -2,10 +2,9 @@
 TARGET = BALLView
 
 include ..\..\Makefile_options.txt
+include Makefile.lst
 
 BALLVIEW_PATH = "$(SDIR)\Applications\BALLView"
-
-include Makefile.lst
 
 ########################
 # options for Compiler #
@@ -24,13 +23,7 @@ CC =  cl $(CCOPTIONS) $(BALLVIEW_INCLUDES)  $(BALLVIEW_DEFINES) $(OPT) /TP
 
 LINK = link  -nologo /OUT:$(TARGETDIR)\BALLView.exe $(BALLVIEW_LIBS) $(TARGETDIR)\*.obj
 
-.SUFFIXES: .ui .moc .h .myui
-
 UICDIR = $(SDIR)\Applications\BALLView
-
-.c.obj:
-	$(CC)  $(*).C
-	echo A > $(*).obj
 
 .ui.myui:
 	echo running uic and moc for $(*B)
@@ -49,5 +42,6 @@ clean:
 	$(BINPATH)\rm.exe -f  $(TARGETDIR)/*.* $(OBJS) $(UICS) $(MOCS)
 
 $(TARGET).exe:  $(UICS) $(MOCS) $(OBJS) 
+#compile the resource file:
 	rc.exe /fo"$(TARGETDIR)\BALLView.res" BALLView.rc
 	$(LINK) $(TARGETDIR)\BALLView.res

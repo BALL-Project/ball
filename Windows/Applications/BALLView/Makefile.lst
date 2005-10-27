@@ -1,23 +1,22 @@
-BALLVIEW_PATH = ..\..\..\source\Applications\BALLView
 
 OBJS = \
-$(BALLVIEW_PATH)\aboutDialog.obj\
-$(BALLVIEW_PATH)\aboutDialog_moc.obj\
-$(BALLVIEW_PATH)\demoTutorialDialog.obj\
-$(BALLVIEW_PATH)\demoTutorialDialogData.obj\
-$(BALLVIEW_PATH)\demoTutorialDialog_moc.obj\
-$(BALLVIEW_PATH)\demoTutorialDialogData_moc.obj\
-$(BALLVIEW_PATH)\mainframe.obj\
-$(BALLVIEW_PATH)\mainframe_moc.obj\
-$(BALLVIEW_PATH)\icons.obj\
-$(BALLVIEW_PATH)\main.obj
+..\..\..\source\Applications\BALLView\aboutDialog.obj\
+..\..\..\source\Applications\BALLView\aboutDialog_moc.obj\
+..\..\..\source\Applications\BALLView\demoTutorialDialog.obj\
+..\..\..\source\Applications\BALLView\demoTutorialDialogData.obj\
+..\..\..\source\Applications\BALLView\demoTutorialDialog_moc.obj\
+..\..\..\source\Applications\BALLView\demoTutorialDialogData_moc.obj\
+..\..\..\source\Applications\BALLView\mainframe.obj\
+..\..\..\source\Applications\BALLView\mainframe_moc.obj\
+..\..\..\source\Applications\BALLView\icons.obj\
+..\..\..\source\Applications\BALLView\main.obj
 
 UICS = \
-$(BALLVIEW_PATH)\demoTutorialDialog.myui\
-$(BALLVIEW_PATH)\aboutDialog.myui
+..\..\..\source\Applications\BALLView\demoTutorialDialog.myui\
+..\..\..\source\Applications\BALLView\aboutDialog.myui
 
 MOCS = \
-$(BALLVIEW_PATH)\aboutDialog.mymoc\
-$(BALLVIEW_PATH)\demoTutorialDialog.mymoc\
-$(BALLVIEW_PATH)\demoTutorialDialogData.mymoc\
-$(BALLVIEW_PATH)\mainframe.mymoc
+..\..\..\source\Applications\BALLView\aboutDialog.mymoc\
+..\..\..\source\Applications\BALLView\demoTutorialDialog.mymoc\
+..\..\..\source\Applications\BALLView\demoTutorialDialogData.mymoc\
+..\..\..\source\Applications\BALLView\mainframe.mymoc
