@@ -2,13 +2,15 @@
 TARGETDIR = TEST
 OPT = /O2 /Ot /GA /Og
 
-BALL_PATH=D:\BALL
+.SUFFIXES: .ui .moc .h .myui
 
-BALL_WIN_DIR=$(BALL_PATH)\Windows
-BALL_CONTRIB=$(BALL_WIN_DIR)\Contrib
-BINPATH = $(BALL_CONTRIB)\bin
+BALL_WIN_DIR	=	$(BALL_PATH)\Windows
+BALL_CONTRIB	=	$(BALL_WIN_DIR)\Contrib
+BINPATH		=	$(BALL_CONTRIB)\bin
+SDIR		=	$(BALL_PATH)\source
+INC_DIR		=	$(BALL_PATH)\include\
 
-INCLUDES = /I "$(BALL_WIN_DIR)\include" /I "$(BALL_PATH)\include" /I "$(BALL_CONTRIB)\regex-0.12" /I "$(BALL_CONTRIB)\ONC_RPC" /I "$(PYTHONDIR)\include"
+INCLUDES = /I "$(BALL_WIN_DIR)\include" /I "$(INC_DIR)" /I "$(BALL_CONTRIB)\regex-0.12" /I "$(BALL_CONTRIB)\ONC_RPC" /I "$(PYTHONDIR)\include"
 
 DEFINES = /D WIN32 /D _WINDOWS /D _USRDLL /D YY_NEVER_INTERACTIVE /D _WINDLL /U ERROR /U IN /U OUT
 
@@ -21,3 +23,6 @@ LINKOPTIONS = -nologo /OUT:$(TARGETDIR)\$(TARGET).dll /NOLOGO /DLL $(LIBS) /FORC
 VIEW_LIBS = $(LIBS) "$(MSVCDIR)\PlatformSDK\Lib\WS2_32.Lib" $(QTDIR)\lib\qt-mt335.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib $(BALL_WIN_DIR)\Libs\libBALL\$(TARGETDIR)\libBALL.lib
 VIEW_INCLUDES = /I "$(QTDIR)\include"
 
+.c.obj:
+	$(CC)  $(*).C
+	echo A > $(*).obj

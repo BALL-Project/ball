@@ -1,11 +1,8 @@
 
 TARGET = libBALL
 
-include ..\..\Makefile_options.txt
-
 include Makefile.lst
-
-SDIR= "$(BALL_PATH)\source"
+include ..\..\Makefile_options.txt
 
 ########################
 # options for Compiler #
@@ -41,10 +38,7 @@ clean:
 $(TARGET).dll:   $(NO_OPTIMIZATION_OBJS)  $(OBJS) 
 	$(LINK)
 
-.c.obj:
-	$(CC)  $(*).C
-	echo A > $(*).obj
-
+# rule to create non optimized C++ files:
 .c._obj:
 	$(NOOPT_CC)  $(*).C
 	echo A > $(*)._obj
