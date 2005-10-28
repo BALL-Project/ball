@@ -1,5 +1,4 @@
 
-
 .SUFFIXES: .ui .h .myui .mymoc .exe .C .sip .mysip
 
 ########## paths ########################
@@ -54,6 +53,6 @@ LINKDLL = $(LINK) $(LINKOPTIONS_DLL)
 BALLVIEW_LIBS = $(VIEW_LIBS) $(BALL_WIN_DIR)\Libs\libVIEW\$(TARGETDIR)\libVIEW.lib
 
 ########### VIEW ########################
-VIEW_LIBS = "$(MSVCDIR)\PlatformSDK\Lib\WS2_32.Lib" $(QTDIR)\lib\qt-mt335.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib $(BALL_WIN_DIR)\Libs\libBALL\$(TARGETDIR)\libBALL.lib
+VIEW_LIBS = "$(MSVCDIR)\PlatformSDK\Lib\WS2_32.Lib" $(QTDIR)\lib\qt-mt$(QTVERSION).lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib $(BALL_WIN_DIR)\Libs\libBALL\$(TARGETDIR)\libBALL.lib
 
 VIEW_INCLUDES = /I "$(QTDIR)\include"

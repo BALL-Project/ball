@@ -7,7 +7,7 @@ VIEW_DEFINES	= /D BALL_VIEW_BUILD_DLL /D BALL_QT_HAS_THREADS /D QT_THREAD_SUPPOR
 
 CC		= $(CC) $(VIEW_INCLUDES) $(VIEW_DEFINES)
 
-LINKDLL		= $(LINKDLL) $(VIEW_LIBS) /EXPORT:initBALL
+LINKDLL		= $(LINKDLL) $(VIEW_LIBS)
 
 
 UICDIR = "$(INC_DIR)\BALL\VIEW\UIC"
@@ -30,10 +30,10 @@ UICDIR = "$(INC_DIR)\BALL\VIEW\UIC"
 	$(QTDIR)\bin\moc -o "mocfiles\$(*B)_moc.C"  "$(*).h"
 	echo A > $(*).mymoc
 
-all: libBALL.dll
+all: libVIEW.dll
 
 clean:
 	$(BINPATH)\rm.exe -f  $(TARGETDIR)/*.* $(OBJS) $(UICS) $(MOCS) mocfiles/*.*
 
-$(TARGET).dll:  $(UICS) $(MOCS) $(OBJS) 
+libVIEW.dll:  $(UICS) $(MOCS) $(OBJS) 
 	$(LINKDLL) /OUT:$(TARGETDIR)\libVIEW.dll 

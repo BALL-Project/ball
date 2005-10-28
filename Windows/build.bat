@@ -3,6 +3,7 @@ echo.
 
 if "%BALL_PATH%"=="" goto Usage1
 if "%QTDIR%"=="" goto Usage2
+if "%QTVERSION%"=="" goto Usage22
 if "%PYTHONDIR%"=="" goto Usage3
 if "%VSINSTALLDIR%"=="" goto Usage4
 
@@ -20,7 +21,7 @@ if "%1" == "debug" (
 if "%2" == "clean" goto CLEANUP
 
 
-if not exist Contrib\sip\siplib\sip.pyd goto Create_SIP
+if not exist "%PYTHONDIR%\Lib\site-packages\sip.pyd" goto Create_SIP
 
 goto BUILD
 
@@ -87,6 +88,10 @@ goto Usage
 
 :Usage2
 echo. QTDIR variable is not set. 
+goto Usage
+
+:Usage22
+echo. QTVERSION variable is not set. 
 goto Usage
 
 :Usage3
