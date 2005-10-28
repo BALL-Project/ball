@@ -1,8 +1,6 @@
 
-TARGET = libBALL
-
-include Makefile.lst
-include ..\..\Makefile_options.txt
+!INCLUDE Makefile.lst
+!INCLUDE ..\..\Makefile_options.txt
 
 ########################
 # options for Compiler #
@@ -11,32 +9,27 @@ include ..\..\Makefile_options.txt
 BALL_DEFINES = /D _MBCS /D HAVE_STRING_H /D BALL_BUILD_DLL
 
 # options for C++ files
-CC		= cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(BALL_DEFINES) $(OPT) /TP
+CC		= $(CC) $(BALL_DEFINES)
 
 # options for C files
-CCC		= cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(BALL_DEFINES) $(OPT) /TC
+CCC		= cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(BALL_DEFINES) $(CC_OPT) $(CC_DEBUG) /TC
 
 # options for C++ without optimization
-NOOPT_CC	= cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(BALL_DEFINES) /TP
+NOOPT_CC	= cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(BALL_DEFINES) $(CC_DEBUG) /TP
 
-########################
-# options for Linker   #
-########################
-
-LINK = link  $(LINKOPTIONS) $(TARGETDIR)\*.obj
 
 FLEX = $(BINPATH)\flex
 
 # bison will crash if not run with absolute path!!!
 BISON = $(BINPATH)\bison
 
-all: flex_bison regex $(TARGET).dll
+all: flex_bison regex libBALL.dll
 
 clean:
 	$(BINPATH)\rm.exe -f  $(TARGETDIR)/*.* $(OBJS) $(NO_OPTIMIZATION_OBJS)
 
-$(TARGET).dll:   $(NO_OPTIMIZATION_OBJS)  $(OBJS) 
-	$(LINK)
+libBALL.dll:   $(NO_OPTIMIZATION_OBJS)  $(OBJS) 
+	$(LINKDLL) /OUT:$(TARGETDIR)\libBALL.dll 
 
 .c.obj:
 	$(CC)  $(*).C

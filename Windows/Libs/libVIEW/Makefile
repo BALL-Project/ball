@@ -1,25 +1,17 @@
 
-TARGET = libVIEW
+!INCLUDE Makefile.lst
+!INCLUDE  ..\..\Makefile_options.txt
 
-include Makefile.lst
-include ..\..\Makefile_options.txt
 
-########################
-# options for Compiler #
-########################
+VIEW_DEFINES	= /D BALL_VIEW_BUILD_DLL /D BALL_QT_HAS_THREADS /D QT_THREAD_SUPPORT  
 
-VIEW_DEFINES = /D BALL_VIEW_BUILD_DLL /D BALL_QT_HAS_THREADS /D QT_THREAD_SUPPORT  
+CC		= $(CC) $(VIEW_INCLUDES) $(VIEW_DEFINES)
 
-# options for C++ files
-CC =  cl $(CCOPTIONS) $(INCLUDES) $(VIEW_INCLUDES) $(DEFINES) $(VIEW_DEFINES) $(OPT) /TP
+LINKDLL		= $(LINKDLL) $(VIEW_LIBS) /EXPORT:initBALL
 
-########################
-# options for Linker   #
-########################
-
-LINK = link  $(LINKOPTIONS) $(VIEW_LIBS) $(TARGETDIR)\*.obj  /EXPORT:initBALL
 
 UICDIR = "$(INC_DIR)\BALL\VIEW\UIC"
+
 
 .c.obj:
 	$(CC)  $(*).C
@@ -38,10 +30,10 @@ UICDIR = "$(INC_DIR)\BALL\VIEW\UIC"
 	$(QTDIR)\bin\moc -o "mocfiles\$(*B)_moc.C"  "$(*).h"
 	echo A > $(*).mymoc
 
-all: $(TARGET).dll
+all: libBALL.dll
 
 clean:
 	$(BINPATH)\rm.exe -f  $(TARGETDIR)/*.* $(OBJS) $(UICS) $(MOCS) mocfiles/*.*
 
 $(TARGET).dll:  $(UICS) $(MOCS) $(OBJS) 
-	$(LINK)
+	$(LINKDLL) /OUT:$(TARGETDIR)\libVIEW.dll 

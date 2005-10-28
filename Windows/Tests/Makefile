@@ -1,12 +1,11 @@
 
-include ..\Makefile_options.txt
-
-include ..\..\source\TEST\Makefile.lst
+!INCLUDE ..\Makefile_options.txt
+!INCLUDE ..\..\source\TEST\Makefile.lst
 
 # options for C++ files
-CC		= cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(BALL_DEFINES) /TP
+CC		= $(CC) $(BALL_DEFINES)
 
-LINK = link  $(LINKOPTIONS_EXE) $(BALL_WIN_DIR)\Libs\libBALL\$(TARGETDIR)\libBALL.lib
+LINK = $(LINK) $(BALL_WIN_DIR)\Libs\libBALL\$(TARGETDIR)\libBALL.lib
 
 o = .obj
 EXEEXT = .exe
@@ -14,12 +13,6 @@ e = .exe
 
 TESTDIR = $(SDIR)\TEST
 PREFIX = $(TESTDIR)\\
-
-#.obj.exe:
-#	$(LD) $(LFLAGS) $*.obj  $(BALL_LIB) $(XLIB) $(LDOPTS)
-
-#.c.obj:
-#	$(CC) $(CFLAGS) $(DFLAGS) $(IFLAGS) $(INCL) $(*).C
 
 .c.exe:
 	$(CC) $(*).C
@@ -43,8 +36,6 @@ EXECUTABLES = \
 	$(EXECUTABLES_QSAR)\
 	$(EXECUTABLES_SOLVATION)\
 	$(XDR_DEPENDENT_EXECUTABLES)
-
-# default target
 
 all:	$(EXECUTABLES)
 

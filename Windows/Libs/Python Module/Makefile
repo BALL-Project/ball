@@ -1,32 +1,22 @@
 
-TARGET = BALL
-
-include Makefile.lst
-include ..\..\Makefile_options.txt
-
-.SUFFIXES: .sip .mysip
+!INCLUDE  Makefile.lst
+!INCLUDE  ..\..\Makefile_options.txt
 
 EXTENSION_DIR = $(SDIR)\PYTHON\Extensions
-########################
-# options for Compiler #
-########################
 
 # options for C++ files
-CC =  cl $(CCOPTIONS) $(INCLUDES) $(VIEW_INCLUDES) $(DEFINES) $(VIEW_DEFINES) $(OPT) /TP
+CC =  $(CC) $(VIEW_INCLUDES) $(VIEW_DEFINES)
 
-########################
-# options for Linker   #
-########################
+# options for Linker
+LINKDLL = $(LINKDLL) $(BALLVIEW_LIBS)
 
-LINK = link  $(LINKOPTIONS) $(BALLVIEW_LIBS) $(TARGETDIR)\*.obj 
-
-all: $(EXTENSION_DIR)\BALL.mysip $(TARGET).dll
+all: $(EXTENSION_DIR)\BALL.mysip BALL.dll
 
 clean:
 	$(BINPATH)\rm.exe -f  $(TARGETDIR)/*.* $(EXTENSION_DIR)/BALL.mysip *.C *.h *.sip *.obj
 
-$(TARGET).dll:   $(OBJS) 
-	$(LINK)
+BALL.dll:   $(OBJS) 
+	$(LINKDLL) /OUT:$(TARGETDIR)\BALL.dll 
 
 .sip.mysip:
 	echo running sip for $(*B)
