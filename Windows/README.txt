@@ -60,6 +60,8 @@ and create the other one...
 
 BALLView can be started with the batch-file
 BALL/Windows/startBALLView.bat
+or
+BALL/Windows/startBALLViewDebug.bat
 
 This ensures, that the PATH environment variable contains the
 directories for the needed libs.
