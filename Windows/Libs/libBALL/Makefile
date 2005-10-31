@@ -27,7 +27,7 @@ all: flex_bison regex libBALL.dll
 
 clean:
 	cd $(SDIR)
-	del /S /Q *.obj *.obj_ > NUL 2> NUL
+	del /S /Q *.obj *._obj > NUL 2> NUL
 	cd $(MAKEDIR)
 	del /Q /S $(TARGETDIR)\*.* > NUL 2> NUL
 

@@ -34,7 +34,7 @@ all: libVIEW.dll
 
 clean:
 	cd $(SDIR)\VIEW
-	del /S /Q *.obj *.obj_ *.myui > NUL 2> NUL
+	del /S /Q *.obj *._obj *.myui > NUL 2> NUL
 	cd $(INC_DIR)
 	del /S /Q *.mymoc > NUL 2> NUL
 	cd $(MAKEDIR)
