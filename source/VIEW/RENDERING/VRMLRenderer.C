@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.C,v 1.3.8.3 2005/10/31 01:32:29 amoll Exp $
+// $Id: VRMLRenderer.C,v 1.3.8.4 2005/10/31 10:32:42 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
@@ -269,7 +269,6 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 		}
 		out_(out);
 	}
-	current_intend_ --;
 	outfinish_("]");
 
 // print colors ========================================
@@ -295,7 +294,15 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 	current_intend_ --;
 	outfinish_("]");
 	out_("}");
-	outfinish_("colorPerVertex FALSE");
+
+	if (mesh.colors.size() > 1)
+	{
+		outfinish_("colorPerVertex TRUE");
+	}
+	else
+	{
+		outfinish_("colorPerVertex FALSE");
+	}
 	outfinish_("}");
 	outfinish_("}");
 }
