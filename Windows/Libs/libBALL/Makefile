@@ -26,7 +26,10 @@ BISON = $(BINPATH)\bison
 all: flex_bison regex libBALL.dll
 
 clean:
-	$(BINPATH)\rm.exe -f  $(TARGETDIR)/*.* $(OBJS) $(NO_OPTIMIZATION_OBJS)
+	cd $(SDIR)
+	del /S /Q *.obj *.obj_ > NUL 2> NUL
+	cd $(MAKEDIR)
+	del /Q /S $(TARGETDIR)\*.* > NUL 2> NUL
 
 libBALL.dll:   $(NO_OPTIMIZATION_OBJS)  $(OBJS) 
 	$(LINKDLL) /OUT:$(TARGETDIR)\libBALL.dll 

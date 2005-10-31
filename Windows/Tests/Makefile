@@ -40,4 +40,7 @@ EXECUTABLES = \
 all:	$(EXECUTABLES)
 
 clean: 
-	$(BINPATH)\rm.exe -f  $(TARGETDIR)/*.* $(EXECUTABLES)
+	cd $(SDIR)\TEST
+	del /S /Q *.exe > NUL 2> NUL
+	cd $(MAKEDIR)
+	del /Q /S $(TARGETDIR)\*.* > NUL 2> NUL
