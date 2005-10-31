@@ -11,8 +11,10 @@ if not exist Contrib goto Usage5
 
 if "%1" == "debug" (
 	set NMAKE_ARG="DEBUG=true" 
+	set RESULT_DIR=Debug
 	echo OK, we are working on the debugging version
 )else if "%1" == "release" (
+	set RESULT_DIR=Result
 	echo OK, we are working on the release version
 )else (
 	goto Usage6
@@ -39,18 +41,23 @@ goto BUILD
 echo building the libraries...
 
 cd Libs\libBALL
+mkdir %RESULT_DIR% > NUL 2> NULL
 nmake %NMAKE_ARG% /CS
 cd ..
 
 cd libVIEW
+mkdir %RESULT_DIR% > NUL 2> NULL
+mkdir mocfiles > NUL 2> NULL
 nmake %NMAKE_ARG% /CS
 cd ..
 
 cd "Python Module"
+mkdir %RESULT_DIR% > NUL 2> NULL
 nmake %NMAKE_ARG% /CS
 cd ..
 
 cd ..\Applications\BALLView
+mkdir %RESULT_DIR% > NUL 2> NULL
 nmake %NMAKE_ARG% /CS
 cd ..
 
