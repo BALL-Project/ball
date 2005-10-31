@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.C,v 1.3.8.4 2005/10/31 10:32:42 amoll Exp $
+// $Id: VRMLRenderer.C,v 1.3.8.5 2005/10/31 11:08:15 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
@@ -270,7 +270,38 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 		out_(out);
 	}
 	outfinish_("]");
+	
+	// print normals =====================================
+	// each triangle gets its normal calculated from the three vertex normals
+	outheader_("normal Normal {");
+	outheader_("vector [");
+	itt = mesh.triangle.begin(); 
+	for (; itt != mesh.triangle.end(); itt++)
+	{
 
+		Vector3 n = mesh.normal[(*itt).v1] +
+								mesh.normal[(*itt).v2] +
+								mesh.normal[(*itt).v3];
+		n /= 3.0;
+
+		String out = VRMLVector3(n);
+		if (itt != mesh.triangle.end()) 
+		{
+			out += ",";
+		}
+		out_(out);
+	}
+	outfinish_("]");
+	outfinish_("}");
+
+	outheader_("normalIndex [");
+	for (Position i = 0; i < mesh.vertex.size(); i++)
+	{
+		String si(i);
+		out_(si + ", " + si + ", " + si + ", -1");
+	}
+	outfinish_("]");
+	
 // print colors ========================================
 	outheader_("color Color {");
 	outheader_("color [");
