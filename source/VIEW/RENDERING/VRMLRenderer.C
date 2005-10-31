@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.C,v 1.3.8.2 2005/07/25 12:37:21 amoll Exp $
+// $Id: VRMLRenderer.C,v 1.3.8.3 2005/10/31 01:32:29 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
@@ -74,7 +74,10 @@ void VRMLRenderer::setFileName(const String& name)
 String VRMLRenderer::VRMLColorRGBA(const ColorRGBA& input)
 	throw()
 {
-	return String((float) input.getRed()) + " " + String((float) input.getGreen()) + String((float) input.getBlue());
+	return 
+		String((float) input.getRed())   + " " + 
+		String((float) input.getGreen()) + " " +
+		String((float) input.getBlue());
 }
 
 String VRMLRenderer::VRMLVector3(Vector3 input)
@@ -131,18 +134,28 @@ bool VRMLRenderer::finish()
 	return true;
 }
 
-void VRMLRenderer::renderSphere_(const Sphere& sphere)
+void VRMLRenderer::header_(const Vector3& translation, const ColorRGBA& color,
+													 const String& rotation)
 	throw()
 {
 	outheader_("Transform {");
-	outheader_("translation " + VRMLVector3(sphere.getPosition()));
+ 	if (rotation != "")
+	{
+ 		outheader_("rotation " + rotation);
+ 		current_intend_ --;
+	}
+	outheader_("translation " + VRMLVector3(translation));
 	outheader_("children [");
 
 	outheader_("Shape {");
-	VRMLobjectColor(sphere);
 
-	outheader_("geometry Sphere {");
-	out_("radius " + String(sphere.getRadius()));
+	VRMLColor(color);
+}
+
+
+void VRMLRenderer::footer_()
+	throw()
+{
 	current_intend_ --;
 	outfinish_("}");
 	outfinish_("}");
@@ -150,15 +163,64 @@ void VRMLRenderer::renderSphere_(const Sphere& sphere)
 	out_("}");
 }
 
-void VRMLRenderer::VRMLobjectColor(const GeometricObject& object)
+
+void VRMLRenderer::renderSphere_(const Sphere& sphere)
+	throw()
+{
+	header_(sphere.getPosition(), sphere.getColor());
+	outheader_("geometry Sphere {");
+	out_("radius " + String(sphere.getRadius()));
+	footer_();
+}
+
+
+void VRMLRenderer::renderTube_(const Tube& tube)
+	throw()
+{
+	header_(tube.getVertex1(), tube.getColor());
+	outheader_("geometry Cylinder {");
+	Vector3 v = tube.getVertex2() - tube.getVertex1(); 
+	out_("height " + String(v.getLength()));
+	out_("radius " + String(tube.getRadius()));
+	footer_();
+}
+
+
+void VRMLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
+	throw()
+{
+	static Vector3 default_angle(0,1,0);
+
+	Vector3 v = tube.getVertex2() - tube.getVertex1(); 
+
+	float f = v.getAngle(default_angle);
+	Vector3 a = v % default_angle;
+
+	String r;
+	if (!Maths::isZero(a.getSquareLength()))
+	{
+		a.normalize();
+		r = String(a.x) + " " + 
+				String(a.y) + " " + 
+				String(a.z) + " ";
+
+		r += String(f);
+	}
+
+	header_(tube.getVertex1() + v / 2.0, tube.getColor(), r);
+	outheader_("geometry Cylinder {");
+	out_("height " + String(v.getLength()));
+	out_("radius " + String(tube.getRadius()));
+	footer_();
+}
+
+
+void VRMLRenderer::VRMLColor(const ColorRGBA& color)
 	throw()
 {
 	outheader_("appearance Appearance {");
 	outheader_("material Material {");
-	out_("diffuseColor " 
-					 + String ((float)object.getColor().getRed()) + " "
-					 + String ((float)object.getColor().getBlue()) + " "
-					 + String ((float)object.getColor().getGreen()));
+	out_("diffuseColor " + VRMLColorRGBA(color));
 
 	out_("shininess 0.5");
 	current_intend_ --;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.19 2005/09/29 14:01:34 amoll Exp $
+// $Id: scene.h,v 1.62.2.20 2005/10/31 01:33:06 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -485,6 +485,9 @@ namespace BALL
 
 			/// show an dialog to save an PNG file to
 			void showExportPNGDialog();
+
+			///
+			void showExportVRMLDialog();
 			
 			///
 			void exportPOVRay();

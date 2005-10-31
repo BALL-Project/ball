@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.54 2005/10/25 13:57:07 amoll Exp $
+// $Id: scene.C,v 1.171.2.55 2005/10/31 01:32:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -19,6 +19,7 @@
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
+#include <BALL/VIEW/RENDERING/VRMLRenderer.h>
 
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -1324,6 +1325,9 @@ namespace BALL
 			insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, SLOT(showExportPNGDialog()), ALT + Key_P);
 			setMenuHint("Export a PNG image file from the Scene");
 
+			insertMenuEntry(MainControl::FILE_EXPORT, "VRML...", this, SLOT(showExportVRMLDialog()));
+			setMenuHint("Export a VRML file from the Scene");
+
 			window_menu_entry_id_ = 
 				insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 			menuBar()->setItemChecked(window_menu_entry_id_, true);
@@ -1930,6 +1934,33 @@ namespace BALL
 
 			painter.end();
 		}
+
+		void Scene::showExportVRMLDialog()
+		{
+			String start = String(screenshot_nr_) + ".vrml";
+			screenshot_nr_ ++;
+			QFileDialog fd("Export to a VRML file", "*.vrml", 0, "Select a VRMLfile", true);
+			fd.setSelection(start.c_str());
+			fd.setMode(QFileDialog::AnyFile);
+			if (fd.exec() != QDialog::Accepted ||
+					fd.selectedFile() == "")
+			{
+				return;
+			}
+
+			VRMLRenderer vrml(fd.selectedFile().ascii());
+
+			if (exportScene(vrml))
+			{
+				setStatusbarText("Saved VRML to " + String(fd.selectedFile().ascii()));
+				setWorkingDirFromFilename_(fd.selectedFile().ascii());
+				return;
+			}
+			
+
+			setStatusbarText("Could not save VRML", true);
+		}
+
 
 
 		String Scene::exportPNG()

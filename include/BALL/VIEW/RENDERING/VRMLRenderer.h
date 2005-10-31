@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.h,v 1.5.8.2 2005/09/01 22:18:02 amoll Exp $
+// $Id: VRMLRenderer.h,v 1.5.8.3 2005/10/31 01:32:43 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_VRMLRENDERER_H
@@ -85,7 +85,7 @@ class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 		throw();
 
 	///
-	void VRMLobjectColor(const GeometricObject& object)
+	void VRMLColor(const ColorRGBA& color)
 		throw();
 
 	//@}
@@ -111,6 +111,12 @@ class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 	void renderMesh_(const Mesh& mesh)
 		throw();
 
+	void renderTube_(const Tube& tube)
+		throw();
+
+	void renderTwoColoredTube_(const TwoColoredTube& tube)
+		throw();
+
 	void out_(const String& data)
 		throw();
 
@@ -121,15 +127,22 @@ class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 		throw() {out_(data); current_intend_ -= 1;}
 	//@}
 
-		Size width, height;
+	Size width, height;
+
 	protected:
+
+	void header_(const Vector3& translation, const ColorRGBA& color, 
+							 const String& rotation = "")
+		throw();
 		
-		File outfile_;
+	void footer_()
+		throw();
 
-		Vector3   origin_;
-		Matrix4x4 rotation_;
-		Index current_intend_;
+	File outfile_;
 
+	Vector3   origin_;
+	Matrix4x4 rotation_;
+	Index current_intend_;
 };
   
 } } // namespaces
