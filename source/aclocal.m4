@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.2.14 2005/11/01 12:06:35 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.15 2005/11/01 14:46:58 oliver Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -814,7 +814,7 @@ dnl   Check for Intel C++ (icc)
 dnl
 AC_DEFUN(CF_IDENTIFY_INTEL, [
 AC_MSG_CHECKING(for Intel C++ compiler)
-ICC=`${CXX} -V 2>&1 | ${SED} -n 1p | ${SED} "s/Intel(R) C++ Compiler.*/__INTELCC__/g" | ${EGREP} "^__INTELCC__$" | sed -n 1p`
+ICC=`${CXX} -V 2>&1 | ${SED} -n 1p | ${SED} "s/Intel(R) C++ Compiler.*/__INTELCC__/g"| ${SED} "s/Intel(R) C Compiler.*/__INTELCC__/g" | ${EGREP} "^__INTELCC__$" | sed -n 1p`
 if test "${ICC}" = "__INTELCC__" ; then
 IS_INTELCC=true
 AC_MSG_RESULT(yes)
@@ -840,6 +840,9 @@ AC_DEFUN(CF_INTEL_OPTIONS,[
 AC_MSG_CHECKING(compiler version)
 echo "int main(){}" > conftest.C
 CXX_VERSION=`${CXX} -V conftest.C 2>&1| ${GREP} "Intel(R) C++" | ${SED} -n 1p | ${SED} "s/.*Version //" | ${CUT} -d" " -f1`
+if test "${CXX_VERSION}" = "" ; then
+  CXX_VERSION=`${CXX} -v 2>&1| ${SED} "s/.*ersion //" | ${CUT} -d " " -f1`
+fi
 CXX_NAME="icc"
 VERSION_OUTPUT="Intel C++ Compiler ${CXX_VERSION}"
 CXX_COMPILER_NAME="icc"

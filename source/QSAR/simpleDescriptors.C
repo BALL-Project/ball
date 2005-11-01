@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleDescriptors.C,v 1.8 2004/05/11 07:28:22 oliver Exp $
+// $Id: simpleDescriptors.C,v 1.8.4.1 2005/11/01 14:47:07 oliver Exp $
 //
 
 #include <BALL/QSAR/simpleDescriptors.h>
@@ -19,7 +19,6 @@
 #include <BALL/CONCEPT/property.h>
 
 #include <iostream>
-#include <cmath>
 
 using namespace std;
 
