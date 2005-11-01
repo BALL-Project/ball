@@ -77,8 +77,8 @@ build debug BALL
 
 Proceed as in point 3 but call
 
-build release TESTS              or
-build debug TESTS
+build release tests             or
+build debug tests
 
 ---------------------------------------------------------------------------------
 -------------------------------	KNOWN ISSUES: -----------------------------------

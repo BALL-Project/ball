@@ -122,7 +122,7 @@ goto Usage
 
 :Usage
 echo.
-echo Useage: build (debug/release) [BALL/TESTS/clean]
+echo Useage: build (debug/release) [BALL/tests/clean]
 echo.
 echo You can also have a look at in BALL\Windows\Readme.txt
 goto end

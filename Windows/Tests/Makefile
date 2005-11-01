@@ -2,10 +2,11 @@
 !INCLUDE ..\Makefile_options.txt
 !INCLUDE ..\..\source\TEST\Makefile.lst
 
-# options for C++ files
-CC		= $(CC) $(BALL_DEFINES)
+# options for C++ files: no optimizations because for some files this creates an
+# error C1053: main_ too large
+CC	= cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(CC_DEBUG) /TP $(BALL_DEFINES)
 
-LINK = $(LINK) $(BALL_WIN_DIR)\Libs\libBALL\$(TARGETDIR)\libBALL.lib
+LINK	= $(LINK) $(BALL_WIN_DIR)\Libs\libBALL\$(TARGETDIR)\libBALL.lib
 
 o = .obj
 EXEEXT = .exe
