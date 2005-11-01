@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.2.15 2005/11/01 14:46:58 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.16 2005/11/01 20:01:27 oliver Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -814,7 +814,7 @@ dnl   Check for Intel C++ (icc)
 dnl
 AC_DEFUN(CF_IDENTIFY_INTEL, [
 AC_MSG_CHECKING(for Intel C++ compiler)
-ICC=`${CXX} -V 2>&1 | ${SED} -n 1p | ${SED} "s/Intel(R) C++ Compiler.*/__INTELCC__/g"| ${SED} "s/Intel(R) C Compiler.*/__INTELCC__/g" | ${EGREP} "^__INTELCC__$" | sed -n 1p`
+ICC=`${CXX} -V 2>&1 | ${SED} -n 1p | ${SED} "s/Intel(R) C++ Compiler.*/__INTELCC__/g" | ${EGREP} "^__INTELCC__$" | sed -n 1p`
 if test "${ICC}" = "__INTELCC__" ; then
 IS_INTELCC=true
 AC_MSG_RESULT(yes)
