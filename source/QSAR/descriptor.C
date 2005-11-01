@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: descriptor.C,v 1.11.4.1 2005/11/01 14:47:07 oliver Exp $
+// $Id: descriptor.C,v 1.11.4.2 2005/11/01 15:27:24 oliver Exp $
 //
 
 #include <BALL/QSAR/descriptor.h>
@@ -14,10 +14,6 @@
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/CONCEPT/timeStamp.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
-
-#include <iostream>
-#include <vector>
-#include <queue>
 
 using namespace std;
 
