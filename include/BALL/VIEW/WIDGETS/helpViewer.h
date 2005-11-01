@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.1.2.7 2005/09/01 22:18:05 amoll Exp $
+// $Id: helpViewer.h,v 1.1.2.8 2005/11/01 21:47:35 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -35,7 +35,7 @@ namespace BALL
 
 			protected:
 
-			QPopupMenu* createPopupMenu(const QPoint& pos);
+			virtual QPopupMenu* createPopupMenu(const QPoint& pos);
 
 			bool forward_, backward_;
 		};

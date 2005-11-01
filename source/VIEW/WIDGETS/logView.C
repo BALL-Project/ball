@@ -28,7 +28,7 @@ namespace BALL
 			setReadOnly(false);
 		}
 
-		void DragLogView::contentsDragLeaveEvent(QDragEnterEvent*)
+		void DragLogView::contentsDragLeaveEvent(QDragLeaveEvent*)
 		{
 			setReadOnly(true);
 		}

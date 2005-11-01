@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.11.8.5 2005/10/20 20:09:53 amoll Exp $
+// $Id: logView.h,v 1.11.8.6 2005/11/01 21:47:35 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -48,7 +48,7 @@ namespace BALL
 
 			public slots:
 			virtual void contentsDragEnterEvent(QDragEnterEvent* e);
-			virtual void contentsDragLeaveEvent(QDragEnterEvent* e);
+			virtual void contentsDragLeaveEvent(QDragLeaveEvent* e);
 			virtual void contentsDropEvent(QDropEvent* e);
 		};
 
