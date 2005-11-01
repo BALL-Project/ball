@@ -1,0 +1,16 @@
+
+EXECUTABLES = \
+	$(PREFIX)MolmecSupport_bench$(EXEEXT)\
+	$(PREFIX)CompositeCreation_bench$(EXEEXT)\
+	$(PREFIX)CompositeClone_bench$(EXEEXT)\
+	$(PREFIX)DataStructures_bench$(EXEEXT)\
+	$(PREFIX)KernelCreation_bench$(EXEEXT)\
+	$(PREFIX)KernelClone_bench$(EXEEXT)\
+	$(PREFIX)KernelIteration_bench$(EXEEXT)\
+	$(PREFIX)FragmentDB_bench$(EXEEXT)\
+	$(PREFIX)AmberFF_bench$(EXEEXT)\
+	$(PREFIX)CharmmFF_bench$(EXEEXT)\
+	$(PREFIX)PDB_bench$(EXEEXT)\
+	$(PREFIX)PoissonBoltzmann_bench$(EXEEXT)\
+	$(PREFIX)ContourSurface_bench$(EXEEXT)\
+	$(PREFIX)MolmecSupport_bench$(EXEEXT)
