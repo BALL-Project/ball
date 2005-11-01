@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.22.2.4 2005/07/11 16:30:07 oliver Exp $
+dnl $Id: configure.ac,v 1.22.2.5 2005/11/01 12:06:40 oliver Exp $
 dnl
 dnl
 
@@ -128,7 +128,8 @@ fi
 if test "$with_qt_libs" != "" ; then
 QT_LIBPATH=$with_qt_libs
 fi
-if test "$with_qt_mt" = "yes" ; then
+
+if test "$with_qt_mt" = "yes" -o "${with_qt_mt+set}" != set; then
 USE_THREADSAFE_QT=true
 QT_MT_SUFFIX="-mt"
 else
