@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.11.6.1 2005/06/19 09:32:51 oliver Exp $
+# $Id: Makefile,v 1.11.6.2 2005/11/01 08:52:52 oliver Exp $
 #========================
 # BALL/TUTORIAL Makefile
 #========================
@@ -7,7 +7,8 @@ EXECUTABLES=\
 	tutorial1\
 	tutorial2\
 	tutorial3\
-	bounding_box
+	bounding_box\
+	string_tutorial
 
 all:	$(EXECUTABLES)
 

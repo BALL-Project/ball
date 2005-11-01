@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.21.2.1 2005/06/19 09:32:47 oliver Exp $
+# $Id: Makefile,v 1.21.2.2 2005/11/01 08:52:51 oliver Exp $
 #
 
 #========================
@@ -13,7 +13,7 @@ include ../common.mak
 -include .Dependencies
 
 DIRECTORY=EXAMPLES
-EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran PDBChecker addHydrogens
+EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran PDBChecker addHydrogens SASAreas energy
 VIEW_EXECUTABLES=$(BALL_HAS_VIEW:true=BALLVIEWClient)
 
 BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
@@ -34,6 +34,9 @@ PDB2discover:	PDB2discover.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 amberEnergy:	amberEnergy.o 
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+energy:	energy.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 bindingEnergy:	bindingEnergy.o 

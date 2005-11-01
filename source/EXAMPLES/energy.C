@@ -4,7 +4,7 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/SOLVATION/poissonBoltzmann.h>
 #include <BALL/FORMAT/HINFile.h>
-#include <BALL/KERNEL/defaultProcessors.h>
+#include <BALL/STRUCTURE/defaultProcessors.h>
 
 using namespace BALL;
 
@@ -33,7 +33,7 @@ int main()
 	fdpb.solve();
 	float solvent_energy = fdpb.getEnergy();
 	
-	fdpb.options[FDPB::Option::solvent_dc] = 1.0;
+	fdpb.options[FDPB::Option::SOLVENT_DC] = 1.0;
 	fdpb.setup(s);
 	fdpb.solve();
 	float vacuum_energy = fdpb.getEnergy();
