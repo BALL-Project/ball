@@ -41,23 +41,23 @@ goto BUILD
 echo building the libraries...
 
 cd Libs\libBALL
-mkdir %RESULT_DIR% > NUL 2> NULL
+mkdir %RESULT_DIR% > NUL 2> NUL
 nmake %NMAKE_ARG% /CS
 cd ..
 
 cd libVIEW
-mkdir %RESULT_DIR% > NUL 2> NULL
+mkdir %RESULT_DIR% > NUL 2> NUL
 mkdir mocfiles > NUL 2> NULL
 nmake %NMAKE_ARG% /CS
 cd ..
 
 cd "Python Module"
-mkdir %RESULT_DIR% > NUL 2> NULL
+mkdir %RESULT_DIR% > NUL 2> NUL
 nmake %NMAKE_ARG% /CS
 cd ..
 
 cd ..\Applications\BALLView
-mkdir %RESULT_DIR% > NUL 2> NULL
+mkdir %RESULT_DIR% > NUL 2> NUL
 nmake %NMAKE_ARG% /CS
 cd ..
 
