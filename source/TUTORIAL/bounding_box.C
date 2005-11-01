@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bounding_box.C,v 1.11 2004/10/26 11:48:46 amoll Exp $
+// $Id: bounding_box.C,v 1.11.4.1 2005/11/01 23:42:00 amoll Exp $
 //
 // BALLView tutorial example
 // ------------------------
@@ -17,7 +17,6 @@
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
-#include "../APPLICATIONS/BALLVIEW/mainframe.h"
 
 #include <qapplication.h>
 
@@ -34,6 +33,9 @@ class MyMainframe
 	: public MainControl
 {
 	public:
+
+ 		BALL_EMBEDDABLE(MyMainframe, MainControl)
+
 		MyMainframe(QWidget* parent = 0, const char* name = 0)
 			:	MainControl(parent, name)
 		{
@@ -41,22 +43,20 @@ class MyMainframe
 			scene_->setMinimumSize(10, 10);
 			setCentralWidget(scene_);
 
-			GeometricControl* geometric_control_ = new GeometricControl(this, "Representations");
-			CHECK_PTR(geometric_control_);
-
-			MolecularControl* molecular_control_ = new MolecularControl(this, "Molecules");
-			CHECK_PTR(molecular_control_);
+			new GeometricControl(this, "Representations");
+			new MolecularControl(this, "Molecules");
 		}	
+
 };
 
 int main(int argc, char **argv)
 {
   QApplication application(argc, argv);
+
   MyMainframe mainframe;
   application.setMainWidget(&mainframe);
 	mainframe.setIdentifier("MAIN");
 	mainframe.registerThis();
-  // start the application
   mainframe.show();
 
   // read a molecule from a file
@@ -78,13 +78,13 @@ int main(int argc, char **argv)
 		rep->insert(**it);
 	}
   mainframe.insert(*rep);
+  mainframe.update(*rep);
+
+	Stage stage;
+	stage.getCamera().setViewPoint(Vector3(0,0,0));	
+	stage.getCamera().setLookAtPosition(Vector3(-3,2,-2));
 
 	SceneMessage* msg = new SceneMessage(SceneMessage::UPDATE_CAMERA);
-	Camera camera;
-	camera.setViewPoint(Vector3(0,0,0));	
-	camera.setLookAtPosition(Vector3(-3,2,-2));
-	Stage stage;
-	stage.setCamera(camera);
 	msg->setStage(stage);
 	mainframe.sendMessage(*msg);
 
