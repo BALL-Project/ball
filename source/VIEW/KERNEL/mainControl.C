@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.37 2005/10/19 22:09:04 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.38 2005/11/01 19:55:21 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -376,6 +376,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				return;
 			}
 
+			init_();
+			QMainWindow::show();
+		}
+
+		void MainControl::init_()
+		{
 			// connect apply button in Preferences dialog to slot
 			connect(preferences_dialog_->ok_button, SIGNAL(clicked()), this, SLOT(applyPreferencesClicked_()));
 
@@ -406,8 +412,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			fetchPreferences(preferences_file_);
 			applyPreferences();
-
-			QMainWindow::show();
 		}
 
 		void MainControl::checkMenus()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72.2.17 2005/10/14 13:19:29 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.18 2005/11/01 19:55:35 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -784,6 +784,8 @@ namespace BALL
 
 			//_
 			void setPreferencesEnabled_(bool state);
+
+			void init_();
 
 			//_
 			FragmentDB fragment_db_;
