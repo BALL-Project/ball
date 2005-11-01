@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57.4.26 2005/08/10 13:45:43 amoll Exp $
+// $Id: cartoonModel.C,v 1.57.4.27 2005/11/01 21:39:11 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -1510,7 +1510,7 @@ void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 		geometric_objects_.push_back(mesh);
 
 		Atom* connection_atom = 0;
-		Atom* atoms[9];
+		Atom* atoms[11];
 
 		vector<Atom*> hbond_atoms;
 
