@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.2.16 2005/11/01 20:01:27 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.17 2005/11/01 21:12:51 oliver Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -814,7 +814,7 @@ dnl   Check for Intel C++ (icc)
 dnl
 AC_DEFUN(CF_IDENTIFY_INTEL, [
 AC_MSG_CHECKING(for Intel C++ compiler)
-ICC=`${CXX} -V 2>&1 | ${SED} -n 1p | ${SED} "s/Intel(R) C++ Compiler.*/__INTELCC__/g" | ${EGREP} "^__INTELCC__$" | sed -n 1p`
+ICC=`${CXX} -V 2>&1 | ${SED} -n 1p |${SED} "s/Intel(R) C Compiler.*/__INTELCC__/g"| ${SED} "s/Intel(R) C++ Compiler.*/__INTELCC__/g" | ${EGREP} "^__INTELCC__$" | sed -n 1p`
 if test "${ICC}" = "__INTELCC__" ; then
 IS_INTELCC=true
 AC_MSG_RESULT(yes)
@@ -850,31 +850,40 @@ CXX_COMPILER_NAME="icc"
 AC_MSG_RESULT(${VERSION_OUTPUT})
 CF_DIGEST_CXX_VERSION
 
-dnl
-if test "${CXX_VERSION_1}" != "" -a "${CXX_VERSION_2}" != "" ; then
-if test ${CXX_VERSION_1} -ge 8 ; then
-if test ${CXX_VERSION_1} = 8 -a ${CXX_VERSION_2} -ge 1 ; then
-if test `basename ${CXX}` = "icc" ; then
-	AC_MSG_RESULT([WARNING: Starting with version 8.1, icpc should be used instead of icc.])
-	AC_MSG_RESULT([Otherwise, linking errors will occur! Please call configure again])
-	AC_MSG_RESULT([with icpc as the compiler.])
-	AC_MSG_RESULT()
-	CF_ERROR(Aborted.)
-fi
-fi
-fi
-fi
 
+DYNAROPTS="${DYNAROPTS} -shared -o"
 TEMPLATE_DIR=""
 AR="${CXX}"
 DYNAR="${CXX}"
 AROPTS="${AROPTS} -o"
-DYNAROPTS="${DYNAROPTS} -shared -o"
 CXX_MAKEDEPEND="${CXX}"
 MAKEDEP_CXX_OPTS="-M"
 MAKEDEP_CXX_SUFFIX=" >.Dependencies"
-
 CXXFLAGS="${CXXFLAGS} -KPIC"
+
+dnl
+if test "${CXX_VERSION_1}" != "" -a "${CXX_VERSION_2}" != "" ; then
+  if test ${CXX_VERSION_1} = 8 -a ${CXX_VERSION_2} -ge 1 -o ${CXX_VERSION_1} -ge 9 ; then
+    if test `basename ${CXX}` = "icc" ; then
+      AC_MSG_RESULT([WARNING: Starting with version 8.1, icpc should be used instead of icc.])
+      AC_MSG_RESULT([Otherwise, linking errors will occur! Please call configure again])
+      AC_MSG_RESULT([with icpc as the compiler.])
+      AC_MSG_RESULT()
+      CF_ERROR(Aborted.)
+    fi
+  fi 
+  dnl
+  dnl  icpc 9.0 has a problem: linking without -O0 invokes IPO, which
+  dnl  doesn't seem to work ("Cannot find "("..." as error message).
+  dnl  So we just turn it off.
+  dnl
+  if test ${CXX_VERSION_1} -ge 9 ; then
+    LDFLAGS="$LDFLAGS -O0"
+    DYNAROPTS="-O0 $DYNAROPTS"
+  fi
+fi
+
+
 
 dnl   optimze as on highest level: this compiler
 CXXFLAGS_O="${CXXFLAGS_O} -O1"
