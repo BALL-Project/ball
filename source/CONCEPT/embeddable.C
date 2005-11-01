@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: embeddable.C,v 1.17 2004/11/23 22:38:49 amoll Exp $
+// $Id: embeddable.C,v 1.17.4.1 2005/11/01 00:15:45 amoll Exp $
 //
 
 #include <BALL/CONCEPT/embeddable.h>
@@ -13,7 +13,7 @@ namespace BALL
 		throw()
 		:	identifier_(identifier)
 	{
-		#ifdef DEBUG
+		#ifdef BALL_DEBUG
 			Log.info() << "constructing Embeddable(const String& identified = '" 
 								 << identifier << "') [this = " << (void*)this << "]" << std::endl;
 		#endif
@@ -23,7 +23,7 @@ namespace BALL
 		throw()
 		:	identifier_(embeddable.identifier_)
 	{
-		#ifdef DEBUG
+		#ifdef BALL_DEBUG
 			Log.info() << "copy constructing Embeddable(embeddable = " << (void*)&embeddable 
 								 <<" [this = " << (void*)this << "]" << std::endl;
 		#endif
@@ -32,7 +32,7 @@ namespace BALL
 	Embeddable::~Embeddable()
 		throw()
 	{
-		#ifdef DEBUG
+		#ifdef BALL_DEBUG
 			Log.info() << "destructing Embeddable [this = " << (void*)this << "]" << std::endl;
 		#endif
 		// make sure destructed instances are securely unregistered
@@ -102,7 +102,7 @@ namespace BALL
 		
 		// ...and in the hash map for fast retrieval of the class id string
 		instance_to_type_map_.insert(std::pair<Embeddable*, string>(e_ptr, class_id_string));
-		#ifdef DEBUG
+		#ifdef BALL_DEBUG
 			Log.info() << "Embeddable::registerInstance_: registering " << class_id_string 
 								 << " @ " << (void*)instance << std::endl;
 		#endif
@@ -146,7 +146,7 @@ namespace BALL
 
 		// remove it from the instance hash map
 		instance_to_type_map_.erase(instance);
-		#ifdef DEBUG
+		#ifdef BALL_DEBUG
 			Log.info() << "Embeddable::unregisterInstance_: unregistering " << (void*)instance << std::endl;
 		#endif
 	}
