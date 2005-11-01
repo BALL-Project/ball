@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.17 2004/12/13 13:41:30 amoll Exp $
+// $Id: main.C,v 1.17.4.1 2005/11/01 21:33:28 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -13,6 +13,7 @@
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
+#include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 
 #include <iostream>
