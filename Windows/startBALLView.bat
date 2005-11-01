@@ -1,6 +1,7 @@
 SET BALL_DATA_PATH=..\data
-SET LIBSDIR=$(BALL_PATH)\libs\
+SET LIBSDIR=%BALL_PATH%\Windows\libs
 SET RESULTDIR=Release
-SET PATH="%QTDIR%\lib;%LIBSDIR%\libBALL\%RESULT_DIR%;%LIBSDIR%\libView\%RESULT_DIR%;%LIBSDIR%\Python Module\%RESULT_DIR%;%BALL_PATH%\Windows\Applications\BALLVIEW\%RESULT_DIR%"
+copy %BALL_PATH%\Windows\Applications\BALLVIEW\%RESULTDIR%\BALLView.* %LIBSDIR%\"Python Module"\%RESULTDIR%
+SET PATH=%QTDIR%\lib;%LIBSDIR%\libBALL\%RESULTDIR%;%LIBSDIR%\libView\%RESULTDIR%;%LIBSDIR%\"Python Module"\%RESULTDIR%;;%BALL_PATH%\Windows\Contrib\ONC_RPC\bin
 echo using PATH %PATH%
-BALLView.exe 2> ballview.log
+BALLView.exe
