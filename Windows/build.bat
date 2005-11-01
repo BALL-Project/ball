@@ -22,6 +22,7 @@ if "%1" == "debug" (
 if "%2" == "BALL" goto BALL
 if "%2" == "clean" goto CLEANUP
 if "%2" == "tests" goto TESTS
+if "%2" == "benchmarks" goto BENCHMARKS
 
 if "%QTDIR%"=="" goto Usage2
 if "%QTVERSION%"=="" goto Usage22
@@ -54,6 +55,10 @@ echo ----------------------------------------------------------------
 cd %%i
 mkdir %RESULT_DIR% > NUL 2> NUL
 nmake %NMAKE_ARG% /CS
+if errorlevel 1 (
+echo Error occured while running make in %%i%, aborting...
+goto end
+)
 cd "%OLDDIR%"
 )
 
@@ -77,6 +82,14 @@ mkdir %RESULT_DIR% > NUL 2> NUL
 nmake %NMAKE_ARG% /CS
 goto end
 
+rem ---------------------------------- Build the Benchmarks -----------------------
+:BENCHMARKS
+echo building the benchmarks ...
+
+cd Benchmarks
+mkdir %RESULT_DIR% > NUL 2> NUL
+nmake %NMAKE_ARG% /CS
+goto end
 
 rem ----------------------------------------------- Make clean ---------------------------------------
 :CLEANUP
@@ -122,7 +135,7 @@ goto Usage
 
 :Usage
 echo.
-echo Useage: build (debug/release) [BALL/tests/clean]
+echo Useage: build debug^|release [BALL^|tests^|clean^|benchmarks]
 echo.
 echo You can also have a look at in BALL\Windows\Readme.txt
 goto end

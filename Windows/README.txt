@@ -80,6 +80,13 @@ Proceed as in point 3 but call
 build release tests             or
 build debug tests
 
+5.) Benchmarks
+
+To build the benchmarks, proceed as in point 3 but call
+
+build release benchmarks        or
+build debug benchmarks
+
 ---------------------------------------------------------------------------------
 -------------------------------	KNOWN ISSUES: -----------------------------------
 ---------------------------------------------------------------------------------
