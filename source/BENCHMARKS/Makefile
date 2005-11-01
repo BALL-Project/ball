@@ -1,19 +1,6 @@
 DIRECTORY=BENCHMARKS
 
-EXECUTABLES = \
-	CompositeCreation_bench\
-	CompositeClone_bench\
-	DataStructures_bench\
-	KernelCreation_bench\
-	KernelClone_bench\
-	KernelIteration_bench\
-	FragmentDB_bench\
-	AmberFF_bench\
-	CharmmFF_bench\
-	PDB_bench\
-	PoissonBoltzmann_bench\
-	ContourSurface_bench\
-	MolmecSupport_bench
+include Makefile.lst
 
 # default target
 all:	$(EXECUTABLES)
