@@ -13,7 +13,8 @@ LINKDLL = $(LINKDLL) $(BALLVIEW_LIBS)
 all: $(EXTENSION_DIR)\BALL.mysip BALL.dll
 
 clean:
-	$(BINPATH)\rm.exe -f  $(TARGETDIR)/*.* $(EXTENSION_DIR)/BALL.mysip *.C *.h *.sip *.obj
+	del /S /Q *.C *.h *.sip > NUL 2> NUL
+	del /Q /S $(TARGETDIR)\*.* > NUL 2> NUL
 
 BALL.dll:   $(OBJS) 
 	$(LINKDLL) /OUT:$(TARGETDIR)\BALL.dll 
