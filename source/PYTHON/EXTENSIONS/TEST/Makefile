@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1.2.1 2005/11/02 20:21:36 oliver Exp $
+# $Id: Makefile,v 1.1.2.2 2005/11/02 21:29:26 oliver Exp $
 #
 
 DIRECTORY=TEST
@@ -43,50 +43,50 @@ dummy:
 	@echo 'export BALL_PY_LIBPATH="'${BALL_PY_LIBPATH}'"' > .vars
 	@echo 'export PYTHON="'${PYTHON_EXECUTABLE}'"' >> .vars
 
-test: info basic_test system_test maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test qsar_test solvation_test
+test: dummy info basic_test system_test maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test qsar_test solvation_test
 	@./runtests -success
 
 info:
 	@./runtests -info
 
 basic_test:	dummy
-	@./runtests -section BASIC $(EXECUTABLES_BASIC) $(TEST_OPTIONS) 
+	@./runtests -section BASIC  $(TEST_OPTIONS) $(EXECUTABLES_BASIC)
 
 system_test:	 dummy
-	@./runtests -section SYSTEM $(EXECUTABLES_SYSTEM) $(TEST_OPTIONS) 
+	@./runtests -section SYSTEM  $(TEST_OPTIONS) $(EXECUTABLES_SYSTEM)
 
 maths_test:	 dummy
-	@./runtests -section MATHS $(EXECUTABLES_MATHS) $(TEST_OPTIONS) 
+	@./runtests -section MATHS  $(TEST_OPTIONS) $(EXECUTABLES_MATHS)
 
 datatypes_test:	 dummy
-	@./runtests -section DATATYPES $(EXECUTABLES_DATATYPES) $(TEST_OPTIONS) 
+	@./runtests -section DATATYPES  $(TEST_OPTIONS) $(EXECUTABLES_DATATYPES)
 	
 concepts_test:	 dummy
-	@./runtests -section CONCEPTS $(EXECUTABLES_CONCEPTS) $(TEST_OPTIONS) 
+	@./runtests -section CONCEPTS $(TEST_OPTIONS) $(EXECUTABLES_CONCEPTS)
 	
 kernel_test:	 dummy
-	@./runtests -section KERNEL $(EXECUTABLES_KERNEL) $(TEST_OPTIONS) 
+	@./runtests -section KERNEL $(TEST_OPTIONS) $(EXECUTABLES_KERNEL)
 	
 formats_test:	
-	@./runtests -section FORMATS $(EXECUTABLES_FORMATS) $(TEST_OPTIONS) 
+	@./runtests -section FORMATS $(TEST_OPTIONS) $(EXECUTABLES_FORMATS)
 	
 energy_test:	
-	@./runtests -section ENERGY $(EXECUTABLES_ENERGY) $(TEST_OPTIONS) 
+	@./runtests -section ENERGY  $(TEST_OPTIONS) $(EXECUTABLES_ENERGY)
 	
 molmec_test:	
-	@./runtests -section MOLMEC $(EXECUTABLES_MOLMEC) $(TEST_OPTIONS) 
+	@./runtests -section MOLMEC $(TEST_OPTIONS) $(EXECUTABLES_MOLMEC)
 	
 nmr_test:	
-	@./runtests -section NMR $(EXECUTABLES_NMR) $(TEST_OPTIONS) 
+	@./runtests -section NMR $(TEST_OPTIONS) $(EXECUTABLES_NMR)
 
 structure_test:	
-	@./runtests -section STRUCTURE $(EXECUTABLES_STRUCTURE) $(TEST_OPTIONS) 
+	@./runtests -section STRUCTURE $(TEST_OPTIONS) $(EXECUTABLES_STRUCTURE)
 
 qsar_test:	
-	@./runtests -section QSAR $(EXECUTABLES_QSAR) $(TEST_OPTIONS) 
+	@./runtests -section QSAR $(TEST_OPTIONS) $(EXECUTABLES_QSAR)
 
 solvation_test:	
-	@./runtests -section SOLVATION $(EXECUTABLES_SOLVATION) $(TEST_OPTIONS) 
+	@./runtests -section SOLVATION $(TEST_OPTIONS) $(EXECUTABLES_SOLVATION)
 
 clean:	default_clean
 	@$(RM) -rf *.log *.TMP core core.* 
