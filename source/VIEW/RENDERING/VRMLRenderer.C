@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.C,v 1.3.8.5 2005/10/31 11:08:15 amoll Exp $
+// $Id: VRMLRenderer.C,v 1.3.8.6 2005/11/02 11:06:57 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
@@ -142,7 +142,6 @@ void VRMLRenderer::header_(const Vector3& translation, const ColorRGBA& color,
  	if (rotation != "")
 	{
  		outheader_("rotation " + rotation);
- 		current_intend_ --;
 	}
 	outheader_("translation " + VRMLVector3(translation));
 	outheader_("children [");
@@ -343,7 +342,7 @@ void VRMLRenderer::out_(const String& data)
 {
 	if (current_intend_ < 0)
 	{
-		BALLVIEW_DEBUG
+//   		BALLVIEW_DEBUG
 	}
 	String out;
 	for (Index p=0; p< current_intend_; p++)
