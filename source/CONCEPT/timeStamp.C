@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timeStamp.C,v 1.20 2002/12/17 21:32:05 oliver Exp $
+// $Id: timeStamp.C,v 1.20.8.1 2005/11/02 16:10:54 amoll Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 
@@ -12,9 +12,13 @@
 #	include <time.h>
 #endif 
 
-#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
-#	include <windows.h>
-#	include <sys/timeb.h>
+#ifdef BALL_COMPILER_MSVC
+ #ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+  #include <windows.h>
+ #else
+	#include <time.h>
+ #endif
+ #include <sys/timeb.h>
 #endif
 
 using namespace std;
@@ -85,7 +89,7 @@ namespace BALL
 				long usec = (tvl.QuadPart - sec * ticks_) * 1000000 / ticks_;
 				return PreciseTime(sec, usec);
 			#else
-				struct _timeb tv;
+				::_timeb tv;
 				_ftime(&tv);
 				return PreciseTime(tv.time, tv.millitm * 1000);
 			#endif

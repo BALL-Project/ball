@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timeStamp.h,v 1.23.6.3 2005/08/11 23:26:18 amoll Exp $
+// $Id: timeStamp.h,v 1.23.6.4 2005/11/02 16:10:28 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
@@ -24,10 +24,6 @@
 #endif
 
 #include <iostream>
-#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
-#	include <windows.h>
-#	include <sys/timeb.h>
-#endif
 
 namespace BALL 
 {
