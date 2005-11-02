@@ -4,7 +4,8 @@ true = 1
 
 import sys
 import traceback
-sys.path.append("..")
+import os
+sys.path.append(os.environ["BALL_PY_LIBPATH"])
 
 from BALL import *
 

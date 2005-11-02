@@ -258,11 +258,18 @@ Windows/DOT NET:
 ---------------------------------
 FFTW Support
   FFTW is required to compile the following classes:
-    -
+    - FFT1D
+    - FFT2D
+    - FFT3D
 
   FFTW version 3.0.1 is required. It is available from 
   www.fftw.org for download.
-  Install the library and specify its path
+	After installation, point configure to the library with the
+	options 
+    --with-fftw-lib=DIR     (libfftw is in DIR)
+  and
+    --with-fftw-incl=DIR    (fftw includes are in DIR).
+	
 
 Python Support
   To enable the Python bindings of BALL you need QT support
@@ -282,4 +289,4 @@ Python Support
   directory through "make install".
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.16.4.3 2005/11/01 12:06:35 oliver Exp $
+document revision: $Id: INSTALLATION,v 1.16.4.4 2005/11/02 20:21:36 oliver Exp $
