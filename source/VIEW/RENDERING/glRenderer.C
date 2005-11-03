@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.25 2005/10/23 22:37:35 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.26 2005/11/03 17:39:57 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -241,17 +241,39 @@ namespace BALL
 					light_nr++;
 					continue;
 				}
-					
+				
 				glLightfv(light_nr, GL_AMBIENT, zero);
 				glLightfv(light_nr, GL_DIFFUSE, intensity);
 				glLightfv(light_nr, GL_SPECULAR, intensity);
 
-				Vector3 light_pos;
 				Vector3 light_dir;
+
+				if (it->getType() == LightSource::DIRECTIONAL)
+				{
+					// directional light sources dont have a position!
+					// but they get their direction with GL_POSITION!
+					light_dir = it->getDirection();
+					if (it->isRelativeToCamera())
+					{
+						light_dir = stage_->calculateAbsoluteCoordinates(light_dir);
+					}
+
+					GLfloat pos[]  = { light_dir.x,
+														 light_dir.y,
+														 -light_dir.z,
+														 0.0};  // the 1 is for positional lights
+
+					glLightfv(light_nr, GL_POSITION, pos);
+					glEnable(light_nr);
+					light_nr++;
+					continue;
+				}
+	
+				Vector3 light_pos;
 
 				if (it->isRelativeToCamera())
 				{
-					light_pos = stage_->calculateAbsoluteCoordinates(it->getPosition());
+					light_pos = stage_->calculateAbsoluteCoordinates(it->getPosition()) + stage_->getCamera().getViewPoint();
 					light_dir = stage_->calculateAbsoluteCoordinates(it->getDirection());
 				}
 				else
@@ -281,10 +303,7 @@ namespace BALL
 													 light_pos.z,
 													 1.0};  // the 1 is for positional lights
 
-				if (it->getType() == LightSource::DIRECTIONAL)
-				{
-					pos[3] = 0.0;
-				}
+				glLightfv(light_nr, GL_POSITION, pos);
 
 				glEnable(light_nr);
 				light_nr++;
@@ -317,7 +336,7 @@ namespace BALL
 	#ifdef BALL_BENCHMARKING
 	Timer t;
 	t.start();
-	#endif
+#endif
 			GLDisplayList* display_list;
 			if (display_lists_.has(&rep))
 			{
@@ -586,7 +605,6 @@ namespace BALL
 												 label.getExpandedText(),
 												 label.getFont()); 
 			*/
-
 			// build bitmap
 			int width, height;
  			GLubyte* text_array = generateBitmapFromText_(label.getExpandedText(), 
@@ -646,7 +664,7 @@ namespace BALL
 			}
 
 			Index backg = qRed(image.pixel(0,0));
-			
+
 			// copy image to char array
 			int offset = (height - 1) * width;
 

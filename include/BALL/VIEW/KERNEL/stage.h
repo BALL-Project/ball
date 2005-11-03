@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.18.4.4 2005/09/01 22:17:55 amoll Exp $
+// $Id: stage.h,v 1.18.4.5 2005/11/03 17:37:22 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -41,7 +41,8 @@ namespace BALL
 		/** Light source is mainly used for Renderer classes (e.g. OpenGL and POVRay).
 		 		Currently we support ambient, positional and directional light sources.
 		 		The Position and direction of lights can be stored twofold:
-				Either with absolute room coordinates, and a direction vector or relative to a Camera.
+				- Either with absolute room coordinates and a direction vector or \\
+				- Relative to a Camera.
 				In this case, the position and direction vector are stored as multiples of
 				look right, look up and view vector.
 				\ingroup  ViewKernelStage
@@ -143,7 +144,7 @@ namespace BALL
 				throw() { color_ = color;}
 			
 			/** Get the type of the light.
-			 		NOTE: Yet unused, but for further specification of the light source.
+			 		\see Types
 			*/
 			Index getType() const
 				throw() { return type_;}

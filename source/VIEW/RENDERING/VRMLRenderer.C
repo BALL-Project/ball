@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.C,v 1.3.8.6 2005/11/02 11:06:57 amoll Exp $
+// $Id: VRMLRenderer.C,v 1.3.8.7 2005/11/03 17:39:57 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
@@ -46,6 +46,9 @@ VRMLRenderer::VRMLRenderer(const String& name)
 		current_intend_(0)
 {
 	outfile_.open(name, std::ios::out);
+
+	out_("#VRML V2.0 utf8");
+	out_("");
 }
 
 VRMLRenderer::~VRMLRenderer()
@@ -69,6 +72,9 @@ void VRMLRenderer::setFileName(const String& name)
 {
 	outfile_.open(name, std::ios::out);
 	current_intend_ = 0;
+
+	out_("#VRML V2.0 utf8");
+	out_("");
 }
 
 String VRMLRenderer::VRMLColorRGBA(const ColorRGBA& input)
@@ -109,9 +115,6 @@ bool VRMLRenderer::init(const Stage& stage)
 	#endif
 
 	stage_ = &stage;
-
-	out_("#VRML V2.0 utf8");
-	out_("");
 /*
 	// Find out the position of the camera.
 	const Camera& camera = stage_->getCamera();
@@ -233,6 +236,7 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 	// so we should let VRMLRay know...
 	outheader_("Shape {");
 	outheader_("geometry IndexedFaceSet {");
+	out_("normalPerVertex TRUE");
 	outheader_("coord Coordinate {");
 	outheader_("point [");
 
@@ -259,8 +263,7 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 	{
 		String out = (String((*itt).v1) + " " 
 						 + String((*itt).v2) + " " 
-						 + String((*itt).v3) + " " 
-						 + " -1"); 
+						 + String((*itt).v3) + " " ); 
 
 		if (itt != mesh.triangle.end()) 
 		{
@@ -271,20 +274,13 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 	outfinish_("]");
 	
 	// print normals =====================================
-	// each triangle gets its normal calculated from the three vertex normals
 	outheader_("normal Normal {");
 	outheader_("vector [");
-	itt = mesh.triangle.begin(); 
-	for (; itt != mesh.triangle.end(); itt++)
+	itv = mesh.vertex.begin(); 
+	for (; itv != mesh.vertex.end(); itv++)
 	{
-
-		Vector3 n = mesh.normal[(*itt).v1] +
-								mesh.normal[(*itt).v2] +
-								mesh.normal[(*itt).v3];
-		n /= 3.0;
-
-		String out = VRMLVector3(n);
-		if (itt != mesh.triangle.end()) 
+		String out = VRMLVector3(*itv);
+		if (itv != mesh.vertex.end()) 
 		{
 			out += ",";
 		}
