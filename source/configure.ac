@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.22.2.6 2005/11/03 07:12:00 oliver Exp $
+dnl $Id: configure.ac,v 1.22.2.7 2005/11/03 07:18:37 oliver Exp $
 dnl
 dnl
 
@@ -35,9 +35,9 @@ dnl retrieve the BALL version and print it to the console
 dnl for debugging purposes (people sending in config.log and the like).
 dnl
 BALL_VERSION_STRING=`grep define\ BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | cut -d\" -f2`
-BALL_CURRENT_VERSION=$BALL_VERSION_STRING
+BALL_CURRENT_VERSION=${BALL_VERSION_STRING}
 BALL_COMPATIBILITY_VERSION=`echo ${BALL_VERSION_STRING} | cut -d. -f1-2`
-dnl CF_VERSION
+CF_VERSION_CHECK
 
 dnl   Require the user to accept the license (once)
 CF_CHECK_LICENSE

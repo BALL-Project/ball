@@ -1359,8 +1359,15 @@ PROJECT=BALL
 
 
 BALL_VERSION_STRING=`grep define\ BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | cut -d\" -f2`
-BALL_CURRENT_VERSION=$BALL_VERSION_STRING
+BALL_CURRENT_VERSION=${BALL_VERSION_STRING}
 BALL_COMPATIBILITY_VERSION=`echo ${BALL_VERSION_STRING} | cut -d. -f1-2`
+
+MACHINE=`uname -a`
+echo "$as_me:$LINENO: result: This is BALL $BALL_VERSION_STRING compiling." >&5
+echo "${ECHO_T}This is BALL $BALL_VERSION_STRING compiling." >&6
+echo "$as_me:$LINENO: result: Host: $MACHINE" >&5
+echo "${ECHO_T}Host: $MACHINE" >&6
+
 
 
 # Extract the first word of "more", so it can be a program name with args.
