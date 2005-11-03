@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.20.2.7 2005/10/04 15:47:01 amoll Exp $
+// $Id: lightSettings.C,v 1.20.2.8 2005/11/03 17:58:20 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -210,20 +210,25 @@ void LightSettings::removeLightPressed()
 
 void LightSettings::typeSelected()
 {
-	bool is_ambient = (light_type->selected() == ambient);
+	typeSelected_(light_type->selectedId());
+}
 
-	relative_to_camera->setEnabled(!is_ambient);
-	      not_relative->setEnabled(!is_ambient);
+void LightSettings::typeSelected_(Position type)
+{
+	bool is_ambient = (type == LightSource::AMBIENT);
+	
+	bool pos_enabled = type != LightSource::DIRECTIONAL && !is_ambient;
 
-	position_x->setEnabled(!is_ambient);
-	position_y->setEnabled(!is_ambient);
-	position_z->setEnabled(!is_ambient);
+	position_x->setEnabled(pos_enabled);
+	position_y->setEnabled(pos_enabled);
+	position_z->setEnabled(pos_enabled);
 
 	direction_x->setEnabled(!is_ambient);
 	direction_y->setEnabled(!is_ambient);
 	direction_z->setEnabled(!is_ambient);
+	relative_to_camera->setEnabled(!is_ambient);
+	not_relative->setEnabled(!is_ambient);
 }
-
 
 void LightSettings::getValues_()
 	throw()
@@ -253,16 +258,7 @@ void LightSettings::getValues_()
 	setPosition_(pos);
 	setDirection_(dir);
 
-	bool is_ambient = (light.getType() == LightSource::AMBIENT);
-	
-	position_x->setEnabled(!is_ambient);
-	position_y->setEnabled(!is_ambient);
-	position_z->setEnabled(!is_ambient);
-	direction_x->setEnabled(!is_ambient);
-	direction_y->setEnabled(!is_ambient);
-	direction_z->setEnabled(!is_ambient);
-	relative_to_camera->setEnabled(!is_ambient);
-	not_relative->setEnabled(!is_ambient);
+	typeSelected_(light.getType());
 	
 	light_type->setButton(light.getType());
 	intensity->setValue((Index)(light.getIntensity() * 100.0));
@@ -352,7 +348,7 @@ void LightSettings::positionTypeChanged()
 		else
 		{
 			pos = stage_->calculateAbsoluteCoordinates(pos) + vp;
-			dir = pos + stage_->calculateAbsoluteCoordinates(dir);
+			dir = stage_->calculateAbsoluteCoordinates(dir) + pos;
 		}
 
 		setPosition_(pos);
@@ -366,16 +362,16 @@ void LightSettings::positionTypeChanged()
 
 void LightSettings::setPosition_(const Vector3& v)
 {
-	position_x->setText(createFloatString(v.x, 1).c_str());
-	position_y->setText(createFloatString(v.y, 1).c_str());
-	position_z->setText(createFloatString(v.z, 1).c_str());
+	position_x->setText(createFloatString(v.x, 2).c_str());
+	position_y->setText(createFloatString(v.y, 2).c_str());
+	position_z->setText(createFloatString(v.z, 2).c_str());
 }
 
 void LightSettings::setDirection_(const Vector3& v)
 {
-	direction_x->setText(createFloatString(v.x, 1).c_str());
-	direction_y->setText(createFloatString(v.y, 1).c_str());
-	direction_z->setText(createFloatString(v.z, 1).c_str());
+	direction_x->setText(createFloatString(v.x, 2).c_str());
+	direction_y->setText(createFloatString(v.y, 2).c_str());
+	direction_z->setText(createFloatString(v.z, 2).c_str());
 }
 
 Vector3 LightSettings::getPosition_() 

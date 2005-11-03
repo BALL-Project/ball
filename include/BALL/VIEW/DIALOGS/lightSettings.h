@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.h,v 1.10.4.3 2005/10/04 15:50:38 amoll Exp $
+// $Id: lightSettings.h,v 1.10.4.4 2005/11/03 17:58:05 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_LIGHTSETTINGS_H
@@ -97,6 +97,7 @@ namespace BALL
 			void setControlsEnabled_(bool state);
 			Index getCurrentLightNumber_() const;
 
+			void typeSelected_(Position type);
 		
 			//_ apply values to a light
 			void saveSettingsToLight_()
