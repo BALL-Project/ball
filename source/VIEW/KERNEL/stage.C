@@ -13,7 +13,7 @@ namespace BALL
 			throw()
 			:	position_(),
 				direction_(0, 0, -1),
-				angle_(180),
+				angle_(10),
 				intensity_(0.8),
 				color_(255, 255, 255, 255),
 				type_(0),
