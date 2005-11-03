@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.70.4.3 2005/08/08 11:51:49 amoll Exp $
+// $Id: atom.h,v 1.70.4.4 2005/11/03 14:17:54 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -175,7 +175,7 @@ namespace BALL
 				throw();
 		
 			/** Copy constructor.
-					The copy is either deep or shallow (default).
+					The copy is either deep (default) or shallow.
 					 \par
 					<b>Note:</b> Deep copying of atoms does not include bond cloning.
 					@param   atom the atom to be copied (cloned)
@@ -238,16 +238,14 @@ namespace BALL
 					@see	Composite::clear
 					@see	destroy
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear() throw();
 		
 			/** Explicit destructor.
 					Destroy this instance explicitly and 
 					reset its attributes to the default values. 
 					@see  Composite::clear
 			*/
-			virtual void destroy()
-				throw();
+			virtual void destroy() throw();
 
 			//@}
 			/**	@name	Persistence 
@@ -280,8 +278,7 @@ namespace BALL
           @param   atom the atom to be copied
           @param   deep make a deep (=<b>true</b>) or shallow (=<b>false</b>) copy of <tt>atom</tt>
       */
-      void set(const Atom& atom, bool deep = true)
-        throw();
+      void set(const Atom& atom, bool deep = true) throw();
 
       /** Deep/shallow assignment.
 					The inverse operation to  \link set set \endlink , behaves identically.
@@ -327,89 +324,58 @@ namespace BALL
 				throw();
 
 			//@}
-			/** @name Accessors: inspectors and mutators 
+			/** @name Accessors
 			*/
 			//@{ 
 
-			/** Change the atom element type.
-					@param   element the new element
-			*/
-			void setElement(const Element& element)
-				throw();
+			/// Assign the atom's element
+			void setElement(const Element& element)	throw();
 				
-			/** Constant inspection of the atom element type.
-					@return  Element& - constant reference to the element type
-			*/
-			const Element& getElement() const
-				throw();
+			/// Return the atom's element
+			const Element& getElement() const	throw();
 
-			/** Set the charge of an atom.
+			/** Set the atom's (partial) charge.
 					Charges should be assigned in multiples of the proton charge
 					(elementary charge).
-					@param   charge the new charge
 			*/
-			void setCharge(float charge)
-				throw();
+			void setCharge(float charge) throw();
 
-			/** Retrieve the charge of an atom
+			/**	Return the atom's (partial) charge.
 					Charges should be assigned in multiples of the proton charge
 					(elementary charge).
-					@return  float - copy of the charge
 			*/
-			float getCharge() const
-				throw();
+			float getCharge() const	throw();
 
-			/** Set the formal charge of the atom.
-			*/
-			void setFormalCharge(Index formal_charge) 
-				throw();
+			/// Set the atom's formal charge
+			void setFormalCharge(Index formal_charge) throw();
 
-			/** Return the formal charge of the atom
-			*/
+			/// Return the atom's formal charge
 			Index getFormalCharge() const throw();
 
-
-			/** Mutable inspection of the atom's parent molecule.
-					A NULL pointer is returned if this atom is not part of a molecule.
-					 \par
-					Use  \link Molecule::insert Molecule::insert \endlink  to insert an atom into a molecule and
-					 \link Molecule::remove Molecule::remove \endlink  to remove it.
-					@return  Molecule* - mutable pointer to the parent molecule
-			*/
-			Molecule *getMolecule()
-				throw();
-
-			/** Constant inspection of the atom's parent molecule.
+			/** Return the molecule the atom is contained in (const).
 					A NULL pointer is returned if this atom is not part of a molecule.
 					 \par
 					Use  \link Molecule::insert Molecule::insert \endlink  to insert an atom into a molecule and
 					 \link Molecule::remove Molecule::remove \endlink  to remove it.
 					@return  Molecule* - constant pointer to the parent molecule
 			*/
-			const Molecule* getMolecule() const
-				throw();
+			const Molecule* getMolecule() const	throw();
+			/// Return the molecule the atom is contained in (mutable)
+			Molecule* getMolecule()	throw();
 
-			/** Mutable inspection of the atom's parent fragment.
-					A NULL pointer is returned if this atom is not part of a fragment.
-					 \par
-					Use  \link Fragment::insert Fragment::insert \endlink  to insert an atom into a fragment and
-					 \link Fragment::remove Fragment::remove \endlink  to remove it.
-					@return   Fragment* - mutable pointer to the fragment
-			*/
-			Fragment* getFragment()
-				throw();
 
-			/** Constant inspection of the atom's parent fragment.
+			/** Return the fragment the atom is contained in (const).
 					A NULL pointer is returned if this atom is not part of a fragment.
 					 \par
 					Use  \link Fragment::insert Fragment::insert \endlink  to insert an atom into a fragment and
 					 \link Fragment::remove Fragment::remove \endlink  to remove it.					
 					@return   Fragment* -	constant pointer to the fragment
 			*/
-			const Fragment* getFragment() const
-				throw();
+			const Fragment* getFragment() const	throw();
+			/// Return the fragment the atom is contained in (mutable)
+			Fragment* getFragment()	throw();
 
-			/** Return the residue the atom is contained in.
+			/** Return the residue the atom is contained in (const).
 					A NULL pointer is returned if this atom is not part of a residue.
 					 \par
 					Use  \link Residue::insert Residue::insert \endlink  to insert an atom into a residue and
@@ -417,29 +383,32 @@ namespace BALL
 					@return   Residue* -	constant pointer to the residue
 			*/
 			const Residue* getResidue() const	throw();
+			/// Return the residue the atom is contained in (mutable)
+			Residue* getResidue() throw();
 
-			/** Return the secondary structure the atom is contained in.
+			/** Return the secondary structure the atom is contained in (const).
 					A NULL pointer is returned if this atom is not part of a secondary structure.
 					 \par
 					@return   SecondaryStructure* -	constant pointer to the secondary structure
 			*/
 			const SecondaryStructure* getSecondaryStructure() const throw();
+			/// Return the secondary structure the atom is contained in (mutable)
+			SecondaryStructure* getSecondaryStructure() throw();
 
-			/** Return the chain the atom is contained in.
+			/** Return the chain the atom is contained in (const).
 					A NULL pointer is returned if this atom is not part of a chain.
 					 \par
 					@return   Chain* -	constant pointer to the chain
 			*/
 			const Chain* getChain() const throw();
+			/// Return the chain the atom is contained in (mutable)
+			Chain* getChain() throw();
+				
 
-			/** Set the atom name.
-					@param   name the new name
-			*/
+			/// Set the atom name.
 			void setName(const String& name) throw();
 
-			/** Return the atom name
-					@return  String& - constant reference to the name
-			*/
+			/// Return the atom name
 			const String& getName() const throw();
 
 			/** Assemble a fully specified atom name.
@@ -471,64 +440,39 @@ namespace BALL
 									the variant extension (<tt>-XX</tt>) is omitted
 					@return	String the full name
 			*/
-			String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const
-				throw();
+			String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const throw();
 
-			/** Change the atom's position vector.
-					@param   position the new position vector
+			/** Assign the atom coordinates.
+					BALL uses units of Angstrom for atom coordinates.
 			*/
-			void setPosition(const Vector3& position)
-				throw();
-
-			/** Mutable inspection of the atom's position vector.
-					@return  Vector3& - mutable reference to the position vector
-			*/
-			Vector3& getPosition()
-				throw();
-
-			/** Constant inspection of the atom's position vector.
-					@return  Vector3& - constant reference to the position vector
-			*/
-			const Vector3& getPosition() const
-				throw();
+			void setPosition(const Vector3& position)	throw();
+				
+			/// Return the atom coordinates (mutable)
+			Vector3& getPosition() throw();
+			
+			/// Return the atom coordinates (const)
+			const Vector3& getPosition() const throw();
 
 			/** Set the atom radius.
 					BALL uses units of Angstrom for the atom radii.
-					@param   radius the new radius
 			*/
-			void setRadius(float radius)
-				throw();
+			void setRadius(float radius) throw();
 				
-			/** Return the atom radius.
-					BALL uses units of Angstrom for the atom radii.
-					@return  float - copy of the radius
-			*/
-			float getRadius() const
-				throw();
+			/// Return the atom radius.
+			float getRadius() const	throw();
 
-			/** Set the atom type.
-					@param   atom_type the new type
-			*/
-			void setType(Type atom_type)
-				throw();
+			/// Assign the numerical atom type.
+			void setType(Type atom_type) throw();
 		
-			/** Return the atom type.
-					@return  Type - copy of the type
-			*/
-			Type getType() const
-				throw();
-		
-			/**	Get the type name of the atom.
-					@return the type name 
-			*/
-			String getTypeName() const
-				throw();
+			/// Return the (numerical) atom type
+			Type getType() const throw();
 
-			/**	Set the type name of the atom.
-			*/
-			void setTypeName(const String& name)
-				throw();
+			/// Return the atom type name
+			String getTypeName() const throw();
 
+			/// Assign the atom type name
+			void setTypeName(const String& name) throw();
+//????
 			/** Set the atom velocity
 					BALL uses units of \f$ {\AA}/ps \f$ for the velocity.
 			*/

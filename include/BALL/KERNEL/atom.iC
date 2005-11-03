@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.iC,v 1.18 2005/03/09 16:18:41 amoll Exp $
+// $Id: atom.iC,v 1.18.2.1 2005/11/03 14:17:55 oliver Exp $
 //
 
 BALL_INLINE
@@ -54,17 +54,33 @@ const String& Atom::getName() const
 }
 
 BALL_INLINE
-const Molecule* Atom::getMolecule() const
-	throw()
+const Molecule* Atom::getMolecule() const	throw()
 {
-	return ((Atom *)this)->getMolecule();
+	return const_cast<Atom&>(*this).getMolecule();
 }
 
 BALL_INLINE
-const Fragment* Atom::getFragment() const
-	throw()
+const Fragment* Atom::getFragment() const	throw()
 {
-	return ((Atom*)this)->getFragment();
+	return const_cast<Atom&>(*this).getFragment();
+}
+
+BALL_INLINE
+const Residue* Atom::getResidue() const throw()
+{
+	return const_cast<Atom&>(*this).getResidue();
+}
+
+BALL_INLINE
+const Chain* Atom::getChain() const throw()
+{
+	return const_cast<Atom&>(*this).getChain();
+}
+
+BALL_INLINE
+const SecondaryStructure* Atom::getSecondaryStructure() const throw()
+{
+	return const_cast<Atom&>(*this).getSecondaryStructure();
 }
 
 BALL_INLINE
