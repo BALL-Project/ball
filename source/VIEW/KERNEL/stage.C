@@ -361,8 +361,6 @@ namespace BALL
 
 				Vector3 du(camera_.getLookUpVector() * d);
 
-				pos -= camera_.getViewPoint();
-
 				// calculate the planes
 				const Plane3 plane_rv(dr, dr);
 				const Plane3 plane_uv(du, du);
