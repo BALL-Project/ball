@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.2.18 2005/11/03 07:12:00 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.19 2005/11/03 07:14:37 oliver Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -14,7 +14,7 @@ dnl
 AC_DEFUN(CF_VERSION_CHECK,[
 MACHINE=`uname -a`
 AC_MESSAGE(This is PROJECT $PROJECT[]_VERSION_STRING compiling on $MACHINE.)
-]
+])
 
 dnl
 dnl		display the license and abort if not accepted

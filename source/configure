@@ -1358,9 +1358,9 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 PROJECT=BALL
 
 
-BALL_CURRENT_VERSION=1.1
-BALL_COMPATIBILITY_VERSION=1.1
-
+BALL_VERSION_STRING=`grep define\ BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | cut -d\" -f2`
+BALL_CURRENT_VERSION=$BALL_VERSION_STRING
+BALL_COMPATIBILITY_VERSION=`echo ${BALL_VERSION_STRING} | cut -d. -f1-2`
 
 
 # Extract the first word of "more", so it can be a program name with args.
