@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19.4.13 2005/08/03 15:42:59 amoll Exp $
+// $Id: POVRenderer.C,v 1.19.4.14 2005/11/04 14:42:16 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -284,15 +284,28 @@ namespace BALL
 				}
 
 				out << "light_source { ";
-				Vector3 pos = it->getPosition();
-				if (it->isRelativeToCamera())
+
+				if (it->getType() == LightSource::POSITIONAL)
 				{
-					pos = stage_->calculateAbsoluteCoordinates(pos) + stage_->getCamera().getViewPoint();
+					Vector3 pos = it->getPosition();
+					if (it->isRelativeToCamera())
+					{
+						pos = stage_->calculateAbsoluteCoordinates(pos) + stage_->getCamera().getViewPoint();
+					}
+					out << POVVector3(pos) << ", " << POVColorRGBA(light_col) << "}" << endl;
 				}
+				else
+				{
+					// directional light sources
+					Vector3 dir = it->getDirection();
+					if (it->isRelativeToCamera())
+					{
+						dir = stage_->calculateAbsoluteCoordinates(dir);
+					}
 
-				out << POVVector3(pos) << ", " << POVColorRGBA(light_col) << "}" << endl;
-
-				// TODO: distinguish between directional / positional light sources
+					out << POVVector3(dir * -1000) << ", " << POVColorRGBA(light_col) 
+							<< " parallel point_at " << POVVector3(dir) << "}" << endl;
+				}
 			}
 			
 			// Add some global blurb for radiosity support

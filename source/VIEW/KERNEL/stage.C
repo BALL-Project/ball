@@ -163,6 +163,7 @@ namespace BALL
 
 			view_vector_  = look_at_ - view_point_;
 			right_vector_ = look_up_vector_ % view_vector_;
+			right_vector_ *= -1.0;
 
 			if (!right_vector_.isZero())	right_vector_.normalize();
 			else right_vector_.set(1,0,0);
