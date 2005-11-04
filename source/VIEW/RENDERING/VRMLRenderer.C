@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.C,v 1.3.8.8 2005/11/04 11:41:35 amoll Exp $
+// $Id: VRMLRenderer.C,v 1.3.8.9 2005/11/04 12:51:41 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
@@ -263,7 +263,7 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 	{
 		String out = (String((*itt).v1) + " " 
 						 + String((*itt).v2) + " " 
-						 + String((*itt).v3) + " " ); 
+						 + String((*itt).v3) + ", -1"); 
 
 		if (itt != mesh.triangle.end()) 
 		{
@@ -289,14 +289,15 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 	outfinish_("]");
 	outfinish_("}");
 
+	/*
 	outheader_("normalIndex [");
 	for (Position i = 0; i < mesh.vertex.size(); i++)
 	{
 		String si(i);
-		out_(si + ", " + si + ", " + si + ", -1");
+		out_(si + ", " + si + ", " + si);
 	}
 	outfinish_("]");
-	
+	*/
 // print colors ========================================
 	outheader_("color Color {");
 	outheader_("color [");
