@@ -15,6 +15,9 @@ all: $(EXTENSION_DIR)\BALL.mysip BALL.dll
 clean:
 	del /S /Q *.C *.h *.sip > NUL 2> NUL
 	del /Q /S $(TARGETDIR)\*.* > NUL 2> NUL
+	del /Q /S *.obj > NUL 2> NUL
+	del /Q /S $(EXTENSION_DIR)\BALL.mysip > NUL 2> NUL
+
 
 BALL.dll:   $(OBJS) 
 	$(LINKDLL) /OUT:$(TARGETDIR)\BALL.dll 
