@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.sip,v 1.7 2003/11/01 09:27:36 oliver Exp $
+// $Id: bond.sip,v 1.7.6.1 2005/11/04 08:07:06 oliver Exp $
 //
 
 class Bond
@@ -16,12 +16,6 @@ class Bond
   public:
   // friend class Atom;
   // BALL_CREATE(Bond)
-  // class TooManyBonds
-  //  : public Exception::GeneralException
-  // {
-  //  public:
-  //  TooManyBonds(const char* file, int line);
-  // };
   typedef short Order;
   typedef short Type;
   enum BondOrder

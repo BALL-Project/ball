@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.iC,v 1.4 2002/12/12 09:48:45 oliver Exp $
+// $Id: bond.iC,v 1.4.8.1 2005/11/04 08:07:05 oliver Exp $
 
 BALL_INLINE
 void Bond::clear_()
@@ -206,8 +206,7 @@ bool Bond::isInterBondOf(const AtomContainer& atom_container) const
 }
 
 BALL_INLINE
-bool Bond::isIntraBond() const
-	throw()
+bool Bond::isIntraBond() const throw()
 {	
 	// the two atoms have to be inside two different (non-NULL) composite
 	return (isBound() && (first_->Composite::getRoot() == second_->Composite::getRoot()) 
@@ -215,16 +214,14 @@ bool Bond::isIntraBond() const
 }
 
 BALL_INLINE
-bool Bond::isIntraBondOf(const AtomContainer &atom_container) const
-	throw()
+bool Bond::isIntraBondOf(const AtomContainer &atom_container) const	throw()
 {
 	return (isBound() &&  first_->Composite::isDescendantOf(atom_container)
 										&& second_->Composite::isDescendantOf(atom_container));
 }
 
 BALL_INLINE
-bool Bond::isValid () const
-	throw()
+bool Bond::isValid () const throw()
 {
 	return (PropertyManager::isValid()
 								&& first_  != 0
@@ -235,16 +232,14 @@ bool Bond::isValid () const
 }
 
 BALL_INLINE
-bool Bond::operator == (const Bond& bond) const
-	throw()
+bool Bond::operator == (const Bond& bond) const throw()
 {
-	return(Object::operator ==(bond));
+	return (this == &bond);
 }
 
 BALL_INLINE
-bool Bond::operator != (const Bond& bond) const
-	throw()
+bool Bond::operator != (const Bond& bond) const throw()
 {
-	return ! (*this == bond);
+	return (this != &bond);
 }
 

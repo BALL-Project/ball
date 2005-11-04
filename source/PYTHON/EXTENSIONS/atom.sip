@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.sip,v 1.9.6.1 2005/11/03 14:17:55 oliver Exp $
+// $Id: atom.sip,v 1.9.6.2 2005/11/04 08:07:06 oliver Exp $
 //
 
 class Atom
@@ -49,8 +49,8 @@ class Atom
    ~Atom() throw();
    virtual void clear() throw();
    virtual void destroy() throw();
-   void persistentWrite(PersistenceManager& /pm/, const char* /name/ = 0) const throw(Exception::GeneralException);
-   void persistentRead(PersistenceManager& /pm/) throw(Exception::GeneralException);
+   // void persistentWrite(PersistenceManager& /pm/, const char* /name/ = 0) const throw(GeneralException);
+   // void persistentRead(PersistenceManager& /pm/) throw(GeneralException);
    void set(const Atom& /atom/, bool /deep/ = true) throw();
    void get(Atom& /atom/, bool /deep/ = true) const throw();
    void swap(Atom& /atom/) throw();
@@ -67,7 +67,7 @@ class Atom
    void setCharge(float /charge/) throw();
    float getCharge() const throw();
 
-	 void setFormalCharge(Index /formal_charge/) throw()
+	 void setFormalCharge(Index /formal_charge/) throw();
    Index getFormalCharge() const throw();
 
    const Fragment* getFragment() const throw();
@@ -101,35 +101,39 @@ class Atom
 
    const String& getTypeName() const throw();
    void setTypeName(const String& /name/) throw();
-//??????
+
    void setVelocity(const Vector3& /velocity/) throw();
    const Vector3& getVelocity() const throw();
-	 Vector3& getForce() throw();
+	 // Vector3& getForce() throw();
 	  
    void setForce(const Vector3& /force/) throw();
    const Vector3& getForce() const throw();
    // Vector3& getForce() throw();
 
    Size countBonds() const;
-   Bond* getBond(Position /index/);
-   const Bond* getBond(Position /index/) const;
-   Bond* getBond(const Atom& /atom/);
-   const Bond *getBond(const Atom& /atom/) const;
-   Bond *createBond(Atom& /atom/);
-   Bond *createBond(Bond& /bond/, Atom& /atom/);
-   Bond *cloneBond(Bond& /bond/, Atom& /atom/);
-   bool destroyBond(const Atom& /atom/);
-   void destroyBonds();
-   bool hasBond(const Bond& /bond/) const;
-   bool isBoundTo(const Atom& /atom/) const;
-   bool isBound() const;
-   bool isGeminal(const Atom& /atom/) const;
-   bool isVicinal(const Atom& /atom/) const;
+   Bond* getBond(Position /index/) throw(IndexOverflow);
+   const Bond* getBond(Position /index/) const throw(IndexOverflow);
+   Bond* getBond(const Atom& /atom/) throw();
+   const Bond *getBond(const Atom& /atom/) const throw();
+
+   Bond* createBond(Atom& /atom/) throw(TooManyBonds);
+   Bond* createBond(Bond& /bond/, Atom& /atom/) throw(TooManyBonds);
+
+   Bond* cloneBond(Bond& /bond/, Atom& /atom/) throw();
+   bool destroyBond(const Atom& /atom/) throw();
+   void destroyBonds() throw();
+
+   bool hasBond(const Bond& /bond/) const throw();
+   bool isBoundTo(const Atom& /atom/) const throw();
+   bool isBound() const throw();
+   bool isGeminal(const Atom& /atom/) const throw();
+   bool isVicinal(const Atom& /atom/) const throw();
    virtual bool isValid() const throw();
+
    // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
    // virtual void read(std::istream& s);
    // virtual void write(std::ostream& s) const;
-   // bool applyBonds(UnaryProcessor<Bond>& processor);
+   bool applyBonds(BondProcessor& /processor/) throw();
 	
 	// convert the atom to a string representation
 	SIP_PYOBJECT __str__();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.40.4.6 2005/07/25 12:37:38 amoll Exp $
+// $Id: BALL.sip,v 1.40.4.7 2005/11/04 08:07:06 oliver Exp $
 //
 
 /////////////////////////
@@ -224,6 +224,7 @@
 %Include pyAtomDict.sip
 %Include pyAtomList.sip
 %Include pyAtomProcessor.sip
+%Include pyBondProcessor.sip
 %Include pyFragmentProcessor.sip
 %Include pyResidueProcessor.sip
 %Include pyCompositeProcessor.sip

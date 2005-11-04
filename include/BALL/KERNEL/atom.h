@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.70.4.4 2005/11/03 14:17:54 oliver Exp $
+// $Id: atom.h,v 1.70.4.5 2005/11/04 08:07:04 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -472,47 +472,31 @@ namespace BALL
 
 			/// Assign the atom type name
 			void setTypeName(const String& name) throw();
-//????
+
 			/** Set the atom velocity
 					BALL uses units of \f$ {\AA}/ps \f$ for the velocity.
 			*/
-			void setVelocity(const Vector3& velocity)
-				throw();
+			void setVelocity(const Vector3& velocity)	throw();
 
-			/** 
+			/** Return the atom velocity.
 					BALL uses units of \f$ {\AA}/ps \f$ for the velocity.
-					@return  Vector3& - constant reference to the velocity vector
 			*/
-			const Vector3& getVelocity() const
-				throw();
+			const Vector3& getVelocity() const throw();
 
-			/** Change the atom's force vector.
+			/** Assign the atom's force vevtor.
 					BALL uses units of <b>Newton</b> (1 N = 1 J/m) as the unit of force.
 			*/
-			void setForce(const Vector3& force)
-				throw();
+			void setForce(const Vector3& force)	throw();
+			/// Return the atom's force vector (const)
+			const Vector3& getForce() const throw();
+			/// Return the atom's force vector (mutable)
+			Vector3& getForce()	throw();
 
-			/** Mutable inspection of the atom's force vector.
-					BALL uses units of <b>Newton</b> (1 N = 1 J/m) as the unit of force.
-					@return  Vector3& - mutable reference to the force vector
-			*/
-			Vector3& getForce()
-				throw();
 
-			/** Constant inspection of the atom's force vector.
-					BALL uses units of <b>Newton</b> (1 N = 1 J/m) as the unit of force.
-					@return  Vector3& - constant reference to the force vector
-			*/
-			const Vector3& getForce() const
-				throw();
+			/// Return the number of bonds 
+			Size countBonds() const	throw();
 
-			/** Constant inspection of the atom's number of bonds.
-					@return	Size - copy of number of bonds
-			*/
-			Size countBonds() const
-				throw();
-
-			/** Mutable inspection of an atom's indexed bond.
+			/** Return a bond by its index (mutable).
 					The reference is 0 if this instance does not have a bond with index <b>  index </b>. \par
 					<b>Note:</b> No corresponding mutator Atom::setBond exists to
 					consider design of contract - an atom may not insert a bond in its bond table at a given index.
@@ -522,52 +506,41 @@ namespace BALL
 					@param   index the index of the bond to be accessed to
 					@return  Bond* - mutable pointer to the bond that is indexed in this instance's bond table,
 									 0 if this instance does not have a bond with index <b>  index </b>
-					@exception   IndexOverflow if <tt>index > MAX_NUMBER_OF_BONDS</tt>
+					@exception   IndexOverflow if <tt>index >= MAX_NUMBER_OF_BONDS</tt>
 			*/
-			Bond* getBond(Position index)
-				throw(Exception::IndexOverflow);
+			Bond* getBond(Position index)	throw(Exception::IndexOverflow);
 
-			/** Constant inspection of an atom's indexed bond.
-					The reference is 0 if this instance does not have a bond with index <b>  index </b>. \par
-					<b>Note:</b> No corresponding mutator Atom::setBond exists to
-					consider design of contract - an atom may not insert a bond in its bond table at a given index.
-					The atom's bond table is an implementation detail that is not relevant to and should not be relied
-					on by the client programmer. A bond must always be created via  \link Bond::Bond Bond::Bond \endlink  or
-					 \link Atom::createBond Atom::createBond \endlink .
-					@param   index the index of the bond to be accessed to
-					@return  Bond* - constant pointer to the bond that is indexed in this instance's bond table,
-									 0 if this instance does not have a bond with index <b>  index </b>
-					@exception   IndexOverflow if <tt>index > MAX_NUMBER_OF_BONDS</tt>
+			/** Return a bond by its index (const).
+					@exception   IndexOverflow if <tt>index >= MAX_NUMBER_OF_BONDS</tt>
 			*/
 			const Bond* getBond(Position index) const
 				throw(Exception::IndexOverflow);
 
-			/** Mutable inspection of an atom's bond with another atom.
+			/** Return a bond by its partner atom (const).
 					The reference is 0 if this instance does not have a bond with <b>  atom </b>.
 					@param   atom the atom that is considered to have a bond with this instance
 					@return  Bond* - mutable pointer to the bond that connects <tt>atom</tt>  with this instance,
 									 0 if this instance does not have a bond with <b>  atom </b>
 					@see     Atom::createBond	     
 			*/
-			Bond* getBond(const Atom& atom)
-				throw();
+			Bond* getBond(const Atom& atom) throw();
 
-			/** Constant inspection of an atom's bond with another atom.
+			/** Return a bond by its partner atom (mutable)
 					The reference is 0 if this instance does not have a bond with <b>  atom </b>.
 					@param   atom the atom that is considered to have a bond with this instance
 					@return  Bond* - constant pointer to the bond that connects <b>  atom </b> with 
 									 this instance, 0 if this instance does not have a bond with <b>  atom </b>
 					@see     Atom::createBond	     
 			*/
-			const Bond* getBond(const Atom& atom) const
-				throw();
-
+			const Bond* getBond(const Atom& atom) const throw();
 			//@}
+
+
 			/** @name Miscellaneous 
 			*/
 			//@{ 
 
-			/** Bond creation.
+			/** Create a new bond to an atom.
 					Create a new instance of  \link Bond Bond \endlink  connecting this instance to <b>  atom </b>.
 					Calls  \link Bond::createBond Bond::createBond \endlink .
 					The state of the bond is initialized to the default values.
@@ -577,7 +550,7 @@ namespace BALL
 			Bond* createBond(Atom& atom)
 				throw(Exception::TooManyBonds);
 
-			/** Extended bond creation.
+			/** Create a new bond from an already existing instance of Bond.
 					Initialize the bond <b>  bond </b> to connect this instance to <b>  atom </b>.
 					Calls  \link Bond::createBond Bond::createBond \endlink .
 					The state of the bond is initialzed to the default values. \par
@@ -590,9 +563,10 @@ namespace BALL
 				throw(Exception::TooManyBonds);
 
 			/**	Create a copy of a bond.
+					This is mostly for internal use and should not be required by most
+					users.
 			*/
-			Bond* cloneBond(Bond& bond, Atom& atom)
-				throw();
+			Bond* cloneBond(Bond& bond, Atom& atom)	throw();
 
 			/** Explicit bond destruction.
 					Destroy the bond connecting {\em *this atom} and <b>  atom </b> explicitly.
@@ -605,8 +579,7 @@ namespace BALL
 					@see     AutoDeletable
 					@see     Bond::destroy
 			*/
-			bool destroyBond(const Atom& atom)
-				throw();
+			bool destroyBond(const Atom& atom) throw();
 
 			/** Explicit bond table destruction.
 					Destroy all the bonds connecting {\em *this atom} with another atom explicitly.
@@ -619,10 +592,9 @@ namespace BALL
 					@see       AutoDeletable
 					@see       Bond::destroy
 			*/
-			void destroyBonds()
-				throw();
-
+			void destroyBonds()	throw();
 			//@}
+
 			/** @name Predicates 
 			*/
 			//@{ 
@@ -636,7 +608,7 @@ namespace BALL
 			bool hasBond(const Bond& bond) const
 				throw();
 
-			/** Determine whether the atom is bound to another.
+			/** Determine whether there exists a bond to another atom.
 					Calls  \link Atom::getBond Atom::getBond \endlink .
 					Hydrogen bonds (type = Bond::TYPE__HYDROGEN) are ignored.
 					@param   atom the atom in question
@@ -644,16 +616,14 @@ namespace BALL
 													<tt>false</tt> otherwise
 					@see     Atom::getBond
 			*/
-			bool isBoundTo(const Atom& atom) const
-				throw();
+			bool isBoundTo(const Atom& atom) const throw();
 
 			/** Determine whether the atom has any bond.
 					@return  bool - <tt>true</tt> if an atom is bound to this instance,
 													<tt>false</tt> otherwise
 					@see     Atom::hasBond
 			*/
-			bool isBound() const
-				throw();
+			bool isBound() const throw();
 
 			/**	True if the two atoms are geminal.
 					Two atoms are geminal if they do not share a common bond but both have a
@@ -662,8 +632,7 @@ namespace BALL
 					@param	atom the second atom
 					@return bool - <b>true</b> if <tt>atom</tt> is geminal to this instance
 			*/
-			bool isGeminal(const Atom& atom) const
-				throw();
+			bool isGeminal(const Atom& atom) const throw();
 
 			/**	True if the two atoms are vicinal.
 					Two atoms are vicinal if they are separated by three bonds (1-4 position).
@@ -671,10 +640,9 @@ namespace BALL
 					@param	atom the second atom
 					@return bool - <b>true</b> if <tt>atom</tt> is vicinal to this instance
 			*/
-			bool isVicinal(const Atom& atom) const
-				throw();
-
+			bool isVicinal(const Atom& atom) const throw();
 			//@}
+
 			/** @name Debuggers and diagnostics 
 			*/
 			//@{ 
@@ -683,19 +651,18 @@ namespace BALL
 					@return	bool - <tt>true</tt> if the internal state of this 
 									instance is correct (self-validated) and consistent, <tt>false</tt> otherwise
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const throw();
 
 			/** Internal state dump.
 					Dump the current internal state of this instance to 
 					the output ostream <b>  s </b> with dumping depth <b>  depth </b>.
+					For debugging purposes only.
 					@param   s - output stream where to output the internal state
 					@param   depth - the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
-
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 			//@}
+
 			/** @name Internal iteration
 			*/
 			//@{
@@ -705,8 +672,7 @@ namespace BALL
 					@return  bool - <tt>true</tt> if application has been terminated successfully,
 													<tt>false</tt> otherwise
 			*/
-			bool applyBonds(UnaryProcessor<Bond>& processor)
-				throw();
+			bool applyBonds(UnaryProcessor<Bond>& processor) throw();
 
 			//@}
 			/** @name External iteration

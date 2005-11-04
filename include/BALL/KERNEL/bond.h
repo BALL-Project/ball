@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.h,v 1.44.4.2 2005/08/08 11:51:49 amoll Exp $
+// $Id: bond.h,v 1.44.4.3 2005/11/04 08:07:05 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_BOND_H
@@ -34,8 +34,6 @@ namespace BALL
 
 	/** Bond class.
 			An instance of Bond represents a bond between two atoms.
-			Bond equality is defined as bond identity.
-			A linear ordering of bonds is defined as the linear order of the  \link Object::Handle Object::Handle \endlink s.
 			There can be only one bond between two atoms (double, triple, etc. bonds are represented
 			using just one bond and an appropriate value for the bond order attribute, see  \link setBondOrder setBondOrder \endlink ).
 			 \par
@@ -46,9 +44,12 @@ namespace BALL
 			
 				- "first atom" ( \link Bond::first_ Bond::first_ \endlink )
 				- "second atom" ( \link Bond::second_ Bond::second_ \endlink )
-				- "bond name" ( \link Bond::name_ Bond::name_ \endlink )
-				- "bond order" ( \link Bond::bond_order_ Bond::bond_order_ \endlink )
-				- "bond type" ( \link Bond::bond_type_ Bond::bond_type_ \endlink )
+				- "bond name" ( \link Bond::name_ Bond::name_ \endlink ): an arbitrary name
+				- "bond order" ( \link Bond::bond_order_ Bond::bond_order_ \endlink ): the order, i.e. single, double, triple,...
+				- "bond type" ( \link Bond::bond_type_ Bond::bond_type_ \endlink ): covalent, hydrogen bond, etc. to identify non-standard bond types
+			
+			Bond equality is defined as bond identity.
+			A linear ordering of bonds is defined as the linear order of the  \link Object::Handle Object::Handle \endlink s.
 			
     	\ingroup KernelMiscellaneous 
 	*/
@@ -160,8 +161,7 @@ namespace BALL
 					- bond type is unknown (= \link Bond::TYPE__UNKNOWN Bond::TYPE__UNKNOWN \endlink )
 				
 		*/
-		Bond()
-			throw();
+		Bond() throw();
 
 		/** Copy constructor.
 				Calls  \link Bond::createBond Bond::createBond \endlink .
@@ -202,16 +202,13 @@ namespace BALL
 			throw(Exception::TooManyBonds);
 
 		/** Destructor.
-				Default destruction of this bond.
 				If the bond is connecting two atoms, they are disconnected.
 		*/
-		virtual ~Bond()
-			throw();
+		virtual ~Bond() throw();
 
-		/** Explicit default initialization.
-				Set the state of this bond to the default values.
+		/** Disconnect and reset to default state.
+				Reset the bond attributes to their default values.
 				The state of this bond is:
-
 					- bond has no connectivity with first atom (=0)
 					- bond has no connectivity with second atom (=0)
 					- bond name is the empty string (="")
@@ -219,8 +216,7 @@ namespace BALL
 					- bond type is unknown (= \link Bond::TYPE__UNKNOWN Bond::TYPE__UNKNOWN \endlink )
 				
 		*/
-		virtual void clear()
-			throw();
+		virtual void clear() throw();
 
 		/** Explicit destructor.
 				Destroy this bond explicitly without releasing its heap memory thus
@@ -229,10 +225,9 @@ namespace BALL
 				<b>Note:</b> Destroy is equivalent to  \link Bond::clear Bond::clear \endlink .
 				@see Bond::clear
 		*/
-		virtual void destroy()
-			throw();
-
+		virtual void destroy() throw();
 		//@}
+
 		/**	@name Persistence 
 		*/
 		//@{
@@ -255,23 +250,16 @@ namespace BALL
 		*/
 		void finalize()
 			throw(Exception::GeneralException);
-
 		//@}
 
 		/**	@name Predicates
 		*/
 		//@{
-		/**	Equality operator.
-				@see Object::operator ==
-		*/
-		bool operator == (const Bond& bond) const
-			throw();
+		///	Equality operator. Two bonds are equal, if they are identical instances.
+		bool operator == (const Bond& bond) const	throw();
 
-		/**	Inequality operator
-				@see operator ==
-		*/
-		bool operator != (const Bond& bond) const
-			throw();
+		///	Inequality operator. Two bonds are not equal, if they are different instances.
+		bool operator != (const Bond& bond) const	throw();
 		//@}
 
 		/** @name Assignment methods 
@@ -287,16 +275,13 @@ namespace BALL
 				@return Bond - this bond
 				@see    Bond::set
 		*/
-		Bond& operator = (const Bond& bond)
-			throw();
+		Bond& operator = (const Bond& bond) throw();
 
 		/** Swap the contents of two bonds
 				@param bond the bond <tt>this</tt> is being swapped with
 				@see   Bond::Bond
 		*/
-		void swap(Bond& bond)
-			throw();
-	
+		void swap(Bond& bond)	throw();
 		//@}
 
 		/** @name Accessors
@@ -306,28 +291,19 @@ namespace BALL
 		/** Set the first atom.
 				This method does not ensure the correct order of atoms 
 				(see  \link Bond Bond \endlink ), so its use is recommended for internal purposes only.
-				@param atom the atom to set
 		*/
-		void setFirstAtom(Atom* atom)
-			throw();
-	
-		/** Return a pointer to the first atom.
-		*/
-		const Atom* getFirstAtom() const
-			throw();
-	 
+		void setFirstAtom(Atom* atom) throw();
 		/** Set the second atom.
 				This method does not ensure the correct order of atoms 
 				(see  \link Bond Bond \endlink ), so its use is recommended for internal purposes only.
-				@param atom the atom to set
 		*/
-		void setSecondAtom(Atom* atom)
-			throw();
+		void setSecondAtom(Atom* atom) throw();
 	
-		/** Return a pointer to the second atom.
-		*/
-		const Atom* getSecondAtom() const
-			throw();
+		/// Return a pointer to the first atom
+		const Atom* getFirstAtom() const throw();
+	
+		/// Return a pointer to the second atom.
+		const Atom* getSecondAtom() const throw();
 
 		/**	Return the partner atom of an atom.
 				If the given <tt>atom</tt> is part of this bond, the other atom
@@ -336,60 +312,38 @@ namespace BALL
 				@param	atom one of the bond's atoms
 				@return	the atom's bond partner
 		*/
-		Atom* getPartner(const Atom& atom) const
-			throw();
+		Atom* getPartner(const Atom& atom) const throw();
 
-		/** Set the name.
-				@param name the new name of this bond
-		*/
-		void setName(const String& name)
-			throw();
+		/// Assign the atom name
+		void setName(const String& name) throw();
 
-		/** Return the name.
-				@return      String - constant reference to the name of this bond
-		*/
-		const String& getName() const
-			throw();
+		/// Return the atom name
+		const String& getName() const	throw();
 
-		/** Set the bond order.
-				@param       bond_order the new order of this bond
-		*/
-		void setOrder(Order bond_order)
-			throw();
+		/// Assign the bond order
+		void setOrder(Order bond_order)	throw();
 	
-		/** Return the bond order.
-				@return      Order the order of the bond
-		*/
-		Order getOrder() const
-			throw();
+		/// Return the bond order
+		Order getOrder() const throw();
 	
-		/** Set the bond type
-				@param       bond_type the new type
-		*/
-		void setType(Type bond_type)
-			throw();
+		/// Set the bond type
+		void setType(Type bond_type) throw();
 	
-		/** Return the bond type
-				@return      Type - the bond type
-		*/
-		Type getType() const
-			throw();
+		/// Return the bond type
+		Type getType() const throw();
 	
 		/** Return the bond length
 				@exception NotBound if the bond has not two atoms
 				@return      float - the distance between the two atoms
 		*/
-		float getLength() const
-			throw(NotBound);
+		float getLength() const throw(NotBound);
 
 		/** Return the partner of the atom in this bond.
 				@param			 atom an atom
 				@return      Atom a constant pointer to the atom,
 										 0 if the atom is not part of the bond
 		*/
-		const Atom* getBoundAtom(const Atom& atom) const
-			throw();
-
+		const Atom* getBoundAtom(const Atom& atom) const throw();
 		//@}
 
 		/** @name Predicates 
@@ -403,16 +357,14 @@ namespace BALL
 												<tt>false</tt> otherwise
 				@see     Atom::hasBond
 		*/
-		bool isBondOf(const Atom& atom) const
-			throw();
+		bool isBondOf(const Atom& atom) const	throw();
 
 		/** Determine whether this bond contains any atom.
 				@return   bool - <tt>true</tt> if bond connects the atom <b>  atom </b> with another atom, 
 												 <tt>false</tt> otherwise
 				@see      Atom::hasBond
 		*/
-		bool isBound() const
-			throw();
+		bool isBound() const throw();
 
 		/** Determine whether the bond connects two fragments.
 				If both atoms have no roots, the result is false.
@@ -421,8 +373,7 @@ namespace BALL
 												 <tt>false</tt> otherwise
 				@see      Composite::getRoot
 		*/
-		bool isInterBond() const
-			throw();
+		bool isInterBond() const throw();
 
 		/** Request for the intermolecular bonding of this bond within {\em atom_container}.
 				Query, if this bond connects a atom within {\em atom_container} instance with an atom outside.
@@ -432,8 +383,7 @@ namespace BALL
 													<tt>false</tt> otherwise
 				@see      Composite::isDescendantOf
 		*/
-		bool isInterBondOf(const AtomContainer& atom_container) const
-			throw();
+		bool isInterBondOf(const AtomContainer& atom_container) const	throw();
 
 		/**	Request for the intramolecular bonding of this bond.
 				Query, if this bond connects its two atoms within a common parent  \link Composite Composite \endlink  instance.
@@ -443,8 +393,7 @@ namespace BALL
 											 <tt>false</tt> otherwise
 				@see    Composite::getRoot
 		*/
-		bool isIntraBond() const
-			throw();
+		bool isIntraBond() const throw();
 
 		/** Request for the intramolecular bonding of this bond within {\em atom_container}.
 				Query, if this bond connects its two atoms within the common parent {\em atom_container} instance.
@@ -454,12 +403,11 @@ namespace BALL
 											 <tt>false</tt> otherwise
 				@see    Composite::isDescendantOf
 		*/
-		bool isIntraBondOf(const AtomContainer& atom_container) const
-			throw();
+		bool isIntraBondOf(const AtomContainer& atom_container) const	throw();
 
 		//@}
 
-		/** @name Debuggers and diagnostics 
+		/** @name Debugging and diagnostics 
 		*/
 		//@{ 
 
@@ -467,8 +415,7 @@ namespace BALL
 				@return   bool - <tt>true</tt> if the internal state of this bond is correct (self-validated)
 									and consistent, <tt>false</tt> otherwise
 		*/
-		virtual bool isValid() const
-			throw();
+		virtual bool isValid() const throw();
 
 		/** Internal state dump.
 				Dump the current internal state of this bond to the output ostream <b>  s </b>
@@ -476,9 +423,7 @@ namespace BALL
 				@param	s output stream where to output the internal state of this bond
 				@param  depth the dumping depth
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
-	
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 		//@}
 
 		protected:
@@ -505,11 +450,8 @@ namespace BALL
 
 		private:
 
-		void arrangeBonds_() 
-			throw();
-
-		void clear_()
-			throw();
+		void arrangeBonds_() throw();
+		void clear_() throw();
 	};
 
 # ifndef BALL_NO_INLINE_FUNCTIONS

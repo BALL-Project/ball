@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.49.4.6 2005/08/19 11:25:09 amoll Exp $
+// $Id: exception.h,v 1.49.4.7 2005/11/04 08:07:03 oliver Exp $
 //
    
 #ifndef BALL_COMMON_EXCEPTION_H
@@ -443,29 +443,27 @@ namespace BALL
 		};
 		
 		/// Exception to be thrown if too many errors occur, e.g. in ForceField
-		class BALL_EXPORT TooManyErrors: public Exception::GeneralException
+		class BALL_EXPORT TooManyErrors
+			: public Exception::GeneralException
 		{
 			public:
-
-				///
-				TooManyErrors(const char* file, int line)
-					throw();
+			///
+			TooManyErrors(const char* file, int line)	throw();
 		};
 		 
 		/// Exception to be thrown if too many bonds for one atom
-		class BALL_EXPORT TooManyBonds: public Exception::GeneralException
+		class BALL_EXPORT TooManyBonds
+			: public Exception::GeneralException
 		{
 			public:
-
-				///
-				TooManyBonds(const char* file, int line, String error)
-					throw();
+			///
+			TooManyBonds(const char* file, int line, const String& error = "") throw();
 		};
 
 
-		/**
+		/** Class handling uncaught exception globally.
 		*/
-		 class BALL_EXPORT GlobalExceptionHandler
+		class BALL_EXPORT GlobalExceptionHandler
 		{
 			public:
 			/**	@name	Constructors
@@ -488,36 +486,26 @@ namespace BALL
 					<tt>bad_alloc</tt> (the default behaviour defined in the ANSI C++ 
 					standard).
 			*/
-			GlobalExceptionHandler()
-				throw();
+			GlobalExceptionHandler() throw();
 			//@}
 			
 			/**	@name	Accessors
 			*/
 			//@{
 				
-			/**
-			*/
-			static void setName(const String& name)
-				throw();
+			/// Assign the name of the exception. This should agree with the class name.
+			static void setName(const String& name)	throw();
 				
-			/**
-			*/
-			static void setMessage(const String& message)
-				throw();
+			/// Set the error message
+			static void setMessage(const String& message) throw();
 
-			/**
-			*/
-			static void setLine(int line)
-				throw();
+			/// Set the line number the exception was thrown. Should be set to __LINE__ in most cases.
+			static void setLine(int line)	throw();
 
-			/**
-			*/
-			static void setFile(const String& file)
-				throw();
+			/// The source file name where the exception was thrown
+			static void setFile(const String& file)	throw();
 
-			/**
-			*/
+			/// Set all exception attributes
 			static void set
 				(const String& file, int line, 
 				 const String& name, const String& message)
@@ -527,12 +515,10 @@ namespace BALL
 			protected:
 
 			/// The BALL replacement for terminate
-			static void terminate()
-				throw();
+			static void terminate()	throw();
 
 			/// The BALL new handler
-			static void newHandler()
-				throw(Exception::OutOfMemory);
+			static void newHandler() throw(Exception::OutOfMemory);
 
 			static std::string file_;
 			static int				 line_;

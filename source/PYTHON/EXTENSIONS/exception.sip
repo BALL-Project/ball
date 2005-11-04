@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.sip,v 1.6.4.1 2005/07/27 13:20:24 amoll Exp $
+// $Id: exception.sip,v 1.6.4.2 2005/11/04 08:07:07 oliver Exp $
 //
 
 class GeneralException 
@@ -499,5 +499,17 @@ class GlobalExceptionHandler
 		(const String& /file/, int /line/, 
 		 const String& /name/, const String& /message/);
 };	
+
+class TooManyBonds
+ : GeneralException
+{
+%TypeHeaderCode
+  #include <BALL/COMMON/exception.h>
+  using namespace BALL;
+  using namespace BALL::Exception;
+%End
+  public:
+  TooManyBonds(const char* /file/, int /line/, const String& /error/) throw();
+};
 
 GlobalExceptionHandler globalHandler;
