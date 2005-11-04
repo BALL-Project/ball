@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.10.4.1 2005/09/29 14:01:24 amoll Exp $
+// $Id: materialSettings.C,v 1.10.4.2 2005/11/04 15:25:51 amoll Exp $
 // 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
@@ -42,11 +42,19 @@ namespace BALL
 			stage.setDiffuseIntensity(	((float)diffuse_slider->value())   / 10.0);
 			stage.setAmbientIntensity(	((float)ambient_slider->value())   / 10.0);
 			stage.setShininess(					((float)shininess_slider->value()) / 10.0);
-			glMaterialf(GL_FRONT, GL_SHININESS, stage.getShininess());
-			glMaterialf(GL_FRONT, GL_SPECULAR,  stage.getSpecularIntensity());
-			glMaterialf(GL_FRONT, GL_DIFFUSE,   stage.getDiffuseIntensity());
-			glMaterialf(GL_FRONT, GL_AMBIENT,   stage.getAmbientIntensity());
 
+			glMaterialf(GL_FRONT, GL_SHININESS, stage.getShininess());
+			GLfloat values[4];
+			values[3] = 1.0;
+
+			values[0] = values[1] = values[2] =  stage.getSpecularIntensity();
+			glMaterialfv(GL_FRONT, GL_SPECULAR,  values);
+			
+			values[0] = values[1] = values[2] = stage.getDiffuseIntensity();
+			glMaterialfv(GL_FRONT, GL_DIFFUSE,   values);
+			
+			values[0] = values[1] = values[2] = stage.getAmbientIntensity();
+ 			glMaterialfv(GL_FRONT, GL_AMBIENT,   values);
 		}
 
 		void MaterialSettings::ambientChanged()
