@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.16 2005/10/23 12:02:21 oliver Exp $
+// $Id: datasetControl.h,v 1.17 2005/11/04 14:10:13 anne Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -139,7 +139,9 @@ namespace BALL
 			void computeIsoContourSurface();
 
 			///
-			void createElectronDensity_();
+/**
+ * void createElectronDensity_();
+ */
 
 			//@} 
 			/** @name Protected members 
