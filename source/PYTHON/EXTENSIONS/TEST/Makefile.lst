@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.1.2.3 2005/11/04 08:07:08 oliver Exp $
+# $Id: Makefile.lst,v 1.1.2.4 2005/11/04 20:04:51 oliver Exp $
 #
 EXEEXT=.py
 
@@ -10,14 +10,12 @@ VIEW_DEPENDENT_EXECUTABLES=\
 
 EXECUTABLES_BASIC = \
 	$(PREFIX)ClassTest_test$(EXEEXT)\
-	$(PREFIX)RegularExpression_test$(EXEEXT)\
-	$(PREFIX)GlobalTypes_test$(EXEEXT)\
 	$(PREFIX)VersionInfo_test$(EXEEXT)
 
 EXECUTABLES_MATHS = \
 
 EXECUTABLES_SYSTEM = \
-	$(PREFIX)Sysinfo_test$(EXEEXT)
+	$(PREFIX)SysInfo_test$(EXEEXT)
 
 EXECUTABLES_DATATYPES = \
 	$(PREFIX)String_test1$(EXEEXT)\

@@ -132,4 +132,6 @@ def TEST_REAL_EQUAL(a, b):
 		status.failTest(msg)
 
 def FAIL():
-	status.failTest('caught unexpected exception')
+	status.failTest('caught unexpected exception:')
+	print "    Type:   ",sys.exc_type
+	print "    Value:  ",sys.exc_value	

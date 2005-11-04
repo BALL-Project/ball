@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.49.4.7 2005/11/04 08:07:03 oliver Exp $
+// $Id: exception.h,v 1.49.4.8 2005/11/04 20:06:44 oliver Exp $
 //
    
 #ifndef BALL_COMMON_EXCEPTION_H
@@ -457,7 +457,7 @@ namespace BALL
 		{
 			public:
 			///
-			TooManyBonds(const char* file, int line, const String& error = "") throw();
+			TooManyBonds(const char* file, int line, const String& error) throw();
 		};
 
 

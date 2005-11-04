@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.40.4.7 2005/11/04 08:07:06 oliver Exp $
+// $Id: BALL.sip,v 1.40.4.8 2005/11/04 20:04:49 oliver Exp $
 //
 
 /////////////////////////
@@ -272,6 +272,7 @@
 // %Include fileSystem.sip
 %Include path.sip
 // %Include socket.sip
+%Include sysinfo.sip
 %Include timer.sip
 
 // VIEW/KERNEL

@@ -98,7 +98,7 @@ for i in $* ; do
 		# rerun it in verbose mode to find out which
 		# subtest failed
 		echo "Failure in test $i. Please check log file $i.log."
-		( ${PYTHON} ./$i.py -V 2>&1 |cat > $i.log ) 2>/dev/null
+		( ${PYTHON} ./$i.py -v 2>&1 |cat > $i.log ) 2>/dev/null
 		if test -f core ; then
 			rm core
 		fi
