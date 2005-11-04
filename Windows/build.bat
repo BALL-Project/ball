@@ -2,7 +2,7 @@
 echo.
 
 if "%BALL_PATH%"=="" goto Usage1
-if "%VSINSTALLDIR%"=="" goto Usage4
+rem if "%VSINSTALLDIR%"=="" goto Usage4
 
 if not exist Contrib goto Usage5
 
@@ -47,6 +47,8 @@ rem ---------------------------------- Build the libs and the application ------
 :BUILD
 echo ---------------------------------------------------------------
 echo building the libraries and BALLView ...
+
+mkdir Libs\libVIEW\mocfiles 2> NUL
 
 for %%i in ("Libs\libBALL" "Libs\libVIEW" "Libs\Python Module"  "Applications\BALLView") do (
 echo ----------------------------------------------------------------
