@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editOperationDialog.h,v 1.5 2005/09/02 19:54:27 anne Exp $ 
+// $Id: editOperationDialog.h,v 1.6 2005/11/04 17:57:48 anne Exp $ 
 //
 
 #ifndef BALL_VIEW_DIALOGS_EDITOPERATIONDIALOG_H
@@ -23,8 +23,10 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		/** Dialog for storing the undo Operations of EditableScene.
+		/** Dialogtab for storing the undo Operations of EditableScene.
 		 		\ingroups ViewDialogs
+				This just makes sense if using an editableScene. By now just the editabelScene
+				creates undo-operations.
 		*/
 
 		class BALL_EXPORT EditOperationDialog

@@ -155,18 +155,6 @@ namespace BALL
 					virtual ~EditableScene()
 						throw();
 
-					/** Explicit default initialization.
-						Reset the default values of this scene to:
-						-  width is set to <tt> 600</tt>
-						-  height is set to <tt> 600</tt>
-						- camera position set to <tt> Vector(1,0,0)</tt>
-						- camera look at position set to <tt> Vector(0,0,0)</tt>
-						\par
-						*/
-					virtual void clear()
-						throw();
-
-
 					void onNotify(Message *message)
 						throw();
 
@@ -205,7 +193,9 @@ namespace BALL
 
 					/**
 					 * initializes the context_menu_ 
-					 * context_menu_composite_ should be set to the current object   Warum????   
+					 * context_menu_composite_ should be set to the current object
+					 * in order to gaurantee that the chosen operation takes place 
+					 * on the clicked composite
 					 */
 					void popupContextMenu_();
 
@@ -214,6 +204,22 @@ namespace BALL
 						//#############################################################
 						//								Mouse Events
 						//############################################################
+						
+						
+						/**
+		 				*  Mouse Events should provide the following functionality: 
+		 				*  right click  - context menu to clicked object (atom or bond)
+		 				*  left click   - insertion of an atom with type edit_atom_type_ 
+					  *  							 in a previouse defined atomContainer (care about the highlight-mechanism)
+					  *  middle click - selection of a first bond partner
+					  *    if a middle click is released on an atom, this atom is the second bond partner
+					  *    if there is no atom, we insert an atom with type edit_atom_type_ into the
+					  *    atomcontainer of the first bond partner 
+					  *    if two differemt atomcontainers are connected, they have to be merged! 
+					  *
+					  *  for every operation we have to emit the corresponding undo-operation! 
+					  */
+
 						virtual void mousePressEvent(QMouseEvent* e);
 
 
@@ -241,9 +247,6 @@ namespace BALL
 					protected slots:
 						virtual void editMode_();
 						virtual void bondMode_();
-						virtual void rotateMode_();
-						virtual void pickingMode_();
-						virtual void moveMode_();
 						virtual void showScaling_();
 						
 					signals:
@@ -297,13 +300,71 @@ namespace BALL
 					int edit_atom_type_;        //store atomtype for new atoms     
 					bool show_scaling_axes_;  //regulates display of thedisplay of the  scaling axes
 					
-					//inherited by scene
-					virtual void renderView_(RenderMode mode)
-						throw();
 
-					virtual void glDraw()
-						throw();
+					/**
+					 *  for structuring the code we splitted MousePressEvent and 
+					 *  MouseMoveEvent into button related functions or Bond-/Edit- Mode
+					 */
+					
+					/**
+					 * this function performs the action of MousePressEvent::LeftButton
+					 * inserts a new atom 
+					 */
+					void leftButtonPressEvent_(QMouseEvent* e);
+				
+					
+					/** this function performs the action of MousePressEvent::RightButton
+					 * it searchs an object, that is close to the click ray and open a 
+					 * special context menu
+					 */
+					void rightButtonPressEvent_(QMouseEvent* e);
+					
+					
+					/**
+					 * this function performs the action of MousePressEvent::MidButton
+					 * if there is an atom in select_atom_limit, a new bond from this atom 
+					 * is started the new bond is sketched with a thin line 
+					 *    => we have to update the corresponding bond_positions 
+					 *    (	x_ewindow_bond_pos_first_ = pos.x and x_ewindow_bond_pos_second_old_ = pos.x)
+					 */
+					void midButtonPressEvent_(QMouseEvent* e);
+				
 
+					/**
+					 * this function performs the action of mouseMoveEvent in Bond Mode
+					 * the bond is sketched and the actual bond length is presented
+					 * if the click-ray is within a certain radius to an atom, the
+					 * bond snaps into this atom
+					 */
+					void moveEventBondMode_(QMouseEvent* e);
+					
+					/**
+					 * this function performs the action of mouseMoveEvent in Bond Mode
+					 */
+					void moveEventMoveMode_();
+					
+
+					/**
+					 *  this function performs the action of mouseReleaseEvent in Bond Mode
+					 *  having found a second bond partner. It checks, if first and second 
+					 *  bond partner are the same atom. If not, a bond is inserted. 
+					 *  If the two atoms belong to different atomContainers, they are merged
+					 *  and the corresponding undo-operation is emited.
+					 */
+					void releaseEventBondModeWithAtom_(Atom* atom);
+
+					/**
+					 * this function performs the action of mouseReleaseEvent in Bond Mode 
+					 *  _without_ having found a second bond partner.
+					 *
+					 *  If there is even no first bond partner -> nothing to do.
+					 *  If there is one and the new atom is not in the atomradius of 
+					 *  the first bondpartner, we insert a new atom into the atomcontainer
+					 *  of the first bondpartner.
+					 */
+					void releaseEventBondModeWithoutAtom_(QMouseEvent* e);
+
+					
 					/**
 					 * Insert a given Atom in the Scene. Its position is specified by the 2-dim 
 					 * Mouseclick coordinates of the Screen, which will be translated into the 
@@ -344,7 +405,7 @@ namespace BALL
 					 */
 					AtomContainer* getAtomContainer_(const Atom* atom);
 				
-					void highligthAtomContainer_(AtomContainer* ac);
+					void highlightAtomContainer_(AtomContainer* ac);
 
 					/**
 					 * Maps the current viewplane to screen coordinates.
@@ -363,6 +424,13 @@ namespace BALL
 					 * draws a ruler showing the scaling of the insertion plain of the EditableScene 
 					 */
 					void drawRuler_();
+				
+					void renderView_(RenderMode mode)
+						throw();
+
+					void glDraw()
+						throw();
+
 					
 					/* enables EditOperations like MERGED__MOLECULES do invalidate bonds or atoms*/
 					void invalidateComposite(Composite* deleted_composite);

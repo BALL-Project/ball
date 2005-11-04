@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editOperationDialog.C,v 1.6 2005/09/07 13:57:20 anne Exp $
+// $Id: editOperationDialog.C,v 1.7 2005/11/04 17:57:48 anne Exp $
 
 #include <BALL/VIEW/DIALOGS/editOperationDialog.h>
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -38,16 +38,14 @@ namespace BALL
 			undo_operation_list->setSelectionMode(QListBox::Extended);	
 		}
 
-
+			
 		EditOperationDialog::~EditOperationDialog()
 			throw()
 		{
 		}
 
-			// ------------------------- SLOTS ------------------------------------------------
-			// --------------------------------------------------------------------------------
-
-
+		// ------------------------- SLOTS ------------------------------------------------
+		// --------------------------------------------------------------------------------
 		void EditOperationDialog::undo()
 		{
 			signed int number_of_items = undo_operation_list->count(); 
@@ -61,43 +59,34 @@ namespace BALL
 			}
 				
 			// check whether the undo selection is valid
-			if( smallest_highlighted_item < number_of_items )
+			if (smallest_highlighted_item < number_of_items)
 			{
 				EditableScene* scene = EditableScene::getInstance(0);
 
-				if (scene == 0)
+				int number_of_undo_operations = number_of_items - smallest_highlighted_item;
+					
+				for (int i = 0 ; i < number_of_undo_operations; i++)
 				{
-					Log.error() << "Expected an EditableScene, but found none!" << std::endl;
-				}
-				else
-				{ 
-					int number_of_undo_operations=number_of_items - smallest_highlighted_item;
-					
-					for(int i = 0 ; i < number_of_undo_operations; i++)
-					{
-						//remove EditOperation from list_of_operations
-						EditableScene::EditOperation undo_operation = list_of_operations_.back();
-						list_of_operations_.pop_back();
-						undo_operation.undo(scene);
-						
-						//remove EditOperation from undo_list in Dialog
-						undo_operation_list->removeItem(number_of_items - number_of_undo_operations);
-					}
-					
+					//remove EditOperation from list_of_operations
+					EditableScene::EditOperation undo_operation = list_of_operations_.back();
+					list_of_operations_.pop_back();
+					undo_operation.undo(scene);	
+					//remove EditOperation from undo_list in Dialog
+					undo_operation_list->removeItem(number_of_items - number_of_undo_operations);
+				}	
 					//highlighting of the last operation is done automatically
-				}
 			}
 		}
 
 		void EditOperationDialog::operationSelected(int operation)
 		{
-			//disconnect the signal for selection to inhibit recursive loops
-			disconnect( undo_operation_list, SIGNAL( highlighted(int) ), this, SLOT( operationSelected(int) ));
+			//we _have_ to disconnect the signal for selection to inhibit recursive loops! 
+			disconnect(undo_operation_list, SIGNAL( highlighted(int) ), this, SLOT( operationSelected(int) ));
 			signed int number_of_items = undo_operation_list->count(); 
 			undo_operation_list->clearSelection();
 			// Warning: we _have_ to use signed ints here, since the first item has index
 			// 0, and our loop would never terminate
-			for(signed int i = number_of_items-1; i >= operation; i--)
+			for (signed int i = number_of_items-1; i >= operation; i--)
 			{	
 				undo_operation_list->setSelected(i, true);
 			}
@@ -119,12 +108,12 @@ namespace BALL
 		
 		void EditOperationDialog::invalidateComposite(Composite* composite)
 		{
-			if(RTTI::isKindOf<Atom>(*composite))
+			if (RTTI::isKindOf<Atom>(*composite))
 			{	
 				Atom* atom  = dynamic_cast<Atom*>(composite);
 				removeEditOperationFromList_(atom);
 			}
-			else if(RTTI::isKindOf<Bond>(*composite))
+			else if (RTTI::isKindOf<Bond>(*composite))
 			{
 				Bond* bond  = dynamic_cast<Bond*>(composite);
 				removeEditOperationFromList_(bond);
@@ -133,9 +122,8 @@ namespace BALL
 				//if it is an atomcontainer itself 
 			{
 				Composite::ChildCompositeIterator cci;
-				for(cci = composite->beginChildComposite(); +cci; ++cci)
+				for (cci = composite->beginChildComposite(); +cci; ++cci)
 				{
-					// Maybe it would suffice to just iterate over all atoms and bonds here?
 					invalidateComposite(cci);
 				}
 			}
@@ -174,12 +162,12 @@ namespace BALL
 					Position atom_to_delete;
 					std::vector<Atom*> mol=list_of_operations_[i].molecule;
 					//check if the deleted atom is contained in one of the merged molecules
-					for( Position j=0; j < mol.size(); j++)
+					for (Position j = 0; j < mol.size(); j++)
 					{
-						if(mol[j] == atom)
+						if (mol[j] == atom)
 						{
 							// The merge has to be deleted, if the deleted atom is the last atom in this molecule
-							if(mol.size() == (Position)1)
+							if (mol.size() == (Position)1)
 							{
 								// delete the current item from the list of edit operations
 								to_delete.push_back(i);
@@ -194,10 +182,10 @@ namespace BALL
 						}
 					}
 					
-					if(atom_to_delete!=0)
+					if (atom_to_delete != 0)
 					{ // we have to rebuild the molecule list
 						std::vector<Atom*> new_molecule;
-						for(Position j=0; j< mol.size(); j++)
+						for (Position j = 0; j < mol.size(); j++)
 						{	
 							if (atom_to_delete != j)
 							{
@@ -206,11 +194,8 @@ namespace BALL
 						}
 						// insert the new list
 						list_of_operations_[i].molecule = new_molecule;
-
 					}// end if
-					
 				}// end of MERGED__MOLECULES
-				
 			} //end of loop 
 
 			if (to_delete.size() > 0)
@@ -243,21 +228,18 @@ namespace BALL
 				}
 				return true;
 			}
-
 			// the atom was not in the list
 			return false;
 		}
 
-
 		bool EditOperationDialog::removeEditOperationFromList_(Bond* bond)
-		{	
-			
+		{		
 			vector<Position> to_delete;
 
-			for (Position i=0; i < list_of_operations_.size(); i++) 
+			for (Position i = 0; i < list_of_operations_.size(); i++) 
 			{
 				// Does the current edit operation contain a bond?
-				if ( list_of_operations_[i].operationType == EditableScene::EditOperation::ADDED__BOND ) 
+				if (list_of_operations_[i].operationType == EditableScene::EditOperation::ADDED__BOND) 
 					//later we will remove things like CHANGED__BOND__TYPE
 				{
 					if (list_of_operations_[i].bond == bond) // the current bond has been invalidated
@@ -271,7 +253,7 @@ namespace BALL
 			if (to_delete.size() > 0)
 			{
 				sort(to_delete.begin(), to_delete.end());
-				// TODO: This is probably too expensive... there should be a better way :-)
+				// This is probably too expensive... there should be a better way :-)
 				vector<EditableScene::EditOperation> new_list_of_operations;
 				Position to_delete_index = 0;
 
@@ -282,23 +264,18 @@ namespace BALL
 						new_list_of_operations.push_back(list_of_operations_[i]);
 					}
 					else
-					{
-						// we have skipped one of the elements
+					{	// we have skipped one of the elements
 						to_delete_index++;
 					}
 				}
-				
 				// finally replace the old operations with the new ones
 				list_of_operations_ = new_list_of_operations;
 
 				return true;
-		
 			}
-			
 			return false; 
 		}
- 
+		
 	} //end of VIEW namespace
-	
 }//end of BALL namespace
 			

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editFunctions.C,v 1.3 2005/09/07 13:57:20 anne Exp $
+// $Id: editFunctions.C,v 1.4 2005/11/04 17:57:48 anne Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editFunctions.h>
@@ -31,19 +31,6 @@ namespace BALL
 									<< " of class EditFunctions" << endl;
 			#endif 
 		}
-
-		void EditFunctions::initializeWidget(MainControl& main_control)
-			throw()
-		{
-			DockWidget::initializeWidget(main_control);
-		}
-
-		void EditFunctions::finalizeWidget(MainControl& main_control)
-			throw()
-		{
-			DockWidget::initializeWidget(main_control);
-		}
-
 	}		
 }
 

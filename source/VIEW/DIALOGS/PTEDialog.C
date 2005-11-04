@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTEDialog.C,v 1.3 2005/09/02 19:56:14 anne Exp $
+// $Id: PTEDialog.C,v 1.4 2005/11/04 17:57:48 anne Exp $
 
 #include <BALL/VIEW/DIALOGS/PTEDialog.h>
 #include <BALL/KERNEL/PTE.h>
@@ -19,14 +19,12 @@ namespace BALL
 			: PTEDialogData(parent, name, fl),
 				ModularWidget(name)
 		{
-			//registerWidget(this);
 			// iterate over all buttons in the button group
-			int i=1;
-			int highest_id = Element::NUMBER_OF_ELEMENTS; // the maximal id in the button group
+			Index highest_id = Element::NUMBER_OF_ELEMENTS; // the maximal id in the button group
 			// we can't use count here, since the id's in the group are
 			// not contingent, since we use the atomic number as index
 			// and since the side groups (???) are left out
-			for (;i<=highest_id;i++)
+			for (Index i = 1; i <= highest_id; i++)
 			{
 				if (buttonGroup1->find(i) != 0)
 				{
@@ -35,7 +33,6 @@ namespace BALL
 			}
 			
 			// colour the current ElementType in PTE
-			
 			button_standard_color_ = buttonGroup1->find(1)->paletteBackgroundColor();
 			EditableScene* scene = EditableScene::getInstance(0);
 
@@ -53,10 +50,7 @@ namespace BALL
 					button->setPaletteBackgroundColor(QColor("yellow"));
 				}
 		  }
-
-			
 		}
-	
 				
 		PTEDialog::~PTEDialog()
 			throw()
@@ -80,12 +74,9 @@ namespace BALL
 
 			 if (old_button)
 				 old_button->setPaletteBackgroundColor(button_standard_color_);
-
 			 //color new ElementType
 			 buttonGroup1->find(elementNumber)->setPaletteBackgroundColor(QColor("yellow"));
-
 			 scene->setEditElementType(elementNumber);
-			 
 		 }
 	 }
 
