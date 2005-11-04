@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19.4.14 2005/11/04 14:42:16 amoll Exp $
+// $Id: POVRenderer.C,v 1.19.4.15 2005/11/04 14:58:25 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -310,6 +310,7 @@ namespace BALL
 			
 			// Add some global blurb for radiosity support
 			out << "global_settings { radiosity { brightness 0.6 } }" << endl;
+
 			// Set the background color
 			out << "background { " << POVColorRGBA(stage_->getBackgroundColor()) << " }" << endl << endl;
 
@@ -317,11 +318,20 @@ namespace BALL
 			// "material properties"
 			// TODO: allow for more than one finish in order to have seperate parameters for different objects
 			out << "#declare BALLFinish            		 = finish { ";
+
 			// stage uses opengl values for material parameters (-1.0 -> 1.0), so normalize these
 			out << "specular " 	<< stage.getSpecularIntensity() / 2.0 + 0.5 << " ";
+
+			// shininess   0 -> roughness: 0.1
+			// shininess 128 -> roughness: 0.01
+			float r = 0.1 - ((stage.getShininess() / 128.0) * 0.09);
+			out << "roughness " << r << " ";
+			
 			out << "diffuse " 	<< stage.getDiffuseIntensity() 	/ 2.0 + 0.5 << " ";
+
 			// povray uses an other ambient setting
 			out << "ambient 0.0 }"	 	<< endl;
+
 			out << "#declare BALLFinishSphereSolid      = BALLFinish" << endl;
 			out << "#declare BALLFinishSphereTransp     = BALLFinish" << endl;
 			out << "#declare BALLFinishTubeSolid        = BALLFinish" << endl;
