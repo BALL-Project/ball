@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.C,v 1.3.8.7 2005/11/03 17:39:57 amoll Exp $
+// $Id: VRMLRenderer.C,v 1.3.8.8 2005/11/04 11:41:35 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
@@ -276,11 +276,11 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 	// print normals =====================================
 	outheader_("normal Normal {");
 	outheader_("vector [");
-	itv = mesh.vertex.begin(); 
-	for (; itv != mesh.vertex.end(); itv++)
+	itv = mesh.normal.begin(); 
+	for (; itv != mesh.normal.end(); itv++)
 	{
 		String out = VRMLVector3(*itv);
-		if (itv != mesh.vertex.end()) 
+		if (itv != mesh.normal.end()) 
 		{
 			out += ",";
 		}
