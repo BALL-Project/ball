@@ -213,6 +213,8 @@ namespace BALL
 			view_point_ = results[0];
 			look_at_ 		= results[1];
 			look_up_vector_ = results[2];
+
+			calculateVectors_();
 			
 			return true;
 		}

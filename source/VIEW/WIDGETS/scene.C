@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.56 2005/11/04 14:23:40 amoll Exp $
+// $Id: scene.C,v 1.171.2.57 2005/11/04 15:42:34 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1551,7 +1551,7 @@ namespace BALL
 						* 2.0 * gl_renderer_.getYScale()
 						* mouse_sensitivity_ / TRANSLATE_FACTOR;
 
-					m.setTranslation(-right_translate - up_translate);
+					m.setTranslation(right_translate - up_translate);
 					break;
 				}
 
