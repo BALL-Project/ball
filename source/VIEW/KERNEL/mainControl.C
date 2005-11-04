@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.38 2005/11/01 19:55:21 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.39 2005/11/04 23:08:01 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1465,7 +1465,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					file->close();
 					String filename = file->getName();
 					delete file;
-					file = new DCDFile(filename, File::IN);
+					file = new DCDFile(filename, std::ios::in);
 					NewTrajectoryMessage* message = new NewTrajectoryMessage;
 					message->setComposite(*simulation_thread_->getComposite());
 					message->setTrajectoryFile(*file);

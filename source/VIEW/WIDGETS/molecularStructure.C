@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.86.2.11 2005/10/14 11:42:30 amoll Exp $
+// $Id: molecularStructure.C,v 1.86.2.12 2005/11/04 23:08:01 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1232,7 +1232,7 @@ namespace BALL
 					}
 
 					dcd = new DCDFile;
-					dcd->open(name, File::OUT);
+					dcd->open(name, std::ios::out);
 					dcd->enableVelocityStorage();
 				}
 				// ============================= WITH MULTITHREADING ===================================
