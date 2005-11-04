@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.26 2005/11/03 17:39:57 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.27 2005/11/04 14:25:05 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -252,7 +252,7 @@ namespace BALL
 				{
 					// directional light sources dont have a position!
 					// but they get their direction with GL_POSITION!
-					light_dir = it->getDirection();
+					light_dir = -it->getDirection();
 					if (it->isRelativeToCamera())
 					{
 						light_dir = stage_->calculateAbsoluteCoordinates(light_dir);
@@ -260,7 +260,7 @@ namespace BALL
 
 					GLfloat pos[]  = { light_dir.x,
 														 light_dir.y,
-														 -light_dir.z,
+														 light_dir.z,
 														 0.0};  // the 1 is for positional lights
 
 					glLightfv(light_nr, GL_POSITION, pos);
@@ -296,6 +296,7 @@ namespace BALL
 				}
 				
 				glLightfv(light_nr, GL_SPOT_CUTOFF, &angle);
+				glLightf(light_nr, GL_SPOT_EXPONENT, (GLfloat) 100);
 
 				// setup the position of the lightsource
 				GLfloat pos[]  = { light_pos.x,

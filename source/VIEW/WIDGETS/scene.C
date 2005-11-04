@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.55 2005/10/31 01:32:52 amoll Exp $
+// $Id: scene.C,v 1.171.2.56 2005/11/04 14:23:40 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -717,7 +717,7 @@ namespace BALL
 				* 2.0 * scene->gl_renderer_.getYScale()
 				* mouse_sensitivity_ / TRANSLATE_FACTOR;
 
-			Vector3 v(right_translate + up_translate);
+			Vector3 v(-right_translate + up_translate);
 
 			stage_->getCamera().translate(v);
 			updateCamera_();
@@ -769,11 +769,11 @@ namespace BALL
 			vv.normalize();
 			vv *= 20.0;
 
-			Vector3 a = camera.getRightVector()  * right1
+			Vector3 a = -camera.getRightVector()  * right1
 				+ camera.getLookUpVector() * up1
 				+ vv * sphereProject_(0.8, right1, up1);
 
-			Vector3 b = camera.getRightVector()  * right2
+			Vector3 b = -camera.getRightVector()  * right2
 				+ camera.getLookUpVector() * up2
 				+ vv * sphereProject_(0.8, right2, up2);
 
