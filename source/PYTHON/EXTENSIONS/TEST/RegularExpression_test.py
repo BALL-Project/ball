@@ -1,7 +1,7 @@
 #!/usr/bin/env /opt/bin/python2.1
 from ClassTest import *
 
-START_TEST("RegularExpression", "$Id: RegularExpression_test.py,v 1.3 2003/08/26 09:18:25 oliver Exp $")
+START_TEST("RegularExpression", "$Id: RegularExpression_test.py,v 1.3.6.1 2005/11/06 21:51:26 oliver Exp $")
 
 CHECK('RegularExpression()')
 re = RegularExpression()
@@ -47,12 +47,6 @@ RESULT()
 CHECK('RegularExpression::get(RegularExpression& regular_expression, bool deep = true) const')
 re2.clear()
 re1.get(re2)
-TEST_EQUAL(re2.getPattern(), "abc")
-RESULT()
-
-CHECK('RegularExpression::operator = (const RegularExpression& expression) const')
-re2.clear()
-re2 = re1
 TEST_EQUAL(re2.getPattern(), "abc")
 RESULT()
 
@@ -133,7 +127,7 @@ CHECK('RegularExpression::bool operator == (const RegularExpression& regular_exp
 re2.set("abc")
 re1.set("abc")
 TEST_EQUAL(re2 == re1, true)
-re2.set("")
+re1.set("")
 TEST_EQUAL(re2 == re1, false)
 RESULT()
 

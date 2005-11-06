@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.1.2.4 2005/11/04 20:04:51 oliver Exp $
+# $Id: Makefile.lst,v 1.1.2.5 2005/11/06 21:51:26 oliver Exp $
 #
 EXEEXT=.py
 
@@ -18,6 +18,7 @@ EXECUTABLES_SYSTEM = \
 	$(PREFIX)SysInfo_test$(EXEEXT)
 
 EXECUTABLES_DATATYPES = \
+	$(PREFIX)RegularExpression_test$(EXEEXT)\
 	$(PREFIX)String_test1$(EXEEXT)\
 
 EXECUTABLES_CONCEPTS = \

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.65.4.3 2005/08/11 15:29:15 amoll Exp $
+// $Id: file.h,v 1.65.4.4 2005/11/06 21:51:25 oliver Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -562,7 +562,7 @@ namespace BALL
 				The path is	compared before and after call of 
 				FileSystem::canonizePath(canonized_name).
 				@see FileSystem::canonizePath
-				@return bool true if the path is cononized.
+				@return bool true if the path is canonized.
 		*/
 		bool isCanonized()
 			const throw (Exception::FileNotFound);
