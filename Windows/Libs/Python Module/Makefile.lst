@@ -1,4 +1,5 @@
 OBJS = \
+BALLmodule.obj\
 extractors.obj\
 pyAtomContainerList.obj\
 pyAtomList.obj\
@@ -43,6 +44,7 @@ sipBALLAtomVector.obj\
 sipBALLBit.obj\
 sipBALLBitVector.obj\
 sipBALLBond.obj\
+sipBALLBondProcessor.obj\
 sipBALLBoundingBoxProcessor.obj\
 sipBALLBox.obj\
 sipBALLBox3.obj\
@@ -115,7 +117,6 @@ sipBALLGeometricControl.obj\
 sipBALLGeometricObject.obj\
 sipBALLGeometricObjectList.obj\
 sipBALLGeometricObjectSelectionMessage.obj\
-sipBALLGlobalExceptionHandler.obj\
 sipBALLGradient.obj\
 sipBALLHBondModelProcessor.obj\
 sipBALLHINFile.obj\
@@ -136,6 +137,7 @@ sipBALLLine.obj\
 sipBALLLine3.obj\
 sipBALLLineBasedFile.obj\
 sipBALLLogView.obj\
+sipBALLLongIndex.obj\
 sipBALLMainControl.obj\
 sipBALLMatrix4x4.obj\
 sipBALLMesh.obj\
@@ -249,11 +251,14 @@ sipBALLSubstring.obj\
 sipBALLSurface.obj\
 sipBALLSurfaceProcessor.obj\
 sipBALLSurfaceTriangle.obj\
+sipBALLSysInfo.obj\
 sipBALLSystem.obj\
 sipBALLTemperatureFactorColorProcessor.obj\
 sipBALLTimer.obj\
+sipBALLTime.obj\
 sipBALLTimeStamp.obj\
 sipBALLTooManyErrors.obj\
+sipBALLTooManyBonds.obj\
 sipBALLTrajectoryFile.obj\
 sipBALLTransformationProcessor.obj\
 sipBALLTranslationProcessor.obj\
