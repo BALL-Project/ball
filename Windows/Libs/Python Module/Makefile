@@ -13,10 +13,12 @@ LINKDLL = $(LINKDLL) $(BALLVIEW_LIBS) /EXPORT:initBALL
 all: $(EXTENSION_DIR)\BALL.mysip BALL.dll
 
 clean:
+	move BALLmodule.C .. > NUL 2> NUL
 	del /S /Q *.C *.h *.sip > NUL 2> NUL
 	del /Q /S $(TARGETDIR)\*.* > NUL 2> NUL
 	del /Q /S *.obj > NUL 2> NUL
 	del /Q /S $(EXTENSION_DIR)\BALL.mysip > NUL 2> NUL
+	move ..\BALLmodule.C . > NUL 2> NUL
 
 
 BALL.dll:   $(OBJS) 
