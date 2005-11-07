@@ -1,7 +1,7 @@
 #!/usr/bin/env /opt/bin/python2.1
 from ClassTest import *
 
-START_TEST("RegularExpression", "$Id: RegularExpression_test.py,v 1.3.6.1 2005/11/06 21:51:26 oliver Exp $")
+START_TEST("RegularExpression", "$Id: RegularExpression_test.py,v 1.3.6.2 2005/11/07 10:23:14 oliver Exp $")
 
 CHECK('RegularExpression()')
 re = RegularExpression()
@@ -133,7 +133,7 @@ RESULT()
 
 CHECK('RegularExpression::bool operator != (const RegularExpression& regular_expression) const')
 TEST_EQUAL(re2 != re1, true)
-re2.set("abc")
+re1.set("abc")
 TEST_EQUAL(re2 != re1, false)
 RESULT()
 
