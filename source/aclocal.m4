@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.2.20 2005/11/03 07:18:36 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.21 2005/11/07 10:48:42 oliver Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -3440,11 +3440,11 @@ AC_DEFUN(CF_PYTHON, [
 		PYTHON_VERSION="${PYTHON_VERSION_NUMBER_1}.${PYTHON_VERSION_NUMBER_2}"
 		
 		dnl
-		dnl  We need at least Python 2.0
+		dnl  We need at least Python 2.3
 		dnl
-		if test "${PYTHON_VERSION_NUMBER_1}" -le 1 ; then
+		if test "${PYTHON_VERSION_NUMBER_1}" -le 1 -o "${PYTHON_VERSION_NUMBER_2}" -lt 2 ; then
 			AC_MSG_RESULT()
-			AC_MSG_RESULT([Python verison 2.0 or above required!])
+			AC_MSG_RESULT([Python verison 2.3 or above required!])
 			AC_MSG_RESULT([Please donwload and install Python from])
 			AC_MSG_RESULT([  http://www.python.org])
 			CF_ERROR
@@ -3567,10 +3567,10 @@ AC_DEFUN(CF_PYTHON, [
 			SIP_VERS_MINOR_MINOR="0"
 		fi
 		if test "${SIP_VERS_MAJOR}" -lt 4 \
-				-o "${SIP_VERS_MAJOR}" = 4 -a "${SIP_VERS_MINOR}" -lt 1 \
-				-o "${SIP_VERS_MAJOR}" = 4 -a "${SIP_VERS_MINOR}" = 1 -a "${SIP_VERS_MINOR_MINOR}" -lt 1; then
+				-o "${SIP_VERS_MAJOR}" = 4 -a "${SIP_VERS_MINOR}" -lt 3 \
+				-o "${SIP_VERS_MAJOR}" = 4 -a "${SIP_VERS_MINOR}" = 3 -a "${SIP_VERS_MINOR_MINOR}" -lt 1; then
 			AC_MSG_RESULT()
-			AC_MSG_RESULT(SIP release 4.1.1 or above required.)
+			AC_MSG_RESULT(SIP release 4.3.1 or above required.)
 			AC_MSG_RESULT(Your version: ${SIP_VERSION}")
 			AC_MSG_RESULT(Please upgrade or specify the location of the correct SIP using the)
 			AC_MSG_RESULT( --with-sip=PATH)
@@ -3578,7 +3578,6 @@ AC_DEFUN(CF_PYTHON, [
 			CF_ERROR
 		fi
 	
-
 		dnl
 		dnl	SIP header file (sip.h)
 		dnl

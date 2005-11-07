@@ -21520,11 +21520,11 @@ echo "${ECHO_T}${PYTHON_VERSION}" >&6
 
 										PYTHON_VERSION="${PYTHON_VERSION_NUMBER_1}.${PYTHON_VERSION_NUMBER_2}"
 
-								if test "${PYTHON_VERSION_NUMBER_1}" -le 1 ; then
+								if test "${PYTHON_VERSION_NUMBER_1}" -le 1 -o "${PYTHON_VERSION_NUMBER_2}" -lt 2 ; then
 			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-			echo "$as_me:$LINENO: result: Python verison 2.0 or above required!" >&5
-echo "${ECHO_T}Python verison 2.0 or above required!" >&6
+			echo "$as_me:$LINENO: result: Python verison 2.3 or above required!" >&5
+echo "${ECHO_T}Python verison 2.3 or above required!" >&6
 			echo "$as_me:$LINENO: result: Please donwload and install Python from" >&5
 echo "${ECHO_T}Please donwload and install Python from" >&6
 			echo "$as_me:$LINENO: result:   http://www.python.org" >&5
@@ -22082,12 +22082,12 @@ echo "$as_me: error: Aborted." >&2;}
 			SIP_VERS_MINOR_MINOR="0"
 		fi
 		if test "${SIP_VERS_MAJOR}" -lt 4 \
-				-o "${SIP_VERS_MAJOR}" = 4 -a "${SIP_VERS_MINOR}" -lt 1 \
-				-o "${SIP_VERS_MAJOR}" = 4 -a "${SIP_VERS_MINOR}" = 1 -a "${SIP_VERS_MINOR_MINOR}" -lt 1; then
+				-o "${SIP_VERS_MAJOR}" = 4 -a "${SIP_VERS_MINOR}" -lt 3 \
+				-o "${SIP_VERS_MAJOR}" = 4 -a "${SIP_VERS_MINOR}" = 3 -a "${SIP_VERS_MINOR_MINOR}" -lt 1; then
 			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-			echo "$as_me:$LINENO: result: SIP release 4.1.1 or above required." >&5
-echo "${ECHO_T}SIP release 4.1.1 or above required." >&6
+			echo "$as_me:$LINENO: result: SIP release 4.3.1 or above required." >&5
+echo "${ECHO_T}SIP release 4.3.1 or above required." >&6
 			echo "$as_me:$LINENO: result: Your version: ${SIP_VERSION}\"" >&5
 echo "${ECHO_T}Your version: ${SIP_VERSION}\"" >&6
 			echo "$as_me:$LINENO: result: Please upgrade or specify the location of the correct SIP using the" >&5
@@ -22133,7 +22133,6 @@ echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
 		fi
-
 
 								echo "$as_me:$LINENO: checking sip header file" >&5
 echo $ECHO_N "checking sip header file... $ECHO_C" >&6
