@@ -1,5 +1,6 @@
 NO_OPTIMIZATION_OBJS = \
-..\..\..\source\SOLVATION\pair6_12RDFIntegrator._obj
+..\..\..\source\SOLVATION\pair6_12RDFIntegrator._obj\
+..\..\..\source\FORMAT\PDBdefs._obj
 
 OBJS = \
 libBALL.obj\
@@ -59,7 +60,7 @@ libBALL.obj\
 ..\..\..\source\FORMAT\NMRStarFile.obj\
 ..\..\..\source\FORMAT\parameters.obj\
 ..\..\..\source\FORMAT\parameterSection.obj\
-..\..\..\source\FORMAT\PDBdefs.obj\
+#..\..\..\source\FORMAT\PDBdefs.obj\
 ..\..\..\source\FORMAT\PDBFileDetails.obj\
 ..\..\..\source\FORMAT\PDBFileGeneral.obj\
 ..\..\..\source\FORMAT\PDBInfo.obj\
