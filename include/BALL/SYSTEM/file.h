@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.65.4.4 2005/11/06 21:51:25 oliver Exp $
+// $Id: file.h,v 1.65.4.5 2005/11/08 11:40:24 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -174,22 +174,22 @@ namespace BALL
 		//@{
 
 		/// Open for input (default)
-		static const OpenMode IN = std::ios::in;
+		static const OpenMode MODE_IN = std::ios::in;
 
 		/// Open for output
-		static const OpenMode OUT = std::ios::out;
+		static const OpenMode MODE_OUT = std::ios::out;
 
 		/// Append. Seek to end before each write operation
-		static const OpenMode APP = std::ios::app;
+		static const OpenMode MODE_APP = std::ios::app;
 
 		/// Binary mode
-		static const OpenMode BINARY = std::ios::binary;
+		static const OpenMode MODE_BINARY = std::ios::binary;
 
 		/// Seek to end directly after opening.
-		static const OpenMode ATE =  std::ios::ate;
+		static const OpenMode MODE_ATE =  std::ios::ate;
 
 		/// Truncate an existing file.
-		static const OpenMode TRUNC = std::ios::trunc;
+		static const OpenMode MODE_TRUNC = std::ios::trunc;
 
 		//@}
 		/**	@name	Enums
