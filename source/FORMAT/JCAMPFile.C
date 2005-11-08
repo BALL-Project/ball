@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.17.6.4 2005/08/12 12:26:50 amoll Exp $
+// $Id: JCAMPFile.C,v 1.17.6.5 2005/11/08 12:01:08 amoll Exp $
 //
 
 
@@ -170,7 +170,7 @@ namespace BALL
 	bool JCAMPFile::write()
 		throw(File::CannotWrite)
 	{
-		if (!isOpen() || getOpenMode() != File::OUT)
+		if (!isOpen() || getOpenMode() != File::MODE_OUT)
 		{
 			throw(File::CannotWrite(__FILE__, __LINE__, name_));
 		}

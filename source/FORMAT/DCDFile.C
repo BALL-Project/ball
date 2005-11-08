@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.35 2004/08/29 16:28:32 amoll Exp $
+// $Id: DCDFile.C,v 1.35.4.1 2005/11/08 12:01:08 amoll Exp $
 //
 
 #include <BALL/FORMAT/DCDFile.h>
@@ -679,7 +679,7 @@ namespace BALL
 	bool DCDFile::flushToDisk(const ::std::vector<SnapShot>& buffer)
 		throw(File::CannotWrite)
 	{
-		if (!isOpen() || !(getOpenMode() & File::OUT))
+		if (!isOpen() || !(getOpenMode() & File::MODE_OUT))
 		{
 			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}

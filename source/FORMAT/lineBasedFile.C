@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.C,v 1.29 2004/02/17 16:07:19 oliver Exp $
+// $Id: lineBasedFile.C,v 1.29.6.1 2005/11/08 12:01:08 amoll Exp $
 //
 
 #include <BALL/FORMAT/lineBasedFile.h>
@@ -71,7 +71,7 @@ namespace BALL
 	bool LineBasedFile::search(const String& text, bool return_to_start)
 		throw(Exception::ParseError)
 	{
-		if (!isOpen() || getOpenMode() != IN)
+		if (!isOpen() || getOpenMode() != MODE_IN)
 		{
 			throw Exception::ParseError(__FILE__, __LINE__, String("File '") + getName() + "' not open for reading" , 
 																	"LineBasedFile::search");
@@ -96,7 +96,7 @@ namespace BALL
 	bool LineBasedFile::search(const String& text, const String& stop, bool return_to_start)
 		throw(Exception::ParseError)
 	{
-		if (!isOpen() || getOpenMode() != IN)
+		if (!isOpen() || getOpenMode() != MODE_IN)
 		{
 			throw Exception::ParseError(__FILE__, __LINE__, String("File '") + getName() + "' not open for reading" , 
 																	"LineBasedFile::search");
@@ -133,7 +133,7 @@ namespace BALL
 	bool LineBasedFile::readLine()
 		throw(Exception::ParseError)
 	{
-		if (!isOpen() || getOpenMode() != IN)
+		if (!isOpen() || getOpenMode() != MODE_IN)
 		{
 			throw Exception::ParseError(__FILE__, __LINE__, String("File '") + getName() + "' not open for reading" , 
 																	"LineBasedFile::readLine");
