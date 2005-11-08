@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.27 2005/11/04 14:25:05 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.28 2005/11/08 13:33:17 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -142,9 +142,7 @@ namespace BALL
 
 			// smooth line drawing
 			glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-			glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 			glEnable(GL_LINE_SMOOTH);
-			glEnable(GL_POLYGON_SMOOTH);
 
 			glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
