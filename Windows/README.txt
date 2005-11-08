@@ -5,17 +5,19 @@ This document explains how to build BALL and BALLView on the windows platform.
 ------------------------------------ REQUIREMENTS: ---------------------------------
 ------------------------------------------------------------------------------------
 
-1.) You need either a version of Microsoft Visual Studio .NET or the
-    Microsoft Visual C++ Toolkit, which can be obtained free of charge from
-	  http://msdn.microsoft.com/visualc/vctoolkit2003/
+1.) You need a version of Microsoft Visual Studio NET.
+    Microsoft Visual C++ Express can be obtained free of charge from
+		http://msdn.microsoft.com/vstudio/express/visualc/download/
 
-2.) BALLView can only be installed if Python 2.3.x is installed!
+2.) BALL can only be installed if Python 2.3.x is installed!
 		(Currently we advise you to use the release 2.3.5.)
-		Furthermore you need the QT library 3.2.X or 3.3.X. (Threads support enabled)
-		If you create OpenSource code and accept the GPL, QT can be downloaded free of 
-		charge from ftp://ftp.trolltech.com/qt/source/
+		Python can be obtained free of charge from
+		http://www.python.org/ftp/python/2.3.5/Python-2.3.5.exe
 
-3.) Python support is only available with QT (see point 2).
+3.) To create the GUI part of BALL or Python support for BALL, you need the QT library 
+		3.2.X or 3.3.X. (Threads support enabled).
+		If you create OpenSource code and accept the GPL, QT can be downloaded free of charge from 
+		ftp://ftp.trolltech.com/qt/source/
 
 -----------------------------------------------------------------------------------
 ------------------------------------ INSTALLATION: --------------------------------
@@ -45,7 +47,7 @@ This file contains:
 
 3.) Building the libraries with QT and BALLView
 
-Open a Microsoft Visual Studio .NET or Microsoft Compiler Suite Command prompt 
+Open a Microsoft Visual Studio .NET command prompt 
 (see Windows Start Menu) and change the directory to "BALL\Windows" . Next call 
 
 build release                   or
@@ -65,24 +67,30 @@ environment variable contains the directories for the needed libs.
 startBALLView.bat               or
 startBALLViewDebug.bat
 
-4.) Building the libraries without QT and BALLView:
-
+4.) Building the libraries without QT and BALLView: 
 If you dont have the QT library available or dont need the GUI and Python Support, 
-you can create the core library BALL only: Proceed as in point 3 but call
+you can create the core library BALL only: 
+
+Proceed as in point 3 but call
 
 build release BALL              or
 build debug BALL
 
-5.) Building the tests
 
-Proceed as in point 3 but call
+-----------------------------------------------------------------------------------
+-------------------------------ADDONS INSTALLATION: -------------------------------
+-----------------------------------------------------------------------------------
+
+1.) Building the tests
+
+Proceed as in point 3 above but call
 
 build release tests             or
 build debug tests
 
-5.) Benchmarks
+2.) Building the Benchmarks
 
-To build the benchmarks, proceed as in point 3 but call
+Proceed as in point 3 above but call
 
 build release benchmarks        or
 build debug benchmarks
