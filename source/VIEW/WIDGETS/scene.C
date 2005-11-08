@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.57 2005/11/04 15:42:34 amoll Exp $
+// $Id: scene.C,v 1.171.2.58 2005/11/08 00:57:37 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1060,6 +1060,7 @@ namespace BALL
 			}
 
 			readLights_(inifile);
+			light_settings_->updateFromStage();
 		}
 
 
@@ -1172,12 +1173,6 @@ namespace BALL
 				Vector3 dir = light.getDirection();
 				Vector3 pos = light.getPosition();
 
-				if (light.isRelativeToCamera())
-				{
-					pos = stage_->calculateRelativeCoordinates(pos);
-					dir = stage_->calculateRelativeCoordinates(dir);
-				}
-
 				data = vector3ToString(pos);
 				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Position",  vector3ToString(pos));
 				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Direction", vector3ToString(dir));
@@ -1228,15 +1223,6 @@ namespace BALL
 						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Direction");
 						stringToVector3(data, dir);
 
-						if (light.isRelativeToCamera())
-						{
-							// set position of lightsource from up, right and view vector
-							pos = stage_->calculateAbsoluteCoordinates(pos);
-
-							// set direction of lightsource from up, right and view vector
-							dir = stage_->calculateAbsoluteCoordinates(dir);
-						}
-						
 						light.setPosition(pos);
 						light.setDirection(dir);
 
