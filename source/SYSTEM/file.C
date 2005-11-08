@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.51 2004/05/03 11:43:34 amoll Exp $
+// $Id: file.C,v 1.51.6.1 2005/11/08 11:40:34 amoll Exp $
 //
 
 #include <BALL/SYSTEM/file.h>
@@ -240,7 +240,7 @@ namespace BALL
 		is_temporary_ = false;
 
 		// we are reading files
-		if (open_mode & IN)
+		if (open_mode & MODE_IN)
 		{
 			// check
 			String transformation_command = transformation_manager_.findTransformation(name_);
@@ -409,7 +409,7 @@ namespace BALL
 		if (!is_open_)
 		{
 			// dont open the file with File::OUT here, or it might get overwritten
-			if (!open(name_, File::IN))
+			if (!open(name_, MODE_IN))
 			{
 				throw Exception::FileNotFound(__FILE__, __LINE__, name_);
 			}		

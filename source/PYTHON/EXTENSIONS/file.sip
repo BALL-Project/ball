@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.sip,v 1.15.6.2 2005/11/08 00:24:58 amoll Exp $
+// $Id: file.sip,v 1.15.6.3 2005/11/08 11:40:46 amoll Exp $
 //
 
 class std__openmode
@@ -34,26 +34,26 @@ class File
 %TypeHeaderCode
 	#include <BALL/SYSTEM/file.h>
 	using namespace BALL;
-/*
-	const File::OpenMode BALL_File__IN = File::IN;
-	const File::OpenMode BALL_File__OUT = File::OUT;
-	const File::OpenMode BALL_File__APP = File::APP;
-	const File::OpenMode BALL_File__BINARY = File::BINARY;
-	const File::OpenMode BALL_File__ATE = File::ATE;
-	const File::OpenMode BALL_File__TRUNC = File::TRUNC;
-*/
+
+	const File::OpenMode BALL_File__IN = File::MODE_IN;
+	const File::OpenMode BALL_File__OUT = File::MODE_OUT;
+	const File::OpenMode BALL_File__APP = File::MODE_APP;
+	const File::OpenMode BALL_File__BINARY = File::MODE_BINARY;
+	const File::OpenMode BALL_File__ATE = File::MODE_ATE;
+	const File::OpenMode BALL_File__TRUNC = File::MODE_TRUNC;
+
 %End
   public:
-	/*
+
 	enum {
-		IN = BALL_File__IN,
-		OUT = BALL_File__OUT,
-		APP = BALL_File__APP,
-		BINARY = BALL_File__BINARY,
-		ATE = BALL_File__ATE,
-		TRUNC = BALL_File__TRUNC
+		MODE_IN = BALL_File__IN,
+		MODE_OUT = BALL_File__OUT,
+		MODE_APP = BALL_File__APP,
+		MODE_BINARY = BALL_File__BINARY,
+		MODE_ATE = BALL_File__ATE,
+		MODE_TRUNC = BALL_File__TRUNC
 	};
-	*/
+
 
   File();
 	// default open mode: IN
