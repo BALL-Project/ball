@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.40.4.8 2005/11/04 20:04:49 oliver Exp $
+// $Id: BALL.sip,v 1.40.4.9 2005/11/08 00:05:43 amoll Exp $
 //
 
 /////////////////////////
@@ -316,7 +316,7 @@
 %Include label.sip
 %Include line.sip
 %Include mesh.sip
-// %Include point.sip
+%Include point.sip
 %Include simpleBox.sip
 %Include sphere.sip
 %Include twoColoredLine.sip
