@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LineBasedFile_test.C,v 1.19 2004/11/07 08:25:37 oliver Exp $
+// $Id: LineBasedFile_test.C,v 1.19.4.1 2005/11/08 12:52:18 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -10,7 +10,7 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 ///////////////////////////
 
-START_TEST(LineBasedFile, "$Id: LineBasedFile_test.C,v 1.19 2004/11/07 08:25:37 oliver Exp $")
+START_TEST(LineBasedFile, "$Id: LineBasedFile_test.C,v 1.19.4.1 2005/11/08 12:52:18 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -356,7 +356,7 @@ CHECK(gotoLine(Position line_number) throw(LineBasedFileError))
 RESULT
 
 CHECK([EXTRA] triming whitespaces)
-	LineBasedFile f1("data"+PS+"LineBasedFile_test2.txt", File::IN, true);
+	LineBasedFile f1("data"+PS+"LineBasedFile_test2.txt", File::MODE_IN, true);
 	f1.readLine();
 	String line = f1.getLine();
 	TEST_EQUAL(line, "line1")
