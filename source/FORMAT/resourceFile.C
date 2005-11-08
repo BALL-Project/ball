@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.C,v 1.30 2004/05/27 19:49:58 oliver Exp $
+// $Id: resourceFile.C,v 1.30.4.1 2005/11/08 12:46:55 amoll Exp $
 //
 
 #include <BALL/FORMAT/resourceFile.h>
@@ -674,7 +674,7 @@ namespace BALL
 
 	bool ResourceFile::open(const String& name)
 	{
-		if (File::open(name.c_str(), File::IN) && good())
+		if (File::open(name.c_str(), File::MODE_IN) && good())
 		{
 			*this >> *this;
 			
@@ -694,7 +694,7 @@ namespace BALL
 	
 	void ResourceFile::saveAs(const Entry& entry, const String& name)
 	{
-		File file(name.c_str(), File::OpenMode(File::OUT | File::TRUNC));
+		File file(name.c_str(), File::OpenMode(File::MODE_OUT | File::MODE_TRUNC));
 		
 		Size depth = 0;
 		
