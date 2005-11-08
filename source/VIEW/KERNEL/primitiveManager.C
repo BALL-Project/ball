@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.18 2005/10/24 11:08:01 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.19 2005/11/08 14:05:07 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -473,6 +473,7 @@ void PrimitiveManager::storeRepresentations(INIFile& out)
 {
 	Position nr_of_representations = 0;
 	RepresentationsConstIterator it = begin();
+	RepresentationList reps;
 	for (; it != end(); it++)
 	{
 		// only store representations with composites!
@@ -487,6 +488,7 @@ void PrimitiveManager::storeRepresentations(INIFile& out)
 		// we can only store reps for one system!
 		List<const Composite*>::const_iterator cit = (**it).getComposites().begin();
 		const Composite* root = &(**cit).getRoot();
+		cit++;
 		for (; cit != (**it).getComposites().end(); cit++)
 		{
 			if ((**cit).getRoot() != *root)
@@ -522,12 +524,12 @@ void PrimitiveManager::storeRepresentations(INIFile& out)
 										String("Representation") + String(nr_of_representations),  
 										String(system_nr) + String(";") + (**it).toString());
 		nr_of_representations++;
+		reps.push_back(*it);
 	}
 
 	// create a numerical id for every representation
 	HashMap<const Representation*, Position> rep_to_pos_map;
 	
-	const RepresentationList& reps = getRepresentations();
 	PrimitiveManager::RepresentationList::const_iterator rep_it = reps.begin();
 	for (Position i = 0; rep_it != reps.end(); rep_it++)
 	{
@@ -535,6 +537,7 @@ void PrimitiveManager::storeRepresentations(INIFile& out)
 		i++;
 	}
 
+	// write the clipping planes
 	for (Position plane_pos = 0; plane_pos < getClippingPlanes().size(); plane_pos++)
 	{
 		ClippingPlane* const plane = getClippingPlanes()[plane_pos];
@@ -547,9 +550,7 @@ void PrimitiveManager::storeRepresentations(INIFile& out)
 		data_string += String(plane->isActive());
 		data_string += " ";
 
-		HashSet<const Representation*>::ConstIterator rit = 
-			plane->getRepresentations().begin();
-
+		HashSet<const Representation*>::ConstIterator rit = plane->getRepresentations().begin();
 		for (; +rit; ++rit)
 		{
 			data_string += String(rep_to_pos_map[*rit]);
@@ -560,12 +561,14 @@ void PrimitiveManager::storeRepresentations(INIFile& out)
 	}
 }
 			
+
 void PrimitiveManager::restoreRepresentations(const INIFile& in, const vector<const Composite*>& new_systems)
 {
 	try
 	{
 		for (Position p = 0; p < 9999999; p++)
 		{
+			// stop condition
 			if (!in.hasEntry("BALLVIEW_PROJECT", "Representation" + String(p))) break;
 
 			String data_string = in.getValue("BALLVIEW_PROJECT", "Representation" + String(p));
@@ -594,7 +597,7 @@ void PrimitiveManager::restoreRepresentations(const INIFile& in, const vector<co
 				DisplayProperties::getInstance(0)->getSettingsFromString(data_string);
 			}
 
-			// Composite positions
+			// Composites id's per number
 			data_string = string_vector2[1];
 			data_string.split(string_vector2, ",");
 			HashSet<Position> hash_set;
@@ -609,8 +612,7 @@ void PrimitiveManager::restoreRepresentations(const INIFile& in, const vector<co
 				continue;
 			}
 
-			const Composite* composite = new_systems[system_pos];
-
+			// custom color
 			data_string = string_vector[1];
 			if (data_string.has('|'))
 			{
@@ -623,13 +625,16 @@ void PrimitiveManager::restoreRepresentations(const INIFile& in, const vector<co
 				}
 			}
 
+			// to select the composites for the new Representation:
+			// send a ControlSelectionMessage, on which the DisplayProperties will work
+			Composite* composite = (Composite*) new_systems[system_pos];
 			ControlSelectionMessage* msg = new ControlSelectionMessage();
-			Position current = 0;
+			Position current = 1;
 
-			Composite::CompositeIterator ccit = ((Composite*)composite)->beginComposite();
+			Composite::CompositeIterator ccit = composite->beginComposite();
 			for (; +ccit; ++ccit)
 			{
-				if (hash_set.has(current)) msg->getSelection().push_back((Composite*)&*ccit);
+				if (hash_set.has(current)) msg->getSelection().push_back(&*ccit);
 				current++;
 			}
 
@@ -640,6 +645,7 @@ void PrimitiveManager::restoreRepresentations(const INIFile& in, const vector<co
 				DisplayProperties::getInstance(0)->apply();
 			}	
 
+			// is representation hidden?
 			if (string_vector2.size() == 3 && string_vector2[2].has('H'))
 			{
 				Representation* rep = 0;
@@ -658,15 +664,16 @@ void PrimitiveManager::restoreRepresentations(const INIFile& in, const vector<co
 			}
 		}
 
-		// create a vector with all Representation
+		// create a vector with all Representations to access per numeric id
 		vector<const Representation*> representations;
-		PrimitiveManager::RepresentationList::const_iterator rit = 
-			getRepresentations().begin();
+
+		PrimitiveManager::RepresentationList::const_iterator rit = getRepresentations().begin();
 		for (; rit != getRepresentations().end(); rit++)
 		{
 			representations.push_back(*rit);
 		}
 
+		// create clipping planes
 		for (Position p = 0; p < 9999999; p++)
 		{
 			if (!in.hasEntry("BALLVIEW_PROJECT", "ClippingPlane" + String(p))) break;
@@ -717,7 +724,6 @@ void PrimitiveManager::restoreRepresentations(const INIFile& in, const vector<co
 		return;
 	}
 }
-
 
 
 void PrimitiveManager::focusRepresentation(const Representation& rep)
