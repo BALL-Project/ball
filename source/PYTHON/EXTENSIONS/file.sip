@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.sip,v 1.15.6.1 2005/07/20 18:54:35 oliver Exp $
+// $Id: file.sip,v 1.15.6.2 2005/11/08 00:24:58 amoll Exp $
 //
 
 class std__openmode
@@ -34,14 +34,17 @@ class File
 %TypeHeaderCode
 	#include <BALL/SYSTEM/file.h>
 	using namespace BALL;
+/*
 	const File::OpenMode BALL_File__IN = File::IN;
 	const File::OpenMode BALL_File__OUT = File::OUT;
 	const File::OpenMode BALL_File__APP = File::APP;
 	const File::OpenMode BALL_File__BINARY = File::BINARY;
 	const File::OpenMode BALL_File__ATE = File::ATE;
 	const File::OpenMode BALL_File__TRUNC = File::TRUNC;
+*/
 %End
   public:
+	/*
 	enum {
 		IN = BALL_File__IN,
 		OUT = BALL_File__OUT,
@@ -50,6 +53,7 @@ class File
 		ATE = BALL_File__ATE,
 		TRUNC = BALL_File__TRUNC
 	};
+	*/
 
   File();
 	// default open mode: IN
