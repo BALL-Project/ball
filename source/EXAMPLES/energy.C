@@ -7,6 +7,7 @@
 #include <BALL/STRUCTURE/defaultProcessors.h>
 
 using namespace BALL;
+using namespace std;
 
 int main()
 {
