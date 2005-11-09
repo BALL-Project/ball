@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.16 2005/10/17 19:18:43 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.17 2005/11/09 12:42:55 oliver Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -235,7 +235,7 @@ namespace BALL
 		}
 
 
-		bool PyWidgetData::parseLine_(String line)
+		bool PyWidgetData::parseLine_(String line, bool silent)
 		{
 			if (!Py_IsInitialized())
 			{
@@ -266,6 +266,8 @@ namespace BALL
 				Size nr = line.split(tokens, String("(\")").c_str());
 				if (nr < 2) return false;
 				((PyWidget*)parent())->run(tokens[1]);
+				appendToHistory_(line);
+				
 				return true;
 			}
 			
@@ -284,7 +286,10 @@ namespace BALL
 						multi_line_text_.append("\n");
 						multi_lines_ = 1;
 						appendToHistory_(line);
-						newPrompt_();
+						if (!silent)
+						{
+							newPrompt_();
+						}
 						return true;
 				}
 
@@ -298,7 +303,10 @@ namespace BALL
 				if (!line.isEmpty())
 				{
 					multi_line_text_ += line + "\n";
-					newPrompt_();
+					if (!silent)
+					{
+						newPrompt_();	
+					}
 					return true;
 				}
 
@@ -347,12 +355,18 @@ namespace BALL
 			}
 			else
 			{
-				for (Position p = 0; p <= multi_lines_ -1; p++) results_.push_back(state);
+				for (Position p = 0; p <= multi_lines_ -1; p++)
+				{
+					results_.push_back(state);
+				}
 			}
 			
 			multi_line_mode_ = false;
 
-			newPrompt_();
+			if (!silent)
+			{
+				newPrompt_();
+			}
 			return ok;
 		}
 
@@ -492,7 +506,7 @@ namespace BALL
 		bool PyWidgetData::runFile(const String& filename)
 		{
 			stop_script_ = false;
-			append(String("> running File " + filename + "\n").c_str());
+			append(String("> executing script from " + filename + "\n").c_str());
 			LineBasedFile file;
 			try
 			{
@@ -507,9 +521,11 @@ namespace BALL
 
 			while (file.readLine())
 			{
-				if (!parseLine_(file.getLine()))
+				// Call parse line with 'silent = true' to make sure we do not get prompts
+				// for each line read.
+				if (!parseLine_(file.getLine(), true))
 				{
-					String result_string = "> Error in Line " + String(file.getLineNumber()) + " in file " + filename + "\n";
+					String result_string = "> Error in line " + String(file.getLineNumber()) + " of file " + filename + "\n";
 					append(result_string.c_str());
 					newPrompt_();
 					return false;
@@ -524,8 +540,8 @@ namespace BALL
 					return false;
 				}
 			}
-			append("> finished...");
-			((PyWidget*)parent())->setStatusbarText("finished script");
+			append("> Finished.");
+			((PyWidget*)parent())->setStatusbarText("Finished script.");
 			newPrompt_();
 			return true;
 		}
@@ -740,11 +756,17 @@ namespace BALL
 		{
 			DockWidget::applyPreferences();
 
-			if (text_edit_->python_settings_ == 0) return;
+			if (text_edit_->python_settings_ == 0)
+			{
+				return;	
+			}
 
 			hotkeys_ = (python_hotkeys_->getContent());
 
-			if (started_startup_script_ || !isValid()) return;
+			if (started_startup_script_ || !isValid())
+			{
+				return;
+			}
 
 			started_startup_script_ = true;
 
@@ -756,7 +778,10 @@ namespace BALL
 			}
 			
 			String user_startup = text_edit_->python_settings_->getFilename();
-			if (user_startup == "") return;
+			if (user_startup == "") 
+			{
+				return;	
+			}
 
 			text_edit_->runFile(user_startup);
 		}

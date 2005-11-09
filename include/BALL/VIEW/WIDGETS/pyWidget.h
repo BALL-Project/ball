@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.23.2.11 2005/10/17 19:18:53 amoll Exp $
+// $Id: pyWidget.h,v 1.23.2.12 2005/11/09 12:42:55 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -172,7 +172,8 @@ namespace BALL
 			virtual void paste();
 
 			bool parseLine_();
-			bool parseLine_(String line);
+			/// Parse a and execute a given string. If silent is set to true, no prompts are being printed.
+			bool parseLine_(String line, bool silent = false);
 
 			void appendToHistory_(const String& line);
 			
