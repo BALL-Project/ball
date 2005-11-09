@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.37.2.13 2005/09/01 14:25:24 amoll Exp $
+// $Id: datasetControl.C,v 1.37.2.14 2005/11/09 18:08:53 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -703,8 +703,8 @@ namespace BALL
 			rep->setModelType(MODEL_CONTOUR_SURFACE); 
 
 			// Make sure BALLView knows about the new representation.
-			RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::ADD);
-			notify_(message);
+			getMainControl()->insert(*rep);
+			getMainControl()->update(*rep);
 		}
 
 

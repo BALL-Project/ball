@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.19.4.15 2005/11/04 14:58:25 amoll Exp $
+// $Id: POVRenderer.C,v 1.19.4.16 2005/11/09 18:05:49 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -747,6 +747,7 @@ namespace BALL
 			}
 			out << "\t\t}" << endl;
 			out << "\t inside_vector <0, 0, 1>" << endl;
+			out << "hollow" << endl;
 			out << "\t}" << endl;
 		}
 				
