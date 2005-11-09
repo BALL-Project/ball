@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.17 2005/11/09 12:42:55 oliver Exp $
+// $Id: pyWidget.C,v 1.44.6.18 2005/11/09 14:07:07 oliver Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -262,10 +262,16 @@ namespace BALL
 
 			if (line.hasPrefix("run("))
 			{
+				// This code is probably the worst I've seen in a long, long time...
+				// Needs to be replaced by something integrated with Py language concepts
+				// in the future (e.g. calling run with a variable argument won't work!) -- OK -- 11/2006
 				vector<String> tokens;
-				Size nr = line.split(tokens, String("(\")").c_str());
-				if (nr < 2) return false;
-				((PyWidget*)parent())->run(tokens[1]);
+				Size nr = line.split(tokens, String("(\"')").c_str());
+				if (nr < 2)		
+				{
+					return false;
+				}
+				PyInterpreter::runFile(tokens[1]);
 				appendToHistory_(line);
 				
 				return true;
@@ -512,7 +518,7 @@ namespace BALL
 			{
 				file.open(filename);
 			}
-			catch(Exception::GeneralException e)
+			catch	(...)
 			{
 				append(String("> Could not find file " + filename + "\n").c_str());
 				newPrompt_();

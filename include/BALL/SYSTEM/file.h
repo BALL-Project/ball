@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.65.4.5 2005/11/08 11:40:24 amoll Exp $
+// $Id: file.h,v 1.65.4.6 2005/11/09 14:07:07 oliver Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -169,10 +169,10 @@ namespace BALL
 		typedef std::ios::openmode OpenMode;			
 
 		//@}
+
 		/**	@name	Constants
 		*/
 		//@{
-
 		/// Open for input (default)
 		static const OpenMode MODE_IN = std::ios::in;
 
@@ -190,8 +190,8 @@ namespace BALL
 
 		/// Truncate an existing file.
 		static const OpenMode MODE_TRUNC = std::ios::trunc;
-
 		//@}
+
 		/**	@name	Enums
 		*/
 		//@{
