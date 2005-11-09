@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile.in,v 1.40.4.1 2005/06/16 20:50:27 oliver Exp $
+# $Id: Makefile.in,v 1.40.4.2 2005/11/09 12:09:58 oliver Exp $
 #
 
 include config.mak
@@ -66,7 +66,7 @@ collect:	$(OBJECT_LISTS)
 	
 
 libBALL.@SHARED_LIB_SUFFIX@: libBALL.objects
-	$(DYNAR) $(ADD_DYNAROPTS_LIBBALL) $(DYNAROPTS) libBALL.@SHARED_LIB_SUFFIX@ `cat libBALL.objects` $(PYTHON_LIBS) -lm
+	$(DYNAR) $(ADD_DYNAROPTS_LIBBALL) $(DYNAROPTS) libBALL.@SHARED_LIB_SUFFIX@ `cat libBALL.objects` $(PYTHON_LIBS) $(FFTW_LIBS) -lm
 
 libVIEW.@SHARED_LIB_SUFFIX@: libVIEW.objects libBALL.@SHARED_LIB_SUFFIX@
 	$(DYNAR) $(ADD_DYNAROPTS_LIBVIEW) $(DYNAROPTS) libVIEW.@SHARED_LIB_SUFFIX@ `cat libVIEW.objects` -L. -lBALL $(QT_LIBOPTS) $(OPENGL_LIBOPTS) $(X11_LIBOPTS) $(PYTHON_LIBS) -lm

@@ -311,7 +311,7 @@ ac_includes_default="\
 #endif"
 
 ac_default_prefix=`cd ..; pwd`
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PAGER LN_S UNAME CUT TR AR CP RM MV LN SED FIND DIFF TAIL GREP EGREP CAT ECHO_COMMAND ECHO OSMAJOR OS OSREV BINFMT BINFMT_PATH ARCHITECTURE SHARED_LIB_SUFFIX CXXPATH CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXCPP BALL_HAS_XDR LEX LEXLIB LEX_OUTPUT_ROOT YACC BALL_HAS_FLEX_YACC BALL_HAS_FFTW BALL_HAS_FFTW_H BALL_HAS_FFTW_FLOAT BALL_HAS_FFTW_DOUBLE BALL_HAS_FFTW_LONG_DOUBLE MOC UIC SIP SIP_LIB SIP_INCLUDES PYTHON_INCLUDES PYTHON_SUPPORT PYTHON_LIBS PYTHON_EXECUTABLE VALGRIND VALGRIND_OPTS BALL_PATH BALL_INCLUDES CXX_MAKEDEPEND MAKEDEP_CXX_OPTS MAKEDEP_CXX_SUFFIX DEPENDENCY_GREPS CC ADD_CXXFLAGS LIB_CXXFLAGS NONLIB_CXXFLAGS HAS_GPLUSPLUS STD_CPP_INCLUDES MAKEDEP_OPTS BALL_TYPENAME BINFMT_INDEX VIEW_LIBS OPENGL_LIBOPTS OPENGL_LIBPATH QT_LIBOPTS QT_LIBPATH QT_MT_SUFFIX X11_LIBOPTS X11_LIBPATH X11_LIBS BALL_LIBS DEFINES CXXFLAGS_D CXXFLAGS_O CPP_MODE_FLAGS CPP_MODE_FLAGS_NO_OPTIMIZATION AROPTS DYNAR DYNAROPTS DYNAROPTS_PYMODULE ADD_DYNAROPTS_LIBBALL ADD_DYNAROPTS_LIBVIEW RANLIB ADDITIONAL_COMMENTS USE_VIEW BALL_HAS_VIEW VIEW_PLATFORM VIEW_INCLUDES LIBVIEW TEMPLATE_DIR SUBDIRS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PAGER LN_S UNAME CUT TR AR CP RM MV LN SED FIND DIFF TAIL GREP EGREP CAT ECHO_COMMAND ECHO OSMAJOR OS OSREV BINFMT BINFMT_PATH ARCHITECTURE SHARED_LIB_SUFFIX CXXPATH CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXCPP BALL_HAS_XDR LEX LEXLIB LEX_OUTPUT_ROOT YACC BALL_HAS_FLEX_YACC BALL_HAS_FFTW BALL_HAS_FFTW_H BALL_HAS_FFTW_FLOAT BALL_HAS_FFTW_DOUBLE BALL_HAS_FFTW_LONG_DOUBLE FFTW_LIBS MOC UIC SIP SIP_LIB SIP_INCLUDES PYTHON_INCLUDES PYTHON_SUPPORT PYTHON_LIBS PYTHON_EXECUTABLE VALGRIND VALGRIND_OPTS BALL_PATH BALL_INCLUDES CXX_MAKEDEPEND MAKEDEP_CXX_OPTS MAKEDEP_CXX_SUFFIX DEPENDENCY_GREPS CC ADD_CXXFLAGS LIB_CXXFLAGS NONLIB_CXXFLAGS HAS_GPLUSPLUS STD_CPP_INCLUDES MAKEDEP_OPTS BALL_TYPENAME BINFMT_INDEX VIEW_LIBS OPENGL_LIBOPTS OPENGL_LIBPATH QT_LIBOPTS QT_LIBPATH QT_MT_SUFFIX X11_LIBOPTS X11_LIBPATH X11_LIBS BALL_LIBS DEFINES CXXFLAGS_D CXXFLAGS_O CPP_MODE_FLAGS CPP_MODE_FLAGS_NO_OPTIMIZATION AROPTS DYNAR DYNAROPTS DYNAROPTS_PYMODULE ADD_DYNAROPTS_LIBBALL ADD_DYNAROPTS_LIBVIEW RANLIB ADDITIONAL_COMMENTS USE_VIEW BALL_HAS_VIEW VIEW_PLATFORM VIEW_INCLUDES LIBVIEW TEMPLATE_DIR SUBDIRS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1411,21 +1411,21 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test "${PAGER}" = "no" ; then
-PAGER=cat
+	PAGER=cat
 fi
 if test ! -f config.lic ; then
-${PAGER} COPYRIGHT
-echo " "
-echo "Do you accept these terms (y/n)?"
-answer=""
-while test "$answer" != "y" -a "$answer" != "n" ; do
-read answer
-done
-if test "$answer" = "n" ; then
-exit
-else
-echo "accepted" > config.lic
-fi
+	${PAGER} COPYRIGHT
+	echo " "
+	echo "Do you accept these terms (y/n)?"
+	answer=""
+	while test "$answer" != "y" -a "$answer" != "n" ; do
+		read answer
+	done
+	if test "$answer" = "n" ; then
+		exit
+	else
+		echo "accepted" > config.lic
+	fi
 fi
 
 
@@ -1631,117 +1631,117 @@ if test "${enable_double_cpx+set}" = set; then
 fi;
 
 if test "$enable_optimization" = "no" ; then
-DEBUG=true
+	DEBUG=true
 else
-DEBUG=false
+	DEBUG=false
 fi
 
 if test "$enable_debuginfo" = "yes" ; then
-DEBUG_INFO=true
+	DEBUG_INFO=true
 else
-DEBUG_INFO=false
+	DEBUG_INFO=false
 fi
 
 if test "$enable_64" = "yes" ; then
-BINFMT_64_BIT=true
+	BINFMT_64_BIT=true
 else
-BINFMT_64_BIT=false
+	BINFMT_64_BIT=false
 fi
 
 if test "$with_compiler" != "" ; then
-CXX=$with_compiler
+	CXX=$with_compiler
 fi
 
 if test "$with_cxxflags" != "" ; then
-CXXFLAGS="${CXXFLAGS}`echo $with_cxxflags|tr , \  `"
+	CXXFLAGS="${CXXFLAGS}`echo $with_cxxflags|tr , \  `"
 fi
 
 if test "$with_ldflags" != "" ; then
-LDFLAGS="${LDFLAGS}`echo $with_ldflags|tr ,  \  `"
+	LDFLAGS="${LDFLAGS}`echo $with_ldflags|tr ,  \  `"
 fi
 
 if test "$with_dynarflags" != "" ; then
-DYNAROPTS="${DYNAROPTS}`echo $with_dynarflags|tr ,  \  `"
+	DYNAROPTS="${DYNAROPTS}`echo $with_dynarflags|tr ,  \  `"
 fi
 
 if test "$with_arflags" != "" ; then
-AROPTS="${AROPTS}`echo $with_arflags|tr ,  \  `"
+	AROPTS="${AROPTS}`echo $with_arflags|tr ,  \  `"
 fi
 
 if test "$with_qt" != "" ; then
-QTDIR=$with_qt
+	QTDIR=$with_qt
 fi
 if test "$with_qt_incl" != "" ; then
-QT_INCPATH=$with_qt_incl
+	QT_INCPATH=$with_qt_incl
 fi
 if test "$with_qt_libs" != "" ; then
-QT_LIBPATH=$with_qt_libs
+	QT_LIBPATH=$with_qt_libs
 fi
 
 if test "$with_qt_mt" = "yes" -o "${with_qt_mt+set}" != set; then
-USE_THREADSAFE_QT=true
-QT_MT_SUFFIX="-mt"
+	USE_THREADSAFE_QT=true
+	QT_MT_SUFFIX="-mt"
 else
-USE_THREADSAFE_QT=false
-QT_MT_SUFFIX=""
+	USE_THREADSAFE_QT=false
+	QT_MT_SUFFIX=""
 fi
 if test "$with_opengl_incl" != "" ; then
-OPENGL_INCPATH=$with_opengl_incl
+	OPENGL_INCPATH=$with_opengl_incl
 fi
 if test "$with_opengl_libs" != "" ; then
-OPENGL_LIBPATH=$with_opengl_libs
+	OPENGL_LIBPATH=$with_opengl_libs
 fi
 
 if test "$with_mesa" != "yes" ; then
-VIEW_PLATFORM=OpenGL
+	VIEW_PLATFORM=OpenGL
 else
-VIEW_PLATFORM=Mesa
+	VIEW_PLATFORM=Mesa
 fi
 
 if test "$with_moc" != "" ; then
-MOC=$with_moc
+	MOC=$with_moc
 else
-MOC=moc
+	MOC=moc
 fi
 
 if test "$with_uic" != "" ; then
-UIC=$with_uic
+	UIC=$with_uic
 else
-UIC=uic
+	UIC=uic
 fi
 
 if test "$with_libxnet" != "no" ; then
-USE_LIBXNET=true
+	USE_LIBXNET=true
 else
-USE_LIBXNET=false
+	USE_LIBXNET=false
 fi
 
 if test "$with_VIEW" = "no" -o "$enable_VIEW" = "no"; then
-USE_VIEW=false
-BALL_HAS_VIEW=""
+	USE_VIEW=false
+	BALL_HAS_VIEW=""
 else
-USE_VIEW=true
-BALL_HAS_VIEW=true
+	USE_VIEW=true
+	BALL_HAS_VIEW=true
 fi
 
 if test "$with_xdr" = "no" ; then
-BALL_NO_XDR=true
+	BALL_NO_XDR=true
 else
-BALL_NO_XDR=false
+	BALL_NO_XDR=false
 fi
 
 # use this switch to enable the python support
 # this also builds libBALLc.so and requires
 # Python.h and libsip.a
 if test "$with_python" != "" -a "$with_python" != "no" -o "$enable_python" = yes ; then
-PYTHON_SUPPORT=true
-if test "${with_python}" != "" -a "${with_python}" != "yes" ; then
-PYTHON_EXE=${with_python}
+	PYTHON_SUPPORT=true
+	if test "${with_python}" != "" -a "${with_python}" != "yes" ; then
+		PYTHON_EXE=${with_python}
+	else
+		PYTHON_EXE=python
+	fi
 else
-PYTHON_EXE=python
-fi
-else
-PYTHON_SUPPORT=
+	PYTHON_SUPPORT=
 fi
 
 # the path to the python includes (Python.h)
@@ -1760,41 +1760,41 @@ SIP=$with_sip
 
 # support for fftw (FFT lib)
 if test "$with_fftw" != "" -a "$with_fftw" != "no" -o "$enable_fftw" = yes ; then
-FFTW_SUPPORT=true
+	FFTW_SUPPORT=true
 if test "${with_fftw_lib}" != "" ; then
-FFTW_LIBPATH=${with_fftw_lib}
+	FFTW_LIBPATH=${with_fftw_lib}
 else
-FFTW_LIBPATH=""
+	FFTW_LIBPATH=""
 fi
 if test "${with_fftw_incl}" != "" ; then
-FFTW_INCL=${with_fftw_incl}
+	FFTW_INCL=${with_fftw_incl}
 else
-FFTW_INCL=""
+	FFTW_INCL=""
 fi
 if test "$enable_fftw_float" = "no" ; then
-FFTW_DISABLE_FFTW_FLOAT=true
+	FFTW_DISABLE_FFTW_FLOAT=true
 else
-FFTW_DISABLE_FFTW_FLOAT=false
+	FFTW_DISABLE_FFTW_FLOAT=false
 fi
 if test "$enable_fftw_double" = "no" ; then
-FFTW_DISABLE_FFTW_DOUBLE=true
+	FFTW_DISABLE_FFTW_DOUBLE=true
 else
-FFTW_DISABLE_FFTW_DOUBLE=false
+	FFTW_DISABLE_FFTW_DOUBLE=false
 fi
 if test "$enable_fftw_longdbl" = "no" ; then
-FFTW_DISABLE_FFTW_LONGDBL=true
+		FFTW_DISABLE_FFTW_LONGDBL=true
+	else
+		FFTW_DISABLE_FFTW_LONGDBL=false
+	fi
 else
-FFTW_DISABLE_FFTW_LONGDBL=false
-fi
-else
-FFTW_SUPPORT=
+	FFTW_SUPPORT=
 fi
 
 # size of Complex type (if given)
 if test "$enable_double_cplx" = yes ; then
-FFTW_PRECISION=double
+	FFTW_PRECISION=double
 else
-FFTW_PRECISION=float
+	FFTW_PRECISION=float
 fi
 
 
@@ -1856,13 +1856,13 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test $UNAME = no ; then
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: This script requires the unix command uname, but cannot find it." >&5
+	echo "$as_me:$LINENO: result: This script requires the unix command uname, but cannot find it." >&5
 echo "${ECHO_T}This script requires the unix command uname, but cannot find it." >&6
-echo "$as_me:$LINENO: result: Please add the correct path to uname to your \$PATH variable" >&5
+	echo "$as_me:$LINENO: result: Please add the correct path to uname to your \$PATH variable" >&5
 echo "${ECHO_T}Please add the correct path to uname to your \$PATH variable" >&6
-echo "$as_me:$LINENO: result: and restart configure." >&5
+	echo "$as_me:$LINENO: result: and restart configure." >&5
 echo "${ECHO_T}and restart configure." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -1888,7 +1888,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -1944,13 +1944,13 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test $CUT = no ; then
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: This script requires the unix command cut, but cannot find it." >&5
+	echo "$as_me:$LINENO: result: This script requires the unix command cut, but cannot find it." >&5
 echo "${ECHO_T}This script requires the unix command cut, but cannot find it." >&6
-echo "$as_me:$LINENO: result: Please add the correct path to cut to your \$PATH variable" >&5
+	echo "$as_me:$LINENO: result: Please add the correct path to cut to your \$PATH variable" >&5
 echo "${ECHO_T}Please add the correct path to cut to your \$PATH variable" >&6
-echo "$as_me:$LINENO: result: and restart configure." >&5
+	echo "$as_me:$LINENO: result: and restart configure." >&5
 echo "${ECHO_T}and restart configure." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -1976,7 +1976,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -2032,13 +2032,13 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test $TR = no ; then
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: This script requires the unix command tr, but cannot find it." >&5
+	echo "$as_me:$LINENO: result: This script requires the unix command tr, but cannot find it." >&5
 echo "${ECHO_T}This script requires the unix command tr, but cannot find it." >&6
-echo "$as_me:$LINENO: result: Please add the correct path to tr to your \$PATH variable" >&5
+	echo "$as_me:$LINENO: result: Please add the correct path to tr to your \$PATH variable" >&5
 echo "${ECHO_T}Please add the correct path to tr to your \$PATH variable" >&6
-echo "$as_me:$LINENO: result: and restart configure." >&5
+	echo "$as_me:$LINENO: result: and restart configure." >&5
 echo "${ECHO_T}and restart configure." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -2064,7 +2064,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -2120,13 +2120,13 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test $AR = no ; then
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: This script requires the unix command ar, but cannot find it." >&5
+	echo "$as_me:$LINENO: result: This script requires the unix command ar, but cannot find it." >&5
 echo "${ECHO_T}This script requires the unix command ar, but cannot find it." >&6
-echo "$as_me:$LINENO: result: Please add the correct path to ar to your \$PATH variable" >&5
+	echo "$as_me:$LINENO: result: Please add the correct path to ar to your \$PATH variable" >&5
 echo "${ECHO_T}Please add the correct path to ar to your \$PATH variable" >&6
-echo "$as_me:$LINENO: result: and restart configure." >&5
+	echo "$as_me:$LINENO: result: and restart configure." >&5
 echo "${ECHO_T}and restart configure." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -2152,7 +2152,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -2208,13 +2208,13 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test $CP = no ; then
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: This script requires the unix command cp, but cannot find it." >&5
+	echo "$as_me:$LINENO: result: This script requires the unix command cp, but cannot find it." >&5
 echo "${ECHO_T}This script requires the unix command cp, but cannot find it." >&6
-echo "$as_me:$LINENO: result: Please add the correct path to cp to your \$PATH variable" >&5
+	echo "$as_me:$LINENO: result: Please add the correct path to cp to your \$PATH variable" >&5
 echo "${ECHO_T}Please add the correct path to cp to your \$PATH variable" >&6
-echo "$as_me:$LINENO: result: and restart configure." >&5
+	echo "$as_me:$LINENO: result: and restart configure." >&5
 echo "${ECHO_T}and restart configure." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -2240,7 +2240,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -2296,13 +2296,13 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test $RM = no ; then
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: This script requires the unix command rm, but cannot find it." >&5
+	echo "$as_me:$LINENO: result: This script requires the unix command rm, but cannot find it." >&5
 echo "${ECHO_T}This script requires the unix command rm, but cannot find it." >&6
-echo "$as_me:$LINENO: result: Please add the correct path to rm to your \$PATH variable" >&5
+	echo "$as_me:$LINENO: result: Please add the correct path to rm to your \$PATH variable" >&5
 echo "${ECHO_T}Please add the correct path to rm to your \$PATH variable" >&6
-echo "$as_me:$LINENO: result: and restart configure." >&5
+	echo "$as_me:$LINENO: result: and restart configure." >&5
 echo "${ECHO_T}and restart configure." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -2328,7 +2328,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -2384,13 +2384,13 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test $MV = no ; then
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: This script requires the unix command mv, but cannot find it." >&5
+	echo "$as_me:$LINENO: result: This script requires the unix command mv, but cannot find it." >&5
 echo "${ECHO_T}This script requires the unix command mv, but cannot find it." >&6
-echo "$as_me:$LINENO: result: Please add the correct path to mv to your \$PATH variable" >&5
+	echo "$as_me:$LINENO: result: Please add the correct path to mv to your \$PATH variable" >&5
 echo "${ECHO_T}Please add the correct path to mv to your \$PATH variable" >&6
-echo "$as_me:$LINENO: result: and restart configure." >&5
+	echo "$as_me:$LINENO: result: and restart configure." >&5
 echo "${ECHO_T}and restart configure." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -2416,7 +2416,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -2472,13 +2472,13 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test $LN = no ; then
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: This script requires the unix command ln, but cannot find it." >&5
+	echo "$as_me:$LINENO: result: This script requires the unix command ln, but cannot find it." >&5
 echo "${ECHO_T}This script requires the unix command ln, but cannot find it." >&6
-echo "$as_me:$LINENO: result: Please add the correct path to ln to your \$PATH variable" >&5
+	echo "$as_me:$LINENO: result: Please add the correct path to ln to your \$PATH variable" >&5
 echo "${ECHO_T}Please add the correct path to ln to your \$PATH variable" >&6
-echo "$as_me:$LINENO: result: and restart configure." >&5
+	echo "$as_me:$LINENO: result: and restart configure." >&5
 echo "${ECHO_T}and restart configure." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -2504,7 +2504,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -2560,13 +2560,13 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test $SED = no ; then
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: This script requires the unix command sed, but cannot find it." >&5
+	echo "$as_me:$LINENO: result: This script requires the unix command sed, but cannot find it." >&5
 echo "${ECHO_T}This script requires the unix command sed, but cannot find it." >&6
-echo "$as_me:$LINENO: result: Please add the correct path to sed to your \$PATH variable" >&5
+	echo "$as_me:$LINENO: result: Please add the correct path to sed to your \$PATH variable" >&5
 echo "${ECHO_T}Please add the correct path to sed to your \$PATH variable" >&6
-echo "$as_me:$LINENO: result: and restart configure." >&5
+	echo "$as_me:$LINENO: result: and restart configure." >&5
 echo "${ECHO_T}and restart configure." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -2592,7 +2592,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -2648,13 +2648,13 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test $FIND = no ; then
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: This script requires the unix command find, but cannot find it." >&5
+	echo "$as_me:$LINENO: result: This script requires the unix command find, but cannot find it." >&5
 echo "${ECHO_T}This script requires the unix command find, but cannot find it." >&6
-echo "$as_me:$LINENO: result: Please add the correct path to find to your \$PATH variable" >&5
+	echo "$as_me:$LINENO: result: Please add the correct path to find to your \$PATH variable" >&5
 echo "${ECHO_T}Please add the correct path to find to your \$PATH variable" >&6
-echo "$as_me:$LINENO: result: and restart configure." >&5
+	echo "$as_me:$LINENO: result: and restart configure." >&5
 echo "${ECHO_T}and restart configure." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -2680,7 +2680,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -2736,13 +2736,13 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test $DIFF = no ; then
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: This script requires the unix command diff, but cannot find it." >&5
+	echo "$as_me:$LINENO: result: This script requires the unix command diff, but cannot find it." >&5
 echo "${ECHO_T}This script requires the unix command diff, but cannot find it." >&6
-echo "$as_me:$LINENO: result: Please add the correct path to diff to your \$PATH variable" >&5
+	echo "$as_me:$LINENO: result: Please add the correct path to diff to your \$PATH variable" >&5
 echo "${ECHO_T}Please add the correct path to diff to your \$PATH variable" >&6
-echo "$as_me:$LINENO: result: and restart configure." >&5
+	echo "$as_me:$LINENO: result: and restart configure." >&5
 echo "${ECHO_T}and restart configure." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -2768,7 +2768,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -2824,13 +2824,13 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test $TAIL = no ; then
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: This script requires the unix command tail, but cannot find it." >&5
+	echo "$as_me:$LINENO: result: This script requires the unix command tail, but cannot find it." >&5
 echo "${ECHO_T}This script requires the unix command tail, but cannot find it." >&6
-echo "$as_me:$LINENO: result: Please add the correct path to tail to your \$PATH variable" >&5
+	echo "$as_me:$LINENO: result: Please add the correct path to tail to your \$PATH variable" >&5
 echo "${ECHO_T}Please add the correct path to tail to your \$PATH variable" >&6
-echo "$as_me:$LINENO: result: and restart configure." >&5
+	echo "$as_me:$LINENO: result: and restart configure." >&5
 echo "${ECHO_T}and restart configure." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -2856,7 +2856,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -2912,13 +2912,13 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test $GREP = no ; then
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: This script requires the unix command grep, but cannot find it." >&5
+	echo "$as_me:$LINENO: result: This script requires the unix command grep, but cannot find it." >&5
 echo "${ECHO_T}This script requires the unix command grep, but cannot find it." >&6
-echo "$as_me:$LINENO: result: Please add the correct path to grep to your \$PATH variable" >&5
+	echo "$as_me:$LINENO: result: Please add the correct path to grep to your \$PATH variable" >&5
 echo "${ECHO_T}Please add the correct path to grep to your \$PATH variable" >&6
-echo "$as_me:$LINENO: result: and restart configure." >&5
+	echo "$as_me:$LINENO: result: and restart configure." >&5
 echo "${ECHO_T}and restart configure." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -2944,7 +2944,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -3000,13 +3000,13 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test $EGREP = no ; then
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: This script requires the unix command egrep, but cannot find it." >&5
+	echo "$as_me:$LINENO: result: This script requires the unix command egrep, but cannot find it." >&5
 echo "${ECHO_T}This script requires the unix command egrep, but cannot find it." >&6
-echo "$as_me:$LINENO: result: Please add the correct path to egrep to your \$PATH variable" >&5
+	echo "$as_me:$LINENO: result: Please add the correct path to egrep to your \$PATH variable" >&5
 echo "${ECHO_T}Please add the correct path to egrep to your \$PATH variable" >&6
-echo "$as_me:$LINENO: result: and restart configure." >&5
+	echo "$as_me:$LINENO: result: and restart configure." >&5
 echo "${ECHO_T}and restart configure." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -3032,7 +3032,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -3088,13 +3088,13 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test $CAT = no ; then
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: This script requires the unix command cat, but cannot find it." >&5
+	echo "$as_me:$LINENO: result: This script requires the unix command cat, but cannot find it." >&5
 echo "${ECHO_T}This script requires the unix command cat, but cannot find it." >&6
-echo "$as_me:$LINENO: result: Please add the correct path to cat to your \$PATH variable" >&5
+	echo "$as_me:$LINENO: result: Please add the correct path to cat to your \$PATH variable" >&5
 echo "${ECHO_T}Please add the correct path to cat to your \$PATH variable" >&6
-echo "$as_me:$LINENO: result: and restart configure." >&5
+	echo "$as_me:$LINENO: result: and restart configure." >&5
 echo "${ECHO_T}and restart configure." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -3120,7 +3120,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -3244,7 +3244,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -3316,7 +3316,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -3496,7 +3496,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -3610,7 +3610,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -4459,7 +4459,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -4739,7 +4739,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -4836,7 +4836,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -4888,12 +4888,12 @@ if test "${CXX_VERSION_STRING}" = "" ; then
 
 TMP__DIR="${CXX}/"
 while test "${TMP__DIR}" != "" ; do
-TMP__NAME=`echo ${TMP__DIR}|${CUT} -d/ -f1`
-TMP__DIR=`echo ${TMP__DIR}|${CT} -d/ -f2-`
-if test "${TMP__DIR}" = "${TMP__NAME}" ; then
-TMP__DIR=""
-fi
-done
+	TMP__NAME=`echo ${TMP__DIR}|${CUT} -d/ -f1`
+	TMP__DIR=`echo ${TMP__DIR}|${CT} -d/ -f2-`
+	if test "${TMP__DIR}" = "${TMP__NAME}" ; then
+		TMP__DIR=""
+	fi
+	done
 
 CXX_VERSION="${TMP__NAME}"
 CXX_VERSION_OUTPUT="${CXX_VERSION} (unknown version)"
@@ -4974,7 +4974,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -5061,12 +5061,12 @@ if test "${CXX_VERSION_TEST}" != "" ; then
 
 TMP__DIR="${CXX}/"
 while test "${TMP__DIR}" != "" ; do
-TMP__NAME=`echo ${TMP__DIR}|${CUT} -d/ -f1`
-TMP__DIR=`echo ${TMP__DIR}|${CT} -d/ -f2-`
-if test "${TMP__DIR}" = "${TMP__NAME}" ; then
-TMP__DIR=""
-fi
-done
+	TMP__NAME=`echo ${TMP__DIR}|${CUT} -d/ -f1`
+	TMP__DIR=`echo ${TMP__DIR}|${CT} -d/ -f2-`
+	if test "${TMP__DIR}" = "${TMP__NAME}" ; then
+		TMP__DIR=""
+	fi
+	done
 
 CXX_VERSION="${TMP__NAME}"
 CXX_VERSION_OUTPUT="${CXX_VERSION} (unknown version)"
@@ -5134,7 +5134,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -6005,7 +6005,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -6373,7 +6373,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -9023,7 +9023,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -9077,7 +9077,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -9132,7 +9132,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -9195,7 +9195,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -9314,7 +9314,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -9373,7 +9373,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -10498,7 +10498,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -14136,7 +14136,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -15877,7 +15877,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -16064,7 +16064,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -16684,7 +16684,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -16786,7 +16786,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -16991,7 +16991,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -17558,7 +17558,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -17759,10 +17759,6 @@ FFTW_LIB_D="${_LIBS}"
 if test "${FFTW_LIB_D}" = "" ; then
 echo "$as_me:$LINENO: result: (not found!)" >&5
 echo "${ECHO_T}(not found!)" >&6
-echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: no double support found for FFTW!" >&5
-echo "${ECHO_T}no double support found for FFTW!" >&6
 FFTW_DISABLE_FFTW_DOUBLE=true
 else
 echo "$as_me:$LINENO: result: (${FFTW_LIB_D})" >&5
@@ -17857,10 +17853,6 @@ FFTW_LIB_L="${_LIBS}"
 if test "${FFTW_LIB_L}" = "" ; then
 echo "$as_me:$LINENO: result: (not found!)" >&5
 echo "${ECHO_T}(not found!)" >&6
-echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: no long double support found for FFTW!" >&5
-echo "${ECHO_T}no long double support found for FFTW!" >&6
 FFTW_DISABLE_FFTW_LONGDBL=true
 else
 echo "$as_me:$LINENO: result: (${FFTW_LIB_L})" >&5
@@ -17898,7 +17890,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -17944,13 +17936,13 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-						#include <fftw3.h>
+	#include <fftw3.h>
 
 int
 main ()
 {
 
-						 fftwf_plan f = fftwf_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
+	 fftwf_plan f = fftwf_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
 
   ;
   return 0;
@@ -18021,7 +18013,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -18133,7 +18125,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -18245,7 +18237,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -18269,21 +18261,21 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 if test "${BALL_HAS_FFTW_FLOAT}" != "" ; then
-LIBS="${FFTW_LIB_F}/libfftw3f.a ${LIBS}"
+FFTW_LIBS="${FFTW_LIB_F}/libfftw3f.a}"
 cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_FFTW_FLOAT
 _ACEOF
 
 fi
 if test "${BALL_HAS_FFTW_DOUBLE}" != "" ; then
-LIBS="${FFTW_LIB_D}/libfftw3.a ${LIBS}"
+FFTW_LIBS="${FFTW_LIB_D}/libfftw3.a"
 cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_FFTW_DOUBLE
 _ACEOF
 
 fi
 if test "${BALL_HAS_FFTW_LONG_DOUBLE}" != "" ; then
-LIBS="${FFTW_LIB_L}/libfftw3l.a ${LIBS}"
+FFTW_LIBS="${FFTW_LIB_L}/libfftw3l.a"
 cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_FFTW_LONG_DOUBLE
 _ACEOF
@@ -18292,6 +18284,8 @@ fi
 if test "${BALL_HAS_FFTW_H}" != "" ; then
 LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
 fi
+
+
 
 
 
@@ -18551,12 +18545,12 @@ fi
 
 if test "${USE_VIEW}" = true ; then
 if test "${OS}" = "Darwin" ; then
-VIEW_PLATFORM="OpenGL-Darwin"
-OPENGL_LIBOPTS="-framework Carbon -framework OpenGL -framework AGL"
-X11_LIBPATHOPT=""
-X11_INCPATH=""
-OPENGL_INCPATH="-I/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers -I/System/Library/Frameworks/AGL.framework/Versions/A/Headers"
-VIEW_INCLUDES="${VIEW_INCLUDES} ${OPENGL_INCPATH}"
+	VIEW_PLATFORM="OpenGL-Darwin"
+	OPENGL_LIBOPTS="-framework Carbon -framework OpenGL -framework AGL"
+	X11_LIBPATHOPT=""
+	X11_INCPATH=""
+	OPENGL_INCPATH="-I/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers -I/System/Library/Frameworks/AGL.framework/Versions/A/Headers"
+	VIEW_INCLUDES="${VIEW_INCLUDES} ${OPENGL_INCPATH}"
 fi
 
 if test "${VIEW_PLATFORM}" = Mesa ; then
@@ -18672,7 +18666,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -18987,7 +18981,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -19118,7 +19112,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -19338,7 +19332,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -19662,7 +19656,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -19725,7 +19719,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -19802,7 +19796,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -20292,7 +20286,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -20464,7 +20458,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -20688,7 +20682,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -20804,7 +20798,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -20860,7 +20854,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -20961,7 +20955,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -21015,7 +21009,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -21071,7 +21065,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -21171,7 +21165,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -21226,7 +21220,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -21282,7 +21276,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -21351,7 +21345,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -21445,7 +21439,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -21495,7 +21489,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -21553,7 +21547,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -21691,7 +21685,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -21753,7 +21747,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -21808,7 +21802,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -21873,13 +21867,13 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test $SIP = no ; then
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: This script requires the unix command sip, but cannot find it." >&5
+	echo "$as_me:$LINENO: result: This script requires the unix command sip, but cannot find it." >&5
 echo "${ECHO_T}This script requires the unix command sip, but cannot find it." >&6
-echo "$as_me:$LINENO: result: Please add the correct path to sip to your \$PATH variable" >&5
+	echo "$as_me:$LINENO: result: Please add the correct path to sip to your \$PATH variable" >&5
 echo "${ECHO_T}Please add the correct path to sip to your \$PATH variable" >&6
-echo "$as_me:$LINENO: result: and restart configure." >&5
+	echo "$as_me:$LINENO: result: and restart configure." >&5
 echo "${ECHO_T}and restart configure." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -21905,7 +21899,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -21954,7 +21948,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -22005,7 +21999,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -22061,7 +22055,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -22120,7 +22114,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -22253,7 +22247,7 @@ echo "${ECHO_T}" >&6
 
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then
-${RM} $TARFILE ;
+	${RM} $TARFILE ;
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -23178,6 +23172,7 @@ s,@BALL_HAS_FFTW_H@,$BALL_HAS_FFTW_H,;t t
 s,@BALL_HAS_FFTW_FLOAT@,$BALL_HAS_FFTW_FLOAT,;t t
 s,@BALL_HAS_FFTW_DOUBLE@,$BALL_HAS_FFTW_DOUBLE,;t t
 s,@BALL_HAS_FFTW_LONG_DOUBLE@,$BALL_HAS_FFTW_LONG_DOUBLE,;t t
+s,@FFTW_LIBS@,$FFTW_LIBS,;t t
 s,@MOC@,$MOC,;t t
 s,@UIC@,$UIC,;t t
 s,@SIP@,$SIP,;t t

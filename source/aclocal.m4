@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.2.21 2005/11/07 10:48:42 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69.2.22 2005/11/09 12:09:34 oliver Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -26,21 +26,21 @@ dnl
 AC_DEFUN(CF_CHECK_LICENSE,[
 AC_PATH_PROG(PAGER, more, no)
 if test "${PAGER}" = "no" ; then
-PAGER=cat
+	PAGER=cat
 fi
 if test ! -f config.lic ; then
-${PAGER} COPYRIGHT
-echo " "
-echo "Do you accept these terms (y/n)?"
-answer=""
-while test "$answer" != "y" -a "$answer" != "n" ; do
-read answer 
-done
-if test "$answer" = "n" ; then	
-exit
-else
-echo "accepted" > config.lic
-fi
+	${PAGER} COPYRIGHT
+	echo " "
+	echo "Do you accept these terms (y/n)?"
+	answer=""
+	while test "$answer" != "y" -a "$answer" != "n" ; do
+		read answer 
+	done
+	if test "$answer" = "n" ; then	
+		exit
+	else
+		echo "accepted" > config.lic
+	fi
 fi
 ])
 
@@ -50,12 +50,12 @@ dnl
 AC_DEFUN(CF_BASENAME,[
 TMP__DIR="$1/"
 while test "${TMP__DIR}" != "" ; do
-TMP__NAME=`echo ${TMP__DIR}|${CUT} -d/ -f1`
-TMP__DIR=`echo ${TMP__DIR}|${CT} -d/ -f2-`
-if test "${TMP__DIR}" = "${TMP__NAME}" ; then
-TMP__DIR=""
-fi
-done
+	TMP__NAME=`echo ${TMP__DIR}|${CUT} -d/ -f1`
+	TMP__DIR=`echo ${TMP__DIR}|${CT} -d/ -f2-`
+	if test "${TMP__DIR}" = "${TMP__NAME}" ; then
+		TMP__DIR=""
+	fi
+	done
 ])
 
 dnl    define a macro to abort configure, print an appropriate error message
@@ -79,7 +79,7 @@ AC_ERROR(Aborted.)
 AC_DEFUN(CF_CONF_DIAG_TAR,[
 TARFILE=conf.diag.tar
 if test -f $TARFILE ; then 
-${RM} $TARFILE ; 
+	${RM} $TARFILE ; 
 fi
 FILES="configure configure.ac aclocal.m4 config.log"
 if test -f config.h ; then FILES="$FILES config.h" ; fi
@@ -95,11 +95,11 @@ dnl
 AC_DEFUN(CF_MSG_PATH_PROG,[
 AC_PATH_PROG($1,$2,no)
 if test $$1 = no ; then
-AC_MSG_RESULT()
-AC_MSG_RESULT([This script requires the unix command $2, but cannot find it.])
-AC_MSG_RESULT([Please add the correct path to $2 to your \$PATH variable])
-AC_MSG_RESULT([and restart configure.])
-CF_ERROR
+	AC_MSG_RESULT()
+	AC_MSG_RESULT([This script requires the unix command $2, but cannot find it.])
+	AC_MSG_RESULT([Please add the correct path to $2 to your \$PATH variable])
+	AC_MSG_RESULT([and restart configure.])
+	CF_ERROR
 fi
 ])
 
@@ -2556,8 +2556,6 @@ CF_FIND_LIB(FFTW_LIB_D,libfftw3, ${FFTW_LIBPATH})
 
 if test "${FFTW_LIB_D}" = "" ; then
 AC_MSG_RESULT((not found!))
-AC_MSG_RESULT()
-AC_MSG_RESULT(no double support found for FFTW!)
 FFTW_DISABLE_FFTW_DOUBLE=true
 else
 AC_MSG_RESULT((${FFTW_LIB_D}))
@@ -2571,8 +2569,6 @@ CF_FIND_LIB(FFTW_LIB_L,libfftw3l, ${FFTW_LIBPATH})
 
 if test "${FFTW_LIB_L}" = "" ; then
 AC_MSG_RESULT((not found!))
-AC_MSG_RESULT()
-AC_MSG_RESULT(no long double support found for FFTW!)
 FFTW_DISABLE_FFTW_LONGDBL=true
 else
 AC_MSG_RESULT((${FFTW_LIB_L}))
@@ -2607,11 +2603,11 @@ LIBS="${FFTW_LIB_F}/libfftw3f.a ${LIBS}"
 LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
 FFTW_LINKING_OK=0
 AC_TRY_LINK([
-						#include <fftw3.h>
-					],
-					[
-						 fftwf_plan f = fftwf_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
-					], FFTW_LINKING_OK=1)
+	#include <fftw3.h>
+	],
+	[
+	 fftwf_plan f = fftwf_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
+	], FFTW_LINKING_OK=1)
 LIBS=${SAVE_LIBS}
 LDFLAGS=${SAVE_LDFLAGS}
 if test "${FFTW_LINKING_OK}" != "1" ; then
@@ -2684,23 +2680,25 @@ fi
 fi
 AC_DEFINE_UNQUOTED(PROJECT[]_COMPLEX_TYPE, ${PROJECT[]_COMPLEX_TYPE})
 if test "${PROJECT[]_HAS_FFTW_FLOAT}" != "" ; then
-LIBS="${FFTW_LIB_F}/libfftw3f.a ${LIBS}"
+FFTW_LIBS="${FFTW_LIB_F}/libfftw3f.a}"
 AC_DEFINE(PROJECT[]_HAS_FFTW_FLOAT,)
 fi
 if test "${PROJECT[]_HAS_FFTW_DOUBLE}" != "" ; then
-LIBS="${FFTW_LIB_D}/libfftw3.a ${LIBS}"
+FFTW_LIBS="${FFTW_LIB_D}/libfftw3.a"
 AC_DEFINE(PROJECT[]_HAS_FFTW_DOUBLE,)
 fi
 if test "${PROJECT[]_HAS_FFTW_LONG_DOUBLE}" != "" ; then
-LIBS="${FFTW_LIB_L}/libfftw3l.a ${LIBS}"
+FFTW_LIBS="${FFTW_LIB_L}/libfftw3l.a"
 AC_DEFINE(PROJECT[]_HAS_FFTW_LONG_DOUBLE,)
 fi
 if test "${PROJECT[]_HAS_FFTW_H}" != "" ; then
 LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
 fi
+
 AC_SUBST(PROJECT[]_HAS_FFTW_FLOAT,)
 AC_SUBST(PROJECT[]_HAS_FFTW_DOUBLE,)
 AC_SUBST(PROJECT[]_HAS_FFTW_LONG_DOUBLE,)
+AC_SUBST(FFTW_LIBS)
 ])
 
 dnl
@@ -2733,12 +2731,12 @@ dnl
 dnl		Fix up the OpenGL stuff for MacOS X -- here we need to use OpenGL and AGL frameworks
 dnl
 if test "${OS}" = "Darwin" ; then
-VIEW_PLATFORM="OpenGL-Darwin"
-OPENGL_LIBOPTS="-framework Carbon -framework OpenGL -framework AGL"
-X11_LIBPATHOPT=""
-X11_INCPATH=""
-OPENGL_INCPATH="-I/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers -I/System/Library/Frameworks/AGL.framework/Versions/A/Headers"
-VIEW_INCLUDES="${VIEW_INCLUDES} ${OPENGL_INCPATH}"
+	VIEW_PLATFORM="OpenGL-Darwin"
+	OPENGL_LIBOPTS="-framework Carbon -framework OpenGL -framework AGL"
+	X11_LIBPATHOPT=""
+	X11_INCPATH=""
+	OPENGL_INCPATH="-I/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers -I/System/Library/Frameworks/AGL.framework/Versions/A/Headers"
+	VIEW_INCLUDES="${VIEW_INCLUDES} ${OPENGL_INCPATH}"
 fi
 
 if test "${VIEW_PLATFORM}" = Mesa ; then
