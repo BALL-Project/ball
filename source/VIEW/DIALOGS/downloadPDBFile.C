@@ -50,6 +50,7 @@ DownloadPDBFile::DownloadPDBFile(QWidget* parent, const char* name, bool modal, 
 	registerWidget(this);
 	hide();
 	connect(results, SIGNAL(activated(const QString&)), this, SLOT(slotNewId(const QString&)));
+	pdbId->setFocus();
 
 #ifdef BALL_QT_HAS_THREADS
 	thread_ = new FetchHTMLThread();
@@ -189,13 +190,14 @@ bool DownloadPDBFile::threadedDownload_(const String& url)
 	{
 		if (thread_->getTCPTransfer().getReceivedBytes() == 0)
 		{
-			setStatusbarText("Got an empty file, aborting..", true);
+			setStatusbarText("Could not download the given file. Maybe it does not exist on pdb.org?", true);
 		}
 		else
 		{
 			setStatusbarText(String("Failed to download file, ErrorCode ") + 
 											 String(thread_->getTCPTransfer().getStatusCode()), true);
 		}
+		error_ = true;
 		return false;
 	}
 #else
@@ -213,7 +215,8 @@ void DownloadPDBFile::slotDownload()
 	try
 	{
 		String url = "http://www.rcsb.org/pdb/cgi/export.cgi/";
-		url += pdbId->text().latin1();
+		String id = pdbId->text().latin1();
+		url += id;
 		url += ".pdb?format=PDB&pdbId=";
 		url += pdbId->text().latin1();
 		url +="&compression=None"; 
@@ -250,7 +253,7 @@ void DownloadPDBFile::slotDownload()
 		}
 		else
 		{
-			setStatusbarText(String("read ") + String(system->countAtoms()) + " atoms from URL \"" + url + "\"", true);
+			setStatusbarText(String("read ") + String(system->countAtoms()) + " atoms for:  " + id, true);
 		}
 
 		if (system->getName() == "")
@@ -480,6 +483,7 @@ void DownloadPDBFile::downloadEnded_()
 	buttonClose->setEnabled(true);
 	idChanged();
 	qApp->processEvents();
+	pdbId->setFocus();
 
 #ifdef BALL_QT_HAS_THREADS
 	if (error_)

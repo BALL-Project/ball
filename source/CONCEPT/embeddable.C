@@ -1,10 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: embeddable.C,v 1.17.4.1 2005/11/01 00:15:45 amoll Exp $
+// $Id: embeddable.C,v 1.17.4.2 2005/11/09 18:35:33 amoll Exp $
 //
 
 #include <BALL/CONCEPT/embeddable.h>
+
+#undef BALL_DEBUG
 
 namespace BALL
 {
