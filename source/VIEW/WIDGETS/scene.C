@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.58 2005/11/08 00:57:37 amoll Exp $
+// $Id: scene.C,v 1.171.2.59 2005/11/10 01:36:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -664,6 +664,66 @@ namespace BALL
 			pm.getUpdateWaitCondition().wakeAll();
 #endif
 		}
+
+		/////////////////////////////////////////////////////////
+		void Scene::rotateClockwise(float degree)
+		{
+			Camera camera(stage_->getCamera());
+			Matrix4x4 m;
+			m.setRotation(Angle(-degree, false), camera.getViewVector());
+
+			camera.setLookUpVector(m * camera.getLookUpVector());
+			stage_->getCamera() = camera;
+			updateCamera_();
+		}
+
+		void Scene::move(Vector3 v)
+		{
+			Camera& camera = stage_->getCamera();
+
+			Vector3 vv = camera.getViewVector();
+			vv.normalize(); 
+
+			Vector3 x = v.x * camera.getRightVector() +
+									v.y * camera.getLookUpVector() -
+									v.z * vv;
+
+			camera.translate(-x);
+			updateCamera_();
+		}
+
+		void Scene::rotate(float degree_right, float degree_up)
+		{
+			Camera& camera = stage_->getCamera();
+
+			Vector3 vv = camera.getViewVector();
+			vv.normalize(); 
+
+			/*
+			Matrix4x4 m1;
+			m1.setRotation(degree_right, camera.getLookUpVector());
+
+			Matrix4x4 m2;
+			m2.setRotation(degree_up, camera.getRightVector());
+
+			vv = m1 * vv;
+			vv = m2 * vv;
+			*/
+
+			Quaternion q1;
+ 			q1.set(camera.getLookUpVector(), Angle(degree_right, false).toRadian());
+
+			Quaternion q2;
+ 			q2.set(camera.getRightVector(), Angle(degree_up, false).toRadian());
+
+ 			q1 += q2;
+			
+			stage_->getCamera().rotate(q1, system_origin_);
+			updateCamera_();
+		}
+	
+		/////////////////////////////////////////////////////////
+
 
 		void Scene::rotateSystem2_(Scene* /*scene*/)
 		{

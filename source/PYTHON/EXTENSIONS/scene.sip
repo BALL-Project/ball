@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.sip,v 1.2.4.3 2005/06/20 00:28:59 amoll Exp $
+// $Id: scene.sip,v 1.2.4.4 2005/11/10 01:38:04 amoll Exp $
 //
 
 class Scene 
@@ -37,6 +37,7 @@ static Scene* getInstance(Position /index/);
 //  void defaultPreferences(Preferences&) throw();
 		void exportPNG(const String&);
 		String exportPNG();
+		void exportPOVRay();
 		void showExportPNGDialog();
 		
   	void exportScene(Renderer&) const throw();
@@ -53,6 +54,10 @@ static Scene* getInstance(Position /index/);
 	void enterActiveStereo();
 	void exitStereo();
 	void setVisible(bool);
+	void rotate(float, float);
+	void rotateClockwise(float);
+	void move(Vector3);
+
 //  void writePreferences(INIFile&) throw();
   ~Scene() throw();
 };

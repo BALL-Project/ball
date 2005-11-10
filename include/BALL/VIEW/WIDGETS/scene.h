@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.20 2005/10/31 01:33:06 amoll Exp $
+// $Id: scene.h,v 1.62.2.21 2005/11/10 01:37:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -555,6 +555,15 @@ namespace BALL
 
 			///
 			static void setPOVNumber(Position pos) { pov_nr_ = pos;}
+
+			///
+			void rotate(float degree_right, float degree_up);
+
+			///
+			void rotateClockwise(float degree);
+
+			///
+			void move(Vector3 v);
 
 			void initTimer();
 			

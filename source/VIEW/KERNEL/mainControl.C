@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.39 2005/11/04 23:08:01 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.40 2005/11/10 01:36:54 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1894,6 +1894,11 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		return false;
 #endif
 		return multi_threading_mode_;
+	}
+
+	void MainControl::processEvents(Size ms)
+	{
+		qApp->processEvents(ms);
 	}
 			
 

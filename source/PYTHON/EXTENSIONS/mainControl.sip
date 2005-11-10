@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.19.4.6 2005/10/14 13:20:27 amoll Exp $
+// $Id: mainControl.sip,v 1.19.4.7 2005/11/10 01:38:04 amoll Exp $
 //
 
 class MainControl
@@ -111,6 +111,7 @@ class MainControl
 	void resize(int, int);
 	void setMultithreading(bool) throw();
 	bool useMultithreading() throw();
+	void processEvents(Size);
 
 	void quit();
 };

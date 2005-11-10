@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72.2.18 2005/11/01 19:55:35 amoll Exp $
+// $Id: mainControl.h,v 1.72.2.19 2005/11/10 01:37:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -715,6 +715,9 @@ namespace BALL
 			
 			///
 			void loadBALLViewProjectFile(const String& filename) throw();
+
+			///
+			void processEvents(Size ms);
 
 			//@}
 			
