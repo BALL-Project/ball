@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.19 2005/10/17 15:45:51 amoll Exp $
+// $Id: representation.C,v 1.62.4.20 2005/11/10 22:00:23 amoll Exp $
 //
 
 
@@ -661,6 +661,7 @@ namespace BALL
 			throw()
 		{
 			composites_ = composites;
+			needs_update_ = true;
 		}
 			
   #	ifdef BALL_NO_INLINE_FUNCTIONS
