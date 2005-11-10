@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.19 2005/11/08 14:05:07 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.20 2005/11/10 21:26:30 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -212,13 +212,23 @@ PrimitiveManager::RepresentationList PrimitiveManager::removedComposite(const Co
 		// test if a Representation has Composites which are (not) to be removed
 		List<const Composite*> composites;
 
+
 		List<const Composite*>::ConstIterator crit = rep.getComposites().begin();
+
+		// special case for representations with composites of two different roots:
+		// we have to update them manualy here!
+		// otherwise no update will be done for this representations!
+		const Composite* root = &(**crit).getRoot();
+		bool must_be_updated = false;
+		
 		for(; crit != rep.getComposites().end(); crit++)
 		{
 			if (&composite != *crit && !composite.isAncestorOf(**crit))
 			{
 				composites.push_back(*crit);
 			}
+
+			if (&(**crit).getRoot() != root) must_be_updated = true;
 		}
 	
 
@@ -236,6 +246,13 @@ PrimitiveManager::RepresentationList PrimitiveManager::removedComposite(const Co
 		if (rep.getModelProcessor() == 0)
 		{
 			rep.clearGeometricObjects();
+		}
+
+		// see above: manual update
+		if (must_be_updated)
+		{
+			rep.update(true);
+			continue;
 		}
 
 		// call update for the Representation

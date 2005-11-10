@@ -36,11 +36,13 @@ Fixed:
  - Crash while wrongly using malformed boolean expression "residueID(...)"
  - Crash in CalculateSecondaryStructureProcessor, when one SS is part of another
  - Crash while running an MDS with trajectory if the DCD file could not be written
+ - possible Crash with representations for two different systems
  - NMRViewer und underlying widgets did not compile
  - Problems in persistence with g++ 4.x series
  - Hangup in socket interface with g++ 4.x series
  - Mouse sensitivity changed in Rotate mode when focusing on small structures
  - Memory issues with Python objects (e.g. inserting GeometricObjects into Representations)
+ - Lighting, especialy for directional lights
  - Saving and loading of BALLView project files
  - Accelerators for menu entries didnt always work
  - Splitting of surfaces for given distance: computed incorrect surfaces
