@@ -1,7 +1,7 @@
 #   example script for simulated annealing
 #   output heated structures as Hinfile
 #   one system has to be loaded before calling the script
-system = getComposites()[0]
+system = getSystem(0)
 ff = getMolecularStructure().getForceField()
 ff.setup(system)
 ssm = SnapShotManager()

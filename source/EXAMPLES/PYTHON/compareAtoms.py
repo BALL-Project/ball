@@ -1,8 +1,8 @@
 # example for how to create a new representation
 # we draw a line between the identical atoms of two systems
 
-system1 = getComposites()[0]
-system2 = getComposites()[1]
+system1 = getSystem(0)
+system2 = getSystem(1)
 
 rep = Representation()
 

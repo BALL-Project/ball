@@ -1,7 +1,7 @@
 # select all atoms in proximity of less than maxdistance from a selected atom
 maxdistance = 4
 
-system = getComposites()[0]
+system = getSystem(0)
 
 cl = []
 
