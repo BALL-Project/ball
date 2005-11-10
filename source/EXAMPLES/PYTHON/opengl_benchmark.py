@@ -6,26 +6,13 @@ def runTest(name, model):
 	run = 0
 	getDisplayProperties().selectModel(model)
 	getDisplayProperties().apply()
-	v = Vector3(13, 84, 41)
-	l = Vector3(13, 84, -7)
-	u = Vector3(0, -1, 0)
-	s = getScene().getStage()
-	s.getCamera().setViewPoint(v)
-	s.getCamera().setLookAtPosition(l)
-	s.getCamera().setLookUpVector(v)
-	sm = SceneMessage(SceneMessage.UPDATE_CAMERA)
-	sm.setStage(s)
-	getMainControl().sendMessage(sm)
+	getGeometricControl().focusRepresentation()
+	getScene().move(Vector3(0,0,-nr_runs))
 	timer = Timer()
 	timer.start()
 	while run < nr_runs:
 		run += 1
-		v = v + Vector3(0,0,1)
-		l = l + Vector3(0,0,1)
-		s.getCamera().setViewPoint(v)
-		sm = SceneMessage(SceneMessage.UPDATE_CAMERA)
-		sm.setStage(s)
-		getMainControl().sendMessage(sm)
+		getScene().move(Vector3(0,0,1))
 	timer.stop()
 	model_result = timer.getClockTime()
 	clearRepresentations()
@@ -33,6 +20,8 @@ def runTest(name, model):
 	result += model_result
 
 setMultithreading(0)
+clearMolecules()
+clearRepresentations()
 dp = getDisplayProperties()
 dp.enableCreationForNewMolecules(0)
 dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
@@ -50,6 +39,7 @@ getDatasetControl().setVisible(0)
 getPyWidget().setVisible(0)
 
 getMainControl().resize(800, 600)
+getMainControl().processEvents(5000)
 
 runTest("Lines", 		MODEL_LINES)
 runTest("VDW",   		MODEL_VDW)
