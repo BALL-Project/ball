@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editOperationDialog.C,v 1.7 2005/11/04 17:57:48 anne Exp $
+// $Id: editOperationDialog.C,v 1.8 2005/11/11 13:56:04 anne Exp $
 
 #include <BALL/VIEW/DIALOGS/editOperationDialog.h>
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -74,7 +74,8 @@ namespace BALL
 					//remove EditOperation from undo_list in Dialog
 					undo_operation_list->removeItem(number_of_items - number_of_undo_operations);
 				}	
-					//highlighting of the last operation is done automatically
+				//highlighting of the last operation is done automatically
+			
 			}
 		}
 
@@ -126,6 +127,7 @@ namespace BALL
 				{
 					invalidateComposite(cci);
 				}
+				return;
 			}
 			else //something different from AtomContainer or atom
 			{
@@ -138,12 +140,14 @@ namespace BALL
 			{
 				undo_operation_list->insertItem(list_of_operations_[i].description.c_str());
 			}
+			//we have to highlight the last undo-operation entry 
+			undo_operation_list->setCurrentItem(undo_operation_list->count()-1);
 		}
 
 		
 		bool EditOperationDialog::removeEditOperationFromList_(Atom* atom)
 		{	
-			vector<Position> to_delete;
+			HashSet<Position> to_delete;
 			
 			for (Position i=0; i < list_of_operations_.size(); i++) 
 			{
@@ -153,67 +157,45 @@ namespace BALL
 					if (list_of_operations_[i].atom == atom) // the current atom has been invalidated
 					{
 						// delete the current item from the list of edit operations
-						to_delete.push_back(i);
+						to_delete.insert(i);
 
 					}
 				}
 				else if (list_of_operations_[i].operationType == EditableScene::EditOperation::MERGED__MOLECULES) 
 				{	
-					Position atom_to_delete;
-					std::vector<Atom*> mol=list_of_operations_[i].molecule;
+					std::vector<Atom*>& mol=list_of_operations_[i].molecule;
+					std::vector<Atom*>::iterator it = mol.begin();
 					//check if the deleted atom is contained in one of the merged molecules
-					for (Position j = 0; j < mol.size(); j++)
+					for (; it != mol.end(); it++)
 					{
-						if (mol[j] == atom)
+						if (*it != atom) continue;
+						
+						// The merge has to be deleted, if the deleted atom is the last atom in this molecule
+						if (mol.size() < 2)
 						{
-							// The merge has to be deleted, if the deleted atom is the last atom in this molecule
-							if (mol.size() == (Position)1)
-							{
-								// delete the current item from the list of edit operations
-								to_delete.push_back(i);
-								break;
-							}
-							else 
-							{	
-								// Otherwise we just have to delete this atom from the molecule
-								atom_to_delete = j;
-								break;
-							}
+							// delete the current item from the list of edit operations
+							to_delete.insert(i);
+							break;
 						}
-					}
-					
-					if (atom_to_delete != 0)
-					{ // we have to rebuild the molecule list
-						std::vector<Atom*> new_molecule;
-						for (Position j = 0; j < mol.size(); j++)
+						else 
 						{	
-							if (atom_to_delete != j)
-							{
-								new_molecule.push_back(mol[j]);
-							}
+							// Otherwise we just have to delete this atom from the molecule
+							mol.erase(it);
+							break;
 						}
-						// insert the new list
-						list_of_operations_[i].molecule = new_molecule;
-					}// end if
+					} // 
 				}// end of MERGED__MOLECULES
 			} //end of loop 
 
 			if (to_delete.size() > 0)
 			{
-				sort(to_delete.begin(), to_delete.end());
 				vector<EditableScene::EditOperation> new_list_of_operations;
-				Position to_delete_index = 0;
 
 				for (Position i = 0; i < list_of_operations_.size(); i++)
 				{
-					if (to_delete[to_delete_index] != i)
+					if (!to_delete.has(i))
 					{
 						new_list_of_operations.push_back(list_of_operations_[i]);
-					}
-					else
-					{
-						// we have skipped one of the elements
-						to_delete_index++;
 					}
 				}
 
