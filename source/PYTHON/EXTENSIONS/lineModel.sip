@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.sip,v 1.3 2003/12/12 17:51:56 amoll Exp $
+// $Id: lineModel.sip,v 1.3.6.1 2005/11/11 17:21:23 leonhardt Exp $
 //
 
 class AddLineModel 
@@ -13,9 +13,10 @@ class AddLineModel
 	using namespace BALL::VIEW;
 %End
   public:
-//  void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
+
   AddLineModel() throw();
   AddLineModel(const AddLineModel&) throw();
- // Processor::Result operator() (Composite&);
   ~AddLineModel() throw();
+  //Processor::Result operator() (Composite&);
+	//void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 };

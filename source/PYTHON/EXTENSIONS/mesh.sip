@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.sip,v 1.2.6.1 2005/07/25 20:46:52 amoll Exp $
+// $Id: mesh.sip,v 1.2.6.2 2005/11/11 17:21:23 leonhardt Exp $
 //
 
 class Mesh 
@@ -24,6 +24,6 @@ class Mesh
   void set(const Mesh&) throw();
   void swap(Mesh&) throw();
   ~Mesh() throw();
-	PyColorRGBAVector getColors();
+//	PyColorRGBAVector getColors();
 //	PyColorRGBAVector colors;
 };

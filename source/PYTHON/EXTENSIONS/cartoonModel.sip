@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.sip,v 1.1.6.1 2005/07/20 12:16:01 amoll Exp $
+// $Id: cartoonModel.sip,v 1.1.6.2 2005/11/11 17:21:19 leonhardt Exp $
 //
 
 class AddCartoonModel 
@@ -13,14 +13,11 @@ class AddCartoonModel
 	using namespace BALL::VIEW;
 %End
   public:
-//  void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
-  AddCartoonModel() throw();
+
+	AddCartoonModel() throw();
   AddCartoonModel(const AddCartoonModel&) throw();
-  //Processor::Result operator() (Composite&);
-  bool finish();
-  bool start();
-  void clear() throw();
   ~AddCartoonModel() throw();
+  //Processor::Result operator() (Composite&);
 
 	void setHelixRadius(float) throw();
 	float getHelixRadius() const throw();

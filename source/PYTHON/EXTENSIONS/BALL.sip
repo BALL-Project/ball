@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.40.4.9 2005/11/08 00:05:43 amoll Exp $
+// $Id: BALL.sip,v 1.40.4.10 2005/11/11 17:21:17 leonhardt Exp $
 //
 
 /////////////////////////
@@ -287,14 +287,18 @@
 %Include geometricObject.sip
 %Include geometricObjectList.sip
 %Include view-common.sip
+%Include clippingPlane.sip
+%Include molecularInformation.sip
+%Include server.sip
 
 // VIEW/DATATYPE
 %Include colorUnit.sip
 %Include colorRGBA.sip
-%Include colorRGBAVector.sip
+//%Include colorRGBAVector.sip
 %Include vertex1.sip
 %Include vertex2.sip
 %Include colorExtension2.sip
+%Include colorTable.sip
 
 // VIEW/MODELS
 %Include colorProcessor.sip
@@ -309,6 +313,8 @@
 %Include cartoonModel.sip
 %Include HBondModel.sip
 %Include surfaceModel.sip
+%Include forceModel.sip
+%Include labelModel.sip
 
 // VIEW/PRIMITIVES
 %Include box.sip
@@ -331,6 +337,7 @@
 // VIEW/RENDERER
 %Include renderer.sip
 %Include POVRenderer.sip
+%Include VRMLRenderer.sip
 
 // VIEW/WIDGETS
 %Include modularWidget.sip
@@ -342,6 +349,7 @@
 %Include geometricControl.sip
 %Include logView.sip
 %Include datasetControl.sip
+//%Include helpViewer.sip
 
 // Makefile
 //%Include Makefile.sip

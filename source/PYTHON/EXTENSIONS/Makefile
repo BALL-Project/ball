@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.33.4.9 2005/07/25 20:48:28 amoll Exp $
+# $Id: Makefile,v 1.33.4.10 2005/11/11 17:21:18 leonhardt Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -55,8 +55,9 @@ PYBALL_SOURCES = \
 	pyNucleicAcidList.C \
 	pyPDBAtomList.C \
 	pyResidueList.C \
-	pyGeometricObjectList.C\
-	pyColorRGBAVector.C
+	pyGeometricObjectList.C
+	
+#pyColorRGBAVector.C
 
 PYBALL_OBJECTS  = $(PYBALL_SOURCES:.C=.o)
  

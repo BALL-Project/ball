@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: view-common.sip,v 1.5 2005/01/12 16:55:49 amoll Exp $
+// $Id: view-common.sip,v 1.5.4.1 2005/11/11 17:21:27 leonhardt Exp $
 //
 
 %ModuleHeaderCode 
@@ -17,7 +17,18 @@ enum Command
 	COMMAND__UNKOWN              = 0,
 	COMMAND__SEND_OBJECT         = 1,
 	NUMBER_OF_COMMANDS
-};	
+};
+
+enum EventsIDs
+{
+	SCENE_EXPORTPNG_EVENT = 60000,
+	SCENE_EXPORTPOV_EVENT,
+	SCENE_SETCAMERA_EVENT,
+	SIMULATION_THREAD_FINISHED_EVENT,
+	LOG_EVENT,
+	UPDATE_COMPOSITE_EVENT
+	FINISHED_REPRESENTATION_UPDATE_EVENT
+};
 
 enum DrawingMode
 {
@@ -46,6 +57,7 @@ enum ModelType
 	MODEL_BACKBONE,
 	MODEL_CARTOON,
 	MODEL_HBONDS,
+  MODEL_FORCES,
 	MODEL_LABEL,
 	MODEL_CONTOUR_SURFACE
 };
@@ -60,20 +72,43 @@ enum ColoringMethod
 	COLORING_DISTANCE,
 	COLORING_TEMPERATURE_FACTOR,
 	COLORING_OCCUPANCY,
+	COLORING_FORCES,
+	COLORING_RESIDUE_TYPE,
+	COLORING_CHAIN,
+	COLORING_MOLECULE,
 	COLORING_CUSTOM,
 	COLORING_UNKNOWN
 };
 
-String getModelName(ModelType) 
-	throw();
+	enum GeometricObjectType
+	{
+		TYPE__UNKNOWN              = -1,
+		TYPE__LINE                 = 0,
+		TYPE__SPHERE               = 1,
+		TYPE__TUBE                 = 2,
+		TYPE__POINT                = 3,
+		TYPE__MESH                 = 4,
+		TYPE__BOX           			 = 5
+	};
 
-String getColoringName(ColoringMethod) 
-	throw();
+String getModelName(ModelType) throw();
+String getColoringName(ColoringMethod)  throw();
+bool isSurfaceModel(ModelType)	throw();
+bool modelMuteableByDisplayProperties(ModelType)	throw();
+bool modelMustBeRebuild(ModelType)	throw();
+String getTypeName(GeometricObjectType);
+GeometricObjectType getGeometricObjectType(const GeometricObject&);
+String vector3ToString(const Vector3& ) throw();
+bool stringToVector3(const String&, Vector3&) throw();
+String createFloatString(float, Size)	throw();
+MainControl* getMainControl()	throw();
+String createTemporaryFilename() throw();
+Vector3 getNormal(const Vector3&)	throw();
 
-enum EventsIDs
-{
-	SCENE_EXPORTPNG_EVENT = 60000,
-	SIMULATION_THREAD_FINISHED_EVENT,
-	LOG_EVENT,
-	UPDATE_COMPOSITE_EVENT
-};
+//void logString(const String& data);
+//QColor chooseColor(QLabel* label);
+//void processDropEvent(QDropEvent* e);
+//void focusCamera(const List<Vector3>& points);
+String getDataPath();
+
+

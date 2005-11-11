@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.sip,v 1.3.4.1 2005/07/27 13:20:23 amoll Exp $
+// $Id: colorProcessor.sip,v 1.3.4.2 2005/11/11 17:21:20 leonhardt Exp $
 //
 
 class ColorProcessor
@@ -15,24 +15,28 @@ class ColorProcessor
 
   ColorProcessor() throw();
   ColorProcessor(const ColorProcessor& /color_calculator/) throw();
-	void getColor(const Composite&, ColorRGBA&);
-  //Processor::Result operator() (GeometricObject& /object/);
-//%MethodCode
-//	sipRes = sipCpp->operator () (*a0);
-//%End
-
-  Size getTransparency() const throw();
-  // const ColorProcessor& operator = (const ColorProcessor& /color_calculator/) throw();
-  const ColorRGBA& getDefaultColor() const throw();
-  // const CompositeSet* getComposites() throw();
-  void clear() throw();
-  void clearAtomGrid() throw();
-  // void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
-  void set(const ColorProcessor& /color_calculator/) throw();
-  // void setComposites(const CompositeSet* /composites/) throw();
-  void setDefaultColor(const ColorRGBA& /color/) throw();
-  void setTransparency(Size /value/) throw();
   ~ColorProcessor();
+  virtual void clear() throw();
+  void set(const ColorProcessor& /color_calculator/) throw();
+	virtual bool start() throw();
+  // const ColorProcessor& operator = (const ColorProcessor& /color_calculator/) throw();
+	bool updateAlwaysNeeded();
+  void setDefaultColor(const ColorRGBA& /color/) throw();
+  const ColorRGBA& getDefaultColor() const throw();
+  //Processor::Result operator() (GeometricObject& /object/);
+	void getColor(const Composite&, ColorRGBA&);
+  Size getTransparency() const throw();
+  void setTransparency(Size /value/) throw();
+  // void setComposites(const CompositeSet* /composites/) throw();
+  // const CompositeSet* getComposites() throw();
+  //void clearAtomGrid() throw();
+	void setAdditionalGridDistance(float) throw();
+	float getAdditionalGridDistance() const throw();
+	//AtomGrid& getAtomGrid() throw();
+  // void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
+	void setModelType(ModelType);
+	//virtual void createAtomGrid(const Composite* = 0) throw();
+	const Atom* getClosestItem(const Vector3&) const throw();
 };
 
 

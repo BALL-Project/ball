@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.sip,v 1.4.6.1 2005/04/17 20:34:15 amoll Exp $
+// $Id: compositeManager.sip,v 1.4.6.2 2005/11/11 17:21:21 leonhardt Exp $
 //
 class CompositeManager
 {
@@ -12,19 +12,22 @@ class CompositeManager
 %End
 	public:
 
- 	// CompositeConstIterator begin() const throw();
-  // CompositeConstIterator end() const throw();
-  // CompositeIterator begin() throw();
-  // CompositeIterator end() throw();
-  CompositeManager() throw();
+ 	CompositeManager() throw();
   CompositeManager(const CompositeManager& /cm/) throw();
-  Size getNumberOfComposites() const throw();
+  ~CompositeManager() throw();
+  virtual void clear() throw();
   bool has(const Composite*) const throw();
   bool hasRoot(const Composite*) const throw();
   bool insert(Composite& /composite/) throw();
-  void remove(Composite& /composite/, bool) throw();
-  void clear() throw();
-	PyCompositeList getComposites() throw();
+  void remove(Composite& /composite/, bool = true) throw();
+  Size getNumberOfComposites() const throw();
+	
+	// CompositeConstIterator begin() const throw();
+  // CompositeConstIterator end() const throw();
+  // CompositeIterator begin() throw();
+  // CompositeIterator end() throw();
+
+	//PyCompositeList& getComposites() throw();
+	//const PyCompositeList& getComposites() const throw();
   // void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
-  ~CompositeManager() throw();
 };

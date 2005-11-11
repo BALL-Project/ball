@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondModel.sip,v 1.1 2003/12/11 16:05:39 amoll Exp $
+// $Id: HBondModel.sip,v 1.1.6.1 2005/11/11 17:21:18 leonhardt Exp $
 //
 
 class HBondModelProcessor  
@@ -13,15 +13,14 @@ class HBondModelProcessor
 	using namespace BALL::VIEW;
 %End
   public:
-//  const HBondModelProcessor& operator = (const HBondModelProcessor& model) throw();
-  HBondModelProcessor() throw();
+  
+	HBondModelProcessor() throw();
   HBondModelProcessor(const HBondModelProcessor&) throw();
-  //Processor::Result operator() (Composite&);
-  bool finish();
-  float getRadius() const throw();
-  void clear() throw();
-  void set(const HBondModelProcessor&) throw();
-  void setRadius(float) throw();
-  void swap(HBondModelProcessor&) throw();
   ~HBondModelProcessor() throw();
+  virtual void clear() throw();
+  void set(const HBondModelProcessor&) throw();
+//  const HBondModelProcessor& operator = (const HBondModelProcessor& model) throw();
+  //Processor::Result operator() (Composite&);
+  void setRadius(float) throw();
+  float getRadius() const throw();
 };

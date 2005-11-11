@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.sip,v 1.2 2003/12/11 16:33:58 amoll Exp $
+// $Id: surfaceModel.sip,v 1.2.6.1 2005/11/11 17:21:26 leonhardt Exp $
 //
 
 class AddSurfaceModel 
@@ -13,16 +13,17 @@ class AddSurfaceModel
 	using namespace BALL::VIEW;
 %End
   public:
-//  void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
-  AddSurfaceModel() throw();
+  
+	AddSurfaceModel() throw();
   AddSurfaceModel(const AddSurfaceModel&) throw();
-  //Processor::Result operator() (Composite&);
-  SurfaceProcessor::SurfaceType getType() const;
-  bool finish();
-  bool start();
-  float getProbeRadius() const throw();
-  void clear() throw();
-  void setProbeRadius(float) throw();
-  void setType(SurfaceProcessor::SurfaceType);
   ~AddSurfaceModel() throw();
+  virtual void clear() throw();
+	virtual void clearComposites() throw();
+  SurfaceProcessor::SurfaceType getType() const;
+  void setType(SurfaceProcessor::SurfaceType);
+  //Processor::Result operator() (Composite&);
+  //void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
+  void setProbeRadius(float) throw();
+  float getProbeRadius() const throw();
+	virtual bool createGeometricObjects() throw();
 };
