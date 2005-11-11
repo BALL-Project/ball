@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.60 2005/11/11 00:14:30 amoll Exp $
+// $Id: scene.C,v 1.171.2.61 2005/11/11 10:58:41 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -26,6 +26,7 @@
 #include <BALL/VIEW/PRIMITIVES/disc.h>
 
 #include <BALL/SYSTEM/timer.h>
+#include <BALL/MATHS/quaternion.h>
 
 #include <qpainter.h>
 #include <qmenubar.h>
@@ -35,6 +36,7 @@
 #include <qapplication.h>
 #include <qdragobject.h>
 #include <qfiledialog.h>
+#include <qapplication.h>
 
 //         #define BALL_BENCHMARKING
 
@@ -56,9 +58,11 @@ namespace BALL
 		float Scene::mouse_wheel_sensitivity_ = 5;
 		bool  Scene::show_light_sources_ = false;
 		float Scene::animation_smoothness_ = 2;
-		#define  ZOOM_FACTOR 			55
-		#define  ROTATE_FACTOR    22
-		#define  TRANSLATE_FACTOR 10
+
+		#define  ROTATE_FACTOR    50.
+		#define  ROTATE_FACTOR2   50.
+		#define  TRANSLATE_FACTOR 4.
+    #define  ZOOM_FACTOR      10.
 
 	  QGLFormat Scene::gl_format_(QGL::DepthBuffer 		| 
 																QGL::StereoBuffers 	| 
@@ -74,7 +78,6 @@ namespace BALL
 				rotate_id_(-1),
 				picking_id_(-1),
 				system_origin_(0.0),
-				quaternion_(),
 				need_update_(false),
 				update_running_(false),
 				x_window_pos_old_(0),
@@ -110,7 +113,6 @@ namespace BALL
 				rotate_id_(-1),
 				picking_id_(-1),
 				system_origin_(0.0, 0.0, 0.0),
-				quaternion_(),
 				need_update_(false),
 				update_running_(false),
 				x_window_pos_old_(0),
@@ -148,7 +150,6 @@ namespace BALL
 			:	QGLWidget(gl_format_, parent_widget, name, 0, w_flags),
 				ModularWidget(scene),
 				system_origin_(scene.system_origin_),
-				quaternion_(scene.quaternion_),
 				x_window_pos_old_(0),
 				y_window_pos_old_(0),
 				x_window_pos_new_(0),
@@ -194,7 +195,6 @@ namespace BALL
 			throw()
 		{
 			system_origin_.set(0.0, 0.0, 0.0);
-			quaternion_.setIdentity();
 
 			stage_->clear();
 			animation_points_.clear();
@@ -205,7 +205,6 @@ namespace BALL
 		{
 			stage_ = scene.stage_;
 			system_origin_.set(scene.system_origin_);
-			quaternion_.set(scene.quaternion_);
 		}
 
 		const Scene& Scene::operator = (const Scene& scene)
@@ -230,8 +229,6 @@ namespace BALL
 			BALL_DUMP_HEADER(s, this, this);
 
 			stage_->dump(s, depth);
-
-			quaternion_.dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);     
 		}
@@ -641,14 +638,6 @@ namespace BALL
 			HashSet<Representation*>& reps_drawn = pm.getRepresentationsBeeingDrawn();
 			Representation* rep = (Representation*)& repr;
 
-			/*
-			 * ?????????? locks up
-			while (pm.getRepresentationsBeeingUpdated().has(rep))
-			{
-				pm.getUpdateWaitCondition().wait(100);
-			}
-			*/
-
 			reps_drawn.insert(rep);
 #endif
 
@@ -701,17 +690,6 @@ namespace BALL
 			Vector3 vv = camera.getViewVector();
 			vv.normalize(); 
 
-			/*
-			Matrix4x4 m1;
-			m1.setRotation(degree_right, camera.getLookUpVector());
-
-			Matrix4x4 m2;
-			m2.setRotation(degree_up, camera.getRightVector());
-
-			vv = m1 * vv;
-			vv = m2 * vv;
-			*/
-
 			Quaternion q1;
  			q1.set(camera.getLookUpVector(), Angle(degree_right, false).toRadian());
 
@@ -726,168 +704,61 @@ namespace BALL
 	
 		/////////////////////////////////////////////////////////
 
-
-		void Scene::rotateSystem2_(Scene* /*scene*/)
+		float Scene::getXDiff_()
 		{
-			if (current_mode_ != ROTATE__MODE ||
-					x_window_pos_old_ == x_window_pos_new_) 
-			{
-				return;
-			}
+			float delta_x = x_window_pos_new_ - x_window_pos_old_;
+			delta_x /= qApp->desktop()->width();
+			delta_x *= mouse_sensitivity_;
+			return delta_x;
+		}
 
-			const Angle angle((x_window_pos_new_ - x_window_pos_old_) * 
-								  			(mouse_sensitivity_ / (ROTATE_FACTOR * -30)));
+		float Scene::getYDiff_()
+		{
+			float delta_y = y_window_pos_new_ - y_window_pos_old_;
+			delta_y /= qApp->desktop()->width();
+			delta_y *= mouse_sensitivity_;
+			return delta_y;
+		}
 
-			Camera camera(stage_->getCamera());
-			Matrix4x4 m;
-			m.setRotation(angle, camera.getViewVector());
+		void Scene::rotateSystemClockwise_()
+		{
+			if (current_mode_ != ROTATE__MODE) return;
 
-			camera.setLookUpVector(m * camera.getLookUpVector());
-			stage_->getCamera() = camera;
-			updateCamera_();
+			float x = getXDiff_();
+
+			if (x == 0) return;
+
+			x *= ROTATE_FACTOR2;
+
+			rotateClockwise(x);
 		}
 
 
-		void Scene::rotateSystem_(Scene* scene)
+		void Scene::rotateSystem_()
 		{
-			scene->calculateQuaternion_(quaternion_);
-			stage_->getCamera().rotate(quaternion_, system_origin_);
-			updateCamera_();
+			float x = getXDiff_() * ROTATE_FACTOR;
+			float y = getYDiff_() * ROTATE_FACTOR;
+
+			rotate(-x, -y);
 		}
 
 
-		void Scene::translateSystem_(Scene* scene)
+		void Scene::translateSystem_()
 		{
-			Camera& camera = stage_->getCamera();
-			Camera& camera_scene = scene->stage_->getCamera();
+			float x = getXDiff_() * TRANSLATE_FACTOR; 
+			float y = getYDiff_() * TRANSLATE_FACTOR;
 
-			// Differences between the old and new x and y positions in the window
-			float delta_x = scene->x_window_pos_new_ - scene->x_window_pos_old_;
-			float delta_y = scene->y_window_pos_new_ - scene->y_window_pos_old_;
-
-			// calculate translation in x-axis direction
-			Vector3 right_translate = camera_scene.getRightVector()
-				* (delta_x / scene->gl_renderer_.getWidth()) 
-				* 1.4 * camera.getDistance()   // take distance from this scene
-				* 2.0 * scene->gl_renderer_.getXScale()
-				* mouse_sensitivity_ / TRANSLATE_FACTOR;
-
-			// calculate translation in y-axis direction
-			Vector3 up_translate 		= camera_scene.getLookUpVector() 
-				* (delta_y / scene->gl_renderer_.getHeight()) 
-				* 1.4 * camera.getDistance() // take distance from this scene
-				* 2.0 * scene->gl_renderer_.getYScale()
-				* mouse_sensitivity_ / TRANSLATE_FACTOR;
-
-			Vector3 v(-right_translate + up_translate);
-
-			stage_->getCamera().translate(v);
-			updateCamera_();
+			move(Vector3(x, -y, 0));
 		}
 
 
-		void Scene::zoomSystem_(Scene *scene)
+		void Scene::zoomSystem_()
 		{
-			Camera& camera = stage_->getCamera();
+			float y = getYDiff_() * ZOOM_FACTOR;
 
-			// Difference between the old and new y position in the window 
-			float delta_y = scene->y_window_pos_new_ - scene->y_window_pos_old_;
-
-			// stop if no movement in y-axis-direction
-			if (delta_y == 0) return;
-
-			Vector3 v((delta_y / 
-						scene->gl_renderer_.getHeight() * camera.getDistance()) // take distance from this scene
-					* scene->stage_->getCamera().getViewVector()
-					* mouse_sensitivity_ / ZOOM_FACTOR);  
-
-			stage_->getCamera().translate(v);
-			updateCamera_();
+			move(Vector3(0, 0, y));
 		}
 
-
-		void Scene::calculateQuaternion_(Quaternion& q, const Quaternion* rotate)
-		{
-			if ((x_window_pos_old_ == x_window_pos_new_) &&
-					(y_window_pos_old_ == y_window_pos_new_))
-			{
-				return;
-			}
-
-			Quaternion tmp;
-
-			float right1 = (gl_renderer_.getWidth()  - x_window_pos_old_) / 
-				gl_renderer_.getWidth() * mouse_sensitivity_ / -ROTATE_FACTOR;
-			float up1 = 	 (gl_renderer_.getHeight() - y_window_pos_old_) / 
-				gl_renderer_.getHeight() * mouse_sensitivity_ / -ROTATE_FACTOR;
-			float right2 = (gl_renderer_.getWidth()  - x_window_pos_new_) / 
-				gl_renderer_.getWidth() * mouse_sensitivity_ / -ROTATE_FACTOR;
-			float up2 = 	 (gl_renderer_.getHeight() - y_window_pos_new_) / 
-				gl_renderer_.getHeight() * mouse_sensitivity_ / -ROTATE_FACTOR;
-
-			const Camera& camera = stage_->getCamera();
-
-			Vector3 vv = camera.getViewVector();
-			vv.normalize();
-			vv *= 20.0;
-
-			Vector3 a = -camera.getRightVector()  * right1
-				+ camera.getLookUpVector() * up1
-				+ vv * sphereProject_(0.8, right1, up1);
-
-			Vector3 b = -camera.getRightVector()  * right2
-				+ camera.getLookUpVector() * up2
-				+ vv * sphereProject_(0.8, right2, up2);
-
-			Vector3 cross = a % b;
-
-			// calculate the rotate vector from the quaternion, if given
-			// and apply it
-			if (rotate != 0)
-			{
-				Matrix4x4 m;
-				rotate->getRotationMatrix(m);
-				Vector4 tmp_vector(cross.x, cross.y, cross.z);
-				tmp_vector = m * tmp_vector;
-				cross.set(tmp_vector.x, tmp_vector.y, tmp_vector.z);
-			}
-
-			float phi = (a - b).getLength();
-
-			if (BALL_REAL_GREATER(phi, (float)1, Constants::EPSILON))
-			{
-				phi = (float)1;
-			}
-
-			if (BALL_REAL_LESS(phi, (float)-1, Constants::EPSILON))
-			{
-				phi = (float)-1;
-			}
-
-			phi = (float)(2.0 * asin((float)phi));
-
-			tmp.set(cross, -phi);
-			q = tmp;
-		}
-
-
-		float Scene::sphereProject_(float radius, float x, float y)
-		{
-			float dist = (float)sqrt((float)(x * x + y * y));
-			float z;
-
-			if (BALL_REAL_LESS(dist, radius * sqrt(2.0) / 2.0, Constants::EPSILON))
-			{
-				z = (float)sqrt((float)(radius * radius - dist * dist));
-			}
-			else
-			{
-				float t = radius / sqrt(2.0);
-				z = t * t / dist;
-			}
-
-			return z;
-		}
 
 		// picking routine ------
 		void Scene::selectObjects_(bool select)
@@ -1524,21 +1395,21 @@ namespace BALL
 			{
 				case (Qt::ShiftButton | Qt::LeftButton): 
 				case  Qt::MidButton:
-					zoomSystem_(this);
+					zoomSystem_();
 					break;
 
 				case (Qt::ControlButton | Qt::LeftButton):
 				case  Qt::RightButton:
-					translateSystem_(this);
+					translateSystem_();
 					break;
 
 				case (Qt::LeftButton | Qt::RightButton):
 				case (Qt::LeftButton | Qt::ShiftButton | Qt::ControlButton):
-					rotateSystem2_(this);
+					rotateSystemClockwise_();
 					break;
 
 				case Qt::LeftButton:
-					rotateSystem_(this);
+					rotateSystem_();
 					break;
 
 				default:
@@ -1558,8 +1429,8 @@ namespace BALL
 			Camera& camera = stage_->getCamera();
 
 			// Difference between the old and new position in the window 
-			float delta_x = x_window_pos_new_ - x_window_pos_old_;
-			float delta_y = y_window_pos_new_ - y_window_pos_old_;
+			float delta_x = getXDiff_() / 4.0;
+			float delta_y = getYDiff_() / 4.0;
 
 			// stop if no movement
 			if (delta_x == 0 && delta_y == 0) return;
@@ -1573,10 +1444,10 @@ namespace BALL
 				case (Qt::ShiftButton | Qt::LeftButton): 
 				case  Qt::MidButton:
 				{
-					Vector3 v((delta_y / 
-								gl_renderer_.getHeight() * camera.getDistance()) 
-							* -stage_->getCamera().getViewVector()
-							* mouse_sensitivity_ / ZOOM_FACTOR);  
+					Vector3 v = delta_y * camera.getDistance()
+											* -stage_->getCamera().getViewVector()
+											* ZOOM_FACTOR;  
+
 					m.setTranslation(v);
 					break;
 				}
@@ -1587,18 +1458,14 @@ namespace BALL
 				{
 					// calculate translation in x-axis direction
 					Vector3 right_translate = camera.getRightVector()
-						* (delta_x / gl_renderer_.getWidth()) 
-						* 1.4 * camera.getDistance()   
-						* 2.0 * gl_renderer_.getXScale()
-						* mouse_sensitivity_ / TRANSLATE_FACTOR;
+						* delta_x * camera.getDistance()   
+						* TRANSLATE_FACTOR;
 
 					// calculate translation in y-axis direction
-					Vector3 up_translate 		= camera.getLookUpVector() 
-						* (delta_y / gl_renderer_.getHeight()) 
-						* 1.4 * camera.getDistance() 
-						* 2.0 * gl_renderer_.getYScale()
-						* mouse_sensitivity_ / TRANSLATE_FACTOR;
-
+					Vector3 up_translate = camera.getLookUpVector()
+						* delta_y * camera.getDistance()   
+						* TRANSLATE_FACTOR;
+					
 					m.setTranslation(right_translate - up_translate);
 					break;
 				}
@@ -1606,12 +1473,12 @@ namespace BALL
 				// rotate
 				case Qt::LeftButton:
 				{
-					float angle_x = delta_x * (mouse_sensitivity_ / (ROTATE_FACTOR * 3));
-					float angle_y = delta_y * (mouse_sensitivity_ / (ROTATE_FACTOR * -3));
-					float angle_total = fabs(angle_x) + fabs(angle_y);
+					delta_x *= ROTATE_FACTOR * 4.;
+					delta_y *= ROTATE_FACTOR * 4.;
+					float angle_total = fabs(delta_x) + fabs(delta_y);
 
-					Vector3 rotation_axis = (camera.getLookUpVector() * angle_x / angle_total) +
-																	(camera.getRightVector()  * angle_y / angle_total);
+					Vector3 rotation_axis = (camera.getLookUpVector() * delta_x / angle_total) +
+																	(camera.getRightVector()  * delta_y / angle_total);
 
 					m.rotate(Angle(angle_total, false), rotation_axis);
 					break;
@@ -1621,9 +1488,9 @@ namespace BALL
 				case (Qt::LeftButton | Qt::RightButton):
 				case (Qt::LeftButton | Qt::ShiftButton | Qt::ControlButton):
 				default:
-					float angle_x = delta_x * (mouse_sensitivity_ / (ROTATE_FACTOR * 3));
+					delta_x *= ROTATE_FACTOR2;
 					Vector3 rotation_axis = camera.getViewVector();
-					m.rotate(Angle(angle_x, false), rotation_axis);
+					m.rotate(Angle(delta_x, false), rotation_axis);
 					break;
 			}
 
@@ -1789,7 +1656,7 @@ namespace BALL
 			qmouse_event->accept();
 
 			y_window_pos_new_ = y_window_pos_old_ + (qmouse_event->delta()/120*mouse_wheel_sensitivity_);
-			zoomSystem_(this);
+			zoomSystem_();
 			y_window_pos_old_ = y_window_pos_new_;
 		}
 #endif

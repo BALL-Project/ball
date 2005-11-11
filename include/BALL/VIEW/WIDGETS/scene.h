@@ -1,15 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.21 2005/11/10 01:37:22 amoll Exp $
+// $Id: scene.h,v 1.62.2.22 2005/11/11 10:59:03 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
 #define BALL_VIEW_WIDGETS_SCENE_H
-
-#ifndef BALL_MATHS_QUATERNION_H
-#	include <BALL/MATHS/quaternion.h>
-#endif
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 #	include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -648,20 +644,15 @@ namespace BALL
 			void processRotateModeMouseEvents_(QMouseEvent* e);
 			void processMoveModeMouseEvents_(QMouseEvent* e);
 
-			void rotateSystem_(Scene* scene);
-			void rotateSystem2_(Scene* scene);
-			void translateSystem_(Scene* scene);
-			void zoomSystem_(Scene* scene);
+			void rotateSystem_();
+			void rotateSystemClockwise_();
+			void translateSystem_();
+			void zoomSystem_();
 
 			void selectionPressed_();
 			void selectionReleased_();
 			void selectionPressedMoved_();
 			void deselectionReleased_();
-
-			void calculateQuaternion_(Quaternion& quaternion, const Quaternion* rotate = 0);
-
-			//_ called by calculateQuaternion_
-			float sphereProject_(float radius, float x, float y);
 
 			void selectObjects_(bool select = true);
 
@@ -673,6 +664,9 @@ namespace BALL
 
 			void createCoordinateSystem_()
 				throw();
+
+			inline float getXDiff_();
+			inline float getYDiff_();
 
 			//_ state of the scene: picking or rotate mode?
 			ModeType current_mode_;
@@ -688,7 +682,6 @@ namespace BALL
 			Index show_popup_infos_id_;
 			
 			Vector3 system_origin_;
-			Quaternion quaternion_;
 
 			bool need_update_;
 			bool update_running_;
@@ -741,6 +734,7 @@ namespace BALL
 			bool show_info_;
 			PreciseTime time_;
 			float last_fps_;
+			float zoom_factor_;
 		};
 
 
