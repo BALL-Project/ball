@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.19.4.8 2005/11/11 17:21:23 leonhardt Exp $
+// $Id: mainControl.sip,v 1.19.4.9 2005/11/11 23:08:13 amoll Exp $
 //
 
 class MainControl
@@ -53,7 +53,11 @@ class MainControl
 	void redrawAllRepresentations(bool /rebuild_display_lists/ = false) throw();
  	
 	void update(Composite& /composite/, bool /changed_hierarchy/ = true) throw();
-	bool insert(Composite& /Transfer/, String = "") throw();
+
+	// we get a seg fault under windows if we use default parameters here:
+	bool insert(Composite& /Transfer/, String) throw();
+	bool insert(Composite& /Transfer/) throw();
+
 	bool remove(Composite& /composite/, bool = true, bool = true) throw();
 
 	bool update(Representation& /composite/) throw();
