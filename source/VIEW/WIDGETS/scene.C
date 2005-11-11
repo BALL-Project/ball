@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.59 2005/11/10 01:36:54 amoll Exp $
+// $Id: scene.C,v 1.171.2.60 2005/11/11 00:14:30 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -344,6 +344,8 @@ namespace BALL
 		{
 			QGLWidget::initializeGL();
 			if (!format().rgba())  Log.error() << "no rgba mode for OpenGL available." << endl;
+
+			makeCurrent();
 
 			gl_renderer_.init(*this);
 			gl_renderer_.initSolid();
