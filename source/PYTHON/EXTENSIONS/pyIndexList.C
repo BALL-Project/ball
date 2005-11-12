@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyIndexList.C,v 1.1.2.1 2005/11/12 11:18:02 oliver Exp $
+// $Id: pyIndexList.C,v 1.1.2.2 2005/11/12 14:16:30 oliver Exp $
 //
 
 #include <BALL/PYTHON/pyIndexList.h>
@@ -32,7 +32,7 @@ namespace BALL
 		operator = (idx_list);
 	}
 
-	PyIndexList::PyIndexList(const std::list<Position>& pos_list);
+	PyIndexList::PyIndexList(const std::list<Position>& pos_list)
 	{
 		operator = (pos_list);
 	}
@@ -42,47 +42,47 @@ namespace BALL
 		operator = (idx_vector);
 	}
 
-	PyIndexList::PyIndexList(const std::vector<Position>& pos_vector);
+	PyIndexList::PyIndexList(const std::vector<Position>& pos_vector)
 	{
 		operator = (pos_vector);
 	}
 
-	void PyIndexList::operator = (const std::list<Index>& idx_list)
+	PyIndexList& PyIndexList::operator = (const std::list<Index>& idx_list)
 	{
 		// clear the old contents
 		clear();
 		
-		std::copy(idx_list.begin(), idx_list.end(), std::back_inserter<Index>(*this));		
+		std::copy(idx_list.begin(), idx_list.end(), std::back_inserter<PyIndexList>(*this));		
 
 		return *this;
 	}
 
-	void PyIndexList::operator = (const std::list<Position>& pos_list)
+	PyIndexList& PyIndexList::operator = (const std::list<Position>& pos_list)
 	{
 		// clear the old contents
 		clear();
 		
-		std::copy(pos_list.begin(), pos_list.end(), std::back_inserter<Index>(*this));		
+		std::copy(pos_list.begin(), pos_list.end(), std::back_inserter<PyIndexList>(*this));		
 
 		return *this;
 	}
 
-	void PyIndexList::operator = (const std::vector<Index>& idx_vector)
+	PyIndexList& PyIndexList::operator = (const std::vector<Index>& idx_vector)
 	{
 		// clear the old contents
 		clear();
 		
-		std::copy(idx_vector.begin(), idx_vector.end(), std::back_inserter<Index>(*this));		
+		std::copy(idx_vector.begin(), idx_vector.end(), std::back_inserter<PyIndexList>(*this));		
 
 		return *this;
 	}
 
-	void PyIndexList::operator = (const std::vector<Position>& pos_vector)
+	PyIndexList& PyIndexList::operator = (const std::vector<Position>& pos_vector)
 	{
 		// clear the old contents
 		clear();
 		
-		std::copy(pos_vector.begin(), pos_vector.end(), std::back_inserter<Position>(*this));		
+		std::copy(pos_vector.begin(), pos_vector.end(), std::back_inserter<PyIndexList>(*this));		
 
 		return *this;
 	}

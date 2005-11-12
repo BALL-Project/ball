@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.33.4.10 2005/11/11 17:21:18 leonhardt Exp $
+# $Id: Makefile,v 1.33.4.11 2005/11/12 14:16:29 oliver Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -42,6 +42,7 @@ PYBALL_SOURCES = \
 	pyBALLSipHelper.C\
 	pyCompositeList.C\
 	pyRepresentationList.C\
+	pyIndexList.C\
 	pyAtomList.C \
 	pyBondList.C \
 	pyConstant.C \

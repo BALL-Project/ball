@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.sip,v 1.15.6.4 2005/11/12 11:18:01 oliver Exp $
+// $Id: file.sip,v 1.15.6.5 2005/11/12 14:16:29 oliver Exp $
 //
 
 class std__openmode
@@ -45,12 +45,12 @@ class File
 
 
 	enum {
-		MODE_IN = BALL_File__IN,
-		MODE_OUT = BALL_File__OUT,
-		MODE_APP = BALL_File__APP,
-		MODE_BINARY = BALL_File__BINARY,
-		MODE_ATE = BALL_File__ATE,
-		MODE_TRUNC = BALL_File__TRUNC
+		MODE_IN,
+		MODE_OUT,
+		MODE_APP,
+		MODE_BINARY,
+		MODE_ATE,
+		MODE_TRUNC
 	};
 
 

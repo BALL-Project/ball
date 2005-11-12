@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.51.6.1 2005/11/08 11:40:34 amoll Exp $
+// $Id: file.C,v 1.51.6.2 2005/11/12 14:16:30 oliver Exp $
 //
 
 #include <BALL/SYSTEM/file.h>
@@ -22,7 +22,14 @@
 namespace BALL 
 {
 	using namespace Exception;
-
+ 
+	const File::OpenMode File::MODE_IN = std::ios::in;
+	const File::OpenMode File::MODE_OUT = std::ios::out;
+	const File::OpenMode File::MODE_APP = std::ios::app;
+	const File::OpenMode File::MODE_BINARY = std::ios::binary;
+	const File::OpenMode File::MODE_ATE = std::ios::ate;
+	const File::OpenMode File::MODE_TRUNC = std::ios::trunc;
+ 
 	File::CannotWrite::CannotWrite(const char* file, int line, const String& filename)
 		throw()
 		:	Exception::GeneralException(file, line, "File::CannotWrite", ""),
