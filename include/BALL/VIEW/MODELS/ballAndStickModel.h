@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.14.2.2 2005/09/01 22:17:56 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.14.2.3 2005/11/12 01:00:46 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
@@ -108,12 +108,6 @@ namespace BALL
 			/** Inspection of the radius of the ball-component.
 			*/
 			float getBallRadius() const
-				throw();
-
-			/** Copy the radius of the ball-component to real.
-					\param  radius the real receiving the radius of the ball-component
-			*/
-			void getBallRadius(float& radius)
 				throw();
 
 			/** Change the radius of the stick-component.
