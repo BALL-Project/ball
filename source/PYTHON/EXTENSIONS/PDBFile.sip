@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.sip,v 1.11.2.1 2005/07/20 18:54:35 oliver Exp $
+// $Id: PDBFile.sip,v 1.11.2.2 2005/11/12 11:17:59 oliver Exp $
 //
 
 class PDBFile
@@ -18,9 +18,9 @@ class PDBFile
   virtual bool read(Protein& /protein/) throw (ParseError);
   virtual bool read(Molecule& /molecule/) throw (ParseError);
   virtual bool read(System& /system/) throw (ParseError);
-  virtual bool write(const Protein& /protein/) throw(CannotWrite);
-  virtual bool write(const Molecule& /protein/) throw(CannotWrite);
-  virtual bool write(const System& /system/) throw(CannotWrite);
+  virtual bool write(const Protein& /protein/) throw(File::CannotWrite);
+  virtual bool write(const Molecule& /protein/) throw(File::CannotWrite);
+  virtual bool write(const System& /system/) throw(File::CannotWrite);
   void operator >> (Protein& /protein/);
   void operator >> (Molecule& /molecule/);
   void operator >> (System& /system/);

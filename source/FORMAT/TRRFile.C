@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TRRFile.C,v 1.8.6.1 2005/11/08 12:46:55 amoll Exp $
+// $Id: TRRFile.C,v 1.8.6.2 2005/11/12 11:17:57 oliver Exp $
 //
 
 #include <BALL/FORMAT/TRRFile.h>
@@ -118,7 +118,7 @@ namespace BALL
 		return has_velocities_;
 	}
 
-	void TRRFile::setVelocityStorage(const bool storage)
+	void TRRFile::setVelocityStorage(bool storage)
 		throw()
 	{
 		has_velocities_ = storage;
@@ -130,7 +130,7 @@ namespace BALL
 		return has_forces_;
 	}
 
-	void TRRFile::setForceStorage(const bool storage)
+	void TRRFile::setForceStorage(bool storage)
 		throw()
 	{
 		has_forces_ = storage;
@@ -160,7 +160,7 @@ namespace BALL
 		return timestep_;
 	}
 
-	void TRRFile::setTimestep(const float timestep)
+	void TRRFile::setTimestep(float timestep)
 		throw()
 	{
 		timestep_ = timestep;
@@ -184,15 +184,15 @@ namespace BALL
 		return box3_;
 	}
 
-	void TRRFile::setBoundingBox(const Vector3 box[3])
+	void TRRFile::setBoundingBox(const Vector3& x, const Vector3& y, const Vector3& z)
 		throw()
 	{
-		box1_ = box[0];
-		box2_ = box[1];
-		box3_ = box[2];
+		box1_ = x;
+		box2_ = y;
+		box3_ = z;
 	}
 
-	bool TRRFile::writeNextHeader(const TRRHeader header)
+	bool TRRFile::writeNextHeader(const TRRHeader& header)
 		throw()
 	{
 		Size i;
@@ -333,7 +333,9 @@ namespace BALL
 		header_.timestep_time = timestep_;
 
 		if (!writeNextHeader(header_))
+		{
 			return false;
+		}
 
 		// now follows the bounding box information
 		if (header_.bounding_box_data_size == 3 * precision_)

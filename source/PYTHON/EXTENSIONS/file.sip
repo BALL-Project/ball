@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.sip,v 1.15.6.3 2005/11/08 11:40:46 amoll Exp $
+// $Id: file.sip,v 1.15.6.4 2005/11/12 11:18:01 oliver Exp $
 //
 
 class std__openmode
@@ -14,19 +14,6 @@ class std__openmode
 	public:
 };
 
-// nested class File::CannotWrite
-class CannotWrite
-{
-%TypeHeaderCode
-	#include <BALL/SYSTEM/file.h>
-	using namespace BALL;
-	typedef File::CannotWrite CannotWrite;
-%End
-  public:
-  CannotWrite(const char* /file/, int /line/, const String& /filename/) throw();
-  ~CannotWrite() throw();
-  String getFilename() const throw();
-};
 
 
 class File
@@ -35,15 +22,27 @@ class File
 	#include <BALL/SYSTEM/file.h>
 	using namespace BALL;
 
+/*
 	const File::OpenMode BALL_File__IN = File::MODE_IN;
 	const File::OpenMode BALL_File__OUT = File::MODE_OUT;
 	const File::OpenMode BALL_File__APP = File::MODE_APP;
 	const File::OpenMode BALL_File__BINARY = File::MODE_BINARY;
 	const File::OpenMode BALL_File__ATE = File::MODE_ATE;
 	const File::OpenMode BALL_File__TRUNC = File::MODE_TRUNC;
+*/
 
 %End
   public:
+
+	// nested class File::CannotWrite
+	class CannotWrite
+	{
+		 public:
+		 CannotWrite(const char* /file/, int /line/, const String& /filename/) throw();
+		 ~CannotWrite() throw();
+		 String getFilename() const throw();
+	};
+
 
 	enum {
 		MODE_IN = BALL_File__IN,

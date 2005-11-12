@@ -1,0 +1,52 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pyIndexList.sip,v 1.1.2.1 2005/11/12 11:18:02 oliver Exp $
+//
+
+%MappedType PyIndexList
+{
+%TypeHeaderCode
+	#include <BALL/PYTHON/pyIndexList.h>
+	#include "sipBALLIndex.h"
+  #include <BALL/PYTHON/pyBALLSipHelper.h>
+%End
+%ConvertFromTypeCode
+	PyObject *pl;
+
+	if ((pl = PyList_New(0)) == NULL)
+	{
+		return NULL;
+	}
+
+	// Convert the list.
+	for (PyIndexList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	{
+		if (PyList_Append(pl, PyInt_FromLong(*it)) < 0)
+		{
+			Py_DECREF(pl);
+			return NULL;
+		}
+	}
+
+	return pl;
+%End
+ 
+%ConvertToTypeCode
+	// Convert a Python list of Index instances to an IndexList object on the
+	// heap.
+ 
+	PyIndexList* index_list = new PyIndexList;
+ 
+	for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)
+	{
+		Index index = PyInt_AsLong(PyList_GET_ITEM(sipPy,i));
+		index_list -> push_back(index);
+	}
+ 
+	*sipCppPtr = index_list;
+
+	return 1;
+%End
+};
+

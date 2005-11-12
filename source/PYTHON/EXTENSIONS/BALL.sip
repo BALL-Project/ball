@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.40.4.10 2005/11/11 17:21:17 leonhardt Exp $
+// $Id: BALL.sip,v 1.40.4.11 2005/11/12 11:17:58 oliver Exp $
 //
 
 /////////////////////////
@@ -59,10 +59,10 @@
 // binarySearchTree.h // ??
 %Include bitVector.sip 
 // forEach.h // not supported -> extractors!
-// hashGrid.h // ??
-// hashMap.h // ?? ->pyAtomDict
-// hashSet.h // ??
-// list.h // ??
+// %Include hashGrid.h // ?? too generic... Possibly create an Atom* grid from it?
+// hashMap.h // -> dictionary
+// hashSet.h // -> dictionary
+// list.h // -> Python lists
 // listStack.h // ?? 
 %Include options.sip
 %Include regularData1D.sip
@@ -71,9 +71,9 @@
 // triple.h -- generic, no way...
 // quadruple.h -- generic, no way...
 %Include regularExpression.sip
-%Include string.sip
-// stringHashMap.h // ??
-// stringHashSet.h // ??
+%Include string.sip 
+// stringHashMap.h // -> dictionaries
+// stringHashSet.h // -> dictionaries
 
 
 // ENERGY
@@ -83,21 +83,29 @@
 
 
 // FORMAT
+%Include DCDFile.sip
 %Include HINFile.sip
 %Include INIFile.sip
+// %Include JCAMPFile.sip
+%Include KCFFile.sip
 %Include MOL2File.sip
 %Include MOLFile.sip
-%Include SDFile.sip
-%Include lineBasedFile.sip
-%Include genericMolFile.sip
+// %Include NMRStarFile.sip
 %Include PDBFile.sip
+%Include PDBInfo.sip
+%Include PDBRecords.sip
+%Include PDBdefs.sip // only the most relevant enums, we do not expose the internals
+%Include SDFile.sip
+%Include TRRFile.sip
 %Include XYZFile.sip
-// genericPDBFile.h // not supported
-// %Include parameterSection.sip
-// %Include parameters.sip
+// %Include bruker1DFile.sip
+// %Include bruker2DFile.sip
+%Include genericMolFile.sip
+%Include lineBasedFile.sip
+%Include parameterSection.sip
+%Include parameters.sip
 %Include resourceFile.sip
 %Include trajectoryFile.sip
-%Include DCDFile.sip
 
 
 // KERNEL
@@ -221,13 +229,9 @@
 
 // PYTHON
 %Include extractors.sip
-%Include pyAtomDict.sip
-%Include pyAtomList.sip
-%Include pyAtomProcessor.sip
-%Include pyBondProcessor.sip
-%Include pyFragmentProcessor.sip
-%Include pyResidueProcessor.sip
-%Include pyCompositeProcessor.sip
+%Include pyIndexList.sip // a list of numbers (indices etc.)
+%Include pyAtomDict.sip // a dictionary mapping to atoms
+%Include pyAtomList.sip // a list of atom (pointers)
 %Include pyBondList.sip
 %Include pyCompositeList.sip
 %Include pyAtomContainerList.sip
@@ -240,6 +244,11 @@
 %Include pyProteinList.sip
 %Include pyNucleotideList.sip
 %Include pyNucleicAcidList.sip
+%Include pyAtomProcessor.sip 
+%Include pyBondProcessor.sip
+%Include pyFragmentProcessor.sip
+%Include pyResidueProcessor.sip
+%Include pyCompositeProcessor.sip
 
 // QSAR
 //%Include descriptor.sip
