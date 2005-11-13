@@ -24,7 +24,7 @@ PREFIX = $(BENCHMARKDIR)\\
 all:	$(EXECUTABLES)
 
 clean: 
-	cd $(BENCHMARKDIR)
-	del /S /Q *.exe > NUL 2> NUL
-	cd $(MAKEDIR)
-	del /Q /S $(TARGETDIR)\*.* > NUL 2> NUL
+	cd "$(BENCHMARKDIR)"
+	$(MYDEL) *.exe
+	cd "$(MAKEDIR)"
+	$(MYDEL) $(TARGETDIR)\*.*

@@ -26,10 +26,10 @@ UICDIR = $(SDIR)\Applications\BALLView
 all: BALLView.exe
 
 clean:
-	del /Q /S $(TARGETDIR)\*.* > NUL 2> NUL
-	cd $(UICDIR)
-	del /S /Q *.obj *.mymoc *.myui > NUL 2> NUL
-	cd $(MAKEDIR)
+	cd "$(UICDIR)"
+	$(MYDEL) *.obj *.mymoc *.myui
+	cd "$(MAKEDIR)"
+	$(MYDEL) $(TARGETDIR)\*.*
 
 BALLView.exe:  $(UICS) $(MOCS) $(OBJS) 
 #compile the resource file:

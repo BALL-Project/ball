@@ -8,6 +8,7 @@ BINPATH		=	$(BALL_CONTRIB)\bin
 SDIR		=	$(BALL_PATH)\source
 INC_DIR		=	$(BALL_PATH)\include\
 
+MYDEL		=	"$(BALL_WIN_DIR)\mydel.bat"
 ######### optimization and debugging ##########
 ######### compiler options 
 CC_OPT = /O2 /Ot /GA /Og
