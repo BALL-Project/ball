@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.19.4.9 2005/11/11 23:08:13 amoll Exp $
+// $Id: mainControl.sip,v 1.19.4.10 2005/11/13 18:36:45 amoll Exp $
 //
 
 class MainControl
@@ -136,4 +136,5 @@ class MainControl
 	virtual void openFile(const String&) throw();
 	void saveBALLViewProjectFile(const String&);
 	void loadBALLViewProjectFile(const String&) throw();
+	void processEvents(Size ms);
 };
