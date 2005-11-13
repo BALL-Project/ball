@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.sip,v 1.2.4.5 2005/11/11 17:21:25 leonhardt Exp $
+// $Id: scene.sip,v 1.2.4.6 2005/11/13 18:05:19 amoll Exp $
 //
 
 class Scene 
@@ -54,9 +54,9 @@ static Scene* getInstance(Position /index/);
 	void enterActiveStereo();
 	void exitStereo();
 	void setVisible(bool);
-	//void rotate(float, float);
-	//void rotateClockwise(float);
-	//void move(Vector3);
+	void rotate(float, float);
+	void rotateClockwise(float);
+	void move(Vector3);
 
 //  void writePreferences(INIFile&) throw();
   ~Scene() throw();
