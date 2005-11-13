@@ -9,6 +9,7 @@ SDIR		=	$(BALL_PATH)\source
 INC_DIR		=	$(BALL_PATH)\include\
 
 MYDEL		=	"$(BALL_WIN_DIR)\mydel.bat"
+MYDEL_R		=	"$(BALL_WIN_DIR)\mydel_recursive.bat"
 ######### optimization and debugging ##########
 ######### compiler options 
 CC_OPT = /O2 /Ot /GA /Og

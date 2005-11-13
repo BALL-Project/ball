@@ -24,7 +24,5 @@ PREFIX = $(BENCHMARKDIR)\\
 all:	$(EXECUTABLES)
 
 clean: 
-	cd "$(BENCHMARKDIR)"
-	$(MYDEL) *.exe
-	cd "$(MAKEDIR)"
+	$(MYDEL) "$(BENCHMARKDIR)"\*.exe
 	$(MYDEL) $(TARGETDIR)\*.*

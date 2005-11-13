@@ -14,11 +14,7 @@ all: $(EXTENSION_DIR)\BALL.mysip BALL.dll
 
 clean:
 	move BALLmodule.C .. > NUL 2> NUL
-	cd "$(EXTENSION_DIR)"
-	$(MYDEL) BALL.mysip sipBALL*.*
-	cd "$(MAKEDIR)"
-	$(MYDEL) *.C *.h *.sip *.obj
-	$(MYDEL) (TARGETDIR)\*.*
+	$(MYDEL) "$(EXTENSION_DIR)\BALL.mysip"  "$(EXTENSION_DIR)\sipBALL*.*"  *.C *.h *.sip *.obj  $(TARGETDIR)\*.* 
 	move ..\BALLmodule.C . > NUL 2> NUL
 
 BALL.dll:   $(OBJS) 

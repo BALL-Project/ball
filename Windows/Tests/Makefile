@@ -41,7 +41,5 @@ EXECUTABLES = \
 all:	$(EXECUTABLES)
 
 clean: 
-	cd $(SDIR)\TEST
-	del /S /Q *.exe > NUL 2> NUL
-	cd $(MAKEDIR)
-	del /Q /S $(TARGETDIR)\*.* > NUL 2> NUL
+	$(MYDEL) "$(SDIR)\TEST"\*.exe
+	$(MYDEL) $(TARGETDIR)\*.*

@@ -33,9 +33,10 @@ UICDIR = "$(INC_DIR)\BALL\VIEW\UIC"
 all: libVIEW.dll
 
 clean:
-	$(MYDEL) $(SDIR)\VIEW\*.obj $(SDIR)\VIEW\*._obj
-	$(MYDEL) $(INC_DIR)\*.mymoc
-	$(MYDEL) $(TARGETDIR)\*.* mocfiles\*.*
+	cd "$(SDIR)\VIEW"
+	$(MYDEL_R) *.obj  *._obj  *.mymoc *Data.C *.myui
+	cd "$(MAKEDIR)"
+	$(MYDEL)   $(TARGETDIR)\*.*  mocfiles\*.*
 
 libVIEW.dll:  $(UICS) $(MOCS) $(OBJS) 
 	$(LINKDLL) /OUT:$(TARGETDIR)\libVIEW.dll 
