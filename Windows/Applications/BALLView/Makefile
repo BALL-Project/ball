@@ -18,6 +18,12 @@ UICDIR = $(SDIR)\Applications\BALLView
 	$(QTDIR)\bin\uic -o "$(*R)Data.C" -impl "$(*R)Data.h" "$(*).ui"
 	echo A >  $(*).myui
 
+.ui.myui2:
+	echo running uic and moc for $(*B)
+	$(QTDIR)\bin\uic -o "$(*R).h"  "$(*).ui"
+	$(QTDIR)\bin\uic -o "$(*R).C" -impl "$(*R).h" "$(*).ui"
+	echo A >  $(*).myui2
+
 .h.mymoc:
 	echo running moc for $(*B)
 	$(QTDIR)\bin\moc -o "$(*R)_moc.C"  "$(*).h"
@@ -27,7 +33,7 @@ all: BALLView.exe
 
 clean:
 	cd "$(UICDIR)"
-	$(MYDEL) *.obj *.mymoc *.myui
+	$(MYDEL) *.obj *.mymoc *.myui *.myui2 *Data.* *_moc.C aboutDialog.C aboutDialog.h
 	cd "$(MAKEDIR)"
 	$(MYDEL) $(TARGETDIR)\*.*
 

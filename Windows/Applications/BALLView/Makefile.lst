@@ -13,7 +13,7 @@ OBJS = \
 
 UICS = \
 ..\..\..\source\Applications\BALLView\demoTutorialDialog.myui\
-..\..\..\source\Applications\BALLView\aboutDialog.myui
+..\..\..\source\Applications\BALLView\aboutDialog.myui2\
 
 MOCS = \
 ..\..\..\source\Applications\BALLView\aboutDialog.mymoc\
