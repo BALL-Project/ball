@@ -35,6 +35,8 @@ all: libVIEW.dll
 clean:
 	cd "$(SDIR)\VIEW"
 	$(MYDEL_R) *.obj  *._obj  *.mymoc *Data.C *.myui
+	cd "$(INC_DIR)\BALL\VIEW"
+	$(MYDEL_R) *.mymoc
 	cd "$(MAKEDIR)"
 	$(MYDEL)   $(TARGETDIR)\*.*  mocfiles\*.*
 
