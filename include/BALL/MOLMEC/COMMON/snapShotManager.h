@@ -1,7 +1,7 @@
 	// -*- Mode: C++; tab-width: 2; -*-
 	// vi: set ts=2:
 	//
-	// $Id: snapShotManager.h,v 1.18.4.3 2005/07/30 21:53:04 amoll Exp $
+	// $Id: snapShotManager.h,v 1.18.4.4 2005/11/13 17:40:18 amoll Exp $
 	//
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -35,7 +35,7 @@ class BALL_EXPORT SnapShotManager
 	public:
 
 	///  Local class for handling options
-	struct Option
+	BALL_EXPORT struct Option
 	{
 		/** After how many snapshots shall they be flushed to the hard disk 
 				@see Default::FLUSH_TO_DISK_FREQUENCY
@@ -45,7 +45,7 @@ class BALL_EXPORT SnapShotManager
 	};
 
 	/// Local class for handling default values for the options
-	struct Default
+	BALL_EXPORT struct Default
 	{
 		/** This is the default value of the number of snapshots to be taken
 				before writing them to hard disk. Default is ...
