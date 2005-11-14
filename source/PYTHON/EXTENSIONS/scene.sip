@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.sip,v 1.2.4.6 2005/11/13 18:05:19 amoll Exp $
+// $Id: scene.sip,v 1.2.4.7 2005/11/14 13:49:13 amoll Exp $
 //
 
 class Scene 
@@ -57,7 +57,8 @@ static Scene* getInstance(Position /index/);
 	void rotate(float, float);
 	void rotateClockwise(float);
 	void move(Vector3);
-
+	void moveComposites(PyCompositeList, Vector3);
+	void rotateComposites(PyCompositeList, float, float, float = 0);
 //  void writePreferences(INIFile&) throw();
   ~Scene() throw();
 };

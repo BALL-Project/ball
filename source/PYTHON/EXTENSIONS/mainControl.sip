@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.19.4.11 2005/11/13 18:37:10 amoll Exp $
+// $Id: mainControl.sip,v 1.19.4.12 2005/11/14 13:49:11 amoll Exp $
 //
 
 class MainControl
@@ -126,7 +126,6 @@ class MainControl
 	void disableLoggingToFile() throw();
 	void setLoggingFilename(const String&) throw();
 	const String& getLoggingFilename() const throw();
-	void moveItems(const Matrix4x4&) throw();
 	void setProxy(const String&, Position);
 	String getProxy() const; 
 	Position getProxyPort() const;

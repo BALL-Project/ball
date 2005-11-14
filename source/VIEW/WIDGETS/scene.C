@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.61 2005/11/11 10:58:41 amoll Exp $
+// $Id: scene.C,v 1.171.2.62 2005/11/14 13:48:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -27,6 +27,9 @@
 
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/MATHS/quaternion.h>
+
+#include <BALL/STRUCTURE/geometricTransformations.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <qpainter.h>
 #include <qmenubar.h>
@@ -657,6 +660,19 @@ namespace BALL
 		}
 
 		/////////////////////////////////////////////////////////
+
+		Vector3 Scene::getTranslationVector_(const Vector3& v)
+		{
+			const Camera& camera = stage_->getCamera();
+
+			Vector3 vv = camera.getViewVector();
+			vv.normalize(); 
+
+			return v.x * camera.getRightVector() +
+						 v.y * camera.getLookUpVector() -
+						 v.z * vv;
+		}
+		
 		void Scene::rotateClockwise(float degree)
 		{
 			Camera camera(stage_->getCamera());
@@ -672,23 +688,13 @@ namespace BALL
 		{
 			Camera& camera = stage_->getCamera();
 
-			Vector3 vv = camera.getViewVector();
-			vv.normalize(); 
-
-			Vector3 x = v.x * camera.getRightVector() +
-									v.y * camera.getLookUpVector() -
-									v.z * vv;
-
-			camera.translate(-x);
+			camera.translate(-getTranslationVector_(v));
 			updateCamera_();
 		}
 
 		void Scene::rotate(float degree_right, float degree_up)
 		{
-			Camera& camera = stage_->getCamera();
-
-			Vector3 vv = camera.getViewVector();
-			vv.normalize(); 
+			const Camera& camera = stage_->getCamera();
 
 			Quaternion q1;
  			q1.set(camera.getLookUpVector(), Angle(degree_right, false).toRadian());
@@ -701,7 +707,88 @@ namespace BALL
 			stage_->getCamera().rotate(q1, system_origin_);
 			updateCamera_();
 		}
+
+		void Scene::moveComposites(const List<Composite*>& composites, Vector3 v)
+		{
+			HashSet<Composite*> roots;
+
+			Vector3 x = getTranslationVector_(v);
+
+			Matrix4x4 m;
+			m.setTranslation(x);
+			TransformationProcessor tp(m);
+
+			List<Composite*>::const_iterator cit = composites.begin();
+			for (; cit != composites.end(); ++cit)
+			{
+				roots.insert(&(**cit).getRoot());
+				(**cit).apply(tp);
+			}
+
+			HashSet<Composite*>::Iterator rit = roots.begin();
+			for(; rit != roots.end(); rit++)
+			{
+				getMainControl()->updateRepresentationsOf(**rit, true, false);
+			}
+		}
 	
+		void Scene::rotateComposites(const List<Composite*>& selection, float degree_right, float degree_up, float degree_clockwise)
+		{
+			const Camera& camera = stage_->getCamera();
+
+			Vector3 vv = camera.getViewVector();
+			vv.normalize(); 
+
+			Quaternion q1;
+ 			q1.set(camera.getLookUpVector(), Angle(degree_right, false).toRadian());
+
+			Quaternion q2;
+ 			q2.set(camera.getRightVector(), Angle(degree_up, false).toRadian());
+
+			Quaternion q3;
+ 			q3.set(camera.getViewVector(), Angle(degree_clockwise, false).toRadian());
+
+ 			q1 += q2;
+ 			q1 += q3;
+			
+			GeometricCenterProcessor center_processor;
+			Vector3 center;
+			List<Composite*>::const_iterator cit = selection.begin();
+			for(; cit != selection.end(); cit++)
+			{
+				(*cit)->apply(center_processor);
+				center += center_processor.getCenter();
+			}
+				
+			center /= (float) selection.size();
+
+			Matrix4x4 mym1, mym2, m;
+			mym1.setTranslation(center * -1);
+			mym2.setTranslation(center);
+
+			q1.getRotationMatrix(m);
+
+			TransformationProcessor tp1(mym1);
+			TransformationProcessor tp2(m);
+			TransformationProcessor tp3(mym2);
+
+			HashSet<Composite*> roots;
+
+			for (cit = selection.begin(); cit != selection.end(); cit++) 
+			{
+				(*cit)->apply(tp1);
+				(*cit)->apply(tp2);
+				(*cit)->apply(tp3) ;
+				roots.insert(&(**cit).getRoot());
+			}
+
+			HashSet<Composite*>::Iterator rit = roots.begin();
+			for(; rit != roots.end(); rit++)
+			{
+				getMainControl()->updateRepresentationsOf(**rit, true, false);
+			}
+		}
+
 		/////////////////////////////////////////////////////////
 
 		float Scene::getXDiff_()
@@ -1378,6 +1465,33 @@ namespace BALL
 			}
 		}
 
+		Index Scene::getMoveModeAction_(const QMouseEvent& e)
+		{
+			switch (e.state())
+			{
+				// zoom
+				case (Qt::ShiftButton | Qt::LeftButton): 
+				case  Qt::MidButton:
+					return MOVE_ZOOM;
+
+				// translate 
+				case (Qt::ControlButton | Qt::LeftButton):
+				case  Qt::RightButton:
+					return MOVE_TRANSLATE;
+
+				// rotate
+				case Qt::LeftButton:
+					return MOVE_ROTATE;
+
+				// rotate2 
+				case (Qt::LeftButton | Qt::RightButton):
+				case (Qt::LeftButton | Qt::ShiftButton | Qt::ControlButton):
+				default:
+					return MOVE_ROTATE_CLOCKWISE;
+			}
+
+			return MOVE_TRANSLATE;
+		}
 
 		void Scene::processRotateModeMouseEvents_(QMouseEvent* e)
 		{
@@ -1435,14 +1549,49 @@ namespace BALL
 			// stop if no movement
 			if (delta_x == 0 && delta_y == 0) return;
 
-			TransformationMessage* msg = new TransformationMessage;
+			Index action = getMoveModeAction_(*e);
+
+			const HashSet<Composite*>& selection = getMainControl()->getSelection();
+			if (selection.size() != 0)
+			{
+				List<Composite*> composites;
+				std::copy(selection.begin(), selection.end(), std::front_inserter(composites));
+
+				switch (action)
+				{
+					case MOVE_ZOOM:
+					{
+						moveComposites(composites, Vector3(0,0, delta_y * ZOOM_FACTOR));
+						return;
+					}
+
+					case MOVE_TRANSLATE:
+					{
+						moveComposites(composites, Vector3(delta_x * TRANSLATE_FACTOR ,-delta_y * TRANSLATE_FACTOR, 0));
+						return;
+					}
+
+					case MOVE_ROTATE:
+					{
+						rotateComposites(composites, delta_x * ROTATE_FACTOR * 4., delta_y * ROTATE_FACTOR * 4., 0);
+						return;
+					}
+
+					case MOVE_ROTATE_CLOCKWISE:
+					{
+						rotateComposites(composites, 0, 0, delta_x * ROTATE_FACTOR * 4.);
+						return;
+					}
+				}
+
+				return;
+			}
+
 			Matrix4x4 m;
 
-			switch (e->state())
+			switch (action)
 			{
-				// zoom
-				case (Qt::ShiftButton | Qt::LeftButton): 
-				case  Qt::MidButton:
+				case MOVE_ZOOM:
 				{
 					Vector3 v = delta_y * camera.getDistance()
 											* -stage_->getCamera().getViewVector()
@@ -1452,9 +1601,7 @@ namespace BALL
 					break;
 				}
 
-				// =============== translate ========================
-				case (Qt::ControlButton | Qt::LeftButton):
-				case  Qt::RightButton:
+				case MOVE_TRANSLATE:
 				{
 					// calculate translation in x-axis direction
 					Vector3 right_translate = camera.getRightVector()
@@ -1470,8 +1617,7 @@ namespace BALL
 					break;
 				}
 
-				// rotate
-				case Qt::LeftButton:
+				case MOVE_ROTATE:
 				{
 					delta_x *= ROTATE_FACTOR * 4.;
 					delta_y *= ROTATE_FACTOR * 4.;
@@ -1484,16 +1630,14 @@ namespace BALL
 					break;
 				}
 
-				// ===================== rotate2 ===========================
-				case (Qt::LeftButton | Qt::RightButton):
-				case (Qt::LeftButton | Qt::ShiftButton | Qt::ControlButton):
+				case MOVE_ROTATE_CLOCKWISE:
 				default:
 					delta_x *= ROTATE_FACTOR2;
 					Vector3 rotation_axis = camera.getViewVector();
 					m.rotate(Angle(delta_x, false), rotation_axis);
-					break;
 			}
 
+			TransformationMessage* msg = new TransformationMessage;
 			msg->setMatrix(m);
 			notify_(msg);
 		}

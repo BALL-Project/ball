@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.22 2005/11/11 10:59:03 amoll Exp $
+// $Id: scene.h,v 1.62.2.23 2005/11/14 13:48:14 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -28,6 +28,8 @@
 #endif
 
 #include <qtimer.h>
+
+class QMouseEvent;
 
 namespace BALL
 {
@@ -151,6 +153,21 @@ namespace BALL
 				PICKING__MODE
 			};
 
+			/// Different Move Mode actions
+			enum MoveModeAction
+			{
+				///
+				MOVE_TRANSLATE,
+
+				///
+				MOVE_ZOOM,
+
+				///
+				MOVE_ROTATE,
+
+				///
+				MOVE_ROTATE_CLOCKWISE
+			};
 			
 			//@} 
 			/** @name Enums 
@@ -558,8 +575,26 @@ namespace BALL
 			///
 			void rotateClockwise(float degree);
 
-			///
+			/** Move the view. \\
+			 		v.x = right  \\
+					v.y = up     \\
+					v.z = view direction 
+			*/
 			void move(Vector3 v);
+
+			/** Move some Composites. \\
+			 		v.x = right  \\
+					v.y = up     \\
+					v.z = view direction 
+			*/
+			void moveComposites(const List<Composite*>& composites, Vector3 v);
+
+			/** Rotate some Composites. \\
+			 		v.x = right  \\
+					v.y = up     \\
+					v.z = view direction 
+			*/
+			void rotateComposites(const List<Composite*>& composites, float degree_right, float degree_up, float degree_clockwise = 0);
 
 			void initTimer();
 			
@@ -648,6 +683,7 @@ namespace BALL
 			void rotateSystemClockwise_();
 			void translateSystem_();
 			void zoomSystem_();
+			Index getMoveModeAction_(const QMouseEvent& e);
 
 			void selectionPressed_();
 			void selectionReleased_();
@@ -667,6 +703,7 @@ namespace BALL
 
 			inline float getXDiff_();
 			inline float getYDiff_();
+			inline Vector3 getTranslationVector_(const Vector3& v);
 
 			//_ state of the scene: picking or rotate mode?
 			ModeType current_mode_;

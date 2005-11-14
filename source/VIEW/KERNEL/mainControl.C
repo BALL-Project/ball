@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.40 2005/11/10 01:36:54 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.41 2005/11/14 13:48:47 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -636,11 +636,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				GeometricObjectSelectionMessage* selection_message = 
 					RTTI::castTo<GeometricObjectSelectionMessage>(*message);
 				selectComposites_(*selection_message);
-			}
-			else if (RTTI::isKindOf<TransformationMessage> (*message))
-			{
-				if (compositesAreLocked()) return;
-				moveItems((dynamic_cast<TransformationMessage*>(message))->getMatrix());
 			}
 			else if (RTTI::isKindOf<RepresentationMessage>(*message))
 			{
@@ -1647,63 +1642,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			}
 		}
 
-
-		void MainControl::moveItems(const Matrix4x4& m)
-			throw()
-		{
-			if (selection_.size() == 0) return;
-
-			// copy list, because selection could change
-			HashSet<Composite*> selection = selection_;
-			HashSet<Composite*>::Iterator it = selection.begin();
-			HashSet<Composite*> roots;
-
-			// rotation
-			if ((m.m14 == 0.0) && (m.m24 == 0.0) && (m.m34 == 0.0))
-			{
-				GeometricCenterProcessor center_processor;
-				Vector3 center;
-				for(; it != selection.end(); it++)
-				{
-					(*it)->apply(center_processor);
-					center += center_processor.getCenter();
-				}
-				
-				center /= (float) selection.size();
-
-				Matrix4x4 mym1, mym2;
-				mym1.setTranslation(center * -1);
-				mym2.setTranslation(center);
-
-				TransformationProcessor tp1(mym1);
-				TransformationProcessor tp2(m);
-				TransformationProcessor tp3(mym2);
-
-				for (it = selection.begin(); it != selection.end(); it++)
-				{
-					(*it)->apply(tp1);
-					(*it)->apply(tp2);
-					(*it)->apply(tp3) ;
-					roots.insert(&(**it).getRoot());
-				}
-			}
-			// translation
-			else
-			{
-				TransformationProcessor tp(m);
-				for(; it != selection.end(); it++)
-				{
-					(*it)->apply(tp);
-					roots.insert(&(**it).getRoot());
-				}
-			}
-
-			HashSet<Composite*>::Iterator rit = roots.begin();
-			for(; rit != roots.end(); rit++)
-			{
-				updateRepresentationsOf(**rit, true, false);
-			}
-		}
 
 		bool MainControl::lockCompositesFor(ModularWidget* widget)
 			throw()
