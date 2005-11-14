@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.sip,v 1.3.6.1 2005/11/11 17:21:20 leonhardt Exp $
+// $Id: colorRGBA.sip,v 1.3.6.2 2005/11/14 11:58:20 amoll Exp $
 //
 
 class ColorRGBA
@@ -19,7 +19,8 @@ class ColorRGBA
   // ColorRGBA(const ColorHSV& /color/) throw();
   ColorRGBA(const char* /value/) throw(InvalidRange, NotInHexFormat);
   ColorRGBA(const String& /value/) throw(InvalidRange, NotInHexFormat);
-  ColorRGBA(const ColorUnit& /red_value/, const ColorUnit& /green_value/, const ColorUnit& /blue_value/, const ColorUnit& /alpha_value/ = 1.0) throw();
+	//  ColorRGBA(const ColorUnit& /red/, const ColorUnit& /green/, const ColorUnit& /blue/, const ColorUnit& /alpha/ = 1.0) throw();
+  ColorRGBA(float /red/, float /green/, float /blue/, float /alpha/ = 1.0) throw();
 	//ColorRGBA(const QColor&, const ColorUnit& = 1.0) throw();
   //virtual ~ColorRGBA() throw();
   void clear() throw();
