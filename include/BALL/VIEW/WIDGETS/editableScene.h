@@ -370,7 +370,7 @@ namespace BALL
 					 * Mouseclick coordinates of the Screen, which will be translated into the 
 					 * 3-dim space of Viewing Volume.
 					 */
-					void insert_(int x_, int y_, PDBAtom &atom_);
+					bool insert_(int x_, int y_, PDBAtom &atom_);
 
 					/**
 					 *  Given a 3-dim. Coordinates (in Viewing Volume) getScreenPosition

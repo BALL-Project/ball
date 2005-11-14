@@ -51,10 +51,10 @@ namespace BALL
 		EditableScene::EditOperation::EditOperation()
 			throw()
 			: operationType(),
-		atom(),
-		bond(),
-		molecule(),
-		description()
+				atom(),
+				bond(),
+				molecule(),
+				description()
 		{ 
 		}
 
@@ -62,10 +62,10 @@ namespace BALL
 		EditableScene::EditOperation::EditOperation(Atom* new_atom, Bond* new_bond, vector <Atom* > new_molecule, String new_description, int new_operation)
 			throw()
 			: operationType((EditableScene::EditOperation::OperationType)new_operation),
-		atom(new_atom),
-		bond(new_bond),
-		molecule(new_molecule),
-		description(new_description)
+				atom(new_atom),
+				bond(new_bond),
+				molecule(new_molecule),
+				description(new_description)
 		{
 		}
 
@@ -73,21 +73,21 @@ namespace BALL
 		EditableScene::EditOperation::EditOperation(const EditOperation& e_Operation)
 			throw()
 			: operationType(e_Operation.operationType),
-		atom(e_Operation.atom),
-		bond(e_Operation.bond),
-		molecule(e_Operation.molecule),
-		description(e_Operation.description)
+				atom(e_Operation.atom),
+				bond(e_Operation.bond),
+				molecule(e_Operation.molecule),
+				description(e_Operation.description)
 		{	
 		}
 
 
 		EditableScene::EditOperation::~EditOperation()	
 			throw()
-			{
+		{
 #ifdef BALL_VIEW_DEBUG
-				Log.info() << "Destructing object EditOperation " << this << " of class EditableScene>" << std::endl;
+			Log.info() << "Destructing object EditOperation " << this << " of class EditableScene>" << std::endl;
 #endif 
-			}
+		}
 
 
 		// undo an EditOperation
@@ -211,35 +211,36 @@ namespace BALL
 		EditableScene::EditableScene()
 			throw()
 			:	Scene(),
-		edit_id_(-1),
-		scaling_id_(-1),
-		first_atom_for_bond_(0),
-		context_menu_composite_(0),
-		context_menu_(this),
-		select_atom_limit_(0.5),
-		select_bond_limit_(0.9),
-		average_atom_radius_limit_(0.7),
-		move_an_atom_(false),
-		edit_atom_type_(6),
-		show_scaling_axes_(false)
+				edit_id_(-1),
+				scaling_id_(-1),
+				first_atom_for_bond_(0),
+				context_menu_composite_(0),
+				context_menu_(this),
+				select_atom_limit_(0.5),
+				select_bond_limit_(0.9),
+				average_atom_radius_limit_(0.7),
+				move_an_atom_(false),
+				edit_atom_type_(6),
+				show_scaling_axes_(false)
 		{
 		}
 
 		EditableScene::EditableScene(QWidget* parent_widget, const char* name, WFlags w_flags)
 			throw()
 			: Scene(parent_widget, name, w_flags),
-		edit_id_(-1),	
-		scaling_id_(-1),
-		first_atom_for_bond_(0),
-		context_menu_composite_(0),
-		context_menu_(this),
-		select_atom_limit_(0.5),
-		select_bond_limit_(0.9),
-		average_atom_radius_limit_(0.7),
-		move_an_atom_(false),
-		edit_atom_type_(6),
-		show_scaling_axes_(false)
+				edit_id_(-1),	
+				scaling_id_(-1),
+				first_atom_for_bond_(0),
+				context_menu_composite_(0),
+				context_menu_(this),
+				select_atom_limit_(0.5),
+				select_bond_limit_(0.9),
+				average_atom_radius_limit_(0.7),
+				move_an_atom_(false),
+				edit_atom_type_(6),
+				show_scaling_axes_(false)
 		{	
+printf("asdasdasdasdas");
 			//this is neccessary Mr Moll! 
 			registerWidget(this); 
 		}
@@ -248,62 +249,62 @@ namespace BALL
 		EditableScene::EditableScene(const EditableScene& e_scene, QWidget* parent_widget, const char* name , WFlags w_flags)
 			throw()
 			: Scene(e_scene, parent_widget, name, w_flags),
-		edit_id_(-1),
-		scaling_id_(-1),
-		first_atom_for_bond_(e_scene.first_atom_for_bond_),
-		context_menu_composite_(0),
-		context_menu_(this),
-		select_atom_limit_(e_scene.select_atom_limit_),
-		select_bond_limit_(e_scene.select_bond_limit_),
-		average_atom_radius_limit_(e_scene.average_atom_radius_limit_),
-		move_an_atom_(false),
-		edit_atom_type_(e_scene.edit_atom_type_),
-		show_scaling_axes_(e_scene.show_scaling_axes_)
+				edit_id_(-1),
+				scaling_id_(-1),
+				first_atom_for_bond_(e_scene.first_atom_for_bond_),
+				context_menu_composite_(0),
+				context_menu_(this),
+				select_atom_limit_(e_scene.select_atom_limit_),
+				select_bond_limit_(e_scene.select_bond_limit_),
+				average_atom_radius_limit_(e_scene.average_atom_radius_limit_),
+				move_an_atom_(false),
+				edit_atom_type_(e_scene.edit_atom_type_),
+				show_scaling_axes_(e_scene.show_scaling_axes_)
 		{
 		}
 
 		EditableScene::~EditableScene()
 			throw()
-			{
+		{
 #ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object EditableScene " << this << " of class EditableScene>" << std::endl;
 #endif 
-			}
+		}
 
 
 		void EditableScene::onNotify(Message *message)
 			throw()
-			{	
+		{	
 #ifdef BALL_VIEW_DEBUG
-				Log.error() << "EditableScene " << this  << "onNotify " << std::endl;
+			Log.error() << "EditableScene " << this  << "onNotify " << std::endl;
 #endif
-				// react now only to SceneMessage
-				if (RTTI::isKindOf<CompositeMessage>(*message))
+			// react now only to SceneMessage
+			if (RTTI::isKindOf<CompositeMessage>(*message))
+			{
+				CompositeMessage *composite_message = RTTI::castTo<CompositeMessage>(*message);
+				switch (composite_message->getType())
 				{
-					CompositeMessage *composite_message = RTTI::castTo<CompositeMessage>(*message);
-					switch (composite_message->getType())
-					{
-						case CompositeMessage::REMOVED_COMPOSITE:
-							// checking of the type of removed composite and handling of  
-							// updating the undo-list is done via the signal invalidComposite
-							// EditOperationDialog::invalidateComposite() is called 
-							Composite* deleted_composite; 
-							deleted_composite = composite_message->getComposite();
-							emit invalidComposite(deleted_composite);
-							break;	// no return since we want Scene::onNotify to be performed
+					case CompositeMessage::REMOVED_COMPOSITE:
+						// checking of the type of removed composite and handling of  
+						// updating the undo-list is done via the signal invalidComposite
+						// EditOperationDialog::invalidateComposite() is called 
+						Composite* deleted_composite; 
+						deleted_composite = composite_message->getComposite();
+						emit invalidComposite(deleted_composite);
+						break;	// no return since we want Scene::onNotify to be performed
 
-						case CompositeMessage::UNDEFINED:
-							Log.error() << "Unknown type of CompositeMessage in " << __FILE__ << __LINE__ << std::endl;
-							break;
+					case CompositeMessage::UNDEFINED:
+						Log.error() << "Unknown type of CompositeMessage in " << __FILE__ << __LINE__ << std::endl;
+						break;
 
-						default: // in all other cases 	Scene::onNotify(message) is called
-							break;
-					}
+					default: // in all other cases 	Scene::onNotify(message) is called
+						break;
 				}
-				// A New Selection -> change of current_atomContainer_ is organized in the atom insertion procedure 
-				Scene::onNotify(message);
-				return;
 			}
+			// A New Selection -> change of current_atomContainer_ is organized in the atom insertion procedure 
+			Scene::onNotify(message);
+			return;
+		}
 
 
 		void EditableScene::initializeWidget(MainControl& main_control)
@@ -334,26 +335,20 @@ namespace BALL
 
 		void EditableScene::finalizeWidget(MainControl& main_control)
 			throw()
-			{
-				if (current_mode_ == (Scene::ModeType)EDIT__MODE)
-				{
-					main_control.removeMenuEntry(
-							MainControl::DISPLAY, edit_id_);
-							//MainControl::DISPLAY, "&Edit Mode", this, SLOT(editMode_()), CTRL+Key_E);
-					main_control.removeMenuEntry(MainControl::DISPLAY,scaling_id_ );
-							//MainControl::DISPLAY, "&Show Scaling", this, SLOT(showScaling_()), CTRL+Key_E);
-				}
-				Scene::finalizeWidget(main_control);	
-			}
+		{
+			main_control.removeMenuEntry(MainControl::DISPLAY, edit_id_);
+			main_control.removeMenuEntry(MainControl::DISPLAY,scaling_id_ );
+			Scene::finalizeWidget(main_control);	
+		}
 
 
 		void EditableScene::checkMenu(MainControl& main_control)
 			throw()
-			{
-				menuBar()->setItemChecked(edit_id_,(current_mode_ == (Scene::ModeType)EDIT__MODE));
-				menuBar()->setItemChecked(scaling_id_,show_scaling_axes_);
-				Scene::checkMenu(main_control);
-			}
+		{
+			menuBar()->setItemChecked(edit_id_,(current_mode_ == (Scene::ModeType)EDIT__MODE));
+			menuBar()->setItemChecked(scaling_id_,show_scaling_axes_);
+			Scene::checkMenu(main_control);
+		}
 
 		// initializes the context_menu
 		void EditableScene::popupContextMenu_()
@@ -525,30 +520,8 @@ namespace BALL
 			// are we in BOND__MODE? 
 			if (current_mode_ == (Scene::ModeType)BOND__MODE)
 			{
-				// delete last symbolic bond line	
-				QPainter painter(this);
-				painter.setPen(white);
-				painter.setRasterOp(XorROP);
-
-				// did we paint a line at all?
-				if (mouse_has_moved_)
-				{
-					painter.drawLine(
-							(int) (x_ewindow_bond_pos_second_old_) ,  
-							(int) (y_ewindow_bond_pos_second_old_),   
-							(int) (x_ewindow_bond_pos_first_),
-							(int) (y_ewindow_bond_pos_first_));
-
-					// delete the bondlength-remark
-					QString bondstring;
-					bondstring.setNum(bond_length_, 'f', 2);
-					// don't do this for really short bonds...
-					if (bond_length_ > 0.3)
-						painter.drawText((int)x_text_position_, (int)y_text_position_,bondstring);
-
-				}
-				painter.end();	
-
+				// MainControl will initialize an Update of the Scene, when CompositeMessage is received
+				
 				//is there an atom in  select_atom_limit_ Angstroem?
 				Atom *atom = getClickedAtom_(e->x(), e->y(), select_atom_limit_);
 
@@ -952,7 +925,7 @@ namespace BALL
 		{
 			// if no atom is selected
 			PDBAtom* a 		= new PDBAtom(PTE[edit_atom_type_], PTE[edit_atom_type_].getName());
-			insert_(e->x(), e->y(), *a);
+			if (!insert_(e->x(), e->y(), *a)) return;
 			first_atom_for_bond_ = a;
 			current_mode_ = (Scene::ModeType)BOND__MODE;
 			bond_length_  = 0;
@@ -1186,101 +1159,150 @@ namespace BALL
 		 */
 		void EditableScene::releaseEventBondModeWithAtom_(Atom* atom)
 		{
+Log.error() << "#~~#   4 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			// is it the atom we started with?
 			if (atom == first_atom_for_bond_)
 			{
 				// in this case, we assume that the user does not want to set a bond
 				// -> do nothing
+				return;
 			}
-			else // we found _another_ atom
+
+			// we found _another_ atom
+			//set the bond
+			// TODO: - make the bond_order variable. Even better: change order with click on the bond
+			//       - if there is already a bond, change it to a double bond
+			Bond* c = new Bond("Bond", *first_atom_for_bond_, *atom, Bond::ORDER__SINGLE);		
+
+			String bond_string;
+			int bond_type = c->getOrder();
+
+			switch (bond_type)
 			{
-				//set the bond
-				// TODO: - make the bond_order variable. Even better: change order with click on the bond
-				//       - if there is already a bond, change it to a double bond
-				Bond* c = new Bond("Bond", *first_atom_for_bond_, *atom, Bond::ORDER__SINGLE);		
+				case Bond::ORDER__SINGLE:
+					bond_string = "single bond";
+					break;
+				case Bond::ORDER__DOUBLE:
+					bond_string = "double bond";
+					break;
+				case Bond::ORDER__TRIPLE:						
+					bond_string = "triple bond";	
+					break;
+				case Bond::ORDER__QUADRUPLE:
+					bond_string = "quadruple bond";	
+					break;
+				case Bond::ORDER__AROMATIC:
+					bond_string = "aromatic bond";	
+					break;
+				default:					
+					bond_string = "unknown";	
+					break;
+			}
 
-				String bond_string;
-				int bond_type = c->getOrder();
+			EditOperation eo(0, c, std::vector<Atom*>(), 
+											 "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
+			
+			// tell about the new undo operation
+			emit newEditOperation(eo);
+			//update representation
+			notify_(new CompositeMessage(*atom, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY)); 
 
-				switch (bond_type)
+			// It may be that this operation leads to an isolated two-atom molecule, 
+			// which is not inserted in other molecules, but in the system.
+			// if a bond between differnet molecules ( do not share common ancestor) 
+			// were created, the molecules
+			// should be merged, and an EditOperation will be created, which stores the atoms
+			// belonging to the old molecule
+			// by convention the molecule given by atom (the second bond partner) is deleted
+			// and all atoms where inserted into the molecule given by first_atom_for_bond_.
+
+			// if the new atom is the only element of its AtomContainer
+			// no editoperation is needed
+
+			// do the atoms share a common atom container
+			Composite* ancestor = first_atom_for_bond_->getLowestCommonAncestor(*atom);
+			Composite* parent = atom->getParent();
+			Composite* first_parent = first_atom_for_bond_->getParent();
+
+			// we will merge if the two atoms are descendents in a Molecule or System
+			bool merge = true;
+			if (ancestor != 0)
+			{
+				merge = RTTI::isKindOf<System>(*ancestor) &&
+								parent != first_parent;
+			}
+
+Log.error() << "#~~#   1 "  << merge           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+			if (!merge)
+			{
+				getMainControl()->update(*ancestor);
+				return;
+			}
+
+			// we have to create the undo operation before executing
+			// the splice, since we need the moved atoms :)
+			// we only need to construct an undo operation if the moved molecule contains
+			// more than one atom
+			if (parent->getDegree() > 1)
+			{
+				std::vector<Atom*> old_molecule;
+
+				Size nr = parent->getDegree();
+				for (Size i = 0; i < nr; i++)
 				{
-					case Bond::ORDER__SINGLE:
-						bond_string = "single bond";
-						break;
-					case Bond::ORDER__DOUBLE:
-						bond_string = "double bond";
-						break;
-					case Bond::ORDER__TRIPLE:						
-						bond_string = "triple bond";	
-						break;
-					case Bond::ORDER__QUADRUPLE:
-						bond_string = "quadruple bond";	
-						break;
-					case Bond::ORDER__AROMATIC:
-						bond_string = "aromatic bond";	
-						break;
-					default:					
-						bond_string = "unknown";	
-						break;
+					Atom* atom= dynamic_cast<Atom*>(parent->getChild(i));
+					old_molecule.push_back(atom);
 				}
-				std::vector<Atom*> v; 
-				EditOperation eo( NULL, c, v, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
+
+				EditOperation eo(NULL, NULL, old_molecule, 
+												 "Merged two molecules ", EditOperation::MERGED__MOLECULES);
 				// tell about the new undo operation
 				emit newEditOperation(eo);
-				//update representation
-				notify_(new CompositeMessage(*atom, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY)); 
+			}
 
-				// It may be that this operation leads to an isolated two-atom molecule, 
-				// which is not inserted in other molecules, but in the system.
-				// if a bond between differnet molecules ( do not share common ancestor) 
-				// were created, the molecules
-				// should be merged, and an EditOperation will be created, which stores the atoms
-				// belonging to the old molecule
-				// by convention the molecule given by atom (the second bond partner) is deleted
-				// and all atoms where inserted into the molecule given by first_atom_for_bond_.
+			Composite* root_to_delete = 0;
+			Composite* root_to_update = 0;
 
-				// if the new atom is the only element of its AtomContainer
-				// no editoperation is needed
-
-				// do the atoms share a common atom container
-				Composite* ancestor = first_atom_for_bond_->getLowestCommonAncestor(*atom);
-
-				if( RTTI::isKindOf<System>(*ancestor) || ( !ancestor  ))
+			if (RTTI::isKindOf<Molecule>(*first_parent) &&
+					first_parent->getParent()->getDegree() == 1)
+			{
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+				root_to_delete = &first_parent->getRoot();
+				root_to_update = &parent->getRoot();
+				parent->spliceAfter(*first_parent);
+			}
+			else
+			{
+				if (RTTI::isKindOf<Molecule>(*parent) &&
+						parent->getParent()->getDegree() == 1)
 				{
-					// we have to create the undo operation before executing
-					// the splice, since we need the moved atoms :)
-					// we only need to construct an undo operation if the moved molecule contains
-					// more than one atom
-					Composite* parent= atom->getParent();
-					if(parent->getChild( (Index)1 )  )
-					{
-						Composite* nextChild = parent->getChild((Index)0);
-						std::vector<Atom*> old_molecule;
-
-						for (Index i=(Index)1; (nextChild != 0) ; i++)
-						{
-							Atom* atom= dynamic_cast<Atom*>(nextChild);
-							old_molecule.push_back(atom);
-							nextChild = parent->getChild(i);
-						}
-
-						EditOperation eo( NULL, NULL, old_molecule, 
-								              "Merged two molecules ", EditOperation::MERGED__MOLECULES);
-						// tell about the new undo operation
-						emit newEditOperation(eo);
-					}
-
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+					root_to_delete = &parent->getRoot();
+					root_to_update = &first_parent->getRoot();
+					first_parent->spliceAfter(*parent);
+				}
+				else
+				{
+Log.error() << "#~~#   3 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 					// we always splice the second atom container into the first one
 					// this can be easily changed for example the smaller into bigger one ... 
-					AtomContainer* ai1 = dynamic_cast<AtomContainer*>(first_atom_for_bond_->getParent());
-					AtomContainer* ai2 = dynamic_cast<AtomContainer*>(atom->getParent());
+					AtomContainer* ai1 = dynamic_cast<AtomContainer*>(first_parent);
+					AtomContainer* ai2 = dynamic_cast<AtomContainer*>(parent);
+					root_to_delete = ai2;
+					root_to_update = ai1;
 					ai1->spliceAfter(*ai2);
-					
-					//update representation
-					notify_(new CompositeMessage(ai1->getRoot(), CompositeMessage::CHANGED_COMPOSITE_HIERARCHY));	
 				}
-				highlightAtomContainer_(current_atomContainer_);
 			}
+
+			// remove spliced root
+			if (ancestor == 0)
+			{
+				getMainControl()->remove(*root_to_delete);
+			}
+			// update representation of other root
+			getMainControl()->update(*root_to_update, true);
+			
+//   			highlightAtomContainer_(current_atomContainer_);
 		}
 
 
@@ -1313,7 +1335,7 @@ namespace BALL
 
 					// build a new atom...
 					PDBAtom* a = new PDBAtom(PTE[edit_atom_type_], PTE[edit_atom_type_].getName());
-					insert_(e->x(), e->y(), *a);
+					if (!insert_(e->x(), e->y(), *a)) return;
 
 					Vector3 atom_position = a->getPosition();
 					std::vector<Atom*> v; 
@@ -1376,7 +1398,7 @@ namespace BALL
 		//
 
 		// insert an atom at screen positions (x,y) on the view plane
-		void EditableScene::insert_(int x, int y, PDBAtom &atom_)
+		bool EditableScene::insert_(int x, int y, PDBAtom &atom_)
 		{
 			// find the 3D coordinates of screen position (x,y) on the view plane
 			Vector3 point = clickedPointOnViewPlane_(x,y);
@@ -1396,12 +1418,6 @@ namespace BALL
 			List <Composite*> compositeList = getMainControl()->getMolecularControlSelection(); 
 			List <Composite*>::Iterator it  = compositeList.begin();
 
-			if (compositeList.size() > 1)
-			{
-				Log.error() <<"Please highlight exactly one AtomContainer for insertion of the created atoms!" << endl;
-				return;
-			}
-
 			// only one highlighted composite
 			if (compositeList.size() == 1)
 			{
@@ -1410,7 +1426,7 @@ namespace BALL
 				if (ai == 0)
 				{
 					Log.error() <<"Please highlight exactly one AtomContainer for insertion of the created atoms!" << endl;
-					return;
+					return false;
 				}
 				if (RTTI::isKindOf<System>(**it))
 				{
@@ -1428,7 +1444,10 @@ namespace BALL
 				getMainControl()->update(*ai, true);
 			}
 			else 
-			{	//  no highlighted composite => we create a new system, including a new molecule
+			{	
+				if (!refocus) return false;
+
+				//  no highlighted composite => we create a new system, including a new molecule
 				//  into which the new atom will be inserted! 
 				System *system = new System();
 				Molecule* current_molecule = new Molecule();
@@ -1451,7 +1470,7 @@ namespace BALL
 			}
 			// highlight the actual atom container
 			highlightAtomContainer_(current_atomContainer_);
-			return;
+			return true;
 		}	
 
 
