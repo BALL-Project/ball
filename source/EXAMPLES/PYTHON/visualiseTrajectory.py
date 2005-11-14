@@ -1,5 +1,5 @@
 #  example script to viualise the movement in a trajectory
-clearMolecules()
+clearAll()
 openFile(Path().find("structures/AlaAla.hin"))
 dcd = DCDFile(Path().find("structures/alaala.dcd"))
 system = getSystem(0)
@@ -9,6 +9,7 @@ ssm = SnapShotManager(system, getMolecularStructure().getForceField(), dcd)
 nr_ss = dcd.getNumberOfSnapShots()
 
 rep = Representation()
+rep.setDrawingPrecision(DRAWING_PRECISION_MEDIUM)
 
 positions = []
 for atom in atoms(system):

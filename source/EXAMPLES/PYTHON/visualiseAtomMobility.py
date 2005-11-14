@@ -2,7 +2,7 @@
 #  it creates a sphere for every atoms
 #  the radius is proportional to the mobility and the color is
 #  interpolated between blue (no movement at all) and red (very mobile)
-clearMolecules()
+clearAll()
 openFile(Path().find("structures/AlaAla.hin"))
 dcd = DCDFile(Path().find("structures/alaala.dcd"))
 system = getSystem(0)

@@ -57,6 +57,10 @@ def clearMolecules():
 	while len(getSystems()) > 0:
 		getMainControl().remove(getSystem(0))
 
+def clearAll():
+	clearMolecules()
+	clearRepresentations()
+
 def setMultithreading(mode):
 	getMainControl().setMultithreading(mode)
 

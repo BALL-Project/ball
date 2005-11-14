@@ -17,7 +17,7 @@ def runTest(name, model):
 	result += model_result
 
 setMultithreading(0)
-clearRepresentations()
+clearAll()
 dp = getDisplayProperties()
 dp.enableCreationForNewMolecules(0)
 dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
