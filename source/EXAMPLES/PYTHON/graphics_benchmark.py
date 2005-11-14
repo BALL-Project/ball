@@ -36,6 +36,7 @@ runTest("SES", 			MODEL_SE_SURFACE)
 print "Result: "+str(result)+" seconds"
 result /= nr_runs
 result = 3 / result
-print "Result: "+str(result)+" BALLView stones"
+result_str = "Result: "+str(result)+" BALLView stones"
+getMainControl().setStatusbarText(result_str, 1);
 setMultithreading(1)
 

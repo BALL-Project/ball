@@ -3,15 +3,13 @@ nr_runs = 70
 
 def runTest(name, model):
 	global result
-	run = 0
 	getDisplayProperties().selectModel(model)
 	getDisplayProperties().apply()
 	getGeometricControl().focusRepresentation()
 	getScene().move(Vector3(0,0,-nr_runs))
 	timer = Timer()
 	timer.start()
-	while run < nr_runs:
-		run += 1
+	for run in range(0, nr_runs):
 		getScene().move(Vector3(0,0,1))
 	timer.stop()
 	model_result = timer.getClockTime()
@@ -52,5 +50,6 @@ result /= nr_runs
 result = 1 / result
 #scale results to the graphics_benchmark.py script
 result /= 5
-print "Result: "+str(result)+" BALLView OpenGL stones"
+result_str = "Result: "+str(result)+" BALLView OpenGL stones"
+getMainControl().setStatusbarText(result_str, 1);
 setMultithreading(1)
