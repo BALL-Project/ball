@@ -3,14 +3,12 @@ nr_runs = 5
 
 def runTest(name, model):
 	global result
-	run = 0
 	model_result = 0
 	timer = Timer()
 	timer.start()
-	while run < nr_runs:
+	for i in range(0, nr_runs):
 		getDisplayProperties().selectModel(model)
 		getDisplayProperties().apply()
-		run += 1
 		clearRepresentations()
 	model_result = timer.getClockTime()
 	print name+" "+str(model_result)+" seconds"
