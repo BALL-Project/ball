@@ -1,6 +1,0 @@
-openFile("bpti.pdb")
-dp = getDisplayProperties()
-dp.selectModel(MODEL_VDW)
-dp.apply()
-dp.selectModel(MODEL_LINES)
-dp.apply()
