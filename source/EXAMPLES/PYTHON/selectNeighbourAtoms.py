@@ -1,7 +1,13 @@
 # select all atoms in proximity of less than maxdistance from a selected atom
 maxdistance = 4
 
+if getSystems() == []:
+	print "No System loaded! aborting..:"
+
 system = getSystem(0)
+
+if getMainControl().getSelection() == []:
+	print "No Selection available! Please select some Atoms before starting this script!"
 
 cl = []
 

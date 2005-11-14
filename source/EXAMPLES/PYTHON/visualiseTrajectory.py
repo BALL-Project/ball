@@ -1,6 +1,8 @@
 #  example script to viualise the movement in a trajectory
-dcd = DCDFile("test.dcd")
-system = getComposites()[0]
+clearMolecules()
+openFile(Path().find("structures/AlaAla.hin"))
+dcd = DCDFile(Path().find("structures/alaala.dcd"))
+system = getSystem(0)
 number_ss = dcd.getNumberOfSnapShots()
 
 ssm = SnapShotManager(system, getMolecularStructure().getForceField(), dcd)
