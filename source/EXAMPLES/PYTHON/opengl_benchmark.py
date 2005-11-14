@@ -51,5 +51,6 @@ result = 1 / result
 #scale results to the graphics_benchmark.py script
 result /= 5
 result_str = "Result: "+str(result)+" BALLView OpenGL stones"
+print result_str
 getMainControl().setStatusbarText(result_str, 1);
 setMultithreading(1)

@@ -37,6 +37,7 @@ print "Result: "+str(result)+" seconds"
 result /= nr_runs
 result = 3 / result
 result_str = "Result: "+str(result)+" BALLView stones"
+print result_str
 getMainControl().setStatusbarText(result_str, 1);
 setMultithreading(1)
 
