@@ -1,9 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.5.2.2 2005/11/15 20:02:08 amoll Exp $
+// $Id: vertexBuffer.C,v 1.5.2.3 2005/11/15 21:06:44 amoll Exp $
 
 // prevent typedef clash under Linux
+#ifndef BALL_ENABLE_VERTEX_BUFFER
+
 #define QT_CLEAN_NAMESPACE
 #include <qgl.h>
 
@@ -313,3 +315,4 @@ namespace BALL
 
 }
 
+#endif
