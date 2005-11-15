@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.28 2005/11/08 13:33:17 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.29 2005/11/15 20:07:41 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -31,6 +31,7 @@
 using namespace std;
 
 //   #define BALL_BENCHMARKING
+//   #define BALL_ENABLE_VERTEX_BUFFER
 
 namespace BALL
 {
@@ -142,7 +143,9 @@ namespace BALL
 
 			// smooth line drawing
 			glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+			glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 			glEnable(GL_LINE_SMOOTH);
+			glEnable(GL_POLYGON_SMOOTH);
 
 			glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
@@ -315,12 +318,13 @@ namespace BALL
 		{
 			if (rep.getGeometricObjects().size() == 0) return;
 
-			/*
+		#ifdef BALL_ENABLE_VERTEX_BUFFER
 			if (vertexBuffersEnabled())
 			{
 				clearVertexBuffersFor(*(Representation*)&rep);
 			}
-			*/
+		#endif
+			
 
 			DisplayListHashMap::Iterator hit = display_lists_.find(&rep);
 			if (hit == display_lists_.end()) return;
@@ -355,11 +359,9 @@ namespace BALL
 			
 			display_list->endDefinition();
 
-			/*
+		#ifdef BALL_ENABLE_VERTEX_BUFFER
 			clearVertexBuffersFor(*(Representation*)&rep);
-			*/
-
-			/*
+			
 			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 			{
 				// prevent copying the pointers of the buffers later...
@@ -381,7 +383,8 @@ namespace BALL
 					}
 				}
 			}
-			*/
+		#endif
+		
 
 	#ifdef BALL_BENCHMARKING
 	t.stop();
@@ -442,7 +445,7 @@ namespace BALL
 			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
 			if (for_display_list)
 			{
-				/*
+			#ifdef BALL_ENABLE_VERTEX_BUFFER
 				if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 				{
 					// draw everything except of meshes, these are put into vertex buffer objects in bufferRepresentation()
@@ -453,15 +456,17 @@ namespace BALL
 				}
 				else
 				{
-				*/
+			#endif
+				
 					// render everything
 					for (; it != geometric_objects.end(); it++)
 					{
 						render_(*it);
 					}
-				/*
+			#ifdef BALL_ENABLE_VERTEX_BUFFER
 				}
-				*/
+			#endif
+			
 			}
 			else // drawing for picking directly
 			{
@@ -765,15 +770,7 @@ namespace BALL
 
 			translateVector3_(tube.getVertex1());
 
-			// dont rotate if we have to draw in z-axis direction
-//   			if (!Maths::isZero(rotation_axis.getSquareLength()))
-//   			{
-				rotateVector3Angle_(rotation_axis, angle);
-//   			}
-//   			else
-//   			{
-//   				translateVector3_(result);
-//   			}
+			rotateVector3Angle_(rotation_axis, angle);
 
 			glScalef((GLfloat)tube.getRadius(),
 							 (GLfloat)tube.getRadius(),
@@ -1405,10 +1402,6 @@ namespace BALL
 				return;
 			}
 
-
-			// ????? removed the following line at 13.05.05,  seems to work fine without it, and bonds dont get picked otherwise
-//   			number_of_hits--;
-			
 			Position minimum_z_coord = UINT_MAX;
 			Position names;
 			Name nearest_name = 0;
@@ -1572,7 +1565,8 @@ namespace BALL
 		bool GLRenderer::enableVertexBuffers(bool /* state */)
 			throw()
 		{
-			/*
+		
+		#ifdef BALL_ENABLE_VERTEX_BUFFER
 			if (!isExtensionSupported("GL_ARB_vertex_buffer_object")) 
 			{
 				use_vertex_buffer_ = false;
@@ -1585,18 +1579,21 @@ namespace BALL
 				else       Log.info() << "Disabling Vertex Buffer" << std::endl;
 			}
 			use_vertex_buffer_ = state;
-*/
-			use_vertex_buffer_ = false; // ???
-/*
+		#else
+			use_vertex_buffer_ = false;
+		#endif
+
+		#ifdef BALL_ENABLE_VERTEX_BUFFER
 			if (use_vertex_buffer_) MeshBuffer::initGL();
-*/
+		#endif
+
 			return true;
 		}
 
 		void GLRenderer::clearVertexBuffersFor(Representation& /* rep */)
 			throw()
 		{
-			/*
+		#ifdef BALL_ENABLE_VERTEX_BUFFER
 			MeshBufferHashMap::Iterator vit = rep_to_buffers_.find(&rep);
 			if (vit == rep_to_buffers_.end()) return;
 
@@ -1609,7 +1606,7 @@ namespace BALL
 
 			meshes.clear();
 			rep_to_buffers_.erase(vit);
-			*/
+		#endif
 		}
 
 		void GLRenderer::drawBuffered(const Representation& rep)
@@ -1617,7 +1614,7 @@ namespace BALL
 		{
 			if (rep.isHidden()) return;
 
-			/*
+		#ifdef BALL_ENABLE_VERTEX_BUFFER
 			// if we have vertex buffers for this Representation, draw them
 			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 			{
@@ -1637,7 +1634,8 @@ namespace BALL
 					finishDrawingMeshes_();
 				}
 			}
-			*/
+		#endif
+		
 			// if we have a displaylist for this Representation, draw it
 			DisplayListHashMap::Iterator dit = display_lists_.find(&rep);
 			if (dit != display_lists_.end())
@@ -1663,10 +1661,11 @@ namespace BALL
 		bool GLRenderer::vertexBuffersSupported() const
 			throw()
 		{
-			/*
+		#ifdef BALL_ENABLE_VERTEX_BUFFER
 			return isExtensionSupported("GL_ARB_vertex_buffer_object");
-			*/
-			return false; // ????
+		#else
+			return false;
+		#endif
 		}
 
 		void GLRenderer::renderClippingPlane_(const ClippingPlane& plane)
