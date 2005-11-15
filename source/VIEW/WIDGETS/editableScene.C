@@ -1302,6 +1302,9 @@ printf("asdasdasdasdas");
 				}
 			}
 
+			// TODO: Collect AtomContainers of to_delete, that are not anchestors of the two atoms
+			// and insert them into to_update->getRoot()
+
 			// remove spliced root
 			if (to_delete != 0)
 			{
