@@ -1267,35 +1267,17 @@ printf("asdasdasdasdas");
 
 			if (ancestor == 0)
 			{
-				if (RTTI::isKindOf<Molecule>(*first_parent))
-				{
-					to_delete = &first_parent->getRoot();
-					to_update = &parent->getRoot();
-					parent->spliceAfter(*first_parent);
-				}
-				else
-				{
-					if (RTTI::isKindOf<Molecule>(*parent))
-					{
-						to_delete = &parent->getRoot();
-						to_update = &first_parent->getRoot();
-						first_parent->spliceAfter(*parent);
-					}
-					else
-					{
-						Molecule dummy;
-						
-						Composite* to_splice = first_parent->getAncestor(dummy);
-						if (to_splice == 0) to_splice = &first_parent->getRoot();
-						
-						Composite* to_splice_into = parent->getAncestor(dummy);
-						if (to_splice_into == 0) to_splice_into = &parent->getRoot();
-						
-						to_update = &parent->getRoot();
-						to_delete = &to_splice->getRoot();
-						to_splice_into->spliceAfter(*to_splice);
-					}
-				}
+				Molecule dummy;
+				
+				Composite* to_splice = first_parent->getAncestor(dummy);
+				if (to_splice == 0) to_splice = &first_parent->getRoot();
+				
+				Composite* to_splice_into = parent->getAncestor(dummy);
+				if (to_splice_into == 0) to_splice_into = &parent->getRoot();
+				
+				to_update = &parent->getRoot();
+				to_delete = &to_splice->getRoot();
+				to_splice_into->spliceAfter(*to_splice);
 			}
 			else 
 			{
@@ -1315,9 +1297,7 @@ printf("asdasdasdasdas");
 					}
 					else
 					{
-//   						to_delete = &first_parent->getRoot();
  						to_update = &parent->getRoot();
-//   						to_update->spliceAfter(to_delete);
 					}
 				}
 			}
@@ -1330,7 +1310,7 @@ printf("asdasdasdasdas");
 			// update representation of other root
 			getMainControl()->update(*to_update, true);
 			
-//   			highlightAtomContainer_(current_atomContainer_);
+ 			highlightAtomContainer_(current_atomContainer_);
 		}
 
 
