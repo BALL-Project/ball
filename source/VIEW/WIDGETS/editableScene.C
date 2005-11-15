@@ -1159,7 +1159,6 @@ printf("asdasdasdasdas");
 		 */
 		void EditableScene::releaseEventBondModeWithAtom_(Atom* atom)
 		{
-Log.error() << "#~~#   4 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			// is it the atom we started with?
 			if (atom == first_atom_for_bond_)
 			{
@@ -1219,21 +1218,24 @@ Log.error() << "#~~#   4 "             << " "  << __FILE__ << "  " << __LINE__<<
 			// if the new atom is the only element of its AtomContainer
 			// no editoperation is needed
 
-			// do the atoms share a common atom container
-			Composite* ancestor = first_atom_for_bond_->getLowestCommonAncestor(*atom);
 			Composite* parent = atom->getParent();
 			Composite* first_parent = first_atom_for_bond_->getParent();
 
-			// we will merge if the two atoms are descendents in a Molecule or System
-			bool merge = true;
+		
+			// do the atoms share a common atom container
+			Composite* ancestor = first_atom_for_bond_->getLowestCommonAncestor(*atom);
+
+			bool splice = true;
 			if (ancestor != 0)
 			{
-				merge = RTTI::isKindOf<System>(*ancestor) &&
-								parent != first_parent;
+				// do nothing if the two atoms have same parent!
+				splice = first_parent == parent;
+				splice |= RTTI::isKindOf<System>(*ancestor) ||
+								  RTTI::isKindOf<Molecule>(*first_parent) ||
+								  RTTI::isKindOf<Molecule>(*parent);
 			}
 
-Log.error() << "#~~#   1 "  << merge           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-			if (!merge)
+			if (!splice)
 			{
 				getMainControl()->update(*ancestor);
 				return;
@@ -1260,47 +1262,73 @@ Log.error() << "#~~#   1 "  << merge           << " "  << __FILE__ << "  " << __
 				emit newEditOperation(eo);
 			}
 
-			Composite* root_to_delete = 0;
-			Composite* root_to_update = 0;
+			Composite* to_delete = 0;
+			Composite* to_update = 0;
 
-			if (RTTI::isKindOf<Molecule>(*first_parent) &&
-					first_parent->getParent()->getDegree() == 1)
+			if (ancestor == 0)
 			{
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-				root_to_delete = &first_parent->getRoot();
-				root_to_update = &parent->getRoot();
-				parent->spliceAfter(*first_parent);
-			}
-			else
-			{
-				if (RTTI::isKindOf<Molecule>(*parent) &&
-						parent->getParent()->getDegree() == 1)
+				if (RTTI::isKindOf<Molecule>(*first_parent))
 				{
-Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-					root_to_delete = &parent->getRoot();
-					root_to_update = &first_parent->getRoot();
-					first_parent->spliceAfter(*parent);
+					to_delete = &first_parent->getRoot();
+					to_update = &parent->getRoot();
+					parent->spliceAfter(*first_parent);
 				}
 				else
 				{
-Log.error() << "#~~#   3 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-					// we always splice the second atom container into the first one
-					// this can be easily changed for example the smaller into bigger one ... 
-					AtomContainer* ai1 = dynamic_cast<AtomContainer*>(first_parent);
-					AtomContainer* ai2 = dynamic_cast<AtomContainer*>(parent);
-					root_to_delete = ai2;
-					root_to_update = ai1;
-					ai1->spliceAfter(*ai2);
+					if (RTTI::isKindOf<Molecule>(*parent))
+					{
+						to_delete = &parent->getRoot();
+						to_update = &first_parent->getRoot();
+						first_parent->spliceAfter(*parent);
+					}
+					else
+					{
+						Molecule dummy;
+						
+						Composite* to_splice = first_parent->getAncestor(dummy);
+						if (to_splice == 0) to_splice = &first_parent->getRoot();
+						
+						Composite* to_splice_into = parent->getAncestor(dummy);
+						if (to_splice_into == 0) to_splice_into = &parent->getRoot();
+						
+						to_update = &parent->getRoot();
+						to_delete = &to_splice->getRoot();
+						to_splice_into->spliceAfter(*to_splice);
+					}
+				}
+			}
+			else 
+			{
+				if (RTTI::isKindOf<Molecule>(*first_parent))
+				{
+					to_delete = first_parent;
+					to_update = &parent->getRoot();
+					parent->spliceAfter(*first_parent);
+				}
+				else
+				{
+					if (RTTI::isKindOf<Molecule>(*parent))
+					{
+						to_delete = parent;
+						to_update = &first_parent->getRoot();
+						first_parent->spliceAfter(*parent);
+					}
+					else
+					{
+//   						to_delete = &first_parent->getRoot();
+ 						to_update = &parent->getRoot();
+//   						to_update->spliceAfter(to_delete);
+					}
 				}
 			}
 
 			// remove spliced root
-			if (ancestor == 0)
+			if (to_delete != 0)
 			{
-				getMainControl()->remove(*root_to_delete);
+				getMainControl()->remove(*to_delete);
 			}
 			// update representation of other root
-			getMainControl()->update(*root_to_update, true);
+			getMainControl()->update(*to_update, true);
 			
 //   			highlightAtomContainer_(current_atomContainer_);
 		}
