@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.20.4.9 2005/09/29 14:01:27 amoll Exp $
+// $Id: modularWidget.C,v 1.20.4.10 2005/11/15 23:46:35 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -214,7 +214,8 @@ namespace BALL
 			Position p = filename.split(fields, separators.c_str()) -1;
 			if (p == 0) return;
 			String suffix = fields[p];				
-			setWorkingDir(filename.getSubstring(0, filename.size() - (suffix.size() + 1)));
+			String result = filename.getSubstring(0, filename.size() - (suffix.size() + 1));
+			setWorkingDir(result);
 		}
 
 		bool ModularWidget::lockComposites()

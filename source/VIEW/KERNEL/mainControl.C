@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.41 2005/11/14 13:48:47 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.42 2005/11/15 23:46:15 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1635,10 +1635,18 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		void MainControl::setWorkingDir(const String& dir)
 			throw() 
 		{ 
-			Directory directory(dir);
+			String dir2 = dir;
+			// QT will return Paths on windows with "/" as delimiter!
+#ifdef BALL_PLATFORM_WINDOWS
+			for (Position p = 0; p < dir2.size(); p++)
+			{
+				if (dir2[p] == '/') dir2[p] = '\\';
+			}
+#endif
+			Directory directory(dir2);
 			if (directory.isValid())
 			{
-				working_dir_ = dir;
+				working_dir_ = dir2;
 			}
 		}
 
