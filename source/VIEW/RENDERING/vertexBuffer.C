@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.5.2.1 2005/07/28 14:38:32 amoll Exp $
+// $Id: vertexBuffer.C,v 1.5.2.2 2005/11/15 20:02:08 amoll Exp $
 
 // prevent typedef clash under Linux
 #define QT_CLEAN_NAMESPACE
@@ -12,9 +12,10 @@
  #include <windows.h>
  #include <wingdi.h>	
 #else
-// #define GLX_GLXEXT_PROTOTYPES // required for Mesa-like implementations
+ #define GLX_GLXEXT_PROTOTYPES // required for Mesa-like implementations
  #include <GL/gl.h>
  #include <GL/glx.h>
+ #include <GL/glext.h>
 #endif
 
 #include <BALL/VIEW/RENDERING/vertexBuffer.h>
