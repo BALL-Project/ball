@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.C,v 1.26.2.4 2005/09/29 14:01:26 amoll Exp $
+// $Id: stageSettings.C,v 1.26.2.5 2005/11/16 00:49:15 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
@@ -113,7 +113,6 @@ namespace BALL
 			Scene::setShowLightSources(show_lights_->isChecked());
 			Scene::setAnimationSmoothness(((float)animation_smoothness->value()) / 10.0);
 
-			/* ?????
 			// use vertex buffers ?
 			bool use_buffer = use_vertex_buffers->isChecked();
 			GLRenderer& renderer = ((Scene*)Scene::getInstance(0))->getGLRenderer();
@@ -133,7 +132,6 @@ namespace BALL
 			}
 
 			renderer.enableVertexBuffers(use_buffer);
-			*/ // ?????
 		}
 
 
