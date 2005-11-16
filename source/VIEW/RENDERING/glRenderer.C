@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.30 2005/11/16 10:26:59 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.31 2005/11/16 10:41:39 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -62,11 +62,9 @@ namespace BALL
 				picking_mode_(false),
 				model_type_(MODEL_LINES),
 				drawed_other_object_(false),
-				drawed_mesh_(false)
+				drawed_mesh_(false),
+				GLU_quadric_obj_(0)
 		{
-			GLU_quadric_obj_ = gluNewQuadric();
-			gluQuadricOrientation(GLU_quadric_obj_, GLU_OUTSIDE);
-			gluQuadricNormals(GLU_quadric_obj_, GLU_SMOOTH);
 		}
 
 		GLRenderer::~GLRenderer()
@@ -186,6 +184,12 @@ namespace BALL
 			GL_spheres_list_ = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
 			GL_tubes_list_   = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
 			GL_boxes_list_   = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
+
+			GLU_quadric_obj_ = gluNewQuadric();
+			gluQuadricOrientation(GLU_quadric_obj_, GLU_OUTSIDE);
+			gluQuadricNormals(GLU_quadric_obj_, GLU_SMOOTH); //GLU_FLAT GLU_SMOOTH
+			gluQuadricTexture(GLU_quadric_obj_, GL_FALSE);
+			gluQuadricDrawStyle(GLU_quadric_obj_, GLU_FILL);
 
 			createSpheres_();
 			createTubes_();
