@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.40.4.12 2005/11/16 13:35:59 amoll Exp $
+// $Id: BALL.sip,v 1.40.4.13 2005/11/16 22:26:40 amoll Exp $
 //
 
 /////////////////////////
@@ -205,7 +205,7 @@
 %Include conjugateGradient.sip
 %Include energyMinimizer.sip
 // %Include lineSearch.sip
-// %Include steepestDescent.sip
+%Include steepestDescent.sip
 
 // MOLMEC/PARAMETER
 // %Include atomTypes.sip
