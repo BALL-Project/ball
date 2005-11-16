@@ -1,6 +1,9 @@
 # example for how to create a new representation
 # we draw a line between the identical atoms of two systems
 
+if len(getSystems()) < 2:
+	print "Two Systems have to be loaded!"
+
 system1 = getSystem(0)
 system2 = getSystem(1)
 
