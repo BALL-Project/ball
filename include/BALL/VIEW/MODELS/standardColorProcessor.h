@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.29.2.9 2005/09/01 22:17:58 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.29.2.10 2005/11/16 13:38:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -11,8 +11,8 @@
 #	include <BALL/VIEW/MODELS/colorProcessor.h>
 #endif
 
-#ifndef BALL_VIEW_DATATYPTE_COLORTABLE_H
-# include <BALL/VIEW/DATATYPE/colorTable.h>
+#ifndef BALL_VIEW_DATATYPTE_COLORMAP_H
+# include <BALL/VIEW/DATATYPE/colorMap.h>
 #endif
 
 #ifndef BALL_KERNEL_RESIDUE_H
@@ -128,7 +128,7 @@ namespace BALL
 			protected:
 				GeometricObjectList list_;
 				ColorRGBA first_color_, middle_color_, last_color_;
-				ColorTable table_;
+				ColorMap table_;
 				Residue dummy_residue_;
 				HashMap<const Residue*, Position> residue_map_;
 		};

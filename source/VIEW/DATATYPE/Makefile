@@ -6,7 +6,7 @@ CPP_SOURCES=\
 	colorExtension2.C\
 	colorHSV.C\
 	colorRGBA.C\
-	colorTable.C\
+	colorMap.C\
 	colorUnit.C\
 	colorUnitHue.C\
 	vertex1.C\

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.52.2.10 2005/08/02 13:27:45 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.52.2.11 2005/11/16 13:38:45 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -344,7 +344,7 @@ namespace BALL
 			ColorProcessor::start();
 			residue_map_.clear();
 			table_.clear();
-			table_ = ColorTable(500);
+			table_ = ColorMap(500);
 			ColorRGBA base_colors[3];
 			base_colors[0] = first_color_;
 			base_colors[1] = middle_color_;
@@ -402,7 +402,7 @@ namespace BALL
 			if (residue_map_.size() == 0) return true;
 
 			table_.setRange(0, residue_map_.size() - 1);
-			table_.createTable();
+			table_.createMap();
 
 			for (Position p = 0; p < table_.size(); p++)
 			{

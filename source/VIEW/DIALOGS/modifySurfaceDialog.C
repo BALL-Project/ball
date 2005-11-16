@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.1.2.30 2005/10/19 12:35:07 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.1.2.31 2005/11/16 13:39:25 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/VIEW/DATATYPE/colorTable.h>
+#include <BALL/VIEW/DATATYPE/colorMap.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 
 #include <BALL/SYSTEM/path.h>
@@ -368,22 +368,22 @@ namespace BALL
 			list[0] = min_color;
 			list[1] = mid_color;
 
-			ColorTable lower_table(list, 2);
+			ColorMap lower_table(list, 2);
 			lower_table.setMinMaxColors(min_min_color, max_max_color);
 			lower_table.setAlphaBlending(true);
 			lower_table.setNumberOfColors(levels_box->value()/2);
 			lower_table.setRange(String((min_box->text().ascii())).toFloat(), String((mid_box->text().ascii())).toFloat());
-			lower_table.createTable();
+			lower_table.createMap();
 
 			list[0] = mid_color;
 			list[1] = max_color;
 
-			ColorTable upper_table(list, 2);
+			ColorMap upper_table(list, 2);
 			upper_table.setMinMaxColors(min_min_color, max_max_color);
 			upper_table.setAlphaBlending(true);
 			upper_table.setNumberOfColors(levels_box->value()/2);
 			upper_table.setRange(String((mid_box->text().ascii())).toFloat(), String((max_box->text().ascii())).toFloat());
-			upper_table.createTable();
+			upper_table.createMap();
 
 			try 
 			{
