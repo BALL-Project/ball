@@ -1,9 +1,9 @@
-// $Id: colorTable.sip,v 1.1.2.2 2005/11/16 11:29:45 oliver Exp $
+// $Id: colorTable.sip,v 1.1.2.3 2005/11/16 13:51:13 oliver Exp $
 
 class ColorTable
 {
 %TypeHeaderCode
-	#include <BALL/VIEW/DATATYPE/colorTable.h>
+	#include <BALL/VIEW/DATATYPE/colorMap.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End
