@@ -6,13 +6,16 @@ and some new functionality for BALLView.
 
 Added:
  - Support for Python under Windows
+ - Python support for further classes 
+ - Support for creating animations and movies per Python script
+ - Further Python example scripts
  - Support for SD files in BALLView
- - Picking support for bonds
- - Coloring by molecule
- - Online HTML documentation in BALLView
+ - Context sensitive HTML documentation in BALLView
  - BALLView again has a fourth drawing precision "ultra" for real 
    fast graphics accelerator cards
  - Amber charges and radii values for nucleotides
+ - Picking support for bonds
+ - Coloring by molecule
 
 Changed:
  - BALL and BALLView libraries are now built as DLLs under Windows
@@ -24,12 +27,13 @@ Changed:
  - A standard BALLView Python startup script will be executed in any case.
  	 It can be found in BALL/data/startup.py.
    Users can choose an additional startup script, that will run afterwards.
+ - PyInterpreter and PyWidget report the reason if the Python module can not be loaded
  - Removed Notification and changed the way to register for Log access 
  - Removed GLQuadricObject. This functionality is available through GLRenderer
  - Improved PreferenceEntry class and reading/storing code for preferences
- - PyInterpreter and PyWidget report the reason if the Python module can not be loaded
  - Coloring of surfaces by grid: the way autoscale works and the default colors
  - Renamed ColorTable to ColorMap
+ - Cleanup of the Scene code for move, rotate, zoom: Now cleaner, smaller and faster code.
 
 Fixed:
  - Problems with POSIX compliance of socket classes

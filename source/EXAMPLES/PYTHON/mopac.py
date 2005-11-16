@@ -1,3 +1,4 @@
+# Example script to calculate the energy of the first System by calling Mopac.
 S = getSystem(0)
 
 text = "PM3 1SCF MMOK GEO-OK\n\n\n"

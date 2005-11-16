@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.sip,v 1.1.2.1 2005/11/16 22:27:27 amoll Exp $
+// $Id: steepestDescent.sip,v 1.1.2.2 2005/11/16 22:50:59 amoll Exp $
 //
 
 class SteepestDescentMinimizer 
@@ -22,8 +22,6 @@ class SteepestDescentMinimizer
   ~SteepestDescentMinimizer();
   // SteepestDescentMinimizer& operator = (const SteepestDescentMinimizer& /rhs/);
   virtual bool specificSetup();
-  void setStepLength(double /value/);
-  double getStepLength() const; 
   virtual double findStep();
   virtual void updateDirection();
   virtual bool minimize(Size /iterations/ = 0, bool /resume/ = false); 
