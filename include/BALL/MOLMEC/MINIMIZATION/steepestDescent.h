@@ -1,24 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.h,v 1.23.6.1 2005/07/29 12:37:48 amoll Exp $
+// $Id: steepestDescent.h,v 1.23.6.2 2005/11/16 22:22:46 amoll Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
 #define BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
-/*
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
-#ifndef BALL_DATATYPE_OPTIONS_H
-#	include <BALL/DATATYPE/options.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
-#	include <BALL/MOLMEC/COMMON/forceField.h>
-#endif
-*/
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
 # include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #endif
@@ -26,11 +14,7 @@
 #ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H
 # include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #endif
-/*
-#ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
-#	include <BALL/MOLMEC/COMMON/snapShot.h>
-#endif
-*/
+
 namespace BALL 
 {
 	/** SteepestDescentMinimizer
@@ -115,6 +99,7 @@ namespace BALL
 		virtual void updateStepSize(double lambda);
 		
 		protected:
+
 		/**	The line search minimizer.
 				This member is used to perform the line search in findStep
 		*/
