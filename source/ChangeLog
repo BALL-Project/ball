@@ -29,6 +29,7 @@ Changed:
  - Improved PreferenceEntry class and reading/storing code for preferences
  - PyInterpreter and PyWidget report the reason if the Python module can not be loaded
  - Coloring of surfaces by grid: the way autoscale works and the default colors
+ - Renamed ColorTable to ColorMap
 
 Fixed:
  - Problems with POSIX compliance of socket classes
