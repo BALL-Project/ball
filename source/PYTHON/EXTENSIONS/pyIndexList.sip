@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyIndexList.sip,v 1.1.2.1 2005/11/12 11:18:02 oliver Exp $
+// $Id: pyIndexList.sip,v 1.1.2.2 2005/11/16 20:01:25 amoll Exp $
 //
 
 %MappedType PyIndexList
@@ -35,6 +35,11 @@
 %ConvertToTypeCode
 	// Convert a Python list of Index instances to an IndexList object on the
 	// heap.
+ 
+	if (sipIsErr == NULL)
+	{
+		return PyList_Check(sipPy);
+	}
  
 	PyIndexList* index_list = new PyIndexList;
  

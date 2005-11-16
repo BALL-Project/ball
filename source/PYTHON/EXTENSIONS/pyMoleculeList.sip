@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyMoleculeList.sip,v 1.5 2003/12/18 19:03:21 oliver Exp $
+// $Id: pyMoleculeList.sip,v 1.5.6.1 2005/11/16 20:01:25 amoll Exp $
 //
 
 %MappedType PyMoleculeList
@@ -40,6 +40,11 @@
 %ConvertToTypeCode
 	// Convert a Python list of Molecule instances to an MoleculeList object on the
 	// heap.
+ 
+	if (sipIsErr == NULL)
+	{
+		return PyList_Check(sipPy);
+	}
  
 	PyMoleculeList *molecule_list = new PyMoleculeList;
  

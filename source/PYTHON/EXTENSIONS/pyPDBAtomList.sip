@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyPDBAtomList.sip,v 1.5 2003/12/18 19:03:21 oliver Exp $
+// $Id: pyPDBAtomList.sip,v 1.5.6.1 2005/11/16 20:01:26 amoll Exp $
 //
 
 %MappedType PyPDBAtomList
@@ -40,6 +40,11 @@
 %ConvertToTypeCode
 	// Convert a Python list of PDBAtom instances to an PDBAtomList object on the
 	// heap.
+ 
+	if (sipIsErr == NULL)
+	{
+		return PyList_Check(sipPy);
+	}
  
 	PyPDBAtomList *PDB_atom_list = new PyPDBAtomList;
  
