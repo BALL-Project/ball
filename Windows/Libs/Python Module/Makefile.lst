@@ -162,6 +162,7 @@ sipBALLPyBondList.obj \
 sipBALLPyAtomList.obj \
 sipBALLPyAtomDict.obj \
 sipBALLPyIndexList.obj \
+sipBALLSteepestDescentMinimizer.obj \
 sipBALLEnergyMinimizer.obj \
 sipBALLConjugateGradientMinimizer.obj \
 sipBALLMicroCanonicalMD.obj \
