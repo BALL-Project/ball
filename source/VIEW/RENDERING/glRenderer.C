@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.29 2005/11/15 20:07:41 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.30 2005/11/16 10:26:59 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -27,6 +27,11 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qimage.h>
+
+#ifdef BALL_ENABLE_VERTEX_BUFFER
+ #include <BALL/VIEW/RENDERING/vertexBuffer.h>
+#endif
+
 
 using namespace std;
 

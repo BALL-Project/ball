@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.32.2.11 2005/10/23 22:23:44 amoll Exp $
+// $Id: glRenderer.h,v 1.32.2.12 2005/11/16 10:27:35 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -31,10 +31,6 @@
 # include <BALL/VIEW/RENDERING/glDisplayList.h>
 #endif
 
-#ifndef BALL_VIEW_RENDERING_VERTEXBUFFER_H
-# include <BALL/VIEW/RENDERING/vertexBuffer.h>
-#endif
-
 class QFont;
 
 namespace BALL
@@ -46,6 +42,7 @@ namespace BALL
 	{
 		class GLDisplayList;
 		class Scene;
+		class MeshBuffer;
 
 		/** GLRenderer
 		 		Renderer which provides hardware accelerated OPENGL rendering.
