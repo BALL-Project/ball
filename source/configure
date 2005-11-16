@@ -17363,11 +17363,11 @@ fi
 
 
 if test "${FFTW_SUPPORT}" = true ; then
-FFTW_SUPPORT=true
+	FFTW_SUPPORT=true
 
-echo "$as_me:$LINENO: checking for FFTW headers" >&5
+	echo "$as_me:$LINENO: checking for FFTW headers" >&5
 echo $ECHO_N "checking for FFTW headers... $ECHO_C" >&6
-if test "${FFTW_INCL}" != "" ; then
+	if test "${FFTW_INCL}" != "" ; then
 
 _INCLUDES=
 
@@ -17443,7 +17443,7 @@ fi
 
 FFTW_INCL_PATH="${_INCLUDES}"
 
-else
+	else
 
 _INCLUDES=
 
@@ -17519,20 +17519,20 @@ fi
 
 FFTW_INCL_PATH="${_INCLUDES}"
 
-fi
+	fi
 
-if test "${FFTW_INCL_PATH}" = "" ; then
-echo "$as_me:$LINENO: result: (not found!)" >&5
+	if test "${FFTW_INCL_PATH}" = "" ; then
+		echo "$as_me:$LINENO: result: (not found!)" >&5
 echo "${ECHO_T}(not found!)" >&6
-echo "$as_me:$LINENO: result: " >&5
+		echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: No FFTW header files found! Please specify the path to the FFTW header fftw3.h" >&5
+		echo "$as_me:$LINENO: result: No FFTW header files found! Please specify the path to the FFTW header fftw3.h" >&5
 echo "${ECHO_T}No FFTW header files found! Please specify the path to the FFTW header fftw3.h" >&6
-echo "$as_me:$LINENO: result: by passing the option --with-fftw-incl=DIR to configure." >&5
+		echo "$as_me:$LINENO: result: by passing the option --with-fftw-incl=DIR to configure." >&5
 echo "${ECHO_T}by passing the option --with-fftw-incl=DIR to configure." >&6
-echo "$as_me:$LINENO: result: The FFTW package can be found under the following URL:" >&5
+		echo "$as_me:$LINENO: result: The FFTW package can be found under the following URL:" >&5
 echo "${ECHO_T}The FFTW package can be found under the following URL:" >&6
-echo "$as_me:$LINENO: result: http://www.fftw.org" >&5
+		echo "$as_me:$LINENO: result: http://www.fftw.org" >&5
 echo "${ECHO_T}http://www.fftw.org" >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -17570,13 +17570,13 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-else
-echo "$as_me:$LINENO: result: (${FFTW_INCL_PATH})" >&5
+	else
+		echo "$as_me:$LINENO: result: (${FFTW_INCL_PATH})" >&5
 echo "${ECHO_T}(${FFTW_INCL_PATH})" >&6
-fi
+	fi
 
-if test "${FFTW_DISABLE_FFTW_FLOAT}" = "false" ; then
-echo "$as_me:$LINENO: checking for FFTW library with float support" >&5
+	if test "${FFTW_DISABLE_FFTW_FLOAT}" = "false" ; then
+		echo "$as_me:$LINENO: checking for FFTW library with float support" >&5
 echo $ECHO_N "checking for FFTW library with float support... $ECHO_C" >&6
 
 _LIBS=
@@ -17658,23 +17658,19 @@ fi
 FFTW_LIB_F="${_LIBS}"
 
 
-if test "${FFTW_LIB_F}" = "" ; then
-echo "$as_me:$LINENO: result: (not found!)" >&5
+		if test "${FFTW_LIB_F}" = "" ; then
+			echo "$as_me:$LINENO: result: (not found!)" >&5
 echo "${ECHO_T}(not found!)" >&6
-echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: no float support found for FFTW!" >&5
-echo "${ECHO_T}no float support found for FFTW!" >&6
-FFTW_DISABLE_FFTW_FLOAT=true
-else
-echo "$as_me:$LINENO: result: (${FFTW_LIB_F})" >&5
+			FFTW_DISABLE_FFTW_FLOAT=true
+		else
+			echo "$as_me:$LINENO: result: (${FFTW_LIB_F})" >&5
 echo "${ECHO_T}(${FFTW_LIB_F})" >&6
-FFTW_DISABLE_FFTW_FLOAT=false
-fi
-fi
+			FFTW_DISABLE_FFTW_FLOAT=false
+		fi
+	fi
 
-if test "${FFTW_DISABLE_FFTW_DOUBLE}" = "false" ; then
-echo "$as_me:$LINENO: checking for FFTW library with double support" >&5
+	if test "${FFTW_DISABLE_FFTW_DOUBLE}" = "false" ; then
+		echo "$as_me:$LINENO: checking for FFTW library with double support" >&5
 echo $ECHO_N "checking for FFTW library with double support... $ECHO_C" >&6
 
 _LIBS=
@@ -17756,19 +17752,19 @@ fi
 FFTW_LIB_D="${_LIBS}"
 
 
-if test "${FFTW_LIB_D}" = "" ; then
-echo "$as_me:$LINENO: result: (not found!)" >&5
+		if test "${FFTW_LIB_D}" = "" ; then
+			echo "$as_me:$LINENO: result: (not found!)" >&5
 echo "${ECHO_T}(not found!)" >&6
-FFTW_DISABLE_FFTW_DOUBLE=true
-else
-echo "$as_me:$LINENO: result: (${FFTW_LIB_D})" >&5
+			FFTW_DISABLE_FFTW_DOUBLE=true
+		else
+			echo "$as_me:$LINENO: result: (${FFTW_LIB_D})" >&5
 echo "${ECHO_T}(${FFTW_LIB_D})" >&6
-FFTW_DISABLE_FFTW_DOUBLE=false
-fi
-fi
+			FFTW_DISABLE_FFTW_DOUBLE=false
+		fi
+	fi
 
-if test "${FFTW_DISABLE_FFTW_LONGDBL}" = false ; then
-echo "$as_me:$LINENO: checking for FFTW library with long double support" >&5
+	if test "${FFTW_DISABLE_FFTW_LONGDBL}" = false ; then
+		echo "$as_me:$LINENO: checking for FFTW library with long double support" >&5
 echo $ECHO_N "checking for FFTW library with long double support... $ECHO_C" >&6
 
 _LIBS=
@@ -17850,21 +17846,21 @@ fi
 FFTW_LIB_L="${_LIBS}"
 
 
-if test "${FFTW_LIB_L}" = "" ; then
-echo "$as_me:$LINENO: result: (not found!)" >&5
+		if test "${FFTW_LIB_L}" = "" ; then
+			echo "$as_me:$LINENO: result: (not found!)" >&5
 echo "${ECHO_T}(not found!)" >&6
-FFTW_DISABLE_FFTW_LONGDBL=true
-else
-echo "$as_me:$LINENO: result: (${FFTW_LIB_L})" >&5
+			FFTW_DISABLE_FFTW_LONGDBL=true
+		else
+			echo "$as_me:$LINENO: result: (${FFTW_LIB_L})" >&5
 echo "${ECHO_T}(${FFTW_LIB_L})" >&6
-FFTW_DISABLE_FFTW_LONGDBL=false
-fi
-fi
+			FFTW_DISABLE_FFTW_LONGDBL=false
+		fi
+	fi
 
-if test "${FFTW_LIB_F}" = "" -a "${FFTW_LIB_D}" = "" -a "${FFTW_LIB_L}" = "" ; then
-echo "$as_me:$LINENO: result: Please install it in a standard location or specify the path" >&5
+	if test "${FFTW_LIB_F}" = "" -a "${FFTW_LIB_D}" = "" -a "${FFTW_LIB_L}" = "" ; then
+			echo "$as_me:$LINENO: result: Please install it in a standard location or specify the path" >&5
 echo "${ECHO_T}Please install it in a standard location or specify the path" >&6
-echo "$as_me:$LINENO: result: with --with-fftw-lib=DIR on the command line." >&5
+			echo "$as_me:$LINENO: result: with --with-fftw-lib=DIR on the command line." >&5
 echo "${ECHO_T}with --with-fftw-lib=DIR on the command line." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -17902,47 +17898,47 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-fi
+	fi
 
-if test "${FFTW_INCL_PATH}" != /usr/include -a "${FFTW_INCL_PATH}" != "" ; then
-BALL_INCLUDES="${BALL_INCLUDES} -I${FFTW_INCL_PATH}"
-fi
+			if test "${FFTW_INCL_PATH}" != /usr/include -a "${FFTW_INCL_PATH}" != "" ; then
+		BALL_INCLUDES="${BALL_INCLUDES} -I${FFTW_INCL_PATH}"
+	fi
 
-cat >>confdefs.h <<\_ACEOF
+	cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_FFTW true
 _ACEOF
 
-cat >>confdefs.h <<\_ACEOF
+	cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_FFTW_H true
 _ACEOF
 
-BALL_HAS_FFTW=true
+	BALL_HAS_FFTW=true
 
 
 
-BALL_HAS_FFTW_FLOAT=""
-if test "${FFTW_DISABLE_FFTW_FLOAT}" = "false" ; then
-echo "$as_me:$LINENO: checking linking against libfftw3f" >&5
+	BALL_HAS_FFTW_FLOAT=""
+	if test "${FFTW_DISABLE_FFTW_FLOAT}" = "false" ; then
+		echo "$as_me:$LINENO: checking linking against libfftw3f" >&5
 echo $ECHO_N "checking linking against libfftw3f... $ECHO_C" >&6
-SAVE_LIBS=${LIBS}
-SAVE_LDFLAGS=${LDFLAGS}
-LIBS="${FFTW_LIB_F}/libfftw3f.a ${LIBS}"
-LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
-FFTW_LINKING_OK=0
-cat >conftest.$ac_ext <<_ACEOF
+		SAVE_LIBS=${LIBS}
+		SAVE_LDFLAGS=${LDFLAGS}
+		LIBS="${FFTW_LIB_F}/libfftw3f.a ${LIBS}"
+		LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
+		FFTW_LINKING_OK=0
+		cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-	#include <fftw3.h>
+		#include <fftw3.h>
 
 int
 main ()
 {
 
-	 fftwf_plan f = fftwf_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
+		 fftwf_plan f = fftwf_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
 
   ;
   return 0;
@@ -17978,16 +17974,16 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-LIBS=${SAVE_LIBS}
-LDFLAGS=${SAVE_LDFLAGS}
-if test "${FFTW_LINKING_OK}" != "1" ; then
-echo "$as_me:$LINENO: result: no" >&5
+		LIBS=${SAVE_LIBS}
+		LDFLAGS=${SAVE_LDFLAGS}
+		if test "${FFTW_LINKING_OK}" != "1" ; then
+	echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: Cannot link against libfftw3f. Please check config.log and" >&5
+	echo "$as_me:$LINENO: result: Cannot link against libfftw3f. Please check config.log and" >&5
 echo "${ECHO_T}Cannot link against libfftw3f. Please check config.log and" >&6
-echo "$as_me:$LINENO: result: specify appropriate options to configure (e.g. --with-fftw-lib/incl)." >&5
+	echo "$as_me:$LINENO: result: specify appropriate options to configure (e.g. --with-fftw-lib/incl)." >&5
 echo "${ECHO_T}specify appropriate options to configure (e.g. --with-fftw-lib/incl)." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -18025,36 +18021,36 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-else
-echo "$as_me:$LINENO: result: yes" >&5
+	else
+	echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-BALL_HAS_FFTW_FLOAT=true
-fi
-fi
+	BALL_HAS_FFTW_FLOAT=true
+	fi
+	fi
 
-BALL_HAS_FFTW_DOUBLE=""
-if test "${FFTW_DISABLE_FFTW_DOUBLE}" = "false" ; then
-echo "$as_me:$LINENO: checking linking against libfftw3" >&5
+	BALL_HAS_FFTW_DOUBLE=""
+	if test "${FFTW_DISABLE_FFTW_DOUBLE}" = "false" ; then
+	echo "$as_me:$LINENO: checking linking against libfftw3" >&5
 echo $ECHO_N "checking linking against libfftw3... $ECHO_C" >&6
-SAVE_LIBS=${LIBS}
-SAVE_LDFLAGS=${LDFLAGS}
-LIBS="${FFTW_LIB_D}/libfftw3.a ${LIBS}"
-LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
-FFTW_LINKING_OK=0
-cat >conftest.$ac_ext <<_ACEOF
+	SAVE_LIBS=${LIBS}
+	SAVE_LDFLAGS=${LDFLAGS}
+	LIBS="${FFTW_LIB_D}/libfftw3.a ${LIBS}"
+	LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
+	FFTW_LINKING_OK=0
+	cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-						#include <fftw3.h>
+							#include <fftw3.h>
 
 int
 main ()
 {
 
-						 fftw_plan f = fftw_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
+							 fftw_plan f = fftw_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
 
   ;
   return 0;
@@ -18090,16 +18086,16 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-LIBS=${SAVE_LIBS}
-LDFLAGS=${SAVE_LDFLAGS}
-if test "${FFTW_LINKING_OK}" != "1" ; then
-echo "$as_me:$LINENO: result: no" >&5
+	LIBS=${SAVE_LIBS}
+	LDFLAGS=${SAVE_LDFLAGS}
+	if test "${FFTW_LINKING_OK}" != "1" ; then
+	echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: Cannot link against libfftw3. Please check config.log and" >&5
+	echo "$as_me:$LINENO: result: Cannot link against libfftw3. Please check config.log and" >&5
 echo "${ECHO_T}Cannot link against libfftw3. Please check config.log and" >&6
-echo "$as_me:$LINENO: result: specify appropriate options to configure (e.g. --with-fftw-lib/incl)." >&5
+	echo "$as_me:$LINENO: result: specify appropriate options to configure (e.g. --with-fftw-lib/incl)." >&5
 echo "${ECHO_T}specify appropriate options to configure (e.g. --with-fftw-lib/incl)." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -18137,36 +18133,36 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-else
-echo "$as_me:$LINENO: result: yes" >&5
+	else
+	echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-BALL_HAS_FFTW_DOUBLE=true
-fi
-fi
+	BALL_HAS_FFTW_DOUBLE=true
+	fi
+	fi
 
-BALL_HAS_FFTW_LONG_DOUBLE=""
-if test "${FFTW_DISABLE_FFTW_LONGDBL}" = "false" ; then
-echo "$as_me:$LINENO: checking linking against libfftw3l" >&5
+	BALL_HAS_FFTW_LONG_DOUBLE=""
+	if test "${FFTW_DISABLE_FFTW_LONGDBL}" = "false" ; then
+	echo "$as_me:$LINENO: checking linking against libfftw3l" >&5
 echo $ECHO_N "checking linking against libfftw3l... $ECHO_C" >&6
-SAVE_LIBS=${LIBS}
-SAVE_LDFLAGS=${LDFLAGS}
-LIBS="${FFTW_LIB_D}/libfftw3l.a ${LIBS}"
-LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
-FFTW_LINKING_OK=0
-cat >conftest.$ac_ext <<_ACEOF
+	SAVE_LIBS=${LIBS}
+	SAVE_LDFLAGS=${LDFLAGS}
+	LIBS="${FFTW_LIB_D}/libfftw3l.a ${LIBS}"
+	LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
+	FFTW_LINKING_OK=0
+	cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-						#include <fftw3.h>
+							#include <fftw3.h>
 
 int
 main ()
 {
 
-						 fftwl_plan f = fftwl_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
+							 fftwl_plan f = fftwl_plan_dft_1d(1,0,0,1,FFTW_FORWARD);
 
   ;
   return 0;
@@ -18202,16 +18198,16 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-LIBS=${SAVE_LIBS}
-LDFLAGS=${SAVE_LDFLAGS}
-if test "${FFTW_LINKING_OK}" != "1" ; then
-echo "$as_me:$LINENO: result: no" >&5
+	LIBS=${SAVE_LIBS}
+	LDFLAGS=${SAVE_LDFLAGS}
+	if test "${FFTW_LINKING_OK}" != "1" ; then
+	echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: Cannot link against libfftw3l. Please check config.log and" >&5
+	echo "$as_me:$LINENO: result: Cannot link against libfftw3l. Please check config.log and" >&5
 echo "${ECHO_T}Cannot link against libfftw3l. Please check config.log and" >&6
-echo "$as_me:$LINENO: result: specify appropriate options to configure (e.g. --with-fftw-lib/incl)." >&5
+	echo "$as_me:$LINENO: result: specify appropriate options to configure (e.g. --with-fftw-lib/incl)." >&5
 echo "${ECHO_T}specify appropriate options to configure (e.g. --with-fftw-lib/incl)." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -18249,12 +18245,12 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-else
-echo "$as_me:$LINENO: result: yes" >&5
+	else
+	echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-BALL_HAS_FFTW_LONG_DOUBLE=true
-fi
-fi
+	BALL_HAS_FFTW_LONG_DOUBLE=true
+	fi
+	fi
 fi
 cat >>confdefs.h <<_ACEOF
 #define BALL_COMPLEX_TYPE ${BALL_COMPLEX_TYPE}
