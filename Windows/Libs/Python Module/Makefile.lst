@@ -74,7 +74,7 @@ sipBALLResidueNumberColorProcessor.obj \
 sipBALLElementColorProcessor.obj \
 sipBALLInterpolateColorProcessor.obj \
 sipBALLColorProcessor.obj \
-sipBALLColorTable.obj \
+sipBALLColorMap.obj \
 sipBALLColorExtension2.obj \
 sipBALLVertex2.obj \
 sipBALLVertex.obj \

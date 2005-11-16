@@ -4,7 +4,7 @@ libVIEW.obj\
 ..\..\..\source\VIEW\DATATYPE\colorExtension2.obj\
 ..\..\..\source\VIEW\DATATYPE\colorHSV.obj\
 ..\..\..\source\VIEW\DATATYPE\colorRGBA.obj\
-..\..\..\source\VIEW\DATATYPE\colorTable.obj\
+..\..\..\source\VIEW\DATATYPE\colorMap.obj\
 ..\..\..\source\VIEW\DATATYPE\colorUnit.obj\
 ..\..\..\source\VIEW\DATATYPE\colorUnitHue.obj\
 ..\..\..\source\VIEW\DATATYPE\vertex1.obj\
