@@ -93,6 +93,11 @@ namespace BALL
 				static const String PSI_MAX;
 				static const String DEG_PSI;
 				
+				// penalty value of the inside points
+				// Default value for static protein is -15, for mobile protein 1
+				static const String PENALTY_STATIC;
+				static const String PENALTY_MOBILE;
+				
 			};
     
       struct Default
@@ -147,6 +152,11 @@ namespace BALL
 				static const float PSI_MIN;
 				static const float PSI_MAX;
 				static const float DEG_PSI;
+				
+				// penalty value of the inside points
+				// Default value for static protein is -15, for mobile protein 1
+				static const int PENALTY_STATIC;
+				static const int PENALTY_MOBILE;
 			};
 
       /**
