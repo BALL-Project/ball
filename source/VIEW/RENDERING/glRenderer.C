@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.31 2005/11/16 10:41:39 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.32 2005/11/17 13:35:57 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1571,7 +1571,7 @@ namespace BALL
 			return string_vector;
 		}
 		
-		bool GLRenderer::enableVertexBuffers(bool /* state */)
+		bool GLRenderer::enableVertexBuffers(bool state)
 			throw()
 		{
 		
@@ -1599,7 +1599,7 @@ namespace BALL
 			return true;
 		}
 
-		void GLRenderer::clearVertexBuffersFor(Representation& /* rep */)
+		void GLRenderer::clearVertexBuffersFor(Representation& rep)
 			throw()
 		{
 		#ifdef BALL_ENABLE_VERTEX_BUFFER
@@ -1639,8 +1639,6 @@ namespace BALL
 					{
 						(*bit)->draw();
 					}
-
-					finishDrawingMeshes_();
 				}
 			}
 		#endif
