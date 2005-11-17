@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.62 2005/11/14 13:48:47 amoll Exp $
+// $Id: scene.C,v 1.171.2.63 2005/11/17 13:25:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1406,10 +1406,25 @@ namespace BALL
 					animation_points_.size() > 0 && !animation_running);
 		}
 
+		bool Scene::isAnimationRunning() const
+			throw()
+		{
+			#ifdef BALL_QT_HAS_THREADS
+				if (animation_thread_ != 0 && animation_thread_->running())
+				{
+					return true;
+				}
+			#endif
+
+			return false;
+		}
+
 		//##########################EVENTS#################################
 
 		void Scene::mouseMoveEvent(QMouseEvent* e)
 		{
+			if (isAnimationRunning()) return;
+
 			makeCurrent();
 
 			need_update_ = true;
@@ -1443,6 +1458,8 @@ namespace BALL
 
 		void Scene::mousePressEvent(QMouseEvent* e)
 		{
+			if (isAnimationRunning()) return;
+
 			makeCurrent();
 
 			mouse_button_is_pressed_ = true;
@@ -1645,6 +1662,8 @@ namespace BALL
 
 		void Scene::mouseReleaseEvent(QMouseEvent* e)
 		{
+			if (isAnimationRunning()) return;
+
 			makeCurrent();
 
 			mouse_button_is_pressed_ = false;

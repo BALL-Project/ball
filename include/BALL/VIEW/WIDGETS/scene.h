@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62.2.23 2005/11/14 13:48:14 amoll Exp $
+// $Id: scene.h,v 1.62.2.24 2005/11/17 13:25:04 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -597,6 +597,10 @@ namespace BALL
 			void rotateComposites(const List<Composite*>& composites, float degree_right, float degree_up, float degree_clockwise = 0);
 
 			void initTimer();
+
+			///
+			bool isAnimationRunning() const
+				throw();
 			
 			protected slots:
 

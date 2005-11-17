@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.sip,v 1.2.4.7 2005/11/14 13:49:13 amoll Exp $
+// $Id: scene.sip,v 1.2.4.8 2005/11/17 13:24:58 amoll Exp $
 //
 
 class Scene 
@@ -60,5 +60,6 @@ static Scene* getInstance(Position /index/);
 	void moveComposites(PyCompositeList, Vector3);
 	void rotateComposites(PyCompositeList, float, float, float = 0);
 //  void writePreferences(INIFile&) throw();
+	bool isAnimationRunning() const throw();
   ~Scene() throw();
 };
