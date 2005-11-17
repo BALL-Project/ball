@@ -372,14 +372,14 @@ namespace BALL
 			return docu_for_menu_entry_.has(id);
 		}
 
-		String HelpViewer::getHelpentryFor(const QWidget* widget) const
+		String HelpViewer::getHelpEntryFor(const QWidget* widget) const
 		{
 			if (!docu_for_widget_.has(widget)) return false;
 			
 			return docu_for_widget_[widget];
 		}
 
-		String HelpViewer::getHelpentryFor(Index id) const
+		String HelpViewer::getHelpEntryFor(Index id) const
 		{
 			if (!docu_for_menu_entry_.has(id)) return false;
 

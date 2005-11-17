@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.1.2.9 2005/11/17 14:10:42 amoll Exp $
+// $Id: helpViewer.h,v 1.1.2.10 2005/11/17 14:13:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -123,10 +123,10 @@ namespace BALL
 			bool hasHelpFor(const QWidget* widget) const;
 
 			/// Get help entry for menu entry
-			String getHelpentryFor(Index id) const;
+			String getHelpEntryFor(Index id) const;
 
 			/// Get help entry for widget
-			String getHelpentryFor(const QWidget* widget) const;
+			String getHelpEntryFor(const QWidget* widget) const;
 					
 			public slots:
 
