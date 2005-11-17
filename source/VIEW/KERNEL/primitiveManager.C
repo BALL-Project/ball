@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.20 2005/11/10 21:26:30 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.21 2005/11/17 13:11:03 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -581,6 +581,10 @@ void PrimitiveManager::storeRepresentations(INIFile& out)
 
 void PrimitiveManager::restoreRepresentations(const INIFile& in, const vector<const Composite*>& new_systems)
 {
+ 	DisplayProperties* dp = DisplayProperties::getInstance(0);
+
+	if (dp == 0) return;
+
 	try
 	{
 		for (Position p = 0; p < 9999999; p++)
@@ -609,9 +613,12 @@ void PrimitiveManager::restoreRepresentations(const INIFile& in, const vector<co
 			vector<String> string_vector2;
 			data_string.split(string_vector2, "[]");
 			data_string = string_vector2[0];
-			if (DisplayProperties::getInstance(0) != 0)
+
+			if (!dp->getSettingsFromString(data_string))
 			{
-				DisplayProperties::getInstance(0)->getSettingsFromString(data_string);
+				BALLVIEW_DEBUG;
+				Log.error() << "data_string " << std::endl;
+				continue;
 			}
 
 			// Composites id's per number
@@ -636,17 +643,14 @@ void PrimitiveManager::restoreRepresentations(const INIFile& in, const vector<co
 				data_string.split(string_vector2, "|");
 				ColorRGBA color;
 				color = string_vector2[1];
-				if (DisplayProperties::getInstance(0) != 0)
-				{
-					DisplayProperties::getInstance(0)->setCustomColor(color);
-				}
+				dp->setCustomColor(color);
 			}
 
 			// to select the composites for the new Representation:
 			// send a ControlSelectionMessage, on which the DisplayProperties will work
 			Composite* composite = (Composite*) new_systems[system_pos];
 			ControlSelectionMessage* msg = new ControlSelectionMessage();
-			Position current = 1;
+			Position current = 0;
 
 			Composite::CompositeIterator ccit = composite->beginComposite();
 			for (; +ccit; ++ccit)
@@ -655,23 +659,26 @@ void PrimitiveManager::restoreRepresentations(const INIFile& in, const vector<co
 				current++;
 			}
 
+			if (hash_set.size() == 0)
+			{
+				BALLVIEW_DEBUG;
+				continue;
+			}
+
 			getMainControl()->sendMessage(*msg);
 		
-			if (DisplayProperties::getInstance(0) != 0)
+			Representation* rep = 0;
+			dp->apply();
+			rep = dp->getRepresentation();
+			if (rep == 0)
 			{
-				DisplayProperties::getInstance(0)->apply();
-			}	
+				BALLVIEW_DEBUG;
+				continue;
+			}
 
 			// is representation hidden?
 			if (string_vector2.size() == 3 && string_vector2[2].has('H'))
 			{
-				Representation* rep = 0;
-				RepresentationsIterator pit = begin();
-				for (; pit != end(); pit++)
-				{
-					rep = *pit;
-				}
-
 				rep->setHidden(true);
 				rep->update(false);
 
