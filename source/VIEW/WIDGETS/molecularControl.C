@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.35 2005/10/13 17:20:00 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.36 2005/11/17 14:28:01 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -632,8 +632,10 @@ namespace BALL
 
 			select_id_ = insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()));   
 			setMenuHint("Select a molecular object to see its position in the scene or to mark it for a simulation");
+			setMenuHelp("molecularControl.html#selection_highlight");
 			deselect_id_ = insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()));
 			setMenuHint("Deselect a molecular object.");
+			setMenuHelp("molecularControl.html#selection_highlight");
 
 			main_control.insertPopupMenuSeparator(MainControl::EDIT);
 

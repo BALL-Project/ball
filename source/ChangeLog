@@ -41,7 +41,8 @@ Fixed:
  - Crash while wrongly using malformed boolean expression "residueID(...)"
  - Crash in CalculateSecondaryStructureProcessor, when one SS is part of another
  - Crash while running an MDS with trajectory if the DCD file could not be written
- - possible Crash with representations for two different systems
+ - possible crash with representations for two different systems
+ - possible crash with mouse movements while animation is running
  - NMRViewer und underlying widgets did not compile
  - Problems in persistence with g++ 4.x series
  - Hangup in socket interface with g++ 4.x series

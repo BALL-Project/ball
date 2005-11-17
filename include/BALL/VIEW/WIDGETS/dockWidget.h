@@ -75,6 +75,9 @@ namespace BALL
 
 			///
 			virtual void setVisible(bool state);
+			
+			///
+			virtual void registerWidgetForHelpSystem(const QWidget* widget, const String& url);
 
 			//@}
 			/** @name Public slots 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.63 2005/11/17 13:25:07 amoll Exp $
+// $Id: scene.C,v 1.171.2.64 2005/11/17 14:28:01 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1337,6 +1337,7 @@ namespace BALL
 			window_menu_entry_id_ = 
 				insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 			menuBar()->setItemChecked(window_menu_entry_id_, true);
+			setMenuHelp("scene.html");
 
 			// ======================== ANIMATION ===============================================
 			String help_url = "tips.html#animations";

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.86.2.12 2005/11/04 23:08:01 amoll Exp $
+// $Id: molecularStructure.C,v 1.86.2.13 2005/11/17 14:28:01 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -149,6 +149,7 @@ namespace BALL
 			create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS, 
 																					"&Distance Grid", this, SLOT(createGridFromDistance()));
 			setMenuHint("Create a grid with the distance to the geometric center of a structure.");
+			setMenuHelp("tips.html#distance_grids");
 
 			minimization_dialog_.setAmberDialog(&amber_dialog_);
 			minimization_dialog_.setCharmmDialog(&charmm_dialog_);

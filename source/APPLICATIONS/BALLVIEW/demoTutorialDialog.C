@@ -365,8 +365,8 @@ void DemoTutorialDialog::nextStepDemo_()
 
 		rep->setColorProcessor(0);
 
- 		SceneMessage smsg(SceneMessage::REBUILD_DISPLAY_LISTS);
- 		getMainControl()->sendMessage(smsg);
+ 		getMainControl()->sendMessage(*new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS));
+
 		disable_button = false;
 	}
 	else if (current_step_ == 17)
