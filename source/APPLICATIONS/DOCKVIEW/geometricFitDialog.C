@@ -26,8 +26,8 @@ namespace BALL
 				setINIFileSectionName("GEOMETRIC_FIT_OPTIONS");
 				registerObject_(surface_thickness);
 				registerObject_(grid_spacing);
-				registerObject_(penalty_value1);
-				registerObject_(penalty_value2);
+				registerObject_(penalty_static);
+				registerObject_(penalty_mobile);
 				registerObject_(near_radius);
 				registerObject_(deg_interval);
 				registerObject_(peak_num);
@@ -132,8 +132,8 @@ namespace BALL
 		{
     	surface_thickness->setText("1.0");
     	grid_spacing->setText("1.0"); 
-    	penalty_value1->setText("-15");
-    	penalty_value2->setText("1");
+    	penalty_static->setText("-15");
+    	penalty_mobile->setText("1");
     	deg_interval->setText("20");
     	near_radius->setText("1.8");
     	peak_num->setText("3");
@@ -151,6 +151,8 @@ namespace BALL
 				options[GeometricFit::Option::SURFACE_THICKNESS] = String(surface_thickness->text().ascii()).toFloat();
 				options[GeometricFit::Option::DEGREE_INTERVAL] = String(deg_interval->text().ascii()).toDouble();
 				options[GeometricFit::Option::TOP_N] = String(peak_num->text().ascii()).toInt();
+				options[GeometricFit::Option::PENALTY_STATIC] = String(penalty_static->text().ascii()).toInt();
+				options[GeometricFit::Option::PENALTY_MOBILE] = String(penalty_mobile->text().ascii()).toInt();
 			}
 		  catch (Exception::InvalidFormat)
 			{
@@ -197,12 +199,12 @@ namespace BALL
 			grid_spacing->setText(backup_[1]);
 			backup_[1] = temp;
 
-			temp = penalty_value1->text();
-			penalty_value1->setText(backup_[2]);
+			temp = penalty_static->text();
+			penalty_static->setText(backup_[2]);
 			backup_[2] = temp;
 
-			temp = penalty_value2->text();
-			penalty_value2->setText(backup_[3]);
+			temp = penalty_mobile->text();
+			penalty_mobile->setText(backup_[3]);
 			backup_[3] = temp;
 
 			temp = near_radius->text();

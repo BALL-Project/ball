@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.27 2005/10/13 11:52:40 leonhardt Exp $
+// $Id: dockingController.C,v 1.1.2.28 2005/11/17 12:11:43 leonhardt Exp $
 //
 
 #include "dockingController.h"
@@ -24,7 +24,7 @@
 #include <qmessagebox.h>
 #include <qcombobox.h>
 //#define BALL_VIEW_DEBUG
-#undef BALL_QT_HAS_THREADS
+//#undef BALL_QT_HAS_THREADS
 using namespace std;
 
 namespace BALL

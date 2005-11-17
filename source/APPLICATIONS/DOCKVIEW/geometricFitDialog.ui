@@ -142,7 +142,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>penalty value 2</string>
+                        <string>penalty value for mobile partner</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="0" column="1">
@@ -298,12 +298,12 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>penalty value 1</string>
+                        <string>penalty value for static partner</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="2" column="1">
                     <property name="name">
-                        <cstring>penalty_value1</cstring>
+                        <cstring>penalty_static</cstring>
                     </property>
                     <property name="minimumSize">
                         <size>
@@ -326,7 +326,7 @@
                 </widget>
                 <widget class="QLineEdit" row="3" column="1">
                     <property name="name">
-                        <cstring>penalty_value2</cstring>
+                        <cstring>penalty_mobile</cstring>
                     </property>
                     <property name="minimumSize">
                         <size>
@@ -482,8 +482,8 @@
 <tabstops>
     <tabstop>surface_thickness</tabstop>
     <tabstop>grid_spacing</tabstop>
-    <tabstop>penalty_value1</tabstop>
-    <tabstop>penalty_value2</tabstop>
+    <tabstop>penalty_static</tabstop>
+    <tabstop>penalty_mobile</tabstop>
     <tabstop>near_radius</tabstop>
     <tabstop>deg_interval</tabstop>
     <tabstop>peak_num</tabstop>
