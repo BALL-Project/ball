@@ -56,7 +56,7 @@ Fixed:
  - Missing assignment operator in RotamerLibrary
  - Browse button didnt work in Molecular Dynamics Simulation dialog
  - Incorrect bond orders and GLN amide group planarity in fragment database
- - Naming of peptides built.
+ - PeptideBuilder: Naming of peptides; enabled support for paste in Dialog
  - Opening of files in current directory per command line with BALLView
  - Some problems with rendering Labels on Windows and MacOS
  - Some minor problems with the clipping planes
