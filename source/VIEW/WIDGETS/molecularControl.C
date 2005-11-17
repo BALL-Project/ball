@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.37 2005/11/17 21:58:03 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.38 2005/11/17 23:43:36 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -774,6 +774,15 @@ namespace BALL
 				}
 				composite_to_item_[*cit]->setSelected(true);
 			}
+
+			listview->setUpdatesEnabled(true);
+			listview->triggerUpdate();
+			updateSelection();
+
+			selected_ = selection;
+			ControlSelectionMessage* message = new ControlSelectionMessage;
+			message->setSelection(selected_);
+			notify_(message);
 		}
 
 		// set the checkboxes according to the selection in the MainControl
