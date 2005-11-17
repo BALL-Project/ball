@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.39.2.4 2005/09/29 14:01:30 amoll Exp $
+// $Id: displayProperties.h,v 1.39.2.5 2005/11/17 13:02:29 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -142,6 +142,10 @@ namespace BALL
 			/// Set if Representations are automaticaly created for new Molecules
 			void enableCreationForNewMolecules(bool state) 
 				throw() { create_representations_for_new_molecules_ = state;}
+
+			/// Get the Representation on which DisplayProperties is working on
+			Representation* getRepresentation() 
+				throw() { return rep_;}
 				
 			public slots:
 					
