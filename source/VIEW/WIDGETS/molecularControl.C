@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.2.36 2005/11/17 14:28:01 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.37 2005/11/17 21:58:03 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -332,7 +332,7 @@ namespace BALL
 			if (RTTI::isKindOf<ControlSelectionMessage>(*message))
 			{
 				ControlSelectionMessage* nsm = (ControlSelectionMessage*) message;
-				setHighlighting_(nsm->getSelection());
+				highlight(nsm->getSelection());
 				return true;
 			}
 
@@ -755,12 +755,12 @@ namespace BALL
 		}
 
 		// set the highlighting according to the selection in the MainControl
-		void MolecularControl::setHighlighting_(List<Composite*> selection)
+		void MolecularControl::highlight(const List<Composite*>& selection)
 			throw()
 		{	
 			listview->clearSelection();
 
-			List<Composite*>::Iterator cit = selection.begin();
+			List<Composite*>::ConstIterator cit = selection.begin();
 			for (; cit != selection.end(); cit++)
 			{
 				if (*cit == 0 || 

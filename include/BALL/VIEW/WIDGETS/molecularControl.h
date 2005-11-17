@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.47.2.9 2005/09/01 22:18:06 amoll Exp $
+// $Id: molecularControl.h,v 1.47.2.10 2005/11/17 21:57:14 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -273,6 +273,10 @@ class BALL_VIEW_EXPORT MolecularControl
 	void highlightSelection()
 		throw();
 
+	///
+	void highlight(const List<Composite*>& composite)
+		throw();
+
 	/** Cut the selected Composite objects and copy them into an internal
 			copy list. If there are already Composite objects in the 
 			copy list they will be deleted. 
@@ -452,9 +456,6 @@ class BALL_VIEW_EXPORT MolecularControl
 
 	//_ Test, if its allowed to paste the copy liste into the current selected context item.
 	bool pasteAllowedFor_(Composite& composite)
-		throw();
-
-	void setHighlighting_(List<Composite*> selection)
 		throw();
 
 	//
