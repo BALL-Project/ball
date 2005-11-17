@@ -1,8 +1,16 @@
+# create an animation for a molecule
+
+clearAll()
+
+#the molecule to animate
+openFile(Path().find("structures/bpti.pdb"))
+
 angle_step = 6
 turns = 1
 move_step = 1
 move_dist = 100
 
+# do we want to create a movie with PNGs or POVRays?
 def my_task():
 	m.processEvents(1000)
 	#s.exportPOVRay()
@@ -37,7 +45,7 @@ for i in range(0, 90 / angle_step):
 	
 #move throught molecule
 for i in range(0, move_dist * 2 / move_step):
-	s.move(Vector3(0,0,move_step))
+	s.move(Vector3(0,0,-move_step))
 	my_task()
 
 #reset camera

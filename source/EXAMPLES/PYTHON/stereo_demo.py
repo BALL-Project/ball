@@ -1,7 +1,9 @@
-getDisplayProperties().selectModel(MODEL_BALL_AND_STICK)
+clearAll()
+
+getDisplayProperties().selectModel(MODEL_STICK)
 getDisplayProperties().selectColoringMethod(COLORING_ELEMENT)
-  
-openFile("bpti.pdb")
+setMultithreading(0)  
+openFile(Path().find("structures/bpti.pdb"))
 getMolecularStructure().addHydrogens()
 
 getScene().enterDualStereo()
@@ -15,10 +17,12 @@ mds.setup(ff, ssm)
 mds.setTimeStep(0.001)
 counter = 0
 limit = 60
+setMultithreading(1)  
 
 while counter < limit and not getPyWidget().toAbortScript():
-  mds.simulateIterations(10)
+  mds.simulateIterations(1)
   getMainControl().update(system)
-  limit = limit + 10
+  limit = limit + 1
+  getMainControl().processEvents(2000)
 
 getScene().exitStereo()
