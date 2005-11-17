@@ -91,6 +91,12 @@ The last three entries can be switched on and off to repeat the animation or exp
 </div>
 <pre>mencoder  "mf://*.png"  -mf fps=25 -o output.avi -ovc xvid  -xvidencopts pass=1:bitrate=1600</pre>
 
+<h3>Usage of distance grids<a name="distance_grids"></a></h3>
+You might wonder what a distance grid should be good for (see Menu entry "Tools->Distance Grid").
+This creates a grid with the distance of every point in the grid to the center of the molecule.
+This grid can be used to color surfaces according to the distance of every triangle to the center of the molecule,
+which can create quite nice coloring effects. (see also <a href="geometricControl.html#color_surfaces">here</a>)
+
 <h1 align="center"><hr width=550>
 <a href="displayProperties.html"><img src="images/left.png" width="58" height="28" align="absmiddle"></a>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="index.html">Index</a> &nbsp;&nbsp;&nbsp;&nbsp;
