@@ -4,8 +4,8 @@
 
 EXTENSION_DIR = $(SDIR)\PYTHON\Extensions
 
-# options for C++ files
-CC =  $(CC) $(VIEW_INCLUDES) $(VIEW_DEFINES)
+# options for C++ files: no optimization!
+CC = cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(CC_OPT) $(CC_DEBUG) /TP $(VIEW_INCLUDES) $(VIEW_DEFINES)
 
 # options for Linker
 LINKDLL = $(LINKDLL) $(BALLVIEW_LIBS) /EXPORT:initBALL
