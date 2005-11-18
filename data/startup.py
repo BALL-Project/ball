@@ -64,6 +64,9 @@ def clearAll():
 def setMultithreading(mode):
 	getMainControl().setMultithreading(mode)
 
+def runScript(filename):
+	getPyWidget().run(filename)
+	
 
 ###################### EXAMPLES: #######################
 def createStickModel():
