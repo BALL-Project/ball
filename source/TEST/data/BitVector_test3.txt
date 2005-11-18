@@ -1,5 +1,0 @@
-BALL::Size size = 4 
-bool - = FALSE 
-bool - = TRUE 
-bool - = FALSE 
-bool - = FALSE 

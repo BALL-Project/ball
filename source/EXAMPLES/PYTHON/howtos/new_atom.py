@@ -1,6 +1,0 @@
-s = System()
-m = Molecule()
-o = Atom()
-m.insert(o)
-s.insert(m)
-getMainControl().insert(s)

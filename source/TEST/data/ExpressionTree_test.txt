@@ -1,4 +1,0 @@
-/Object: [0-9a-zA-Fx]* is instance of class: BALL::ExpressionTree
-[type = 1  negate = 1  arg = ]
-/Object: [0-9a-zA-Fx]* is instance of class: BALL::ExpressionTree
-        [type = 0  negate = 0  arg = <NULL>]

@@ -1,9 +1,0 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: python.doc,v 1.7 2004/05/27 19:49:46 oliver Exp $
-//
-
-	/** \defgroup PythonExtensions Python extensions
-			\ingroup Python
-	*/

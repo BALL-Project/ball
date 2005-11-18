@@ -1,9 +1,0 @@
-; $Id: ions.rul,v 1.2 2002/12/12 09:53:11 oliver Exp $
-; example rule file
-
-
-[ChargeRules:K]
- 1.0 = true()
-
-[RadiusRules:K]
- 2.0 = true()

@@ -1,5 +1,0 @@
-/Object: [0-9a-fA-Fx]+ is instance of class: .*
-/  angle \(real\): -0.41614[0-9]+
-/    i: 0.2430[0-9]+
-/    j: 0.4860[0-9]+
-/    k: 0.7290[0-9]+
