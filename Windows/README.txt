@@ -45,55 +45,33 @@ This file contains:
 	- "QTVERSION" to a numerical representation for your QT version e.g. 335 for version 3.3.5
 	- "QTDIR" (this is in general done automatical by the QT installation)
 
-3.) Building the libraries with QT and BALLView
+3.) Building BALL:
 
-Open a Microsoft Visual Studio .NET command prompt 
-(see Windows Start Menu) and change the directory to "BALL\Windows" . Next call 
+Open BALL\Windows\BALL-project.sln
+We have a configuration set for Debuging and one for creating a Release version.
+If you switch between the both, you have to clean up the whole project.
 
-build release                   or
-build debug
+Build the projects in the following order:
 
-To build the release or debugging version of the libraries.
-To clean up all object files etc. call
+BALL-lib
+VIEW-lib
+Python-lib
+BALLView
 
-build release clean             or
-build debug clean
+To start BALLView, call 
 
-This has also to be done if you want switch between the two versions and create the other one!
+BALL\Windows\startBALLView  			or
+BALL\Windows\startBALLViewDebug
 
-BALLView can be started with one of the following batch-files which ensures, that the PATH 
-environment variable contains the directories for the needed libs.
+depending, if you create the debug or release version.
 
-startBALLView.bat               or
-startBALLViewDebug.bat
+If you dont have QT 3.3.X installed, you can only build the core library BALL-lib!
 
-4.) Building the libraries without QT and BALLView: 
-If you dont have the QT library available or dont need the GUI and Python Support, 
-you can create the core library BALL only: 
+We have also project entries to create
 
-Proceed as in point 3 but call
-
-build release BALL              or
-build debug BALL
-
-
------------------------------------------------------------------------------------
--------------------------------ADDONS INSTALLATION: -------------------------------
------------------------------------------------------------------------------------
-
-1.) Building the tests
-
-Proceed as in point 3 above but call
-
-build release tests             or
-build debug tests
-
-2.) Building the Benchmarks
-
-Proceed as in point 3 above but call
-
-build release benchmarks        or
-build debug benchmarks
+Tutorials,
+Benchmarks and
+Tests.
 
 ---------------------------------------------------------------------------------
 -------------------------------	KNOWN ISSUES: -----------------------------------
