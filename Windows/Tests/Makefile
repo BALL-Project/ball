@@ -1,18 +1,23 @@
 
 !INCLUDE ..\Makefile_options.txt
-!INCLUDE ..\..\source\TEST\Makefile.lst
+
+TESTDIR = ..\..\source\TEST
+
+PREFIX = ..\..\source\TEST\\
+
+!INCLUDE $(TESTDIR)\Makefile.lst
 
 # options for C++ files: no optimizations because for some files this creates an
 # error C1053: main_ too large
 CC	= cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(CC_DEBUG) /TP $(BALL_DEFINES)
 
-LINK	= $(LINK) $(BALL_WIN_DIR)\Libs\libBALL\$(TARGETDIR)\libBALL.lib
+LINK	= $(LINK) $(BALLVIEW_LIBS)
 
 o = .obj
 EXEEXT = .exe
 e = .exe
 
-TESTDIR = $(SDIR)\TEST
+INDIR = $(SDIR)\TEST
 PREFIX = $(TESTDIR)\\
 
 .c.exe:
