@@ -67,11 +67,15 @@ depending, if you create the debug or release version.
 
 If you dont have QT 3.3.X installed, you can only build the core library BALL-lib!
 
-We have also project entries to create
+
+We have also project entries to create the
 
 Tutorials,
 Benchmarks and
 Tests.
+
+You can also create all parts of the project per Makefile in the Command line.
+For instructions on how to do this, see README2.txt.
 
 ---------------------------------------------------------------------------------
 -------------------------------	KNOWN ISSUES: -----------------------------------
