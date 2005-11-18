@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideDialog.C,v 1.9.6.2 2005/11/17 17:22:58 amoll Exp $
+// $Id: peptideDialog.C,v 1.9.6.3 2005/11/18 15:21:13 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
 #include <BALL/COMMON/logStream.h>
@@ -118,9 +118,10 @@ namespace BALL
 			if (sequence_.size() == sequence->text().length())
 			{
 				bool equal = true;
+				String s = sequence->text().ascii();
 				for (Position p = 0; p < sequence_.size(); p++)
 				{
-					if ((sequence_[p]).getType()[0] != sequence->text()[p])
+					if ((sequence_[p]).getType()[0] != s[p])
 					{
 						equal = false;
 						break;
@@ -148,9 +149,10 @@ namespace BALL
 			{
 				sequence_.resize(written_seq_size);
 
+				String s = sequence->text().ascii();
 				for (Position p = 0; p < sequence_.size(); p++)
 				{
-					sequence_[p].setAminoAcidType(String(sequence->text()[p].latin1()));
+					sequence_[p].setAminoAcidType(String(s[p]));
 				}
 
 				if (sequence_.size() != 0)
@@ -208,9 +210,10 @@ namespace BALL
 			// same size, but different amino acids
 			if (written_seq_size == old_size)
 			{
+				String s = sequence->text().ascii();
 				for (Position p = 0; p < sequence_.size(); p++)
 				{
-					sequence_[p].setAminoAcidType(String(sequence->text()[p].latin1()));
+					sequence_[p].setAminoAcidType(String(s[p]));
 				}
 			}
 		}
