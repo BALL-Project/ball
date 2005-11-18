@@ -19,9 +19,11 @@
 			<Tool
 				Name="VCNMakeTool"
 				BuildCommandLine="cd $(InputDir)
+set MSVCDIR=$(VCInstallDir)
 nmake debug=true /CS"
 				ReBuildCommandLine="cd $(InputDir)
 nmake clean debug=true /CS
+set MSVCDIR=$(VCInstallDir)
 nmake debug=true /CS"
 				CleanCommandLine="cd $(InputDir)
 nmake debug=true clean /CS"/>
@@ -34,8 +36,10 @@ nmake debug=true clean /CS"/>
 			<Tool
 				Name="VCNMakeTool"
 				BuildCommandLine="cd $(InputDir)
+set MSVCDIR=$(VCInstallDir)
 nmake /CS"
 				ReBuildCommandLine="cd $(InputDir)
+set MSVCDIR=$(VCInstallDir)
 nmake clean /CS
 nmake /CS"
 				CleanCommandLine="cd $(InputDir)

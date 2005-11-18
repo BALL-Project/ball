@@ -19,13 +19,6 @@ INDIR = $(SDIR)\TUTORIAL\
 	move $(*B).exe $(TARGETDIR)
 	echo A > $(TESTDIR)\$(*B).exe
 
-#.C.exe:#
-#	$(CC) $(INDIR)\$(*B).C
-#	$(LINK) $(INDIR)\$(*B).obj 
-#	move $(*B).exe $(TARGETDIR)
-#	echo A > $(INDIR)\$(*B).exe
-
-
 EXECUTABLES = \
 	$(INDIR)\bounding_box.exe  \
 	$(INDIR)\glBoundingBoxModel.exe  \
@@ -37,5 +30,5 @@ EXECUTABLES = \
 all:	$(EXECUTABLES)
 
 clean: 
-	$(MYDEL) "$(INDIR)\*.exe
+	$(MYDEL) "$(INDIR)\*.exe"
 	$(MYDEL) $(TARGETDIR)\*.*

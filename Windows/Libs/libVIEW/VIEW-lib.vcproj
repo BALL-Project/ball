@@ -19,9 +19,11 @@
 			<Tool
 				Name="VCNMakeTool"
 				BuildCommandLine="cd $(SolutionDir)\Libs\libVIEW
+set MSVCDIR=$(VCInstallDir)
 nmake debug=true /CS"
 				ReBuildCommandLine="cd $(SolutionDir)\Libs\libVIEW
 nmake clean debug=true /CS
+set MSVCDIR=$(VCInstallDir)
 nmake debug=true /CS"
 				CleanCommandLine="cd $(SolutionDir)\Libs\libVIEW 
 nmake debug=true clean /CS"/>
@@ -34,9 +36,11 @@ nmake debug=true clean /CS"/>
 			<Tool
 				Name="VCNMakeTool"
 				BuildCommandLine="cd $(SolutionDir)\Libs\libVIEW
+set MSVCDIR=$(VCInstallDir)
 nmake /CS"
 				ReBuildCommandLine="cd $(SolutionDir)\Libs\libVIEW
 nmake clean /CS
+set MSVCDIR=$(VCInstallDir)
 nmake /CS"
 				CleanCommandLine="cd $(SolutionDir)\Libs\libVIEW
 nmake clean /CS"/>
