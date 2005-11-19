@@ -23,6 +23,8 @@ if "%2" == "BALL" goto BALL
 if "%2" == "clean" goto CLEANUP
 if "%2" == "tests" goto TESTS
 if "%2" == "benchmarks" goto BENCHMARKS
+if "%2" == "tutorial" goto TUTORIAL
+if "%2" == "all" goto ALL
 
 if "%QTDIR%"=="" goto Usage2
 if "%QTVERSION%"=="" goto Usage22
@@ -93,10 +95,19 @@ mkdir %RESULT_DIR% > NUL 2> NUL
 nmake %NMAKE_ARG% /CS
 goto end
 
+rem ---------------------------------- Build the Tutorials -----------------------
+:TUTORIAL
+echo building the tutorials ...
+
+cd Tutorial
+mkdir %RESULT_DIR% > NUL 2> NUL
+nmake %NMAKE_ARG% /CS
+goto end
+
 rem ----------------------------------------------- Make clean ---------------------------------------
 :CLEANUP
 echo Cleaning up ...
-for %%i in ("Libs\libBALL" "Libs\libVIEW" "Libs\Python Module"  "Applications\BALLView" Tests) do (
+for %%i in ("Libs\libBALL" "Libs\libVIEW" "Libs\Python Module"  "Applications\BALLView" Tests Tutorial Benchmarks) do (
 echo running make clean in %%i
 cd %%i
 nmake %NMAKE_ARG% clean /CS
@@ -105,6 +116,14 @@ cd "%OLDDIR%"
 
 goto end
 
+rem ----------------------------------------------- Make all ---------------------------------------
+: ALL
+build.bat %1
+build.bat %1 tests
+build.bat %1 benchmarks
+build.bat %1 tutorial
+
+goto end
 
 rem ---------------------------------------------- Useage hints -----------------------------------------
 :Usage1
@@ -137,7 +156,7 @@ goto Usage
 
 :Usage
 echo.
-echo Useage: build debug^|release [BALL^|tests^|clean^|benchmarks]
+echo Useage: build debug^|release [BALL^|tests^|clean^|benchmarks^|tutorial^|all]
 echo.
 echo You can also have a look at in BALL\Windows\Readme.txt
 goto end

@@ -1,9 +1,11 @@
 
+This document explains how to build BALL and BALLView on the windows platform by
+using the Makefiles. For documentation on how to use the Visual Studio project
+files, see README.txt.
+
 -----------------------------------------------------------------------------------
 -----------------------------INSTALLATION PER MAKEFILE: ---------------------------
 -----------------------------------------------------------------------------------
-
-If you want to, you can also build BALL per nmake and Makefiles in the command line:
 
 Proceed like in README.txt for points 1.) and 2.)
 
@@ -27,15 +29,13 @@ environment variable contains the directories for the needed libs.
 startBALLView.bat               or
 startBALLViewDebug.bat
 
-4.) Building the libraries without QT and BALLView: 
+-----------------------------------------------------------------------------------
+Building the libraries without QT and BALLView: 
 If you dont have the QT library available or dont need the GUI and Python Support, 
 you can create the core library BALL only: 
 
-Proceed as in point 3 but call
-
 build release BALL              or
 build debug BALL
-
 
 -----------------------------------------------------------------------------------
 -------------------------------ADDONS INSTALLATION: -------------------------------
@@ -43,15 +43,20 @@ build debug BALL
 
 1.) Building the tests
 
-Proceed as in point 3 above but call
-
 build release tests             or
 build debug tests
 
 2.) Building the Benchmarks
 
-Proceed as in point 3 above but call
-
 build release benchmarks        or
 build debug benchmarks
 
+3.) Building the Tutorials
+
+build release tutorial 					or
+build debug tutorial
+
+4.) To build all libraries and every entry from the list above call
+
+build release all 							or
+build debug all 
