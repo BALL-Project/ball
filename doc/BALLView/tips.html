@@ -85,11 +85,13 @@ The last three entries can be switched on and off to repeat the animation or exp
 </td></tr></table>
 
 <h3>Create movies from pictures<a name="movies"></a></h3>
-<div align="justify">To create movies from a set of images, we suggest useage of the GNU program <a href="http://www.mplayerhq.hu/h">mencoder</a>, 
+<div align="justify">To create movies from a set of images on Linux we suggest useage of the GNU program <a href="http://www.mplayerhq.hu/h">mencoder</a>, 
   which is freely available for Linux, MacOS and Windows.
   To create an AVI video with 25 frames per second from all PNG images in the current directory with the codec <a href="http://www.xvid.org/">XviD</a> and a bitrate of 1600 kbit/s invoke
 </div>
 <pre>mencoder  "mf://*.png"  -mf fps=25 -o output.avi -ovc xvid  -xvidencopts pass=1:bitrate=1600</pre>
+<p>
+For Windows users we recommend the free software <a href="http://www.virtualdub.org/">VirtualDub</a>.
 
 <h3>Usage of distance grids<a name="distance_grids"></a></h3>
 You might wonder what a distance grid should be good for (see Menu entry "Tools->Distance Grid").
