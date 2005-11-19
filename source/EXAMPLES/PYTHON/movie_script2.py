@@ -12,6 +12,7 @@ m = getMainControl()
 
 # delete old representations and disable new representations 
 clearAll()
+showOnlyScene()
 getDisplayProperties().enableCreationForNewMolecules(0)
 
 #the molecule to animate
@@ -54,13 +55,13 @@ camera.setLookUpVector(Vector3(0.9,0.47,0))
 s.setCamera(camera)
 
 #rotate right
-angle_step = 2
+angle_step = 2.1
 for i in range(0, 390 / angle_step):
 	s.rotate(angle_step, 0)
 	my_task()
 	
 # move chain C
-move_step = 1
+move_step = 0.7
 for i in range(0, 45 / move_step): 
 	s.moveComposites(chain_a, Vector3(-move_step, move_step, 0))
 	my_task()

@@ -28,15 +28,7 @@ dp.selectColoringMethod(COLORING_ELEMENT)
 dp.setTransparency(0)
 openFile(Path().find("structures/bpti.pdb"))
 
-getScene().setVisible(1)
-getGeometricControl().getInstance(0).setVisible(0)
-getMolecularControl().getInstance(0).setVisible(0)
-getLogView().setVisible(0)
-getDatasetControl().setVisible(0)
-getPyWidget().setVisible(0)
-
-getMainControl().resize(800, 600)
-getMainControl().processEvents(5000)
+showOnlyScene()
 
 runTest("Lines", 		MODEL_LINES)
 runTest("VDW",   		MODEL_VDW)

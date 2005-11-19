@@ -26,6 +26,19 @@ def getPyWidget():
 def getDatasetControl():
 	return DatasetControl.getInstance(0)
 
+def hideAllWidgets():
+	getScene().setVisible(0)
+	getGeometricControl().setVisible(0)
+	getMolecularControl().setVisible(0)
+	getLogView().setVisible(0)
+	getDatasetControl().setVisible(0)
+	getPyWidget().setVisible(0)
+
+def showOnlyScene():
+	hideAllWidgets()
+	getScene().setVisible(1)
+	getMainControl().resize(800, 600)
+	getMainControl().processEvents(5000)
 
 ###################### SHORTCUTS: #######################
 def openFile(file):
