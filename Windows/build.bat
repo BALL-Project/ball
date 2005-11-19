@@ -118,10 +118,10 @@ goto end
 
 rem ----------------------------------------------- Make all ---------------------------------------
 : ALL
-build.bat %1
-build.bat %1 tests
-build.bat %1 benchmarks
-build.bat %1 tutorial
+call build.bat %1
+call build.bat %1 tests
+call build.bat %1 benchmarks
+call build.bat %1 tutorial
 
 goto end
 
