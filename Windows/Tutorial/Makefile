@@ -21,7 +21,6 @@ INDIR = $(SDIR)\TUTORIAL\
 
 EXECUTABLES = \
 	$(INDIR)\bounding_box.exe  \
-	$(INDIR)\glBoundingBoxModel.exe  \
 	$(INDIR)\string_tutorial.exe  \
 	$(INDIR)\tutorial1.exe  \
 	$(INDIR)\tutorial2.exe  \
