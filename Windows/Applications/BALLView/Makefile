@@ -39,7 +39,7 @@ clean:
 
 BALLView.exe:  $(UICS) $(MOCS) $(OBJS) 
 #compile the resource file:
-	rc.exe /fo"$(TARGETDIR)\BALLView.res" BALLView.rc
+	rc.exe /i "$(INCLUDE)"\mfc /fo"$(TARGETDIR)\BALLView.res" BALLView.rc 
 	$(LINK) $(TARGETDIR)\BALLView.res /OUT:$(TARGETDIR)\BALLView.exe
 	echo.
 	echo finished creating BALLVIEW...

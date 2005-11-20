@@ -1,8 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.5.2.4 2005/11/16 00:49:45 amoll Exp $
+// $Id: vertexBuffer.C,v 1.5.2.5 2005/11/20 16:49:17 amoll Exp $
 
+#include <BALL/CONFIG/config.h>
 // prevent typedef clash under Linux
 #ifdef BALL_ENABLE_VERTEX_BUFFER
 

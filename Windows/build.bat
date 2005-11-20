@@ -38,7 +38,7 @@ rem ---------------------------------- Create the sip DLL and executeable ------
 :Create_SIP
 echo Creating the SIP files ...
 cd Contrib\sip
-python configure.py
+"%PYTHONDIR%\"python configure.py
 nmake
 nmake install
 echo Installed the SIP files.
