@@ -37,7 +37,7 @@ def hideAllWidgets():
 def showOnlyScene():
 	hideAllWidgets()
 	getScene().setVisible(1)
-	getMainControl().resize(800, 600)
+	getMainControl().resize(800, 654)
 	getMainControl().processEvents(5000)
 
 ###################### SHORTCUTS: #######################
