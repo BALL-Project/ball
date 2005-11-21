@@ -11,10 +11,9 @@ doxygen $CONFIGFILE && \
 cd doxygen/html && \
 for i in `find . -name "*html"`; do sed -i "s/BALL:://g" $i; done 
 
-if [ $# = 1 ] && [ $1 = "-website" ]; then
-	for i in `find . -name "*_html"`; 
-	do 
-		tidy $i > tidy $i 2> /dev/null;
-	done
-fi
-
+echo running tidy...
+for i in `find . -name "*_html"`; 
+do 
+	tidy $i > tidy $i;
+done
+echo finished running tidy...
