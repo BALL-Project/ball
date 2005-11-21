@@ -31,7 +31,7 @@ LINKDEBUG	=
 
 ######### compiler options #################
 
-INCLUDES = /I "$(BALL_WIN_DIR)\include" /I "$(INC_DIR)" /I "$(BALL_CONTRIB)\regex-0.12" /I "$(BALL_CONTRIB)\ONC_RPC" /I "$(PYTHONDIR)\include" /I "$(INCLUDE)"
+INCLUDES = /I "$(BALL_WIN_DIR)\include" /I "$(INC_DIR)" /I "$(BALL_CONTRIB)\regex-0.12" /I "$(BALL_CONTRIB)\ONC_RPC" /I "$(PYTHONDIR)\include"
 
 DEFINES = /D WIN32 /D _WINDOWS /D _USRDLL /D YY_NEVER_INTERACTIVE /D _WINDLL /U ERROR /U IN /U OUT
 
@@ -56,6 +56,5 @@ BALLVIEW_LIBS = $(VIEW_LIBS) $(BALL_WIN_DIR)\Libs\libVIEW\$(TARGETDIR)\libVIEW.l
 
 ########### VIEW ########################
 VIEW_LIBS = "WS2_32.Lib" $(QTDIR)\lib\qt-mt$(QTVERSION).lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib $(BALL_WIN_DIR)\Libs\libBALL\$(TARGETDIR)\libBALL.lib
-#VIEW_LIBS = "$(MSVCDIR)\PlatformSDK\Lib\WS2_32.Lib" $(QTDIR)\lib\qt-mt$(QTVERSION).lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib $(BALL_WIN_DIR)\Libs\libBALL\$(TARGETDIR)\libBALL.lib
 
 VIEW_INCLUDES = /I "$(QTDIR)\include"
