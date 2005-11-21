@@ -12,8 +12,5 @@ cd doxygen/html && \
 for i in `find . -name "*html"`; do sed -i "s/BALL:://g" $i; done 
 
 echo running tidy...
-for i in `find . -name "*_html"`; 
-do 
-	tidy $i > tidy $i;
-done
+tidy -m -i -asxml -q -bare -clean *html 2>/dev/null
 echo finished running tidy...
