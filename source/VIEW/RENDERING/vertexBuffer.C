@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.5.2.5 2005/11/20 16:49:17 amoll Exp $
+// $Id: vertexBuffer.C,v 1.5.2.6 2005/11/22 16:28:00 amoll Exp $
 
 #include <BALL/CONFIG/config.h>
 // prevent typedef clash under Linux
@@ -12,6 +12,7 @@
 
 #ifdef _WINDOWS
 // Header Files For Windows
+ #define WINDOWS_LEAN_AND_MEAN
  #include <windows.h>
  #include <wingdi.h>	
 #else
