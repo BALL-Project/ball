@@ -59,6 +59,7 @@ Fixed:
  - PeptideBuilder: Naming of peptides; enabled support for paste in Dialog
  - Opening of files in current directory per command line with BALLView
  - Some problems with rendering Labels on Windows and MacOS
+ - Some problems with ATI graphics cards: Line Models and Polygon Smoothing
  - Some minor problems with the clipping planes
  - Some minor problems with dashed bonds in the Ball-and-Stick model
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.2.33 2005/11/22 14:27:23 amoll Exp $
+// $Id: glRenderer.C,v 1.67.2.34 2005/11/22 14:55:48 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -861,19 +861,19 @@ namespace BALL
 			initDrawingOthers_();
 
 			setColor4ub_(line);
-
 			glDisable(GL_LIGHTING);
-			glBegin(GL_LINE_STRIP);
-			
+
+			glBegin(GL_LINES);
 			vertexVector3_(line.getVertex1());
 			vertexVector3_(line.getMiddleVertex());
-
+			glEnd();
+			
+			glBegin(GL_LINES);
 			setColorRGBA_(line.getColor2());
-
 			vertexVector3_(line.getMiddleVertex());
 			vertexVector3_(line.getVertex2());
-
 			glEnd();
+			
 			glEnable(GL_LIGHTING);
 		}
 
