@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.25 2005/10/22 07:29:17 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.26 2005/11/24 13:16:24 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -49,7 +49,8 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 		id_(-1),
 		rep_(0),
 		advanced_options_modified_(false),
-		create_representations_for_new_molecules_(true)
+		create_representations_for_new_molecules_(true),
+		changed_selection_color_(false)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new DisplayProperties " << this << std::endl;
@@ -336,6 +337,12 @@ void DisplayProperties::apply()
 	}
 
 	setStatusbarText("building model...");
+
+	if (changed_selection_color_)
+	{
+		notify_(new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS));
+	}
+
 	createRepresentation_(getMainControl()->getMolecularControlSelection());
 }
 
@@ -348,6 +355,7 @@ void DisplayProperties::editColor()
 void DisplayProperties::editSelectionColor()
 {
 	BALL_SELECTED_COLOR.set(chooseColor(selection_color_label));
+	changed_selection_color_ = true;
 }
 
 // ------------------------------------------------------------------------
@@ -458,7 +466,9 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 	}
 	else
 	{
-		rebuild_representation = (rep_->getModelType() != mt | advanced_options_modified_);
+		rebuild_representation = rep_->getModelType() != mt  | 
+														 advanced_options_modified_  |
+														 changed_selection_color_;
 
 		if (custom_precision_button->isChecked())
 		{
@@ -520,6 +530,8 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 	apply_button->setEnabled(false);
 	rep_->update(rebuild_representation);
 	apply_button->setEnabled(true);
+
+	changed_selection_color_ = false;
 
 	return rep_;
 }
