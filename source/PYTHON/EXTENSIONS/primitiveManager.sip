@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.sip,v 1.10.4.3 2005/11/11 17:21:24 leonhardt Exp $
+// $Id: primitiveManager.sip,v 1.10.4.4 2005/11/24 14:37:30 amoll Exp $
 //
 
 class PrimitiveManager
@@ -40,10 +40,10 @@ class PrimitiveManager
   RepresentationList getRepresentationsOf(const Composite&) throw();
 	bool willBeUpdated(const Representation&) const throw();
 	bool updateRunning() const throw();
+	void rebuildAllRepresentations() throw();
 	void setUpdatePending(bool);
 	bool updatePending();
 	//HashSet<Representation*>& getRepresentationsBeeingUpdated();
-	//HashSet<Representation*>& getRepresentationsBeeingDrawn();
 	//const vector<ClippingPlane*>& getClippingPlanes() const;
 	//bool removeClippingPlane(ClippingPlane*);
 	//void insertClippingPlane(ClippingPlane*);

@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.22 2005/11/24 14:24:09 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.23 2005/11/24 14:36:52 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -58,6 +58,8 @@ void PrimitiveManager::clear()
 	throw()
 {
 	representations_to_be_updated_.clear();
+	currently_updateing_.clear();
+
 
 #ifdef BALL_QT_HAS_THREADS
 	if (thread_.running())
@@ -296,10 +298,11 @@ List<Representation*> PrimitiveManager::getRepresentationsOf(const Composite& co
 void PrimitiveManager::update_(Representation& rep)
 	throw()
 {
-	if (!has(rep)) 
+	if (!has(rep) || currently_updateing_.has(&rep))
 	{
 		return;
 	}
+
 #ifdef BALL_QT_HAS_THREADS
 	if (rep.isHidden()) 
 	{
@@ -317,6 +320,7 @@ void PrimitiveManager::update_(Representation& rep)
 	}
 
 	representations_to_be_updated_.push_back(&rep);
+	currently_updateing_.insert(&rep);
 
 	if (!updateRunning()) startUpdateThread_();
 #endif
@@ -341,6 +345,7 @@ void PrimitiveManager::startUpdateThread_()
 	{
  		delete rep;
 		representations_to_be_updated_.pop_front();
+		currently_updateing_.erase(rep);
 		mutex_.unlock();
 		startUpdateThread_();
 		return;
@@ -399,6 +404,7 @@ void PrimitiveManager::finishedUpdate_()
 
 	Representation* rep = *representations_to_be_updated_.begin();
 	representations_to_be_updated_.pop_front();
+	currently_updateing_.erase(rep);
 
 	// Representation might have been deleted
 	if (has(*rep))
@@ -440,23 +446,12 @@ bool PrimitiveManager::updateRunning() const
 bool PrimitiveManager::willBeUpdated(const Representation& rep) const
 	throw()
 {
-	RepresentationList::ConstIterator it = representations_to_be_updated_.begin();
-	for (; it != representations_to_be_updated_.end(); it++)
-	{
- 		if (*it == &rep) return true;
-	}
-
-	return false;
+	return currently_updateing_.has((Representation*)&rep);
 }
 
 HashSet<Representation*>& PrimitiveManager::getRepresentationsBeeingUpdated()
 {
 	return currently_updateing_;
-}
-
-HashSet<Representation*>& PrimitiveManager::getRepresentationsBeeingDrawn()
-{
-	return currently_drawing_;
 }
 
 bool PrimitiveManager::removeClippingPlane(ClippingPlane* plane)
@@ -489,7 +484,14 @@ void PrimitiveManager::insertClippingPlane(ClippingPlane* plane)
 void PrimitiveManager::rebuildAllRepresentations()
 	throw()
 {
-	representations_to_be_updated_ = representations_;
+	RepresentationsIterator it = begin();
+	for (;it != end(); it++)
+	{
+		if (currently_updateing_.has(*it)) continue;
+		representations_to_be_updated_.push_back(*it);
+		currently_updateing_.insert(*it);
+	}
+
 	startUpdateThread_();
 }
 
