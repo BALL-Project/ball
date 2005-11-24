@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.20.2.10 2005/11/24 14:36:49 amoll Exp $
+// $Id: primitiveManager.h,v 1.20.2.11 2005/11/24 14:43:28 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -215,6 +215,9 @@ namespace BALL
 			///
 			HashSet<Representation*>& getRepresentationsBeeingUpdated();
 
+			/// Used by UpdateRepresentationThread
+			HashSet<Representation*>& getRepresentationsBeeingDrawn();
+
 			///
 			const vector<ClippingPlane*>& getClippingPlanes() const { return clipping_planes_;}
 
@@ -264,6 +267,8 @@ namespace BALL
 			RepresentationList representations_to_be_updated_;
 			// hashset with same content as above for faster acces
 			HashSet<Representation*> currently_updateing_;
+
+			HashSet<Representation*> currently_drawing_;
 
 			vector<ClippingPlane*> clipping_planes_;
 			

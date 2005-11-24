@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.23 2005/11/24 14:36:52 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.24 2005/11/24 14:43:25 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -824,6 +824,11 @@ void PrimitiveManager::focusRepresentation(const Representation& rep)
 	}
 
 	VIEW::focusCamera(positions);
+}
+
+HashSet<Representation*>& PrimitiveManager::getRepresentationsBeeingDrawn()
+{
+	return currently_drawing_;
 }
 
 } } // namespaces
