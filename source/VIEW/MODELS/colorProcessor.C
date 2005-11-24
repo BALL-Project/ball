@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.34.4.11 2005/08/02 13:27:52 amoll Exp $
+// $Id: colorProcessor.C,v 1.34.4.12 2005/11/24 14:17:06 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -426,6 +426,8 @@ namespace BALL
 		bool ColorProcessor::start()
 			throw()
 		{
+			selection_color_ = BALL_SELECTED_COLOR;
+			selection_color_.setAlpha(255 - transparency_);
 			return (getComposites() != 0);
 		}
 
