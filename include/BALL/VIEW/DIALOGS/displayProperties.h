@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.39.2.5 2005/11/17 13:02:29 amoll Exp $
+// $Id: displayProperties.h,v 1.39.2.6 2005/11/24 14:24:46 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -277,6 +277,7 @@ namespace BALL
 			ColorRGBA 			custom_color_;
 			bool 						advanced_options_modified_;
 			bool 						create_representations_for_new_molecules_;
+			bool 						changed_selection_color_;
 		};
 
 } } // namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.20 2005/11/10 22:00:23 amoll Exp $
+// $Id: representation.C,v 1.62.4.21 2005/11/24 14:24:09 amoll Exp $
 //
 
 
@@ -319,6 +319,10 @@ namespace BALL
 						}
 					}
 				}
+
+				// rebuild if the selection color changed
+				// slow this way, but do it anyhow...
+				rebuild_ |= BALL_SELECTED_COLOR_CHANGE_TIME > model_build_time_;
 
 				if (rebuild_)
 				{

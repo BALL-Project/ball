@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.36.2.21 2005/11/17 13:11:03 amoll Exp $
+// $Id: primitiveManager.C,v 1.36.2.22 2005/11/24 14:24:09 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -484,6 +484,13 @@ void PrimitiveManager::insertClippingPlane(ClippingPlane* plane)
 
 	getMainControl()->sendMessage(*new SyncClippingPlanesMessage());
 	getMainControl()->sendMessage(*new SceneMessage(SceneMessage::REDRAW));
+}
+
+void PrimitiveManager::rebuildAllRepresentations()
+	throw()
+{
+	representations_to_be_updated_ = representations_;
+	startUpdateThread_();
 }
 
 void PrimitiveManager::storeRepresentations(INIFile& out)

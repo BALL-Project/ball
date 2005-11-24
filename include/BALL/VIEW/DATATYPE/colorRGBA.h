@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.h,v 1.18.8.2 2005/09/01 22:17:40 amoll Exp $
+// $Id: colorRGBA.h,v 1.18.8.3 2005/11/24 14:23:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
 #	include <BALL/VIEW/DATATYPE/colorUnit.h>
+#endif
+
+#ifndef BALL_CONCEPT_TIMESTAMP_H
+ #include <BALL/CONCEPT/timeStamp.h>
 #endif
 
 class QColor;
@@ -472,7 +476,8 @@ namespace BALL
 		};
 
 		/** Static instance for the color of selected geometric objects */
-		extern ColorRGBA BALL_SELECTED_COLOR;
+		extern ColorRGBA 				BALL_SELECTED_COLOR;
+		extern PreciseTime 		 	BALL_SELECTED_COLOR_CHANGE_TIME;
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/DATATYPE/colorRGBA.iC>

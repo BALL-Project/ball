@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.20.2.8 2005/10/14 11:49:56 amoll Exp $
+// $Id: primitiveManager.h,v 1.20.2.9 2005/11/24 14:23:53 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -176,6 +176,10 @@ namespace BALL
 
 			/// Return true, if a Representation is currently beeing updated
 			bool updateRunning() const
+				throw();
+
+			///
+			void rebuildAllRepresentations()
 				throw();
 
 			#ifdef BALL_QT_HAS_THREADS

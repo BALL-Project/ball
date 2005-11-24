@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97.2.26 2005/11/24 13:16:24 amoll Exp $
+// $Id: displayProperties.C,v 1.97.2.27 2005/11/24 14:24:37 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -340,7 +340,8 @@ void DisplayProperties::apply()
 
 	if (changed_selection_color_)
 	{
-		notify_(new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS));
+		BALL_SELECTED_COLOR_CHANGE_TIME = PreciseTime::now();
+		getMainControl()->getPrimitiveManager().rebuildAllRepresentations();
 	}
 
 	createRepresentation_(getMainControl()->getMolecularControlSelection());
