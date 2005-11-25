@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.171.2.64 2005/11/17 14:28:01 amoll Exp $
+// $Id: scene.C,v 1.171.2.65 2005/11/25 14:43:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1165,12 +1165,23 @@ namespace BALL
 			}
 			else
 			{
+				/// TODO: Fog in POVRAY!
 				glEnable(GL_FOG);
-				GLfloat color[4] = {0.0, 0.0, 0.0, 0.4};
+
+				ColorRGBA co = stage_->getBackgroundColor();
+				GLfloat color[4] = {(float) co.getRed(),
+														(float) co.getGreen(),
+														(float) co.getBlue(), 
+														1.0};
 				glFogfv(GL_FOG_COLOR, color);
+
 				glFogf(GL_FOG_START, 2.0);
-				glFogf(GL_FOG_END, 400 * 3 - stage_->getFogIntensity() * 3 + 12);
+ 				glFogf(GL_FOG_END, (200 - ((float)stage_->getFogIntensity()) / 2.0) + 12);
 				glFogi(GL_FOG_MODE, GL_LINEAR);
+
+				// doesnt work as expected:
+				// glFogf(GL_FOG_END, 400);
+				// glFogf(GL_FOG_DENSITY, ((float) stage_->getFogIntensity()) / 40.0);
 			}
 
 			renderView_(REBUILD_DISPLAY_LISTS);

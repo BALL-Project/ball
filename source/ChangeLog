@@ -58,6 +58,8 @@ Fixed:
  - Incorrect bond orders and GLN amide group planarity in fragment database
  - PeptideBuilder: Naming of peptides; enabled support for paste in Dialog
  - Opening of files in current directory per command line with BALLView
+ - Rendering of Fog
+ - Update of Representations after changing Selection color
  - Some problems with rendering Labels on Windows and MacOS
  - Some problems with ATI graphics cards: Line Models and Polygon Smoothing
  - Some minor problems with the clipping planes
