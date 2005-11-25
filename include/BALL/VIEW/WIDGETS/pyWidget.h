@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.23.2.12 2005/11/09 12:42:55 oliver Exp $
+// $Id: pyWidget.h,v 1.23.2.13 2005/11/25 15:05:19 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -297,7 +297,10 @@ namespace BALL
 			void reactTo(const QKeyEvent& e) throw();
 
 			/// run a Python script from a given file
-			bool run(const String& filename) throw() {return text_edit_->runFile(filename);}
+			bool run(const String& filename) throw();
+
+			// Rerun the last script again
+			bool runAgain();
 
 			public slots:
 
@@ -312,6 +315,7 @@ namespace BALL
 			List<Hotkey> 			hotkeys_;
 			// 								we use an own working dir to find Python Scripts
 			String 						working_dir_;
+			String 						last_script_;
 			bool 							valid_;
 			bool 							started_startup_script_;
 		};

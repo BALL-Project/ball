@@ -79,6 +79,9 @@ def setMultithreading(mode):
 
 def runScript(filename):
 	getPyWidget().run(filename)
+
+def runScriptAgain():
+	getPyWidget().runAgain()
 	
 
 ###################### EXAMPLES: #######################

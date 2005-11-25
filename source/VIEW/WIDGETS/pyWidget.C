@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.18 2005/11/09 14:07:07 oliver Exp $
+// $Id: pyWidget.C,v 1.44.6.19 2005/11/25 15:05:03 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -844,6 +844,17 @@ namespace BALL
 					return;
 				}
 			}
+		}
+
+		bool PyWidget::run(const String& filename) throw() 
+		{
+			last_script_ = filename;
+			return text_edit_->runFile(filename);
+		}
+			
+		bool PyWidget::runAgain()
+		{
+			return run(last_script_);
 		}
 
 	} // namespace VIEW
