@@ -1,4 +1,4 @@
-// $Id: baseFunction.C,v 1.1 2005/11/21 19:27:07 anker Exp $
+// $Id: baseFunction.C,v 1.2 2005/11/25 14:03:55 anker Exp $
 
 #include <BALL/SCORING/COMMON/baseFunction.h>
 
@@ -17,6 +17,12 @@ namespace BALL
 		throw()
 		:	lower_(lower),
 			upper_(upper)
+	{
+	}
+
+
+	ScoringBaseFunction::~ScoringBaseFunction()
+		throw()
 	{
 	}
 
