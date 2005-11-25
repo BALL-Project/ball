@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.19 2005/11/25 15:05:03 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.20 2005/11/25 15:38:45 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -567,7 +567,7 @@ namespace BALL
 			setWorkingDirFromFilename_(s.ascii());
 			working_dir_ = getWorkingDir();
 
-			text_edit_->runFile(s.ascii());
+			run(s.ascii());
 		}
 
 		void PyWidgetData::exportHistory()
@@ -849,6 +849,7 @@ namespace BALL
 		bool PyWidget::run(const String& filename) throw() 
 		{
 			last_script_ = filename;
+Log.error() << "#~~#   1 " << last_script_            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			return text_edit_->runFile(filename);
 		}
 			
