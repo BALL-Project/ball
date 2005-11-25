@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.23.2.13 2005/11/25 15:05:19 amoll Exp $
+// $Id: pyWidget.h,v 1.23.2.14 2005/11/25 17:48:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -264,14 +264,6 @@ namespace BALL
 			virtual void finalizeWidget(MainControl& main_control)
 				throw();
 			
-			///
-			virtual void fetchPreferences(INIFile& inifile)
-				throw();
-			
-			///
-			virtual void writePreferences(INIFile& inifile)
-				throw();
-
 			///
 			void initializePreferencesTab(Preferences &preferences)
 				throw();

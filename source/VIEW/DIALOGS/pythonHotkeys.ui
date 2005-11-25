@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>PythonHotkeysData</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>551</width>
-            <height>379</height>
+            <height>419</height>
         </rect>
     </property>
     <property name="caption">
@@ -17,32 +17,23 @@
     </property>
     <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>layout81</cstring>
+            <cstring>layout3</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>20</x>
-                <y>340</y>
-                <width>510</width>
-                <height>32</height>
+                <x>0</x>
+                <y>350</y>
+                <width>550</width>
+                <height>70</height>
             </rect>
         </property>
-        <hbox>
+        <vbox>
             <property name="name">
                 <cstring>unnamed</cstring>
             </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <widget class="QPushButton">
+            <widget class="QTextEdit">
                 <property name="name">
-                    <cstring>new_button</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>150</width>
-                        <height>30</height>
-                    </size>
+                    <cstring>textEdit1</cstring>
                 </property>
                 <property name="maximumSize">
                     <size>
@@ -50,83 +41,92 @@
                         <height>30</height>
                     </size>
                 </property>
+                <property name="paletteBackgroundColor">
+                    <color>
+                        <red>172</red>
+                        <green>172</green>
+                        <blue>172</blue>
+                    </color>
+                </property>
                 <property name="text">
-                    <string>&amp;Add new</string>
+                    <string>&lt;b&gt;Note:&lt;/b&gt; F1 is reserved for the internal help system! You cant use the the following signs: '@' '°'</string>
                 </property>
-                <property name="accel">
-                    <string>Alt+A</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Add a new hotkey</string>
+                <property name="wordWrap">
+                    <enum>WidgetWidth</enum>
                 </property>
             </widget>
-            <widget class="QPushButton">
+            <widget class="QLayoutWidget">
                 <property name="name">
-                    <cstring>remove_button</cstring>
+                    <cstring>layout81</cstring>
                 </property>
-                <property name="enabled">
-                    <bool>false</bool>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>100</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>32767</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string>&amp;Remove</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+R</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Remove a hotkey, select the row (with the field to the left)</string>
-                </property>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <widget class="QPushButton">
+                        <property name="name">
+                            <cstring>new_button</cstring>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>150</width>
+                                <height>30</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>32767</width>
+                                <height>30</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Add new</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+A</string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Add a new hotkey</string>
+                        </property>
+                    </widget>
+                    <widget class="QPushButton">
+                        <property name="name">
+                            <cstring>remove_button</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>100</width>
+                                <height>30</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>32767</width>
+                                <height>30</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Remove</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+R</string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Remove a hotkey, select the row (with the field to the left)</string>
+                        </property>
+                    </widget>
+                </hbox>
             </widget>
-        </hbox>
-    </widget>
-    <widget class="QTable">
-        <property name="name">
-            <cstring>table</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>1</x>
-                <y>0</y>
-                <width>546</width>
-                <height>330</height>
-            </rect>
-        </property>
-        <property name="numRows">
-            <number>0</number>
-        </property>
-        <property name="numCols">
-            <number>3</number>
-        </property>
-        <property name="showGrid">
-            <bool>true</bool>
-        </property>
-        <property name="selectionMode">
-            <enum>SingleRow</enum>
-        </property>
-        <property name="focusStyle">
-            <enum>SpreadSheet</enum>
-        </property>
+        </vbox>
     </widget>
 </widget>
 <connections>
-    <connection>
-        <sender>table</sender>
-        <signal>selectionChanged()</signal>
-        <receiver>PythonHotkeys</receiver>
-        <slot>rowSelected()</slot>
-    </connection>
     <connection>
         <sender>new_button</sender>
         <signal>pressed()</signal>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pythonHotkeys.h,v 1.3.6.3 2005/09/29 14:01:31 amoll Exp $
+// $Id: pythonHotkeys.h,v 1.3.6.4 2005/11/25 17:46:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PYTHONHOTKEYS_H
@@ -17,10 +17,49 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
+#include <qtable.h>
+
 namespace BALL
 {
 	namespace VIEW
 	{
+			///
+			class BALL_VIEW_EXPORT HotkeyTable
+				:	public QTable,
+					public PreferencesEntry::ExtendedPreferencesObject
+			{
+				Q_OBJECT
+
+				public:
+					HotkeyTable(QWidget* parent = 0, const char* name = 0)
+						throw();
+					
+					///
+					virtual bool getValue(String& value) const;
+
+					///
+					virtual bool setValue(const String& value);
+
+					///
+					List<Hotkey> getContent() const
+						throw();
+
+					///
+					void setContent(const List<Hotkey>& hotkeys)
+						throw();
+
+					public slots:
+					
+					///
+					virtual void addEmptyRow() throw();
+					
+					///
+					virtual void removeSelection();
+					
+				private:
+					QStringList modifier_, keys_;
+			};
+
 
 		/** Dialog for setting up the Hotkeys for Python commands.
 		 		It is inserted to the Preferences.
@@ -41,29 +80,20 @@ namespace BALL
 			~PythonHotkeys() {}
 
 			///
-			void setContent(const List<Hotkey>& hotkeys)
+			const List<Hotkey>& getContent() const
 				throw();
-
+			
 			///
-			List<Hotkey> getContent() const
-				throw();
+			void setContent(const List<Hotkey>& hotkeys);
 
 			public slots:
 
 			///
-			virtual void removePressed();
-			
-			///
-			virtual void newPressed();
-			
-			///
 			virtual void rowSelected();
 
 			protected:
-			
-			void addEmtpyLine_() throw();
-			
-			QStringList modifier_, keys_;
+
+			HotkeyTable*  table;
 		};
 
 } }

@@ -12,36 +12,57 @@ namespace BALL
 	namespace VIEW
 	{
 
-PythonHotkeys::PythonHotkeys( QWidget* parent,  const char* name, WFlags fl )
-  : PythonHotkeysData( parent, name, fl ),
-		PreferencesEntry()
+HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
 {
-  table->horizontalHeader()->setLabel(0, "Modifier");
-  table->horizontalHeader()->setLabel(1, "Key");
-  table->horizontalHeader()->setLabel(2, "Command");
+  horizontalHeader()->setLabel(0, "Modifier");
+  horizontalHeader()->setLabel(1, "Key");
+  horizontalHeader()->setLabel(2, "Command");
 
-  table->setNumRows(0);
-	table->setColumnWidth(2, 240);
+  setNumRows(0);
+  setNumCols(3);
+	setShowGrid(true);
+	
+	setColumnWidth(2, 240);
+	setGeometry(5,5, 546, 330);
+
+	setSelectionMode(QTable::SingleRow);
+
+	setName("PythonHotkeys");
 
 	modifier_ << "None" << "Shift" << "Alt";
+
 	for (Position p = 1; p < 13; p++)
 	{
 		keys_ << (String("F") + String(p)).c_str();
 	}
 	
-	setWidgetStackName("Python Hotkeys");
-	registerWidgetForHelpSystem_(this, "pythonInterpreter.html#create_hotkeys");
+	// F2 -> runScriptAgain()
+	addEmptyRow();
+	((QComboTableItem*)item(0,0))->setCurrentItem(0);
+	((QComboTableItem*)item(0,1))->setCurrentItem(1);
+	item(0,2)->setText("runScriptAgain()");
+
+	// F3 -> clearRepresentations()
+	addEmptyRow();
+	((QComboTableItem*)item(1,0))->setCurrentItem(0);
+	((QComboTableItem*)item(1,1))->setCurrentItem(2);
+	item(1,2)->setText("clearRepresentations()");
+
+	// F4 -> removeWater()
+	addEmptyRow();
+	((QComboTableItem*)item(2,0))->setCurrentItem(0);
+	((QComboTableItem*)item(2,1))->setCurrentItem(3);
+	item(2,2)->setText("removeWater()");
 }
 
-
-List<Hotkey> PythonHotkeys::getContent() const
+List<Hotkey> HotkeyTable::getContent() const
 	throw()
 {
 	List<Hotkey> result;
-	for (Index pos = 0; pos < table->numRows(); pos++)
+	for (Index pos = 0; pos < numRows(); pos++)
 	{
-		if (table->item(pos, 2)->text().isEmpty() ||
-				!RTTI::isKindOf<QComboTableItem>(*table->item(pos, 0))) 
+		if (item(pos, 2)->text().isEmpty() ||
+				!RTTI::isKindOf<QComboTableItem>(*item(pos, 0))) 
 		{
 			Log.error() << "Problem reading content of PythonHotkeys" << std::endl;
 			continue;
@@ -49,7 +70,7 @@ List<Hotkey> PythonHotkeys::getContent() const
 
 		Hotkey hotkey;
 
-		Index ci = ((QComboTableItem*) table->item(pos, 0))->currentItem();
+		Index ci = ((QComboTableItem*)item(pos, 0))->currentItem();
 		switch(ci)
 		{
 			case 0:
@@ -68,10 +89,10 @@ List<Hotkey> PythonHotkeys::getContent() const
 				Log.error() << "Problem reading content of PythonHotkeys" << std::endl;
 		}
 
-		ci = ((QComboTableItem*) table->item(pos, 1))->currentItem();
+		ci = ((QComboTableItem*) item(pos, 1))->currentItem();
 		hotkey.key = (Qt::Key) (Qt::Key_F1 + ci);
 
-		hotkey.action = table->item(pos, 2)->text().ascii();
+		hotkey.action = item(pos, 2)->text().ascii();
 
 		result.push_back(hotkey);
 	}
@@ -79,17 +100,17 @@ List<Hotkey> PythonHotkeys::getContent() const
 	return result;
 }
 
-void PythonHotkeys::setContent(const List<Hotkey>& hotkeys)
+void HotkeyTable::setContent(const List<Hotkey>& hotkeys)
 	throw()
 {
-  table->setNumRows(hotkeys.size());
-	table->setColumnWidth(2, 230);
+  setNumRows(hotkeys.size());
+	setColumnWidth(2, 230);
 
 	List<Hotkey>::ConstIterator it = hotkeys.begin();
 	Position p = 0;
 	for (; it != hotkeys.end(); it++)
 	{
-		QComboTableItem * item = new QComboTableItem(table, modifier_, FALSE );
+		QComboTableItem * item = new QComboTableItem(this, modifier_, FALSE );
 		switch ((Position)(*it).button_state)
 		{
 			case (Position)Qt::NoButton:
@@ -107,53 +128,129 @@ void PythonHotkeys::setContent(const List<Hotkey>& hotkeys)
 			default:
 				Log.error() << "Invalid button state for Hotkey" << std::endl;
 		}
-    table->setItem(p, 0,  item) ;
+    setItem(p, 0,  item) ;
 
-		QComboTableItem * item2 = new QComboTableItem(table, keys_, FALSE );
+		QComboTableItem * item2 = new QComboTableItem(this, keys_, FALSE );
 		item2->setCurrentItem((*it).key - Qt::Key_F1);
-    table->setItem(p, 1,  item2) ;
+    setItem(p, 1,  item2) ;
 
-    table->setText(p, 2,  (*it).action.c_str());
+    setText(p, 2,  (*it).action.c_str());
 
 		p++;
 	}
 }
 
-void PythonHotkeys::addEmtpyLine_()
+void HotkeyTable::addEmptyRow()
 	throw()
 {
-	table->setNumRows(table->numRows() + 1);
-	QComboTableItem * item = new QComboTableItem(table, modifier_, FALSE );
+	setNumRows(numRows() + 1);
+	QComboTableItem * item = new QComboTableItem(this, modifier_, FALSE );
 	item->setCurrentItem(0);
-  table->setItem(table->numRows() -1, 0,  item) ;
-	item = new QComboTableItem(table, keys_, FALSE );
+  setItem(numRows() -1, 0,  item) ;
+	item = new QComboTableItem(this, keys_, FALSE );
 	item->setCurrentItem(0);
-  table->setItem(table->numRows() -1, 1,  item) ;
-  table->setText(table->numRows() -1, 2, "");
-	table->update();
+  setItem(numRows() -1, 1,  item) ;
+  setText(numRows() -1, 2, "");
+	update();
 }
 
-void PythonHotkeys::removePressed()
+void HotkeyTable::removeSelection()
 {
-	for (Index p = 0; p < table->numRows(); p++)
+	for (Index p = 0; p < numRows(); p++)
 	{
-		if (table->isRowSelected(p))
+		if (isRowSelected(p))
 		{
-			table->removeRow(p);
+			removeRow(p);
 			return;
 		}
 	}
 }
 
-void PythonHotkeys::newPressed()
+bool HotkeyTable::getValue(String& value) const
 {
-	addEmtpyLine_();
+	value = "";
+	for (Position p = 0; p < numRows(); p++)
+	{
+		Index c1 = ((QComboTableItem*)item(p, 0))->currentItem();
+		Index c2 = ((QComboTableItem*)item(p, 1))->currentItem();
+		value += String(c1) + '°' + String(c2) + '°' + item(p, 2)->text().ascii();
+		value += '@';
+	}
+	return true;
 }
+
+bool HotkeyTable::setValue(const String& value)
+{
+	setNumRows(0);
+
+	vector<String> fields;
+	vector<String> fields2;
+	Size nr = value.split(fields, "@");
+
+	for (Position p = 0; p < nr; p ++)
+	{
+		Size nr2 = fields[p].split(fields2, "°");
+		if (nr2 != 3)
+		{
+			BALLVIEW_DEBUG;
+			continue;
+		}
+
+		Position p0;
+		Position p1;
+		try
+		{
+			p0 = fields2[0].toUnsignedShort();
+			p1 = fields2[1].toUnsignedShort();
+		}
+		catch(...)
+		{
+			BALLVIEW_DEBUG;
+			continue;
+		}
+
+		addEmptyRow();
+
+		((QComboTableItem*)item(p,0))->setCurrentItem(p0);
+		((QComboTableItem*)item(p,1))->setCurrentItem(p1);
+		item(p,2)->setText(fields2[2].c_str());
+	}
+	
+	return true;
+}
+
+
+
+PythonHotkeys::PythonHotkeys( QWidget* parent,  const char* name, WFlags fl )
+  : PythonHotkeysData( parent, name, fl ),
+		PreferencesEntry()
+{
+	setWidgetStackName("Python Hotkeys");
+	registerWidgetForHelpSystem_(this, "pythonInterpreter.html#create_hotkeys");
+
+	table = new HotkeyTable(this);
+	connect(new_button, SIGNAL(pressed()), table, SLOT(addEmtpyRow()));
+	connect(remove_button, SIGNAL(pressed()), table, SLOT(removeSelection()));
+	connect(table, SIGNAL(selectionChanged()), this, SLOT(rowSelected()));
+}
+
 
 void PythonHotkeys::rowSelected()
 {
 	remove_button->setEnabled(table->currentSelection() == -1);
 }
+
+const List<Hotkey>& PythonHotkeys::getContent() const
+	throw()
+{
+	return table->getContent();
+}
+
+void PythonHotkeys::setContent(const List<Hotkey>& hotkeys)
+{
+	table->setContent(hotkeys);
+}
+
 
 
 } } // NAMESPACE

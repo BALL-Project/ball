@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.20 2005/11/25 15:38:45 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.21 2005/11/25 17:48:33 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -689,46 +689,6 @@ namespace BALL
 			PyInterpreter::finalize();
 
 			DockWidget::finalizeWidget(main_control);
-		}
-
-
-		void PyWidget::fetchPreferences(INIFile& inifile)
-			throw()
-		{
-			DockWidget::fetchPreferences(inifile);
-
-			for (Position p = 0; true; p++)
-			{
-				if (!inifile.hasEntry("PYTHON", "Hotkey" + String(p))) break;
-
-				Hotkey hotkey;
-				if (!hotkey.set(inifile.getValue("PYTHON", "Hotkey" + String(p)))) continue;
-
-				insertHotkey(hotkey);
-			}
-
-			python_hotkeys_->setContent(hotkeys_);
-		}
-
-
-		void PyWidget::writePreferences(INIFile& inifile)
-			throw()
-		{
-			if (!inifile.hasSection("PYTHON"))
-			{
-				inifile.appendSection("PYTHON");
-			}
-
-			DockWidget::writePreferences(inifile);
-
-			List<Hotkey>::iterator it = hotkeys_.begin();
-			for (Position p = 0; it != hotkeys_.end(); it++)
-			{
-				String data;
-				(*it).get(data);
-				inifile.insertValue("PYTHON", "Hotkey" + String(p), data);
-				p++;
-			}
 		}
 
 
