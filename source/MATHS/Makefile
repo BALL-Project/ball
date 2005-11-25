@@ -29,7 +29,8 @@ CPP_SOURCES= $(FFT_SOURCES)\
 	vector4.C\
 	parsedFunction.C\
 	parsedFunctionLexer.C\
-	parsedFunctionParser.C
+	parsedFunctionParser.C\
+	randomNumberGenerator.C
 
 #
 # the prefix for the methods defined in the lexer
