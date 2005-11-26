@@ -44,22 +44,74 @@ HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
 	}
 	
 	// F2 -> runScriptAgain()
-	addEmptyRow();
-	((QComboTableItem*)item(0,0))->setCurrentItem(0);
-	((QComboTableItem*)item(0,1))->setCurrentItem(1);
-	item(0,2)->setText("runScriptAgain()");
+	appendHotkey(NONE, 2, "runScriptAgain()");
 
-	// F3 -> clearRepresentations()
-	addEmptyRow();
-	((QComboTableItem*)item(1,0))->setCurrentItem(0);
-	((QComboTableItem*)item(1,1))->setCurrentItem(2);
-	item(1,2)->setText("clearRepresentations()");
+	// F3 -> hideAllRepresentations()
+	appendHotkey(NONE, 3, "hideAllRepresentations()");
+
+	// S-F3 -> clearRepresentations()
+	appendHotkey(SHIFT, 3, "clearRepresentations()");
+	
+	// C-F3 -> clearAll()
+	appendHotkey(SHIFT, 3, "clearAll()");
 
 	// F4 -> removeWater()
+	appendHotkey(NONE, 4, "removeWater()");
+
+	// F5 -> reopenLastFile()
+	// appendHotkey(NONE, 5, "reopenLastFile()");
+	
+	// F6 -> showCartoonAndLigand()
+	// appendHotkey(NONE, 6, "showCartoonAndLigand()");
+	
+	// F7 -> relaxStructure()
+	// appendHotkey(NONE, 7, "relaxStructure()");
+	
+	// F8 -> quickSave()
+	// appendHotkey(NONE, 8, "quickSave()");
+	
+	// F9 -> quickLoad()
+	// appendHotkey(NONE, 9, "quickLoad()");
+}
+
+void HotkeyTable::appendHotkey(Modifier mod, Position F_key, const String& command)
+{
 	addEmptyRow();
-	((QComboTableItem*)item(2,0))->setCurrentItem(0);
-	((QComboTableItem*)item(2,1))->setCurrentItem(3);
-	item(2,2)->setText("removeWater()");
+	((QComboTableItem*)item(numRows() - 1, 0))->setCurrentItem((Position)mod);
+	((QComboTableItem*)item(numRows() - 1, 1))->setCurrentItem(F_key - 1);
+	item(numRows() - 1, 2)->setText(command);
+}
+
+List<Hotkey> HotkeyTable::getContent() const
+	throw()
+{
+	List<Hotkey> result;
+	for (Index pos = 0; pos < numRows(); pos++)
+	{
+		if (item(pos, 2)->text().isEmpty() ||
+				!RTTI::isKindOf<QComboTableItem>(*item(pos, 0))) 
+		{
+			Log.error() << "Problem reading content of PythonHotkeys" << std::endl;
+			continue;
+		}
+
+		Hotkey hotkey;
+
+		Index ci = ((QComboTableItem*)item(pos, 0))->currentItem();
+		switch(ci)
+		{
+			case 0:
+
+	// F4 -> removeWater()
+	appendHotkey(NONE, 4, "removeWater()");
+}
+
+void HotkeyTable::appendHotkey(Modifier mod, Position F_key, const String& command)
+{
+	addEmptyRow();
+	((QComboTableItem*)item(numRows() - 1, 0))->setCurrentItem((Position)mod);
+	((QComboTableItem*)item(numRows() - 1, 1))->setCurrentItem(F_key - 1);
+	item(numRows() - 1, 2)->setText(command);
 }
 
 List<Hotkey> HotkeyTable::getContent() const
@@ -215,11 +267,7 @@ bool HotkeyTable::setValue(const String& value)
 			continue;
 		}
 
-		addEmptyRow();
-
-		((QComboTableItem*)item(p,0))->setCurrentItem(p0);
-		((QComboTableItem*)item(p,1))->setCurrentItem(p1);
-		item(p,2)->setText(fields2[2].c_str());
+		appendHotkey((Modifier)p0, p1 + 1, fields2[2].c_str());
 	}
 	
 	return true;
@@ -232,6 +280,7 @@ PythonHotkeys::PythonHotkeys( QWidget* parent,  const char* name, WFlags fl )
 		PreferencesEntry()
 {
 	setWidgetStackName("Python Hotkeys");
+	setINIFileSectionName("Python Hotkeys");
 	registerWidgetForHelpSystem_(this, "pythonInterpreter.html#create_hotkeys");
 
 	table = new HotkeyTable(this);
@@ -250,7 +299,6 @@ void PythonHotkeys::rowSelected()
 const List<Hotkey> PythonHotkeys::getContent() const
 	throw()
 {
-	return List<Hotkey>();
  	return table->getContent();
 }
 

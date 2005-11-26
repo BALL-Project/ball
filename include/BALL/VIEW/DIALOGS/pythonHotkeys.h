@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pythonHotkeys.h,v 1.3.6.5 2005/11/26 03:22:15 amoll Exp $
+// $Id: pythonHotkeys.h,v 1.3.6.6 2005/11/26 14:35:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PYTHONHOTKEYS_H
@@ -31,6 +31,16 @@ namespace BALL
 				Q_OBJECT
 
 				public:
+
+					///
+					enum Modifier
+					{
+						NONE = 0,
+						SHIFT,
+						ALT
+					};
+
+					///
 					HotkeyTable(QWidget* parent = 0, const char* name = 0)
 						throw();
 					
@@ -55,6 +65,11 @@ namespace BALL
 					
 					///
 					virtual void removeSelection();
+
+					/** Append a hotkey
+					 		F_key: 1-12 for the 12 F-keys
+					*/
+					virtual void appendHotkey(Modifier mod, Position F_key, const String& command);
 					
 				private:
 					QStringList modifier_, keys_;
