@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.62.4.21 2005/11/24 14:24:09 amoll Exp $
+// $Id: representation.C,v 1.62.4.22 2005/11/26 18:03:53 amoll Exp $
 //
 
 
@@ -595,7 +595,8 @@ namespace BALL
 									HashMap<const Composite*, Position>& hashmap) const
 			throw()
 		{
-			hashmap[&c] = hashmap.size();
+			Size i = hashmap.size();
+			hashmap[&c] = i;
 			for (Position p = 0; p < c.getDegree(); p++)
 			{
 				collectRecursive_(*c.getChild(p), hashmap);
