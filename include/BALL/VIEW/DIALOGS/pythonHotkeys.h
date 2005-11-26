@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pythonHotkeys.h,v 1.3.6.6 2005/11/26 14:35:01 amoll Exp $
+// $Id: pythonHotkeys.h,v 1.3.6.7 2005/11/26 17:31:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PYTHONHOTKEYS_H
@@ -36,8 +36,8 @@ namespace BALL
 					enum Modifier
 					{
 						NONE = 0,
-						SHIFT,
-						ALT
+						SHIFT
+						// ALT // currently not working!
 					};
 
 					///

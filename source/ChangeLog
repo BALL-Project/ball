@@ -10,6 +10,7 @@ Added:
  - Support for creating animations and movies per Python script
  - Further Python example scripts
  - Support for SD files in BALLView
+ - Some sensible Hotkeys for Python Scripts in BALLView
  - Context sensitive HTML documentation in BALLView
  - BALLView again has a fourth drawing precision "ultra" for real 
    fast graphics accelerator cards
