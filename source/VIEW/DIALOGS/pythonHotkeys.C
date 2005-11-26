@@ -79,7 +79,7 @@ void HotkeyTable::appendHotkey(Modifier mod, Position F_key, const String& comma
 	addEmptyRow();
 	((QComboTableItem*)item(numRows() - 1, 0))->setCurrentItem((Position)mod);
 	((QComboTableItem*)item(numRows() - 1, 1))->setCurrentItem(F_key - 1);
-	item(numRows() - 1, 2)->setText(command);
+	item(numRows() - 1, 2)->setText(command.c_str());
 }
 
 List<Hotkey> HotkeyTable::getContent() const
