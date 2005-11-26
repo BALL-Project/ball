@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.43 2005/11/26 15:50:01 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.44 2005/11/26 16:50:49 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1849,18 +1849,35 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				
 	void MainControl::quickSave() 
 	{
+		setStatusbarText("quick saving...", true);
+
 		String file = Directory::getUserHomeDir();
 		file += FileSystem::PATH_SEPARATOR;
 		file += "quick.bvp";
 		saveBALLViewProjectFile(file);
+
+		setStatusbarText("quick saving finished", true);
 	}
 
 	void MainControl::quickLoad()
 	{
+		setStatusbarText("quick loading...", true);
+
+		while (getCompositeManager().getComposites().size() > 0)
+		{
+			remove(**getCompositeManager().begin());
+		}
+
+		while (getPrimitiveManager().getRepresentations().size() > 0)
+		{
+			remove((**getPrimitiveManager().getRepresentations().begin()));
+		}
+
 		String file = Directory::getUserHomeDir();
 		file += FileSystem::PATH_SEPARATOR;
 		file += "quick.bvp";
 		loadBALLViewProjectFile(file);
+		setStatusbarText("quick loading finished", true);
 	}
 		
 
