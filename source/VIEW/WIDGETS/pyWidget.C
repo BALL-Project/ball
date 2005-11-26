@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.21 2005/11/25 17:48:33 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.22 2005/11/26 03:20:41 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -636,6 +636,7 @@ namespace BALL
 			throw()
 			: DockWidget(parent, name),
 				text_edit_(new PyWidgetData(this)),
+				python_hotkeys_(0),	
 				working_dir_(""),
 				valid_(false),
 				started_startup_script_(false)
@@ -697,8 +698,8 @@ namespace BALL
 		{
 			text_edit_->python_settings_= new PythonSettings();
 			preferences.insertEntry(text_edit_->python_settings_);
-			python_hotkeys_ = new PythonHotkeys();
-			preferences.insertEntry(python_hotkeys_);
+ 			python_hotkeys_ = new PythonHotkeys();
+ 			preferences.insertEntry(python_hotkeys_);
 		}
 
 		void PyWidget::finalizePreferencesTab(Preferences &preferences)
@@ -727,7 +728,7 @@ namespace BALL
 				return;	
 			}
 
-			hotkeys_ = (python_hotkeys_->getContent());
+ 			hotkeys_ = (python_hotkeys_->getContent());
 
 			if (started_startup_script_ || !isValid())
 			{
@@ -809,7 +810,6 @@ namespace BALL
 		bool PyWidget::run(const String& filename) throw() 
 		{
 			last_script_ = filename;
-Log.error() << "#~~#   1 " << last_script_            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			return text_edit_->runFile(filename);
 		}
 			

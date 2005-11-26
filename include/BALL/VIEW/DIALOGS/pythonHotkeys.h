@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pythonHotkeys.h,v 1.3.6.4 2005/11/25 17:46:47 amoll Exp $
+// $Id: pythonHotkeys.h,v 1.3.6.5 2005/11/26 03:22:15 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PYTHONHOTKEYS_H
@@ -51,7 +51,7 @@ namespace BALL
 					public slots:
 					
 					///
-					virtual void addEmptyRow() throw();
+					virtual void addEmptyRow();
 					
 					///
 					virtual void removeSelection();
@@ -80,7 +80,7 @@ namespace BALL
 			~PythonHotkeys() {}
 
 			///
-			const List<Hotkey>& getContent() const
+			const List<Hotkey> getContent() const
 				throw();
 			
 			///

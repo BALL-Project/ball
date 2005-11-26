@@ -13,6 +13,8 @@ namespace BALL
 	{
 
 HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
+	throw()
+	: QTable(parent)
 {
   horizontalHeader()->setLabel(0, "Modifier");
   horizontalHeader()->setLabel(1, "Key");
@@ -22,14 +24,19 @@ HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
   setNumCols(3);
 	setShowGrid(true);
 	
-	setColumnWidth(2, 240);
-	setGeometry(5,5, 546, 330);
+	setColumnWidth(1, 60);
+	setColumnWidth(2, 330);
+	setGeometry(5,5, 534, 340);
 
 	setSelectionMode(QTable::SingleRow);
 
+	QStringList labels;
+	labels << "Modifyer" << "Key" << "Command";
+	setColumnLabels(labels);
+
 	setName("PythonHotkeys");
 
-	modifier_ << "None" << "Shift" << "Alt";
+	modifier_ << "" << "Shift" << "Alt";
 
 	for (Position p = 1; p < 13; p++)
 	{
@@ -141,7 +148,6 @@ void HotkeyTable::setContent(const List<Hotkey>& hotkeys)
 }
 
 void HotkeyTable::addEmptyRow()
-	throw()
 {
 	setNumRows(numRows() + 1);
 	QComboTableItem * item = new QComboTableItem(this, modifier_, FALSE );
@@ -169,7 +175,7 @@ void HotkeyTable::removeSelection()
 bool HotkeyTable::getValue(String& value) const
 {
 	value = "";
-	for (Position p = 0; p < numRows(); p++)
+	for (Position p = 0; p < (Position)numRows(); p++)
 	{
 		Index c1 = ((QComboTableItem*)item(p, 0))->currentItem();
 		Index c2 = ((QComboTableItem*)item(p, 1))->currentItem();
@@ -229,26 +235,28 @@ PythonHotkeys::PythonHotkeys( QWidget* parent,  const char* name, WFlags fl )
 	registerWidgetForHelpSystem_(this, "pythonInterpreter.html#create_hotkeys");
 
 	table = new HotkeyTable(this);
-	connect(new_button, SIGNAL(pressed()), table, SLOT(addEmtpyRow()));
+	connect(new_button, SIGNAL(pressed()), table, SLOT(addEmptyRow()));
 	connect(remove_button, SIGNAL(pressed()), table, SLOT(removeSelection()));
-	connect(table, SIGNAL(selectionChanged()), this, SLOT(rowSelected()));
+
+	registerObject_(table);
 }
 
 
 void PythonHotkeys::rowSelected()
 {
-	remove_button->setEnabled(table->currentSelection() == -1);
+ 	remove_button->setEnabled(table->currentRow() >= 0);
 }
 
-const List<Hotkey>& PythonHotkeys::getContent() const
+const List<Hotkey> PythonHotkeys::getContent() const
 	throw()
 {
-	return table->getContent();
+	return List<Hotkey>();
+ 	return table->getContent();
 }
 
 void PythonHotkeys::setContent(const List<Hotkey>& hotkeys)
 {
-	table->setContent(hotkeys);
+ 	table->setContent(hotkeys);
 }
 
 
