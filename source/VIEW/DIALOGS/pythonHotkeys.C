@@ -36,7 +36,7 @@ HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
 
 	setName("PythonHotkeys");
 
-	modifier_ << "" << "Shift" << "Alt";
+	modifier_ << "" << "Shift";// << "Alt";
 
 	for (Position p = 1; p < 13; p++)
 	{
@@ -49,11 +49,11 @@ HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
 	// F3 -> hideAllRepresentations()
 	appendHotkey(NONE, 3, "hideAllRepresentations()");
 
-	// S-F3 -> clearRepresentations()
-	appendHotkey(SHIFT, 3, "clearRepresentations()");
+	// F12 -> clearRepresentations()
+	appendHotkey(NONE, 12, "clearRepresentations()");
 	
-	// C-F3 -> clearAll()
-	appendHotkey(ALT, 3, "clearAll()");
+	// S-F12 -> clearAll()
+	appendHotkey(SHIFT, 12, "clearAll()");
 
 	// F4 -> removeWater()
 	appendHotkey(NONE, 4, "removeWater()");
@@ -62,16 +62,16 @@ HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
 	// appendHotkey(NONE, 5, "reopenLastFile()");
 	
 	// F6 -> showCartoonAndLigand()
-	// appendHotkey(NONE, 6, "showCartoonAndLigand()");
+	appendHotkey(NONE, 6, "showCartoonAndLigand()");
 	
 	// F7 -> relaxStructure()
-	// appendHotkey(NONE, 7, "relaxStructure()");
+	appendHotkey(NONE, 7, "relaxStructure()");
 	
 	// F8 -> quickSave()
-	// appendHotkey(NONE, 8, "quickSave()");
+	appendHotkey(NONE, 8, "quickSave()");
 	
 	// F9 -> quickLoad()
-	// appendHotkey(NONE, 9, "quickLoad()");
+	appendHotkey(NONE, 9, "quickLoad()");
 }
 
 void HotkeyTable::appendHotkey(Modifier mod, Position F_key, const String& command)
@@ -109,7 +109,7 @@ List<Hotkey> HotkeyTable::getContent() const
         break;
 
       case 2:
-        hotkey.button_state = Qt::AltButton;
+        hotkey.button_state = Qt::ControlButton;
         break;
 
       default:
@@ -149,7 +149,7 @@ void HotkeyTable::setContent(const List<Hotkey>& hotkeys)
 				item->setCurrentItem(1);
 				break;
 
-			case (Position)Qt::AltButton:
+			case (Position)Qt::ControlButton:
 				item->setCurrentItem(2);
 				break;
 

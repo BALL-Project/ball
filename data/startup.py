@@ -62,6 +62,11 @@ def getRepresentations():
 def getForceField():
 	return getMolecularStructure().getForceField()
 
+def hideAllRepresentations():
+	for i in range(len(getRepresentations())):
+		getRepresentations()[i].setHidden(1)
+		getMainControl().update(getRepresentations()[i])
+
 def clearRepresentations():
 	while len(getRepresentations()) > 0:
 		getMainControl().remove(getRepresentations()[0])
@@ -82,7 +87,12 @@ def runScript(filename):
 
 def runScriptAgain():
 	getPyWidget().runAgain()
-	
+
+def quickSave():
+	getMainControl().quickSave()
+
+def quickLoad():
+	getMainControl().quickLoad()
 
 ###################### EXAMPLES: #######################
 def createStickModel():
@@ -100,4 +110,45 @@ def removeWater():
 		return
 	getMolecularControl().cut()
 
+
+def relaxStructure():	
+	s = getMolecularControlSelection()
+	if len(s) == 0:
+		s.append(getSystem(0))
+	if len(s) != 1:
+		print "One System has to be highlighted!"
+		return
+	getMolecularStructure().addHydrogens()
+	getMolecularControl().applySelector("element(H)")
+	getMolecularStructure().runMinimization()
+	getMolecularControl().applySelector("")
+	getMolecularControl().highlight(s)
+	getMolecularStructure().MDSimulation(0)
+
+
+def showCartoonAndLigand():
+	clearRepresentations()
+	removeWater()
+	s = getMolecularControlSelection()
+	if len(s) == 0:
+		s.append(getSystem(0))
+	if len(s) != 1:
+		print "One System has to be highlighted!"
+		return
+	S = s[0] 
+	l = []
+	for r in residues(S):
+		if not r.isAminoAcid():
+			l.append(r)
+	getMolecularControl().highlight(l)
+	getDisplayProperties().selectModel(MODEL_VDW)
+	getDisplayProperties().selectColoringMethod(COLORING_ELEMENT)
+	getDisplayProperties().apply()
+	l = []
+	l.append(S)
+	getMolecularControl().highlight(l)
+	getMolecularControl().centerCamera()
+	getDisplayProperties().selectModel(MODEL_CARTOON)
+	getDisplayProperties().selectColoringMethod(COLORING_RESIDUE_INDEX)
+	getDisplayProperties().apply()
 
