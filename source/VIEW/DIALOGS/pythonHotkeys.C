@@ -53,7 +53,7 @@ HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
 	appendHotkey(SHIFT, 3, "clearRepresentations()");
 	
 	// C-F3 -> clearAll()
-	appendHotkey(SHIFT, 3, "clearAll()");
+	appendHotkey(ALT, 3, "clearAll()");
 
 	// F4 -> removeWater()
 	appendHotkey(NONE, 4, "removeWater()");
@@ -100,64 +100,33 @@ List<Hotkey> HotkeyTable::getContent() const
 		Index ci = ((QComboTableItem*)item(pos, 0))->currentItem();
 		switch(ci)
 		{
-			case 0:
+      case 0:
+        hotkey.button_state = Qt::NoButton;
+        break;
 
-	// F4 -> removeWater()
-	appendHotkey(NONE, 4, "removeWater()");
+      case 1:
+        hotkey.button_state = Qt::ShiftButton;
+        break;
+
+      case 2:
+        hotkey.button_state = Qt::AltButton;
+        break;
+
+      default:
+        Log.error() << "Problem reading content of PythonHotkeys" << std::endl;
+    }
+
+    ci = ((QComboTableItem*) item(pos, 1))->currentItem();
+    hotkey.key = (Qt::Key) (Qt::Key_F1 + ci);
+
+    hotkey.action = item(pos, 2)->text().ascii();
+
+    result.push_back(hotkey);
+  }
+
+  return result;
 }
 
-void HotkeyTable::appendHotkey(Modifier mod, Position F_key, const String& command)
-{
-	addEmptyRow();
-	((QComboTableItem*)item(numRows() - 1, 0))->setCurrentItem((Position)mod);
-	((QComboTableItem*)item(numRows() - 1, 1))->setCurrentItem(F_key - 1);
-	item(numRows() - 1, 2)->setText(command);
-}
-
-List<Hotkey> HotkeyTable::getContent() const
-	throw()
-{
-	List<Hotkey> result;
-	for (Index pos = 0; pos < numRows(); pos++)
-	{
-		if (item(pos, 2)->text().isEmpty() ||
-				!RTTI::isKindOf<QComboTableItem>(*item(pos, 0))) 
-		{
-			Log.error() << "Problem reading content of PythonHotkeys" << std::endl;
-			continue;
-		}
-
-		Hotkey hotkey;
-
-		Index ci = ((QComboTableItem*)item(pos, 0))->currentItem();
-		switch(ci)
-		{
-			case 0:
-				hotkey.button_state = Qt::NoButton;
-				break;
-
-			case 1:
-				hotkey.button_state =Qt::ShiftButton;
-				break;
-
-			case 2:
-				hotkey.button_state = Qt::AltButton;
-				break;
-
-			default:
-				Log.error() << "Problem reading content of PythonHotkeys" << std::endl;
-		}
-
-		ci = ((QComboTableItem*) item(pos, 1))->currentItem();
-		hotkey.key = (Qt::Key) (Qt::Key_F1 + ci);
-
-		hotkey.action = item(pos, 2)->text().ascii();
-
-		result.push_back(hotkey);
-	}
-
-	return result;
-}
 
 void HotkeyTable::setContent(const List<Hotkey>& hotkeys)
 	throw()
