@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.169.2.42 2005/11/15 23:46:15 amoll Exp $
+// $Id: mainControl.C,v 1.169.2.43 2005/11/26 15:50:01 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1846,7 +1846,23 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 	{
 		qApp->processEvents(ms);
 	}
-			
+				
+	void MainControl::quickSave() 
+	{
+		String file = Directory::getUserHomeDir();
+		file += FileSystem::PATH_SEPARATOR;
+		file += "quick.bvp";
+		saveBALLViewProjectFile(file);
+	}
+
+	void MainControl::quickLoad()
+	{
+		String file = Directory::getUserHomeDir();
+		file += FileSystem::PATH_SEPARATOR;
+		file += "quick.bvp";
+		loadBALLViewProjectFile(file);
+	}
+		
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>
