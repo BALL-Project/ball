@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.11 2005/07/16 21:00:40 oliver Exp $
+# $Id: Makefile,v 1.12 2005/11/27 23:13:46 anker Exp $
 #
 # Makefile for BALL utilities
 #
@@ -10,6 +10,7 @@ EXECUTABLES = \
 	add_hydrogens\
 	assign_typenames_from_rules\
 	clip_protein_around_ligand\
+	create_random_numbers\
 	dcd2dcd\
 	export_fragment\
 	pdb2amber_naming\
