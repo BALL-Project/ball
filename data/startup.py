@@ -106,9 +106,14 @@ def createStickModel():
 
 def removeWater():
 	getMainControl().clearSelection()
+	print "asdasdasd"
+	setMultithreading(0)
 	if getMolecularControl().applySelector("residue(HOH)") == 0:
 		return
 	getMolecularControl().cut()
+	for i in range(len(getSystems())):
+		getMainControl().update(getSystem(i), 1)
+	setMultithreading(1)
 
 
 def relaxStructure():	
