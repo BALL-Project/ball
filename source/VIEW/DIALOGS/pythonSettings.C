@@ -34,7 +34,7 @@ HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
 	setSelectionMode(QTable::SingleRow);
 
 	QStringList labels;
-	labels << "Modifyer" << "Key" << "Command";
+	labels << "Modifier" << "Key" << "Command";
 	setColumnLabels(labels);
 
 	setName("PythonHotkeys");
