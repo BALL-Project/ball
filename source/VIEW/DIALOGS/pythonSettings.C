@@ -26,8 +26,9 @@ HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
   setNumCols(3);
 	setShowGrid(true);
 	
+	setColumnWidth(0, 70);
 	setColumnWidth(1, 60);
-	setColumnWidth(2, 330);
+	setColumnWidth(2, 350);
 	setGeometry(5,5, 534, 320);
 
 	setSelectionMode(QTable::SingleRow);
@@ -51,29 +52,38 @@ HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
 	// F3 -> hideAllRepresentations()
 	appendHotkey(NONE, 3, "hideAllRepresentations()");
 
+	// F4 -> removeWater()
+	appendHotkey(NONE, 4, "removeWater()");
+
+	// F5 -> printAtomTypesForHighlighted()
+	appendHotkey(NONE, 5, "printAtomTypesForHighlighted()");
+
+	// F5 -> printAtomTypesForLigands()
+	appendHotkey(SHIFT, 5, "printAtomTypesForLigands()");
+
+	// F6 -> showCartoonAndLigand()
+	appendHotkey(NONE, 6, "highlightLigand()");
+
+	// S-F6 -> showCartoonAndLigand()
+	appendHotkey(SHIFT, 6, "showCartoonAndLigand()");
+
+	// F7 -> addOptimizedHydrogens()
+	appendHotkey(NONE, 7, "addOptimizedHydrogens()");
+	
+	// S-F7 -> relaxStructure()
+	appendHotkey(SHIFT, 7, "relaxStructure()");
+	
+	// F8 -> quickSave()
+	appendHotkey(NONE, 8, "quickSave()");
+	
+	// S-F8 -> quickLoad()
+	appendHotkey(SHIFT, 8, "quickLoad()");
+	
 	// F12 -> clearRepresentations()
 	appendHotkey(NONE, 12, "clearRepresentations()");
 	
 	// S-F12 -> clearAll()
 	appendHotkey(SHIFT, 12, "clearAll()");
-
-	// F4 -> removeWater()
-	appendHotkey(NONE, 4, "removeWater()");
-
-	// F5 -> reopenLastFile()
-	// appendHotkey(NONE, 5, "reopenLastFile()");
-	
-	// F6 -> showCartoonAndLigand()
-	appendHotkey(NONE, 6, "showCartoonAndLigand()");
-	
-	// F7 -> relaxStructure()
-	appendHotkey(NONE, 7, "relaxStructure()");
-	
-	// F8 -> quickSave()
-	appendHotkey(NONE, 8, "quickSave()");
-	
-	// F9 -> quickLoad()
-	appendHotkey(NONE, 9, "quickLoad()");
 }
 
 void HotkeyTable::appendHotkey(Modifier mod, Position F_key, const String& command)
