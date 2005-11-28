@@ -26,7 +26,7 @@ HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
 	
 	setColumnWidth(1, 60);
 	setColumnWidth(2, 330);
-	setGeometry(5,5, 534, 340);
+	setGeometry(5,5, 534, 320);
 
 	setSelectionMode(QTable::SingleRow);
 

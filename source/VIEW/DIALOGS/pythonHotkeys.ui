@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>PythonHotkeysData</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>551</width>
+            <width>554</width>
             <height>430</height>
         </rect>
     </property>
@@ -23,13 +23,19 @@
             <rect>
                 <x>0</x>
                 <y>330</y>
-                <width>550</width>
+                <width>540</width>
                 <height>82</height>
             </rect>
         </property>
         <vbox>
             <property name="name">
                 <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>5</number>
             </property>
             <widget class="QLabel">
                 <property name="name">
