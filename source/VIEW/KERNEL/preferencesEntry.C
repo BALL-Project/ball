@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.16.2.4 2005/10/22 07:29:10 amoll Exp $
+// $Id: preferencesEntry.C,v 1.16.2.5 2005/11/28 15:16:28 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -333,10 +333,8 @@ namespace BALL
 			{
 				Index id = currentStackPage();
 				if (id == -1) return;
-Log.error() << "#~~#   11 " << id            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				for (Position p = 0; p < stack_entries_[id].size(); p++)
 				{
-Log.error() << "#~~#   12 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 					QWidget* widget = stack_entries_[id][p];
 					setValue_(widget, map[widget]);
 				}
