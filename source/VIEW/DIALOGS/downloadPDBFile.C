@@ -1,6 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: downloadPDBFile.C,v 1.31.4.10 2005/11/28 10:49:51 oliver Exp $
+//
+
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 
 #include <BALL/SYSTEM/TCPTransfer.h>
@@ -176,7 +179,7 @@ bool DownloadPDBFile::threadedDownload_(const String& url)
 		Size bytes = thread_->getTCPTransfer().getReceivedBytes();
 		if (bytes != last_bytes)
 		{
-			setStatusbarText("Downloaded: " + String(bytes) + " bytes", true);
+			setStatusbarText("received " + String(bytes) + " bytes", true);
 			last_bytes = bytes;
 		}
 		
