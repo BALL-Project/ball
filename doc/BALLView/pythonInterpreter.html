@@ -9,13 +9,13 @@
 <center>
 <table width="700" border="0" cellpadding="0">
   <tr>
-    <td align="left">
+    <td align="center">
 
-<h1 align="center">
+<h2 align="center">
 <a href="datasetControl.html"><img src="images/left.png" width="58" height="28" align="absmiddle"></a>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="index.html">Index</a> &nbsp;&nbsp;&nbsp;&nbsp;
-<a href="displayProperties.html"><img src="images/right.png" width="58" height="28" border="0" align="absmiddle"></a> </h1>
-<hr width=550>
+<a href="displayProperties.html"><img src="images/right.png" width="58" height="28" border="0" align="absmiddle"></a> </h2>
+<hr width=700>
 		
 <h2>PythonInterpreter</h2>
 
@@ -49,8 +49,8 @@ In this script the user can define variables and methods to further simplify usa
 The location of the additional startup script is set in the Preferences:
 </div>
 <p><img src="images/startup_script1.png" width="631" height="375"> </p>
-<p>An example for a startup script:</p>
-<pre>
+<p align=left>An example for a startup script:</p>
+<pre align=left>
 def createStickModel():
   dp = DisplayProperties.getInstance(0)
   dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
@@ -67,21 +67,24 @@ def removeWater():
   getMolecularControl().cut()
 </pre>
 
-<h3>Use self written scripts with hotkeys</h3>
+<h3>Python hotkeys</h3>
 <p align="justify"><a name="create_hotkeys"></a>
-  BALLView can bind any Python command to an hotkey for the F-keys.  This is especially usefull with self defined methods.
-  With the startup script above, the user could bind the three methods to different hotkeys (see below). 
-  Thereby he can e.g. remove all water molecules in the loaded Systems with one keypress. By using the Shift- and Control-modifier, BALLView can have up to 36 different hotkeys. This enables the user to 
-  accelerate repetitive tasks dramatically. Of course, it is also possible to start extern Python scripts with a hotkey
-	(just add an hotkey entry with 'runScript("filename")').
+  BALLView can bind any Python command to an hotkey for the F-keys.  
+	By using the Shift-modifier, BALLView can have up to 24  different hotkeys additional to the standard 
+	hotkeys for menu entries. This enables the user to 
+  accelerate repetitive tasks dramatically.
+	The standard startup Python Scripts defines many different shortcuts, which can be mapped to any F-key.
+  Thereby a user can e.g. remove all water molecules in the loaded Systems with one keypress. 
+	Of course, it is also possible to start methods defined in the user startup script or extern Python scripts with a hotkey:
+	Just add an hotkey entry with <i>runScript("filename")</i>.
 	</p>
 <p><img src="images/hotkeys.png"></p>
 
-<h1 align="center"><hr width=550>
+<h2 align="center"><hr width=700>
 <a href="datasetControl.html"><img src="images/left.png" width="58" height="28" align="absmiddle"></a>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="index.html">Index</a> &nbsp;&nbsp;&nbsp;&nbsp;
 <a href="displayProperties.html"><img src="images/right.png" width="58" height="28" align="absmiddle"></a>
-</h1>
+</h2>
 
 </td></tr></table>
 
