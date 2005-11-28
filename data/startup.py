@@ -62,6 +62,7 @@ def getRepresentations():
 def getForceField():
 	return getMolecularStructure().getForceField()
 
+###################### HOTKEYS: #######################
 def hideAllRepresentations():
 	for i in range(len(getRepresentations())):
 		getRepresentations()[i].setHidden(1)
@@ -94,19 +95,8 @@ def quickSave():
 def quickLoad():
 	getMainControl().quickLoad()
 
-###################### EXAMPLES: #######################
-def createStickModel():
-	dp = getDisplayProperties()
-	dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
-	dp.selectMode(DRAWING_MODE_SOLID)
-	dp.selectModel(MODEL_STICK)
-	dp.selectColoringMethod(COLORING_ELEMENT)
-	dp.setTransparency(0)
-	dp.apply()
-
 def removeWater():
 	getMainControl().clearSelection()
-	print "asdasdasd"
 	setMultithreading(0)
 	if getMolecularControl().applySelector("residue(HOH)") == 0:
 		return
@@ -115,8 +105,7 @@ def removeWater():
 		getMainControl().update(getSystem(i), 1)
 	setMultithreading(1)
 
-
-def relaxStructure():	
+def addOptimizedHydrogens():
 	s = getMolecularControlSelection()
 	if len(s) == 0:
 		s.append(getSystem(0))
@@ -126,13 +115,14 @@ def relaxStructure():
 	getMolecularStructure().addHydrogens()
 	getMolecularControl().applySelector("element(H)")
 	getMolecularStructure().runMinimization()
+
+def relaxStructure():	
+	addOptimizedHydrogens()
 	getMolecularControl().applySelector("")
 	getMolecularControl().highlight(s)
 	getMolecularStructure().MDSimulation(0)
 
-
-def showCartoonAndLigand():
-	clearRepresentations()
+def highlightLigand():
 	removeWater()
 	s = getMolecularControlSelection()
 	if len(s) == 0:
@@ -146,6 +136,10 @@ def showCartoonAndLigand():
 		if not r.isAminoAcid():
 			l.append(r)
 	getMolecularControl().highlight(l)
+
+def showCartoonAndLigand():
+	clearRepresentations()
+	highlightLigand()
 	getDisplayProperties().selectModel(MODEL_VDW)
 	getDisplayProperties().selectColoringMethod(COLORING_ELEMENT)
 	getDisplayProperties().apply()
@@ -156,4 +150,26 @@ def showCartoonAndLigand():
 	getDisplayProperties().selectModel(MODEL_CARTOON)
 	getDisplayProperties().selectColoringMethod(COLORING_RESIDUE_INDEX)
 	getDisplayProperties().apply()
+
+def printAtomTypesForHighlighted():
+	s = getMolecularControlSelection()
+	print "Atom types for highlighted Items:"
+	for r in s:
+		for a in atoms(r):
+			print "Residue "+str(a.getParent().getID())+" "+str(a.getFullName())+" : "+str(a.getType())
+
+def printAtomTypesForLigands():
+	highlightLigand()
+	printAtomTypesForHighlighted()
+
+###################### EXAMPLES: #######################
+def createStickModel():
+	dp = getDisplayProperties()
+	dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
+	dp.selectMode(DRAWING_MODE_SOLID)
+	dp.selectModel(MODEL_STICK)
+	dp.selectColoringMethod(COLORING_ELEMENT)
+	dp.setTransparency(0)
+	dp.apply()
+
 
