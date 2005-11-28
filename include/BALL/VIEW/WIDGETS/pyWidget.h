@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.23.2.14 2005/11/25 17:48:13 amoll Exp $
+// $Id: pyWidget.h,v 1.23.2.15 2005/11/28 15:10:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -33,7 +33,6 @@ namespace BALL
 	namespace VIEW
 	{
 		class PythonSettings;
-		class PythonHotkeys;
 
 		class RunPythonThread;
 
@@ -303,7 +302,6 @@ namespace BALL
 			protected:
 
 			PyWidgetData* 		text_edit_;
-			PythonHotkeys* 		python_hotkeys_;
 			List<Hotkey> 			hotkeys_;
 			// 								we use an own working dir to find Python Scripts
 			String 						working_dir_;

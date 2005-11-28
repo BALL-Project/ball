@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44.6.22 2005/11/26 03:20:41 amoll Exp $
+// $Id: pyWidget.C,v 1.44.6.23 2005/11/28 15:10:07 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -10,7 +10,6 @@
 #include <BALL/VIEW/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/DIALOGS/pythonSettings.h>
-#include <BALL/VIEW/DIALOGS/pythonHotkeys.h>
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/FORMAT/lineBasedFile.h>
@@ -636,7 +635,6 @@ namespace BALL
 			throw()
 			: DockWidget(parent, name),
 				text_edit_(new PyWidgetData(this)),
-				python_hotkeys_(0),	
 				working_dir_(""),
 				valid_(false),
 				started_startup_script_(false)
@@ -698,8 +696,6 @@ namespace BALL
 		{
 			text_edit_->python_settings_= new PythonSettings();
 			preferences.insertEntry(text_edit_->python_settings_);
- 			python_hotkeys_ = new PythonHotkeys();
- 			preferences.insertEntry(python_hotkeys_);
 		}
 
 		void PyWidget::finalizePreferencesTab(Preferences &preferences)
@@ -709,12 +705,6 @@ namespace BALL
 			{
 				preferences.removeEntry(text_edit_->python_settings_);
 				text_edit_->python_settings_ = 0;
-			}
-
-			if (python_hotkeys_ != 0)
-			{
-				preferences.removeEntry(python_hotkeys_);
-				python_hotkeys_ = 0;
 			}
 		}
 
@@ -728,7 +718,7 @@ namespace BALL
 				return;	
 			}
 
- 			hotkeys_ = (python_hotkeys_->getContent());
+ 			hotkeys_ = (text_edit_->python_settings_->getContent());
 
 			if (started_startup_script_ || !isValid())
 			{

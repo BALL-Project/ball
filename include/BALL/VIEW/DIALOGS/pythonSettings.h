@@ -10,10 +10,69 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
+#ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
+ #include <BALL/VIEW/WIDGETS/pyWidget.h>
+#endif
+
+#include <qtable.h>
+
 namespace BALL
 {
 	namespace VIEW
 	{
+		///
+		class BALL_VIEW_EXPORT HotkeyTable
+			:	public QTable,
+				public PreferencesEntry::ExtendedPreferencesObject
+		{
+			Q_OBJECT
+
+			public:
+
+				///
+				enum Modifier
+				{
+					NONE = 0,
+					SHIFT
+					// ALT // currently not working!
+				};
+
+				///
+				HotkeyTable(QWidget* parent = 0, const char* name = 0)
+					throw();
+				
+				///
+				virtual bool getValue(String& value) const;
+
+				///
+				virtual bool setValue(const String& value);
+
+				///
+				List<Hotkey> getContent() const
+					throw();
+
+				///
+				void setContent(const List<Hotkey>& hotkeys)
+					throw();
+
+				public slots:
+				
+				///
+				virtual void addEmptyRow();
+				
+				///
+				virtual void removeSelection();
+
+				/** Append a hotkey
+						F_key: 1-12 for the 12 F-keys
+				*/
+				virtual void appendHotkey(Modifier mod, Position F_key, const String& command);
+				
+			private:
+				QStringList modifier_, keys_;
+		};
+
+
 		/** Dialog for setting the Python preferences.
 		 		Currently only a startup script can be selected, that will be called,
 				when the application has loaded and a PyWidget instance is added.
@@ -41,10 +100,24 @@ namespace BALL
 			String getFilename() const
 				throw();
 
+			///
+			const List<Hotkey> getContent() const
+				throw();
+			
+			///
+			void setContent(const List<Hotkey>& hotkeys);
+
 			public slots:
 
 			/// Open a filedialog to select the startup script
 			void fileSelected();
+
+			///
+			virtual void rowSelected();
+
+			protected:
+
+			HotkeyTable*  table;
 		};
 } }
 
