@@ -61,8 +61,6 @@ libVIEW.obj\
 ..\..\..\source\VIEW\DIALOGS\preferencesData.obj\
 #..\..\..\source\VIEW\DIALOGS\PTEDialog.obj\
 #..\..\..\source\VIEW\DIALOGS\PTEDialogData.obj\
-..\..\..\source\VIEW\DIALOGS\pythonHotkeys.obj\
-..\..\..\source\VIEW\DIALOGS\pythonHotkeysData.obj\
 ..\..\..\source\VIEW\DIALOGS\pythonSettings.obj\
 ..\..\..\source\VIEW\DIALOGS\pythonSettingsData.obj\
 ..\..\..\source\VIEW\DIALOGS\serverPreferences.obj\
@@ -185,8 +183,6 @@ mocfiles\preferencesData_moc.obj\
 mocfiles\preferences_moc.obj\
 #mocfiles\PTEDialogData_moc.obj\
 #mocfiles\PTEDialog_moc.obj\
-mocfiles\pythonHotkeysData_moc.obj\
-mocfiles\pythonHotkeys_moc.obj\
 mocfiles\pythonSettingsData_moc.obj\
 mocfiles\pythonSettings_moc.obj\
 mocfiles\serverPreferences_moc.obj\
@@ -238,7 +234,6 @@ UICS = \
 ..\..\..\source\VIEW\DIALOGS\peptideDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\preferences.myui\
 #..\..\..\source\VIEW\DIALOGS\PTEDialog.myui\
-..\..\..\source\VIEW\DIALOGS\pythonHotkeys.myui\
 ..\..\..\source\VIEW\DIALOGS\pythonSettings.myui\
 ..\..\..\source\VIEW\DIALOGS\setCamera.myui\
 ..\..\..\source\VIEW\DIALOGS\snapShotVisualisation.myui\
