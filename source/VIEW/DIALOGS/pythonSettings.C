@@ -287,7 +287,7 @@ PythonSettings::PythonSettings( QWidget* parent,  const char* name, WFlags fl )
 	registerObject_(table);
 	registerObject_(script_edit);
 
-	setWidgetStackName("Python Settings");
+	setWidgetStackName("Python");
 	setWidgetStack(widget_stack);
 }
 

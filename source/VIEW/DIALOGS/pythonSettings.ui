@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Python Settings</string>
+        <string>Python</string>
     </property>
     <widget class="QWidgetStack">
         <property name="name">
@@ -29,7 +29,7 @@
         </property>
         <widget class="QWidget">
             <property name="name">
-                <cstring>General_Settings</cstring>
+                <cstring>General</cstring>
             </property>
             <attribute name="id">
                 <number>0</number>
