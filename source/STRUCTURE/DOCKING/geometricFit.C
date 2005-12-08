@@ -688,7 +688,6 @@ namespace BALL
 		int surface_type = options.getInteger(Option::SURFACE_TYPE);
 		System& system = ( pro_idx == PROTEIN_A ) ? system1_ : system2_;
 
-		// TODO: Configurable as an Option
     int PENALTY;
     
     // init grid value
@@ -707,7 +706,7 @@ namespace BALL
 				*grid = Complex(0.0,0.0);
       }
 
-      PENALTY = -15;
+      PENALTY = options.getInteger(Option::PENALTY_STATIC);
     }
     else // if ( pro_idx == PROTEIN_B )
     {
@@ -729,8 +728,7 @@ namespace BALL
 				*grid = Complex(0.0,0.0);
       }
       
-			// TODO: Configurable as an option
-      PENALTY = 1;
+      PENALTY = options.getInteger(Option::PENALTY_MOBILE);
     }
 
     findInsidePoints_( system, pro_idx );
@@ -751,6 +749,11 @@ namespace BALL
       {}
     }
 
+		// TEST! //
+		fstream blubb("grid1", std::ios::out);
+		//blubb << *FFT_grid_a_ ;blubb.close();
+		fstream bla("grid2", std::ios::out);
+		//bla << *FFT_grid_b_ ;bla.close();
 		return;
   }
   
@@ -1276,7 +1279,7 @@ namespace BALL
 			System sys_b = system_backup_b_;
 
 			changeProteinOrientation_(sys_b, p.orientation);
-			TranslationProcessor tp(p.translation);
+			TranslationProcessor tp(p.translation*-1);
 			sys_b.apply(tp);
 
 			sys_a.splice(sys_b);
