@@ -52,11 +52,11 @@
                     </property>
                     <property name="font">
                         <font>
-                            <family>Dingbats</family>
+                            <family>Sans Serif</family>
                         </font>
                     </property>
                     <property name="text">
-                        <string>t</string>
+                        <string>down</string>
                     </property>
                 </widget>
                 <widget class="QPushButton" row="1" column="0">
@@ -73,11 +73,11 @@
                     </property>
                     <property name="font">
                         <font>
-                            <family>Dingbats</family>
+                            <family>Sans Serif</family>
                         </font>
                     </property>
                     <property name="text">
-                        <string>s</string>
+                        <string>up</string>
                     </property>
                 </widget>
                 <widget class="QPushButton" row="0" column="0" rowspan="1" colspan="2">
