@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.1.2.26 2005/10/13 11:52:39 leonhardt Exp $
+// $Id: dockProgressDialog.C,v 1.1.2.27 2005/12/16 16:10:08 leonhardt Exp $
 //
 
 #include "dockProgressDialog.h"
@@ -192,11 +192,6 @@ namespace BALL
 			if (!alg_->hasFinished())
 			{
 			 	timer_.start(1000, true);
-			}
-			else
-			{
-				//dialog is closed and deleted
-			 	close(true);
 			}
 		}
 		

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1.2.28 2005/11/17 12:11:43 leonhardt Exp $
+// $Id: dockingController.C,v 1.1.2.29 2005/12/16 16:10:08 leonhardt Exp $
 //
 
 #include "dockingController.h"
@@ -102,7 +102,7 @@ namespace BALL
 			if (RTTI::isKindOf<DockingFinishedMessage>(*message))
 			{
 				DockingFinishedMessage* dfm = RTTI::castTo<DockingFinishedMessage>(*message);
-
+				
 				unlockComposites();
 				if (dfm->wasAborted())
 				{
@@ -113,10 +113,17 @@ namespace BALL
 						return;
 					}
 				}
+				
+				progress_dialog_->close();
+				delete progress_dialog_;
+				progress_dialog_ = NULL;
+				
+				setStatusbarText("Starting scoring...", true);
 				if(!runScoring_((ConformationSet*)(dfm->getConformationSet())))
 				{
 				 delete dfm->getConformationSet();
 				}
+				setStatusbarText("Scoring finished.", true);
 			}
 			// DatasetControl sends this messages, when user wants to have a look at a DockResult
 			else if (RTTI::isKindOf<ShowDockResultMessage>(*message))
@@ -304,6 +311,7 @@ namespace BALL
 		bool DockingController::runScoring_(ConformationSet* conformation_set)
 			throw()
 		{
+			if (!conformation_set) return false;
 			if (!conformation_set->size())
 			{
 				Log.error() << "There are no docking results! " << __FILE__ << " " << __LINE__ << std::endl;

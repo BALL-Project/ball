@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1.2.8.2.12 2005/07/18 13:40:12 leonhardt Exp $
+# $Id: Makefile,v 1.1.2.8.2.13 2005/12/16 16:10:08 leonhardt Exp $
 #
 
 EXECUTABLE=DOCKView
@@ -58,7 +58,7 @@ UIC_FILES=\
 	dockResultDialogData.C
 
 DOCKView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS) $(FFTW_LIBS)
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS) $(FFTW_LIBS) -L/opt/gnu/lib -lfftw3
 
 depend: $(UIC_FILES) $(MOC_SOURCES)
 
