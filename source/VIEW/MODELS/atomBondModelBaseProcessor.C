@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.C,v 1.14 2005/02/23 12:55:19 amoll Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.15 2005/12/23 17:03:33 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>

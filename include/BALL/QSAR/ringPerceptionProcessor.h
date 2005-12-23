@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.h,v 1.9 2005/04/22 15:01:40 amoll Exp $
+// $Id: ringPerceptionProcessor.h,v 1.10 2005/12/23 17:01:58 amoll Exp $
 //
 
 #ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
@@ -39,7 +39,7 @@ namespace BALL
 			and the Balducci Pearlman algorithm described in:
 			Renzo Balducci, Robert S. Pearlman, J. Chem. Inf. Comput. Sci., 34:822-831, 1994
 	*/
-	class RingPerceptionProcessor
+	class BALL_EXPORT RingPerceptionProcessor
 		:	public UnaryProcessor<AtomContainer>
 	{
 		public:

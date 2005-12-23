@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBdefs.h,v 1.7 2005/02/23 11:34:17 oliver Exp $
+// $Id: PDBdefs.h,v 1.8 2005/12/23 17:01:45 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_PDBDEFS_H
@@ -117,118 +117,118 @@ namespace BALL
 
 		/**	@name PDB record format definitions */
 		//@{
-		extern const char* FORMAT_UNKNOWN;
-		extern const char* FORMAT_ANISOU;
-		extern const char* FORMAT_ATOM;
-		extern const char* FORMAT_ATOM_PARTIAL_CRG;
-		extern const char* FORMAT_AUTHOR;
-		extern const char* FORMAT_CAVEAT;
-		extern const char* FORMAT_CISPEP;
-		extern const char* FORMAT_COMPND;
-		extern const char* FORMAT_CONECT;
-		extern const char* FORMAT_CRYST1;
-		extern const char* FORMAT_DBREF;
-		extern const char* FORMAT_END;
-		extern const char* FORMAT_ENDMDL;
-		extern const char* FORMAT_EXPDTA;
-		extern const char* FORMAT_FORMUL;
-		extern const char* FORMAT_FTNOTE;
-		extern const char* FORMAT_HEADER;
-		extern const char* FORMAT_HELIX;
-		extern const char* FORMAT_HET;
-		extern const char* FORMAT_HETATM;
-		extern const char* FORMAT_HETNAM;
-		extern const char* FORMAT_HETSYN;
-		extern const char* FORMAT_HYDBND;
-		extern const char* FORMAT_JRNL;
-		extern const char* FORMAT_KEYWDS;
-		extern const char* FORMAT_LINK;
-		extern const char* FORMAT_MASTER;
-		extern const char* FORMAT_MODEL;
-		extern const char* FORMAT_MODRES;
-		extern const char* FORMAT_MTRIX1;
-		extern const char* FORMAT_MTRIX2;
-		extern const char* FORMAT_MTRIX3;
-		extern const char* FORMAT_OBSLTE;
-		extern const char* FORMAT_ORIGX1;
-		extern const char* FORMAT_ORIGX2;
-		extern const char* FORMAT_ORIGX3;
-		extern const char* FORMAT_REMARK;
-		extern const char* FORMAT_REVDAT;
-		extern const char* FORMAT_SCALE1;
-		extern const char* FORMAT_SCALE2;
-		extern const char* FORMAT_SCALE3;
-		extern const char* FORMAT_SEQADV;
-		extern const char* FORMAT_SEQRES;
-		extern const char* FORMAT_SHEET;
-		extern const char* FORMAT_SIGATM;
-		extern const char* FORMAT_SIGUIJ;
-		extern const char* FORMAT_SITE;
-		extern const char* FORMAT_SLTBRG;
-		extern const char* FORMAT_SOURCE;
-		extern const char* FORMAT_SPRSDE;
-		extern const char* FORMAT_SSBOND;
-		extern const char* FORMAT_TER;
-		extern const char* FORMAT_TITLE;
-		extern const char* FORMAT_TURN;
-		extern const char* FORMAT_TVECT;
+		BALL_EXPORT extern const char* FORMAT_UNKNOWN;
+		BALL_EXPORT extern const char* FORMAT_ANISOU;
+		BALL_EXPORT extern const char* FORMAT_ATOM;
+		BALL_EXPORT extern const char* FORMAT_ATOM_PARTIAL_CRG;
+		BALL_EXPORT extern const char* FORMAT_AUTHOR;
+		BALL_EXPORT extern const char* FORMAT_CAVEAT;
+		BALL_EXPORT extern const char* FORMAT_CISPEP;
+		BALL_EXPORT extern const char* FORMAT_COMPND;
+		BALL_EXPORT extern const char* FORMAT_CONECT;
+		BALL_EXPORT extern const char* FORMAT_CRYST1;
+		BALL_EXPORT extern const char* FORMAT_DBREF;
+		BALL_EXPORT extern const char* FORMAT_END;
+		BALL_EXPORT extern const char* FORMAT_ENDMDL;
+		BALL_EXPORT extern const char* FORMAT_EXPDTA;
+		BALL_EXPORT extern const char* FORMAT_FORMUL;
+		BALL_EXPORT extern const char* FORMAT_FTNOTE;
+		BALL_EXPORT extern const char* FORMAT_HEADER;
+		BALL_EXPORT extern const char* FORMAT_HELIX;
+		BALL_EXPORT extern const char* FORMAT_HET;
+		BALL_EXPORT extern const char* FORMAT_HETATM;
+		BALL_EXPORT extern const char* FORMAT_HETNAM;
+		BALL_EXPORT extern const char* FORMAT_HETSYN;
+		BALL_EXPORT extern const char* FORMAT_HYDBND;
+		BALL_EXPORT extern const char* FORMAT_JRNL;
+		BALL_EXPORT extern const char* FORMAT_KEYWDS;
+		BALL_EXPORT extern const char* FORMAT_LINK;
+		BALL_EXPORT extern const char* FORMAT_MASTER;
+		BALL_EXPORT extern const char* FORMAT_MODEL;
+		BALL_EXPORT extern const char* FORMAT_MODRES;
+		BALL_EXPORT extern const char* FORMAT_MTRIX1;
+		BALL_EXPORT extern const char* FORMAT_MTRIX2;
+		BALL_EXPORT extern const char* FORMAT_MTRIX3;
+		BALL_EXPORT extern const char* FORMAT_OBSLTE;
+		BALL_EXPORT extern const char* FORMAT_ORIGX1;
+		BALL_EXPORT extern const char* FORMAT_ORIGX2;
+		BALL_EXPORT extern const char* FORMAT_ORIGX3;
+		BALL_EXPORT extern const char* FORMAT_REMARK;
+		BALL_EXPORT extern const char* FORMAT_REVDAT;
+		BALL_EXPORT extern const char* FORMAT_SCALE1;
+		BALL_EXPORT extern const char* FORMAT_SCALE2;
+		BALL_EXPORT extern const char* FORMAT_SCALE3;
+		BALL_EXPORT extern const char* FORMAT_SEQADV;
+		BALL_EXPORT extern const char* FORMAT_SEQRES;
+		BALL_EXPORT extern const char* FORMAT_SHEET;
+		BALL_EXPORT extern const char* FORMAT_SIGATM;
+		BALL_EXPORT extern const char* FORMAT_SIGUIJ;
+		BALL_EXPORT extern const char* FORMAT_SITE;
+		BALL_EXPORT extern const char* FORMAT_SLTBRG;
+		BALL_EXPORT extern const char* FORMAT_SOURCE;
+		BALL_EXPORT extern const char* FORMAT_SPRSDE;
+		BALL_EXPORT extern const char* FORMAT_SSBOND;
+		BALL_EXPORT extern const char* FORMAT_TER;
+		BALL_EXPORT extern const char* FORMAT_TITLE;
+		BALL_EXPORT extern const char* FORMAT_TURN;
+		BALL_EXPORT extern const char* FORMAT_TVECT;
 		//@}
 
 		/**	@name PDB record tag names */
 		//@{
-		extern const char* RECORD_TAG_ANISOU;
-		extern const char* RECORD_TAG_ATOM;
-		extern const char* RECORD_TAG_AUTHOR;
-		extern const char* RECORD_TAG_CAVEAT;
-		extern const char* RECORD_TAG_CISPEP;
-		extern const char* RECORD_TAG_COMPND;
-		extern const char* RECORD_TAG_CONECT;
-		extern const char* RECORD_TAG_CRYST1;
-		extern const char* RECORD_TAG_DBREF;
-		extern const char* RECORD_TAG_END;
-		extern const char* RECORD_TAG_ENDMDL;
-		extern const char* RECORD_TAG_EXPDTA;
-		extern const char* RECORD_TAG_FORMUL;
-		extern const char* RECORD_TAG_FTNOTE;
-		extern const char* RECORD_TAG_HEADER;
-		extern const char* RECORD_TAG_HELIX;
-		extern const char* RECORD_TAG_HET;
-		extern const char* RECORD_TAG_HETATM;
-		extern const char* RECORD_TAG_HETNAM;
-		extern const char* RECORD_TAG_HETSYN;
-		extern const char* RECORD_TAG_HYDBND;
-		extern const char* RECORD_TAG_JRNL;
-		extern const char* RECORD_TAG_KEYWDS;
-		extern const char* RECORD_TAG_LINK;
-		extern const char* RECORD_TAG_MASTER;
-		extern const char* RECORD_TAG_MODEL;
-		extern const char* RECORD_TAG_MODRES;
-		extern const char* RECORD_TAG_MTRIX1;
-		extern const char* RECORD_TAG_MTRIX2;
-		extern const char* RECORD_TAG_MTRIX3;
-		extern const char* RECORD_TAG_OBSLTE;
-		extern const char* RECORD_TAG_ORIGX1;
-		extern const char* RECORD_TAG_ORIGX2;
-		extern const char* RECORD_TAG_ORIGX3;
-		extern const char* RECORD_TAG_REMARK;
-		extern const char* RECORD_TAG_REVDAT;
-		extern const char* RECORD_TAG_SCALE1;
-		extern const char* RECORD_TAG_SCALE2;
-		extern const char* RECORD_TAG_SCALE3;
-		extern const char* RECORD_TAG_SEQADV;
-		extern const char* RECORD_TAG_SEQRES;
-		extern const char* RECORD_TAG_SHEET;
-		extern const char* RECORD_TAG_SIGATM;
-		extern const char* RECORD_TAG_SIGUIJ;
-		extern const char* RECORD_TAG_SITE;
-		extern const char* RECORD_TAG_SLTBRG;
-		extern const char* RECORD_TAG_SOURCE;
-		extern const char* RECORD_TAG_SPRSDE;
-		extern const char* RECORD_TAG_SSBOND;
-		extern const char* RECORD_TAG_TER;
-		extern const char* RECORD_TAG_TITLE;
-		extern const char* RECORD_TAG_TURN;
-		extern const char* RECORD_TAG_TVECT;
+		BALL_EXPORT extern const char* RECORD_TAG_ANISOU;
+		BALL_EXPORT extern const char* RECORD_TAG_ATOM;
+		BALL_EXPORT extern const char* RECORD_TAG_AUTHOR;
+		BALL_EXPORT extern const char* RECORD_TAG_CAVEAT;
+		BALL_EXPORT extern const char* RECORD_TAG_CISPEP;
+		BALL_EXPORT extern const char* RECORD_TAG_COMPND;
+		BALL_EXPORT extern const char* RECORD_TAG_CONECT;
+		BALL_EXPORT extern const char* RECORD_TAG_CRYST1;
+		BALL_EXPORT extern const char* RECORD_TAG_DBREF;
+		BALL_EXPORT extern const char* RECORD_TAG_END;
+		BALL_EXPORT extern const char* RECORD_TAG_ENDMDL;
+		BALL_EXPORT extern const char* RECORD_TAG_EXPDTA;
+		BALL_EXPORT extern const char* RECORD_TAG_FORMUL;
+		BALL_EXPORT extern const char* RECORD_TAG_FTNOTE;
+		BALL_EXPORT extern const char* RECORD_TAG_HEADER;
+		BALL_EXPORT extern const char* RECORD_TAG_HELIX;
+		BALL_EXPORT extern const char* RECORD_TAG_HET;
+		BALL_EXPORT extern const char* RECORD_TAG_HETATM;
+		BALL_EXPORT extern const char* RECORD_TAG_HETNAM;
+		BALL_EXPORT extern const char* RECORD_TAG_HETSYN;
+		BALL_EXPORT extern const char* RECORD_TAG_HYDBND;
+		BALL_EXPORT extern const char* RECORD_TAG_JRNL;
+		BALL_EXPORT extern const char* RECORD_TAG_KEYWDS;
+		BALL_EXPORT extern const char* RECORD_TAG_LINK;
+		BALL_EXPORT extern const char* RECORD_TAG_MASTER;
+		BALL_EXPORT extern const char* RECORD_TAG_MODEL;
+		BALL_EXPORT extern const char* RECORD_TAG_MODRES;
+		BALL_EXPORT extern const char* RECORD_TAG_MTRIX1;
+		BALL_EXPORT extern const char* RECORD_TAG_MTRIX2;
+		BALL_EXPORT extern const char* RECORD_TAG_MTRIX3;
+		BALL_EXPORT extern const char* RECORD_TAG_OBSLTE;
+		BALL_EXPORT extern const char* RECORD_TAG_ORIGX1;
+		BALL_EXPORT extern const char* RECORD_TAG_ORIGX2;
+		BALL_EXPORT extern const char* RECORD_TAG_ORIGX3;
+		BALL_EXPORT extern const char* RECORD_TAG_REMARK;
+		BALL_EXPORT extern const char* RECORD_TAG_REVDAT;
+		BALL_EXPORT extern const char* RECORD_TAG_SCALE1;
+		BALL_EXPORT extern const char* RECORD_TAG_SCALE2;
+		BALL_EXPORT extern const char* RECORD_TAG_SCALE3;
+		BALL_EXPORT extern const char* RECORD_TAG_SEQADV;
+		BALL_EXPORT extern const char* RECORD_TAG_SEQRES;
+		BALL_EXPORT extern const char* RECORD_TAG_SHEET;
+		BALL_EXPORT extern const char* RECORD_TAG_SIGATM;
+		BALL_EXPORT extern const char* RECORD_TAG_SIGUIJ;
+		BALL_EXPORT extern const char* RECORD_TAG_SITE;
+		BALL_EXPORT extern const char* RECORD_TAG_SLTBRG;
+		BALL_EXPORT extern const char* RECORD_TAG_SOURCE;
+		BALL_EXPORT extern const char* RECORD_TAG_SPRSDE;
+		BALL_EXPORT extern const char* RECORD_TAG_SSBOND;
+		BALL_EXPORT extern const char* RECORD_TAG_TER;
+		BALL_EXPORT extern const char* RECORD_TAG_TITLE;
+		BALL_EXPORT extern const char* RECORD_TAG_TURN;
+		BALL_EXPORT extern const char* RECORD_TAG_TVECT;
 		//@}
 
 		/** @name Some typedefs for simplifying parsing.
@@ -312,7 +312,7 @@ namespace BALL
 
 		/**
 		*/
-		struct RecordTypeFormat
+		struct BALL_EXPORT RecordTypeFormat
 		{
 			public:
 			RecordType		record_type;
@@ -320,7 +320,7 @@ namespace BALL
 			const char*		format_string;
 		};
 
-		struct Residue
+		struct BALL_EXPORT Residue
 		{
 			ResidueName name;
 			Character   chain_ID;
@@ -348,14 +348,14 @@ namespace BALL
 
 		/**
 		*/
-		struct RecordUNKNOWN
+		struct BALL_EXPORT RecordUNKNOWN
 		{
 			Real max_record_size[SIZE_OF_PDB_RECORD_LINE];
 		};
 		
 		/**
 		*/
-		struct RecordANISOU
+		struct BALL_EXPORT RecordANISOU
 		{
 			RecordType  record_type;
 			RecordName  record_name;
@@ -376,7 +376,7 @@ namespace BALL
 
 		/**
 		*/
-		struct RecordATOM
+		struct BALL_EXPORT RecordATOM
 		{
 			RecordType  record_type;
 			RecordName  record_name;
@@ -395,7 +395,7 @@ namespace BALL
 
 		/**
 		*/
-		struct RecordAUTHOR
+		struct BALL_EXPORT RecordAUTHOR
 		{
 			RecordType   record_type;
 			RecordName   record_name;
@@ -405,7 +405,7 @@ namespace BALL
 
 		/**
 		*/
-		struct RecordCAVEAT
+		struct BALL_EXPORT RecordCAVEAT
 		{
 			RecordType   record_type;
 			RecordName   record_name;
@@ -416,7 +416,7 @@ namespace BALL
 
 		/**
 		*/
-		struct RecordCISPEP
+		struct BALL_EXPORT RecordCISPEP
 		{
 			///
 			RecordType     record_type;
@@ -429,7 +429,7 @@ namespace BALL
 
 		/**
 		*/
-		struct RecordCOMPND
+		struct BALL_EXPORT RecordCOMPND
 		{
 			RecordType        record_type;
 			RecordName        record_name;
@@ -439,7 +439,7 @@ namespace BALL
 		
 		/**
 		*/
-		struct RecordCONECT
+		struct BALL_EXPORT RecordCONECT
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -461,7 +461,7 @@ namespace BALL
 
 		/**
 		*/
-		struct RecordCRYST1
+		struct BALL_EXPORT RecordCRYST1
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -481,7 +481,7 @@ namespace BALL
 
 		/**
 		*/
-		struct RecordDBREF
+		struct BALL_EXPORT RecordDBREF
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -517,21 +517,21 @@ namespace BALL
 		};
 
 		///
-		struct RecordEND
+		struct BALL_EXPORT RecordEND
 		{
 			RecordType record_type;
 			RecordName record_name;
 		};
 
 		///
-		struct RecordENDMDL
+		struct BALL_EXPORT RecordENDMDL
 		{
 			RecordType record_type;
 			RecordName record_name;
 		};
 		
 		///
-		struct RecordEXPDTA
+		struct BALL_EXPORT RecordEXPDTA
 		{
 			RecordType   record_type;
 			RecordName   record_name;
@@ -540,7 +540,7 @@ namespace BALL
 		};
 		
 		///
-		struct RecordFORMUL
+		struct BALL_EXPORT RecordFORMUL
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -552,7 +552,7 @@ namespace BALL
 		};
 		
 		///
-		struct RecordFTNOTE
+		struct BALL_EXPORT RecordFTNOTE
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -561,7 +561,7 @@ namespace BALL
 		};
 		
 		///
-		struct RecordHEADER
+		struct BALL_EXPORT RecordHEADER
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -571,7 +571,7 @@ namespace BALL
 		};
 		
 		///
-		struct RecordHELIX
+		struct BALL_EXPORT RecordHELIX
 		{
 			RecordType    record_type;
 			RecordName    record_name;
@@ -599,7 +599,7 @@ namespace BALL
 		};
 		
 		///
-		struct RecordHET
+		struct BALL_EXPORT RecordHET
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -609,7 +609,7 @@ namespace BALL
 		};
 		
 		///
-		struct RecordHETATM
+		struct BALL_EXPORT RecordHETATM
 		{
 			RecordType  record_type;
 			RecordName  record_name;
@@ -626,7 +626,7 @@ namespace BALL
 		};
 		
 		///
-		struct RecordHETNAM
+		struct BALL_EXPORT RecordHETNAM
 		{
 			RecordType   record_type;
 			RecordName   record_name;
@@ -636,7 +636,7 @@ namespace BALL
 		};
 		
 		///
-		struct RecordHETSYN
+		struct BALL_EXPORT RecordHETSYN
 		{
 			RecordType   record_type;
 			RecordName   record_name;
@@ -646,37 +646,40 @@ namespace BALL
 		};
 		
 		///
-		struct RecordHYDBND
+		struct BALL_EXPORT RecordHYDBND
 		{
 			RecordType       record_type;
 			RecordName       record_name;
 			///
-			struct HydrogenPartnerAtom
+			struct BALL_EXPORT HydrogenPartnerAtom
 			{
 				Atom           atom_name;
 				Character      alternate_location_indicator;
 				Residue				 residue;
-			} hydrogen_partner_atom[2];
+			};
+
+			HydrogenPartnerAtom hydrogen_partner_atom[2];
 			///
-			struct HydrogenAtom
+			struct BALL_EXPORT HydrogenAtom
 			{
 				Atom           atom_name;
 				Character      alternate_location_indicator;
 				Residue				 residue;
-			} hydrogen_atom;
+			};
+			HydrogenAtom hydrogen_atom;
 			SymmetryOperator first_non_hydrogen_atom;
 			SymmetryOperator second_non_hydrogen_atom;
 		};
 		
 		///
-		struct RecordJRNL
+		struct BALL_EXPORT RecordJRNL
 		{
 			RecordType record_type;
 			RecordName record_name;
 			LString    text;
 		};
 		///
-		struct RecordKEYWDS
+		struct BALL_EXPORT RecordKEYWDS
 		{
 			RecordType   record_type;
 			RecordName   record_name;
@@ -684,22 +687,23 @@ namespace BALL
 			PDBList      keywords;
 		};
 		///
-		struct RecordLINK
+		struct BALL_EXPORT RecordLINK
 		{
 			RecordType      record_type;
 			RecordName      record_name;
 			///			
-			struct LinkPartner
+			struct BALL_EXPORT LinkPartner
 			{
 				Atom          atom_name;
 				Character     alternate_location_indicator;
 				Residue				residue;
-			} link_partner[2];
+			};
+			LinkPartner link_partner[2];
 			SymmetryOperator first_atom;
 			SymmetryOperator second_atom;
 		};
 		///
-		struct RecordMASTER
+		struct BALL_EXPORT RecordMASTER
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -729,14 +733,14 @@ namespace BALL
 			}
 		};
 		///
-		struct RecordMODEL
+		struct BALL_EXPORT RecordMODEL
 		{
 			RecordType record_type;
 			RecordName record_name;
 			Integer    model_serial_number;
 		};
 		///
-		struct RecordMODRES
+		struct BALL_EXPORT RecordMODRES
 		{
 			RecordType  record_type;
 			RecordName  record_name;
@@ -746,7 +750,7 @@ namespace BALL
 			PDBString   comment;
 		};
 		///
-		struct RecordMTRIX1
+		struct BALL_EXPORT RecordMTRIX1
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -755,7 +759,7 @@ namespace BALL
 			Integer    is_given;
 		};
 		///
-		struct RecordMTRIX2
+		struct BALL_EXPORT RecordMTRIX2
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -764,7 +768,7 @@ namespace BALL
 			Integer    is_given;
 		};
 		///
-		struct RecordMTRIX3
+		struct BALL_EXPORT RecordMTRIX3
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -773,7 +777,7 @@ namespace BALL
 			Integer    is_given;
 		};
 		///
-		struct RecordOBSLTE
+		struct BALL_EXPORT RecordOBSLTE
 		{
 			RecordType	 record_type;
 			RecordName	 record_name;
@@ -783,28 +787,28 @@ namespace BALL
 			IDcode       replacing_entry_code[8];
 		};
 		///
-		struct RecordORIGX1
+		struct BALL_EXPORT RecordORIGX1
 		{
 			RecordType record_type;
 			RecordName record_name;
 			Real       transformation_matrix[4];
 		};
 		///
-		struct RecordORIGX2
+		struct BALL_EXPORT RecordORIGX2
 		{
 			RecordType record_type;
 			RecordName record_name;
 			Real       transformation_matrix[4];
 		};
 		///
-		struct RecordORIGX3
+		struct BALL_EXPORT RecordORIGX3
 		{
 			RecordType record_type;
 			RecordName record_name;
 			Real       transformation_matrix[4];
 		};
 		///
-		struct RecordREMARK
+		struct BALL_EXPORT RecordREMARK
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -812,7 +816,7 @@ namespace BALL
 			LString    text;
 		};
 		///
-		struct RecordREVDAT
+		struct BALL_EXPORT RecordREVDAT
 		{
 			RecordType   record_type;
 			RecordName   record_name;
@@ -825,7 +829,7 @@ namespace BALL
 		};
 
 		///
-		struct RecordSCALE1
+		struct BALL_EXPORT RecordSCALE1
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -833,7 +837,7 @@ namespace BALL
 		};
 
 		///
-		struct RecordSCALE2
+		struct BALL_EXPORT RecordSCALE2
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -841,7 +845,7 @@ namespace BALL
 		};
 
 		///
-		struct RecordSCALE3
+		struct BALL_EXPORT RecordSCALE3
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -849,7 +853,7 @@ namespace BALL
 		};
 
 		///
-		struct RecordSEQADV
+		struct BALL_EXPORT RecordSEQADV
 		{
 			RecordType	record_type;
 			RecordName	record_name;
@@ -863,7 +867,7 @@ namespace BALL
 		};
 
 		///
-		struct RecordSEQRES
+		struct BALL_EXPORT RecordSEQRES
 		{
 			RecordType  record_type;
 			RecordName  record_name;
@@ -901,7 +905,7 @@ namespace BALL
 		};
 
 		///
-		struct RecordSHEET
+		struct BALL_EXPORT RecordSHEET
 		{
 			RecordType    record_type;
 			RecordName    record_name;
@@ -935,7 +939,7 @@ namespace BALL
 		};
 
 		///
-		struct RecordSIGATM
+		struct BALL_EXPORT RecordSIGATM
 		{
 			RecordType  record_type;
 			RecordName  record_name;
@@ -952,7 +956,7 @@ namespace BALL
 		};
 
 		///
-		struct RecordSIGUIJ
+		struct BALL_EXPORT RecordSIGUIJ
 		{
 			RecordType  record_type;
 			RecordName  record_name;
@@ -972,7 +976,7 @@ namespace BALL
 		};
 
 		///
-		struct RecordSITE
+		struct BALL_EXPORT RecordSITE
 		{
 			RecordType    record_type;
 			RecordName    record_name;
@@ -983,23 +987,25 @@ namespace BALL
 		};
 
 		///
-		struct RecordSLTBRG
+		struct BALL_EXPORT RecordSLTBRG
 		{
 			RecordType      record_type;
 			RecordName      record_name;
 			///
-			struct PartnerAtom
+			struct BALL_EXPORT PartnerAtom
 			{
 				Atom          atom_name;
 				Character     alternate_location_indicator;
 				Residue				residue;
-			} partner_atom[2];
+			};
+			
+			PartnerAtom partner_atom[2];
 			SymmetryOperator first_atom;
 			SymmetryOperator second_atom;
 		};
 
 		///
-		struct RecordSOURCE
+		struct BALL_EXPORT RecordSOURCE
 		{
 			RecordType        record_type;
 			RecordName        record_name;
@@ -1008,7 +1014,7 @@ namespace BALL
 		};
 
 		///
-		struct RecordSPRSDE
+		struct BALL_EXPORT RecordSPRSDE
 		{
 			RecordType        record_type;
 			RecordName        record_name;
@@ -1019,7 +1025,7 @@ namespace BALL
 		};
 
 		///
-		struct RecordSSBOND
+		struct BALL_EXPORT RecordSSBOND
 		{
 			RecordType    record_type;
 			RecordName    record_name;
@@ -1042,7 +1048,7 @@ namespace BALL
 
 		/**
 		*/
-		struct RecordTER
+		struct BALL_EXPORT RecordTER
 		{
 			RecordType  record_type;
 			RecordName  record_name;
@@ -1052,7 +1058,7 @@ namespace BALL
 
 		/**
 		*/
-		struct RecordTITLE
+		struct BALL_EXPORT RecordTITLE
 		{
 			RecordType   record_type;
 			RecordName   record_name;
@@ -1062,7 +1068,7 @@ namespace BALL
 
 		/**
 		*/
-		struct RecordTURN
+		struct BALL_EXPORT RecordTURN
 		{
 			RecordType    record_type;
 			RecordName    record_name;
@@ -1087,7 +1093,7 @@ namespace BALL
 
 		/**
 		*/
-		struct RecordTVECT
+		struct BALL_EXPORT RecordTVECT
 		{
 			RecordType record_type;
 			RecordName record_name;
@@ -1100,7 +1106,7 @@ namespace BALL
 		/** This struct contains the number of records in a PDB file
 				as required for the MASTER record.		
 		*/
-		struct BookKeeping
+		struct BALL_EXPORT BookKeeping
 		{
 			Size remark_records;
 			Size het_records;
@@ -1136,9 +1142,9 @@ namespace BALL
 		};
 
 
-		struct Structure	
+		struct BALL_EXPORT Structure	
 		{
-			struct AtomEntry
+			struct BALL_EXPORT AtomEntry
 			{
 				const BALL::Atom* atom;
 				const BALL::Residue* residue;
@@ -1154,7 +1160,7 @@ namespace BALL
 			};
 			
 
-			struct ConectAtomList
+			struct BALL_EXPORT ConectAtomList
 			{
 				Position serial_number;
 				std::list<Position> bonds;
@@ -1186,7 +1192,7 @@ namespace BALL
 		/**	A structure tracking the current values of all auxiliary information required to write ATOM or HETATM records.
 				This is used for keeping track of chain and residue names while writing multiple atoms.
 		*/
-		struct AdditionalAtomInfo
+		struct BALL_EXPORT AdditionalAtomInfo
 		{
 			const Chain* current_chain;
 			const ::BALL::Residue* current_residue;
@@ -1212,7 +1218,7 @@ namespace BALL
 
 		/**	Maps all record formats and tags to the record type.
 		*/
-    extern const RecordTypeFormat RECORD_TYPE_FORMAT [];
+    BALL_EXPORT extern const RecordTypeFormat RECORD_TYPE_FORMAT [];
 
 	} // namespace PDB
 

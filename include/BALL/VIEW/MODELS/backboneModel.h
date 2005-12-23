@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.19 2005/07/16 21:00:34 oliver Exp $
+// $Id: backboneModel.h,v 1.20 2005/12/23 17:02:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -30,7 +30,7 @@ namespace BALL
 				documentation.
 				\ingroup  ViewModels
 		*/
-		class BALL_EXPORT AddBackboneModel: public ModelProcessor
+		class BALL_VIEW_EXPORT AddBackboneModel: public ModelProcessor
 		{
 			//_
 			protected:

@@ -12,6 +12,7 @@
 #include <BALL/SYSTEM/directory.h>
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/fileSystem.h>
+#include <BALL/SYSTEM/path.h>
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -21,11 +22,21 @@
 
 #include <qdragobject.h>
 #include <qdir.h>
+#include <qwhatsthis.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
+
+		float SurfaceDrawingPrecisions[4] = 
+		{
+			1.5,
+			3.5,
+			6.5,
+			12
+		};
+
 
 		bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS = true;
 
@@ -93,6 +104,8 @@ namespace BALL
 					return "by residue type";
 				case COLORING_CHAIN:
 					return "by chain";
+				case COLORING_MOLECULE:
+					return "by molecule";
 				case COLORING_CUSTOM:
 					return "custom";
 				case COLORING_UNKNOWN:
@@ -127,7 +140,6 @@ namespace BALL
 							type == MODEL_CARTOON   ||
 							type == MODEL_LABEL);
 		}
-
 
 		bool modelMuteableByDisplayProperties(ModelType type)
 			throw()
@@ -412,6 +424,37 @@ namespace BALL
 			getMainControl()->sendMessage(*scene_message);
 		}
 
-	} // namespace VIEW
+		String getDataPath()
+		{
+			// we set the base directory to the first stored data path in the Path class
+			// this should be equal to the BALLVIEW_DATA_PATH environment variable
+			// (if it was set, otherwise the compiled data path)
+			Path path;
+			String dir1 = path.getDataPath();
 
+			if (dir1.has('\n')) dir1 = dir1.before(String('\n'));
+
+			// sort out double slashes
+			String dir = "";
+			dir += dir1[0];
+
+			for (Position p = 1; p < dir1.size(); p++)
+			{
+				if (dir1[p - 1] == FileSystem::PATH_SEPARATOR &&
+						dir1[p] 		 == FileSystem::PATH_SEPARATOR)
+				{
+					continue;
+				}
+
+				dir += dir1[p];
+			}
+
+			if (!dir.hasSuffix(String(FileSystem::PATH_SEPARATOR)))
+			{
+				dir += FileSystem::PATH_SEPARATOR;
+			}
+				
+			return dir;
+		}
+	} // namespace VIEW
 } //namespace BALL

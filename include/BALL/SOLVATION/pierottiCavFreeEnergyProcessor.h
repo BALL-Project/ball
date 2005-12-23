@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pierottiCavFreeEnergyProcessor.h,v 1.16 2003/08/26 08:04:49 oliver Exp $
+// $Id: pierottiCavFreeEnergyProcessor.h,v 1.17 2005/12/23 17:02:00 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H
@@ -29,7 +29,7 @@ namespace BALL
 			Energy returned in units of kJ/mol.	 \par
 		\ingroup Solvation	
 	 */
-	class PierottiCavFreeEnergyProcessor
+	class BALL_EXPORT PierottiCavFreeEnergyProcessor
 		:	public EnergyProcessor
 	{
 		

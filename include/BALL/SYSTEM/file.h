@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.66 2005/07/29 12:38:14 amoll Exp $
+// $Id: file.h,v 1.67 2005/12/23 17:02:06 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -77,7 +77,7 @@ namespace BALL
 			accessible through  \link File::getTransformationManager File::getTransformationManager \endlink .
 			\ingroup System
 	*/
-	class TransformationManager
+	class BALL_EXPORT TransformationManager
 	{	
 		public:
 			
@@ -169,29 +169,29 @@ namespace BALL
 		typedef std::ios::openmode OpenMode;			
 
 		//@}
+
 		/**	@name	Constants
 		*/
 		//@{
-
 		/// Open for input (default)
-		static const OpenMode IN = std::ios::in;
+		static const OpenMode MODE_IN;
 
 		/// Open for output
-		static const OpenMode OUT = std::ios::out;
+		static const OpenMode MODE_OUT;
 
 		/// Append. Seek to end before each write operation
-		static const OpenMode APP = std::ios::app;
+		static const OpenMode MODE_APP;
 
 		/// Binary mode
-		static const OpenMode BINARY = std::ios::binary;
+		static const OpenMode MODE_BINARY;
 
 		/// Seek to end directly after opening.
-		static const OpenMode ATE =  std::ios::ate;
+		static const OpenMode MODE_ATE;
 
 		/// Truncate an existing file.
-		static const OpenMode TRUNC = std::ios::trunc;
-
+		static const OpenMode MODE_TRUNC;
 		//@}
+
 		/**	@name	Enums
 		*/
 		//@{
@@ -562,7 +562,7 @@ namespace BALL
 				The path is	compared before and after call of 
 				FileSystem::canonizePath(canonized_name).
 				@see FileSystem::canonizePath
-				@return bool true if the path is cononized.
+				@return bool true if the path is canonized.
 		*/
 		bool isCanonized()
 			const throw (Exception::FileNotFound);

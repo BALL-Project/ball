@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.C,v 1.15 2005/07/16 21:00:52 oliver Exp $
+// $Id: regularData2DWidget.C,v 1.16 2005/12/23 17:03:39 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData2DWidget.h> 
-#include <BALL/VIEW/DATATYPE/colorTable.h>
+#include <BALL/VIEW/DATATYPE/colorMap.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
 #include <qpointarray.h>
@@ -47,10 +47,10 @@ namespace BALL
 				return;
 			}
 
-			// set up the ColorTable... TODO: This should be done by a dialog or something similar
+			// set up the ColorMap... TODO: This should be done by a dialog or something similar
 			
 			ColorRGBA colorList[3];
-			ColorTable color_table_;  
+			ColorMap color_table_;  
 			colorList[0] = ColorRGBA(1.,0.,0.,1.);
 			colorList[1] = ColorRGBA(0.,1.,0.,1.);
 			colorList[2] = ColorRGBA(0.,0.,1.,1.);
@@ -68,7 +68,7 @@ namespace BALL
 				else if ((*data_)[i] > max) max = (*data_)[i];
 			}			
 			color_table_.setRange(min, max);
-			color_table_.createTable();
+			color_table_.createMap();
 			
 			//maximal number of Lines and Columns
 			Size max_x = (*data_).getSize().x;

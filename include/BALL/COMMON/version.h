@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: version.h,v 1.31 2005/07/16 21:00:29 oliver Exp $
+// $Id: version.h,v 1.32 2005/12/23 17:01:39 amoll Exp $
 //
 
 #ifndef BALL_COMMON_VERSION_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_COMMON_EXCEPTION_H
 #	include <BALL/COMMON/exception.h>
+#endif
+
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
 #endif
 
 //
@@ -29,7 +33,7 @@ namespace BALL
 			 \par
 	\ingroup Common		
 	*/
-	class VersionInfo
+	class BALL_EXPORT VersionInfo
 	{
 		public:
 
@@ -69,7 +73,7 @@ namespace BALL
 		protected:
 
 		static const char* RELEASE_DATE_AND_TIME;
-	  static const char* RELEASE_WHAT_STRING;
+	    static const char* RELEASE_WHAT_STRING;
 	};
 	
 }

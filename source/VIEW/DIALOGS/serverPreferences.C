@@ -1,12 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.C,v 1.10 2005/07/16 21:00:48 oliver Exp $
+// $Id: serverPreferences.C,v 1.11 2005/12/23 17:03:29 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/serverPreferences.h>
 #include <BALL/VIEW/KERNEL/common.h>
-#include <BALL/FORMAT/INIFile.h>
 #include <BALL/COMMON/rtti.h>
 
 #include <qlabel.h>
@@ -37,7 +36,7 @@ namespace BALL
 			port_label->setMargin(0);
 			
 			port_ = new QLineEdit(this, "LineEdit_1");
-			port_->setGeometry(120, 20, 90, 30);
+			port_->setGeometry(180, 20, 90, 30);
 			port_->setMinimumSize(0, 0);
 			port_->setMaximumSize(32767, 32767);
 			port_->setFocusPolicy(QWidget::StrongFocus);
@@ -60,13 +59,15 @@ namespace BALL
 			resize(380,210);
 			setMinimumSize(0, 0);
 			setMaximumSize(32767, 32767);
-			setDefaultValues();
 
+			port_->setText(String(VIEW_DEFAULT_PORT).c_str());
+			server_status_->setChecked(false);
+			
 			setINIFileSectionName("NETWORK");
 			registerObject_(server_status_);
 			registerObject_(port_);
 
-			insertEntry(this, "Client/Server");
+			setWidgetStackName("Client/Server");
 		}
 
 		ServerPreferences::~ServerPreferences()
@@ -89,13 +90,6 @@ namespace BALL
 			throw()
 		{
 			return server_status_->isChecked();
-		}
-
-		void ServerPreferences::setDefaultValues(bool /*all*/)
-			throw()
-		{
-			port_->setText(String(VIEW_DEFAULT_PORT).c_str());
-			server_status_->setChecked(false);
 		}
 
 	} // namespace VIEW

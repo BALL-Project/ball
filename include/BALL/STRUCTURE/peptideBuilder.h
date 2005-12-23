@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideBuilder.h,v 1.6 2004/05/27 19:49:47 oliver Exp $
+// $Id: peptideBuilder.h,v 1.7 2005/12/23 17:02:03 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_PEPTIDEBUILDER_H
@@ -19,7 +19,7 @@ namespace BALL
 	{
 		/** This class represents one amino acid in the sequence.
 		*/
-		class AminoAcidDescriptor
+		class BALL_EXPORT AminoAcidDescriptor
 		{
 			public:
 	   
@@ -31,7 +31,7 @@ namespace BALL
 	    *  either a three - letter or a one letter string for the
 	    *  amino acid type, phi is the torsion angle phi, psi is
 	    *  the psi torsion angle and omega is the angle of the peptide
-	    *  bond.
+	    *  bond. By default, a standard alpha-helical geometry is constructed.
 	    */
 	   AminoAcidDescriptor(const String& type, const Angle& phi=Angle(-47.,false),
 			       const Angle& psi=Angle(-58.,false), const Angle& omega=Angle(180.,false));
@@ -89,7 +89,7 @@ namespace BALL
    /** Build a Peptide from a sequence and the corresponing angles.
 			 Dont forget to call setFragmentDB() before using this class.
    */
-   class PeptideBuilder
+   class BALL_EXPORT PeptideBuilder
 	 {
 		 public:
 
@@ -102,6 +102,11 @@ namespace BALL
 	    * 	process.
 	    */
 	   PeptideBuilder(const std::vector<AminoAcidDescriptor>& sequence);
+
+		 /** Construct a peptide from a one-letter code sequence.
+		 */
+		 PeptideBuilder(const String& sequence, const Angle& phi = Angle(-47., false),
+										const Angle& psi = Angle(-58., false), const Angle& omega = Angle(180., false));
 	   
 	   /** copy constructor 
 	    */

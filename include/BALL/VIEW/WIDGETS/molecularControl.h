@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.49 2005/07/16 21:00:37 oliver Exp $
-//
+// $Id: molecularControl.h,v 1.50 2005/12/23 17:02:23 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -44,7 +43,7 @@ class BondProperties;
 		For further informations on this topic have a look at the class Selector.
 		\ingroup ViewWidgets
 */
-class BALL_EXPORT MolecularControl
+class BALL_VIEW_EXPORT MolecularControl
 	: public GenericControl
 {			
 	///
@@ -83,7 +82,7 @@ class BALL_EXPORT MolecularControl
 	BALL_EMBEDDABLE(MolecularControl,GenericControl)
 	
 	/// A selectable list view item with a pointer to a Composite
-	class BALL_EXPORT SelectableListViewItem
+	class BALL_VIEW_EXPORT SelectableListViewItem
 		: public QCheckListItem
 	{
 		public:
@@ -158,13 +157,13 @@ class BALL_EXPORT MolecularControl
 		throw();
 
 	/** Insert a Composite object into this Control.
-			If <tt>name == 0</tt> than the Information visitor is used for determining
+			If <tt>name == ""</tt> than the Information visitor is used for determining
 			a name for the Composite.\par
 			Calls generateListViewItem_() for the Composite.
 			\param   composite a pointer to the Composite to be inserted into the Control
-			\param   name a name, the SelectableListViewItem for the Composite should receive
+			\param   name for the SelectableListViewItem
 	*/
-	void addComposite(Composite& composite, QString* name = 0)
+	void addComposite(Composite& composite, String given_name = "")
 		throw();
 
 	/** Recursive removal of a Composite from the Control.
@@ -272,6 +271,10 @@ class BALL_EXPORT MolecularControl
 
 	///
 	void highlightSelection()
+		throw();
+
+	///
+	void highlight(const List<Composite*>& composite)
 		throw();
 
 	/** Cut the selected Composite objects and copy them into an internal
@@ -453,9 +456,6 @@ class BALL_EXPORT MolecularControl
 
 	//_ Test, if its allowed to paste the copy liste into the current selected context item.
 	bool pasteAllowedFor_(Composite& composite)
-		throw();
-
-	void setHighlighting_(List<Composite*> selection)
 		throw();
 
 	//

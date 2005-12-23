@@ -9916,6 +9916,14 @@
                 <number>10</number>
             </attribute>
         </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>Molecule</cstring>
+            </property>
+            <attribute name="id">
+                <number>11</number>
+            </attribute>
+        </widget>
     </widget>
 </widget>
 <connections>
@@ -10135,6 +10143,6 @@
     <slot>aromaticColorPressed()</slot>
     <slot>otherColorPressed()</slot>
 </slots>
-<exportmacro>BALL_EXPORT</exportmacro>
+<exportmacro>BALL_VIEW_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

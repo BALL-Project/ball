@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomicContactEnergy.h,v 1.14 2003/08/26 08:04:12 oliver Exp $
+// $Id: atomicContactEnergy.h,v 1.15 2005/12/23 17:01:43 amoll Exp $
 //
 
 #ifndef BALL_ENERGY_ATOMICCONTACTENERGY_H
@@ -29,7 +29,7 @@ namespace BALL
 
     	\ingroup EnergyMiscellaneous 
 	*/ 
-  double calculateACE
+  BALL_EXPORT double calculateACE
     (const AtomContainer& atom_container,
      const string& type_filename = "energy/ACE_types.dat", 
 		 const string& parameter_filename = "energy/ACE_parameters.dat");

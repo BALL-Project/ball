@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# $Id: config.mak.in,v 1.37 2005/07/16 21:00:52 oliver Exp $
+# $Id: config.mak.in,v 1.38 2005/12/23 17:03:40 amoll Exp $
 #
 
 # First, some basic unix commands, including the C++ compiler
@@ -88,6 +88,8 @@ SIP_INCLUDES   			= @SIP_INCLUDES@
 PYTHON_INCLUDES			= @PYTHON_INCLUDES@
 PYTHON_SUPPORT      = @PYTHON_SUPPORT@ 
 PYTHON_LIBS					= @PYTHON_LIBS@
+PYTHON_EXECUTABLE	  =	@PYTHON_EXECUTABLE@
+FFTW_LIBS						= @FFTW_LIBS@
 
 #
 # Support for valgrind, a memory leak checker.

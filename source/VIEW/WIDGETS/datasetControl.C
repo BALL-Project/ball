@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.42 2005/10/23 12:02:30 oliver Exp $
+// $Id: datasetControl.C,v 1.43 2005/12/23 17:03:37 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -20,7 +20,6 @@
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/DATATYPE/contourSurface.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <qfiledialog.h>
 #include <qlistview.h>
@@ -29,6 +28,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
 		DatasetControl::DatasetControl(QWidget* parent, const char* name)
 			throw()
 			:	GenericControl(parent, name),
@@ -82,17 +82,14 @@ namespace BALL
 			insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()));
 			setMenuHint("Open a 3D data grid");
 
-			insertMenuEntry(MainControl::FILE_OPEN, "GAMESS output", this, SLOT(addGAMESSData()));
-			setMenuHint("Open the results of a GAMESS run");
-
 			menu_cs_ = insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  
 																							SLOT(computeIsoContourSurface()), CTRL+Key_U);
 			setMenuHint("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.");
-			//setMenuHelp("datasetControl.html#isocontour_surfaces");
+			setMenuHelp("datasetControl.html#isocontour_surfaces");
 
 			GenericControl::initializeWidget(main_control);
 
-			//registerWidgetForHelpSystem(this, "datasetControl.html");
+			registerWidgetForHelpSystem(this, "datasetControl.html");
 		}
 
 
@@ -106,25 +103,7 @@ namespace BALL
 												!getMainControl()->compositesAreLocked() && item_to_grid3_.size() > 0);
 		}
 
-/*  ????
-		void DatasetControl::addGAMESSData()
-			throw()
-		{
-			// TODO: do we need to ensure that a system is selected here?
-			// if (!getMainControl()->getSelectedSystem()) return;
 
-			QString file = QFileDialog::getOpenFileName(
-													getWorkingDir().c_str(),
-													"GAMESS logfiles(*.log)",
-													this,
-													"GAMESS Logfile Dialog",
-													"Select a GAMESS logfile");
-
-			if (file == QString::null) return;
-
-			addGAMESSData(file.ascii());
-		}		
-*/
 		void DatasetControl::addTrajectory()
 			throw()
 		{
@@ -141,17 +120,6 @@ namespace BALL
 
 			addTrajectory(file.ascii());
 		}
-/*  ?????????
-		void DatasetControl::addGAMESSData(const String& filename)
-		{
-			// do we need to ensure that a system is selected?
-			// if (!getMainControl()->getSelectedSystem() == 0) return;
-
-			GAMESSLogFile* log = new GAMESSLogFile(filename, std::ios::in);
-			insertGAMESSData_(log);
-			setWorkingDirFromFilename_(filename);
-		}
-*/
 
 		void DatasetControl::addTrajectory(const String& filename)
 		{
@@ -163,44 +131,6 @@ namespace BALL
 			setWorkingDirFromFilename_(filename);
 		}
 
-/* ?????
-		void DatasetControl::insertGAMESSData_(GAMESSLogFile* file)
-			throw()
-		{
-			// Read the GAMESS - Data into a new System
-			System *system = new System;
-			setStatusbarText("Reading GAMESS data...");
-			*file >> *system;
-
-			file->system = system;
-			
-			String filename = file->getName();
-			// The following has been borrowed from MolecularFileDialog::finish_()		
-			setStatusbarText(String("Read ") + String(system->countAtoms()) + " atoms from file \"" + filename + "\"", true);
-
-			if (filename[0] != FileSystem::PATH_SEPARATOR)
-			{
-				system->setProperty("FROM_FILE", getWorkingDir() + FileSystem::PATH_SEPARATOR + filename);
-			}
-			else
-			{
-				system->setProperty("FROM_FILE", filename);
-			}
-
-			system->setName(filename);
-
-			// notify tree of a new composite
-			CompositeMessage* new_message = new CompositeMessage;
-			new_message->setComposite(*system);
-			new_message->setCompositeName(system->getName());
-			new_message->setType(CompositeMessage::NEW_COMPOSITE);
-			notify_(new_message);
-
-			QListViewItem* item = new QListViewItem(listview, filename.c_str(), system->getName().c_str(), "QM Data Set");
-			item_to_gamess_[item] = file;
-			insertComposite_(system, item);
-		}
-*/
 		void DatasetControl::insertTrajectory_(TrajectoryFile* file, System& system)
 			throw()
 		{
@@ -355,17 +285,6 @@ namespace BALL
 				delete ssm;
 				setStatusbarText("deleted 3D grid");
 			}
-/* ????
-			else if (item_to_gamess_.has(&item))
-			{
-				GAMESSLogFile* f = item_to_gamess_[&item];
-
-				// Later, we will probably need a message for that... 
-				item_to_gamess_.erase(&item);
-				delete f;
-				setStatusbarText("deleted GAMESS data");
-			}
-*/
 			else
 			{
 				return false;
@@ -414,12 +333,6 @@ namespace BALL
 					insertContextMenuEntry_("ContourSurface", SLOT(computeIsoContourSurface()));
 				}
 			}
-/*
-			if (item_to_gamess_.has(context_item_))
-			{
-				insertContextMenuEntry_("Create electron density grid", SLOT(createElectronDensity_()));
-			}
-*/
 		}
 
 		void DatasetControl::insertContextMenuEntry_(const QString & text, const char* member)
@@ -731,7 +644,7 @@ namespace BALL
 			{
 				surface_dialog_ = new ContourSurfaceDialog(this, "ContourSurfaceDialog");
 				surface_dialog_->setDatasetControl(this);
-				//registerWidgetForHelpSystem(surface_dialog_, "datasetControl.html#isocontour_surfaces");
+				registerWidgetForHelpSystem(surface_dialog_, "datasetControl.html#isocontour_surfaces");
 			}
 			if (!surface_dialog_->exec()) return;
 
@@ -748,94 +661,39 @@ namespace BALL
 			Mesh* mesh = new Mesh;
 			
 			// reorient the vertices for OpenGL
-			Position vertex = 0;
 			for (Position t = 0; t < cs.triangle.size(); t++)
 			{
+				const Mesh::Triangle& org = cs.triangle[t];
 				Mesh::Triangle tri;
-				tri.v1 = vertex;
-				tri.v2 = vertex + 2;
-				tri.v3 = vertex + 1;
+				tri.v1 = org.v1;
+				tri.v2 = org.v3;
+				tri.v3 = org.v2;
 				mesh->triangle.push_back(tri);
-
-				mesh->vertex.push_back(cs.vertex[cs.triangle[t].v1]);
-				mesh->vertex.push_back(cs.vertex[cs.triangle[t].v2]);
-				mesh->vertex.push_back(cs.vertex[cs.triangle[t].v3]);
-
-				mesh->normal.push_back(cs.normal[cs.triangle[t].v1]);
-				mesh->normal.push_back(cs.normal[cs.triangle[t].v2]);
-				mesh->normal.push_back(cs.normal[cs.triangle[t].v3]);
-
-				vertex += 3;
 			}
 
-			/*
-			Representation * rep2 = new Representation();
-			for (Position p = 0; p < cs.normal.size(); p++)
-			{
-				Line* line = new Line();
-				line->setVertex1(cs.vertex[p]);
-				line->setVertex2(cs.vertex[p] + cs.normal[p]);
-				rep2->getGeometricObjects().push_back(line);
-			}
-			getMainControl()->insert(*rep2);
-			getMainControl()->update(*rep2);
-			*/
+			mesh->vertex = cs.vertex;
+			mesh->normal = cs.normal;
 
-			mesh->colorList.clear(); 
-			mesh->colorList.push_back(surface_dialog_->getColor());
+			mesh->colors.clear(); 
+			mesh->colors.push_back(surface_dialog_->getColor());
 
+			//////////////////////////////////////////////
 			// Create a new representation containing the contour surface.
-			Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
+			Representation* rep = new Representation();
 			rep->insert(*mesh);
 			rep->setModelType(MODEL_CONTOUR_SURFACE); 
 
 			// Make sure BALLView knows about the new representation.
-			RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::ADD);
-			notify_(message);
+			getMainControl()->insert(*rep);
+			getMainControl()->update(*rep);
 		}
-/*
-		void DatasetControl::createElectronDensity_()
-		{
-			if (!item_to_gamess_.has(context_item_))
-				return;
 
-			GAMESSLogFile* file = item_to_gamess_[context_item_];
-			System *system = file->system;
 
-			// TODO: we should ask about the size of the boundary to be added
-			file->initializeBasisSet();
-			QMBasisSet& qmbs = file->getBasisSet();
-
-			// TODO: This is really important! We need to put the files somewhere where we find them,
-			// 				and we need to automatically decide upon the chosen basis set!!!
-			//
-//			qmbs.readBasisSetData(getWorkingDir() + FileSystem::PATH_SEPARATOR + "basisset_631g*");
-			qmbs.setup(*system);
-
-			BoundingBoxProcessor bp;
-			system->apply(bp);
-
-			RegularData3D *density = new RegularData3D(bp.getLower() - Vector3(5., 5., 5.), 
-																								(bp.getUpper() - bp.getLower()) + Vector3(10., 10., 10.), 
-																								Vector3(0.2,0.2,0.2));
-
-			for (Size i=0; i<density->size(); i++)
-			{
-				(*density)[i] = qmbs(density->getCoordinates(i));
-			}
-
-			insertGrid_(density, system, system->getName());
-			RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::NEW);
-			msg->setData(*density);
-			msg->setComposite(*system);
-			msg->setCompositeName("Electron density for"+system->getName());
-			notify_(msg);
-		}
-*/
 		DatasetControl::DatasetControl(const DatasetControl& control)
 			throw()
 			: GenericControl(control)
 		{
 		}
+
 	} // namespace VIEW
 } // namespace BALL

@@ -1,17 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.h,v 1.5 2005/02/06 20:57:04 oliver Exp $
+// $Id: materialSettings.h,v 1.6 2005/12/23 17:02:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MATERIALSETTINGS_H
 #define BALL_VIEW_DIALOGS_MATERIALSETTINGS_H
 
 #include <BALL/VIEW/UIC/materialSettingsData.h>
-
-#ifndef BALL_COMMON_GLOBAL_H
-// # include <BALL/COMMON/global.h>
-#endif
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -28,7 +24,7 @@ namespace BALL
 				Materials can be added, removed and adjusted.
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT MaterialSettings 
+		class BALL_VIEW_EXPORT MaterialSettings 
 			: public MaterialSettingsData,
 				public PreferencesEntry
 		{ 
@@ -44,10 +40,6 @@ namespace BALL
 
 			/// Apply the new values to the stage
 			void apply()
-				throw();
-
-			/// Called when defaults is pressed in Preferences, calls setDefaults
-			virtual void setDefaultValues(bool /*all*/ = false)
 				throw();
 
 			public slots:

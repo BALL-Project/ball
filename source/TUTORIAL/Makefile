@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.13 2005/07/16 21:00:45 oliver Exp $
+# $Id: Makefile,v 1.14 2005/12/23 17:03:18 amoll Exp $
 #
 
 #========================
@@ -10,7 +10,8 @@ EXECUTABLES=\
 	tutorial1\
 	tutorial2\
 	tutorial3\
-	bounding_box
+	bounding_box\
+	string_tutorial
 
 all:	$(EXECUTABLES)
 
@@ -34,8 +35,8 @@ tutorial2:	tutorial2.o
 tutorial3:	tutorial3.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
-bounding_box:	bounding_box.o glBoundingBoxModel.o
-	$(CXX)	$(LDFLAGS) -o $@ $@.o glBoundingBoxModel.o $(LIBS) $(VIEW_LIBS)
+bounding_box:	bounding_box.o 
+	$(CXX)	$(LDFLAGS) -o $@ $(LIBS) $(VIEW_LIBS)
 
 string_tutorial:	string_tutorial.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS) 

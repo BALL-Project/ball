@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selectable.h,v 1.19 2003/08/26 08:04:09 oliver Exp $
+// $Id: selectable.h,v 1.20 2005/12/23 17:01:41 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_SELECTABLE_H
@@ -33,7 +33,7 @@ namespace BALL
 			 \par
 			 \ingroup ConceptsMiscellaneous
 	*/
-	class Selectable
+	class BALL_EXPORT Selectable
 	{
 		public:
 

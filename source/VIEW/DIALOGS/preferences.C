@@ -1,14 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.18 2005/07/16 21:00:47 oliver Exp $
+// $Id: preferences.C,v 1.19 2005/12/23 17:03:29 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/WIDGETS/helpViewer.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <qwidgetstack.h>
 #include <qlistview.h>
+#include <qpushbutton.h>
 
 namespace BALL
 {
@@ -63,7 +66,7 @@ namespace BALL
 			
 			}
 
-			if (child->getEntries().size() == 0) return;
+			if (child->getStackPages().size() == 0) return;
 
 			QWidget* widget = dynamic_cast<QWidget*>(child);
 
@@ -76,14 +79,14 @@ namespace BALL
 
 			entries_.insert(child);
 
-			PreferencesEntry::EntriesList::Iterator it = child->getEntries().begin();
+			PreferencesEntry::StackPages::Iterator it = child->getStackPages().begin();
 			QListViewItem* item = new QListViewItem(entries_listview, (*it).second.c_str());
 			entries_listview->insertItem(item);
 			item_to_widget_[item] = (*it).first;
 			item_to_entry_[item] = child;
 			widget_to_item_[widget] = item;
 			it++;
-			for (; it != child->getEntries().end(); it++)
+			for (; it != child->getStackPages().end(); it++)
 			{
 				QListViewItem* new_item = new QListViewItem(item, (*it).second.c_str());
 				item->insertItem(new_item);
@@ -123,7 +126,7 @@ namespace BALL
 			move(x_pos, y_pos);
 
 			HashSet<PreferencesEntry*>::Iterator it = entries_.begin();
-			for (; it != entries_.end(); it++)
+			for (; +it; it++)
 			{
 				(**it).readPreferenceEntries(inifile);
 			}
@@ -135,8 +138,9 @@ namespace BALL
 			// the window position
 			inifile.insertValue("WINDOWS", "Preferences::x", String(x()));
 			inifile.insertValue("WINDOWS", "Preferences::y", String(y()));
+
 			HashSet<PreferencesEntry*>::Iterator it = entries_.begin();
-			for (; it != entries_.end(); it++)
+			for (; +it; it++)
 			{
 				(**it).writePreferenceEntries(inifile);
 			}
@@ -150,9 +154,12 @@ namespace BALL
 
 		void Preferences::showEntry(QWidget* child)
 		{
-			if (!widget_to_item_.has(child)) 
+			if (!widget_to_item_.has(child)) return;
+
+			HelpViewer* hv = HelpViewer::getInstance(0);
+			if (hv != 0)
 			{
-				return;
+				help_button->setEnabled(hv->hasHelpFor(child));
 			}
 
 			QListViewItem* item = widget_to_item_[child];
@@ -179,9 +186,10 @@ namespace BALL
 			if (!item_to_entry_.has(item->parent())) return;
 			PreferencesEntry* entry= item_to_entry_[item->parent()];
 
-			widget_stack->raiseWidget(item_to_widget_[item->parent()]);
+			QWidget* widget = item_to_widget_[item->parent()];
+			widget_stack->raiseWidget(widget);
 
-			entry->showEntry(child);
+			entry->showStackPage(child);
 		}	
 
 		const QWidget* Preferences::currentPage() const
@@ -211,11 +219,11 @@ namespace BALL
 			
 			if (item_to_entry_.has(item))
 			{
-				item_to_entry_[item]->setDefaultValues();
+				item_to_entry_[item]->restoreDefaultValues();
 			}
 			else
 			{
-				item_to_entry_[item->parent()]->setDefaultValues();
+				item_to_entry_[item->parent()]->restoreDefaultValues();
 			}
 		}
 
@@ -230,6 +238,33 @@ namespace BALL
 			delete item;
 
 			if (update) entries_listview->triggerUpdate();
+		}
+
+		void Preferences::showHelp()
+		{
+			HelpViewer* hv = HelpViewer::getInstance(0);
+			if (hv != 0)
+			{
+				hv->showHelpFor(item_to_widget_[entries_listview->selectedItem()]);
+			}
+		}
+
+		void Preferences::cancelPreferences()
+		{
+			HashSet<PreferencesEntry*>::Iterator it = entries_.begin();
+			for (; +it; ++it)
+			{
+				(**it).restoreValues(true);
+			}
+		}
+
+		void Preferences::applyPreferences()
+		{
+			HashSet<PreferencesEntry*>::Iterator it = entries_.begin();
+			for (; +it; ++it)
+			{
+				(**it).storeValues();
+			}
 		}
 
 	} // namespace VIEW

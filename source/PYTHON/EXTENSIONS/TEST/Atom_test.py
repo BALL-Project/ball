@@ -1,7 +1,7 @@
 #!/usr/bin/env /opt/bin/python2.1
 from ClassTest import *
 
-START_TEST('Atom', '$Id: Atom_test.py,v 1.3 2003/08/26 09:18:25 oliver Exp $')
+START_TEST('Atom', '$Id: Atom_test.py,v 1.4 2005/12/23 17:03:01 amoll Exp $')
 
 CHECK('Atom.Atom()')
 a = Atom()
@@ -56,5 +56,7 @@ try:
 except:
 	FAIL()
 RESULT()
+
+
 
 END_TEST()

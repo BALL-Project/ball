@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.sip,v 1.15 2003/11/12 18:20:28 oliver Exp $
+// $Id: file.sip,v 1.16 2005/12/23 17:02:51 amoll Exp $
 //
 
 class std__openmode
@@ -14,19 +14,6 @@ class std__openmode
 	public:
 };
 
-// nested class File::CannotWrite
-class CannotWrite
-{
-%TypeHeaderCode
-	#include <BALL/SYSTEM/file.h>
-	using namespace BALL;
-	typedef File::CannotWrite CannotWrite;
-%End
-  public:
-  CannotWrite(const char* /file/, int /line/, const String& /filename/) throw();
-  ~CannotWrite() throw();
-  String getFilename() const throw();
-};
 
 
 class File
@@ -34,22 +21,38 @@ class File
 %TypeHeaderCode
 	#include <BALL/SYSTEM/file.h>
 	using namespace BALL;
-	const File::OpenMode BALL_File__IN = File::IN;
-	const File::OpenMode BALL_File__OUT = File::OUT;
-	const File::OpenMode BALL_File__APP = File::APP;
-	const File::OpenMode BALL_File__BINARY = File::BINARY;
-	const File::OpenMode BALL_File__ATE = File::ATE;
-	const File::OpenMode BALL_File__TRUNC = File::TRUNC;
+
+/*
+	const File::OpenMode BALL_File__IN = File::MODE_IN;
+	const File::OpenMode BALL_File__OUT = File::MODE_OUT;
+	const File::OpenMode BALL_File__APP = File::MODE_APP;
+	const File::OpenMode BALL_File__BINARY = File::MODE_BINARY;
+	const File::OpenMode BALL_File__ATE = File::MODE_ATE;
+	const File::OpenMode BALL_File__TRUNC = File::MODE_TRUNC;
+*/
+
 %End
   public:
-	enum {
-		IN = BALL_File__IN,
-		OUT = BALL_File__OUT,
-		APP = BALL_File__APP,
-		BINARY = BALL_File__BINARY,
-		ATE = BALL_File__ATE,
-		TRUNC = BALL_File__TRUNC
+
+	// nested class File::CannotWrite
+	class CannotWrite
+	{
+		 public:
+		 CannotWrite(const char* /file/, int /line/, const String& /filename/) throw();
+		 ~CannotWrite() throw();
+		 String getFilename() const throw();
 	};
+
+
+	enum {
+		MODE_IN,
+		MODE_OUT,
+		MODE_APP,
+		MODE_BINARY,
+		MODE_ATE,
+		MODE_TRUNC
+	};
+
 
   File();
 	// default open mode: IN
@@ -111,7 +114,10 @@ class OpenMode
 %End
 
 %ConvertToTypeCode
-  if (PyInt_Check(sipPy))
+  if (sipIsErr == NULL)
+    return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_OpenMode));
+
+	if (PyInt_Check(sipPy))
   {
 		int mode = PyInt_AS_LONG(sipPy);
 		File::OpenMode result;

@@ -1,17 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.C,v 1.9 2005/02/06 20:57:07 oliver Exp $
+// $Id: charmmConfigurationDialog.C,v 1.10 2005/12/23 17:03:23 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
+#include <BALL/SYSTEM/path.h>
 
 #include <qfiledialog.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
+#include <qbuttongroup.h>
 
 namespace BALL
 {
@@ -22,6 +24,26 @@ namespace BALL
 			:	CharmmConfigurationDialogData(parent, name),
 				charmm_(0)
 		{
+			setINIFileSectionName("CHARMM");
+
+			registerObject_(nonbonded_cutoff_line_edit);
+			registerObject_(vdw_cutoff_line_edit);
+			registerObject_(vdw_cuton_line_edit);
+			registerObject_(electrostatic_cutoff_line_edit);
+			registerObject_(electrostatic_cuton_line_edit);
+			registerObject_(scaling_electrostatic_1_4_line_edit);
+			registerObject_(scaling_vdw_1_4_line_edit);
+
+			registerObject_(dielectric_group);
+			registerObject_(assign_charges_checkBox);
+			registerObject_(assign_typenames_checkBox);
+			registerObject_(assign_types_checkBox);
+			registerObject_(overwrite_charges_checkBox);
+			registerObject_(overwrite_typenames_checkBox);
+			registerObject_(use_eef1_checkBox);
+			
+			registerObject_(parameter_file_edit);
+			registerObject_(max_unassigned_atoms);
 		}
 
 		CharmmConfigurationDialog::~CharmmConfigurationDialog()
@@ -42,39 +64,8 @@ namespace BALL
 			if (!result.isEmpty())
 			{
 				// store the new filename in the lineedit field
-				setFilename(String(result.ascii()));
+				parameter_file_edit->setText(result.ascii());
 			}
-		}
-
-		void CharmmConfigurationDialog::resetOptions()
-		{
-			nonbonded_cutoff_line_edit->setText("20.000000");
-			vdw_cutoff_line_edit->setText("9.000000");
-			vdw_cuton_line_edit->setText("7.000000");
-			electrostatic_cutoff_line_edit->setText("9.000000");
-			electrostatic_cuton_line_edit->setText("7.000000");
-			solvation_cutoff_line_edit->setText("9.000000");
-			solvation_cuton_line_edit->setText("7.000000");
-			scaling_electrostatic_1_4_line_edit->setText("1.000000");
-			scaling_vdw_1_4_line_edit->setText("2.000000");
-
-			distance_button->setChecked(true);
-			constant_button->setChecked(false);
-			assign_charges_checkBox->setChecked(true);
-			assign_typenames_checkBox->setChecked(true);
-			assign_types_checkBox->setChecked(true);
-			overwrite_charges_checkBox->setChecked(true);
-			overwrite_typenames_checkBox->setChecked(true);
-			use_eef1_checkBox->setChecked(true);
-
-			max_unassigned_atoms->setText("10");
-
-			/*
-			boundary_box->setChecked(false);
-			add_solvent_box->setChecked(false);
-			box_size_edit->setText("40.0000");
-			solvent_file_edit->setText("");
-			*/
 		}
 
 		const String& CharmmConfigurationDialog::getFilename() const
@@ -84,368 +75,100 @@ namespace BALL
 			return filename;
 		}
 		
-		void CharmmConfigurationDialog::setFilename(const String& filename)
-		{
-			parameter_file_edit->setText(filename.c_str());
-		}
-		
-		//function to restore previously changed options
-		void CharmmConfigurationDialog::setOptions
-					(float nonbonded_cutoff, float vdw_cutoff, 
-					 float vdw_cuton, float electrostatic_cutoff, 
-					 float electrostatic_cuton, float solvation_cutoff,
-					 float solvation_cuton,
-					 float scaling_electrostatic_1_4, float scaling_vdw_1_4, 
-					 bool use_dddc, bool assign_charges,
-					 bool assign_typenames, bool assign_types, 
-					 bool overwrite_charges, bool overwrite_typenames,
-					 bool use_eef1)
-		{
-			nonbonded_cutoff_line_edit->setText(String(nonbonded_cutoff).c_str());
-			vdw_cutoff_line_edit->setText(String(vdw_cutoff).c_str());
-			vdw_cuton_line_edit->setText(String(vdw_cuton).c_str());
-			electrostatic_cutoff_line_edit->setText(String(electrostatic_cutoff).c_str());
-			electrostatic_cuton_line_edit->setText(String(electrostatic_cuton).c_str());
-			solvation_cutoff_line_edit->setText(String(solvation_cutoff).c_str());
-			solvation_cuton_line_edit->setText(String(solvation_cuton).c_str());
-			scaling_electrostatic_1_4_line_edit->setText(String(scaling_electrostatic_1_4).c_str());
-			scaling_vdw_1_4_line_edit->setText(String(scaling_vdw_1_4).c_str());
-
-			distance_button->setChecked(use_dddc);
-			assign_charges_checkBox->setChecked(assign_charges);
-			assign_typenames_checkBox->setChecked(assign_typenames);
-			assign_types_checkBox->setChecked(assign_types);
-			overwrite_charges_checkBox->setChecked(overwrite_charges);
-			overwrite_typenames_checkBox->setChecked(overwrite_typenames);
-			use_eef1_checkBox->setChecked(use_eef1);
-			accept();
-		}
-
-		void CharmmConfigurationDialog::writePreferences(INIFile& inifile) const
-			throw()
-		{
-			// the CHARMM options
-			if (!inifile.hasSection("CHARMM")) inifile.appendSection("CHARMM");
-			inifile.insertValue("CHARMM", "Filename", getFilename());
-			inifile.insertValue("CHARMM", "NONBONDED_CUTOFF",nonbonded_cutoff_);
-			inifile.insertValue("CHARMM", "VDW_CUTOFF",vdw_cutoff_);
-			inifile.insertValue("CHARMM", "VDW_CUTON",vdw_cuton_);
-			inifile.insertValue("CHARMM", "ELECTROSTATIC_CUTOFF",electrostatic_cutoff_);
-			inifile.insertValue("CHARMM", "ELECTROSTATIC_CUTON",electrostatic_cuton_);
-			inifile.insertValue("CHARMM", "SOLVATION_CUTOFF",solvation_cutoff_);
-			inifile.insertValue("CHARMM", "SOLVATION_CUTON",solvation_cuton_);
-			inifile.insertValue("CHARMM", "SCALING_ELECTROSTATIC_1_4",scaling_electrostatic_1_4_);
-			inifile.insertValue("CHARMM", "SCALING_VDW_1_4",scaling_vdw_1_4_);
-			
-			inifile.insertValue("CHARMM", "ASSIGN_CHARGES",assign_charges_);
-			inifile.insertValue("CHARMM", "ASSIGN_TYPENAMES",assign_typenames_);
-			inifile.insertValue("CHARMM", "ASSIGN_TYPES",assign_types_);
-			inifile.insertValue("CHARMM", "OVERWRITE_CHARGES",overwrite_charges_);
-			inifile.insertValue("CHARMM", "OVERWRITE_TYPENAMES",overwrite_typenames_);
-			inifile.insertValue("CHARMM", "USE_EEF1",use_eef1_);
-		}
-
-
-		void CharmmConfigurationDialog::fetchPreferences(const INIFile& inifile)
-			throw()
-		{
-			// the CHARMM options
-			if (inifile.hasEntry("CHARMM", "DistanceDependentDC"))
-			{
-				use_dddc_ = inifile.getValue("CHARMM", "DistanceDependentDC").toUnsignedInt() == 1;
-			}
-
-			if (inifile.hasEntry("CHARMM", "NONBONDED_CUTOFF"))
-			{
-				nonbonded_cutoff_ = inifile.getValue("CHARMM", "NONBONDED_CUTOFF").toFloat();
-			}
-			
-			if (inifile.hasEntry("CHARMM", "VDW_CUTOFF"))
-			{
-				vdw_cutoff_ = inifile.getValue("CHARMM", "VDW_CUTOFF").toFloat();
-			}
-			
-			if (inifile.hasEntry("CHARMM", "VDW_CUTON"))
-			{
-				vdw_cuton_ = inifile.getValue("CHARMM", "VDW_CUTON").toFloat();
-			}
-			
-			if (inifile.hasEntry("CHARMM", "ELECTROSTATIC_CUTOFF"))
-			{
-				electrostatic_cutoff_ = inifile.getValue("CHARMM", "ELECTROSTATIC_CUTOFF").toFloat();
-			}
-			
-			if (inifile.hasEntry("CHARMM", "ELECTROSTATIC_CUTON"))
-			{
-				electrostatic_cuton_ = inifile.getValue("CHARMM", "ELECTROSTATIC_CUTON").toFloat();
-			}
-			
-			if (inifile.hasEntry("CHARMM", "SOLVATION_CUTOFF"))
-			{
-				solvation_cutoff_ = inifile.getValue("CHARMM", "SOLVATION_CUTOFF").toFloat();
-			}
-			
-			if (inifile.hasEntry("CHARMM", "SOLVATION_CUTON"))
-			{
-				solvation_cuton_ = inifile.getValue("CHARMM", "SOLVATION_CUTON").toFloat();
-			}
-			
-			if (inifile.hasEntry("CHARMM", "SCALING_ELECTROSTATIC_1_4"))
-			{
-				scaling_electrostatic_1_4_ = inifile.getValue("CHARMM", "SCALING_ELECTROSTATIC_1_4").toFloat();
-			}
-			
-			if (inifile.hasEntry("CHARMM", "SCALING_VDW_1_4"))
-			{
-				scaling_vdw_1_4_ = inifile.getValue("CHARMM", "SCALING_VDW_1_4").toFloat();
-			}
-			
-			if (inifile.hasEntry("CHARMM", "ASSIGN_CHARGES"))
-			{
-				assign_charges_ = inifile.getValue("CHARMM", "ASSIGN_CHARGES").toUnsignedInt();
-			}
-			
-			if (inifile.hasEntry("CHARMM", "ASSIGN_TYPENAMES"))
-			{
-				assign_typenames_ = inifile.getValue("CHARMM", "ASSIGN_TYPENAMES").toUnsignedInt();
-			}
-			
-			if (inifile.hasEntry("CHARMM", "ASSIGN_TYPES"))
-			{
-				assign_types_ = inifile.getValue("CHARMM", "ASSIGN_TYPES").toUnsignedInt();
-			}
-			
-			if (inifile.hasEntry("CHARMM", "OVERWRITE_CHARGES"))
-			{
-				overwrite_charges_ = inifile.getValue("CHARMM", "OVERWRITE_CHARGES").toUnsignedInt();
-			}
-			
-			if (inifile.hasEntry("CHARMM", "OVERWRITE_TYPENAMES"))
-			{
-				overwrite_typenames_ = inifile.getValue("CHARMM", "OVERWRITE_TYPENAMES").toUnsignedInt();
-			}
-
-			if (inifile.hasEntry("CHARMM", "USE_EEF1"))
-			{
-				use_eef1_ = inifile.getValue("CHARMM", "USE_EEF1").toUnsignedInt();
-			}
-
-			if (inifile.hasEntry("CHARMM", "Filename"))
-			{
-				setFilename(inifile.getValue("CHARMM", "Filename"));
-			}
-		}
-
-		float CharmmConfigurationDialog::getNonbondedCutoff() const
-		{
-			return nonbonded_cutoff_;
-		}
-
-		float CharmmConfigurationDialog::getVdwCutoff() const
-		{
-			return vdw_cutoff_;
-		}
-
-		float CharmmConfigurationDialog::getVdwCuton() const
-		{
-			return vdw_cuton_;
-		}
-
-		float CharmmConfigurationDialog::getElectrostaticCutoff() const
-		{
-			return electrostatic_cutoff_;
-		}
-
-		float CharmmConfigurationDialog::getElectrostaticCuton() const
-		{
-			return electrostatic_cuton_;
-		}
-
-		float CharmmConfigurationDialog::getSolvationCutoff() const
-		{
-			return solvation_cutoff_;
-		}
-
-		float CharmmConfigurationDialog::getSolvationCuton() const
-		{
-			return solvation_cuton_;
-		}
-
-		float CharmmConfigurationDialog::getScalingElectrostatic_1_4() const
-		{
-			return scaling_electrostatic_1_4_;
-		}
-
-		float CharmmConfigurationDialog::getScalingVdw_1_4() const
-		{
-			return scaling_vdw_1_4_;
-		}
-
-		bool CharmmConfigurationDialog::getAssignCharges() const
-		{
-			return assign_charges_;
-		}
-
-		bool CharmmConfigurationDialog::getAssignTypenames() const
-		{
-			return assign_typenames_;
-		}
-
-		bool CharmmConfigurationDialog::getAssignTypes() const
-		{
-			return assign_types_;
-		}
-
-		bool CharmmConfigurationDialog::getOverwriteCharges() const
-		{
-			return overwrite_charges_;
-		}
-
-		bool CharmmConfigurationDialog::getOverwriteTypenames() const
-		{
-			return overwrite_typenames_;
-		}
-
-		bool CharmmConfigurationDialog::getUseDistanceDependentDC() const
-		{
-			return use_dddc_;
-		}
-
-		bool CharmmConfigurationDialog::getUseEEF1() const
-		{
-			return use_eef1_;
-		}
 
 		void CharmmConfigurationDialog::reject()
 		{
 			hide();
-
-			nonbonded_cutoff_line_edit->setText(String(nonbonded_cutoff_).c_str());
-			vdw_cutoff_line_edit->setText(String(vdw_cutoff_).c_str());
-			vdw_cuton_line_edit->setText(String(vdw_cuton_).c_str());
-			electrostatic_cutoff_line_edit->setText(String(electrostatic_cutoff_).c_str());
-			electrostatic_cuton_line_edit->setText(String(electrostatic_cuton_).c_str());
-			solvation_cutoff_line_edit->setText(String(solvation_cutoff_).c_str());
-			solvation_cuton_line_edit->setText(String(solvation_cuton_).c_str());
-			scaling_electrostatic_1_4_line_edit->setText(String(scaling_electrostatic_1_4_).c_str());
-			scaling_vdw_1_4_line_edit->setText(String(scaling_vdw_1_4_).c_str());
-
-			distance_button->setChecked(use_dddc_);
-			assign_charges_checkBox->setChecked(assign_charges_);
-			assign_typenames_checkBox->setChecked(assign_typenames_);
-			assign_types_checkBox->setChecked(assign_types_);
-			overwrite_charges_checkBox->setChecked(overwrite_charges_);
-			overwrite_typenames_checkBox->setChecked(overwrite_typenames_);
-			use_eef1_checkBox->setChecked(use_eef1_);
-			setResult(0);
+			PreferencesEntry::restoreValues();
 		}
 
 		void CharmmConfigurationDialog::accept()
 		{
-			try
-			{
-				nonbonded_cutoff_ = String(nonbonded_cutoff_line_edit->text().ascii()).toFloat();
-				vdw_cutoff_ = String(vdw_cutoff_line_edit->text().ascii()).toFloat();
-				vdw_cuton_ = String(vdw_cuton_line_edit->text().ascii()).toFloat();
-				electrostatic_cutoff_ = String(electrostatic_cutoff_line_edit->text().ascii()).toFloat();
-				electrostatic_cuton_ = String(electrostatic_cuton_line_edit->text().ascii()).toFloat();
-				solvation_cutoff_ = String(solvation_cutoff_line_edit->text().ascii()).toFloat();
-				solvation_cuton_ = String(solvation_cuton_line_edit->text().ascii()).toFloat();
-
-				scaling_electrostatic_1_4_ = String(scaling_electrostatic_1_4_line_edit->text().ascii()).toFloat();
-				scaling_vdw_1_4_ = String(scaling_vdw_1_4_line_edit->text().ascii()).toFloat();
-			}
-			catch(Exception::GeneralException e)
-			{
-				Log.error() << "Invalid value: " << std::endl << e << std::endl;
-				return;
-			}
-
-			use_dddc_ = distance_button->isChecked();
-			assign_charges_ = assign_charges_checkBox->isChecked();
-			assign_types_ = assign_types_checkBox->isChecked();
-			assign_typenames_ = assign_typenames_checkBox->isChecked();
-			overwrite_typenames_ = overwrite_typenames_checkBox->isChecked();
-			overwrite_charges_ = overwrite_charges_checkBox->isChecked();
-			use_eef1_ = use_eef1_checkBox->isChecked();
-
 			if (charmm_ != 0) applyTo(*charmm_);
-			setResult(1);
 			hide();
+			PreferencesEntry::storeValues();
 		}
 
 
 		void CharmmConfigurationDialog::applyTo(CharmmFF& charmm)
 			throw()
 		{
-			charmm.options[CharmmFF::Option::ASSIGN_TYPES] = (getAssignTypes() ? "true" : "false");
-			charmm.options[CharmmFF::Option::ASSIGN_CHARGES] = (getAssignCharges() ? "true" : "false");
-			charmm.options[CharmmFF::Option::ASSIGN_TYPENAMES] = (getAssignTypenames() ? "true" : "false");
-			charmm.options[CharmmFF::Option::OVERWRITE_CHARGES] = (getOverwriteCharges() ? "true" : "false");
-			charmm.options[CharmmFF::Option::OVERWRITE_TYPENAMES] = (getOverwriteTypenames() ? "true" : "false");
-
-			charmm.options[CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = getUseDistanceDependentDC();
-			charmm.options[CharmmFF::Option::USE_EEF1] = getUseEEF1();
-			charmm.options[CharmmFF::Option::NONBONDED_CUTOFF] = getNonbondedCutoff();
-			charmm.options[CharmmFF::Option::VDW_CUTOFF] = getVdwCutoff();
-			charmm.options[CharmmFF::Option::VDW_CUTON] = getVdwCuton();
-			charmm.options[CharmmFF::Option::ELECTROSTATIC_CUTOFF] = getElectrostaticCutoff();
-			charmm.options[CharmmFF::Option::ELECTROSTATIC_CUTON] = getElectrostaticCuton();
-			charmm.options[CharmmFF::Option::SOLVATION_CUTOFF] = getSolvationCutoff();
-			charmm.options[CharmmFF::Option::SOLVATION_CUTON] = getSolvationCuton();
-			charmm.options[CharmmFF::Option::SCALING_ELECTROSTATIC_1_4] = getScalingElectrostatic_1_4();
-			charmm.options[CharmmFF::Option::SCALING_VDW_1_4] = getScalingVdw_1_4();
-
-			charmm.options[CharmmFF::Option::FILENAME] = getFilename();
-
-			bool error = false;
 			try
 			{
-				if (String(max_unassigned_atoms->text().ascii()).toUnsignedInt() == 0) error = true;
-				charmm.setMaximumNumberOfErrors(String(max_unassigned_atoms->text().ascii()).toUnsignedInt());
-			}
-			catch(...)
-			{
-				error = true;
-			}
+				charmm.options[CharmmFF::Option::ASSIGN_TYPES] = getValue_(assign_types_checkBox);
+				charmm.options[CharmmFF::Option::ASSIGN_CHARGES] = getValue_(assign_charges_checkBox);
+				charmm.options[CharmmFF::Option::ASSIGN_TYPENAMES] = getValue_(assign_typenames_checkBox);
+				charmm.options[CharmmFF::Option::OVERWRITE_CHARGES] = getValue_(overwrite_charges_checkBox);
+				charmm.options[CharmmFF::Option::OVERWRITE_TYPENAMES] = getValue_(overwrite_typenames_checkBox);
 
-			if (error)
-			{
-				max_unassigned_atoms->setText("10");
-				charmm.setMaximumNumberOfErrors(10);
- 				Log.error() << "Invalid value for max number of unassigned atoms, using default value of 10" << std::endl;
-			}
+				bool value = distance_button->isChecked();
+				charmm.options[CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = value ? "true" : "false";
 
-			/*
-			if (boundary_box->isChecked())
-			{
-				charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
+				charmm.options[CharmmFF::Option::USE_EEF1] = getValue_(use_eef1_checkBox);
+				charmm.options[CharmmFF::Option::NONBONDED_CUTOFF] = getValue_(nonbonded_cutoff_line_edit);
+				charmm.options[CharmmFF::Option::VDW_CUTOFF] = getValue_(vdw_cutoff_line_edit);
+				charmm.options[CharmmFF::Option::VDW_CUTON] = getValue_(vdw_cuton_line_edit);
+				charmm.options[CharmmFF::Option::ELECTROSTATIC_CUTOFF] = getValue_(electrostatic_cutoff_line_edit);
+				charmm.options[CharmmFF::Option::ELECTROSTATIC_CUTON] = getValue_(electrostatic_cuton_line_edit);
+				charmm.options[CharmmFF::Option::SOLVATION_CUTOFF] = getValue_(solvation_cutoff_line_edit);
+				charmm.options[CharmmFF::Option::SOLVATION_CUTON] = getValue_(solvation_cuton_line_edit);
+				charmm.options[CharmmFF::Option::SCALING_ELECTROSTATIC_1_4] = getValue_(scaling_electrostatic_1_4_line_edit);
+				charmm.options[CharmmFF::Option::SCALING_VDW_1_4] = getValue_(scaling_vdw_1_4_line_edit);
+
+				charmm.options[CharmmFF::Option::FILENAME] = getFilename();
+
+				bool error = false;
 				try
 				{
-					charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_DISTANCE] = 
-						String(box_size_edit->text().ascii()).toFloat();
+					if (String(max_unassigned_atoms->text().ascii()).toUnsignedInt() == 0) error = true;
+					charmm.setMaximumNumberOfErrors(String(max_unassigned_atoms->text().ascii()).toUnsignedInt());
 				}
 				catch(...)
 				{
-					Log.error() << "Invalid distance for Periodic Boundary choosen." << std::endl;
+					error = true;
 				}
-				if (add_solvent_box->isChecked())
-				{
-					charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "true";
 
-					if (solvent_file_edit->text() != "")
+				if (error)
+				{
+					max_unassigned_atoms->setText("10");
+					charmm.setMaximumNumberOfErrors(10);
+					Log.error() << "Invalid value for max number of unassigned atoms, using default value of 10" << std::endl;
+				}
+
+				/*
+				if (boundary_box->isChecked())
+				{
+					charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
+					try
 					{
-						charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_SOLVENT_FILE] = 
-							solvent_file_edit->text().ascii();
+						charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_DISTANCE] = 
+							String(box_size_edit->text().ascii()).toFloat();
+					}
+					catch(...)
+					{
+						Log.error() << "Invalid distance for Periodic Boundary choosen." << std::endl;
+					}
+					if (add_solvent_box->isChecked())
+					{
+						charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "true";
+
+						if (solvent_file_edit->text() != "")
+						{
+							charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_SOLVENT_FILE] = 
+								solvent_file_edit->text().ascii();
+						}
 					}
 				}
+				else
+				{
+					charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "false";
+					charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "false";
+				}
+			*/
 			}
-			else
+			catch(...)
 			{
-				charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "false";
-				charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "false";
 			}
-		*/
 		}
 
 		void CharmmConfigurationDialog::setCharmmFF(CharmmFF& charmm)
@@ -489,5 +212,22 @@ namespace BALL
 			*/
 		}
 	
+		String CharmmConfigurationDialog::getValue_(const QCheckBox* box) const
+		{
+			if (box->isChecked()) return true;
+			else 									return false;
+		}
+
+		float CharmmConfigurationDialog::getValue_(const QLineEdit* edit) const
+			throw(Exception::InvalidFormat)
+		{
+			return String(edit->text().ascii()).toFloat();
+		}
+
+		void CharmmConfigurationDialog::resetOptions()
+		{
+			PreferencesEntry::restoreDefaultValues();
+		}
+
 	}//namespace VIEW
 }//namespace BALL

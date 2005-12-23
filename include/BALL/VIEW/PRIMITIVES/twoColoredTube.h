@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.h,v 1.10 2005/07/16 21:00:36 oliver Exp $
+// $Id: twoColoredTube.h,v 1.11 2005/12/23 17:02:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
@@ -42,7 +42,7 @@ namespace BALL
 				interface and additional methods. \par
 				\ingroup ViewPrimitives
 		*/
-		class BALL_EXPORT TwoColoredTube
+		class BALL_VIEW_EXPORT TwoColoredTube
 			: public GeometricObject,
 			  public ColorExtension2,
    			public Vertex2

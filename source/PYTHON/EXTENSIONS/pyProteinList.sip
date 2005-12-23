@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyProteinList.sip,v 1.5 2003/12/18 19:03:21 oliver Exp $
+// $Id: pyProteinList.sip,v 1.6 2005/12/23 17:02:57 amoll Exp $
 //
 
 %MappedType PyProteinList
@@ -40,6 +40,11 @@
 %ConvertToTypeCode
 	// Convert a Python list of Protein instances to an ProteinList object on the
 	// heap.
+ 
+	if (sipIsErr == NULL)
+	{
+		return PyList_Check(sipPy);
+	}
  
 	PyProteinList *protein_list = new PyProteinList;
  

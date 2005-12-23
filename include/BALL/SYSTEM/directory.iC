@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.iC,v 1.16 2003/08/26 08:04:55 oliver Exp $
+// $Id: directory.iC,v 1.17 2005/12/23 17:02:06 amoll Exp $
 //
 
 BALL_INLINE
@@ -47,16 +47,16 @@ BALL_INLINE
 void Directory::clear()
 {
 	#ifdef BALL_PLATFORM_WINDOWS
-		CloseHandle(dir_);
-		FindClose(dirent_);
+	if (dirent_ != INVALID_HANDLE_VALUE) FindClose(dirent_);
+	if (dir_ != INVALID_HANDLE_VALUE) CloseHandle(dir_);
 	#else
 		if (dir_ != 0)
 		{
 			::closedir(dir_);
 		}
-		dir_ = 0;		
-		dirent_ = 0;
 	#endif
+	dir_ = INVALID_HANDLE_VALUE;
+	dirent_ = INVALID_HANDLE_VALUE;
   directory_path_ = "";
 }
 
@@ -166,15 +166,17 @@ bool Directory::remove(String directory_path)
 			return desynchronize_(false);
 		}
 			
+		bool ok = desynchronize_((::_rmdir(directory_path.data()) == 0));
+	#else
+		bool ok = desynchronize_((::rmdir(directory_path.data()) == 0));
+	#endif
+
 		if (directory_path == directory_path_) 
 		{
-			CloseHandle(dir_);
-			FindClose(dirent_);
+			clear();
 		}
-		return desynchronize_((::_rmdir(directory_path.data()) == 0));
-	#else
-		return desynchronize_((::rmdir(directory_path.data()) == 0));
-	#endif
+
+		return ok;
 }
 
 BALL_INLINE 

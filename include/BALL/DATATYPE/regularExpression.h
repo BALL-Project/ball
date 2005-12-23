@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularExpression.h,v 1.2 2003/08/26 08:04:11 oliver Exp $
+// $Id: regularExpression.h,v 1.3 2005/12/23 17:01:42 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULAREXPRESSION_H
@@ -48,7 +48,7 @@ namespace BALL
 	/**	Regular expression class
     	\ingroup  DatatypeMiscellaneous
 	*/
-	class RegularExpression
+	class BALL_EXPORT RegularExpression
 	{
 		public:
 
@@ -115,35 +115,22 @@ namespace BALL
 		*/
 		//@{
 			
-		/**	Default constructor.
-				Creates a new RegularExpression object.
-		*/
-		RegularExpression()
-			throw();
+		///	Default constructor
+		RegularExpression()	throw();
 
-		/**	Copy constructor
-		*/
-		RegularExpression(const RegularExpression& regular_expression)
-			throw();
+		///	Copy constructor
+		RegularExpression(const RegularExpression& regular_expression) throw();
 
-		/**	Detailled constructor	
-				@param pattern the string to create the pattern from
-				@param wildcard_pattern ?????
-		*/
-		RegularExpression(const String& pattern, bool wildcard_pattern = false)
-			throw();
+		///
+		RegularExpression(const String& pattern, bool wildcard_pattern = false) throw();
 
-		/**	Destructor
-		*/
-		virtual ~RegularExpression()
-			throw();
+		///	Destructor
+		virtual ~RegularExpression() throw();
 
-		/**	Clear method.
-		*/
+		///	Reset the object attributes to their default values
 		virtual void clear() throw();
 
-		/**	Destroy the instance.
-		*/
+		///	Destroy the instance
 		void destroy() throw();
 		//@}
 
@@ -151,34 +138,27 @@ namespace BALL
 		*/
 		//@{
 
-		/** Assignment operator
-		*/
+		/// Assignment operator
 		RegularExpression& operator = (const RegularExpression& expression) throw();
 
-		/**	Assign from another instance
-		*/
+		///	Assign from another instance
 		void set(const RegularExpression& regular_expression) throw();
 
-		/**	Assign from a string.
-				@param wildcard_pattern ?????
-		*/
+		///	Assign from a string
 		void set(const String& pattern, bool wildcard_pattern = false) throw();
 
-		/**	Assign to another instance
-		*/
+		///	Assign to another instance
 		void get(RegularExpression& regular_expression) const throw();
-
 		//@}
+
 		/**	@name	Accessors
 		*/
 		//@{
 
-		/**	Get the expression pattern.
-		*/
+		///	Get the expression pattern.
 		const String& getPattern() const throw();
 
-		/**	Count subexpressions.
-		*/
+		///	Count subexpressions.
 		Size countSubexpressions() const throw();
 
 		/**	Match a text with a given pattern.
@@ -291,11 +271,13 @@ namespace BALL
 
 		/**	output operator
 		*/
+		BALL_EXPORT
 		friend std::ostream& operator << (std::ostream& s, const RegularExpression& regular_expression)
 			throw();
 
 		/**	input operator
 		*/
+		BALL_EXPORT
 		friend std::istream& operator >> (std::istream& s, RegularExpression& regular_expression)
 			throw();
 

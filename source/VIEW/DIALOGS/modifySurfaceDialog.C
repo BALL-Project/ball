@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.3 2005/07/03 09:43:35 oliver Exp $
+// $Id: modifySurfaceDialog.C,v 1.4 2005/12/23 17:03:27 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/VIEW/DATATYPE/colorTable.h>
+#include <BALL/VIEW/DATATYPE/colorMap.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 
 #include <BALL/SYSTEM/path.h>
@@ -35,8 +35,8 @@
 
 namespace BALL
 {
-	namespace VIEW
-	{
+	 namespace VIEW
+	 {
 
 		ModifySurfaceDialog::ModifySurfaceDialog( QWidget* parent,  const char* name, bool modal, WFlags fl )
 			: ModifySurfaceDialogData(parent, name, modal, fl),
@@ -93,8 +93,8 @@ namespace BALL
 				rep_->setNeedsUpdate();
 				return;
 			}
-			RepresentationMessage* msg = new RepresentationMessage(*rep_, RepresentationMessage::UPDATE);
-			notify_(*msg);
+
+			notify_(new RepresentationMessage(*rep_, RepresentationMessage::UPDATE));
 		}
 
 
@@ -109,6 +109,7 @@ namespace BALL
 			QColor qcolor = chooseColor(custom_color_label);
 			selected_color.set(qcolor);
 		}
+
 
 		void ModifySurfaceDialog::maxPressed()
 		{
@@ -227,19 +228,19 @@ namespace BALL
 		{
 			if (grid_ == 0) return;
 
-			min_value_  = Limits<float>::max();
-			max_value_  = Limits<float>::min(); 
+			min_value_  = 0;
+			max_value_  = 0;
 			mid_value_  = 0;
+
+			float extr = 0;
+			float value = 0;
 
 			try
 			{
 				for(Position p = 0; p < mesh_->vertex.size(); p++)
 				{
-					const float& value = grid_->getInterpolatedValue(mesh_->vertex[p]);
-
-					mid_value_ += value;
-					if (value < min_value_) min_value_ = value;
-					if (value > max_value_) max_value_ = value;
+					value = fabs(grid_->getInterpolatedValue(mesh_->vertex[p]));
+					if (value > extr) extr = value;
 				}
 			}
 			catch(Exception::OutOfGrid)
@@ -248,7 +249,8 @@ namespace BALL
 				return;
 			}
 
-			mid_value_ /= mesh_->vertex.size();
+			min_value_  = -extr;
+			max_value_  = +extr;
 
 			apply_button->setEnabled(true);
 			autoscale->setEnabled(true);
@@ -294,14 +296,14 @@ namespace BALL
 
 			if (!color_only_selection->isChecked())
 			{
-				mesh_->colorList.resize(1);
-				mesh_->colorList[0] = col;
+				mesh_->colors.resize(1);
+				mesh_->colors[0] = col;
 				return;
 			}
 
-			if (mesh_->colorList.size() != mesh_->vertex.size())
+			if (mesh_->colors.size() != mesh_->vertex.size())
 			{
-				mesh_->colorList.resize(mesh_->vertex.size());
+				mesh_->colors.resize(mesh_->vertex.size());
 			}
 
 			// make sure we have a colorProcessor
@@ -320,11 +322,11 @@ namespace BALL
 
 				if (atom == 0 || !atom->isSelected())
 				{
-					mesh_->colorList[p].setAlpha(255 - rep_->getTransparency());
+					mesh_->colors[p].setAlpha(255 - rep_->getTransparency());
 				}
 				else
 				{
-					mesh_->colorList[p] = col;
+					mesh_->colors[p] = col;
 				}
 			}
 		}
@@ -360,42 +362,42 @@ namespace BALL
 			setColor_(max_max_color, max_max_label, max_max_alpha, alpha_button_grid);
 
 			// now do the colorizing stuff...
-			mesh_->colorList.resize(mesh_->vertex.size());
+			mesh_->colors.resize(mesh_->vertex.size());
 			ColorRGBA list[2];
 
 			list[0] = min_color;
 			list[1] = mid_color;
 
-			ColorTable lower_table(list, 2);
+			ColorMap lower_table(list, 2);
 			lower_table.setMinMaxColors(min_min_color, max_max_color);
 			lower_table.setAlphaBlending(true);
 			lower_table.setNumberOfColors(levels_box->value()/2);
 			lower_table.setRange(String((min_box->text().ascii())).toFloat(), String((mid_box->text().ascii())).toFloat());
-			lower_table.createTable();
+			lower_table.createMap();
 
 			list[0] = mid_color;
 			list[1] = max_color;
 
-			ColorTable upper_table(list, 2);
+			ColorMap upper_table(list, 2);
 			upper_table.setMinMaxColors(min_min_color, max_max_color);
 			upper_table.setAlphaBlending(true);
 			upper_table.setNumberOfColors(levels_box->value()/2);
 			upper_table.setRange(String((mid_box->text().ascii())).toFloat(), String((max_box->text().ascii())).toFloat());
-			upper_table.createTable();
+			upper_table.createMap();
 
 			try 
 			{
 				const float mid_value = String(mid_box->text().ascii()).toFloat();
-				for (Position i = 0; i < mesh_->colorList.size(); i++)
+				for (Position i = 0; i < mesh_->colors.size(); i++)
 				{
 					const float grid_value = grid_->getInterpolatedValue(mesh_->vertex[i]);
 					if (grid_value <= mid_value)
 					{
-						mesh_->colorList[i].set(lower_table.map(grid_value));
+						mesh_->colors[i].set(lower_table.map(grid_value));
 					}
 					else
 					{
-						mesh_->colorList[i].set(upper_table.map(grid_value));
+						mesh_->colors[i].set(upper_table.map(grid_value));
 					}
 				}
 			}	
@@ -405,103 +407,24 @@ namespace BALL
 				return false;
 			}
 
-			if (transparency_group_grid->selected() == none_button_grid)
+			rep_->setTransparency(0);
+
+			if (transparency_group_grid->selected() != none_button_grid)
 			{
-				rep_->setTransparency(0);
-			}
-			else if (transparency_group_grid->selected() == alpha_button_grid)
-			{
-				rep_->setTransparency(255 - (int) min_min_color.getAlpha());
+				if ((Size)min_min_color.getAlpha() 	!= 255 ||
+						(Size)min_color.getAlpha() 			!= 255 ||
+						(Size)mid_color.getAlpha() 			!= 255 ||
+						(Size)max_color.getAlpha() 			!= 255 ||
+						(Size)max_max_color.getAlpha() 	!= 255)
+				{
+					// if we use Transparency, just tell the Representation
+					rep_->setTransparency(80);
+				}
 			}
 
 			return true;
 		}
 
-
-		void ModifySurfaceDialog::saveSettings_()
-		{
-			if (!configs_.has(rep_))
-			{
-				configs_[rep_] = ColoringConfig();
-			}
-			ColoringConfig& config = configs_[rep_];
-
-			setColor_(config.min_min_color, min_min_label, min_min_alpha, alpha_button_grid);
-			setColor_(config.min_color, min_label, min_alpha, alpha_button_grid);
-			setColor_(config.mid_color, mid_label, mid_alpha, alpha_button_grid);
-			setColor_(config.max_color, max_label, max_alpha, alpha_button_grid);
-			setColor_(config.max_max_color, max_max_label, max_max_alpha, alpha_button_grid);
-
-			config.min_value = String(min_box->text().ascii()).toFloat();
-			config.mid_value = String(mid_box->text().ascii()).toFloat();
-			config.max_value = String(max_box->text().ascii()).toFloat();
-
-			config.number_of_levels = levels_box->value();
-
-			config.transparency = 0;
-			if (surface_tab->currentPage() == by_grid)
-			{
-				config.tab = 0;
-				if (transparency_group_grid->selected() == none_button_grid)
-				{
-					config.transparency = 0;
-				}
-				else
-				{
-					config.transparency = 2;
-				}
-			}
-			else if (surface_tab->currentPage() == by_color)
-			{
-				config.tab = 1;
-			}
-			else
-			{
-				config.tab = 2;
-			}
-		}
-
-
-		void ModifySurfaceDialog::loadSettings_()
-		{
-			if (!configs_.has(rep_))
-			{
-				return;
-			}
-			ColoringConfig& config = configs_[rep_];
-
-			getColor_(config.min_min_color, min_min_label, min_min_alpha);
-			getColor_(config.min_color, min_label, min_alpha);
-			getColor_(config.mid_color, mid_label, mid_alpha);
-			getColor_(config.max_color, max_label, max_alpha);
-			getColor_(config.max_max_color, max_max_label, max_max_alpha);
-
-			min_box->setText(String(config.min_value).c_str());
-			mid_box->setText(String(config.mid_value).c_str());
-			max_box->setText(String(config.max_value).c_str());
-
-			levels_box->setValue(config.number_of_levels);
-
-
-			surface_tab->setCurrentPage(config.tab);
-
-			if (config.tab == 0)
-			{
-				if (config.transparency == 0)
-				{
-					none_button_grid->setEnabled(true);
-				}
-				else if (config.transparency == 1)
-				{
-					alpha_button_grid->setEnabled(true);
-				}
-			}
-			else if (config.tab == 1)
-			{
-			}
-					
-			QWidget::update();
-		}
 
 		void ModifySurfaceDialog::checkApplyButton_()
 		{
@@ -554,18 +477,14 @@ namespace BALL
 			if (!RTTI::isKindOf<RegularData3DMessage>(*message)) return;
 
 			RegularData3DMessage *rm = RTTI::castTo<RegularData3DMessage>(*message);
-			switch (rm->getType())
-			{
-				case (CompositeMessage::CompositeMessageType) RegularData3DMessage::NEW:
-					insertGrid_(*rm->getData(), rm->getCompositeName());
-					return;
 
-				case (CompositeMessage::CompositeMessageType) RegularData3DMessage::REMOVE:
-					removeGrid_(*rm->getData());
-					return;
-				
-				default:
-					return;
+			if 			((Index)rm->getType() == (Index)RegularData3DMessage::NEW)
+			{
+				insertGrid_(*rm->getData(), rm->getCompositeName());
+			}
+			else if ((Index)rm->getType() == (Index)RegularData3DMessage::REMOVE)
+			{
+				removeGrid_(*rm->getData());
 			}
 		}
 
@@ -724,16 +643,16 @@ namespace BALL
 				// make a backup of the old meshs content and clear it
 				vector<ColorRGBA> colors;
 
-				bool multi_color = (org_mesh.colorList.size() > 1);
+				bool multi_color = (org_mesh.colors.size() > 1);
 
 				if (multi_color)
 				{
-					colors = org_mesh.colorList;
-					org_mesh.colorList.clear();
+					colors = org_mesh.colors;
+					org_mesh.colors.clear();
 				}
 				else
 				{ 
-					new_mesh->colorList = org_mesh.colorList;
+					new_mesh->colors = org_mesh.colors;
 				}
 
 				vector<Surface::Triangle> triangles = org_mesh.triangle;
@@ -757,7 +676,10 @@ namespace BALL
 
 						new_mesh->vertex.push_back(vertices[pos]);
 						new_mesh->normal.push_back(normals[pos]);
-						new_mesh->colorList.push_back(colors[pos]);
+						if (multi_color)
+						{
+							new_mesh->colors.push_back(colors[pos]);
+						}
 					}
 				}
 
@@ -787,7 +709,7 @@ namespace BALL
 							org_mesh.normal.push_back(normals[vpos]);
 							if (multi_color)
 							{
-								org_mesh.colorList.push_back(colors[vpos]);
+								org_mesh.colors.push_back(colors[vpos]);
 							}
 						}
 
@@ -836,7 +758,8 @@ namespace BALL
 
 		void ModifySurfaceDialog::calculateIncludedVertices_(vector<bool>& include_vertex, const Mesh& org_mesh, HashSet<const Composite*>& roots)
 		{
-			List<const Atom*> atoms;
+			List<const Atom*> selected_atoms;
+			List<const Atom*> all_atoms;
 
 			HashSet<const Composite*>::ConstIterator it = roots.begin();
 			for(; +it; it++)
@@ -847,13 +770,17 @@ namespace BALL
 					const AtomContainer* const acont = dynamic_cast<const AtomContainer*>(*it);
 					BALL_FOREACH_ATOM(*acont, ait)
 					{
-						if ((*ait).isSelected()) atoms.push_back(&*ait);
+						all_atoms.push_back(&*ait);
+
+						if ((*ait).isSelected()) selected_atoms.push_back(&*ait);
 					}
 				}
-				else if ((**it).isSelected() && RTTI::isKindOf<Atom>(**it))
+				else if (RTTI::isKindOf<Atom>(**it))
 				{
 					const Atom* atom = dynamic_cast<const Atom*> (*it);
-					atoms.push_back(atom);
+					all_atoms.push_back(atom);
+
+					if (atom->isSelected()) selected_atoms.push_back(atom);
 				}
 			}
 
@@ -861,32 +788,32 @@ namespace BALL
 
 			BoundingBoxProcessor boxp;
 			boxp.start();
-			List<const Atom*>::Iterator lit = atoms.begin();
-			for(;lit != atoms.end(); lit++)
+			List<const Atom*>::Iterator lit = all_atoms.begin();
+			for(;lit != all_atoms.end(); lit++)
 			{
 				boxp.operator() (*(Atom*)*lit);
 			}
 			boxp.finish();
 
-			const Vector3 diagonal = boxp.getUpper() - boxp.getLower();
+			Vector3 diagonal = boxp.getUpper() - boxp.getLower();
 			
 			// grid spacing, tradeoff between speed and memory consumption
 			float grid_spacing = distance;
 
 			float memory = SysInfo::getAvailableMemory();
 			//
-			// if we can not calculate available memory, use around 60 MB for the grid
-			if (memory == -1) memory = 100000000;
-			memory *= 0.6;
+			// if we can not calculate the available memory, use around 6 MB for the grid
+			if (memory == -1) memory = 10000000;
+			memory *= (float) 0.6;
 
 			Vector3 overhead(2.5 + distance);
-			float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing((LongIndex)memory, diagonal + 
-																																			overhead * 2.0);		
+			diagonal += overhead * 2.0;
+			float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing((LongIndex)memory, diagonal);
 			if (min_spacing > grid_spacing) grid_spacing = min_spacing;
 			
-			AtomGrid atom_grid(boxp.getLower() - overhead, diagonal + overhead, grid_spacing); 
+			AtomGrid atom_grid(boxp.getLower() - overhead, diagonal, grid_spacing); 
 		 
-			for (lit = atoms.begin(); lit != atoms.end(); lit++)
+			for (lit = selected_atoms.begin(); lit != selected_atoms.end(); lit++)
 			{
 				atom_grid.insert((*lit)->getPosition(), *lit);
 			}
@@ -964,13 +891,12 @@ namespace BALL
 
 				Mesh* mesh = dynamic_cast<Mesh*> (*it);
 
-				for (Position p = 0; p < mesh->colorList.size(); p++)
+				for (Position p = 0; p < mesh->colors.size(); p++)
 				{
-					mesh->colorList[p].setAlpha(255 - transparency);
+					mesh->colors[p].setAlpha(255 - transparency);
 				}
 			}
 		}
 
 	} // namespace VIEW
- 
 } // namespace BALL

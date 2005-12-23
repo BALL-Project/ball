@@ -19,7 +19,7 @@ namespace BALL
 	/** Generic QSAR molecular partial charge descriptor class
 			\\
 	*/
-	class PartialChargeBase
+	class BALL_EXPORT PartialChargeBase
 		:	public Descriptor
 	{
 		public:

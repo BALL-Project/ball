@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.21 2005/02/24 15:52:26 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.22 2005/12/23 17:02:09 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -27,13 +27,13 @@
 namespace BALL
 {
 	class PTE;
-	class INIFile;
 
 	namespace VIEW
 	{
 		class ColorProcessor;
 
-		class BALL_EXPORT QColorTableItem : public QTableItem
+		class BALL_VIEW_EXPORT QColorTableItem 
+			: public QTableItem
 		{
 			public:
 				QColorTableItem(QTable* t, EditType et, const ColorRGBA& color);
@@ -49,15 +49,21 @@ namespace BALL
 		};
 
 
-		class QColorTable : public QTable
+		///
+		class BALL_VIEW_EXPORT QColorTable
+			:	public QTable,
+				public PreferencesEntry::ExtendedPreferencesObject
 		{
 				Q_OBJECT
 
 			public:
-				QColorTable(QWidget* parent = 0)
+				QColorTable(QWidget* parent = 0, const char* name = 0)
 					throw();
 				
 				void setNamesTitle(const String& string)
+					throw();
+
+				String getNamesTitle() const
 					throw();
 				
 				void setContent(const vector<String>& names, const vector<ColorRGBA>& colors)
@@ -71,6 +77,12 @@ namespace BALL
 
 				const vector<String>& getNames() const
 					throw() { return names_;}
+
+				///
+				virtual bool getValue(String&) const;
+
+				///
+				virtual bool setValue(const String& value);
 
 			private slots:
 				
@@ -87,7 +99,7 @@ namespace BALL
 		 		It is inserted to the Preferences.
 				\ingroup ViewDialogs
 		*/
-		class ColoringSettingsDialog 
+		class BALL_VIEW_EXPORT ColoringSettingsDialog 
 			: public ColoringSettingsDialogData,
 				public PreferencesEntry
 		{ 
@@ -100,16 +112,6 @@ namespace BALL
 
 			/// Destructor
 			~ColoringSettingsDialog() {}
-
-			///
-			void writePreferenceEntries(INIFile& inifile);
-
-			///
-			void readPreferenceEntries(const INIFile& inifile);
-
-			/// Called when defaults is pressed in Preferences, calls setDefaults
-			virtual void setDefaultValues(bool all = false)
-				throw();
 
 			///
 			void applySettingsTo(ColorProcessor& cp) const
@@ -130,12 +132,6 @@ namespace BALL
 			///
 			vector<ColorRGBA> getColors(ColoringMethod method) const
 				throw();
-
-			///
-			void writeColorTable(const QColorTable& table, INIFile& inifile);
-
-			///
-			void readColorTable(QColorTable& table, const INIFile& inifile);
 
 			protected slots:
 
@@ -182,9 +178,12 @@ namespace BALL
 
 			protected:
 
+			virtual void setDefaultValues_();
+
 			QColorTable* element_table_;
 			QColorTable* residue_table_;
 			QColorTable* chain_table_;
+			QColorTable* molecule_table_;
 		};
 
 } }

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK_test.C,v 1.5 2004/11/07 08:25:38 oliver Exp $
+// $Id: UCK_test.C,v 1.6 2005/12/23 17:03:13 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -27,12 +27,12 @@ UCK *u1;
 UCK *u2;
 UCK *u3;
 
-START_TEST(UCK, "$Id: UCK_test.C,v 1.5 2004/11/07 08:25:38 oliver Exp $")
+START_TEST(UCK, "$Id: UCK_test.C,v 1.6 2005/12/23 17:03:13 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-SDFile f("benzoic_acid.sdf");
+SDFile f("data/benzoic_acid.sdf");
 Molecule* m = 0;
 CHECK([Extra] Structure initialization)
 	m = f.read();

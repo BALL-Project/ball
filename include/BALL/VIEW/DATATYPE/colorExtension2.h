@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension2.h,v 1.9 2005/07/16 21:00:31 oliver Exp $
+// $Id: colorExtension2.h,v 1.10 2005/12/23 17:02:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLOREXTENSION2_H
@@ -23,7 +23,7 @@ namespace BALL
 				\see         ColorUnit
 				\ingroup ViewDatatypeGeometricObject
 		*/
-		class BALL_EXPORT ColorExtension2
+		class BALL_VIEW_EXPORT ColorExtension2
 		{
 			public:
 

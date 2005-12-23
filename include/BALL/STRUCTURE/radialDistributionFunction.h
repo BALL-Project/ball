@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: radialDistributionFunction.h,v 1.19 2003/08/26 08:04:52 oliver Exp $
+// $Id: radialDistributionFunction.h,v 1.20 2005/12/23 17:02:04 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
@@ -21,7 +21,7 @@ namespace BALL
 			fit from molecular dynamics simulation.	 \par
 	\ingroup RDF	
 	*/
-	class RadialDistributionFunction 
+	class BALL_EXPORT RadialDistributionFunction 
 	{
 		public:
 		

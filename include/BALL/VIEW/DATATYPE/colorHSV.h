@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorHSV.h,v 1.20 2005/07/16 21:00:31 oliver Exp $
+// $Id: colorHSV.h,v 1.21 2005/12/23 17:02:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORHSV_H
@@ -41,7 +41,7 @@ namespace BALL
 				conversions.  \par
 			\ingroup ViewDatatypeColors	
 		*/
-		class BALL_EXPORT ColorHSV
+		class BALL_VIEW_EXPORT ColorHSV
 		{
 			/** @name Class friends
 						- class ColorRGBA

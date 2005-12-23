@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.h,v 1.11 2005/07/16 21:00:34 oliver Exp $
+// $Id: lineModel.h,v 1.12 2005/12/23 17:02:18 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_LINEMODEL_H
@@ -22,7 +22,7 @@ namespace BALL
 				For information about the processor concept see Processor.
 				\ingroup  ViewModels
 		*/
-		class BALL_EXPORT AddLineModel: public AtomBondModelBaseProcessor
+		class BALL_VIEW_EXPORT AddLineModel: public AtomBondModelBaseProcessor
 		{
 			public:
 

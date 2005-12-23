@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.sip,v 1.1 2003/12/11 16:05:39 amoll Exp $
+// $Id: cartoonModel.sip,v 1.2 2005/12/23 17:02:48 amoll Exp $
 //
 
 class AddCartoonModel 
@@ -13,18 +13,30 @@ class AddCartoonModel
 	using namespace BALL::VIEW;
 %End
   public:
-//  void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
-  AddCartoonModel() throw();
+
+	AddCartoonModel() throw();
   AddCartoonModel(const AddCartoonModel&) throw();
-  //Processor::Result operator() (Composite&);
-  bool finish();
-  bool start();
-  float getArrowHeight() const throw();
-  float getArrowWidth() const throw();
-  float getHelixRadius() const throw();
-  void clear() throw();
-  void setArrowHeight(float) throw();
-  void setArrowWidth(float) throw();
-  void setHelixRadius(float) throw();
   ~AddCartoonModel() throw();
+  //Processor::Result operator() (Composite&);
+
+	void setHelixRadius(float) throw();
+	float getHelixRadius() const throw();
+	void setArrowWidth(float) throw();
+	float getArrowWidth() const throw();
+	void setStrandHeight(float) throw();
+	float getStrandHeight() const throw();
+	void setStrandWidth(float) throw();
+	float getStrandWidth() const throw();
+	void setDNABaseRadius(float) throw();
+	float getDNABaseRadius() const throw();
+	void setDNAHelixRadius(float) throw();
+	float getDNAHelixRadius() const throw();
+	void setDNALadderRadius(float) throw();
+	float getDNALadderRadius() const throw();
+	void setDrawDNAAsLadderModel(bool) throw();
+	bool drawDNAAsLadderModel() throw();
+	void enableRibbons(bool) throw();
+	bool ribbonsEnabled() const throw();
+	void enableTwoColors(bool) throw();
+	bool twoColorsEnabled() const throw();
 };

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventAccessibleSurface.h,v 1.11 2003/11/04 20:09:24 strobel Exp $
+// $Id: solventAccessibleSurface.h,v 1.12 2005/12/23 17:02:04 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTACCESSIBLESURFACE_H
 #define BALL_STRUCTURE_SOLVENTACCESSIBLESURFACE_H
@@ -38,7 +38,7 @@ namespace BALL
 	/** Generic SolventAccessibleSurface Class.
 	\ingroup Surface			
 	*/
-	class SolventAccessibleSurface
+	class BALL_EXPORT SolventAccessibleSurface
 	{
 		public:
 
@@ -196,7 +196,7 @@ namespace BALL
 
 	/**	Output- Operator
 	*/
-	std::ostream& operator << (std::ostream& s,
+	BALL_EXPORT std::ostream& operator << (std::ostream& s,
 														 const SolventAccessibleSurface& sas);
 
 	//@}

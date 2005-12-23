@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ruleProcessor.h,v 1.16 2003/08/26 08:04:25 oliver Exp $
+// $Id: ruleProcessor.h,v 1.17 2005/12/23 17:01:52 amoll Exp $
 //
 
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
@@ -23,7 +23,7 @@ namespace BALL
 			
     	\ingroup  MolmecAssignment
 	*/
-	class RuleProcessor
+	class BALL_EXPORT RuleProcessor
 		:	public UnaryProcessor<Atom>
 	{
 		public:

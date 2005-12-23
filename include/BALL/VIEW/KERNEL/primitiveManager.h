@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.22 2005/07/03 09:43:07 oliver Exp $
-//
+// $Id: primitiveManager.h,v 1.23 2005/12/23 17:02:15 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -15,6 +14,10 @@
 # include <qmutex.h>
 # include <qwaitcondition.h>
 #endif
+
+#include <vector>
+
+using std::vector;
 
 namespace BALL
 {
@@ -37,7 +40,7 @@ namespace BALL
 				is done in an instance of UpdateRepresentationThread.
 				\ingroup ViewKernelGeometricPrimitives
 		*/
-		class BALL_EXPORT PrimitiveManager
+		class BALL_VIEW_EXPORT PrimitiveManager
 			:	public Object
 		{
 			friend class Representation;
@@ -175,6 +178,10 @@ namespace BALL
 			bool updateRunning() const
 				throw();
 
+			///
+			void rebuildAllRepresentations()
+				throw();
+
 			#ifdef BALL_QT_HAS_THREADS
 			/** Get the UpdateRepresentationThread, which updates one Representation.
 					(Only used in Multithreaded code.)
@@ -206,17 +213,9 @@ namespace BALL
 			bool updatePending() { return update_pending_;}
 
 			///
-			void setMultithreadingMode(bool state)
-				throw() { multi_threading_mode_ = state;}
-
-			///
-			bool usesMultithreading()
-				throw();
-
-			///
 			HashSet<Representation*>& getRepresentationsBeeingUpdated();
 
-			///
+			/// Used by UpdateRepresentationThread
 			HashSet<Representation*>& getRepresentationsBeeingDrawn();
 
 			///
@@ -232,7 +231,7 @@ namespace BALL
 			void storeRepresentations(INIFile& out);
 			
 			///
-			void restoreRepresentations(const INIFile& in);
+			void restoreRepresentations(const INIFile& in, const vector<const Composite*>& new_systems);
 
 			///
 			void focusRepresentation(const Representation& rep);
@@ -264,7 +263,12 @@ namespace BALL
 			RepresentationList representations_;
 			
 			//_ List with all representations, which will be updated
+			//  representations will be updated with the same order as in this list
 			RepresentationList representations_to_be_updated_;
+			// hashset with same content as above for faster acces
+			HashSet<Representation*> currently_updateing_;
+
+			HashSet<Representation*> currently_drawing_;
 
 			vector<ClippingPlane*> clipping_planes_;
 			
@@ -278,10 +282,6 @@ namespace BALL
 			MainControl* 	main_control_;
 			bool 					update_running_;
 			bool 					update_pending_;
-			bool 					multi_threading_mode_;
-
-			HashSet<Representation*> currently_drawing_;
-			HashSet<Representation*> currently_updateing_;
 		};
 
 	} // namespace VIEW

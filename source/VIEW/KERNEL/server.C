@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.17 2004/10/21 12:37:10 amoll Exp $
+// $Id: server.C,v 1.18 2005/12/23 17:03:33 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -309,17 +309,6 @@ namespace BALL
 			getMainControl()->insert(*new_composite_ptr);
     }
 
-
-		void Server::defaultPreferences()
-			throw()
-		{
-			const QWidget* current_page = getMainControl()->getPreferences()->currentPage();
-
-			if (current_page == server_preferences_)
-			{
-				server_preferences_->setDefaultValues();
-			}
-		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/server.iC>

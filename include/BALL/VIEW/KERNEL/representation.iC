@@ -125,6 +125,11 @@ BALL_INLINE
 void Representation::setSurfaceDrawingPrecision(float precision)
 	throw() 
 {
+	if (precision < 0.1)
+	{
+		Log.error() << "Error: setting invalid surface drawing precision, using 0.1! " << std::endl;
+		precision = 0.1;
+	}
 	surface_drawing_precision_ = precision;
 	if (model_processor_ != 0) model_processor_->setSurfaceDrawingPrecision(surface_drawing_precision_);
 }

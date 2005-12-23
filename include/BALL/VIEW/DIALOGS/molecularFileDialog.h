@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.20 2005/07/16 21:00:32 oliver Exp $
+// $Id: molecularFileDialog.h,v 1.21 2005/12/23 17:02:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -37,7 +37,7 @@ namespace BALL
 				@see PDBFile
 				\ingroup ViewDialogs
 		 */
-		class BALL_EXPORT MolecularFileDialog
+		class BALL_VIEW_EXPORT MolecularFileDialog
 			: public QWidget,
 				public ModularWidget
 		{
@@ -125,16 +125,14 @@ namespace BALL
 			System* readMOLFile(String filename, String system_name)
 				throw();
 
-			/** Read an SD file.
-					This reads <b>all</b> molecules from the file, so it may take a while!
-					Browsing the file contents first be added later on.
-			 */
-			System* readSDFile(String filename, String system_name)
-				throw();
-
 			/** Read a MOL2 file
 			 */
 			System* readMOL2File(String filename, String system_name)
+				throw();
+
+			/** Read a SD file
+			 */
+			System* readSDFile(String filename, String system_name)
 				throw();
 
 			/** Write a PDB file

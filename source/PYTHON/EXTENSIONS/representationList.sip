@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationList.sip,v 1.1 2003/12/18 19:03:22 oliver Exp $
+// $Id: representationList.sip,v 1.2 2005/12/23 17:02:58 amoll Exp $
 //
 
 %MappedType RepresentationList
@@ -41,6 +41,9 @@
 %End
  
 %ConvertToTypeCode
+  if (sipIsErr == NULL)
+    return (PyList_Check(sipPy));
+
 	// Convert a Python list of Representation instances to an RepresentationList object on the
 	// heap.
  

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorChooser.h,v 1.2 2004/09/28 17:35:52 amoll Exp $
+// $Id: colorChooser.h,v 1.3 2005/12/23 17:02:09 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORCHOOSER_H 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Timer_test.C,v 1.22 2003/07/03 12:00:13 amoll Exp $
+// $Id: Timer_test.C,v 1.23 2005/12/23 17:03:13 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
@@ -15,7 +15,7 @@
 #endif
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.22 2003/07/03 12:00:13 amoll Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.23 2005/12/23 17:03:13 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -265,7 +265,6 @@ CHECK(bool operator < (const Timer& timer) const)
 	Timer t2;
 	TEST_EQUAL(t1 < t2, false);
 	TEST_EQUAL(t2 < t1, true);
-	t2 = t1;
 	TEST_EQUAL(t1 < t2, false);
 RESULT
 
@@ -277,8 +276,6 @@ CHECK(bool operator <= (const Timer& timer) const)
 	Timer& t2 = *new Timer;
 	TEST_EQUAL(t1 <= t2, false);
 	TEST_EQUAL(t2 <= t1, true);
-	t2 = t1;
-	TEST_EQUAL(t1 <= t2, true);
 	delete &t1;
 	delete &t2;
 RESULT
@@ -291,8 +288,6 @@ CHECK(bool operator >= (const Timer& timer) const)
 	Timer& t2 = *new Timer;
 	TEST_EQUAL(t1 >= t2, true);
 	TEST_EQUAL(t2 > t1, false);
-	t2 = t1;
-	TEST_EQUAL(t1 >= t2, true);
 	delete &t1;
 	delete &t2;
 RESULT
@@ -305,8 +300,6 @@ CHECK(bool operator > (const Timer& timer) const)
 	Timer t2;
 	TEST_EQUAL(t1 > t2, true);
 	TEST_EQUAL(t2 > t1, false);
-	t2 = t1;
-	TEST_EQUAL(t1 > t2, false);
 RESULT
 
 CHECK(bool isValid() const)

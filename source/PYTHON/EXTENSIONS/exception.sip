@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.sip,v 1.6 2004/12/27 17:24:57 amoll Exp $
+// $Id: exception.sip,v 1.7 2005/12/23 17:02:51 amoll Exp $
 //
 
 class GeneralException 
@@ -132,7 +132,7 @@ class InvalidRange
 	using namespace BALL::Exception;
 %End
 	public:
-	InvalidRange(const char* /file/, int /line/);
+	InvalidRange(const char* /file/, int /line/, float);
  	SIP_PYOBJECT __repr__();
 %MethodCode
   if (sipCpp == 0)
@@ -480,8 +480,20 @@ class ParseError
 %End
 };
 
+class TooManyBonds
+ : GeneralException
+{
+%TypeHeaderCode
+  #include <BALL/COMMON/exception.h>
+  using namespace BALL;
+  using namespace BALL::Exception;
+%End
+  public:
+  TooManyBonds(const char* /file/, int /line/, const String /error/) throw();
+};
 
 
+/// creates a crash under windows:
 class GlobalExceptionHandler
 {
 %TypeHeaderCode
@@ -501,3 +513,4 @@ class GlobalExceptionHandler
 };	
 
 GlobalExceptionHandler globalHandler;
+

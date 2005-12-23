@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.h,v 1.30 2004/05/27 19:49:46 oliver Exp $ 
+// $Id: poissonBoltzmann.h,v 1.31 2005/12/23 17:02:00 amoll Exp $ 
 //
 
 // Finite Difference Poisson Boltzmann Solver
@@ -33,7 +33,7 @@ namespace BALL
 	/** Finite Difference Poisson Boltzmann Solver.
 	\ingroup Solvation		
 	*/			
-	class FDPB 
+	class BALL_EXPORT FDPB 
 	{
 
 		public:
@@ -213,7 +213,7 @@ namespace BALL
 				for each recognized key in FDPB::options. \par
 				For each symbol the required type is given under parameters.
 		*/
-		struct Option 
+		struct BALL_EXPORT Option 
 		{
 			/**	The verbosity level.
 					Use integer values with this option.
@@ -408,7 +408,7 @@ namespace BALL
 		/** This struct contains symbols for the available 
 				boundary conditions.
 		*/
-		struct Boundary 
+		struct BALL_EXPORT Boundary 
 		{
 			/**	Boundary condition zero: boundary points have zero potential.
 					A Potential of zero is assigned to all points on the
@@ -450,7 +450,7 @@ namespace BALL
 		
 		/**	Constants to define  the charge distribution methods.
 		*/
-		struct ChargeDistribution 
+		struct BALL_EXPORT ChargeDistribution 
 		{
 			/**	Charge distribution method Trilinear: charge is distributed 
 					over the eight nearest gridpoints.
@@ -469,7 +469,7 @@ namespace BALL
 				constant on the grid. We recommend the use of harmonic smoothing
 				(which happens to be the default Default::dielectric_smoothing).
 		*/
-		struct DielectricSmoothing 
+		struct BALL_EXPORT DielectricSmoothing 
 		{
 			/**	Do not perform any smoothing
 			*/
@@ -498,7 +498,7 @@ namespace BALL
 				These values are used by 
 				FDPB::setup methods if no options have been set.
 		*/
-		struct Default 
+		struct BALL_EXPORT Default 
 		{
 			/** Default verbosity level.
 					0 - shut up!
@@ -624,7 +624,7 @@ namespace BALL
 					calculate the potential at the atom's position
 					(to calculate the total energy).
 		*/
-		struct FastAtomStruct 
+		struct BALL_EXPORT FastAtomStruct 
 		{
 			float q;
 			float r;

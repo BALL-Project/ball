@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.33 2005/07/16 21:00:34 oliver Exp $
+// $Id: representation.h,v 1.34 2005/12/23 17:02:16 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -56,7 +56,7 @@ namespace BALL
 				It stores the drawing precision and mode.
 				\ingroup ViewKernelGeometricPrimitives
 		*/
-		class BALL_EXPORT Representation
+		class BALL_VIEW_EXPORT Representation
 			: public PropertyManager
 		{
 			friend class UpdateRepresentationThread;
@@ -289,6 +289,15 @@ namespace BALL
 			/// Get a String containing all settings for Usage in project files.
 			String toString() const
 				throw();
+
+			/// Needed for MSVC
+			bool operator == (const Representation& object) const
+				throw() { return this == &object;}
+
+		
+			/// Needed for MSVC
+			bool operator < (const Representation& object) const
+				throw() { return this < &object;}
 
 			//@}
 

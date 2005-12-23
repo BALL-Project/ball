@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.8 2005/07/16 21:00:35 oliver Exp $
+// $Id: mesh.h,v 1.9 2005/12/23 17:02:19 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
@@ -30,7 +30,7 @@ namespace BALL
 				same fashion as Surface. \par
 				\ingroup ViewPrimitives
 		*/
-		class BALL_EXPORT Mesh
+		class BALL_VIEW_EXPORT Mesh
 			: public GeometricObject,
 			  public Surface
 		{
@@ -113,6 +113,9 @@ namespace BALL
 			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
 				throw();
 
+			///
+			vector<ColorRGBA>& getColors() { return colors;}
+
 			//@}
 			/** @name Attributes
 			 */
@@ -122,7 +125,7 @@ namespace BALL
 					there are vertices in this mesh, we take the first element to color the whole
 					mesh. If it is *empty*, we use the color white.
 			 */
-			vector<ColorRGBA> colorList;
+			vector<ColorRGBA> colors;
 			//@}
 
 		};

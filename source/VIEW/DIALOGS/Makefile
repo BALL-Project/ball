@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.48 2005/10/23 12:02:30 oliver Exp $
+# $Id: Makefile,v 1.49 2005/12/23 17:03:22 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -50,6 +50,8 @@ CPP_SOURCES=\
 	molecularDynamicsDialog.C\
 	molecularDynamicsDialogData.C\
 	molecularFileDialog.C\
+	openBruker1DFile.C\
+	openBruker2DFile.C\
 	networkPreferences.C\
 	networkPreferencesData.C\
 	parsedFunctionDialog.C\
@@ -62,15 +64,11 @@ CPP_SOURCES=\
 	setCameraData.C\
 	pythonSettings.C\
 	pythonSettingsData.C\
-	pythonHotkeys.C\
-	pythonHotkeysData.C\
 	serverPreferences.C\
 	snapShotVisualisation.C\
 	snapShotVisualisationData.C\
 	stageSettings.C\
-	stageSettingsData.C\
-#	runGAMESSDialog.C\
-#	runGAMESSDialogData.C
+	stageSettingsData.C
 
 MOC_SOURCES=\
 	amberConfigurationDialog_moc.C\
@@ -112,6 +110,8 @@ MOC_SOURCES=\
 	molecularDynamicsDialogData_moc.C\
 	networkPreferences_moc.C\
 	networkPreferencesData_moc.C\
+	openBruker1DFile_moc.C\
+	openBruker2DFile_moc.C\
 	parsedFunctionDialog_moc.C\
 	parsedFunctionDialogData_moc.C\
 	peptideDialog_moc.C\
@@ -120,17 +120,13 @@ MOC_SOURCES=\
 	preferencesData_moc.C\
 	pythonSettings_moc.C\
 	pythonSettingsData_moc.C\
-	pythonHotkeys_moc.C\
-	pythonHotkeysData_moc.C\
 	serverPreferences_moc.C\
 	setCamera_moc.C\
 	setCameraData_moc.C\
 	snapShotVisualisation_moc.C\
 	snapShotVisualisationData_moc.C\
 	stageSettings_moc.C\
-	stageSettingsData_moc.C\
-	runGAMESSDialog_moc.C\
-	runGAMESSDialogData_moc.C
+	stageSettingsData_moc.C
 
 UIC_SOURCES=\
 	amberConfigurationDialogData.C\
@@ -156,11 +152,9 @@ UIC_SOURCES=\
 	peptideDialogData.C\
 	preferencesData.C\
 	pythonSettingsData.C\
-	pythonHotkeysData.C\
 	setCameraData.C\
 	snapShotVisualisationData.C\
-	stageSettingsData.C\
-	runGAMESSDialogData.C
+	stageSettingsData.C
 
 UIC_HDR=$(UIC_SOURCES:Data.C=.dh)
 
@@ -177,6 +171,9 @@ serverPreferences_moc.C: $(HEADER_DIR)/serverPreferences.h
 
 openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
 	$(MOC) $(HEADER_DIR)/openBruker1DFile.h -o $@
+
+openBruker2DFile_moc.C: $(HEADER_DIR)/openBruker2DFile.h
+	$(MOC) $(HEADER_DIR)/openBruker2DFile.h -o $@
 
 colorChooser_moc.C: $(HEADER_DIR)/colorChooser.h
 	$(MOC) $(HEADER_DIR)/colorChooser.h -o $@

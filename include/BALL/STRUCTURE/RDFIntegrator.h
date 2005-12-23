@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RDFIntegrator.h,v 1.19 2004/05/27 19:49:46 oliver Exp $
+// $Id: RDFIntegrator.h,v 1.20 2005/12/23 17:02:01 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_RDFINTEGRATOR_H
@@ -18,7 +18,7 @@ namespace BALL
 			computation of interaction energies.	 \par
 	\ingroup RDF
   */
-	class RDFIntegrator
+	class BALL_EXPORT RDFIntegrator
 	{
 		public:
 

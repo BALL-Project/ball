@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reissCavFreeEnergyProcessor.h,v 1.17 2003/08/26 08:04:49 oliver Exp $
+// $Id: reissCavFreeEnergyProcessor.h,v 1.18 2005/12/23 17:02:00 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H
@@ -30,7 +30,7 @@ namespace BALL
 			Energies are returned in units of kJ/mol.	 \par
 \ingroup Solvation			
 	 */
-	class ReissCavFreeEnergyProcessor
+	class BALL_EXPORT ReissCavFreeEnergyProcessor
 		:	public EnergyProcessor
 	{
 		

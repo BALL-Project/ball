@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.56 2005/10/23 12:02:28 oliver Exp $
+// $Id: atom.C,v 1.57 2005/12/23 17:02:41 amoll Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -330,17 +330,17 @@ namespace BALL
 		return Composite::getAncestor(RTTI::getDefault<Fragment>());
 	}
 					                                                                                                                              
-	const Residue* Atom::getResidue() const throw()
+	Residue* Atom::getResidue() throw()
 	{
 		return Composite::getAncestor(RTTI::getDefault<Residue>());
 	}
  
-	const Chain* Atom::getChain() const throw()
+	Chain* Atom::getChain() throw()
 	{
 		return Composite::getAncestor(RTTI::getDefault<Chain>());
 	}
  
-	const SecondaryStructure* Atom::getSecondaryStructure() const throw()
+	SecondaryStructure* Atom::getSecondaryStructure() throw()
 	{
 		return Composite::getAncestor(RTTI::getDefault<SecondaryStructure>());
 	}

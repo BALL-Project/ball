@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadraticAngleBend.h,v 1.18 2003/08/26 08:04:28 oliver Exp $
+// $Id: quadraticAngleBend.h,v 1.19 2005/12/23 17:01:54 amoll Exp $
 //
  
 #ifndef BALL_MOLMEC_PARAMETER_QUADRATICANGLEBEND_H
@@ -27,7 +27,7 @@ namespace BALL
 			
     	\ingroup  MolmecParameters
 	*/
-	class QuadraticAngleBend 
+	class BALL_EXPORT QuadraticAngleBend 
 		:	public ParameterSection
 	{
 		public:
@@ -37,13 +37,13 @@ namespace BALL
 			UNKNOWN
 		};
 
-		struct Values 
+		struct BALL_EXPORT Values 
 		{
 			float theta0;
 			float k;
 		};
 
-		struct Data
+		struct BALL_EXPORT Data
 		{
 			Atom::StaticAtomAttributes*	atom1;
 			Atom::StaticAtomAttributes*	atom2;

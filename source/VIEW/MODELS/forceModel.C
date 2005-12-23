@@ -1,13 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceModel.C,v 1.10 2005/02/23 13:01:49 amoll Exp $
+// $Id: forceModel.C,v 1.11 2005/12/23 17:03:34 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/forceModel.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
-#include <cmath>
 
 using namespace std;
 

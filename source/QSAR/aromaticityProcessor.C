@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: aromaticityProcessor.C,v 1.12 2005/07/16 21:00:43 oliver Exp $
+// $Id: aromaticityProcessor.C,v 1.13 2005/12/23 17:03:03 amoll Exp $
 //
 
 #include <BALL/QSAR/aromaticityProcessor.h>
@@ -986,12 +986,12 @@ namespace BALL
 			{
 				switch ((int)(*i)->getCharge())
 				{
-					case 	1: num_pi += -1; break;
-					case 	2: num_pi += -2; break;
-					case 	3: num_pi += -3; break;
-					case -1: num_pi += 1;  break;
-					case -2: num_pi += 2;  break;
-					case -3: num_pi += 3;  break;
+					case 	1: num_pi -= 1; break;
+					case 	2: num_pi -= 2; break;
+					case 	3: num_pi -= 3; break;
+					case   -1: num_pi += 1;  break;
+					case   -2: num_pi += 2;  break;
+					case   -3: num_pi += 3;  break;
 				}
 			}
 

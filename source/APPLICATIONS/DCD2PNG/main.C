@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.17 2004/12/13 13:41:30 amoll Exp $
+// $Id: main.C,v 1.18 2005/12/23 17:02:30 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -13,6 +13,7 @@
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
+#include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 
 #include <iostream>
@@ -180,10 +181,10 @@ int main(int argc, char **argv)
 	if (inifile.hasEntry("DCD2PNG", "WORKINGDIR"))
 	{
 		String argument = inifile.getValue("DCD2PNG", "WORKINGDIR");
-		Directory d(dir.getPath() + BALL::FileSystem::PATH_SEPARATOR + argument);
+		Directory d(argument);
 		if (d.isValid())
 		{
-			working_dir = dir.getPath() + BALL::FileSystem::PATH_SEPARATOR + argument;
+			working_dir = argument;
 		}
 		else
 		{
@@ -220,7 +221,8 @@ int main(int argc, char **argv)
 
 	if (inifile.hasEntry("DCD2PNG", "POVRAY_OPTIONS"))
 	{
-		povray_options = inifile.getValue("DCD2PNG", "POVRAY_OPTIONS") + " +I- ";
+//   		povray_options = inifile.getValue("DCD2PNG", "POVRAY_OPTIONS") + " +I- ";
+		povray_options = inifile.getValue("DCD2PNG", "POVRAY_OPTIONS") + " +Iasd.pov ";
 	}
 
 	if (inifile.hasEntry("DCD2PNG", "POVRAY"))
@@ -228,8 +230,14 @@ int main(int argc, char **argv)
 		povray_exec = inifile.getValue("DCD2PNG", "POVRAY");
 	}
 
-	Scene::getInstance(0)->resize(width, height);
+	if (!File::isAccessible(povray_exec))
+	{
+		std::cout << "Could not find POVRay at the given location: " << povray_exec << std::endl;
+		std::cout << "Please modify the settings in DCD2PNG.ini" << std::endl;
+		return -1;
+	}
 
+	Scene::getInstance(0)->resize(width, height);
 	povray_options +=	"+W" + String(width) + " +H" + String(height) + " +O" + working_dir + FileSystem::PATH_SEPARATOR;
 	POVRenderer pov;
 	pov.setHumanReadable(false);
@@ -250,12 +258,14 @@ int main(int argc, char **argv)
 	}
 	String pov_exec2 = strings[s - 1];
 
-	while(sm.applyNextSnapShot())
+	error = false;
+	while(sm.applyNextSnapShot() && ! error)
 	{
 		String pov_arg = povray_options + String(nr) + ".png" ;
 
 		std::stringstream pov_renderer_output;
-		pov.setOstream(pov_renderer_output);
+//   		pov.setOstream(pov_renderer_output);
+ 		pov.setFileName("asd.pov");
  		Scene::getInstance(0)->exportScene(pov);
 
 		int writepipe[2];
@@ -301,7 +311,12 @@ int main(int argc, char **argv)
 			close (writepipe[1]); 
 
 			int status;
-			waitpid( -1, &status, 0 );
+			int result = waitpid( -1, &status, 0 );
+
+			if (result <= 1) 
+			{
+				std::cerr << "No child process!" << std::endl;
+			}
 		}
 		else
 		{
@@ -322,11 +337,19 @@ int main(int argc, char **argv)
  				close(writepipe[0]);
 			}
 
- 	   	execl (povray_exec.c_str(), pov_exec2.c_str(), pov_arg.c_str(), 0);
-
+			std::cerr << "Calling " << povray_exec << " " << pov_arg << std::endl;
+ 	   	int result = execl (povray_exec.c_str(), pov_exec2.c_str(), pov_arg.c_str(), 0);
+			if (result == -1)
+			{
+				std::cout << "Could not exec POVRay! " << std::endl;
+				error = true;
+			}
+			
 			/*
+			// for debugging:
  			std::cout << std::endl ;
   		execl ("/bin/cat", "cat", 0);
+			error = true;
 			*/
 		}
 

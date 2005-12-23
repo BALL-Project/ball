@@ -1,5 +1,5 @@
 # 
-# $Id: Makefile,v 1.8 2005/07/16 21:00:39 oliver Exp $
+# $Id: Makefile,v 1.9 2005/12/23 17:02:27 amoll Exp $
 #
 #
 # APPLICATIONS/Makefile
@@ -28,7 +28,7 @@ DIRS=$(VIEW_DIRS)\
 default:	dirs
 
 dirs:	dummy
-	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET="default"
+	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET="all"
 
 depend:	dummy
 	@for i in $(DIRS) ; do ( cd $$i ; echo "" >.Dependencies ) ; done

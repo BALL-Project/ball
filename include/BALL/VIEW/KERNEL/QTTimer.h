@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: QTTimer.h,v 1.24 2004/05/27 19:49:49 oliver Exp $
+// $Id: QTTimer.h,v 1.25 2005/12/23 17:02:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H
@@ -33,7 +33,7 @@ namespace BALL
 				Therefore it will only function within a QT application.
 				\ingroup ViewKernelClient				 		
 		*/
-		class BALL_EXPORT QTTimer: public QObject
+		class BALL_VIEW_EXPORT QTTimer: public QObject
 		{
 			public:
 

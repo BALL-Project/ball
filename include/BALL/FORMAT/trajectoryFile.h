@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.h,v 1.20 2003/08/26 08:04:15 oliver Exp $
+// $Id: trajectoryFile.h,v 1.21 2005/12/23 17:01:46 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
@@ -27,7 +27,7 @@ namespace BALL
 			
     	\ingroup  MDFormats
 	*/
-	class TrajectoryFile
+	class BALL_EXPORT TrajectoryFile
 		:	public File
 	{
 

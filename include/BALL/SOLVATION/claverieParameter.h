@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: claverieParameter.h,v 1.14 2003/08/26 08:04:48 oliver Exp $
+// $Id: claverieParameter.h,v 1.15 2005/12/23 17:01:59 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_CLAVERIEPARAMETER_H
@@ -28,7 +28,7 @@ namespace BALL
 			<b>Note:</b> Dispersion and repulsion terms are <b>not</b> distinguished.  \par
 		\ingroup Solvation	
 	 */
-	class ClaverieParameter
+	class BALL_EXPORT ClaverieParameter
 		:	public ParameterSection
 	{
 

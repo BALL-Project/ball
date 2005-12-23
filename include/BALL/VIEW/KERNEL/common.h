@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.38 2005/07/16 21:00:33 oliver Exp $
+// $Id: common.h,v 1.39 2005/12/23 17:02:14 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -46,15 +46,6 @@ namespace BALL
 				\see  Server
 		*/
 		#define VIEW_DEFAULT_PORT 20000
-
-		/// Number of drawing modes
-		#define BALL_VIEW_MAXIMAL_DRAWING_MODE 3
-
-		/// Number of drawing precisions
-		#define BALL_VIEW_MAXIMAL_DRAWING_PRECISION 4
-
-		/// MAXIMAL_DRAWING_PRECISION * MAXIMAL_DRAWING_MODE
-		#define BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE  12  
 
 		//@}
 		/** @name General enumerations, methods and typedefs
@@ -113,7 +104,7 @@ namespace BALL
 		};
 
 		/// global variable, which defines, if DockWidgets are shown with a Label
-		BALL_EXPORT extern bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS;
+		BALL_VIEW_EXPORT extern bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS;
 
 		//@}
 		/** @name Enumerations for Representations and Renderer
@@ -135,10 +126,15 @@ namespace BALL
 			DRAWING_MODE_SOLID
 		};
 
+		/// Number of drawing modes
+		#define BALL_VIEW_MAXIMAL_DRAWING_MODE 3
 
 		/// Enumeration for Drawing Precisions.
 		enum DrawingPrecision
 		{
+			///
+			DRAWING_PRECISION_INVALID = -1,
+
 			///
 			DRAWING_PRECISION_LOW = 0,
 
@@ -148,10 +144,18 @@ namespace BALL
 			///
 			DRAWING_PRECISION_HIGH,
 
-			/// UNUSED AT THE MOMENT !
+			/// 
 			DRAWING_PRECISION_ULTRA
 		};
+		
+		/// Number of drawing precisions
+		#define BALL_VIEW_MAXIMAL_DRAWING_PRECISION 4
 
+		/// MAXIMAL_DRAWING_PRECISION * MAXIMAL_DRAWING_MODE
+		#define BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE  BALL_VIEW_MAXIMAL_DRAWING_PRECISION * BALL_VIEW_MAXIMAL_DRAWING_MODE
+
+		/// Mapping from the enum to the float values of Surfaces
+		BALL_VIEW_EXPORT extern float SurfaceDrawingPrecisions[4];
 
 		/** This properties define the available models.
 				Add new model entries directly before MODEL_LABEL if you want them to show up 
@@ -247,6 +251,9 @@ namespace BALL
 
 			///
 			COLORING_CHAIN,
+			
+			///
+			COLORING_MOLECULE,
 
 			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 			// add new coloring types before this comment!!!!
@@ -263,7 +270,7 @@ namespace BALL
 		 		the GeometricObjects, which have this Composite set, will be colored
 				by the default color.
 		*/
-		BALL_EXPORT extern Composite composite_to_be_ignored_for_colorprocessors_;
+		BALL_VIEW_EXPORT extern Composite composite_to_be_ignored_for_colorprocessors_;
 
 
 		/// Enumeration of GeometricObject Types
@@ -293,52 +300,52 @@ namespace BALL
 
 		/** Get a name for a ModelType
 		*/
-		BALL_EXPORT String getModelName(ModelType type) 
+		BALL_VIEW_EXPORT String getModelName(ModelType type) 
 			throw();
 
 		/** Get a name for a ColoringMethod
 		*/
-		BALL_EXPORT String getColoringName(ColoringMethod type) 
+		BALL_VIEW_EXPORT String getColoringName(ColoringMethod type) 
 			throw();
 
 		/** Define, which Models are Surfaces.
 				Add new kinds of Surfaces to this function!
 		*/
-		BALL_EXPORT bool isSurfaceModel(ModelType type)
+		BALL_VIEW_EXPORT bool isSurfaceModel(ModelType type)
 			throw();
 
 		/** Model can be modified with DisplayProperitesDialog
 		*/
-		BALL_EXPORT bool modelMuteableByDisplayProperties(ModelType type)
+		BALL_VIEW_EXPORT bool modelMuteableByDisplayProperties(ModelType type)
 			throw();
 
 		/** Model must be rebuild, if Composite changes
+		 		but hierarchy is unchanged.
 		*/
-		BALL_EXPORT bool modelMustBeRebuild(ModelType type)
+		BALL_VIEW_EXPORT bool modelMustBeRebuild(ModelType type)
 			throw();
-
 
 		/////////////////////////////////////////////////////////
 
 		///
-		BALL_EXPORT String getTypeName(GeometricObjectType type);
+		BALL_VIEW_EXPORT String getTypeName(GeometricObjectType type);
 
 		///
-		BALL_EXPORT GeometricObjectType getGeometricObjectType(const GeometricObject& object);
+		BALL_VIEW_EXPORT GeometricObjectType getGeometricObjectType(const GeometricObject& object);
 
 		
 		/////////////////////////////////////////////////////////
 
 		///
-		BALL_EXPORT String vector3ToString(const Vector3& v)
+		BALL_VIEW_EXPORT String vector3ToString(const Vector3& v)
 			throw();
 
 		///
-		BALL_EXPORT bool stringToVector3(const String& data, Vector3& v)
+		BALL_VIEW_EXPORT bool stringToVector3(const String& data, Vector3& v)
 			throw();
 
 		/// create a string from a float and cut after a given number of digits after the dot
-		BALL_EXPORT String createFloatString(float value, Size precision)
+		BALL_VIEW_EXPORT String createFloatString(float value, Size precision)
 			throw();
 
 		/** Get MainControl
@@ -348,19 +355,19 @@ namespace BALL
 				MainControl* mc = dynamic_cast<MainControl*>(qApp->mainWidget());\\
 				On all other platforms, it uses MainControl::getInstance(0);
 		*/
-		BALL_EXPORT MainControl* getMainControl()
+		BALL_VIEW_EXPORT MainControl* getMainControl()
 			throw();
 
 		/// Create a temporary filename in the users home dir
-		BALL_EXPORT String createTemporaryFilename()
+		BALL_VIEW_EXPORT String createTemporaryFilename()
 			throw();
 
 		///
-		BALL_EXPORT Vector3 getNormal(const Vector3& v)
+		BALL_VIEW_EXPORT Vector3 getNormal(const Vector3& v)
 			throw();
 
 		/// Event class used for thread safe output to logview
-		class BALL_EXPORT LogEvent
+		class BALL_VIEW_EXPORT LogEvent
 			: public QCustomEvent
 		{
 			public:
@@ -393,7 +400,7 @@ namespace BALL
 		};
 
 		/// thread safe output to logview
-		BALL_EXPORT void logString(const String& data);
+		BALL_VIEW_EXPORT void logString(const String& data);
 
 		/// BALLView Debug macro
 		#define BALLVIEW_DEBUG logString(String("A problem occured in ") + __FILE__ + " " + \
@@ -404,14 +411,20 @@ namespace BALL
 		 		The colordialog is initialised with the background color of the label.
 				If the colordialog returns a new color, this becomes the new backbground color of the label.
 		*/
-		BALL_EXPORT QColor chooseColor(QLabel* label);
+		BALL_VIEW_EXPORT QColor chooseColor(QLabel* label);
 
-		BALL_EXPORT void processDropEvent(QDropEvent* e);
+		BALL_VIEW_EXPORT void processDropEvent(QDropEvent* e);
 
 		/** focus the camera on a list of points, e.g. atoms or geometric objects.
 				Sends a SceneMessage.
 		*/
-		BALL_EXPORT void focusCamera(const List<Vector3>& points);
+		BALL_VIEW_EXPORT void focusCamera(const List<Vector3>& points);
+
+		/** Get the first defined data path, this should be the content of the environment variable BALLVIEW_DATA_PATH.
+		 		We also sort out double slashes and make sure a slash is at the end.
+		*/
+		BALL_VIEW_EXPORT String getDataPath();
+		
 
 		//@}
 

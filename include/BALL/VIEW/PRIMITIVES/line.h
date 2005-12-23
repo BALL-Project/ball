@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line.h,v 1.8 2005/07/16 21:00:35 oliver Exp $
+// $Id: line.h,v 1.9 2005/12/23 17:02:19 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIVES_LINE_H
@@ -32,7 +32,7 @@ namespace BALL
 				interface and additional methods. \par
 				\ingroup ViewPrimitives
 		*/
-		class BALL_EXPORT Line
+		class BALL_VIEW_EXPORT Line
 			: public GeometricObject,
 				public Vertex2
 		{

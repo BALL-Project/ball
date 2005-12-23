@@ -21,7 +21,7 @@ namespace BALL
 				implementation in LogView.
 				\ingroup ViewWidgets
 		*/
-		class BALL_EXPORT DockWidget
+		class BALL_VIEW_EXPORT DockWidget
 			: public QDockWindow,
 				public ModularWidget
 		{
@@ -75,6 +75,9 @@ namespace BALL
 
 			///
 			virtual void setVisible(bool state);
+			
+			///
+			virtual void registerWidgetForHelpSystem(const QWidget* widget, const String& url);
 
 			//@}
 			/** @name Public slots 

@@ -1,16 +1,14 @@
-Package: BALLVIEW
-Version: 1.1.0_pre3
+Package: ballview
+Version: 1.1.1
 Section: x11
-Priority: Extra
+Priority: extra
 Architecture: i386
-Essential: no
-Depends: libqt3c102-mt (>= 3.2.3), python2.3
+Depends: libqt3-mt, python2.3
 Installed-Size: 16024
 Maintainer: Andreas Moll <amoll@bioinf.uni-sb.de>
 Provides: 
-Description: BALLView 1.1
- BALLView is a free molecular modeling and molecular graphics tool.
- It provides fast OpenGL-based visualization of molecular structures, 
+Description: A free molecular modeling and molecular graphics tool
+ BALLView provides fast OpenGL-based visualization of molecular structures, 
  molecular mechanics methods (minimization, MD simulation using the 
  AMBER and CHARMM force fields), calculation and visualization 
  of electrostatic properties (FDPB).
@@ -25,8 +23,6 @@ Description: BALLView 1.1
  for Molecular Mechanics, advanced solvation methods, comparison and 
  analysis of protein structures, file import/export, and visualization.
  .
- BALL is available free of charge for research and educational purposes. 
- Commercial licenses are available through our partner Algorithmic 
- Solutions.
+ BALLView is available under the GPL licence.
  .
  Homepage: www.BALLView.org

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.31 2005/07/16 21:00:47 oliver Exp $
+// $Id: molecularFileDialog.C,v 1.32 2005/12/23 17:03:28 amoll Exp $$
 //
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -12,7 +12,6 @@
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/MOLFile.h>
-#include <BALL/FORMAT/SDFile.h>
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/MATHS/simpleBox3.h>
@@ -66,7 +65,7 @@ namespace BALL
 													getWorkingDir().c_str(),
 													getMainControl(),
 													"Molecular File Dialog",
-													"Choose a file to open" );
+													"Choose a molecular file to open" );
 
  		  for (QStringList::Iterator it = files.begin(); it != files.end(); ++it) 
 			{
@@ -166,7 +165,7 @@ namespace BALL
 										"*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf",
 										getMainControl(),
 										"Molecular File Dialog",
-										"Choose a filename to save under" );
+										"Choose a filename to save the selected system" );
 
 		 	if (s == QString::null) return false;
 			String filename = s.ascii();
@@ -437,39 +436,6 @@ namespace BALL
 		}
 
 
-		System* MolecularFileDialog::readSDFile(String filename, String system_name)
-			throw()
-		{
-			setStatusbarText("reading SD file...", true);
-
-			System* system = new System();
-
-			Size counter = 0;
-			try
-			{
-				SDFile mol_file(filename);
-				Molecule * mol = mol_file.read();
-				while (mol != 0)
-				{
-					system->insert(*mol);
-					counter++;
-					mol = mol_file.read();
-				}
-				mol_file.close();
-			}
-			catch(...)
-			{
-				setStatusbarText("Reading of SD file failed!", true);
-				delete system;
-				return 0;
-			}
-			setStatusbarText("Read " + String(counter) + " molecules from " + filename + ".");
-
- 			if (!finish_(filename, system_name, system)) return 0;
-			return system;
-		}
-
-
 		System* MolecularFileDialog::readMOL2File(String filename, String system_name)
 			throw()
 		{
@@ -494,6 +460,31 @@ namespace BALL
 			return system;
 		}
 		
+
+		System* MolecularFileDialog::readSDFile(String filename, String system_name)
+			throw()
+		{
+			setStatusbarText("reading SD file...", true);
+
+			System* system = new System();
+
+			try
+			{
+				SDFile sd_file(filename);
+				sd_file >> *system;
+				sd_file.close();
+			}
+			catch(Exception::GeneralException e)
+			{
+				setStatusbarText("Reading of SD file failed, see logs!", true);
+				delete system;
+				return 0;
+			}
+
+ 			if (!finish_(filename, system_name, system)) return 0;
+			return system;
+		}
+
 
 		bool MolecularFileDialog::finish_(const String& filename, const String& system_name, System* system)
 			throw()

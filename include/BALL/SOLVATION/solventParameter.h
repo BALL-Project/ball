@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventParameter.h,v 1.16 2003/08/26 08:04:49 oliver Exp $
+// $Id: solventParameter.h,v 1.17 2005/12/23 17:02:00 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_SOLVENTPARAMETER_H
@@ -30,7 +30,7 @@ namespace BALL
 			class ( \link SolventDescriptor SolventDescriptor \endlink ).   \par
 	\ingroup Solvation		
 	 */
-	class SolventParameter
+	class BALL_EXPORT SolventParameter
 		:	public ParameterSection
 	{
 

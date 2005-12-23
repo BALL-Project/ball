@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: QTTimer.C,v 1.17 2003/08/29 15:37:56 amoll Exp $
+// $Id: QTTimer.C,v 1.18 2005/12/23 17:03:30 amoll Exp $
 
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>

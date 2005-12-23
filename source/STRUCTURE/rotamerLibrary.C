@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.C,v 1.29 2004/06/25 13:07:07 anker Exp $
+// $Id: rotamerLibrary.C,v 1.30 2005/12/23 17:03:05 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
@@ -57,7 +57,7 @@ namespace BALL
 		:	variants_(),
 			valid_(false)
 	{
-		readSQWRLLibraryFile(filename, fragment_db);
+		valid_ = readSQWRLLibraryFile(filename, fragment_db);
 	}
 
 	RotamerLibrary::RotamerLibrary(const RotamerLibrary& library)
@@ -66,10 +66,29 @@ namespace BALL
 	{
 	}
 
-	RotamerLibrary::~RotamerLibrary()
+	RotamerLibrary& RotamerLibrary::operator = (const RotamerLibrary& rhs)
 	{
+		// Avoid self assignment...
+		if (&rhs != this)
+		{ // ...and copy all attributes.
+			variants_ = rhs.variants_;
+			valid_ = rhs.valid_;
+		}
+
+		return *this;
 	}
 
+	RotamerLibrary::~RotamerLibrary()
+	{
+		valid_ = false;
+		variants_.clear();
+	}
+
+	bool RotamerLibrary::isValid() const
+	{
+		return valid_;
+	}
+	
 	ResidueRotamerSet* RotamerLibrary::getRotamerSet(const String& name)
 	{
 		vector<ResidueRotamerSet>::iterator it = variants_.begin();

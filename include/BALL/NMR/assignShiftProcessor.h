@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assignShiftProcessor.h,v 1.23 2004/05/27 19:49:43 oliver Exp $
+// $Id: assignShiftProcessor.h,v 1.24 2005/12/23 17:01:55 amoll Exp $
 //
 
 #ifndef BALL_NMR_ASSIGNSHIFTPROCESSOR_H
@@ -29,7 +29,7 @@ namespace BALL
 	 		You have to set the FragmentDB after you create an instance of this processor.
 		\ingroup Spectra		
 	*/
-	class AssignShiftProcessor
+	class BALL_EXPORT AssignShiftProcessor
 		: public UnaryProcessor<Composite>
 	{
 		public:

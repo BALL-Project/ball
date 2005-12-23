@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.25 2005/08/12 15:26:50 amoll Exp $
+// $Id: TCPTransfer.h,v 1.26 2005/12/23 17:02:06 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
@@ -80,7 +80,7 @@ namespace BALL
 			 		This exception is thrown if a transfer fails.
 			\ingroup System
 			*/
-			class TransferFailed 
+			class BALL_EXPORT TransferFailed 
 				: public Exception::GeneralException
 			{
 				 public:

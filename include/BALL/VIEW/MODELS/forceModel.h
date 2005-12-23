@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceModel.h,v 1.4 2005/07/16 21:00:34 oliver Exp $
+// $Id: forceModel.h,v 1.5 2005/12/23 17:02:18 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_FORCEMODEL_H
@@ -22,7 +22,7 @@ namespace BALL
 				For information about the processor concept see Processor.
 				\ingroup  ViewModels
 		*/
-		class BALL_EXPORT ForceModel: public ModelProcessor
+		class BALL_VIEW_EXPORT ForceModel: public ModelProcessor
 		{
 			public:
 

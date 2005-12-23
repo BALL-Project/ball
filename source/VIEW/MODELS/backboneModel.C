@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.24 2005/07/16 21:00:49 oliver Exp $
+// $Id: backboneModel.C,v 1.25 2005/12/23 17:03:33 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -133,7 +133,7 @@ namespace BALL
 			AtomConstIterator it;
 
 			// we collect P atoms in nucleotides
-			if (name.size() == 1 && (name == "C" || name == "G" || name == "T" || name == "A"))
+			if (name.size() == 1 && (name == "C" || name == "G" || name == "T" || name == "A" || name == "U"))
 			{
 				BALL_FOREACH_ATOM(residue, it)
 				{

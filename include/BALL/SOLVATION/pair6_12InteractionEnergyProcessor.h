@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.21 2004/02/23 17:26:03 anhi Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.22 2005/12/23 17:01:59 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
@@ -45,7 +45,7 @@ namespace BALL
 \ingroup Solvation
 	 */
 	
-	class Pair6_12InteractionEnergyProcessor
+	class BALL_EXPORT Pair6_12InteractionEnergyProcessor
 		:	public EnergyProcessor
 	{
 
@@ -64,7 +64,7 @@ namespace BALL
 				This struct contains a symbolic name for each recognized key in
 				Pair6_12InteractionEnergyProcessor::options.
 		*/
-		struct Option
+		struct BALL_EXPORT Option
 		{
 			
 			/** The verbosity level.
@@ -132,7 +132,7 @@ namespace BALL
 				These values represent the default settings for the calculations of the
 				interaction energy.
 		 */
-		struct Default
+		struct BALL_EXPORT Default
 		{
 			/** Default verbosity level.
 					@see Option::VERBOSITY

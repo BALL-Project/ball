@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.75 2004/07/05 20:57:28 oliver Exp $
+// $Id: vector3.h,v 1.76 2005/12/23 17:01:49 amoll Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -474,6 +474,11 @@ namespace BALL
 		*/
 		bool operator != (const TVector3& vector) const
 			throw();
+
+		/// Needed for MSVC
+		bool operator < (const TVector3& vector) const
+			throw();
+
 
 		/**	Zero predicate.
 				The function Maths::isZero is used to compare the values with zero. 
@@ -1118,6 +1123,15 @@ namespace BALL
 	{
 		return (Maths::isEqual(x, v.x) && Maths::isEqual(y, v.y) && Maths::isEqual(z, v.z));
 	}
+
+	template <typename T>
+	BALL_INLINE 
+	bool TVector3<T>::operator < (const TVector3<T>& v) const
+		throw()
+	{
+		return (x < v.x || y < v.y || z < v.z);
+	}
+
 
 	template <typename T>
 	BALL_INLINE 

@@ -1,13 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.C,v 1.41 2005/07/16 21:00:40 oliver Exp $
+// $Id: logStream.C,v 1.42 2005/12/23 17:02:32 amoll Exp $
 //
 
 #include <limits>
 #include <string>
 #include <BALL/COMMON/logStream.h>
-#include <BALL/CONCEPT/notification.h>
 
 #define BUFFER_LENGTH 32768
 
@@ -111,7 +110,7 @@ namespace BALL
 																 << outstring.c_str() << std::endl;
 							if (list_it->target != 0)
 							{
-								list_it->target->notify();
+								list_it->target->logNotify();
 							}
 						}
 					}
@@ -254,22 +253,33 @@ namespace BALL
 	}
 
 	LogStreamNotifier::LogStreamNotifier()
+		: registered_at_(0)
 	{
-	}
-
-	LogStreamNotifier::LogStreamNotifier(const LogStream::Target& target)
-	{
-		NotificationRegister(*this, const_cast<LogStream::Target &>(target));
 	}
 
 	LogStreamNotifier::~LogStreamNotifier()
 	{
-		NotificationUnregister(*this);
+		unregister();
 	}
 
-	void LogStreamNotifier::notify() const
+	void LogStreamNotifier::logNotify()
 	{
-		Notify(const_cast<LogStreamNotifier&>(*this));
+	}
+
+	void LogStreamNotifier::unregister()
+	{
+		if (registered_at_ == 0) return;
+
+		registered_at_->remove(stream_);
+		registered_at_ = 0;
+	}
+
+	void LogStreamNotifier::registerAt(LogStream& log, int min_level, int max_level)
+	{
+		unregister();
+
+		registered_at_ = &log;
+		log.insertNotification(stream_, *this, min_level, max_level);
 	}
 
 	// keep the given buffer	
@@ -279,7 +289,7 @@ namespace BALL
 			delete_buffer_(delete_buf),
 			disable_output_(false)
 	{
-		if (associate_stdio == true) 
+		if (associate_stdio) 
 		{
 			// associate cout to informations and warnings,
 			// cerr to errors by default
@@ -288,11 +298,11 @@ namespace BALL
 		}
 	}
 
-	// remove the streambuffer
 	LogStream::~LogStream()
 	{
 		if (delete_buffer_)
 		{
+			// remove the streambuffer
 			delete rdbuf();
 		}
 	}
@@ -304,23 +314,11 @@ namespace BALL
 
 	void LogStream::insert(std::ostream& stream, int min_level, int max_level) 
 	{
-		// return if no LogStreamBuf is defined!
-		if (rdbuf() == 0)
+		if (!bound_() || hasStream_(stream))
 		{
 			return;
 		}
 			
-		// first, check whether the stream is already associated (avoid
-		// multiple insertions)																																	
-		std::list<LogStreamBuf::StreamStruct>::iterator list_it = rdbuf()->stream_list_.begin();
-		for (; list_it != rdbuf()->stream_list_.end(); ++list_it) 
-		{
-			if ((*list_it).stream == &stream) 
-			{
-				return;
-			}
-		}
-
 		// we didn`t find it - create a new entry in the list
 		LogStreamBuf::StreamStruct s_struct;
 		s_struct.min_level = min_level;
@@ -331,156 +329,86 @@ namespace BALL
 
 	void LogStream::remove(std::ostream& stream) 
 	{
-		// return if no LogStreamBuf is defined!
-		if (rdbuf() == 0)
+		if (!bound_()) return;
+
+		StreamIterator it = findStream_(stream);
+		if (it != rdbuf()->stream_list_.end())
 		{
-			return;
+			rdbuf()->stream_list_.erase(it);
 		}
-			
-		// find the stream in the LogStreamBuf's list
-		std::list<LogStreamBuf::StreamStruct>::iterator	list_it 
-			= rdbuf()->stream_list_.begin();
-		for (; list_it != rdbuf()->stream_list_.end(); ++list_it)
-		{
-			if (list_it->stream == &stream) 
-			{
-				// remove the stream - iterator becomes invalid, so exit
-				rdbuf()->stream_list_.erase(list_it);
-				break;
-			}
-		}
-		
-		// if the stream is not found nothing happens!		
 	}
 
-	void LogStream::insertNotification(const std::ostream& s, const LogStream::Target& target)
+	void LogStream::insertNotification(std::ostream& s, LogStreamNotifier& target,
+																		int min_level, int max_level)
 	{
-		// return if no LogStreamBuf is defined!
-		if (rdbuf() == 0)
-		{
-			return;
-		}
-			
-		// find the stream in the LogStreamBuf's list
-		std::list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
+		if (!bound_()) return;
+
+		insert(s, min_level, max_level);
+
+		StreamIterator it = findStream_(s);
+		(*it).target = &target;
+	}
+
+	LogStream::StreamIterator LogStream::findStream_(const std::ostream& s)
+	{
+		StreamIterator list_it = rdbuf()->stream_list_.begin();
 		for (; list_it != rdbuf()->stream_list_.end(); ++list_it)
 		{
 			if (list_it->stream == &s) 
 			{
-				// set the notification target
-				list_it->target = new LogStreamNotifier(const_cast<LogStream::Target&>(target));
-				break;
+				return list_it;
 			}
 		}
-		
-		// if the stream is not found nothing happens!		
+
+		return list_it;
 	}
 
-	
-	void LogStream::removeNotification(const std::ostream& s) 
+	bool LogStream::hasStream_(std::ostream& stream)
 	{
-		// return if no LogStreamBuf is defined!
-		if (rdbuf() == 0)
-		{
-			return;
-		}
-			
-		// find the stream in the LogStreamBuf's list
-		std::list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
-		for (; list_it != rdbuf()->stream_list_.end(); ++list_it)
-		{
-			if (list_it->stream == &s) 
-			{
-				// destroy and remove the notification target
-				delete list_it->target;
-				list_it->target = 0;
-				break;
-			}
-		}
-		
-		// if the stream is not found nothing happens!		
+		if (!bound_()) return false;
+
+		return findStream_(stream) != rdbuf()->stream_list_.end();
 	}
 
 	void LogStream::setMinLevel(const std::ostream& stream, int level) 
 	{
-		// return if no LogStreamBuf is defined!
-		if (rdbuf() == 0)
-		{
-			return;
-		}
+		if (!bound_()) return;
 			
-		// find the stream in the LogStreamBuf's list
-		std::list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
-		for (; list_it != rdbuf()->stream_list_.end(); ++list_it)
+		StreamIterator it = findStream_(stream);
+		if (it != rdbuf()->stream_list_.end())
 		{
-			if ((*list_it).stream == &stream) 
-			{
-				// change the streams min_level and exit the loop
-				(*list_it).min_level = level;
-				break;
-			}	
+			(*it).min_level = level;
 		}
 	}
 
 	void LogStream::setMaxLevel(const std::ostream& stream, int level) 
 	{
-		// return if no LogStreamBuf is defined!
-		if (rdbuf() == 0)
-		{
-			return;
-		}
+		if (!bound_()) return;
 			
-		// find the stream in the LogStreamBuf's list:
-		// iterate over the list until you find the stream`s pointer
-
-		std::list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
-		for (; list_it != rdbuf()->stream_list_.end(); ++list_it)
+		StreamIterator it = findStream_(stream);
+		if (it != rdbuf()->stream_list_.end())
 		{
-			if ((*list_it).stream == &stream) 
-			{
-				// change the streams max_level and exit the loop
-				(*list_it).max_level = level;
-				break;
-			}
+			(*it).max_level = level;
 		}
 	}
 	
 	void LogStream::setPrefix(const std::ostream& s, const string& prefix) 
 	{
-		// return if no LogStreamBuf is defined!
-		if (rdbuf() == 0)
+		if (!bound_()) return;
+
+		StreamIterator it = findStream_(s);
+		if (it != rdbuf()->stream_list_.end())
 		{
-			return;
-		}
-			
-		// find the stream in the LogStreamBuf's list:
-		// iterate over the list until you find the stream`s pointer
-		std::list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
-		for (; list_it != rdbuf()->stream_list_.end(); ++list_it)
-		{
-			if ((*list_it).stream == &s) 
-			{
-				// change the streams max_level and exit the loop
-				list_it->prefix = prefix;
-				return;
-			} 
-		}
+			(*it).prefix = prefix;
+		}		
 	}
 	
 	Size LogStream::getNumberOfLines(int min_level, int max_level) const  
 	{
-		// cast this to const, to access non const method rdbuf() which
-		// is usually const, but declared non const
-		LogStream*	non_const_this = const_cast<LogStream*>(this);
-
-		// if rdbuf() is NULL, return
-		if (non_const_this->rdbuf() == 0)
-		{
-			return 0;
-		}
+		if (!bound_()) return 0;
 
 		// iterate over all loglines and count the lines of interest
-
+		LogStream*	non_const_this = const_cast<LogStream*>(this);
 		vector<LogStreamBuf::Logline>::iterator	it = non_const_this->rdbuf()->loglines_.begin();
 		Size	count = 0;
 
@@ -502,14 +430,9 @@ namespace BALL
 			return "";
 		}
 
-		LogStream* non_const_this = const_cast<LogStream*>(this);
+		if (!bound_()) return "";
 
-		if (non_const_this->rdbuf() == 0)
-		{
-			return "";
-		}
-
-		return non_const_this->rdbuf()->loglines_[index].text;	
+		return const_cast<LogStream*>(this)->rdbuf()->loglines_[index].text;	
 	}
 
 	int LogStream::getLineLevel(const Index& index) const
@@ -519,14 +442,9 @@ namespace BALL
 			return -1;
 		}
 
-		LogStream*	non_const_this = const_cast<LogStream*>(this);
+		if (!bound_()) return -1;
 
-		if (non_const_this->rdbuf() == 0)
-		{
-			return -1;
-		}
-
-		return non_const_this->rdbuf()->loglines_[index].level;	
+		return const_cast<LogStream*>(this)->rdbuf()->loglines_[index].level;	
 	}
 
 
@@ -537,14 +455,9 @@ namespace BALL
 			return 0;
 		}
 
-		LogStream*	non_const_this = const_cast<LogStream*>(this);
+		if (!bound_()) return 0;
 
-		if (non_const_this->rdbuf() == 0)
-		{
-			return 0;
-		}
-
-		return non_const_this->rdbuf()->loglines_[index].time;	
+		return const_cast<LogStream*>(this)->rdbuf()->loglines_[index].time;	
 	}
 
 	std::list<int>	LogStream::filterLines
@@ -610,8 +523,15 @@ namespace BALL
 		std::ostream::flush();
 	}
 
+	bool LogStream::bound_() const
+	{
+		LogStream*	non_const_this = const_cast<LogStream*>(this);
+
+		return (non_const_this->rdbuf() != 0);
+	}
+
 	// global default logstream
-	LogStream	Log(new LogStreamBuf, true, true);
+	BALL_EXPORT		LogStream	Log(new LogStreamBuf, true, true);
 
 #	ifdef	BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/COMMON/logStream.iC>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.iC,v 1.12 2005/02/14 23:18:27 amoll Exp $
+// $Id: message.iC,v 1.13 2005/12/23 17:02:15 amoll Exp $
 
 BALL_INLINE
 void Message::setSender(const ConnectionObject* object)

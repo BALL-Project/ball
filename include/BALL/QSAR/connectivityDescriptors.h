@@ -18,7 +18,7 @@ namespace BALL
 	/** This descriptor returns the Zagreb Index, which is calculated
 			as: $\sum_i d_i^2$, over all heavy atoms
 	*/
-	class ZagrebIndex
+	class BALL_EXPORT ZagrebIndex
 		: public ConnectivityBase
 	{
 		public:
@@ -63,7 +63,7 @@ namespace BALL
 			\( J = \frac{q}{(q-n+2)} \cdot \sum_{\text{adjac.}i,j} (s_i,s_j)^{-\frac{1}{2}} \),
 			$s_i$ and $s_j$ denotes the row sum of the distance matrix of atom $i$ and $j$.
 	*/
-	class BalabanIndexJ
+	class BALL_EXPORT BalabanIndexJ
 		:	public ConnectivityBase
 	{
 		public:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SASEdge.h,v 1.8 2004/02/23 17:26:05 anhi Exp $
+// $Id: SASEdge.h,v 1.9 2005/12/23 17:02:01 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SASEDGE_H
@@ -32,7 +32,7 @@ namespace BALL
 	/** Generic SASEdge Class.
 	\ingroup Surface			
 	*/
-	class SASEdge	:	public GraphEdge< SASVertex,SASEdge,SASFace >
+	class BALL_EXPORT SASEdge	:	public GraphEdge< SASVertex,SASEdge,SASFace >
 	{
 		public:
 
@@ -221,7 +221,7 @@ namespace BALL
 
 	/**	Output- Operator
 	*/
-	std::ostream& operator << (std::ostream& s, const SASEdge& sasedge);
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const SASEdge& sasedge);
 
 	//@}
 

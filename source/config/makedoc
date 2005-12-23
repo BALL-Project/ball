@@ -2,6 +2,7 @@
 CONFIGFILE=doxygen.cfg
 
 if [ $# = 1 ] && [ $1 = "-website" ]; then
+	$BALL_PATH/source/config/makeBALLViewDoc
 	CONFIGFILE=doxygen_website.cfg
 fi
 
@@ -11,3 +12,6 @@ doxygen $CONFIGFILE && \
 cd doxygen/html && \
 for i in `find . -name "*html"`; do sed -i "s/BALL:://g" $i; done 
 
+echo running tidy...
+tidy -m -i -asxml -q -bare -clean *html 2>/dev/null
+echo finished running tidy...

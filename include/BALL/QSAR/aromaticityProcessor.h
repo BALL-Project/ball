@@ -17,7 +17,7 @@ namespace BALL
 			called before, to calculate a ring set. It can be called explicitely
 			with aromatize with a ringset as parameter.
 	*/
-	class AromaticityProcessor
+	class BALL_EXPORT AromaticityProcessor
 		:	public UnaryProcessor<AtomContainer>
 	{
 		public:

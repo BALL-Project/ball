@@ -1,10 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorChooser.C,v 1.3 2005/07/16 21:00:46 oliver Exp $
-//
-
-#include <BALL/VIEW/DIALOGS/colorChooser.h>
+#include "../../BALL/include/BALL/VIEW/DIALOGS/colorChooser.h"
 
 #include <qcolordialog.h>
 #include <qslider.h>

@@ -1,0 +1,60 @@
+
+.SUFFIXES: .ui .h .myui .mymoc .exe .C .sip .mysip
+
+########## paths ########################
+BALL_WIN_DIR	=	$(BALL_PATH)\Windows
+BALL_CONTRIB	=	$(BALL_WIN_DIR)\Contrib
+BINPATH		=	$(BALL_CONTRIB)\bin
+SDIR		=	$(BALL_PATH)\source
+INC_DIR		=	$(BALL_PATH)\include\
+
+MYDEL		=	"$(BALL_WIN_DIR)\mydel.bat"
+MYDEL_R		=	"$(BALL_WIN_DIR)\mydel_recursive.bat"
+######### optimization and debugging ##########
+######### compiler options 
+CC_OPT = /O2 /GA
+
+CC_DEBUG = -Od -RTC1 -GS /D "DEBUG" /Zi
+
+########## link options
+LINKDEBUG = /OPT:NOREF /DEBUG /ASSEMBLYDEBUG /MAP /MAPINFO:EXPORTS /MAPINFO:LINES
+
+# do we create debugging infos?
+!IFDEF DEBUG
+TARGETDIR	= Debug
+CC_OPT		= 
+!ELSE
+TARGETDIR	= Release
+CC_DEBUG	= 
+LINKDEBUG	= 
+!ENDIF
+
+######### compiler options #################
+
+INCLUDES = /I "$(BALL_WIN_DIR)\include" /I "$(INC_DIR)" /I "$(BALL_CONTRIB)\regex-0.12" /I "$(BALL_CONTRIB)\ONC_RPC" /I "$(PYTHONDIR)\include"
+
+DEFINES = /D WIN32 /D _WINDOWS /D _USRDLL /D YY_NEVER_INTERACTIVE /D _WINDLL /U ERROR /U IN /U OUT
+
+# general compiler flags, for files with and without optimization, for C and C++ files
+CCOPTIONS = /EHsc /MD /GR /W0 /nologo -c /Zm1200 /Fo"$(TARGETDIR)\\"
+
+# options for C++ files
+CC		= cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(CC_OPT) $(CC_DEBUG) /TP
+
+########## link options #################
+
+LIBS = $(PYTHONDIR)\libs\python23.lib $(BALL_CONTRIB)\ONC_RPC\librpc\oncrpc.lib imm32.lib winmm.lib ws2_32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib 
+
+LINKOPTIONS	= -nologo $(LIBS) $(LINKDEBUG) /INCREMENTAL:NO /OPT:NOWIN98 
+
+LINKOPTIONS_DLL = /DLL /FORCE $(TARGETDIR)\*.obj
+
+LINK	= link $(LINKOPTIONS)
+LINKDLL = $(LINK) $(LINKOPTIONS_DLL)
+
+BALLVIEW_LIBS = $(VIEW_LIBS) $(BALL_WIN_DIR)\Libs\libVIEW\$(TARGETDIR)\libVIEW.lib
+
+########### VIEW ########################
+VIEW_LIBS = "WS2_32.Lib" $(QTDIR)\lib\qt-mt$(QTVERSION).lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib $(BALL_WIN_DIR)\Libs\libBALL\$(TARGETDIR)\libBALL.lib
+
+VIEW_INCLUDES = /I "$(QTDIR)\include"

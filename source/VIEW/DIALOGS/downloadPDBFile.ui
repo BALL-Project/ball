@@ -8,370 +8,178 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>560</width>
-            <height>350</height>
+            <width>331</width>
+            <height>80</height>
         </rect>
     </property>
     <property name="minimumSize">
         <size>
-            <width>560</width>
-            <height>350</height>
+            <width>0</width>
+            <height>0</height>
         </size>
     </property>
     <property name="maximumSize">
         <size>
-            <width>560</width>
-            <height>350</height>
+            <width>350</width>
+            <height>80</height>
         </size>
     </property>
     <property name="caption">
         <string>Download a structure file from www.rcsb.org</string>
     </property>
-    <property name="sizeGripEnabled">
-        <bool>false</bool>
-    </property>
-    <widget class="QGroupBox">
+    <grid>
         <property name="name">
-            <cstring>search_box</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>2</x>
-                <y>2</y>
-                <width>556</width>
-                <height>261</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Search the PDB (www.rcsb.org) online</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <widget class="QPushButton">
+        <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
-                <cstring>searchbutton</cstring>
+                <cstring>layout6</cstring>
             </property>
-            <property name="geometry">
-                <rect>
-                    <x>397</x>
-                    <y>220</y>
-                    <width>150</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>30</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>Search</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Search www.rcsb.org for query string</string>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel3</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>15</y>
-                    <width>538</width>
-                    <height>44</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Enter a query string. Queries may contain boolean modifiers &lt;font color="#ff0000"&gt;and&lt;/font&gt;, &lt;font color="#ff0000"&gt;or&lt;/font&gt; and &lt;font color="#ff0000"&gt;not&lt;/font&gt;, and the wildcard &lt;font color="#ff0000"&gt;*&lt;/font&gt;. Queries are case insensitive.</string>
-            </property>
-        </widget>
-        <widget class="QTextEdit">
-            <property name="name">
-                <cstring>searchField</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>8</x>
-                    <y>72</y>
-                    <width>327</width>
-                    <height>130</height>
-                </rect>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Enter query string for www.rcsb.org</string>
-            </property>
-        </widget>
-        <widget class="QComboBox">
-            <property name="name">
-                <cstring>results</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>134</x>
-                    <y>220</y>
-                    <width>226</width>
-                    <height>28</height>
-                </rect>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>8</x>
-                    <y>220</y>
-                    <width>121</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Search results</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignLeft</set>
-            </property>
-        </widget>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>searchMethod</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>349</x>
-                    <y>63</y>
-                    <width>200</width>
-                    <height>140</height>
-                </rect>
-            </property>
-            <property name="title">
-                <string>Search Method</string>
-            </property>
-            <property name="alignment">
-                <set>AlignHCenter</set>
-            </property>
-            <widget class="QLayoutWidget">
+            <vbox>
                 <property name="name">
-                    <cstring>layout162</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="geometry">
-                    <rect>
-                        <x>6</x>
-                        <y>20</y>
-                        <width>183</width>
-                        <height>108</height>
-                    </rect>
+                <property name="spacing">
+                    <number>5</number>
                 </property>
-                <vbox>
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>unnamed</cstring>
+                        <cstring>layout5</cstring>
                     </property>
-                    <property name="margin">
-                        <number>0</number>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="spacing">
+                            <number>0</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>150</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>PDB ID</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignLeft</set>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>pdbId</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>You can also enter a PDB id directly.</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout95</cstring>
                     </property>
-                    <widget class="QRadioButton">
+                    <hbox>
                         <property name="name">
-                            <cstring>fullText</cstring>
+                            <cstring>unnamed</cstring>
                         </property>
-                        <property name="text">
-                            <string>Full text</string>
+                        <property name="margin">
+                            <number>0</number>
                         </property>
-                        <property name="checked">
-                            <bool>true</bool>
+                        <property name="spacing">
+                            <number>5</number>
                         </property>
-                    </widget>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>authors</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Authors</string>
-                        </property>
-                    </widget>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>exactMatch</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Match exact word</string>
-                        </property>
-                    </widget>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>removeSimilar</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Remove homologs</string>
-                        </property>
-                    </widget>
-                </vbox>
-            </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>download</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Download</string>
+                            </property>
+                            <property name="accel">
+                                <string></string>
+                            </property>
+                            <property name="default">
+                                <bool>true</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Download PDB file</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>button_abort</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Abort</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+A</string>
+                            </property>
+                            <property name="autoDefault">
+                                <bool>true</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Abort download</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>buttonClose</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>C&amp;ancel</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+A</string>
+                            </property>
+                            <property name="autoDefault">
+                                <bool>true</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Close window</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </vbox>
         </widget>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>showDetails</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>399</x>
-                <y>277</y>
-                <width>150</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Show File Details</string>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>pdbId</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>134</x>
-                <y>280</y>
-                <width>228</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>25</height>
-            </size>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>You can also enter a PDB id directly.</string>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textLabel1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>46</x>
-                <y>274</y>
-                <width>80</width>
-                <height>38</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>PDB ID</string>
-        </property>
-        <property name="alignment">
-            <set>AlignVCenter|AlignLeft</set>
-        </property>
-    </widget>
-    <widget class="QLayoutWidget">
-        <property name="name">
-            <cstring>layout95</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>7</x>
-                <y>314</y>
-                <width>542</width>
-                <height>35</height>
-            </rect>
-        </property>
-        <hbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>download</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>false</bool>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>0</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string>Download</string>
-                </property>
-                <property name="accel">
-                    <string></string>
-                </property>
-                <property name="default">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Download PDB file</string>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>button_abort</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>false</bool>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>0</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string>&amp;Abort</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+A</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Abort download</string>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>buttonClose</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>0</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string>C&amp;ancel</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+A</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Close window</string>
-                </property>
-            </widget>
-        </hbox>
-    </widget>
+    </grid>
 </widget>
 <connections>
     <connection>
@@ -398,31 +206,12 @@
         <receiver>downloadPDBFile</receiver>
         <slot>idChanged()</slot>
     </connection>
-    <connection>
-        <sender>searchbutton</sender>
-        <signal>clicked()</signal>
-        <receiver>downloadPDBFile</receiver>
-        <slot>slotSearch()</slot>
-    </connection>
-    <connection>
-        <sender>showDetails</sender>
-        <signal>clicked()</signal>
-        <receiver>downloadPDBFile</receiver>
-        <slot>slotShowDetail()</slot>
-    </connection>
 </connections>
 <tabstops>
     <tabstop>pdbId</tabstop>
     <tabstop>download</tabstop>
     <tabstop>button_abort</tabstop>
     <tabstop>buttonClose</tabstop>
-    <tabstop>searchField</tabstop>
-    <tabstop>fullText</tabstop>
-    <tabstop>exactMatch</tabstop>
-    <tabstop>searchbutton</tabstop>
-    <tabstop>removeSimilar</tabstop>
-    <tabstop>results</tabstop>
-    <tabstop>showDetails</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
@@ -434,6 +223,6 @@
     <slot>idChanged()</slot>
     <slot>abort()</slot>
 </slots>
-<exportmacro>BALL_EXPORT</exportmacro>
+<exportmacro>BALL_VIEW_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

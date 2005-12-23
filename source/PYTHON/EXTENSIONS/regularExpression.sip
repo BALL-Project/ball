@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularExpression.sip,v 1.6 2004/09/27 14:24:03 oliver Exp $
+// $Id: regularExpression.sip,v 1.7 2005/12/23 17:02:57 amoll Exp $
 //
 
 class RegularExpression
@@ -36,11 +36,10 @@ class RegularExpression
   void get(RegularExpression& /regular_expression/) const;
   const String& getPattern() const;
   Size countSubexpressions() const;
-  bool match(const char* /text/, const char* /pattern/, int /compile_flags/ = 0, int /execute_flags/ = 0 );
-  bool match(const String& /text/) const throw(NullPointer, IndexUnderflow, IndexOverflow);
-  bool match(const Substring& /text/, Index /from/ = 0, int /execute_flags/ = 0) const;
-  bool match(const char* /text/, int /execute_flags/) const;
-	bool match(const char* /text/) const;
+  bool match(const char* /text/, const char* /pattern/, int /compile_flags/ = REG_EXTENDED | REG_NOSUB, int /execute_flags/ = 0 );
+  bool match(const String& /text/, int /from/ = 0, int /execute_flags/ = 0) const throw(NullPointer, IndexUnderflow, IndexOverflow);
+  bool match(const Substring& /text/, int /from/ = 0, int /execute_flags/ = 0) const;
+  bool match(const char* /text/, int /execute_flags/ = 0) const;
 
   // static bool find
   //  (const char* /text/, const char* /pattern/,
@@ -50,16 +49,16 @@ class RegularExpression
   //  int execute_flags = 0);
   bool find
    (const String& /text/, Substring& /found/,
-    Index /from/ = 0, int /execute_flags/ = 0) const;
+    int /from/ = 0, int /execute_flags/ = 0) const;
   // bool find
   // (const String& /text/, Substring /found_subexpression[],
-  //  Size number_of_subexpressions, Index from = 0, int execute_flags = 0) const;
+  //  int number_of_subexpressions, int from = 0, int execute_flags = 0) const;
   bool find
    (const Substring& /text/, Substring& /found/,
-    Index /from/ = 0, int /execute_flags/ = 0) const;
+    int /from/ = 0, int /execute_flags/ = 0) const;
   // bool find
   // (const Substring& text, Substring found_subexpressions[],
-  //  Size number_of_subexpressions, Index from = 0, int execute_flags = 0) const;
+  //  Size number_of_subexpressions, int from = 0, int execute_flags = 0) const;
   //bool find
   // (const char* /text/, const char** found_substrings_from = 0,
   //  const char** found_substring_to = 0, int execute_flags = 0) const;
@@ -71,7 +70,7 @@ class RegularExpression
   bool operator >= (const RegularExpression& /regular_expression/) const;
   bool operator > (const RegularExpression& /regular_expression/) const;
   virtual bool isValid() const throw();
-  // virtual void dump(::std::ostream& s = ::std::cout, Size depth = 0) const;
+  // virtual void dump(::std::ostream& s = ::std::cout, unsigned int depth = 0) const;
   // friend ::std::ostream& operator << (::std::ostream& s, const RegularExpression& /regular_expression/);
   // friend ::std::istream& operator >> (::std::istream& s, RegularExpression& /regular_expression/);
 };

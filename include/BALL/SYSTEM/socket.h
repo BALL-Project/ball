@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: socket.h,v 1.36 2005/07/29 12:38:15 amoll Exp $
+// $Id: socket.h,v 1.37 2005/12/23 17:02:07 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_SOCKET_H
@@ -106,7 +106,7 @@
 
 namespace BALL 
 {
-	void errnoError_(const char* method_name);
+	BALL_EXPORT void errnoError_(const char* method_name);
 
 	/**	@name	Network socket support 
 	*/
@@ -196,8 +196,6 @@ namespace BALL
 			sock_dgram	= SOCK_DGRAM,
 			///
 			sock_raw	= SOCK_RAW,
-			///
-			sock_rdm	= SOCK_RDM,
 			///
 			sock_seqpacket  = SOCK_SEQPACKET
 		};

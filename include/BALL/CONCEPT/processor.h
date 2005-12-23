@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: processor.h,v 1.17 2003/08/26 08:04:08 oliver Exp $
+// $Id: processor.h,v 1.18 2005/12/23 17:01:41 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
@@ -15,6 +15,10 @@
 #	include <BALL/CONCEPT/baseFunctor.h>
 #endif
 
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 namespace BALL 
 {
 
@@ -26,7 +30,7 @@ namespace BALL
 
 	/**	Global Types and Enums for Processors
 	*/
-	class Processor
+	class BALL_EXPORT Processor
 	{
 		public:
 		/**	Result type

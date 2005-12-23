@@ -1,15 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.65 2005/07/16 21:00:38 oliver Exp $
+// $Id: scene.h,v 1.66 2005/12/23 17:02:24 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
 #define BALL_VIEW_WIDGETS_SCENE_H
-
-#ifndef BALL_MATHS_QUATERNION_H
-#	include <BALL/MATHS/quaternion.h>
-#endif
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 #	include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -32,6 +28,8 @@
 #endif
 
 #include <qtimer.h>
+
+class QMouseEvent;
 
 namespace BALL
 {
@@ -87,7 +85,7 @@ namespace BALL
 				Scenes. These other Scenes can have different Camera angles or other properties.
 				\ingroup ViewWidgets
 		*/
-		class BALL_EXPORT Scene
+		class BALL_VIEW_EXPORT Scene
 			: public QGLWidget, 
 				public ModularWidget
 		{
@@ -102,7 +100,7 @@ namespace BALL
 			/** This class is only intended for usage with multithreading.
 			 		It provides a mean for other threads to make the Scene export a PNG.
 			*/
-			class BALL_EXPORT SceneExportPNGEvent : public QCustomEvent
+			class BALL_VIEW_EXPORT SceneExportPNGEvent : public QCustomEvent
 			{
 				public:
 					SceneExportPNGEvent()
@@ -112,7 +110,7 @@ namespace BALL
 			/** This class is only intended for usage with multithreading.
 			 		It provides a mean for other threads to make the Scene export a POVRay file.
 			*/
-			class BALL_EXPORT SceneExportPOVEvent : public QCustomEvent
+			class BALL_VIEW_EXPORT SceneExportPOVEvent : public QCustomEvent
 			{
 				public:
 					SceneExportPOVEvent()
@@ -122,7 +120,7 @@ namespace BALL
 			/** This class is only intended for usage with multithreading.
 			 		It provides a mean for other threads to set the camera position.
 			*/
-			class BALL_EXPORT SceneSetCameraEvent : public QCustomEvent
+			class BALL_VIEW_EXPORT SceneSetCameraEvent : public QCustomEvent
 			{
 				public:
 					SceneSetCameraEvent()
@@ -155,6 +153,21 @@ namespace BALL
 				PICKING__MODE
 			};
 
+			/// Different Move Mode actions
+			enum MoveModeAction
+			{
+				///
+				MOVE_TRANSLATE,
+
+				///
+				MOVE_ZOOM,
+
+				///
+				MOVE_ROTATE,
+
+				///
+				MOVE_ROTATE_CLOCKWISE
+			};
 			
 			//@} 
 			/** @name Enums 
@@ -176,7 +189,7 @@ namespace BALL
 			};
 				
 			//@} 
-			/**	@name	Constructors 
+			/**	@name	Constructors and Destructor
 			*/	
 			//@{
 
@@ -185,10 +198,7 @@ namespace BALL
 
 			/** Default Constructor.
 					Initialize the width and height of this scene to <tt> 600</tt> and sets
-					the camera position to:
-					  - camera position set to <tt> Vector(1,0,0)</tt>
-					  - camera look at position set to <tt> Vector(0,0,0)</tt>
-						- camera look up vector to <tt> Vector(0,0,-1)</tt>
+					the camera position.
 					\par
 					Calls registerWidget.
 					\param      parent_widget the parent widget of this scene 
@@ -211,11 +221,6 @@ namespace BALL
 			 */
 			Scene (const Scene& scene, QWidget* parent_widget = NULL, const char* name = NULL, WFlags wflags = 0)
 				throw();
-
-			//@} 
-			/** @name Destructors 
-			*/ 
-			//@{
 
 			/** Destructor.
 			*/
@@ -377,10 +382,6 @@ namespace BALL
 				throw();
 				
 			///
-			virtual void cancelPreferences()
-				throw();
-				
-			///
 			static void setMouseSensitivity(float sensitivity)
 				throw() { mouse_sensitivity_ = sensitivity; }
 
@@ -497,6 +498,9 @@ namespace BALL
 
 			/// show an dialog to save an PNG file to
 			void showExportPNGDialog();
+
+			///
+			void showExportVRMLDialog();
 			
 			///
 			void exportPOVRay();
@@ -565,7 +569,44 @@ namespace BALL
 			///
 			static void setPOVNumber(Position pos) { pov_nr_ = pos;}
 
+			///
+			void rotate(float degree_right, float degree_up);
+
+			///
+			void rotateClockwise(float degree);
+
+			/** Move the view. \\
+			 		v.x = right  \\
+					v.y = up     \\
+					v.z = view direction 
+			*/
+			void move(Vector3 v);
+
+			/** Move some Composites. \\
+			 		v.x = right  \\
+					v.y = up     \\
+					v.z = view direction 
+			*/
+			void moveComposites(const List<Composite*>& composites, Vector3 v);
+
+			/** Rotate some Composites. \\
+			 		v.x = right  \\
+					v.y = up     \\
+					v.z = view direction 
+			*/
+			void rotateComposites(const List<Composite*>& composites, float degree_right, float degree_up, float degree_clockwise = 0);
+
 			void initTimer();
+
+			///
+			bool isAnimationRunning() const
+				throw();
+
+			///
+			void setTurnPoint(const Vector3& v) { system_origin_ = v;}
+
+			///
+			const Vector3& getTurnPoint() const { return system_origin_;}
 			
 			protected slots:
 
@@ -627,6 +668,8 @@ namespace BALL
 			//@}
 
 			protected:
+			
+			virtual void updateGL();
 
 			void renderView_(RenderMode mode)
 				throw();
@@ -646,20 +689,16 @@ namespace BALL
 			void processRotateModeMouseEvents_(QMouseEvent* e);
 			void processMoveModeMouseEvents_(QMouseEvent* e);
 
-			void rotateSystem_(Scene* scene);
-			void rotateSystem2_(Scene* scene);
-			void translateSystem_(Scene* scene);
-			void zoomSystem_(Scene* scene);
+			void rotateSystem_();
+			void rotateSystemClockwise_();
+			void translateSystem_();
+			void zoomSystem_();
+			Index getMoveModeAction_(const QMouseEvent& e);
 
 			void selectionPressed_();
 			void selectionReleased_();
 			void selectionPressedMoved_();
 			void deselectionReleased_();
-
-			void calculateQuaternion_(Quaternion& quaternion, const Quaternion* rotate = 0);
-
-			//_ called by calculateQuaternion_
-			float sphereProject_(float radius, float x, float y);
 
 			void selectObjects_(bool select = true);
 
@@ -671,6 +710,10 @@ namespace BALL
 
 			void createCoordinateSystem_()
 				throw();
+
+			inline float getXDiff_();
+			inline float getYDiff_();
+			inline Vector3 getTranslationVector_(const Vector3& v);
 
 			//_ state of the scene: picking or rotate mode?
 			ModeType current_mode_;
@@ -686,7 +729,6 @@ namespace BALL
 			Index show_popup_infos_id_;
 			
 			Vector3 system_origin_;
-			Quaternion quaternion_;
 
 			bool need_update_;
 			bool update_running_;
@@ -737,12 +779,15 @@ namespace BALL
 			Position last_x_pos_, last_y_pos_;
 
 			bool show_info_;
+			PreciseTime time_;
+			float last_fps_;
+			float zoom_factor_;
 		};
 
 
 #ifdef BALL_QT_HAS_THREADS
 		///
-		class BALL_EXPORT AnimationThread
+		class BALL_VIEW_EXPORT AnimationThread
 			: public QThread
 		{
 			public:

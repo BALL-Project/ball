@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.65 2005/07/16 21:00:49 oliver Exp $
+// $Id: representation.C,v 1.66 2005/12/23 17:03:32 amoll Exp $
 //
 
 
@@ -29,7 +29,7 @@ namespace BALL
 				: PropertyManager(),
 					drawing_mode_(DRAWING_MODE_SOLID),
 					drawing_precision_(DRAWING_PRECISION_HIGH),
-					surface_drawing_precision_(-1),
+					surface_drawing_precision_(3.5),
 					model_type_(MODEL_UNKNOWN),
 					coloring_method_(COLORING_UNKNOWN),
 					transparency_(0),
@@ -52,7 +52,7 @@ namespace BALL
 				: PropertyManager(rp),
 					drawing_mode_(rp.drawing_mode_),
 					drawing_precision_(rp.drawing_precision_),
-					surface_drawing_precision_(rp.drawing_precision_),
+					surface_drawing_precision_(rp.surface_drawing_precision_),
 					model_type_(rp.model_type_),
 					coloring_method_(rp.coloring_method_),
 					transparency_(rp.transparency_),
@@ -63,7 +63,7 @@ namespace BALL
 					rebuild_(rp.rebuild_),
 					changed_color_processor_(true),
 					hidden_(rp.hidden_),
-					geometric_objects_(rp.geometric_objects_),
+					geometric_objects_(),
 					model_update_enabled_(rp.model_update_enabled_),
 					coloring_update_enabled_(rp.coloring_update_enabled_)
 		{
@@ -93,7 +93,7 @@ namespace BALL
 				: PropertyManager(),
 					drawing_mode_(drawing_mode),
 					drawing_precision_(drawing_precision),
-					surface_drawing_precision_(-1),
+					surface_drawing_precision_(3.5),
 					model_type_(model_type),
 					transparency_(0),
 					model_processor_(0),
@@ -146,7 +146,7 @@ namespace BALL
 			GeometricObjectList::ConstIterator it = representation.getGeometricObjects().begin();
 			for (;it != representation.getGeometricObjects().end(); it++)
 			{
-				GeometricObject* object = new GeometricObject(**it);
+				GeometricObject* object = (GeometricObject*)(**it).create();
 				getGeometricObjects().push_back(object);
 			}
 
@@ -175,19 +175,19 @@ namespace BALL
 		{
 			composites_.clear();
 
+			clearGeometricObjects();
+
 			if (model_processor_  != 0) delete model_processor_;
 			if (color_processor_  != 0) delete color_processor_;
 			model_processor_ 	= 0;
 			color_processor_ 	= 0;
-
-			clearGeometricObjects();
 
 			drawing_mode_= DRAWING_MODE_SOLID;
 			drawing_precision_= DRAWING_PRECISION_HIGH;
 			model_type_ = MODEL_UNKNOWN;
 			coloring_method_ = COLORING_UNKNOWN;
 			transparency_ = 0;
-			surface_drawing_precision_ = -1;
+			surface_drawing_precision_ = 3.5;
 
 			rebuild_ = true;
 			hidden_ = false;
@@ -205,12 +205,8 @@ namespace BALL
 			{
 				delete *it;
 			}
-			getGeometricObjects().clear();
 
-			if (model_processor_ != 0)
-			{
-				model_processor_->getGeometricObjects().clear();
-			}
+			getGeometricObjects().clear();
 		}
 					
 
@@ -226,6 +222,8 @@ namespace BALL
 			s << "drawing mode: " << drawing_mode_<< std::endl;
 			BALL_DUMP_DEPTH(s, depth);
 			s << "drawing precision: " << drawing_precision_<< std::endl;
+			BALL_DUMP_DEPTH(s, depth);
+			s << "surface drawing precision: " << surface_drawing_precision_<< std::endl;
 			BALL_DUMP_DEPTH(s, depth);
 			s << "model type : " << model_type_ << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
@@ -250,6 +248,18 @@ namespace BALL
 		bool Representation::isValid() const
 			throw()
 		{
+			if (!isSurfaceModel(model_type_))
+			{
+				if (drawing_precision_  < 0 || drawing_precision_ > BALL_VIEW_MAXIMAL_DRAWING_PRECISION)
+				{
+					return false;
+				}
+			}
+			else
+			{
+				if (surface_drawing_precision_ < 0.1) return false;
+			}
+				
 			if (drawing_precision_  < 0 || drawing_precision_ > BALL_VIEW_MAXIMAL_DRAWING_PRECISION ||
 					drawing_mode_ 			< 0 || drawing_mode_ > BALL_VIEW_MAXIMAL_DRAWING_MODE ||
 					transparency_ 			> 255)
@@ -282,8 +292,6 @@ namespace BALL
 
 			needs_update_ = false;
 
- 			const PreciseTime last_build_time = model_build_time_;
-
 #ifdef BALL_BENCHMARKING
 			Timer t;
 			t.start();
@@ -300,13 +308,17 @@ namespace BALL
 					List<const Composite*>::const_iterator it = composites_.begin();
 					for (; it!= composites_.end(); it++)
 					{
-						if ((*it)->getModificationTime() > last_build_time) 
+						if ((*it)->getModificationTime() > model_build_time_) 
 						{
 							rebuild_ = true;
 							break;
 						}
 					}
 				}
+
+				// rebuild if the selection color changed
+				// slow this way, but do it anyhow...
+				rebuild_ |= BALL_SELECTED_COLOR_CHANGE_TIME > model_build_time_;
 
 				if (rebuild_)
 				{
@@ -340,7 +352,7 @@ namespace BALL
 					List<const Composite*>::const_iterator it = composites_.begin();
 					for (; it!= composites_.end(); it++)
 					{
-						if ((*it)->getSelectionTime() > last_build_time) 
+						if ((*it)->getSelectionTime() > model_build_time_) 
 						{
 							apply_color_processor = true;
 							break;
@@ -355,6 +367,7 @@ namespace BALL
 					color_processor_->setTransparency(transparency_);
 					color_processor_->setModelType(model_type_);
 					getGeometricObjects().apply(*color_processor_);
+					changed_color_processor_ = false;
 #ifdef BALL_BENCHMARKING
 					t.stop();
 					logString("Calculating Coloring time: " + String(t.getClockTime()));
@@ -374,8 +387,7 @@ namespace BALL
 			MainControl* mc = getMainControl();
 			if (mc != 0)
 			{
-				RepresentationMessage* message = new RepresentationMessage(*this, RepresentationMessage::UPDATE);
-				mc->sendMessage(*message);
+				mc->sendMessage(*new RepresentationMessage(*this, RepresentationMessage::UPDATE));
 			}
 #endif
 		}
@@ -432,26 +444,7 @@ namespace BALL
 		void Representation::setModelProcessor(ModelProcessor* processor)
 			throw() 
 		{ 
-			if (processor == 0 && model_processor_ == 0) return;
-
-			GeometricObjectList::ConstIterator it = geometric_objects_.begin();
-			for (;it != geometric_objects_.end(); it++)
-			{
-				delete *it;
-			}
-			geometric_objects_.clear();
-
-			// if modelprocessor is removed, copy the geometric object pointers to the Representation's own list
-			if (processor == 0 && model_processor_ != 0)
-			{
-				GeometricObjectList::ConstIterator it = model_processor_->getGeometricObjects().begin();
-				for (;it != model_processor_->getGeometricObjects().end(); it++)
-				{
-					geometric_objects_.push_back(*it);
-				}
-
-				model_processor_->getGeometricObjects().clear();
-			}
+			clearGeometricObjects();
 
 			if (model_processor_ != 0) delete model_processor_;
 
@@ -459,8 +452,8 @@ namespace BALL
 			
 			if (model_processor_ != 0) 
 			{
-				model_processor_->setDrawingPrecision(drawing_precision_);
 				model_processor_->setSurfaceDrawingPrecision(surface_drawing_precision_);
+				model_processor_->setDrawingPrecision(drawing_precision_);
 			}
 
 			changed_color_processor_ = true;
@@ -579,7 +572,8 @@ namespace BALL
 									HashMap<const Composite*, Position>& hashmap) const
 			throw()
 		{
-			hashmap[&c] = hashmap.size();
+			Size i = hashmap.size();
+			hashmap[&c] = i;
 			for (Position p = 0; p < c.getDegree(); p++)
 			{
 				collectRecursive_(*c.getChild(p), hashmap);
@@ -649,6 +643,7 @@ namespace BALL
 			throw()
 		{
 			composites_ = composites;
+			needs_update_ = true;
 		}
 			
   #	ifdef BALL_NO_INLINE_FUNCTIONS

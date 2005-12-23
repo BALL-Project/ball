@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.33 2004/05/14 11:48:19 amoll Exp $ 
+// $Id: regularData3D.h,v 1.34 2005/12/23 17:01:42 amoll Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -623,7 +623,7 @@ namespace BALL
 			}
       size_ = size;
 		}
-    catch (std::bad_alloc& e)
+    catch (std::bad_alloc)
     {
       throw Exception::OutOfMemory(__FILE__, __LINE__, new_size * (Size)sizeof(ValueType));
 		}
@@ -678,7 +678,7 @@ namespace BALL
 				}
 			}
 		}
-    catch (std::bad_alloc& e)
+    catch (std::bad_alloc)
     {
       throw Exception::OutOfMemory(__FILE__, __LINE__, new_size * (Size)sizeof(ValueType));
 		}

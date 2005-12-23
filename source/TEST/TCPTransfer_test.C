@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer_test.C,v 1.26 2005/07/16 21:00:45 oliver Exp $
+// $Id: TCPTransfer_test.C,v 1.27 2005/12/23 17:03:12 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -23,7 +23,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.26 2005/07/16 21:00:45 oliver Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.27 2005/12/23 17:03:12 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

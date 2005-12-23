@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.sip,v 1.3 2004/01/18 20:31:53 oliver Exp $
+// $Id: preferences.sip,v 1.4 2005/12/23 17:02:54 amoll Exp $
 //
 
 class Preferences
@@ -13,11 +13,20 @@ class Preferences
 %End
   public:
 	// Preferences(QWidget *parent = NULL, const char *name = NULL, int width = 400, int height = 300) throw();
-	// bool hasTabs() throw();
-	void show();
+	Preferences(const Preferences&) throw();
+	//virtual ~Preferences() throw();
+			
+	//bool hasPages() throw();
+	//void insertEntry(PreferencesEntry*) throw();
+	//void removeEntry(PreferencesEntry *)	throw();
 	void fetchPreferences(INIFile& /inifile/) throw();
-	// void insertTab(QWidget* /child/, const QString& /name/) throw();
-	// void removeTab(QWidget* /child/) throw();
 	void writePreferences(INIFile& /inifile/) throw();
-	~Preferences() throw();
+
+	void show();
+	//void showEntry(QWidget* page);
+	//void entrySelected(QListViewItem* item);
+	void setDefaultValues();
+	void cancelPreferences();
+	void applyPreferences();
+	void showHelp();
 };

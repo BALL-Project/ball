@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularExpression_test.C,v 1.15 2003/06/16 12:02:05 anker Exp $
+// $Id: RegularExpression_test.C,v 1.16 2005/12/23 17:03:11 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.15 2003/06/16 12:02:05 anker Exp $")
+START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.16 2005/12/23 17:03:11 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@ String filename;
 using std::ofstream;
 using std::ios;
 
-RegularExpression* re;
+RegularExpression* re = 0;
 
 CHECK(RegularExpression() throw())
 	re = new RegularExpression();

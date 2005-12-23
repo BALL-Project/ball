@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.sip,v 1.13 2003/11/12 18:20:27 oliver Exp $
+// $Id: HINFile.sip,v 1.14 2005/12/23 17:02:45 amoll Exp $
 //
 
 class HINFile
@@ -17,8 +17,8 @@ class HINFile
   HINFile(String&, OpenMode /openmode/ = std::ios::in) throw(FileNotFound);
 	~HINFile() throw();
 
-  virtual bool write(const System& /system/) throw(CannotWrite);
-	virtual bool write(const Molecule& /molecule/) throw(CannotWrite);
+  virtual bool write(const System& /system/) throw(File::CannotWrite);
+	virtual bool write(const Molecule& /molecule/) throw(File::CannotWrite);
   virtual bool read(System& /system/)	throw(ParseError);
 	virtual Molecule* read() throw(ParseError);
 

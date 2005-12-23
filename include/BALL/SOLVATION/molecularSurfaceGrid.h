@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularSurfaceGrid.h,v 1.14 2004/02/26 16:44:43 oliver Exp $
+// $Id: molecularSurfaceGrid.h,v 1.15 2005/12/23 17:01:59 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_MOLECULARSURFACEGRID_H
@@ -27,21 +27,21 @@ namespace BALL
 {
 
 	// Define the entry values for an SES or SAS grid
-	const char CCONN__INSIDE = 0;
-	const char CCONN__OUTSIDE = 1;
-	const char CCONN__INSIDE_PROBE = (char)64;
+	BALL_EXPORT extern const char CCONN__INSIDE;
+	BALL_EXPORT extern const char CCONN__OUTSIDE;
+	BALL_EXPORT extern const char CCONN__INSIDE_PROBE;
 
 	/** calculateSESGrid
 	\ingroup Solvation
 	*/
-	TRegularData3D<char>* calculateSESGrid
+	BALL_EXPORT TRegularData3D<char>* calculateSESGrid
 		(const Vector3& lower, const Vector3& upper, 
 		 float spacing, const System& system, float probe_radius);
 
 	/** calculateSASGrid
 	\ingroup Solvation
 	*/
-	TRegularData3D<char>* calculateSASGrid
+	BALL_EXPORT TRegularData3D<char>* calculateSASGrid
 		(const Vector3& lower, const Vector3& upper, 
 		 float spacing, const System& system, float probe_radius);
 

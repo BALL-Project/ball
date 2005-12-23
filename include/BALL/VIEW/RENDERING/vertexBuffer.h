@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.h,v 1.5 2005/07/16 21:00:37 oliver Exp $
+// $Id: vertexBuffer.h,v 1.6 2005/12/23 17:02:21 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_VERTEXBUFFER_H
@@ -37,7 +37,7 @@ namespace BALL
 				These must be initialised by calling MeshBuffer::initGL() (See below).
 				\ingroup ViewRendering
 		*/
-		class BALL_EXPORT MeshBuffer
+		class BALL_VIEW_EXPORT MeshBuffer
 		{
 			public:
 

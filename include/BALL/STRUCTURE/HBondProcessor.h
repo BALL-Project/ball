@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.h,v 1.6 2005/04/14 12:43:31 anhi Exp $
+// $Id: HBondProcessor.h,v 1.7 2005/12/23 17:02:01 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_HBONDPROCESSOR_H
@@ -30,7 +30,7 @@ namespace BALL
 	 *  structure: pattern recognition of hydrogen-bonded and geometrical features. 
 	 *  Biopolymers, 22, 2577-2637".
    */
-  class HBondProcessor 
+  class BALL_EXPORT HBondProcessor 
 		:	public UnaryProcessor<Composite>
   {
  
@@ -46,7 +46,7 @@ namespace BALL
 		const float BOND_LENGTH_C_O;
 
     ///
-		struct ResidueData
+		struct BALL_EXPORT ResidueData
 		{
 			Vector3 pos_C;
 			Vector3 pos_N;
@@ -105,7 +105,6 @@ namespace BALL
     std::vector<std::vector<Position> > h_bond_pairs_;
 
   }; //class HBondProcessor
-
 } //namesspace BALL
 
 

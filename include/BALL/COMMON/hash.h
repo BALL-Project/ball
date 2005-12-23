@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hash.h,v 1.22 2005/02/06 09:44:53 oliver Exp $
+// $Id: hash.h,v 1.23 2005/12/23 17:01:39 amoll Exp $
 //
 
 #ifndef BALL_COMMON_HASH_H
@@ -41,19 +41,19 @@ namespace BALL
 	
 	/**
 	*/
-  extern HashIndex hashPointer(void *const ptr) throw();
+  BALL_EXPORT extern HashIndex hashPointer(void *const ptr) throw();
 
 	/**
 	*/
-  extern HashIndex hashString(const char* str) throw();
+  BALL_EXPORT extern HashIndex hashString(const char* str) throw();
 
 	/**
 	*/
-  extern HashIndex hashPJWString(const char* str) throw();
+  BALL_EXPORT extern HashIndex hashPJWString(const char* str) throw();
 
 	/**
 	*/
-  extern HashIndex hashElfString(const char* str) throw();
+  BALL_EXPORT extern HashIndex hashElfString(const char* str) throw();
 
 	/** General default hash function.
 			This method converts a given key to a 
@@ -73,7 +73,7 @@ namespace BALL
 			This method is optimized for the hashing of STL strings.
 			In fact, it is only an inline wrapper around  \link hashString hashString \endlink .
 	*/
-	inline HashIndex Hash(const string& s) throw()
+	BALL_EXPORT inline HashIndex Hash(const string& s) throw()
 	{
 		return hashString(s.c_str());
 	}
@@ -82,7 +82,7 @@ namespace BALL
 			This method is optimized for the hashing of BALL strings.
 			In fact, it is only an inline wrapper around  \link hashString hashString \endlink .
 	*/
-	inline HashIndex Hash(const String& s) throw()
+	BALL_EXPORT inline HashIndex Hash(const String& s) throw()
 	{
 		return hashString(s.c_str());
 	}
@@ -90,7 +90,7 @@ namespace BALL
 	/** Pointer hash function.
 			Use this function to hash pointers to objects.
 	*/
-	inline HashIndex Hash(void *const& ptr) throw()
+	BALL_EXPORT inline HashIndex Hash(void *const& ptr) throw()
 	{
 		return hashPointer(ptr);
 	}
@@ -103,7 +103,7 @@ namespace BALL
 			greater or equal to the number given as the argument.
 			Only odd prime numbers are returned, the lowest number returned is 3.
 	*/
-	HashIndex getNextPrime(HashIndex l) throw();
+	BALL_EXPORT HashIndex getNextPrime(HashIndex l) throw();
 
 	//@}
 

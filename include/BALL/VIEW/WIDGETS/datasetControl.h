@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.17 2005/11/04 14:10:13 anne Exp $
+// $Id: datasetControl.h,v 1.18 2005/12/23 17:02:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -27,17 +27,12 @@
 # include <BALL/DATATYPE/regularData3D.h>
 #endif 
 
-//#ifndef BALL_FORMAT_GAMESSLOGFILE_H
-//# include <BALL/FORMAT/GAMESSLogFile.h>
-//#endif
-
 #include <qpopupmenu.h>
 
 namespace BALL
 {
 	class TrajectoryFile;
 	class SnapShotManager;
-//	class GAMESSLogFile;
 
 	namespace VIEW
 	{
@@ -50,7 +45,7 @@ namespace BALL
 				The DatasetControl has three columns: Name, from (Composite) and Type.
 				\ingroup ViewWidgets
 		*/
-		class BALL_EXPORT DatasetControl
+		class BALL_VIEW_EXPORT DatasetControl
 			: public GenericControl
 		{
 			Q_OBJECT
@@ -95,9 +90,6 @@ namespace BALL
 			virtual void checkMenu(MainControl& main_control)
 				throw();
 
-			/// insert a GAMESS dataset
-//			void addGAMESSData(const String& filename);
-
 			/// insert a trajectory for the currently selected System
 			void addTrajectory(const String& filename);
 			
@@ -111,10 +103,6 @@ namespace BALL
 			*/ 
 			//@{
 			public slots:
-
-			///
-//			void addGAMESSData()
-//				throw();
 
 			///
 			void addTrajectory()
@@ -137,11 +125,6 @@ namespace BALL
 
 			///
 			void computeIsoContourSurface();
-
-			///
-/**
- * void createElectronDensity_();
- */
 
 			//@} 
 			/** @name Protected members 
@@ -174,9 +157,6 @@ namespace BALL
 			// Use context_item_ and the Hashmaps to differ between the different types.
 			virtual void createContextMenu_();
 
-//			void insertGAMESSData_(GAMESSLogFile* file)
-//				throw();
-
 			void insertTrajectory_(TrajectoryFile* file, System& system)
 				throw();
 
@@ -207,7 +187,6 @@ namespace BALL
 			HashMap<QListViewItem*	, RegularData1D*>   					item_to_grid1_;
 			HashMap<QListViewItem*	, RegularData2D*>   					item_to_grid2_;
 			HashMap<QListViewItem*	, RegularData3D*>   					item_to_grid3_;
-//			HashMap<QListViewItem*	, GAMESSLogFile*>   					item_to_gamess_;
 			// insert new HashMaps like above for new data type objects.
 			
 			HashMap<Composite*      , HashSet<QListViewItem*> > 	composite_to_items_;

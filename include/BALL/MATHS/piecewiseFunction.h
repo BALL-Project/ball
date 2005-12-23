@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewiseFunction.h,v 1.22 2004/05/27 19:49:42 oliver Exp $
+// $Id: piecewiseFunction.h,v 1.23 2005/12/23 17:01:48 amoll Exp $
 //
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
@@ -39,7 +39,7 @@ namespace BALL
 			limit is the first interval of the vector. \par
 			
 	 */
-	class PiecewiseFunction
+	class BALL_EXPORT PiecewiseFunction
 	{
 		public:
 

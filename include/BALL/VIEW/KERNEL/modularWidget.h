@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.21 2005/07/16 21:00:33 oliver Exp $
+// $Id: modularWidget.h,v 1.22 2005/12/23 17:02:15 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -17,6 +17,7 @@
 
 class QObject;
 class QMenuBar;
+class QWidget;
 
 namespace BALL
 {
@@ -52,7 +53,7 @@ namespace BALL
 				\see PyWidget
 			\ingroup ViewKernelConnectivity
 		*/
-		class BALL_EXPORT ModularWidget
+		class BALL_VIEW_EXPORT ModularWidget
 			: public Embeddable,	
 				public ConnectionObject
 		{
@@ -171,16 +172,6 @@ namespace BALL
 			virtual void applyPreferences()
 				throw() {};
 
-			/// Method is called when the Cancel button of the Preferences is pressed.
-			virtual void cancelPreferences()
-				throw() {};
-
-			/** Set default values for the current page in Preferences
-					Automatically called by the default button in thre Preferences dialog.)
-			*/
-			virtual void defaultPreferences()
-				throw() {};
-			
 			/** Fetch the widgets preferences from the INIFile.
 					This method is called automatically by MainControl::show() at the start of the application.
 					\param  inifile the INIFile that contains the needed values
@@ -246,6 +237,15 @@ namespace BALL
 			///
 			void setMenuHint(const String& hint);
 
+			///
+			void setMenuHelp(const String& url);
+
+			///
+			virtual void registerWidgetForHelpSystem(const QWidget* widget, const String& url);
+
+			///
+			virtual void registerMenuEntryForHelpSystem(Index entry, const String& docu_entry);
+
 			//@}
 			/**	@name	Debugging and Diagnostics
 			*/
@@ -260,17 +260,17 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-					
-			//@}
 
+			//@}
 
 			void setWorkingDirFromFilename_(String filename)
 				throw();
 
 			void removeMenuEntries();
-			
-			protected:
 
+			virtual void showHelp(const String& url);
+
+			protected:
 
 			//_ id in the menubar entry "WINDOWS" for every widget
 			Index window_menu_entry_id_;

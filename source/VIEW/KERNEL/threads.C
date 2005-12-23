@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.38 2005/07/03 09:43:40 oliver Exp $
+// $Id: threads.C,v 1.39 2005/12/23 17:03:33 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -97,7 +97,7 @@ namespace BALL
 		{
 			if (url_ == "")
 			{
-				output_("Invalid Address " + url_ + " in " + String(__FILE__) + __LINE__, true);
+				output_("Invalid Address " + url_ + " in " + String(__FILE__) + ":" + String(__LINE__), true);
 				return;
 			}
 			try
@@ -139,7 +139,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				output_(String("Exception in ") + String(__FILE__) + __LINE__, true);
+				output_(String("Exception in ") + String(__FILE__) + ": " + String(__LINE__), true);
 			}
 		}
 
@@ -250,9 +250,13 @@ namespace BALL
 			}
 			catch(Exception::GeneralException e)
 			{
-				String txt = String("Exception was thrown during minimization: ")
-											+ __FILE__ + " " + __LINE__ + " " + e.getMessage();
+				delete dcd_file_;
+				dcd_file_ = 0;
+
+				String txt = String("Exception was thrown during minimization: ") + __FILE__ + ": " + String(__LINE__) + " :\n" 
+											+ e.getMessage();
 				output_(txt, true);
+
 				finish_();
 			}
 		}
@@ -337,8 +341,16 @@ namespace BALL
 			catch(Exception::GeneralException e)
 			{
 				String txt = String("Exception was thrown during MD simulation: ")
-											+ __FILE__ + " " + __LINE__ + " " + e.getMessage();
+											+ __FILE__ + ": " + String(__LINE__) + " \n" + e.getMessage();
 				output_(txt, true);
+
+				if (dcd_file_ != 0)
+				{
+					dcd_file_->close();
+					delete dcd_file_;
+					dcd_file_ = 0;
+				}
+
 				finish_();
 			}
 		}

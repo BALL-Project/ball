@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.41 2005/07/03 09:43:24 oliver Exp $
+// $Id: BALL.sip,v 1.42 2005/12/23 17:02:45 amoll Exp $
 //
 
 /////////////////////////
@@ -59,10 +59,10 @@
 // binarySearchTree.h // ??
 %Include bitVector.sip 
 // forEach.h // not supported -> extractors!
-// hashGrid.h // ??
-// hashMap.h // ?? ->pyAtomDict
-// hashSet.h // ??
-// list.h // ??
+// %Include hashGrid.h // ?? too generic... Possibly create an Atom* grid from it?
+// hashMap.h // -> dictionary
+// hashSet.h // -> dictionary
+// list.h // -> Python lists
 // listStack.h // ?? 
 %Include options.sip
 %Include regularData1D.sip
@@ -71,9 +71,9 @@
 // triple.h -- generic, no way...
 // quadruple.h -- generic, no way...
 %Include regularExpression.sip
-%Include string.sip
-// stringHashMap.h // ??
-// stringHashSet.h // ??
+%Include string.sip 
+// stringHashMap.h // -> dictionaries
+// stringHashSet.h // -> dictionaries
 
 
 // ENERGY
@@ -83,21 +83,29 @@
 
 
 // FORMAT
+%Include DCDFile.sip
 %Include HINFile.sip
 %Include INIFile.sip
+// %Include JCAMPFile.sip
+%Include KCFFile.sip
 %Include MOL2File.sip
 %Include MOLFile.sip
-%Include SDFile.sip
-%Include lineBasedFile.sip
-%Include genericMolFile.sip
+// %Include NMRStarFile.sip
 %Include PDBFile.sip
+%Include PDBInfo.sip
+%Include PDBRecords.sip
+%Include PDBdefs.sip // only the most relevant enums, we do not expose the internals
+%Include SDFile.sip
+%Include TRRFile.sip
 %Include XYZFile.sip
-// genericPDBFile.h // not supported
-// %Include parameterSection.sip
-// %Include parameters.sip
+// %Include bruker1DFile.sip
+// %Include bruker2DFile.sip
+%Include genericMolFile.sip
+%Include lineBasedFile.sip
+%Include parameterSection.sip
+%Include parameters.sip
 %Include resourceFile.sip
 %Include trajectoryFile.sip
-%Include DCDFile.sip
 
 
 // KERNEL
@@ -197,7 +205,7 @@
 %Include conjugateGradient.sip
 %Include energyMinimizer.sip
 // %Include lineSearch.sip
-// %Include steepestDescent.sip
+%Include steepestDescent.sip
 
 // MOLMEC/PARAMETER
 // %Include atomTypes.sip
@@ -221,12 +229,9 @@
 
 // PYTHON
 %Include extractors.sip
-%Include pyAtomDict.sip
-%Include pyAtomList.sip
-%Include pyAtomProcessor.sip
-%Include pyFragmentProcessor.sip
-%Include pyResidueProcessor.sip
-%Include pyCompositeProcessor.sip
+%Include pyIndexList.sip // a list of numbers (indices etc.)
+%Include pyAtomDict.sip // a dictionary mapping to atoms
+%Include pyAtomList.sip // a list of atom (pointers)
 %Include pyBondList.sip
 %Include pyCompositeList.sip
 %Include pyAtomContainerList.sip
@@ -239,6 +244,11 @@
 %Include pyProteinList.sip
 %Include pyNucleotideList.sip
 %Include pyNucleicAcidList.sip
+%Include pyAtomProcessor.sip 
+%Include pyBondProcessor.sip
+%Include pyFragmentProcessor.sip
+%Include pyResidueProcessor.sip
+%Include pyCompositeProcessor.sip
 
 // QSAR
 //%Include descriptor.sip
@@ -271,6 +281,7 @@
 // %Include fileSystem.sip
 %Include path.sip
 // %Include socket.sip
+%Include sysinfo.sip
 %Include timer.sip
 
 // VIEW/KERNEL
@@ -285,13 +296,18 @@
 %Include geometricObject.sip
 %Include geometricObjectList.sip
 %Include view-common.sip
+%Include clippingPlane.sip
+%Include molecularInformation.sip
+%Include server.sip
 
 // VIEW/DATATYPE
 %Include colorUnit.sip
 %Include colorRGBA.sip
+//%Include colorRGBAVector.sip
 %Include vertex1.sip
 %Include vertex2.sip
 %Include colorExtension2.sip
+%Include colorMap.sip
 
 // VIEW/MODELS
 %Include colorProcessor.sip
@@ -306,6 +322,8 @@
 %Include cartoonModel.sip
 %Include HBondModel.sip
 %Include surfaceModel.sip
+%Include forceModel.sip
+%Include labelModel.sip
 
 // VIEW/PRIMITIVES
 %Include box.sip
@@ -328,6 +346,7 @@
 // VIEW/RENDERER
 %Include renderer.sip
 %Include POVRenderer.sip
+%Include VRMLRenderer.sip
 
 // VIEW/WIDGETS
 %Include modularWidget.sip
@@ -339,6 +358,7 @@
 %Include geometricControl.sip
 %Include logView.sip
 %Include datasetControl.sip
+//%Include helpViewer.sip
 
 // Makefile
 //%Include Makefile.sip

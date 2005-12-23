@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.iC,v 1.1 2003/08/26 12:11:39 oliver Exp $
+// $Id: glDisplayList.iC,v 1.2 2005/12/23 17:02:21 amoll Exp $
 
 BALL_INLINE
 void GLDisplayList::useCompileMode()

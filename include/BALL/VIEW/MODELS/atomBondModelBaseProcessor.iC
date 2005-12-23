@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.iC,v 1.4 2003/12/15 15:12:21 amoll Exp $
+// $Id: atomBondModelBaseProcessor.iC,v 1.5 2005/12/23 17:02:17 amoll Exp $
 
 BALL_INLINE
 void AtomBondModelBaseProcessor::insertAtom_(const Atom* atom)

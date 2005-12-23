@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.h,v 1.10 2005/02/11 17:06:55 amoll Exp $
+// $Id: lightSettings.h,v 1.11 2005/12/23 17:02:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_LIGHTSETTINGS_H
@@ -9,19 +9,18 @@
 
 #include <BALL/VIEW/UIC/lightSettingsData.h>
 
-#ifndef BALL_VIEW_KERNEL_STAGE_H
-# include <BALL/VIEW/KERNEL/stage.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_STAGE_H
+# include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		class Stage;
 		class Scene;
 
 		/** Dialog for setting the lighting, which is added to the Preferences.
@@ -30,7 +29,7 @@ namespace BALL
 				to reset the lighting can be stored.
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT LightSettings 
+		class BALL_VIEW_EXPORT LightSettings 
 			: public LightSettingsData,
 				public PreferencesEntry
 		{ 
@@ -57,9 +56,12 @@ namespace BALL
 				throw();
 
 			/// Called when defaults is pressed in Preferences, calls setDefaults
-			virtual void setDefaultValues(bool /*all*/ = false)
+			virtual void restoreDefaultValues(bool /*all*/ = false)
 				throw();
 
+			///
+			void restoreValues(bool all);
+			
 			public slots:
 
 			/// Slot for the AddLight button
@@ -95,6 +97,8 @@ namespace BALL
 			void setControlsEnabled_(bool state);
 			Index getCurrentLightNumber_() const;
 
+			void typeSelected_(Position type);
+		
 			//_ apply values to a light
 			void saveSettingsToLight_()
 				throw();

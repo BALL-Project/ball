@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.sip,v 1.4 2005/07/16 21:00:43 oliver Exp $
+// $Id: scene.sip,v 1.5 2005/12/23 17:02:58 amoll Exp $
 //
 
 class Scene 
@@ -37,6 +37,7 @@ static Scene* getInstance(Position /index/);
 //  void defaultPreferences(Preferences&) throw();
 		void exportPNG(const String&);
 		String exportPNG();
+		void exportPOVRay();
 		void showExportPNGDialog();
 		
   	void exportScene(Renderer&) const throw();
@@ -53,6 +54,14 @@ static Scene* getInstance(Position /index/);
 	void enterActiveStereo();
 	void exitStereo();
 	void setVisible(bool);
+	void rotate(float, float);
+	void rotateClockwise(float);
+	void move(Vector3);
+	void moveComposites(PyCompositeList, Vector3);
+	void rotateComposites(PyCompositeList, float, float, float = 0);
 //  void writePreferences(INIFile&) throw();
+	bool isAnimationRunning() const throw();
+	void setTurnPoint(const Vector3&);
+	const Vector3& getTurnPoint() const;
   ~Scene() throw();
 };

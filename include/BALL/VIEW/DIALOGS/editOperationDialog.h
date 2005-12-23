@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editOperationDialog.h,v 1.6 2005/11/04 17:57:48 anne Exp $ 
+// $Id: editOperationDialog.h,v 1.7 2005/12/23 17:02:10 amoll Exp $ 
 //
 
 #ifndef BALL_VIEW_DIALOGS_EDITOPERATIONDIALOG_H
@@ -17,19 +17,15 @@
 # include <BALL/VIEW/WIDGETS/editableScene.h>
 #endif
 
-#include <vector>
-
 namespace BALL
 {
 	namespace VIEW
 	{
-		/** Dialogtab for storing the undo Operations of EditableScene.
+		/** Dialog for storing the undo Operations of EditableScene.
 		 		\ingroups ViewDialogs
-				This just makes sense if using an editableScene. By now just the editabelScene
-				creates undo-operations.
 		*/
 
-		class BALL_EXPORT EditOperationDialog
+		class BALL_VIEW_EXPORT EditOperationDialog
 			: public EditOperationDialogData,
 				public ModularWidget
 	  {
@@ -49,17 +45,12 @@ namespace BALL
 		
 			public slots:
 				
-				void undo();
+				void undo(int number_of_undo_steps);
 				void operationSelected(int operation);
 				void addEditOperation(EditableScene::EditOperation& eo);
-				void invalidateComposite(Composite* composite);  //TODO: * oder & 
 				
 			protected:
-				//undo stack
-				std::vector< EditableScene::EditOperation > list_of_operations_;
-				bool removeEditOperationFromList_(Atom* atom);
-				bool removeEditOperationFromList_(Bond* bond);
-				
+
 		};
 	}
 }

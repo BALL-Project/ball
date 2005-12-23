@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.sip,v 1.14 2003/11/12 18:20:29 oliver Exp $
+// $Id: string.sip,v 1.15 2005/12/23 17:02:59 amoll Exp $
 //
 
 class Substring
@@ -33,8 +33,8 @@ class Substring
   void destroy();
   // operator String() const;
   String toString() const;
-  Substring& bind(const String& /string/, Index /from/ = 0, Size /len/ = String::EndPos);
-  Substring& bind(const Substring& /substring/, Index /from/ = 0, Size /len/ = String::EndPos);
+  Substring& bind(const String& /string/, int /from/ = 0, int /len/ = String::EndPos);
+  Substring& bind(const Substring& /substring/, int /from/ = 0, int /len/ = String::EndPos);
   void unbind();
   String* getBoundString();
   const String* getBoundString() const;
@@ -69,7 +69,7 @@ class Substring
   bool operator != (char /c/) const;
   // friend ::std::ostream& operator << (::std::ostream& s, const Substring& substring);
   bool isValid() const;
-  // void dump(::std::ostream& s = ::std::cout, Size depth = 0) const;
+  // void dump(::std::ostream& s = ::std::cout, int depth = 0) const;
 };
 
 
@@ -120,8 +120,8 @@ class String
   String(double /d/);
   ~String();
   void destroy();
-  void set(const String& /string/, Index /from/ = 0, Size /len/ = String::EndPos);
-  void set(const char* /char_ptr/, Index /from/ = 0, Size /len/ = String::EndPos);
+  void set(const String& /string/, int /from/ = 0, int /len/ = String::EndPos);
+  void set(const char* /char_ptr/, int /from/ = 0, int /len/ = String::EndPos);
   // void set(Size /buffer_size/, const char *format, ...);
   // void set(std::strstream& s);
   // void set(char /c/, Size /len/ = 1);
@@ -134,7 +134,7 @@ class String
   // void set(unsigned long ul);
   //void set(float /f/);
   //void set(double /d/);
-  // void get(char* char_ptr, Index from = 0, Size len = String::EndPos) const;
+  // void get(char* char_ptr, int from = 0, int len = String::EndPos) const;
   // String& operator = (const String& s);
   // String& operator = (const char* pc);
   // String& operator = (std::strstream& s);
@@ -161,28 +161,28 @@ class String
   // unsigned long toUnsignedLong() const;
   float toFloat() const;
   double toDouble() const;
-  void toLower(Index /from/ = 0, Size /len/ = String::EndPos);
-  void toUpper(Index /from/ = 0, Size /len/ = String::EndPos);
-  Substring getSubstring(Index /from/ = 0, Size /len/ = String::EndPos) const; 
-  Substring operator () (Index /from/, Size /len/ = String::EndPos) const; 
+  void toLower(int /from/ = 0, int /len/ = String::EndPos);
+  void toUpper(int /from/ = 0, int /len/ = String::EndPos);
+  Substring getSubstring(int /from/ = 0, int /len/ = String::EndPos) const; 
+  Substring operator () (int /from/, int /len/ = String::EndPos) const; 
 %MethodCode
-	sipRes = new Substring(sipCpp->operator () (*a0));
+	sipRes = new Substring(sipCpp->operator () (a0, a1));
 %End
 
-  Substring before(const String& /s/, Index /from/ = 0) const;
-  Substring through(const String& /s/, Index /from/ = 0) const;
-  Substring from(const String& /s/, Index /from/ = 0) const;
-  Substring after(const String& /s/, Index /from/ = 0) const;
+  Substring before(const String& /s/, int /from/ = 0) const;
+  Substring through(const String& /s/, int /from/ = 0) const;
+  Substring from(const String& /s/, int /from/ = 0) const;
+  Substring after(const String& /s/, int /from/ = 0) const;
   Size countFields(const char* /delimiters/ = String::CHARACTER_CLASS__WHITESPACE) const;
   String getField(Index /index/, const char* /delimiters/ = String::CHARACTER_CLASS__WHITESPACE) const;
-  // Size split(String string_array[], Size array_size, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index from = 0) const;
+  // Size split(String string_array[], Size array_size, const char* delimiters = CHARACTER_CLASS__WHITESPACE, int from = 0) const;
   String& trimLeft(const char* /trimmed/ = String::CHARACTER_CLASS__WHITESPACE);
   String& trimRight(const char* /trimmed_chars/ = String::CHARACTER_CLASS__WHITESPACE);
   String& trim(const char* /trimmed_chars/ = String::CHARACTER_CLASS__WHITESPACE);
   String& truncate(Size /size/);
   Substring left(Size /len/) const;
   Substring right(Size /len/) const;
-  Substring instr(const String& /pattern/, Index /from/ = 0) const;
+  Substring instr(const String& /pattern/, int /from/ = 0) const;
   // String operator + (const string& /string/) const;
 	String operator + (const String& /string/) const;
   String operator + (const char* /char_ptr/) const;
@@ -190,10 +190,10 @@ class String
   // friend String operator + (const char* char_ptr, const String& s);
   // friend String operator + (char c, const String& s);
   void swap(String& /s/);
-  String& reverse(Index /from/ = 0, Size /len/ = String::EndPos);
+  String& reverse(int /from/ = 0, int /len/ = String::EndPos);
   Index substitute(const String& /to_replace/, const String& /replacing/);
   bool has(char /c/) const;
-  bool hasSubstring(const String& /s/, Index /from/ = 0) const;
+  bool hasSubstring(const String& /s/, int /from/ = 0) const;
   bool hasPrefix(const String& /s/) const;
   bool hasSuffix(const String& /s/) const;
   bool isEmpty() const;
@@ -207,11 +207,11 @@ class String
   bool isDigit(char /c/);
   bool isSpace(char /c/);
   bool isWhitespace(char /c/);
-  int compare(const String& /string/, Index /from/ = 0) const;
-  int compare(const String& /string/, Index /from/, Size /len/) const;
-  int compare(const char* /char_ptr/, Index /from/ = 0) const;
-  int compare(const char* /char_ptr/, Index /from/, Size /len/) const;
-  int compare(char /c/, Index /from/ = 0) const;
+  int compare(const String& /string/, int /from/ = 0) const;
+  int compare(const String& /string/, int /from/, int /len/) const;
+  int compare(const char* /char_ptr/, int /from/ = 0) const;
+  int compare(const char* /char_ptr/, int /from/, int /len/) const;
+  int compare(char /c/, int /from/ = 0) const;
   bool operator == (const String& /string/) const;
   bool operator != (const String& /string/) const;
   bool operator < (const String& /string/) const;
@@ -243,7 +243,7 @@ class String
   bool operator > (char /c/) const;
   bool operator >= (char /c/) const;
   bool isValid() const;
-  // void dump(::std::ostream& s = ::std::cout, Size depth = 0) const;
+  // void dump(::std::ostream& s = ::std::cout, int depth = 0) const;
   // ::std::istream& getline(::std::istream& s = ::std::cin, char delimiter = '\n');
   // friend ::std::istream& getline(::std::istream& s,  String& string,  char delimiter = '\n');
 	

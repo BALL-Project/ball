@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularInformation.h,v 1.8 2005/07/16 21:00:33 oliver Exp $
-//
+// $Id: molecularInformation.h,v 1.9 2005/12/23 17:02:15 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
 #define BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
@@ -22,7 +21,7 @@ namespace BALL
 				of the displayed Composite objects.
 				\ingroup ViewKernelOther
 		*/
-		class BALL_EXPORT MolecularInformation
+		class BALL_VIEW_EXPORT MolecularInformation
 			: public Visitor<Composite>
 		{
 			public:

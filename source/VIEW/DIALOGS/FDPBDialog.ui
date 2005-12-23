@@ -1261,6 +1261,6 @@
     <slot>okPressed()</slot>
     <slot>resetPressed()</slot>
 </slots>
-<exportmacro>BALL_EXPORT</exportmacro>
+<exportmacro>BALL_VIEW_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

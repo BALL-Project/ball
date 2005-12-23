@@ -1,14 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker2DFile.C,v 1.5 2005/07/16 21:00:47 oliver Exp $
-//
+// $Id: openBruker2DFile.C,v 1.6 2005/12/23 17:03:28 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/openBruker2DFile.h>
-#include <BALL/FORMAT/bruker2DFile.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
+
+#include <BALL/FORMAT/bruker2DFile.h>
+
 #include <qfiledialog.h>
-#include <qkeysequence.h>
 
 namespace BALL
 {
@@ -26,50 +27,45 @@ namespace BALL
       throw()
     {
       #ifdef BALL_VIEW_DEBUG
-      Log.info() << "Destructing object " << (void *)this << " of class " 
-								 << RTTI::getName<OpenBruker2DFile>() << endl;
+				Log.info() << "Destructing object of class OpenBruker2DFile" << endl;
       #endif
     }
 
-    void OpenBruker2DFile::initializeWidget(MainControl& main_control)
+    void OpenBruker2DFile::initializeWidget(MainControl&)
   		throw()
     {
-      insertMenuEntry(MainControl::FILE_IMPORT, "Bruker&2D File", this, SLOT(openFile_()));
+      insertMenuEntry(MainControl::FILE_IMPORT, "Bruker&2D File", this, SLOT(openFile()));
     }
 
-	  void OpenBruker2DFile::openFile_()
+	  void OpenBruker2DFile::openFile()
 		  throw()
     {
       QFileDialog* fd = new QFileDialog(this,"Import Bruker2DFile", true);
 			fd->setMode(QFileDialog::ExistingFile);
-      fd->setFilter("Bruker2DFile-files (2r)");
+      fd->setFilter("Bruker2DFile-files (*.2r)");
 			if (!fd->exec()) return;
       setStatusbarText("reading Bruker2DFile file...");
 
       // reading the file
-      Bruker2DFile *myfile = new Bruker2DFile();
+      Bruker2DFile myfile;
       
       try
       {
-			  myfile->read(fd->selectedFile().ascii());
+			  myfile.read(fd->selectedFile().ascii());
       }
       catch(...)
       {
 				Log.info() << "> read Bruker2DFile file failed." << std::endl;
-			  delete myfile;
 			  return;
       }
 
-      // writing to log
       setStatusbarText(String("Read 2D NMR spectrum from ") + fd->selectedFile().ascii());
 
-			/*
-      // notify main window
-      NewRegularData2DMessage new_message;
-      new_message.setComposite((Composite*)new RegularData2D(myfile.getData()));
-      new_message.setCompositeName(mydir);
-      notify_(new_message);
-			*/
+			RegularData2D* data = new RegularData2D(myfile.getData());
+
+      RegularData2DMessage* msg = new RegularData2DMessage(RegularData2DMessage::NEW);
+			msg->setData(*data);
+      notify_(msg);
     }
   }
 }

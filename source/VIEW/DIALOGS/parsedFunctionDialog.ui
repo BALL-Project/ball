@@ -173,6 +173,6 @@
 <includes>
 	<include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
 </includes>
-<exportmacro>BALL_EXPORT</exportmacro>
+<exportmacro>BALL_VIEW_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

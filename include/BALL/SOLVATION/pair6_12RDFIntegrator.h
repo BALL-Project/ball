@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12RDFIntegrator.h,v 1.23 2004/05/27 19:49:46 oliver Exp $
+// $Id: pair6_12RDFIntegrator.h,v 1.24 2005/12/23 17:01:59 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
@@ -31,7 +31,7 @@ namespace BALL
 			(@see	RadialDistributionFunction) into the computaion. \par
 \ingroup Solvation
 	*/
-	class Pair6_12RDFIntegrator
+	class BALL_EXPORT Pair6_12RDFIntegrator
 		:	public RDFIntegrator
 	{
 		public:
@@ -42,7 +42,7 @@ namespace BALL
 				This struct contains a symbolic name for each recognized key in
 				Pair6_12RDFIntegrator::options.
 		 */
-		struct Option
+		struct BALL_EXPORT Option
 		{
 			/** The integration method.
 					Use integer values with this option.
@@ -66,7 +66,7 @@ namespace BALL
 			static const char* VERBOSITY;
 		};
 
-		struct Default
+		struct BALL_EXPORT Default
 		{
 			/** Default verbosity level.
 					@see Option::VERBOSITY

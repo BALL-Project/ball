@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.h,v 1.11 2004/10/08 14:49:20 amoll Exp $
+// $Id: serverPreferences.h,v 1.12 2005/12/23 17:02:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_SERVERPREFERENCES_H
@@ -30,7 +30,7 @@ namespace BALL
 				This is one of the view dialogs, that is not implemented by an ui-file!
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT ServerPreferences 
+		class BALL_VIEW_EXPORT ServerPreferences 
 			: public QWidget,
 				public PreferencesEntry
 		{
@@ -65,10 +65,6 @@ namespace BALL
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
-
-			/// 
-			void setDefaultValues(bool /*all*/ = false)
-				throw();
 
 			/** Access the port the Server tries to connect to.
 					\return int the port number of this serverPreferences

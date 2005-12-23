@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: graphVertex.h,v 1.14 2004/02/23 17:26:06 anhi Exp $
+// $Id: graphVertex.h,v 1.15 2005/12/23 17:02:03 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_GRAPHVERTEX_H
@@ -591,8 +591,6 @@ namespace BALL
 	{
 		return true;
 	}
-
-
 
 } // namespace BALL
 

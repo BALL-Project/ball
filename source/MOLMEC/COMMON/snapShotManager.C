@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.C,v 1.14 2004/08/29 16:25:54 amoll Exp $
+// $Id: snapShotManager.C,v 1.15 2005/12/23 17:02:43 amoll Exp $
 //
 
 #include <BALL/KERNEL/PTE.h>
@@ -393,7 +393,7 @@ namespace BALL
 	// first snapshot taken (and with no other previous snapshots in a file)
 	// has index 1. 
 	void SnapShotManager::takeSnapShot()
-		throw()
+		throw(File::CannotWrite)
 	{
 		if (system_ptr_ == 0) return;
 
@@ -587,7 +587,7 @@ namespace BALL
 
 	// This method writes all snapshots in memory to the snapshot file on disk
 	void SnapShotManager::flushToDisk()
-		throw()
+		throw(File::CannotWrite)
 	{
 		// if no snapshots are in main memory, then there is nothing to do
 		// also abort, if no trajectory file was set

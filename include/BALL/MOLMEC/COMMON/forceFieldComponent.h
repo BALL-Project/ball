@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceFieldComponent.h,v 1.19 2004/12/27 17:06:32 amoll Exp $
+// $Id: forceFieldComponent.h,v 1.20 2005/12/23 17:01:51 amoll Exp $
 //
 
 // Molecular Mechanics: general force field component class
@@ -29,7 +29,7 @@ namespace BALL
 			
     	\ingroup  MolmecCommon
 	*/
-	class ForceFieldComponent 
+	class BALL_EXPORT ForceFieldComponent 
 	{
 
 		friend class ForceField;

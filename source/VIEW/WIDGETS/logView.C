@@ -28,7 +28,7 @@ namespace BALL
 			setReadOnly(false);
 		}
 
-		void DragLogView::contentsDragLeaveEvent(QDragEnterEvent*)
+		void DragLogView::contentsDragLeaveEvent(QDragLeaveEvent*)
 		{
 			setReadOnly(true);
 		}
@@ -44,9 +44,8 @@ namespace BALL
 		LogView::LogView(QWidget *parent, const char *name)
 			throw()
 			: DockWidget(parent, name),
-				NotificationTarget<LogStreamNotifier>(),
+				LogStreamNotifier(),
 				text_edit_(new DragLogView(this)),
-				strstream_(),
 				output_running_(false)
 		{
 			default_visible_ = false;
@@ -57,9 +56,8 @@ namespace BALL
 		LogView::LogView(const LogView& view)
 			throw()
 			: DockWidget((QWidget*)view.getParent()),
-				NotificationTarget<LogStreamNotifier>(),
+				LogStreamNotifier(),
 				text_edit_(new DragLogView(this)),
-				strstream_(),
 				output_running_(false)
 		{
 			default_visible_ = false;
@@ -75,22 +73,21 @@ namespace BALL
 			#endif 
 		}
 
-		bool LogView::onNotify(LogStreamNotifier& /* source */)
-			throw()
+		void LogView::logNotify() 
 		{
-			if (output_running_) return false;
+			if (output_running_) return;
 			output_running_ = true;
 			char c;
-			strstream_.get(c);
+			stream_.get(c);
 
 			String line;
-			while (strstream_.gcount() > 0)
+			while (stream_.gcount() > 0)
 			{
 				line += c;
-				strstream_.get(c);
+				stream_.get(c);
 			}
 
-			strstream_.clear();
+			stream_.clear();
 
 			if (line.size() > 0)
 			{
@@ -99,19 +96,22 @@ namespace BALL
 			}
 
 			output_running_ = false;
-			return true;
+			return;
 		}
 
 		void LogView::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			Log.insert(strstream_);
-			Log.insertNotification(strstream_, *this);
+			registerAt(Log);
 			text_edit_->setReadOnly(true);
 			text_edit_->setTextFormat(PlainText);
 
 			DockWidget::initializeWidget(main_control);
 			insertMenuEntry(MainControl::EDIT, "Clear Logs", text_edit_, SLOT(clear()));
+
+			registerWidgetForHelpSystem(this, "logView.html");
+
+			setMinimumSize(10, 10);
 		}
 
 
@@ -119,7 +119,7 @@ namespace BALL
 			throw()
 		{
 			DockWidget::finalizeWidget(main_control);
-			Log.remove(strstream_);
+			LogStreamNotifier::unregister();
 		}
 
 	} // VIEW

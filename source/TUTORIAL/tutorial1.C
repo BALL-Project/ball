@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tutorial1.C,v 1.6 2002/02/27 12:25:08 sturm Exp $
+// $Id: tutorial1.C,v 1.7 2005/12/23 17:03:21 amoll Exp $
 // tutorial example 1
 // ------------------
 // build two water molecules and write them to a file
@@ -85,7 +85,7 @@ int main()
 	S->insert(*water2);
 
 	// and write this system to a HyperChem file
-	HINFile outfile("water.hin", File::OUT);
+	HINFile outfile("water.hin", File::MODE_OUT);
 	outfile << *S;
 	outfile.close();
 

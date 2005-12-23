@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: typeRuleProcessor.h,v 1.11 2003/08/26 08:04:26 oliver Exp $
+// $Id: typeRuleProcessor.h,v 1.12 2005/12/23 17:01:52 amoll Exp $
 //
 
 // Molecular Mechanics: rule-based assignment of types 
@@ -19,7 +19,7 @@ namespace BALL
 			
     	\ingroup  MolmecAssignment
 	*/
-	class TypeRuleProcessor
+	class BALL_EXPORT TypeRuleProcessor
 		:	public RuleProcessor
 	{
 		public:

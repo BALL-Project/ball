@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.h,v 1.32 2004/03/25 12:46:18 amoll Exp $
+// $Id: DCDFile.h,v 1.33 2005/12/23 17:01:44 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_DCDFILE_H
@@ -32,7 +32,7 @@ namespace BALL
 			
     	\ingroup  MDFormats
 	*/
-	class DCDFile
+	class BALL_EXPORT DCDFile
 		:	public TrajectoryFile
 	{
 

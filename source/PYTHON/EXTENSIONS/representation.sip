@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.12 2005/07/16 21:00:43 oliver Exp $
+// $Id: representation.sip,v 1.13 2005/12/23 17:02:58 amoll Exp $
 //
 
 class Representation
@@ -11,14 +11,19 @@ class Representation
 	#include <BALL/VIEW/KERNEL/representation.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
+	typedef Representation::GeometricObjectList GeometricObjectList;
 %End
   public:
 	// BALL_CREATE(Representation);
+	enum Properties
+	{
+		PROPERTY__ALWAYS_FRONT = 0,
+		PROPERTY__IS_COORDINATE_SYSTEM
+	};
 	Representation() throw();
 	Representation(ModelType /model_type/, DrawingPrecision /drawing_precision/, DrawingMode /drawing_mode/) throw();
-	// Representation(const GeometricObjectList& /object_list/) throw();
 	Representation(const Representation& /representation/) throw();
-	~Representation() throw();
+  ~Representation() throw();
 	// const Representation& operator = (const Representation& /representation/) throw();
 
 	void clear() throw();
@@ -41,9 +46,8 @@ class Representation
 	const GeometricObjectList& getGeometricObjects() const throw();
 	void insert(GeometricObject& /Transfer/) throw();
 
-	PyCompositeList getComposites() throw();
-	PyCompositeList getComposites() const throw();
-//	void setComposites(const List<const Composite*>&) throw();
+	//const PyCompositeList& getComposites() const throw();
+	//void setComposites(const PyCompositeList&) throw();
 
 	ModelProcessor* getModelProcessor() throw();
 	const ModelProcessor* getModelProcessor() const throw();
@@ -57,8 +61,8 @@ class Representation
 	void setModelType(ModelType /type/) throw();
 	ModelType getModelType() const throw();
 
-	ColoringMethod getColoringMethod() const throw();
 	void setColoringMethod(ColoringMethod /type/) throw();
+	ColoringMethod getColoringMethod() const throw();
 
 	void enableModelUpdate(bool);
 	void enableColoringUpdate(bool);
@@ -67,14 +71,13 @@ class Representation
 
 	String getProperties() const throw();
 	bool isValid() const throw();
-	//	void dump(std::ostream& s, Size depth) const throw();
-	String toString() const throw();
 	void update(bool /rebuild/) throw();
-
 	void clearGeometricObjects() throw();
-
 	const PreciseTime& getModelBuildTime() const throw();
-
 	bool needsUpdate() const throw();
 	void setNeedsUpdate() throw();
+	//	void dump(std::ostream& s, Size depth) const throw();
+	String toString() const throw();
+	//bool operator == (const Representation&) const throw();
+	//bool operator < (const Representation& object) const throw();
 };

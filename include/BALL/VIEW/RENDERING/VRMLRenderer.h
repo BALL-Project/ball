@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.h,v 1.7 2005/07/16 21:00:36 oliver Exp $
+// $Id: VRMLRenderer.h,v 1.8 2005/12/23 17:02:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_VRMLRENDERER_H
@@ -29,111 +29,122 @@ namespace BALL
 	{
 		class ColorRGBA;
 
-		/** VRMLRenderer class.
-				This class walks over all the geometric primitives in a Scene
-				and exports them into a data file in the VRML format, which can
-				be used to render the same scene externally.
-				\ingroup ViewRendering
-		*/
-		class BALL_EXPORT VRMLRenderer : public Renderer
-		{
-			public:
+/** VRMLRenderer class.
+		This class walks over all the geometric primitives in a Scene
+		and exports them into a data file in the VRML format, which can
+		be used to render the same scene externally.
+		\ingroup ViewRendering
+*/
+class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
+{
+	public:
 
-			BALL_CREATE(VRMLRenderer)
+	BALL_CREATE(VRMLRenderer)
 
-			/** @name Constructors and Destructors.
-			 */
-			//@{
+	/** @name Constructors and Destructors.
+	 */
+	//@{
 
-			/// Default constructor.
-			VRMLRenderer()
-				throw();
+	/// Default constructor.
+	VRMLRenderer()
+		throw();
 
-			/** Detailed constructor.
-					\param name The name of the file we will create
-			 */
-			VRMLRenderer(const String& name)
-				throw(Exception::FileNotFound);
-			
-			/// Destructor.
-			virtual ~VRMLRenderer()
-				throw();
+	/** Detailed constructor.
+			\param name The name of the file we will create
+	 */
+	VRMLRenderer(const String& name)
+		throw(Exception::FileNotFound);
+	
+	/// Destructor.
+	virtual ~VRMLRenderer()
+		throw();
 
-			/// Clear method.
-			virtual void clear()
-				throw();
+	/// Clear method.
+	virtual void clear()
+		throw();
 
-			//@}
-			/** @name Accessors
-			 */
-			//@{
+	//@}
+	/** @name Accessors
+	 */
+	//@{
 
-			/** Sets the name of the file we will create.
-					\param name The file name
-			 */
-			void setFileName(const String& name)
-				throw(Exception::FileNotFound);
+	/** Sets the name of the file we will create.
+			\param name The file name
+	 */
+	void setFileName(const String& name)
+		throw(Exception::FileNotFound);
 
-			/** Converts a ColorRGBA into a String in VRMLRay format.
-			 */
-			String VRMLColorRGBA(const ColorRGBA& input)
-				throw();
+	/** Converts a ColorRGBA into a String in VRMLRay format.
+	 */
+	String VRMLColorRGBA(const ColorRGBA& input)
+		throw();
 
-			/** Converts a Vector3 into a String in VRMLRay format.
-			 */
-			String VRMLVector3(Vector3 input)
-				throw();
+	/** Converts a Vector3 into a String in VRMLRay format.
+	 */
+	String VRMLVector3(Vector3 input)
+		throw();
 
-			///
-			void VRMLobjectColor(const GeometricObject& object)
-				throw();
+	///
+	void VRMLColor(const ColorRGBA& color)
+		throw();
 
-			//@}
-			
-			/** @name Processor specific methods
-			 */
-			//@{
-			/** Start method. 
-					This method creates the file and writes the header.
-			 */
-			virtual bool init(const Stage& stage)
-				throw();
+	//@}
+	
+	/** @name Processor specific methods
+	 */
+	//@{
+	/** Start method. 
+			This method creates the file and writes the header.
+	 */
+	virtual bool init(const Stage& stage)
+		throw();
 
-			/** Finish method.
-					This method writes the ending of the file and closes it.
-			 */
-			virtual bool finish()
-				throw();
+	/** Finish method.
+			This method writes the ending of the file and closes it.
+	 */
+	virtual bool finish()
+		throw();
 
-			void renderSphere_(const Sphere& sphere)
-				throw();
-			
-			void renderMesh_(const Mesh& mesh)
-				throw();
+	void renderSphere_(const Sphere& sphere)
+		throw();
+	
+	void renderMesh_(const Mesh& mesh)
+		throw();
 
-			void out_(const String& data)
-				throw();
+	void renderTube_(const Tube& tube)
+		throw();
 
-			void outheader_(const String& data)
-				throw() {out_(data); current_intend_ += 1;}
+	void renderTwoColoredTube_(const TwoColoredTube& tube)
+		throw();
 
-			void outfinish_(const String& data)
-				throw() {out_(data); current_intend_ -= 1;}
-			//@}
+	void out_(const String& data)
+		throw();
 
-				Size width, height;
-			protected:
-				
-				File outfile_;
+	void outheader_(const String& data)
+		throw() {out_(data); current_intend_ += 1;}
 
-				Vector3   origin_;
-				Matrix4x4 rotation_;
-				Index current_intend_;
+	void outfinish_(const String& data)
+		throw() {out_(data); current_intend_ -= 1;}
+	//@}
 
-		};
+	Size width, height;
+
+	protected:
+
+	void header_(const Vector3& translation, const ColorRGBA& color, 
+							 const String& rotation = "")
+		throw();
+		
+	void footer_()
+		throw();
+
+	File outfile_;
+
+	Vector3   origin_;
+	Matrix4x4 rotation_;
+	Index current_intend_;
+};
   
-	} // namespace VIEW
-
-} // namespace BALL
+} } // namespaces
 
 #endif // BALL_VIEW_RENDERING_VRMLRENDERER_H

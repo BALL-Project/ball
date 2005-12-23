@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.h,v 1.32 2004/12/27 17:06:32 amoll Exp $
+// $Id: forceField.h,v 1.33 2005/12/23 17:01:51 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -82,7 +82,7 @@ namespace BALL
 			
     	\ingroup  MolmecCommon
 	*/
-	class ForceField
+	class BALL_EXPORT ForceField
 	{
 		public:
 

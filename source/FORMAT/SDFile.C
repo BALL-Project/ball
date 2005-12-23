@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.C,v 1.11 2004/11/07 14:44:14 oliver Exp $
+// $Id: SDFile.C,v 1.12 2005/12/23 17:02:40 amoll Exp $
 //
 
 #include <BALL/FORMAT/SDFile.h>
@@ -183,5 +183,15 @@ namespace BALL
 		// write end marker
 		getFileStream() << "$$$$" << std::endl;
 	}
+
+	const SDFile& SDFile::operator = (const SDFile& file)
+		throw()
+	{
+		read_atoms_ = file.read_atoms_;
+		MOLFile::operator = (file);
+
+		return *this;
+	}
+
 	
 } // namespace BALL

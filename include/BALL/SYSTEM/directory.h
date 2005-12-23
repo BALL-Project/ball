@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.h,v 1.28 2005/07/29 12:38:14 amoll Exp $
+// $Id: directory.h,v 1.29 2005/12/23 17:02:06 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
@@ -47,6 +47,10 @@ namespace BALL
 	*/
 	class BALL_EXPORT Directory
 	{
+#ifndef BALL_PLATFORM_WINDOWS
+# define INVALID_HANDLE_VALUE 0 
+#endif
+
 		public:
 
 		/**	@name Constants

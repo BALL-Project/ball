@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gradient.h,v 1.19 2005/01/24 16:21:13 amoll Exp $ 
+// $Id: gradient.h,v 1.20 2005/12/23 17:01:51 amoll Exp $ 
 //
 
 // A conjugate gradient minimizer for geometry optimisation
@@ -37,7 +37,7 @@ namespace BALL
 			
     	\ingroup  MolmecCommon
 	*/
-	class Gradient
+	class BALL_EXPORT Gradient
 		:	private std::vector<Vector3>
 	{
     public:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box.h,v 1.8 2005/07/16 21:00:35 oliver Exp $
+// $Id: box.h,v 1.9 2005/12/23 17:02:19 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_BOX_H
@@ -27,7 +27,7 @@ namespace BALL
 				interface and additional methods. \par
 				\ingroup ViewPrimitives
 		*/
-		class BALL_EXPORT Box
+		class BALL_VIEW_EXPORT Box
 			: public GeometricObject,
 				public Box3
 		{

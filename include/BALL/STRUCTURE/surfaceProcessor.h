@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.h,v 1.39 2003/09/07 17:23:59 oliver Exp $
+// $Id: surfaceProcessor.h,v 1.40 2005/12/23 17:02:05 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SURFACE_PROCESSOR_H
@@ -44,7 +44,7 @@ namespace BALL
 	/** SurfaceProcessor.
 	\ingroup Surface			
 	*/
-	class SurfaceProcessor
+	class BALL_EXPORT SurfaceProcessor
 		:	public UnaryProcessor<Atom>
 	{
 		public:

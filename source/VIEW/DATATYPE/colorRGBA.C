@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.C,v 1.9 2005/02/06 20:57:07 oliver Exp $
+// $Id: colorRGBA.C,v 1.10 2005/12/23 17:03:21 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
@@ -14,6 +14,7 @@ namespace BALL
 	namespace VIEW
 	{
 		ColorRGBA BALL_SELECTED_COLOR(255, 255, 0, 255);
+		PreciseTime  BALL_SELECTED_COLOR_CHANGE_TIME(PreciseTime::now());
 		
 		ColorRGBA::ColorRGBA()
 			throw()

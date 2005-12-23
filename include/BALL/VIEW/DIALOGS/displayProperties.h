@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.42 2005/07/16 21:00:32 oliver Exp $
+// $Id: displayProperties.h,v 1.43 2005/12/23 17:02:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -20,6 +20,8 @@
 #endif
 
 #include <BALL/VIEW/UIC/displayPropertiesData.h>
+
+#include <qtimer.h>
 
 namespace BALL
 {
@@ -46,7 +48,7 @@ namespace BALL
 				VIEW/KERNEL/common.h.
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT DisplayProperties 
+		class BALL_VIEW_EXPORT DisplayProperties 
 			: public DisplayPropertiesData,
 				public ModularWidget,
 				public PreferencesEntry
@@ -100,24 +102,6 @@ namespace BALL
 			*/ 
 			//@{
 			
-			/** Fetches the preferences (the position, custom color, model, drawing 
-					precision, drawing mode and the coloring method from the INIFile.
-					This method will be called inside MainControl::show().
-					\param  inifile the INIFile that contains the needed information 
-					\see    writePreferences
-			*/
-			virtual void fetchPreferences(INIFile &inifile)
-					throw();
-				
-			/** Writes the preferences (the position, custom color, model, drawing 
-					precision, drawing mode and the coloring method to the INIFile.
-					This method will be called inside MainControl::aboutToExit()
-					\param  inifile the INIFile to be written into
-					\see    fetchPreferences
-			*/
-			virtual void writePreferences(INIFile &inifile)
-					throw();
-				
 			/**	Initialize the popup menu <b>Display</b> with the entry
 					<b>Display Properties</b>, which opens the dialog.
 					This method is called automatically	immediately before the main application is started
@@ -160,7 +144,18 @@ namespace BALL
 			/// Set if Representations are automaticaly created for new Molecules
 			void enableCreationForNewMolecules(bool state) 
 				throw() { create_representations_for_new_molecules_ = state;}
-				
+
+			/// Get the Representation on which DisplayProperties is working on
+			Representation* getRepresentation() 
+				throw() { return rep_;}
+
+			/* 	Create the new representation for the selection in the MolecularControl or for a given List of Composites.
+					Called by onNotify() after receiving CompositeMessage::NEW_MOLECULE and by apply().
+					To insert a new type of model, this is the only method in DisplayProperties you have to
+					change (See also VIEW/KERNEL/common.h).
+			*/
+			virtual Representation* createRepresentation(const List<Composite*>& composites);
+	
 			public slots:
 					
 			//@} 
@@ -247,20 +242,13 @@ namespace BALL
 			void modelUpdatesChanged();
 
 			//@}
-				
+			
+			
 			protected:
 			
 			//_ Set buttons and slider according to the values
 			void checkDrawingPrecision_()
 				throw();
-
-			/*_ Create the new representation for the selection in the MolecularControl or for a given List of Composites.
-					Called by onNotify() after receiving CompositeMessage::NEW_MOLECULE and by apply().
-					To insert a new type of model, this is the only method in DisplayProperties you have to
-					change (See also VIEW/KERNEL/common.h).
-			*/
-			virtual Representation* createRepresentation_(const List<Composite*>& composites)
-				throw(Exception::InvalidOption);
 
 			//_
 			virtual void getAdvancedModelOptions_()
@@ -275,6 +263,16 @@ namespace BALL
 			
 			//_
 			virtual void applyColoringSettings_(Representation& rep);
+
+			//_
+			bool isNotBusy_();
+
+			protected slots:
+			//_
+			void checkMenu_();
+
+			protected:
+			
 			// --------------------------------------------------------------------------------
 			// attributs
 			// --------------------------------------------------------------------------------
@@ -291,6 +289,8 @@ namespace BALL
 			ColorRGBA 			custom_color_;
 			bool 						advanced_options_modified_;
 			bool 						create_representations_for_new_molecules_;
+			bool 						changed_selection_color_;
+			QTimer 					timer_;
 		};
 
 } } // namespaces

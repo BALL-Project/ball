@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editFunctions.h,v 1.3 2005/11/04 17:57:48 anne Exp $
+// $Id: editFunctions.h,v 1.4 2005/12/23 17:02:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_EDITFUNCTIONS_H
@@ -29,12 +29,14 @@ namespace BALL
 				\link BALL::EditableScene EditableScene. \endlink
 		 		\ingroups ViewWidgets
 		 */
-		class BALL_EXPORT EditFunctions
+		class BALL_VIEW_EXPORT EditFunctions
 			: public DockWidget
 		{
 			Q_OBJECT
 
 			public:
+
+//			BALL_EMBEDDABLE(DockWidget)
 
 				BALL_EMBEDDABLE(EditFunctions, DockWidget)
 
@@ -42,6 +44,16 @@ namespace BALL
 					throw();
 
 				~EditFunctions()
+					throw();
+
+				/**	Setup the menu entry in "Edit->Clear Logs".
+				*/
+				virtual void initializeWidget(MainControl& main_control)
+					throw();
+
+				/**	Remove menu entries.
+				*/
+				virtual void finalizeWidget(MainControl& main_control)
 					throw();
 
 			protected:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.88 2005/07/16 21:00:51 oliver Exp $
+// $Id: molecularStructure.C,v 1.89 2005/12/23 17:03:38 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -149,6 +149,7 @@ namespace BALL
 			create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS, 
 																					"&Distance Grid", this, SLOT(createGridFromDistance()));
 			setMenuHint("Create a grid with the distance to the geometric center of a structure.");
+			setMenuHelp("tips.html#distance_grids");
 
 			minimization_dialog_.setAmberDialog(&amber_dialog_);
 			minimization_dialog_.setCharmmDialog(&charmm_dialog_);
@@ -288,12 +289,11 @@ namespace BALL
 			} 
 			else 
 			{
-				setStatusbarText("Errors found in molecule, the problematic atoms are now selected and colored yellow! See also logs", true);
+				setStatusbarText("Errors found in molecule, the problematic atoms are now selected and colored! See also logs", true);
 				HashSet<Composite*>::Iterator it = changed_roots.begin();
 				for (; it != changed_roots.end(); it++)
 				{
-					CompositeMessage* msg = new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE);
-					notify_(msg);
+					notify_(new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE));
 				}
 			}
 
@@ -316,22 +316,36 @@ namespace BALL
 
 			Size number_of_hydrogens = 0;
 
+			bool hydrogen_ok = true;
+			bool bond_ok = true;
+
 			for (; it != temp_selection_.end(); ++it)
 			{	
-				(*it)->apply(getFragmentDB().add_hydrogens);
+				hydrogen_ok &= (*it)->apply(getFragmentDB().add_hydrogens);
 				number_of_hydrogens += getFragmentDB().add_hydrogens.getNumberOfInsertedAtoms();
 				
 				if (getFragmentDB().add_hydrogens.getNumberOfInsertedAtoms() == 0) continue;
 				
-				(*it)->apply(getFragmentDB().build_bonds);
+				bond_ok &= (*it)->apply(getFragmentDB().build_bonds);
 
 				CompositeMessage *change_message = 
 					new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 				notify_(change_message);
 			}
 
-			setStatusbarText(String("added ") +  String(number_of_hydrogens) + 
-											 " hydrogen atoms.", true);
+			String result =	String("added ") + String(number_of_hydrogens) + " hydrogen atoms.";
+
+			if (!bond_ok) 
+			{
+				result += " An error occured, while adding the bonds. Too many bonds for one atom?";
+			}
+
+			if (!hydrogen_ok) 
+			{
+				result += " An error occured, while adding the hydrogens. Too many bonds for one atom?";
+			}
+
+			setStatusbarText(result, true);
 		}
 
 
@@ -361,9 +375,11 @@ namespace BALL
 				}
 			}
 
+			bool ok = true;
+
 			for (; it != temp_selection_.end(); ++it)
 			{	
-				(*it)->apply(getFragmentDB().build_bonds);
+				ok &= (*it)->apply(getFragmentDB().build_bonds);
 
 				CompositeMessage *change_message = 
 					new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
@@ -378,6 +394,8 @@ namespace BALL
 
 			String result = "added " + String(new_number_of_bonds - old_number_of_bonds) + 
 										  " bonds (total " + String(new_number_of_bonds) + ").";
+
+			if (!ok) result += " An error occured. Too many bonds for one atom?";
 			setStatusbarText(result, true);
 		}
 
@@ -803,10 +821,10 @@ namespace BALL
 		void MolecularStructure::fetchPreferences(INIFile& inifile)
 			throw()
 		{
-			minimization_dialog_.readPreferences(inifile);
-			md_dialog_.readPreferences(inifile);
-			amber_dialog_.fetchPreferences(inifile);
-			charmm_dialog_.fetchPreferences(inifile);
+			minimization_dialog_.readPreferenceEntries(inifile);
+			md_dialog_.readPreferenceEntries(inifile);
+			amber_dialog_.readPreferenceEntries(inifile);
+			charmm_dialog_.readPreferenceEntries(inifile);
 			if (inifile.hasEntry("FORCEFIELD", "selected"))
 			{
 				if (inifile.getValue("FORCEFIELD", "selected") == "AMBER")
@@ -824,10 +842,10 @@ namespace BALL
 		void MolecularStructure::writePreferences(INIFile& inifile)
 			throw()
 		{
-			minimization_dialog_.writePreferences(inifile);
-			md_dialog_.writePreferences(inifile);
-			amber_dialog_.writePreferences(inifile);
-			charmm_dialog_.writePreferences(inifile);
+			minimization_dialog_.writePreferenceEntries(inifile);
+			md_dialog_.writePreferenceEntries(inifile);
+			amber_dialog_.writePreferenceEntries(inifile);
+			charmm_dialog_.writePreferenceEntries(inifile);
 			inifile.appendSection("FORCEFIELD");
 			if (use_amber_)
 			{
@@ -1117,6 +1135,7 @@ namespace BALL
 					|| md_dialog_.getSimulationTime() == 0.0
 					|| md_dialog_.getTemperature() == 0.0)
 			{
+				Log.error() << "No system or invalid settings for MD Simulation" << std::endl;
 				return;
 			}
 
@@ -1207,9 +1226,15 @@ namespace BALL
 				{
 					Directory d;
 					// use an absolute filename
-					String name = d.getPath() + FileSystem::PATH_SEPARATOR + md_dialog_.getDCDFile();
+					String name = md_dialog_.getDCDFile();
+
+					if (!md_dialog_.getDCDFile().has(FileSystem::PATH_SEPARATOR))
+					{
+						name = d.getPath() + FileSystem::PATH_SEPARATOR + md_dialog_.getDCDFile();
+					}
+
 					dcd = new DCDFile;
-					dcd->open(name, File::OUT);
+					dcd->open(name, std::ios::out);
 					dcd->enableVelocityStorage();
 				}
 				// ============================= WITH MULTITHREADING ===================================
@@ -1308,6 +1333,7 @@ namespace BALL
 
 			System* system = new System;
 			system->insert(*protein);
+			system->setName(dialog.getSequence());
 			getMainControl()->insert(*system, dialog.getSequence());
 		}
 
@@ -1409,6 +1435,7 @@ namespace BALL
 			if (fdpb_dialog_ == 0)
 			{
 				fdpb_dialog_ = new FDPBDialog(this, "FDPBDialog");
+				fdpb_dialog_->fetchPreferences(getMainControl()->getINIFile());
 			}
 
 			fdpb_dialog_->show();
@@ -1433,8 +1460,7 @@ namespace BALL
 				notify_(msg);
 			}
 
-			CompositeMessage* msg = new CompositeMessage(*getForceField().getSystem(), CompositeMessage::CHANGED_COMPOSITE);
-			notify_(msg);
+			getMainControl()->update(*getForceField().getSystem(), true);
 
 			setStatusbarText("Setup of the force field failed for selected atoms.", true);
 		}

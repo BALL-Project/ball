@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.21 2005/10/23 12:02:29 oliver Exp $
-//
+// $Id: sysinfo.C,v 1.22 2005/12/23 17:03:06 amoll Exp $
 
 #include <BALL/SYSTEM/sysinfo.h>
 
@@ -101,6 +100,15 @@ namespace BALL
 #else
 #ifdef BALL_COMPILER_MSVC
 
+		/// internal helper method used on Windows Platform, not available extern!
+		MEMORYSTATUSEX getMemoryStatus()
+		{
+			MEMORYSTATUSEX statex;
+			statex.dwLength = sizeof (statex);
+			GlobalMemoryStatusEx (&statex);
+			return statex;
+		}
+
 		LongIndex getAvailableMemory()
 		{
 			return getFreeMemory();
@@ -108,15 +116,13 @@ namespace BALL
 
 		LongIndex getFreeMemory()
 		{
-			MEMORYSTATUSEX statex;
-			GlobalMemoryStatusEx (&statex);
+			MEMORYSTATUSEX statex = getMemoryStatus();
 			return static_cast<LongIndex>(statex.ullAvailPhys);
 		}
 
 		LongIndex getTotalMemory()
 		{
- 			MEMORYSTATUSEX statex;
-			GlobalMemoryStatusEx (&statex);
+			MEMORYSTATUSEX statex = getMemoryStatus();
 			return static_cast<LongIndex>(statex.ullTotalPhys);
 		}
 
@@ -139,8 +145,7 @@ namespace BALL
 
 		LongIndex getFreeSwapSpace()
 		{
- 			MEMORYSTATUSEX statex;
-			GlobalMemoryStatusEx (&statex);
+			MEMORYSTATUSEX statex = getMemoryStatus();
 			return (LongIndex) statex.ullAvailPageFile;
 		}
 

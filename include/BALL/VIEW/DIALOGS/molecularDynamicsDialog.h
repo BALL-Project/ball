@@ -7,8 +7,9 @@
 
 #include <BALL/VIEW/UIC/molecularDynamicsDialogData.h>
 
-#include <BALL/FORMAT/INIFile.h>
-#include <BALL/SYSTEM/path.h>
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#endif
 
 namespace BALL
 {
@@ -16,11 +17,13 @@ namespace BALL
 	{
 		class AmberConfigurationDialog;
 		class CharmmConfigurationDialog;
+
 /** Dialog for performing MD simulations
 		\ingroup ViewDialogs
 */
-class BALL_EXPORT MolecularDynamicsDialog 
-	: public MolecularDynamicsDialogData
+class BALL_VIEW_EXPORT MolecularDynamicsDialog 
+	: public MolecularDynamicsDialogData,
+		public PreferencesEntry
 {
     Q_OBJECT
 
@@ -31,12 +34,6 @@ class BALL_EXPORT MolecularDynamicsDialog
 
 		///
     virtual ~MolecularDynamicsDialog();
-
-		///
-		void writePreferences(INIFile& inifile) const;
-
-		///
-		void readPreferences(const INIFile& inifile);
 
 		///
 		float getSimulationTime() const;
@@ -88,6 +85,9 @@ class BALL_EXPORT MolecularDynamicsDialog
 		
 		///
 		bool getUseAmber();
+
+		///
+		void chooseDCDFile();
 	
 		protected slots:
 

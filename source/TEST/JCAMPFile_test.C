@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile_test.C,v 1.4 2003/08/26 19:04:54 oliver Exp $
+// $Id: JCAMPFile_test.C,v 1.5 2005/12/23 17:03:09 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: JCAMPFile_test.C,v 1.4 2003/08/26 19:04:54 oliver Exp $")
+START_TEST(class_name, "$Id: JCAMPFile_test.C,v 1.5 2005/12/23 17:03:09 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -67,7 +67,7 @@ CHECK(bool write() throw(File::CannotWrite))
 	jcamp.close();
 	String filename;
 	NEW_TMP_FILE(filename);
-	JCAMPFile out(filename, File::OUT);
+	JCAMPFile out(filename, File::MODE_OUT);
 	out.getHeader() = jcamp.getHeader();
 	out.getEntries() = jcamp.getEntries();
 	out.write();

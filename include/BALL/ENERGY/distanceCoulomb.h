@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: distanceCoulomb.h,v 1.11 2004/02/18 23:24:03 oliver Exp $
+// $Id: distanceCoulomb.h,v 1.12 2005/12/23 17:01:43 amoll Exp $
 //
 
 #ifndef BALL_ENERGY_DISTANCE_COULOMB_H
@@ -26,7 +26,7 @@ namespace BALL
     	
 			\ingroup  Electrostatic
 	*/
-	double calculateDistanceCoulomb(const AtomContainer& fragment);
+	BALL_EXPORT double calculateDistanceCoulomb(const AtomContainer& fragment);
 } // namespace BALL
 
 #endif //  BALL_ENERGY_DISTANCE_COULOMB_H

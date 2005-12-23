@@ -18,7 +18,7 @@ namespace BALL
 		/** Dialog for showing and changing the properties of the bonds of an atom
 				\ingroup  ViewDialogs
 		*/
-		class BALL_EXPORT BondProperties 
+		class BALL_VIEW_EXPORT BondProperties 
 			: public BondPropertiesData
 		{ 
 			Q_OBJECT

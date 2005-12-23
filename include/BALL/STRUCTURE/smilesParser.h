@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smilesParser.h,v 1.13 2003/08/26 08:04:53 oliver Exp $
+// $Id: smilesParser.h,v 1.14 2005/12/23 17:02:04 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMILES_PARSER_H
@@ -37,7 +37,7 @@ namespace BALL
 			<b>Status:</b> <b>experimental</b> \par
 	\ingroup StructureMiscellaneous		
 	*/
-	class SmilesParser
+	class BALL_EXPORT SmilesParser
 	{
 		public:
 		enum ZEIsomerType
@@ -80,7 +80,7 @@ namespace BALL
 			ZEIsomerType	ze_type_;
 		};
 		
-		class SPAtom
+		BALL_EXPORT class SPAtom
 			:	public Atom
 		{
 			public:

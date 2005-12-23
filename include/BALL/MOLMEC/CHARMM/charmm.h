@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.h,v 1.16 2004/12/27 17:06:31 amoll Exp $
+// $Id: charmm.h,v 1.17 2005/12/23 17:01:50 amoll Exp $
 //
 
 // Molecular Mechanics: CHARMM force field class
@@ -28,7 +28,7 @@ namespace BALL
 			
     	\ingroup  CHARMM
 	*/
-	class CharmmFF 
+	class BALL_EXPORT CharmmFF 
 		: public ForceField
 	{
 		public:
@@ -39,7 +39,7 @@ namespace BALL
 
 		/**	Options names
 		*/
-		struct Option
+		struct BALL_EXPORT Option
 		{
 			/**	The parameter file name.
 					The default is <tt>parm19\_eef1.ini</tt> which means that EEF1 is
@@ -114,7 +114,7 @@ namespace BALL
 
 		/** Default values
 		*/
-		struct Default
+		struct BALL_EXPORT Default
 		{
 			/**	Default filename for the parameter file
 			*/

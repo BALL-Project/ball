@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.sip,v 1.9 2003/11/12 18:20:27 oliver Exp $
+// $Id: MOL2File.sip,v 1.10 2005/12/23 17:02:46 amoll Exp $
 //
 
 class MOL2File
@@ -18,6 +18,6 @@ class MOL2File
 		throw(FileNotFound);
   ~MOL2File()
 		throw();
-  virtual bool write(const System& /system/) throw(CannotWrite);
+  virtual bool write(const System& /system/) throw(File::CannotWrite);
   virtual bool read(System& /system/)	throw(ParseError);
 };

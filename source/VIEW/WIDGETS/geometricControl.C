@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.76 2005/07/16 21:00:51 oliver Exp $
+// $Id: geometricControl.C,v 1.77 2005/12/23 17:03:38 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -65,7 +65,10 @@ namespace BALL
 				return;
 			}
 
-			if (representation_ == 0) return;
+			if (representation_ == 0)
+			{
+				return;
+			}
 
 			if (control_reference_.getMainControl()->compositesAreLocked())
 			{
@@ -248,7 +251,7 @@ namespace BALL
 			insertContextMenuEntry("Duplicate", this, SLOT(duplicateRepresentation()), 15);
 			insertContextMenuEntry("Select Atoms", this, SLOT(selectAtoms()), 25);
 			insertContextMenuEntry("Modify Model", this, SLOT(modifyRepresentation_()), 20);	
-			insertContextMenuEntry("Modifiy Surface", modify_surface_dialog_, SLOT(show()), 30);	
+			insertContextMenuEntry("Modify Surface", modify_surface_dialog_, SLOT(show()), 30);	
 			context_menu_.insertSeparator();
 			context_menu_.insertItem("Clipping Plane", &clipping_plane_context_menu_, 40);
 
@@ -305,6 +308,9 @@ namespace BALL
 			CHECK_PTR(new_item);
 
 			representation_to_item_[&rep] = new_item;
+			new_item->setSelected(true);
+			deselectOtherControls_();
+			updateSelection();
 		}
 
 
@@ -346,7 +352,10 @@ namespace BALL
 
 		void GeometricControl::selectedRepresentation(Representation& representation, bool state)
 		{
-			if (state != representation.isHidden()) return;
+			if (state != representation.isHidden()) 
+			{
+				return;
+			}
 
 			if (!state)
 			{
@@ -359,10 +368,7 @@ namespace BALL
 				
 			representation.setHidden(!representation.isHidden());
 
-			if (representation.needsUpdate()) 
-			{
-				representation.update(true);
-			}
+			representation.update(false);
 		}
 
 
@@ -398,8 +404,8 @@ namespace BALL
 			throw()
 		{
 			if (context_representation_ == 0) return;
-			ShowDisplayPropertiesMessage* message = new ShowDisplayPropertiesMessage;
-			notify_(message);
+
+			notify_(new ShowDisplayPropertiesMessage);
 		}
 
 		void GeometricControl::updateSelection()
@@ -420,14 +426,17 @@ namespace BALL
 				}
 			}
 
-			if (item == 0) return;
+			Representation* rep = 0;
+			
+			if (item != 0)
+			{
+				rep = ((SelectableListViewItem*)item)->getRepresentation();
+			}
 
-			Representation* rep = ((SelectableListViewItem*)item)->getRepresentation();
 			modify_surface_dialog_->setRepresentation(rep);
-			if (rep == 0) return; 
+			notify_(new RepresentationMessage(*rep, RepresentationMessage::SELECTED));
 
-			RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::SELECTED);
-			notify_(message);
+			if (rep == 0) return; 
 
 			if (rep->getComposites().size() > 0) 
 			{
@@ -486,6 +495,10 @@ namespace BALL
 			{
 				main_control.setDeleteEntryEnabled(true);
 			}
+
+			menuBar()->setItemEnabled(menu_clipping_plane_id_, 
+										!main_control.compositesAreLocked() &&
+										!main_control.updateOfRepresentationRunning());
 		}
 
 		void GeometricControl::focusRepresentation()
@@ -504,20 +517,23 @@ namespace BALL
 			menu_clipping_plane_id_ = insertMenuEntry(MainControl::DISPLAY, 
 																		"New Clipping Plane", this, SLOT(createNewClippingPlane()));   
 			setMenuHint("Add an OpenGL Clipping Plane to the Scene");
+			setMenuHelp("geometricControl.html#clipping_planes");
+
+			registerWidgetForHelpSystem(this, "geometricControl.html");
 		}
 
 		void GeometricControl::moveClippingPlane()
 		{
 			getMainControl()->clearSelection();
 
-			SceneMessage* msg = new SceneMessage(SceneMessage::ENTER_MOVE_MODE);
-			notify_(msg);
+			notify_(new SceneMessage(SceneMessage::ENTER_MOVE_MODE));
 		}
 
 		void GeometricControl::flipClippingPlane()
 		{
 			if (context_plane_ == 0) return;
 
+			context_plane_->flip();
 			getMainControl()->redrawAllRepresentations();
 		}
 
@@ -536,7 +552,10 @@ namespace BALL
 		void GeometricControl::setClippingPlaneZ()
 		{
 			if (Scene::getInstance(0) == 0) return;
-			setClippingPlane_(Scene::getInstance(0)->getStage()->getCamera().getViewVector());
+			Vector3 v = Scene::getInstance(0)->getStage()->getCamera().getViewVector();
+			if (Maths::isZero(v.getSquareLength())) return;
+			v.normalize();
+			setClippingPlane_(v);
 		}
 
 		void GeometricControl::setClippingPlane_(const Vector3& n)
@@ -605,9 +624,7 @@ namespace BALL
 				getMainControl()->selectCompositeRecursive((Composite*)*it, false);
 			}
 
-			NewSelectionMessage* msg = new NewSelectionMessage();
-			notify_(msg);
-
+			notify_(new NewSelectionMessage);
 
 		  rep.update(false);
 		}

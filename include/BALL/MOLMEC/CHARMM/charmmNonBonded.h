@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.h,v 1.22 2005/02/14 22:29:36 amoll Exp $
+// $Id: charmmNonBonded.h,v 1.23 2005/12/23 17:01:50 amoll Exp $
 //
 // Molecular Mechanics: Charmm force field, non-bonded component
 // (van der Waals, electrostatics, EEF1 solvation)
@@ -43,7 +43,7 @@ namespace BALL
 			
     	\ingroup  CHARMM
 	*/
-	class CharmmNonBonded 
+	class BALL_EXPORT CharmmNonBonded 
 		: public ForceFieldComponent
 	{
 		public:

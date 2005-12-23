@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: autoDeletable.h,v 1.24 2004/11/07 08:25:35 oliver Exp $
+// $Id: autoDeletable.h,v 1.25 2005/12/23 17:01:40 amoll Exp $
 //
 
 
@@ -14,6 +14,10 @@
 
 #ifndef BALL_COMMON_COMMON_H
 #	include <BALL/COMMON/debug.h>
+#endif
+
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
 #endif
 
 #include <stdlib.h>
@@ -53,7 +57,7 @@ namespace BALL
 			
 	 	 \ingroup ConceptsMiscellaneous
 	*/
-	class AutoDeletable
+	class BALL_EXPORT AutoDeletable
 	{
 		public:
 

@@ -1,11 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyConstant.h,v 1.11 2004/05/27 19:49:44 oliver Exp $
+// $Id: pyConstant.h,v 1.12 2005/12/23 17:01:57 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYCONSTANT_H
 #define BALL_PYTHON_PYCONSTANT_H
+
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
 
 namespace BALL 
 {

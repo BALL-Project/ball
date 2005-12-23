@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondShiftProcessor.h,v 1.13 2003/08/26 08:04:44 oliver Exp $
+// $Id: HBondShiftProcessor.h,v 1.14 2005/12/23 17:01:55 amoll Exp $
 //
 
 #ifndef BALL_NMR_HBONDSHIFTPROCESSOR_H
@@ -32,7 +32,7 @@ namespace BALL
   /** Shift assignment processor implementing the effect of hydrogen bonds. 
 	\ingroup ShiftModulesNMR		
   */
-  class HBondShiftProcessor
+  class BALL_EXPORT HBondShiftProcessor
 		: public ShiftModule
   {
     public:

@@ -18,7 +18,7 @@ namespace BALL
 			van der Waals surface areas of the molecule, 
 			where the atoms	have a positive partial charge.			
 	*/
-	class PositiveVdWSurface
+	class BALL_EXPORT PositiveVdWSurface
 		: public SurfaceBase
 	{
 		public:
@@ -54,7 +54,7 @@ namespace BALL
 			van der Waals surface areas of the molecule, 
 			where the atoms	have a negative partial charge.
 	*/
-	class NegativeVdWSurface
+	class BALL_EXPORT NegativeVdWSurface
 		:	public SurfaceBase
 	{
 		public:
@@ -91,7 +91,7 @@ namespace BALL
 			where the partial charge of the atom is 
 			positive and the atom is a polar atom.
 	*/
-	class PositivePolarVdWSurface
+	class BALL_EXPORT PositivePolarVdWSurface
 		:	public SurfaceBase
 	{
 		public:
@@ -128,7 +128,7 @@ namespace BALL
 			where the partial charge of the atom is 
 			negative and the atom is a polar atom.
 	*/
-	class NegativePolarVdWSurface
+	class BALL_EXPORT NegativePolarVdWSurface
 		:	public SurfaceBase
 	{
 		public:
@@ -164,7 +164,7 @@ namespace BALL
 			van der Waals surface areas of the molecule,
 			of the hydrophobic atoms.
 	*/
-	class HydrophobicVdWSurface
+	class BALL_EXPORT HydrophobicVdWSurface
 		:	public SurfaceBase
 	{
 		public:
@@ -200,7 +200,7 @@ namespace BALL
 			van der Waals surface areas of the molecule,
 			of the polar atoms.
 	*/
-	class PolarVdWSurface
+	class BALL_EXPORT PolarVdWSurface
 		:	public SurfaceBase
 	{
 		public:
@@ -238,7 +238,7 @@ namespace BALL
 			the positive van der Waals area by the molecules
 			van der Waals surface area.
 	*/
-	class RelPositiveVdWSurface
+	class BALL_EXPORT RelPositiveVdWSurface
 		:	public SurfaceBase
 	{
 		public:
@@ -282,7 +282,7 @@ namespace BALL
 			the negative van der Waals area by the molecules
 			van der Waals surface area.
 	*/
-	class RelNegativeVdWSurface
+	class BALL_EXPORT RelNegativeVdWSurface
 		:	public SurfaceBase
 	{
 		public:
@@ -327,7 +327,7 @@ namespace BALL
 			van der Waals surface by the van der Waals surface
 			area of the molecule
 	*/
-	class RelPositivePolarVdWSurface
+	class BALL_EXPORT RelPositivePolarVdWSurface
 		:	public SurfaceBase
 	{
 		public:
@@ -372,7 +372,7 @@ namespace BALL
 			van der Waals surface by the van der Waals surface
 			areas of the molecule.
 	*/
-	class RelNegativePolarVdWSurface
+	class BALL_EXPORT RelNegativePolarVdWSurface
 		:	public SurfaceBase
 	{
 		public:
@@ -416,7 +416,7 @@ namespace BALL
 			the hydrophobic van der Waals surface by the 
 			van der Waals surface of the molecule.
 	*/
-	class RelHydrophobicVdWSurface
+	class BALL_EXPORT RelHydrophobicVdWSurface
 		:	public SurfaceBase
 	{
 		public:
@@ -460,7 +460,7 @@ namespace BALL
 			polar van der Waals surface by the van der Waals
 			surface of the molecule.
 	*/
-	class RelPolarVdWSurface
+	class BALL_EXPORT RelPolarVdWSurface
 		:	public SurfaceBase
 	{
 		public:
@@ -501,7 +501,7 @@ namespace BALL
 	/** This descriptor calculates the van
 			der Waals volume of the molecule
 	*/
-	class VdWVolume
+	class BALL_EXPORT VdWVolume
 		:	public SurfaceBase
 	{
 		public:
@@ -537,7 +537,7 @@ namespace BALL
 			the molecule, by deviding the molecular 
 			weight by the van der Waals surface area.
 	*/
-	class Density
+	class BALL_EXPORT Density
 		:	public SurfaceBase
 	{
 		public:
@@ -572,7 +572,7 @@ namespace BALL
 	/** This descriptor calculates the van 
 			der Waals surface area of the molecule.
 	*/
-	class VdWSurface
+	class BALL_EXPORT VdWSurface
 		:	public SurfaceBase
 	{
 		public:

@@ -4,14 +4,15 @@ Compiler:
   BALL requires a more or less ANSI compliant C++ compiler.
   It has been successfully built and tested on the following platforms:
 
-    - Linux/x86 2.x using g++ 3.2.x/3.3.x/3.4.x (some trouble with 4.0.0!)
+    - Linux/x86 2.x using g++ 3.2.x/3.3.x/3.4.x/4.0.x
     - Solaris/SPARC 8 using g++ 3.2.1
-    - MacOS X (Panther) using g++ 3.3
+    - MacOS X 10.4 (Tiger) using g++ 4.0.1
     - Microsoft Windows XP using Microsoft Visual Studio .NET 2003
+    - Microsoft Windows XP using Microsoft Visual Studio Express (free!)
 
   We have also successful reports (although with slight problems) for:
     - Microsoft Windows/cygwin
-
+    
   (Please refer to Section 2.6 at the bottom of this file for specific hints
   for these platforms)
    
@@ -49,6 +50,17 @@ External software and libraries:
   the vendor drivers and the provided OpenGL libraries (e.g. from
   www.nvidia.org if you have NVidia graphics cards).
 
+  There are additional dependencies that are not required by default:
+    - FFTW (The Fastest Fourier Transform in the West) enables the
+      Fourier transforms required for some of the docking code
+
+    - Python support for most BALL classes is disabled by default as it
+      requires SIP, a wrapper generator.
+
+  The functionality provided by these libraries is not essential for
+  BALL, however if you desire one of these features, have a look at
+  Section 2.7 of this document for detailed installation instructions.
+
 2) Building the libraries
 =========================
 
@@ -76,8 +88,8 @@ common.mak, and Makefile).
 
 The configuration of BALL may be adapted to your needs and to your system
 configuration from the command line by adding one or more of the following
-options.  An overview of these options can also be obtained by executing
-"configure --help"
+options.  An complete list of these options can also be obtained by executing
+"configure --help". The most important ones are:
 
   --x-includes=DIR        X include files are in DIR
 
@@ -103,7 +115,8 @@ options.  An overview of these options can also be obtained by executing
 
   --with-qt-libs=DIR      QT libraries are in DIR
 
-  --wiht-qt-mt  	  Use the threaded version of QT
+  --with-qt-mt  	  Use the threaded version of QT. If configure fails to link against
+                          your QT libraries, try to rerun configure with this option. 
 
   --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL
 
@@ -218,8 +231,18 @@ the qt libraries (libqt.so, libqgl.so), and the OpenGL/Mesa libraries
 ---------------------------
 
 MacOS X: 
-  - Make sure you run MacOS X Panther and have g++ 3.3 installed
-  - install QT 3.3.4 (under Tiger: a 3.3.5 snapshot -- not yet tested!)
+  - Make sure you run MacOS X Tiger and have g++ 4.0 installed
+    (check this by calling 'g++ --version')
+  - install QT 3.3.5 (only snapshots are currently available!)
+    make sure it is the Mac *native* version, not the X11 one
+    (which should work as well, but is ugly an not supported!)
+  - call configure with '--with-qt-mt'
+  - For Python support: make sure you have *framework installation*
+    of Python. Install SIP 4.2.0 or 4.2.1 together with the
+    patch provided from our website!
+  - To produce a MacOS-compliant BALLView application, use
+    'make macos_app' in source/BALLVIEW
+  - Make sure you set your DYLD_LIBRARY_PATH correctly!
 
 Windows/cygwin:
   - should work out of the box without visualization:
@@ -231,5 +254,39 @@ Windows/DOT NET:
   - There is an additional file provided with more detailed installation instructions
     in BALL/Windows/README.txt
 
+2.7) Enabling Additional Features
+---------------------------------
+FFTW Support
+  FFTW is required to compile the following classes:
+    - FFT1D
+    - FFT2D
+    - FFT3D
+
+  FFTW version 3.0.1 is required. It is available from 
+  www.fftw.org for download.
+	After installation, point configure to the library with the
+	options 
+    --with-fftw-lib=DIR     (libfftw is in DIR)
+  and
+    --with-fftw-incl=DIR    (fftw includes are in DIR).
+	
+
+Python Support
+  To enable the Python bindings of BALL you need QT support
+  enabled and the wrapper generator SIP (version 4.3.1), which
+  is available from 
+     http://www.riverbankcomputing.co.uk/sip/index.php
+  Make sure to have a recent Python installation (2.3.x) and
+  install SIP there. Then, enable the Python support by
+  specifying --with-python[=PYDIR] where PYDIR is the location
+  of the Python interpreter if it deviates from the standard
+  installation or is not contained in your current PATH. 
+
+  After running configure, building and installing the libraries,
+  you will have to build the Python bindings in BALL/source/PYTHON/EXTENSIONS
+  by changing to that directory and typing make. The result is
+  a dynamic library, which can be installed into the library
+  directory through "make install".
+
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.17 2005/07/03 09:43:12 oliver Exp $
+document revision: $Id: INSTALLATION,v 1.18 2005/12/23 17:02:24 amoll Exp $

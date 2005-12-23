@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.31 2005/07/16 21:00:34 oliver Exp $
+// $Id: cartoonModel.h,v 1.32 2005/12/23 17:02:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -29,7 +29,7 @@ namespace BALL
 				documentation.
 				\ingroup  ViewModels
 		*/
-		class BALL_EXPORT AddCartoonModel
+		class BALL_VIEW_EXPORT AddCartoonModel
 			: public AddBackboneModel
 		{
 			public:
@@ -91,12 +91,20 @@ namespace BALL
 				throw() { return arrow_width_;}
 
 			///
-			void setArrowHeight(float heigth)
-				throw() { arrow_height_ = heigth;}
+			void setStrandHeight(float heigth)
+				throw() { strand_height_ = heigth;}
 
 			///
-			float getArrowHeight() const
-				throw() { return arrow_height_;}
+			float getStrandHeight() const
+				throw() { return strand_height_;}
+			
+			///
+			void setStrandWidth(float w)
+				throw() { strand_width_ = w;}
+
+			///
+			float getStrandWidth() const
+				throw() { return strand_width_;}
 
 			///
 			void setDNABaseRadius(float r)
@@ -146,6 +154,10 @@ namespace BALL
 			bool twoColorsEnabled() const
 				throw() {return use_two_colors_;}
 
+			///
+			virtual bool createGeometricObjects()
+				throw();
+
 			//@}
 
 			protected:
@@ -186,14 +198,20 @@ namespace BALL
 			bool assignNucleotideAtoms_(Residue& r, Size nr_atoms, String atom_names[10], Atom* atoms[10])
 				throw();
 
+			void drawRiboseAtoms_(const Atom* atom1, const Atom* atom2, const Vector3& v1, const Vector3& v2);
+
 			virtual void drawPart_(Position pos);
 			Position getType_(const Residue& residue);
 
 			Composite* last_chain_;
+			SecondaryStructure* current_ss_;
+			bool 			 have_single_residues_;
+			AddBackboneModel backbone_model_;
 
 			float helix_radius_;
 			float arrow_width_;
-			float arrow_height_;
+			float strand_width_;
+			float strand_height_;
 			float DNA_helix_radius_;
 			float DNA_ladder_radius_;
 			float DNA_base_radius_;

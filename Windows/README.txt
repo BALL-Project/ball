@@ -1,63 +1,111 @@
-You will need Microsoft Visual Studio .NET (MSVC 7) in order to compile BALL.
 
-BALL requires some standard Unix tools and libraries that are not usually 
-found on Windows systems. We provide an archive file with all needed files 
-for this tools:
+This document explains how to build BALL and BALLView on the windows platform by
+using the Visual Studio project files.
 
-http://www.ball-project.org/Downloads/Contrib/Contrib-1.1.zip
+------------------------------------------------------------------------------------
+------------------------------------ REQUIREMENTS: ---------------------------------
+------------------------------------------------------------------------------------
+
+1.) You need a version of Microsoft Visual Studio NET.
+		If you have a commercial version of Visual Studio, you can proceed 
+		to step 2...
+
+		Microsoft Visual C++ Express can be obtained free of charge from
+		http://msdn.microsoft.com/vstudio/express/visualc/download/
+		If you use the express version, you need also to install the 
+		Microsoft Windows Platform SDK!
+		http://www.microsoft.com/msdownload/platformsdk/sdkupdate/
+		For the Express version, building BALL per project files, doesnt
+		seem to work. See README2.txt for instructions on how to build BALL
+		per Makefiles.
+
+2.) BALL can only be installed if Python 2.3.x is installed!
+		(Currently we advise you to use the release 2.3.5.)
+		Python can be obtained free of charge from
+		http://www.python.org/ftp/python/2.3.5/Python-2.3.5.exe
+
+3.) To create the GUI part of BALL or Python support for BALL, you need the QT 
+		library 3.3.X. (Threads support enabled).
+		Unfortunately QT 3.3 for Windows is not available under the GPL, so 
+		you need a commercial licence if you want to compile the GUI part.
+		Future versions of BALL will be build on top of QT 4.X, which is 
+		available under the GPL for Windows.
+
+-----------------------------------------------------------------------------------
+------------------------------------ INSTALLATION: --------------------------------
+-----------------------------------------------------------------------------------
+
+1.) Install the Contrib files:
+
+BALL requires some standard Unix tools and libraries that are not usually found on 
+Windows systems. We provide an archive file with all needed files for this tools:
+http://www.ball-project.org/Downloads/Contrib/Contrib-1.1.1.zip
+The Contib folder in the archive must be copied into the BALL\Windows\ directory. 
 
 This file contains:
+	- FLEX: a fast lexical analyser
+	- BISON: a parser generator
+	- regex: a regular expression library
+	- RPC: the remote procedure call library (for XDR)
+	- sip: a Python binding generator
 
-  - FLEX: a fast lexical analyser
+2.) Set the following environment variables: 
+		
+	- "PYTHONDIR" to the path of your Python installation
+	- "BALL_PATH" to the BALL installation 
+	- "BALL_DATA_PATH" to the "data" subdirectory in the BALL installation  path (e.g. C:\BALL\data)
+	- "QTVERSION" to a numerical representation for your QT version e.g. 335 for version 3.3.5
+	- "QTDIR" (this is in general done automatical by the QT installation)
 
-  - BISON: a parser generator
+3.) Building BALL:
 
-  - regex: a regular expression library
+Open BALL\Windows\BALL-project.sln
+We have a configuration set for Debuging and one for creating a Release version.
+If you switch between the both, you have to clean up the whole project.
 
-  - RPC: the remote procedure call library (for XDR)
-  
-The Contib folder in the archive must be copied to BALL\Windows\ directory. 
+Build the projects in the following order:
 
-------------------------------------------------------------------------
-Updated versions of these packages are available from GNUWIN32 project at
-http://gnuwin32.sourceforge.net/packages/flex.htm and 
-http://gnuwin32.sourceforge.net/packages/bison.htm and RWTH Aaachen (ONCRPC) at
-http://www.plt.rwth-aachen.de/ks/english/oncrpc.html.
+BALL-lib
+VIEW-lib
+Python-lib
+BALLView
 
-WARNING: bison 1.875 does not work for the BALL installation!
-------------------------------------------------------------------------
+To start BALLView, call 
 
-Now you can open the BALL project BALL/Windows/BALL.sln
-and (hopefully) compile BALL. 
+BALL\Windows\startBALLView  			or
+BALL\Windows\startBALLViewDebug
 
-Currently the Python Support is broken on Windows, but the project file still
-includes the Python libs and includes, so Python has to be installed.
+depending, if you created the debug or release version of BALL and BALLView.
 
-If you want to compile the visualization component of BALL as well,
-you will need a QT license (QT 3.2.0 or higher, commercial or academic license).
-If you install a version different than 3.3.4 you have to adjust the
-linker settings to reflect the correct QT library name.
-To do so, open the properties dialog in MSVC for the entry of the libVIEW 
-library. In the field for additional dependencies, adjust the name of the
-QT-library. (See also BALL/WINDOWS/setting_qt_version_in_visual_studio_de.png)
-Also the QTDIR environment variable has to be set to the installation directory of
-QT (this is in general done automatical by the QT installation.)
+If you dont have QT 3.3.X installed, you can only build the core library BALL-lib!
 
-After you compiled the BALL- and libVIEW-libs, you can compile BALLView.
-The program can be started with the batch-file startBALLView.bat under
-BALL/Windows/APPLICATIONS/BALLVIEW/ 
-This batch file ensures, that the PATH environment variable contains the
-directories for the needed libs.
 
-If experienced some instabilities with this release, please try to disable all
-optimisations for the MSVC compiler.
+We have also project entries to create Tutorials, Benchmarks and Tests.
 
-Known Issues:
-- Currently the Python Support is broken on Windows
+You can also create all parts of the project per Makefile in the Command line.
+For instructions on how to do this, see README2.txt.
+
+---------------------------------------------------------------------------------
+-------------------------------	RUNNING THE TEST SUITE: -------------------------
+---------------------------------------------------------------------------------
+To run the test suite, just call
+runTests.bat 										or
+runTestsDebug.bat
+
+If a test should fail, a Log file is created in the folder TEST.
+
+---------------------------------------------------------------------------------
+-------------------------------	KNOWN ISSUES: -----------------------------------
+---------------------------------------------------------------------------------
+
+- If experienced some instabilities with this release, please try to use the debugging
+  version of the library.
+
 - XDRPersistenceManager fails
 
-Please report any problems you have with this (still clumsy) setup to
 
-   ball-bugs@bioinf.uni-sb.de
+Please report any problems you have with this setup to
+
+	ball-bugs@bioinf.uni-sb.de
 
 Thank you!

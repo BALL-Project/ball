@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.h,v 1.29 2003/08/26 08:04:13 oliver Exp $
+// $Id: HINFile.h,v 1.30 2005/12/23 17:01:44 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_HINFILE_H
@@ -22,7 +22,7 @@ namespace BALL
 			
     	\ingroup  StructureFormats
 	*/
-	class HINFile
+	class BALL_EXPORT HINFile
 		: public GenericMolFile
 	{
 		public:
@@ -68,13 +68,15 @@ namespace BALL
 		*/
 		//@{
 		
-		/**	Write a system to a HIN file.
+		/**	Write a molecule to a HIN file.
 				Note that this changes the properties of atoms in the system.
 		*/
 		virtual bool write(const Molecule& molecule)
 			throw(File::CannotWrite);
 
-		///
+		/**	Write a system to a HIN file.
+				Note that this changes the properties of atoms in the system.
+		*/
 		virtual bool write(const System& system)
 			throw(File::CannotWrite);
 		

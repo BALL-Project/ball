@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rtti.h,v 1.26 2005/02/06 09:44:53 oliver Exp $
+// $Id: rtti.h,v 1.27 2005/12/23 17:01:39 amoll Exp $
 //
 
 #ifndef BALL_COMMON_RTTI_H
@@ -27,7 +27,7 @@ namespace BALL
 	// further interpretation
 	namespace GNUDemangling 
 	{
-		string demangle(string s);
+		BALL_EXPORT string demangle(string s);
 	}
 #	endif
 
@@ -41,7 +41,7 @@ namespace BALL
 			
 			\ingroup Common
 	*/ 
-	string streamClassName(const std::type_info& t);
+	BALL_EXPORT string streamClassName(const std::type_info& t);
 
 	/**	Simplified RunTime Type Identification.
 			ANSI C++ provides support for runtime type identification (RTTI). However, the support
@@ -230,8 +230,8 @@ namespace BALL
 			T		t;
 			return (typeid(u) == typeid(t));
 		}
-	} // namespace RTTI
 
+	} // namespace RTTI
 } // namespace BALL
 
 #endif // BALL_COMMON_RTTI_H

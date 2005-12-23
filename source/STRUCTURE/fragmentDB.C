@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.67 2005/07/16 21:00:43 oliver Exp $
+// $Id: fragmentDB.C,v 1.68 2005/12/23 17:03:04 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -1276,38 +1276,48 @@ namespace BALL
 
 	bool FragmentDB::BuildBondsProcessor::finish()
 	{
-		// if there are no inter-fragment bonds, return
-		if (connections_.size() >= 2)
+		bool ok = true;
+
+		try
 		{
-			ConnectionList::iterator it1(connections_.begin());
-			ConnectionList::iterator it2;
-			for (; it1 != connections_.end(); ++it1)
+			// if there are no inter-fragment bonds, return
+			if (connections_.size() >= 2)
 			{
-				for (it2 = it1, ++it2; it2 != connections_.end(); ++it2)
+				ConnectionList::iterator it1(connections_.begin());
+				ConnectionList::iterator it2;
+				for (; it1 != connections_.end(); ++it1)
 				{
-					if ((it1->atom != 0) && (it2->atom != 0))
+					for (it2 = it1, ++it2; it2 != connections_.end(); ++it2)
 					{
-						if (buildConnection_(*it1, *it2))
+						if ((it1->atom != 0) && (it2->atom != 0))
 						{
-							// Remember we built a bond
-							bonds_built_++;
-							// Remove the connection we made from the list of connections
-							it1->atom = 0;	
-							it2->atom = 0;
+							if (buildConnection_(*it1, *it2))
+							{
+								// Remember we built a bond
+								bonds_built_++;
+								// Remove the connection we made from the list of connections
+								it1->atom = 0;	
+								it2->atom = 0;
+							}
 						}
 					}
 				}
 			}
 		}
+		catch(Exception::TooManyBonds)
+		{
+			ok = false;
+		}
 
 		// Clear the connection list
 		connections_.clear();
-		return true;
+		return ok;
 	}
 
 
 	bool FragmentDB::BuildBondsProcessor::buildConnection_(FragmentDB::BuildBondsProcessor::Connection& con1, 
 																												 FragmentDB::BuildBondsProcessor::Connection& con2)
+		throw(Exception::TooManyBonds)
 	{
 		if (con1.type_name != con2.connect_to || 
 				con1.connect_to != con2.type_name)
@@ -1347,9 +1357,16 @@ namespace BALL
 
 	Processor::Result FragmentDB::BuildBondsProcessor::operator () (Fragment& fragment)
 	{
-		// build all bonds in the fragment
-		bonds_built_ += buildFragmentBonds(fragment);
-		
+		try
+		{
+			// build all bonds in the fragment
+			bonds_built_ += buildFragmentBonds(fragment);
+		}
+		catch(Exception::TooManyBonds())
+		{
+			return Processor::ABORT;
+		}
+			
 		// store a pointer to the fragment in a list
 		// to build all inter-fragment bonds in the finish method
 		storeConnections_(fragment);
@@ -1359,6 +1376,7 @@ namespace BALL
 
 
 	Size FragmentDB::BuildBondsProcessor::buildFragmentBonds(Fragment& fragment, const Fragment& tplate) const
+		throw(Exception::TooManyBonds)
 	{
 		// abort immediately if no fragment DB is known
 		if (fragment_db_ == 0) return 0;
@@ -1521,6 +1539,7 @@ namespace BALL
 
 
 	Size FragmentDB::BuildBondsProcessor::buildInterFragmentBonds(Fragment& first, Fragment& second) const
+		throw(Exception::TooManyBonds)
 	{
 		if (fragment_db_ == 0) return 0;
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.15 2005/07/16 21:00:35 oliver Exp $
+// $Id: surfaceModel.h,v 1.16 2005/12/23 17:02:18 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_SURFACEMODEL_H
@@ -31,7 +31,7 @@ namespace BALL
 				\see     SurfaceProcessor
 				\ingroup  ViewModels
 		*/
-		class BALL_EXPORT AddSurfaceModel
+		class BALL_VIEW_EXPORT AddSurfaceModel
 			: public ModelProcessor
 		{
 			public:

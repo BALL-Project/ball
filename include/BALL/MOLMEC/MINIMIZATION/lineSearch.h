@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.h,v 1.19 2004/04/20 11:40:31 amoll Exp $
+// $Id: lineSearch.h,v 1.20 2005/12/23 17:01:53 amoll Exp $
 //
 
 // Line Search Minimizer: A special class for the line search minimization algorithm
@@ -23,7 +23,7 @@ namespace BALL
 			cubic interpolation.  \par
     	\ingroup  MolmecEnergyMinimizer
 	*/
-	class LineSearch
+	class BALL_EXPORT LineSearch
 	{
 		public:
 

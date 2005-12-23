@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: File_test.C,v 1.46 2004/02/25 10:40:28 oliver Exp $
+// $Id: File_test.C,v 1.47 2005/12/23 17:03:08 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -21,13 +21,13 @@ using namespace std;
 #	define sleep(a) _sleep(1000 * a)
 #endif
 
-START_TEST(File, "$Id: File_test.C,v 1.46 2004/02/25 10:40:28 oliver Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.47 2005/12/23 17:03:08 amoll Exp $")
 
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-File* f1;
+File* f1 = 0;
 
 CHECK(File() throw())
 	f1 = new File();

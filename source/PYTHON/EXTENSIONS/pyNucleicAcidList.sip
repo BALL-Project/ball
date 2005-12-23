@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyNucleicAcidList.sip,v 1.5 2003/12/12 11:11:52 oliver Exp $
+// $Id: pyNucleicAcidList.sip,v 1.6 2005/12/23 17:02:56 amoll Exp $
 //
 
 %MappedType PyNucleicAcidList
@@ -40,6 +40,11 @@
 %ConvertToTypeCode
 	// Convert a Python list of NucleicAcid instances to an NucleicAcidList object on the
 	// heap.
+ 
+	if (sipIsErr == NULL)
+	{
+		return PyList_Check(sipPy);
+	}
  
 	PyNucleicAcidList *nucleic_acid_list = new PyNucleicAcidList;
  

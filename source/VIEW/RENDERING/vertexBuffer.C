@@ -1,20 +1,25 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.5 2005/03/02 09:46:07 oliver Exp $
+// $Id: vertexBuffer.C,v 1.6 2005/12/23 17:03:36 amoll Exp $
 
+#include <BALL/CONFIG/config.h>
 // prevent typedef clash under Linux
+#ifdef BALL_ENABLE_VERTEX_BUFFER
+
 #define QT_CLEAN_NAMESPACE
 #include <qgl.h>
 
 #ifdef _WINDOWS
 // Header Files For Windows
+ #define WINDOWS_LEAN_AND_MEAN
  #include <windows.h>
  #include <wingdi.h>	
 #else
-// #define GLX_GLXEXT_PROTOTYPES // required for Mesa-like implementations
+ #define GLX_GLXEXT_PROTOTYPES // required for Mesa-like implementations
  #include <GL/gl.h>
  #include <GL/glx.h>
+ #include <GL/glext.h>
 #endif
 
 #include <BALL/VIEW/RENDERING/vertexBuffer.h>
@@ -161,16 +166,16 @@ namespace BALL
 			glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[1]);
 			glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * vertices_ * 3, data, GL_STATIC_DRAW_ARB);
 
-			if (mesh_->colorList.size() > 1)
+			if (mesh_->colors.size() > 1)
 			{
 				multiple_colors_ = true;
 				for (Size index = 0; index < vertices_; ++index)
 				{
 					const Size start = index * 4;
-					data[start] = (float) mesh_->colorList[index].getRed();
-					data[start + 1] = (float) mesh_->colorList[index].getGreen();
-					data[start + 2] = (float) mesh_->colorList[index].getBlue();
-					data[start + 3] = (float) mesh_->colorList[index].getAlpha();
+					data[start] = (float) mesh_->colors[index].getRed();
+					data[start + 1] = (float) mesh_->colors[index].getGreen();
+					data[start + 2] = (float) mesh_->colors[index].getBlue();
+					data[start + 3] = (float) mesh_->colors[index].getAlpha();
 				}
 
 				glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[2]);
@@ -179,9 +184,9 @@ namespace BALL
 			else
 			{
 				multiple_colors_ = false;
-				if (mesh_->colorList.size() == 1)
+				if (mesh_->colors.size() == 1)
 				{
-					color_ = mesh_->colorList[0];
+					color_ = mesh_->colors[0];
 				}
 			}
 
@@ -312,3 +317,4 @@ namespace BALL
 
 }
 
+#endif

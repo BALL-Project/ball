@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.h,v 1.8 2005/07/16 21:00:36 oliver Exp $
+// $Id: sphere.h,v 1.9 2005/12/23 17:02:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
@@ -27,7 +27,7 @@ namespace BALL
 				interface and additional methods. \par
 				\ingroup ViewPrimitives
 		*/
-		class BALL_EXPORT Sphere
+		class BALL_VIEW_EXPORT Sphere
 			: public GeometricObject,
 				protected Sphere3
 		{

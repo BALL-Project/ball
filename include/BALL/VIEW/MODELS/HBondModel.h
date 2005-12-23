@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondModel.h,v 1.7 2005/07/16 21:00:34 oliver Exp $
+// $Id: HBondModel.h,v 1.8 2005/12/23 17:02:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_HBONDMODELPROCESSOR_H
@@ -20,7 +20,7 @@ namespace BALL
 		/** HBondModelProcessor class.
 				\ingroup  ViewModels
 		*/
-		class BALL_EXPORT HBondModelProcessor: public AtomBondModelBaseProcessor
+		class BALL_VIEW_EXPORT HBondModelProcessor: public AtomBondModelBaseProcessor
 		{
 			public:
 

@@ -1,14 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker1DFile.C,v 1.5 2005/07/16 21:00:47 oliver Exp $
-//
+// $Id: openBruker1DFile.C,v 1.6 2005/12/23 17:03:28 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/openBruker1DFile.h>
-#include <BALL/FORMAT/bruker1DFile.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
+
+#include <BALL/FORMAT/bruker1DFile.h>
+
 #include <qfiledialog.h>
-#include <qkeysequence.h>
 
 namespace BALL
 {
@@ -26,42 +27,45 @@ namespace BALL
       throw()
     {
       #ifdef BALL_VIEW_DEBUG
-      Log.info() << "Destructing object " << (void *)this << " of class " 
-								 << RTTI::getName<OpenBruker1DFile>() << endl;
+				Log.info() << "Destructing object of class OpenBruker1DFile" << endl;
       #endif
     }
 
-    void OpenBruker1DFile::initializeWidget(MainControl& main_control)
+    void OpenBruker1DFile::initializeWidget(MainControl&)
   		throw()
     {
-      insertMenuEntry(MainControl::FILE_IMPORT, "Bruker&1D File", this, SLOT(openFile_()));
+      insertMenuEntry(MainControl::FILE_IMPORT, "Bruker&1D File", this, SLOT(openFile()));
     }
 
-	  void OpenBruker1DFile::openFile_()
+	  void OpenBruker1DFile::openFile()
 		  throw()
     {
       QFileDialog* fd = new QFileDialog(this,"Import Bruker1DFile", true);
 			fd->setMode(QFileDialog::ExistingFile);
-      fd->setFilter("Bruker1DFile-files (1r)");
+      fd->setFilter("Bruker1DFile-files (*.1r)");
 			if (!fd->exec()) return;
       setStatusbarText("reading Bruker1DFile file...");
 
       // reading the file
-      Bruker1DFile *myfile = new Bruker1DFile();
+      Bruker1DFile myfile;
       
       try
       {
-			  myfile->read(fd->selectedFile().ascii());
+			  myfile.read(fd->selectedFile().ascii());
       }
       catch(...)
       {
 				Log.info() << "> read Bruker1DFile file failed." << std::endl;
-			  delete myfile;
 			  return;
       }
 
-      // writing to log
       setStatusbarText(String("Read 1D NMR spectrum from ") + fd->selectedFile().ascii());
+
+			RegularData1D* data = new RegularData1D(myfile.getData());
+
+      RegularData1DMessage* msg = new RegularData1DMessage(RegularData1DMessage::NEW);
+			msg->setData(*data);
+      notify_(msg);
     }
   }
 }

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueTorsions.C,v 1.8 2002/02/27 12:21:45 sturm Exp $
+// $Id: residueTorsions.C,v 1.9 2005/12/23 17:02:44 amoll Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/residueTorsions.h>
@@ -11,6 +11,20 @@ using namespace std;
 
 namespace BALL 
 {
+
+	bool ResidueTorsions::Data::operator == (const Data& data) const
+	{
+		return  residue_name == data.residue_name && 
+						atom_name_A == data.atom_name_A&& 
+						atom_name_B == data.atom_name_B&& 
+						atom_name_C == data.atom_name_C&& 
+						atom_name_D == data.atom_name_D;
+	}
+
+	bool ResidueTorsions::Data::operator != (const Data& data) const
+	{
+		return !(*this == data);
+	}
 
 	ResidueTorsions::ResidueTorsions()
 		:	ParameterSection()

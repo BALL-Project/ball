@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canonicalMD.h,v 1.26 2005/01/24 16:57:41 amoll Exp $
+// $Id: canonicalMD.h,v 1.27 2005/12/23 17:01:52 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
@@ -27,7 +27,7 @@ namespace BALL
 			
     	\ingroup  MDSimulation
 	*/
-  class CanonicalMD 
+  class BALL_EXPORT CanonicalMD 
 		: public MolecularDynamics
 	{
     public: 

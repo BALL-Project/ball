@@ -1,20 +1,81 @@
-Changes since 1.1:
+1.1.1:
 
-fixed:
+The version 1.1.1 finaly brings full Python, DLL and nmake Makefile support under Windows.
+Furthermore there is a large number of prominent fixes (especialy for g++ 4.x) 
+and some new functionality for BALLView.
+
+Added:
+ - Support for Python under Windows
+ - Python support for further classes 
+ - Support for creating animations and movies per Python script
+ - Further Python example scripts
+ - Some sensible Hotkeys for Python Scripts in BALLView
+ - Support for SD files in BALLView
+ - Context sensitive HTML documentation in BALLView
+ - BALLView again has a fourth drawing precision "ultra" for real 
+   fast graphics accelerator cards
+ - Amber charges and radii values for nucleotides
+ - Picking support for bonds
+ - Coloring by molecule
+
+Changed:
+ - BALL and BALLView libraries are now built as DLLs under Windows
+ - Both libraries are now compiled with optimization under Windows
+ - Improved useability of the DisplayProperties Dialog
+ - Visual improvements for the cartoon model, e.g. for DNA and Strands
+ - Renamed Mesh::colorList to Mesh::colors
+ - Exception::InvalidRange now has a float value
+ - Bond::TooManyBonds moved to Exception namespace
+ - A standard BALLView Python startup script will be executed in any case.
+ 	 It can be found in BALL/data/startup.py.
+   Users can choose an additional startup script, that will run afterwards.
+ - PyInterpreter and PyWidget report the reason if the Python module can not be loaded
+ - Removed Notification and changed the way to register for Log access 
+ - Removed GLQuadricObject. This functionality is available through GLRenderer
+ - Improved PreferenceEntry class and reading/storing code for preferences
+ - Coloring of surfaces by grid: the way autoscale works and the default colors
+ - Renamed ColorTable to ColorMap
+ - Cleanup of the Scene code for move, rotate, zoom: Now cleaner, smaller and faster code.
+ - Adapted DownloadPDBDialog to new rcsb.org website
+
+Fixed:
+ - Crash while reading PDB files with too many bonds
+ - Crash while wrongly using malformed boolean expression "residueID(...)"
+ - Crash in CalculateSecondaryStructureProcessor, when one SS is part of another
+ - Crash while running an MDS with trajectory if the DCD file could not be written
+ - Crash with representations for two different systems
+ - Crash with mouse movements while animation is running
  - Memory issues with Python objects (e.g. inserting GeometricObjects into Representations)
- - Saving and Loading of BALLView Project files
- - accelerated CustomColorProcessor
- - problem for very short tubes in Cartoon and Backbone model
- - logging improved when opening molecular file formats
- - added support for SD files in BALLView
- - spliting of surfaces for given distance values
+ - FragmentDB entries for H-atoms in nucleotides
+ - NMRViewer und underlying widgets did not compile
+ - Problems in persistence with g++ 4.x series
+ - Hangup in socket interface with g++ 4.x series
+ - Problems with POSIX compliance of socket classes
+ - Mouse sensitivity changed in Rotate mode when focusing on small structures
+ - Lighting, especialy for directional lights
+ - Saving and loading of BALLView project files
+ - Accelerators for menu entries didnt always work
+ - Splitting of surfaces for given distance: computed incorrect surfaces
+ - POVRay export: degenerated objects (with a length of 0) and meshes with only one color
+ - Browse button didnt work in Molecular Dynamics Simulation dialog
+ - Incorrect bond orders and GLN amide group planarity in fragment database
+ - PeptideBuilder: Naming of peptides; enabled support for paste in Dialog
+ - Opening of files in current directory per command line with BALLView
+ - Rendering of Fog
+ - Update of Representations after changing Selection color
+ - Problems with rendering Labels on Windows and MacOS
+ - Problems with Directory and Sysinfo on Windows
+ - Problems with ATI graphics cards: Line Models and Polygon Smoothing
+ - Minor problems with the clipping planes
+ - Minor problems with dashed bonds in the Ball-and-Stick model
+ - Missing assignment operator in RotamerLibrary
 
 
 1.1: 21.06.2005
 
 BALL is now provided under the LGPL and BALLView under the GPL.
 
-The version 1.1 brings support for MacOS X and and a large numer of prominent fixes and 
+The version 1.1 brings support for MacOS X and and a large number of prominent fixes and 
 improvements in BALLView. Most of these improvements are related to an improved user 
 interface and some new models and animation possibilities.
 We also did some features changes related to the Python support.
@@ -27,29 +88,29 @@ Added:
   - Python support: added more classes to the Python SIP interface
   - Proxy Support for TCP transfers
   - BALLView
-  - Documentation for BALLView in the folder BALL/doc/BALLView  
-  - Tutorial and demo under Help-menu
-  - new models for rendering nucleic acids and for visualizing forces
-  - ribbons for Cartoon model
-  - usage of OpenGL vertex buffer objects to accelerate display of triangluated surfaces 
-  - highlighting of atoms for which the setup of a force field fails
-  - improved ball&stick model now renders double-, triple- and aromatic bonds
-  - ability to create animations, either as on-screen presentations or for movies
-  - OpenGL rendering now allows for depth cueing, material paramters may be adjusted
-  - Stereo display using side-by-side mode or shutter glasses
-  - Clipping planes
-  - support for drag and drop of molecular files and python scripts
-  - ability to disable model or coloring updates for a representation
-  - spliting surfaces (e.g. to cut out a binding pocket or the like)
-  - improved labels for atoms, residues, etc.
-  - Esc key now switches to last used mode in Scene
-  - Enter key now focus on selection or on first loaded system if no selection exists
-  - its now possible to hide secondary structure entries in the MolecularControl
-  - history for boolean expressions
-  - Python scripting
-    - Hotkey support for starting any (BALL-)Python command from BALLView
-    - support to quit program from Python interpreter
-    - support for starting Python script from command line
+		- Documentation for BALLView in the folder BALL/doc/BALLView  
+		- Tutorial and demo under Help-menu
+		- new models for rendering nucleic acids and for visualizing forces
+		- ribbons for Cartoon model
+		- usage of OpenGL vertex buffer objects to accelerate display of triangluated surfaces 
+		- highlighting of atoms for which the setup of a force field fails
+		- improved ball&stick model now renders double-, triple- and aromatic bonds
+		- ability to create animations, either as on-screen presentations or for movies
+		- OpenGL rendering now allows for depth cueing, material paramters may be adjusted
+		- Stereo display using side-by-side mode or shutter glasses
+		- Clipping planes
+		- support for drag and drop of molecular files and python scripts
+		- ability to disable model or coloring updates for a representation
+		- spliting surfaces (e.g. to cut out a binding pocket or the like)
+		- improved labels for atoms, residues, etc.
+		- Esc key now switches to last used mode in Scene
+		- Enter key now focus on selection or on first loaded system if no selection exists
+		- its now possible to hide secondary structure entries in the MolecularControl
+		- history for boolean expressions
+		- Python scripting
+			- Hotkey support for starting any (BALL-)Python command from BALLView
+			- support to quit program from Python interpreter
+			- support for starting Python script from command line
 
 Fixed:
   - Several bugfixes in the file formats

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.7 2004/12/13 13:38:41 amoll Exp $
+// $Id: mainframe.C,v 1.8 2005/12/23 17:02:30 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -52,33 +52,7 @@ namespace BALL
  		molecular_structure_ = new MolecularStructure(this, "MolecularStructure");
  		CHECK_PTR(molecular_structure_);
 
-		// initialize own preferences tab
-		initializePreferencesTab(*preferences_dialog_);
-
-		// initialize all modular widgets 
-		List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-		for (; it != modular_widgets_.end(); ++it)
-		{
-			(*it)->initializeWidget(*this);
-			(*it)->initializePreferencesTab(*preferences_dialog_);
-		}
-
-		// check own preferences 
-		preferences_dialog_->fetchPreferences(preferences_);
-
-		// fetch own preferences tab
-		fetchPreferences(preferences_);
-
-		// apply on own preferences tab
-		applyPreferences();
-
-		// check menu entries, fetch and apply preferences
-		for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
-		{
-			(*it)->checkMenu(*this);
-			(*it)->fetchPreferences(preferences_);
-			(*it)->applyPreferences();
-		}
+		init_();
 	}
 
 	Mainframe::~Mainframe()

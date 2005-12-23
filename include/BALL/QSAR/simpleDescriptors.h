@@ -16,7 +16,7 @@ namespace BALL
 
 	/** This descriptor calculates the molecular weight
 	*/
-	class MolecularWeight
+	class BALL_EXPORT MolecularWeight
 		:	public SimpleBase
 	{
 		public:
@@ -51,7 +51,7 @@ namespace BALL
 	/** This descriptor counts the number of bonds of the 
 			molecule.
 	*/
-	class NumberOfBonds
+	class BALL_EXPORT NumberOfBonds
 		:	public SimpleBase
 	{
 		public:
@@ -86,7 +86,7 @@ namespace BALL
 	/** This descriptor counts the number of single bonds of the
 			molecule. 
 	*/
-	class NumberOfSingleBonds
+	class BALL_EXPORT NumberOfSingleBonds
 		:	public SimpleBase
 	{
 		public:
@@ -120,7 +120,7 @@ namespace BALL
 	/** This descriptor counts the number of double bonds of 
 			the molecule
 	*/
-	class NumberOfDoubleBonds
+	class BALL_EXPORT NumberOfDoubleBonds
 		:	public SimpleBase
 	{
 		public:
@@ -155,7 +155,7 @@ namespace BALL
 	/** This descriptor counts the number of triple bonds of
 			the molecule
 	*/
-	class NumberOfTripleBonds
+	class BALL_EXPORT NumberOfTripleBonds
 		:	public SimpleBase
 	{
 		public:
@@ -189,7 +189,7 @@ namespace BALL
 
 	/** This descriptor counts the number of aromatic bonds.
 	*/
-	class NumberOfAromaticBonds
+	class BALL_EXPORT NumberOfAromaticBonds
 		:	public SimpleBase
 	{
 		public:
@@ -223,7 +223,7 @@ namespace BALL
 
 	/** This descriptor counts the number of aromatic atoms
 	*/
-	class NumberOfAtoms
+	class BALL_EXPORT NumberOfAtoms
 		:	public SimpleBase
 	{
 		public:
@@ -257,7 +257,7 @@ namespace BALL
 
 	/** This descriptor counts the number of boron
 	*/
-	class NumberOfBoron
+	class BALL_EXPORT NumberOfBoron
 		:	public SimpleBase
 	{
 		public:
@@ -291,7 +291,7 @@ namespace BALL
 
 	/** This descriptor counts the number of carbon
 	*/
-	class NumberOfCarbon
+	class BALL_EXPORT NumberOfCarbon
 		:	public SimpleBase
 	{
 		public:
@@ -325,7 +325,7 @@ namespace BALL
 
 	/** This descriptor counts the number of nitrogen
 	*/
-	class NumberOfNitrogen
+	class BALL_EXPORT NumberOfNitrogen
 		:	public SimpleBase
 	{
 		public:
@@ -359,7 +359,7 @@ namespace BALL
 
 	/** This descriptor counts the number of oxygen
 	*/
-	class NumberOfOxygen
+	class BALL_EXPORT NumberOfOxygen
 		:	public SimpleBase
 	{
 		public:
@@ -392,7 +392,7 @@ namespace BALL
 
 	/** This descriptor counts the number of flourine
 	*/
-	class NumberOfFlourine
+	class BALL_EXPORT NumberOfFlourine
 		:	public SimpleBase
 	{
 		public:
@@ -426,7 +426,7 @@ namespace BALL
 
 	/** This descriptor counts the number of phosphorus
 	*/
-	class NumberOfPhosphorus
+	class BALL_EXPORT NumberOfPhosphorus
 		:	public SimpleBase
 	{
 		public:
@@ -460,7 +460,7 @@ namespace BALL
 
 	/** This descriptor counts the number of sulfur.
 	*/
-	class NumberOfSulfur
+	class BALL_EXPORT NumberOfSulfur
 		:	public SimpleBase
 	{
 		public:
@@ -494,7 +494,7 @@ namespace BALL
 
 	/** This descriptor counts the number of chlorine.
 	*/
-	class NumberOfChlorine
+	class BALL_EXPORT NumberOfChlorine
 		:	public SimpleBase
 	{
 		public:
@@ -528,7 +528,7 @@ namespace BALL
 
 	/** This descriptor counts the number of bromine.
 	*/
-	class NumberOfBromine
+	class BALL_EXPORT NumberOfBromine
 		: public SimpleBase
 	{
 		public:
@@ -562,7 +562,7 @@ namespace BALL
 
 	/** This descriptor counts the number of iodine.
 	*/
-	class NumberOfIodine
+	class BALL_EXPORT NumberOfIodine
 		:	public SimpleBase
 	{
 		public:
@@ -596,7 +596,7 @@ namespace BALL
 
 	/** This descriptor counts the number of hydrogen
 	*/
-	class NumberOfHydrogen
+	class BALL_EXPORT NumberOfHydrogen
 		:	public SimpleBase
 	{
 		public:
@@ -630,7 +630,7 @@ namespace BALL
 
 	/** This descriptor adds up the formal charges.
 	*/
-	class FormalCharge
+	class BALL_EXPORT FormalCharge
 		:	public SimpleBase
 	{
 		public:
@@ -666,7 +666,7 @@ namespace BALL
 			are atoms with an atomic number strictly greater than
 			1 (all but hydrgen).
 	*/
-	class NumberOfHeavyAtoms
+	class BALL_EXPORT NumberOfHeavyAtoms
 		:	public SimpleBase
 	{
 		public:
@@ -705,7 +705,7 @@ namespace BALL
 			descriptor is the negative of the sum over all $i$ of 
 			$p_i \cdot \log p_i$.
 	*/	
-	class MeanAtomInformationContent
+	class BALL_EXPORT MeanAtomInformationContent
 		:	public SimpleBase
 	{
 		public:
@@ -739,7 +739,7 @@ namespace BALL
 
 	/** This descriptor is $n$ times MeanAtomInformationContent.
 	*/
-	class AtomInformationContent
+	class BALL_EXPORT AtomInformationContent
 		:	public SimpleBase
 	{
 		public:
@@ -781,7 +781,7 @@ namespace BALL
 			rotatable. A single bond is rotatable if it is a heavy bond,
 			not in a ring and bounds not a lone atom like halogens.
 	*/
-	class NumberOfRotatableSingleBonds
+	class BALL_EXPORT NumberOfRotatableSingleBonds
 		:	public SimpleBase
 	{
 		public:
@@ -817,7 +817,7 @@ namespace BALL
 			bonds. This is the number of rotatble single bonds devided 
 			by the number of single bonds.
 	*/
-	class RelNumberOfRotatableSingleBonds
+	class BALL_EXPORT RelNumberOfRotatableSingleBonds
 		:	public SimpleBase
 	{
 		public:
@@ -858,7 +858,7 @@ namespace BALL
 	/** This descriptor counts the number of aromatic atoms, a atom 
 			is aromatic if it participates a aromatic bond.
 	*/
-	class NumberOfAromaticAtoms
+	class BALL_EXPORT NumberOfAromaticAtoms
 		:	public SimpleBase
 	{
 		public:
@@ -893,7 +893,7 @@ namespace BALL
 	/** This descriptor counts the number of heavy bonds, a bond is
 			heavy if both participating atoms are heavy.
 	*/
-	class NumberOfHeavyBonds
+	class BALL_EXPORT NumberOfHeavyBonds
 		:	public SimpleBase
 	{
 		public:	
@@ -929,7 +929,7 @@ namespace BALL
 			ia rotatble if it is heavy, not in a ring and not bounds 
 			lone atoms like halogens.
 	*/
-	class NumberOfRotatableBonds
+	class BALL_EXPORT NumberOfRotatableBonds
 		:	public SimpleBase
 	{
 		public:
@@ -964,7 +964,7 @@ namespace BALL
 			calculated by deviding the number of rotatable bonds by the 
 			number of bonds
 	*/
-	class RelNumberOfRotatableBonds
+	class BALL_EXPORT RelNumberOfRotatableBonds
 		:	public SimpleBase
 	{
 		public:
@@ -1006,7 +1006,7 @@ namespace BALL
 			\( 1 + \log_2 m \), where $m$ is the number of heavy 
 			bonds.
 	*/
-	class VertexAdjacency
+	class BALL_EXPORT VertexAdjacency
 		:	public SimpleBase
 	{
 		public:
@@ -1051,7 +1051,7 @@ namespace BALL
 			of heavy atoms and $m$ is the number of heavy bonds. If
 			$f$ is not in $(0,1)$ then $0$ is returned.
 	*/
-	class VertexAdjacencyEquality
+	class BALL_EXPORT VertexAdjacencyEquality
 		:	public SimpleBase
 	{
 		public:
@@ -1094,7 +1094,7 @@ namespace BALL
 			then this can be set via setExpression with an Expression string as 
 			parameter.
 	*/
-	class NumberOfHydrogenBondAcceptors
+	class BALL_EXPORT NumberOfHydrogenBondAcceptors
 		:	public SimpleBase
 	{
 		public:
@@ -1159,7 +1159,7 @@ namespace BALL
 			molecule. If another set of atoms want to be used, it can be set via
 			\texttt{setExpression}, with an Expression string as parameter.
 	*/
-	class NumberOfHydrogenBondDonors
+	class BALL_EXPORT NumberOfHydrogenBondDonors
 		:	public SimpleBase
 	{
 		public:
@@ -1223,7 +1223,7 @@ namespace BALL
 			hydrophobic atoms should be considered, another expression can be set via
 			setExpression, with an Expression string as parameter.
 	*/
-	class NumberOfHydrophobicAtoms
+	class BALL_EXPORT NumberOfHydrophobicAtoms
 		:	public SimpleBase
 	{
 		public:
@@ -1287,7 +1287,7 @@ namespace BALL
 			differences in atomic polarizabilities of the both
 			participating atoms through all bonds.
 	*/
-	class BondPolarizabilities
+	class BALL_EXPORT BondPolarizabilities
 		:	public SimpleBase
 	{
 		public:
@@ -1322,7 +1322,7 @@ namespace BALL
 	/** This descriptor adds up the atomic polarizabilities
 			for all atoms.
 	*/
-	class AtomicPolarizabilities
+	class BALL_EXPORT AtomicPolarizabilities
 		:	public SimpleBase
 	{
 		public:
@@ -1356,7 +1356,7 @@ namespace BALL
 
 	/** This descriptor returns the number of rings in the SSSR
 	*/
-	class SizeOfSSSR
+	class BALL_EXPORT SizeOfSSSR
 		:	public SimpleBase
 	{
 		public:
@@ -1391,7 +1391,7 @@ namespace BALL
 	/** This descriptor returns the principle moment of inertia
 			calculated from the filed coordinates!
 	*/
-	class PrincipalMomentOfInertia
+	class BALL_EXPORT PrincipalMomentOfInertia
 		:	public SimpleBase
 	{
 		public:
@@ -1427,7 +1427,7 @@ namespace BALL
 			moment of inertia over all atoms, calculated from the filed
 			coordinates!
 	*/
-	class PrincipalMomentOfInertiaX
+	class BALL_EXPORT PrincipalMomentOfInertiaX
 		:	public SimpleBase
 	{
 		public:
@@ -1462,7 +1462,7 @@ namespace BALL
 	/** This descriptor adds up the y-axis component of the principal 
 			moment of inertia over all atoms, calculated from the filed coordinates!
 	*/
-	class PrincipalMomentOfInertiaY
+	class BALL_EXPORT PrincipalMomentOfInertiaY
 		:	public SimpleBase
 	{
 		public:
@@ -1498,7 +1498,7 @@ namespace BALL
 			moment of interia over all atoms, calculated from the filed
 			coordinates!
 	*/
-	class PrincipalMomentOfInertiaZ
+	class BALL_EXPORT PrincipalMomentOfInertiaZ
 		:	public SimpleBase
 	{
 		public:

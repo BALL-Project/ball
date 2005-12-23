@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.31 2005/07/16 21:00:35 oliver Exp $
+// $Id: standardColorProcessor.h,v 1.32 2005/12/23 17:02:18 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -11,8 +11,8 @@
 #	include <BALL/VIEW/MODELS/colorProcessor.h>
 #endif
 
-#ifndef BALL_VIEW_DATATYPTE_COLORTABLE_H
-# include <BALL/VIEW/DATATYPE/colorTable.h>
+#ifndef BALL_VIEW_DATATYPTE_COLORMAP_H
+# include <BALL/VIEW/DATATYPE/colorMap.h>
 #endif
 
 #ifndef BALL_KERNEL_RESIDUE_H
@@ -21,6 +21,10 @@
 
 #ifndef BALL_KERNEL_CHAIN_H
 # include<BALL/KERNEL/chain.h>
+#endif
+
+#ifndef BALL_KERNEL_MOLECULE_H
+# include<BALL/KERNEL/molecule.h>
 #endif
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -44,7 +48,7 @@ namespace BALL
 				to color an entire molecular object in its element colors. 
 				\ingroup  ViewModels
 		*/
-		class BALL_EXPORT ElementColorProcessor
+		class BALL_VIEW_EXPORT ElementColorProcessor
 			: public ColorProcessor
 		{
 			public:
@@ -85,7 +89,7 @@ namespace BALL
 		/** ColorProcessor for coloring by the numbers of the Residue 's.
 				\ingroup  ViewModels
 		*/
-		class ResidueNumberColorProcessor
+		class BALL_VIEW_EXPORT ResidueNumberColorProcessor
 			: public ColorProcessor
 		{
 			public:
@@ -124,40 +128,90 @@ namespace BALL
 			protected:
 				GeometricObjectList list_;
 				ColorRGBA first_color_, middle_color_, last_color_;
-				ColorTable table_;
+				ColorMap table_;
 				Residue dummy_residue_;
 				HashMap<const Residue*, Position> residue_map_;
 		};
 
-		class ChainColorProcessor
+		///
+		class BALL_VIEW_EXPORT PositionColorProcessor
 			: public ColorProcessor
 		{
 			public:
 
-				BALL_CREATE(ChainColorProcessor)
+			BALL_CREATE(PositionColorProcessor)
 
-				///
-				ChainColorProcessor();
+			///
+			PositionColorProcessor();
 
-				///
-				virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
+			///
+			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 
-				///
-				void setColors(const vector<ColorRGBA>& colors) { colors_ = colors;}
+			///
+			void setColors(const vector<ColorRGBA>& colors) { colors_ = colors;}
 
-				///
-				vector<ColorRGBA>& getColors() { return colors_;}
+			///
+			vector<ColorRGBA>& getColors() { return colors_;}
 
-				///
-				const vector<ColorRGBA>& getColors() const { return colors_;}
+			///
+			const vector<ColorRGBA>& getColors() const { return colors_;}
+
+			///
+			bool start() throw();
 
 			protected:
 
-			Chain 													dummy_chain_;
-			vector<ColorRGBA> 							colors_;
-			HashMap<const Chain*, Position> chain_to_position_;
+			virtual const Composite* getAncestor_(const Composite&) { return 0;}
+
+			virtual bool isOK_(const Composite&) { return false;}
+
+			vector<ColorRGBA> 										colors_;
+			HashMap<const Composite*, Position> 	composite_to_position_;
 		};
 
+
+		///
+		class BALL_VIEW_EXPORT ChainColorProcessor
+			: public PositionColorProcessor
+		{
+			public:
+
+			BALL_CREATE(ChainColorProcessor)
+
+			///
+			ChainColorProcessor();
+
+			protected:
+
+			virtual const Composite* getAncestor_(const Composite& composite) 
+				{ return composite.getAncestor(dummy_chain_);}
+
+			virtual bool isOK_(const Composite& composite) { return RTTI::isKindOf<Chain>(composite);}
+
+ 			Chain 	dummy_chain_;
+		};
+
+
+		///
+		class BALL_VIEW_EXPORT MoleculeColorProcessor
+			: public PositionColorProcessor
+		{
+			public:
+
+			BALL_CREATE(MoleculeColorProcessor)
+
+			///
+			MoleculeColorProcessor();
+
+			protected:
+
+			virtual const Composite* getAncestor_(const Composite& composite) 
+				{ return composite.getAncestor(dummy_molecule_);}
+
+			virtual bool isOK_(const Composite& composite) { return RTTI::isKindOf<Molecule>(composite);}
+
+ 			Molecule 	dummy_molecule_;
+		};
 
 
 		/** ResidueNameColorProcessor is derived from the class ColorProcessor.
@@ -167,7 +221,7 @@ namespace BALL
 				corresponding to the names of the residues.
 				\ingroup  ViewModels
 		*/
-		class ResidueNameColorProcessor
+		class BALL_VIEW_EXPORT ResidueNameColorProcessor
 			: public ColorProcessor
 		{
 			public:
@@ -220,8 +274,8 @@ namespace BALL
 				is greater than +1 or lower than -1 it will be set to +1 or -1.
 				\ingroup  ViewModels
 		*/
-		class AtomChargeColorProcessor
-			: public ColorProcessor
+		class BALL_VIEW_EXPORT AtomChargeColorProcessor
+			: public InterpolateColorProcessor
 		{
 			public:
 
@@ -250,57 +304,10 @@ namespace BALL
 			*/ 
 			//@{
 
-			/** Change the positive color.
-					If the charge of the given Atom object is greater +1, this color will be
-					used. This positive color is used in the visit() method to calculate the
-					actual charge color of the given Atom object.
-					\param color the new positive color.
-			*/
-			void setPositiveColor(const ColorRGBA& color)
-				throw();
-
-			/** Non-mutable inspection of the positive color.
-					\return  ColorRGBA& a constant reference to the positive color
-			*/
-			const ColorRGBA& getPositiveColor() const
-				throw();
-
-			/** Change the neutral color.
-					If the charge of the given Atom object is = 0 than this color will be
-					used. This neutral color is used in the visit method to calculate the
-					actual charge color of the given Atom object.
-			*/
-			void setNeutralColor(const ColorRGBA& color)
-				throw();
-
-			/** Non-mutable inspection of the neutral color.
-					\return  ColorRGBA& a constant reference to the neutral color
-			*/
-			const ColorRGBA& getNeutralColor() const
-				throw();
-
-			/** Change the negative color.
-					If the charge of the given Atom object is = 0 than this color will be
-					used. This negative color is used in the visit() method to calculate the
-					actual charge color of the given Atom object.
-			*/
-			void setNegativeColor(const ColorRGBA& color)
-				throw();
-
-			/** Non-mutable inspection of the negative color.
-					\return  ColorRGBA& a constant reference to the negative color
-			*/
-			const ColorRGBA& getNegativeColor() const
-				throw();
-
 			///
 			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 
 			//@}
-
-			private:
-
-			ColorRGBA		positive_color_, neutral_color_, negative_color_;
 		};
 
 
@@ -314,7 +321,7 @@ namespace BALL
 				color will be interpolated according to the distance.
 				\ingroup  ViewModels
 		*/
-		class AtomDistanceColorProcessor
+		class BALL_VIEW_EXPORT AtomDistanceColorProcessor
 			:  public ColorProcessor
 		{
 			public:
@@ -351,8 +358,7 @@ namespace BALL
 					the distances of the inserted atoms are calculated.
 					\param distance the new max distance 
 			*/
-			void setDistance(float distance)
-				throw();
+			void setDistance(float distance) throw() { distance_ = distance;}
 
 			/** Inspection of the max distance.
 			*/
@@ -462,7 +468,7 @@ namespace BALL
 		/** CustomColorProcessor colorizes every GeometricObject with the default color.
 				\ingroup  ViewModels
 		*/
-		class CustomColorProcessor
+		class BALL_VIEW_EXPORT CustomColorProcessor
 			: public ColorProcessor
 		{
 			public:
@@ -472,18 +478,13 @@ namespace BALL
 				CustomColorProcessor()
 					: ColorProcessor()
 				{}
-
-
-				/** Calculate a color for a GeometricObject.
-				*/
-				virtual Processor::Result operator() (GeometricObject*& object);
 		};
 
 
 		/** Coloring by the temperature factor of atoms from a PDBFile
 				\ingroup  ViewModels
 		*/
-		class TemperatureFactorColorProcessor
+		class BALL_VIEW_EXPORT TemperatureFactorColorProcessor
 			: public InterpolateColorProcessor
 		{
 			public:
@@ -501,7 +502,7 @@ namespace BALL
 		/** Coloring by the occupancy of atoms from a PDBFile
 				\ingroup  ViewModels
 		*/
-		class OccupancyColorProcessor
+		class BALL_VIEW_EXPORT OccupancyColorProcessor
 			: public InterpolateColorProcessor
 		{
 			public:
@@ -518,7 +519,7 @@ namespace BALL
 		/** Coloring by the forces, acting on atoms.
 				\ingroup  ViewModels
 		*/
-		class ForceColorProcessor
+		class BALL_VIEW_EXPORT ForceColorProcessor
 			: public InterpolateColorProcessor
 		{
 			public:
@@ -536,7 +537,7 @@ namespace BALL
 		/** Coloring by the secondary structure, a Composite is in
 				\ingroup  ViewModels
 		*/
-		class SecondaryStructureColorProcessor
+		class BALL_VIEW_EXPORT SecondaryStructureColorProcessor
 			: public ColorProcessor
 		{
 			public:
@@ -600,7 +601,7 @@ namespace BALL
 		/** Coloring by the type of a Residue
 				\ingroup  ViewModels
 		*/
-		class ResidueTypeColorProcessor
+		class BALL_VIEW_EXPORT ResidueTypeColorProcessor
 			: public ColorProcessor
 		{
 			public:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.98 2005/07/03 09:43:42 oliver Exp $
+// $Id: molecularControl.C,v 1.99 2005/12/23 17:03:38 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -114,7 +114,7 @@ namespace BALL
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new MolecularControl " << this << std::endl;
 		#endif
-			listview->addColumn("[selected] Name");
+			listview->addColumn("[selected] | Name  [highlighted]");
 			listview->addColumn("Type");
 			listview->setColumnWidth(0, 120);
 			listview->setColumnWidth(1, 60);
@@ -131,7 +131,7 @@ namespace BALL
 
 			QPushButton* clear_button = new QPushButton(this);
 			clear_button->resize(60, 25);
-			clear_button->setMaximumSize(60, 36);
+			clear_button->setMinimumSize(40, 25);
 			clear_button->setText("Clear");
 			clear_button->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, false));
 			connect(clear_button, SIGNAL(clicked()), this, SLOT(clearSelector()));
@@ -142,12 +142,22 @@ namespace BALL
 
 			QPushButton* help_button = new QPushButton(this);
 			help_button->resize(60, 25);
-			help_button->setMaximumSize(60, 36);
+			help_button->setMinimumSize(40, 25);
 			help_button->setText("Help");
 			help_button->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, false));
 			connect(help_button, SIGNAL(clicked()), this, SLOT(showSelectorHelp()));
 			QToolTip::add(help_button, tr("Show a help dialog."));
 			layout3->addWidget(help_button);
+
+			QPushButton* select_button = new QPushButton(this);
+			select_button->resize(60, 25);
+			select_button->setText("Select");
+			select_button->setDefault(true);
+			select_button->setMinimumSize(40, 25);
+			select_button->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, false));
+			connect(select_button, SIGNAL(clicked()), this, SLOT(applySelector()));
+			QToolTip::add(select_button, tr("Apply the current expression."));
+			layout3->addWidget(select_button);
 
 			// if the selection of any item changed,
 			// mark the complete selection as invalid
@@ -265,7 +275,8 @@ namespace BALL
 				switch (composite_message->getType())
 				{
 					case CompositeMessage::NEW_MOLECULE:
-						addComposite(*(Composite *)composite_message->getComposite());
+						addComposite(*(Composite *)composite_message->getComposite(), 
+																			 composite_message->getCompositeName());
 						return false;
 					
 					case CompositeMessage::REMOVED_COMPOSITE:
@@ -321,7 +332,7 @@ namespace BALL
 			if (RTTI::isKindOf<ControlSelectionMessage>(*message))
 			{
 				ControlSelectionMessage* nsm = (ControlSelectionMessage*) message;
-				setHighlighting_(nsm->getSelection());
+				highlight(nsm->getSelection());
 				return true;
 			}
 
@@ -468,20 +479,17 @@ namespace BALL
 			
 		void MolecularControl::buildBonds()
 		{
-			MolecularTaskMessage* message = new MolecularTaskMessage(MolecularTaskMessage::BUILD_BONDS);
-			notify_(message);
+			notify_(new MolecularTaskMessage(MolecularTaskMessage::BUILD_BONDS));
 		}
 			
 		void MolecularControl::centerCamera()
 		{
-			CompositeMessage* message = new CompositeMessage(*context_composite_, CompositeMessage::CENTER_CAMERA);
-			notify_(message);
+			notify_(new CompositeMessage(*context_composite_, CompositeMessage::CENTER_CAMERA));
 		}
 
 		void MolecularControl::checkResidue()
 		{
-			MolecularTaskMessage* message = new MolecularTaskMessage(MolecularTaskMessage::CHECK_RESIDUE);
-			notify_(message);
+			notify_(new MolecularTaskMessage(MolecularTaskMessage::CHECK_RESIDUE));
 		}
 
 		void MolecularControl::showFilename()
@@ -589,9 +597,10 @@ namespace BALL
 			if (composite->isSelected() == state) return;
 			
 			CompositeMessage::CompositeMessageType id = CompositeMessage::DESELECTED_COMPOSITE;
+
 			if (state) id = CompositeMessage::SELECTED_COMPOSITE;
-			CompositeMessage* message = new CompositeMessage(*composite, id);
-			notify_(message);
+
+			notify_(new CompositeMessage(*composite, id));
 		}
 
 
@@ -623,8 +632,10 @@ namespace BALL
 
 			select_id_ = insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()));   
 			setMenuHint("Select a molecular object to see its position in the scene or to mark it for a simulation");
+			setMenuHelp("molecularControl.html#selection_highlight");
 			deselect_id_ = insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()));
 			setMenuHint("Deselect a molecular object.");
+			setMenuHelp("molecularControl.html#selection_highlight");
 
 			main_control.insertPopupMenuSeparator(MainControl::EDIT);
 
@@ -640,22 +651,25 @@ namespace BALL
 			setMenuHint("Clear the items in the clipboard");
 
 			GenericControl::initializeWidget(main_control);
+
+			registerWidgetForHelpSystem(this, "molecularControl.html");
+			registerWidgetForHelpSystem(selector_edit_, "molecularControl.html#regular_expressions"); 
 		}
 
 
-		void MolecularControl::addComposite(Composite& composite, QString* own_name)
+		void MolecularControl::addComposite(Composite& composite, String given_name)
 			throw()
 		{
 			// get information about the composite
 			composite.host(getInformationVisitor_());
 
-			// if the own name is empty use name as name
-			QString name = getInformationVisitor_().getName().c_str();
-
-			if ((name[0] == '<') && (own_name != 0))
+			// if the own name is empty use name from information visitor
+			if (given_name == "")
 			{
-				name = *own_name;
+				given_name = getInformationVisitor_().getName();
 			}
+
+			QString name = given_name.c_str();
 
 			// generate ListViewItem and insert it into the ListView
 			generateListViewItem_(0, composite, &name);
@@ -676,7 +690,7 @@ namespace BALL
 			if (to_find == composite_to_item_.end())
 			{
 				setStatusbarText(String("Tried to remove an invalid Composite in ") 
-																 + __FILE__ + " " + __LINE__, true);
+																 + String(__FILE__) + " " + String(__LINE__), true);
 				return 0;
 			}
 
@@ -709,9 +723,9 @@ namespace BALL
 			Log.error() << "MolecularControl " << this << " onNotify " << message << std::endl;
 		#endif
 
-			listview->setUpdatesEnabled(false);
-
 			GenericControl::onNotify(message);
+
+			listview->setUpdatesEnabled(false);
 
 			// react accordingly to the given message
 			if (reactToMessages_(message))
@@ -741,12 +755,13 @@ namespace BALL
 		}
 
 		// set the highlighting according to the selection in the MainControl
-		void MolecularControl::setHighlighting_(List<Composite*> selection)
+		void MolecularControl::highlight(const List<Composite*>& selection)
 			throw()
 		{	
+			listview->setUpdatesEnabled(false);
 			listview->clearSelection();
 
-			List<Composite*>::Iterator cit = selection.begin();
+			List<Composite*>::ConstIterator cit = selection.begin();
 			for (; cit != selection.end(); cit++)
 			{
 				if (*cit == 0 || 
@@ -760,6 +775,10 @@ namespace BALL
 				}
 				composite_to_item_[*cit]->setSelected(true);
 			}
+
+			listview->setUpdatesEnabled(true);
+			listview->triggerUpdate();
+			updateSelection();
 		}
 
 		// set the checkboxes according to the selection in the MainControl
@@ -840,8 +859,8 @@ namespace BALL
 			selected_.clear();
 			listview->setUpdatesEnabled(true);
 			listview->triggerUpdate();
-			ControlSelectionMessage* message = new ControlSelectionMessage;
-			notify_(message);
+
+			notify_(new ControlSelectionMessage);
 
 			HashSet<Composite*>::Iterator roots_it = roots.begin();
 			for (; +roots_it; roots_it++)
@@ -937,8 +956,8 @@ namespace BALL
 		void MolecularControl::moveItems()
 		{
 			select();
-			SceneMessage* msg = new SceneMessage(SceneMessage::ENTER_MOVE_MODE);
-			notify_(msg);
+
+			notify_(new SceneMessage(SceneMessage::ENTER_MOVE_MODE));
 		}
 
 
@@ -1044,8 +1063,7 @@ namespace BALL
 			message->setSelection(selected_);
 			notify_(message);
 
-			ShowDisplayPropertiesMessage* msg = new ShowDisplayPropertiesMessage;
-			notify_(msg);
+			notify_(new ShowDisplayPropertiesMessage);
 		}
 
 		void MolecularControl::collapseAll()
@@ -1068,9 +1086,7 @@ namespace BALL
 
 		void MolecularControl::createRepresentation_()
 		{
-			CreateRepresentationMessage* crm = new CreateRepresentationMessage(selected_, 
-					selected_model_, selected_coloring_method_);
-			notify_(crm);
+			notify_(new CreateRepresentationMessage(selected_, selected_model_, selected_coloring_method_));
 		}
 
 		void MolecularControl::countItems()
@@ -1105,8 +1121,8 @@ namespace BALL
 				s+= " Residues, ";
 			}
 
-			s+=String(ac.countAtoms()) + " Atoms, ";
-			s+=String(ac.countBonds()) + " Bonds";
+			s += String(ac.countAtoms()) + " Atoms, ";
+			s += String(ac.countBonds()) + " Bonds";
 			setStatusbarText(s, true);
 		}
 
@@ -1126,7 +1142,7 @@ namespace BALL
 			}
 			catch(Exception::ParseError e)
 			{
-				setStatusbarText(String("Invalid expression ") + e.getMessage());
+				setStatusbarText(String("Invalid expression ") + e.getMessage(), true);
 				return 0;
 			}
 
@@ -1136,7 +1152,15 @@ namespace BALL
 			CompositeManager::CompositeIterator it = getMainControl()->getCompositeManager().begin();
 			for(; it != getMainControl()->getCompositeManager().end(); it++)
 			{
-				(*it)->apply(s);
+				try
+				{
+					(*it)->apply(s);
+				}
+				catch(Exception::GeneralException e)
+				{
+					setStatusbarText(String("Invalid expression ") + e.getMessage(), true);
+				}
+
 				List<Atom*>::Iterator ait = s.getSelectedAtoms().begin();
 				for (; ait != s.getSelectedAtoms().end(); ait++)
 				{
@@ -1165,43 +1189,7 @@ namespace BALL
 
 		void MolecularControl::showSelectorHelp()
 		{
-			QMessageBox::information( this, "BALLView",
-					String(
-					String("In this text field, you can enter regular expressions to select molecular entities.\n")+
-					"To apply your selection, just press Return key after you are finished. If you want to\n"+
-					"clear your selection, just click on the button next to the help button.\n\n"+
-					"Possible predicates are: \n"+
-					"true() \t this is always true\n" +
-					"false() \t this is always false\n" +
-					"selected() \t this is true for already selected atoms\n" +
-					"name(string) \t the name of the atom \n" +
-					"type(string) \t the type name of the atom\n" +
-					"element(char) \t the element (abbreviated by its symbol)\n" +
-					"residue(string) \t the name of the residue containing the atom\n" +
-					"residueID(int) \t the PDB ID of the residue (usally a number)\n" +
-					"protein() \t the name of the protein the atom is contained in\n" +
-					"secondaryStruct() \t the name of the secondary structure the atom is contained in\n" +
-					"solvent() \t true if the atom is a solvent atom added by BALL\n" +
-					"backbone() \t true for backbone atoms\n" +
-					"chain() \n" +
-					"nucleotide() \n" +
-					"inRing() \n" +
-					"doubleBonds() \n" +
-					"tripleBonds() \n" +
-					"aromaticBonds() \n" +
-					"numberOfBonds(int) \n" +
-					"connectedTo(char) \n" +
-					"sp3Hybridized() \n" +
-					"sp2Hybridized() \n" +
-					"spHybridized() \n" +
-					"charge() \n" +
-					"isAxial() \n" +
-					"is4C1() \n\n" +
-					"They can be connected with\n" +
-					"AND and OR, grouped with brackets, and each predicate can be negated with '!'\n\n" +
-					"You have to press RETURN to apply the selection!"
-					).c_str(),
-					"&OK");
+			showHelp("molecularControl.html#regular_expressions");
 		}
 
 		void MolecularControl::clearSelector()
@@ -1366,11 +1354,19 @@ namespace BALL
 			inifile.appendSection("MOLECULARCONTROL");
 			inifile.insertValue("MOLECULARCONTROL", "ShowSS", show_ss_);
 
-			String regexps;
+			HashSet<String> set;
 
 			for (Position p = 0; p < (Position)selector_edit_->count(); p++)
 			{
-				regexps += selector_edit_->text(p).ascii();
+				set.insert(selector_edit_->text(p).ascii());
+			}
+
+			String regexps;
+			
+			HashSet<String>::ConstIterator it = set.begin();
+			for (; +it; ++it)
+			{
+				regexps += *it;
 				regexps += "|";
 			}
 

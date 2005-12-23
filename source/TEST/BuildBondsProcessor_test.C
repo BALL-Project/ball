@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BuildBondsProcessor_test.C,v 1.7 2005/07/16 21:00:44 oliver Exp $
+// $Id: BuildBondsProcessor_test.C,v 1.8 2005/12/23 17:03:07 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: BuildBondsProcessor_test.C,v 1.7 2005/07/16 21:00:44 oliver Exp $")
+START_TEST(Fragment, "$Id: BuildBondsProcessor_test.C,v 1.8 2005/12/23 17:03:07 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

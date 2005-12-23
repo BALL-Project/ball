@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredLine.h,v 1.9 2005/07/16 21:00:36 oliver Exp $
+// $Id: twoColoredLine.h,v 1.10 2005/12/23 17:02:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_VIEW_PRIMITIVES_TWOCOLOREDLINE_H
@@ -42,7 +42,7 @@ namespace BALL
 				interface and additional methods. \par
 				\ingroup ViewPrimitives
 		*/
-		class BALL_EXPORT TwoColoredLine
+		class BALL_VIEW_EXPORT TwoColoredLine
 			: public GeometricObject,
 				public ColorExtension2,
 				public Vertex2

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.16 2005/07/16 21:00:51 oliver Exp $
+// $Id: genericControl.C,v 1.17 2005/12/23 17:03:37 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
@@ -77,8 +77,7 @@ namespace BALL
 
 		void GenericControl::deselectOtherControls_()
 		{
-			DeselectControlsMessage* dcm = new DeselectControlsMessage;
-			notify_(dcm);
+			notify_(new DeselectControlsMessage);
 		}
 
 		void GenericControl::updateSelection() 
@@ -127,5 +126,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL

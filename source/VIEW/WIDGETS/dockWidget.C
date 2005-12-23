@@ -1,10 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.27 2005/08/31 13:35:55 amoll Exp $
+// $Id: dockWidget.C,v 1.28 2005/12/23 17:03:37 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
+
 #include <qmenubar.h>
 #include <qlabel.h>
 #include <qdragobject.h>
@@ -172,6 +174,18 @@ namespace BALL
 				hide();
 			}
 		}
+
+		void DockWidget::registerWidgetForHelpSystem(const QWidget* widget, const String& url)
+		{
+			ModularWidget::registerWidgetForHelpSystem(widget, url);
+
+			// also register Windows menu entry!
+			RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
+			msg->setMenuEntry(window_menu_entry_id_);
+			msg->setURL(url);
+			notify_(msg);
+		}
+
 
 	} // namespace VIEW 
 } // namespace BALL

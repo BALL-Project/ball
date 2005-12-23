@@ -1,24 +1,30 @@
 #!/bin/sh
 
+INSTALL_DIR=usr/share/BALL
 rm -rf deb-ball &&
 cp -r deb-ball-source deb-ball &&
-cp ../lib/$PLATFORM/lib*.so deb-ball/opt/BALL/lib &&
+cp ../lib/$PLATFORM/* deb-ball/$INSTALL_DIR/lib &&
 
-cp ../lib/$PLATFORM/BALLmodule.so deb-ball/usr/lib/python2.3/site-packages &&
-#cp /opt/sip-4.0rc1_gcc-3.3.3/siplib/sip.so deb-ball/usr/lib/python2.3/site-packages &&
+cp -r ../source/APPLICATIONS/BALLVIEW/BALLView deb-ball/$INSTALL_DIR/bin/BALLView &&
 
-cp ../source/APPLICATIONS/BALLVIEW/BALLView deb-ball/opt/BALL/bin/BALLView &&
+cp -rf ../doc/BALLView deb-ball/$INSTALL_DIR/doc &&
 
-cp -rf ../doc/BALLView deb-ball/opt/BALL/doc &&
-
-cp -r ../data deb-ball/opt/BALL &&
+cp -r ../data deb-ball/$INSTALL_DIR &&
+cp -r ../source/EXAMPLES/PYTHON deb-ball/$INSTALL_DIR &&
 
 for i in `find deb-ball -name "CVS"`; do rm -rf $i; done &&
+for i in `find deb-ball -name "dummy"`; do rm -rf $i; done &&
 
 chmod -R 0755 deb-ball/DEBIAN &&
+chmod -x deb-ball/$INSTALL_DIR/data/QSAR/* &&
+chmod -x deb-ball/$INSTALL_DIR/data/CHARMM/charmm* &&
 chmod +x deb-ball/usr/bin/BALLView &&
+chown -R root deb-ball/usr/share/doc/ballview &&
+chgrp -R root deb-ball/usr/share/doc/ballview &&
+strip --strip-unneeded deb-ball/$INSTALL_DIR/lib/*.so &&
+strip --strip-unneeded deb-ball/$INSTALL_DIR/bin/BALLView &&
 
 dpkg -b deb-ball BALLView.deb &&
-
-rm -rf deb-ball
+rm -rf deb-ball &&
+mv BALLView.deb ~
 

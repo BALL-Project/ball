@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.13 2005/07/16 21:00:37 oliver Exp $
+// $Id: logView.h,v 1.14 2005/12/23 17:02:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -29,10 +29,6 @@
 # include <qtextedit.h>
 #endif
 
-#ifndef BALL_CONCEPT_NOTIFICATION_h
-# include <BALL/CONCEPT/notification.h>
-#endif
-
 #ifndef BALL_VIEW_WIDGETS_DOCKWIDGET_H
 #	include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
@@ -52,7 +48,7 @@ namespace BALL
 
 			public slots:
 			virtual void contentsDragEnterEvent(QDragEnterEvent* e);
-			virtual void contentsDragLeaveEvent(QDragEnterEvent* e);
+			virtual void contentsDragLeaveEvent(QDragLeaveEvent* e);
 			virtual void contentsDropEvent(QDropEvent* e);
 		};
 
@@ -67,9 +63,9 @@ namespace BALL
 				record and show all messages sent to the \link BALL::LogStream Log \endlink object.
 				\ingroup ViewWidgets
 		*/
-		class BALL_EXPORT LogView
+		class BALL_VIEW_EXPORT LogView
 			: public DockWidget,
-			  public NotificationTarget<LogStreamNotifier>
+			  public LogStreamNotifier
 		{
 			Q_OBJECT
 
@@ -128,15 +124,12 @@ namespace BALL
 					\param   source the notification source
 					\return  bool returns always <tt>true</tt>
 			*/
-			virtual bool onNotify(LogStreamNotifier &source)
-				throw();
+			void logNotify();
 
 			private:
 
 
 			QTextEdit* text_edit_;
-
-			std::stringstream strstream_;
 
 			bool output_running_;
 		};

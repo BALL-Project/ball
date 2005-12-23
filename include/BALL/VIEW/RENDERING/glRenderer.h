@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.35 2005/07/16 21:00:37 oliver Exp $
+// $Id: glRenderer.h,v 1.36 2005/12/23 17:02:21 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -27,16 +27,8 @@
 # include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
-#ifndef BALL_VIEW_RENDERING_GLQUADRICOBJECT_H
-# include <BALL/VIEW/RENDERING/glQuadricObject.h>
-#endif
-
 #ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
 # include <BALL/VIEW/RENDERING/glDisplayList.h>
-#endif
-
-#ifndef BALL_VIEW_RENDERING_VERTEXBUFFER_H
-# include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #endif
 
 class QFont;
@@ -50,12 +42,13 @@ namespace BALL
 	{
 		class GLDisplayList;
 		class Scene;
+		class MeshBuffer;
 
 		/** GLRenderer
 		 		Renderer which provides hardware accelerated OPENGL rendering.
 				\ingroup ViewRendering
 		*/
-		class BALL_EXPORT GLRenderer
+		class BALL_VIEW_EXPORT GLRenderer
 			: public Renderer
 		{
 			friend class Scene;
@@ -94,7 +87,7 @@ namespace BALL
 					<b> drawing_mode_</b> are not allowed. 
 					\see         GeneralException			
 			*/
-			class WrongModes:	public Exception::GeneralException
+			class BALL_VIEW_EXPORT WrongModes:	public Exception::GeneralException
 			{
 				public:
 
@@ -146,10 +139,14 @@ namespace BALL
 			GeometricObject* getObject(GLRenderer::Name name) const
 				throw();
 
-			/** Initialise the display lists.
+			/** Initialise the renderer, by calling the init method below
 			 		This method is called by Scene::initializeGL.
 			*/
-			virtual bool init(const Stage& stage, float width, float height)
+			virtual bool init(Scene& scene)
+				throw();
+
+			/// Initialise the renderer, e.g. the display lists.
+			virtual bool init(const Stage& stage, float height, float width)
 				throw();
 
 			/// Set the light sources according to the stage
@@ -282,6 +279,9 @@ namespace BALL
 			///
 			DrawingMode getDrawingMode() const;
 
+			///
+			void initPerspective();
+
 			//@}
 			protected:
 
@@ -341,10 +341,6 @@ namespace BALL
 
 			//_
 			void setColor4ub_(const GeometricObject& object)
-				throw();
-
-			//_
-			GLubyte* generateBitmapFromText_(const String& text, const QFont& font, int& width, int& height) const
 				throw();
 
 			//_
@@ -411,6 +407,14 @@ namespace BALL
 			void setColorRGBA_(const ColorRGBA& color)
 				throw();
 
+			void initGLU_(DrawingMode mode);
+
+			//_
+ 			GLubyte* generateBitmapFromText_(const String& text, const QFont& font, int& width, int& height) const
+				throw();
+
+			Scene* 								scene_;
+
 			///
 			DrawingMode 					drawing_mode_;
 
@@ -423,7 +427,6 @@ namespace BALL
 			//_
 			float 								y_scale_;
 
-			GLQuadricObject 			GL_quadric_object_;
 			GLDisplayList* 				GL_spheres_list_;
 			GLDisplayList* 				GL_tubes_list_;
 			GLDisplayList* 				GL_boxes_list_;
@@ -459,6 +462,7 @@ namespace BALL
 			bool 										single_pick_;
 			bool 										drawed_other_object_;
 			bool 										drawed_mesh_;
+			GLUquadricObj*  GLU_quadric_obj_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

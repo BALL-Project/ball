@@ -20,7 +20,7 @@ namespace BALL
 	/** Generic QSAR molecular connectivity descriptors class
 			\\
 	*/
-	class ConnectivityBase
+	class BALL_EXPORT ConnectivityBase
 		:	public Descriptor
 	{
 		public:

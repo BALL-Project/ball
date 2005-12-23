@@ -168,376 +168,6 @@
         <property name="title">
             <string>Light Source Settings</string>
         </property>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>groupBox23</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>11</x>
-                    <y>26</y>
-                    <width>377</width>
-                    <height>165</height>
-                </rect>
-            </property>
-            <property name="title">
-                <string>Position</string>
-            </property>
-            <widget class="QLayoutWidget">
-                <property name="name">
-                    <cstring>layout59</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>7</x>
-                        <y>21</y>
-                        <width>364</width>
-                        <height>135</height>
-                    </rect>
-                </property>
-                <grid>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <property name="margin">
-                        <number>0</number>
-                    </property>
-                    <widget class="QButtonGroup" row="1" column="0">
-                        <property name="name">
-                            <cstring>relative_to_camera</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Position is...</string>
-                        </property>
-                        <property name="alignment">
-                            <set>AlignHCenter</set>
-                        </property>
-                        <property name="exclusive">
-                            <bool>true</bool>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QRadioButton">
-                                <property name="name">
-                                    <cstring>relative</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>5</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>160</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>140</width>
-                                        <height>16</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>relative to camera</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="buttonGroupId">
-                                    <number>0</number>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Keep lightsource relative to camera</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton">
-                                <property name="name">
-                                    <cstring>not_relative</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>5</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>30</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>140</width>
-                                        <height>16</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>absolute</string>
-                                </property>
-                                <property name="buttonGroupId">
-                                    <number>1</number>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Keep lightsource static</string>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <widget class="QLayoutWidget" row="0" column="0">
-                        <property name="name">
-                            <cstring>layout48</cstring>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <widget class="QLineEdit" row="0" column="3">
-                                <property name="name">
-                                    <cstring>position_z</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>5</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>30</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>80</width>
-                                        <height>500</height>
-                                    </size>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Position z</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>textLabel1_3</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>3</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>90</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>32767</width>
-                                        <height>110</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>View point</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="1" column="2">
-                                <property name="name">
-                                    <cstring>direction_y</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>5</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>30</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>80</width>
-                                        <height>500</height>
-                                    </size>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Direction y</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="1" column="3">
-                                <property name="name">
-                                    <cstring>direction_z</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>5</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>30</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>80</width>
-                                        <height>500</height>
-                                    </size>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Direction z</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="1" column="1">
-                                <property name="name">
-                                    <cstring>direction_x</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>5</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>30</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>80</width>
-                                        <height>500</height>
-                                    </size>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Direction x</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="0" column="2">
-                                <property name="name">
-                                    <cstring>position_y</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>5</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>30</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>80</width>
-                                        <height>500</height>
-                                    </size>
-                                </property>
-                                <property name="frameShape">
-                                    <enum>LineEditPanel</enum>
-                                </property>
-                                <property name="frameShadow">
-                                    <enum>Sunken</enum>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Position y</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="0" column="1">
-                                <property name="name">
-                                    <cstring>position_x</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>5</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>30</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>80</width>
-                                        <height>500</height>
-                                    </size>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Position x</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="1" column="0">
-                                <property name="name">
-                                    <cstring>textLabel1_3_2</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>3</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>90</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>32767</width>
-                                        <height>110</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>Direction</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                </grid>
-            </widget>
-        </widget>
         <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>layout54</cstring>
@@ -913,6 +543,376 @@
                 </property>
             </widget>
         </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox23</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>26</y>
+                    <width>377</width>
+                    <height>165</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>Orientation</string>
+            </property>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>layout59</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>7</x>
+                        <y>21</y>
+                        <width>364</width>
+                        <height>135</height>
+                    </rect>
+                </property>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <widget class="QButtonGroup" row="1" column="0">
+                        <property name="name">
+                            <cstring>relative_to_camera</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Position is...</string>
+                        </property>
+                        <property name="alignment">
+                            <set>AlignHCenter</set>
+                        </property>
+                        <property name="exclusive">
+                            <bool>true</bool>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>relative</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>160</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>140</width>
+                                        <height>16</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>relative to camera</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>0</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Keep lightsource relative to camera</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>not_relative</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>30</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>140</width>
+                                        <height>16</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>absolute</string>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>1</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Keep lightsource static</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QLayoutWidget" row="0" column="0">
+                        <property name="name">
+                            <cstring>layout48</cstring>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <widget class="QLineEdit" row="0" column="3">
+                                <property name="name">
+                                    <cstring>position_z</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>30</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>80</width>
+                                        <height>500</height>
+                                    </size>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Position z</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1_3</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>3</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>90</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>32767</width>
+                                        <height>110</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>Position</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="1" column="2">
+                                <property name="name">
+                                    <cstring>direction_y</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>30</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>80</width>
+                                        <height>500</height>
+                                    </size>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Direction y</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="1" column="3">
+                                <property name="name">
+                                    <cstring>direction_z</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>30</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>80</width>
+                                        <height>500</height>
+                                    </size>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Direction z</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>direction_x</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>30</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>80</width>
+                                        <height>500</height>
+                                    </size>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Direction x</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="0" column="2">
+                                <property name="name">
+                                    <cstring>position_y</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>30</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>80</width>
+                                        <height>500</height>
+                                    </size>
+                                </property>
+                                <property name="frameShape">
+                                    <enum>LineEditPanel</enum>
+                                </property>
+                                <property name="frameShadow">
+                                    <enum>Sunken</enum>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Position y</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>position_x</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>30</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>80</width>
+                                        <height>500</height>
+                                    </size>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Position x</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1_3_2</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>3</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>90</width>
+                                        <height>25</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>32767</width>
+                                        <height>110</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>Direction</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                </grid>
+            </widget>
+        </widget>
     </widget>
 </widget>
 <connections>
@@ -1002,6 +1002,6 @@
     <slot>intensityChanged()</slot>
     <slot>positionTypeChanged()</slot>
 </slots>
-<exportmacro>BALL_EXPORT</exportmacro>
+<exportmacro>BALL_VIEW_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

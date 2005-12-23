@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.h,v 1.9 2005/07/29 12:38:15 amoll Exp $
+// $Id: sysinfo.h,v 1.10 2005/12/23 17:02:07 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_SYSINFO_H
@@ -14,6 +14,7 @@
 namespace BALL
 {
 	/** Namespace for methods to obtain informations about the systems hardware.
+	 		All memory values are returned in amounts of byte.
 	 		See the man page for sysinfo, GetSystemInfo and /proc/cpuinfo under Linux.
 	 		@see http://msdn.microsoft.com/library/en-us/memory/base/memorystatus_str.asp
 			@see http://msdn.microsoft.com/library/en-us/memory/base/globalmemorystatusex.asp

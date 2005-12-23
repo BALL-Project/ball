@@ -15,7 +15,7 @@ namespace BALL
   namespace VIEW
   {      
 		///
-    class BALL_EXPORT CanvasWidget
+    class BALL_VIEW_EXPORT CanvasWidget
       : public QCanvasView
     {
       Q_OBJECT    
@@ -23,7 +23,7 @@ namespace BALL
       public:
       
 			///
-      class BALL_EXPORT PixmapItem
+      class BALL_VIEW_EXPORT PixmapItem
 				: public QCanvasRectangle
       {
 				public:

@@ -4,11 +4,11 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	glDisplayList.C\
-	glQuadricObject.C\
 	glRenderer.C\
 	renderer.C\
 	POVRenderer.C\
-	VRMLRenderer.C
+	VRMLRenderer.C\
+	vertexBuffer.C
 
 include ../../common.mak
 -include .Dependencies
