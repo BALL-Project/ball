@@ -1,3 +1,13 @@
+since 1.1.1:
+
+Added:
+- BALLView has menu entries for user defined Python Hotkeys
+- Futher Python example scripts
+
+Fixed:
+- Improved Python Bindings
+- Return pressed in PeptideDialog now applies settings
+
 1.1.1:
 
 The version 1.1.1 finaly brings full Python, DLL and nmake Makefile support under Windows.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.58 2005/12/23 17:02:29 amoll Exp $
+// $Id: mainframe.C,v 1.59 2005/12/26 03:26:25 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -69,6 +69,7 @@ namespace BALL
 		initPopupMenu(TOOLS);
 	#ifdef BALL_PYTHON_SUPPORT
 		initPopupMenu(TOOLS_PYTHON);
+		initPopupMenu(MainControl::USER);
 	#endif
 		initPopupMenu(WINDOWS);
 

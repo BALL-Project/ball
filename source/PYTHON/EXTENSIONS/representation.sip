@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.13 2005/12/23 17:02:58 amoll Exp $
+// $Id: representation.sip,v 1.14 2005/12/26 03:26:09 amoll Exp $
 //
 
 class Representation
@@ -47,7 +47,16 @@ class Representation
 	void insert(GeometricObject& /Transfer/) throw();
 
 	//const PyCompositeList& getComposites() const throw();
-	//void setComposites(const PyCompositeList&) throw();
+	void setComposites(const PyCompositeList&) throw();
+%MethodCode
+	List<const Composite*> my_list;
+	for (PyCompositeList::ConstIterator it = a0->begin(); it != a0->end(); ++it)
+	{
+		Composite* obj = *it;
+		my_list.push_back(obj);
+	}
+	sipCpp->setComposites(my_list);
+%End
 
 	ModelProcessor* getModelProcessor() throw();
 	const ModelProcessor* getModelProcessor() const throw();

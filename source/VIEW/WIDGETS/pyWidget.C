@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.47 2005/12/23 17:03:38 amoll Exp $
+// $Id: pyWidget.C,v 1.48 2005/12/26 03:26:00 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -18,6 +18,7 @@
 #include <qfiledialog.h>
 #include <qapplication.h>
 #include <qdragobject.h>
+#include <qwidgetstack.h>
 
 // currently doesnt work right
 //#undef BALL_QT_HAS_THREADS
@@ -637,7 +638,8 @@ namespace BALL
 				text_edit_(new PyWidgetData(this)),
 				working_dir_(""),
 				valid_(false),
-				started_startup_script_(false)
+				started_startup_script_(false),
+				last_id_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new PyWidget " << this << std::endl;
@@ -696,6 +698,7 @@ namespace BALL
 		{
 			text_edit_->python_settings_= new PythonSettings();
 			preferences.insertEntry(text_edit_->python_settings_);
+			preferences_ = &preferences;
 		}
 
 		void PyWidget::finalizePreferencesTab(Preferences &preferences)
@@ -720,6 +723,34 @@ namespace BALL
 
  			hotkeys_ = (text_edit_->python_settings_->getContent());
 
+			QPopupMenu* menu = getMainControl()->initPopupMenu(MainControl::USER);
+			menu->clear();
+			disconnect(menu, SIGNAL(highlighted(int)), this, SLOT(activatedMenuItem_(int)));
+			connect(menu, SIGNAL(highlighted(int)), this, SLOT(activatedMenuItem_(int)));
+
+			List<Hotkey>::Iterator it = hotkeys_.begin();
+			for (; it != hotkeys_.end(); it++)
+			{
+				String entry = (*it).action;
+				if (entry.size() > 35)
+				{ 
+					entry.truncate(32);
+					entry += "...";
+				}
+
+ 				insertMenuEntry(MainControl::USER, entry.c_str(), this, SLOT(hotkeyItem()));
+				setMenuHint("Perform a user defined action per Python interface");
+				setMenuHelp("pythonInterpreter.html#create_hotkeys");
+			}
+
+			getMainControl()->insertPopupMenuSeparator(MainControl::USER);
+ 			insertMenuEntry(MainControl::USER, "Modify", this, SLOT(modifyHotkeys()));
+			setMenuHint("Manage user defined Python commands");
+			setMenuHelp("pythonInterpreter.html#create_hotkeys");
+
+			/////////////////////////////////////////
+			// startup script
+			/////////////////////////////////////////
 			if (started_startup_script_ || !isValid())
 			{
 				return;
@@ -741,6 +772,51 @@ namespace BALL
 			}
 
 			text_edit_->runFile(user_startup);
+		}
+
+		void PyWidget::modifyHotkeys()
+		{
+ 			preferences_->showEntry(text_edit_->python_settings_->widget_stack->widget(1));
+			preferences_->show();
+		}
+
+		void PyWidget::activatedMenuItem_(int id)
+		{
+			last_id_ = id;
+		}
+
+		void PyWidget::hotkeyItem()
+		{
+			if (last_id_ == 0) 
+			{
+				BALLVIEW_DEBUG;
+				return;
+			}
+
+			QMenuItem* data = menuBar()->findItem(MainControl::USER);
+			QPopupMenu* menu = data->popup();
+			Index hotkey_num = -1;
+			for (Position p= 0; p < hotkeys_.size(); p++)
+			{
+				if (last_id_ == menu->idAt(p))
+				{
+					hotkey_num = p;
+				}
+			}
+
+			if (hotkey_num == -1) 
+			{
+				BALLVIEW_DEBUG;
+				return;
+			}
+
+			List<Hotkey>::iterator it = hotkeys_.begin();
+			for (Position p = 1; p <= (Position)hotkey_num; p++)
+			{
+				it++;
+			}
+
+			text_edit_->runString((*it).action);
 		}
 
 		void PyWidgetData::abortScript()
@@ -786,8 +862,12 @@ namespace BALL
 		void PyWidget::reactTo(const QKeyEvent& e) 
 			throw() 
 		{
+<<<<<<< pyWidget.C
+			/*
+=======
 			// doesnt work, no idea yet why:
 			/*
+>>>>>>> 1.44.6.25
 			if (getMainControl()->compositesAreLocked() ||
 					getMainControl()->getPrimitiveManager().updateRunning())
 			{

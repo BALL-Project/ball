@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.26 2005/12/23 17:02:23 amoll Exp $
+// $Id: pyWidget.h,v 1.27 2005/12/26 03:29:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -33,6 +33,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class PythonSettings;
+		class Preferences;
 
 		class RunPythonThread;
 
@@ -298,6 +299,11 @@ namespace BALL
 			/// Open a dialog to select a start up script
 			virtual void scriptDialog();
 
+			virtual void hotkeyItem();
+
+			virtual void modifyHotkeys();
+
+			virtual void activatedMenuItem_(int id);
 
 			protected:
 
@@ -308,6 +314,8 @@ namespace BALL
 			String 						last_script_;
 			bool 							valid_;
 			bool 							started_startup_script_;
+			Index 						last_id_;
+			Preferences* 			preferences_;
 		};
 
 	} // namespaces	

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideDialog.C,v 1.10 2005/12/23 17:03:29 amoll Exp $
+// $Id: peptideDialog.C,v 1.11 2005/12/26 03:25:59 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
 #include <BALL/COMMON/logStream.h>
@@ -21,6 +21,7 @@ namespace BALL
 			 Peptides::PeptideBuilder(),
 			 protein_(0)
 		{
+			connect(sequence, SIGNAL(returnPressed()), this, SLOT(close_pressed()));
 			sequence->clear();
 			show();
 		}

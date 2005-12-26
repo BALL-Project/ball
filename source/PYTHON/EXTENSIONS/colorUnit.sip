@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.sip,v 1.3 2005/12/23 17:02:50 amoll Exp $
+// $Id: colorUnit.sip,v 1.4 2005/12/26 03:26:09 amoll Exp $
 //
 
 class NotInHexFormat
@@ -28,16 +28,16 @@ class ColorUnit
   ColorUnit() throw();
   ColorUnit(const ColorUnit& /color_unit/) throw();
   ColorUnit(const String& /value/) throw(InvalidRange, NotInHexFormat);
-  ColorUnit(const char* /value/) throw(InvalidRange, NotInHexFormat);
+  // ColorUnit(const char* /value/) throw(InvalidRange, NotInHexFormat);
   // ColorUnit(const unsigned char /value/) throw();
   // ColorUnit(const short /value/) throw(InvalidRange);
   // ColorUnit(const unsigned short /value/) throw(InvalidRange);
   // ColorUnit(const int /value/) throw(InvalidRange);
-  // ColorUnit(const unsigned int /value/) throw(InvalidRange);
+  ColorUnit(const unsigned int /value/) throw(InvalidRange);
   // Colorunit(const long /value/) throw(InvalidRange);
   // ColorUnit(const unsigned long /value/) throw(InvalidRange);
   // ColorUnit(const float /value/) throw(InvalidRange);
-  ColorUnit(const double /value/) throw(InvalidRange);
+  // ColorUnit(const double /value/) throw(InvalidRange);
   //virtual ~ColorUnit() throw();
   void clear() throw();
   // operator String () const throw();
@@ -72,9 +72,9 @@ class ColorUnit
   // void set(const int /value/) throw(InvalidRange);
   // const ColorUnit& operator = (const int /value/) throw(InvalidRange);
   // void get(int& /value/) const throw();
-  // void set(const unsigned int /value/) throw(InvalidRange);
+  void set(const unsigned int /value/) throw(InvalidRange);
   // const ColorUnit& operator = (const unsigned int /value/) throw(InvalidRange);
-  // void get(unsigned int& /value/) const throw();
+  void get(unsigned int& /value/) const throw();
   // void set(const long /value/) throw(InvalidRange);
   // const ColorUnit& operator = (const long /value/) throw(InvalidRange);
   // void get(long& /value/) const throw();
@@ -84,7 +84,7 @@ class ColorUnit
   // void set(const float /value/) throw(InvalidRange);
   // const ColorUnit& operator = (const float /value/) throw(InvalidRange);
   // void get(float& /value/) const throw();
-  void set(const double /value/) throw(InvalidRange);
+  // void set(const double /value/) throw(InvalidRange);
   // const ColorUnit& operator = (const double /value/) throw(InvalidRange);
   // void get(double& /value/) const throw();
   

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.C,v 1.29 2005/12/23 17:03:30 amoll Exp $
+// $Id: stageSettings.C,v 1.30 2005/12/26 03:25:59 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
@@ -41,6 +41,7 @@ namespace BALL
 			registerObject_(enable_fog);
 			registerObject_(fog_slider);
 			registerObject_(popup_names);
+			registerWidgetForHelpSystem_(popup_names, "scene.html#popup_atoms");
 
 			registerObject_(slider_);
 			registerObject_(wheel_slider_);
