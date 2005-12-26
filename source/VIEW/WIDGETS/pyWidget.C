@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.48 2005/12/26 03:26:00 amoll Exp $
+// $Id: pyWidget.C,v 1.49 2005/12/26 04:05:09 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -862,12 +862,8 @@ namespace BALL
 		void PyWidget::reactTo(const QKeyEvent& e) 
 			throw() 
 		{
-<<<<<<< pyWidget.C
-			/*
-=======
 			// doesnt work, no idea yet why:
 			/*
->>>>>>> 1.44.6.25
 			if (getMainControl()->compositesAreLocked() ||
 					getMainControl()->getPrimitiveManager().updateRunning())
 			{
