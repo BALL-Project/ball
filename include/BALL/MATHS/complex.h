@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: complex.h,v 1.21 2005/02/02 10:49:42 anhi Exp $
+// $Id: complex.h,v 1.22 2006/01/03 18:15:47 anhi Exp $
 
 #ifndef BALL_MATHS_COMPLEX_H
 #define BALL_MATHS_COMPLEX_H
@@ -16,7 +16,7 @@
 
 namespace BALL 
 {
-	//typedef std::complex<double> Complex;
+	typedef std::complex<BALL_COMPLEX_PRECISION> Complex;
 } // namespace BALL
 
 #endif // BALL_MATHS_COMPLEX_H
