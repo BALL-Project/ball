@@ -17234,6 +17234,7 @@ fi
 
 
 
+if test "${FFTW_SUPPORT}" == true ; then
 
 if test "${FFTW_SUPPORT}" = true ; then
 	FFTW_SUPPORT=true
@@ -18305,6 +18306,7 @@ _ACEOF
 
 
 
+fi
 
 
 if test "${USE_VIEW}" = true ; then

@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.28 2006/01/03 17:57:58 anhi Exp $
+dnl $Id: configure.ac,v 1.29 2006/01/03 19:16:39 anhi Exp $
 dnl
 dnl
 
@@ -475,7 +475,9 @@ dnl
 dnl
 dnl FFTW -- Fastest Fourier Transform in the West
 dnl
+if test "${FFTW_SUPPORT}" == true ; then
 CF_CHECK_FFTW_SUPPORT
+fi
 
 dnl
 dnl		VIEW
