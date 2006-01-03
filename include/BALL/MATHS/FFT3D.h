@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.h,v 1.16 2006/01/03 17:42:39 anhi Exp $
+// $Id: FFT3D.h,v 1.17 2006/01/03 19:10:41 anhi Exp $
 //
 
 #ifndef BALL_MATHS_TFFT3D_H
@@ -1010,7 +1010,7 @@ namespace BALL
 																			Vector3(from.getPhysSpaceMaxX(), from.getPhysSpaceMaxY(), from.getPhysSpaceMaxZ()));
 
 			// and fill it
-			double normalization=1./(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+			double normalization=1./(pow((float)(lengthX*lengthY*lengthZ),(int)from.getNumberOfInverseTransforms()));
 			typename TFFT3D<ComplexTraits>::Complex dataIn;
 			typename TFFT3D<ComplexTraits>::Complex dataOut;
 			
@@ -1059,7 +1059,7 @@ namespace BALL
 
 			// and fill it
 			// AR: old double normalization=1./(sqrt(2.*M_PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
-			double normalization=1./pow(sqrt(2.*M_PI),3)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+			double normalization=1./pow(sqrt(2.*M_PI),3)/(pow((float)(lengthX*lengthY*lengthZ),(int)from.getNumberOfInverseTransforms()));
 			
 			
 			Index x, y, z;
@@ -1125,7 +1125,7 @@ namespace BALL
 																		from.getPhysSpaceMaxZ()));
 
 			// and fill it
-			double normalization = 1./(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+			double normalization = 1./(pow((float)(lengthX*lengthY*lengthZ),(int)from.getNumberOfInverseTransforms()));
 			typename TFFT3D<ComplexTraits>::Complex dataIn;
 			typename TFFT3D<ComplexTraits>::Complex dataOut;
 			
@@ -1175,7 +1175,7 @@ namespace BALL
 
 			// and fill it
 			// AR: old version double normalization=1./(sqrt(2.*M_PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
-			double normalization=1./pow(sqrt(2.*M_PI),3)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+			double normalization=1./pow(sqrt(2.*M_PI),3)/(pow((float)(lengthX*lengthY*lengthZ),(int)from.getNumberOfInverseTransforms()));
 			
 			Index x, y, z;
 			signed int xp, yp, zp;
