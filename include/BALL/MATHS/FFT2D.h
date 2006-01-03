@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.h,v 1.14 2005/07/16 21:00:30 oliver Exp $
+// $Id: FFT2D.h,v 1.15 2006/01/03 17:36:08 anhi Exp $
 //
 
 #ifndef BALL_MATHS_TFFT2D_H
@@ -329,7 +329,7 @@ namespace BALL
 	
 	/**	Default type
 	*/
-	typedef TFFT2D<DoubleTraits> FFT2D;
+	typedef TFFT2D<BALL_DEFAULT_FFTW_TRAITS> FFT2D;
 	
 	// AR:
 	/** Global assignment operator from TFFT2D to TRegularData2D<Complex>
