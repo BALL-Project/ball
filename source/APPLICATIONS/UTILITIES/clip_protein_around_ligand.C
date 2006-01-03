@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clip_protein_around_ligand.C,v 1.8 2004/05/27 18:13:08 oliver Exp $
+// $Id: clip_protein_around_ligand.C,v 1.9 2006/01/03 18:09:45 anhi Exp $
 //
 // A program for extracting a parts of a protein around a ligand.
 // The output are XYZFiles because we use this program for creating AMSOL
@@ -638,7 +638,7 @@ int main(int argc, char** argv)
 	system.insert(*cut_protein);
 	system.apply(db.build_bonds);
 
-	PDBFile intermediate("intermediate.pdb", File::OUT);
+	PDBFile intermediate("intermediate.pdb", std::ios::out);
 	intermediate << system;
 	intermediate.close();
 
@@ -674,14 +674,14 @@ int main(int argc, char** argv)
 	amber_ff.options.set(AmberFF::Option::FILENAME, tmp);
 	amber_ff.setup(system);
 
-	PDBFile before_minimization("before_minimization.pdb", File::OUT);
+	PDBFile before_minimization("before_minimization.pdb", std::ios::out);
 	before_minimization << system;
 
 	Log.info() << "Starting minimizer: " << endl << endl;
 	ConjugateGradientMinimizer cgm(amber_ff);
 	cgm.minimize(1000);
 
-	PDBFile cut_protein_file("cut_protein_file.pdb", File::OUT);
+	PDBFile cut_protein_file("cut_protein_file.pdb", std::ios::out);
 	cut_protein_file << system;
 
 	tmp_res = new Residue;
@@ -697,11 +697,11 @@ int main(int argc, char** argv)
 	Chain* tmp_chain = new Chain;
 	tmp_chain->insert(*tmp_res);
 
-	XYZFile cut_protein_file_xyz("cut_protein_file.xyz", File::OUT);
+	XYZFile cut_protein_file_xyz("cut_protein_file.xyz", std::ios::out);
 	cut_protein_file_xyz << system;
 
 	cut_protein->insert(*tmp_chain);
-	XYZFile cut_system_file_xyz("cut_system_file.xyz", File::OUT);
+	XYZFile cut_system_file_xyz("cut_system_file.xyz", std::ios::out);
 	cut_system_file_xyz << system;
 	Log.info() << "# atoms in cut system: " << system.countAtoms() << endl;
 	Log.info() << "# heavy atoms in cut system: " << count_heavy_atoms(system) << endl;
@@ -710,7 +710,7 @@ int main(int argc, char** argv)
 	// Log.info() << "computed # heavy atoms in cut system: " << heavy_atoms << endl;
 	// /DEBUG
 
-	XYZFile ligand_file_xyz("ligand_file.xyz", File::OUT);
+	XYZFile ligand_file_xyz("ligand_file.xyz", std::ios::out);
 	ligand_file_xyz << ligand;
 
 }

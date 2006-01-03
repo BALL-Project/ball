@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: add_hydrogens.C,v 1.7 2004/05/27 18:13:07 oliver Exp $
+// $Id: add_hydrogens.C,v 1.8 2006/01/03 18:09:45 anhi Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -79,7 +79,7 @@ int main(int argc, char** argv)
 	cgm.minimize(1000);
 
 	cout << "Writing " << argv[2] << "..." << endl;
-	PDBFile outfile(argv[2], File::OUT);
+	PDBFile outfile(argv[2], std::ios::out);
 	outfile << system;
 	cout << "done." << endl;
 
