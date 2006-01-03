@@ -1,6 +1,9 @@
 DIRECTORY=STRUCTURE
 THISLIB=$(LIBNAME)
 
+STRUCTURE_SUBDIRS=\
+	DOCKING
+
 SMILES_SOURCES= \
 	smilesParser.C\
 	smilesParserParser.C\
@@ -72,9 +75,32 @@ include ../common.mak
 
 depend:	\
 	$(SMILES_SOURCES)\
-	$(SMARTS_SOURCES)
+	$(SMARTS_SOURCES)\
+	subdirsdepend
 
-default_clean:	clean_parser
+default: echodir $(OBJECTS) dirs
+
+default_clean:	clean_parser subdirsclean
+
+collectlib: subdirscollectlib
+
+dirs: dummy
+	@$(MAKE) subdirs SUBDIRS="$(STRUCTURE_SUBDIRS)" TARGET=default
+
+subdirs:	dummy
+	@set -e; for i in $(SUBDIRS); do cd $$i; if $(MAKE) $(TARGET); then cd .. ; else cd .. ; exit 1 ; fi ; done
+
+subdirsdepend:	dummy
+	@echo "" > .Dependencies
+	@for i in $(SUBDIRS); do ( cd $$i; echo "" >.Dependencies; cd .. ) ; done
+	@$(MAKE) subdirs SUBDIRS="$(STRUCTURE_SUBDIRS)" TARGET=depend
+
+subdirsclean:
+	@$(MAKE) subdirs SUBDIRS="$(STRUCTURE_SUBDIRS)" TARGET=default_clean
+
+subdirscollectlib:	dummy
+	@$(MAKE) subdirs SUBDIRS="$(STRUCTURE_SUBDIRS)" TARGET=collectlib LIBNAME="$(THISLIB)"
+
 
 clean_parser:
 	@-$(RM) smilesParserParser.C smilesParserLexer.C smilesParserParser.h smartsParserParser.C smartsParserLexer.C smartsParserParser.h
@@ -114,3 +140,4 @@ smartsParserLexer.o: smartsParserLexer.C smartsParserParser.C
 smartsParserParser.o: smartsParserParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
 
+dummy:

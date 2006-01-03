@@ -1,11 +1,16 @@
-# $Id: Makefile,v 1.13 2005/12/23 17:02:31 amoll Exp $
+# $Id: Makefile,v 1.14 2006/01/03 19:11:53 anhi Exp $
 #
 # Makefile for BALL utilities
 #
 
+include ../../common.mak
+default: all
+
 DIRECTORY=APPLICATIONS/UTILITIES
 
-EXECUTABLES = \
+FFT_SOURCES=$(BALL_HAS_FFTW:true=rigid_docking)
+
+EXECUTABLES = $(FFT_SOURCES)\
 	add_hydrogens\
 	assign_typenames_from_rules\
 	clip_protein_around_ligand\
@@ -24,7 +29,6 @@ all:	$(EXECUTABLES)
 CPP_SOURCES=$(EXECUTABLES:=.C)
 OBJECTS=$(EXECUTABLES:=.o)
 
-include ../../common.mak
 -include .Dependencies
 
 # remove the library specific flags
