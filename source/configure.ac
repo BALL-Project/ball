@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.27 2006/01/03 17:35:23 anhi Exp $
+dnl $Id: configure.ac,v 1.28 2006/01/03 17:57:58 anhi Exp $
 dnl
 dnl
 
@@ -503,7 +503,7 @@ dnl
 BINFMT="${BINFMT}-${CXX_NAME}"
 BINFMT_INDEX=""
 
-LIBS="${LIBS} -lm"
+LIBS="${LIBS} ${FFTW_LIBS} -lm"
 VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
