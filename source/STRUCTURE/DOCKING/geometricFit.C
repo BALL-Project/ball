@@ -1,5 +1,6 @@
 //TODO: - optimize list of include files
 //			- find out if all functions are really ever called in the algorithm
+//			- make use of real-to-complex property
 
 #include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 
@@ -14,12 +15,7 @@
 #include <BALL/KERNEL/atomIterator.h>
 #include <BALL/KERNEL/molecule.h>
 
-#include <BALL/FORMAT/PDBFile.h>
-#include <BALL/FORMAT/HINFile.h>
-
 #include <BALL/DATATYPE/hashGrid.h>
-
-#include <BALL/MATHS/vector4.h> 
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
@@ -31,10 +27,6 @@
 #include <BALL/DATATYPE/string.h>
 
 using namespace std;
-
-// TODO???? Fix it! :)
-   typedef std::complex<double> Complex;
-//typedef std::complex<float> Complex;
 
 namespace BALL
 {
@@ -347,7 +339,8 @@ namespace BALL
     radius_b_ = r2;
 
     // enlarge the grid a little (2 spacing larger)
-		float d = (r1 + r2) * 2 + 2 * grid_spacing;
+		//float d = (r1 + r2) * 2 + 2 * grid_spacing;
+		float d = (r1 + r2) * 2 + 1;
 
     // number of grid point = number of units + 1
 		int grid_size = (int)ceil( d / grid_spacing ) + 1;
@@ -680,6 +673,166 @@ namespace BALL
     return;
   }
 
+	// use the same algorithm FTDock uses to find the inside points
+	void GeometricFit::findFTDockInsidePoints_(System& system, ProteinIndex pro_idx)
+		throw()
+	{
+		int number_of_points = 0;
+		int verbosity = options.getInteger(Option::VERBOSITY);
+
+		if (verbosity > 15)
+			Log << "looking for inside points now (FTDock-algorithm)..." << endl;
+
+		FFT3D* FFT_grid = NULL;
+    
+    if ( pro_idx == PROTEIN_A )
+    {
+      FFT_grid = FFT_grid_a_;
+    }
+    else // ( pro_idx == PROTEIN_B )
+    {
+      FFT_grid = FFT_grid_b_;
+    }
+
+		Complex penalty(1., 0.);
+
+		double near_radius  = options.getReal(Option::NEAR_RADIUS);
+		double grid_spacing = options.getReal(Option::GRID_SPACING);
+
+		int    grid_size    = options.getInteger(Option::GRID_SIZE);
+
+    const double RADIUS_SQR = near_radius * near_radius; // Angstrom
+
+		int points_to_check	= (int)((near_radius/grid_spacing)+1.5);
+
+		FFT3D::IndexType grid_index;
+		Vector3 atom_position;
+		Vector3 atom_index;
+		Vector3 grid_position;
+
+    // find all the inside point in grid
+    for ( AtomIterator atom_it = system.beginAtom(); +atom_it; ++atom_it )
+    {
+      atom_position = atom_it->getPosition();
+			atom_index    = (atom_position + FFT_grid_origin_)/grid_spacing;
+//			std::cout << atom_index << std::endl;
+
+			for (grid_index.x  = (Position)max((int)rint(atom_index.x) - points_to_check, 0);
+					 grid_index.x <= (Position)min((int)rint(atom_index.x) + points_to_check, grid_size - 1);
+					 grid_index.x++)
+			{
+				for (grid_index.y  = (Position)max((int)rint(atom_index.y) - points_to_check, 0);
+						 grid_index.y <= (Position)min((int)rint(atom_index.y) + points_to_check, grid_size - 1);
+						 grid_index.y++)
+				{
+					for (grid_index.z  = (Position)max((int)rint(atom_index.z) - points_to_check, 0);
+						 	 grid_index.z <= (Position)min((int)rint(atom_index.z) + points_to_check, grid_size - 1);
+							 grid_index.z++)
+					{
+						// That can be done faster...
+						int index = grid_index.z + (grid_index.y + grid_index.x*grid_size)*grid_size;
+//						std::cout << "Index: " << index << " ptc " << points_to_check << std::endl;
+						Complex& data = (*FFT_grid)[index];
+						if ((data.real() == 0.) && 
+								(atom_position.getSquareDistance(FFT_grid->getGridCoordinates(index)) <= RADIUS_SQR))
+						{
+							data = penalty;
+							number_of_points++;
+						}
+					}	
+				}	
+			}	
+		}
+
+		if (verbosity > 15)
+		{
+			Log << "Number of inside points: " << number_of_points << std::endl;
+		}
+
+    return;
+	}
+
+	// compute surface points according to FTDock's definition
+	void GeometricFit::findFTDockSurfacePoints_(System& system, ProteinIndex pro_idx)
+		throw()
+	{
+		int verbosity = options.getInteger(Option::VERBOSITY);
+
+		int number_of_points = 0;
+    FFT3D* FFT_grid = NULL;
+		int PENALTY;
+
+    if ( pro_idx == PROTEIN_A )
+    {
+      FFT_grid = FFT_grid_a_;
+      PENALTY = options.getInteger(Option::PENALTY_STATIC);   // penalty for inside points of protein A (static)
+    }
+    else // ( pro_idx == PROTEIN_B )
+    {
+      FFT_grid = FFT_grid_b_;
+      PENALTY = options.getInteger(Option::PENALTY_MOBILE);   // penalty for inside points of protein B (mobile)
+    }
+
+		Complex penalty(PENALTY, 0.);
+		float  surface_thickness = options.getReal(Option::SURFACE_THICKNESS);
+		double grid_spacing      = options.getReal(Option::GRID_SPACING);
+		int    grid_size         = options.getInteger(Option::GRID_SIZE);
+
+		int points_to_check = (int) ((surface_thickness/grid_spacing) + 1.5);
+
+		// iterate over the complete grid
+		int x, y, z, index; 
+		int x2, y2, z2, index2;
+		float SQR_SPACING   = grid_spacing*grid_spacing;
+		float SQR_THICKNESS = surface_thickness*surface_thickness;
+
+		for (x=0; x<grid_size; x++)
+		{
+			for (y=0; y<grid_size; y++)
+			{
+				for (z=0; z<grid_size; z++)
+				{
+					index = z + (y + x*grid_size)*grid_size;
+					Complex& data = (*FFT_grid)[index];
+
+					if (data.real() == 1) // this point was classified as inside
+					{
+						bool is_surface_point = false;
+
+						// iterate over the surrounding points
+						for (x2=max(x-points_to_check, 0); !is_surface_point&&(x2<=min(x+points_to_check, grid_size-1)); x2++)
+						{
+							for (y2=max(y-points_to_check, 0); !is_surface_point&&(y2<=min(y+points_to_check, grid_size-1)); y2++)
+							{
+								for (z2=max(z-points_to_check, 0); !is_surface_point&&(z2<=min(z+points_to_check, grid_size-1)); z2++)
+								{
+									index2 = z2+(y2+x2*grid_size)*grid_size;
+
+									// extend the surface to the outside only
+									if ((*FFT_grid)[index2].real() == 0)
+									{
+										// is the point inside the surface thickness?
+										if ( ((x-x2)*(x-x2) + (y-y2)*(y-y2) + (z-z2)*(z-z2)) * SQR_SPACING < SQR_THICKNESS )
+											is_surface_point = true;
+									}
+								}
+							}
+						}
+
+						if (!is_surface_point)
+							data = penalty;
+						else
+							number_of_points++;
+					}
+				}
+			}
+		}
+
+		if (verbosity > 1)
+			Log.info() << "findFTDockSurfacePoints_ : " << number_of_points << std::endl;
+
+		return;
+ }
 
   // make grid from System
   void GeometricFit::makeFFTGrid_( ProteinIndex pro_idx )
@@ -731,7 +884,10 @@ namespace BALL
       PENALTY = options.getInteger(Option::PENALTY_MOBILE);
     }
 
-    findInsidePoints_( system, pro_idx );
+		if (surface_type == FTDOCK)
+			findFTDockInsidePoints_( system, pro_idx );
+		else
+			findInsidePoints_( system, pro_idx );
 
     // Since the surface points have the same value with inside points in protein b,
     // so we only search for the surface points for protein a
@@ -745,15 +901,14 @@ namespace BALL
       {
 				findVanDerWaalsSurfacePoints_( system, pro_idx );
       }
+      else if( surface_type == FTDOCK )
+      {
+				findFTDockSurfacePoints_( system, pro_idx );
+      }
       else
       {}
     }
 
-		// TEST! //
-		fstream blubb("grid1", std::ios::out);
-		//blubb << *FFT_grid_a_ ;blubb.close();
-		fstream bla("grid2", std::ios::out);
-		//bla << *FFT_grid_b_ ;bla.close();
 		return;
   }
   
@@ -1279,7 +1434,7 @@ namespace BALL
 			System sys_b = system_backup_b_;
 
 			changeProteinOrientation_(sys_b, p.orientation);
-			TranslationProcessor tp(p.translation*-1);
+			TranslationProcessor tp(p.translation);
 			sys_b.apply(tp);
 
 			sys_a.splice(sys_b);

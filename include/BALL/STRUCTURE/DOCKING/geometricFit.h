@@ -247,7 +247,7 @@ namespace BALL
       enum ProteinIndex{  PROTEIN_A = 1, PROTEIN_B    = 2 };
 
 			// The surface type to use for construction of the grids.
-      enum SurfaceType {  CONNOLLY  = 1, VAN_DER_WAALS = 2 };
+      enum SurfaceType {  CONNOLLY  = 1, VAN_DER_WAALS = 2, FTDOCK = 3 };
 
       // Default constructor
       // Creates an empty GeometricFit object
@@ -343,6 +343,14 @@ namespace BALL
 
       // find out the surface points according to the van der Waal's surface definition.
       void findVanDerWaalsSurfacePoints_( System& system, ProteinIndex pro_idx )
+				throw();
+
+      // find the inside points using the same algorithm as FTDock
+      void findFTDockInsidePoints_( System& system, ProteinIndex pro_idx )
+				throw();
+
+      // find out the surface points according to the FTDock surface definition.
+      void findFTDockSurfacePoints_( System& system, ProteinIndex pro_idx )
 				throw();
 
 			/** Compute the center of mass of system
