@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: config.h.in,v 1.49 2005/12/23 17:03:40 amoll Exp $ 
+// $Id: config.h.in,v 1.50 2006/01/03 17:35:50 anhi Exp $ 
 //
 
 #ifndef BALL_CONFIG_CONFIG_H
@@ -190,8 +190,8 @@
 // Define whether inline functions may be used as template parameters.
 #undef BALL_HAS_INLINE_TPL_ARGS
 
-// Define the precision for the BALL Complex type (has to be consistent
-// with the FFTW precision, if included).
+// Define the precision for the BALL Complex type. This is mainly used
+// to determine the FFTW default type
 #define BALL_COMPLEX_PRECISION float
 
 // Define whether the FFTW library/header is available.
@@ -202,6 +202,9 @@
 #undef BALL_HAS_FFTW_DOUBLE
 #undef BALL_HAS_FFTW_FLOAT
 #undef BALL_HAS_FFTW_LONG_DOUBLE
+
+// The default traits for the FFTW classes
+#define BALL_FFTW_DEFAULT_TRAITS FloatTraits
 
 // QT options
 #undef BALL_HAS_VIEW
