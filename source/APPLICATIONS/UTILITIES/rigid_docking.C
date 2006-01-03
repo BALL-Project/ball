@@ -69,6 +69,7 @@ int main( int argc, char **argv )
 
 	// Verbosity of the docking code
 	int VERBOSITY = 6;
+	int PENALTY_STATIC = -5;
 
   // whether to add hydrogen atoms to the systems
   bool ADD_HYDROGENS = false;
@@ -79,12 +80,14 @@ usage: docking -a <PDB File name for protein A>\n\
                -b <PDB File name for protein B>\n\
 							[-c <chain name protein A>]\n\
 							[-z <chain name protein B>]\n\
-              [-r <NEAR_RADIUS>]\n\
-						 	[-s <GRID_SPACING>]\n\
+							[-i <DEGREE_INTERVAL>]\n\
+							[-p <PENALTY_STATIC>]\n\
+							[-r <NEAR_RADIUS>]\n\
+							[-s <GRID_SPACING>]\n\
 							[-t <SURFACE_THICKNESS>]\n\
-						 	[-y <SURFACE_STYLE>]\n\
-						 	[-e <GRID_SIZE>]\n\
-              [-x <output_number>]\n\
+							[-y <SURFACE_STYLE>]\n\
+							[-e <GRID_SIZE>]\n\
+							[-x <output_number>]\n\
 							[-v <verbosity level>]\n";
 
   string SEPARATOR = "--------------------------------------------------";
@@ -107,6 +110,7 @@ usage: docking -a <PDB File name for protein A>\n\
 				case 't':  SURFACE_THICKNESS = atof( argv[++arg_count] );   break;
 				case 'y':  SURFACE_TYPE      = atoi( argv[++arg_count] );   break;
 				case 'i':  DEGREE_INTERVAL   = atof( argv[++arg_count] );   break;
+				case 'p':  PENALTY_STATIC    = atoi( argv[++arg_count] );   break;
 				case 'g':  ADD_HYDROGENS     = true;                        break;
 				case 'x':  BEST_NUM          = atoi( argv[++arg_count] );   break;
 				case 'n':  TOP_N             = atoi( argv[++arg_count] );   break;
@@ -237,7 +241,14 @@ usage: docking -a <PDB File name for protein A>\n\
 	geo_fit.options[GeometricFit::Option::GRID_SPACING] = GRID_SPACING;
 	geo_fit.options[GeometricFit::Option::GRID_SIZE] = GRID_SIZE;
 	geo_fit.options[GeometricFit::Option::SURFACE_THICKNESS] = SURFACE_THICKNESS;
+	geo_fit.options[GeometricFit::Option::SURFACE_TYPE] = SURFACE_TYPE;
 	geo_fit.options[GeometricFit::Option::DEGREE_INTERVAL] = DEGREE_INTERVAL;
+	geo_fit.options[GeometricFit::Option::PENALTY_STATIC] = PENALTY_STATIC;
+	/** Workaround! **/
+	geo_fit.options[GeometricFit::Option::DEG_PHI] = DEGREE_INTERVAL;
+	geo_fit.options[GeometricFit::Option::DEG_THETA] = DEGREE_INTERVAL;
+	geo_fit.options[GeometricFit::Option::DEG_PSI] = DEGREE_INTERVAL;
+	/** Workaround! **/
 	geo_fit.options[GeometricFit::Option::TOP_N] = TOP_N;
 	geo_fit.options[GeometricFit::Option::BEST_NUM] = BEST_NUM;
 	geo_fit.options[GeometricFit::Option::VERBOSITY] = VERBOSITY;
