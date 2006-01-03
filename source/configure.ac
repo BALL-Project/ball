@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.26 2006/01/03 16:55:47 anhi Exp $
+dnl $Id: configure.ac,v 1.27 2006/01/03 17:35:23 anhi Exp $
 dnl
 dnl
 
@@ -81,7 +81,8 @@ AC_ARG_ENABLE(fftw-float,      [  --disable-fftw-float    disable support for fl
 AC_ARG_ENABLE(fftw-double,     [  --disable-fftw-double   disable support for double precision in FFT code])
 AC_ARG_ENABLE(fftw-longdbl,    [  --disable-fftw-longdbl  disable support for long double precision in FFT code])
 dnl		 Do we still need this?
-AC_ARG_ENABLE(double-cpx,      [  --enable-double-cplx    use double precision floats for Complex type])
+AC_ARG_ENABLE(double-cplx,     [  --enable-double-cplx    use double precision floats for Complex type])
+AC_ARG_ENABLE(longdbl-cplx,    [  --enable-longdbl-cplx   use long double precision floats for Complex type])
 
 dnl
 dnl    interpret switches...
@@ -244,13 +245,6 @@ if test "$enable_fftw_longdbl" = "no" ; then
 	fi
 else
 	FFTW_SUPPORT=
-fi
-
-# size of Complex type (if given)
-if test "$enable_double_cplx" = yes ; then
-	FFTW_PRECISION=double
-else
-	FFTW_PRECISION=float
 fi
 
 dnl

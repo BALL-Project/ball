@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.74 2006/01/03 16:55:46 anhi Exp $
+dnl		$Id: aclocal.m4,v 1.75 2006/01/03 17:35:23 anhi Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -1681,6 +1681,10 @@ AC_MSG_CHECKING(for Complex type precision)
 if test "${enable_double_cplx}" = yes ; then
 PROJECT[]_COMPLEX_PRECISION=double
 fi
+if test "${enable_longdbl_cplx}" = yes ; then
+PROJECT[]_COMPLEX_PRECISION="long double"
+fi
+AC_DEFINE_UNQUOTED(PROJECT[]_COMPLEX_PRECISION, ${PROJECT[]_COMPLEX_PRECISION})
 AC_MSG_RESULT(${PROJECT[]_COMPLEX_PRECISION})
 ])
 
@@ -2678,21 +2682,58 @@ if test "${FFTW_SUPPORT}" = true ; then
 fi
 AC_DEFINE_UNQUOTED(PROJECT[]_COMPLEX_TYPE, ${PROJECT[]_COMPLEX_TYPE})
 if test "${PROJECT[]_HAS_FFTW_FLOAT}" != "" ; then
-FFTW_LIBS="${FFTW_LIB_F}/libfftw3f.a}"
+FFTW_LIBS="${FFTW_LIB_F}/libfftw3f.a"
 AC_DEFINE(PROJECT[]_HAS_FFTW_FLOAT,)
 fi
 if test "${PROJECT[]_HAS_FFTW_DOUBLE}" != "" ; then
-FFTW_LIBS="${FFTW_LIB_D}/libfftw3.a"
+FFTW_LIBS="$FFTW_LIBS ${FFTW_LIB_D}/libfftw3.a"
 AC_DEFINE(PROJECT[]_HAS_FFTW_DOUBLE,)
 fi
 if test "${PROJECT[]_HAS_FFTW_LONG_DOUBLE}" != "" ; then
-FFTW_LIBS="${FFTW_LIB_L}/libfftw3l.a"
+FFTW_LIBS="$FFTW_LIBS ${FFTW_LIB_L}/libfftw3l.a"
 AC_DEFINE(PROJECT[]_HAS_FFTW_LONG_DOUBLE,)
 fi
 if test "${PROJECT[]_HAS_FFTW_H}" != "" ; then
 LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
 fi
 
+dnl
+dnl Now, determine the default FFTW precision using the PROJECT[]_COMPLEX_PRECISION
+dnl determined earlier. If this FFTW lib corresponding to this type is not
+dnl available, we throw an error
+dnl
+if test "${PROJECT[]_COMPLEX_PRECISION}" == "float" ; then
+	if test "${PROJECT[]_HAS_FFTW_FLOAT}" != "" ; then
+		PROJECT[]_FFTW_DEFAULT_TRAITS="FloatTraits"
+	else	
+		AC_MSG_RESULT([The fftw3 library needed for the default complex type (float) is not available!])
+		AC_MSG_RESULT([Please specify the desired default FFTW precision (--enable-...-cplx) and/or])
+		AC_MSG_RESULT([the path to the fftw3 lib/headers needed for this type (--with--fftw-lib/incl).])
+		CF_ERROR
+	fi
+fi
+if test "${PROJECT[]_COMPLEX_PRECISION}" == "double" ; then
+	if test "${PROJECT[]_HAS_FFTW_DOUBLE}" != "" ; then
+		PROJECT[]_FFTW_DEFAULT_TRAITS="DoubleTraits"
+	else	
+		AC_MSG_RESULT([The fftw3 library needed for the default complex type (double) is not available!])
+		AC_MSG_RESULT([Please specify the desired default FFTW precision (--enable-...-cplx) and/or])
+		AC_MSG_RESULT([the path to the fftw3 lib/headers needed for this type (--with--fftw-lib/incl).])
+		CF_ERROR
+	fi
+fi
+if test "${PROJECT[]_COMPLEX_PRECISION}" == "long double" ; then
+	if test "${PROJECT[]_HAS_FFTW_LONG_DOUBLE}" != "" ; then
+		PROJECT[]_FFTW_DEFAULT_TRAITS="LongDoubleTraits"
+	else	
+		AC_MSG_RESULT([The fftw3 library needed for the default complex type (long double) is not available!])
+		AC_MSG_RESULT([Please specify the desired default FFTW precision (--enable-...-cplx) and/or])
+		AC_MSG_RESULT([the path to the fftw3 lib/headers needed for this type (--with--fftw-lib/incl).])
+		CF_ERROR
+	fi
+fi
+
+AC_DEFINE_UNQUOTED(PROJECT[]_FFTW_DEFAULT_TRAITS, ${PROJECT[]_FFTW_DEFAULT_TRAITS})
 AC_SUBST(PROJECT[]_HAS_FFTW_FLOAT,)
 AC_SUBST(PROJECT[]_HAS_FFTW_DOUBLE,)
 AC_SUBST(PROJECT[]_HAS_FFTW_LONG_DOUBLE,)

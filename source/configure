@@ -858,6 +858,7 @@ Optional Features:
   --disable-fftw-double   disable support for double precision in FFT code
   --disable-fftw-longdbl  disable support for long double precision in FFT code
   --enable-double-cplx    use double precision floats for Complex type
+  --enable-longdbl-cplx   use long double precision floats for Complex type
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1624,9 +1625,14 @@ if test "${enable_fftw_longdbl+set}" = set; then
   enableval="$enable_fftw_longdbl"
 
 fi;
-# Check whether --enable-double-cpx or --disable-double-cpx was given.
-if test "${enable_double_cpx+set}" = set; then
-  enableval="$enable_double_cpx"
+# Check whether --enable-double-cplx or --disable-double-cplx was given.
+if test "${enable_double_cplx+set}" = set; then
+  enableval="$enable_double_cplx"
+
+fi;
+# Check whether --enable-longdbl-cplx or --disable-longdbl-cplx was given.
+if test "${enable_longdbl_cplx+set}" = set; then
+  enableval="$enable_longdbl_cplx"
 
 fi;
 
@@ -1788,13 +1794,6 @@ if test "$enable_fftw_longdbl" = "no" ; then
 	fi
 else
 	FFTW_SUPPORT=
-fi
-
-# size of Complex type (if given)
-if test "$enable_double_cplx" = yes ; then
-	FFTW_PRECISION=double
-else
-	FFTW_PRECISION=float
 fi
 
 
@@ -9159,6 +9158,13 @@ echo $ECHO_N "checking for Complex type precision... $ECHO_C" >&6
 if test "${enable_double_cplx}" = yes ; then
 BALL_COMPLEX_PRECISION=double
 fi
+if test "${enable_longdbl_cplx}" = yes ; then
+BALL_COMPLEX_PRECISION="long double"
+fi
+cat >>confdefs.h <<_ACEOF
+#define BALL_COMPLEX_PRECISION ${BALL_COMPLEX_PRECISION}
+_ACEOF
+
 echo "$as_me:$LINENO: result: ${BALL_COMPLEX_PRECISION}" >&5
 echo "${ECHO_T}${BALL_COMPLEX_PRECISION}" >&6
 
@@ -18121,21 +18127,21 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 if test "${BALL_HAS_FFTW_FLOAT}" != "" ; then
-FFTW_LIBS="${FFTW_LIB_F}/libfftw3f.a}"
+FFTW_LIBS="${FFTW_LIB_F}/libfftw3f.a"
 cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_FFTW_FLOAT
 _ACEOF
 
 fi
 if test "${BALL_HAS_FFTW_DOUBLE}" != "" ; then
-FFTW_LIBS="${FFTW_LIB_D}/libfftw3.a"
+FFTW_LIBS="$FFTW_LIBS ${FFTW_LIB_D}/libfftw3.a"
 cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_FFTW_DOUBLE
 _ACEOF
 
 fi
 if test "${BALL_HAS_FFTW_LONG_DOUBLE}" != "" ; then
-FFTW_LIBS="${FFTW_LIB_L}/libfftw3l.a"
+FFTW_LIBS="$FFTW_LIBS ${FFTW_LIB_L}/libfftw3l.a"
 cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_FFTW_LONG_DOUBLE
 _ACEOF
@@ -18144,6 +18150,155 @@ fi
 if test "${BALL_HAS_FFTW_H}" != "" ; then
 LDFLAGS="$LDFLAGS -I${FFTW_INCL_PATH}"
 fi
+
+if test "${BALL_COMPLEX_PRECISION}" == "float" ; then
+	if test "${BALL_HAS_FFTW_FLOAT}" != "" ; then
+		BALL_FFTW_DEFAULT_TRAITS="FloatTraits"
+	else
+		echo "$as_me:$LINENO: result: The fftw3 library needed for the default complex type (float) is not available!" >&5
+echo "${ECHO_T}The fftw3 library needed for the default complex type (float) is not available!" >&6
+		echo "$as_me:$LINENO: result: Please specify the desired default FFTW precision (--enable-...-cplx) and/or" >&5
+echo "${ECHO_T}Please specify the desired default FFTW precision (--enable-...-cplx) and/or" >&6
+		echo "$as_me:$LINENO: result: the path to the fftw3 lib/headers needed for this type (--with--fftw-lib/incl)." >&5
+echo "${ECHO_T}the path to the fftw3 lib/headers needed for this type (--with--fftw-lib/incl)." >&6
+
+echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+echo "$as_me:$LINENO: result: Configure failed. If you cannot solve your problem with the aid" >&5
+echo "${ECHO_T}Configure failed. If you cannot solve your problem with the aid" >&6
+echo "$as_me:$LINENO: result: of the above error message, please contact the BALL mailing list" >&5
+echo "${ECHO_T}of the above error message, please contact the BALL mailing list" >&6
+echo "$as_me:$LINENO: result: or the BALL developers. Please enclose the file 'conf.diag.tar'" >&5
+echo "${ECHO_T}or the BALL developers. Please enclose the file 'conf.diag.tar'" >&6
+echo "$as_me:$LINENO: result: which has been created in source. It contains the relevant" >&5
+echo "${ECHO_T}which has been created in source. It contains the relevant" >&6
+echo "$as_me:$LINENO: result: files from this configure run. In most cases, the information" >&5
+echo "${ECHO_T}files from this configure run. In most cases, the information" >&6
+echo "$as_me:$LINENO: result: is necessary to diagnose what went wrong. This file contains" >&5
+echo "${ECHO_T}is necessary to diagnose what went wrong. This file contains" >&6
+echo "$as_me:$LINENO: result: information about your system setup and versions of compilers" >&5
+echo "${ECHO_T}information about your system setup and versions of compilers" >&6
+echo "$as_me:$LINENO: result: and other tools installed in your system." >&5
+echo "${ECHO_T}and other tools installed in your system." >&6
+echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+
+TARFILE=conf.diag.tar
+if test -f $TARFILE ; then
+	${RM} $TARFILE ;
+fi
+FILES="configure configure.ac aclocal.m4 config.log"
+if test -f config.h ; then FILES="$FILES config.h" ; fi
+if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+tar cf $TARFILE $FILES
+
+{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+
+	fi
+fi
+if test "${BALL_COMPLEX_PRECISION}" == "double" ; then
+	if test "${BALL_HAS_FFTW_DOUBLE}" != "" ; then
+		BALL_FFTW_DEFAULT_TRAITS="DoubleTraits"
+	else
+		echo "$as_me:$LINENO: result: The fftw3 library needed for the default complex type (double) is not available!" >&5
+echo "${ECHO_T}The fftw3 library needed for the default complex type (double) is not available!" >&6
+		echo "$as_me:$LINENO: result: Please specify the desired default FFTW precision (--enable-...-cplx) and/or" >&5
+echo "${ECHO_T}Please specify the desired default FFTW precision (--enable-...-cplx) and/or" >&6
+		echo "$as_me:$LINENO: result: the path to the fftw3 lib/headers needed for this type (--with--fftw-lib/incl)." >&5
+echo "${ECHO_T}the path to the fftw3 lib/headers needed for this type (--with--fftw-lib/incl)." >&6
+
+echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+echo "$as_me:$LINENO: result: Configure failed. If you cannot solve your problem with the aid" >&5
+echo "${ECHO_T}Configure failed. If you cannot solve your problem with the aid" >&6
+echo "$as_me:$LINENO: result: of the above error message, please contact the BALL mailing list" >&5
+echo "${ECHO_T}of the above error message, please contact the BALL mailing list" >&6
+echo "$as_me:$LINENO: result: or the BALL developers. Please enclose the file 'conf.diag.tar'" >&5
+echo "${ECHO_T}or the BALL developers. Please enclose the file 'conf.diag.tar'" >&6
+echo "$as_me:$LINENO: result: which has been created in source. It contains the relevant" >&5
+echo "${ECHO_T}which has been created in source. It contains the relevant" >&6
+echo "$as_me:$LINENO: result: files from this configure run. In most cases, the information" >&5
+echo "${ECHO_T}files from this configure run. In most cases, the information" >&6
+echo "$as_me:$LINENO: result: is necessary to diagnose what went wrong. This file contains" >&5
+echo "${ECHO_T}is necessary to diagnose what went wrong. This file contains" >&6
+echo "$as_me:$LINENO: result: information about your system setup and versions of compilers" >&5
+echo "${ECHO_T}information about your system setup and versions of compilers" >&6
+echo "$as_me:$LINENO: result: and other tools installed in your system." >&5
+echo "${ECHO_T}and other tools installed in your system." >&6
+echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+
+TARFILE=conf.diag.tar
+if test -f $TARFILE ; then
+	${RM} $TARFILE ;
+fi
+FILES="configure configure.ac aclocal.m4 config.log"
+if test -f config.h ; then FILES="$FILES config.h" ; fi
+if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+tar cf $TARFILE $FILES
+
+{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+
+	fi
+fi
+if test "${BALL_COMPLEX_PRECISION}" == "long double" ; then
+	if test "${BALL_HAS_FFTW_LONG_DOUBLE}" != "" ; then
+		BALL_FFTW_DEFAULT_TRAITS="LongDoubleTraits"
+	else
+		echo "$as_me:$LINENO: result: The fftw3 library needed for the default complex type (long double) is not available!" >&5
+echo "${ECHO_T}The fftw3 library needed for the default complex type (long double) is not available!" >&6
+		echo "$as_me:$LINENO: result: Please specify the desired default FFTW precision (--enable-...-cplx) and/or" >&5
+echo "${ECHO_T}Please specify the desired default FFTW precision (--enable-...-cplx) and/or" >&6
+		echo "$as_me:$LINENO: result: the path to the fftw3 lib/headers needed for this type (--with--fftw-lib/incl)." >&5
+echo "${ECHO_T}the path to the fftw3 lib/headers needed for this type (--with--fftw-lib/incl)." >&6
+
+echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+echo "$as_me:$LINENO: result: Configure failed. If you cannot solve your problem with the aid" >&5
+echo "${ECHO_T}Configure failed. If you cannot solve your problem with the aid" >&6
+echo "$as_me:$LINENO: result: of the above error message, please contact the BALL mailing list" >&5
+echo "${ECHO_T}of the above error message, please contact the BALL mailing list" >&6
+echo "$as_me:$LINENO: result: or the BALL developers. Please enclose the file 'conf.diag.tar'" >&5
+echo "${ECHO_T}or the BALL developers. Please enclose the file 'conf.diag.tar'" >&6
+echo "$as_me:$LINENO: result: which has been created in source. It contains the relevant" >&5
+echo "${ECHO_T}which has been created in source. It contains the relevant" >&6
+echo "$as_me:$LINENO: result: files from this configure run. In most cases, the information" >&5
+echo "${ECHO_T}files from this configure run. In most cases, the information" >&6
+echo "$as_me:$LINENO: result: is necessary to diagnose what went wrong. This file contains" >&5
+echo "${ECHO_T}is necessary to diagnose what went wrong. This file contains" >&6
+echo "$as_me:$LINENO: result: information about your system setup and versions of compilers" >&5
+echo "${ECHO_T}information about your system setup and versions of compilers" >&6
+echo "$as_me:$LINENO: result: and other tools installed in your system." >&5
+echo "${ECHO_T}and other tools installed in your system." >&6
+echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+
+TARFILE=conf.diag.tar
+if test -f $TARFILE ; then
+	${RM} $TARFILE ;
+fi
+FILES="configure configure.ac aclocal.m4 config.log"
+if test -f config.h ; then FILES="$FILES config.h" ; fi
+if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+tar cf $TARFILE $FILES
+
+{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+
+	fi
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define BALL_FFTW_DEFAULT_TRAITS ${BALL_FFTW_DEFAULT_TRAITS}
+_ACEOF
 
 
 
