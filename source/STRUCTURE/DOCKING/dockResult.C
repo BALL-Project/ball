@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.1 2006/01/04 15:57:11 amoll Exp $
+// $Id: dockResult.C,v 1.2 2006/01/04 15:58:20 amoll Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/FORMAT/PDBFile.h>
 
-#include "dockResult.h"
+# include <BALL/STRUCTURE/DOCKING/dockResult.h>
+
 //#define BALL_VIEW_DEBUG
 namespace BALL
 {
