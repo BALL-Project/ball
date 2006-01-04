@@ -9,14 +9,6 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
-#ifndef BALL_FORMAT_INIFILE_H
-#include <BALL/FORMAT/INIFile.h>
-#endif
-
-#ifndef BALL_KERNEL_SYSTEM_H
-#include <BALL/KERNEL/system.h>
-#endif
-
 #ifndef BALL_MOLMEC_COMMON_RADIUSRULEPROCESSOR_H
 # include <BALL/MOLMEC/COMMON/radiusRuleProcessor.h>
 #endif
@@ -33,14 +25,14 @@
 # include <BALL/DATATYPE/options.h>
 #endif
 
-#include "dockDialogData.h"
-#include "dockResult.h"
-#include "dockProgressDialog.h"
-//#include "dockingController.h"
-
+#include <BALL/VIEW/UIC/dockDialogData.h>
 
 namespace BALL
 {
+	class INIFile;
+	class System;
+	class Options;
+
 	namespace VIEW
 	{
 		class DockingController;

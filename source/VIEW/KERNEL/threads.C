@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.39 2005/12/23 17:03:33 amoll Exp $
+// $Id: threads.C,v 1.40 2006/01/04 16:26:30 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -19,6 +19,8 @@
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
+
+#include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
 
 #include <BALL/SYSTEM/directory.h>
 
@@ -396,6 +398,80 @@ namespace BALL
 			dialog_->calculate_();
 		}
 
+
+		// =========================== implementation of class DockingThread ================
+		
+		///
+		DockingThread::DockingThread()
+			throw()
+			: BALLThread(),
+				dock_alg_(0)
+		{} 
+		
+		// Copy constructor.
+		DockingThread::DockingThread(const DockingThread& dock_thread)
+			throw()
+			: BALLThread(),
+				dock_alg_(dock_thread.dock_alg_)
+		{}
+		
+		///
+		DockingThread::~DockingThread()
+			throw()
+		{
+			output_("delete thread", true);
+
+			if (dock_alg_ != 0)
+			{
+				delete dock_alg_;
+				dock_alg_ = NULL;
+			}
+		}
+		
+		// Assignment operator
+		const DockingThread& DockingThread::operator =(const DockingThread& dock_thread)
+			throw()
+		{
+			if (&dock_thread != this)
+			{
+				dock_alg_ = dock_thread.dock_alg_;
+			}
+			return *this;
+		}
+		
+		//
+		void DockingThread::setDockingAlgorithm(DockingAlgorithm* dock_alg)
+			throw()
+		{
+			dock_alg_ = dock_alg;
+		}
+		
+		/// 
+		void DockingThread::run()
+			throw(Exception::NullPointer)
+		{
+				if (dock_alg_ == 0 ||
+						main_control_ == 0)
+				{
+					throw Exception::NullPointer(__FILE__, __LINE__);
+				}
+				
+				output_("starting docking...", true);
+
+				dock_alg_->start();
+				
+		 		DockingFinishedEvent* finished = new DockingFinishedEvent(dock_alg_->wasAborted());
+				// Qt will delete event when done
+				ConformationSet* cs = new ConformationSet(dock_alg_->getConformationSet());
+				// conformation set is deleted in DockResult
+				finished->setConformationSet(cs);
+				qApp->postEvent(getMainControl(), finished);
+				
+				output_("Docking finished.", true);
+		}
+		
+		// =================================================0
+		
 	} // namespace VIEW
 } // namespace BALL
 

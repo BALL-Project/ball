@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.59 2005/12/26 03:26:25 amoll Exp $
+// $Id: mainframe.C,v 1.60 2006/01/04 16:28:17 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -21,6 +21,8 @@
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
+
+#include <BALL/VIEW/WIDGETS/dockingController.h>
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/COMMON/version.h>
@@ -91,6 +93,8 @@ namespace BALL
 		CHECK_PTR(new MolecularStructure(	this, "MolecularStructure"));
 		CHECK_PTR(new HelpViewer(					this, "Documentation"));
 		CHECK_PTR(new LogView(						this, "Logs"));
+
+		CHECK_PTR(new DockingController(this, "DockingController"));
 
 		Scene::stereoBufferSupportTest();
 		scene_ = new Scene(this, "3D View");

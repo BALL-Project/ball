@@ -16,7 +16,7 @@
 #include <qtimer.h>
 #include <qdatetime.h>
 
-#include "dockProgressDialogData.h"
+#include <BALL/VIEW/UIC/dockProgressDialogData.h>
 
 namespace BALL
 {

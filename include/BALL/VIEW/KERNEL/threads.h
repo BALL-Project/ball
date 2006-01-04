@@ -27,6 +27,7 @@ namespace BALL
 	class EnergyMinimizer;
 	class MolecularDynamics;
 	class Composite;
+	class DockingAlgorithm;
 
 namespace VIEW
 {
@@ -314,6 +315,41 @@ namespace VIEW
 				FinishedRepresentionUpdateEvent()
 					:QCustomEvent(FINISHED_REPRESENTATION_UPDATE_EVENT)
 				{}
+		};
+
+		/// Thread for Docking
+		class BALL_EXPORT DockingThread
+			: public BALLThread
+		{
+			public:
+				///
+				DockingThread()
+					throw();
+				
+				/** Copy constructor.
+					*/
+				DockingThread(const DockingThread& dock_thread)
+					throw();
+					
+				///
+				virtual ~DockingThread()
+					throw();
+				
+				/**  Assignment operator
+				 */
+				const DockingThread& operator =(const DockingThread& dock_thread)
+					throw();
+					
+				///
+				void setDockingAlgorithm(DockingAlgorithm* dock_alg)
+					throw();
+					
+				///
+				virtual void run()
+					throw(Exception::NullPointer);
+					
+			protected:
+				DockingAlgorithm* dock_alg_;
 		};
 
 	}

@@ -5,12 +5,16 @@
 #ifndef BALL_VIEW_DIALOGS_DOCKRESULTDIALOG_H
 #define BALL_VIEW_DIALOGS_DOCKRESULTDIALOG_H
 
-#include "dockResult.h"
-#include "dockResultDialogData.h"
-#include "dockingController.h"
+#include <BALL/VIEW/UIC/dockResultDialogData.h>
+
+#ifndef BALL_WIDGETS_DOCKINGCONTROLLER_H
+# include <BALL/VIEW/WIDGETS/dockingController.h>
+#endif
 
 namespace BALL
 {
+	class DockResult;
+
 	namespace VIEW
 	{
 		/** Dialog for showing the docking results.

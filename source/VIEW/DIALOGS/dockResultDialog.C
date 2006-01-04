@@ -1,8 +1,17 @@
-// $Id: dockResultDialog.C,v 1.2 2006/01/04 14:54:19 anhi Exp $
+// $Id: dockResultDialog.C,v 1.3 2006/01/04 16:25:30 amoll Exp $
 //
 
-#include "dockResultDialog.h"
-#include "dockDialog.h"
+#include <BALL/VIEW/DIALOGS/dockResultDialog.h>
+#include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
+
+#include <BALL/VIEW/WIDGETS/molecularStructure.h>
+
+#include <BALL/VIEW/KERNEL/mainControl.h>
+
+#include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
+#include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
+#include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
+#include <BALL/STRUCTURE/DOCKING/dockResult.h>
 
 #include <qtable.h>
 #include <qcombobox.h>
@@ -10,12 +19,6 @@
 #include <qtextedit.h>
 #include <qmessagebox.h>
 
-#include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
-#include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
-#include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
-#include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
-#include <BALL/VIEW/WIDGETS/molecularStructure.h>
 
 //#define BALL_VIEW_DEBUG
 
@@ -62,7 +65,7 @@ namespace BALL
 		// Copy constructor.
 		DockResultDialog::DockResultDialog(const DockResultDialog& dock_res_dialog)
 			throw()
-			: //DockResultDialogData(dock_res_dialog),
+			: DockResultDialogData(),
 				dock_res_(dock_res_dialog.dock_res_),
 				docked_system_(dock_res_dialog.docked_system_),
 				redock_partner1_(dock_res_dialog.redock_partner1_),

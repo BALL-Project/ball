@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.68 2005/12/23 17:02:15 amoll Exp $
+// $Id: message.h,v 1.69 2006/01/04 16:26:34 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -33,6 +33,9 @@ namespace BALL
 {
 	class Composite;
 	class TrajectoryFile;
+	class ConformationSet;
+	class DockResult;
+	class System;
 
 	namespace VIEW
 	{
@@ -920,6 +923,122 @@ class BALL_VIEW_EXPORT RegisterHelpSystemMessage
 	Index 	 menu_entry_;
 	String 	 url_;
 	bool  	 register_;
+};
+
+
+//////////////// DOCKING ///////////////////////
+/// Message to notify about a new DockResult
+class BALL_EXPORT NewDockResultMessage
+	:public CompositeMessage
+{
+	public:
+		///
+		NewDockResultMessage()
+			throw();
+			
+		///
+		void setDockResult(DockResult& dock_res)
+			throw()
+		{
+			dock_res_ = &dock_res;
+		}
+
+		///
+		DockResult* getDockResult()
+			throw()
+		{
+			return dock_res_;
+		}
+
+	protected:
+		DockResult* dock_res_;
+};
+
+/// Message to notify dock result should be shown
+class BALL_EXPORT ShowDockResultMessage
+	:public Message
+{
+	public:
+		///
+		ShowDockResultMessage()
+			throw();
+			
+		///
+		ShowDockResultMessage(DockResult* dock_res, System* docked_system)
+			throw();
+			
+		///
+		void setDockResult(DockResult* dock_res)
+			throw()
+		{
+			dock_res_ = dock_res;
+		}
+
+		void setDockedSystem(System* docked_system)
+			throw()
+		{
+			docked_system_ = docked_system;
+		}
+		
+		///
+		DockResult* getDockResult()
+			throw()
+		{
+			return dock_res_;
+		}
+		
+		///
+		System* getDockedSystem()
+			throw()
+		{
+			return docked_system_;
+		}
+
+	protected:
+		DockResult* dock_res_;
+		System* docked_system_;
+};
+
+/// Message to notify docking has finished
+class BALL_EXPORT DockingFinishedMessage
+	:public Message
+{
+	public:
+		///
+		DockingFinishedMessage()
+			throw();
+
+		///
+		DockingFinishedMessage(bool abort)
+			throw();
+			 
+		///
+		virtual ~DockingFinishedMessage()
+			throw();
+			
+		///
+		void setConformationSet(const ConformationSet* conformation_set)
+		{
+			conformation_set_ = conformation_set;
+		}
+		
+		//
+		const ConformationSet* getConformationSet() const
+		{
+			return conformation_set_;
+		}
+		
+		///
+		bool wasAborted()
+		{
+		 	return abort_;
+		}
+
+	protected:
+
+		/// this conformation set is deleted in DockResult
+		const ConformationSet* conformation_set_;
+		bool abort_;
 };
 
 

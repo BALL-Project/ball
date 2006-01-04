@@ -1,12 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.2 2006/01/04 14:54:18 anhi Exp $
+// $Id: dockDialog.C,v 1.3 2006/01/04 16:25:30 amoll Exp $
 //
-
-#include "dockDialog.h"
-#include "geometricFitDialog.h"
-#include "dockingController.h"
 
 #include <qpushbutton.h>
 #include <qcombobox.h>
@@ -20,11 +16,19 @@
 #include <qbuttongroup.h>
 #include <qlistbox.h>
 
+#include <BALL/VIEW/DIALOGS/dockDialog.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
+#include <BALL/VIEW/WIDGETS/dockingController.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/STRUCTURE/DOCKING/geometricFit.h>
+#include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
+#include <BALL/FORMAT/INIFile.h>
+#include <BALL/KERNEL/system.h>
+# include <BALL/DATATYPE/options.h>
+
+
 //#define BALL_VIEW_DEBUG
 namespace BALL
 {
@@ -77,7 +81,7 @@ namespace BALL
 		// Copy constructor.
 		DockDialog::DockDialog(const DockDialog& dock_dialog)
 			throw()
-			: //DockDialogData(dock_dialog),
+			: DockDialogData(),
 				PreferencesEntry(dock_dialog),
 				is_redock_(dock_dialog.is_redock_),
 				has_changed_(dock_dialog.has_changed_),
@@ -546,10 +550,10 @@ namespace BALL
 				return false;
 			}
 		
-			main_control->getPrimitiveManager().setMultithreadingMode(false);
+			main_control->setMultithreading(false);
 			main_control->update(*docking_partner1_, true);
 			main_control->update(*docking_partner2_, true);
-			main_control->getPrimitiveManager().setMultithreadingMode(true);
+			main_control->setMultithreading(true);
 			return true;
 		}
 		

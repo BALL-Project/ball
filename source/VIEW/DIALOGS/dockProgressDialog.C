@@ -1,7 +1,7 @@
-// $Id: dockProgressDialog.C,v 1.2 2006/01/04 14:54:19 anhi Exp $
+// $Id: dockProgressDialog.C,v 1.3 2006/01/04 16:25:30 amoll Exp $
 //
 
-#include "dockProgressDialog.h"
+#include <BALL/VIEW/DIALOGS/dockProgressDialog.h>
 
 #include <qprogressbar.h>
 #include <qtextedit.h>

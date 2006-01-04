@@ -1,9 +1,9 @@
-#include "geometricFitDialog.h"
+
+#include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
+#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 
 #include <qlineedit.h>
 #include <qcombobox.h>
-
-#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 
 //#define BALL_VIEW_DEBUG
 
@@ -42,7 +42,7 @@ namespace BALL
 		// Copy constructor.
 		GeometricFitDialog::GeometricFitDialog(const GeometricFitDialog& geo_fit_dialog)
 			throw()
-			: //GeometricFitDialogData(geo_fit_dialog),
+			: GeometricFitDialogData(),
 				PreferencesEntry(),
 				has_changed_(geo_fit_dialog.has_changed_),
 				is_redock_(geo_fit_dialog.is_redock_),
