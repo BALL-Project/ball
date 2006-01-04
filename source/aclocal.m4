@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.75 2006/01/03 17:35:23 anhi Exp $
+dnl		$Id: aclocal.m4,v 1.76 2006/01/04 16:51:37 anhi Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -2537,6 +2537,10 @@ if test "${FFTW_SUPPORT}" = true ; then
 		CF_ERROR
 	else
 		AC_MSG_RESULT((${FFTW_INCL_PATH}))
+	fi
+
+	if test "${FFTW_INCL_PATH}" != /usr/include ; then
+		BALL_INCLUDES="${BALL_INCLUDES} -I${FFTW_INCL_PATH}"
 	fi
 
 	if test "${FFTW_DISABLE_FFTW_FLOAT}" = "false" ; then
