@@ -5,6 +5,7 @@ THISLIB=$(LIBNAME)
 FFT_DEPENDENT_SOURCES=$(BALL_HAS_FFTW:true=geometricFit.C)
 
 CPP_SOURCES= \
+	dockResult.C\
 	dockingAlgorithm.C\
 	conformationSet.C\
 	energeticEvaluation.C\

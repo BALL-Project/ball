@@ -1,9 +1,20 @@
-#ifndef RANDOMEVALUATION_H
-#define RANDOMEVALUATION_H
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
 
-#include <BALL/STRUCTURE/DOCKING/conformationSet.h>
-#include <BALL/DATATYPE/hashMap.h>
-#include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
+#ifndef BALL_STRUCTURE_RANDOMEVALUATION_H
+#define BALL_STRUCTURE_RANDOMEVALUATION_H
+
+#ifndef BALL_STRUCTURE_DOCKING_RANKEDCONFORMATION_H
+# include <BALL/STRUCTURE/DOCKING/conformationSet.h>
+#endif
+
+#ifndef BALL_DATATYPE_HASHMAP_H
+# include <BALL/DATATYPE/hashMap.h>
+#endif
+
+#ifndef BALL_STRUCTURE_DOCKING_ENERGETICEVALUATION_H
+# include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
+#endif 
 
 #include <vector>
 

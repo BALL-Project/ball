@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 
-
 #ifndef BALL_STRUCTURE_DOCKING_DOCKINGALGORITHM_H
 #define BALL_STRUCTURE_DOCKING_DOCKINGALGORITHM_H
 

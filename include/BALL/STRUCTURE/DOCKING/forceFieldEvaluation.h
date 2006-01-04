@@ -1,9 +1,16 @@
-#ifndef FORCEFIELDEVALUATION_H
-#define FORCEFIELDEVALUATION_H
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
 
-#include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
+#ifndef BALL_STRUCTURE_FORCEFIELDEVALUATION_H
+#define BALL_STRUCTURE_FORCEFIELDEVALUATION_H
 
-#include <BALL/MOLMEC/COMMON/forceField.h>
+#ifndef BALL_STRUCTURE_DOCKING_ENERGETICEVALUATION_H
+# include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
+#endif
+
+#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
+# include <BALL/MOLMEC/COMMON/forceField.h>
+#endif
 
 namespace BALL
 {

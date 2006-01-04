@@ -1,8 +1,16 @@
-#ifndef AMBEREVALUATION_H
-#define AMBEREVALUATION_H
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
 
-#include <BALL/STRUCTURE/DOCKING/forceFieldEvaluation.h>
-#include <BALL/MOLMEC/AMBER/amber.h>
+#ifndef BALL_STRUCTURE_DOCKING_AMBEREVALUATION_H
+#define BALL_STRUCTURE_DOCKING_AMBEREVALUATION_H
+
+#ifndef BALL_STRUCTURE_FORCEFIELDEVALUATION_H
+# include <BALL/STRUCTURE/DOCKING/forceFieldEvaluation.h>
+#endif
+
+#ifndef BALL_MOLMEC_AMBER_AMBER_H
+# include <BALL/MOLMEC/AMBER/amber.h>
+#endif
 
 namespace BALL
 {

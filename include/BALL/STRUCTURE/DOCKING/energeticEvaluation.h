@@ -1,8 +1,12 @@
-#ifndef ENERGETICEVALUATION_H
-#define ENERGETICEVALUATION_H
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
 
-#include <BALL/STRUCTURE/DOCKING/conformationSet.h>
-#include <BALL/DATATYPE/hashMap.h>
+#ifndef BALL_STRUCTURE_DOCKING_ENERGETICEVALUATION_H
+#define BALL_STRUCTURE_DOCKING_ENERGETICEVALUATION_H
+
+#ifndef BALL_STRUCTURE_DOCKING_RANKEDCONFORMATION_H
+# include <BALL/STRUCTURE/DOCKING/conformationSet.h>
+#endif
 
 #include <vector>
 
