@@ -92,7 +92,7 @@ subdirs:	dummy
 
 subdirsdepend:	dummy
 	@echo "" > .Dependencies
-	@for i in $(SUBDIRS); do ( cd $$i; echo "" >.Dependencies; cd .. ) ; done
+	@for i in $(STRUCTURE_SUBDIRS); do ( cd $$i; echo "" >.Dependencies; cd .. ) ; done
 	@$(MAKE) subdirs SUBDIRS="$(STRUCTURE_SUBDIRS)" TARGET=depend
 
 subdirsclean:
