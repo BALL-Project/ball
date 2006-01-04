@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.44 2004/10/20 12:26:41 amoll Exp $
+# $Id: Makefile,v 1.44.4.1 2006/01/04 14:40:07 anhi Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -29,6 +29,12 @@ CPP_SOURCES=\
 	compositePropertiesData.C\
 	contourSurfaceDialog.C\
 	contourSurfaceDialogData.C\
+	dockDialog.C\
+	dockDialogData.C\
+	dockProgressDialog.C\
+	dockProgressDialogData.C\
+	dockResultDialog.C\
+	dockResultDialogData.C\
 	downloadPDBFile.C\
 	downloadPDBFileData.C\
 	displayProperties.C\
@@ -83,6 +89,12 @@ MOC_SOURCES=\
 	colorMeshDialogData_moc.C\
 	contourSurfaceDialog_moc.C\
 	contourSurfaceDialogData_moc.C\
+	dockDialog_moc.C\
+	dockDialogData_moc.C\
+	dockProgressDialog_moc.C\
+	dockProgressDialogData_moc.C\
+	dockResultDialog_moc.C\
+	dockResultDialogData_moc.C\
 	downloadPDBFile_moc.C\
 	downloadPDBFileData_moc.C\
 	displayProperties_moc.C\
@@ -129,6 +141,9 @@ UIC_SOURCES=\
 	colorMeshDialogData.C\
 	compositePropertiesData.C\
 	contourSurfaceDialogData.C\
+	dockDialogData.C\
+	dockProgressDialogData.C\
+	dockResultDialogData.C\
 	downloadPDBFileData.C\
 	displayPropertiesData.C\
 	FDPBDialogData.C\
