@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.44.4.1 2006/01/04 14:40:07 anhi Exp $
+# $Id: Makefile,v 1.44.4.2 2006/01/04 14:46:54 anhi Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -41,6 +41,8 @@ CPP_SOURCES=\
 	displayPropertiesData.C\
 	FDPBDialog.C\
 	FDPBDialogData.C\
+	geometricFitDialog.C\
+	geometricFitDialogData.C\
 	labelDialog.C\
 	labelDialogData.C\
 	lightSettings.C\
@@ -101,6 +103,8 @@ MOC_SOURCES=\
 	displayPropertiesData_moc.C\
 	FDPBDialog_moc.C\
 	FDPBDialogData_moc.C\
+	geometricFitDialog_moc.C\
+	geometricFitDialogData_moc.C\
 	labelDialog_moc.C\
 	labelDialogData_moc.C\
 	lightSettings_moc.C\
@@ -147,6 +151,7 @@ UIC_SOURCES=\
 	downloadPDBFileData.C\
 	displayPropertiesData.C\
 	FDPBDialogData.C\
+	geometricFitDialogData.C\
 	labelDialogData.C\
 	lightSettingsData.C\
 	mainControlPreferencesData.C\
