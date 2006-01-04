@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.49 2005/12/23 17:03:22 amoll Exp $
+# $Id: Makefile,v 1.50 2006/01/04 14:54:18 anhi Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -31,12 +31,20 @@ CPP_SOURCES=\
 	contourSurfaceDialogData.C\
 	clippingDialog.C\
 	clippingDialogData.C\
+	dockDialog.C\
+	dockDialogData.C\
+	dockProgressDialog.C\
+	dockProgressDialogData.C\
+	dockResultDialog.C\
+	dockResultDialogData.C\
 	downloadPDBFile.C\
 	downloadPDBFileData.C\
 	displayProperties.C\
 	displayPropertiesData.C\
 	FDPBDialog.C\
 	FDPBDialogData.C\
+	geometricFitDialog.C\
+	geometricFitDialogData.C\
 	labelDialog.C\
 	labelDialogData.C\
 	lightSettings.C\
@@ -89,12 +97,20 @@ MOC_SOURCES=\
 	modifySurfaceDialogData_moc.C\
 	contourSurfaceDialog_moc.C\
 	contourSurfaceDialogData_moc.C\
+	dockDialog_moc.C\
+	dockDialogData_moc.C\
+	dockProgressDialog_moc.C\
+	dockProgressDialogData_moc.C\
+	dockResultDialog_moc.C\
+	dockResultDialogData_moc.C\
 	downloadPDBFile_moc.C\
 	downloadPDBFileData_moc.C\
 	displayProperties_moc.C\
 	displayPropertiesData_moc.C\
 	FDPBDialog_moc.C\
 	FDPBDialogData_moc.C\
+	geometricFitDialog_moc.C\
+	geometricFitDialogData_moc.C\
 	labelDialog_moc.C\
 	labelDialogData_moc.C\
 	lightSettings_moc.C\
@@ -138,9 +154,13 @@ UIC_SOURCES=\
 	modifySurfaceDialogData.C\
 	compositePropertiesData.C\
 	contourSurfaceDialogData.C\
+	dockDialogData.C\
+	dockProgressDialogData.C\
+	dockResultDialogData.C\
 	downloadPDBFileData.C\
 	displayPropertiesData.C\
 	FDPBDialogData.C\
+	geometricFitDialogData.C\
 	labelDialogData.C\
 	lightSettingsData.C\
 	mainControlPreferencesData.C\
