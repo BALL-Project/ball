@@ -20,6 +20,7 @@ CPP_SOURCES=\
 	canvasWidget.C\
 	regularData2DWidget.C\
 	regularData1DWidget.C\
+	dockingController.C\
 	helpViewer.C
 
 
@@ -38,6 +39,7 @@ MOC_SOURCES=\
 	canvasWidget_moc.C\
 	regularData1DWidget_moc.C\
 	regularData2DWidget_moc.C\
+	dockingController_moc.C\
 	helpViewer_moc.C
 
 PYTHON_MOC_SOURCES=\
@@ -88,4 +90,7 @@ datasetControl_moc.C:	$(HEADER_DIR)/datasetControl.h
 
 helpViewer_moc.C:	$(HEADER_DIR)/helpViewer.h
 	$(MOC) $(HEADER_DIR)/helpViewer.h -o $@
+
+dockingController_moc.C:	$(HEADER_DIR)/dockingController.h
+	$(MOC) $(HEADER_DIR)/dockingController.h -o $@
 
