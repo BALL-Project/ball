@@ -28,6 +28,7 @@ namespace BALL
 	class MolecularDynamics;
 	class Composite;
 	class DockingAlgorithm;
+	class ConformationSet;
 
 namespace VIEW
 {
@@ -352,6 +353,52 @@ namespace VIEW
 				DockingAlgorithm* dock_alg_;
 		};
 
+
+		///
+		class BALL_EXPORT DockingFinishedEvent
+			: public QCustomEvent
+		{
+			public:
+				
+				///
+				DockingFinishedEvent()
+					:QCustomEvent(DOCKING_FINISHED_EVENT),
+					 conformation_set_(0)
+				{}
+
+				///
+				DockingFinishedEvent(bool abort)
+					:QCustomEvent(DOCKING_FINISHED_EVENT),
+					 conformation_set_(0)
+				{
+				 	abort_ = abort;
+				}
+				 
+				///
+				void setConformationSet(const ConformationSet* conformation_set)
+				{
+					conformation_set_ = conformation_set;
+				}
+				
+				//
+				const ConformationSet* getConformationSet() const
+				{
+					return conformation_set_;
+				}
+				
+				///
+				bool wasAborted()
+				{
+		 			return abort_;
+				}
+				
+				protected:
+
+				/// this conformation set is deleted in DockResult
+				const ConformationSet* conformation_set_;
+				bool abort_;
+		};
+		
 	}
 }
 #endif //BALL_QT_HAS_THREADS

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.43 2005/12/23 17:03:37 amoll Exp $
+// $Id: datasetControl.C,v 1.44 2006/01/04 16:37:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -20,6 +20,7 @@
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/DATATYPE/contourSurface.h>
+# include <BALL/STRUCTURE/DOCKING/dockResult.h>
 
 #include <qfiledialog.h>
 #include <qlistview.h>
@@ -81,6 +82,9 @@ namespace BALL
 
 			insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()));
 			setMenuHint("Open a 3D data grid");
+
+			insertMenuEntry(MainControl::FILE_OPEN, "Dock Result", this, SLOT(addDockResult()));
+			setMenuHint("Open a dock result file");
 
 			menu_cs_ = insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  
 																							SLOT(computeIsoContourSurface()), CTRL+Key_U);
@@ -694,6 +698,58 @@ namespace BALL
 			: GenericControl(control)
 		{
 		}
+
+	// DOCKING =================================>
+	void DatasetControl::addDockResult()
+		throw()
+	{
+		// open dialog to select result file
+		QString file = QFileDialog::getOpenFileName(
+												getWorkingDir().c_str(),
+												"DockResult files(*.dr)",
+												this,
+												"Dock Result File Dialog",
+												"Select a Dock Result file" );
+												
+		if (file == QString::null) return;
+		setWorkingDirFromFilename_(file.ascii());
+		
+		// read the DockResult from the file
+		DockResult* dock_res = new DockResult();
+		if (!dock_res->readDockResult(file.ascii()))
+		{
+			setStatusbarText("Could not read DockResult file!");
+			return;
+		}
+		
+		/* // you can also use the operator>>
+		File input(file.ascii(), std::ios::in | std::ios::binary);
+		input >> *dock_res;
+		input.close();
+		*/
+		
+		// get docked system, set its name to name of file and add it to BALLView structures
+		// apply the first SnapShot to the system to get the positions of the docked structures
+		SnapShot ss = (*(dock_res->getConformationSet()))[0];
+		System* docked_system = new System(dock_res->getConformationSet()->getSystem());
+		String name = file.ascii();
+		vector<String> s;
+		name.split(s, "/");
+		docked_system->setName(s[s.size()-1].before("."));
+		ss.applySnapShot(*docked_system);
+		getMainControl()->insert(*docked_system);
+		insertDockResult_(dock_res, *docked_system);
+	}
+
+	void DatasetControl::insertDockResult_(DockResult* dock_res, System& system)
+		throw()
+	{
+		QString name = dock_res->getDockingAlgorithm();
+		
+		QListViewItem* item = new QListViewItem(listview, name, system.getName().c_str(), "DockResult");
+		item_to_dock_result_[item] = dock_res;
+		insertComposite_(&system, item);
+	}
 
 	} // namespace VIEW
 } // namespace BALL

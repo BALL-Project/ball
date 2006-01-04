@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.40 2006/01/04 16:26:30 amoll Exp $
+// $Id: threads.C,v 1.41 2006/01/04 16:40:36 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -12,6 +12,7 @@
 #include <BALL/VIEW/MODELS/modelProcessor.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.18 2005/12/23 17:02:22 amoll Exp $
+// $Id: datasetControl.h,v 1.19 2006/01/04 16:37:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -33,6 +33,7 @@ namespace BALL
 {
 	class TrajectoryFile;
 	class SnapShotManager;
+	class DockResult;
 
 	namespace VIEW
 	{
@@ -118,6 +119,10 @@ namespace BALL
 			void add3DGrid() throw();
 
 			///
+			void addDockResult()
+				throw();
+				
+			///
 			void updateSelection() throw();
 
 			/// Overloaded from GenericControl, calls cut
@@ -135,6 +140,10 @@ namespace BALL
 			// overload this method to add furter data types
 			virtual bool deleteItem_(QListViewItem& item);
 
+			void showDockResult_();
+			void saveDockTrajectories_();
+			void saveDockResult_();
+
 			void deleteItems_();
 			void visualiseTrajectory_();
 			void bufferTrajectory_();
@@ -150,6 +159,9 @@ namespace BALL
 
 		  protected:
 			
+			void insertDockResult_(DockResult* file, System& system)
+				throw();
+
 			// only for Python Interface
 			DatasetControl(const DatasetControl& control) throw();
 
@@ -187,6 +199,7 @@ namespace BALL
 			HashMap<QListViewItem*	, RegularData1D*>   					item_to_grid1_;
 			HashMap<QListViewItem*	, RegularData2D*>   					item_to_grid2_;
 			HashMap<QListViewItem*	, RegularData3D*>   					item_to_grid3_;
+			HashMap<QListViewItem*	, DockResult*>								item_to_dock_result_;
 			// insert new HashMaps like above for new data type objects.
 			
 			HashMap<Composite*      , HashSet<QListViewItem*> > 	composite_to_items_;
