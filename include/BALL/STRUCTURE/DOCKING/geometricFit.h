@@ -447,7 +447,7 @@ namespace BALL
       int total_round_;
 
 			// ordered set of the top_n peaks
-			multiset<Peak_> peak_set_;
+			std::multiset<Peak_> peak_set_;
 
 			// Needed to produce the correct results in getRankedConformations
 			System system_backup_a_;
