@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.1 2006/01/04 16:19:10 amoll Exp $
+// $Id: dockingController.C,v 1.2 2006/01/05 15:57:57 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -113,6 +113,11 @@ namespace BALL
 				DockingFinishedMessage* dfm = RTTI::castTo<DockingFinishedMessage>(*message);
 				
 				unlockComposites();
+				
+				progress_dialog_->close();
+				delete progress_dialog_;
+				progress_dialog_ = NULL;
+				
 				if (dfm->wasAborted())
 				{
 					QMessageBox request_message(0,0);
@@ -122,10 +127,6 @@ namespace BALL
 						return;
 					}
 				}
-				
-				progress_dialog_->close();
-				delete progress_dialog_;
-				progress_dialog_ = NULL;
 				
 				setStatusbarText("Starting scoring...", true);
 				if(!runScoring_((ConformationSet*)(dfm->getConformationSet())))
@@ -137,7 +138,7 @@ namespace BALL
 			// DatasetControl sends this messages, when user wants to have a look at a DockResult
 			else if (RTTI::isKindOf<ShowDockResultMessage>(*message))
 			{
-	      ShowDockResultMessage* sdrm = RTTI::castTo<ShowDockResultMessage>(*message);
+				ShowDockResultMessage* sdrm = RTTI::castTo<ShowDockResultMessage>(*message);
 				
 				DockResultDialog* result_dialog = new DockResultDialog(this);
 				// dialog deletes itself after close-button is pressed

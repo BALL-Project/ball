@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.45 2006/01/05 13:04:04 amoll Exp $
+// $Id: datasetControl.C,v 1.46 2006/01/05 15:57:57 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -216,6 +216,12 @@ namespace BALL
 				insertTrajectory_(ntm->getTrajectoryFile(), *(System*)ntm->getComposite());
 				return;
 			}
+			else if (RTTI::isKindOf<NewDockResultMessage>(*message))
+			{
+				NewDockResultMessage* dock_res_m = RTTI::castTo<NewDockResultMessage>(*message);
+				insertDockResult_(dock_res_m->getDockResult(), *(System*)dock_res_m->getComposite());
+				return;
+			}  
 			else if (RTTI::isKindOf<CompositeMessage>(*message))
 			{
 				CompositeMessage *composite_message = RTTI::castTo<CompositeMessage>(*message);
@@ -252,6 +258,13 @@ namespace BALL
 				item_to_trajectory_.erase(&item);
 				delete ssm;
 				setStatusbarText("deleted trajectory");
+			}
+			else if (item_to_dock_result_.has(&item))
+			{
+				DockResult* dock_res = item_to_dock_result_[&item];
+				item_to_dock_result_.erase(&item);
+				delete dock_res;
+				setStatusbarText("deleted dock result");
 			}
 			else if (item_to_grid1_.has(&item))
 			{
@@ -323,6 +336,13 @@ namespace BALL
 				return;
 			}
 
+			if (item_to_dock_result_.has(context_item_))
+			{
+				insertContextMenuEntry_("Save Trajectories", SLOT(saveDockTrajectories_()));
+				insertContextMenuEntry_("Save Dock Result", SLOT(saveDockResult_()));
+				insertContextMenuEntry_("Show Dock Result", SLOT(showDockResult_()));
+			}
+			
 			if (item_to_grid1_.has(context_item_) ||
 		      item_to_grid2_.has(context_item_) ||
 					item_to_grid3_.has(context_item_))

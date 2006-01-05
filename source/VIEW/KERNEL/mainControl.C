@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.173 2005/12/23 17:03:31 amoll Exp $
+// $Id: mainControl.C,v 1.174 2006/01/05 15:57:16 leonhardt Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1527,6 +1527,21 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				{
 					getPrimitiveManager().setUpdatePending(false);
 				}
+			}
+
+			if (e->type() == (QEvent::Type)DOCKING_FINISHED_EVENT)
+			{
+				DockingFinishedEvent* dock_event = dynamic_cast<DockingFinishedEvent*>(e);
+				if (dock_event->getConformationSet() == 0)
+				{
+					Log.warn() << "Could not send docking finished message in " << __FILE__ << " " << __LINE__ << std::endl;
+					return;
+				}
+				// send a DockingFinishedMessage
+				DockingFinishedMessage* dock_fin_m = new DockingFinishedMessage(dock_event->wasAborted());
+				dock_fin_m->setConformationSet(dock_event->getConformationSet());
+				notify_(dock_fin_m);
+				return;
 			}
 		#else
 			e->type(); // prevent warning for single thread build
