@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.44 2006/01/04 16:37:52 amoll Exp $
+// $Id: datasetControl.C,v 1.45 2006/01/05 13:04:04 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -749,6 +749,66 @@ namespace BALL
 		QListViewItem* item = new QListViewItem(listview, name, system.getName().c_str(), "DockResult");
 		item_to_dock_result_[item] = dock_res;
 		insertComposite_(&system, item);
+	}
+
+
+	void DatasetControl::showDockResult_()
+	{	
+		ShowDockResultMessage* msg = new ShowDockResultMessage(item_to_dock_result_[context_item_], (System*) item_to_composite_[context_item_]);
+		notify_(msg);
+	}
+
+
+	void DatasetControl::saveDockTrajectories_()
+	{
+		DockResult* dock_res = item_to_dock_result_[context_item_];
+		
+		QString s = QFileDialog::getSaveFileName(
+									getWorkingDir().c_str(),
+									"DCD files(*.dcd)",
+									getMainControl(),
+									"Dock Trajectory File Dialog",
+									"Choose a filename to save" );
+
+		if (s == QString::null) return;
+		String filename = s.ascii();
+
+		setWorkingDirFromFilename_(filename);
+
+		if (!dock_res->getConformationSet()->writeDCDFile(filename))
+		{
+			setStatusbarText("Could not write DCDFile.", true);
+			return;
+		}
+
+		setStatusbarText("Written DCDFile.", true);
+	}
+
+	void DatasetControl::saveDockResult_()
+	{
+		DockResult* dock_res = item_to_dock_result_[context_item_];
+		
+		QString s = QFileDialog::getSaveFileName(getWorkingDir().c_str(),
+																							"DockResult files(*.dr)",
+																							getMainControl(),
+																							"DockResult File Dialog",
+																							"Choose a filename to save" );
+		if (s == QString::null) return;
+		String filename = s.ascii();
+		
+		if (!dock_res->writeDockResult(filename))
+		{
+			setStatusbarText("Could not write DockResultFile.", true);
+			return;
+		}
+		
+		/* // you can also use the operator<<
+		File file(filename, std::ios_base::out | std::ios::binary);
+		file << *dock_res;
+		file.close();
+		*/
+		
+		setStatusbarText("Written DockResultFile.", true);
 	}
 
 	} // namespace VIEW
