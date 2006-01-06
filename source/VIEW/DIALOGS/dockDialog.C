@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.3 2006/01/04 16:25:30 amoll Exp $
+// $Id: dockDialog.C,v 1.4 2006/01/06 13:10:35 leonhardt Exp $
 //
 
 #include <qpushbutton.h>
@@ -726,7 +726,7 @@ namespace BALL
 		
 		// Indicates the OK button was pressed.
 		// If we are not doing redocking it checks if two different systems are chosen.
-		// Hides the dialog and calls \link DockDialog::applyValues_ applyValues_ \endlink and \link DockDialog::applyProcessors_ applyProcessors_ \endlink.
+		// Hides the dialog and calls applyValues_ and applyProcessors_.
 		void DockDialog::okPressed()
 		{
 			if (!is_redock_)
@@ -751,9 +751,11 @@ namespace BALL
 			hide();
 			// set options user has chosen
 			applyValues_();
-			// apply processors, e.g. add hydrogens
-			applyProcessors_();
-			
+			// apply processors for first docking, e.g. add hydrogens
+			if (!is_redock_)
+			{
+				applyProcessors_();
+			}
 			// set property for the two docking partners
 			// is needed to identify these original partners for redocking
 			AtomContainerIterator it;

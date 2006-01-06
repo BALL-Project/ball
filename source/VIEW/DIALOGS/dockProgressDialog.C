@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.3 2006/01/04 16:25:30 amoll Exp $
+// $Id: dockProgressDialog.C,v 1.4 2006/01/06 13:10:35 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockProgressDialog.h>
@@ -144,8 +144,6 @@ namespace BALL
     void DockProgressDialog::abortClicked()
 		{
 			alg_->abort();
-			//dialog is closed and deleted
-			close(true);
 		}
 		
 		//
@@ -187,8 +185,9 @@ namespace BALL
 			}
 			remaining_time->setText(s);
 			
-			// if docking has finished, close dialog
-			// else restart timer
+			// if docking has not finished restart timer
+			// remark: dialog is closed by the docking controller since otherwise the time between 
+			// closing the dialog and showing the DockResult in the dataset widget would be too long 
 			if (!alg_->hasFinished())
 			{
 			 	timer_.start(1000, true);
