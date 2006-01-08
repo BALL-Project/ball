@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.4 2006/01/06 13:10:35 leonhardt Exp $
+// $Id: dockDialog.C,v 1.5 2006/01/08 19:42:34 anhi Exp $
 //
 
 #include <qpushbutton.h>
@@ -22,11 +22,14 @@
 #include <BALL/VIEW/WIDGETS/dockingController.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
-#include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/KERNEL/system.h>
-# include <BALL/DATATYPE/options.h>
+#include <BALL/DATATYPE/options.h>
+
+#ifdef BALL_HAS_FFTW
+#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
+#include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
+#endif
 
 
 //#define BALL_VIEW_DEBUG
@@ -230,8 +233,10 @@ namespace BALL
 			//make sure the order of added algorithms is consistent to the enum order
 			//because the algorithm with enum value i should be at position i in the combobox
 			//otherwise you get the wrong option dialog for an algorithm
+#ifdef BALL_HAS_FFTW
 			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
 			addAlgorithm("Geometric Fit", DockingController::GEOMETRIC_FIT, geo_fit);
+#endif
 			
 			//build HashMap for scoring function advanced option dialogs
 			//make sure the order of added scoring functions is consistent to the enum order
@@ -273,11 +278,13 @@ namespace BALL
 			HashMap<int, QDialog*>::Iterator it = algorithm_dialogs_.begin();
 			for (; +it; ++it)
 			{
+#ifdef BALL_HAS_FFTW
 				GeometricFitDialog* dialog = dynamic_cast<GeometricFitDialog*>(it->second);
 				if(dialog)
 				{
 					dialog->fetchPreferences(file);
 				}
+#endif
 			}
 		}
 		 
@@ -318,11 +325,13 @@ namespace BALL
 			HashMap<int, QDialog*>::Iterator it = algorithm_dialogs_.begin();
 			for (; +it; ++it)
 			{
+#ifdef BALL_HAS_FFTW
 				GeometricFitDialog* dialog = dynamic_cast<GeometricFitDialog*>(it->second);
 				if(dialog)
 				{
 					dialog->writePreferences(file);
 				}
+#endif
 			}
 		}
 		
@@ -395,8 +404,10 @@ namespace BALL
 			//options_[DockingAlgorithm::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
 			try
 			{
+#ifdef BALL_HAS_FFTW
 				algorithm_opt_[GeometricFit::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
 				algorithm_opt_[GeometricFit::Option::VERBOSITY] = String(verbosity->text().ascii()).toInt();
+#endif
 			}
 			catch (Exception::InvalidFormat)
 			{
@@ -408,8 +419,10 @@ namespace BALL
 			switch(index)
 			{
 				case DockingController::GEOMETRIC_FIT:
+#ifdef BALL_HAS_FFTW
 					GeometricFitDialog* dialog = RTTI::castTo<GeometricFitDialog>(*(algorithm_dialogs_[index]));
 					dialog->getOptions(algorithm_opt_);
+#endif
 					break;
 			}
 			
@@ -418,6 +431,7 @@ namespace BALL
 			{
 				try
 					{
+#ifdef BALL_HAS_FFTW	
 						algorithm_opt_[GeometricFit::Option::PHI_MIN] = String(phi_min->text().ascii()).toFloat();
 						algorithm_opt_[GeometricFit::Option::PHI_MAX] = String(phi_max->text().ascii()).toFloat();
 						algorithm_opt_[GeometricFit::Option::DEG_PHI] = String(delta_phi->text().ascii()).toFloat();
@@ -427,6 +441,7 @@ namespace BALL
 						algorithm_opt_[GeometricFit::Option::THETA_MIN] = String(theta_min->text().ascii()).toFloat();
 						algorithm_opt_[GeometricFit::Option::THETA_MAX] = String(theta_max->text().ascii()).toFloat();
 						algorithm_opt_[GeometricFit::Option::DEG_THETA] = String(delta_theta->text().ascii()).toFloat();
+#endif
 					}
 				catch(Exception::InvalidFormat)
 					{
@@ -436,6 +451,7 @@ namespace BALL
 			}
 			else
 				{
+#ifdef BALL_HAS_FFTW
 					algorithm_opt_[GeometricFit::Option::PHI_MIN] = GeometricFit::Default::PHI_MIN;
 					algorithm_opt_[GeometricFit::Option::PHI_MAX] = GeometricFit::Default::PHI_MAX;
 					algorithm_opt_[GeometricFit::Option::DEG_PHI] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
@@ -445,6 +461,7 @@ namespace BALL
 					algorithm_opt_[GeometricFit::Option::THETA_MIN] = GeometricFit::Default::THETA_MIN;
 					algorithm_opt_[GeometricFit::Option::THETA_MAX] = GeometricFit::Default::THETA_MAX;
 					algorithm_opt_[GeometricFit::Option::DEG_THETA] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
+#endif
 				}
 			
 			// options for chosen scoring function
@@ -792,9 +809,12 @@ namespace BALL
 				switch(index)
 				{
 					case DockingController::GEOMETRIC_FIT:
+#ifdef BALL_HAS_FFTW
 						GeometricFitDialog* gfd = dynamic_cast<GeometricFitDialog*> (algorithm_dialogs_[index]);
 						gfd->isRedock(is_redock_);
 						gfd->exec();
+#endif
+						break;
 				}
 			}
 		}
@@ -816,9 +836,9 @@ namespace BALL
 			int chosen_system = systems1->currentItem();
 			// if item 0 (<select>) is chosen, do nothing
 			if(chosen_system)
-				{
-					docking_partner1_ = loaded_systems_[chosen_system - 1];
-				}
+			{
+				docking_partner1_ = loaded_systems_[chosen_system - 1];
+		 	}
 		}
 		
 		// Indicates a system in the combobox was chosen as docking partner 2.
@@ -827,9 +847,9 @@ namespace BALL
 			int chosen_system = systems2->currentItem();
 			// if item 0 (<select>) is chosen, do nothing
 			if(chosen_system)
-				{
-					docking_partner2_ = loaded_systems_[chosen_system - 1];
-				}
+			{
+				docking_partner2_ = loaded_systems_[chosen_system - 1];
+		 	}
 		}
 		
 		// Indicates that a scoring function in the combobox was chosen.

@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.50 2006/01/04 14:54:18 anhi Exp $
+# $Id: Makefile,v 1.51 2006/01/08 19:42:34 anhi Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -11,6 +11,10 @@ HEADER_DIR=$(BALL_PATH)/include/BALL/$(DIRECTORY)
 UIC_DIR=$(BALL_PATH)/include/BALL/VIEW/UIC
 
 THISLIB=$(LIBNAME)
+
+FFT_DEPENDENT_SOURCES=$(BALL_HAS_FFTW:true=geometricFitDialog.C geometricFitDialogData.C)
+FFT_DEPENDENT_MOC_SOURCES=$(BALL_HAS_FFTW:true=geometricFitDialog_moc.C geometricFitDialogData_moc.C)
+FFT_DEPENDENT_UIC_SOURCES=$(BALL_HAS_FFTW:true=geometricFitDialogData.C)
 
 CPP_SOURCES=\
 	amberConfigurationDialog.C\
@@ -43,8 +47,6 @@ CPP_SOURCES=\
 	displayPropertiesData.C\
 	FDPBDialog.C\
 	FDPBDialogData.C\
-	geometricFitDialog.C\
-	geometricFitDialogData.C\
 	labelDialog.C\
 	labelDialogData.C\
 	lightSettings.C\
@@ -73,10 +75,12 @@ CPP_SOURCES=\
 	pythonSettings.C\
 	pythonSettingsData.C\
 	serverPreferences.C\
+	HTTPServerPreferences.C\
 	snapShotVisualisation.C\
 	snapShotVisualisationData.C\
 	stageSettings.C\
-	stageSettingsData.C
+	stageSettingsData.C\
+	$(FFT_DEPENDENT_SOURCES)
 
 MOC_SOURCES=\
 	amberConfigurationDialog_moc.C\
@@ -109,8 +113,6 @@ MOC_SOURCES=\
 	displayPropertiesData_moc.C\
 	FDPBDialog_moc.C\
 	FDPBDialogData_moc.C\
-	geometricFitDialog_moc.C\
-	geometricFitDialogData_moc.C\
 	labelDialog_moc.C\
 	labelDialogData_moc.C\
 	lightSettings_moc.C\
@@ -137,12 +139,14 @@ MOC_SOURCES=\
 	pythonSettings_moc.C\
 	pythonSettingsData_moc.C\
 	serverPreferences_moc.C\
+	HTTPServerPreferences_moc.C\
 	setCamera_moc.C\
 	setCameraData_moc.C\
 	snapShotVisualisation_moc.C\
 	snapShotVisualisationData_moc.C\
 	stageSettings_moc.C\
-	stageSettingsData_moc.C
+	stageSettingsData_moc.C\
+	$(FFT_DEPENDENT_MOC_SOURCES)
 
 UIC_SOURCES=\
 	amberConfigurationDialogData.C\
@@ -160,7 +164,6 @@ UIC_SOURCES=\
 	downloadPDBFileData.C\
 	displayPropertiesData.C\
 	FDPBDialogData.C\
-	geometricFitDialogData.C\
 	labelDialogData.C\
 	lightSettingsData.C\
 	mainControlPreferencesData.C\
@@ -174,7 +177,8 @@ UIC_SOURCES=\
 	pythonSettingsData.C\
 	setCameraData.C\
 	snapShotVisualisationData.C\
-	stageSettingsData.C
+	stageSettingsData.C\
+	$(FFT_DEPENDENT_UIC_SOURCES)
 
 UIC_HDR=$(UIC_SOURCES:Data.C=.dh)
 
@@ -188,6 +192,9 @@ molecularFileDialog_moc.C: $(HEADER_DIR)/molecularFileDialog.h
 
 serverPreferences_moc.C: $(HEADER_DIR)/serverPreferences.h
 	$(MOC) $(HEADER_DIR)/serverPreferences.h -o $@
+
+HTTPServerPreferences_moc.C: $(HEADER_DIR)/HTTPServerPreferences.h
+	$(MOC) $(HEADER_DIR)/HTTPServerPreferences.h -o $@
 
 openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
 	$(MOC) $(HEADER_DIR)/openBruker1DFile.h -o $@
