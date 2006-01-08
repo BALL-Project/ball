@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.51 2006/01/08 19:42:34 anhi Exp $
+# $Id: Makefile,v 1.52 2006/01/08 21:17:28 anhi Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -75,7 +75,6 @@ CPP_SOURCES=\
 	pythonSettings.C\
 	pythonSettingsData.C\
 	serverPreferences.C\
-	HTTPServerPreferences.C\
 	snapShotVisualisation.C\
 	snapShotVisualisationData.C\
 	stageSettings.C\
@@ -139,7 +138,6 @@ MOC_SOURCES=\
 	pythonSettings_moc.C\
 	pythonSettingsData_moc.C\
 	serverPreferences_moc.C\
-	HTTPServerPreferences_moc.C\
 	setCamera_moc.C\
 	setCameraData_moc.C\
 	snapShotVisualisation_moc.C\
@@ -192,9 +190,6 @@ molecularFileDialog_moc.C: $(HEADER_DIR)/molecularFileDialog.h
 
 serverPreferences_moc.C: $(HEADER_DIR)/serverPreferences.h
 	$(MOC) $(HEADER_DIR)/serverPreferences.h -o $@
-
-HTTPServerPreferences_moc.C: $(HEADER_DIR)/HTTPServerPreferences.h
-	$(MOC) $(HEADER_DIR)/HTTPServerPreferences.h -o $@
 
 openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
 	$(MOC) $(HEADER_DIR)/openBruker1DFile.h -o $@
