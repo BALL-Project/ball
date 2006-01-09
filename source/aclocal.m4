@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.81 2006/01/09 21:11:05 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.82 2006/01/09 22:33:12 oliver Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -12,9 +12,9 @@ dnl to the console to simplify debugging of submitted configure
 dnl output.
 dnl
 AC_DEFUN(CF_VERSION_CHECK,[
-MACHINE=`uname -a`
-AC_MSG_RESULT(This is PROJECT $PROJECT[]_VERSION_STRING compiling.)
-AC_MSG_RESULT(Host: $MACHINE)
+	MACHINE=`uname -a`
+	AC_MSG_RESULT(This is PROJECT $PROJECT[]_VERSION_STRING compiling.)
+	AC_MSG_RESULT(Host: $MACHINE)
 ])
 
 dnl
@@ -48,13 +48,13 @@ dnl		define a macro to remove the directory name
 dnl		from a fully specified path
 dnl
 AC_DEFUN(CF_BASENAME,[
-TMP__DIR="$1/"
-while test "${TMP__DIR}" != "" ; do
-	TMP__NAME=`echo ${TMP__DIR}|${CUT} -d/ -f1`
-	TMP__DIR=`echo ${TMP__DIR}|${CT} -d/ -f2-`
-	if test "${TMP__DIR}" = "${TMP__NAME}" ; then
-		TMP__DIR=""
-	fi
+ 	TMP__DIR="$1/"
+	while test "${TMP__DIR}" != "" ; do
+		TMP__NAME=`echo ${TMP__DIR}|${CUT} -d/ -f1`
+		TMP__DIR=`echo ${TMP__DIR}|${CT} -d/ -f2-`
+		if test "${TMP__DIR}" = "${TMP__NAME}" ; then
+			TMP__DIR=""
+		fi
 	done
 ])
 
@@ -62,30 +62,30 @@ dnl    define a macro to abort configure, print an appropriate error message
 dnl    and package up the current stuff relevant to diagnosis into a tar
 dnl    file.
 AC_DEFUN(CF_ERROR,[
-AC_MSG_RESULT()
-AC_MSG_RESULT([Configure failed. If you cannot solve your problem with the aid])
-AC_MSG_RESULT([of the above error message, please contact the ]PROJECT[ mailing list])
-AC_MSG_RESULT([or the ]PROJECT[ developers. Please enclose the file 'conf.diag.tar'])
-AC_MSG_RESULT([which has been created in source. It contains the relevant])
-AC_MSG_RESULT([files from this configure run. In most cases, the information])
-AC_MSG_RESULT([is necessary to diagnose what went wrong. This file contains])
-AC_MSG_RESULT([information about your system setup and versions of compilers])
-AC_MSG_RESULT([and other tools installed in your system.])
-AC_MSG_RESULT()
-CF_CONF_DIAG_TAR
-AC_ERROR(Aborted.)
+	AC_MSG_RESULT()
+	AC_MSG_RESULT([Configure failed. If you cannot solve your problem with the aid])
+	AC_MSG_RESULT([of the above error message, please contact the ]PROJECT[ mailing list])
+	AC_MSG_RESULT([or the ]PROJECT[ developers. Please enclose the file 'conf.diag.tar'])
+	AC_MSG_RESULT([which has been created in source. It contains the relevant])
+	AC_MSG_RESULT([files from this configure run. In most cases, the information])
+	AC_MSG_RESULT([is necessary to diagnose what went wrong. This file contains])
+	AC_MSG_RESULT([information about your system setup and versions of compilers])
+	AC_MSG_RESULT([and other tools installed in your system.])
+	AC_MSG_RESULT()
+	CF_CONF_DIAG_TAR
+	AC_ERROR(Aborted.)
 ])
 
 AC_DEFUN(CF_CONF_DIAG_TAR,[
-TARFILE=conf.diag.tar
-if test -f $TARFILE ; then 
-	${RM} $TARFILE ; 
-fi
-FILES="configure configure.ac aclocal.m4 config.log"
-if test -f config.h ; then FILES="$FILES config.h" ; fi
-if test -f config.mak ; then FILES="$FILES config.mak" ; fi
-if test -f common.mak ; then FILES="$FILES common.mak" ; fi
-tar cf $TARFILE $FILES
+	TARFILE=conf.diag.tar
+	if test -f $TARFILE ; then 
+		${RM} $TARFILE ; 
+	fi
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+	tar cf $TARFILE $FILES
 ])
 
 dnl    define a macro to inform the user about failed tests for programs
@@ -93,14 +93,14 @@ dnl    it checks for the unix command given as second parameter and
 dnl    sets the shell variable given as second parameter to its absolute path
 dnl 
 AC_DEFUN(CF_MSG_PATH_PROG,[
-AC_PATH_PROG($1,$2,no)
-if test $$1 = no ; then
-	AC_MSG_RESULT()
-	AC_MSG_RESULT([This script requires the unix command $2, but cannot find it.])
-	AC_MSG_RESULT([Please add the correct path to $2 to your \$PATH variable])
-	AC_MSG_RESULT([and restart configure.])
-	CF_ERROR
-fi
+	AC_PATH_PROG($1,$2,no)
+	if test $$1 = no ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([This script requires the unix command $2, but cannot find it.])
+		AC_MSG_RESULT([Please add the correct path to $2 to your \$PATH variable])
+		AC_MSG_RESULT([and restart configure.])
+		CF_ERROR
+	fi
 ])
 
 dnl
@@ -116,80 +116,80 @@ dnl        additional dirnames are included in searches these should be absolute
 dnl 
 
 AC_DEFUN(CF_FIND_HEADER,[
-_INCLUDES=
+	_INCLUDES=
 
-dnl    immediate return on predefined directory (read from file?)
-if test "${$1}" != "" ; then
-_INCLUDES=${$1}
-fi
-
-if test "${_INCLUDES}" = "" ; then
-for i in /usr/include /opt/include $3 ; do
-if test -f "$i/$2" -a "${_INCLUDES}" = ""; then
-_INCLUDES="$i"
-fi
-done
-fi
-
-if test "${_INCLUDES}" = "" ; then
-for i in /usr/*/include /opt/*/include ; do
-if test -f "$i/$2" -a "${_INCLUDES}" = ""; then
-_INCLUDES="$i"
-fi
-done
-fi
-
-if test "${_INCLUDES}" = "" ; then
-for i in /opt/*/*/include /usr/*/*/include /usr/local/*/*/include ; do
-if test -f "$i/$2" -a "${_INCLUDES}" = ""; then
-_INCLUDES="$i"
-fi
-done
-fi
-
-if test "${_INCLUDES}" = "" -a "${FIND}" != "-" ; then
-if test "${FIND_KNOWS_PATH}" = false ; then
-FIND_OPT="-name"
-_TMP_FIND_NAME="$2"
-while test _`${EGREP} / $_TMP_FIND_NAME`_ != __ ; do
-_TMP_FIND_NAME=`echo ${_TMP_FIND_NAME}|${CUT} -d/ -f2-`
-done
-
-FIND_ARG="\*${_TMP_FIND_NAME}\*"
-else
-FIND_OPT="-path"
-FIND_ARG="\*$2\*"
-fi
-
-_TMP=`${FIND} /usr ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
-for j in ${_TMP} ; do
-if test "${_INCLUDES}" = "" ; then
-_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
-fi
-done
-
-if test "${_INCLUDES}" = "" ; then
-_TMP=`${FIND} /opt ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
-for j in ${_TMP} ; do
-if test "${_INCLUDES}" = "" ; then
-	_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
-fi
-done
-fi
-
-if test "${_INCLUDES}" = "" -a "$3" != ""; then
-for i in $3 /dev/null ; do
-_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
-for j in ${_TMP} ; do
-	if test "${_INCLUDES}" = "" ; then
-		_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+	dnl    immediate return on predefined directory (read from file?)
+	if test "${$1}" != "" ; then
+	_INCLUDES=${$1}
 	fi
-done
-done
-fi
-fi
 
-$1="${_INCLUDES}"
+	if test "${_INCLUDES}" = "" ; then
+		for i in /usr/include /opt/include $3 ; do
+			if test -f "$i/$2" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /usr/*/include /opt/*/include ; do
+			if test -f "$i/$2" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /opt/*/*/include /usr/*/*/include /usr/local/*/*/include ; do
+			if test -f "$i/$2" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" -a "${FIND}" != "-" ; then
+		if test "${FIND_KNOWS_PATH}" = false ; then
+			FIND_OPT="-name"
+			_TMP_FIND_NAME="$2"
+			while test _`${EGREP} / $_TMP_FIND_NAME`_ != __ ; do
+				_TMP_FIND_NAME=`echo ${_TMP_FIND_NAME}|${CUT} -d/ -f2-`
+			done
+
+			FIND_ARG="\*${_TMP_FIND_NAME}\*"
+		else
+			FIND_OPT="-path"
+			FIND_ARG="\*$2\*"
+		fi
+
+		_TMP=`${FIND} /usr ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+		for j in ${_TMP} ; do
+			if test "${_INCLUDES}" = "" ; then
+				_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+			fi
+		done
+
+		if test "${_INCLUDES}" = "" ; then
+			_TMP=`${FIND} /opt ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_INCLUDES}" = "" ; then
+					_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+				fi
+			done
+		fi
+
+		if test "${_INCLUDES}" = "" -a "$3" != ""; then
+			for i in $3 /dev/null ; do
+				_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+				for j in ${_TMP} ; do
+					if test "${_INCLUDES}" = "" ; then
+						_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+					fi
+				done
+			done
+		fi
+	fi
+
+	$1="${_INCLUDES}"
 ])
 
 
@@ -206,84 +206,84 @@ dnl        additional dirnames are included in searches these should be absolute
 dnl 
 
 AC_DEFUN(CF_FIND_LIB,[
-_LIBS=
+	_LIBS=
 
-dnl   immediate "return" on preset directory (read from file?)
-if test "${$1}" != "" ; then
-_LIBS=${$1}
-fi
+	dnl   immediate "return" on preset directory (read from file?)
+	if test "${$1}" != "" ; then
+		_LIBS=${$1}
+	fi
 
-if test "$3" = "" ; then
-_LIBDIRS="/usr/lib /opt/lib /usr/local/lib"
-else
-_LIBDIRS="$3"
-fi
+	if test "$3" = "" ; then
+		_LIBDIRS="/usr/lib /opt/lib /usr/local/lib"
+	else
+		_LIBDIRS="$3"
+	fi
 
-if test "${_LIBS}" = "" ; then
-for i in ${_LIBDIRS} ; do
-for j in $i/$2.* ; do
-if test -f "$j" -a "${_LIBS}" = ""; then
-	_LIBS="$i"
-fi
-done
-done
-fi
+	if test "${_LIBS}" = "" ; then
+		for i in ${_LIBDIRS} ; do
+			for j in $i/$2.* ; do
+				if test -f "$j" -a "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
 
-if test "${_LIBS}" = "" ; then
-for i in /usr/lib /opt/lib /usr/*/lib /opt/*/lib ; do
-for j in $i/$2.* ; do
-if test -f "$j" -a "${_LIBS}" = ""; then
-	_LIBS="$i"
-fi
-done
-done
-fi
+	if test "${_LIBS}" = "" ; then
+		for i in /usr/lib /opt/lib /usr/*/lib /opt/*/lib ; do
+			for j in $i/$2.* ; do
+				if test -f "$j" -a "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
 
-if test "${_LIBS}" = "" ; then
-for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
-for j in $i/$2.* ; do
-if test -f "$j" -a "${_LIBS}" = ""; then
-	_LIBS="$i"
-fi
-done
-done
-fi
+	if test "${_LIBS}" = "" ; then
+		for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
+			for j in $i/$2.* ; do
+				if test -f "$j" -a "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
 
-if test "${_LIBS}" = "" -a "${FIND}" != "-" ; then
-if test "${_LIBS}" = "" -a "$3" != ""; then
-for i in $3 /dev/null; do
-if test "${_LIBS}" = "" ; then
-	_TMP=`${FIND} $i -name "$2.*" -print 2>/dev/null`
-	for j in ${_TMP} ; do
-		if test "${_LIBS}" = "" ; then
-			_LIBS=`echo $j|${SED} "s/\/$2\\.*/\//"`
+	if test "${_LIBS}" = "" -a "${FIND}" != "-" ; then
+		if test "${_LIBS}" = "" -a "$3" != ""; then
+			for i in $3 /dev/null; do
+				if test "${_LIBS}" = "" ; then
+					_TMP=`${FIND} $i -name "$2.*" -print 2>/dev/null`
+					for j in ${_TMP} ; do
+						if test "${_LIBS}" = "" ; then
+							_LIBS=`echo $j|${SED} "s/\/$2\\.*/\//"`
+						fi
+					done
+				fi
+			done
 		fi
-	done
-fi
-done
-fi
 
-if test "${_LIBS}" = "" ; then
-_TMP=`${FIND} /opt -name "$2.*" -print 2>/dev/null`
-for j in ${_TMP} ; do
-if test "${_LIBS}" = "" ; then
-	_LIBS=`echo $j|${SED} "s/\/$2\\.*/\//"`
-fi
-done
-fi
+		if test "${_LIBS}" = "" ; then
+			_TMP=`${FIND} /opt -name "$2.*" -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_LIBS}" = "" ; then
+					_LIBS=`echo $j|${SED} "s/\/$2\\.*/\//"`
+				fi
+			done
+		fi
 
-if test "${_LIBS}" = "" ; then
-_TMP=`${FIND} /usr -name "$2.*" -print 2>/dev/null`
-for j in ${_TMP} ; do
-if test "${_LIBS}" = "" ; then
-	_LIBS=`echo $j|${SED} "s/\/$2\\.*/\//"`
-fi
-done
-fi
+		if test "${_LIBS}" = "" ; then
+			_TMP=`${FIND} /usr -name "$2.*" -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_LIBS}" = "" ; then
+					_LIBS=`echo $j|${SED} "s/\/$2\\.*/\//"`
+				fi
+			done
+		fi
 
-fi
+	fi
 
-$1="${_LIBS}"
+	$1="${_LIBS}"
 ])
 
 
