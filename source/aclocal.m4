@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.77 2006/01/09 11:01:09 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.78 2006/01/09 11:34:58 oliver Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -2944,14 +2944,14 @@ if test "${QTDIR}" != "" ; then
 				fi			
 		
 				dnl
-				dnl  We do require QT 3.x by now. 2.x won't do...
+				dnl  We do require QT 3.3 by now. 2.x won't do...
 				dnl
 				if test `echo ${QT_VERSION} | ${CUT} -c1-2` != "0x" ; then
-					if test "${QT_VERSION}" -lt 300 ; then
+					if test "${QT_VERSION}" -lt 330 -o "${QT_VERSION}" -gt 340; then
 						AC_MSG_RESULT()
-						AC_MSG_RESULT([QT version 3.0 or above is required for PROJECT[]. Please update])
-						AC_MSG_RESULT([to a more current version or specify the path to a more])
-						AC_MSG_RESULT([recent version of libqt by passing the option --with-qt-libs=DIR])
+						AC_MSG_RESULT([QT version 3.3.x is required for PROJECT[]. Please update])
+						AC_MSG_RESULT([to a suitable version or specify the path to a more])
+						AC_MSG_RESULT([suitable version of libqt* by passing the option --with-qt-libs=DIR])
 						AC_MSG_RESULT([to configure.])
 						AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
 						AC_MSG_RESULT([path - configure will recognize this, too.])
