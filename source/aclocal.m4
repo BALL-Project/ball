@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.78 2006/01/09 11:34:58 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.79 2006/01/09 20:03:23 oliver Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -2000,13 +2000,13 @@ dnl
 dnl   check whether vsnprintf is defined
 dnl
 AC_DEFUN(CF_CHECK_VSNPRINTF, [
-AC_CHECK_FUNCS(vsnprintf, HAVE_VSNPRINTF=1)
-if test "${HAVE_VSNPRINTF}" = 1 ; then
-dnl
-dnl   check whether vsnprintf works as expected
-dnl   on Solaris 2.x it is broken in the 64bit version
-dnl
-AC_TRY_RUN(
+	AC_CHECK_FUNCS(vsnprintf, HAVE_VSNPRINTF=1)
+	if test "${HAVE_VSNPRINTF}" = 1 ; then
+		dnl
+		dnl   check whether vsnprintf works as expected
+		dnl   on Solaris 2.x it is broken in the 64bit version
+		dnl
+		AC_TRY_RUN(
 [
 #include <stdlib.h>
 int main()
@@ -2024,15 +2024,15 @@ int main()
 	}
 }
 ],
-VSNPRINTF_OK=1,
-DUMMY=0,
-DUMMY=0
-)
+			VSNPRINTF_OK=1,
+			DUMMY=0,
+			DUMMY=0
+		)
 
-if test "${VSNPRINTF_OK}" = 1 ; then
-AC_DEFINE(PROJECT[]_HAVE_VSNPRINTF)
-fi
-fi
+		if test "${VSNPRINTF_OK}" = 1 ; then
+			AC_DEFINE(PROJECT[]_HAVE_VSNPRINTF)
+		fi
+	fi
 ])
 
 
@@ -2040,43 +2040,43 @@ dnl
 dnl   check whether we need sysinfo or gethostname
 dnl
 AC_DEFUN(CF_CHECK_GETHOSTNAME, [
-AC_CHECK_FUNCS(gethostname, HAVE_GETHOSTNAME=1)
-if test "${HAVE_GETHOSTNAME}" = 1 ; then
-AC_DEFINE(PROJECT[]_HAVE_GETHOSTNAME)
-else
-AC_CHECK_FUNCS(sysinfo, HAVE_SYSINFO=1)
-if test "${HAVE_SYSINFO}" = 1  ; then
-AC_DEFINE(PROJECT[]_HAVE_SYSINFO)
-else
-AC_MSG_RESULT()
-AC_MSG_RESULT([Could not find gethostname or sysinfo methods!])
-AC_MSG_RESULT([Please refer to config.log to identify the problem.])
-CF_ERROR
-fi
-fi
+	AC_CHECK_FUNCS(gethostname, HAVE_GETHOSTNAME=1)
+	if test "${HAVE_GETHOSTNAME}" = 1 ; then
+		AC_DEFINE(PROJECT[]_HAVE_GETHOSTNAME)
+	else
+		AC_CHECK_FUNCS(sysinfo, HAVE_SYSINFO=1)
+		if test "${HAVE_SYSINFO}" = 1  ; then
+			AC_DEFINE(PROJECT[]_HAVE_SYSINFO)
+		else
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([Could not find gethostname or sysinfo methods!])
+			AC_MSG_RESULT([Please refer to config.log to identify the problem.])
+			CF_ERROR
+		fi
+	fi
 
-dnl
-dnl check for gethostname in the header
-dnl
-if test "${HAVE_GETHOSTNAME}" = 1 ; then
-AC_MSG_CHECKING(for gethostname in unistd.h)
-AC_TRY_COMPILE(
-[
-#include <unistd.h>
-],
-[
-char name[1024];
-gethostname(name, 1023);
-],
-HAVE_GETHOSTNAME_HEADER=1
-)
-if test "${HAVE_GETHOSTNAME_HEADER+set}" != set ; then
-AC_MSG_RESULT(no)
-AC_DEFINE(PROJECT[]_DEFINE_GETHOSTNAME)
-else
-AC_MSG_RESULT(yes)
-fi
-fi
+	dnl
+	dnl check for gethostname in the header
+	dnl
+	if test "${HAVE_GETHOSTNAME}" = 1 ; then
+		AC_MSG_CHECKING(for gethostname in unistd.h)
+		AC_TRY_COMPILE(
+		[
+		#include <unistd.h>
+		],
+		[
+		char name[1024];
+		gethostname(name, 1023);
+		],
+		HAVE_GETHOSTNAME_HEADER=1
+		)
+		if test "${HAVE_GETHOSTNAME_HEADER+set}" != set ; then
+			AC_MSG_RESULT(no)
+			AC_DEFINE(PROJECT[]_DEFINE_GETHOSTNAME)
+		else
+			AC_MSG_RESULT(yes)
+		fi
+	fi
 ])
 
 AC_DEFUN(CF_CHECK_NETLIBS, [
@@ -2745,32 +2745,9 @@ AC_SUBST(PROJECT[]_HAS_FFTW_LONG_DOUBLE,)
 AC_SUBST(FFTW_LIBS)
 ])
 
-dnl
-dnl		VIEW support
-dnl
-AC_DEFUN(CF_VIEW, [
-dnl
-dnl    search for X-libs and includes and PROJECT[]View (OpenGL/MESA) stuff
-dnl 
-if test "${USE_VIEW}" = true ; then
-AC_PATH_X
-X11_INCPATH=${x_includes}
-X11_LIBPATH=${x_libraries}
 
-if test "${no_x}" = "yes" ; then
-USE_VIEW=false
-fi
 
-if test "${USE_VIEW}" = true ; then
-if test "${X11_LIBPATH}" = "/usr/lib" -o "${X11_LIBPATH}" = "" ; then
-X11_LIBPATH=""
-X11_LIBPATHOPT=""
-else
-X11_LIBPATHOPT="-L${X11_LIBPATH}"
-fi
-fi
-
-if test "${USE_VIEW}" = true ; then
+AC_DEFUN(CF_VIEW_OPENGL, [
 dnl
 dnl		Fix up the OpenGL stuff for MacOS X -- here we need to use OpenGL and AGL frameworks
 dnl
@@ -2784,392 +2761,293 @@ if test "${OS}" = "Darwin" ; then
 fi
 
 if test "${VIEW_PLATFORM}" = Mesa ; then
-AC_MSG_CHECKING(for Mesa includes)
-CF_FIND_HEADER(MESA_INCLUDES,GL/gl.h, ${OPENGL_INCPATH} ${X11_INCPATH})
-if test "${MESA_INCLUDES}" = "" ; then
-	AC_MSG_RESULT((not found!))
-	AC_MSG_RESULT()
-	AC_MSG_RESULT(No Mesa headers found! Please specify the path to the directory)
-	AC_MSG_RESULT(containing the Mesa headers using --with-opengl-incl=DIR.)
-	AC_MSG_RESULT(Mesa can be obtained from www.mesa3d.org.)
-	CF_ERROR
-else
-	AC_MSG_RESULT(${MESA_INCLUDES})
-fi
-
-if test "${USE_VIEW}" = true ; then
-	AC_MSG_CHECKING(for Mesa library)
-	CF_FIND_LIB(MESA_LIBS,libMesaGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
-	if test "${MESA_LIBS}" = "" ; then
-		CF_FIND_LIB(MESA_LIBS,libGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
-	fi
-	if test "${MESA_LIBS}" = "" ; then
+	AC_MSG_CHECKING(for Mesa includes)
+	CF_FIND_HEADER(MESA_INCLUDES,GL/gl.h, ${OPENGL_INCPATH} ${X11_INCPATH})
+	if test "${MESA_INCLUDES}" = "" ; then
 		AC_MSG_RESULT((not found!))
 		AC_MSG_RESULT()
-		AC_MSG_RESULT(No Mesa library libMesaGL or libGL found! Please specify the path)
-		AC_MSG_RESULT(to the directory containing the library using the --with-opengl-libs=DIR.)
+		AC_MSG_RESULT(No Mesa headers found! Please specify the path to the directory)
+		AC_MSG_RESULT(containing the Mesa headers using --with-opengl-incl=DIR.)
 		AC_MSG_RESULT(Mesa can be obtained from www.mesa3d.org.)
-		AC_MSG_RESULT(Aborted.)
+		CF_ERROR
 	else
-		AC_MSG_RESULT((${MESA_LIBS}))
+		AC_MSG_RESULT(${MESA_INCLUDES})
 	fi
-fi
 
-dnl prevent the use of -L/usr/lib - this may lead to problems with different
-dnl binary formats (e.g. SGI O32/N32 format)
-if test "${MESA_INCLUDES}" != /usr/include -a "${MESA_INCLUDES}" != "" ; then
-	VIEW_INCLUDES="${VIEW_INCLUDES} -I${MESA_INCLUDES}"
-fi
+	if test "${USE_VIEW}" = true ; then
+		AC_MSG_CHECKING(for Mesa library)
+		CF_FIND_LIB(MESA_LIBS,libMesaGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
+		if test "${MESA_LIBS}" = "" ; then
+			CF_FIND_LIB(MESA_LIBS,libGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
+		fi
+		if test "${MESA_LIBS}" = "" ; then
+			AC_MSG_RESULT((not found!))
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(No Mesa library libMesaGL or libGL found! Please specify the path)
+			AC_MSG_RESULT(to the directory containing the library using the --with-opengl-libs=DIR.)
+			AC_MSG_RESULT(Mesa can be obtained from www.mesa3d.org.)
+			AC_MSG_RESULT(Aborted.)
+		else
+			AC_MSG_RESULT((${MESA_LIBS}))
+		fi
+
+		dnl prevent the use of -L/usr/lib - this may lead to problems with different
+		dnl binary formats (e.g. SGI O32/N32 format)
+		if test "${MESA_INCLUDES}" != /usr/include -a "${MESA_INCLUDES}" != "" ; then
+			VIEW_INCLUDES="${VIEW_INCLUDES} -I${MESA_INCLUDES}"
+		fi
+	fi
 fi
 
 if test ${VIEW_PLATFORM} = OpenGL ; then
-AC_MSG_CHECKING(for OpenGL includes)
-CF_FIND_HEADER(OPENGL_INCPATH,GL/gl.h)
-if test "${OPENGL_INCPATH}" = "" ; then
-	AC_MSG_RESULT((not found!))
-	AC_MSG_RESULT()
-	AC_MSG_RESULT(no OpenGL headers found! Please use the option --with-opengl-incl=DIR)
-	AC_MSG_RESULT(of configure to specify the correct path to these headers.)
-	CF_ERROR
-else
-	AC_MSG_RESULT((${OPENGL_INCPATH}))
-fi
+	AC_MSG_CHECKING(for OpenGL includes)
+	CF_FIND_HEADER(OPENGL_INCPATH,GL/gl.h)
+	if test "${OPENGL_INCPATH}" = "" ; then
+		AC_MSG_RESULT((not found!))
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(no OpenGL headers found! Please use the option --with-opengl-incl=DIR)
+		AC_MSG_RESULT(of configure to specify the correct path to these headers.)
+		CF_ERROR
+	else
+		AC_MSG_RESULT((${OPENGL_INCPATH}))
+	fi
 
-AC_MSG_CHECKING(for OpenGL library)
-CF_FIND_LIB(OPENGL_LIBPATH,libGL)
-if test "${OPENGL_LIBPATH}" = "" ; then
-	AC_MSG_RESULT((not found!))
-	AC_MSG_RESULT()
-	AC_MSG_RESULT(no OpenGL lib found! Please use the option --with-opengl-libs=DIR)
-	AC_MSG_RESULT(of configure to specify the correct path to these libraries.)
-	CF_ERROR
-else
-	AC_MSG_RESULT((${OPENGL_LIBPATH}))
-fi
+	AC_MSG_CHECKING(for OpenGL library)
+	CF_FIND_LIB(OPENGL_LIBPATH,libGL)
+	if test "${OPENGL_LIBPATH}" = "" ; then
+		AC_MSG_RESULT((not found!))
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(no OpenGL lib found! Please use the option --with-opengl-libs=DIR)
+		AC_MSG_RESULT(of configure to specify the correct path to these libraries.)
+		CF_ERROR
+	else
+		AC_MSG_RESULT((${OPENGL_LIBPATH}))
+	fi
 
-if test "${OPENGL_INCPATH}" != /usr/include && test "${OPENGL_INCPATH}" != "" ; then
-	VIEW_INCLUDES="${VIEW_INCLUDES} -I${OPENGL_INCPATH}"
+	if test "${OPENGL_INCPATH}" != /usr/include && test "${OPENGL_INCPATH}" != "" ; then
+		VIEW_INCLUDES="${VIEW_INCLUDES} -I${OPENGL_INCPATH}"
+	fi
 fi
-fi
+])
 
-if test "${USE_VIEW}" = true ; then
-AC_MSG_CHECKING(for QT headers)
-if test "${QTDIR}" != "" ; then
-	CF_FIND_HEADER(QT_INCPATH,qgl.h,${QTDIR}/include ${PROJECT[]_PATH}/contrib/qt/include)
-else
-	CF_FIND_HEADER(QT_INCPATH,qgl.h,${PROJECT[]_PATH}/contrib/qt/include)
-fi
 
-if test "${QT_INCPATH}" = "" ; then
-	AC_MSG_RESULT((not found!))
-	AC_MSG_RESULT()
-	AC_MSG_RESULT(No QT header files found! Please specify the path to the QT headers)
-	AC_MSG_RESULT(by passing the option --with-qt-incl=DIR to configure.)
-	AC_MSG_RESULT(You may also set the environment variable QTDIR to the correct)
-	AC_MSG_RESULT(path - configure will recognize this, too.)
-	AC_MSG_RESULT(The QT package can be found under the following URL:)
-	AC_MSG_RESULT(  http://www.troll.no/qt)
-	CF_ERROR
-else
-	AC_MSG_RESULT((${QT_INCPATH}))	
-fi
+AC_DEFUN(CF_VIEW_QT_BASICS, [
+	AC_MSG_CHECKING(for QT headers)
+	if test "${QTDIR}" != "" ; then
+		CF_FIND_HEADER(QT_INCPATH,qgl.h,${QTDIR}/include ${PROJECT[]_PATH}/contrib/qt/include)
+	else
+		CF_FIND_HEADER(QT_INCPATH,qgl.h,${PROJECT[]_PATH}/contrib/qt/include)
+	fi
 
-AC_MSG_CHECKING(for libqt${QT_MT_SUFFIX})
-if test "${QTDIR}" != "" ; then
-	if test "${QT_MT_SUFFIX}" = "-mt" -o "${QT_MT_SUFFIX+set}" != set ; then
-						if test -a "${QTDIR}/lib/libqt-mt.so" ; then
-							QT_LIBPATH="${QTDIR}/lib"
-						elif test -a "${QTDIR}/lib/libqt.so" ; then
-							QT_LIBPATH="${QTDIR}/lib"
-							QT_MT_SUFFIX=""
-						fi
-						if test "${QT_LIBPATH}" = "" ; then
-							CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${PROJECT[]_PATH}/contrib/qt/include)
-						fi
-					else	
-						if test -a "${QTDIR}/lib/libqt.so" ; then
-							QT_LIBPATH="${QTDIR}/lib"
-						elif test -a "${QTDIR}/lib/libqt-mt.so" ; then
-							QT_LIBPATH="${QTDIR}/lib"
-							QT_MT_SUFFIX="-mt"
-						fi
-						if test "${QT_LIBPATH}" = "" ; then
-							CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${PROJECT[]_PATH}/contrib/qt/include)
-						fi
-					fi
-				else
-					CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${PROJECT[]_PATH}/contrib/qt/lib ${PROJECT[]_PATH}/contrib/qt/lib/${BINFMT})
-				fi
+	if test "${QT_INCPATH}" = "" ; then
+		AC_MSG_RESULT((not found!))
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(No QT header files found! Please specify the path to the QT headers)
+		AC_MSG_RESULT(by passing the option --with-qt-incl=DIR to configure.)
+		AC_MSG_RESULT(You may also set the environment variable QTDIR to the correct)
+		AC_MSG_RESULT(path - configure will recognize this, too.)
+		AC_MSG_RESULT(The QT package can be found under the following URL:)
+		AC_MSG_RESULT(  http://www.troll.no/qt)
+		CF_ERROR
+	else
+		AC_MSG_RESULT((${QT_INCPATH}))	
+	fi
 
-				if test "${QT_LIBPATH}" = "" ; then
-					AC_MSG_RESULT((not found!))
-					AC_MSG_RESULT()
-					AC_MSG_RESULT([The QT library could not be found. Please specify the path to libqt])
-					AC_MSG_RESULT([by passing the option --with-qt-libs=DIR to configure.])
-					AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
-					AC_MSG_RESULT([path - configure will recognize this, too.])
-					AC_MSG_RESULT([If the QT library was built with thread support enabled (libqt-mt])
-					AC_MSG_RESULT([instead of libqt), please specify the option --with-threadsafe-qt.])
-					AC_MSG_RESULT([The QT package can be found under the following URL:])
-					AC_MSG_RESULT(  http://www.troll.no/qt)
-					CF_ERROR
-				else
-					AC_MSG_RESULT((${QT_LIBPATH}))	
-				fi
+	AC_MSG_CHECKING(for libqt${QT_MT_SUFFIX})
+	if test "${QTDIR}" != "" ; then
+		if test "${QT_MT_SUFFIX}" = "-mt" -o "${QT_MT_SUFFIX+set}" != set ; then
+			if test -a "${QTDIR}/lib/libqt-mt.so" ; then
+				QT_LIBPATH="${QTDIR}/lib"
+			elif test -a "${QTDIR}/lib/libqt.so" ; then
+				QT_LIBPATH="${QTDIR}/lib"
+				QT_MT_SUFFIX=""
+			fi
+			if test "${QT_LIBPATH}" = "" ; then
+				CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${PROJECT[]_PATH}/contrib/qt/include)
+			fi
+		else	
+			if test -a "${QTDIR}/lib/libqt.so" ; then
+				QT_LIBPATH="${QTDIR}/lib"
+			elif test -a "${QTDIR}/lib/libqt-mt.so" ; then
+				QT_LIBPATH="${QTDIR}/lib"
+				QT_MT_SUFFIX="-mt"
+			fi
+			if test "${QT_LIBPATH}" = "" ; then
+				CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${PROJECT[]_PATH}/contrib/qt/include)
+			fi
+		fi
+	else
+		CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${PROJECT[]_PATH}/contrib/qt/lib ${PROJECT[]_PATH}/contrib/qt/lib/${BINFMT})
+	fi
+
+	if test "${QT_LIBPATH}" = "" ; then
+		AC_MSG_RESULT((not found!))
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([The QT library could not be found. Please specify the path to libqt])
+ 		AC_MSG_RESULT([by passing the option --with-qt-libs=DIR to configure.])
+		AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
+		AC_MSG_RESULT([path - configure will recognize this, too.])
+		AC_MSG_RESULT([If the QT library was built with thread support enabled (libqt-mt])
+		AC_MSG_RESULT([instead of libqt), please specify the option --with-threadsafe-qt.])
+		AC_MSG_RESULT([The QT package can be found under the following URL:])
+		AC_MSG_RESULT(  http://www.troll.no/qt)
+		CF_ERROR
+	else
+		AC_MSG_RESULT((${QT_LIBPATH}))	
+	fi
 
 				
-				dnl
-				dnl extract the QT version number and version number string from include/qglobal.h
-				dnl
-				QT_VERSION=`${GREP} "#define QT_VERSION[^_]" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
-				QT_VERSION_STR=`${GREP} "#define QT_VERSION_STR" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3 | ${TR} -d \\"`
-				AC_MSG_CHECKING(for QT version number in qglobal.h)
-				if test "${QT_VERSION}" = "" ; then
-					AC_MSG_RESULT([<unknown>])
-					AC_MSG_RESULT()
-					AC_MSG_RESULT([  Could not determine version number of QT library -- please])
-					AC_MSG_RESULT([  check config.log for details.])
-					AC_MSG_RESULT([  You might have a problem with your (DY)LD_LIBRARY_PATH.])
-					AC_MSG_RESULT([  Please check the settings of QTDIR as well or specify])
-					AC_MSG_RESULT([  the path to the library/headers with])
-					AC_MSG_RESULT([    --with-qt-libs=<DIR> / --with-qt-incl=<DIR>])
-					CF_ERROR
-				else
-					AC_MSG_RESULT([${QT_VERSION} (${QT_VERSION_STR})])
-					AC_DEFINE_UNQUOTED(PROJECT[]_QT_VERSION, ${QT_VERSION})
-					AC_DEFINE_UNQUOTED(PROJECT[]_QT_VERSION_STR, ${QT_VERSION_STR})
-					if test "${QT_MT_SUFFIX}" = "-mt" ; then
-						AC_DEFINE(PROJECT[]_QT_HAS_THREADS,)
-					fi
-				fi			
+	dnl
+	dnl extract the QT version number and version number string from include/qglobal.h
+	dnl
+	QT_VERSION=`${GREP} "#define QT_VERSION[^_]" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
+	QT_VERSION_STR=`${GREP} "#define QT_VERSION_STR" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3 | ${TR} -d \\"`
+	AC_MSG_CHECKING(for QT version number in qglobal.h)
+	if test "${QT_VERSION}" = "" ; then
+		AC_MSG_RESULT([<unknown>])
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([  Could not determine version number of QT library -- please])
+		AC_MSG_RESULT([  check config.log for details.])
+		AC_MSG_RESULT([  You might have a problem with your (DY)LD_LIBRARY_PATH.])
+		AC_MSG_RESULT([  Please check the settings of QTDIR as well or specify])
+		AC_MSG_RESULT([  the path to the library/headers with])
+		AC_MSG_RESULT([    --with-qt-libs=<DIR> / --with-qt-incl=<DIR>])
+		CF_ERROR
+	else
+		AC_MSG_RESULT([${QT_VERSION} (${QT_VERSION_STR})])
+		AC_DEFINE_UNQUOTED(PROJECT[]_QT_VERSION, ${QT_VERSION})
+		AC_DEFINE_UNQUOTED(PROJECT[]_QT_VERSION_STR, ${QT_VERSION_STR})
+		if test "${QT_MT_SUFFIX}" = "-mt" ; then
+			AC_DEFINE(PROJECT[]_QT_HAS_THREADS,)
+		fi
+	fi			
 		
-				dnl
-				dnl  We do require QT 3.3 by now. 2.x won't do...
-				dnl
-				if test `echo ${QT_VERSION} | ${CUT} -c1-2` != "0x" ; then
-					if test "${QT_VERSION}" -lt 330 -o "${QT_VERSION}" -gt 340; then
-						AC_MSG_RESULT()
-						AC_MSG_RESULT([QT version 3.3.x is required for PROJECT[]. Please update])
-						AC_MSG_RESULT([to a suitable version or specify the path to a more])
-						AC_MSG_RESULT([suitable version of libqt* by passing the option --with-qt-libs=DIR])
-						AC_MSG_RESULT([to configure.])
-						AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
-						AC_MSG_RESULT([path - configure will recognize this, too.])
-						AC_MSG_RESULT()
-						AC_MSG_RESULT([The complete QT package can be found under the following URL:])
-						AC_MSG_RESULT([  http://www.troll.no/qt])
-						CF_ERROR
-					fi
-				fi
-
-				dnl
-				dnl	Add the QT include path to the VIEW includes
-				dnl
-				if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
-					VIEW_INCLUDES="${VIEW_INCLUDES} -I${QT_INCPATH}"
-				fi	
-			fi
+	dnl
+	dnl  Check for the right version number of QT
+	dnl
+	if test `echo ${QT_VERSION} | ${CUT} -c1-2` != "0x" ; then
+		if test "${QT_VERSION}" -lt ${QT_MIN_VERSION} -o "${QT_VERSION}" -gt ${QT_MAX_VERSION} ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([QT version ]${QT_RECOMMENDED_VERSION}[ is recommended for PROJECT[]. Please update])
+			AC_MSG_RESULT([to a suitable version or specify the path to a more])
+			AC_MSG_RESULT([suitable version of libqt* by passing the option --with-qt-libs=DIR])
+			AC_MSG_RESULT([to configure.])
+			AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
+			AC_MSG_RESULT([path - configure will recognize this, too.])
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([The complete QT package can be found under the following URL:])
+			AC_MSG_RESULT([  http://www.troll.no/qt])
+			CF_ERROR
 		fi
 	fi
 
-
 	dnl
-	dnl   verify libraries needed for VIEW
-	dnl   (X, QT, Mesa/OpenGL)
+	dnl	Add the QT include path to the VIEW includes
 	dnl
+	if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
+		VIEW_INCLUDES="${VIEW_INCLUDES} -I${QT_INCPATH}"
+	fi	
+])
 
-	if test "${USE_VIEW}" = true ; then		
-		dnl  
-		dnl
-		dnl  identify the X11 libraries needed to link agains
-		dnl
-		dnl
-		
-		AC_MSG_CHECKING(linking against X11 libraries)
-		dnl 
-		dnl   if the user specified X libraries, try these first
-		dnl
-		if test "${X11_LIBS}" != "" ; then
-			SAVE_LIBS=${LIBS}
-			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-			AC_TRY_LINK([],[],X_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-		fi
-
-		dnl
-		dnl  Special treatment for MacOS X -- we just ignore everything.
-		dnl		The OpenGL and AGL frameworks will take care of it...
-		dnl
-		if test "${OS}" = "Darwin" ; then
-			X11_LIBS=""
-			X11_LIBPATHOPTS=""
-			X_LINKING_OK="true"
-		fi
-
-		dnl 		
-		dnl  now try the default guess: Xmu, Xext, Xt, and X11 
-		dnl
-		if test "${X_LINKING_OK+set}" != set ; then
-			X11_LIBS="-lXmu -lXext -lXt -lX11 -lm"
-			SAVE_LIBS=${LIBS}
-			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-			AC_TRY_LINK([],[],X_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-		fi
-		
-		dnl 		
-		dnl  second guess: add SM and ICE
-		dnl
-		if test "${X_LINKING_OK+set}" != set ; then
-			X11_LIBS="-lXmu -lXext -lXt -lX11 -lSM -lICE -lm"
-			SAVE_LIBS=${LIBS}
-			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-			AC_TRY_LINK([],[],X_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-		fi
-		
-		dnl 		
-		dnl  now try the default guess: Xmu, Xext, Xt, and X11 
-		dnl
-		if test "${X_LINKING_OK+set}" != set ; then
-			X11_LIBS="-lXmu -lXt -lX11 -lm"
-			SAVE_LIBS=${LIBS}
-			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-			AC_TRY_LINK([],[],X_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-		fi
-		
-		dnl 		
-		dnl  second guess: add SM and ICE
-		dnl
-		if test "${X_LINKING_OK+set}" != set ; then
-			X11_LIBS="-lXmu -lXt -lX11 -lSM -lICE -lm"
-			SAVE_LIBS=${LIBS}
-			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-			AC_TRY_LINK([],[],X_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-		fi
-		
-		dnl 
-		dnl  if we could not link - complain about it!
-		dnl
-		if test "${X_LINKING_OK+set}" = set ; then
-			AC_MSG_RESULT(yes)	
+dnl Make sure we can link against OpenGL or Mesa
+AC_DEFUN(CF_VIEW_OPENGL_LINK_TEST, [
+	if test "${VIEW_PLATFORM}" = OpenGL ; then
+		if test "${OPENGL_LIBPATH}" != "/usr/lib" -a "${OPENGL_LIBPATH}" != "" ; then
+			OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL"
 		else
-			AC_MSG_RESULT(no)
-			AC_MSG_RESULT()
-			AC_MSG_RESULT(Don't know how to link with X11 libraries.)
-			AC_MSG_RESULT(Please specify the correct libraries (e.g. -lXmu -lXt -lX11) in the)
-			AC_MSG_RESULT(environment variable X11_LIBS)
-			AC_MSG_RESULT(If you are running Solaris 2.x you might also try the option --without-libxnet)
-			AC_MSG_RESULT(if your X libraries were linked against libsocket and libnsl instead of libxnet.)
-			AC_MSG_RESULT(Built of visualization component VIEW disabled.)
-			AC_MSG_RESULT()
-			USE_VIEW=false
+			OPENGL_LIBPATH=""
+			OPENGL_LIBOPTS="-lGLU -lGL"
 		fi
 
-		dnl		
-		dnl  define some variables: X11_LIBOPTS and VIEW_LIBS
+		dnl make sure we have OpenGL libs and no Mesa libs!
 		dnl
-		X11_LIBOPTS="${X11_LIBPATHOPT} ${X11_LIBS}"
-	fi
-
-	if test "${USE_VIEW}" = true ; then
-		if test "${VIEW_PLATFORM}" = OpenGL ; then
-			if test "${OPENGL_LIBPATH}" != "/usr/lib" -a "${OPENGL_LIBPATH}" != "" ; then
-				OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL"
-			else
-				OPENGL_LIBPATH=""
-				OPENGL_LIBOPTS="-lGLU -lGL"
-			fi
-
-			dnl make sure we have OpenGL libs and no Mesa libs!
-			dnl
+		SAVE_LIBS=${LIBS}
+		SAVE_LDFLAGS=${LDFLAGS}
+		LIBS="${LIBS} ${X11_LIBOPTS}"
+		if test "${OPENGL_LIBPATH}" != "" ; then
+			LDFLAGS="${LDFLAGS} -L${OPENGL_LIBPATH}"
+		fi
+		AC_CHECK_LIB(GL, XMesaGarbageCollect, VIEW_PLATFORM=Mesa)
+		LIBS=${SAVE_LIBS}
+		LDFLAGS=${SAVE_LDFLAGS}
+		if test "${VIEW_PLATFORM}" != Mesa ; then
+			AC_MSG_CHECKING(linking against OpenGL libraries)
 			SAVE_LIBS=${LIBS}
-			SAVE_LDFLAGS=${LDFLAGS}
-			LIBS="${LIBS} ${X11_LIBOPTS}"
-			if test "${OPENGL_LIBPATH}" != "" ; then
-				LDFLAGS="${LDFLAGS} -L${OPENGL_LIBPATH}"
-			fi
-			AC_CHECK_LIB(GL, XMesaGarbageCollect, VIEW_PLATFORM=Mesa)
+			LIBS="${OPENGL_LIBOPTS} ${LIBS}"
+			AC_TRY_LINK([],[],OPENGL_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
-			LDFLAGS=${SAVE_LDFLAGS}
-			if test "${VIEW_PLATFORM}" != Mesa ; then
-				AC_MSG_CHECKING(linking against OpenGL libraries)
-				SAVE_LIBS=${LIBS}
-				LIBS="${OPENGL_LIBOPTS} ${LIBS}"
-				AC_TRY_LINK([],[],OPENGL_LINKING_OK=1)
-				LIBS=${SAVE_LIBS}
-				if test "${OPENGL_LINKING_OK+set}" != set ; then
-					AC_MSG_RESULT(no)
-					AC_MSG_RESULT()
-					AC_MSG_RESULT(Cannot link against libGL/GLU - disabling visualization support!)
-					AC_MSG_RESULT(Please specify the path to OpenGL libraries using --with-opengl-libs=DIR)
-					CF_ERROR
-				else
-					AC_MSG_RESULT(yes)
-				fi
+			if test "${OPENGL_LINKING_OK+set}" != set ; then
+				AC_MSG_RESULT(no)
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(Cannot link against libGL/GLU - disabling visualization support!)
+				AC_MSG_RESULT(Please specify the path to OpenGL libraries using --with-opengl-libs=DIR)
+				CF_ERROR
+			else
+				AC_MSG_RESULT(yes)
 			fi
 		fi
 	fi
 
-	if test "${USE_VIEW}" = true ; then
-		if test "${VIEW_PLATFORM}" = Mesa ; then
-			dnl
-			dnl  strip default path
-			dnl
+	if test "${VIEW_PLATFORM}" = Mesa ; then
+		dnl
+		dnl  strip default path
+		dnl
+	
+		if test "${MESA_LIBS}" = "" ; then 
+			MESA_LIBS=${OPENGL_LIBPATH}
+		fi
+		if test "${MESA_LIBS}" != "/usr/lib" -a "${MESA_LIBS}" != "" ; then
+			OPENGL_LIBPATH="${MESA_LIBS}"
+			OPENGL_LIBPATHOPT="-L${MESA_LIBS}"			
+		else
+			OPENGL_LIBPATH=""
+			OPENGL_LIBPATHOPT=""
+		fi
 		
-			if test "${MESA_LIBS}" = "" ; then 
-				MESA_LIBS=${OPENGL_LIBPATH}
-			fi
-			if test "${MESA_LIBS}" != "/usr/lib" -a "${MESA_LIBS}" != "" ; then
-				OPENGL_LIBPATH="${MESA_LIBS}"
-				OPENGL_LIBPATHOPT="-L${MESA_LIBS}"			
-			else
-				OPENGL_LIBPATH=""
-				OPENGL_LIBPATHOPT=""
-			fi
-			
-			dnl
-			dnl  out first guess for the names of the Mesa libraries
-			dnl
-			OPENGL_LIBS="-lGLU -lGL"
+		dnl
+		dnl  out first guess for the names of the Mesa libraries
+		dnl
+		OPENGL_LIBS="-lGLU -lGL"
 
-			dnl
-			dnl  try to link against mesa libraries
-			dnl
-			AC_MSG_CHECKING(linking against Mesa libs)
+		dnl
+		dnl  try to link against mesa libraries
+		dnl
+		AC_MSG_CHECKING(linking against Mesa libs)
+		SAVE_LIBS=${LIBS}
+		LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
+		AC_TRY_LINK([],[], HAVE_MESALIBS=1)
+		LIBS=${SAVE_LIBS}
+
+		dnl
+		dnl  could not link against libGLU/libGL,
+		dnl  so try libMesaGLU/libMesaGL
+		dnl
+		if test "${HAVE_MESALIBS+set}" != set ; then
+			OPENGL_LIBS="-lMesaGLU -lMesaGL"
 			SAVE_LIBS=${LIBS}
 			LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
 			AC_TRY_LINK([],[], HAVE_MESALIBS=1)
 			LIBS=${SAVE_LIBS}
+		fi
 
-			dnl
-			dnl  could not link against libGLU/libGL,
-			dnl  so try libMesaGLU/libMesaGL
-			dnl
-			if test "${HAVE_MESALIBS+set}" != set ; then
-				OPENGL_LIBS="-lMesaGLU -lMesaGL"
-				SAVE_LIBS=${LIBS}
-				LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
-				AC_TRY_LINK([],[], HAVE_MESALIBS=1)
-				LIBS=${SAVE_LIBS}
-			fi
-
-			if test "${HAVE_MESALIBS+set}" != set ; then
-				AC_MSG_RESULT(no)
-				AC_MSG_RESULT()
-				AC_MSG_RESULT(Cannot link against libMesaGL/GLU - disabling visualization support!)
-				AC_MSG_RESULT(Please specify the path to libMesaGL using --with-opengl-libs=DIR)
-				CF_ERROR
-			else
-				AC_MSG_RESULT(yes)
-				OPENGL_LIBOPTS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS}"
-			fi
+		if test "${HAVE_MESALIBS+set}" != set ; then
+			AC_MSG_RESULT(no)
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Cannot link against libMesaGL/GLU - disabling visualization support!)
+			AC_MSG_RESULT(Please specify the path to libMesaGL using --with-opengl-libs=DIR)
+			CF_ERROR
+		else
+			AC_MSG_RESULT(yes)
+			OPENGL_LIBOPTS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS}"
 		fi
 	fi
+])
 
-	if test "${USE_VIEW}" = true ; then
+
+AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
+		X=`pwd`
+		AC_MSG_CHECKING(linking against QT libraries)
+
 		if test "${QT_LIBPATH}" != "/usr/lib" ; then
 			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lqgl -lqt${QT_MT_SUFFIX}"
 			QT_LIBOPTS="-L${QT_LIBPATH} -lqt${QT_MT_SUFFIX}"
@@ -3178,114 +3056,110 @@ if test "${QTDIR}" != "" ; then
 			QTQGL_LIBOPTS="-lqgl -lqt${QT_MT_SUFFIX}"
 			QT_LIBOPTS="-lqt${QT_MT_SUFFIX}"
 		fi
-	fi
 
-	if test "${USE_VIEW}" = true ; then
-		AC_MSG_CHECKING(linking against QT libraries)
-
-			SAVE_LIBS=${LIBS}
-			LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
-			AC_TRY_LINK([#include <qgl.h>], [QGLWidget widget;], QT_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-	
-			if test "${QT_LINKING_OK+set}" != set ; then
-				SAVE_LIBS=${LIBS}
-				LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
-				AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
-				LIBS=${SAVE_LIBS}
-			else
-				dnl link against qgl as well (for qt <= 2.0)
-				QT_LIBOPTS="${QTQGL_LIBOPTS}"
-			fi
-
-			if test "${QT_LINKING_OK+set}" != set ; then
-				SAVE_LIBS=${LIBS}
-				X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
-				LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
-				AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
-				LIBS=${SAVE_LIBS}
-			fi
+		SAVE_LIBS=${LIBS}
+		LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+		AC_TRY_LINK([#include <qgl.h>], [QGLWidget widget;], QT_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
 
 		if test "${QT_LINKING_OK+set}" != set ; then
+			SAVE_LIBS=${LIBS}
+			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+			AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
+			LIBS=${SAVE_LIBS}
+		else
+			dnl link against qgl as well (for qt <= 2.0)
+			QT_LIBOPTS="${QTQGL_LIBOPTS}"
+		fi
+
+		if test "${QT_LINKING_OK+set}" != set ; then
+			SAVE_LIBS=${LIBS}
+			X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
+			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+			AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
+			LIBS=${SAVE_LIBS}
+		fi
+
+	if test "${QT_LINKING_OK+set}" != set ; then
+		AC_MSG_RESULT(no)
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([Cannot link against libqt!])
+		AC_MSG_RESULT([If QT is installed, please specify the path to the library])
+		AC_MSG_RESULT([using the option --with-qt-libs=DIR or the environment variable QTDIR.])
+		CF_ERROR
+	else
+		AC_MSG_RESULT(yes)
+		
+		dnl  
+		dnl  identify the version of the library
+		dnl
+		AC_MSG_CHECKING(QT library version)
+		SAVE_LIBS=${LIBS}
+		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+		if test "${OS}" = "Darwin" ; then
+			DYLD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${DYLD_LIBRARY_PATH}"
+			export DYLD_LIBRARY_PATH
+			echo "DYLD_LIBRARY_PATH = ${DYLD_LIBRARY_PATH}" 1>&5
+		else
+			LD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${LD_LIBRARY_PATH}"
+			export LD_LIBRARY_PATH
+			echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
+		fi
+		AC_TRY_RUN(
+			[
+				#include <stdio.h> 
+				const char* qVersion();
+				int main()
+				{
+					FILE* f = fopen("qt.version", "w");
+					fprintf(f, "%s\n", qVersion());
+					fclose(f);
+					return 0;
+				}
+			], 
+			QT_VERSION_OK=1,
+			DUMMY=0,
+			DUMMY=0
+		)
+		LIBS=${SAVE_LIBS}
+		
+		dnl
+		dnl	if the program compiled and ran successfully,
+		dnl extract the QT version number
+		dnl
+		if test "${QT_VERSION_OK+set}" != set; then
 			AC_MSG_RESULT(no)
 			AC_MSG_RESULT()
-			AC_MSG_RESULT([Cannot link against libqt!])
-			AC_MSG_RESULT([If QT is installed, please specify the path to the library])
-			AC_MSG_RESULT([using the option --with-qt-libs=DIR or the environment variable QTDIR.])
+			AC_MSG_RESULT(The execution of a program linked against the QT)
+			AC_MSG_RESULT(library failed. Please have a look at config.log)
+			AC_MSG_RESULT((the last few lines) to find out what happened.)
+			AC_MSG_RESULT(Perhaps you specified the wrong library or the)
+			AC_MSG_RESULT(X11 libraries are in conflict with any other library.)
+			AC_MSG_RESULT(You might also want to check your LD_LIBRARY_PATH.)
 			CF_ERROR
 		else
-			AC_MSG_RESULT(yes)
-			
-			dnl  
-			dnl  identify the version of the library
-			dnl
-			AC_MSG_CHECKING(QT library version)
-			SAVE_LIBS=${LIBS}
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
-			if test "${OS}" = "Darwin" ; then
-				DYLD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${DYLD_LIBRARY_PATH}"
-				export DYLD_LIBRARY_PATH
-				echo "DYLD_LIBRARY_PATH = ${DYLD_LIBRARY_PATH}" 1>&5
-			else
-				LD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${LD_LIBRARY_PATH}"
-				export LD_LIBRARY_PATH
-				echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
-			fi
-			AC_TRY_RUN(
-				[
-					#include <stdio.h> 
-					const char* qVersion();
-					int main()
-					{
-						FILE* f = fopen("qt.version", "w");
-						fprintf(f, "%s\n", qVersion());
-						fclose(f);
-						return 0;
-					}
-				], 
-				QT_VERSION_OK=1,
-				DUMMY=0,
-				DUMMY=0
-			)
-			LIBS=${SAVE_LIBS}
-			
-			dnl
-			dnl	if the program compiled and ran successfully,
-			dnl extract the QT version number
-			dnl
-			if test "${QT_VERSION_OK+set}" != set; then
-				AC_MSG_RESULT(no)
-				AC_MSG_RESULT()
-				AC_MSG_RESULT(The execution of a program linked against the QT)
-				AC_MSG_RESULT(library failed. Please have a look at config.log)
-				AC_MSG_RESULT((the last few lines) to find out what happened.)
-				AC_MSG_RESULT(Perhaps you specified the wrong library or the)
-				AC_MSG_RESULT(X11 libraries are in conflict with any other library.)
-				AC_MSG_RESULT(You might also want to check your LD_LIBRARY_PATH.)
-				CF_ERROR
-			else
-				QT_VERSION_STRING=`cat qt.version`
-				AC_MSG_RESULT(${QT_VERSION_STRING})
+			QT_VERSION_STRING=`cat qt.version`
+			AC_MSG_RESULT(${QT_VERSION_STRING})
 
-				dnl
-				dnl  test whether this version is the right one
-				dnl  (2.x.y and at least 2.0.2
-				dnl
-				${RM} qt.version 2>/dev/null
-				QT_MAJOR=`echo ${QT_VERSION_STRING} | ${CUT} -d. -f1`
-				if test "${QT_MAJOR}" -lt 3 ; then
-					AC_MSG_RESULT()
-					AC_MSG_RESULT(QT version 3.x is required.)
-					AC_MSG_RESULT(Please install version QT Version 3 (at least 3.0.6))
-					AC_MSG_RESULT(which can be obtained from)
-					AC_MSG_RESULT()
-					AC_MSG_RESULT(  www.troll.no/qt)
-					CF_ERROR
-				fi
+			dnl
+			dnl  test whether this version is the right one
+			dnl
+			${RM} qt.version 2>/dev/null
+			QT_MAJOR=`echo ${QT_VERSION_STRING} | ${CUT} -d. -f1`
+			if test "${QT_MAJOR}" -lt 3 ; then
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(QT version 3.x is required.)
+				AC_MSG_RESULT(Please install version QT Version 3 (at least 3.0.6))
+				AC_MSG_RESULT(which can be obtained from)
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(  www.troll.no/qt)
+				CF_ERROR
 			fi
 		fi
 	fi
+])
 
+AC_DEFUN(CF_VIEW_QT_EXECUTABLES, [
 	dnl
 	dnl	try to find the MOC (QT meta object compiler)
 	dnl It is usually installed in ${QTDIR}/bin/moc
@@ -3332,7 +3206,7 @@ if test "${QTDIR}" != "" ; then
 			if test "${MOC_VERSION}" != "${QT_VERSION_STR}" ; then
 				AC_MSG_RESULT()
 				AC_MSG_RESULT([QT version (${QT_VERSION_STR}) is incompatible with moc version (${MOC_VERISON})!])
-				AC_MSG_RESULT([Please check your QTDRI environment variable, include the correct])
+				AC_MSG_RESULT([Please check your QTDIR environment variable, include the correct])
 				AC_MSG_RESULT([path to moc in your PATH environment variable, or specify the correct])
 				AC_MSG_RESULT([path to moc using the option --with-moc=PATH to rerun configure.])
 				CF_ERROR
@@ -3394,15 +3268,153 @@ if test "${QTDIR}" != "" ; then
 			fi
 		fi
 	fi
-    
+])
+dnl Try to identify the X11 libraries to link against
 
-	if test "${USE_VIEW}" = "true" ; then
-		AC_DEFINE(PROJECT[]_HAS_VIEW,)
-		LIBVIEW="libVIEW.a"
-		VIEW="VIEW"
-	else
-		VIEW=
+AC_DEFUN(CF_VIEW_X_LINK_TEST, [
+
+	dnl  
+	dnl
+	dnl  identify the X11 libraries needed to link against
+	dnl
+	dnl
+	
+	AC_MSG_CHECKING(linking against X11 libraries)
+	dnl 
+	dnl   if the user specified X libraries, try these first
+	dnl
+	if test "${X11_LIBS}" != "" ; then
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
 	fi
+
+	dnl
+	dnl  Special treatment for MacOS X -- we just ignore everything.
+	dnl		The OpenGL and AGL frameworks will take care of it...
+	dnl
+	if test "${OS}" = "Darwin" ; then
+		X11_LIBS=""
+		X11_LIBPATHOPTS=""
+		X_LINKING_OK="true"
+	fi
+
+	dnl 		
+	dnl  now try the default guess: Xmu, Xext, Xt, and X11 
+	dnl
+	if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXext -lXt -lX11 -lm"
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	fi
+	
+	dnl 		
+	dnl  second guess: add SM and ICE
+	dnl
+	if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXext -lXt -lX11 -lSM -lICE -lm"
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	fi
+	
+	dnl 		
+	dnl  now try the default guess: Xmu, Xext, Xt, and X11 
+	dnl
+	if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXt -lX11 -lm"
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	fi
+	
+	dnl 		
+	dnl  second guess: add SM and ICE
+	dnl
+	if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXt -lX11 -lSM -lICE -lm"
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	fi
+	
+	dnl 
+	dnl  if we could not link - complain about it!
+	dnl
+	if test "${X_LINKING_OK+set}" = set ; then
+		AC_MSG_RESULT(yes)	
+	else
+		AC_MSG_RESULT(no)
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Don't know how to link with X11 libraries.)
+		AC_MSG_RESULT(Please specify the correct libraries (e.g. -lXmu -lXt -lX11) in the)
+		AC_MSG_RESULT(environment variable X11_LIBS)
+		AC_MSG_RESULT(If you are running Solaris 2.x you might also try the option --without-libxnet)
+		AC_MSG_RESULT(if your X libraries were linked against libsocket and libnsl instead of libxnet.)
+		AC_MSG_RESULT(Built of visualization component VIEW disabled.)
+		AC_MSG_RESULT()
+		USE_VIEW=false
+	fi
+
+	dnl		
+	dnl  define some variables: X11_LIBOPTS and VIEW_LIBS
+	dnl
+	X11_LIBOPTS="${X11_LIBPATHOPT} ${X11_LIBS}"
+])
+
+
+dnl
+dnl		VIEW support
+dnl
+AC_DEFUN(CF_VIEW, [
+dnl
+dnl    search for X-libs and includes, QT and 3D stuff (OpenGL/MESA)
+dnl 
+if test "${USE_VIEW}" = true ; then
+	AC_PATH_X
+	X11_INCPATH=${x_includes}
+	X11_LIBPATH=${x_libraries}
+
+	if test "${no_x}" = "yes" ; then
+		USE_VIEW=false
+	fi
+
+	if test "${X11_LIBPATH}" = "/usr/lib" -o "${X11_LIBPATH}" = "" ; then
+		X11_LIBPATH=""
+		X11_LIBPATHOPT=""
+	else
+		X11_LIBPATHOPT="-L${X11_LIBPATH}"
+	fi
+
+	dnl Check for OpenGL/Mesa
+	CF_VIEW_OPENGL
+
+	dnl Check for QT basics (version, headers, existence of library)
+	CF_VIEW_QT_BASICS
+
+	dnl Check for X11 libraries to link against
+	CF_VIEW_X_LINK_TEST
+
+  dnl Check whether we can link against OpenGL/Mesa
+	CF_VIEW_OPENGL_LINK_TEST
+	
+	dnl Check whether we can link against all libraries together 
+  dnl (build a simple QT executable and determine QT version number)
+	CF_VIEW_QT_LINK_TEST
+
+	dnl Check for QT executables required to build the dialogs (MOC, UIC)
+	CF_VIEW_QT_EXECUTABLES
+
+	AC_DEFINE(PROJECT[]_HAS_VIEW,)
+	LIBVIEW="libVIEW.a"
+	VIEW="VIEW"
+fi
 ])
 
 

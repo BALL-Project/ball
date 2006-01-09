@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.30 2006/01/09 11:01:16 oliver Exp $
+dnl $Id: configure.ac,v 1.31 2006/01/09 20:03:24 oliver Exp $
 dnl
 dnl
 
@@ -13,7 +13,7 @@ dnl
 dnl    Disable caching in MULTI_BUILD mode - just to be sure
 dnl
 if test "${MULTI_BUILD}" = "true" ; then
-${RM} config.cache
+	${RM} config.cache
 fi
 
 
@@ -22,13 +22,13 @@ dnl    Some initialization stuff...
 dnl 
 AC_INIT(BALL, 1.2, ball-bugs@bioinf.uni-sb.de)
 AC_CONFIG_HEADER([
-config.h:config/config.h.in
+	config.h:config/config.h.in
 ])
 AC_LANG(C++)
 PROJECT=BALL
 define(PROJECT, BALL)
 dnl this project define is required by (portable) aclocal.m4 file
-dnl being used for BNPP, BALL, and OpenMS
+dnl being used for BN++, BALL, and OpenMS
 
 dnl
 dnl retrieve the BALL version and print it to the console
@@ -482,6 +482,10 @@ fi
 dnl
 dnl		VIEW
 dnl
+dnl Currently, we require QT 3.3.x. QT 4.x isn't supported yet.
+QT_MIN_VERSION=330
+QT_MAX_VERSION=399
+QT_RECOMMENDED_VERSION=3.3.5
 CF_VIEW
 
 dnl

@@ -13833,8 +13833,8 @@ _ACEOF
 fi
 done
 
-if test "${HAVE_VSNPRINTF}" = 1 ; then
-if test "$cross_compiling" = yes; then
+	if test "${HAVE_VSNPRINTF}" = 1 ; then
+										if test "$cross_compiling" = yes; then
   DUMMY=0
 
 else
@@ -13885,13 +13885,13 @@ fi
 rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
 
-if test "${VSNPRINTF_OK}" = 1 ; then
-cat >>confdefs.h <<\_ACEOF
+		if test "${VSNPRINTF_OK}" = 1 ; then
+			cat >>confdefs.h <<\_ACEOF
 #define BALL_HAVE_VSNPRINTF 1
 _ACEOF
 
-fi
-fi
+		fi
+	fi
 
 
 
@@ -13998,12 +13998,12 @@ _ACEOF
 fi
 done
 
-if test "${HAVE_GETHOSTNAME}" = 1 ; then
-cat >>confdefs.h <<\_ACEOF
+	if test "${HAVE_GETHOSTNAME}" = 1 ; then
+		cat >>confdefs.h <<\_ACEOF
 #define BALL_HAVE_GETHOSTNAME 1
 _ACEOF
 
-else
+	else
 
 for ac_func in sysinfo
 do
@@ -14106,17 +14106,17 @@ _ACEOF
 fi
 done
 
-if test "${HAVE_SYSINFO}" = 1  ; then
-cat >>confdefs.h <<\_ACEOF
+		if test "${HAVE_SYSINFO}" = 1  ; then
+			cat >>confdefs.h <<\_ACEOF
 #define BALL_HAVE_SYSINFO 1
 _ACEOF
 
-else
-echo "$as_me:$LINENO: result: " >&5
+		else
+			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: Could not find gethostname or sysinfo methods!" >&5
+			echo "$as_me:$LINENO: result: Could not find gethostname or sysinfo methods!" >&5
 echo "${ECHO_T}Could not find gethostname or sysinfo methods!" >&6
-echo "$as_me:$LINENO: result: Please refer to config.log to identify the problem." >&5
+			echo "$as_me:$LINENO: result: Please refer to config.log to identify the problem." >&5
 echo "${ECHO_T}Please refer to config.log to identify the problem." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -14154,27 +14154,27 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-fi
-fi
+		fi
+	fi
 
-if test "${HAVE_GETHOSTNAME}" = 1 ; then
-echo "$as_me:$LINENO: checking for gethostname in unistd.h" >&5
+				if test "${HAVE_GETHOSTNAME}" = 1 ; then
+		echo "$as_me:$LINENO: checking for gethostname in unistd.h" >&5
 echo $ECHO_N "checking for gethostname in unistd.h... $ECHO_C" >&6
-cat >conftest.$ac_ext <<_ACEOF
+		cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-#include <unistd.h>
+		#include <unistd.h>
 
 int
 main ()
 {
 
-char name[1024];
-gethostname(name, 1023);
+		char name[1024];
+		gethostname(name, 1023);
 
   ;
   return 0;
@@ -14210,18 +14210,18 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-if test "${HAVE_GETHOSTNAME_HEADER+set}" != set ; then
-echo "$as_me:$LINENO: result: no" >&5
+		if test "${HAVE_GETHOSTNAME_HEADER+set}" != set ; then
+			echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-cat >>confdefs.h <<\_ACEOF
+			cat >>confdefs.h <<\_ACEOF
 #define BALL_DEFINE_GETHOSTNAME 1
 _ACEOF
 
-else
-echo "$as_me:$LINENO: result: yes" >&5
+		else
+			echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-fi
-fi
+		fi
+	fi
 
 
 
@@ -18449,9 +18449,12 @@ _ACEOF
 
 fi
 
+QT_MIN_VERSION=330
+QT_MAX_VERSION=399
+QT_RECOMMENDED_VERSION=3.3.5
 
 if test "${USE_VIEW}" = true ; then
-echo "$as_me:$LINENO: checking for X" >&5
+	echo "$as_me:$LINENO: checking for X" >&5
 echo $ECHO_N "checking for X... $ECHO_C" >&6
 
 
@@ -18685,23 +18688,21 @@ else
 echo "${ECHO_T}libraries $x_libraries, headers $x_includes" >&6
 fi
 
-X11_INCPATH=${x_includes}
-X11_LIBPATH=${x_libraries}
+	X11_INCPATH=${x_includes}
+	X11_LIBPATH=${x_libraries}
 
-if test "${no_x}" = "yes" ; then
-USE_VIEW=false
-fi
+	if test "${no_x}" = "yes" ; then
+		USE_VIEW=false
+	fi
 
-if test "${USE_VIEW}" = true ; then
-if test "${X11_LIBPATH}" = "/usr/lib" -o "${X11_LIBPATH}" = "" ; then
-X11_LIBPATH=""
-X11_LIBPATHOPT=""
-else
-X11_LIBPATHOPT="-L${X11_LIBPATH}"
-fi
-fi
+	if test "${X11_LIBPATH}" = "/usr/lib" -o "${X11_LIBPATH}" = "" ; then
+		X11_LIBPATH=""
+		X11_LIBPATHOPT=""
+	else
+		X11_LIBPATHOPT="-L${X11_LIBPATH}"
+	fi
 
-if test "${USE_VIEW}" = true ; then
+
 if test "${OS}" = "Darwin" ; then
 	VIEW_PLATFORM="OpenGL-Darwin"
 	OPENGL_LIBOPTS="-framework Carbon -framework OpenGL -framework AGL"
@@ -18712,7 +18713,7 @@ if test "${OS}" = "Darwin" ; then
 fi
 
 if test "${VIEW_PLATFORM}" = Mesa ; then
-echo "$as_me:$LINENO: checking for Mesa includes" >&5
+	echo "$as_me:$LINENO: checking for Mesa includes" >&5
 echo $ECHO_N "checking for Mesa includes... $ECHO_C" >&6
 
 _INCLUDES=
@@ -18789,16 +18790,16 @@ fi
 
 MESA_INCLUDES="${_INCLUDES}"
 
-if test "${MESA_INCLUDES}" = "" ; then
-	echo "$as_me:$LINENO: result: (not found!)" >&5
+	if test "${MESA_INCLUDES}" = "" ; then
+		echo "$as_me:$LINENO: result: (not found!)" >&5
 echo "${ECHO_T}(not found!)" >&6
-	echo "$as_me:$LINENO: result: " >&5
+		echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-	echo "$as_me:$LINENO: result: No Mesa headers found! Please specify the path to the directory" >&5
+		echo "$as_me:$LINENO: result: No Mesa headers found! Please specify the path to the directory" >&5
 echo "${ECHO_T}No Mesa headers found! Please specify the path to the directory" >&6
-	echo "$as_me:$LINENO: result: containing the Mesa headers using --with-opengl-incl=DIR." >&5
+		echo "$as_me:$LINENO: result: containing the Mesa headers using --with-opengl-incl=DIR." >&5
 echo "${ECHO_T}containing the Mesa headers using --with-opengl-incl=DIR." >&6
-	echo "$as_me:$LINENO: result: Mesa can be obtained from www.mesa3d.org." >&5
+		echo "$as_me:$LINENO: result: Mesa can be obtained from www.mesa3d.org." >&5
 echo "${ECHO_T}Mesa can be obtained from www.mesa3d.org." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -18836,13 +18837,13 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-else
-	echo "$as_me:$LINENO: result: ${MESA_INCLUDES}" >&5
+	else
+		echo "$as_me:$LINENO: result: ${MESA_INCLUDES}" >&5
 echo "${ECHO_T}${MESA_INCLUDES}" >&6
-fi
+	fi
 
-if test "${USE_VIEW}" = true ; then
-	echo "$as_me:$LINENO: checking for Mesa library" >&5
+	if test "${USE_VIEW}" = true ; then
+		echo "$as_me:$LINENO: checking for Mesa library" >&5
 echo $ECHO_N "checking for Mesa library... $ECHO_C" >&6
 
 _LIBS=
@@ -18923,7 +18924,7 @@ fi
 
 MESA_LIBS="${_LIBS}"
 
-	if test "${MESA_LIBS}" = "" ; then
+		if test "${MESA_LIBS}" = "" ; then
 
 _LIBS=
 
@@ -19003,33 +19004,33 @@ fi
 
 MESA_LIBS="${_LIBS}"
 
-	fi
-	if test "${MESA_LIBS}" = "" ; then
-		echo "$as_me:$LINENO: result: (not found!)" >&5
+		fi
+		if test "${MESA_LIBS}" = "" ; then
+			echo "$as_me:$LINENO: result: (not found!)" >&5
 echo "${ECHO_T}(not found!)" >&6
-		echo "$as_me:$LINENO: result: " >&5
+			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-		echo "$as_me:$LINENO: result: No Mesa library libMesaGL or libGL found! Please specify the path" >&5
+			echo "$as_me:$LINENO: result: No Mesa library libMesaGL or libGL found! Please specify the path" >&5
 echo "${ECHO_T}No Mesa library libMesaGL or libGL found! Please specify the path" >&6
-		echo "$as_me:$LINENO: result: to the directory containing the library using the --with-opengl-libs=DIR." >&5
+			echo "$as_me:$LINENO: result: to the directory containing the library using the --with-opengl-libs=DIR." >&5
 echo "${ECHO_T}to the directory containing the library using the --with-opengl-libs=DIR." >&6
-		echo "$as_me:$LINENO: result: Mesa can be obtained from www.mesa3d.org." >&5
+			echo "$as_me:$LINENO: result: Mesa can be obtained from www.mesa3d.org." >&5
 echo "${ECHO_T}Mesa can be obtained from www.mesa3d.org." >&6
-		echo "$as_me:$LINENO: result: Aborted." >&5
+			echo "$as_me:$LINENO: result: Aborted." >&5
 echo "${ECHO_T}Aborted." >&6
-	else
-		echo "$as_me:$LINENO: result: (${MESA_LIBS})" >&5
+		else
+			echo "$as_me:$LINENO: result: (${MESA_LIBS})" >&5
 echo "${ECHO_T}(${MESA_LIBS})" >&6
-	fi
-fi
+		fi
 
-if test "${MESA_INCLUDES}" != /usr/include -a "${MESA_INCLUDES}" != "" ; then
-	VIEW_INCLUDES="${VIEW_INCLUDES} -I${MESA_INCLUDES}"
-fi
+						if test "${MESA_INCLUDES}" != /usr/include -a "${MESA_INCLUDES}" != "" ; then
+			VIEW_INCLUDES="${VIEW_INCLUDES} -I${MESA_INCLUDES}"
+		fi
+	fi
 fi
 
 if test ${VIEW_PLATFORM} = OpenGL ; then
-echo "$as_me:$LINENO: checking for OpenGL includes" >&5
+	echo "$as_me:$LINENO: checking for OpenGL includes" >&5
 echo $ECHO_N "checking for OpenGL includes... $ECHO_C" >&6
 
 _INCLUDES=
@@ -19106,14 +19107,14 @@ fi
 
 OPENGL_INCPATH="${_INCLUDES}"
 
-if test "${OPENGL_INCPATH}" = "" ; then
-	echo "$as_me:$LINENO: result: (not found!)" >&5
+	if test "${OPENGL_INCPATH}" = "" ; then
+		echo "$as_me:$LINENO: result: (not found!)" >&5
 echo "${ECHO_T}(not found!)" >&6
-	echo "$as_me:$LINENO: result: " >&5
+		echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-	echo "$as_me:$LINENO: result: no OpenGL headers found! Please use the option --with-opengl-incl=DIR" >&5
+		echo "$as_me:$LINENO: result: no OpenGL headers found! Please use the option --with-opengl-incl=DIR" >&5
 echo "${ECHO_T}no OpenGL headers found! Please use the option --with-opengl-incl=DIR" >&6
-	echo "$as_me:$LINENO: result: of configure to specify the correct path to these headers." >&5
+		echo "$as_me:$LINENO: result: of configure to specify the correct path to these headers." >&5
 echo "${ECHO_T}of configure to specify the correct path to these headers." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -19151,12 +19152,12 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-else
-	echo "$as_me:$LINENO: result: (${OPENGL_INCPATH})" >&5
+	else
+		echo "$as_me:$LINENO: result: (${OPENGL_INCPATH})" >&5
 echo "${ECHO_T}(${OPENGL_INCPATH})" >&6
-fi
+	fi
 
-echo "$as_me:$LINENO: checking for OpenGL library" >&5
+	echo "$as_me:$LINENO: checking for OpenGL library" >&5
 echo $ECHO_N "checking for OpenGL library... $ECHO_C" >&6
 
 _LIBS=
@@ -19237,14 +19238,14 @@ fi
 
 OPENGL_LIBPATH="${_LIBS}"
 
-if test "${OPENGL_LIBPATH}" = "" ; then
-	echo "$as_me:$LINENO: result: (not found!)" >&5
+	if test "${OPENGL_LIBPATH}" = "" ; then
+		echo "$as_me:$LINENO: result: (not found!)" >&5
 echo "${ECHO_T}(not found!)" >&6
-	echo "$as_me:$LINENO: result: " >&5
+		echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-	echo "$as_me:$LINENO: result: no OpenGL lib found! Please use the option --with-opengl-libs=DIR" >&5
+		echo "$as_me:$LINENO: result: no OpenGL lib found! Please use the option --with-opengl-libs=DIR" >&5
 echo "${ECHO_T}no OpenGL lib found! Please use the option --with-opengl-libs=DIR" >&6
-	echo "$as_me:$LINENO: result: of configure to specify the correct path to these libraries." >&5
+		echo "$as_me:$LINENO: result: of configure to specify the correct path to these libraries." >&5
 echo "${ECHO_T}of configure to specify the correct path to these libraries." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -19282,20 +19283,21 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-else
-	echo "$as_me:$LINENO: result: (${OPENGL_LIBPATH})" >&5
+	else
+		echo "$as_me:$LINENO: result: (${OPENGL_LIBPATH})" >&5
 echo "${ECHO_T}(${OPENGL_LIBPATH})" >&6
+	fi
+
+	if test "${OPENGL_INCPATH}" != /usr/include && test "${OPENGL_INCPATH}" != "" ; then
+		VIEW_INCLUDES="${VIEW_INCLUDES} -I${OPENGL_INCPATH}"
+	fi
 fi
 
-if test "${OPENGL_INCPATH}" != /usr/include && test "${OPENGL_INCPATH}" != "" ; then
-	VIEW_INCLUDES="${VIEW_INCLUDES} -I${OPENGL_INCPATH}"
-fi
-fi
 
-if test "${USE_VIEW}" = true ; then
-echo "$as_me:$LINENO: checking for QT headers" >&5
+
+	echo "$as_me:$LINENO: checking for QT headers" >&5
 echo $ECHO_N "checking for QT headers... $ECHO_C" >&6
-if test "${QTDIR}" != "" ; then
+	if test "${QTDIR}" != "" ; then
 
 _INCLUDES=
 
@@ -19371,7 +19373,7 @@ fi
 
 QT_INCPATH="${_INCLUDES}"
 
-else
+	else
 
 _INCLUDES=
 
@@ -19447,24 +19449,24 @@ fi
 
 QT_INCPATH="${_INCLUDES}"
 
-fi
+	fi
 
-if test "${QT_INCPATH}" = "" ; then
-	echo "$as_me:$LINENO: result: (not found!)" >&5
+	if test "${QT_INCPATH}" = "" ; then
+		echo "$as_me:$LINENO: result: (not found!)" >&5
 echo "${ECHO_T}(not found!)" >&6
-	echo "$as_me:$LINENO: result: " >&5
+		echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-	echo "$as_me:$LINENO: result: No QT header files found! Please specify the path to the QT headers" >&5
+		echo "$as_me:$LINENO: result: No QT header files found! Please specify the path to the QT headers" >&5
 echo "${ECHO_T}No QT header files found! Please specify the path to the QT headers" >&6
-	echo "$as_me:$LINENO: result: by passing the option --with-qt-incl=DIR to configure." >&5
+		echo "$as_me:$LINENO: result: by passing the option --with-qt-incl=DIR to configure." >&5
 echo "${ECHO_T}by passing the option --with-qt-incl=DIR to configure." >&6
-	echo "$as_me:$LINENO: result: You may also set the environment variable QTDIR to the correct" >&5
+		echo "$as_me:$LINENO: result: You may also set the environment variable QTDIR to the correct" >&5
 echo "${ECHO_T}You may also set the environment variable QTDIR to the correct" >&6
-	echo "$as_me:$LINENO: result: path - configure will recognize this" >&5
+		echo "$as_me:$LINENO: result: path - configure will recognize this" >&5
 echo "${ECHO_T}path - configure will recognize this" >&6
-	echo "$as_me:$LINENO: result: The QT package can be found under the following URL:" >&5
+		echo "$as_me:$LINENO: result: The QT package can be found under the following URL:" >&5
 echo "${ECHO_T}The QT package can be found under the following URL:" >&6
-	echo "$as_me:$LINENO: result: http://www.troll.no/qt" >&5
+		echo "$as_me:$LINENO: result: http://www.troll.no/qt" >&5
 echo "${ECHO_T}http://www.troll.no/qt" >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -19502,22 +19504,22 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-else
-	echo "$as_me:$LINENO: result: (${QT_INCPATH})" >&5
+	else
+		echo "$as_me:$LINENO: result: (${QT_INCPATH})" >&5
 echo "${ECHO_T}(${QT_INCPATH})" >&6
-fi
+	fi
 
-echo "$as_me:$LINENO: checking for libqt${QT_MT_SUFFIX}" >&5
+	echo "$as_me:$LINENO: checking for libqt${QT_MT_SUFFIX}" >&5
 echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
-if test "${QTDIR}" != "" ; then
-	if test "${QT_MT_SUFFIX}" = "-mt" -o "${QT_MT_SUFFIX+set}" != set ; then
-						if test -a "${QTDIR}/lib/libqt-mt.so" ; then
-							QT_LIBPATH="${QTDIR}/lib"
-						elif test -a "${QTDIR}/lib/libqt.so" ; then
-							QT_LIBPATH="${QTDIR}/lib"
-							QT_MT_SUFFIX=""
-						fi
-						if test "${QT_LIBPATH}" = "" ; then
+	if test "${QTDIR}" != "" ; then
+		if test "${QT_MT_SUFFIX}" = "-mt" -o "${QT_MT_SUFFIX+set}" != set ; then
+			if test -a "${QTDIR}/lib/libqt-mt.so" ; then
+				QT_LIBPATH="${QTDIR}/lib"
+			elif test -a "${QTDIR}/lib/libqt.so" ; then
+				QT_LIBPATH="${QTDIR}/lib"
+				QT_MT_SUFFIX=""
+			fi
+			if test "${QT_LIBPATH}" = "" ; then
 
 _LIBS=
 
@@ -19597,15 +19599,15 @@ fi
 
 QT_LIBPATH="${_LIBS}"
 
-						fi
-					else
-						if test -a "${QTDIR}/lib/libqt.so" ; then
-							QT_LIBPATH="${QTDIR}/lib"
-						elif test -a "${QTDIR}/lib/libqt-mt.so" ; then
-							QT_LIBPATH="${QTDIR}/lib"
-							QT_MT_SUFFIX="-mt"
-						fi
-						if test "${QT_LIBPATH}" = "" ; then
+			fi
+		else
+			if test -a "${QTDIR}/lib/libqt.so" ; then
+				QT_LIBPATH="${QTDIR}/lib"
+			elif test -a "${QTDIR}/lib/libqt-mt.so" ; then
+				QT_LIBPATH="${QTDIR}/lib"
+				QT_MT_SUFFIX="-mt"
+			fi
+			if test "${QT_LIBPATH}" = "" ; then
 
 _LIBS=
 
@@ -19685,9 +19687,9 @@ fi
 
 QT_LIBPATH="${_LIBS}"
 
-						fi
-					fi
-				else
+			fi
+		fi
+	else
 
 _LIBS=
 
@@ -19767,28 +19769,28 @@ fi
 
 QT_LIBPATH="${_LIBS}"
 
-				fi
+	fi
 
-				if test "${QT_LIBPATH}" = "" ; then
-					echo "$as_me:$LINENO: result: (not found!)" >&5
+	if test "${QT_LIBPATH}" = "" ; then
+		echo "$as_me:$LINENO: result: (not found!)" >&5
 echo "${ECHO_T}(not found!)" >&6
-					echo "$as_me:$LINENO: result: " >&5
+		echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-					echo "$as_me:$LINENO: result: The QT library could not be found. Please specify the path to libqt" >&5
+		echo "$as_me:$LINENO: result: The QT library could not be found. Please specify the path to libqt" >&5
 echo "${ECHO_T}The QT library could not be found. Please specify the path to libqt" >&6
-					echo "$as_me:$LINENO: result: by passing the option --with-qt-libs=DIR to configure." >&5
+ 		echo "$as_me:$LINENO: result: by passing the option --with-qt-libs=DIR to configure." >&5
 echo "${ECHO_T}by passing the option --with-qt-libs=DIR to configure." >&6
-					echo "$as_me:$LINENO: result: You may also set the environment variable QTDIR to the correct" >&5
+		echo "$as_me:$LINENO: result: You may also set the environment variable QTDIR to the correct" >&5
 echo "${ECHO_T}You may also set the environment variable QTDIR to the correct" >&6
-					echo "$as_me:$LINENO: result: path - configure will recognize this, too." >&5
+		echo "$as_me:$LINENO: result: path - configure will recognize this, too." >&5
 echo "${ECHO_T}path - configure will recognize this, too." >&6
-					echo "$as_me:$LINENO: result: If the QT library was built with thread support enabled (libqt-mt" >&5
+		echo "$as_me:$LINENO: result: If the QT library was built with thread support enabled (libqt-mt" >&5
 echo "${ECHO_T}If the QT library was built with thread support enabled (libqt-mt" >&6
-					echo "$as_me:$LINENO: result: instead of libqt), please specify the option --with-threadsafe-qt." >&5
+		echo "$as_me:$LINENO: result: instead of libqt), please specify the option --with-threadsafe-qt." >&5
 echo "${ECHO_T}instead of libqt), please specify the option --with-threadsafe-qt." >&6
-					echo "$as_me:$LINENO: result: The QT package can be found under the following URL:" >&5
+		echo "$as_me:$LINENO: result: The QT package can be found under the following URL:" >&5
 echo "${ECHO_T}The QT package can be found under the following URL:" >&6
-					echo "$as_me:$LINENO: result: http://www.troll.no/qt" >&5
+		echo "$as_me:$LINENO: result: http://www.troll.no/qt" >&5
 echo "${ECHO_T}http://www.troll.no/qt" >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -19826,32 +19828,32 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-				else
-					echo "$as_me:$LINENO: result: (${QT_LIBPATH})" >&5
+	else
+		echo "$as_me:$LINENO: result: (${QT_LIBPATH})" >&5
 echo "${ECHO_T}(${QT_LIBPATH})" >&6
-				fi
+	fi
 
 
-																QT_VERSION=`${GREP} "#define QT_VERSION[^_]" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
-				QT_VERSION_STR=`${GREP} "#define QT_VERSION_STR" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3 | ${TR} -d \\"`
-				echo "$as_me:$LINENO: checking for QT version number in qglobal.h" >&5
+				QT_VERSION=`${GREP} "#define QT_VERSION[^_]" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
+	QT_VERSION_STR=`${GREP} "#define QT_VERSION_STR" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3 | ${TR} -d \\"`
+	echo "$as_me:$LINENO: checking for QT version number in qglobal.h" >&5
 echo $ECHO_N "checking for QT version number in qglobal.h... $ECHO_C" >&6
-				if test "${QT_VERSION}" = "" ; then
-					echo "$as_me:$LINENO: result: <unknown>" >&5
+	if test "${QT_VERSION}" = "" ; then
+		echo "$as_me:$LINENO: result: <unknown>" >&5
 echo "${ECHO_T}<unknown>" >&6
-					echo "$as_me:$LINENO: result: " >&5
+		echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-					echo "$as_me:$LINENO: result:   Could not determine version number of QT library -- please" >&5
+		echo "$as_me:$LINENO: result:   Could not determine version number of QT library -- please" >&5
 echo "${ECHO_T}  Could not determine version number of QT library -- please" >&6
-					echo "$as_me:$LINENO: result:   check config.log for details." >&5
+		echo "$as_me:$LINENO: result:   check config.log for details." >&5
 echo "${ECHO_T}  check config.log for details." >&6
-					echo "$as_me:$LINENO: result:   You might have a problem with your (DY)LD_LIBRARY_PATH." >&5
+		echo "$as_me:$LINENO: result:   You might have a problem with your (DY)LD_LIBRARY_PATH." >&5
 echo "${ECHO_T}  You might have a problem with your (DY)LD_LIBRARY_PATH." >&6
-					echo "$as_me:$LINENO: result:   Please check the settings of QTDIR as well or specify" >&5
+		echo "$as_me:$LINENO: result:   Please check the settings of QTDIR as well or specify" >&5
 echo "${ECHO_T}  Please check the settings of QTDIR as well or specify" >&6
-					echo "$as_me:$LINENO: result:   the path to the library/headers with" >&5
+		echo "$as_me:$LINENO: result:   the path to the library/headers with" >&5
 echo "${ECHO_T}  the path to the library/headers with" >&6
-					echo "$as_me:$LINENO: result:     --with-qt-libs=<DIR> / --with-qt-incl=<DIR>" >&5
+		echo "$as_me:$LINENO: result:     --with-qt-libs=<DIR> / --with-qt-incl=<DIR>" >&5
 echo "${ECHO_T}    --with-qt-libs=<DIR> / --with-qt-incl=<DIR>" >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -19889,46 +19891,46 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-				else
-					echo "$as_me:$LINENO: result: ${QT_VERSION} (${QT_VERSION_STR})" >&5
+	else
+		echo "$as_me:$LINENO: result: ${QT_VERSION} (${QT_VERSION_STR})" >&5
 echo "${ECHO_T}${QT_VERSION} (${QT_VERSION_STR})" >&6
-					cat >>confdefs.h <<_ACEOF
+		cat >>confdefs.h <<_ACEOF
 #define BALL_QT_VERSION ${QT_VERSION}
 _ACEOF
 
-					cat >>confdefs.h <<_ACEOF
+		cat >>confdefs.h <<_ACEOF
 #define BALL_QT_VERSION_STR ${QT_VERSION_STR}
 _ACEOF
 
-					if test "${QT_MT_SUFFIX}" = "-mt" ; then
-						cat >>confdefs.h <<\_ACEOF
+		if test "${QT_MT_SUFFIX}" = "-mt" ; then
+			cat >>confdefs.h <<\_ACEOF
 #define BALL_QT_HAS_THREADS
 _ACEOF
 
-					fi
-				fi
+		fi
+	fi
 
-																if test `echo ${QT_VERSION} | ${CUT} -c1-2` != "0x" ; then
-					if test "${QT_VERSION}" -lt 300 ; then
-						echo "$as_me:$LINENO: result: " >&5
+				if test `echo ${QT_VERSION} | ${CUT} -c1-2` != "0x" ; then
+		if test "${QT_VERSION}" -lt ${QT_MIN_VERSION} -o "${QT_VERSION}" -gt ${QT_MAX_VERSION} ; then
+			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-						echo "$as_me:$LINENO: result: QT version 3.0 or above is required for BALL. Please update" >&5
-echo "${ECHO_T}QT version 3.0 or above is required for BALL. Please update" >&6
-						echo "$as_me:$LINENO: result: to a more current version or specify the path to a more" >&5
-echo "${ECHO_T}to a more current version or specify the path to a more" >&6
-						echo "$as_me:$LINENO: result: recent version of libqt by passing the option --with-qt-libs=DIR" >&5
-echo "${ECHO_T}recent version of libqt by passing the option --with-qt-libs=DIR" >&6
-						echo "$as_me:$LINENO: result: to configure." >&5
+			echo "$as_me:$LINENO: result: QT version ${QT_RECOMMENDED_VERSION} is recommended for BALL. Please update" >&5
+echo "${ECHO_T}QT version ${QT_RECOMMENDED_VERSION} is recommended for BALL. Please update" >&6
+			echo "$as_me:$LINENO: result: to a suitable version or specify the path to a more" >&5
+echo "${ECHO_T}to a suitable version or specify the path to a more" >&6
+			echo "$as_me:$LINENO: result: suitable version of libqt* by passing the option --with-qt-libs=DIR" >&5
+echo "${ECHO_T}suitable version of libqt* by passing the option --with-qt-libs=DIR" >&6
+			echo "$as_me:$LINENO: result: to configure." >&5
 echo "${ECHO_T}to configure." >&6
-						echo "$as_me:$LINENO: result: You may also set the environment variable QTDIR to the correct" >&5
+			echo "$as_me:$LINENO: result: You may also set the environment variable QTDIR to the correct" >&5
 echo "${ECHO_T}You may also set the environment variable QTDIR to the correct" >&6
-						echo "$as_me:$LINENO: result: path - configure will recognize this, too." >&5
+			echo "$as_me:$LINENO: result: path - configure will recognize this, too." >&5
 echo "${ECHO_T}path - configure will recognize this, too." >&6
-						echo "$as_me:$LINENO: result: " >&5
+			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-						echo "$as_me:$LINENO: result: The complete QT package can be found under the following URL:" >&5
+			echo "$as_me:$LINENO: result: The complete QT package can be found under the following URL:" >&5
 echo "${ECHO_T}The complete QT package can be found under the following URL:" >&6
-						echo "$as_me:$LINENO: result:   http://www.troll.no/qt" >&5
+			echo "$as_me:$LINENO: result:   http://www.troll.no/qt" >&5
 echo "${ECHO_T}  http://www.troll.no/qt" >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -19966,26 +19968,23 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-					fi
-				fi
-
-																if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
-					VIEW_INCLUDES="${VIEW_INCLUDES} -I${QT_INCPATH}"
-				fi
-			fi
 		fi
+	fi
+
+				if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
+		VIEW_INCLUDES="${VIEW_INCLUDES} -I${QT_INCPATH}"
 	fi
 
 
 
-	if test "${USE_VIEW}" = true ; then
 
-		echo "$as_me:$LINENO: checking linking against X11 libraries" >&5
+
+	echo "$as_me:$LINENO: checking linking against X11 libraries" >&5
 echo $ECHO_N "checking linking against X11 libraries... $ECHO_C" >&6
-								if test "${X11_LIBS}" != "" ; then
-			SAVE_LIBS=${LIBS}
-			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-			cat >conftest.$ac_ext <<_ACEOF
+				if test "${X11_LIBS}" != "" ; then
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -20030,267 +20029,267 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-			LIBS=${SAVE_LIBS}
-		fi
-
-										if test "${OS}" = "Darwin" ; then
-			X11_LIBS=""
-			X11_LIBPATHOPTS=""
-			X_LINKING_OK="true"
-		fi
-
-								if test "${X_LINKING_OK+set}" != set ; then
-			X11_LIBS="-lXmu -lXext -lXt -lX11 -lm"
-			SAVE_LIBS=${LIBS}
-			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-			cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_cxx_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  X_LINKING_OK=1
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-			LIBS=${SAVE_LIBS}
-		fi
-
-								if test "${X_LINKING_OK+set}" != set ; then
-			X11_LIBS="-lXmu -lXext -lXt -lX11 -lSM -lICE -lm"
-			SAVE_LIBS=${LIBS}
-			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-			cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_cxx_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  X_LINKING_OK=1
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-			LIBS=${SAVE_LIBS}
-		fi
-
-								if test "${X_LINKING_OK+set}" != set ; then
-			X11_LIBS="-lXmu -lXt -lX11 -lm"
-			SAVE_LIBS=${LIBS}
-			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-			cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_cxx_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  X_LINKING_OK=1
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-			LIBS=${SAVE_LIBS}
-		fi
-
-								if test "${X_LINKING_OK+set}" != set ; then
-			X11_LIBS="-lXmu -lXt -lX11 -lSM -lICE -lm"
-			SAVE_LIBS=${LIBS}
-			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-			cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_cxx_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  X_LINKING_OK=1
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-			LIBS=${SAVE_LIBS}
-		fi
-
-								if test "${X_LINKING_OK+set}" = set ; then
-			echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-		else
-			echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-			echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-			echo "$as_me:$LINENO: result: Don't know how to link with X11 libraries." >&5
-echo "${ECHO_T}Don't know how to link with X11 libraries." >&6
-			echo "$as_me:$LINENO: result: Please specify the correct libraries (e.g. -lXmu -lXt -lX11) in the" >&5
-echo "${ECHO_T}Please specify the correct libraries (e.g. -lXmu -lXt -lX11) in the" >&6
-			echo "$as_me:$LINENO: result: environment variable X11_LIBS" >&5
-echo "${ECHO_T}environment variable X11_LIBS" >&6
-			echo "$as_me:$LINENO: result: If you are running Solaris 2.x you might also try the option --without-libxnet" >&5
-echo "${ECHO_T}If you are running Solaris 2.x you might also try the option --without-libxnet" >&6
-			echo "$as_me:$LINENO: result: if your X libraries were linked against libsocket and libnsl instead of libxnet." >&5
-echo "${ECHO_T}if your X libraries were linked against libsocket and libnsl instead of libxnet." >&6
-			echo "$as_me:$LINENO: result: Built of visualization component VIEW disabled." >&5
-echo "${ECHO_T}Built of visualization component VIEW disabled." >&6
-			echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-			USE_VIEW=false
-		fi
-
-								X11_LIBOPTS="${X11_LIBPATHOPT} ${X11_LIBS}"
+		LIBS=${SAVE_LIBS}
 	fi
 
-	if test "${USE_VIEW}" = true ; then
-		if test "${VIEW_PLATFORM}" = OpenGL ; then
-			if test "${OPENGL_LIBPATH}" != "/usr/lib" -a "${OPENGL_LIBPATH}" != "" ; then
-				OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL"
-			else
-				OPENGL_LIBPATH=""
-				OPENGL_LIBOPTS="-lGLU -lGL"
-			fi
+					if test "${OS}" = "Darwin" ; then
+		X11_LIBS=""
+		X11_LIBPATHOPTS=""
+		X_LINKING_OK="true"
+	fi
 
-									SAVE_LIBS=${LIBS}
-			SAVE_LDFLAGS=${LDFLAGS}
-			LIBS="${LIBS} ${X11_LIBOPTS}"
-			if test "${OPENGL_LIBPATH}" != "" ; then
-				LDFLAGS="${LDFLAGS} -L${OPENGL_LIBPATH}"
-			fi
-			echo "$as_me:$LINENO: checking for XMesaGarbageCollect in -lGL" >&5
+				if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXext -lXt -lX11 -lm"
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  X_LINKING_OK=1
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+		LIBS=${SAVE_LIBS}
+	fi
+
+				if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXext -lXt -lX11 -lSM -lICE -lm"
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  X_LINKING_OK=1
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+		LIBS=${SAVE_LIBS}
+	fi
+
+				if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXt -lX11 -lm"
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  X_LINKING_OK=1
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+		LIBS=${SAVE_LIBS}
+	fi
+
+				if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXt -lX11 -lSM -lICE -lm"
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  X_LINKING_OK=1
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+		LIBS=${SAVE_LIBS}
+	fi
+
+				if test "${X_LINKING_OK+set}" = set ; then
+		echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+	else
+		echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+		echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+		echo "$as_me:$LINENO: result: Don't know how to link with X11 libraries." >&5
+echo "${ECHO_T}Don't know how to link with X11 libraries." >&6
+		echo "$as_me:$LINENO: result: Please specify the correct libraries (e.g. -lXmu -lXt -lX11) in the" >&5
+echo "${ECHO_T}Please specify the correct libraries (e.g. -lXmu -lXt -lX11) in the" >&6
+		echo "$as_me:$LINENO: result: environment variable X11_LIBS" >&5
+echo "${ECHO_T}environment variable X11_LIBS" >&6
+		echo "$as_me:$LINENO: result: If you are running Solaris 2.x you might also try the option --without-libxnet" >&5
+echo "${ECHO_T}If you are running Solaris 2.x you might also try the option --without-libxnet" >&6
+		echo "$as_me:$LINENO: result: if your X libraries were linked against libsocket and libnsl instead of libxnet." >&5
+echo "${ECHO_T}if your X libraries were linked against libsocket and libnsl instead of libxnet." >&6
+		echo "$as_me:$LINENO: result: Built of visualization component VIEW disabled." >&5
+echo "${ECHO_T}Built of visualization component VIEW disabled." >&6
+		echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+		USE_VIEW=false
+	fi
+
+				X11_LIBOPTS="${X11_LIBPATHOPT} ${X11_LIBS}"
+
+
+
+	if test "${VIEW_PLATFORM}" = OpenGL ; then
+		if test "${OPENGL_LIBPATH}" != "/usr/lib" -a "${OPENGL_LIBPATH}" != "" ; then
+			OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL"
+		else
+			OPENGL_LIBPATH=""
+			OPENGL_LIBOPTS="-lGLU -lGL"
+		fi
+
+						SAVE_LIBS=${LIBS}
+		SAVE_LDFLAGS=${LDFLAGS}
+		LIBS="${LIBS} ${X11_LIBOPTS}"
+		if test "${OPENGL_LIBPATH}" != "" ; then
+			LDFLAGS="${LDFLAGS} -L${OPENGL_LIBPATH}"
+		fi
+		echo "$as_me:$LINENO: checking for XMesaGarbageCollect in -lGL" >&5
 echo $ECHO_N "checking for XMesaGarbageCollect in -lGL... $ECHO_C" >&6
 if test "${ac_cv_lib_GL_XMesaGarbageCollect+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -20358,14 +20357,14 @@ if test $ac_cv_lib_GL_XMesaGarbageCollect = yes; then
   VIEW_PLATFORM=Mesa
 fi
 
-			LIBS=${SAVE_LIBS}
-			LDFLAGS=${SAVE_LDFLAGS}
-			if test "${VIEW_PLATFORM}" != Mesa ; then
-				echo "$as_me:$LINENO: checking linking against OpenGL libraries" >&5
+		LIBS=${SAVE_LIBS}
+		LDFLAGS=${SAVE_LDFLAGS}
+		if test "${VIEW_PLATFORM}" != Mesa ; then
+			echo "$as_me:$LINENO: checking linking against OpenGL libraries" >&5
 echo $ECHO_N "checking linking against OpenGL libraries... $ECHO_C" >&6
-				SAVE_LIBS=${LIBS}
-				LIBS="${OPENGL_LIBOPTS} ${LIBS}"
-				cat >conftest.$ac_ext <<_ACEOF
+			SAVE_LIBS=${LIBS}
+			LIBS="${OPENGL_LIBOPTS} ${LIBS}"
+			cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -20410,15 +20409,15 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-				LIBS=${SAVE_LIBS}
-				if test "${OPENGL_LINKING_OK+set}" != set ; then
-					echo "$as_me:$LINENO: result: no" >&5
+			LIBS=${SAVE_LIBS}
+			if test "${OPENGL_LINKING_OK+set}" != set ; then
+				echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-					echo "$as_me:$LINENO: result: " >&5
+				echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-					echo "$as_me:$LINENO: result: Cannot link against libGL/GLU - disabling visualization support!" >&5
+				echo "$as_me:$LINENO: result: Cannot link against libGL/GLU - disabling visualization support!" >&5
 echo "${ECHO_T}Cannot link against libGL/GLU - disabling visualization support!" >&6
-					echo "$as_me:$LINENO: result: Please specify the path to OpenGL libraries using --with-opengl-libs=DIR" >&5
+				echo "$as_me:$LINENO: result: Please specify the path to OpenGL libraries using --with-opengl-libs=DIR" >&5
 echo "${ECHO_T}Please specify the path to OpenGL libraries using --with-opengl-libs=DIR" >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -20456,32 +20455,81 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-				else
-					echo "$as_me:$LINENO: result: yes" >&5
+			else
+				echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-				fi
 			fi
 		fi
 	fi
 
-	if test "${USE_VIEW}" = true ; then
-		if test "${VIEW_PLATFORM}" = Mesa ; then
+	if test "${VIEW_PLATFORM}" = Mesa ; then
 
-			if test "${MESA_LIBS}" = "" ; then
-				MESA_LIBS=${OPENGL_LIBPATH}
-			fi
-			if test "${MESA_LIBS}" != "/usr/lib" -a "${MESA_LIBS}" != "" ; then
-				OPENGL_LIBPATH="${MESA_LIBS}"
-				OPENGL_LIBPATHOPT="-L${MESA_LIBS}"
-			else
-				OPENGL_LIBPATH=""
-				OPENGL_LIBPATHOPT=""
-			fi
+		if test "${MESA_LIBS}" = "" ; then
+			MESA_LIBS=${OPENGL_LIBPATH}
+		fi
+		if test "${MESA_LIBS}" != "/usr/lib" -a "${MESA_LIBS}" != "" ; then
+			OPENGL_LIBPATH="${MESA_LIBS}"
+			OPENGL_LIBPATHOPT="-L${MESA_LIBS}"
+		else
+			OPENGL_LIBPATH=""
+			OPENGL_LIBPATHOPT=""
+		fi
 
-												OPENGL_LIBS="-lGLU -lGL"
+								OPENGL_LIBS="-lGLU -lGL"
 
-												echo "$as_me:$LINENO: checking linking against Mesa libs" >&5
+								echo "$as_me:$LINENO: checking linking against Mesa libs" >&5
 echo $ECHO_N "checking linking against Mesa libs... $ECHO_C" >&6
+		SAVE_LIBS=${LIBS}
+		LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
+		cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  HAVE_MESALIBS=1
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+		LIBS=${SAVE_LIBS}
+
+										if test "${HAVE_MESALIBS+set}" != set ; then
+			OPENGL_LIBS="-lMesaGLU -lMesaGL"
 			SAVE_LIBS=${LIBS}
 			LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
 			cat >conftest.$ac_ext <<_ACEOF
@@ -20530,67 +20578,16 @@ fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 			LIBS=${SAVE_LIBS}
+		fi
 
-															if test "${HAVE_MESALIBS+set}" != set ; then
-				OPENGL_LIBS="-lMesaGLU -lMesaGL"
-				SAVE_LIBS=${LIBS}
-				LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
-				cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_cxx_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  HAVE_MESALIBS=1
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-				LIBS=${SAVE_LIBS}
-			fi
-
-			if test "${HAVE_MESALIBS+set}" != set ; then
-				echo "$as_me:$LINENO: result: no" >&5
+		if test "${HAVE_MESALIBS+set}" != set ; then
+			echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-				echo "$as_me:$LINENO: result: " >&5
+			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-				echo "$as_me:$LINENO: result: Cannot link against libMesaGL/GLU - disabling visualization support!" >&5
+			echo "$as_me:$LINENO: result: Cannot link against libMesaGL/GLU - disabling visualization support!" >&5
 echo "${ECHO_T}Cannot link against libMesaGL/GLU - disabling visualization support!" >&6
-				echo "$as_me:$LINENO: result: Please specify the path to libMesaGL using --with-opengl-libs=DIR" >&5
+			echo "$as_me:$LINENO: result: Please specify the path to libMesaGL using --with-opengl-libs=DIR" >&5
 echo "${ECHO_T}Please specify the path to libMesaGL using --with-opengl-libs=DIR" >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -20628,15 +20625,19 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-			else
-				echo "$as_me:$LINENO: result: yes" >&5
+		else
+			echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-				OPENGL_LIBOPTS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS}"
-			fi
+			OPENGL_LIBOPTS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS}"
 		fi
 	fi
 
-	if test "${USE_VIEW}" = true ; then
+
+
+		X=`pwd`
+		echo "$as_me:$LINENO: checking linking against QT libraries" >&5
+echo $ECHO_N "checking linking against QT libraries... $ECHO_C" >&6
+
 		if test "${QT_LIBPATH}" != "/usr/lib" ; then
 			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lqgl -lqt${QT_MT_SUFFIX}"
 			QT_LIBOPTS="-L${QT_LIBPATH} -lqt${QT_MT_SUFFIX}"
@@ -20645,15 +20646,10 @@ echo "${ECHO_T}yes" >&6
 			QTQGL_LIBOPTS="-lqgl -lqt${QT_MT_SUFFIX}"
 			QT_LIBOPTS="-lqt${QT_MT_SUFFIX}"
 		fi
-	fi
 
-	if test "${USE_VIEW}" = true ; then
-		echo "$as_me:$LINENO: checking linking against QT libraries" >&5
-echo $ECHO_N "checking linking against QT libraries... $ECHO_C" >&6
-
-			SAVE_LIBS=${LIBS}
-			LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
-			cat >conftest.$ac_ext <<_ACEOF
+		SAVE_LIBS=${LIBS}
+		LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+		cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -20698,123 +20694,123 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-			LIBS=${SAVE_LIBS}
-
-			if test "${QT_LINKING_OK+set}" != set ; then
-				SAVE_LIBS=${LIBS}
-				LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
-				cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <qgl.h>
-int
-main ()
-{
-QGLWidget wid;
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_cxx_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  QT_LINKING_OK=1
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-				LIBS=${SAVE_LIBS}
-			else
-								QT_LIBOPTS="${QTQGL_LIBOPTS}"
-			fi
-
-			if test "${QT_LINKING_OK+set}" != set ; then
-				SAVE_LIBS=${LIBS}
-				X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
-				LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
-				cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <qgl.h>
-int
-main ()
-{
-QGLWidget wid;
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_cxx_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  QT_LINKING_OK=1
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-				LIBS=${SAVE_LIBS}
-			fi
+		LIBS=${SAVE_LIBS}
 
 		if test "${QT_LINKING_OK+set}" != set ; then
-			echo "$as_me:$LINENO: result: no" >&5
+			SAVE_LIBS=${LIBS}
+			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+			cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <qgl.h>
+int
+main ()
+{
+QGLWidget wid;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  QT_LINKING_OK=1
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+			LIBS=${SAVE_LIBS}
+		else
+						QT_LIBOPTS="${QTQGL_LIBOPTS}"
+		fi
+
+		if test "${QT_LINKING_OK+set}" != set ; then
+			SAVE_LIBS=${LIBS}
+			X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
+			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+			cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <qgl.h>
+int
+main ()
+{
+QGLWidget wid;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  QT_LINKING_OK=1
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+			LIBS=${SAVE_LIBS}
+		fi
+
+	if test "${QT_LINKING_OK+set}" != set ; then
+		echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-			echo "$as_me:$LINENO: result: " >&5
+		echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-			echo "$as_me:$LINENO: result: Cannot link against libqt!" >&5
+		echo "$as_me:$LINENO: result: Cannot link against libqt!" >&5
 echo "${ECHO_T}Cannot link against libqt!" >&6
-			echo "$as_me:$LINENO: result: If QT is installed, please specify the path to the library" >&5
+		echo "$as_me:$LINENO: result: If QT is installed, please specify the path to the library" >&5
 echo "${ECHO_T}If QT is installed, please specify the path to the library" >&6
-			echo "$as_me:$LINENO: result: using the option --with-qt-libs=DIR or the environment variable QTDIR." >&5
+		echo "$as_me:$LINENO: result: using the option --with-qt-libs=DIR or the environment variable QTDIR." >&5
 echo "${ECHO_T}using the option --with-qt-libs=DIR or the environment variable QTDIR." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -20852,24 +20848,24 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-		else
-			echo "$as_me:$LINENO: result: yes" >&5
+	else
+		echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 
-												echo "$as_me:$LINENO: checking QT library version" >&5
+								echo "$as_me:$LINENO: checking QT library version" >&5
 echo $ECHO_N "checking QT library version... $ECHO_C" >&6
-			SAVE_LIBS=${LIBS}
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
-			if test "${OS}" = "Darwin" ; then
-				DYLD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${DYLD_LIBRARY_PATH}"
-				export DYLD_LIBRARY_PATH
-				echo "DYLD_LIBRARY_PATH = ${DYLD_LIBRARY_PATH}" 1>&5
-			else
-				LD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${LD_LIBRARY_PATH}"
-				export LD_LIBRARY_PATH
-				echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
-			fi
-			if test "$cross_compiling" = yes; then
+		SAVE_LIBS=${LIBS}
+		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+		if test "${OS}" = "Darwin" ; then
+			DYLD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${DYLD_LIBRARY_PATH}"
+			export DYLD_LIBRARY_PATH
+			echo "DYLD_LIBRARY_PATH = ${DYLD_LIBRARY_PATH}" 1>&5
+		else
+			LD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${LD_LIBRARY_PATH}"
+			export LD_LIBRARY_PATH
+			echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
+		fi
+		if test "$cross_compiling" = yes; then
   DUMMY=0
 
 else
@@ -20880,15 +20876,15 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-					#include <stdio.h>
-					const char* qVersion();
-					int main()
-					{
-						FILE* f = fopen("qt.version", "w");
-						fprintf(f, "%s\n", qVersion());
-						fclose(f);
-						return 0;
-					}
+				#include <stdio.h>
+				const char* qVersion();
+				int main()
+				{
+					FILE* f = fopen("qt.version", "w");
+					fprintf(f, "%s\n", qVersion());
+					fclose(f);
+					return 0;
+				}
 
 _ACEOF
 rm -f conftest$ac_exeext
@@ -20913,24 +20909,24 @@ DUMMY=0
 fi
 rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
-			LIBS=${SAVE_LIBS}
+		LIBS=${SAVE_LIBS}
 
-															if test "${QT_VERSION_OK+set}" != set; then
-				echo "$as_me:$LINENO: result: no" >&5
+										if test "${QT_VERSION_OK+set}" != set; then
+			echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-				echo "$as_me:$LINENO: result: " >&5
+			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-				echo "$as_me:$LINENO: result: The execution of a program linked against the QT" >&5
+			echo "$as_me:$LINENO: result: The execution of a program linked against the QT" >&5
 echo "${ECHO_T}The execution of a program linked against the QT" >&6
-				echo "$as_me:$LINENO: result: library failed. Please have a look at config.log" >&5
+			echo "$as_me:$LINENO: result: library failed. Please have a look at config.log" >&5
 echo "${ECHO_T}library failed. Please have a look at config.log" >&6
-				echo "$as_me:$LINENO: result: (the last few lines) to find out what happened." >&5
+			echo "$as_me:$LINENO: result: (the last few lines) to find out what happened." >&5
 echo "${ECHO_T}(the last few lines) to find out what happened." >&6
-				echo "$as_me:$LINENO: result: Perhaps you specified the wrong library or the" >&5
+			echo "$as_me:$LINENO: result: Perhaps you specified the wrong library or the" >&5
 echo "${ECHO_T}Perhaps you specified the wrong library or the" >&6
-				echo "$as_me:$LINENO: result: X11 libraries are in conflict with any other library." >&5
+			echo "$as_me:$LINENO: result: X11 libraries are in conflict with any other library." >&5
 echo "${ECHO_T}X11 libraries are in conflict with any other library." >&6
-				echo "$as_me:$LINENO: result: You might also want to check your LD_LIBRARY_PATH." >&5
+			echo "$as_me:$LINENO: result: You might also want to check your LD_LIBRARY_PATH." >&5
 echo "${ECHO_T}You might also want to check your LD_LIBRARY_PATH." >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -20968,25 +20964,25 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-			else
-				QT_VERSION_STRING=`cat qt.version`
-				echo "$as_me:$LINENO: result: ${QT_VERSION_STRING}" >&5
+		else
+			QT_VERSION_STRING=`cat qt.version`
+			echo "$as_me:$LINENO: result: ${QT_VERSION_STRING}" >&5
 echo "${ECHO_T}${QT_VERSION_STRING}" >&6
 
-																				${RM} qt.version 2>/dev/null
-				QT_MAJOR=`echo ${QT_VERSION_STRING} | ${CUT} -d. -f1`
-				if test "${QT_MAJOR}" -lt 3 ; then
-					echo "$as_me:$LINENO: result: " >&5
+												${RM} qt.version 2>/dev/null
+			QT_MAJOR=`echo ${QT_VERSION_STRING} | ${CUT} -d. -f1`
+			if test "${QT_MAJOR}" -lt 3 ; then
+				echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-					echo "$as_me:$LINENO: result: QT version 3.x is required." >&5
+				echo "$as_me:$LINENO: result: QT version 3.x is required." >&5
 echo "${ECHO_T}QT version 3.x is required." >&6
-					echo "$as_me:$LINENO: result: Please install version QT Version 3 (at least 3.0.6)" >&5
+				echo "$as_me:$LINENO: result: Please install version QT Version 3 (at least 3.0.6)" >&5
 echo "${ECHO_T}Please install version QT Version 3 (at least 3.0.6)" >&6
-					echo "$as_me:$LINENO: result: which can be obtained from" >&5
+				echo "$as_me:$LINENO: result: which can be obtained from" >&5
 echo "${ECHO_T}which can be obtained from" >&6
-					echo "$as_me:$LINENO: result: " >&5
+				echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-					echo "$as_me:$LINENO: result: www.troll.no/qt" >&5
+				echo "$as_me:$LINENO: result: www.troll.no/qt" >&5
 echo "${ECHO_T}www.troll.no/qt" >&6
 
 echo "$as_me:$LINENO: result: " >&5
@@ -21024,10 +21020,11 @@ tar cf $TARFILE $FILES
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
-				fi
 			fi
 		fi
 	fi
+
+
 
 					if test "${USE_VIEW}" = true ; then
 		if test "${MOC}" = moc ; then
@@ -21193,8 +21190,8 @@ echo "${ECHO_T}${MOC_VERSION}" >&6
 echo "${ECHO_T}" >&6
 				echo "$as_me:$LINENO: result: QT version (${QT_VERSION_STR}) is incompatible with moc version (${MOC_VERISON})!" >&5
 echo "${ECHO_T}QT version (${QT_VERSION_STR}) is incompatible with moc version (${MOC_VERISON})!" >&6
-				echo "$as_me:$LINENO: result: Please check your QTDRI environment variable, include the correct" >&5
-echo "${ECHO_T}Please check your QTDRI environment variable, include the correct" >&6
+				echo "$as_me:$LINENO: result: Please check your QTDIR environment variable, include the correct" >&5
+echo "${ECHO_T}Please check your QTDIR environment variable, include the correct" >&6
 				echo "$as_me:$LINENO: result: path to moc in your PATH environment variable, or specify the correct" >&5
 echo "${ECHO_T}path to moc in your PATH environment variable, or specify the correct" >&6
 				echo "$as_me:$LINENO: result: path to moc using the option --with-moc=PATH to rerun configure." >&5
@@ -21451,16 +21448,13 @@ echo "$as_me: error: Aborted." >&2;}
 	fi
 
 
-	if test "${USE_VIEW}" = "true" ; then
-		cat >>confdefs.h <<\_ACEOF
+	cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_VIEW
 _ACEOF
 
-		LIBVIEW="libVIEW.a"
-		VIEW="VIEW"
-	else
-		VIEW=
-	fi
+	LIBVIEW="libVIEW.a"
+	VIEW="VIEW"
+fi
 
 
 
