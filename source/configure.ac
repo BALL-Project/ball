@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.29 2006/01/03 19:16:39 anhi Exp $
+dnl $Id: configure.ac,v 1.30 2006/01/09 11:01:16 oliver Exp $
 dnl
 dnl
 
@@ -20,7 +20,7 @@ fi
 dnl 
 dnl    Some initialization stuff...
 dnl 
-AC_INIT(BALL, 1.0, ball-bugs@bioinf.uni-sb.de)
+AC_INIT(BALL, 1.2, ball-bugs@bioinf.uni-sb.de)
 AC_CONFIG_HEADER([
 config.h:config/config.h.in
 ])
