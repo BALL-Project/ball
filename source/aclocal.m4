@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.80 2006/01/09 20:14:59 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.81 2006/01/09 21:11:05 oliver Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -2901,7 +2901,7 @@ AC_DEFUN(CF_VIEW_QT_BASICS, [
 	dnl extract the QT version number and version number string from include/qglobal.h
 	dnl
 	QT_VERSION=`${GREP} "#define QT_VERSION[^_]" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
-	QT_VERSION_STR=`${GREP} "#define QT_VERSION_STR" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3 | ${TR} -d \\"`
+	QT_VERSION_STR=`${GREP} "#define QT_VERSION_STR" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3 | ${TR} -d '\042'`
 	AC_MSG_CHECKING(for QT version number in qglobal.h)
 	if test "${QT_VERSION}" = "" ; then
 		AC_MSG_RESULT([<unknown>])
