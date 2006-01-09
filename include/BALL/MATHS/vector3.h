@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.76 2005/12/23 17:01:49 amoll Exp $
+// $Id: vector3.h,v 1.77 2006/01/09 20:14:59 oliver Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -891,7 +891,7 @@ namespace BALL
 	{
 		if (position > 2)
 		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__);
+			throw Exception::IndexOverflow(__FILE__, __LINE__, position);
 		}
 		switch (position) 
 		{
