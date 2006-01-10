@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.3 2006/01/10 12:34:35 anhi Exp $
+// $Id: dockingController.C,v 1.4 2006/01/10 12:35:48 anhi Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -249,7 +249,9 @@ namespace BALL
 						delete dock_alg_;
 						dock_alg_ = NULL;
 					}
+#ifdef BALL_HAS_FFTW
 					dock_alg_ =  new GeometricFit();
+#endif
 					break;
 			}
 			
