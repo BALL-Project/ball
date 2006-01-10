@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.2 2006/01/05 15:57:57 leonhardt Exp $
+// $Id: dockingController.C,v 1.3 2006/01/10 12:34:35 anhi Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
-#include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
+
 #include <BALL/VIEW/DIALOGS/dockResultDialog.h>
 #include <BALL/VIEW/DIALOGS/dockProgressDialog.h>
 
@@ -18,13 +18,17 @@
 #include <BALL/STRUCTURE/DOCKING/dockResult.h>
 #include <BALL/STRUCTURE/DOCKING/conformationSet.h>
 #include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
-#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 #include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/DATATYPE/options.h>
 #include <BALL/FORMAT/INIFile.h>
+
+#ifdef BALL_HAS_FFTW
+#include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
+#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
+#endif
 
 #ifdef BALL_QT_HAS_THREADS
 #	include <BALL/VIEW/KERNEL/threads.h>
