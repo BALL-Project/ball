@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.82 2006/01/09 22:33:12 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.83 2006/01/10 13:52:23 oliver Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -679,15 +679,16 @@ CXX_MAKEDEPEND="${CXX}"
 MAKEDEP_CXX_OPTS="-M"
 CXXFLAGS_D="${CXXFLAGS_D} -Wall -W -pedantic -Wno-long-long"
 CXXFLAGS_DI="${CXXFLAGS_DI} -g"
+
 dnl
 dnl	Some compiler versions have problems with -O3 unter Darwin (3.3.0),
 dnl so we go back to -O1.
 dnl
 if test "${OS}" = "Darwin" ; then
-CXXFLAGS_O="${CXXFLAGS_O} -O1 -Wall -W -pedantic -Wno-long-long -Wno-long-double"		
-CXXFLAGS_D="${CXXFLAGS_D} -O1"
+	CXXFLAGS_O="${CXXFLAGS_O} -O1 -Wall -W -pedantic -Wno-long-long -Wno-long-double"		
+	CXXFLAGS_D="${CXXFLAGS_D} -O1"
 else
-CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
+	CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
 fi
 MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
@@ -695,30 +696,30 @@ dnl  We do not need the -fPIC flag for CYGWIN and Darwin,
 dnl  because its code is always position independent.
 dnl  A warning is emitted otherwise.
 if test "${OS}" != "CYGWIN" -a "${OS}" != "Darwin" ; then
-CXXFLAGS="${CXXFLAGS} -fPIC"
+	CXXFLAGS="${CXXFLAGS} -fPIC"
 fi
 
 DYNAR="${CXX}"
 if test "${OS}" = "Solaris" ; then
-DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
+	DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
 else 
-if test "${OS}" = "Darwin" ; then
-DYNAROPTS="${DYNAROPTS} -headerpad_max_install_names -compatibility_version ${BALL_COMPATIBILITY_VERSION} -current_version ${BALL_CURRENT_VERSION} -dynamiclib -o"
-ADD_DYNAROPTS_LIBBALL="-seg1addr 0xb0000000"
-ADD_DYNAROPTS_LIBVIEW="-seg1addr 0x80000000"
-DYNAROPTS_PYMODULE="-headerpad_max_install_names -bundle -framework Python -o"
-RANLIB="ranlib -s "
-else	
-DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
-fi
+	if test "${OS}" = "Darwin" ; then
+		DYNAROPTS="${DYNAROPTS} -headerpad_max_install_names -compatibility_version ${BALL_COMPATIBILITY_VERSION} -current_version ${BALL_CURRENT_VERSION} -dynamiclib -o"
+		ADD_DYNAROPTS_LIBBALL="-seg1addr 0xb0000000"
+		ADD_DYNAROPTS_LIBVIEW="-seg1addr 0x80000000"
+		DYNAROPTS_PYMODULE="-headerpad_max_install_names -bundle -framework Python -o"
+		RANLIB="ranlib -s "
+	else	
+		DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
+	fi
 fi
 
 if test "${IS_EGXX}" = true; then
-PROJECT[]_TYPENAME=typename
+	PROJECT[]_TYPENAME=typename
 else
-if test "${CXX_VERSION_1}" -gt 2 -o "${CXX_VERSION_1}" -eq 2 -a "${CXX_VERSION_2}" -ge 8 ; then
-PROJECT[]_TYPENAME=typename
-fi
+	if test "${CXX_VERSION_1}" -gt 2 -o "${CXX_VERSION_1}" -eq 2 -a "${CXX_VERSION_2}" -ge 8 ; then
+		PROJECT[]_TYPENAME=typename
+	fi
 fi
 ])
 

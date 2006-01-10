@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.52 2006/01/08 21:17:28 anhi Exp $
+# $Id: Makefile,v 1.53 2006/01/10 13:52:25 oliver Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -146,7 +146,7 @@ MOC_SOURCES=\
 	stageSettingsData_moc.C\
 	$(FFT_DEPENDENT_MOC_SOURCES)
 
-UIC_SOURCES=\
+UIC_SOURCES=$(FFT_DEPENDENT_UIC_SOURCES)\
 	amberConfigurationDialogData.C\
 	minimizationDialogData.C\
 	bondPropertiesData.C\
@@ -175,8 +175,7 @@ UIC_SOURCES=\
 	pythonSettingsData.C\
 	setCameraData.C\
 	snapShotVisualisationData.C\
-	stageSettingsData.C\
-	$(FFT_DEPENDENT_UIC_SOURCES)
+	stageSettingsData.C
 
 UIC_HDR=$(UIC_SOURCES:Data.C=.dh)
 

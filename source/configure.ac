@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.31 2006/01/09 20:03:24 oliver Exp $
+dnl $Id: configure.ac,v 1.32 2006/01/10 13:52:25 oliver Exp $
 dnl
 dnl
 
@@ -34,7 +34,7 @@ dnl
 dnl retrieve the BALL version and print it to the console
 dnl for debugging purposes (people sending in config.log and the like).
 dnl
-BALL_VERSION_STRING=`grep define\ BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | cut -d\" -f2`
+BALL_VERSION_STRING=`grep define\ BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | cut -d\" -f2 | tr -d "a-zA-Z"`
 BALL_CURRENT_VERSION=${BALL_VERSION_STRING}
 BALL_COMPATIBILITY_VERSION=`echo ${BALL_VERSION_STRING} | cut -d. -f1-2`
 CF_VERSION_CHECK
