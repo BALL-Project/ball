@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.1 2006/01/13 15:36:07 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.2 2006/01/13 16:20:51 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -290,7 +290,7 @@ namespace BALL
 
 		void PyWidget::abortScript()
 		{
-			((PyWidget*)(parent()))->setStatusbarText("Aborting Python script");
+			 setStatusbarText("Aborting Python script");
 			 stop_script_ = true;
 		}
 
