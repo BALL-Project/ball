@@ -5,7 +5,7 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#include <qcanvas.h>
+#include <QCanvasWidget>
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <vector>
@@ -47,7 +47,7 @@ namespace BALL
 			///
       CanvasWidget (QWidget *parent  = 0, 
 										const char* name = 0, 
-										WFlags f         = 0);
+										Qt::WFlags f         = 0);
                 
 
       //Destructor

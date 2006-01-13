@@ -1,7 +1,9 @@
+//Added by qt3to4:
+#include <QLabel>
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.12 2005/12/23 17:02:16 amoll Exp $
+// $Id: server.h,v 1.12.2.1 2006/01/13 15:35:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_SERVER_H

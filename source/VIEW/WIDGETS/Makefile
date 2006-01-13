@@ -10,37 +10,38 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	dockWidget.C\
-	genericControl.C\
 	logView.C\
+ 	genericControl.C\
 	geometricControl.C\
-	datasetControl.C\
 	molecularControl.C\
 	molecularStructure.C\
 	scene.C\
-	canvasWidget.C\
-	regularData2DWidget.C\
-	regularData1DWidget.C\
 	dockingController.C\
-	helpViewer.C
+	helpViewer.C\
+	datasetControl.C
+
+#	canvasWidget.C\
+#	regularData2DWidget.C\
+#	regularData1DWidget.C\
 
 
 PYTHON_CPP_SOURCES=\
 	pyWidget.C
 
 MOC_SOURCES=\
-	dockWidget_moc.C\
-	genericControl_moc.C\
-	logView_moc.C\
 	datasetControl_moc.C\
+	dockWidget_moc.C\
+	dockingController_moc.C\
+	genericControl_moc.C\
 	geometricControl_moc.C\
+	helpViewer_moc.C\
+	logView_moc.C\
 	molecularControl_moc.C\
 	molecularStructure_moc.C\
-	scene_moc.C\
-	canvasWidget_moc.C\
-	regularData1DWidget_moc.C\
-	regularData2DWidget_moc.C\
-	dockingController_moc.C\
-	helpViewer_moc.C
+	scene_moc.C
+#	canvasWidget_moc.C\
+#	regularData1DWidget_moc.C\
+#	regularData2DWidget_moc.C\
 
 PYTHON_MOC_SOURCES=\
 	pyWidget_moc.C

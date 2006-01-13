@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174 2006/01/05 15:57:16 leonhardt Exp $
+// $Id: mainControl.C,v 1.174.2.1 2006/01/13 15:36:00 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -30,17 +30,18 @@
 #include <BALL/SYSTEM/directory.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/SYSTEM/timer.h>
+#include <BALL/VIEW/KERNEL/threads.h>
 
-#ifdef BALL_QT_HAS_THREADS
-#	include <BALL/VIEW/KERNEL/threads.h>
-#endif
-
-#include <qpopupmenu.h>	 // menus
 #include <qstatusbar.h>  // statusbar
 #include <qtooltip.h>
 #include <qpushbutton.h> // needed for preferences
 #include <qcursor.h>     // wait cursor
 #include <qmessagebox.h> 
+#include <QEvent>
+#include <QLabel>
+#include <QCustomEvent>
+#include <QAction>
+#include <QMenuBar>
 
 #include <algorithm> // sort
 
@@ -83,7 +84,7 @@ namespace BALL
 
 		MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 			throw()
-			:	QMainWindow(parent, name),
+			:	QMainWindow(parent),
 				ConnectionObject(),
 				Embeddable("BALL::VIEW::MainControl"),
 				fragment_db_(),
@@ -95,30 +96,31 @@ namespace BALL
 				main_control_preferences_(0),
 				network_preferences_(0),
 				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
-				preferences_id_(-1),
-				delete_id_(0),
 				preferences_file_(),
 				composites_locked_(false),
 				locking_widget_(0),
 				stop_simulation_(false),
 				simulation_thread_(0),
-				multi_threading_mode_(true),
+ 				multi_threading_mode_(true),
 				modular_widgets_(),
-				menu_entries_hints_(),
 				simulation_icon_(0),
 				working_dir_(),
 				logging_file_name_("VIEW.log"),
 				logging_to_file_(false),
 				about_to_quit_(false),
-				important_text_in_statusbar_(false)
+				important_text_in_statusbar_(false),
+				stop_simulation_action_(0),
+				complement_selection_action_(0),
+				open_action_(0),
+				save_project_action_(0),
+				preferences_action_(0),
+				delete_action_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new MainControl " << this << std::endl;
 		#endif
 
-		#ifndef BALL_QT_HAS_THREADS
-			multi_threading_mode_ = false;
-		#endif
+			setObjectName(name);
 
 			// store and load the INIFile from the Users homedir
 			// default for UNIX/LINUX
@@ -153,7 +155,7 @@ namespace BALL
 		void MainControl::setup_()
 			throw()
 		{
-			setDockMenuEnabled(false);
+//   			setDockMenuEnabled(false);
 
 			// copy the environment variable BALLVIEW_DATA_PATH to BALL_DATA_PATH
 			// this has to be done here also, if it was done in main.C, no idea why!
@@ -197,7 +199,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 						logging_file_name_.c_str() + "." +
 						"This file is created in either your home directory or\n"+ 
 						"in the directory with this executeable.",
-						QMessageBox::Abort,  QMessageBox::NoButton);
+						QMessageBox::Abort,  Qt::NoButton);
 				Log.error() << e << std::endl;
 
 				exit(-1);
@@ -206,7 +208,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			preferences_file_.read();
 
 			statusBar()->setMinimumSize(2, 25);
-			statusBar()->addWidget(message_label_, 20);
+			statusBar()->addPermanentWidget(message_label_, 20);
 
 			QFont font(message_label_->font());
 			font.setBold(true);
@@ -214,15 +216,15 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			message_label_->setFrameShape(QLabel::NoFrame);
 
 			connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
-			connect(menuBar(), SIGNAL(highlighted(int)), this, SLOT(menuItemHighlighted(int)));
+			connect(menuBar(), SIGNAL(hovered(QAction*)), this, SLOT(menuItemHighlighted(QAction*)));
 
-			QToolTip::setWakeUpDelay(500);
-			QToolTip::setGloballyEnabled(true);
+//   			QToolTip::setWakeUpDelay(500);
+//   			QToolTip::setGloballyEnabled(true);
 
 			simulation_icon_ = new QLabel(statusBar());
 			simulation_icon_->setMaximumSize(14,16);
-			statusBar()->addWidget(simulation_icon_, 1, TRUE );
-			QToolTip::add(simulation_icon_, "simulation status");
+			statusBar()->addPermanentWidget(simulation_icon_, false );
+//   			QToolTip::add(simulation_icon_, "simulation status");
 			QPixmap icon(simulation_running_xpm_);
 
 			simulation_icon_->setPixmap(icon);
@@ -234,18 +236,22 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 		MainControl::MainControl(const MainControl& main_control)
 			throw()
-			:	QMainWindow(0, ""),
+			:	QMainWindow(0),
 				ConnectionObject(main_control),
 				Embeddable(main_control),
 				selection_(),
 				main_control_preferences_(0),
 				network_preferences_(0),
 				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
-				preferences_id_(-1),
-				delete_id_(0),
 				composites_locked_(false),
 				locking_widget_(0),
-				about_to_quit_(false)
+				about_to_quit_(false),
+				stop_simulation_action_(0),
+				complement_selection_action_(0),
+				open_action_(0),
+				save_project_action_(0),
+				preferences_action_(0),
+				delete_action_(0)
 		{
 			setup_();
 		}
@@ -260,20 +266,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			clear();
 		}
 
-		QPopupMenu* MainControl::initPopupMenu(int ID)
+		QMenu* MainControl::initPopupMenu(int ID)
 			throw()
 		{
-			QPopupMenu* menu = 0;
-			QMenuItem* item = menuBar()->findItem(ID);
-			if ((item != 0) && (item->popup() != 0))
-			{
-				return item->popup();
-			}
+			if (id_to_menu_.has(ID)) return id_to_menu_[ID];
 
-			menu = new QPopupMenu(this);
-			CHECK_PTR(menu);
-
-			connect(menu, SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
+			QMenu* menu = 0;
 
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "new menu entry: " << ID << endl;	
@@ -281,62 +279,62 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			switch (ID)
 			{
 				case FILE:
-					menuBar()->insertItem("&File", menu, FILE, FILE);
+					menu = menuBar()->addMenu("&File");
 					break;
 				case FILE_OPEN:
-					initPopupMenu(FILE)->insertItem("&Open", menu, FILE_OPEN);
+					menu = initPopupMenu(FILE)->addMenu("&Open");
 					break;
 				case FILE_IMPORT:
-					initPopupMenu(FILE)->insertItem("&Import", menu, FILE_IMPORT);
+					menu = initPopupMenu(FILE)->addMenu("&Import");
 					break;
 				case FILE_EXPORT:
-					initPopupMenu(FILE)->insertItem("&Export Image", menu, FILE_EXPORT);
+					menu = initPopupMenu(FILE)->addMenu("&Export Image");
 					break;
 				case EDIT:
-					menuBar()->insertItem("&Edit", menu, EDIT, EDIT);
+					menu = menuBar()->addMenu("&Edit");
 					break;
 				case BUILD:
-					menuBar()->insertItem("&Build", menu, BUILD, BUILD);
+					menu = menuBar()->addMenu("&Build");
 					break;
 				case DISPLAY:
-					menuBar()->insertItem("&Display", menu, DISPLAY, DISPLAY);
+					menu = menuBar()->addMenu("&Display");
 					break;
 				case DISPLAY_VIEWPOINT:
-					initPopupMenu(DISPLAY)->insertItem("&Viewpoint", menu, DISPLAY_VIEWPOINT);
+					menu = initPopupMenu(DISPLAY)->addMenu("&Viewpoint");
 					break;
 				case DISPLAY_STEREO:
-					initPopupMenu(DISPLAY)->insertItem("&Stereo", menu, DISPLAY_STEREO);
+					menu = initPopupMenu(DISPLAY)->addMenu("&Stereo");
 					break;
 				case DISPLAY_ANIMATION:
-					initPopupMenu(DISPLAY)->insertItem("&Animation", menu, DISPLAY_ANIMATION);
-					menu->setCheckable(true);
+					menu = initPopupMenu(DISPLAY)->addMenu("&Animation");
 					break;
 				case MOLECULARMECHANICS:
-					menuBar()->insertItem("&Molecular Mechanics", menu, MOLECULARMECHANICS, -1);
+					menu = menuBar()->addMenu("&Molecular Mechanics");
 					break;
 				case CHOOSE_FF:
-					initPopupMenu(MOLECULARMECHANICS)->insertItem("Force Field", menu, CHOOSE_FF);
-					menu->setCheckable(true);
+					menu = initPopupMenu(MOLECULARMECHANICS)->addMenu("Force Field");
 					break;
 				case TOOLS:
-					menuBar()->insertItem("&Tools", menu, TOOLS, TOOLS);
+					menu = menuBar()->addMenu("&Tools");
 					break;
 				case TOOLS_PYTHON:
-					initPopupMenu(TOOLS)->insertItem("&Python", menu, TOOLS_PYTHON);
+					menu = initPopupMenu(TOOLS)->addMenu("&Python");
 					break;
 				case WINDOWS:
-					menuBar()->insertItem("&Windows", menu, WINDOWS, WINDOWS);
+					menu = menuBar()->addMenu("&Windows");
 					break;
 				case USER:
-					menuBar()->insertItem("&User", menu, USER, USER);
+					menu = menuBar()->addMenu("&User");
 					break;
 				case HELP:
-					menuBar()->insertItem("&Help", menu, HELP, HELP);
+					menu = menuBar()->addMenu("&Help");
 					break;
 				default:
-					delete menu;
-					menu = 0;
+					return 0;
 			}
+
+			connect(menu, SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
+			id_to_menu_[ID] = menu;
 
 			return menu;
 		}
@@ -348,19 +346,17 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			primitive_manager_.clear();
 			composite_manager_.clear();
 
-			return;
-			#ifdef BALL_QT_HAS_THREADS
 			if (simulation_thread_ != 0)
 			{
-				if (simulation_thread_->running())
+				if (simulation_thread_->isRunning())
 				{
+					simulation_thread_->terminate();
 					simulation_thread_->wait();
 				}
 
 				delete simulation_thread_;
 				simulation_thread_ = 0;
 			}
-			#endif
 		}
 			
 		void MainControl::show()
@@ -370,7 +366,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			#endif
 
 			// prevent multiple inserting of menu entries, by calls of showFullScreen(), ...
-			if (preferences_id_ != -1) 
+			if (preferences_action_ != 0) 
 			{
 				QMainWindow::show();
 				return;
@@ -396,18 +392,21 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				(*it)->initializePreferencesTab(*preferences_dialog_);
 			}
 
+			preferences_dialog_->workaround();
+			preferences_dialog_->showEntry(main_control_preferences_);
+
 			// own menu entries
 			insertPopupMenuSeparator(MainControl::FILE);
-			insertMenuEntry(MainControl::FILE, "&Quit", qApp, SLOT(quit()), CTRL+Key_Q);	
+			insertMenuEntry(MainControl::FILE, "&Quit", qApp, SLOT(quit()), Qt::CTRL+Qt::Key_Q);	
 
 			// if the preferences dialog has any tabs then show it
 			if (preferences_dialog_->hasPages())
 			{
 				insertPopupMenuSeparator(MainControl::EDIT);
-				preferences_id_ = insertMenuEntry(MainControl::EDIT,
+				preferences_action_ = insertMenuEntry(MainControl::EDIT,
 																					"Preferences", 
 																					preferences_dialog_, 
-																					SLOT(show()), CTRL+Key_Z);
+																					SLOT(show()), Qt::CTRL+Qt::Key_Z);
 			}
 
 			fetchPreferences(preferences_file_);
@@ -420,11 +419,11 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			if (preferences_dialog_ != 0 &&
 					preferences_dialog_->hasPages())
 			{
-				menuBar()->setItemChecked(preferences_id_, preferences_dialog_->isVisible());			
+				preferences_action_->setChecked(preferences_dialog_->isVisible());			
 			}
 
 			// overridden in Controls
-			if (delete_id_ != 0) menuBar()->setItemEnabled(delete_id_, false);
+			if (delete_action_ != 0) delete_action_->setEnabled(false);
 
 			// checks all modular widgets 
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
@@ -433,10 +432,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				(*it)->checkMenu(*this);
 			}
 
-			menuBar()->setItemEnabled(stop_simulation_id_, simulation_thread_ != 0);
-			menuBar()->setItemEnabled(complement_selection_id_, !composites_locked_);
+			stop_simulation_action_->setEnabled(simulation_thread_ != 0);
+			complement_selection_action_->setEnabled(!composites_locked_);
 
-			menuBar()->setItemEnabled(FILE_OPEN, !composites_locked_);
+			initPopupMenu(FILE_OPEN)->setEnabled(!composites_locked_);
 		}
 
 
@@ -456,7 +455,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
 			for (; it != modular_widgets_.end(); ++it)
 			{
-				(*it)->finalizePreferencesTab(*preferences_dialog_);
+//   				(*it)->finalizePreferencesTab(*preferences_dialog_);
 				(*it)->finalizeWidget(*this);
 			}
 
@@ -466,18 +465,16 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				unregisterConnectionObject(**it);
 			}
 
-			#ifdef BALL_QT_HAS_THREADS
-				if (simulation_thread_ != 0)
+			if (simulation_thread_ != 0)
+			{
+				if (simulation_thread_->isRunning()) 
 				{
-					if (simulation_thread_->running()) 
-					{
-						simulation_thread_->terminate();
-						simulation_thread_->wait();
-					}
-					delete simulation_thread_;
-					simulation_thread_ = 0;
+					simulation_thread_->terminate();
+					simulation_thread_->wait();
 				}
-			#endif
+				delete simulation_thread_;
+				simulation_thread_ = 0;
+			}
 
 			modular_widgets_.clear();
 
@@ -548,11 +545,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 						rep->update(false);
 					}
 				}
-				
-			#ifndef BALL_QT_HAS_THREADS
-				// if build multithreaded, the Representation will send the message itself
-				notify_(new RepresentationMessage(*rep, RepresentationMessage::UPDATE));
-			#endif
 			}
 
 			return changed_representations.size() != 0;
@@ -686,67 +678,33 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			return mc;
 		}
 
-		Index MainControl::current_id_ = 15000;
-
-		Index MainControl::insertMenuEntry(int parent_id, const String& name, const QObject* receiver, 
-																		 const char* slot, int accel, int pos)
+		QAction* MainControl::insertMenuEntry(Position parent_id, const String& name, const QObject* receiver, 
+																		 const char* slot, const QKeySequence& accel)
 			throw()
 		{
-			QMenuBar* menu_bar = menuBar();
-			if (menu_bar == 0) return -1;
-			
-			// enable the corresponding popup menu
-			menu_bar->setItemEnabled(parent_id, true);
-			QPopupMenu* popup = initPopupMenu(parent_id);
+			QMenu* popup = initPopupMenu(parent_id);
 			if (popup == 0)
 			{
 				Log.error() << "MainControl::insertMenuEntry: cannot find popup menu for ID " << parent_id << endl;
-				return -1;
+				return 0;
 			}
 
-			Index entry_ID = getNextID_();
-			popup->insertItem(name.c_str(), receiver, slot, accel, entry_ID, pos);
+			QAction* action = popup->addAction(name.c_str(), receiver, slot, accel);
 
-			return entry_ID;
+			return action;
 		}
-
-		void MainControl::removeMenuEntry(Index parent_id, Index entry_ID)
-			throw()
-		{
-			if (about_to_quit_) return;
-
-			QMenuBar* menu_bar = menuBar();
-			if (menu_bar == 0) return;
-			
-			QMenuItem* item = menuBar()->findItem(parent_id);
-			if ((item == 0) || (item->popup() == 0) || entry_ID == -1) return;
-			QPopupMenu* popup = item->popup();
-
-			popup->removeItem(entry_ID);
-		}
-
 
 		void MainControl::insertPopupMenuSeparator(int ID)
 			throw()
 		{
-			QMenuBar* menu_bar = menuBar();
-			if (menu_bar != 0)
+			QMenu* popup = initPopupMenu(ID);
+			if (popup == 0)
 			{
-				// enable the corresponding popup menu
-				menu_bar->setItemEnabled(ID, true);
-				//
-				QPopupMenu* popup = initPopupMenu(ID);
-				if (popup == 0)
-				{
-					Log.error() << "MainControl::insertMenuEntry: cannot find popup menu for ID " << ID << endl;
-				}
-				else
-				{
-					popup->insertSeparator();
-				}
+				Log.error() << "MainControl::insertMenuEntry: cannot find popup menu for ID " << ID << endl;
+				return;
 			}
+			popup->addSeparator();
 		}
-
 
 		void MainControl::initializePreferencesTab_()
 			throw()
@@ -754,13 +712,11 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			main_control_preferences_ = new MainControlPreferences();
 
 			preferences_dialog_->insertEntry(main_control_preferences_);
-			preferences_dialog_->showEntry(main_control_preferences_);
 
 			main_control_preferences_->enableLoggingToFile(logging_to_file_);
 
 			network_preferences_ = new NetworkPreferences();
 			preferences_dialog_->insertEntry(network_preferences_);
-			preferences_dialog_->showEntry(network_preferences_);
 		}
 
 		void MainControl::applyPreferencesClicked_()
@@ -783,7 +739,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			if (main_control_preferences_ != 0)
 			{
 				QApplication::setStyle(main_control_preferences_->getStyle());
-				BALL_VIEW_DOCKWINDOWS_SHOW_LABELS = main_control_preferences_->showLabelsEnabled();
 				QWidget::update();
 
 				if (!main_control_preferences_->loggingToFileEnabled()) 
@@ -843,18 +798,14 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 	 		inifile.insertValue("WINDOWS", "Main::height", String(height()));
 			inifile.insertValue("WINDOWS", "File::working_dir", working_dir_);
 
-			QString s;
-			QTextStream stream( &s, IO_ReadWrite);
-			stream.setEncoding(QTextStream::Latin1);
-			stream << *this;
-			String mys(s.data());
-			for (Position p = 0; p < mys.size(); p++)
+			String mys;
+			QByteArray ba = saveState();
+			for (Position p = 0; p < (Position) ba.size(); p++)
 			{
-				if (mys[p] == '\n') 
-				{
-					mys[p] = '*';
-				}
+				mys += String((short) ba.at(p));
+				mys += "|";
 			}
+
 			inifile.insertValue("WINDOWS", "Main::dockwidgets", mys);
 
 			// finalizes all modular widgets
@@ -1175,7 +1126,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << text << std::endl;
 #endif
-			if (message_label_->text().ascii() == text.c_str()) return;
+			if (ascii(message_label_->text()) == text) return;
 
 			if (beep) 
 			{
@@ -1189,17 +1140,20 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			important_text_in_statusbar_ = important;
 
-			message_label_->setText(text.c_str());
+			QPalette pal(message_label_->palette());
+
 			if (important)
 			{
-				message_label_->setPaletteForegroundColor( QColor(255,0,0) );
+				pal.setColor(message_label_->foregroundRole(), QColor(255,0,0));
 				Log.info() << text << std::endl;
 			}
 			else
 			{
-				message_label_->setPaletteForegroundColor( QColor(0,0,0) );
+				pal.setColor(message_label_->foregroundRole(), QColor(0,0,0));
 			}
 
+			message_label_->setPalette(pal);
+			message_label_->setText(text.c_str());
 			timer_.start(6000);
 		}
 
@@ -1207,7 +1161,9 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			if (important_text_in_statusbar_)
 			{
-				message_label_->setPaletteForegroundColor( QColor(0,0,0) );
+				QPalette pal(message_label_->palette());
+				pal.setColor(message_label_->foregroundRole(), QColor(0,0,0));
+				message_label_->setPalette(pal);
 				important_text_in_statusbar_ = false;
 				timer_.start(6000);
 			}
@@ -1218,57 +1174,61 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		void MainControl::restoreWindows(const INIFile& inifile)
 			throw()
 		{
-			// the geometry of the main window
-			int x_pos = x();
-			int y_pos = y();
-			int w = 1024;
-			int h = 800;
-			if (inifile.hasEntry("WINDOWS", "Main::x"))
+			try
 			{
-				x_pos = inifile.getValue("WINDOWS", "Main::x").toInt();
-			}
-			if (inifile.hasEntry("WINDOWS", "Main::y"))
-			{
-				y_pos = inifile.getValue("WINDOWS", "Main::y").toInt();
-			}
-			if (inifile.hasEntry("WINDOWS", "Main::height"))
-			{
-				h = inifile.getValue("WINDOWS", "Main::height").toInt();
-			}
-			if (inifile.hasEntry("WINDOWS", "Main::width"))
-			{
-				w = inifile.getValue("WINDOWS", "Main::width").toInt();
-			}
+				// the geometry of the main window
+				int x_pos = x();
+				int y_pos = y();
+				int w = 1024;
+				int h = 800;
+				if (inifile.hasEntry("WINDOWS", "Main::x"))
+				{
+					x_pos = inifile.getValue("WINDOWS", "Main::x").toInt();
+				}
+				if (inifile.hasEntry("WINDOWS", "Main::y"))
+				{
+					y_pos = inifile.getValue("WINDOWS", "Main::y").toInt();
+				}
+				if (inifile.hasEntry("WINDOWS", "Main::height"))
+				{
+					h = inifile.getValue("WINDOWS", "Main::height").toInt();
+				}
+				if (inifile.hasEntry("WINDOWS", "Main::width"))
+				{
+					w = inifile.getValue("WINDOWS", "Main::width").toInt();
+				}
 
-			resize(w,h);
-			move(QPoint(x_pos, y_pos));
+				resize(w,h);
+				move(QPoint(x_pos, y_pos));
 
-			// now the dockwidgets
-			if (!inifile.hasEntry("WINDOWS", "Main::dockwidgets")) return;
+				// now the dockwidgets
+				if (!inifile.hasEntry("WINDOWS", "Main::dockwidgets")) return;
 
-			String mys(inifile.getValue("WINDOWS", "Main::dockwidgets"));
-			for (Position p = 0; p < mys.size(); p++)
-			{
-				if (mys[p] == '*') mys[p] = '\n';
+				String mys(inifile.getValue("WINDOWS", "Main::dockwidgets"));
+				vector<String> sv;
+				mys.split(sv, "|");
+
+				QByteArray s;
+				s.reserve(sv.size());
+				for (Position p = 0; p < sv.size(); p++)
+				{
+					s.append((char) sv[p].toShort());
+				}
+
+				restoreState(s);
 			}
-			QString s = mys.c_str();
-			QTextStream stream( &s, IO_ReadWrite);
-			stream >> *this;
+			catch(...)
+			{
+				Log.error() << "Could not restore settings of main windows" << std::endl;
+			}
 		}
 
-		void MainControl::menuItemHighlighted(int id)
+		void MainControl::menuItemHighlighted(QAction* action)
 			throw()
 		{
-			if (menu_entries_hints_.has(id)) 
-			{
-				setStatusbarText(menu_entries_hints_[id]);
-			}
-			else
-			{
-				setStatusbarText("");
-			}
+			last_highlighted_menu_entry_ = action;
 
-			last_highlighted_menu_entry_ = id;
+			setStatusbarText(ascii(action->toolTip()));
 		}
 
 		void MainControl::dump(ostream& s, Size depth) const
@@ -1406,16 +1366,16 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		void MainControl::insertDeleteEntry()
 			throw()
 		{
-			if (delete_id_ == 0) 
+			if (delete_action_ == 0) 
 			{
-				delete_id_ = insertMenuEntry(MainControl::EDIT, "Delete", this, SLOT(deleteClicked()));	
+				delete_action_ = insertMenuEntry(MainControl::EDIT, "Delete", this, SLOT(deleteClicked()));	
 			}
 		}
 
 		void MainControl::setDeleteEntryEnabled(bool state)
 			throw()
 		{
-			menuBar()->setItemEnabled(delete_id_, state);
+			delete_action_->setEnabled(state);
 		}
 
 		void MainControl::setBusyMode_(bool state) 
@@ -1440,18 +1400,15 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 		void MainControl::stopSimulation() 
 		{
-		#ifdef BALL_QT_HAS_THREADS
 			if (simulation_thread_ == 0) return;
 
 			stop_simulation_ = true;
 			setStatusbarText("Terminating calculation ...", true);
-			#endif
 		}
 
 		// is called when the SimulationThread has finished
 		void MainControl::stopedSimulation_()
 		{
-			#ifdef BALL_QT_HAS_THREADS
 			if (simulation_thread_ != 0)
 			{
 				DCDFile* file = simulation_thread_->getDCDFile();
@@ -1480,23 +1437,27 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			unlockCompositesFor(locking_widget_);
 
 			notify_(new FinishedSimulationMessage);
-			#endif
 		}
 
-		void MainControl::customEvent(QCustomEvent* e)
+		bool MainControl::event(QEvent* e)
 		{
-		#ifdef BALL_QT_HAS_THREADS
+			if (e->type() < QEvent::User)
+			{
+				return QMainWindow::event(e);
+			}
+
 			if (e->type() == (QEvent::Type)FINISHED_REPRESENTATION_UPDATE_EVENT)
 			{
-				qApp->processEvents(200);
-				primitive_manager_.finishedUpdate_();
-				return;
+//   				processEvents(200);
+				FinishedRepresentionUpdateEvent* fe = dynamic_cast<FinishedRepresentionUpdateEvent*> (e);
+				primitive_manager_.finishedUpdate_(fe->getRepresentation());
+				return true;
 			}
 
 			if (e->type() == (QEvent::Type)SIMULATION_THREAD_FINISHED_EVENT)
 			{
 				stopedSimulation_();
-				return;
+				return true;
 			}
 			
 			if (e->type() == (QEvent::Type)LOG_EVENT)
@@ -1505,10 +1466,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				if (so->showOnlyInLogView())
 				{
 					Log.info() << so->getMessage() << std::endl;
-					return;
+					return true;
 				}
  				setStatusbarText(so->getMessage(), so->isImportant());
-				return;
+				return true;
 			}
 			
 			if (e->type() == (QEvent::Type)UPDATE_COMPOSITE_EVENT)
@@ -1517,16 +1478,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				if (so->getComposite() == 0) 
 				{
 					Log.warn() << "Could not update visualisation in " << __FILE__ << __LINE__ << std::endl;
-					return;
+					return true;
 				}
 
 				updateRepresentationsOf(* const_cast<Composite*>(so->getComposite()), true);
-
-				// prevent deadlock if no representation has to be updated:
-				if (!primitive_manager_.getUpdateThread().running())
-				{
-					getPrimitiveManager().setUpdatePending(false);
-				}
 			}
 
 			if (e->type() == (QEvent::Type)DOCKING_FINISHED_EVENT)
@@ -1535,38 +1490,29 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				if (dock_event->getConformationSet() == 0)
 				{
 					Log.warn() << "Could not send docking finished message in " << __FILE__ << " " << __LINE__ << std::endl;
-					return;
+					return true;
 				}
 				// send a DockingFinishedMessage
 				DockingFinishedMessage* dock_fin_m = new DockingFinishedMessage(dock_event->wasAborted());
 				dock_fin_m->setConformationSet(dock_event->getConformationSet());
 				notify_(dock_fin_m);
-				return;
+				return true;
 			}
-		#else
-			e->type(); // prevent warning for single thread build
-		#endif
 		}
 
 		bool MainControl::setSimulationThread(SimulationThread* thread)
 			throw()
-		{
-			#ifdef BALL_QT_HAS_THREADS
-				if (!lockCompositesFor(0)) return false;
+	{
+			if (!lockCompositesFor(0)) return false;
 
-				simulation_thread_ = thread;
-				if (thread != 0) 
-				{
-					thread->setMainControl(this);
-				}
+			simulation_thread_ = thread;
+			if (thread != 0) 
+			{
+				thread->setMainControl(this);
+			}
 
-				checkMenus();
-				setBusyMode_(thread != 0);
-
-			#else
-				// prevent warning
-				if (thread != 0) return true;
-			#endif
+			checkMenus();
+			setBusyMode_(thread != 0);
 
 			return true;
 		}
@@ -1669,9 +1615,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		bool MainControl::lockCompositesFor(ModularWidget* widget)
 			throw()
 		{
-#ifdef BALL_QT_HAS_THREADS
 			if (!composites_locked_mutex_.tryLock()) return false;
-#endif
 
 			locking_widget_ = widget;
 			composites_locked_ = true;
@@ -1683,10 +1627,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			throw()
 		{
 			if (locking_widget_ != widget) return false;
-#ifdef BALL_QT_HAS_THREADS
 			composites_locked_mutex_.unlock();
 			composites_locked_wait_condition_.wakeAll();
-#endif
 			composites_locked_ = false;
 			setBusyMode_(false);
 			return true;
@@ -1876,15 +1818,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 	bool MainControl::useMultithreading()
 		throw() 
 	{ 
-#ifndef BALL_QT_HAS_THREADS
-		return false;
-#endif
 		return multi_threading_mode_;
 	}
 
 	void MainControl::processEvents(Size ms)
 	{
-		qApp->processEvents(ms);
+		qApp->processEvents(QEventLoop::AllEvents, ms);
 	}
 				
 	void MainControl::quickSave() 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.37 2005/12/23 17:03:27 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.37.2.1 2006/01/13 15:35:52 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -22,20 +22,40 @@
 
 #include <qslider.h>
 #include <qlabel.h>
-#include <qwidgetstack.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		ModelSettingsDialog::ModelSettingsDialog( QWidget* parent,  const char* name, WFlags fl )
-			: ModelSettingsDialogData( parent, name, fl ),
+		ModelSettingsDialog::ModelSettingsDialog( QWidget* parent,  const char* name, Qt::WFlags fl )
+			: QDialog(parent, fl),
+				Ui_ModelSettingsDialogData(),
 				PreferencesEntry()
 		{
+			setupUi(this);
+			setObjectName(name);
 			setINIFileSectionName("MODEL_OPTIONS");
+
+			// signals and slots connections
+			connect( ball_stick_cylinder_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( ballStickCylinderRadiusChanged() ) );
+			connect( ball_stick_sphere_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( ballStickSphereRadiusChanged() ) );
+			connect( cartoon_dna_base_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonDNABaseRadiusChanged() ) );
+			connect( cartoon_dna_helix_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonDNAHelixRadiusChanged() ) );
+			connect( cartoon_dna_ladder_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonDNALadderRadiusChanged() ) );
+			connect( cartoon_helix_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonHelixRadiusChanged() ) );
+			connect( cartoon_tube_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonTubeRadiusChanged() ) );
+			connect( force_max_length_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceMaxLengthChanged() ) );
+			connect( force_scaling_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceScalingChanged() ) );
+			connect( hbonds_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( hbondsRadiusChanged() ) );
+			connect( stick_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( stickRadiusChanged() ) );
+			connect( strand_arrow_width_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonStrandArrowWidthChanged() ) );
+			connect( strand_height_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonStrandHeightChanged() ) );
+			connect( strand_width_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonStrandWidthChanged() ) );
+			connect( surface_probe_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( probeRadiusChanged() ) );
+			connect( tube_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( tubeRadiusChanged() ) );
+			connect( vdw_radius_factor_slider, SIGNAL( valueChanged(int) ), this, SLOT( VDWfactorChanged() ) );
 
 			setDefaultValues_();
 
@@ -59,7 +79,8 @@ namespace BALL
 			registerObject_(cartoon_dna_helix_radius_slider);
 			registerObject_(cartoon_dna_ladder_radius_slider);
 			registerObject_(cartoon_dna_base_radius_slider);
-			registerObject_(dna_cartoon_model_type);
+			registerObject_(cartoon_dna_wac);
+			registerObject_(cartoon_dna_ladder);
 			registerObject_(ribbons_enabled);
 			registerObject_(two_colored_ribbons);
 			

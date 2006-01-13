@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.sip,v 1.12 2005/12/23 17:02:57 amoll Exp $
+// $Id: pyWidget.sip,v 1.12.2.1 2006/01/13 15:35:40 amoll Exp $
 //
 
 class PyWidget
@@ -24,6 +24,6 @@ class PyWidget
 	virtual void initializeWidget(MainControl& /main_control/) throw();
 	virtual void finalizeWidget(MainControl& /main_control/) throw();
 	bool toAbortScript() throw();
-	bool run(const String&) throw();
+	bool runFile(const String&) throw();
 	bool runAgain();
 }; 

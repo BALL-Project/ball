@@ -1,19 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.16 2005/12/23 17:03:22 amoll Exp $
+// $Id: amberConfigurationDialog.C,v 1.16.2.1 2006/01/13 15:35:42 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
+#include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <qfiledialog.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
-#include <qbuttongroup.h>
+#include <QFileDialog>
 
 namespace BALL
 {
@@ -21,10 +21,20 @@ namespace BALL
 	{
 
 		AmberConfigurationDialog::AmberConfigurationDialog(QWidget* parent, const char* name)
-			:	AmberConfigurationDialogData(parent, name),
+			:	QDialog(parent),
+				Ui_AmberConfigurationDialogData(),
 				amber_(0)
 		{
+			setupUi(this);
+
+			// signals and slots connections
+			connect( close_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
+			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
+			connect( reset_button, SIGNAL( clicked() ), this, SLOT( resetOptions() ) );
+			connect( browse_button, SIGNAL( clicked() ), this, SLOT( browseParameterFiles() ) );
+
 			setINIFileSectionName("AMBER");
+			setObjectName(name);
 
 			registerObject_(nonbonded_cutoff_line_edit);
 			registerObject_(vdw_cutoff_line_edit);
@@ -53,14 +63,14 @@ namespace BALL
 		{
 			// look up the full path of the parameter file
 			Path p;
-			String filename = p.find(parameter_file_edit->text().ascii());
+			String filename = p.find(ascii(parameter_file_edit->text()));
 
 			if (filename == "")
 			{
-				filename = parameter_file_edit->text().ascii();
+				filename = ascii(parameter_file_edit->text());
 			}
 			QString tmp = filename.c_str();
-			QString result = QFileDialog::getOpenFileName(tmp, "*.ini", 0, "Select an AMBER parameter file");
+			QString result = QFileDialog::getOpenFileName(0, "Select an AMBER parameter file", tmp, "*.ini", 0);
 			if (!result.isEmpty())
 			{
 				// store the new filename in the lineedit field
@@ -92,7 +102,7 @@ namespace BALL
 		float AmberConfigurationDialog::getValue_(const QLineEdit* edit) const
 			throw(Exception::InvalidFormat)
 		{
-			return String(edit->text().ascii()).toFloat();
+			return ascii(edit->text()).toFloat();
 		}
 
 		void AmberConfigurationDialog::applyTo(AmberFF& amber)
@@ -117,17 +127,17 @@ namespace BALL
 				amber.options[AmberFF::Option::SCALING_ELECTROSTATIC_1_4] = getValue_(scaling_electrostatic_1_4_line_edit);
 				amber.options[AmberFF::Option::SCALING_VDW_1_4] = getValue_(scaling_vdw_1_4_line_edit);
 
-				amber.options[AmberFF::Option::FILENAME] = String(parameter_file_edit->text().ascii());
+				amber.options[AmberFF::Option::FILENAME] = ascii(parameter_file_edit->text());
 				
 				bool error = false;
-				if (String(max_unassigned_atoms->text().ascii()).toUnsignedInt() == 0) 
+				if (ascii(max_unassigned_atoms->text()).toUnsignedInt() == 0) 
 				{
 					error = true;
 				}
 
 				try
 				{
-					amber.setMaximumNumberOfErrors(String(max_unassigned_atoms->text().ascii()).toUnsignedInt());
+					amber.setMaximumNumberOfErrors(ascii(max_unassigned_atoms->text()).toUnsignedInt());
 				}
 				catch(...)
 				{

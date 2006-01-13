@@ -1,19 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.C,v 1.10 2005/12/23 17:03:23 amoll Exp $
+// $Id: charmmConfigurationDialog.C,v 1.10.2.1 2006/01/13 15:35:43 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
+#include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <qfiledialog.h>
+#include <QFileDialog>
 #include <qlineedit.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
-#include <qbuttongroup.h>
 
 namespace BALL
 {
@@ -21,10 +21,20 @@ namespace BALL
 	{
 
 		CharmmConfigurationDialog::CharmmConfigurationDialog(QWidget* parent, const char* name)
-			:	CharmmConfigurationDialogData(parent, name),
+			:	QDialog(parent),
+				Ui_CharmmConfigurationDialogData(),
 				charmm_(0)
 		{
+			setupUi(this);
+
+			// signals and slots connections
+			connect( browse_button, SIGNAL( clicked() ), this, SLOT( browseParameterFiles() ) );
+			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
+			connect( close_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
+			connect( reset_button, SIGNAL( clicked() ), this, SLOT( resetOptions() ) );
+
 			setINIFileSectionName("CHARMM");
+			setObjectName(name);
 
 			registerObject_(nonbonded_cutoff_line_edit);
 			registerObject_(vdw_cutoff_line_edit);
@@ -60,18 +70,18 @@ namespace BALL
 				filename = getFilename();
 			}
 			QString tmp = filename.c_str();
-			QString result = QFileDialog::getOpenFileName(tmp, "*.ini", 0, "Select a Charmm parameter file");
+			QString result = QFileDialog::getOpenFileName(0,"Select a Charmm parameter file", tmp, "*.ini", 0);
 			if (!result.isEmpty())
 			{
 				// store the new filename in the lineedit field
-				parameter_file_edit->setText(result.ascii());
+				parameter_file_edit->setText(result);
 			}
 		}
 
 		const String& CharmmConfigurationDialog::getFilename() const
 		{
 			static String filename;
-			filename = parameter_file_edit->text().ascii();
+			filename = ascii(parameter_file_edit->text());
 			return filename;
 		}
 		
@@ -120,8 +130,8 @@ namespace BALL
 				bool error = false;
 				try
 				{
-					if (String(max_unassigned_atoms->text().ascii()).toUnsignedInt() == 0) error = true;
-					charmm.setMaximumNumberOfErrors(String(max_unassigned_atoms->text().ascii()).toUnsignedInt());
+					if (ascii(max_unassigned_atoms->text()).toUnsignedInt() == 0) error = true;
+					charmm.setMaximumNumberOfErrors(ascii(max_unassigned_atoms->text()).toUnsignedInt());
 				}
 				catch(...)
 				{
@@ -221,7 +231,7 @@ namespace BALL
 		float CharmmConfigurationDialog::getValue_(const QLineEdit* edit) const
 			throw(Exception::InvalidFormat)
 		{
-			return String(edit->text().ascii()).toFloat();
+			return ascii(edit->text()).toFloat();
 		}
 
 		void CharmmConfigurationDialog::resetOptions()

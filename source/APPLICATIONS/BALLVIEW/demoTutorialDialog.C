@@ -18,8 +18,8 @@
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/WIDGETS/logView.h>
-#include <BALL/VIEW/WIDGETS/pyWidget.h>
-#include <BALL/VIEW/WIDGETS/datasetControl.h>
+//   #include <BALL/VIEW/WIDGETS/pyWidget.h> /// ?????????????
+//   #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/WIDGETS/helpViewer.h>
@@ -29,7 +29,7 @@
 
 #include <qpushbutton.h>
 #include <qmessagebox.h>
-#include <qtextbrowser.h>
+#include <QTextBrowser>
 
 namespace BALL
 {
@@ -38,12 +38,17 @@ namespace BALL
 
 DemoTutorialDialog::DemoTutorialDialog(QWidget* parent, const char* name)
 	throw()
-	:	DemoTutorialDialogData(parent, name),
+	:	QDialog(parent),
+		Ui_DemoTutorialDialogData(),
 		ModularWidget(name)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new DemoTutorialDialog " << this << std::endl;
 #endif
+
+	setupUi(this);
+	setObjectName(name);
+
 	// register the widget with the MainControl
  	ModularWidget::registerWidget(this);
 	hide();
@@ -59,7 +64,7 @@ DemoTutorialDialog::~DemoTutorialDialog()
 
 void DemoTutorialDialog::initDemo_()
 {
-	setCaption("BALLView Demo");
+	setWindowTitle("BALLView Demo");
 
 	prefix_ = getBaseDir_() + "demo";
 
@@ -94,7 +99,7 @@ void DemoTutorialDialog::initDemo_()
 			msg += "It should be found in " + Path().getDataPath() + "bpti.pdb";
 
 			QMessageBox::critical(0, "Error while starting BALLView Demo", msg.c_str(),
-					QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+					QMessageBox::Ok, Qt::NoButton, Qt::NoButton);
 			return;
 		}
 		
@@ -116,9 +121,9 @@ void DemoTutorialDialog::initDemo_()
 
 	// hide some dockwidgets
 	if (LogView::getInstance(0) != 0) 			 LogView::getInstance(0)->hide();
-	if (DatasetControl::getInstance(0) != 0) DatasetControl::getInstance(0)->hide();
+//   	if (DatasetControl::getInstance(0) != 0) DatasetControl::getInstance(0)->hide();
 #ifdef BALL_PYTHON_SUPPORT
-	if (PyWidget::getInstance(0) != 0) 			 PyWidget::getInstance(0)->hide();
+//   	if (PyWidget::getInstance(0) != 0) 			 PyWidget::getInstance(0)->hide();
 #endif
 }
 
@@ -134,7 +139,7 @@ String DemoTutorialDialog::getBaseDir_()
 
 void DemoTutorialDialog::initTutorial_()
 {
-	setCaption("BALLView Tutorial");
+	setWindowTitle("BALLView Tutorial");
 	
 	prefix_ = getBaseDir_() + "tutorial";
 
@@ -142,18 +147,16 @@ void DemoTutorialDialog::initTutorial_()
 
 	((Mainframe*)getMainControl())->reset();
 
-	BALL_VIEW_DOCKWINDOWS_SHOW_LABELS = true;
-
 	Scene::getInstance(0)->show();
 	MolecularControl::getInstance(0)->show();
-	MolecularControl::getInstance(0)->dock();
+	MolecularControl::getInstance(0)->setFloating(false);
 	MolecularControl::getInstance(0)->applyPreferences();
-	DatasetControl::getInstance(0)->show();
-	DatasetControl::getInstance(0)->applyPreferences();
-	DatasetControl::getInstance(0)->dock();
+//   	DatasetControl::getInstance(0)->show();
+//   	DatasetControl::getInstance(0)->applyPreferences();
+//   	DatasetControl::getInstance(0)->setFloating(false);
 	GeometricControl::getInstance(0)->show();
 	GeometricControl::getInstance(0)->applyPreferences();
-	GeometricControl::getInstance(0)->dock();
+	GeometricControl::getInstance(0)->setFloating(false);
 
 	LogView::getInstance(0)->hide();
 
@@ -172,10 +175,9 @@ void DemoTutorialDialog::show()
 		initTutorial_();
 	}
 
-	text_browser->setSource(String(prefix_ + "01.html").c_str());
+	text_browser->setSource(QUrl(String(prefix_ + "01.html").c_str()));
 
 	resize(270, 500);
-	DemoTutorialDialogData::show();
 	raise();
 }
 
@@ -245,7 +247,7 @@ void DemoTutorialDialog::nextStepClicked()
 
 	id = prefix_ + id + ".html";
 
-	text_browser->setSource(id.c_str());
+	text_browser->setSource(QUrl(id.c_str())); 
 	next_button->setEnabled(false);
 
 	current_step_ ++;
@@ -272,7 +274,7 @@ void DemoTutorialDialog::nextStepClicked()
 			HelpViewer* hv = HelpViewer::getInstance(0);
 			if (hv == 0) return;
 			hv->showHelp();
-			hv->undock();
+			hv->setFloating(true);
 			hv->showMaximized();
 		}
 	}
@@ -342,7 +344,7 @@ void DemoTutorialDialog::nextStepDemo_()
 
 		List<Composite*> composites;
 		composites.push_back(*getMainControl()->getCompositeManager().getComposites().begin());
-		MolecularControl::getInstance(0)->highlight(composites);
+//   		MolecularControl::getInstance(0)->highlight(composites); ???????????????
 
 		ms->chooseAmberFF();
 		ms->getMDSimulationDialog().setTimeStep(0.001);

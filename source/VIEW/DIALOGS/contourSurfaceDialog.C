@@ -8,7 +8,6 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <qcombobox.h>
 
 namespace BALL
 {
@@ -16,8 +15,19 @@ namespace BALL
  {
 
 ContourSurfaceDialog::ContourSurfaceDialog( QWidget* parent,  const char* name )
-    : ContourSurfaceDialogData( parent, name, TRUE, 0 )
+ : QDialog(parent), 
+ 	 Ui_ContourSurfaceDialogData()
 {
+	setupUi(this);
+
+	// signals and slots connections
+	connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
+	connect( buttonOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
+	connect( threshold, SIGNAL( textChanged(const QString&) ), this, SLOT( valuesChanged() ) );
+	connect( grids, SIGNAL( activated(int) ), this, SLOT( valuesChanged() ) );
+	connect( color_button, SIGNAL( clicked() ), this, SLOT( chooseColor() ) );
+
+	setObjectName(name);
 }
 
 ContourSurfaceDialog::~ContourSurfaceDialog()
@@ -29,7 +39,7 @@ double ContourSurfaceDialog::getThreshold() const
 	if (threshold->text().isEmpty()) return DBL_MAX;
 	try
 	{
-		return (double)String(threshold->text().ascii()).toFloat();
+		return (double)ascii(threshold->text()).toFloat();
 	}
 	catch(...)
 	{
@@ -44,7 +54,7 @@ RegularData3D* ContourSurfaceDialog::getGrid()
 
 void ContourSurfaceDialog::valuesChanged()
 {
-	buttonOk->setEnabled((grids->currentItem() != -1) && 
+	buttonOk->setEnabled((grids->currentIndex() != -1) && 
 												!grids->currentText().isEmpty() &&
 												(getThreshold() != DBL_MAX));
 }
@@ -60,17 +70,17 @@ bool ContourSurfaceDialog::exec()
 		it = grid_pair_list.begin(); 
 		for (; it != grid_pair_list.end(); it++)
 		{
-			grids->insertItem((*it).second.c_str());
+			grids->addItem((*it).second.c_str());
 		}
 	}
 
 	valuesChanged();
-	if (!ContourSurfaceDialogData::exec()) return false;
+	if (!QDialog::exec()) return false;
 	
-	if (grids->currentItem() != -1)
+	if (grids->currentIndex() != -1)
 	{
 		it = grid_pair_list.begin();
-		for (Index i = 0; i < grids->currentItem(); i++)
+		for (Index i = 0; i < grids->currentIndex(); i++)
 		{
 			it++;
 		}
@@ -87,7 +97,7 @@ void ContourSurfaceDialog::chooseColor()
 
 ColorRGBA ContourSurfaceDialog::getColor()
 {
-	return ColorRGBA(color_label->backgroundColor());
+	return VIEW::getColor(color_label);
 }
 		
 

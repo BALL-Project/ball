@@ -31,6 +31,8 @@
 
 // has to come after BALL includes to prevent problems with Visual Stuio Net
 #include <qgl.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
 
 
@@ -112,7 +114,7 @@ namespace BALL
 						\param      w_flags the flags the scene widget should have 
 						(See documentation of QT-library for information concerning widget flags) 
 						*/
-					EditableScene(QWidget* parent_widget, const char* name = NULL, WFlags w_flags = 0)
+					EditableScene(QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0)
 						throw();
 
 					/** Copy constructor.
@@ -126,7 +128,7 @@ namespace BALL
 						(See documentation of QT-library for information concerning widget flags) 
 						undo_, stack for operations is NOT copied!				
 						*/
-					EditableScene (const EditableScene& eScene, QWidget* parent_widget = NULL, const char* name = NULL, WFlags wflags = 0)
+					EditableScene (const EditableScene& eScene, QWidget* parent_widget = NULL, const char* name = NULL, Qt::WFlags wflags = 0)
 						throw();
 
 					//@} 

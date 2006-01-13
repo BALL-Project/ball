@@ -33,7 +33,8 @@ namespace BALL
     		\ingroup  ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT LabelDialog 
-			: public LabelDialogData,
+			: public QDialog,
+				public Ui_LabelDialogData,
 				public ModularWidget
 		{
 			Q_OBJECT
@@ -166,7 +167,7 @@ namespace BALL
 			Representation* createMultipleLabels_();
 
 
-			int id_;
+			QAction* 					id_;
 			
 			ColorRGBA 				custom_color_;
 			QFont 						font_;

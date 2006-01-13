@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77 2005/12/23 17:03:38 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.1 2006/01/13 15:36:05 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -16,7 +16,6 @@
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/DIALOGS/clippingDialog.h>
 
-#include <qpopupmenu.h>
 #include <qmenubar.h>
 #include <qtooltip.h> 
 
@@ -30,57 +29,6 @@ namespace BALL
 	namespace VIEW
 	{
 
-		GeometricControl::SelectableListViewItem::SelectableListViewItem(
-				QListView* parent, const QString& text,
-				Representation* representation, GeometricControl& control)
-			throw()
-			: QCheckListItem(parent, text, QCheckListItem::CheckBox),
-				representation_(representation),
-				clipping_plane_(0),
-				control_reference_(control),
-				ignore_change_(false)
-		{
-			setText(0, text);
-			if (representation_ != 0)
-			{
-				setText(1, representation->getColoringName().c_str());
-				setText(2, representation->getProperties().c_str());
-				setOn(!representation->isHidden());
-			}
-		}
-
-		void GeometricControl::SelectableListViewItem::stateChange(bool state)
-			throw()
-		{
-			if (ignore_change_)
-			{
-				ignore_change_ = false;
-				return;
-			}
-
-			if (getClippingPlane() != 0)
-			{
-				getClippingPlane()->setActive(!getClippingPlane()->isActive());
-				VIEW::getMainControl()->redrawAllRepresentations();
-				return;
-			}
-
-			if (representation_ == 0)
-			{
-				return;
-			}
-
-			if (control_reference_.getMainControl()->compositesAreLocked())
-			{
-				ignore_change_ = true;
-				setOn(!state);
-				VIEW::getMainControl()->setStatusbarText("Cannot switch on/off Representation now!", true);
-				return;
-			}
-			control_reference_.selectedRepresentation(*representation_, isOn());
-		}
-
-
 		GeometricControl::GeometricControl(QWidget* parent, const char* name)
 			throw()
 			:	GenericControl(parent, name),
@@ -88,33 +36,37 @@ namespace BALL
 				clipping_plane_context_menu_(this),
 				context_representation_(0),
 				modify_surface_dialog_(new ModifySurfaceDialog(this, "ModifySurfaceDialog")),
-				creating_representations_(false)
+				creating_representations_(false),
+				ignore_change_(false)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new GeometricControl " << this << std::endl;
 		#endif
-			listview->addColumn("[visible] Model");
-			listview->addColumn("Color");
-			listview->addColumn("Properties");
-			listview->setColumnWidth(0, 60);
-			listview->setColumnWidth(1, 60);
-			listview->setColumnWidth(2, 60);
+			
+			listview->setObjectName("MolecularControlList");
+			listview->headerItem()->setText(0, "[visible] Model");
+			listview->headerItem()->setText(1, "Color");
+			listview->headerItem()->setText(2, "Properties");
+			listview->headerItem()->setSizeHint(0, QSize(20, 220));
+			listview->headerItem()->setSizeHint(1, QSize(20, 60));
+			listview->headerItem()->setSizeHint(2, QSize(20, 60));
+			
 			String txt = String("List of the representations: \n") +
 									"1.column: model type and name of the molecular entity, the model was created from\n" +
 									"2.column: used coloring method\n" +
 									"3.column: number of used molecular entities, number of geometric objects. ";
 
-			QToolTip::add(listview, txt.c_str());
-			connect(listview, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
+			listview->setToolTip(txt.c_str());
+			
 			registerWidget(this);
 
-			clipping_plane_context_menu_.insertItem("Hide/Show", this, SLOT(hideShowClippingPlane()));
-			clipping_plane_context_menu_.insertItem("Move", this, SLOT(moveClippingPlane()));
-			clipping_plane_context_menu_.insertItem("Flip", this, SLOT(flipClippingPlane()));	
-			clipping_plane_context_menu_.insertItem("Set to x axis", this, SLOT(setClippingPlaneX()));	
-			clipping_plane_context_menu_.insertItem("Set to y axis", this, SLOT(setClippingPlaneY()));	
-			clipping_plane_context_menu_.insertItem("Set to z axis", this, SLOT(setClippingPlaneZ()));	
-			clipping_plane_context_menu_.insertItem("Select Representations to clip", this, SLOT(selectClipRepresentations()));	
+			clipping_plane_context_menu_.addAction("Hide/Show", this, SLOT(hideShowClippingPlane()));
+			clipping_plane_context_menu_.addAction("Move", this, SLOT(moveClippingPlane()));
+			clipping_plane_context_menu_.addAction("Flip", this, SLOT(flipClippingPlane()));	
+			clipping_plane_context_menu_.addAction("Set to x axis", this, SLOT(setClippingPlaneX()));	
+			clipping_plane_context_menu_.addAction("Set to y axis", this, SLOT(setClippingPlaneY()));	
+			clipping_plane_context_menu_.addAction("Set to z axis", this, SLOT(setClippingPlaneZ()));	
+			clipping_plane_context_menu_.addAction("Select Representations to clip", this, SLOT(selectClipRepresentations()));	
 		}
 
 		GeometricControl::~GeometricControl()
@@ -137,7 +89,7 @@ namespace BALL
 			generateListViewItem_(rep);
 
 			// update the view
-			listview->triggerUpdate();
+			listview->update();
 		}
 
 		void GeometricControl::removeRepresentation(Representation& rep)
@@ -145,41 +97,44 @@ namespace BALL
 		{
 			if (!representation_to_item_.has(&rep)) return;
 
-			removeItem_(representation_to_item_[&rep], true);
+			removeItem_(representation_to_item_[&rep]);
+			item_to_representation_.erase(representation_to_item_[&rep]);
 			representation_to_item_.erase(&rep);		
 		}
 
 		void GeometricControl::updateRepresentation(Representation& rep)
 			throw()
 		{
-			const HashMap<Representation*, SelectableListViewItem*>::Iterator to_find = 
+			const HashMap<Representation*, QTreeWidgetItem*>::Iterator to_find = 
 				representation_to_item_.find(&rep);
 
 			if (to_find == representation_to_item_.end()) return;
 
-			SelectableListViewItem* const item = to_find->second;
+			QTreeWidgetItem* const item = to_find->second;
 
 			// prevent flickering in GeometricControl, e.g. while a simulation is running
 			// so only update if something changed
-			String new_text = rep.getName();
-			bool changed_content = item->text(0).ascii() != new_text;
-			if (changed_content) item->setText(0, new_text.c_str());
+			String new_text1 = rep.getName();
+			bool changed_content = ascii(item->text(0)) != new_text1;
 
-			new_text = rep.getColoringName();
-			changed_content |= item->text(1).ascii() != new_text;
-			if (changed_content) item->setText(1, new_text.c_str());
+			String new_text2 = rep.getColoringName();
+			changed_content |= ascii(item->text(1)) != new_text2;
 
-			new_text = rep.getProperties();
-			changed_content |= item->text(2).ascii() != new_text;
-			if (changed_content) item->setText(2, new_text.c_str());
+			String new_text3 = rep.getProperties();
+			changed_content |= ascii(item->text(2)) != new_text3;
 
-			if (rep.isHidden() == item->isOn())
+			if (changed_content)
 			{
-				changed_content = true;
-				item->setOn(!rep.isHidden());
+				item->setText(0, new_text1.c_str());
+				item->setText(1, new_text2.c_str());
+				item->setText(2, new_text3.c_str());
 			}
 
-			if (changed_content) listview->triggerUpdate();
+			if (rep.isHidden() == (item->checkState(0) == Qt::Checked))
+			{
+				if (rep.isHidden()) item->setCheckState(0, Qt::Unchecked);
+				else 							  item->setCheckState(0, Qt::Checked);
+			}
 		}
 
 
@@ -204,10 +159,7 @@ namespace BALL
 				return;
 			}
 
-			if (!RTTI::isKindOf<RepresentationMessage> (*message))
-			{
-				return;
-			}
+			if (!RTTI::isKindOf<RepresentationMessage> (*message)) return;
 			
 			Representation* rep =	(RTTI::castTo<RepresentationMessage> (*message))->getRepresentation();
 			if (rep == 0) return;
@@ -240,49 +192,62 @@ namespace BALL
 			}
 		}
 
-		void GeometricControl::buildContextMenu(SelectableListViewItem* item)
+		void GeometricControl::buildContextMenu()
 			throw()
 		{
-			Representation* rep = item->getRepresentation();
-			ClippingPlane* plane = item->getClippingPlane();
+			QList<QTreeWidgetItem*> il = getSelectedItems();
+			if (il.size() == 0) return;
 
-			insertContextMenuEntry("Focus", this, SLOT(focusRepresentation()), 5);
-			insertContextMenuEntry("Delete", this, SLOT(deleteCurrentItems()), 10);
-			insertContextMenuEntry("Duplicate", this, SLOT(duplicateRepresentation()), 15);
-			insertContextMenuEntry("Select Atoms", this, SLOT(selectAtoms()), 25);
-			insertContextMenuEntry("Modify Model", this, SLOT(modifyRepresentation_()), 20);	
-			insertContextMenuEntry("Modify Surface", modify_surface_dialog_, SLOT(show()), 30);	
-			context_menu_.insertSeparator();
-			context_menu_.insertItem("Clipping Plane", &clipping_plane_context_menu_, 40);
+			Representation* rep = 0;
+			ClippingPlane* plane = 0;
+			
+			if (item_to_representation_.has(context_item_)) rep = item_to_representation_[context_item_];
+			else if (item_to_plane_.has(context_item_))     plane = item_to_plane_[context_item_]; 
 
+			context_menu_.clear();
+			vector<QAction*> actions;
+
+			actions.push_back(context_menu_.addAction("Delete", this, SLOT(deleteCurrentItems())));
+			actions.push_back(context_menu_.addAction("Focus", this, SLOT(focusRepresentation())));
+			actions.push_back(context_menu_.addAction("Duplicate", this, SLOT(duplicateRepresentation())));
+ 			actions.push_back(context_menu_.addAction("Select Atoms", this, SLOT(selectAtoms())));
+			actions.push_back(context_menu_.addAction("Modify Model", this, SLOT(modifyRepresentation_())));	
+ 			actions.push_back(context_menu_.addAction("Modify Surface", modify_surface_dialog_, SLOT(show())));	
+			context_menu_.addSeparator();
+			actions.push_back(context_menu_.addMenu(&clipping_plane_context_menu_));
+			actions[6]->setText("Clipping Plane");
+
+			// planes ->
 			if (plane != 0)
 			{
-				context_menu_.setItemEnabled(5, false); 
-				context_menu_.setItemEnabled(15, false); 
-				context_menu_.setItemEnabled(20, false); 
-				context_menu_.setItemEnabled(25, false); 
-				context_menu_.setItemEnabled(30, false); 
-				context_menu_.setItemEnabled(40, true); 
+				for (Position p = 1; p < 6; p++)
+				{
+					actions[p]->setEnabled(false); 
+				}
 				return;
 			}
 
-			context_menu_.setItemEnabled(40, false); 
+			// representations ->
+			actions[6]->setEnabled(false);
 
 			if (getSelectedItems().size() != 1)
 			{
-				context_menu_.setItemEnabled(5, false); 
-				context_menu_.setItemEnabled(15, false); 
+				for (Position p = 1; p < 6; p++)
+				{
+					actions[p]->setEnabled(false); 
+				}
 			}
 
-			if (getSelectedItems().size() > 1 ||
-					rep->getModelType() >= MODEL_LABEL)
+			// not modifyable
+			if (rep->getModelType() >= MODEL_LABEL)
 			{
-				context_menu_.setItemEnabled(20, false); 
+				actions[4]->setEnabled(false);
 			}
 
+			// surfaces
 			if (!isSurfaceModel(rep->getModelType()))
 			{
-				context_menu_.setItemEnabled(30, false);
+				actions[5]->setEnabled(false);
 			}
 			else
 			{
@@ -290,92 +255,80 @@ namespace BALL
 			}
 		}
 
-		void GeometricControl::insertContextMenuEntry(const String& name, const QObject* receiver, const char* slot, int entry_ID, int accel)
-			throw()
-		{
-			context_menu_.insertItem(name.c_str(), receiver, slot, accel, entry_ID);
-		}
-
 		void GeometricControl::generateListViewItem_(Representation& rep)
 			throw()
 		{
 			if (!getMainControl()->getPrimitiveManager().has(rep)) return;
 
+			QStringList sl;
+			sl << rep.getName().c_str()
+				 << rep.getColoringName().c_str()
+				 << rep.getProperties().c_str();
 			// create a new list item
-			SelectableListViewItem* new_item = new SelectableListViewItem(listview, 
-																								rep.getName().c_str(), &rep, *this);
-
-			CHECK_PTR(new_item);
+			QTreeWidgetItem* new_item = new QTreeWidgetItem(listview, sl);
 
 			representation_to_item_[&rep] = new_item;
-			new_item->setSelected(true);
-			deselectOtherControls_();
+			item_to_representation_[new_item] = &rep;
+			
+			if (!rep.isHidden()) new_item->setCheckState(0, Qt::Checked);
+			
+			listview->setItemSelected(new_item, true);
+ 			deselectOtherControls_();
 			updateSelection();
 		}
-
 
 		void GeometricControl::deleteCurrentItems()
 			throw()
 		{
-			if (getMainControl()->getPrimitiveManager().updateRunning())
+			if (getMainControl()->getPrimitiveManager().updateRunning() ||
+			    creating_representations_) 
 			{
 				setStatusbarText("Could not delete Representation while update is running!", true);
 				return;
 			}
 
 			ItemList items = getSelectedItems();
-			if (items.size() == 0) return;
-
-			if (creating_representations_) 
-			{
-				setStatusbarText("Can not modify representations, while creating a new one!", true);
-				return;
-			}
-
-			ItemList::Iterator it = items.begin();
+			ItemList::iterator it = items.begin();
 			for (; it != items.end(); ++it)
 			{
-				SelectableListViewItem* item = (SelectableListViewItem*) *it;
-				Representation* rep = item->getRepresentation();
+				QTreeWidgetItem* item = *it;
+				Representation* rep = item_to_representation_[item];
 				if (rep != 0) 
 				{
 					getMainControl()->remove(*rep);
+					setStatusbarText("Deleted representation.");
 					continue;
 				}
 
-				ClippingPlane* plane = item->getClippingPlane();
+				ClippingPlane* plane = item_to_plane_[item];
+				removeItem_(item);
+				item_to_plane_.erase(item);
+				plane_to_item_.erase(plane);
 				getMainControl()->getPrimitiveManager().removeClippingPlane(plane);
+				setStatusbarText("Deleted Clipping Plane.");
 			}
-
-			setStatusbarText("Deleted representation.");
 		}
 
 		void GeometricControl::selectedRepresentation(Representation& representation, bool state)
 		{
-			if (state != representation.isHidden()) 
-			{
-				return;
-			}
+			if (state != representation.isHidden()) return;
 
-			if (!state)
+			if (!state)  setStatusbarText("Hide representation.");
+			else 				 setStatusbarText("Show representation.");
+				
+			representation.setHidden(!state);
+			if (!representation.isHidden()) 
 			{
-				setStatusbarText("Hide representation.");
+				representation.update(false); 
 			}
 			else
 			{
-				setStatusbarText("Show representation.");
+				notify_(new SceneMessage(SceneMessage::REDRAW));
 			}
-				
-			representation.setHidden(!representation.isHidden());
-
-			representation.update(false);
 		}
 
-
-		void GeometricControl::onContextMenu_(QListViewItem* item,  const QPoint& point, int /* column */)
+		void GeometricControl::showGuestContextMenu(const QPoint& pos)
 		{
-			if (item == 0) return;
-
 			if (getMainControl()->compositesAreLocked() ||
 					creating_representations_)
 			{
@@ -383,22 +336,10 @@ namespace BALL
 				return;
 			}
 
-			// clear the context menu
-			context_menu_.clear();
-
-			// create the context menu
-			context_representation_ = ((SelectableListViewItem*)item)->getRepresentation();
-			context_plane_ = 					((SelectableListViewItem*)item)->getClippingPlane();
-			context_item_ = item;
-
-			buildContextMenu((SelectableListViewItem*)item);
-
-			// is the context menu not empty
-			if (context_menu_.count())
-			{
-				context_menu_.popup(point);
-			}
+			buildContextMenu();
+			context_menu_.popup(mapToGlobal(pos));
 		}
+		
 
 		void GeometricControl::modifyRepresentation_()
 			throw()
@@ -412,26 +353,21 @@ namespace BALL
 		{
 			GenericControl::updateSelection();
 
-			context_representation_ = 0;
-			context_plane_ 					= 0;
+			getSelectedItems();
 
-			QListViewItem* item = 0;
-			QListViewItemIterator it(listview);
-			for (; it.current(); ++it)
+			if (context_item_ != 0)
 			{
-				if (it.current()->isSelected())
-				{
-					item = it.current();
-					break;
-				}
+				context_representation_ = item_to_representation_[context_item_];
+				context_plane_ 					= item_to_plane_[context_item_];
+			}
+			else
+			{
+				context_representation_ = 0;
+				context_plane_          = 0;
 			}
 
-			Representation* rep = 0;
-			
-			if (item != 0)
-			{
-				rep = ((SelectableListViewItem*)item)->getRepresentation();
-			}
+			// less to type...
+			Representation* rep = context_representation_;
 
 			modify_surface_dialog_->setRepresentation(rep);
 			notify_(new RepresentationMessage(*rep, RepresentationMessage::SELECTED));
@@ -476,12 +412,16 @@ namespace BALL
 			throw()
 		{
 			List<Representation*> selection;
-			ItemList selected = ((GeometricControl*)this)->getSelectedItems();
-			for (ItemList::Iterator it = selected.begin(); it != selected.end(); ++it)
+ 			HashMap<QTreeWidgetItem*, Representation*>::ConstIterator it = item_to_representation_.begin();
+			for (; +it; ++it)
 			{
-				Representation* rep = ((SelectableListViewItem*) *it)->getRepresentation();
-				if (rep != 0) selection.push_back(rep);
+				QTreeWidgetItem* item = (*it).first;
+				if (listview->isItemSelected(item))
+				{
+					selection.push_back((*it).second);
+				}
 			}
+			
 			return selection;
 		}
 
@@ -496,7 +436,7 @@ namespace BALL
 				main_control.setDeleteEntryEnabled(true);
 			}
 
-			menuBar()->setItemEnabled(menu_clipping_plane_id_, 
+			menu_clipping_plane_->setEnabled(
 										!main_control.compositesAreLocked() &&
 										!main_control.updateOfRepresentationRunning());
 		}
@@ -514,12 +454,12 @@ namespace BALL
 		{
 			GenericControl::initializeWidget(main_control);
 
-			menu_clipping_plane_id_ = insertMenuEntry(MainControl::DISPLAY, 
+			menu_clipping_plane_ = insertMenuEntry(MainControl::DISPLAY, 
 																		"New Clipping Plane", this, SLOT(createNewClippingPlane()));   
 			setMenuHint("Add an OpenGL Clipping Plane to the Scene");
 			setMenuHelp("geometricControl.html#clipping_planes");
 
-			registerWidgetForHelpSystem(this, "geometricControl.html");
+			registerForHelpSystem(this, "geometricControl.html");
 		}
 
 		void GeometricControl::moveClippingPlane()
@@ -578,13 +518,12 @@ namespace BALL
 			ItemList::Iterator it = items.begin();
 
 			Scene* scene = Scene::getInstance(0);
-
 			if (scene == 0) return;
 
-
+			bool changed = false;
 			for (; it != items.end(); it++)
 			{
-				ClippingPlane* plane = ((SelectableListViewItem*) *it)->getClippingPlane();
+				ClippingPlane* plane = item_to_plane_[*it];
 				if (plane == 0) continue;
 
 				Vector3 n(plane->getNormal());
@@ -607,8 +546,10 @@ namespace BALL
 					plane->setPoint(plane->getPoint() - t);
 				}
 
-				getMainControl()->redrawAllRepresentations();
+				changed = true;
 			}
+
+			if (changed) getMainControl()->redrawAllRepresentations();
 		}
 
 
@@ -679,31 +620,25 @@ namespace BALL
 				to_have_planes.insert(*plane_it);
 			}
 
-			// collect all planes, the GeometricControl currently has
-			HashMap<ClippingPlane*, SelectableListViewItem*> plane_map;
-			QListViewItemIterator it(listview);
-			for (; it.current(); ++it)
-			{
-				SelectableListViewItem* item = (SelectableListViewItem*)it.current();
-				if (item->getClippingPlane() != 0)
-				{
-					plane_map[item->getClippingPlane()] = item;
-				}
-			}
-
 			HashSet<ClippingPlane*>::Iterator cit = to_have_planes.begin();
 			for (; +cit; ++cit)
 			{
-				if (!plane_map.has(*cit))
+				ClippingPlane* plane = *cit;
+				if (!plane_to_item_.has(plane))
 				{
-					SelectableListViewItem* new_item = new SelectableListViewItem(listview, "ClippingPlane", 0, *this);
-					if ((**cit).isHidden()) new_item->setText(2, "[hidden]");
-					new_item->setOn((**cit).isActive());
-					new_item->setClippingPlane(*cit);
+					QStringList sl;
+					sl << "ClippingPlane";
+					if (plane->isHidden()) sl << "[hidden]";
+					QTreeWidgetItem* new_item = new QTreeWidgetItem(listview, sl);
+
+					if (plane->isActive()) new_item->setCheckState(0, Qt::Checked);
+
+					item_to_plane_[new_item] = plane;
+					plane_to_item_[plane] = new_item;
 				}
 			}
 
-			HashMap<ClippingPlane*, SelectableListViewItem*>::Iterator mit = plane_map.begin();
+			HashMap<ClippingPlane*, QTreeWidgetItem*>::Iterator mit = plane_to_item_.begin();
 			for (; +mit; ++mit)
 			{
 				if (!to_have_planes.has(mit->first)) removeItem_(mit->second);
@@ -740,6 +675,45 @@ namespace BALL
 		{
 		}
 
-					
+		void GeometricControl::onItemClicked(QTreeWidgetItem* item)
+		{
+			if (ignore_change_) 
+			{
+				ignore_change_ = false;
+				return;
+			}
+
+			bool checked = (item->checkState(0) == Qt::Checked);
+
+			if (getMainControl()->compositesAreLocked())
+			{
+				ignore_change_ = true;
+
+				if (checked) item->setCheckState(0, Qt::Unchecked);
+				else 				 item->setCheckState(0, Qt::Checked);
+
+				VIEW::getMainControl()->setStatusbarText("Cannot switch Representation on/off now!", true);
+				return;
+			}
+
+			ClippingPlane* plane = item_to_plane_[item];
+			Representation* rep = item_to_representation_[item];
+
+			if (rep != 0)
+			{
+				if (rep->isHidden() == checked)
+				{
+					selectedRepresentation(*rep, checked);
+				}
+				return;
+			}
+
+			if (plane->isHidden() == checked)
+			{
+				plane->setActive(!plane->isActive());
+				getMainControl()->redrawAllRepresentations();
+			}
+		}
+
 	} // namespace VIEW
 } // namespace BALL

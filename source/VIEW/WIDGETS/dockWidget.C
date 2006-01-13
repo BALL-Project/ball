@@ -1,15 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.28 2005/12/23 17:03:37 amoll Exp $
+// $Id: dockWidget.C,v 1.28.2.1 2006/01/13 15:36:04 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
 #include <qmenubar.h>
-#include <qlabel.h>
-#include <qdragobject.h>
 
 namespace BALL
 {
@@ -17,16 +15,17 @@ namespace BALL
 	{
 
 		DockWidget::DockWidget()
-			:	QDockWindow(QDockWindow::InDock, 0),
+			:	QDockWidget(),
 				ModularWidget("unnamed DockWidget"),
 				guest_(0)
 		{
+			BALLVIEW_DEBUG;
 			setAcceptDrops(true);
 		}
 			
-		DockWidget::DockWidget(const DockWidget& dw)
-			:	QDockWindow(QDockWindow::InDock, 0),
-				ModularWidget(dw.name()),
+		DockWidget::DockWidget(const DockWidget&)
+			:	QDockWidget(),
+				ModularWidget(),
 				guest_(0)
 		{
 			setAcceptDrops(true);
@@ -34,60 +33,46 @@ namespace BALL
 			
 		
 		DockWidget::DockWidget(QWidget* parent, const char* name)
-			: QDockWindow(QDockWindow::InDock, parent),
+			: QDockWidget(name, parent),
 				ModularWidget(name),
 				guest_(0)
 		{
-			layout_ = new QVBoxLayout();
-			caption_label_ = new QLabel(this, "caption_label");
-			caption_label_->resize(90, 12);
-			caption_label_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
-			caption_label_->setPaletteBackgroundColor( QColor( 255, 255, 127 ) );
-			QFont caption_label_font(caption_label_->font());
-			caption_label_font.setFamily( "Helvetica" );
-			caption_label_font.setPointSize( 11 );
-			caption_label_->setFont( caption_label_font ); 
-			caption_label_->setFrameShape(QLabel::NoFrame);
-			caption_label_->setAlignment(QLabel::AlignCenter);
-			layout_->addWidget(caption_label_);
-			boxLayout()->addLayout(layout_);
-
-			setOrientation(Qt::Vertical);
-
 			if (name != 0) 
 			{ 
-				setCaption(name);
-				setName(name);
-				caption_label_->setText(name);
+				setObjectName(name);
 			}
 			else 
 			{
-				setName("DockWidget");
+				setObjectName("DockWidget");
 			}
 
 			setAcceptDrops(true);
+			setFloating(false);
+			resize(100, 100);
 		}
 
 		void DockWidget::setGuest(QWidget& guest)
 		{
 			QPoint p;
-			guest.reparent(this, p, true);
+			guest.setParent(this);
 			guest.resize(120,100);
-			guest.setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding, 0, 0, false));
-			layout_->addWidget(&guest);
+//   			guest.setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding, 0, 0, false));
+//   			layout_->addWidget(&guest);
 			guest_ = &guest;
 			setMinimumSize(20, 20);
-			setCloseMode(QDockWindow::Always);
-			setResizeEnabled(true);
+//   			setCloseMode(Q3DockWindow::Always);
+//   			setResizeEnabled(true);
+			setWidget(&guest);
+
+			guest.setContextMenuPolicy(Qt::CustomContextMenu);
+			connect(&guest, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showGuestContextMenu(const QPoint&)));
 		}
 
 		void DockWidget::initializeWidget(MainControl&)
 			throw()
 		{
-			window_menu_entry_id_ = 
-				insertMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(switchShowWidget()));
-			menuBar()->setItemChecked(window_menu_entry_id_, true);
-			connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setWindowsMenuEntry(bool)));
+			window_menu_entry_ = toggleViewAction();
+			getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(window_menu_entry_);
 		}
 
 		void DockWidget::writePreferences(INIFile& /* inifile */)
@@ -104,53 +89,8 @@ namespace BALL
 			if (!inifile.hasEntry("WINDOWS", "Main::dockwidgets") &&
 				  !default_visible_)
 			{
-				switchShowWidget();
+				setVisible(false);
 			}
-
-			if (!BALL_VIEW_DOCKWINDOWS_SHOW_LABELS)
-			{
-				caption_label_->hide();
-			}
-		}
-
-		void DockWidget::switchShowWidget()
-			throw()
-		{
-			if (window_menu_entry_id_ == -1) return;
-
-			if (!getMainControl()) 
-			{
-				BALLVIEW_DEBUG
-				return;
-			}
-
-			QMenuBar* menu = getMainControl()->menuBar();
-			if (menu->isItemChecked(window_menu_entry_id_))
-			{
-				hide();
-				menu->setItemChecked(window_menu_entry_id_, false);
-			}
-			else
-			{
-				show();
-				menu->setItemChecked(window_menu_entry_id_, true);
-			}
-		}
-
-		void DockWidget::setWindowsMenuEntry(bool state) 
-		{
-			QMenuBar* menu = getMainControl()->menuBar();
-			if (menu->isItemChecked(window_menu_entry_id_) != isVisible())
-			{
-				menu->setItemChecked(window_menu_entry_id_, state);
-			}
-		}
-
-		void DockWidget::applyPreferences()
-			throw()
-		{
-			if (!BALL_VIEW_DOCKWINDOWS_SHOW_LABELS) caption_label_->hide();
-			else caption_label_->show();
 		}
 
 		void DockWidget::dropEvent(QDropEvent* e)
@@ -160,32 +100,26 @@ namespace BALL
 
 		void DockWidget::dragEnterEvent(QDragEnterEvent* event)
 		{
-			event->accept(QTextDrag::canDecode(event));
+			if (event->mimeData()->hasUrls()) event->acceptProposedAction();
 		}
 
 		void DockWidget::setVisible(bool state)
 		{
-			if (state)
-			{
-				show();
-			}
-			else
-			{
-				hide();
-			}
+			if (window_menu_entry_ != 0) window_menu_entry_->setChecked(state);
+			// only for Python needed
+			QDockWidget::setVisible(state);
 		}
 
-		void DockWidget::registerWidgetForHelpSystem(const QWidget* widget, const String& url)
+		void DockWidget::registerForHelpSystem(const QObject* widget, const String& url)
 		{
-			ModularWidget::registerWidgetForHelpSystem(widget, url);
+			ModularWidget::registerForHelpSystem(widget, url);
 
 			// also register Windows menu entry!
 			RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
-			msg->setMenuEntry(window_menu_entry_id_);
+			msg->setObject(window_menu_entry_);
 			msg->setURL(url);
 			notify_(msg);
 		}
-
 
 	} // namespace VIEW 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66 2005/12/23 17:02:24 amoll Exp $
+// $Id: scene.h,v 1.66.2.1 2006/01/13 15:35:36 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -22,12 +22,16 @@
 // has to come after BALL includes to prevent problems with Visual Studio Net
 #include <qgl.h>
 
-#ifdef BALL_QT_HAS_THREADS
- #include <qthread.h>
- #include <qevent.h>
-#endif
+#include <qthread.h>
+#include <qevent.h>
 
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QDragEnterEvent>
+#include <QWheelEvent>
+#include <QKeyEvent>
+#include <QDropEvent>
 
 class QMouseEvent;
 
@@ -100,31 +104,31 @@ namespace BALL
 			/** This class is only intended for usage with multithreading.
 			 		It provides a mean for other threads to make the Scene export a PNG.
 			*/
-			class BALL_VIEW_EXPORT SceneExportPNGEvent : public QCustomEvent
+			class BALL_VIEW_EXPORT SceneExportPNGEvent : public QEvent
 			{
 				public:
 					SceneExportPNGEvent()
-						: QCustomEvent( SCENE_EXPORTPNG_EVENT){}
+						: QEvent((QEvent::Type) SCENE_EXPORTPNG_EVENT){}
 			};
 
 			/** This class is only intended for usage with multithreading.
 			 		It provides a mean for other threads to make the Scene export a POVRay file.
 			*/
-			class BALL_VIEW_EXPORT SceneExportPOVEvent : public QCustomEvent
+			class BALL_VIEW_EXPORT SceneExportPOVEvent : public QEvent
 			{
 				public:
 					SceneExportPOVEvent()
-						: QCustomEvent( SCENE_EXPORTPOV_EVENT){}
+						: QEvent((QEvent::Type) SCENE_EXPORTPOV_EVENT){}
 			};
 
 			/** This class is only intended for usage with multithreading.
 			 		It provides a mean for other threads to set the camera position.
 			*/
-			class BALL_VIEW_EXPORT SceneSetCameraEvent : public QCustomEvent
+			class BALL_VIEW_EXPORT SceneSetCameraEvent : public QEvent
 			{
 				public:
 					SceneSetCameraEvent()
-						: QCustomEvent( SCENE_SETCAMERA_EVENT){}
+						: QEvent((QEvent::Type) SCENE_SETCAMERA_EVENT){}
 
 					Camera camera;
 			};
@@ -153,20 +157,20 @@ namespace BALL
 				PICKING__MODE
 			};
 
-			/// Different Move Mode actions
-			enum MoveModeAction
+			/// Different Mouse Mode actions
+			enum ModeAction
 			{
 				///
-				MOVE_TRANSLATE,
+				TRANSLATE_ACTION,
 
 				///
-				MOVE_ZOOM,
+				ZOOM_ACTION,
 
 				///
-				MOVE_ROTATE,
+				ROTATE_ACTION,
 
 				///
-				MOVE_ROTATE_CLOCKWISE
+				ROTATE_CLOCKWISE_ACTION
 			};
 			
 			//@} 
@@ -206,7 +210,7 @@ namespace BALL
 					\param      w_flags the flags the scene widget should have 
 											(See documentation of QT-library for information concerning widget flags) 
 			*/
-			Scene(QWidget* parent_widget, const char* name = NULL, WFlags w_flags = 0)
+			Scene(QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0)
 				throw();
 
 			/** Copy constructor.
@@ -219,7 +223,7 @@ namespace BALL
 					\param  wflags the flags the scene widget should have 
 									(See documentation of QT-library for information concerning widget flags) 
 			 */
-			Scene (const Scene& scene, QWidget* parent_widget = NULL, const char* name = NULL, WFlags wflags = 0)
+			Scene (const Scene& scene, QWidget* parent_widget = NULL, const char* name = NULL, Qt::WFlags wflags = 0)
 				throw();
 
 			/** Destructor.
@@ -654,7 +658,7 @@ namespace BALL
 				throw();
 			
 			//_
-			virtual void customEvent( QCustomEvent * e );
+			virtual bool event(QEvent* e);
 
 			///
 			virtual void dropEvent(QDropEvent* e);
@@ -722,11 +726,16 @@ namespace BALL
 			ModeType last_mode_;
 	
 			// Menu entry IDs
-			Index rotate_id_, picking_id_, move_id_;
-			Index no_stereo_id_, active_stereo_id_, dual_stereo_id_;
-			Index record_animation_id_, start_animation_id_, clear_animation_id_, cancel_animation_id_;
-			Index animation_export_POV_id_, animation_export_PNG_id_, animation_repeat_id_;
-			Index show_popup_infos_id_;
+			QAction* rotate_action_; 
+			QAction* picking_action_; 
+			QAction* move_action_;
+			QAction* no_stereo_action_; 
+			QAction* active_stereo_action_; 
+			QAction* dual_stereo_action_;
+			QAction* record_animation_action_; 
+			QAction* start_animation_action_, *clear_animation_action_, *cancel_animation_action_;
+			QAction* animation_export_POV_action_, *animation_export_PNG_action_, *animation_repeat_action_;
+			QAction* show_popup_infos_action_;
 			
 			Vector3 system_origin_;
 

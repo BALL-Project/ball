@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.h,v 1.14 2005/12/23 17:02:23 amoll Exp $
+// $Id: regularData1DWidget.h,v 1.14.2.1 2006/01/13 15:35:36 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
@@ -21,6 +21,9 @@
 #endif
 
 #include <qcolor.h>
+//Added by qt3to4:
+#include <QContextMenuEvent>
+#include <QResizeEvent>
 
 namespace BALL
 {

@@ -22,7 +22,8 @@ namespace BALL
 		\ingroup ViewDialogs
 */
 class BALL_VIEW_EXPORT MolecularDynamicsDialog 
-	: public MolecularDynamicsDialogData,
+	: public QDialog,
+		public Ui_MolecularDynamicsDialogData,
 		public PreferencesEntry
 {
     Q_OBJECT

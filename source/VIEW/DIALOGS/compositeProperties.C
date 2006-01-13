@@ -2,12 +2,11 @@
 // vi: set ts=2:
 //
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
+#include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
-#include <qcombobox.h>
-#include <qgroupbox.h>
 
 namespace BALL
 {
@@ -15,10 +14,18 @@ namespace BALL
 	{
 
 CompositeProperties::CompositeProperties(Composite* composite, QWidget* parent, 
-																				 const char* name, bool modal, WFlags fl )
-    : CompositePropertiesData( parent, name, modal, fl ),
+																				 const char* name, bool, Qt::WFlags fl )
+    : QDialog(parent, fl),
+			Ui_CompositePropertiesData(),
 			composite_(composite)
 {
+	setupUi(this);
+	
+  // signals and slots connections
+  connect( ok_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
+  connect( cancel_button, SIGNAL( clicked() ), this, SLOT( close() ) );
+
+	setObjectName(name);
 	if (RTTI::isKindOf<AtomContainer>(*composite))
 	{
 		name_edit->setText(((AtomContainer*)composite)->getName().c_str());
@@ -68,10 +75,10 @@ CompositeProperties::CompositeProperties(Composite* composite, QWidget* parent,
 		element = PTE.getElement(nr);
 		if (element == Element::UNKNOWN) break;
 
-		element_box->insertItem(element.getSymbol().c_str());
+		element_box->addItem(element.getSymbol().c_str());
 	}
 
-	element_box->setCurrentText(atom->getElement().getSymbol().c_str());
+	element_box->setCurrentIndex(atom->getElement().getAtomicNumber() - 1);
 }
 
 String CompositeProperties::getString_(float data) const
@@ -95,12 +102,12 @@ void CompositeProperties::accept()
 		if (RTTI::isKindOf<Atom>(*composite_))
 		{
 			Atom* atom = (Atom*) composite_;
-			atom->setName(String(name_edit->text().latin1()));
-			atom->setType(String(type_edit->text().latin1()).toShort());
-			atom->setTypeName(String(type_name_edit->text().latin1()));
-			atom->setCharge(String(charge_edit->text().latin1()).toFloat());
-			atom->setRadius(String(radius_edit->text().latin1()).toFloat());
-			atom->setElement(PTE[(String(element_box->currentText().latin1()))]);
+			atom->setName(ascii(name_edit->text()));
+			atom->setType(ascii(type_edit->text()).toShort());
+			atom->setTypeName(ascii(type_name_edit->text()));
+			atom->setCharge(ascii(charge_edit->text()).toFloat());
+			atom->setRadius(ascii(radius_edit->text()).toFloat());
+			atom->setElement(PTE[(ascii(element_box->currentText()))]);
 		}
 	}
 	catch(Exception::InvalidFormat)
@@ -111,13 +118,13 @@ void CompositeProperties::accept()
 
 	if (RTTI::isKindOf<AtomContainer>(*composite_))
 	{
-		((AtomContainer*)composite_)->setName(name_edit->text().latin1());
+		((AtomContainer*)composite_)->setName(ascii(name_edit->text()));
 	}
 
 	if (RTTI::isKindOf<Residue>(*composite_))
 	{
 		Residue* residue = (Residue*) composite_;
-		residue->setID(id_edit->text().latin1());
+		residue->setID(ascii(id_edit->text()));
 	}
 	
 	Log.info() << "Values applied." << std::endl;

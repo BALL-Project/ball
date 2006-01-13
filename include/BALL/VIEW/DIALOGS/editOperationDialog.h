@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editOperationDialog.h,v 1.7 2005/12/23 17:02:10 amoll Exp $ 
+// $Id: editOperationDialog.h,v 1.7.2.1 2006/01/13 15:35:25 amoll Exp $ 
 //
 
 #ifndef BALL_VIEW_DIALOGS_EDITOPERATIONDIALOG_H
@@ -26,7 +26,8 @@ namespace BALL
 		*/
 
 		class BALL_VIEW_EXPORT EditOperationDialog
-			: public EditOperationDialogData,
+			: public QDialog,
+				public Ui_EditOperationDialogData,
 				public ModularWidget
 	  {
 			Q_OBJECT
@@ -36,7 +37,7 @@ namespace BALL
 			BALL_EMBEDDABLE(EditOperationDialogData,ModularWidget)
 
 			///
-			EditOperationDialog(QWidget* parent = 0, const char* name = 0, WFlags fl = 0);
+			EditOperationDialog(QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0);
 
 			///
 			~EditOperationDialog()

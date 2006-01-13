@@ -20,9 +20,7 @@
  #include <qapplication.h>
 #endif
 
-#include <qdragobject.h>
-#include <qdir.h>
-#include <qwhatsthis.h>
+#include <QUrl>
 
 namespace BALL
 {
@@ -37,8 +35,6 @@ namespace BALL
 			12
 		};
 
-
-		bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS = true;
 
 		Composite composite_to_be_ignored_for_colorprocessors_;
 
@@ -318,42 +314,61 @@ namespace BALL
 			LogEvent* su = new LogEvent;
 			su->setMessage(data);
 			su->setShowOnlyInLogView(true);
-			qApp->postEvent(MainControl::getInstance(0), su);  // Qt will delete it when done
+			qApp->postEvent((QObject*)MainControl::getInstance(0), su);  // Qt will delete it when done
 		}
 
 
 		LogEvent::LogEvent()
-			: QCustomEvent(LOG_EVENT),
+			: QEvent((QEvent::Type)LOG_EVENT),
 				important_(false),
 				only_log_(false)
 		{
 		}
 
-		QColor chooseColor(QLabel* label)
+		ColorRGBA getColor(const QLabel* label) 
 		{
-			QColor qcolor = QColorDialog::getColor(label->backgroundColor());
-			if (!qcolor.isValid()) return label->backgroundColor();
-			label->setBackgroundColor(qcolor);
-			return qcolor;
+			QPalette pal(label->palette());
+			QColor qcolor = pal.color(label->backgroundRole());
+			return ColorRGBA(qcolor);
 		}
 
+		void setColor(const QLabel* label, const ColorRGBA& color)
+		{
+			QPalette pal(label->palette());
+			pal.setColor(label->backgroundRole(), color.getQColor());
+			((QLabel*)label)->setAutoFillBackground(true);
+			((QLabel*)label)->setPalette(pal);
+		}
+
+		QColor chooseColor(QLabel* label)
+		{
+			QColor qcolor;
+			QPalette pal(label->palette());
+			qcolor = pal.color(QPalette::Window);
+			QColor qcolor2 = QColorDialog::getColor(qcolor);
+			if (!qcolor2.isValid()) return qcolor;
+			pal.setColor(QPalette::Window, qcolor2);
+			label->setPalette(pal);
+			label->setAutoFillBackground(true);
+			return qcolor2;
+		}
 
 		void processDropEvent(QDropEvent* e)
 		{
-			if (!QUriDrag::canDecode(e)) 
+			if (!e->mimeData()->hasUrls())
 			{
 				e->ignore();
 				return;
 			}
 
-			QStrList lst;
-			QUriDrag::decode(e, lst);
-			e->accept();
+			QList<QUrl> urls = e->mimeData()->urls();
+			e->acceptProposedAction();
 
-			for (Position i = 0; i < lst.count(); ++i )
+			QList<QUrl>::iterator it = urls.begin();
+			for (; it != urls.end(); it++)
 			{
-				QString filename = QDir::convertSeparators(QUriDrag::uriToLocalFile(lst.at(i)));
-				getMainControl()->openFile(filename.ascii());
+				QString filename = (*it).path();
+				getMainControl()->openFile(ascii(filename));
 			}
 		}
 
@@ -455,6 +470,11 @@ namespace BALL
 			}
 				
 			return dir;
+		}
+
+		String ascii(const QString& str)
+		{
+			return str.toAscii().constData();
 		}
 	} // namespace VIEW
 } //namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46 2006/01/05 15:57:57 leonhardt Exp $
+// $Id: datasetControl.C,v 1.46.2.1 2006/01/13 15:36:04 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -11,8 +11,8 @@
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
 
-#include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
-#include <BALL/VIEW/WIDGETS/regularData2DWidget.h>
+//   #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
+//   #include <BALL/VIEW/WIDGETS/regularData2DWidget.h>
 
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
@@ -20,10 +20,9 @@
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/DATATYPE/contourSurface.h>
-# include <BALL/STRUCTURE/DOCKING/dockResult.h>
+#include <BALL/STRUCTURE/DOCKING/dockResult.h>
 
-#include <qfiledialog.h>
-#include <qlistview.h>
+#include <QFileDialog>
 
 namespace BALL
 {
@@ -39,14 +38,17 @@ namespace BALL
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new DatasetControl " << this << std::endl;
 		#endif
-			listview->addColumn("Name");
-			listview->addColumn("from");
-			listview->addColumn("Type");
-			listview->setColumnWidth(0, 120);
-			listview->setColumnWidth(1, 60);
-			listview->setColumnWidth(2, 60);
+			listview->setColumnCount(3);
+			listview->headerItem()->setText(0, "Name");
+//   			listview->horizontalHeaderItem(0)->setSizeHint(120);
+			listview->headerItem()->setText(1, "from");
+//   			listview->horizontalHeaderItem(1)->setSizeHint(60);
+			listview->headerItem()->setText(2, "Type");
+//   			listview->horizontalHeaderItem(2)->setSizeHint(60);
 			default_visible_ = false;
 			connect(listview, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
+			setMinimumSize(50,50);
+			resize(50,50);
 			registerWidget(this);
 		}
 
@@ -60,10 +62,7 @@ namespace BALL
 
 			if (dialog_ != 0) delete dialog_;
 
-			while (listview->firstChild() != 0)
-			{
-				deleteItem_(*listview->firstChild());
-			}
+			listview->clear();
 		}
 
 
@@ -87,24 +86,23 @@ namespace BALL
 			setMenuHint("Open a dock result file");
 
 			menu_cs_ = insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  
-																							SLOT(computeIsoContourSurface()), CTRL+Key_U);
+																							SLOT(computeIsoContourSurface()), Qt::CTRL+Qt::Key_U);
 			setMenuHint("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.");
 			setMenuHelp("datasetControl.html#isocontour_surfaces");
 
 			GenericControl::initializeWidget(main_control);
 
-			registerWidgetForHelpSystem(this, "datasetControl.html");
+			registerForHelpSystem(this, "datasetControl.html");
 		}
 
 
 		void DatasetControl::checkMenu(MainControl& main_control)
 			throw()
 		{
-			menuBar()->setItemEnabled(open_trajectory_id_, main_control.getSelectedSystem());
+			open_trajectory_id_->setEnabled(main_control.getSelectedSystem());
 			if (getSelectedItems().size() > 0) main_control.setDeleteEntryEnabled(true);
 
-			menuBar()->setItemEnabled(menu_cs_, 
-												!getMainControl()->compositesAreLocked() && item_to_grid3_.size() > 0);
+			menu_cs_->setEnabled(!getMainControl()->compositesAreLocked() && item_to_grid3_.size() > 0);
 		}
 
 
@@ -113,16 +111,14 @@ namespace BALL
 		{
 			if (!getMainControl()->getSelectedSystem()) return;
 
-			QString file = QFileDialog::getOpenFileName(
+			QString file = QFileDialog::getOpenFileName(0,
+													"Save as a DCD Trajectory File",
 													getWorkingDir().c_str(),
-													"DCD files(*.dcd)",
-													this,
-													"Trajectory File Dialog",
-													"Select a DCD file" );
+													"DCD files(*.dcd)");
 
 			if (file == QString::null) return;
 
-			addTrajectory(file.ascii());
+			addTrajectory(ascii(file));
 		}
 
 		void DatasetControl::addTrajectory(const String& filename)
@@ -157,17 +153,19 @@ namespace BALL
 			
 			if (pos) pos++;
 			name = name.getSubstring(pos);
-			
-			QListViewItem* item = new QListViewItem(listview, name.c_str(), system.getName().c_str(), "Trajectory");
+
+			QStringList sl;
+			sl << name.c_str() << system.getName().c_str() << "Trajectory";
+			QTreeWidgetItem* item = addRow(sl);
 			item_to_trajectory_[item] = manager;
 			insertComposite_(&system, item);
 		}
 
 
-		void DatasetControl::insertComposite_(Composite* composite, QListViewItem* item)
+		void DatasetControl::insertComposite_(Composite* composite, QTreeWidgetItem* item)
 			throw()
 		{
-			listview->triggerUpdate();
+//   			listview->triggerUpdate();
 			item_to_composite_[item] = composite;
 			if (composite_to_items_.has(composite))
 			{
@@ -175,7 +173,7 @@ namespace BALL
 			}
 			else
 			{
-				HashSet<QListViewItem*> set;
+				HashSet<QTreeWidgetItem*> set;
 				set.insert(item);
 				composite_to_items_[composite] = set;
 			}
@@ -230,9 +228,9 @@ namespace BALL
 				if (!composite_to_items_.has(composite)) return;
 
 				// create a copy of the hashset, because it changes
-				HashSet<QListViewItem*> to_delete = composite_to_items_[composite];
+				HashSet<QTreeWidgetItem*> to_delete = composite_to_items_[composite];
 
-				HashSet<QListViewItem*>::Iterator lit = to_delete.begin();
+				HashSet<QTreeWidgetItem*>::Iterator lit = to_delete.begin();
 				for (;lit != to_delete.end(); lit++)
 				{
 					deleteItem_(**lit);
@@ -247,10 +245,11 @@ namespace BALL
 			for (; it != item_list.end(); it++)
 			{
 				deleteItem_(**it);
+				removeItem_(*it);
 			}
 		}
 
-		bool DatasetControl::deleteItem_(QListViewItem& item)
+		bool DatasetControl::deleteItem_(QTreeWidgetItem& item)
 		{
 			if (item_to_trajectory_.has(&item))
 			{
@@ -310,25 +309,15 @@ namespace BALL
 			Composite* composite = item_to_composite_[&item];
 			composite_to_items_[composite].erase(&item);
 			item_to_composite_.erase(&item);
-			GenericControl::removeItem_(&item, true);
+//   			GenericControl::removeItem_(&item, true);
 			return true;
 		}
 
 
-		void DatasetControl::onContextMenu_(QListViewItem* item,  const QPoint& point, int /* column */)
-		{
-			if (item == 0) return;
-			context_item_ = item;
-			
-			context_menu_.clear();
-			createContextMenu_();
-
-			insertContextMenuEntry_("Delete", SLOT(deleteItems_()));
-			context_menu_.exec(point);
-		}
-
 		void DatasetControl::createContextMenu_()
 		{
+			context_menu_.clear();
+
 			if (item_to_trajectory_.has(context_item_))
 			{
 				insertContextMenuEntry_("Visualise/Export", SLOT(visualiseTrajectory_()));
@@ -361,8 +350,8 @@ namespace BALL
 
 		void DatasetControl::insertContextMenuEntry_(const QString & text, const char* member)
 		{
-			Index menu_entry_pos = context_menu_.insertItem(text, this, member);
-			if (getSelectedItems().size() > 1) context_menu_.setItemEnabled(menu_entry_pos, false);
+			QAction* menu_entry_pos = context_menu_.addAction(text, this, member);
+			if (getSelectedItems().size() > 1) menu_entry_pos->setEnabled(false);
 		}
 
 		void DatasetControl::visualiseTrajectory_()
@@ -397,13 +386,14 @@ namespace BALL
 
 		void DatasetControl::visualiseGrid_()
 		{
+			/*
 			if (item_to_grid1_.has(context_item_))
 			{
 				RegularData1D* grid = item_to_grid1_[context_item_];
 				DockableRegularData1DWidget* widget = new DockableRegularData1DWidget(grid, getMainControl());
 				widget->show();
 				widget->zoomToFit();
-				widget->undock();
+				widget->setFloating(true);
 			}
 			else if (item_to_grid2_.has(context_item_))
 			{
@@ -411,8 +401,9 @@ namespace BALL
 				DockableRegularData2DWidget* widget = new DockableRegularData2DWidget(grid, getMainControl());
 				widget->show();
 				widget->zoomToFit();
-				widget->undock();
+				widget->setFloating(true);
 			}
+			*/
 		}
 
 
@@ -421,14 +412,13 @@ namespace BALL
 			SnapShotManager* ssm = item_to_trajectory_[context_item_];
 
 			QString s = QFileDialog::getSaveFileName(
+										0,
+										"Choose a DCD file to save",
 										getWorkingDir().c_str(),
-										"DCD files(*.dcd)",
-										getMainControl(),
-										"Trajectory File Dialog",
-										"Choose a filename to save" );
+										"DCD files(*.dcd)");
 
 			if (s == QString::null) return;
-			String filename = s.ascii();
+			String filename = ascii(s);
 
 			setWorkingDirFromFilename_(filename);
 
@@ -454,15 +444,17 @@ namespace BALL
 		String DatasetControl::chooseGridFileForOpen_()
 			throw()
 		{
-			QString result = QFileDialog::getOpenFileName("", "*", 0, "Select a RegularData file");
+			QString result = QFileDialog::getOpenFileName(
+					0, "Select a RegularData file", getWorkingDir().c_str(), "*");
 			if (result == QString::null) return "";
-			setWorkingDirFromFilename_(result.ascii());
+			String filename = ascii(result);
+			setWorkingDirFromFilename_(filename);
 
 			File infile;
 			
 			try
 			{
-				infile.open(result.ascii(), std::ios::in);
+				infile.open(filename, std::ios::in);
 			}
 			catch(Exception::FileNotFound)
 			{
@@ -470,7 +462,7 @@ namespace BALL
 				return "";
 			}
 
-			return result.ascii();
+			return filename;
 		}
 
 
@@ -523,39 +515,39 @@ namespace BALL
 		void DatasetControl::insertGrid_(RegularData1D* data, System* system, const String& name)
 			throw()
 		{
-			QListViewItem* item = createListViewItem_(system, name, "1D Grid");
+			QTreeWidgetItem* item = createListViewItem_(system, name, "1D Grid");
 			item_to_grid1_[item] = data;
 		}
 
 		void DatasetControl::insertGrid_(RegularData2D* data, System* system, const String& name)
 			throw()
 		{
-			QListViewItem* item = createListViewItem_(system, name, "2D Grid");
+			QTreeWidgetItem* item = createListViewItem_(system, name, "2D Grid");
 			item_to_grid2_[item] = data;
 		}
 
 		void DatasetControl::insertGrid_(RegularData3D* data, System* system, const String& name)
 			throw()
 		{
-			QListViewItem* item = createListViewItem_(system, name, "3D Grid");
+			QTreeWidgetItem* item = createListViewItem_(system, name, "3D Grid");
 			item_to_grid3_[item] = data;
 		}
 
 
-		QListViewItem* DatasetControl::createListViewItem_(System* system, const String& name, const String& type)
+		QTreeWidgetItem* DatasetControl::createListViewItem_(System* system, const String& name, const String& type)
 			throw()
 		{
-			QListViewItem* item;
-			if (system != 0) 
-			{
-				item = new QListViewItem(listview, name.c_str(), system->getName().c_str(), type.c_str());
-				insertComposite_(system, item);
-			}
-			else
-			{ 	
-				item = new QListViewItem(listview, name.c_str(), "", type.c_str());
-			}
+			QStringList sl;
+			sl << name.c_str();
 
+			if (system != 0) 	sl << system->getName().c_str();
+			else 							sl << "";
+
+			sl << type.c_str();
+
+			QTreeWidgetItem* item = addRow(sl);
+
+			if (system != 0) insertComposite_(system, item);
 			return item;
 		}
 
@@ -563,12 +555,14 @@ namespace BALL
 		String DatasetControl::chooseGridFileForSave_()
 			throw()
 		{
-			QString qs = QFileDialog::getSaveFileName("", "*", 0, "Select a RegularData file");
+			QString qs = QFileDialog::getSaveFileName(
+					0, "Select a RegularData file", getWorkingDir().c_str(), "*");
 			if (qs == QString::null) return "";
-			setWorkingDirFromFilename_(qs.ascii());
 
-			String result = qs.ascii();
+			String result = ascii(qs);
 			if (result.isEmpty()) return 0;
+
+			setWorkingDirFromFilename_(result);
 
 			File test;
 			
@@ -610,19 +604,19 @@ namespace BALL
 		void DatasetControl::updateSelection()
 			throw()
 		{
-			GenericControl::updateSelection();
+//   			GenericControl::updateSelection();
 
-			QListViewItemIterator it(listview);
-			for (; it.current(); ++it)
+			ItemList list = getSelectedItems();
+			ItemList::iterator it = list.begin();
+			for (; it != list.end(); it++)
 			{
-				QListViewItem* item = it.current();
-				if (!item->isSelected()) continue;
+				QTreeWidgetItem* item = *it;
 
 				if (item_to_grid1_.has(item))
 				{
 					RegularData1DMessage* message = new RegularData1DMessage(RegularData1DMessage::SELECTED);
 					message->setData(*item_to_grid1_[item]);
-					message->setCompositeName(item->text(0).ascii());
+					message->setCompositeName(ascii(item->text(1)));
 					notify_(message);
 					break;
 				}
@@ -631,7 +625,7 @@ namespace BALL
 				{
 					RegularData2DMessage* message = new RegularData2DMessage(RegularData2DMessage::SELECTED);
 					message->setData(*item_to_grid2_[item]);
-					message->setCompositeName(item->text(0).ascii());
+					message->setCompositeName(ascii(item->text(1)));
 					notify_(message);
 					break;
 				}
@@ -640,7 +634,7 @@ namespace BALL
 				{
 					RegularData3DMessage* message = new RegularData3DMessage(RegularData3DMessage::SELECTED);
 					message->setData(*item_to_grid3_[item]);
-					message->setCompositeName(item->text(0).ascii());
+					message->setCompositeName(ascii(item->text(1)));
 					notify_(message);
 					break;
 				}
@@ -651,10 +645,10 @@ namespace BALL
 			throw()
 		{
 			List<std::pair<RegularData3D*,String> > grids;
-			HashMap<QListViewItem*, RegularData3D*>::Iterator it = item_to_grid3_.begin();
+			HashMap<QTreeWidgetItem*, RegularData3D*>::Iterator it = item_to_grid3_.begin();
 			for (; it != item_to_grid3_.end(); it++)
 			{
-				std::pair<RegularData3D*, String> p((*it).second, (*it).first->text(0).ascii());
+				std::pair<RegularData3D*, String> p((*it).second, ascii((*it).first->text(0)));
 				grids.push_back(p);
 			}
 			return grids;
@@ -662,13 +656,14 @@ namespace BALL
 
 
 		void DatasetControl::computeIsoContourSurface()
+			throw()
 		{
 			// execute the surface dialog and abort if cancel is clicked
 			if (surface_dialog_ == 0) 
 			{
 				surface_dialog_ = new ContourSurfaceDialog(this, "ContourSurfaceDialog");
 				surface_dialog_->setDatasetControl(this);
-				registerWidgetForHelpSystem(surface_dialog_, "datasetControl.html#isocontour_surfaces");
+				registerForHelpSystem(surface_dialog_, "datasetControl.html#isocontour_surfaces");
 			}
 			if (!surface_dialog_->exec()) return;
 
@@ -725,18 +720,19 @@ namespace BALL
 	{
 		// open dialog to select result file
 		QString file = QFileDialog::getOpenFileName(
+												0,
+												"Select a Dock Result file",
 												getWorkingDir().c_str(),
-												"DockResult files(*.dr)",
-												this,
-												"Dock Result File Dialog",
-												"Select a Dock Result file" );
+												"DockResult files(*.dr)");
+
+		String filename = ascii(file);
 												
 		if (file == QString::null) return;
-		setWorkingDirFromFilename_(file.ascii());
+		setWorkingDirFromFilename_(filename);
 		
 		// read the DockResult from the file
 		DockResult* dock_res = new DockResult();
-		if (!dock_res->readDockResult(file.ascii()))
+		if (!dock_res->readDockResult(filename))
 		{
 			setStatusbarText("Could not read DockResult file!");
 			return;
@@ -752,7 +748,7 @@ namespace BALL
 		// apply the first SnapShot to the system to get the positions of the docked structures
 		SnapShot ss = (*(dock_res->getConformationSet()))[0];
 		System* docked_system = new System(dock_res->getConformationSet()->getSystem());
-		String name = file.ascii();
+		String name = filename;
 		vector<String> s;
 		name.split(s, "/");
 		docked_system->setName(s[s.size()-1].before("."));
@@ -764,9 +760,11 @@ namespace BALL
 	void DatasetControl::insertDockResult_(DockResult* dock_res, System& system)
 		throw()
 	{
-		QString name = dock_res->getDockingAlgorithm();
+		QString name = dock_res->getDockingAlgorithm().c_str();
 		
-		QListViewItem* item = new QListViewItem(listview, name, system.getName().c_str(), "DockResult");
+		QStringList sl;
+		sl << name << system.getName().c_str() << "DockResult";
+		QTreeWidgetItem* item = new QTreeWidgetItem(listview, sl);
 		item_to_dock_result_[item] = dock_res;
 		insertComposite_(&system, item);
 	}
@@ -784,14 +782,13 @@ namespace BALL
 		DockResult* dock_res = item_to_dock_result_[context_item_];
 		
 		QString s = QFileDialog::getSaveFileName(
+									0,
+									"Choose a Trajectory file to save",
 									getWorkingDir().c_str(),
-									"DCD files(*.dcd)",
-									getMainControl(),
-									"Dock Trajectory File Dialog",
-									"Choose a filename to save" );
+									"DCD files(*.dcd)");
 
 		if (s == QString::null) return;
-		String filename = s.ascii();
+		String filename = ascii(s);
 
 		setWorkingDirFromFilename_(filename);
 
@@ -808,13 +805,12 @@ namespace BALL
 	{
 		DockResult* dock_res = item_to_dock_result_[context_item_];
 		
-		QString s = QFileDialog::getSaveFileName(getWorkingDir().c_str(),
-																							"DockResult files(*.dr)",
-																							getMainControl(),
-																							"DockResult File Dialog",
-																							"Choose a filename to save" );
+		QString s = QFileDialog::getSaveFileName(0,
+																							"Choose a file to save the docking result",
+																							getWorkingDir().c_str(),
+																							"DockResult files(*.dr)");
 		if (s == QString::null) return;
-		String filename = s.ascii();
+		String filename = ascii(s);
 		
 		if (!dock_res->writeDockResult(filename))
 		{
@@ -829,6 +825,13 @@ namespace BALL
 		*/
 		
 		setStatusbarText("Written DockResultFile.", true);
+	}
+
+	void DatasetControl::showGuestContextMenu(const QPoint& pos)
+	{
+		getSelectedItems();
+		createContextMenu_();
+		context_menu_.exec(mapToGlobal(pos));
 	}
 
 	} // namespace VIEW

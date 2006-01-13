@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.h,v 1.6 2005/12/23 17:02:09 amoll Exp $
+// $Id: charmmConfigurationDialog.h,v 1.6.2.1 2006/01/13 15:35:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_CHARMMCONFIGURATIONDIALOG_H
@@ -25,7 +25,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT CharmmConfigurationDialog
-			: public CharmmConfigurationDialogData,
+			: public QDialog,
+				public Ui_CharmmConfigurationDialogData,
 				public PreferencesEntry
 		{
 			friend class MolecularStructure;

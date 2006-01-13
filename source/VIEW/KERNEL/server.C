@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.18 2005/12/23 17:03:33 amoll Exp $
+// $Id: server.C,v 1.18.2.1 2006/01/13 15:36:02 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -153,8 +153,8 @@ namespace BALL
 			throw()
 		{
 			server_icon_ = new QLabel(main_control.statusBar());
-			main_control.statusBar()->addWidget(server_icon_, 1, TRUE );
-			QToolTip::add(server_icon_, "VIEW server status");
+			main_control.statusBar()->addPermanentWidget(server_icon_);
+//   			QToolTip::add(server_icon_, "VIEW server status");
 			QPixmap icon(mini_ray_xpm_);
 
   		server_icon_->setFrameShape(QLabel::NoFrame);
@@ -174,7 +174,6 @@ namespace BALL
 			throw()
 		{
 			server_preferences_ = new ServerPreferences();
-			CHECK_PTR(server_preferences_);
 
 			preferences.insertEntry(server_preferences_);
 		}
@@ -207,7 +206,7 @@ namespace BALL
 				// adjust the tool tip and update the server icon
 				QString tip;
 				tip.sprintf("VIEW Server listening on port %d", port); 
-				QToolTip::add(server_icon_, tip);
+//   				QToolTip::add(server_icon_, tip);
 				server_icon_->show();
 			}
 			else

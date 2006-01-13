@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76 2005/12/23 17:02:14 amoll Exp $
+// $Id: mainControl.h,v 1.76.2.1 2006/01/13 15:35:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -39,11 +39,17 @@
 # include <BALL/STRUCTURE/fragmentDB.h>
 #endif
 
-#include <qmainwindow.h>
+#include <QMainWindow>
 #include <qapplication.h>
 #include <qmenubar.h>    // menus
 #include <qlabel.h>			 // statusbar
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QCustomEvent>
+
+class QMenu;
+class QKeySequence;
+class QAction;
 
 namespace BALL
 {
@@ -331,7 +337,7 @@ namespace BALL
 				throw();
 
 			/// Get the ID of the last highlighted menu entry (used for the HelpViewer)
-			Index getLastHighLightedMenuEntry() { return last_highlighted_menu_entry_;}
+			QAction* getLastHighLightedMenuEntry() { return last_highlighted_menu_entry_;}
 			
 			public slots:
 
@@ -394,11 +400,11 @@ namespace BALL
 					@see setMenuHint
 					@see getMenuHint
 			*/
-			void menuItemHighlighted(int id)
+			void menuItemHighlighted(QAction* action)
 				throw();
 			
 			/// Interface to QT events, e.g. to communicate with other threads
-			virtual void customEvent( QCustomEvent * e );
+			virtual bool event(QEvent* e);
 
 			/// Make the program exit
 			virtual void quit();
@@ -439,12 +445,10 @@ namespace BALL
 					\param receiver the object to which the menu action will be connected
 					\param slot the function that will be called by activation of the menu entry
 					\param accel the acceleration key
-					\param entry_ID the id for the new menu entry (default: -1, will create a new one)
-					\param hint
 					\return int the new entry_ID
 			*/
-			Index insertMenuEntry (Index parent_id, const String& name, const QObject* receiver = 0, 
-													 const char* slot = 0, Index accel = 0, Index pos = -1)
+			QAction* insertMenuEntry(Position parent_id, const String& name, const QObject* receiver = 0, 
+													 const char* slot = 0, const QKeySequence& accel = 0)
 				throw();
 
 			/// 
@@ -458,7 +462,7 @@ namespace BALL
 					\return   QPopupMenu* a pointer to the created QPopupMenu
 					\see      PopUpID
 			*/	
-			virtual QPopupMenu* initPopupMenu(int ID)
+			virtual QMenu* initPopupMenu(int ID)
 				throw();
 
 			/** Insert a separator into the popup menu <b> ID</b>. 
@@ -575,11 +579,11 @@ namespace BALL
 				throw();
 
 			/// Set a hint for a menu entry
-			void setMenuHint(Index id, const String& hint)
+			void setMenuHint(QAction* id, const String& hint)
 				throw();
 
 			/// Get the hint for a menu entry
-			const String& getMenuHint(Index id) const
+			String getMenuHint(QAction* id) const
 				throw();
 			
 			/// Get a const reference for the fragment database
@@ -758,11 +762,6 @@ namespace BALL
 																				 bool to_delete = true)
 				throw();
 
-			/*_	Create a unique item ID for a menuentry by adding 1 to current_id_
-			*/
-			int getNextID_()
-				throw();
-
 			void selectRecursive_(Composite* composite)
 				throw();
 
@@ -815,11 +814,8 @@ namespace BALL
 			MainControlPreferences* 		main_control_preferences_;
 			NetworkPreferences* 				network_preferences_;
 			Preferences*								preferences_dialog_;
-			int 			 									preferences_id_;
-			int 			 									delete_id_;
 			INIFile		 									preferences_file_;
 			
-			static int 									current_id_;
 			bool 												composites_locked_;
 			ModularWidget*							locking_widget_;
 			bool 											  stop_simulation_;
@@ -833,8 +829,6 @@ namespace BALL
 					removeModularWidget.
 			*/
 			List<ModularWidget*>				modular_widgets_;
-
-			HashMap<Index, String>      menu_entries_hints_;
 
 			QLabel*             simulation_icon_;
 			static const char  *simulation_running_xpm_[];
@@ -857,9 +851,15 @@ namespace BALL
 			String 							proxy_;
 			Position 						proxy_port_;
 
-			Index 							stop_simulation_id_, complement_selection_id_, open_id_, save_project_id_;
+			QAction* stop_simulation_action_;
+			QAction* complement_selection_action_;
+			QAction* open_action_;
+			QAction* save_project_action_;
+			QAction* preferences_action_;
+			QAction* delete_action_;
 
-			Index last_highlighted_menu_entry_;
+			QAction* last_highlighted_menu_entry_;
+			HashMap<Position, QMenu*> id_to_menu_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

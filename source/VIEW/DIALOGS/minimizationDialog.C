@@ -1,18 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: minimizationDialog.C,v 1.4 2005/12/23 17:03:27 amoll Exp $
+// $Id: minimizationDialog.C,v 1.4.2.1 2006/01/13 15:35:52 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/minimizationDialog.h>
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
+#include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <qfiledialog.h>
+#include <QFileDialog>
 #include <qlineedit.h>
-#include <qradiobutton.h>
-#include <qbuttongroup.h>
 
 namespace BALL
 {
@@ -20,11 +19,22 @@ namespace BALL
 	{
 
 		MinimizationDialog::MinimizationDialog(QWidget* parent, const char* name)
-			:	MinimizationDialogData( parent, name ),
+			:	QDialog(parent),
+				Ui_MinimizationDialogData(),
 				amber_dialog_(0),
 				charmm_dialog_(0)
 		{
+			setupUi(this);
+			setObjectName(name);
 			setINIFileSectionName("MINIMIZATION");
+			
+			// signals and slots connections
+			connect( start_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
+			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
+			connect( advanced_button, SIGNAL( clicked() ), this, SLOT( advancedOptions() ) );
+			connect( useAmberRadioButton, SIGNAL( clicked() ), this, SLOT( useAmberFF() ) );
+			connect( useCharmmRadioButton, SIGNAL( clicked() ), this, SLOT( useCharmmFF() ) );
+
 
 			registerObject_(max_iterations_lineedit);
 			registerObject_(energy_difference_lineedit);
@@ -41,7 +51,7 @@ namespace BALL
 		{
 			try
 			{
-				return (Size)String(max_iterations_lineedit->text().ascii()).toUnsignedInt();
+				return (Size)ascii(max_iterations_lineedit->text()).toUnsignedInt();
 			}
 			catch(...)
 			{
@@ -59,7 +69,7 @@ namespace BALL
 		{
 			try
 			{
-				return (Size)String(refresh_iterations_lineedit->text().ascii()).toUnsignedInt();
+				return (Size)ascii(refresh_iterations_lineedit->text()).toUnsignedInt();
 			}
 			catch(...)
 			{
@@ -77,7 +87,7 @@ namespace BALL
 		{
 			try
 			{
-				return (double)String(max_grad_lineedit->text().ascii()).toFloat();
+				return (double)ascii(max_grad_lineedit->text()).toFloat();
 			}
 			catch(...)
 			{
@@ -95,7 +105,7 @@ namespace BALL
 		{
 			try
 			{
-				return (double)String(energy_difference_lineedit->text().ascii()).toFloat();
+				return (double)ascii(energy_difference_lineedit->text()).toFloat();
 			}
 			catch(...)
 			{

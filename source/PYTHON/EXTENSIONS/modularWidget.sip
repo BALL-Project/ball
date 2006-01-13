@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.sip,v 1.7 2005/12/23 17:02:53 amoll Exp $
+// $Id: modularWidget.sip,v 1.7.2.1 2006/01/13 15:35:39 amoll Exp $
 //
 
 class ModularWidget
@@ -48,10 +48,8 @@ class ModularWidget
 	//Index insertMenuEntry (Index, const String&, const QObject*= 0, const char* = 0, Index = 0, Index = -1) throw();
 	void setMenuHint(const String&);
 	void setMenuHelp(const String&);
-	//virtual void registerWidgetForHelpSystem(const QWidget*, const String&);
-	virtual void registerMenuEntryForHelpSystem(Index, const String&);
+	//virtual void registerForHelpSystem(const QObject*, const String&);
 //	virtual void dump(std::ostream& = std::cout, Size = 0) const throw();
 	void setWorkingDirFromFilename_(String) throw();
-	void removeMenuEntries();
 	virtual void showHelp(const String&);
 }; 

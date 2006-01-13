@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.23 2005/12/23 17:03:26 amoll Exp $
+// $Id: lightSettings.C,v 1.23.2.1 2006/01/13 15:35:50 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -9,9 +9,7 @@
 
 #include <qpushbutton.h>
 #include <qlineedit.h> 
-#include <qlistbox.h>
 #include <qlabel.h>
-#include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qslider.h>
 
@@ -20,12 +18,27 @@ namespace BALL
 	namespace VIEW
 	{
 
-LightSettings::LightSettings(QWidget* parent, const char* name, WFlags fl)
-  : LightSettingsData(parent, name, fl),
+LightSettings::LightSettings(QWidget* parent, const char* name, Qt::WFlags fl)
+  : QDialog(parent, fl),
+		Ui_LightSettingsData(),
 		PreferencesEntry(),
 		ignore_(false),
 		current_light_(-1)
 {
+	setupUi(this);
+	setObjectName(name);
+	
+	// signals and slots connections
+	connect( lights_list, SIGNAL( selectionChanged() ), this, SLOT( lightSelected() ) );
+	connect( ambient, SIGNAL( stateChanged(int) ), this, SLOT( typeSelected() ) );
+	connect( point, SIGNAL( stateChanged(int) ), this, SLOT( typeSelected() ) );
+	connect( directional, SIGNAL( stateChanged(int) ), this, SLOT( typeSelected() ) );
+	connect( intensity, SIGNAL( valueChanged(int) ), this, SLOT( intensityChanged() ) );
+	connect( color_button, SIGNAL( clicked() ), this, SLOT( colorPressed() ) );
+	connect( add_lights_button, SIGNAL( clicked() ), this, SLOT( addLightPressed() ) );
+	connect( remove_lights_button, SIGNAL( clicked() ), this, SLOT( removeLightPressed() ) );
+	connect( not_relative, SIGNAL( stateChanged(int) ), this, SLOT( positionTypeChanged() ) );
+
 	if (parent == 0 || !RTTI::isKindOf<Scene>(*parent)) 
 	{
 		Log.error() << "LightSettings dialog must be created with a Scene as parent!" << std::endl;
@@ -39,7 +52,7 @@ LightSettings::LightSettings(QWidget* parent, const char* name, WFlags fl)
 		return;
 	}
 	
-	relative_to_camera->setChecked(true);
+	relative->setChecked(true);
 	defaultsPressed();
 	setWidgetStackName("Lighting");
 	registerWidgetForHelpSystem_(this, "scene.html#lightsources");
@@ -69,20 +82,20 @@ void LightSettings::update()
 		return;
 	}
 
-	if (lights_.size() != lights_list->count())
+	if (lights_.size() != (Position) lights_list->count())
 	{
 		clearFields_();
 	
 		for (Position light_nr = 0; light_nr < lights_.size(); light_nr++)
 		{
-			lights_list->insertItem((String("Light ") + String(light_nr + 1)).c_str());
+			lights_list->addItem((String("Light ") + String(light_nr + 1)).c_str());
 		}
 	}
 
 	if (getCurrentLightNumber_() == -1)
 	{
 		ignore_ = true;
-		lights_list->setSelected(lights_.size() - 1, true);
+		lights_list->setItemSelected(lights_list->item(lights_.size() - 1), true);
 		ignore_ = false;
 		return;
 	}
@@ -139,13 +152,13 @@ void LightSettings::saveSettingsToLight_()
 	}
 
 	LightSource& light = lights_[current_light_];
-	light.setColor(color_sample->backgroundColor());
+	light.setColor(getColor(color_sample));
 
 	try
 	{
 		Vector3 pos = getPosition_();
 		Vector3 dir = getDirection_();
-		bool relative = LightSettingsData::relative->isChecked();
+		bool relative = Ui_LightSettingsData::relative->isChecked();
 		light.setRelativeToCamera(relative);
 
 		// position and direction
@@ -164,11 +177,11 @@ void LightSettings::saveSettingsToLight_()
 		/////////////////////////////////////////////////////
 		// type of light
 
-		if 			(light_type->selected() == ambient)
+		if 			(ambient->isChecked())
 		{
 			light.setType(LightSource::AMBIENT);
 		}
-		else if (light_type->selected() == point)
+		else if (point->isChecked())
 		{
 			light.setType(LightSource::POSITIONAL);
 		}
@@ -210,7 +223,11 @@ void LightSettings::removeLightPressed()
 
 void LightSettings::typeSelected()
 {
-	typeSelected_(light_type->selectedId());
+	Position pos = LightSource::AMBIENT;
+	if (point->isChecked()) pos = LightSource::POSITIONAL;
+	if (directional->isChecked()) pos = LightSource::DIRECTIONAL;
+
+	typeSelected_(pos);
 }
 
 void LightSettings::typeSelected_(Position type)
@@ -226,7 +243,7 @@ void LightSettings::typeSelected_(Position type)
 	direction_x->setEnabled(!is_ambient);
 	direction_y->setEnabled(!is_ambient);
 	direction_z->setEnabled(!is_ambient);
-	relative_to_camera->setEnabled(!is_ambient);
+	relative->setEnabled(!is_ambient);
 	not_relative->setEnabled(!is_ambient);
 }
 
@@ -240,7 +257,7 @@ void LightSettings::getValues_()
 
 	LightSource& light = lights_[current];
 
-	color_sample->setBackgroundColor(light.getColor().getQColor());
+	setColor(color_sample, light.getColor());
 
 	Vector3 pos = light.getPosition();
 	Vector3 dir = light.getDirection();
@@ -258,9 +275,11 @@ void LightSettings::getValues_()
 	setPosition_(pos);
 	setDirection_(dir);
 
-	typeSelected_(light.getType());
+	typeSelected();
 	
-	light_type->setButton(light.getType());
+	if (light.getType() == LightSource::AMBIENT) ambient->setChecked(true);
+	if (light.getType() == LightSource::POSITIONAL) point->setChecked(true);
+	if (light.getType() == LightSource::DIRECTIONAL) directional->setChecked(true);
 	intensity->setValue((Index)(light.getIntensity() * 100.0));
 }
 
@@ -291,10 +310,12 @@ void LightSettings::setControlsEnabled_(bool state)
 	intensity->setEnabled(state);
 	intensity->setValue(0);
 	remove_lights_button->setEnabled(state);
-	relative_to_camera->setEnabled(state);
+	relative->setEnabled(state);
 	not_relative->setEnabled(state);
 	color_button->setEnabled(state);
-	light_type->setEnabled(state);
+	point->setEnabled(state);
+	directional->setEnabled(state);
+	ambient->setEnabled(state);
 }
 
 void LightSettings::apply()
@@ -319,7 +340,7 @@ void LightSettings::restoreDefaultValues(bool /*all*/)
 	throw()
 {
 	defaultsPressed();
-	color_sample->setBackgroundColor(white);
+	setColor(color_sample, ColorRGBA(255,255,255));
 	lights_list->setCurrentItem(0);
 }
 
@@ -377,22 +398,22 @@ void LightSettings::setDirection_(const Vector3& v)
 Vector3 LightSettings::getPosition_() 
 	throw(Exception::InvalidFormat)
 {
-	return Vector3(String(position_x->text().ascii()).toFloat(),
-				 			   String(position_y->text().ascii()).toFloat(),
-			  				 String(position_z->text().ascii()).toFloat());
+	return Vector3(ascii(position_x->text()).toFloat(),
+				 			   ascii(position_y->text()).toFloat(),
+			  				 ascii(position_z->text()).toFloat());
 }
 
 Vector3 LightSettings::getDirection_() 
 	throw(Exception::InvalidFormat)
 {
-	return Vector3(String(direction_x->text().ascii()).toFloat(),
-				 			   String(direction_y->text().ascii()).toFloat(),
-			  				 String(direction_z->text().ascii()).toFloat());
+	return Vector3(ascii(direction_x->text()).toFloat(),
+				 			   ascii(direction_y->text()).toFloat(),
+			  				 ascii(direction_z->text()).toFloat());
 }
 
 Index LightSettings::getCurrentLightNumber_() const
 {
-	return lights_list->currentItem();
+	return lights_list->row(lights_list->currentItem());
 }
 
 void LightSettings::restoreValues(bool)

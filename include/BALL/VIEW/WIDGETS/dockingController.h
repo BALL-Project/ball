@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1 2006/01/04 16:25:01 amoll Exp $
+// $Id: dockingController.h,v 1.1.2.1 2006/01/13 15:35:33 amoll Exp $
 //
 
 #ifndef BALL_WIDGETS_DOCKINGCONTROLLER_H
@@ -199,9 +199,9 @@ namespace BALL
 				*/
 				DockProgressDialog* progress_dialog_;
 				
-				/** Menu entry id
+				/** Menu entry 
 				 */
-				int id_;
+				QAction* action_;
 		};
 	} // end of namespace View
 } // end of namespace BALL

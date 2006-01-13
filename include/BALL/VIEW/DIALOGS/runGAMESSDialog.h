@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: runGAMESSDialog.h,v 1.1 2005/09/02 13:36:56 anhi Exp $
+// $Id: runGAMESSDialog.h,v 1.1.2.1 2006/01/13 15:35:29 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_RUNGAMESSDIALOG_H
@@ -22,7 +22,8 @@ namespace BALL
 	namespace VIEW
 	{
 		class BALL_EXPORT RunGAMESSDialog
-			: public RunGAMESSDialogData
+			: public QDialog,
+				public Ui_RunGAMESSDialogData
 		{
 			Q_OBJECT
 

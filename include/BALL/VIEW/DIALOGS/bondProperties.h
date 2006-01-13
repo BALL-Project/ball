@@ -19,12 +19,13 @@ namespace BALL
 				\ingroup  ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT BondProperties 
-			: public BondPropertiesData
+			: public QDialog,
+			  public Ui_BondPropertiesData
 		{ 
 			Q_OBJECT
 
 		public:
-			BondProperties(Atom* atom,  QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+			BondProperties(Atom* atom,  QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
 			~BondProperties();
 
 		public slots:

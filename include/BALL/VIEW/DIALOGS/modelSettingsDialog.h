@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.24 2005/12/23 17:02:11 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.24.2.1 2006/01/13 15:35:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -22,6 +22,7 @@
 #include <BALL/VIEW/UIC/modelSettingsDialogData.h>
 
 #include <qcheckbox.h>
+#include <QLabel>
 
 class QSlider;
 class QLabel;
@@ -37,7 +38,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT ModelSettingsDialog 
-			: public ModelSettingsDialogData,
+			: public QDialog,
+				public Ui_ModelSettingsDialogData,
 				public PreferencesEntry
 		{ 
 			Q_OBJECT
@@ -45,7 +47,7 @@ namespace BALL
 			public:
 
 			/// Constructor
-			ModelSettingsDialog( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+			ModelSettingsDialog( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
 
 			/// Destructor
 			~ModelSettingsDialog() {}

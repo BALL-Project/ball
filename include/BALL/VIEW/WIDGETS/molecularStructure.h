@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.28 2005/12/23 17:02:23 amoll Exp $
+// $Id: molecularStructure.h,v 1.28.2.1 2006/01/13 15:35:35 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -271,25 +271,25 @@ namespace BALL
 
 			void selectUnassignedForceFieldAtoms_();
 
-			Index center_camera_id_;
-			Index build_bonds_id_;
-			Index add_hydrogens_id_;
-			Index check_structure_id_;
-			Index	create_distance_grid_id_;
-			Index	calculate_ss_id_;
-			Index	map_proteins_id_;
-			Index	calculate_RMSD_id_;
-			Index	assign_charges_id_;
-			Index	energy_id_;
-			Index	minimization_id_;
-			Index	mdsimulation_id_;
-			Index	build_peptide_id_;
-			Index	calculate_hbonds_id_;
-			Index	amber_ff_id_;
-			Index	charmm_ff_id_;
-			Index setup_ff_;
-			Index calculate_ramachandran_;
-			Index menu_FPDB_;
+			QAction* center_camera_id_;
+			QAction* build_bonds_id_;
+			QAction* add_hydrogens_id_;
+			QAction* check_structure_id_;
+			QAction* create_distance_grid_id_;
+			QAction* calculate_ss_id_;
+			QAction* map_proteins_id_;
+			QAction* calculate_RMSD_id_;
+			QAction* assign_charges_id_;
+			QAction* energy_id_;
+			QAction* minimization_id_;
+			QAction* mdsimulation_id_;
+			QAction* build_peptide_id_;
+			QAction* calculate_hbonds_id_;
+			QAction* amber_ff_id_;
+			QAction* charmm_ff_id_;
+			QAction* setup_ff_;
+			QAction* calculate_ramachandran_;
+			QAction* menu_FPDB_;
 
 			bool use_amber_;
 

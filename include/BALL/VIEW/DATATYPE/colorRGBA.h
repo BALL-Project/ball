@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.h,v 1.21 2005/12/23 17:02:08 amoll Exp $
+// $Id: colorRGBA.h,v 1.21.2.1 2006/01/13 15:35:21 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -377,6 +377,9 @@ namespace BALL
 							 ColorUnit& green_value,
 							 ColorUnit& blue_value) const
 				throw();
+
+			///
+			ColorRGBA getInverseColor() const;
 			 
 			//@}
 			/**	@name	Predicates

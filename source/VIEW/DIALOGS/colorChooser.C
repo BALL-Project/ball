@@ -8,6 +8,8 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 #define BALLVIEW_BUTTON_WIDTH 70
 #define BALLVIEW_BUTTON_HEIGHT 30
@@ -15,7 +17,7 @@
 ColorChooser::ColorChooser(QWidget *parent, const char *name)
 	: QWidget(parent, name)
 {
-	QHBoxLayout *layout = new QHBoxLayout(this);
+	Q3HBoxLayout *layout = new Q3HBoxLayout(this);
 	layout->setMargin(0);
 
 	label = new QLabel(this, "Name");

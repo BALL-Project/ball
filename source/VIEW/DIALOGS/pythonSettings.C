@@ -7,37 +7,111 @@
 #include <qlineedit.h>
 #include <qfiledialog.h>
 #include <qpushbutton.h>
-#include <qwidgetstack.h>
+#include <qstackedwidget.h>
+#include <QTableWidgetItem>
+#include <QHeaderView>
+#include <QComboBox>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
+ComboBoxDelegate::ComboBoxDelegate(QObject* parent)
+	: QItemDelegate(parent)
+{
+	sl_modifier_ << "None" << "Shift" << "Ctrl";
+	
+	for (Position p = 1; p < 13; p++)
+	{
+		sl_keys_ << (String("F") + String(p)).c_str();
+	}
+}
+
+QWidget *ComboBoxDelegate::createEditor(QWidget *parent,
+		const QStyleOptionViewItem& option,
+		const QModelIndex& index) const
+{
+	Position c = index.column();
+
+	if (c == 2) return QItemDelegate::createEditor(parent, option, index);
+
+	QComboBox* editor = new QComboBox(parent);
+
+	if (c == 0) editor->addItems(sl_modifier_);
+	else 			 editor->addItems(sl_keys_);
+
+	editor->setEditable(false);
+	editor->setFrame(false);
+	editor->setDuplicatesEnabled(false);
+
+	editor->installEventFilter(const_cast<ComboBoxDelegate*>(this));
+	editor->showPopup();
+	return editor;
+}
+
+void ComboBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+	if (index.column() == 2)
+	{
+		QItemDelegate::setEditorData(editor, index);
+		return;
+	}
+
+	QString data = index.model()->data(index, Qt::DisplayRole).toString();
+	QComboBox* cb = static_cast<QComboBox*>(editor);
+	cb->setCurrentIndex(cb->findText(data));
+}
+
+void ComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+																	 const QModelIndex &index) const
+{
+	if (index.column() == 2)
+	{
+		QItemDelegate::setModelData(editor, model, index);
+		return;
+	}
+
+	QComboBox* cb = static_cast<QComboBox*>(editor);
+	QString data = cb->currentText();
+	model->setData(index, data);
+}
+
+void ComboBoxDelegate::updateEditorGeometry(QWidget *editor,
+												const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+	editor->setGeometry(option.rect);
+}
+
+// =====================================================
+
 HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
 	throw()
-	: QTable(parent)
+	: QTableWidget(parent),
+		delegate_(this)
 {
-  horizontalHeader()->setLabel(0, "Modifier");
-  horizontalHeader()->setLabel(1, "Key");
-  horizontalHeader()->setLabel(2, "Command");
+	setItemDelegate(&delegate_);
 
-  setNumRows(0);
-  setNumCols(3);
+  setColumnCount(3);
+	setHorizontalHeaderItem(0, new QTableWidgetItem());
+	setHorizontalHeaderItem(1, new QTableWidgetItem());
+	setHorizontalHeaderItem(2, new QTableWidgetItem());
+  horizontalHeaderItem(0)->setText("Modifier");
+  horizontalHeaderItem(1)->setText("Key");
+  horizontalHeaderItem(2)->setText("Command");
+
+  setRowCount(0);
 	setShowGrid(true);
 	
 	setColumnWidth(0, 70);
 	setColumnWidth(1, 60);
 	setColumnWidth(2, 350);
-	setGeometry(5,5, 534, 320);
+	setGeometry(2,2, 530, 342);
 
-	setSelectionMode(QTable::SingleRow);
+	setSelectionBehavior(QAbstractItemView::SelectRows);
+	setSelectionMode(QAbstractItemView::SingleSelection);
 
-	QStringList labels;
-	labels << "Modifier" << "Key" << "Command";
-	setColumnLabels(labels);
-
-	setName("PythonHotkeys");
+	setObjectName("PythonHotkeys");
 
 	modifier_ << "" << "Shift";// << "Alt";
 
@@ -47,61 +121,63 @@ HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
 	}
 	
 	// F2 -> runScriptAgain()
-	appendHotkey(NONE, 2, "runScriptAgain()");
+	appendHotkey("None", "F2", "runScriptAgain()");
 
 	// F3 -> hideAllRepresentations()
-	appendHotkey(NONE, 3, "hideAllRepresentations()");
+	appendHotkey("None", "F3", "hideAllRepresentations()");
 
 	// F4 -> removeWater()
-	appendHotkey(NONE, 4, "removeWater()");
+	appendHotkey("None", "F4", "removeWater()");
 
 	// F5 -> printAtomTypesForHighlighted()
-	appendHotkey(NONE, 5, "printAtomTypesForHighlighted()");
+	appendHotkey("None", "F5", "printAtomTypesForHighlighted()");
 
 	// F5 -> printAtomTypesForLigands()
-	appendHotkey(SHIFT, 5, "printAtomTypesForLigands()");
+	appendHotkey("Shift", "F5", "printAtomTypesForLigands()");
 
 	// F6 -> showCartoonAndLigand()
-	appendHotkey(NONE, 6, "highlightLigand()");
+	appendHotkey("None", "F6", "highlightLigand()");
 
 	// S-F6 -> showCartoonAndLigand()
-	appendHotkey(SHIFT, 6, "showCartoonAndLigand()");
+	appendHotkey("Shift", "F6", "showCartoonAndLigand()");
 
 	// F7 -> addOptimizedHydrogens()
-	appendHotkey(NONE, 7, "addOptimizedHydrogens()");
+	appendHotkey("None", "F7", "addOptimizedHydrogens()");
 	
 	// S-F7 -> relaxStructure()
-	appendHotkey(SHIFT, 7, "relaxStructure()");
+	appendHotkey("Shift", "F7", "relaxStructure()");
 	
 	// F8 -> quickSave()
-	appendHotkey(NONE, 8, "quickSave()");
+	appendHotkey("None", "F8", "quickSave()");
 	
 	// S-F8 -> quickLoad()
-	appendHotkey(SHIFT, 8, "quickLoad()");
+	appendHotkey("Shift", "F8", "quickLoad()");
 	
 	// F12 -> clearRepresentations()
-	appendHotkey(NONE, 12, "clearRepresentations()");
+	appendHotkey("None", "F12", "clearRepresentations()");
 	
 	// S-F12 -> clearAll()
-	appendHotkey(SHIFT, 12, "clearAll()");
+	appendHotkey("Shift", "F12", "clearAll()");
 }
 
-void HotkeyTable::appendHotkey(Modifier mod, Position F_key, const String& command)
+void HotkeyTable::appendHotkey(const String& mod, const String& F_key, const String& command)
 {
 	addEmptyRow();
-	((QComboTableItem*)item(numRows() - 1, 0))->setCurrentItem((Position)mod);
-	((QComboTableItem*)item(numRows() - 1, 1))->setCurrentItem(F_key - 1);
-	item(numRows() - 1, 2)->setText(command.c_str());
+	Index r = rowCount() - 1;
+
+	item(r, 0)->setText(mod.c_str());
+	item(r, 1)->setText(F_key.c_str());
+	item(r, 2)->setText(command.c_str());
+	scrollToBottom();
 }
 
 List<Hotkey> HotkeyTable::getContent() const
 	throw()
 {
 	List<Hotkey> result;
-	for (Index pos = 0; pos < numRows(); pos++)
+	for (Index pos = 0; pos < rowCount(); pos++)
 	{
-		if (item(pos, 2)->text().isEmpty() ||
-				!RTTI::isKindOf<QComboTableItem>(*item(pos, 0))) 
+		if (item(pos, 2)->text().isEmpty())
 		{
 			Log.error() << "Problem reading content of PythonHotkeys" << std::endl;
 			continue;
@@ -109,29 +185,18 @@ List<Hotkey> HotkeyTable::getContent() const
 
 		Hotkey hotkey;
 
-		Index ci = ((QComboTableItem*)item(pos, 0))->currentItem();
-		switch(ci)
-		{
-      case 0:
-        hotkey.button_state = Qt::NoButton;
-        break;
+		String s = ascii(item(pos, 0)->text());
+		if      (s == "None")  hotkey.button_state = Qt::NoModifier;
+		else if (s == "Shift") hotkey.button_state = Qt::ShiftModifier;
+		else if (s == "Ctrl")  hotkey.button_state = Qt::ControlModifier;
+		else Log.error() << "Problem reading content of PythonHotkeys" << std::endl;
 
-      case 1:
-        hotkey.button_state = Qt::ShiftButton;
-        break;
+		s = ascii(item(pos, 1)->text());
+		Index p = s[1] - 49;
 
-      case 2:
-        hotkey.button_state = Qt::ControlButton;
-        break;
+    hotkey.key = (Qt::Key) (Qt::Key_F1 + p);
 
-      default:
-        Log.error() << "Problem reading content of PythonHotkeys" << std::endl;
-    }
-
-    ci = ((QComboTableItem*) item(pos, 1))->currentItem();
-    hotkey.key = (Qt::Key) (Qt::Key_F1 + ci);
-
-    hotkey.action = item(pos, 2)->text().ascii();
+    hotkey.action = ascii(item(pos, 2)->text());
 
     result.push_back(hotkey);
   }
@@ -143,38 +208,33 @@ List<Hotkey> HotkeyTable::getContent() const
 void HotkeyTable::setContent(const List<Hotkey>& hotkeys)
 	throw()
 {
-  setNumRows(hotkeys.size());
+  setRowCount(hotkeys.size());
 	setColumnWidth(2, 230);
 
 	List<Hotkey>::ConstIterator it = hotkeys.begin();
 	Position p = 0;
 	for (; it != hotkeys.end(); it++)
 	{
-		QComboTableItem * item = new QComboTableItem(this, modifier_, FALSE );
+		String s;
+		QStringList sl;
 		switch ((Position)(*it).button_state)
 		{
-			case (Position)Qt::NoButton:
-				item->setCurrentItem(0);
-				break;
-
-			case (Position)Qt::ShiftButton:
-				item->setCurrentItem(1);
-				break;
-
-			case (Position)Qt::ControlButton:
-				item->setCurrentItem(2);
-				break;
-
+			case (Position)Qt::NoButton: 				s = "None"; break;
+			case (Position)Qt::ShiftModifier: 	s = "Shift"; break;
+			case (Position)Qt::ControlModifier: s = "Ctrl"; break;
 			default:
 				Log.error() << "Invalid button state for Hotkey" << std::endl;
 		}
-    setItem(p, 0,  item) ;
 
-		QComboTableItem * item2 = new QComboTableItem(this, keys_, FALSE );
-		item2->setCurrentItem((*it).key - Qt::Key_F1);
-    setItem(p, 1,  item2) ;
+		insertRow(p);
 
-    setText(p, 2,  (*it).action.c_str());
+		itemAt(p, 0)->setText(s.c_str());
+
+		Position p = (*it).key - Qt::Key_F1 + 1;
+		s = String(p);
+		itemAt(p, 1)->setText(s.c_str());
+
+		itemAt(p, 2)->setText((*it).action.c_str());
 
 		p++;
 	}
@@ -182,37 +242,34 @@ void HotkeyTable::setContent(const List<Hotkey>& hotkeys)
 
 void HotkeyTable::addEmptyRow()
 {
-	setNumRows(numRows() + 1);
-	QComboTableItem * item = new QComboTableItem(this, modifier_, FALSE );
-	item->setCurrentItem(0);
-  setItem(numRows() -1, 0,  item) ;
-	item = new QComboTableItem(this, keys_, FALSE );
-	item->setCurrentItem(0);
-  setItem(numRows() -1, 1,  item) ;
-  setText(numRows() -1, 2, "");
-	update();
+	Position p = rowCount();
+	insertRow(p);
+	scrollToBottom();
+	setItem(p, 0, new QTableWidgetItem());
+	setItem(p, 1, new QTableWidgetItem());
+	setItem(p, 2, new QTableWidgetItem());
+	item(p, 0)->setText("None");
+	item(p, 1)->setText("F2");
+	item(p, 2)->setText("");
+	emit(cellActivated(p, 2));
 }
 
 void HotkeyTable::removeSelection()
 {
-	for (Index p = 0; p < numRows(); p++)
-	{
-		if (isRowSelected(p))
-		{
-			removeRow(p);
-			return;
-		}
-	}
+	QList<QTableWidgetSelectionRange> l = QTableWidget::selectedRanges();
+	if (l.size() == 0) return;
+
+	removeRow((*l.begin()).bottomRow());
 }
 
 bool HotkeyTable::getValue(String& value) const
 {
 	value = "";
-	for (Position p = 0; p < (Position)numRows(); p++)
+	for (Position p = 0; p < (Position)rowCount(); p++)
 	{
-		Index c1 = ((QComboTableItem*)item(p, 0))->currentItem();
-		Index c2 = ((QComboTableItem*)item(p, 1))->currentItem();
-		value += String(c1) + '°' + String(c2) + '°' + item(p, 2)->text().ascii();
+		value += ascii(item(p, 0)->text()) + '°';
+		value += ascii(item(p, 1)->text()) + '°';
+		value += ascii(item(p, 2)->text()) + '°';
 		value += '@';
 	}
 	return true;
@@ -220,7 +277,7 @@ bool HotkeyTable::getValue(String& value) const
 
 bool HotkeyTable::setValue(const String& value)
 {
-	setNumRows(0);
+	setRowCount(0);
 
 	vector<String> fields;
 	vector<String> fields2;
@@ -235,20 +292,7 @@ bool HotkeyTable::setValue(const String& value)
 			continue;
 		}
 
-		Position p0;
-		Position p1;
-		try
-		{
-			p0 = fields2[0].toUnsignedShort();
-			p1 = fields2[1].toUnsignedShort();
-		}
-		catch(...)
-		{
-			BALLVIEW_DEBUG;
-			continue;
-		}
-
-		appendHotkey((Modifier)p0, p1 + 1, fields2[2].c_str());
+		appendHotkey(fields2[0], fields2[1], fields2[2]);
 	}
 	
 	return true;
@@ -271,11 +315,20 @@ void PythonSettings::setContent(const List<Hotkey>& hotkeys)
  	table->setContent(hotkeys);
 }
 
-PythonSettings::PythonSettings( QWidget* parent,  const char* name, WFlags fl )
- : PythonSettingsData(parent, name, fl),
+
+// =============================================================
+PythonSettings::PythonSettings(QWidget* parent, const char* name)
+ : QDialog(parent),
+	 Ui_PythonSettingsData(),
 	 PreferencesEntry()
 {
 	setINIFileSectionName("PYTHON");
+	setupUi(this);
+	setObjectName(name);
+	
+	// signals and slots connections
+	connect( choose_button, SIGNAL( clicked() ), this, SLOT( fileSelected() ) );
+	connect( clear_button, SIGNAL( clicked() ), this, SLOT( clearStartupScript() ) );
 
 	table = new HotkeyTable(widget_stack->widget(1));
 	connect(new_button, SIGNAL(pressed()), table, SLOT(addEmptyRow()));
@@ -295,11 +348,10 @@ PythonSettings::PythonSettings( QWidget* parent,  const char* name, WFlags fl )
 void PythonSettings::fileSelected()
 {
 	QString s = QFileDialog::getSaveFileName(
-								"",
-								"Python scripts (*.py)",
-								this,	
+								0,
 								"Choose a Startup Python Script",
-								"" );
+								getMainControl()->getWorkingDir().c_str(),
+								"Python scripts (*.py)");
 
 	if (s == QString::null) return;
 	script_edit->setText(s);
@@ -321,7 +373,7 @@ void PythonSettings::clearStartupScript()
 String PythonSettings::getFilename() const
 	throw()
 {
-	return String(script_edit->text().ascii());
+	return ascii(script_edit->text());
 }
 
 

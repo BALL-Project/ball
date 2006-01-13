@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19 2006/01/04 16:37:56 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.1 2006/01/13 15:35:33 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -27,7 +27,8 @@
 # include <BALL/DATATYPE/regularData3D.h>
 #endif 
 
-#include <qpopupmenu.h>
+#include <QMenu>
+#include <QTreeWidgetItem>
 
 namespace BALL
 {
@@ -98,16 +99,17 @@ namespace BALL
 			List<std::pair<RegularData3D*, String> > get3DGrids()
 				throw();
 
-
 			//@}
 			/** @name Public slots 
 			*/ 
 			//@{
 			public slots:
+				
+			///
+			void computeIsoContourSurface() throw();
 
 			///
-			void addTrajectory()
-				throw();
+			void addTrajectory() throw();
 
 			///
 			void add1DGrid() throw();
@@ -119,17 +121,13 @@ namespace BALL
 			void add3DGrid() throw();
 
 			///
-			void addDockResult()
-				throw();
+			void addDockResult() throw();
 				
 			///
 			void updateSelection() throw();
 
 			/// Overloaded from GenericControl, calls cut
 			virtual void deleteCurrentItems() throw() {deleteItems_();}
-
-			///
-			void computeIsoContourSurface();
 
 			//@} 
 			/** @name Protected members 
@@ -138,7 +136,9 @@ namespace BALL
 		  protected slots:
 
 			// overload this method to add furter data types
-			virtual bool deleteItem_(QListViewItem& item);
+			virtual bool deleteItem_(QTreeWidgetItem& item);
+			virtual void showGuestContextMenu(const QPoint& pos);
+
 
 			void showDockResult_();
 			void saveDockTrajectories_();
@@ -153,8 +153,6 @@ namespace BALL
 			String chooseGridFileForSave_() throw();
 			String chooseGridFileForOpen_() throw();
 	
-			void onContextMenu_(QListViewItem* item, const QPoint& point, int column);
-
 			//@}
 
 		  protected:
@@ -181,31 +179,30 @@ namespace BALL
 			void insertGrid_(RegularData3D* file, System* system, const String& name)
 				throw();
 
-			QListViewItem* createListViewItem_(System* system, const String& name, const String& type)
+			QTreeWidgetItem* createListViewItem_(System* system, const String& name, const String& type)
 				throw();
 			
-			void insertComposite_(Composite* composite, QListViewItem* item)
+			void insertComposite_(Composite* composite, QTreeWidgetItem* item)
 				throw();
 
 			void insertContextMenuEntry_(const QString & text, const char* member);
 
-			QPopupMenu 							 			context_menu_;
-			QListViewItem* 								context_item_;
+			QMenu 									 			context_menu_;
 
 			SnapshotVisualisationDialog* 	dialog_;
 			ContourSurfaceDialog* 				surface_dialog_;
 
-			HashMap<QListViewItem*	, SnapShotManager*> 					item_to_trajectory_;
-			HashMap<QListViewItem*	, RegularData1D*>   					item_to_grid1_;
-			HashMap<QListViewItem*	, RegularData2D*>   					item_to_grid2_;
-			HashMap<QListViewItem*	, RegularData3D*>   					item_to_grid3_;
-			HashMap<QListViewItem*	, DockResult*>								item_to_dock_result_;
+			HashMap<QTreeWidgetItem*	, SnapShotManager*> 					item_to_trajectory_;
+			HashMap<QTreeWidgetItem*	, RegularData1D*>   					item_to_grid1_;
+			HashMap<QTreeWidgetItem*	, RegularData2D*>   					item_to_grid2_;
+			HashMap<QTreeWidgetItem*	, RegularData3D*>   					item_to_grid3_;
+			HashMap<QTreeWidgetItem*	, DockResult*>								item_to_dock_result_;
 			// insert new HashMaps like above for new data type objects.
 			
-			HashMap<Composite*      , HashSet<QListViewItem*> > 	composite_to_items_;
-			HashMap<QListViewItem*  , Composite*>  								item_to_composite_;
+			HashMap<Composite*      , HashSet<QTreeWidgetItem*> > 	composite_to_items_;
+			HashMap<QTreeWidgetItem*  , Composite*>  								item_to_composite_;
 
-			Index menu_cs_, open_trajectory_id_;
+			QAction* menu_cs_, *open_trajectory_id_;
 		};
 		
 } } // namespaces

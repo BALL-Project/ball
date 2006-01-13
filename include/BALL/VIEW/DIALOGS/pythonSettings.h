@@ -14,15 +14,39 @@
  #include <BALL/VIEW/WIDGETS/pyWidget.h>
 #endif
 
-#include <qtable.h>
+#include <QTableWidget>
+#include <QDialog>
+#include <QItemDelegate>
 
 namespace BALL
 {
 	namespace VIEW
 	{
+
+		class ComboBoxDelegate
+			: public QItemDelegate
+		{
+			public:
+
+				ComboBoxDelegate(QObject* parent = 0);
+
+				QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+										          const QModelIndex &index) const;
+
+				void setEditorData(QWidget *editor, const QModelIndex &index) const;
+				void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+
+				void updateEditorGeometry(QWidget *editor,
+																	const QStyleOptionViewItem &option, const QModelIndex &index) const;
+			private:
+
+				QStringList sl_keys_;
+				QStringList sl_modifier_;
+		};
+
 		///
 		class BALL_VIEW_EXPORT HotkeyTable
-			:	public QTable,
+			:	public QTableWidget,
 				public PreferencesEntry::ExtendedPreferencesObject
 		{
 			Q_OBJECT
@@ -66,10 +90,13 @@ namespace BALL
 				/** Append a hotkey
 						F_key: 1-12 for the 12 F-keys
 				*/
-				virtual void appendHotkey(Modifier mod, Position F_key, const String& command);
+				virtual void appendHotkey(const String& modif, const String& F_key, const String& command);
 				
 			private:
+
+//   				bool edit (const QModelIndex & index, EditTrigger trigger, QEvent* event);
 				QStringList modifier_, keys_;
+				ComboBoxDelegate delegate_;
 		};
 
 
@@ -79,7 +106,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT PythonSettings 
-			: public PythonSettingsData,
+			: public QDialog,
+				public Ui_PythonSettingsData,
 				public PreferencesEntry
 		{ 
 			Q_OBJECT
@@ -87,7 +115,7 @@ namespace BALL
 			public:
 
 			/// Constructor
-			PythonSettings( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+			PythonSettings(QWidget* parent = 0, const char* name = 0);
 
 			/// Destructor
 			~PythonSettings() {}

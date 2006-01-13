@@ -1,13 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.C,v 1.16 2005/12/23 17:03:26 amoll Exp $
+// $Id: mainControlPreferences.C,v 1.16.2.1 2006/01/13 15:35:51 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qstylefactory.h>
 
@@ -16,15 +15,17 @@ namespace BALL
 	namespace VIEW
 	{
 
-MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name, WFlags fl)
+MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name, Qt::WFlags fl)
 	throw()
-	: MainControlPreferencesData(parent, name, fl),
+	: QDialog(parent, fl),
+		Ui_MainControlPreferencesData(),
 		PreferencesEntry()
 {
+	setupUi(this);
+	setObjectName(name);
 	setINIFileSectionName("GENERAL");
-	style_box_->insertStringList(QStyleFactory::keys());
+	style_box_->addItems(QStyleFactory::keys());
 	registerObject_(style_box_);
-	registerObject_(show_labels);
 	registerObject_(logging_to_file);
 
 	setWidgetStackName("General");
@@ -44,12 +45,6 @@ QStyle* MainControlPreferences::getStyle()
 {
 	QStyle* new_style = QStyleFactory::create(style_box_->currentText());			
 	return new_style;
-}
-
-bool MainControlPreferences::showLabelsEnabled() const
-	throw()
-{
-	return show_labels->isChecked();
 }
 
 void MainControlPreferences::enableLoggingToFile(bool state)

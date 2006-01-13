@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.69 2006/01/04 16:26:34 amoll Exp $
+// $Id: message.h,v 1.69.2.1 2006/01/13 15:35:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -894,10 +894,7 @@ class BALL_VIEW_EXPORT RegisterHelpSystemMessage
 		throw();
 
 	///
-	void setWidget(const QWidget* widget) { widget_ = widget;}
-
-	///
-	void setMenuEntry(Index id) { menu_entry_ = id;}
+	void setObject(const QObject* object) { object_ = object;}
 
 	///
 	void setURL(const String& url) { url_ = url;}
@@ -905,11 +902,7 @@ class BALL_VIEW_EXPORT RegisterHelpSystemMessage
 	///
 	void setRegisterMode(bool state) { register_ = state;}
 
-	///
-	const QWidget* getWidget() const { return widget_;}
-
-	///
-	Index getMenuEntry() const { return menu_entry_;}
+	const QObject* getObject() const { return object_;}
 
 	///
 	const String& getURL() const { return url_;}
@@ -919,7 +912,7 @@ class BALL_VIEW_EXPORT RegisterHelpSystemMessage
 
 	protected:
 
-	const QWidget* widget_;
+	const QObject* object_;
 	Index 	 menu_entry_;
 	String 	 url_;
 	bool  	 register_;

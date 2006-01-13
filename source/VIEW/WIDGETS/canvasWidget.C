@@ -5,6 +5,8 @@
 //
 
 #include <BALL/VIEW/WIDGETS/canvasWidget.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 namespace BALL
 {
@@ -41,7 +43,7 @@ namespace BALL
 
     // ======================= class CanvasWidget =======================
     
-    CanvasWidget::CanvasWidget(QWidget *parent, const char* name, WFlags f)
+    CanvasWidget::CanvasWidget(QWidget *parent, const char* name, Qt::WFlags f)
       : QCanvasView(parent, name, f),
 				canvas_(0,0)
     {
@@ -71,7 +73,7 @@ namespace BALL
     void CanvasWidget::zoomIn()
       throw()
     {
-      QWMatrix m = this->worldMatrix();
+      QMatrix m = this->worldMatrix();
       m.scale(2.0,2.0);
       this->setWorldMatrix(m);
     }
@@ -79,7 +81,7 @@ namespace BALL
     void CanvasWidget::zoomOut()
       throw()
     {
-      QWMatrix m = this->worldMatrix();
+      QMatrix m = this->worldMatrix();
       m.scale(0.5, 0.5);
       this->setWorldMatrix(m);
     }
@@ -88,7 +90,7 @@ namespace BALL
     void CanvasWidget::zoom(float xfactor, float yfactor)
       throw()
     {
-      QWMatrix m = this->worldMatrix();
+      QMatrix m = this->worldMatrix();
       m.scale(xfactor, yfactor);
       this->setWorldMatrix(m);
     }
@@ -98,7 +100,7 @@ namespace BALL
     {      
       float xfactor = 1.;
       float yfactor = 1.;
-      QWMatrix m  = worldMatrix();
+      QMatrix m  = worldMatrix();
 
 			// in order to prevend rounding errors we minimize the dividend
 			// -> subtract 15	
@@ -117,7 +119,7 @@ namespace BALL
 		  //originally we have a 3x3 matrix
 			//m.m12 and m.m21 are the old matrixvalues
 			//m.dx and m.dy are the old translation values	
-			QWMatrix m2(xfactor, m.m12(), m.m21(), yfactor, m.dx(), m.dy());
+			QMatrix m2(xfactor, m.m12(), m.m21(), yfactor, m.dx(), m.dy());
       setWorldMatrix(m2);
     }
 

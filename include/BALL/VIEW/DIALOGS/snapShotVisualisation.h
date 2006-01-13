@@ -7,6 +7,8 @@
 
 #include <BALL/VIEW/UIC/snapShotVisualisationData.h>
 
+#include <QDialog>
+
 namespace BALL
 {
 	class SnapShotManager;
@@ -20,7 +22,8 @@ namespace BALL
 		\ingroup ViewDialogs
 */
 class BALL_VIEW_EXPORT SnapshotVisualisationDialog 
-	: public SnapshotVisualisationDialogData, 
+	: public QDialog,
+		public Ui_SnapshotVisualisationDialogData, 
 		public ModularWidget
 {
 	Q_OBJECT

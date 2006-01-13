@@ -24,7 +24,8 @@ namespace BALL
     \ingroup  ViewDialogs
  */
 class BALL_VIEW_EXPORT ContourSurfaceDialog 
-	: public ContourSurfaceDialogData
+	: public QDialog,
+		public Ui_ContourSurfaceDialogData
 { 
     Q_OBJECT
 

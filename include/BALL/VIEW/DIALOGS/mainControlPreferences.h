@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.h,v 1.14 2005/12/23 17:02:10 amoll Exp $
+// $Id: mainControlPreferences.h,v 1.14.2.1 2006/01/13 15:35:26 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MAINCONTROLPREFERENCES_H
@@ -17,6 +17,8 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
+#include <QDialog>
+
 namespace BALL
 {
 	namespace VIEW
@@ -30,7 +32,8 @@ namespace BALL
 		\ingroup ViewDialogs
 */
 class BALL_VIEW_EXPORT MainControlPreferences 
-	: public MainControlPreferencesData,
+	: public QDialog,
+		public Ui_MainControlPreferencesData,
 		public PreferencesEntry
 {
 	Q_OBJECT
@@ -43,7 +46,7 @@ class BALL_VIEW_EXPORT MainControlPreferences
 
 	/** Default Constructor.
 	*/
-	MainControlPreferences(QWidget *parent = NULL, const char *name = NULL, WFlags fl=0)
+	MainControlPreferences(QWidget *parent = NULL, const char *name = NULL, Qt::WFlags fl=0)
 		throw();
 	
 	//@}
@@ -68,11 +71,6 @@ class BALL_VIEW_EXPORT MainControlPreferences
 	 */
 	QStyle* getStyle()
 		throw();
-
-	/// Inspection, wheter the name labels in the DockWidget instances should be enabled.
-	bool showLabelsEnabled() const
-		throw();
-
 
 	/// Enable logging to file
 	void enableLoggingToFile(bool state)

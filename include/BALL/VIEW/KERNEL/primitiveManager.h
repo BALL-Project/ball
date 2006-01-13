@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.23 2005/12/23 17:02:15 amoll Exp $
+// $Id: primitiveManager.h,v 1.23.2.1 2006/01/13 15:35:32 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -10,10 +10,8 @@
 #	include <BALL/VIEW/KERNEL/representation.h>
 #endif
 
-#ifdef BALL_QT_HAS_THREADS
-# include <qmutex.h>
-# include <qwaitcondition.h>
-#endif
+#include <qmutex.h>
+#include <qwaitcondition.h>
 
 #include <vector>
 
@@ -56,6 +54,9 @@ namespace BALL
 			//@{
 			///
 			typedef List<Representation*> RepresentationList;
+
+			///
+			typedef HashSet<Representation*> RepresentationSet;
 
 			/// Iteration to the Representations
 			typedef RepresentationList::Iterator RepresentationsIterator;
@@ -170,53 +171,9 @@ namespace BALL
 			RepresentationList getRepresentationsOf(const Composite& composite)
 				throw();
 
-			/// Return true if a Representation will be updated
-			bool willBeUpdated(const Representation& rep) const
-				throw();
-
-			/// Return true, if a Representation is currently beeing updated
-			bool updateRunning() const
-				throw();
-
 			///
 			void rebuildAllRepresentations()
 				throw();
-
-			#ifdef BALL_QT_HAS_THREADS
-			/** Get the UpdateRepresentationThread, which updates one Representation.
-					(Only used in Multithreaded code.)
-			*/
-			static UpdateRepresentationThread& getUpdateThread() { return thread_;}
-
-			/** The follow QWaitCondition can be used to let a thread wait until
-			 		all Representations have been updated.
-					This is e.g. used by SimulationThread.
-					(e.g. getMainControl()->getUpdateWaitCondition().wait();)
-					(Only used in Multithreaded code.)
-			*/
-			QWaitCondition& getUpdateWaitCondition() { return update_finished_;}
-
-			///
-			QWaitCondition& getDrawingWaitCondition() { return drawing_finished_;}
-			#endif
-
-			/** Used by SimulationThread to notify the PrimitiveManager of
-			 		an pending update, which will start soon.
-					This is needed to sync the main thread and the SimulationThread.
-					(Only used in Multithreaded code.)
-			*/
-			void setUpdatePending(bool state) { update_pending_ = state;}
-
-			/** Returns true if an Update will accour soon or an update is running
-					(Only used in Multithreaded code.)
-			*/
-			bool updatePending() { return update_pending_;}
-
-			///
-			HashSet<Representation*>& getRepresentationsBeeingUpdated();
-
-			/// Used by UpdateRepresentationThread
-			HashSet<Representation*>& getRepresentationsBeeingDrawn();
 
 			///
 			const vector<ClippingPlane*>& getClippingPlanes() const { return clipping_planes_;}
@@ -235,14 +192,30 @@ namespace BALL
 
 			///
 			void focusRepresentation(const Representation& rep);
+			
+			/// Return true if a Representation will be updated
+			bool willBeUpdated(const Representation& rep)
+				throw();
+
+			/// Return true, if a Representation is currently beeing updated
+			bool updateRunning() 
+				throw();
+
+			///
+			void startedRendering(Representation* rep);
+
+			///
+			void finishedRendering(Representation* rep);
+			
+			/// Used by UpdateRepresentationThread
+			bool isBeeingRendered(const Representation* rep);
 
 			protected:
+		
+			///
+			Representation* popRepresentationToUpdate();
 
-			/*_ Start the UpdateRepresentationThread with one Representation
-					(Only used in Multithreaded code.)
-			*/
-			void startUpdateThread_()
-				throw();
+			void finishedUpdate_(Representation* rep);
 
 			/*_ Called by Representation::update() to start a multithreaded
 			 		Update of the Representation.
@@ -251,37 +224,22 @@ namespace BALL
 			void update_(Representation& rep)
 				throw();
 
-			/*_ Called by UpdateRepresentationThread, when it is finished.
-			 		If an other Representation is waiting to be updated, 
-					startUpdateThread_() is called again.
-					(Only used in Multithreaded code.)
-			*/
-			void finishedUpdate_()
-				throw();
-			
 			//_ List with all representations
 			RepresentationList representations_;
 			
-			//_ List with all representations, which will be updated
-			//  representations will be updated with the same order as in this list
-			RepresentationList representations_to_be_updated_;
-			// hashset with same content as above for faster acces
-			HashSet<Representation*> currently_updateing_;
+			HashSet<Representation*> beeing_rendered_;
 
-			HashSet<Representation*> currently_drawing_;
+			HashSet<Representation*> beeing_updated_;
+
+			HashSet<Representation*> to_update_;
 
 			vector<ClippingPlane*> clipping_planes_;
 			
-			#ifdef BALL_QT_HAS_THREADS
-			static UpdateRepresentationThread thread_;
-			static QMutex 										mutex_;
-			QWaitCondition 										update_finished_;
-			QWaitCondition 										drawing_finished_;
-			#endif
+			UpdateRepresentationThread* thread_;
+			QMutex 											render_mutex_;
+			QMutex 											update_mutex_;
 
 			MainControl* 	main_control_;
-			bool 					update_running_;
-			bool 					update_pending_;
 		};
 
 	} // namespace VIEW

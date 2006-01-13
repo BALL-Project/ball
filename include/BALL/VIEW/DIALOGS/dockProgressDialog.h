@@ -26,7 +26,8 @@ namespace BALL
     		\ingroup  ViewDialogs
 		 */
 		class BALL_EXPORT DockProgressDialog : 
-			public DockProgressDialogData
+			public QDialog,
+			public Ui_DockProgressDialogData
 		{ 
 			Q_OBJECT
 				
@@ -42,7 +43,7 @@ namespace BALL
 				 	*	@param			modal the modal flag
 				 	*	@param			fl the widget flags
 					*/
-				DockProgressDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
+				DockProgressDialog(QWidget* parent = 0, const char* name = 0)
 					throw();
 					
 				/** Destructor

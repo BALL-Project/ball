@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.19 2005/12/23 17:02:29 amoll Exp $
+// $Id: main.C,v 1.19.2.1 2006/01/13 15:35:38 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -26,6 +26,9 @@ void myMessageOutput( QtMsgType type, const char *msg )
 				break;
 		case QtFatalMsg:
 				fprintf( stderr, "Fatal: %s\n", msg );
+				abort();                    // deliberately core dump
+		case QtCriticalMsg:
+				fprintf( stderr, "Critical: %s\n", msg );
 				abort();                    // deliberately core dump
 	}
 }
@@ -53,7 +56,7 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 	{
 		QMessageBox::critical(0, "Error while starting BALLView", 
 				"Your computer has no OpenGL support, please install the correct drivers. Aborting for now...",
-				QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+				QMessageBox::Ok, Qt::NoButton, Qt::NoButton);
 		return -1;
 	}
 
@@ -83,7 +86,7 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 	// =============== initialize Mainframe ============================================
 	// Create the mainframe.
 	BALL::Mainframe mainframe;
-	application.setMainWidget(&mainframe);
+//   	qApp->setMainWindow(&mainframe);
 
 	// can we use the users homedir as working dir?
 	if (home_dir != "")

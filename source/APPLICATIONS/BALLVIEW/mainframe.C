@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60 2006/01/04 16:28:17 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.1 2006/01/13 15:35:38 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -18,6 +18,7 @@
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/WIDGETS/helpViewer.h>
+#include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -28,9 +29,10 @@
 #include <BALL/COMMON/version.h>
 
 #ifdef BALL_PYTHON_SUPPORT
-#	include <BALL/VIEW/WIDGETS/pyWidget.h>
+  #	include <BALL/VIEW/WIDGETS/pyWidget.h>
 #endif
 
+#include <QPrintDialog>
 #include <qmenubar.h>
 #include <qlabel.h>
 #include <qprinter.h>
@@ -38,6 +40,9 @@
 #include <qimage.h>
 #include <qmessagebox.h>
 #include <qcursor.h>
+#include <QPixmap>
+#include <QKeyEvent>
+#include <QFileDialog>
 
 #include <sstream>
 
@@ -58,8 +63,8 @@ namespace BALL
 		// ---------------------
 		// setup main window
 		// ---------------------
-		setCaption("BALLView");
-		setIcon(QPixmap(bucky_64x64_xpm));
+		setWindowTitle("BALLView");
+		setWindowIcon(QPixmap(bucky_64x64_xpm));
 		resize(800,600);
 		// make sure submenus are the first 
 		initPopupMenu(FILE_OPEN);
@@ -83,36 +88,32 @@ namespace BALL
 		setLoggingFilename("BALLView.log");
 		setAcceptDrops(true);
 
-		CHECK_PTR(new MolecularControl(		this, "Structures"));
-		CHECK_PTR(new GeometricControl(		this, "Representations"));
-		CHECK_PTR(new DatasetControl(			this, "Datasets"));
-		CHECK_PTR(new DisplayProperties(	this, "DisplayProperties"));
-		CHECK_PTR(new LabelDialog(				this, "LabelDialog"));
-		CHECK_PTR(new MolecularFileDialog(this, "MolecularFileDialog"));
-		CHECK_PTR(new DownloadPDBFile(		this, "DownloadPDBFile", false));
-		CHECK_PTR(new MolecularStructure(	this, "MolecularStructure"));
-		CHECK_PTR(new HelpViewer(					this, "Documentation"));
-		CHECK_PTR(new LogView(						this, "Logs"));
-
-		CHECK_PTR(new DockingController(this, "DockingController"));
+ 		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, "Structures"));
+		addDockWidget(Qt::LeftDockWidgetArea, new GeometricControl(this, "Representations"));
+		addDockWidget(Qt::TopDockWidgetArea,  new DatasetControl(this, "Datasets"));
+		addDockWidget(Qt::AllDockWidgetAreas, new HelpViewer(this, "Documentation"));
+		new DisplayProperties(	this, "DisplayProperties");
+		new LabelDialog(				this, "LabelDialog");
+		new MolecularFileDialog(this, "MolecularFileDialog");
+		new DownloadPDBFile(		this, "DownloadPDBFile", false);
+		new MolecularStructure(	this, "MolecularStructure");
+ 		addDockWidget(Qt::BottomDockWidgetArea, new LogView(this, "Logs"));
+		new DockingController(  this, "DockingController");
 
 		Scene::stereoBufferSupportTest();
 		scene_ = new Scene(this, "3D View");
-		CHECK_PTR(scene_);
 		setCentralWidget(scene_);
 
 		// setup the VIEW server
 		Server* server = new Server(this);
-		CHECK_PTR(server);
 		// registering object generator
 		MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
 		server->registerObjectCreator(*object_creator);
 
 		DemoTutorialDialog* demo = new DemoTutorialDialog(this, "BALLViewDemo");
-		CHECK_PTR(demo);
 
 		#ifdef BALL_PYTHON_SUPPORT
-			new PyWidget(this, "Python Interpreter");
+ 			addDockWidget(Qt::BottomDockWidgetArea, new PyWidget(this, "Python Interpreter"));
 		#endif
 
 		// ---------------------
@@ -121,25 +122,24 @@ namespace BALL
 		String hint;
 
 		// File Menu
-		Index entry = insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, SLOT(exportPOVRay()), CTRL+Key_Y);
+		QAction* entry = insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, SLOT(exportPOVRay()), Qt::CTRL+Qt::Key_Y);
 
 		// registerMenuEntryForHelpSystem
 		RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
-		msg->setMenuEntry(entry);
+		msg->setObject(entry);
 		msg->setURL("tips.html#povray");
 		notify_(msg);
 
 		insertMenuEntry(MainControl::FILE, "Print", this, SLOT(printScene()));
 
-		insertMenuEntry(MainControl::FILE_OPEN, "Project", this, 
-										SLOT(loadBALLViewProjectFile()), 0, 2);
+		insertMenuEntry(MainControl::FILE_OPEN, "Project", this, SLOT(loadBALLViewProjectFile()));
 
-		save_project_id_ = insertMenuEntry(MainControl::FILE, "Save Project", this, 
+		save_project_action_ = insertMenuEntry(MainControl::FILE, "Save Project", this, 
 										SLOT(saveBALLViewProjectFile()));
 
 		// Display Menu
 		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
-										ALT+Key_X);
+										Qt::ALT+Qt::Key_X);
 
 		// Help-Menu -------------------------------------------------------------------
 		insertMenuEntry(MainControl::HELP, "Demo", demo, SLOT(showDemo()));
@@ -148,16 +148,16 @@ namespace BALL
 		insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()));
 
 		// Menu ------------------------------------------------------------------------
-		menuBar()->setSeparator(QMenuBar::InWindowsStyle);
+//   		menuBar()->setSeparator(QMenuBar::InWindowsStyle);
 
 //   		#ifdef BALL_QT_HAS_THREADS
-			stop_simulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
-											SLOT(stopSimulation()), ALT+Key_C);
+			stop_simulation_action_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
+											SLOT(stopSimulation()), Qt::ALT+Qt::Key_C);
 			insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
-			setMenuHint(stop_simulation_id_, "Abort a running simulation thread");
+			setMenuHint(stop_simulation_action_, "Abort a running simulation thread");
 //   		#endif
 
-		complement_selection_id_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
+		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
 
 		setStatusbarText("Ready.");
 	}
@@ -170,15 +170,14 @@ namespace BALL
 	void Mainframe::exportPOVRay()
 	{
 		QString qresult = QFileDialog::getSaveFileName(
-											getWorkingDir().c_str(),
-											"*.pov",
-											this,
+											0,
 											"Export POVRay File",
-											"Choose a filename" );
+											getWorkingDir().c_str(),
+											"*.pov");
 
 	 	if (qresult == QString::null) return;
 
-		String result = qresult.ascii();
+		String result = ascii(qresult);
 
 		if (!result.hasSuffix(".pov"))
 		{
@@ -228,14 +227,14 @@ namespace BALL
 #ifdef BALL_PYTHON_SUPPORT
 		if (file.hasSuffix(".py"))
 		{
-			PyWidget::getInstance(0)->run(file);
+ 			PyWidget::getInstance(0)->run(file);
 			return;
 		}
 #endif
 
 		if (file.hasSuffix(".dcd"))
 		{
-			DatasetControl::getInstance(0)->addTrajectory(file);
+ 			DatasetControl::getInstance(0)->addTrajectory(file);
 			return;
 		}
 
@@ -246,7 +245,8 @@ namespace BALL
 	void Mainframe::printScene()
 	{
 		QPrinter printer;
-		if (!printer.setup(this)) return;
+		QPrintDialog dialog(&printer, this);
+		if (!dialog.exec()) return;
 		
 		setStatusbarText("printing..");
 
@@ -265,14 +265,14 @@ namespace BALL
 		throw()
 	{
 		QString qresult = QFileDialog::getSaveFileName(
+											0,
+											"Select a BALLView project file",
 											getWorkingDir().c_str(), 
-											"*.bvp", 
-											this, 
-											"Select a BALLView project file");
+											"*.bvp");
 
 	 	if (qresult == QString::null) return;
 
-		String result = qresult.ascii();
+		String result = ascii(qresult);
 		if (result.isEmpty()) return;
 
 		if (!result.hasSuffix(".bvp")) result += ".bvp";
@@ -286,25 +286,28 @@ namespace BALL
 		throw()
 	{
 		QString result = QFileDialog::getOpenFileName(
-				getWorkingDir().c_str(), "*.bvp", 0, "Select a BALLView project file");
+																		0,
+																		"Select a BALLView project file",
+																		getWorkingDir().c_str(), 
+																		"*.bvp");
 		if (result.isEmpty())
 		{
 			return;
 		}
 
- 		MainControl::loadBALLViewProjectFile(result.ascii());
+ 		MainControl::loadBALLViewProjectFile(ascii(result));
 	}
 
 
 	void Mainframe::keyPressEvent(QKeyEvent* e)
 	{
-		if (e->key() == Key_Escape) 
+		if (e->key() == Qt::Key_Escape) 
 		{
 			Scene::getInstance(0)->switchToLastMode();
 			return;
 		}
 
-		if (e->key() == Key_Enter) 
+		if (e->key() == Qt::Key_Enter) 
 		{
 			if (composite_manager_.getNumberOfComposites() == 0) return;
 
@@ -326,7 +329,7 @@ namespace BALL
 		}
 
 		#ifdef BALL_PYTHON_SUPPORT
-			PyWidget::getInstance(0)->reactTo(*e);
+ 			PyWidget::getInstance(0)->reactTo(*e);
 			e->accept();
 		#endif
 	}
@@ -367,13 +370,20 @@ namespace BALL
 	void Mainframe::checkMenus()
 	{
 		MainControl::checkMenus();
-		menuBar()->setItemEnabled(save_project_id_, !composites_locked_);
+		save_project_action_->setEnabled(!composites_locked_);
 	}
 
 	void Mainframe::about()
 	{
+Log.error() << "#~~#   1 "   <<
+Scene::getInstance(0)->isValid()	
+	<< " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
+		setMultithreading(false);
 		// Display about dialog
-		AboutDialog about;
+		QDialog w;
+ 		Ui_AboutDialog about;
+		about.setupUi(&w);
 		QString version = QString("QT ") + qVersion();
 #ifdef BALL_QT_HAS_THREADS
 		version += "(mt)";
@@ -384,7 +394,7 @@ namespace BALL
 		font.setPixelSize(18);
 		about.BALLView_version_label->setFont(font);
 		about.BALL_version_label->setText(__DATE__);
-		about.exec(); 
+		w.exec(); 
 	}
 
 }

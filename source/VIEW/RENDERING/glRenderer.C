@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71 2005/12/23 17:03:36 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.1 2006/01/13 15:36:03 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -35,6 +35,7 @@
 
 using namespace std;
 
+//   #define BALL_VIEW_DEBUG
 //   #define BALL_BENCHMARKING
 //   #define BALL_ENABLE_VERTEX_BUFFER
 
@@ -42,6 +43,29 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
+#ifdef BALL_VIEW_DEBUG
+#define CHECK_GL_ERROR \
+{\
+	GLenum e = glGetError(); \
+	if (e != GL_NO_ERROR)\
+	{\
+		Log.error() << "GL Error occurred in " << __FILE__ << " " << __LINE__ << std::endl;\
+		switch (e)\
+		{\
+			case GL_INVALID_VALUE: Log.error() << " GL_INVALID_VALUE" << std::endl;break;\
+ 			case GL_INVALID_ENUM: Log.error() << " GL_INVALID_ENUM" << std::endl;break;\
+			case GL_INVALID_OPERATION: Log.error() << " GL_INVALID_OPERATION" << std::endl;break;\
+			case GL_STACK_OVERFLOW: Log.error() << " GL_STACK_OVERFLOW" << std::endl;break;\
+			case GL_STACK_UNDERFLOW: Log.error() << " GL_STACK_UNDERFLOW" << std::endl;break;\
+			case GL_TABLE_TOO_LARGE: Log.error() << " GL_TABLE_TOO_LARGE" << std::endl;break;\
+			default: Log.error() << " UNKNOWN ERROR" << std::endl;\
+		}\
+	}\
+}
+#else 
+#define CHECK_GL_ERROR
+#endif
 
 		GLRenderer::GLRenderer()
 			throw()
@@ -347,9 +371,9 @@ namespace BALL
 		void GLRenderer::bufferRepresentation(const Representation& rep)
 			throw()
 		{
-	#ifdef BALL_BENCHMARKING
-	Timer t;
-	t.start();
+#ifdef BALL_BENCHMARKING
+			Timer t;
+			t.start();
 #endif
 			GLDisplayList* display_list;
 			if (display_lists_.has(&rep))
@@ -395,7 +419,6 @@ namespace BALL
 				}
 			}
 		#endif
-		
 
 	#ifdef BALL_BENCHMARKING
 	t.stop();
@@ -643,6 +666,7 @@ namespace BALL
 																								 int& width, int& height) const
 			throw()
 		{
+			/*
 			QColor c1(0,0,0);
 			QColor c2(255,255,255);
 		
@@ -696,6 +720,8 @@ namespace BALL
 
 			width = pixel_width;
 			return text_array;
+			*/
+			return 0;
 		}
 
 		void GLRenderer::renderPoint_(const Point& point)

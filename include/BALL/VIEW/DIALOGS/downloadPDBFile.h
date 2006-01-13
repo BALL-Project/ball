@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.14 2005/12/23 17:02:10 amoll Exp $
+// $Id: downloadPDBFile.h,v 1.14.2.1 2006/01/13 15:35:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -17,7 +17,6 @@
 # include <BALL/DATATYPE/hashSet.h>
 #endif
 
-#include <qtextbrowser.h>
 #include <qimage.h>
 
 namespace BALL
@@ -33,7 +32,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT DownloadPDBFile 
-			: public DownloadPDBFileData,
+			: public QDialog,
+				public Ui_DownloadPDBFileData,
 				public ModularWidget
 		{ 
 				Q_OBJECT
@@ -41,7 +41,7 @@ namespace BALL
 				BALL_EMBEDDABLE(DownloadPDBFile, ModularWidget)
 
 				///
-				DownloadPDBFile( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 )
+				DownloadPDBFile( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 )
 					throw();
 
 				///
@@ -90,7 +90,7 @@ namespace BALL
 
 				void setProxyAndTransfer_(TCPTransfer& tcp);
 				
-				QTextBrowser 						*qb_;
+//   				QTextBrowser 						*qb_;
 				FetchHTMLThread 				*thread_;
 				bool 										aborted_;
 				bool 										error_;
@@ -100,7 +100,7 @@ namespace BALL
 				// e.g. gif images if not supported
 				HashSet<String> 				unsupported_images_;
 
-				Index menu_id_;
+				QAction* menu_id_;
 		};
 
 	} 

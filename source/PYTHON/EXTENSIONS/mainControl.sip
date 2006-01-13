@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.22 2005/12/23 17:02:52 amoll Exp $
+// $Id: mainControl.sip,v 1.22.2.1 2006/01/13 15:35:39 amoll Exp $
 //
 
 class MainControl
@@ -71,14 +71,11 @@ class MainControl
 	// void onNotify(Message* /message/) throw();	
 	void sendMessage(Message& /Transfer/) throw();
 
-	Index getLastHighLightedMenuEntry();
-	
 	virtual void show();
 	virtual void checkMenus();
 	void stopSimulation();
 	void complementSelection();	
 	virtual void aboutToExit();
-	void menuItemHighlighted(int /id/) throw();
 	//virtual void customEvent( QCustomEvent *);
 	virtual void quit();
 	virtual bool isAboutToQuit();
@@ -105,8 +102,8 @@ class MainControl
 	void printSelectionInfos() throw();
 	void setStatusbarText(const String&, bool = false, bool = false);
 	String getStatusbarText() const	throw();
-	void setMenuHint(Index /id/, const String& /hint/) throw();
-	const String& getMenuHint(Index /id/) const throw();
+//	void setMenuHint(Index /id/, const String& /hint/) throw();
+//	const String& getMenuHint(Index /id/) const throw();
 	const FragmentDB& getFragmentDB() const throw();
 
 	bool compositesAreLocked() throw();

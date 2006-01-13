@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.40 2006/01/04 16:26:33 amoll Exp $
+// $Id: common.h,v 1.40.2.1 2006/01/13 15:35:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -26,7 +26,9 @@
 
 #include <qevent.h>
 #include <qcolordialog.h>
-#include <qlabel.h>
+#include <QLabel>
+#include <QCustomEvent>
+#include <QDropEvent>
 
 namespace BALL
 {
@@ -35,6 +37,7 @@ namespace BALL
 
 		class GeometricObject;
 		class MainControl;
+		class ColorRGBA;
 
 		/** @name defines
 				\ingroup ViewKernelOther
@@ -105,9 +108,6 @@ namespace BALL
 			/// see DockingFinishedEvent
 			DOCKING_FINISHED_EVENT
 		};
-
-		/// global variable, which defines, if DockWidgets are shown with a Label
-		BALL_VIEW_EXPORT extern bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS;
 
 		//@}
 		/** @name Enumerations for Representations and Renderer
@@ -371,7 +371,7 @@ namespace BALL
 
 		/// Event class used for thread safe output to logview
 		class BALL_VIEW_EXPORT LogEvent
-			: public QCustomEvent
+			: public QEvent
 		{
 			public:
 
@@ -410,12 +410,6 @@ namespace BALL
 													 String(__LINE__) + ".  Please notify us per mail: ball@bioinf.uni-sb.de");
 
 	
-		/** Choose a color.
-		 		The colordialog is initialised with the background color of the label.
-				If the colordialog returns a new color, this becomes the new backbground color of the label.
-		*/
-		BALL_VIEW_EXPORT QColor chooseColor(QLabel* label);
-
 		BALL_VIEW_EXPORT void processDropEvent(QDropEvent* e);
 
 		/** focus the camera on a list of points, e.g. atoms or geometric objects.
@@ -427,7 +421,18 @@ namespace BALL
 		 		We also sort out double slashes and make sure a slash is at the end.
 		*/
 		BALL_VIEW_EXPORT String getDataPath();
+
+		///
+		BALL_VIEW_EXPORT String ascii(const QString& str);
 		
+		///
+		BALL_VIEW_EXPORT ColorRGBA getColor(const QLabel* label);
+		
+		///
+ 		BALL_VIEW_EXPORT void setColor(const QLabel* label, const ColorRGBA& color);
+
+		///
+		BALL_VIEW_EXPORT QColor chooseColor(QLabel* label);
 
 		//@}
 

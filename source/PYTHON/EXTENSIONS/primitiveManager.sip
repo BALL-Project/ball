@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.sip,v 1.13 2005/12/23 17:02:54 amoll Exp $
+// $Id: primitiveManager.sip,v 1.13.2.1 2006/01/13 15:35:39 amoll Exp $
 //
 
 class PrimitiveManager
@@ -37,16 +37,14 @@ class PrimitiveManager
   // RepresentationsIterator end() throw();
 	RepresentationList removedComposite(const Composite&, bool = true) throw();
   RepresentationList getRepresentationsOf(const Composite&) throw();
-	bool willBeUpdated(const Representation&) const throw();
-	bool updateRunning() const throw();
 	void rebuildAllRepresentations() throw();
-	void setUpdatePending(bool);
-	bool updatePending();
-	//HashSet<Representation*>& getRepresentationsBeeingUpdated();
 	//const vector<ClippingPlane*>& getClippingPlanes() const;
 	//bool removeClippingPlane(ClippingPlane*);
 	//void insertClippingPlane(ClippingPlane*);
 	void storeRepresentations(INIFile&);
   //void restoreRepresentations(const INIFile&, const vector<const Composite*>&);
 	void focusRepresentation(const Representation&);
+	bool willBeUpdated(const Representation&) const throw();
+	bool updateRunning() const throw();
+	bool isBeeingRendered(const Representation*);
 };

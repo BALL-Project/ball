@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: networkPreferences.C,v 1.4 2005/12/23 17:03:28 amoll Exp $
+// $Id: networkPreferences.C,v 1.4.2.1 2006/01/13 15:35:55 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/networkPreferences.h>
@@ -16,12 +16,20 @@ namespace BALL
 	namespace VIEW
 	{
 
-NetworkPreferences::NetworkPreferences(QWidget* parent, const char* name, WFlags fl)
+NetworkPreferences::NetworkPreferences(QWidget* parent, const char* name, Qt::WFlags fl)
 	throw()
-	: NetworkPreferencesData(parent, name, fl),
+	: QDialog(parent, fl),
+		Ui_NetworkPreferencesData(),
 		PreferencesEntry()
 {
 	setINIFileSectionName("NETWORK");
+	setupUi(this);
+	
+  // signals and slots connections
+  connect( enable_proxy, SIGNAL( toggled(bool) ), host_edit, SLOT( setEnabled(bool) ) );
+  connect( enable_proxy, SIGNAL( toggled(bool) ), port_edit, SLOT( setEnabled(bool) ) );
+
+	setObjectName(name);
 	registerObject_(port_edit);
 	registerObject_(host_edit);
 	registerObject_(enable_proxy);
@@ -73,14 +81,14 @@ void NetworkPreferences::applySettings()
 	Position port = 0;
 	try
 	{
-		port = String(port_edit->text().ascii()).toUnsignedInt();
+		port = ascii(port_edit->text()).toUnsignedInt();
 	}
 	catch(...)
 	{
 		return;
 	}
 		
-	mc->setProxy(host_edit->text().ascii(), port);
+	mc->setProxy(ascii(host_edit->text()), port);
 }
 
 } } // namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89 2005/12/23 17:03:38 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.1 2006/01/13 15:36:06 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -43,7 +43,7 @@ namespace BALL
 
 		MolecularStructure::MolecularStructure(QWidget* parent, const char* name)
 			throw()
-			:	QWidget(parent, name),
+			:	QWidget(parent),
 				ModularWidget(name),
 				amber_(),
 				charmm_(),
@@ -56,16 +56,17 @@ namespace BALL
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "New MolecularStructure " << this << std::endl;
 			#endif
+			setObjectName(name);
 			registerWidget(this);
 			hide();
 		}
 
 
-		void MolecularStructure::initializeWidget(MainControl& main_control)
+		void MolecularStructure::initializeWidget(MainControl&)
 		{
 			// cant use ModularWidget::getMainControl() here, no idea why
 			center_camera_id_ = insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
-																												SLOT(centerCamera()), CTRL+Key_F);
+																												SLOT(centerCamera()), Qt::CTRL+Qt::Key_F);
 			setMenuHint("Focus the camera on one or multiple objects.");
 
 			// Build Menu -------------------------------------------------------------------
@@ -74,44 +75,41 @@ namespace BALL
 	// 										CTRL+Key_G, -1 , hint);
 
 			build_peptide_id_ = insertMenuEntry(MainControl::BUILD, "B&uild Peptide", this, 
-													SLOT(buildPeptide()), ALT+Key_U);
+													SLOT(buildPeptide()), Qt::ALT+Qt::Key_U);
 			setMenuHint("Build a peptide from selected amino acids.");
 
 			build_bonds_id_ = insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
-																												SLOT(buildBonds()), CTRL+Key_B);
+																												SLOT(buildBonds()), Qt::CTRL+Qt::Key_B);
 			setMenuHint("Add missing bonds to a selected structure.");
 
 			add_hydrogens_id_ = insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
-																												SLOT(addHydrogens()), CTRL+Key_H);
+																												SLOT(addHydrogens()), Qt::CTRL+Qt::Key_H);
 			setMenuHint("Add missing atoms to a selected structure.");
 			
 			check_structure_id_ = insertMenuEntry(MainControl::BUILD, "Chec&k Structure", this, 
-																												SLOT(checkResidue()), CTRL+Key_K);
+																												SLOT(checkResidue()), Qt::CTRL+Qt::Key_K);
 			setMenuHint("Check a structure against the fragment database.");
 			
 			// MOLECULARMECHANICS Menu -------------------------------------------------------------------
 			energy_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Single Point Calculation", this, 
-								SLOT(calculateForceFieldEnergy()), CTRL+Key_A, MainControl::MOLECULARMECHANICS + 12);
+								SLOT(calculateForceFieldEnergy()), Qt::CTRL+Qt::Key_A);
 			setMenuHint("Calculate the energy of a System with the AMBER/CHARMM force field.");
 				
 			minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Energy Minimization", 
-							this, SLOT(runMinimization()), CTRL+Key_E, MainControl::MOLECULARMECHANICS+ 10);
+							this, SLOT(runMinimization()), Qt::CTRL+Qt::Key_E);
 			setMenuHint("To perform an Energy Minimization, first select the molecular structures.");
 
 			mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", 
-								this, SLOT(MDSimulation()), CTRL+Key_M, MainControl::MOLECULARMECHANICS + 11);
+								this, SLOT(MDSimulation()), Qt::CTRL+Qt::Key_M);
 			setMenuHint("To perform a MD simulation , first select the molecular structures.");
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
-			(main_control.initPopupMenu(MainControl::CHOOSE_FF))->setCheckable(true);
 
 			amber_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Amber", this, SLOT(chooseAmberFF()));
 			setMenuHint("Use Amber Force Field");
 			
 			charmm_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Charmm", this, SLOT(chooseCharmmFF()));
 			setMenuHint("Use Charmm Force Field");
-
-			menuBar()->setItemChecked(charmm_ff_id_, true);
 
 			setup_ff_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Options", this, 
 												SLOT(setupForceField()));
@@ -129,7 +127,7 @@ namespace BALL
 			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 
 			calculate_ss_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate sec&ondary structure", this,
-																				 SLOT(calculateSecondaryStructure()), ALT+Key_O);
+																				 SLOT(calculateSecondaryStructure()), Qt::ALT+Qt::Key_O);
 			setMenuHint("Recalculate the secondary structure for a structure.");
 
 //   			calculate_ramachandran_ = insertMenuEntry(MainControl::TOOLS, "Ramachandran Plot", this,
@@ -137,7 +135,7 @@ namespace BALL
 //   			setMenuHint("Calculate a Ramachandran Plot for a Protein.");
 
 			calculate_hbonds_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate H-B&onds", this, 
-																		SLOT(calculateHBonds()), ALT+Key_N);
+																		SLOT(calculateHBonds()), Qt::ALT+Qt::Key_N);
 			setMenuHint("To assign H-bonds, one System has to be selected.");
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
@@ -450,35 +448,37 @@ namespace BALL
 
 			// AMBER methods are available only for single systems
 			// disable calculation entries, if a simulation is running
-			menuBar()->setItemEnabled(energy_id_, one_system && composites_muteable);
-			menuBar()->setItemEnabled(minimization_id_, one_system && composites_muteable);
-			menuBar()->setItemEnabled(mdsimulation_id_, one_system && composites_muteable);
+			energy_id_->setEnabled( one_system && composites_muteable);
+			minimization_id_->setEnabled( one_system && composites_muteable);
+			mdsimulation_id_->setEnabled( one_system && composites_muteable);
 
-			menuBar()->setItemEnabled(calculate_hbonds_id_, one_system && composites_muteable);
+			calculate_hbonds_id_->setEnabled( one_system && composites_muteable);
 
 			// prevent changes to forcefields, if simulation is running
-			menuBar()->setItemEnabled(MainControl::CHOOSE_FF, composites_muteable);
-			menuBar()->setItemEnabled(setup_ff_, composites_muteable);
+			getMainControl()->initPopupMenu(MainControl::CHOOSE_FF)->setEnabled(composites_muteable);
+//   			setup_ff_, composites_muteable);
 			
-			menuBar()->setItemEnabled(build_peptide_id_, composites_muteable);
+			build_peptide_id_->setEnabled( composites_muteable);
 
 			bool allow = selected && composites_muteable;
-			menuBar()->setItemEnabled(add_hydrogens_id_, allow);
-			menuBar()->setItemEnabled(build_bonds_id_, allow);
-			menuBar()->setItemEnabled(check_structure_id_, allow);
-			menuBar()->setItemEnabled(calculate_ss_id_, allow);
+			add_hydrogens_id_->setEnabled( allow);
+			build_bonds_id_->setEnabled( allow);
+			check_structure_id_->setEnabled( allow);
+			calculate_ss_id_->setEnabled( allow);
 
 			// these menu point for single items only
-			menuBar()->setItemEnabled(center_camera_id_, one_item && composites_muteable);
-			menuBar()->setItemEnabled(create_distance_grid_id_, one_item && composites_muteable);
+			center_camera_id_->setEnabled( one_item && composites_muteable);
+			create_distance_grid_id_->setEnabled( one_item && composites_muteable);
 
 //			menuBar()->setItemEnabled( map_proteins_id_, (number_of_selected_objects == 2) && 
 // 																									 composites_muteable);
-			menuBar()->setItemEnabled(calculate_RMSD_id_, (number_of_selected_objects == 2) &&
-																										composites_muteable); 
-			menuBar()->setItemEnabled(calculate_ramachandran_, (number_of_selected_objects == 1) &&
-							RTTI::isKindOf<Protein>(**getMainControl()->getMolecularControlSelection().begin()));
-			menuBar()->setItemEnabled(menu_FPDB_, !getMainControl()->compositesAreLocked() && 
+			
+			calculate_RMSD_id_->setEnabled( (number_of_selected_objects == 2) && composites_muteable); 
+			
+//   			calculate_ramachandran_->setEnabled((number_of_selected_objects == 1) &&
+//   							RTTI::isKindOf<Protein>(**getMainControl()->getMolecularControlSelection().begin()));
+			
+			menu_FPDB_->setEnabled( !getMainControl()->compositesAreLocked() && 
 																						 (getMainControl()->getSelectedSystem() != 0));
 		}
 
@@ -1358,8 +1358,8 @@ namespace BALL
 		void MolecularStructure::chooseAmberFF()
 		{
 			use_amber_ = true;
-			menuBar()->setItemChecked(charmm_ff_id_, false);
-			menuBar()->setItemChecked(amber_ff_id_, true);
+			charmm_ff_id_->setChecked( false);
+			amber_ff_id_->setChecked( true);
 			md_dialog_.useAmberFF();
 			minimization_dialog_.useAmberFF();
 		}
@@ -1367,8 +1367,8 @@ namespace BALL
 		void MolecularStructure::chooseCharmmFF()
 		{
 			use_amber_ = false;
-			menuBar()->setItemChecked(amber_ff_id_, false);
-			menuBar()->setItemChecked(charmm_ff_id_, true);
+			amber_ff_id_->setChecked( false);
+			charmm_ff_id_->setChecked( true);
 			md_dialog_.useCharmmFF();
 			minimization_dialog_.useCharmmFF();
 		}

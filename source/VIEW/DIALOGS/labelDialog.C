@@ -9,15 +9,12 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <qpopupmenu.h>
 #include <qmenubar.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
-#include <qcombobox.h>
 #include <qfontdialog.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
 
 namespace BALL
 {
@@ -26,14 +23,28 @@ namespace BALL
 
 LabelDialog::LabelDialog(QWidget* parent, const char* name)
 	throw()
-	:	LabelDialogData( parent, name ),
+	:	QDialog(parent),
+		Ui_LabelDialogData(),
 		ModularWidget(name),
-		id_(-1)
+		id_(0)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new LabelDialog " << this << std::endl;
 #endif
-	setCaption("Add Label");
+	setupUi(this);
+
+	// signals and slots connections
+	connect( apply_button_, SIGNAL( clicked() ), this, SLOT( accept() ) );
+	connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
+	connect( edit_button, SIGNAL( clicked() ), this, SLOT( editColor() ) );
+	connect( add_tag_button, SIGNAL( clicked() ), this, SLOT( addTag() ) );
+	connect( font_button, SIGNAL( clicked() ), this, SLOT( fontSelected() ) );
+	connect( mode_group, SIGNAL( clicked(int) ), this, SLOT( modeChanged() ) );
+	connect( label_edit_, SIGNAL( textChanged(const QString&) ), this, SLOT( textChanged() ) );
+	connect( history_box, SIGNAL( activated(int) ), this, SLOT( historySelected() ) );
+
+	setWindowTitle("Add Label");
+	setObjectName(name);
 
 	// register the widget with the MainControl
 	ModularWidget::registerWidget(this);
@@ -58,7 +69,7 @@ void LabelDialog::fetchPreferences(INIFile& inifile)
 	if (inifile.hasEntry("WINDOWS", "Label::customcolor"))
 	{
 		custom_color_.set(inifile.getValue("WINDOWS", "Label::customcolor"));
-		color_sample_->setBackgroundColor(custom_color_.getQColor());
+		setColor(color_sample_, custom_color_);
 	}
 
 	if (inifile.hasEntry("WINDOWS", "Label::font"))
@@ -88,7 +99,7 @@ void LabelDialog::writePreferences(INIFile& inifile)
 	inifile.insertValue("WINDOWS", "Label::customcolor", custom_color_);
 
 	// the font size
-	inifile.insertValue("WINDOWS", "Label::font", font_.toString().ascii());
+	inifile.insertValue("WINDOWS", "Label::font", ascii(font_.toString()));
 
 	// many <-> one label
 	inifile.insertValue("WINDOWS", "Label::manylabels", String(!all_items->isChecked()));
@@ -114,15 +125,14 @@ void LabelDialog::onNotify(Message *message)
 void LabelDialog::initializeWidget(MainControl& main_control)
 	throw()
 {
-	main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
+	main_control.initPopupMenu(MainControl::DISPLAY);
 
-	id_ = insertMenuEntry(MainControl::DISPLAY, "Add &Label", this, SLOT(show()), CTRL+Key_L);
+	id_ = insertMenuEntry(MainControl::DISPLAY, "Add &Label", this, SLOT(show()), Qt::CTRL+Qt::Key_L);
 	setMenuHint("Add a label for selected molecular objects");   
 }
 
 void LabelDialog::show()
 {
-	LabelDialogData::show();
 	raise();
 }
 
@@ -139,7 +149,7 @@ void LabelDialog::accept()
 	rep->setModelType(MODEL_LABEL);
 
 	LabelModel* model = new LabelModel;
-	model->setText(label_edit_->text().ascii());
+	model->setText(ascii(label_edit_->text()));
 	model->setColor(custom_color_);
 	model->setFont(font_);
 			 if (		 all_items->isChecked()) model->setMode(LabelModel::ONE_LABEL);
@@ -163,7 +173,7 @@ void LabelDialog::accept()
 	getMainControl()->insert(*rep);
 	getMainControl()->update(*rep);
 	
-	history_box->insertItem(label_edit_->text());
+	history_box->addItem(label_edit_->text());
 	history_box->setEnabled(true);
 
 	setStatusbarText("Label added.");
@@ -220,8 +230,8 @@ void LabelDialog::historySelected()
 void LabelDialog::checkMenu(MainControl&)
 	throw()
 {
-	menuBar()->setItemEnabled(id_, getMainControl()->getMolecularControlSelection().size() > 0 &&
-																!getMainControl()->compositesAreLocked());
+	id_->setEnabled(getMainControl()->getMolecularControlSelection().size() > 0 &&
+									!getMainControl()->compositesAreLocked());
 }
 
 

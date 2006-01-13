@@ -17,9 +17,11 @@
 #include <BALL/VIEW/KERNEL/compositeManager.h>
 
 #include <qpainter.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qmenubar.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
 #include <BALL/MATHS/vector3.h>
 #include <BALL/MATHS/matrix44.h>
@@ -90,7 +92,7 @@ namespace BALL
 		{
 		}
 
-		EditableScene::EditableScene(QWidget* parent_widget, const char* name, WFlags w_flags)
+		EditableScene::EditableScene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 			throw()
 			: Scene(parent_widget, name, w_flags),
 				edit_id_(-1),
@@ -107,7 +109,7 @@ namespace BALL
 
 		// TODO: Was sollte ein Copyconstructor sinnvolles tun?
 		// undo_ is NOT copied, since we would run into trouble with the pointers to atoms and bonds it saves
-		EditableScene::EditableScene(const EditableScene& eScene, QWidget* parent_widget, const char* name , WFlags w_flags)
+		EditableScene::EditableScene(const EditableScene& eScene, QWidget* parent_widget, const char* name , Qt::WFlags w_flags)
 			throw()
 			: Scene(eScene, parent_widget, name, w_flags),
 				edit_id_(-1),
@@ -144,7 +146,7 @@ namespace BALL
 
 			hint = "Switch to edit mode";
 			edit_id_ =	main_control.insertMenuEntry(
-					MainControl::DISPLAY, "&Edit Mode", this, SLOT(editMode_()), CTRL+Key_E, -1, hint);
+					MainControl::DISPLAY, "&Edit Mode", this, SLOT(editMode_()), Qt::CTRL+Qt::Key_E, -1, hint);
 
 			Scene::initializeWidget(main_control);
 
@@ -157,7 +159,7 @@ namespace BALL
 		{
 			if (current_mode_ == (Scene::ModeType)EDIT__MODE)
 			{
-				main_control.removeMenuEntry(MainControl::DISPLAY, "&Edit Mode", this, SLOT(editMode_()), CTRL+Key_E);
+				main_control.removeMenuEntry(MainControl::DISPLAY, "&Edit Mode", this, SLOT(editMode_()), Qt::CTRL+Qt::Key_E);
 			}
 			Scene::finalizeWidget(main_control);	
 		}
@@ -303,7 +305,7 @@ namespace BALL
 					
 					//paint the line representing the offered bond
 					QPainter painter(this);
-					painter.setPen(white);
+					painter.setPen(Qt::white);
 
 					// this allows to (a) draw or (b) erase, depending if a line was already drawn on 
 					// the same position
@@ -350,7 +352,7 @@ namespace BALL
 			{
 				// delete last symbolic bond line	
 				QPainter painter(this);
-				painter.setPen(white);
+				painter.setPen(Qt::white);
 				painter.setRasterOp(XorROP);
 
 				// did we paint a line at all?

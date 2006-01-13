@@ -45,7 +45,8 @@ namespace BALL
     		\ingroup  ViewDialogs
 		 */
 		class BALL_EXPORT DockDialog : 
-			public DockDialogData,
+			public QDialog,
+			public Ui_DockDialogData,
 			public PreferencesEntry
 		{ 
 			Q_OBJECT
@@ -66,7 +67,7 @@ namespace BALL
 				 *	@see        QDialog
 				 *	@see				PreferncesEntry
 				 */
-				DockDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
+				DockDialog(QWidget* parent = 0, const char* name = 0)
 					throw();
 					
 				/** Destructor.

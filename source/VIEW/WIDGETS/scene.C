@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174 2005/12/23 17:03:39 amoll Exp $
+// $Id: scene.C,v 1.174.2.1 2006/01/13 15:36:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -32,14 +32,18 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <qpainter.h>
-#include <qmenubar.h>
 #include <qimage.h>
-#include <qmenubar.h>
 #include <qcursor.h>
 #include <qapplication.h>
-#include <qdragobject.h>
-#include <qfiledialog.h>
 #include <qapplication.h>
+#include <QWheelEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
+#include <QDesktopWidget>
+#include <QFileDialog>
 
 //         #define BALL_BENCHMARKING
 
@@ -70,7 +74,8 @@ namespace BALL
 	  QGLFormat Scene::gl_format_(QGL::DepthBuffer 		| 
 																QGL::StereoBuffers 	| 
 																QGL::DoubleBuffer 	| 
-																QGL::DirectRendering);
+																QGL::DirectRendering |
+																QGL::SampleBuffers);
 
 		Scene::Scene()
 			throw()
@@ -78,8 +83,8 @@ namespace BALL
 				ModularWidget("<Scene>"),
 				current_mode_(ROTATE__MODE),
 				last_mode_(PICKING__MODE),
-				rotate_id_(-1),
-				picking_id_(-1),
+				rotate_action_(0),
+				picking_action_(0),
 				system_origin_(0.0),
 				need_update_(false),
 				update_running_(false),
@@ -107,14 +112,14 @@ namespace BALL
 #endif
 		}
 
-		Scene::Scene(QWidget* parent_widget, const char* name, WFlags w_flags)
+		Scene::Scene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 			throw()
-			:	QGLWidget(gl_format_, parent_widget, name, 0, w_flags),
+			:	QGLWidget(gl_format_, parent_widget, (QGLWidget*)0, w_flags),
 				ModularWidget(name),
 				current_mode_(ROTATE__MODE),
 				last_mode_(PICKING__MODE),
-				rotate_id_(-1),
-				picking_id_(-1),
+				rotate_action_(0),
+				picking_action_(0),
 				system_origin_(0.0, 0.0, 0.0),
 				need_update_(false),
 				update_running_(false),
@@ -137,6 +142,7 @@ namespace BALL
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (2) " << this << std::endl;
 #endif
+			setObjectName(name);
 			// the widget with the MainControl
 			registerWidget(this);
 			gl_renderer_.setSize(600, 600);
@@ -148,9 +154,9 @@ namespace BALL
 			}
 		}
 
-		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, WFlags w_flags)
+		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 			throw()
-			:	QGLWidget(gl_format_, parent_widget, name, 0, w_flags),
+			:	QGLWidget(gl_format_, parent_widget, (QGLWidget*)0, w_flags),
 				ModularWidget(scene),
 				system_origin_(scene.system_origin_),
 				x_window_pos_old_(0),
@@ -173,6 +179,8 @@ namespace BALL
 			Log.error() << "new Scene (3) " << this << std::endl;
 #endif
 
+			setObjectName(name);
+
 			resize((Size) scene.gl_renderer_.getWidth(), (Size) scene.gl_renderer_.getHeight());
 
 			// the widget with the MainControl
@@ -189,9 +197,7 @@ namespace BALL
 
 				delete stage_;
 
-#ifdef BALL_QT_HAS_THREADS
 				if (animation_thread_ != 0) delete animation_thread_;
-#endif
 			}
 
 		void Scene::clear()
@@ -259,6 +265,9 @@ namespace BALL
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "Scene " << this  << "onNotify " << message << std::endl;
 #endif
+			qApp->processEvents();
+			makeCurrent();
+
 			if (RTTI::isKindOf<RepresentationMessage>(*message)) 
 			{
 				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
@@ -579,6 +588,7 @@ namespace BALL
 				for(; it != pm.getRepresentations().end(); it++)
 				{
 					Representation& rep = **it;
+					if (rep.isHidden()) continue;
 
 					if (run == 0)
 					{
@@ -636,13 +646,10 @@ namespace BALL
 				return;
 			}
 
-#ifdef BALL_QT_HAS_THREADS
 			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
-			HashSet<Representation*>& reps_drawn = pm.getRepresentationsBeeingDrawn();
 			Representation* rep = (Representation*)& repr;
 
-			reps_drawn.insert(rep);
-#endif
+			pm.startedRendering(rep);
 
 			if (mode == REBUILD_DISPLAY_LISTS)
 			{
@@ -653,10 +660,7 @@ namespace BALL
 				gl_renderer_.render(repr);
 			}
 
-#ifdef BALL_QT_HAS_THREADS
-			reps_drawn.erase(rep);
-			pm.getUpdateWaitCondition().wakeAll();
-#endif
+			pm.finishedRendering(rep);
 		}
 
 		/////////////////////////////////////////////////////////
@@ -745,11 +749,11 @@ namespace BALL
 			Quaternion q2;
  			q2.set(camera.getRightVector(), Angle(degree_up, false).toRadian());
 
-			Quaternion q3;
- 			q3.set(camera.getViewVector(), Angle(degree_clockwise, false).toRadian());
+			Quaternion Q;
+ 			Q.set(camera.getViewVector(), Angle(degree_clockwise, false).toRadian());
 
  			q1 += q2;
- 			q1 += q3;
+ 			q1 += Q;
 			
 			GeometricCenterProcessor center_processor;
 			Vector3 center;
@@ -1297,94 +1301,93 @@ namespace BALL
 		{
 			setMinimumSize(10, 10);
 
-			main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
+			main_control.initPopupMenu(MainControl::DISPLAY);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
-			rotate_id_ =	insertMenuEntry(
-					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
+			rotate_action_ =	insertMenuEntry(
+					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), Qt::CTRL+Qt::Key_R);
 			setMenuHint("Switch to rotate/zoom mode");
 
-			picking_id_ = insertMenuEntry( MainControl::DISPLAY, "&Picking Mode", 
-													this, SLOT(pickingMode_()), CTRL+Key_P);
+			picking_action_ = insertMenuEntry( MainControl::DISPLAY, "&Picking Mode", 
+													this, SLOT(pickingMode_()), Qt::CTRL+Qt::Key_P);
 			setMenuHint("Switch to picking mode, e.g. to identify singe atoms or groups");
 			setMenuHelp("scene.html#identify_atoms");
 
-			move_id_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()));
+			move_action_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()));
 			setMenuHint("Move selected items");
 			setMenuHelp("molecularControl.html#move_molecule");
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-			no_stereo_id_ = insertMenuEntry (
+			no_stereo_action_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
- 			menuBar()->setItemChecked(no_stereo_id_, true) ;
+			no_stereo_action_->setChecked(true);
 			setMenuHelp("tips.html#3D");
 
-			active_stereo_id_ = insertMenuEntry (
+			active_stereo_action_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()));
 			setMenuHelp("tips.html#3D");
 
-			dual_stereo_id_ = insertMenuEntry (
+			dual_stereo_action_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "Side by Side", this, SLOT(enterDualStereo()));
 			setMenuHelp("tips.html#3D");
 
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
-											SLOT(showViewPoint_()), CTRL+Key_W);
+											SLOT(showViewPoint_()), Qt::CTRL+Qt::Key_W);
 			setMenuHint("Print the coordinates of the current viewpoint");
 
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, 
-											SLOT(setViewPoint_()), CTRL+Key_N);
+											SLOT(setViewPoint_()), Qt::CTRL+Qt::Key_N);
 			setMenuHint("Move the viewpoint to the given coordinates");
 
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()));
 			setMenuHint("Reset the camera to the orgin (0,0,0)");
 
-			insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, SLOT(showExportPNGDialog()), ALT + Key_P);
+			insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, SLOT(showExportPNGDialog()), Qt::ALT + Qt::Key_P);
 			setMenuHint("Export a PNG image file from the Scene");
 
 //   			insertMenuEntry(MainControl::FILE_EXPORT, "VRML...", this, SLOT(showExportVRMLDialog()));
 //   			setMenuHint("Export a VRML file from the Scene");
 
-			window_menu_entry_id_ = 
+			window_menu_entry_ = 
 				insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
-			menuBar()->setItemChecked(window_menu_entry_id_, true);
+			window_menu_entry_->setChecked(true);
 			setMenuHelp("scene.html");
 
 			// ======================== ANIMATION ===============================================
 			String help_url = "tips.html#animations";
 
-			record_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 
+			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 
 															SLOT(recordAnimationClicked()));
 			setMenuHint("Record an animation for later processing");
- 			menuBar()->setItemChecked(record_animation_id_, false) ;
 			setMenuHelp(help_url);
 			
-			clear_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, 
+			clear_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, 
 															SLOT(clearRecordedAnimation()));
 			setMenuHelp(help_url);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
-			start_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, 
+			start_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, 
 															SLOT(startAnimation()));
 			setMenuHelp(help_url);
 
-			cancel_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, 
+			cancel_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, 
 															SLOT(stopAnimation()));
-			menuBar()->setItemEnabled(cancel_animation_id_, false);
+			cancel_animation_action_->setEnabled(false);
 			setMenuHelp(help_url);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
-			animation_export_PNG_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", 
+			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", 
 																	this, SLOT(animationExportPNGClicked()));
 			setMenuHelp(help_url);
 
-			animation_export_POV_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", 
+			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", 
 																	this, SLOT(animationExportPOVClicked()));
 			setMenuHelp(help_url);
 
-			animation_repeat_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
+			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
 																	SLOT(animationRepeatClicked()));
 			setMenuHelp(help_url);
 
@@ -1392,41 +1395,35 @@ namespace BALL
 
 			connect(&timer_, SIGNAL(timeout()), this, SLOT(timerSignal_()) );			
 
-			registerWidgetForHelpSystem(this, "scene.html");
+			registerForHelpSystem(this, "scene.html");
 		}
 
 		void Scene::checkMenu(MainControl& /*main_control*/)
 			throw()
 		{
-			menuBar()->setItemChecked(rotate_id_, 	(current_mode_ == ROTATE__MODE));
-			menuBar()->setItemChecked(picking_id_,  (current_mode_ == PICKING__MODE));		
+			rotate_action_->setChecked(current_mode_ == ROTATE__MODE);
+			picking_action_->setChecked(current_mode_ == PICKING__MODE);
+			picking_action_->setEnabled(!getMainControl()->compositesAreLocked());
+			move_action_->setEnabled(!getMainControl()->compositesAreLocked());
 
-			menuBar()->setItemEnabled(picking_id_, !getMainControl()->compositesAreLocked());
-			menuBar()->setItemEnabled(move_id_, !getMainControl()->compositesAreLocked());
-
-			bool animation_running = false;
-			#ifdef BALL_QT_HAS_THREADS
-				animation_running = (animation_thread_ != 0 && animation_thread_->running());
-			#endif
+			bool animation_running = (animation_thread_ != 0 && animation_thread_->isRunning());
 			
-			menuBar()->setItemEnabled(start_animation_id_, 
+			start_animation_action_->setEnabled(
 																animation_points_.size() > 0 && 
 																!getMainControl()->compositesAreLocked() &&
 																!animation_running);
 			
-			menuBar()->setItemEnabled(clear_animation_id_, 
+			clear_animation_action_->setEnabled(
 					animation_points_.size() > 0 && !animation_running);
 		}
 
 		bool Scene::isAnimationRunning() const
 			throw()
 		{
-			#ifdef BALL_QT_HAS_THREADS
-				if (animation_thread_ != 0 && animation_thread_->running())
-				{
-					return true;
-				}
-			#endif
+			if (animation_thread_ != 0 && animation_thread_->isRunning())
+			{
+				return true;
+			}
 
 			return false;
 		}
@@ -1447,9 +1444,8 @@ namespace BALL
 			// ============ picking mode ================
 			if (current_mode_ == PICKING__MODE)
 			{
-				if (e->state() == Qt::LeftButton  ||
-						e->state() == Qt::RightButton ||
-						e->state() == (Qt::LeftButton | Qt::ShiftButton))
+				if (e->buttons() == Qt::LeftButton  ||
+						e->buttons() == Qt::RightButton)
 				{
 					selectionPressedMoved_();
 				}
@@ -1486,8 +1482,8 @@ namespace BALL
 
 			if(current_mode_ == PICKING__MODE)
 			{	
-				if (e->button() == Qt::LeftButton ||
-						e->button() == Qt::RightButton)
+				if (e->buttons() == Qt::LeftButton ||
+						e->buttons() == Qt::RightButton)
 				{
 					selectionPressed_();
 				}
@@ -1496,30 +1492,24 @@ namespace BALL
 
 		Index Scene::getMoveModeAction_(const QMouseEvent& e)
 		{
-			switch (e.state())
+			if (e.modifiers() == Qt::NoModifier)
 			{
-				// zoom
-				case (Qt::ShiftButton | Qt::LeftButton): 
-				case  Qt::MidButton:
-					return MOVE_ZOOM;
-
-				// translate 
-				case (Qt::ControlButton | Qt::LeftButton):
-				case  Qt::RightButton:
-					return MOVE_TRANSLATE;
-
-				// rotate
-				case Qt::LeftButton:
-					return MOVE_ROTATE;
-
-				// rotate2 
-				case (Qt::LeftButton | Qt::RightButton):
-				case (Qt::LeftButton | Qt::ShiftButton | Qt::ControlButton):
-				default:
-					return MOVE_ROTATE_CLOCKWISE;
+				if (e.buttons() == Qt::LeftButton) return ROTATE_ACTION;
+				if (e.buttons() == Qt::MidButton) return ZOOM_ACTION;
+				if (e.buttons() == Qt::RightButton) return TRANSLATE_ACTION;
+			}
+			else if (e.buttons() == Qt::LeftButton)
+			{
+				if (e.modifiers() == Qt::ShiftModifier) return ZOOM_ACTION;
+				if (e.modifiers() == Qt::ControlModifier) return TRANSLATE_ACTION;
+				if (e.modifiers() == Qt::ShiftModifier | Qt::ControlModifier) return ROTATE_CLOCKWISE_ACTION;
+			}
+			else if (e.buttons() == Qt::LeftButton | Qt::RightButton)
+			{
+					return ROTATE_CLOCKWISE_ACTION;
 			}
 
-			return MOVE_TRANSLATE;
+			return TRANSLATE_ACTION;
 		}
 
 		void Scene::processRotateModeMouseEvents_(QMouseEvent* e)
@@ -1530,24 +1520,24 @@ namespace BALL
 				return;
 			}
 
-			if(current_mode_ != ROTATE__MODE) return;
+			if (current_mode_ != ROTATE__MODE) return;
 			
 			content_changed_ = true;
 
-			switch (e->state())
+			switch ((Index)(e->buttons() | e->modifiers()))
 			{
-				case (Qt::ShiftButton | Qt::LeftButton): 
+				case (Qt::ShiftModifier | Qt::LeftButton): 
 				case  Qt::MidButton:
 					zoomSystem_();
 					break;
 
-				case (Qt::ControlButton | Qt::LeftButton):
+				case (Qt::ControlModifier | Qt::LeftButton):
 				case  Qt::RightButton:
 					translateSystem_();
 					break;
 
-				case (Qt::LeftButton | Qt::RightButton):
-				case (Qt::LeftButton | Qt::ShiftButton | Qt::ControlButton):
+				case (Qt::LeftButton | (Index)Qt::RightButton):
+				case (Qt::LeftButton | Qt::ShiftModifier | Qt::ControlModifier):
 					rotateSystemClockwise_();
 					break;
 
@@ -1559,7 +1549,7 @@ namespace BALL
 					break;
 			}
 
-			if (menuBar()->isItemChecked(record_animation_id_))
+			if (record_animation_action_->isChecked())
 			{
 				animation_points_.push_back(stage_->getCamera());
 			}
@@ -1589,25 +1579,25 @@ namespace BALL
 
 				switch (action)
 				{
-					case MOVE_ZOOM:
+					case ZOOM_ACTION:
 					{
 						moveComposites(composites, Vector3(0,0, delta_y * ZOOM_FACTOR));
 						return;
 					}
 
-					case MOVE_TRANSLATE:
+					case TRANSLATE_ACTION:
 					{
 						moveComposites(composites, Vector3(delta_x * TRANSLATE_FACTOR ,-delta_y * TRANSLATE_FACTOR, 0));
 						return;
 					}
 
-					case MOVE_ROTATE:
+					case ROTATE_ACTION:
 					{
 						rotateComposites(composites, delta_x * ROTATE_FACTOR * 4., delta_y * ROTATE_FACTOR * 4., 0);
 						return;
 					}
 
-					case MOVE_ROTATE_CLOCKWISE:
+					case ROTATE_CLOCKWISE_ACTION:
 					{
 						rotateComposites(composites, 0, 0, delta_x * ROTATE_FACTOR * 4.);
 						return;
@@ -1623,7 +1613,7 @@ namespace BALL
 
 			switch (action)
 			{
-				case MOVE_ZOOM:
+				case ZOOM_ACTION:
 				{
 					Vector3 v = -stage_->getCamera().getViewVector();
 					if (Maths::isZero(v.getSquareLength())) v = Vector3(1,0,0);
@@ -1635,7 +1625,7 @@ namespace BALL
 					break;
 				}
 
-				case MOVE_TRANSLATE:
+				case TRANSLATE_ACTION:
 				{
 					// calculate translation in x-axis direction
 					Vector3 right_translate = camera.getRightVector() * delta_x * TRANSLATE_FACTOR * 3.0;
@@ -1647,7 +1637,7 @@ namespace BALL
 					break;
 				}
 
-				case MOVE_ROTATE:
+				case ROTATE_ACTION:
 				{
 					delta_x *= ROTATE_FACTOR * 4.;
 					delta_y *= ROTATE_FACTOR * 4.;
@@ -1660,7 +1650,7 @@ namespace BALL
 					break;
 				}
 
-				case MOVE_ROTATE_CLOCKWISE:
+				case ROTATE_CLOCKWISE_ACTION:
 				default:
 					delta_x *= ROTATE_FACTOR2;
 					Vector3 rotation_axis = camera.getViewVector();
@@ -1684,9 +1674,9 @@ namespace BALL
 			// ============ picking mode ================
 			if(current_mode_ == PICKING__MODE)
 			{
-				switch (e->state())
+				switch (e->buttons() | e->modifiers())
 				{
-					case (Qt::LeftButton | Qt::ShiftButton):
+					case (Qt::LeftButton | Qt::ShiftModifier):
 					case Qt::RightButton:
 						deselectionReleased_();
 						break;
@@ -1812,15 +1802,16 @@ namespace BALL
 
 
 			painter.setBackgroundMode(Qt::OpaqueMode);
-			painter.setBackgroundColor(color.getQColor());
-			painter.setPen(getStage()->getBackgroundColor().getQColor());
+//   			painter.setBackgroundColor(color.getQColor());
+//   			painter.setPen(getStage()->getBackgroundColor().getQColor());
+			painter.setPen(color.getQColor());
 
 			QPoint diff(20, 20);
 			if (pos_x > (Position) width() / 2) diff.setX(-20);
 			if (pos_y > (Position) height() / 2) diff.setY(-20);
 
 			point += diff;
-			painter.drawText(point, string.c_str(), 0, -1);
+			painter.drawText(point, string.c_str());
 
 			show_info_ = false;
 		}
@@ -1841,29 +1832,29 @@ namespace BALL
 		{
 			if (gl_renderer_.getStereoMode() != GLRenderer::NO_STEREO)
 			{
-				if ((e->key() == Key_Y && e->state() == AltButton) ||
-						 e->key() == Key_Escape)
+				if ((e->key() == Qt::Key_Y && e->modifiers() == Qt::AltModifier) ||
+						 e->key() == Qt::Key_Escape)
 				{
 					exitStereo();
 				}
 
 				// setting of eye and focal distance
-				if (e->key() != Key_Left  &&
-						e->key() != Key_Right &&
-						e->key() != Key_Up    &&
-						e->key() != Key_Down)
+				if (e->key() != Qt::Key_Left  &&
+						e->key() != Qt::Key_Right &&
+						e->key() != Qt::Key_Up    &&
+						e->key() != Qt::Key_Down)
 				{
 					return;
 				}
 
 				// setting of eye distance
-				if (e->key() == Key_Left ||
-						e->key() == Key_Right)
+				if (e->key() == Qt::Key_Left ||
+						e->key() == Qt::Key_Right)
 				{
 					float new_distance = stage_->getEyeDistance();
 
 					float modifier;
-					if (e->key() == Key_Left)
+					if (e->key() == Qt::Key_Left)
 					{
 						modifier = -0.1;
 					}
@@ -1872,7 +1863,7 @@ namespace BALL
 						modifier = +0.1;
 					}
 
-					if (e->state() == ShiftButton)
+					if (e->modifiers() == Qt::ShiftModifier)
 					{
 						modifier *= 10;
 					}
@@ -1898,7 +1889,7 @@ namespace BALL
 					float new_focal_distance = stage_->getFocalDistance();
 
 					float modifier;
-					if (e->key() == Key_Down)
+					if (e->key() == Qt::Key_Down)
 					{
 						modifier = -1;
 					}
@@ -1907,7 +1898,7 @@ namespace BALL
 						modifier = +1;
 					}
 
-					if (e->state() == ShiftButton)
+					if (e->modifiers() == Qt::ShiftModifier)
 					{
 						modifier *= 10;
 					}
@@ -1950,9 +1941,9 @@ namespace BALL
 			last_mode_ = current_mode_;
 			current_mode_ = ROTATE__MODE;		
 			setCursor(QCursor(Qt::SizeAllCursor));
-			menuBar()->setItemChecked(rotate_id_, true);
-			menuBar()->setItemChecked(picking_id_, false);
-			menuBar()->setItemChecked(move_id_, false);
+			rotate_action_->setChecked(true);
+			picking_action_->setChecked(false);
+			move_action_->setChecked(false);
 		}
 
 		void Scene::pickingMode_()
@@ -1963,9 +1954,9 @@ namespace BALL
 			last_mode_ = current_mode_;
 			current_mode_ = PICKING__MODE;
 			setCursor(QCursor(Qt::CrossCursor));
-			menuBar()->setItemChecked(rotate_id_, false);
-			menuBar()->setItemChecked(picking_id_, true);
-			menuBar()->setItemChecked(move_id_, false);
+			rotate_action_->setChecked(false);
+			picking_action_->setChecked(true);
+			move_action_->setChecked(false);
 		}
 
 		void Scene::moveMode_()
@@ -1976,9 +1967,9 @@ namespace BALL
 			last_mode_ = current_mode_;
 			current_mode_ = MOVE__MODE;
 			setCursor(QCursor(Qt::PointingHandCursor));
-			menuBar()->setItemChecked(rotate_id_, false);
-			menuBar()->setItemChecked(picking_id_, false);
-			menuBar()->setItemChecked(move_id_, true);
+			rotate_action_->setChecked(false);
+			picking_action_->setChecked(false);
+			move_action_->setChecked(true);
 		}
 
 		void Scene::selectionPressed_()
@@ -2010,8 +2001,8 @@ namespace BALL
 			y_window_pick_pos_second_ = y_window_pos_new_;
 
 			QPainter painter(this);
-			painter.setPen(white);
-			painter.setRasterOp(XorROP);
+			ColorRGBA color = getStage()->getBackgroundColor().getInverseColor();
+			painter.setPen(color.getQColor());
 
 			painter.drawRect((int) x_window_pick_pos_first_,
 					(int) y_window_pick_pos_first_,
@@ -2030,21 +2021,22 @@ namespace BALL
 		{
 			String start = String(screenshot_nr_) + ".vrml";
 			screenshot_nr_ ++;
-			QFileDialog fd("Export to a VRML file", "*.vrml", 0, "Select a VRMLfile", true);
-			fd.setSelection(start.c_str());
-			fd.setMode(QFileDialog::AnyFile);
+			QFileDialog fd(0, "Export to a VRML file", getMainControl()->getWorkingDir().c_str(), "*.vrml");
+			fd.selectFile(start.c_str());
+			fd.setFileMode(QFileDialog::AnyFile);
 			if (fd.exec() != QDialog::Accepted ||
-					fd.selectedFile() == "")
+					fd.selectedFiles().size() == 0)
 			{
 				return;
 			}
 
-			VRMLRenderer vrml(fd.selectedFile().ascii());
+			String filename = ascii(*fd.selectedFiles().begin());
+			VRMLRenderer vrml(filename);
 
 			if (exportScene(vrml))
 			{
-				setStatusbarText("Saved VRML to " + String(fd.selectedFile().ascii()));
-				setWorkingDirFromFilename_(fd.selectedFile().ascii());
+				setStatusbarText("Saved VRML to " + filename);
+				setWorkingDirFromFilename_(filename);
 				return;
 			}
 			
@@ -2071,16 +2063,17 @@ namespace BALL
 
 			String start = String(screenshot_nr_) + ".png";
 			screenshot_nr_ ++;
-			QFileDialog fd("Export a screenshot to a PNG file", "*.png", 0, "Select a PNG file", true);
-			fd.setSelection(start.c_str());
-			fd.setMode(QFileDialog::AnyFile);
+			QFileDialog fd(0, "Export a screenshot to a PNG file", getMainControl()->getWorkingDir().c_str(),
+										 "*.png");
+			fd.selectFile(start.c_str());
+			fd.setFileMode(QFileDialog::AnyFile);
 			if (fd.exec() != QDialog::Accepted ||
-					fd.selectedFile() == "")
+					fd.selectedFiles().size() == 0)
 			{
 				return;
 			}
 
-			String file_name = fd.selectedFile().ascii();
+			String file_name = ascii(*fd.selectedFiles().begin());
 			if (!file_name.has('.')) file_name += ".png";
 
 			bool ok = image.save(file_name.c_str(), "PNG");
@@ -2118,49 +2111,39 @@ namespace BALL
 			else 				setStatusbarText("Could not save POVRay to " + filename);
 		}
 
-		void Scene::customEvent(QCustomEvent * e)
+		bool Scene::event(QEvent* e)
 		{
+			if (e->type() < QEvent::User) return QGLWidget::event(e);
+
 			if (e->type() == (QEvent::Type)SCENE_EXPORTPNG_EVENT) 
 			{  
 				exportPNG();
-				return;
+				return true;
 			}
 
 			if (e->type() == (QEvent::Type)SCENE_EXPORTPOV_EVENT) 
 			{  
 				exportPOVRay();
-				return;
+				return true;
 			}
 
 			if (e->type() == (QEvent::Type)SCENE_SETCAMERA_EVENT) 
 			{  
 				setCamera(((SceneSetCameraEvent*) e)->camera);
-				return;
+				return true;
 			}
+
+			return false;
 		}
 
 		void Scene::switchShowWidget()
 			throw()
 		{
-			if (window_menu_entry_id_ == -1) return;
+			if (window_menu_entry_ == 0) return;
 
-			if (!getMainControl()) 
-			{
-				BALLVIEW_DEBUG
-				return;
-			}
-
-			QMenuBar* menu = getMainControl()->menuBar();
-			if (menu->isItemChecked(window_menu_entry_id_))
-			{
-				hide();
-				menu->setItemChecked(window_menu_entry_id_, false);
-			}
-			else
-			{
-				show();
-				menu->setItemChecked(window_menu_entry_id_, true);
-			}
+			bool vis = isVisible();
+			setVisible(!vis);
+			window_menu_entry_->setChecked(vis);
 		}
 
 
@@ -2176,13 +2159,13 @@ namespace BALL
 			glMatrixMode(GL_MODELVIEW);
 
 			hide();
-			reparent((QWidget*)getMainControl(), getWFlags() & ~WType_Mask, last_pos_, false);
+//   			reparent((QWidget*)getMainControl(), getWFlags() & ~Qt::WType_Mask, last_pos_, false);
 			((QMainWindow*)getMainControl())->setCentralWidget(this);
 			show();
 
-			getMainControl()->menuBar()->setItemChecked(no_stereo_id_, true);
-			getMainControl()->menuBar()->setItemChecked(active_stereo_id_, false);
-			getMainControl()->menuBar()->setItemChecked(dual_stereo_id_, false);
+			no_stereo_action_->setChecked(true);
+			active_stereo_action_->setChecked(false);
+			dual_stereo_action_->setChecked(false);
 			update();
 		}
 
@@ -2193,13 +2176,13 @@ namespace BALL
 			last_pos_ = pos();
 			hide();
 			showNormal();  // needed on windows
-			reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
+//   			reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
 			showFullScreen();
 			show();
 
-			getMainControl()->menuBar()->setItemChecked(no_stereo_id_, false);
-			getMainControl()->menuBar()->setItemChecked(active_stereo_id_, true);
-			getMainControl()->menuBar()->setItemChecked(dual_stereo_id_, false);
+			no_stereo_action_->setChecked(false);
+			active_stereo_action_->setChecked(true);
+			dual_stereo_action_->setChecked(false);
 			update();
 		}
 
@@ -2210,14 +2193,14 @@ namespace BALL
 			last_pos_ = pos();
 			hide();
 			showNormal();  // needed on windows
-			reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
+//   			reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
 			showFullScreen();
 			setGeometry(qApp->desktop()->geometry());
 			show();
 
-			getMainControl()->menuBar()->setItemChecked(no_stereo_id_, false);
-			getMainControl()->menuBar()->setItemChecked(active_stereo_id_, false);
-			getMainControl()->menuBar()->setItemChecked(dual_stereo_id_, true);
+			no_stereo_action_->setChecked(false);
+			active_stereo_action_->setChecked(false);
+			dual_stereo_action_->setChecked(true);
 			update();
 		}
 
@@ -2239,25 +2222,20 @@ namespace BALL
 			throw()
 		{
 			if (!lockComposites()) return;
-			menuBar()->setItemChecked(record_animation_id_, false);
-			menuBar()->setItemEnabled(record_animation_id_, false);
+			record_animation_action_->setChecked(false);
+			record_animation_action_->setEnabled(false);
 
-			menuBar()->setItemEnabled(start_animation_id_, false);
-			menuBar()->setItemEnabled(cancel_animation_id_, true);
+			start_animation_action_->setChecked(false);
+			cancel_animation_action_->setEnabled(true);
 
-			menuBar()->setItemEnabled(animation_repeat_id_, false);
-			menuBar()->setItemEnabled(animation_export_POV_id_, false);
-			menuBar()->setItemEnabled(animation_export_PNG_id_, false);
-			menuBar()->setItemEnabled(clear_animation_id_, false);
+			animation_repeat_action_->setEnabled(false);
+			animation_export_POV_action_->setEnabled(false);
+			animation_export_PNG_action_->setEnabled(false);
+			clear_animation_action_->setEnabled(false);
 
-			#ifdef BALL_QT_HAS_THREADS
-				if (animation_thread_ != 0) delete animation_thread_;
-				animation_thread_ = new AnimationThread();
-				animation_thread_->start();
-				return;
-			#endif
-	
-			animate_();
+			if (animation_thread_ != 0) delete animation_thread_;
+			animation_thread_ = new AnimationThread();
+			animation_thread_->start();
 		}
 
 		void Scene::stopAnimation()
@@ -2269,16 +2247,15 @@ namespace BALL
 		void Scene::recordAnimationClicked()
 			throw()
 		{
-			menuBar()->setItemChecked(record_animation_id_, 
-					!menuBar()->isItemChecked(record_animation_id_));
+			record_animation_action_->setChecked(!record_animation_action_->isChecked());
 		}
 
 		void Scene::animate_()
 			throw()
 		{
-			bool export_PNG = menuBar()->isItemChecked(animation_export_PNG_id_);
-			bool export_POV = menuBar()->isItemChecked(animation_export_POV_id_);
-			bool repeat     = menuBar()->isItemChecked(animation_repeat_id_);
+			bool export_PNG = animation_export_PNG_action_->isChecked();
+			bool export_POV = animation_export_POV_action_->isChecked();
+			bool repeat     = animation_repeat_action_->isChecked();
 
 			do
 			{
@@ -2307,9 +2284,7 @@ namespace BALL
 
 					for (Size i = 0; i < steps && !stop_animation_; i++)
 					{
-						#ifdef BALL_QT_HAS_THREADS
-							animation_thread_->mySleep(50);
-						#endif
+						animation_thread_->mySleep(50);
 
 						camera.setViewPoint(camera.getViewPoint() - diff_viewpoint);
 						camera.setLookUpVector(camera.getLookUpVector() - diff_up);
@@ -2339,36 +2314,33 @@ namespace BALL
 			while(!stop_animation_ && repeat);
 
 			stop_animation_ = false;
-			menuBar()->setItemEnabled(start_animation_id_, true);
-			menuBar()->setItemEnabled(cancel_animation_id_, false);
-			menuBar()->setItemEnabled(record_animation_id_, true);
+			start_animation_action_->setEnabled(true);
+			cancel_animation_action_->setEnabled(false);
+			record_animation_action_->setEnabled(true);
 
-			menuBar()->setItemEnabled(animation_repeat_id_, true);
-			menuBar()->setItemEnabled(animation_export_POV_id_, true);
-			menuBar()->setItemEnabled(animation_export_PNG_id_, true);
-			menuBar()->setItemEnabled(clear_animation_id_, true);
+			animation_repeat_action_->setEnabled(true);
+			animation_export_POV_action_->setEnabled(true);
+			animation_export_PNG_action_->setEnabled(true);
+			clear_animation_action_->setEnabled(true);
 			unlockComposites();
 		}
 
 		void Scene::animationRepeatClicked()
 			throw()
 		{
-			menuBar()->setItemChecked(animation_repeat_id_, 
-					!menuBar()->isItemChecked(animation_repeat_id_));
+			animation_repeat_action_->setChecked(!animation_repeat_action_->isChecked());
 		}
 
 		void Scene::animationExportPOVClicked()
 			throw()
 		{
-			menuBar()->setItemChecked(animation_export_POV_id_, 
-					!menuBar()->isItemChecked(animation_export_POV_id_));
+			animation_export_POV_action_->setChecked(!animation_export_POV_action_->isChecked());
 		}
 
 		void Scene::animationExportPNGClicked()
 			throw()
 		{
-			menuBar()->setItemChecked(animation_export_PNG_id_, 
-					!menuBar()->isItemChecked(animation_export_PNG_id_));
+			animation_export_PNG_action_->setChecked(!animation_export_PNG_action_->isChecked());
 		}
 
 		void Scene::switchToLastMode()
@@ -2395,7 +2367,8 @@ namespace BALL
 
 		void Scene::dragEnterEvent(QDragEnterEvent* event)
 		{
-			event->accept(QTextDrag::canDecode(event));
+			 if (event->mimeData()->hasUrls()) event->acceptProposedAction();
+//   			 if (event->mimeData()->hasFormat("text/plain")) event->acceptProposedAction();
 		}
 
 
@@ -2415,7 +2388,7 @@ namespace BALL
 				delete gl_test;
 				if (!supports)
 				{
-					gl_format_ = (QGL::DepthBuffer);
+					gl_format_ = QGLFormat(QGL::DepthBuffer);
 				}
 			}
 			
@@ -2436,14 +2409,8 @@ namespace BALL
 
 		void Scene::setVisible(bool state)
 		{
-			if (state)
-			{
-				show();
-			}
-			else
-			{
-				hide();
-			}
+			// only for Python needed
+			QGLWidget::setVisible(state);
 		}
 
 		void Scene::updateGL()
@@ -2472,10 +2439,7 @@ namespace BALL
 
 			QPainter painter(this);
 
-			ColorRGBA color = getStage()->getBackgroundColor();
-			color.set(255 - (Position) color.getRed(),
-								255 - (Position) color.getGreen(),
-								255 - (Position) color.getBlue());
+			ColorRGBA color = getStage()->getBackgroundColor().getInverseColor();
 
 			painter.setBackgroundMode(Qt::OpaqueMode);
 			painter.setPen(color.getQColor());

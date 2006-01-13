@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeProperties.h,v 1.4 2005/12/23 17:02:09 amoll Exp $
+// $Id: compositeProperties.h,v 1.4.2.1 2006/01/13 15:35:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COMPOSITEPROPERTIES_H
@@ -21,13 +21,15 @@ namespace BALL
 		/** Dialog for showing and changing the properties of an Composite, e.g. an Atom or a Molecule.
 				\ingroup  ViewDialogs
 		*/
-		class BALL_VIEW_EXPORT CompositeProperties : public CompositePropertiesData
+		class BALL_VIEW_EXPORT CompositeProperties 
+			: public QDialog,
+				public Ui_CompositePropertiesData
 		{ 
 			Q_OBJECT
 
 		public:
 			CompositeProperties(Composite* composite,  QWidget* parent = 0, const char* name = 0, 
-													bool modal = FALSE, WFlags fl = 0 );
+													bool modal = FALSE, Qt::WFlags fl = 0 );
 			~CompositeProperties();
 
 		public slots:

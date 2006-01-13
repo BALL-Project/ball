@@ -9,7 +9,7 @@
 #include <qslider.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
-#include <qprogressdialog.h>
+#include <QProgressDialog>
 
 namespace BALL
 {
@@ -17,13 +17,34 @@ namespace BALL
 	{
 
 SnapshotVisualisationDialog::SnapshotVisualisationDialog(QWidget* parent, const char* name)
-	: SnapshotVisualisationDialogData(parent, name),
+	: QDialog(parent),
+		Ui_SnapshotVisualisationDialogData(),
 		ModularWidget(name),
 		snap_shot_manager_(0)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new SnapshotVisualisationDialog" << this << std::endl;
 #endif
+	setupUi(this);
+
+	// signals and slots connections
+	connect( animateButton, SIGNAL( clicked() ), this, SLOT( animateClicked() ) );
+	connect( cancelButton, SIGNAL( clicked() ), this, SLOT( close() ) );
+	connect( firstSnapshotButton, SIGNAL( clicked() ), this, SLOT( firstSnapshotClicked() ) );
+	connect( tenBackwardButton, SIGNAL( clicked() ), this, SLOT( tenBackwardClicked() ) );
+	connect( oneBackwardButton, SIGNAL( clicked() ), this, SLOT( oneBackwardClicked() ) );
+	connect( oneForwardButton, SIGNAL( clicked() ), this, SLOT( oneForwardClicked() ) );
+	connect( tenForwardButton, SIGNAL( clicked() ), this, SLOT( tenForwardClicked() ) );
+	connect( lastSnapshotButton, SIGNAL( clicked() ), this, SLOT( lastSnapshotClicked() ) );
+	connect( snapShotSlider, SIGNAL( valueChanged(int) ), this, SLOT( sliderMovedToPos() ) );
+	connect( startSnapshot, SIGNAL( textChanged(const QString&) ), this, SLOT( snapShotInputTest() ) );
+	connect( endSnapshot, SIGNAL( textChanged(const QString&) ), this, SLOT( snapShotInputTest() ) );
+	connect( animationSpeedSlider, SIGNAL( valueChanged(int) ), this, SLOT( animationSpeedChanged() ) );
+	connect( forwardLoopButton, SIGNAL( clicked() ), this, SLOT( checkLoop() ) );
+	connect( rockLoopButton, SIGNAL( clicked() ), this, SLOT( checkRock() ) );
+	connect( noLoopButton, SIGNAL( clicked() ), this, SLOT( checkNoLoop() ) );
+
+	setObjectName(name);
 	tmp_.setNum(1);
 	ModularWidget::registerWidget(this);
 }
@@ -96,14 +117,14 @@ void SnapshotVisualisationDialog::animateClicked()
 	Size tempo = getEndSnapshot();
 	Size speed = animationSpeedSlider->value();
 	bool forward = true;
-	QProgressDialog progress("SnapShot Visualisation", "Abort Animation", tempo, 0, "progress", true);
+	QProgressDialog progress("SnapShot Visualisation", "Abort Animation", 0, tempo, 0);
 	
 	for (Size i = getStartSnapshot(); 
-			 i < tempo && !error_ && !progress.wasCancelled(); )
+			 i < tempo && !error_ && !progress.wasCanceled(); )
 	{
-		progress.setProgress(i);
+		progress.setValue(i);
 			
-		setCaption((String("CurrentSnapshot: ") + String(i)).c_str());
+		setWindowTitle((String("CurrentSnapshot: ") + String(i)).c_str());
 		snapShotSlider->setValue(i);
 		update_();
 
@@ -133,7 +154,7 @@ void SnapshotVisualisationDialog::animateClicked()
 			if (speed >= tempo - i)
 			{
 				i = tempo;
-				setCaption((String("CurrentSnapshot: ") + String(i)).c_str());
+				setWindowTitle((String("CurrentSnapshot: ") + String(i)).c_str());
 				snapShotSlider->setValue(i);
 				update_();
 				
@@ -176,7 +197,7 @@ void SnapshotVisualisationDialog::animateClicked()
 		}
 	}
 	
-	setCaption("Snapshot Visualisation");
+	setWindowTitle("Snapshot Visualisation");
 }
 
 
@@ -224,7 +245,7 @@ Size SnapshotVisualisationDialog::getStartSnapshot() const
 {
 	try
 	{
-		return (Size)String(startSnapshot->text().ascii()).toUnsignedInt();
+		return (Size)ascii(startSnapshot->text()).toUnsignedInt();
 	}
 	catch(...)
 	{
@@ -238,7 +259,7 @@ Size SnapshotVisualisationDialog::getEndSnapshot() const
 {
 	try 
 	{
-		return (Size)String(endSnapshot->text().ascii()).toUnsignedInt();
+		return (Size)ascii(endSnapshot->text()).toUnsignedInt();
 	}
 	catch(...)
 	{
@@ -289,8 +310,8 @@ void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_m
 
 void SnapshotVisualisationDialog::snapShotInputTest()
 {
-	String startSnap = startSnapshot->text().ascii();
-	String endSnap = endSnapshot->text().ascii();
+	String startSnap = ascii(startSnapshot->text());
+	String endSnap = ascii(endSnapshot->text());
 	String valid_char = "0123456789";
 	//test if input is valid
 	if (startSnap.size()!=0)
@@ -321,9 +342,9 @@ void SnapshotVisualisationDialog::snapShotInputTest()
 	}
 
 	// set line edits to number of snapshots, if written number is bigger then number of snapshots
-	String num_of_shots = numberOfSnapshots->text().ascii();
-	String num_of_startsnap = startSnapshot->text().ascii();
-	String num_of_endsnap = endSnapshot->text().ascii();
+	String num_of_shots = ascii(numberOfSnapshots->text());
+	String num_of_startsnap = ascii(startSnapshot->text());
+	String num_of_endsnap = ascii(endSnapshot->text());
 	Size num_shots = num_of_shots.toInt();
 	Size num_startsnap = num_of_startsnap.toInt();
 	Size num_endsnap = num_of_endsnap.toInt();

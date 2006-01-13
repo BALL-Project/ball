@@ -1,7 +1,11 @@
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
+#include <QDropEvent>
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.14 2005/12/23 17:02:23 amoll Exp $
+// $Id: logView.h,v 1.14.2.1 2006/01/13 15:35:35 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -25,13 +29,11 @@
 #	include <qstring.h>
 #endif
 
-#ifndef QTEXTEDIT_H
-# include <qtextedit.h>
-#endif
-
 #ifndef BALL_VIEW_WIDGETS_DOCKWIDGET_H
 #	include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
+
+#include <QTextEdit>
 
 namespace BALL
 {

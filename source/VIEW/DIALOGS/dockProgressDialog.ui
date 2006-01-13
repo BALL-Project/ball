@@ -1,233 +1,197 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>DockProgressDialogData</class>
-<widget class="QDialog">
-    <property name="name">
-        <cstring>DockProgressDialogData</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>630</width>
-            <height>388</height>
-        </rect>
-    </property>
-    <property name="sizePolicy">
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>DockProgressDialogData</class>
+ <widget class="QDialog" name="DockProgressDialogData" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>630</width>
+    <height>388</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>7</hsizetype>
+    <vsizetype>7</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle" >
+   <string>Docking Progress</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>11</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="textLabel1" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>&lt;b>Chosen Parameters&lt;/b></string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QTextEdit" name="general_params" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>7</hsizetype>
+       <vsizetype>1</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize" >
+      <size>
+       <width>250</width>
+       <height>120</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>32767</width>
+       <height>120</height>
+      </size>
+     </property>
+     <property name="readOnly" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>80</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="0" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="0" column="1" >
+      <widget class="QLabel" name="remaining_time" >
+       <property name="text" >
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" >
+      <widget class="QPushButton" name="pause_button" >
+       <property name="sizePolicy" >
         <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>7</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
+         <hsizetype>1</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
         </sizepolicy>
-    </property>
-    <property name="caption">
-        <string>Docking Progress</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QLabel" row="0" column="0">
-            <property name="name">
-                <cstring>textLabel1</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>&lt;b&gt;Chosen Parameters&lt;/b&gt;</string>
-            </property>
-        </widget>
-        <widget class="QTextEdit" row="1" column="0">
-            <property name="name">
-                <cstring>general_params</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>1</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>250</width>
-                    <height>120</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>32767</width>
-                    <height>120</height>
-                </size>
-            </property>
-            <property name="hScrollBarMode">
-                <enum>Auto</enum>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="wordWrap">
-                <enum>NoWrap</enum>
-            </property>
-            <property name="readOnly">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <spacer row="2" column="0">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>80</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QLayoutWidget" row="3" column="0">
-            <property name="name">
-                <cstring>layout2</cstring>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel" row="0" column="1">
-                    <property name="name">
-                        <cstring>remaining_time</cstring>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="2" column="0">
-                    <property name="name">
-                        <cstring>pause_button</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>110</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>Pause</string>
-                    </property>
-                </widget>
-                <widget class="QProgressBar" row="1" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>progress_bar</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>200</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>time_label</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Remaining time:</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="2" column="1">
-                    <property name="name">
-                        <cstring>abort_button</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>110</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>Abort</string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QTextEdit" row="1" column="1" rowspan="3" colspan="1">
-            <property name="name">
-                <cstring>options</cstring>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>350</width>
-                    <height>300</height>
-                </size>
-            </property>
-            <property name="vScrollBarMode">
-                <enum>Auto</enum>
-            </property>
-            <property name="hScrollBarMode">
-                <enum>Auto</enum>
-            </property>
-            <property name="wordWrap">
-                <enum>NoWrap</enum>
-            </property>
-            <property name="readOnly">
-                <bool>true</bool>
-            </property>
-        </widget>
-    </grid>
-</widget>
-<connections>
-    <connection>
-        <sender>pause_button</sender>
-        <signal>clicked()</signal>
-        <receiver>DockProgressDialogData</receiver>
-        <slot>pauseClicked()</slot>
-    </connection>
-    <connection>
-        <sender>abort_button</sender>
-        <signal>clicked()</signal>
-        <receiver>DockProgressDialogData</receiver>
-        <slot>abortClicked()</slot>
-    </connection>
-</connections>
-<slots>
-    <slot>pauseClicked()</slot>
-    <slot>abortClicked()</slot>
-</slots>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>110</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>Pause</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="2" >
+      <widget class="QProgressBar" name="progress_bar" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>7</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="time_label" >
+       <property name="text" >
+        <string>Remaining time:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" >
+      <widget class="QPushButton" name="abort_button" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>110</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>Abort</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item rowspan="3" row="1" column="1" >
+    <widget class="QTextEdit" name="options" >
+     <property name="minimumSize" >
+      <size>
+       <width>350</width>
+       <height>300</height>
+      </size>
+     </property>
+     <property name="readOnly" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>

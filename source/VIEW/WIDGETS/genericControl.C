@@ -1,50 +1,30 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.17 2005/12/23 17:03:37 amoll Exp $
+// $Id: genericControl.C,v 1.17.2.1 2006/01/13 15:36:05 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <qlistview.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-
-		void MyListView::keyPressEvent(QKeyEvent * e)
-		{
-			if (e->key() != Key_Delete ||
-					parentWidget() == 0 ||
-					!RTTI::isKindOf<GenericControl>(*parentWidget())) 
-			{
-				QListView::keyPressEvent(e);
-				return;
-			}
-
-			((GenericControl*)parentWidget())->deleteCurrentItems();
-		}
-
-		void GenericControl::onContextMenu_(QListViewItem* /*item*/, const QPoint& /*point*/, int /*column*/)
-		{}
-
 		GenericControl::GenericControl(QWidget* parent, const char* name)
 			throw()
 				:	DockWidget(parent, name),
-					context_item_(0),
-					listview(new MyListView(this))
+ 					context_item_(0),
+					listview(new QTreeWidget(this))
 		{
 			// appearance
-			listview->setRootIsDecorated(true);
-			listview->setSorting(-1);
-			listview->setSelectionMode(QListView::Extended);
-			setGuest(*listview);	
-
-			connect(listview, SIGNAL(rightButtonPressed(QListViewItem*, const QPoint&, int)), this,
-							SLOT(onContextMenu_(QListViewItem*, const QPoint&, int)));
+//   			listview->setSorting(-1);
+ 			setGuest(*listview);	
+			listview->setSelectionMode(QAbstractItemView::ExtendedSelection);
+			connect(listview, SIGNAL(itemSelectionChanged()), this, SLOT(updateSelection()));
+			connect(listview, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*)));
 		}
 
 
@@ -54,25 +34,19 @@ namespace BALL
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << this << " of class GenericControl" << endl;
 			#endif 
-
-			listview->clear();
 		}
 
 
 		GenericControl::ItemList GenericControl::getSelectedItems()
 			throw()
 		{
-			ItemList selected;
-			QListViewItemIterator it(listview);
-			for (; it.current(); ++it)
+			QList<QTreeWidgetItem*> result;
+			result = listview->selectedItems();
+			if (result.size() > 0)
 			{
-				if (it.current()->isSelected())
-				{
-					selected.push_back(it.current());
-				}
+				context_item_ = *result.begin();
 			}
-
-			return selected;
+			return result;
 		}
 
 		void GenericControl::deselectOtherControls_()
@@ -82,16 +56,7 @@ namespace BALL
 
 		void GenericControl::updateSelection() 
 		{
-			QListViewItemIterator it(listview);
-			for (; it.current(); ++it)
-			{
-				QListViewItem* item = it.current();
-				if (item->isSelected())
-				{
-					deselectOtherControls_();
-					return;
-				}
-			}
+			if (getSelectedItems().size() != 0) deselectOtherControls_();
 		}
 
 		void GenericControl::onNotify(Message *message)
@@ -102,7 +67,8 @@ namespace BALL
 				return;
 			}
 
-			listview->selectAll(false);
+			listview->setCurrentItem(0);
+//   			listview->selectAll(false);
 		}
 
 		void GenericControl::initializeWidget(MainControl& main_control)
@@ -112,18 +78,25 @@ namespace BALL
 			DockWidget::initializeWidget(main_control);
 		} 
 
-		void GenericControl::removeItem_(QListViewItem* item, bool update)
+		QTreeWidgetItem* GenericControl::addRow(const QStringList& entries)
+		{
+			QTreeWidgetItem* item = new QTreeWidgetItem(listview, entries);
+
+			if (checkable_) item->setFlags(Qt::ItemIsUserCheckable|Qt::ItemIsSelectable);
+			return item;
+		}
+
+		void GenericControl::removeItem_(QTreeWidgetItem* item)
 			throw()
 		{
-			while (item->firstChild() != 0)
+			while (item->child(0) != 0)
 			{
-				removeItem_(item->firstChild(), false);
+				removeItem_(item->child(0));
 			}
 
 			delete item;
-
-			if (update) listview->triggerUpdate();
 		}
+
 
 	} // namespace VIEW
 } // namespace BALL

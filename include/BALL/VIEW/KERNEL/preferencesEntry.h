@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.h,v 1.10 2005/12/23 17:02:15 amoll Exp $
+// $Id: preferencesEntry.h,v 1.10.2.1 2006/01/13 15:35:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCES_ENTRY
@@ -20,8 +20,7 @@
 #endif
 
 class QWidget;
-class QLabel;
-class QWidgetStack;
+class QStackedWidget;
 
 namespace BALL
 {
@@ -44,11 +43,11 @@ namespace BALL
 				To support more sophisticated items, e.g. color tables, a base class
 				is provided to derive from (see ExtendedPreferencesObject).
 				\\
-				Furthermore this class allows to use QWidgetStack items, like e.g.
+				Furthermore this class allows to use QStackedWidget items, like e.g.
 				in the Preferences, where all individual child widgets are than
 				also entries in a QListView. This is than also use to support
 				e.g. applying default values for the currently shown page in the
-				QWidgetStack.\\
+				QStackedWidget.\\
 				\\
 				How to use this class:\\
 				1. Derive from it.\\
@@ -57,10 +56,10 @@ namespace BALL
 				4. Call registerObject_() for every GUI element to be restored.\\
 				5. Call setINIFileSectionName(String) for the section in the INIFile, where
 				   the settins are to be stored.
-				6. If the dialog is a page in a QWidgetStack (like in the Preferences dialog) 
+				6. If the dialog is a page in a QStackedWidget (like in the Preferences dialog) 
 					 call insertEntry(this, "Name to appear in the listview").\\
-				7. If the dialog itself has a QWidgetStack call setWidgetStack() for it and 
-					 set the names of the QWidgetStack pages accordingly.
+				7. If the dialog itself has a QStackedWidget call setWidgetStack() for it and 
+					 set the names of the QStackedWidget pages accordingly.
 					 But: setWidgetStack() has to be called after all registerObject_() calls!\\
 				\\
 				@see QModelSettings for an example
@@ -121,26 +120,26 @@ namespace BALL
 			/// Get the name for the section in the INIFile
 			const String& getINIFileSectionName() const { return inifile_section_name_;}
 	
-			/** If the derived class is to be shown in a QWidgetStack, 
+			/** If the derived class is to be shown in a QStackedWidget, 
 			    call this method to set the name for its entry.
 			*/
 			void setWidgetStackName(const String& name);
 			
-			/// Return all pages, that are to be shown in a parent QWidgetStack.
+			/// Return all pages, that are to be shown in a parent QStackedWidget.
 			StackPages& getStackPages() { return stack_pages_;}
 	
 			/** Call this method in the constructor of the derived class
-			    has its own QWidgetStack.
+			    has its own QStackedWidget.
 			*/
-			void setWidgetStack(QWidgetStack* stack);
+			void setWidgetStack(QStackedWidget* stack);
 
-			/// Show the specified page in the QWidgetStack.
+			/// Show the specified page in the QStackedWidget.
 			virtual void showStackPage(Position nr);
 			
-			/// Show the specified page in the QWidgetStack.
+			/// Show the specified page in the QStackedWidget.
 			virtual void showStackPage(QWidget* widget);
 
-			/// Get the currently shown page in the QWidgetStack.
+			/// Get the currently shown page in the QStackedWidget.
 			virtual Position currentStackPage() const;
 
 			/// Set all registered objects to their default values.
@@ -171,10 +170,6 @@ namespace BALL
 
 			void insertEntry_(QWidget*, const String& name);
 
-			ColorRGBA getLabelColor_(const QLabel* label) const;
-
-			void setLabelColor_(QLabel* label, const ColorRGBA& color);
-
 			// name for the section in the INIFile
 			String 							inifile_section_name_;
 			
@@ -184,12 +179,12 @@ namespace BALL
 			// stored default and last values for each registered object
 			ValueMap 						default_values_, last_values_;
 			
-			// if the derived class has its own QWidgetStack, it is stored here
-			QWidgetStack*				widget_stack_;
+			// if the derived class has its own QStackedWidget, it is stored here
+			QStackedWidget*				widget_stack_;
 
 			StackPages 					stack_pages_;
 
-			// registered objects per QWidgetStack page
+			// registered objects per QStackedWidget page
 			StackEntries 				stack_entries_;
 		};
   

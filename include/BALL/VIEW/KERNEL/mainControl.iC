@@ -1,14 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.iC,v 1.7 2005/12/23 17:02:14 amoll Exp $
-
-BALL_INLINE 
-int MainControl::getNextID_()
-	throw()
-{
-	return current_id_++;
-}
+// $Id: mainControl.iC,v 1.7.2.1 2006/01/13 15:35:31 amoll Exp $
 
 BALL_INLINE 
 Preferences* MainControl::getPreferences()
@@ -73,7 +66,7 @@ BALL_INLINE
 String MainControl::getStatusbarText() const
 	throw()
 {
-	return message_label_->text().ascii();
+	return ascii(message_label_->text());
 }
 
 BALL_INLINE
@@ -84,18 +77,17 @@ const String& MainControl::getLoggingFilename() const
 }
 
 BALL_INLINE
-void MainControl::setMenuHint(Index id, const String& string)
+void MainControl::setMenuHint(QAction* id, const String& string)
 	throw()
 {
-	menu_entries_hints_[id] = string;
-	menuBar()->setWhatsThis(id, string.c_str());
+	id->setToolTip(string.c_str());
 }
 
 BALL_INLINE
-const String& MainControl::getMenuHint(Index id) const
+String MainControl::getMenuHint(QAction* id) const
 	throw() 
 {
-	return menu_entries_hints_[id];
+	return ascii(id->toolTip());
 }
 
 BALL_INLINE

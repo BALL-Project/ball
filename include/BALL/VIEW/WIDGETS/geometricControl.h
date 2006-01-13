@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.27 2005/12/23 17:02:22 amoll Exp $
+// $Id: geometricControl.h,v 1.27.2.1 2006/01/13 15:35:34 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -20,8 +20,7 @@
 
 
 #include <qpoint.h>
-#include <qpopupmenu.h>
-#include <qlistview.h>
+#include <QMenu>
 
 namespace BALL
 {
@@ -46,42 +45,9 @@ namespace BALL
 		{
 			Q_OBJECT
 
-			class BALL_VIEW_EXPORT SelectableListViewItem
-				: public QCheckListItem
-			{
-				public:
-
-				SelectableListViewItem(QListView* parent, const QString& text, 
-															 Representation* representation, 
-															 GeometricControl& control)
-					throw();
-
-				Representation* getRepresentation() { return representation_;};
-
-				ClippingPlane* getClippingPlane() { return clipping_plane_;};
-
-				void setClippingPlane(ClippingPlane* plane) { clipping_plane_ = plane;}
-
-				protected:
-
-				// overriden function, used to message to Control
-				virtual void stateChange(bool)
-					throw();
-
-				Representation* 	representation_;
-				ClippingPlane* 	clipping_plane_;
-				GeometricControl& control_reference_;
-				bool 							ignore_change_;
-
-				private: 
-				
-				// prevent use of default cstr
-				SelectableListViewItem();
-			};
-
 			public:
 			
-			BALL_EMBEDDABLE(GeometricControl,GenericControl)
+			BALL_EMBEDDABLE(GeometricControl, GenericControl)
 
 			/**	@name	Constructors and Destructors
 			*/	
@@ -153,28 +119,13 @@ namespace BALL
 
 			/** Build a context menu for the Representation object 
 					the QListViewItem object.
-					Calls insertContextMenuEntry for each context menu entry that will be
-					created.
 					\param   representation the Representation object for that a context menu should be created
 					\see     insertContextMenuEntry
 					\see     onContextMenu
 			*/
-			virtual void buildContextMenu(SelectableListViewItem* item)
+			virtual void buildContextMenu()
 				throw();
 
-			/** Insert a new context menu entry.
-					\param name the name of the new menu entry
-					\param receiver the object to which the menu action will be connected
-					\param slot the function that will be called by activation of the menu entry
-					\param accel the acceleration key
-					\param entry_ID the id for the new menu entry (default: -1, will create a new one)
-					\see   buildContextMenu
-			*/
-			void insertContextMenuEntry(const String& name, const QObject* receiver = 0, 
-																  const char* slot = 0, int entry_ID = -1, int accel = 0)
-				throw();
-
-			
 			/// Overloaded from ModularWidget
 			virtual void checkMenu(MainControl& main_control)
 				throw();
@@ -237,16 +188,7 @@ namespace BALL
 			///** @name Protected members */ 
 			//@{
 
-			/*_ Controlling method for context menus.
-					Calls buildContextMenu for the Representation object belonging
-					to the <b> item</b> and executes the context menu if menu entries are available.
-					\param  item the QListViewItem for which a context menu should be created
-					\param  point the position to which the context menu should be drawn
-					\param  column not used at the moment
-					\see    buildContextMenu
-			*/
-			virtual void onContextMenu_(QListViewItem* item, const QPoint& point, int column);
-			
+			///
 			virtual void modifyRepresentation_()
 				throw();
 
@@ -260,6 +202,11 @@ namespace BALL
 				throw();
 
 			//@}
+			
+		  protected slots:
+
+			virtual void onItemClicked(QTreeWidgetItem* item);
+			void showGuestContextMenu(const QPoint& pos);
 
 		  protected:
 			
@@ -272,26 +219,26 @@ namespace BALL
 				COLUMN_ID__Properties
 			};
 
-			QString						getName_(QListViewItem& item)
-				throw();
-
 			void setClippingPlane_(const Vector3& n);
 
 			// the context menu
-			QPopupMenu 				context_menu_;
-			QPopupMenu 				clipping_plane_context_menu_;
+			QMenu 						context_menu_;
+			QMenu 						clipping_plane_context_menu_;
 
 			Representation* 	context_representation_;
 			ClippingPlane* 		context_plane_;
-			QListViewItem*  	context_item_;
 
-			HashMap<Representation*, SelectableListViewItem*> representation_to_item_;
+ 			HashMap<Representation*, QTreeWidgetItem*> representation_to_item_;
+ 			HashMap<ClippingPlane*, QTreeWidgetItem*> plane_to_item_;
+ 			HashMap<QTreeWidgetItem*, Representation*> item_to_representation_;
+ 			HashMap<QTreeWidgetItem*, ClippingPlane*> item_to_plane_;
 
 			ModifySurfaceDialog* 	modify_surface_dialog_;
 
-			bool  creating_representations_;
+			bool creating_representations_;
+			bool ignore_change_;
 
-			Index menu_clipping_plane_id_;
+			QAction* menu_clipping_plane_;
 		};
 		
 } } // namespaces

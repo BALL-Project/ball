@@ -12,7 +12,7 @@
 # include <BALL/VIEW/KERNEL/clippingPlane.h>
 #endif
 
-#include <qlistview.h>
+#include <QDialog>
 
 namespace BALL
 {
@@ -22,16 +22,18 @@ namespace BALL
     		\ingroup  ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT ClippingDialog 
-			: public ClippingDialogData
+			: public QDialog,
+				public Ui_ClippingDialogData
 		{
 			Q_OBJECT
 				
+			/*
 			class BALL_VIEW_EXPORT SelectableListViewItem
-				: public QCheckListItem
+				: public QTableWidgetItem
 			{
 				public:
 
-				SelectableListViewItem(QListView* parent, const QString& text, 
+				SelectableListViewItem(QListWidget* parent, const QString& text, 
 															 Representation* representation)
 					throw();
 
@@ -46,6 +48,7 @@ namespace BALL
 				// prevent use of default cstr
 				SelectableListViewItem();
 			};
+			*/
 
 			public:
 			

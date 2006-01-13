@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.32 2005/12/23 17:03:28 amoll Exp $$
+// $Id: molecularFileDialog.C,v 1.32.2.1 2006/01/13 15:35:54 amoll Exp $$
 //
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -18,6 +18,7 @@
 #include <BALL/KERNEL/system.h>
 
 #include <qmenubar.h>
+#include <QFileDialog>
 
 namespace BALL
 {
@@ -33,6 +34,7 @@ namespace BALL
 #endif
 			// register the widget with the MainControl
 			registerWidget(this);
+			setObjectName(name);
 			hide();
 		}
 
@@ -48,10 +50,10 @@ namespace BALL
 		void MolecularFileDialog::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			insertMenuEntry(MainControl::FILE_OPEN, "&Structure", this, SLOT(readFiles()), CTRL+Key_O, 0);
+			insertMenuEntry(MainControl::FILE_OPEN, "&Structure", this, SLOT(readFiles()), Qt::CTRL+Qt::Key_O);
 			setMenuHint("Open a PDB, HIN, MOL or MOL2 file");
 			save_id_ = insertMenuEntry(MainControl::FILE, "&Save Structure", (QObject *)this, 
-																	 SLOT(writeFile()), CTRL+Key_S, -1);
+																	 SLOT(writeFile()), Qt::CTRL+Qt::Key_S);
 			setMenuHint("Save a system as PDB, HIN, MOL or MOL2 file (1 System has to be selected)");
 
 			connect(main_control.initPopupMenu(MainControl::FILE), SIGNAL(aboutToShow()), 
@@ -61,16 +63,15 @@ namespace BALL
 		void MolecularFileDialog::readFiles()
 		{
 			QStringList files = QFileDialog::getOpenFileNames(
-													"*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf",
+													0,
+													"Choose a molecular file to open",
 													getWorkingDir().c_str(),
-													getMainControl(),
-													"Molecular File Dialog",
-													"Choose a molecular file to open" );
+													"*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf");
 
  		  for (QStringList::Iterator it = files.begin(); it != files.end(); ++it) 
 			{
 				// construct a name for the system(the filename without the dir path)
-				openFile((*it).ascii());
+				openFile(ascii(*it));
 			}
 		}
 
@@ -161,14 +162,13 @@ namespace BALL
 			setStatusbarText("writing file...");
 
 			QString s = QFileDialog::getSaveFileName(
+										0,
+										"Choose a filename to save the selected system",
 										getWorkingDir().c_str(),
-										"*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf",
-										getMainControl(),
-										"Molecular File Dialog",
-										"Choose a filename to save the selected system" );
+										"*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf");
 
 		 	if (s == QString::null) return false;
-			String filename = s.ascii();
+			String filename = ascii(s);
 			setWorkingDirFromFilename_(filename);
 
 			String filter(filename);
@@ -520,8 +520,8 @@ namespace BALL
 		void MolecularFileDialog::checkMenuEntries()
 			throw()
 		{
-			menuBar()->setItemEnabled(save_id_, getMainControl()->getSelectedSystem() && 
-																					!getMainControl()->compositesAreLocked());
+			save_id_->setEnabled(getMainControl()->getSelectedSystem() && 
+													!getMainControl()->compositesAreLocked());
 		}
 
 

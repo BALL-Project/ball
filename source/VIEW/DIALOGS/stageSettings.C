@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.C,v 1.30 2005/12/26 03:25:59 amoll Exp $
+// $Id: stageSettings.C,v 1.30.2.1 2006/01/13 15:35:59 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
@@ -13,17 +13,27 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qslider.h>
-#include <qwidgetstack.h>
-#include <qlistview.h>
+#include <QStackedWidget>
+#include <QListWidget>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		StageSettings::StageSettings( QWidget* parent,  const char* name, WFlags fl )
-			: StageSettingsData(parent, name, fl)
+		StageSettings::StageSettings( QWidget* parent,  const char* name, Qt::WFlags fl )
+			: QDialog(parent, fl),
+				Ui_StageSettingsData()
 		{
+			setupUi(this);
+			
+			// signals and slots connections
+			connect( color_button, SIGNAL( clicked() ), this, SLOT( colorPressed() ) );
+			connect( eye_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( eyeDistanceChanged() ) );
+			connect( focal_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( focalDistanceChanged() ) );
+			connect( enable_fog, SIGNAL( stateChanged(int) ), this, SLOT( fogStateChanged() ) );
+
+			setObjectName(name);
 			stage_ = ((Scene*) parent)->getStage();
 			if (stage_ == 0) return;
 			scene_ = (Scene*) parent;
@@ -41,7 +51,6 @@ namespace BALL
 			registerObject_(enable_fog);
 			registerObject_(fog_slider);
 			registerObject_(popup_names);
-			registerWidgetForHelpSystem_(popup_names, "scene.html#popup_atoms");
 
 			registerObject_(slider_);
 			registerObject_(wheel_slider_);
@@ -65,7 +74,7 @@ namespace BALL
 			throw()
 		{
 			if (stage_ == 0) return;
-			color_sample->setBackgroundColor(stage_->getBackgroundColor().getQColor());
+			setColor(color_sample, stage_->getBackgroundColor());
 			coordinate_button->setChecked(stage_->coordinateSystemEnabled());
 
 			slider_->setValue((int) Scene::getMouseSensitivity() - 1);
@@ -86,7 +95,7 @@ namespace BALL
 			throw()
 		{
 			if (stage_ == 0) return;
-			stage_->setBackgroundColor(color_sample->backgroundColor());
+			stage_->setBackgroundColor(getColor(color_sample));
 			stage_->showCoordinateSystem(coordinate_button->isChecked());
 
 			Scene::setMouseSensitivity(slider_->value() + 1);
@@ -138,7 +147,7 @@ namespace BALL
 
 		void StageSettings::setDefaultValues_()
 		{
-			color_sample->setBackgroundColor(black);
+			setColor(color_sample, ColorRGBA(0,0,0));
 			animation_smoothness->setValue(25);
 			coordinate_button->setChecked(false);
 			show_lights_->setChecked(false);
@@ -211,8 +220,7 @@ namespace BALL
 			
 			for (Position p = 0; p < extensions.size(); p++)
 			{
-				QListViewItem* item = new QListViewItem(extensions_list, extensions[p].c_str());
-				extensions_list->insertItem(item);
+				new QListWidgetItem(extensions[p].c_str(), extensions_list);
 			}
 
 			if (!renderer.vertexBuffersSupported())

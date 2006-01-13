@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.h,v 1.15 2005/12/23 17:02:13 amoll Exp $
+// $Id: stageSettings.h,v 1.15.2.1 2006/01/13 15:35:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_STAGESETTINGS_H
@@ -12,6 +12,8 @@
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
+
+#include <QDialog>
 
 namespace BALL
 {
@@ -29,7 +31,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT StageSettings 
-			: public StageSettingsData,
+			: public QDialog,
+				public Ui_StageSettingsData,
 				public PreferencesEntry
 		{ 
 			Q_OBJECT
@@ -37,7 +40,7 @@ namespace BALL
 			public:
 
 			/// Constructor
-			StageSettings( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+			StageSettings( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
 
 			/// Destructor
 			~StageSettings() {}

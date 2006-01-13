@@ -21,7 +21,8 @@ namespace BALL
 			* \ingroup ViewDialogs
 			*/
 		class BALL_EXPORT DockResultDialog : 
-				public DockResultDialogData
+				public QDialog,
+				public Ui_DockResultDialogData
 		{ 
 			Q_OBJECT
 
@@ -37,7 +38,7 @@ namespace BALL
 				 	*	@param			modal the modal flag
 				 	*	@param			fl the widget flags
 					*/
-				DockResultDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
+				DockResultDialog(QWidget* parent = 0, const char* name = 0)
 					throw();
 					
 				/** Destructor
@@ -145,25 +146,24 @@ namespace BALL
 				void closeClicked();
 				
 				
-			protected slots:
+				protected slots:
 			
 				/** Is called when context menu entry <b> Delete Score Column </b> is pressed.
 					* Deletes a score column.
-					* @param			column number of the column which should be deleted
 					*/
-				void deleteColumn_(int column);
+				void deleteColumn_();
 
 				/** Is called when context menu entry <b> Scoring Options </b> is pressed.
 					* Shows options of the scoring function in a small dialog.
 					* @param			column number of the column for which the scoring function options should be shown
 					*/
-				void showScoringOptions_(int column);
+				void showScoringOptions_();
 
 				/** Is called when context menu entry <b> Redock </b> is pressed.
 					* Calls \link DockingController::runDocking DockingController::runDocking \endlink for redocking.
 					* @param			row number of the row for which redocking should be started
 					*/
-				void redock_(int row);
+				void redock_();
 
 				
 			protected:
@@ -200,6 +200,8 @@ namespace BALL
 				};
 
 			private:
+
+				Index getContextMenuEntryData_();
 
 				/** Copy constructor
 					* Remark: Copy contructor is private because it is not completed. 

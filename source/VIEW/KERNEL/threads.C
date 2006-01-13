@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.41 2006/01/04 16:40:36 amoll Exp $
+// $Id: threads.C,v 1.41.2.1 2006/01/13 15:36:02 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -41,13 +41,6 @@ namespace BALL
 
 		void BALLThread::output_(const String& string, bool important)
 		{
-			if (main_control_ == 0) 
-			{
-				throw Exception::NullPointer(__FILE__, __LINE__);
-			}
-
-			if (main_control_->stopedSimulation()) return;
-
 			LogEvent* su = new LogEvent;
 			su->setMessage(string);
 			su->setImportant(important);
@@ -56,25 +49,17 @@ namespace BALL
 
 		void BALLThread::waitForUpdateOfRepresentations_()
 		{
-			if (main_control_ == 0) 
+//   Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+			PrimitiveManager& pm = main_control_->getPrimitiveManager();
+			while (pm.updateRunning())
 			{
-				throw Exception::NullPointer(__FILE__, __LINE__);
+				msleep(50);
 			}
-
-			while (main_control_->getPrimitiveManager().updatePending())
-			{
-				main_control_->getPrimitiveManager().getUpdateWaitCondition().wait(100);
-			}
+//   Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		}
 
 		void BALLThread::updateScene_()
 		{
-			if (main_control_ == 0) 
-			{
-				throw Exception::NullPointer(__FILE__, __LINE__);
-			}
-
-			main_control_->getPrimitiveManager().setUpdatePending(true);
 			// notify MainControl to update all Representations for the Composite
 			UpdateCompositeEvent* se = new UpdateCompositeEvent;
 			se->setComposite(composite_);
@@ -153,26 +138,28 @@ namespace BALL
 			: BALLThread(),
 				rep_(0)
 		{
+			setTerminationEnabled(true);
 		}
 
 		void UpdateRepresentationThread::run()
 		{
-			if (rep_ == 0) return;
-			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
-			while (pm.getRepresentationsBeeingDrawn().has(rep_))
+			PrimitiveManager& pm = main_control_->getPrimitiveManager();
+			Representation* rep = 0;
+			while (true)
 			{
-				pm.getUpdateWaitCondition().wait(100);
-			}
+				msleep(10);
 
-			pm.getRepresentationsBeeingUpdated().insert(rep_);
+				if (!main_control_->useMultithreading()) continue;
+
+				rep = pm.popRepresentationToUpdate();
+				if (rep == 0) continue;
 				
- 			rep_->update_();
-			rep_ = 0;
-			pm.getRepresentationsBeeingUpdated().erase(rep_);
-			pm.getUpdateWaitCondition().wakeAll();
+				rep->update_();
 
-			FinishedRepresentionUpdateEvent* se = new FinishedRepresentionUpdateEvent;
-			qApp->postEvent(getMainControl(), se);
+				FinishedRepresentionUpdateEvent* se = new FinishedRepresentionUpdateEvent;
+				se->setRepresentation(rep);
+				qApp->postEvent(getMainControl(), se);
+			}
 		}
 
 		// ==========================================
@@ -182,6 +169,7 @@ namespace BALL
 				steps_between_updates_(0),
 				dcd_file_(0)
 		{
+			setTerminationEnabled(true);
 		}
 		
 		void SimulationThread::exportSceneToPNG_()
@@ -234,7 +222,7 @@ namespace BALL
 					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
 													minimizer_->getNumberOfIterations(), 
 													ff.getEnergy(), ff.getRMSGradient());
-					output_(message.ascii());
+					output_(ascii(message));
 				}
 
 				updateScene_();
@@ -320,7 +308,7 @@ namespace BALL
 					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
 													md_->getNumberOfIterations(), ff.getEnergy(),
 													ff.getRMSGradient());
-					output_(message.ascii());
+					output_(ascii(message));
 					
 
 					if (save_images_) exportSceneToPNG_();
@@ -368,19 +356,13 @@ namespace BALL
 
 		MDSimulationThread::~MDSimulationThread()
 		{
-			if (md_ != 0)
-			{ 
-				delete md_;
-			}
+			if (md_ != 0) delete md_;
 		}
 
 
 		void MDSimulationThread::setMolecularDynamics(MolecularDynamics* md)
 		{ 
-			if (md_ != 0)
-			{
-				delete md_;
-			}
+			if (md_ != 0) delete md_;
 			
 			md_ = md;
 		}

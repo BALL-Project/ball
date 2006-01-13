@@ -9,8 +9,10 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <qpopupmenu.h>
-#include <qcursor.h>
+#include <QMenu>
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QEvent>
 
 using namespace std;
 
@@ -24,11 +26,12 @@ namespace BALL
 				forward_(false),
 				backward_(false)
 		{
-			connect(this, SIGNAL(backwardAvailable(bool)), this, SLOT(setBackwardAvailable(bool)));
-			connect(this, SIGNAL(forwardAvailable(bool)), this, SLOT(setForwardAvailable(bool)));
+//   			connect(this, SIGNAL(backwardAvailable(bool)), this, SLOT(setBackwardAvailable(bool)));
+//   			connect(this, SIGNAL(forwardAvailable(bool)), this, SLOT(setForwardAvailable(bool)));
 		}
 
-		QPopupMenu* MyTextBrowser::createPopupMenu(const QPoint&)
+		/*
+		QMenu* MyTextBrowser::createMenu(const QPoint&)
 		{
 			QPopupMenu* cm = new QPopupMenu(this);
 			cm->insertItem("Home", this, SLOT(home()));
@@ -45,7 +48,7 @@ namespace BALL
 
 			return cm;
 		}
-
+		
 		void MyTextBrowser::setBackwardAvailable(bool b)
 		{
 			backward_ = b;
@@ -55,6 +58,7 @@ namespace BALL
 		{
 			forward_ = b;
 		}
+*/
 
 
 		HelpViewer::HelpViewer(QWidget *parent, const char *name)
@@ -77,7 +81,7 @@ namespace BALL
 
 			hide();
 			setGuest(*browser_);
-			undock();
+//   			undock();
 			resize(800, 700);
 			move(20,20);
 			setMinimumSize(800, 600);
@@ -92,7 +96,7 @@ namespace BALL
 				Log.error() << "Destructing object " << this << " of class HelpViewer" << endl;
 			#endif 
 
-			qApp->setGlobalMouseTracking(FALSE);
+//   			qApp->setGlobalMouseTracking(FALSE);
 			qApp->removeEventFilter(this);
 		}
 
@@ -100,11 +104,11 @@ namespace BALL
 			throw()
 		{
 			DockWidget::initializeWidget(main_control);
-			insertMenuEntry(MainControl::HELP, "Documentation", this, SLOT(showHelp()), 0, 0);
+			insertMenuEntry(MainControl::HELP, "Documentation", this, SLOT(showHelp()));
 			insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(enterWhatsThisMode()));	
 
  			qApp->installEventFilter(this);
-			qApp->setGlobalMouseTracking(TRUE);
+//   			qApp->setGlobalMouseTracking(TRUE);
 		}
 
 		void HelpViewer::showHelp()
@@ -114,7 +118,7 @@ namespace BALL
 
 		void HelpViewer::showHelp(const String& url)
 		{
-			browser_->setSource((base_dir_ + url).c_str());
+			browser_->loadResource(QTextDocument::HtmlResource, QUrl((base_dir_ + url).c_str()));
 			show();
 		}
 
@@ -128,28 +132,13 @@ namespace BALL
 			if (RTTI::isKindOf<RegisterHelpSystemMessage>(*message)) 
 			{
 				RegisterHelpSystemMessage* msg = RTTI::castTo<RegisterHelpSystemMessage>(*message);
-				if (msg->getWidget() != 0)
+				if (msg->isRegister())
 				{
-					if (msg->isRegister())
-					{
-						registerWidgetForHelpSystem(msg->getWidget(), msg->getURL());
-					}
-					else
-					{
-						unregisterWidgetForHelpSystem(msg->getWidget());
-					}
+					registerForHelpSystem(msg->getObject(), msg->getURL());
 				}
-
-				else if (msg->getMenuEntry() != -1)
+				else
 				{
-					if (msg->isRegister())
-					{
-						registerMenuEntryForHelpSystem(msg->getMenuEntry(), msg->getURL());
-					}
-					else
-					{
-						unregisterMenuEntryForHelpSystem(msg->getMenuEntry());
-					}
+					unregisterForHelpSystem(msg->getObject());
 				}
 
 				return;
@@ -167,7 +156,7 @@ namespace BALL
 		void HelpViewer::setDefaultPage(const String& url)
 		{
 			default_page_ = url;
-			browser_->setSource(default_page_.c_str());
+			browser_->loadResource(QTextDocument::HtmlResource, QUrl(default_page_.c_str()));
 		}
 
 		const String& HelpViewer::getDefaultPage() const
@@ -186,8 +175,10 @@ namespace BALL
 
 			base_dir_ = dir;
 
-			browser_->mimeSourceFactory()->setFilePath(base_dir_.c_str());
-			browser_->setSource((base_dir_ + default_page_).c_str());
+			QStringList sl;
+			sl << base_dir_.c_str();
+			browser_->setSearchPaths(sl);
+			browser_->loadResource(QTextDocument::HtmlResource, QUrl((base_dir_ + default_page_).c_str()));
 		}
 
 		void HelpViewer::enterWhatsThisMode()
@@ -206,7 +197,7 @@ namespace BALL
 		bool HelpViewer::showDocumentationForObject()
 		{
 			QPoint point = QCursor::pos();
-			QWidget* widget = qApp->widgetAt(point, true);
+			QWidget* widget = qApp->widgetAt(point);
 
 			if (widget == 0) return false;
 			
@@ -228,15 +219,15 @@ namespace BALL
 			// maybe the library has a bug under windows
 			try
 			{
-				if (RTTI::isKindOf<QPopupMenu>(*widget))
+				if (RTTI::isKindOf<QMenu>(*widget))
 				{
 					ignore_event_ = true;
 
 					// nothing happens if we dont have a docu entry
-					Index id = getMainControl()->getLastHighLightedMenuEntry();
-					if (docu_for_menu_entry_.has(id))
+					QAction* id = getMainControl()->getLastHighLightedMenuEntry();
+					if (docu_entries_.has(id))
 					{
-						showHelp(docu_for_menu_entry_[id]);
+						showHelp(docu_entries_[id]);
 						exitWhatsThisMode();
 					}
 
@@ -269,18 +260,18 @@ namespace BALL
 			}
 			
 			/////////////////////////////////////////////
-			// Show Documentation if Shift-F1 is pressed
+			// Show Documentation if F1 is pressed
 			/////////////////////////////////////////////
 			if (e->type() == QEvent::KeyPress)
 			{
 				QKeyEvent* ke = (QKeyEvent*) e;
-				if (ke->key() != Qt::Key_F1 ||
-						ke->state() != Qt::ShiftButton)
+				if (ke->key() != Qt::Key_F1)
+//   						ke->modifiers() != Qt::ShiftModifier)
 				{
 					return false;
 				}
 
-				if (ke->key() == Key_Escape) 
+				if (ke->key() == Qt::Key_Escape) 
 				{
 					if (whats_this_mode_)
 					{
@@ -317,74 +308,48 @@ namespace BALL
 			return showDocumentationForObject();
 		}
 
-		void HelpViewer::registerWidgetForHelpSystem(const QWidget* widget, const String& docu_entry)
+		void HelpViewer::registerForHelpSystem(const QObject* object, const String& docu_entry)
 		{
-			docu_for_widget_[widget] = docu_entry;
+			docu_entries_[object] = docu_entry;
 		}
 
-		void HelpViewer::registerMenuEntryForHelpSystem(Index entry, const String& docu_entry)
+		void HelpViewer::unregisterForHelpSystem(const QObject* object)
 		{
-			docu_for_menu_entry_[entry] = docu_entry;
+			docu_entries_.erase(object);
 		}
 
-		void HelpViewer::unregisterWidgetForHelpSystem(const QWidget* widget)
+		bool HelpViewer::showHelpFor(const QObject* object)
 		{
-			docu_for_widget_.erase(widget);
-		}
+			HashMap<const QObject*, String>::Iterator to_find;
+			to_find = docu_entries_.find(object);
 
-		void HelpViewer::unregisterMenuEntryForHelpSystem(Index id)
-		{
-			docu_for_menu_entry_.erase(id);
-		}
+			QObject* widget2 = (QWidget*) object;
 
-		bool HelpViewer::showHelpFor(const QWidget* widget)
-		{
-			HashMap<const QWidget*, String>::Iterator to_find;
-			to_find = docu_for_widget_.find(widget);
-
-			QWidget* widget2 = (QWidget*) widget;
-
-			while (to_find == docu_for_widget_.end() && widget2 != 0)
+			while (to_find == docu_entries_.end() && widget2 != 0)
 			{
 				if (widget2->parent() == 0) return false;
 
-				widget2 = dynamic_cast<QWidget*>(widget2->parent());
-
-				if (widget2->parent() == 0) return false;
-
-				to_find = docu_for_widget_.find(widget2);
+				to_find = docu_entries_.find(widget2);
 			}
 
 			if (widget2 == 0) return false;
 
-			showHelp(docu_for_widget_[widget2]);
+			showHelp(docu_entries_[widget2]);
 
 			return true;
 		}
 
-		bool HelpViewer::hasHelpFor(const QWidget* widget) const
+		bool HelpViewer::hasHelpFor(const QObject* object) const
 		{
-			return docu_for_widget_.has(widget);
+			return docu_entries_.has(object);
 		}
 
-		bool HelpViewer::hasHelpFor(Index id) const
+		String HelpViewer::getHelpEntryFor(const QObject* widget) const
 		{
-			return docu_for_menu_entry_.has(id);
-		}
-
-		String HelpViewer::getHelpEntryFor(const QWidget* widget) const
-		{
-			if (!docu_for_widget_.has(widget)) return false;
+			if (!docu_entries_.has(widget)) return false;
 			
-			return docu_for_widget_[widget];
+			return docu_entries_[widget];
 		}
 
-		String HelpViewer::getHelpEntryFor(Index id) const
-		{
-			if (!docu_for_menu_entry_.has(id)) return false;
-
-			return docu_for_menu_entry_[id];
-		}
-					
 	} // VIEW
 } // namespace BALL

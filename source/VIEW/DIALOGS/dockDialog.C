@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5 2006/01/08 19:42:34 anhi Exp $
+// $Id: dockDialog.C,v 1.5.2.1 2006/01/13 15:35:47 amoll Exp $
 //
 
 #include <qpushbutton.h>
@@ -14,7 +14,6 @@
 #include <qfiledialog.h>
 #include <qtabwidget.h>
 #include <qbuttongroup.h>
-#include <qlistbox.h>
 
 #include <BALL/VIEW/DIALOGS/dockDialog.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -38,9 +37,10 @@ namespace BALL
 	namespace VIEW
 	{
 		// Default constructor
-		DockDialog::DockDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
+		DockDialog::DockDialog(QWidget* parent,  const char* name)
 			throw()
-			: DockDialogData(parent, name, modal, fl),
+			: QDialog(parent),
+				Ui_DockDialogData(),
 				PreferencesEntry(),
 				docking_partner1_(0),
 				docking_partner2_(0)
@@ -48,6 +48,9 @@ namespace BALL
 		#ifdef BALL_VIEW_DEBUG
 			Log.info() << "new DockDialog " << this << std::endl;
 		#endif
+
+			setupUi(this);
+			setObjectName(name);
 			
 			// register QWidgets of Dialog with PreferenceEntry
 			// entries of them in the INIFile will be generated
@@ -84,7 +87,8 @@ namespace BALL
 		// Copy constructor.
 		DockDialog::DockDialog(const DockDialog& dock_dialog)
 			throw()
-			: DockDialogData(),
+			: QDialog(),
+				Ui_DockDialogData(),
 				PreferencesEntry(dock_dialog),
 				is_redock_(dock_dialog.is_redock_),
 				has_changed_(dock_dialog.has_changed_),
@@ -100,7 +104,9 @@ namespace BALL
 				charge_rule_processor_(dock_dialog.charge_rule_processor_),
 				radius_processor_(dock_dialog.radius_processor_),
 				charge_processor_(dock_dialog.charge_processor_)
-		{}
+		{
+			setupUi(this);
+		}
 		
 		// Destructor
 		DockDialog::~DockDialog()
@@ -207,7 +213,7 @@ namespace BALL
 				algorithm_dialogs_[algorithm] = dialog;
 			}
 			// add to ComboBox
-			algorithms->insertItem(name, algorithm);
+			algorithms->addItem(name, algorithm);
 		}
 		
 		// Adds scoring function to Combobox and its advanced option dialogs to HashMap, if it has such an dialog.
@@ -220,7 +226,7 @@ namespace BALL
 				scoring_dialogs_[score_func] = dialog;
 			}
 			// add to ComboBox
-			scoring_functions->insertItem(name, score_func);
+			scoring_functions->addItem(name, score_func);
 		}
 		
 		// is called by DockingController::initializeWidget()
@@ -319,7 +325,7 @@ namespace BALL
 			for (Position i = 0; i < backup_.size(); i++)
 			{
 				String entry = String("redock_entry_") + String(i);
-				file.insertValue("REDOCKING", entry, backup_[i].ascii());
+				file.insertValue("REDOCKING", entry, ascii(backup_[i]));
 			}
 			
 			HashMap<int, QDialog*>::Iterator it = algorithm_dialogs_.begin();
@@ -339,11 +345,11 @@ namespace BALL
 		void DockDialog::reset()
 			throw()
 		{
-			if (tab_pages->currentPageIndex() == 0)
+			if (tab_pages->currentIndex() == 0)
 			{
 				// comboboxes
-				algorithms->setCurrentItem(0);
-				scoring_functions->setCurrentItem(0);
+				algorithms->setCurrentIndex(0);
+				scoring_functions->setCurrentIndex(0);
 				
 				// buttons
 				alg_advanced_button->setEnabled(false);
@@ -371,12 +377,12 @@ namespace BALL
 				else
 				{
 					// system comboboxes
-					systems1->setCurrentItem(0);
-					systems2->setCurrentItem(0);
+					systems1->setCurrentIndex(0);
+					systems2->setCurrentIndex(0);
 				}
 			}
 			
-			if (tab_pages->currentPageIndex() == 1)
+			if (tab_pages->currentIndex() == 1)
 			{
 				// radii / charges config files
 				radii_data_lineedit->setText("radii/PARSE.siz");
@@ -415,7 +421,7 @@ namespace BALL
 				return;
 			}
 			// options for chosen algorithm; options are filled by the corresponding dialog
-			Index index = algorithms->currentItem();
+			Index index = algorithms->currentIndex();
 			switch(index)
 			{
 				case DockingController::GEOMETRIC_FIT:
@@ -465,7 +471,7 @@ namespace BALL
 				}
 			
 			// options for chosen scoring function
-			index = scoring_functions->currentItem();
+			index = scoring_functions->currentIndex();
 			switch(index)
 			{
 				case DockingController::AMBER_FF:
@@ -532,13 +538,13 @@ namespace BALL
 				{
 					if (charges_data_button->isChecked())
 					{
-						charge_processor_.setFilename(charges_data_lineedit->text().ascii());
+						charge_processor_.setFilename(ascii(charges_data_lineedit->text()));
 						if (!docking_partner1_->apply(charge_processor_)) return false;
 						if (!docking_partner2_->apply(charge_processor_)) return false;
 					}
 					else
 					{
-						INIFile inifile(String(charges_rules_lineedit->text().ascii()));
+						INIFile inifile(ascii(charges_rules_lineedit->text()));
 						charge_rule_processor_ = ChargeRuleProcessor(inifile);
 						if (!docking_partner1_->apply(charge_rule_processor_)) return false;
 						if (!docking_partner2_->apply(charge_rule_processor_)) return false;
@@ -548,13 +554,13 @@ namespace BALL
 				{
 					if (radii_data_button->isChecked())
 					{
-						radius_processor_.setFilename(radii_data_lineedit->text().ascii());
+						radius_processor_.setFilename(ascii(radii_data_lineedit->text()));
 						if (!docking_partner1_->apply(radius_processor_)) return false;
 						if (!docking_partner2_->apply(radius_processor_)) return false;
 					}
 					else
 					{
-						INIFile inifile(String(radii_rules_lineedit->text().ascii()));
+						INIFile inifile(ascii(radii_rules_lineedit->text()));
 						radius_rule_processor_ = RadiusRuleProcessor(inifile);
 						if (!docking_partner1_->apply(radius_rule_processor_)) return false;
 						if (!docking_partner2_->apply(radius_rule_processor_)) return false;
@@ -584,10 +590,14 @@ namespace BALL
 					Log.error() << "Error while selecting file! " << __FILE__ << " " << __LINE__ << std::endl;
 					return;
 				}
-			QString s = QFileDialog::getOpenFileName(main_control->getWorkingDir().c_str(), "", main_control, "", "Choose a file");
+			QString s = QFileDialog::getOpenFileName(
+					0,
+					"Choose a file",
+					main_control->getWorkingDir().c_str()
+					);
 
 			if (s == QString::null) return;
-			main_control->setWorkingDir(s.ascii());
+			main_control->setWorkingDir(ascii(s));
 			lineedit.setText(s);
 		}
 		
@@ -630,7 +640,7 @@ namespace BALL
 				System* system = dynamic_cast<System*>(*composite_it);
 				if (system == 0) continue;
 
-				current_system_list.append(system->getName());
+				current_system_list << system->getName().c_str();
 				loaded_systems_.push_back(system);			
 
 				// test if the user has selected one or two systems
@@ -655,24 +665,30 @@ namespace BALL
 								Log.error() << "More than two systems selected! " << __FILE__ << " " << __LINE__ << std::endl;
 #endif
 								
-								QMessageBox error_message(0,0);
-								error_message.warning(0, "Error", "More than two systems selected!", QMessageBox::Ok, QMessageBox::NoButton);
+								QMessageBox error_message("Error", "More than two systems selected!", 
+																					QMessageBox::Critical,
+																					QMessageBox::Ok,
+																					QMessageBox::NoButton,
+																					QMessageBox::NoButton);
+								error_message.exec();
 								return;
 							}
 					}
 			}
 			// set selection lists of dialog
-			systems1->insertStringList(current_system_list);
-			systems2->insertStringList(current_system_list);
+			systems1->clear();
+			systems1->addItems(current_system_list);
+			systems2->clear();
+			systems2->addItems(current_system_list);
 			
 			// If the user has selected one or two systems, they are the current items in the comboboxes.
 			if (docking_partner1_ != NULL)
 			{
-				systems1->setCurrentText(docking_partner1_->getName());
+				systems1->setCurrentIndex(systems1->findText(docking_partner1_->getName().c_str()));
 			}
 			if (docking_partner2_ != NULL)
 			{
-				systems2->setCurrentText(docking_partner2_->getName());
+				systems2->setCurrentIndex(systems2->findText(docking_partner2_->getName().c_str()));
 			}
 		}
 		
@@ -683,11 +699,11 @@ namespace BALL
 			throw()
 		{
 			QString temp = algorithms->currentText();
-			algorithms->setCurrentText(backup_[0]);
+			algorithms->setCurrentIndex(algorithms->findText(backup_[0]));
 			backup_[0] = temp;
 
 			temp = scoring_functions->currentText();
-			scoring_functions->setCurrentText(backup_[1]);
+			scoring_functions->setCurrentIndex(scoring_functions->findText(backup_[1]));
 			backup_[1] = temp;
 
 			temp = best_num->text();
@@ -712,15 +728,15 @@ namespace BALL
 		{
 			if (is_redock_)
 			{
-				setCaption("Redocking Options");
-				tab_pages->setTabEnabled(tab_pages->page(1), false);
+				setWindowTitle("Redocking Options");
+				tab_pages->setTabEnabled(1, false);
 				systems_group->setHidden(true);
 				euler_group->setHidden(false);
 			}
 			else
 			{
-				setCaption("Docking Options");
-				tab_pages->setTabEnabled(tab_pages->page(1), true);
+				setWindowTitle("Docking Options");
+				tab_pages->setTabEnabled(1, true);
 				euler_group->setHidden(true);
 				systems_group->setHidden(false);
 				fillSystemComboboxes_();
@@ -735,10 +751,10 @@ namespace BALL
 			adjustSize();
 			
 			// always show the first tab page
-			tab_pages->setCurrentPage(0);
+			tab_pages->setCurrentIndex(0);
 			
 			// show dialog to user
-			DockDialogData::show();
+			QDialog::show();
 		}
 		
 		// Indicates the OK button was pressed.
@@ -753,16 +769,24 @@ namespace BALL
 						(systems2->currentText() == "<select>") || 
 						(systems1->currentText() == systems2->currentText()))
 				{
-					QMessageBox error_message(0,0);
-					error_message.warning(0,"Error","Please select two different docking partners!", QMessageBox::Ok, QMessageBox::NoButton);
+					QMessageBox error_message("Error","Please select two different docking partners!", 
+																		QMessageBox::Critical,
+																		QMessageBox::Ok,
+																		QMessageBox::NoButton,
+																		QMessageBox::NoButton);
+					error_message.exec();
 					return;
 				}
 			}
 			// if no algorithm is chosen => Error message!
 			if (algorithms->currentText() == "<select>")
 			{
-				QMessageBox error_message(0,0);
-				error_message.warning(0,"Error","Please select docking algorithm!", QMessageBox::Ok, QMessageBox::NoButton);
+				QMessageBox error_message("Error", "Please select docking algorithm!",
+																	QMessageBox::Critical,
+																	QMessageBox::Ok,
+																	QMessageBox::NoButton,
+																	QMessageBox::NoButton);
+				error_message.exec();
 				return;
 			}
 			hide();
@@ -803,7 +827,7 @@ namespace BALL
 		void DockDialog::algAdvancedPressed()
 		{
 			// show corresponding options dialog
-			Index index = algorithms->currentItem();
+			Index index = algorithms->currentIndex();
 			if (algorithm_dialogs_.has(index))
 			{
 				switch(index)
@@ -823,7 +847,7 @@ namespace BALL
 		void DockDialog::scoringAdvancedPressed()
 		{
 			// show corresponding options dialog
-			Index index = scoring_functions->currentItem();
+			Index index = scoring_functions->currentIndex();
 			if (scoring_dialogs_.has(index))
 			{
 				scoring_dialogs_[index]->exec();
@@ -833,7 +857,7 @@ namespace BALL
 		// Indicates a system in the combobox was chosen as docking partner 1.
 		void DockDialog::partner1Chosen()
 		{
-			int chosen_system = systems1->currentItem();
+			int chosen_system = systems1->currentIndex();
 			// if item 0 (<select>) is chosen, do nothing
 			if(chosen_system)
 			{
@@ -844,7 +868,7 @@ namespace BALL
 		// Indicates a system in the combobox was chosen as docking partner 2.
 		void DockDialog::partner2Chosen()
 		{
-			int chosen_system = systems2->currentItem();
+			int chosen_system = systems2->currentIndex();
 			// if item 0 (<select>) is chosen, do nothing
 			if(chosen_system)
 			{
@@ -856,7 +880,7 @@ namespace BALL
 		void DockDialog::scoringFuncChosen()
 		{
 			// if chosen scoring function has advanced options, enable advanced_button
-			Index index = scoring_functions->currentItem();
+			Index index = scoring_functions->currentIndex();
 			if (scoring_dialogs_.has(index))
 			{
 				scoring_advanced_button->setEnabled(true);
@@ -871,7 +895,7 @@ namespace BALL
 		void DockDialog::algorithmChosen()
 		{
 			// if chosen algorithm has advanced options
-			Index index = algorithms->currentItem();
+			Index index = algorithms->currentIndex();
 			if (algorithm_dialogs_.has(index))
 			{
 				alg_advanced_button->setEnabled(true);
@@ -887,7 +911,7 @@ namespace BALL
 							break;
 						}
 					}
-					scoring_functions->listBox()->item(i)->setSelectable(found);
+//   					scoring_functions->listBox()->item(i)->setSelectable(found); ????
 				}
 			}
 			else
@@ -897,15 +921,16 @@ namespace BALL
 				// enable all scoring functions
 				for (int i = 0; i < scoring_functions->count(); i++)
 				{
-					scoring_functions->listBox()->item(i)->setSelectable(true);
+//   					scoring_functions->listBox()->item(i)->setSelectable(true); ????
 				}
 			}
 			
 			// set default scoring function as current item if the current item isn't an allowed scoring function
-			if(!scoring_functions->listBox()->item(scoring_functions->currentItem())->isSelectable())
-			{
-				scoring_functions->setCurrentItem(0);
-			}
+//   			if(!scoring_functions->listBox()->item(scoring_functions->currentIndex())->isSelectable())
+//   			{
+//   				scoring_functions->setCurrentIndex(0);
+//   			}
+			// ?????????
 		}
 		
 		//

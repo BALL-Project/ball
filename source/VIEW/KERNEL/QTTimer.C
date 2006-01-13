@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: QTTimer.C,v 1.18 2005/12/23 17:03:30 amoll Exp $
+// $Id: QTTimer.C,v 1.18.2.1 2006/01/13 15:36:00 amoll Exp $
 
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>
@@ -9,6 +9,8 @@
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/rtti.h>
 #include <stdio.h>
+//Added by qt3to4:
+#include <QTimerEvent>
 
 using namespace std;
 
@@ -26,22 +28,24 @@ namespace BALL
 
 		QTTimer::QTTimer(QObject* parent, const char* name)
 				throw()
-			:	QObject(parent, name),
+			:	QObject(parent),
 			  timer_id_(0),
 				interval_(100),
 				timer_enabled_(false),
 				timer_running_(false)
 		{
+			setObjectName(name);
 		}
 
 		QTTimer::QTTimer(const QTTimer &timer, QObject* parent, const char* name)
 				throw()
-			:	QObject(parent, name),
+			:	QObject(parent),
 			  timer_id_(0),
 				interval_(timer.interval_),
 				timer_enabled_(false),
 				timer_running_(false)
 		{
+			setObjectName(name);
 		}
 
 		QTTimer::~QTTimer()

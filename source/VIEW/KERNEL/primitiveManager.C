@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.40 2005/12/23 17:03:32 amoll Exp $
+// $Id: primitiveManager.C,v 1.40.2.1 2006/01/13 15:36:02 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -21,24 +21,22 @@
 
 #include <qapplication.h>
 
+#define BALL_VIEW_DEBUG
+
 namespace BALL
 {
 	namespace VIEW
 	{
 
-#ifdef BALL_QT_HAS_THREADS
-	UpdateRepresentationThread PrimitiveManager::thread_;
-	QMutex 										 PrimitiveManager::mutex_;
-#endif
-
 
 PrimitiveManager::PrimitiveManager(MainControl* mc)
 	throw()
 	: Object(),
-		main_control_(mc),
-		update_running_(false),
-		update_pending_(false)
+		thread_(new UpdateRepresentationThread()),
+		main_control_(mc)
 {
+	thread_->start(QThread::LowPriority);
+	thread_->setMainControl(mc);
 }
 
 PrimitiveManager::~PrimitiveManager()
@@ -57,17 +55,13 @@ PrimitiveManager::PrimitiveManager(const PrimitiveManager& pm)
 void PrimitiveManager::clear()
 	throw()
 {
-	representations_to_be_updated_.clear();
-	currently_updateing_.clear();
+	to_update_.clear();
 
-
-#ifdef BALL_QT_HAS_THREADS
-	if (thread_.running())
+	if (thread_->isRunning())
 	{
-		thread_.terminate();
-		thread_.wait();
+		thread_->terminate();
+		thread_->wait();
 	}
-#endif
 
 	// call clear for all stored representations to clear also their geometric objects
 	RepresentationsIterator it = begin();
@@ -108,32 +102,25 @@ bool PrimitiveManager::has(const Representation& representation) const
 bool PrimitiveManager::remove(Representation& representation, bool send_message)
 	throw()
 {
-	bool found = false;
 	RepresentationsIterator it = begin();
 	for( ; it != end(); it++)
 	{
-		if (*it == &representation)
+		if (*it != &representation) continue;
+		
+		// found it!
+		representations_.erase(it);
+
+		if (send_message)
 		{
-			found = true;
-			break;
+			main_control_->notify_(new RepresentationMessage(representation, RepresentationMessage::REMOVE));
 		}
+
+		if (!willBeUpdated(representation)) delete &representation;
+
+		return true;
 	}
 
-	if (!found) return false;
-
-	representations_.erase(it);
-
-	if (send_message)
-	{
-		main_control_->notify_(new RepresentationMessage(representation, RepresentationMessage::REMOVE));
-	}
-
-	if (!willBeUpdated(representation))
-	{
-		delete &representation;
-	}
-
-	return true;
+	return false;
 }
 
 void PrimitiveManager::dump(std::ostream& s, Size depth) const
@@ -295,169 +282,10 @@ List<Representation*> PrimitiveManager::getRepresentationsOf(const Composite& co
 	return changed_representations;
 }
 
-void PrimitiveManager::update_(Representation& rep)
-	throw()
-{
-	if (!has(rep))
-	{
-		return;
-	}
-
-#ifdef BALL_QT_HAS_THREADS
-	if (rep.isHidden()) 
-	{
-		rep.needs_update_ = true;
-		// update of GeometricControl, also if Representation is hidden
-		main_control_->notify_(new RepresentationMessage(rep, RepresentationMessage::UPDATE));
-		return;
-	}
-
-	if (!getMainControl()->useMultithreading())
-	{
-		rep.update_();
-		main_control_->notify_(new RepresentationMessage(rep, RepresentationMessage::UPDATE));	
-		return;
-	}
-
-	representations_to_be_updated_.push_back(&rep);
-	currently_updateing_.insert(&rep);
-
-	if (!updateRunning()) startUpdateThread_();
-#endif
-}
-
-void PrimitiveManager::startUpdateThread_()
-	throw()
-{
-#ifdef BALL_VIEW_DEBUG
-	Log.error() << "starting Representation Update" << std::endl;
-#endif
-
-#ifdef BALL_QT_HAS_THREADS
-	if (!representations_to_be_updated_.size()) return;
-
-	if (!mutex_.tryLock()) return;
-
-	update_running_ = true;
-	// maybe the Representation to be updated is already deleted?
-	Representation* rep = *representations_to_be_updated_.begin();
-	if (!has(*rep)) 
-	{
- 		delete rep;
-		representations_to_be_updated_.pop_front();
-		currently_updateing_.erase(rep);
-		mutex_.unlock();
-		startUpdateThread_();
-		return;
-	}
-
-	// start the UpdateRepresentationThread
-	thread_.setRepresentation(*rep);
-
-	#if BALL_QT_VERSION >=	0x030200
-		thread_.start(QThread::LowPriority);
-	#else
-		thread_.start();
-	#endif
-				
-	// no statusbar changes while beeing otherwise busy
-	if (main_control_->compositesAreLocked()) return;
-
-	thread_.wait(500);
-	if (!thread_.running()) return;
-	
-	// keep the user informed: we are still building the Representation -> Statusbar text
-	Position pos = 3;
-	String dots;
-
-	while (thread_.running())
-	{
-		main_control_->setStatusbarText("Creating Model ..." + dots);
-		qApp->wakeUpGuiThread();
-		qApp->processEvents();
-		if (pos < 40) 
-		{
-			pos ++;
-			dots +="..";
-		}
-		else 
-		{
-			pos = 3;
-			dots = "...";
-		}
-		thread_.wait(500); 
-	}
-		
-	main_control_->setStatusbarText("");
-#endif
-}
-
-void PrimitiveManager::finishedUpdate_()
-	throw()
-{
-#ifdef BALL_QT_HAS_THREADS
-	if (representations_to_be_updated_.size() == 0)
-	{
-		BALLVIEW_DEBUG
-		return;
-	}
-
-	Representation* rep = *representations_to_be_updated_.begin();
-	representations_to_be_updated_.pop_front();
-	currently_updateing_.erase(rep);
-
-	// Representation might have been deleted
-	if (has(*rep))
-	{
-		// no it wasnt, so update all widgets, that this Representation was rebuild
-		main_control_->notify_(new RepresentationMessage(*rep, RepresentationMessage::UPDATE));
-	}
-	else
-	{
-		delete rep;
-	}
-
-	mutex_.unlock();
-
-	if (representations_to_be_updated_.size() == 0)
-	{
-		#ifdef BALL_VIEW_DEBUG
-			Log.error() << "finished all Representations Update" << std::endl;
-		#endif
-
-		update_running_ = false;
-		update_pending_ = false;
-		update_finished_.wakeAll();
-		main_control_->setPreferencesEnabled_(true);
-		return;
-	}
-
-	startUpdateThread_();
-#endif
-}
-
-bool PrimitiveManager::updateRunning() const
-	throw() 
-{
-	return update_running_;
-}
-
-
-bool PrimitiveManager::willBeUpdated(const Representation& rep) const
-	throw()
-{
-	return currently_updateing_.has((Representation*)&rep);
-}
-
-HashSet<Representation*>& PrimitiveManager::getRepresentationsBeeingUpdated()
-{
-	return currently_updateing_;
-}
-
 bool PrimitiveManager::removeClippingPlane(ClippingPlane* plane)
 {
-	for (vector<ClippingPlane*>::iterator it = clipping_planes_.begin(); 
-			 it != clipping_planes_.end(); it++)
+	vector<ClippingPlane*>::iterator it = clipping_planes_.begin(); 
+	for (; it != clipping_planes_.end(); it++)
 	{
 		if (*it == plane)
 		{
@@ -484,15 +312,13 @@ void PrimitiveManager::insertClippingPlane(ClippingPlane* plane)
 void PrimitiveManager::rebuildAllRepresentations()
 	throw()
 {
+	update_mutex_.lock();
 	RepresentationsIterator it = begin();
 	for (;it != end(); it++)
 	{
-		if (currently_updateing_.has(*it)) continue;
-		representations_to_be_updated_.push_back(*it);
-		currently_updateing_.insert(*it);
+		to_update_.insert(*it);
 	}
-
-	startUpdateThread_();
+	update_mutex_.unlock();
 }
 
 void PrimitiveManager::storeRepresentations(INIFile& out)
@@ -690,10 +516,6 @@ void PrimitiveManager::restoreRepresentations(const INIFile& in, const vector<co
 			{
 				rep->setHidden(true);
 				rep->update(false);
-
-   #ifndef BALL_QT_HAS_THREADS
-				getMainControl()->sendMessage(*new RepresentationMessage(*rep, RepresentationMessage::UPDATE));
-   #endif
 			}
 		}
 
@@ -826,9 +648,167 @@ void PrimitiveManager::focusRepresentation(const Representation& rep)
 	VIEW::focusCamera(positions);
 }
 
-HashSet<Representation*>& PrimitiveManager::getRepresentationsBeeingDrawn()
+bool PrimitiveManager::isBeeingRendered(const Representation* rep)
 {
-	return currently_drawing_;
+	render_mutex_.lock();
+	bool result = beeing_rendered_.has((Representation*)rep);
+	render_mutex_.unlock();
+
+	return result;
 }
+
+void PrimitiveManager::startedRendering(Representation* rep)
+{
+	render_mutex_.lock();
+	beeing_rendered_.insert(rep);
+	render_mutex_.unlock();
+}
+
+void PrimitiveManager::finishedRendering(Representation* rep)
+{
+	render_mutex_.lock();
+	beeing_rendered_.erase(rep);
+	render_mutex_.unlock();
+}
+
+Representation* PrimitiveManager::popRepresentationToUpdate()
+{
+	if (!render_mutex_.tryLock()) return 0;
+
+	if (!update_mutex_.tryLock())
+	{
+		render_mutex_.unlock();
+		return 0;
+	}
+
+	Representation* rep = 0;
+	RepresentationSet::Iterator it = to_update_.begin();
+	for (; +it; ++it)
+	{
+		if (!beeing_rendered_.has(*it))
+		{
+			rep = *it;
+			break;
+		}
+	}
+
+	if (rep != 0) 
+	{
+		beeing_updated_.insert(rep);
+		to_update_.erase(rep);
+	}
+
+	render_mutex_.unlock();
+	update_mutex_.unlock();
+
+	return rep;
+}
+
+void PrimitiveManager::update_(Representation& rep)
+	throw()
+{
+	if (!has(rep))
+	{
+		return;
+	}
+
+	if (rep.isHidden()) 
+	{
+		rep.needs_update_ = true;
+		// update of GeometricControl, also if Representation is hidden
+		main_control_->notify_(new RepresentationMessage(rep, RepresentationMessage::UPDATE));
+		return;
+	}
+
+	if (!getMainControl()->useMultithreading())
+	{
+		rep.update_();
+		main_control_->notify_(new RepresentationMessage(rep, RepresentationMessage::UPDATE));	
+		return;
+	}
+
+	update_mutex_.lock();
+	to_update_.insert(&rep);
+	update_mutex_.unlock();
+}
+
+void PrimitiveManager::finishedUpdate_(Representation* rep)
+{
+#ifdef BALL_VIEW_DEBUG
+	if (!beeing_updated_.has(rep))
+	{
+		BALLVIEW_DEBUG
+		return;
+	}
+#endif
+
+	update_mutex_.lock();
+	beeing_updated_.erase(rep);
+	update_mutex_.unlock();
+
+	// Representation might have been deleted
+	if (has(*rep))
+	{
+		// no it wasnt, so update all widgets, that this Representation was rebuild
+		main_control_->notify_(new RepresentationMessage(*rep, RepresentationMessage::UPDATE));
+	}
+	else
+	{
+		delete rep;
+	}
+
+
+//   		main_control_->setPreferencesEnabled_(true);
+}
+
+bool PrimitiveManager::updateRunning()
+	throw() 
+{
+ 	if (!update_mutex_.tryLock()) return true;
+	bool running = beeing_updated_.size();
+ 	update_mutex_.unlock();
+	return running;
+}
+
+
+bool PrimitiveManager::willBeUpdated(const Representation& rep) 
+	throw()
+{
+ 	update_mutex_.lock();
+	bool will = to_update_.has((Representation*)&rep);
+ 	update_mutex_.unlock();
+	return will;
+}
+
+
+/*
+	// no statusbar changes while beeing otherwise busy
+	if (main_control_->compositesAreLocked()) return;
+
+	// keep the user informed: we are still building the Representation -> Statusbar text
+	Position pos = 3;
+	String dots;
+
+	while (thread_->isRunning())
+	{
+		thread_->wait(300); 
+		main_control_->setStatusbarText("Creating Model ..." + dots);
+		qApp->processEvents();
+		if (pos < 40) 
+		{
+			pos ++;
+			dots +="..";
+		}
+		else 
+		{
+			pos = 3;
+			dots = "...";
+		}
+	}
+		
+	main_control_->setStatusbarText("");
+*/
+
+
 
 } } // namespaces

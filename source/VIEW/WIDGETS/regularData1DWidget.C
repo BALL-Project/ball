@@ -1,14 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.22 2005/12/23 17:03:39 amoll Exp $
+// $Id: regularData1DWidget.C,v 1.22.2.1 2006/01/13 15:36:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QContextMenuEvent>
+#include <QResizeEvent>
 
 namespace BALL
 {
@@ -20,9 +23,9 @@ namespace BALL
 			: CanvasWidget(parent),
 				ModularWidget("RegularData1DWidget"),
 				data_(data),
-				diagram_color_(QColor(black)),
-				background_color_(QColor(white)),
-				axis_color_(QColor(red))
+				diagram_color_(QColor(Qt::black)),
+				background_color_(QColor(Qt::white)),
+				axis_color_(QColor(Qt::red))
 		{
 			registerWidget(this);
 		}
@@ -82,7 +85,7 @@ namespace BALL
 			int y_new;
 			int x_old = 5;
 			int y_old = height_+5 - (int)((((*data_)[0]-min)/dif_min)*5);
-			QCanvasLine *ql;
+			Q3CanvasLine *ql;
 
 			try
 			{
@@ -91,11 +94,11 @@ namespace BALL
 					x_new = 5*(i+1);
 					y_new = height_+5 - (int)(((data_->getData(i)-min)/dif_min)*5);
 					
-					ql = new QCanvasLine(&canvas_);
+					ql = new Q3CanvasLine(&canvas_);
 					ql->setPen(diagram_color_);
 					ql->show();
 					ql->setPoints(x_old, y_old, x_new, y_new);
-					objects_.push_back(dynamic_cast<QCanvasItem*> (ql));
+					objects_.push_back(dynamic_cast<Q3CanvasItem*> (ql));
 
 					x_old = x_new;
 					y_old = y_new;
@@ -109,24 +112,24 @@ namespace BALL
 			}
 
 			//add the x-axis
-			ql = new QCanvasLine(&canvas_);
+			ql = new Q3CanvasLine(&canvas_);
 			int startx = 1;
 			int starty = height_+5 - (int)/*round*/(((startx-min)/dif_min)*5);
 			int endx   = data_->size()*5;
 			ql->setPoints(startx, starty, endx, starty);
 			ql->setPen(axis_color_);
 			ql->show();
-			objects_.push_back(dynamic_cast<QCanvasItem*> (ql));
+			objects_.push_back(dynamic_cast<Q3CanvasItem*> (ql));
 				
 			//add the y-axis	
-			ql = new QCanvasLine(&canvas_);
+			ql = new Q3CanvasLine(&canvas_);
 			startx = 4;
 			starty = 0;
 			int endy   = height_+5 - (int)/*round*/((((*data_)[endx]-min)/dif_min)*5);
 			ql->setPoints(startx, starty, startx, endy);
-			ql->setPen(QColor(red));
+			ql->setPen(QColor(Qt::red));
 			ql->show();
-			objects_.push_back(dynamic_cast<QCanvasItem*> (ql));
+			objects_.push_back(dynamic_cast<Q3CanvasItem*> (ql));
 		}
 
 		void RegularData1DWidget::onNotify(Message *message)
@@ -150,8 +153,8 @@ namespace BALL
 			{
 				data_ = 0;
 
-				QCanvasItemList list = canvas()->allItems();
-				QCanvasItemList::Iterator it = list.begin();
+				Q3CanvasItemList list = canvas()->allItems();
+				Q3CanvasItemList::Iterator it = list.begin();
 				for (; it != list.end(); ++it) 
 				{
 					if ( *it ) delete *it;
@@ -189,7 +192,7 @@ namespace BALL
 
 		void DockableRegularData1DWidget::contextMenuEvent(QContextMenuEvent* e)
 		{
-			QPopupMenu context_menu;
+			Q3PopupMenu context_menu;
 			context_menu.insertItem("ZoomToFit", this, SLOT(zoomToFit()));
 			context_menu.insertItem("ZoomIn", this, SLOT(zoomIn()));
 			context_menu.insertItem("ZoomOut", this, SLOT(zoomOut()));

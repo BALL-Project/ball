@@ -1,26 +1,28 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTEDialog.C,v 1.5 2005/12/23 17:03:22 amoll Exp $
+// $Id: PTEDialog.C,v 1.5.2.1 2006/01/13 15:35:41 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/PTEDialog.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/VIEW/WIDGETS/editableScene.h>
 
 #include <qtooltip.h>
-#include <qbuttongroup.h>
-#include <qbutton.h>
+#include <q3buttongroup.h>
+#include <q3button.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		PTEDialog::PTEDialog(QWidget* parent, const char* name, WFlags fl)
-			: PTEDialogData(parent, name, fl),
+		PTEDialog::PTEDialog(QWidget* parent, const char* name, Qt::WFlags fl)
+			: QDialog(parent, name, fl),
+				Ui_PTEDialogData(),
 				ModularWidget(name)
 		{
 			//registerWidget(this);
 			Log.error() << "PTEDialog " << dynamic_cast<ModularWidget*>(this) << std::endl;
+			setupUi(this);
 			
 			// iterate over all buttons in the button group
 			int i=1;
@@ -48,7 +50,7 @@ namespace BALL
 		  else
 		  {
 			 	int element_type = scene->getEditElementType();
-			 	QButton* button = buttonGroup1->find(element_type);
+			 	Q3Button* button = buttonGroup1->find(element_type);
 
 			 	if (button)
 				{
@@ -78,7 +80,7 @@ namespace BALL
 		 else
 		 {
 			 //recolor old ElementType
-			 QButton* old_button = buttonGroup1->find(scene->getEditElementType());
+			 Q3Button* old_button = buttonGroup1->find(scene->getEditElementType());
 
 			 if (old_button)
 				 old_button->setPaletteBackgroundColor(button_standard_color_);

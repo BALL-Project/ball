@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.4 2005/12/23 17:03:27 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.4.2.1 2006/01/13 15:35:53 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -24,12 +24,11 @@
 #include <qlineedit.h>
 #include <qspinbox.h>
 #include <qtabwidget.h>
-#include <qbuttongroup.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
-#include <qcombobox.h>
+#include <QComboBox>
 #include <qslider.h>
 #include <qmessagebox.h>
 
@@ -38,13 +37,34 @@ namespace BALL
 	 namespace VIEW
 	 {
 
-		ModifySurfaceDialog::ModifySurfaceDialog( QWidget* parent,  const char* name, bool modal, WFlags fl )
-			: ModifySurfaceDialogData(parent, name, modal, fl),
+		ModifySurfaceDialog::ModifySurfaceDialog( QWidget* parent,  const char* name, bool, Qt::WFlags fl )
+			: QDialog(parent, fl),
+				Ui_ModifySurfaceDialogData(),
 				ModularWidget(name),
 				grid_(0),
 				rep_(0)
 		{
+			setupUi(this);
+
+			// signals and slots connections
+			connect( apply_button, SIGNAL( clicked() ), this, SLOT( applyPressed() ) );
+			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( cancelPressed() ) );
+			connect( surface_tab, SIGNAL( selected(const QString&) ), this, SLOT( tabChanged() ) );
+			connect( autoscale, SIGNAL( clicked() ), this, SLOT( autoScalePressed() ) );
+			connect( grids, SIGNAL( activated(int) ), this, SLOT( gridSelected() ) );
+			connect( transparency_group_grid, SIGNAL( clicked(int) ), this, SLOT( gridTransparencyChanged() ) );
+			connect( min_min_button, SIGNAL( clicked() ), this, SLOT( minMinPressed() ) );
+			connect( min_button, SIGNAL( clicked() ), this, SLOT( minPressed() ) );
+			connect( mid_button, SIGNAL( clicked() ), this, SLOT( midPressed() ) );
+			connect( max_button, SIGNAL( clicked() ), this, SLOT( maxPressed() ) );
+			connect( max_max_button, SIGNAL( clicked() ), this, SLOT( maxMaxPressed() ) );
+			connect( choose_button, SIGNAL( clicked() ), this, SLOT( choosePressed() ) );
+			connect( split_group, SIGNAL( clicked(int) ), this, SLOT( splitMethodChanged() ) );
+			connect( transparency_slider, SIGNAL( valueChanged(int) ), this, SLOT( customColorTransparencyChanged() ) );
+			connect( transparency_slider_2, SIGNAL( valueChanged(int) ), this, SLOT( changeDrawingModeTransparencyChanged() ) );
+
 			registerWidget(this);
+			setObjectName(name);
 		}
 
 		ModifySurfaceDialog::~ModifySurfaceDialog()
@@ -55,30 +75,30 @@ namespace BALL
 		// ------------------------- SLOTS ------------------------------------------------
 		void ModifySurfaceDialog::applyPressed() 
 		{
-			if (surface_tab->currentPage() == by_grid)
+			if (surface_tab->currentWidget() == by_grid)
 			{
 				if (!colorByGrid_()) return;
 			}
-			else if (surface_tab->currentPage() == by_color)
+			else if (surface_tab->currentWidget() == by_color)
 			{
 				colorByCustomColor_();
 			}
-			else if (surface_tab->currentPage() == drawing_mode)
+			else if (surface_tab->currentWidget() == drawing_mode)
 			{
 				changeDrawingMode_();
 			}
-			else if (surface_tab->currentPage() == split)
+			else if (surface_tab->currentWidget() == split)
 			{
 				if (split_by_distance->isChecked())
 				{
 					try
 					{
-						String(distance_edit->text().ascii()).toFloat();
+						ascii(distance_edit->text()).toFloat();
 					}
 					catch(...)
 					{
 						QMessageBox::critical(this, "BALLView", "Please enter a correct numerical value for the split distance!", 
-															 QMessageBox::Ok, QMessageBox::NoButton);
+															 QMessageBox::Ok, Qt::NoButton);
 						return;
 					}
 				}
@@ -155,7 +175,7 @@ namespace BALL
 		bool ModifySurfaceDialog::insertGrid_(RegularData3D& grid, const String& name)
 		{
 			grid_list_.push_back(&grid);
-			grids->insertItem(name.c_str());
+			grids->addItem(name.c_str());
 			if (grid_ == 0) grid_ = &grid;
 			if (rep_ == 0) return false;
 
@@ -171,9 +191,9 @@ namespace BALL
 			{
 				if (*it == &grid)
 				{
-					if ((Index)pos == grids->currentItem()) 
+					if ((Index)pos == grids->currentIndex()) 
 					{
-						grids->setCurrentItem(-1);
+						grids->setCurrentIndex(-1);
 						invalidateGrid_();
 					}
 					grid_list_.erase(it);
@@ -197,13 +217,13 @@ namespace BALL
 				return;
 			}
 
-			if (grids->count() == 0 || grids->currentItem() == -1)
+			if (grids->count() == 0 || grids->currentIndex() == -1)
 			{
 				invalidateGrid_();
 				return;
 			}
 
-			Index pos = grids->currentItem();
+			Index pos = grids->currentIndex();
 			list<RegularData3D*>::iterator it = grid_list_.begin();
 			for (Position p = 0; p < (Position)pos; p++)
 			{
@@ -262,7 +282,10 @@ namespace BALL
 
 		void ModifySurfaceDialog::setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box, const QRadioButton* rbutton)
 		{
-			color.set(label->backgroundColor());
+			QPalette pal(label->palette());
+			QColor qcolor = pal.color(label->backgroundRole());
+			color.set(qcolor);
+
 			if (rbutton->isChecked())
 			{
 				color.setAlpha(box->value());
@@ -275,13 +298,18 @@ namespace BALL
 
 		void ModifySurfaceDialog::getColor_(const ColorRGBA& color, QLabel* label, QSpinBox* box)
 		{
-			label->setBackgroundColor(color.getQColor());
+			QPalette pal(label->palette());
+			QColor qcolor = color.getQColor();
+			pal.setColor(label->backgroundRole(), qcolor);
+			label->setPalette(pal);
 			box->setValue(color.getAlpha());
 		}
 
 		void ModifySurfaceDialog::colorByCustomColor_()
 		{
-			ColorRGBA col(custom_color_label->backgroundColor());
+			QPalette pal(custom_color_label->palette());
+			QColor qcolor = pal.color(custom_color_label->backgroundRole());
+			ColorRGBA col(qcolor);
 
 			if (transparency_slider->value() == 0)
 			{
@@ -345,9 +373,9 @@ namespace BALL
 
 			try
 			{
-				String((mid_box->text().ascii())).toFloat();
-				String((min_box->text().ascii())).toFloat();
-				String((max_box->text().ascii())).toFloat();
+				ascii(mid_box->text()).toFloat();
+				ascii(min_box->text()).toFloat();
+				ascii(max_box->text()).toFloat();
 			}
 			catch(...)
 			{
@@ -372,7 +400,7 @@ namespace BALL
 			lower_table.setMinMaxColors(min_min_color, max_max_color);
 			lower_table.setAlphaBlending(true);
 			lower_table.setNumberOfColors(levels_box->value()/2);
-			lower_table.setRange(String((min_box->text().ascii())).toFloat(), String((mid_box->text().ascii())).toFloat());
+			lower_table.setRange(ascii(min_box->text()).toFloat(), ascii(mid_box->text()).toFloat());
 			lower_table.createMap();
 
 			list[0] = mid_color;
@@ -382,12 +410,12 @@ namespace BALL
 			upper_table.setMinMaxColors(min_min_color, max_max_color);
 			upper_table.setAlphaBlending(true);
 			upper_table.setNumberOfColors(levels_box->value()/2);
-			upper_table.setRange(String((mid_box->text().ascii())).toFloat(), String((max_box->text().ascii())).toFloat());
+			upper_table.setRange(ascii(mid_box->text()).toFloat(), ascii(max_box->text()).toFloat());
 			upper_table.createMap();
 
 			try 
 			{
-				const float mid_value = String(mid_box->text().ascii()).toFloat();
+				const float mid_value = ascii(mid_box->text()).toFloat();
 				for (Position i = 0; i < mesh_->colors.size(); i++)
 				{
 					const float grid_value = grid_->getInterpolatedValue(mesh_->vertex[i]);
@@ -409,17 +437,14 @@ namespace BALL
 
 			rep_->setTransparency(0);
 
-			if (transparency_group_grid->selected() != none_button_grid)
+			if ((Size)min_min_color.getAlpha() 	!= 255 ||
+					(Size)min_color.getAlpha() 			!= 255 ||
+					(Size)mid_color.getAlpha() 			!= 255 ||
+					(Size)max_color.getAlpha() 			!= 255 ||
+					(Size)max_max_color.getAlpha() 	!= 255)
 			{
-				if ((Size)min_min_color.getAlpha() 	!= 255 ||
-						(Size)min_color.getAlpha() 			!= 255 ||
-						(Size)mid_color.getAlpha() 			!= 255 ||
-						(Size)max_color.getAlpha() 			!= 255 ||
-						(Size)max_max_color.getAlpha() 	!= 255)
-				{
 					// if we use Transparency, just tell the Representation
 					rep_->setTransparency(80);
-				}
 			}
 
 			return true;
@@ -435,7 +460,7 @@ namespace BALL
 				return;
 			}
 
-			if (surface_tab->currentPage() == by_grid)
+			if (surface_tab->currentWidget() == by_grid)
 			{
 				apply_button->setEnabled(grid_ != 0);
 				autoscale->setEnabled(grid_ != 0);
@@ -492,7 +517,7 @@ namespace BALL
 			throw()
 		{
 			grid_ = 0;
-			grids->setCurrentItem(-1);
+			grids->setCurrentIndex(-1);
 			checkApplyButton_();
 		}
 
@@ -521,21 +546,21 @@ namespace BALL
 				mesh_ = (Mesh*) *rep->getGeometricObjects().begin();
 			}
 
-			if (grids->currentItem() == -1 && 
+			if (grids->currentIndex() == -1 && 
 					grids->count() != 0)
 			{
-				grids->setCurrentItem(grids->count()-1);
+				grids->setCurrentIndex(grids->count()-1);
 			}
 			gridSelected() ;
 
-			mode_combobox->setCurrentItem(rep_->getDrawingMode());
+			mode_combobox->setCurrentIndex(rep_->getDrawingMode());
 
 			checkApplyButton_();
 		}
 
 		void ModifySurfaceDialog::show()
 		{
-			ModifySurfaceDialogData::show();
+			QDialog::show();
 			raise();
 		}
 
@@ -784,7 +809,7 @@ namespace BALL
 				}
 			}
 
-			float distance = String(distance_edit->text().ascii()).toFloat();
+			float distance = ascii(distance_edit->text()).toFloat();
 
 			BoundingBoxProcessor boxp;
 			boxp.start();
@@ -878,7 +903,7 @@ namespace BALL
 		{
 			if (rep_ == 0) return;
 
-			rep_->setDrawingMode((DrawingMode)mode_combobox->currentItem());
+			rep_->setDrawingMode((DrawingMode)mode_combobox->currentIndex());
 
 			Size transparency = (Size)((float)transparency_slider_2->value() * 2.55);
 

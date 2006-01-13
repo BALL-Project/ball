@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.19 2005/12/23 17:03:29 amoll Exp $
+// $Id: preferences.C,v 1.19.2.1 2006/01/13 15:35:57 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -9,8 +9,8 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/WIDGETS/helpViewer.h>
 #include <BALL/FORMAT/INIFile.h>
-#include <qwidgetstack.h>
-#include <qlistview.h>
+#include <QStackedWidget>
+#include <QTreeWidget>
 #include <qpushbutton.h>
 
 namespace BALL
@@ -20,38 +20,39 @@ namespace BALL
 
 		Preferences::Preferences(const Preferences& /*preferences*/)
 			throw()
-			:	PreferencesData(0, "", FALSE, 208)
+			:	QDialog(0),
+				Ui_PreferencesData()
 		{
+			setupUi(this);
 		}
 
 		Preferences::Preferences(QWidget* parent, const char* name)
 			throw()
-			:	PreferencesData(parent, name, FALSE, 208)
+			:	QDialog(parent),
+				Ui_PreferencesData()
 		{
-			setCaption(name);
+			setupUi(this);
+			setObjectName(name);
+			
+			// signals and slots connections
+			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( close() ) );
+			connect( defaults_button, SIGNAL( clicked() ), this, SLOT( setDefaultValues() ) );
+			connect(entries_listview, SIGNAL(itemSelectionChanged()), this, SLOT(entrySelected()));
+			connect( help_button, SIGNAL( clicked() ), this, SLOT( showHelp() ) );
 		}
 
 		Preferences::~Preferences()
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.info() << "Destructing object " << (void *)this 
-									 << " of class Preferences" << std::endl;
+				Log.info() << "Destructing object " << this << " of class Preferences" << std::endl;
 			#endif 
-
-			HashSet<PreferencesEntry*>::Iterator it = entries_.begin();
-			for (; it != entries_.end(); it++)
-			{
-				delete *it;
-			}
-			
-			entries_.clear();
 		}
 
 		bool Preferences::hasPages()
 			throw()
 		{
-			 return (entries_listview->childCount() > 0);
+			return (widget_stack->count() > 1);
 		}
 
 		void Preferences::insertEntry(PreferencesEntry *child)
@@ -68,28 +69,38 @@ namespace BALL
 
 			if (child->getStackPages().size() == 0) return;
 
-			QWidget* widget = dynamic_cast<QWidget*>(child);
+ 			QWidget* widget = dynamic_cast<QWidget*>(child);
 
- 			widget_stack->addWidget(widget);
-
-			// set size for all child tabs
-			widget->setMinimumSize(widget_stack->width(), widget_stack->height());
-			widget->setMaximumSize(widget_stack->width(), widget_stack->height());
-			widget->resize(widget_stack->width(), widget_stack->height());
-
-			entries_.insert(child);
+ 			widget->setMinimumSize(widget_stack->width(), widget_stack->height());
+ 			widget->setMaximumSize(widget_stack->width(), widget_stack->height());
+ 			widget->resize(widget_stack->width(), widget_stack->height());
 
 			PreferencesEntry::StackPages::Iterator it = child->getStackPages().begin();
-			QListViewItem* item = new QListViewItem(entries_listview, (*it).second.c_str());
-			entries_listview->insertItem(item);
-			item_to_widget_[item] = (*it).first;
+ 			entries_.insert(child);
+   		widget_stack->addWidget((*it).first);
+
+			// the parent listview entry
+			QStringList sl;
+			sl << (*it).second.c_str();
+			QTreeWidgetItem* item = new QTreeWidgetItem(entries_listview, sl);
+
+			if (child->getStackPages().size() == 1)
+			{
+				item_to_widget_[item] = (*it).first;
+				widget_to_item_[(*it).first] = item;
+				return;
+			}
+			
+			item_to_widget_[item] = widget_stack->widget(0);
+//   			widget_to_item_[widget_stack->widget(0)] = item;
 			item_to_entry_[item] = child;
-			widget_to_item_[widget] = item;
 			it++;
+
 			for (; it != child->getStackPages().end(); it++)
 			{
-				QListViewItem* new_item = new QListViewItem(item, (*it).second.c_str());
-				item->insertItem(new_item);
+				QStringList sl;
+				sl << (*it).second.c_str();
+				QTreeWidgetItem* new_item = new QTreeWidgetItem(item, sl);
 				item_to_widget_[new_item] = (*it).first;
 				widget_to_item_[(*it).first] = new_item;
 			}
@@ -154,49 +165,61 @@ namespace BALL
 
 		void Preferences::showEntry(QWidget* child)
 		{
-			if (!widget_to_item_.has(child)) return;
-
-			HelpViewer* hv = HelpViewer::getInstance(0);
-			if (hv != 0)
+			if (!widget_to_item_.has(child)) 
 			{
-				help_button->setEnabled(hv->hasHelpFor(child));
-			}
-
-			QListViewItem* item = widget_to_item_[child];
-			entries_listview->setSelected(item, true);
-
-			if (item->parent() != 0)
-			{
-				item->parent()->setOpen(true);
-			}
-
-			if (widget_stack->id(child) != -1)
-			{
-				if (item->firstChild() == 0)
-				{
-					widget_stack->raiseWidget(child);
-				}
-				else
-				{
-					widget_stack->raiseWidget(0);
-				}
+				widget_stack->setCurrentIndex(0);
 				return;
 			}
 
-			if (!item_to_entry_.has(item->parent())) return;
-			PreferencesEntry* entry= item_to_entry_[item->parent()];
+			// enable or disable help button
+			HelpViewer* hv = HelpViewer::getInstance(0);
+			if (hv != 0) help_button->setEnabled(hv->hasHelpFor(child));
 
-			QWidget* widget = item_to_widget_[item->parent()];
-			widget_stack->raiseWidget(widget);
+			// set the listview entry 
+			QTreeWidgetItem* item = widget_to_item_[child];
+			entries_listview->setItemSelected(item, true);
+			if (item->parent() != 0) entries_listview->setItemExpanded(item->parent(), true);
 
-			entry->showStackPage(child);
+			// workaround for damn QT 4.1!
+			for (Index p = 0; p < widget_stack->count(); p++)
+			{
+				widget_stack->widget(p)->hide();
+			}
+
+			// is the child a direct child of the stacked widget?
+			if (widget_stack->indexOf(child) != -1)
+			{
+				// show the child 
+				if (item->child(0) == 0) widget_stack->setCurrentWidget(child);
+				// or the empty page if the child is an empty node
+				else widget_stack->setCurrentIndex(0);
+
+				widget_stack->currentWidget()->show();
+
+				return;
+			}
+
+ 			if (!item_to_entry_.has(item->parent()))
+			{
+				BALLVIEW_DEBUG
+				return;
+			}
+
+ 			PreferencesEntry* entry= item_to_entry_[item->parent()];
+			QWidget* cw = (*entry->getStackPages().begin()).first;
+			widget_stack->setCurrentWidget(cw);
+			cw->show();
+ 			entry->showStackPage(child);
 		}	
 
 		const QWidget* Preferences::currentPage() const
 			throw()
 		{
-			QListViewItem* item = entries_listview->selectedItem();
-			if (item == 0) return 0;
+			QList<QTreeWidgetItem*> sel = entries_listview->selectedItems();
+			if (sel.size() == 0) return 0;
+			QTreeWidgetItem* item =  *sel.begin();
+
+			if (item->child(0) != 0) return widget_stack->widget(0);
 			
 			return item_to_widget_[item];
 		}
@@ -204,19 +227,23 @@ namespace BALL
 		const QWidget* Preferences::currentEntry() const
 			throw()
 		{
-			return widget_stack->visibleWidget();
+			return widget_stack->currentWidget();
 		}
 		
-		void Preferences::entrySelected(QListViewItem* item)
+		void Preferences::entrySelected()
 		{
-			showEntry(item_to_widget_[item]);
+			QWidget* to_show = (QWidget*)currentPage();
+			if (to_show == currentEntry()) return;
+			showEntry(to_show);
 		}
+
 
 		void Preferences::setDefaultValues()
 		{
-			QListViewItem* item = entries_listview->selectedItem();
-			if (item == 0) return;
-			
+			QList<QTreeWidgetItem*> sel = entries_listview->selectedItems();
+			if (sel.size() == 0) return;
+			QTreeWidgetItem* item =  *sel.begin();
+
 			if (item_to_entry_.has(item))
 			{
 				item_to_entry_[item]->restoreDefaultValues();
@@ -227,25 +254,28 @@ namespace BALL
 			}
 		}
 
-		void Preferences::removeItem_(QListViewItem* item, bool update)
+		void Preferences::removeItem_(QTreeWidgetItem* item, bool)
 			throw()
 		{
-			while (item->firstChild() != 0)
+			while (item->child(0) != 0)
 			{
-				removeItem_(item->firstChild(), false);
+				removeItem_(item->child(0), false);
+				delete item->takeChild(0);
 			}
 
-			delete item;
-
-			if (update) entries_listview->triggerUpdate();
+			if (item->parent() != 0) delete item;
 		}
 
 		void Preferences::showHelp()
 		{
+			QList<QTreeWidgetItem*> sel = entries_listview->selectedItems();
+			if (sel.size() == 0) return;
+			QTreeWidgetItem* item =  *sel.begin();
+
 			HelpViewer* hv = HelpViewer::getInstance(0);
 			if (hv != 0)
 			{
-				hv->showHelpFor(item_to_widget_[entries_listview->selectedItem()]);
+				hv->showHelpFor(item_to_widget_[item]);
 			}
 		}
 
@@ -265,6 +295,18 @@ namespace BALL
 			{
 				(**it).storeValues();
 			}
+		}
+
+		void Preferences::workaround()
+		{
+			HashMap<QTreeWidgetItem*, QWidget*>::Iterator it = item_to_widget_.begin();
+			for (; +it; ++it)
+			{
+				entries_listview->setItemSelected((*it).first, false);
+			}
+
+//   			entries_listview->setItemSelected((*item_to_widget_.begin()).first, true);
+//   			showEntry(widget_stack->widget(0));
 		}
 
 	} // namespace VIEW

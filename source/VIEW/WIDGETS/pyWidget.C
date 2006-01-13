@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49 2005/12/26 04:05:09 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.1 2006/01/13 15:36:07 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -15,14 +15,14 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 
 #include <qscrollbar.h>
-#include <qfiledialog.h>
+#include <QFileDialog>
 #include <qapplication.h>
-#include <qdragobject.h>
-#include <qwidgetstack.h>
+#include <QKeyEvent>
+#include <QDropEvent>
+#include <QTextCursor>
 
 // currently doesnt work right
 //#undef BALL_QT_HAS_THREADS
-
 
 namespace BALL
 {
@@ -68,7 +68,7 @@ namespace BALL
 		{
 
 			return (key 	 				== e.key() 		&&
-							button_state 	== e.state()	);
+							button_state 	== e.modifiers()	);
 		}
 
 		bool Hotkey::set(const String& data) 
@@ -85,7 +85,7 @@ namespace BALL
 			try
 			{
 				key = (Qt::Key) fields[0].toUnsignedInt();
-				button_state = (Qt::ButtonState) fields[1].toUnsignedInt();
+				button_state = (Qt::KeyboardModifiers) fields[1].toUnsignedInt();
 				action = fields[2];
 			}
 			catch(...)
@@ -106,140 +106,485 @@ namespace BALL
 
 		// ==========================================================
 
-		PyWidgetData::PyWidgetData(QWidget* parent, const char* name)
-			: QTextEdit(parent, name),
-				thread_(0),
-				stop_script_(false)
-		{
-			setWrapPolicy(QTextEdit::Anywhere);
-			#ifdef BALL_QT_HAS_THREADS
-			  thread_ = new RunPythonThread();
-			#endif
+		void MyLineEdit::keyPressEvent(QKeyEvent* e) 
+		{ 
+			if (e->key() == Qt::Key_Up ||
+			    e->key() == Qt::Key_Down)
+			{
+				pw_->keyPressed(e);
+				return;
+			}
+
+			QLineEdit::keyPressEvent(e);
 		}
 
-		PyWidgetData::PyWidgetData(const PyWidgetData& /*widget*/)
-			:	QTextEdit(),
-				stop_script_(false)
-		{
-		}
+		//
+// ######################################################################################################
 
-		PyWidgetData::~PyWidgetData()
+		PyWidget::PyWidget(QWidget *parent, const char *name)
 			throw()
-		{	
-#ifdef BALL_QT_HAS_THREADS
-			if (thread_->running())
+			: DockWidget(parent, name),
+				text_edit_(new QTextEdit(this)),
+				line_edit_(new QLineEdit(this)),
+				thread_(0),
+				working_dir_(""),
+				valid_(false),
+				started_startup_script_(false),
+				stop_script_(false)
+		{
+		#ifdef BALL_VIEW_DEBUG
+			Log.error() << "new PyWidget " << this << std::endl;
+		#endif
+			default_visible_ = false;
+			setGuest(*text_edit_);
+			registerWidget(this);
+			text_edit_->setReadOnly(true);
+
+//    			QGridLayout* lay = new QGridLayout();
+//   			((QGridLayout*)layout())->addLayout(lay, 2, 0);
+//   			line_edit_ = new QLineEdit(this);
+//   			lay->addWidget(text_edit_,0, 0, 1, -1);
+//   			lay->addWidget(line_edit_,1, 0, 1, -1);
+		}
+
+		PyWidget::~PyWidget()
+			throw()
+		{}
+
+		void PyWidget::initializeWidget(MainControl& main_control)
+			throw()
+		{
+//   			insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
+
+			DockWidget::initializeWidget(main_control);
+			registerForHelpSystem(this, "pythonInterpreter.html");
+
+			QAction* id1 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", this , SLOT(scriptDialog()));
+			QAction* id2 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
+			QAction* id3 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
+
+			startInterpreter();
+
+			valid_ = PyInterpreter::isValid();
+	
+			if (!valid_)
 			{
-				thread_->wait(500);
-				thread_->terminate();
+				id1->setEnabled(false);
+				id2->setEnabled(false);
+				id3->setEnabled(false);
+				appendText("No Python support available:");
+				runString("import BALL");
+				setEnabled(false);
+				setStatusbarText("No Python support available! (See PyWidget)", true);
+				return;
 			}
-			delete thread_;
-#endif
 		}
 
 
-		void PyWidgetData::startInterpreter()
+		void PyWidget::finalizeWidget(MainControl& main_control)
+			throw()
 		{
-			stop_script_ = false;
-			// initialize the interpreter
-			PyInterpreter::initialize();
+			abortScript();
+			PyInterpreter::finalize();
 
-			if (!PyInterpreter::isValid())
+			DockWidget::finalizeWidget(main_control);
+		}
+
+
+		void PyWidget::initializePreferencesTab(Preferences &preferences)
+			throw()
+		{
+			python_settings_= new PythonSettings();
+			preferences.insertEntry(python_settings_);
+			preferences_ = &preferences;
+		}
+
+		void PyWidget::finalizePreferencesTab(Preferences &preferences)
+			throw()
+		{
+			if (python_settings_ != 0)
+			{
+				preferences.removeEntry(python_settings_);
+				python_settings_ = 0;
+			}
+		}
+
+		void PyWidget::applyPreferences()
+			throw()
+		{
+			DockWidget::applyPreferences();
+
+			if (python_settings_ == 0)
+			{
+				return;	
+			}
+
+ 			hotkeys_ = (python_settings_->getContent());
+
+			QMenu* menu = getMainControl()->initPopupMenu(MainControl::USER);
+			menu->clear();
+
+			List<Hotkey>::Iterator it = hotkeys_.begin();
+			for (; it != hotkeys_.end(); it++)
+			{
+				String entry = (*it).action;
+				if (entry.size() > 35)
+				{ 
+					entry.truncate(32);
+					entry += "...";
+				}
+
+ 				QAction* action = insertMenuEntry(MainControl::USER, entry.c_str(), this, SLOT(hotkeyItem()));
+				action->setData((*it).action.c_str());
+				setMenuHint("Perform a user defined action per Python interface");
+				setMenuHelp("pythonInterpreter.html#create_hotkeys");
+			}
+
+			getMainControl()->insertPopupMenuSeparator(MainControl::USER);
+ 			insertMenuEntry(MainControl::USER, "Modify", this, SLOT(modifyHotkeys()));
+			setMenuHint("Manage user defined Python commands");
+			setMenuHelp("pythonInterpreter.html#create_hotkeys");
+
+			/////////////////////////////////////////
+			// startup script
+			/////////////////////////////////////////
+			if (started_startup_script_ || !isValid())
 			{
 				return;
 			}
 
-			// print the PyBALL version and clear
-			// the widget's contents in case of a restart
-			setText((String("BALL ") + VersionInfo::getVersion()).c_str());
+			started_startup_script_ = true;
 
-			// print the first prompt 
-			multi_line_mode_ = false;
+			String startup = getDataPath() + "startup.py";
+			if (!runFile(startup))
+			{
+				Log.error() << "Could not find startup script. Please set the correct path to the data path!" << std::endl;
+				Log.error() << "To do so set the environment variable BALL_DATA_PATH or BALLVIEW_DATA_PATH." << std::endl;
+			}
+			
+			String user_startup = python_settings_->getFilename();
+			if (user_startup == "") 
+			{
+				return;	
+			}
+
+			runFile(user_startup);
+		}
+
+		void PyWidget::modifyHotkeys()
+		{
+ 			preferences_->showEntry(python_settings_->widget_stack->widget(1));
+			preferences_->show();
+		}
+
+		void PyWidget::hotkeyItem()
+		{
+			if (sender() == 0) return;
+
+			QAction* action = dynamic_cast<QAction*>(sender());
+
+			if (action == 0) return;
+
+			runString(ascii(action->data().toString()));
+		}
+
+		void PyWidget::abortScript()
+		{
+			((PyWidget*)(parent()))->setStatusbarText("Aborting Python script");
+			 stop_script_ = true;
+		}
+
+		PyWidget::PyWidget(const PyWidget& p)
+			throw()
+		 : DockWidget(p)
+		{}
+
+		bool PyWidget::toAbortScript() throw() 
+		{
+			return stop_script_;
+		}
+
+		void PyWidget::insertHotkey(const Hotkey& hotkey) 
+			throw()
+		{
+			List<Hotkey>::iterator it = hotkeys_.begin();
+			for (; it != hotkeys_.end(); it++)
+			{
+				if ((*it) == hotkey) return;
+			}
+
+			hotkeys_.push_back(hotkey);
+		}
+
+		void PyWidget::removeHotkey(const Hotkey& hotkey) 
+			throw()
+		{
+			List<Hotkey>::iterator it = hotkeys_.begin();
+			for (; it != hotkeys_.end(); it++)
+			{
+				if ((*it) == hotkey) return;
+			}
+
+			hotkeys_.erase(it);
+		}
+
+		void PyWidget::reactTo(const QKeyEvent& e) 
+			throw() 
+		{
+			// doesnt work, no idea yet why:
+			/*
+			if (getMainControl()->compositesAreLocked() ||
+					getMainControl()->getPrimitiveManager().updateRunning())
+			{
+				return;
+			}
+			*/
+
+			List<Hotkey>::iterator it = hotkeys_.begin();
+			for (; it != hotkeys_.end(); it++)
+			{
+				if ((*it) == e) 
+				{
+					runString((*it).action);
+					return;
+				}
+			}
+		}
+		
+		bool PyWidget::runAgain()
+		{
+			return runFile(last_script_);
+		}
+
+		void PyWidget::setError_(bool state)
+		{
+			QColor color;
+			if (state)
+			{
+				color = Qt::red;
+			}
+			else
+			{
+				color = Qt::black;
+			}
+
+			text_edit_->setTextColor(color);
+		}
+
+		void PyWidget::appendText(const String& text)
+		{
+ 			text_edit_->setUpdatesEnabled(false);
+ 			QTextCursor ct = text_edit_->textCursor();
+ 			if (!ct.atEnd()) 
+ 			{
+ 				ct.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+				text_edit_->setTextCursor(ct);
+ 			}
+					
+ 			text_edit_->insertPlainText(text.c_str());
+ 			ct.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+ 			text_edit_->setTextCursor(ct);
+ 			text_edit_->ensureCursorVisible();
+ 			text_edit_->setUpdatesEnabled(true);
+		}
+
+		void PyWidget::contentsDragEnterEvent(QDragEnterEvent * e)
+		{
+//   			e->accept(Q3TextDrag::canDecode(e));
+		}
+
+		void PyWidget::contentsDropEvent(QDropEvent *e)
+		{
+//   			VIEW::processDropEvent(e);
+		}
+
+		void PyWidget::exportHistory()
+		{
+			QString s = QFileDialog::getSaveFileName(
+										0, "Export History",
+										getWorkingDir().c_str(), "");
+
+		 	if (s == QString::null) return;
+			String filename(ascii(s));
+			setWorkingDirFromFilename_(filename);
+
+			File file(filename, std::ios::out);
+			if (!file.isOpen()) 
+			{
+				appendText(String("> Could not export history to file " + filename + "\n").c_str());
+				newPrompt_();
+				return;
+			}
+					
+			for (Position p = 0; p < history_.size(); p++)
+			{
+				if (results_[p]) file << history_[p] << std::endl;
+			}
+
+			file.close();
+		}
+
+
+		void PyWidget::clear()
+			throw()
+		{
+			text_edit_->clear();
 			newPrompt_();
-			history_position_ = history_.size() + 1;
 		}
 
-
-		void PyWidgetData::retrieveHistoryLine_(Position index)
+		void PyWidget::paste()
 		{
-			if (index > history_.size()) 
-			{
-				history_position_ = history_.size();
-				return;
-			}
-
-			int row, col;
-			getCursorPosition(&row, &col);
-
-			if (index == history_.size())
-			{
-				history_position_ = history_.size();
-				removeParagraph(row);
-				insertParagraph(getPrompt_(), row);
-				setCursorPosition(paragraphs()-1, col);
-				QScrollBar* sb = verticalScrollBar();
-				if (sb != 0)
-				{
-					sb->setValue(sb->maxValue());
-				}
-				removeParagraph(row +1);
-				return;
-			}
-
-			String line = getPrompt_()+ history_[index];
-
-			// replace the line's contents
-			removeParagraph(row);
-			insertParagraph(line.c_str(), row);
-			setCursorPosition(row, line.size()); 
-			QScrollBar* sb = verticalScrollBar();
-			if (sb != 0)
-			{
-				sb->setValue(sb->maxValue());
-			}
-
-			// update the history position
-			history_position_ = index;
-			removeParagraph(row +1);
+			line_edit_->paste();
 		}
 
-
-		bool PyWidgetData::returnPressed()
+		void PyWidget::scriptDialog()
 		{
-			// check for an empty line (respect the prompt)
-			int row, col;
-			getCursorPosition(&row, &col);
-			current_line_ = getCurrentLine_();
-			QTextEdit::returnPressed();
-			if (col < 5)
+			if (working_dir_ == "") working_dir_ = getWorkingDir();
+
+			QString s = QFileDialog::getOpenFileName(
+										0, "Choose a Python script",
+										working_dir_.c_str(),
+										"Python Scripts(*.py)");
+
+		 	if (s == QString::null) return;
+			setWorkingDirFromFilename_(ascii(s));
+			working_dir_ = getWorkingDir();
+
+			runFile(ascii(s));
+		}
+
+		String PyWidget::getCurrentLine() const
+		{
+			return String(ascii(line_edit_->text()));
+		}
+
+		bool PyWidget::runFile(const String& filename)
+			throw()
+		{
+			last_script_ = filename;
+			stop_script_ = false;
+			appendText(String("> executing script from " + filename + "\n").c_str());
+			LineBasedFile file;
+			try
 			{
-				if (multi_line_mode_)
+				file.open(filename);
+			}
+			catch	(...)
+			{
+				appendText(String("> Could not find file " + filename + "\n").c_str());
+				newPrompt_();
+				return false;
+			}
+
+			while (file.readLine())
+			{
+				// Call parse line with 'silent = true' to make sure we do not get prompts
+				// for each line read.
+				if (!parseLine_(file.getLine(), true))
 				{
-					// in multi line mode: end of input - parse it!
-					parseLine_();
-				}
-				else	
-				{
-					// return on an empty line is handled 
-					// as in the interactive interpreter: do nothing and 
-					// print another prompt
+					String result_string = "> Error in line " + String(file.getLineNumber()) + " of file " + filename + "\n";
+					appendText(result_string.c_str());
 					newPrompt_();
+					return false;
 				}
-			} 
-			else 
-			{	
-				// parse the line
-				parseLine_();
-			}
 
-			return false;
+				if (stop_script_) 
+				{
+					stop_script_ = false;
+ 					setStatusbarText("Aborted script");
+					appendText("> aborted...");
+					newPrompt_();
+					return false;
+				}
+			}
+			appendText("> Finished.");
+			setStatusbarText("Finished script.");
+			newPrompt_();
+			return true;
 		}
 
-
-		bool PyWidgetData::parseLine_(String line, bool silent)
+		void PyWidget::dump(std::ostream& s, Size depth) const
+			throw()
 		{
+			BALL_DUMP_STREAM_PREFIX(s);
+
+			BALL_DUMP_HEADER(s, this, this);
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "multiline_mode : " << multi_line_mode_<< std::endl;
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "multi_line_text  : " << multi_line_text_<< std::endl;
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "history : "<< std::endl;
+			
+			for (Position i = 0; i < history_.size(); i++)
+			{
+				BALL_DUMP_DEPTH(s, depth);
+				s << history_[i]<< std::endl;
+			}
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "history_position : " << history_position_ << std::endl;
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "current_line : " << getCurrentLine() << std::endl;
+
+			BALL_DUMP_STREAM_SUFFIX(s);
+		}
+
+		void PyWidget::newPrompt_()
+		{
+			appendText(getPrompt_());
+//   			setCursorPosition(paragraphs() - 1, 4);
+		}
+
+		bool PyWidget::parseLine_()
+		{
+			return parseLine_(getCurrentLine());
+		}
+
+		void PyWidget::keyPressed(QKeyEvent* e)
+		{
+			if (e->key() == Qt::Key_Up)
+			{
+				if (history_position_ != 0) retrieveHistoryLine_(history_position_ - 1);
+				return;
+			}
+			else if (e->key() == Qt::Key_Down)
+			{
+				retrieveHistoryLine_(history_position_ + 1);
+				return;
+			}
+			/*
+			else if (e->key() == Qt::Key_Home)
+			{
+				setCursorPosition(row, 4);
+				return;
+			}
+			else if (e->key() == Qt::Key_Return)
+			{
+				if (!returnPressed()) return;
+			}
+			else if (e->key() == Qt::Key_PageUp)
+			{
+				return;
+			}
+			else if (e->key() == Qt::Key_PageDown)
+			{
+				return;
+			}
+*/
+		} 
+
+		bool PyWidget::parseLine_(String line, bool silent)
+		{
+			appendText(line);
+
 			if (!Py_IsInitialized())
 			{
-				append("ERROR: no interpreter running!\n");
+				appendText("ERROR: no interpreter running!\n");
 				return false;
 			}
 
@@ -343,15 +688,15 @@ namespace BALL
 			{
 				if (result.hasSubstring("ERROR"))
 				{
-					setColor(red);
+					setError_(true);
 					ok = false;
 				}
 				else
 				{
-					setColor(blue);
+					setError_(false);
 				}
-				append(result.c_str());
-				setColor(black);
+				appendText(result.c_str());
+				setError_(false);
 			}
 
 				
@@ -376,7 +721,7 @@ namespace BALL
 			return ok;
 		}
 
-		bool PyWidgetData::runString(String command)
+		bool PyWidget::runString(String command)
 		{
 			if (!command.has('\n'))
 			{
@@ -394,504 +739,58 @@ namespace BALL
 		}
 		
 
-		void PyWidgetData::appendToHistory_(const String& line)
+		void PyWidget::appendToHistory_(const String& line)
 		{
 			history_.push_back(line);
 			history_position_ = history_.size();
 		}
 
-		const char* PyWidgetData::getPrompt_() const
+		const char* PyWidget::getPrompt_() const
 		{
 			return (multi_line_mode_ ? "... " : ">>> ");
 		}
 
-		void PyWidgetData::newPrompt_()
+		void PyWidget::retrieveHistoryLine_(Position index)
 		{
-			append(getPrompt_());
-			setCursorPosition(paragraphs() - 1, 4);
-		}
-
-		bool PyWidgetData::parseLine_()
-		{
-			String line = current_line_.getSubstring(4);
-			return parseLine_(line);
-		}
-
-
-		void PyWidgetData::keyPressEvent(QKeyEvent* e)
-		{
-			int row, col;
-			getCursorPosition(&row, &col);
-
-			if (row != paragraphs()-1 || col < 4)
+			if (index > history_.size()) 
 			{
-				setCursorPosition(paragraphs()-1, paragraphLength(paragraphs() -1) -1);
-			}
-
-			if (e->key() == Key_Left || e->key() == Key_Backspace)
-			{
-				if (col <= 4) return;
-			}
-			else if (e->key() == Key_Right)
-			{
-				setCursorPosition(paragraphs()-1, col+1);
+				history_position_ = history_.size();
 				return;
 			}
-			else if (e->key() == Key_Up)
-			{
-				if (history_position_ != 0) retrieveHistoryLine_(history_position_ - 1);
-				return;
-			}
-			else if (e->key() == Key_Down)
-			{
-				retrieveHistoryLine_(history_position_ + 1);
-				return;
-			}
-			else if (e->key() == Key_Home)
-			{
-				setCursorPosition(row, 4);
-				return;
-			}
-			else if (e->key() == Key_Return)
-			{
-				if (!returnPressed()) return;
-			}
-			else if (e->key() == Key_PageUp)
-			{
-				return;
-			}
-			else if (e->key() == Key_PageDown)
-			{
-				return;
-			}
-
-			QTextEdit::keyPressEvent(e);
-		} 
-
-
-		void PyWidgetData::dump(std::ostream& s, Size depth) const
-			throw()
-		{
-			BALL_DUMP_STREAM_PREFIX(s);
-
-			BALL_DUMP_HEADER(s, this, this);
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "multiline_mode : " << multi_line_mode_<< std::endl;
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "multi_line_text  : " << multi_line_text_<< std::endl;
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "history : "<< std::endl;
 			
-			for (Position i = 0; i < history_.size(); i++)
-			{
-				BALL_DUMP_DEPTH(s, depth);
-				s << history_[i]<< std::endl;
-			}
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "history_position : " << history_position_ << std::endl;
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "current_line : " << current_line_ << std::endl;
-
-			BALL_DUMP_STREAM_SUFFIX(s);
+			line_edit_->setText(history_[index].c_str());
 		}
 
-
-		String PyWidgetData::getCurrentLine_()
+		bool PyWidget::returnPressed()
 		{
-			int row, col;
-			getCursorPosition(&row, &col);
-			return String(text(row).ascii());
-		}
+			if (multi_line_mode_) parseLine_(ascii(line_edit_->text()));
+			else 									newPrompt_();
 
-
-		bool PyWidgetData::runFile(const String& filename)
-		{
-			stop_script_ = false;
-			append(String("> executing script from " + filename + "\n").c_str());
-			LineBasedFile file;
-			try
-			{
-				file.open(filename);
-			}
-			catch	(...)
-			{
-				append(String("> Could not find file " + filename + "\n").c_str());
-				newPrompt_();
-				return false;
-			}
-
-			while (file.readLine())
-			{
-				// Call parse line with 'silent = true' to make sure we do not get prompts
-				// for each line read.
-				if (!parseLine_(file.getLine(), true))
-				{
-					String result_string = "> Error in line " + String(file.getLineNumber()) + " of file " + filename + "\n";
-					append(result_string.c_str());
-					newPrompt_();
-					return false;
-				}
-
-				if (stop_script_) 
-				{
-					stop_script_ = false;
- 					((PyWidget*)parent())->setStatusbarText("Aborted script");
-					append("> aborted...");
-					newPrompt_();
-					return false;
-				}
-			}
-			append("> Finished.");
-			((PyWidget*)parent())->setStatusbarText("Finished script.");
-			newPrompt_();
 			return true;
 		}
 
-		void PyWidget::scriptDialog()
+		void PyWidget::startInterpreter()
 		{
-			if (working_dir_ == "") working_dir_ = getWorkingDir();
+			stop_script_ = false;
+			// initialize the interpreter
+ 			PyInterpreter::initialize();
 
-			QString s = QFileDialog::getOpenFileName(
-										working_dir_.c_str(),
-										"Python Scripts(*.py)",
-										getMainControl(),
-										"Run Python Script",
-										"Choose a Python script" );
-
-		 	if (s == QString::null) return;
-			setWorkingDirFromFilename_(s.ascii());
-			working_dir_ = getWorkingDir();
-
-			run(s.ascii());
-		}
-
-		void PyWidgetData::exportHistory()
-		{
-			PyWidget* p = (PyWidget*) parent();
-			QString s = QFileDialog::getSaveFileName(
-										p->getWorkingDir().c_str(),
-										"",
-										p->getMainControl(),
-										"Export History",
-										"");
-
-		 	if (s == QString::null) return;
-			String filename(s.ascii());
-			p->setWorkingDirFromFilename_(filename);
-
-			File file(filename, std::ios::out);
-			if (!file.isOpen()) 
+			if (!PyInterpreter::isValid())
 			{
-				append(String("> Could not export history to file " + filename + "\n").c_str());
-				newPrompt_();
 				return;
 			}
-					
-			for (Position p = 0; p < history_.size(); p++)
-			{
-				if (results_[p]) file << history_[p] << std::endl;
-			}
 
-			file.close();
-		}
+			// print the PyBALL version and clear
+			// the widget's contents in case of a restart
+			text_edit_->clear();
+			appendText((String("BALL ") + VersionInfo::getVersion()).c_str());
 
-		void PyWidgetData::clear()
-		{
-			QTextEdit::clear();
+			// print the first prompt 
+			multi_line_mode_ = false;
 			newPrompt_();
+			history_position_ = history_.size() + 1;
 		}
 
-		void PyWidgetData::paste()
-		{
-			int row, col;
-			getCursorPosition(&row, &col);
-
-			if (row != paragraphs()-1)
-			{
-				setCursorPosition(paragraphs()-1, paragraphLength(paragraphs() -1) -1);
-			}
-
-			QTextEdit::paste();
-		}
-
-
-		void PyWidgetData::contentsDragEnterEvent(QDragEnterEvent * e)
-		{
-			e->accept(QTextDrag::canDecode(e));
-		}
-
-		void PyWidgetData::contentsDropEvent(QDropEvent *e)
-		{
-			VIEW::processDropEvent(e);
-		}
-
-// ######################################################################################################
-
-		PyWidget::PyWidget(QWidget *parent, const char *name)
-			throw()
-			: DockWidget(parent, name),
-				text_edit_(new PyWidgetData(this)),
-				working_dir_(""),
-				valid_(false),
-				started_startup_script_(false),
-				last_id_(0)
-		{
-		#ifdef BALL_VIEW_DEBUG
-			Log.error() << "new PyWidget " << this << std::endl;
-		#endif
-			default_visible_ = false;
-			setGuest(*text_edit_);
-			registerWidget(this);
-		}
-
-		PyWidget::~PyWidget()
-			throw()
-		{}
-
-		void PyWidget::initializeWidget(MainControl& main_control)
-			throw()
-		{
-//   			insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
-
-			DockWidget::initializeWidget(main_control);
-			registerWidgetForHelpSystem(this, "pythonInterpreter.html");
-
-			Index id1 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", this , SLOT(scriptDialog()));
-			Index id2 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
-			Index id3 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
-
-			text_edit_->startInterpreter();
-
-			valid_ = PyInterpreter::isValid();
-	
-			if (!valid_)
-			{
-				menuBar()->setItemEnabled(id1, false);
-				menuBar()->setItemEnabled(id2, false);
-				menuBar()->setItemEnabled(id3, false);
-				text_edit_->setText("No Python support available:");
-				text_edit_->runString("import BALL");
-				text_edit_->setEnabled(false);
-				setStatusbarText("No Python support available! (See PyWidget)", true);
-				return;
-			}
-		}
-
-
-		void PyWidget::finalizeWidget(MainControl& main_control)
-			throw()
-		{
-			text_edit_->abortScript();
-			PyInterpreter::finalize();
-
-			DockWidget::finalizeWidget(main_control);
-		}
-
-
-		void PyWidget::initializePreferencesTab(Preferences &preferences)
-			throw()
-		{
-			text_edit_->python_settings_= new PythonSettings();
-			preferences.insertEntry(text_edit_->python_settings_);
-			preferences_ = &preferences;
-		}
-
-		void PyWidget::finalizePreferencesTab(Preferences &preferences)
-			throw()
-		{
-			if (text_edit_->python_settings_ != 0)
-			{
-				preferences.removeEntry(text_edit_->python_settings_);
-				text_edit_->python_settings_ = 0;
-			}
-		}
-
-		void PyWidget::applyPreferences()
-			throw()
-		{
-			DockWidget::applyPreferences();
-
-			if (text_edit_->python_settings_ == 0)
-			{
-				return;	
-			}
-
- 			hotkeys_ = (text_edit_->python_settings_->getContent());
-
-			QPopupMenu* menu = getMainControl()->initPopupMenu(MainControl::USER);
-			menu->clear();
-			disconnect(menu, SIGNAL(highlighted(int)), this, SLOT(activatedMenuItem_(int)));
-			connect(menu, SIGNAL(highlighted(int)), this, SLOT(activatedMenuItem_(int)));
-
-			List<Hotkey>::Iterator it = hotkeys_.begin();
-			for (; it != hotkeys_.end(); it++)
-			{
-				String entry = (*it).action;
-				if (entry.size() > 35)
-				{ 
-					entry.truncate(32);
-					entry += "...";
-				}
-
- 				insertMenuEntry(MainControl::USER, entry.c_str(), this, SLOT(hotkeyItem()));
-				setMenuHint("Perform a user defined action per Python interface");
-				setMenuHelp("pythonInterpreter.html#create_hotkeys");
-			}
-
-			getMainControl()->insertPopupMenuSeparator(MainControl::USER);
- 			insertMenuEntry(MainControl::USER, "Modify", this, SLOT(modifyHotkeys()));
-			setMenuHint("Manage user defined Python commands");
-			setMenuHelp("pythonInterpreter.html#create_hotkeys");
-
-			/////////////////////////////////////////
-			// startup script
-			/////////////////////////////////////////
-			if (started_startup_script_ || !isValid())
-			{
-				return;
-			}
-
-			started_startup_script_ = true;
-
-			String startup = getDataPath() + "startup.py";
-			if (!text_edit_->runFile(startup))
-			{
-				Log.error() << "Could not find startup script. Please set the correct path to the data path!" << std::endl;
-				Log.error() << "To do so set the environment variable BALL_DATA_PATH or BALLVIEW_DATA_PATH." << std::endl;
-			}
-			
-			String user_startup = text_edit_->python_settings_->getFilename();
-			if (user_startup == "") 
-			{
-				return;	
-			}
-
-			text_edit_->runFile(user_startup);
-		}
-
-		void PyWidget::modifyHotkeys()
-		{
- 			preferences_->showEntry(text_edit_->python_settings_->widget_stack->widget(1));
-			preferences_->show();
-		}
-
-		void PyWidget::activatedMenuItem_(int id)
-		{
-			last_id_ = id;
-		}
-
-		void PyWidget::hotkeyItem()
-		{
-			if (last_id_ == 0) 
-			{
-				BALLVIEW_DEBUG;
-				return;
-			}
-
-			QMenuItem* data = menuBar()->findItem(MainControl::USER);
-			QPopupMenu* menu = data->popup();
-			Index hotkey_num = -1;
-			for (Position p= 0; p < hotkeys_.size(); p++)
-			{
-				if (last_id_ == menu->idAt(p))
-				{
-					hotkey_num = p;
-				}
-			}
-
-			if (hotkey_num == -1) 
-			{
-				BALLVIEW_DEBUG;
-				return;
-			}
-
-			List<Hotkey>::iterator it = hotkeys_.begin();
-			for (Position p = 1; p <= (Position)hotkey_num; p++)
-			{
-				it++;
-			}
-
-			text_edit_->runString((*it).action);
-		}
-
-		void PyWidgetData::abortScript()
-		{
-			((PyWidget*)(parent()))->setStatusbarText("Aborting Python script");
-			 stop_script_ = true;
-		}
-
-		PyWidget::PyWidget(const PyWidget& p)
-			throw()
-		 : DockWidget(p)
-		{}
-
-		bool PyWidget::toAbortScript() throw() 
-		{
-			return text_edit_->stop_script_;
-		}
-
-		void PyWidget::insertHotkey(const Hotkey& hotkey) 
-			throw()
-		{
-			List<Hotkey>::iterator it = hotkeys_.begin();
-			for (; it != hotkeys_.end(); it++)
-			{
-				if ((*it) == hotkey) return;
-			}
-
-			hotkeys_.push_back(hotkey);
-		}
-
-		void PyWidget::removeHotkey(const Hotkey& hotkey) 
-			throw()
-		{
-			List<Hotkey>::iterator it = hotkeys_.begin();
-			for (; it != hotkeys_.end(); it++)
-			{
-				if ((*it) == hotkey) return;
-			}
-
-			hotkeys_.erase(it);
-		}
-
-		void PyWidget::reactTo(const QKeyEvent& e) 
-			throw() 
-		{
-			// doesnt work, no idea yet why:
-			/*
-			if (getMainControl()->compositesAreLocked() ||
-					getMainControl()->getPrimitiveManager().updateRunning())
-			{
-				return;
-			}
-			*/
-
-			List<Hotkey>::iterator it = hotkeys_.begin();
-			for (; it != hotkeys_.end(); it++)
-			{
-				if ((*it) == e) 
-				{
-					text_edit_->runString((*it).action);
-					return;
-				}
-			}
-		}
-
-		bool PyWidget::run(const String& filename) throw() 
-		{
-			last_script_ = filename;
-			return text_edit_->runFile(filename);
-		}
-			
-		bool PyWidget::runAgain()
-		{
-			return run(last_script_);
-		}
 
 	} // namespace VIEW
 } // namespace BALL

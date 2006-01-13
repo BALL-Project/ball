@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.22 2005/12/23 17:02:15 amoll Exp $
+// $Id: modularWidget.h,v 1.22.2.1 2006/01/13 15:35:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -18,6 +18,8 @@
 class QObject;
 class QMenuBar;
 class QWidget;
+class QAction;
+class QKeySequence;
 
 namespace BALL
 {
@@ -226,12 +228,9 @@ namespace BALL
 			bool unlockComposites()
 				throw();
 
-			/// Wrapper for MainControl::menuBar()
-			QMenuBar* menuBar() 
-				throw();
-
-			Index insertMenuEntry (Index parent_id, const String& name, const QObject* receiver = 0, 
-													 const char* slot = 0, Index accel = 0, Index pos = -1)
+			///
+			QAction* insertMenuEntry (Position parent_id, const String& name, const QObject* receiver = 0, 
+													 const char* slot = 0, const QKeySequence& accel = 0)
 				throw();
 
 			///
@@ -241,10 +240,7 @@ namespace BALL
 			void setMenuHelp(const String& url);
 
 			///
-			virtual void registerWidgetForHelpSystem(const QWidget* widget, const String& url);
-
-			///
-			virtual void registerMenuEntryForHelpSystem(Index entry, const String& docu_entry);
+			virtual void registerForHelpSystem(const QObject* object, const String& url);
 
 			//@}
 			/**	@name	Debugging and Diagnostics
@@ -266,14 +262,12 @@ namespace BALL
 			void setWorkingDirFromFilename_(String filename)
 				throw();
 
-			void removeMenuEntries();
-
 			virtual void showHelp(const String& url);
 
 			protected:
 
 			//_ id in the menubar entry "WINDOWS" for every widget
-			Index window_menu_entry_id_;
+			QAction* window_menu_entry_;
 
 			//_ should there be an entry to switch the window on and off?
 			bool show_window_enty_;
@@ -281,9 +275,7 @@ namespace BALL
 			//_ should the widget be visible, if no config file entry exists?
 			bool default_visible_;
 
-			vector<std::pair<Index, Index> > menu_ids_;
-
-			Index last_parent_id_, last_id_;
+			QAction* last_action_;
 		}; 
   
 	} // namespace VIEW

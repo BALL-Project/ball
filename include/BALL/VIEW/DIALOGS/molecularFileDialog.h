@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.21 2005/12/23 17:02:11 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.21.2.1 2006/01/13 15:35:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -14,8 +14,6 @@
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
-
-#include <qfiledialog.h>
 
 namespace BALL
 {
@@ -185,7 +183,7 @@ namespace BALL
 				SD_FILE
 			};
 
-			Index save_id_, open_id_;
+			QAction* save_id_, *open_id_;
 		};
 
 	} // namespace VIEW

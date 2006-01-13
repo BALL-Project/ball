@@ -5,12 +5,13 @@
 #include <BALL/VIEW/DIALOGS/molecularDynamicsDialog.h>
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
+#include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <qfiledialog.h>
+#include <QFileDialog>
 #include <qlineedit.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 
@@ -20,11 +21,26 @@ namespace BALL
 	{
 
 MolecularDynamicsDialog::MolecularDynamicsDialog(QWidget* parent, const char* name)
-	:	MolecularDynamicsDialogData( parent, name ),
+	:	QDialog(parent),
+		Ui_MolecularDynamicsDialogData(),
 		amber_dialog_(0),
 		charmm_dialog_(0)
 {
 	setINIFileSectionName("MDSIMULATION");
+
+	setupUi(this);
+	setObjectName(name);
+	
+	// signals and slots connections
+	connect( start_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
+	connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
+	connect( steps_lineedit, SIGNAL( textChanged(const QString&) ), this, SLOT( timeChanged() ) );
+	connect( timestep_linedit, SIGNAL( textChanged(const QString&) ), this, SLOT( timeChanged() ) );
+	connect( enable_dcd, SIGNAL( clicked() ), this, SLOT( enableDCDFileSelected() ) );
+	connect( advanced_button, SIGNAL( clicked() ), this, SLOT( advancedOptions() ) );
+	connect( useAmberRadioButton, SIGNAL( clicked() ), this, SLOT( useAmberFF() ) );
+	connect( useCharmmRadioButton, SIGNAL( clicked() ), this, SLOT( useCharmmFF() ) );
+	connect( browse_button, SIGNAL( clicked() ), this, SLOT( chooseDCDFile() ) );
 
 	registerObject_(temperature_lineedit);
 	registerObject_(timestep_linedit);
@@ -40,7 +56,7 @@ float MolecularDynamicsDialog::getSimulationTime() const
 {
 	try
 	{
-		return String(time_lineedit->text().ascii()).toFloat();
+		return ascii(time_lineedit->text()).toFloat();
 	}
 	catch(...)
 	{
@@ -57,7 +73,7 @@ float MolecularDynamicsDialog::getTimeStep() const
 {
 	try
 	{
-		return String(timestep_linedit->text().ascii()).toFloat();
+		return ascii(timestep_linedit->text()).toFloat();
 	}
 	catch(...)
 	{
@@ -69,7 +85,7 @@ Size MolecularDynamicsDialog::getNumberOfSteps() const
 {
 	try
 	{
-		return (Size)String(steps_lineedit->text().ascii()).toUnsignedInt();
+		return (Size)ascii(steps_lineedit->text()).toUnsignedInt();
 	}
 	catch(...)
 	{
@@ -108,7 +124,7 @@ float MolecularDynamicsDialog::getTemperature() const
 {
 	try
 	{
-		return (Size)String(temperature_lineedit->text().ascii()).toFloat();
+		return (Size)ascii(temperature_lineedit->text()).toFloat();
 	}
 	catch(...)
 	{
@@ -129,12 +145,12 @@ void MolecularDynamicsDialog::enableDCDFileSelected()
 String MolecularDynamicsDialog::getDCDFile() const
 {
 	if (!dcd_file_edit->isEnabled()) return "";
-	return String(dcd_file_edit->text().ascii());
+	return ascii(dcd_file_edit->text());
 }
 
 Size MolecularDynamicsDialog::getStepsBetweenRefreshs() const
 {
-	return String(refresh_lineedit->text().ascii()).toUnsignedInt();
+	return ascii(refresh_lineedit->text()).toUnsignedInt();
 }
 
 void MolecularDynamicsDialog::advancedOptions()
@@ -178,7 +194,8 @@ bool MolecularDynamicsDialog::getUseAmber()
 
 void MolecularDynamicsDialog::chooseDCDFile()
 {
-	QString result = QFileDialog::getSaveFileName("", "*.dcd", 0, "Choose a DCDFile");
+	QString result = QFileDialog::getSaveFileName(0, "Choose a DCDFile",
+																	getMainControl()->getWorkingDir().c_str(), "*.dcd");
 	if (result != "") dcd_file_edit->setText(result);
 }
 

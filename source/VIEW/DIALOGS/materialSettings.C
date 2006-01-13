@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.11 2005/12/23 17:03:26 amoll Exp $
+// $Id: materialSettings.C,v 1.11.2.1 2006/01/13 15:35:51 amoll Exp $
 // 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
@@ -15,11 +15,21 @@ namespace BALL
 	namespace VIEW
 	{
 
-		MaterialSettings::MaterialSettings(QWidget* parent, const char* name, WFlags fl)
-			: MaterialSettingsData( parent, name, fl ),
+		MaterialSettings::MaterialSettings(QWidget* parent, const char* name, Qt::WFlags fl)
+			: QDialog(parent, fl),
+				Ui_MaterialSettingsData(),
 				PreferencesEntry()
 		{
+			setupUi(this);
+			setObjectName(name);
 			setINIFileSectionName("MATERIAL_SETTINGS");
+			
+			// signals and slots connections
+			connect( specular_slider, SIGNAL( valueChanged(int) ), this, SLOT( specularChanged() ) );
+			connect( diffuse_slider, SIGNAL( valueChanged(int) ), this, SLOT( diffuseChanged() ) );
+			connect( ambient_slider, SIGNAL( valueChanged(int) ), this, SLOT( ambientChanged() ) );
+			connect( diffuse_slider, SIGNAL( valueChanged(int) ), this, SLOT( diffuseChanged() ) );
+			connect( shininess_slider, SIGNAL( valueChanged(int) ), this, SLOT( shininessChanged() ) );
 
 			specular_slider->setValue((Index)(0.774 * 10.0));
 			diffuse_slider->setValue((Index)(0.4   	* 10.0));

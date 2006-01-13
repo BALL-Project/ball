@@ -1,24 +1,27 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editOperationDialog.C,v 1.9 2005/12/23 17:03:25 amoll Exp $
+// $Id: editOperationDialog.C,v 1.9.2.1 2006/01/13 15:35:49 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/editOperationDialog.h>
 #include <BALL/VIEW/WIDGETS/editableScene.h>
 
 #include <qtooltip.h>
-#include <qbuttongroup.h>
-#include <qbutton.h>
-#include <qlistbox.h>
+#include <q3buttongroup.h>
+#include <q3button.h>
+#include <q3listbox.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		EditOperationDialog::EditOperationDialog(QWidget* parent, const char* name, WFlags fl)
-			: EditOperationDialogData(parent, name, fl),
+		EditOperationDialog::EditOperationDialog(QWidget* parent, const char* name, Qt::WFlags fl)
+			: QWidget(parent, name, fl),
+				Ui_EditOperationDialogData(),
 				ModularWidget(name)
 		{	
+			setupUi(this);
+
 			EditableScene* scene = EditableScene::getInstance(0);
 
 			if (scene == 0)
@@ -30,7 +33,7 @@ namespace BALL
 				connect(scene, SIGNAL(newEditOperation(EditableScene::EditOperation&)),
 								this,    SLOT(addEditOperation(EditableScene::EditOperation&)));
 			}
-			undo_operation_list->setSelectionMode(QListBox::Extended);	
+			undo_operation_list->setSelectionMode(Q3ListBox::Extended);	
 		}
 
 

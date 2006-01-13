@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.22 2005/12/23 17:02:09 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.22.2.1 2006/01/13 15:35:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -21,7 +21,7 @@
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif 
 
-#include <qtable.h>
+#include <QTableWidget>
 #include <vector>
 			
 namespace BALL
@@ -32,26 +32,9 @@ namespace BALL
 	{
 		class ColorProcessor;
 
-		class BALL_VIEW_EXPORT QColorTableItem 
-			: public QTableItem
-		{
-			public:
-				QColorTableItem(QTable* t, EditType et, const ColorRGBA& color);
-				
-				void paint( QPainter *p, const QColorGroup &cg, const QRect &cr, bool selected );
-				
-				void setColor(ColorRGBA color) { color_rgba_ = color;}
-				
-				const ColorRGBA& getColor() const { return color_rgba_;}
-
-			protected:
-				ColorRGBA color_rgba_;
-		};
-
-
 		///
 		class BALL_VIEW_EXPORT QColorTable
-			:	public QTable,
+			:	public QTableWidget,
 				public PreferencesEntry::ExtendedPreferencesObject
 		{
 				Q_OBJECT
@@ -86,7 +69,9 @@ namespace BALL
 
 			private slots:
 				
-				QWidget* beginEdit(int row, int col, bool replace);
+				void beginEdit(int row, int col);
+
+				virtual void mousePressEvent(QMouseEvent* event);
 				
 			private:
 				vector<ColorRGBA> colors_;
@@ -100,7 +85,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT ColoringSettingsDialog 
-			: public ColoringSettingsDialogData,
+			: public QDialog,
+				public Ui_ColoringSettingsDialogData,
 				public PreferencesEntry
 		{ 
 			Q_OBJECT
@@ -108,7 +94,7 @@ namespace BALL
 			public:
 
 			/// Constructor
-			ColoringSettingsDialog( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+			ColoringSettingsDialog( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
 
 			/// Destructor
 			~ColoringSettingsDialog() {}

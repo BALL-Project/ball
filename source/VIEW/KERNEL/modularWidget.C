@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.24 2005/12/23 17:03:32 amoll Exp $
+// $Id: modularWidget.C,v 1.24.2.1 2006/01/13 15:36:01 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -22,10 +22,10 @@ namespace BALL
 			throw()
 			: Embeddable(),
 				ConnectionObject(),
-				window_menu_entry_id_(-1),
+				window_menu_entry_(0),
 				show_window_enty_(false),
 				default_visible_(true),
-				last_id_(-1)
+				last_action_(0)
 		{
 			if (name) setIdentifier(name);
 		}
@@ -34,7 +34,7 @@ namespace BALL
 			throw()
 			: Embeddable(widget),
 				ConnectionObject(widget),
-				last_id_(-1)
+				last_action_(0)
 		{
 		}
 
@@ -68,15 +68,19 @@ namespace BALL
 
 			if (!RTTI::isKindOf<QObject>(*mwidget)) 
 			{
-				Log.error() << "ModularWidget::ModularWidget: widget " << mwidget << " is not " 
-										<< "in a MainControl object!" << endl;
+				Log.error() << "ModularWidget::ModularWidget: widget " 
+										<< mwidget << " is not " 
+										<< "a QObject!" << endl;
 				return;
 			}
 
-			MainControl* mc = MainControl::getMainControl(dynamic_cast<QObject*>(mwidget));
+			QObject* object = dynamic_cast<QObject*>(mwidget);
+			MainControl* mc = MainControl::getMainControl(object);
 			if (!mc)
 			{
-				Log.error() << "ModularWidget::ModularWidget(): widget " << mwidget << " is not in a MainControl object!" << endl;
+				Log.error() << "ModularWidget::ModularWidget(): widget " 
+										<< ascii(object->objectName()) << " " 
+										<< mwidget << " is not in a MainControl object!" << endl;
 				return;
 			}
 
@@ -93,7 +97,6 @@ namespace BALL
 
 		void ModularWidget::finalizeWidget(MainControl& /* main_control */)
 		{
-			removeMenuEntries();
 		}
 
 		void ModularWidget::checkMenu(MainControl& /* main_control */)
@@ -136,10 +139,10 @@ namespace BALL
 			QWidget* widget= dynamic_cast<QWidget*>(this);
 			if (!widget) return;
 
-			if (window_menu_entry_id_ != -1)
+			if (window_menu_entry_ != 0)
 			{
 				inifile.insertValue("WINDOWS", getIdentifier() + "::on", 
-					String(getMainControl()->menuBar()->isItemChecked(window_menu_entry_id_)));
+					String(window_menu_entry_->isChecked()));
 			}
 
 			inifile.insertValue("WINDOWS", getIdentifier() + "::x", String(widget->x()));
@@ -181,12 +184,6 @@ namespace BALL
 			throw()
 		{
 			ConnectionObject::dump(s, depth);
-		}
-
-		QMenuBar* ModularWidget::menuBar()
-			throw()
-		{
-			return getMainControl()->menuBar();
 		}
 
 		String ModularWidget::getWorkingDir()
@@ -232,55 +229,39 @@ namespace BALL
 			return getMainControl()->unlockCompositesFor(this);
 		}
 
-		void ModularWidget::removeMenuEntries()
-		{
-			if (getMainControl() == 0) return;
-
-			for (Position i = 0; i < menu_ids_.size(); i++)
-			{
-				getMainControl()->removeMenuEntry(menu_ids_[i].first, menu_ids_[i].second);
-			}
-
-			menu_ids_.clear();
-			last_id_ = -1;
-		}
-				
-		Index ModularWidget::insertMenuEntry(Index parent_id, const String& name, 
-												const QObject* receiver, const char* slot, Index accel, Index pos)
+		QAction* ModularWidget::insertMenuEntry(Position menu_id, const String& name, 
+												const QObject* receiver, const char* slot, const QKeySequence& shortcut)
 			throw()
 		{
-			if (getMainControl() == 0) return -1;
+			if (getMainControl() == 0) return 0;
 
-			last_id_ = getMainControl()->insertMenuEntry(parent_id, name, receiver, slot, accel, pos);
-			if (last_id_ == -1) return -1;
+			last_action_ = getMainControl()->insertMenuEntry(menu_id, name, receiver, slot, shortcut);
 
-			menu_ids_.push_back(pair<Index, Index>(parent_id, last_id_));
-
-			last_parent_id_ = parent_id;
-
-			return last_id_;
+			return last_action_;
 		}
 
 		void ModularWidget::setMenuHint(const String& hint)
 		{
-			if (last_id_ 				== -1 ||
+			if (last_action_ 		 == 0 ||
 					getMainControl() == 0)
 			{
 				return;
 			}
 
-			getMainControl()->setMenuHint(last_id_, hint);
+			last_action_->setToolTip(hint.c_str());
+
+ 			getMainControl()->setMenuHint(last_action_, hint);
 		}
 
 		void ModularWidget::setMenuHelp(const String& url)
 		{
-			if (last_id_ 				== -1 ||
+			if (last_action_ 			== 0 ||
 					getMainControl() == 0)
 			{
 				return;
 			}
 
-			registerMenuEntryForHelpSystem(last_id_, url);
+			registerForHelpSystem(last_action_, url);
 		}
 
 		void ModularWidget::showHelp(const String& url)
@@ -288,22 +269,13 @@ namespace BALL
 			notify_(new ShowHelpMessage(url));
 		}
 
-		void ModularWidget::registerWidgetForHelpSystem(const QWidget* widget, const String& url)
+		void ModularWidget::registerForHelpSystem(const QObject* object, const String& url)
 		{
 			RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
-			msg->setWidget(widget);
+			msg->setObject(object);
 			msg->setURL(url);
 			notify_(msg);
 		}
-
-		void ModularWidget::registerMenuEntryForHelpSystem(Index entry, const String& docu_entry)
-		{
-			RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
-			msg->setMenuEntry(entry);
-			msg->setURL(docu_entry);
-			notify_(msg);
-		}
-
 
 	} // namespace VIEW
 } // namespace BALL

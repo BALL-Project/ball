@@ -1,7 +1,9 @@
+//Added by qt3to4:
+#include <QTimerEvent>
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: QTTimer.h,v 1.25 2005/12/23 17:02:13 amoll Exp $
+// $Id: QTTimer.h,v 1.25.2.1 2006/01/13 15:35:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H

@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <QCustomEvent>
 #ifndef BALL_VIEW_KERNEL_THREADS_H
 #define BALL_VIEW_KERNEL_THREADS_H
 
@@ -280,21 +282,21 @@ namespace VIEW
 				This should only be used internaly.
 		*/
 		class BALL_VIEW_EXPORT SimulationThreadFinished
-			: public QCustomEvent
+			: public QEvent
 		{
 			public:
 				SimulationThreadFinished()
-					: QCustomEvent( SIMULATION_THREAD_FINISHED_EVENT ){}
+					: QEvent((QEvent::Type)SIMULATION_THREAD_FINISHED_EVENT ){}
 		};
 
 		///
 		class BALL_VIEW_EXPORT UpdateCompositeEvent
-			: public QCustomEvent
+			: public QEvent
 		{
 			public:
 				///
 				UpdateCompositeEvent()
-					:QCustomEvent(UPDATE_COMPOSITE_EVENT),
+					:QEvent((QEvent::Type)UPDATE_COMPOSITE_EVENT),
 					 composite_(0){}
 
 				///
@@ -309,13 +311,24 @@ namespace VIEW
 		
 		///
 		class BALL_VIEW_EXPORT FinishedRepresentionUpdateEvent
-			: public QCustomEvent
+			: public QEvent
 		{
 			public:
 				///
 				FinishedRepresentionUpdateEvent()
-					:QCustomEvent(FINISHED_REPRESENTATION_UPDATE_EVENT)
+					:QEvent((QEvent::Type)FINISHED_REPRESENTATION_UPDATE_EVENT),
+					 rep_(0)
 				{}
+
+				///
+				void setRepresentation(Representation* rep) { rep_ = rep;}
+
+				///
+				Representation* getRepresentation() { return rep_;}
+
+			protected:
+
+				Representation* rep_;
 		};
 
 		/// Thread for Docking
@@ -356,19 +369,19 @@ namespace VIEW
 
 		///
 		class BALL_EXPORT DockingFinishedEvent
-			: public QCustomEvent
+			: public QEvent
 		{
 			public:
 				
 				///
 				DockingFinishedEvent()
-					:QCustomEvent(DOCKING_FINISHED_EVENT),
+					:QEvent((QEvent::Type)DOCKING_FINISHED_EVENT),
 					 conformation_set_(0)
 				{}
 
 				///
 				DockingFinishedEvent(bool abort)
-					:QCustomEvent(DOCKING_FINISHED_EVENT),
+					:QEvent((QEvent::Type)DOCKING_FINISHED_EVENT),
 					 conformation_set_(0)
 				{
 				 	abort_ = abort;

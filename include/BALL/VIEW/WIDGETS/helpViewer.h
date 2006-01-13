@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.2 2005/12/23 17:02:23 amoll Exp $
+// $Id: helpViewer.h,v 1.2.2.1 2006/01/13 15:35:34 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -11,7 +11,7 @@
 #	include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
-#include <qtextbrowser.h>
+#include <QTextBrowser>
 
 namespace BALL
 {
@@ -29,13 +29,13 @@ namespace BALL
 
 			public slots:
 
-			void setBackwardAvailable(bool b);
+//   			void setBackwardAvailable(bool b);
 
-			void setForwardAvailable(bool b);
+//   			void setForwardAvailable(bool b);
 
 			protected:
 
-			virtual QPopupMenu* createPopupMenu(const QPoint& pos);
+//   			virtual QMenu* createPopupMenu(const QPoint& pos);
 
 			bool forward_, backward_;
 		};
@@ -99,34 +99,22 @@ namespace BALL
 			const String& getBaseDirectory() const;
 
 			/// Register a widget for showing its documentation
-			virtual void registerWidgetForHelpSystem(const QWidget* widget, const String& docu_entry);
+			virtual void registerForHelpSystem(const QObject* object, const String& docu_entry);
 
 			/// Unregister a widget for showing its documentation
-			void unregisterWidgetForHelpSystem(const QWidget* widget);
-
-			/// Register a menu entry for showing its documentation
-			virtual void registerMenuEntryForHelpSystem(Index entry, const String& docu_entry);
-			
-			/// Unregister a menu entry for showing its documentation
-			void unregisterMenuEntryForHelpSystem(Index id);
-			
-			/// Test if we have a documentation entry for the menu entry id
-			bool hasHelpFor(Index id) const;
+			void unregisterForHelpSystem(const QObject* object);
 
 			/// Show the documentation entry for a given widget
-			bool showHelpFor(const QWidget* widget);
+			bool showHelpFor(const QObject* object);
 
 			/// Show documentation for object under cursor
 			bool showDocumentationForObject();
 
-			/// Check wheter we have a documentation entry for a given widget
-			bool hasHelpFor(const QWidget* widget) const;
-
-			/// Get help entry for menu entry
-			String getHelpEntryFor(Index id) const;
+			/// Check wheter we have a documentation entry for a given object
+			bool hasHelpFor(const QObject* object) const;
 
 			/// Get help entry for widget
-			String getHelpEntryFor(const QWidget* widget) const;
+			String getHelpEntryFor(const QObject* object) const;
 					
 			public slots:
 
@@ -150,10 +138,7 @@ namespace BALL
 			bool 						whats_this_mode_;
 			bool 						ignore_event_;
 
-			HashMap<const QWidget*, String> docu_for_widget_;
-
-			HashMap<Index, String> docu_for_menu_entry_;
-
+			HashMap<const QObject*, String> docu_entries_;
 		};
   	
 } } // namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.20 2005/12/23 17:03:22 amoll Exp $
+// $Id: FDPBDialog.C,v 1.20.2.1 2006/01/13 15:35:40 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -13,18 +13,18 @@
 
 #include <qlineedit.h>
 #include <qpushbutton.h>
-#include <qfiledialog.h>
-#include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
+#include <QFileDialog>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		FDPBDialog::FDPBDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
-			: FDPBDialogData(parent, name, modal, fl),
+		FDPBDialog::FDPBDialog(QWidget* parent,  const char* name, bool modal, Qt::WFlags fl)
+			: QDialog(parent, fl),
+				Ui_FDPBDialogData(),
 				ModularWidget("FDPBDialog"),
 				system_(0),
 				thread_(0)
@@ -35,6 +35,19 @@ namespace BALL
 			registerWidget(this);
 
 			setINIFileSectionName("FDPB");
+
+			setupUi(this);
+			setObjectName(name);
+			setModal(modal);
+			
+			// signals and slots connections
+			connect( radii_data_browse, SIGNAL( clicked() ), this, SLOT( browseRadiiData() ) );
+			connect( radii_rules_browse, SIGNAL( clicked() ), this, SLOT( browseRadiiRules() ) );
+			connect( ok_button, SIGNAL( clicked() ), this, SLOT( okPressed() ) );
+			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( cancelPressed() ) );
+			connect( reset_button, SIGNAL( clicked() ), this, SLOT( resetPressed() ) );
+			connect( charges_rules_browse, SIGNAL( pressed() ), this, SLOT( browseChargesRules() ) );
+			connect( charges_data_browse, SIGNAL( clicked() ), this, SLOT( browseChargesData() ) );
 
 			registerObject_(radii_data_lineedit);
 			registerObject_(radii_rules_lineedit);
@@ -71,8 +84,8 @@ namespace BALL
 			#ifdef BALL_QT_HAS_THREADS
 				if (thread_ != 0)
 				{
-					if (thread_->running()) thread_->terminate();
-					if (thread_->running()) thread_->wait();
+					if (thread_->isRunning()) thread_->terminate();
+					if (thread_->isRunning()) thread_->wait();
 					delete thread_;
 				}
 			#endif
@@ -124,11 +137,10 @@ namespace BALL
 			throw()
 		{
 			QString s = QFileDialog::getOpenFileName(
+										0,
+										"Choose a file",
 										"",
-										"",
-										getMainControl(),
-										"",
-										"Choose a file" );
+										"");
 
 			if (s == QString::null) return;
 			lineedit.setText(s);
@@ -211,15 +223,15 @@ namespace BALL
 			throw()
 		{
 			/// ------------------------------
-			options_[FDPB::Option::SOLVENT_DC] 						= String(dc_solvent->text().ascii()).toFloat();
-			options_[FDPB::Option::SOLUTE_DC] 						= String(dc_interior->text().ascii()).toFloat();
-			options_[FDPB::Option::PROBE_RADIUS] 					= String(probe_radius->text().ascii()).toFloat();
-			options_[FDPB::Option::IONIC_STRENGTH] 				= String(ionic_strenght->text().ascii()).toFloat();
-			options_[FDPB::Option::ION_RADIUS] 						= String(ion_radius->text().ascii()).toFloat();
-			options_[FDPB::Option::SPACING] 							= String(spacing->text().ascii()).toFloat();
-			options_[FDPB::Option::BORDER]								= String(border->text().ascii()).toFloat();
-			options_[FDPB::Option::TEMPERATURE]						= String(temperature->text().ascii()).toFloat();
-			options_[FDPB::Option::MAX_ITERATIONS]				= String(max_iterations->text().ascii()).toFloat();
+			options_[FDPB::Option::SOLVENT_DC] 						= ascii(dc_solvent->text()).toFloat();
+			options_[FDPB::Option::SOLUTE_DC] 						= ascii(dc_interior->text()).toFloat();
+			options_[FDPB::Option::PROBE_RADIUS] 					= ascii(probe_radius->text()).toFloat();
+			options_[FDPB::Option::IONIC_STRENGTH] 				= ascii(ionic_strenght->text()).toFloat();
+			options_[FDPB::Option::ION_RADIUS] 						= ascii(ion_radius->text()).toFloat();
+			options_[FDPB::Option::SPACING] 							= ascii(spacing->text()).toFloat();
+			options_[FDPB::Option::BORDER]								= ascii(border->text()).toFloat();
+			options_[FDPB::Option::TEMPERATURE]						= ascii(temperature->text()).toFloat();
+			options_[FDPB::Option::MAX_ITERATIONS]				= ascii(max_iterations->text()).toFloat();
 
 			/// ------------------------------
 			if (boundary_zero->isChecked())
@@ -300,12 +312,12 @@ namespace BALL
 				{
 					if (charges_data_button->isChecked())
 					{
-						charge_processor_.setFilename(charges_data_lineedit->text().ascii());
+						charge_processor_.setFilename(ascii(charges_data_lineedit->text()));
 						if (!system_->apply(charge_processor_)) return false;
 					}
 					else
 					{
-						INIFile inifile(String(charges_rules_lineedit->text().ascii()));
+						INIFile inifile(ascii(charges_rules_lineedit->text()));
 						charge_rule_processor_ = ChargeRuleProcessor(inifile);
 						if (!system_->apply(charge_rule_processor_)) return false;
 					}
@@ -315,12 +327,12 @@ namespace BALL
 				{
 					if (radii_data_button->isChecked())
 					{
-						radius_processor_.setFilename(radii_data_lineedit->text().ascii());
+						radius_processor_.setFilename(ascii(radii_data_lineedit->text()));
 						if (!system_->apply(radius_processor_)) return false;
 					}
 					else
 					{
-						INIFile inifile(String(radii_rules_lineedit->text().ascii()));
+						INIFile inifile(ascii(radii_rules_lineedit->text()));
 						radius_rule_processor_ = RadiusRuleProcessor(inifile);
 						if (!system_->apply(radius_rule_processor_)) return false;
 					}

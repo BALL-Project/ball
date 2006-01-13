@@ -22,7 +22,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT MinimizationDialog 
-			: public MinimizationDialogData,
+			: public QDialog,
+				public Ui_MinimizationDialogData,
 				public PreferencesEntry
 		{
 				Q_OBJECT

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.43 2005/12/23 17:02:10 amoll Exp $
+// $Id: displayProperties.h,v 1.43.2.1 2006/01/13 15:35:24 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -49,7 +49,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT DisplayProperties 
-			: public DisplayPropertiesData,
+			: public QDialog,
+				public Ui_DisplayPropertiesData,
 				public ModularWidget,
 				public PreferencesEntry
 		{
@@ -281,7 +282,7 @@ namespace BALL
 			Preferences* 							preferences_;
 			
 			// the menu entry id of the dialog
-			int 						id_;
+			QAction*        id_;
 			
 			// used by GeometricControl to modify an existing representation
 			Representation* rep_;

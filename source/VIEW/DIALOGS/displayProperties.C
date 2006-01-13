@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101 2005/12/23 17:03:25 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.1 2006/01/13 15:35:46 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -29,11 +29,8 @@
 #include <qmenubar.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qcombobox.h>
 #include <qslider.h>
 #include <qradiobutton.h>
-#include <qlistbox.h>
-#include <qbuttongroup.h>
 #include <qtimer.h>
 
 namespace BALL
@@ -43,13 +40,13 @@ namespace BALL
 
 DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 	throw()
-	:	DisplayPropertiesData( parent, name ),
+	:	QDialog(parent),
+		Ui_DisplayPropertiesData(),
 		ModularWidget(name),
 		PreferencesEntry(),
 		model_settings_(0),
 		coloring_settings_(0),
 		preferences_(0),
-		id_(-1),
 		rep_(0),
 		advanced_options_modified_(false),
 		create_representations_for_new_molecules_(true),
@@ -58,18 +55,37 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new DisplayProperties " << this << std::endl;
 #endif
+	setupUi(this);
+
+	connect( coloring_method_combobox, SIGNAL( activated(int) ), this, SLOT( selectColoringMethod(int) ) );
+	connect( mode_combobox, SIGNAL( activated(int) ), this, SLOT( selectMode(int) ) );
+	connect( model_type_combobox, SIGNAL( activated(int) ), this, SLOT( selectModel(int) ) );
+	connect( precision_combobox, SIGNAL( activated(int) ), this, SLOT( precisionBoxChanged(int) ) );
+	connect( create_button, SIGNAL( clicked() ), this, SLOT( apply() ) );
+	connect( close_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
+	connect( coloring_options, SIGNAL( clicked() ), this, SLOT( coloringOptionsPressed() ) );
+	connect( custom_button, SIGNAL( clicked() ), this, SLOT( editColor() ) );
+	connect( edit_selection, SIGNAL( clicked() ), this, SLOT( editSelectionColor() ) );
+	connect( model_options, SIGNAL( clicked() ), this, SLOT( modelOptionsPressed() ) );
+	connect( precision_slider, SIGNAL( valueChanged(int) ), this, SLOT( precisionSliderChanged() ) );
+	connect( transparency_slider, SIGNAL( valueChanged(int) ), this, SLOT( transparencySliderChanged() ) );
+	connect( model_updates_enabled, SIGNAL( stateChanged(int) ), this, SLOT( modelUpdatesChanged() ) );
+	connect( coloring_updates_enabled, SIGNAL( stateChanged(int) ), this, SLOT( coloringUpdatesChanged() ) );
+	connect( modify_button, SIGNAL( clicked() ), this, SLOT( apply() ) );
+	
+	setObjectName(name);
 	ModularWidget::registerWidget(this);
 
 	model_type_combobox->clear();
 	for (Index p = 0; p < MODEL_LABEL; p++)
 	{
-		model_type_combobox->insertItem(VIEW::getModelName((VIEW::ModelType)p).c_str());
+		model_type_combobox->addItem(VIEW::getModelName((VIEW::ModelType)p).c_str());
 	}
 
 	coloring_method_combobox->clear();
 	for (Index p = 0; p < COLORING_UNKNOWN; p++)
 	{
-		coloring_method_combobox->insertItem(VIEW::getColoringName((VIEW::ColoringMethod)p).c_str());
+		coloring_method_combobox->addItem(VIEW::getColoringName((VIEW::ColoringMethod)p).c_str());
 	}
 
 	createRepresentationMode();
@@ -88,7 +104,8 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 
 DisplayProperties::DisplayProperties(const DisplayProperties& /*dp*/)
 	throw()
-	: DisplayPropertiesData(),
+	: QDialog(),
+		Ui_DisplayPropertiesData(),
 		ModularWidget(*this),
 		PreferencesEntry()
 {
@@ -100,23 +117,20 @@ DisplayProperties::~DisplayProperties()
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "deleting DisplayProperties " << this << std::endl;
 #endif
-	
-	if (model_settings_ != 0) delete model_settings_;
-	if (coloring_settings_ != 0) delete coloring_settings_;
 }
 
 
 void DisplayProperties::initializeWidget(MainControl& main_control)
 	throw()
 {
-	(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
+	(main_control.initPopupMenu(MainControl::DISPLAY));
 
 	id_ = insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
-																		 SLOT(show()), CTRL+Key_I);   
+																		 SLOT(show()), Qt::CTRL+Qt::Key_I);   
 	setMenuHint("Create a new representation or modify an existing one");
 	setMenuHelp("displayProperties.html");
 
-	registerWidgetForHelpSystem(this, "displayProperties.html");
+	registerForHelpSystem(this, "displayProperties.html");
 	connect(&timer_, SIGNAL(timeout()), this, SLOT(checkMenu_()));
 
 	selectModel(MODEL_STICK);
@@ -158,7 +172,8 @@ void DisplayProperties::checkMenu(MainControl& main_control)
 	{
 		modify_button->setEnabled(false);
 		create_button->setEnabled(false);
-		timer_.start(300, true);
+		timer_.setSingleShot(true);
+		timer_.start(300);
 		return;
 	}
 
@@ -188,14 +203,14 @@ void DisplayProperties::checkMenu(MainControl& main_control)
 void DisplayProperties::show()
 {
 	checkDrawingPrecision_();
-	DisplayPropertiesData::show();
+	QDialog::show();
 	raise();
 }
 
 void DisplayProperties::createRepresentationMode()
 {
 	rep_ = 0;
-	setCaption("create Representation");
+ 	setWindowTitle("create Representation");
 	checkMenu_();
 
 	model_updates_enabled->setChecked(true);
@@ -214,24 +229,24 @@ void DisplayProperties::modifyRepresentationMode(Representation* rep)
 		return;
 	}
 	
-	setCaption("modify Representation");
+ 	setWindowTitle("modify Representation");
 	if (rep_->getColoringMethod() < COLORING_UNKNOWN)
 	{
-		coloring_method_combobox->setCurrentItem(rep_->getColoringMethod());
+		coloring_method_combobox->setCurrentIndex(rep_->getColoringMethod());
 	}
 	
-	precision_combobox->setCurrentItem(rep_->getDrawingPrecision());
+	precision_combobox->setCurrentIndex(rep_->getDrawingPrecision());
 	
 	if (rep_->getModelType() != MODEL_UNKNOWN)
 	{
-		model_type_combobox->setCurrentItem(rep_->getModelType());
+		model_type_combobox->setCurrentIndex(rep_->getModelType());
 	}
-	mode_combobox->setCurrentItem(rep_->getDrawingMode());
+	mode_combobox->setCurrentIndex(rep_->getDrawingMode());
 
 	if (rep_->getColorProcessor() != 0)
 	{
 		custom_color_ = rep_->getColorProcessor()->getDefaultColor();
-		custom_color_label->setBackgroundColor(custom_color_.getQColor());
+		setColor(custom_color_label, custom_color_);
 	}
 
 	transparency_slider->setValue((Size)(rep_->getTransparency() / 2.55));
@@ -252,9 +267,9 @@ void DisplayProperties::selectModel(int index)
 	}
 
 	// enable usage from python
-	if (index != model_type_combobox->currentItem())
+	if (index != model_type_combobox->currentIndex())
 	{
-		model_type_combobox->setCurrentItem(index);
+		model_type_combobox->setCurrentIndex(index);
 		return;
 	}
 
@@ -269,9 +284,9 @@ void DisplayProperties::selectMode(int index)
 	}
 
 	// enable usage from python
-	if (index != mode_combobox->currentItem())
+	if (index != mode_combobox->currentIndex())
 	{
-		mode_combobox->setCurrentItem(index);
+		mode_combobox->setCurrentIndex(index);
 		return;
 	}
 }
@@ -284,9 +299,9 @@ void DisplayProperties::selectColoringMethod(int index)
 	}
 
 	// enable usage from python
-	if (index != coloring_method_combobox->currentItem())
+	if (index != coloring_method_combobox->currentIndex())
 	{
-		coloring_method_combobox->setCurrentItem(index);
+		coloring_method_combobox->setCurrentIndex(index);
 		return;
 	}
 }
@@ -374,8 +389,8 @@ void DisplayProperties::onNotify(Message *message)
 	{
 		CreateRepresentationMessage* crm = (CreateRepresentationMessage*) message;
 		if (crm->getComposites().size() == 0) return;
-		model_type_combobox->setCurrentItem(crm->getModelType());
-		coloring_method_combobox->setCurrentItem(crm->getColoringMethod());
+		model_type_combobox->setCurrentIndex(crm->getModelType());
+		coloring_method_combobox->setCurrentIndex(crm->getColoringMethod());
 		createRepresentationMode();
 		createRepresentation(crm->getComposites());
 	}
@@ -423,13 +438,13 @@ void DisplayProperties::editSelectionColor()
 // ------------------------------------------------------------------------
 void DisplayProperties::applyModelSettings_(Representation& rep)
 {
-	ModelType current_type = (ModelType) model_type_combobox->currentItem();
+	ModelType current_type = (ModelType) model_type_combobox->currentIndex();
 	if (rep.getModelProcessor() == 0 ||
 			rep.getModelType() != current_type ||
 			!rep.modelUpdateEnabled())
 	{
 		rep.setModelProcessor(model_settings_->createModelProcessor(current_type));
-		rep.setModelType((ModelType)model_type_combobox->currentItem());
+		rep.setModelType((ModelType)model_type_combobox->currentIndex());
 	}
 
 	if (custom_precision_button->isChecked())
@@ -438,11 +453,11 @@ void DisplayProperties::applyModelSettings_(Representation& rep)
 	}
 	else
 	{
-		rep.setDrawingPrecision((DrawingPrecision) precision_combobox->currentItem());
+		rep.setDrawingPrecision((DrawingPrecision) precision_combobox->currentIndex());
 
 		if (isSurfaceModel(current_type))
 		{
-			rep.setSurfaceDrawingPrecision(SurfaceDrawingPrecisions[precision_combobox->currentItem()]);
+			rep.setSurfaceDrawingPrecision(SurfaceDrawingPrecisions[precision_combobox->currentIndex()]);
 		}
 	}
 
@@ -452,7 +467,7 @@ void DisplayProperties::applyModelSettings_(Representation& rep)
 
 void DisplayProperties::applyColoringSettings_(Representation& rep)
 {
-	ColoringMethod current_coloring = (ColoringMethod) coloring_method_combobox->currentItem();
+	ColoringMethod current_coloring = (ColoringMethod) coloring_method_combobox->currentIndex();
 
  	if (rep.getColorProcessor() == 0 ||
  			rep.getColoringMethod() != current_coloring ||
@@ -462,7 +477,7 @@ void DisplayProperties::applyColoringSettings_(Representation& rep)
 		rep.setColoringMethod(current_coloring);
 	}
 
-	custom_color_.set(custom_color_label->backgroundColor());
+	custom_color_ = (getColor(custom_color_label));
 	custom_color_.setAlpha(255 - (Position)(transparency_slider->value() * 2.55));
 
 	ColorProcessor* cp = rep.getColorProcessor();
@@ -482,13 +497,13 @@ Representation* DisplayProperties::createRepresentation(const List<Composite*>& 
 
 	if (rep_ != 0 && rep_->getModelProcessor() == 0) return 0;
 
-	ModelType mt = (ModelType) model_type_combobox->currentItem();
-	DrawingPrecision dp = (DrawingPrecision)precision_combobox->currentItem();
+	ModelType mt = (ModelType) model_type_combobox->currentIndex();
+	DrawingPrecision dp = (DrawingPrecision)precision_combobox->currentIndex();
 
 	if (new_representation)
 	{
 		// create a new Representation
-		rep_ = new Representation(mt, dp, (DrawingMode)mode_combobox->currentItem());
+		rep_ = new Representation(mt, dp, (DrawingMode)mode_combobox->currentIndex());
 		rebuild_representation = true;
 
 		if (isSurfaceModel(mt))
@@ -588,7 +603,7 @@ Representation* DisplayProperties::createRepresentation(const List<Composite*>& 
 		advanced_options_modified_ = false;
 	}
 
-	rep_->setDrawingMode((DrawingMode)  mode_combobox->currentItem());
+	rep_->setDrawingMode((DrawingMode)  mode_combobox->currentIndex());
 
 	rep_->setTransparency(transparency);
 
@@ -626,7 +641,7 @@ void DisplayProperties::coloringOptionsPressed()
 {
 	if (preferences_ == 0) return;
 
-	preferences_->showEntry(coloring_settings_->getEntryFor((ColoringMethod) coloring_method_combobox->currentItem()));
+	preferences_->showEntry(coloring_settings_->getEntryFor((ColoringMethod) coloring_method_combobox->currentIndex()));
 	preferences_->show();
 }
 
@@ -634,7 +649,7 @@ void DisplayProperties::modelOptionsPressed()
 {
 	if (preferences_ == 0) return;
 
-	preferences_->showEntry(model_settings_->getEntryFor((ModelType) model_type_combobox->currentItem()));
+	preferences_->showEntry(model_settings_->getEntryFor((ModelType) model_type_combobox->currentIndex()));
 	preferences_->show();
 }
 
@@ -655,7 +670,7 @@ void DisplayProperties::precisionBoxChanged(int index)
 void DisplayProperties::checkDrawingPrecision_()
 	throw()
 {
-	ModelType mt = (ModelType)model_type_combobox->currentItem();
+	ModelType mt = (ModelType)model_type_combobox->currentIndex();
 
 	if (!modelMuteableByDisplayProperties(mt) ||
 	    !model_updates_enabled->isChecked())
@@ -693,7 +708,7 @@ void DisplayProperties::getAdvancedColoringOptions_()
 {
 	if (rep_ == 0 ||
 			rep_->getColorProcessor() == 0 ||
-			coloring_method_combobox->currentItem() == COLORING_CUSTOM) 
+			coloring_method_combobox->currentIndex() == COLORING_CUSTOM) 
 	{
 		return;
 	}
@@ -766,14 +781,14 @@ void DisplayProperties::setSurfaceDrawingPrecision(float value)
 	if (value < 0.1) return;
 	precision_slider->setValue((int)(value * 10.0));
 	
-	bool is_s = isSurfaceModel((ModelType)model_type_combobox->currentItem());
+	bool is_s = isSurfaceModel((ModelType)model_type_combobox->currentIndex());
 	custom_precision_button->setChecked(is_s);
 	presets_precision_button->setChecked(!is_s);
 }
 		
 void DisplayProperties::setDrawingPrecision(int value)
 {
-	precision_combobox->setCurrentItem(value);
+	precision_combobox->setCurrentIndex(value);
 	precisionBoxChanged(value);
 	presets_precision_button->setChecked(true);
 }
@@ -786,7 +801,7 @@ void DisplayProperties::setTransparency(int value)
 void DisplayProperties::setCustomColor(const ColorRGBA& color)
 {
 	custom_color_ = color;
-	custom_color_label->setBackgroundColor(custom_color_.getQColor());
+	setColor(custom_color_label, custom_color_);
 }
 	
 void DisplayProperties::coloringUpdatesChanged()

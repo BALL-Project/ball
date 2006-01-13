@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.66 2005/12/23 17:03:32 amoll Exp $
+// $Id: representation.C,v 1.66.2.1 2006/01/13 15:36:02 amoll Exp $
 //
 
 
@@ -382,14 +382,7 @@ namespace BALL
 				rebuild_ = false;
 			}
 
-#ifndef BALL_QT_HAS_THREADS
-			// if multithreaded, the PrimitiveManager will send the Update message, otherwise do it here...
-			MainControl* mc = getMainControl();
-			if (mc != 0)
-			{
-				mc->sendMessage(*new RepresentationMessage(*this, RepresentationMessage::UPDATE));
-			}
-#endif
+			// in multithreaded, the PrimitiveManager will send the Update message
 		}
 		
 
@@ -585,16 +578,14 @@ namespace BALL
 		{
 			rebuild_ |= rebuild;
 
-#ifdef BALL_QT_HAS_THREADS
 			MainControl* mc = getMainControl();
-			if (mc != 0)
+			if (mc == 0) 
 			{
-				mc->getPrimitiveManager().update_(*this);
+				update_();
 				return;
 			}
-#endif
-
-			update_();
+			
+			mc->getPrimitiveManager().update_(*this);
 		}
 
 		String Representation::getName() const

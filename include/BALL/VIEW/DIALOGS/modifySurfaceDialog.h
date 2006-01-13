@@ -1,13 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.h,v 1.4 2005/12/23 17:02:11 amoll Exp $
+// $Id: modifySurfaceDialog.h,v 1.4.2.1 2006/01/13 15:35:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
 #define BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
 
 #include <BALL/VIEW/UIC/modifySurfaceDialogData.h>
+//Added by qt3to4:
+#include <QLabel>
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
@@ -43,7 +45,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT ModifySurfaceDialog 
-			: public ModifySurfaceDialogData,
+			: public QDialog,
+				public Ui_ModifySurfaceDialogData,
 				public ModularWidget
 		{ 
 			Q_OBJECT
@@ -53,7 +56,7 @@ namespace BALL
 			BALL_EMBEDDABLE(ModifySurfaceDialog, ModularWidget)
 
 			///
-			ModifySurfaceDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
+			ModifySurfaceDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0);
 
 			///
 			~ModifySurfaceDialog()

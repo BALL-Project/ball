@@ -18,6 +18,8 @@
 
 #include "demoTutorialDialogData.h"
 
+#include <QDialog>
+
 namespace BALL
 {
   class System;
@@ -28,7 +30,8 @@ namespace BALL
 		/**	Dialog for showing a demo and tutorial.
 		*/
 		class DemoTutorialDialog : 
-			public DemoTutorialDialogData,
+			public QDialog,
+			public Ui_DemoTutorialDialogData,
  			public ModularWidget
 		{
 			Q_OBJECT

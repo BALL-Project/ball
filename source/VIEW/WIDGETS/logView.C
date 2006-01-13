@@ -7,7 +7,10 @@
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <qdragobject.h>
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
+#include <QDropEvent>
+#include <QTextCursor>
 
 using namespace std;
 
@@ -22,9 +25,9 @@ namespace BALL
 		}
 
 
-		void DragLogView::contentsDragEnterEvent(QDragEnterEvent * e)
+		void DragLogView::contentsDragEnterEvent(QDragEnterEvent* e)
 		{
-			e->accept(QTextDrag::canDecode(e));
+			if (e->mimeData()->hasUrls()) e->acceptProposedAction();
 			setReadOnly(false);
 		}
 
@@ -50,6 +53,10 @@ namespace BALL
 		{
 			default_visible_ = false;
 			setGuest(*text_edit_);
+ 			text_edit_->setLineWrapMode(QTextEdit::WidgetWidth);
+			text_edit_->setAcceptRichText(false);
+			text_edit_->setReadOnly(true);
+			resize(300, 100);
 			registerWidget(this);
 		}
 
@@ -91,8 +98,19 @@ namespace BALL
 
 			if (line.size() > 0)
 			{
-				text_edit_->append(line.c_str());
-				text_edit_->scrollToBottom();
+ 				setUpdatesEnabled(false);
+ 				QTextCursor ct = text_edit_->textCursor();
+ 				if (!ct.atEnd()) 
+ 				{
+ 					ct.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+					text_edit_->setTextCursor(ct);
+ 				}
+					
+ 				text_edit_->insertPlainText(line.c_str());
+ 				ct.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+ 				text_edit_->setTextCursor(ct);
+ 				text_edit_->ensureCursorVisible();
+ 				setUpdatesEnabled(true);
 			}
 
 			output_running_ = false;
@@ -104,12 +122,11 @@ namespace BALL
 		{
 			registerAt(Log);
 			text_edit_->setReadOnly(true);
-			text_edit_->setTextFormat(PlainText);
 
 			DockWidget::initializeWidget(main_control);
 			insertMenuEntry(MainControl::EDIT, "Clear Logs", text_edit_, SLOT(clear()));
 
-			registerWidgetForHelpSystem(this, "logView.html");
+			registerForHelpSystem(this, "logView.html");
 
 			setMinimumSize(10, 10);
 		}
