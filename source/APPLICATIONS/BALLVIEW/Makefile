@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.10.2.1 2006/01/13 15:35:37 amoll Exp $
+# $Id: Makefile,v 1.10.2.2 2006/01/13 16:00:15 amoll Exp $
 #
 
 EXECUTABLE=BALLView
@@ -19,9 +19,7 @@ UIC_DIR=.
 BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 
 CPP_SOURCES=\
-	aboutDialog.C\
 	demoTutorialDialog.C\
-	demoTutorialDialogData.C\
 	icons.C\
 	main.C\
 	mainframe.C
