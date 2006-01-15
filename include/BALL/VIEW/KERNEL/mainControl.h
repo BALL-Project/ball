@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76.2.1 2006/01/13 15:35:31 amoll Exp $
+// $Id: mainControl.h,v 1.76.2.2 2006/01/15 13:08:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -39,13 +39,12 @@
 # include <BALL/STRUCTURE/fragmentDB.h>
 #endif
 
+#include <QKeySequence>
 #include <QMainWindow>
 #include <qapplication.h>
 #include <qmenubar.h>    // menus
 #include <qlabel.h>			 // statusbar
 #include <qtimer.h>
-//Added by qt3to4:
-#include <QCustomEvent>
 
 class QMenu;
 class QKeySequence;
@@ -448,7 +447,7 @@ namespace BALL
 					\return int the new entry_ID
 			*/
 			QAction* insertMenuEntry(Position parent_id, const String& name, const QObject* receiver = 0, 
-													 const char* slot = 0, const QKeySequence& accel = 0)
+													 const char* slot = 0, QKeySequence accel = QKeySequence())
 				throw();
 
 			/// 

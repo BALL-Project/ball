@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.22.2.1 2006/01/13 15:35:31 amoll Exp $
+// $Id: modularWidget.h,v 1.22.2.2 2006/01/15 13:08:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -15,11 +15,12 @@
 # include <BALL/VIEW/KERNEL/connectionObject.h>
 #endif
 
+#include <QKeySequence>
+
 class QObject;
 class QMenuBar;
 class QWidget;
 class QAction;
-class QKeySequence;
 
 namespace BALL
 {
@@ -230,7 +231,7 @@ namespace BALL
 
 			///
 			QAction* insertMenuEntry (Position parent_id, const String& name, const QObject* receiver = 0, 
-													 const char* slot = 0, const QKeySequence& accel = 0)
+													 const char* slot = 0, QKeySequence accel = QKeySequence())
 				throw();
 
 			///

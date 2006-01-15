@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.24.2.1 2006/01/13 15:36:01 amoll Exp $
+// $Id: modularWidget.C,v 1.24.2.2 2006/01/15 13:07:56 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -230,7 +230,7 @@ namespace BALL
 		}
 
 		QAction* ModularWidget::insertMenuEntry(Position menu_id, const String& name, 
-												const QObject* receiver, const char* slot, const QKeySequence& shortcut)
+												const QObject* receiver, const char* slot, QKeySequence shortcut)
 			throw()
 		{
 			if (getMainControl() == 0) return 0;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.1 2006/01/13 15:36:00 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.2 2006/01/15 13:07:56 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -679,7 +679,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		QAction* MainControl::insertMenuEntry(Position parent_id, const String& name, const QObject* receiver, 
-																		 const char* slot, const QKeySequence& accel)
+																		 const char* slot, QKeySequence accel)
 			throw()
 		{
 			QMenu* popup = initPopupMenu(parent_id);
@@ -1448,7 +1448,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			if (e->type() == (QEvent::Type)FINISHED_REPRESENTATION_UPDATE_EVENT)
 			{
-//   				processEvents(200);
 				FinishedRepresentionUpdateEvent* fe = dynamic_cast<FinishedRepresentionUpdateEvent*> (e);
 				primitive_manager_.finishedUpdate_(fe->getRepresentation());
 				return true;
@@ -1498,6 +1497,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				notify_(dock_fin_m);
 				return true;
 			}
+
+			return false;
 		}
 
 		bool MainControl::setSimulationThread(SimulationThread* thread)
