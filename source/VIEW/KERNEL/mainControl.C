@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.2 2006/01/15 13:07:56 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.3 2006/01/16 00:32:30 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -223,6 +223,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			simulation_icon_ = new QLabel(statusBar());
 			simulation_icon_->setMaximumSize(14,16);
+			simulation_icon_->setMinimumSize(14,16);
 			statusBar()->addPermanentWidget(simulation_icon_, false );
 //   			QToolTip::add(simulation_icon_, "simulation status");
 			QPixmap icon(simulation_running_xpm_);
@@ -1384,10 +1385,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			if (state)
 			{
-				if (composites_locked_) 
-				{
-					return;
-				}
 				QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 				simulation_icon_->show();
 			}
