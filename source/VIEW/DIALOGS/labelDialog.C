@@ -39,7 +39,7 @@ LabelDialog::LabelDialog(QWidget* parent, const char* name)
 	connect( edit_button, SIGNAL( clicked() ), this, SLOT( editColor() ) );
 	connect( add_tag_button, SIGNAL( clicked() ), this, SLOT( addTag() ) );
 	connect( font_button, SIGNAL( clicked() ), this, SLOT( fontSelected() ) );
-	connect( mode_group, SIGNAL( clicked(int) ), this, SLOT( modeChanged() ) );
+	connect( all_items, SIGNAL( toggled(bool) ), this, SLOT( modeChanged() ) );
 	connect( label_edit_, SIGNAL( textChanged(const QString&) ), this, SLOT( textChanged() ) );
 	connect( history_box, SIGNAL( activated(int) ), this, SLOT( historySelected() ) );
 
