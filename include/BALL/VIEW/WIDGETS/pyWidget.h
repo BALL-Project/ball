@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.1 2006/01/13 15:35:36 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.2 2006/01/16 00:17:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -98,11 +98,11 @@ namespace BALL
 				MyLineEdit(QWidget* parent)
 					: QLineEdit(parent) {};
 
-				virtual void keyPressEvent(QKeyEvent* event);
-
 				void setPyWidget(PyWidget* pw) { pw_ = pw;}
 
 			protected:
+
+				virtual void keyPressEvent(QKeyEvent* event);
 
 				PyWidget* pw_;
 		};
@@ -224,11 +224,13 @@ namespace BALL
 
 			void appendText(const String& text);
 
+			protected slots:
+
+			virtual bool returnPressed();
+
 			protected:
 
 			void setError_(bool state);
-
-			virtual bool returnPressed();
 
 			/** Start the interpreter.
 					This method initializes the interpreter if it is not yet running. 
@@ -268,12 +270,10 @@ namespace BALL
 			virtual void contentsDropEvent(QDropEvent* e);
 
 
-			protected:
-
-			void keyPressed(QKeyEvent* e);
+			bool keyPressed(QKeyEvent* e);
 
 			QTextEdit* 				text_edit_;
-			QLineEdit* 				line_edit_;
+			MyLineEdit* 			line_edit_;
 			List<Hotkey> 			hotkeys_;
 			// 								we use an own working dir to find Python Scripts
 			String 						working_dir_;

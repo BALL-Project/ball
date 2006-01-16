@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.2 2006/01/13 16:20:51 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.3 2006/01/16 00:16:35 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -108,12 +108,7 @@ namespace BALL
 
 		void MyLineEdit::keyPressEvent(QKeyEvent* e) 
 		{ 
-			if (e->key() == Qt::Key_Up ||
-			    e->key() == Qt::Key_Down)
-			{
-				pw_->keyPressed(e);
-				return;
-			}
+			if (pw_->keyPressed(e)) return;
 
 			QLineEdit::keyPressEvent(e);
 		}
@@ -124,27 +119,35 @@ namespace BALL
 		PyWidget::PyWidget(QWidget *parent, const char *name)
 			throw()
 			: DockWidget(parent, name),
-				text_edit_(new QTextEdit(this)),
-				line_edit_(new QLineEdit(this)),
-				thread_(0),
+				text_edit_(0),
+				line_edit_(0),
 				working_dir_(""),
 				valid_(false),
 				started_startup_script_(false),
+				thread_(0),
 				stop_script_(false)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new PyWidget " << this << std::endl;
 		#endif
-			default_visible_ = false;
-			setGuest(*text_edit_);
-			registerWidget(this);
+			text_edit_ = new QTextEdit(this);
+			text_edit_->setLineWrapMode(QTextEdit::WidgetWidth);
 			text_edit_->setReadOnly(true);
+			text_edit_->setTabStopWidth((Position)(text_edit_->tabStopWidth() / 2.0));
+			setGuest(*text_edit_);
 
-//    			QGridLayout* lay = new QGridLayout();
-//   			((QGridLayout*)layout())->addLayout(lay, 2, 0);
-//   			line_edit_ = new QLineEdit(this);
-//   			lay->addWidget(text_edit_,0, 0, 1, -1);
-//   			lay->addWidget(line_edit_,1, 0, 1, -1);
+			line_edit_ = new MyLineEdit(this);
+			line_edit_->setPyWidget(this);
+
+ 			QGridLayout* lay = new QGridLayout();
+ 			((QGridLayout*)layout())->addLayout(lay, 2, 0);
+ 			lay->addWidget(text_edit_,0, 0, 1, -1);
+ 			lay->addWidget(line_edit_,1, 0, 1, -1);
+
+			connect(line_edit_, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
+
+			default_visible_ = false;
+			registerWidget(this);
 		}
 
 		PyWidget::~PyWidget()
@@ -172,7 +175,7 @@ namespace BALL
 				id1->setEnabled(false);
 				id2->setEnabled(false);
 				id3->setEnabled(false);
-				appendText("No Python support available:");
+				appendText("> No Python support available:");
 				runString("import BALL");
 				setEnabled(false);
 				setStatusbarText("No Python support available! (See PyWidget)", true);
@@ -365,14 +368,19 @@ namespace BALL
 			}
 			else
 			{
-				color = Qt::black;
+				color = Qt::blue;
 			}
 
 			text_edit_->setTextColor(color);
 		}
 
-		void PyWidget::appendText(const String& text)
+		void PyWidget::appendText(const String& t)
 		{
+			String text = t; 
+			if (!text.size() || text[text.size() - 1] != '\n')
+			{
+				text += '\n';
+			}
  			text_edit_->setUpdatesEnabled(false);
  			QTextCursor ct = text_edit_->textCursor();
  			if (!ct.atEnd()) 
@@ -536,8 +544,7 @@ namespace BALL
 
 		void PyWidget::newPrompt_()
 		{
-			appendText(getPrompt_());
-//   			setCursorPosition(paragraphs() - 1, 4);
+			if (multi_line_mode_) appendText(".");
 		}
 
 		bool PyWidget::parseLine_()
@@ -545,46 +552,35 @@ namespace BALL
 			return parseLine_(getCurrentLine());
 		}
 
-		void PyWidget::keyPressed(QKeyEvent* e)
+		bool PyWidget::keyPressed(QKeyEvent* e)
 		{
-			if (e->key() == Qt::Key_Up)
+			Index hp = history_position_;
+
+			if 			(e->key() == Qt::Key_Up)   			hp--;
+			else if (e->key() == Qt::Key_Down) 			hp++;
+			else if (e->key() == Qt::Key_PageUp) 		hp = 0;
+			else if (e->key() == Qt::Key_PageDown)	hp = history_.size() - 1;
+			else 
 			{
-				if (history_position_ != 0) retrieveHistoryLine_(history_position_ - 1);
-				return;
+				return false;
 			}
-			else if (e->key() == Qt::Key_Down)
+
+			if (hp < 0 || hp >= (Index) history_.size()) 
 			{
-				retrieveHistoryLine_(history_position_ + 1);
-				return;
+				return true;
 			}
-			/*
-			else if (e->key() == Qt::Key_Home)
-			{
-				setCursorPosition(row, 4);
-				return;
-			}
-			else if (e->key() == Qt::Key_Return)
-			{
-				if (!returnPressed()) return;
-			}
-			else if (e->key() == Qt::Key_PageUp)
-			{
-				return;
-			}
-			else if (e->key() == Qt::Key_PageDown)
-			{
-				return;
-			}
-*/
+
+			retrieveHistoryLine_((Position)hp);
+			return true;
 		} 
 
 		bool PyWidget::parseLine_(String line, bool silent)
 		{
-			appendText(line);
+			if (!silent) appendText(line);
 
 			if (!Py_IsInitialized())
 			{
-				appendText("ERROR: no interpreter running!\n");
+				appendText("> ERROR: no interpreter running!\n");
 				return false;
 			}
 
@@ -592,8 +588,6 @@ namespace BALL
 			String temp(line);
 			temp.trim();
 			if (temp.hasPrefix("#")) return true;
-
-			history_position_ = history_.size();
 
 			line.trimRight();
 
@@ -686,6 +680,8 @@ namespace BALL
 
 			if (result != "") 
 			{
+				result = "> " + result; 
+
 				if (result.hasSubstring("ERROR"))
 				{
 					setError_(true);
@@ -696,7 +692,7 @@ namespace BALL
 					setError_(false);
 				}
 				appendText(result.c_str());
-				setError_(false);
+				text_edit_->setTextColor(Qt::black);
 			}
 
 				
@@ -742,29 +738,33 @@ namespace BALL
 		void PyWidget::appendToHistory_(const String& line)
 		{
 			history_.push_back(line);
-			history_position_ = history_.size();
+			history_position_ = history_.size() -1;
 		}
 
 		const char* PyWidget::getPrompt_() const
 		{
-			return (multi_line_mode_ ? "... " : ">>> ");
+			return (multi_line_mode_ ? ". " : "");
 		}
 
 		void PyWidget::retrieveHistoryLine_(Position index)
 		{
 			if (index > history_.size()) 
 			{
-				history_position_ = history_.size();
+				history_position_ = history_.size() - 1;
 				return;
 			}
 			
 			line_edit_->setText(history_[index].c_str());
+			history_position_ = index;
 		}
 
 		bool PyWidget::returnPressed()
 		{
-			if (multi_line_mode_) parseLine_(ascii(line_edit_->text()));
-			else 									newPrompt_();
+			String line = getCurrentLine();
+			line_edit_->setText("");
+				
+			parseLine_(line);
+			newPrompt_();
 
 			return true;
 		}
@@ -783,12 +783,12 @@ namespace BALL
 			// print the PyBALL version and clear
 			// the widget's contents in case of a restart
 			text_edit_->clear();
-			appendText((String("BALL ") + VersionInfo::getVersion()).c_str());
+			appendText((String("> BALL ") + VersionInfo::getVersion()).c_str());
 
 			// print the first prompt 
 			multi_line_mode_ = false;
 			newPrompt_();
-			history_position_ = history_.size() + 1;
+			history_position_ = 0;
 		}
 
 
