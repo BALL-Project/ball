@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.1 2006/01/13 15:36:08 amoll Exp $
+// $Id: scene.C,v 1.174.2.2 2006/01/16 15:17:16 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -81,29 +81,12 @@ namespace BALL
 			throw()
 			:	QGLWidget(gl_format_),
 				ModularWidget("<Scene>"),
-				current_mode_(ROTATE__MODE),
-				last_mode_(PICKING__MODE),
-				rotate_action_(0),
-				picking_action_(0),
-				system_origin_(0.0),
-				need_update_(false),
-				update_running_(false),
-				x_window_pos_old_(0),
-				y_window_pos_old_(0),
-				x_window_pos_new_(0),
-				y_window_pos_new_(0),
-				x_window_pick_pos_first_(0),
-				y_window_pick_pos_first_(0),
-				x_window_pick_pos_second_(0),
-				y_window_pick_pos_second_(0),
-				stage_(new Stage),
-				light_settings_(0),
-				stage_settings_(0),
-				animation_thread_(0),
-				stop_animation_(false),
-				content_changed_(true),
-				time_(),
-				last_fps_(0)
+				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
+				stage_(new Stage()),
+				light_settings_(new LightSettings(this)),
+				stage_settings_(new StageSettings(this)),
+				material_settings_(new MaterialSettings(this)),
+				animation_thread_(0)
 		{
 			gl_renderer_.setSize(600, 600);
 			setAcceptDrops(true);
@@ -129,8 +112,7 @@ namespace BALL
 				y_window_pos_new_(0),
 				x_window_pick_pos_first_(0),
 				y_window_pick_pos_first_(0),
-				x_window_pick_pos_second_(0),
-				y_window_pick_pos_second_(0),
+				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage),
 				light_settings_(0),
 				stage_settings_(0),
@@ -159,21 +141,13 @@ namespace BALL
 			:	QGLWidget(gl_format_, parent_widget, (QGLWidget*)0, w_flags),
 				ModularWidget(scene),
 				system_origin_(scene.system_origin_),
-				x_window_pos_old_(0),
-				y_window_pos_old_(0),
-				x_window_pos_new_(0),
-				y_window_pos_new_(0),
-				x_window_pick_pos_first_(0),
-				y_window_pick_pos_first_(0),
-				x_window_pick_pos_second_(0),
-				y_window_pick_pos_second_(0),
+				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage(*scene.stage_)),
 				light_settings_(new LightSettings(this)),
 				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
-				stop_animation_(false),
-				content_changed_(true)
+				stop_animation_(false)
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (3) " << this << std::endl;
@@ -797,7 +771,7 @@ namespace BALL
 
 		float Scene::getXDiff_()
 		{
-			float delta_x = x_window_pos_new_ - x_window_pos_old_;
+			float delta_x = (float)x_window_pos_new_ - (float)x_window_pos_old_;
 			delta_x /= qApp->desktop()->width();
 			delta_x *= mouse_sensitivity_;
 			return delta_x;
@@ -805,7 +779,7 @@ namespace BALL
 
 		float Scene::getYDiff_()
 		{
-			float delta_y = y_window_pos_new_ - y_window_pos_old_;
+			float delta_y = (float)y_window_pos_new_ - (float)y_window_pos_old_;
 			delta_y /= qApp->desktop()->width();
 			delta_y *= mouse_sensitivity_;
 			return delta_y;
@@ -852,14 +826,18 @@ namespace BALL
 
 
 		// picking routine ------
-		void Scene::selectObjects_(bool select)
+		void Scene::selectObjects_()
 		{
+			rb_->hide();
+
+			QPoint p0 = mapFromGlobal(QPoint(x_window_pick_pos_first_, y_window_pick_pos_first_));
+			QPoint p1 = mapFromGlobal(QPoint(x_window_pos_new_, y_window_pos_new_));
+
 			List<GeometricObject*> objects;
-			gl_renderer_.pickObjects1(
-					(Position)x_window_pick_pos_first_,
-					(Position)y_window_pick_pos_first_,
-					(Position)x_window_pick_pos_second_,
-					(Position)y_window_pick_pos_second_);
+			gl_renderer_.pickObjects1((Position) p0.x(),
+																(Position) p0.y(),
+																(Position) p1.x(),
+																(Position) p1.y());
 
 			// draw the representations
 			renderView_(DIRECT_RENDERING);
@@ -869,7 +847,7 @@ namespace BALL
 			// sent collected objects
 			GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
 			message->setSelection(objects);
-			message->setSelected(select);
+			message->setSelected(pick_select_);
 			notify_(message);
 		}
 
@@ -1438,8 +1416,8 @@ namespace BALL
 
 			need_update_ = true;
 
-			x_window_pos_new_ = e->x();
-			y_window_pos_new_ = e->y();
+			x_window_pos_new_ = e->globalX();
+			y_window_pos_new_ = e->globalY();
 
 			// ============ picking mode ================
 			if (current_mode_ == PICKING__MODE)
@@ -1472,19 +1450,17 @@ namespace BALL
 
 			mouse_button_is_pressed_ = true;
 
-			x_window_pos_old_ = e->x();
-			y_window_pos_old_ = e->y();
+			x_window_pos_old_ = e->globalX();
+			y_window_pos_old_ = e->globalY();
 
-			if(current_mode_ == ROTATE__MODE)
-			{
-				return;
-			}
+			if (current_mode_ == ROTATE__MODE) return;
 
-			if(current_mode_ == PICKING__MODE)
+			if (current_mode_ == PICKING__MODE)
 			{	
 				if (e->buttons() == Qt::LeftButton ||
 						e->buttons() == Qt::RightButton)
 				{
+					pick_select_ = (e->buttons() == Qt::LeftButton);
 					selectionPressed_();
 				}
 			}
@@ -1494,19 +1470,19 @@ namespace BALL
 		{
 			if (e.modifiers() == Qt::NoModifier)
 			{
-				if (e.buttons() == Qt::LeftButton) return ROTATE_ACTION;
-				if (e.buttons() == Qt::MidButton) return ZOOM_ACTION;
+				if (e.buttons() == Qt::LeftButton) 	return ROTATE_ACTION;
+				if (e.buttons() == Qt::MidButton) 	return ZOOM_ACTION;
 				if (e.buttons() == Qt::RightButton) return TRANSLATE_ACTION;
 			}
 			else if (e.buttons() == Qt::LeftButton)
 			{
-				if (e.modifiers() == Qt::ShiftModifier) return ZOOM_ACTION;
-				if (e.modifiers() == Qt::ControlModifier) return TRANSLATE_ACTION;
+				if (e.modifiers() == Qt::ShiftModifier) 											return ZOOM_ACTION;
+				if (e.modifiers() == Qt::ControlModifier) 										return TRANSLATE_ACTION;
 				if (e.modifiers() == Qt::ShiftModifier | Qt::ControlModifier) return ROTATE_CLOCKWISE_ACTION;
 			}
 			else if (e.buttons() == Qt::LeftButton | Qt::RightButton)
 			{
-					return ROTATE_CLOCKWISE_ACTION;
+				return ROTATE_CLOCKWISE_ACTION;
 			}
 
 			return TRANSLATE_ACTION;
@@ -1514,8 +1490,8 @@ namespace BALL
 
 		void Scene::processRotateModeMouseEvents_(QMouseEvent* e)
 		{
-			if (x_window_pos_old_ == e->x() &&
-					y_window_pos_old_ == e->y())
+			if (x_window_pos_old_ == e->globalX() &&
+					y_window_pos_old_ == e->globalY())
 			{
 				return;
 			}
@@ -1672,22 +1648,10 @@ namespace BALL
 			mouse_button_is_pressed_ = false;
 
 			// ============ picking mode ================
-			if(current_mode_ == PICKING__MODE)
+			if (current_mode_ == PICKING__MODE)
 			{
-				switch (e->buttons() | e->modifiers())
-				{
-					case (Qt::LeftButton | Qt::ShiftModifier):
-					case Qt::RightButton:
-						deselectionReleased_();
-						break;
-
-					case Qt::LeftButton:
-						selectionReleased_();
-						break;
-
-					default:
-						break;
-				}
+				selectObjects_();
+				need_update_ = true;
 			}
 			else if (current_mode_ == ROTATE__MODE)
 			{
@@ -1720,7 +1684,7 @@ namespace BALL
 				return;
 			}
 
-			QPoint point = mapFromGlobal(QCursor::pos());
+			QPoint point = QCursor::pos();
 
 			if (!rect().contains(point)) return;
 
@@ -1822,7 +1786,7 @@ namespace BALL
 		{
 			qmouse_event->accept();
 
-			y_window_pos_new_ = y_window_pos_old_ + (qmouse_event->delta()/120*mouse_wheel_sensitivity_);
+			y_window_pos_new_ = (Position)(y_window_pos_old_ + (qmouse_event->delta() / 120 * mouse_wheel_sensitivity_));
 			zoomSystem_();
 			y_window_pos_old_ = y_window_pos_new_;
 		}
@@ -1976,45 +1940,41 @@ namespace BALL
 		{
 			x_window_pick_pos_first_ = x_window_pos_old_;
 			y_window_pick_pos_first_ = y_window_pos_old_;
-			x_window_pick_pos_second_ = x_window_pos_old_;
-			y_window_pick_pos_second_ = y_window_pos_old_;
-		}
-
-		void Scene::selectionReleased_()
-		{
-			selectObjects_(true);
-			need_update_ = true;
-			updateGL();
-		}
-
-		void Scene::deselectionReleased_()
-		{
-			selectObjects_(false);
-			need_update_ = true;
-			updateGL();
 		}
 
 
 		void Scene::selectionPressedMoved_()
 		{
-			x_window_pick_pos_second_ = x_window_pos_new_;
-			y_window_pick_pos_second_ = y_window_pos_new_;
+			Position x[2];
+			Position y[2];
 
-			QPainter painter(this);
-			ColorRGBA color = getStage()->getBackgroundColor().getInverseColor();
-			painter.setPen(color.getQColor());
+			if (x_window_pos_new_ < x_window_pick_pos_first_)
+			{
+				x[0] = x_window_pos_new_;
+				x[1] = x_window_pick_pos_first_;
+			}
+			else
+			{
+				x[0] = x_window_pick_pos_first_;
+				x[1] = x_window_pos_new_;
+			}
 
-			painter.drawRect((int) x_window_pick_pos_first_,
-					(int) y_window_pick_pos_first_,
-					(int) (x_window_pos_old_ - x_window_pick_pos_first_),
-					(int) (y_window_pos_old_ - y_window_pick_pos_first_));
+			if (y_window_pos_new_ < y_window_pick_pos_first_)
+			{
+				y[0] = y_window_pos_new_;
+				y[1] = y_window_pick_pos_first_;
+			}
+			else
+			{
+				y[0] = y_window_pick_pos_first_;
+				y[1] = y_window_pos_new_;
+			}
 
-			painter.drawRect((int) x_window_pick_pos_first_,
-					(int) y_window_pick_pos_first_,
-					(int) (x_window_pos_new_ - x_window_pick_pos_first_),
-					(int) (y_window_pos_new_ - y_window_pick_pos_first_));
+			QPoint p0 = mapFromGlobal(QPoint(x[0], y[0]));
+			QPoint p1 = mapFromGlobal(QPoint(x[1], y[1]));
 
-			painter.end();
+			rb_->setGeometry(QRect(p0, p1));
+			rb_->show();
 		}
 
 		void Scene::showExportVRMLDialog()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.1 2006/01/13 15:35:36 amoll Exp $
+// $Id: scene.h,v 1.66.2.2 2006/01/16 15:17:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -34,6 +34,7 @@
 #include <QDropEvent>
 
 class QMouseEvent;
+class QRubberBand;
 
 namespace BALL
 {
@@ -700,11 +701,9 @@ namespace BALL
 			Index getMoveModeAction_(const QMouseEvent& e);
 
 			void selectionPressed_();
-			void selectionReleased_();
 			void selectionPressedMoved_();
-			void deselectionReleased_();
 
-			void selectObjects_(bool select = true);
+			void selectObjects_();
 
 			void writeLights_(INIFile& inifile) const
 				throw();
@@ -726,31 +725,27 @@ namespace BALL
 			ModeType last_mode_;
 	
 			// Menu entry IDs
-			QAction* rotate_action_; 
-			QAction* picking_action_; 
-			QAction* move_action_;
-			QAction* no_stereo_action_; 
-			QAction* active_stereo_action_; 
-			QAction* dual_stereo_action_;
-			QAction* record_animation_action_; 
-			QAction* start_animation_action_, *clear_animation_action_, *cancel_animation_action_;
-			QAction* animation_export_POV_action_, *animation_export_PNG_action_, *animation_repeat_action_;
-			QAction* show_popup_infos_action_;
+			QAction *rotate_action_, *picking_action_, *move_action_;
+			QAction *no_stereo_action_, *active_stereo_action_, *dual_stereo_action_;
+			QAction *record_animation_action_, *start_animation_action_, *clear_animation_action_, *cancel_animation_action_;
+			QAction *animation_export_POV_action_, *animation_export_PNG_action_, *animation_repeat_action_;
 			
 			Vector3 system_origin_;
 
 			bool need_update_;
 			bool update_running_;
 
-			float x_window_pos_old_;
-			float y_window_pos_old_;
-			float x_window_pos_new_;
-			float y_window_pos_new_;
+			Index x_window_pos_old_;
+			Index y_window_pos_old_;
+			Index x_window_pos_new_;
+			Index y_window_pos_new_;
 
-			float x_window_pick_pos_first_;
-			float y_window_pick_pos_first_;
-			float x_window_pick_pos_second_;
-			float y_window_pick_pos_second_;
+			Index x_window_pick_pos_first_;
+			Index y_window_pick_pos_first_;
+			Index x_window_pick_pos_second_;
+			Index y_window_pick_pos_second_;
+			bool pick_select_;
+			QRubberBand* rb_;
 
 			Stage* stage_;
 			Camera stereo_camera_;
