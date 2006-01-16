@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.3 2006/01/16 00:16:35 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.4 2006/01/16 13:02:17 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -157,8 +157,6 @@ namespace BALL
 		void PyWidget::initializeWidget(MainControl& main_control)
 			throw()
 		{
-//   			insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
-
 			DockWidget::initializeWidget(main_control);
 			registerForHelpSystem(this, "pythonInterpreter.html");
 

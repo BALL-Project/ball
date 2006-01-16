@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.1 2006/01/13 15:36:04 amoll Exp $
+// $Id: dockingController.C,v 1.4.2.2 2006/01/16 13:02:17 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -58,6 +58,7 @@ namespace BALL
 			#endif
 			registerWidget(this);
 			setObjectName(name);
+			hide();
 		}
 
 		// Copy constructor.
