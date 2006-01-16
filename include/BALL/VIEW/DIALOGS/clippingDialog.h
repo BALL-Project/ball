@@ -27,29 +27,6 @@ namespace BALL
 		{
 			Q_OBJECT
 				
-			/*
-			class BALL_VIEW_EXPORT SelectableListViewItem
-				: public QTableWidgetItem
-			{
-				public:
-
-				SelectableListViewItem(QListWidget* parent, const QString& text, 
-															 Representation* representation)
-					throw();
-
-				Representation* getRepresentation() { return representation_;};
-
-				protected:
-
-				Representation* 	representation_;
-
-				private: 
-				
-				// prevent use of default cstr
-				SelectableListViewItem();
-			};
-			*/
-
 			public:
 			
 			/**	@name	Constructors
@@ -74,6 +51,7 @@ namespace BALL
 			///
 			void setClippingPlane(ClippingPlane* plane) { clipping_plane_ = plane;}
 
+			///
 			const ClippingPlane* getClippingPlane() const { return clipping_plane_;}
 			
 			//@}
@@ -86,7 +64,7 @@ namespace BALL
 				
 			/** Show and raise the dialog
 			*/
-			void show();
+			void exec();
 			
 			///
 			void accept();

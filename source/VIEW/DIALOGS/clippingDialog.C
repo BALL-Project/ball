@@ -13,21 +13,6 @@ namespace BALL
 	namespace VIEW
 	{
 
-	/*
-ClippingDialog::SelectableListViewItem::SelectableListViewItem(const QString& text, 
-																															 Representation* representation)
-	throw()
-	: QTableWidgetItem(text),
-		representation_(representation)
-{
-	setFlags(Qt::ItemIsSelectable);
-	setText(0, text);
-	setText(1, representation->getColoringName().c_str());
-	setText(2, representation->getProperties().c_str());
-}
-*/
-
-
 ClippingDialog::ClippingDialog(QWidget* parent, const char* name)
 	throw()
 	:	QDialog(parent),
@@ -44,16 +29,6 @@ ClippingDialog::ClippingDialog(QWidget* parent, const char* name)
   connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 
 	setObjectName(name);
-
-	/*
-	listview->removeColumn(0);
-	listview->insertColumn("Model");
-	listview->insertColumn("Color");
-	listview->insertColumn("Properties");
-	listview->setColumnWidth(0, 60);
-	listview->setColumnWidth(1, 60);
-	listview->setColumnWidth(2, 60); 
-	*/
 }
 
 ClippingDialog::~ClippingDialog()
@@ -64,15 +39,26 @@ ClippingDialog::~ClippingDialog()
 #endif
 }
 
-void ClippingDialog::show()
+void ClippingDialog::exec()
 {
 	if (clipping_plane_ == 0) return;
 
-	raise();
 	MainControl* mc = getMainControl();
 	if (mc == 0) return;
 
 	PrimitiveManager& pm = mc->getPrimitiveManager();
+
+ 	listview->setColumnCount(3);
+	listview->setRowCount(pm.getRepresentations().size());
+	listview->setHorizontalHeaderItem(0, new QTableWidgetItem());
+	listview->setHorizontalHeaderItem(1, new QTableWidgetItem());
+	listview->setHorizontalHeaderItem(2, new QTableWidgetItem());
+ 	listview->horizontalHeaderItem(0)->setText("Model");
+ 	listview->horizontalHeaderItem(1)->setText("Coloring");
+ 	listview->horizontalHeaderItem(2)->setText("Properties");
+	listview->setColumnWidth(0, 140);
+	listview->setColumnWidth(1, 140);
+	listview->setColumnWidth(2, 140);
 
 	Position row= 0;
 	PrimitiveManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
@@ -81,8 +67,10 @@ void ClippingDialog::show()
 		const Representation& rep = **it;
 
 		QTableWidgetItem* item = new QTableWidgetItem(rep.getName().c_str());
-		item->setFlags(Qt::ItemIsSelectable);
-		if (clipping_plane_->getRepresentations().has(*it)) item->setCheckState(Qt::Checked);
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
+		item->setCheckState(Qt::Checked);
+
+		if (!clipping_plane_->getRepresentations().has(*it)) item->setCheckState(Qt::Unchecked);
 		listview->setItem(row, 0, item);
 
 		item = new QTableWidgetItem(rep.getColoringName().c_str());
@@ -92,6 +80,9 @@ void ClippingDialog::show()
 		listview->setItem(row, 2, item);
 		row++;
 	}
+
+	raise();
+	QDialog::exec();
 }
 
 
@@ -109,6 +100,7 @@ void ClippingDialog::accept()
 
 	List<Representation*> lreps = getMainControl()->getPrimitiveManager().getRepresentations();
 	vector<const Representation*> reps;
+	reps.resize(lreps.size());
 	copy(lreps.begin(), lreps.end(), reps.begin());
 
 	for (Position pos = 0; pos < (Position)listview->rowCount(); pos++)

@@ -134,6 +134,7 @@ void LabelDialog::initializeWidget(MainControl& main_control)
 void LabelDialog::show()
 {
 	raise();
+	QDialog::show();
 }
 
 
