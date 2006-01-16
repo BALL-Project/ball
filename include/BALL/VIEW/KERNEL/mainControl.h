@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76.2.2 2006/01/15 13:08:16 amoll Exp $
+// $Id: mainControl.h,v 1.76.2.3 2006/01/16 01:35:29 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -740,6 +740,8 @@ namespace BALL
 			// Connected to the delete entry
 			virtual void deleteClicked();
 
+			void updateRepLabel_();
+
 			protected:
 
 			virtual void initializePreferencesTab_()
@@ -830,8 +832,10 @@ namespace BALL
 			List<ModularWidget*>				modular_widgets_;
 
 			QLabel*             simulation_icon_;
+			QLabel*             rep_label_;
 			static const char  *simulation_running_xpm_[];
 			static const char  *simulation_stoped_xpm_[];
+			Position 					  rep_label_nr_;
 
 			String 							working_dir_;
 
@@ -842,6 +846,7 @@ namespace BALL
 			bool 								about_to_quit_;
 			bool 								important_text_in_statusbar_;
 			QTimer 							timer_;
+			QTimer 							render_timer_;
 			#ifdef 	BALL_QT_HAS_THREADS
 			QMutex 							composites_locked_mutex_;
 			QWaitCondition 			composites_locked_wait_condition_;

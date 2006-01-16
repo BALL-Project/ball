@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.3 2006/01/16 00:32:30 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.4 2006/01/16 01:33:50 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -155,8 +155,6 @@ namespace BALL
 		void MainControl::setup_()
 			throw()
 		{
-//   			setDockMenuEnabled(false);
-
 			// copy the environment variable BALLVIEW_DATA_PATH to BALL_DATA_PATH
 			// this has to be done here also, if it was done in main.C, no idea why!
 			char*	BALLView_data_path = getenv("BALLVIEW_DATA_PATH");
@@ -214,6 +212,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			font.setBold(true);
 			message_label_->setFont(font); 
 			message_label_->setFrameShape(QLabel::NoFrame);
+			message_label_->setFrameShadow(QLabel::Plain);
 
 			connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
 			connect(menuBar(), SIGNAL(hovered(QAction*)), this, SLOT(menuItemHighlighted(QAction*)));
@@ -221,9 +220,23 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 //   			QToolTip::setWakeUpDelay(500);
 //   			QToolTip::setGloballyEnabled(true);
 
+			font.setPointSize(14);
+			rep_label_ = new QLabel(statusBar());
+			rep_label_->setFrameShape(QLabel::NoFrame);
+			rep_label_->setFrameShadow(QLabel::Plain);
+			rep_label_->setFont(font); 
+			rep_label_->setMaximumSize(20,20);
+			rep_label_->setMinimumSize(20,20);
+			rep_label_->setAlignment(Qt::AlignCenter);
+			rep_label_->hide();
+			statusBar()->addPermanentWidget(rep_label_, false );
+			rep_label_nr_ = 0;
+
+			render_timer_.start(200);
+
 			simulation_icon_ = new QLabel(statusBar());
-			simulation_icon_->setMaximumSize(14,16);
-			simulation_icon_->setMinimumSize(14,16);
+			simulation_icon_->setMaximumSize(14,20);
+			simulation_icon_->setMinimumSize(14,20);
 			statusBar()->addPermanentWidget(simulation_icon_, false );
 //   			QToolTip::add(simulation_icon_, "simulation status");
 			QPixmap icon(simulation_running_xpm_);
@@ -231,7 +244,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			simulation_icon_->setPixmap(icon);
 			simulation_icon_->hide();
 			simulation_icon_->setFrameShape(QLabel::NoFrame);
+			simulation_icon_->setFrameShadow(QLabel::Plain);
+
 			connect(&timer_, SIGNAL(timeout()), SLOT(clearStatusBarText_()));
+			connect(&render_timer_, SIGNAL(timeout()), SLOT(updateRepLabel_()));
 		}
 
 
@@ -1857,6 +1873,29 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		file += "quick.bvp";
 		loadBALLViewProjectFile(file);
 		setStatusbarText("quick loading finished", true);
+	}
+
+	void MainControl::updateRepLabel_()
+	{
+		if (!primitive_manager_.updateRunning()) 
+		{
+			rep_label_->setText("");
+			return;
+		}
+
+		rep_label_nr_ ++;
+		rep_label_->show();
+		char c = '-';
+		if 		   (rep_label_nr_ == 2) c = '\\';
+		else  if (rep_label_nr_ == 3) c = '|';
+		else  if (rep_label_nr_ == 4) c = '/';
+		else  if (rep_label_nr_ == 5) 
+		{
+			c = '-';
+			rep_label_nr_ = 1;
+		}
+
+		rep_label_->setText(QString(c));
 	}
 		
 
