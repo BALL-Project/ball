@@ -152,8 +152,6 @@ namespace BALL
 			///
 			void textChanged();
 
-			///
-			void historySelected();
 			//@}
 			
 			/// Overloaded from ModularWidget

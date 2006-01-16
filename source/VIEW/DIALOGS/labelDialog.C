@@ -40,8 +40,7 @@ LabelDialog::LabelDialog(QWidget* parent, const char* name)
 	connect( add_tag_button, SIGNAL( clicked() ), this, SLOT( addTag() ) );
 	connect( font_button, SIGNAL( clicked() ), this, SLOT( fontSelected() ) );
 	connect( all_items, SIGNAL( toggled(bool) ), this, SLOT( modeChanged() ) );
-	connect( label_edit_, SIGNAL( textChanged(const QString&) ), this, SLOT( textChanged() ) );
-	connect( history_box, SIGNAL( activated(int) ), this, SLOT( historySelected() ) );
+	connect( text_box, SIGNAL( editTextChanged(const QString&) ), this, SLOT( textChanged() ) );
 
 	setWindowTitle("Add Label");
 	setObjectName(name);
@@ -150,9 +149,10 @@ void LabelDialog::accept()
 	rep->setModelType(MODEL_LABEL);
 
 	LabelModel* model = new LabelModel;
-	model->setText(ascii(label_edit_->text()));
+	model->setText(ascii(text_box->currentText()));
 	model->setColor(custom_color_);
 	model->setFont(font_);
+
 			 if (		 all_items->isChecked()) model->setMode(LabelModel::ONE_LABEL);
 	else if (		every_atom->isChecked()) model->setMode(LabelModel::ALL_ATOMS);
 	else if (every_residue->isChecked()) model->setMode(LabelModel::ALL_RESIDUES);
@@ -174,8 +174,7 @@ void LabelDialog::accept()
 	getMainControl()->insert(*rep);
 	getMainControl()->update(*rep);
 	
-	history_box->addItem(label_edit_->text());
-	history_box->setEnabled(true);
+	text_box->addItem(text_box->currentText());
 
 	setStatusbarText("Label added.");
 }
@@ -195,8 +194,7 @@ void LabelDialog::addTag()
 	else if (tag_box->currentText() == "Atom Type Name")tag = "%Y";
 	else if (tag_box->currentText() == "Element") 			tag = "%E";
 
-	label_edit_->setText(label_edit_->text() + tag);
-	label_edit_->update();
+	text_box->lineEdit()->setText(text_box->currentText() + tag);
 }
 
 void LabelDialog::fontSelected()
@@ -218,14 +216,7 @@ void LabelDialog::modeChanged()
 
 void LabelDialog::textChanged()
 {
-	apply_button_->setEnabled(label_edit_->text() != "");
-}
-
-void LabelDialog::historySelected()
-{
-	if (history_box->currentText() == "") return;
-
-	label_edit_->setText(history_box->currentText());
+	apply_button_->setEnabled(text_box->currentText() != "");
 }
 
 void LabelDialog::checkMenu(MainControl&)
