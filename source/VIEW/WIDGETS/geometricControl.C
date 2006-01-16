@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.1 2006/01/13 15:36:05 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.2 2006/01/16 16:22:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -292,10 +292,9 @@ namespace BALL
 			for (; it != items.end(); ++it)
 			{
 				QTreeWidgetItem* item = *it;
-				Representation* rep = item_to_representation_[item];
-				if (rep != 0) 
+				if (item_to_representation_.has(item))
 				{
-					getMainControl()->remove(*rep);
+					getMainControl()->remove(*item_to_representation_[item]);
 					setStatusbarText("Deleted representation.");
 					continue;
 				}
@@ -355,15 +354,22 @@ namespace BALL
 
 			getSelectedItems();
 
-			if (context_item_ != 0)
+			if (context_item_ == 0)
 			{
-				context_representation_ = item_to_representation_[context_item_];
+				context_representation_ = 0;
+				context_plane_          = 0;
+				return;
+			}
+
+			if (item_to_plane_.has(context_item_))
+			{
+				context_representation_ = 0;
 				context_plane_ 					= item_to_plane_[context_item_];
 			}
 			else
 			{
-				context_representation_ = 0;
-				context_plane_          = 0;
+				context_representation_ = item_to_representation_[context_item_];
+				context_plane_ 					= 0;
 			}
 
 			// less to type...
@@ -500,6 +506,8 @@ namespace BALL
 
 		void GeometricControl::setClippingPlane_(const Vector3& n)
 		{
+			updateSelection();
+
 			if (context_plane_ == 0) return;
 
 			context_plane_->setNormal(n);
@@ -620,6 +628,8 @@ namespace BALL
 				to_have_planes.insert(*plane_it);
 			}
 
+			context_plane_ = 0;
+
 			HashSet<ClippingPlane*>::Iterator cit = to_have_planes.begin();
 			for (; +cit; ++cit)
 			{
@@ -630,8 +640,16 @@ namespace BALL
 					sl << "ClippingPlane";
 					if (plane->isHidden()) sl << "[hidden]";
 					QTreeWidgetItem* new_item = new QTreeWidgetItem(listview, sl);
+					new_item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
 
-					if (plane->isActive()) new_item->setCheckState(0, Qt::Checked);
+					ignore_change_ = true;
+					new_item->setCheckState(0, Qt::Checked);
+
+					if (!plane->isActive()) 
+					{
+						ignore_change_ = true;
+						new_item->setCheckState(0, Qt::Unchecked);
+					}
 
 					item_to_plane_[new_item] = plane;
 					plane_to_item_[plane] = new_item;
@@ -696,8 +714,11 @@ namespace BALL
 				return;
 			}
 
-			ClippingPlane* plane = item_to_plane_[item];
-			Representation* rep = item_to_representation_[item];
+			ClippingPlane* plane = 0;
+			Representation* rep  = 0;
+			
+			if (item_to_plane_.has(item)) plane = item_to_plane_[item];
+			else 												  rep   = item_to_representation_[item];
 
 			if (rep != 0)
 			{
@@ -708,7 +729,7 @@ namespace BALL
 				return;
 			}
 
-			if (plane->isHidden() == checked)
+			if (plane->isActive() != checked)
 			{
 				plane->setActive(!plane->isActive());
 				getMainControl()->redrawAllRepresentations();
