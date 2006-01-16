@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.18.2.1 2006/01/13 15:36:02 amoll Exp $
+// $Id: server.C,v 1.18.2.2 2006/01/16 00:24:50 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -160,6 +160,7 @@ namespace BALL
   		server_icon_->setFrameShape(QLabel::NoFrame);
 			server_icon_->setPixmap(icon);
 			server_icon_->setMaximumSize(14,16);
+			server_icon_->setMinimumSize(14,16);
 			server_icon_->show();
  		}
 
