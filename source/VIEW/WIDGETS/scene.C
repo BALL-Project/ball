@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.4 2006/01/17 15:00:50 amoll Exp $
+// $Id: scene.C,v 1.174.2.5 2006/01/17 16:08:17 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1653,7 +1653,8 @@ namespace BALL
 			if (current_mode_ == PICKING__MODE)
 			{
 				selectObjects_();
-				need_update_ = true;
+				// update will be done from MolecularControl!
+				need_update_ = false; 			
 			}
 			else if (current_mode_ == ROTATE__MODE)
 			{
