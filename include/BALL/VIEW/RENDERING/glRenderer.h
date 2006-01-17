@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36 2005/12/23 17:02:21 amoll Exp $
+// $Id: glRenderer.h,v 1.36.2.1 2006/01/17 13:45:24 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -408,10 +408,6 @@ namespace BALL
 				throw();
 
 			void initGLU_(DrawingMode mode);
-
-			//_
- 			GLubyte* generateBitmapFromText_(const String& text, const QFont& font, int& width, int& height) const
-				throw();
 
 			Scene* 								scene_;
 
