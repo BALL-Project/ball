@@ -81,12 +81,8 @@ namespace BALL
 
 			hide();
 			setGuest(*browser_);
-//   			undock();
-			resize(800, 700);
-			move(20,20);
-			setMinimumSize(800, 600);
-
 			registerWidget(this);
+			browser_->setReadOnly(true);
 		}
 
 		HelpViewer::~HelpViewer()
@@ -118,7 +114,8 @@ namespace BALL
 
 		void HelpViewer::showHelp(const String& url)
 		{
-			browser_->loadResource(QTextDocument::HtmlResource, QUrl((base_dir_ + url).c_str()));
+			QUrl qurl = QUrl((base_dir_ + url).c_str());
+ 			browser_->setSource(qurl);
 			show();
 		}
 
@@ -144,10 +141,7 @@ namespace BALL
 				return;
 			}
 
-			if (!RTTI::isKindOf<ShowHelpMessage>(*message)) 
-			{
-				return;
-			}
+			if (!RTTI::isKindOf<ShowHelpMessage>(*message)) return;
 
 			ShowHelpMessage* msg = RTTI::castTo<ShowHelpMessage>(*message);
 			showHelp(msg->getURL());
@@ -156,7 +150,8 @@ namespace BALL
 		void HelpViewer::setDefaultPage(const String& url)
 		{
 			default_page_ = url;
-			browser_->loadResource(QTextDocument::HtmlResource, QUrl(default_page_.c_str()));
+			QUrl qurl((base_dir_ + url).c_str());
+			browser_->setSource(qurl);
 		}
 
 		const String& HelpViewer::getDefaultPage() const
@@ -175,10 +170,8 @@ namespace BALL
 
 			base_dir_ = dir;
 
-			QStringList sl;
-			sl << base_dir_.c_str();
-			browser_->setSearchPaths(sl);
-			browser_->loadResource(QTextDocument::HtmlResource, QUrl((base_dir_ + default_page_).c_str()));
+			QUrl qurl((dir + default_page_).c_str());
+			browser_->setSource(qurl);
 		}
 
 		void HelpViewer::enterWhatsThisMode()
@@ -321,20 +314,24 @@ namespace BALL
 		bool HelpViewer::showHelpFor(const QObject* object)
 		{
 			HashMap<const QObject*, String>::Iterator to_find;
-			to_find = docu_entries_.find(object);
 
-			QObject* widget2 = (QWidget*) object;
+			QObject* widget2 = (QObject*) object;
 
-			while (to_find == docu_entries_.end() && widget2 != 0)
-			{
-				if (widget2->parent() == 0) return false;
-
+			while (widget2 != 0)
+			{ 
 				to_find = docu_entries_.find(widget2);
+				if (to_find != docu_entries_.end()) break;
+
+				widget2 = widget2->parent();
 			}
 
-			if (widget2 == 0) return false;
+			if (widget2 == 0) 
+			{
+				setStatusbarText("No documentation for this widget available!", true);
+				return false;
+			}
 
-			showHelp(docu_entries_[widget2]);
+			showHelp((*to_find).second);
 
 			return true;
 		}
