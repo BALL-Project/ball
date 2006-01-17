@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.3 2006/01/17 14:35:19 amoll Exp $
+// $Id: scene.C,v 1.174.2.4 2006/01/17 15:00:50 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1329,7 +1329,7 @@ namespace BALL
 
 			window_menu_entry_ = 
 				insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
-			window_menu_entry_->setChecked(true);
+			window_menu_entry_->setCheckable(true);
 			setMenuHelp("scene.html");
 
 			// ======================== ANIMATION ===============================================
@@ -1393,6 +1393,8 @@ namespace BALL
 			
 			clear_animation_action_->setEnabled(
 					animation_points_.size() > 0 && !animation_running);
+
+			window_menu_entry_->setChecked(isVisible());
 		}
 
 		bool Scene::isAnimationRunning() const
