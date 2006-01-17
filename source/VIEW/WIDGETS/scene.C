@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.2 2006/01/16 15:17:16 amoll Exp $
+// $Id: scene.C,v 1.174.2.3 2006/01/17 14:35:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1672,7 +1672,7 @@ namespace BALL
 
 		void Scene::initTimer()
 		{
-			timer_.start(500);
+//   			timer_.start(500); // ?????????????? currently doesnt work with QT 4.1
 		}
 
 		void Scene::timerSignal_()
@@ -1757,25 +1757,18 @@ namespace BALL
 
 			setStatusbarText(string2, false);
 
-			QPainter painter(this);
-
-			ColorRGBA color = getStage()->getBackgroundColor();
-			color.set(255 - (Position) color.getRed(),
-								255 - (Position) color.getGreen(),
-								255 - (Position) color.getBlue());
-
-
-			painter.setBackgroundMode(Qt::OpaqueMode);
-//   			painter.setBackgroundColor(color.getQColor());
-//   			painter.setPen(getStage()->getBackgroundColor().getQColor());
-			painter.setPen(color.getQColor());
-
 			QPoint diff(20, 20);
 			if (pos_x > (Position) width() / 2) diff.setX(-20);
 			if (pos_y > (Position) height() / 2) diff.setY(-20);
-
 			point += diff;
-			painter.drawText(point, string.c_str());
+
+			QPainter painter(this);
+//   				painter.setBackgroundMode(Qt::OpaqueMode);
+				painter.setBackgroundMode(Qt::TransparentMode);
+//   				painter.setBackground(QBrush(getStage()->getBackgroundColor().getInverseColor().getQColor()));
+				painter.setPen(getStage()->getBackgroundColor().getQColor());
+				painter.drawText(point, string.c_str());
+			painter.end();
 
 			show_info_ = false;
 		}
