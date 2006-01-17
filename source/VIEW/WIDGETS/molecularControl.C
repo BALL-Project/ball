@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.2 2006/01/17 16:35:25 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.3 2006/01/17 16:38:02 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -494,7 +494,11 @@ namespace BALL
 
 		void MolecularControl::showGuestContextMenu(const QPoint& pos)
 		{
-			if (getMainControl()->compositesAreLocked()) return;
+			if (getMainControl()->compositesAreLocked() ||
+					getMainControl()->getPrimitiveManager().updateRunning()) 
+			{
+				return;
+			}
 
 			QList<QTreeWidgetItem *> items = listview->selectedItems();
 			if (items.size() == 0) return;

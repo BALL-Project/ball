@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.2 2006/01/16 16:22:54 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.4 2006/01/17 16:39:27 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -329,7 +329,7 @@ namespace BALL
 		void GeometricControl::showGuestContextMenu(const QPoint& pos)
 		{
 			if (getMainControl()->compositesAreLocked() ||
-					creating_representations_)
+					getMainControl()->getPrimitiveManager().updateRunning()) 
 			{
 				setStatusbarText("No changes to representations allowed, while simulation is running or creating new representations!", true);
 				return;
@@ -378,7 +378,10 @@ namespace BALL
 			modify_surface_dialog_->setRepresentation(rep);
 			notify_(new RepresentationMessage(*rep, RepresentationMessage::SELECTED));
 
-			if (rep == 0) return; 
+			if (rep == 0 || !getMainControl()->getPrimitiveManager().has(*rep)) 
+			{
+				return; 
+			}
 
 			if (rep->getComposites().size() > 0) 
 			{
