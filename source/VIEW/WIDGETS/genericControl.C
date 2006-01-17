@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.17.2.1 2006/01/13 15:36:05 amoll Exp $
+// $Id: genericControl.C,v 1.17.2.2 2006/01/17 14:44:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
@@ -67,8 +67,7 @@ namespace BALL
 				return;
 			}
 
-			listview->setCurrentItem(0);
-//   			listview->selectAll(false);
+			listview->clearSelection();
 		}
 
 		void GenericControl::initializeWidget(MainControl& main_control)
