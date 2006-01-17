@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.5 2006/01/17 22:57:11 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.6 2006/01/17 23:45:10 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -803,7 +803,7 @@ namespace BALL
 			String toc = getCurrentLine();
 			if (toc == "") return;
 
-			bool global = toc.hasSuffix(".");
+			bool global = !toc.hasSuffix(".");
 
 			if (global)
 			{
@@ -819,26 +819,9 @@ namespace BALL
 			String cmd;
 			bool state;
 
-			if (!getMembers(toc, sl)) return;
+			if (!getMembers(toc + ".__class__", sl)) return;
 
-			cmd = toc + ".__class__.__bases__";
-			String result = PyInterpreter::run(cmd , state);
-
-			if (!state) 
-			{
-Log.error() << "#~~#   9 "  << result           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-				return;
-			}
-
-			vector<String> subclasses;
-			result.split(subclasses, "(<,>)\'");
-
-			for (Position p = 0; p < subclasses.size(); p++)
-			{
-				if (!getMembers(subclasses[p], sl)) return;
-			}
-		
-
+Log.error() << "#~~#   3 " << sl.size()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			combo_box_->clear();
 			combo_box_->addItems(sl);
 			combo_box_->show();
@@ -851,17 +834,15 @@ Log.error() << "#~~#   9 "  << result           << " "  << __FILE__ << "  " << _
 			String result = PyInterpreter::run(cmd , state);
 			if (!state) 
 			{
-Log.error() << "#~~#   8 "  << result           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				return false;
 			}
 
 			vector<String> sv;
-			result.split(sv, "[,\']");
+			result.split(sv, "[,\'] ");
 			for (Position p = 0; p < sv.size(); p++)
 			{
 				if (sv[p].hasPrefix("__")) continue;
 				sl << sv[p].c_str();
-Log.error() << "#~~#   7 " << sv[p]            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			}
 
 			return true;
