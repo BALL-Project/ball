@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.C,v 1.7.2.1 2006/01/13 15:36:03 amoll Exp $
+// $Id: glDisplayList.C,v 1.7.2.2 2006/01/17 14:51:35 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glDisplayList.h>
@@ -11,7 +11,7 @@
 
 using namespace std;
 
-#define BALL_VIEW_DEBUG
+//   #define BALL_VIEW_DEBUG
 
 #ifdef BALL_VIEW_DEBUG
 #define CHECK_GL_ERROR \

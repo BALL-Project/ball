@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.2 2006/01/17 14:51:26 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.3 2006/01/17 14:53:46 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -316,6 +316,8 @@ namespace BALL
 		void DatasetControl::createContextMenu_()
 		{
 			context_menu_.clear();
+
+			insertContextMenuEntry_("Delete", SLOT(deleteCurrentItems()));
 
 			if (item_to_trajectory_.has(context_item_))
 			{

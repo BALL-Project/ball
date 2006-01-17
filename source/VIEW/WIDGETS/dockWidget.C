@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.28.2.1 2006/01/13 15:36:04 amoll Exp $
+// $Id: dockWidget.C,v 1.28.2.2 2006/01/17 14:55:13 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -56,12 +56,8 @@ namespace BALL
 			QPoint p;
 			guest.setParent(this);
 			guest.resize(120,100);
-//   			guest.setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding, 0, 0, false));
-//   			layout_->addWidget(&guest);
 			guest_ = &guest;
 			setMinimumSize(20, 20);
-//   			setCloseMode(Q3DockWindow::Always);
-//   			setResizeEnabled(true);
 			setWidget(&guest);
 
 			guest.setContextMenuPolicy(Qt::CustomContextMenu);
