@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.1 2006/01/13 15:36:04 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.2 2006/01/17 14:51:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -309,7 +309,6 @@ namespace BALL
 			Composite* composite = item_to_composite_[&item];
 			composite_to_items_[composite].erase(&item);
 			item_to_composite_.erase(&item);
-//   			GenericControl::removeItem_(&item, true);
 			return true;
 		}
 
@@ -604,7 +603,7 @@ namespace BALL
 		void DatasetControl::updateSelection()
 			throw()
 		{
-//   			GenericControl::updateSelection();
+			GenericControl::updateSelection();
 
 			ItemList list = getSelectedItems();
 			ItemList::iterator it = list.begin();
