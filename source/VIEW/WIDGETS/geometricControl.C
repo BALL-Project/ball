@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.4 2006/01/17 16:39:27 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.5 2006/01/17 16:46:58 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -421,6 +421,7 @@ namespace BALL
 			throw()
 		{
 			List<Representation*> selection;
+Log.error() << "#~~#   1 "  << item_to_representation_.size()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
  			HashMap<QTreeWidgetItem*, Representation*>::ConstIterator it = item_to_representation_.begin();
 			for (; +it; ++it)
 			{
