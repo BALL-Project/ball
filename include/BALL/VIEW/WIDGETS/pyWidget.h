@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.2 2006/01/16 00:17:16 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.3 2006/01/17 22:57:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -24,6 +24,8 @@
 #include <QKeyEvent>
 #include <QDropEvent>
 #include <QLineEdit>
+#include <QComboBox>
+#include <QStringList>
 
 // currently doesnt work right
 #undef BALL_QT_HAS_THREADS
@@ -207,6 +209,9 @@ namespace BALL
 			public slots:
 
 			//
+			void showCompletion();
+		
+			//
 			void clear() throw();
 
 			//
@@ -223,6 +228,8 @@ namespace BALL
 			virtual void modifyHotkeys();
 
 			void appendText(const String& text);
+
+			bool getMembers(const String& classname, QStringList& sl);
 
 			protected slots:
 
@@ -274,6 +281,7 @@ namespace BALL
 
 			QTextEdit* 				text_edit_;
 			MyLineEdit* 			line_edit_;
+			QComboBox* 				combo_box_;
 			List<Hotkey> 			hotkeys_;
 			// 								we use an own working dir to find Python Scripts
 			String 						working_dir_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.4 2006/01/16 13:02:17 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.5 2006/01/17 22:57:11 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -121,6 +121,7 @@ namespace BALL
 			: DockWidget(parent, name),
 				text_edit_(0),
 				line_edit_(0),
+				combo_box_(new QComboBox(0)),
 				working_dir_(""),
 				valid_(false),
 				started_startup_script_(false),
@@ -145,6 +146,8 @@ namespace BALL
  			lay->addWidget(line_edit_,1, 0, 1, -1);
 
 			connect(line_edit_, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
+
+			combo_box_->hide();
 
 			default_visible_ = false;
 			registerWidget(this);
@@ -558,6 +561,12 @@ namespace BALL
 			else if (e->key() == Qt::Key_Down) 			hp++;
 			else if (e->key() == Qt::Key_PageUp) 		hp = 0;
 			else if (e->key() == Qt::Key_PageDown)	hp = history_.size() - 1;
+			else if (e->key() == Qt::Key_Right)	
+			{
+				if (line_edit_->cursorPosition() != (Index) getCurrentLine().size()) return false;
+				showCompletion();
+				return true;
+			}
 			else 
 			{
 				return false;
@@ -789,6 +798,74 @@ namespace BALL
 			history_position_ = 0;
 		}
 
+		void PyWidget::showCompletion()
+		{
+			String toc = getCurrentLine();
+			if (toc == "") return;
+
+			bool global = toc.hasSuffix(".");
+
+			if (global)
+			{
+				// ...
+				return;
+			}
+
+			vector<String> sv;
+			toc.split(sv, "(),. ");
+			toc = sv[sv.size() - 1];
+
+			QStringList sl;
+			String cmd;
+			bool state;
+
+			if (!getMembers(toc, sl)) return;
+
+			cmd = toc + ".__class__.__bases__";
+			String result = PyInterpreter::run(cmd , state);
+
+			if (!state) 
+			{
+Log.error() << "#~~#   9 "  << result           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+				return;
+			}
+
+			vector<String> subclasses;
+			result.split(subclasses, "(<,>)\'");
+
+			for (Position p = 0; p < subclasses.size(); p++)
+			{
+				if (!getMembers(subclasses[p], sl)) return;
+			}
+		
+
+			combo_box_->clear();
+			combo_box_->addItems(sl);
+			combo_box_->show();
+		}
+
+		bool PyWidget::getMembers(const String& classname, QStringList& sl)
+		{
+			bool state;
+			String cmd = String("dir(") + classname + ")";
+			String result = PyInterpreter::run(cmd , state);
+			if (!state) 
+			{
+Log.error() << "#~~#   8 "  << result           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+				return false;
+			}
+
+			vector<String> sv;
+			result.split(sv, "[,\']");
+			for (Position p = 0; p < sv.size(); p++)
+			{
+				if (sv[p].hasPrefix("__")) continue;
+				sl << sv[p].c_str();
+Log.error() << "#~~#   7 " << sv[p]            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+			}
+
+			return true;
+		}
 
 	} // namespace VIEW
 } // namespace BALL
