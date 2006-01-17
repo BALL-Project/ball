@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.4.2.1 2006/01/13 15:35:53 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.4.2.2 2006/01/17 16:31:07 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -52,7 +52,7 @@ namespace BALL
 			connect( surface_tab, SIGNAL( selected(const QString&) ), this, SLOT( tabChanged() ) );
 			connect( autoscale, SIGNAL( clicked() ), this, SLOT( autoScalePressed() ) );
 			connect( grids, SIGNAL( activated(int) ), this, SLOT( gridSelected() ) );
-			connect( transparency_group_grid, SIGNAL( clicked(int) ), this, SLOT( gridTransparencyChanged() ) );
+			connect( alpha_button_grid, SIGNAL( toogled(bool) ), this, SLOT( gridTransparencyChanged() ) );
 			connect( min_min_button, SIGNAL( clicked() ), this, SLOT( minMinPressed() ) );
 			connect( min_button, SIGNAL( clicked() ), this, SLOT( minPressed() ) );
 			connect( mid_button, SIGNAL( clicked() ), this, SLOT( midPressed() ) );
@@ -282,9 +282,7 @@ namespace BALL
 
 		void ModifySurfaceDialog::setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box, const QRadioButton* rbutton)
 		{
-			QPalette pal(label->palette());
-			QColor qcolor = pal.color(label->backgroundRole());
-			color.set(qcolor);
+			color = VIEW::getColor(label);
 
 			if (rbutton->isChecked())
 			{
@@ -298,10 +296,7 @@ namespace BALL
 
 		void ModifySurfaceDialog::getColor_(const ColorRGBA& color, QLabel* label, QSpinBox* box)
 		{
-			QPalette pal(label->palette());
-			QColor qcolor = color.getQColor();
-			pal.setColor(label->backgroundRole(), qcolor);
-			label->setPalette(pal);
+			VIEW::setColor(label, color);
 			box->setValue(color.getAlpha());
 		}
 

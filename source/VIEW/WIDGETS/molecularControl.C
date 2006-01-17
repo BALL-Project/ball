@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.1 2006/01/13 15:36:06 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.2 2006/01/17 16:35:25 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -380,7 +380,6 @@ namespace BALL
 			throw()
 		{
 			bool composites_muteable = !getMainControl()->compositesAreLocked();
-			context_menu_.setEnabled(composites_muteable);
 
 			bool one_item = (getSelection().size() == 1);
 
@@ -495,6 +494,8 @@ namespace BALL
 
 		void MolecularControl::showGuestContextMenu(const QPoint& pos)
 		{
+			if (getMainControl()->compositesAreLocked()) return;
+
 			QList<QTreeWidgetItem *> items = listview->selectedItems();
 			if (items.size() == 0) return;
 
