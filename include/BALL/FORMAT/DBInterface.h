@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.h,v 1.1 2005/11/06 19:36:33 oliver Exp $
+// $Id: DBInterface.h,v 1.2 2006/01/18 12:22:09 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_DBINTERFACE_H
@@ -18,7 +18,21 @@
 namespace BALL
 {
 
-	/** A simplified interface to a small molecule structure database.
+	/** A simple interface to a small molecule structure database.
+			The database allows the storage of molecular structures in an SQL database.
+			The structure includes the independent storage of the molecule's topology (i.e.
+      atoms and bonds) and a number of geometries (conformations, i.e. atom coordinates).
+			\par
+			The interface has currently been tested with MySQL 4, however it should be easy to
+			port it to other databases. In order to create a database, please have a look at
+			source/APPLICATIONS/DB. There are SQL scripts provided to create an empty database
+			as well as code examples importing structures into the database and extracting structures
+			from there again.
+			\par 
+			The database interface also requires an activated database interface in QT.
+			If you did not install the QT database drivers, please recompile QT with the appropriate
+			options (see QT documentation for details). Using the database support without the
+			enabling the visualization component of BALL is not possible at this time.
 	*/
 	class DBInterface
 	{
