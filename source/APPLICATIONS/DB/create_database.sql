@@ -1,8 +1,3 @@
--- MySQL dump 10.9
---
--- Host: localhost    Database: STRUCTURES
--- ------------------------------------------------------
--- Server version	4.1.10a
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -15,6 +10,9 @@
 --
 -- Table structure for table `atom_charge`
 --
+
+CREATE DATABASE IF NOT EXISTS STRUCTURES;
+USE STRUCTURES;
 
 DROP TABLE IF EXISTS `atom_charge`;
 CREATE TABLE `atom_charge` (
