@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.7 2006/01/18 13:47:17 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.8 2006/01/18 14:02:23 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -846,7 +846,7 @@ namespace BALL
 
 			combo_box_->clear();
 			combo_box_->addItems(sl);
-			combo_box_->resize(line_edit_->size().height(), width() / 2);
+			combo_box_->resize(width() / 2, line_edit_->size().height());
 			combo_box_->show();
 			combo_box_->showPopup();
 		}
