@@ -14,6 +14,7 @@ PARSER_SOURCES= \
 CPP_SOURCES=\
 	bruker1DFile.C\
 	bruker2DFile.C\
+	DBInterface.C\
 	DCDFile.C\
 	genericMolFile.C\
 	HINFile.C\
@@ -40,7 +41,7 @@ CPP_SOURCES=\
 include ../common.mak
 -include .Dependencies
 
-#depend: $(PARSER_SOURCES)
+depend: $(PARSER_SOURCES)
 
 default_clean:	clean_flex_bison
 
@@ -48,10 +49,15 @@ clean_flex_bison:
 	@-$(RM) GAMESSDatParserParser.C GAMESSDatParserLexer.C GAMESSDatParserParser.h
 	@-$(RM) GAMESSLogParserParser.C GAMESSLogParserLexer.C GAMESSLogParserParser.h
 
+
+DBInterface.o:	DBInterface.C
+	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(VIEW_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
+
+
 GAMESSDatParserParser.C: GAMESSDatParserParser.y
 	$(YACC) -p GAMESSDatParser -d $*.y && $(MV) y.tab.h $*.h && $(MV) y.tab.c $@
-GAMESSDatParserParser.h: GAMESSDatParserParser.y
 
+GAMESSDatParserParser.h: GAMESSDatParserParser.y
 
 GAMESSDatParserLexer.C: GAMESSDatParserLexer.l
 	$(LEX) -PGAMESSDatParser -o$@ $*.l
