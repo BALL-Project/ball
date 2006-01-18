@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.5 2006/01/17 16:46:58 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.6 2006/01/18 14:57:27 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -97,7 +97,8 @@ namespace BALL
 		{
 			if (!representation_to_item_.has(&rep)) return;
 
-			removeItem_(representation_to_item_[&rep]);
+			delete representation_to_item_[&rep];
+
 			item_to_representation_.erase(representation_to_item_[&rep]);
 			representation_to_item_.erase(&rep);		
 		}
@@ -421,7 +422,6 @@ namespace BALL
 			throw()
 		{
 			List<Representation*> selection;
-Log.error() << "#~~#   1 "  << item_to_representation_.size()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
  			HashMap<QTreeWidgetItem*, Representation*>::ConstIterator it = item_to_representation_.begin();
 			for (; +it; ++it)
 			{
@@ -721,8 +721,8 @@ Log.error() << "#~~#   1 "  << item_to_representation_.size()           << " "  
 			ClippingPlane* plane = 0;
 			Representation* rep  = 0;
 			
-			if (item_to_plane_.has(item)) plane = item_to_plane_[item];
-			else 												  rep   = item_to_representation_[item];
+			if 			(item_to_plane_.has(item)) 					plane = item_to_plane_[item];
+			else if (item_to_representation_.has(item))	rep   = item_to_representation_[item];
 
 			if (rep != 0)
 			{

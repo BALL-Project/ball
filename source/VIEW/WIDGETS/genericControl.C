@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.17.2.2 2006/01/17 14:44:59 amoll Exp $
+// $Id: genericControl.C,v 1.17.2.3 2006/01/18 14:57:29 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
@@ -19,8 +19,6 @@ namespace BALL
  					context_item_(0),
 					listview(new QTreeWidget(this))
 		{
-			// appearance
-//   			listview->setSorting(-1);
  			setGuest(*listview);	
 			listview->setSelectionMode(QAbstractItemView::ExtendedSelection);
 			connect(listview, SIGNAL(itemSelectionChanged()), this, SLOT(updateSelection()));
@@ -46,6 +44,11 @@ namespace BALL
 			{
 				context_item_ = *result.begin();
 			}
+			else
+			{
+				context_item_ = 0;
+			}
+
 			return result;
 		}
 
