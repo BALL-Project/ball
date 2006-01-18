@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.C,v 1.1 2005/11/06 19:36:33 oliver Exp $
+// $Id: DBInterface.C,v 1.2 2006/01/18 21:04:43 oliver Exp $
 //
 
 #include <BALL/FORMAT/DBInterface.h>
@@ -13,6 +13,7 @@
 #include <BALL/FORMAT/INIFile.h>
 
 #include <sstream>
+#include <iostream>
 
 namespace BALL 
 {
@@ -333,11 +334,47 @@ namespace BALL
 
 	void DBInterface::setTopology(DBInterface::ID id, const System& system)
 	{
+		// delete atom_coord first -----
+		prepare("SELECT id FROM conformations WHERE topology_id = ?");
+		addBindValue(id);
+		executeQuery();
+
+		while (next())
+    {
+      cerr << "Y" << endl;
+      prepare(string("DELETE FROM atom_coord WHERE conformation_id = ") + value(0).toString().ascii() );
+      executeQuery();
+    }
+
+
+		//------------------------------
+  
+
 		// Remove all older conformations for consistency (the number/order of atoms might have changed!)
 		prepare("DELETE FROM conformations WHERE topology_id = ?");
 		addBindValue(id);
 		executeQuery();
 
+  
+
+		// same for all charges -------
+		prepare("SELECT id FROM molecule_charge WHERE topology_id = ?");
+		addBindValue(id);
+		executeQuery();
+  
+  
+		while (next())
+    {
+      prepare(string("DELETE FROM atom_charge WHERE molecule_charge_id = ") + value(0).toString().ascii() );
+      executeQuery();
+    }
+  
+
+		prepare("DELETE FROM molecule_charge WHERE topology_id = ?");
+		addBindValue(id);
+		executeQuery();
+
+		//-----------------------------
 		prepare("DELETE FROM connection_table_atoms WHERE topology_id = ?");
 		addBindValue(id);
 		executeQuery();
@@ -445,26 +482,6 @@ namespace BALL
 	DBInterface::ID DBInterface::storeConformation
 		(DBInterface::ID topology_id, DBInterface::ID method_id, const System& system)
 	{
-		
-		prepare("SELECT id FROM conformations WHERE topology_id = ? AND method_id = ?");
-		addBindValue(topology_id);
-		addBindValue(method_id);
-		executeQuery();
-
-		if (size() != 0)
-		{
-			// Delete the old conformation from the coordinate table and the conformation table
-			first();
-			ID conf_id = value(0).toInt();
-			prepare("DELETE FROM conformations WHERE id = ?");
-			addBindValue(conf_id);
-			executeQuery();
-
-			prepare("DELETE FROM atom_coord WHERE conformation_id = ?");
-			addBindValue(conf_id);
-			executeQuery();
-		}
-		
 		// Create a new conformation for the given topology/method.
 		prepare("INSERT INTO conformations (topology_id, method_id) VALUES (?, ?)");
 		addBindValue(topology_id);
@@ -509,6 +526,52 @@ namespace BALL
 	}
 
 
+
+	/// Store the current conformation 
+	DBInterface::ID DBInterface::storeCharge
+		(DBInterface::ID topology_id, DBInterface::ID method_id, const System& system)
+	{
+		// Create a new conformation for the given topology/method.
+		prepare("INSERT INTO molecule_charge (topology_id, method_id) VALUES (?, ?)");
+		addBindValue(topology_id);
+		addBindValue(method_id);
+		executeQuery();
+		ID charge_id = lastInsertedID();
+
+		// Use this conformation ID to create atom coordinates.
+		// Sanity check: make sure the number of atoms/bonds is consistent with the topology.
+		Index atom_count = system.countAtoms();
+		executeQuery("SELECT count(*) FROM connection_table_atoms WHERE topology_id = " + String((long)topology_id));
+		first();
+		if (atom_count != value(0).toInt())
+    {
+      throw InconsistentTopology(__FILE__, __LINE__, "found " + String(value(0).toInt())
+				 + " atoms instead of " + String(atom_count) + " in system.");
+    }
+  
+		Index bond_count = system.countBonds();
+		executeQuery("SELECT count(*) FROM connection_table_bonds WHERE topology_id = " + String((long)topology_id));
+		first();
+		if (bond_count != value(0).toInt())
+    {
+      throw InconsistentTopology(__FILE__, __LINE__, "found " + String(value(0).toInt())
+				 + " bonds instead of " + String(bond_count) + " in system.");
+    }
+  
+		// Insert the atom coordinates
+		Size idx = 0;
+		for (AtomConstIterator ai = system.beginAtom(); +ai; ++ai, ++idx)
+    {
+      prepare("INSERT INTO atom_charge (molecule_charge_id, atom_idx, charge) VALUES (?, ?, ?)");
+      addBindValue(charge_id);
+      addBindValue(idx);
+      addBindValue(ai->getCharge());
+      executeQuery();
+    }
+  
+		return charge_id;
+	}
+
 	/// Return IDs for all current methods for conformation generation
 	DBInterface::IDVector DBInterface::getConformationMethods()
 	{
@@ -523,6 +586,23 @@ namespace BALL
 		return ids;
 	}
 
+	/// Return IDs for all current methods for charge generation
+	DBInterface::IDVector DBInterface::getChargeMethods()
+	{
+		// Extract all method IDs from the corresponding table...
+		executeQuery("SELECT method_id FROM charge_generation");
+		IDVector ids;
+		while (next())
+    {	
+      // ...and return a vector containing all those IDs.
+      ids.push_back((Size)value(0).toInt());
+    }
+		
+		return ids;
+	}
+
+
+
 	/// Return name and parameters of a conformation generation method
 	DBInterface::ConformationMethod DBInterface::getConformationMethod(DBInterface::ID method_id)
 	{
@@ -530,6 +610,15 @@ namespace BALL
 		first();
 		return ConformationMethod(value(0).toString().ascii(), value(1).toString().ascii());
 	}
+
+	/// Return name and parameters of a charge generation method
+	DBInterface::ChargeMethod DBInterface::getChargeMethod(DBInterface::ID method_id)
+	{
+		executeQuery("SELECT method, parameters FROM charge_generation WHERE method_id = " + String((long)method_id));
+		first();
+		return ChargeMethod(value(0).toString().ascii(), value(1).toString().ascii());
+	}
+
 
 	/// Return name and parameters of a conformation generation method
 	DBInterface::ID DBInterface::getConformationMethod(const String& method, const String& parameters)
@@ -544,6 +633,23 @@ namespace BALL
 			std::cout << "query:       " << executedQuery() << std::endl;
 			throw InvalidQuery(__FILE__, __LINE__, "no such method: " + method + "/" + parameters);
 		}
+		first();
+		return (ID)(value(0).toInt());
+	}
+
+	/// Return name and parameters of a charge generation method
+	DBInterface::ID DBInterface::getChargeMethod(const String& method, const String& parameters)
+	{
+		prepare("SELECT method_id FROM charge_generation WHERE method = ? AND parameters = ?");
+		addBindValue(method.c_str());
+		addBindValue(parameters.c_str());
+		executeQuery();
+		if (size() != 1)
+    {
+      std::cout << "result size: " << size() << std::endl;
+      std::cout << "query:       " << executedQuery() << std::endl;
+      throw InvalidQuery(__FILE__, __LINE__, "no such method: " + method + "/" + parameters);
+    }
 		first();
 		return (ID)(value(0).toInt());
 	}
@@ -571,4 +677,28 @@ namespace BALL
 		return id;
 	}
 	
+
+	/// Create a new charge generation method and return its database ID
+	DBInterface::ID DBInterface::newChargeMethod(const String& method, const String& parameters)
+	{
+		ID id = 0;
+		try
+    {
+      // Check whether we have an ID for this method already
+      id = getChargeMethod(method, parameters);
+    }
+		catch (InvalidQuery)
+    {
+      // Otherwise, insert a new method into the method generation table.
+      prepare("INSERT INTO charge_generation (method, parameters) VALUES (?, ?)");
+      addBindValue(method.c_str());
+      addBindValue(parameters.c_str());
+      executeQuery();
+      id = lastInsertedID();
+    }
+  
+		// Return either the old or the new ID.
+		return id;
+	}
+
 } // namespace BALL

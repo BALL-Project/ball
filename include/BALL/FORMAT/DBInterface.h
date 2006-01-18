@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.h,v 1.2 2006/01/18 12:22:09 oliver Exp $
+// $Id: DBInterface.h,v 1.3 2006/01/18 21:04:43 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_DBINTERFACE_H
@@ -80,10 +80,19 @@ namespace BALL
 		/// A vector of database IDs
 		typedef std::vector<ID> IDVector;
 
-		/** Describes a method for conformation generation.
+		/** Description of a method for conformation generation.
 				First: name of the method used, second: the paramters used.
 		*/
 		typedef std::pair<String, String> ConformationMethod;
+
+		/** Description of a method for charge generation.
+				First: name of the method used, second: the paramters used.
+		*/
+		typedef std::pair<String, String> ChargeMethod;
+		//@}
+
+		/**	@name Constants */
+		//@{
 
 		/// Database status codes
 		enum ErrorCodes
@@ -91,11 +100,6 @@ namespace BALL
 			NO_ERROR,
 			NO_CONNECTION // the database was not connected/initialized (good() = false)
 		};
-
-		//@}
-
-		/**	@name Constants */
-		//@{
 
 		/// The file containing the login credentials used by connect()
 		static const String BALL_DEFAULT_DBRCFILE;
@@ -138,6 +142,9 @@ namespace BALL
 		IDVector getConformationList(ID topology_id, ID method_id);
 		/// Assign a specific conformation to an existing topology
 		void loadConformation(const ID conformation, System& system);
+
+		/// Store the current conformation with energy
+		ID storeConformation(ID topology_id, ID method_id, const System& system,double energy);
 		/// Store the current conformation 
 		ID storeConformation(ID topology, ID method_ID, const System& system);
 
@@ -149,10 +156,19 @@ namespace BALL
 		ID getConformationMethod(const String& method, const String& parameters);
 		/// Create a new conformation generation method and return its database ID
 		ID newConformationMethod(const String& method, const String& parameters);
-		//@}
 				
-		/**	@name Debugging and diagnostics */
-		//@{
+		/// Charge methods, same as conformation methods
+		ID storeCharge(ID topology_id, ID method_id, const System& system);
+
+		///
+		IDVector getChargeMethods();
+		///
+		ChargeMethod getChargeMethod(DBInterface::ID method_id);
+		///
+		ID getChargeMethod(const String& method, const String& parameters);
+		///
+		ID newChargeMethod(const String& method, const String& parameters);
+
 		///
 		ErrorCode getError() const { return error_; }
 		///
@@ -254,7 +270,9 @@ namespace BALL
 
 		// Database conection
 		ErrorCode				error_;
+		///
 		QSqlDatabase*		db_;
+		///
 		QSqlQuery*			query_;
 		
 		// Connection details
