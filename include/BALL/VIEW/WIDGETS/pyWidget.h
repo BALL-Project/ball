@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.3 2006/01/17 22:57:40 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.4 2006/01/18 13:47:21 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -229,11 +229,13 @@ namespace BALL
 
 			void appendText(const String& text);
 
-			bool getMembers(const String& classname, QStringList& sl);
+			bool getMembers(const String& classname, QStringList& sl, const String& prefix);
 
 			protected slots:
 
 			virtual bool returnPressed();
+
+			virtual bool completionSelected_();
 
 			protected:
 
@@ -276,7 +278,6 @@ namespace BALL
 
 			virtual void contentsDropEvent(QDropEvent* e);
 
-
 			bool keyPressed(QKeyEvent* e);
 
 			QTextEdit* 				text_edit_;
@@ -300,6 +301,7 @@ namespace BALL
 			PythonSettings* 	python_settings_;
 			RunPythonThread* 	thread_;
 			bool 							stop_script_;
+			Size              complete_prefix_;
 		};
 
 	} // namespaces	

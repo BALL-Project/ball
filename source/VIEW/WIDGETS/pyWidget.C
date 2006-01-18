@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.6 2006/01/17 23:45:10 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.7 2006/01/18 13:47:17 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -121,7 +121,7 @@ namespace BALL
 			: DockWidget(parent, name),
 				text_edit_(0),
 				line_edit_(0),
-				combo_box_(new QComboBox(0)),
+				combo_box_(0),
 				working_dir_(""),
 				valid_(false),
 				started_startup_script_(false),
@@ -139,13 +139,15 @@ namespace BALL
 
 			line_edit_ = new MyLineEdit(this);
 			line_edit_->setPyWidget(this);
+			combo_box_ = new QComboBox(this);
 
  			QGridLayout* lay = new QGridLayout();
  			((QGridLayout*)layout())->addLayout(lay, 2, 0);
- 			lay->addWidget(text_edit_,0, 0, 1, -1);
- 			lay->addWidget(line_edit_,1, 0, 1, -1);
-
+ 			lay->addWidget(text_edit_,0, 0, 1, 2);
+ 			lay->addWidget(line_edit_,1, 0, 1, 1);
+ 			lay->addWidget(combo_box_,1, 1, 1, 1);
 			connect(line_edit_, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
+			connect(combo_box_, SIGNAL(activated(int)), this, SLOT(completionSelected_()));
 
 			combo_box_->hide();
 
@@ -803,48 +805,93 @@ namespace BALL
 			String toc = getCurrentLine();
 			if (toc == "") return;
 
-			bool global = !toc.hasSuffix(".");
+			vector<String> sv;
+			// find last parameter or command
+			toc.split(sv, "(), +-=");
+			toc = sv[sv.size() - 1];
 
-			if (global)
+			bool global = !toc.has('.');
+			String complete_prefix;
+
+			if (!global)
 			{
-				// ...
+				// we do a member completion here...
+				toc.split(sv, ".");
+				// begin of command: all after the dot
+				if (sv.size() > 1)
+				{
+					complete_prefix = sv[sv.size() - 1];
+				}
+				else
+				{
+					complete_prefix = "";
+				}
+				toc = sv[0];
+				toc += ".__class__";
+			}
+			else
+			{
+				// global search: not much to be done
+				complete_prefix = toc;
+				toc = "";
+			}
+
+			QStringList sl;
+
+			if (!getMembers(toc, sl, complete_prefix)) 
+			{
+				setStatusbarText(String("No completion for Python command found: ") + toc, true);
 				return;
 			}
 
-			vector<String> sv;
-			toc.split(sv, "(),. ");
-			toc = sv[sv.size() - 1];
-
-			QStringList sl;
-			String cmd;
-			bool state;
-
-			if (!getMembers(toc + ".__class__", sl)) return;
-
-Log.error() << "#~~#   3 " << sl.size()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			combo_box_->clear();
 			combo_box_->addItems(sl);
+			combo_box_->resize(line_edit_->size().height(), width() / 2);
 			combo_box_->show();
+			combo_box_->showPopup();
 		}
 
-		bool PyWidget::getMembers(const String& classname, QStringList& sl)
+		bool PyWidget::getMembers(const String& classname, QStringList& sl, const String& prefix)
 		{
 			bool state;
 			String cmd = String("dir(") + classname + ")";
 			String result = PyInterpreter::run(cmd , state);
-			if (!state) 
-			{
-				return false;
-			}
+			if (!state) return false;
 
 			vector<String> sv;
 			result.split(sv, "[,\'] ");
+
+			bool has_prefix = prefix != "";
 			for (Position p = 0; p < sv.size(); p++)
 			{
+				// remove Python special commands
 				if (sv[p].hasPrefix("__")) continue;
+				
+				// do we have a prefix for the member to find?
+				if (has_prefix && !sv[p].hasPrefix(prefix)) 
+				{
+					continue;
+				}
+
 				sl << sv[p].c_str();
 			}
 
+			complete_prefix_ = prefix.size();
+
+			return true;
+		}
+
+		bool PyWidget::completionSelected_()
+		{
+			String s = ascii(combo_box_->currentText());
+			if (s == "") return false;
+
+			String cl = getCurrentLine();
+
+			cl += s.getSubstring(complete_prefix_);
+
+			line_edit_->setText(cl.c_str());
+			combo_box_->hide();
 			return true;
 		}
 
