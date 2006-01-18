@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.5 2006/01/17 16:08:17 amoll Exp $
+// $Id: scene.C,v 1.174.2.6 2006/01/18 15:44:57 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1034,6 +1034,9 @@ namespace BALL
 			inifile.insertValue("EXPORT", "PNGNR", String(screenshot_nr_));
 			writeLights_(inifile);
 
+			inifile.insertValue("WINDOWS", getIdentifier() + "::on", String("asdasd") + String(isVisible()));
+			inifile.insertValue("WINDOWS", "getIdentifier", String(isVisible()));  // ???
+
 			if (inifile.hasSection("BALLVIEW_PROJECT"))
 			{
 				inifile.insertValue("BALLVIEW_PROJECT", "Camera", getStage()->getCamera().toString());
@@ -1055,10 +1058,9 @@ namespace BALL
 				screenshot_nr_ = inifile.getValue("EXPORT", "PNGNR").toUnsignedInt();
 			}
 
-			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on") &&
-					!inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt())
+			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on"))
 			{
-				switchShowWidget();
+				setVisible(inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt());
 			}
 
 			readLights_(inifile);

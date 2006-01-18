@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.8 2006/01/18 14:02:23 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.9 2006/01/18 15:44:57 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -22,7 +22,7 @@
 #include <QTextCursor>
 
 // currently doesnt work right
-//#undef BALL_QT_HAS_THREADS
+#undef BALL_QT_HAS_THREADS
 
 namespace BALL
 {
@@ -846,9 +846,9 @@ namespace BALL
 
 			combo_box_->clear();
 			combo_box_->addItems(sl);
-			combo_box_->resize(width() / 2, line_edit_->size().height());
 			combo_box_->show();
 			combo_box_->showPopup();
+			combo_box_->resize(width() / 2, line_edit_->size().height());
 		}
 
 		bool PyWidget::getMembers(const String& classname, QStringList& sl, const String& prefix)
