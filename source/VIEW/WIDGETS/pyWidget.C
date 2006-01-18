@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.9 2006/01/18 15:44:57 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.10 2006/01/18 16:49:41 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -550,11 +550,6 @@ namespace BALL
 			if (multi_line_mode_) appendText(".");
 		}
 
-		bool PyWidget::parseLine_()
-		{
-			return parseLine_(getCurrentLine());
-		}
-
 		bool PyWidget::keyPressed(QKeyEvent* e)
 		{
 			Index hp = history_position_;
@@ -571,6 +566,7 @@ namespace BALL
 			}
 			else 
 			{
+				history_position_ = history_.size();
 				return false;
 			}
 
@@ -747,7 +743,7 @@ namespace BALL
 		void PyWidget::appendToHistory_(const String& line)
 		{
 			history_.push_back(line);
-			history_position_ = history_.size() -1;
+			history_position_ = history_.size();
 		}
 
 		const char* PyWidget::getPrompt_() const
@@ -774,6 +770,7 @@ namespace BALL
 				
 			parseLine_(line);
 			newPrompt_();
+			history_position_ = history_.size();
 
 			return true;
 		}
@@ -844,6 +841,13 @@ namespace BALL
 				return;
 			}
 
+			if (sl.size() == 1)
+			{
+				String cl = getCurrentLine();
+				cl += ascii((*sl.begin())).getSubstring(complete_prefix_);
+				line_edit_->setText(cl.c_str());
+			}
+
 			combo_box_->clear();
 			combo_box_->addItems(sl);
 			combo_box_->show();
@@ -868,10 +872,7 @@ namespace BALL
 				if (sv[p].hasPrefix("__")) continue;
 				
 				// do we have a prefix for the member to find?
-				if (has_prefix && !sv[p].hasPrefix(prefix)) 
-				{
-					continue;
-				}
+				if (has_prefix && !sv[p].hasPrefix(prefix)) continue;
 
 				sl << sv[p].c_str();
 			}
