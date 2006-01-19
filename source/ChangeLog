@@ -1,12 +1,32 @@
-since 1.1.1:
+1.2 nonpublic:
+
+Added docking code.
+Ported BALLView from QT 3.X to 4.1.
 
 Added:
+- Added BALL documentation widget in BALLView
+- Python widget now supports completion
+- Python widget has ability to show help entry for actual BALL Python command
 - BALLView has menu entries for user defined Python Hotkeys
-- Futher Python example scripts
+- Further Python example scripts
 
 Fixed:
 - Improved Python Bindings
-- Return pressed in PeptideDialog now applies settings
+- Pressing Return in PeptideDialog now applies settings
+- Label rendering now supports antialiased fonts
+- Improved multithreading
+- Faster picking mode
+- Improved layout of LabelDialog
+
+Known problems:
+- Drag and Drop doesnt work yet
+- Molecular Control Selected für Child->Parent doesnt always gets selected
+- Documentation widget has problems with HTML layout (QT problem)
+- RegularData widgets currently dont work (QT 4.1 does not yet have CanvasWidgets)
+- Popup Labels for infos in Scene dont work because of problems of QPainter with QGLWidget
+- Preferences QStackedWidget looks awfull on startup (QT problem)
+- DockResultDialog cant sort results yet
+
 
 1.1.1:
 
