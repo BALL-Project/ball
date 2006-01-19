@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.69.2.3 2006/01/19 13:55:46 amoll Exp $
+// $Id: message.h,v 1.69.2.4 2006/01/19 14:10:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -873,7 +873,7 @@ class BALL_VIEW_EXPORT ShowHelpMessage
 	public:
 
 	///
-	ShowHelpMessage(String url = "", String project = "")
+	ShowHelpMessage(String url = "", String project = "BALLView")
 		throw();
 
 	String getURL() const { return url_;}
