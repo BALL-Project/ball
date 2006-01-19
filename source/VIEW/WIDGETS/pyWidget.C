@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.10 2006/01/18 16:49:41 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.11 2006/01/19 01:52:02 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -846,6 +846,7 @@ namespace BALL
 				String cl = getCurrentLine();
 				cl += ascii((*sl.begin())).getSubstring(complete_prefix_);
 				line_edit_->setText(cl.c_str());
+				return;
 			}
 
 			combo_box_->clear();
