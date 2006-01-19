@@ -22,11 +22,12 @@ Fixed:
 Known problems:
 - Drag and Drop doesnt work yet
 - Molecular Control Selected für Child->Parent doesnt always gets selected
-- Documentation widget has problems with HTML layout (QT problem)
 - RegularData widgets currently dont work (QT 4.1 does not yet have CanvasWidgets)
 - Popup Labels for infos in Scene dont work because of problems of QPainter with QGLWidget
-- Preferences QStackedWidget looks awfull on startup (QT problem)
 - DockResultDialog cant sort results yet
+- Preferences QStackedWidget looks awfull on startup (QT problem)
+- HelpViewer has problems with HTML layout (QT problem)
+- HelpViewer segfaults when clicking on link which is highlighted (QT problem)
 
 
 1.1.1:
