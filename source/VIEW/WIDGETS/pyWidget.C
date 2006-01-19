@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.11 2006/01/19 01:52:02 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.12 2006/01/19 11:08:21 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -804,7 +804,9 @@ namespace BALL
 
 			vector<String> sv;
 			// find last parameter or command
-			toc.split(sv, "(), +-=");
+			//
+			// ??? count opening and closing brackets, if opening > closing...
+			toc.split(sv, ", +-=");
 			toc = sv[sv.size() - 1];
 
 			bool global = !toc.has('.');
@@ -814,6 +816,7 @@ namespace BALL
 			{
 				// we do a member completion here...
 				toc.split(sv, ".");
+Log.error() << "#~~#   1 "  << toc << " " << sv.size()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				// begin of command: all after the dot
 				if (sv.size() > 1)
 				{
@@ -823,6 +826,8 @@ namespace BALL
 				{
 					complete_prefix = "";
 				}
+
+				if (sv.size() == 0) return;
 				toc = sv[0];
 				toc += ".__class__";
 			}
@@ -841,10 +846,16 @@ namespace BALL
 				return;
 			}
 
+			if (sl.size() == 0) return;
+
 			if (sl.size() == 1)
 			{
+				String result = ascii(*sl.begin());
 				String cl = getCurrentLine();
-				cl += ascii((*sl.begin())).getSubstring(complete_prefix_);
+				
+				if (result.size() <= complete_prefix.size()) return;
+				
+				cl += result.getSubstring(complete_prefix_);
 				line_edit_->setText(cl.c_str());
 				return;
 			}
