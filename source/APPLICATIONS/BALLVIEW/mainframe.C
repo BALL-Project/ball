@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.3 2006/01/19 15:02:12 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.4 2006/01/19 15:57:16 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -386,11 +386,6 @@ namespace BALL
 
 	void Mainframe::about()
 	{
-Log.error() << "#~~#   1 "   <<
-Scene::getInstance(0)->isValid()	
-	<< " "  << __FILE__ << "  " << __LINE__<< std::endl;
-
-		setMultithreading(false);
 		// Display about dialog
 		QDialog w;
  		Ui_AboutDialog about;

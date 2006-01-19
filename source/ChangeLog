@@ -12,6 +12,7 @@ Added:
 
 Fixed:
 - Improved Python Bindings
+- Commands run() and quit() in BALL Python are now Python conform (e.g. can be used in user scripts)
 - Pressing Return in PeptideDialog now applies settings
 - Label rendering now supports antialiased fonts
 - Improved multithreading
