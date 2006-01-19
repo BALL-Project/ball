@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.32.2.2 2006/01/19 13:54:03 amoll Exp $
+// $Id: message.C,v 1.32.2.3 2006/01/19 14:31:34 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -346,11 +346,12 @@ FinishedSimulationMessage::FinishedSimulationMessage()
 {
 }
 
-ShowHelpMessage::ShowHelpMessage(String url, String project)
+ShowHelpMessage::ShowHelpMessage(String url, String project, String entry)
 	throw()
 	: Message(),
 		url_(url),
-		project_(project)
+		project_(project),
+		entry_(entry)
 {
 }
 
