@@ -1,5 +1,5 @@
 # 
-# $Id: common.mak.in,v 1.14 2004/02/17 14:46:04 oliver Exp $
+# $Id: common.mak.in,v 1.14.10.1 2006/01/19 19:07:44 amoll Exp $
 #
 
 include @BALL_PATH@/source@BINFMT_PATH@/config.mak
@@ -24,7 +24,7 @@ echodir:
 # .dh -- dummy header files for 
 # .il -- Intel CC otimizer files
 default_clean:
-	@-$(RM) -rf *.dh *il *~ @TEMPLATE_DIR@ core core.* $(OBJECTS) $(MOC_SOURCES) $(UIC_SOURCES) $(ADD_MOC_SOURCES) $(EXECUTABLES) $(EXECUTABLE)
+	@-$(RM) -rf *.dh *il *~ @TEMPLATE_DIR@ core core.* $(OBJECTS) $(MOC_SOURCES) $(ADD_MOC_SOURCES) $(EXECUTABLES) $(EXECUTABLE)
 
 
 collectlib:	default
