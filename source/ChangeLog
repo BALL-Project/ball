@@ -9,7 +9,8 @@ Added:
 - Python widget has ability to show help entry for actual BALL Python command
 - BALLView has menu entries for user defined Python Hotkeys
 - Further Python example scripts
-- Added indicator for Update of Representations in statusbar
+- Added indicator for update of representations in statusbar
+- Busy mouse cursor while update of representations
 
 Fixed:
 - Improved Python Bindings

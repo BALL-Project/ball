@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.4 2006/01/16 01:33:50 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.5 2006/01/19 17:06:01 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -232,7 +232,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			statusBar()->addPermanentWidget(rep_label_, false );
 			rep_label_nr_ = 0;
 
-			render_timer_.start(200);
+			render_timer_.start(100);
 
 			simulation_icon_ = new QLabel(statusBar());
 			simulation_icon_->setMaximumSize(14,20);
@@ -1879,6 +1879,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 	{
 		if (!primitive_manager_.updateRunning()) 
 		{
+			if (!composites_locked_)
+			{
+				QApplication::restoreOverrideCursor();
+			}
 			rep_label_->setText("");
 			return;
 		}
@@ -1894,6 +1898,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			c = '-';
 			rep_label_nr_ = 1;
 		}
+
+		QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 		rep_label_->setText(QString(c));
 	}
