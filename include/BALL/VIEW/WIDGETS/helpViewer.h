@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.2.2.1 2006/01/13 15:35:34 amoll Exp $
+// $Id: helpViewer.h,v 1.2.2.2 2006/01/19 13:56:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -91,6 +91,9 @@ namespace BALL
 		
 			///
 			const String& getDefaultPage() const;
+
+			///
+			void setProject(const String& project) { project_ = project;}
 			
 			///
 			void setBaseDirectory(const String& dir);
@@ -132,6 +135,7 @@ namespace BALL
 		
 			protected:
 
+			String 					project_;
 			String 					default_page_;
 			String 					base_dir_;
 			MyTextBrowser* 	browser_;

@@ -64,6 +64,7 @@ namespace BALL
 		HelpViewer::HelpViewer(QWidget *parent, const char *name)
 			throw()
 			: DockWidget(parent, name),
+				project_("BALLView"),
 				default_page_("index.html"),
 				browser_( new MyTextBrowser(this)),
 				whats_this_mode_(false),
@@ -144,6 +145,7 @@ namespace BALL
 			if (!RTTI::isKindOf<ShowHelpMessage>(*message)) return;
 
 			ShowHelpMessage* msg = RTTI::castTo<ShowHelpMessage>(*message);
+			if (msg->getProject() != project_) return;
 			showHelp(msg->getURL());
 		}
 
