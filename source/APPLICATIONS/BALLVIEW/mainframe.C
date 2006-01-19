@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.2 2006/01/13 16:11:09 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.3 2006/01/19 15:02:12 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -91,7 +91,18 @@ namespace BALL
  		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, "Structures"));
 		addDockWidget(Qt::LeftDockWidgetArea, new GeometricControl(this, "Representations"));
 		addDockWidget(Qt::TopDockWidgetArea,  new DatasetControl(this, "Datasets"));
-		addDockWidget(Qt::AllDockWidgetAreas, new HelpViewer(this, "Documentation"));
+
+		HelpViewer* BALL_docu = new HelpViewer(this, "BALL Docu");
+		addDockWidget(Qt::AllDockWidgetAreas, BALL_docu);
+		String dirp = getDataPath() + ".." + FileSystem::PATH_SEPARATOR + "doc" + 
+									FileSystem::PATH_SEPARATOR + "BALL" + FileSystem::PATH_SEPARATOR;
+		BALL_docu->setBaseDirectory(dirp);
+		BALL_docu->setWhatsThisEnabled(false);
+		BALL_docu->setProject("BALL");
+		BALL_docu->setDefaultPage("index.htm");
+
+		addDockWidget(Qt::AllDockWidgetAreas, new HelpViewer(this, "BALLView Docu"));
+
 		new DisplayProperties(	this, "DisplayProperties");
 		new LabelDialog(				this, "LabelDialog");
 		new MolecularFileDialog(this, "MolecularFileDialog");

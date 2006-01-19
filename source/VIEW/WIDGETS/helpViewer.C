@@ -68,7 +68,8 @@ namespace BALL
 				default_page_("index.html"),
 				browser_( new MyTextBrowser(this)),
 				whats_this_mode_(false),
-				ignore_event_(false)
+				ignore_event_(false),
+				whats_this_(true)
 		{
 			String dir = getDataPath();
 			dir += 	String("..") + 
@@ -101,8 +102,11 @@ namespace BALL
 			throw()
 		{
 			DockWidget::initializeWidget(main_control);
-			insertMenuEntry(MainControl::HELP, "Documentation", this, SLOT(showHelp()));
-			insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(enterWhatsThisMode()));	
+			insertMenuEntry(MainControl::HELP, project_ + " Docu", this, SLOT(showHelp()));
+			if (whats_this_)
+			{
+				insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(enterWhatsThisMode()));	
+			}
 
  			qApp->installEventFilter(this);
 //   			qApp->setGlobalMouseTracking(TRUE);
@@ -113,10 +117,12 @@ namespace BALL
 			showHelp(default_page_);
 		}
 
-		void HelpViewer::showHelp(const String& url)
+		void HelpViewer::showHelp(const String& url, String entry)
 		{
 			QUrl qurl = QUrl((base_dir_ + url).c_str());
  			browser_->setSource(qurl);
+
+			if (entry != "") browser_->find(entry.c_str(), QTextDocument::FindCaseSensitively);
 			show();
 		}
 
@@ -146,7 +152,7 @@ namespace BALL
 
 			ShowHelpMessage* msg = RTTI::castTo<ShowHelpMessage>(*message);
 			if (msg->getProject() != project_) return;
-			showHelp(msg->getURL());
+			showHelp(msg->getURL(), msg->getEntry());
 		}
 
 		void HelpViewer::setDefaultPage(const String& url)

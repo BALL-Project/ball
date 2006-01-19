@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.2.2.2 2006/01/19 13:56:28 amoll Exp $
+// $Id: helpViewer.h,v 1.2.2.3 2006/01/19 15:02:21 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -84,7 +84,7 @@ namespace BALL
 				throw();
 
 			///
-			virtual void showHelp(const String& URL);
+			virtual void showHelp(const String& URL, String entry = "");
 
 			///
 			void setDefaultPage(const String& url);
@@ -118,6 +118,9 @@ namespace BALL
 
 			/// Get help entry for widget
 			String getHelpEntryFor(const QObject* object) const;
+
+			///
+			void setWhatsThisEnabled(bool state) { whats_this_ = state;}
 					
 			public slots:
 
@@ -141,6 +144,7 @@ namespace BALL
 			MyTextBrowser* 	browser_;
 			bool 						whats_this_mode_;
 			bool 						ignore_event_;
+			bool 						whats_this_;
 
 			HashMap<const QObject*, String> docu_entries_;
 		};

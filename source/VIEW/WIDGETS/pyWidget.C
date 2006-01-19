@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.13 2006/01/19 13:11:55 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.14 2006/01/19 15:02:14 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -9,10 +9,12 @@
 
 #include <BALL/VIEW/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DIALOGS/pythonSettings.h>
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/FORMAT/lineBasedFile.h>
+#include <BALL/SYSTEM/directory.h>
 
 #include <qscrollbar.h>
 #include <QFileDialog>
@@ -564,6 +566,11 @@ namespace BALL
 				showCompletion();
 				return true;
 			}
+			else if (e->key() == Qt::Key_Enter)	
+			{
+				showDocu_();
+				return true;
+			}
 			else 
 			{
 				history_position_ = history_.size();
@@ -799,49 +806,13 @@ namespace BALL
 
 		void PyWidget::showCompletion()
 		{
-			String toc = getCurrentLine();
-			if (toc == "") return;
-
-			vector<String> sv;
-			// find last parameter or command
-			//
-			// ??? count opening and closing brackets, if opening > closing...
-			toc.split(sv, ", +-=");
-			toc = sv[sv.size() - 1];
-
-			bool global = !toc.has('.');
-			String complete_prefix;
-
-			if (!global)
-			{
-				// we do a member completion here...
-				toc.split(sv, ".");
-				// begin of command: all after the dot
-				if (sv.size() > 1)
-				{
-					complete_prefix = sv[sv.size() - 1];
-				}
-				else
-				{
-					complete_prefix = "";
-				}
-
-				if (sv.size() == 0) return;
-				toc = sv[0];
-				toc += ".__class__";
-			}
-			else
-			{
-				// global search: not much to be done
-				complete_prefix = toc;
-				toc = "";
-			}
+			if (!getClassAndMember_()) return;
 
 			QStringList sl;
 
-			if (!getMembers(toc, sl, complete_prefix)) 
+			if (!getMembers(class_, sl, member_)) 
 			{
-				setStatusbarText(String("No completion for Python command found: ") + toc, true);
+				setStatusbarText("No completion found:", true);
 				return;
 			}
 
@@ -853,7 +824,7 @@ namespace BALL
 				String result = ascii(*sl.begin());
 				String cl = getCurrentLine();
 				
-				if (result.size() <= complete_prefix.size()) return;
+				if (result.size() <= member_.size()) return;
 				
 				cl += result.getSubstring(complete_prefix_);
 				line_edit_->setText(cl.c_str());
@@ -928,6 +899,88 @@ namespace BALL
 			}
 
 			combo_box_->hide();
+			return true;
+		}
+
+		void PyWidget::showClassDocu(const String& classname, const String& member)
+		{
+			String dirp = getDataPath() + ("..") + 
+							FileSystem::PATH_SEPARATOR + 
+							"doc" + 
+							FileSystem::PATH_SEPARATOR +
+							"BALL" +
+							FileSystem::PATH_SEPARATOR;
+
+			Directory dir(dirp);
+			String doc = String("classBALL_1_1") + classname + "-members.htm";
+			if (!dir.has(doc)) 
+			{
+				return;
+			}
+
+			notify_(new ShowHelpMessage(doc, "BALL", member));
+		}
+
+		void PyWidget::showDocu_()
+		{
+			getClassAndMember_();
+			showClassDocu(class_, member_);
+		}
+
+		bool PyWidget::getClassAndMember_()
+		{
+			String toc = getCurrentLine();
+			if (toc == "") return false;
+
+			vector<String> sv;
+			// find last parameter or command
+			//
+			// ??? count opening and closing brackets, if opening > closing...
+			toc.split(sv, ", +-=");
+			toc = sv[sv.size() - 1];
+
+			bool global = !toc.has('.');
+			String complete_prefix;
+
+			if (!global)
+			{
+				// we do a member completion here...
+				toc.split(sv, ".");
+				// begin of command: all after the dot
+				if (sv.size() > 1)
+				{
+					complete_prefix = sv[sv.size() - 1];
+				}
+				else
+				{
+					complete_prefix = "";
+				}
+
+				if (sv.size() == 0) return false;
+				String cmd = sv[0];
+				cmd += ".__class__";
+
+				bool state;
+				String result = PyInterpreter::run(cmd, state);
+				if (!state) return false;
+ 
+				vector<String> sv;
+				result.split(sv, "[,\'] <>.");
+				// e.g. class BALL Atom
+				if (sv.size() < 3) return false;
+
+				class_ = sv[2];
+				member_ = complete_prefix;
+			}
+			else
+			{
+				// global search: not much to be done
+				complete_prefix = toc;
+				class_ = "";
+			}
+
+			member_ = complete_prefix;
+
 			return true;
 		}
 

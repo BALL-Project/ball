@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.4 2006/01/18 13:47:21 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.5 2006/01/19 15:02:21 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -206,6 +206,9 @@ namespace BALL
 			void dump(std::ostream& s, Size depth) const
 				throw();
 
+			//
+			void showClassDocu(const String& classname, const String& member);
+
 			public slots:
 
 			//
@@ -237,7 +240,11 @@ namespace BALL
 
 			virtual bool completionSelected_();
 
+			void showDocu_();
+
 			protected:
+
+			bool getClassAndMember_();
 
 			void setError_(bool state);
 
@@ -250,7 +257,6 @@ namespace BALL
 
 			virtual void paste();
 
-			bool parseLine_();
 			/// Parse a and execute a given string. If silent is set to true, no prompts are being printed.
 			bool parseLine_(String line, bool silent = false);
 
@@ -302,6 +308,8 @@ namespace BALL
 			RunPythonThread* 	thread_;
 			bool 							stop_script_;
 			Size              complete_prefix_;
+			String 						class_;
+			String 						member_;
 		};
 
 	} // namespaces	
