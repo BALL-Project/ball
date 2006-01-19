@@ -9,6 +9,7 @@ Added:
 - Python widget has ability to show help entry for actual BALL Python command
 - BALLView has menu entries for user defined Python Hotkeys
 - Further Python example scripts
+- Added indicator for Update of Representations in statusbar
 
 Fixed:
 - Improved Python Bindings
@@ -18,6 +19,7 @@ Fixed:
 - Improved multithreading
 - Faster picking mode
 - Improved layout of LabelDialog
+- Indicator in statusbar for Server and Simulation was missing
 
 Known problems:
 - Drag and Drop doesnt work yet
