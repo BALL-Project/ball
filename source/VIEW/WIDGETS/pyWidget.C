@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.12 2006/01/19 11:08:21 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.13 2006/01/19 13:11:55 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -816,7 +816,6 @@ namespace BALL
 			{
 				// we do a member completion here...
 				toc.split(sv, ".");
-Log.error() << "#~~#   1 "  << toc << " " << sv.size()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				// begin of command: all after the dot
 				if (sv.size() > 1)
 				{
@@ -848,6 +847,7 @@ Log.error() << "#~~#   1 "  << toc << " " << sv.size()           << " "  << __FI
 
 			if (sl.size() == 0) return;
 
+			// only one possibility: add it!
 			if (sl.size() == 1)
 			{
 				String result = ascii(*sl.begin());
@@ -857,9 +857,14 @@ Log.error() << "#~~#   1 "  << toc << " " << sv.size()           << " "  << __FI
 				
 				cl += result.getSubstring(complete_prefix_);
 				line_edit_->setText(cl.c_str());
+				if (cl[cl.size() - 1] == ')')
+				{
+					line_edit_->setCursorPosition(cl.size() - 1);
+				}
 				return;
 			}
 
+			// more then one: show combobox
 			combo_box_->clear();
 			combo_box_->addItems(sl);
 			combo_box_->show();
@@ -878,6 +883,7 @@ Log.error() << "#~~#   1 "  << toc << " " << sv.size()           << " "  << __FI
 			result.split(sv, "[,\'] ");
 
 			bool has_prefix = prefix != "";
+			bool has_class  = classname != "";
 			for (Position p = 0; p < sv.size(); p++)
 			{
 				// remove Python special commands
@@ -886,7 +892,19 @@ Log.error() << "#~~#   1 "  << toc << " " << sv.size()           << " "  << __FI
 				// do we have a prefix for the member to find?
 				if (has_prefix && !sv[p].hasPrefix(prefix)) continue;
 
-				sl << sv[p].c_str();
+				String res = sv[p];
+
+				// add brackets to methods
+				if (has_class)
+				{
+					char c = res[0];
+					if (c >= 97 && c <= 122)
+					{
+						res += "()";
+					}
+				}
+
+				sl << res.c_str();
 			}
 
 			complete_prefix_ = prefix.size();
@@ -904,6 +922,11 @@ Log.error() << "#~~#   1 "  << toc << " " << sv.size()           << " "  << __FI
 			cl += s.getSubstring(complete_prefix_);
 
 			line_edit_->setText(cl.c_str());
+			if (cl[cl.size() - 1] == ')')
+			{
+				line_edit_->setCursorPosition(cl.size() - 1);
+			}
+
 			combo_box_->hide();
 			return true;
 		}
