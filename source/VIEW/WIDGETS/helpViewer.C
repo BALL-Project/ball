@@ -13,6 +13,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QEvent>
+#include <QTextCursor>
 
 using namespace std;
 
@@ -121,6 +122,13 @@ namespace BALL
 		{
 			QUrl qurl = QUrl((base_dir_ + url).c_str());
  			browser_->setSource(qurl);
+
+ 			QTextCursor ct = browser_->textCursor();
+ 			if (!ct.atStart()) 
+ 			{
+ 				ct.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+				browser_->setTextCursor(ct);
+ 			}
 
 			if (entry != "") browser_->find(entry.c_str(), QTextDocument::FindCaseSensitively);
 			show();
