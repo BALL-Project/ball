@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.14 2006/01/19 15:02:14 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.15 2006/01/20 19:23:43 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -549,7 +549,15 @@ namespace BALL
 
 		void PyWidget::newPrompt_()
 		{
-			if (multi_line_mode_) appendText(".");
+			line_edit_->setText("");
+
+			// intend
+			if (multi_line_mode_)
+			{
+				String s;
+				for (Position p = 0; p < intend_; p++) s += "    ";
+				line_edit_->setText(s.c_str());
+			}
 		}
 
 		bool PyWidget::keyPressed(QKeyEvent* e)
@@ -562,21 +570,25 @@ namespace BALL
 			else if (e->key() == Qt::Key_PageDown)	hp = history_.size() - 1;
 			else if (e->key() == Qt::Key_Right)	
 			{
+				// show completion
 				if (line_edit_->cursorPosition() != (Index) getCurrentLine().size()) return false;
 				showCompletion();
 				return true;
 			}
 			else if (e->key() == Qt::Key_Enter)	
 			{
+				// show docu
 				showDocu_();
 				return true;
 			}
 			else 
 			{
+				// clear history position
 				history_position_ = history_.size();
 				return false;
 			}
 
+			// show history entry
 			if (hp < 0 || hp >= (Index) history_.size()) 
 			{
 				return true;
@@ -586,97 +598,42 @@ namespace BALL
 			return true;
 		} 
 
-		bool PyWidget::parseLine_(String line, bool silent)
+		bool PyWidget::testMultilineStart_(const String& line, bool silent)
 		{
-			if (!silent) appendText(line);
-
-			if (!Py_IsInitialized())
+			if (line.hasSuffix(":")&&
+					(line.hasPrefix("for ") 		|| 
+					 line.hasPrefix("def ") 		||
+					 line.hasPrefix("class ") 	||
+					 line.hasPrefix("while ")	  ||
+					 line.hasPrefix("if ")))
 			{
-				appendText("> ERROR: no interpreter running!\n");
-				return false;
-			}
+				multi_line_mode_ = true;
+				multi_line_text_ = line;
+				multi_line_text_.append("\n");
+				multi_lines_ = 1;
 
-			// check for comments
-			String temp(line);
-			temp.trim();
-			if (temp.hasPrefix("#")) return true;
+				if (!silent)
+				{
+					appendToHistory_(line);
+					appendText(line);
+					intend_ = 1;
+					newPrompt_();
+				}
 
-			line.trimRight();
-
-			if (line == "quit" || line == "quit()")
-			{
-				stop_script_ = true;
-				PyInterpreter::finalize();
-				getMainControl()->quit();
 				return true;
 			}
 
-			if (line.hasPrefix("run("))
-			{
-				// This code is probably the worst I've seen in a long, long time...
-				// Needs to be replaced by something integrated with Py language concepts
-				// in the future (e.g. calling run with a variable argument won't work!) -- OK -- 11/2006
-				vector<String> tokens;
-				Size nr = line.split(tokens, String("(\"')").c_str());
-				if (nr < 2)		
-				{
-					return false;
-				}
-				PyInterpreter::runFile(tokens[1]);
-				appendToHistory_(line);
-				
-				return true;
-			}
-			
-			if (!multi_line_mode_)
-			{
-				if (line.isEmpty()) return true;
-				if ((line.hasPrefix("for ") 		|| 
-						 line.hasPrefix("def ") 		||
-						 line.hasPrefix("class ") 	||
-						 line.hasPrefix("while ")	  ||
-						 line.hasPrefix("if "))
-						&& line.hasSuffix(":"))
-				{
-						multi_line_mode_ = true;
-						multi_line_text_ = line;
-						multi_line_text_.append("\n");
-						multi_lines_ = 1;
-						appendToHistory_(line);
-						if (!silent)
-						{
-							newPrompt_();
-						}
-						return true;
-				}
+			return false;
+		}
 
-				multi_lines_ = 0;
-				appendToHistory_(line);
-			}
-			else // Multiline mode
-			{
-				multi_lines_ += 1;
-				appendToHistory_(line);
-				if (!line.isEmpty())
-				{
-					multi_line_text_ += line + "\n";
-					if (!silent)
-					{
-						newPrompt_();	
-					}
-					return true;
-				}
 
-				line = multi_line_text_ + "\n";
-			}
-
-			bool state = true;
-			bool ok = true;
-		  String result;
+		String PyWidget::runCommand_(const String& text, bool& state)
+		{
+			String result;
 #ifndef BALL_QT_HAS_THREADS
-			result = PyInterpreter::run(line, state);
+			result = PyInterpreter::run(text, state);
 #else
-			thread_->input = line;
+			thread_->input = text;
 			thread_->start();
 
 			while (thread_->running()) 
@@ -690,23 +647,83 @@ namespace BALL
 			state = thread_->state;
 #endif
 
+			return result;
+		}
+
+
+		bool PyWidget::parseLine_(String line, bool silent)
+		{
+			if (!Py_IsInitialized())
+			{
+				appendText("> ERROR: no interpreter running!\n");
+				return false;
+			}
+
+			// check for comments
+			String temp(line);
+			temp.trim();
+			if (temp.hasPrefix("#")) return true;
+
+			line.trimRight();
+
+			// singe <-> multi line mode
+			if (!multi_line_mode_)
+			{
+				if (line.isEmpty()) return true;
+
+				if (testMultilineStart_(line, silent)) return true;
+
+				multi_lines_ = 0;
+				appendText(line);
+				appendToHistory_(line);
+			}
+			else // Multiline mode
+			{
+				multi_lines_ += 1;
+
+				if (!line.isEmpty())
+				{
+					if (line[line.size() - 1] == ':')
+					{
+						intend_ ++;
+					}
+
+					multi_line_text_ += line + "\n";
+					if (!silent)
+					{
+						appendToHistory_(line);
+						appendText(line);
+						newPrompt_();	
+					}
+					return true;
+				}
+
+				line = multi_line_text_ + "\n";
+				intend_ = 0;
+			}
+
+			// ok, now run the commad !
+			bool state;
+		  String result = runCommand_(line, state);
+
+			// did an error occur?
 			if (result != "") 
 			{
 				result = "> " + result; 
 
-				if (result.hasSubstring("ERROR"))
+				setError_(!state);
+
+				if (!silent | !state)
 				{
-					setError_(true);
-					ok = false;
+					appendText(result.c_str());
 				}
-				else
-				{
-					setError_(false);
-				}
-				appendText(result.c_str());
+
 				text_edit_->setTextColor(Qt::black);
 			}
 
+			multi_line_mode_ = false;
+
+			if (silent) return state;
 				
 			if (!multi_line_mode_)
 			{
@@ -719,14 +736,10 @@ namespace BALL
 					results_.push_back(state);
 				}
 			}
-			
-			multi_line_mode_ = false;
 
-			if (!silent)
-			{
-				newPrompt_();
-			}
-			return ok;
+			newPrompt_();
+			
+			return state;
 		}
 
 		bool PyWidget::runString(String command)
@@ -773,7 +786,6 @@ namespace BALL
 		bool PyWidget::returnPressed()
 		{
 			String line = getCurrentLine();
-			line_edit_->setText("");
 				
 			parseLine_(line);
 			newPrompt_();
@@ -847,7 +859,7 @@ namespace BALL
 		{
 			bool state;
 			String cmd = String("dir(") + classname + ")";
-			String result = PyInterpreter::run(cmd , state);
+			String result = runCommand_(cmd , state);
 			if (!state) return false;
 
 			vector<String> sv;
@@ -961,7 +973,7 @@ namespace BALL
 				cmd += ".__class__";
 
 				bool state;
-				String result = PyInterpreter::run(cmd, state);
+				String result = runCommand_(cmd, state);
 				if (!state) return false;
  
 				vector<String> sv;

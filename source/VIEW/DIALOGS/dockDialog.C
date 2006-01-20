@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.1 2006/01/13 15:35:47 amoll Exp $
+// $Id: dockDialog.C,v 1.5.2.2 2006/01/20 19:23:54 amoll Exp $
 //
 
 #include <qpushbutton.h>
@@ -251,10 +251,11 @@ namespace BALL
 			addScoringFunction("Default", DockingController::DEFAULT);
 			MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
 			if (!mol_struct)
-				{
-					Log.error() << "Error while building HashMap for scoring function advanced option dialogs! " << __FILE__ << " " << __LINE__ << std::endl;
-					return;
-				}
+			{
+				Log.error() << "Error while building HashMap for scoring function advanced option dialogs! " 
+										<< __FILE__ << " " << __LINE__ << std::endl;
+				return;
+			}
 			addScoringFunction("Amber Force Field", DockingController::AMBER_FF, &(mol_struct->getAmberConfigurationDialog()));
 			
 			vector<int> sf;
@@ -606,10 +607,7 @@ namespace BALL
 		void DockDialog::fillSystemComboboxes_()
 			throw()
 		{
-			// selection lists for systems should be empty
-			systems1->clear();
-			systems2->clear();
-			
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			// pointer to selected systems
 			docking_partner1_ = NULL;
 			docking_partner2_ = NULL;
@@ -622,12 +620,12 @@ namespace BALL
 			current_system_list.append("<select>");
 			
 			// get the composites
-			MainControl* main_control = MainControl::getInstance(0);
+			MainControl* main_control = getMainControl();
 			if (!main_control)
-				{
-					Log.error() << "Error while filling system comboboxes! " << __FILE__ << " " << __LINE__ << std::endl;
-					return;
-				}
+			{
+				BALLVIEW_DEBUG
+				return;
+			}
 			CompositeManager& composite_manager = main_control->getCompositeManager();
 			
 			// iterate over all composites; add systems to list
@@ -637,44 +635,29 @@ namespace BALL
 			// vector of pointers to all loaded systems is also filled (same order as current system list)
 			for (; +composite_it; ++composite_it)
 			{
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				System* system = dynamic_cast<System*>(*composite_it);
 				if (system == 0) continue;
 
 				current_system_list << system->getName().c_str();
 				loaded_systems_.push_back(system);			
-
-				// test if the user has selected one or two systems
-				if (!system->isSelected())
-				{
-					continue;
-				}
-				if (docking_partner1_ == NULL)
-					{
-						docking_partner1_ = system;
-					}
-				else
-					{
-						if (docking_partner2_ == NULL)
-							{
-								docking_partner2_ = system;
-							}
-						else
-							{
-								// if more than 2 systems are selected => Error message!
-#ifdef BALL_VIEW_DEBUG
-								Log.error() << "More than two systems selected! " << __FILE__ << " " << __LINE__ << std::endl;
-#endif
-								
-								QMessageBox error_message("Error", "More than two systems selected!", 
-																					QMessageBox::Critical,
-																					QMessageBox::Ok,
-																					QMessageBox::NoButton,
-																					QMessageBox::NoButton);
-								error_message.exec();
-								return;
-							}
-					}
 			}
+
+			List<Composite*> cl = main_control->getMolecularControlSelection();
+			if (cl.size() == 2)
+			{
+				List<Composite*>::iterator lit = cl.begin();
+				System* system1 = dynamic_cast<System*>(*lit);
+				lit++
+				System* system2 = dynamic_cast<System*>(*lit);
+
+				if (system1 && system2)
+				{
+					docking_partner1_ = system1;
+					docking_partner2_ = system2;
+				}
+			}
+
 			// set selection lists of dialog
 			systems1->clear();
 			systems1->addItems(current_system_list);
