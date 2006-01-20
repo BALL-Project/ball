@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.4 2006/01/19 15:57:16 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.5 2006/01/20 00:11:23 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -86,7 +86,6 @@ namespace BALL
 //		Lo g.remove(std::cout);
 // 		Log.remove(std::cerr);
 		setLoggingFilename("BALLView.log");
-		setAcceptDrops(true);
 
  		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, "Structures"));
 		addDockWidget(Qt::LeftDockWidgetArea, new GeometricControl(this, "Representations"));
@@ -226,6 +225,8 @@ namespace BALL
 		throw()
 	{
 		if (composites_locked_) return;
+
+		if (file == "") return;
 
 		setStatusbarText(String("Opening file ") + file + "...");
 

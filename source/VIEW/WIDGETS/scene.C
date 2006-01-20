@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.7 2006/01/18 16:11:36 amoll Exp $
+// $Id: scene.C,v 1.174.2.9 2006/01/20 00:10:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2325,7 +2325,6 @@ namespace BALL
 		void Scene::dragEnterEvent(QDragEnterEvent* event)
 		{
 			 if (event->mimeData()->hasUrls()) event->acceptProposedAction();
-//   			 if (event->mimeData()->hasFormat("text/plain")) event->acceptProposedAction();
 		}
 
 
