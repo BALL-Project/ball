@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.5 2006/01/19 15:02:21 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.6 2006/01/20 19:31:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -269,8 +269,13 @@ namespace BALL
 			*/
 			void newPrompt_();
 
+			bool testMultilineStart_(const String& line, bool silent);
+
 			//_
 			const char* getPrompt_() const;
+
+			//_ Wrapper for multi and single threading call
+			String runCommand_(const String& command, bool& state);
 
 			/**	Replace the line the cursor is in with a line from the history.
 					Used to display text from the history (cursor down/up).
@@ -310,6 +315,7 @@ namespace BALL
 			Size              complete_prefix_;
 			String 						class_;
 			String 						member_;
+			Position 					intend_;
 		};
 
 	} // namespaces	
