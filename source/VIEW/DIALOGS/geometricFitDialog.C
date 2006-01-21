@@ -42,6 +42,7 @@ namespace BALL
 				is_redock_ = false;
 				
 				hide();
+				connect(reset_button, SIGNAL(pressed()), this, SLOT(reset()));
 			}
 		
 		// Copy constructor.
@@ -134,16 +135,20 @@ namespace BALL
 
 		// Reset the dialog to the standard values
 		void GeometricFitDialog::reset()
-			throw()
 		{
-    	surface_thickness->setText("1.0");
-    	grid_spacing->setText("1.0"); 
-    	penalty_static->setText("-15");
-    	penalty_mobile->setText("1");
-    	deg_interval->setText("20");
-    	near_radius->setText("1.8");
-    	peak_num->setText("3");
-			surface_type->setCurrentIndex(surface_type->findText("Connolly"));
+			restoreDefaultValues();
+		}
+
+		void GeometricFitDialog::reject()
+		{
+			restoreValues();
+			QDialog::reject();
+		}
+
+		void GeometricFitDialog::accept()
+		{
+			storeValues();
+			QDialog::accept();
 		}
 		
 		// Fill options with values of the dialog.
@@ -248,17 +253,5 @@ namespace BALL
 			QDialog::show();
 		}
 	
-		//
-		void GeometricFitDialog::resetPressed()
-		{
-			reset();
-		}
-		
-		/////// TODO: take the values which were in the fields when dialog was opened
-		void GeometricFitDialog::cancelPressed()
-		{
-			reject();
-		}
-		
 	} // namespace VIEW
 } // namespace BALL

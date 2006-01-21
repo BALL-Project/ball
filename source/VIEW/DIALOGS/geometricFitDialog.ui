@@ -459,5 +459,38 @@
   <tabstop>reset_button</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>cancel_button</sender>
+   <signal>clicked()</signal>
+   <receiver>GeometricFitDialogData</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>217</x>
+     <y>294</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>212</x>
+     <y>306</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ok_button</sender>
+   <signal>clicked()</signal>
+   <receiver>GeometricFitDialogData</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>122</x>
+     <y>289</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>120</x>
+     <y>307</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

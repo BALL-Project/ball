@@ -97,10 +97,6 @@ namespace BALL
 				void writePreferences(INIFile& file)
 					throw();
 					
-				/** Resets the dialog to the standard values.
-				 */
-				void reset()
-					throw();
 				//@}
 					
 			public slots:
@@ -112,12 +108,15 @@ namespace BALL
 			 /** Is called when reset button is pressed.
 				 * Calls \link GeometricFitDialog::reset reset \endlink.
 				 */
-				void resetPressed();
+				void reset();
 				
 				/** Is called when cancel button is pressed.
 				 *	Hides dialog.
 				 */
-				void cancelPressed();
+				virtual void reject();
+
+				//
+				virtual void accept();
 				
 				
 			protected:
