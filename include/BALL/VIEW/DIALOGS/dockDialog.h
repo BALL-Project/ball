@@ -179,7 +179,7 @@ namespace BALL
 					* Dialog is adapted for docking / redocking.
 				 *	Calls \link fillSystemComboboxes_ fillSystemComboboxes_ \endlink in case of docking.
 				 */
-				void show();
+				bool exec();
 				
 				/** Is called when reset button is pressed.
 				 * Calls \link DockDialog::reset reset \endlink.
@@ -286,7 +286,7 @@ namespace BALL
 				
 				
 			private:
-				
+
 				/** Copy constructor.
 					* Remark: Copy contructor is private because it is not completed. 
 					* The copy constuctor of the QT widgets is private and cannot be called.  

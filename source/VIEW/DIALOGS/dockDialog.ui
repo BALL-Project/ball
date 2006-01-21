@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>475</width>
-    <height>587</height>
+    <width>552</width>
+    <height>549</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -35,51 +35,27 @@
   <property name="windowTitle" >
    <string>Docking Options</string>
   </property>
-  <layout class="QGridLayout" >
+  <layout class="QVBoxLayout" >
    <property name="margin" >
-    <number>11</number>
+    <number>9</number>
    </property>
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="1" column="2" >
-    <widget class="QPushButton" name="reset_button" >
-     <property name="text" >
-      <string>Reset</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QPushButton" name="ok_button" >
-     <property name="text" >
-      <string>OK</string>
-     </property>
-     <property name="default" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" >
-    <widget class="QPushButton" name="cancel_button" >
-     <property name="text" >
-      <string>Cancel</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="3" >
+   <item>
     <widget class="QTabWidget" name="tab_pages" >
      <widget class="QWidget" name="general_page" >
       <attribute name="title" >
        <string>General</string>
       </attribute>
-      <layout class="QGridLayout" >
+      <layout class="QVBoxLayout" >
        <property name="margin" >
-        <number>0</number>
+        <number>9</number>
        </property>
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item row="0" column="0" >
+       <item>
         <widget class="QGroupBox" name="systems_group" >
          <property name="sizePolicy" >
           <sizepolicy>
@@ -116,7 +92,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0" >
+       <item>
         <widget class="QGroupBox" name="algorithm_group" >
          <property name="sizePolicy" >
           <sizepolicy>
@@ -155,7 +131,7 @@
          </layout>
         </widget>
        </item>
-       <item row="2" column="0" >
+       <item>
         <widget class="QGroupBox" name="scoring_group" >
          <property name="sizePolicy" >
           <sizepolicy>
@@ -191,7 +167,7 @@
          </layout>
         </widget>
        </item>
-       <item row="3" column="0" >
+       <item>
         <widget class="QGroupBox" name="options_group" >
          <property name="sizePolicy" >
           <sizepolicy>
@@ -282,7 +258,7 @@
          </layout>
         </widget>
        </item>
-       <item row="4" column="0" >
+       <item>
         <widget class="QGroupBox" name="euler_group" >
          <property name="enabled" >
           <bool>true</bool>
@@ -559,14 +535,97 @@
       <attribute name="title" >
        <string>Processors</string>
       </attribute>
-      <layout class="QGridLayout" >
+      <layout class="QVBoxLayout" >
        <property name="margin" >
-        <number>0</number>
+        <number>9</number>
        </property>
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item row="1" column="0" >
+       <item>
+        <widget class="QGroupBox" name="charges_group" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title" >
+          <string>Charges Config File</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>11</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="1" column="0" >
+           <widget class="QRadioButton" name="charges_rules_button" >
+            <property name="minimumSize" >
+             <size>
+              <width>110</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>by rules</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" >
+           <widget class="QRadioButton" name="charges_data_button" >
+            <property name="minimumSize" >
+             <size>
+              <width>110</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>from table</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QLineEdit" name="charges_data_lineedit" >
+            <property name="text" >
+             <string>charges/PARSE.crg</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" >
+           <widget class="QLineEdit" name="charges_rules_lineedit" >
+            <property name="text" >
+             <string>solvation/PARSE.rul</string>
+            </property>
+            <property name="readOnly" >
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="QPushButton" name="charges_data_browse" >
+            <property name="text" >
+             <string>Browse</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2" >
+           <widget class="QPushButton" name="charges_rules_browse" >
+            <property name="text" >
+             <string>Browse</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="radii_group" >
          <property name="sizePolicy" >
           <sizepolicy>
@@ -655,7 +714,7 @@
          </layout>
         </widget>
        </item>
-       <item row="2" column="0" >
+       <item>
         <widget class="QGroupBox" name="processors_group" >
          <property name="sizePolicy" >
           <sizepolicy>
@@ -719,92 +778,43 @@
          </layout>
         </widget>
        </item>
-       <item row="0" column="0" >
-        <widget class="QGroupBox" name="charges_group" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>5</hsizetype>
-           <vsizetype>0</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="title" >
-          <string>Charges Config File</string>
-         </property>
-         <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>11</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <item row="1" column="0" >
-           <widget class="QRadioButton" name="charges_rules_button" >
-            <property name="minimumSize" >
-             <size>
-              <width>110</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text" >
-             <string>by rules</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" >
-           <widget class="QRadioButton" name="charges_data_button" >
-            <property name="minimumSize" >
-             <size>
-              <width>110</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text" >
-             <string>from table</string>
-            </property>
-            <property name="checked" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" >
-           <widget class="QLineEdit" name="charges_data_lineedit" >
-            <property name="text" >
-             <string>charges/PARSE.crg</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1" >
-           <widget class="QLineEdit" name="charges_rules_lineedit" >
-            <property name="text" >
-             <string>solvation/PARSE.rul</string>
-            </property>
-            <property name="readOnly" >
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2" >
-           <widget class="QPushButton" name="charges_data_browse" >
-            <property name="text" >
-             <string>Browse</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2" >
-           <widget class="QPushButton" name="charges_rules_browse" >
-            <property name="text" >
-             <string>Browse</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
       </layout>
      </widget>
     </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="ok_button" >
+       <property name="text" >
+        <string>OK</string>
+       </property>
+       <property name="default" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancel_button" >
+       <property name="text" >
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="reset_button" >
+       <property name="text" >
+        <string>Reset</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

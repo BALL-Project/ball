@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.2 2006/01/20 19:23:54 amoll Exp $
+// $Id: dockDialog.C,v 1.5.2.3 2006/01/21 01:35:56 amoll Exp $
 //
 
 #include <qpushbutton.h>
@@ -82,6 +82,20 @@ namespace BALL
 			is_redock_ = false;
 			
 			hide(); 
+
+			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( cancelPressed() ) );
+			connect( ok_button, SIGNAL( clicked() ), this, SLOT( okPressed() ) );
+			connect( reset_button, SIGNAL( clicked() ), this, SLOT( resetPressed() ) );
+			connect( alg_advanced_button, SIGNAL( clicked() ), this, SLOT( algAdvancedPressed() ) );
+			connect( scoring_advanced_button, SIGNAL( clicked() ), this, SLOT( scoringAdvancedPressed() ) );
+			connect( systems1, SIGNAL( activated(const QString&) ), this, SLOT( partner1Chosen() ) );
+			connect( systems2, SIGNAL( activated(const QString&) ), this, SLOT( partner2Chosen() ) );
+			connect( scoring_functions, SIGNAL( activated(const QString&) ), this, SLOT( scoringFuncChosen() ) );
+			connect( charges_data_browse, SIGNAL( clicked() ), this, SLOT( browseChargesData() ) );
+			connect( charges_rules_browse, SIGNAL( clicked() ), this, SLOT( browseChargesRules() ) );
+			connect( radii_data_browse, SIGNAL( clicked() ), this, SLOT( browseRadiiData() ) );
+			connect( radii_rules_browse, SIGNAL( clicked() ), this, SLOT( browseRadiiRules() ) );
+			connect( algorithms, SIGNAL( activated(const QString&) ), this, SLOT( algorithmChosen() ) );
 		}
 		
 		// Copy constructor.
@@ -607,7 +621,6 @@ namespace BALL
 		void DockDialog::fillSystemComboboxes_()
 			throw()
 		{
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			// pointer to selected systems
 			docking_partner1_ = NULL;
 			docking_partner2_ = NULL;
@@ -635,7 +648,6 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 			// vector of pointers to all loaded systems is also filled (same order as current system list)
 			for (; +composite_it; ++composite_it)
 			{
-Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				System* system = dynamic_cast<System*>(*composite_it);
 				if (system == 0) continue;
 
@@ -648,7 +660,7 @@ Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<<
 			{
 				List<Composite*>::iterator lit = cl.begin();
 				System* system1 = dynamic_cast<System*>(*lit);
-				lit++
+				lit++;
 				System* system2 = dynamic_cast<System*>(*lit);
 
 				if (system1 && system2)
@@ -707,7 +719,7 @@ Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<<
 
 		// Shows and raises the dialog.
 		// In case of docking, the comboboxes for the docking partners are filled with the loaded systems in BALLView.
-		void DockDialog::show()
+		bool DockDialog::exec()
 		{
 			if (is_redock_)
 			{
@@ -737,7 +749,7 @@ Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<<
 			tab_pages->setCurrentIndex(0);
 			
 			// show dialog to user
-			QDialog::show();
+			return QDialog::exec();
 		}
 		
 		// Indicates the OK button was pressed.
@@ -792,11 +804,12 @@ Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<<
 				it->setProperty("DOCKING_PARTNER_2");
 			}
 			accept();
+			storeValues();
 		}
 		
-		///////// TODO: take the values which were in the fields when dialog was opened
 		void DockDialog::cancelPressed()
 		{
+			restoreValues();
 			reject();
 		}
 		
@@ -842,7 +855,7 @@ Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<<
 		{
 			int chosen_system = systems1->currentIndex();
 			// if item 0 (<select>) is chosen, do nothing
-			if(chosen_system)
+			if (chosen_system)
 			{
 				docking_partner1_ = loaded_systems_[chosen_system - 1];
 		 	}
@@ -853,7 +866,7 @@ Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<<
 		{
 			int chosen_system = systems2->currentIndex();
 			// if item 0 (<select>) is chosen, do nothing
-			if(chosen_system)
+			if (chosen_system)
 			{
 				docking_partner2_ = loaded_systems_[chosen_system - 1];
 		 	}
