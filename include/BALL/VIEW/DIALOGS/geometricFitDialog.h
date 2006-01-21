@@ -24,7 +24,8 @@ namespace BALL
 				@see GeometricFit
 		 */
 		class BALL_EXPORT GeometricFitDialog : 
-			public GeometricFitDialogData,
+			public QDialog,
+			public Ui_GeometricFitDialogData,
 			public PreferencesEntry
 		{ 
 			Q_OBJECT
@@ -45,7 +46,7 @@ namespace BALL
 				 *	@see        QDialog
 				 *	@see				PreferncesEntry
 				 */
-				GeometricFitDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
+				GeometricFitDialog(QWidget* parent = 0, const char* name = 0)
 					throw();
 					
 				/** Destructor.

@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.53.2.1 2006/01/13 15:35:41 amoll Exp $
+# $Id: Makefile,v 1.53.2.2 2006/01/21 12:29:09 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -12,9 +12,9 @@ UIC_DIR=$(BALL_PATH)/include/BALL/VIEW/UIC
 
 THISLIB=$(LIBNAME)
 
-FFT_DEPENDENT_SOURCES=$(BALL_HAS_FFTW:true=geometricFitDialog.C geometricFitDialogData.C)
-FFT_DEPENDENT_MOC_SOURCES=$(BALL_HAS_FFTW:true=geometricFitDialog_moc.C geometricFitDialogData_moc.C)
-FFT_DEPENDENT_UIC_SOURCES=$(BALL_HAS_FFTW:true=geometricFitDialogData.C)
+FFT_DEPENDENT_SOURCES=$(BALL_HAS_FFTW:true=geometricFitDialog.C)
+FFT_DEPENDENT_UIC_SOURCES=$(BALL_HAS_FFTW:true=geometricFitDialog.ui)
+FFT_DEPENDENT_MOC_SOURCES=$(BALL_HAS_FFTW:true=geometricFitDialog_moc.C)
 
 
 CPP_SOURCES=\
