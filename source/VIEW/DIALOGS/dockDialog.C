@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.3 2006/01/21 01:35:56 amoll Exp $
+// $Id: dockDialog.C,v 1.5.2.4 2006/01/21 14:34:12 amoll Exp $
 //
 
 #include <qpushbutton.h>
@@ -254,6 +254,7 @@ namespace BALL
 			//because the algorithm with enum value i should be at position i in the combobox
 			//otherwise you get the wrong option dialog for an algorithm
 #ifdef BALL_HAS_FFTW
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
 			addAlgorithm("Geometric Fit", DockingController::GEOMETRIC_FIT, geo_fit);
 #endif
@@ -426,8 +427,8 @@ namespace BALL
 			try
 			{
 #ifdef BALL_HAS_FFTW
-				algorithm_opt_[GeometricFit::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
-				algorithm_opt_[GeometricFit::Option::VERBOSITY] = String(verbosity->text().ascii()).toInt();
+				algorithm_opt_[GeometricFit::Option::BEST_NUM] = ascii(best_num->text()).toInt();
+				algorithm_opt_[GeometricFit::Option::VERBOSITY] = ascii(verbosity->text()).toInt();
 #endif
 			}
 			catch (Exception::InvalidFormat)
@@ -453,15 +454,15 @@ namespace BALL
 				try
 					{
 #ifdef BALL_HAS_FFTW	
-						algorithm_opt_[GeometricFit::Option::PHI_MIN] = String(phi_min->text().ascii()).toFloat();
-						algorithm_opt_[GeometricFit::Option::PHI_MAX] = String(phi_max->text().ascii()).toFloat();
-						algorithm_opt_[GeometricFit::Option::DEG_PHI] = String(delta_phi->text().ascii()).toFloat();
-						algorithm_opt_[GeometricFit::Option::PSI_MIN] = String(psi_min->text().ascii()).toFloat();
-						algorithm_opt_[GeometricFit::Option::PSI_MAX] = String(psi_max->text().ascii()).toFloat();
-						algorithm_opt_[GeometricFit::Option::DEG_PSI] = String(delta_psi->text().ascii()).toFloat();
-						algorithm_opt_[GeometricFit::Option::THETA_MIN] = String(theta_min->text().ascii()).toFloat();
-						algorithm_opt_[GeometricFit::Option::THETA_MAX] = String(theta_max->text().ascii()).toFloat();
-						algorithm_opt_[GeometricFit::Option::DEG_THETA] = String(delta_theta->text().ascii()).toFloat();
+						algorithm_opt_[GeometricFit::Option::PHI_MIN] = ascii(phi_min->text()).toFloat();
+						algorithm_opt_[GeometricFit::Option::PHI_MAX] = ascii(phi_max->text()).toFloat();
+						algorithm_opt_[GeometricFit::Option::DEG_PHI] = ascii(delta_phi->text()).toFloat();
+						algorithm_opt_[GeometricFit::Option::PSI_MIN] = ascii(psi_min->text()).toFloat();
+						algorithm_opt_[GeometricFit::Option::PSI_MAX] = ascii(psi_max->text()).toFloat();
+						algorithm_opt_[GeometricFit::Option::DEG_PSI] = ascii(delta_psi->text()).toFloat();
+						algorithm_opt_[GeometricFit::Option::THETA_MIN] = ascii(theta_min->text()).toFloat();
+						algorithm_opt_[GeometricFit::Option::THETA_MAX] = ascii(theta_max->text()).toFloat();
+						algorithm_opt_[GeometricFit::Option::DEG_THETA] = ascii(delta_theta->text()).toFloat();
 #endif
 					}
 				catch(Exception::InvalidFormat)

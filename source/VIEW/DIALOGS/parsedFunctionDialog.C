@@ -14,8 +14,8 @@ namespace BALL
 	namespace VIEW
 	{
 
-ParsedFunctionDialog::ParsedFunctionDialog( QWidget* parent,  const char* name, bool modal, Qt::WFlags fl )
-    : QDialog(parent, fl),
+ParsedFunctionDialog::ParsedFunctionDialog( QWidget* parent,  const char* name)
+    : QDialog(parent),
 			Ui_ParsedFunctionDialogData()
 {
 	setupUi(this);
