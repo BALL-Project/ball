@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.3.2.1 2006/01/13 15:35:48 amoll Exp $
+// $Id: dockResultDialog.C,v 1.3.2.2 2006/01/21 15:36:42 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockResultDialog.h>
@@ -65,8 +65,18 @@ namespace BALL
 //   			connect( columns, SIGNAL( clicked(int) ), this, SLOT( sortTable(int) ) );
 			result_table->setSortingEnabled(false); // ????????????????
 			
-			
 			hide();
+
+			connect( close_button, SIGNAL( clicked() ), this, SLOT( closeClicked() ) );
+			connect( scoring_button, SIGNAL( clicked() ), this, SLOT( scoringClicked() ) );
+			connect( advanced_button, SIGNAL( clicked() ), this, SLOT( advancedClicked() ) );
+			connect( scoring_functions, SIGNAL( activated(const QString&) ), this, SLOT( scoringFuncChosen() ) );
+			connect( show_button, SIGNAL( clicked() ), this, SLOT( showSnapshot() ) );
+			connect( upwardButton, SIGNAL( clicked() ), this, SLOT( upwardClicked() ) );
+			connect( downwardButton, SIGNAL( clicked() ), this, SLOT( downwardClicked() ) );
+			connect( result_table, SIGNAL( doubleClicked(int,int,int,const QPoint&) ), this, SLOT( showSnapshot() ) );
+			connect( dock_opt_button, SIGNAL( clicked() ), this, SLOT( showDockingOptions() ) );
+			connect( result_table, SIGNAL( contextMenuRequested(int,int,const QPoint&) ), this, SLOT( contextMenuRequested(int,int,const QPoint&) ) );
 		}
 		
 		// Copy constructor.
@@ -155,35 +165,35 @@ namespace BALL
 		// show and raise result dialog
 		void DockResultDialog::show()
 		{
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			if (!dock_res_) return;
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			
 			// before showing the dialog the result table has to be build and filled 
 			// first get the number of conformations, to know how many rows the table needs
 			Size conformation_num = dock_res_->getConformationSet()->size();
 			// insert rows in table
-//   			result_table->insertRows(0,conformation_num); ???????????????
+			result_table->setRowCount(conformation_num);
+			result_table->setColumnCount(dock_res_->numberOfScorings());
 		
 			// fill the first column with snapshot numbers
-			for(Position i=0; i < conformation_num; i++)
+			for (Position i=0; i < conformation_num; i++)
 			{
 				QString s;
-//   				result_table->setText(i,0,s.setNum(i)); ????????????????
+				result_table->setItem(i, 0, new QTableWidgetItem(s.setNum(i)));
 			}
 			
 			// fill table with scores
-			for(Position i = 0; i < dock_res_->numberOfScorings(); i++)
+			for (Position i = 0; i < dock_res_->numberOfScorings(); i++)
 			{
-				// insert new score column in table; i+1, because first column contains snapshot number
-//   				result_table->insertColumns(i+1, 1); // ????
-				// set the scoring function name as label of the column
-//   				result_table->horizontalHeader()->setLabel(i+1, dock_res_->getScoringName(i)); ????????
+				result_table->horizontalHeaderItem(i + 1)->setText(dock_res_->getScoringName(i).c_str());
 				// the scores in the vector are sorted by snapshot number!
 				// the score with snapshot number i is at position i in the vector
 				vector<float> scores = dock_res_->getScores(i);
 				for(Position j = 0; j < scores.size(); j++)
 				{
 					QString s;
-//   					result_table->setText(j, i+1, s.setNum(scores[j])); ???????????ß
+					result_table->setItem(j, i + 1, new QTableWidgetItem(s.setNum(scores[j])));
 				}
 			}
 			
@@ -204,22 +214,21 @@ namespace BALL
 		// show snapshot of selected row
 		void DockResultDialog::showSnapshot()
 		{
-			if(!dock_res_) return;
-		
 			// get index of current row
 			Index selected_row = result_table->currentRow();
+			if (!dock_res_ || selected_row == -1) return;
+
 			// get snapshot number of this row
-			Index snapshot;
-			snapshot = (result_table->item(selected_row, 0)->text()).toInt();
+			Index snapshot = (result_table->item(selected_row, 0)->text()).toInt();
 			// apply snapshot
 			const ConformationSet* conformation_set = dock_res_->getConformationSet();
-			SnapShot selected_conformation = (*conformation_set)[snapshot];
+			const SnapShot& selected_conformation = (*conformation_set)[snapshot];
 			selected_conformation.applySnapShot(*docked_system_);
 			//inform main control that system has changed
 			MainControl* main_control = MainControl::getInstance(0);
 			if (!main_control)
 			{
-				Log.error() << "Error while informing MainControl about changed system! " << __FILE__ << " " << __LINE__ << std::endl;
+				BALLVIEW_DEBUG;
 				return;
 			}
 			main_control->update(*docked_system_, true);
