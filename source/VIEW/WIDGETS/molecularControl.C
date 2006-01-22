@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.4 2006/01/17 16:39:42 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.5 2006/01/22 13:19:51 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -10,6 +10,7 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
 #include <BALL/VIEW/DIALOGS/bondProperties.h>
+#include <BALL/VIEW/DIALOGS/atomOverview.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
 #include <qpushbutton.h> 
@@ -347,6 +348,7 @@ namespace BALL
 
 			// -----------------------------------> AtomContainer
 			count_items_action_ = context_menu_.addAction("Count items", this, SLOT(countItems()), 0);
+			atom_overview_ = context_menu_.addAction("Atom Overview", this, SLOT(showAtomOverview()), 0);
 			// <----------------------------------- AtomContainer
 			
 			context_menu_.addSeparator();
@@ -387,7 +389,9 @@ namespace BALL
 			deselect_action_->setEnabled(composite.isSelected() && composites_muteable);
 
 			// -----------------------------------> AtomContainer
-			count_items_action_->setEnabled(RTTI::isKindOf<AtomContainer>(composite));
+			bool ac = RTTI::isKindOf<AtomContainer>(composite);
+			count_items_action_->setEnabled(ac);
+			atom_overview_->setEnabled(ac);
 			// <----------------------------------- AtomContainer
 			
 			// -----------------------------------> Atoms
@@ -1287,6 +1291,13 @@ namespace BALL
 			if (checked == c->isSelected()) return;
 
  			selectedComposite_(c, checked);
+		}
+
+		void MolecularControl::showAtomOverview()
+		{
+			AtomOverview ao;
+			ao.setParent(dynamic_cast<AtomContainer*>(item_to_composite_[context_item_]));
+			ao.exec();
 		}
 
 	} // namespace VIEW

@@ -4,6 +4,7 @@ Added docking code.
 Ported BALLView from QT 3.X to 4.1.
 
 Added:
+- Widget for overview of atom values (e.g. atom type, charge)
 - Added BALL documentation widget in BALLView
 - Python widget now supports completion
 - Python widget has ability to show help entry for actual BALL Python command

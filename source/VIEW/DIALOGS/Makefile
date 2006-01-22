@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.53.2.2 2006/01/21 12:29:09 amoll Exp $
+# $Id: Makefile,v 1.53.2.3 2006/01/22 13:19:58 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -18,6 +18,7 @@ FFT_DEPENDENT_MOC_SOURCES=$(BALL_HAS_FFTW:true=geometricFitDialog_moc.C)
 
 
 CPP_SOURCES=\
+	atomOverview.C\
 	amberConfigurationDialog.C\
 	bondProperties.C\
 	charmmConfigurationDialog.C\
@@ -56,6 +57,7 @@ CPP_SOURCES=\
 
 MOC_SOURCES=\
 	amberConfigurationDialog_moc.C\
+	atomOverview_moc.C\
 	minimizationDialog_moc.C\
 	compositeProperties_moc.C\
 	bondProperties_moc.C\
@@ -92,6 +94,7 @@ MOC_SOURCES=\
 
 UIC_SOURCES=$(FFT_DEPENDENT_UIC_SOURCES)\
 	amberConfigurationDialog.ui\
+	atomOverview.ui\
 	bondProperties.ui\
 	charmmConfigurationDialog.ui\
 	clippingDialog.ui\
@@ -140,9 +143,6 @@ openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
 
 openBruker2DFile_moc.C: $(HEADER_DIR)/openBruker2DFile.h
 	$(MOC) $(HEADER_DIR)/openBruker2DFile.h -o $@
-
-colorChooser_moc.C: $(HEADER_DIR)/colorChooser.h
-	$(MOC) $(HEADER_DIR)/colorChooser.h -o $@
 
 depend: $(UIC_HDR) $(MOC_SOURCES)
 
