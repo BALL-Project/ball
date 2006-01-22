@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.5 2006/01/22 13:19:51 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.6 2006/01/22 16:09:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -539,8 +539,8 @@ namespace BALL
 		void MolecularControl::recurseGeneration_(QTreeWidgetItem* item, Composite& composite)
 			throw()
 		{
-			Composite::ChildCompositeReverseIterator it = composite.rbeginChildComposite();
-			for (; it != composite.rendChildComposite(); ++it)
+			Composite::ChildCompositeIterator it = composite.beginChildComposite();
+			for (; it != composite.endChildComposite(); ++it)
 			{
 				generateListViewItem_(item, *it);
 			}
