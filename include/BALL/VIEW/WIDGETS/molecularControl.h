@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.50.2.1 2006/01/13 15:35:35 amoll Exp $
+// $Id: molecularControl.h,v 1.50.2.2 2006/01/22 13:24:29 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -293,6 +293,9 @@ class BALL_VIEW_EXPORT MolecularControl
 	virtual void clearSelector();
 
 	void switchShowSecondaryStructure();
+
+	///
+	void showAtomOverview();
 	
 	//@} 
 	/** @name Protected members 
@@ -445,7 +448,7 @@ class BALL_VIEW_EXPORT MolecularControl
 
 	bool 						show_ss_;
 	QAction* center_camera_action_, *composite_properties_action_, *bond_propertes_action_, 
-					 *select_action_, *deselect_action_, *count_items_action_;
+					 *select_action_, *deselect_action_, *count_items_action_, *atom_overview_;
 
 	bool ignore_checked_changes_;
 };

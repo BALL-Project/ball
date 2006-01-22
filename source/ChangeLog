@@ -26,7 +26,6 @@ Fixed:
 Known problems:
 - Molecular Control Selection: Child->Parent doesnt always gets selected
 - Popup Labels for infos in Scene dont work because of problems of QPainter with QGLWidget
-- DockResultDialog cant sort results yet
 - RegularData widgets currently dont work (QT 4.1 does not yet have CanvasWidgets)
 - Preferences QStackedWidget looks awfull on startup (QT problem)
 - HelpViewer has problems with HTML layout (QT problem)
