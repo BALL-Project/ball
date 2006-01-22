@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.4 2006/01/21 14:34:12 amoll Exp $
+// $Id: dockDialog.C,v 1.5.2.5 2006/01/22 12:43:08 amoll Exp $
 //
 
 #include <qpushbutton.h>
@@ -254,7 +254,6 @@ namespace BALL
 			//because the algorithm with enum value i should be at position i in the combobox
 			//otherwise you get the wrong option dialog for an algorithm
 #ifdef BALL_HAS_FFTW
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
 			addAlgorithm("Geometric Fit", DockingController::GEOMETRIC_FIT, geo_fit);
 #endif
