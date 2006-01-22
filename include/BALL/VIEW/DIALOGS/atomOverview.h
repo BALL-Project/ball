@@ -62,7 +62,40 @@ namespace BALL
 
 					QTableWidget* table_;
 			};
+	
+			///
+			class BALL_VIEW_EXPORT ApplyProcessor
+				: public UnaryProcessor<Composite>
+			{
+				public:
+
+					BALL_CREATE(ApplyProcessor)
+				
+					///
+					ApplyProcessor()
+						throw();
+
+					///
+					ApplyProcessor(const ApplyProcessor& model_processor)
+						throw();
+
+					///
+					virtual ~ApplyProcessor()
+						throw();
+
+					///
+					Processor::Result operator() (Composite& composite);
+
+					///
+					void setTable(QTableWidget* widget) { table_ = widget; row_ = 0;}
+
+				protected:
+
+					QTableWidget* table_;
+					Position row_;
+			};
 			
+		
 			/**	@name	Constructors
 			*/	
 			//@{
@@ -118,7 +151,9 @@ namespace BALL
 
 			AtomContainer* parent_;
 			OverviewProcessor processor_;
+			ApplyProcessor 	  apply_processor_;
 			String 						item_backup_;
+			bool 							ignore_;
 		};
 
 } } // namespaces

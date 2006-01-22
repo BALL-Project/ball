@@ -28,9 +28,10 @@ AtomOverview::AtomOverview(QWidget* parent, const char* name)
 	setModal(true);
 	setSizeGripEnabled(true);
 	processor_.setTable(table);
+	apply_processor_.setTable(table);
 
 	connect(table, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(itemChanged(QTableWidgetItem*)));
-	connect(table, SIGNAL(itemActivated(QTableWidgetItem*)), this, SLOT(itemActivated(QTableWidgetItem*)));
+	connect(table, SIGNAL(itemClicked(QTableWidgetItem*)), this, SLOT(itemActivated(QTableWidgetItem*)));
 
 	hide();
 }
@@ -61,13 +62,16 @@ void AtomOverview::setParent(AtomContainer* ac)
 	table->setHorizontalHeaderItem(2, new QTableWidgetItem("Type"));
 	table->setHorizontalHeaderItem(3, new QTableWidgetItem("Radius"));
 	table->setHorizontalHeaderItem(4, new QTableWidgetItem("Charge"));
+	ignore_ = true;
 	parent_->apply(processor_);
+	ignore_ = false;
 }
 
 
 void AtomOverview::accept()
 {
 	QDialog::accept();
+	parent_->apply(apply_processor_);
 	VIEW::getMainControl()->update(*parent_);
 	VIEW::getMainControl()->setStatusbarText("Applied values", true);
 }
@@ -133,7 +137,7 @@ Processor::Result AtomOverview::OverviewProcessor::operator() (Composite& compos
 
 void AtomOverview::itemChanged(QTableWidgetItem* item)
 {
-	if (item == 0) return;
+	if (ignore_ | item == 0) return;
   Index c = table->column(item);
 
 	String s = ascii(item->text());
@@ -177,9 +181,54 @@ void AtomOverview::restoreItem_(QTableWidgetItem* item)
 
 void AtomOverview::itemActivated(QTableWidgetItem* item)
 {
-Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	if (item == 0) return;
 	item_backup_ = ascii(item->text());
+}
+
+
+AtomOverview::ApplyProcessor::ApplyProcessor()
+	throw()
+	: UnaryProcessor<Composite>(),
+	  table_(0)
+{
+}
+
+AtomOverview::ApplyProcessor::ApplyProcessor(const ApplyProcessor&)
+	throw()
+	: UnaryProcessor<Composite>(),
+		table_(0)
+{
+}
+
+AtomOverview::ApplyProcessor::~ApplyProcessor()
+	throw()
+{
+}
+
+Processor::Result AtomOverview::ApplyProcessor::operator() (Composite& composite)
+{
+	if (RTTI::isKindOf<Atom>(composite))
+	{
+		Atom* atom = dynamic_cast<Atom*>(&composite);
+		String s;
+
+		atom->setSelected(table_->item(row_, 0)->checkState() == Qt::Checked);
+
+		s = ascii(table_->item(row_, 1)->text());
+		atom->setElement(PTE.getElement(s));
+
+		s = ascii(table_->item(row_, 2)->text());
+		atom->setType(s.toInt());
+
+		s = ascii(table_->item(row_, 3)->text());
+		atom->setRadius(s.toFloat());
+
+		s = ascii(table_->item(row_, 4)->text());
+		atom->setCharge(s.toFloat());
+		row_ ++;
+	}
+
+	return Processor::CONTINUE;
 }
 
 } } // namespaces
