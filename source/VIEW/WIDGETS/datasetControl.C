@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.3 2006/01/17 14:53:46 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.4 2006/01/22 11:28:35 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -831,6 +831,7 @@ namespace BALL
 	void DatasetControl::showGuestContextMenu(const QPoint& pos)
 	{
 		getSelectedItems();
+		if (context_item_ == 0) return;
 		createContextMenu_();
 		context_menu_.exec(mapToGlobal(pos));
 	}

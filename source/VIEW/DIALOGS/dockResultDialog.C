@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.3.2.3 2006/01/22 02:44:33 amoll Exp $
+// $Id: dockResultDialog.C,v 1.3.2.4 2006/01/22 11:29:26 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockResultDialog.h>
@@ -60,7 +60,7 @@ namespace BALL
 			addScoringFunction("Amber Force Field", DockingController::AMBER_FF, &(mol_struct->getAmberConfigurationDialog()));
 			addScoringFunction("Random", DockingController::RANDOM);
 		
-//   			result_table->setSortingEnabled(false); // ????????????????
+			result_table->setSortingEnabled(false); // ????????????????
 			
 			hide();
 
@@ -70,13 +70,13 @@ namespace BALL
 			connect( scoring_opt, SIGNAL( clicked()), this, SLOT(showScoringOptions_()));
 			connect( delete_score, SIGNAL( clicked()), this, SLOT(deleteColumn_()));
 			connect( dock_opt_button, SIGNAL( clicked() ), this, SLOT( showDockingOptions() ) );
-			connect( redock, SIGNAL( clicked() ), this, SLOT( redock() ) );
+			connect( redock, SIGNAL( clicked() ), this, SLOT( redock_() ) );
 			connect( show_button, SIGNAL( clicked() ), this, SLOT( showSnapshot() ) );
 			connect( upwardButton, SIGNAL( clicked() ), this, SLOT( upwardClicked() ) );
 			connect( downwardButton, SIGNAL( clicked() ), this, SLOT( downwardClicked() ) );
 			connect( close_button, SIGNAL( clicked() ), this, SLOT( closeClicked() ) );
 
-			connect(result_table, SIGNAL(sortByColumn(int)), this, SLOT(sortTable(int)));
+			connect(result_table->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(sortTable(int)));
 			connect(result_table, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged_()));
 			connect(result_table, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(itemDoubleClicked_(int, int) ) );
 		}
@@ -365,7 +365,6 @@ namespace BALL
 		// sort the result table by clicked column
 		void DockResultDialog::sortTable(int column)
 		{
-Log.error() << "#~~#   18 "    << column         << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			// create vector which contains the rows of the table
 			vector<vector<float> > rows;
 			for(Index row_it = 0; row_it < result_table->rowCount(); row_it++)
