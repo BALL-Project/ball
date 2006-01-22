@@ -132,14 +132,6 @@ namespace BALL
 					*/
 				void scoringClicked();
 				
-				/** Is called when the result table is right-clicked.
-					* Shows a context menu with entries <b>Delete Score Column</b>, <b>Scoring Options</b> and <b>Redock</b>
-					* @param			row number of the row which the user clicked
-					* @param			column number of the row which the user clicked
-					* @param			pos
-					*/
-				void contextMenuRequested(int row, int column, const QPoint& pos);
-
 				/** Is called when close button is pressed.
 					* Closes and deletes the dialog.
 				*/
@@ -147,6 +139,10 @@ namespace BALL
 				
 				
 				protected slots:
+
+				void itemDoubleClicked_(int col, int row);
+
+				void selectionChanged_();
 			
 				/** Is called when context menu entry <b> Delete Score Column </b> is pressed.
 					* Deletes a score column.
@@ -200,8 +196,6 @@ namespace BALL
 				};
 
 			private:
-
-				Index getContextMenuEntryData_();
 
 				/** Copy constructor
 					* Remark: Copy contructor is private because it is not completed. 
