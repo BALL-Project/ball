@@ -175,13 +175,17 @@ void AtomOverview::itemChanged(QTableWidgetItem* item)
 
 void AtomOverview::restoreItem_(QTableWidgetItem* item)
 {
-	if (item == 0) return;
+	if (item == 0 || table->column(item) <= 0) return;
 	item->setText(item_backup_.c_str());
 }
 
 void AtomOverview::itemActivated(QTableWidgetItem* item)
 {
-	if (item == 0) return;
+	if (item == 0 || table->column(item) <= 0) 
+	{
+		return;
+	}
+
 	item_backup_ = ascii(item->text());
 }
 
