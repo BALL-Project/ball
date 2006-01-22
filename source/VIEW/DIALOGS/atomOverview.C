@@ -65,6 +65,7 @@ void AtomOverview::setParent(AtomContainer* ac)
 	ignore_ = true;
 	parent_->apply(processor_);
 	ignore_ = false;
+	showMaximized();
 }
 
 
