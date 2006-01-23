@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.22.2.1 2006/01/13 15:35:23 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.22.2.2 2006/01/23 16:08:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -85,7 +85,7 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT ColoringSettingsDialog 
-			: public QDialog,
+			: public QWidget,
 				public Ui_ColoringSettingsDialogData,
 				public PreferencesEntry
 		{ 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.C,v 1.38.2.1 2006/01/13 15:35:44 amoll Exp $
+// $Id: coloringSettingsDialog.C,v 1.38.2.2 2006/01/23 16:07:38 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
@@ -152,7 +152,7 @@ namespace BALL
 					
 		// =========================================================================================
 		ColoringSettingsDialog::ColoringSettingsDialog( QWidget* parent,  const char* name, Qt::WFlags fl )
-			: QDialog(parent, fl),
+			: QWidget(parent, fl),
 				Ui_ColoringSettingsDialogData(),
 				PreferencesEntry()
 		{

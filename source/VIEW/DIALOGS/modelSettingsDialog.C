@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.37.2.1 2006/01/13 15:35:52 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.37.2.2 2006/01/23 16:07:39 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -30,7 +30,7 @@ namespace BALL
 	{
 
 		ModelSettingsDialog::ModelSettingsDialog( QWidget* parent,  const char* name, Qt::WFlags fl )
-			: QDialog(parent, fl),
+			: QWidget(parent, fl),
 				Ui_ModelSettingsDialogData(),
 				PreferencesEntry()
 		{
