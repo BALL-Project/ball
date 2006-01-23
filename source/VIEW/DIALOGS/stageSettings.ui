@@ -3,7 +3,7 @@
  <comment></comment>
  <exportmacro></exportmacro>
  <class>StageSettingsData</class>
- <widget class="QDialog" name="StageSettingsData" >
+ <widget class="QWidget" name="StageSettingsData" >
   <property name="geometry" >
    <rect>
     <x>0</x>

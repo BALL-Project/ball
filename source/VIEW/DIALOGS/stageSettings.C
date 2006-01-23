@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.C,v 1.30.2.1 2006/01/13 15:35:59 amoll Exp $
+// $Id: stageSettings.C,v 1.30.2.2 2006/01/23 17:08:00 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
@@ -22,7 +22,7 @@ namespace BALL
 	{
 
 		StageSettings::StageSettings( QWidget* parent,  const char* name, Qt::WFlags fl )
-			: QDialog(parent, fl),
+			: QWidget(parent, fl),
 				Ui_StageSettingsData()
 		{
 			setupUi(this);
