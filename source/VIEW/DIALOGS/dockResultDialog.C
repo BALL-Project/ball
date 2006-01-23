@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.3.2.4 2006/01/22 11:29:26 amoll Exp $
+// $Id: dockResultDialog.C,v 1.3.2.5 2006/01/23 13:16:50 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockResultDialog.h>
@@ -60,7 +60,7 @@ namespace BALL
 			addScoringFunction("Amber Force Field", DockingController::AMBER_FF, &(mol_struct->getAmberConfigurationDialog()));
 			addScoringFunction("Random", DockingController::RANDOM);
 		
-			result_table->setSortingEnabled(false); // ????????????????
+			result_table->setSortingEnabled(false);
 			
 			hide();
 
@@ -78,7 +78,6 @@ namespace BALL
 
 			connect(result_table->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(sortTable(int)));
 			connect(result_table, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged_()));
-			connect(result_table, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(itemDoubleClicked_(int, int) ) );
 		}
 		
 		// Copy constructor.
@@ -205,13 +204,6 @@ namespace BALL
 			QDialog::show();
 		}
 
-		void DockResultDialog::itemDoubleClicked_(int col, int row)
-		{
-			if (col == 0 && row >= 0)
-			{
-				showSnapshot();
-			}
-		}
 		
 		// show snapshot of selected row
 		void DockResultDialog::showSnapshot()

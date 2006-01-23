@@ -140,8 +140,6 @@ namespace BALL
 				
 				protected slots:
 
-				void itemDoubleClicked_(int col, int row);
-
 				void selectionChanged_();
 			
 				/** Is called when context menu entry <b> Delete Score Column </b> is pressed.
