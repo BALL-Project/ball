@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBijection.h,v 1.1 2006/01/23 20:44:54 oliver Exp $
+// $Id: atomBijection.h,v 1.2 2006/01/23 21:55:15 oliver Exp $
 //
-// $Id: atomBijection.h,v 1.1 2006/01/23 20:44:54 oliver Exp $
+// $Id: atomBijection.h,v 1.2 2006/01/23 21:55:15 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -32,7 +32,7 @@ namespace BALL
 			There are a few methods for general mappings (based on atom order, atom names, etc.)
 			that should suffice for most applications. If you want to match proteins based on
 			particular mappings (e.g. based on a pairwise alignment), you should create the mapping
-			yourself. This is easily done by pushing an AtomPair into the list:
+			yourself. This is easily done by pushing an AtomPair into the vector:
 			\code
 				Atom* atom1 = ...;
 				Atom* atom2 = ...;
@@ -44,13 +44,13 @@ namespace BALL
 				bijection.push_back(AtomBijection::AtomPair(atom1, atom2));
 			\endcode
 			\p
-			The class behaves more or less like the list of atom pointer pairs it
+			The class behaves more or less like the vector of atom pointer pairs it
 			truly is. In particular, the STL container interface has been fully 
 			implemented.
 	\ingroup StructureMiscellaneous
 	*/
 	class BALL_EXPORT AtomBijection
-		: public std::list<std::pair<Atom*, Atom*> >
+		: public std::vector<std::pair<Atom*, Atom*> >
 	{
 		public:
 
@@ -59,6 +59,7 @@ namespace BALL
 		/** A struct for representing an atom pair of the mapping.
 		*/
 		typedef std::pair<Atom*, Atom*> AtomPair;
+		typedef std::vector<std::pair<Atom*, Atom*> > PairVector;
 		//@}
 		
 		/**	@name	Constructors and Destructors
@@ -161,19 +162,17 @@ namespace BALL
 		/**	@name STL container compliance */
 		//@{
 		///
-		using size;
+		using PairVector::size;
 		///
-		using push_back;
+		using PairVector::push_back;
 		///
-		using push_front;
+		using PairVector::begin;
 		///
-		using begin;
+		using PairVector::end;
 		///
-		using end;
+		using PairVector::rbegin;
 		///
-		using rbegin;
-		///
-		using rend;
+		using PairVector::rend;
 		//@}
 	
 	};

@@ -14,18 +14,20 @@ SMARTS_SOURCES=\
 	smartsParserParser.C\
 	smartsParserLexer.C
 
-CPP_SOURCES= \
-	molecularGraph.C\
+CPP_SOURCES=\
 	analyticalSES.C\
+	atomBijection.C\
+	buildBondsProcessor.C\
 	connolly.C\
 	defaultProcessors.C\
 	fragmentDB.C\
-	buildBondsProcessor.C\
 	geometricProperties.C\
 	geometricTransformations.C\
 	graphEdge.C\
 	graphFace.C\
 	graphVertex.C\
+	HBondProcessor.C\
+	molecularGraph.C\
 	numericalSAS.C\
 	peptides.C\
 	peptideBuilder.C\
@@ -64,7 +66,6 @@ CPP_SOURCES= \
 	triangulatedSAS.C\
 	triangulatedSES.C\
 	triangulatedSurface.C\
-	HBondProcessor.C\
 	UCK.C
 
 SMILES_PARSER_PREFIX=SmilesParser
