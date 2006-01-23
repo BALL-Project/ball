@@ -6,20 +6,20 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 <body>
-<center>
+<div align=center>
 <table width="700" border="0" cellpadding="0">
   <tr>
     <td align="center">
 
 <h2 align="center">
-<a href="datasetControl.html"><img src="images/left.png" width="58" height="28" align="absmiddle"></a>
+<a href="datasetControl.html"><img src="images/left.png" width="58" height="28" align="Middle"></a>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="index.html">Index</a> &nbsp;&nbsp;&nbsp;&nbsp;
-<a href="displayProperties.html"><img src="images/right.png" width="58" height="28" border="0" align="absmiddle"></a> </h2>
+<a href="displayProperties.html"><img src="images/right.png" width="58" height="28" border="0" align="Middle"></a> </h2>
 <hr width=700>
 		
 <h2>PythonInterpreter</h2>
 
-<a name="python_scripts"><h3>Write Python scripts for BALLView</h3></a>
+<a name="python_scripts"></a><h2>Write Python scripts for BALLView</h2>
 <div align="justify">The easiest way to access objects in BALLView is to use the interface to the ModularWidgets. 
   Every major widget in BALLView, like the Scene or the MolecularControl is such a ModularWidget.
   To get the instance of a ModularWidget in a running BALLView session, call e.g.<br>
@@ -39,8 +39,26 @@
 </div>
 <br>
 
-<a name="startup_script">
-<h3>Setup a Python startup script</h3></a>
+<a name="startup_script"></a>
+<h2 align=center>Completion and context sensitive help</h2>
+<div align=justify>
+<a name="completion"></a>
+To ease and accelerate the development with Python we implemented Command completion:
+When the right cursor key is pressed at the end of the edit line, a combobox pops up with all
+possible completions. This can e.g. be used to show all members of a BALL class
+and works e.g. for the example:
+<pre>
+a = Atom()
+a.getElem[Key right]
+</pre>
+
+<br><br>
+To get context sensitive help for the current line, write your line of code and press "Enter" (from the numlock block) or
+"Shift-F1" after the name of the method (like above). This pops up a window with the BALL documentation for the class and member. 
+</div>
+
+<a name="startup_script"></a>
+<h2>Setup a Python startup script</h2>
 <div align="justify">BALLView loads a standard Python script, every time it is started. 
 This script is located in BALL/data/startup.py and defines some shortcuts for obtaining
 objectes and widgets at runtime.
@@ -72,12 +90,13 @@ def removeWater():
 </td></tr></table>
 </div>
 
-<h3>Python hotkeys</h3>
+<h2>Python hotkeys</h2>
 <p align="justify"><a name="create_hotkeys"></a>
   BALLView can bind any Python command to an hotkey for the F-keys.  
 	By using the Shift-modifier, BALLView can have up to 24  different hotkeys additional to the standard 
 	hotkeys for menu entries. This enables the user to 
   accelerate repetitive tasks dramatically.
+	Furthermore all Python Hotkeys are show as entries in the "User" menu.
 	The standard startup Python Scripts defines many different shortcuts, which can be mapped to any F-key.
   Thereby a user can e.g. remove all water molecules in the loaded Systems with one keypress. 
 	Of course, it is also possible to start methods defined in the user startup script or extern Python scripts with a hotkey:
@@ -85,10 +104,12 @@ def removeWater():
 	</p>
 <p><img src="images/hotkeys.png"></p>
 
+<br><br><br>
+
 <table width="700" border="1" cellpadding="5">
   <tr>
-    <td><b>Method</td>
-    <td><b>Note</b></td></td>
+    <td><b>Method</b></td>
+    <td><b>Note</b></td>
   </tr>
   <tr>
     <td>runScriptAgain()</td>
@@ -126,7 +147,7 @@ def removeWater():
   <tr>
     <td>relaxStructure()</td>
     <td>Add optimized hydrogens to one loaded system and perform a MD simulation for this system. Remark: Settings for MDS and mimization are
-		take from the corresponding dialog.</a></td>
+		take from the corresponding dialog.</td>
   </tr>
   <tr>
     <td>quickSave()</td>
@@ -144,17 +165,17 @@ def removeWater():
     <td>clearAll()</td>
     <td>Remove all loaded systems and all representations. Remark: The datasets are not removed</td>
   </tr>
-
-
 </table>
 
-<h2 align="center"><hr width=700>
-<a href="datasetControl.html"><img src="images/left.png" width="58" height="28" align="absmiddle"></a>
+<hr width=700>
+<h2 align="center">
+<a href="datasetControl.html"><img src="images/left.png" width="58" height="28" align="Middle"></a>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="index.html">Index</a> &nbsp;&nbsp;&nbsp;&nbsp;
-<a href="displayProperties.html"><img src="images/right.png" width="58" height="28" align="absmiddle"></a>
+<a href="displayProperties.html"><img src="images/right.png" width="58" height="28" align="Middle"></a>
 </h2>
 
 </td></tr></table>
+</div>
 
 </body>
 </html>
