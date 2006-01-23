@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.3.2.5 2006/01/23 13:16:50 amoll Exp $
+// $Id: dockResultDialog.C,v 1.3.2.6 2006/01/23 13:20:55 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockResultDialog.h>
@@ -61,6 +61,7 @@ namespace BALL
 			addScoringFunction("Random", DockingController::RANDOM);
 		
 			result_table->setSortingEnabled(false);
+			result_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
 			
 			hide();
 
