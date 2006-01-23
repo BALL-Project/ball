@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.23.2.1 2006/01/13 15:35:50 amoll Exp $
+// $Id: lightSettings.C,v 1.23.2.2 2006/01/23 19:48:11 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -19,7 +19,7 @@ namespace BALL
 	{
 
 LightSettings::LightSettings(QWidget* parent, const char* name, Qt::WFlags fl)
-  : QDialog(parent, fl),
+  : QWidget(parent, fl),
 		Ui_LightSettingsData(),
 		PreferencesEntry(),
 		ignore_(false),

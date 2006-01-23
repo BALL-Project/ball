@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: networkPreferences.C,v 1.4.2.1 2006/01/13 15:35:55 amoll Exp $
+// $Id: networkPreferences.C,v 1.4.2.2 2006/01/23 19:48:12 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/networkPreferences.h>
@@ -18,7 +18,7 @@ namespace BALL
 
 NetworkPreferences::NetworkPreferences(QWidget* parent, const char* name, Qt::WFlags fl)
 	throw()
-	: QDialog(parent, fl),
+	: QWidget(parent, fl),
 		Ui_NetworkPreferencesData(),
 		PreferencesEntry()
 {

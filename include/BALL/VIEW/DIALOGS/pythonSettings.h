@@ -15,7 +15,7 @@
 #endif
 
 #include <QTableWidget>
-#include <QDialog>
+#include <QWidget>
 #include <QItemDelegate>
 
 namespace BALL
@@ -106,7 +106,7 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT PythonSettings 
-			: public QDialog,
+			: public QWidget,
 				public Ui_PythonSettingsData,
 				public PreferencesEntry
 		{ 

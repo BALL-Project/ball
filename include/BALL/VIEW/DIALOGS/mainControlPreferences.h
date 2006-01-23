@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.h,v 1.14.2.1 2006/01/13 15:35:26 amoll Exp $
+// $Id: mainControlPreferences.h,v 1.14.2.2 2006/01/23 19:48:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MAINCONTROLPREFERENCES_H
@@ -17,7 +17,7 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
-#include <QDialog>
+#include <QWidget>
 
 namespace BALL
 {
@@ -32,7 +32,7 @@ namespace BALL
 		\ingroup ViewDialogs
 */
 class BALL_VIEW_EXPORT MainControlPreferences 
-	: public QDialog,
+	: public QWidget,
 		public Ui_MainControlPreferencesData,
 		public PreferencesEntry
 {

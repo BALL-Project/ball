@@ -318,7 +318,7 @@ void PythonSettings::setContent(const List<Hotkey>& hotkeys)
 
 // =============================================================
 PythonSettings::PythonSettings(QWidget* parent, const char* name)
- : QDialog(parent),
+ : QWidget(parent),
 	 Ui_PythonSettingsData(),
 	 PreferencesEntry()
 {

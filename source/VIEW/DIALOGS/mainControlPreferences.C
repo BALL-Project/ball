@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.C,v 1.16.2.1 2006/01/13 15:35:51 amoll Exp $
+// $Id: mainControlPreferences.C,v 1.16.2.2 2006/01/23 19:48:11 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
@@ -17,7 +17,7 @@ namespace BALL
 
 MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name, Qt::WFlags fl)
 	throw()
-	: QDialog(parent, fl),
+	: QWidget(parent, fl),
 		Ui_MainControlPreferencesData(),
 		PreferencesEntry()
 {

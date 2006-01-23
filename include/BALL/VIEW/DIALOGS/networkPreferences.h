@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: networkPreferences.h,v 1.3.2.1 2006/01/13 15:35:28 amoll Exp $
+// $Id: networkPreferences.h,v 1.3.2.2 2006/01/23 19:48:09 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_NETWORKPREFERENCES_H
@@ -13,7 +13,7 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
-#include <qdialog.h>
+#include <QWidget>
 
 namespace BALL
 {
@@ -28,7 +28,7 @@ namespace BALL
 		\ingroup ViewDialogs
 */
 class BALL_VIEW_EXPORT NetworkPreferences 
-	: public QDialog,
+	: public QWidget,
 		public Ui_NetworkPreferencesData,
 		public PreferencesEntry
 {
