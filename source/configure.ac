@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.32 2006/01/10 13:52:25 oliver Exp $
+dnl $Id: configure.ac,v 1.33 2006/01/23 20:45:01 oliver Exp $
 dnl
 dnl
 
@@ -55,6 +55,10 @@ AC_ARG_WITH(cxxflags,          [  --with-cxxflags=FLAGS   add FLAGS to the C++ c
 AC_ARG_WITH(ldflags,           [  --with-ldflags=FLAGS    add FLAGS to the linker flags (commas are converted to blanks)])
 AC_ARG_WITH(arflags,           [  --with-arflags=FLAGS    add FLAGS to the flags for the creation of the static libraries])
 AC_ARG_WITH(dynarflags,        [  --with-dynarflags=FLAGS add FLAGS to the flags for the creation of the shared libraries])
+AC_ARG_WITH(libxnet,           [  --without-libxnet       use -lsocket -lnsl rather than -lxnet (under Solaris)])
+AC_ARG_WITH(xdr,               [  --without-xdr           no RPC/XDR headers available - do not build portable binary persistence support])
+
+dnl  ** QT/X11 **
 AC_ARG_WITH(qt,                [  --with-qt=QTDIR         QT is installed in QTDIR. Prefer this over the following options.])
 AC_ARG_WITH(qt-incl,           [  --with-qt-incl=DIR      QT header files are in DIR])
 AC_ARG_WITH(qt-libs,           [  --with-qt-libs=DIR      QT libraries are in DIR])
@@ -64,7 +68,8 @@ AC_ARG_WITH(uic,               [  --with-uic=UIC          use UIC as the absolut
 AC_ARG_WITH(opengl-incl,       [  --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL])
 AC_ARG_WITH(opengl-libs,       [  --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL])
 AC_ARG_WITH(mesa,              [  --with-mesa             use MESA instead of OpenGL])
-AC_ARG_WITH(libxnet,           [  --without-libxnet       use -lsocket -lnsl rather than -lxnet (under Solaris)])
+
+dnl ** Python support **
 AC_ARG_ENABLE(python,          [  --enable-python         enable Python support and search for executable])
 AC_ARG_WITH(python,            [  --with-python=EXE       enable Python support and use Python executable in EXE])
 AC_ARG_WITH(python-incl,       [  --with-python-incl=DIR  Python includes (Python.h) is in DIR])
@@ -73,16 +78,21 @@ AC_ARG_WITH(python-ldopts,     [  --with-python-ldopts=X  Use additional options
 AC_ARG_WITH(sip,   	           [  --with-sip=DIR          the SIP executable resides in DIR])
 AC_ARG_WITH(sip-lib,   	       [  --with-sip-lib=DIR      the SIP library resides in DIR])
 AC_ARG_WITH(sip-incl,   	     [  --with-sip-incl=DIR     the SIP header file resides in DIR])
-AC_ARG_WITH(xdr,               [  --without-xdr           no RPC/XDR headers available - do not build portable binary persistence support])
+
+dnl ** FFTW ** 
 AC_ARG_ENABLE(fftw,            [  --enable-fftw           enable the build of BALL with support for FFTW (a FFT library)])
 AC_ARG_WITH(fftw-lib,          [  --with-fftw-lib=DIR     libfftw is in DIR])
 AC_ARG_WITH(fftw-incl,         [  --with-fftw-incl=DIR    fftw includes are in DIR])
 AC_ARG_ENABLE(fftw-float,      [  --disable-fftw-float    disable support for float precision in FFT code])
 AC_ARG_ENABLE(fftw-double,     [  --disable-fftw-double   disable support for double precision in FFT code])
 AC_ARG_ENABLE(fftw-longdbl,    [  --disable-fftw-longdbl  disable support for long double precision in FFT code])
-dnl		 Do we still need this?
 AC_ARG_ENABLE(double-cplx,     [  --enable-double-cplx    use double precision floats for Complex type])
 AC_ARG_ENABLE(longdbl-cplx,    [  --enable-longdbl-cplx   use long double precision floats for Complex type])
+
+dnl ** GSL **
+AC_ARG_ENABLE(gsl,             [  --enable-gsl            enable the build of BALL with support for GSL (GNU Scientific Library)])
+AC_ARG_WITH(gsl-lib,           [  --with-gsl-lib=DIR      libgsl is in DIR])
+AC_ARG_WITH(gsl-incl,          [  --with-gsl-incl=DIR     gsl includes are in DIR])
 
 dnl
 dnl    interpret switches...
@@ -218,33 +228,50 @@ SIP=$with_sip
 # support for fftw (FFT lib)
 if test "$with_fftw" != "" -a "$with_fftw" != "no" -o "$enable_fftw" = yes ; then
 	FFTW_SUPPORT=true
-if test "${with_fftw_lib}" != "" ; then
-	FFTW_LIBPATH=${with_fftw_lib}
-else
-	FFTW_LIBPATH=""
-fi
-if test "${with_fftw_incl}" != "" ; then
-	FFTW_INCL=${with_fftw_incl}
-else
-	FFTW_INCL=""
-fi
-if test "$enable_fftw_float" = "no" ; then
-	FFTW_DISABLE_FFTW_FLOAT=true
-else
-	FFTW_DISABLE_FFTW_FLOAT=false
-fi
-if test "$enable_fftw_double" = "no" ; then
-	FFTW_DISABLE_FFTW_DOUBLE=true
-else
-	FFTW_DISABLE_FFTW_DOUBLE=false
-fi
-if test "$enable_fftw_longdbl" = "no" ; then
+	if test "${with_fftw_lib}" != "" ; then
+		FFTW_LIBPATH=${with_fftw_lib}
+	else
+		FFTW_LIBPATH=""
+	fi
+	if test "${with_fftw_incl}" != "" ; then
+		FFTW_INCL=${with_fftw_incl}
+	else
+		FFTW_INCL=""
+	fi
+	if test "$enable_fftw_float" = "no" ; then
+		FFTW_DISABLE_FFTW_FLOAT=true
+	else
+		FFTW_DISABLE_FFTW_FLOAT=false
+	fi
+	if test "$enable_fftw_double" = "no" ; then
+		FFTW_DISABLE_FFTW_DOUBLE=true
+	else
+		FFTW_DISABLE_FFTW_DOUBLE=false
+	fi
+	if test "$enable_fftw_longdbl" = "no" ; then
 		FFTW_DISABLE_FFTW_LONGDBL=true
 	else
 		FFTW_DISABLE_FFTW_LONGDBL=false
 	fi
 else
 	FFTW_SUPPORT=
+fi
+
+# support for GSL (GNU Scientific Library)
+if test "$with_gsl" != "" -a "$with_gsl" != "no" -o "$enable_gsl" = yes ; then
+	GSL_SUPPORT=true
+	if test "${with_gsl_lib}" != "" ; then
+		GSL_LIBPATH=${with_gsl_lib}
+	else
+		GSL_LIBPATH=""
+	fi
+	if test "${with_gsl_incl}" != "" ; then
+		GSL_INCL=${with_gsl_incl}
+	else
+		GSL_INCL=""
+	fi
+else
+	GSL_SUPPORT=
 fi
 
 dnl
@@ -354,8 +381,8 @@ dnl		some platforms need to include ieeefp.h
 dnl		for the definition of finite
 dnl
 if test "$OS" = IRIX -o "$OS" = Solaris ; then
-INCLUDE_IEEEFP=true
-BALL_INCLUDE_IEEEFP=true
+	INCLUDE_IEEEFP=true
+	BALL_INCLUDE_IEEEFP=true
 fi
 
 dnl 	check for standard C headers
@@ -452,16 +479,16 @@ dnl
 AC_PROG_LEX
 AC_PROG_YACC
 if test "${LEX}" != "flex" -o "${YACC}" = "" ; then
-BALL_HAS_FLEX_YACC=false
-AC_DEFINE(BALL_HAS_FLEX_YACC, false)
-AC_MSG_RESULT(flex and yacc/bison required!)
-AC_MSG_RESULT(Please install them from your closest GNU mirror.)	
-AC_MSG_RESULT()
-AC_MSG_ERROR(Aborted.)
+	BALL_HAS_FLEX_YACC=false
+	AC_DEFINE(BALL_HAS_FLEX_YACC, false)
+	AC_MSG_RESULT(flex and yacc/bison required!)
+	AC_MSG_RESULT(Please install them from your closest GNU mirror.)	
+	AC_MSG_RESULT()
+	AC_MSG_ERROR(Aborted.)
 else
-BALL_HAS_FLEX_YACC=true
-AC_DEFINE(BALL_HAS_FLEX_YACC, true)
-LIBS="${LIBS}"
+	BALL_HAS_FLEX_YACC=true
+	AC_DEFINE(BALL_HAS_FLEX_YACC, true)
+	LIBS="${LIBS}"
 fi
 AC_SUBST(BALL_HAS_FLEX_YACC)
 AC_SUBST(LEX)
@@ -476,7 +503,14 @@ dnl
 dnl FFTW -- Fastest Fourier Transform in the West
 dnl
 if test "${FFTW_SUPPORT}" == true ; then
-CF_CHECK_FFTW_SUPPORT
+	CF_CHECK_FFTW_SUPPORT
+fi
+
+dnl
+dnl GSL -- The GNU Scientific Library
+dnl
+if test "${GSL_SUPPORT}" == true ; then
+	CF_CHECK_GSL_SUPPORT
 fi
 
 dnl
@@ -514,8 +548,10 @@ VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
 if test "${USE_VIEW}" = true ; then
-VIEW_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
-VIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
+	VIEW_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
+	VIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
+	BALL_INCLUDES="${VIEW_INCLUDES}"
+	BALL_LIBS="${VIEW_LIBS}"
 fi
 
 LDFLAGS="$LDFLAGS"
@@ -540,7 +576,7 @@ dnl  [] to escape m4, and finally $$ to escape make - the correct expression
 dnl  is something like "(${BALL_PATH}|^[^/]*$)". Send me an email if got that immediately...
 dnl
 if test "${HAS_GPLUSPLUS}" = false -a "${MAKEDEP_CXX_SUFFIX}" != "" ; then
-MAKEDEP_CXX_SUFFIX="|egrep \"(${BALL_PATH}|^[[^/]]*\$\$)\" ${MAKEDEP_CXX_SUFFIX}"
+	MAKEDEP_CXX_SUFFIX="|egrep \"(${BALL_PATH}|^[[^/]]*\$\$)\" ${MAKEDEP_CXX_SUFFIX}"
 fi
 
 
@@ -560,7 +596,7 @@ dnl					DEPENDENCIES
 
 MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} ${CXXFLAGS}"
 if test ${CXX_MAKEDEPEND} = "makedepend" ; then
-MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -- "
+	MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -- "
 fi
 
 AC_SUBST(CXX_MAKEDEPEND)		dnl path to C++ makedepend
@@ -607,7 +643,7 @@ AC_SUBST(CXXFLAGS_D)        dnl debug flags for compiler
 AC_SUBST(CXXFLAGS_O)        dnl optimization flags for compiler 
 AC_SUBST(CPP_MODE_FLAGS)    dnl set to CXXFLAGS_D|CXXFLAGS_O, depending on BALL_DEBUG
 AC_SUBST(CPP_MODE_FLAGS_NO_OPTIMIZATION)    
-										dnl set to CXXFLAGS_D|"", depending on BALL_DEBUG
+                            dnl set to CXXFLAGS_D|"", depending on BALL_DEBUG
 
 
 
@@ -619,10 +655,10 @@ dnl if nothing has been defined for AR/AROPTS,
 dnl use default
 
 if test "${AR}" = "no" ; then
-AR="ar"
+	AR="ar"
 fi
 if test "${AROPTS}" = "" ; then
-AROPTS="cru"
+	AROPTS="cru"
 fi
 
 dnl
@@ -661,7 +697,7 @@ AC_SUBST(ADDITIONAL_COMMENTS)
 dnl	    VIEW
 
 AC_SUBST(USE_VIEW)				dnl bool: use ballview (default=true)
-AC_SUBST(BALL_HAS_VIEW)				dnl true if VIEW is enabled, "" otherwise
+AC_SUBST(BALL_HAS_VIEW)		dnl true if VIEW is enabled, "" otherwise
 AC_SUBST(VIEW_PLATFORM)		dnl Mesa or OpenGL
 AC_SUBST(VIEW_INCLUDES)		dnl VIEW includes
 AC_SUBST(LIBVIEW)					dnl static library name
@@ -714,6 +750,8 @@ dnl		modification (in MULTI_BUILD mode).
 dnl
 AC_OUTPUT([
  	config.mak.tmp:config/config.mak.in 
+ 	rules.mak.tmp:config/rules.mak.in 
+ 	targets.mak.tmp:config/targets.mak.in 
 	common.mak.tmp:config/common.mak.in 
 	Makefile.tmp:config/Makefile.in
 ])

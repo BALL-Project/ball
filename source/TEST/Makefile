@@ -1,8 +1,13 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.218 2005/12/23 17:03:09 amoll Exp $
+# $Id: Makefile,v 1.219 2006/01/23 20:45:03 oliver Exp $
 #
+# Author:
+#   Oliver Kohlbacher
+#
+
+include ../config.mak
 
 DIRECTORY=TEST
 
@@ -14,7 +19,7 @@ DIRECTORY=TEST
 include Makefile.lst
 
 
-EXECUTABLES = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
+EXECUTABLES =\
 	$(EXECUTABLES_BASIC)\
 	$(EXECUTABLES_SYSTEM)\
 	$(EXECUTABLES_MATHS)\
@@ -28,20 +33,29 @@ EXECUTABLES = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	$(EXECUTABLES_STRUCTURE)\
 	$(EXECUTABLES_QSAR)\
 	$(EXECUTABLES_SOLVATION)
+
+ifeq ($(BALL_HAS_XDR),true)
+	EXECUTABLES += $(XDR_DEPENDENT_EXECUTABLES)
+endif
  
-# default target
+ifeq ($(BALL_HAS_VIEW),true)
+	EXECUTABLES += $(VIEW_DEPENDENT_EXECUTABLES)
+endif
+ 
+
 all:	$(EXECUTABLES)
 
 echo:
-	echo $(EXECUTABLES)
+	@echo $(EXECUTABLES)
+
+include ../rules.mak
+include ../targets.mak
+-include .Dependencies
 
 # required for clean and depend
 CPP_SOURCES=$(EXECUTABLES:$(EXEEXT)=.C)
 OBJECTS=$(EXECUTABLES:$(EXEEXT)=.o)
 VALGRINDS=$(EXECUTABLES:$(EXEEXT)=.vgr)
-
-include ../common.mak
--include .Dependencies
 
 # remove the library specific flags
 # and replace them by the aplication specific
@@ -63,8 +77,16 @@ CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION) -g
 
 dummy:
 
-test: info basic_test system_test maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test qsar_test solvation_test
+
+ifeq ($(BALL_HAS_VIEW),true)
+test:	info simple_tests
+else
+test:	info simple_tests view_tests
+endif
 	@./runtests -success
+
+
+simple_tests:	basic_test system_test	maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test qsar_test solvation_test
 
 info:
 	@./runtests -info

@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.C,v 1.2 2006/01/18 21:04:43 oliver Exp $
+// $Id: DBInterface.C,v 1.3 2006/01/23 20:45:02 oliver Exp $
+//
+// Author:
+//   Oliver Kohlbacher
 //
 
 #include <BALL/FORMAT/DBInterface.h>
@@ -12,8 +15,15 @@
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/FORMAT/INIFile.h>
 
+// Required for XDR encoding of types and charges
+#include <rpc/types.h>
+#include <rpc/xdr.h>
+
 #include <sstream>
 #include <iostream>
+
+
+// #define BALL_DEBUG_DBINTERFACE 1
 
 namespace BALL 
 {
@@ -59,6 +69,18 @@ namespace BALL
 		:	error_(DBInterface::NO_ERROR),	
 			db_(0)
 	{
+	}
+
+
+	DBInterface::IDVector DBInterface::extractIDs()
+	{
+		// Walk over all results and return a vector of IDs.
+		IDVector ids;
+		while (next())
+		{
+			ids.push_back(value(0).toInt());
+		}
+		return ids;
 	}
 
 	bool DBInterface::getMOLFile(DBInterface::ID id, String& text, String& name, String& source_id)
@@ -147,6 +169,9 @@ namespace BALL
 	{
 		executeQuery("SELECT LAST_INSERT_ID()");
 		first();
+		#ifdef BALL_DEBUG_DBINTERFACE
+			std::cout << "lastInsertedID() = " << ID(value(0).toInt()) << std::endl;
+		#endif
 		return ID(value(0).toInt());
 	}
 
@@ -339,33 +364,24 @@ namespace BALL
 		addBindValue(id);
 		executeQuery();
 
-		while (next())
-    {
-      cerr << "Y" << endl;
-      prepare(string("DELETE FROM atom_coord WHERE conformation_id = ") + value(0).toString().ascii() );
-      executeQuery();
-    }
-
-
-		//------------------------------
-  
-
 		// Remove all older conformations for consistency (the number/order of atoms might have changed!)
 		prepare("DELETE FROM conformations WHERE topology_id = ?");
 		addBindValue(id);
 		executeQuery();
 
   
-
+/*
 		// same for all charges -------
 		prepare("SELECT id FROM molecule_charge WHERE topology_id = ?");
 		addBindValue(id);
 		executeQuery();
   
-  
-		while (next())
+		ids = extractIDs();
+
+		for (Position i = 0; i < ids.size(); ++i)
     {
-      prepare(string("DELETE FROM atom_charge WHERE molecule_charge_id = ") + value(0).toString().ascii() );
+			prepare(string("DELETE FROM atom_charge WHERE molecule_charge_id = ?") );
+			addBindValue(ids[i]);
       executeQuery();
     }
   
@@ -373,6 +389,7 @@ namespace BALL
 		prepare("DELETE FROM molecule_charge WHERE topology_id = ?");
 		addBindValue(id);
 		executeQuery();
+*/
 
 		//-----------------------------
 		prepare("DELETE FROM connection_table_atoms WHERE topology_id = ?");
@@ -429,14 +446,7 @@ namespace BALL
 		prepare("SELECT id FROM conformations WHERE topology_id = ?");
 		addBindValue(topology_id);
 		executeQuery();
-
-		IDVector ids;
-		while (next())
-		{
-			ids.push_back(value(0).toInt());
-		}
-
-		return ids;
+		return extractIDs();
 	}
 
 	/// Return IDs of all conformations created with a given method
@@ -445,51 +455,161 @@ namespace BALL
 		prepare("SELECT id FROM conformations WHERE topology_id = ? AND method_id = ?");
 		addBindValue(topology_id, method_id);
 		executeQuery();
-
-		IDVector ids;
-		while (next())
-		{
-			ids.push_back(value(0).toInt());
-		}
-
-		return ids;
+		return extractIDs();
 	}
 
 	/// Assign a specific conformation to an existing topology
 	void DBInterface::loadConformation(DBInterface::ID conformation_id, System& system)
 	{
-		executeQuery("SELECT x, y, z FROM atom_coord WHERE conformation_id = " + String((long)conformation_id));
-		if (size() == 0)
+		executeQuery("SELECT coordinates FROM conformations WHERE id = " + String((long)conformation_id));
+		if (size() != 1)
 		{
 			throw InvalidQuery(__FILE__, __LINE__, String("conformation does not exist: #") + String((long)conformation_id));
 		}
-		if (size() != system.countAtoms())
+
+		// Extract the coordinates from the XDR-formatted BLOB and assign them to
+		// the atoms. If the number of coordinates stored in the BLOB deviates
+		// from the number of atoms in the system, throw InconsistentTopology
+		first();
+		assignCoordinates_(system, value(0).toByteArray());
+	}
+
+	void DBInterface::assignCoordinates_(System& system, const QByteArray& data)	
+	{
+		// Decode the XDR data obtained from the ByteArray
+		static std::vector<float> v;	
+		decodeArray_(data, v);
+
+		// Compare the number of floats to the number of coordinates required.
+		if (v.size() != (3 * system.countAtoms()))
 		{
 			throw InconsistentTopology(__FILE__, __LINE__, 
-						String("conformation and topology are not consistent for conformation # ")
-						+ String((long)conformation_id) + ". #atoms in conformation/system: "
-						+ String(size()) + "/" + String(system.countAtoms()));
+						String("conformation and topology are not consistent for conformation. ")
+						+ String("Number of atoms in conformation/system: ")
+						+ String(v.size() / 3) + "/" + String(system.countAtoms()));
 		}
 		
+		// Walk over the atoms of the system and assign the coordinates from the 
+		// coordinate vector.
 		AtomIterator ai(system.beginAtom());
-		while (next())
+		for (Position i = 0; i < (v.size() / 3); ++i)
 		{
-			ai++->setPosition(Vector3(value(0).toDouble(), value(1).toDouble(), value(2).toDouble()));
+			ai->setPosition(Vector3(v[i], v[i + 1], v[i + 2]));
 		}
+	}
+
+	void DBInterface::assignCharges_(System& system, const QByteArray& data)	
+	{
+		// Decode the XDR data obtained from the ByteArray
+		static std::vector<float> v;	
+		decodeArray_(data, v);
+
+		// Compare the number of floats to the number of coordinates required.
+		if (v.size() != system.countAtoms())
+		{
+			throw InconsistentTopology(__FILE__, __LINE__, 
+						String("conformation and topology are not consistent for charge set. ")
+						+ String("Number of atoms in charge set/system: ")
+						+ String(v.size()) + "/" + String(system.countAtoms()));
+		}
+		
+		// Walk over the atoms of the system and assign the coordinates from the 
+		// coordinate vector.
+		AtomIterator ai(system.beginAtom());
+		for (Position i = 0; i < v.size(); ++i)
+		{
+			ai->setCharge(v[i]);
+		}
+	}
+
+	void DBInterface::extractCharges_(const System& system, QByteArray& data)	
+	{
+		// Copy all charges into a vector.
+		std::vector<float> v;
+		for (AtomConstIterator ai(system.beginAtom()); +ai; ++ai)
+		{
+			v.push_back(ai->getCharge());
+		}
+
+		// Encode these floats into an XDR blob in data.
+		encodeArray_(v, data);
+	}
+
+	void DBInterface::decodeArray_(const QByteArray& a, std::vector<float>& v)
+	{
+		// Create an XDR object ready to *decode* from a memory block (data).
+		XDR xdr;
+		xdrmem_create(&xdr, a.data(), a.size(), XDR_DECODE);
+
+		// Determine the number of atoms in the system and make sure the
+		// number of coordinates stored in the XDR blob is the same.
+		Size number_of_entries = 0;
+		if (xdr_u_int(&xdr, &number_of_entries) != 1)
+		{
+			xdr_destroy(&xdr);
+			throw InconsistentTopology(__FILE__, __LINE__, 
+						String("could not decode number of array entries."));
+																
+		}
+
+		// Extract the floats from the ByteArray
+		v.resize(number_of_entries);
+		for (Position i = 0; i < number_of_entries; ++i)
+		{
+			xdr_float(&xdr, &(v[i]));
+		}
+
+		// Free the private datastructures of the XDR struct.
+		xdr_destroy(&xdr);
+	}
+
+	void DBInterface::extractCoordinates_(const System& system, QByteArray& data)	
+	{
+		static std::vector<float> v;
+		v.resize(system.countAtoms() * 3);
+		Size number_of_atoms(system.countAtoms());
+
+		// For each atom, store the x, y, and z coordinates.
+		AtomConstIterator ai(system.beginAtom());
+		for (Position i = 0; i < 3 * number_of_atoms; ++i, ++ai)
+		{
+			const Vector3& r(ai->getPosition());
+			v[i] = r.x;
+			v[i + 1] = r.y;
+			v[i + 2] = r.z;
+		}
+		
+		// Encode the coordinate data as XDR.
+		encodeArray_(v, data);
+	}
+
+	void DBInterface::encodeArray_(const std::vector<float>& v, QByteArray& a)
+	{
+		// Determine the amount of space we need and resize the byte array accordingly.
+		// Global layout: int (number of entries), number_of_entries * float (data)
+		a.resize(4 + 4 * v.size());
+	
+		// Create an XDR struct ready for writing into the byte array.
+		XDR xdr;
+		xdrmem_create(&xdr, a.data(), a.size(), XDR_ENCODE);
+		
+		// Store the number of entries in the XDR blob.
+		Size s = v.size();
+		xdr_u_int(&xdr, &s);
+
+		for (Position i = 0; i < v.size(); ++i)
+		{
+			xdr_float(&xdr, const_cast<float*>(&v[i]));
+		}
+
+		// Free the internal XDR data structures.
+		xdr_destroy(&xdr);
 	}
 
 	/// Store the current conformation 
 	DBInterface::ID DBInterface::storeConformation
 		(DBInterface::ID topology_id, DBInterface::ID method_id, const System& system)
 	{
-		// Create a new conformation for the given topology/method.
-		prepare("INSERT INTO conformations (topology_id, method_id) VALUES (?, ?)");
-		addBindValue(topology_id);
-		addBindValue(method_id);
-		executeQuery();
-		ID conf_id = lastInsertedID();
-		
-		// Use this conformation ID to create atom coordinates.
 		// Sanity check: make sure the number of atoms/bonds is consistent with the topology.
 		Index atom_count = system.countAtoms();
 		executeQuery("SELECT count(*) FROM connection_table_atoms WHERE topology_id = " + String((long)topology_id));
@@ -499,91 +619,72 @@ namespace BALL
 			throw InconsistentTopology(__FILE__, __LINE__, "found " + String(value(0).toInt())
 																 + " atoms instead of " + String(atom_count) + " in system.");
 		}
-		
-		Index bond_count = system.countBonds();
-		executeQuery("SELECT count(*) FROM connection_table_bonds WHERE topology_id = " + String((long)topology_id));
-		first();
-		if (bond_count != value(0).toInt())
-		{
-			throw InconsistentTopology(__FILE__, __LINE__, "found " + String(value(0).toInt())
-																 + " bonds instead of " + String(bond_count) + " in system.");
-		}
 
-		// Insert the atom coordinates
-		Size idx = 0;
-		for (AtomConstIterator ai = system.beginAtom(); +ai; ++ai, ++idx)
-		{
-			prepare("INSERT INTO atom_coord (conformation_id, atom_idx, x, y, z) VALUES (?, ?, ?, ?, ?)");
-			addBindValue(conf_id);
-			addBindValue(idx);
-			addBindValue(ai->getPosition().x);
-			addBindValue(ai->getPosition().y);
-			addBindValue(ai->getPosition().z);
-			executeQuery();
-		}
-		
-		return conf_id;
+		// Extract the coordinate from the system and encode them into an XDR-formatted BLOB.
+		QByteArray buffer;
+		extractCoordinates_(system, buffer);
+
+		// Create a new conformation for the given topology/method.
+		prepare("INSERT INTO conformations (topology_id, method_id, coordinates) VALUES (?, ?, ?)");
+		addBindValue(topology_id);
+		addBindValue(method_id);
+		addBindValue(QVariant(buffer));
+		executeQuery();
+
+		return lastInsertedID();
 	}
 
 
-
-	/// Store the current conformation 
-	DBInterface::ID DBInterface::storeCharge
+	/// Store a charge set
+	DBInterface::ID DBInterface::storeCharges
 		(DBInterface::ID topology_id, DBInterface::ID method_id, const System& system)
 	{
-		// Create a new conformation for the given topology/method.
-		prepare("INSERT INTO molecule_charge (topology_id, method_id) VALUES (?, ?)");
-		addBindValue(topology_id);
-		addBindValue(method_id);
-		executeQuery();
-		ID charge_id = lastInsertedID();
-
-		// Use this conformation ID to create atom coordinates.
 		// Sanity check: make sure the number of atoms/bonds is consistent with the topology.
 		Index atom_count = system.countAtoms();
 		executeQuery("SELECT count(*) FROM connection_table_atoms WHERE topology_id = " + String((long)topology_id));
 		first();
 		if (atom_count != value(0).toInt())
-    {
-      throw InconsistentTopology(__FILE__, __LINE__, "found " + String(value(0).toInt())
-				 + " atoms instead of " + String(atom_count) + " in system.");
-    }
-  
-		Index bond_count = system.countBonds();
-		executeQuery("SELECT count(*) FROM connection_table_bonds WHERE topology_id = " + String((long)topology_id));
-		first();
-		if (bond_count != value(0).toInt())
-    {
-      throw InconsistentTopology(__FILE__, __LINE__, "found " + String(value(0).toInt())
-				 + " bonds instead of " + String(bond_count) + " in system.");
-    }
-  
-		// Insert the atom coordinates
-		Size idx = 0;
-		for (AtomConstIterator ai = system.beginAtom(); +ai; ++ai, ++idx)
-    {
-      prepare("INSERT INTO atom_charge (molecule_charge_id, atom_idx, charge) VALUES (?, ?, ?)");
-      addBindValue(charge_id);
-      addBindValue(idx);
-      addBindValue(ai->getCharge());
-      executeQuery();
-    }
-  
-		return charge_id;
+		{
+			throw InconsistentTopology(__FILE__, __LINE__, "found " + String(value(0).toInt())
+																 + " atoms instead of " + String(atom_count) + " in system.");
+		}
+
+		// Extract the coordinate from the system and encode them into an XDR-formatted BLOB.
+		QByteArray buffer;
+		extractCharges_(system, buffer);
+
+		// Create a new conformation for the given topology/method.
+		prepare("INSERT INTO charges (topology_id, method_id, charges) VALUES (?, ?, ?)");
+		addBindValue(topology_id);
+		addBindValue(method_id);
+		addBindValue(QVariant(buffer));
+		executeQuery();
+
+		return lastInsertedID();
 	}
+
+	void DBInterface::loadCharges(DBInterface::ID charge_id, System& system)
+	{
+		executeQuery("SELECT coordinates FROM conformations WHERE id = " + String((long)charge_id));
+		if (size() != 1)
+		{
+			throw InvalidQuery(__FILE__, __LINE__, String("charge set does not exist: #") + String((long)charge_id));
+		}
+
+		// Extract the charges from the XDR-formatted BLOB and assign them to
+		// the atoms. If the number of charges stored in the BLOB deviates
+		// from the number of atoms in the system, throw InconsistentTopology
+		first();
+		assignCharges_(system, value(0).toByteArray());
+	}
+
 
 	/// Return IDs for all current methods for conformation generation
 	DBInterface::IDVector DBInterface::getConformationMethods()
 	{
 		// Extract all method IDs from the corresponding table...
 		executeQuery("SELECT method_id FROM conformation_generation");
-		IDVector ids;
-		while (next())
-		{	
-			// ...and return a vector containing all those IDs.
-			ids.push_back((Size)value(0).toInt());
-		}
-		return ids;
+		return extractIDs();
 	}
 
 	/// Return IDs for all current methods for charge generation
@@ -591,14 +692,7 @@ namespace BALL
 	{
 		// Extract all method IDs from the corresponding table...
 		executeQuery("SELECT method_id FROM charge_generation");
-		IDVector ids;
-		while (next())
-    {	
-      // ...and return a vector containing all those IDs.
-      ids.push_back((Size)value(0).toInt());
-    }
-		
-		return ids;
+		return extractIDs();
 	}
 
 
@@ -607,16 +701,30 @@ namespace BALL
 	DBInterface::ConformationMethod DBInterface::getConformationMethod(DBInterface::ID method_id)
 	{
 		executeQuery("SELECT method, parameters FROM conformation_generation WHERE method_id = " + String((long)method_id));
-		first();
-		return ConformationMethod(value(0).toString().ascii(), value(1).toString().ascii());
+		if (size() > 0)
+		{
+			first();
+			return ConformationMethod(value(0).toString().ascii(), value(1).toString().ascii());
+		}
+		else
+		{
+			return ConformationMethod("", "");
+		}
 	}
 
 	/// Return name and parameters of a charge generation method
 	DBInterface::ChargeMethod DBInterface::getChargeMethod(DBInterface::ID method_id)
 	{
 		executeQuery("SELECT method, parameters FROM charge_generation WHERE method_id = " + String((long)method_id));
-		first();
-		return ChargeMethod(value(0).toString().ascii(), value(1).toString().ascii());
+		if (size() > 0)
+		{
+			first();
+			return ChargeMethod(value(0).toString().ascii(), value(1).toString().ascii());
+		}
+		else 
+		{
+			return ChargeMethod("", "");
+		}
 	}
 
 

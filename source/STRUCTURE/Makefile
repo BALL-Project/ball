@@ -73,6 +73,10 @@ SMARTS_PARSER_PREFIX=SmartsParser
 include ../common.mak
 -include .Dependencies
 
+ifeq ($(BALL_HAS_FSL),true)
+	CPP_SOURCES+=RMSDMinimizer.C
+endif
+
 depend:	\
 	$(SMILES_SOURCES)\
 	$(SMARTS_SOURCES)\

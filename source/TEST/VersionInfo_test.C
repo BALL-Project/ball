@@ -1,7 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VersionInfo_test.C,v 1.3 2003/06/09 22:40:54 oliver Exp $
+// $Id: VersionInfo_test.C,v 1.4 2006/01/23 20:45:03 oliver Exp $
+//
+// Author:
+//   Oliver Kohlbacher
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(VersionInfo, "$Id: VersionInfo_test.C,v 1.3 2003/06/09 22:40:54 oliver Exp $")
+START_TEST(VersionInfo, "$Id: VersionInfo_test.C,v 1.4 2006/01/23 20:45:03 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -20,6 +25,7 @@ using namespace BALL;
 
 CHECK(static const char* getVersion() throw())
 	TEST_NOT_EQUAL(VersionInfo::getVersion(), 0)
+	STATUS("Release string: " << VersionInfo::getVersion())
 	TEST_EQUAL(String(VersionInfo::getVersion()).hasPrefix(BALL_RELEASE_STRING), true)
 RESULT
 

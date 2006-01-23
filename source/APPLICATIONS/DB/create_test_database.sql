@@ -7,8 +7,8 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-CREATE DATABASE IF NOT EXISTS STRUCTURES;
-USE STRUCTURES;
+CREATE DATABASE IF NOT EXISTS BALL_DBINTERFACE_TEST;
+USE BALL_DBINTERFACE_TEST;
 
 --
 -- Table structure for table `charge_generation`
@@ -99,6 +99,50 @@ CREATE TABLE `connection_table_bonds` (
   KEY `topology_id` (`topology_id`),
   KEY `bond_number` (`bond_number`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 MAX_ROWS=4294967295;
+
+--
+-- Table structure for table `fingerprints`
+--
+
+DROP TABLE IF EXISTS `fingerprints`;
+CREATE TABLE `fingerprints` (
+  `ID` varchar(255) NOT NULL default '',
+  `torsion_key` longblob NOT NULL,
+  `bit_maccs` blob,
+  `uck` varchar(32) default NULL,
+  `formula` varchar(40) default NULL,
+  `struc` longblob,
+  `weight` float default NULL,
+  `torsion_count` longblob,
+  `structure_id` int(11) NOT NULL default '0',
+  `torsion_bind` longblob,
+  `frowns` longblob,
+  `name` varchar(100) default NULL,
+  `filter` text,
+  `smiles` blob,
+  PRIMARY KEY  (`structure_id`),
+  KEY `id_index` (`ID`),
+  KEY `comp_index` (`ID`,`formula`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 MAX_ROWS=100000000 AVG_ROW_LENGTH=2000;
+
+--
+-- Table structure for table `singular`
+--
+
+DROP TABLE IF EXISTS `singular`;
+CREATE TABLE `singular` (
+  `ID` varchar(255) NOT NULL default '',
+  `torsion_key` longblob NOT NULL,
+  `bit_maccs` blob,
+  `uck` varchar(32) default NULL,
+  `formula` varchar(40) default NULL,
+  `struc` longblob,
+  `weight` float default NULL,
+  `torsion_count` longblob,
+  `count` int(11) NOT NULL default '0',
+  UNIQUE KEY `uck_index` (`uck`),
+  KEY `ID_index` (`ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Table structure for table `topology`

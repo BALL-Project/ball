@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.83 2006/01/10 13:52:23 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.84 2006/01/23 20:44:55 oliver Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -984,8 +984,8 @@ dnl   Problem with linux headers:
 dnl   cannot use -std strict_ansi since the socket headers
 dnl   cause an error #280
 if test "${OS}" != "Linux" ; then
-CXXFLAGS="${CXXFLAGS} -std strict_ansi"
-MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -std strict_ansi"
+	CXXFLAGS="${CXXFLAGS} -std strict_ansi"
+	MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -std strict_ansi"
 fi
 ])
 
@@ -4603,12 +4603,16 @@ AC_DEFUN(CF_MOVE_CONFIG_FILES, [
 		${MV} Makefile.tmp ${BINFMT}/Makefile
 		${MV} common.mak.tmp ${BINFMT}/common.mak
 		${MV} config.mak.tmp ${BINFMT}/config.mak
+		${MV} rules.mak.tmp ${BINFMT}/rules.mak
+		${MV} targets.mak.tmp ${BINFMT}/targets.mak
 	  mkdir ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG 2>/dev/null
 	  ${MV} -f config.h $PROJECT[]_PATH/include/PROJECT[]/CONFIG/config.h.${BINFMT}
 	else
 		${MV} Makefile.tmp Makefile
 		${MV} common.mak.tmp common.mak
 		${MV} config.mak.tmp config.mak
+		${MV} rules.mak.tmp rules.mak
+		${MV} targets.mak.tmp targets.mak
 
 		dnl
 		dnl move that damned file only if it differs from the previous
@@ -4769,6 +4773,8 @@ AC_DEFUN(CF_GSL, [
   		[]PROJECTUPPER[]_LIBS="${[]PROJECTUPPER[]_LIBS} -L${GSL_LIBDIR} -lgsl -lgslcblas"	
   	fi
 
+		PROJECT[]_HAS_GSL=true
+		AC_SUBST(PROJECT[]_HAS_GSL)
 
 	else
 		AC_MSG_RESULT(disabled)

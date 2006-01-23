@@ -1,11 +1,18 @@
-since 1.1.1:
+
+
+1.2:
 
 Added:
+- Small molecule database interface (FORMAT/DBInterface) allows the 
+  storage and retrieval of small molecules and their conformations in
+  a relational database
+- Quaternion RMSD optimizer (STRUCTURE/RMSDMinimizer) calculates the optimal 
+  transformation for a point set, similar to the Kabsch algorithm. An implementation 
+  of the paper by Coutsalies et al., J. Comput. CHem. 25(15), 1849 (2004)
 - BALLView has menu entries for user defined Python Hotkeys
-- Futher Python example scripts
+- Further Python example scripts
 
 Fixed:
-- Improved Python Bindings
 - Return pressed in PeptideDialog now applies settings
 
 1.1.1:

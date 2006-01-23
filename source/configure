@@ -859,6 +859,7 @@ Optional Features:
   --disable-fftw-longdbl  disable support for long double precision in FFT code
   --enable-double-cplx    use double precision floats for Complex type
   --enable-longdbl-cplx   use long double precision floats for Complex type
+  --enable-gsl            enable the build of BALL with support for GSL (GNU Scientific Library)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -868,6 +869,8 @@ Optional Packages:
   --with-ldflags=FLAGS    add FLAGS to the linker flags (commas are converted to blanks)
   --with-arflags=FLAGS    add FLAGS to the flags for the creation of the static libraries
   --with-dynarflags=FLAGS add FLAGS to the flags for the creation of the shared libraries
+  --without-libxnet       use -lsocket -lnsl rather than -lxnet (under Solaris)
+  --without-xdr           no RPC/XDR headers available - do not build portable binary persistence support
   --with-qt=QTDIR         QT is installed in QTDIR. Prefer this over the following options.
   --with-qt-incl=DIR      QT header files are in DIR
   --with-qt-libs=DIR      QT libraries are in DIR
@@ -877,7 +880,6 @@ Optional Packages:
   --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL
   --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL
   --with-mesa             use MESA instead of OpenGL
-  --without-libxnet       use -lsocket -lnsl rather than -lxnet (under Solaris)
   --with-python=EXE       enable Python support and use Python executable in EXE
   --with-python-incl=DIR  Python includes (Python.h) is in DIR
   --with-python-libs=DIR  Python library (libpython*.a) is in DIR
@@ -885,9 +887,10 @@ Optional Packages:
   --with-sip=DIR          the SIP executable resides in DIR
   --with-sip-lib=DIR      the SIP library resides in DIR
   --with-sip-incl=DIR     the SIP header file resides in DIR
-  --without-xdr           no RPC/XDR headers available - do not build portable binary persistence support
   --with-fftw-lib=DIR     libfftw is in DIR
   --with-fftw-incl=DIR    fftw includes are in DIR
+  --with-gsl-lib=DIR      libgsl is in DIR
+  --with-gsl-incl=DIR     gsl includes are in DIR
   --with-x                use the X Window System
 
 Some influential environment variables:
@@ -1481,6 +1484,19 @@ if test "${with_dynarflags+set}" = set; then
 
 fi;
 
+# Check whether --with-libxnet or --without-libxnet was given.
+if test "${with_libxnet+set}" = set; then
+  withval="$with_libxnet"
+
+fi;
+
+# Check whether --with-xdr or --without-xdr was given.
+if test "${with_xdr+set}" = set; then
+  withval="$with_xdr"
+
+fi;
+
+
 # Check whether --with-qt or --without-qt was given.
 if test "${with_qt+set}" = set; then
   withval="$with_qt"
@@ -1535,11 +1551,6 @@ if test "${with_mesa+set}" = set; then
 
 fi;
 
-# Check whether --with-libxnet or --without-libxnet was given.
-if test "${with_libxnet+set}" = set; then
-  withval="$with_libxnet"
-
-fi;
 # Check whether --enable-python or --disable-python was given.
 if test "${enable_python+set}" = set; then
   enableval="$enable_python"
@@ -1588,11 +1599,6 @@ if test "${with_sip_incl+set}" = set; then
 
 fi;
 
-# Check whether --with-xdr or --without-xdr was given.
-if test "${with_xdr+set}" = set; then
-  withval="$with_xdr"
-
-fi;
 # Check whether --enable-fftw or --disable-fftw was given.
 if test "${enable_fftw+set}" = set; then
   enableval="$enable_fftw"
@@ -1633,6 +1639,24 @@ fi;
 # Check whether --enable-longdbl-cplx or --disable-longdbl-cplx was given.
 if test "${enable_longdbl_cplx+set}" = set; then
   enableval="$enable_longdbl_cplx"
+
+fi;
+
+# Check whether --enable-gsl or --disable-gsl was given.
+if test "${enable_gsl+set}" = set; then
+  enableval="$enable_gsl"
+
+fi;
+
+# Check whether --with-gsl-lib or --without-gsl-lib was given.
+if test "${with_gsl_lib+set}" = set; then
+  withval="$with_gsl_lib"
+
+fi;
+
+# Check whether --with-gsl-incl or --without-gsl-incl was given.
+if test "${with_gsl_incl+set}" = set; then
+  withval="$with_gsl_incl"
 
 fi;
 
@@ -1767,33 +1791,50 @@ SIP=$with_sip
 # support for fftw (FFT lib)
 if test "$with_fftw" != "" -a "$with_fftw" != "no" -o "$enable_fftw" = yes ; then
 	FFTW_SUPPORT=true
-if test "${with_fftw_lib}" != "" ; then
-	FFTW_LIBPATH=${with_fftw_lib}
-else
-	FFTW_LIBPATH=""
-fi
-if test "${with_fftw_incl}" != "" ; then
-	FFTW_INCL=${with_fftw_incl}
-else
-	FFTW_INCL=""
-fi
-if test "$enable_fftw_float" = "no" ; then
-	FFTW_DISABLE_FFTW_FLOAT=true
-else
-	FFTW_DISABLE_FFTW_FLOAT=false
-fi
-if test "$enable_fftw_double" = "no" ; then
-	FFTW_DISABLE_FFTW_DOUBLE=true
-else
-	FFTW_DISABLE_FFTW_DOUBLE=false
-fi
-if test "$enable_fftw_longdbl" = "no" ; then
+	if test "${with_fftw_lib}" != "" ; then
+		FFTW_LIBPATH=${with_fftw_lib}
+	else
+		FFTW_LIBPATH=""
+	fi
+	if test "${with_fftw_incl}" != "" ; then
+		FFTW_INCL=${with_fftw_incl}
+	else
+		FFTW_INCL=""
+	fi
+	if test "$enable_fftw_float" = "no" ; then
+		FFTW_DISABLE_FFTW_FLOAT=true
+	else
+		FFTW_DISABLE_FFTW_FLOAT=false
+	fi
+	if test "$enable_fftw_double" = "no" ; then
+		FFTW_DISABLE_FFTW_DOUBLE=true
+	else
+		FFTW_DISABLE_FFTW_DOUBLE=false
+	fi
+	if test "$enable_fftw_longdbl" = "no" ; then
 		FFTW_DISABLE_FFTW_LONGDBL=true
 	else
 		FFTW_DISABLE_FFTW_LONGDBL=false
 	fi
 else
 	FFTW_SUPPORT=
+fi
+
+# support for GSL (GNU Scientific Library)
+if test "$with_gsl" != "" -a "$with_gsl" != "no" -o "$enable_gsl" = yes ; then
+	GSL_SUPPORT=true
+	if test "${with_gsl_lib}" != "" ; then
+		GSL_LIBPATH=${with_gsl_lib}
+	else
+		GSL_LIBPATH=""
+	fi
+	if test "${with_gsl_incl}" != "" ; then
+		GSL_INCL=${with_gsl_incl}
+	else
+		GSL_INCL=""
+	fi
+else
+	GSL_SUPPORT=
 fi
 
 
@@ -4876,8 +4917,8 @@ CXXFLAGS_D="${CXXFLAGS_D}"
 CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 
 if test "${OS}" != "Linux" ; then
-CXXFLAGS="${CXXFLAGS} -std strict_ansi"
-MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -std strict_ansi"
+	CXXFLAGS="${CXXFLAGS} -std strict_ansi"
+	MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -std strict_ansi"
 fi
  ;;
 MIPSpro )
@@ -5252,8 +5293,8 @@ fi
 
 
 if test "$OS" = IRIX -o "$OS" = Solaris ; then
-INCLUDE_IEEEFP=true
-BALL_INCLUDE_IEEEFP=true
+	INCLUDE_IEEEFP=true
+	BALL_INCLUDE_IEEEFP=true
 fi
 
 ac_ext=cc
@@ -17340,27 +17381,27 @@ done
 test -n "$YACC" || YACC="yacc"
 
 if test "${LEX}" != "flex" -o "${YACC}" = "" ; then
-BALL_HAS_FLEX_YACC=false
-cat >>confdefs.h <<\_ACEOF
+	BALL_HAS_FLEX_YACC=false
+	cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_FLEX_YACC false
 _ACEOF
 
-echo "$as_me:$LINENO: result: flex and yacc/bison required!" >&5
+	echo "$as_me:$LINENO: result: flex and yacc/bison required!" >&5
 echo "${ECHO_T}flex and yacc/bison required!" >&6
-echo "$as_me:$LINENO: result: Please install them from your closest GNU mirror." >&5
+	echo "$as_me:$LINENO: result: Please install them from your closest GNU mirror." >&5
 echo "${ECHO_T}Please install them from your closest GNU mirror." >&6
-echo "$as_me:$LINENO: result: " >&5
+	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-{ { echo "$as_me:$LINENO: error: Aborted." >&5
+	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 else
-BALL_HAS_FLEX_YACC=true
-cat >>confdefs.h <<\_ACEOF
+	BALL_HAS_FLEX_YACC=true
+	cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_FLEX_YACC true
 _ACEOF
 
-LIBS="${LIBS}"
+	LIBS="${LIBS}"
 fi
 
 
@@ -18448,6 +18489,10 @@ _ACEOF
 
 
 
+fi
+
+if test "${GSL_SUPPORT}" == true ; then
+	CF_CHECK_GSL_SUPPORT
 fi
 
 QT_MIN_VERSION=330
@@ -22505,8 +22550,10 @@ VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
 if test "${USE_VIEW}" = true ; then
-VIEW_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
-VIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
+	VIEW_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
+	VIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
+	BALL_INCLUDES="${VIEW_INCLUDES}"
+	BALL_LIBS="${VIEW_LIBS}"
 fi
 
 LDFLAGS="$LDFLAGS"
@@ -22516,7 +22563,7 @@ LIBS="$BALL_LIBS"
 CXXFLAGS="$CXXFLAGS $DEFINES"
 
 if test "${HAS_GPLUSPLUS}" = false -a "${MAKEDEP_CXX_SUFFIX}" != "" ; then
-MAKEDEP_CXX_SUFFIX="|egrep \"(${BALL_PATH}|^[^/]*\$\$)\" ${MAKEDEP_CXX_SUFFIX}"
+	MAKEDEP_CXX_SUFFIX="|egrep \"(${BALL_PATH}|^[^/]*\$\$)\" ${MAKEDEP_CXX_SUFFIX}"
 fi
 
 
@@ -22529,7 +22576,7 @@ fi
 
 MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} ${CXXFLAGS}"
 if test ${CXX_MAKEDEPEND} = "makedepend" ; then
-MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -- "
+	MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -- "
 fi
 
 
@@ -22548,10 +22595,10 @@ fi
 
 
 if test "${AR}" = "no" ; then
-AR="ar"
+	AR="ar"
 fi
 if test "${AROPTS}" = "" ; then
-AROPTS="cru"
+	AROPTS="cru"
 fi
 
 if test "${DYNAROPTS_PYMODULE}" = "" ; then
@@ -22666,7 +22713,7 @@ echo "${ECHO_T}enabled" >&6
 	fi
 
 
-                              ac_config_files="$ac_config_files config.mak.tmp:config/config.mak.in common.mak.tmp:config/common.mak.in Makefile.tmp:config/Makefile.in"
+                                                  ac_config_files="$ac_config_files config.mak.tmp:config/config.mak.in rules.mak.tmp:config/rules.mak.in targets.mak.tmp:config/targets.mak.in common.mak.tmp:config/common.mak.in Makefile.tmp:config/Makefile.in"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -23192,6 +23239,8 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
   "config.mak.tmp" ) CONFIG_FILES="$CONFIG_FILES config.mak.tmp:config/config.mak.in" ;;
+  "rules.mak.tmp" ) CONFIG_FILES="$CONFIG_FILES rules.mak.tmp:config/rules.mak.in" ;;
+  "targets.mak.tmp" ) CONFIG_FILES="$CONFIG_FILES targets.mak.tmp:config/targets.mak.in" ;;
   "common.mak.tmp" ) CONFIG_FILES="$CONFIG_FILES common.mak.tmp:config/common.mak.in" ;;
   "Makefile.tmp" ) CONFIG_FILES="$CONFIG_FILES Makefile.tmp:config/Makefile.in" ;;
   "config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS config.h:config/config.h.in" ;;
@@ -23890,12 +23939,16 @@ echo "${ECHO_T}creating shadow directories..." >&6
 		${MV} Makefile.tmp ${BINFMT}/Makefile
 		${MV} common.mak.tmp ${BINFMT}/common.mak
 		${MV} config.mak.tmp ${BINFMT}/config.mak
+		${MV} rules.mak.tmp ${BINFMT}/rules.mak
+		${MV} targets.mak.tmp ${BINFMT}/targets.mak
 	  mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
 	  ${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h.${BINFMT}
 	else
 		${MV} Makefile.tmp Makefile
 		${MV} common.mak.tmp common.mak
 		${MV} config.mak.tmp config.mak
+		${MV} rules.mak.tmp rules.mak
+		${MV} targets.mak.tmp targets.mak
 
 										if test -f $BALL_PATH/include/BALL/CONFIG/config.h ; then
 			if test "`${DIFF} config.h $BALL_PATH/include/BALL/CONFIG/config.h`" != "" ; then

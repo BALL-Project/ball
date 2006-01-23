@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.h,v 1.3 2006/01/18 21:04:43 oliver Exp $
+// $Id: DBInterface.h,v 1.4 2006/01/23 20:44:54 oliver Exp $
+//
+// Author:
+//   Oliver Kohlbacher
 //
 
 #ifndef BALL_FORMAT_DBINTERFACE_H
@@ -157,10 +160,11 @@ namespace BALL
 		/// Create a new conformation generation method and return its database ID
 		ID newConformationMethod(const String& method, const String& parameters);
 				
-		/// Charge methods, same as conformation methods
-		ID storeCharge(ID topology_id, ID method_id, const System& system);
-
-		///
+		/// Store a set of assigned atom charges
+		ID storeCharges(ID topology_id, ID method_id, const System& system);
+		/// Assign a specific set of atom charges
+		void loadCharges(const ID charge_id, System& system);
+		/// 
 		IDVector getChargeMethods();
 		///
 		ChargeMethod getChargeMethod(DBInterface::ID method_id);
@@ -191,7 +195,6 @@ namespace BALL
 			 const String& database_name = "structures", const String& host = "diclofenac.informatik.uni-tuebingen.de",
 			 Size port = 3306, const String& driver = "QMYSQL3");
 
-
 		/** Connect to the database using the default login settings.
 				The default settings for a user are stored in $HOME/.ballrc.
 				Make sure this file is readable for *YOU ONLY* (e.g. by "chmod 600 ~/.ballrc").
@@ -201,7 +204,7 @@ namespace BALL
 					[BALLStructureDatabase]
 					user=oliver
 					password=mypassword
-					database=structures
+					database=STRUCTURES
 					host=diclofenac.informatik.uni-tuebingen.de
 					port=3306
 					driver=QMYSQL3
@@ -236,6 +239,11 @@ namespace BALL
 		/// Skip to the next result of the last query (if it exists)
 		bool next() { return query_->next(); }
 
+		/** Return a vector of IDs, if the last query produced just IDs.
+				This will call next() until all records have been extracted.
+		*/
+		IDVector extractIDs();
+
 		/// Skip to the previous result of the last query (if it exists)
 		bool prev() { return query_->prev(); }
 
@@ -267,6 +275,19 @@ namespace BALL
 		//@}
 
 		protected:	
+
+		/// Assign the coordinates from the XDR-encoded bytearray to the system
+		static void assignCoordinates_(System& system, const QByteArray& data);
+		/// Extract the coordinates from the system and XDR-encode them as a byte array.
+		static void extractCoordinates_(const System& system, QByteArray& data);
+		/// Assign the charges from the XDR-encoded bytearray to the system
+		static void assignCharges_(System& system, const QByteArray& data);
+		/// Extract the coordinates from the system and XDR-encode them as a byte array.
+		static void extractCharges_(const System& system, QByteArray& data);
+		///
+		static void encodeArray_(const std::vector<float>& v, QByteArray& a);
+		///
+		static void decodeArray_(const QByteArray& a, std::vector<float>& v);
 
 		// Database conection
 		ErrorCode				error_;

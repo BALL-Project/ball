@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.67 2005/12/23 17:02:06 amoll Exp $
+// $Id: file.h,v 1.68 2006/01/23 20:44:54 oliver Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -49,12 +49,6 @@
 #	define F_OK 0
 #	define W_OK 2
 #	define R_OK 4
-#	ifdef IN
-#		undef IN
-#	endif
-#	ifdef	OUT
-#		undef OUT
-#	endif
 #endif
 
 

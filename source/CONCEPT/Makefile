@@ -1,10 +1,19 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.22 2006/01/23 20:45:02 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
+#
+
+include ../config.mak
+
 DIRECTORY=CONCEPT
 
 THISLIB=$(LIBNAME)
 
-XDR_SOURCES=$(BALL_HAS_XDR:true=XDRPersistenceManager.C)
-
-CPP_SOURCES= $(XDR_SOURCES)\
+CPP_SOURCES=\
 	autoDeletable.C\
 	composite.C\
 	embeddable.C\
@@ -19,5 +28,11 @@ CPP_SOURCES= $(XDR_SOURCES)\
 	timeStamp.C\
 	visitor.C
 
-include ../common.mak
+ifeq ($(BALL_HAS_XDR),true)
+	CPP_SOURCES += XDRPersistenceManager.C
+endif
+
+include ../rules.mak
+include ../targets.mak
+
 -include .Dependencies
