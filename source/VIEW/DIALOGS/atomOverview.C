@@ -105,6 +105,7 @@ Processor::Result AtomOverview::OverviewProcessor::operator() (Composite& compos
 		Position r = table_->rowCount();
 		table_->setRowCount(r + 1);
 
+		// Name
 		Position c = 0;
 		String s = atom->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID);
 		QTableWidgetItem* item = new QTableWidgetItem(s.c_str());
@@ -112,25 +113,52 @@ Processor::Result AtomOverview::OverviewProcessor::operator() (Composite& compos
 		item->setCheckState(Qt::Checked);
 		if (!atom->isSelected()) item->setCheckState(Qt::Unchecked);
 
+		// Element
 		s = atom->getElement().getSymbol();
 		c++;
 		table_->setItem(r, c, new QTableWidgetItem(s.c_str()));
 		if (atom->getElement().isUnknown()) table_->item(c, r)->setBackgroundColor(Qt::red);
 
+		// Type
 		s = atom->getType();
 		c++;
 		table_->setItem(r, c, new QTableWidgetItem(s.c_str()));
  		if (atom->getType() == -1) table_->item(r, c)->setBackgroundColor(Qt::red);
 
-		s = atom->getRadius();
+		// Radius
+		float f = atom->getRadius();
+		s = String(f);
 		c++;
 		table_->setItem(r, c, new QTableWidgetItem(s.c_str()));
-		if (atom->getRadius() <= 0.0) table_->item(r, c)->setBackgroundColor(Qt::red);
+		if (f <= 0.0 || f > 4.0) table_->item(r, c)->setBackgroundColor(Qt::red);
 
-		s = atom->getCharge();
+		// Charge
+		f = atom->getCharge();
+		s = String(f);
 		c++;
 		table_->setItem(r, c, new QTableWidgetItem(s.c_str()));
-		if (atom->getCharge() == 0.0) table_->item(r, c)->setBackgroundColor(Qt::red);
+		if (f == 0.0) table_->item(r, c)->setBackgroundColor(Qt::yellow);
+		else
+		{
+			// calculate min and max possible charge
+			Position p = (Position) atom->getElement().getGroup();
+			Index min = -8;
+			Index max = 8;
+
+			// HauptGruppe
+			if (p< 3 || p > 13)
+			{
+				if (p > 12) p-= 10;
+				min = -p;
+				max = 8 - p;
+			}
+
+			if (f > (float) max ||
+					f < (float) min)
+			{
+				table_->item(r, c)->setBackgroundColor(Qt::red);
+			}
+		}
 	}
 
 	return Processor::CONTINUE;
@@ -151,6 +179,7 @@ void AtomOverview::itemChanged(QTableWidgetItem* item)
 
 	try
 	{
+		// Atom Type
 		if (c == 2)
 		{
 			Index i = s.toInt();
@@ -160,6 +189,7 @@ void AtomOverview::itemChanged(QTableWidgetItem* item)
 
 		float f = s.toFloat();
 
+		// Radius
 		if (c == 3 && (f <= 0.0))
 		{
 			restoreItem_(item);
