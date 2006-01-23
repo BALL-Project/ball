@@ -58,9 +58,13 @@ namespace BALL
 					///
 					void setTable(QTableWidget* widget) { table_ = widget;}
 
+					///
+					void showOnlySelection(bool state) {only_selection_ = state;}
+
 				protected:
 
 					QTableWidget* table_;
+					bool 					only_selection_;
 			};
 	
 			///
@@ -89,10 +93,14 @@ namespace BALL
 					///
 					void setTable(QTableWidget* widget) { table_ = widget; row_ = 0;}
 
+					///
+					void showOnlySelection(bool state) {only_selection_ = state;}
+
 				protected:
 
 					QTableWidget* table_;
 					Position row_;
+					bool 					only_selection_;
 			};
 			
 		
@@ -128,6 +136,9 @@ namespace BALL
 			///
 			void setParent(AtomContainer* ac);
 
+			///
+			void showOnlySelection(bool state) {only_selection_ = state;}
+
 			//@}
 			/** @name Protected slots
 			*/
@@ -154,6 +165,7 @@ namespace BALL
 			ApplyProcessor 	  apply_processor_;
 			String 						item_backup_;
 			bool 							ignore_;
+			bool 							only_selection_;
 		};
 
 } } // namespaces

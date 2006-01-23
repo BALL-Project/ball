@@ -17,7 +17,8 @@ AtomOverview::AtomOverview(QWidget* parent, const char* name)
 	throw()
 	:	QDialog(parent),
 		Ui_AtomOverviewData(),
-		parent_(0)
+		parent_(0),
+		only_selection_(false)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new AtomOverview " << this << std::endl;
@@ -63,6 +64,7 @@ void AtomOverview::setParent(AtomContainer* ac)
 	table->setHorizontalHeaderItem(3, new QTableWidgetItem("Radius"));
 	table->setHorizontalHeaderItem(4, new QTableWidgetItem("Charge"));
 	ignore_ = true;
+	processor_.showOnlySelection(only_selection_);
 	parent_->apply(processor_);
 	ignore_ = false;
 	showMaximized();
@@ -72,6 +74,7 @@ void AtomOverview::setParent(AtomContainer* ac)
 void AtomOverview::accept()
 {
 	QDialog::accept();
+	apply_processor_.showOnlySelection(only_selection_);
 	parent_->apply(apply_processor_);
 	VIEW::getMainControl()->update(*parent_);
 	VIEW::getMainControl()->setStatusbarText("Applied values", true);
@@ -102,6 +105,8 @@ Processor::Result AtomOverview::OverviewProcessor::operator() (Composite& compos
 	if (RTTI::isKindOf<Atom>(composite))
 	{
 		Atom* atom = dynamic_cast<Atom*>(&composite);
+		if (only_selection_ && !atom->isSelected()) return Processor::CONTINUE;
+
 		Position r = table_->rowCount();
 		table_->setRowCount(r + 1);
 
@@ -245,6 +250,9 @@ Processor::Result AtomOverview::ApplyProcessor::operator() (Composite& composite
 	if (RTTI::isKindOf<Atom>(composite))
 	{
 		Atom* atom = dynamic_cast<Atom*>(&composite);
+
+		if (only_selection_ && !atom->isSelected()) return Processor::CONTINUE;
+
 		String s;
 
 		atom->setSelected(table_->item(row_, 0)->checkState() == Qt::Checked);

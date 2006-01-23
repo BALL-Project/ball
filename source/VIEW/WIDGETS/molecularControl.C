@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.6 2006/01/22 16:09:28 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.7 2006/01/23 22:53:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -349,6 +349,8 @@ namespace BALL
 			// -----------------------------------> AtomContainer
 			count_items_action_ = context_menu_.addAction("Count items", this, SLOT(countItems()), 0);
 			atom_overview_ = context_menu_.addAction("Atom Overview", this, SLOT(showAtomOverview()), 0);
+			atom_overview_selection_ = context_menu_.addAction("Atom Overview for Selection", this, 
+																												SLOT(showAtomOverviewForSelection()), 0);
 			// <----------------------------------- AtomContainer
 			
 			context_menu_.addSeparator();
@@ -392,6 +394,7 @@ namespace BALL
 			bool ac = RTTI::isKindOf<AtomContainer>(composite);
 			count_items_action_->setEnabled(ac);
 			atom_overview_->setEnabled(ac);
+			atom_overview_selection_->setEnabled(ac);
 			// <----------------------------------- AtomContainer
 			
 			// -----------------------------------> Atoms
@@ -1296,6 +1299,14 @@ namespace BALL
 		void MolecularControl::showAtomOverview()
 		{
 			AtomOverview ao;
+			ao.setParent(dynamic_cast<AtomContainer*>(item_to_composite_[context_item_]));
+			ao.exec();
+		}
+
+		void MolecularControl::showAtomOverviewForSelection()
+		{
+			AtomOverview ao;
+			ao.showOnlySelection(true);
 			ao.setParent(dynamic_cast<AtomContainer*>(item_to_composite_[context_item_]));
 			ao.exec();
 		}
