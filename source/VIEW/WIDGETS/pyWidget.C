@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.15 2006/01/20 19:23:43 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.16 2006/01/23 00:40:51 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -348,6 +348,13 @@ namespace BALL
 			}
 			*/
 
+			if (e.key() == Qt::Key_F1 &&
+ 					e.modifiers() == Qt::ShiftModifier)
+			{
+				showDocumentation();
+				return;
+			}
+
 			List<Hotkey>::iterator it = hotkeys_.begin();
 			for (; it != hotkeys_.end(); it++)
 			{
@@ -578,7 +585,7 @@ namespace BALL
 			else if (e->key() == Qt::Key_Enter)	
 			{
 				// show docu
-				showDocu_();
+				showDocumentation();
 				return true;
 			}
 			else 
@@ -933,7 +940,7 @@ namespace BALL
 			notify_(new ShowHelpMessage(doc, "BALL", member));
 		}
 
-		void PyWidget::showDocu_()
+		void PyWidget::showDocumentation()
 		{
 			getClassAndMember_();
 			showClassDocu(class_, member_);

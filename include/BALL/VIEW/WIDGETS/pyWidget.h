@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.6 2006/01/20 19:31:27 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.7 2006/01/23 00:41:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -223,6 +223,9 @@ namespace BALL
 			//
 			void abortScript();
 
+			// Show the docu for the current line
+			void showDocumentation();
+
 			/// Open a dialog to select a start up script
 			virtual void scriptDialog();
 
@@ -240,7 +243,6 @@ namespace BALL
 
 			virtual bool completionSelected_();
 
-			void showDocu_();
 
 			protected:
 

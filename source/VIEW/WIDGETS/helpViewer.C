@@ -274,8 +274,8 @@ namespace BALL
 			if (e->type() == QEvent::KeyPress)
 			{
 				QKeyEvent* ke = (QKeyEvent*) e;
-				if (ke->key() != Qt::Key_F1)
-//   						ke->modifiers() != Qt::ShiftModifier)
+				if (ke->key() != Qt::Key_F1 ||
+ 						ke->modifiers() != Qt::NoModifier)
 				{
 					return false;
 				}
