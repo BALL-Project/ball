@@ -22,7 +22,7 @@ ComboBoxDelegate::ComboBoxDelegate(QObject* parent)
 {
 	sl_modifier_ << "None" << "Shift" << "Ctrl";
 	
-	for (Position p = 1; p < 13; p++)
+	for (Position p = 2; p < 13; p++)
 	{
 		sl_keys_ << (String("F") + String(p)).c_str();
 	}
@@ -115,7 +115,7 @@ HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
 
 	modifier_ << "" << "Shift";// << "Alt";
 
-	for (Position p = 1; p < 13; p++)
+	for (Position p = 2; p < 13; p++)
 	{
 		keys_ << (String("F") + String(p)).c_str();
 	}
