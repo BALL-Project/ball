@@ -1,23 +1,32 @@
-
-
 1.2:
 
 Added:
-- Small molecule database interface (FORMAT/DBInterface) allows the 
-  storage and retrieval of small molecules and their conformations in
-  a relational database
-- Quaternion RMSD optimizer (STRUCTURE/RMSDMinimizer) calculates the optimal 
-  transformation for a point set, similar to the Kabsch algorithm. An implementation 
-  of the paper by Coutsalies et al., J. Comput. CHem. 25(15), 1849 (2004)
-- BALLView has menu entries for user defined Python Hotkeys
-- Further Python example scripts
+ - Protein-protein docking code based on Fourier correlation (requires FFTW library)
+ - Protein-ligand docking code based on a genetic algorithm (similar to AutoDock)
+ - An interactive user interface for the two docking algorithms
+ - Small molecule database interface (FORMAT/DBInterface) allows the 
+   storage and retrieval of small molecules and their conformations in
+   a relational database
+ - Quaternion RMSD optimizer (STRUCTURE/RMSDMinimizer) calculates the optimal 
+   transformation for a point set, similar to the Kabsch algorithm. An implementation 
+   of the paper by Coutsalies et al., J. Comput. Chem. 25(15), 189 (2004)
+ - A major rewrite of the code for molecule superposition
+ - A SMARTS matcher
+ - An interface to GAMESS (to allow quantum mechanics calculations from BALL)
+ - BALLView has menu entries for user defined Python Hotkeys
+ - Further Python example scripts
+
+Changed:
+ - Build process now requires GNU make for conditional compiling
+ - common.mak has been broken down into targets.mak and rules.mak
+ - configure now checks for the correct version of QT
 
 Fixed:
-- Return pressed in PeptideDialog now applies settings
+ - Return pressed in PeptideDialog now applies settings
 
 1.1.1:
 
-The version 1.1.1 finaly brings full Python, DLL and nmake Makefile support under Windows.
+The version 1.1.1 finally brings full Python, DLL and nmake Makefile support under Windows.
 Furthermore there is a large number of prominent fixes (especialy for g++ 4.x) 
 and some new functionality for BALLView.
 
