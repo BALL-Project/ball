@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.C,v 1.3 2006/01/23 20:45:02 oliver Exp $
+// $Id: DBInterface.C,v 1.4 2006/01/25 10:02:23 bertsch Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -24,6 +24,8 @@
 
 
 // #define BALL_DEBUG_DBINTERFACE 1
+
+using namespace std;
 
 namespace BALL 
 {
