@@ -25,7 +25,7 @@ extern void yyerror(char* s);
 	SmartsParser::SPAtom*						atom;
 	SmartsParser::SPNode*						node;
 	SmartsParser::SPEdge*						edge;
-	SmartsParser::ChiralDef*				chiral;
+	/*SmartsParser::ChiralDef*				chiral;*/
 	SmartsParser::SPBond*						sp_bond;
 	/*SmartsParser::LogicalOperator		logical;*/
 	NamedProperty*									property;
@@ -88,7 +88,7 @@ extern void yyerror(char* s);
 %type		<number>	ring_connected
 %type		<number>	degree
 
-%type		<chiral>	chirality
+%type		<atom>	chirality
 
 //%type		<logical>	log_op
 
@@ -114,14 +114,22 @@ smarts:
 			SmartsParser::state.current_parser->setRoot($1);
 			$$ = $1;			
 		}
-	|	'(' smarts ')'
+	|	'(' smarts ')' // component level grouping
 		{
-			// TODO
+			SmartsParser::state.current_parser->setNextComponentNumberToSubTree($2);
 			$$ = $2;
 		}
-	|	smarts '.' smarts
+	|	smarts '.' smarts // dot disconnection
 		{
-			// TODO
+			SmartsParser::state.current_parser->setRoot($1);
+			SmartsParser::SPBond* b = new SmartsParser::SPBond(SmartsParser::SPBond::NOT_NECESSARILY_CONNECTED);
+			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
+			SmartsParser::state.current_parser->addEdge(e);
+			e->setSPBond(b);
+			e->setFirstSPNode($1);
+			e->setSecondSPNode($3);
+			$1->addSPEdge(e);
+			$$ = $1;
 		}
 	;
 
@@ -148,6 +156,7 @@ node_expression:
 		{
 			SmartsParser::SPBond* b = new SmartsParser::SPBond(SmartsParser::SPBond::SINGLE);
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
+			SmartsParser::state.current_parser->addEdge(e);
 			e->setSPBond(b);
 			e->setFirstSPNode($1);
 			e->setSecondSPNode($2);
@@ -171,6 +180,7 @@ sp_node:
 	|	sp_node '(' node_expression ')'
 		{
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
+			SmartsParser::state.current_parser->addEdge(e);
 			SmartsParser::SPBond* b = new SmartsParser::SPBond(SmartsParser::SPBond::SINGLE);
 			e->setSPBond(b);
 			e->setFirstSPNode($1);
@@ -191,12 +201,14 @@ sp_edge:
 		bond
 		{
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
+			SmartsParser::state.current_parser->addEdge(e);
 			e->setSPBond($1);
 			$$ = e;
 		}
 	|	'!' bond
 		{
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
+			SmartsParser::state.current_parser->addEdge(e);
 			e->setSPBond($2);
 			e->setNot(true);
 			$$ = e;
@@ -204,12 +216,14 @@ sp_edge:
 	|	ring_bond
 		{
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
+			SmartsParser::state.current_parser->addEdge(e);
 			e->setSPBond($1);
 			$$ = e;
 		}
 	|	'!' ring_bond
 		{
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
+			SmartsParser::state.current_parser->addEdge(e);
 			e->setSPBond($2);
 			e->setNot(true);
 			$$ = e;
@@ -217,6 +231,7 @@ sp_edge:
 	|	sp_edge ';' sp_edge
 		{
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
+			SmartsParser::state.current_parser->addEdge(e);
 			e->setInternal(true);
 			e->setFirstSPEdge($1);
 			e->setSecondSPEdge($3);
@@ -226,6 +241,7 @@ sp_edge:
 	| sp_edge ',' sp_edge
 		{
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
+			SmartsParser::state.current_parser->addEdge(e);
 			e->setInternal(true);
 			e->setFirstSPEdge($1);
 			e->setSecondSPEdge($3);
@@ -235,6 +251,7 @@ sp_edge:
 	|	sp_edge '&' sp_edge
 		{
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
+			SmartsParser::state.current_parser->addEdge(e);
 			e->setInternal(true);
 			e->setFirstSPEdge($1);
 			e->setSecondSPEdge($3);
@@ -244,9 +261,11 @@ sp_edge:
 /*	|	sp_edge '!' ring_bond
 		{
 			SmartsParser::SPEdge* e1 = new SmartsParser::SPEdge();
+			SmartsParser::state.current_parser->addEdge(e);
 			e1->setSPBond($3);
 			e1->setNot(true);
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
+			SmartsParser::state.current_parser->addEdge(e);
 			e->setInternal(true);
 			e->setFirstSPEdge($1);
 			e->setSecondSPEdge(e1);
@@ -256,8 +275,10 @@ sp_edge:
 /*	|	sp_edge ring_bond
 		{
 			SmartsParser::SPEdge* e1 = new SmartsParser::SPEdge();
+			SmartsParser::state.current_parser->addEdge(e);
 			e1->setSPBond($2);
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
+			SmartsParser::state.current_parser->addEdge(e);
 			e->setInternal(true);
 			e->setFirstSPEdge($1);
 			e->setSecondSPEdge(e1);
@@ -327,11 +348,13 @@ atom_node:
 	| unbraced_atom connection_list
 		{
 			$$ = new SmartsParser::SPNode($1);
+			SmartsParser::state.current_parser->addNode($$);
 			SmartsParser::state.current_parser->addRingConnection($$, $2);
 		}
 	|	unbraced_atom
 		{
 			$$ = new SmartsParser::SPNode($1);
+			SmartsParser::state.current_parser->addNode($$);
 		}
 	|	rec_expression
 		{
@@ -344,10 +367,12 @@ node:
 		atom
 		{
 			$$ = new SmartsParser::SPNode($1);
+			SmartsParser::state.current_parser->addNode($$);
 		}
 	| unbraced_atom
 		{
 			$$ = new SmartsParser::SPNode($1);
+			SmartsParser::state.current_parser->addNode($$);
 		}
 	|	rec_expression
 		{
@@ -398,14 +423,17 @@ node:
 	|	node ';' node
 		{
 			$$ = new SmartsParser::SPNode($1, SmartsParser::AND_LOW, $3);
+			SmartsParser::state.current_parser->addNode($$);
 		}
 	|	node ',' node
 		{
 			$$ = new SmartsParser::SPNode($1, SmartsParser::OR, $3);
+			SmartsParser::state.current_parser->addNode($$);
 		}
 	|	node '&' node
 		{
 			$$ = new SmartsParser::SPNode($1, SmartsParser::AND, $3);
+			SmartsParser::state.current_parser->addNode($$);
 		}
 	;
 
@@ -499,14 +527,16 @@ atom:
 		}
 	|	'!' chirality
 		{
-			$$ = new SmartsParser::SPAtom("*");
-			$$->setChirality(*$2);
+			//$$ = new SmartsParser::SPAtom("*");
+			$$ = $2;
+			//$$->setChirality(*$2);
 			$$->addAtomProperty(NamedProperty("NotChirality", true));
 		}
 	|	chirality
 		{
-			$$ = new SmartsParser::SPAtom("*");
-			$$->setChirality(*$1);
+			//$$ = new SmartsParser::SPAtom("*");
+			$$ = $1;
+			//$$->setChirality(*$1);
 		}
 	| unbraced_atom '!' neg_charge
 		{
@@ -521,12 +551,22 @@ atom:
 	| unbraced_atom '!' chirality
 		{
 			$1->addAtomProperty(NamedProperty("NotChirality", true));
-			$1->setChirality(*$3);
+			//$1->setChirality(*$3);
+			for (Size i = 0; i != $3->countProperties(); ++i)
+			{
+				$1->addAtomProperty($3->getNamedProperty(i));
+			}
+			delete $3;
 			$$ = $1;
 		}
 	| unbraced_atom chirality
 		{
-			$1->setChirality(*$2);
+			//$1->setChirality(*$2);
+			for (Size i = 0; i != $2->countProperties(); ++i)
+			{
+				$1->addAtomProperty($2->getNamedProperty(i));
+			}
+			delete $2;
 			$$ = $1;
 		}
 	|	atom atom_property
@@ -556,13 +596,23 @@ atom:
 		}
 	|	atom '!' chirality
 		{
-			$1->setChirality(*$3);
+			//$1->setChirality(*$3);
 			$1->addAtomProperty(NamedProperty("NotChirality", true));
+			for (Size i = 0; i != $3->countProperties(); ++i)
+			{
+				$1->addAtomProperty($3->getNamedProperty(i));
+			}
+			delete $3;
 			$$ = $1;
 		}
 	|	atom chirality
 		{
-			$1->setChirality(*$2);
+			//$1->setChirality(*$2);
+			for (Size i = 0; i != $2->countProperties(); ++i)
+			{
+				$1->addAtomProperty($2->getNamedProperty(i));
+			}
+			delete $2;
 			$$ = $1;
 		}
 	|	atom '!' atom_property
@@ -803,14 +853,26 @@ isotope:
 
 chirality:
 		'@' /*%prec PREC_CHIRALITY*/
-		{ 
-			$$ = new SmartsParser::ChiralDef(SmartsParser::TH, 1); 
+		{
+			$$ = new SmartsParser::SPAtom();
+			$$->addAtomProperty(NamedProperty("Chirality", SmartsParser::CCW_DEFAULT));
 		}
 	|	'@' '@' /*%prec PREC_CHIRALITY*/
 		{ 
-			$$ = new SmartsParser::ChiralDef(SmartsParser::TH, 1); 
+			$$ = new SmartsParser::SPAtom();
+			$$->addAtomProperty(NamedProperty("Chirality", SmartsParser::CW_DEFAULT));
 		}
-	|	TK_CHIRAL_CLASS_TH TK_ONE_TWO 
+	| '@' '?'
+		{
+			$$ = new SmartsParser::SPAtom();
+			$$->addAtomProperty(NamedProperty("Chirality", SmartsParser::CCW_DEFAULT_OR_UNSPECIFIED));
+		}
+	| '@' '@' '?' 
+		{
+			$$ = new SmartsParser::SPAtom();
+			$$->addAtomProperty(NamedProperty("Chirality", SmartsParser::CW_DEFAULT_OR_UNSPECIFIED));
+		}
+/*	|	TK_CHIRAL_CLASS_TH TK_ONE_TWO 
 		{
 			$$ = new SmartsParser::ChiralDef(SmartsParser::TH, $2); 
 		}
@@ -824,12 +886,17 @@ chirality:
 		}
 	|	TK_CHIRAL_CLASS_SP TK_DIGIT
 		{
-			$$ = new SmartsParser::ChiralDef(SmartsParser::TB, $2); 
+			$$ = new SmartsParser::ChiralDef(SmartsParser::SP, $2); 
 		}
 	|	TK_CHIRAL_CLASS_OH TK_DIGIT
 		{
 			$$ = new SmartsParser::ChiralDef(SmartsParser::OH, $2); 
 		}
+	| chirality '?' 
+		{
+			// TODO correct class
+			$$ = $1;
+		}*/
 	;
 
 %%

@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.27 2006/01/23 20:45:03 oliver Exp $
+# $Id: Makefile.lst,v 1.28 2006/01/25 14:41:47 bertsch Exp $
 #
 
 EXECUTABLES_BASIC = \
@@ -212,6 +212,8 @@ $(PREFIX)ReconstructFragmentProcessor_test$(EXEEXT)\
 $(PREFIX)ResidueChecker_test$(EXEEXT)\
 $(PREFIX)RotamerLibrary_test$(EXEEXT)\
 $(PREFIX)SmilesParser_test$(EXEEXT)\
+$(PREFIX)SmartsParser_test$(EXEEXT)\
+$(PREFIX)SmartsMatcher_test$(EXEEXT)\
 $(PREFIX)StructureMapper_test$(EXEEXT)\
 $(PREFIX)TransformationProcessor_test$(EXEEXT)\
 $(PREFIX)TranslationProcessor_test$(EXEEXT)\

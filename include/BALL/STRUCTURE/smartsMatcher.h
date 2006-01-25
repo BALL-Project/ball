@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.h,v 1.3 2005/10/11 16:03:44 bertsch Exp $
+// $Id: smartsMatcher.h,v 1.4 2006/01/25 14:41:46 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMARTSMATCHER_H
@@ -46,7 +46,7 @@ namespace BALL
 				throw(Exception::ParseError);
 
 			/// destructor
-			virtual ~SmartsMatcher();
+			~SmartsMatcher();
 			//@}
 
 			/// assignment operator
@@ -96,7 +96,7 @@ namespace BALL
 					RecStruct_& operator = (const RecStruct_& rec_struct);
 			};
 			
-			/// mehtod for evaluation of ring edges, after the the smarts tree is matched to molcule
+			/// method for evaluation of ring edges, after the the smarts tree is matched to molcule
 			bool evaluateRingEdges_(const HashSet<const Atom*>& matching, const HashMap<const SPNode*, const Atom*>& mapping);
 			
 			/// method for the evaluation of a pseudo-tree
@@ -106,7 +106,10 @@ namespace BALL
 			bool evaluate_node_(RecStruct_& rs, SPNode* start_node, const Atom* start_atom);
 	
 			/// method for evaluating a edge of a pseudo-tree 
-			bool evaluate_edge_(RecStruct_& rs, SPEdge* start_node, const Atom* start_atom, const Bond* start_bond);	
+			bool evaluate_edge_(RecStruct_& rs, SPEdge* start_node, const Atom* start_atom, const Bond* start_bond);
+
+			/// matches from the recurive part
+			HashMap<SPNode*, std::vector<HashSet<const Atom*> > > rec_matches_;
 	};
   
 } // namespace BALL

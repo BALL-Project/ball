@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SmartsMatcher_test.C,v 1.1 2005/11/17 14:36:26 bertsch Exp $
+// $Id: SmartsMatcher_test.C,v 1.2 2006/01/25 14:41:47 bertsch Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -20,7 +20,7 @@
 using namespace BALL;
 using namespace std;
 
-START_TEST(SmartsMatcher, "$Id: SmartsMatcher_test.C,v 1.1 2005/11/17 14:36:26 bertsch Exp $")
+START_TEST(SmartsMatcher, "$Id: SmartsMatcher_test.C,v 1.2 2006/01/25 14:41:47 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -36,6 +36,7 @@ CHECK(~SmartsMatcher())
 RESULT
 
 CHECK(match(Molecule& mol, const String& smarts))
+
 	SDFile infile("data/SmartsMatcher_test.sdf");
 	System s;
 	infile >> s;
@@ -52,6 +53,7 @@ CHECK(match(Molecule& mol, const String& smarts))
 		tmp.trim();
 		vector<String> split;
 		tmp.split(split, " ");
+
 		vector<HashSet<const Atom*> > matchings = sm->match(*s.getMolecule(0), split[2]);
 		TEST_EQUAL(matchings.size(), split[0].toUnsignedInt())
 	}
