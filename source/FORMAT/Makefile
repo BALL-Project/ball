@@ -1,5 +1,7 @@
 DIRECTORY=FORMAT
 
+include ../config.mak
+
 THISLIB=$(LIBNAME)
 
 PARSER_SOURCES= \
@@ -14,7 +16,6 @@ PARSER_SOURCES= \
 CPP_SOURCES=\
 	bruker1DFile.C\
 	bruker2DFile.C\
-	DBInterface.C\
 	DCDFile.C\
 	genericMolFile.C\
 	HINFile.C\
@@ -38,7 +39,13 @@ CPP_SOURCES=\
 	TRRFile.C\
 	XYZFile.C
 
-include ../common.mak
+ifeq ($(BALL_HAS_VIEW),true)
+	CPP_SOURCES+=DBInterface.C
+endif
+
+include ../targets.mak
+include ../rules.mak
+
 -include .Dependencies
 
 depend: $(PARSER_SOURCES)
