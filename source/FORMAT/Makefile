@@ -1,3 +1,12 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.24 2006/01/26 18:24:59 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
+#
+
 DIRECTORY=FORMAT
 
 include ../config.mak
@@ -55,10 +64,6 @@ default_clean:	clean_flex_bison
 clean_flex_bison:
 	@-$(RM) GAMESSDatParserParser.C GAMESSDatParserLexer.C GAMESSDatParserParser.h
 	@-$(RM) GAMESSLogParserParser.C GAMESSLogParserLexer.C GAMESSLogParserParser.h
-
-
-DBInterface.o:	DBInterface.C
-	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(VIEW_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
 
 
 GAMESSDatParserParser.C: GAMESSDatParserParser.y
