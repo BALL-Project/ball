@@ -1,7 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pySecondaryStructureList.C,v 1.2 2002/02/27 12:24:01 sturm Exp $
+// $Id: pySecondaryStructureList.C,v 1.3 2006/01/26 07:41:03 oliver Exp $
+//
+// Author:
+//   Oliver Kohlbacher
+//
 
 #include <BALL/PYTHON/pySecondaryStructureList.h>
 #include <BALL/KERNEL/secondaryStructure.h>

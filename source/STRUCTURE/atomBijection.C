@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBijection.C,v 1.1 2006/01/24 09:31:14 oliver Exp $
+// $Id: atomBijection.C,v 1.2 2006/01/26 07:41:03 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -9,16 +9,11 @@
 
 #include <BALL/STRUCTURE/atomBijection.h>
 
-#include <BALL/COMMON/limits.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/KERNEL/PTE.h>
+#include <BALL/KERNEL/extractors.h>
+#include <BALL/KERNEL/residue.h>
 #include <BALL/DATATYPE/hashGrid.h>
-#include <BALL/MATHS/quaternion.h>
-
-
-#include <stack>
-#include <vector>
-#include <map>
 
 using namespace std;
 
@@ -35,18 +30,21 @@ namespace BALL
 	double AtomBijection::calculateRMSD() const
 	{
 		double sum_of_squares = 0.0;
-		// 
-		for(Size i = 0; i < size(); i++)
+		
+		if (!empty())
 		{
-			Vector3& r(operator [] (i).first->getPosition());
-			sum_of_squares += r.getSquareDistance(operator [] (i).second->getPosition());
+			for (Size i = 0; i < size(); ++i)
+			{
+				Vector3& r(operator [] (i).first->getPosition());
+				sum_of_squares += r.getSquareDistance(operator [] (i).second->getPosition());
+			}
+
+			// calculate mean square deviation
+			sum_of_squares = sqrt(sum_of_squares / (double)size());
 		}
 
-		// calculate mean square deviation
-		sum_of_squares /= (double)size();
-
 		// return RMSD
-		return sqrt(sum_of_squares);
+		return sum_of_squares;
 	}
 
 	Size AtomBijection::assignByName(AtomContainer& A, AtomContainer& B)
@@ -108,29 +106,95 @@ namespace BALL
 		// Delete old bijection.
 		clear();
 
-		// Check whether we could map anything.
-		if (size() == 0)	
+		// Map in order -- first atom of A onto
+		// first atom of B and so on.
+		AtomIterator ai(A.beginAtom());
+		AtomIterator bi(B.beginAtom());
+		for (; +ai && +bi; ++ai, ++bi)
 		{
-			// Last stage: map in order -- first atom of A onto
-			// first atom of B and so on.
-			AtomIterator ai(A.beginAtom());
-			AtomIterator bi(B.beginAtom());
-			for (; +ai && +bi; ++ai, ++bi)
-			{
-				push_back(std::pair<Atom*, Atom*>(&*ai, &*bi));
-			}
+			push_back(std::pair<Atom*, Atom*>(&*ai, &*bi));
 		}
+
 		return size();
 	}
 
 	Size AtomBijection::assignCAlphaAtoms(AtomContainer& A, AtomContainer& B)
 	{
-		// ???
+		// Delete old bijection.
+		clear();
+		
+		// Extract all residues in A and B
+		ResidueList rla(residues(A));
+		ResidueList rlb(residues(B));
+
+		// Walk over the residues in parallel
+		ResidueList::iterator ita(rla.begin());
+		ResidueList::iterator itb(rla.begin());
+		for (; ita != rla.end() && itb != rlb.end(); ++ita, ++itb)
+		{
+			// If the two residues do have an atom named CA, push back the pair.
+			Atom* caa = (*ita)->getAtom("CA");
+			Atom* cab = (*itb)->getAtom("CA");
+			if (caa != 0 && cab != 0)
+			{
+				push_back(AtomPair(caa, cab));
+			}
+		}
+			
+		//
+		return size();
 	}
 
 	Size AtomBijection::assignBackboneAtoms(AtomContainer& A, AtomContainer& B)
 	{
-		// ???
+		// Delete old bijection.
+		clear();
+		
+		// Extract all residues in A and B
+		ResidueList rla(residues(A));
+		ResidueList rlb(residues(B));
+
+		// Walk over the residues in parallel
+		ResidueList::iterator ita(rla.begin());
+		ResidueList::iterator itb(rla.begin());
+		for (; ita != rla.end() && itb != rlb.end(); ++ita, ++itb)
+		{
+			// If the two residues do have backbone atoms (CA, C, N, O, H)
+			// map then onto each other.
+			Atom* a = (*ita)->getAtom("CA");
+			Atom* b = (*itb)->getAtom("CA");
+			if (a != 0 && b != 0)
+			{
+				push_back(AtomPair(a, b));
+			}
+			a = (*ita)->getAtom("C");
+			b = (*itb)->getAtom("C");
+			if (a != 0 && b != 0)
+			{
+				push_back(AtomPair(a, b));
+			}
+			a = (*ita)->getAtom("N");
+			b = (*itb)->getAtom("N");
+			if (a != 0 && b != 0)
+			{
+				push_back(AtomPair(a, b));
+			}
+			a = (*ita)->getAtom("O");
+			b = (*itb)->getAtom("O");
+			if (a != 0 && b != 0)
+			{
+				push_back(AtomPair(a, b));
+			}
+			a = (*ita)->getAtom("H");
+			b = (*itb)->getAtom("H");
+			if (a != 0 && b != 0)
+			{
+				push_back(AtomPair(a, b));
+			}
+		}
+			
+		//
+		return size();
 	}
 
 
