@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.C,v 1.29 2005/01/04 13:27:19 oliver Exp $
+// $Id: structureMapper.C,v 1.30 2006/01/26 11:58:55 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/structureMapper.h>
@@ -56,32 +56,31 @@ namespace BALL
 			calculateDefaultBijection();
 		}
 
-		// check whether we have to transform each coordinate first
-		// (only in case of calculation of the RMSD of a mapping)
-		bool transform = (transformation_ != Matrix4x4(1.0, 0.0, 0.0, 0.0, 
-																									 0.0, 1.0, 0.0, 0.0, 
-																									 0.0, 0.0, 1.0, 0.0, 
-																									 0.0, 0.0, 0.0, 1.0));
+		// Check whether we have to transform each coordinate first
+		// (only if we have a transformation already defined which differs from the 
+		// unity matrix).
+		bool transform = (transformation_ != Matrix4x4::getIdentity());
 
 		// for each pair in the bijection array, calculate square deviation for each 
 		// coordinate set
-
 		double square_deviation = 0;
-		Vector3 r;
 
 		if (transform)
 		{
+			// Compute the RMSD we would get *after* applying the transformation.
 			for(Size i = 0; i < bijection_.size(); i++)
 			{
-				r = transformation_ * bijection_[i].first->getPosition();
+				const Vector3& r(transformation_ * bijection_[i].first->getPosition());
 				square_deviation += r.getSquareDistance(bijection_[i].second->getPosition());
 			}
 		}
 		else
 		{
+			// Compute the RMSD we have right now, as the transformation is just the
+			// identity matrix.
 			for(Size i = 0; i < bijection_.size(); i++)
 			{
-				r = bijection_[i].first->getPosition();
+				const Vector3& r(bijection_[i].first->getPosition());
 				square_deviation += r.getSquareDistance(bijection_[i].second->getPosition());
 			}
 		}
@@ -112,11 +111,11 @@ namespace BALL
 		return true;
 	}
 
-	StructureMapper::AtomBijection StructureMapper::calculateFragmentBijection
+	AtomBijection StructureMapper::calculateFragmentBijection
 		(const vector <Fragment*>& A, const vector<Fragment*>& B)
 	{
-		AtomBijection pair_array;
-		AtomPairType pair;
+		AtomBijection bijection;
+		AtomBijection::AtomPair pair;
 
 		Size minimum = (Size)min(A.size(), B.size());
 
@@ -139,13 +138,13 @@ namespace BALL
 					{
 						pair.first = &(*atom_iterator1);
 						pair.second = &(*atom_iterator2);
-						pair_array.push_back(pair);
+						bijection.push_back(pair);
 					}
 				}
 			}
 		}
 
-		return pair_array;
+		return bijection;
 	}
 
 
@@ -153,7 +152,7 @@ namespace BALL
 		(const vector<Fragment*>& A,
 		 const vector<Fragment*>& B, Matrix4x4* transformation, double upper_bound, double lower_bound)
 	{
-		StructureMapper::AtomBijection fragment_bijection = calculateFragmentBijection(A, B);
+		AtomBijection fragment_bijection = calculateFragmentBijection(A, B);
 
 		Size size = (Size)fragment_bijection.size();
 
@@ -164,7 +163,7 @@ namespace BALL
 		}
 
 		Matrix4x4 tmp_transformation = transformation_;
-		StructureMapper::AtomBijection tmp_bijection = bijection_;
+		AtomBijection tmp_bijection = bijection_;
 	  bijection_ = fragment_bijection;
 
 		// calculate all triangles from the bijection
@@ -215,65 +214,21 @@ namespace BALL
 
 	void StructureMapper::calculateDefaultBijection()
 	{
-		// Remember the names of A and their atom pointers.
-		StringHashMap<Atom*> A_names;
-		for (AtomIterator ai = A_->beginAtom(); +ai; ++ai)
+		// Make sure we have two structures...
+		if (A_ == 0 || B_ == 0)
 		{
-			A_names.insert(std::pair<String, Atom*>(ai->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID), &*ai));
+			return;
 		}
-		
-		// Iterate over all atoms of B and try to find an 
-		// atom in A identical names.
-		bijection_.clear();
-		for (AtomIterator ai = B_->beginAtom(); +ai; ++ai)
-		{
-			if (A_names.has(ai->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID)))
-			{
-				// We found two matching atoms. Remember them.
-				bijection_.push_back(AtomPairType(A_names[ai->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID)], &*ai));
 
-				// Throw away the hash map entry in order to avoid
-				// 1:n mappings.
-				A_names.erase(ai->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID));
-			}
-		}
+		// Assign by names first.
+		bijection_.assignByName(*A_, *B_);
 
 		// Check whether we could map anything.
+		// If not: method of last resort, map the atoms inthe
+		// order they appear in.
 		if (bijection_.size() == 0)	
 		{
-			// Next stage: try to map by atom name only.
-			A_names.clear();
-			for (AtomIterator ai = A_->beginAtom(); +ai; ++ai)
-			{
-				A_names.insert(std::pair<String, Atom*>(ai->getName(), &*ai));
-			}
-			bijection_.clear();
-			for (AtomIterator ai = B_->beginAtom(); +ai; ++ai)
-			{
-				if (A_names.has(ai->getName()))
-				{
-					// We found two matching atoms. Remember them.
-					bijection_.push_back(std::pair<Atom*, Atom*>
-															(A_names[ai->getName()], &*ai));
-					// Throw away the hash map entry in order to avoid
-					// 1:n mappings.
-					A_names.erase(ai->getName());
-				}
-			}			
-		}
-
-		// Check whether we could map anything.
-		if (bijection_.size() == 0)	
-		{
-			// Last stage: map in order -- first atom of A onto
-			// first atom of B and so on.
-			AtomIterator ai(A_->beginAtom());
-			AtomIterator bi(B_->beginAtom());
-			for (; +ai && +bi; ++ai, ++bi)
-			{
-				bijection_.push_back(std::pair<Atom*, Atom*>
-														 (&*ai, &*bi));
-			}
+			bijection_.assignTrivial(*A_, *B_);
 		}
 	}
 
@@ -854,7 +809,8 @@ namespace BALL
 		HashGridBox3 < Position >::BoxIterator ibox_it;
 		HashGridBox3 < Position >::DataIterator id_it;
 
-		Matrix4x4 T, T_best;
+		Matrix4x4 T;
+		Matrix4x4 T_best;
 		Vector3 v;
 		bool matched;
 		float square_tolerance;

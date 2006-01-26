@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBijection.h,v 1.2 2006/01/23 21:55:15 oliver Exp $
+// $Id: atomBijection.h,v 1.3 2006/01/26 11:58:54 oliver Exp $
 //
-// $Id: atomBijection.h,v 1.2 2006/01/23 21:55:15 oliver Exp $
+// $Id: atomBijection.h,v 1.3 2006/01/26 11:58:54 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -116,9 +116,10 @@ namespace BALL
 				This method creates a mapping based on the atom names.
 				If the atom is contained in a Residue/Protein, the name consists
 				of the fully qualified name (<chain>:<residue name>:<residue id>:<atom name>).
-				If it does not map any atoms, please check the chain names and the residue IDs!
+				If no pair of atoms could by matched this way, it will try to match by
+				atom names only (not considering residues, chains or the like).
 				\p
-				The method constructs a has map for all atom names, so run time is linear 
+				The method constructs a hash map for all atom names, so run time is linear 
 				in the number of atoms.
 				\p
 				The number of atoms mapped is returned.

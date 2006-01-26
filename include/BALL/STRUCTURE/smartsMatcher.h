@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.h,v 1.4 2006/01/25 14:41:46 bertsch Exp $
+// $Id: smartsMatcher.h,v 1.5 2006/01/26 11:58:54 oliver Exp $
+//
+// Author:
+//   Andreas Bertsch
 //
 
 #ifndef BALL_STRUCTURE_SMARTSMATCHER_H
@@ -20,7 +23,7 @@
 namespace BALL 
 {
 
-	/** @name	\brief SMARTS Parser.
+	/** @name	\brief SMARTS Matcher
 	*/
 	class SmartsMatcher
 	{

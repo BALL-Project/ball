@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89 2005/12/23 17:03:38 amoll Exp $
+// $Id: molecularStructure.C,v 1.90 2006/01/26 11:58:55 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -673,10 +673,9 @@ namespace BALL
 				atom_set.insert(&*ait);
 			}
 
-			StructureMapper::AtomBijection& ab = 
-				(StructureMapper::AtomBijection&) sm.getBijection();
+			const AtomBijection& ab = sm.getBijection();
 
-			StructureMapper::AtomBijection::iterator ab_it= ab.begin();
+			AtomBijection::const_iterator ab_it = ab.begin();
 			for (; ab_it != ab.end(); ++ab_it)
 			{
 				atom_set.erase(ab_it->first);
@@ -741,35 +740,33 @@ namespace BALL
 
 			StructureMapper sm(*a1, *a2);
 			
-
-			double					rmsd;
-			
 			map<String, Position> type_map;
 			type_map["ALA"] = 0;
-			type_map["GLY"] = 1;
-			type_map["VAL"] = 2;
-			type_map["LEU"] = 3;
-			type_map["ILE"] = 4;
-			type_map["SER"] = 5;
-			type_map["CYS"] = 6;
-			type_map["THR"] = 7;
-			type_map["MET"] = 8;
-			type_map["PHE"] = 9;
-			type_map["TYR"] = 10;
-			type_map["TRP"] = 11;
-			type_map["PRO"] = 12;
-			type_map["HIS"] = 13;
-			type_map["LYS"] = 14;
-			type_map["ARG"] = 15;
-			type_map["ASP"] = 16;
-			type_map["GLU"] = 17;
-			type_map["ASN"] = 18;
-			type_map["GLN"] = 19;
+			type_map["GLY"] = 0;
+			type_map["VAL"] = 0;
+			type_map["LEU"] = 0;
+			type_map["ILE"] = 0;
+			type_map["SER"] = 0;
+			type_map["CYS"] = 0;
+			type_map["THR"] = 0;
+			type_map["MET"] = 0;
+			type_map["PHE"] = 0;
+			type_map["TYR"] = 0;
+			type_map["TRP"] = 0;
+			type_map["PRO"] = 0;
+			type_map["HIS"] = 0;
+			type_map["LYS"] = 0;
+			type_map["ARG"] = 0;
+			type_map["ASP"] = 0;
+			type_map["GLU"] = 0;
+			type_map["ASN"] = 0;
+			type_map["GLN"] = 0;
 
-			double upper = 8.0;
-			double lower = 4.0;
+			double upper = 8.0; // These parameters have to go to the preferences dialog ! // OK 02/2006
+			double lower = 4.0; // ?????
 			double tolerance = 0.6;
-
+			double rmsd = 0.0;
+			
 			Size not_matched_ca;
 
 			Matrix4x4	m;
@@ -777,8 +774,7 @@ namespace BALL
 			sm.setTransformation(m);
 			a1->apply(sm);
 
-			CompositeMessage* cm =
-					new CompositeMessage(*a1, CompositeMessage::CHANGED_COMPOSITE);
+			CompositeMessage* cm = new CompositeMessage(*a1, CompositeMessage::CHANGED_COMPOSITE);
 			notify_(cm);
 
 			Log.info() << "Calcuted RMSD: " << rmsd << std::endl;
@@ -935,7 +931,6 @@ namespace BALL
 				selectUnassignedForceFieldAtoms_();
 				return;
 			}
-
 
 			// Compute the single point energy and print the result to Log and the status bar.
 			ff.updateEnergy();
@@ -1466,4 +1461,5 @@ namespace BALL
 		}
 
 	} // namespace VIEW
+
 } // namespace BALL
