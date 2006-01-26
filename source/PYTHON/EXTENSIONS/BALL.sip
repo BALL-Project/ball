@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.42 2005/12/23 17:02:45 amoll Exp $
+// $Id: BALL.sip,v 1.43 2006/01/26 21:33:35 oliver Exp $
 //
 
 /////////////////////////
@@ -24,7 +24,7 @@
 %Include global.sip
 // %Include hash.sip // ??
 // %Include limits.sip // ??
-// %Include logStream.sip // ??
+%Include logStream.sip
 // %Include rtti.sip // ??
 %Include version.sip 
 
