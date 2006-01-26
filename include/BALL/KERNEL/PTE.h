@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.h,v 1.30 2005/10/23 12:02:17 oliver Exp $
+// $Id: PTE.h,v 1.30.2.1 2006/01/26 12:30:02 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_PTE_H
@@ -604,7 +604,7 @@ namespace BALL
 					1       IA        IA    
 					2       IIA       IIA            
 					3       IIIA      IIIB    
-					4       IVA       IVAB   
+					4       IVA       IVB   
 					5       VA        VB  
 					6       VIA       VIB   
 					7       VIIA      VIIB    
