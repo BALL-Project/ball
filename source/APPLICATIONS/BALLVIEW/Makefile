@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.11 2006/01/26 16:12:53 oliver Exp $
+# $Id: Makefile,v 1.12 2006/01/26 21:52:45 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -42,7 +42,7 @@ UIC_FILES=\
 	demoTutorialDialogData.C
 
 BALLView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(PYTHON_LIBS)
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_LIBS) $(PYTHON_LIBS)
 
 depend: $(UIC_FILES) $(MOC_SOURCES)
 
