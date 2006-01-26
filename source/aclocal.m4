@@ -1,7 +1,11 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.85 2006/01/26 16:12:50 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.86 2006/01/26 20:42:39 oliver Exp $
+dnl
+dnl Author:
+dnl   Oliver Kohlbacher
+dnl   Andreas Hildebrandt
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl

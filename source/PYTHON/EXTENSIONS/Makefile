@@ -1,7 +1,10 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
 #
-# BALL Python support Makefile
+# $Id: Makefile,v 1.36 2006/01/26 20:42:39 oliver Exp $
 #
-# $Id: Makefile,v 1.35 2005/12/23 17:02:46 amoll Exp $
+# Author:
+#   Oliver Kohlbacher
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -33,8 +36,6 @@ SIP_OPTS=-c $(SIP_DIR) -e -s ".C" -b BALL.sbf
 SIPFLAGS += $(PYTHON_INCLUDES) $(SIP_INCLUDES)
 CXXFLAGS += $(SIPFLAGS)
 
-BALL_INCLUDES+=$(VIEW_INCLUDES)
-BALL_LIBS=$(VIEW_LIBS)
 ADD_INCLUDES=$(PYTHON_INCLUDES) $(SIP_INCLUDES)
  
 PYBALL_SOURCES = \
@@ -58,8 +59,6 @@ PYBALL_SOURCES = \
 	pyResidueList.C \
 	pyGeometricObjectList.C
 	
-#pyColorRGBAVector.C
-
 PYBALL_OBJECTS  = $(PYBALL_SOURCES:.C=.o)
  
 CPP_SOURCES = $(SIP_SOURCES:.h=.C) $(PYBALL_SOURCES)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RMSDMinimizer.C,v 1.2 2006/01/26 16:12:54 oliver Exp $
+// $Id: RMSDMinimizer.C,v 1.3 2006/01/26 20:42:39 oliver Exp $
 //
 // Compute RMSD-optimal transformation for two structures
 // Coutsalis et al, J. Comput. Chem., 25(15), 1849 (2004)
@@ -26,6 +26,19 @@ using namespace std;
 
 namespace BALL
 {
+
+	RMSDMinimizer::TooFewCoordinates::TooFewCoordinates(const char* file, int line, Size size)
+		:	Exception::GeneralException(file, line, "RMSDMinimizer::TooFewCoordinates",
+																	String("too few coordinates to determine unique transformation: ") + String(size))
+	{
+	}
+
+	RMSDMinimizer::IncompatibleCoordinateSets::IncompatibleCoordinateSets(const char* file, int line, Size size_a, Size size_b)
+		:	Exception::GeneralException(file, line, "RMSDMinimizer::IncompatibleCoordinateSets",
+																	String("coordinate sets of differing size are incompatible ( size of A: ") 
+																	+ String(size_a) + " / size of B: " + String(size_b))
+	{
+	}
 
 	void RMSDMinimizer::extractCAlpha(const AtomContainer& A, const AtomContainer& B)
 	{
