@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.33 2006/01/23 20:45:01 oliver Exp $
+dnl $Id: configure.ac,v 1.34 2006/01/26 16:12:52 oliver Exp $
 dnl
 dnl
 
@@ -261,14 +261,14 @@ fi
 if test "$with_gsl" != "" -a "$with_gsl" != "no" -o "$enable_gsl" = yes ; then
 	GSL_SUPPORT=true
 	if test "${with_gsl_lib}" != "" ; then
-		GSL_LIBPATH=${with_gsl_lib}
+		GSL_LIBDIR=${with_gsl_lib}
 	else
-		GSL_LIBPATH=""
+		GSL_LIBDIR=""
 	fi
 	if test "${with_gsl_incl}" != "" ; then
-		GSL_INCL=${with_gsl_incl}
+		GSL_INCDIR=${with_gsl_incl}
 	else
-		GSL_INCL=""
+		GSL_INCDIR=""
 	fi
 else
 	GSL_SUPPORT=
@@ -488,7 +488,6 @@ if test "${LEX}" != "flex" -o "${YACC}" = "" ; then
 else
 	BALL_HAS_FLEX_YACC=true
 	AC_DEFINE(BALL_HAS_FLEX_YACC, true)
-	LIBS="${LIBS}"
 fi
 AC_SUBST(BALL_HAS_FLEX_YACC)
 AC_SUBST(LEX)
@@ -510,7 +509,7 @@ dnl
 dnl GSL -- The GNU Scientific Library
 dnl
 if test "${GSL_SUPPORT}" == true ; then
-	CF_CHECK_GSL_SUPPORT
+	CF_GSL
 fi
 
 dnl
@@ -543,15 +542,13 @@ dnl
 BINFMT="${BINFMT}-${CXX_NAME}"
 BINFMT_INDEX=""
 
-LIBS="${LIBS} ${FFTW_LIBS} -lm"
-VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+BALL_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
 
+LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} -lm"
+VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
 if test "${USE_VIEW}" = true ; then
-	VIEW_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
-	VIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
-	BALL_INCLUDES="${VIEW_INCLUDES}"
-	BALL_LIBS="${VIEW_LIBS}"
+	BALL_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
 fi
 
 LDFLAGS="$LDFLAGS"
@@ -625,7 +622,6 @@ AC_SUBST(BINFMT_INDEX)      dnl BFMT: binformat index of the current BINFMT - pa
 
 dnl         LINKER
 
-AC_SUBST(VIEW_LIBS)     dnl VIEW libs
 AC_SUBST(OPENGL_LIBOPTS)    dnl compiler options for OpenGL libs (-Lxxx -lGLU -lGL)
 AC_SUBST(OPENGL_LIBPATH)    dnl path to OpenGL libs (without -L)
 AC_SUBST(QT_LIBOPTS)        dnl copiler options for QT libs (-Lxxx -lqgl -lqt)
@@ -699,7 +695,6 @@ dnl	    VIEW
 AC_SUBST(USE_VIEW)				dnl bool: use ballview (default=true)
 AC_SUBST(BALL_HAS_VIEW)		dnl true if VIEW is enabled, "" otherwise
 AC_SUBST(VIEW_PLATFORM)		dnl Mesa or OpenGL
-AC_SUBST(VIEW_INCLUDES)		dnl VIEW includes
 AC_SUBST(LIBVIEW)					dnl static library name
 
 

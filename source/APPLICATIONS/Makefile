@@ -1,9 +1,10 @@
-# 
-# $Id: Makefile,v 1.9 2005/12/23 17:02:27 amoll Exp $
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
 #
+# $Id: Makefile,v 1.10 2006/01/26 16:12:53 oliver Exp $
 #
-# APPLICATIONS/Makefile
-#
+# Author:
+#   Oliver Kohlbacher
 #
 
 include ../config.mak

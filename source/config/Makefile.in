@@ -1,7 +1,10 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile.in,v 1.42 2005/12/23 17:03:39 amoll Exp $
+# $Id: Makefile.in,v 1.43 2006/01/26 16:12:56 oliver Exp $
+#
+# Author:
+#  Oliver Kohlbacher
 #
 
 include config.mak

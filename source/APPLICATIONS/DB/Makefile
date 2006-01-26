@@ -1,6 +1,7 @@
-# $Id: Makefile,v 1.1 2006/01/23 20:45:01 oliver Exp $
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
 #
-# Makefile for BALL utilities
+# $Id: Makefile,v 1.2 2006/01/26 16:12:53 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher

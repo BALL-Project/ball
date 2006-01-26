@@ -1,3 +1,12 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.23 2006/01/26 16:12:55 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
+#
+
 DIRECTORY=VIEW/KERNEL
 
 THISLIB=$(LIBNAME)
@@ -28,8 +37,6 @@ MOC_SOURCES=\
 
 include ../../common.mak
 -include .Dependencies
-
-BALL_INCLUDES=$(VIEW_INCLUDES)
 
 mainControl_moc.C:  $(BALL_PATH)/include/BALL/VIEW/KERNEL/mainControl.h
 	$(MOC) $(BALL_PATH)/include/BALL/VIEW/KERNEL/mainControl.h -o mainControl_moc.C

@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.84 2006/01/23 20:44:55 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.85 2006/01/26 16:12:50 oliver Exp $
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -3364,7 +3364,7 @@ AC_DEFUN(CF_VIEW_X_LINK_TEST, [
 	fi
 
 	dnl		
-	dnl  define some variables: X11_LIBOPTS and VIEW_LIBS
+	dnl  define some variables: X11_LIBOPTS
 	dnl
 	X11_LIBOPTS="${X11_LIBPATHOPT} ${X11_LIBS}"
 ])
@@ -4562,11 +4562,11 @@ AC_DEFUN(CF_CHECK_MULTI_BUILD,[
 			i=`expr $i + 1`
 		done
 		${CAT} config/config.h.footer | ${SED} 1,2d >> config.h
-		${MKDIR} ${[]PROJECT[]_PATH}/include/[]PROJECT[]/CONFIG 2>/dev/null
-		if test -f ${[]PROJECT[]_PATH}/include/[]PROJECT[]/CONFIG/config.h ; then
-			if test "`${DIFF} ${[]PROJECT[]_PATH}/include/[]PROJECT[]/CONFIG/config.h config.h`" != "" ; then
-				${RM} ${[]PROJECT[]_PATH}/include/PROJECT/CONFIG/config.h
-				${MV} config.h  ${[]PROJECT[]_PATH}/include/[]PROJECT[]/CONFIG/config.h
+		${MKDIR} ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG 2>/dev/null
+		if test -f ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG/config.h ; then
+			if test "`${DIFF} ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG/config.h config.h`" != "" ; then
+				${RM} ${PROJECT[]_PATH}/include/PROJECT/CONFIG/config.h
+				${MV} config.h  ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG/config.h
 			else
 				${RM} config.h
 			fi
@@ -4694,20 +4694,10 @@ AC_DEFUN(CF_GSL, [
 	if test "${GSL_SUPPORT}" = "true" ; then	
 		AC_MSG_RESULT(enabled)
 
-		AC_DEFINE([]PROJECTUPPER[]_HAS_GSL)
-		AC_DEFINE([]PROJECTUPPER[]_HAS_GSL_H)
+		AC_DEFINE(PROJECT[]_HAS_GSL)
+		AC_DEFINE(PROJECT[]_HAS_GSL_H)
 
 		AC_MSG_CHECKING(for GSL header files)
-		if test "${GSL_INCPATH}" = "" ; then
-			AC_MSG_RESULT([Please specify the path to <gsl/gsl_version.h>])
-		  AC_MSG_RESULT([by passing the option --with-gsl-incl=DIR to configure.])
-		  AC_MSG_RESULT()
-		  AC_MSG_RESULT([GSL is needed for signal processing.])
-		  AC_MSG_RESULT([Please install the library on your system, or disable it with --disable-gsl.])
-		  AC_MSG_RESULT()
-			CF_ERROR
-		fi
-
    	CF_FIND_HEADER(GSL_INCDIR, gsl/gsl_version.h, ${GSL_INCPATH})
 		if test "${GSL_INCDIR}" = "" ; then
       AC_MSG_RESULT((not found!))
@@ -4721,8 +4711,10 @@ AC_DEFUN(CF_GSL, [
 			CF_ERROR
 		  CF_ERROR
 	  else
+			dnl  remove trailing '/gsl' from the include path
+			GSL_INCDIR=`echo ${GSL_INCDIR} | sed "s/gsl$//"` 
   		AC_MSG_RESULT((${GSL_INCDIR}))
-  		[]PROJECTUPPER[]_INCLUDES="${[]PROJECTUPPER[]_INCLUDES} -I${GSL_INCDIR}"
+  		PROJECT[]_INCLUDES="${PROJECT[]_INCLUDES} -I${GSL_INCDIR}"
   	fi
 
 		dnl
@@ -4730,9 +4722,9 @@ AC_DEFUN(CF_GSL, [
 		dnl
 	
 	  AC_MSG_CHECKING(for libgsl.so)
-  	if test "${GSL_LIB_DIR}" != "" ; then
-      if test -a "${GSL_LIB_DIR}/libgsl.a" ; then
-		  	GSL_LIBDIR="${GSL_LIB_DIR}/"
+  	if test "${GSL_LIBDIR}" != "" ; then
+      if test -a "${GSL_LIBDIR}/libgsl.a" ; then
+		  	GSL_LIBDIR="${GSL_LIBDIR}/"
   		fi
   	fi	
 		CF_FIND_LIB(GSL_LIBDIR, libgsl, ${GSL_LIBPATH})
@@ -4742,18 +4734,17 @@ AC_DEFUN(CF_GSL, [
 		  AC_MSG_RESULT()
 		  AC_MSG_RESULT([The GSL library could not be found. Please specify the path to libgsl.a])
 		  AC_MSG_RESULT([by passing the option --with-gsl-libs=DIR to configure.])
-		  AC_MSG_RESULT([You may also set the environment variable GSL_LIB_DIR to the correct])
+		  AC_MSG_RESULT([You may also set the environment variable GSL_LIBDIR to the correct])
 		  AC_MSG_RESULT([path - configure will recognize this, too.])
 		  AC_MSG_RESULT()
-		  AC_MSG_RESULT([GSL is needed for signal processing.])
 		  AC_MSG_RESULT([Please install the library on your system, or disable it with --disable-gsl.])
 		  AC_MSG_RESULT()
 			CF_ERROR
 	  else
 			AC_MSG_CHECKING(for libgslcblas.so)
-			if test "${GSL_LIB_DIR}" != "" ; then
-				if test -a "${GSL_LIB_DIR}/libgslcblas.a" ; then
-					AC_MSG_RESULT(${GSL_LIB_DIR}/libgslcblas.a)
+			if test "${GSL_LIBDIR}" != "" ; then
+				if test -a "${GSL_LIBDIR}/libgslcblas.a" ; then
+					AC_MSG_RESULT(${GSL_LIBDIR}/libgslcblas.a)
 				else
 					AC_MSG_RESULT((not found!))
 					AC_MSG_RESULT()
@@ -4767,10 +4758,8 @@ AC_DEFUN(CF_GSL, [
 					AC_MSG_RESULT()
 					CF_ERROR
 				fi
-			fi	
-	
-  		AC_MSG_RESULT((${GSL_LIBDIR}))
-  		[]PROJECTUPPER[]_LIBS="${[]PROJECTUPPER[]_LIBS} -L${GSL_LIBDIR} -lgsl -lgslcblas"	
+			fi		
+  		GSL_LIBS="${GSL_LIBS} -L${GSL_LIBDIR} -lgsl -lgslcblas"	
   	fi
 
 		PROJECT[]_HAS_GSL=true

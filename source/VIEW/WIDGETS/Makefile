@@ -1,3 +1,12 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.26 2006/01/26 16:12:55 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
+#
+
 DIRECTORY=VIEW/WIDGETS
 
 # Where the headers of the derived classes reside
@@ -48,7 +57,7 @@ PYTHON_MOC_SOURCES=\
 include ../../common.mak
 -include .Dependencies
 
-BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
+BALL_INCLUDES+=$(PYTHON_INCLUDES)
 
 depend: $(MOC_SOURCES)
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RMSDMinimizer.C,v 1.1 2006/01/23 20:45:03 oliver Exp $
+// $Id: RMSDMinimizer.C,v 1.2 2006/01/26 16:12:54 oliver Exp $
 //
 // Compute RMSD-optimal transformation for two structures
 // Coutsalis et al, J. Comput. Chem., 25(15), 1849 (2004)
@@ -27,7 +27,6 @@ using namespace std;
 namespace BALL
 {
 
-
 	void RMSDMinimizer::extractCAlpha(const AtomContainer& A, const AtomContainer& B)
 	{
 		// Remove old coordinates.
@@ -35,7 +34,7 @@ namespace BALL
 		positions_b_.clear();
 
 		// Fill with new C_alpha coordinates
-		for (AtomIterator ai = S1.beginAtom(); +ai; ++ai)
+		for (AtomConstIterator ai = A.beginAtom(); +ai; ++ai)
 		{
 			if ((ai->getName() == "CA") && (ai->getElement() == PTE[Element::C]))
 			{
@@ -43,7 +42,7 @@ namespace BALL
 			}
 		}
 	
-		for (AtomIterator ai = S2.beginAtom(); +ai; ++ai)
+		for (AtomConstIterator ai = B.beginAtom(); +ai; ++ai)
 		{
 			if ((ai->getName() == "CA") && (ai->getElement() == PTE[Element::C]))
 			{
@@ -52,11 +51,11 @@ namespace BALL
 		}
 	}
 
-	void RMSDMinimizer::computeTransformation()
+	double RMSDMinimizer::computeTransformation()
 		throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates)
 	{
 		// Make sure our two point sets have the same size...
-		if (positions_a_.size() != positsions_b_.size())
+		if (positions_a_.size() != positions_b_.size())
 		{
 			throw IncompatibleCoordinateSets(__FILE__, __LINE__, positions_a_.size(), positions_b_.size());
 		}
@@ -72,8 +71,8 @@ namespace BALL
 		Vector3 barycenter_B;
 		for (Position i = 0; i < positions_a_.size(); ++i)
 		{
-			barycenter_A += postions_a_[i];
-			barycenter_B += postions_b_[i];
+			barycenter_A += positions_a_[i];
+			barycenter_B += positions_b_[i];
 		}
 		barycenter_A /= (double)positions_a_.size();
 		barycenter_B /= (double)positions_b_.size();
@@ -93,9 +92,9 @@ namespace BALL
 			for (Position j = 0; j < 3; ++j)
 			{
 				R(i,j) = 0.0;
-				for (Position k = 0; k < X.size(); ++k)
+				for (Position k = 0; k < positions_a_.size(); ++k)
 				{
-					R(i,j) += X[k][i] * Y[k][j];
+					R(i,j) += positions_a_[k][i] * positions_b_[k][j];
 				}
 			}
 		}
@@ -138,13 +137,13 @@ namespace BALL
 		// move to the barycenter of B. This will (optimally) map A onto B.
 		translation_1_ = -barycenter_A;
 		q_max.getRotationMatrix(transformation_);
-		translation_2 = barycenter_B;
+		translation_2_ = barycenter_B;
 
 		// Compute final RMSD
 		double sum_of_squares = 0.0;
-		for (Position i = 0; i < X.size(); ++i)
+		for (Position i = 0; i < positions_a_.size(); ++i)
 		{
-			sum_of_squares += X[i].getSquareLength() + Y[i].getSquareLength();
+			sum_of_squares += positions_a_[i].getSquareLength() + positions_b_[i].getSquareLength();
 		}
 		double rmsd = sqrt(fabs((sum_of_squares - 2.0 * eval_max)) / double(positions_a_.size()));
 

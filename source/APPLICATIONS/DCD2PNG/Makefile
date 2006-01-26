@@ -1,11 +1,16 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.4 2005/12/23 17:02:30 amoll Exp $
+# $Id: Makefile,v 1.5 2006/01/26 16:12:53 oliver Exp $
+#
+# Author:
+#   Andreas Moll
+#   Oliver Kohlbacher
 #
 
-EXECUTABLE=DCD2PNG
 DIRECTORY=APPLICATIONS/DCD2PNG
+
+EXECUTABLE=DCD2PNG
 
 all:	$(EXECUTABLE)
 
@@ -13,8 +18,6 @@ clean:	default_clean
 
 include ../../common.mak
 -include .Dependencies
-
-BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 
 CPP_SOURCES=\
 	main.C\

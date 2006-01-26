@@ -1,8 +1,15 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
 #
-# $Id: Makefile,v 1.53 2006/01/10 13:52:25 oliver Exp $
+# $Id: Makefile,v 1.54 2006/01/26 16:12:55 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
 #
 
 DIRECTORY=VIEW/DIALOGS
+
+include ../../config.mak
 
 # Where the headers of the derived classes reside
 HEADER_DIR=$(BALL_PATH)/include/BALL/$(DIRECTORY)
@@ -11,10 +18,6 @@ HEADER_DIR=$(BALL_PATH)/include/BALL/$(DIRECTORY)
 UIC_DIR=$(BALL_PATH)/include/BALL/VIEW/UIC
 
 THISLIB=$(LIBNAME)
-
-FFT_DEPENDENT_SOURCES=$(BALL_HAS_FFTW:true=geometricFitDialog.C geometricFitDialogData.C)
-FFT_DEPENDENT_MOC_SOURCES=$(BALL_HAS_FFTW:true=geometricFitDialog_moc.C geometricFitDialogData_moc.C)
-FFT_DEPENDENT_UIC_SOURCES=$(BALL_HAS_FFTW:true=geometricFitDialogData.C)
 
 CPP_SOURCES=\
 	amberConfigurationDialog.C\
@@ -177,12 +180,18 @@ UIC_SOURCES=$(FFT_DEPENDENT_UIC_SOURCES)\
 	snapShotVisualisationData.C\
 	stageSettingsData.C
 
+ifeq ($(BALL_HAS_FFTW),true)
+	CPP_SOURCES+=geometricFitDialog.C geometricFitDialogData.C
+	MOC_SOURCES+=geometricFitDialog_moc.C geometricFitDialogData_moc.C
+	UIC_SOURCES+=geometricFitDialogData.C
+endif
+
+
 UIC_HDR=$(UIC_SOURCES:Data.C=.dh)
 
-include ../../common.mak
+include ../../rules.mak
+include ../../targets.mak
 -include .Dependencies
-
-BALL_INCLUDES=$(VIEW_INCLUDES)
 
 molecularFileDialog_moc.C: $(HEADER_DIR)/molecularFileDialog.h
 	$(MOC) $(HEADER_DIR)/molecularFileDialog.h -o $@

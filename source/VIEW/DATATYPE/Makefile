@@ -1,3 +1,12 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.12 2006/01/26 16:12:54 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
+#
+
 DIRECTORY=VIEW/DATATYPE
 
 THISLIB=$(LIBNAME)
@@ -14,5 +23,3 @@ CPP_SOURCES=\
 
 include ../../common.mak
 -include .Dependencies
-
-BALL_INCLUDES=$(VIEW_INCLUDES)
