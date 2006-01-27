@@ -23,7 +23,7 @@ namespace BALL
     		\ingroup  ViewDialogs
 				@see GeometricFit
 		 */
-		class BALL_EXPORT GeometricFitDialog : 
+		class BALL_VIEW_EXPORT GeometricFitDialog : 
 			public QDialog,
 			public Ui_GeometricFitDialogData,
 			public PreferencesEntry

@@ -256,11 +256,11 @@ namespace BALL
 			throw()
 		{
 			MainControl* mc = 0;
-			#ifdef BALL_PLATFORM_WINDOWS
-				mc = dynamic_cast<MainControl*>(qApp->mainWidget());
-			#else
+//   			#ifdef BALL_PLATFORM_WINDOWS
+//   				mc = dynamic_cast<MainControl*>(qApp->mainWidget());
+//   			#else
 				mc = MainControl::getInstance(0);
-			#endif
+//   			#endif
 
 			#ifdef BALL_VIEW_DEBUG
 				if (mc == 0)

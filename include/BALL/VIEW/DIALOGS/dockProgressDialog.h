@@ -25,7 +25,7 @@ namespace BALL
 		/**	Dialog for showing the progress during a docking calculation.
     		\ingroup  ViewDialogs
 		 */
-		class BALL_EXPORT DockProgressDialog : 
+		class BALL_VIEW_EXPORT DockProgressDialog : 
 			public QDialog,
 			public Ui_DockProgressDialogData
 		{ 

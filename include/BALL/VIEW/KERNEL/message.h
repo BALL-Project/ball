@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.69.2.5 2006/01/19 14:31:42 amoll Exp $
+// $Id: message.h,v 1.69.2.6 2006/01/27 00:39:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -927,7 +927,7 @@ class BALL_VIEW_EXPORT RegisterHelpSystemMessage
 
 //////////////// DOCKING ///////////////////////
 /// Message to notify about a new DockResult
-class BALL_EXPORT NewDockResultMessage
+class BALL_VIEW_EXPORT NewDockResultMessage
 	:public CompositeMessage
 {
 	public:
@@ -954,7 +954,7 @@ class BALL_EXPORT NewDockResultMessage
 };
 
 /// Message to notify dock result should be shown
-class BALL_EXPORT ShowDockResultMessage
+class BALL_VIEW_EXPORT ShowDockResultMessage
 	:public Message
 {
 	public:
@@ -999,7 +999,7 @@ class BALL_EXPORT ShowDockResultMessage
 };
 
 /// Message to notify docking has finished
-class BALL_EXPORT DockingFinishedMessage
+class BALL_VIEW_EXPORT DockingFinishedMessage
 	:public Message
 {
 	public:

@@ -31,7 +31,7 @@ clean:
 	cd "$(MAKEDIR)"
 	$(MYDEL) $(TARGETDIR)\*.*
 
-libBALL.dll:   $(NO_OPTIMIZATION_OBJS)  $(OBJS) 
+libBALL.dll:   $(NO_OPTIMIZATION_OBJS)  $(OBJS) $(OBJS2)
 	$(LINKDLL) /OUT:$(TARGETDIR)\libBALL.dll 
 
 .c.obj:

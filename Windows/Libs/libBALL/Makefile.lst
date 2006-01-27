@@ -115,6 +115,7 @@ libBALL.obj\
 ..\..\..\source\MATHS\vector2.obj\
 ..\..\..\source\MATHS\vector3.obj\
 ..\..\..\source\MATHS\vector4.obj\
+..\..\..\source\MATHS\FFT1D.obj ..\..\..\source\MATHS\FFT2D.obj ..\..\..\source\MATHS\FFT3D.obj\
 ..\..\..\source\MOLMEC\AMBER\amber.obj\
 ..\..\..\source\MOLMEC\AMBER\amberBend.obj\
 ..\..\..\source\MOLMEC\AMBER\amberNonBonded.obj\
@@ -245,12 +246,5 @@ libBALL.obj\
 ..\..\..\source\STRUCTURE\triangulatedSAS.obj\
 ..\..\..\source\STRUCTURE\triangulatedSES.obj\
 ..\..\..\source\STRUCTURE\triangulatedSurface.obj\
-..\..\..\source\STRUCTURE\UCK.obj\
-..\..\..\source\SYSTEM\directory.obj\
-..\..\..\source\SYSTEM\file.obj\
-..\..\..\source\SYSTEM\fileSystem.obj\
-..\..\..\source\SYSTEM\path.obj\
-..\..\..\source\SYSTEM\socket.obj\
-..\..\..\source\SYSTEM\sysinfo.obj\
-..\..\..\source\SYSTEM\TCPTransfer.obj\
-..\..\..\source\SYSTEM\timer.obj
+..\..\..\source\STRUCTURE\UCK.obj ..\..\..\source\STRUCTURE\DOCKING\amberEvaluation.obj ..\..\..\source\STRUCTURE\DOCKING\dockResult.obj ..\..\..\source\STRUCTURE\DOCKING\energeticEvaluation.obj ..\..\..\source\STRUCTURE\DOCKING\geometricFit.obj ..\..\..\source\STRUCTURE\DOCKING\conformationSet.obj ..\..\..\source\STRUCTURE\DOCKING\dockingAlgorithm.obj ..\..\..\source\STRUCTURE\DOCKING\forceFieldEvaluation.obj ..\..\..\source\STRUCTURE\DOCKING\randomEvaluation.obj ..\..\..\source\SYSTEM\directory.obj ..\..\..\source\SYSTEM\file.obj ..\..\..\source\SYSTEM\fileSystem.obj ..\..\..\source\SYSTEM\path.obj ..\..\..\source\SYSTEM\socket.obj ..\..\..\source\SYSTEM\sysinfo.obj ..\..\..\source\SYSTEM\TCPTransfer.obj ..\..\..\source\SYSTEM\timer.obj
+#stupid WINDOWS: no more than 255 lines!

@@ -1,6 +1,6 @@
 
 !INCLUDE Makefile.lst
-!INCLUDE  ..\..\Makefile_options.txt
+!INCLUDE ..\..\Makefile_options.txt
 
 
 VIEW_DEFINES	= /D BALL_VIEW_BUILD_DLL /D BALL_QT_HAS_THREADS /D QT_THREAD_SUPPORT  
@@ -20,9 +20,7 @@ UICDIR = "$(INC_DIR)\BALL\VIEW\UIC"
 .ui.myui:
 	echo running uic and moc for $(*B)
 	$(QTDIR)\bin\uic -o "$(UICDIR)\$(*B)Data.h"  "$(*).ui"
-	$(QTDIR)\bin\uic -o "$(*)Data.C" -impl "$(UICDIR)\$(*B)Data.h" "$(*).ui"
 	$(QTDIR)\bin\moc -o "mocfiles\$(*B)_moc.C"  "$(INC_DIR)\BALL\VIEW\DIALOGS\$(*B).h"
-	$(QTDIR)\bin\moc -o "mocfiles\$(*B)Data_moc.C"  "$(UICDIR)\$(*B)Data.h"
 	echo A >  $(*).myui
 
 .h.mymoc:

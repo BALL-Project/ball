@@ -20,7 +20,7 @@ namespace BALL
 		/** Dialog for showing the docking results.
 			* \ingroup ViewDialogs
 			*/
-		class BALL_EXPORT DockResultDialog : 
+		class BALL_VIEW_EXPORT DockResultDialog : 
 				public QDialog,
 				public Ui_DockResultDialogData
 		{ 

@@ -44,7 +44,7 @@ namespace BALL
 			* For redocking he can specify the euler angles.
     		\ingroup  ViewDialogs
 		 */
-		class BALL_EXPORT DockDialog : 
+		class BALL_VIEW_EXPORT DockDialog : 
 			public QDialog,
 			public Ui_DockDialogData,
 			public PreferencesEntry

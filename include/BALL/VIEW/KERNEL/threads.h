@@ -332,7 +332,7 @@ namespace VIEW
 		};
 
 		/// Thread for Docking
-		class BALL_EXPORT DockingThread
+		class BALL_VIEW_EXPORT DockingThread
 			: public BALLThread
 		{
 			public:
@@ -368,7 +368,7 @@ namespace VIEW
 
 
 		///
-		class BALL_EXPORT DockingFinishedEvent
+		class BALL_VIEW_EXPORT DockingFinishedEvent
 			: public QEvent
 		{
 			public:
