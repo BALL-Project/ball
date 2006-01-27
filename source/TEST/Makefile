@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.220 2006/01/27 11:18:05 oliver Exp $
+# $Id: Makefile,v 1.221 2006/01/27 20:57:46 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -32,14 +32,24 @@ EXECUTABLES =\
 	$(EXECUTABLES_ENERGY)\
 	$(EXECUTABLES_STRUCTURE)\
 	$(EXECUTABLES_QSAR)\
-	$(EXECUTABLES_SOLVATION)
+	$(EXECUTABLES_SOLVATION)\
+	$(EXECUTABLES_OTHERS)
+
+OTHERS_TEST=""
 
 ifeq ($(BALL_HAS_XDR),true)
-	EXECUTABLES += $(XDR_DEPENDENT_EXECUTABLES)
+	EXECUTABLES_OTHERS += $(XDR_DEPENDENT_EXECUTABLES)
+	OTHERS_TEST += $(XDR_DEPENDENT_EXECUTABLES)
 endif
  
 ifeq ($(BALL_HAS_VIEW),true)
-	EXECUTABLES += $(VIEW_DEPENDENT_EXECUTABLES)
+	EXECUTABLES_OTHERS += $(VIEW_DEPENDENT_EXECUTABLES)
+	OTHERS_TEST += $(VIEW_DEPENDENT_EXECUTABLES)
+endif
+ 
+ifeq ($(BALL_HAS_GSL),true)
+	EXECUTABLES_OTHERS += $(GSL_DEPENDENT_EXECUTABLES)
+	OTHERS_TEST += $(GSL_DEPENDENT_EXECUTABLES)
 endif
  
 
@@ -47,6 +57,7 @@ all:	$(EXECUTABLES)
 
 echo:
 	@echo $(EXECUTABLES)
+	@echo $(ALL_TESTS)
 
 include ../rules.mak
 include ../targets.mak
@@ -78,9 +89,10 @@ CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION) -g
 dummy:
 
 # Enable the visualization tests only if we have visualization support
-ALL_TESTS=basic_test system_test	maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test qsar_test solvation_test
-ifeq ($(BALL_HAS_VIEW),true)
-	ALL_TESTS += view_test
+ALL_TESTS=basic_test system_test	maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test qsar_test solvation_test 
+
+ifneq ($(OTHERS_TEST),"")
+	ALL_TESTS+=others_test
 endif
 
 test: info $(ALL_TESTS)
@@ -130,6 +142,9 @@ solvation_test:	$(EXECUTABLES_SOLVATION)
 
 view_test:	$(EXECUTABLES_VIEW)
 	@./runtests -section "VIEW" $(TEST_OPTIONS) $(EXECUTABLES_VIEW)
+
+others_test:	$(EXECUTABLES_OTHERS)
+	@./runtests -section "OTHERS" $(TEST_OPTIONS) $(EXECUTABLES_OTHERS)
 
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.vgr *.log ii_files Templates.DB	SunWS_cache *.TMP core core.* a.out $(EXECUTABLES)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RMSDMinimizer.h,v 1.1 2006/01/26 16:12:50 oliver Exp $
+// $Id: RMSDMinimizer.h,v 1.2 2006/01/27 20:57:46 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -47,23 +47,16 @@ namespace BALL
 			public:
 			TooFewCoordinates(const char*, int, Size);
 		};
-		
-		void extractCAlpha(const AtomContainer& A, const AtomContainer& B);
 
-		/**
-			\return the RMSD of the optimal transformation
-		*/
-		double computeTransformation()
-			throw(IncompatibleCoordinateSets, TooFewCoordinates);
+		typedef std::vector<Vector3> PointVector;
+		typedef std::pair<Matrix4x4, double> Result;
 
+		static Result computeTransformation(const AtomBijection& ab)
+			throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates);
 
-		protected:
-		std::vector<Vector3> positions_a_;
-		std::vector<Vector3> positions_b_;
-		Vector3 translation_1_;
-		Vector3 translation_2_;
-		Matrix4x4 transformation_;
-	};
+		static Result computeTransformation(const PointVector& X, const PointVector& Y)
+			throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates);
+ };
 
 }	// namespace BALL
 

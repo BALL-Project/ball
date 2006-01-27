@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RMSDMinimizer.C,v 1.3 2006/01/26 20:42:39 oliver Exp $
+// $Id: RMSDMinimizer.C,v 1.4 2006/01/27 20:57:46 oliver Exp $
 //
 // Compute RMSD-optimal transformation for two structures
 // Coutsalis et al, J. Comput. Chem., 25(15), 1849 (2004)
@@ -40,62 +40,57 @@ namespace BALL
 	{
 	}
 
-	void RMSDMinimizer::extractCAlpha(const AtomContainer& A, const AtomContainer& B)
-	{
-		// Remove old coordinates.
-		positions_a_.clear();
-		positions_b_.clear();
-
-		// Fill with new C_alpha coordinates
-		for (AtomConstIterator ai = A.beginAtom(); +ai; ++ai)
-		{
-			if ((ai->getName() == "CA") && (ai->getElement() == PTE[Element::C]))
-			{
-				positions_a_.push_back(ai->getPosition());
-			}
-		}
-	
-		for (AtomConstIterator ai = B.beginAtom(); +ai; ++ai)
-		{
-			if ((ai->getName() == "CA") && (ai->getElement() == PTE[Element::C]))
-			{
-				positions_b_.push_back(ai->getPosition());
-			}
-		}
-	}
-
-	double RMSDMinimizer::computeTransformation()
+	RMSDMinimizer::Result RMSDMinimizer::computeTransformation
+		(const AtomBijection& ab)
 		throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates)
 	{
-		// Make sure our two point sets have the same size...
-		if (positions_a_.size() != positions_b_.size())
+		RMSDMinimizer::PointVector X(ab.size());
+		RMSDMinimizer::PointVector Y(ab.size());
+		for (Position i = 0; i < ab.size(); ++i)
 		{
-			throw IncompatibleCoordinateSets(__FILE__, __LINE__, positions_a_.size(), positions_b_.size());
+			X[i] = ab[i].first->getPosition();
+			Y[i] = ab[i].second->getPosition();
+		}
+		return computeTransformation(X, Y);
+	}
+
+	std::pair<Matrix4x4, double> RMSDMinimizer::computeTransformation
+		(const RMSDMinimizer::PointVector& A, const RMSDMinimizer::PointVector& B)
+		throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates)
+	{
+		// Copy the point sets so we can remove the barycenters easily
+		PointVector X(A);
+		PointVector Y(B);
+
+		// Make sure our two point sets have the same size...
+		if (X.size() != Y.size())
+		{
+			throw IncompatibleCoordinateSets(__FILE__, __LINE__, X.size(), Y.size());
 		}
 		// ...and contain at least three atoms each.
-		if (positions_a_.size() < 3)
+		if (X.size() < 3)
 		{
-			throw TooFewCoordinates(__FILE__, __LINE__, positions_a_.size());
+			throw TooFewCoordinates(__FILE__, __LINE__, X.size());
 		}
 
 		
 		// Compute the barycenters (geometric center of mass)
-		Vector3 barycenter_A;
-		Vector3 barycenter_B;
-		for (Position i = 0; i < positions_a_.size(); ++i)
+		Vector3 barycenter_X;
+		Vector3 barycenter_Y;
+		for (Position i = 0; i < X.size(); ++i)
 		{
-			barycenter_A += positions_a_[i];
-			barycenter_B += positions_b_[i];
+			barycenter_X += X[i];
+			barycenter_Y += Y[i];
 		}
-		barycenter_A /= (double)positions_a_.size();
-		barycenter_B /= (double)positions_b_.size();
+		barycenter_X /= (double)X.size();
+		barycenter_Y /= (double)Y.size();
 
 		// Remove the barycenters from the systems so we can get 
 		// the optimal rotation wrt the barycenters only.
-		for (Position i = 0; i < positions_a_.size(); ++i)
+		for (Position i = 0; i < X.size(); ++i)
 		{
-			positions_a_[i] -= barycenter_A;
-			positions_b_[i] -= barycenter_B;
+			X[i] -= barycenter_X;
+			Y[i] -= barycenter_Y;
 		}
 
 		// Calculate correlation matrix R
@@ -105,9 +100,9 @@ namespace BALL
 			for (Position j = 0; j < 3; ++j)
 			{
 				R(i,j) = 0.0;
-				for (Position k = 0; k < positions_a_.size(); ++k)
+				for (Position k = 0; k < X.size(); ++k)
 				{
-					R(i,j) += positions_a_[k][i] * positions_b_[k][j];
+					R(i,j) += X[k][i] * Y[k][j];
 				}
 			}
 		}
@@ -146,21 +141,26 @@ namespace BALL
 		q_max.j =	evec_max[2];
 		q_max.k = evec_max[3];
 	
-		// Store transformation: move barycenter of A to the origin, apply T,
-		// move to the barycenter of B. This will (optimally) map A onto B.
-		translation_1_ = -barycenter_A;
-		q_max.getRotationMatrix(transformation_);
-		translation_2_ = barycenter_B;
+		// Compute the complete transformation: move barycenter of A to the origin, 
+		// apply quaternion,  move to the barycenter of B. This will (optimally) 
+		// map X onto Y.
+		Matrix4x4 t1;
+		t1.setTranslation(-barycenter_X);
+		Matrix4x4 t2;
+		q_max.getRotationMatrix(t2);
+		Matrix4x4 t3;
+		t3.setTranslation(barycenter_Y);
+		Matrix4x4 T = t1 * t2 * t3;
 
 		// Compute final RMSD
 		double sum_of_squares = 0.0;
-		for (Position i = 0; i < positions_a_.size(); ++i)
+		for (Position i = 0; i < X.size(); ++i)
 		{
-			sum_of_squares += positions_a_[i].getSquareLength() + positions_b_[i].getSquareLength();
+			sum_of_squares += X[i].getSquareLength() + Y[i].getSquareLength();
 		}
-		double rmsd = sqrt(fabs((sum_of_squares - 2.0 * eval_max)) / double(positions_a_.size()));
+		double rmsd = sqrt(fabs((sum_of_squares - 2.0 * eval_max)) / double(X.size()));
 
-		return rmsd;
+		return make_pair(T, rmsd);
 	}
 
 } // namespace BALL

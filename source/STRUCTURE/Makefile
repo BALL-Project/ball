@@ -1,4 +1,14 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.47 2006/01/27 20:57:46 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
+#
+
 DIRECTORY=STRUCTURE
+
 THISLIB=$(LIBNAME)
 
 STRUCTURE_SUBDIRS=\
@@ -78,10 +88,7 @@ ifeq ($(BALL_HAS_GSL),true)
 	CPP_SOURCES+=RMSDMinimizer.C
 endif
 
-depend:	\
-	$(SMILES_SOURCES)\
-	$(SMARTS_SOURCES)\
-	subdirsdepend
+depend:	$(SMILES_SOURCES)	$(SMARTS_SOURCES) subdirsdepend
 
 default: echodir $(OBJECTS) dirs
 
