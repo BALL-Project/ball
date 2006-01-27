@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.29 2005/07/16 21:00:31 oliver Exp $
+// $Id: common.h,v 1.29.2.1 2006/01/27 14:49:50 amoll Exp $
 //
 
 #ifndef BALL_MATHS_COMMON_H
@@ -353,10 +353,17 @@ namespace BALL
 			return (abs((double)a - (double)b) < abs((double)max_diff));
 		}
 
+
+		/// round to integral value in floating-point format
+		inline double rint(double x)
+		{
+			if (x < 0.0) return (double)(int)(x - 0.5);
+			else 				 return (double)(int)(x + 0.5);
+		}
+
 	//@}
 		
 	} // namespace Maths
-
 } // namespace BALL
 
 #endif // BALL_MATHS_COMMON_H
