@@ -19,6 +19,10 @@ libVIEW.obj\
 ..\..\..\source\VIEW\DIALOGS\compositeProperties.obj\
 ..\..\..\source\VIEW\DIALOGS\contourSurfaceDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\displayProperties.obj\
+..\..\..\source\VIEW\DIALOGS\dockProgressDialog.obj\
+..\..\..\source\VIEW\DIALOGS\dockResultDialog.obj\
+..\..\..\source\VIEW\DIALOGS\dockDialog.obj\
+..\..\..\source\VIEW\DIALOGS\geometricFitDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\downloadPDBFile.obj\
 #..\..\..\source\VIEW\DIALOGS\editOperationDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\FDPBDialog.obj\
@@ -95,6 +99,7 @@ libVIEW.obj\
 #..\..\..\source\VIEW\WIDGETS\canvasWidget.obj\
 ..\..\..\source\VIEW\WIDGETS\datasetControl.obj\
 ..\..\..\source\VIEW\WIDGETS\dockWidget.obj\
+..\..\..\source\VIEW\WIDGETS\dockingController.obj\
 #..\..\..\source\VIEW\WIDGETS\editableScene.obj\
 #..\..\..\source\VIEW\WIDGETS\editFunctions.obj\
 ..\..\..\source\VIEW\WIDGETS\genericControl.obj\
@@ -116,6 +121,11 @@ mocfiles\coloringSettingsDialog_moc.obj\
 mocfiles\compositeProperties_moc.obj\
 mocfiles\contourSurfaceDialog_moc.obj\
 mocfiles\displayProperties_moc.obj\
+mocfiles\dockDialog_moc.obj\
+mocfiles\dockingController_moc.obj\
+mocfiles\dockProgressDialog_moc.obj\
+mocfiles\dockResultDialog_moc.obj\
+mocfiles\geometricFitDialog_moc.obj\
 mocfiles\downloadPDBFile_moc.obj\
 #mocfiles\editOperationDialog_moc.obj\
 mocfiles\FDPBDialog_moc.obj\
@@ -151,7 +161,7 @@ mocfiles\molecularStructure_moc.obj\
 mocfiles\pyWidget_moc.obj\
 #mocfiles\regularData1DWidget_moc.obj\
 #mocfiles\regularData2DWidget_moc.obj\
-#mocfiles\scene_moc.obj\
+mocfiles\scene_moc.obj\
 #mocfiles\openBruker1DFile_moc.obj\
 #mocfiles\openBruker2DFile_moc.obj
 
@@ -164,6 +174,10 @@ UICS = \
 ..\..\..\source\VIEW\DIALOGS\coloringSettingsDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\compositeProperties.myui\
 ..\..\..\source\VIEW\DIALOGS\contourSurfaceDialog.myui\
+..\..\..\source\VIEW\DIALOGS\dockDialog.myui\
+..\..\..\source\VIEW\DIALOGS\dockResultDialog.myui\
+..\..\..\source\VIEW\DIALOGS\dockProgressDialog.myui\
+..\..\..\source\VIEW\DIALOGS\geometricFitDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\displayProperties.myui\
 ..\..\..\source\VIEW\DIALOGS\downloadPDBFile.myui\
 #..\..\..\source\VIEW\DIALOGS\editOperationDialog.myui\
@@ -187,9 +201,9 @@ UICS = \
 ..\..\..\source\VIEW\DIALOGS\stageSettings.myui
 
 MOCS = \
-#..\..\..\include\BALL\VIEW\WIDGETS\canvasWidget.mymoc\
 ..\..\..\include\BALL\VIEW\WIDGETS\datasetControl.mymoc\
 ..\..\..\include\BALL\VIEW\WIDGETS\dockWidget.mymoc\
+..\..\..\include\BALL\VIEW\WIDGETS\dockingController.mymoc\
 ..\..\..\include\BALL\VIEW\WIDGETS\editableScene.mymoc\
 #..\..\..\include\BALL\VIEW\WIDGETS\editFunctions.mymoc\
 ..\..\..\include\BALL\VIEW\WIDGETS\genericControl.mymoc\
@@ -199,11 +213,13 @@ MOCS = \
 ..\..\..\include\BALL\VIEW\WIDGETS\molecularControl.mymoc\
 ..\..\..\include\BALL\VIEW\WIDGETS\molecularStructure.mymoc\
 ..\..\..\include\BALL\VIEW\WIDGETS\pyWidget.mymoc\
-#..\..\..\include\BALL\VIEW\WIDGETS\regularData1DWidget.mymoc\
-#..\..\..\include\BALL\VIEW\WIDGETS\regularData2DWidget.mymoc\
 ..\..\..\include\BALL\VIEW\WIDGETS\scene.mymoc\
 ..\..\..\include\BALL\VIEW\KERNEL\mainControl.mymoc\
 ..\..\..\include\BALL\VIEW\DIALOGS\molecularFileDialog.mymoc\
-..\..\..\include\BALL\VIEW\DIALOGS\serverPreferences.mymoc\
-..\..\..\include\BALL\VIEW\DIALOGS\openBruker1DFile.mymoc\
-..\..\..\include\BALL\VIEW\DIALOGS\openBruker2DFile.mymoc
+..\..\..\include\BALL\VIEW\DIALOGS\serverPreferences.mymoc
+
+#..\..\..\include\BALL\VIEW\WIDGETS\canvasWidget.mymoc\
+#..\..\..\include\BALL\VIEW\WIDGETS\regularData1DWidget.mymoc\
+#..\..\..\include\BALL\VIEW\WIDGETS\regularData2DWidget.mymoc\
+#..\..\..\include\BALL\VIEW\DIALOGS\openBruker1DFile.mymoc\
+#..\..\..\include\BALL\VIEW\DIALOGS\openBruker2DFile.mymoc
