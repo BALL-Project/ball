@@ -17415,7 +17415,6 @@ if test "${FFTW_SUPPORT}" = true ; then
 
 	echo "$as_me:$LINENO: checking for FFTW headers" >&5
 echo $ECHO_N "checking for FFTW headers... $ECHO_C" >&6
-	if test "${FFTW_INCL}" != "" ; then
 
 	_INCLUDES=
 
@@ -17491,83 +17490,6 @@ echo $ECHO_N "checking for FFTW headers... $ECHO_C" >&6
 
 	FFTW_INCL_PATH="${_INCLUDES}"
 
-	else
-
-	_INCLUDES=
-
-		if test "${FFTW_INCL_PATH}" != "" ; then
-	_INCLUDES=${FFTW_INCL_PATH}
-	fi
-
-	if test "${_INCLUDES}" = "" ; then
-		for i in /usr/include /opt/include  ; do
-			if test -f "$i/fftw3.h" -a "${_INCLUDES}" = ""; then
-				_INCLUDES="$i"
-			fi
-		done
-	fi
-
-	if test "${_INCLUDES}" = "" ; then
-		for i in /usr/*/include /opt/*/include ; do
-			if test -f "$i/fftw3.h" -a "${_INCLUDES}" = ""; then
-				_INCLUDES="$i"
-			fi
-		done
-	fi
-
-	if test "${_INCLUDES}" = "" ; then
-		for i in /opt/*/*/include /usr/*/*/include /usr/local/*/*/include ; do
-			if test -f "$i/fftw3.h" -a "${_INCLUDES}" = ""; then
-				_INCLUDES="$i"
-			fi
-		done
-	fi
-
-	if test "${_INCLUDES}" = "" -a "${FIND}" != "-" ; then
-		if test "${FIND_KNOWS_PATH}" = false ; then
-			FIND_OPT="-name"
-			_TMP_FIND_NAME="fftw3.h"
-			while test _`${EGREP} / $_TMP_FIND_NAME`_ != __ ; do
-				_TMP_FIND_NAME=`echo ${_TMP_FIND_NAME}|${CUT} -d/ -f2-`
-			done
-
-			FIND_ARG="\*${_TMP_FIND_NAME}\*"
-		else
-			FIND_OPT="-path"
-			FIND_ARG="\*fftw3.h\*"
-		fi
-
-		_TMP=`${FIND} /usr ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
-		for j in ${_TMP} ; do
-			if test "${_INCLUDES}" = "" ; then
-				_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
-			fi
-		done
-
-		if test "${_INCLUDES}" = "" ; then
-			_TMP=`${FIND} /opt ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
-			for j in ${_TMP} ; do
-				if test "${_INCLUDES}" = "" ; then
-					_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
-				fi
-			done
-		fi
-
-		if test "${_INCLUDES}" = "" -a "" != ""; then
-			for i in  /dev/null ; do
-				_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
-				for j in ${_TMP} ; do
-					if test "${_INCLUDES}" = "" ; then
-						_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
-					fi
-				done
-			done
-		fi
-	fi
-
-	FFTW_INCL_PATH="${_INCLUDES}"
-
-	fi
 
 	if test "${FFTW_INCL_PATH}" = "" ; then
 		echo "$as_me:$LINENO: result: (not found!)" >&5

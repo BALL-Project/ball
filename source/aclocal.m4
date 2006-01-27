@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.86 2006/01/26 20:42:39 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.87 2006/01/27 14:47:27 oliver Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -2526,11 +2526,7 @@ if test "${FFTW_SUPPORT}" = true ; then
 	FFTW_SUPPORT=true
 
 	AC_MSG_CHECKING(for FFTW headers)
-	if test "${FFTW_INCL}" != "" ; then
-		CF_FIND_HEADER(FFTW_INCL_PATH, fftw3.h, ${FFTW_INCL})
-	else
-		CF_FIND_HEADER(FFTW_INCL_PATH, fftw3.h,)
-	fi
+	CF_FIND_HEADER(FFTW_INCL_PATH, fftw3.h, ${FFTW_INCL})
 
 	if test "${FFTW_INCL_PATH}" = "" ; then
 		AC_MSG_RESULT((not found!))
