@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.47 2005/02/08 19:41:21 oliver Exp $
+// $Id: support.C,v 1.47.8.1 2006/01/27 14:50:25 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/support.h>
@@ -28,16 +28,6 @@ namespace BALL
 
 	namespace MolmecSupport 
 	{
-
-#ifdef BALL_COMPILER_MSVC
-		inline double rint(double x)
-		{
-			if (x < 0.0)
-				return (double)(int)(x - 0.5);
-			else
-				return (double)(int)(x + 0.5);
-		}
-#endif
 
 		// Calculate a vector of non-bonded atom pairs whose distance is
 		// smaller than the value of the distance variable
