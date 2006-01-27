@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.219 2006/01/23 20:45:03 oliver Exp $
+# $Id: Makefile,v 1.220 2006/01/27 11:18:05 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -77,16 +77,14 @@ CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION) -g
 
 dummy:
 
-
+# Enable the visualization tests only if we have visualization support
+ALL_TESTS=basic_test system_test	maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test qsar_test solvation_test
 ifeq ($(BALL_HAS_VIEW),true)
-test:	info simple_tests
-else
-test:	info simple_tests view_tests
+	ALL_TESTS += view_test
 endif
+
+test: info $(ALL_TESTS)
 	@./runtests -success
-
-
-simple_tests:	basic_test system_test	maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test qsar_test solvation_test
 
 info:
 	@./runtests -info

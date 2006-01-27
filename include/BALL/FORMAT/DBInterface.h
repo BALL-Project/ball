@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.h,v 1.4 2006/01/23 20:44:54 oliver Exp $
+// $Id: DBInterface.h,v 1.5 2006/01/27 11:18:05 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -40,6 +40,7 @@ namespace BALL
 	class DBInterface
 	{
 		public:
+		
 		class InvalidQuery
 			:	public Exception::GeneralException
 		{
