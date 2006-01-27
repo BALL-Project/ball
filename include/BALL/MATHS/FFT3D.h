@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.h,v 1.17 2006/01/03 19:10:41 anhi Exp $
+// $Id: FFT3D.h,v 1.17.2.1 2006/01/27 00:40:46 amoll Exp $
 //
 
 #ifndef BALL_MATHS_TFFT3D_H
@@ -89,7 +89,7 @@ namespace BALL
 			//@{
 
 			/// Assignment operator
-			const TFFT3D& operator = (const TFFT3D& TFFT3D)
+ 			const TFFT3D& operator = (const TFFT3D& fft_3d)
 				throw();
 			
 			/** Clear the contents.
@@ -110,8 +110,8 @@ namespace BALL
 
 			/** Equality operator.
 			 */
-			bool operator == (const TFFT3D& TFFT3D) const
-				throw();
+ 			bool operator == (const TFFT3D& fft3d) const
+ 				throw();
 			//@}
 			
 			// @name Accessors
