@@ -26,6 +26,13 @@
 #include <BALL/COMMON/exception.h>
 #include <BALL/DATATYPE/string.h>
 
+#ifdef BALL_COMPILER_MSVC
+double rint (double num) 
+{
+	return floor(num + 0.5);
+}
+#endif
+
 using namespace std;
 
 namespace BALL
@@ -717,16 +724,16 @@ namespace BALL
 			atom_index    = (atom_position + FFT_grid_origin_)/grid_spacing;
 //			std::cout << atom_index << std::endl;
 
-			for (grid_index.x  = (Position)max((int)rint(atom_index.x) - points_to_check, 0);
-					 grid_index.x <= (Position)min((int)rint(atom_index.x) + points_to_check, grid_size - 1);
+			for (grid_index.x  = (Position)BALL_MAX((int)rint(atom_index.x) - points_to_check, 0);
+					 grid_index.x <= (Position)BALL_MIN((int)rint(atom_index.x) + points_to_check, grid_size - 1);
 					 grid_index.x++)
 			{
-				for (grid_index.y  = (Position)max((int)rint(atom_index.y) - points_to_check, 0);
-						 grid_index.y <= (Position)min((int)rint(atom_index.y) + points_to_check, grid_size - 1);
+				for (grid_index.y  = (Position)BALL_MAX((int)rint(atom_index.y) - points_to_check, 0);
+						 grid_index.y <= (Position)BALL_MIN((int)rint(atom_index.y) + points_to_check, grid_size - 1);
 						 grid_index.y++)
 				{
-					for (grid_index.z  = (Position)max((int)rint(atom_index.z) - points_to_check, 0);
-						 	 grid_index.z <= (Position)min((int)rint(atom_index.z) + points_to_check, grid_size - 1);
+					for (grid_index.z  = (Position)BALL_MAX((int)rint(atom_index.z) - points_to_check, 0);
+						 	 grid_index.z <= (Position)BALL_MIN((int)rint(atom_index.z) + points_to_check, grid_size - 1);
 							 grid_index.z++)
 					{
 						// That can be done faster...
