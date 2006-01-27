@@ -28,7 +28,7 @@ namespace BALL
 		/** A class defining the interface for docking algorithms.
 				This is a first iteration.
 		*/
-		class ConformationSet
+		class BALL_EXPORT ConformationSet
 		{
 		  public:
 

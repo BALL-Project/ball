@@ -16,7 +16,7 @@ namespace BALL
 		 *	This trivial class will return the identity scoring, leaving
 		 *	permutation and score unchanged.
 		 */
-		class EnergeticEvaluation
+		class BALL_EXPORT EnergeticEvaluation
 		{
 			public:
 

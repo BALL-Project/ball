@@ -20,7 +20,7 @@ namespace BALL
 		 * 	the conformation set which was produced by the algorithm
 		 *	and the scores, names and options of all scoring functions that were used for the ranking / reranking.
 		 */
-		class DockResult
+		class BALL_EXPORT DockResult
 		{
 			public:
 					
