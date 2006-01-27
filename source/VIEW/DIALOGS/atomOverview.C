@@ -142,27 +142,24 @@ Processor::Result AtomOverview::OverviewProcessor::operator() (Composite& compos
 		s = String(f);
 		c++;
 		table_->setItem(r, c, new QTableWidgetItem(s.c_str()));
-		if (f == 0.0) table_->item(r, c)->setBackgroundColor(Qt::yellow);
-		else
+		
+		// calculate min and max possible charge
+		Position p = (Position) atom->getElement().getGroup();
+		Index min = -8;
+		Index max = 8;
+
+		// HauptGruppe
+		if (p< 3 || p > 13)
 		{
-			// calculate min and max possible charge
-			Position p = (Position) atom->getElement().getGroup();
-			Index min = -8;
-			Index max = 8;
+			if (p > 12) p-= 10;
+			min = -p;
+			max = 8 - p;
+		}
 
-			// HauptGruppe
-			if (p< 3 || p > 13)
-			{
-				if (p > 12) p-= 10;
-				min = -p;
-				max = 8 - p;
-			}
-
-			if (f > (float) max ||
-					f < (float) min)
-			{
-				table_->item(r, c)->setBackgroundColor(Qt::red);
-			}
+		if (f > (float) max ||
+				f < (float) min)
+		{
+			table_->item(r, c)->setBackgroundColor(Qt::red);
 		}
 	}
 

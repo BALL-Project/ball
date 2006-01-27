@@ -26,13 +26,6 @@
 #include <BALL/COMMON/exception.h>
 #include <BALL/DATATYPE/string.h>
 
-#ifdef BALL_COMPILER_MSVC
-double rint (double num) 
-{
-	return floor(num + 0.5);
-}
-#endif
-
 using namespace std;
 
 namespace BALL
