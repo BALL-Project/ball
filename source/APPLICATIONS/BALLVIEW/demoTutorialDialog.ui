@@ -1,0 +1,108 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>DemoTutorialDialogData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>DemoTutorialDialogData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>311</width>
+            <height>375</height>
+        </rect>
+    </property>
+    <property name="baseSize">
+        <size>
+            <width>100</width>
+            <height>100</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>true</bool>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>5</number>
+        </property>
+        <widget class="QLayoutWidget" row="1" column="0">
+            <property name="name">
+                <cstring>layout3</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>cancel_button</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>30</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>Cancel</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>next_button</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>30</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>Next</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QTextBrowser" row="0" column="0">
+            <property name="name">
+                <cstring>text_browser</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>1</horstretch>
+                    <verstretch>1</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="resizePolicy">
+                <enum>AutoOneFit</enum>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>cancel_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DemoTutorialDialogData</receiver>
+        <slot>close()</slot>
+    </connection>
+    <connection>
+        <sender>next_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DemoTutorialDialogData</receiver>
+        <slot>nextStepClicked()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>nextStepClicked()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

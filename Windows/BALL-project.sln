@@ -1,0 +1,102 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BALL library", "Libs\libBALL\BALL-lib.vcproj", "{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VIEW library", "Libs\libVIEW\VIEW-lib.vcproj", "{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Python library", "Libs\Python Module\Python-lib.vcproj", "{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F} = {733D70D5-8CC3-4E97-B8B5-28BC0355F09F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BALLView", "Applications\BALLView\BALLView-app.vcproj", "{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F} = {733D70D5-8CC3-4E97-B8B5-28BC0355F09F}
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F} = {733D70D5-8CC3-4E97-B8B5-28BC0355F09F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tests", "Tests\test.vcproj", "{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Benchmarks", "Benchmarks\benchmarks-project.vcproj", "{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tutorials", "Tutorial\tutorials.vcproj", "{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Python = Python
+		Python Multithreaded = Python Multithreaded
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Debug.ActiveCfg = Debug|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Debug.Build.0 = Debug|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python Multithreaded.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python Multithreaded.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Release.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Release.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Debug.ActiveCfg = Debug|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Debug.Build.0 = Debug|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python Multithreaded.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python Multithreaded.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Release.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Release.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Debug.ActiveCfg = Debug|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Debug.Build.0 = Debug|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python Multithreaded.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python Multithreaded.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Release.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Release.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Debug.ActiveCfg = Debug|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Debug.Build.0 = Debug|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python Multithreaded.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python Multithreaded.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Release.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Release.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Debug.ActiveCfg = Debug|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Debug.Build.0 = Debug|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python Multithreaded.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python Multithreaded.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Release.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Release.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Debug.ActiveCfg = Debug|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Debug.Build.0 = Debug|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python Multithreaded.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python Multithreaded.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Release.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Release.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Debug.ActiveCfg = Debug|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Debug.Build.0 = Debug|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python Multithreaded.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Python Multithreaded.Build.0 = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Release.ActiveCfg = Release|Win32
+		{733D70D5-8CC3-4E97-B8B5-28BC0355F09F}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,884 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: smartsMatcher.C,v 1.5 2006/01/25 14:41:47 bertsch Exp $
+//
+
+#include <BALL/STRUCTURE/smartsMatcher.h>
+#include <BALL/STRUCTURE/smartsParser.h>
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
+
+#include <stack>
+
+using namespace std;
+
+#define SMARTS_MATCHER_DEBUG
+#undef SMARTS_MATCHER_DEBUG
+
+#define REC_DEBUG
+#undef REC_DEBUG
+
+namespace BALL
+{
+	SmartsMatcher::SmartsMatcher()
+	{
+	}
+
+	SmartsMatcher::SmartsMatcher(const SmartsMatcher& /*matcher*/)
+	{
+	}
+
+	SmartsMatcher::~SmartsMatcher()
+	{
+	}
+
+	SmartsMatcher::SmartsMatcher& SmartsMatcher::operator = (const SmartsMatcher& /*matcher*/)
+	{
+		return *this;
+	}
+	
+	vector<HashSet<const Atom*> > SmartsMatcher::match(Molecule& molecule, const String& smarts) 
+		throw(Exception::ParseError)
+	{
+		// TODO:
+		//  - what attributes of the molecule must be set, or external by the user?
+		//  - component level grouping, connected components of the molecule graph
+		//  - chirality (backends not implemented yet; only matches when properties would be set)
+		//  - nested recursive SMARTS (i.e. [$([$(CC)],[$(C)])], why need this? )
+		
+		vector<HashSet<const Atom*> > matches;
+		SmartsParser parser;
+		parser.parse(smarts);
+		SmartsParser::SPNode* root = parser.getRoot();
+
+		if (parser.getNeedsSSSR())
+		{
+			RingPerceptionProcessor rpp;
+			std::vector<std::vector<Atom*> > sssr;
+			rpp.calculateSSSR(sssr, molecule);
+			parser.setSSSR(sssr);
+		}
+
+		rec_matches_.clear();
+		if (parser.isRecursive())
+		{
+			//rec_matches_.clear();
+		
+			// collect all recursive environments of the tree
+			stack<SPNode*> rec_nodes;
+			HashSet<SPNode*> tree_nodes = parser.getNodes();
+			for (HashSet<SPNode*>::Iterator it = tree_nodes.begin(); it != tree_nodes.end(); ++it)
+			{
+				if ((*it)->isRecursive())
+				{
+					rec_nodes.push(*it);
+				}
+			}
+	
+			#ifdef REC_DEBUG
+			cerr << "rec nodes: " << rec_nodes.size() << endl;
+			#endif
+		
+			//HashMap<SPNode*, vector<HashSet<const Atom*> > > rec_matches;
+			while (rec_nodes.size() != 0)
+			{
+				vector<HashSet<const Atom*> > tmp;
+				for (AtomConstIterator it=molecule.beginAtom(); +it; ++it)
+				{
+					RecStruct_ rs;
+					evaluate_(rs, rec_nodes.top(), &*it);
+					if (rs.matched_atoms.size() != 0)
+					{
+						for (Size i = 0; i != rs.matched_atoms.size(); ++i)
+						{
+							//cerr << "eval" << endl;
+							if (evaluateRingEdges_(rs.matched_atoms[i], rs.mapped_atoms[i]))
+							{
+								tmp.push_back(rs.matched_atoms[i]);
+							}
+							//cerr << "eval ring edges" << endl;
+						}
+					}
+				}
+				//cerr << "size of tmp=" << tmp.size() << endl;
+
+				// TODO reduce the multiple matches to unique ones
+
+				
+				if (rec_nodes.top()->getNot())
+				{
+					//cerr << "not" << endl;
+					HashSet<const Atom*> non_match;
+					for (vector<HashSet<const Atom*> >::const_iterator jt = tmp.begin(); jt != tmp.end(); ++jt)
+					{
+						for (HashSet<const Atom*>::ConstIterator it = jt->begin(); +it; ++it)
+						{
+							non_match.insert(*it);
+						}
+					}
+					//cerr << "non_match.size()=" << non_match.size() << endl;
+					
+					HashSet<const Atom*> tmp_match;
+					for (AtomConstIterator it=molecule.beginAtom(); +it; ++it)
+					{
+						if (!non_match.has(&*it))
+						{
+							tmp_match.insert(&*it);
+							//cerr << it->getName();
+						}
+					}
+					rec_matches_[rec_nodes.top()].push_back(tmp_match);
+				}
+				else
+				{
+					rec_matches_[rec_nodes.top()] = tmp;
+				}
+				rec_nodes.pop();
+			}
+
+			#ifdef REC_DEBUG
+			cerr << "#rec env: " << rec_matches_.size() << endl;
+			for (HashMap<SPNode*, vector<HashSet<const Atom*> > >::ConstIterator it = rec_matches_.begin(); +it; ++it)
+			{
+				cerr << it->second.size() << ": ";
+				for (vector<HashSet<const Atom*> >::const_iterator it1 = it->second.begin(); it1 != it->second.end(); ++it1)
+				{
+					cerr << it1->size() << " ";
+					for (HashSet<const Atom*>::ConstIterator it2 = it1->begin(); +it2; ++it2)
+					{
+						cerr << (*it2)->getName() << " ";
+					}
+				}
+				cerr << endl;
+			}
+			#endif
+			
+			
+			//cerr << "recursive smarts not implemented yet" << endl;
+		}
+		//else
+		//{
+			// TODO: better selection heuristic, most discriminating part should be choosen first
+			// 
+			for (AtomConstIterator it=molecule.beginAtom(); +it; ++it)
+			{
+				RecStruct_ rs;
+				evaluate_(rs, root, &*it);
+				#ifdef SMARTS_MATCHER_DEBUG
+				cerr << "SM: found " << rs.matched_atoms.size() << " matchings without considering ring edges" << endl;
+				#endif
+				if (rs.matched_atoms.size() != 0)
+				{
+					for (Size i=0; i!=rs.matched_atoms.size(); ++i)
+					{
+						#ifdef SMARTS_MATCHER_DEBUG
+						cerr << "size of matchings[" << i << "]: " << rs.matched_atoms[i].size() << ", size of mappings[" << i << "]: " << rs.mapped_atoms[i].size() << endl;
+						#endif
+						if (evaluateRingEdges_(rs.matched_atoms[i], rs.mapped_atoms[i]))
+						{
+							matches.push_back(rs.matched_atoms[i]);
+						}
+					}
+				}
+			}
+		//}
+
+		// TODO eliminate double hits while matching, for example CC in alphatic chains, can match C1C2 and C2C1
+		if (matches.size() != 0)
+		{
+			vector<HashSet<const Atom*> > unique_matches;
+			unique_matches.push_back(matches[0]);
+			for (vector<HashSet<const Atom*> >::const_iterator it1 = matches.begin(); it1 != matches.end(); ++it1)
+			{
+				bool has(false);
+				for (vector<HashSet<const Atom*> >::const_iterator it2 = unique_matches.begin(); it2 != unique_matches.end(); ++it2)
+				{
+					if (it1->size() == it2->size())
+					{
+						bool equal(true);
+						for (HashSet<const Atom*>::ConstIterator it3 = it1->begin(); it3 != it1->end(); ++it3)
+						{
+							if (!it2->has(*it3))
+							{
+								equal = false;
+								break;
+							}
+						}
+						if (equal)
+						{
+							has = true;
+						}
+					}
+				}
+				if (!has)
+				{
+					unique_matches.push_back(*it1);
+				}
+			}
+			matches = unique_matches;
+		}
+#ifdef SMARTS_MATCHER_DEBUG
+		cerr << "SM: found " << matches.size() << /* " matches from " << matched_atoms.size() << " seeds:" <<*/ endl;
+		for (vector<HashSet<const Atom*> >::const_iterator it=matches.begin(); it!=matches.end(); ++it)
+		{
+			cerr << "> size=" << it->size();
+			for (HashSet<const Atom*>::ConstIterator it1=it->begin(); +it1; ++it1)
+			{
+				cerr << "\t" << (*it1)->getElement().getSymbol() << "(" << *it1 << ")";
+			}
+			cerr << endl;
+		}
+#endif
+
+		return matches;
+	}
+
+	bool SmartsMatcher::evaluateRingEdges_(	const HashSet<const Atom*>& match, const HashMap<const SPNode*, const Atom*>& mapping)
+	{
+		#ifdef SMARTS_MATCHER_DEBUG
+		cerr << "bool SmartsMatcher::evaluateRingEdges_( const HashSet<const Atom*>& match, const HashMap<const SPNode*, const Atom*>& mapping)" << endl;
+		#endif
+		HashMap<Size, vector<SmartsParser::SPNode*> > ring_bonds = SmartsParser::state.current_parser->getRingConnections();
+		if (ring_bonds.size() > 0)
+		{
+		
+			for (HashMap<Size, vector<SmartsParser::SPNode*> >::ConstIterator it=ring_bonds.begin(); +it; ++it)
+			{
+				if (it->second.size()%2 != 0)
+				{
+					throw Exception::ParseError(__FILE__, __LINE__, "wrong number of bond indices", String(it->first));
+				}
+				for (Size i=0; i!=it->second.size(); i+=2)
+				{
+					if (mapping.has(it->second[i]) && mapping.has(it->second[i+1]))
+					{
+						const Atom* first = mapping[it->second[i]];
+						const Atom* second = mapping[it->second[i+1]];
+						if (!match.has(first) || !match.has(second))
+						{
+							return false;
+						}
+						else
+						{
+							if (!first->isBoundTo(*second))
+							{
+								return false;
+							}
+						}
+					}
+					else
+					{
+						//cerr << "rings bonds not within this mapping" << endl;
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
+	void SmartsMatcher::evaluate_(RecStruct_& rs, SPNode* start_node, const Atom* start_atom)
+	{
+		#ifdef SMARTS_MATCHER_DEBUG
+		cerr << "void SmartsMatcher::evaluate_(start_node=" << start_node << ", start_atom=" << start_atom->getName() << ")" << endl;
+		#endif
+		evaluate_node_(rs, start_node, start_atom);
+		return;
+	}
+
+	bool SmartsMatcher::evaluate_node_(RecStruct_& rs, SPNode* start_node, const Atom* start_atom)
+	{
+		#ifdef SMARTS_MATCHER_DEBUG
+		cerr << "bool SmartsMatcher::evaluate_node_(start_node=" <<start_node << ", start_atom=" << start_atom->getName() << ")" << endl;
+		#endif
+		// the results are stored in here
+		RecStruct_ result_rs;
+		bool consider_as_noninternal(false);
+
+		if (start_node->isRecursive())
+		{
+			// if rec_matches does _not_ has the node, we are in the pre phase
+			// (collecting all rec environment matches)
+			if (rec_matches_.has(start_node)) 
+			{
+				RecStruct_ new_rs;
+				for (vector<HashSet<const Atom*> >::iterator it = rec_matches_[start_node].begin(); it != rec_matches_[start_node].end(); ++it)
+				{
+					if (it->has(start_atom))
+					{
+						//cerr << start_atom->getName() << endl;
+						if (rs.matched_atoms.size() == 0)
+						{
+							HashSet<const Atom*> matched_atoms;
+							matched_atoms.insert(start_atom);
+							new_rs.matched_atoms.push_back(matched_atoms);
+							new_rs.visited_atoms.push_back(matched_atoms);
+							HashMap<const SPNode*, const Atom*> mapped_atoms;
+							mapped_atoms[start_node] = start_atom;
+							new_rs.mapped_atoms.push_back(mapped_atoms);
+							HashSet<const SPEdge*> visited_edges;
+							new_rs.visited_edges.push_back(visited_edges);
+							HashSet<const Bond*> visited_bonds;
+							new_rs.visited_bonds.push_back(visited_bonds);
+						}
+					
+						for (Size i = 0; i != rs.matched_atoms.size(); ++i)
+						{
+							// add the matched atom
+							//if (!rs.matched_atoms[i].has(start_atom))
+							//{
+								new_rs.add(rs, i);
+								new_rs.matched_atoms[new_rs.matched_atoms.size()-1].insert(start_atom);
+								new_rs.visited_atoms[new_rs.visited_atoms.size()-1].insert(start_atom);
+								new_rs.mapped_atoms[new_rs.mapped_atoms.size()-1][start_node] = start_atom;
+							//}
+						}	
+					}
+				}
+				
+				// count relevant edges TODO
+				Size rel_edges_count(0);
+				HashSet<SPEdge*> relevant_edges;
+				for (SmartsParser::SPNode::EdgeIterator eit = start_node->begin(); eit != start_node->end(); ++eit)
+				{
+					if (!SmartsParser::state.current_parser->hasRecursiveEdge(*eit))
+					{
+						rel_edges_count++;
+						relevant_edges.insert(*eit);
+					}
+				}
+				if (rel_edges_count == 0)
+				{
+					result_rs.add(new_rs);
+				}
+			
+				// the node must be non-internal? TODO
+				//cerr << new_rs.matched_atoms.size();
+				//if (new_rs.matched_atoms.size() != 0)
+				//{
+				//	cerr << new_rs.matched_atoms[0].size() << endl;
+				//}
+				//cerr << endl;
+				
+				
+				for (Size i = 0; i != new_rs.matched_atoms.size(); ++i)
+				{
+					for (Atom::BondConstIterator bit = start_atom->beginBond(); bit != start_atom->endBond(); ++bit)
+          {
+            if (!new_rs.visited_bonds[i].has(&*bit))
+            {
+              for (SmartsParser::SPNode::EdgeIterator eit = start_node->begin(); eit != start_node->end(); ++eit)
+              {
+                if (!new_rs.visited_edges[i].has(*eit) && relevant_edges.has(*eit))
+                {
+									
+                  RecStruct_ first_new_rs;
+                  first_new_rs.add(new_rs, i);
+                  first_new_rs.mapped_atoms[0][start_node] = start_atom;
+                  first_new_rs.matched_atoms[0].insert(start_atom);
+                  first_new_rs.visited_atoms[0].insert(start_atom);
+                  first_new_rs.visited_bonds[0].insert(&*bit);
+                  first_new_rs.visited_edges[0].insert(*eit);
+	                if (evaluate_edge_(first_new_rs, *eit, start_atom, &*bit))
+                  {
+                    if (start_node->countEdges() > 1)
+                    {
+                      for (Size j = 0; j != first_new_rs.matched_atoms.size(); ++j)
+                      {
+                        RecStruct_ second_new_rs;
+                        second_new_rs.add(first_new_rs, j);
+                        if (evaluate_node_(second_new_rs, start_node, start_atom))
+                        {
+                          result_rs.add(second_new_rs);
+                        }
+                      }
+                    }
+                    else
+                    {
+                      result_rs.add(first_new_rs);
+                    }
+                  }
+								}
+							}
+						}
+					}
+				}
+				rs = result_rs;
+				return rs.matched_atoms.size() != 0;
+			}
+		}
+
+		// if it is a internal node, we must consider the logical operator
+		if (start_node->isInternal())
+		{
+			#ifdef SMARTS_MATCHER_DEBUG
+			cerr << "node is internal" << endl;
+			#endif
+			// both edges must be set
+			SPEdge* first_edge = start_node->getFirstEdge();
+			SPEdge* second_edge = start_node->getSecondEdge();
+			SmartsParser::LogicalOperator log_op = start_node->getLogicalOperator();
+			if (log_op == SmartsParser::AND || log_op == SmartsParser::AND_LOW)
+			{
+				if (rs.matched_atoms.size() == 0)
+				{
+					RecStruct_ first_new_rs;
+					if (evaluate_node_(first_new_rs, first_edge->getSecondSPNode(), start_atom))
+					{
+						for (Size i = 0; i != first_new_rs.matched_atoms.size(); ++i)
+						{
+							RecStruct_ second_new_rs;
+							//cerr << first_new_rs.matched_atoms[i].size() << endl;
+							second_new_rs.add(first_new_rs, i);
+							if (evaluate_node_(second_new_rs, second_edge->getSecondSPNode(), start_atom))
+							{
+								result_rs.add(second_new_rs);
+							}
+						}
+					}
+				}
+				else
+				{
+					// for every possible beginning
+					for (Size i=0; i!=rs.matched_atoms.size(); ++i)
+					{
+						// create new data structures
+						RecStruct_ first_new_rs;
+						first_new_rs.add(rs, i);
+						// for each bond
+						for (Atom::BondConstIterator it1 = start_atom->beginBond(); it1 != start_atom->endBond(); ++it1)
+						{
+							// can it be matched?
+							if (evaluate_edge_(first_new_rs, first_edge, start_atom, &*it1))
+							{
+								// now try to match the second edge
+								for (Size j = 0; j != first_new_rs.matched_atoms.size(); ++j)
+								{
+									RecStruct_ second_new_rs;
+									second_new_rs.add(first_new_rs, j);
+									for (Atom::BondConstIterator it2=start_atom->beginBond(); it2!=start_atom->endBond(); ++it2)
+									{
+										if (evaluate_edge_(second_new_rs, second_edge, start_atom, &*it2))
+										{
+											result_rs.add(second_new_rs);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				#ifdef SMARTS_MATCHER_DEBUG
+				cerr << "log_op=OR" << endl;
+				#endif
+				if (log_op == SmartsParser::OR)
+				{
+					if (rs.matched_atoms.size() == 0)
+					{
+						RecStruct_ new_rs;
+						if (evaluate_node_(new_rs, first_edge->getSecondSPNode(), start_atom))
+						{
+							result_rs.add(new_rs);
+						}
+						new_rs.clear();
+						if (evaluate_node_(new_rs, second_edge->getSecondSPNode(), start_atom))
+						{
+							result_rs.add(new_rs);
+						}
+					}
+					else
+					{
+						for (Size i = 0; i != rs.matched_atoms.size(); ++i)
+						{
+							RecStruct_ new_rs;
+							new_rs.add(rs, i);
+
+							if (evaluate_node_(new_rs, first_edge->getSecondSPNode(), start_atom))
+							{
+								result_rs.add(new_rs);
+							}
+											
+							new_rs.clear();
+							new_rs.add(rs, i);
+						
+							if (evaluate_node_(new_rs, second_edge->getSecondSPNode(), start_atom))
+							{
+								result_rs.add(new_rs);
+							}
+						}
+						
+					}
+				}
+			}
+			if (start_node->countEdges() != 0)
+			{
+				//cerr << "consider node as noninternal" << endl;
+				consider_as_noninternal = true;
+			}
+		}
+
+		// normal mode		
+		if (!start_node->isInternal() || consider_as_noninternal)
+		{
+			RecStruct_ new_rs = rs;
+			if (consider_as_noninternal || start_node->getSPAtom()->equals(start_atom))
+			{
+				if (consider_as_noninternal)
+				{
+					if (result_rs.matched_atoms.size() == 0)
+					{
+						return false;
+					}
+
+					//cerr << "size of matched atoms: " << result_rs.matched_atoms.size() << endl;
+					
+					// prepare the matches
+					new_rs = result_rs;
+					result_rs.clear();
+				}
+
+				//cerr << "size of matched atoms: " << result_rs.matched_atoms.size() << " " << new_rs.matched_atoms.size() << endl;
+				
+				// first matched node?
+				if (new_rs.matched_atoms.size() == 0)
+				{
+					// just add the found atom and node to the structures
+					// the details are further processed by the next for loop
+					#ifdef SMARTS_MATCHER_DEBUG
+					cerr << "matched_Atoms.size() == 0" << endl;
+					#endif
+					
+					HashSet<const Atom*> matched_atom;
+					matched_atom.insert(start_atom);
+					new_rs.matched_atoms.push_back(matched_atom);
+					HashMap<const SPNode*, const Atom*> mapped_atom;
+					mapped_atom[start_node] = start_atom;
+					new_rs.mapped_atoms.push_back(mapped_atom);
+					new_rs.visited_atoms.push_back(matched_atom);
+					HashSet<const Bond*> visited_bond;
+					new_rs.visited_bonds.push_back(visited_bond);
+					HashSet<const SPEdge*> visited_edge;
+					new_rs.visited_edges.push_back(visited_edge);
+				}
+				for (Size i = 0; i != new_rs.matched_atoms.size(); ++i)
+				{
+					// are we at a leaf?
+					if (start_node->countEdges() == 0)
+					{
+						// just add the node and atom to the results 
+						#ifdef SMARTS_MATCHER_DEBUG
+						cerr << "leaf node" << endl;
+						#endif
+						result_rs.add(new_rs, i);
+						result_rs.matched_atoms[result_rs.matched_atoms.size()-1].insert(start_atom);
+						result_rs.visited_atoms[result_rs.visited_atoms.size()-1].insert(start_atom);
+						result_rs.mapped_atoms[result_rs.mapped_atoms.size()-1][start_node] = start_atom;
+					}
+
+					Size matched_bonds(0), matched_edges(0);
+					
+					for (Atom::BondConstIterator bit = start_atom->beginBond(); bit != start_atom->endBond(); ++bit)
+					{
+						if (!new_rs.visited_bonds[i].has(&*bit))
+						{
+							for (SmartsParser::SPNode::EdgeIterator eit = start_node->begin(); eit != start_node->end(); ++eit)
+							{
+								if (!new_rs.visited_edges[i].has(*eit))
+								{
+									RecStruct_ first_new_rs;
+									first_new_rs.add(new_rs, i);
+									first_new_rs.mapped_atoms[0][start_node] = start_atom;
+									first_new_rs.matched_atoms[0].insert(start_atom);
+									first_new_rs.visited_atoms[0].insert(start_atom);
+									first_new_rs.visited_bonds[0].insert(&*bit);
+									first_new_rs.visited_edges[0].insert(*eit);
+									#ifdef SMARTS_MATCHER_DEBUG
+									cerr << "calling eval edge, size of result_matched_atoms: " << result_rs.matched_atoms.size() << endl;
+									#endif
+									if (evaluate_edge_(first_new_rs, *eit, start_atom, &*bit))
+									{
+										//cerr << "yes, matched edge" << endl;
+										if (start_node->countEdges() > 1)
+										{
+											for (Size j = 0; j != first_new_rs.matched_atoms.size(); ++j)
+											{
+												RecStruct_ second_new_rs;
+												second_new_rs.add(first_new_rs, j);
+												if (evaluate_node_(second_new_rs, start_node, start_atom))
+												{
+													result_rs.add(second_new_rs);
+												}
+											}
+										}
+										else
+										{
+											result_rs.add(first_new_rs);
+										}
+									}
+									#ifdef SMARTS_MATCHER_DEBUG
+									cerr << "size of result_matched_atoms after edge_eval call: " << result_rs.matched_atoms.size() << ", ";
+									for (Size bla = 0; bla != result_rs.matched_atoms.size(); ++bla)
+									{
+										cerr << result_rs.matched_atoms[bla].size() << " ";
+									}
+									cerr << endl;
+									#endif
+								}
+							}
+						}
+						else
+						{
+							matched_bonds++;
+						}
+					}
+
+					HashSet<SPEdge*> visited_edges;
+					for (SmartsParser::SPNode::EdgeIterator eit = start_node->begin(); eit != start_node->end(); ++eit)
+					{
+						if (new_rs.visited_edges[i].has(*eit))
+						{
+							matched_edges++;
+							visited_edges.insert(*eit);
+						}
+					}
+					
+#ifdef SMARTS_MATCHER_DEBUG
+					if (consider_as_noninternal)
+					{
+						cerr << "#matched_bonds=" << matched_bonds << ", #matched_edges=" << matched_edges << endl;
+					}
+#endif
+					//cerr << "#matched_bonds=" << matched_bonds << ", #matched_edges=" << matched_edges
+					//	<< ", #edges=" << start_node->countEdges() << ", #bonds=" << start_atom->countBonds() << endl;
+					
+					if (start_node->countEdges() != 0 && matched_edges != 0 && matched_edges == start_node->countEdges())
+					{
+						if (matched_bonds == matched_edges)
+						{
+							result_rs.add(new_rs, i);
+						}
+						else
+						{
+							if (matched_bonds - 1 == matched_edges)
+							{
+								result_rs.add(new_rs, i);
+							}
+						}
+					}
+				}
+			}
+		}
+	
+		#ifdef SMARTS_MATCHER_DEBUG
+		if (start_node->countEdges() == 0)
+		{
+			//cerr << "#of matches = " << result_matched_atoms.size() << ", size=" << result_matched_atoms[0].size() << endl;
+		}
+		#endif
+
+		rs = result_rs;
+		
+		return rs.matched_atoms.size() != 0;
+	}
+	
+	bool SmartsMatcher::evaluate_edge_(	RecStruct_& rs, SPEdge* start_edge, const Atom* start_atom, const Bond* start_bond)
+	{
+		#ifdef SMARTS_MATCHER_DEBUG
+		cerr << "bool SmartsMatcher::evaluate_edge_(start_edge=" << start_edge << ", start_atom=" << start_atom << ", start_bond=" << start_bond << endl;
+		#endif
+		RecStruct_ result_rs;
+		bool consider_as_non_internal(false);
+				
+		if (start_edge->isInternal())
+		{
+			SmartsParser::LogicalOperator log_op = start_edge->getLogicalOperator();
+			if (log_op == SmartsParser::AND || log_op == SmartsParser::AND_LOW)
+			{
+				for (Size i = 0; i != rs.matched_atoms.size(); ++i)
+				{
+					RecStruct_ first_new_rs;
+					first_new_rs.add(rs, i);
+					if (evaluate_edge_(first_new_rs, start_edge->getFirstSPEdge(), start_atom, start_bond))
+					{
+						for (Size j = 0; j != first_new_rs.matched_atoms.size(); ++j)
+						{
+							RecStruct_ second_new_rs;
+							second_new_rs.add(first_new_rs, j);
+						 	if (evaluate_edge_(second_new_rs, start_edge->getSecondSPEdge(), start_atom, start_bond))
+							{
+								result_rs.add(second_new_rs);
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				if (log_op == SmartsParser::OR)
+				{
+					for (Size i = 0; i != rs.matched_atoms.size(); ++i)
+					{
+						RecStruct_ new_rs;
+						new_rs.add(rs, i);
+						
+						if (evaluate_edge_(new_rs, start_edge->getFirstSPEdge(), start_atom, start_bond))
+						{
+							result_rs.add(new_rs);
+						}
+						new_rs.clear();
+						new_rs.add(rs, i);
+						if (evaluate_edge_(new_rs, start_edge->getSecondSPEdge(), start_atom, start_bond))
+						{
+							result_rs.add(new_rs);
+						}
+					}
+				}
+				else
+				{
+					// in this case the edges are just internal edges without any logical op, sense ????
+					//cerr << "TODO case not implemented: internal edge with no op" << endl;
+					for (Size i = 0; i != rs.matched_atoms.size(); ++i)
+					{
+						RecStruct_ new_rs;
+						new_rs.add(rs, i);
+						if (evaluate_node_(new_rs, start_edge->getSecondSPNode(), start_atom))
+						{
+							result_rs.add(new_rs);
+						}
+					}
+				}
+			}
+
+			// now test if there is also a atom interconnection
+			if (start_edge->getFirstSPNode() != 0 && start_edge->getSecondSPNode() != 0 && result_rs.matched_atoms.size() != 0)
+			{
+				consider_as_non_internal = true;
+				result_rs.clear();
+			}
+		}
+		
+		if (!start_edge->isInternal() || consider_as_non_internal)
+		{
+			// just call the evaluate_node_ methode with next node
+			if (consider_as_non_internal || start_edge->getSPBond()->equals(start_bond))
+			{
+				if (!consider_as_non_internal)
+				{
+					//cerr << "bond equals = " << start_edge->getSPBond()->equals(start_bond) << endl;
+				}
+				// TODO sense?
+				if (start_edge->getFirstSPNode() == 0 && start_edge->getSecondSPNode() == 0)
+				{
+					//#ifdef SMARTS_MATCHER_DEBUG
+					//cerr << "size of matched_atoms " << rs.matched_atoms.size() << ", " << rs.matched_atoms[0].size() << "first node and second node are null" << endl;
+					//#endif
+					return true;
+				}
+				// only non-ringclosure bonds are considered so far!
+				const Atom* partner = start_bond->getPartner(*start_atom);
+				for (Size i = 0; i != rs.matched_atoms.size(); ++i)
+				{
+					if (!rs.matched_atoms[i].has(partner))
+					{
+						RecStruct_ new_rs;
+						new_rs.add(rs, i);
+					
+						// TODO first case correct?
+						if (consider_as_non_internal || start_edge->getSPBond()->equals(start_bond))
+						{
+							new_rs.visited_bonds[0].insert(start_bond);
+							new_rs.visited_edges[0].insert(start_edge);
+						}
+						
+						if (evaluate_node_(new_rs, start_edge->getSecondSPNode(), partner))
+						{
+							//cerr << "evaluate next node " << consider_as_non_internal << endl;
+							result_rs.add(new_rs);
+							//cerr << "evaluated next node: " << result_rs.matched_atoms.size() << endl;
+						}
+					}
+				}
+			}
+		}
+
+		rs = result_rs;		
+		return rs.matched_atoms.size() != 0;
+	}
+
+	SmartsMatcher::RecStruct_::RecStruct_()
+	{
+	}
+
+	SmartsMatcher::RecStruct_::RecStruct_(const RecStruct_& rec_struct)
+		:	matched_atoms(rec_struct.matched_atoms),
+			mapped_atoms(rec_struct.mapped_atoms),
+			visited_atoms(rec_struct.visited_atoms),
+			visited_bonds(rec_struct.visited_bonds),
+			visited_edges(rec_struct.visited_edges)
+	{
+	}
+
+	SmartsMatcher::RecStruct_::~RecStruct_()
+	{
+	}
+
+	void SmartsMatcher::RecStruct_::add(const RecStruct_& rec_struct)
+	{
+		for (vector<HashSet<const Atom*> >::const_iterator it = rec_struct.matched_atoms.begin(); it != rec_struct.matched_atoms.end(); ++it)
+		{
+			matched_atoms.push_back(*it);
+		}
+		for (vector<HashMap<const SPNode*, const Atom*> >::const_iterator it = rec_struct.mapped_atoms.begin(); it != rec_struct.mapped_atoms.end(); ++it)
+		{
+			mapped_atoms.push_back(*it);
+		}
+		for (vector<HashSet<const Atom*> >::const_iterator it = rec_struct.visited_atoms.begin(); it != rec_struct.visited_atoms.end(); ++it)
+		{
+			visited_atoms.push_back(*it);
+		}
+		for (vector<HashSet<const Bond*> >::const_iterator it = rec_struct.visited_bonds.begin(); it != rec_struct.visited_bonds.end(); ++it)
+		{
+			visited_bonds.push_back(*it);
+		}
+		for (vector<HashSet<const SPEdge*> >::const_iterator it = rec_struct.visited_edges.begin(); it != rec_struct.visited_edges.end(); ++it)
+		{
+			visited_edges.push_back(*it);
+		}
+		return;
+	}
+
+	void SmartsMatcher::RecStruct_::add(const RecStruct_& rec_struct, Size i)
+	{
+		matched_atoms.push_back(rec_struct.matched_atoms[i]);
+		mapped_atoms.push_back(rec_struct.mapped_atoms[i]);
+		visited_atoms.push_back(rec_struct.visited_atoms[i]);
+		visited_bonds.push_back(rec_struct.visited_bonds[i]);
+		visited_edges.push_back(rec_struct.visited_edges[i]);
+		return;
+	}
+
+	void SmartsMatcher::RecStruct_::clear()
+	{
+		matched_atoms.clear();
+		mapped_atoms.clear();
+		visited_atoms.clear();
+		visited_bonds.clear();
+		visited_edges.clear();
+		return;
+	}
+
+	SmartsMatcher::RecStruct_& SmartsMatcher::RecStruct_::operator = (const RecStruct_& rec_struct)
+	{
+		matched_atoms = rec_struct.matched_atoms;
+		mapped_atoms = rec_struct.mapped_atoms;
+		visited_atoms = rec_struct.visited_atoms;
+		visited_bonds = rec_struct.visited_bonds;
+		visited_edges = rec_struct.visited_edges;
+		return *this;
+	}
+	
+} // namespace BALL
+
