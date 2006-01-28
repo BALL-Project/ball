@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RMSDMinimizer.h,v 1.2 2006/01/27 20:57:46 oliver Exp $
+// $Id: RMSDMinimizer.h,v 1.3 2006/01/28 12:32:54 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -22,11 +22,16 @@ namespace BALL
 {
 
 	/** RMSD minimizer class.
-			
+			This class computes the optimal transformation mapping
+			one set of three-dimensional points onto another set of
+			points. It implements the algorithm by Coutsalis et al.
+			(J. Comput. Chem., 25(15), 1849 (2004)), which computes
+			the RMSD-optimal transformation by solving an eigenvalue
+			problem.
 			 \par
 	\ingroup StructureMiscellaneous
 	\remarks{
-		This class requires GSL (GNU Scientific Library) support to be enabled.
+		This code requires GSL (GNU Scientific Library) support to be enabled.
 		If you cannot compile/link code using RMSDMinimizer, please rerun configure
 		and enable GSL support (configure --help for details).
 	}
