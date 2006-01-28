@@ -12,7 +12,7 @@ cd ../doc/
 rm -fr doxygen/html/ 
 doxygen $CONFIGFILE 
 cd doxygen/html 
-for i in `find . -name "*html"`; do sed -i "s/BALL:://g" $i; done 
+for i in `find . -name "*htm"`; do sed -i "s/BALL:://g" $i; done 
 
 echo running tidy...
 tidy -m -i -asxml -q -bare -clean *htm* 2>/dev/null | true
