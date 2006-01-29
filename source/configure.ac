@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.22 2005/03/01 19:09:27 oliver Exp $
+dnl $Id: configure.ac,v 1.22.4.1 2006/01/29 23:02:44 amoll Exp $
 dnl
 dnl
 
@@ -13,22 +13,31 @@ dnl
 dnl    Disable caching in MULTI_BUILD mode - just to be sure
 dnl
 if test "${MULTI_BUILD}" = "true" ; then
-${RM} config.cache
+	${RM} config.cache
 fi
 
 
 dnl 
 dnl    Some initialization stuff...
 dnl 
-AC_INIT(BALL, 1.0, ball-bugs@bioinf.uni-sb.de)
+AC_INIT(BALL, 1.2, ball-bugs@bioinf.uni-sb.de)
 AC_CONFIG_HEADER([
-config.h:config/config.h.in
+	config.h:config/config.h.in
 ])
 AC_LANG(C++)
 PROJECT=BALL
 define(PROJECT, BALL)
 dnl this project define is required by (portable) aclocal.m4 file
-dnl being used for BNPP, BALL, and OpenMS
+dnl being used for BN++, BALL, and OpenMS
+
+dnl
+dnl retrieve the BALL version and print it to the console
+dnl for debugging purposes (people sending in config.log and the like).
+dnl
+BALL_VERSION_STRING=`grep define\ BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | cut -d\" -f2 | tr -d "a-zA-Z"`
+BALL_CURRENT_VERSION=${BALL_VERSION_STRING}
+BALL_COMPATIBILITY_VERSION=`echo ${BALL_VERSION_STRING} | cut -d. -f1-2`
+CF_VERSION_CHECK
 
 dnl   Require the user to accept the license (once)
 CF_CHECK_LICENSE
@@ -72,122 +81,124 @@ AC_ARG_ENABLE(fftw-float,      [  --disable-fftw-float    disable support for fl
 AC_ARG_ENABLE(fftw-double,     [  --disable-fftw-double   disable support for double precision in FFT code])
 AC_ARG_ENABLE(fftw-longdbl,    [  --disable-fftw-longdbl  disable support for long double precision in FFT code])
 dnl		 Do we still need this?
-AC_ARG_ENABLE(double-cpx,      [  --enable-double-cplx    use double precision floats for Complex type])
+AC_ARG_ENABLE(double-cplx,     [  --enable-double-cplx    use double precision floats for Complex type])
+AC_ARG_ENABLE(longdbl-cplx,    [  --enable-longdbl-cplx   use long double precision floats for Complex type])
 
 dnl
 dnl    interpret switches...
 dnl
 if test "$enable_optimization" = "no" ; then
-DEBUG=true
+	DEBUG=true
 else
-DEBUG=false
+	DEBUG=false
 fi
 
 if test "$enable_debuginfo" = "yes" ; then
-DEBUG_INFO=true
+	DEBUG_INFO=true
 else
-DEBUG_INFO=false
+	DEBUG_INFO=false
 fi
 
 if test "$enable_64" = "yes" ; then
-BINFMT_64_BIT=true
+	BINFMT_64_BIT=true
 else
-BINFMT_64_BIT=false
+	BINFMT_64_BIT=false
 fi
 
 if test "$with_compiler" != "" ; then
-CXX=$with_compiler
+	CXX=$with_compiler
 fi
 
 if test "$with_cxxflags" != "" ; then
-CXXFLAGS="${CXXFLAGS}`echo $with_cxxflags|tr , \  `"
+	CXXFLAGS="${CXXFLAGS}`echo $with_cxxflags|tr , \  `"
 fi
 
 if test "$with_ldflags" != "" ; then
-LDFLAGS="${LDFLAGS}`echo $with_ldflags|tr ,  \  `"
+	LDFLAGS="${LDFLAGS}`echo $with_ldflags|tr ,  \  `"
 fi
 
 if test "$with_dynarflags" != "" ; then
-DYNAROPTS="${DYNAROPTS}`echo $with_dynarflags|tr ,  \  `"
+	DYNAROPTS="${DYNAROPTS}`echo $with_dynarflags|tr ,  \  `"
 fi
 
 if test "$with_arflags" != "" ; then
-AROPTS="${AROPTS}`echo $with_arflags|tr ,  \  `"
+	AROPTS="${AROPTS}`echo $with_arflags|tr ,  \  `"
 fi
 
 if test "$with_qt" != "" ; then
-QTDIR=$with_qt
+	QTDIR=$with_qt
 fi
 if test "$with_qt_incl" != "" ; then
-QT_INCPATH=$with_qt_incl
+	QT_INCPATH=$with_qt_incl
 fi
 if test "$with_qt_libs" != "" ; then
-QT_LIBPATH=$with_qt_libs
+	QT_LIBPATH=$with_qt_libs
 fi
-if test "$with_qt_mt" = "yes" ; then
-USE_THREADSAFE_QT=true
-QT_MT_SUFFIX="-mt"
+
+if test "$with_qt_mt" = "yes" -o "${with_qt_mt+set}" != set; then
+	USE_THREADSAFE_QT=true
+	QT_MT_SUFFIX="-mt"
 else
-USE_THREADSAFE_QT=false
-QT_MT_SUFFIX=""
+	USE_THREADSAFE_QT=false
+	QT_MT_SUFFIX=""
 fi
 if test "$with_opengl_incl" != "" ; then
-OPENGL_INCPATH=$with_opengl_incl
+	OPENGL_INCPATH=$with_opengl_incl
 fi
 if test "$with_opengl_libs" != "" ; then
-OPENGL_LIBPATH=$with_opengl_libs
+	OPENGL_LIBPATH=$with_opengl_libs
 fi
 
 if test "$with_mesa" != "yes" ; then	
-VIEW_PLATFORM=OpenGL
+	VIEW_PLATFORM=OpenGL
 else
-VIEW_PLATFORM=Mesa
+	VIEW_PLATFORM=Mesa
 fi
 
 if test "$with_moc" != "" ; then	
-MOC=$with_moc
+	MOC=$with_moc
 else
-MOC=moc
+	MOC=moc
 fi
 
 if test "$with_uic" != "" ; then	
-UIC=$with_uic
+	UIC=$with_uic
 else
-UIC=uic
+	UIC=uic
 fi
 
 if test "$with_libxnet" != "no" ; then	
-USE_LIBXNET=true
+	USE_LIBXNET=true
 else
-USE_LIBXNET=false
+	USE_LIBXNET=false
 fi
 
 if test "$with_VIEW" = "no" -o "$enable_VIEW" = "no"; then
-USE_VIEW=false
-BALL_HAS_VIEW=""
+	USE_VIEW=false
+	BALL_HAS_VIEW=""
 else	
-USE_VIEW=true
-BALL_HAS_VIEW=true
+	USE_VIEW=true
+	BALL_HAS_VIEW=true
 fi
 
 if test "$with_xdr" = "no" ; then
-BALL_NO_XDR=true
+	BALL_NO_XDR=true
 else
-BALL_NO_XDR=false
+	BALL_NO_XDR=false
 fi
 
 # use this switch to enable the python support
 # this also builds libBALLc.so and requires
 # Python.h and libsip.a
 if test "$with_python" != "" -a "$with_python" != "no" -o "$enable_python" = yes ; then
-PYTHON_SUPPORT=true
-if test "${with_python}" != "" -a "${with_python}" != "yes" ; then
-PYTHON_EXE=${with_python}
+	PYTHON_SUPPORT=true
+	if test "${with_python}" != "" -a "${with_python}" != "yes" ; then
+		PYTHON_EXE=${with_python}
+	else
+		PYTHON_EXE=python
+	fi
 else
-PYTHON_EXE=python
-fi
-else
-PYTHON_SUPPORT=
+	PYTHON_SUPPORT=
 fi
 
 # the path to the python includes (Python.h)
@@ -206,41 +217,34 @@ SIP=$with_sip
 
 # support for fftw (FFT lib)
 if test "$with_fftw" != "" -a "$with_fftw" != "no" -o "$enable_fftw" = yes ; then
-FFTW_SUPPORT=true
+	FFTW_SUPPORT=true
 if test "${with_fftw_lib}" != "" ; then
-FFTW_LIBPATH=${with_fftw_lib}
+	FFTW_LIBPATH=${with_fftw_lib}
 else
-FFTW_LIBPATH=""
+	FFTW_LIBPATH=""
 fi
 if test "${with_fftw_incl}" != "" ; then
-FFTW_INCL=${with_fftw_incl}
+	FFTW_INCL=${with_fftw_incl}
 else
-FFTW_INCL=""
+	FFTW_INCL=""
 fi
 if test "$enable_fftw_float" = "no" ; then
-FFTW_DISABLE_FFTW_FLOAT=true
+	FFTW_DISABLE_FFTW_FLOAT=true
 else
-FFTW_DISABLE_FFTW_FLOAT=false
+	FFTW_DISABLE_FFTW_FLOAT=false
 fi
 if test "$enable_fftw_double" = "no" ; then
-FFTW_DISABLE_FFTW_DOUBLE=true
+	FFTW_DISABLE_FFTW_DOUBLE=true
 else
-FFTW_DISABLE_FFTW_DOUBLE=false
+	FFTW_DISABLE_FFTW_DOUBLE=false
 fi
 if test "$enable_fftw_longdbl" = "no" ; then
-FFTW_DISABLE_FFTW_LONGDBL=true
+		FFTW_DISABLE_FFTW_LONGDBL=true
+	else
+		FFTW_DISABLE_FFTW_LONGDBL=false
+	fi
 else
-FFTW_DISABLE_FFTW_LONGDBL=false
-fi
-else
-FFTW_SUPPORT=
-fi
-
-# size of Complex type (if given)
-if test "$enable_double_cplx" = yes ; then
-FFTW_PRECISION=double
-else
-FFTW_PRECISION=float
+	FFTW_SUPPORT=
 fi
 
 dnl
@@ -471,11 +475,17 @@ dnl
 dnl
 dnl FFTW -- Fastest Fourier Transform in the West
 dnl
+if test "${FFTW_SUPPORT}" == true ; then
 CF_CHECK_FFTW_SUPPORT
+fi
 
 dnl
 dnl		VIEW
 dnl
+dnl Currently, we require QT 3.3.x. QT 4.x isn't supported yet.
+QT_MIN_VERSION=330
+QT_MAX_VERSION=399
+QT_RECOMMENDED_VERSION=3.3.5
 CF_VIEW
 
 dnl
@@ -499,7 +509,7 @@ dnl
 BINFMT="${BINFMT}-${CXX_NAME}"
 BINFMT_INDEX=""
 
-LIBS="${LIBS} -lm"
+LIBS="${LIBS} ${FFTW_LIBS} -lm"
 VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
@@ -572,10 +582,10 @@ AC_SUBST(HAS_GPLUSPLUS)     dnl true, if C++ compiler is g++
 AC_SUBST(STD_CPP_INCLUDES)  dnl standard include paths of C++ compiler
 AC_SUBST(MAKEDEP_OPTS)      dnl options for makedep (needed for Linux)
 AC_SUBST(BALL_TYPENAME)			dnl if the compiler requires the use of typename
-										dnl this variable is set to "typename". "" otherwise.
+														dnl this variable is set to "typename". "" otherwise.
 AC_SUBST(BINFMT_INDEX)      dnl BFMT: binformat index of the current BINFMT - passed to the compiler
-										dnl   as -DBFMT=${BINFMT_INDEX} to decide which config.h to use
-										dnl   used in multi-platform build only!
+														dnl   as -DBFMT=${BINFMT_INDEX} to decide which config.h to use
+														dnl   used in multi-platform build only!
 
 dnl         LINKER
 
@@ -615,10 +625,20 @@ if test "${AROPTS}" = "" ; then
 AROPTS="cru"
 fi
 
+dnl
+dnl  Some platforms (e.g. Darwin) require special flags to build
+dnl  loadable modules. If no specific flags for this were set,
+dnl  we just use the standard settings to create dynamic libraries.
+dnl
+if test "${DYNAROPTS_PYMODULE}" = "" ; then
+  DYNAROPTS_PYMODULE="${DYNAROPTS}"
+fi
+
 AC_SUBST(AR)
 AC_SUBST(AROPTS)
 AC_SUBST(DYNAR)
 AC_SUBST(DYNAROPTS)
+AC_SUBST(DYNAROPTS_PYMODULE)
 AC_SUBST(ADD_DYNAROPTS_LIBBALL)
 AC_SUBST(ADD_DYNAROPTS_LIBVIEW)
 AC_SUBST(RANLIB)

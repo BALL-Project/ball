@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# $Id: config.mak.in,v 1.35 2005/03/01 19:09:28 oliver Exp $
+# $Id: config.mak.in,v 1.35.4.1 2006/01/29 23:02:44 amoll Exp $
 #
 
 # First, some basic unix commands, including the C++ compiler
@@ -20,6 +20,7 @@ AROPTS  = @AROPTS@
 
 # options for shared library generation
 DYNAROPTS = @DYNAROPTS@
+DYNAROPTS_PYMODULE = @DYNAROPTS_PYMODULE@
 ADD_DYNAROPTS_LIBBALL = @ADD_DYNAROPTS_LIBBALL@
 ADD_DYNAROPTS_LIBVIEW = @ADD_DYNAROPTS_LIBVIEW@
 
@@ -87,6 +88,8 @@ SIP_INCLUDES   			= @SIP_INCLUDES@
 PYTHON_INCLUDES			= @PYTHON_INCLUDES@
 PYTHON_SUPPORT      = @PYTHON_SUPPORT@ 
 PYTHON_LIBS					= @PYTHON_LIBS@
+PYTHON_EXECUTABLE	  =	@PYTHON_EXECUTABLE@
+FFTW_LIBS						= @FFTW_LIBS@
 
 #
 # Support for valgrind, a memory leak checker.
