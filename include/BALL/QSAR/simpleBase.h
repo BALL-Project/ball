@@ -22,7 +22,7 @@ namespace BALL
 			descriptors.
 			\\
 	*/
-	class SimpleBase
+	class BALL_EXPORT SimpleBase
 		:	public Descriptor
 	{
 		public:

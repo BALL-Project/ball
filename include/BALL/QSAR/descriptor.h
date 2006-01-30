@@ -23,7 +23,7 @@ namespace BALL
 	/**	Generic QSAR molecular descriptor class.
 			\\
 	*/
-	class Descriptor
+	class BALL_EXPORT Descriptor
 		:	public UnaryProcessor<Molecule>
 	{
 		public:
