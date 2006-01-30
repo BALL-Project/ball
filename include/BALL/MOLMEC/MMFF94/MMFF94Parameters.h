@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.9 2005/04/10 20:18:45 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.10 2006/01/30 16:11:49 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -20,6 +20,11 @@
 #ifndef BALL_KERNEL_BOND_H
 # include <BALL/KERNEL/bond.h>
 #endif
+
+//   #ifndef BALL_KERNEL_STANDARDPREDICATES_H
+# include <BALL/KERNEL/standardPredicates.h>
+//   #endif
+
 using namespace std;
 
 namespace BALL 
@@ -160,32 +165,19 @@ namespace BALL
 		///
 		typedef HashMap<Position, BondData> StretchMap;
 
-		/**	@name Constant Definitions
-		*/
-		//@{
-
 		BALL_CREATE(MMFF94StretchParameters)
 
-		/**	Default constructor.
-		*/
+		///	Default constructor.
 		MMFF94StretchParameters();
 
-		/**	Destructor.
-		*/
+		///	Destructor.
 		virtual ~MMFF94StretchParameters();
 
-		//@}
-		/**	@name Assignment
-		*/
-		//@{
-
-		/**	Assignment operator
-		*/
+		///	Assignment operator
 		const MMFF94StretchParameters& operator = (const MMFF94StretchParameters& param)
 			throw();
 
-		/**	Clear method
-		*/
+		///	Clear method
 		virtual void clear()
 			throw();
 
@@ -202,8 +194,8 @@ namespace BALL
 		///
 		const StretchMap& getBondParameters() { return parameters_;}
 
-		///
-		//@}
+		/// Calculate the needed values per Schomaker-Stevenson Rule
+		StretchMap::ConstIterator calculateValues(const Bond& bond);
 
 		protected:
 
@@ -213,6 +205,13 @@ namespace BALL
 		StretchMap parameters_;
 		
 		bool is_initialized_;
+
+		static float radii_[];
+		static float electronegatives_[];
+
+		SpHybridizedPredicate  sp1_;
+		Sp2HybridizedPredicate sp2_;
+		Sp2HybridizedPredicate sp3_;
 	};
 
 ///////////////////////////////////////////////////////////////////////////
