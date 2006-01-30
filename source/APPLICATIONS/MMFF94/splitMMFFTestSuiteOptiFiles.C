@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.8 2005/04/10 22:56:02 amoll Exp $
+// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.9 2006/01/30 22:35:54 amoll Exp $
 //
 // A small program for spliting the Optimol log file from the MMFF94 test suite
 // into smaller files, which are better to handle for parsing 
@@ -16,6 +16,12 @@
 #include <BALL/SYSTEM/file.h>
 #include <BALL/DATATYPE/hashSet.h>
 
+//   #define DEBUG
+#ifdef DEBUG
+#define LINE_PRINT Log.error() << infile.getLine() << "         " << __LINE__ << std::endl;
+#else
+#define LINE_PRINT
+#endif
 
 using namespace std;
 using namespace BALL;
@@ -64,6 +70,8 @@ int main(int argc, char** argv)
 
 	while (infile.readLine())
 	{
+		LINE_PRINT
+
 		if (infile.getLine().hasSubstring("Structure Name:") ||
 				infile.getLine().hasSubstring("New Structure Name"))
 		{

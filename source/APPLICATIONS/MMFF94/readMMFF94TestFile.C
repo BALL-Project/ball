@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.19 2005/04/10 23:09:04 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.20 2006/01/30 22:35:53 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -21,6 +21,7 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
 
+#include <math.h>
 
 using namespace std;
 using namespace BALL;
@@ -160,9 +161,9 @@ bool testStretch(MMFF94& mmff, const String& filename, bool compare)
 
 	vector<float> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
 
-	float stretch_diff = std::fabs(mmff.getEnergy() - results[1]);
+	float stretch_diff = fabs(mmff.getEnergy() - results[1]);
 
-	if (std::fabs(stretch_diff / results[1]) > 1.0 / 100.0 && stretch_diff > 0.001)
+	if (fabs(stretch_diff / results[1]) > 1.0 / 100.0 && stretch_diff > 0.001)
 	{
 		Log.error() << filename << "   " << results[1] << "  " << mmff.getEnergy() << std::endl;
 		return false;
@@ -258,9 +259,9 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 	vector<float> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
 
 	float s_plus_b = results[2] + results[1] + results[4];
-	float diff = std::fabs(mmff.getEnergy() - s_plus_b);
+	float diff = fabs(mmff.getEnergy() - s_plus_b);
 
-	if (std::fabs(diff / s_plus_b) > 5.0 / 100.0 && diff > 0.001)
+	if (fabs(diff / s_plus_b) > 5.0 / 100.0 && diff > 0.001)
 	{
 		Log.error() << filename << "   " << s_plus_b << "  " 
 																		 << mmff.getEnergy() << std::endl;
@@ -318,7 +319,7 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 				continue;
 			}
 
-			float deltae = std::fabs(s.energy - energy[poss2]);
+			float deltae = fabs(s.energy - energy[poss2]);
 			found = true;
 			if (s.theta0 != theta0[poss2] ||
 					deltae > energy[poss2] / 20.0 && deltae > 0.001)
@@ -348,9 +349,9 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 
 	vector<float> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
 
-	float bend_diff = std::fabs(mmff.getEnergy() - results[2]);
+	float bend_diff = fabs(mmff.getEnergy() - results[2]);
 
-	if (std::fabs(bend_diff / results[1]) > 5.0 / 100.0 && bend_diff > 0.001)
+	if (fabs(bend_diff / results[1]) > 5.0 / 100.0 && bend_diff > 0.001)
 	{
 		Log.error() << filename << "   " << results[2] << "  " << mmff.getEnergy() << std::endl;
 		return false;
