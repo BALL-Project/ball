@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: aromaticityProcessor.C,v 1.2 2004/07/12 19:49:45 amoll Exp $
+// $Id: aromaticityProcessor.C,v 1.2.6.1 2006/01/30 12:17:37 amoll Exp $
 //
 
 #include <BALL/QSAR/aromaticityProcessor.h>
@@ -82,15 +82,428 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
+	void AromaticityProcessor::aromatizeSimple(vector<vector<Atom*> >& sssr)
+	{
+		vector<HashSet<Atom*> > aromatic_rings;
+		vector<HashSet<Atom*> > can_be_rings;
+		HashSet<Atom*> aromatic_atoms;
+		HashMap<Atom*, Size> correct_n;
+		vector<HashSet<Atom*> > sp2n_rings;
+		HashMap<Atom*, vector<HashSet<Atom*> > > atom_to_rings;
 
-	void AromaticityProcessor::aromatize(vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
+		// for each
+		for (vector<vector<Atom*> >::iterator it=sssr.begin();it!=sssr.end();++it)
+		{
+			HashSet<Atom*> ring;
+			for (vector<Atom*>::iterator ait=it->begin();ait!=it->end();++ait)
+			{
+				ring.insert(*ait);
+			}
+
+			if (simpleCanBeAromatic_(ring))
+			{
+				// count pi-electrons
+				Size num_pi = countPiElectrons_(ring);
+				// aromatic? 
+				if ((num_pi-2)%4 == 0)
+				{
+					// test if the rings contains a sp3 nitrogen
+					bool has_sp2n(false);
+					for (HashSet<Atom*>::ConstIterator nit=ring.begin(); +nit; ++nit)
+					{
+						if ((*nit)->getElement() == PTE[Element::N])
+						{
+							Size num_double(0);
+							for (Atom::BondIterator bit=(*nit)->beginBond(); +bit; ++bit)
+							{
+								if (bit->getOrder() == Bond::ORDER__DOUBLE)
+								{
+									++num_double;
+								}
+							}
+							if (num_double < 1)
+							{
+								atom_to_rings[*nit].push_back(ring);
+								has_sp2n = true;
+							}
+						}
+					}
+					
+					if (!has_sp2n)
+					{
+						aromatic_rings.push_back(ring);
+						aromatic_atoms += ring;
+					}
+					else
+					{
+						sp2n_rings.push_back(ring);
+					}
+				}
+			}
+			else
+			{
+				if (simpleCanBeAromaticWeaker_(ring))
+				{
+					bool has_sp2n(false);
+					for (HashSet<Atom*>::ConstIterator nit=ring.begin(); +nit; ++nit)
+					{
+						if ((*nit)->getElement() == PTE[Element::N])
+						{
+							Size num_double(0);
+							for (Atom::BondIterator bit=(*nit)->beginBond(); +bit; ++bit)
+							{
+								if (bit->getOrder() == Bond::ORDER__DOUBLE)
+								{
+									++num_double;
+								}
+							}
+							if (num_double < 1)
+							{
+								atom_to_rings[*nit].push_back(ring);
+								has_sp2n = true;
+							}
+						}
+					}
+					if (!has_sp2n)
+					{
+						can_be_rings.push_back(ring);
+					}
+					else
+					{
+						sp2n_rings.push_back(ring);	
+					}
+				}
+			}
+		}
+
+		// handle the sp2n containing rings, all the rings are stored in atom_to_rings
+		for (HashMap<Atom*, vector<HashSet<Atom*> > >::Iterator it=atom_to_rings.begin(); +it; ++it)
+		{
+			if (it->second.size() > 1)
+			{
+				// now we must decide which ring to set aromatic
+				if (it->second.size() == 2)
+				{
+					HashSet<Atom*> ring1(it->second[0]), ring2(it->second[1]);
+					if (simpleCanBeAromatic_(ring1) && !simpleCanBeAromatic_(ring2))
+					{
+						if ((countPiElectrons_(ring1)-2)%4 == 0)
+						{
+							aromatic_rings.push_back(ring1);
+							aromatic_atoms += ring1;
+						}
+						else
+						{
+							if (simpleCanBeAromaticWeaker_(ring2))
+							{
+								if ((countPiElectrons_(ring2)-2)%4 == 0)
+								{
+									can_be_rings.push_back(ring2);
+								}
+							}
+						}
+					}
+					else
+					{
+						if (!simpleCanBeAromatic_(ring1) && simpleCanBeAromatic_(ring2))
+						{
+							if ((countPiElectrons_(ring2)-2)%4 == 0)
+							{
+								aromatic_rings.push_back(ring2);
+								aromatic_atoms += ring2;
+							}
+							else
+							{
+								if (simpleCanBeAromatic_(ring1))
+								{
+									if ((countPiElectrons_(ring1)-2)%4 == 0)
+									{
+										aromatic_rings.push_back(ring1);
+										aromatic_atoms += ring1;
+									}
+								}
+							}
+						}
+						else
+						{
+							if (simpleCanBeAromatic_(ring1) && simpleCanBeAromatic_(ring2))
+							{
+								if ((countPiElectrons_(ring1)-2)%4 == 0)
+								{
+									aromatic_rings.push_back(ring1);
+									aromatic_atoms += ring1;
+								}
+								else
+								{
+									if ((countPiElectrons_(ring2)-2)%4 == 0)
+									{
+										aromatic_rings.push_back(ring2);
+										aromatic_atoms += ring2;
+									}
+								}
+							}
+							else
+							{
+								if (simpleCanBeAromaticWeaker_(ring1))
+								{
+									if ((countPiElectrons_(ring1)-2)%4 == 0)
+									{
+										can_be_rings.push_back(ring1);
+									}
+								}
+								else
+								{
+									if (simpleCanBeAromaticWeaker_(ring2))
+									{
+										if ((countPiElectrons_(ring2)-2)%4 == 0)
+										{
+											can_be_rings.push_back(ring2);
+										}
+									}										
+								}
+							}
+						}
+					}
+				}
+				else
+				{
+					// number of participating rings is 3
+					HashSet<Atom*> ring1(it->second[0]), ring2(it->second[1]), ring3(it->second[2]);
+					if (simpleCanBeAromatic_(ring1) && (countPiElectrons_(ring1)-2)%4 == 0)
+					{
+						aromatic_rings.push_back(ring1);
+						aromatic_atoms += ring1;
+					}
+					else
+					{
+						if (simpleCanBeAromatic_(ring2) && (countPiElectrons_(ring2)-2)%4 == 0)
+						{
+							aromatic_rings.push_back(ring2);
+							aromatic_atoms += ring2;
+						}
+						else
+						{
+							if (simpleCanBeAromatic_(ring3) && (countPiElectrons_(ring3)-2)%4 == 0)
+							{
+								aromatic_rings.push_back(ring3);
+								aromatic_atoms += ring3;
+							}
+							else
+							{
+								if (simpleCanBeAromaticWeaker_(ring1) && (countPiElectrons_(ring1)-2)%4 == 0)
+								{
+									can_be_rings.push_back(ring1);
+								}
+								else
+								{
+									if (simpleCanBeAromaticWeaker_(ring2) && (countPiElectrons_(ring2)-2)%4 == 0)
+									{
+										can_be_rings.push_back(ring2);
+									}
+									else
+									{
+										if (simpleCanBeAromaticWeaker_(ring3) && (countPiElectrons_(ring3)-2)%4 == 0)
+										{
+											can_be_rings.push_back(ring3);
+										}	
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				HashSet<Atom*> ring = *it->second.begin();
+				if (simpleCanBeAromatic_(ring))
+				{
+					if ((countPiElectrons_(ring)-2)%4 == 0)
+					{
+						aromatic_rings.push_back(ring);
+						aromatic_atoms += ring;
+					}
+				}
+				else
+				{
+					if (simpleCanBeAromaticWeaker_(ring))
+					{
+						can_be_rings.push_back(ring);
+					}
+				}
+			}
+		}
+
+		// now handle the rings which can be aromatic 
+		for (vector<HashSet<Atom*> >::const_iterator it=can_be_rings.begin(); it!=can_be_rings.end(); ++it)
+		{
+			bool can_be(true);
+			HashSet<Atom*> ring = *it;
+			for (HashSet<Atom*>::ConstIterator ait=ring.begin(); +ait; ++ait)
+			{
+				Size s_bonds(0), a_bonds(0), d_bonds(0);
+				for (Atom::BondIterator bit=(*ait)->beginBond(); +bit; ++bit)
+				{
+					if (it->has(bit->getPartner(**ait)))
+					{
+						if (bit->getOrder() == Bond::ORDER__SINGLE) s_bonds++;
+						if (bit->getOrder() == Bond::ORDER__AROMATIC) a_bonds++;
+						if (bit->getOrder() == Bond::ORDER__DOUBLE) d_bonds++;
+					}
+					else
+					{
+						if (aromatic_atoms.has(bit->getPartner(**ait)))
+						{
+							a_bonds += 2;
+						}
+					}
+				}
+				//cerr << "\n" << s_bonds << " " << a_bonds << " " << d_bonds << endl;
+				if ((*ait)->getElement() == PTE[Element::C])
+				{
+					if (!((d_bonds == 1 && s_bonds > 0) || a_bonds > 1))
+					{
+						can_be = false;
+						break;
+					}
+				}
+			}
+			if (can_be)
+			{
+				// intersect the ring with the aromatic rings
+				for (vector<HashSet<Atom*> >::const_iterator aro_it=aromatic_rings.begin(); aro_it!=aromatic_rings.end(); ++aro_it)
+				{
+					if ((countPiElectrons_(ring)-2)%4 == 0)
+					{
+						aromatic_rings.push_back(ring);
+						break;
+					}
+				}
+			}
+		}
+	
+		// write the aromatic rings back to the sssr set
+		sssr.clear();
+		for (vector<HashSet<Atom*> >::const_iterator it=aromatic_rings.begin();it!=aromatic_rings.end();++it)
+		{
+			vector<Atom*> ring;
+			for (HashSet<Atom*>::ConstIterator ait=it->begin(); +ait; ++ait)
+			{
+				ring.push_back(*ait);
+			}
+			sssr.push_back(ring);
+		}
+	}
+
+	bool AromaticityProcessor::simpleCanBeAromatic_(const HashSet<Atom*>& ring)
+	{
+		// first ensure that the rings has alternating double bonds
+		Size destab(0);
+		for (HashSet<Atom*>::ConstIterator ait=ring.begin(); +ait; ++ait)
+		{
+			Size s_bonds(0), d_bonds(0), a_bonds(0);
+			for (Atom::BondIterator bit=(*ait)->beginBond(); +bit; ++bit)
+			{
+				if (ring.has(bit->getPartner(**ait)))
+				{
+					if (bit->getOrder() == Bond::ORDER__SINGLE) s_bonds++;
+					if (bit->getOrder() == Bond::ORDER__DOUBLE) d_bonds++;
+					if (bit->getOrder() == Bond::ORDER__AROMATIC) a_bonds++;
+				}
+			}
+			if ((*ait)->getElement() == PTE[Element::C])
+			{
+				if (!((d_bonds == 1 && s_bonds > 0) || a_bonds > 1))
+				{
+					return false;
+				}
+			}
+			else
+			{
+				if ((*ait)->getElement() == PTE[Element::S])
+				{
+					if ((*ait)->countBonds() > 2)
+					{
+						return false;
+					}
+				}
+				if (!(d_bonds == 1 || a_bonds > 1))
+				{
+					destab++;
+				}
+			}
+		}
+
+		if (destab < 2)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	bool AromaticityProcessor::simpleCanBeAromaticWeaker_(const HashSet<Atom*>& ring)
+	{
+		Size destab(0);
+		for (HashSet<Atom*>::ConstIterator ait=ring.begin(); +ait; ++ait)
+		{
+			Size s_bonds(0), a_bonds(0), d_bonds(0);
+			for (Atom::BondIterator bit=(*ait)->beginBond(); +bit; ++bit)
+			{
+				if (bit->getOrder() == Bond::ORDER__SINGLE) s_bonds++;
+				if (bit->getOrder() == Bond::ORDER__AROMATIC) a_bonds++;
+				if (bit->getOrder() == Bond::ORDER__DOUBLE)
+				{
+					// now we check additionally if the partner is in a ring,
+					// else the double bond does _not_ count
+					if (bit->getPartner(**ait)->getProperty("InRing").getBool())
+					{
+						++d_bonds;
+					}
+				}
+			}
+			if ((*ait)->getElement() == PTE[Element::C])
+			{
+				if (!(d_bonds == 1 && s_bonds > 0) || a_bonds > 1)
+				{
+					return false;
+				}
+			}
+			else
+			{
+				if (d_bonds == 0)
+				{
+					destab++;
+				}
+        if ((*ait)->getElement() == PTE[Element::S])
+				{
+					if ((*ait)->countBonds() > 2)
+					{
+						return false;
+					}
+				}
+			}
+		}
+		if (destab < 2)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	void AromaticityProcessor::aromatize(const vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
 	{
 		//cerr << "AromaticityProcessor::aromatize(vector<vector<Atom*> >& sssr_orig)";
 		vector<HashSet<Atom*> > sssr;
-		for (vector<vector<Atom*> >::iterator it1=sssr_orig.begin();it1!=sssr_orig.end();++it1)
+		for (vector<vector<Atom*> >::const_iterator it1=sssr_orig.begin();it1!=sssr_orig.end();++it1)
 		{
 			HashSet<Atom*> ring;
-			for (vector<Atom*>::iterator it2=it1->begin();it2!=it1->end();++it2)
+			for (vector<Atom*>::const_iterator it2=it1->begin();it2!=it1->end();++it2)
 			{
 				ring.insert(*it2);
 			}
@@ -161,7 +574,7 @@ namespace BALL
 			if (may_be && destab < 2 && !(destab == 1 && it1->size() == 6) && !(destab == 1 && it1->size() == 7))
 			{
 					sssr_new.push_back(*it1);
-		}
+			}
 		}
 		sssr = sssr_new;
 
@@ -267,8 +680,7 @@ namespace BALL
 				b_it->getPartner(*(b_it->getSecondAtom()))->setProperty("IsAromatic", true);
 			}
 		}
-	//cerr << "..ended!" << endl;
-}
+	}
 
 	void AromaticityProcessor::extendAromaticSystem_(vector<HashSet<Atom*> >& sssr, HashSet<Atom*> ring)
 	{
@@ -424,7 +836,7 @@ namespace BALL
 				{
 					// merged ring has no conj. double bonds -> set aromaticity
 					for (HashSet<Atom*>::iterator it=ring.begin();it!=ring.end();++it)
-						{
+					{
 						(*it)->setProperty("IsAromatic", true);
 						for (Atom::BondIterator b_it=(*it)->beginBond();b_it!=(*it)->endBond();++b_it)
 						{
@@ -439,15 +851,18 @@ namespace BALL
 		}
 		else
 		{
-			// ring has no further intersection with other rings -> set aromaticity
-			for (HashSet<Atom*>::iterator it=ring.begin();it!=ring.end();++it)
+			// ring has no further intersection with other rings -> check aromaticity
+			if ((countPiElectrons_(ring)-2)%4 == 0)
 			{
-				(*it)->setProperty("IsAromatic", true);
-				for (Atom::BondIterator b_it=(*it)->beginBond();b_it!=(*it)->endBond();++b_it)
+				for (HashSet<Atom*>::iterator it=ring.begin();it!=ring.end();++it)
 				{
-					if (ring.has(b_it->getPartner(**it)))
+					(*it)->setProperty("IsAromatic", true);
+					for (Atom::BondIterator b_it=(*it)->beginBond();b_it!=(*it)->endBond();++b_it)
 					{
-						b_it->setOrder(Bond::ORDER__AROMATIC);
+						if (ring.has(b_it->getPartner(**it)))
+						{
+							b_it->setOrder(Bond::ORDER__AROMATIC);
+						}
 					}
 				}
 			}
@@ -571,12 +986,12 @@ namespace BALL
 			{
 				switch ((int)(*i)->getCharge())
 				{
-					case 	1: num_pi += -1; break;
-					case 	2: num_pi += -2; break;
-					case 	3: num_pi += -3; break;
-					case -1: num_pi += 1;  break;
-					case -2: num_pi += 2;  break;
-					case -3: num_pi += 3;  break;
+					case 	1: num_pi -= 1; break;
+					case 	2: num_pi -= 2; break;
+					case 	3: num_pi -= 3; break;
+					case   -1: num_pi += 1;  break;
+					case   -2: num_pi += 2;  break;
+					case   -3: num_pi += 3;  break;
 				}
 			}
 

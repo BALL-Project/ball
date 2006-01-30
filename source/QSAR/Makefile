@@ -17,4 +17,4 @@ CPP_SOURCES=\
 	surfaceDescriptors.C
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies
