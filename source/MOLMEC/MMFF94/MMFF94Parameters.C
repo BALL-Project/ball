@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.15 2006/01/30 16:11:46 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.16 2006/01/30 23:19:44 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -342,8 +342,8 @@ namespace BALL
 		return atom_type1 * MMFF94_number_atom_types + atom_type2;
 	}
 
-	MMFF94StretchParameters::StretchMap::ConstIterator 
-	  MMFF94StretchParameters::calculateValues(const Bond& bond)
+	// Calculate the optimum radius value using a modified Schomaker-Stevenson rule
+	float MMFF94StretchParameters::calculateR0(const Bond& bond)
 	{
 		const Atom& atom1 = *bond.getFirstAtom();
 		const Atom& atom2 = *bond.getSecondAtom();
@@ -355,7 +355,7 @@ namespace BALL
 		if (e1 > 54 || e2 > 54 ||
 				e1 == 0 || e2 || 0) 
 		{
-			return parameters_.end();
+			return -1;
 		}
 
 		// Calculate Hybridization
@@ -372,27 +372,23 @@ namespace BALL
 
 
 		// only SP hypridized atoms: 
-		if (h1 == 0 || h2 == 0)
-		{
-			return parameters_.end();
-		}
+		if (h1 == 0 || h2 == 0) return -1;
 
 		// only singe, double, tripple, quadruple  and aromatic bonds
 		Bond::BondOrder bo = (Bond::BondOrder) bond.getOrder();
 		if (bo == Bond::ORDER__UNKNOWN || 
 				bo == Bond::ORDER__ANY)
 		{
-			return parameters_.end();
+			return -1;
 		}
 
 		float r1 = radii_[e1];
 		float r2 = radii_[e2];
 
 		// only for stored radii
-		if (r1 == 0.0 ||
-				r2 == 0.0)
+		if (r1 == 0.0 || r2 == 0.0)
 		{
-			return parameters_.end();
+			return -1;
 		}
 
 		// calculate corrected radii
@@ -448,20 +444,72 @@ namespace BALL
 		const float n = 1.4;
 
 		// FORMULA from CHARMM docu:
-		float r0 = radii_[e1] + radii_[e2] - c * pow(fabs(electronegatives_[e1] - electronegatives_[e2]), n) - d;
+		const float r0 = radii_[e1] + radii_[e2] - c * pow(fabs(electronegatives_[e1] - electronegatives_[e2]), n) - d;
 		
-		if (r0 > 0.0)
-		{
-			// do something!
-			return parameters_.end();
-		}
+		return r0;
 
+		// calculate force constant:
 		// requisite data is not available, use relationship developed by Badger
 		// parameters are those described in: D. L. Herschbach and V. W. Laurie, J. Chem.  Phys. 1961, 35, 458-463.
-
-		// to change:
-return parameters_.end();
 	}
+
+
+	bool MMFF94StretchParameters::readEmpericalParameters(const String& filename)
+	{
+		emperical_parameters_.clear();
+
+		LineBasedFile infile(filename);
+		vector<String> fields;
+
+		try
+		{
+			while (infile.readLine())
+			{
+				// comments
+				if (infile.getLine().hasPrefix("*") || infile.getLine().hasPrefix("$")) 
+				{
+					continue;
+				}
+				
+				if (infile.getLine().split(fields) < 5)
+				{
+					Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+										  << filename << " Not 5 fields in one line " 
+											<< infile.getLine() << std::endl;
+					return false;
+				}
+
+				const Position type1 = fields[0].toUnsignedInt();
+				const Position type2 = fields[1].toUnsignedInt();
+				const Position index = getIndex_(type1, type2);
+
+				EmpericalStretchMap::Iterator it = emperical_parameters_.find(index);
+
+				if (it == emperical_parameters_.end())
+				{
+					it = emperical_parameters_.insert(pair<Position, EmpericalBondData>(index, EmpericalBondData())).first;
+				}
+
+				EmpericalBondData& data = it->second;
+
+				data.r0 = fields[2].toFloat();
+				data.kb = fields[3].toFloat(); 
+			}
+		}
+		catch(...)
+		{
+			Log.error() << "Error while parsing line " << infile.readLine() << std::endl;
+			Log.error() << " in File " << filename << std::endl;
+			infile.close();
+			return false;
+		}
+
+		infile.close();
+
+		is_initialized_ = true;
+		return true;
+	}
+
 
 	float MMFF94StretchParameters::radii_[] =
 	{

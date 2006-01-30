@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.10 2006/01/30 16:11:49 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.11 2006/01/30 23:19:54 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -50,7 +50,7 @@ namespace BALL
 		
 		///
 		bool readParameters(const String& filename);
-		
+
 		/** Get an equivalence atom type for the given atom type.
 		 		@param number between 1 and 4, 4 is the most general equivalence
 				@return Index -1 if no equivalence found
@@ -163,7 +163,15 @@ namespace BALL
 		};
 
 		///
+		struct EmpericalBondData
+		{
+			float kb;
+			float r0;
+		};
+	
+		///
 		typedef HashMap<Position, BondData> StretchMap;
+		typedef HashMap<Position, EmpericalBondData> EmpericalStretchMap;
 
 		BALL_CREATE(MMFF94StretchParameters)
 
@@ -192,10 +200,13 @@ namespace BALL
 			throw(Exception::FileNotFound);
 		
 		///
+		bool readEmpericalParameters(const String& filename);
+
+		///
 		const StretchMap& getBondParameters() { return parameters_;}
 
-		/// Calculate the needed values per Schomaker-Stevenson Rule
-		StretchMap::ConstIterator calculateValues(const Bond& bond);
+		/// Calculate the radius value per Schomaker-Stevenson Rule
+		float calculateValues(const Bond& bond);
 
 		protected:
 
@@ -203,6 +214,7 @@ namespace BALL
 
 		/// standard parameters 
 		StretchMap parameters_;
+		EmpericalStretchMap emperical_parameters_;
 		
 		bool is_initialized_;
 
