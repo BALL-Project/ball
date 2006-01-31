@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.19 2006/01/31 10:55:27 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.20 2006/01/31 17:03:27 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -348,7 +348,7 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 		return atom_type1 * MMFF94_number_atom_types + atom_type2;
 	}
 
-	// Calculate the optimum radius value using a modified Schomaker-Stevenson rule
+	// Calculate the optimum bond length value using a modified Schomaker-Stevenson rule
 	float MMFF94StretchParameters::calculateR0(const Bond& bond)
 	{
 		const Atom& atom1 = *bond.getFirstAtom();
@@ -357,87 +357,85 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 		const Position e1 = atom1.getElement().getAtomicNumber();
 		const Position e2 = atom2.getElement().getAtomicNumber();
 
-		// only atoms up to Xenon
+		const Position t1 = atom1.getType();
+		const Position t2 = atom2.getType();
+
+		// currently only supports atoms up to Xenon
 		if (e1 > 54 || e2 > 54 ||
 				e1 == 0 || e2 == 0) 
 		{
-Log.error() << "#~~#   3 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			return -1;
 		}
 
-		// Calculate Hybridization
-		Position h1 = 0;
-		Position h2 = 0;
-
-		if      (sp1_.operator() (atom1)) h1 = 1;
-		else if (sp2_.operator() (atom1)) h1 = 2;
-		else if (sp3_.operator() (atom1)) h1 = 3;
-
-		if      (sp1_.operator() (atom2)) h2 = 1;
-		else if (sp2_.operator() (atom2)) h2 = 2;
-		else if (sp3_.operator() (atom2)) h2 = 3;
-
-Log.error() << "#~~#   8 "  << h1           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   9 "  << h2           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-
-		// only SP hypridized atoms: 
-		if (h1 == 0 || h2 == 0) 
-		{
-Log.error() << "#~~#   5 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-			return -1;
-		}
-
-		// only singe, double, tripple, quadruple  and aromatic bonds
-		Bond::BondOrder bo = (Bond::BondOrder) bond.getOrder();
-		if (bo == Bond::ORDER__UNKNOWN || 
-				bo == Bond::ORDER__ANY)
-		{
-Log.error() << "#~~#   4 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-			return -1;
-		}
-
+		// radii
 		float r1 = radii_[e1];
 		float r2 = radii_[e2];
 
 		// only for stored radii
 		if (r1 == 0.0 || r2 == 0.0)
 		{
-Log.error() << "#~~#   6 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			return -1;
 		}
 
-		// calculate corrected radii
-		// no correction for H atoms
-		if (e1 != 1 && e2 != 1)
+		Position bo = bond.getOrder();
+		if (bo == Bond::ORDER__UNKNOWN || 
+				bo == Bond::ORDER__QUADRUPLE ||
+				bo == Bond::ORDER__ANY)
 		{
-			if (bo == Bond::ORDER__AROMATIC)
-			{
-				r1 -= 0.035;
-				r2 -= 0.035;
-			}
-			else if (bo == Bond::ORDER__QUADRUPLE)
-			{
-				r1 -= 0.070;
-				r2 -= 0.070;
-			}
-			else if (bo == Bond::ORDER__TRIPLE)
-			{
-				r1 -= 0.17;
-				r2 -= 0.17;
-			}
-			else if (bo == Bond::ORDER__DOUBLE)
-			{
-				r1 -= 0.1;
-				r2 -= 0.1;
-			}
-			else 
-			{
-				if (h1 == 1) r1 -= 0.08;
-				if (h2 == 1) r2 -= 0.08;
+			return -1;
+		}
 
-				if (h1 == 2) r1 -= 0.035;
-				if (h2 == 2) r2 -= 0.035;
+		Position b1 = (*atom_types_)[t1].mltb;
+		Position b2 = (*atom_types_)[t2].mltb;
+
+		if (b1 == 1 && b2 == 1) bo = 4;
+		else if (b1 + b2 == 3)  bo = 5;
+		else
+		{
+			// to do:  ???????
+			// if aromatisch and same ring:
+			if (bond.hasProperty("MMFFAROMBOND"))
+			{
+				if (!(*atom_types_)[t1].pilp && !(*atom_types_)[t2].pilp)
+				{
+					bo = 4;
+				}
+				else 
+				{
+					bo = 5;
+				}
 			}
+		}
+
+		// calculate corrected radii
+		
+		if (bo == 5)
+		{
+			r1 -= 0.04;
+			r2 -= 0.04;
+		}
+		else if (bo == 4)
+		{
+			r1 -= 0.075;
+			r2 -= 0.075;
+		}
+		else if (bo == 3)
+		{
+			r1 -= 0.17;
+			r2 -= 0.17;
+		}
+		else if (bo == 2)
+		{
+			r1 -= 0.1;
+			r2 -= 0.1;
+		}
+		else 
+		{
+			if (b1 == 1 || b1 == 2) r1 -= 0.03;
+			if (b2 == 1 || b2 == 2) r2 -= 0.03;
+
+			if (b1 == 3) r1 -= 0.08;
+			if (b2 == 3) r2 -= 0.08;
 		}
 
 		// calculate shrink factor
@@ -450,7 +448,7 @@ Log.error() << "#~~#   6 "             << " "  << __FILE__ << "  " << __LINE__<<
 		if (e1 > 10 || e2 > 10) d = 0.0;
 
 		// calculate SENS c
-		float c = 0.08;
+		float c = 0.085;
 
 		// for hyrogen atoms
 		if (e1 == 1 || e2 == 1) c = 0.05;
@@ -462,12 +460,12 @@ Log.error() << "#~~#   6 "             << " "  << __FILE__ << "  " << __LINE__<<
 		const float r0 = radii_[e1] + radii_[e2] - c * pow(fabs(electronegatives_[e1] - electronegatives_[e2]), n) - d;
 		
 		return r0;
-
-		// calculate force constant:
-		// requisite data is not available, use relationship developed by Badger
-		// parameters are those described in: D. L. Herschbach and V. W. Laurie, J. Chem.  Phys. 1961, 35, 458-463.
 	}
 
+
+	// calculate force constant:
+	// requisite data is not available, use relationship developed by Badger
+	// parameters are those described in: D. L. Herschbach and V. W. Laurie, J. Chem.  Phys. 1961, 35, 458-463.
 	float MMFF94StretchParameters::calculateStretchConstant(const Bond& bond, float r0)
 	{
 		const Atom& a1 = *bond.getFirstAtom();
@@ -494,14 +492,15 @@ Log.error() << "#~~#   6 "             << " "  << __FILE__ << "  " << __LINE__<<
 		const Position XENON = 54;
 		const Position RADON = 86;
 
+		// from CHARMM implementation
 		// default values
 		float	AIJ = 3.15;
 		float	BIJ = 1.80;
 
-		// special values
+		// special values taken from HERSCHBACH and LAURIE 1961
 		if (p1 < HELIUM)
 		{
-			if      (p2 < HELIUM) { AIJ = 1.26; BIJ = 0.025; } // maybe an Error in CHARMM? might be 0.25
+			if      (p2 < HELIUM) { AIJ = 1.26; BIJ = 0.025; } // 0.025 is not an error!
 			else if (p2 < NEON)   { AIJ = 1.66; BIJ = 0.30; }
 			else if (p2 < ARGON)  { AIJ = 1.84; BIJ = 0.38; }
 			else if (p2 < KRYPTN) { AIJ = 1.98; BIJ = 0.49; }
