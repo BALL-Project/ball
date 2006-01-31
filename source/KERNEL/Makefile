@@ -1,3 +1,12 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.15.2.1 2006/01/31 10:34:55 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
+#
+
 DIRECTORY=KERNEL
 
 THISLIB=$(LIBNAME)
@@ -18,6 +27,7 @@ CPP_SOURCES= \
 	expressionParser.C\
 	expressionParserLexer.C\
 	expressionParserParser.C\
+	extractors.C\
 	fragment.C\
 	global.C\
 	molecule.C\

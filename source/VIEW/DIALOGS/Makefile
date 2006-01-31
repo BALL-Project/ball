@@ -1,8 +1,15 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
 #
-# $Id: Makefile,v 1.53.2.3 2006/01/22 13:19:58 amoll Exp $
+# $Id: Makefile,v 1.53.2.4 2006/01/31 10:34:57 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
 #
 
 DIRECTORY=VIEW/DIALOGS
+
+include ../../config.mak
 
 # Where the headers of the derived classes reside
 HEADER_DIR=$(BALL_PATH)/include/BALL/$(DIRECTORY)
@@ -11,11 +18,6 @@ HEADER_DIR=$(BALL_PATH)/include/BALL/$(DIRECTORY)
 UIC_DIR=$(BALL_PATH)/include/BALL/VIEW/UIC
 
 THISLIB=$(LIBNAME)
-
-FFT_DEPENDENT_SOURCES=$(BALL_HAS_FFTW:true=geometricFitDialog.C)
-FFT_DEPENDENT_UIC_SOURCES=$(BALL_HAS_FFTW:true=geometricFitDialog.ui)
-FFT_DEPENDENT_MOC_SOURCES=$(BALL_HAS_FFTW:true=geometricFitDialog_moc.C)
-
 
 CPP_SOURCES=\
 	atomOverview.C\
@@ -50,10 +52,8 @@ CPP_SOURCES=\
 	serverPreferences.C\
 	snapShotVisualisation.C\
 	stageSettings.C\
-	$(FFT_DEPENDENT_SOURCES)
-
-#	openBruker1DFile.C\
-#	openBruker2DFile.C\
+	openBruker1DFile.C\
+	openBruker2DFile.C
 
 MOC_SOURCES=\
 	amberConfigurationDialog_moc.C\
@@ -88,9 +88,8 @@ MOC_SOURCES=\
 	setCamera_moc.C\
 	snapShotVisualisation_moc.C\
 	stageSettings_moc.C\
-	$(FFT_DEPENDENT_MOC_SOURCES)
-#	openBruker1DFile_moc.C\
-#	openBruker2DFile_moc.C\
+	openBruker1DFile_moc.C\
+	openBruker2DFile_moc.C\
 
 UIC_SOURCES=$(FFT_DEPENDENT_UIC_SOURCES)\
 	amberConfigurationDialog.ui\
@@ -125,12 +124,18 @@ UIC_SOURCES=$(FFT_DEPENDENT_UIC_SOURCES)\
 	dockProgressDialog.ui\
 	dockResultDialog.ui
 
+ifeq ($(BALL_HAS_FFTW),true)
+	CPP_SOURCES+=geometricFitDialog.C geometricFitDialogData.C
+	MOC_SOURCES+=geometricFitDialog_moc.C geometricFitDialogData_moc.C
+	UIC_SOURCES+=geometricFitDialogData.C
+endif
+
+
 UIC_HDR=$(UIC_SOURCES:Data.C=.dh)
 
-include ../../common.mak
+include ../../rules.mak
+include ../../targets.mak
 -include .Dependencies
-
-BALL_INCLUDES=$(VIEW_INCLUDES)
 
 molecularFileDialog_moc.C: $(HEADER_DIR)/molecularFileDialog.h
 	$(MOC) $(HEADER_DIR)/molecularFileDialog.h -o $@

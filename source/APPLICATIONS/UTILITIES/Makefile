@@ -1,14 +1,19 @@
-# $Id: Makefile,v 1.14 2006/01/03 19:11:53 anhi Exp $
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
 #
-# Makefile for BALL utilities
+# $Id: Makefile,v 1.14.2.1 2006/01/31 10:34:54 oliver Exp $
 #
-
-include ../../common.mak
-default: all
+# Author:
+#   Oliver Kohlbacher
+#
 
 DIRECTORY=APPLICATIONS/UTILITIES
 
-FFT_SOURCES=$(BALL_HAS_FFTW:true=rigid_docking)
+include ../../common.mak
+
+default: all
+
+
 
 EXECUTABLES = $(FFT_SOURCES)\
 	add_hydrogens\
@@ -22,12 +27,17 @@ EXECUTABLES = $(FFT_SOURCES)\
 	reconstruct_fragment\
 	solvent_accessibility
 
+ifeq ($(BALL_HAS_FFTW),true)
+	EXECUTABLES+=rigid_docking
+endif
+
 # default target
 all:	$(EXECUTABLES)
 
 # required for clean and depend
 CPP_SOURCES=$(EXECUTABLES:=.C)
 OBJECTS=$(EXECUTABLES:=.o)
+
 
 -include .Dependencies
 

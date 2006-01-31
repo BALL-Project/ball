@@ -1,12 +1,15 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
 #
-# $Id: Makefile,v 1.8 2005/07/16 21:00:40 oliver Exp $
+# $Id: Makefile,v 1.8.2.1 2006/01/31 10:34:54 oliver Exp $
 #
-# Makefile for Finite Difference Poisson-Boltzmann Application
+# Author:
+#   Oliver Kohlbacher
 #
 
+DIRECTORY=APPLICATIONS/PB
 
 EXECUTABLE=PB
-DIRECTORY=APPLICATIONS/PB
 
 all:	$(EXECUTABLE)
 

@@ -1,11 +1,15 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.10.2.2 2006/01/13 16:00:15 amoll Exp $
+#
+# Author:
+#   Oliver Kohlbacher
+#   Andreas Moll
 #
 
-EXECUTABLE=BALLView
 DIRECTORY=APPLICATIONS/BALLVIEW
+
+EXECUTABLE=BALLView
 
 all:	$(EXECUTABLE)
 
@@ -15,8 +19,6 @@ include ../../common.mak
 -include .Dependencies
 
 UIC_DIR=.
-
-BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 
 CPP_SOURCES=\
 	demoTutorialDialog.C\
@@ -33,7 +35,7 @@ UIC_FILES=\
 	demoTutorialDialogData.h
 
 BALLView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(PYTHON_LIBS)
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_LIBS) $(PYTHON_LIBS)
 
 depend: $(UIC_FILES) $(MOC_SOURCES)
 

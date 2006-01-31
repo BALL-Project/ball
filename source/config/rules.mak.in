@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# $Id: rules.mak.in,v 1.1 2006/01/23 20:45:04 oliver Exp $
+# $Id: rules.mak.in,v 1.1.2.1 2006/01/31 10:34:58 oliver Exp $
 #
 # Author:
 #  Oliver Kohlbacher

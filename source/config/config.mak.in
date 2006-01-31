@@ -2,7 +2,10 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# $Id: config.mak.in,v 1.38 2005/12/23 17:03:40 amoll Exp $
+# $Id: config.mak.in,v 1.38.2.1 2006/01/31 10:34:58 oliver Exp $
+#
+# Author:
+#  Oliver Kohlbacher
 #
 
 # First, some basic unix commands, including the C++ compiler
@@ -64,24 +67,31 @@ BALL_LIBS       = @BALL_LIBS@
 # USE_VIEW contains true if VIEW support is to be built, false otherwise
 # VIEW_PLATFORM either contains Mesa or OpenGL (so far)
 #
-USE_VIEW		    = @USE_VIEW@
-VIEW_PLATFORM 	= @VIEW_PLATFORM@
-VIEW_INCLUDES	  = @VIEW_INCLUDES@
-VIEW_LIBS		    = @VIEW_LIBS@
-BALL_HAS_XDR				= @BALL_HAS_XDR@
 BALL_HAS_VIEW				= @BALL_HAS_VIEW@
+VIEW_PLATFORM				= @VIEW_PLATFORM@
+
+BALL_HAS_XDR				= @BALL_HAS_XDR@
+
+BALL_HAS_GSL				= @BALL_HAS_GSL@
+
 BALL_HAS_FFTW       = @BALL_HAS_FFTW@
+FFTW_LIBS						= @FFTW_LIBS@
+
 BALL_HAS_FLEX_YACC	= @BALL_HAS_FLEX_YACC@
+
+X11_LIBPATH         = @X11_LIBPATH@
+X11_LIBOPTS         = @X11_LIBOPTS@
+X11_LIBS            = @X11_LIBS@
+
 OPENGL_LIBPATH      = @OPENGL_LIBPATH@
 OPENGL_LIBOPTS      = @OPENGL_LIBOPTS@
+
 QT_LIBPATH          = @QT_LIBPATH@
 QT_MT_SUFFIX        = @QT_MT_SUFFIX@
 QT_LIBOPTS          = @QT_LIBOPTS@
 MOC                 = @MOC@
 UIC                 = @UIC@
-X11_LIBPATH         = @X11_LIBPATH@
-X11_LIBOPTS         = @X11_LIBOPTS@
-X11_LIBS            = @X11_LIBS@
+
 SIP            			= @SIP@
 SIP_LIB        			= @SIP_LIB@
 SIP_INCLUDES   			= @SIP_INCLUDES@
@@ -89,7 +99,6 @@ PYTHON_INCLUDES			= @PYTHON_INCLUDES@
 PYTHON_SUPPORT      = @PYTHON_SUPPORT@ 
 PYTHON_LIBS					= @PYTHON_LIBS@
 PYTHON_EXECUTABLE	  =	@PYTHON_EXECUTABLE@
-FFTW_LIBS						= @FFTW_LIBS@
 
 #
 # Support for valgrind, a memory leak checker.
@@ -152,48 +161,3 @@ DIRS	= @SUBDIRS@
 #
 .SUFFIXES: .C .y .l .o .vgr _moc.C .ui .h Data.C Data_moc.C Data.h .dh Data.C
 
-#
-# Rule to create .o files from .C files
-#
-.C.o:
-	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
-
-#
-# Rule to create .C files from the BISON .y files
-#
-.y.C:
-	$(YACC) -p $(PARSER_PREFIX) -d $*.y && $(MV) y.tab.h $*.h && $(MV) y.tab.c $@
-
-#
-# Rule to create .C files from the FLEX .l files
-#
-.l.C:
-	$(LEX) -P$(PARSER_PREFIX) -o$@ $*.l
-
-#
-# Rule to create header files from .ui files (using UIC)
-# .dh files are dummy files required due to the stupidity 
-# of some implementations of make (e.g. SUN)
-# They are just empty files that exist whenever the corresponding
-# *Data.h files exists.
-#
-.ui.dh:
-	$(UIC) -o $(UIC_DIR)/$*Data.h $< && touch $*.dh
-
-.dhData.C:
-	$(UIC) -o $@ -impl $(UIC_DIR)/$*Data.h $*.ui
-
-#
-# Rule to create moc files from header files (using MOC)
-#
-.dhData_moc.C: $*.dh
-	$(MOC) -o $@ $(UIC_DIR)/$*Data.h
-
-.dh_moc.C:  $*.dh
-	$(MOC) -o $@ $(HEADER_DIR)/$*.h
-
-#
-# Rule to create valgrind output from compiled test
-#
-.vgr:	$*
-	$(VALGRIND) $(VALGRIND_OPTS) $*

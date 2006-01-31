@@ -1,4 +1,14 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.43.2.2 2006/01/31 10:34:56 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
+#
+
 DIRECTORY=STRUCTURE
+
 THISLIB=$(LIBNAME)
 
 STRUCTURE_SUBDIRS=\
@@ -14,18 +24,20 @@ SMARTS_SOURCES=\
 	smartsParserParser.C\
 	smartsParserLexer.C
 
-CPP_SOURCES= \
-	molecularGraph.C\
+CPP_SOURCES=\
 	analyticalSES.C\
+	atomBijection.C\
+	buildBondsProcessor.C\
 	connolly.C\
 	defaultProcessors.C\
 	fragmentDB.C\
-	buildBondsProcessor.C\
 	geometricProperties.C\
 	geometricTransformations.C\
 	graphEdge.C\
 	graphFace.C\
 	graphVertex.C\
+	HBondProcessor.C\
+	molecularGraph.C\
 	numericalSAS.C\
 	peptides.C\
 	peptideBuilder.C\
@@ -64,7 +76,6 @@ CPP_SOURCES= \
 	triangulatedSAS.C\
 	triangulatedSES.C\
 	triangulatedSurface.C\
-	HBondProcessor.C\
 	UCK.C
 
 SMILES_PARSER_PREFIX=SmilesParser
@@ -73,10 +84,11 @@ SMARTS_PARSER_PREFIX=SmartsParser
 include ../common.mak
 -include .Dependencies
 
-depend:	\
-	$(SMILES_SOURCES)\
-	$(SMARTS_SOURCES)\
-	subdirsdepend
+ifeq ($(BALL_HAS_GSL),true)
+	CPP_SOURCES+=RMSDMinimizer.C
+endif
+
+depend:	$(SMILES_SOURCES)	$(SMARTS_SOURCES) subdirsdepend
 
 default: echodir $(OBJECTS) dirs
 

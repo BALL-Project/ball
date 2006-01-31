@@ -1,12 +1,15 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
 #
-# $Id: Makefile,v 1.4 2005/07/16 21:00:39 oliver Exp $
+# $Id: Makefile,v 1.4.2.1 2006/01/31 10:34:53 oliver Exp $
 #
-# Makefile for AMBER Application
+# Author:
+#   Oliver Kohlbacher
 #
 
+DIRECTORY=APPLICATIONS/AMBER
 
 EXECUTABLE=amber
-DIRECTORY=APPLICATIONS/AMBER
 
 all:	$(EXECUTABLE)
 

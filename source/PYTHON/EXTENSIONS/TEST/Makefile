@@ -1,7 +1,10 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.2 2005/12/23 17:03:01 amoll Exp $
+# $Id: Makefile,v 1.2.2.1 2006/01/31 10:34:55 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
 #
 
 DIRECTORY=TEST
@@ -13,8 +16,7 @@ DIRECTORY=TEST
 # of the executable name!
 include Makefile.lst
 
-
-EXECUTABLES = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
+EXECUTABLES =\
 	$(EXECUTABLES_BASIC)\
 	$(EXECUTABLES_SYSTEM)\
 	$(EXECUTABLES_MATHS)\
@@ -29,6 +31,10 @@ EXECUTABLES = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	$(EXECUTABLES_QSAR)\
 	$(EXECUTABLES_SOLVATION)
  
+ifeq (%(BALL_HAS_XDR),true)
+	EXECUTABLES+=$(XDR_DEPENDENT_EXECUTABLES)
+endif
+
 # default target
 all:	test
 

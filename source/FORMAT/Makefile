@@ -1,4 +1,15 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.21.2.1 2006/01/31 10:34:55 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
+#
+
 DIRECTORY=FORMAT
+
+include ../config.mak
 
 THISLIB=$(LIBNAME)
 
@@ -37,10 +48,16 @@ CPP_SOURCES=\
 	TRRFile.C\
 	XYZFile.C
 
-include ../common.mak
+ifeq ($(BALL_HAS_VIEW),true)
+	CPP_SOURCES+=DBInterface.C
+endif
+
+include ../targets.mak
+include ../rules.mak
+
 -include .Dependencies
 
-#depend: $(PARSER_SOURCES)
+depend: $(PARSER_SOURCES)
 
 default_clean:	clean_flex_bison
 
@@ -48,10 +65,11 @@ clean_flex_bison:
 	@-$(RM) GAMESSDatParserParser.C GAMESSDatParserLexer.C GAMESSDatParserParser.h
 	@-$(RM) GAMESSLogParserParser.C GAMESSLogParserLexer.C GAMESSLogParserParser.h
 
+
 GAMESSDatParserParser.C: GAMESSDatParserParser.y
 	$(YACC) -p GAMESSDatParser -d $*.y && $(MV) y.tab.h $*.h && $(MV) y.tab.c $@
-GAMESSDatParserParser.h: GAMESSDatParserParser.y
 
+GAMESSDatParserParser.h: GAMESSDatParserParser.y
 
 GAMESSDatParserLexer.C: GAMESSDatParserLexer.l
 	$(LEX) -PGAMESSDatParser -o$@ $*.l
