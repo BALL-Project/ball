@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.12 2006/01/31 01:13:32 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.13 2006/01/31 17:05:59 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -218,6 +218,9 @@ namespace BALL
 		///
 		float calculateStretchConstant(const Bond& bond, float r0);
 
+		///
+		void setMMFFAtomTypeData(const vector<MMFF94AtomTypeData>& data) { atom_types_= &data;}
+
 		protected:
 
 		/// standard parameters 
@@ -229,9 +232,7 @@ namespace BALL
 		static float radii_[];
 		static float electronegatives_[];
 
-		SpHybridizedPredicate  sp1_;
-		Sp2HybridizedPredicate sp2_;
-		Sp2HybridizedPredicate sp3_;
+		const vector<MMFF94AtomTypeData>* atom_types_;
 	};
 
 ///////////////////////////////////////////////////////////////////////////
