@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.18 2006/01/31 10:40:14 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.19 2006/01/31 10:55:27 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -259,6 +259,7 @@ namespace BALL
 																																	 bond.getSecondAtom()->getType()));
 		if (it == parameters_.end())
 		{
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			it = (*(MMFF94StretchParameters*)this).getEmpericalParameters(bond);
 		}
 		return it;
@@ -358,8 +359,9 @@ namespace BALL
 
 		// only atoms up to Xenon
 		if (e1 > 54 || e2 > 54 ||
-				e1 == 0 || e2 || 0) 
+				e1 == 0 || e2 == 0) 
 		{
+Log.error() << "#~~#   3 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			return -1;
 		}
 
@@ -375,15 +377,22 @@ namespace BALL
 		else if (sp2_.operator() (atom2)) h2 = 2;
 		else if (sp3_.operator() (atom2)) h2 = 3;
 
+Log.error() << "#~~#   8 "  << h1           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << "#~~#   9 "  << h2           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 		// only SP hypridized atoms: 
-		if (h1 == 0 || h2 == 0) return -1;
+		if (h1 == 0 || h2 == 0) 
+		{
+Log.error() << "#~~#   5 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+			return -1;
+		}
 
 		// only singe, double, tripple, quadruple  and aromatic bonds
 		Bond::BondOrder bo = (Bond::BondOrder) bond.getOrder();
 		if (bo == Bond::ORDER__UNKNOWN || 
 				bo == Bond::ORDER__ANY)
 		{
+Log.error() << "#~~#   4 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			return -1;
 		}
 
@@ -393,6 +402,7 @@ namespace BALL
 		// only for stored radii
 		if (r1 == 0.0 || r2 == 0.0)
 		{
+Log.error() << "#~~#   6 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			return -1;
 		}
 
@@ -538,7 +548,11 @@ namespace BALL
 		Index ij = getMMFF94Index(a1.getType(), a2.getType());
 
 		float ro = calculateR0(bond);
-		if (ro == -1) return parameters_.end();
+		if (ro == -1) 
+		{
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+			return parameters_.end();
+		}
 
 		float kb = calculateStretchConstant(bond, ro);
 
