@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.16 2006/01/30 23:19:44 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.17 2006/01/31 01:13:17 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -221,7 +221,8 @@ namespace BALL
 			standard_bond_exists(0),
 			kb_sbmb(0),
 			r0_sbmb(0),
-			sbmb_exists(0)
+			sbmb_exists(0),
+			emperical(0)
 	{
 	}
 
@@ -254,8 +255,8 @@ namespace BALL
 		MMFF94StretchParameters::getParameters(const Bond& bond) const
 	{
 		// take the standard value
-		StretchMap::ConstIterator it = parameters_.find(getIndex_(bond.getFirstAtom()->getType(),
-																							 							  bond.getSecondAtom()->getType()));
+		StretchMap::ConstIterator it = parameters_.find(getMMFF94Index(bond.getFirstAtom()->getType(),
+																																	 bond.getSecondAtom()->getType()));
 		return it;
 	}
 
@@ -287,7 +288,7 @@ namespace BALL
 
 				const Position type1 = fields[1].toUnsignedInt();
 				const Position type2 = fields[2].toUnsignedInt();
-				const Position index = getIndex_(type1, type2);
+				const Position index = getMMFF94Index(type1, type2);
 
 				StretchMap::Iterator it = parameters_.find(index);
 
@@ -328,7 +329,7 @@ namespace BALL
 		return true;
 	}
 
-	Position MMFF94StretchParameters::getIndex_(Position atom_type1, Position atom_type2) const
+	Position getMMFF94Index(Position atom_type1, Position atom_type2)
 	{ 
 		// make sure atom_type1 is smaller or equal atom_type2
 		// because the parameters are not mirrored
@@ -453,6 +454,100 @@ namespace BALL
 		// parameters are those described in: D. L. Herschbach and V. W. Laurie, J. Chem.  Phys. 1961, 35, 458-463.
 	}
 
+	float MMFF94StretchParameters::calculateStretchConstant(const Bond& bond, float r0)
+	{
+		const Atom& a1 = *bond.getFirstAtom();
+		const Atom& a2 = *bond.getSecondAtom();
+
+		Index ij = getMMFF94Index(a1.getType(), a2.getType());
+
+		if (emperical_parameters_.has(ij))
+		{
+			const EmpericalBondData& bd = emperical_parameters_[ij];
+			const float kb = bd.kb * pow((bd.r0 / r0), 6);
+			return kb;
+		}
+
+		Position e1 = a1.getElement().getAtomicNumber();
+		Position e2 = a2.getElement().getAtomicNumber();
+		Position p1 = BALL_MIN(e1, e2);
+		Position p2 = BALL_MAX(e1, e2);
+
+		const Position HELIUM = 2;
+		const Position NEON = 10;
+		const Position ARGON = 18;
+		const Position KRYPTN = 36;
+		const Position XENON = 54;
+		const Position RADON = 86;
+
+		// default values
+		float	AIJ = 3.15;
+		float	BIJ = 1.80;
+
+		// special values
+		if (p1 < HELIUM)
+		{
+			if      (p2 < HELIUM) { AIJ = 1.26; BIJ = 0.025; } // maybe an Error in CHARMM? might be 0.25
+			else if (p2 < NEON)   { AIJ = 1.66; BIJ = 0.30; }
+			else if (p2 < ARGON)  { AIJ = 1.84; BIJ = 0.38; }
+			else if (p2 < KRYPTN) { AIJ = 1.98; BIJ = 0.49; }
+			else if (p2 < XENON)  { AIJ = 2.03; BIJ = 0.51; }
+			else if (p2 < RADON)  { AIJ = 2.03; BIJ = 0.25; }
+		}
+		else if (p1 < NEON)
+		{
+			if 			(p2 < NEON) 	{ AIJ = 1.91; BIJ = 0.68; }
+			else if (p2 < ARGON)	{ AIJ = 2.28; BIJ = 0.74; }
+			else if (p2 < KRYPTN) { AIJ = 2.35; BIJ = 0.85; }
+			else if (p2 < XENON)  { AIJ = 2.33; BIJ = 0.68; }
+			else if (p2 < RADON)  { AIJ = 2.50; BIJ = 0.97; }
+		}
+		else if (p1 < ARGON)
+		{
+			if 			(p2 < ARGON)  { AIJ = 2.41; BIJ = 1.18; }
+			else if (p2 < KRYPTN) { AIJ = 2.52; BIJ = 1.02; }
+			else if (p2 < XENON) 	{ AIJ = 2.61; BIJ = 1.28; }
+			else if (p2 < RADON) 	{ AIJ = 2.60; BIJ = 0.84; }
+		}
+		else if (p1 < KRYPTN)
+		{
+			if 			(p2 < KRYPTN) { AIJ = 2.58; BIJ = 1.41; }
+			else if (p2 < XENON)  { AIJ = 2.66; BIJ = 0.86; }
+			else if (p2 < RADON)  { AIJ = 2.75; BIJ = 1.14; }
+		}
+		else if (p1 < XENON)
+		{
+			if 			(p2 < XENON) { AIJ = 2.85; BIJ = 1.62; }
+			else if (p2 < XENON) { AIJ = 2.76; BIJ = 1.25; }
+		}
+
+		float kb = pow(((AIJ - BIJ) / (r0 - BIJ)), 3);
+		return kb;
+	}
+
+
+	MMFF94StretchParameters::StretchMap::ConstIterator MMFF94StretchParameters::getEmpericalParameters(const Bond& bond)
+	{
+		const Atom& a1 = *bond.getFirstAtom();
+		const Atom& a2 = *bond.getSecondAtom();
+
+		Index ij = getMMFF94Index(a1.getType(), a2.getType());
+
+		float ro = calculateR0(bond);
+		if (ro == -1) return parameters_.end();
+
+		float kb = calculateStretchConstant(bond, ro);
+
+		StretchMap::Iterator it = parameters_.insert(pair<Position, BondData>(ij, BondData())).first;
+
+		BondData& bd = (*it).second;
+		bd.kb_normal = kb;
+		bd.r0_normal = ro;
+		bd.emperical = true;
+
+		return it;
+	}
+
 
 	bool MMFF94StretchParameters::readEmpericalParameters(const String& filename)
 	{
@@ -481,7 +576,7 @@ namespace BALL
 
 				const Position type1 = fields[0].toUnsignedInt();
 				const Position type2 = fields[1].toUnsignedInt();
-				const Position index = getIndex_(type1, type2);
+				const Position index = getMMFF94Index(type1, type2);
 
 				EmpericalStretchMap::Iterator it = emperical_parameters_.find(index);
 

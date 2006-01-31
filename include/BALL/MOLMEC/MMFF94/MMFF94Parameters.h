@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.11 2006/01/30 23:19:54 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.12 2006/01/31 01:13:32 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -29,6 +29,9 @@ using namespace std;
 
 namespace BALL 
 {
+
+	Position getMMFF94Index(Position atom_type1, Position atom_type2);
+
 	/// hold the maximum number of MMFF94 atom types + 1 (wildcard)
 	extern Size MMFF94_number_atom_types;
 
@@ -160,6 +163,7 @@ namespace BALL
 			float kb_sbmb;
 			float r0_sbmb;
 			bool  sbmb_exists;
+			bool  emperical;
 		};
 
 		///
@@ -196,6 +200,9 @@ namespace BALL
 		StretchMap::ConstIterator getParameters(const Bond& bond) const;
 
 		///
+		StretchMap::ConstIterator getEmpericalParameters(const Bond& bond);
+
+		///
 		bool readParameters(const String& filename)
 			throw(Exception::FileNotFound);
 		
@@ -206,11 +213,12 @@ namespace BALL
 		const StretchMap& getBondParameters() { return parameters_;}
 
 		/// Calculate the radius value per Schomaker-Stevenson Rule
-		float calculateValues(const Bond& bond);
+		float calculateR0(const Bond& bond);
+
+		///
+		float calculateStretchConstant(const Bond& bond, float r0);
 
 		protected:
-
-		Position getIndex_(Position atom_type1, Position atom_type2) const;
 
 		/// standard parameters 
 		StretchMap parameters_;
