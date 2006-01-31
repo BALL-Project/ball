@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.17 2006/01/31 01:13:17 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.18 2006/01/31 10:40:14 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -257,6 +257,10 @@ namespace BALL
 		// take the standard value
 		StretchMap::ConstIterator it = parameters_.find(getMMFF94Index(bond.getFirstAtom()->getType(),
 																																	 bond.getSecondAtom()->getType()));
+		if (it == parameters_.end())
+		{
+			it = (*(MMFF94StretchParameters*)this).getEmpericalParameters(bond);
+		}
 		return it;
 	}
 
