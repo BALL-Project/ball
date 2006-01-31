@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.C,v 1.4 2006/01/25 10:02:23 bertsch Exp $
+// $Id: DBInterface.C,v 1.5 2006/01/31 09:40:16 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -573,7 +573,7 @@ namespace BALL
 
 		// For each atom, store the x, y, and z coordinates.
 		AtomConstIterator ai(system.beginAtom());
-		for (Position i = 0; i < 3 * number_of_atoms; ++i, ++ai)
+		for (Position i = 0; i < 3 * number_of_atoms; i += 3, ++ai)
 		{
 			const Vector3& r(ai->getPosition());
 			v[i] = r.x;
