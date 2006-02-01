@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.30 2006/01/27 20:57:47 oliver Exp $
+# $Id: Makefile.lst,v 1.31 2006/02/01 13:05:02 leonhardt Exp $
 #
 
 EXECUTABLES_BASIC = \
@@ -222,7 +222,8 @@ $(PREFIX)TranslationProcessor_test$(EXEEXT)\
 $(PREFIX)SurfaceProcessor_test$(EXEEXT)\
 $(PREFIX)SecondaryStructureProcessor_test$(EXEEXT)\
 $(PREFIX)UCK_test$(EXEEXT)\
-$(PREFIX)BuildBondsProcessor_test$(EXEEXT)
+$(PREFIX)BuildBondsProcessor_test$(EXEEXT)\
+$(PREFIX)DockResult_test$(EXEEXT)
 
 EXECUTABLES_SOLVATION = \
 $(PREFIX)PoissonBoltzmann_test$(EXEEXT)\
