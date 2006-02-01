@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.3 2006/01/04 16:25:30 amoll Exp $
+// $Id: dockResultDialog.C,v 1.4 2006/02/01 13:08:17 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockResultDialog.h>
@@ -154,38 +154,39 @@ namespace BALL
 			Size conformation_num = dock_res_->getConformationSet()->size();
 			// insert rows in table
 			result_table->insertRows(0,conformation_num);
-		
-			// fill the first column with snapshot numbers
+			
+			// we want table sorted by scoring 0
+			dock_res_->sortBy(0);
+			// first get order of snapshot indices of scoring 0
+			vector<ConformationSet::Conformation> conf = dock_res_->getScores(0);
+			
+			// fill the first column with snapshot indices
 			for(Position i=0; i < conformation_num; i++)
 			{
 				QString s;
-				result_table->setText(i,0,s.setNum(i));
+				result_table->setText(i,0,s.setNum(conf[i].first));
 			}
-			
-			// fill table with scores
+		
+			// second fill table with scores
 			for(Position i = 0; i < dock_res_->numberOfScorings(); i++)
 			{
 				// insert new score column in table; i+1, because first column contains snapshot number
 				result_table->insertColumns(i+1, 1);
 				// set the scoring function name as label of the column
 				result_table->horizontalHeader()->setLabel(i+1, dock_res_->getScoringName(i));
-				// the scores in the vector are sorted by snapshot number!
-				// the score with snapshot number i is at position i in the vector
-				vector<float> scores = dock_res_->getScores(i);
-				for(Position j = 0; j < scores.size(); j++)
+				// 
+				for(Position j = 0; j < conformation_num; j++)
 				{
 					QString s;
-					result_table->setText(j, i+1, s.setNum(scores[j]));
+					result_table->setText(j, i+1, s.setNum((*dock_res_)(j,i)));
 				}
-			}
+			}	
 			
 			// adjust column width
 			for(Index j = 0; j < result_table->numCols() ; j++)
 			{
 				result_table->adjustColumn(j);
 			}
-			// sort by first score column
-			sortTable(1);
 			// adjust table/dialog size
 			result_table->adjustSize();
 			adjustSize();
@@ -303,41 +304,55 @@ namespace BALL
 			
 			if(!scoring || !dock_res_) return;
 			
-			// apply scoring function; set new scores in the conformation set
+			// apply scoring function
 			ConformationSet* conformation_set = dock_res_->getConformationSet();
-			vector<ConformationSet::Conformation> ranked_conformations = (*scoring)(*conformation_set);
-			conformation_set->setScoring(ranked_conformations);
-			
-			// sort vector ranked_conformations by snapshot numbers
-			sort(ranked_conformations.begin(), ranked_conformations.end());
-			
-			// add a new scoring to dock_res_; we need the name, options and score vector of the scoring function
-			vector<float> scores;
-			for (Position i = 0; i < ranked_conformations.size(); i++)
-			{
-				scores.push_back(ranked_conformations[i].second);
+			vector<ConformationSet::Conformation> ranked_conformations;
+			try
+	   	{
+				ranked_conformations = (*scoring)(*conformation_set);
 			}
-			dock_res_->addScoring(String(scoring_functions->currentText().ascii()), scoring_options, scores);
+			catch(...)
+			{
+				Log.error() << "Scoring of docking results failed! " << __FILE__ << " " << __LINE__ << std::endl;
+				// delete instance 
+				if (scoring != NULL)
+				{
+					delete scoring;
+					scoring = NULL;
+				}
+				return;
+			}
 			
-			// before filling the table with a new score column, sort table by snapshot number
-			// because the scores in the vector are also sorted by them
-			sortTable(0);
+			// add a new scoring to dock_res_
+			dock_res_->addScoring(String(scoring_functions->currentText().ascii()), scoring_options, ranked_conformations);
 			
 			// add new column to the table of the result dialog, where the new scores are shown
 			Size num_column = result_table->numCols();
 			result_table->insertColumns(num_column,1);
 			result_table->horizontalHeader()->setLabel(num_column, scoring_functions->currentText());
 			
-			// fill new column
-			for(Position i = 0; i < scores.size(); i++)
+			// fill table sorted by the new scoring
+			dock_res_->sortBy(dock_res_->numberOfScorings()-1);
+			// first get order of snapshot indices of new added scoring 
+			vector<ConformationSet::Conformation> conf = dock_res_->getScores(dock_res_->numberOfScorings()-1);
+			
+			// fill the first column with snapshot indices
+			for(Position i=0; i < dock_res_->getConformationSet()->size(); i++)
 			{
 				QString s;
-				result_table->setText(i, num_column, s.setNum(scores[i]));
+				result_table->setText(i,0,s.setNum(conf[i].first));
 			}
 			
-			// sort by new column
-			sortTable(num_column);
-			
+			// second fill table with scores
+			for(Position i = 0; i < dock_res_->numberOfScorings(); i++)
+			{
+				for(Position j = 0; j < dock_res_->getConformationSet()->size(); j++)
+				{
+					QString s;
+					result_table->setText(j, i+1, s.setNum((*dock_res_)(j,i)));
+				}
+			}	
+						
 			// adjust column width
 			result_table->adjustColumn(num_column);
 			
@@ -356,33 +371,41 @@ namespace BALL
 		// sort the result table by clicked column
 		void DockResultDialog::sortTable(int column)
 		{
-			// create vector which contains the rows of the table
-			vector<vector<float> > rows;
-			for(Index row_it = 0; row_it < result_table->numRows(); row_it++)
+			// scoring 0 ist is column 1...
+			// index -1 corresponds to an ordering by snapshot number
+			dock_res_->sortBy(column-1);
+		
+			// first get order of snapshot indices
+			// and fill the first column with snapshot indices
+			if(column != 0)
 			{
-				vector<float> row;
-				for(Index column_it = 0; column_it < result_table->numCols(); column_it++)
+				vector<ConformationSet::Conformation> conf = dock_res_->getScores(column-1);
+			
+				for(Position i=0; i < dock_res_->getConformationSet()->size(); i++)
 				{
-					QString s = result_table->text(row_it, column_it);
-					row.push_back(s.toFloat());
-				}
-				rows.push_back(row);
-			}
-			// sort row-vector by the column which the user clicked
-			Compare_ compare_func = Compare_(column);
-			sort(rows.begin(), rows.end(), compare_func);
-			// fill result table
-			for(Index row_it = 0; row_it < result_table->numRows(); row_it++)
-			{
-				QString s;
-				// snapshot number isn't a float!
-				int index = (int) rows[row_it][0];
-				result_table->setText(row_it,0,s.setNum(index));
-				for(Index column_it = 1; column_it < result_table->numCols(); column_it++)
-				{
-					result_table->setText(row_it,column_it,s.setNum(rows[row_it][column_it]));
+					QString s;
+					result_table->setText(i,0,s.setNum(conf[i].first));
 				}
 			}
+			else
+			{
+				for(Position i=0; i < dock_res_->getConformationSet()->size(); i++)
+				{
+					QString s;
+					result_table->setText(i,0,s.setNum(i));
+				}
+			}
+			
+			// second fill table with scores
+			for(Position i = 0; i < dock_res_->numberOfScorings(); i++)
+			{
+				for(Position j = 0; j < dock_res_->getConformationSet()->size(); j++)
+				{
+					QString s;
+					result_table->setText(j, i+1, s.setNum((*dock_res_)(j,i)));
+				}
+			}	
+			
 			//now the current selected row can be different,
 			//so call showSnapshot() of current selected row
 			showSnapshot();
@@ -554,24 +577,5 @@ namespace BALL
 			dock_control->runDocking(true);
 		}
 		
-		/*implementation of nested class Compare_		
-		*/
-		// default constructor
-		DockResultDialog::Compare_::Compare_() throw()
-		{}
-		
-		// constructor
-		DockResultDialog::Compare_::Compare_(Position index) throw()
-		{ index_ = index; }
-		
-		// destructor
-		DockResultDialog::Compare_::~Compare_() throw()
-		{}
-			
-		// operator ()
-		bool DockResultDialog::Compare_::operator() (const vector<float>& a, const vector<float>& b) const
-			throw()
-		{ return a[index_] < b[index_]; }
-	
 	} // end of namespace VIEW
 } // end of namespace BALL

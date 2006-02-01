@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4 2006/01/10 12:35:48 anhi Exp $
+// $Id: dockingController.C,v 1.5 2006/02/01 13:07:41 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -364,7 +364,7 @@ namespace BALL
 		
 			if (!scoring) return false;
 			
-			// apply scoring function; set new scores in the conformation set
+			// apply scoring function
 			vector<ConformationSet::Conformation> ranked_conformations;
 			try
 	   	{
@@ -381,7 +381,6 @@ namespace BALL
 				}
 				return false;
 			}
-			conformation_set->setScoring(ranked_conformations);
 
 			// create new DockResult and add a new scoring to it;
 			// we need the name, options and score vector of the scoring function
@@ -390,20 +389,13 @@ namespace BALL
 																						dock_dialog_.getAlgorithmOptions()); 
 			// dock result is deleted by DatasetControl
 		
-			// sort vector ranked_conformations by snapshot numbers
-			sort(ranked_conformations.begin(), ranked_conformations.end());
-			
-			vector<float> scores;
-			for (Position i = 0; i < ranked_conformations.size(); i++)
-			{
-				scores.push_back(ranked_conformations[i].second);
-			}
-
-			dock_res->addScoring(String(dock_dialog_.scoring_functions->currentText().ascii()), dock_dialog_.getScoringOptions(), scores);
+			dock_res->addScoring(String(dock_dialog_.scoring_functions->currentText().ascii()), 
+													 dock_dialog_.getScoringOptions(), ranked_conformations);
 
 			// add docked system to BALLView structures
-			const SnapShot& best_result = (*conformation_set)[0];
-
+			Index snapshot_index = (dock_res->getScores(0))[0].first;
+			const SnapShot& best_result = (*conformation_set)[snapshot_index];
+			
 			System* docked_system = new System(conformation_set->getSystem());
 			// system is deleted by main control, when it is removed from BallView
 			best_result.applySnapShot(*docked_system);
