@@ -76,7 +76,7 @@ def getOneSystem():
 	return l
 
 def getRepresentations():
-	return getMainControl().getPrimitiveManager().getRepresentations()
+	return getMainControl().getRepresentationManager().getRepresentations()
 
 def getForceField():
 	return getMolecularStructure().getForceField()

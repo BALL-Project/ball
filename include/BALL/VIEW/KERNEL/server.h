@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.12.2.2 2006/02/01 13:23:40 amoll Exp $
+// $Id: server.h,v 1.12.2.3 2006/02/01 14:47:04 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_SERVER_H
@@ -73,6 +73,9 @@ namespace BALL
 			*/
 			Server(QWidget* parent = 0, const char* name = 0)
 				throw();
+
+			// only for Python interface
+			Server(const Server& server);
 
 			//@}
 			/** @name Destructors 
