@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.22.2.1 2006/01/31 10:34:57 oliver Exp $
+# $Id: Makefile,v 1.22.2.2 2006/02/01 13:23:48 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -26,7 +26,6 @@ CPP_SOURCES=\
   objectCreator.C\
 	preferencesEntry.C\
   primitiveManager.C\
-  QTTimer.C\
   representation.C\
   server.C\
   stage.C\

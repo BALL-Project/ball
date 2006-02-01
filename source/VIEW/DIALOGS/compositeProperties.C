@@ -5,8 +5,8 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qpushbutton.h>
 
 namespace BALL
 {

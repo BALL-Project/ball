@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: minimizationDialog.C,v 1.4.2.1 2006/01/13 15:35:52 amoll Exp $
+// $Id: minimizationDialog.C,v 1.4.2.2 2006/02/01 13:23:46 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/minimizationDialog.h>
@@ -10,8 +10,8 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <QFileDialog>
-#include <qlineedit.h>
+#include <QtGui/QFileDialog>
+#include <QtGui/qlineedit.h>
 
 namespace BALL
 {

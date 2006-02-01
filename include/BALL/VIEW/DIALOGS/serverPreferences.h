@@ -1,15 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.h,v 1.12 2005/12/23 17:02:12 amoll Exp $
+// $Id: serverPreferences.h,v 1.12.2.1 2006/02/01 13:23:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_SERVERPREFERENCES_H
 #define BALL_VIEW_DIALOGS_SERVERPREFERENCES_H
 
-#include <qwidget.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
+#include <QtGui/qwidget.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qlineedit.h>
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>

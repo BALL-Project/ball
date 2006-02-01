@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.19.2.1 2006/01/13 15:35:57 amoll Exp $
+// $Id: preferences.C,v 1.19.2.2 2006/02/01 13:23:48 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -9,9 +9,9 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/WIDGETS/helpViewer.h>
 #include <BALL/FORMAT/INIFile.h>
-#include <QStackedWidget>
-#include <QTreeWidget>
-#include <qpushbutton.h>
+#include <QtGui/QStackedWidget>
+#include <QtGui/QTreeWidget>
+#include <QtGui/qpushbutton.h>
 
 namespace BALL
 {

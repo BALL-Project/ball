@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.21.2.1 2006/01/31 10:34:55 oliver Exp $
+# $Id: Makefile,v 1.21.2.2 2006/02/01 13:23:43 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -49,7 +49,7 @@ CPP_SOURCES=\
 	XYZFile.C
 
 ifeq ($(BALL_HAS_VIEW),true)
-	CPP_SOURCES+=DBInterface.C
+#	CPP_SOURCES+=DBInterface.C
 endif
 
 include ../targets.mak

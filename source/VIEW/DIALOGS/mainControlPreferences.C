@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.C,v 1.16.2.2 2006/01/23 19:48:11 amoll Exp $
+// $Id: mainControlPreferences.C,v 1.16.2.3 2006/02/01 13:23:46 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <qcheckbox.h>
-#include <qstylefactory.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qstylefactory.h>
 
 namespace BALL
 {

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.41.2.1 2006/01/13 15:36:02 amoll Exp $
+// $Id: threads.C,v 1.41.2.2 2006/02/01 13:23:49 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -25,7 +25,7 @@
 
 #include <BALL/SYSTEM/directory.h>
 
-#include <qapplication.h>
+#include <QtGui/qapplication.h>
 
 namespace BALL
 {

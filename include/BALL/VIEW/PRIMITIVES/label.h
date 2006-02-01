@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.14 2005/12/23 17:02:19 amoll Exp $
+// $Id: label.h,v 1.14.2.1 2006/02/01 13:23:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
@@ -15,7 +15,7 @@
 #	include <BALL/VIEW/DATATYPE/vertex1.h>
 #endif
 
-#include <qfont.h>
+#include <QtGui/qfont.h>
 
 namespace BALL
 {

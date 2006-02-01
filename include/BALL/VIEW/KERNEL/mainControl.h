@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76.2.3 2006/01/16 01:35:29 amoll Exp $
+// $Id: mainControl.h,v 1.76.2.4 2006/02/01 13:23:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -39,12 +39,12 @@
 # include <BALL/STRUCTURE/fragmentDB.h>
 #endif
 
-#include <QKeySequence>
-#include <QMainWindow>
-#include <qapplication.h>
-#include <qmenubar.h>    // menus
-#include <qlabel.h>			 // statusbar
-#include <qtimer.h>
+#include <QtGui/QKeySequence>
+#include <QtGui/QMainWindow>
+#include <QtGui/qapplication.h>
+#include <QtGui/qmenubar.h>    // menus
+#include <QtGui/qlabel.h>			 // statusbar
+#include <QtCore/qtimer.h>
 
 class QMenu;
 class QKeySequence;

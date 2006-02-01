@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.53.2.4 2006/01/31 10:34:57 oliver Exp $
+# $Id: Makefile,v 1.53.2.5 2006/02/01 13:23:44 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -51,9 +51,9 @@ CPP_SOURCES=\
 	setCamera.C\
 	serverPreferences.C\
 	snapShotVisualisation.C\
-	stageSettings.C\
-	openBruker1DFile.C\
-	openBruker2DFile.C
+	stageSettings.C
+#	openBruker1DFile.C\
+#	openBruker2DFile.C
 
 MOC_SOURCES=\
 	amberConfigurationDialog_moc.C\
@@ -87,9 +87,9 @@ MOC_SOURCES=\
 	serverPreferences_moc.C\
 	setCamera_moc.C\
 	snapShotVisualisation_moc.C\
-	stageSettings_moc.C\
-	openBruker1DFile_moc.C\
-	openBruker2DFile_moc.C\
+	stageSettings_moc.C
+#	openBruker1DFile_moc.C\
+#	openBruker2DFile_moc.C\
 
 UIC_SOURCES=$(FFT_DEPENDENT_UIC_SOURCES)\
 	amberConfigurationDialog.ui\

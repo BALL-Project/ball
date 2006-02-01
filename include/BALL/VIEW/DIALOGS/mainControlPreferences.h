@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.h,v 1.14.2.2 2006/01/23 19:48:08 amoll Exp $
+// $Id: mainControlPreferences.h,v 1.14.2.3 2006/02/01 13:23:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MAINCONTROLPREFERENCES_H
@@ -17,7 +17,7 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
 namespace BALL
 {

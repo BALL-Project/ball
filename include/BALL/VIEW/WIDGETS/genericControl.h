@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.h,v 1.14.2.1 2006/01/13 15:35:34 amoll Exp $
+// $Id: genericControl.h,v 1.14.2.2 2006/02/01 13:23:42 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
 #define BALL_VIEW_WIDGETS_GENERICCONTROL_H
@@ -10,10 +10,10 @@
 # include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
-#include <QKeyEvent>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
-#include <QList>
+#include <QtGui/QKeyEvent>
+#include <QtGui/QTreeWidget>
+#include <QtGui/QTreeWidgetItem>
+#include <QtCore/QList>
 
 namespace BALL
 {

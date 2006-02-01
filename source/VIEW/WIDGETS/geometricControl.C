@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.6 2006/01/18 14:57:27 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.7 2006/02/01 13:23:50 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -16,8 +16,8 @@
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/DIALOGS/clippingDialog.h>
 
-#include <qmenubar.h>
-#include <qtooltip.h> 
+#include <QtGui/qmenubar.h>
+#include <QtGui/qtooltip.h> 
 
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/analyticalGeometry.h>

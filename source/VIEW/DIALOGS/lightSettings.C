@@ -1,17 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.23.2.2 2006/01/23 19:48:11 amoll Exp $
+// $Id: lightSettings.C,v 1.23.2.3 2006/02/01 13:23:46 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
-#include <qpushbutton.h>
-#include <qlineedit.h> 
-#include <qlabel.h>
-#include <qradiobutton.h>
-#include <qslider.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qlineedit.h> 
+#include <QtGui/qlabel.h>
+#include <QtGui/qradiobutton.h>
+#include <QtGui/qslider.h>
 
 namespace BALL
 {

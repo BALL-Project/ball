@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.28.2.2 2006/01/17 14:55:13 amoll Exp $
+// $Id: dockWidget.C,v 1.28.2.3 2006/02/01 13:23:50 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
-#include <qmenubar.h>
+#include <QtGui/qmenubar.h>
 
 namespace BALL
 {

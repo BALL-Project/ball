@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.24.2.2 2006/01/15 13:07:56 amoll Exp $
+// $Id: modularWidget.C,v 1.24.2.3 2006/02/01 13:23:49 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -9,7 +9,7 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
-#include <qmenubar.h>
+#include <QtGui/qmenubar.h>
 
 using namespace std;
 

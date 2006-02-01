@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.C,v 1.34.2.1 2006/01/13 15:35:48 amoll Exp $
+// $Id: downloadPDBFile.C,v 1.34.2.2 2006/02/01 13:23:46 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
@@ -14,13 +14,12 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 
-#include <qlineedit.h> 
-#include <qfile.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qimage.h>
-#include <qpushbutton.h>
-#include <qapplication.h>
+#include <QtGui/qlineedit.h> 
+#include <QtGui/qradiobutton.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qimage.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qapplication.h>
 
 #ifdef BALL_HAS_SSTREAM
 # include <sstream>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.37.2.2 2006/01/23 16:07:39 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.37.2.3 2006/02/01 13:23:47 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -20,9 +20,9 @@
 #include <BALL/DATATYPE/string.h>
 #include <BALL/FORMAT/INIFile.h>
 
-#include <qslider.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
+#include <QtGui/qslider.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qradiobutton.h>
 
 namespace BALL
 {

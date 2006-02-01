@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.5 2006/01/19 17:06:01 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.6 2006/02/01 13:23:49 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -32,20 +32,19 @@
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 
-#include <qstatusbar.h>  // statusbar
-#include <qtooltip.h>
-#include <qpushbutton.h> // needed for preferences
-#include <qcursor.h>     // wait cursor
-#include <qmessagebox.h> 
-#include <QEvent>
-#include <QLabel>
-#include <QCustomEvent>
-#include <QAction>
-#include <QMenuBar>
+#include <QtGui/qstatusbar.h>  // statusbar
+#include <QtGui/qtooltip.h>
+#include <QtGui/qpushbutton.h> // needed for preferences
+#include <QtGui/qcursor.h>     // wait cursor
+#include <QtGui/qmessagebox.h> 
+#include <QtGui/QMenuBar>
+#include <QtGui/QLabel>
+#include <QtGui/QAction>
+#include <QtCore/qtimer.h>
+#include <QtCore/QEvent>
+#include <QtCore/QCustomEvent>
 
 #include <algorithm> // sort
-
-#include <qtimer.h>
 
 //       #define BALL_BENCHMARKING
 

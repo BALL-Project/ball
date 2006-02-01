@@ -3,8 +3,8 @@
 #include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <qlineedit.h>
-#include <qcombobox.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qcombobox.h>
 
 //#define BALL_VIEW_DEBUG
 

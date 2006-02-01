@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.C,v 1.10.2.1 2006/01/13 15:35:43 amoll Exp $
+// $Id: charmmConfigurationDialog.C,v 1.10.2.2 2006/02/01 13:23:45 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
@@ -9,11 +9,11 @@
 #include <BALL/MOLMEC/CHARMM/charmm.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <QFileDialog>
-#include <qlineedit.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
+#include <QtGui/QFileDialog>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qradiobutton.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qpushbutton.h>
 
 namespace BALL
 {

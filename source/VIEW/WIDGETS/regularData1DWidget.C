@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.22.2.1 2006/01/13 15:36:07 amoll Exp $
+// $Id: regularData1DWidget.C,v 1.22.2.2 2006/02/01 13:23:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
-#include <q3popupmenu.h>
-#include <qapplication.h>
+#include <QtGui/q3popupmenu.h>
+#include <QtGui/qapplication.h>
 //Added by qt3to4:
 #include <QContextMenuEvent>
 #include <QResizeEvent>

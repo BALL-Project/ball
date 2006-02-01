@@ -1,5 +1,3 @@
-//Added by qt3to4:
-#include <QCustomEvent>
 #ifndef BALL_VIEW_KERNEL_THREADS_H
 #define BALL_VIEW_KERNEL_THREADS_H
 
@@ -21,8 +19,9 @@
 # include <BALL/SYSTEM/TCPTransfer.h>
 #endif
 
-#include <qthread.h>
-#include <qevent.h>
+#include <QtCore/qthread.h>
+#include <QtGui/qevent.h>
+#include <QtCore/QCustomEvent>
 
 namespace BALL
 {

@@ -9,12 +9,12 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <qmenubar.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qfontdialog.h>
-#include <qradiobutton.h>
+#include <QtGui/qmenubar.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qfontdialog.h>
+#include <QtGui/qradiobutton.h>
 
 namespace BALL
 {

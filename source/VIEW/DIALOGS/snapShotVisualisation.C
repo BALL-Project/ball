@@ -4,12 +4,12 @@
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/FORMAT/trajectoryFile.h>
 
-#include <qlineedit.h>
-#include <qcheckbox.h>
-#include <qslider.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <QProgressDialog>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qslider.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qradiobutton.h>
+#include <QtGui/QProgressDialog>
 
 namespace BALL
 {

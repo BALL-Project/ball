@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.24.2.2 2006/01/23 16:08:01 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.24.2.3 2006/02/01 13:23:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -21,8 +21,8 @@
 
 #include <BALL/VIEW/UIC/modelSettingsDialogData.h>
 
-#include <qcheckbox.h>
-#include <QLabel>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/QLabel>
 
 class QSlider;
 class QLabel;

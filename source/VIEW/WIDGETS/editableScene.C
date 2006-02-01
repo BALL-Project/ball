@@ -16,10 +16,10 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/compositeManager.h>
 
-#include <qpainter.h>
-#include <q3popupmenu.h>
-#include <qmenubar.h>
-#include <qcursor.h>
+#include <QtGui/qpainter.h>
+#include <QtGui/q3popupmenu.h>
+#include <QtGui/qmenubar.h>
+#include <QtGui/qcursor.h>
 //Added by qt3to4:
 #include <QMouseEvent>
 

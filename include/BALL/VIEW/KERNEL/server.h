@@ -1,9 +1,7 @@
-//Added by qt3to4:
-#include <QLabel>
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.12.2.1 2006/01/13 15:35:32 amoll Exp $
+// $Id: server.h,v 1.12.2.2 2006/02/01 13:23:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_SERVER_H
@@ -17,10 +15,6 @@
 #	include <BALL/DATATYPE/hashMap.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_QTTIMER_H
-#	include <BALL/VIEW/KERNEL/QTTimer.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 #	include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
@@ -28,6 +22,9 @@
 #ifndef BALL_VIEW_KERNEL_OBJECTCREATOR_H
 # include <BALL/VIEW/KERNEL/objectCreator.h>
 #endif
+
+#include <QtCore/qtimer.h>
+#include <QtGui/QLabel>
 
 class QLabel;
 
@@ -55,7 +52,7 @@ namespace BALL
 			\ingroup ViewKernelClient
 		*/
 		class BALL_VIEW_EXPORT Server
-			: public QTTimer,
+			: public QTimer,
    			public ModularWidget
 		{
 			public:

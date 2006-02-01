@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.2.2.3 2006/01/19 15:02:21 amoll Exp $
+// $Id: helpViewer.h,v 1.2.2.4 2006/02/01 13:23:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -11,7 +11,7 @@
 #	include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
-#include <QTextBrowser>
+#include <QtGui/QTextBrowser>
 
 namespace BALL
 {

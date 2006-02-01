@@ -6,8 +6,8 @@
 #endif
 
 #include <QCanvasWidget>
-#include <qpixmap.h>
-#include <qpainter.h>
+#include <QtGui/qpixmap.h>
+#include <QtGui/qpainter.h>
 #include <vector>
 
 namespace BALL

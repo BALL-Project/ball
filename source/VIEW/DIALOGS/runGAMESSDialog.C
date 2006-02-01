@@ -1,19 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: runGAMESSDialog.C,v 1.2 2005/10/05 10:09:37 anhi Exp $
+// $Id: runGAMESSDialog.C,v 1.2.2.1 2006/02/01 13:23:48 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/runGAMESSDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 
-#include <qfiledialog.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qspinbox.h>
-#include <qradiobutton.h>
-#include <qlineedit.h>
+#include <QtGui/qfiledialog.h>
+#include <QtGui/qcombobox.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qspinbox.h>
+#include <QtGui/qradiobutton.h>
+#include <QtGui/qlineedit.h>
 
 namespace BALL
 {

@@ -7,7 +7,7 @@
 
 #include <BALL/VIEW/UIC/snapShotVisualisationData.h>
 
-#include <QDialog>
+#include <QtGui/QDialog>
 
 namespace BALL
 {

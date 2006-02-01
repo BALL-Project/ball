@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.15.2.1 2006/01/31 10:34:55 oliver Exp $
+# $Id: Makefile,v 1.15.2.2 2006/02/01 13:23:43 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -27,7 +27,6 @@ CPP_SOURCES= \
 	expressionParser.C\
 	expressionParserLexer.C\
 	expressionParserParser.C\
-	extractors.C\
 	fragment.C\
 	global.C\
 	molecule.C\
@@ -42,6 +41,7 @@ CPP_SOURCES= \
 	selector.C\
 	standardPredicates.C\
 	system.C
+#	extractors.C\
 
 
 #

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.2 2006/01/16 15:17:20 amoll Exp $
+// $Id: scene.h,v 1.66.2.3 2006/02/01 13:23:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -20,18 +20,15 @@
 #endif 
 
 // has to come after BALL includes to prevent problems with Visual Studio Net
-#include <qgl.h>
+#include <QtOpenGL/qgl.h>
 
-#include <qthread.h>
-#include <qevent.h>
-
-#include <qtimer.h>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QDragEnterEvent>
-#include <QWheelEvent>
-#include <QKeyEvent>
-#include <QDropEvent>
+#include <QtCore/qthread.h>
+#include <QtCore/qtimer.h>
+#include <QtGui/qevent.h>
+#include <QtGui/QDragEnterEvent>
+#include <QtGui/QWheelEvent>
+#include <QtGui/QKeyEvent>
+#include <QtGui/QDropEvent>
 
 class QMouseEvent;
 class QRubberBand;

@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.C,v 1.10.2.1 2006/01/13 15:35:40 amoll Exp $
+// $Id: colorRGBA.C,v 1.10.2.2 2006/02/01 13:23:44 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
-#include <qcolor.h>
+#include <QtGui/qcolor.h>
 
 using namespace std;
 

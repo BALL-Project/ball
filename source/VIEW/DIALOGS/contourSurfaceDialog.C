@@ -5,9 +5,9 @@
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qlayout.h>
 
 namespace BALL
 {

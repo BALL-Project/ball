@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.C,v 1.30.2.2 2006/01/23 17:08:00 amoll Exp $
+// $Id: stageSettings.C,v 1.30.2.3 2006/02/01 13:23:48 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
@@ -9,12 +9,12 @@
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qslider.h>
-#include <QStackedWidget>
-#include <QListWidget>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qslider.h>
+#include <QtGui/QStackedWidget>
+#include <QtGui/QListWidget>
 
 namespace BALL
 {

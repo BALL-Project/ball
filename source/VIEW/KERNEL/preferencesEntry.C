@@ -1,22 +1,22 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.19.2.1 2006/01/13 15:36:01 amoll Exp $
+// $Id: preferencesEntry.C,v 1.19.2.2 2006/02/01 13:23:49 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <qslider.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
-#include <QStackedWidget>
-#include <QButtonGroup>
-#include <QComboBox>
-#include <QGroupBox>
-#include <QRadioButton>
+#include <QtGui/qslider.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/QStackedWidget>
+#include <QtGui/QButtonGroup>
+#include <QtGui/QComboBox>
+#include <QtGui/QGroupBox>
+#include <QtGui/QRadioButton>
 
 using namespace std;
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.16.2.1 2006/01/13 15:35:39 amoll Exp $
+// $Id: mainframe.h,v 1.16.2.2 2006/02/01 13:23:43 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -15,19 +15,11 @@
 # include <BALL/VIEW/WIDGETS/scene.h>
 #endif
 
-#ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
-# include <BALL/VIEW/DIALOGS/displayProperties.h>
-#endif
-
-#ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
-//   # include <BALL/VIEW/WIDGETS/datasetControl.h>
-#endif
-
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
 # include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #endif
 
-#include <qwidget.h>
+#include <QtGui/qwidget.h>
 
 namespace BALL
 {
@@ -86,7 +78,6 @@ namespace BALL
 		protected:
 
 		Scene*										scene_;
-//   		DatasetControl* 					dataset_control_;
 		bool 											fullscreen_;
 		QRect 										last_size_;
 	};

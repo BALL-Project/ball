@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.16.2.1 2006/01/13 15:35:42 amoll Exp $
+// $Id: amberConfigurationDialog.C,v 1.16.2.2 2006/02/01 13:23:44 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
@@ -9,11 +9,11 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <qlineedit.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <QFileDialog>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qradiobutton.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/QFileDialog>
 
 namespace BALL
 {

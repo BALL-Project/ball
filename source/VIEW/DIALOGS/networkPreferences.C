@@ -1,15 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: networkPreferences.C,v 1.4.2.2 2006/01/23 19:48:12 amoll Exp $
+// $Id: networkPreferences.C,v 1.4.2.3 2006/02/01 13:23:47 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/networkPreferences.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <qcheckbox.h>
-#include <qlineedit.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qlineedit.h>
 
 namespace BALL
 {

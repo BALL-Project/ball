@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editFunctions.h,v 1.4 2005/12/23 17:02:22 amoll Exp $
+// $Id: editFunctions.h,v 1.4.2.1 2006/02/01 13:23:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_EDITFUNCTIONS_H
@@ -19,7 +19,7 @@
 #	include <BALL/VIEW/DIALOGS/editOperationDialog.h>
 #endif
 
-#include <qtabwidget.h>
+#include <QtGui/qtabwidget.h>
 namespace BALL
 {
 	namespace VIEW

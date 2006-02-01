@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.40.2.1 2006/01/13 15:35:30 amoll Exp $
+// $Id: common.h,v 1.40.2.2 2006/02/01 13:23:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -24,11 +24,11 @@
 #endif
 
 
-#include <qevent.h>
-#include <qcolordialog.h>
-#include <QLabel>
-#include <QCustomEvent>
-#include <QDropEvent>
+#include <QtGui/qcolordialog.h>
+#include <QtGui/QLabel>
+#include <QtGui/qevent.h>
+#include <QtCore/QCustomEvent>
+#include <QtGui/QDropEvent>
 
 namespace BALL
 {

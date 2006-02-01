@@ -10,15 +10,11 @@
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_MESSAGE_H
-//   # include <BALL/VIEW/KERNEL/message.h>
-#endif
-
 #include <BALL/DATATYPE/regularData3D.h>
 
 #include "demoTutorialDialogData.h"
 
-#include <QDialog>
+#include <QtGui/QDialog>
 
 namespace BALL
 {

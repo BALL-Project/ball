@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.7 2006/01/23 00:41:47 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.8 2006/02/01 13:23:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -19,19 +19,19 @@
 #	include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
-#include <QTextEdit>
-#include <QDragEnterEvent>
-#include <QKeyEvent>
-#include <QDropEvent>
-#include <QLineEdit>
-#include <QComboBox>
-#include <QStringList>
+#include <QtGui/QTextEdit>
+#include <QtGui/QDragEnterEvent>
+#include <QtGui/QKeyEvent>
+#include <QtGui/QDropEvent>
+#include <QtGui/QLineEdit>
+#include <QtGui/QComboBox>
+#include <QtCore/QStringList>
 
 // currently doesnt work right
 #undef BALL_QT_HAS_THREADS
 
 #ifdef BALL_QT_HAS_THREADS
-# include <qthread.h>
+# include <QtGui/qthread.h>
 #endif
 
 namespace BALL

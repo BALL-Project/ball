@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.4.2.2 2006/01/17 16:31:07 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.4.2.3 2006/02/01 13:23:47 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -21,16 +21,16 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/SYSTEM/sysinfo.h>
 
-#include <qlineedit.h>
-#include <qspinbox.h>
-#include <qtabwidget.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <QComboBox>
-#include <qslider.h>
-#include <qmessagebox.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qspinbox.h>
+#include <QtGui/qtabwidget.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qradiobutton.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/QComboBox>
+#include <QtGui/qslider.h>
+#include <QtGui/qmessagebox.h>
 
 namespace BALL
 {

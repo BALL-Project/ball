@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.1 2006/01/13 15:35:46 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.2 2006/02/01 13:23:45 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -26,12 +26,12 @@
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 
-#include <qmenubar.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qslider.h>
-#include <qradiobutton.h>
-#include <qtimer.h>
+#include <QtGui/qmenubar.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qslider.h>
+#include <QtGui/qradiobutton.h>
+#include <QtCore/qtimer.h>
 
 namespace BALL
 {

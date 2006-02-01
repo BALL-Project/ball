@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.43.2.1 2006/01/13 15:35:24 amoll Exp $
+// $Id: displayProperties.h,v 1.43.2.2 2006/02/01 13:23:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -21,7 +21,7 @@
 
 #include <BALL/VIEW/UIC/displayPropertiesData.h>
 
-#include <qtimer.h>
+#include <QtCore/qtimer.h>
 
 namespace BALL
 {

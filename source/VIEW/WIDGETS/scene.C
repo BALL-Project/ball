@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.9 2006/01/20 00:10:47 amoll Exp $
+// $Id: scene.C,v 1.174.2.10 2006/02/01 13:23:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -31,19 +31,12 @@
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 
-#include <qpainter.h>
-#include <qimage.h>
-#include <qcursor.h>
-#include <qapplication.h>
-#include <qapplication.h>
-#include <QWheelEvent>
-#include <QKeyEvent>
-#include <QEvent>
-#include <QDropEvent>
-#include <QDragEnterEvent>
-#include <QMouseEvent>
-#include <QDesktopWidget>
-#include <QFileDialog>
+#include <QtGui/qpainter.h>
+#include <QtGui/qimage.h>
+#include <QtGui/qcursor.h>
+#include <QtGui/qapplication.h>
+#include <QtGui/QDesktopWidget>
+#include <QtGui/QFileDialog>
 
 //         #define BALL_BENCHMARKING
 

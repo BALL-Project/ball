@@ -1,15 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editOperationDialog.C,v 1.9.2.1 2006/01/13 15:35:49 amoll Exp $
+// $Id: editOperationDialog.C,v 1.9.2.2 2006/02/01 13:23:46 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/editOperationDialog.h>
 #include <BALL/VIEW/WIDGETS/editableScene.h>
 
-#include <qtooltip.h>
-#include <q3buttongroup.h>
-#include <q3button.h>
-#include <q3listbox.h>
+#include <QtGui/qtooltip.h>
+#include <QtGui/q3buttongroup.h>
+#include <QtGui/q3button.h>
+#include <QtGui/q3listbox.h>
 
 namespace BALL
 {

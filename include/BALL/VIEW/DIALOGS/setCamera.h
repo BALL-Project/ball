@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: setCamera.h,v 1.5.2.1 2006/01/13 15:35:29 amoll Exp $
+// $Id: setCamera.h,v 1.5.2.2 2006/02/01 13:23:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_SETCAMERA_H
@@ -12,7 +12,7 @@
 #endif
 
 #include <BALL/VIEW/UIC/setCameraData.h>
-#include <QDialog>
+#include <QtGui/QDialog>
 
 namespace BALL
 {

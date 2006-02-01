@@ -1,19 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.5 2006/01/22 12:43:08 amoll Exp $
+// $Id: dockDialog.C,v 1.5.2.6 2006/02/01 13:23:45 amoll Exp $
 //
 
-#include <qpushbutton.h>
-#include <qcombobox.h>
-#include <qstringlist.h>
-#include <qmessagebox.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
-#include <qradiobutton.h>
-#include <qfiledialog.h>
-#include <qtabwidget.h>
-#include <qbuttongroup.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qcombobox.h>
+#include <QtCore/qstringlist.h>
+#include <QtGui/qmessagebox.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qradiobutton.h>
+#include <QtGui/qfiledialog.h>
+#include <QtGui/qtabwidget.h>
+#include <QtGui/qbuttongroup.h>
 
 #include <BALL/VIEW/DIALOGS/dockDialog.h>
 #include <BALL/STRUCTURE/fragmentDB.h>

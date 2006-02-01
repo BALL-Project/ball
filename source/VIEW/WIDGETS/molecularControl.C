@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.7 2006/01/23 22:53:47 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.8 2006/02/01 13:23:51 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -13,11 +13,12 @@
 #include <BALL/VIEW/DIALOGS/atomOverview.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
-#include <qpushbutton.h> 
-#include <qlineedit.h> 
-#include <qmessagebox.h> 
-#include <qtooltip.h> 
-#include <QGridLayout> 
+
+#include <QtGui/qpushbutton.h> 
+#include <QtGui/qlineedit.h> 
+#include <QtGui/qmessagebox.h> 
+#include <QtGui/qtooltip.h> 
+#include <QtGui/QGridLayout> 
 
 namespace BALL
 {

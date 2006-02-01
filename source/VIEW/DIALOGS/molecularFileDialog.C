@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.32.2.1 2006/01/13 15:35:54 amoll Exp $$
+// $Id: molecularFileDialog.C,v 1.32.2.2 2006/02/01 13:23:47 amoll Exp $$
 //
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -17,8 +17,8 @@
 #include <BALL/MATHS/simpleBox3.h>
 #include <BALL/KERNEL/system.h>
 
-#include <qmenubar.h>
-#include <QFileDialog>
+#include <QtGui/qmenubar.h>
+#include <QtGui/QFileDialog>
 
 namespace BALL
 {

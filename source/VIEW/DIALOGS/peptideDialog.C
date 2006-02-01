@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideDialog.C,v 1.11.2.1 2006/01/13 15:35:56 amoll Exp $
+// $Id: peptideDialog.C,v 1.11.2.2 2006/02/01 13:23:47 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/COMMON/logStream.h>
 
-#include <qlineedit.h>
-#include <qradiobutton.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qradiobutton.h>
 
 namespace BALL
 {

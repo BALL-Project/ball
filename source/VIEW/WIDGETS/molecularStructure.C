@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.1 2006/01/13 15:36:06 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.2 2006/02/01 13:23:51 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -32,7 +32,7 @@
 #	include <BALL/VIEW/KERNEL/threads.h>
 #endif
 
-#include <qmenubar.h>
+#include <QtGui/qmenubar.h>
 
 using namespace std;
 

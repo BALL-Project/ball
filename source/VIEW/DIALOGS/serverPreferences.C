@@ -1,15 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.C,v 1.11.2.1 2006/01/13 15:35:58 amoll Exp $
+// $Id: serverPreferences.C,v 1.11.2.2 2006/02/01 13:23:48 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/serverPreferences.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/COMMON/rtti.h>
 
-#include <qlabel.h>
-#include <qpushbutton.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qpushbutton.h>
 
 namespace BALL
 {

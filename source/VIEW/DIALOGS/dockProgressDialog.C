@@ -1,13 +1,13 @@
-// $Id: dockProgressDialog.C,v 1.4.2.1 2006/01/13 15:35:47 amoll Exp $
+// $Id: dockProgressDialog.C,v 1.4.2.2 2006/02/01 13:23:45 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockProgressDialog.h>
 
-#include <qprogressbar.h>
-#include <qtextedit.h>
-#include <qpushbutton.h>
-#include <qmessagebox.h>
-#include <qlabel.h>
+#include <QtGui/qprogressbar.h>
+#include <QtGui/qtextedit.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qmessagebox.h>
+#include <QtGui/qlabel.h>
 
 //#define BALL_VIEW_DEBUG
 

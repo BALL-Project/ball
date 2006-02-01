@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.40.2.1 2006/01/13 15:36:02 amoll Exp $
+// $Id: primitiveManager.C,v 1.40.2.2 2006/02/01 13:23:49 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -19,7 +19,7 @@
 #include <BALL/VIEW/DATATYPE/vertex2.h>
 #include <BALL/VIEW/DATATYPE/vertex1.h>
 
-#include <qapplication.h>
+#include <QtGui/qapplication.h>
 
 #define BALL_VIEW_DEBUG
 

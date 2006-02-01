@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.4 2006/01/22 11:28:35 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.5 2006/02/01 13:23:50 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -22,7 +22,7 @@
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/STRUCTURE/DOCKING/dockResult.h>
 
-#include <QFileDialog>
+#include <QtGui/QFileDialog>
 
 namespace BALL
 {

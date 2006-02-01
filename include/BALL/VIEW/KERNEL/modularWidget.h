@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.22.2.2 2006/01/15 13:08:16 amoll Exp $
+// $Id: modularWidget.h,v 1.22.2.3 2006/02/01 13:23:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -15,7 +15,7 @@
 # include <BALL/VIEW/KERNEL/connectionObject.h>
 #endif
 
-#include <QKeySequence>
+#include <QtGui/QKeySequence>
 
 class QObject;
 class QMenuBar;

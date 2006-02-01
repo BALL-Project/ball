@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.3.2.6 2006/01/23 13:20:55 amoll Exp $
+// $Id: dockResultDialog.C,v 1.3.2.7 2006/02/01 13:23:46 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockResultDialog.h>
@@ -13,12 +13,12 @@
 #include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/dockResult.h>
 
-#include <QTableWidget>
-#include <QHeaderView>
-#include <qcombobox.h>
-#include <qpushbutton.h>
-#include <qtextedit.h>
-#include <qmessagebox.h>
+#include <QtGui/QTableWidget>
+#include <QtGui/QHeaderView>
+#include <QtGui/qcombobox.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qtextedit.h>
+#include <QtGui/qmessagebox.h>
 
 
 //#define BALL_VIEW_DEBUG

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.1 2006/01/13 15:35:33 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.2 2006/02/01 13:23:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -27,8 +27,8 @@
 # include <BALL/DATATYPE/regularData3D.h>
 #endif 
 
-#include <QMenu>
-#include <QTreeWidgetItem>
+#include <QtGui/QMenu>
+#include <QtGui/QTreeWidgetItem>
 
 namespace BALL
 {

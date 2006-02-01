@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.22.2.2 2006/01/23 16:08:01 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.22.2.3 2006/02/01 13:23:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -21,7 +21,7 @@
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif 
 
-#include <QTableWidget>
+#include <QtGui/QTableWidget>
 #include <vector>
 			
 namespace BALL

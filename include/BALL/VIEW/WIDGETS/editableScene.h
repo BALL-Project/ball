@@ -30,7 +30,7 @@
 #endif
 
 // has to come after BALL includes to prevent problems with Visual Stuio Net
-#include <qgl.h>
+#include <QtGui/qgl.h>
 //Added by qt3to4:
 #include <QMouseEvent>
 

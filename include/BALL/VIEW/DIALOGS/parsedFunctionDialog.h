@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parsedFunctionDialog.h,v 1.5.2.2 2006/01/21 14:34:02 amoll Exp $
+// $Id: parsedFunctionDialog.h,v 1.5.2.3 2006/02/01 13:23:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PARSEDFUNCTIONDIALOG_H
@@ -13,7 +13,7 @@
 
 #include <BALL/VIEW/UIC/parsedFunctionDialogData.h>
 
-#include <qdialog.h>
+#include <QtGui/qdialog.h>
 
 namespace BALL
 {

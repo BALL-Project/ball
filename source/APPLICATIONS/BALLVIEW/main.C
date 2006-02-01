@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.19.2.1 2006/01/13 15:35:38 amoll Exp $
+// $Id: main.C,v 1.19.2.2 2006/02/01 13:23:43 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
-#include <qapplication.h>
-#include <qmessagebox.h>
-#include <qgl.h>
+#include <QtGui/qapplication.h>
+#include <QtGui/qmessagebox.h>
+#include <QtOpenGL/qgl.h>
 
 #include "mainframe.h"
 #include <BALL/SYSTEM/path.h>

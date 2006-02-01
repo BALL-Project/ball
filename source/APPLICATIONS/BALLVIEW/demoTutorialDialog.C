@@ -18,8 +18,8 @@
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/WIDGETS/logView.h>
-//   #include <BALL/VIEW/WIDGETS/pyWidget.h> /// ?????????????
-//   #include <BALL/VIEW/WIDGETS/datasetControl.h>
+#include <BALL/VIEW/WIDGETS/pyWidget.h>
+#include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/WIDGETS/helpViewer.h>
@@ -27,9 +27,9 @@
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <qpushbutton.h>
-#include <qmessagebox.h>
-#include <QTextBrowser>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qmessagebox.h>
+#include <QtGui/QTextBrowser>
 
 namespace BALL
 {
@@ -121,9 +121,9 @@ void DemoTutorialDialog::initDemo_()
 
 	// hide some dockwidgets
 	if (LogView::getInstance(0) != 0) 			 LogView::getInstance(0)->hide();
-//   	if (DatasetControl::getInstance(0) != 0) DatasetControl::getInstance(0)->hide();
+ 	if (DatasetControl::getInstance(0) != 0) DatasetControl::getInstance(0)->hide();
 #ifdef BALL_PYTHON_SUPPORT
-//   	if (PyWidget::getInstance(0) != 0) 			 PyWidget::getInstance(0)->hide();
+ 	if (PyWidget::getInstance(0) != 0) 			 PyWidget::getInstance(0)->hide();
 #endif
 }
 
@@ -151,9 +151,9 @@ void DemoTutorialDialog::initTutorial_()
 	MolecularControl::getInstance(0)->show();
 	MolecularControl::getInstance(0)->setFloating(false);
 	MolecularControl::getInstance(0)->applyPreferences();
-//   	DatasetControl::getInstance(0)->show();
-//   	DatasetControl::getInstance(0)->applyPreferences();
-//   	DatasetControl::getInstance(0)->setFloating(false);
+ 	DatasetControl::getInstance(0)->show();
+ 	DatasetControl::getInstance(0)->applyPreferences();
+ 	DatasetControl::getInstance(0)->setFloating(false);
 	GeometricControl::getInstance(0)->show();
 	GeometricControl::getInstance(0)->applyPreferences();
 	GeometricControl::getInstance(0)->setFloating(false);

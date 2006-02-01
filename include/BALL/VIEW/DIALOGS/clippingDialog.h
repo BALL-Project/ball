@@ -12,7 +12,7 @@
 # include <BALL/VIEW/KERNEL/clippingPlane.h>
 #endif
 
-#include <QDialog>
+#include <QtGui/QDialog>
 
 namespace BALL
 {

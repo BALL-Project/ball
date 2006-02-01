@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker1DFile.C,v 1.6.2.1 2006/01/13 15:35:55 amoll Exp $
+// $Id: openBruker1DFile.C,v 1.6.2.2 2006/02/01 13:23:47 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/openBruker1DFile.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -9,7 +9,7 @@
 
 #include <BALL/FORMAT/bruker1DFile.h>
 
-#include <q3filedialog.h>
+#include <QtGui/q3filedialog.h>
 
 namespace BALL
 {

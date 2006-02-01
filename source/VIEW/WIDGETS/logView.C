@@ -7,10 +7,7 @@
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <QDragEnterEvent>
-#include <QDragLeaveEvent>
-#include <QDropEvent>
-#include <QTextCursor>
+#include <QtGui/QTextCursor>
 
 using namespace std;
 

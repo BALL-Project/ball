@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.18.2.3 2006/01/16 01:33:48 amoll Exp $
+// $Id: server.C,v 1.18.2.4 2006/02/01 13:23:49 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -10,11 +10,9 @@
 #include <BALL/SYSTEM/socket.h>
 #include <BALL/FORMAT/INIFile.h>
 
-#include <qstatusbar.h>
-#include <qpixmap.h>
-#include <qtooltip.h>
-#include <qstring.h>
-#include <qlabel.h>
+#include <QtGui/qstatusbar.h>
+#include <QtGui/qpixmap.h>
+#include <QtGui/qtooltip.h>
 
 using namespace std;
 
@@ -53,7 +51,7 @@ namespace BALL
 
 		Server::Server(QWidget* parent, const char* name)
 				throw()
-			:	QTTimer(parent, name),
+			:	QTimer(parent),
 				ModularWidget(name),
 				object_creator_(0),
 				composite_hashmap_(),
@@ -88,7 +86,7 @@ namespace BALL
 		void Server::clear()
 			throw()
 		{
-			QTTimer::clear();
+			QTimer::stop();
 			ConnectionObject::clear();
 		}
 
@@ -101,9 +99,9 @@ namespace BALL
 			
 			// if the timer is already running, clear it and close the
 			// socket first
-			if (isTimerEnabled())
+			if (isActive())
 			{
-				stopTimer();
+				stop();
 				sock_inet_buf.close();
 			}
 			
@@ -123,16 +121,16 @@ namespace BALL
 
 			// check once per second
 			setInterval(1000);
-			startTimer();
+			stop();
 		}
 
 		void Server::deactivate()
 				throw()
 		{
-			if (isTimerEnabled())
+			if (isActive())
 			{
 				Log.info() << "VIEW::Server: stopped." << endl;
-				stopTimer();
+				QTimer::stop();
 				sock_inet_buf_->close();
 			}
 		}
@@ -234,7 +232,6 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			QTTimer::dump(s, depth + 1);
 			ConnectionObject::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);

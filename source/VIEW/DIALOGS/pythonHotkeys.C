@@ -3,8 +3,8 @@
 //
 #include <BALL/VIEW/DIALOGS/pythonHotkeys.h>
 
-#include <qtable.h>
-#include <qpushbutton.h>
+#include <QtGui/qtable.h>
+#include <QtGui/qpushbutton.h>
 
 namespace BALL
 {

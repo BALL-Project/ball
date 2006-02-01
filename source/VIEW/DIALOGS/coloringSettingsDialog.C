@@ -1,18 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.C,v 1.38.2.2 2006/01/23 16:07:38 amoll Exp $
+// $Id: coloringSettingsDialog.C,v 1.38.2.3 2006/02/01 13:23:45 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/KERNEL/PTE.h>
 
-#include <qcolordialog.h>
-#include <qslider.h>
-#include <qlabel.h>
-#include <QStackedWidget>
-#include <qcheckbox.h>
+#include <QtGui/qcolordialog.h>
+#include <QtGui/qslider.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/QStackedWidget>
+#include <QtGui/qcheckbox.h>
 
 namespace BALL
 {

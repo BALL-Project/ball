@@ -14,9 +14,9 @@
  #include <BALL/VIEW/WIDGETS/pyWidget.h>
 #endif
 
-#include <QTableWidget>
-#include <QWidget>
-#include <QItemDelegate>
+#include <QtGui/QTableWidget>
+#include <QtGui/QWidget>
+#include <QtGui/QItemDelegate>
 
 namespace BALL
 {

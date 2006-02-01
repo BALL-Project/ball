@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.20.2.1 2006/01/13 15:35:40 amoll Exp $
+// $Id: FDPBDialog.C,v 1.20.2.2 2006/02/01 13:23:44 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -11,11 +11,11 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <QFileDialog>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qradiobutton.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/QFileDialog>
 
 namespace BALL
 {

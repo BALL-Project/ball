@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorChooser.h,v 1.3.2.1 2006/01/13 15:35:23 amoll Exp $
+// $Id: colorChooser.h,v 1.3.2.2 2006/02/01 13:23:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORCHOOSER_H 
@@ -11,8 +11,8 @@
   #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
 
-#include <qwidget.h>
- #include <qwidgetplugin.h>
+#include <QtGui/qwidget.h>
+ #include <QtGui/qwidgetplugin.h>
 //Added by qt3to4:
 #include <QLabel>
 

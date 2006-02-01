@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.16 2006/01/23 00:40:51 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.17 2006/02/01 13:23:51 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -16,12 +16,12 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/SYSTEM/directory.h>
 
-#include <qscrollbar.h>
-#include <QFileDialog>
-#include <qapplication.h>
-#include <QKeyEvent>
-#include <QDropEvent>
-#include <QTextCursor>
+#include <QtGui/qscrollbar.h>
+#include <QtGui/QFileDialog>
+#include <QtGui/qapplication.h>
+#include <QtGui/QKeyEvent>
+#include <QtGui/QDropEvent>
+#include <QtGui/QTextCursor>
 
 // currently doesnt work right
 #undef BALL_QT_HAS_THREADS

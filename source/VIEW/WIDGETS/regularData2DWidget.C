@@ -1,18 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.C,v 1.16.2.1 2006/01/13 15:36:07 amoll Exp $
+// $Id: regularData2DWidget.C,v 1.16.2.2 2006/02/01 13:23:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData2DWidget.h> 
 #include <BALL/VIEW/DATATYPE/colorMap.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
-#include <q3pointarray.h>
-#include <qpainter.h>
-#include <qlayout.h>
-#include <q3popupmenu.h>
-#include <qapplication.h>
+#include <QtGui/q3pointarray.h>
+#include <QtGui/qpainter.h>
+#include <QtGui/qlayout.h>
+#include <QtGui/q3popupmenu.h>
+#include <QtGui/qapplication.h>
 //Added by qt3to4:
 #include <QContextMenuEvent>
 #include <QPixmap>

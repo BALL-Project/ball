@@ -16,11 +16,8 @@
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
-#ifdef BALL_PLATFORM_WINDOWS
- #include <qapplication.h>
-#endif
-
-#include <QUrl>
+#include <QtGui/qapplication.h>
+#include <QtCore/QUrl>
 
 namespace BALL
 {

@@ -1,15 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.h,v 1.4.2.1 2006/01/13 15:35:27 amoll Exp $
+// $Id: modifySurfaceDialog.h,v 1.4.2.2 2006/02/01 13:23:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
 #define BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
 
 #include <BALL/VIEW/UIC/modifySurfaceDialogData.h>
-//Added by qt3to4:
-#include <QLabel>
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>

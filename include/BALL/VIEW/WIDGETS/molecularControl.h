@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.50.2.3 2006/01/23 22:53:56 amoll Exp $
+// $Id: molecularControl.h,v 1.50.2.4 2006/02/01 13:23:42 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -22,10 +22,10 @@
  #include <BALL/MATHS/matrix44.h>
 #endif
 
-#include <qpoint.h>
-#include <QMenu>
-#include <QTreeView>
-#include <QComboBox>
+#include <QtCore/qpoint.h>
+#include <QtGui/qmenu.h>
+#include <QtGui/qtreeview.h>
+#include <QtGui/qcombobox.h>
 
 
 namespace BALL

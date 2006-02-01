@@ -9,11 +9,11 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <QMenu>
-#include <QMouseEvent>
-#include <QKeyEvent>
-#include <QEvent>
-#include <QTextCursor>
+#include <QtGui/QMenu>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QKeyEvent>
+#include <QtCore/QEvent>
+#include <QtGui/QTextCursor>
 
 using namespace std;
 

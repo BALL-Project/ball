@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.11.2.2 2006/01/23 19:48:12 amoll Exp $
+// $Id: materialSettings.C,v 1.11.2.3 2006/02/01 13:23:46 amoll Exp $
 // 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
-#include <qlabel.h>
-#include <qslider.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qslider.h>
 
 namespace BALL
 {

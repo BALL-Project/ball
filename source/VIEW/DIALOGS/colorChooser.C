@@ -3,11 +3,11 @@
 //
 #include "../../BALL/include/BALL/VIEW/DIALOGS/colorChooser.h"
 
-#include <qcolordialog.h>
-#include <qslider.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
+#include <QtGui/qcolordialog.h>
+#include <QtGui/qslider.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qlayout.h>
+#include <QtGui/qpushbutton.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 

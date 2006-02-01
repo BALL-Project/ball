@@ -1,15 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTEDialog.C,v 1.5.2.1 2006/01/13 15:35:41 amoll Exp $
+// $Id: PTEDialog.C,v 1.5.2.2 2006/02/01 13:23:44 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/PTEDialog.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/VIEW/WIDGETS/editableScene.h>
 
-#include <qtooltip.h>
-#include <q3buttongroup.h>
-#include <q3button.h>
+#include <QtGui/qtooltip.h>
+#include <QtGui/q3buttongroup.h>
+#include <QtGui/q3button.h>
 
 namespace BALL
 {

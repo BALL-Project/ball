@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.5 2006/01/20 00:11:23 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.6 2006/02/01 13:23:43 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -32,17 +32,17 @@
   #	include <BALL/VIEW/WIDGETS/pyWidget.h>
 #endif
 
-#include <QPrintDialog>
-#include <qmenubar.h>
-#include <qlabel.h>
-#include <qprinter.h>
-#include <qpainter.h>
-#include <qimage.h>
-#include <qmessagebox.h>
-#include <qcursor.h>
-#include <QPixmap>
-#include <QKeyEvent>
-#include <QFileDialog>
+#include <QtGui/QPrintDialog>
+#include <QtGui/qmenubar.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qprinter.h>
+#include <QtGui/qpainter.h>
+#include <QtGui/qimage.h>
+#include <QtGui/qmessagebox.h>
+#include <QtGui/qcursor.h>
+#include <QtGui/QPixmap>
+#include <QtGui/QKeyEvent>
+#include <QtGui/QFileDialog>
 
 #include <sstream>
 
