@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.8 2006/02/01 13:23:51 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.9 2006/02/01 14:15:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -503,7 +503,7 @@ namespace BALL
 		void MolecularControl::showGuestContextMenu(const QPoint& pos)
 		{
 			if (getMainControl()->compositesAreLocked() ||
-					getMainControl()->getPrimitiveManager().updateRunning()) 
+					getMainControl()->getRepresentationManager().updateRunning()) 
 			{
 				setStatusbarText("No changes allowed, while simulation is running or creating new representations!", true);
 				return;

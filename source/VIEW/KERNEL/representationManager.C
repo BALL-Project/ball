@@ -1,9 +1,9 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.C,v 1.1.2.1 2006/02/01 13:44:08 amoll Exp $
+// $Id: representationManager.C,v 1.1.2.2 2006/02/01 14:15:06 amoll Exp $
 
-#include <BALL/VIEW/KERNEL/primitiveManager.h>
+#include <BALL/VIEW/KERNEL/representationManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -648,11 +648,12 @@ void RepresentationManager::focusRepresentation(const Representation& rep)
 	VIEW::focusCamera(positions);
 }
 
-bool RepresentationManager::isBeeingRendered(const Representation* rep)
+bool RepresentationManager::isBeeingRendered(const Representation* rep) const
 {
-	render_mutex_.lock();
+	QMutex* mutex = (QMutex*) &render_mutex_;
+	mutex->lock();
 	bool result = beeing_rendered_.has((Representation*)rep);
-	render_mutex_.unlock();
+	mutex->unlock();
 
 	return result;
 }
@@ -761,54 +762,26 @@ void RepresentationManager::finishedUpdate_(Representation* rep)
 //   		main_control_->setPreferencesEnabled_(true);
 }
 
-bool RepresentationManager::updateRunning()
+bool RepresentationManager::updateRunning() const
 	throw() 
 {
- 	if (!update_mutex_.tryLock()) return true;
+	QMutex* mutex = (QMutex*) &update_mutex_;
+ 	if (!mutex->tryLock()) return true;
 	bool running = beeing_updated_.size();
- 	update_mutex_.unlock();
+ 	mutex->unlock();
 	return running;
 }
 
 
-bool RepresentationManager::willBeUpdated(const Representation& rep) 
+bool RepresentationManager::willBeUpdated(const Representation& rep) const
 	throw()
 {
- 	update_mutex_.lock();
+	QMutex* mutex = (QMutex*) &update_mutex_;
+	mutex->lock();
 	bool will = to_update_.has((Representation*)&rep);
- 	update_mutex_.unlock();
+	mutex->unlock();
 	return will;
 }
-
-
-/*
-	// no statusbar changes while beeing otherwise busy
-	if (main_control_->compositesAreLocked()) return;
-
-	// keep the user informed: we are still building the Representation -> Statusbar text
-	Position pos = 3;
-	String dots;
-
-	while (thread_->isRunning())
-	{
-		thread_->wait(300); 
-		main_control_->setStatusbarText("Creating Model ..." + dots);
-		qApp->processEvents();
-		if (pos < 40) 
-		{
-			pos ++;
-			dots +="..";
-		}
-		else 
-		{
-			pos = 3;
-			dots = "...";
-		}
-	}
-		
-	main_control_->setStatusbarText("");
-*/
-
 
 
 } } // namespaces

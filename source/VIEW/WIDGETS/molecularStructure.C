@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.2 2006/02/01 13:23:51 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.3 2006/02/01 14:15:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -28,9 +28,7 @@
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 
-#ifdef BALL_QT_HAS_THREADS
-#	include <BALL/VIEW/KERNEL/threads.h>
-#endif
+#include <BALL/VIEW/KERNEL/threads.h>
 
 #include <QtGui/qmenubar.h>
 
@@ -1068,11 +1066,7 @@ namespace BALL
 				thread->setNumberOfStepsBetweenUpdates(minimization_dialog_.getRefresh());
 				thread->setComposite(system);
 
-			#if BALL_QT_VERSION >=	0x030200
-					thread->start(QThread::LowPriority);
-			#else
-					thread->start();
-			#endif
+				thread->start(QThread::LowPriority);
 				return;
 				
    		#else
@@ -1247,12 +1241,7 @@ namespace BALL
 				thread->setNumberOfStepsBetweenUpdates(steps);
 				thread->setDCDFile(dcd);
 				thread->setComposite(system);
-
-				#if BALL_QT_VERSION >=	0x030200
-					thread->start(QThread::LowPriority);
-				#else
-					thread->start();
-				#endif
+				thread->start(QThread::LowPriority);
 
 			#else
 				// ============================= WITHOUT MULTITHREADING ==============================

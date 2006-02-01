@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.7 2006/02/01 13:23:50 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.8 2006/02/01 14:15:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -259,7 +259,7 @@ namespace BALL
 		void GeometricControl::generateListViewItem_(Representation& rep)
 			throw()
 		{
-			if (!getMainControl()->getPrimitiveManager().has(rep)) return;
+			if (!getMainControl()->getRepresentationManager().has(rep)) return;
 
 			QStringList sl;
 			sl << rep.getName().c_str()
@@ -281,7 +281,7 @@ namespace BALL
 		void GeometricControl::deleteCurrentItems()
 			throw()
 		{
-			if (getMainControl()->getPrimitiveManager().updateRunning() ||
+			if (getMainControl()->getRepresentationManager().updateRunning() ||
 			    creating_representations_) 
 			{
 				setStatusbarText("Could not delete Representation while update is running!", true);
@@ -304,7 +304,7 @@ namespace BALL
 				removeItem_(item);
 				item_to_plane_.erase(item);
 				plane_to_item_.erase(plane);
-				getMainControl()->getPrimitiveManager().removeClippingPlane(plane);
+				getMainControl()->getRepresentationManager().removeClippingPlane(plane);
 				setStatusbarText("Deleted Clipping Plane.");
 			}
 		}
@@ -330,7 +330,7 @@ namespace BALL
 		void GeometricControl::showGuestContextMenu(const QPoint& pos)
 		{
 			if (getMainControl()->compositesAreLocked() ||
-					getMainControl()->getPrimitiveManager().updateRunning()) 
+					getMainControl()->getRepresentationManager().updateRunning()) 
 			{
 				setStatusbarText("No changes to representations allowed, while simulation is running or creating new representations!", true);
 				return;
@@ -379,7 +379,7 @@ namespace BALL
 			modify_surface_dialog_->setRepresentation(rep);
 			notify_(new RepresentationMessage(*rep, RepresentationMessage::SELECTED));
 
-			if (rep == 0 || !getMainControl()->getPrimitiveManager().has(*rep)) 
+			if (rep == 0 || !getMainControl()->getRepresentationManager().has(*rep)) 
 			{
 				return; 
 			}
@@ -456,7 +456,7 @@ namespace BALL
 			List<Representation*> reps = getHighlightedRepresentations();
 			if (reps.size() != 1) return;
 			
-			getMainControl()->getPrimitiveManager().focusRepresentation(**reps.begin());
+			getMainControl()->getRepresentationManager().focusRepresentation(**reps.begin());
 		}
 
 		void GeometricControl::initializeWidget(MainControl& main_control)
@@ -610,22 +610,22 @@ namespace BALL
 			plane->setNormal(n);
 			plane->setPoint(camera.getLookAtPosition() + vv * 10);
 
-			PrimitiveManager& pm = mc->getPrimitiveManager();
-			PrimitiveManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+			RepresentationManager& pm = mc->getRepresentationManager();
+			RepresentationManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
 			for (; it != pm.getRepresentations().end(); it++)
 			{
 				plane->getRepresentations().insert(*it);
 			}
-			getMainControl()->getPrimitiveManager().insertClippingPlane(plane);
+			getMainControl()->getRepresentationManager().insertClippingPlane(plane);
 		}
 
 
 		void GeometricControl::updateClippingPlanes()
 		{
-			// put the planes from the PrimitiveManager into a hashset
+			// put the planes from the RepresentationManager into a hashset
 			HashSet<ClippingPlane*> to_have_planes;
 
-			const vector<ClippingPlane*>& vc = getMainControl()->getPrimitiveManager().getClippingPlanes();
+			const vector<ClippingPlane*>& vc = getMainControl()->getRepresentationManager().getClippingPlanes();
 			vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
 			for (; plane_it != vc.end(); plane_it++)
 			{

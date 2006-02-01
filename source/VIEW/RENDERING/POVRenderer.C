@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.22 2005/12/23 17:03:36 amoll Exp $
+// $Id: POVRenderer.C,v 1.22.2.1 2006/02/01 14:15:07 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -399,7 +399,7 @@ namespace BALL
 					render_(*it);
 				}
 
-				const vector<ClippingPlane*>& vc = getMainControl()->getPrimitiveManager().getClippingPlanes();
+				const vector<ClippingPlane*>& vc = getMainControl()->getRepresentationManager().getClippingPlanes();
 				vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
 				for (;plane_it != vc.end(); plane_it++)
 				{

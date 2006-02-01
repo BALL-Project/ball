@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.17 2006/02/01 13:23:51 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.18 2006/02/01 14:15:08 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -342,7 +342,7 @@ namespace BALL
 			// doesnt work, no idea yet why:
 			/*
 			if (getMainControl()->compositesAreLocked() ||
-					getMainControl()->getPrimitiveManager().updateRunning())
+					getMainControl()->getRepresentationManager().updateRunning())
 			{
 				return;
 			}

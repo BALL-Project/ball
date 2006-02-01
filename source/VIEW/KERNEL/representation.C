@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.66.2.1 2006/01/13 15:36:02 amoll Exp $
+// $Id: representation.C,v 1.66.2.2 2006/02/01 14:15:06 amoll Exp $
 //
 
 
@@ -382,7 +382,7 @@ namespace BALL
 				rebuild_ = false;
 			}
 
-			// in multithreaded, the PrimitiveManager will send the Update message
+			// in multithreaded, the RepresentationManager will send the Update message
 		}
 		
 
@@ -585,7 +585,7 @@ namespace BALL
 				return;
 			}
 			
-			mc->getPrimitiveManager().update_(*this);
+			mc->getRepresentationManager().update_(*this);
 		}
 
 		String Representation::getName() const

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.6 2006/02/01 13:23:49 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.7 2006/02/01 14:15:06 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1321,7 +1321,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		bool MainControl::remove(Representation& rep)
 			throw()
 		{
-			if (getPrimitiveManager().updateRunning())
+			if (getRepresentationManager().updateRunning())
 			{
 				setStatusbarText("Could not delete Representation while update is running!", true);
 				return false;
@@ -1655,7 +1655,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		INIFile out(temp);
 		out.appendSection("BALLVIEW_PROJECT");
 
-		getPrimitiveManager().storeRepresentations(out);
+		getRepresentationManager().storeRepresentations(out);
 
 		// write turning point of scene
 		Scene* scene = Scene::getInstance(0);
@@ -1693,7 +1693,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 	void MainControl::loadBALLViewProjectFile(const String& filename)
 		throw()
 	{
-		if (getPrimitiveManager().updateRunning()) 
+		if (getRepresentationManager().updateRunning()) 
 		{
 			setStatusbarText("Could not load project file, while update is running!", true);
 			return; 
@@ -1766,7 +1766,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		file.close();
 		if (has_dp) DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
 
-		getPrimitiveManager().restoreRepresentations(in, new_systems);
+		getRepresentationManager().restoreRepresentations(in, new_systems);
 
 		getSelection().clear();
 		notify_(new NewSelectionMessage);
@@ -1862,9 +1862,9 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			remove(**getCompositeManager().begin());
 		}
 
-		while (getPrimitiveManager().getRepresentations().size() > 0)
+		while (getRepresentationManager().getRepresentations().size() > 0)
 		{
-			remove((**getPrimitiveManager().getRepresentations().begin()));
+			remove((**getRepresentationManager().getRepresentations().begin()));
 		}
 
 		String file = Directory::getUserHomeDir();

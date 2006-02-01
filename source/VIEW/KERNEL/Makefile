@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.22.2.2 2006/02/01 13:23:48 amoll Exp $
+# $Id: Makefile,v 1.22.2.3 2006/02/01 14:15:05 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -25,7 +25,7 @@ CPP_SOURCES=\
   moleculeObjectCreator.C\
   objectCreator.C\
 	preferencesEntry.C\
-  primitiveManager.C\
+  representationManager.C\
   representation.C\
   server.C\
   stage.C\

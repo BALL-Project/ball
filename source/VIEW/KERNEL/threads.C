@@ -1,13 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.41.2.2 2006/02/01 13:23:49 amoll Exp $
+// $Id: threads.C,v 1.41.2.3 2006/02/01 14:15:06 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
-
-// Do nothing, if no thread support
-#ifdef BALL_QT_HAS_THREADS
 
 #include <BALL/VIEW/MODELS/modelProcessor.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -50,7 +47,7 @@ namespace BALL
 		void BALLThread::waitForUpdateOfRepresentations_()
 		{
 //   Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-			PrimitiveManager& pm = main_control_->getPrimitiveManager();
+			RepresentationManager& pm = main_control_->getRepresentationManager();
 			while (pm.updateRunning())
 			{
 				msleep(50);
@@ -143,7 +140,7 @@ namespace BALL
 
 		void UpdateRepresentationThread::run()
 		{
-			PrimitiveManager& pm = main_control_->getPrimitiveManager();
+			RepresentationManager& pm = main_control_->getRepresentationManager();
 			Representation* rep = 0;
 			while (true)
 			{
@@ -458,4 +455,3 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif //Thread support

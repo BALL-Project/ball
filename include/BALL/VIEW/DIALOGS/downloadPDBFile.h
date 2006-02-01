@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.14.2.3 2006/02/01 14:14:49 amoll Exp $
+// $Id: downloadPDBFile.h,v 1.14.2.4 2006/02/01 14:19:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -16,8 +16,6 @@
 #ifndef BALL_DATATYPE_HASHSET_H
 # include <BALL/DATATYPE/hashSet.h>
 #endif
-
-#include <QtGui/qimage.h>
 
 namespace BALL
 {

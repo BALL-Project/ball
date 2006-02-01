@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.C,v 1.34.2.3 2006/02/01 14:15:04 amoll Exp $
+// $Id: downloadPDBFile.C,v 1.34.2.4 2006/02/01 14:19:48 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
@@ -115,7 +115,8 @@ bool DownloadPDBFile::threadedDownload_(const String& url)
 	{
 		if (thread_->getTCPTransfer().getReceivedBytes() == 0)
 		{
-			setStatusbarText("Could not download the given file. Maybe it does not exist on pdb.org?", true);
+			setStatusbarText(String("Could not download the given file. Maybe it does not exist on pdb.org? Errorcode ") +
+						String(thread_->getTCPTransfer().getStatusCode()), true);
 		}
 		else
 		{

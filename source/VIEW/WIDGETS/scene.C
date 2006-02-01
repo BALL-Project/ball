@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.10 2006/02/01 13:23:52 amoll Exp $
+// $Id: scene.C,v 1.174.2.11 2006/02/01 14:15:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -469,7 +469,7 @@ namespace BALL
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
 		{
-			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+			RepresentationManager& pm = getMainControl()->getRepresentationManager();
 			
 			// ============== enable active Clipping planes ==============================
 			GLint current_clipping_plane = GL_CLIP_PLANE0;
@@ -551,7 +551,7 @@ namespace BALL
 					}
 				}
 
-				PrimitiveManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+				RepresentationManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
 				for(; it != pm.getRepresentations().end(); it++)
 				{
 					Representation& rep = **it;
@@ -613,7 +613,7 @@ namespace BALL
 				return;
 			}
 
-			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+			RepresentationManager& pm = getMainControl()->getRepresentationManager();
 			Representation* rep = (Representation*)& repr;
 
 			pm.startedRendering(rep);
@@ -924,7 +924,7 @@ namespace BALL
 		void Scene::createCoordinateSystem_()
 			throw()
 		{
-			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+			RepresentationManager& pm = getMainControl()->getRepresentationManager();
 
 			Representation* rp = pm.createRepresentation();
 			ColorRGBA red(255,0,0,120);
@@ -990,11 +990,11 @@ namespace BALL
 		{
 			if (er.init(*stage_, (float) width(), (float) height()))
 			{
-				PrimitiveManager::RepresentationList::ConstIterator it;
+				RepresentationManager::RepresentationList::ConstIterator it;
 				MainControl *main_control = MainControl::getMainControl(this);
 
-				it = main_control->getPrimitiveManager().getRepresentations().begin();
-				for (; it != main_control->getPrimitiveManager().getRepresentations().end(); it++)
+				it = main_control->getRepresentationManager().getRepresentations().begin();
+				for (; it != main_control->getRepresentationManager().getRepresentations().end(); it++)
 				{
 					if (!er.render(**it))
 					{
@@ -1103,11 +1103,11 @@ namespace BALL
 
 			bool showed_coordinate = stage_->coordinateSystemEnabled();
 			stage_settings_->apply();
-			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+			RepresentationManager& pm = getMainControl()->getRepresentationManager();
 
 			if (showed_coordinate && !stage_->coordinateSystemEnabled())
 			{
-				PrimitiveManager::RepresentationsIterator it = pm.begin();
+				RepresentationManager::RepresentationsIterator it = pm.begin();
 				Representation* coordinate_rep = 0;
 				for (; it != pm.end(); ++it)
 				{
@@ -1676,7 +1676,7 @@ namespace BALL
 		{
 			if (mouse_button_is_pressed_ ||
 					getMainControl()->compositesAreLocked() ||
-					getMainControl()->getPrimitiveManager().updateRunning())
+					getMainControl()->getRepresentationManager().updateRunning())
 			{
 				return;
 			}
