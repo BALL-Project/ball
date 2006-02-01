@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.83.2.1 2006/01/31 10:34:44 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.83.2.2 2006/02/01 12:04:58 oliver Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -3140,8 +3140,8 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 			dnl
 			dnl  Check for the right version number of QT
 			dnl
-			if test `echo ${QT_VERSION_STR} | ${CUT} -c1-2` != "0x" ; then
-				QT_VERSION=`echo ${QT_VERSION_STR} | tr -d "."` 
+			if test `echo ${QT_VERSION_STR} | ${CUT} -c1-2 | ${SED} "s/-.*//"` != "0x" ; then
+				QT_VERSION=`echo ${QT_VERSION_STR} | ${TR} -d "." ` 
 				if test "${QT_VERSION}" -lt "${QT_MIN_VERSION}" -o "${QT_VERSION}" -gt "${QT_MAX_VERSION}" ; then
 					AC_MSG_RESULT()
 					AC_MSG_RESULT([QT version ]${QT_RECOMMENDED_VERSION}[ is recommended for PROJECT[]. Please update])
@@ -3201,7 +3201,7 @@ AC_DEFUN(CF_VIEW_QT_EXECUTABLES, [
 		else
 			AC_MSG_RESULT(yes)
 			AC_MSG_CHECKING(moc version)
-			MOC_VERSION=`${MOC} -v 2>&1 | ${TR} -d "()" | ${SED} "s/.* Qt //"`
+			MOC_VERSION=`${MOC} -v 2>&1 | ${TR} -d "()" | ${SED} "s/.* Qt //" | ${SED} "s/-.*//"`
 			AC_MSG_RESULT(${MOC_VERSION})
 			
 			if test "${MOC_VERSION}" != "${QT_VERSION_STR}" ; then
@@ -3257,7 +3257,7 @@ AC_DEFUN(CF_VIEW_QT_EXECUTABLES, [
 			AC_MSG_RESULT(yes)
 			AC_MSG_CHECKING(uic version)
 			changequote(<<,>>)
-			UIC_VERSION=`${UIC} -v 2>&1 | ${SED} "s/[A-Za-z ]*//g" | ${SED} "s/\.$//"`
+			UIC_VERSION=`${UIC} -v 2>&1 | ${SED} "s/[A-Za-z ]*//g" | ${SED} "s/\.$//" | ${SED} "s/-.*//"`
 			changequote([,])
 
 			AC_MSG_RESULT(${UIC_VERSION})
