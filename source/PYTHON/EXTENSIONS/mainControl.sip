@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.22.2.1 2006/01/13 15:35:39 amoll Exp $
+// $Id: mainControl.sip,v 1.22.2.2 2006/02/01 14:47:07 amoll Exp $
 //
 
 class MainControl
@@ -47,7 +47,7 @@ class MainControl
 	static Size countInstances();
 	static MainControl* getInstance(Position /index/);
 
-	PrimitiveManager& getPrimitiveManager() throw();
+	RepresentationManager& getRepresentationManager() throw();
   CompositeManager& getCompositeManager() throw();
 	bool updateRepresentationsOf(const Composite& /composite/, bool /rebuild/ = true, bool = false) throw();
 	void redrawAllRepresentations(bool /rebuild_display_lists/ = false) throw();
@@ -106,7 +106,7 @@ class MainControl
 //	const String& getMenuHint(Index /id/) const throw();
 	const FragmentDB& getFragmentDB() const throw();
 
-	bool compositesAreLocked() throw();
+	bool compositesAreLocked() const throw();
 	bool lockCompositesFor(ModularWidget*) throw();
 	bool unlockCompositesFor(ModularWidget*) throw();
 	ModularWidget* getLockingWidget() throw();

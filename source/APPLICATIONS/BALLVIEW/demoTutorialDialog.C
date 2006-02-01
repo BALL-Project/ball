@@ -293,7 +293,7 @@ void DemoTutorialDialog::nextStepDemo_()
 	bool disable_button = true;
 
 	// remove representations
-	PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+	RepresentationManager& pm = getMainControl()->getRepresentationManager();
 	Size nr = pm.getNumberOfRepresentations();
 	list<Representation*> reps = pm.getRepresentations();
 	for (Position p = 0; p < nr; p++)
@@ -364,7 +364,7 @@ void DemoTutorialDialog::nextStepDemo_()
 
 		getMainControl()->setMultithreading(false);
 
-		Representation* rep = *getMainControl()->getPrimitiveManager().begin();
+		Representation* rep = *getMainControl()->getRepresentationManager().begin();
 
 		ModifySurfaceDialog* cdialog = ModifySurfaceDialog::getInstance(0);
 		cdialog->setRepresentation(rep);
@@ -412,7 +412,7 @@ void DemoTutorialDialog::nextStepDemo_()
 		}
 
 		// Create a new representation containing the contour surface.
-		Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
+		Representation* rep = getMainControl()->getRepresentationManager().createRepresentation();
 		rep->insert(*mesh);
 		rep->setModelType(MODEL_CONTOUR_SURFACE); 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.18.2.4 2006/02/01 13:23:49 amoll Exp $
+// $Id: server.C,v 1.18.2.5 2006/02/01 14:47:09 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -71,6 +71,12 @@ namespace BALL
 			unregisterObjectCreator();
 		}
 
+		Server::Server(const Server& server)
+			: QTimer(),
+				ModularWidget()
+		{
+		}
+
 		Server::~Server()
 			throw()
 		{
@@ -121,7 +127,7 @@ namespace BALL
 
 			// check once per second
 			setInterval(1000);
-			stop();
+			start();
 		}
 
 		void Server::deactivate()

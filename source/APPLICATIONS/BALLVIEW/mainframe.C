@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.6 2006/02/01 13:23:43 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.7 2006/02/01 14:47:04 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -349,7 +349,7 @@ namespace BALL
 	
 	void Mainframe::reset()
 	{
-		if (composites_locked_ || getPrimitiveManager().updateRunning()) return;
+		if (composites_locked_ || getRepresentationManager().updateRunning()) return;
 
 		DisplayProperties* dp = DisplayProperties::getInstance(0);
 		dp->setDrawingPrecision(DRAWING_PRECISION_HIGH);
@@ -369,8 +369,8 @@ namespace BALL
 		}
 
 		// remove all Representations
-		PrimitiveManager::RepresentationList reps = getPrimitiveManager().getRepresentations();
-		PrimitiveManager::RepresentationList::Iterator rit = reps.begin();
+		RepresentationManager::RepresentationList reps = getRepresentationManager().getRepresentations();
+		RepresentationManager::RepresentationList::Iterator rit = reps.begin();
 
 		for (; rit != reps.end(); ++rit)
 		{
