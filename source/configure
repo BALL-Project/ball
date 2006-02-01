@@ -21031,12 +21031,12 @@ echo "${ECHO_T}yes" >&6
 echo $ECHO_N "checking linking against QT libraries... $ECHO_C" >&6
 
 		if test "${QT_LIBPATH}" != "/usr/lib" ; then
-			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -l QtCore"
-			QT_LIBOPTS="-L${QT_LIBPATH} -lQtGui -l QtCore"
+			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore"
+			QT_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -l QtCore"
 		else
 			QT_LIBPATH=""
-			QTQGL_LIBOPTS=" -lQtOpenGL -lQtGui -l QtCore"
-			QT_LIBOPTS="-lQtGui -l QtCore"
+			QTQGL_LIBOPTS=" -lQtOpenGL -lQtGui -lQtCore"
+			QT_LIBOPTS="-lQtOpenGL -lQtGui -lQtCore"
 		fi
 
 		SAVE_LIBS=${LIBS}

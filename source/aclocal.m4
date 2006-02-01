@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.83.2.3 2006/02/01 12:16:56 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.83.2.4 2006/02/01 13:53:02 oliver Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -3048,12 +3048,12 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 		AC_MSG_CHECKING(linking against QT libraries)
 
 		if test "${QT_LIBPATH}" != "/usr/lib" ; then
-			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -l QtCore"
-			QT_LIBOPTS="-L${QT_LIBPATH} -lQtGui -l QtCore"
+			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore"
+			QT_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -l QtCore"
 		else 
 			QT_LIBPATH=""
-			QTQGL_LIBOPTS=" -lQtOpenGL -lQtGui -l QtCore"
-			QT_LIBOPTS="-lQtGui -l QtCore"
+			QTQGL_LIBOPTS=" -lQtOpenGL -lQtGui -lQtCore"
+			QT_LIBOPTS="-lQtOpenGL -lQtGui -lQtCore"
 		fi
 
 		SAVE_LIBS=${LIBS}
