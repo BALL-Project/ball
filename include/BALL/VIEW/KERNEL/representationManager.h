@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.h,v 1.1.2.2 2006/02/01 13:43:54 amoll Exp $
+// $Id: representationManager.h,v 1.1.2.3 2006/02/01 14:14:50 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATIONMANAGER_H
 #define  BALL_VIEW_KERNEL_REPRESENTATIONMANAGER_H
@@ -194,11 +194,11 @@ namespace BALL
 			void focusRepresentation(const Representation& rep);
 			
 			/// Return true if a Representation will be updated
-			bool willBeUpdated(const Representation& rep)
+			bool willBeUpdated(const Representation& rep) const
 				throw();
 
 			/// Return true, if a Representation is currently beeing updated
-			bool updateRunning() 
+			bool updateRunning() const 
 				throw();
 
 			///
@@ -208,7 +208,7 @@ namespace BALL
 			void finishedRendering(Representation* rep);
 			
 			/// Used by UpdateRepresentationThread
-			bool isBeeingRendered(const Representation* rep);
+			bool isBeeingRendered(const Representation* rep) const;
 
 			protected:
 		

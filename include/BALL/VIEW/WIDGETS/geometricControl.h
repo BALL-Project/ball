@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.27.2.2 2006/02/01 13:23:42 amoll Exp $
+// $Id: geometricControl.h,v 1.27.2.3 2006/02/01 14:14:51 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -36,7 +36,7 @@ namespace BALL
 				The method buildContextMenu is a means to 
 				create a customizable context menu entries.
 				To use this widget in the application just create it with MainControl as
-				parent and all in the PrimitiveManager created Representation objects will show
+				parent and all in the RepresentationManager created Representation objects will show
 				up in the GeometricControl.
 				\ingroup ViewWidgets
 		*/

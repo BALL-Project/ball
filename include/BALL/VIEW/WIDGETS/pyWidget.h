@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.8 2006/02/01 13:23:42 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.9 2006/02/01 14:14:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -27,12 +27,10 @@
 #include <QtGui/QComboBox>
 #include <QtCore/QStringList>
 
+#include <QtCore/qthread.h>
+
 // currently doesnt work right
 #undef BALL_QT_HAS_THREADS
-
-#ifdef BALL_QT_HAS_THREADS
-# include <QtGui/qthread.h>
-#endif
 
 namespace BALL
 {
@@ -43,7 +41,6 @@ namespace BALL
 
 		class RunPythonThread;
 
-#ifdef BALL_QT_HAS_THREADS
 		class BALL_VIEW_EXPORT RunPythonThread
 			: public QThread
 		{
@@ -58,7 +55,6 @@ namespace BALL
 				String input;
 				String output;
 		};
-#endif
 
 		///
 		struct BALL_VIEW_EXPORT Hotkey

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.20.2.2 2006/02/01 13:23:44 amoll Exp $
+// $Id: FDPBDialog.C,v 1.20.2.3 2006/02/01 14:15:03 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -81,14 +81,12 @@ namespace BALL
 				Log.info() << "Destructing object " << this << " of class FDPBDialog" << std::endl;
 			#endif 
 
-			#ifdef BALL_QT_HAS_THREADS
 				if (thread_ != 0)
 				{
 					if (thread_->isRunning()) thread_->terminate();
 					if (thread_->isRunning()) thread_->wait();
 					delete thread_;
 				}
-			#endif
 		}
 
 		// ------------------------- SLOTS ------------------------------------------------
@@ -157,6 +155,7 @@ namespace BALL
 			}
 
 			if (!lockComposites()) return false;
+			// currently doesnt work:
 			#ifdef BALL_QT_HAS_THREADS_
 				if (thread_ == 0)
 				{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.14.2.2 2006/02/01 13:23:39 amoll Exp $
+// $Id: downloadPDBFile.h,v 1.14.2.3 2006/02/01 14:14:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -55,19 +55,10 @@ namespace BALL
 			public slots:
 
 				///
-				void slotSearch();
-
-				///
 				void slotDownload();
 
 				///
-				void slotShowDetail();
-
-				///
 				void slotNewId(const QString& new_id);
-
-				///
-				void displayHTML(const QString& url);
 
 				///
 				void idChanged();
@@ -90,7 +81,6 @@ namespace BALL
 
 				void setProxyAndTransfer_(TCPTransfer& tcp);
 				
-//   				QTextBrowser 						*qb_;
 				FetchHTMLThread 				*thread_;
 				bool 										aborted_;
 				bool 										error_;

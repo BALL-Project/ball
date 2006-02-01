@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.34 2005/12/23 17:02:16 amoll Exp $
+// $Id: representation.h,v 1.34.2.1 2006/02/01 14:14:50 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -45,7 +45,7 @@ namespace BALL
 		class ColorProcessor;
 		class GeometricObject;
 		class UpdateRepresentationThread;
-		class PrimitiveManager;
+		class RepresentationManager;
 
 		/** Representation
 		 		A Representation is a collection of geometric objects for a group of 
@@ -60,7 +60,7 @@ namespace BALL
 			: public PropertyManager
 		{
 			friend class UpdateRepresentationThread;
-			friend class PrimitiveManager;
+			friend class RepresentationManager;
 			public:
 
 			BALL_CREATE(Representation)
@@ -304,7 +304,7 @@ namespace BALL
 			protected:
 
 			/** Wrapper method for multithreading.
-			 		Can be called by update() directly, or by the PrimitiveManager' s 
+			 		Can be called by update() directly, or by the RepresentationManager' s 
 					UpdateRepresentationThread.
 			*/
 			void update_()

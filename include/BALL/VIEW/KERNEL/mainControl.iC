@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.iC,v 1.7.2.1 2006/01/13 15:35:31 amoll Exp $
+// $Id: mainControl.iC,v 1.7.2.2 2006/02/01 14:14:50 amoll Exp $
 
 BALL_INLINE 
 Preferences* MainControl::getPreferences()
@@ -39,7 +39,7 @@ void MainControl::quit()
 }
 
 BALL_INLINE
-bool MainControl::compositesAreLocked()
+bool MainControl::compositesAreLocked() const
 	throw()
 {
 	return composites_locked_;
@@ -56,10 +56,7 @@ BALL_INLINE
 bool MainControl::updateOfRepresentationRunning()
 	throw()
 {
-#ifdef BALL_QT_HAS_THREADS
 	return primitive_manager_.updateRunning();
-#endif
-	return false;
 }
 
 BALL_INLINE

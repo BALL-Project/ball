@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.2 2006/02/01 13:23:45 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.3 2006/02/01 14:15:04 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -399,7 +399,7 @@ void DisplayProperties::onNotify(Message *message)
 bool DisplayProperties::isNotBusy_()
 {
 	return !getMainControl()->compositesAreLocked() &&
-					!getMainControl()->getPrimitiveManager().updateRunning();
+					!getMainControl()->getRepresentationManager().updateRunning();
 }
 
 void DisplayProperties::apply()
@@ -415,7 +415,7 @@ void DisplayProperties::apply()
 	if (changed_selection_color_)
 	{
 		BALL_SELECTED_COLOR_CHANGE_TIME = PreciseTime::now();
-		getMainControl()->getPrimitiveManager().rebuildAllRepresentations();
+		getMainControl()->getRepresentationManager().rebuildAllRepresentations();
 	}
 
 	createRepresentation(getMainControl()->getMolecularControlSelection());
@@ -528,8 +528,8 @@ Representation* DisplayProperties::createRepresentation(const List<Composite*>& 
 		rep_->setComposites(temp_composites);
 
 		// this is not straight forward, but we have to prevent a second rendering run in the Scene...
-		// the insertion into the PrimitiveManager is needed to allow the Representation::update
-		getMainControl()->getPrimitiveManager().insert(*rep_, false);
+		// the insertion into the RepresentationManager is needed to allow the Representation::update
+		getMainControl()->getRepresentationManager().insert(*rep_, false);
 		
 		Representation* repx = rep_;
 		// now we can add the Representation to the GeometricControl
@@ -538,7 +538,7 @@ Representation* DisplayProperties::createRepresentation(const List<Composite*>& 
 		rep_ = repx;
 
 		// no refocus, if a this is not the only Representation
-		if ((getMainControl()->getPrimitiveManager().getRepresentations().size() < 2) && 
+		if ((getMainControl()->getRepresentationManager().getRepresentations().size() < 2) && 
 				composites.size() > 0)
 		{
 			CompositeMessage* ccmessage = new CompositeMessage;

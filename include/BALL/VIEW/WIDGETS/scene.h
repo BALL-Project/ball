@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.3 2006/02/01 13:23:42 amoll Exp $
+// $Id: scene.h,v 1.66.2.4 2006/02/01 14:14:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -786,7 +786,6 @@ namespace BALL
 		};
 
 
-#ifdef BALL_QT_HAS_THREADS
 		///
 		class BALL_VIEW_EXPORT AnimationThread
 			: public QThread
@@ -803,7 +802,6 @@ namespace BALL
 				///
 				void mySleep(Size msec) {msleep(msec);}
 		};
-#endif
 
 
 } } // namespaces

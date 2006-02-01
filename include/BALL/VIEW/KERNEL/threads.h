@@ -5,8 +5,6 @@
 #include <BALL/common.h>
 #endif
 
-#ifdef BALL_QT_HAS_THREADS
-
 #ifndef BALL_VIEW_KERNEL_REPRESENTATION_H
 #include <BALL/VIEW/KERNEL/representation.h>
 #endif
@@ -77,7 +75,7 @@ namespace VIEW
 
 			/** Provokes an update of the Representation's and the Scene 
 			 		with rebuild of the display-lists.
-					This method calls PrimitiveManager::notifyOfPendingingUpdate()
+					This method calls RepresentationManager::notifyOfPendingingUpdate()
 					and sends an UpdateCompositeEvent with a pointer to the Composite.
 			*/
 			void updateScene_();
@@ -86,8 +84,8 @@ namespace VIEW
 			void output_(const String& string, bool important = false);
 
 			/** Wait until all Representation's are rebuild, by using
-					PrimitiveManager::updatePending() and \\
-					PrimitiveManager::getUpdateWaitCondition().wait() .
+					RepresentationManager::updatePending() and \\
+					RepresentationManager::getUpdateWaitCondition().wait() .
 			*/
 			void waitForUpdateOfRepresentations_();
 	
@@ -413,5 +411,4 @@ namespace VIEW
 		
 	}
 }
-#endif //BALL_QT_HAS_THREADS
 #endif //BALL_VIEW_KERNEL_THREADS_H

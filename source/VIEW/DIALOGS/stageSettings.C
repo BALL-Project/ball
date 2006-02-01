@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.C,v 1.30.2.3 2006/02/01 13:23:48 amoll Exp $
+// $Id: stageSettings.C,v 1.30.2.4 2006/02/01 14:15:05 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
@@ -131,7 +131,7 @@ namespace BALL
 			{
 				getMainControl()->setStatusbarText("Because of change in usage of vertex buffer, all Representations have to be deleted!", true);
 				// remove representations
-				PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+				RepresentationManager& pm = getMainControl()->getRepresentationManager();
 				Size nr = pm.getNumberOfRepresentations();
 				list<Representation*> reps = pm.getRepresentations();
 				for (Position p = 0; p < nr; p++)

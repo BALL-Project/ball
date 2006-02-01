@@ -46,7 +46,7 @@ void ClippingDialog::exec()
 	MainControl* mc = getMainControl();
 	if (mc == 0) return;
 
-	PrimitiveManager& pm = mc->getPrimitiveManager();
+	RepresentationManager& pm = mc->getRepresentationManager();
 
  	listview->setColumnCount(3);
 	listview->setRowCount(pm.getRepresentations().size());
@@ -61,7 +61,7 @@ void ClippingDialog::exec()
 	listview->setColumnWidth(2, 140);
 
 	Position row= 0;
-	PrimitiveManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+	RepresentationManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
 	for (; it != pm.getRepresentations().end(); it++)
 	{
 		const Representation& rep = **it;
@@ -98,7 +98,7 @@ void ClippingDialog::accept()
 
 	clipping_plane_->getRepresentations().clear();
 
-	List<Representation*> lreps = getMainControl()->getPrimitiveManager().getRepresentations();
+	List<Representation*> lreps = getMainControl()->getRepresentationManager().getRepresentations();
 	vector<const Representation*> reps;
 	reps.resize(lreps.size());
 	copy(lreps.begin(), lreps.end(), reps.begin());

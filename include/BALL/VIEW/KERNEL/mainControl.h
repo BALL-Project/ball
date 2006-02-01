@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76.2.4 2006/02/01 13:23:40 amoll Exp $
+// $Id: mainControl.h,v 1.76.2.5 2006/02/01 14:14:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -19,8 +19,8 @@
 #	include <BALL/VIEW/KERNEL/connectionObject.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
-#	include <BALL/VIEW/KERNEL/primitiveManager.h>
+#ifndef BALL_VIEW_KERNEL_REPRESENTATIONMANAGER_H
+#	include <BALL/VIEW/KERNEL/representationManager.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
@@ -42,13 +42,9 @@
 #include <QtGui/QKeySequence>
 #include <QtGui/QMainWindow>
 #include <QtGui/qapplication.h>
-#include <QtGui/qmenubar.h>    // menus
-#include <QtGui/qlabel.h>			 // statusbar
+#include <QtGui/qmenubar.h> 
+#include <QtGui/qlabel.h>
 #include <QtCore/qtimer.h>
-
-class QMenu;
-class QKeySequence;
-class QAction;
 
 namespace BALL
 {
@@ -66,7 +62,7 @@ namespace BALL
 				It is a storage facility for Composite objects, the graphical
 				Representation and the inserted ModularWidget.
 				The interface for the Composite administration is implemented in CompositeManager, and for
-				the Representation 's in PrimitiveManager.
+				the Representation 's in RepresentationManager.
 				\par
 				This class is also the root ConnectionObject. 
 				Therefore all messages will be handled from this class. 
@@ -92,7 +88,7 @@ namespace BALL
 				public ConnectionObject,
 				public Embeddable
 		{
-			friend class PrimitiveManager;
+			friend class RepresentationManager;
 			friend class SimulationThread;
 
 			Q_OBJECT
@@ -210,9 +206,9 @@ namespace BALL
 			//@{
 
 			/** Get the primitive manager.
-					The class PrimitiveManager contains all Representation objects and GeometricObject.
+					The class RepresentationManager contains all Representation objects and GeometricObject.
 			*/
-			PrimitiveManager& getPrimitiveManager()
+			RepresentationManager& getRepresentationManager()
 				throw() { return primitive_manager_;}
 
 			/** Get the composite manager.
@@ -276,7 +272,7 @@ namespace BALL
 
 			/** Update a Representation
 			 		A RepresentationMessage with type UPDATE and a SceneMessage is send.
-					\return false if the PrimitiveManager doesnt contain the Representation
+					\return false if the RepresentationManager doesnt contain the Representation
 			*/
 			bool update(Representation& rep)
 				throw();
@@ -284,14 +280,14 @@ namespace BALL
 			/** Insert a Representation
 			 		The Representation must be created on the heap!!!
 			 		A RepresentationMessage with type NEW is send.
-					\return false if the PrimitiveManager contains the Representation
+					\return false if the RepresentationManager contains the Representation
 			*/
 			bool insert(Representation& rep)
 				throw();
 
 			/** Remove a Representation
 			 		A RepresentationMessage with type REMOVE is send.
-					\return false if the PrimitiveManager doesnt contain the Representation
+					\return false if the RepresentationManager doesnt contain the Representation
 			*/
 			bool remove(Representation& rep)
 				throw();
@@ -569,6 +565,9 @@ namespace BALL
 			/** Sets the text in the statusbar.
 					The statusbar has a label, whose text is set to the given argument.
 					It is possible to notify the user with a beep sound.
+					@param important If true, the message is also logged in the LogView, marked red in the statusbar and
+								 shown there for a longer time
+					@param beep if true a beep tone is played to inform the user about a critical event
 			*/
 			void setStatusbarText(const String& text, bool important = false, bool beep = false)
 				throw();
@@ -592,18 +591,22 @@ namespace BALL
 			/** Check wheter the stored composites can be modified at the moment.
 					This method returns true e.g. while a MD simulation is running.
 			*/
-			bool compositesAreLocked() throw();
+			bool compositesAreLocked() const throw();
 
-			///
+			/** Lock the Composites for a given Modular Widget.
+					This allows exclusive acces e.g. to delete or modify Composites and prevents those
+					nasty segfaults if an other thread works on the Composites.
+					@retrun true if the exclusive lock on the composites could be obtained
+			*/
 			bool lockCompositesFor(ModularWidget* widget) throw();
 
-			///
+			/// Lock the Composites for a given Modular Widget
 			bool unlockCompositesFor(ModularWidget* widget) throw();
 
-			///
+			/// Get the ModularWidget with excluse access to the Composites
 			ModularWidget* getLockingWidget() throw();
 
-			///
+			/// Return true if Representations are (re)calculated
 			bool updateOfRepresentationRunning() throw();
 					
 			/// Returns true, if the simulation was told to stop, but hasnt done this so far.
@@ -635,43 +638,48 @@ namespace BALL
 			void insertDeleteEntry()
 				throw();
 
-			///
+			/** BALLView stores the directory of the last file operation, e.g. when a PDB file is opened or saved.
+			 		This saves the user some time, since he doesnt have to change the folders in the file dialogs as often.
+					This method returns the last directory.
+			*/
 			String getWorkingDir() const
 				throw() { return working_dir_;}
 
-			///
+			/// Set the working directory for the next file dialog and file operation to the given directory.
 			void setWorkingDir(const String& dir)
 				throw();
 
-			///
+			/** This enables logging to an file for all messages send per LogStream .e.g. Log().error()
+			*/
 			void enableLoggingToFile()
 				throw();
 			
-			///
+			/** This disables logging to an file for all messages send per LogStream .e.g. Log().error()
+			*/	
 			void disableLoggingToFile()
 				throw();
 
-			///
+			/** Set the name for the logging file (see above) to the given name. 
+					This file is stored in the users home dir.
+			*/
 			void setLoggingFilename(const String& string)
 				throw();
 
-			///
+			/// See above
 			const String& getLoggingFilename() const
 				throw();
 
-			///
+			/// Set the proxy for HTTP and FTP operations
 			void setProxy(const String& host, Position port);
 
-			///
+			/// Get the hostname for the proxy
 			String getProxy() const { return proxy_;}
 
-			///
+			/// Get the port for the proxy
 			Position getProxyPort() const { return proxy_port_;}
 
-			#ifdef BALL_QT_HAS_THREADS
 			/// QWaitCondition to wake up threads, after Composites are unlocked
 			QWaitCondition& getCompositesLockedWaitCondition() { return composites_locked_wait_condition_;}
-			#endif
 
 			/** Multithreaded code is used for serveral functions:
 			    - Update of Representations
@@ -709,19 +717,19 @@ namespace BALL
 			*/
 			virtual void openFile(const String& /*file*/) throw() {};
 
-			///
+			/// Save the current configuration, structures and representations to a BALLView project file (*.bvp)
 			void saveBALLViewProjectFile(const String& filename);
 			
-			///
+			/// Load a BALLView project file
 			void loadBALLViewProjectFile(const String& filename) throw();
 
-			///
+			/// Create a BALLView project file with the name quick.bvp in the users home dir
 			void quickSave();
 
-			///
+			/// Quickload quick.bvp in the users home die (see above)
 			void quickLoad();
 
-			///
+			/// Added overloaded method from QApplication for access in Python
 			void processEvents(Size ms);
 
 			//@}
@@ -809,7 +817,7 @@ namespace BALL
 			*/
 			QLabel* 										message_label_;
 
-			PrimitiveManager 						primitive_manager_;
+			RepresentationManager 						primitive_manager_;
 			CompositeManager 						composite_manager_;
 
 			MainControlPreferences* 		main_control_preferences_;
@@ -847,10 +855,8 @@ namespace BALL
 			bool 								important_text_in_statusbar_;
 			QTimer 							timer_;
 			QTimer 							render_timer_;
-			#ifdef 	BALL_QT_HAS_THREADS
 			QMutex 							composites_locked_mutex_;
 			QWaitCondition 			composites_locked_wait_condition_;
-			#endif
 
 			String 							proxy_;
 			Position 						proxy_port_;
