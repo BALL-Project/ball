@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.20 2006/01/31 17:03:27 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.22 2006/02/01 00:18:15 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -259,7 +259,6 @@ namespace BALL
 																																	 bond.getSecondAtom()->getType()));
 		if (it == parameters_.end())
 		{
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			it = (*(MMFF94StretchParameters*)this).getEmpericalParameters(bond);
 		}
 		return it;
@@ -431,8 +430,14 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 		}
 		else 
 		{
-			if (b1 == 1 || b1 == 2) r1 -= 0.03;
-			if (b2 == 1 || b2 == 2) r2 -= 0.03;
+			if (b1 == 1 || b1 == 2) 
+			{
+				r1 -= 0.03;
+			}
+			if (b2 == 1 || b2 == 2) 
+			{
+				r2 -= 0.03;
+			}
 
 			if (b1 == 3) r1 -= 0.08;
 			if (b2 == 3) r2 -= 0.08;
@@ -471,7 +476,7 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 		const Atom& a1 = *bond.getFirstAtom();
 		const Atom& a2 = *bond.getSecondAtom();
 
-		Index ij = getMMFF94Index(a1.getType(), a2.getType());
+		Index ij = getMMFF94Index(a1.getElement().getAtomicNumber(), a2.getElement().getAtomicNumber());
 
 		if (emperical_parameters_.has(ij))
 		{
@@ -549,7 +554,6 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 		float ro = calculateR0(bond);
 		if (ro == -1) 
 		{
-Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			return parameters_.end();
 		}
 
