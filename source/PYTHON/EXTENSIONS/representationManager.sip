@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.sip,v 1.1.2.1 2006/02/01 14:23:09 amoll Exp $
+// $Id: representationManager.sip,v 1.1.2.2 2006/02/01 14:23:25 amoll Exp $
 //
 
 class RepresentationManager
@@ -45,6 +45,6 @@ class RepresentationManager
   //void restoreRepresentations(const INIFile&, const vector<const Composite*>&);
 	void focusRepresentation(const Representation&);
 	bool willBeUpdated(const Representation&) const throw();
-	bool updateRunning() const throw() const;
+	bool updateRunning() const throw();
 	bool isBeeingRendered(const Representation*) const;
 };
