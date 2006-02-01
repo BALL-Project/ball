@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.83.2.2 2006/02/01 12:04:58 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.83.2.3 2006/02/01 12:16:56 oliver Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -3134,7 +3134,7 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 			AC_MSG_RESULT(You might also want to check your LD_LIBRARY_PATH.)
 			CF_ERROR
 		else
-			QT_VERSION_STR=`cat qt.version`
+			QT_VERSION_STR=`cat qt.version | ${SED} "s/-.*//"`
 			AC_MSG_RESULT(${QT_VERSION_STR})
 
 			dnl

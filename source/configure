@@ -21355,7 +21355,7 @@ echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
 		else
-			QT_VERSION_STR=`cat qt.version`
+			QT_VERSION_STR=`cat qt.version | ${SED} "s/-.*//"`
 			echo "$as_me:$LINENO: result: ${QT_VERSION_STR}" >&5
 echo "${ECHO_T}${QT_VERSION_STR}" >&6
 
