@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.218.2.1 2006/01/31 10:34:56 oliver Exp $
+# $Id: Makefile,v 1.218.2.2 2006/02/01 17:16:23 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -35,29 +35,30 @@ EXECUTABLES =\
 	$(EXECUTABLES_SOLVATION)\
 	$(EXECUTABLES_OTHERS)
 
-OTHERS_TEST=""
-
 ifeq ($(BALL_HAS_XDR),true)
 	EXECUTABLES_OTHERS += $(XDR_DEPENDENT_EXECUTABLES)
 	OTHERS_TEST += $(XDR_DEPENDENT_EXECUTABLES)
+	ALL_TESTS += others_test
 endif
  
 ifeq ($(BALL_HAS_VIEW),true)
 	EXECUTABLES_OTHERS += $(VIEW_DEPENDENT_EXECUTABLES)
 	OTHERS_TEST += $(VIEW_DEPENDENT_EXECUTABLES)
+	ALL_TESTS += others_test
 endif
  
 ifeq ($(BALL_HAS_GSL),true)
 	EXECUTABLES_OTHERS += $(GSL_DEPENDENT_EXECUTABLES)
 	OTHERS_TEST += $(GSL_DEPENDENT_EXECUTABLES)
+	ALL_TESTS += others_test
 endif
  
 
 all:	$(EXECUTABLES)
 
 echo:
-	@echo $(EXECUTABLES)
-	@echo $(ALL_TESTS)
+	@echo "_$(EXECUTABLES)_"
+	@echo "_$(ALL_TESTS)_"
 
 include ../rules.mak
 include ../targets.mak
@@ -92,7 +93,6 @@ dummy:
 ALL_TESTS=basic_test system_test	maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test qsar_test solvation_test 
 
 ifneq ($(OTHERS_TEST),"")
-	ALL_TESTS+=others_test
 endif
 
 test: info $(ALL_TESTS)
