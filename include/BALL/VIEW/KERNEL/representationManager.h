@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.h,v 1.1.2.1 2006/02/01 13:38:02 amoll Exp $
+// $Id: representationManager.h,v 1.1.2.2 2006/02/01 13:43:54 amoll Exp $
 
-#ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
-#define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
+#ifndef  BALL_VIEW_KERNEL_REPRESENTATIONMANAGER_H
+#define  BALL_VIEW_KERNEL_REPRESENTATIONMANAGER_H
 
 #ifndef BALL_VIEW_KERNEL_REPRESENTATION_H
 #	include <BALL/VIEW/KERNEL/representation.h>
@@ -28,17 +28,17 @@ namespace BALL
 		class UpdateRepresentationThread;
 		class ClippingPlane;
 
-		/** PrimitiveManager manages the graphical Representation objects and all GeometricObject.
+		/** RepresentationManager manages the graphical Representation objects and all GeometricObject.
 		 		All Representation objects which shall be inserted should be created using createRepresentation().
-				When the PrimitiveManager is destroyed, all inserted Representation are deleted.
-				The PrimitiveManager has also the capability for multithreaded updateing of
+				When the RepresentationManager is destroyed, all inserted Representation are deleted.
+				The RepresentationManager has also the capability for multithreaded updateing of
 				the Representation's:\\
-				Representation::update() calls PrimitiveManager::update_(Representation)\\
+				Representation::update() calls RepresentationManager::update_(Representation)\\
 				if the code is build with support for multithreading. The update itself
 				is done in an instance of UpdateRepresentationThread.
 				\ingroup ViewKernelGeometricPrimitives
 		*/
-		class BALL_VIEW_EXPORT PrimitiveManager
+		class BALL_VIEW_EXPORT RepresentationManager
 			:	public Object
 		{
 			friend class Representation;
@@ -47,7 +47,7 @@ namespace BALL
 
 			public:
 
-			BALL_CREATE(PrimitiveManager)
+			BALL_CREATE(RepresentationManager)
 
 			/**	@name Type definitions
 			*/
@@ -72,17 +72,17 @@ namespace BALL
 			/** Default Constructor
 			 		The MainControl pointer is needed to send Messages.
 			*/
-			PrimitiveManager(MainControl* mc = 0)
+			RepresentationManager(MainControl* mc = 0)
 				throw();
 
 			/** Copy constructor
 			*/
-			PrimitiveManager(const PrimitiveManager& pm)
+			RepresentationManager(const RepresentationManager& pm)
 				throw();
 
 			/** Destructor
 			*/
-			virtual ~PrimitiveManager()
+			virtual ~RepresentationManager()
 				throw();
 
 			//@}
@@ -91,11 +91,11 @@ namespace BALL
 			//@{
 			
 			///
-			const PrimitiveManager& operator = (const PrimitiveManager& pm)
+			const RepresentationManager& operator = (const RepresentationManager& pm)
 				throw();
 
 			///
-			bool operator == (const PrimitiveManager& pm) const
+			bool operator == (const RepresentationManager& pm) const
 				throw();
 			
 			/// Clears also the representations
@@ -245,4 +245,4 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
+#endif // BALL_VIEW_KERNEL_REPRESENTATIONMANAGER_H
