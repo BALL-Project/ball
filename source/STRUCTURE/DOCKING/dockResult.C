@@ -1,12 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.2 2006/01/04 15:58:20 amoll Exp $
+// $Id: dockResult.C,v 1.3 2006/02/01 13:06:18 leonhardt Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/FORMAT/PDBFile.h>
-
 # include <BALL/STRUCTURE/DOCKING/dockResult.h>
 
 //#define BALL_VIEW_DEBUG
@@ -15,13 +14,14 @@ namespace BALL
 		// Default Constructor
 		DockResult::DockResult()
 			throw()
-			: conformation_set_(0)
+			: conformation_set_(0),
+				sorted_by_(0)
 		{}
 		
 		// Constructor
-		DockResult::DockResult(const String& docking_algorithm, ConformationSet* conformation_set,
-														const Options& docking_options)
+		DockResult::DockResult(const String& docking_algorithm, ConformationSet* conformation_set, const Options& docking_options)
 			throw()
+			: sorted_by_(0)
 		{
 			docking_algorithm_ = docking_algorithm;
 			conformation_set_ = conformation_set;
@@ -34,7 +34,8 @@ namespace BALL
 			: docking_algorithm_(dock_res.docking_algorithm_),
 				docking_options_(dock_res.docking_options_),
 				conformation_set_(dock_res.conformation_set_),
-				scorings_(dock_res.scorings_)
+				scorings_(dock_res.scorings_),
+				sorted_by_(dock_res.sorted_by_)
 		{}
 		
 		// Destructor
@@ -61,6 +62,7 @@ namespace BALL
 				conformation_set_ = dock_res.conformation_set_;
 				docking_options_ = dock_res.docking_options_;
 				scorings_ = dock_res.scorings_;
+				sorted_by_ = dock_res.sorted_by_;
 			}
 			return *this;
 		}
@@ -96,24 +98,90 @@ namespace BALL
 			return conformation_set_;
 		}
 		
-		// returns scores of scoring_ i
-		const vector<float>& DockResult::getScores(Position i) const
+		void DockResult::sortBy(Index scoring_index)
+			throw(Exception::IndexOverflow)
+		{
+			if (scoring_index >= (Index)scorings_.size())
+			{
+				throw Exception::IndexOverflow(__FILE__, __LINE__, scoring_index, (Size)(scorings_.size()-1));
+			}
+			
+			sorted_by_ = scoring_index;
+		}
+
+		const Index DockResult::isSortedBy() const
 			throw()
 		{
-			return scorings_[i].scores_;
+			return sorted_by_;
+		}
+
+		// i -> score row, j -> scoring column
+		float DockResult::operator()(Position i, Position j)
+			throw(Exception::IndexOverflow)
+		{
+			// check if i and j are valid
+			if (j >= scorings_.size())
+			{
+				throw Exception::IndexOverflow(__FILE__, __LINE__, (Index)j, (Size)(scorings_.size()-1));
+			}
+			if (i >= scorings_[j].scores_.size())
+			{
+				throw Exception::IndexOverflow(__FILE__, __LINE__, (Index)i, (Size)(scorings_[j].scores_.size()-1));
+			}
+			
+			if(sorted_by_ < 0)
+			{
+				return scorings_[j].scores_[i];
+			}
+			else
+			{
+				// get to know the snaphot index for the score
+				Index snapshot_index = scorings_[sorted_by_].snapshot_order_[i];
+				// get score of scoring j that belongs to the snapshot index
+				return scorings_[j].scores_[snapshot_index];
+			}
+		}
+		
+		// returns sorted scores of scoring_ i
+		const vector<ConformationSet::Conformation> DockResult::getScores(Position i) const
+			throw(Exception::IndexOverflow)
+		{
+			if (i >= scorings_.size())
+			{
+				throw Exception::IndexOverflow(__FILE__, __LINE__, (Index)i, (Size)(scorings_.size()-1));
+			}
+		
+			vector<ConformationSet::Conformation> conformations;
+			for(Position j = 0; j < scorings_[i].snapshot_order_.size(); j++)
+			{
+				Index ss_index = scorings_[i].snapshot_order_[j];
+				ConformationSet::Conformation c(ss_index, scorings_[i].scores_[ss_index]);
+				conformations.push_back(c);
+			}
+			return conformations;
 		}
 		
 		//returns name of scoring function of scoring_ i
 		const String& DockResult::getScoringName(Position i) const
-			throw()
+			throw(Exception::IndexOverflow)
 		{
+			if (i >= scorings_.size())
+			{
+				throw Exception::IndexOverflow(__FILE__, __LINE__, (Index)i, (Size)(scorings_.size()-1));
+			}
+			
 			return scorings_[i].name_;
 		}
 		
 		//returns options of scoring function of scoring_ i
 		const Options& DockResult::getScoringOptions(Position i) const
-			throw()
+			throw(Exception::IndexOverflow)
 		{
+			if (i >= scorings_.size())
+			{
+				throw Exception::IndexOverflow(__FILE__, __LINE__, (Index)i, (Size)(scorings_.size()-1));
+			}
+			
 			return scorings_[i].options_;
 		}
 		
@@ -125,18 +193,34 @@ namespace BALL
 		}
 		
 		// add new Scoring_ to vector scorings_
-		void DockResult::addScoring(const String& name, const Options& options, const vector<float>& scores)
+		// the score vector has to be sorted
+		void DockResult::addScoring(const String& name, const Options& options, vector<ConformationSet::Conformation> scores)
 			throw()
 		{
-			scorings_.push_back(Scoring_(name, options, scores));
+			Compare_ compare_func = Compare_();
+			sort(scores.begin(), scores.end(), compare_func);
+			// split up vector of Conformations
+			vector<Index> snapshot_order(scores.size());
+			vector<float> score_values(scores.size());
+			for (Position i = 0; i < scores.size(); i++)
+			{
+				snapshot_order[i] = scores[i].first;
+				score_values[scores[i].first] = scores[i].second;
+			}
+			scorings_.push_back(Scoring_(name, options, score_values, snapshot_order));
 		}
 		
 		/// delete i-th Scoring_ of vector scorings_
 		void DockResult::deleteScoring(Position i)
-			throw()
+			throw(Exception::IndexOverflow)
 		{
+			if (i >= scorings_.size())
+			{
+				throw Exception::IndexOverflow(__FILE__, __LINE__, (Index)i, (Size)(scorings_.size()-1));
+			}
+			
 			vector<Scoring_>::iterator scoring_it;
-			scorings_.erase(scorings_.begin()+i);	
+			scorings_.erase(scorings_.begin()+i);
 		}
 		
 		// store dock result in a file
@@ -183,7 +267,14 @@ namespace BALL
 				INI_out.appendSection(section);
 				for (Position j = 0; j < scorings_[i].scores_.size(); j++)
 				{
-					INI_out.insertValue(section, String(j), scorings_[i].scores_[j]);
+					INI_out.insertValue(section, String(j), String(scorings_[i].scores_[j]));
+				}
+				
+				section = String("SNAPSHOT_ORDER_") + String(i);
+				INI_out.appendSection(section);
+				for (Position j = 0; j < scorings_[i].snapshot_order_.size(); j++)
+				{
+					INI_out.insertValue(section, String(j), String(scorings_[i].snapshot_order_[j]));
 				}
 			}
 			// second: store docked system in a temporary PDBFile
@@ -317,12 +408,29 @@ namespace BALL
 						}
 					catch (Exception::InvalidFormat)
 						{
-							Log.error() << "Conversion from String to float faoled: invalid format! " << __FILE__ << " " << __LINE__ << std::endl;
+							Log.error() << "Conversion from String to float failed: invalid format! " << __FILE__ << " " << __LINE__ << std::endl;
+							return false;
+						} 
+				}
+				// read snapshot order
+				vector<Index> snapshot_order;
+				it = INI_in.getSectionFirstLine("SNAPSHOT_ORDER_" + String(p)); 
+				it.getSectionNextLine();
+				for (; +it; it.getSectionNextLine())
+				{
+					String line(*it);
+					try
+						{
+							snapshot_order.push_back(((line.after("=")).toString()).toInt());
+						}
+					catch (Exception::InvalidFormat)
+						{
+							Log.error() << "Conversion from String to int failed: invalid format! " << __FILE__ << " " << __LINE__ << std::endl;
 							return false;
 						} 
 				}
 				// add new Scoring_ to vector scorings_
-        addScoring(name, options, scores);
+				scorings_.push_back(Scoring_(name, options, scores, snapshot_order));
 			}
 			
 			// second: read PDB part from result file in a temporary PDBFile
@@ -397,11 +505,12 @@ namespace BALL
 		/** Scoring_ class
 			* Constructor
 			*/
-		DockResult::Scoring_::Scoring_(const String& name, const Options& options, const vector<float>& scores) throw()
+		DockResult::Scoring_::Scoring_(const String& name, const Options& options, const vector<float>& scores, const vector<Index>& snapshot_order) throw()
 		{
 			name_ = name;
 			options_ = options;
 			scores_ = scores;
+			snapshot_order_ = snapshot_order;
 		}
 		
 		/** Scoring_ class
@@ -411,7 +520,8 @@ namespace BALL
 			throw()
 			: name_(scoring.name_),
 				options_(scoring.options_),
-				scores_(scoring.scores_)
+				scores_(scoring.scores_),
+				snapshot_order_(scoring.snapshot_order_)
 		{}
 		
 		/** Scoring_ class
@@ -431,29 +541,45 @@ namespace BALL
 				name_ = scoring.name_;
 				options_ = scoring.options_;
 				scores_ = scoring.scores_;
+				snapshot_order_ = scoring.snapshot_order_;
 			}
 			return *this;
 		}
 
+		/*implementation of nested class Compare_		
+		*/
+		// default constructor
+		DockResult::Compare_::Compare_() throw()
+		{}
 		
-	std::ostream& operator <<(std::ostream& out, const DockResult& dock_res)
-		throw()
-	{
-		if(!dock_res.writeDockResult(out))
+		// destructor
+		DockResult::Compare_::~Compare_() throw()
+		{}
+			
+		// operator ()
+		bool DockResult::Compare_::operator() (const ConformationSet::Conformation& a, const ConformationSet::Conformation& b) const
+		//bool DockResult::Compare_::operator() (const std::pair<Index, float>& a, const std::pair<Index, float>& b) const	
+			throw()
+		{ return a.second < b.second; }
+		
+		std::ostream& operator <<(std::ostream& out, const DockResult& dock_res)
+			throw()
 		{
-		 	Log.error() << "Could not write dock result! " << __FILE__ << " " << __LINE__ << std::endl;
+			if(!dock_res.writeDockResult(out))
+			{
+				Log.error() << "Could not write dock result! " << __FILE__ << " " << __LINE__ << std::endl;
+			}
+			return out;
 		}
-		return out;
-	}
-	
-	std::istream& operator >>(std::istream& in, DockResult& dock_res)
-		throw()
-	{
-		if(!dock_res.readDockResult(in))
+
+		std::istream& operator >>(std::istream& in, DockResult& dock_res)
+			throw()
 		{
-		 	Log.error() << "Could not read dock result file! " << __FILE__ << " " << __LINE__ << std::endl;
+			if(!dock_res.readDockResult(in))
+			{
+				Log.error() << "Could not read dock result file! " << __FILE__ << " " << __LINE__ << std::endl;
+			}
+			return in;
 		}
-		return in;
-	}
 	
 } // end of namespace BALL
