@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.15 2006/01/26 16:12:54 oliver Exp $
+# $Id: Makefile,v 1.16 2006/02/01 13:01:55 leonhardt Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -19,6 +19,7 @@ EXECUTABLES = $(FFT_SOURCES)\
 	add_hydrogens\
 	assign_typenames_from_rules\
 	clip_protein_around_ligand\
+	compute_docking_RMSD\
 	create_random_numbers\
 	dcd2dcd\
 	export_fragment\
