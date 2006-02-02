@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.h,v 1.1.2.6 2006/02/02 15:58:28 amoll Exp $
+// $Id: MMFF94Bend.h,v 1.1.2.7 2006/02/02 17:49:39 amoll Exp $
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -100,6 +100,12 @@ namespace BALL
 		
 		///
 		const vector<Bend>& getBends() const { return bends_;}
+
+		///
+		double calculateEmpericalReferenceAngle(Atom& atom1, Atom& atom2, Atom& atom3) const;
+		
+		///
+		double calculateEmpericalForceConstant(Atom& atom1, Atom& atom2, Atom& atom3) const;
 		//@}
 
 		private:

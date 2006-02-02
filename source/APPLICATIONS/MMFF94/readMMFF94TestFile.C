@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.21 2006/02/02 15:59:01 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.22 2006/02/02 17:49:49 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -463,7 +463,7 @@ int runtests(const vector<String>& filenames)
 		}
 
  		result &= testStretch(mmff, filenames[pos], true);
-    result &= testBend(mmff, filenames[pos], true);
+//       result &= testBend(mmff, filenames[pos], true);
 //    		result &= testStretchBend(mmff, filenames[pos], true);
 
 		if (result) ok++;

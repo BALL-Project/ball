@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.24 2006/02/02 15:58:39 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.25 2006/02/02 17:49:45 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
@@ -227,7 +228,8 @@ namespace BALL
 	}
 
 	MMFF94StretchParameters::MMFF94StretchParameters()
-		: is_initialized_(false)
+		: is_initialized_(false),
+			mmff_(0)
 	{
 	}
 
@@ -391,9 +393,11 @@ namespace BALL
 		else if (b1 + b2 == 3)  bo = 5;
 		else
 		{
-			// to do:  ???????
 			// if aromatisch and same ring:
-			if (bond.hasProperty("MMFFAROMBOND"))
+			vector <Atom*> atoms;
+			atoms.push_back((Atom*)&atom1);
+			atoms.push_back((Atom*)&atom2);
+			if (mmff_->areInOneAromaticRing(atoms, 0))
 			{
 				if (!(*atom_types_)[t1].pilp && !(*atom_types_)[t2].pilp)
 				{
@@ -691,12 +695,6 @@ namespace BALL
 
 		if (it == parameters_.end())
 		{
-#ifdef BALL_DEBUG_MMFF
-			Log.info() << "MMFF94 Bend "  << bond_type 
-								 << " " << atom_type1 << " " << atom_type2 << " " << atom_type3 
-								 << "  ->  ???" << std::endl;
-#endif
-
 			return false;
 		}
 

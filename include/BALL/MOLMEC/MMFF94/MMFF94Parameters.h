@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.14 2006/02/02 15:58:29 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.15 2006/02/02 17:49:39 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -21,14 +21,12 @@
 # include <BALL/KERNEL/bond.h>
 #endif
 
-//   #ifndef BALL_KERNEL_STANDARDPREDICATES_H
-# include <BALL/KERNEL/standardPredicates.h>
-//   #endif
-
 using namespace std;
 
 namespace BALL 
 {
+
+	class MMFF94;
 
 	Position getMMFF94Index(Position atom_type1, Position atom_type2);
 
@@ -221,6 +219,9 @@ namespace BALL
 		///
 		void setMMFFAtomTypeData(const vector<MMFF94AtomTypeData>& data) { atom_types_= &data;}
 
+		///
+		void setMMFF94(const MMFF94& mmff) { mmff_ = &mmff;}
+
 		protected:
 
 		/// standard parameters 
@@ -233,6 +234,7 @@ namespace BALL
 		static double electronegatives_[];
 
 		const vector<MMFF94AtomTypeData>* atom_types_;
+		const MMFF94* mmff_;
 	};
 
 ///////////////////////////////////////////////////////////////////////////

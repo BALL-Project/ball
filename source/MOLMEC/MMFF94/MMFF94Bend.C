@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.14 2006/02/02 15:58:38 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.15 2006/02/02 17:49:45 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -9,6 +9,7 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/SYSTEM/path.h>
 
 #include <math.h>
@@ -103,9 +104,13 @@ namespace BALL
 					this_bend.atom2 = &Atom::getAttributes()[(*atom_it)->getIndex()];
 					this_bend.atom3 = &Atom::getAttributes()[it1->getPartner(**atom_it)->getIndex()];
 
-					if (use_selection && (!this_bend.atom1->ptr->isSelected() ||
-																!this_bend.atom2->ptr->isSelected() ||
-																!this_bend.atom3->ptr->isSelected()))
+					Atom& atom1 = *this_bend.atom1->ptr;
+					Atom& atom2 = *this_bend.atom2->ptr;
+					Atom& atom3 = *this_bend.atom3->ptr;
+
+					if (use_selection && (!atom1.isSelected() ||
+																!atom1.isSelected() ||
+																!atom1.isSelected()))
 					{
 						continue;
 					}
@@ -114,10 +119,7 @@ namespace BALL
 					Atom::Type atom_type_a2 = this_bend.atom2->type;
 					Atom::Type atom_type_a3 = this_bend.atom3->type;
 
-					this_bend.ATIJK = getBendType(*it1, *it2,
-																				*this_bend.atom1->ptr,
-																				*this_bend.atom2->ptr,
-																				*this_bend.atom3->ptr);
+					this_bend.ATIJK = getBendType(*it1, *it2, atom1, atom2, atom3);
 
 					// check for parameters in a step down procedure
 					// full parameters
@@ -158,18 +160,31 @@ namespace BALL
 						bends_.push_back(this_bend);
 						continue;
 					}
+
+					// ok we will try the emperical rule
+					double ra = calculateEmpericalReferenceAngle(atom1, atom2, atom3);
+					double ka = calculateEmpericalForceConstant(atom1, atom2, atom3);
+
+					if (ra != -1 && ka != -1)
+					{
+						this_bend.ka = ka;
+						this_bend.theta0 = ra;
+						bends_.push_back(this_bend);
+						continue;
+					}
+
 					
 					// complain if nothing was found
 					getForceField()->error() << "MMFF94Bend::setup: cannot find bend parameters for atom types:"
 																	 << atom_type_a1 << "-" << atom_type_a2 << "-" << atom_type_a3 
 																	 << "bend " << this_bend.ATIJK
-																	 << " (atoms are: " << this_bend.atom1->ptr->getFullName() << "/" 
-																	 << this_bend.atom2->ptr->getFullName() << "/" 
-																	 << this_bend.atom3->ptr->getFullName() << ")" << endl;
+																	 << " (atoms are: " << atom1.getFullName() << "/" 
+																	 << atom2.getFullName() << "/" 
+																	 << atom3.getFullName() << ")" << endl;
 
-					getForceField()->getUnassignedAtoms().insert(it2->getPartner(**atom_it));
-					getForceField()->getUnassignedAtoms().insert(*atom_it);
-					getForceField()->getUnassignedAtoms().insert(it1->getPartner(**atom_it));
+					getForceField()->getUnassignedAtoms().insert(&atom1);
+					getForceField()->getUnassignedAtoms().insert(&atom2);
+					getForceField()->getUnassignedAtoms().insert(&atom3);
 				}
 			}
 		}
@@ -329,4 +344,42 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 		return sum_bond_types;
 	}
 
+	double MMFF94Bend::calculateEmpericalReferenceAngle(Atom& atom1, Atom& atom2, Atom& atom3) const
+	{
+		const MMFF94& mmff = *(const MMFF94*)getForceField();
+		const vector<MMFF94AtomTypeData>& atd = mmff.getAtomTypes();
+
+		const MMFF94AtomTypeData& aj = atd[atom2.getType()];
+		if (aj.crd == 4) return 109.45;
+		if (aj.crd == 2)
+		{
+			if (atom2.getElement().getSymbol() == "O") return 105;
+			if (atom2.getElement().getAtomicNumber() > 10) return 95;
+			if (aj.lin) return 180;
+		}
+
+		if (aj.crd == 3 && 
+				aj.val == 3 &&
+				aj.mltb == 0)
+		{
+			if (atom2.getElement().getSymbol() == "N") return 107;
+			return 92;
+		}
+			
+		vector<Atom*> atoms;
+		atoms.push_back(&atom1);
+		atoms.push_back(&atom2);
+		atoms.push_back(&atom3);
+
+		if (mmff.areInOneRing(atoms, 3)) return 60;
+		if (mmff.areInOneRing(atoms, 4)) return 90;
+
+		// default value
+		return 120;
+	}
+		
+	double MMFF94Bend::calculateEmpericalForceConstant(Atom& atom1, Atom& atom2, Atom& atom3) const
+	{
+		return -1;
+	}
 } // namespace BALL

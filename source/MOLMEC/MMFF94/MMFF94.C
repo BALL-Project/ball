@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.17 2006/02/02 15:59:50 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.18 2006/02/02 17:49:45 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -151,6 +151,9 @@ namespace BALL
 			throw Exception::FileNotFound(__FILE__, __LINE__, folder_);
 		}
 
+		collectRings_();
+		collectBonds_();
+
 		if (!parameters_initialized_)
 		{
 			String prefix = folder + FileSystem::PATH_SEPARATOR;
@@ -161,9 +164,6 @@ namespace BALL
 			equivalences_.readParameters(prefix + "MMFFDEF.PAR");
 			parameters_initialized_ = true;
 		}
-
-		collectRings_();
-		collectBonds_();
 
 		return true;
 	}
@@ -452,5 +452,50 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 #endif
 
 	}
+
+	bool MMFF94::areInOneRing(const vector<Atom*>& v, Size ring_size) const
+	{
+		for (Position i = 0; i < rings_.size(); i++)
+		{
+			if (ring_size != 0 && ring_size != rings_[i].size()) continue;
+
+			bool found = true;
+			for (Position j = 0; j < v.size(); j++)
+			{
+				if (!rings_[i].has(v[j])) 
+				{
+					found = false;
+					break;
+				}
+			}
+
+			if (found) return true;
+		}
+
+		return false;
+	}
+
+	bool MMFF94::areInOneAromaticRing(const vector<Atom*>& v, Size ring_size) const
+	{
+		for (Position i = 0; i < rings_.size(); i++)
+		{
+			if (ring_size != 0 && ring_size != aromatic_rings_[i].size()) continue;
+
+			bool found = true;
+			for (Position j = 0; j < v.size(); j++)
+			{
+				if (!aromatic_rings_[i].has(v[j])) 
+				{
+					found = false;
+					break;
+				}
+			}
+
+			if (found) return true;
+		}
+
+		return false;
+	}
+
 
 } // namespace BALL
