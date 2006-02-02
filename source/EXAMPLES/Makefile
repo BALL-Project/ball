@@ -1,7 +1,10 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.23 2005/12/23 17:02:34 amoll Exp $
+# $Id: Makefile,v 1.23.2.1 2006/02/02 11:42:13 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
 #
 
 #========================
@@ -9,17 +12,30 @@
 #========================
 
 
-include ../common.mak
--include .Dependencies
+include ../config.mak
 
 DIRECTORY=EXAMPLES
-EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran PDBChecker addHydrogens SASAreas energy
-VIEW_EXECUTABLES=$(BALL_HAS_VIEW:true=BALLVIEWClient)
 
-BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
+CPP_SOURCES=\
+	proteinMapper.C\
+	PDB2discover.C\
+	amberEnergy.C\
+	bindingEnergy.C\
+	ramachandran.C\
+	PDBChecker.C\
+	addHydrogens.C\
+	SASAreas.C\
+	energy.C
 
 
-default:	$(EXECUTABLES) $(VIEW_EXECUTABLES)
+ifeq ($(BALL_HAS_VIEW),true)
+	EXECUTABLES += BALLViewClient
+endif
+
+default:	$(EXECUTABLES)
+
+include ../common.mak
+-include .Dependencies
 
 # remove the library specific flags
 LIB_CXXFLAGS = $(NONLIB_CXXFLAGS)
