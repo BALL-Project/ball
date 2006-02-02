@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.22 2006/02/01 00:18:15 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.23 2006/02/02 13:08:19 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -347,7 +347,7 @@ namespace BALL
 		return atom_type1 * MMFF94_number_atom_types + atom_type2;
 	}
 
-	// Calculate the optimum bond length value using a modified Schomaker-Stevenson rule
+	// Calculate the reference bond length value using a modified Schomaker-Stevenson rule
 	float MMFF94StretchParameters::calculateR0(const Bond& bond)
 	{
 		const Atom& atom1 = *bond.getFirstAtom();
@@ -360,15 +360,15 @@ namespace BALL
 		const Position t2 = atom2.getType();
 
 		// currently only supports atoms up to Xenon
-		if (e1 > 54 || e2 > 54 ||
+		if (e1 > 53 || e2 > 53 ||
 				e1 == 0 || e2 == 0) 
 		{
 			return -1;
 		}
 
 		// radii
-		float r1 = radii_[e1];
-		float r2 = radii_[e2];
+		float r1 = radii_[e1 - 1];
+		float r2 = radii_[e2 - 1];
 
 		// only for stored radii
 		if (r1 == 0.0 || r2 == 0.0)
@@ -462,7 +462,7 @@ namespace BALL
 		const float n = 1.4;
 
 		// FORMULA from CHARMM docu:
-		const float r0 = radii_[e1] + radii_[e2] - c * pow(fabs(electronegatives_[e1] - electronegatives_[e2]), n) - d;
+		const float r0 = radii_[e1 - 1] + radii_[e2 - 1] - c * pow(fabs(electronegatives_[e1 - 1] - electronegatives_[e2 - 1]), n) - d;
 		
 		return r0;
 	}
