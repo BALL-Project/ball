@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.25 2006/02/02 17:49:45 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.26 2006/02/02 23:52:50 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -259,10 +259,6 @@ namespace BALL
 		// take the standard value
 		StretchMap::ConstIterator it = parameters_.find(getMMFF94Index(bond.getFirstAtom()->getType(),
 																																	 bond.getSecondAtom()->getType()));
-		if (it == parameters_.end())
-		{
-			it = (*(MMFF94StretchParameters*)this).getEmpericalParameters(bond);
-		}
 		return it;
 	}
 
@@ -349,231 +345,6 @@ namespace BALL
 		return atom_type1 * MMFF94_number_atom_types + atom_type2;
 	}
 
-	// Calculate the reference bond length value using a modified Schomaker-Stevenson rule
-	double MMFF94StretchParameters::calculateR0(const Bond& bond)
-	{
-		const Atom& atom1 = *bond.getFirstAtom();
-		const Atom& atom2 = *bond.getSecondAtom();
-
-		const Position e1 = atom1.getElement().getAtomicNumber();
-		const Position e2 = atom2.getElement().getAtomicNumber();
-
-		const Position t1 = atom1.getType();
-		const Position t2 = atom2.getType();
-
-		// currently only supports atoms up to Xenon
-		if (e1 > 53 || e2 > 53 ||
-				e1 == 0 || e2 == 0) 
-		{
-			return -1;
-		}
-
-		// radii
-		double r1 = radii_[e1 - 1];
-		double r2 = radii_[e2 - 1];
-
-		// only for stored radii
-		if (r1 == 0.0 || r2 == 0.0)
-		{
-			return -1;
-		}
-
-		Position bo = bond.getOrder();
-		if (bo == Bond::ORDER__UNKNOWN || 
-				bo == Bond::ORDER__QUADRUPLE ||
-				bo == Bond::ORDER__ANY)
-		{
-			return -1;
-		}
-
-		Position b1 = (*atom_types_)[t1].mltb;
-		Position b2 = (*atom_types_)[t2].mltb;
-
-		if (b1 == 1 && b2 == 1) bo = 4;
-		else if (b1 + b2 == 3)  bo = 5;
-		else
-		{
-			// if aromatisch and same ring:
-			vector <Atom*> atoms;
-			atoms.push_back((Atom*)&atom1);
-			atoms.push_back((Atom*)&atom2);
-			if (mmff_->areInOneAromaticRing(atoms, 0))
-			{
-				if (!(*atom_types_)[t1].pilp && !(*atom_types_)[t2].pilp)
-				{
-					bo = 4;
-				}
-				else 
-				{
-					bo = 5;
-				}
-			}
-		}
-
-		// calculate corrected radii
-		
-		if (bo == 5)
-		{
-			r1 -= 0.04;
-			r2 -= 0.04;
-		}
-		else if (bo == 4)
-		{
-			r1 -= 0.075;
-			r2 -= 0.075;
-		}
-		else if (bo == 3)
-		{
-			r1 -= 0.17;
-			r2 -= 0.17;
-		}
-		else if (bo == 2)
-		{
-			r1 -= 0.1;
-			r2 -= 0.1;
-		}
-		else 
-		{
-			if (b1 == 1 || b1 == 2) 
-			{
-				r1 -= 0.03;
-			}
-			if (b2 == 1 || b2 == 2) 
-			{
-				r2 -= 0.03;
-			}
-
-			if (b1 == 3) r1 -= 0.08;
-			if (b2 == 3) r2 -= 0.08;
-		}
-
-		// calculate shrink factor
-		double d = 0.008; // SHRINK FACTOR
-
-		// for hyrogen atoms no shrinking
-		if (e1 == 1 || e2 == 1) d = 0.0;
-
-		// for atoms > neon no shrinking
-		if (e1 > 10 || e2 > 10) d = 0.0;
-
-		// calculate SENS c
-		double c = 0.085;
-
-		// for hyrogen atoms
-		if (e1 == 1 || e2 == 1) c = 0.05;
-
-		// POWER
-		const double n = 1.4;
-
-		// FORMULA from CHARMM docu:
-		const double r0 = radii_[e1 - 1] + radii_[e2 - 1] - c * pow(fabs(electronegatives_[e1 - 1] - electronegatives_[e2 - 1]), n) - d;
-		
-		return r0;
-	}
-
-
-	// calculate force constant:
-	// requisite data is not available, use relationship developed by Badger
-	// parameters are those described in: D. L. Herschbach and V. W. Laurie, J. Chem.  Phys. 1961, 35, 458-463.
-	double MMFF94StretchParameters::calculateStretchConstant(const Bond& bond, double r0)
-	{
-		const Atom& a1 = *bond.getFirstAtom();
-		const Atom& a2 = *bond.getSecondAtom();
-
-		Index ij = getMMFF94Index(a1.getElement().getAtomicNumber(), a2.getElement().getAtomicNumber());
-
-		if (emperical_parameters_.has(ij))
-		{
-			const EmpericalBondData& bd = emperical_parameters_[ij];
-			const double kb = bd.kb * pow((bd.r0 / r0), 6);
-			return kb;
-		}
-
-		Position e1 = a1.getElement().getAtomicNumber();
-		Position e2 = a2.getElement().getAtomicNumber();
-		Position p1 = BALL_MIN(e1, e2);
-		Position p2 = BALL_MAX(e1, e2);
-
-		const Position HELIUM = 2;
-		const Position NEON = 10;
-		const Position ARGON = 18;
-		const Position KRYPTN = 36;
-		const Position XENON = 54;
-		const Position RADON = 86;
-
-		// from CHARMM implementation
-		// default values
-		double	AIJ = 3.15;
-		double	BIJ = 1.80;
-
-		// special values taken from HERSCHBACH and LAURIE 1961
-		if (p1 < HELIUM)
-		{
-			if      (p2 < HELIUM) { AIJ = 1.26; BIJ = 0.025; } // 0.025 is not an error!
-			else if (p2 < NEON)   { AIJ = 1.66; BIJ = 0.30; }
-			else if (p2 < ARGON)  { AIJ = 1.84; BIJ = 0.38; }
-			else if (p2 < KRYPTN) { AIJ = 1.98; BIJ = 0.49; }
-			else if (p2 < XENON)  { AIJ = 2.03; BIJ = 0.51; }
-			else if (p2 < RADON)  { AIJ = 2.03; BIJ = 0.25; }
-		}
-		else if (p1 < NEON)
-		{
-			if 			(p2 < NEON) 	{ AIJ = 1.91; BIJ = 0.68; }
-			else if (p2 < ARGON)	{ AIJ = 2.28; BIJ = 0.74; }
-			else if (p2 < KRYPTN) { AIJ = 2.35; BIJ = 0.85; }
-			else if (p2 < XENON)  { AIJ = 2.33; BIJ = 0.68; }
-			else if (p2 < RADON)  { AIJ = 2.50; BIJ = 0.97; }
-		}
-		else if (p1 < ARGON)
-		{
-			if 			(p2 < ARGON)  { AIJ = 2.41; BIJ = 1.18; }
-			else if (p2 < KRYPTN) { AIJ = 2.52; BIJ = 1.02; }
-			else if (p2 < XENON) 	{ AIJ = 2.61; BIJ = 1.28; }
-			else if (p2 < RADON) 	{ AIJ = 2.60; BIJ = 0.84; }
-		}
-		else if (p1 < KRYPTN)
-		{
-			if 			(p2 < KRYPTN) { AIJ = 2.58; BIJ = 1.41; }
-			else if (p2 < XENON)  { AIJ = 2.66; BIJ = 0.86; }
-			else if (p2 < RADON)  { AIJ = 2.75; BIJ = 1.14; }
-		}
-		else if (p1 < XENON)
-		{
-			if 			(p2 < XENON) { AIJ = 2.85; BIJ = 1.62; }
-			else if (p2 < XENON) { AIJ = 2.76; BIJ = 1.25; }
-		}
-
-		double kb = pow(((AIJ - BIJ) / (r0 - BIJ)), 3);
-		return kb;
-	}
-
-
-	MMFF94StretchParameters::StretchMap::ConstIterator MMFF94StretchParameters::getEmpericalParameters(const Bond& bond)
-	{
-		const Atom& a1 = *bond.getFirstAtom();
-		const Atom& a2 = *bond.getSecondAtom();
-
-		Index ij = getMMFF94Index(a1.getType(), a2.getType());
-
-		double ro = calculateR0(bond);
-		if (ro == -1) 
-		{
-			return parameters_.end();
-		}
-
-		double kb = calculateStretchConstant(bond, ro);
-
-		StretchMap::Iterator it = parameters_.insert(pair<Position, BondData>(ij, BondData())).first;
-
-		BondData& bd = (*it).second;
-		bd.kb_normal = kb;
-		bd.r0_normal = ro;
-		bd.emperical = true;
-
-		return it;
-	}
-
-
 	bool MMFF94StretchParameters::readEmpericalParameters(const String& filename)
 	{
 		emperical_parameters_.clear();
@@ -631,7 +402,7 @@ namespace BALL
 	}
 
 
-	double MMFF94StretchParameters::radii_[] =
+	double MMFF94StretchParameters::radii[] =
 	{
      0.33, 0.0,
      1.34, 0.90, 0.81, 0.77, 0.73, 0.72, 0.74, 0.0,
@@ -646,7 +417,7 @@ namespace BALL
      1.46, 1.40, 1.41, 1.35, 1.33, 0.0
 	};
 
-	double MMFF94StretchParameters::electronegatives_[] =
+	double MMFF94StretchParameters::electronegatives[] =
 	{
      2.20, 0.0,
      0.97, 1.47, 2.01, 2.5, 3.07, 3.5, 4.10, 0.0,

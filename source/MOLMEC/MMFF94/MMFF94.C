@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.18 2006/02/02 17:49:45 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.19 2006/02/02 23:52:49 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -158,7 +158,6 @@ namespace BALL
 		{
 			String prefix = folder + FileSystem::PATH_SEPARATOR;
 			atom_types_.readParameters(prefix + "MMFFPROP.PAR");
-			bond_parameters_.setMMFFAtomTypeData(atom_types_.getAtomTypes());
 			bond_parameters_.readParameters(prefix + "MMFFBOND.PAR");
 			bond_parameters_.readEmpericalParameters(prefix + "MMFFBNDK.PAR");
 			equivalences_.readParameters(prefix + "MMFFDEF.PAR");

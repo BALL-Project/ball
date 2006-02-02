@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.22 2006/02/02 17:49:49 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.23 2006/02/02 23:53:04 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -113,7 +113,7 @@ void enableOneComponent(const String& comp, MMFF94& mmff)
 bool isOk(double value, double reference)
 {
 	double diff = fabs(value - reference);
-	double diff_max = fabs(reference / 200.0); // max half percent difference
+	double diff_max = fabs(reference / 100.0); // max 1 percent difference
 
 	return diff < diff_max || diff < 0.001;
 }
@@ -175,7 +175,7 @@ bool testStretch(MMFF94& mmff, const String& filename, bool compare)
 			}
 
 			Log.error() << std::endl
-									<< "Problem Stretch:   " << filename << "   " 
+									<< "Problem Stretch:   " << filename << "     emperical? " << s.emperical  << "   "
 									<< s.atom1->getName() << " " << s.atom2->getName() << std::endl
 									<< "got r " << s.r0 << "   kb " << s.kb << "   " << s.sbmb << "    " << std::endl
 									<< "was r " << r0s[poss2] << "   kb " << kbs[poss2] << "   " << is_sbmb[poss2]

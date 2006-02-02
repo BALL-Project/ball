@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.17 2006/02/02 15:58:39 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.18 2006/02/02 23:52:50 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -9,6 +9,7 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/SYSTEM/path.h>
 
 //   #define BALL_DEBUG_MMFF
@@ -73,9 +74,9 @@ namespace BALL
 		// a working instance to put the current values in and push it back
 		Stretch dummy_stretch;
 
-		MMFF94& mmff = *(MMFF94*)getForceField();
+		const MMFF94& mmff = *(MMFF94*)getForceField();
 
-		const MMFF94StretchParameters& stretch_data = mmff.getStretchParameters();
+		parameters_ = &mmff.getStretchParameters();
 		MMFF94StretchParameters::StretchMap::ConstIterator stretch_it;
 
 		const vector<Bond*>& bonds = mmff.getBonds();
@@ -83,47 +84,62 @@ namespace BALL
 		vector<Bond*>::const_iterator bond_it = bonds.begin();
 		for (; bond_it != bonds.end(); bond_it++)
 		{
-			stretch_it = stretch_data.getParameters(**bond_it);
+			stretch_it = parameters_->getParameters(**bond_it);
 			
 			Atom& atom1 = *(Atom*)(*bond_it)->getFirstAtom();
 			Atom& atom2 = *(Atom*)(*bond_it)->getSecondAtom();
-
-			if (!+stretch_it)
-			{
-				getForceField()->error() << "cannot find stretch parameters for atom types " 
- 					<< atom1.getType() << " "
- 					<< atom2.getType() << " "
-					<< " (atoms are: " 
-					<< atom1.getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << " " 
-					<< atom2.getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) 
-					<< ")" << std::endl;
-
-				getForceField()->getUnassignedAtoms().insert(&atom1);
-				getForceField()->getUnassignedAtoms().insert(&atom2);
-				continue;
-			}
 
 			const bool is_sbmb = (**bond_it).hasProperty("MMFF94SBMB");
 			dummy_stretch.sbmb = is_sbmb;
 			dummy_stretch.atom1 = &atom1; 
 			dummy_stretch.atom2 = &atom2;
 
-			const MMFF94StretchParameters::BondData& data = stretch_it->second;
-
-			if (is_sbmb)
+			if (+stretch_it)
 			{
-				dummy_stretch.r0 = data.r0_sbmb;
-				dummy_stretch.kb = data.kb_sbmb;
+				const MMFF94StretchParameters::BondData& data = stretch_it->second;
+
+				if (is_sbmb)
+				{
+					dummy_stretch.r0 = data.r0_sbmb;
+					dummy_stretch.kb = data.kb_sbmb;
+				}
+				else
+				{
+					dummy_stretch.r0 = data.r0_normal;
+					dummy_stretch.kb = data.kb_normal;
+				}
+
+				(**bond_it).setProperty("MMFF94RBL", (double) dummy_stretch.r0);
+				stretch_.push_back(dummy_stretch);
+
+				continue;
 			}
-			else
+
+			// try emperical values
+			double r0 = calculateR0(**bond_it);
+			double k  = calculateStretchConstant(**bond_it, r0);
+
+			if (r0 != -1 && k != -1)
 			{
-				dummy_stretch.r0 = data.r0_normal;
-				dummy_stretch.kb = data.kb_normal;
+				dummy_stretch.r0 = r0;
+				dummy_stretch.kb = k;
+				dummy_stretch.emperical = true;
+				(**bond_it).setProperty("MMFF94RBL", (double) dummy_stretch.r0);
+				stretch_.push_back(dummy_stretch);
+				continue;
 			}
 
-			dummy_stretch.emperical = data.emperical;
+			getForceField()->error() << "cannot find stretch parameters for atom types " 
+				<< atom1.getType() << " "
+				<< atom2.getType() << " "
+				<< " (atoms are: " 
+				<< atom1.getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << " " 
+				<< atom2.getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) 
+				<< ")" << std::endl;
 
-			stretch_.push_back(dummy_stretch);
+			getForceField()->getUnassignedAtoms().insert(&atom1);
+			getForceField()->getUnassignedAtoms().insert(&atom2);
+			continue;
 		}
 
 		return true;
@@ -164,7 +180,6 @@ namespace BALL
 			energy_ += eb_ij;
 		}
 
-
 		return energy_;
 	}
 
@@ -196,5 +211,208 @@ namespace BALL
 			stretch_[i].atom2->getForce()+= direction;
 		}                                                                                                          
 	}
+
+	// Calculate the reference bond length value using a modified Schomaker-Stevenson rule
+	double MMFF94Stretch::calculateR0(const Bond& bond)
+	{
+		const Atom& atom1 = *bond.getFirstAtom();
+		const Atom& atom2 = *bond.getSecondAtom();
+
+		const Position e1 = atom1.getElement().getAtomicNumber();
+		const Position e2 = atom2.getElement().getAtomicNumber();
+
+		const Position t1 = atom1.getType();
+		const Position t2 = atom2.getType();
+
+		// currently only supports atoms up to Xenon
+		if (e1 > 53 || e2 > 53 ||
+				e1 == 0 || e2 == 0) 
+		{
+			return -1;
+		}
+
+		// radii
+		double r1 = parameters_->radii[e1 - 1];
+		double r2 = parameters_->radii[e2 - 1];
+
+		// only for stored radii
+		if (r1 == 0.0 || r2 == 0.0)
+		{
+			return -1;
+		}
+
+		Position bo = bond.getOrder();
+		if (bo == Bond::ORDER__UNKNOWN || 
+				bo == Bond::ORDER__QUADRUPLE ||
+				bo == Bond::ORDER__ANY)
+		{
+			return -1;
+		}
+
+		const MMFF94& mmff = *((const MMFF94*)getForceField());
+		const vector<MMFF94AtomTypeData>& atom_types = mmff.getAtomTypes();
+
+		Position b1 = atom_types[t1].mltb;
+		Position b2 = atom_types[t2].mltb;
+
+		if (b1 == 1 && b2 == 1) bo = 4;
+		else if (b1 + b2 == 3)  bo = 5;
+		else
+		{
+			// if aromatisch and same ring:
+			vector <Atom*> atoms;
+			atoms.push_back((Atom*)&atom1);
+			atoms.push_back((Atom*)&atom2);
+			if (mmff.areInOneAromaticRing(atoms, 0))
+			{
+				if (!atom_types[t1].pilp && !atom_types[t2].pilp)
+				{
+					bo = 4;
+				}
+				else 
+				{
+					bo = 5;
+				}
+			}
+		}
+
+		// calculate corrected radii
+		
+		if (bo == 5)
+		{
+			r1 -= 0.04;
+			r2 -= 0.04;
+		}
+		else if (bo == 4)
+		{
+			r1 -= 0.075;
+			r2 -= 0.075;
+		}
+		else if (bo == 3)
+		{
+			r1 -= 0.17;
+			r2 -= 0.17;
+		}
+		else if (bo == 2)
+		{
+			r1 -= 0.1;
+			r2 -= 0.1;
+		}
+		else 
+		{
+			if (b1 == 1 || b1 == 2) 
+			{
+				r1 -= 0.03;
+			}
+			if (b2 == 1 || b2 == 2) 
+			{
+				r2 -= 0.03;
+			}
+
+			if (b1 == 3) r1 -= 0.08;
+			if (b2 == 3) r2 -= 0.08;
+		}
+
+		// calculate shrink factor
+		double d = 0.008; // SHRINK FACTOR
+
+		// for hyrogen atoms no shrinking
+		if (e1 == 1 || e2 == 1) d = 0.0;
+
+		// for atoms > neon no shrinking
+		if (e1 > 10 || e2 > 10) d = 0.0;
+
+		// calculate SENS c
+		double c = 0.085;
+
+		// for hyrogen atoms
+		if (e1 == 1 || e2 == 1) c = 0.05;
+
+		// POWER
+		const double n = 1.4;
+
+		// FORMULA from CHARMM docu:
+		const double r0 = parameters_->radii[e1 - 1] + parameters_->radii[e2 - 1] - c * 
+									pow(fabs(parameters_->electronegatives[e1 - 1] - parameters_->electronegatives[e2 - 1]), n) - d;
+		
+		return r0;
+	}
+
+
+	// calculate force constant:
+	// requisite data is not available, use relationship developed by Badger
+	// parameters are those described in: D. L. Herschbach and V. W. Laurie, J. Chem.  Phys. 1961, 35, 458-463.
+	double MMFF94Stretch::calculateStretchConstant(const Bond& bond, double r0)
+	{
+		const Atom& a1 = *bond.getFirstAtom();
+		const Atom& a2 = *bond.getSecondAtom();
+
+		Index ij = getMMFF94Index(a1.getElement().getAtomicNumber(), a2.getElement().getAtomicNumber());
+
+		if (parameters_->getEmpericalParameters().has(ij))
+		{
+			const MMFF94StretchParameters::EmpericalBondData& bd = parameters_->getEmpericalParameters()[ij];
+			const double kb = bd.kb * pow((bd.r0 / r0), 6);
+			return kb;
+		}
+
+		Position e1 = a1.getElement().getAtomicNumber();
+		Position e2 = a2.getElement().getAtomicNumber();
+		Position p1 = BALL_MIN(e1, e2);
+		Position p2 = BALL_MAX(e1, e2);
+
+		const Position HELIUM = 2;
+		const Position NEON = 10;
+		const Position ARGON = 18;
+		const Position KRYPTN = 36;
+		const Position XENON = 54;
+		const Position RADON = 86;
+
+		// from CHARMM implementation
+		// default values
+		double	AIJ = 3.15;
+		double	BIJ = 1.80;
+
+		// special values taken from HERSCHBACH and LAURIE 1961
+		if (p1 < HELIUM)
+		{
+			if      (p2 < HELIUM) { AIJ = 1.26; BIJ = 0.025; } // 0.025 is not an error!
+			else if (p2 < NEON)   { AIJ = 1.66; BIJ = 0.30; }
+			else if (p2 < ARGON)  { AIJ = 1.84; BIJ = 0.38; }
+			else if (p2 < KRYPTN) { AIJ = 1.98; BIJ = 0.49; }
+			else if (p2 < XENON)  { AIJ = 2.03; BIJ = 0.51; }
+			else if (p2 < RADON)  { AIJ = 2.03; BIJ = 0.25; }
+		}
+		else if (p1 < NEON)
+		{
+			if 			(p2 < NEON) 	{ AIJ = 1.91; BIJ = 0.68; }
+			else if (p2 < ARGON)	{ AIJ = 2.28; BIJ = 0.74; }
+			else if (p2 < KRYPTN) { AIJ = 2.35; BIJ = 0.85; }
+			else if (p2 < XENON)  { AIJ = 2.33; BIJ = 0.68; }
+			else if (p2 < RADON)  { AIJ = 2.50; BIJ = 0.97; }
+		}
+		else if (p1 < ARGON)
+		{
+			if 			(p2 < ARGON)  { AIJ = 2.41; BIJ = 1.18; }
+			else if (p2 < KRYPTN) { AIJ = 2.52; BIJ = 1.02; }
+			else if (p2 < XENON) 	{ AIJ = 2.61; BIJ = 1.28; }
+			else if (p2 < RADON) 	{ AIJ = 2.60; BIJ = 0.84; }
+		}
+		else if (p1 < KRYPTN)
+		{
+			if 			(p2 < KRYPTN) { AIJ = 2.58; BIJ = 1.41; }
+			else if (p2 < XENON)  { AIJ = 2.66; BIJ = 0.86; }
+			else if (p2 < RADON)  { AIJ = 2.75; BIJ = 1.14; }
+		}
+		else if (p1 < XENON)
+		{
+			if 			(p2 < XENON) { AIJ = 2.85; BIJ = 1.62; }
+			else if (p2 < XENON) { AIJ = 2.76; BIJ = 1.25; }
+		}
+
+		double kb = pow(((AIJ - BIJ) / (r0 - BIJ)), 3);
+		return kb;
+	}
+
 
 } // namespace BALL

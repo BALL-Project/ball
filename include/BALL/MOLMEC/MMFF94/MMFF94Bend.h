@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.h,v 1.1.2.7 2006/02/02 17:49:39 amoll Exp $
+// $Id: MMFF94Bend.h,v 1.1.2.8 2006/02/02 23:53:00 amoll Exp $
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -105,10 +105,14 @@ namespace BALL
 		double calculateEmpericalReferenceAngle(Atom& atom1, Atom& atom2, Atom& atom3) const;
 		
 		///
-		double calculateEmpericalForceConstant(Atom& atom1, Atom& atom2, Atom& atom3) const;
+		double calculateEmpericalForceConstant(Atom& atom1, Atom& atom2, Atom& atom3, double angle_0) const;
 		//@}
 
 		private:
+
+		static double z_[];
+		static double c_[];
+		static Position atom_nr_[];
 
 		vector<Bend> bends_;
 		MMFF94BendParameters parameters_;

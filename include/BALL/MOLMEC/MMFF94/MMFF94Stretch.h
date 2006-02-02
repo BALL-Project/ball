@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.h,v 1.1.2.13 2006/02/02 17:49:39 amoll Exp $ 
+// $Id: MMFF94Stretch.h,v 1.1.2.14 2006/02/02 23:53:01 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -93,11 +93,21 @@ namespace BALL
 		virtual void update()
 			throw(Exception::TooManyErrors);
 
+		///
 		const vector<Stretch>& getStretches() const { return stretch_;}
+
+		/// Calculate the radius value per Schomaker-Stevenson Rule
+		double calculateR0(const Bond& bond);
+
+		///
+		double calculateStretchConstant(const Bond& bond, double r0);
 
 		//@} 
 
 		private:
+
+		///
+		const MMFF94StretchParameters* parameters_;
 
 		/*_	@name	Private Attributes	
 		*/

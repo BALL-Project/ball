@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.15 2006/02/02 17:49:45 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.16 2006/02/02 23:52:50 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -163,7 +163,7 @@ namespace BALL
 
 					// ok we will try the emperical rule
 					double ra = calculateEmpericalReferenceAngle(atom1, atom2, atom3);
-					double ka = calculateEmpericalForceConstant(atom1, atom2, atom3);
+					double ka = calculateEmpericalForceConstant(atom1, atom2, atom3, ra);
 
 					if (ra != -1 && ka != -1)
 					{
@@ -378,8 +378,65 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 		return 120;
 	}
 		
-	double MMFF94Bend::calculateEmpericalForceConstant(Atom& atom1, Atom& atom2, Atom& atom3) const
+	double MMFF94Bend::calculateEmpericalForceConstant(Atom& atom1, Atom& atom2, Atom& atom3, double angle_0) const
 	{
-		return -1;
+		Position elements[3];
+		elements[0] = atom1.getElement().getAtomicNumber() - 1;
+		elements[1] = atom1.getElement().getAtomicNumber() - 1;
+		elements[2] = atom1.getElement().getAtomicNumber() - 1;
+
+		if (elements[0] > 12 || elements[1] > 12 || elements[2] > 12)
+		{
+			return -1;
+		}
+
+		HashMap<Position, Position> e_to_i;
+		for (Position p = 0; p < 12; p++)
+		{
+			e_to_i[atom_nr_[p]] = p;
+		}
+
+		double zcz = e_to_i[elements[0]] * e_to_i[elements[1]] * e_to_i[elements[2]];
+
+		// One Parameter lacking?
+		if (zcz == 0.0) return -1;
+
+		vector<Atom*> atoms;
+		atoms.push_back(&atom1);
+		atoms.push_back(&atom2);
+		atoms.push_back(&atom3);
+
+		const MMFF94& mmff = *(const MMFF94*)getForceField();
+		
+		double beta = 1.75;
+		
+		if 			(mmff.areInOneRing(atoms, 3))  beta *= 0.05;
+		else if (mmff.areInOneRing(atoms, 4))  beta *= 0.85;
+
+		double r01 = atom1.getBond(atom2)->getProperty("MMFF94RBL").getDouble();
+		double r02 = atom2.getBond(atom3)->getProperty("MMFF94RBL").getDouble();
+
+		double D = pow(r01 - r02, 2) / pow (r01 + r02, 2);
+
+		double k = beta * zcz * pow(angle_0, -2) * exp(-2 * D) / (r01 + r02);
+
+		return k;
 	}
+
+	double MMFF94Bend::z_[] = 
+	{
+		1.395, 0. ,2.494, 2.711, 3.045, 2.847, 2.350, 2.350, 2.980, 2.909, 3.017, 3.086
+	};
+
+	double MMFF94Bend::c_[] = 
+	{
+		0., 0.704, 1.016, 1.113, 1.337, 0., 0.811, 1.068, 1.249, 1.078, 0. ,0.
+	};
+
+	Position MMFF94Bend::atom_nr_[] =
+	{
+		1,5,6,7,8,9,14,15,16,17,35,53
+	};
+
+
 } // namespace BALL

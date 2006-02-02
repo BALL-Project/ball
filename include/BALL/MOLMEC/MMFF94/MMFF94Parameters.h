@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.15 2006/02/02 17:49:39 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.16 2006/02/02 23:53:01 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -198,9 +198,6 @@ namespace BALL
 		StretchMap::ConstIterator getParameters(const Bond& bond) const;
 
 		///
-		StretchMap::ConstIterator getEmpericalParameters(const Bond& bond);
-
-		///
 		bool readParameters(const String& filename)
 			throw(Exception::FileNotFound);
 		
@@ -208,19 +205,16 @@ namespace BALL
 		bool readEmpericalParameters(const String& filename);
 
 		///
-		const StretchMap& getBondParameters() { return parameters_;}
-
-		/// Calculate the radius value per Schomaker-Stevenson Rule
-		double calculateR0(const Bond& bond);
-
+		const StretchMap& getBondParameters() const { return parameters_;}
+		
 		///
-		double calculateStretchConstant(const Bond& bond, double r0);
-
-		///
-		void setMMFFAtomTypeData(const vector<MMFF94AtomTypeData>& data) { atom_types_= &data;}
+		const EmpericalStretchMap& getEmpericalParameters() const { return emperical_parameters_;}
 
 		///
 		void setMMFF94(const MMFF94& mmff) { mmff_ = &mmff;}
+
+		static double radii[];
+		static double electronegatives[];
 
 		protected:
 
@@ -230,10 +224,6 @@ namespace BALL
 		
 		bool is_initialized_;
 
-		static double radii_[];
-		static double electronegatives_[];
-
-		const vector<MMFF94AtomTypeData>* atom_types_;
 		const MMFF94* mmff_;
 	};
 
