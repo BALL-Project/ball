@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.2.1 2005/04/06 16:01:53 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.2.2 2006/02/02 15:58:38 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -196,8 +196,8 @@ namespace BALL
 		
 		vector<OutOfPlaneBend>::iterator bend_it = bends_.begin();
 
-		float radian_to_degree = 180.0 / Constants::PI;
-		float degree_to_radian= Constants::PI / 180;
+		double radian_to_degree = 180.0 / Constants::PI;
+		double degree_to_radian= Constants::PI / 180;
 
 		for (; bend_it != bends_.end(); ++bend_it) 
 		{

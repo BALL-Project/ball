@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.16 2005/03/31 13:45:26 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.17 2006/02/02 15:58:39 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -120,6 +120,8 @@ namespace BALL
 				dummy_stretch.r0 = data.r0_normal;
 				dummy_stretch.kb = data.kb_normal;
 			}
+
+			dummy_stretch.emperical = data.emperical;
 
 			stretch_.push_back(dummy_stretch);
 		}

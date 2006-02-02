@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.16 2006/02/02 15:58:38 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.17 2006/02/02 15:59:50 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -424,31 +424,8 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 		aromatic_rings_.clear();
 
 		AromaticityProcessor ap;
-//   		ap.aromatize(rings, *getSystem());
 		ap.aromatizeSimple(rings);
-/*
-		for (Position i = 0; i < rings.size(); i++)
-		{
-			bool ok = true;
-			for (Position j = 0; j < rings[i].size(); j++)
-			{
-				if (!rings[i][j]->hasProperty("IsAromatic"))
-				{
-					ok = false;
-					break;
-				}
-			}
-
-			if (!ok) continue;
-			
-			aromatic_rings_.push_back(HashSet<Atom*>());
-			for (Position j = 0; j < rings[i].size(); j++)
-			{
-				aromatic_rings_[aromatic_rings_.size() - 1].insert(rings[i][j]);
-			}
-		}
-
-		*/
+	
 		for (Position i = 0; i < rings.size(); i ++)
 		{
 			aromatic_rings_.push_back(HashSet<Atom*>());

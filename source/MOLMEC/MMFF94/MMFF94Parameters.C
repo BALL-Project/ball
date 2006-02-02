@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.23 2006/02/02 13:08:19 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.24 2006/02/02 15:58:39 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -11,7 +11,7 @@
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
 
-#define BALL_DEBUG_MMFF
+// #define BALL_DEBUG_MMFF
 using namespace std;
 
 namespace BALL 
@@ -307,14 +307,14 @@ namespace BALL
 
 				if (is_sbmb)
 				{
-					data.kb_sbmb = fields[3].toFloat(); 
-					data.r0_sbmb = fields[4].toFloat();
+					data.kb_sbmb = fields[3].toDouble(); 
+					data.r0_sbmb = fields[4].toDouble();
 					data.sbmb_exists = true;
 				}
 				else
 				{
-					data.kb_normal = fields[3].toFloat(); 
-					data.r0_normal = fields[4].toFloat();
+					data.kb_normal = fields[3].toDouble(); 
+					data.r0_normal = fields[4].toDouble();
 					data.standard_bond_exists = true;
 				}
 			}
@@ -348,7 +348,7 @@ namespace BALL
 	}
 
 	// Calculate the reference bond length value using a modified Schomaker-Stevenson rule
-	float MMFF94StretchParameters::calculateR0(const Bond& bond)
+	double MMFF94StretchParameters::calculateR0(const Bond& bond)
 	{
 		const Atom& atom1 = *bond.getFirstAtom();
 		const Atom& atom2 = *bond.getSecondAtom();
@@ -367,8 +367,8 @@ namespace BALL
 		}
 
 		// radii
-		float r1 = radii_[e1 - 1];
-		float r2 = radii_[e2 - 1];
+		double r1 = radii_[e1 - 1];
+		double r2 = radii_[e2 - 1];
 
 		// only for stored radii
 		if (r1 == 0.0 || r2 == 0.0)
@@ -444,7 +444,7 @@ namespace BALL
 		}
 
 		// calculate shrink factor
-		float d = 0.008; // SHRINK FACTOR
+		double d = 0.008; // SHRINK FACTOR
 
 		// for hyrogen atoms no shrinking
 		if (e1 == 1 || e2 == 1) d = 0.0;
@@ -453,16 +453,16 @@ namespace BALL
 		if (e1 > 10 || e2 > 10) d = 0.0;
 
 		// calculate SENS c
-		float c = 0.085;
+		double c = 0.085;
 
 		// for hyrogen atoms
 		if (e1 == 1 || e2 == 1) c = 0.05;
 
 		// POWER
-		const float n = 1.4;
+		const double n = 1.4;
 
 		// FORMULA from CHARMM docu:
-		const float r0 = radii_[e1 - 1] + radii_[e2 - 1] - c * pow(fabs(electronegatives_[e1 - 1] - electronegatives_[e2 - 1]), n) - d;
+		const double r0 = radii_[e1 - 1] + radii_[e2 - 1] - c * pow(fabs(electronegatives_[e1 - 1] - electronegatives_[e2 - 1]), n) - d;
 		
 		return r0;
 	}
@@ -471,7 +471,7 @@ namespace BALL
 	// calculate force constant:
 	// requisite data is not available, use relationship developed by Badger
 	// parameters are those described in: D. L. Herschbach and V. W. Laurie, J. Chem.  Phys. 1961, 35, 458-463.
-	float MMFF94StretchParameters::calculateStretchConstant(const Bond& bond, float r0)
+	double MMFF94StretchParameters::calculateStretchConstant(const Bond& bond, double r0)
 	{
 		const Atom& a1 = *bond.getFirstAtom();
 		const Atom& a2 = *bond.getSecondAtom();
@@ -481,7 +481,7 @@ namespace BALL
 		if (emperical_parameters_.has(ij))
 		{
 			const EmpericalBondData& bd = emperical_parameters_[ij];
-			const float kb = bd.kb * pow((bd.r0 / r0), 6);
+			const double kb = bd.kb * pow((bd.r0 / r0), 6);
 			return kb;
 		}
 
@@ -499,8 +499,8 @@ namespace BALL
 
 		// from CHARMM implementation
 		// default values
-		float	AIJ = 3.15;
-		float	BIJ = 1.80;
+		double	AIJ = 3.15;
+		double	BIJ = 1.80;
 
 		// special values taken from HERSCHBACH and LAURIE 1961
 		if (p1 < HELIUM)
@@ -539,7 +539,7 @@ namespace BALL
 			else if (p2 < XENON) { AIJ = 2.76; BIJ = 1.25; }
 		}
 
-		float kb = pow(((AIJ - BIJ) / (r0 - BIJ)), 3);
+		double kb = pow(((AIJ - BIJ) / (r0 - BIJ)), 3);
 		return kb;
 	}
 
@@ -551,13 +551,13 @@ namespace BALL
 
 		Index ij = getMMFF94Index(a1.getType(), a2.getType());
 
-		float ro = calculateR0(bond);
+		double ro = calculateR0(bond);
 		if (ro == -1) 
 		{
 			return parameters_.end();
 		}
 
-		float kb = calculateStretchConstant(bond, ro);
+		double kb = calculateStretchConstant(bond, ro);
 
 		StretchMap::Iterator it = parameters_.insert(pair<Position, BondData>(ij, BondData())).first;
 
@@ -608,8 +608,8 @@ namespace BALL
 
 				EmpericalBondData& data = it->second;
 
-				data.r0 = fields[2].toFloat();
-				data.kb = fields[3].toFloat(); 
+				data.r0 = fields[2].toDouble();
+				data.kb = fields[3].toDouble(); 
 			}
 		}
 		catch(...)
@@ -627,7 +627,7 @@ namespace BALL
 	}
 
 
-	float MMFF94StretchParameters::radii_[] =
+	double MMFF94StretchParameters::radii_[] =
 	{
      0.33, 0.0,
      1.34, 0.90, 0.81, 0.77, 0.73, 0.72, 0.74, 0.0,
@@ -642,7 +642,7 @@ namespace BALL
      1.46, 1.40, 1.41, 1.35, 1.33, 0.0
 	};
 
-	float MMFF94StretchParameters::electronegatives_[] =
+	double MMFF94StretchParameters::electronegatives_[] =
 	{
      2.20, 0.0,
      0.97, 1.47, 2.01, 2.5, 3.07, 3.5, 4.10, 0.0,
@@ -683,7 +683,7 @@ namespace BALL
 	}
 
 	bool MMFF94BendParameters::getParameters(Position bond_type,
-			Position atom_type1, Position atom_type2, Position atom_type3, float& ka, float& angle) const
+			Position atom_type1, Position atom_type2, Position atom_type3, double& ka, double& angle) const
 	{
 		// take the standard value
 		BendMap::ConstIterator it = parameters_.find(
@@ -745,9 +745,9 @@ namespace BALL
 				const Position atom_type3 = fields[3].toUnsignedInt();
 				const Position index = getIndex_(bend_type, atom_type1, atom_type2, atom_type3);
 
-				parameters_[index] = pair<float, float>();
-				parameters_[index].first  = fields[4].toFloat(); // ka
-				parameters_[index].second = fields[5].toFloat(); // theta
+				parameters_[index] = pair<double, double>();
+				parameters_[index].first  = fields[4].toDouble(); // ka
+				parameters_[index].second = fields[5].toDouble(); // theta
 			}
 		}
 		catch(...)
@@ -815,7 +815,7 @@ namespace BALL
 
 	bool MMFF94StretchBendParameters::getParameters(Position bend_type,
 			const Atom& atom1, const Atom& atom2, const Atom& atom3, 
-			float& kb_ijk, float& kb_kji) const
+			double& kb_ijk, double& kb_kji) const
 	{
 		// take the standard value
 		StretchBendMap::ConstIterator it = parameters_.find(
@@ -879,9 +879,9 @@ Log.info() << "MMFF94 StretchBend: from row: " << atom1.getName() << " " << atom
 				const Position atom_type3 = fields[3].toUnsignedInt();
 				const Position index = getIndex_(sb, atom_type1, atom_type2, atom_type3);
 
-				parameters_[index] = pair<float, float>();
-				parameters_[index].first  = fields[4].toFloat(); // kba_ijk
-				parameters_[index].second = fields[5].toFloat(); // kba_kji
+				parameters_[index] = pair<double, double>();
+				parameters_[index].first  = fields[4].toDouble(); // kba_ijk
+				parameters_[index].second = fields[5].toDouble(); // kba_kji
 			}
 		}
 		catch(...)
@@ -917,11 +917,11 @@ Log.info() << "MMFF94 StretchBend: from row: " << atom1.getName() << " " << atom
 				const Position ir = fields[0].toUnsignedInt();
 				const Position jr = fields[1].toUnsignedInt();
 				const Position kr = fields[2].toUnsignedInt();
-				const float    f_ijk = fields[3].toFloat();
-				const float    f_kji = fields[4].toFloat();
+				const double    f_ijk = fields[3].toDouble();
+				const double    f_kji = fields[4].toDouble();
 				const Position index = getIndexByRow_(ir, jr, kr);
 
-				parameters_[index] = pair<float, float>();
+				parameters_[index] = pair<double, double>();
 				parameters_[index].first  = f_ijk;
 				parameters_[index].second = f_kji;
 			}

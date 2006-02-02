@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.2.1 2005/03/17 13:48:24 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.2.2 2006/02/02 15:58:38 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -13,12 +13,6 @@ using namespace std;
 
 // define a macro for the square function
 #define SQR(x) ((x) * (x))
-
-#ifdef BALL_HAS_INLINE_TPL_ARGS
-#	define BALL_TPL_ARG_INLINE inline
-#else
-#	define BALL_TPL_ARG_INLINE
-#endif
 
 namespace BALL 
 {
@@ -161,7 +155,7 @@ namespace BALL
 		if (getForceField()->periodic_boundary.isEnabled())
 		{
 			SimpleBox3 box = getForceField()->periodic_boundary.getBox();
-			float max_cut_off = 0.5 * Maths::min(box.getWidth(), box.getHeight(), box.getDepth());
+			double max_cut_off = 0.5 * Maths::min(box.getWidth(), box.getHeight(), box.getDepth());
 
 			if (cut_off_> max_cut_off)
 			{

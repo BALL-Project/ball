@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.13 2005/04/02 13:51:00 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.14 2006/02/02 15:58:38 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -13,7 +13,7 @@
 
 #include <math.h>
 
-//     #define BALL_DEBUG_MMFF
+#define BALL_DEBUG_MMFF
 
 using namespace std;
 
@@ -186,16 +186,16 @@ namespace BALL
 		Vector3 v1, v2;
 		vector<Bend>::iterator bend_it = bends_.begin();
 
-		float radian_to_degree = 180.0 / Constants::PI;
-		float degree_to_radian= Constants::PI / 180;
+		double radian_to_degree = 180.0 / Constants::PI;
+		double degree_to_radian= Constants::PI / 180;
 
 		// -0.007 degree^-1
-		const float k1 = -0.007;
+		const double k1 = -0.007;
 
 		for (; bend_it != bends_.end(); ++bend_it) 
 		{
-			const float& ka = bend_it->ka;
-			const float& theta0 = bend_it->theta0;
+			const double& ka = bend_it->ka;
+			const double& theta0 = bend_it->theta0;
 		
 			v1 = bend_it->atom1->position - bend_it->atom2->position;
 			v2 = bend_it->atom3->position - bend_it->atom2->position;
@@ -231,7 +231,7 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 											<< theta << "  T0: " << theta0 << " ka " << ka;
 #endif
 
-			float energy;
+			double energy;
 			if (bend_it->is_linear)
 			{ 
 				energy = 143.9325 * ka * (1.0 + cos(theta * degree_to_radian));
