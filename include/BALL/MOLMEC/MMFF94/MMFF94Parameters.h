@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.13 2006/01/31 17:05:59 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.14 2006/02/02 15:58:29 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -155,13 +155,13 @@ namespace BALL
 		{
 			BondData();
 
-			float kb_normal;
-			float r0_normal;
+			double kb_normal;
+			double r0_normal;
 			bool  standard_bond_exists;
 			
 			/// parameters for optinal single-bond--multiple bond cases (see MMFFPROP.PAR)
-			float kb_sbmb;
-			float r0_sbmb;
+			double kb_sbmb;
+			double r0_sbmb;
 			bool  sbmb_exists;
 			bool  emperical;
 		};
@@ -169,8 +169,8 @@ namespace BALL
 		///
 		struct EmpericalBondData
 		{
-			float kb;
-			float r0;
+			double kb;
+			double r0;
 		};
 	
 		///
@@ -213,10 +213,10 @@ namespace BALL
 		const StretchMap& getBondParameters() { return parameters_;}
 
 		/// Calculate the radius value per Schomaker-Stevenson Rule
-		float calculateR0(const Bond& bond);
+		double calculateR0(const Bond& bond);
 
 		///
-		float calculateStretchConstant(const Bond& bond, float r0);
+		double calculateStretchConstant(const Bond& bond, double r0);
 
 		///
 		void setMMFFAtomTypeData(const vector<MMFF94AtomTypeData>& data) { atom_types_= &data;}
@@ -229,8 +229,8 @@ namespace BALL
 		
 		bool is_initialized_;
 
-		static float radii_[];
-		static float electronegatives_[];
+		static double radii_[];
+		static double electronegatives_[];
 
 		const vector<MMFF94AtomTypeData>* atom_types_;
 	};
@@ -245,7 +245,7 @@ namespace BALL
 		public:
 
 		/// Map with the force constant and reference angle
-		typedef HashMap<Position, pair<float, float> > BendMap;
+		typedef HashMap<Position, pair<double, double> > BendMap;
 
 		/**	@name Constant Definitions
 		*/
@@ -283,7 +283,7 @@ namespace BALL
 		bool getParameters(Position bend_type,
 											 Position atom_type1, 
 											 Position atom_type2, 
-											 Position atom_type3, float& ka, float& angle) const;
+											 Position atom_type3, double& ka, double& angle) const;
 
 		///
 		bool readParameters(const String& filename)
@@ -317,7 +317,7 @@ namespace BALL
 		public:
 
 		/// Map with the force constant and reference angle
-		typedef HashMap<Position, pair<float, float> > StretchBendMap;
+		typedef HashMap<Position, pair<double, double> > StretchBendMap;
 
 		/**	@name Constant Definitions
 		*/
@@ -356,7 +356,7 @@ namespace BALL
 											 const Atom& atom1, 
 											 const Atom& atom2, 
 											 const Atom& atom3, 
-											 float& kba_ijk, float& kba_kji) const;
+											 double& kba_ijk, double& kba_kji) const;
 
 		/// read parameters for stretch-bends and for assignment by periodic table row
 		bool readParameters(const String& filename, const String& by_row_filename)

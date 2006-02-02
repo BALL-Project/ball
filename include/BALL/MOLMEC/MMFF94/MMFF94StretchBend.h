@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.h,v 1.1.2.2 2005/04/10 20:18:45 amoll Exp $
+// $Id: MMFF94StretchBend.h,v 1.1.2.3 2006/02/02 15:58:29 amoll Exp $
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -33,16 +33,16 @@ namespace BALL
 
 		struct StretchBend
 		{
-			float kba_ijk;
-			float kba_kji;
+			double kba_ijk;
+			double kba_kji;
 			Atom::StaticAtomAttributes*	atom1;
 			Atom::StaticAtomAttributes*	atom2;
 			Atom::StaticAtomAttributes*	atom3;
-			const float* delta_r_ij;
-			const float* delta_r_kj;
-			const float* delta_theta;
+			const double* delta_r_ij;
+			const double* delta_r_kj;
+			const double* delta_theta;
 			Position sbtijk; // debug
-			float energy;  // debug
+			double energy;  // debug
 		};
 
 		BALL_CREATE(MMFF94StretchBend)

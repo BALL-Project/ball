@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.h,v 1.1.2.1 2005/03/17 13:48:48 amoll Exp $
+// $Id: MMFF94NonBonded.h,v 1.1.2.2 2006/02/02 15:58:29 amoll Exp $
 //
 
 // Molecular Mechanics: MMFF94 force field, non-bonded component
@@ -171,7 +171,7 @@ namespace BALL
         {\tt HASH\_GRID}: box grid
     */
     MolmecSupport::PairListAlgorithmType  algorithm_type_;
-		float cut_off_;
+		double cut_off_;
 		vector<Atom*> non_bonded_;
 
 		//_@}

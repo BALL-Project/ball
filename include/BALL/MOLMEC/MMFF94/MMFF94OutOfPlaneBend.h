@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.h,v 1.1.2.1 2005/04/06 16:01:46 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.h,v 1.1.2.2 2006/02/02 15:58:29 amoll Exp $
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -42,8 +42,8 @@ namespace BALL
 			Atom::StaticAtomAttributes*	j;
 			Atom::StaticAtomAttributes*	k;
 			Atom::StaticAtomAttributes*	l;
-			float k_oop;
-			float energy;  // debug
+			double k_oop;
+			double energy;  // debug
 		};
 
 		BALL_CREATE(MMFF94OutOfPlaneBend)

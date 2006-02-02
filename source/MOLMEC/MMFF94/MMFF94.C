@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.15 2006/01/31 17:06:08 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.16 2006/02/02 15:58:38 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -17,14 +17,13 @@
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/QSAR/aromaticityProcessor.h>
 
-#define BALL_DEBUG_MMFF
+//   #define BALL_DEBUG_MMFF
 
 using namespace std;
 
 namespace BALL 
 {
 	const char* MMFF94::Option::FOLDER = "folder";
-
 	const char* MMFF94::Default::FOLDER = "MMFF94";
 
 	// Default constructor
@@ -36,12 +35,7 @@ namespace BALL
 		// set the force field name
 		setName("MMFF94");
 
-		// create the component list
-      insertComponent(new MMFF94Stretch(*this));
-     		insertComponent(new MMFF94Bend(*this));
-         		insertComponent(new MMFF94StretchBend(*this));
-//   		insertComponent(new MMFF94Torsion(*this));
-//   		insertComponent(new MMFF94NonBonded(*this));
+		insertComponents_();
 	}
 
   // Constructor initialized with a system
@@ -50,12 +44,7 @@ namespace BALL
 			folder_(Default::FOLDER),
 			parameters_initialized_(false)
   {
-		// create the component list
-     insertComponent(new MMFF94Stretch(*this));
-//               		insertComponent(new MMFF94Bend(*this));
-//         		insertComponent(new MMFF94StretchBend(*this));
-//   		insertComponent(new MMFF94Torsion(*this));
-//   		insertComponent(new MMFF94NonBonded(*this));
+		insertComponents_();
 
     bool result = setup(system);
 
@@ -75,12 +64,7 @@ namespace BALL
 			folder_(Default::FOLDER),
 			parameters_initialized_(false)
   {
-		// create the component list
-//      insertComponent(new MMFF94Stretch(*this));
-         		insertComponent(new MMFF94Bend(*this));
-//            		insertComponent(new MMFF94StretchBend(*this));
-//      		insertComponent(new MMFF94Torsion(*this));
-//   		insertComponent(new MMFF94NonBonded(*this));
+		insertComponents_();
 
     bool result = setup(system, new_options);
 
@@ -93,6 +77,15 @@ namespace BALL
       Log.error() << " Force Field setup failed! " << endl;
       valid_ = false;
 		}
+	}
+
+	void MMFF94::insertComponents_()
+	{
+    insertComponent(new MMFF94Stretch(*this));
+ 		insertComponent(new MMFF94Bend(*this));
+ 		insertComponent(new MMFF94StretchBend(*this));
+ 		insertComponent(new MMFF94Torsion(*this));
+ 		insertComponent(new MMFF94NonBonded(*this));
 	}
  
 	// copy constructor  

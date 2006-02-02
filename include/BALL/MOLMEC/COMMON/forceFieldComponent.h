@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceFieldComponent.h,v 1.19 2004/12/27 17:06:32 amoll Exp $
+// $Id: forceFieldComponent.h,v 1.19.6.1 2006/02/02 15:58:28 amoll Exp $
 //
 
 // Molecular Mechanics: general force field component class
@@ -95,6 +95,12 @@ namespace BALL
 		*/
 		String	getName() const;
 
+		///
+		bool isEnabled() const { return enabled_;}
+
+		///
+		void setEnabled(bool state) { enabled_ = state;}
+
 		//@}	
 		/**	@name	Force field calculations
 		*/
@@ -155,6 +161,8 @@ namespace BALL
 		/*_	The force field component name
 		*/
 		String	name_;
+
+		bool 		enabled_;
 		
 		//_@}
 
