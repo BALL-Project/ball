@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.h,v 1.1.2.8 2006/02/02 23:53:00 amoll Exp $
+// $Id: MMFF94Bend.h,v 1.1.2.9 2006/02/03 00:39:59 amoll Exp $
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -112,7 +112,7 @@ namespace BALL
 
 		static double z_[];
 		static double c_[];
-		static Position atom_nr_[];
+		static String elements_[];
 
 		vector<Bend> bends_;
 		MMFF94BendParameters parameters_;

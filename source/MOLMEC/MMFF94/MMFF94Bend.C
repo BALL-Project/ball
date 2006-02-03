@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.16 2006/02/02 23:52:50 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.17 2006/02/03 00:39:49 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -380,26 +380,35 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 		
 	double MMFF94Bend::calculateEmpericalForceConstant(Atom& atom1, Atom& atom2, Atom& atom3, double angle_0) const
 	{
-		Position elements[3];
-		elements[0] = atom1.getElement().getAtomicNumber() - 1;
-		elements[1] = atom1.getElement().getAtomicNumber() - 1;
-		elements[2] = atom1.getElement().getAtomicNumber() - 1;
+		String el[3];
+		el[0] = atom1.getElement().getSymbol();
+		el[1] = atom2.getElement().getSymbol();
+		el[2] = atom3.getElement().getSymbol();
 
-		if (elements[0] > 12 || elements[1] > 12 || elements[2] > 12)
+		Position ps[3];
+
+		for (Position p = 0; p < 3; p++)
+		{
+			ps[p] = 0;
+			for (Position i = 0; i < 12; i++)
+			{
+				if (el[p] == elements_[i])
+				{
+					ps[p] = i;
+					break;
+				}
+			}
+
+			if (ps[p] == 0) return -1;
+		}
+
+		double zcz = z_[ps[0]] * c_[ps[1]] * z_[ps[2]];
+
+		// One Parameter lacking?
+		if (zcz == 0.0) 
 		{
 			return -1;
 		}
-
-		HashMap<Position, Position> e_to_i;
-		for (Position p = 0; p < 12; p++)
-		{
-			e_to_i[atom_nr_[p]] = p;
-		}
-
-		double zcz = e_to_i[elements[0]] * e_to_i[elements[1]] * e_to_i[elements[2]];
-
-		// One Parameter lacking?
-		if (zcz == 0.0) return -1;
 
 		vector<Atom*> atoms;
 		atoms.push_back(&atom1);
@@ -433,9 +442,9 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 		0., 0.704, 1.016, 1.113, 1.337, 0., 0.811, 1.068, 1.249, 1.078, 0. ,0.
 	};
 
-	Position MMFF94Bend::atom_nr_[] =
+	String MMFF94Bend::elements_[] =
 	{
-		1,5,6,7,8,9,14,15,16,17,35,53
+		"H", "B", "C", "N", "O", "F", "SI", "P", "S", "CL", "BR", "AS"
 	};
 
 
