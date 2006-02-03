@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.17 2006/02/03 00:39:49 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.18 2006/02/03 14:02:07 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -14,12 +14,25 @@
 
 #include <math.h>
 
-#define BALL_DEBUG_MMFF
+//   #define BALL_DEBUG_MMFF
 
 using namespace std;
 
 namespace BALL 
 {
+	MMFF94Bend::Bend::Bend()
+		: theta0(0),
+			delta_theta(0),
+			ka(0),
+			atom1(0),
+			atom2(0),
+			atom3(0),
+			is_linear(false),
+			ATIJK(0),
+			energy(0),
+			emperical(false)
+	{
+	}
 
 	/// 0.043844 / 2
 	#define K0 0.021922
@@ -156,9 +169,19 @@ namespace BALL
 					{
 						this_bend.is_linear = atom_types[atom_type_a2].lin;
 
-						// store the bend parameters otherwise
-						bends_.push_back(this_bend);
-						continue;
+						// sometimes the ka values are lacking, try the emperical rule
+						if (this_bend.ka == 0.0)
+						{
+							this_bend.ka = calculateEmpericalForceConstant(atom1, atom2, atom3, this_bend.theta0);
+							this_bend.emperical = true;
+						}
+
+						if (this_bend.ka > 0.0)
+						{
+							// store the bend parameters otherwise
+							bends_.push_back(this_bend);
+							continue;
+						}
 					}
 
 					// ok we will try the emperical rule
@@ -170,6 +193,7 @@ namespace BALL
 						this_bend.ka = ka;
 						this_bend.theta0 = ra;
 						bends_.push_back(this_bend);
+						this_bend.emperical = true;
 						continue;
 					}
 
@@ -380,16 +404,19 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 		
 	double MMFF94Bend::calculateEmpericalForceConstant(Atom& atom1, Atom& atom2, Atom& atom3, double angle_0) const
 	{
+		double degree_to_radian= Constants::PI / 180.0;
+		angle_0 *= degree_to_radian;
+
 		String el[3];
 		el[0] = atom1.getElement().getSymbol();
 		el[1] = atom2.getElement().getSymbol();
 		el[2] = atom3.getElement().getSymbol();
 
-		Position ps[3];
-
+		// look for the constant for every element
+		Index ps[3];
 		for (Position p = 0; p < 3; p++)
 		{
-			ps[p] = 0;
+			ps[p] = -1;
 			for (Position i = 0; i < 12; i++)
 			{
 				if (el[p] == elements_[i])
@@ -399,7 +426,7 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 				}
 			}
 
-			if (ps[p] == 0) return -1;
+			if (ps[p] == -1) return -1;
 		}
 
 		double zcz = z_[ps[0]] * c_[ps[1]] * z_[ps[2]];
@@ -432,20 +459,10 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 		return k;
 	}
 
-	double MMFF94Bend::z_[] = 
-	{
-		1.395, 0. ,2.494, 2.711, 3.045, 2.847, 2.350, 2.350, 2.980, 2.909, 3.017, 3.086
-	};
-
-	double MMFF94Bend::c_[] = 
-	{
-		0., 0.704, 1.016, 1.113, 1.337, 0., 0.811, 1.068, 1.249, 1.078, 0. ,0.
-	};
-
-	String MMFF94Bend::elements_[] =
-	{
-		"H", "B", "C", "N", "O", "F", "SI", "P", "S", "CL", "BR", "AS"
-	};
+	// original values from Paper V
+	double MMFF94Bend::z_[] = 				{ 1.395, 0. ,   2.494, 2.711, 3.045, 2.847, 2.350, 2.350, 2.980, 2.909, 3.017, 0.,    3.086 };
+	double MMFF94Bend::c_[] = 				{ 0.,    0.704, 1.016, 1.113, 1.337, 0.,    0.811, 1.068, 1.249, 1.078, 0.,    0.825, 0.  };
+	String MMFF94Bend::elements_[] = { "H",    "B",   "C",   "N",   "O",   "F",   "SI",  "P",   "S",   "CL",  "BR", "AS",   "I" };
 
 
 } // namespace BALL
