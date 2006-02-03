@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.18 2006/02/03 14:02:07 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.19 2006/02/03 15:19:18 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -225,8 +225,8 @@ namespace BALL
 		Vector3 v1, v2;
 		vector<Bend>::iterator bend_it = bends_.begin();
 
-		double radian_to_degree = 180.0 / Constants::PI;
-		double degree_to_radian= Constants::PI / 180;
+		double radian_to_degree = (double)180.0 / Constants::PI;
+		double degree_to_radian= Constants::PI / (double)180.0;
 
 		// -0.007 degree^-1
 		const double k1 = -0.007;
@@ -412,6 +412,7 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 		el[1] = atom2.getElement().getSymbol();
 		el[2] = atom3.getElement().getSymbol();
 
+Log.error() << "#~~#   18 "  << el[0] << " " << el[1] << " " << el[2]           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		// look for the constant for every element
 		Index ps[3];
 		for (Position p = 0; p < 3; p++)
@@ -426,7 +427,11 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 				}
 			}
 
-			if (ps[p] == -1) return -1;
+			if (ps[p] == -1) 
+			{
+Log.error() << "#~~#   19 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+				return -1;
+			}
 		}
 
 		double zcz = z_[ps[0]] * c_[ps[1]] * z_[ps[2]];
@@ -434,6 +439,7 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 		// One Parameter lacking?
 		if (zcz == 0.0) 
 		{
+Log.error() << "#~~#   20 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			return -1;
 		}
 
@@ -462,7 +468,7 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 	// original values from Paper V
 	double MMFF94Bend::z_[] = 				{ 1.395, 0. ,   2.494, 2.711, 3.045, 2.847, 2.350, 2.350, 2.980, 2.909, 3.017, 0.,    3.086 };
 	double MMFF94Bend::c_[] = 				{ 0.,    0.704, 1.016, 1.113, 1.337, 0.,    0.811, 1.068, 1.249, 1.078, 0.,    0.825, 0.  };
-	String MMFF94Bend::elements_[] = { "H",    "B",   "C",   "N",   "O",   "F",   "SI",  "P",   "S",   "CL",  "BR", "AS",   "I" };
+	String MMFF94Bend::elements_[] = { "H",    "B",   "C",   "N",   "O",   "F",   "Si",  "P",   "S",   "Cl",  "Br", "As",   "I" };
 
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.19 2006/02/02 23:52:49 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.20 2006/02/03 15:19:17 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -17,7 +17,7 @@
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/QSAR/aromaticityProcessor.h>
 
-//   #define BALL_DEBUG_MMFF
+//    #define BALL_DEBUG_MMFF
 
 using namespace std;
 
@@ -151,8 +151,8 @@ namespace BALL
 			throw Exception::FileNotFound(__FILE__, __LINE__, folder_);
 		}
 
-		collectRings_();
 		collectBonds_();
+		collectRings_();
 
 		if (!parameters_initialized_)
 		{
@@ -163,6 +163,8 @@ namespace BALL
 			equivalences_.readParameters(prefix + "MMFFDEF.PAR");
 			parameters_initialized_ = true;
 		}
+
+		assignBondTypes_();
 
 		return true;
 	}
@@ -393,11 +395,20 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 					continue;
 				}
 
-				assignMMFF94BondType(bond);
 				bonds_.push_back(&bond);
 			}
 		}
 	}
+
+	void MMFF94::assignBondTypes_()
+	{
+		vector<Bond*>::iterator bit = bonds_.begin();
+		for (; bit != bonds_.end(); bit++)
+		{
+			assignMMFF94BondType(**bit);
+		}
+	}
+		
 	
 	void MMFF94::collectRings_()
 	{
@@ -417,6 +428,50 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 				rings_[i].insert(rings[i][j]);
 			}
 		}
+
+
+		Atom *a1, *a2, *a3;
+		// search for rings of size 3
+		vector<Bond*>::iterator bit = bonds_.begin();
+		for (; bit != bonds_.end(); bit++)
+		{
+			a1 = (Atom*)(**bit).getFirstAtom();
+			a2 = (Atom*)(**bit).getSecondAtom();
+			AtomBondIterator abi = a2->beginBond();
+			for (; +abi; ++abi)
+			{
+				a3 = (Atom*)(*abi).getPartner(*a2);
+				if (a3 == a1) continue;
+
+				Bond* b = a3->getBond(*a1);
+
+				if (b == 0) continue;
+				
+				bool found = false;
+				for (Position i = 0; i < rings.size(); i++)
+				{
+					if (rings_[i].size() != 3) continue;
+
+					if (rings_[i].has(a1) &&
+							rings_[i].has(a2) &&
+							rings_[i].has(a3))
+					{
+						found = true;
+						break;
+					}
+				}
+
+				if (found) continue;
+
+Log.error() << "#~~#   6 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+				rings_.push_back(HashSet<Atom*>());
+				rings_[rings_.size() -1].insert(a1);
+				rings_[rings_.size() -1].insert(a2);
+				rings_[rings_.size() -1].insert(a3);
+			}
+		}
+
+
 
 		///////////////////////////////////////
 		/// calculate all aromatic rings in the molecule
