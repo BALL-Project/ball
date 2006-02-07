@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76 2005/12/23 17:02:14 amoll Exp $
+// $Id: mainControl.h,v 1.77 2006/02/07 12:35:25 oliver Exp $
+//
+// Author:
+//   Andreas Moll
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -221,7 +224,8 @@ namespace BALL
 					updateRepresentationsOf() is called after receiving a CompositeMessage with type CHANGED_COMPOSITE in onNotify().
 					It sends a RepresentationMessage with type UPDATE for every Representation, which was build for the 
 					Composite.  After this a SceneMessage is send to redraw the Scene.
-					Remember:
+					\par
+					Notes:
 					If you changed a Composite in MainControl or a derived class, the MainControl doesnt get 
 					notified, from the CompositeMessage it sends. So you have to call this function instead 
 					of sending the message.

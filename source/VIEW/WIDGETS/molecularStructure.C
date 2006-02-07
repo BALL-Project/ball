@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.90 2006/01/26 11:58:55 oliver Exp $
+// $Id: molecularStructure.C,v 1.91 2006/02/07 12:35:26 oliver Exp $
+//
+// Author:
+//   Andreas Moll
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>

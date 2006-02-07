@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.h,v 1.5 2006/01/27 11:18:05 oliver Exp $
+// $Id: DBInterface.h,v 1.6 2006/02/07 12:35:25 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -202,7 +202,7 @@ namespace BALL
 				The file adheres to the format definition of an \link INIFile INIFile \endlink.
 				The keywords recognized can be seen from the example below:
 				\verbatim
-					[BALLStructureDatabase]
+					[StructureDatabase]
 					user=oliver
 					password=mypassword
 					database=STRUCTURES

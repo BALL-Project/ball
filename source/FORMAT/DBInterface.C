@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.C,v 1.5 2006/01/31 09:40:16 oliver Exp $
+// $Id: DBInterface.C,v 1.6 2006/02/07 12:35:25 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -193,6 +193,7 @@ namespace BALL
 		db_->setDatabaseName(db);
 		db_->setPassword(password);
 		db_->setPort(port);
+
 		if (!db_->open())
 		{
 			setError(NO_CONNECTION);
