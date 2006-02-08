@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.h,v 1.10 2005/12/23 17:01:58 amoll Exp $
+// $Id: ringPerceptionProcessor.h,v 1.11 2006/02/08 21:26:49 bertsch Exp $
 //
 
 #ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
@@ -195,15 +195,19 @@ namespace BALL
 			struct PathMessage
 			{
 				void push(EdgeItem<Index, Index>* bond, TNode* node);
-			
+		
+				//void merge(PathMessage);
+
+				//void join(PathMessage);
+				
 				// path of the message
 				BitVector beep;
 				
 				/// pointer to the first node this message was sent from
-				TNode * nfirst;
+				TNode* nfirst;
 			
 				// pointer to the last node of the messages' path
-				TNode * nlast;
+				TNode* nlast;
 
 				/// pointer to the first edge of the message path
 				EdgeItem<Index, Index>* efirst;
@@ -215,10 +219,14 @@ namespace BALL
 			/// mapping for the path representation as bitvectors
 			static HashMap<EdgeItem<Index, Index>*, Size> bond_to_index;
 			static HashMap<Size, EdgeItem<Index, Index>*> index_to_bond;
-			/// hte SSSR detected by the algorithm
+			/// the SSSR detected by the algorithm
 			static std::vector<BitVector> rings;
 			/// the matrix for the independency tests
 			static std::vector<BitVector> matrix;
+			/// the rings of the ith phase, which are to be forwarded to the ring selector
+			static std::vector<BitVector> forwarded_rings_;
+			/// rings (beer) which have already been tested
+			static std::vector<BitVector> tested_beers_;
 
 			/*_ function that gets a binary edge-encoded ring as a BitVector
 					and adds it to the ringset if its linearly independend
