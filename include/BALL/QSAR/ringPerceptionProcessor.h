@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.h,v 1.6.2.2 2006/02/08 22:41:48 amoll Exp $
+// $Id: ringPerceptionProcessor.h,v 1.6.2.3 2006/02/09 23:05:20 amoll Exp $
 //
 
 #ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
@@ -108,7 +108,12 @@ namespace BALL
 			*/
 			Size calculateSSSR(vector<vector<Atom*> >& sssr, AtomContainer& ac);
 			//@}
-		
+
+			/** Getter which returns all the 3 and 4 membered rings, calculateSSSR with
+			 *  the Balducci-Pearlman Algorithm (defalt) is needed prior this call.
+			 */
+			const vector<vector<Atom*> >& getAll3And4Rings() const;
+			
 			/** @name Processor-related methods
 			*/
 			//@{
@@ -216,18 +221,29 @@ namespace BALL
 			/// mapping for internal TNode structure and the nodes of the molecular graph
 			static HashMap<TNode*, NodeItem<Index, Index>* > tnode_to_atom;
 			static HashMap<NodeItem<Index, Index>* , TNode*> atom_to_tnode;
+			
 			/// mapping for the path representation as bitvectors
 			static HashMap<EdgeItem<Index, Index>*, Size> bond_to_index;
 			static HashMap<Size, EdgeItem<Index, Index>*> index_to_bond;
+			
 			/// the SSSR detected by the algorithm
 			static std::vector<BitVector> rings;
+			
 			/// the matrix for the independency tests
 			static std::vector<BitVector> matrix;
+			
 			/// the rings of the ith phase, which are to be forwarded to the ring selector
 			static std::vector<BitVector> forwarded_rings_;
+			
 			/// rings (beer) which have already been tested
 			static std::vector<BitVector> tested_beers_;
 
+			/// contains all the 3 and 4 membered rings after the procedure of the Balducci-Pearlman algorithm
+			static std::vector<std::vector<Atom*> > all3and4membered_rings_;
+
+			/// contains all the 3 and 4 membered rings as beers
+			static std::vector<BitVector> all3and4membered_beers_;
+			
 			/*_ function that gets a binary edge-encoded ring as a BitVector
 					and adds it to the ringset if its linearly independend
 			*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.10.2.2 2006/02/08 22:42:05 amoll Exp $
+// $Id: ringPerceptionProcessor.C,v 1.10.2.3 2006/02/09 23:05:03 amoll Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
@@ -129,6 +129,11 @@ namespace BALL
 		}
 	}
 
+	const vector<vector<Atom*> >& RingPerceptionProcessor::getAll3And4Rings() const
+	{
+		return all3and4membered_rings_;
+	}
+	
 	Size RingPerceptionProcessor::FiguerasAlgorithm_(vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
 	{
 		// the algorithm runs on a copy, bc bonds and maybe atoms are destroyed!
@@ -581,7 +586,6 @@ namespace BALL
 
 
 	// Balducci, Pearlman algorithm
-
 	HashMap<RingPerceptionProcessor::TNode*, NodeItem<Index, Index> *> RingPerceptionProcessor::tnode_to_atom;
 	HashMap<NodeItem<Index, Index>* , RingPerceptionProcessor::TNode*> RingPerceptionProcessor::atom_to_tnode;
 	HashMap<EdgeItem<Index, Index> *, Size> RingPerceptionProcessor::bond_to_index;
@@ -590,6 +594,8 @@ namespace BALL
 	vector<BitVector> RingPerceptionProcessor::matrix;
 	vector<BitVector> RingPerceptionProcessor::forwarded_rings_;
 	vector<BitVector> RingPerceptionProcessor::tested_beers_;
+	vector<vector<Atom*> > RingPerceptionProcessor::all3and4membered_rings_;
+	vector<BitVector> RingPerceptionProcessor::all3and4membered_beers_;
 
 	void RingPerceptionProcessor::TNode::recieve()
 	{
@@ -855,6 +861,8 @@ namespace BALL
 		matrix.clear();
 		forwarded_rings_.clear();
 		tested_beers_.clear();
+		all3and4membered_beers_.clear();
+		all3and4membered_rings_.clear();
 		
 		// 1. init the flow-network
 
@@ -938,6 +946,10 @@ namespace BALL
 					{
 						tested_beers_.push_back(*it);
 						BalducciPearlmanRingSelector_(*it);
+						if (it->countValue(true) == 3)
+						{
+							all3and4membered_beers_.push_back(*it);
+						}
 					}
 				}
 				else
@@ -945,6 +957,7 @@ namespace BALL
 					even_sized.push_back(*it);
 				}
 			}
+
 			// now process the even-sized rings
 			for (vector<BitVector>::const_iterator it = even_sized.begin(); it != even_sized.end(); ++it)
 			{
@@ -952,12 +965,16 @@ namespace BALL
 				{
 					tested_beers_.push_back(*it);
 					BalducciPearlmanRingSelector_(*it);
+					if (it->countValue(true) == 4)
+					{
+						all3and4membered_beers_.push_back(*it);
+					}
 				}
 			}
 			// clean up for next round
 			forwarded_rings_.clear();
 			
-			// this is just a workaround, due to deficiencies of the balducci pearlman algorithm TODO needed any more?
+			// this is just a workaround, due to deficiencies of the balducci pearlman algorithm
 			if (count > BALL_QSAR_RINGPERCEPTIONPROCESSOR_MAX_RUNS)
 			{
 				break;
@@ -965,17 +982,17 @@ namespace BALL
 		}
 
 		// now set the named property InRing to true, for the ring bonds
-		for (Size i=0;i!=rings.size();++i)
+		for (Size i = 0; i != rings.size(); ++i)
 		{
 			HashSet<Atom*> in_ring;
 			vector<Atom*> ring;
-			for (Size j=0;j!=rings[i].getSize();++j)
+			for (Size j = 0; j != rings[i].getSize(); ++j)
 			{
 				if (rings[i][j])
 				{
-					Bond * b = index_to_bond[j]->getBond();
+					Bond* b = index_to_bond[j]->getBond();
 					b->setProperty("InRing", true);
-					Atom * a = b->getPartner(*b->getFirstAtom());
+					Atom* a = b->getPartner(*b->getFirstAtom());
 					a->setProperty("InRing", true);
 					if (!in_ring.has(a))
 					{
@@ -994,6 +1011,34 @@ namespace BALL
 			sssr.push_back(ring);
 		}
 
+		// now handle all 3 and 4 membered rings
+		for (Size i = 0; i != all3and4membered_beers_.size(); ++i)
+		{
+			HashSet<Atom*> in_ring;
+			vector<Atom*> ring;
+			for (Size j = 0; j != all3and4membered_beers_[i].getSize(); ++j)
+			{
+				if (all3and4membered_beers_[i][j])
+				{
+					Bond* b = index_to_bond[j]->getBond();
+					Atom* a = b->getPartner(*b->getFirstAtom());
+					if (!in_ring.has(a))
+					{
+						in_ring.insert(a);
+						ring.push_back(a);
+					}
+
+					a = b->getPartner(*b->getSecondAtom());
+					if (!in_ring.has(a))
+					{
+						in_ring.insert(a);
+						ring.push_back(a);
+					}
+				}
+			}
+			all3and4membered_rings_.push_back(ring);
+		}
+		
 		// delete TNodes
 		for (HashMap<NodeItem<Index, Index>* , TNode*>::Iterator it=atom_to_tnode.begin(); +it; ++it)
 		{
