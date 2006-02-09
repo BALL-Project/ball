@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.18 2006/02/02 23:52:50 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.19 2006/02/09 22:58:00 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -63,7 +63,8 @@ namespace BALL
 	bool MMFF94Stretch::setup()
 		throw(Exception::TooManyErrors)
 	{
-		if (getForceField() == 0) 
+		if (getForceField() == 0 ||
+				dynamic_cast<MMFF94*>(getForceField()) == 0) 
 		{
 			Log.error() << "MMFF94Stretch::setup(): component not bound to force field" << endl;
 			return false;
@@ -74,7 +75,7 @@ namespace BALL
 		// a working instance to put the current values in and push it back
 		Stretch dummy_stretch;
 
-		const MMFF94& mmff = *(MMFF94*)getForceField();
+		const MMFF94& mmff = *dynamic_cast<const MMFF94*>(getForceField());
 
 		parameters_ = &mmff.getStretchParameters();
 		MMFF94StretchParameters::StretchMap::ConstIterator stretch_it;
@@ -249,8 +250,15 @@ namespace BALL
 			return -1;
 		}
 
-		const MMFF94& mmff = *((const MMFF94*)getForceField());
-		const vector<MMFF94AtomTypeData>& atom_types = mmff.getAtomTypes();
+		if (getForceField() == 0 ||
+				dynamic_cast<MMFF94*>(getForceField()) == 0)
+		{
+			Log.error() << "No MMFF94 ForceField available " << __FILE__ << " " << __LINE__ << std::endl;
+			return -1;
+		}
+
+		const MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
+		const vector<MMFF94AtomTypeData>& atom_types = mmff->getAtomTypes();
 
 		Position b1 = atom_types[t1].mltb;
 		Position b2 = atom_types[t2].mltb;
@@ -263,7 +271,7 @@ namespace BALL
 			vector <Atom*> atoms;
 			atoms.push_back((Atom*)&atom1);
 			atoms.push_back((Atom*)&atom2);
-			if (mmff.areInOneAromaticRing(atoms, 0))
+			if (mmff->areInOneAromaticRing(atoms, 0))
 			{
 				if (!atom_types[t1].pilp && !atom_types[t2].pilp)
 				{

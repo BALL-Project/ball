@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.2.8 2006/02/03 15:19:22 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.2.9 2006/02/09 22:58:08 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -195,7 +195,7 @@ namespace BALL
 		const MMFF94AtomTypeEquivalences & getEquivalences() const { return equivalences_;}
 
 		///
-		bool areInOneRing(const vector<Atom*>& v, Size ring_size = 0) const;
+		bool areInOneRing(vector<Atom*> v, Size ring_size = 0) const;
 		
 		///
 		bool areInOneAromaticRing(const vector<Atom*>& v, Size ring_size = 0) const;

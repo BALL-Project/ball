@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.20 2006/02/03 15:19:17 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.21 2006/02/09 22:58:00 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -429,48 +429,43 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 			}
 		}
 
+		vector<vector<Atom*> > rings2 = rpp.getAll3And4Rings();
 
-		Atom *a1, *a2, *a3;
-		// search for rings of size 3
-		vector<Bond*>::iterator bit = bonds_.begin();
-		for (; bit != bonds_.end(); bit++)
+		// copy 3er and 4er rings
+		for (Position i = 0; i < rings2.size(); i++)
 		{
-			a1 = (Atom*)(**bit).getFirstAtom();
-			a2 = (Atom*)(**bit).getSecondAtom();
-			AtomBondIterator abi = a2->beginBond();
-			for (; +abi; ++abi)
+			bool found = false;
+
+			// remove duplettes
+			for (Position ri = 0; ri < rings_.size(); ri++)
 			{
-				a3 = (Atom*)(*abi).getPartner(*a2);
-				if (a3 == a1) continue;
-
-				Bond* b = a3->getBond(*a1);
-
-				if (b == 0) continue;
+				if (rings_[ri].size() != rings2[i].size()) continue;
 				
-				bool found = false;
-				for (Position i = 0; i < rings.size(); i++)
+				bool found_all_atoms  = true;
+				for (Position j = 0; j < rings2[i].size(); j++)
 				{
-					if (rings_[i].size() != 3) continue;
-
-					if (rings_[i].has(a1) &&
-							rings_[i].has(a2) &&
-							rings_[i].has(a3))
+					if (!rings_[ri].has(rings2[i][j]))
 					{
-						found = true;
+						found_all_atoms = false;
 						break;
 					}
 				}
 
-				if (found) continue;
+				if (found_all_atoms)
+				{
+					found = true;
+					break;
+				}
+			}
 
-Log.error() << "#~~#   6 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-				rings_.push_back(HashSet<Atom*>());
-				rings_[rings_.size() -1].insert(a1);
-				rings_[rings_.size() -1].insert(a2);
-				rings_[rings_.size() -1].insert(a3);
+			if (found) continue;
+
+			rings_.push_back(HashSet<Atom*>());
+			for (Position j = 0; j < rings2[i].size(); j++)
+			{
+				rings_[i].insert(rings2[i][j]);
 			}
 		}
-
 
 
 		///////////////////////////////////////
@@ -489,7 +484,7 @@ Log.error() << "#~~#   6 "             << " "  << __FILE__ << "  " << __LINE__<<
 			}
 		}
 
-#ifdef BALL_DEBUG_MMFF
+//   #ifdef BALL_DEBUG_MMFF
 		Log.info() << "MMFF94: Found " << rings_.size() << " rings: ";
 		for (Position pos = 0; pos < rings_.size(); pos++)
 		{
@@ -503,11 +498,11 @@ Log.error() << "#~~#   6 "             << " "  << __FILE__ << "  " << __LINE__<<
 			Log.info() << aromatic_rings_[pos].size() << " ";
 		}
 		Log.info() << std::endl;
-#endif
+//   #endif
 
 	}
 
-	bool MMFF94::areInOneRing(const vector<Atom*>& v, Size ring_size) const
+	bool MMFF94::areInOneRing(vector<Atom*> v, Size ring_size) const
 	{
 		for (Position i = 0; i < rings_.size(); i++)
 		{

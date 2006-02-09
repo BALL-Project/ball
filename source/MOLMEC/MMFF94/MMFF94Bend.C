@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.19 2006/02/03 15:19:18 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.20 2006/02/09 22:58:00 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -71,7 +71,8 @@ namespace BALL
 	bool MMFF94Bend::setup()
 		throw(Exception::TooManyErrors)
 	{
-		if (getForceField() == 0) 
+		if (getForceField() == 0 ||
+				dynamic_cast<MMFF94*>(getForceField()) == 0) 
 		{
 			Log.error() << "MMFF94Bend::setup(): component not bound to force field" << endl;
 			return false;
@@ -97,13 +98,14 @@ namespace BALL
 		// a working instance to put the current values in and push it back
 		Bend this_bend;
 
-		const vector<MMFF94AtomTypeData>& atom_types = ((MMFF94*)getForceField())->getAtomTypes();
-		const MMFF94AtomTypeEquivalences& equivalences = ((MMFF94*)getForceField())->getEquivalences();
+		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
+		const vector<MMFF94AtomTypeData>& atom_types = mmff->getAtomTypes();
+		const MMFF94AtomTypeEquivalences& equivalences = mmff->getEquivalences();
 
-		vector<Atom*>::const_iterator	atom_it = getForceField()->getAtoms().begin();
+		vector<Atom*>::const_iterator	atom_it = mmff->getAtoms().begin();
 		Atom::BondIterator it1;
 		Atom::BondIterator it2;
-		for ( ; atom_it != getForceField()->getAtoms().end(); ++atom_it) 
+		for ( ; atom_it != mmff->getAtoms().end(); ++atom_it) 
 		{
 			for (it2 = (*atom_it)->beginBond(); +it2 ; ++it2) 
 			{
@@ -199,16 +201,16 @@ namespace BALL
 
 					
 					// complain if nothing was found
-					getForceField()->error() << "MMFF94Bend::setup: cannot find bend parameters for atom types:"
-																	 << atom_type_a1 << "-" << atom_type_a2 << "-" << atom_type_a3 
-																	 << "bend " << this_bend.ATIJK
-																	 << " (atoms are: " << atom1.getFullName() << "/" 
-																	 << atom2.getFullName() << "/" 
-																	 << atom3.getFullName() << ")" << endl;
+					mmff->error() << "MMFF94Bend::setup: cannot find bend parameters for atom types:"
+												<< atom_type_a1 << "-" << atom_type_a2 << "-" << atom_type_a3 
+												<< "bend " << this_bend.ATIJK
+												<< " (atoms are: " << atom1.getFullName() << "/" 
+												<< atom2.getFullName() << "/" 
+												<< atom3.getFullName() << ")" << endl;
 
-					getForceField()->getUnassignedAtoms().insert(&atom1);
-					getForceField()->getUnassignedAtoms().insert(&atom2);
-					getForceField()->getUnassignedAtoms().insert(&atom3);
+					mmff->getUnassignedAtoms().insert(&atom1);
+					mmff->getUnassignedAtoms().insert(&atom2);
+					mmff->getUnassignedAtoms().insert(&atom3);
 				}
 			}
 		}
@@ -323,7 +325,7 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 					 8            Is in a four-membered ring and the sum of the bond types is 2 
 		*/
 
-		MMFF94& mmff = *(MMFF94*)getForceField();
+		MMFF94& mmff = *dynamic_cast<MMFF94*>(getForceField());
 		const vector<HashSet<Atom*> >& all_rings = mmff.getRings();
 
 		bool in_ring_of_three = false;
@@ -370,7 +372,7 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 
 	double MMFF94Bend::calculateEmpericalReferenceAngle(Atom& atom1, Atom& atom2, Atom& atom3) const
 	{
-		const MMFF94& mmff = *(const MMFF94*)getForceField();
+		const MMFF94& mmff = *dynamic_cast<MMFF94*>(getForceField());
 		const vector<MMFF94AtomTypeData>& atd = mmff.getAtomTypes();
 
 		const MMFF94AtomTypeData& aj = atd[atom2.getType()];
@@ -412,7 +414,6 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 		el[1] = atom2.getElement().getSymbol();
 		el[2] = atom3.getElement().getSymbol();
 
-Log.error() << "#~~#   18 "  << el[0] << " " << el[1] << " " << el[2]           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		// look for the constant for every element
 		Index ps[3];
 		for (Position p = 0; p < 3; p++)
@@ -429,7 +430,6 @@ Log.error() << "#~~#   18 "  << el[0] << " " << el[1] << " " << el[2]           
 
 			if (ps[p] == -1) 
 			{
-Log.error() << "#~~#   19 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				return -1;
 			}
 		}
@@ -439,7 +439,6 @@ Log.error() << "#~~#   19 "             << " "  << __FILE__ << "  " << __LINE__<
 		// One Parameter lacking?
 		if (zcz == 0.0) 
 		{
-Log.error() << "#~~#   20 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			return -1;
 		}
 
@@ -448,7 +447,7 @@ Log.error() << "#~~#   20 "             << " "  << __FILE__ << "  " << __LINE__<
 		atoms.push_back(&atom2);
 		atoms.push_back(&atom3);
 
-		const MMFF94& mmff = *(const MMFF94*)getForceField();
+		const MMFF94& mmff = *dynamic_cast<MMFF94*>(getForceField());
 		
 		double beta = 1.75;
 		
