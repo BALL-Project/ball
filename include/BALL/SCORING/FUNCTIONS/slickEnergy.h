@@ -1,4 +1,4 @@
-// $Id: slick.h,v 1.1 2005/11/21 19:27:06 anker Exp $
+// $Id: slickEnergy.h,v 1.1 2006/02/09 16:13:36 anker Exp $
 
 #ifndef BALL_SCORING_FUNCTIONS_SLICK_H
 #define BALL_SCORING_FUNCTIONS_SLICK_H
@@ -172,6 +172,7 @@ namespace BALL
 		*/
 		double getNonpolarSolvationScore() const
 			throw();
+		//@}
 
 
 		private:
