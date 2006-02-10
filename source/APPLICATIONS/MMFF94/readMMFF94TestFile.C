@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.24 2006/02/03 00:39:46 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.25 2006/02/10 15:29:45 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -232,6 +232,11 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 		f_ij.push_back(fields[5].toFloat());
 	}
 
+	// calulatate stretches and bends
+	mmff.getComponent("MMFF94 Stretch")->setEnabled(true);
+	mmff.getComponent("MMFF94 Bend")->setEnabled(true);
+	mmff.updateEnergy();
+
 	enableOneComponent("MMFF94 StretchBend", mmff);
 	mmff.updateEnergy();
 	MMFF94StretchBend* comp= (MMFF94StretchBend*) mmff.getComponent("MMFF94 StretchBend");
@@ -271,7 +276,8 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 
 			if (//s.sbtijk != sbtijk ||
 					!BALL_REAL_EQUAL(constants[0], constants_ours[0], 0.0001) ||
-					!BALL_REAL_EQUAL(constants[1], constants_ours[1], 0.0001))
+					!BALL_REAL_EQUAL(constants[1], constants_ours[1], 0.0001) ||
+					!isOk(s.energy, energy1))
 			{
 				Log.error() << std::endl
 										<< "Problem StretchBend:   " << filename << "   " 
@@ -295,7 +301,7 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 
 	vector<double> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
 
-	double s_plus_b = results[2] + results[1] + results[4];
+	double s_plus_b = results[4];
 
 	if (!isOk(mmff.getEnergy(), s_plus_b))
 	{
@@ -316,11 +322,11 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 	LineBasedFile infile(full_file_name);
 	vector<String> atoms1, atoms2, atoms3;
 	vector<Position>   type;
-	vector<double>  theta0, delta, energy;
+	vector<double>  theta0, delta, energy, ka;
 	while (infile.readLine())
 	{
 		vector<String> fields;
-		if (infile.getLine().split(fields) < 7)
+		if (infile.getLine().split(fields) < 8)
 		{
 			Log.error() << "Problem: " << __FILE__ << __LINE__ << std::endl;
 			continue;
@@ -333,6 +339,7 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 		theta0.push_back(fields[4].toFloat());
 		delta.push_back(fields[5].toFloat());
 		energy.push_back(fields[6].toFloat());
+		ka.push_back(fields[7].toFloat());
 	}
 
 	enableOneComponent("MMFF94 Bend", mmff);
@@ -358,18 +365,29 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 			}
 
 			found = true;
-			if (!BALL_REAL_EQUAL(s.theta0, theta0[poss2], 0.0001) ||
-					!isOk(s.energy, energy[poss2]))
+			if (BALL_REAL_EQUAL(s.theta0, theta0[poss2], 0.001) &&
+					BALL_REAL_EQUAL(s.ka, ka[poss2], 0.001) &&
+					isOk(s.energy, energy[poss2]))
 			{
-				Log.error() << std::endl
-										<< "Problem Bend:   " << filename << "   " 
-										<< s.atom1->ptr->getName() << " " << s.atom2->ptr->getName() 
-										<< " " << s.atom3->ptr->getName()  << std::endl
-										<< "got delta " << s.delta_theta << "  theta " << s.theta0 << "  ATIJK " << s.ATIJK << "  ENERGY " << s.energy << std::endl
-										<< "was delta " << delta[poss2] << " theta " <<  theta0[poss2] << "  ATIJK " << type[poss2] << "  ENERGY " << energy[poss2]
-										<< std::endl;
-				ok = false;
+				break;
 			}
+
+			if (s.emperical &&
+					isOk(s.theta0, theta0[poss2]) &&
+					isOk(s.ka, ka[poss2]) &&
+					isOk(s.energy, energy[poss2]))
+			{
+				break;
+			}
+
+			Log.error() << std::endl
+									<< "Problem Bend:   " << filename << "    emperical? "  << s.emperical << "   "
+									<< s.atom1->ptr->getName() << " " << s.atom2->ptr->getName() 
+									<< " " << s.atom3->ptr->getName()  << std::endl
+									<< "got delta " << s.delta_theta << "  theta " << s.theta0 << " ka " << s.ka << "  ATIJK " << s.ATIJK << "  ENERGY " << s.energy << std::endl
+									<< "was delta " << delta[poss2] << " theta " <<  theta0[poss2] << " ka " << ka[poss2] << "  ATIJK " << type[poss2] << "  ENERGY " << energy[poss2]
+										<< std::endl;
+			ok = false;
 
 			break;
 		}
@@ -442,7 +460,7 @@ int runtests(const vector<String>& filenames)
 		}
 
 		bool wrong_rings = false;
-		if (mmff.getRings().size() != nr_rings)
+		if (mmff.getRings().size() < nr_rings)
 		{
 			Log.error() << "Got " << mmff.getRings().size() << "          rings, was " << nr_rings << std::endl;
 			rings_wrong.push_back(filenames[pos]);
@@ -462,8 +480,8 @@ int runtests(const vector<String>& filenames)
 			Log.info() << "We have unassigned atoms: " << mmff.getUnassignedAtoms().size() << std::endl;
 		}
 
- 		result &= testStretch(mmff, filenames[pos], true);
-    result &= testBend(mmff, filenames[pos], true);
+//    		result &= testStretch(mmff, filenames[pos], true);
+//       result &= testBend(mmff, filenames[pos], true);
  		result &= testStretchBend(mmff, filenames[pos], true);
 
 		if (result) ok++;

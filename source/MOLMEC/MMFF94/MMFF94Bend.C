@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.24 2006/02/10 13:41:26 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.25 2006/02/10 15:29:32 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -231,7 +231,7 @@ namespace BALL
 		const double degree_to_radian= Constants::PI / (double)180.0;
 
 		// -0.007 degree^-1
-		const double k1 = -0.007;
+		const volatile double k1 = -0.007;
 
 		for (; bend_it != bends_.end(); ++bend_it) 
 		{
@@ -242,12 +242,12 @@ namespace BALL
 			v1.set(a1.x - a2.x, a1.y - a2.y, a1.z - a2.z);
 			v2.set(a3.x - a2.x, a3.y - a2.y, a3.z - a2.z);
 		
-			const double square_length = v1.getSquareLength() * v2.getSquareLength();
+			const volatile double square_length = v1.getSquareLength() * v2.getSquareLength();
 
 			if (Maths::isZero(square_length)) continue;
 
-			const double costheta = v1 * v2 / sqrt(square_length);
-			double theta;
+			const volatile double costheta = v1 * v2 / sqrt(square_length);
+			volatile double theta;
 			if (costheta > 1.0) 
 			{	
 				theta = 0.0;
@@ -261,7 +261,9 @@ namespace BALL
 				theta = acos(costheta);
 			}
 
-			theta *= radian_to_degree;
+			// radian to degree
+			theta *= 180.;
+			theta /= Constants::PI;
 
 			const double& ka = bend_it->ka;
 			const double& theta0 = bend_it->theta0;
