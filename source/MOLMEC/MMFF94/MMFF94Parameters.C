@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.26 2006/02/02 23:52:50 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.27 2006/02/10 17:25:20 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -602,11 +602,24 @@ namespace BALL
 			{
 				return false;
 			}
-#ifdef BALL_DEBUG_MMFF
+ #ifdef BALL_DEBUG_MMFF
 Log.info() << "MMFF94 StretchBend: from row: " << atom1.getName() << " " << atom2.getName() << " " << atom3.getName() << " " <<
 																									atom1.getType() << " " << atom2.getType() << " " << atom3.getType() << 
 																									"    b: " << bend_type << std::endl;
-#endif
+  #endif
+		if (r1 < r3)
+		{
+			kb_ijk = it->second.first;
+			kb_kji = it->second.second;
+		}
+		else
+		{
+			kb_ijk = it->second.second;
+			kb_kji = it->second.first;
+		}
+
+		return true;
+
 		}
 
 		kb_ijk = it->second.first;

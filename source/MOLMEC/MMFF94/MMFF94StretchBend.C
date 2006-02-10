@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.2.7 2006/02/02 15:58:39 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.2.8 2006/02/10 17:25:20 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -92,6 +92,8 @@ namespace BALL
 		{
 			long index = ((long) stretches[stretch_pos].atom1) * 
 									 ((long) stretches[stretch_pos].atom2);
+if (stretch_map.has(index)) Log.error() << "#~~#   5 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
 			stretch_map[index] = stretch_pos;
 		}
 
@@ -114,59 +116,48 @@ namespace BALL
 			sb.atom1 = 			  bends[bend_pos].atom1;
 			sb.atom2 = 			  bends[bend_pos].atom2;
 			sb.atom3 = 			  bends[bend_pos].atom3;
-			
-			// find the i->j stretch
-			stretch_it1 = stretch_map.find(((long) sb.atom1->ptr) *
-																	   ((long) sb.atom2->ptr));
-			
-			// find the j->k stretch
-			stretch_it2 = stretch_map.find(((long) sb.atom2->ptr) *
-																	   ((long) sb.atom3->ptr));
-
-			if (!+stretch_it1 || !+stretch_it2)
-			{
-				errorOccured_("stretch", *sb.atom1->ptr, *sb.atom2->ptr, *sb.atom3->ptr);
-				continue;
-			}
-
-			// store delta_r for i->j
-			// store delta_r for j->k
-			Position pos1 = stretch_it1->second;
-			Position pos2 = stretch_it2->second;
 
 			// make sure calculateSBTIJK gets the sbmb in the right order:
 			// pair with the smaller atom type partner first !
-			Size sum_types_pos1 = stretches[pos1].atom1->getType() +
-														stretches[pos1].atom2->getType();
-
-			Size sum_types_pos2 = stretches[pos2].atom1->getType() +
-														stretches[pos2].atom2->getType();
-
-			// do we need to flip?
-			if (sum_types_pos2 < sum_types_pos1)
+			if (sb.atom1->type > sb.atom3->type)
 			{
-				Position temp = pos1;
-				pos1 = pos2;
-				pos2 = temp;
+				Atom::StaticAtomAttributes*	temp = sb.atom1;
+				sb.atom1 = sb.atom3;
+				sb.atom3 = temp;
 			}
 			
+			Atom* a1 = sb.atom1->ptr;
+			Atom* a2 = sb.atom2->ptr;
+			Atom* a3 = sb.atom3->ptr;
+
+			// find the i->j stretch
+			stretch_it1 = stretch_map.find((long) a1 * (long) a2);
+			
+			// find the j->k stretch
+			stretch_it2 = stretch_map.find((long) a2 * (long) a3);
+
+			if (!+stretch_it1 || !+stretch_it2)
+			{
+				errorOccured_("stretch", *a1, *a2, *a3);
+				continue;
+			}
+
+			const Position pos1 = stretch_it1->second;
+			const Position pos2 = stretch_it2->second;
+
+			// store deltas for the stretches
 			sb.delta_r_ij = &stretches[pos1].delta_r;
 			sb.delta_r_kj = &stretches[pos2].delta_r;
 
-			// calculate SBTIJK
-			Index sbtijk = calculateSBTIJK(bends[bend_pos].ATIJK, 
-																		 stretches[pos1].sbmb,
-																		 stretches[pos2].sbmb);
-
-			sb.sbtijk = sbtijk;
+			sb.sbtijk = calculateSBTIJK(bends[bend_pos].ATIJK, 
+																	stretches[pos1].sbmb,
+																	stretches[pos2].sbmb);
 
 			// get kba_ijk and kba_kji
-			if (sbtijk == -1 ||
-			    !parameters_.getParameters(sbtijk, 
-																		 *sb.atom1->ptr, *sb.atom2->ptr, *sb.atom3->ptr,
-																		 sb.kba_ijk, sb.kba_kji))
+			if (sb.sbtijk == -1 ||
+			    !parameters_.getParameters(sb.sbtijk, *a1, *a2, *a3, sb.kba_ijk, sb.kba_kji))
 			{
-				errorOccured_("stretch-bend", *sb.atom1->ptr, *sb.atom2->ptr, *sb.atom3->ptr);
+				errorOccured_("stretch-bend", *a1, *a2, *a3);
 				continue;
 			}
 
@@ -206,25 +197,25 @@ Log.info() << sb.atom1->ptr->getName() << " " << sb.atom2->ptr->getName() << " "
 		for (Size i = 0; i < stretch_bends_.size(); i++)
 		{
 			StretchBend& sb = stretch_bends_[i];
-			double energy = K0 * (sb.kba_ijk * (*sb.delta_r_ij) +
-													 sb.kba_kji * (*sb.delta_r_kj)) 
-										 	  * (*sb.delta_theta);
+			double energy = (double)K0 * (sb.kba_ijk * (*sb.delta_r_ij) +
+													  				sb.kba_kji * (*sb.delta_r_kj)) 
+										 	   					* (*sb.delta_theta);
 	
-#ifdef BALL_DEBUG_MMFF
-Log.info() << "MMFF94 SB "  
-	<< sb.atom1->ptr->getName() << " "
-	<< sb.atom2->ptr->getName() << " "
-	<< sb.atom3->ptr->getName() << " "
-	<< sb.atom1->type << " "
-	<< sb.atom2->type << " "
-	<< sb.atom3->type << " :"
-	<< sb.kba_ijk << " " 
-	<< sb.kba_kji  << " r_ij: " 
-	<< *sb.delta_r_ij << " r_ik: " 
-	<< *sb.delta_r_kj << " d: " 
-	<< *sb.delta_theta<< "      " 
-	<< energy << std::endl;
-#endif
+   #ifdef BALL_DEBUG_MMFF
+			Log.info() << "MMFF94 SB "  
+				<< sb.atom1->ptr->getName() << " "
+				<< sb.atom2->ptr->getName() << " "
+				<< sb.atom3->ptr->getName() << " "
+				<< sb.atom1->type << " "
+				<< sb.atom2->type << " "
+				<< sb.atom3->type << " :"
+				<< sb.kba_ijk << " " 
+				<< sb.kba_kji  << " r_ij: " 
+				<< *sb.delta_r_ij << " r_ik: " 
+				<< *sb.delta_r_kj << " d: " 
+				<< *sb.delta_theta<< "      " 
+				<< energy << std::endl;
+   #endif
 
 			sb.energy = energy;
 

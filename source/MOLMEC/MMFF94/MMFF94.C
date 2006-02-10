@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.22 2006/02/10 01:12:56 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.23 2006/02/10 17:25:20 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -464,7 +464,7 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 			aromatic_rings_.push_back(set);
 		}
 
-//   #ifdef BALL_DEBUG_MMFF
+#ifdef BALL_DEBUG_MMFF
 		Log.info() << "MMFF94: Found " << rings_.size() << " rings: ";
 		for (Position pos = 0; pos < rings_.size(); pos++)
 		{
@@ -478,7 +478,7 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 			Log.info() << aromatic_rings_[pos].size() << " ";
 		}
 		Log.info() << std::endl;
-//   #endif
+#endif
 
 	}
 

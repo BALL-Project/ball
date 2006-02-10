@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.h,v 1.1.2.3 2006/02/02 15:58:29 amoll Exp $
+// $Id: MMFF94StretchBend.h,v 1.1.2.4 2006/02/10 17:25:25 amoll Exp $
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -41,7 +41,7 @@ namespace BALL
 			const double* delta_r_ij;
 			const double* delta_r_kj;
 			const double* delta_theta;
-			Position sbtijk; // debug
+			Index sbtijk; // debug
 			double energy;  // debug
 		};
 
