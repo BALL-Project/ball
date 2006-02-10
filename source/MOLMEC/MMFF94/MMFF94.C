@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.21 2006/02/09 22:58:00 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.22 2006/02/10 01:12:56 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -422,11 +422,15 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 
 		for (Position i = 0; i < rings.size(); i++)
 		{
-			rings_.push_back(HashSet<Atom*>());
+			// all 3er and 4er rings are copied below
+ 			if (rings[i].size() == 3 || rings[i].size() == 4) continue;
+
+			HashSet<Atom*> set;
 			for (Position j = 0; j < rings[i].size(); j++)
 			{
-				rings_[i].insert(rings[i][j]);
+				set.insert(rings[i][j]);
 			}
+			rings_.push_back(set);
 		}
 
 		vector<vector<Atom*> > rings2 = rpp.getAll3And4Rings();
@@ -434,37 +438,12 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 		// copy 3er and 4er rings
 		for (Position i = 0; i < rings2.size(); i++)
 		{
-			bool found = false;
-
-			// remove duplettes
-			for (Position ri = 0; ri < rings_.size(); ri++)
-			{
-				if (rings_[ri].size() != rings2[i].size()) continue;
-				
-				bool found_all_atoms  = true;
-				for (Position j = 0; j < rings2[i].size(); j++)
-				{
-					if (!rings_[ri].has(rings2[i][j]))
-					{
-						found_all_atoms = false;
-						break;
-					}
-				}
-
-				if (found_all_atoms)
-				{
-					found = true;
-					break;
-				}
-			}
-
-			if (found) continue;
-
-			rings_.push_back(HashSet<Atom*>());
+			HashSet<Atom*> set;
 			for (Position j = 0; j < rings2[i].size(); j++)
 			{
-				rings_[i].insert(rings2[i][j]);
+				set.insert(rings2[i][j]);
 			}
+			rings_.push_back(set);
 		}
 
 
@@ -477,11 +456,12 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 	
 		for (Position i = 0; i < rings.size(); i ++)
 		{
-			aromatic_rings_.push_back(HashSet<Atom*>());
+			HashSet<Atom*> set;
 			for (Position j = 0; j < rings[i].size(); j++)
 			{
-				aromatic_rings_[i].insert(rings[i][j]);
+				set.insert(rings[i][j]);
 			}
+			aromatic_rings_.push_back(set);
 		}
 
 //   #ifdef BALL_DEBUG_MMFF
