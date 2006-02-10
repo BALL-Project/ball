@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.19 2006/02/09 22:58:00 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.20 2006/02/10 14:40:32 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -306,31 +306,35 @@ namespace BALL
 			r1 -= 0.1;
 			r2 -= 0.1;
 		}
-		else 
+		else  // bo == 1
 		{
-			if (b1 == 1 || b1 == 2) 
-			{
-				r1 -= 0.03;
-			}
-			if (b2 == 1 || b2 == 2) 
-			{
-				r2 -= 0.03;
-			}
+			// calculate hybridization index
+			Position h1 = 3;
+			Position h2 = 3;
 
-			if (b1 == 3) r1 -= 0.08;
-			if (b2 == 3) r2 -= 0.08;
+			if (b1 == 1 || b1 == 2) h1 = 2;
+			else if (b1 == 3) 			h1 = 1;
+
+			if (b2 == 1 || b2 == 2) h2 = 2;
+			else if (b2 == 3) 			h2 = 1;
+
+			if 			(h1 == 1) r1 -= 0.08;
+			else if (h1 == 2) r1 -= 0.03;
+
+			if 			(h2 == 1) r2 -= 0.08;
+			else if (h2 == 2) r2 -= 0.03;
 		}
 
 		// calculate shrink factor
-		double d = 0.008; // SHRINK FACTOR
+		double d = 0.008; 
 
-		// for hyrogen atoms no shrinking
-		if (e1 == 1 || e2 == 1) d = 0.0;
+		// for hyrogen atoms no shrinking , found in CHARMM, not in original paper?
+//   		if (e1 == 1 || e2 == 1) d = 0.0;
 
-		// for atoms > neon no shrinking
-		if (e1 > 10 || e2 > 10) d = 0.0;
+		// for atoms > neon no shrinking , found in CHARMM, not in original paper?
+//   		if (e1 > 10 || e2 > 10) d = 0.0;
 
-		// calculate SENS c
+		// calculate proportionality constant c
 		double c = 0.085;
 
 		// for hyrogen atoms
@@ -339,9 +343,11 @@ namespace BALL
 		// POWER
 		const double n = 1.4;
 
-		// FORMULA from CHARMM docu:
-		const double r0 = parameters_->radii[e1 - 1] + parameters_->radii[e2 - 1] - c * 
-									pow(fabs(parameters_->electronegatives[e1 - 1] - parameters_->electronegatives[e2 - 1]), n) - d;
+		const double diff_e = fabs((double)(parameters_->electronegatives[e1 - 1] - 
+																				parameters_->electronegatives[e2 - 1]));
+
+		// FORMULA 
+		const double r0 = r1 + r2 - c * pow(diff_e, n) - d;
 		
 		return r0;
 	}
@@ -381,7 +387,7 @@ namespace BALL
 		double	AIJ = 3.15;
 		double	BIJ = 1.80;
 
-		// special values taken from HERSCHBACH and LAURIE 1961
+		// individual values taken from HERSCHBACH and LAURIE 1961
 		if (p1 < HELIUM)
 		{
 			if      (p2 < HELIUM) { AIJ = 1.26; BIJ = 0.025; } // 0.025 is not an error!
