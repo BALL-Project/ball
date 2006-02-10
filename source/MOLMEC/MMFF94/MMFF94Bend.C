@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.20 2006/02/09 22:58:00 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.21 2006/02/10 11:19:57 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -353,17 +353,18 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 		if (bond1.hasProperty("MMFF94SBMB")) sum_bond_types ++;
 		if (bond2.hasProperty("MMFF94SBMB")) sum_bond_types ++;
 
-		if (in_ring_of_four)
-		{
-			Position result = 4;
-			if (sum_bond_types != 0) result = 6 + sum_bond_types;
-			return result;
-		}
-
 		if (in_ring_of_three)
 		{
 			Position result = 3;
 			if (sum_bond_types != 0) result = 4 + sum_bond_types;
+			return result;
+		}
+
+
+		if (in_ring_of_four)
+		{
+			Position result = 4;
+			if (sum_bond_types != 0) result = 6 + sum_bond_types;
 			return result;
 		}
 
