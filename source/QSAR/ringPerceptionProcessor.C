@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.15 2006/02/09 00:01:10 bertsch Exp $
+// $Id: ringPerceptionProcessor.C,v 1.16 2006/02/10 10:24:23 bertsch Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
@@ -88,6 +88,9 @@ namespace BALL
 		String algorithm_name = options.get(Option::ALGORITHM_NAME);
 		if (algorithm_name == "Balducci")
 		{
+			// clear the structures
+			all3and4membered_rings_.clear();
+			
 			// build molecular graph
 			Molecule * mol = static_cast<Molecule*>(&ac);
 			MolecularGraph mol_graph(*mol);
@@ -862,7 +865,6 @@ namespace BALL
 		forwarded_rings_.clear();
 		tested_beers_.clear();
 		all3and4membered_beers_.clear();
-		all3and4membered_rings_.clear();
 		
 		// 1. init the flow-network
 
