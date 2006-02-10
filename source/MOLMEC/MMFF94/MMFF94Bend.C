@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.22 2006/02/10 13:18:09 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.23 2006/02/10 13:35:27 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -144,28 +144,28 @@ namespace BALL
 																				atom_type_a3, 
 																				this_bend.ka, this_bend.theta0)
 						// we ignore the step 1-1-1, as it is currently superflous
-						|| // 2-2-2
+						|| // 2-1-2
 						parameters_.getParameters(this_bend.ATIJK, 
 																			equivalences.getEquivalence(atom_type_a1, 2),
-																			equivalences.getEquivalence(atom_type_a2, 2),
+																			equivalences.getEquivalence(atom_type_a2, 1),
 																			equivalences.getEquivalence(atom_type_a3, 2),
 																			this_bend.ka, this_bend.theta0)
-						|| // 3-2-3
+						|| // 3-1-3
 						parameters_.getParameters(this_bend.ATIJK, 
 																			equivalences.getEquivalence(atom_type_a1, 3),
-																			equivalences.getEquivalence(atom_type_a2, 2),
+																			equivalences.getEquivalence(atom_type_a2, 1),
 																			equivalences.getEquivalence(atom_type_a3, 3),
 																			this_bend.ka, this_bend.theta0)
-						|| // 4-2-4
+						|| // 4-1-4
 						parameters_.getParameters(this_bend.ATIJK, 
 																			equivalences.getEquivalence(atom_type_a1, 4),
-																			equivalences.getEquivalence(atom_type_a2, 2),
+																			equivalences.getEquivalence(atom_type_a2, 1),
 																			equivalences.getEquivalence(atom_type_a3, 4),
 																			this_bend.ka, this_bend.theta0)
 						|| // try full wildcard matching
 						parameters_.getParameters(this_bend.ATIJK, 
 																			0,
-																			equivalences.getEquivalence(atom_type_a1, 2),
+																			equivalences.getEquivalence(atom_type_a1, 1),
 																			0,
 																			this_bend.ka, this_bend.theta0))
 					{
@@ -175,6 +175,7 @@ namespace BALL
 						if (this_bend.ka == 0.0)
 						{
 							this_bend.ka = calculateEmpericalForceConstant(atom1, atom2, atom3, this_bend.theta0);
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 							this_bend.emperical = true;
 						}
 
