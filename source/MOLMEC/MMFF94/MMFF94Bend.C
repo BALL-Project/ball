@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.21 2006/02/10 11:19:57 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.22 2006/02/10 13:18:09 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -224,25 +224,27 @@ namespace BALL
 	{
 		energy_ = 0;
 		
-		Vector3 v1, v2;
+		TVector3<double> v1, v2;
 		vector<Bend>::iterator bend_it = bends_.begin();
 
-		double radian_to_degree = (double)180.0 / Constants::PI;
-		double degree_to_radian= Constants::PI / (double)180.0;
+		const double radian_to_degree = (double)180.0 / Constants::PI;
+		const double degree_to_radian= Constants::PI / (double)180.0;
 
 		// -0.007 degree^-1
 		const double k1 = -0.007;
 
 		for (; bend_it != bends_.end(); ++bend_it) 
 		{
-			const double& ka = bend_it->ka;
-			const double& theta0 = bend_it->theta0;
+			const Vector3& a1 = bend_it->atom1->position;
+			const Vector3& a2 = bend_it->atom2->position;
+			const Vector3& a3 = bend_it->atom3->position;
+
+			v1.set(a1.x - a2.x, a1.y - a2.y, a1.z - a2.z);
+			v2.set(a3.x - a2.x, a3.y - a2.y, a3.z - a2.z);
 		
-			v1 = bend_it->atom1->position - bend_it->atom2->position;
-			v2 = bend_it->atom3->position - bend_it->atom2->position;
 			const double square_length = v1.getSquareLength() * v2.getSquareLength();
 
-			if (square_length == 0.0) continue;
+			if (Maths::isZero(square_length)) continue;
 
 			const double costheta = v1 * v2 / sqrt(square_length);
 			double theta;
@@ -261,6 +263,9 @@ namespace BALL
 
 			theta *= radian_to_degree;
 
+			const double& ka = bend_it->ka;
+			const double& theta0 = bend_it->theta0;
+
 #ifdef BALL_DEBUG_MMFF
 Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " " 
 											<< bend_it->atom2->ptr->getName() << " " 
@@ -269,7 +274,7 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 											<< bend_it->atom2->type << " "
 											<< bend_it->atom3->type << " "
 											<< "ATIJK: " << bend_it->ATIJK << "  T: "
-											<< theta << "  T0: " << theta0 << " ka " << ka;
+											<< theta << "  T0: " << theta0 << " ka " << ka << std::endl;
 #endif
 
 			double energy;
@@ -288,7 +293,7 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 
 			bend_it->delta_theta = theta;
 
-	bend_it->energy = energy;
+			bend_it->energy = energy;
 
 #ifdef BALL_DEBUG_MMFF
 	Log.info() << "  E: "<< energy << std::endl;
