@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.23 2006/02/10 13:35:27 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.24 2006/02/10 13:41:26 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -175,7 +175,6 @@ namespace BALL
 						if (this_bend.ka == 0.0)
 						{
 							this_bend.ka = calculateEmpericalForceConstant(atom1, atom2, atom3, this_bend.theta0);
-Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 							this_bend.emperical = true;
 						}
 
@@ -382,6 +381,14 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 		const MMFF94& mmff = *dynamic_cast<MMFF94*>(getForceField());
 		const vector<MMFF94AtomTypeData>& atd = mmff.getAtomTypes();
 
+		vector<Atom*> atoms;
+		atoms.push_back(&atom1);
+		atoms.push_back(&atom2);
+		atoms.push_back(&atom3);
+
+		if (mmff.areInOneRing(atoms, 3)) return 60;
+		if (mmff.areInOneRing(atoms, 4)) return 90;
+
 		const MMFF94AtomTypeData& aj = atd[atom2.getType()];
 		if (aj.crd == 4) return 109.45;
 		if (aj.crd == 2)
@@ -399,14 +406,6 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 			return 92;
 		}
 			
-		vector<Atom*> atoms;
-		atoms.push_back(&atom1);
-		atoms.push_back(&atom2);
-		atoms.push_back(&atom3);
-
-		if (mmff.areInOneRing(atoms, 3)) return 60;
-		if (mmff.areInOneRing(atoms, 4)) return 90;
-
 		// default value
 		return 120;
 	}
