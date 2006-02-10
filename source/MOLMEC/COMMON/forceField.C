@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.C,v 1.40.6.1 2006/02/02 15:58:37 amoll Exp $
+// $Id: forceField.C,v 1.40.6.2 2006/02/10 11:04:19 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -592,6 +592,7 @@ namespace BALL
 	void ForceField::insertComponent(ForceFieldComponent* force_field_component)
 	{
 		components_.push_back(force_field_component);
+		force_field_component->setForceField(*this);
 	}
 
 	// Remove the component 
