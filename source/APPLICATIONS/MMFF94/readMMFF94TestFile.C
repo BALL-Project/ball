@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.26 2006/02/11 18:31:11 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.27 2006/02/11 23:10:13 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -20,6 +20,8 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
+//   #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
 
 #include <math.h>
 
@@ -417,6 +419,67 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 	return ok;
 }
 
+///////////////////////////////////////////////////////////
+bool testTorsions(MMFF94& mmff, const String& filename, bool compare)
+{
+	String full_file_name = (dir +FileSystem::PATH_SEPARATOR + filename + ".torsion");
+	LineBasedFile infile(full_file_name);
+	vector<String> atoms1, atoms2, atoms3, atoms4;
+	vector<Position>   type;
+	vector<double>  energy, angle, v1, v2, v3;
+	while (infile.readLine())
+	{
+		vector<String> fields;
+		if (infile.getLine().split(fields) < 9)
+		{
+			Log.error() << "Problem: " << __FILE__ << __LINE__ << std::endl;
+			continue;
+		}
+
+		atoms1.push_back(fields[0]);
+		atoms2.push_back(fields[1]);
+		atoms3.push_back(fields[2]);
+		atoms4.push_back(fields[3]);
+		type.push_back(fields[4].toUnsignedInt());
+		energy.push_back(fields[5].toFloat());
+		v1.push_back(fields[6].toFloat());
+		v2.push_back(fields[7].toFloat());
+		v3.push_back(fields[8].toFloat());
+	}
+
+	enableOneComponent("MMFF94 Torsion", mmff);
+	mmff.updateEnergy();
+	MMFF94Torsion* comp= (MMFF94Torsion*) mmff.getComponent("MMFF94 Torsion");
+
+	for (Position poss = 0; poss < comp->getTorsions().size(); poss++)
+	{
+		const MMFF94Torsion::Torsion& s = comp->getTorsions()[poss];
+
+		vector<double> constants, constants_ours;
+
+		Index sbtijk = -1;
+		double energy1 = 0.0;
+		Position found = 0;
+	}
+
+
+		
+	if (!compare) return true;
+
+	vector<double> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
+
+	double s_plus_b = results[4];
+
+	if (!isOk(mmff.getEnergy(), s_plus_b))
+	{
+		Log.error() << filename << "   " << s_plus_b << "  " << mmff.getEnergy() << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+
 int runtests(const vector<String>& filenames)
 {
 	MMFF94 mmff;
@@ -486,7 +549,8 @@ int runtests(const vector<String>& filenames)
 
 //    		result &= testStretch(mmff, filenames[pos], true);
 //       result &= testBend(mmff, filenames[pos], true);
- 		result &= testStretchBend(mmff, filenames[pos], true);
+//    		result &= testStretchBend(mmff, filenames[pos], true);
+ 		result &= testTorsions(mmff, filenames[pos], true);
 
 		if (result) ok++;
 		else if (!wrong_rings) not_ok.push_back(filenames[pos]);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.9 2006/01/30 22:35:54 amoll Exp $
+// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.10 2006/02/11 23:10:14 amoll Exp $
 //
 // A small program for spliting the Optimol log file from the MMFF94 test suite
 // into smaller files, which are better to handle for parsing 
@@ -76,6 +76,7 @@ int main(int argc, char** argv)
 				infile.getLine().hasSubstring("New Structure Name"))
 		{
 			file_name = infile.getLine().after(": ");
+			Log.error() <<  file_name << std::endl;
 			nr_aromatic_rings = 0; 
 			nr_rings = 0;
 		}
@@ -250,6 +251,45 @@ int main(int argc, char** argv)
 				outfile << fields[0] << " " << fields[1] << " " 
 								<< fields[3] << " " << fields[7] << " " 
 								<< fields[11] << " " << fields[12] << " " << std::endl;
+			}
+		}
+		/// torsions
+		else if (infile.getLine() == "  I       J          K       L        I   J   K   L   CLASS    ANGLE     ENERGY     V1      V2      V3")
+		{
+			File outfile(dir + FileSystem::PATH_SEPARATOR + file_name + ".torsions", std::ios::out);
+
+			infile.readLine();
+			while (infile.readLine() && infile.getLine() != "")
+			{
+				vector<String> fields;
+				infile.getLine().split(fields);
+
+				// I J K L type angle energy v1 v2 v3
+				outfile << fields[0] << " " << fields[1] << " " 
+								<< fields[3] << " " << fields[5] << " " 
+								<< fields[10] << " " << fields[11] << " "
+								<< fields[12] << " " << fields[13] << " "
+								<< fields[14] << " " << fields[15]
+								<< std::endl;
+			}
+		}
+		/// planes
+		else if (infile.getLine() == "  I -- J -- K ... L            I  J  K  L         ANGLE       ENERGY    CONSTANT")
+		{
+			File outfile(dir + FileSystem::PATH_SEPARATOR + file_name + ".planes", std::ios::out);
+
+			infile.readLine();
+			while (infile.readLine() && infile.getLine() != "")
+			{
+				vector<String> fields;
+				infile.getLine().split(fields);
+
+				// I J K L angle energy constant
+				outfile << fields[0] << " " << fields[1] << " " 
+								<< fields[2] << " " << fields[3] << " " 
+								<< fields[9] << " " << fields[10] << " "
+								<< fields[11]
+								<< std::endl;
 			}
 		}
 	}
