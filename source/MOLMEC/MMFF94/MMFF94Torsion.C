@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.1 2005/03/17 13:48:25 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.2 2006/02/11 22:29:41 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -10,6 +10,7 @@
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/SYSTEM/path.h>
 
 #include <algorithm>
 
@@ -17,6 +18,20 @@ using namespace std;
 
 namespace BALL 
 {
+
+	MMFF94Torsion::Torsion::Torsion()
+		: type(-1),
+			angle(0),
+			atom1(0),
+			atom2(0),
+			atom3(0),
+			atom4(0),
+			energy(0),
+			v1(-1),
+			v2(-1),
+			v3(-1)
+	{
+	}
 
 	// default constructor
 	MMFF94Torsion::MMFF94Torsion()
@@ -52,33 +67,39 @@ namespace BALL
 	bool MMFF94Torsion::setup()
 		throw(Exception::TooManyErrors)
 	{
-		if (getForceField() == 0) 
+		if (getForceField() == 0 ||
+				dynamic_cast<MMFF94*>(getForceField()) == 0) 
 		{
-			Log.error() << "MMFF94Torsion::setup: component not bound to force field" << endl;
+			Log.error() << "MMFF94Torsion::setup(): component not bound to force field" << endl;
 			return false;
 		}
 
-		// clear torsion array
-
-		// extract the torsion parameters from the parameter file
-		bool result;
-		MMFF94* MMFF94_force_field = dynamic_cast<MMFF94*>(force_field_);
-		bool has_initialized_parameters = true;
-		if ((MMFF94_force_field == 0) || !MMFF94_force_field->hasInitializedParameters())
+		if (!parameters_.isInitialized())
 		{
-			has_initialized_parameters = false;
-		}
+			Path    path;
+			String  filename(path.find("MMFF94/MMFFTOR.PAR"));
 
-		if (!has_initialized_parameters)
-		{
-			result = true; // torsion_parameters_.extractSection(getForceField()->getParameters(), "Torsions");
-
-			if (!result) 
+			if (filename == "") 
 			{
-				Log.error() << "MMFF94Torsion::setup: cannot find section Torsions" << endl;
-				return false;
+				throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 			}
+
+			parameters_.readParameters(filename);
 		}
+
+		torsions_.clear();
+
+		// a working instance to put the current values in and push it back
+		Torsion this_torsion;
+
+		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
+		const vector<MMFF94AtomTypeData>& atom_types = mmff->getAtomTypes();
+		const MMFF94AtomTypeEquivalences& equivalences = mmff->getEquivalences();
+
+		Atom*	a1;
+		Atom*	a2;
+		Atom*	a3;
+		Atom*	a4;
 
 		// calculate the torsions
 		vector<Atom*>::const_iterator atom_it = getForceField()->getAtoms().begin();
@@ -86,14 +107,95 @@ namespace BALL
 		Atom::BondIterator it2;
 		Atom::BondIterator it3;
 
-		Atom*	a1;
-		Atom*	a2;
-		Atom*	a3;
-		Atom*	a4;
-
 		bool use_selection = getForceField()->getUseSelection();
 
 		// proper torsion will be added to the torsion vector
+		for (; atom_it != getForceField()->getAtoms().end(); ++atom_it) 
+		{
+			for (it1 = (*atom_it)->beginBond(); +it1 ; ++ it1) 
+			{
+				if (it1->getType() == Bond::TYPE__HYDROGEN) continue; // ignore H -bonds
+				if (*atom_it != it1->getFirstAtom()) continue;
+			
+				// central atoms
+				a2 = *atom_it;
+				a3 = const_cast<Atom*>(it1->getSecondAtom());
+
+				for (it2 = (*atom_it)->beginBond(); +it2 ; ++it2) 
+				{
+					if (it2->getType() == Bond::TYPE__HYDROGEN) continue; // ignore H -bonds
+					if (it2->getSecondAtom() == it1->getSecondAtom()) continue;
+				
+					// determine the first atom
+					if (it2->getFirstAtom() == *atom_it) 
+					{
+						a1 = const_cast<Atom*>(it2->getSecondAtom());
+					} 
+					else 
+					{
+						a1 = const_cast<Atom*>(it2->getFirstAtom());
+					}
+
+					for (it3 = const_cast<Atom*>(it1->getSecondAtom())->beginBond(); +it3 ; ++it3) 
+					{
+						if (it3->getType() == Bond::TYPE__HYDROGEN) continue; // ignore H -bonds
+						if (it3->getFirstAtom() == a2 ) continue;
+
+						// determine the fourth atom a4
+						if (it3->getFirstAtom() == a3)
+						{
+							a4 = const_cast<Atom*>(it3->getSecondAtom());
+						} 
+						else 
+						{
+							a4 = const_cast<Atom*>(it3->getFirstAtom());
+						}
+
+						if (use_selection && (!a1->isSelected() ||
+																	!a2->isSelected() ||
+																	!a3->isSelected() ||
+																	!a4->isSelected()))
+						{
+							continue;
+						}
+
+						// ok, we have the torsion
+						// search torsion parameters for (a1,a2,a3,a4)
+						Atom::Type type_a1 = a1->getType();
+						Atom::Type type_a2 = a2->getType();
+						Atom::Type type_a3 = a3->getType();
+						Atom::Type type_a4 = a4->getType();
+
+						this_torsion.atom1 = &Atom::getAttributes()[a1->getIndex()];
+						this_torsion.atom2 = &Atom::getAttributes()[a2->getIndex()];
+						this_torsion.atom3 = &Atom::getAttributes()[a3->getIndex()];
+						this_torsion.atom4 = &Atom::getAttributes()[a4->getIndex()];
+
+						// check for parameters in a step down procedure
+						// full parameters
+						if (parameters_.getParameters(this_torsion.type, 
+																					type_a1, type_a2, type_a3, type_a4, 
+																					this_torsion.v1, this_torsion.v2, this_torsion.v3)
+							|| // try full wildcard matching
+							parameters_.getParameters(this_torsion.type, 
+																				0,
+																				equivalences.getEquivalence(type_a2, 1),
+																				equivalences.getEquivalence(type_a3, 1),
+																				0,
+																				this_torsion.v1, this_torsion.v2, this_torsion.v3))
+						{
+							continue;
+						}
+
+						// didnt found torsion parameters
+						getForceField()->getUnassignedAtoms().insert(a1);
+						getForceField()->getUnassignedAtoms().insert(a2);
+						getForceField()->getUnassignedAtoms().insert(a3);
+						getForceField()->getUnassignedAtoms().insert(a4);
+					} // it3
+				} // it2
+			} // it1
+		} // atom_it
 
 		return true;
 	}

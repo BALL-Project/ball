@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.2.9 2006/02/11 18:04:15 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.2.10 2006/02/11 22:29:40 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -151,6 +151,11 @@ namespace BALL
 			sb.sbtijk = calculateSBTIJK(bends[bend_pos].ATIJK, 
 																	stretches[pos1].sbmb,
 																	stretches[pos2].sbmb);
+
+			if (sb.sbtijk == 2 && sb.atom1->type == sb.atom3->type)
+			{
+				sb.sbtijk = 1;
+			}
 
 			// get kba_ijk and kba_kji
 			if (sb.sbtijk == -1 ||

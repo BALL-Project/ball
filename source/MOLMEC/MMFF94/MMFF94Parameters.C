@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.28 2006/02/11 18:04:14 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.29 2006/02/11 22:29:40 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -9,8 +9,8 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94.h>
 #include <BALL/FORMAT/lineBasedFile.h>
-#include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
+#include <BALL/SYSTEM/path.h>
 
 // #define BALL_DEBUG_MMFF
 using namespace std;
@@ -755,5 +755,118 @@ Log.info() << "MMFF94 StretchBend: from row: " << atom1.getName() << " " << atom
 					 r2 * 10      +
 					 r3;
 	}
+
+	///////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////
+
+	MMFF94TorsionParameters::MMFF94TorsionParameters()
+		: is_initialized_(false)
+	{
+	}
+
+	MMFF94TorsionParameters::~MMFF94TorsionParameters()
+	{
+		clear();
+	}
+	
+	void MMFF94TorsionParameters::clear()
+		throw()
+	{
+		parameters_.clear();
+	}
+	
+	const MMFF94TorsionParameters& MMFF94TorsionParameters::operator 
+		= (const MMFF94TorsionParameters& param)
+		throw()
+	{
+		parameters_ = param.parameters_;
+		return *this;
+	}
+
+	bool MMFF94TorsionParameters::getParameters(Position torsion_type,
+			Index at1, Index at2, Index at3, Index at4,
+			double& v1, double& v2, double& v3) const
+	{
+		return true;
+	}
+
+	bool MMFF94TorsionParameters::readParameters(const String& filename)
+		throw(Exception::FileNotFound)
+	{
+		parameters_.clear();
+
+		LineBasedFile infile(filename);
+		vector<String> fields;
+
+		try
+		{
+			while (infile.readLine())
+			{
+				// comments
+				if (infile.getLine().hasPrefix("*") || infile.getLine().hasPrefix("$")) 
+				{
+					continue;
+				}
+				
+				if (infile.getLine().split(fields) < 9)
+				{
+					Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+										  << filename << " Not 9 fields in one line " 
+											<< infile.getLine() << std::endl;
+					return false;
+				}
+
+				const Position type = fields[0].toUnsignedInt();
+				const Position atom_type1 = fields[1].toUnsignedInt();
+				const Position atom_type2 = fields[2].toUnsignedInt();
+				const Position atom_type3 = fields[3].toUnsignedInt();
+				const Position atom_type4 = fields[4].toUnsignedInt();
+				const Position index = getIndex_(type, atom_type1, atom_type2, atom_type3, atom_type4);
+
+				parameters_[index] = vector<double>();
+				parameters_[index].push_back(fields[5].toDouble());
+				parameters_[index].push_back(fields[6].toDouble());
+				parameters_[index].push_back(fields[7].toDouble());
+			}
+		}
+		catch(...)
+		{
+			Log.error() << "Error while parsing line " << infile.readLine() << std::endl;
+			Log.error() << " in File " << filename << std::endl;
+			infile.close();
+			return false;
+		}
+
+		infile.close();
+
+		is_initialized_ = true;
+		return true;
+	}
+
+	long MMFF94TorsionParameters::getIndex_(Position type,
+								Position at1, Position at2, Position at3, Position at4) const
+	{ 
+		// sort all atom types
+		vector<Position> types;
+		types.push_back(at1);
+		types.push_back(at2);
+		types.push_back(at3);
+		types.push_back(at4);
+
+		sort(types.begin(), types.end());
+
+		// The torsion parameters are ordered using the canonical index 
+		//
+		// CXT = MC*(J*MA**3 + K*MA**2 + I*MA + L) + TTIJKL
+		//
+		// In this case, as of 2/96, MC (the maximum permissible torsion-type index plus
+		// 1) and MA (the maximum permitted atom type plus 1) are set to 6 and 136,
+		// respectively, to insure that CXT will fit within a 32-bit integer word. Thus,
+		// J changes least rapidly and K next least rapidly. For I, L and TTIJKL, the
+		// effect on the ordering can be seen in the portion of the MMFFTOR.PAR file
+		// displayed above.
+		return 6 * (at1 * 136^3 + at2 * 136^2 + at3 * 136 + at4) + type;
+	}
+
 
 } // namespace BALL

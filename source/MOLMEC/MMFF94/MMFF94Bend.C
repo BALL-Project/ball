@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.25 2006/02/10 15:29:32 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.26 2006/02/11 22:29:40 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -124,8 +124,8 @@ namespace BALL
 					Atom& atom3 = *this_bend.atom3->ptr;
 
 					if (use_selection && (!atom1.isSelected() ||
-																!atom1.isSelected() ||
-																!atom1.isSelected()))
+																!atom2.isSelected() ||
+																!atom3.isSelected()))
 					{
 						continue;
 					}
@@ -165,7 +165,7 @@ namespace BALL
 						|| // try full wildcard matching
 						parameters_.getParameters(this_bend.ATIJK, 
 																			0,
-																			equivalences.getEquivalence(atom_type_a1, 1),
+																			equivalences.getEquivalence(atom_type_a2, 1),
 																			0,
 																			this_bend.ka, this_bend.theta0))
 					{
