@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.2.8 2006/02/10 17:25:20 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.2.9 2006/02/11 18:04:15 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -92,7 +92,6 @@ namespace BALL
 		{
 			long index = ((long) stretches[stretch_pos].atom1) * 
 									 ((long) stretches[stretch_pos].atom2);
-if (stretch_map.has(index)) Log.error() << "#~~#   5 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 			stretch_map[index] = stretch_pos;
 		}
@@ -229,10 +228,7 @@ Log.info() << sb.atom1->ptr->getName() << " " << sb.atom2->ptr->getName() << " "
 	// calculates and adds its forces to the current forces of the force field
 	void MMFF94StretchBend::updateForces()
 	{
-		if (getForceField() == 0)
-		{
-			return;
-		}
+		if (getForceField() == 0) return;
 	}
 
 	/* "The stretch-bend types are defined in terms of the constituent bond types BTIJ 
@@ -254,8 +250,7 @@ Log.info() << sb.atom1->ptr->getName() << " " << sb.atom2->ptr->getName() << " "
 					 10             7               0               1
 					 11             8 (*)           1               1
 	*/
-	Index MMFF94StretchBend::calculateSBTIJK(Position angle_type, 
-																					 bool bond_type1, bool bond_type2)
+	Index MMFF94StretchBend::calculateSBTIJK(Position angle_type, bool bond_type1, bool bond_type2)
 	{
 		if (angle_type  == 0 || angle_type == 4) return angle_type;
 

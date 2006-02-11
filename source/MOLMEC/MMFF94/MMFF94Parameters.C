@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.27 2006/02/10 17:25:20 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.28 2006/02/11 18:04:14 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -607,7 +607,7 @@ Log.info() << "MMFF94 StretchBend: from row: " << atom1.getName() << " " << atom
 																									atom1.getType() << " " << atom2.getType() << " " << atom3.getType() << 
 																									"    b: " << bend_type << std::endl;
   #endif
-		if (r1 < r3)
+		if (r1 <= r3)
 		{
 			kb_ijk = it->second.first;
 			kb_kji = it->second.second;
@@ -701,11 +701,8 @@ Log.info() << "MMFF94 StretchBend: from row: " << atom1.getName() << " " << atom
 				const Position kr = fields[2].toUnsignedInt();
 				const double    f_ijk = fields[3].toDouble();
 				const double    f_kji = fields[4].toDouble();
-				const Position index = getIndexByRow_(ir, jr, kr);
 
-				parameters_[index] = pair<double, double>();
-				parameters_[index].first  = f_ijk;
-				parameters_[index].second = f_kji;
+				parameters_[getIndexByRow_(ir, jr, kr)] = pair<double, double>(f_ijk, f_kji);
 			}
 		}
 		catch(...)
