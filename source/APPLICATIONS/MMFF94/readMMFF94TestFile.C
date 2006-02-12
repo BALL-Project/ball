@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.27 2006/02/11 23:10:13 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.28 2006/02/12 01:06:32 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -422,8 +422,19 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 ///////////////////////////////////////////////////////////
 bool testTorsions(MMFF94& mmff, const String& filename, bool compare)
 {
-	String full_file_name = (dir +FileSystem::PATH_SEPARATOR + filename + ".torsion");
-	LineBasedFile infile(full_file_name);
+	String full_file_name = (dir +FileSystem::PATH_SEPARATOR + filename + ".torsions");
+	LineBasedFile infile;
+
+	// some molecules dont have torsions
+	try
+	{
+		infile.open(full_file_name);
+	}
+	catch(...)
+	{
+		return true;
+	}
+
 	vector<String> atoms1, atoms2, atoms3, atoms4;
 	vector<Position>   type;
 	vector<double>  energy, angle, v1, v2, v3;
@@ -451,15 +462,80 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare)
 	mmff.updateEnergy();
 	MMFF94Torsion* comp= (MMFF94Torsion*) mmff.getComponent("MMFF94 Torsion");
 
+	if (comp->getTorsions().size() != atoms4.size())
+	{
+		Log.error() << "Not all torsions found " << filename << " got "
+								<< comp->getTorsions().size() << " was " << atoms4.size()<< std::endl;
+	}
+
 	for (Position poss = 0; poss < comp->getTorsions().size(); poss++)
 	{
-		const MMFF94Torsion::Torsion& s = comp->getTorsions()[poss];
+		const MMFF94Torsion::Torsion& t = comp->getTorsions()[poss];
 
 		vector<double> constants, constants_ours;
 
+		String n1 = t.atom1->ptr->getName();
+		String n2 = t.atom2->ptr->getName();
+		String n3 = t.atom3->ptr->getName();
+		String n4 = t.atom4->ptr->getName();
+
+		Index found = -1;
+		bool swap = false;
+
+		for (Position as = 0; as < atoms1.size(); as++)
+		{
+			if (atoms1[as] == n1 &&
+					atoms2[as] == n2 &&
+					atoms3[as] == n3 &&
+					atoms4[as] == n4)
+			{
+				found = as;
+				break;
+			}
+
+			if (atoms4[as] == n1 &&
+					atoms3[as] == n2 &&
+					atoms2[as] == n3 &&
+					atoms1[as] == n4)
+			{
+				found = as;
+				swap = true;
+				break;
+			}
+		}
+
+		if (found == -1)
+		{
+			Log.error() << "Could not find atoms [torsion] " << n1 << " " << n2 << " " << n3 << " " << n4 << std::endl;
+		}
+
+		if (!swap)
+		{
+			if (t.v1 == v1[found] &&
+					t.v2 == v2[found] &&
+					t.v3 == v3[found])
+			{
+				continue;
+			}
+		}
+		else
+		{
+			if (t.v3 == v1[found] &&
+					t.v2 == v2[found] &&
+					t.v1 == v3[found])
+			{
+				continue;
+			}
+		}
+
+		Log.error() << std::endl
+								<< "Problem Stretch:   " << filename 
+								<< t.atom1->ptr->getName() << " " << t.atom2->ptr->getName() << " "
+								<< t.atom3->ptr->getName() << " " << t.atom4->ptr->getName() << std::endl
+								<< "got v " << t.v1 << " " << t.v2 << " " << t.v3 << std::endl
+								<< "was v " << v1[found] << " " << v2[found] << " " << v3[found] << std::endl;
+
 		Index sbtijk = -1;
-		double energy1 = 0.0;
-		Position found = 0;
 	}
 
 
