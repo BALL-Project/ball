@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.2 2006/02/11 22:29:41 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.3 2006/02/12 01:51:38 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -159,7 +159,26 @@ namespace BALL
 							continue;
 						}
 
+						////////////////////////////////////////
 						// ok, we have the torsion
+						////////////////////////////////////////
+						
+						// if a2 or a3 is a linear type, do nothing!
+						if (atom_types[a2->getType()].lin ||
+								atom_types[a3->getType()].lin)
+						{
+							continue;
+						}
+
+						// if we have only 3 different atoms in one ring, do nothing!
+						vector<Atom*> atoms;
+						atoms.push_back(a1);
+						atoms.push_back(a2);
+						atoms.push_back(a3);
+						atoms.push_back(a4);
+
+						if (mmff->areInOneRing(atoms, 3)) continue;
+
 						// search torsion parameters for (a1,a2,a3,a4)
 						Atom::Type type_a1 = a1->getType();
 						Atom::Type type_a2 = a2->getType();
@@ -170,6 +189,8 @@ namespace BALL
 						this_torsion.atom2 = &Atom::getAttributes()[a2->getIndex()];
 						this_torsion.atom3 = &Atom::getAttributes()[a3->getIndex()];
 						this_torsion.atom4 = &Atom::getAttributes()[a4->getIndex()];
+
+						this_torsion.type = getTorsionType(atoms);
 
 						// check for parameters in a step down procedure
 						// full parameters
@@ -184,6 +205,7 @@ namespace BALL
 																				0,
 																				this_torsion.v1, this_torsion.v2, this_torsion.v3))
 						{
+							torsions_.push_back(this_torsion);
 							continue;
 						}
 
@@ -203,6 +225,7 @@ namespace BALL
 	// calculates the current energy of this component
 	double MMFF94Torsion::updateEnergy() 
 	{
+		/*
 		double cosphi;
 
 		Vector3	a21;
@@ -213,7 +236,6 @@ namespace BALL
 
 		energy_ = 0;
 
-		/*
 		vector<SingleMMFF94Torsion>::const_iterator it = torsion_.begin(); 
 
 		bool use_selection = getForceField()->getUseSelection();
@@ -262,7 +284,43 @@ namespace BALL
 	// calculates and adds its forces to the current forces of the force field
 	void MMFF94Torsion::updateForces()
 	{
-		bool use_selection = getForceField()->getUseSelection();
+//   		bool use_selection = getForceField()->getUseSelection();
 	}
+
+
+	// The first column gives the value of the torsion type index, TTIJKL. This 
+	// index normally takes the value "0", but is "1" when the j-k bond has a bond 
+	// type index BTJK of 1, is "2" when BTJK is "0" but BTIJ and/or BTKL is "1", is 
+	// "4" when i, j, k, and l are all members of the same 4-membered ring, and 
+	// is "5" when the four atoms are members of a 5-membered ring which is 
+	// not aromatic and contains no unsaturation.
+	Position MMFF94Torsion::getTorsionType(const vector<Atom*>& atoms) const
+	{
+		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
+
+		const Bond& bond1 = *atoms[0]->getBond(*atoms[1]);
+		const Bond& bond2 = *atoms[1]->getBond(*atoms[2]);
+		const Bond& bond3 = *atoms[2]->getBond(*atoms[3]);
+		
+		if (bond2.hasProperty("MMFF94SBMB")) return 1;
+
+		if (bond1.hasProperty("MMFF94SBMB") ||
+				bond3.hasProperty("MMFF94SBMB"))
+		{
+			return 2;
+		}
+
+		if (mmff->areInOneRing(atoms, 4)) return 4;
+
+		if (mmff->areInOneRing(atoms, 5))
+		{
+			// ???? saturation
+			return 5;
+		}
+
+		// default value: 0
+		return 0;
+	}
+
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.16 2006/02/02 23:53:01 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.17 2006/02/12 01:51:48 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -368,6 +368,78 @@ namespace BALL
 		/// parameters 
 		StretchBendMap parameters_;
 		StretchBendMap parameters_by_row_;
+
+		bool is_initialized_;
+	};
+
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+	
+	/**	MMFF94 parameters for torsions (see MMFFTOR.PAR)
+      \ingroup  MMFF94
+	*/
+	class MMFF94TorsionParameters
+	{
+		public:
+
+		/// Map with the force constant and reference angle
+		typedef HashMap<long, vector<double> > TorsionsMap;
+
+		/**	@name Constant Definitions
+		*/
+		//@{
+
+		BALL_CREATE(MMFF94TorsionParameters)
+
+		/**	Default constructor.
+		*/
+		MMFF94TorsionParameters();
+
+		/**	Destructor.
+		*/
+		virtual ~MMFF94TorsionParameters();
+
+		//@}
+		/**	@name Assignment
+		*/
+		//@{
+
+		/**	Assignment operator
+		*/
+		const MMFF94TorsionParameters& operator = (const MMFF94TorsionParameters& param)
+			throw();
+
+		/**	Clear method
+		*/
+		virtual void clear()
+			throw();
+
+		///
+		bool isInitialized() { return is_initialized_;}
+
+		///
+		bool getParameters(Position type_index,
+											 Index at1, Index at2, Index at3, Index at4,
+											 double& v1, double& v2, double& v3) const;
+
+		/// read parameters for torsions
+		bool readParameters(const String& filename)
+			throw(Exception::FileNotFound);
+		
+		//@}
+
+		protected:
+
+		long getIndex_(Position type,
+											 Position atom_type1, 
+											 Position atom_type2, 
+											 Position atom_type3,
+											 Position atom_type4) const;
+
+		/// parameters 
+		TorsionsMap parameters_;
 
 		bool is_initialized_;
 	};

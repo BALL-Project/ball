@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.29 2006/02/11 22:29:40 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.30 2006/02/12 01:51:38 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -787,6 +787,16 @@ Log.info() << "MMFF94 StretchBend: from row: " << atom1.getName() << " " << atom
 			Index at1, Index at2, Index at3, Index at4,
 			double& v1, double& v2, double& v3) const
 	{
+		const Position index = getIndex_(torsion_type, at1, at2, at3, at4);
+
+		TorsionsMap::ConstIterator it = parameters_.find(index);
+		if (it == parameters_.end()) return false;
+		const vector<double>& v = (*it).second;
+
+		v1 = v[0];
+		v2 = v[1];
+		v3 = v[2];
+
 		return true;
 	}
 

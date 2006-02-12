@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.28 2006/02/12 01:06:32 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.29 2006/02/12 01:51:30 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -507,33 +507,35 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare)
 		if (found == -1)
 		{
 			Log.error() << "Could not find atoms [torsion] " << n1 << " " << n2 << " " << n3 << " " << n4 << std::endl;
+			continue;
 		}
+
+		bool ok = true;
 
 		if (!swap)
 		{
-			if (t.v1 == v1[found] &&
-					t.v2 == v2[found] &&
-					t.v3 == v3[found])
-			{
-				continue;
-			}
+			ok &= t.v1 == v1[found] &&
+						t.v2 == v2[found] &&
+						t.v3 == v3[found];
 		}
 		else
 		{
-			if (t.v3 == v1[found] &&
-					t.v2 == v2[found] &&
-					t.v1 == v3[found])
-			{
-				continue;
-			}
+			ok &= t.v3 == v1[found] &&
+						t.v2 == v2[found] &&
+						t.v1 == v3[found];
 		}
+
+		ok &= t.type != type[found];
+
+
+		if (ok) continue;
 
 		Log.error() << std::endl
 								<< "Problem Stretch:   " << filename 
 								<< t.atom1->ptr->getName() << " " << t.atom2->ptr->getName() << " "
 								<< t.atom3->ptr->getName() << " " << t.atom4->ptr->getName() << std::endl
-								<< "got v " << t.v1 << " " << t.v2 << " " << t.v3 << std::endl
-								<< "was v " << v1[found] << " " << v2[found] << " " << v3[found] << std::endl;
+								<< "got t " << t.type << " v " << t.v1 << " " << t.v2 << " " << t.v3 << std::endl
+								<< "was t " << type[found] << " v " << v1[found] << " " << v2[found] << " " << v3[found] << std::endl;
 
 		Index sbtijk = -1;
 	}

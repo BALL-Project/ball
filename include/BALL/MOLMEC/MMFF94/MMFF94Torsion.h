@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.h,v 1.1.2.1 2005/03/17 13:48:49 amoll Exp $
+// $Id: MMFF94Torsion.h,v 1.1.2.2 2006/02/12 01:51:48 amoll Exp $
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -21,6 +21,10 @@
 # include <BALL/MOLMEC/COMMON/forceField.h>
 #endif
 
+#ifndef BALL_MOLMEC_MMFF94_MMFF94PARAMETERS_H
+#	include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
+#endif
+
 namespace BALL 
 {
 	/**	MMFF94 bond stretch component
@@ -30,6 +34,21 @@ namespace BALL
 		: public ForceFieldComponent
 	{
 		public:
+
+		/// see MMFFTOR.PAR
+		struct Torsion
+		{
+			Torsion();
+
+			Index type;
+			double angle;
+			Atom::StaticAtomAttributes*	atom1;
+			Atom::StaticAtomAttributes*	atom2;
+			Atom::StaticAtomAttributes*	atom3;
+			Atom::StaticAtomAttributes*	atom4;
+			double energy;  // debug
+			double v1, v2, v3;
+		};
 
 		/**	@name	Type Definitions	
 		*/
@@ -82,6 +101,12 @@ namespace BALL
 		*/
 		virtual void updateForces();
 
+		///
+		Position getTorsionType(const vector<Atom*>& atoms) const;
+		
+		///
+		const vector<Torsion>& getTorsions() const { return torsions_;}
+
 		//@}
 
 		private:
@@ -93,6 +118,9 @@ namespace BALL
 		/*_	array with the torsions
 		*/
 		//_@}
+	 
+		vector<Torsion> torsions_;
+		MMFF94TorsionParameters parameters_;
 	 
 	};
 } // namespace BALL 
