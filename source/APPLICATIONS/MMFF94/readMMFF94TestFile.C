@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.29 2006/02/12 01:51:30 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.30 2006/02/12 15:50:33 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -452,10 +452,11 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare)
 		atoms3.push_back(fields[2]);
 		atoms4.push_back(fields[3]);
 		type.push_back(fields[4].toUnsignedInt());
-		energy.push_back(fields[5].toFloat());
-		v1.push_back(fields[6].toFloat());
-		v2.push_back(fields[7].toFloat());
-		v3.push_back(fields[8].toFloat());
+		angle.push_back(fields[5].toFloat());
+		energy.push_back(fields[6].toFloat());
+		v1.push_back(fields[7].toFloat());
+		v2.push_back(fields[8].toFloat());
+		v3.push_back(fields[9].toFloat());
 	}
 
 	enableOneComponent("MMFF94 Torsion", mmff);
@@ -510,30 +511,25 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare)
 			continue;
 		}
 
-		bool ok = true;
+		bool ok = (BALL_REAL_EQUAL(t.v1 , v1[found], 0.0001) &&
+						   BALL_REAL_EQUAL(t.v2 , v2[found], 0.0001) &&
+						   BALL_REAL_EQUAL(t.v3 , v3[found], 0.0001))
+							||
+							(BALL_REAL_EQUAL(t.v3 , v1[found], 0.0001) &&
+						 	 BALL_REAL_EQUAL(t.v2 , v2[found], 0.0001) &&
+						 	 BALL_REAL_EQUAL(t.v1 , v3[found], 0.0001));
 
-		if (!swap)
-		{
-			ok &= t.v1 == v1[found] &&
-						t.v2 == v2[found] &&
-						t.v3 == v3[found];
-		}
-		else
-		{
-			ok &= t.v3 == v1[found] &&
-						t.v2 == v2[found] &&
-						t.v1 == v3[found];
-		}
-
-		ok &= t.type != type[found];
+		ok &= (t.type == (Index)type[found]); 
 
 
 		if (ok) continue;
 
 		Log.error() << std::endl
-								<< "Problem Stretch:   " << filename 
+								<< "Problem Stretch:   " << filename << " "
 								<< t.atom1->ptr->getName() << " " << t.atom2->ptr->getName() << " "
-								<< t.atom3->ptr->getName() << " " << t.atom4->ptr->getName() << std::endl
+								<< t.atom3->ptr->getName() << " " << t.atom4->ptr->getName() << "   "
+								<< t.atom1->type << " " << t.atom2->type << " " << t.atom3->type << " " << t.atom4->type << " "
+								<< std::endl
 								<< "got t " << t.type << " v " << t.v1 << " " << t.v2 << " " << t.v3 << std::endl
 								<< "was t " << type[found] << " v " << v1[found] << " " << v2[found] << " " << v3[found] << std::endl;
 

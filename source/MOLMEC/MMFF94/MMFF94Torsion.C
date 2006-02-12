@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.4 2006/02/12 15:04:10 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.5 2006/02/12 15:50:28 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -170,9 +170,13 @@ namespace BALL
 							continue;
 						}
 
-						// a2s type must always be smaller than a3s
+						// a2 type must always be smaller or equal than a3 type
+						//
+						// if a2 type == a3 type: a1 type must always be smaller or equal a4 type
+						//
 						// if not: swap direction
-						if (a3->getType() < a2->getType())
+						if ((a2->getType() >  a3->getType()) ||
+							  (a2->getType() == a3->getType() && a1->getType() > a4->getType()))
 						{
 							Atom* temp;
 							temp = a1; a1 = a4; a4 = temp; 
@@ -200,6 +204,8 @@ namespace BALL
 						this_torsion.atom4 = &Atom::getAttributes()[a4->getIndex()];
 
 						this_torsion.type = getTorsionType(atoms);
+
+						if (this_torsion.type == 99) continue;
 
 						// check for parameters in a step down procedure
 						// full parameters
@@ -322,14 +328,32 @@ namespace BALL
 	{
 		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
 
-		const Bond& bond1 = *atoms[0]->getBond(*atoms[1]);
-		const Bond& bond2 = *atoms[1]->getBond(*atoms[2]);
-		const Bond& bond3 = *atoms[2]->getBond(*atoms[3]);
-		
-		if (bond2.hasProperty("MMFF94SBMB")) return 1;
+		const Bond* bond1 = atoms[0]->getBond(*atoms[1]);
+		const Bond* bond2 = atoms[1]->getBond(*atoms[2]);
+		const Bond* bond3 = atoms[2]->getBond(*atoms[3]);
 
-		if (bond1.hasProperty("MMFF94SBMB") ||
-				bond3.hasProperty("MMFF94SBMB"))
+		HashSet<Atom*> set;
+		set.insert(atoms[0]);
+		set.insert(atoms[1]);
+		set.insert(atoms[2]);
+		set.insert(atoms[3]);
+
+		if (set.size() < 4) return 99;
+
+		if (!bond1 || !bond2 || !bond3)
+		{
+			Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
+			Log.error() << atoms[0]->getName() << " " 
+									<< atoms[1]->getName() << " "
+									<< atoms[2]->getName() << " "
+									<< atoms[3]->getName() << std::endl;
+			return 99;
+		}
+		
+		if (bond2->hasProperty("MMFF94SBMB")) return 1;
+
+		if (bond1->hasProperty("MMFF94SBMB") ||
+				bond3->hasProperty("MMFF94SBMB"))
 		{
 			return 2;
 		}
