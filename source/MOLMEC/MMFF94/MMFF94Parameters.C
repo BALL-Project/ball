@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.30 2006/02/12 01:51:38 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.31 2006/02/12 15:04:10 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -787,7 +787,7 @@ Log.info() << "MMFF94 StretchBend: from row: " << atom1.getName() << " " << atom
 			Index at1, Index at2, Index at3, Index at4,
 			double& v1, double& v2, double& v3) const
 	{
-		const Position index = getIndex_(torsion_type, at1, at2, at3, at4);
+		const String index = getIndex_(torsion_type, at1, at2, at3, at4);
 
 		TorsionsMap::ConstIterator it = parameters_.find(index);
 		if (it == parameters_.end()) return false;
@@ -831,7 +831,7 @@ Log.info() << "MMFF94 StretchBend: from row: " << atom1.getName() << " " << atom
 				const Position atom_type2 = fields[2].toUnsignedInt();
 				const Position atom_type3 = fields[3].toUnsignedInt();
 				const Position atom_type4 = fields[4].toUnsignedInt();
-				const Position index = getIndex_(type, atom_type1, atom_type2, atom_type3, atom_type4);
+				const String index = getIndex_(type, atom_type1, atom_type2, atom_type3, atom_type4);
 
 				parameters_[index] = vector<double>();
 				parameters_[index].push_back(fields[5].toDouble());
@@ -853,29 +853,10 @@ Log.info() << "MMFF94 StretchBend: from row: " << atom1.getName() << " " << atom
 		return true;
 	}
 
-	long MMFF94TorsionParameters::getIndex_(Position type,
+	String MMFF94TorsionParameters::getIndex_(Position type,
 								Position at1, Position at2, Position at3, Position at4) const
 	{ 
-		// sort all atom types
-		vector<Position> types;
-		types.push_back(at1);
-		types.push_back(at2);
-		types.push_back(at3);
-		types.push_back(at4);
-
-		sort(types.begin(), types.end());
-
-		// The torsion parameters are ordered using the canonical index 
-		//
-		// CXT = MC*(J*MA**3 + K*MA**2 + I*MA + L) + TTIJKL
-		//
-		// In this case, as of 2/96, MC (the maximum permissible torsion-type index plus
-		// 1) and MA (the maximum permitted atom type plus 1) are set to 6 and 136,
-		// respectively, to insure that CXT will fit within a 32-bit integer word. Thus,
-		// J changes least rapidly and K next least rapidly. For I, L and TTIJKL, the
-		// effect on the ordering can be seen in the portion of the MMFFTOR.PAR file
-		// displayed above.
-		return 6 * (at1 * 136^3 + at2 * 136^2 + at3 * 136 + at4) + type;
+		return String(type) + '|' + String(at1) + '|' + String(at2) + '|' + String(at3) + '|' + String(at4);
 	}
 
 

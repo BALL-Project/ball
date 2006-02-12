@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.17 2006/02/12 01:51:48 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.18 2006/02/12 15:04:22 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -385,7 +385,7 @@ namespace BALL
 		public:
 
 		/// Map with the force constant and reference angle
-		typedef HashMap<long, vector<double> > TorsionsMap;
+		typedef HashMap<String, vector<double> > TorsionsMap;
 
 		/**	@name Constant Definitions
 		*/
@@ -432,7 +432,7 @@ namespace BALL
 
 		protected:
 
-		long getIndex_(Position type,
+		String getIndex_(Position type,
 											 Position atom_type1, 
 											 Position atom_type2, 
 											 Position atom_type3,

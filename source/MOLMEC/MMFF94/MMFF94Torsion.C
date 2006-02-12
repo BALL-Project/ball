@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.3 2006/02/12 01:51:38 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.4 2006/02/12 15:04:10 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -170,6 +170,15 @@ namespace BALL
 							continue;
 						}
 
+						// a2s type must always be smaller than a3s
+						// if not: swap direction
+						if (a3->getType() < a2->getType())
+						{
+							Atom* temp;
+							temp = a1; a1 = a4; a4 = temp; 
+							temp = a2; a2 = a3; a3 = temp; 
+						}
+
 						// if we have only 3 different atoms in one ring, do nothing!
 						vector<Atom*> atoms;
 						atoms.push_back(a1);
@@ -197,13 +206,28 @@ namespace BALL
 						if (parameters_.getParameters(this_torsion.type, 
 																					type_a1, type_a2, type_a3, type_a4, 
 																					this_torsion.v1, this_torsion.v2, this_torsion.v3)
+							|| // try wildcard matching
+							parameters_.getParameters(this_torsion.type, 
+																				0,
+																				equivalences.getEquivalence(type_a2, 1),
+																				equivalences.getEquivalence(type_a3, 1),
+																				equivalences.getEquivalence(type_a4, 1),
+																				this_torsion.v1, this_torsion.v2, this_torsion.v3)
+							|| // try wildcard matching
+							parameters_.getParameters(this_torsion.type, 
+																				equivalences.getEquivalence(type_a1, 1),
+																				equivalences.getEquivalence(type_a2, 1),
+																				equivalences.getEquivalence(type_a3, 1),
+																				0,
+																				this_torsion.v1, this_torsion.v2, this_torsion.v3)
 							|| // try full wildcard matching
 							parameters_.getParameters(this_torsion.type, 
 																				0,
 																				equivalences.getEquivalence(type_a2, 1),
 																				equivalences.getEquivalence(type_a3, 1),
 																				0,
-																				this_torsion.v1, this_torsion.v2, this_torsion.v3))
+																				this_torsion.v1, this_torsion.v2, this_torsion.v3)
+							)
 						{
 							torsions_.push_back(this_torsion);
 							continue;
