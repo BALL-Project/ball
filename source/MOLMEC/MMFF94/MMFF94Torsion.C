@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.6 2006/02/13 01:34:54 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.7 2006/02/13 16:39:07 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -10,6 +10,7 @@
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/SYSTEM/path.h>
 
 #include <algorithm>
@@ -89,23 +90,16 @@ namespace BALL
 
 		torsions_.clear();
 
-		// a working instance to put the current values in and push it back
-		Torsion this_torsion;
-
 		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
 		const vector<MMFF94AtomTypeData>& atom_types = mmff->getAtomTypes();
 		const MMFF94AtomTypeEquivalences& equivalences = mmff->getEquivalences();
 
-		Atom*	a1;
-		Atom*	a2;
-		Atom*	a3;
-		Atom*	a4;
-
 		// calculate the torsions
 		vector<Atom*>::const_iterator atom_it = getForceField()->getAtoms().begin();
-		Atom::BondIterator it1;
-		Atom::BondIterator it2;
-		Atom::BondIterator it3;
+		Atom::BondIterator it1, it2, it3;
+		Atom *atom1, *atom2, *atom3, *atom4;
+		// a working instance to put the current values in and push it back
+		Torsion this_torsion;
 
 		bool use_selection = getForceField()->getUseSelection();
 
@@ -118,8 +112,8 @@ namespace BALL
 				if (*atom_it != it1->getFirstAtom()) continue;
 			
 				// central atoms
-				a2 = *atom_it;
-				a3 = const_cast<Atom*>(it1->getSecondAtom());
+				atom2 = *atom_it;
+				atom3 = const_cast<Atom*>(it1->getSecondAtom());
 
 				for (it2 = (*atom_it)->beginBond(); +it2 ; ++it2) 
 				{
@@ -129,29 +123,20 @@ namespace BALL
 					if (&*it2 == &*it1) continue;
 				
 					// determine the outer atom a1
-					a1 = (*it2).getPartner(**atom_it);
+					atom1 = (*it2).getPartner(**atom_it);
 
-					// TAJVUV
-Log.error() << "#~~#   ------------------ "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-					for (it3 = a3->beginBond(); +it3 ; ++it3) 
+					for (it3 = atom3->beginBond(); +it3 ; ++it3) 
 					{
-Log.error() << "#~~#   x " << (*it3).getFirstAtom()->getName() << " "   << (*it3).getSecondAtom()->getName()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 						if (it3->getType() == Bond::TYPE__HYDROGEN) continue; // ignore H -bonds
 
-						a4 = (*it3).getPartner(*a3);
+						atom4 = (*it3).getPartner(*atom3);
 
-						if (a4 == 0)
-						{
-Log.error() << "#~~#   9 "   << a3  << " " << a3->getName()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   9 " << (*it3).getFirstAtom() << " "   << (*it3).getSecondAtom()          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-						}
+						if (atom4 == atom2 || atom4 == atom1) continue;
 
-						if (a4 == 0 || a4 == a2 || a4 == a1) continue;
-
-						if (use_selection && (!a1->isSelected() ||
-																	!a2->isSelected() ||
-																	!a3->isSelected() ||
-																	!a4->isSelected()))
+						if (use_selection && (!atom1->isSelected() ||
+																	!atom2->isSelected() ||
+																	!atom3->isSelected() ||
+																	!atom4->isSelected()))
 						{
 							continue;
 						}
@@ -160,94 +145,46 @@ Log.error() << "#~~#   9 " << (*it3).getFirstAtom() << " "   << (*it3).getSecond
 						// ok, we have the torsion
 						////////////////////////////////////////
 						
-						// if a2 or a3 is a linear type, do nothing!
-						if (atom_types[a2->getType()].lin ||
-								atom_types[a3->getType()].lin)
+						// if one of the both middle atoms is of linear type, do nothing!
+						if (atom_types[atom2->getType()].lin ||
+								atom_types[atom3->getType()].lin)
 						{
 							continue;
 						}
 
-						// a2 type must always be smaller or equal than a3 type
-						//
-						// if a2 type == a3 type: a1 type must always be smaller or equal a4 type
-						//
-						// if not: swap direction
-						if ((a2->getType() >  a3->getType()) ||
-							  (a2->getType() == a3->getType() && a1->getType() > a4->getType()))
-						{
-							Atom* temp;
-							temp = a1; a1 = a4; a4 = temp; 
-							temp = a2; a2 = a3; a3 = temp; 
-						}
-
-						// if we have only 3 different atoms in one ring, do nothing!
 						vector<Atom*> atoms;
-						atoms.push_back(a1);
-						atoms.push_back(a2);
-						atoms.push_back(a3);
-						atoms.push_back(a4);
-
-Log.error() << "Torsion " 
-					<< atoms[0]->getName() << " " 
-					<< atoms[1]->getName() << " "
-					<< atoms[2]->getName() << " "
-					<< atoms[3]->getName() << std::endl;
-
-
+						atoms.push_back(atom1);
+						atoms.push_back(atom2);
+						atoms.push_back(atom3);
+						atoms.push_back(atom4);
+						
+						// do nothing for ring systems with 3 atoms
 						if (mmff->areInOneRing(atoms, 3)) continue;
 
-						HashSet<Atom*> set;
-						set.insert(atoms[0]);
-						set.insert(atoms[1]);
-						set.insert(atoms[2]);
-						set.insert(atoms[3]);
-
-						if (set.size() < 4) continue;
-
-						const Bond* bond1 = atoms[0]->getBond(*atoms[1]);
-						const Bond* bond2 = atoms[1]->getBond(*atoms[2]);
-						const Bond* bond3 = atoms[2]->getBond(*atoms[3]);
-
-						if (!bond1 || !bond2 || !bond3)
+						// sort according to atom type:
+						// a2 type must always be smaller or equal than a3 type
+						// if a2 type == a3 type: a1 type must always be smaller or equal a4 type
+						// if not: swap direction
+						if ((atoms[1]->getType() >  atoms[2]->getType()) ||
+							  (atoms[1]->getType() == atoms[2]->getType() && atoms[0]->getType() > atoms[3]->getType()))
 						{
-							vector<Bond*> bonds;
-							for (Position p = 0; p < 4; p++)
-							{
-								for (Position r = p + 1; r < 4; r++)
-								{
-									Bond* bond = atoms[p]->getBond(*atoms[r]);
-									if (bond != 0)
-									{
-										bonds.push_back(bond);
-									}
-								}
-							}
-
-							if (bonds.size() < 3) continue;
-
-				Log.error() << "Problem in " << __FILE__ << __LINE__ << "  " 
-										<< atoms[0]->getName() << " " 
-										<< atoms[1]->getName() << " "
-										<< atoms[2]->getName() << " "
-										<< atoms[3]->getName() << std::endl;
-
-				continue;
+							Atom* temp;
+							temp = atoms[0]; atoms[0] = atoms[3]; atoms[3] = temp; 
+							temp = atoms[1]; atoms[1] = atoms[2]; atoms[2] = temp; 
 						}
 
 						// search torsion parameters for (a1,a2,a3,a4)
-						Atom::Type type_a1 = a1->getType();
-						Atom::Type type_a2 = a2->getType();
-						Atom::Type type_a3 = a3->getType();
-						Atom::Type type_a4 = a4->getType();
+						Atom::Type type_a1 = atoms[0]->getType();
+						Atom::Type type_a2 = atoms[1]->getType();
+						Atom::Type type_a3 = atoms[2]->getType();
+						Atom::Type type_a4 = atoms[3]->getType();
 
-						this_torsion.atom1 = &Atom::getAttributes()[a1->getIndex()];
-						this_torsion.atom2 = &Atom::getAttributes()[a2->getIndex()];
-						this_torsion.atom3 = &Atom::getAttributes()[a3->getIndex()];
-						this_torsion.atom4 = &Atom::getAttributes()[a4->getIndex()];
+						this_torsion.atom1 = &Atom::getAttributes()[atoms[0]->getIndex()];
+						this_torsion.atom2 = &Atom::getAttributes()[atoms[1]->getIndex()];
+						this_torsion.atom3 = &Atom::getAttributes()[atoms[2]->getIndex()];
+						this_torsion.atom4 = &Atom::getAttributes()[atoms[3]->getIndex()];
 
 						this_torsion.type = getTorsionType(atoms);
-
-						if (this_torsion.type == 99) continue;
 
 						// check for parameters in a step down procedure
 						// full parameters
@@ -281,7 +218,7 @@ Log.error() << "Torsion "
 							continue;
 						}
 
-						// if all parameters are equal 0, no energy will result, so do nothing!
+						// do nothing if all three constants are zeros:
 						if (this_torsion.v1 == 0.0 &&
 								this_torsion.v2 == 0.0 &&
 								this_torsion.v3 == 0.0)
@@ -290,14 +227,16 @@ Log.error() << "Torsion "
 						}
 
 						// didnt found torsion parameters
-						getForceField()->getUnassignedAtoms().insert(a1);
-						getForceField()->getUnassignedAtoms().insert(a2);
-						getForceField()->getUnassignedAtoms().insert(a3);
-						getForceField()->getUnassignedAtoms().insert(a4);
+						getForceField()->getUnassignedAtoms().insert(atoms[0]);
+						getForceField()->getUnassignedAtoms().insert(atoms[1]);
+						getForceField()->getUnassignedAtoms().insert(atoms[2]);
+						getForceField()->getUnassignedAtoms().insert(atoms[3]);
 
-						getForceField()->error() << "MMFF94 Torsion: Could not find parameters for "
-							<< a1->getFullName() << " " << a2->getFullName() << " " << a3->getFullName() << " " << a4->getFullName() << "  " 
-							<< a1->getType() << " " << a2->getType() << " " << a3->getType() << " " << a4->getType() << " " << std::endl;
+						getForceField()->error() << "MMFF94 Torsion: Could not find parameters for type " << this_torsion.type << "   "
+							<< atoms[0]->getFullName() << " " << atoms[1]->getFullName() << " " 
+							<< atoms[2]->getFullName() << " " << atoms[3]->getFullName() << "  " 
+							<< atoms[0]->getType() << " " << atoms[1]->getType() << " " 
+							<< atoms[2]->getType() << " " << atoms[3]->getType() << " " << std::endl;
 					} // it3
 				} // it2
 			} // it1
@@ -372,35 +311,71 @@ Log.error() << "Torsion "
 	}
 
 
-	// The first column gives the value of the torsion type index, TTIJKL. This 
-	// index normally takes the value "0", but is "1" when the j-k bond has a bond 
-	// type index BTJK of 1, is "2" when BTJK is "0" but BTIJ and/or BTKL is "1", is 
-	// "4" when i, j, k, and l are all members of the same 4-membered ring, and 
-	// is "5" when the four atoms are members of a 5-membered ring which is 
-	// not aromatic and contains no unsaturation.
+	/* from Paper IV:
+			- This index normally takes the value "0," 
+			- "1" when the J-K bond has a bond type index of 1; 
+			- "2" when BTJK is "0" but BTIJ and/or BTKL is "1"
+			- "4" when i, j, k, and I are all members of the same four-membered ring
+			- "5" when the four atoms are members of a five-membered ring
+				and at least one is a sp3-hybridized carbon (MMFF atom type 1).
+	*/
 	Position MMFF94Torsion::getTorsionType(const vector<Atom*>& atoms) const
 	{
 		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
+
+		// in a ring of 4?
+		if (mmff->areInOneRing(atoms, 4))
+		{
+			// make sure we dont also have 2 rings of 3!
+			if (atoms[0]->getBond(*atoms[2]) == 0 &&
+					atoms[1]->getBond(*atoms[3]) == 0)
+			{
+				return 4;
+			}
+		}
 
 		const Bond* bond1 = atoms[0]->getBond(*atoms[1]);
 		const Bond* bond2 = atoms[1]->getBond(*atoms[2]);
 		const Bond* bond3 = atoms[2]->getBond(*atoms[3]);
 
+Log.error() << "# " << atoms[0]->getName() << " " 
+										<< atoms[1]->getName() << " "
+										<< atoms[2]->getName() << " "
+										<< atoms[3]->getName() << " "   	
+										<< bond1->hasProperty("MMFF94SBMB") << " "
+										<< bond2->hasProperty("MMFF94SBMB") << " "
+										<< bond3->hasProperty("MMFF94SBMB") << " # "
+										<< bond1->getOrder() << " " 
+										<< bond2->getOrder() << " " 
+										<< bond3->getOrder() << " " 
+										<< std::endl;
+
 		if (bond2->hasProperty("MMFF94SBMB")) return 1;
 
-		if (bond1->hasProperty("MMFF94SBMB") ||
+		if ((bond1->hasProperty("MMFF94SBMB") &&
+		    bond1->getOrder() != Bond::ORDER__SINGLE) ||
+		   (bond3->hasProperty("MMFF94SBMB") &&
+		    bond3->getOrder() != Bond::ORDER__SINGLE))
+		{
+//   			return 2;
+		}
+		/*
+		if (bond1->hasProperty("MMFF94SBMB") &&
 				bond3->hasProperty("MMFF94SBMB"))
 		{
 			return 2;
 		}
+		*/
 
-		if (mmff->areInOneRing(atoms, 4)) return 4;
-
+		// in one nonaromatic ring 
 		if (mmff->areInOneRing(atoms, 5) && 
 				!mmff->areInOneAromaticRing(atoms, 5))
 		{
-			// ???? saturation
-			return 5;
+			// at least one atom has type 1?
+			for (Position as = 0; as < atoms.size(); as++)
+			{
+				if (atoms[as]->getType() == 1) return 5;
+			}
 		}
 
 		// default value: 0
