@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.10 2006/02/11 23:10:14 amoll Exp $
+// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.11 2006/02/13 11:43:05 amoll Exp $
 //
 // A small program for spliting the Optimol log file from the MMFF94 test suite
 // into smaller files, which are better to handle for parsing 
@@ -227,11 +227,11 @@ int main(int argc, char** argv)
 				vector<String> fields;
 				infile.getLine().split(fields);
 
-				// I J K type angle delta energy
+				// I J K type angle delta energy ka
 				outfile << fields[0] << " " << fields[1] << " " 
 								<< fields[3] << " " << fields[7] << " " 
 								<< fields[9] << " " << fields[10] << " " 
-								<< fields[11]  << std::endl;
+								<< fields[11] << " " << fields[12]  << std::endl;
 			}
 		}
 		
