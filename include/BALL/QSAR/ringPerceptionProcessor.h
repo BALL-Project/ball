@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.h,v 1.13 2006/02/13 19:34:30 bertsch Exp $
+// $Id: ringPerceptionProcessor.h,v 1.14 2006/02/13 19:35:46 bertsch Exp $
 //
 
 #ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
@@ -109,7 +109,7 @@ namespace BALL
 			Size calculateSSSR(vector<vector<Atom*> >& sssr, AtomContainer& ac);
 			//@}
 
-			/** Getter which returns all the 3 and 4 membered rings, calculateSSSR with
+			/** Getter which returns all the 3 - 6 membered rings, calculateSSSR with
 			 *  the Balducci-Pearlman Algorithm (defalt) is needed prior this call.
 			 */
 			const vector<vector<Atom*> >& getAllSmallRings() const;
@@ -238,10 +238,10 @@ namespace BALL
 			/// rings (beer) which have already been tested
 			static std::vector<BitVector> tested_beers_;
 
-			/// contains all the 3 and 4 membered rings after the procedure of the Balducci-Pearlman algorithm
+			/// contains all 3 to 6 membered rings after the procedure of the Balducci-Pearlman algorithm
 			static std::vector<std::vector<Atom*> > all_small_rings_;
 
-			/// contains all the 3 and 4 membered rings as beers
+			/// contains all 3 to 6 membered rings as beers
 			static std::vector<BitVector> all_small_beers_;
 			
 			/*_ function that gets a binary edge-encoded ring as a BitVector

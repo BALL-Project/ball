@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.16 2006/02/10 10:24:23 bertsch Exp $
+// $Id: ringPerceptionProcessor.C,v 1.17 2006/02/13 19:34:30 bertsch Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
@@ -89,7 +89,7 @@ namespace BALL
 		if (algorithm_name == "Balducci")
 		{
 			// clear the structures
-			all3and4membered_rings_.clear();
+			all_small_rings_.clear();
 			
 			// build molecular graph
 			Molecule * mol = static_cast<Molecule*>(&ac);
@@ -132,9 +132,9 @@ namespace BALL
 		}
 	}
 
-	const vector<vector<Atom*> >& RingPerceptionProcessor::getAll3And4Rings() const
+	const vector<vector<Atom*> >& RingPerceptionProcessor::getAllSmallRings() const
 	{
-		return all3and4membered_rings_;
+		return all_small_rings_;
 	}
 	
 	Size RingPerceptionProcessor::FiguerasAlgorithm_(vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
@@ -597,8 +597,8 @@ namespace BALL
 	vector<BitVector> RingPerceptionProcessor::matrix;
 	vector<BitVector> RingPerceptionProcessor::forwarded_rings_;
 	vector<BitVector> RingPerceptionProcessor::tested_beers_;
-	vector<vector<Atom*> > RingPerceptionProcessor::all3and4membered_rings_;
-	vector<BitVector> RingPerceptionProcessor::all3and4membered_beers_;
+	vector<vector<Atom*> > RingPerceptionProcessor::all_small_rings_;
+	vector<BitVector> RingPerceptionProcessor::all_small_beers_;
 
 	void RingPerceptionProcessor::TNode::recieve()
 	{
@@ -864,7 +864,7 @@ namespace BALL
 		matrix.clear();
 		forwarded_rings_.clear();
 		tested_beers_.clear();
-		all3and4membered_beers_.clear();
+		all_small_beers_.clear();
 		
 		// 1. init the flow-network
 
@@ -948,9 +948,9 @@ namespace BALL
 					{
 						tested_beers_.push_back(*it);
 						BalducciPearlmanRingSelector_(*it);
-						if (it->countValue(true) == 3)
+						if (it->countValue(true) == 3 || it->countValue(true) == 5)
 						{
-							all3and4membered_beers_.push_back(*it);
+							all_small_beers_.push_back(*it);
 						}
 					}
 				}
@@ -967,9 +967,9 @@ namespace BALL
 				{
 					tested_beers_.push_back(*it);
 					BalducciPearlmanRingSelector_(*it);
-					if (it->countValue(true) == 4)
+					if (it->countValue(true) == 4 || it->countValue(true) == 6)
 					{
-						all3and4membered_beers_.push_back(*it);
+						all_small_beers_.push_back(*it);
 					}
 				}
 			}
@@ -1013,14 +1013,14 @@ namespace BALL
 			sssr.push_back(ring);
 		}
 
-		// now handle all 3 and 4 membered rings
-		for (Size i = 0; i != all3and4membered_beers_.size(); ++i)
+		// now handle small membered rings
+		for (Size i = 0; i != all_small_beers_.size(); ++i)
 		{
 			HashSet<Atom*> in_ring;
 			vector<Atom*> ring;
-			for (Size j = 0; j != all3and4membered_beers_[i].getSize(); ++j)
+			for (Size j = 0; j != all_small_beers_[i].getSize(); ++j)
 			{
-				if (all3and4membered_beers_[i][j])
+				if (all_small_beers_[i][j])
 				{
 					Bond* b = index_to_bond[j]->getBond();
 					Atom* a = b->getPartner(*b->getFirstAtom());
@@ -1038,7 +1038,7 @@ namespace BALL
 					}
 				}
 			}
-			all3and4membered_rings_.push_back(ring);
+			all_small_rings_.push_back(ring);
 		}
 		
 		// delete TNodes
