@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.30 2006/02/12 15:50:33 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.31 2006/02/13 01:34:58 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -469,6 +469,8 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare)
 								<< comp->getTorsions().size() << " was " << atoms4.size()<< std::endl;
 	}
 
+	HashSet<Position> found_torsions;
+
 	for (Position poss = 0; poss < comp->getTorsions().size(); poss++)
 	{
 		const MMFF94Torsion::Torsion& t = comp->getTorsions()[poss];
@@ -485,19 +487,13 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare)
 
 		for (Position as = 0; as < atoms1.size(); as++)
 		{
-			if (atoms1[as] == n1 &&
-					atoms2[as] == n2 &&
-					atoms3[as] == n3 &&
-					atoms4[as] == n4)
+			if (atoms1[as] == n1 && atoms2[as] == n2 && atoms3[as] == n3 && atoms4[as] == n4)
 			{
 				found = as;
 				break;
 			}
 
-			if (atoms4[as] == n1 &&
-					atoms3[as] == n2 &&
-					atoms2[as] == n3 &&
-					atoms1[as] == n4)
+			if (atoms4[as] == n1 && atoms3[as] == n2 && atoms2[as] == n3 && atoms1[as] == n4)
 			{
 				found = as;
 				swap = true;
@@ -522,6 +518,8 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare)
 		ok &= (t.type == (Index)type[found]); 
 
 
+		found_torsions.insert(found);
+
 		if (ok) continue;
 
 		Log.error() << std::endl
@@ -532,10 +530,15 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare)
 								<< std::endl
 								<< "got t " << t.type << " v " << t.v1 << " " << t.v2 << " " << t.v3 << std::endl
 								<< "was t " << type[found] << " v " << v1[found] << " " << v2[found] << " " << v3[found] << std::endl;
-
-		Index sbtijk = -1;
 	}
 
+	for (Position p = 0; p < atoms1.size(); p++)
+	{
+		if (v1[p] == 0.0 && v2[p] == 0.0 && v3[p] == 0.0) continue;
+		if (found_torsions.has(p)) continue;
+
+		Log.error() << "No data for torsion " << atoms1[p] << " " << atoms2[p] << " " << atoms3[p] << " " << atoms4[p] << std::endl;
+	}
 
 		
 	if (!compare) return true;

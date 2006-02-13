@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.5 2006/02/12 15:50:28 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.6 2006/02/13 01:34:54 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -124,32 +124,29 @@ namespace BALL
 				for (it2 = (*atom_it)->beginBond(); +it2 ; ++it2) 
 				{
 					if (it2->getType() == Bond::TYPE__HYDROGEN) continue; // ignore H -bonds
-					if (it2->getSecondAtom() == it1->getSecondAtom()) continue;
+					
+					// identical to bond 1?
+					if (&*it2 == &*it1) continue;
 				
-					// determine the first atom
-					if (it2->getFirstAtom() == *atom_it) 
-					{
-						a1 = const_cast<Atom*>(it2->getSecondAtom());
-					} 
-					else 
-					{
-						a1 = const_cast<Atom*>(it2->getFirstAtom());
-					}
+					// determine the outer atom a1
+					a1 = (*it2).getPartner(**atom_it);
 
-					for (it3 = const_cast<Atom*>(it1->getSecondAtom())->beginBond(); +it3 ; ++it3) 
+					// TAJVUV
+Log.error() << "#~~#   ------------------ "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+					for (it3 = a3->beginBond(); +it3 ; ++it3) 
 					{
+Log.error() << "#~~#   x " << (*it3).getFirstAtom()->getName() << " "   << (*it3).getSecondAtom()->getName()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 						if (it3->getType() == Bond::TYPE__HYDROGEN) continue; // ignore H -bonds
-						if (it3->getFirstAtom() == a2 ) continue;
 
-						// determine the fourth atom a4
-						if (it3->getFirstAtom() == a3)
+						a4 = (*it3).getPartner(*a3);
+
+						if (a4 == 0)
 						{
-							a4 = const_cast<Atom*>(it3->getSecondAtom());
-						} 
-						else 
-						{
-							a4 = const_cast<Atom*>(it3->getFirstAtom());
+Log.error() << "#~~#   9 "   << a3  << " " << a3->getName()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << "#~~#   9 " << (*it3).getFirstAtom() << " "   << (*it3).getSecondAtom()          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 						}
+
+						if (a4 == 0 || a4 == a2 || a4 == a1) continue;
 
 						if (use_selection && (!a1->isSelected() ||
 																	!a2->isSelected() ||
@@ -190,7 +187,52 @@ namespace BALL
 						atoms.push_back(a3);
 						atoms.push_back(a4);
 
+Log.error() << "Torsion " 
+					<< atoms[0]->getName() << " " 
+					<< atoms[1]->getName() << " "
+					<< atoms[2]->getName() << " "
+					<< atoms[3]->getName() << std::endl;
+
+
 						if (mmff->areInOneRing(atoms, 3)) continue;
+
+						HashSet<Atom*> set;
+						set.insert(atoms[0]);
+						set.insert(atoms[1]);
+						set.insert(atoms[2]);
+						set.insert(atoms[3]);
+
+						if (set.size() < 4) continue;
+
+						const Bond* bond1 = atoms[0]->getBond(*atoms[1]);
+						const Bond* bond2 = atoms[1]->getBond(*atoms[2]);
+						const Bond* bond3 = atoms[2]->getBond(*atoms[3]);
+
+						if (!bond1 || !bond2 || !bond3)
+						{
+							vector<Bond*> bonds;
+							for (Position p = 0; p < 4; p++)
+							{
+								for (Position r = p + 1; r < 4; r++)
+								{
+									Bond* bond = atoms[p]->getBond(*atoms[r]);
+									if (bond != 0)
+									{
+										bonds.push_back(bond);
+									}
+								}
+							}
+
+							if (bonds.size() < 3) continue;
+
+				Log.error() << "Problem in " << __FILE__ << __LINE__ << "  " 
+										<< atoms[0]->getName() << " " 
+										<< atoms[1]->getName() << " "
+										<< atoms[2]->getName() << " "
+										<< atoms[3]->getName() << std::endl;
+
+				continue;
+						}
 
 						// search torsion parameters for (a1,a2,a3,a4)
 						Atom::Type type_a1 = a1->getType();
@@ -239,11 +281,23 @@ namespace BALL
 							continue;
 						}
 
+						// if all parameters are equal 0, no energy will result, so do nothing!
+						if (this_torsion.v1 == 0.0 &&
+								this_torsion.v2 == 0.0 &&
+								this_torsion.v3 == 0.0)
+						{
+							continue;
+						}
+
 						// didnt found torsion parameters
 						getForceField()->getUnassignedAtoms().insert(a1);
 						getForceField()->getUnassignedAtoms().insert(a2);
 						getForceField()->getUnassignedAtoms().insert(a3);
 						getForceField()->getUnassignedAtoms().insert(a4);
+
+						getForceField()->error() << "MMFF94 Torsion: Could not find parameters for "
+							<< a1->getFullName() << " " << a2->getFullName() << " " << a3->getFullName() << " " << a4->getFullName() << "  " 
+							<< a1->getType() << " " << a2->getType() << " " << a3->getType() << " " << a4->getType() << " " << std::endl;
 					} // it3
 				} // it2
 			} // it1
@@ -332,24 +386,6 @@ namespace BALL
 		const Bond* bond2 = atoms[1]->getBond(*atoms[2]);
 		const Bond* bond3 = atoms[2]->getBond(*atoms[3]);
 
-		HashSet<Atom*> set;
-		set.insert(atoms[0]);
-		set.insert(atoms[1]);
-		set.insert(atoms[2]);
-		set.insert(atoms[3]);
-
-		if (set.size() < 4) return 99;
-
-		if (!bond1 || !bond2 || !bond3)
-		{
-			Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
-			Log.error() << atoms[0]->getName() << " " 
-									<< atoms[1]->getName() << " "
-									<< atoms[2]->getName() << " "
-									<< atoms[3]->getName() << std::endl;
-			return 99;
-		}
-		
 		if (bond2->hasProperty("MMFF94SBMB")) return 1;
 
 		if (bond1->hasProperty("MMFF94SBMB") ||
@@ -360,7 +396,8 @@ namespace BALL
 
 		if (mmff->areInOneRing(atoms, 4)) return 4;
 
-		if (mmff->areInOneRing(atoms, 5))
+		if (mmff->areInOneRing(atoms, 5) && 
+				!mmff->areInOneAromaticRing(atoms, 5))
 		{
 			// ???? saturation
 			return 5;
