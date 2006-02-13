@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.h,v 1.12 2006/02/09 00:01:10 bertsch Exp $
+// $Id: ringPerceptionProcessor.h,v 1.13 2006/02/13 19:34:30 bertsch Exp $
 //
 
 #ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
@@ -112,7 +112,7 @@ namespace BALL
 			/** Getter which returns all the 3 and 4 membered rings, calculateSSSR with
 			 *  the Balducci-Pearlman Algorithm (defalt) is needed prior this call.
 			 */
-			const vector<vector<Atom*> >& getAll3And4Rings() const;
+			const vector<vector<Atom*> >& getAllSmallRings() const;
 			
 			/** @name Processor-related methods
 			*/
@@ -239,10 +239,10 @@ namespace BALL
 			static std::vector<BitVector> tested_beers_;
 
 			/// contains all the 3 and 4 membered rings after the procedure of the Balducci-Pearlman algorithm
-			static std::vector<std::vector<Atom*> > all3and4membered_rings_;
+			static std::vector<std::vector<Atom*> > all_small_rings_;
 
 			/// contains all the 3 and 4 membered rings as beers
-			static std::vector<BitVector> all3and4membered_beers_;
+			static std::vector<BitVector> all_small_beers_;
 			
 			/*_ function that gets a binary edge-encoded ring as a BitVector
 					and adds it to the ringset if its linearly independend
