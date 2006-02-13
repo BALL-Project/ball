@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.7 2006/02/13 16:39:07 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.8 2006/02/13 18:45:13 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -173,49 +173,52 @@ namespace BALL
 							temp = atoms[1]; atoms[1] = atoms[2]; atoms[2] = temp; 
 						}
 
+						this_torsion.type = getTorsionType(atoms);
+
 						// search torsion parameters for (a1,a2,a3,a4)
 						Atom::Type type_a1 = atoms[0]->getType();
 						Atom::Type type_a2 = atoms[1]->getType();
 						Atom::Type type_a3 = atoms[2]->getType();
 						Atom::Type type_a4 = atoms[3]->getType();
 
-						this_torsion.atom1 = &Atom::getAttributes()[atoms[0]->getIndex()];
-						this_torsion.atom2 = &Atom::getAttributes()[atoms[1]->getIndex()];
-						this_torsion.atom3 = &Atom::getAttributes()[atoms[2]->getIndex()];
-						this_torsion.atom4 = &Atom::getAttributes()[atoms[3]->getIndex()];
-
-						this_torsion.type = getTorsionType(atoms);
-
+//   Log.error() << "#~~#   7 " << type_a1 << " " << type_a2 << " " << type_a3 << " " << type_a4            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 						// check for parameters in a step down procedure
-						// full parameters
-						if (parameters_.getParameters(this_torsion.type, 
-																					type_a1, type_a2, type_a3, type_a4, 
-																					this_torsion.v1, this_torsion.v2, this_torsion.v3)
-							|| // try wildcard matching
-							parameters_.getParameters(this_torsion.type, 
-																				0,
-																				equivalences.getEquivalence(type_a2, 1),
-																				equivalences.getEquivalence(type_a3, 1),
-																				equivalences.getEquivalence(type_a4, 1),
-																				this_torsion.v1, this_torsion.v2, this_torsion.v3)
-							|| // try wildcard matching
-							parameters_.getParameters(this_torsion.type, 
-																				equivalences.getEquivalence(type_a1, 1),
-																				equivalences.getEquivalence(type_a2, 1),
-																				equivalences.getEquivalence(type_a3, 1),
-																				0,
-																				this_torsion.v1, this_torsion.v2, this_torsion.v3)
-							|| // try full wildcard matching
-							parameters_.getParameters(this_torsion.type, 
-																				0,
-																				equivalences.getEquivalence(type_a2, 1),
-																				equivalences.getEquivalence(type_a3, 1),
-																				0,
-																				this_torsion.v1, this_torsion.v2, this_torsion.v3)
-							)
+						bool found = false;
+						for (Position p = 1; p < 5 && !found; p++)
 						{
-							torsions_.push_back(this_torsion);
-							continue;
+							for (Position i = 0; i < 3; i++)
+							{
+								Position di = p;
+								Position dl = p;
+
+								if 			(i == 1) di ++;
+								else if (i == 2) dl ++;
+
+								found = parameters_.getParameters(this_torsion.type, 
+																				equivalences.getEquivalence(type_a1, di),
+																				type_a2, type_a3,
+																				equivalences.getEquivalence(type_a4, dl),
+																				this_torsion.v1, this_torsion.v2, this_torsion.v3);
+								
+								if (found) break;
+							}
+						}
+
+						if (!found)
+						{
+							// ???? heuristics
+							//
+							// didnt found torsion parameters
+							getForceField()->getUnassignedAtoms().insert(atoms[0]);
+							getForceField()->getUnassignedAtoms().insert(atoms[1]);
+							getForceField()->getUnassignedAtoms().insert(atoms[2]);
+							getForceField()->getUnassignedAtoms().insert(atoms[3]);
+
+							getForceField()->error() << "MMFF94 Torsion: Could not find parameters for type " << this_torsion.type << "   "
+								<< atoms[0]->getFullName() << " " << atoms[1]->getFullName() << " " 
+								<< atoms[2]->getFullName() << " " << atoms[3]->getFullName() << "  " 
+								<< atoms[0]->getType() << " " << atoms[1]->getType() << " " 
+								<< atoms[2]->getType() << " " << atoms[3]->getType() << " " << std::endl;
 						}
 
 						// do nothing if all three constants are zeros:
@@ -226,17 +229,14 @@ namespace BALL
 							continue;
 						}
 
-						// didnt found torsion parameters
-						getForceField()->getUnassignedAtoms().insert(atoms[0]);
-						getForceField()->getUnassignedAtoms().insert(atoms[1]);
-						getForceField()->getUnassignedAtoms().insert(atoms[2]);
-						getForceField()->getUnassignedAtoms().insert(atoms[3]);
+						// finaly: we really have a valid torsion: store it
+						this_torsion.atom1 = &Atom::getAttributes()[atoms[0]->getIndex()];
+						this_torsion.atom2 = &Atom::getAttributes()[atoms[1]->getIndex()];
+						this_torsion.atom3 = &Atom::getAttributes()[atoms[2]->getIndex()];
+						this_torsion.atom4 = &Atom::getAttributes()[atoms[3]->getIndex()];
 
-						getForceField()->error() << "MMFF94 Torsion: Could not find parameters for type " << this_torsion.type << "   "
-							<< atoms[0]->getFullName() << " " << atoms[1]->getFullName() << " " 
-							<< atoms[2]->getFullName() << " " << atoms[3]->getFullName() << "  " 
-							<< atoms[0]->getType() << " " << atoms[1]->getType() << " " 
-							<< atoms[2]->getType() << " " << atoms[3]->getType() << " " << std::endl;
+						torsions_.push_back(this_torsion);
+
 					} // it3
 				} // it2
 			} // it1
@@ -338,6 +338,7 @@ namespace BALL
 		const Bond* bond2 = atoms[1]->getBond(*atoms[2]);
 		const Bond* bond3 = atoms[2]->getBond(*atoms[3]);
 
+#ifdef BALL_DEBUG_TEST
 Log.error() << "# " << atoms[0]->getName() << " " 
 										<< atoms[1]->getName() << " "
 										<< atoms[2]->getName() << " "
@@ -349,16 +350,32 @@ Log.error() << "# " << atoms[0]->getName() << " "
 										<< bond2->getOrder() << " " 
 										<< bond3->getOrder() << " " 
 										<< std::endl;
+#endif
 
 		if (bond2->hasProperty("MMFF94SBMB")) return 1;
 
-		if ((bond1->hasProperty("MMFF94SBMB") &&
-		    bond1->getOrder() != Bond::ORDER__SINGLE) ||
-		   (bond3->hasProperty("MMFF94SBMB") &&
-		    bond3->getOrder() != Bond::ORDER__SINGLE))
+		Sp2HybridizedPredicate sp2_;
+
+		if (atoms[0]->getElement().getSymbol() == "C" &&
+				atoms[1]->getElement().getSymbol() == "C" &&
+				sp2_.operator()(*(Atom*)atoms[0]) &&
+				sp2_.operator()(*(Atom*)atoms[1]) &&
+				bond1->getOrder() == Bond::ORDER__SINGLE &&
+				bond1->hasProperty("MMFF94SBMB"))
 		{
-//   			return 2;
+ 			return 2;
 		}
+
+		if (atoms[1]->getElement().getSymbol() == "C" &&
+				atoms[2]->getElement().getSymbol() == "C" &&
+				sp2_.operator()(*(Atom*)atoms[2]) &&
+				sp2_.operator()(*(Atom*)atoms[3]) &&
+				bond3->getOrder() == Bond::ORDER__SINGLE &&
+				bond3->hasProperty("MMFF94SBMB"))
+		{
+ 			return 2;
+		}
+
 		/*
 		if (bond1->hasProperty("MMFF94SBMB") &&
 				bond3->hasProperty("MMFF94SBMB"))
@@ -367,10 +384,12 @@ Log.error() << "# " << atoms[0]->getName() << " "
 		}
 		*/
 
+Log.error() << "#~~#   9 "  << atoms[0]->getName() << " " << atoms[1]->getName() << " " << atoms[2]->getName() << " " << atoms[3]->getName()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		// in one nonaromatic ring 
-		if (mmff->areInOneRing(atoms, 5) && 
-				!mmff->areInOneAromaticRing(atoms, 5))
+		if (mmff->areInOneRing(atoms, 5))
+//   				!mmff->areInOneAromaticRing(atoms, 5))
 		{
+Log.error() << "#~~#   10 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			// at least one atom has type 1?
 			for (Position as = 0; as < atoms.size(); as++)
 			{

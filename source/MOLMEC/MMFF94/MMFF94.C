@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.23 2006/02/10 17:25:20 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.24 2006/02/13 18:45:12 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -18,6 +18,7 @@
 #include <BALL/QSAR/aromaticityProcessor.h>
 
 //    #define BALL_DEBUG_MMFF
+#define BALL_DEBUG_TEST
 
 using namespace std;
 
@@ -285,7 +286,7 @@ namespace BALL
 
 		const MMFF94StretchParameters::BondData& data = it->second;
 
-#ifdef BALL_DEBUG_MMFF
+#ifdef BALL_DEBUG_TEST
 		if (!data.sbmb_exists && !data.standard_bond_exists)
 		{
 			Log.error() << "Error in " << __FILE__ << " " << __LINE__ << std::endl;

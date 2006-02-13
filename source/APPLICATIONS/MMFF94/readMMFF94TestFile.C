@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.31 2006/02/13 01:34:58 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.32 2006/02/13 18:45:05 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -159,15 +159,18 @@ bool testStretch(MMFF94& mmff, const String& filename, bool compare)
 
 			found = true;
 
+			bool sbmb_ok = is_sbmb[poss2] == s.sbmb;
+
 			// equal values for parameters?
-			if (BALL_REAL_EQUAL(s.r0, r0s[poss2], 0.0001) && 
+			if (sbmb_ok &&
+					BALL_REAL_EQUAL(s.r0, r0s[poss2], 0.0001) && 
 					BALL_REAL_EQUAL(s.kb, kbs[poss2], 0.0001))
 			{
 				break;
 			}
 
 			// almost equal for emeperical values ?
-			if (s.emperical)
+			if (sbmb_ok && s.emperical)
 			{
 				if (isOk(s.r0, r0s[poss2]) &&
 						isOk(s.kb, kbs[poss2]))
@@ -420,7 +423,7 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 }
 
 ///////////////////////////////////////////////////////////
-bool testTorsions(MMFF94& mmff, const String& filename, bool compare)
+bool testTorsions(MMFF94& mmff, const String& filename, bool compare, long& wrong_types)
 {
 	String full_file_name = (dir +FileSystem::PATH_SEPARATOR + filename + ".torsions");
 	LineBasedFile infile;
@@ -515,8 +518,15 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare)
 						 	 BALL_REAL_EQUAL(t.v2 , v2[found], 0.0001) &&
 						 	 BALL_REAL_EQUAL(t.v1 , v3[found], 0.0001));
 
-		ok &= (t.type == (Index)type[found]); 
+		bool type_ok = (t.type == (Index)type[found]);
+		if (!type_ok)
+		{
+			wrong_types++;
+			ok = false;
+		}
 
+
+if (type_ok) continue;
 
 		found_torsions.insert(found);
 
@@ -537,7 +547,7 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare)
 		if (v1[p] == 0.0 && v2[p] == 0.0 && v3[p] == 0.0) continue;
 		if (found_torsions.has(p)) continue;
 
-		Log.error() << "No data for torsion " << atoms1[p] << " " << atoms2[p] << " " << atoms3[p] << " " << atoms4[p] << std::endl;
+		Log.error() << "No data for torsion " << type[p] << "  " << atoms1[p] << " " << atoms2[p] << " " << atoms3[p] << " " << atoms4[p] << std::endl;
 	}
 
 		
@@ -565,6 +575,7 @@ int runtests(const vector<String>& filenames)
 	vector<String> rings_wrong;
 	vector<String> aromatic_rings_wrong;
 	Size ok = 0;
+	long wrong_torsion_types = 0;
 	for (Position pos = 0; pos < filenames.size(); pos++)
 	{
 		Log.info() << "> " << filenames[pos] << std::endl;
@@ -581,6 +592,7 @@ int runtests(const vector<String>& filenames)
 			mmff.getComponent(p)->setEnabled(true);
 		}
 
+//   		mmff.getComponent("MMFF94 Torsion")->setEnabled(false);
 		if (!mmff.setup(*system))
 		{
 			Log.error() << "Setup failed for " << full_file_name << std::endl;
@@ -601,6 +613,17 @@ int runtests(const vector<String>& filenames)
 		}
 		catch(...)
 		{
+		}
+
+		Log.info() << "Got rings: " << mmff.getRings().size()  << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+		for (Position p = 0; p < mmff.getRings().size(); p++)
+		{
+			HashSet<Atom*>::ConstIterator it = mmff.getRings()[p].begin();
+			for (; +it; ++it)
+			{
+				Log.info() << (**it).getName() << " ";
+			}
+			Log.info() << std::endl;
 		}
 
 		bool wrong_rings = false;
@@ -627,7 +650,7 @@ int runtests(const vector<String>& filenames)
 //    		result &= testStretch(mmff, filenames[pos], true);
 //       result &= testBend(mmff, filenames[pos], true);
 //    		result &= testStretchBend(mmff, filenames[pos], true);
- 		result &= testTorsions(mmff, filenames[pos], true);
+    		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
 
 		if (result) ok++;
 		else if (!wrong_rings) not_ok.push_back(filenames[pos]);
@@ -655,6 +678,8 @@ int runtests(const vector<String>& filenames)
 		Log.info() << aromatic_rings_wrong[pos] << " ";
 	}
 	Log.info() << std::endl;
+
+	Log.info() << "Wrong torsion types: " << wrong_torsion_types << std::endl;
 		
 	return 0;
 }
