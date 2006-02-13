@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.24 2006/02/13 18:45:12 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.25 2006/02/13 23:59:24 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -434,7 +434,7 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 			rings_.push_back(set);
 		}
 
-		vector<vector<Atom*> > rings2 = rpp.getAll3And4Rings();
+		vector<vector<Atom*> > rings2 = rpp.getAllSmallRings();
 
 		// copy 3er and 4er rings
 		for (Position i = 0; i < rings2.size(); i++)
