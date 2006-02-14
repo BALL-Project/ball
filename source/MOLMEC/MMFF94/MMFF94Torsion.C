@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.9 2006/02/13 23:59:24 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.10 2006/02/14 22:15:42 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -181,7 +181,6 @@ namespace BALL
 						Atom::Type type_a3 = atoms[2]->getType();
 						Atom::Type type_a4 = atoms[3]->getType();
 
-//   Log.error() << "#~~#   7 " << type_a1 << " " << type_a2 << " " << type_a3 << " " << type_a4            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 						// check for parameters in a step down procedure
 						bool found = false;
 						for (Position p = 1; p < 5 && !found; p++)
@@ -352,79 +351,22 @@ Log.error() << "# " << atoms[0]->getName() << " "
 										<< std::endl;
 #endif
 
-		if (bond2->hasProperty("MMFF94SBMB")) return 1;
+		vector<Atom*> as;
+		as.push_back(atoms[1]);
+		as.push_back(atoms[2]);
 
-		/*
-		 Sp2HybridizedPredicate sp2_;
-
-		const vector<MMFF94AtomTypeData>& atd = mmff->getAtomTypes();
-
-
-		if ((atd[atoms[0]->getType()].sbmb &&
-				 atd[atoms[1]->getType()].sbmb) ||
-		    (atd[atoms[0]->getType()].sbmb &&
-				 atd[atoms[1]->getType()].sbmb))
+		if (!mmff->areInOneAromaticRing(as) &&
+				bond2->getOrder() == Bond::ORDER__SINGLE)
 		{
-			return 2;
-		}
-		*/
+			if (bond2->hasProperty("MMFF94SBMB")) return 1;
 
-		/*
-		if (atoms[0]->getElement().getSymbol() == "C" &&
-				atoms[1]->getElement().getSymbol() == "C")
-//    				sp2_.operator()(*(Atom*)atoms[0]) &&
-//    				sp2_.operator()(*(Atom*)atoms[1]) &&
-//   				bond1->getOrder() == Bond::ORDER__SINGLE &&
-//   				bond1->hasProperty("MMFF94SBMB"))
-		{
- 			return 2;
-		}
-
-		if (atoms[1]->getElement().getSymbol() == "C" &&
-				atoms[2]->getElement().getSymbol() == "C")
-//    				sp2_.operator()(*(Atom*)atoms[2]) &&
-//    				sp2_.operator()(*(Atom*)atoms[3]) &&
-//   				bond3->getOrder() == Bond::ORDER__SINGLE &&
-//   				bond3->hasProperty("MMFF94SBMB"))
-		{
- 			return 2;
-		}
-		
-		if (bond1->hasProperty("MMFF94SBMB") &&
-				bond3->hasProperty("MMFF94SBMB"))
-		{
-			return 2;
-		}
-		*/
-		
-
-		bool has_db[4];
-		for (Position p = 0; p < 4; p++)
-		{
-			has_db[p] = 0;
-
-			if (atoms[p]->getElement().getSymbol() != "C" ||
-					atoms[p]->countBonds() != 3)
+			if (bond1->hasProperty("MMFF94SBMB") ||
+			    bond3->hasProperty("MMFF94SBMB"))
 			{
-				continue;
-			}
-
-			AtomBondIterator bit = atoms[p]->beginBond();
-
-			for (; +bit; ++bit)
-			{
-				if (&*bit == bond2) continue;
-			
-				if ((*bit).getOrder() == Bond::ORDER__DOUBLE)
-				{
-					has_db[p] = true;
-					break;
-				}
+				return 2;
 			}
 		}
 
-		if ((has_db[0] || has_db[1]) && bond1->hasProperty("MMFF94SBMB")) return 2;
-		if ((has_db[2] || has_db[3]) && bond3->hasProperty("MMFF94SBMB")) return 2;
 
 		// in one nonaromatic ring 
 		if (mmff->areInOneRing(atoms, 5))
