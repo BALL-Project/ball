@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.25 2006/02/13 23:59:24 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.26 2006/02/14 16:38:13 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -507,7 +507,7 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 
 	bool MMFF94::areInOneAromaticRing(const vector<Atom*>& v, Size ring_size) const
 	{
-		for (Position i = 0; i < rings_.size(); i++)
+		for (Position i = 0; i < aromatic_rings_.size(); i++)
 		{
 			if (ring_size != 0 && ring_size != aromatic_rings_[i].size()) continue;
 
