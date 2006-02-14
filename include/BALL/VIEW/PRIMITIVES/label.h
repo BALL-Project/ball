@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.10 2004/07/14 16:38:19 amoll Exp $
+// $Id: label.h,v 1.10.8.1 2006/02/14 15:01:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
@@ -14,6 +14,8 @@
 #ifndef BALL_VIEW_DATATYPE_VERTEX1_H
 #	include <BALL/VIEW/DATATYPE/vertex1.h>
 #endif
+
+#include <qfont.h>
 
 namespace BALL
 {
@@ -35,11 +37,13 @@ namespace BALL
 				interface and additional methods. \par
 				\ingroup ViewPrimitives
 		*/
-		class BALL_EXPORT Label
+		class BALL_VIEW_EXPORT Label
 			: public GeometricObject,
 				public Vertex
 		{
 			public:
+
+			BALL_CREATE(Label)
 
 			/**	@name	Constructors
 			*/	
@@ -121,6 +125,17 @@ namespace BALL
 			String getText() const
 				throw() { return text_;}
 
+			/** Inspection of the expanded text of the label.
+			*/
+			String getExpandedText() const
+				throw();
+
+			///
+			const QFont& getFont() const { return font_;}
+
+			///
+			void setFont(const QFont& font) { font_ = font;}
+
 			//@}
 			/**	@name	debuggers and diagnostics */
 			//@{
@@ -155,6 +170,7 @@ namespace BALL
 
 			protected:
 				String text_;
+				QFont  font_;
 
 			//@}
 		};

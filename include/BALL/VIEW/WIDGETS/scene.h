@@ -1,15 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.62 2005/03/01 16:46:34 amoll Exp $
+// $Id: scene.h,v 1.62.4.1 2006/02/14 15:01:54 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
 #define BALL_VIEW_WIDGETS_SCENE_H
-
-#ifndef BALL_MATHS_QUATERNION_H
-#	include <BALL/MATHS/quaternion.h>
-#endif
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 #	include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -31,6 +27,10 @@
  #include <qevent.h>
 #endif
 
+#include <qtimer.h>
+
+class QMouseEvent;
+
 namespace BALL
 {
 	namespace VIEW
@@ -40,6 +40,7 @@ namespace BALL
 		class StageSettings;
 		class MaterialSettings;
 		class AnimationThread;
+		class ClippingPlane;
 
 		/**	Scene is the main visualization widget that shows the graphical Representation 's.
 				To do this, the class Scene must be a child of the MainControl.
@@ -84,7 +85,7 @@ namespace BALL
 				Scenes. These other Scenes can have different Camera angles or other properties.
 				\ingroup ViewWidgets
 		*/
-		class BALL_EXPORT Scene
+		class BALL_VIEW_EXPORT Scene
 			: public QGLWidget, 
 				public ModularWidget
 		{
@@ -99,7 +100,7 @@ namespace BALL
 			/** This class is only intended for usage with multithreading.
 			 		It provides a mean for other threads to make the Scene export a PNG.
 			*/
-			class BALL_EXPORT SceneExportPNGEvent : public QCustomEvent
+			class BALL_VIEW_EXPORT SceneExportPNGEvent : public QCustomEvent
 			{
 				public:
 					SceneExportPNGEvent()
@@ -109,7 +110,7 @@ namespace BALL
 			/** This class is only intended for usage with multithreading.
 			 		It provides a mean for other threads to make the Scene export a POVRay file.
 			*/
-			class BALL_EXPORT SceneExportPOVEvent : public QCustomEvent
+			class BALL_VIEW_EXPORT SceneExportPOVEvent : public QCustomEvent
 			{
 				public:
 					SceneExportPOVEvent()
@@ -119,7 +120,7 @@ namespace BALL
 			/** This class is only intended for usage with multithreading.
 			 		It provides a mean for other threads to set the camera position.
 			*/
-			class BALL_EXPORT SceneSetCameraEvent : public QCustomEvent
+			class BALL_VIEW_EXPORT SceneSetCameraEvent : public QCustomEvent
 			{
 				public:
 					SceneSetCameraEvent()
@@ -127,7 +128,7 @@ namespace BALL
 
 					Camera camera;
 			};
-			
+
 			/** @name Type definitions 
 			*/
 			//@{
@@ -152,6 +153,21 @@ namespace BALL
 				PICKING__MODE
 			};
 
+			/// Different Move Mode actions
+			enum MoveModeAction
+			{
+				///
+				MOVE_TRANSLATE,
+
+				///
+				MOVE_ZOOM,
+
+				///
+				MOVE_ROTATE,
+
+				///
+				MOVE_ROTATE_CLOCKWISE
+			};
 			
 			//@} 
 			/** @name Enums 
@@ -173,7 +189,7 @@ namespace BALL
 			};
 				
 			//@} 
-			/**	@name	Constructors 
+			/**	@name	Constructors and Destructor
 			*/	
 			//@{
 
@@ -182,10 +198,7 @@ namespace BALL
 
 			/** Default Constructor.
 					Initialize the width and height of this scene to <tt> 600</tt> and sets
-					the camera position to:
-					  - camera position set to <tt> Vector(1,0,0)</tt>
-					  - camera look at position set to <tt> Vector(0,0,0)</tt>
-						- camera look up vector to <tt> Vector(0,0,-1)</tt>
+					the camera position.
 					\par
 					Calls registerWidget.
 					\param      parent_widget the parent widget of this scene 
@@ -208,11 +221,6 @@ namespace BALL
 			 */
 			Scene (const Scene& scene, QWidget* parent_widget = NULL, const char* name = NULL, WFlags wflags = 0)
 				throw();
-
-			//@} 
-			/** @name Destructors 
-			*/ 
-			//@{
 
 			/** Destructor.
 			*/
@@ -288,25 +296,10 @@ namespace BALL
 					This method is called automatically	immediately before the main application is started 
 					by MainControl::show().
 					\param main_control the MainControl object to be initialized with this scene
-					\see   finalizeWidget
-					\see   insertMenuEntry
-					\see   checkMenu
 			*/
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
 		
-			/**	Remove the widget.
-					Reverse all actions performed in initializeWidget (remove menu entries of this scene).
-					This method will be called by aboutToExit from the MainControl object.
-					\param main_control the MainControl object to be finalized with this scene
-					\see   initializeWidget
-					\see   checkMenu
-					\see   removeMenuEntry
-					\see   aboutToExit
-			*/
-			virtual void finalizeWidget(MainControl& main_control)
-				throw();
-				
 			///
 			virtual void fetchPreferences(INIFile& inifile)
 				throw();
@@ -318,7 +311,7 @@ namespace BALL
 			/**	Menu checking method.
 					This method is called by MainControl::checkMenus before a popup menu is shown.
 					The menus <b>rotate mode</b> and <b>picking mode</b> each will be checked
-					if this scene is in the belonging mode.
+					if this scene is in the corresponding mode.
 					\param main_control the MainControl object whose menus should be checked
 					\see   initializeWidget
 					\see   finalizeWidget
@@ -389,10 +382,6 @@ namespace BALL
 				throw();
 				
 			///
-			virtual void cancelPreferences()
-				throw();
-				
-			///
 			static void setMouseSensitivity(float sensitivity)
 				throw() { mouse_sensitivity_ = sensitivity; }
 
@@ -423,6 +412,21 @@ namespace BALL
 			///
 			static bool stereoBufferSupportTest();
 			
+			///
+			float getMousePositionX() { return x_window_pos_new_;}
+
+			///
+			float getMousePositionY() { return y_window_pos_new_;}
+
+			///
+			void setPopupInfosEnabled(bool state);
+	
+			///
+			bool exportPNG(const String& filename);
+
+			///
+			virtual void setVisible(bool state);
+
 			protected:
 
 			//@}
@@ -485,17 +489,21 @@ namespace BALL
 
 			/// Catch key events
 			void keyPressEvent(QKeyEvent* e);
-		
+
+	
 			public slots:
 
 			/// Export PNG image and return the filename
 			String exportPNG();
+
+			/// show an dialog to save an PNG file to
+			void showExportPNGDialog();
+
+			///
+			void showExportVRMLDialog();
 			
 			///
 			void exportPOVRay();
-
-			///
-			virtual void createNewClippingPlane();
 
 			/** Show or hide widget (Called by menu entry in "WINDOWS")
 					If the ModularWidget is not also a QWidget, this method does nothing
@@ -561,6 +569,45 @@ namespace BALL
 			///
 			static void setPOVNumber(Position pos) { pov_nr_ = pos;}
 
+			///
+			void rotate(float degree_right, float degree_up);
+
+			///
+			void rotateClockwise(float degree);
+
+			/** Move the view. \\
+			 		v.x = right  \\
+					v.y = up     \\
+					v.z = view direction 
+			*/
+			void move(Vector3 v);
+
+			/** Move some Composites. \\
+			 		v.x = right  \\
+					v.y = up     \\
+					v.z = view direction 
+			*/
+			void moveComposites(const List<Composite*>& composites, Vector3 v);
+
+			/** Rotate some Composites. \\
+			 		v.x = right  \\
+					v.y = up     \\
+					v.z = view direction 
+			*/
+			void rotateComposites(const List<Composite*>& composites, float degree_right, float degree_up, float degree_clockwise = 0);
+
+			void initTimer();
+
+			///
+			bool isAnimationRunning() const
+				throw();
+
+			///
+			void setTurnPoint(const Vector3& v) { system_origin_ = v;}
+
+			///
+			const Vector3& getTurnPoint() const { return system_origin_;}
+			
 			protected slots:
 
 			//@}
@@ -571,7 +618,7 @@ namespace BALL
 			/** Switch to rotate mode.
 					If this method is called the mouse actions of this scene will
 					perform rotation, translation and zooming the visualization.
-					This method will be called from the belonging menu entry.
+					This method will be called from the corresponding menu entry.
 					\see initializeWidget
 					\see checkMenu
 			*/
@@ -580,7 +627,7 @@ namespace BALL
 			/** Switch to picking mode.
 					If this method is called the mouse actions of this scene will
 					perform object picking.
-					This method will be called from the belonging menu entry.
+					This method will be called from the corresponding menu entry.
 					\see initializeWidget
 					\see checkMenu
 			*/
@@ -615,9 +662,14 @@ namespace BALL
 			///
 			virtual void dragEnterEvent(QDragEnterEvent* e);
 
+			///
+			virtual void timerSignal_();
+
 			//@}
 
-			private:
+			protected:
+			
+			virtual void updateGL();
 
 			void renderView_(RenderMode mode)
 				throw();
@@ -637,20 +689,16 @@ namespace BALL
 			void processRotateModeMouseEvents_(QMouseEvent* e);
 			void processMoveModeMouseEvents_(QMouseEvent* e);
 
-			void rotateSystem_(Scene* scene);
-			void rotateSystem2_(Scene* scene);
-			void translateSystem_(Scene* scene);
-			void zoomSystem_(Scene* scene);
+			void rotateSystem_();
+			void rotateSystemClockwise_();
+			void translateSystem_();
+			void zoomSystem_();
+			Index getMoveModeAction_(const QMouseEvent& e);
 
 			void selectionPressed_();
 			void selectionReleased_();
 			void selectionPressedMoved_();
 			void deselectionReleased_();
-
-			void calculateQuaternion_(Quaternion& quaternion, const Quaternion* rotate = 0);
-
-			//_ called by calculateQuaternion_
-			float sphereProject_(float radius, float x, float y);
 
 			void selectObjects_(bool select = true);
 
@@ -662,10 +710,11 @@ namespace BALL
 
 			void createCoordinateSystem_()
 				throw();
-			
-			virtual void renderClippingPlane_(const Representation& rep)
-				throw();
-			
+
+			inline float getXDiff_();
+			inline float getYDiff_();
+			inline Vector3 getTranslationVector_(const Vector3& v);
+
 			//_ state of the scene: picking or rotate mode?
 			ModeType current_mode_;
 
@@ -677,9 +726,9 @@ namespace BALL
 			Index no_stereo_id_, active_stereo_id_, dual_stereo_id_;
 			Index record_animation_id_, start_animation_id_, clear_animation_id_, cancel_animation_id_;
 			Index animation_export_POV_id_, animation_export_PNG_id_, animation_repeat_id_;
+			Index show_popup_infos_id_;
 			
 			Vector3 system_origin_;
-			Quaternion quaternion_;
 
 			bool need_update_;
 			bool update_running_;
@@ -718,18 +767,27 @@ namespace BALL
 			QPoint last_pos_;
 
 			static QGLFormat gl_format_;
-			GLint  current_clipping_plane_;
 			List<Camera> animation_points_;
 			AnimationThread* animation_thread_;
 			bool stop_animation_;
 			bool content_changed_;
 			bool want_to_use_vertex_buffer_;
+			bool mouse_button_is_pressed_;
+			QTimer timer_;
+
+			// Position of mouse cursor for identifying Composite
+			Position last_x_pos_, last_y_pos_;
+
+			bool show_info_;
+			PreciseTime time_;
+			float last_fps_;
+			float zoom_factor_;
 		};
 
 
 #ifdef BALL_QT_HAS_THREADS
 		///
-		class BALL_EXPORT AnimationThread
+		class BALL_VIEW_EXPORT AnimationThread
 			: public QThread
 		{
 			public:

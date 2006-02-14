@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.40 2004/12/07 13:34:59 amoll Exp $
+// $Id: INIFile.h,v 1.40.6.1 2006/02/14 15:00:49 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_INIFILE_H
@@ -29,7 +29,7 @@ namespace BALL
     	
 			\ingroup  General
 	*/
-	class INIFile
+	class BALL_EXPORT INIFile
 	{
 		public:
 
@@ -45,7 +45,7 @@ namespace BALL
 		class IteratorTraits_;
 	
 		/** A section within an INI file */
-		class Section
+		class BALL_EXPORT Section
 		{
 			public:
 
@@ -64,6 +64,14 @@ namespace BALL
 				return (name_		 == section.name_		&&
 								lines_	 == section.lines_);
 			}
+
+			/// Needed for MSVC
+			bool operator < (const Section& section) const
+				throw();
+
+			/// Needed for MSVC
+			bool operator > (const Section& section) const
+				throw();
 
 			protected:
 
@@ -370,6 +378,10 @@ namespace BALL
 		*/
 		bool insertValue(const String& section, const String& key, const String& value);
 
+		///
+		const INIFile& operator = (const INIFile& file)
+			throw();
+
 		//@}
 		/** @name Predicates
 		*/
@@ -428,7 +440,7 @@ namespace BALL
 		public:
 
 		/// Interface for the LineIterator
-		class IteratorTraits_
+		class BALL_EXPORT IteratorTraits_
 		{
 			friend class INIFile;
 

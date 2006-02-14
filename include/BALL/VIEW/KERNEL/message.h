@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.65 2005/02/28 19:36:06 amoll Exp $
+// $Id: message.h,v 1.65.4.1 2006/02/14 15:01:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -27,10 +27,15 @@
 # include <BALL/DATATYPE/regularData3D.h>
 #endif
 
+class QWidget;
+
 namespace BALL
 {
 	class Composite;
 	class TrajectoryFile;
+	class ConformationSet;
+	class DockResult;
+	class System;
 
 	namespace VIEW
 	{
@@ -58,7 +63,7 @@ namespace BALL
 		See ConnectionObject for further information concerning message handling
 		and message posting. \par
 */
-class BALL_EXPORT Message
+class BALL_VIEW_EXPORT Message
 {
 	public:
 
@@ -136,7 +141,7 @@ class BALL_EXPORT Message
 /** CompositeMessage is the base class of all messages concerning the change of one Composite.
 		With it ConnectionObject can notify and react to Composite changes.
 */
-class BALL_EXPORT CompositeMessage: public Message
+class BALL_VIEW_EXPORT CompositeMessage: public Message
 {
 	public:
 
@@ -271,7 +276,7 @@ class BALL_EXPORT CompositeMessage: public Message
 		Send by MainControl, GeometricControl and several dialogs. \par
 		Received by Scene
 */
-class BALL_EXPORT SceneMessage: public Message
+class BALL_VIEW_EXPORT SceneMessage: public Message
 {
 	public:
 
@@ -382,7 +387,7 @@ class BALL_EXPORT SceneMessage: public Message
 		It will be sent by existing ConnectionObject objects that collect
 		Composites objects for a certain purpose.
 */
-class BALL_EXPORT GenericSelectionMessage: public Message
+class BALL_VIEW_EXPORT GenericSelectionMessage: public Message
 {
 	public:
 
@@ -441,7 +446,7 @@ class BALL_EXPORT GenericSelectionMessage: public Message
 	  MolecularControl -> MainControl and \par
 		MainControl -> MolecularControl
  */
-class BALL_EXPORT ControlSelectionMessage: public GenericSelectionMessage
+class BALL_VIEW_EXPORT ControlSelectionMessage: public GenericSelectionMessage
 {
 	public:
 	ControlSelectionMessage()
@@ -451,7 +456,7 @@ class BALL_EXPORT ControlSelectionMessage: public GenericSelectionMessage
 
 /** Send by MainControl to Control objects to sync selection
  */
-class BALL_EXPORT NewSelectionMessage: public Message
+class BALL_VIEW_EXPORT NewSelectionMessage: public Message
 {
 	public:
 	NewSelectionMessage()
@@ -473,7 +478,7 @@ class BALL_EXPORT NewSelectionMessage: public Message
 		Send by Scene after picking GeometricObject. \par
 		Caught by MainControl.
 */
-class BALL_EXPORT GeometricObjectSelectionMessage: public Message
+class BALL_VIEW_EXPORT GeometricObjectSelectionMessage: public Message
 {
 	public:
 
@@ -528,7 +533,7 @@ class BALL_EXPORT GeometricObjectSelectionMessage: public Message
 class Representation;
 
 /// Base class for all messages concerning a Representation
-class BALL_EXPORT RepresentationMessage: public Message
+class BALL_VIEW_EXPORT RepresentationMessage: public Message
 {
 	public:
 
@@ -597,7 +602,7 @@ class BALL_EXPORT RepresentationMessage: public Message
 /** Message to perform specific tasks for molecular items.\par
 		Send by MolecularControl to MolecularProperties.
  */
-class BALL_EXPORT MolecularTaskMessage
+class BALL_VIEW_EXPORT MolecularTaskMessage
 	: public Message
 {
 	public:
@@ -638,7 +643,7 @@ class BALL_EXPORT MolecularTaskMessage
 /** Notify the DisplayProperties dialog to show itself.\par
  		Send by the GeometriControl and MolecularControl.
 */
-class BALL_EXPORT ShowDisplayPropertiesMessage
+class BALL_VIEW_EXPORT ShowDisplayPropertiesMessage
 	:public Message
 {
 	public:
@@ -650,7 +655,7 @@ class BALL_EXPORT ShowDisplayPropertiesMessage
 /** Notify the DisplayProperties dialog so that it creates a new Representation. \par
  		Send by the MolecularControl.
 */
-class BALL_EXPORT CreateRepresentationMessage
+class BALL_VIEW_EXPORT CreateRepresentationMessage
 	:public Message
 {
 	public:
@@ -684,7 +689,7 @@ class BALL_EXPORT CreateRepresentationMessage
 	
 
 /// Message to notify about a new Trajectory
-class BALL_EXPORT NewTrajectoryMessage
+class BALL_VIEW_EXPORT NewTrajectoryMessage
 	:public CompositeMessage
 {
 	public:
@@ -708,7 +713,7 @@ class BALL_EXPORT NewTrajectoryMessage
 /** Message send by one GenericControl to notify all other GenericControl instances to
  		deselect their QListView.
 */
-class BALL_EXPORT DeselectControlsMessage
+class BALL_VIEW_EXPORT DeselectControlsMessage
 	: public Message
 {
 	public:
@@ -718,7 +723,7 @@ class BALL_EXPORT DeselectControlsMessage
 
 
 /// Message concerning RegularDatas
-class BALL_EXPORT RegularDataMessage
+class BALL_VIEW_EXPORT RegularDataMessage
 	:public CompositeMessage
 {
 	public:
@@ -743,7 +748,7 @@ class BALL_EXPORT RegularDataMessage
 };
 
 /// Message concerning RegularData1D
-class BALL_EXPORT RegularData1DMessage
+class BALL_VIEW_EXPORT RegularData1DMessage
 	: public RegularDataMessage
 {
 	public:
@@ -766,7 +771,7 @@ class BALL_EXPORT RegularData1DMessage
 
 
 /// Message concerning RegularData2D
-class BALL_EXPORT RegularData2DMessage
+class BALL_VIEW_EXPORT RegularData2DMessage
 	: public RegularDataMessage
 {
 	public:
@@ -789,7 +794,7 @@ class BALL_EXPORT RegularData2DMessage
 
 
 /// Message concerning RegularData3D
-class BALL_EXPORT RegularData3DMessage
+class BALL_VIEW_EXPORT RegularData3DMessage
 	: public RegularDataMessage
 {
 	public:
@@ -812,7 +817,7 @@ class BALL_EXPORT RegularData3DMessage
 
 	
 ///
-class BALL_EXPORT TransformationMessage
+class BALL_VIEW_EXPORT TransformationMessage
 	: public Message
 {
 	public:
@@ -839,7 +844,7 @@ class BALL_EXPORT TransformationMessage
 };
 
 ///
-class BALL_EXPORT FinishedSimulationMessage
+class BALL_VIEW_EXPORT FinishedSimulationMessage
 	: public Message
 {
 	public:
@@ -849,6 +854,193 @@ class BALL_EXPORT FinishedSimulationMessage
 		throw();
 };
 	
+
+///
+class BALL_VIEW_EXPORT SyncClippingPlanesMessage
+	: public Message
+{
+	public:
+
+	///
+	SyncClippingPlanesMessage()
+		throw() {};
+};
+
+///
+class BALL_VIEW_EXPORT ShowHelpMessage
+	: public Message
+{
+	public:
+
+	///
+	ShowHelpMessage(String url = "")
+		throw();
+
+	String getURL() const { return url_;}
+
+	protected:
+
+	String url_;
+};
+
+///
+class BALL_VIEW_EXPORT RegisterHelpSystemMessage
+	: public Message
+{
+	public:
+
+	///
+	RegisterHelpSystemMessage()
+		throw();
+
+	///
+	void setWidget(const QWidget* widget) { widget_ = widget;}
+
+	///
+	void setMenuEntry(Index id) { menu_entry_ = id;}
+
+	///
+	void setURL(const String& url) { url_ = url;}
+
+	///
+	void setRegisterMode(bool state) { register_ = state;}
+
+	///
+	const QWidget* getWidget() const { return widget_;}
+
+	///
+	Index getMenuEntry() const { return menu_entry_;}
+
+	///
+	const String& getURL() const { return url_;}
+
+	///
+	bool isRegister() const { return register_;}
+
+	protected:
+
+	const QWidget* widget_;
+	Index 	 menu_entry_;
+	String 	 url_;
+	bool  	 register_;
+};
+
+
+//////////////// DOCKING ///////////////////////
+/// Message to notify about a new DockResult
+class BALL_EXPORT NewDockResultMessage
+	:public CompositeMessage
+{
+	public:
+		///
+		NewDockResultMessage()
+			throw();
+			
+		///
+		void setDockResult(DockResult& dock_res)
+			throw()
+		{
+			dock_res_ = &dock_res;
+		}
+
+		///
+		DockResult* getDockResult()
+			throw()
+		{
+			return dock_res_;
+		}
+
+	protected:
+		DockResult* dock_res_;
+};
+
+/// Message to notify dock result should be shown
+class BALL_EXPORT ShowDockResultMessage
+	:public Message
+{
+	public:
+		///
+		ShowDockResultMessage()
+			throw();
+			
+		///
+		ShowDockResultMessage(DockResult* dock_res, System* docked_system)
+			throw();
+			
+		///
+		void setDockResult(DockResult* dock_res)
+			throw()
+		{
+			dock_res_ = dock_res;
+		}
+
+		void setDockedSystem(System* docked_system)
+			throw()
+		{
+			docked_system_ = docked_system;
+		}
+		
+		///
+		DockResult* getDockResult()
+			throw()
+		{
+			return dock_res_;
+		}
+		
+		///
+		System* getDockedSystem()
+			throw()
+		{
+			return docked_system_;
+		}
+
+	protected:
+		DockResult* dock_res_;
+		System* docked_system_;
+};
+
+/// Message to notify docking has finished
+class BALL_EXPORT DockingFinishedMessage
+	:public Message
+{
+	public:
+		///
+		DockingFinishedMessage()
+			throw();
+
+		///
+		DockingFinishedMessage(bool abort)
+			throw();
+			 
+		///
+		virtual ~DockingFinishedMessage()
+			throw();
+			
+		///
+		void setConformationSet(const ConformationSet* conformation_set)
+		{
+			conformation_set_ = conformation_set;
+		}
+		
+		//
+		const ConformationSet* getConformationSet() const
+		{
+			return conformation_set_;
+		}
+		
+		///
+		bool wasAborted()
+		{
+		 	return abort_;
+		}
+
+	protected:
+
+		/// this conformation set is deleted in DockResult
+		const ConformationSet* conformation_set_;
+		bool abort_;
+};
+
 
 //@}
 

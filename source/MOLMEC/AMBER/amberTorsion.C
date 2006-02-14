@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberTorsion.C,v 1.34 2005/02/08 19:41:21 oliver Exp $
+// $Id: amberTorsion.C,v 1.34.6.1 2006/02/14 15:02:25 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
@@ -342,7 +342,7 @@ namespace BALL
 
 									if (found)	
 									{
-										for (int j = 0; j < values.n; j++) 
+										for (Position j = 0; j < values.n; j++) 
 										{
 											tmp.values = values.values[j];
 											torsion_.push_back(tmp);

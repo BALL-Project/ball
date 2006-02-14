@@ -142,9 +142,8 @@ namespace BALL
 			String hint;
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-			hint = "Switch to edit mode";
 			edit_id_ =	main_control.insertMenuEntry(
-					MainControl::DISPLAY, "&Edit Mode", this, SLOT(editMode_()), CTRL+Key_E, -1, hint);
+					MainControl::DISPLAY, "&Edit Mode", this, SLOT(editMode_()), CTRL+Key_E, -1);
 
 			Scene::initializeWidget(main_control);
 
@@ -157,7 +156,7 @@ namespace BALL
 		{
 			if (current_mode_ == (Scene::ModeType)EDIT__MODE)
 			{
-				main_control.removeMenuEntry(MainControl::DISPLAY, "&Edit Mode", this, SLOT(editMode_()), CTRL+Key_E);
+				main_control.removeMenuEntry(CTRL+Key_E, -1);
 			}
 			Scene::finalizeWidget(main_control);	
 		}

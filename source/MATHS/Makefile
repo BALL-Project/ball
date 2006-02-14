@@ -29,7 +29,8 @@ CPP_SOURCES= $(FFT_SOURCES)\
 	vector4.C\
 	parsedFunction.C\
 	parsedFunctionLexer.C\
-	parsedFunctionParser.C
+	parsedFunctionParser.C\
+	randomNumberGenerator.C
 
 #
 # the prefix for the methods defined in the lexer
@@ -37,7 +38,7 @@ CPP_SOURCES= $(FFT_SOURCES)\
 PARSER_PREFIX=parsedFunction
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies
 
 depend: $(PARSER_SOURCES)
 
@@ -55,3 +56,4 @@ parsedFunctionLexer.o: parsedFunctionLexer.C parsedFunctionParser.C
 parsedFunctionParser.o: parsedFunctionParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@ || \
 	../config/fixbison parsedFunctionParser.C
+

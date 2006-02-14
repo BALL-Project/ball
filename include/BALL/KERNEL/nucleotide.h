@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.h,v 1.36 2004/05/27 19:49:39 oliver Exp $
+// $Id: nucleotide.h,v 1.36.6.1 2006/02/14 15:00:57 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
@@ -34,7 +34,7 @@ namespace BALL
 			
     	\ingroup KernelContainers 
 	*/
-	class Nucleotide
+	class BALL_EXPORT Nucleotide
 		: public Fragment
 	{
 		public:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Socket_test.C,v 1.10 2003/07/03 11:55:05 amoll Exp $
+// $Id: Socket_test.C,v 1.10.8.1 2006/02/14 15:03:11 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -24,11 +24,11 @@ char c;
 void socket_listener(void*)
 {
 	sock_inet_buf.listen();
-	IOStreamSocket  s(sock_inet_buf.accept());
+	IOStreamSocket s(sock_inet_buf.accept());
 	s.get(c);
 }
 
-START_TEST(Socket, "$Id: Socket_test.C,v 1.10 2003/07/03 11:55:05 amoll Exp $")
+START_TEST(Socket, "$Id: Socket_test.C,v 1.10.8.1 2006/02/14 15:03:11 amoll Exp $")
 using namespace BALL;
 
 /////////////////////////////////////////////////////////////
@@ -38,8 +38,9 @@ CHECK([EXTRA]simple socket transmission)
 	
 	sock_inet_buf.bind();
 	int port = sock_inet_buf.localport();
-	STATUS("localport = " << sock_inet_buf.localport())
+	STATUS("localport = " << port)
 	STATUS("localhost = " << sock_inet_buf.localhost())
+	ABORT_IF(port <= 0)
 
 #ifdef BALL_COMPILER_MSVC
 	_beginthread(socket_listener,0,NULL);
@@ -58,7 +59,7 @@ CHECK([EXTRA]simple socket transmission)
 	else
 	{
 		sleep(1);
-		IOStreamSocket  sio(SocketBuf::sock_stream);
+		IOStreamSocket sio(SocketBuf::sock_stream);
 		int result = sio->connect(sock_inet_buf.localhost(), port);
 		STATUS("B:connect = " << result)
 		sio.put((char)123);

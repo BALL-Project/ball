@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmEEF1.h,v 1.17 2003/08/26 08:04:27 oliver Exp $
+// $Id: charmmEEF1.h,v 1.17.8.1 2006/02/14 15:01:10 amoll Exp $
 //
 
 // Molecular Mechanics Parameter: class describing parameters needed 
@@ -27,7 +27,7 @@ namespace BALL
     	
 			\ingroup  MolmecParameters
 	*/
-	class CharmmEEF1 
+	class BALL_EXPORT CharmmEEF1 
 		:	public ParameterSection
 	{
 		public:

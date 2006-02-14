@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.4 2006/01/06 13:10:35 leonhardt Exp $
+// $Id: dockProgressDialog.C,v 1.4.6.1 2006/02/14 15:03:31 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockProgressDialog.h>

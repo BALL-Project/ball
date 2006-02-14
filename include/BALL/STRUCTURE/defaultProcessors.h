@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: defaultProcessors.h,v 1.15 2003/08/26 08:04:51 oliver Exp $
+// $Id: defaultProcessors.h,v 1.15.8.1 2006/02/14 15:01:23 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
@@ -36,7 +36,7 @@ namespace BALL
 
 	/**	Clears the charge on all atoms
 	*/
-	class ClearChargeProcessor
+	class BALL_EXPORT ClearChargeProcessor
 		:	public UnaryProcessor<Atom> 
 	{
 		public:
@@ -48,7 +48,7 @@ namespace BALL
 
 	/**	Clears the radius of all atoms
 	*/
-	class ClearRadiusProcessor
+	class BALL_EXPORT ClearRadiusProcessor
 		:	public UnaryProcessor<Atom>
 	{
 		public:
@@ -63,7 +63,7 @@ namespace BALL
 			atom a radius according to its name and the name of the fragment 
 			the atom is contained	in.
 	*/
-	class AssignRadiusProcessor
+	class BALL_EXPORT AssignRadiusProcessor
 		:	public UnaryProcessor<Atom> 
 	{
 		public:
@@ -145,7 +145,7 @@ namespace BALL
 			atom a charge according to its name and the name of the fragment 
 			the atom is contained in.
 	*/
-	class AssignChargeProcessor
+	class BALL_EXPORT AssignChargeProcessor
 		: public AssignRadiusProcessor 
 	{
 		public:

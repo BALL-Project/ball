@@ -26,13 +26,13 @@
 		<node>6<value>CA N s</value></node>
 		<node>10<value>HA CA s</value></node>
 		<node>11<value>C CA s</value></node>
-		<node>14<value>O C a</value></node>
+		<node>14<value>O C d</value></node>
 		<node>15<value>CB CA s</value></node>
 		<node>19<value>1HB CB s</value></node>
 		<node>20<value>2HB CB s</value></node>
 		<node>21<value>OG CB s</value></node>
 		<node>23<value>HG OG s</value></node>
-		<node>24<value>OXT C a</value></node>
+		<node>24<value>OXT C s</value></node>
 		<node>25<value>1H N s</value></node>
 		<node>26<value>2H N s</value></node>
 	</node>

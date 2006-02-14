@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gradient.C,v 1.6 2002/02/27 12:21:34 sturm Exp $
+// $Id: gradient.C,v 1.6.10.1 2006/02/14 15:02:26 amoll Exp $
 // Atom gradient class: this class represents the gradient (i.e. the negative forces)
 // for a given system as a vector<Vector3>. THe gradient is stored in units of kJ/(mol A)
 
@@ -103,7 +103,7 @@ namespace BALL
 		Size max_index = (Size)size();
 		if (gradient.size() != max_index)
 		{
-			throw Exception::InvalidRange(__FILE__, __LINE__);
+			throw Exception::InvalidRange(__FILE__, __LINE__, gradient.size());
 		}
 
 		double result = 0.0;

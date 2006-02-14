@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.52 2005/02/24 15:52:34 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.52.4.1 2006/02/14 15:03:47 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -305,33 +305,32 @@ namespace BALL
 				}
 			}
 				
-			try
+			HashMap<const Residue*, Position>::Iterator it = residue_map_.find(residue);
+			if (!+it)
 			{
-				color_to_be_set.set(table_.map(residue->getID().toUnsignedShort()));
+				color_to_be_set.set(default_color_);
 				return;
 			}
-			catch(...)
-			{
-			}
 
-			color_to_be_set.set(default_color_);
+			color_to_be_set.set(table_.map((*it).second));
 		}
 
 		bool ResidueNumberColorProcessor::start()
 			throw()
 		{
 			ColorProcessor::start();
-			min_ = 999999999;
-			max_ = 0;
+			residue_map_.clear();
 			table_.clear();
-			table_ = ColorTable(500);
+			table_ = ColorMap(500);
 			ColorRGBA base_colors[3];
 			base_colors[0] = first_color_;
 			base_colors[1] = middle_color_;
 			base_colors[2] = last_color_;
 			table_.setBaseColors(base_colors, 3);
 
-			CompositeSet::ConstIterator it = composites_->begin();
+			if (composites_ == 0) return false;
+
+			List<const Composite*>::const_iterator it = composites_->begin();
 			ResidueIterator res_it;
 			for(; it != composites_->end(); it++)
 			{
@@ -351,25 +350,36 @@ namespace BALL
 				{
 					res_it = ((SecondaryStructure*)*it)->beginResidue();
 				}
+				else if (RTTI::isKindOf<Atom>(**it))
+				{
+					const Residue* residue = dynamic_cast<const Residue*>((**it).getParent());
+					if (residue == 0) continue;
+
+					residue_map_[residue] = residue_map_.size();
+					continue;
+				}
+				else
+				{
+					const Residue* residue = dynamic_cast<const Residue*>((*it));
+					if (residue == 0) continue;
+
+					residue_map_[residue] = residue_map_.size();
+					continue;
+				}
+
 
 				for (; +res_it; ++res_it)
 				{
 					if ((*res_it).getName() == "HOH") continue;
 
-					try
-					{
-						const Position id = (*res_it).getID().toUnsignedInt();
-						if (id < min_) min_ = id;
-						if (id > max_) max_ = id;
-					}
-					catch(...)
-					{
-					}
+					residue_map_[&*res_it] = residue_map_.size();
 				}
 			}
 
-			table_.setRange((float)min_, (float)max_);
-			table_.createTable();
+			if (residue_map_.size() == 0) return true;
+
+			table_.setRange(0, residue_map_.size() - 1);
+			table_.createMap();
 
 			for (Position p = 0; p < table_.size(); p++)
 			{
@@ -382,66 +392,40 @@ namespace BALL
 		////////////////////////////////////////////////////////////////////
 		AtomChargeColorProcessor::AtomChargeColorProcessor()
 			throw()
-			:	ColorProcessor(),
-				positive_color_("0000FFFF"),
-				neutral_color_("FFFFFFFF"),
-				negative_color_("FF0000FF")
+			:	InterpolateColorProcessor()
 		{
+			mode_ = NO_OUTSIDE_COLORS;
+
+			colors_.resize(3);
+
+			min_value_ = -1.0;
+			max_value_ =  1.0;
+
+			colors_[0] = "0000FFFF";
+			colors_[1] = "FFFFFFFF";
+			colors_[2] = "FF0000FF";
+
 			update_always_needed_ = true;
 		}
 
+
 		AtomChargeColorProcessor::AtomChargeColorProcessor(const AtomChargeColorProcessor& color_processor)
 			throw()
-			: ColorProcessor(color_processor),
-				positive_color_(color_processor.positive_color_),
-				neutral_color_(color_processor.neutral_color_),
-				negative_color_(color_processor.negative_color_)
+			: InterpolateColorProcessor(color_processor)
 		{
 		}
 
 		void AtomChargeColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
 		{
 			const Atom* atom = dynamic_cast<const Atom*>(&composite);
+
 			if (atom == 0)
 			{
 				color_to_be_set.set(default_color_);
 				return;
 			}
 
-			float charge = atom->getCharge();
-
-			// clip the charges to +/- 1.0
-			if 			(charge > 1.0) charge =  1.0;
-			else if (charge < -1.0) charge = -1.0;
-
-			float red1, green1, blue1;
-
-			// interpolate the color
-			if (charge >= 0)
-			{
-				red1   = positive_color_.getRed();
-				green1 = positive_color_.getGreen();
-				blue1  = positive_color_.getBlue();
-			} 
-			else 
-			{
-				red1   = negative_color_.getRed();
-				green1 = negative_color_.getGreen();
-				blue1  = negative_color_.getBlue();
-			
-				charge *= -1.0;
-			}
-
-			const float red2   = neutral_color_.getRed();
-			const float green2 = neutral_color_.getGreen();
-			const float blue2  = neutral_color_.getBlue();
-
-			const float f = 1.0 - charge;
-
-			color_to_be_set.set(red1 	* charge + f * red2,
-													 green1 * charge + f * green2,
-													 blue1 	* charge + f * blue2,
-													 255 - transparency_);
+			interpolateColor(atom->getCharge(), color_to_be_set);
 		}
 
 
@@ -566,16 +550,16 @@ namespace BALL
 			Mesh* const mesh = dynamic_cast<Mesh*>(&object);
 			if (mesh != 0)
 			{
-				mesh->colorList.clear();
+				mesh->colors.clear();
 				if (composite == &composite_to_be_ignored_for_colorprocessors_ || composites_ == 0)
 				{
-					mesh->colorList.push_back(default_color_);
+					mesh->colors.push_back(default_color_);
 					return;
 				}
 
 				if (composite == 0 || composite != last_composite_of_grid_)
 				{
-					createAtomGrid_(composite);
+					createAtomGrid(composite);
 				}
 
 				colorMeshFromGrid_(*mesh);
@@ -673,9 +657,9 @@ namespace BALL
 			{
 				if (last_composite_of_grid_ == 0)
 				{ 
-					createAtomGrid_();
+					createAtomGrid();
 				}
-				CompositeSet::ConstIterator it = composites_->begin();
+				List<const Composite*>::const_iterator it = composites_->begin();
 				for(; it != composites_->end(); it++)
 				{
 					if (RTTI::isKindOf<AtomContainer>(**it))
@@ -725,26 +709,26 @@ namespace BALL
 		{
 			if (atom_grid_.isEmpty()) return;
 			
-			mesh.colorList.resize(mesh.vertex.size());
+			mesh.colors.resize(mesh.vertex.size());
 			
 			for (Position p = 0; p < mesh.vertex.size(); p++)
 			{
 				// make sure we found an atom
-				const Atom* atom = getClosestItem_(mesh.vertex[p]);
+				const Atom* atom = getClosestItem(mesh.vertex[p]);
 
 				if (atom == 0)
 				{
- 					mesh.colorList[p] = default_color_;
+ 					mesh.colors[p] = default_color_;
 				}
 				else
 				{
 					if (show_selection_ && atom->isSelected())
 					{
-						mesh.colorList[p] = selection_color_;
+						mesh.colors[p] = selection_color_;
 					}
 					else
 					{
- 						getColor(*atom, mesh.colorList[p]);
+ 						getColor(*atom, mesh.colors[p]);
 					}
 				}
 			}
@@ -754,10 +738,13 @@ namespace BALL
 		TemperatureFactorColorProcessor::TemperatureFactorColorProcessor()
 			: InterpolateColorProcessor()
 		{
+			mode_ = DEFAULT_COLOR_FOR_OUTSIDE_COLORS;
+
+			colors_.resize(2);
 			default_color_ = ColorRGBA(1.0,1.0,1.0);
-			min_color_.set(0,0,1.0),
-			max_color_.set(1.0,1.0,0),
-			min_value_ = (float) 0.00001;
+			colors_[0].set(0,0,1.0),
+			colors_[1].set(1.0,1.0,0),
+			min_value_ = 0.0001;
 			max_value_ = 50;
 		}
 
@@ -777,11 +764,15 @@ namespace BALL
 		OccupancyColorProcessor::OccupancyColorProcessor()
 			: InterpolateColorProcessor()
 		{
+			mode_ = DEFAULT_COLOR_FOR_OUTSIDE_COLORS;
+
+			colors_.resize(2);
+
 			default_color_ = ColorRGBA(1.0, 1.0, 1.0);
-			min_color_.set(0, 0, 1.0),
-			max_color_.set(1.0, 1.0, 0),
-			min_value_ = 0;
-			max_value_ = 1;
+			colors_[0].set(0, 0, 1.0),
+			colors_[1].set(1.0,1.0,0),
+			min_value_ = 0.0;
+			max_value_ = 1.0;
 		}
 
 		void OccupancyColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
@@ -801,11 +792,17 @@ namespace BALL
 		ForceColorProcessor::ForceColorProcessor()
 			: InterpolateColorProcessor()
 		{
+			mode_ = NO_OUTSIDE_COLORS;
+
+			colors_.resize(2);
+
 			default_color_ = ColorRGBA(1.0, 1.0, 1.0);
-			min_color_.set(0, 0, 1.0),
-			max_color_.set(1.0, 0, 0),
+
+			colors_[0].set(0, 0, 1.0),
+			colors_[1].set(1.0, 0, 0),
 			min_value_ = 0;
 			max_value_ = 10;
+
 			update_always_needed_ = true;
 		}
 
@@ -935,7 +932,8 @@ namespace BALL
 			return turn_color_;
 		}
 
-
+		////////////////////////////////////////////////////////////////////
+		
 		ResidueTypeColorProcessor::ResidueTypeColorProcessor()
 			: ColorProcessor(),
 				basic_color_(ColorRGBA(255,255,0)),
@@ -1098,9 +1096,9 @@ namespace BALL
 			other_color_.setAlpha(255 - t);
 		}
 
-		ChainColorProcessor::ChainColorProcessor()
-			: ColorProcessor(),
-				colors_()
+		////////////////////////////////////////////////////////////////////
+		PositionColorProcessor::PositionColorProcessor()
+			: ColorProcessor()
 		{
 			colors_.resize(20);
 			colors_[ 0].set(1.0, 0.0, 0.0);
@@ -1124,27 +1122,27 @@ namespace BALL
 			colors_[18].set(0.2, 0.7, 0.7);
 			colors_[19].set(0.7, 0.7, 0.2);
 		}
-
-		void ChainColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
+		
+		void PositionColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
 		{
-			const Chain* chain = composite.getAncestor(dummy_chain_);
-			if (chain == 0)
+			const Composite* c = getAncestor_(composite);
+			if (c == 0)
 			{
 				color_to_be_set.set(default_color_);
 				return;
 			}
 
-			HashMap<const Chain*, Position>::Iterator it = chain_to_position_.find(chain);
-			if (it != chain_to_position_.end())
+			HashMap<const Composite*, Position>::Iterator it = composite_to_position_.find(c);
+			if (it != composite_to_position_.end())
 			{
 				color_to_be_set.set(colors_[it->second]);
 				return;
 			}
 
- 			const Composite* parent = chain->getParent();
+ 			const Composite* parent = c->getParent();
 			if (parent == 0) 
 			{
-				chain_to_position_[chain] = 0;
+				composite_to_position_[c] = 0;
 				color_to_be_set.set(colors_[0]);
 				return;
 			}
@@ -1153,19 +1151,49 @@ namespace BALL
 		 	Position pos = 0;
 		 	while (child != 0)
 		 	{
-				const Chain* current_chain = dynamic_cast<const Chain*>(child);
-				if (current_chain != 0)
+				if (isOK_(*child))
 				{
-				 	chain_to_position_[current_chain] = pos;
+				 	composite_to_position_[child] = pos;
 			 	}
 
 			 	child = child->getSibling(1);
 				pos++;
-				if (pos >= colors_.size()) pos -= colors_.size();
+				if (pos >= colors_.size() - 1) pos -= (colors_.size() - 1);
 		 	}
 
-			color_to_be_set.set(colors_[chain_to_position_[chain]]);
+			color_to_be_set.set(colors_[composite_to_position_[c]]);
 		}
+
+		bool PositionColorProcessor::start() 
+			throw()
+		{
+			if (!ColorProcessor::start()) return false;
+
+			if (colors_.size() < 2) return false;
+
+			for (Position p = 0; p < colors_.size(); p++)
+			{
+				colors_[p].setAlpha(255 - transparency_);
+			}
+
+			return true;
+		}
+		
+		////////////////////////////////////////////////////////////////////
+		
+		ChainColorProcessor::ChainColorProcessor()
+			: PositionColorProcessor()
+		{
+		}
+
+
+		////////////////////////////////////////////////////////////////////
+		
+		MoleculeColorProcessor::MoleculeColorProcessor()
+			: PositionColorProcessor()
+		{
+		}
+
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/MODELS/standardColorProcessor.iC>

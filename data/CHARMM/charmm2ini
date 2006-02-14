@@ -1,6 +1,4 @@
-#!/opt/gnu/bin/gawk -f
-# 
-# $Id: charmm2ini,v 1.2 2000/12/07 12:19:49 oliver Exp $
+# $Id: charmm2ini,v 1.2.14.1 2006/02/14 15:00:21 amoll Exp $
 #
 #  CHARMM parameter and topology file converter
 #  produces output for BALL force field INI files

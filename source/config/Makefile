@@ -1,4 +1,6 @@
-# $Id: Makefile,v 1.3 2003/08/26 09:18:51 oliver Exp $
+#
+# $Id: Makefile,v 1.3.8.1 2006/02/14 15:03:55 amoll Exp $
+#
 #========================
 # BALL/EXAMPLES Makefile
 #========================
@@ -9,6 +11,7 @@ EXECUTABLES=check_test
 all:	$(EXECUTABLES)
 
 include ../common.mak
+-include .Dependencies
 
 # remove the library specific flags
 LIB_CXXFLAGS = $(NONLIB_CXXFLAGS)
@@ -24,4 +27,3 @@ clean_flex_bison:
 
 check_test.o: check_test.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) -c $*.C -o $@
-

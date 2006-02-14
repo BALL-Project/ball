@@ -10,6 +10,10 @@
  #include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#endif
+
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
  #include <BALL/SOLVATION/poissonBoltzmann.h>
 #endif
@@ -42,9 +46,10 @@ namespace BALL
 		/** Dialog for performing Finite Distance Poisson Bolzmann calculations
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT FDPBDialog 
+		class BALL_VIEW_EXPORT FDPBDialog 
 		  : public FDPBDialogData,
-		    public ModularWidget
+		    public ModularWidget,
+				public PreferencesEntry
 		{ 
 			friend class CalculateFDPBThread;
 
@@ -62,18 +67,6 @@ namespace BALL
 			virtual ~FDPBDialog()
 				throw();
 				
-			///	Read the preferences from a INIFile
-			void fetchPreferences(INIFile& file)
-				throw();
-			
-			/// Write the preferences to a INIFile
-			void writePreferences(INIFile& file)
-				throw();
-				
-			/// Reset the dialog to the standard values
-			void reset()
-				throw();
-
 			/// Calculate the FDPB grid
 			bool calculate()
 				throw();
@@ -120,8 +113,6 @@ namespace BALL
 			void selectFile_(QLineEdit& lineedit) throw();
 			void applyValues_() throw();
 			bool applyProcessors_() throw();
-			void fetchPreference_(INIFile& inifile, const String& entry, QLineEdit& lineedit) throw();
-			void writePreference_(INIFile& inifile, const String& entry, const QLineEdit& lineedit) const throw();
 
 			FDPB 			fdpb_;
 			Options 	options_;

@@ -1,8 +1,15 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
 #
-# $Id: Makefile,v 1.44 2004/10/20 12:26:41 amoll Exp $
+# $Id: Makefile,v 1.44.8.1 2006/02/14 15:03:25 amoll Exp $
+#
+# Author:
+#   Oliver Kohlbacher
 #
 
 DIRECTORY=VIEW/DIALOGS
+
+include ../../config.mak
 
 # Where the headers of the derived classes reside
 HEADER_DIR=$(BALL_PATH)/include/BALL/$(DIRECTORY)
@@ -21,14 +28,22 @@ CPP_SOURCES=\
 	bondPropertiesData.C\
 	charmmConfigurationDialog.C\
 	charmmConfigurationDialogData.C\
-	colorMeshDialog.C\
-	colorMeshDialogData.C\
+	modifySurfaceDialog.C\
+	modifySurfaceDialogData.C\
 	coloringSettingsDialog.C\
 	coloringSettingsDialogData.C\
 	compositeProperties.C\
 	compositePropertiesData.C\
 	contourSurfaceDialog.C\
 	contourSurfaceDialogData.C\
+	clippingDialog.C\
+	clippingDialogData.C\
+	dockDialog.C\
+	dockDialogData.C\
+	dockProgressDialog.C\
+	dockProgressDialogData.C\
+	dockResultDialog.C\
+	dockResultDialogData.C\
 	downloadPDBFile.C\
 	downloadPDBFileData.C\
 	displayProperties.C\
@@ -48,6 +63,10 @@ CPP_SOURCES=\
 	molecularDynamicsDialog.C\
 	molecularDynamicsDialogData.C\
 	molecularFileDialog.C\
+	openBruker1DFile.C\
+	openBruker2DFile.C\
+	networkPreferences.C\
+	networkPreferencesData.C\
 	parsedFunctionDialog.C\
 	parsedFunctionDialogData.C\
 	peptideDialog.C\
@@ -58,13 +77,12 @@ CPP_SOURCES=\
 	setCameraData.C\
 	pythonSettings.C\
 	pythonSettingsData.C\
-	pythonHotkeys.C\
-	pythonHotkeysData.C\
 	serverPreferences.C\
 	snapShotVisualisation.C\
 	snapShotVisualisationData.C\
 	stageSettings.C\
-	stageSettingsData.C
+	stageSettingsData.C\
+	$(FFT_DEPENDENT_SOURCES)
 
 MOC_SOURCES=\
 	amberConfigurationDialog_moc.C\
@@ -77,12 +95,20 @@ MOC_SOURCES=\
 	bondPropertiesData_moc.C\
 	charmmConfigurationDialog_moc.C\
 	charmmConfigurationDialogData_moc.C\
+	clippingDialog_moc.C\
+	clippingDialogData_moc.C\
 	coloringSettingsDialog_moc.C\
 	coloringSettingsDialogData_moc.C\
-	colorMeshDialog_moc.C\
-	colorMeshDialogData_moc.C\
+	modifySurfaceDialog_moc.C\
+	modifySurfaceDialogData_moc.C\
 	contourSurfaceDialog_moc.C\
 	contourSurfaceDialogData_moc.C\
+	dockDialog_moc.C\
+	dockDialogData_moc.C\
+	dockProgressDialog_moc.C\
+	dockProgressDialogData_moc.C\
+	dockResultDialog_moc.C\
+	dockResultDialogData_moc.C\
 	downloadPDBFile_moc.C\
 	downloadPDBFileData_moc.C\
 	displayProperties_moc.C\
@@ -102,6 +128,10 @@ MOC_SOURCES=\
 	molecularFileDialog_moc.C\
 	molecularDynamicsDialog_moc.C\
 	molecularDynamicsDialogData_moc.C\
+	networkPreferences_moc.C\
+	networkPreferencesData_moc.C\
+	openBruker1DFile_moc.C\
+	openBruker2DFile_moc.C\
 	parsedFunctionDialog_moc.C\
 	parsedFunctionDialogData_moc.C\
 	peptideDialog_moc.C\
@@ -110,25 +140,28 @@ MOC_SOURCES=\
 	preferencesData_moc.C\
 	pythonSettings_moc.C\
 	pythonSettingsData_moc.C\
-	pythonHotkeys_moc.C\
-	pythonHotkeysData_moc.C\
 	serverPreferences_moc.C\
 	setCamera_moc.C\
 	setCameraData_moc.C\
 	snapShotVisualisation_moc.C\
 	snapShotVisualisationData_moc.C\
 	stageSettings_moc.C\
-	stageSettingsData_moc.C
+	stageSettingsData_moc.C\
+	$(FFT_DEPENDENT_MOC_SOURCES)
 
-UIC_SOURCES=\
+UIC_SOURCES=$(FFT_DEPENDENT_UIC_SOURCES)\
 	amberConfigurationDialogData.C\
 	minimizationDialogData.C\
 	bondPropertiesData.C\
 	charmmConfigurationDialogData.C\
+	clippingDialogData.C\
 	coloringSettingsDialogData.C\
-	colorMeshDialogData.C\
+	modifySurfaceDialogData.C\
 	compositePropertiesData.C\
 	contourSurfaceDialogData.C\
+	dockDialogData.C\
+	dockProgressDialogData.C\
+	dockResultDialogData.C\
 	downloadPDBFileData.C\
 	displayPropertiesData.C\
 	FDPBDialogData.C\
@@ -138,21 +171,27 @@ UIC_SOURCES=\
 	materialSettingsData.C\
 	modelSettingsDialogData.C\
 	molecularDynamicsDialogData.C\
+	networkPreferencesData.C\
 	parsedFunctionDialogData.C\
 	peptideDialogData.C\
 	preferencesData.C\
 	pythonSettingsData.C\
-	pythonHotkeysData.C\
 	setCameraData.C\
 	snapShotVisualisationData.C\
 	stageSettingsData.C
 
+ifeq ($(BALL_HAS_FFTW),true)
+	CPP_SOURCES+=geometricFitDialog.C geometricFitDialogData.C
+	MOC_SOURCES+=geometricFitDialog_moc.C geometricFitDialogData_moc.C
+	UIC_SOURCES+=geometricFitDialogData.C
+endif
+
+
 UIC_HDR=$(UIC_SOURCES:Data.C=.dh)
 
-include ../../common.mak
-include .Dependencies
-
-BALL_INCLUDES=$(VIEW_INCLUDES)
+include ../../rules.mak
+include ../../targets.mak
+-include .Dependencies
 
 molecularFileDialog_moc.C: $(HEADER_DIR)/molecularFileDialog.h
 	$(MOC) $(HEADER_DIR)/molecularFileDialog.h -o $@
@@ -163,10 +202,13 @@ serverPreferences_moc.C: $(HEADER_DIR)/serverPreferences.h
 openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
 	$(MOC) $(HEADER_DIR)/openBruker1DFile.h -o $@
 
+openBruker2DFile_moc.C: $(HEADER_DIR)/openBruker2DFile.h
+	$(MOC) $(HEADER_DIR)/openBruker2DFile.h -o $@
+
 colorChooser_moc.C: $(HEADER_DIR)/colorChooser.h
 	$(MOC) $(HEADER_DIR)/colorChooser.h -o $@
 
-depend: $(UIC_SOURCES) $(MOC_SOURCES)
+depend: $(UIC_HDR) $(UIC_SOURCES) $(MOC_SOURCES)
 
 default_clean: clean_uic
 

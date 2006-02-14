@@ -31,6 +31,9 @@ Added:
 - Coloring by residue name now also works for DNA
 - Preferences for material parameters in OpenGL
 - multiple loading of the same file will create enumerated names for the Systems
+- split surfaces, color only selected parts of surfaces
+- special label tags e.g. for name or charge
+- possibility to disable updates of models or coloring for a Representation
 
 Fixed:
 - selection in MolecularControl with CRTG and SHIFT modifier
@@ -68,6 +71,7 @@ Changed:
 - changed Coloring or Model settings are now visible after pressing apply
 - Scene Preferences
 - disabled Server in BALLView by default
+- improved handling for clipping planes
 
 Code Changes:
 - fixed drawing of Boxes

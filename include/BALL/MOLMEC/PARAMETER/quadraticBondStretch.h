@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadraticBondStretch.h,v 1.17 2003/08/26 08:04:28 oliver Exp $
+// $Id: quadraticBondStretch.h,v 1.17.8.1 2006/02/14 15:01:11 amoll Exp $
 //
  
 #ifndef BALL_MOLMEC_PARAMETER_QUADRATICBONDSTRETCH_H
@@ -24,7 +24,7 @@ namespace BALL
     	
 			\ingroup  MolmecParameters
 	*/
-	class QuadraticBondStretch 
+	class BALL_EXPORT QuadraticBondStretch 
 		:	public ParameterSection
 	{
 		public:
@@ -34,13 +34,13 @@ namespace BALL
 			UNKNOWN
 		};
 
-		struct Values 
+		struct BALL_EXPORT Values 
 		{
 			float r0;
 			float k;
 		};
 
-		struct Data
+		struct BALL_EXPORT Data
 		{
 			Atom::StaticAtomAttributes*	atom1;
 			Atom::StaticAtomAttributes*	atom2;

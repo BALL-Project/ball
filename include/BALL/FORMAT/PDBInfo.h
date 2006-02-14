@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBInfo.h,v 1.2 2005/02/13 22:38:48 oliver Exp $
+// $Id: PDBInfo.h,v 1.2.6.1 2006/02/14 15:00:50 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_PDBINFO_H
@@ -26,7 +26,7 @@ namespace BALL
 			on a PDB file read by \link GenericPDBFile \endlink or
 			\link PDBFile \endlink as well as unparse records.
 	*/
-	class PDBInfo
+	class BALL_EXPORT PDBInfo
 	{
 		public:
 		

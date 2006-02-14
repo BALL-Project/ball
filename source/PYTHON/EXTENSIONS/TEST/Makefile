@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.3 2006/01/26 20:42:39 oliver Exp $
+# $Id: Makefile,v 1.3.4.1 2006/02/14 15:02:53 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SmartsMatcher_test.C,v 1.2 2006/01/25 14:41:47 bertsch Exp $
+// $Id: SmartsMatcher_test.C,v 1.2.4.1 2006/02/14 15:03:11 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -20,7 +20,7 @@
 using namespace BALL;
 using namespace std;
 
-START_TEST(SmartsMatcher, "$Id: SmartsMatcher_test.C,v 1.2 2006/01/25 14:41:47 bertsch Exp $")
+START_TEST(SmartsMatcher, "$Id: SmartsMatcher_test.C,v 1.2.4.1 2006/02/14 15:03:11 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

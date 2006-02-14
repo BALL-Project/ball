@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.sip,v 1.2 2004/02/25 10:47:13 oliver Exp $
+// $Id: molecularFileDialog.sip,v 1.2.8.1 2006/02/14 15:02:42 amoll Exp $
 //
 
 class MolecularFileDialog
-  : Embeddable
+  : ModularWidget
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -13,28 +13,25 @@ class MolecularFileDialog
 	using namespace BALL::VIEW;
 %End
   public:
-//  BALL_EMBEDDABLE(MolecularFileDialog,);
 
-// methods implemented by the BALL_EMBEDDED macro
-static Size countInstances();
-static MolecularFileDialog* getInstance(Position /index/);
+	// methods implemented by the BALL_EMBEDDED macro
+	static Size countInstances();
+	static MolecularFileDialog* getInstance(Position /index/);
 
-  bool readHINFile(String, String) throw();
-  bool readMOL2File(String, String) throw();
-  bool readMOLFile(String, String) throw();
-  bool readPDBFile(String, String) throw();
-  bool writeFile();
-  bool writeHINFile(String, const System&) throw();
-  bool writeMOL2File(String, const System&) throw();
-  bool writeMOLFile(String, const System&) throw();
-  bool writePDBFile(String, const System&) throw();
-  void readFiles();
-//  void checkMenuEntries() throw();
-//  void fetchPreferences(INIFile &inifile) throw();
-  void finalizeWidget(MainControl&) throw();
-  void initializeWidget(MainControl&) throw();
-  void openFile(const String&) throw();
-  void openFile(const String&, const String&, const String&) throw();
-//  void writePreferences(INIFile &inifile) throw();
   ~MolecularFileDialog() throw();
+  virtual void initializeWidget(MainControl&) throw();
+  virtual void readFiles();
+  virtual System* openFile(const String&) throw();
+  virtual System* openFile(const String&, const String&, const String&) throw();
+  virtual bool writeFile();
+  System* readPDBFile(String, String) throw();
+  System* readHINFile(String, String) throw();
+  System* readMOL2File(String, String) throw();
+  System* readMOLFile(String, String) throw();
+  System* readSDFile(String, String) throw();
+  bool writePDBFile(String, const System&) throw();
+	bool writeHINFile(String, const System&) throw();
+  bool writeMOLFile(String, const System&) throw();
+  bool writeMOL2File(String, const System&) throw();
+	bool writeSDFile(String, const System&) throw();
 };

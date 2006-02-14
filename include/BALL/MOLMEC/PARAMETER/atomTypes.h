@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomTypes.h,v 1.16 2003/08/26 08:04:27 oliver Exp $
+// $Id: atomTypes.h,v 1.16.8.1 2006/02/14 15:01:09 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -27,7 +27,7 @@ namespace BALL
 			Molecular Mechanics Parameter: class describing the atom type section of a parameter file.
     	\ingroup  MolmecParameters
 	*/
-	class AtomTypes
+	class BALL_EXPORT AtomTypes
 		:	public ParameterSection
 	{
 		public:

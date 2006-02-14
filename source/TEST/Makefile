@@ -1,8 +1,13 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.215 2004/11/18 13:47:33 oliver Exp $
+# $Id: Makefile,v 1.215.6.1 2006/02/14 15:03:07 amoll Exp $
 #
+# Author:
+#   Oliver Kohlbacher
+#
+
+include ../config.mak
 
 DIRECTORY=TEST
 
@@ -14,7 +19,7 @@ DIRECTORY=TEST
 include Makefile.lst
 
 
-EXECUTABLES = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
+EXECUTABLES =\
 	$(EXECUTABLES_BASIC)\
 	$(EXECUTABLES_SYSTEM)\
 	$(EXECUTABLES_MATHS)\
@@ -27,21 +32,41 @@ EXECUTABLES = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	$(EXECUTABLES_ENERGY)\
 	$(EXECUTABLES_STRUCTURE)\
 	$(EXECUTABLES_QSAR)\
-	$(EXECUTABLES_SOLVATION)
+	$(EXECUTABLES_SOLVATION)\
+	$(EXECUTABLES_OTHERS)
+
+OTHERS_TEST=""
+
+ifeq ($(BALL_HAS_XDR),true)
+	EXECUTABLES_OTHERS += $(XDR_DEPENDENT_EXECUTABLES)
+	OTHERS_TEST += $(XDR_DEPENDENT_EXECUTABLES)
+endif
  
-# default target
+ifeq ($(BALL_HAS_VIEW),true)
+	EXECUTABLES_OTHERS += $(VIEW_DEPENDENT_EXECUTABLES)
+	OTHERS_TEST += $(VIEW_DEPENDENT_EXECUTABLES)
+endif
+ 
+ifeq ($(BALL_HAS_GSL),true)
+	EXECUTABLES_OTHERS += $(GSL_DEPENDENT_EXECUTABLES)
+	OTHERS_TEST += $(GSL_DEPENDENT_EXECUTABLES)
+endif
+ 
+
 all:	$(EXECUTABLES)
 
 echo:
-	echo $(EXECUTABLES)
+	@echo $(EXECUTABLES)
+	@echo $(ALL_TESTS)
+
+include ../rules.mak
+include ../targets.mak
+-include .Dependencies
 
 # required for clean and depend
 CPP_SOURCES=$(EXECUTABLES:$(EXEEXT)=.C)
 OBJECTS=$(EXECUTABLES:$(EXEEXT)=.o)
 VALGRINDS=$(EXECUTABLES:$(EXEEXT)=.vgr)
-
-include ../common.mak
-include .Dependencies
 
 # remove the library specific flags
 # and replace them by the aplication specific
@@ -63,7 +88,14 @@ CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION) -g
 
 dummy:
 
-test: info basic_test system_test maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test qsar_test solvation_test
+# Enable the visualization tests only if we have visualization support
+ALL_TESTS=basic_test system_test	maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test qsar_test solvation_test 
+
+ifneq ($(OTHERS_TEST),"")
+	ALL_TESTS+=others_test
+endif
+
+test: info $(ALL_TESTS)
 	@./runtests -success
 
 info:
@@ -110,6 +142,9 @@ solvation_test:	$(EXECUTABLES_SOLVATION)
 
 view_test:	$(EXECUTABLES_VIEW)
 	@./runtests -section "VIEW" $(TEST_OPTIONS) $(EXECUTABLES_VIEW)
+
+others_test:	$(EXECUTABLES_OTHERS)
+	@./runtests -section "OTHERS" $(TEST_OPTIONS) $(EXECUTABLES_OTHERS)
 
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.vgr *.log ii_files Templates.DB	SunWS_cache *.TMP core core.* a.out $(EXECUTABLES)

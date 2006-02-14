@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.h,v 1.13 2004/09/28 21:40:09 amoll Exp $
+// $Id: mainControlPreferences.h,v 1.13.8.1 2006/02/14 15:01:36 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MAINCONTROLPREFERENCES_H
@@ -29,7 +29,7 @@ namespace BALL
 		- if logging to a file is enabled
 		\ingroup ViewDialogs
 */
-class BALL_EXPORT MainControlPreferences 
+class BALL_VIEW_EXPORT MainControlPreferences 
 	: public MainControlPreferencesData,
 		public PreferencesEntry
 {

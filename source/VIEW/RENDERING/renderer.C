@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.C,v 1.9 2004/12/13 16:33:04 amoll Exp $
+// $Id: renderer.C,v 1.9.8.1 2006/02/14 15:03:50 amoll Exp $
 
 #include <BALL/VIEW/RENDERING/renderer.h>
 #include <BALL/VIEW/KERNEL/stage.h>
@@ -48,12 +48,6 @@ namespace BALL
 			throw()
 		{
 			if (representation.isHidden()) return true;
-
-			if (representation.getModelType() == MODEL_CLIPPING_PLANE)
-			{
-				renderClippingPlane_(representation);
-				return true;
-			}
 
 			if (!representation.isValid())
 			{

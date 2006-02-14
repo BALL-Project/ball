@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBRecords.h,v 1.1 2005/02/08 17:32:36 oliver Exp $
+// $Id: PDBRecords.h,v 1.1.6.1 2006/02/14 15:00:50 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_PDBRECORDS_H
@@ -26,7 +26,7 @@ namespace BALL
 			The class fulfills the requirements of an STL container and
 			behaves mostly like the vector of Strings it actually is.
 	*/
-	class PDBRecords
+	class BALL_EXPORT PDBRecords
 	{
 		public:
 		

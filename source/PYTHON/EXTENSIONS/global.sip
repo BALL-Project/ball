@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.sip,v 1.6 2004/09/23 20:29:28 oliver Exp $
+// $Id: global.sip,v 1.6.6.1 2006/02/14 15:02:39 amoll Exp $
 //
 
 %MappedType Index
@@ -60,6 +60,69 @@
 	return PyInt_FromLong(*sipCpp);
 %End
 };
+
+%MappedType LongIndex
+{
+%TypeHeaderCode
+	#include <BALL/COMMON/global.h>
+	#include "sipBALLLongIndex.h"
+%End
+
+%ConvertToTypeCode
+	if (sipIsErr == NULL)
+	{
+		return PyInt_Check(sipPy);
+	}
+	if (PyInt_Check(sipPy))
+	{
+		*sipCppPtr = new LongIndex;
+		**sipCppPtr = PyInt_AsLong(sipPy);
+	
+		return 1;
+	}
+	
+	return 0;
+%End
+%ConvertFromTypeCode
+	if (sipCpp == NULL)
+	{
+		return PyInt_FromLong(0);
+	}
+	return PyInt_FromLong(*sipCpp);
+%End
+};
+
+%MappedType Time
+{
+%TypeHeaderCode
+	#include <BALL/COMMON/global.h>
+	#include "sipBALLTime.h"
+%End
+
+%ConvertToTypeCode
+	if (sipIsErr == NULL)
+	{
+		return PyInt_Check(sipPy);
+	}
+	if (PyInt_Check(sipPy))
+	{
+		*sipCppPtr = new Time;
+		**sipCppPtr = PyInt_AsLong(sipPy);
+	
+		return 1;
+	}
+	
+	return 0;
+%End
+%ConvertFromTypeCode
+	if (sipCpp == NULL)
+	{
+		return PyInt_FromLong(0);
+	}
+	return PyInt_FromLong(*sipCpp);
+%End
+};
+
 
 typedef int Size;
 typedef double DoubleReal;

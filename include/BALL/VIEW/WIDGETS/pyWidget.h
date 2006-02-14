@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.23 2005/02/27 21:39:39 amoll Exp $
+// $Id: pyWidget.h,v 1.23.4.1 2006/02/14 15:01:53 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -33,12 +33,12 @@ namespace BALL
 	namespace VIEW
 	{
 		class PythonSettings;
-		class PythonHotkeys;
+		class Preferences;
 
 		class RunPythonThread;
 
 #ifdef BALL_QT_HAS_THREADS
-		class BALL_EXPORT RunPythonThread
+		class BALL_VIEW_EXPORT RunPythonThread
 			: public QThread
 		{
 			public:
@@ -55,7 +55,7 @@ namespace BALL
 #endif
 
 		///
-		struct BALL_EXPORT Hotkey
+		struct BALL_VIEW_EXPORT Hotkey
 		{
 			public:
 
@@ -71,6 +71,9 @@ namespace BALL
 			const Hotkey& operator = (const Hotkey& s)
 				throw();
 
+			/// Needed for MSVC
+			bool operator < (const Hotkey& key) { return this < &key;}
+
 			///
 			bool set(const String& data) throw();
 
@@ -85,10 +88,10 @@ namespace BALL
 
 		/** Python Widget base class.
 		 		This class was added, because we had to overwrite some qt-methods.
-				Use the derived PyWidget class for your application!
+				Use the PyWidget class for your application!!!
 				\ingroup ViewWidgets
 		*/
-		class BALL_EXPORT PyWidgetData
+		class BALL_VIEW_EXPORT PyWidgetData
 			: public QTextEdit
 		{
 			friend class PyWidget;
@@ -113,55 +116,6 @@ namespace BALL
 			virtual ~PyWidgetData()
 				throw();
 
-			public slots:
-
-			//@}
-			/**	@name QT Slots
-			*/
-			//@{
-			
-			/** Start the interpreter.
-					This method initializes the interpreter if it is not yet running. 
-					An already running interpreter is reinitialized.
-					This method calls <tt>PyInitialize()</tt> to create an interpreter.
-			*/
-			virtual void startInterpreter();
-
-			/**	Stop the interpreter.
-					The interpreter is stoped by calling <tt>Py_Finish()</tt>.
-			*/
-			virtual void stopInterpreter();
-
-			/// Open a dialog to select a start up script
-			virtual void scriptDialog();
-
-			///
-			virtual void abortScript();
-
-			/**	Run a Python program from a file.
-					\param filename the name of the program file
-			*/
-			virtual void runFile(const String& filename);
-
-			///
-			virtual void exportHistory();			
-
-			void runString(String command);
-
-			public:
-
-			//@}
-			/** @name	Widget related methods
-					These methods implement the basic behaviour of the edit window by 
-					overwriting the corresponding methods of <tt>QTextEdit</tt>.
-					You should not call them immediately, but you might want to
-					overwrite them in derived classes.
-			*/
-			//@{
-
-			///
-			virtual bool returnPressed();
-
 			/** Internal state dump.
 					Dump the current internal state of this to 
 					the output ostream <b> s</b> with dumping depth <b> depth</b>.
@@ -171,20 +125,55 @@ namespace BALL
 			void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 
+			///
+			bool runString(String command);
+
+			/**	Run a Python program from a file.
+					\param filename the name of the program file
+			*/
+			virtual bool runFile(const String& filename);
+			
+			public slots:
+
+			//@}
+			/**	@name QT Slots
+			*/
+			//@{
+			
+			///
+			virtual void abortScript();
+
+			///
+			virtual void exportHistory();			
+
 			//@}
 
+			protected slots:
+
+			virtual void contentsDragEnterEvent(QDragEnterEvent* e);
+
+			virtual void contentsDropEvent(QDropEvent* e);
+
 			protected:
+
+			virtual bool returnPressed();
+
+			/** Start the interpreter.
+					This method initializes the interpreter if it is not yet running. 
+					An already running interpreter is reinitialized.
+					This method calls <tt>PyInitialize()</tt> to create an interpreter.
+			*/
+			virtual void startInterpreter();
 
 			virtual void keyPressEvent(QKeyEvent* e);
 
 			virtual void clear();
 			
-			virtual void cut();
-			
 			virtual void paste();
 
 			bool parseLine_();
-			bool parseLine_(String line);
+			/// Parse a and execute a given string. If silent is set to true, no prompts are being printed.
+			bool parseLine_(String line, bool silent = false);
 
 			void appendToHistory_(const String& line);
 			
@@ -227,7 +216,7 @@ namespace BALL
 				So it is possible to access all data in the running application in realtime with the script language.
 				PyWidget also has the capablities to run a Python script from a file at startup, or on demand from the user.
 		*/
-		class BALL_EXPORT PyWidget
+		class BALL_VIEW_EXPORT PyWidget
 			: public DockWidget
 		{
 			Q_OBJECT
@@ -256,14 +245,16 @@ namespace BALL
 			///
 			~PyWidget()
 				throw();
+			
+			/// Is full Python support available?
+			bool isValid() const 
+				throw() { return valid_;}
 
 			/**	@name	ModularWidget related methods
 			*/
 			//@{
 
 			/**	Setup the menu entries.
-					PyWidget creates an entry in Tools|Restart Python and connects
-					the entry to startInterpreter().
 			*/
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
@@ -273,14 +264,6 @@ namespace BALL
 			virtual void finalizeWidget(MainControl& main_control)
 				throw();
 			
-			///
-			virtual void fetchPreferences(INIFile& inifile)
-				throw();
-			
-			///
-			virtual void writePreferences(INIFile& inifile)
-				throw();
-
 			///
 			void initializePreferencesTab(Preferences &preferences)
 				throw();
@@ -294,16 +277,6 @@ namespace BALL
 				throw();
 
 			///
-			virtual void cancelPreferences()
-				throw();
-
-			///
-			virtual void startInterpreter();
-			
-			///
-			virtual void stopInterpreter();
-			
-			///
 			bool toAbortScript() throw();
 
 			///
@@ -316,13 +289,33 @@ namespace BALL
 			void reactTo(const QKeyEvent& e) throw();
 
 			/// run a Python script from a given file
-			void run(const String& filename) throw() {text_edit_->runFile(filename);}
+			bool run(const String& filename) throw();
+
+			// Rerun the last script again
+			bool runAgain();
+
+			public slots:
+
+			/// Open a dialog to select a start up script
+			virtual void scriptDialog();
+
+			virtual void hotkeyItem();
+
+			virtual void modifyHotkeys();
+
+			virtual void activatedMenuItem_(int id);
 
 			protected:
 
 			PyWidgetData* 		text_edit_;
-			PythonHotkeys* 		python_hotkeys_;
 			List<Hotkey> 			hotkeys_;
+			// 								we use an own working dir to find Python Scripts
+			String 						working_dir_;
+			String 						last_script_;
+			bool 							valid_;
+			bool 							started_startup_script_;
+			Index 						last_id_;
+			Preferences* 			preferences_;
 		};
 
 	} // namespaces	

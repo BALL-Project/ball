@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.65 2004/05/27 19:49:47 oliver Exp $
+// $Id: file.h,v 1.65.6.1 2006/02/14 15:01:29 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -49,12 +49,6 @@
 #	define F_OK 0
 #	define W_OK 2
 #	define R_OK 4
-#	ifdef IN
-#		undef IN
-#	endif
-#	ifdef	OUT
-#		undef OUT
-#	endif
 #endif
 
 
@@ -77,7 +71,7 @@ namespace BALL
 			accessible through  \link File::getTransformationManager File::getTransformationManager \endlink .
 			\ingroup System
 	*/
-	class TransformationManager
+	class BALL_EXPORT TransformationManager
 	{	
 		public:
 			
@@ -134,7 +128,7 @@ namespace BALL
 	/**	File Class.	
 			\ingroup System		
 	*/
-	class File
+	class BALL_EXPORT File
 		: public std::fstream
 	{
 		public:
@@ -142,7 +136,7 @@ namespace BALL
 		/**	Exception CannotWrite
 				A given file could not be written, either because its not open or it has a wrong open mode.
 		*/
-		class CannotWrite
+		class BALL_EXPORT CannotWrite
 			: public Exception::GeneralException
 		{
 			public:
@@ -169,29 +163,29 @@ namespace BALL
 		typedef std::ios::openmode OpenMode;			
 
 		//@}
+
 		/**	@name	Constants
 		*/
 		//@{
-
 		/// Open for input (default)
-		static const OpenMode IN = std::ios::in;
+		static const OpenMode MODE_IN;
 
 		/// Open for output
-		static const OpenMode OUT = std::ios::out;
+		static const OpenMode MODE_OUT;
 
 		/// Append. Seek to end before each write operation
-		static const OpenMode APP = std::ios::app;
+		static const OpenMode MODE_APP;
 
 		/// Binary mode
-		static const OpenMode BINARY = std::ios::binary;
+		static const OpenMode MODE_BINARY;
 
 		/// Seek to end directly after opening.
-		static const OpenMode ATE =  std::ios::ate;
+		static const OpenMode MODE_ATE;
 
 		/// Truncate an existing file.
-		static const OpenMode TRUNC = std::ios::trunc;
-
+		static const OpenMode MODE_TRUNC;
 		//@}
+
 		/**	@name	Enums
 		*/
 		//@{
@@ -562,7 +556,7 @@ namespace BALL
 				The path is	compared before and after call of 
 				FileSystem::canonizePath(canonized_name).
 				@see FileSystem::canonizePath
-				@return bool true if the path is cononized.
+				@return bool true if the path is canonized.
 		*/
 		bool isCanonized()
 			const throw (Exception::FileNotFound);
@@ -645,7 +639,7 @@ namespace BALL
 			\ingroup System		
 	*/
 	template <typename T>
-	class BinaryFileAdaptor
+	class BALL_EXPORT BinaryFileAdaptor
 	{
 
 		public:

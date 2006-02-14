@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftModel.h,v 1.16 2004/05/27 19:49:44 oliver Exp $
+// $Id: shiftModel.h,v 1.16.6.1 2006/02/14 15:01:13 amoll Exp $
 //
 
 #ifndef BALL_NMR_SHIFTMODEL_H
@@ -29,7 +29,7 @@ namespace BALL
 			be applied to arbitrary kernel objects in the same fashion as  \link ShiftModule ShiftModule \endlink s.	 \par
 		\ingroup ShiftModel	
 	*/
-	class ShiftModel 
+	class BALL_EXPORT ShiftModel 
 		: public ShiftModule		
 	{
 		public:	

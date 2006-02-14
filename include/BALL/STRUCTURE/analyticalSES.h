@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalSES.h,v 1.16 2004/02/23 17:26:06 anhi Exp $
+// $Id: analyticalSES.h,v 1.16.8.1 2006/02/14 15:01:22 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_ANALYTICALSES_H
@@ -29,7 +29,7 @@ namespace BALL
     	
 			\ingroup  Surface
 	*/
-	float calculateSESAtomAreas
+	BALL_EXPORT float calculateSESAtomAreas
 		(const AtomContainer& fragment, HashMap<const Atom*,float>& atom_areas, float probe_radius = 1.5);
 	
 	/**	Calculate the solvent excluded surface area analytically.
@@ -41,7 +41,7 @@ namespace BALL
 
 			\ingroup  Surface
 	*/
-	float calculateSESArea
+	BALL_EXPORT float calculateSESArea
 		(const AtomContainer& fragment, float probe_radius = 1.5);
 	
 	/**	Calculate the solvent excluded volume analytically.
@@ -53,7 +53,7 @@ namespace BALL
 
 			\ingroup  Surface
 	*/
-	float calculateSESVolume
+	BALL_EXPORT float calculateSESVolume
 		(const AtomContainer& fragment, float probe_radius = 1.5);
 } // namespace BALL
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.19 2004/11/26 10:47:31 amoll Exp $
+// $Id: modularWidget.h,v 1.19.8.1 2006/02/14 15:01:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -17,6 +17,7 @@
 
 class QObject;
 class QMenuBar;
+class QWidget;
 
 namespace BALL
 {
@@ -52,7 +53,7 @@ namespace BALL
 				\see PyWidget
 			\ingroup ViewKernelConnectivity
 		*/
-		class BALL_EXPORT ModularWidget
+		class BALL_VIEW_EXPORT ModularWidget
 			: public Embeddable,	
 				public ConnectionObject
 		{
@@ -121,9 +122,10 @@ namespace BALL
 			*/
 			virtual void initializeWidget(MainControl& main_control);
 			
-			/**	Remove the widget.
+			/**	Remove the widget custom items, e.g all menu entries.
 					This method should reverse all actions performed in initializeWidget
 					(remove menu entries and connections of this ModularWidget).
+					Call this method also in derived classes finalizeWidget to remove the menu entries.
 					This method will be called by MainControl::aboutToExit().
 					\param main_control the MainControl object to be finalized with this ModularWidget
 					\see   initializeWidget
@@ -170,16 +172,6 @@ namespace BALL
 			virtual void applyPreferences()
 				throw() {};
 
-			/// Method is called when the Cancel button of the Preferences is pressed.
-			virtual void cancelPreferences()
-				throw() {};
-
-			/** Set default values for the current page in Preferences
-					Automatically called by the default button in thre Preferences dialog.)
-			*/
-			virtual void defaultPreferences()
-				throw() {};
-			
 			/** Fetch the widgets preferences from the INIFile.
 					This method is called automatically by MainControl::show() at the start of the application.
 					\param  inifile the INIFile that contains the needed values
@@ -234,14 +226,25 @@ namespace BALL
 			bool unlockComposites()
 				throw();
 
-			/// Wrapper for MainControl::insertMenuEntry
-			int insertMenuEntry(int ID, const String& name, const QObject* receiver, const char* slot, 
-																 int accel, int entry_ID, String hint)
-				throw();
-
 			/// Wrapper for MainControl::menuBar()
 			QMenuBar* menuBar() 
 				throw();
+
+			Index insertMenuEntry (Index parent_id, const String& name, const QObject* receiver = 0, 
+													 const char* slot = 0, Index accel = 0, Index pos = -1)
+				throw();
+
+			///
+			void setMenuHint(const String& hint);
+
+			///
+			void setMenuHelp(const String& url);
+
+			///
+			virtual void registerWidgetForHelpSystem(const QWidget* widget, const String& url);
+
+			///
+			virtual void registerMenuEntryForHelpSystem(Index entry, const String& docu_entry);
 
 			//@}
 			/**	@name	Debugging and Diagnostics
@@ -257,13 +260,16 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-					
-			//@}
 
+			//@}
 
 			void setWorkingDirFromFilename_(String filename)
 				throw();
-			
+
+			void removeMenuEntries();
+
+			virtual void showHelp(const String& url);
+
 			protected:
 
 			//_ id in the menubar entry "WINDOWS" for every widget
@@ -274,6 +280,10 @@ namespace BALL
 
 			//_ should the widget be visible, if no config file entry exists?
 			bool default_visible_;
+
+			vector<std::pair<Index, Index> > menu_ids_;
+
+			Index last_parent_id_, last_id_;
 		}; 
   
 	} // namespace VIEW

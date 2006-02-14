@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.72 2005/02/14 23:42:30 amoll Exp $
+// $Id: mainControl.h,v 1.72.4.1 2006/02/14 15:01:41 amoll Exp $
+//
+// Author:
+//   Andreas Moll
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -52,6 +55,7 @@ namespace BALL
 		class ModularWidget;
 		class Preferences;
 		class MainControlPreferences;
+		class NetworkPreferences;
 		class GeometricObjectSelectionMessage;
 		class SimulationThread;
 
@@ -72,7 +76,8 @@ namespace BALL
 				It handles also the general preferences tab Preferences of the main application and notifies all
 				registered ModularWidget objects if the preferences have changed. \par
 				The preferences of the application are stored in an INIFile.
-				The default name of this file is ".BALLView".
+				The default name of this file is ".BALLView".\par
+				\par
 				<b>Caveat:</b> Due to a peculiarity of the QT Meta Object Compiler (MOC)
 				you have to specify the full namespace qualified name of this class when deriving from it. \par
 				So don't use\par 
@@ -80,7 +85,7 @@ namespace BALL
 				<tt> class foo : public BALL::VIEW::MainControl </tt> instead. 
 		\ingroup ViewKernelConnectivity
 		*/
-		class BALL_EXPORT MainControl
+		class BALL_VIEW_EXPORT MainControl
 			: public QMainWindow,
 				public ConnectionObject,
 				public Embeddable
@@ -110,7 +115,7 @@ namespace BALL
 				/// File menu sub menu open
 				FILE_OPEN,
 
-				/// File menu sub menu import
+				/// File menu sub menu import [currently unused]
 				FILE_IMPORT,
 
 				/// File menu sub menu export
@@ -157,13 +162,6 @@ namespace BALL
 
 				/// Help menu
 				HELP = 10800
-			};
-
-			///
-			enum MenuEntry
-			{
-				MENU_STOPSIMULATION 			= 10450,
-				MENU_COMPLEMENT_SELECTION = 10460
 			};
 
 			//@}
@@ -226,14 +224,15 @@ namespace BALL
 					updateRepresentationsOf() is called after receiving a CompositeMessage with type CHANGED_COMPOSITE in onNotify().
 					It sends a RepresentationMessage with type UPDATE for every Representation, which was build for the 
 					Composite.  After this a SceneMessage is send to redraw the Scene.
-					Remember:
+					\par
+					Notes:
 					If you changed a Composite in MainControl or a derived class, the MainControl doesnt get 
 					notified, from the CompositeMessage it sends. So you have to call this function instead 
 					of sending the message.
 					\param  composite the Composite that should be updated
 					\param  rebuild if set to true, the model is rebuilded, otherwise just the coloring is updated
 					\param  force is set to true, also rebuild non surface models (only usefull with rebuild = true)
-					\return false if the CompositeManager doesnt contain the Composite
+					\return true if an update was performed
 			*/
 			bool updateRepresentationsOf(const Composite& composite, bool rebuild = true, bool force = false)
 				throw();
@@ -253,7 +252,7 @@ namespace BALL
 					updateRepresentationsOf(composite) is called.
 					\return false if the CompositeManager doesnt contain the Composite
 			*/
-			bool update(Composite& composite, bool changed_hierarchy = true)
+			void update(Composite& composite, bool changed_hierarchy = true)
 				throw();
 
 			/** Insert a Composite and notify all ModularWidget.
@@ -268,9 +267,10 @@ namespace BALL
 			/** Remove a Composite and notify all ModularWidget.
 			 		A CompositeMessage with type REMOVED_COMPOSITE is send and
 					CompositeManager::remove called.
+					@param update update Representations if needed
 					\return false if the CompositeManager doesnt contain the Composite
 			*/
-			bool remove(Composite& composite, bool to_delete = true)
+			bool remove(Composite& composite, bool to_delete = true, bool update = true)
 				throw();
 
 			/** Update a Representation
@@ -326,16 +326,17 @@ namespace BALL
 			virtual void onNotify(Message *message)
 				throw();
 
-
 			/** Send a Message from Python.
-			 		This Method should only be used from the Python Interface. 
 					Otherwise, you should prefer to use ModularWidget::notify_.
 					The MainControl itself also reacts to a Message, send with this method.
-					The Message will not be deleted, after it was send to all ModularWidget's.
+					The Message will be deleted, after it was send to all ModularWidget's.
 			*/
 			void sendMessage(Message& message)
 				throw();
 
+			/// Get the ID of the last highlighted menu entry (used for the HelpViewer)
+			Index getLastHighLightedMenuEntry() { return last_highlighted_menu_entry_;}
+			
 			public slots:
 
 			//@}
@@ -351,15 +352,10 @@ namespace BALL
 					See ModularWidget for further information concerning menu structure creation
 					and preferences handling. \par
 					Calls registerConnectionObject() \par
-					Calls initializePreferencesTab() \par
 					Calls fetchPreferences() \par
 					Calls applyPreferences() \par
 					Calls insertMenuEntry() \par
 					Calls ModularWidget::initializeWidget() \par
-					Calls ModularWidget::initializePreferencesTab() \par
-					Calls ModularWidget::fetchPreferences() \par
-					Calls ModularWidget::applyPreferences() \par
-					Calls Preferences::fetchPreferences() \par
 					Calls QMainWindow::show() \par
 					Note: Call this method to start the application.
 			*/
@@ -383,39 +379,13 @@ namespace BALL
 			///
 			void complementSelection();
 
-			/** Apply preferences.
-					This method calls the method <b>ModularWidget::applyPreferences</b> of all registered
-					ModularWidget objects if the apply button of the Preferences dialog is pressed. 
-					<b>Note:</b> This method will be called internally whenever the apply button
-					of the Preferences dialog	is pressed.  \par
-					Calls ModularWidget::applyPreferences\par
-					Calls applyPreferences\par
-					\see        ModularWidget::applyPreferences
-					\see        applyPreferences()
-			*/
-			virtual void applyPreferencesTab();
-
-			/** Called after canceling the Preferences dialog.
-					Resets all in the Preferences dialog inserted tabs.
-			*/
-			virtual void cancelPreferencesTab()
-				throw();
-
-			/** Set default values in the current Preferences tab.
-			 		Called by defaults button in Preferences.
-			*/
-			virtual void defaultPreferencesTab()
-				throw();
-
 			/** Last second cleanup.
 					This method will be called internally if the MainControl is about to be destroyed.
 					This method stores the preferences and finalizes all ModularWidget objects
 					and the MainControl.
 					Must be called after your own cleanup routine if you override this method.\par
-					Calls ModularWidget::writePreferences \par
 					Calls ModularWidget::finalizePreferencesTab \par
 					Calls ModularWidget::finalizeWidget \par
-					Calls Preferences::writePreferences \par
 					Calls writePreferences \par
 					Calls finalizePreferencesTab \par
 					Calls removeModularWidget \par
@@ -440,6 +410,9 @@ namespace BALL
 			///
 			bool isAboutToQuit() { return about_to_quit_;}
 			
+			/// overloaded from QT for Python Interface
+			virtual void resize (int w, int h );
+
 			public:
 			
 			//@}
@@ -474,14 +447,13 @@ namespace BALL
 					\param hint
 					\return int the new entry_ID
 			*/
-			int insertMenuEntry (int parent_id, const String& name, const QObject* receiver = 0, 
-													 const char* slot = 0, int accel = 0, int entry_ID = -1, String hint = "")
+			Index insertMenuEntry (Index parent_id, const String& name, const QObject* receiver = 0, 
+													 const char* slot = 0, Index accel = 0, Index pos = -1)
 				throw();
 
 			/// 
-			void removeMenuEntry (int parent_id, const String& name, const QObject* receiver = 0, 
-												 const char* slot = 0, int accel = 0, int entry_ID = -1)
-			throw();
+			void removeMenuEntry (Index parent_id, Index entry_ID)
+				throw();
 			
 			/**	Initialize a new popup menu <b> ID</b>. 
 					If the MainControl has already the popup menu <b>ID</b> that QPopupMenu is returned.
@@ -500,56 +472,20 @@ namespace BALL
 			*/
 			void insertPopupMenuSeparator(int ID)
 				throw();
-
-			/** Create the preferences tab MainControlPreferences for
-					the MainControl and inserts it into the Preferences dialog.
-					It is called automatically by the show method at the
-					start of the application. This method is used in the same manner as the
-					corresponding method in the ModularWidget class. See ModularWidget
-					for more information concerning preferences tabs.\par
-					<b>Note:</b> If this method is overridden, call this method at the end of the
-					overriden method to make sure that the general preferences are initialized.
-					\param  preferences the Preferences dialog for the MainControl
-					\see    show
-					\see    MainControlPreferences
-					\see    Preferences
-			*/
-			virtual void initializePreferencesTab(Preferences &preferences)
-				throw();
 			
-			/**	Remove the MainControlPreferences tab from the 
-					Preferences dialog of the MainControl.
-					This method is called automatically by aboutToExit()
-					at the end of the application. It is used in the same manner as the
-					corresponding method in the ModularWidget class. See ModularWidget
-					for more information concerning preferences tabs.\par
-					<b>Note:</b> If this method is overridden, call this method at the end of the
-					overriden method to make sure that the general preferences are finalized.
-					\param  preferences the Preferences dialog for this MainControl
-					\see    MainControlPreferences
-					\see    Preferences
-			*/
-			virtual void finalizePreferencesTab(Preferences &preferences)
-				throw();
-			
-			/** Apply the preferences of the own tab MainControlPreferences.
-					This method is called automatically by applyPreferencesTab().
-					It is used in the same manner as the
-					corresponding method in the ModularWidget class. See ModularWidget
-					for more information concerning preferences tabs.\par
+			/** Apply all preferences.
+					This method is called automatically by applyPreferencesClicked() and calls
+					applyPreferences() for all registered ModularWidgets.
 					<b>Note:</b> If this method is overridden, call this method at the end of the
 					overriden method to make sure that the general preferences are applied.
-					\param  preferences the Preferences dialog for this MainControl
-					\see    applyPreferencesTab
-					\see    MainControlPreferences
+					\see    ModularWidget
 					\see    Preferences
 			*/
 			virtual void applyPreferences()
 				throw();
 			
-			/** Fetch the widgets preferences from the INIfile.
-					This method fetches the general preferences of the MainControl and
-					the preferences of MainControlPreferences from <tt>inifile</tt>.\par
+			/** Fetch the preferences from the INIfile.
+					Calls fetchPreferences() for all registered ModularWidgets.
 					<b>Note:</b>If this method is overridden, call this method at the end of the
 					overriden method to make sure that the general preferences are fetched.
 					\param  inifile the INIFile that contains the needed values
@@ -558,6 +494,8 @@ namespace BALL
 				throw();
 			
 			/** Writes the widgets preferences to the INIFile.
+					Calls writePreferences() for all registered ModularWidgets and
+					Preferences::savePreferences().
 					<b>Note:</b> If this method is overridden, call this method at the end of the
 					overriden method to make sure that the general preferences are written.
 					\param  inifile the INIFile that contains the needed values
@@ -565,7 +503,7 @@ namespace BALL
 			virtual void writePreferences(INIFile &inifile)
 				throw();
 			
-			/// Restore the positions of all DockWindow's from the INIFile
+			/// Restore the positions the main window and of all DockWindow's from the INIFile
 			virtual void restoreWindows(const INIFile& inifile)
 				throw();
 			
@@ -723,13 +661,35 @@ namespace BALL
 				throw();
 
 			///
-			void moveItems(const Matrix4x4& m)
-				throw();
+			void setProxy(const String& host, Position port);
+
+			///
+			String getProxy() const { return proxy_;}
+
+			///
+			Position getProxyPort() const { return proxy_port_;}
 
 			#ifdef BALL_QT_HAS_THREADS
 			/// QWaitCondition to wake up threads, after Composites are unlocked
 			QWaitCondition& getCompositesLockedWaitCondition() { return composites_locked_wait_condition_;}
 			#endif
+
+			/** Multithreaded code is used for serveral functions:
+			    - Update of Representations
+					- Simulations
+					- Download PDB files
+					To debug such code it is often usefull to to be able to run it in
+					a singlethreaded mode. Every piece of multithreaded code should
+					therefore call this method and decide if it should run without multiple threads.
+					Furthermore most of the time, valid benchmark results can only be achived 
+					with one single thread.
+			*/
+			bool useMultithreading()
+				throw();
+
+			/// See above
+			void setMultithreading(bool state)
+				throw() { multi_threading_mode_ = state;}
 
 			//@}
 			/**	@name	Debugging and Diagnostics
@@ -756,9 +716,24 @@ namespace BALL
 			///
 			void loadBALLViewProjectFile(const String& filename) throw();
 
+			///
+			void quickSave();
+
+			///
+			void quickLoad();
+
+			///
+			void processEvents(Size ms);
+
 			//@}
 			
 			protected slots:
+
+			/*_ This slot is called internally whenever the apply button
+					of the Preferences dialog	is pressed.
+					It calls among other things the method applyPreferences().
+			*/
+			virtual void applyPreferencesClicked_();
 
 			//_ Called by timer to clear the text in the statusbar
 			void clearStatusBarText_();
@@ -767,6 +742,9 @@ namespace BALL
 			virtual void deleteClicked();
 
 			protected:
+
+			virtual void initializePreferencesTab_()
+				throw();
 
 			//_  Called after receiving an SimulationThreadFinished event
 			void stopedSimulation_();
@@ -816,6 +794,8 @@ namespace BALL
 			//_
 			void setPreferencesEnabled_(bool state);
 
+			void init_();
+
 			//_
 			FragmentDB fragment_db_;
 
@@ -837,10 +817,11 @@ namespace BALL
 			CompositeManager 						composite_manager_;
 
 			MainControlPreferences* 		main_control_preferences_;
+			NetworkPreferences* 				network_preferences_;
 			Preferences*								preferences_dialog_;
 			int 			 									preferences_id_;
 			int 			 									delete_id_;
-			INIFile		 									preferences_;
+			INIFile		 									preferences_file_;
 			
 			static int 									current_id_;
 			bool 												composites_locked_;
@@ -848,6 +829,8 @@ namespace BALL
 			bool 											  stop_simulation_;
 
 			SimulationThread* 					simulation_thread_;
+
+			bool 												multi_threading_mode_;
 
 			/*_	A list containing all modular widgets.
 					This list is modified by addModularWidget and
@@ -874,6 +857,13 @@ namespace BALL
 			QMutex 							composites_locked_mutex_;
 			QWaitCondition 			composites_locked_wait_condition_;
 			#endif
+
+			String 							proxy_;
+			Position 						proxy_port_;
+
+			Index 							stop_simulation_id_, complement_selection_id_, open_id_, save_project_id_;
+
+			Index last_highlighted_menu_entry_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

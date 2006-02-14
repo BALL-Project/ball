@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.sip,v 1.7 2003/11/12 18:20:27 oliver Exp $
+// $Id: DCDFile.sip,v 1.7.8.1 2006/02/14 15:02:30 amoll Exp $
 //
 
 class DCDFile
@@ -50,4 +50,5 @@ class DCDFile
 								throw();
 				void disableVelocityStorage()
 								throw();
+		void close();
 };

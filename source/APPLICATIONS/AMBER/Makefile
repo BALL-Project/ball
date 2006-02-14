@@ -1,17 +1,22 @@
-# $Id: Makefile,v 1.2 2001/05/22 15:44:54 oliver Exp $
-# Makefile for AMBER Application
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.2.14.1 2006/02/14 15:02:00 amoll Exp $
+#
+# Author:
+#   Oliver Kohlbacher
 #
 
+DIRECTORY=APPLICATIONS/AMBER
 
 EXECUTABLE=amber
-DIRECTORY=APPLICATIONS/AMBER
 
 all:	$(EXECUTABLE)
 
 clean:	default_clean
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 SOURCES=\
 	main.C\

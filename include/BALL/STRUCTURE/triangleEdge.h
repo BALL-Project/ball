@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangleEdge.h,v 1.10 2003/08/26 08:04:54 oliver Exp $
+// $Id: triangleEdge.h,v 1.10.8.1 2006/02/14 15:01:27 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_TRIANGLEEDGE_H
@@ -39,7 +39,7 @@ namespace BALL
 			 \par
 	\ingroup StructureMiscellaneous
 	*/
-	class TriangleEdge
+	class BALL_EXPORT TriangleEdge
 			:	public GraphEdge< TrianglePoint,TriangleEdge,Triangle >
 	{
 		
@@ -167,7 +167,7 @@ namespace BALL
 
 	/**	Output- Operator
 	*/
-	std::ostream& operator << (std::ostream& s, const TriangleEdge& edge);
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const TriangleEdge& edge);
 
 	//@}
 

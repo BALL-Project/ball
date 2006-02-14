@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timer.iC,v 1.6 2002/12/18 22:05:41 oliver Exp $
+// $Id: timer.iC,v 1.6.10.1 2006/02/14 15:01:30 amoll Exp $
 
 BALL_INLINE 
 bool Timer::isValid() const
@@ -34,19 +34,21 @@ bool Timer::operator < (const Timer& timer) const
 }
 
 BALL_INLINE 
+bool Timer::operator > (const Timer& timer) const
+{
+  return (getCPUTime() > timer.getCPUTime());
+}
+
+BALL_INLINE 
 bool Timer::operator <= (const Timer& timer) const
 {
-  return !(timer < *this);
+  return (getCPUTime() <= timer.getCPUTime());
 }
 
 BALL_INLINE 
 bool Timer::operator >= (const Timer& timer) const
 {
-  return !(*this < timer);
+  return (getCPUTime() >= timer.getCPUTime());
 }
 
-BALL_INLINE 
-bool Timer::operator > (const Timer& timer) const
-{
-  return (timer < *this);
-}
+

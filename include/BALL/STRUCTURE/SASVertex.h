@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SASVertex.h,v 1.7 2003/08/26 08:04:50 oliver Exp $
+// $Id: SASVertex.h,v 1.7.8.1 2006/02/14 15:01:21 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SASVERTEX_H
@@ -27,7 +27,7 @@ namespace BALL
 	/** Generic SASVertex Class.	
   \ingroup Surface    
 	*/
-	class SASVertex	:	public GraphVertex< SASVertex,SASEdge,SASFace >
+	class BALL_EXPORT SASVertex	:	public GraphVertex< SASVertex,SASEdge,SASFace >
 	{
 		public:
 
@@ -171,7 +171,7 @@ namespace BALL
 
 	/**	Output- Operator
 	*/
-	std::ostream& operator << (std::ostream& s, const SASVertex& sasvertex);
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const SASVertex& sasvertex);
 
 	//@}
 

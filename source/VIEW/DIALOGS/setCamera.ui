@@ -181,7 +181,10 @@
                     </size>
                 </property>
                 <property name="text">
-                    <string>OK</string>
+                    <string>O&amp;K</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+K</string>
                 </property>
                 <property name="default">
                     <bool>true</bool>
@@ -215,7 +218,10 @@
                     </size>
                 </property>
                 <property name="text">
-                    <string>Cancel</string>
+                    <string>C&amp;ancel</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+A</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Close window without reseting camera</string>
@@ -254,6 +260,6 @@
 <slots>
     <slot>okPressed()</slot>
 </slots>
-<exportmacro>BALL_EXPORT</exportmacro>
+<exportmacro>BALL_VIEW_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

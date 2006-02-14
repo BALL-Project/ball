@@ -1,7 +1,15 @@
-# $Id: Makefile,v 1.5 2004/05/27 19:49:56 oliver Exp $
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.5.6.1 2006/02/14 15:02:05 amoll Exp $
+#
+# Author:
+#   Oliver Kohlbacher
+#
 
 EXECUTABLE=nmrview
 DIRECTORY=APPLICATIONS/NMRVIEW
+
 all:	$(EXECUTABLE)
 
 clean:	default_clean
@@ -11,12 +19,11 @@ clean:	default_clean
 LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 
-BALL_INCLUDES=$(VIEW_INCLUDES)
-
-CPP_SOURCES=nmrview.C
+CPP_SOURCES=\
+	nmrview.C
 
 MOC_SOURCES=
 

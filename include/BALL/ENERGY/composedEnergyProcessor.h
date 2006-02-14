@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composedEnergyProcessor.h,v 1.12 2003/08/26 08:04:12 oliver Exp $
+// $Id: composedEnergyProcessor.h,v 1.12.8.1 2006/02/14 15:00:47 amoll Exp $
 //
 
 #ifndef BALL_ENERGY_COMPOSEDENERGYPROCESSOR
@@ -35,7 +35,7 @@ namespace BALL
     	
 			\ingroup EnergyMiscellaneous
 	 */	
-	class ComposedEnergyProcessor
+	class BALL_EXPORT ComposedEnergyProcessor
 		: public EnergyProcessor
 	{
 

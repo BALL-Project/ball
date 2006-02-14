@@ -1,14 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55 2005/03/10 11:18:00 amoll Exp $
+// $Id: mainframe.C,v 1.55.4.1 2006/02/14 15:02:03 amoll Exp $
 //
 
 #include "mainframe.h"
 #include "aboutDialog.h"
 #include "icons.h"
-#include "ballviewTutorial.h"
-#include "ballviewDemo.h"
+#include "demoTutorialDialog.h"
 
 #include <BALL/VIEW/KERNEL/moleculeObjectCreator.h>
 #include <BALL/VIEW/KERNEL/server.h>
@@ -18,9 +17,12 @@
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/WIDGETS/logView.h>
+#include <BALL/VIEW/WIDGETS/helpViewer.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
+
+#include <BALL/VIEW/WIDGETS/dockingController.h>
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/COMMON/version.h>
@@ -35,6 +37,7 @@
 #include <qpainter.h>
 #include <qimage.h>
 #include <qmessagebox.h>
+#include <qcursor.h>
 
 #include <sstream>
 
@@ -46,9 +49,6 @@ namespace BALL
 	Mainframe::Mainframe(QWidget* parent, const char* name)
 		:	MainControl(parent, name, ".BALLView"),
 			scene_(0),
-			dataset_control_(0),
-			display_properties_(0),
-			file_dialog_(0),
 			fullscreen_(false)
 	{
 		#ifdef BALL_VIEW_DEBUG
@@ -60,7 +60,7 @@ namespace BALL
 		// ---------------------
 		setCaption("BALLView");
 		setIcon(QPixmap(bucky_64x64_xpm));
-		resize(640,400);
+		resize(800,600);
 		// make sure submenus are the first 
 		initPopupMenu(FILE_OPEN);
 		initPopupMenu(EDIT);
@@ -71,6 +71,7 @@ namespace BALL
 		initPopupMenu(TOOLS);
 	#ifdef BALL_PYTHON_SUPPORT
 		initPopupMenu(TOOLS_PYTHON);
+		initPopupMenu(MainControl::USER);
 	#endif
 		initPopupMenu(WINDOWS);
 
@@ -82,29 +83,23 @@ namespace BALL
 		setLoggingFilename("BALLView.log");
 		setAcceptDrops(true);
 
-		CHECK_PTR(new MolecularControl(this, "Structures"));
-		CHECK_PTR(new GeometricControl(this, "Representations"));
+		CHECK_PTR(new MolecularControl(		this, "Structures"));
+		CHECK_PTR(new GeometricControl(		this, "Representations"));
+		CHECK_PTR(new DatasetControl(			this, "Datasets"));
+		CHECK_PTR(new DisplayProperties(	this, "DisplayProperties"));
+		CHECK_PTR(new LabelDialog(				this, "LabelDialog"));
+		CHECK_PTR(new MolecularFileDialog(this, "MolecularFileDialog"));
+		CHECK_PTR(new DownloadPDBFile(		this, "DownloadPDBFile", false));
+		CHECK_PTR(new MolecularStructure(	this, "MolecularStructure"));
+		CHECK_PTR(new HelpViewer(					this, "Documentation"));
+		CHECK_PTR(new LogView(						this, "Logs"));
 
-		dataset_control_ = new DatasetControl(this, "Datasets");
-		CHECK_PTR(dataset_control_);
+		CHECK_PTR(new DockingController(this, "DockingController"));
 
 		Scene::stereoBufferSupportTest();
 		scene_ = new Scene(this, "3D View");
 		CHECK_PTR(scene_);
-		scene_->setMinimumSize(10, 10);
 		setCentralWidget(scene_);
-
-		display_properties_ = new DisplayProperties(this, "DisplayProperties");
-		CHECK_PTR(display_properties_);
-
-		CHECK_PTR(new LabelDialog(this, "LabelDialog"));
-		
-		file_dialog_ = new MolecularFileDialog(this, "MolecularFileDialog");
-		CHECK_PTR(file_dialog_);
-
-		CHECK_PTR(new DownloadPDBFile(this, "DownloadPDBFile", false));
-
-		CHECK_PTR(new MolecularStructure(this, "MolecularStructure"));
 
 		// setup the VIEW server
 		Server* server = new Server(this);
@@ -113,20 +108,11 @@ namespace BALL
 		MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
 		server->registerObjectCreator(*object_creator);
 
-		LogView* logview = new LogView(this, "Logs");
-		CHECK_PTR(logview);
-		logview->setMinimumSize(10, 10);
-
-		BALLViewTutorial* tutorial = new BALLViewTutorial(this, "BALLViewTutorial");
-		CHECK_PTR(tutorial);
-
-		BALLViewDemo* demo = new BALLViewDemo(this, "BALLViewDemo");
+		DemoTutorialDialog* demo = new DemoTutorialDialog(this, "BALLViewDemo");
 		CHECK_PTR(demo);
 
 		#ifdef BALL_PYTHON_SUPPORT
-			PyWidget* pywidget = new PyWidget(this, "Python Interpreter");
-			CHECK_PTR(pywidget);
-			pywidget->startInterpreter();
+			new PyWidget(this, "Python Interpreter");
 		#endif
 
 		// ---------------------
@@ -135,25 +121,43 @@ namespace BALL
 		String hint;
 
 		// File Menu
-		insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, SLOT(exportPOVRay()), 
-										CTRL+Key_Y);
+		Index entry = insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, SLOT(exportPOVRay()), CTRL+Key_Y);
+
+		// registerMenuEntryForHelpSystem
+		RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
+		msg->setMenuEntry(entry);
+		msg->setURL("tips.html#povray");
+		notify_(msg);
 
 		insertMenuEntry(MainControl::FILE, "Print", this, SLOT(printScene()));
 
-		insertMenuEntry(MainControl::FILE_OPEN, "Project", this, SLOT(loadBALLViewProjectFile()));
-		insertMenuEntry(MainControl::FILE, "Save Project", this, SLOT(saveBALLViewProjectFile()));
+		insertMenuEntry(MainControl::FILE_OPEN, "Project", this, 
+										SLOT(loadBALLViewProjectFile()), 0, 2);
+
+		save_project_id_ = insertMenuEntry(MainControl::FILE, "Save Project", this, 
+										SLOT(saveBALLViewProjectFile()));
 
 		// Display Menu
 		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
 										ALT+Key_X);
 
 		// Help-Menu -------------------------------------------------------------------
-		insertMenuEntry(MainControl::HELP, "Demo", demo, SLOT(show()));
-		insertMenuEntry(MainControl::HELP, "Tutorial", tutorial, SLOT(show()));
+		insertMenuEntry(MainControl::HELP, "Demo", demo, SLOT(showDemo()));
+		insertMenuEntry(MainControl::HELP, "Tutorial", demo, SLOT(showTutorial()));
+		insertPopupMenuSeparator(MainControl::HELP);
 		insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()));
 
 		// Menu ------------------------------------------------------------------------
 		menuBar()->setSeparator(QMenuBar::InWindowsStyle);
+
+//   		#ifdef BALL_QT_HAS_THREADS
+			stop_simulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
+											SLOT(stopSimulation()), ALT+Key_C);
+			insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
+			setMenuHint(stop_simulation_id_, "Abort a running simulation thread");
+//   		#endif
+
+		complement_selection_id_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
 
 		setStatusbarText("Ready.");
 	}
@@ -192,23 +196,6 @@ namespace BALL
 		}
 	}
 
-	void Mainframe::about()
-	{
-		// Display about dialog
-		AboutDialog about;
-		QString version = QString("QT ") + qVersion();
-#ifdef BALL_QT_HAS_THREADS
-		version += "(mt)";
-#endif
-		about.qt_version_label->setText(version);
-		QFont font = about.BALLView_version_label->font();
-		about.BALLView_version_label->setText(QString("BALLView ") + BALL_RELEASE_STRING);
-		font.setPixelSize(18);
-		about.BALLView_version_label->setFont(font);
-		about.BALL_version_label->setText(__DATE__);
-		about.exec(); 
-	}
-
 	void Mainframe::toggleFullScreen()
 	{
 		if (!fullscreen_)
@@ -228,6 +215,8 @@ namespace BALL
 	void Mainframe::openFile(const String& file)
 		throw()
 	{
+		if (composites_locked_) return;
+
 		setStatusbarText(String("Opening file ") + file + "...");
 
 		if (file.hasSuffix(".bvp"))
@@ -244,7 +233,13 @@ namespace BALL
 		}
 #endif
 
-		file_dialog_->openFile(file);
+		if (file.hasSuffix(".dcd"))
+		{
+			DatasetControl::getInstance(0)->addTrajectory(file);
+			return;
+		}
+
+		MolecularFileDialog::getInstance(0)->openFile(file);
 	}
 
 
@@ -312,6 +307,7 @@ namespace BALL
 		if (e->key() == Key_Enter) 
 		{
 			if (composite_manager_.getNumberOfComposites() == 0) return;
+
 			if (getMolecularControlSelection().size() == 0)
 			{
 				control_selection_.push_back(*composite_manager_.begin());
@@ -321,11 +317,74 @@ namespace BALL
 			return;
 		}
 
+		// check all menu entries if Alt or CTRL is pressed to enable shortcuts
+		if (e->key() == Qt::Key_Alt ||
+				e->key() == Qt::Key_Control)				
+		{
+			checkMenus();
+			return;
+		}
 
 		#ifdef BALL_PYTHON_SUPPORT
 			PyWidget::getInstance(0)->reactTo(*e);
 			e->accept();
 		#endif
+	}
+
+	
+	void Mainframe::reset()
+	{
+		if (composites_locked_ || getPrimitiveManager().updateRunning()) return;
+
+		DisplayProperties* dp = DisplayProperties::getInstance(0);
+		dp->setDrawingPrecision(DRAWING_PRECISION_HIGH);
+		dp->selectModel(MODEL_STICK);
+		dp->selectColoringMethod(COLORING_ELEMENT);
+		dp->selectMode(DRAWING_MODE_SOLID);
+		dp->setTransparency(0);
+		dp->setSurfaceDrawingPrecision(6.5);
+
+		// remove all loaded Composites
+		HashSet<Composite*> composites = getCompositeManager().getComposites();
+		HashSet<Composite*>::Iterator it = composites.begin();
+		
+		for (; +it; ++it)
+		{
+			remove(**it, true, false);
+		}
+
+		// remove all Representations
+		PrimitiveManager::RepresentationList reps = getPrimitiveManager().getRepresentations();
+		PrimitiveManager::RepresentationList::Iterator rit = reps.begin();
+
+		for (; rit != reps.end(); ++rit)
+		{
+			remove(**rit);
+		}
+	}
+
+	
+	void Mainframe::checkMenus()
+	{
+		MainControl::checkMenus();
+		menuBar()->setItemEnabled(save_project_id_, !composites_locked_);
+	}
+
+	void Mainframe::about()
+	{
+		// Display about dialog
+		AboutDialog about;
+		QString version = QString("QT ") + qVersion();
+#ifdef BALL_QT_HAS_THREADS
+		version += "(mt)";
+#endif
+		about.qt_version_label->setText(version);
+		QFont font = about.BALLView_version_label->font();
+		about.BALLView_version_label->setText(QString("BALLView ") + BALL_RELEASE_STRING);
+		font.setPixelSize(18);
+		about.BALLView_version_label->setFont(font);
+		about.BALL_version_label->setText(__DATE__);
+		about.exec(); 
 	}
 
 }

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.sip,v 1.3 2005/12/23 17:02:50 amoll Exp $
+// $Id: datasetControl.sip,v 1.3.6.1 2006/02/14 15:02:37 amoll Exp $
 //
 
 class DatasetControl

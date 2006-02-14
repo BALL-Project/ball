@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcid.h,v 1.34 2004/05/27 19:49:39 oliver Exp $ 
+// $Id: nucleicAcid.h,v 1.34.6.1 2006/02/14 15:00:57 amoll Exp $ 
 //
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
@@ -26,7 +26,7 @@ namespace BALL
     	
 			\ingroup KernelContainers 
 	*/
-	class NucleicAcid
+	class BALL_EXPORT NucleicAcid
 		: public Molecule
 	{
 		public:

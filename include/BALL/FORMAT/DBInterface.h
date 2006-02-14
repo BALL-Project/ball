@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.h,v 1.6 2006/02/07 12:35:25 oliver Exp $
+// $Id: DBInterface.h,v 1.6.4.1 2006/02/14 15:00:48 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher

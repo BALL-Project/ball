@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.h,v 1.16 2004/10/21 13:53:37 amoll Exp $
+// $Id: preferences.h,v 1.16.8.1 2006/02/14 15:01:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
@@ -33,7 +33,7 @@ namespace BALL
 				All ModularWidget classes can add their own preferences pages.
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT Preferences 
+		class BALL_VIEW_EXPORT Preferences 
 			: public PreferencesData
 		{
 			Q_OBJECT
@@ -133,6 +133,15 @@ namespace BALL
 
 			///
 			void setDefaultValues();
+
+			///
+			void cancelPreferences();
+
+			/// Store the last applied values for undo
+			void applyPreferences();
+
+			///
+			void showHelp();
 
 			protected:
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: notification.h,v 1.20 2003/08/26 08:04:08 oliver Exp $
+// $Id: notification.h,v 1.20.8.1 2006/02/14 15:00:42 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
@@ -314,6 +314,7 @@ namespace BALL
 	class NotificationTarget
 	{
 		public:
+		virtual ~NotificationTarget() throw() {}
 
 		/**	The method to be invoked upon receiving a notification
 		*/

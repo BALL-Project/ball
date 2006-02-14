@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selector.h,v 1.28 2004/02/23 20:39:00 anker Exp $
+// $Id: selector.h,v 1.28.8.1 2006/02/14 15:00:59 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_SELECTOR_H
@@ -23,7 +23,7 @@ namespace BALL
 	/**	Atom Selection from Regular Expression.
     	\ingroup  Predicates
 	*/
-	class Selector
+	class BALL_EXPORT Selector
 		:	public UnaryProcessor<Composite>
 	{
 		

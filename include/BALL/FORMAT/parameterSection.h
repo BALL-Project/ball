@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parameterSection.h,v 1.24 2003/08/26 08:04:15 oliver Exp $
+// $Id: parameterSection.h,v 1.24.8.1 2006/02/14 15:00:52 amoll Exp $
 //
 
 // Format: general  parameter section class
@@ -36,7 +36,7 @@ namespace BALL
 			
     	\ingroup  General
 	*/
-	class ParameterSection 
+	class BALL_EXPORT ParameterSection 
 	{
 		public:
 

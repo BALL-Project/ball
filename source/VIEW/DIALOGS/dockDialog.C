@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5 2006/01/08 19:42:34 anhi Exp $
+// $Id: dockDialog.C,v 1.5.6.1 2006/02/14 15:03:30 amoll Exp $
 //
 
 #include <qpushbutton.h>

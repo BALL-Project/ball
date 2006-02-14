@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: potential1210.h,v 1.17 2003/08/26 08:04:28 oliver Exp $
+// $Id: potential1210.h,v 1.17.8.1 2006/02/14 15:01:10 amoll Exp $
 //
  
 #ifndef BALL_MOLMEC_PARAMETER_POTENTIAL1210_H
@@ -24,7 +24,7 @@ namespace BALL
 			
     	\ingroup  MolmecParameters
 	*/
-	class Potential1210 
+	class BALL_EXPORT Potential1210 
 		:	public ParameterSection
 	{
 		public:
@@ -34,13 +34,13 @@ namespace BALL
 			UNKNOWN
 		};
 
-		struct Values 
+		struct BALL_EXPORT Values 
 		{
 			float A;
 			float B;
 		};
 
-		struct Data
+		struct BALL_EXPORT Data
 		{
 			Atom*		atom1;
 			Atom*		atom2;

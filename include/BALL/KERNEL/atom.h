@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.70 2005/02/13 22:38:49 oliver Exp $
+// $Id: atom.h,v 1.70.6.1 2006/02/14 15:00:54 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -85,7 +85,7 @@ namespace BALL
 			@see AtomContainer
 			\ingroup KernelContainers 
 	*/
-	class Atom
+	class BALL_EXPORT Atom
 		: public Composite,
 			public PropertyManager
 	{
@@ -145,7 +145,11 @@ namespace BALL
 				// Add the residue ID
 				ADD_RESIDUE_ID,
 				// Add the residue ID and the residue extension
-				ADD_VARIANT_EXTENSIONS_AND_ID
+				ADD_VARIANT_EXTENSIONS_AND_ID,
+				// Add the chain ID and the residue ID 
+				ADD_CHAIN_RESIDUE_ID,
+				// Add the chain ID and the residue ID 
+				ADD_VARIANT_EXTENSIONS_AND_CHAIN_RESIDUE_ID
 			};
 
 			//@}  
@@ -175,7 +179,7 @@ namespace BALL
 				throw();
 		
 			/** Copy constructor.
-					The copy is either deep or shallow (default).
+					The copy is either deep (default) or shallow.
 					 \par
 					<b>Note:</b> Deep copying of atoms does not include bond cloning.
 					@param   atom the atom to be copied (cloned)
@@ -238,16 +242,14 @@ namespace BALL
 					@see	Composite::clear
 					@see	destroy
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear() throw();
 		
 			/** Explicit destructor.
 					Destroy this instance explicitly and 
 					reset its attributes to the default values. 
 					@see  Composite::clear
 			*/
-			virtual void destroy()
-				throw();
+			virtual void destroy() throw();
 
 			//@}
 			/**	@name	Persistence 
@@ -280,8 +282,7 @@ namespace BALL
           @param   atom the atom to be copied
           @param   deep make a deep (=<b>true</b>) or shallow (=<b>false</b>) copy of <tt>atom</tt>
       */
-      void set(const Atom& atom, bool deep = true)
-        throw();
+      void set(const Atom& atom, bool deep = true) throw();
 
       /** Deep/shallow assignment.
 					The inverse operation to  \link set set \endlink , behaves identically.
@@ -327,89 +328,58 @@ namespace BALL
 				throw();
 
 			//@}
-			/** @name Accessors: inspectors and mutators 
+			/** @name Accessors
 			*/
 			//@{ 
 
-			/** Change the atom element type.
-					@param   element the new element
-			*/
-			void setElement(const Element& element)
-				throw();
+			/// Assign the atom's element
+			void setElement(const Element& element)	throw();
 				
-			/** Constant inspection of the atom element type.
-					@return  Element& - constant reference to the element type
-			*/
-			const Element& getElement() const
-				throw();
+			/// Return the atom's element
+			const Element& getElement() const	throw();
 
-			/** Set the charge of an atom.
+			/** Set the atom's (partial) charge.
 					Charges should be assigned in multiples of the proton charge
 					(elementary charge).
-					@param   charge the new charge
 			*/
-			void setCharge(float charge)
-				throw();
+			void setCharge(float charge) throw();
 
-			/** Retrieve the charge of an atom
+			/**	Return the atom's (partial) charge.
 					Charges should be assigned in multiples of the proton charge
 					(elementary charge).
-					@return  float - copy of the charge
 			*/
-			float getCharge() const
-				throw();
+			float getCharge() const	throw();
 
-			/** Set the formal charge of the atom.
-			*/
-			void setFormalCharge(Index formal_charge) 
-				throw();
+			/// Set the atom's formal charge
+			void setFormalCharge(Index formal_charge) throw();
 
-			/** Return the formal charge of the atom
-			*/
+			/// Return the atom's formal charge
 			Index getFormalCharge() const throw();
 
-
-			/** Mutable inspection of the atom's parent molecule.
-					A NULL pointer is returned if this atom is not part of a molecule.
-					 \par
-					Use  \link Molecule::insert Molecule::insert \endlink  to insert an atom into a molecule and
-					 \link Molecule::remove Molecule::remove \endlink  to remove it.
-					@return  Molecule* - mutable pointer to the parent molecule
-			*/
-			Molecule *getMolecule()
-				throw();
-
-			/** Constant inspection of the atom's parent molecule.
+			/** Return the molecule the atom is contained in (const).
 					A NULL pointer is returned if this atom is not part of a molecule.
 					 \par
 					Use  \link Molecule::insert Molecule::insert \endlink  to insert an atom into a molecule and
 					 \link Molecule::remove Molecule::remove \endlink  to remove it.
 					@return  Molecule* - constant pointer to the parent molecule
 			*/
-			const Molecule* getMolecule() const
-				throw();
+			const Molecule* getMolecule() const	throw();
+			/// Return the molecule the atom is contained in (mutable)
+			Molecule* getMolecule()	throw();
 
-			/** Mutable inspection of the atom's parent fragment.
-					A NULL pointer is returned if this atom is not part of a fragment.
-					 \par
-					Use  \link Fragment::insert Fragment::insert \endlink  to insert an atom into a fragment and
-					 \link Fragment::remove Fragment::remove \endlink  to remove it.
-					@return   Fragment* - mutable pointer to the fragment
-			*/
-			Fragment* getFragment()
-				throw();
 
-			/** Constant inspection of the atom's parent fragment.
+			/** Return the fragment the atom is contained in (const).
 					A NULL pointer is returned if this atom is not part of a fragment.
 					 \par
 					Use  \link Fragment::insert Fragment::insert \endlink  to insert an atom into a fragment and
 					 \link Fragment::remove Fragment::remove \endlink  to remove it.					
 					@return   Fragment* -	constant pointer to the fragment
 			*/
-			const Fragment* getFragment() const
-				throw();
+			const Fragment* getFragment() const	throw();
+			/// Return the fragment the atom is contained in (mutable)
+			Fragment* getFragment()	throw();
 
-			/** Return the residue the atom is contained in.
+			/** Return the residue the atom is contained in (const).
 					A NULL pointer is returned if this atom is not part of a residue.
 					 \par
 					Use  \link Residue::insert Residue::insert \endlink  to insert an atom into a residue and
@@ -417,29 +387,32 @@ namespace BALL
 					@return   Residue* -	constant pointer to the residue
 			*/
 			const Residue* getResidue() const	throw();
+			/// Return the residue the atom is contained in (mutable)
+			Residue* getResidue() throw();
 
-			/** Return the secondary structure the atom is contained in.
+			/** Return the secondary structure the atom is contained in (const).
 					A NULL pointer is returned if this atom is not part of a secondary structure.
 					 \par
 					@return   SecondaryStructure* -	constant pointer to the secondary structure
 			*/
 			const SecondaryStructure* getSecondaryStructure() const throw();
+			/// Return the secondary structure the atom is contained in (mutable)
+			SecondaryStructure* getSecondaryStructure() throw();
 
-			/** Return the chain the atom is contained in.
+			/** Return the chain the atom is contained in (const).
 					A NULL pointer is returned if this atom is not part of a chain.
 					 \par
 					@return   Chain* -	constant pointer to the chain
 			*/
 			const Chain* getChain() const throw();
+			/// Return the chain the atom is contained in (mutable)
+			Chain* getChain() throw();
+				
 
-			/** Set the atom name.
-					@param   name the new name
-			*/
+			/// Set the atom name.
 			void setName(const String& name) throw();
 
-			/** Return the atom name
-					@return  String& - constant reference to the name
-			*/
+			/// Return the atom name
 			const String& getName() const throw();
 
 			/** Assemble a fully specified atom name.
@@ -471,104 +444,63 @@ namespace BALL
 									the variant extension (<tt>-XX</tt>) is omitted
 					@return	String the full name
 			*/
-			String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const
-				throw();
+			String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const throw();
 
-			/** Change the atom's position vector.
-					@param   position the new position vector
+			/** Assign the atom coordinates.
+					BALL uses units of Angstrom for atom coordinates.
 			*/
-			void setPosition(const Vector3& position)
-				throw();
-
-			/** Mutable inspection of the atom's position vector.
-					@return  Vector3& - mutable reference to the position vector
-			*/
-			Vector3& getPosition()
-				throw();
-
-			/** Constant inspection of the atom's position vector.
-					@return  Vector3& - constant reference to the position vector
-			*/
-			const Vector3& getPosition() const
-				throw();
+			void setPosition(const Vector3& position)	throw();
+				
+			/// Return the atom coordinates (mutable)
+			Vector3& getPosition() throw();
+			
+			/// Return the atom coordinates (const)
+			const Vector3& getPosition() const throw();
 
 			/** Set the atom radius.
 					BALL uses units of Angstrom for the atom radii.
-					@param   radius the new radius
 			*/
-			void setRadius(float radius)
-				throw();
+			void setRadius(float radius) throw();
 				
-			/** Return the atom radius.
-					BALL uses units of Angstrom for the atom radii.
-					@return  float - copy of the radius
-			*/
-			float getRadius() const
-				throw();
+			/// Return the atom radius.
+			float getRadius() const	throw();
 
-			/** Set the atom type.
-					@param   atom_type the new type
-			*/
-			void setType(Type atom_type)
-				throw();
+			/// Assign the numerical atom type.
+			void setType(Type atom_type) throw();
 		
-			/** Return the atom type.
-					@return  Type - copy of the type
-			*/
-			Type getType() const
-				throw();
-		
-			/**	Get the type name of the atom.
-					@return the type name 
-			*/
-			String getTypeName() const
-				throw();
+			/// Return the (numerical) atom type
+			Type getType() const throw();
 
-			/**	Set the type name of the atom.
-			*/
-			void setTypeName(const String& name)
-				throw();
+			/// Return the atom type name
+			String getTypeName() const throw();
+
+			/// Assign the atom type name
+			void setTypeName(const String& name) throw();
 
 			/** Set the atom velocity
 					BALL uses units of \f$ {\AA}/ps \f$ for the velocity.
 			*/
-			void setVelocity(const Vector3& velocity)
-				throw();
+			void setVelocity(const Vector3& velocity)	throw();
 
-			/** 
+			/** Return the atom velocity.
 					BALL uses units of \f$ {\AA}/ps \f$ for the velocity.
-					@return  Vector3& - constant reference to the velocity vector
 			*/
-			const Vector3& getVelocity() const
-				throw();
+			const Vector3& getVelocity() const throw();
 
-			/** Change the atom's force vector.
+			/** Assign the atom's force vevtor.
 					BALL uses units of <b>Newton</b> (1 N = 1 J/m) as the unit of force.
 			*/
-			void setForce(const Vector3& force)
-				throw();
+			void setForce(const Vector3& force)	throw();
+			/// Return the atom's force vector (const)
+			const Vector3& getForce() const throw();
+			/// Return the atom's force vector (mutable)
+			Vector3& getForce()	throw();
 
-			/** Mutable inspection of the atom's force vector.
-					BALL uses units of <b>Newton</b> (1 N = 1 J/m) as the unit of force.
-					@return  Vector3& - mutable reference to the force vector
-			*/
-			Vector3& getForce()
-				throw();
 
-			/** Constant inspection of the atom's force vector.
-					BALL uses units of <b>Newton</b> (1 N = 1 J/m) as the unit of force.
-					@return  Vector3& - constant reference to the force vector
-			*/
-			const Vector3& getForce() const
-				throw();
+			/// Return the number of bonds 
+			Size countBonds() const	throw();
 
-			/** Constant inspection of the atom's number of bonds.
-					@return	Size - copy of number of bonds
-			*/
-			Size countBonds() const
-				throw();
-
-			/** Mutable inspection of an atom's indexed bond.
+			/** Return a bond by its index (mutable).
 					The reference is 0 if this instance does not have a bond with index <b>  index </b>. \par
 					<b>Note:</b> No corresponding mutator Atom::setBond exists to
 					consider design of contract - an atom may not insert a bond in its bond table at a given index.
@@ -578,52 +510,41 @@ namespace BALL
 					@param   index the index of the bond to be accessed to
 					@return  Bond* - mutable pointer to the bond that is indexed in this instance's bond table,
 									 0 if this instance does not have a bond with index <b>  index </b>
-					@exception   IndexOverflow if <tt>index > MAX_NUMBER_OF_BONDS</tt>
+					@exception   IndexOverflow if <tt>index >= MAX_NUMBER_OF_BONDS</tt>
 			*/
-			Bond* getBond(Position index)
-				throw(Exception::IndexOverflow);
+			Bond* getBond(Position index)	throw(Exception::IndexOverflow);
 
-			/** Constant inspection of an atom's indexed bond.
-					The reference is 0 if this instance does not have a bond with index <b>  index </b>. \par
-					<b>Note:</b> No corresponding mutator Atom::setBond exists to
-					consider design of contract - an atom may not insert a bond in its bond table at a given index.
-					The atom's bond table is an implementation detail that is not relevant to and should not be relied
-					on by the client programmer. A bond must always be created via  \link Bond::Bond Bond::Bond \endlink  or
-					 \link Atom::createBond Atom::createBond \endlink .
-					@param   index the index of the bond to be accessed to
-					@return  Bond* - constant pointer to the bond that is indexed in this instance's bond table,
-									 0 if this instance does not have a bond with index <b>  index </b>
-					@exception   IndexOverflow if <tt>index > MAX_NUMBER_OF_BONDS</tt>
+			/** Return a bond by its index (const).
+					@exception   IndexOverflow if <tt>index >= MAX_NUMBER_OF_BONDS</tt>
 			*/
 			const Bond* getBond(Position index) const
 				throw(Exception::IndexOverflow);
 
-			/** Mutable inspection of an atom's bond with another atom.
+			/** Return a bond by its partner atom (const).
 					The reference is 0 if this instance does not have a bond with <b>  atom </b>.
 					@param   atom the atom that is considered to have a bond with this instance
 					@return  Bond* - mutable pointer to the bond that connects <tt>atom</tt>  with this instance,
 									 0 if this instance does not have a bond with <b>  atom </b>
 					@see     Atom::createBond	     
 			*/
-			Bond* getBond(const Atom& atom)
-				throw();
+			Bond* getBond(const Atom& atom) throw();
 
-			/** Constant inspection of an atom's bond with another atom.
+			/** Return a bond by its partner atom (mutable)
 					The reference is 0 if this instance does not have a bond with <b>  atom </b>.
 					@param   atom the atom that is considered to have a bond with this instance
 					@return  Bond* - constant pointer to the bond that connects <b>  atom </b> with 
 									 this instance, 0 if this instance does not have a bond with <b>  atom </b>
 					@see     Atom::createBond	     
 			*/
-			const Bond* getBond(const Atom& atom) const
-				throw();
-
+			const Bond* getBond(const Atom& atom) const throw();
 			//@}
+
+
 			/** @name Miscellaneous 
 			*/
 			//@{ 
 
-			/** Bond creation.
+			/** Create a new bond to an atom.
 					Create a new instance of  \link Bond Bond \endlink  connecting this instance to <b>  atom </b>.
 					Calls  \link Bond::createBond Bond::createBond \endlink .
 					The state of the bond is initialized to the default values.
@@ -631,9 +552,9 @@ namespace BALL
 					@see     Bond::createBond
 			*/
 			Bond* createBond(Atom& atom)
-				throw();
+				throw(Exception::TooManyBonds);
 
-			/** Extended bond creation.
+			/** Create a new bond from an already existing instance of Bond.
 					Initialize the bond <b>  bond </b> to connect this instance to <b>  atom </b>.
 					Calls  \link Bond::createBond Bond::createBond \endlink .
 					The state of the bond is initialzed to the default values. \par
@@ -643,12 +564,13 @@ namespace BALL
 					@see     Bond::createBond
 			*/
 			Bond* createBond(Bond& bond, Atom& atom)
-				throw();
+				throw(Exception::TooManyBonds);
 
 			/**	Create a copy of a bond.
+					This is mostly for internal use and should not be required by most
+					users.
 			*/
-			Bond* cloneBond(Bond& bond, Atom& atom)
-				throw();
+			Bond* cloneBond(Bond& bond, Atom& atom)	throw();
 
 			/** Explicit bond destruction.
 					Destroy the bond connecting {\em *this atom} and <b>  atom </b> explicitly.
@@ -661,8 +583,7 @@ namespace BALL
 					@see     AutoDeletable
 					@see     Bond::destroy
 			*/
-			bool destroyBond(const Atom& atom)
-				throw();
+			bool destroyBond(const Atom& atom) throw();
 
 			/** Explicit bond table destruction.
 					Destroy all the bonds connecting {\em *this atom} with another atom explicitly.
@@ -675,10 +596,9 @@ namespace BALL
 					@see       AutoDeletable
 					@see       Bond::destroy
 			*/
-			void destroyBonds()
-				throw();
-
+			void destroyBonds()	throw();
 			//@}
+
 			/** @name Predicates 
 			*/
 			//@{ 
@@ -692,7 +612,7 @@ namespace BALL
 			bool hasBond(const Bond& bond) const
 				throw();
 
-			/** Determine whether the atom is bound to another.
+			/** Determine whether there exists a bond to another atom.
 					Calls  \link Atom::getBond Atom::getBond \endlink .
 					Hydrogen bonds (type = Bond::TYPE__HYDROGEN) are ignored.
 					@param   atom the atom in question
@@ -700,16 +620,14 @@ namespace BALL
 													<tt>false</tt> otherwise
 					@see     Atom::getBond
 			*/
-			bool isBoundTo(const Atom& atom) const
-				throw();
+			bool isBoundTo(const Atom& atom) const throw();
 
 			/** Determine whether the atom has any bond.
 					@return  bool - <tt>true</tt> if an atom is bound to this instance,
 													<tt>false</tt> otherwise
 					@see     Atom::hasBond
 			*/
-			bool isBound() const
-				throw();
+			bool isBound() const throw();
 
 			/**	True if the two atoms are geminal.
 					Two atoms are geminal if they do not share a common bond but both have a
@@ -718,8 +636,7 @@ namespace BALL
 					@param	atom the second atom
 					@return bool - <b>true</b> if <tt>atom</tt> is geminal to this instance
 			*/
-			bool isGeminal(const Atom& atom) const
-				throw();
+			bool isGeminal(const Atom& atom) const throw();
 
 			/**	True if the two atoms are vicinal.
 					Two atoms are vicinal if they are separated by three bonds (1-4 position).
@@ -727,10 +644,9 @@ namespace BALL
 					@param	atom the second atom
 					@return bool - <b>true</b> if <tt>atom</tt> is vicinal to this instance
 			*/
-			bool isVicinal(const Atom& atom) const
-				throw();
-
+			bool isVicinal(const Atom& atom) const throw();
 			//@}
+
 			/** @name Debuggers and diagnostics 
 			*/
 			//@{ 
@@ -739,19 +655,18 @@ namespace BALL
 					@return	bool - <tt>true</tt> if the internal state of this 
 									instance is correct (self-validated) and consistent, <tt>false</tt> otherwise
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const throw();
 
 			/** Internal state dump.
 					Dump the current internal state of this instance to 
 					the output ostream <b>  s </b> with dumping depth <b>  depth </b>.
+					For debugging purposes only.
 					@param   s - output stream where to output the internal state
 					@param   depth - the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
-
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 			//@}
+
 			/** @name Internal iteration
 			*/
 			//@{
@@ -761,8 +676,7 @@ namespace BALL
 					@return  bool - <tt>true</tt> if application has been terminated successfully,
 													<tt>false</tt> otherwise
 			*/
-			bool applyBonds(UnaryProcessor<Bond>& processor)
-				throw();
+			bool applyBonds(UnaryProcessor<Bond>& processor) throw();
 
 			//@}
 			/** @name External iteration
@@ -771,11 +685,13 @@ namespace BALL
 
 			typedef Index BondIteratorPosition;
 
-			class BondIteratorTraits
+			class BALL_EXPORT BondIteratorTraits
 			{
 				public:
 
 				BALL_CREATE_DEEP(BondIteratorTraits)
+
+				virtual ~BondIteratorTraits() throw()  {}
 
 				BondIteratorTraits()
 					throw()
@@ -1018,7 +934,7 @@ namespace BALL
 		//@{
 		
 		///
-		class StaticAtomAttributes
+		class BALL_EXPORT StaticAtomAttributes
 		{
 			public:
 			///
@@ -1056,7 +972,7 @@ namespace BALL
 		};
 
 		///
-		class AttributeVector
+		class BALL_EXPORT AttributeVector
 			:	public std::vector<StaticAtomAttributes>
 		{
 			public:

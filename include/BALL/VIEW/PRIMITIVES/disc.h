@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: disc.h,v 1.5 2004/02/26 08:41:42 anhi Exp $
+// $Id: disc.h,v 1.5.10.1 2006/02/14 15:01:47 amoll Exp $
+//
 
 #ifndef BALL_VIEW_PRIMITIV_DISC_H
 #define BALL_VIEW_PRIMITIV_DISC_H
@@ -25,11 +26,13 @@ namespace BALL
 				interface and additional methods. \par
 				\ingroup ViewPrimitives
 		*/
-		class BALL_EXPORT Disc
+		class BALL_VIEW_EXPORT Disc
 			: public GeometricObject,
 				protected Circle3
 		{
 			public:
+
+			BALL_CREATE(Disc)
 
 			/**	@name	Constructors
 			*/	

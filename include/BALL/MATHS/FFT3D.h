@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.h,v 1.12 2005/02/02 10:49:42 anhi Exp $
+// $Id: FFT3D.h,v 1.12.6.1 2006/02/14 15:01:00 amoll Exp $
 //
 
 #ifndef BALL_MATHS_TFFT3D_H
@@ -38,11 +38,13 @@ namespace BALL
 	 \ingroup FFT
 	 */
 	template <typename ComplexTraits>
-	class TFFT3D : public TRegularData3D<std::complex<typename ComplexTraits::ComplexPrecision> >
+	class TFFT3D 
+		: public TRegularData3D<std::complex<typename ComplexTraits::ComplexPrecision> >
 	{
 		public:
 		
 			typedef std::complex<typename ComplexTraits::ComplexPrecision> Complex;
+			typedef TRegularData3D<std::complex<typename ComplexTraits::ComplexPrecision> >	ComplexVector;
 
       BALL_CREATE(TFFT3D)
 
@@ -374,8 +376,7 @@ namespace BALL
 	
 	/**	Default type
 	*/
-	typedef TFFT3D<DoubleTraits> FFT3D;
-	
+	typedef TFFT3D<BALL_FFTW_DEFAULT_TRAITS> FFT3D;
 
 	/** Global assignment operator from TFFT3D to TRegularData3D<Complex>
 	 */
@@ -668,7 +669,7 @@ namespace BALL
 	{
 		if (!inFourierSpace_)
 		{
-			if (position >= size())
+			if (position >= ComplexVector::size())
 			{
 				throw Exception::OutOfGrid(__FILE__, __LINE__);
 			}
@@ -688,7 +689,7 @@ namespace BALL
 		}
 		else
 		{
-			if (position >= size())
+			if (position >= ComplexVector::size())
 			{
 				throw Exception::OutOfGrid(__FILE__, __LINE__);
 			}
@@ -1009,7 +1010,7 @@ namespace BALL
 																			Vector3(from.getPhysSpaceMaxX(), from.getPhysSpaceMaxY(), from.getPhysSpaceMaxZ()));
 
 			// and fill it
-			double normalization=1./(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+			double normalization=1./(pow((float)(lengthX*lengthY*lengthZ),(int)from.getNumberOfInverseTransforms()));
 			typename TFFT3D<ComplexTraits>::Complex dataIn;
 			typename TFFT3D<ComplexTraits>::Complex dataOut;
 			
@@ -1058,7 +1059,7 @@ namespace BALL
 
 			// and fill it
 			// AR: old double normalization=1./(sqrt(2.*M_PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
-			double normalization=1./pow(sqrt(2.*M_PI),3)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+			double normalization=1./pow(sqrt(2.*M_PI),3)/(pow((float)(lengthX*lengthY*lengthZ),(int)from.getNumberOfInverseTransforms()));
 			
 			
 			Index x, y, z;
@@ -1124,7 +1125,7 @@ namespace BALL
 																		from.getPhysSpaceMaxZ()));
 
 			// and fill it
-			double normalization = 1./(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+			double normalization = 1./(pow((float)(lengthX*lengthY*lengthZ),(int)from.getNumberOfInverseTransforms()));
 			typename TFFT3D<ComplexTraits>::Complex dataIn;
 			typename TFFT3D<ComplexTraits>::Complex dataOut;
 			
@@ -1174,7 +1175,7 @@ namespace BALL
 
 			// and fill it
 			// AR: old version double normalization=1./(sqrt(2.*M_PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
-			double normalization=1./pow(sqrt(2.*M_PI),3)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+			double normalization=1./pow(sqrt(2.*M_PI),3)/(pow((float)(lengthX*lengthY*lengthZ),(int)from.getNumberOfInverseTransforms()));
 			
 			Index x, y, z;
 			signed int xp, yp, zp;

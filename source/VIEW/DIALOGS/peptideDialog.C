@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideDialog.C,v 1.9 2004/06/26 15:33:58 amoll Exp $
+// $Id: peptideDialog.C,v 1.9.8.1 2006/02/14 15:03:38 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
 #include <BALL/COMMON/logStream.h>
@@ -14,13 +14,14 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		String PeptideDialog::all_amino_acids_ = "ACDEFGHIKLMNOPQRSTUVWY";
+		String PeptideDialog::all_amino_acids_ = "ACDEFGHIKLMNPQRSTVWY";
 
 		PeptideDialog::PeptideDialog( QWidget* parent, const char* name, WFlags fl )
 		 : PeptideDialogData( parent, name, fl ),
 			 Peptides::PeptideBuilder(),
 			 protein_(0)
 		{
+			connect(sequence, SIGNAL(returnPressed()), this, SLOT(close_pressed()));
 			sequence->clear();
 			show();
 		}
@@ -28,16 +29,15 @@ namespace BALL
 		void PeptideDialog::back_pressed()
 		{
 			//change sequence shown in line-edit
-			if (sequence->text().length() > 1)
-			{
-				String old = sequence->text().ascii();
-				old = old.getSubstring(0, old.size()-1);
-				sequence->setText(old.c_str());
-			}
-			else
+			if (sequence->text().length() <= 1)
 			{
 				sequence->clear();
+				return;
 			}
+
+			String old = sequence->text().ascii();
+			old.truncate(old.size() - 1);
+			sequence->setText(old.c_str());
 		}
 
 		void PeptideDialog::truncString_(String& data)
@@ -81,39 +81,60 @@ namespace BALL
 			}
 		}
 
-		void PeptideDialog::insert_(String aa)
+		void PeptideDialog::insert_(char a)
 			throw()
 		{
-			aa.toUpper();
-
-			String new_aa;
-			for (String::iterator it = aa.begin(); it != aa.end(); ++it)
-			{
-				if (all_amino_acids_.find(*it) != string::npos)
-				{
-					new_aa.push_back(*it);
-				}
-			}
-			sequence->insert(new_aa.c_str());
+			sequence->insert(QString(QChar(a)));
 		}
 		
-		bool PeptideDialog::islower_(char ch)
-			throw()
+		bool PeptideDialog::isAminoAcid_(char a) const
 		{
-			return ( ch>=97 && ch<=122 );
+			return all_amino_acids_.has(a);
 		}
 
 		void PeptideDialog::insert_seq()
 		{
-			String written_seq = sequence->text().ascii();
-			written_seq.toUpper();
-			if (written_seq != sequence->text().ascii())
+			/////////////////////////////////////////////
+			// first check sanity
+			String aa(sequence->text().ascii());
+			aa.toUpper();
+
+			String new_aa;
+			for (Position p = 0; p < aa.size(); p++)
 			{
-				sequence->setText(written_seq.c_str());
+				if (isAminoAcid_(aa[p]))
+				{
+					new_aa += aa[p];
+				}
+			}
+
+			if (new_aa != sequence->text().ascii())
+			{
+				sequence->setText(new_aa.c_str());
 				return;
 			}
 
-			Size written_seq_size = written_seq.size();
+			/////////////////////////////////////////////
+			// no difference ?
+			if (sequence_.size() == sequence->text().length())
+			{
+				bool equal = true;
+				String s = sequence->text().ascii();
+				for (Position p = 0; p < sequence_.size(); p++)
+				{
+					if ((sequence_[p]).getType()[0] != s[p])
+					{
+						equal = false;
+						break;
+					}
+
+					if (equal) return;
+				}
+			}
+
+			/////////////////////////////////////////////
+			// empty string?
+			Size written_seq_size = sequence->text().length();
 			if (written_seq_size == 0)
 			{
 				sequence->clear();
@@ -121,46 +142,79 @@ namespace BALL
 				return;
 			}
 
-			//if written letter is no amino acid, set text to original string and return
-			String last_letter = *(written_seq.end()-1);
-			if (all_amino_acids_.find(last_letter) == string::npos)
+			/////////////////////////////////////////////
+			Size old_size = sequence_.size();
+			
+			//if written_seq < already built sequence => delete amino acids
+			if (written_seq_size < old_size)
 			{
-				written_seq = written_seq.getSubstring(0, written_seq.size()-1);
-				sequence->setText(written_seq.c_str());
-				return;
-			}
+				sequence_.resize(written_seq_size);
 
-			// if written_seq > already built sequence => add amino acid
-			Size sequence_size = sequence_.size();
-			if (written_seq_size > sequence_size)
-			{
-				written_seq.toLower();
-				Angle a_phi(String(phi->text().ascii()).toFloat(), false);
-				Angle a_psi(String(psi->text().ascii()).toFloat(), false);
-				Angle a_omega(String(omega->text().ascii()).toFloat(), false);
-				const String aa = *(written_seq.end()-1);
-				addAminoAcid(aa.c_str(), a_phi, a_psi, a_omega);
-				return;
-			}
+				String s = sequence->text().ascii();
+				for (Position p = 0; p < sequence_.size(); p++)
+				{
+					sequence_[p].setAminoAcidType(String(s[p]));
+				}
 
-			//if written_seq < already built sequence => delete amino acid
-			if (written_seq_size < sequence_size)
-			{
-				sequence_.pop_back();
 				if (sequence_.size() != 0)
 				{
 					Peptides::AminoAcidDescriptor& aad = sequence_[sequence_.size()-1];
-					String data = String(aad.getPhi().toDegree());
-					truncString_(data);
-					phi->setText(data.c_str());
+					String phis = String(aad.getPhi().toDegree());
+					truncString_(phis);
 
-					data = String(aad.getPsi().toDegree());
-					truncString_(data);
-					psi->setText(data.c_str());
+					String psis = String(aad.getPsi().toDegree());
+					truncString_(psis);
 
-					data = String(aad.getOmega().toDegree());
-					truncString_(data);
-					omega->setText(data.c_str());
+					String omegas = String(aad.getOmega().toDegree());
+					truncString_(omegas);
+
+					if (phis == "-47" && psis == "-58")
+					{
+						alpha->setChecked(true);
+					}
+					else
+					{
+						if (phis == "180" && psis == "180")
+						{
+							beta->setChecked(true);
+						}
+						else
+						{
+							other->setChecked(true);
+						}
+					}
+
+					phi->setText(phis.c_str());
+					omega->setText(omegas.c_str());
+					psi->setText(psis.c_str());
+				}
+
+				return;
+			}
+
+			/////////////////////////////////////////////
+			// if written_seq > already built sequence => add amino acid
+			if (written_seq_size > old_size)
+			{
+				Angle a_phi(String(phi->text().ascii()).toFloat(), false);
+				Angle a_psi(String(psi->text().ascii()).toFloat(), false);
+				Angle a_omega(String(omega->text().ascii()).toFloat(), false);
+				const String aa = Substring(sequence->text().ascii(), old_size, written_seq_size - old_size);
+				for (Position p = 0; p < aa.size(); p++)
+				{
+					addAminoAcid(aa[p], a_phi, a_psi, a_omega);
+				}
+				return;
+			}
+
+			/////////////////////////////////////////////
+			// same size, but different amino acids
+			if (written_seq_size == old_size)
+			{
+				String s = sequence->text().ascii();
+				for (Position p = 0; p < sequence_.size(); p++)
+				{
+					sequence_[p].setAminoAcidType(String(s[p]));
 				}
 			}
 		}

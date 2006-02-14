@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileDetails.C,v 1.11 2005/02/24 14:50:18 oliver Exp $
+// $Id: PDBFileDetails.C,v 1.11.4.1 2006/02/14 15:02:20 amoll Exp $
 //
 
 // This file contains the more or less implementation specific portion of PDBFile.
@@ -366,14 +366,18 @@ namespace BALL
 				element_symbol[1] = record.element_symbol[1];
 				element_symbol[2] = '\0';
 				current_PDB_atom_->setElement(PTE[PDBFile::getAtomElementSymbol(record.atom_name, element_symbol)]);
+				current_PDB_atom_->setFormalCharge(0);
 				try	
 				{
-					current_PDB_atom_->setFormalCharge(String(record.charge).toInt());
+					if (record.charge[1] == '+' || record.charge[1] == '-')
+					{
+						current_PDB_atom_->setFormalCharge(String(record.charge).toInt());
+					}
 				}
 				catch (Exception::InvalidFormat)
 				{
 				}
-				current_PDB_atom_->setCharge(current_PDB_atom_->getFormalCharge());
+				current_PDB_atom_->setCharge((float)current_PDB_atom_->getFormalCharge());
 			}
 		}
 		
@@ -492,62 +496,64 @@ namespace BALL
 		{
 			PDB_atom = atom_map_it->second; // retrieve the pointer
 		}
-		
-		// read the entries for the bonds
-		for (i = 0; i < 4; ++i)
+			
+		try
 		{
-			if (record.bond_atom[i] != 0)
+			// read the entries for the bonds
+			for (i = 0; i < 4; ++i)
 			{
+				if (record.bond_atom[i] == 0) continue;
+				
 				// retrieve the second atom via the hash table
 				atom_map_it = PDB_atom_map_.find(record.bond_atom[i]);				
-				if (atom_map_it != PDB_atom_map_.end())
+				if (atom_map_it == PDB_atom_map_.end()) continue;
+
+				// create the new bond
+				bond = PDB_atom->createBond(*atom_map_it->second);
+	
+				if (bond != 0)
 				{
-					// create the new bond
-					bond = PDB_atom->createBond(*atom_map_it->second);
-		
-					if (bond != 0)
-					{
-						bond->setType(Bond::TYPE__COVALENT);
-						bond->setOrder(Bond::ORDER__SINGLE);
-					}
+					bond->setType(Bond::TYPE__COVALENT);
+					bond->setOrder(Bond::ORDER__SINGLE);
 				}
 			}
-		}
+					
+			for (i = 0; i < 4; ++i)
+			{
+				if (record.hbond_atom[i] == 0) continue;
 				
-		for (i = 0; i < 4; ++i)
-		{
-			if (record.hbond_atom[i] != 0)
-			{
 				atom_map_it = PDB_atom_map_.find(record.hbond_atom[i]);
-				if (atom_map_it != PDB_atom_map_.end())
+				if (atom_map_it == PDB_atom_map_.end()) continue;
+				
+				bond = PDB_atom->createBond(*atom_map_it->second);
+	
+				if (bond != 0)
 				{
-					bond = PDB_atom->createBond(*atom_map_it->second);
-		
-					if (bond != 0)
-					{
-						bond->setType(Bond::TYPE__HYDROGEN);
-						bond->setOrder(Bond::ORDER__SINGLE);
-					}
+					bond->setType(Bond::TYPE__HYDROGEN);
+					bond->setOrder(Bond::ORDER__SINGLE);
+				}
+			}
+			
+			for (i = 0; i < 2; ++i)
+			{
+				if (record.salt_bridge_atom[i] == 0) continue;
+				
+				atom_map_it = PDB_atom_map_.find(record.salt_bridge_atom[i]);
+				if (atom_map_it == PDB_atom_map_.end()) continue;
+			
+				bond = PDB_atom->createBond(*atom_map_it->second);
+	
+				if (bond != 0)
+				{
+					bond->setType(Bond::TYPE__SALT_BRIDGE);
+					bond->setOrder(Bond::ORDER__SINGLE);
 				}
 			}
 		}
-		
-		for (i = 0; i < 2; ++i)
+		catch (Exception::TooManyBonds e)
 		{
-			if (record.salt_bridge_atom[i] != 0)
-			{
-				atom_map_it = PDB_atom_map_.find(record.salt_bridge_atom[i]);
-				if (atom_map_it != PDB_atom_map_.end())
-				{
-					bond = PDB_atom->createBond(*atom_map_it->second);
-		
-					if (bond != 0)
-					{
-						bond->setType(Bond::TYPE__SALT_BRIDGE);
-						bond->setOrder(Bond::ORDER__SINGLE);
-					}
-				}
-			}
+			Log.error() << e << std::endl;
+			return false;
 		}
 		
 		return true;
@@ -1138,7 +1144,8 @@ namespace BALL
 		writeBookKeepingSection_(structure, info);
 	}
 	
-	void PDBFile::updateAdditionalAtomInfo_(const PDB::Structure::AtomEntry& atom, PDB::AdditionalAtomInfo& aai)
+	void PDBFile::updateAdditionalAtomInfo_
+		(const PDB::Structure::AtomEntry& atom, PDB::AdditionalAtomInfo& aai)
 	{
 		if (atom.chain != aai.current_chain)
 		{
@@ -1164,20 +1171,20 @@ namespace BALL
 			if (atom.residue != 0)
 			{
 				strncpy(aai.residue_name, atom.residue->getName().c_str(), 4);
+				if (atom.residue->getID().toInt() == 0)
+				{
+					aai.residue_id++;
+				}
+				else
+				{
+					aai.residue_id = atom.residue->getID().toInt();
+				}
+				aai.residue_insertion_code = atom.residue->getInsertionCode();
 			}
 			else
 			{
 				strncpy(aai.residue_name, "UNK", 4);
 			}
-			if (atom.residue->getID().toInt() == 0)
-			{
-				aai.residue_id++;
-			}
-			else
-			{
-				aai.residue_id = atom.residue->getID().toInt();
-			}
-			aai.residue_insertion_code = atom.residue->getInsertionCode();
 		}
 	}
 

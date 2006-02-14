@@ -2,7 +2,6 @@ BALL_INLINE
 void GLRenderer::initTransparent()
 	throw()
 {
-	if (render_mode_ == RENDER_MODE_TRANSPARENT) return;
 	render_mode_ = RENDER_MODE_TRANSPARENT;
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -13,7 +12,6 @@ BALL_INLINE
 void GLRenderer::initSolid()
 	throw()
 {
-	if (render_mode_ == RENDER_MODE_SOLID) return;
 	render_mode_ = RENDER_MODE_SOLID;
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
@@ -24,7 +22,6 @@ BALL_INLINE
 void GLRenderer::initAlwaysFront()
 	throw()
 {
-	if (render_mode_ == RENDER_MODE_ALWAYS_FRONT) return;
 	render_mode_ = RENDER_MODE_ALWAYS_FRONT;
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);

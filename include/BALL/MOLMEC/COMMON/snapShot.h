@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShot.h,v 1.27 2003/08/26 08:04:25 oliver Exp $
+// $Id: snapShot.h,v 1.27.8.1 2006/02/14 15:01:07 amoll Exp $
 //
 
 // This file contains the definitions of the classes 
@@ -28,7 +28,7 @@ namespace BALL
 			by the  \link SnapShotManager SnapShotManager \endlink .  \par
     	\ingroup  MolmecCommon
 	*/
-  class SnapShot
+  class BALL_EXPORT SnapShot
   {
 
 		public:

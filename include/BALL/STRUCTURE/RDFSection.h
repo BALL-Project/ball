@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RDFSection.h,v 1.15 2003/08/26 08:04:50 oliver Exp $
+// $Id: RDFSection.h,v 1.15.8.1 2006/02/14 15:01:20 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_RDFSECTION_H
@@ -20,7 +20,7 @@ namespace BALL
 	/** Helper class for RDFParameter.
 	\ingroup RDF
 	 */
-	class RDFSection
+	class BALL_EXPORT RDFSection
 		:	public ParameterSection
 	{
 		public:

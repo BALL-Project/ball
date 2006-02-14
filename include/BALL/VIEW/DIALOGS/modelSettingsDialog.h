@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.23 2004/10/01 14:20:22 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.23.8.1 2006/02/14 15:01:36 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -36,7 +36,7 @@ namespace BALL
 		/** Dialog for the molecular model settings, it is inserted into the Preferences.
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT ModelSettingsDialog 
+		class BALL_VIEW_EXPORT ModelSettingsDialog 
 			: public ModelSettingsDialogData,
 				public PreferencesEntry
 		{ 
@@ -50,10 +50,6 @@ namespace BALL
 			/// Destructor
 			~ModelSettingsDialog() {}
 
-			///
-			void setDefaultValues(bool all = true)
-				throw();
-			
 			///
 			void applySettingsTo(ModelProcessor& cp) const
 				throw();
@@ -108,11 +104,15 @@ namespace BALL
 
 			///
 			float getCartoonArrowWidth() const
-				throw() {return getFloatValue_(cartoon_arrow_width_slider);}
+				throw() {return getFloatValue_(strand_arrow_width_slider);}
 
 			///
-			float getCartoonArrowHeight() const
-				throw() {return getFloatValue_(cartoon_arrow_height_slider);}
+			float getCartoonStrandHeight() const
+				throw() {return getFloatValue_(strand_height_slider);}
+
+			///
+			float getCartoonStrandWidth() const
+				throw() {return getFloatValue_(strand_width_slider);}
 
 			///
 			float getHBondsRadius() const
@@ -175,11 +175,15 @@ namespace BALL
 
 			///
 			void setCartoonArrowWidth(float value) 
-				throw() { setValue_(cartoon_arrow_width_slider,value);}
+				throw() { setValue_(strand_arrow_width_slider ,value);}
 
 			///
-			void setCartoonArrowHeight(float value) 
-				throw() { setValue_(cartoon_arrow_height_slider,value);}
+			void setCartoonStrandHeight(float value) 
+				throw() { setValue_(strand_height_slider,value);}
+
+			///
+			void setCartoonStrandWidth(float value) 
+				throw() { setValue_(strand_width_slider,value);}
 
 			///
 			void setHBondRadius(float value) 
@@ -218,9 +222,12 @@ namespace BALL
 			void tubeRadiusChanged() {setLabelText_(tube_radius_label, tube_radius_slider);}
 			void cartoonTubeRadiusChanged(){setLabelText_(cartoon_tube_radius_label, cartoon_tube_radius_slider);}
 			void cartoonHelixRadiusChanged(){setLabelText_(cartoon_helix_radius_label, cartoon_helix_radius_slider);}
-			void cartoonArrowWidthChanged(){setLabelText_(cartoon_arrow_width_label, cartoon_arrow_width_slider);}
-			void cartoonArrowHeightChanged(){setLabelText_(cartoon_arrow_height_label, cartoon_arrow_height_slider);}
-			void cartoonDNAHelixRadiusChanged(){setLabelText_(cartoon_dna_helix_radius_label, cartoon_dna_helix_radius_slider);}
+			
+			void cartoonStrandArrowWidthChanged(){setLabelText_(strand_arrow_width_label, strand_arrow_width_slider);}
+			void cartoonStrandHeightChanged(){setLabelText_(strand_height_label, strand_height_slider);}
+			void cartoonStrandWidthChanged() {setLabelText_(strand_width_label, strand_width_slider);}
+			
+					void cartoonDNAHelixRadiusChanged(){setLabelText_(cartoon_dna_helix_radius_label, cartoon_dna_helix_radius_slider);}
 			void cartoonDNABaseRadiusChanged(){setLabelText_(cartoon_dna_base_radius_label, cartoon_dna_base_radius_slider);}
 			void cartoonDNALadderRadiusChanged(){setLabelText_(cartoon_dna_ladder_radius_label, cartoon_dna_ladder_radius_slider);}
 			void hbondsRadiusChanged(){setLabelText_(hbonds_radius_label, hbonds_radius_slider);}
@@ -237,6 +244,8 @@ namespace BALL
 
 			void setLabelText_(QLabel* label, const QSlider* const from)
 				throw();
+
+			void setDefaultValues_();
 		};
 
 } }

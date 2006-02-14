@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecule.h,v 1.34 2004/05/27 19:49:39 oliver Exp $
+// $Id: molecule.h,v 1.34.6.1 2006/02/14 15:00:57 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_MOLECULE_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #	include <BALL/KERNEL/atomContainer.h>
+#endif
+
+#ifndef BALL_KERNEL_FRAGMENT_H
+#	include <BALL/KERNEL/fragment.h>
 #endif
 
 #ifndef BALL_KERNEL_FRAGMENTITERATOR_H
@@ -24,7 +28,7 @@ namespace BALL
 			
    		\ingroup KernelContainers 
 	*/
-	class Molecule
+	class BALL_EXPORT Molecule
 		: public AtomContainer
 	{
 		public:

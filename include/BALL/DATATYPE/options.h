@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.h,v 1.24 2004/05/27 19:49:37 oliver Exp $
+// $Id: options.h,v 1.24.6.1 2006/02/14 15:00:45 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_OPTIONS_H
@@ -23,6 +23,10 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
+#ifndef BALL_CONCEPT_PERSISTENTOBJECT_H
+#	include <BALL/CONCEPT/persistentObject.h>
+#endif
+
 namespace BALL 
 {
 	/**		Options class.
@@ -37,7 +41,7 @@ namespace BALL
 				
     		\ingroup  Generic
 	*/
-	class Options
+	class BALL_EXPORT Options
 		: public StringHashMap<String> 
 	{
 		
@@ -316,6 +320,23 @@ namespace BALL
 					@see readOptionFile
 		*/		
 		bool writeOptionFile(const String& filename) const throw();
+
+		/**	Persistent stream writing.
+				This method writes the strings using the <tt>writePrimitive</tt> method
+				of the PersistenceManager.
+				@param pm the persistence manager
+		*/
+		void write(PersistenceManager& pm) const
+			throw();
+
+		/** Persistent stream reading.
+				This method reads from the
+				persistent stream using the <tt>readPrimitive</tt> method
+				of the PersistenceManager.
+				@param pm the persistence manager
+		*/
+		bool read(PersistenceManager& pm)
+			throw();
 
 		/// Equality operator
 		bool operator == (const Options& option) const throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.21 2004/05/27 19:49:39 oliver Exp $
+// $Id: predicate.h,v 1.21.6.1 2006/02/14 15:00:58 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_PREDICATE_H
@@ -62,6 +62,7 @@ namespace BALL
 		/// Constant virtual RTTI evaluation operator
 		virtual bool operator () (const Composite& composite) const
 			throw();
+		virtual ~KernelPredicate() {}
 	};
 
 	template <class T>

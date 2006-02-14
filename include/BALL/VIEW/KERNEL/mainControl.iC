@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.iC,v 1.6 2005/02/06 20:57:05 oliver Exp $
+// $Id: mainControl.iC,v 1.6.6.1 2006/02/14 15:01:42 amoll Exp $
 
 BALL_INLINE 
 int MainControl::getNextID_()
@@ -21,14 +21,14 @@ BALL_INLINE
 INIFile& MainControl::getINIFile()
 	throw()
 {
-	return preferences_;
+	return preferences_file_;
 }
 
 BALL_INLINE 
 const INIFile& MainControl::getINIFile() const
 	throw()
 {
-	return preferences_;
+	return preferences_file_;
 }
 
 BALL_INLINE

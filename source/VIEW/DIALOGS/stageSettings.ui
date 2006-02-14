@@ -29,7 +29,7 @@
         </property>
         <widget class="QWidget">
             <property name="name">
-                <cstring>Stage</cstring>
+                <cstring>Main</cstring>
             </property>
             <attribute name="id">
                 <number>0</number>
@@ -351,6 +351,22 @@
                         <string></string>
                     </property>
                 </widget>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>popup_names</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>340</y>
+                        <width>370</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>popup names of molecular entities under mouse cursor</string>
+                </property>
             </widget>
         </widget>
         <widget class="QWidget">
@@ -840,28 +856,6 @@
             <attribute name="id">
                 <number>3</number>
             </attribute>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>use_vertex_buffers</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>350</y>
-                        <width>462</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Use OpenGL Vertex Buffer Objects (Experimental!)</string>
-                </property>
-                <property name="checked">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Select to use OpenGL vertex buffer. Results in greater performance.</string>
-                </property>
-            </widget>
             <widget class="QLayoutWidget">
                 <property name="name">
                     <cstring>layout4</cstring>
@@ -1059,6 +1053,28 @@
                     <string>Extensions supported by your graphics card</string>
                 </property>
             </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>use_vertex_buffers</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>350</y>
+                        <width>462</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Use OpenGL Vertex Buffer Objects (experimental!)</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Select to use OpenGL vertex buffer. Results in greater performance.</string>
+                </property>
+            </widget>
         </widget>
     </widget>
 </widget>
@@ -1097,6 +1113,6 @@
     <slot>focalDistanceChanged()</slot>
     <slot>fogStateChanged()</slot>
 </slots>
-<exportmacro>BALL_EXPORT</exportmacro>
+<exportmacro>BALL_VIEW_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

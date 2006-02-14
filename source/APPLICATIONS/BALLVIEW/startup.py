@@ -1,9 +1,20 @@
-mc = MainControl.getInstance(0)
-pm = mc.getPrimitiveManager()
-cm = mc.getCompositeManager()
-dp = DisplayProperties.getInstance(0)
-fd = MolecularFileDialog.getInstance(0)
-moc = MolecularControl.getInstance(0)
+def getMainControl():
+	return MainControl.getInstance(0)
+
+def getMolecularStructure():
+	return MolecularStructure.getInstance(0)
+
+def getMolecularControl():
+	return MolecularControl.getInstance(0)
+
+def getDisplayProperties():
+	return DisplayProperties.getInstance(0)
+
+def getComposites():
+	return getMainControl().getCompositeManager().getComposites()
+
+def getRepresentations():
+	return getMainControl().getPrimitiveManager().getRepresentations()
 
 def clearRepresentations():
 	nr = pm.getNumberOfRepresentations()

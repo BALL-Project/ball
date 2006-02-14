@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.20 2005/02/16 17:10:04 amoll Exp $
+// $Id: primitiveManager.h,v 1.20.4.1 2006/02/14 15:01:43 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -15,14 +15,20 @@
 # include <qwaitcondition.h>
 #endif
 
+#include <vector>
+
+using std::vector;
+
 namespace BALL
 {
 	class Composite;
+	class INIFile;
 
 	namespace VIEW
 	{
 		class MainControl;
 		class UpdateRepresentationThread;
+		class ClippingPlane;
 
 		/** PrimitiveManager manages the graphical Representation objects and all GeometricObject.
 		 		All Representation objects which shall be inserted should be created using createRepresentation().
@@ -34,7 +40,7 @@ namespace BALL
 				is done in an instance of UpdateRepresentationThread.
 				\ingroup ViewKernelGeometricPrimitives
 		*/
-		class BALL_EXPORT PrimitiveManager
+		class BALL_VIEW_EXPORT PrimitiveManager
 			:	public Object
 		{
 			friend class Representation;
@@ -151,16 +157,17 @@ namespace BALL
 			 		Method is called in MainControl, after removal of
 					a composite (e.g. a System) and it removes all
 					representations, which contain the Composite.
+					It can also update all Representations, which have still have other Composites than the one to be deleted.
 					\return a list with the pointers of all removed representations.
 			*/
-			List<Representation*> removedComposite(const Composite& composite)
+			RepresentationList removedComposite(const Composite& composite, bool update = true)
 				throw();
 
 			/** Get a list of Representation, which were build for a Composite.
 			 		Method is called in MainControl, after receiving CompositeChangedMessage.
 					\return a list with the pointers of representations, which are to be updated.
 			*/
-			List<Representation*> getRepresentationsOf(const Composite& composite)
+			RepresentationList getRepresentationsOf(const Composite& composite)
 				throw();
 
 			/// Return true if a Representation will be updated
@@ -169,6 +176,10 @@ namespace BALL
 
 			/// Return true, if a Representation is currently beeing updated
 			bool updateRunning() const
+				throw();
+
+			///
+			void rebuildAllRepresentations()
 				throw();
 
 			#ifdef BALL_QT_HAS_THREADS
@@ -202,19 +213,29 @@ namespace BALL
 			bool updatePending() { return update_pending_;}
 
 			///
-			void setMultithreadingMode(bool state)
-				throw() { multi_threading_mode_ = state;}
-
-			///
-			bool usesMultithreading()
-				throw();
-
-			///
 			HashSet<Representation*>& getRepresentationsBeeingUpdated();
 
-			///
+			/// Used by UpdateRepresentationThread
 			HashSet<Representation*>& getRepresentationsBeeingDrawn();
+
+			///
+			const vector<ClippingPlane*>& getClippingPlanes() const { return clipping_planes_;}
+
+			///
+			bool removeClippingPlane(ClippingPlane* plane);
+
+			///
+			void insertClippingPlane(ClippingPlane* plane);
+
+			///
+			void storeRepresentations(INIFile& out);
 			
+			///
+			void restoreRepresentations(const INIFile& in, const vector<const Composite*>& new_systems);
+
+			///
+			void focusRepresentation(const Representation& rep);
+
 			protected:
 
 			/*_ Start the UpdateRepresentationThread with one Representation
@@ -242,7 +263,14 @@ namespace BALL
 			RepresentationList representations_;
 			
 			//_ List with all representations, which will be updated
+			//  representations will be updated with the same order as in this list
 			RepresentationList representations_to_be_updated_;
+			// hashset with same content as above for faster acces
+			HashSet<Representation*> currently_updateing_;
+
+			HashSet<Representation*> currently_drawing_;
+
+			vector<ClippingPlane*> clipping_planes_;
 			
 			#ifdef BALL_QT_HAS_THREADS
 			static UpdateRepresentationThread thread_;
@@ -254,10 +282,6 @@ namespace BALL
 			MainControl* 	main_control_;
 			bool 					update_running_;
 			bool 					update_pending_;
-			bool 					multi_threading_mode_;
-
-			HashSet<Representation*> currently_drawing_;
-			HashSet<Representation*> currently_updateing_;
 		};
 
 	} // namespace VIEW

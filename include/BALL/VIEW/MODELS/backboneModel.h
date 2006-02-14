@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.17 2005/02/06 20:57:05 oliver Exp $
+// $Id: backboneModel.h,v 1.17.6.1 2006/02/14 15:01:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -30,45 +30,26 @@ namespace BALL
 				documentation.
 				\ingroup  ViewModels
 		*/
-		class BALL_EXPORT AddBackboneModel: public ModelProcessor
+		class BALL_VIEW_EXPORT AddBackboneModel: public ModelProcessor
 		{
 			//_
 			protected:
 
-			class SplinePoint
+			struct SplinePoint
 			{
 			  public:
 
 				SplinePoint();
-				SplinePoint(const Vector3& point, const Atom* atom);
-				~SplinePoint() {}
+				SplinePoint(const Vector3& new_point, const Atom* new_atom);
 
-				void setVector(const Vector3& point) {point_ = point;}
-				const Vector3 &getVector() const {return point_;}
-
-				void setTangentialVector(const Vector3& tangent) {tangent_ = tangent;}
-				const Vector3 &getTangentialVector() const {return tangent_;}
-				
-				void setAtom(const Atom* atom) {atom_ = atom;}
-				const Atom* getAtom() const { return atom_;}
-
-				/** Needed for sort, sorting is needed for creation of backbone for
-				 		a selection of Residues, because the Processor can get the Residues
-						in wrong order from the Representation.
-				*/
-				bool operator < (const SplinePoint& point) const 
-					throw();
-
-			  private:
-
-				Vector3 point_;
-				Vector3 tangent_;
-				const Atom* atom_;
+				Vector3 point;
+				Vector3 tangent;
+				const Atom* atom;
 			};
 
-			friend class SplinePoint;
-
 			public:
+
+			BALL_CREATE(AddBackboneModel)
 
 			/**	@name	Constructors and Destructors
 			*/	
@@ -115,8 +96,8 @@ namespace BALL
 			//@{
 
 			/** Internal value dump.
-					Dump the current state to 
-					the output ostream <tt>s</tt> with dumping depth <tt>depth</tt>.
+					Dump the current state to the output ostream <tt>s</tt> with 
+					dumping depth <tt>depth</tt>.
 					Calls ModelProcessor::dump.
 					\param   s output stream where to output the state 
 					\param   depth the dumping depth
@@ -139,53 +120,46 @@ namespace BALL
 			//@}
 
 			protected:
-			//_ init the spline array with both the positions from the atom list
-			void initSplineArray_();
 
-			//_ calculates to every splinepoint the tangential vector
-			void calculateTangentialVectors_();
-			
 			//_ computes the actual spline path through the given support points
 			//_ in the splinepoint array
-			void createSplinePath_();
-			//_ create a spline segment between two spline points a and b
-			void createSplineSegment_(const SplinePoint &a, const SplinePoint &b);
-			//_ builds a graphical representation to this point 
-			void buildGraphicalRepresentation_(Size start = 0, Size end = 0)
-				throw(Exception::OutOfMemory);
+			void createSplinePath_(Position to_stop);
+			
+			// calculate the interpolated points up to spline point pos
+			virtual void createPart_(Position pos);
+			virtual void drawPart_(Position pos);
+
+			// build the graphical representaion between the given spline points
+			virtual void buildGraphicalRepresentation_(Position start, Position end, Position type);
 
 			//_ collect the atoms, for which the spline points will be calculated
-			virtual void collectAtoms_(const Residue& residue)
-				throw();
+			virtual void collectAtoms_(const Residue& residue);
+
+			virtual Position getType_(const Residue& residue);
+
+			virtual void clear_();
+
+			// test if we have dont have a connection to last drawn residue
+			bool checkBuildNow_(const Residue& residue);
+
+			// build a tube model
+			void buildTube_(Position start, Position end);
+
+			vector<SplinePoint>  splines_;
+			vector<Vector3>  		 points_;
+			vector<const Atom*>  atoms_of_points_;
+
+			//_ 
+			const Residue* last_residue_;
 
 			//_
-			void createBackbone_()
-				throw();
-
-			virtual void clear_()
-				throw();
-
-			bool checkBuildBackboneNow_(const Residue& residue);
-
-			//_
-			vector<SplinePoint> spline_vector_;
-			//_
-			vector<Vector3> 		spline_points_;
-			//_
-			vector<const Atom*> atoms_of_spline_points_;
-			//_ Pointer to the parent of the last processed composite
-			const Composite* last_parent_;
+			Position last_build_;
+			
 			//_
 			float tube_radius_;
 
 			//_
 			Size 	interpolation_steps_;
-
-			//_
-			Index last_spline_point_;
-
-			//_
-			static HashMap<const Residue*, Position> residue_map_;
 		};
 
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GAMESSDatFile.h,v 1.2 2005/10/05 09:59:45 anhi Exp $
+// $Id: GAMESSDatFile.h,v 1.2.6.1 2006/02/14 15:00:48 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_GAMESSDATFILE_H

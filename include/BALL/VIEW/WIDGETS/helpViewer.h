@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.2 2005/12/23 17:02:23 amoll Exp $
+// $Id: helpViewer.h,v 1.2.6.1 2006/02/14 15:01:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H

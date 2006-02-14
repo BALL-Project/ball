@@ -1,6 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: threads.C,v 1.37.4.1 2006/02/14 15:03:45 amoll Exp $
+//
 
 #include <BALL/VIEW/KERNEL/threads.h>
 
@@ -10,6 +12,7 @@
 #include <BALL/VIEW/MODELS/modelProcessor.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 
@@ -17,6 +20,8 @@
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
+
+#include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
 
 #include <BALL/SYSTEM/directory.h>
 
@@ -95,11 +100,17 @@ namespace BALL
 		{
 			if (url_ == "")
 			{
-				output_("Invalid Address " + url_ + " in " + String(__FILE__) + __LINE__, true);
+				output_("Invalid Address " + url_ + " in " + String(__FILE__) + ":" + String(__LINE__), true);
 				return;
 			}
 			try
 			{
+				MainControl* mc = getMainControl();
+				if (mc != 0)
+				{
+					tcp_.setProxy(mc->getProxy(), mc->getProxyPort());
+				}
+
 				if (file_name_ != "")
 				{
 					File f(file_name_, std::ios::out);
@@ -109,6 +120,7 @@ namespace BALL
 						return;
 					}
 					tcp_.set(f, url_);
+					// dont move the transfer() call away from here!
 					tcp_.transfer();
 				}
 				else
@@ -124,12 +136,13 @@ namespace BALL
 					stream_.clear();
 
 					tcp_.set(stream_, url_);
+					// dont move the transfer() call away from here!
 					tcp_.transfer();
 				}
 			}
 			catch(...)
 			{
-				output_(String("Exception in ") + String(__FILE__) + __LINE__, true);
+				output_(String("Exception in ") + String(__FILE__) + ": " + String(__LINE__), true);
 			}
 		}
 
@@ -227,7 +240,7 @@ namespace BALL
 				updateScene_();
 
 				output_(ff.getResults());
-				output_("final RMS gadient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
+				output_("final RMS gradient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
 								+ String(minimizer_->getNumberOfIterations()) + " iterations\n",
 								true);
 				finish_();
@@ -240,9 +253,13 @@ namespace BALL
 			}
 			catch(Exception::GeneralException e)
 			{
-				String txt = String("Exception was thrown during minimization: ")
-											+ __FILE__ + " " + __LINE__ + " " + e.getMessage();
+				delete dcd_file_;
+				dcd_file_ = 0;
+
+				String txt = String("Exception was thrown during minimization: ") + __FILE__ + ": " + String(__LINE__) + " :\n" 
+											+ e.getMessage();
 				output_(txt, true);
+
 				finish_();
 			}
 		}
@@ -313,7 +330,7 @@ namespace BALL
 				if (dcd_file_) manager.flushToDisk();
 
  				output_(ff.getResults());
-				output_("final RMS gadient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
+				output_("final RMS gradient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
 								+ String(md_->getNumberOfIterations()) + " iterations\n", 
 								true);
 
@@ -327,8 +344,16 @@ namespace BALL
 			catch(Exception::GeneralException e)
 			{
 				String txt = String("Exception was thrown during MD simulation: ")
-											+ __FILE__ + " " + __LINE__ + " " + e.getMessage();
+											+ __FILE__ + ": " + String(__LINE__) + " \n" + e.getMessage();
 				output_(txt, true);
+
+				if (dcd_file_ != 0)
+				{
+					dcd_file_->close();
+					delete dcd_file_;
+					dcd_file_ = 0;
+				}
+
 				finish_();
 			}
 		}
@@ -374,6 +399,80 @@ namespace BALL
 			dialog_->calculate_();
 		}
 
+
+		// =========================== implementation of class DockingThread ================
+		
+		///
+		DockingThread::DockingThread()
+			throw()
+			: BALLThread(),
+				dock_alg_(0)
+		{} 
+		
+		// Copy constructor.
+		DockingThread::DockingThread(const DockingThread& dock_thread)
+			throw()
+			: BALLThread(),
+				dock_alg_(dock_thread.dock_alg_)
+		{}
+		
+		///
+		DockingThread::~DockingThread()
+			throw()
+		{
+			output_("delete thread", true);
+
+			if (dock_alg_ != 0)
+			{
+				delete dock_alg_;
+				dock_alg_ = NULL;
+			}
+		}
+		
+		// Assignment operator
+		const DockingThread& DockingThread::operator =(const DockingThread& dock_thread)
+			throw()
+		{
+			if (&dock_thread != this)
+			{
+				dock_alg_ = dock_thread.dock_alg_;
+			}
+			return *this;
+		}
+		
+		//
+		void DockingThread::setDockingAlgorithm(DockingAlgorithm* dock_alg)
+			throw()
+		{
+			dock_alg_ = dock_alg;
+		}
+		
+		/// 
+		void DockingThread::run()
+			throw(Exception::NullPointer)
+		{
+				if (dock_alg_ == 0 ||
+						main_control_ == 0)
+				{
+					throw Exception::NullPointer(__FILE__, __LINE__);
+				}
+				
+				output_("starting docking...", true);
+
+				dock_alg_->start();
+				
+		 		DockingFinishedEvent* finished = new DockingFinishedEvent(dock_alg_->wasAborted());
+				// Qt will delete event when done
+				ConformationSet* cs = new ConformationSet(dock_alg_->getConformationSet());
+				// conformation set is deleted in DockResult
+				finished->setConformationSet(cs);
+				qApp->postEvent(getMainControl(), finished);
+				
+				output_("Docking finished.", true);
+		}
+		
+		// =================================================0
+		
 	} // namespace VIEW
 } // namespace BALL
 

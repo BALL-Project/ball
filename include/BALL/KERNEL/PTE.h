@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.h,v 1.29 2004/05/27 19:49:38 oliver Exp $
+// $Id: PTE.h,v 1.29.6.1 2006/02/14 15:00:53 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_PTE_H
@@ -50,7 +50,7 @@ namespace BALL
 	/**	Element class.
 			\ingroup KernelMiscellaneous	
 	*/
-	class Element
+	class BALL_EXPORT Element
 	{
 		public:
 
@@ -548,6 +548,7 @@ namespace BALL
 			/**	Output operator
 					Prints <b>  this </b> instance of Element.
 			*/
+			BALL_EXPORT
 			friend std::ostream& operator << (std::ostream& s, const Element& element)
 				throw();
 
@@ -660,13 +661,14 @@ namespace BALL
 	/**	Element output operator.
 			Prints the contents of an instance of  \link Element Element \endlink  to an <tt>ostream</tt>.
 	*/
+	BALL_EXPORT
 	std::ostream& operator << (std::ostream& s, const Element& element)
 		throw();
 
 
 	/**	Periodic Table of Elements Class
 	*/
-	class PTE_
+	class BALL_EXPORT PTE_
 	{
 		public:
 
@@ -827,7 +829,7 @@ namespace BALL
 	/**	Global static instance of the periodic table.
 			\ingroup KernelMiscellaneous
 	*/
-	extern PTE_ PTE;
+	BALL_EXPORT extern PTE_ PTE;
 
 
 

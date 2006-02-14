@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coulomb.h,v 1.12 2003/08/26 08:04:12 oliver Exp $
+// $Id: coulomb.h,v 1.12.8.1 2006/02/14 15:00:47 amoll Exp $
 //
 
 #ifndef BALL_ENERGY_COULOMB_H
@@ -23,7 +23,7 @@ namespace BALL
 			
     	\ingroup  Electrostatic
 	*/
-	double calculateCoulomb(const AtomContainer& atoms);
+	BALL_EXPORT double calculateCoulomb(const AtomContainer& atoms);
 } // namespace BALL
 
 #endif //  BALL_ENERGY_COULOMB_H

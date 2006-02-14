@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.10 2004/07/26 20:30:54 amoll Exp $
+// $Id: representation.sip,v 1.10.6.1 2006/02/14 15:02:49 amoll Exp $
 //
 
 class Representation
@@ -11,48 +11,82 @@ class Representation
 	#include <BALL/VIEW/KERNEL/representation.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
+	typedef Representation::GeometricObjectList GeometricObjectList;
 %End
   public:
 	// BALL_CREATE(Representation);
-	ColorProcessor* getColorProcessor() throw();
-	PyCompositeList getComposites() throw();
-	// CompositesConstIterator begin() const throw();
-	// CompositesConstIterator end() const throw();
-	// CompositesIterator begin() throw();
-	// CompositesIterator end() throw();
-	GeometricObjectList& getGeometricObjects() throw();
-	ColoringMethod getColoringMethod() const throw();
- 	DrawingMode getDrawingMode() const throw();
-	DrawingPrecision getDrawingPrecision() const throw();
-	ModelType getModelType() const throw();
-	ModelProcessor* getModelProcessor() throw();
+	enum Properties
+	{
+		PROPERTY__ALWAYS_FRONT = 0,
+		PROPERTY__IS_COORDINATE_SYSTEM
+	};
 	Representation() throw();
 	Representation(ModelType /model_type/, DrawingPrecision /drawing_precision/, DrawingMode /drawing_mode/) throw();
-	Representation(const PyCompositeList& /composites/, ModelProcessor* /rep_processor/) throw();
-	// Representation(const GeometricObjectList& /object_list/) throw();
 	Representation(const Representation& /representation/) throw();
+  ~Representation() throw();
+	// const Representation& operator = (const Representation& /representation/) throw();
+
+	void clear() throw();
+	
+	void setHidden(bool) throw();
+	bool isHidden() const throw();
+
+	void setDrawingPrecision(DrawingPrecision /precision/) throw();
+	DrawingPrecision getDrawingPrecision() const throw();
+	void setSurfaceDrawingPrecision(float /precision/) throw();
+	float getSurfaceDrawingPrecision() const throw();
+
+ 	DrawingMode getDrawingMode() const throw();
+	void setDrawingMode(DrawingMode /mode/) throw();
+
 	Size getTransparency() const throw();
+	void setTransparency(Size /value/) throw();
+
+	GeometricObjectList& getGeometricObjects() throw();
+	const GeometricObjectList& getGeometricObjects() const throw();
+	void insert(GeometricObject& /Transfer/) throw();
+
+	//const PyCompositeList& getComposites() const throw();
+	void setComposites(const PyCompositeList&) throw();
+%MethodCode
+	List<const Composite*> my_list;
+	for (PyCompositeList::ConstIterator it = a0->begin(); it != a0->end(); ++it)
+	{
+		Composite* obj = *it;
+		my_list.push_back(obj);
+	}
+	sipCpp->setComposites(my_list);
+%End
+
+	ModelProcessor* getModelProcessor() throw();
+	const ModelProcessor* getModelProcessor() const throw();
+	void setModelProcessor(ModelProcessor* /Transfer/) throw();
+
+	ColorProcessor* getColorProcessor() throw();
+	void setColorProcessor(ColorProcessor* /Transfer/) throw();
+
 	String getModelName() const throw();
+
+	void setModelType(ModelType /type/) throw();
+	ModelType getModelType() const throw();
+
+	void setColoringMethod(ColoringMethod /type/) throw();
+	ColoringMethod getColoringMethod() const throw();
+
+	void enableModelUpdate(bool);
+	void enableColoringUpdate(bool);
+	bool modelUpdateEnabled() const;
+	bool coloringUpdateEnabled() const;
+
 	String getProperties() const throw();
 	bool isValid() const throw();
-	// CompositeList getComposites() const throw();
-	const GeometricObjectList& getGeometricObjects() const throw();
-	const ModelProcessor* getModelProcessor() const throw();
-	// const Representation& operator = (const Representation& /representation/) throw();
-	float getSurfaceDrawingPrecision() const throw();
-	void clear() throw();
-	//	void dump(std::ostream& s, Size depth) const throw();
-	void insert(GeometricObject& /object/) throw();
-	void setColorProcessor(ColorProcessor* /processor/) throw();
-	void setColoringMethod(ColoringMethod /type/) throw();
-	void setDrawingMode(DrawingMode /mode/) throw();
-	void setDrawingPrecision(DrawingPrecision /precision/) throw();
-	void setModelProcessor(ModelProcessor* /processor/) throw();
-	void setModelType(ModelType /type/) throw();
-	void setSurfaceDrawingPrecision(float /precision/) throw();
-	void setTransparency(Size /value/) throw();
 	void update(bool /rebuild/) throw();
-	bool isHidden() const throw();
-	void setHidden(bool) throw();
-	~Representation() throw();
+	void clearGeometricObjects() throw();
+	const PreciseTime& getModelBuildTime() const throw();
+	bool needsUpdate() const throw();
+	void setNeedsUpdate() throw();
+	//	void dump(std::ostream& s, Size depth) const throw();
+	String toString() const throw();
+	//bool operator == (const Representation&) const throw();
+	//bool operator < (const Representation& object) const throw();
 };

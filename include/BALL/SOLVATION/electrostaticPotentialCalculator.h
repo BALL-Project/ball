@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: electrostaticPotentialCalculator.h,v 1.9 2004/05/10 11:47:10 amoll Exp $
+// $Id: electrostaticPotentialCalculator.h,v 1.9.6.1 2006/02/14 15:01:16 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_ELECTROSTATICPOTENTIALCALCULATOR_H
@@ -30,7 +30,7 @@ namespace BALL
 			Dont forget to set the FragmentDB before using this class.
       \ingroup Solvation
 	 */
-	class ElectrostaticPotentialCalculator
+	class BALL_EXPORT ElectrostaticPotentialCalculator
 	{
 		BALL_CREATE(ElectrostaticPotentialCalculator)
 

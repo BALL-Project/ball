@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: objectCreator.h,v 1.4 2004/02/26 08:41:39 anhi Exp $
+// $Id: objectCreator.h,v 1.4.10.1 2006/02/14 15:01:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_OBJECTCREATOR_H
@@ -40,7 +40,7 @@ namespace BALL
 				This class is used by the class Server to convert incoming
 				PersistentObject objects to Composite objects.
 		*/
-		class BALL_EXPORT ObjectCreator
+		class BALL_VIEW_EXPORT ObjectCreator
 		{
 			public:
 

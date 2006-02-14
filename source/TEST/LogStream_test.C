@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LogStream_test.C,v 1.22 2005/01/18 23:00:04 amoll Exp $
+// $Id: LogStream_test.C,v 1.22.6.1 2006/02/14 15:03:07 amoll Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,11 +13,10 @@
 #	include <sys/time.h>
 #endif
 #include <BALL/MATHS/common.h>
-#include <BALL/CONCEPT/notification.h>
 
 ///////////////////////////
 
-START_TEST(LogStream, "$Id: LogStream_test.C,v 1.22 2005/01/18 23:00:04 amoll Exp $")
+START_TEST(LogStream, "$Id: LogStream_test.C,v 1.22.6.1 2006/02/14 15:03:07 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -26,13 +26,13 @@ using namespace BALL;
 using namespace std;
 
 class TestTarget
-	:	public LogStream::Target
+	:	public LogStreamNotifier
 {
 	public:
-	virtual bool onNotify(BALL::LogStreamNotifier&)
+	virtual void logNotify()
 	{
 		notified = true;
-		return true;
+		return;
 	}
 	bool notified;
 };
@@ -149,31 +149,29 @@ CHECK(remove(std::ostream& s))
 	l1.remove(s);
 RESULT
 
-CHECK(insertNotification(const std::ostream& s, const Target& target))
+CHECK(void insertNotification())
 	LogStream l1(new LogStreamBuf);
 	TestTarget target;
 	ofstream os;
-	l1.insert(os);
-	l1.insertNotification(os, target);
+	target.registerAt(l1);
 	target.notified = false;
 	TEST_EQUAL(target.notified, false)
-	l1 << "test" << endl;
+	l1 << "test" << std::endl;
 	TEST_EQUAL(target.notified, true)
 RESULT
 
-CHECK(removeNotification(const std::ostream& s))
+CHECK(removeNotification)
 	LogStream l1(new LogStreamBuf);
 	TestTarget target;
 	ofstream os;
-	l1.insert(os);
-	l1.insertNotification(os, target);
-	l1.removeNotification(os);
+	target.registerAt(l1);
+	target.unregister();
 	target.notified = false;
 	TEST_EQUAL(target.notified, false)
 	l1 << "test" << endl;
 	TEST_EQUAL(target.notified, false)
 	// make sure we can remove it twice
-	l1.removeNotification(os);
+	target.unregister();
 	l1 << "test" << endl;
 	TEST_EQUAL(target.notified, false)
 RESULT

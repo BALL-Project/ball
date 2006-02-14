@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.20 2005/02/15 17:33:52 leonhardt Exp $
+// $Id: lightSettings.C,v 1.20.4.1 2006/02/14 15:03:33 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -40,8 +40,9 @@ LightSettings::LightSettings(QWidget* parent, const char* name, WFlags fl)
 	}
 	
 	relative_to_camera->setChecked(true);
-	updateFromStage();
-	insertEntry(this, "Lighting");
+	defaultsPressed();
+	setWidgetStackName("Lighting");
+	registerWidgetForHelpSystem_(this, "scene.html#lightsources");
 }
 
 
@@ -98,24 +99,15 @@ void LightSettings::addLightPressed()
 	saveSettingsToLight_();
 
 	LightSource light;
-	light.setIntensity(0.8);
+	light.setIntensity((float) 0.8);
 	light.setType(LightSource::POSITIONAL);
 
-	// position light 20 space units behind camera position
-	const Camera& camera = stage_->getCamera();
-	Vector3 pos = camera.getViewVector();
-	pos.normalize();
-	pos *= -20;
-	pos += camera.getViewPoint();
-	
 	// create a kind of headlight
-	Vector3 up = camera.getLookUpVector();
-	up.normalize();
-	up *= 4;
- 	pos += up;
+	// position light 20 space units behind camera position
 	
-	light.setPosition(pos);
-	light.setDirection(camera.getViewPoint());
+	light.setRelativeToCamera(true);
+	light.setPosition(Vector3(0, 4, -20));
+	light.setDirection(Vector3(0, 0, 1));
 
 	lights_.push_back(light);
 	update();
@@ -153,15 +145,17 @@ void LightSettings::saveSettingsToLight_()
 	{
 		Vector3 pos = getPosition_();
 		Vector3 dir = getDirection_();
-		bool relative = !not_relative->isChecked();
+		bool relative = LightSettingsData::relative->isChecked();
 		light.setRelativeToCamera(relative);
 
 		// position and direction
-		if (relative)
+		
+		if (!relative)
 		{
-			pos = stage_->calculateAbsoluteCoordinates(pos);
-			dir = stage_->calculateAbsoluteCoordinates(dir);
+			Vector3 diff = dir - pos;
+			dir = diff;
 		}
+		
 		light.setPosition(pos);
 		light.setDirection(dir);
 
@@ -169,20 +163,19 @@ void LightSettings::saveSettingsToLight_()
 
 		/////////////////////////////////////////////////////
 		// type of light
-		if (light_type->selected() == ambient)
+
+		if 			(light_type->selected() == ambient)
 		{
 			light.setType(LightSource::AMBIENT);
-			return;
 		}
-
-		if (light_type->selected() == point)
+		else if (light_type->selected() == point)
 		{
 			light.setType(LightSource::POSITIONAL);
-			return;
 		}
-
-		light.setType(LightSource::DIRECTIONAL);
-
+		else
+		{
+			light.setType(LightSource::DIRECTIONAL);
+		}
 	}
 	catch (Exception::GeneralException e)
 	{
@@ -217,20 +210,25 @@ void LightSettings::removeLightPressed()
 
 void LightSettings::typeSelected()
 {
-	bool is_ambient = (light_type->selected() == ambient);
+	typeSelected_(light_type->selectedId());
+}
 
-	relative_to_camera->setEnabled(!is_ambient);
-	      not_relative->setEnabled(!is_ambient);
+void LightSettings::typeSelected_(Position type)
+{
+	bool is_ambient = (type == LightSource::AMBIENT);
+	
+	bool pos_enabled = type != LightSource::DIRECTIONAL && !is_ambient;
 
-	position_x->setEnabled(!is_ambient);
-	position_y->setEnabled(!is_ambient);
-	position_z->setEnabled(!is_ambient);
+	position_x->setEnabled(pos_enabled);
+	position_y->setEnabled(pos_enabled);
+	position_z->setEnabled(pos_enabled);
 
 	direction_x->setEnabled(!is_ambient);
 	direction_y->setEnabled(!is_ambient);
 	direction_z->setEnabled(!is_ambient);
+	relative_to_camera->setEnabled(!is_ambient);
+	not_relative->setEnabled(!is_ambient);
 }
-
 
 void LightSettings::getValues_()
 	throw()
@@ -249,33 +247,19 @@ void LightSettings::getValues_()
 
 	if (light.isRelativeToCamera())
 	{
-		pos = stage_->calculateRelativeCoordinates(pos);
-		dir = stage_->calculateRelativeCoordinates(dir);
-	}
-
-	setPosition_(pos);
-	setDirection_(dir);
-
-	bool is_ambient = (light.getType() == LightSource::AMBIENT);
-	
-	position_x->setEnabled(!is_ambient);
-	position_y->setEnabled(!is_ambient);
-	position_z->setEnabled(!is_ambient);
-	direction_x->setEnabled(!is_ambient);
-	direction_y->setEnabled(!is_ambient);
-	direction_z->setEnabled(!is_ambient);
-	relative_to_camera->setEnabled(!is_ambient);
-	not_relative->setEnabled(!is_ambient);
-	
-	if (light.isRelativeToCamera())
-	{
 		relative->setChecked(true);
 	}
 	else
 	{
 		not_relative->setChecked(true);
+		dir = pos + dir;
 	}
 
+	setPosition_(pos);
+	setDirection_(dir);
+
+	typeSelected_(light.getType());
+	
 	light_type->setButton(light.getType());
 	intensity->setValue((Index)(light.getIntensity() * 100.0));
 }
@@ -331,7 +315,7 @@ void LightSettings::intensityChanged()
 }
 
 
-void LightSettings::setDefaultValues(bool /*all*/)
+void LightSettings::restoreDefaultValues(bool /*all*/)
 	throw()
 {
 	defaultsPressed();
@@ -351,17 +335,20 @@ void LightSettings::positionTypeChanged()
 		Vector3 pos = getPosition_();
 		Vector3 dir = getDirection_();
 
+		const Vector3& vp = stage_->getCamera().getViewPoint();
+
 		if (relative->isChecked())
 		{
 			Vector3 diff = dir - pos;
-			pos = stage_->calculateRelativeCoordinates(pos);
 			dir = stage_->calculateRelativeCoordinates(diff);
+
+			pos -= vp;
+			pos = stage_->calculateRelativeCoordinates(pos);
 		}
 		else
 		{
-			pos = stage_->calculateAbsoluteCoordinates(pos);
-			dir = pos +
-						stage_->calculateAbsoluteCoordinates(dir);
+			pos = stage_->calculateAbsoluteCoordinates(pos) + vp;
+			dir = stage_->calculateAbsoluteCoordinates(dir) + pos;
 		}
 
 		setPosition_(pos);
@@ -369,21 +356,22 @@ void LightSettings::positionTypeChanged()
 	}
 	catch(...)
 	{
+		BALLVIEW_DEBUG
 	}
 }
 
 void LightSettings::setPosition_(const Vector3& v)
 {
-	position_x->setText(createFloatString(v.x, 1).c_str());
-	position_y->setText(createFloatString(v.y, 1).c_str());
-	position_z->setText(createFloatString(v.z, 1).c_str());
+	position_x->setText(createFloatString(v.x, 2).c_str());
+	position_y->setText(createFloatString(v.y, 2).c_str());
+	position_z->setText(createFloatString(v.z, 2).c_str());
 }
 
 void LightSettings::setDirection_(const Vector3& v)
 {
-	direction_x->setText(createFloatString(v.x, 1).c_str());
-	direction_y->setText(createFloatString(v.y, 1).c_str());
-	direction_z->setText(createFloatString(v.z, 1).c_str());
+	direction_x->setText(createFloatString(v.x, 2).c_str());
+	direction_y->setText(createFloatString(v.y, 2).c_str());
+	direction_z->setText(createFloatString(v.z, 2).c_str());
 }
 
 Vector3 LightSettings::getPosition_() 
@@ -407,4 +395,9 @@ Index LightSettings::getCurrentLightNumber_() const
 	return lights_list->currentItem();
 }
 
+void LightSettings::restoreValues(bool)
+{
+	updateFromStage();
+}
+		
 } } // NAMESPACE

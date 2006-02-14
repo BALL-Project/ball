@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.28 2004/02/23 17:26:02 anhi Exp $
+// $Id: common.h,v 1.28.8.1 2006/02/14 15:01:01 amoll Exp $
 //
 
 #ifndef BALL_MATHS_COMMON_H
@@ -164,7 +164,7 @@ namespace BALL
 #ifdef BALL_COMPILER_MSVC
 			return ::_finite(t);
 #else
-			return ::finite(t);
+			return finite(t);
 #endif
 		}
 

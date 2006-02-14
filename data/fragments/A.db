@@ -30,11 +30,11 @@
 		<node>C5<value>C 29.751 35.206 32.384</value></node>
 		<node>C6<value>C 30.698 34.181 32.452</value></node>
 		<node>N6<value>N 31.417 33.777 31.410</value></node>
-		<node>H61<value>H 32.088 33.030 31.518</value></node>
-		<node>H62<value>H 31.292 34.217 30.509</value></node>
+		<node>1H6<value>H 32.088 33.030 31.518</value></node>
+		<node>2H6<value>H 31.292 34.217 30.509</value></node>
 		<node>N1<value>N 30.867 33.595 33.636</value></node>
 		<node>C2<value>C 30.158 33.991 34.674</value></node>
-		<node>H2<value>H 30.296 33.518 35.635</value></node>
+		<node>2H<value>H 30.296 33.518 35.635</value></node>
 		<node>N3<value>N 29.245 34.933 34.744</value></node>
 		<node>C4<value>C 29.090 35.512 33.538</value></node>
 	</node>
@@ -68,11 +68,11 @@
 		<node>27<value>C1* H1* s</value></node>
 		<node>28<value>C3* H3* s</value></node>
 		<node>29<value>C2* 1H2* s</value></node>
-	        <node>30<value>C2* 2H2* s</value></node>
+    <node>30<value>C2* 2H2* s</value></node>
 		<node>31<value>C8 H8 s</value></node>
-		<node>32<value>N6 H61 s</value></node>
-		<node>33<value>N6 H62 s</value></node>
-		<node>34<value>C2 H2 s</value></node>
+		<node>32<value>N6 1H6 s</value></node>
+		<node>33<value>N6 2H6 s</value></node>
+		<node>34<value>C2 2H s</value></node>
  	</node>
 	<node>Connections
 		<node>5-term<value>P 3-term s 1.62 0.5</value></node>

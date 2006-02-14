@@ -7,8 +7,9 @@
 
 #include <BALL/VIEW/UIC/minimizationDialogData.h>
 
-#include <BALL/FORMAT/INIFile.h>
-#include <BALL/SYSTEM/path.h>
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#endif
 
 namespace BALL
 {
@@ -20,8 +21,9 @@ namespace BALL
 		/** Dialog for performing energy minimisations
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT MinimizationDialog 
-			: public MinimizationDialogData
+		class BALL_VIEW_EXPORT MinimizationDialog 
+			: public MinimizationDialogData,
+				public PreferencesEntry
 		{
 				Q_OBJECT
 
@@ -33,12 +35,6 @@ namespace BALL
 				/// Destructor
 				virtual ~MinimizationDialog();
 
-				/// 
-				void writePreferences(INIFile& inifile) const;
-
-				///
-				void readPreferences(const INIFile& inifile);
-				
 				/// Get the maximum number of iterations of the minimizer.
 				Size getMaxIterations() const;
 
@@ -97,7 +93,6 @@ namespace BALL
 		};
 		
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>624</width>
-            <height>446</height>
+            <width>650</width>
+            <height>450</height>
         </rect>
     </property>
     <property name="maximumSize">
@@ -27,15 +27,18 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>5</x>
-                <y>5</y>
-                <width>405</width>
+                <x>10</x>
+                <y>11</y>
+                <width>424</width>
                 <height>125</height>
             </rect>
         </property>
         <vbox>
             <property name="name">
                 <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>1</number>
             </property>
             <property name="spacing">
                 <number>5</number>
@@ -76,7 +79,7 @@
                             </size>
                         </property>
                         <property name="text">
-                            <string>Specular Intensity</string>
+                            <string>Specular intensity</string>
                         </property>
                     </widget>
                     <widget class="QSlider">
@@ -139,20 +142,15 @@
                         </property>
                         <property name="minimumSize">
                             <size>
-                                <width>40</width>
+                                <width>60</width>
                                 <height>25</height>
                             </size>
                         </property>
                         <property name="maximumSize">
                             <size>
-                                <width>40</width>
+                                <width>60</width>
                                 <height>25</height>
                             </size>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <bold>1</bold>
-                            </font>
                         </property>
                         <property name="frameShape">
                             <enum>TabWidgetPanel</enum>
@@ -202,7 +200,7 @@
                             </size>
                         </property>
                         <property name="text">
-                            <string>Diffuse Intensity</string>
+                            <string>Diffuse intensity</string>
                         </property>
                     </widget>
                     <widget class="QSlider">
@@ -262,20 +260,15 @@
                         </property>
                         <property name="minimumSize">
                             <size>
-                                <width>40</width>
+                                <width>60</width>
                                 <height>25</height>
                             </size>
                         </property>
                         <property name="maximumSize">
                             <size>
-                                <width>40</width>
+                                <width>60</width>
                                 <height>25</height>
                             </size>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <bold>1</bold>
-                            </font>
                         </property>
                         <property name="frameShape">
                             <enum>TabWidgetPanel</enum>
@@ -325,7 +318,7 @@
                             </size>
                         </property>
                         <property name="text">
-                            <string>Ambient Intensity</string>
+                            <string>Ambient intensity</string>
                         </property>
                     </widget>
                     <widget class="QSlider">
@@ -385,20 +378,15 @@
                         </property>
                         <property name="minimumSize">
                             <size>
-                                <width>40</width>
+                                <width>60</width>
                                 <height>25</height>
                             </size>
                         </property>
                         <property name="maximumSize">
                             <size>
-                                <width>40</width>
+                                <width>60</width>
                                 <height>25</height>
                             </size>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <bold>1</bold>
-                            </font>
                         </property>
                         <property name="frameShape">
                             <enum>TabWidgetPanel</enum>
@@ -508,20 +496,15 @@
                         </property>
                         <property name="minimumSize">
                             <size>
-                                <width>40</width>
+                                <width>60</width>
                                 <height>25</height>
                             </size>
                         </property>
                         <property name="maximumSize">
                             <size>
-                                <width>40</width>
+                                <width>60</width>
                                 <height>25</height>
                             </size>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <bold>1</bold>
-                            </font>
                         </property>
                         <property name="frameShape">
                             <enum>TabWidgetPanel</enum>
@@ -579,6 +562,6 @@
     <slot>specularChanged()</slot>
     <slot>shininessChanged()</slot>
 </slots>
-<exportmacro>BALL_EXPORT</exportmacro>
+<exportmacro>BALL_VIEW_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

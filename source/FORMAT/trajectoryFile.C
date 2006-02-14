@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.C,v 1.12 2003/08/26 09:17:48 oliver Exp $
+// $Id: trajectoryFile.C,v 1.12.8.1 2006/02/14 15:02:22 amoll Exp $
 //
 
 #include <BALL/FORMAT/trajectoryFile.h>
@@ -134,7 +134,7 @@ namespace BALL
 	bool TrajectoryFile::flushToDisk(const std::vector<SnapShot>& /* buffer */)
 		throw(File::CannotWrite)
 	{
-		if (!isOpen() || getOpenMode() != File::OUT)
+		if (!isOpen() || getOpenMode() != File::MODE_OUT)
 		{
 			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}

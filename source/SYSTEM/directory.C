@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.C,v 1.28 2004/12/07 15:28:48 amoll Exp $
+// $Id: directory.C,v 1.28.6.1 2006/02/14 15:03:01 amoll Exp $
 //
 
 #include <BALL/SYSTEM/directory.h>
@@ -24,10 +24,6 @@
 #ifdef BALL_COMPILER_MSVC
 #	define chdir _chdir
 # define rmdir _rmdir
-#endif
-
-#ifndef BALL_PLATFORM_WINDOWS
-# define INVALID_HANDLE_VALUE 0 
 #endif
 
 namespace BALL 
@@ -102,17 +98,7 @@ namespace BALL
 
 	Directory::~Directory()
 	{
-		#ifdef BALL_PLATFORM_WINDOWS
-		if (dirent_ != INVALID_HANDLE_VALUE)
-		{
-			FindClose(dirent_);
-		}
-		#else
-			if (dir_ != 0) 
-			{
-				::closedir(dir_);
-			}
-		#endif
+		clear();
 	}
 
 	bool Directory::getFirstEntry(String& entry) 
@@ -271,7 +257,7 @@ namespace BALL
 	{
 #ifdef BALL_COMPILER_MSVC
 		synchronize_();
-		Size size =0;
+
 		if (dir_ == INVALID_HANDLE_VALUE)
 		{
 			dir_ = CreateFile(directory_path_.data(),
@@ -298,16 +284,19 @@ namespace BALL
 		dirent_ = FindFirstFile(pat.data(),&fd);
 		if (dirent_ == INVALID_HANDLE_VALUE)
 		{
-			CloseHandle(dir_);
-			dir_ = INVALID_HANDLE_VALUE;
+			if (dir_ != INVALID_HANDLE_VALUE)
+			{
+				CloseHandle(dir_);
+				dir_ = INVALID_HANDLE_VALUE;
+			}
 			desynchronize_();
 			return 0;
 		}
-		++size;
-		while(FindNextFile(dirent_,&fd)!=0) ++size;
+		Size size = 1;
+		while(FindNextFile(dirent_,&fd) != 0) ++size;
 		FindClose(dirent_);
 		desynchronize_();
-		return (size-2);
+		return (size - 2);
 
 #else
 		synchronize_();

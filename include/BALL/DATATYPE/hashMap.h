@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashMap.h,v 1.40 2004/11/18 19:34:14 oliver Exp $ 
+// $Id: hashMap.h,v 1.40.6.1 2006/02/14 15:00:45 amoll Exp $ 
 //
 
 #ifndef BALL_DATATYPE_HASHMAP_H
@@ -563,10 +563,6 @@ namespace BALL
 		virtual bool needRehashing_() const throw();
 
 		virtual void rehash() throw();
-
-		PointerType find_(const Key& key, HashIndex& index) throw();
-			
-		PointerType find_(const Key& key, HashIndex& index) const throw();
 
 		void deleteBuckets_() throw();
 

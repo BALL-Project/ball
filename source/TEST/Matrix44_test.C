@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Matrix44_test.C,v 1.22 2004/11/07 08:25:37 oliver Exp $
+// $Id: Matrix44_test.C,v 1.22.6.1 2006/02/14 15:03:08 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -15,7 +15,7 @@
 #include <math.h>
 ///////////////////////////
 
-START_TEST(Matrix44, "$Id: Matrix44_test.C,v 1.22 2004/11/07 08:25:37 oliver Exp $")
+START_TEST(Matrix44, "$Id: Matrix44_test.C,v 1.22.6.1 2006/02/14 15:03:08 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -151,15 +151,18 @@ RESULT
 
 CHECK(void set(const T* ptr) throw(Exception::NullPointer))
 	m1 = Matrix4x4();
-	float arr[15];
+	
+	float arr[16];
 	for (int i = 0; i <16; i++ )
 	{
 		arr[i] = (float)i + 1;
 	}
+	
 	m1.set(arr);
 	TEST_EQUAL(m1.isEqual(m), true)
 	TEST_EXCEPTION(Exception::NullPointer, m1.set((float*)0))
 RESULT
+
 
 CHECK(void set(const T ptr[4][4]) throw(Exception::NullPointer))
 	m1 = Matrix4x4();
@@ -177,6 +180,7 @@ CHECK(void set(const T ptr[4][4]) throw(Exception::NullPointer))
 	TEST_EQUAL(m1.isEqual(m), true);
 	TEST_EXCEPTION(Exception::NullPointer, m1.set((float*)0))
 RESULT
+
 
 CHECK(void set(const TMatrix4x4& m) throw())
 	m1 = Matrix4x4();

@@ -1,7 +1,7 @@
 #! python
 from ClassTest import *
 
-START_TEST('SysInfo', '$Id: SysInfo_test.py,v 1.2 2005/12/23 17:03:02 amoll Exp $')
+START_TEST('SysInfo', '$Id: SysInfo_test.py,v 1.2.6.1 2006/02/14 15:02:54 amoll Exp $')
 
 CHECK('SysInfo.getFreeMemory()')
 try:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.h,v 1.8 2005/02/06 20:57:06 oliver Exp $
+// $Id: renderer.h,v 1.8.6.1 2006/02/14 15:01:50 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_RENDERER_H
 #define BALL_VIEW_RENDERING_RENDERER_H
@@ -30,6 +30,7 @@ namespace BALL
 		class TwoColoredLine;
 		class TwoColoredTube;
 		class Stage;
+		class ClippingPlane;
 
 		/** Renderer is just a generic base class.
 		 		Derived classes are GLRenderer and POVRenderer.
@@ -38,10 +39,12 @@ namespace BALL
 				render.
 				\ingroup ViewRendering
 		*/
-		class BALL_EXPORT Renderer
+		class BALL_VIEW_EXPORT Renderer
 			:	public Object
 		{
 			public:
+
+			BALL_CREATE(Renderer)
 
 			/**	@name	Constructors and Destructors
 			*/	
@@ -129,7 +132,7 @@ namespace BALL
 			protected:
 
 			///
-			virtual void renderClippingPlane_(const Representation& /*rep*/)
+			virtual void renderClippingPlane_(const ClippingPlane&)
 				throw() {Log.error() << "renderClippingPlane_ not implemented in derived Renderer class" << std::endl;}
 
 			// Render a text label

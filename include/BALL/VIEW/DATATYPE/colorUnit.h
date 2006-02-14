@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.h,v 1.25 2004/02/26 08:41:30 anhi Exp $
+// $Id: colorUnit.h,v 1.25.10.1 2006/02/14 15:01:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -35,9 +35,11 @@ namespace BALL
 				This class is used by the class ColorRGBA and ColorHSV. \par
 				\ingroup ViewDatatypeFormat
 		*/
-		class BALL_EXPORT ColorUnit
+		class BALL_VIEW_EXPORT ColorUnit
 		{
 			public:
+
+			BALL_CREATE(ColorUnit)
 			
 			/**	@name	Exceptions
 			*/
@@ -49,7 +51,7 @@ namespace BALL
 
 					\see         Exception::GeneralException			
 			*/
-			class NotInHexFormat:	public Exception::GeneralException
+			class BALL_VIEW_EXPORT NotInHexFormat:	public Exception::GeneralException
 			{
 				public:
 
@@ -158,7 +160,7 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			~ColorUnit()
+			virtual ~ColorUnit()
 				throw();
 
 			/** Explicit default initialization.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: experiment.h,v 1.10 2003/08/26 08:04:44 oliver Exp $
+// $Id: experiment.h,v 1.10.8.1 2006/02/14 15:01:13 amoll Exp $
 //
 
 #ifndef BALL_NMR_EXPERIMENT_H
@@ -31,7 +31,7 @@ namespace BALL
 	\ingroup Spectra
 	*/
 	template <typename PeakListType>
-	class Experiment
+	class BALL_EXPORT Experiment
 		:	public ShiftModule
 	{
 		public:
@@ -154,7 +154,7 @@ namespace BALL
 			are user-defined ( \link setDefaultPeak setDefaultPeak \endlink ).
 	\ingroup Spectra
 	*/
-	class SimpleExperiment1D
+	class BALL_EXPORT SimpleExperiment1D
 		:	public Experiment1D
 	{
 		public:

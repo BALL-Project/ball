@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.C,v 1.25 2004/05/27 19:49:58 oliver Exp $
+// $Id: MOLFile.C,v 1.25.6.1 2006/02/14 15:02:20 amoll Exp $
 //
 
 
@@ -734,6 +734,13 @@ namespace BALL
 						bond.topology,
 						bond.reacting_center_status);
 		getFileStream() << buf;
+	}
+
+	const MOLFile& MOLFile::operator = (const MOLFile& file)
+		throw()
+	{
+		GenericMolFile::operator = (file);
+		return *this;
 	}
 
 } // namespace BALL

@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.28 2005/02/28 19:36:08 amoll Exp $
+// $Id: message.C,v 1.28.4.1 2006/02/14 15:03:43 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
+
 
 using namespace std;
 
@@ -344,6 +345,87 @@ FinishedSimulationMessage::FinishedSimulationMessage()
 	: Message()
 {
 }
+
+ShowHelpMessage::ShowHelpMessage(String url)
+	throw()
+	: Message(),
+		url_(url)
+{
+}
+
+RegisterHelpSystemMessage::RegisterHelpSystemMessage()
+	throw()
+	: Message(),
+		widget_(0),
+		menu_entry_(-1),
+		url_(""),
+		register_(true)
+{
+}
+		
+///////// docking/////////////////////////////////
+NewDockResultMessage::NewDockResultMessage()
+	throw()
+	: CompositeMessage(),
+		dock_res_(0)
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new NewDockResultMessage" << std::endl;
+	#endif
+}
+
+ShowDockResultMessage::ShowDockResultMessage()
+	throw()
+	: Message(),
+		dock_res_(0),
+		docked_system_(0)
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new ShowDockResultMessage" << std::endl;
+	#endif
+}
+
+ShowDockResultMessage::ShowDockResultMessage(DockResult* dock_res, System* docked_system)
+	throw()
+	: Message()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new ShowDockResultMessage" << std::endl;
+	#endif
+	
+	dock_res_ = dock_res;
+	docked_system_ = docked_system;
+}
+
+DockingFinishedMessage::DockingFinishedMessage()
+	throw()
+	: Message(),
+		conformation_set_(0)
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new DockingFinishedMessage" << std::endl;
+	#endif
+}
+
+DockingFinishedMessage::DockingFinishedMessage(bool abort)
+	throw()
+	: Message(),
+		conformation_set_(0)
+{
+	abort_ = abort;
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new DockingFinishedMessage" << std::endl;
+	#endif
+}
+
+DockingFinishedMessage::~DockingFinishedMessage()
+	throw()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "Destructing " << this << "DockingFinishedMessage" << std::endl;
+	#endif
+}
+
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/message.iC>
 #	endif 

@@ -2,7 +2,7 @@
 from ClassTest import *
 from BALL import *
 
-START_TEST('<class name>', '$Id: GlobalTypes_test.py,v 1.2 2005/12/23 17:03:01 amoll Exp $')
+START_TEST('<class name>', '$Id: GlobalTypes_test.py,v 1.2.6.1 2006/02/14 15:02:53 amoll Exp $')
 
 CHECK('Distance')
 d = Distance()

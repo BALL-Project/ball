@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.C,v 1.14 2004/09/30 15:51:21 amoll Exp $
+// $Id: mainControlPreferences.C,v 1.14.8.1 2006/02/14 15:03:34 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
@@ -27,7 +27,7 @@ MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name
 	registerObject_(show_labels);
 	registerObject_(logging_to_file);
 
-	insertEntry(this, "General");
+	setWidgetStackName("General");
 }
 
 MainControlPreferences::~MainControlPreferences()

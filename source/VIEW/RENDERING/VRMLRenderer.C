@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.C,v 1.3 2004/02/18 16:06:43 amoll Exp $
+// $Id: VRMLRenderer.C,v 1.3.10.1 2006/02/14 15:03:49 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
@@ -46,6 +46,9 @@ VRMLRenderer::VRMLRenderer(const String& name)
 		current_intend_(0)
 {
 	outfile_.open(name, std::ios::out);
+
+	out_("#VRML V2.0 utf8");
+	out_("");
 }
 
 VRMLRenderer::~VRMLRenderer()
@@ -69,12 +72,18 @@ void VRMLRenderer::setFileName(const String& name)
 {
 	outfile_.open(name, std::ios::out);
 	current_intend_ = 0;
+
+	out_("#VRML V2.0 utf8");
+	out_("");
 }
 
 String VRMLRenderer::VRMLColorRGBA(const ColorRGBA& input)
 	throw()
 {
-	return String((float) input.getRed()) + " " + String((float) input.getGreen()) + String((float) input.getBlue());
+	return 
+		String((float) input.getRed())   + " " + 
+		String((float) input.getGreen()) + " " +
+		String((float) input.getBlue());
 }
 
 String VRMLRenderer::VRMLVector3(Vector3 input)
@@ -106,9 +115,6 @@ bool VRMLRenderer::init(const Stage& stage)
 	#endif
 
 	stage_ = &stage;
-
-	out_("#VRML V2.0 utf8");
-	out_("");
 /*
 	// Find out the position of the camera.
 	const Camera& camera = stage_->getCamera();
@@ -131,18 +137,27 @@ bool VRMLRenderer::finish()
 	return true;
 }
 
-void VRMLRenderer::renderSphere_(const Sphere& sphere)
+void VRMLRenderer::header_(const Vector3& translation, const ColorRGBA& color,
+													 const String& rotation)
 	throw()
 {
 	outheader_("Transform {");
-	outheader_("translation " + VRMLVector3(sphere.getPosition()));
+ 	if (rotation != "")
+	{
+ 		outheader_("rotation " + rotation);
+	}
+	outheader_("translation " + VRMLVector3(translation));
 	outheader_("children [");
 
 	outheader_("Shape {");
-	VRMLobjectColor(sphere);
 
-	outheader_("geometry Sphere {");
-	out_("radius " + String(sphere.getRadius()));
+	VRMLColor(color);
+}
+
+
+void VRMLRenderer::footer_()
+	throw()
+{
 	current_intend_ --;
 	outfinish_("}");
 	outfinish_("}");
@@ -150,15 +165,64 @@ void VRMLRenderer::renderSphere_(const Sphere& sphere)
 	out_("}");
 }
 
-void VRMLRenderer::VRMLobjectColor(const GeometricObject& object)
+
+void VRMLRenderer::renderSphere_(const Sphere& sphere)
+	throw()
+{
+	header_(sphere.getPosition(), sphere.getColor());
+	outheader_("geometry Sphere {");
+	out_("radius " + String(sphere.getRadius()));
+	footer_();
+}
+
+
+void VRMLRenderer::renderTube_(const Tube& tube)
+	throw()
+{
+	header_(tube.getVertex1(), tube.getColor());
+	outheader_("geometry Cylinder {");
+	Vector3 v = tube.getVertex2() - tube.getVertex1(); 
+	out_("height " + String(v.getLength()));
+	out_("radius " + String(tube.getRadius()));
+	footer_();
+}
+
+
+void VRMLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
+	throw()
+{
+	static Vector3 default_angle(0,1,0);
+
+	Vector3 v = tube.getVertex2() - tube.getVertex1(); 
+
+	float f = v.getAngle(default_angle);
+	Vector3 a = v % default_angle;
+
+	String r;
+	if (!Maths::isZero(a.getSquareLength()))
+	{
+		a.normalize();
+		r = String(a.x) + " " + 
+				String(a.y) + " " + 
+				String(a.z) + " ";
+
+		r += String(f);
+	}
+
+	header_(tube.getVertex1() + v / 2.0, tube.getColor(), r);
+	outheader_("geometry Cylinder {");
+	out_("height " + String(v.getLength()));
+	out_("radius " + String(tube.getRadius()));
+	footer_();
+}
+
+
+void VRMLRenderer::VRMLColor(const ColorRGBA& color)
 	throw()
 {
 	outheader_("appearance Appearance {");
 	outheader_("material Material {");
-	out_("diffuseColor " 
-					 + String ((float)object.getColor().getRed()) + " "
-					 + String ((float)object.getColor().getBlue()) + " "
-					 + String ((float)object.getColor().getGreen()));
+	out_("diffuseColor " + VRMLColorRGBA(color));
 
 	out_("shininess 0.5");
 	current_intend_ --;
@@ -172,6 +236,7 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 	// so we should let VRMLRay know...
 	outheader_("Shape {");
 	outheader_("geometry IndexedFaceSet {");
+	out_("normalPerVertex TRUE");
 	outheader_("coord Coordinate {");
 	outheader_("point [");
 
@@ -198,8 +263,7 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 	{
 		String out = (String((*itt).v1) + " " 
 						 + String((*itt).v2) + " " 
-						 + String((*itt).v3) + " " 
-						 + " -1"); 
+						 + String((*itt).v3) + ", -1"); 
 
 		if (itt != mesh.triangle.end()) 
 		{
@@ -207,23 +271,47 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 		}
 		out_(out);
 	}
-	current_intend_ --;
 	outfinish_("]");
+	
+	// print normals =====================================
+	outheader_("normal Normal {");
+	outheader_("vector [");
+	itv = mesh.normal.begin(); 
+	for (; itv != mesh.normal.end(); itv++)
+	{
+		String out = VRMLVector3(*itv);
+		if (itv != mesh.normal.end()) 
+		{
+			out += ",";
+		}
+		out_(out);
+	}
+	outfinish_("]");
+	outfinish_("}");
 
+	/*
+	outheader_("normalIndex [");
+	for (Position i = 0; i < mesh.vertex.size(); i++)
+	{
+		String si(i);
+		out_(si + ", " + si + ", " + si);
+	}
+	outfinish_("]");
+	*/
 // print colors ========================================
 	outheader_("color Color {");
 	outheader_("color [");
-	if (mesh.colorList.size() == 0)
+	if (mesh.colors.size() == 0)
 	{
 		out_(VRMLColorRGBA(ColorRGBA(1.,1,1)));
 	}
 	else
 	{
-		vector<ColorRGBA>::const_iterator itc = mesh.colorList.begin(); 
-		for (; itc != mesh.colorList.end(); itc++)
+		vector<ColorRGBA>::const_iterator itc = mesh.colors.begin(); 
+		for (; itc != mesh.colors.end(); itc++)
 		{
 			String out = VRMLColorRGBA(*itc);
-			if (itc != mesh.colorList.end()) 
+			if (itc != mesh.colors.end()) 
 			{
 				out += ",";
 			}
@@ -233,7 +321,15 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 	current_intend_ --;
 	outfinish_("]");
 	out_("}");
-	outfinish_("colorPerVertex FALSE");
+
+	if (mesh.colors.size() > 1)
+	{
+		outfinish_("colorPerVertex TRUE");
+	}
+	else
+	{
+		outfinish_("colorPerVertex FALSE");
+	}
 	outfinish_("}");
 	outfinish_("}");
 }
@@ -243,7 +339,7 @@ void VRMLRenderer::out_(const String& data)
 {
 	if (current_intend_ < 0)
 	{
-		Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
+//   		BALLVIEW_DEBUG
 	}
 	String out;
 	for (Index p=0; p< current_intend_; p++)

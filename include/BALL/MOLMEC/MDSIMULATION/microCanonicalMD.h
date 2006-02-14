@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: microCanonicalMD.h,v 1.24 2005/01/24 16:57:41 amoll Exp $
+// $Id: microCanonicalMD.h,v 1.24.6.1 2006/02/14 15:01:08 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
@@ -21,7 +21,7 @@ namespace BALL
 			
     	\ingroup  MDSimulation
 	*/
-  class MicroCanonicalMD : public MolecularDynamics
+  class BALL_EXPORT MicroCanonicalMD : public MolecularDynamics
 	{
 
     public: 

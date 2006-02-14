@@ -3,6 +3,7 @@
 //
 #include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 
 #include <qlineedit.h>
 #include <qpushbutton.h>
@@ -77,6 +78,16 @@ bool ContourSurfaceDialog::exec()
 	}
 
 	return true;
+}
+
+void ContourSurfaceDialog::chooseColor()
+{
+	VIEW::chooseColor(color_label);
+}
+
+ColorRGBA ContourSurfaceDialog::getColor()
+{
+	return ColorRGBA(color_label->backgroundColor());
 }
 		
 

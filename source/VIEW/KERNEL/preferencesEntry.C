@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.16 2005/02/15 12:35:51 amoll Exp $
+// $Id: preferencesEntry.C,v 1.16.4.1 2006/02/14 15:03:44 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
-#include <BALL/VIEW/DATATYPE/colorRGBA.h>
+#include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 
 #include <qslider.h>
 #include <qlabel.h>
@@ -36,189 +37,234 @@ namespace BALL
 
 		void PreferencesEntry::writePreferenceEntries(INIFile& inifile)
 		{
-			if (preferences_objects_.size() == 0) return;
+			if (registered_objects_.size() == 0) return;
 
-			if (inifile_section_name_ == "") 
+			QWidget* widget = dynamic_cast<QWidget*>(this);
+			if (widget == 0)
 			{
-				Log.error() << "INIFile section name not set in " << this << " :"<< std::endl;
-				HashSet<QWidget*>::Iterator it = preferences_objects_.begin();
-				for (; it != preferences_objects_.end(); it++)
-				{
-					Log.error() << "   " << (**it).name() << std::endl;
-				}
+				Log.error() << "This PreferencesEntry is not a QWidget! " << std::endl;
 				return;
 			}
 
-			inifile.appendSection(inifile_section_name_);
-
-			HashSet<QWidget*>::Iterator it = preferences_objects_.begin();
-			for (; it != preferences_objects_.end(); it++)
+			if (inifile_section_name_ == "") 
 			{
-				String name = (**it).name();
+				Log.error() << "INIFile section name not set in " << widget->name() << std::endl;
+				return;
+			}
 
-				if (name == "")
-				{
-					Log.error() << "Unnamed Preferences object!" << std::endl;
-					continue;
-				}
+			if (!inifile.hasSection(inifile_section_name_))
+			{
+				inifile.appendSection(inifile_section_name_);
+			}
 
-				if (RTTI::isKindOf<QSlider>(**it))
+			String value, name;
+			
+			HashSet<QWidget*>::Iterator it = registered_objects_.begin();
+			for (; it != registered_objects_.end(); it++)
+			{
+				name = (**it).name();
+
+				if (name == "" || !getValue_(*it, value))
 				{
-					inifile.insertValue(inifile_section_name_, name, String((dynamic_cast<QSlider*>(*it))->value()));
-				}
-				else if (RTTI::isKindOf<QLabel>(**it))
-				{
-					inifile.insertValue(inifile_section_name_, name, getLabelColor_(dynamic_cast<QLabel*>(*it)));
-				}
-				else if (RTTI::isKindOf<QLineEdit>(**it))
-				{
-					inifile.insertValue(inifile_section_name_, name, ((dynamic_cast<QLineEdit*>(*it)))->text().ascii());
-				}
-				else if (RTTI::isKindOf<QCheckBox>(**it))
-				{
-					inifile.insertValue(inifile_section_name_, name, String((dynamic_cast<QCheckBox*>(*it))->isChecked()));
-				}
-				else if (RTTI::isKindOf<QComboBox>(**it))
-				{
-					inifile.insertValue(inifile_section_name_, name, String((dynamic_cast<QComboBox*>(*it))->currentItem()));
-				}
-				else if (RTTI::isKindOf<QButtonGroup>(**it))
-				{
-					QButtonGroup* qbg = dynamic_cast<QButtonGroup*>(*it);
-					int id = -1;
-					if (qbg != 0)
+					if (name == "")
 					{
-						if (qbg->selected() == 0)
-						{
-							id = qbg->id(qbg->selected());
-						}
+						Log.error() << "Unnamed Preferences object!";
 					}
-					inifile.insertValue(inifile_section_name_, name, String(id));
-				}
-				else
-				{
-					Log.error() << "Unknown QWidget " << name << " in " 
-											<< __FILE__ << " " << __LINE__ << std::endl;
+
+					Log.error() << " in PreferencesEntry: " << widget->name() << " ";
+				  Log.error() << __FILE__ << " " << __LINE__ << std::endl;
+
 					continue;
 				}
 
+				inifile.insertValue(inifile_section_name_, name, value);
 			}
 		}
 
+
+		bool PreferencesEntry::getValue_(const QWidget* widget, String& value)
+		{
+			const ExtendedPreferencesObject* epo = dynamic_cast<const ExtendedPreferencesObject*>(widget);
+			if (epo != 0)
+			{
+				if (!epo->getValue(value))
+				{
+					BALLVIEW_DEBUG;
+				}
+			}
+			else if (RTTI::isKindOf<QSlider>(*widget))
+			{
+				value = String((dynamic_cast<const QSlider*>(widget))->value());
+			}
+			else if (RTTI::isKindOf<QLabel>(*widget))
+			{
+				value = ColorRGBA((dynamic_cast<const QLabel*>(widget))->backgroundColor());	
+			}
+			else if (RTTI::isKindOf<QLineEdit>(*widget))
+			{
+				value = (dynamic_cast<const QLineEdit*>(widget))->text().ascii();
+			}
+			else if (RTTI::isKindOf<QCheckBox>(*widget))
+			{
+				value = String((dynamic_cast<const QCheckBox*>(widget))->isChecked());
+			}
+			else if (RTTI::isKindOf<QComboBox>(*widget))
+			{
+				value = String((dynamic_cast<const QComboBox*>(widget))->currentItem());
+			}
+			else if (RTTI::isKindOf<QButtonGroup>(*widget))
+			{
+				const QButtonGroup* qbg = dynamic_cast<const QButtonGroup*>(widget);
+
+				// no button selected (should not happen) -> select first
+				if (qbg->selectedId() == -1)
+				{
+					value="0";
+					return true;
+				}
+
+				value = String(qbg->selectedId());
+			}
+			else
+			{
+				Log.error() << "Unknown Preferences object " << widget->name() << std::endl;
+				return false;
+			}
+
+			return true;
+		}
+
+
 		void PreferencesEntry::readPreferenceEntries(const INIFile& inifile)
 		{
-			HashSet<QWidget*>::Iterator it = preferences_objects_.begin();
-			for (; it != preferences_objects_.end(); it++)
+			HashSet<QWidget*>::Iterator it = registered_objects_.begin();
+			for (; it != registered_objects_.end(); it++)
 			{
-
 				if (!inifile.hasEntry(inifile_section_name_, (**it).name())) continue;
 
 				String value = inifile.getValue(inifile_section_name_, (**it).name());
 
-				try
-				{
-					if (RTTI::isKindOf<QSlider>(**it))
-					{
-						(dynamic_cast<QSlider*>(*it))->setValue(value.toInt());
-					}
-					else if (RTTI::isKindOf<QLabel>(**it))
-					{
-						setLabelColor_((dynamic_cast<QLabel*>(*it)), ColorRGBA(value));
-					}
-					else if (RTTI::isKindOf<QLineEdit>(**it))
-					{
-						(dynamic_cast<QLineEdit*>(*it))->setText(value.c_str());
-					}
-					else if (RTTI::isKindOf<QCheckBox>(**it))
-					{
-						(dynamic_cast<QCheckBox*>(*it))->setChecked(value == "1");
-					}
-					else if (RTTI::isKindOf<QComboBox>(**it))
-					{
-						if (value.toUnsignedInt() >= (Position)(dynamic_cast<QComboBox*>(*it))->count()) continue;
-						(dynamic_cast<QComboBox*>(*it))->setCurrentItem(value.toInt());
-					}
-					else if (RTTI::isKindOf<QButtonGroup>(**it))
-					{
-						(dynamic_cast<QButtonGroup*>(*it))->setButton(value.toInt());
-					}
-					else 
-					{
-						Log.error() << "Unknown QWidget in " << __FILE__ << __LINE__ << std::endl;
-						continue;
-					}
-				}
-				catch(...)
+				if (!setValue_(*it, value))
 				{
 					Log.error() << "Invalid entry in INIFile: " << (**it).name() << " " << value << std::endl;
 				}
 			}
 		}
 
+		
+		bool PreferencesEntry::setValue_(QWidget* widget, const String& value)
+		{
+			try
+			{
+				ExtendedPreferencesObject* epo = dynamic_cast<ExtendedPreferencesObject*>(widget);
+				if (epo != 0)
+				{
+					if (!epo->setValue(value))
+					{
+						BALLVIEW_DEBUG;
+					}
+				}
+				else if (RTTI::isKindOf<QSlider>(*widget))
+				{
+					(dynamic_cast<QSlider*>(widget))->setValue(value.toInt());
+				}
+				else if (RTTI::isKindOf<QLabel>(*widget))
+				{
+					QLabel& label = *dynamic_cast<QLabel*>(widget);
+					label.setBackgroundColor(ColorRGBA(value).getQColor());
+				}
+				else if (RTTI::isKindOf<QLineEdit>(*widget))
+				{
+					(dynamic_cast<QLineEdit*>(widget))->setText(value.c_str());
+				}
+				else if (RTTI::isKindOf<QCheckBox>(*widget))
+				{
+					(dynamic_cast<QCheckBox*>(widget))->setChecked(value == "1");
+				}
+				else if (RTTI::isKindOf<QComboBox>(*widget))
+				{
+					if (value.toUnsignedInt() >= (Position)(dynamic_cast<QComboBox*>(widget))->count()) return false;
+					(dynamic_cast<QComboBox*>(widget))->setCurrentItem(value.toInt());
+				}
+				else if (RTTI::isKindOf<QButtonGroup>(*widget))
+				{
+					(dynamic_cast<QButtonGroup*>(widget))->setButton(value.toInt());
+				}
+				else 
+				{
+					Log.error() << "Unknown QWidget " << widget->name() << " in " 
+											<< __FILE__ << __LINE__ << std::endl;
+					return false;
+				}
+			}
+			catch(...)
+			{
+				return false;
+			}
+
+			return true;
+		}
+
+		
 		void PreferencesEntry::registerObject_(QWidget* widget)
 		{
 			if (widget == 0) return;
 
-			if (String(widget->name()) == "")
+			if (widget->name() == "")
 			{
 				Log.error() << "Unnamed Preferences object!" << std::endl;
 				return;
 			}
 
-			if (preferences_objects_.has(widget))
+			if (registered_objects_.has(widget))
 			{
-				Log.error() << "Widget " << widget << " with name " << widget->name() << " was already added!" << std::endl;
+				Log.error() << "Widget " << widget << " with name " << widget->name() 
+										<< " was already added!" << std::endl;
 				return;
 			}
 
-			preferences_objects_.insert(widget);
+			registered_objects_.insert(widget);
+
+			String value;
+			getValue_(widget, value);
+			
+			default_values_[widget] = value;
+			last_values_[widget] = value;
 		}
 
-		void PreferencesEntry::setLabelColor_(QLabel* label, const ColorRGBA& color)
+		
+		void PreferencesEntry::setWidgetStackName(const String& name)
 		{
-			label->setBackgroundColor(color.getQColor());
-		}
+			QWidget* widget = dynamic_cast<QWidget*>(this);
 
-		ColorRGBA PreferencesEntry::getLabelColor_(QLabel* label) const
-		{
-			return ColorRGBA(label->backgroundColor());
-		}
-
-		bool PreferencesEntry::fetchPreference_(const INIFile& inifile, 
-																				const String& entry, ColorRGBA& color)
-			throw()
-		{
-			try
+			if (widget == 0)
 			{
-				if (!inifile.hasEntry(inifile_section_name_, entry)) return false;
-				color = inifile.getValue(inifile_section_name_, entry);
-				return true;
+				BALLVIEW_DEBUG;
+				return;
 			}
-			catch(...)
-			{
-				Log.error() << "Could not read preferences for coloring from INIFile: ";
-				Log.error() << entry << std::endl; 
-			}
-			return false;
-		}
 
-		void PreferencesEntry::insertEntry(QWidget* widget, const String& name)
+			insertEntry_(widget, name);
+		}
+			
+		void PreferencesEntry::insertEntry_(QWidget* widget, const String& name)
 		{
-			entries_.push_back(std::pair<QWidget*, String>(widget, name));
+			stack_pages_.push_back(std::pair<QWidget*, String>(widget, name));
 		}
 
-		void PreferencesEntry::showEntry(Position nr) 
+		
+		void PreferencesEntry::showStackPage(Position nr) 
 		{ 
 			if (widget_stack_ == 0) return;
 			widget_stack_->raiseWidget(nr);
 		}
 
-		void PreferencesEntry::showEntry(QWidget* widget) 
+		void PreferencesEntry::showStackPage(QWidget* widget) 
 		{ 
 			if (widget_stack_ == 0) return;
 			widget_stack_->raiseWidget(widget);
 		}
 
+		
 		void PreferencesEntry::setWidgetStack(QWidgetStack* stack)
 		{
 			widget_stack_ = stack;
@@ -234,16 +280,125 @@ namespace BALL
 				{
 					if (name[i] == '_') name[i] = ' ';
 				}
-				insertEntry(widget_stack_->widget(p), name);
+				insertEntry_(widget_stack_->widget(p), name);
 			}
+
+			storeStackEntries_();
 		}
 
 
-		Position PreferencesEntry::currentEntry() const
+		Position PreferencesEntry::currentStackPage() const
 		{
 			if (widget_stack_ == 0) return 0;
 			return widget_stack_->id(widget_stack_->visibleWidget());
 		}
 
+
+		void PreferencesEntry::registerWidgetForHelpSystem_(const QWidget* widget, const String& url)
+		{
+			if (getMainControl() == 0) return;
+
+			RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
+			msg->setWidget(widget);
+			msg->setURL(url);
+			getMainControl()->sendMessage(*msg);
+		}
+		
+
+		void PreferencesEntry::storeValues()
+		{
+			String value;
+
+			HashSet<QWidget*>::Iterator it = registered_objects_.begin();
+			for (; it != registered_objects_.end(); it++)
+			{
+			 	getValue_(*it, value);
+				last_values_[*it] = value;
+			}
+		}
+
+		void PreferencesEntry::restoreValues_(bool all, const ValueMap& map)
+		{
+			// no widget stack, or (all == true) -> all items are restored
+			if (widget_stack_ == 0 || all)
+			{
+				HashSet<QWidget*>::Iterator it = registered_objects_.begin();
+				for (; +it; it++)
+				{
+					setValue_(*it, map[*it]);
+				}
+			}
+			// entries for current widget stack item
+			else if (!all)
+			{
+				Index id = currentStackPage();
+				if (id == -1) return;
+				for (Position p = 0; p < stack_entries_[id].size(); p++)
+				{
+					QWidget* widget = stack_entries_[id][p];
+					setValue_(widget, map[widget]);
+				}
+			}
+		}
+
+
+		void PreferencesEntry::restoreValues(bool all)
+		{
+			restoreValues_(all, last_values_);
+		}
+
+
+		void PreferencesEntry::restoreDefaultValues(bool all)
+		{
+			restoreValues_(all, default_values_);
+		}
+
+		
+		void PreferencesEntry::storeStackEntries_()
+		{
+			if (widget_stack_ == 0) return;
+
+			stack_entries_.clear();
+			stack_entries_.resize(stack_pages_.size());
+			
+			HashSet<QWidget*>::Iterator it = registered_objects_.begin();
+			for (; it != registered_objects_.end(); it++)
+			{
+				QWidget* widget = *it;
+				while (widget->parent() != 0)
+				{
+					QWidget* parent = (QWidget*)widget->parent();
+
+					if (!RTTI::isKindOf<QWidgetStack>(*parent)) 
+					{
+						widget = parent;
+						continue;
+					}
+
+					Index id = widget_stack_->id(widget);
+
+					if (id == -1) continue;
+
+					stack_entries_[id].push_back(*it);
+					widget = 0;
+					break;
+				} // look for parent 
+
+				// if we dont find the parent widget stack entry, debug
+				if (widget != 0) BALLVIEW_DEBUG;
+
+			} // all objects
+		}
+
+		ColorRGBA PreferencesEntry::getLabelColor_(const QLabel* label) const
+		{
+			return ColorRGBA(label->backgroundColor());
+		}
+			
+		void PreferencesEntry::setLabelColor_(QLabel* label, const ColorRGBA& color)
+		{
+			label->setBackgroundColor(color.getQColor());
+		}
+			
 	} // namespace VIEW
 } // namespace BALL

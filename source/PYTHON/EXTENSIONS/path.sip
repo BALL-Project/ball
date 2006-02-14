@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: path.sip,v 1.2 2005/07/03 09:43:26 oliver Exp $
+// $Id: path.sip,v 1.2.6.1 2006/02/14 15:02:43 amoll Exp $
 //
 
 class Path 

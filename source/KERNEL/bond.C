@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.C,v 1.35 2004/02/25 10:47:12 oliver Exp $
+// $Id: bond.C,v 1.35.8.1 2006/02/14 15:02:23 amoll Exp $
 //
 
 #include <BALL/KERNEL/bond.h>
@@ -9,20 +9,7 @@
 using namespace::std;
 namespace BALL 
 {
-
-	Bond::TooManyBonds::TooManyBonds(const char* file, int line)
-		throw()
-		:	Exception::GeneralException(file, line, "Bond::TooManyBonds", "Unable to create additional bonds.")
-	{
-	}
-
-	Bond::TooManyBonds::TooManyBonds(const char* file, int line, const Atom& atom1, const Atom& atom2)
-		throw()
-		:	Exception::GeneralException(file, line, "Bond::TooManyBonds",
-																	String("Unable to create additional bond between ")
-																	+ atom1.getFullName() + String(" and ") + atom2.getFullName() + ".")
-	{
-	}
+	using namespace BALL::Exception;
 
 	Bond::NotBound::NotBound(const char* file, int line)
 		throw()
@@ -55,7 +42,7 @@ namespace BALL
 	}
 		
 	Bond::Bond(const String& name, Atom& first, Atom& second, Bond::Order order, Type type)
-		throw(Bond::TooManyBonds)
+		throw(TooManyBonds)
 		: Composite(),
 			PropertyManager(),
 			first_(BALL_BOND_DEFAULT_FIRST_ATOM),
@@ -77,7 +64,7 @@ namespace BALL
 	}
 
 	Bond* Bond::createBond(Bond& bond, Atom& first, Atom& second)
-		throw(Bond::TooManyBonds)
+		throw(TooManyBonds)
 	{
 		// first check the cases where no new bond will be created.
 		if (&first == &second)
@@ -99,7 +86,9 @@ namespace BALL
 		{
 			delete bond_ptr;
 			bond_ptr = 0;
-			throw TooManyBonds(__FILE__, __LINE__, first, second);
+			throw TooManyBonds(__FILE__, __LINE__, 
+									first.getFullName() + String(" and ") + second.getFullName() + ".");
+					
 		}
 
 		// if the bond is already bound, delete it and create 
@@ -144,7 +133,7 @@ namespace BALL
 
 			Composite::persistentWrite(pm);
 
-      pm.writeStorableObject(*(PropertyManager*)this, "PropertyManager");
+      pm.writeStorableObject(dynamic_cast<const PropertyManager&>(*this), "PropertyManager");
  
 			pm.writeObjectPointer(first_, "first_");
 			pm.writeObjectPointer(second_, "second_");
@@ -161,7 +150,7 @@ namespace BALL
 			Composite::persistentRead(pm);
 		pm.checkObjectTrailer(0);
 
-		pm.readStorableObject(*(PropertyManager*)this, "PropertyManager");
+		pm.readStorableObject(dynamic_cast<PropertyManager&>(*this), "PropertyManager");
 
 		pm.readObjectPointer(first_, "first_");
 		pm.readObjectPointer(second_, "second_");

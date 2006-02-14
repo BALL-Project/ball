@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.18 2005/03/01 18:33:38 oliver Exp $
+// $Id: main.C,v 1.18.4.1 2006/02/14 15:02:03 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -29,6 +29,10 @@ void myMessageOutput( QtMsgType type, const char *msg )
 				abort();                    // deliberately core dump
 	}
 }
+
+
+// uncomment this to use debugging to std::cout!
+//#undef BALL_PLATFORM_WINDOWS
 
 #ifndef BALL_PLATFORM_WINDOWS
 int main(int argc, char **argv)
@@ -72,7 +76,7 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 					QString("You dont have write access to the current working directory\n") + 
 					"and BALLView can not find your home directory. This can cause\n" + 
 					"unexpected behaviour. Please start BALLView from your homedir with\n" + 
-					"absolute path (e.g. C:\\Windows\\BALLView\\BALLView).\n");
+					"absolute path (e.g. C:\\Programs\\BALLView\\BALLView).\n");
 		}
 	}
 

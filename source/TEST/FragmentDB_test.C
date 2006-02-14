@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FragmentDB_test.C,v 1.15 2004/05/27 19:50:00 oliver Exp $
+// $Id: FragmentDB_test.C,v 1.15.6.1 2006/02/14 15:03:05 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -21,7 +21,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.15 2004/05/27 19:50:00 oliver Exp $")
+START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.15.6.1 2006/02/14 15:03:05 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -96,7 +96,7 @@ CHECK(getResidue(const String&))
 			case 1: TEST_EQUAL(bond_it->getOrder(), Bond::ORDER__SINGLE) break;
 			case 2: TEST_EQUAL(bond_it->getOrder(), Bond::ORDER__SINGLE) break;
 			case 3: TEST_EQUAL(bond_it->getOrder(), Bond::ORDER__SINGLE) break;
-			case 4: TEST_EQUAL(bond_it->getOrder(), Bond::ORDER__AROMATIC) break;
+			case 4: TEST_EQUAL(bond_it->getOrder(), Bond::ORDER__DOUBLE) break;
 			case 5: TEST_EQUAL(bond_it->getOrder(), Bond::ORDER__SINGLE) break;
 			default:
 				STATUS("Too many bonds")
@@ -130,7 +130,7 @@ CHECK(FragmentDB::BuildBondsProcessor::operator () )
 			case 1: TEST_EQUAL(bond_it->getOrder(), Bond::ORDER__SINGLE) break;
 			case 2: TEST_EQUAL(bond_it->getOrder(), Bond::ORDER__SINGLE) break;
 			case 3: TEST_EQUAL(bond_it->getOrder(), Bond::ORDER__SINGLE) break;
-			case 4: TEST_EQUAL(bond_it->getOrder(), Bond::ORDER__AROMATIC) break;
+			case 4: TEST_EQUAL(bond_it->getOrder(), Bond::ORDER__DOUBLE) break;
 			case 5: TEST_EQUAL(bond_it->getOrder(), Bond::ORDER__SINGLE) break;
 			default:
 				STATUS("Too many bonds")

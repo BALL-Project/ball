@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangle.h,v 1.9 2003/08/26 08:04:54 oliver Exp $
+// $Id: triangle.h,v 1.9.8.1 2006/02/14 15:01:27 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_TRIANGLE_H
@@ -39,7 +39,7 @@ namespace BALL
 			 \par
 	\ingroup StructureMiscellaneous
 	*/
-	class Triangle
+	class BALL_EXPORT Triangle
 			:	public GraphTriangle< TrianglePoint,TriangleEdge,Triangle >
 	{
 		
@@ -180,7 +180,7 @@ namespace BALL
 
 	/**	Output- Operator
 	*/
-	std::ostream& operator << (std::ostream& s, const Triangle& triangle);
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const Triangle& triangle);
 
 	//@}
 

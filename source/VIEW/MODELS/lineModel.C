@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.C,v 1.11 2005/03/01 16:49:00 amoll Exp $
+// $Id: lineModel.C,v 1.11.4.1 2006/02/14 15:03:47 amoll Exp $
 
 #include <BALL/VIEW/MODELS/lineModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -78,18 +78,17 @@ namespace BALL
 		void AddLineModel::visualiseBond_(const Bond& bond)
 			throw()
 		{
-			if (bond.getType() == Bond::TYPE__HYDROGEN) return;
+			if (bond.getType() == Bond::TYPE__HYDROGEN ||
+			    bond.getFirstAtom() == 0 ||
+					bond.getSecondAtom() == 0)
+			{
+				return;
+			}
 
 			// generate two colored tube
 			TwoColoredLine *line = new TwoColoredLine;
 
-			if (line == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(TwoColoredLine));
-
-			if (bond.getFirstAtom() == 0 ||
-					bond.getSecondAtom() == 0)
-			{
-				throw Exception::NullPointer(__FILE__, __LINE__);
-			}
+			if (line == 0) return;
 							
 			line->setVertex1Address(bond.getFirstAtom()->getPosition());
 			line->setVertex2Address(bond.getSecondAtom()->getPosition());

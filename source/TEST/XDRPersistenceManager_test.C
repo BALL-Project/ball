@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager_test.C,v 1.20 2004/11/07 08:25:38 oliver Exp $
+// $Id: XDRPersistenceManager_test.C,v 1.20.6.1 2006/02/14 15:03:13 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.20 2004/11/07 08:25:38 oliver Exp $")
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.20.6.1 2006/02/14 15:03:13 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -279,15 +279,15 @@ CHECK(void put(const string& s) throw())
 RESULT
 
 
-PointerSizeUInt psi1 = 0x01234567;
+LongSize psi1 = 0x01234567;
 psi1 <<= 32;
 psi1 += 0xFEDCBA98;
-PointerSizeUInt psi2 = 0xFEDCBA98;
+LongSize psi2 = 0xFEDCBA98;
 psi2 <<= 32;
 psi2 += 0x01234567;
 
-CHECK(void put(const PointerSizeUInt p) throw())
-	pm.put((PointerSizeUInt)0);
+CHECK(void put(const LongSize p) throw())
+	pm.put((LongSize)0);
 	pm.put(psi1);
 	pm.put(psi2);
 RESULT
@@ -393,8 +393,8 @@ CHECK(void get(string& s) throw())
 RESULT
 
 
-CHECK(void get(PointerSizeUInt& p) throw())
-	PointerSizeUInt p;
+CHECK(void get(LongSize& p) throw())
+	LongSize p;
 	pm.get(p);
 	TEST_EQUAL(p, 0)
 	pm.get(p);

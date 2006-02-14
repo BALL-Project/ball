@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex1.h,v 1.7 2004/02/26 08:41:31 anhi Exp $
+// $Id: vertex1.h,v 1.7.10.1 2006/02/14 15:01:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_VERTEX1_H
@@ -28,9 +28,11 @@ namespace BALL
 				this vertex exists. \par
 				\ingroup ViewDatatypeGeometricObject
 		*/
-		class BALL_EXPORT Vertex
+		class BALL_VIEW_EXPORT Vertex
 		{
 			public:
+
+			BALL_CREATE(Vertex)
 
 			/**	@name	Constructors
 			*/	

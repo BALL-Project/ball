@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assignTypes.h,v 1.15 2004/12/17 15:29:18 amoll Exp $
+// $Id: assignTypes.h,v 1.15.6.1 2006/02/14 15:01:05 amoll Exp $
 //
 
 // Molecular Mechanics: atom type assignment
@@ -22,7 +22,7 @@
 namespace BALL 
 {
 	/// Only used for deriving interface
-	class	AssignBaseProcessor
+	class	BALL_EXPORT AssignBaseProcessor
 		:	public UnaryProcessor<Atom>
 	{
 		public:
@@ -60,7 +60,7 @@ namespace BALL
 	/**	Type assignment processor.
     	\ingroup  MolmecCommon
 	*/
-	class	AssignTypeProcessor
+	class	BALL_EXPORT AssignTypeProcessor
 		:	public AssignBaseProcessor
 	{
 		public:
@@ -94,7 +94,7 @@ namespace BALL
 	/**	Assign type names to atoms.
     	\ingroup  MolmecCommon
 	*/
-	class	AssignTypeNameProcessor
+	class	BALL_EXPORT AssignTypeNameProcessor
 		:	public AssignBaseProcessor
 	{
 		public:

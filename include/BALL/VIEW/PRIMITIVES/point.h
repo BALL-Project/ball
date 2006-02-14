@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.h,v 1.7 2004/02/26 08:41:43 anhi Exp $
+// $Id: point.h,v 1.7.10.1 2006/02/14 15:01:48 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIVES_POINT_H
@@ -31,11 +31,13 @@ namespace BALL
 				interface and additional methods. \par
 				\ingroup ViewPrimitives
 		*/
-		class BALL_EXPORT Point
+		class BALL_VIEW_EXPORT Point
 			: public GeometricObject,
 				public Vertex
 		{
 			public:
+
+			BALL_CREATE(Point)
 
 			/**	@name	Constructors
 			*/	

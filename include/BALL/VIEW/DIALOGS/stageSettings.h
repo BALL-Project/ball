@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.h,v 1.14 2005/02/06 20:57:04 oliver Exp $
+// $Id: stageSettings.h,v 1.14.6.1 2006/02/14 15:01:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_STAGESETTINGS_H
@@ -28,7 +28,7 @@ namespace BALL
 				- mouse wheel sensitivity in the Scene
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT StageSettings 
+		class BALL_VIEW_EXPORT StageSettings 
 			: public StageSettingsData,
 				public PreferencesEntry
 		{ 
@@ -50,10 +50,6 @@ namespace BALL
 			void apply()
 				throw();
 
-			/// 
-			void setDefaultValues(bool /*all*/ = false)
-				throw();
-
 			///
 			void getGLSettings()
 				throw();
@@ -65,6 +61,9 @@ namespace BALL
 
 			private:
 
+			///
+			void setDefaultValues_();
+				
 			///
 			void eyeDistanceChanged();
 

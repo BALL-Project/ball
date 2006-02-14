@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.97 2005/02/15 12:35:50 amoll Exp $
+// $Id: displayProperties.C,v 1.97.4.1 2006/02/14 15:03:29 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -13,6 +13,8 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
+#include <BALL/VIEW/WIDGETS/geometricControl.h>
+
 #include <BALL/VIEW/MODELS/backboneModel.h>
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
@@ -22,6 +24,7 @@
 #include <BALL/VIEW/MODELS/HBondModel.h>
 #include <BALL/VIEW/MODELS/forceModel.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
 
 #include <qmenubar.h>
 #include <qlabel.h>
@@ -31,6 +34,7 @@
 #include <qradiobutton.h>
 #include <qlistbox.h>
 #include <qbuttongroup.h>
+#include <qtimer.h>
 
 namespace BALL
 {
@@ -48,7 +52,8 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 		id_(-1),
 		rep_(0),
 		advanced_options_modified_(false),
-		create_representations_for_new_molecules_(true)
+		create_representations_for_new_molecules_(true),
+		changed_selection_color_(false)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new DisplayProperties " << this << std::endl;
@@ -66,6 +71,8 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 	{
 		coloring_method_combobox->insertItem(VIEW::getColoringName((VIEW::ColoringMethod)p).c_str());
 	}
+
+	createRepresentationMode();
 
 	setINIFileSectionName("REPRESENTATION");
 	registerObject_(model_type_combobox);
@@ -99,46 +106,30 @@ DisplayProperties::~DisplayProperties()
 }
 
 
-void DisplayProperties::fetchPreferences(INIFile& inifile)
-	throw()
-{
-	ModularWidget::fetchPreferences(inifile);
-	readPreferenceEntries(inifile);
-}
-
-void DisplayProperties::writePreferences(INIFile& inifile)
-	throw()
-{
-	ModularWidget::writePreferences(inifile);
-	writePreferenceEntries(inifile);
-}
-
-
 void DisplayProperties::initializeWidget(MainControl& main_control)
 	throw()
 {
 	(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
 
-	String hint("Create a new representation or modify an existing one");
-	id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
-																		 SLOT(show()), CTRL+Key_I, -1, hint);   
+	id_ = insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
+																		 SLOT(show()), CTRL+Key_I);   
+	setMenuHint("Create a new representation or modify an existing one");
+	setMenuHelp("displayProperties.html");
+
+	registerWidgetForHelpSystem(this, "displayProperties.html");
+	connect(&timer_, SIGNAL(timeout()), this, SLOT(checkMenu_()));
+
+	selectModel(MODEL_STICK);
 }
 
-
-void DisplayProperties::finalizeWidget(MainControl& main_control)
-	throw()
-{
-	main_control.removeMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
-																									SLOT(show()), CTRL+Key_I);   
-}
 
 void DisplayProperties::initializePreferencesTab(Preferences &preferences)
 	throw()
 {
 	preferences_ = &preferences;
-	model_settings_ = new ModelSettingsDialog(this);
+	model_settings_ = new ModelSettingsDialog(this, "ModelSettings");
 	preferences.insertEntry(model_settings_);
-	coloring_settings_ = new ColoringSettingsDialog(this);
+	coloring_settings_ = new ColoringSettingsDialog(this, "ColoringSettings");
 	preferences.insertEntry(coloring_settings_);
 }
 
@@ -161,7 +152,36 @@ void DisplayProperties::finalizePreferencesTab(Preferences &preferences)
 void DisplayProperties::checkMenu(MainControl& main_control)
 	throw()
 {
-	(main_control.menuBar())->setItemChecked(id_, isVisible());
+	bool busy = !isNotBusy_();
+
+	if (busy)
+	{
+		modify_button->setEnabled(false);
+		create_button->setEnabled(false);
+		timer_.start(300, true);
+		return;
+	}
+
+	bool has_mcs = main_control.getMolecularControlSelection().size() > 0;
+	create_button->setEnabled(has_mcs);
+	create_button->setDefault(has_mcs);
+
+	GeometricControl* gc = GeometricControl::getInstance(0);
+	bool has_gcs = gc != 0 && gc->getHighlightedRepresentations().size() > 0;
+	if (has_gcs)
+	{
+		rep_ = *gc->getHighlightedRepresentations().begin();
+	}
+	else
+	{
+		rep_ = 0;
+	}
+
+	modify_button->setEnabled(rep_ != 0);
+	modify_button->setDefault(rep_ != 0);
+
+	create_button->setEnabled(has_mcs);
+	create_button->setDefault(has_mcs);
 }
 
 
@@ -176,15 +196,26 @@ void DisplayProperties::createRepresentationMode()
 {
 	rep_ = 0;
 	setCaption("create Representation");
-	apply_button->setText("Create");
-	apply_button->setEnabled(getMainControl()->getMolecularControlSelection().size());
+	checkMenu_();
+
+	model_updates_enabled->setChecked(true);
+	coloring_updates_enabled->setChecked(true);
 }
 
-void DisplayProperties::modifyRepresentationMode()
+void DisplayProperties::modifyRepresentationMode(Representation* rep)
 {
+	rep_ = rep;
+	checkMenu(*getMainControl());
+
+	if (rep_ == 0 || 
+			rep->getModelType() >= MODEL_LABEL ||
+			!isNotBusy_())
+	{
+		return;
+	}
+	
 	setCaption("modify Representation");
-	apply_button->setText("Modify");
-	if (rep_->getColoringMethod() != COLORING_UNKNOWN)
+	if (rep_->getColoringMethod() < COLORING_UNKNOWN)
 	{
 		coloring_method_combobox->setCurrentItem(rep_->getColoringMethod());
 	}
@@ -205,11 +236,12 @@ void DisplayProperties::modifyRepresentationMode()
 
 	transparency_slider->setValue((Size)(rep_->getTransparency() / 2.55));
 
+	coloring_updates_enabled->setChecked(rep_->coloringUpdateEnabled());
+	model_updates_enabled->setChecked(rep_->modelUpdateEnabled());
+
 	getAdvancedModelOptions_();
 	getAdvancedColoringOptions_();
 	checkDrawingPrecision_();
-
-	apply_button->setEnabled(true);
 }
 
 void DisplayProperties::selectModel(int index)
@@ -269,15 +301,17 @@ void DisplayProperties::onNotify(Message *message)
 	if (RTTI::isKindOf<CompositeMessage>(*message))
 	{
 		CompositeMessage *composite_message = RTTI::castTo<CompositeMessage>(*message);
-		if (composite_message->getType() != CompositeMessage::NEW_MOLECULE ||
-				!create_representations_for_new_molecules_) 
+		if (!create_representations_for_new_molecules_ ||
+				composite_message->getType() != CompositeMessage::NEW_MOLECULE)
 		{
 			return;
 		}
+
 		// generate graphical representation
+		createRepresentationMode();
 		List<Composite*> clist;
 		clist.push_back(composite_message->getComposite());
-		createRepresentation_(clist);
+		createRepresentation(clist);
 		return;
 	}
 
@@ -294,14 +328,26 @@ void DisplayProperties::onNotify(Message *message)
 			case RepresentationMessage::SELECTED:
 			{
 				Representation* rep = ((RepresentationMessage*) message)->getRepresentation();
-				if (rep->getModelType() >= MODEL_LABEL) return;
-				rep_ = rep;
-				modifyRepresentationMode();
+				if (rep == 0) 
+				{	
+					createRepresentationMode();
+					return;
+				}
+				if (rep->getModelType() >= MODEL_UNKNOWN) return;
+				modifyRepresentationMode(rep);
 				return;
 			}
 			case RepresentationMessage::REMOVE:
 			{
 				createRepresentationMode();
+				return;
+			}
+
+			case RepresentationMessage::STARTED_UPDATE:
+			case RepresentationMessage::FINISHED_UPDATE:
+			case RepresentationMessage::UPDATE:
+			{
+				checkMenu(*getMainControl());
 				return;
 			}
 
@@ -313,9 +359,14 @@ void DisplayProperties::onNotify(Message *message)
 
 	if (RTTI::isKindOf<ControlSelectionMessage>(*message))
 	{
-		createRepresentationMode();
 		// disable apply button if selection is empty
-		apply_button->setEnabled(getMainControl()->getMolecularControlSelection().size());
+		createRepresentationMode();
+		return;
+	}
+
+	if (RTTI::isKindOf<FinishedSimulationMessage>(*message))
+	{
+		checkMenu(*getMainControl());
 		return;
 	}
 
@@ -326,10 +377,15 @@ void DisplayProperties::onNotify(Message *message)
 		model_type_combobox->setCurrentItem(crm->getModelType());
 		coloring_method_combobox->setCurrentItem(crm->getColoringMethod());
 		createRepresentationMode();
-		createRepresentation_(crm->getComposites());
+		createRepresentation(crm->getComposites());
 	}
 }
 
+bool DisplayProperties::isNotBusy_()
+{
+	return !getMainControl()->compositesAreLocked() &&
+					!getMainControl()->getPrimitiveManager().updateRunning();
+}
 
 void DisplayProperties::apply()
 {
@@ -340,7 +396,14 @@ void DisplayProperties::apply()
 	}
 
 	setStatusbarText("building model...");
-	createRepresentation_(getMainControl()->getMolecularControlSelection());
+
+	if (changed_selection_color_)
+	{
+		BALL_SELECTED_COLOR_CHANGE_TIME = PreciseTime::now();
+		getMainControl()->getPrimitiveManager().rebuildAllRepresentations();
+	}
+
+	createRepresentation(getMainControl()->getMolecularControlSelection());
 }
 
 
@@ -352,119 +415,112 @@ void DisplayProperties::editColor()
 void DisplayProperties::editSelectionColor()
 {
 	BALL_SELECTED_COLOR.set(chooseColor(selection_color_label));
+	changed_selection_color_ = true;
 }
 
 // ------------------------------------------------------------------------
 // Model Processor methods
 // ------------------------------------------------------------------------
-
-Representation* DisplayProperties::createRepresentation_(const List<Composite*>& composites)
-	throw(Exception::InvalidOption)
+void DisplayProperties::applyModelSettings_(Representation& rep)
 {
+	ModelType current_type = (ModelType) model_type_combobox->currentItem();
+	if (rep.getModelProcessor() == 0 ||
+			rep.getModelType() != current_type ||
+			!rep.modelUpdateEnabled())
+	{
+		rep.setModelProcessor(model_settings_->createModelProcessor(current_type));
+		rep.setModelType((ModelType)model_type_combobox->currentItem());
+	}
+
+	if (custom_precision_button->isChecked())
+	{
+		rep.setSurfaceDrawingPrecision(((float)precision_slider->value()) / 10.0);
+	}
+	else
+	{
+		rep.setDrawingPrecision((DrawingPrecision) precision_combobox->currentItem());
+
+		if (isSurfaceModel(current_type))
+		{
+			rep.setSurfaceDrawingPrecision(SurfaceDrawingPrecisions[precision_combobox->currentItem()]);
+		}
+	}
+
+	model_settings_->applySettingsTo(*rep.getModelProcessor());
+}
+
+
+void DisplayProperties::applyColoringSettings_(Representation& rep)
+{
+	ColoringMethod current_coloring = (ColoringMethod) coloring_method_combobox->currentItem();
+
+ 	if (rep.getColorProcessor() == 0 ||
+ 			rep.getColoringMethod() != current_coloring ||
+ 			!rep.coloringUpdateEnabled())
+	{
+		rep.setColorProcessor(coloring_settings_->createColorProcessor(current_coloring));
+		rep.setColoringMethod(current_coloring);
+	}
+
+	custom_color_.set(custom_color_label->backgroundColor());
+	custom_color_.setAlpha(255 - (Position)(transparency_slider->value() * 2.55));
+
+	ColorProcessor* cp = rep.getColorProcessor();
+	coloring_settings_->applySettingsTo(*cp);
+	cp->setDefaultColor(custom_color_);
+}
+
+
+Representation* DisplayProperties::createRepresentation(const List<Composite*>& composites)
+{
+	if (composites.size() > 0) rep_ = 0;
+
 	bool rebuild_representation = false;
-	Representation* rep = 0;
-	// if rep_ == 0 we are currently in create mode, otherwise in modify mode
 	bool new_representation = (rep_ == 0);
+
+	if (new_representation && composites.size() == 0) return 0;
+
+	if (rep_ != 0 && rep_->getModelProcessor() == 0) return 0;
+
+	ModelType mt = (ModelType) model_type_combobox->currentItem();
+	DrawingPrecision dp = (DrawingPrecision)precision_combobox->currentItem();
 
 	if (new_representation)
 	{
 		// create a new Representation
-		rep = new Representation((ModelType)model_type_combobox->currentItem(), 
-														 (DrawingPrecision)precision_combobox->currentItem(), 
-														 (DrawingMode)mode_combobox->currentItem());
+		rep_ = new Representation(mt, dp, (DrawingMode)mode_combobox->currentItem());
 		rebuild_representation = true;
-		if (custom_precision_button->isChecked())
+
+		if (isSurfaceModel(mt))
 		{
-			rep->setSurfaceDrawingPrecision(((float)precision_slider->value()) / 10.0);
-		}
-	}
-	else 
-	{
-		// modify an existing Representation
-		// If the represenation has the same ModelProcessor as the currently selected,
-		// we dont have to rebuild the geometric objects.
-		if (rep_->getModelType() != model_type_combobox->currentItem() ||
-				rep_->getDrawingPrecision() != precision_combobox->currentItem() ||
-				 (custom_precision_button->isChecked() &&
-				  rep_->getSurfaceDrawingPrecision() != (float)precision_slider->value() / 10.0)||
-				 (!custom_precision_button->isChecked() &&
-				  rep_->getSurfaceDrawingPrecision() != -1) ||
-				 advanced_options_modified_)
-		{
-			rebuild_representation = true;
-			if (rep_->getColorProcessor() != 0)
+			if (custom_precision_button->isChecked())
 			{
-				coloring_settings_->applySettingsTo(*rep_->getColorProcessor());
+				rep_->setSurfaceDrawingPrecision((float)precision_slider->value() / 10.0);
+			}
+			else
+			{
+				rep_->setSurfaceDrawingPrecision(SurfaceDrawingPrecisions[dp]);
 			}
 		}
-		rep = rep_;
-	}
 
-	if (new_representation || rebuild_representation)
-	{
-		ModelProcessor* model_processor = 
-			model_settings_->createModelProcessor((ModelType) model_type_combobox->currentItem());
-		rep->setModelProcessor(model_processor);
-	}
-
-	ColorProcessor* color_processor = 
-		coloring_settings_->createColorProcessor((ColoringMethod) coloring_method_combobox->currentItem());
-
-	QColor qcolor = custom_color_label->backgroundColor();
-	custom_color_.set(qcolor);
-	custom_color_.setAlpha(255 - (Position)(transparency_slider->value() * 2.55));
-	color_processor->setDefaultColor(custom_color_);
-	rep->setColorProcessor(color_processor);
-
-	rep->setTransparency((Size)(transparency_slider->value() * 2.55));
-	rep->setColoringMethod((ColoringMethod)coloring_method_combobox->currentItem());
-	rep->setDrawingMode((DrawingMode)mode_combobox->currentItem());
-	rep->setModelType((ModelType)model_type_combobox->currentItem());
-
-	if (custom_precision_button->isChecked())
-	{
-		rep->setSurfaceDrawingPrecision(((float)precision_slider->value()) / 10.0);
-	}
-	else
-	{
-		rep->setSurfaceDrawingPrecision(-1);
-		rep->setDrawingPrecision((DrawingPrecision) precision_combobox->currentItem());
-	}
-
-	// set the minimum necessary distance for the coloring grid according to model type
-	if (rep->getModelType() == MODEL_SE_SURFACE)
-	{
-		rep->getColorProcessor()->setAdditionalGridDistance(2.0);
-	}
-	else if (rep->getModelType() == MODEL_SA_SURFACE ||
-					 rep->getModelType() == MODEL_CARTOON ||
-					 rep->getModelType() == MODEL_BACKBONE)
-	{
-		rep->getColorProcessor()->setAdditionalGridDistance(4.0);
-	}
-	
-	if (new_representation)
-	{	
+		// stupid, but must be: create a List with const Composites!
+		List<const Composite*> temp_composites;
 		List<Composite*>::ConstIterator it = composites.begin();
 		for (; it != composites.end(); it++)
 		{
-			rep->getComposites().insert(*it);
+			temp_composites.push_back(*it);
 		}
+		rep_->setComposites(temp_composites);
 
 		// this is not straight forward, but we have to prevent a second rendering run in the Scene...
 		// the insertion into the PrimitiveManager is needed to allow the Representation::update
-		getMainControl()->getPrimitiveManager().insert(*rep, false);
-	}
-
-	apply_button->setEnabled(false);
-	rep->update(rebuild_representation);
-	apply_button->setEnabled(true);
-
-	if (new_representation)
-	{
+		getMainControl()->getPrimitiveManager().insert(*rep_, false);
+		
+		Representation* repx = rep_;
 		// now we can add the Representation to the GeometricControl
-		RepresentationMessage* rm = new RepresentationMessage(*rep, RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL);
-		notify_(rm);
+		notify_(new RepresentationMessage(*rep_, RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL));
+
+		rep_ = repx;
 
 		// no refocus, if a this is not the only Representation
 		if ((getMainControl()->getPrimitiveManager().getRepresentations().size() < 2) && 
@@ -476,9 +532,77 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 			notify_(ccmessage);
 		}
 	}
-	
-	advanced_options_modified_ = false;
-	return rep;
+	else
+	{
+		rebuild_representation = rep_->getModelType() != mt  | 
+														 advanced_options_modified_  |
+														 changed_selection_color_;
+
+		if (custom_precision_button->isChecked())
+		{
+			// workaround, didnt work right otherwise: (just let it this way)
+			rebuild_representation |= 
+				(String(rep_->getSurfaceDrawingPrecision()) != 
+				 String(((float)precision_slider->value() / 10.0)));
+		}
+		else
+		{
+			rebuild_representation |= (rep_->getDrawingPrecision() != dp);
+		}
+	}
+
+	Size transparency = (Size)(transparency_slider->value() * 2.55);
+
+	if (coloring_updates_enabled->isChecked())
+	{
+		applyColoringSettings_(*rep_);
+	}
+	else
+	{
+		if (rep_->getTransparency() != transparency &&
+				!model_updates_enabled->isChecked())
+		{
+			Representation::GeometricObjectList::iterator it = rep_->getGeometricObjects().begin();
+			for (; it != rep_->getGeometricObjects().end(); it++)
+			{
+				if (RTTI::isKindOf<Mesh> (**it))
+				{
+					Mesh* mesh = dynamic_cast<Mesh*> (*it);
+
+					for (Position p = 0; p < mesh->colors.size(); p++)
+					{
+						mesh->colors[p].setAlpha(255 - transparency);
+					}
+				}
+				else
+				{
+					(**it).getColor().setAlpha(255 - transparency);
+				}
+			}
+		}
+	}
+
+	if (rebuild_representation && model_updates_enabled->isChecked())
+	{
+		applyModelSettings_(*rep_);
+		advanced_options_modified_ = false;
+	}
+
+	rep_->setDrawingMode((DrawingMode)  mode_combobox->currentItem());
+
+	rep_->setTransparency(transparency);
+
+	rep_->enableModelUpdate(model_updates_enabled->isChecked());
+	rep_->enableColoringUpdate(coloring_updates_enabled->isChecked());
+
+	create_button->setEnabled(false);
+	modify_button->setEnabled(false);
+	rep_->update(rebuild_representation);
+	modify_button->setEnabled(isNotBusy_());
+
+	changed_selection_color_ = false;
+
+	return rep_;
 }
 
 
@@ -518,58 +642,49 @@ void DisplayProperties::precisionBoxChanged(int index)
 {
 	presets_precision_button->setChecked(true);
 
-	if (index > DRAWING_PRECISION_HIGH)
+	if (index < DRAWING_PRECISION_LOW ||
+			index > DRAWING_PRECISION_ULTRA)
 	{
 		throw(Exception::InvalidOption(__FILE__, __LINE__, index));
 	}
 
-	switch (index)
-	{
-		case VIEW::DRAWING_PRECISION_LOW:
-			presets_precision_label->setText("1.5");
-			break;
-
-		case VIEW::DRAWING_PRECISION_MEDIUM:
-			presets_precision_label->setText("3.5");
-			break;
-
-		case VIEW::DRAWING_PRECISION_HIGH:
-			presets_precision_label->setText("6.5");
-			break;
-
-		default:
-			Log.error() << "Unknown precision in " << __FILE__ << "   " << __LINE__ << std::endl;
-	}
+	String label = createFloatString(SurfaceDrawingPrecisions[index], 1);
+	presets_precision_label->setText(label.c_str());
 }
 
 void DisplayProperties::checkDrawingPrecision_()
 	throw()
 {
-	if (!modelMuteableByDisplayProperties((ModelType)model_type_combobox->currentItem()))
+	ModelType mt = (ModelType)model_type_combobox->currentItem();
+
+	if (!modelMuteableByDisplayProperties(mt) ||
+	    !model_updates_enabled->isChecked())
 	{
 		return;
 	}
 
-	if (!isSurfaceModel((ModelType)model_type_combobox->currentItem()))
+	bool is_surface = isSurfaceModel(mt);
+	custom_precision_button->setEnabled(is_surface);
+	precision_slider->setEnabled(is_surface);
+
+	if (!is_surface)
 	{
 		presets_precision_button->setChecked(true);
-		custom_precision_button->setEnabled(false);
-		precision_slider->setEnabled(false);
 	}
-	else
+
+	if (rep_ == 0) return;
+		
+	if (is_surface &&
+			rep_->getSurfaceDrawingPrecision() != -1)
 	{
-		precision_slider->setEnabled(true);
-		custom_precision_button->setEnabled(true);
-		if (rep_ != 0 &&
-				rep_->getSurfaceDrawingPrecision() != -1)
-		{
-			custom_precision_button->setChecked(true);
-			precision_slider->setValue((Position)(rep_->getSurfaceDrawingPrecision() * 10.0));
-		}
-		else
-		{
-			presets_precision_button->setChecked(true);
-		}
+		custom_precision_button->setChecked(true);
+		setSurfaceDrawingPrecision(rep_->getSurfaceDrawingPrecision());
+		return;
+	}
+	
+	if (rep_->getDrawingPrecision() != DRAWING_PRECISION_INVALID)
+	{
+		setDrawingPrecision(rep_->getDrawingPrecision());
 	}
 }
 
@@ -650,11 +765,17 @@ void DisplayProperties::setSurfaceDrawingPrecision(float value)
 {
 	if (value < 0.1) return;
 	precision_slider->setValue((int)(value * 10.0));
+	
+	bool is_s = isSurfaceModel((ModelType)model_type_combobox->currentItem());
+	custom_precision_button->setChecked(is_s);
+	presets_precision_button->setChecked(!is_s);
 }
 		
 void DisplayProperties::setDrawingPrecision(int value)
 {
 	precision_combobox->setCurrentItem(value);
+	precisionBoxChanged(value);
+	presets_precision_button->setChecked(true);
 }
 
 void DisplayProperties::setTransparency(int value)
@@ -668,5 +789,27 @@ void DisplayProperties::setCustomColor(const ColorRGBA& color)
 	custom_color_label->setBackgroundColor(custom_color_.getQColor());
 }
 	
+void DisplayProperties::coloringUpdatesChanged()
+{
+	bool enabled = coloring_updates_enabled->isChecked();
+
+	coloring_method_combobox->setEnabled(enabled);
+	custom_button->setEnabled(enabled);
+	coloring_options->setEnabled(enabled);
+}
+
+void DisplayProperties::modelUpdatesChanged()
+{
+	bool enabled = model_updates_enabled->isChecked();
+
+	model_type_combobox->setEnabled(enabled);
+	model_options->setEnabled(enabled);
+	resolution_group->setEnabled(enabled);
+}
+
+void DisplayProperties::checkMenu_()
+{
+	checkMenu(*getMainControl());
+}
 
 } } // namespaces

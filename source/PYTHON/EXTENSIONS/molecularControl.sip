@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.sip,v 1.9 2004/11/30 14:15:48 amoll Exp $
+// $Id: molecularControl.sip,v 1.9.6.1 2006/02/14 15:02:41 amoll Exp $
 //
 
 class MolecularControl
-  : ModularWidget
+  : DockWidget
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -18,41 +18,49 @@ class MolecularControl
 	static MolecularControl* getInstance(Position /index/);
 
 	MolecularControl() throw();
-	
-  //List<Composite*> & getSelection() throw();
-  PyCompositeList getSelection() throw();
-  Size removeComposite(Composite&) throw();
-  //constList<Composite*> & getSelection() const throw();
-  //void onContextMenu_(QListViewItem*, const QPoint&, int);
-  void createRepresentation();
-  //void addComposite(Composite&, QString*);
-  Size applySelector();
-  Size applySelector(const String&) throw();
-  void bondProperties();
-  void buildBonds();
-  void buildContextMenu(Composite&) throw();
-  void centerCamera();
-  //void checkMenu(VIEW::MainControl&) throw();
-  void checkResidue();
-  void clearClipboard();
-  void clearSelector();
-  void collapseAll();
-  void compositeProperties();
-  void copy();
-  void countItems();
-  void cut();
-  void deleteCurrentItems() throw();
-  void deselect();
-  void expandAll();
-  virtual void finalizeWidget(MainControl&) throw();
-  virtual void initializeWidget(MainControl&) throw();
-  void invalidateSelection();
-  void moveItems();
-  //void onNotify(Message *message) throw();
-  void paste();
-  void select();
-  void showFilename();
-  void showSelectorHelp();
-  void updateSelection();
   ~MolecularControl() throw();
+  //void addComposite(Composite&, String) throw();
+  Size removeComposite(Composite&) throw();
+	
+  //constList<Composite*> & getSelection() const throw();
+  PyCompositeList getSelection() throw();
+  
+  //void onNotify(Message *message) throw();
+
+	virtual void updateContextMenu(Composite&) throw();
+
+	virtual void initializeWidget(MainControl&) throw();
+
+  Size applySelector(const String&) throw();
+  Size applySelector();
+
+	// void writePreferences(INIFile& inifile) throw();
+	// void fetchPreferences(INIFile& inifile) throw();
+
+  void createRepresentation();
+  void compositeProperties();
+  void bondProperties();
+  void checkResidue();
+  void buildBonds();
+  void centerCamera();
+  void countItems();
+  void showFilename();
+  void updateSelection();
+  void invalidateSelection();
+	void highlightSelection() throw();
+	void highlight(PyCompositeList) throw();
+  void cut();
+  void copy();
+  void paste();
+  void clearClipboard();
+  void select();
+  void deselect();
+  void moveItems();
+  void collapseAll();
+  void expandAll();
+	// see above: applySelector()
+  void showSelectorHelp();
+	// virtual void deleteCurrentItems() throw();
+  void clearSelector();
+	void switchShowSecondaryStructure();
 };

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.17 2004/03/07 01:08:16 amoll Exp $
+// $Id: JCAMPFile.C,v 1.17.8.1 2006/02/14 15:02:19 amoll Exp $
 //
 
 
@@ -10,6 +10,20 @@
 
 namespace BALL
 {
+
+	bool JCAMPFile::JCAMPValue::operator == (const JCAMPValue& value) const
+		throw()
+	{
+		return string_value  	== value.string_value &&
+					 numeric_value  == value.numeric_value && 
+					 type 				  == value.type;
+	}
+
+	bool JCAMPFile::JCAMPValue::operator != (const JCAMPValue& value) const
+		throw()
+	{
+		return !(*this == value);
+	}
 
 	JCAMPFile::JCAMPFile(const String& name, OpenMode open_mode) 
 		throw(Exception::FileNotFound)
@@ -73,7 +87,14 @@ namespace BALL
 							getLine().split(fields);
 							for (Position i = 0; i < fields.size(); i++)
 							{
-								value.numeric_value.push_back(fields[i].toDouble());
+								if (!fields[i].isFloat())
+								{
+									Log.error() << "Warning: " << fields[i] << " is not a float!" << std::endl;
+								}
+								else
+								{
+									value.numeric_value.push_back(fields[i].toDouble());
+								}
 							}
 						}
 						
@@ -149,7 +170,7 @@ namespace BALL
 	bool JCAMPFile::write()
 		throw(File::CannotWrite)
 	{
-		if (!isOpen() || getOpenMode() != File::OUT)
+		if (!isOpen() || getOpenMode() != File::MODE_OUT)
 		{
 			throw(File::CannotWrite(__FILE__, __LINE__, name_));
 		}
@@ -214,7 +235,7 @@ namespace BALL
 		}
 		else if (val.type == STRING)
 		{
-			return val.string_value.toDouble();
+			return val.string_value.trim().toDouble();
 		}
 		else if ((val.type == ARRAY) && (val.numeric_value.size() > 0))
 		{
@@ -232,7 +253,7 @@ namespace BALL
 		const JCAMPValue& val(entries_[name]);
 		if ((val.type == NUMERIC) || (val.type == STRING))
 		{
-			return (Index)val.string_value.toInt();
+			return (Index)val.string_value.trim().toInt();
 		}
 		else if ((val.type == ARRAY) && (val.numeric_value.size() > 0))
 		{
@@ -241,5 +262,28 @@ namespace BALL
 
 		return 0;
 	}
+
+	const JCAMPFile& JCAMPFile::operator = (const JCAMPFile& file)
+		throw()
+	{
+		header_  = file.header_;
+		entries_ = file.entries_;
+		LineBasedFile::operator = (file);
+
+		return *this;
+	}
+
+	bool JCAMPFile::operator == (const JCAMPFile& f)  const throw()
+	{
+		return header_ == f.header_ &&
+					 entries_ == f.entries_;
+
+	}
+
+	bool JCAMPFile::operator != (const JCAMPFile& f)  const throw()
+	{
+		return ! (*this == f);
+	}
+			
 
 } // namespace BALL

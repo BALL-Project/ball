@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.h,v 1.38 2004/05/27 19:49:38 oliver Exp $
+// $Id: chain.h,v 1.38.6.1 2006/02/14 15:00:55 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_CHAIN_H
@@ -29,7 +29,7 @@ namespace BALL
 			
 	 		\ingroup KernelContainers 
 	*/
-	class Chain
+	class BALL_EXPORT Chain
 		: public AtomContainer
 	{
 		public:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.h,v 1.5 2004/02/26 08:41:45 anhi Exp $
+// $Id: VRMLRenderer.h,v 1.5.10.1 2006/02/14 15:01:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_VRMLRENDERER_H
@@ -35,9 +35,11 @@ namespace BALL
 		be used to render the same scene externally.
 		\ingroup ViewRendering
 */
-class BALL_EXPORT VRMLRenderer : public Renderer
+class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 {
 	public:
+
+	BALL_CREATE(VRMLRenderer)
 
 	/** @name Constructors and Destructors.
 	 */
@@ -83,7 +85,7 @@ class BALL_EXPORT VRMLRenderer : public Renderer
 		throw();
 
 	///
-	void VRMLobjectColor(const GeometricObject& object)
+	void VRMLColor(const ColorRGBA& color)
 		throw();
 
 	//@}
@@ -109,6 +111,12 @@ class BALL_EXPORT VRMLRenderer : public Renderer
 	void renderMesh_(const Mesh& mesh)
 		throw();
 
+	void renderTube_(const Tube& tube)
+		throw();
+
+	void renderTwoColoredTube_(const TwoColoredTube& tube)
+		throw();
+
 	void out_(const String& data)
 		throw();
 
@@ -119,15 +127,22 @@ class BALL_EXPORT VRMLRenderer : public Renderer
 		throw() {out_(data); current_intend_ -= 1;}
 	//@}
 
-		Size width, height;
+	Size width, height;
+
 	protected:
+
+	void header_(const Vector3& translation, const ColorRGBA& color, 
+							 const String& rotation = "")
+		throw();
 		
-		File outfile_;
+	void footer_()
+		throw();
 
-		Vector3   origin_;
-		Matrix4x4 rotation_;
-		Index current_intend_;
+	File outfile_;
 
+	Vector3   origin_;
+	Matrix4x4 rotation_;
+	Index current_intend_;
 };
   
 } } // namespaces

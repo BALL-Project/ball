@@ -1,9 +1,10 @@
-# 
-# $Id: Makefile,v 1.7 2004/05/27 18:13:07 oliver Exp $
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
 #
+# $Id: Makefile,v 1.7.6.1 2006/02/14 15:02:00 amoll Exp $
 #
-# APPLICATIONS/Makefile
-#
+# Author:
+#   Oliver Kohlbacher
 #
 
 include ../config.mak
@@ -13,7 +14,9 @@ DIRECTORY=APPLICATIONS
 THISLIB=$(LIBNAME)
 
 OPTIONAL_DIRS=\
-	BALLVIEW
+	BALLVIEW\
+	NMRVIEW\
+	DCD2PNG
 
 VIEW_DIRS=$(BALL_HAS_VIEW:true=$(OPTIONAL_DIRS))
 
@@ -26,7 +29,7 @@ DIRS=$(VIEW_DIRS)\
 default:	dirs
 
 dirs:	dummy
-	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET="default"
+	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET="all"
 
 depend:	dummy
 	@for i in $(DIRS) ; do ( cd $$i ; echo "" >.Dependencies ) ; done

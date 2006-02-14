@@ -1,7 +1,11 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.69.4.1 2006/01/29 23:02:39 amoll Exp $
+dnl		$Id: aclocal.m4,v 1.69.4.2 2006/02/14 15:01:55 amoll Exp $
+dnl
+dnl Author:
+dnl   Oliver Kohlbacher
+dnl   Andreas Hildebrandt
 dnl
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
@@ -984,8 +988,8 @@ dnl   Problem with linux headers:
 dnl   cannot use -std strict_ansi since the socket headers
 dnl   cause an error #280
 if test "${OS}" != "Linux" ; then
-CXXFLAGS="${CXXFLAGS} -std strict_ansi"
-MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -std strict_ansi"
+	CXXFLAGS="${CXXFLAGS} -std strict_ansi"
+	MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -std strict_ansi"
 fi
 ])
 
@@ -2522,11 +2526,7 @@ if test "${FFTW_SUPPORT}" = true ; then
 	FFTW_SUPPORT=true
 
 	AC_MSG_CHECKING(for FFTW headers)
-	if test "${FFTW_INCL}" != "" ; then
-		CF_FIND_HEADER(FFTW_INCL_PATH, fftw3.h, ${FFTW_INCL})
-	else
-		CF_FIND_HEADER(FFTW_INCL_PATH, fftw3.h,)
-	fi
+	CF_FIND_HEADER(FFTW_INCL_PATH, fftw3.h, ${FFTW_INCL})
 
 	if test "${FFTW_INCL_PATH}" = "" ; then
 		AC_MSG_RESULT((not found!))
@@ -3364,7 +3364,7 @@ AC_DEFUN(CF_VIEW_X_LINK_TEST, [
 	fi
 
 	dnl		
-	dnl  define some variables: X11_LIBOPTS and VIEW_LIBS
+	dnl  define some variables: X11_LIBOPTS
 	dnl
 	X11_LIBOPTS="${X11_LIBPATHOPT} ${X11_LIBS}"
 ])
@@ -4562,11 +4562,11 @@ AC_DEFUN(CF_CHECK_MULTI_BUILD,[
 			i=`expr $i + 1`
 		done
 		${CAT} config/config.h.footer | ${SED} 1,2d >> config.h
-		${MKDIR} ${[]PROJECT[]_PATH}/include/[]PROJECT[]/CONFIG 2>/dev/null
-		if test -f ${[]PROJECT[]_PATH}/include/[]PROJECT[]/CONFIG/config.h ; then
-			if test "`${DIFF} ${[]PROJECT[]_PATH}/include/[]PROJECT[]/CONFIG/config.h config.h`" != "" ; then
-				${RM} ${[]PROJECT[]_PATH}/include/PROJECT/CONFIG/config.h
-				${MV} config.h  ${[]PROJECT[]_PATH}/include/[]PROJECT[]/CONFIG/config.h
+		${MKDIR} ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG 2>/dev/null
+		if test -f ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG/config.h ; then
+			if test "`${DIFF} ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG/config.h config.h`" != "" ; then
+				${RM} ${PROJECT[]_PATH}/include/PROJECT/CONFIG/config.h
+				${MV} config.h  ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG/config.h
 			else
 				${RM} config.h
 			fi
@@ -4603,12 +4603,16 @@ AC_DEFUN(CF_MOVE_CONFIG_FILES, [
 		${MV} Makefile.tmp ${BINFMT}/Makefile
 		${MV} common.mak.tmp ${BINFMT}/common.mak
 		${MV} config.mak.tmp ${BINFMT}/config.mak
+		${MV} rules.mak.tmp ${BINFMT}/rules.mak
+		${MV} targets.mak.tmp ${BINFMT}/targets.mak
 	  mkdir ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG 2>/dev/null
 	  ${MV} -f config.h $PROJECT[]_PATH/include/PROJECT[]/CONFIG/config.h.${BINFMT}
 	else
 		${MV} Makefile.tmp Makefile
 		${MV} common.mak.tmp common.mak
 		${MV} config.mak.tmp config.mak
+		${MV} rules.mak.tmp rules.mak
+		${MV} targets.mak.tmp targets.mak
 
 		dnl
 		dnl move that damned file only if it differs from the previous
@@ -4690,20 +4694,10 @@ AC_DEFUN(CF_GSL, [
 	if test "${GSL_SUPPORT}" = "true" ; then	
 		AC_MSG_RESULT(enabled)
 
-		AC_DEFINE([]PROJECTUPPER[]_HAS_GSL)
-		AC_DEFINE([]PROJECTUPPER[]_HAS_GSL_H)
+		AC_DEFINE(PROJECT[]_HAS_GSL)
+		AC_DEFINE(PROJECT[]_HAS_GSL_H)
 
 		AC_MSG_CHECKING(for GSL header files)
-		if test "${GSL_INCPATH}" = "" ; then
-			AC_MSG_RESULT([Please specify the path to <gsl/gsl_version.h>])
-		  AC_MSG_RESULT([by passing the option --with-gsl-incl=DIR to configure.])
-		  AC_MSG_RESULT()
-		  AC_MSG_RESULT([GSL is needed for signal processing.])
-		  AC_MSG_RESULT([Please install the library on your system, or disable it with --disable-gsl.])
-		  AC_MSG_RESULT()
-			CF_ERROR
-		fi
-
    	CF_FIND_HEADER(GSL_INCDIR, gsl/gsl_version.h, ${GSL_INCPATH})
 		if test "${GSL_INCDIR}" = "" ; then
       AC_MSG_RESULT((not found!))
@@ -4717,8 +4711,10 @@ AC_DEFUN(CF_GSL, [
 			CF_ERROR
 		  CF_ERROR
 	  else
+			dnl  remove trailing '/gsl' from the include path
+			GSL_INCDIR=`echo ${GSL_INCDIR} | sed "s/gsl$//"` 
   		AC_MSG_RESULT((${GSL_INCDIR}))
-  		[]PROJECTUPPER[]_INCLUDES="${[]PROJECTUPPER[]_INCLUDES} -I${GSL_INCDIR}"
+  		PROJECT[]_INCLUDES="${PROJECT[]_INCLUDES} -I${GSL_INCDIR}"
   	fi
 
 		dnl
@@ -4726,9 +4722,9 @@ AC_DEFUN(CF_GSL, [
 		dnl
 	
 	  AC_MSG_CHECKING(for libgsl.so)
-  	if test "${GSL_LIB_DIR}" != "" ; then
-      if test -a "${GSL_LIB_DIR}/libgsl.a" ; then
-		  	GSL_LIBDIR="${GSL_LIB_DIR}/"
+  	if test "${GSL_LIBDIR}" != "" ; then
+      if test -a "${GSL_LIBDIR}/libgsl.a" ; then
+		  	GSL_LIBDIR="${GSL_LIBDIR}/"
   		fi
   	fi	
 		CF_FIND_LIB(GSL_LIBDIR, libgsl, ${GSL_LIBPATH})
@@ -4738,18 +4734,17 @@ AC_DEFUN(CF_GSL, [
 		  AC_MSG_RESULT()
 		  AC_MSG_RESULT([The GSL library could not be found. Please specify the path to libgsl.a])
 		  AC_MSG_RESULT([by passing the option --with-gsl-libs=DIR to configure.])
-		  AC_MSG_RESULT([You may also set the environment variable GSL_LIB_DIR to the correct])
+		  AC_MSG_RESULT([You may also set the environment variable GSL_LIBDIR to the correct])
 		  AC_MSG_RESULT([path - configure will recognize this, too.])
 		  AC_MSG_RESULT()
-		  AC_MSG_RESULT([GSL is needed for signal processing.])
 		  AC_MSG_RESULT([Please install the library on your system, or disable it with --disable-gsl.])
 		  AC_MSG_RESULT()
 			CF_ERROR
 	  else
 			AC_MSG_CHECKING(for libgslcblas.so)
-			if test "${GSL_LIB_DIR}" != "" ; then
-				if test -a "${GSL_LIB_DIR}/libgslcblas.a" ; then
-					AC_MSG_RESULT(${GSL_LIB_DIR}/libgslcblas.a)
+			if test "${GSL_LIBDIR}" != "" ; then
+				if test -a "${GSL_LIBDIR}/libgslcblas.a" ; then
+					AC_MSG_RESULT(${GSL_LIBDIR}/libgslcblas.a)
 				else
 					AC_MSG_RESULT((not found!))
 					AC_MSG_RESULT()
@@ -4763,12 +4758,12 @@ AC_DEFUN(CF_GSL, [
 					AC_MSG_RESULT()
 					CF_ERROR
 				fi
-			fi	
-	
-  		AC_MSG_RESULT((${GSL_LIBDIR}))
-  		[]PROJECTUPPER[]_LIBS="${[]PROJECTUPPER[]_LIBS} -L${GSL_LIBDIR} -lgsl -lgslcblas"	
+			fi		
+  		GSL_LIBS="${GSL_LIBS} -L${GSL_LIBDIR} -lgsl -lgslcblas"	
   	fi
 
+		PROJECT[]_HAS_GSL=true
+		AC_SUBST(PROJECT[]_HAS_GSL)
 
 	else
 		AC_MSG_RESULT(disabled)

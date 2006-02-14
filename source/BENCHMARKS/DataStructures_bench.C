@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DataStructures_bench.C,v 1.2 2004/12/13 13:14:57 oliver Exp $
+// $Id: DataStructures_bench.C,v 1.2.6.1 2006/02/14 15:02:08 amoll Exp $
 //
 
 #include <BALL/CONCEPT/benchmark.h>
@@ -17,7 +17,14 @@
 
 using namespace BALL;
 
-START_BENCHMARK(DataStructures, 11.0, "$Id: DataStructures_bench.C,v 1.2 2004/12/13 13:14:57 oliver Exp $")
+#ifdef BALL_PLATFORM_WINDOWS
+long int random()
+{
+	return rand();
+}
+#endif
+
+START_BENCHMARK(DataStructures, 11.0, "$Id: DataStructures_bench.C,v 1.2.6.1 2006/02/14 15:02:08 amoll Exp $")
 
 
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.60 2004/05/27 19:49:37 oliver Exp $
+// $Id: composite.h,v 1.60.6.1 2006/02/14 15:00:41 amoll Exp $
+//
+// Author:
+//   Nicolas Boghossian
+//   Oliver Kohlbacher
 //
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
@@ -68,7 +72,7 @@ namespace BALL
 			
 			\ingroup ConceptsMiscellaneous 
 	*/
-	class Composite
+	class BALL_EXPORT Composite
 		: public PersistentObject,
 			public Selectable
 	{
@@ -839,7 +843,7 @@ B		*/
 
 
 	
-		class AncestorIteratorTraits
+		class BALL_EXPORT AncestorIteratorTraits
 		{
 			public:
 
@@ -942,7 +946,7 @@ B		*/
 			return AncestorConstIterator::end(*this);
 		}
 
-		class ChildCompositeIteratorTraits
+		class BALL_EXPORT ChildCompositeIteratorTraits
 		{
 			public:
 
@@ -1096,7 +1100,7 @@ B		*/
 			return ChildCompositeConstReverseIterator(beginChildComposite());
 		}
 
-		class CompositeIteratorTraits
+		class BALL_EXPORT CompositeIteratorTraits
 		{
 			public:
 

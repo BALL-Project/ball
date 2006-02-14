@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.sip,v 1.2 2004/06/08 15:29:10 amoll Exp $
+// $Id: scene.sip,v 1.2.6.1 2006/02/14 15:02:49 amoll Exp $
 //
 
 class Scene 
@@ -27,6 +27,7 @@ static Scene* getInstance(Position /index/);
   bool isValid() const throw();
 //  const Scene& operator =  (const Scene&) throw();
   const Stage* getStage() const throw();
+	void setCamera(const Camera&) throw();
   static float getMouseSensitivity() throw();
   static void setMouseSensitivity(float) throw();
 //  void applyPreferences(Preferences&) throw();
@@ -34,7 +35,11 @@ static Scene* getInstance(Position /index/);
 //  void checkMenu(MainControl&) throw();
 //  void clear() throw();
 //  void defaultPreferences(Preferences&) throw();
-		void exportPNG();
+		void exportPNG(const String&);
+		String exportPNG();
+		void exportPOVRay();
+		void showExportPNGDialog();
+		
   	void exportScene(Renderer&) const throw();
 //  void fetchPreferences(INIFile&) throw();
 //  void finalizePreferencesTab(Preferences &preferences) throw();
@@ -48,6 +53,15 @@ static Scene* getInstance(Position /index/);
 	void enterDualStereo();
 	void enterActiveStereo();
 	void exitStereo();
+	void setVisible(bool);
+	void rotate(float, float);
+	void rotateClockwise(float);
+	void move(Vector3);
+	void moveComposites(PyCompositeList, Vector3);
+	void rotateComposites(PyCompositeList, float, float, float = 0);
 //  void writePreferences(INIFile&) throw();
+	bool isAnimationRunning() const throw();
+	void setTurnPoint(const Vector3&);
+	const Vector3& getTurnPoint() const;
   ~Scene() throw();
 };

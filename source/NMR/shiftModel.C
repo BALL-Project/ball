@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftModel.C,v 1.17 2002/12/20 19:12:58 oliver Exp $
+// $Id: shiftModel.C,v 1.17.10.1 2006/02/14 15:02:29 amoll Exp $
 
 #include <BALL/NMR/shiftModel.h>
 #include <BALL/CONCEPT/factory.h>
@@ -286,40 +286,26 @@ namespace BALL
 	bool ShiftModel::start()
 		throw()
 	{
-		// call every module
-		bool result = Processor::CONTINUE;
-
 		ModuleList::iterator it = modules_.begin();
 		for (; it != modules_.end(); ++it)
 		{
-			result = (*it)->start();
-			if (result == false)
-			{
-				break;
-			}
+			if (!(*it)->start()) return false;
 		}				
 		
-		return result;
+		return true;
 	}
 
 
 	bool ShiftModel::finish()
 		throw()
 	{
-		// call every module
-		bool result = Processor::CONTINUE;
-
 		ModuleList::iterator it = modules_.begin();
 		for (; it != modules_.end(); ++it)
 		{
-			result = (*it)->finish();
-			if (result == false)
-			{
-				break;
-			}
+			if (!(*it)->finish()) return false;
 		}				
 		
-		return result;
+		return true;
 	}
 
 

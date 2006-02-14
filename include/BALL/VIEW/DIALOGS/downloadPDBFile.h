@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.11 2004/12/10 19:08:46 amoll Exp $
+// $Id: downloadPDBFile.h,v 1.11.8.1 2006/02/14 15:01:35 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -22,6 +22,8 @@
 
 namespace BALL
 {
+	class TCPTransfer;
+
 	namespace VIEW
 	{
 
@@ -30,7 +32,7 @@ namespace BALL
 		/** Dialog to search for and download structure files from the <a href="http://www.rcsb.org/">PDB data bank</a>.
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT DownloadPDBFile 
+		class BALL_VIEW_EXPORT DownloadPDBFile 
 			: public DownloadPDBFileData,
 				public ModularWidget
 		{ 
@@ -49,14 +51,6 @@ namespace BALL
 				///
 				virtual void initializeWidget(VIEW::MainControl& main_control)
 					throw();
-
-			/** Removes the widget.
-					Reverses all actions performed in initializeWidget()
-					This method will be called by MainControl::aboutToExit()
-					\see			removeMenuEntry
-			*/
-			virtual void finalizeWidget(VIEW::MainControl& main_control)
-				throw();
 
 			public slots:
 
@@ -93,6 +87,8 @@ namespace BALL
 
 				bool threadedDownload_(const String& url);
 				void removeFile_(const String& filename);
+
+				void setProxyAndTransfer_(TCPTransfer& tcp);
 				
 				QTextBrowser 						*qb_;
 				FetchHTMLThread 				*thread_;
@@ -103,6 +99,8 @@ namespace BALL
 
 				// e.g. gif images if not supported
 				HashSet<String> 				unsupported_images_;
+
+				Index menu_id_;
 		};
 
 	} 

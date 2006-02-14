@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RandomNumberGenerator_test.C,v 1.1 2005/11/25 14:20:55 anker Exp $
+// $Id: RandomNumberGenerator_test.C,v 1.1.6.1 2006/02/14 15:03:10 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: RandomNumberGenerator_test.C,v 1.1 2005/11/25 14:20:55 anker Exp $")
+START_TEST(class_name, "$Id: RandomNumberGenerator_test.C,v 1.1.6.1 2006/02/14 15:03:10 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

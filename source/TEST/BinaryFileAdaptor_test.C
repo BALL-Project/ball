@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BinaryFileAdaptor_test.C,v 1.8 2002/12/18 16:00:38 sturm Exp $
+// $Id: BinaryFileAdaptor_test.C,v 1.8.10.1 2006/02/14 15:03:03 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,14 +10,14 @@
 
 ///////////////////////////
 
-START_TEST(BinaryFileAdaptor, "$Id: BinaryFileAdaptor_test.C,v 1.8 2002/12/18 16:00:38 sturm Exp $")
+START_TEST(BinaryFileAdaptor, "$Id: BinaryFileAdaptor_test.C,v 1.8.10.1 2006/02/14 15:03:03 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-BinaryFileAdaptor<double>* double_bfa_ptr;
+BinaryFileAdaptor<double>* double_bfa_ptr = 0;
 
 CHECK(default constructor)
 	double_bfa_ptr = new BinaryFileAdaptor<double>;

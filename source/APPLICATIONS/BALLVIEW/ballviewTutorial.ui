@@ -184,7 +184,7 @@ has the caption "Datasets".
 entry &lt;b&gt;"Windows-&gt;Datasets"&lt;/b&gt;.)&lt;br&gt;&lt;br&gt;
 The DatasetControl should have an entry for the trajectory.
 To visualise it, click on the entry and open the context menu with
-the right mouse button. First choose "&lt;b&gt;Load into RAM&lt;/b&gt;" and than 
+the right mouse button. First choose "&lt;b&gt;Load into RAM&lt;/b&gt;" and then 
 "&lt;b&gt;Visualise&lt;/b&gt;". In the Snapshot Visualisation dialog press "&lt;b&gt;Animate&lt;/b&gt;".
 &lt;/blockquote&gt;</string>
             </property>
@@ -290,16 +290,17 @@ The resulting SES will show up in the listview with the title
             <property name="text">
                 <string>&lt;blockquote&gt;
 Now we will colorize the SES. Highlight the Representation
-and press "&lt;b&gt;Color Surface&lt;/b&gt;" in the context menu.
-The newly opened dialog can interpolate the colors of the SES
-between the selected values. For now the most negative and 
+and press "&lt;b&gt;Modify Surface&lt;/b&gt;" in the context menu.
+In the newly opened dialog, select the &lt;b&gt;color by grid&lt;/b&gt; tab.
+We will now interpolate the colors of the SES
+between some selected values. For now the most negative and 
 positive values in the grid are used, but you can also change them
-to your liking. Now press "&lt;b&gt;Apply&lt;/b&gt;" and have a look at 
+to your liking. Just press "&lt;b&gt;Apply&lt;/b&gt;" and have a look at 
 the SES. 
 &lt;br&gt;&lt;br&gt;
-If you want to, you can now try some other 
-settings and colors. The colors can be changed by clicking on
-them.
+If you want to, you can try some other 
+settings and colors before we continue with the tutorial. 
+The colors can be changed by clicking on them.
 &lt;blockquote&gt;</string>
             </property>
             <property name="alignment">

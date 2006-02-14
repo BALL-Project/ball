@@ -1,4 +1,6 @@
-# $Id: Makefile,v 1.13 2002/01/15 15:40:13 amoll Exp $
+#
+# $Id: Makefile,v 1.13.14.1 2006/02/14 15:02:26 amoll Exp $
+#
 
 DIRECTORY=MOLMEC/COMMON
 
@@ -22,4 +24,4 @@ CPP_SOURCES=\
 	typeRuleProcessor.C
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies

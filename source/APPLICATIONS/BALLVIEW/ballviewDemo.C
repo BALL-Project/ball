@@ -4,25 +4,27 @@
 // $Id:
 
 #include "ballviewDemo.h"
+#include "mainframe.h"
+
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
-#include <BALL/KERNEL/system.h>
-#include <BALL/VIEW/DIALOGS/displayProperties.h>
-#include <BALL/VIEW/WIDGETS/molecularStructure.h>
-#include <BALL/VIEW/DIALOGS/FDPBDialog.h>
-#include <BALL/FORMAT/PDBFile.h>
-#include <BALL/FORMAT/HINFile.h>
-#include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
-#include <BALL/STRUCTURE/HBondProcessor.h>
-#include <BALL/VIEW/WIDGETS/scene.h>
-#include <BALL/VIEW/DATATYPE/colorTable.h>
-#include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
+#include <BALL/DATATYPE/contourSurface.h>
+
+#include <BALL/VIEW/DIALOGS/displayProperties.h>
+#include <BALL/VIEW/DIALOGS/FDPBDialog.h>
+#include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 
-#include <qlabel.h>
+#include <BALL/VIEW/WIDGETS/molecularStructure.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/WIDGETS/logView.h>
+#include <BALL/VIEW/WIDGETS/pyWidget.h>
+#include <BALL/VIEW/WIDGETS/datasetControl.h>
+
 #include <qpushbutton.h>
 #include <qwidgetstack.h>
+#include <qmessagebox.h>
 
 namespace BALL
 {
@@ -55,11 +57,11 @@ void BALLViewDemo::show()
 	widget_stack->raiseWidget(0);
 	buttonOk->setEnabled(true);
 	DisplayProperties* dp = DisplayProperties::getInstance(0);
-	dp->setDrawingPrecision(DRAWING_PRECISION_HIGH);
-	dp->setSurfaceDrawingPrecision(6.5);
 	dp->enableCreationForNewMolecules(false);
-	system_ = new System();
 
+	((Mainframe*)getMainControl())->reset();
+
+	// open bpti 
 	try
 	{
 		Path path;
@@ -70,8 +72,21 @@ void BALLViewDemo::show()
 		file_name += String("structures");
 		file_name += FileSystem::PATH_SEPARATOR;
 		file_name += "bpti.pdb";
+
 		MolecularFileDialog* dialog = MolecularFileDialog::getInstance(0);
+		if (dialog == 0) return;
+
 		system_ = dialog->openFile(file_name);
+
+		if (system_ == 0)
+		{
+			String msg("Could not open bpti.pdb. Maybe the file was deleted?\n");
+			msg += "It should be found in " + Path().getDataPath() + "bpti.pdb";
+
+			QMessageBox::critical(0, "Error while starting BALLView Demo", msg.c_str(),
+					QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+			return;
+		}
 		
 		system_->apply(getFragmentDB().add_hydrogens);
 		system_->apply(getFragmentDB().build_bonds);
@@ -87,7 +102,16 @@ void BALLViewDemo::show()
 	composites_.push_back(system_);
 	QDialog::show();
 	raise();
+	move(20,20);
+
+	// hide some dockwidgets
+	if (LogView::getInstance(0) != 0) 			 LogView::getInstance(0)->hide();
+	if (DatasetControl::getInstance(0) != 0) DatasetControl::getInstance(0)->hide();
+#ifdef BALL_PYTHON_SUPPORT
+	if (PyWidget::getInstance(0) != 0) 			 PyWidget::getInstance(0)->hide();
+#endif
 }
+
 
 void BALLViewDemo::onNotify(Message *message)
 	throw()
@@ -141,6 +165,7 @@ void BALLViewDemo::nextStep_()
 	buttonOk->setEnabled(true);
 }
 
+
 void BALLViewDemo::accept()
 {
 	Index id = widget_stack->id(widget_stack->visibleWidget());
@@ -171,43 +196,36 @@ void BALLViewDemo::accept()
 		{
 			type = (ModelType)((Index)type + 1);
 		}
- 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, type, COLORING_ELEMENT);
-		notify_(crmsg);
+		notify_(new CreateRepresentationMessage(composites_, type, COLORING_ELEMENT));
 	}
 	else if (id == 7)
 	{
 		getMainControl()->getMolecularControlSelection().clear();
 		getMainControl()->getMolecularControlSelection().push_back(system_);
 		ms->calculateHBonds();
-   	CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
-   	notify_(crmsg);
- 		crmsg = new CreateRepresentationMessage(composites_, MODEL_HBONDS, COLORING_ELEMENT);
- 		notify_(crmsg);
+   	notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT));
+ 		notify_(new CreateRepresentationMessage(composites_, MODEL_HBONDS, COLORING_ELEMENT));
+
 	}
 	else if (id == 8)
 	{
-		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_VDW, COLORING_TEMPERATURE_FACTOR);
-		notify_(crmsg);
+		notify_(new CreateRepresentationMessage(composites_, MODEL_VDW, COLORING_TEMPERATURE_FACTOR));
 	}
 	else if (id == 9)
 	{
-		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_CARTOON, COLORING_SECONDARY_STRUCTURE);
-		notify_(crmsg);
+		notify_(new CreateRepresentationMessage(composites_, MODEL_CARTOON, COLORING_SECONDARY_STRUCTURE));
 	}
 	else if (id == 10)
 	{
-		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_CARTOON, COLORING_RESIDUE_INDEX);
-		notify_(crmsg);
+		notify_(new CreateRepresentationMessage(composites_, MODEL_CARTOON, COLORING_RESIDUE_INDEX));
 	}
 	else if (id == 11)
 	{
-		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_RESIDUE_NAME);
-		notify_(crmsg);
+		notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_RESIDUE_NAME));
 	}
 	else if (id == 12)
 	{
-		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
-		notify_(crmsg);
+		notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT));
 
 		ms->chooseAmberFF();
 		ms->getMDSimulationDialog().setTimeStep(0.001);
@@ -223,15 +241,14 @@ void BALLViewDemo::accept()
 	else if (id == 14) // SES colored 
 	{
 		getMainControl()->getPrimitiveManager().setMultithreadingMode(false);
-		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_SE_SURFACE, COLORING_ELEMENT);
-		notify_(crmsg);
+		notify_(new CreateRepresentationMessage(composites_, MODEL_SE_SURFACE, COLORING_ELEMENT));
+
 		getMainControl()->getPrimitiveManager().setMultithreadingMode(false);
 
 		Representation* rep = *getMainControl()->getPrimitiveManager().begin();
-		Mesh* mesh = dynamic_cast<Mesh*> (*rep->getGeometricObjects().begin());
 
-		ColorMeshDialog* cdialog = ColorMeshDialog::getInstance(0);
-		cdialog->setMesh(mesh, rep);
+		ModifySurfaceDialog* cdialog = ModifySurfaceDialog::getInstance(0);
+		cdialog->setRepresentation(rep);
 		cdialog->setGrid(grid_);
 		cdialog->setMinValue(-0.7);
 		cdialog->setMaxValue(3.0);
@@ -260,7 +277,8 @@ void BALLViewDemo::accept()
 		Size nr_of_strange_normals = 0;
 		for (Position i = 0; i < mesh->normal.size(); i++)
 		{
-			if ((mesh->vertex[i] + mesh->normal[i]).getDistance(center) < (mesh->vertex[i] - mesh->normal[i]).getDistance(center))
+			if ((mesh->vertex[i] + mesh->normal[i]).getDistance(center) < 
+					(mesh->vertex[i] - mesh->normal[i]).getDistance(center))
 			{
 				nr_of_strange_normals ++;
 			}
@@ -279,11 +297,9 @@ void BALLViewDemo::accept()
 		rep->insert(*mesh);
 		rep->setModelType(MODEL_CONTOUR_SURFACE); 
 
-		RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::ADD);
-		notify_(message);
+		notify_(new RepresentationMessage(*rep, RepresentationMessage::ADD));
 
-   	CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
-   	notify_(crmsg);
+   	notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT));
 	}
 
 	buttonOk->setEnabled(!disable_button);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: property.h,v 1.39 2005/02/11 15:27:12 oliver Exp $
+// $Id: property.h,v 1.39.6.1 2006/02/14 15:00:43 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_PROPERTY_H
@@ -32,7 +32,7 @@ namespace BALL
 	/** Named Property Class.
 			
 	*/
-	class NamedProperty
+	class BALL_EXPORT NamedProperty
 		:	public PersistentObject
 	{
 		public:
@@ -313,7 +313,7 @@ namespace BALL
 	/**	Property Manager class.
 			This class manages properties of a class.
 			A property can be seen as easy way to extend the
-			class' attributes without changing its interface.
+			class BALL_EXPORT' attributes without changing its interface.
 			There are different types of properties defined depending 
 			on the kind of data stored. The simplest kind of property 
 			is just stored as a boolean information: Either an object <b>  has </b>
@@ -334,7 +334,7 @@ namespace BALL
 			 \par
 			
 	*/
-	class PropertyManager
+	class BALL_EXPORT PropertyManager
 	{
 		public:
 		

@@ -130,6 +130,21 @@ namespace BALL
 		{
 		}
 
+		PeptideBuilder::PeptideBuilder(const String& sequence, const Angle& phi, const Angle& psi, const Angle& omega)
+			: sequence_(), 
+				chainname_("_"),
+				proteinname_(sequence),
+				is_proline_(false),
+				fragment_db_(0)
+		{
+			// Iterate over the sequence (one-letter code) and construct
+			// add descriptors for the aa with the given geometry.
+			for (Position i = 0; i < sequence.length(); ++i)
+			{
+				addAminoAcid(sequence[i], phi, psi, omega);
+			}
+		}
+
 		PeptideBuilder::PeptideBuilder(const PeptideBuilder& pc)
 			:sequence_(pc.sequence_),
 			 chainname_(pc.chainname_),

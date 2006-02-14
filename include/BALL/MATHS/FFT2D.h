@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.h,v 1.12 2005/02/02 10:49:42 anhi Exp $
+// $Id: FFT2D.h,v 1.12.6.1 2006/02/14 15:01:00 amoll Exp $
 //
 
 #ifndef BALL_MATHS_TFFT2D_H
@@ -46,6 +46,7 @@ namespace BALL
 		public:
 		
 			typedef std::complex<typename ComplexTraits::ComplexPrecision> Complex;
+			typedef TRegularData2D<std::complex<typename ComplexTraits::ComplexPrecision> >	ComplexVector;
 
       BALL_CREATE(TFFT2D)
 
@@ -328,7 +329,7 @@ namespace BALL
 	
 	/**	Default type
 	*/
-	typedef TFFT2D<DoubleTraits> FFT2D;
+	typedef TFFT2D<BALL_FFTW_DEFAULT_TRAITS> FFT2D;
 	
 	// AR:
 	/** Global assignment operator from TFFT2D to TRegularData2D<Complex>
@@ -560,7 +561,7 @@ namespace BALL
 	{
 		if (!inFourierSpace_)
 		{
-			if (position >= size())
+			if (position >= ComplexVector::size())
 			{
 				throw Exception::OutOfGrid(__FILE__, __LINE__);
 			}
@@ -580,7 +581,7 @@ namespace BALL
 		}
 		else
 		{
-			if (position >= size())
+			if (position >= ComplexVector::size())
 			{
 				throw Exception::OutOfGrid(__FILE__, __LINE__);
 			}
@@ -740,7 +741,7 @@ namespace BALL
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
 		
-		return data_[internalPos];
+		return operator [] (internalPos);
 	}
 
 	template <typename ComplexTraits>
@@ -783,7 +784,7 @@ namespace BALL
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
 		
-		return data_[internalPos];
+		return operator [] (internalPos);
 	}
 	
 	template <typename ComplexTraits>

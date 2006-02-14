@@ -1,4 +1,7 @@
-# $Id: Makefile,v 1.11 2004/02/19 21:27:06 amoll Exp $
+#
+# $Id: Makefile,v 1.11.8.1 2006/02/14 15:03:21 amoll Exp $
+#
+
 #========================
 # BALL/TUTORIAL Makefile
 #========================
@@ -7,11 +10,13 @@ EXECUTABLES=\
 	tutorial1\
 	tutorial2\
 	tutorial3\
-	bounding_box
+	bounding_box\
+	string_tutorial
 
 all:	$(EXECUTABLES)
 
 include ../common.mak
+-include .Dependencies
 
 # remove the library specific flags
 BALL_CXXFLAGS=
@@ -30,8 +35,8 @@ tutorial2:	tutorial2.o
 tutorial3:	tutorial3.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
-bounding_box:	bounding_box.o glBoundingBoxModel.o
-	$(CXX)	$(LDFLAGS) -o $@ $@.o glBoundingBoxModel.o $(LIBS) $(VIEW_LIBS)
+bounding_box:	bounding_box.o 
+	$(CXX)	$(LDFLAGS) -o $@ $(LIBS) $(VIEW_LIBS)
 
 string_tutorial:	string_tutorial.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS) 

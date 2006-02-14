@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.17 2004/07/15 14:01:51 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.17.8.1 2006/02/14 15:01:37 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -37,7 +37,7 @@ namespace BALL
 				@see PDBFile
 				\ingroup ViewDialogs
 		 */
-		class BALL_EXPORT MolecularFileDialog
+		class BALL_VIEW_EXPORT MolecularFileDialog
 			: public QWidget,
 				public ModularWidget
 		{
@@ -77,14 +77,6 @@ namespace BALL
 					\see		finalizeWidget
 			 */
 			virtual void initializeWidget(MainControl& main_control)
-				throw();
-
-			/** Removes the widget and its menu entries.
-					This method will be called by MainControl::aboutToExit().
-					\param		main_control the MainControl object to be finalized
-					\see			initializeWidget
-			 */
-			virtual void finalizeWidget(MainControl& main_control)
 				throw();
 
 		public slots:
@@ -138,6 +130,11 @@ namespace BALL
 			System* readMOL2File(String filename, String system_name)
 				throw();
 
+			/** Read a SD file
+			 */
+			System* readSDFile(String filename, String system_name)
+				throw();
+
 			/** Write a PDB file
 			 */
 			bool writePDBFile(String filename, const System& system)
@@ -156,6 +153,11 @@ namespace BALL
 			/** Write a MOL2 file
 			 */
 			bool writeMOL2File(String filename, const System& system)
+				throw();
+
+			/** Write a SD file
+			 */
+			bool writeSDFile(String filename, const System& system)
 				throw();
 			
 			/// Overloaded from ModularWidget
@@ -179,10 +181,11 @@ namespace BALL
 				PDB_FILE = 0,
 				HIN_FILE,
 				MOL_FILE,
-				MOL2_FILE
+				MOL2_FILE,
+				SD_FILE
 			};
 
-			Index save_id_;
+			Index save_id_, open_id_;
 		};
 
 	} // namespace VIEW

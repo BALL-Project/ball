@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.h,v 1.34 2004/05/27 19:49:38 oliver Exp $
+// $Id: PDBAtom.h,v 1.34.6.1 2006/02/14 15:00:53 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_PDBATOM_H
@@ -37,7 +37,7 @@ namespace BALL
     	
 			\ingroup KernelContainers 
 	*/
-	class PDBAtom
+	class BALL_EXPORT PDBAtom
 		: public Atom
 	{
 		public:

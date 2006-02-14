@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PeptideBuilder_test.C,v 1.10 2004/11/07 14:44:16 oliver Exp $
+// $Id: PeptideBuilder_test.C,v 1.10.6.1 2006/02/14 15:03:09 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(PeptideBuilder, "$Id: PeptideBuilder_test.C,v 1.10 2004/11/07 14:44:16 oliver Exp $")
+START_TEST(PeptideBuilder, "$Id: PeptideBuilder_test.C,v 1.10.6.1 2006/02/14 15:03:09 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -160,39 +160,39 @@ pb3->setFragmentDB(&db);
 CHECK(Protein* construct())
 	Protein* prot = pb->construct();
 	TEST_NOT_EQUAL(prot, 0)
-	ResidueIterator resIt;
-  resIt = prot->beginResidue();
+	ResidueIterator res_it;
+  res_it = prot->beginResidue();
 
 	PRECISION(1e-3)
-	TEST_EQUAL(resIt->getName(), "LEU")
-	TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(0,false));
-  TEST_REAL_EQUAL(resIt->getTorsionPsi(), Angle(-58.,false));
-  ++resIt;
-	TEST_EQUAL(resIt->getName(), "SER")
-  TEST_REAL_EQUAL(fabs(resIt->getTorsionPhi().toRadian()), M_PI)
-	TEST_REAL_EQUAL(fabs(resIt->getTorsionPsi().toRadian()), M_PI)
-  ++resIt;
+	TEST_EQUAL(res_it->getName(), "LEU")
+	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(0,false));
+  TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58.,false));
+  ++res_it;
+	TEST_EQUAL(res_it->getName(), "SER")
+  TEST_REAL_EQUAL(fabs(res_it->getTorsionPhi().toRadian()), M_PI)
+	TEST_REAL_EQUAL(fabs(res_it->getTorsionPsi().toRadian()), M_PI)
+  ++res_it;
 	PRECISION(2E-2)
-	TEST_EQUAL(resIt->getName(), "GLY")
-	TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(-47, false))
-  TEST_REAL_EQUAL(resIt->getTorsionPsi(), -1.01);
-  ++resIt;
-	TEST_EQUAL(resIt->getName(), "VAL")
-  TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(-77., false));
-	TEST_REAL_EQUAL(resIt->getTorsionPsi(), Angle(0, false));
+	TEST_EQUAL(res_it->getName(), "GLY")
+	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-47, false))
+  TEST_REAL_EQUAL(res_it->getTorsionPsi(), -1.01);
+  ++res_it;
+	TEST_EQUAL(res_it->getName(), "VAL")
+  TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-77., false));
+	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(0, false));
 	delete prot;
 	
 	prot = pb3->construct();
 	TEST_NOT_EQUAL(prot, 0)
-  resIt = prot->beginResidue();
+  res_it = prot->beginResidue();
 		
-	TEST_EQUAL(resIt->getName(), "GLY")
-	TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(0,false));
-  TEST_REAL_EQUAL(resIt->getTorsionPsi(), Angle(-58.,false));
-  ++resIt;
-	TEST_EQUAL(resIt->getName(), "VAL")
-  TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(-77.,false));
-	TEST_REAL_EQUAL(resIt->getTorsionPsi(), Angle(0,false));
+	TEST_EQUAL(res_it->getName(), "GLY")
+	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(0,false));
+  TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58.,false));
+  ++res_it;
+	TEST_EQUAL(res_it->getName(), "VAL")
+  TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-77.,false));
+	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(0,false));
 
 	PeptideBuilder pb4;
 	pb4.setFragmentDB(&db);
@@ -203,22 +203,70 @@ CHECK(Protein* construct())
 	delete prot;
 	prot = pb4.construct();
 	
-  resIt = prot->beginResidue();
+  res_it = prot->beginResidue();
 
-	TEST_EQUAL(resIt->getName(), "PRO")
-	TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(0,false));
-  TEST_REAL_EQUAL(resIt->getTorsionPsi(), Angle(-80.,false));
-  ++resIt;
-	TEST_EQUAL(resIt->getName(), "PRO")
-  TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(-12, false));
-	TEST_REAL_EQUAL(resIt->getTorsionPsi(), Angle(-80, false));
-  ++resIt;
-	TEST_EQUAL(resIt->getName(), "PRO")
-	TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(28,false));
-  TEST_EQUAL(resIt->getTorsionPsi(), 0);
+	TEST_EQUAL(res_it->getName(), "PRO")
+	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(0,false));
+  TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-80.,false));
+  ++res_it;
+	TEST_EQUAL(res_it->getName(), "PRO")
+  TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-12, false));
+	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-80, false));
+  ++res_it;
+	TEST_EQUAL(res_it->getName(), "PRO")
+	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(28,false));
+  TEST_EQUAL(res_it->getTorsionPsi(), 0);
 
 	delete prot;
 RESULT
+
+CHECK(PeptideBuilder(const String& sequence, const Angle& phi, const Angle& psi, const Angle& omega))
+	PeptideBuilder pb("ALIMENTE");
+	pb.setFragmentDB(&db);
+	Protein* prot = pb.construct();
+
+	TEST_NOT_EQUAL(prot, 0)
+	ABORT_IF(prot == 0)
+
+	TEST_EQUAL(prot->countChains(), 1)
+	TEST_EQUAL(prot->countResidues(), 8)
+	TEST_EQUAL(prot->getName(), "ALIMENTE");
+	ABORT_IF(prot->countResidues() != 8)
+
+	ResidueIterator res_it = prot->beginResidue();
+	TEST_EQUAL(res_it->getName(), "ALA")
+  TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58.,false));
+  ++res_it;
+	TEST_EQUAL(res_it->getName(), "LEU")
+  TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-47, false));
+	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58, false));
+  ++res_it;
+	TEST_EQUAL(res_it->getName(), "ILE")
+  TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-47, false));
+	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58, false));
+  ++res_it;
+	TEST_EQUAL(res_it->getName(), "MET")
+  TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-47, false));
+	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58, false));
+  ++res_it;
+	TEST_EQUAL(res_it->getName(), "GLU")
+  TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-47, false));
+	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58, false));
+  ++res_it;
+	TEST_EQUAL(res_it->getName(), "ASN")
+  TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-47, false));
+	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58, false));
+  ++res_it;
+	TEST_EQUAL(res_it->getName(), "THR")
+  TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-47, false));
+	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58, false));
+  ++res_it;
+	TEST_EQUAL(res_it->getName(), "GLU")
+  TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-47, false));
+
+	delete prot;	
+RESULT
+
 
 //empty sequence
 CHECK(construct())

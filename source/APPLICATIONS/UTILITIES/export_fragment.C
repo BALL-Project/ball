@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: export_fragment.C,v 1.3 2004/05/27 18:13:08 oliver Exp $
+// $Id: export_fragment.C,v 1.3.6.1 2006/02/14 15:02:07 amoll Exp $
 //
 
 #include <fstream>
@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 	outfile << "\t</node>" << std::endl;
 	outfile << "\t<node>Bonds" << std::endl;
 	Size counter = 1;
-	char bond_order_char;
+	char bond_order_char = '\0';
 	AtomBondConstIterator bond_it;
 	BALL_FOREACH_BOND(system, atom_it, bond_it)
 	{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.20 2004/12/13 20:31:01 amoll Exp $
+// $Id: TCPTransfer.h,v 1.20.6.1 2006/02/14 15:01:28 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
@@ -30,7 +30,7 @@ namespace BALL
 	 
 	 \ingroup System
 	 */
-	class TCPTransfer
+	class BALL_EXPORT TCPTransfer
 	{
 		public:
 
@@ -44,20 +44,21 @@ namespace BALL
 			enum Status
 			{
 				OK  										= 0,
-				GETHOSTBYNAME__ERROR 		= 1,
-				SOCKET__ERROR 					= 2,
-				CONNECT__ERROR 					= 3,
-				RECV__ERROR 						= 4,
-				OUTOFMEMORY__ERROR 			= 5,
-				BODY__ERROR 						= 6,
-				UNKNOWN__ERROR 					= 7,
-				ADDRESS__ERROR 					= 8,
-				UNINITIALIZED__ERROR 		= 9,
-				TRANSFER__ERROR					= 10,
-				SEND__ERROR							= 11,
-				PORT__ERROR							= 12,
-				UNKNOWN_PROTOCOL__ERROR = 13,
-				LOGON__ERROR						= 14,
+				GETHOSTBYNAME__ERROR 		,
+				SOCKET__ERROR 					,
+				CONNECT__ERROR 					,
+				RECV__ERROR 						,
+				OUTOFMEMORY__ERROR 			,
+				BODY__ERROR 						,
+				UNKNOWN__ERROR 					,
+				ADDRESS__ERROR 					,
+				UNINITIALIZED__ERROR 		,
+				TRANSFER__ERROR					,
+				SEND__ERROR							,
+				PORT__ERROR							,
+				UNKNOWN_PROTOCOL__ERROR ,
+				LOGON__ERROR						,
+				PROXY__ERROR 						,	
 				FILENOTFOUND__ERROR 		= 404
 			};
 
@@ -79,7 +80,7 @@ namespace BALL
 			 		This exception is thrown if a transfer fails.
 			\ingroup System
 			*/
-			class TransferFailed 
+			class BALL_EXPORT TransferFailed 
 				: public Exception::GeneralException
 			{
 				 public:
@@ -222,7 +223,23 @@ namespace BALL
 			*/
 			Status transfer()
 				throw();
+
+			///
+			void setProxy(const String proxy_address, Position port);
+
+			///
+			bool usingProxy() const;
+
+			/// abort a running transfer
+			void abort() { abort_ = true;}
 			
+			/** Dump the content of the buffer to an ostream.
+					@param	s the stream to which we will dump
+					@param	depth the indentation depth of the output
+			*/
+			void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
+
 			protected:
 				
 				String 			host_address_;
@@ -236,6 +253,9 @@ namespace BALL
 				char				buffer_[BUFFER_SIZE + 1];
 				Socket			socket_;
 				std::ostream*  fstream_;
+				String 			proxy_address_;
+				Position 		proxy_port_;
+				bool 				abort_;
 				
 				/*_ Send data through the socket.
 				 */
@@ -279,9 +299,8 @@ namespace BALL
 				bool 		waitForOutput_(const String& key, Size seconds)
 					throw();
 				
-				//_ Debug method
-				void 		output_()
-					throw();
+				//_
+				int getReceivedBytes_(Socket& socket);
 
 			private:
 				

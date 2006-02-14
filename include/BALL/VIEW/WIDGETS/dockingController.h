@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1 2006/01/04 16:25:01 amoll Exp $
+// $Id: dockingController.h,v 1.1.6.1 2006/02/14 15:01:51 amoll Exp $
 //
 
 #ifndef BALL_WIDGETS_DOCKINGCONTROLLER_H

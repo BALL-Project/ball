@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.20 2005/02/08 06:09:30 oliver Exp $
+// $Id: modularWidget.C,v 1.20.6.1 2006/02/14 15:03:43 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/FORMAT/INIFile.h>
-#include <BALL/VIEW/DIALOGS/preferences.h>
+#include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #include <qmenubar.h>
 
 using namespace std;
@@ -24,7 +24,8 @@ namespace BALL
 				ConnectionObject(),
 				window_menu_entry_id_(-1),
 				show_window_enty_(false),
-				default_visible_(true)
+				default_visible_(true),
+				last_id_(-1)
 		{
 			if (name) setIdentifier(name);
 		}
@@ -32,7 +33,8 @@ namespace BALL
 		ModularWidget::ModularWidget(const ModularWidget& widget)
 			throw()
 			: Embeddable(widget),
-				ConnectionObject(widget)
+				ConnectionObject(widget),
+				last_id_(-1)
 		{
 		}
 
@@ -91,6 +93,7 @@ namespace BALL
 
 		void ModularWidget::finalizeWidget(MainControl& /* main_control */)
 		{
+			removeMenuEntries();
 		}
 
 		void ModularWidget::checkMenu(MainControl& /* main_control */)
@@ -121,6 +124,10 @@ namespace BALL
 				widget->resize(inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt(),
 											 inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt());
 			} 
+
+			PreferencesEntry* entry = dynamic_cast<PreferencesEntry*>(this);
+			if (entry == 0) return;
+			entry->readPreferenceEntries(inifile);
 		}
 
 		void ModularWidget::writePreferences(INIFile& inifile)
@@ -139,11 +146,16 @@ namespace BALL
 			inifile.insertValue("WINDOWS", getIdentifier() + "::y", String(widget->y()));
 			inifile.insertValue("WINDOWS", getIdentifier() + "::width", String(widget->width()));
 			inifile.insertValue("WINDOWS", getIdentifier() + "::height", String(widget->height()));
+
+			PreferencesEntry* entry = dynamic_cast<PreferencesEntry*>(this);
+			if (entry == 0) return;
+			entry->writePreferenceEntries(inifile);
 		}
 
 		void ModularWidget::setStatusbarText(String text, bool important)
 			throw()
 		{
+			if (getMainControl() == 0) return;
 			getMainControl()->setStatusbarText(text, important);
 		}
 
@@ -169,13 +181,6 @@ namespace BALL
 			throw()
 		{
 			ConnectionObject::dump(s, depth);
-		}
-
-		int ModularWidget::insertMenuEntry(int ID, const String& name, const QObject* receiver, const char* slot, 
-																			 int accel, int entry_ID, String hint)
-			throw()
-		{
-			return getMainControl()->insertMenuEntry(ID, name, receiver, slot, accel, entry_ID, hint);
 		}
 
 		QMenuBar* ModularWidget::menuBar()
@@ -209,7 +214,8 @@ namespace BALL
 			Position p = filename.split(fields, separators.c_str()) -1;
 			if (p == 0) return;
 			String suffix = fields[p];				
-			setWorkingDir(filename.getSubstring(0, filename.size() - (suffix.size() + 1)));
+			String result = filename.getSubstring(0, filename.size() - (suffix.size() + 1));
+			setWorkingDir(result);
 		}
 
 		bool ModularWidget::lockComposites()
@@ -226,6 +232,78 @@ namespace BALL
 			return getMainControl()->unlockCompositesFor(this);
 		}
 
-	} // namespace VIEW
+		void ModularWidget::removeMenuEntries()
+		{
+			if (getMainControl() == 0) return;
 
+			for (Position i = 0; i < menu_ids_.size(); i++)
+			{
+				getMainControl()->removeMenuEntry(menu_ids_[i].first, menu_ids_[i].second);
+			}
+
+			menu_ids_.clear();
+			last_id_ = -1;
+		}
+				
+		Index ModularWidget::insertMenuEntry(Index parent_id, const String& name, 
+												const QObject* receiver, const char* slot, Index accel, Index pos)
+			throw()
+		{
+			if (getMainControl() == 0) return -1;
+
+			last_id_ = getMainControl()->insertMenuEntry(parent_id, name, receiver, slot, accel, pos);
+			if (last_id_ == -1) return -1;
+
+			menu_ids_.push_back(pair<Index, Index>(parent_id, last_id_));
+
+			last_parent_id_ = parent_id;
+
+			return last_id_;
+		}
+
+		void ModularWidget::setMenuHint(const String& hint)
+		{
+			if (last_id_ 				== -1 ||
+					getMainControl() == 0)
+			{
+				return;
+			}
+
+			getMainControl()->setMenuHint(last_id_, hint);
+		}
+
+		void ModularWidget::setMenuHelp(const String& url)
+		{
+			if (last_id_ 				== -1 ||
+					getMainControl() == 0)
+			{
+				return;
+			}
+
+			registerMenuEntryForHelpSystem(last_id_, url);
+		}
+
+		void ModularWidget::showHelp(const String& url)
+		{
+			notify_(new ShowHelpMessage(url));
+		}
+
+		void ModularWidget::registerWidgetForHelpSystem(const QWidget* widget, const String& url)
+		{
+			RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
+			msg->setWidget(widget);
+			msg->setURL(url);
+			notify_(msg);
+		}
+
+		void ModularWidget::registerMenuEntryForHelpSystem(Index entry, const String& docu_entry)
+		{
+			RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
+			msg->setMenuEntry(entry);
+			msg->setURL(docu_entry);
+			notify_(msg);
+		}
+
+
+	} // namespace VIEW
 } // namespace BALL

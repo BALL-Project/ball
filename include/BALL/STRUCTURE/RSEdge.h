@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSEdge.h,v 1.32 2004/02/23 17:26:04 anhi Exp $
+// $Id: RSEdge.h,v 1.32.8.1 2006/02/14 15:01:20 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
@@ -47,7 +47,7 @@ namespace BALL
 	/** Generic RSEdge Class.
   \ingroup StructureMiscellaneous    
 	*/
-	class RSEdge	:	public GraphEdge< RSVertex,RSEdge,RSFace >
+	class BALL_EXPORT RSEdge	:	public GraphEdge< RSVertex,RSEdge,RSFace >
 	{
 		public:
 
@@ -396,7 +396,7 @@ namespace BALL
 
 	/**	Output- Operator
 	*/
-	std::ostream& operator << (std::ostream& s, const RSEdge& rsedge);
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const RSEdge& rsedge);
 
 	//@}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RMSDMinimizer.h,v 1.3 2006/01/28 12:32:54 oliver Exp $
+// $Id: RMSDMinimizer.h,v 1.3.4.1 2006/02/14 15:01:20 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher

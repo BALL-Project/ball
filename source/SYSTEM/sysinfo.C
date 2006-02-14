@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.18 2005/03/11 16:53:37 amoll Exp $
-//
+// $Id: sysinfo.C,v 1.18.4.1 2006/02/14 15:03:02 amoll Exp $
 
 #include <BALL/SYSTEM/sysinfo.h>
 
@@ -27,7 +26,9 @@
 #	  include <windows.h>
 # endif
 # ifdef BALL_OS_DARWIN
-#  include <sys/sysctl.h>
+#   include <stdlib.h>
+#		include <sys/sysctl.h>
+#   include <mach/mach.h>
 # endif
 #endif
 
@@ -99,6 +100,15 @@ namespace BALL
 #else
 #ifdef BALL_COMPILER_MSVC
 
+		/// internal helper method used on Windows Platform, not available extern!
+		MEMORYSTATUSEX getMemoryStatus()
+		{
+			MEMORYSTATUSEX statex;
+			statex.dwLength = sizeof (statex);
+			GlobalMemoryStatusEx (&statex);
+			return statex;
+		}
+
 		LongIndex getAvailableMemory()
 		{
 			return getFreeMemory();
@@ -106,15 +116,13 @@ namespace BALL
 
 		LongIndex getFreeMemory()
 		{
-			MEMORYSTATUSEX statex;
-			GlobalMemoryStatusEx (&statex);
+			MEMORYSTATUSEX statex = getMemoryStatus();
 			return static_cast<LongIndex>(statex.ullAvailPhys);
 		}
 
 		LongIndex getTotalMemory()
 		{
- 			MEMORYSTATUSEX statex;
-			GlobalMemoryStatusEx (&statex);
+			MEMORYSTATUSEX statex = getMemoryStatus();
 			return static_cast<LongIndex>(statex.ullTotalPhys);
 		}
 
@@ -137,8 +145,7 @@ namespace BALL
 
 		LongIndex getFreeSwapSpace()
 		{
- 			MEMORYSTATUSEX statex;
-			GlobalMemoryStatusEx (&statex);
+			MEMORYSTATUSEX statex = getMemoryStatus();
 			return (LongIndex) statex.ullAvailPageFile;
 		}
 
@@ -223,20 +230,52 @@ namespace BALL
 		{
 			return getFreeMemory();
 		}
+ 
+		bool getDarwinMemstats(LongSize& free, LongSize& total, LongSize& used)
+		{
+			static mach_port_t host;
+			static mach_msg_type_number_t host_size = sizeof(vm_statistics_data_t) / sizeof(Index);
+			static vm_size_t page_size;
+			static vm_statistics_data_t vm_stats;
+
+			host = mach_host_self();
+			host_page_size(host, &page_size);
+			if (host_statistics(host, HOST_VM_INFO, (host_info_t)&vm_stats, &host_size) != KERN_SUCCESS)
+			{
+				return false;
+			}
+			used = (vm_stats.active_count + vm_stats.inactive_count + vm_stats.wire_count) * page_size;
+			free = vm_stats.free_count * page_size;
+			total = free + used;
+			
+			return true;
+		}
 
 		LongIndex getFreeMemory()
 		{
-			return -1;
+			static LongSize free, total, used;
+			getDarwinMemstats(free, total, used);
+			return free;
 		}
 
 		LongIndex getTotalMemory()
 		{
+    	unsigned int physmem;
+    	size_t len = sizeof(physmem);
+    	static int mib[2] = { CTL_HW, HW_PHYSMEM };
+
+    	if (sysctl (mib, 2, &physmem, &len, NULL, 0) == 0
+					&& len == sizeof(physmem))
+			{
+    	  return (LongIndex) physmem;
+			}
 			return -1;
 		}
 
 		LongIndex getBufferedMemory()
 		{
 			return -1;
+
 		}
 
 		Time getUptime()
@@ -255,7 +294,7 @@ namespace BALL
 
 		LongIndex getFreeSwapSpace()
 		{
-			return -1;
+			return getFreeMemory(); // It's at least this much. If you better, please tell me! [OK]
 		}
 
 

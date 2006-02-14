@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.C,v 1.7 2005/03/14 16:20:33 amoll Exp $
+// $Id: buildBondsProcessor.C,v 1.7.4.1 2006/02/14 15:02:58 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
@@ -9,16 +9,12 @@
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
-#include <BALL/DATATYPE/hashSet.h>
 #include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/path.h>
-#include <BALL/MATHS/common.h>
 #include <BALL/FORMAT/resourceFile.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
-
-#include <cmath>
 
 using namespace std;
 
@@ -39,6 +35,7 @@ namespace BALL
 			num_bonds_(0),
 			max_length_(0.0f)
 	{
+		setDefaultOptions();
 		readBondLengthsFromFile_();
 	}
 
@@ -64,6 +61,7 @@ namespace BALL
 
 	BuildBondsProcessor::~BuildBondsProcessor()
 	{
+		setDefaultOptions();
 	}
 
 	BuildBondsProcessor& BuildBondsProcessor::operator = (const BuildBondsProcessor& bbp)
@@ -124,6 +122,34 @@ namespace BALL
 		ac.apply(bbox);		
 		Vector3 size = bbox.getUpper() - bbox.getLower();
 
+		// if at least one single number of the coordinates from the atoms
+		// is nan, the bounding box would be huge
+		if (Maths::isNan(size.x) || Maths::isNan(size.y) || Maths::isNan(size.z))
+		{
+			// this is just a fallback; simple method which is computationally hard
+			// (s.th. like O(n^2))
+			AtomIterator ait1, ait2;
+			BALL_FOREACH_ATOM_PAIR(ac, ait1, ait2)
+			{
+				float dist = ait1->getPosition().getDistance(ait2->getPosition());
+				float max_dist(0), min_dist(0);
+				Size an1(ait1->getElement().getAtomicNumber());
+				Size an2(ait2->getElement().getAtomicNumber());
+
+				if (getMaxBondLength_(max_dist, an1, an2) &&
+						getMaxBondLength_(min_dist, an1, an2) &&
+						dist <= max_dist &&
+						dist >= min_dist &&
+						ait1->isBoundTo(*ait2))
+				{
+					Bond* const b = ait1->createBond(*ait2);
+					b->setOrder(Bond::ORDER__UNKNOWN);
+					num_bonds++;
+				}
+			}
+			return num_bonds;
+		}
+		
 		// build HashGrid
 		HashGrid3<Atom*> grid(bbox.getLower() - Vector3(1.0), size + Vector3(2.0), max_length_ + 0.01);
 	
@@ -173,7 +199,7 @@ namespace BALL
 									if (*ait1 <= *ait2) continue;
 									// test the distance criterion for the specific element pair
 									const float dist = atom_pos1.getSquareDistance((*ait2)->getPosition());
-									float max_dist, min_dist;
+									float max_dist(0), min_dist(0);
 									const Size& an1 = atom1.getElement().getAtomicNumber();
 									const Size& an2 = (*ait2)->getElement().getAtomicNumber();
 
@@ -183,8 +209,7 @@ namespace BALL
 											dist >= min_dist &&
 											!atom1.isBoundTo(**ait2))
 									{
-										Bond* const b = atom1.createBond(**ait2);
-										b->setOrder(Bond::ORDER__UNKNOWN);
+										atom1.createBond(**ait2);
 										num_bonds++;
 									}
 								}
@@ -204,7 +229,7 @@ namespace BALL
 							{
 								// test the distance criterion for the specific element pair
 								const float dist = atom_pos1.getSquareDistance((*ait2)->getPosition());
-								float max_dist, min_dist;
+								float max_dist(0), min_dist(0);
 								const Size& an1 = atom1.getElement().getAtomicNumber();
 								const Size& an2 = (*ait2)->getElement().getAtomicNumber();
 
@@ -261,16 +286,18 @@ namespace BALL
 			// count bonds and aromatic bonds
 			Size num_bonds(0), num_aro(0);
 			HashSet<Bond*> bonds;
-			for (vector<Atom*>::iterator ait1=it->begin();ait1!=it->end();++ait1)
+
+			vector<Atom*>::iterator ait1 = it->begin();
+			for (; ait1 != it->end(); ++ait1)
 			{
-				vector<Atom*>::iterator ait2=ait1;
+				vector<Atom*>::iterator ait2(ait1);
 				++ait2;
-				for (;ait2!=it->end();++ait2)
+				for (; ait2 != it->end(); ++ait2)
 				{
-					if ((*ait1)->isBoundTo(**ait2))
+					if ((**ait1).isBoundTo(**ait2))
 					{
 						++num_bonds;
-						Bond* const b = (*ait1)->getBond(**ait2);
+						Bond* const b = (**ait1).getBond(**ait2);
 						bonds.insert(b);
 						if (b->getOrder() == Bond::ORDER__AROMATIC)
 						{
@@ -281,16 +308,16 @@ namespace BALL
 			}
 
 			// estimate if ring is aromatic or not
-			if (double(num_aro)/double(num_bonds) >= 0.5)
+			if (float(num_aro) / float(num_bonds) >= 0.5)
 			{
-				for (HashSet<Bond*>::Iterator bit=bonds.begin();bit!=bonds.end();++bit)
+				for (HashSet<Bond*>::Iterator bit = bonds.begin(); bit != bonds.end(); ++bit)
 				{
 					(*bit)->setOrder(Bond::ORDER__AROMATIC);
 				}
 			}
 			else
 			{
-				for (HashSet<Bond*>::Iterator bit=bonds.begin(); +bit;++bit)
+				for (HashSet<Bond*>::Iterator bit = bonds.begin(); +bit; ++bit)
 				{
 					if ((*bit)->getOrder() == Bond::ORDER__AROMATIC)
 					{
@@ -324,12 +351,12 @@ namespace BALL
 				}
 				bonds.insert(&*bit);
 			}
+
+			bonds.erase(min_bond);
+
 			for (HashSet<Bond*>::ConstIterator it=bonds.begin(); +it; ++it)
 			{
-				if (*it != min_bond)
-				{
-					(*it)->destroy();
-				}
+				(*it)->destroy();
 			}
 		}
 	}
@@ -397,9 +424,9 @@ namespace BALL
 		HashMap<Bond::BondOrder, float>::ConstIterator it=bonds.begin();
 		for (; +it; ++it)
 		{
-			if (min_dist > abs(it->second-length))
+			if (min_dist > Maths::abs(it->second-length))
 			{
-				min_dist = abs(it->second-length);
+				min_dist = Maths::abs(it->second-length);
 				order = it->first;
 			}
 		}
@@ -417,16 +444,6 @@ namespace BALL
 
 	void BuildBondsProcessor::readBondLengthsFromFile_(const String& file_name) throw(Exception::FileNotFound)
 	{
-
-		options.setDefault(BuildBondsProcessor::Option::BONDLENGTHS_FILENAME,
-													 BuildBondsProcessor::Default::BONDLENGTHS_FILENAME);
-		options.setDefaultBool(BuildBondsProcessor::Option::REESTIMATE_BONDORDERS_RINGS,
-													 BuildBondsProcessor::Default::REESTIMATE_BONDORDERS_RINGS);
-		options.setDefaultBool(BuildBondsProcessor::Option::DELETE_EXISTING_BONDS,
-													 BuildBondsProcessor::Default::DELETE_EXISTING_BONDS);
-		options.setDefaultBool(BuildBondsProcessor::Option::DELETE_OVERESTIMATED_BONDS,
-													 BuildBondsProcessor::Default::DELETE_OVERESTIMATED_BONDS);
-		
 		// test file or set default file
 		String filename(file_name);
 		if (file_name == "")
@@ -513,7 +530,10 @@ namespace BALL
 					
 					if (key == "max")
 					{
-						if (value > max_length_) max_length_ = value;
+						if (value > max_length_) 
+						{
+							max_length_ = value;
+						}
 						max_bond_lengths_[an1][an2] = value * value;
 
 						continue;
@@ -521,12 +541,6 @@ namespace BALL
 
 					if (key == "min")
 					{
-						if (value == 0) 
-						{
-							min_bond_lengths_[an1][an2] = LONG_MAX;
-							continue;
-						}
-
 						min_bond_lengths_[an1][an2] = value * value;
 					}
 					else
@@ -540,5 +554,16 @@ namespace BALL
 		delete tree;
 	}
 	
+	void BuildBondsProcessor::setDefaultOptions()
+	{
+		options.setDefault(BuildBondsProcessor::Option::BONDLENGTHS_FILENAME,
+											 BuildBondsProcessor::Default::BONDLENGTHS_FILENAME);
+		options.setDefaultBool(BuildBondsProcessor::Option::REESTIMATE_BONDORDERS_RINGS,
+													 BuildBondsProcessor::Default::REESTIMATE_BONDORDERS_RINGS);
+		options.setDefaultBool(BuildBondsProcessor::Option::DELETE_EXISTING_BONDS,
+													 BuildBondsProcessor::Default::DELETE_EXISTING_BONDS);
+		options.setDefaultBool(BuildBondsProcessor::Option::DELETE_OVERESTIMATED_BONDS,
+													 BuildBondsProcessor::Default::DELETE_OVERESTIMATED_BONDS);
+	}
 	
 } // namespace BALL

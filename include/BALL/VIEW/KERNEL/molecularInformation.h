@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularInformation.h,v 1.6 2004/02/26 08:41:38 anhi Exp $
+// $Id: molecularInformation.h,v 1.6.10.1 2006/02/14 15:01:42 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
 #define BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
@@ -12,6 +12,8 @@
 
 namespace BALL
 {
+	class Atom;
+
 	namespace VIEW
 	{
 		/** MolecularInformation class.
@@ -19,7 +21,7 @@ namespace BALL
 				of the displayed Composite objects.
 				\ingroup ViewKernelOther
 		*/
-		class BALL_EXPORT MolecularInformation
+		class BALL_VIEW_EXPORT MolecularInformation
 			: public Visitor<Composite>
 		{
 			public:
@@ -57,7 +59,12 @@ namespace BALL
 				TYPE__SECONDARY_STRUCTURE  = 6,
 
 				/// Atom type.
-				TYPE__ATOM                 = 7
+				TYPE__ATOM                 = 7,
+					
+				/// Bond type.
+				TYPE__BOND 								 = 8
+
+
 			};
 
 			//@} 
@@ -117,8 +124,9 @@ namespace BALL
 			
   		private:
 
+			String getBondAtomName_(Atom* atom);
 			void getType_(Composite& composite);
-			void getTypeName_(Composite& composite);
+			void getTypeName_();
 			void getName_(Composite& composite);
 
 			Type 	 type_;

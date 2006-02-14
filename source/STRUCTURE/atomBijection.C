@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBijection.C,v 1.2 2006/01/26 07:41:03 oliver Exp $
+// $Id: atomBijection.C,v 1.2.4.1 2006/02/14 15:02:58 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher

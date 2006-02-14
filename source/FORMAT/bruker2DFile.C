@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker2DFile.C,v 1.24 2004/03/09 12:42:20 anhi Exp $
+// $Id: bruker2DFile.C,v 1.24.8.1 2006/02/14 15:02:21 amoll Exp $
 //
 
 #include <BALL/FORMAT/bruker2DFile.h>
@@ -239,6 +239,30 @@ namespace BALL
     spectrum_.setYLower((dum1<dum2) ? dum1 : dum2);
     spectrum_.setYUpper((dum1>dum2) ? dum1 : dum2);
 		*/
+  }
+
+  const Bruker2DFile& Bruker2DFile::operator = (const Bruker2DFile& file)
+	  throw()
+  {
+		parsf1_    = file.parsf1_;
+		parsf2_    = file.parsf2_;
+		minx_      = file.minx_;
+		maxx_      = file.maxx_;
+		miny_      = file.miny_;
+		maxy_      = file.maxy_;
+		dat_       = file.dat_;
+		soffsetf1_ = file.soffsetf1_;
+		soffsetf2_ = file.soffsetf2_;
+		swidthf1_  = file.swidthf1_;	
+		swidthf2_  = file.swidthf2_;
+		bfreqf1_   = file.bfreqf1_;
+		bfreqf2_   = file.bfreqf2_;
+		spointnumf1_ = file.spointnumf1_;
+		spointnumf2_ = file.spointnumf2_;
+		spectrum_  = file.spectrum_;
+
+		File::operator = (file);
+		return *this;
   }
 
 }

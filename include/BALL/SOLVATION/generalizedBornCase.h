@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: generalizedBornCase.h,v 1.1 2005/11/21 19:38:38 anker Exp $
+// $Id: generalizedBornCase.h,v 1.1.6.1 2006/02/14 15:01:17 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_GENERALIZED_BORN_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Extractors_test.C,v 1.1 2006/01/26 07:41:04 oliver Exp $
+// $Id: Extractors_test.C,v 1.1.4.1 2006/02/14 15:03:05 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(Extractors, "$Id: Extractors_test.C,v 1.1 2006/01/26 07:41:04 oliver Exp $")
+START_TEST(Extractors, "$Id: Extractors_test.C,v 1.1.4.1 2006/02/14 15:03:05 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

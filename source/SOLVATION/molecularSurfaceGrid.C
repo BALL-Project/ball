@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularSurfaceGrid.C,v 1.23 2005/02/06 09:45:00 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.23.6.1 2006/02/14 15:02:56 amoll Exp $
 //
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
@@ -9,6 +9,9 @@
 
 namespace BALL 
 {
+	const char CCONN__INSIDE = 0;
+	const char CCONN__OUTSIDE = 1;
+	const char CCONN__INSIDE_PROBE = (char) 64;
 
 	// needed for quicksort (below)
 	extern "C" int 

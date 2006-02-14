@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.10 2005/02/06 20:57:08 oliver Exp $
+// $Id: materialSettings.C,v 1.10.6.1 2006/02/14 15:03:34 amoll Exp $
 // 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
@@ -20,12 +20,17 @@ namespace BALL
 				PreferencesEntry()
 		{
 			setINIFileSectionName("MATERIAL_SETTINGS");
-			setDefaultValues(true);
+
+			specular_slider->setValue((Index)(0.774 * 10.0));
+			diffuse_slider->setValue((Index)(0.4   	* 10.0));
+			ambient_slider->setValue((Index)(0.25 	* 10.0));
+			shininess_slider->setValue((Index)(76.8 * 10.0));
+
 			registerObject_(specular_slider);
 			registerObject_(diffuse_slider);
 			registerObject_(ambient_slider);
 			registerObject_(shininess_slider);
-			insertEntry(this, "Materials");
+			setWidgetStackName("Materials");
 		}
 
 
@@ -37,22 +42,20 @@ namespace BALL
 			stage.setDiffuseIntensity(	((float)diffuse_slider->value())   / 10.0);
 			stage.setAmbientIntensity(	((float)ambient_slider->value())   / 10.0);
 			stage.setShininess(					((float)shininess_slider->value()) / 10.0);
+
 			glMaterialf(GL_FRONT, GL_SHININESS, stage.getShininess());
-			glMaterialf(GL_FRONT, GL_SPECULAR,  stage.getSpecularIntensity());
-			glMaterialf(GL_FRONT, GL_DIFFUSE,   stage.getDiffuseIntensity());
-			glMaterialf(GL_FRONT, GL_AMBIENT,   stage.getAmbientIntensity());
+			GLfloat values[4];
+			values[3] = 1.0;
 
+			values[0] = values[1] = values[2] =  stage.getSpecularIntensity();
+			glMaterialfv(GL_FRONT, GL_SPECULAR,  values);
+			
+			values[0] = values[1] = values[2] = stage.getDiffuseIntensity();
+			glMaterialfv(GL_FRONT, GL_DIFFUSE,   values);
+			
+			values[0] = values[1] = values[2] = stage.getAmbientIntensity();
+ 			glMaterialfv(GL_FRONT, GL_AMBIENT,   values);
 		}
-
-		void MaterialSettings::setDefaultValues(bool /*all*/)
-			throw()
-		{
-			specular_slider->setValue((Index)(0.774 * 10.0));
-			diffuse_slider->setValue((Index)(0.4   	* 10.0));
-			ambient_slider->setValue((Index)(0.25 	* 10.0));
-			shininess_slider->setValue((Index)(76.8 * 10.0));
-		}
-
 
 		void MaterialSettings::ambientChanged()
 		{

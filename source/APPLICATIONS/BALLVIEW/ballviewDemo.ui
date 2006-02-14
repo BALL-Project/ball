@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>529</width>
-            <height>361</height>
+            <width>445</width>
+            <height>475</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -74,6 +74,9 @@
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
                                 </property>
+                                <property name="margin">
+                                    <number>-40</number>
+                                </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
 Welcome to the BALLView demo. It will show you some of
@@ -112,12 +115,15 @@ demonstration.
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
                                 </property>
+                                <property name="margin">
+                                    <number>-40</number>
+                                </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
 This is a Line model, the fastest model available, which is best suited for 
 huge molecules or slow computers. In this model, each bond contained
 in the molecule is shown as a single line.&lt;br&gt;&lt;br&gt;
-For this example, we have chosen a coloring by element. &lt;br&gt;
+For this example, we have chosen a coloring by element.
 (red = oxygen, blue = nitrogen, grey = carbon, yellow = sulfur)
 &lt;br&gt;&lt;br&gt;
 Press OK to continue.
@@ -152,6 +158,9 @@ Press OK to continue.
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
+                                </property>
+                                <property name="margin">
+                                    <number>-40</number>
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
@@ -194,6 +203,9 @@ confusing eye-candy.
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
                                 </property>
+                                <property name="margin">
+                                    <number>-40</number>
+                                </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
 The Ball- and- Stick model adds spheres at the positions of the individual
@@ -230,6 +242,9 @@ between douple, triple and aromatic bonds.
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
+                                </property>
+                                <property name="margin">
+                                    <number>-40</number>
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
@@ -270,6 +285,9 @@ take a moment, depending on the performance of your machine.
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
+                                </property>
+                                <property name="margin">
+                                    <number>-40</number>
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
@@ -315,6 +333,9 @@ sphere of the molecule compose the SES.
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
                                 </property>
+                                <property name="margin">
+                                    <number>-40</number>
+                                </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
 Since proteins are composed of an often large number of amino acids,
@@ -358,6 +379,9 @@ as a thread in space, the &lt;it&gt;backbone&lt;/it&gt; of the protein.
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
                                 </property>
+                                <property name="margin">
+                                    <number>-40</number>
+                                </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
 Parts of a proteins backbone often assume one of two typical
@@ -395,6 +419,9 @@ computed and visualized in a &lt;it&gt;Cartoon&lt;/it&gt; like fashion.
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
                                 </property>
+                                <property name="margin">
+                                    <number>-32</number>
+                                </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
 In order to understand a proteins structure, or the structure of a biomolecular
@@ -431,6 +458,9 @@ bonds.
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
+                                </property>
+                                <property name="margin">
+                                    <number>-40</number>
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
@@ -479,6 +509,9 @@ can be changed in the preferences dialog.
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
                                 </property>
+                                <property name="margin">
+                                    <number>-40</number>
+                                </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
 In this example we see a Cartoon Model, colored according to
@@ -514,6 +547,9 @@ are colored in blue, strands in red, and everything else in green.
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
+                                </property>
+                                <property name="margin">
+                                    <number>-40</number>
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
@@ -551,6 +587,9 @@ of the molecule to blue at its end in the default coloring settings.
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
+                                </property>
+                                <property name="margin">
+                                    <number>-40</number>
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
@@ -598,6 +637,9 @@ Don't worry if the MD Simulation takes a moment to start.
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
                                 </property>
+                                <property name="margin">
+                                    <number>-40</number>
+                                </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
 To understand a protein's function, it is often necessary to study
@@ -637,6 +679,9 @@ this might take a moment.
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
+                                </property>
+                                <property name="margin">
+                                    <number>-40</number>
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
@@ -678,6 +723,9 @@ this might take a moment.
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
                                 </property>
+                                <property name="margin">
+                                    <number>-40</number>
+                                </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
 An other way to visualise the electorstatics grid are isocontour surfaces.
@@ -698,28 +746,27 @@ electrostatic value of 0.01.
                         <attribute name="id">
                             <number>16</number>
                         </attribute>
-                        <widget class="QLabel">
+                        <grid>
                             <property name="name">
-                                <cstring>textLabel3_2_2_4_5_2_2_2_2_2_2_2_2</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>12</x>
-                                    <y>12</y>
-                                    <width>483</width>
-                                    <height>273</height>
-                                </rect>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>7</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>&lt;blockquote&gt;
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>textLabel3_2_2_4_5_2_2_2_2_2_2_2_2</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>7</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="margin">
+                                    <number>-40</number>
+                                </property>
+                                <property name="text">
+                                    <string>&lt;blockquote&gt;
 This completes our interactive tour of BALLView.&lt;br&gt;&lt;br&gt;
 But apart from what was shown in this demo, there are numerous
 additional features to explore, like e.g. the integrated peptide
@@ -729,11 +776,12 @@ Next you can try the BALLView tutorial.
 Additional information and the BALLView manual can be found
 at &lt;a href="http://www.ballview.org"&gt;http://www.ballview.org&lt;/a&gt;
 &lt;/blockquote&gt;</string>
-                            </property>
-                            <property name="alignment">
-                                <set>WordBreak|AlignJustify|AlignTop</set>
-                            </property>
-                        </widget>
+                                </property>
+                                <property name="alignment">
+                                    <set>WordBreak|AlignJustify|AlignTop</set>
+                                </property>
+                            </widget>
+                        </grid>
                     </widget>
                 </widget>
                 <widget class="QLayoutWidget">

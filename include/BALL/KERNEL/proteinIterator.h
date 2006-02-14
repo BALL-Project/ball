@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: proteinIterator.h,v 1.14 2004/05/27 19:49:40 oliver Exp $
+// $Id: proteinIterator.h,v 1.14.6.1 2006/02/14 15:00:58 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_PROTEINITERATOR_H
@@ -25,7 +25,7 @@ namespace BALL
 			
 			\ingroup  KernelIterators
 	*/
-	class ProteinIteratorTraits
+	class BALL_EXPORT ProteinIteratorTraits
 		: public CompositeIteratorTraits
 	{
 		public:

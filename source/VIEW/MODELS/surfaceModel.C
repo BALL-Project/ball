@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.12 2004/09/27 15:29:16 oliver Exp $
+// $Id: surfaceModel.C,v 1.12.8.1 2006/02/14 15:03:47 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/surfaceModel.h>
@@ -94,7 +94,7 @@ namespace BALL
 			ModelProcessor::createGeometricObjects();
 			Mesh* mesh = new Mesh;
 
-			if (mesh == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Mesh));
+			if (mesh == 0) return false;
 
 			SurfaceProcessor sp;
 			sp.setType(getType());
@@ -106,22 +106,16 @@ namespace BALL
 			}
 			else
 			{
-				switch (getDrawingPrecision())
+				if (getDrawingPrecision() >= DRAWING_PRECISION_LOW &&
+						getDrawingPrecision() <= DRAWING_PRECISION_ULTRA)
 				{
-					case VIEW::DRAWING_PRECISION_LOW:
-						sp.setDensity(1.5);
-						break;
-
-					case VIEW::DRAWING_PRECISION_MEDIUM:
-						sp.setDensity(3.5);
-						break;
-
-					case VIEW::DRAWING_PRECISION_HIGH:
-						sp.setDensity(6.0);
-						break;
-
-					default:
-						Log.error() << "Unknown precision in " << __FILE__ << "   " << __LINE__ << std::endl;
+					sp.setDensity(SurfaceDrawingPrecisions[getDrawingPrecision()]);
+				}
+				else
+				{
+					Log.error() << "Invalid Drawing Precision " << getDrawingPrecision() 
+											<< " in " << __FILE__ << " " << __LINE__ << std::endl;
+					sp.setDensity(1.5);
 				}
 			}
 

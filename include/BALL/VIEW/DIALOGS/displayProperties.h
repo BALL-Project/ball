@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.39 2005/02/24 15:52:26 amoll Exp $
+// $Id: displayProperties.h,v 1.39.4.1 2006/02/14 15:01:34 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -20,6 +20,8 @@
 #endif
 
 #include <BALL/VIEW/UIC/displayPropertiesData.h>
+
+#include <qtimer.h>
 
 namespace BALL
 {
@@ -46,7 +48,7 @@ namespace BALL
 				VIEW/KERNEL/common.h.
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT DisplayProperties 
+		class BALL_VIEW_EXPORT DisplayProperties 
 			: public DisplayPropertiesData,
 				public ModularWidget,
 				public PreferencesEntry
@@ -100,24 +102,6 @@ namespace BALL
 			*/ 
 			//@{
 			
-			/** Fetches the preferences (the position, custom color, model, drawing 
-					precision, drawing mode and the coloring method from the INIFile.
-					This method will be called inside MainControl::show().
-					\param  inifile the INIFile that contains the needed information 
-					\see    writePreferences
-			*/
-			virtual void fetchPreferences(INIFile &inifile)
-					throw();
-				
-			/** Writes the preferences (the position, custom color, model, drawing 
-					precision, drawing mode and the coloring method to the INIFile.
-					This method will be called inside MainControl::aboutToExit()
-					\param  inifile the INIFile to be written into
-					\see    fetchPreferences
-			*/
-			virtual void writePreferences(INIFile &inifile)
-					throw();
-				
 			/**	Initialize the popup menu <b>Display</b> with the entry
 					<b>Display Properties</b>, which opens the dialog.
 					This method is called automatically	immediately before the main application is started
@@ -127,14 +111,6 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control)
 					throw();
 				
-			/**	Removes the menu entry <b>Display Properties</b> from the 
-					<b> Display</b> menu.
-					This method will be called by MainControl::aboutToExit() 
-					\param main_control the MainControl object to be finalized 
-			*/
-			virtual void finalizeWidget(MainControl& main_control)
-					throw();
-
 			/// Insert the ModelSettingsDialog and the ColoringSettingsDialog into the Preferences
 			virtual void initializePreferencesTab(Preferences &preferences)
 				throw();
@@ -155,10 +131,12 @@ namespace BALL
 			virtual void checkMenu(MainControl& main_control)
 					throw();
 
-			/// Set the selected Representation, which should be modified
-			void setRepresentation(Representation* rep)
-				throw() {rep_ = rep;}
+			/// Switch to the mode, that a new Representation will be created
+			void createRepresentationMode();
 
+			/// Switch to the mode, that an existing Representation will be modified
+			void modifyRepresentationMode(Representation* rep);
+	
 			/// Settings from String
 			bool getSettingsFromString(const String& data)
 				throw();
@@ -166,7 +144,18 @@ namespace BALL
 			/// Set if Representations are automaticaly created for new Molecules
 			void enableCreationForNewMolecules(bool state) 
 				throw() { create_representations_for_new_molecules_ = state;}
-				
+
+			/// Get the Representation on which DisplayProperties is working on
+			Representation* getRepresentation() 
+				throw() { return rep_;}
+
+			/* 	Create the new representation for the selection in the MolecularControl or for a given List of Composites.
+					Called by onNotify() after receiving CompositeMessage::NEW_MOLECULE and by apply().
+					To insert a new type of model, this is the only method in DisplayProperties you have to
+					change (See also VIEW/KERNEL/common.h).
+			*/
+			virtual Representation* createRepresentation(const List<Composite*>& composites);
+	
 			public slots:
 					
 			//@} 
@@ -179,44 +168,39 @@ namespace BALL
 			*/
 			void show();
 
-			/// Switch to the mode, that a new Representation will be created
-			void createRepresentationMode();
-
-			/// Switch to the mode, that an existing Representation will be modified
-			void modifyRepresentationMode();
-				
+			
 			/** Changes the model.
 					This slot is connected to the model combo box and will be automatically
 					called if the content of this combo box is changed.
 					\param  index the position of the entry in the combobox
 			*/
-			virtual void selectModel(int index);
+			void selectModel(int index);
 
 			/** Changes the drawing mode.
 					This slot is connected to the mode combo box and will be automatically
 					called if the content of this combo box is changed.
 					\param  index the position of the entry in the combobox
 			*/
-			virtual void selectMode(int index);
+			void selectMode(int index);
 
 			/** Changes the coloring method.
 					This slot is connected to the coloring method combo box and will be automatically
 					called if the content of this combo box is changed.
 					\param  index the position of the entry in the combobox
 			*/
-			virtual void selectColoringMethod(int index);
+			void selectColoringMethod(int index);
 
 			///
-			virtual void setSurfaceDrawingPrecision(float value);
+			void setSurfaceDrawingPrecision(float value);
 			
 			///
-			virtual void setDrawingPrecision(int value);
+			void setDrawingPrecision(int value);
 
 			///
-			virtual void setTransparency(int value);
+			void setTransparency(int value);
 
 			///
-			virtual void setCustomColor(const ColorRGBA& color);
+			void setCustomColor(const ColorRGBA& color);
 			
 			/** Indicates the apply button was pressed.
 					Applies the selected model with its selected properties to 
@@ -229,43 +213,42 @@ namespace BALL
 			/** Opens the dialog for editing the custom color.
 					Opens a QColorDialog from the QT-library.
 			 */ 
-			virtual void editColor();
+			void editColor();
 
 			/** Opens the color dialog for the color of selected items.
 					\see BALL_SELECTED_COLOR
 			*/
-			virtual void editSelectionColor();
+			void editSelectionColor();
 
 			///
-			virtual void coloringOptionsPressed();
+			void coloringOptionsPressed();
 
 			///
-			virtual void modelOptionsPressed();
+			void modelOptionsPressed();
 
 			///
-			virtual void precisionBoxChanged(int index);
+			void precisionBoxChanged(int index);
 
 			///
-			virtual void transparencySliderChanged();
+			void transparencySliderChanged();
 
 			///
-			virtual void precisionSliderChanged();
+			void precisionSliderChanged();
+
+			///
+			void coloringUpdatesChanged();
+
+			///
+			void modelUpdatesChanged();
 
 			//@}
-				
+			
+			
 			protected:
 			
 			//_ Set buttons and slider according to the values
 			void checkDrawingPrecision_()
 				throw();
-
-			/*_ Create the new representation for the selection in the MolecularControl or for a given List of Composites.
-					Called by onNotify() after receiving CompositeMessage::NEW_MOLECULE and by apply().
-					To insert a new type of model, this is the only method in DisplayProperties you have to
-					change (See also VIEW/KERNEL/common.h).
-			*/
-			virtual Representation* createRepresentation_(const List<Composite*>& composites)
-				throw(Exception::InvalidOption);
 
 			//_
 			virtual void getAdvancedModelOptions_()
@@ -275,6 +258,21 @@ namespace BALL
 			virtual void getAdvancedColoringOptions_()
 				throw();
 
+			//_
+			virtual void applyModelSettings_(Representation& rep);
+			
+			//_
+			virtual void applyColoringSettings_(Representation& rep);
+
+			//_
+			bool isNotBusy_();
+
+			protected slots:
+			//_
+			void checkMenu_();
+
+			protected:
+			
 			// --------------------------------------------------------------------------------
 			// attributs
 			// --------------------------------------------------------------------------------
@@ -291,6 +289,8 @@ namespace BALL
 			ColorRGBA 			custom_color_;
 			bool 						advanced_options_modified_;
 			bool 						create_representations_for_new_molecules_;
+			bool 						changed_selection_color_;
+			QTimer 					timer_;
 		};
 
 } } // namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.57 2005/02/06 20:57:10 oliver Exp $
+// $Id: cartoonModel.C,v 1.57.6.1 2006/02/14 15:03:46 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -37,9 +37,11 @@ AddCartoonModel::AddCartoonModel()
 	throw()
 	: AddBackboneModel(),
 		last_chain_(0),
+		current_ss_(0),
 		helix_radius_(2.4),
-		arrow_width_(2),
-		arrow_height_(0.3),
+		arrow_width_(1.0),
+		strand_width_(2.2),
+		strand_height_(0.4),
 		DNA_helix_radius_(0.5),
 		DNA_ladder_radius_(0.8),
 		DNA_base_radius_(0.2),
@@ -56,9 +58,11 @@ AddCartoonModel::AddCartoonModel(const AddCartoonModel& cartoon)
 	throw()
 	:	AddBackboneModel(cartoon),
 		last_chain_(0),
+		current_ss_(0),
 		helix_radius_(cartoon.helix_radius_),
 		arrow_width_(cartoon.arrow_width_),
-		arrow_height_(cartoon.arrow_height_),
+		strand_width_(cartoon.strand_width_),
+		strand_height_(cartoon.strand_height_),
 		DNA_helix_radius_(cartoon.DNA_helix_radius_),
 		DNA_ladder_radius_(cartoon.DNA_ladder_radius_),
 		DNA_base_radius_(cartoon.DNA_base_radius_),
@@ -79,13 +83,6 @@ AddCartoonModel::~AddCartoonModel()
 	#endif 
 }
 
-bool AddCartoonModel::createGeometricObjects()
-	throw()
-{
-	return true;
-}
-
-
 void AddCartoonModel::clear_()
 	throw()
 {
@@ -95,37 +92,235 @@ void AddCartoonModel::clear_()
 	ss_nr_splines_.clear();
 }
 
-void AddCartoonModel::collectAtoms_(Chain& chain)
-	throw()
+
+Processor::Result AddCartoonModel::operator() (Composite& composite)
 {
-	clear_();
-	last_chain_ = &chain;
+	// speedup, save some RTTI calls
+	if (RTTI::isKindOf<Atom>(composite)) return Processor::CONTINUE;
 
-	if (chain.countSecondaryStructures() == 0)
+	if (RTTI::isKindOf<Protein>(composite))
 	{
-		ResidueIterator rit = chain.beginResidue();
-		for (; +rit; ++rit)
+		Protein* protein = dynamic_cast<Protein*>(&composite);
+		if (protein->countSecondaryStructures() == 0)
 		{
-			AddBackboneModel::collectAtoms_(*rit);
+			ResidueIterator rit = protein->beginResidue();
+			for(; +rit; ++rit)
+			{
+				AddBackboneModel::operator()(*rit);
+			}
+			return Processor::CONTINUE;
 		}
-		
-		no_ss_ = true;
-		return;
-	}
-	
-	no_ss_ = false;
 
-	SecondaryStructureIterator sit = chain.beginSecondaryStructure();
-	for (; +sit; ++sit)
+		calculateComplementaryBases_(composite);
+		return Processor::CONTINUE;
+	}
+
+	if (RTTI::isKindOf<SecondaryStructure>(composite))
 	{
-		collectAtoms_(*sit);
+		current_ss_ = RTTI::castTo<SecondaryStructure>(composite);
+
+		// fix for some strange PDB files, like 1cfp where a SS is inside a SS:
+		if (composite.getParent() != 0 &&
+				RTTI::isKindOf<SecondaryStructure>(*composite.getParent()))
+		{
+			return Processor::CONTINUE;
+		}
+
+		if (current_ss_->countResidues() == 0) return Processor::CONTINUE;
+
+		collectAtoms_(*current_ss_);
+	}
+
+	// for residues for which we didnt see the SS, create a backbone model
+	if (RTTI::isKindOf<Residue>(composite) &&
+		  composite.getParent() != current_ss_)
+	{
+		backbone_model_.operator() (composite);
+	}
+
+	return Processor::CONTINUE;
+}
+
+
+void AddCartoonModel::drawPart_(Position last)
+{
+	last_build_ = 0;
+
+	if (last == 0) return;
+	
+	// lets see, if we have a valid spline
+	if (points_.size() != (splines_.size() - 1) * interpolation_steps_ ||
+			points_.size() != atoms_of_points_.size())
+	{
+   #ifdef BALL_VIEW_DEBUG
+		logString(String("Invalid spline: ") +
+			          " nr of splines for SS; "  + String(splines_.size()) +
+								" spline points and " + String(points_.size()) +
+								" interpolated points in " +
+								 String(__FILE__) + " " + String(__LINE__) + "\n");
+   #endif
+	}
+
+	const Residue* residue = dynamic_cast<const Residue*>(splines_[0].atom->getParent());
+	if (residue == 0) return;
+
+	Position last_type = getType_(*residue);
+	for (Position pos = 1; pos < last; pos++)
+	{
+		residue = dynamic_cast<const Residue*>(splines_[pos].atom->getParent());
+		if (residue == 0) continue;
+
+		Position type = getType_(*residue);
+
+		if (last_type != type)
+		{
+			if (last_build_ != 0)
+			{
+				// draw connection
+				Position pos1 = (pos - 1) * interpolation_steps_;
+				Position pos2 = (pos - 1) * interpolation_steps_ - 1;
+
+				Position apos1 = pos1;
+				Position apos2 = pos2;
+
+				if (atoms_of_points_.size() > apos1 + interpolation_steps_)
+				{
+					apos1 += interpolation_steps_;
+				}
+
+				if (atoms_of_points_.size() > apos2 + interpolation_steps_)
+				{
+					apos2 += interpolation_steps_;
+				}
+
+				Sphere* sphere = new Sphere;
+				sphere->setRadius(tube_radius_);
+				sphere->setPosition(points_[pos1]);
+				sphere->setComposite(atoms_of_points_[apos1]);
+				geometric_objects_.push_back(sphere);
+ 
+				Tube* tube = new Tube();
+				tube->setVertex1(points_[pos1]);
+				tube->setVertex2(points_[pos2]);
+				tube->setComposite(atoms_of_points_[apos1]);
+				tube->setRadius(tube_radius_);
+				geometric_objects_.push_back(tube);
+				
+				sphere = new Sphere;
+				sphere->setRadius(tube_radius_);
+				sphere->setPosition(points_[pos2]);
+				sphere->setComposite(atoms_of_points_[apos2]);
+				geometric_objects_.push_back(sphere);
+				
+			}
+
+		 	buildGraphicalRepresentation_(last_build_, pos - 1, last_type);
+			last_build_ = pos - 1;
+		}
+
+		last_type = type;
+	}
+
+	buildGraphicalRepresentation_(last_build_, last, last_type);
+}
+	
+
+Position AddCartoonModel::getType_(const Residue& residue)
+{
+	const Composite* parent = residue.getParent();
+	if (parent == 0) return SecondaryStructure::UNKNOWN;
+
+	const SecondaryStructure* ss = dynamic_cast<const SecondaryStructure*>(parent);
+	if (ss == 0) return SecondaryStructure::UNKNOWN;
+	
+	Position type = (Position) ss->getType();
+
+	if (type == SecondaryStructure::STRAND && ss->countResidues() > 3)
+	{
+		return SecondaryStructure::STRAND;
+	}
+
+	else if (ss->getType() == SecondaryStructure::HELIX)
+	{
+		return SecondaryStructure::HELIX;
+	}
+	else
+	{
+		// is this a chain with nucleic acids?
+		const String name = residue.getName();
+		if (name.size() == 1 &&
+				(name == "A" || name == "C" || name == "G" || name == "T" || name == "U"))
+		{
+			return SecondaryStructure::UNKNOWN + 1;
+		}
+
+		return SecondaryStructure::UNKNOWN;
 	}
 }
 
-void AddCartoonModel::collectAtoms_(SecondaryStructure& ss)
-	throw()
+
+void AddCartoonModel::buildGraphicalRepresentation_(Position start, Position end, Position type)
 {
-	Size old_nr_splines = spline_vector_.size();
+	if (end == 0 || start > end) return;
+
+	if 			(type == (Position) SecondaryStructure::UNKNOWN + 1)
+	{
+		float backup_tube_radius = tube_radius_;
+		tube_radius_ = DNA_helix_radius_;
+		buildTube_(start, end);
+		tube_radius_ = backup_tube_radius;
+
+		if (draw_DNA_as_ladder_)
+		{
+			buildDNA_(start, end);
+		}
+		else
+		{
+			buildWatsonCrickModel_(start, end);
+		}
+	}
+	else if (type == (Position) SecondaryStructure::STRAND)
+	{
+		buildStrand_(start, end);
+	}
+	else if (type == (Position) SecondaryStructure::HELIX)
+	{
+		if (draw_ribbon_)
+		{
+			buildRibbon_(start, end);
+		}
+		else
+		{
+			buildHelix_(start, end);
+		}
+	}
+	else
+	{
+		List<GeometricObject*>::Iterator lit = geometric_objects_.end();
+		lit--;
+
+		buildTube_(start, end);
+
+		if (atoms_of_points_.size() < end + 1) return;
+	
+		// prevent problems for SS coloring
+		lit++;
+
+		for (Position p = 0; p < 2; p++)
+		{
+			if (lit == geometric_objects_.end()) return;
+			
+		 	(*lit)->setComposite(splines_[start +1].atom->getParent());
+			lit++;
+		}
+	}
+}
+
+
+// ===========================================================
+void AddCartoonModel::collectAtoms_(SecondaryStructure& ss)
+{
+	Size old_nr_splines = splines_.size();
 	ResidueIterator rit = ss.beginResidue();
 	AtomIterator ait;
 
@@ -144,7 +339,7 @@ void AddCartoonModel::collectAtoms_(SecondaryStructure& ss)
 		{
 			if (ait->getName() == "O5*")
 			{
- 				spline_vector_.push_back(SplinePoint((*ait).getPosition(), &*ait));
+ 				splines_.push_back(SplinePoint((*ait).getPosition(), &*ait));
 				break;
 			}
 		}
@@ -156,7 +351,7 @@ void AddCartoonModel::collectAtoms_(SecondaryStructure& ss)
 			{
 				if (ait->getName() == "P")
 				{
-					spline_vector_.push_back(SplinePoint((*ait).getPosition(), &*ait));
+					splines_.push_back(SplinePoint((*ait).getPosition(), &*ait));
 					break;
 				}
 			}
@@ -167,7 +362,7 @@ void AddCartoonModel::collectAtoms_(SecondaryStructure& ss)
 		{
 			if (ait->getName() == "O3*")
 			{
-				spline_vector_.push_back(SplinePoint((*ait).getPosition(), &*ait));
+				splines_.push_back(SplinePoint((*ait).getPosition(), &*ait));
 				break;
 			}
 		}
@@ -211,7 +406,7 @@ void AddCartoonModel::collectAtoms_(SecondaryStructure& ss)
 						sv = C->getPosition() + (nextN->getPosition() - C->getPosition()) * 0.5;
 					}
 
-					spline_vector_.push_back(SplinePoint(sv, C));	
+					splines_.push_back(SplinePoint(sv, C));	
 					break;
 				}
 			}
@@ -229,10 +424,10 @@ void AddCartoonModel::collectAtoms_(SecondaryStructure& ss)
 		}
 	}
 
-	if (spline_vector_.size() > old_nr_splines)
+	if (splines_.size() > old_nr_splines)
 	{
 		ss_to_spline_start_[&ss] = old_nr_splines;
-		ss_nr_splines_[&ss] = spline_vector_.size() - old_nr_splines;
+		ss_nr_splines_[&ss] = splines_.size() - old_nr_splines;
 	}
 	else
 	{ 
@@ -242,24 +437,58 @@ void AddCartoonModel::collectAtoms_(SecondaryStructure& ss)
 }
 
 
-void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
-	throw()
+// --------------------- HELIX ------------------------------------------------
+void AddCartoonModel::buildHelix_(Position first, Position last)
+{
+	const Atom* first_atom = splines_[first].atom;
+	const Atom*  last_atom = splines_[last].atom;
+
+	Vector3 normal = last_atom->getPosition() - first_atom->getPosition();
+
+	// calcluate slices for the helix cylinder according to the C-atoms
+	Vector3 last_pos = first_atom->getPosition();
+	Vector3 diff = (normal / (last - first));
+
+	for (Position p = first; p < last; p++)
+	{
+		Tube* tube = new Tube;
+		tube->setRadius(helix_radius_);
+		tube->setVertex1(last_pos);
+		last_pos += diff;
+		tube->setVertex2(last_pos);
+		tube->setComposite(splines_[p].atom);
+		geometric_objects_.push_back(tube);
+	}
+		
+	// add a disc at the beginning and the end of the cylinder to close it
+	Disc* disc = new Disc( Circle3(first_atom->getPosition(), -normal, helix_radius_));
+	disc->setComposite(first_atom);
+	geometric_objects_.push_back(disc);
+
+	disc = new Disc(Circle3(last_atom->getPosition(), normal, helix_radius_));
+	disc->setComposite(last_atom);
+	geometric_objects_.push_back(disc);
+}
+
+
+// --------------------- STRAND --------------------------------------------
+void AddCartoonModel::buildStrand_(Position first, Position last)
 {
 	// calculate the normals of the peptide bonds for all residues of the SecondaryStructure
 	vector<Vector3> 			peptide_normals;
-	ResidueIterator ri;
-	BALL_FOREACH_RESIDUE(ss, ri)
+	for (Position spline_pos = first; spline_pos < last; spline_pos++)
 	{
+		const Residue* residue = (const Residue*) splines_[spline_pos].atom->getParent();
 		// we have to find the following atoms:
-		Atom* 	 CA = 0;
-		Atom* 	  N = 0;
-		Atom*		  C = 0;
-		Atom* nextN = 0;
-		Atom*  	  O = 0;
+		const Atom* 	 CA = 0;
+		const Atom* 	  N = 0;
+		const Atom*		  C = 0;
+		const Atom* nextN = 0;
+		const Atom*  	  O = 0;
 
 		// find the CA of this residue
-		AtomIterator ai;
-		BALL_FOREACH_ATOM(*ri, ai)
+		AtomConstIterator ai;
+		BALL_FOREACH_ATOM(*residue, ai)
 		{
 			if (ai->getName() == "CA")
 			{
@@ -275,7 +504,7 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 		}
 
 		// now find the neighbouring atoms of the CA's: N + C
-		AtomBondIterator bi;
+		AtomBondConstIterator bi;
 		BALL_FOREACH_ATOM_BOND(*CA, bi)
 		{
 			Atom* partner = bi->getPartner(*CA);
@@ -323,7 +552,7 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 		// if we are at the last residue break
 		if (!nextN) 
 		{
-			if (!ri->isTerminal())
+			if (!residue->isTerminal())
 			{
 				Log.error() << "Could not find next N atom, aborting..." << std::endl;
 				return;
@@ -342,13 +571,15 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 			return;
 		}
 
-		peptide_normals.push_back(normal.normalize());
+		normal.normalize();
+		peptide_normals.push_back(normal);
 
 	} // iteration over all residues of secondary structure
 
-	// replace first and last peptide_normals, because they may differ too much
-	peptide_normals[peptide_normals.size() - 1] = peptide_normals[peptide_normals.size() - 2];
-	peptide_normals[0] = peptide_normals[1];
+
+	// abort if we have no normals
+	if (peptide_normals.size() == 0) return;
+
 
 	Matrix4x4 rotmat;
 	Angle angle_pi(M_PI);
@@ -364,51 +595,76 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 			peptide_normals[i + 1] = rotmat * peptide_normals[i + 1];
 		}
 	}
+
+	const Angle max_angle(15, false);
+
+	// an additional smoothing run...
+	for (Index i = 0; i < (Index) peptide_normals.size(); i++)
+	{
+		Angle diff(0, false);
+		Size nr = 0;
+		Vector3 median(peptide_normals[i]);
+
+		for (Index j = -2; j < 2; j++)
+		{
+			if (i + j < 0 || i + j + 1 >= (Index) peptide_normals.size()) continue;
+
+			diff += peptide_normals[i].getAngle(peptide_normals[i + j]);
+			median += peptide_normals[i + j];
+			nr++;
+		}
+
+		if (nr == 0) continue;
+
+		diff /= (float) nr;
+
+		if (diff > max_angle)
+		{
+			median /= (float) nr;
+			peptide_normals[i] = median;
+		}
+ 	}
 	
 	// an additional smoothing run...
-	for (Position i = 0; i < peptide_normals.size() - 1; i++)
+	for (Index i = 1; i < (Index) peptide_normals.size(); i++)
 	{
-		// To smooth the strand representation a bit, we iterate over all normal
-		// vectors and compute the angle in between them.
-		// Then we reduce the angle by an appropriate rotation to a third of the
-		// original angle.
-		const Vector3 rotaxis = (peptide_normals[i] % peptide_normals[i+1]);
-
-		if (rotaxis.getSquareLength() > 1e-3)
+		if (peptide_normals[i].getAngle(peptide_normals[i - 1]) > max_angle) 
 		{
-			const Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i+1])));
-			rotmat.rotate(Angle(1.0 / 3.0 * current) - current, rotaxis);
-			peptide_normals[i + 1] = rotmat * peptide_normals[i + 1];
+			peptide_normals[i] = peptide_normals[i - 1];
 		}
-	}
+ 	}
 
-	// start of spline_points_ of this SS
-	const Position start = ss_to_spline_start_[&ss] * interpolation_steps_;
 
-	// prevent problems if we had a Helix before the strand: draw the connection as tube
-	if (last_spline_point_ != -1)
-	{
-		buildGraphicalRepresentation_(last_spline_point_, start);
-	}
-	 
+	////////////////////////////////////////////
+	// now for the real thing: create the meshes
+	
+	// start of points_ of this SS
+	const Position start = last_build_ * interpolation_steps_;
+
 	// put first four points into the mesh (and first two triangles)
-	Vector3 right = spline_points_[start + 1] - spline_points_[start];
+	Vector3 right = points_[start + 1] - points_[start];
 	Vector3 normal = peptide_normals[0];
 
 	// maybe these cases should not happen, but they do...
-	if (!Maths::isZero(normal.getSquareLength())) normal.normalize();
+	if (!Maths::isZero( normal.getSquareLength())) normal.normalize();
 	if (!Maths::isZero( right.getSquareLength()))  right.normalize();
 
 	Vector3 perpendic = normal % right; // perpendicular to spline
 	Vector3 last_points[4];
 
-	last_points[0] = spline_points_[start] - (perpendic * arrow_width_/2.) - normal * arrow_height_/2.;
-	last_points[1] = last_points[0] + normal * arrow_height_;
-	last_points[2] = last_points[1] + perpendic * arrow_width_;
-	last_points[3] = last_points[2] - normal * arrow_height_;
+	last_points[0] = points_[start] - (perpendic * strand_width_/2.) - normal * strand_height_/2.;
+	last_points[1] = last_points[0] + normal * strand_height_;
+	last_points[2] = last_points[1] + perpendic * strand_width_;
+	last_points[3] = last_points[2] - normal * strand_height_;
 
 	Mesh* mesh = new Mesh;
-	mesh->setComposite(ss.getResidue(0));
+	mesh->setComposite(splines_[first].atom->getParent());
+
+	// prevent coloring problems, when coloring by SS
+	if (splines_.size() > first + 1)
+	{
+		mesh->setComposite(splines_[first + 1].atom->getParent());
+	}
 
 	vector<Vector3>& vertices = mesh->vertex;
 	vector<Vector3>& normals  = mesh->normal;
@@ -416,7 +672,7 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 	for (Position i = 0; i < 4; i++)
 	{
 		vertices.push_back(last_points[i]);
-		normals.push_back(right * -1);
+		normals.push_back(right * -1.);
 	}
 
 	Surface::Triangle t;
@@ -457,23 +713,25 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 	// iterate over all but the last amino acid (last amino acid becomes the arrow)
 	Position spline_point_nr = start;
 	Position res = 0;
-	const Position nr_res = ss_nr_splines_[&ss] - 2;
+	const Position nr_res = last - first - 1;
+	vector<char> nr_normals;
 	for (; res < nr_res; res++)
 	{
+		Size copy_start = 0;
 		if (res != 0) 
 		{
 			mesh = new Mesh();
 
-			if (spline_point_nr > atoms_of_spline_points_.size() - 1) 
+			if (spline_point_nr >= atoms_of_points_.size()) 
 			{
-				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << std::endl; 
+				BALLVIEW_DEBUG
 				break;
 			}
 
-			mesh->setComposite(atoms_of_spline_points_[spline_point_nr]->getParent());
+			mesh->setComposite(atoms_of_points_[spline_point_nr]->getParent());
 
 			// copy last 8 points from the old mesh
-			const Size copy_start = last_mesh->vertex.size() - 8;
+			copy_start = last_mesh->vertex.size() - 8;
 			for (Position p = 0; p < 8; p++)
 			{
 				mesh->vertex.push_back(last_mesh->vertex[copy_start + p]);
@@ -485,20 +743,32 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 		// iterate over the spline points between two amino acids
 		for (Position j = 0; j < interpolation_steps_; j++)
 		{
-			right  = spline_points_[spline_point_nr + 1] - spline_points_[spline_point_nr];
+			right  = points_[spline_point_nr + 1] - points_[spline_point_nr];
 			if (right.getSquareLength() == 0)
 			{
-				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << std::endl; 
+				BALLVIEW_DEBUG
 				spline_point_nr++;
 				continue;
 			}
 
-			normal =   peptide_normals[res    ] *(1 - j * 0.9 / 8.0) 
-							 + peptide_normals[res + 1] *     j * 0.9 / 8.0;
+			normal =   peptide_normals[res    ] *(1 - j * 0.9 / (interpolation_steps_ - 1)) 
+							 + peptide_normals[res + 1] *     j * 0.9 / (interpolation_steps_ - 1);
 
-			drawStrand_(spline_points_[spline_point_nr], normal, right, arrow_width_, 
-									last_vertices, *mesh);
+			drawStrand_(points_[spline_point_nr], normal, right, strand_width_, last_vertices, *mesh);
 			spline_point_nr ++;
+		}
+
+		// reduce normal difference between different meshes
+		if (last_mesh != 0)
+		{
+			for (Position p = 0; p < 8; p++)
+			{
+				Vector3& vo = last_mesh->normal[copy_start + p];
+				Vector3& vn = mesh->normal[p];
+				Vector3 v = vo + vn;
+				v /= 2.0;
+				vo = vn = v;
+			}
 		}
 
 		last_mesh = mesh;
@@ -506,210 +776,34 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 	}
 
 	// make sure atoms of arrow head are found for coloring
-	mesh->setComposite(atoms_of_spline_points_[spline_point_nr]->getParent()->getParent());
+	mesh->setComposite(atoms_of_points_[spline_point_nr]->getParent()->getParent());
 
 	// finally, we draw the arrow
-	for (Index j = -1; j <= 6; j++)
-	{
-		// interpolate the depth of the box
-		const float new_arrow_width = 2 * (1 - j * 0.95 / 6.0) * arrow_width_; 
-		
-		right  = spline_points_[spline_point_nr + 1] - spline_points_[spline_point_nr];
 
-		drawStrand_(spline_points_[spline_point_nr], normal, right, new_arrow_width, 
-								last_vertices, *mesh);
+	Vector3 arrow_dir = points_[spline_point_nr + 6] - points_[spline_point_nr - 1];
+
+	arrow_dir /= 7;
+
+	for (Index j = 0; j <= 7; j++)
+	{
+		Position x = spline_point_nr + j;
+		points_[x] = points_[x - 1] + arrow_dir;
+	}
+
+	float new_arrow_width = arrow_width_ + strand_width_;
+	float arrow_width_diff = new_arrow_width / 7;
+
+	for (Index j = 0; j < 8; j++)
+	{
+		right = points_[spline_point_nr + 1] - points_[spline_point_nr];
+
+		drawStrand_(points_[spline_point_nr], normal, right, new_arrow_width, last_vertices, *mesh);
 
 		spline_point_nr++;
+
+		// interpolate the depth of the box
+		new_arrow_width -= arrow_width_diff;
 	}
-}
-
-
-// ---------------------------------------------------------------------
-void AddCartoonModel::drawHelix_(SecondaryStructure& ss)
-	throw()
-{
-	Atom* first = 0;
-	Atom* last = 0;
-	List<const Atom*> catoms;
-	AtomIterator it;
-	BALL_FOREACH_ATOM(ss, it)
-	{
-		if (it->getName()=="C")
-		{
-			if (first == 0) first = &*it;	
-			last = &*it;
-			catoms.push_back(&*it);
-		}
-	}
-
-	if (catoms.size() == 0) return;
-
-	List<const Atom*>::ConstIterator lit = catoms.begin();
-	Vector3 normal = last->getPosition() - first->getPosition();
-
-	// calcluate slices for the helix cylinder according to the C-atoms
-	Vector3 last_pos = first->getPosition();
-	Vector3 diff = (normal / (catoms.size() ));
-
-	for (Position p = 0; p < catoms.size(); p++)
-	{
-		Tube* tube = new Tube;
-		tube->setRadius(helix_radius_);
-		tube->setVertex1(last_pos);
-		last_pos += diff;
-		tube->setVertex2(last_pos);
-		tube->setComposite(*lit);
-		geometric_objects_.push_back(tube);
-		lit++;
-	}
-		
-	// add a disc at the beginning and the end of the cylinder to close it
-	Disc* disc = new Disc( Circle3(first->getPosition(), -normal, helix_radius_));
-	disc->setComposite(first);
-	geometric_objects_.push_back(disc);
-
-	disc = new Disc(Circle3(last_pos, normal, helix_radius_));
-	disc->setComposite(last);
-	geometric_objects_.push_back(disc);
-}
-
-
-// -------------------------------------------------------------------	
-Processor::Result AddCartoonModel::operator() (Composite& composite)
-{
-	// speedup, save some RTTI calls
-	if (RTTI::isKindOf<Atom>(composite)) return Processor::CONTINUE;
-
-	if (RTTI::isKindOf<Protein>(composite))
-	{
-		calculateComplementaryBases_(composite);
-		return Processor::CONTINUE;
-	}
-
-	if (RTTI::isKindOf<Chain>(composite))
-	{
-		collectAtoms_(*dynamic_cast<Chain*>(&composite));
-		computeSpline_();
-		return Processor::CONTINUE;
-	}
-
-	// if we have a chain without SecondaryStructures, build a Backbone model for it
-	if (no_ss_)
-	{
-		const Residue* const residue = dynamic_cast<Residue*>(&composite);
-		if (residue == 0) return Processor::CONTINUE;
-
-		if (checkBuildBackboneNow_(*residue))
-		{
-			buildGraphicalRepresentation_();
-			clear_();
-		}
-
-		last_parent_ = residue->getParent()->getParent();
-		return Processor::CONTINUE;
-	}
-
-	if (!RTTI::isKindOf<SecondaryStructure>(composite))  return Processor::CONTINUE;
-	SecondaryStructure& ss = *RTTI::castTo<SecondaryStructure>(composite);
-
-	if (ss.countResidues() == 0) return Processor::CONTINUE;
-
-	// if called for a SS and no calculation done for the parent chain
-	if (last_chain_ != ss.getParent())
-	{
-		clear_();
-		collectAtoms_(ss);
-		computeSpline_();
-	}
-
-	if (spline_vector_.size() == 0) return Processor::CONTINUE;
-
-	// lets see, if we have a valid spline
-	if (!ss_to_spline_start_.has(&ss) ||
-			 ss_nr_splines_[&ss] == 0     ||
-			 spline_points_.size() != (spline_vector_.size() - 1) * interpolation_steps_)
-	{
-#ifdef BALL_VIEW_DEBUG
-		Log.error() << "Invalid spline for with " << ss_nr_splines_[&ss] 
-			          << " nr of splines for SS; " << spline_vector_.size() 
-								<< " spline points and " << spline_points_.size() 
-								<< " interpolated points in" 
-								<< __FILE__ << " " << __LINE__ << std::endl;
-#endif
-	}
-
-	else if ((ss.getType() == SecondaryStructure::STRAND) && (ss.countResidues() > 3))
-	{
-		drawStrand_(ss);
-		last_spline_point_ = (ss_to_spline_start_[&ss] + ss_nr_splines_[&ss] - 1) * interpolation_steps_ - 1;
-	}
-
-	else if (ss.getType() == SecondaryStructure::HELIX)
-	{
-		Size start = ss_to_spline_start_[&ss];
-		if (draw_ribbon_)
-		{
-			Size end = start + ss_nr_splines_[&ss];
-			drawRibbon_(start * interpolation_steps_, 
-								  end 	* interpolation_steps_);
-			last_spline_point_ = end * interpolation_steps_ - 2;
-		}
-		else
-		{
-			buildGraphicalRepresentation_(last_spline_point_, (start	+ 1)* interpolation_steps_);
-
-			drawHelix_(ss);
-			last_spline_point_ = (start + ss_nr_splines_[&ss] - 1) * interpolation_steps_ - 1;
-		}
-	}
-	else
-	{
-		// is this a chain with nucleic acids?
-		const String name = ss.getResidue(0)->getName();
-		if (name.size() == 1 &&
-				(name == "A" || name == "C" || name == "G" || name == "T" || name == "U"))
-		{
-			drawDNA_(ss);
-		}
-		else
-		{
- 			drawTube_(ss) ;
-		}
-	}
-
-	return Processor::CONTINUE;
-}
-
-
-// -----------------------------------------------------------------
-void AddCartoonModel::drawTube_(SecondaryStructure& ss)
-	throw()
-{
-	Position start = ss_to_spline_start_[&ss];
-	buildGraphicalRepresentation_(start 												* interpolation_steps_, 
-																(start + ss_nr_splines_[&ss])	* interpolation_steps_);
-}
-
-
-void AddCartoonModel::dump(std::ostream& s, Size depth) const
-	throw()
-{
-	BALL_DUMP_STREAM_PREFIX(s);
-	
-	BALL_DUMP_DEPTH(s, depth);
-	BALL_DUMP_HEADER(s, this, this);
-
-	AddBackboneModel::dump(s, depth + 1);
-
-	BALL_DUMP_STREAM_SUFFIX(s);
-}
-
-
-void AddCartoonModel::computeSpline_()
-{
-	if (spline_vector_.size() == 0) return;
-	calculateTangentialVectors_();
-	createSplinePath_();
 }
 
 
@@ -720,12 +814,24 @@ void AddCartoonModel::insertTriangle_(Position v1, Position v2, Position v3, Mes
 	t.v2 = v2;
 	t.v3 = v3;
 	mesh.triangle.push_back(t);
+
+	Vector3 ab = mesh.vertex[v2] - mesh.vertex[v1];
+	Vector3 ac = mesh.vertex[v3] - mesh.vertex[v1];
+	Vector3 n = ab % ac;
+	if (Maths::isZero(n.getSquareLength())) return;
+
+	n.normalize();
+
+	mesh.normal[v1] += n;
+	mesh.normal[v2] += n;
+	mesh.normal[v3] += n;
 }
+
 
 void AddCartoonModel::drawStrand_(const Vector3& start,
 																	Vector3& normal,
 																	Vector3& right,
-																	float arrow_width,
+																	float strand_width,
 																	Position& last_vertices,
 																	Mesh& mesh)
 {
@@ -740,11 +846,15 @@ void AddCartoonModel::drawStrand_(const Vector3& start,
 	if (!Maths::isZero(perpendic.getSquareLength())) perpendic.normalize();
 
 	Vector3 current_points[4];
-	current_points[0] = start - (perpendic * arrow_width   / 2.0) 
-														- (normal    * arrow_height_ / 2.0);
-	current_points[1] = current_points[0] + normal * arrow_height_;
-	current_points[2] = current_points[1] + perpendic * arrow_width;
-	current_points[3] = current_points[2] - normal * arrow_height_;
+	// lower left
+	current_points[0] = start - (perpendic * strand_width  / 2.0) 
+														- (normal    * strand_height_ / 2.0);
+	// upper left
+	current_points[1] = current_points[0] + normal * strand_height_;
+	// upper right
+	current_points[2] = current_points[1] + perpendic * strand_width;
+	// lower right
+	current_points[3] = current_points[2] - normal * strand_height_;
 
 	// put the next 4 points and 8 triangles into the mesh
 	for (Position p = 0; p < 4; p++)
@@ -753,131 +863,221 @@ void AddCartoonModel::drawStrand_(const Vector3& start,
 		vertices->push_back(current_points[p]);
 	}
 
-	normals->push_back(perpendic);
+	// normal for up and down
+	// perpendic for sides
+	normals->push_back(-perpendic);
 	normals->push_back(-normal);
+	normals->push_back(-perpendic);
+	normals->push_back(normal);
 
 	normals->push_back(perpendic);
-	normals->push_back(-normal);
-
-	normals->push_back(perpendic);
-	normals->push_back(-normal);
-
+	normals->push_back(normal);
 	normals->push_back(perpendic);
 	normals->push_back(-normal);
 
 	// one side band
-	insertTriangle_(last_vertices    , last_vertices +  2, last_vertices + 10, mesh);
-	insertTriangle_(last_vertices    , last_vertices + 10, last_vertices +  8, mesh);
+	insertTriangle_(last_vertices +2, last_vertices, last_vertices + 10, mesh);
+	insertTriangle_(last_vertices +10, last_vertices, last_vertices +  8, mesh);
 	
 	// other side band
 	insertTriangle_(last_vertices + 4, last_vertices + 12, last_vertices + 14, mesh);
 	insertTriangle_(last_vertices + 4, last_vertices + 14, last_vertices +  6, mesh);
 
 	// "upper" band
-	insertTriangle_(last_vertices + 3, last_vertices +  5, last_vertices + 13, mesh);
-	insertTriangle_(last_vertices + 3, last_vertices + 13, last_vertices + 11, mesh);
-	
+	insertTriangle_(last_vertices + 5, last_vertices +  3, last_vertices + 13, mesh);
+	insertTriangle_(last_vertices + 13, last_vertices + 3, last_vertices + 11, mesh);
+
 	// "lower" band
 	insertTriangle_(last_vertices + 1, last_vertices +  7, last_vertices + 15, mesh);
-	insertTriangle_(last_vertices + 1, last_vertices +  15, last_vertices + 9, mesh);
+ 	insertTriangle_(last_vertices + 15, last_vertices +  9, last_vertices + 1, mesh);
 
 	last_vertices+=8;
 }
 
 
 // draw a helix as ribbon model
-void AddCartoonModel::drawRibbon_(Size start, Size end)
-	throw()
+void AddCartoonModel::buildRibbon_(Size start, Size end)
 {
-	// sanity tests:
-	if (spline_points_.size() == 0) return;
-	if (spline_points_.size() != atoms_of_spline_points_.size())
+	start *= interpolation_steps_;
+	end   *= interpolation_steps_;
+
+	////////////////////////////////////////////
+	/// calculate band direction and smooth it
+	////////////////////////////////////////////
+	
+	/////////////////////////////////////////
+	// first calculate a line of points in the middle of the helix
+	vector<Vector3> middle_points;
+	middle_points.resize(end);
+
+	const Index nr_steps = (Size)(interpolation_steps_ * 3.0);
+
+	for (Index p = (Index) start; p < (Index) end; p++)
 	{
-		Log.error() << "Error in " << __FILE__ << " " << __LINE__ << std::endl;
-		return;
+		Size nr = 0;
+		for (Index i = -nr_steps; i < nr_steps; i++)
+		{
+			if (p + i < (Index) 0 || p + i + 1>= (Index) points_.size())
+			{
+				continue;
+			}
+
+			middle_points[p] += points_[((Index)p) + i];
+			nr++;
+		}
+
+		middle_points[p] /= (float) nr;
+
+		/*
+		// for debugging:
+		Sphere* s = new Sphere;
+		s->setPosition(middle_points[p]);
+		s->setRadius(0.2);
+		geometric_objects_.push_back(s);
+		*/
 	}
 
-	if (start >= atoms_of_spline_points_.size())
+	/////////////////////////////////////////
+	// ok, now the bands directions
+	vector<Vector3> band_dirs;
+	band_dirs.resize(end);
+
+	for (Position p = start; p < end - 1; p++)
 	{
-		Log.error() << "Error in " << __FILE__ << " " << __LINE__ << std::endl;
-		return;
+		Vector3 dir = points_[p + 1] - points_[p];
+
+		Vector3 normal = (points_[p] - middle_points[p]) % dir;
+
+		if (Maths::isZero(normal.getSquareLength())) 
+		{
+			band_dirs[p] = band_dirs[p - 1];
+			continue;
+		}
+		normal.normalize();
+
+		band_dirs[p] = normal;
 	}
 
-	if (end >= atoms_of_spline_points_.size())
+	// smooth all band direction vectors
+	Angle max_angle(2, false);
+
+
+	// catch problems when no angle can be calculated:
+	try
 	{
-		end = atoms_of_spline_points_.size() - 1;
+		for (Index p = (Index)(start + 1); p < ((Index) end) - 1; p++)
+		{
+			if (band_dirs[p].getAngle(band_dirs[p-1]) < max_angle) continue;
+
+			Size nr = 0;
+			for (Index i = -nr_steps; i < nr_steps; i++)
+			{
+				if (p + i < (Index) start || p + i + 1>= (Index) end)
+				{
+					continue;
+				}
+
+				band_dirs[p] += band_dirs[((Index)p) + i];
+				nr++;
+			}
+
+			if (nr == 0) 
+			{
+				continue;
+			}
+
+
+			band_dirs[p] /= (float) nr;
+
+			if (Maths::isZero(band_dirs[p].getSquareLength())) 
+			{
+				band_dirs[p] = band_dirs[p - 1];
+				continue;
+			}
+
+			band_dirs[p].normalize();
+		}
+
+		
+		// one extra smooth run for first 15 band directions
+		for (Index p = (Index)(start + 15); p >= ((Index) start); p--)
+		{
+			if (band_dirs[p].getAngle(band_dirs[p+1]) < max_angle) continue;
+
+			Size nr = 0;
+			for (Index i = -nr_steps; i < nr_steps; i++)
+			{
+				if (p + i < (Index) start || p + i + 1>= (Index) end)
+				{
+					continue;
+				}
+
+				band_dirs[p] += band_dirs[((Index)p) + i];
+				nr++;
+			}
+
+			if (nr == 0) 
+			{
+				continue;
+			}
+
+			band_dirs[p] /= (float) nr;
+
+			if (Maths::isZero(band_dirs[p].getSquareLength()))
+			{
+				band_dirs[p] = band_dirs[p - 1];
+				continue;
+			}
+
+			band_dirs[p].normalize();
+		}
 	}
-
-
-	if (last_spline_point_ != -1)
+	catch(...)
 	{
-		buildGraphicalRepresentation_(last_spline_point_, start);
 	}
+	
+	middle_points.clear();
 
-	if (end == 0) end = spline_points_.size();
-
-	// overall direction of the helix
-	const Vector3 helix_dir((spline_points_[end] - spline_points_[start]).normalize());
-
+	////////////////////////////////////////////////////////////
+	// calculate some needed values
+	////////////////////////////////////////////////////////////
+	
 	// distance difference vector for growing/shrinking of helix at start/end
-	const Vector3 helix_step = helix_dir * ribbon_width_ / 12;
+	float helix_step = ribbon_width_ / 12;
 
-	// distance vector changes dynamicaly later by helix_step
-	Vector3 tube_diff;
+	// distance between two bands changes dynamicaly later by helix_step
+	float tube_diff = 0;
 	
 	// calculate the number of slides for the circles and the angle in between them
 	Size slides = (Size)(8 + drawing_precision_ * 4);
 	Angle slides_angle = Angle(360.0 / slides, false);
 
-	// direction vector of the two current spline points
-	Vector3 dir;
-	Vector3 last_point(spline_points_[start]);
+	Vector3 last_point(points_[start]);
+	
+	// calculate first direction vector
+	Vector3 dir_new(points_[start + 1] - points_[start]);
 
-	// prevent problems if last point is the same as the start point
-	while (true)
-	{
-		dir = spline_points_[start] - last_point;
-		if (Maths::isZero(dir.getSquareLength()))
-		{
-			start++;
-		}
-		else
-		{
-			break;
-		}
-	}
+	// calculate vector between two bands 
+	Vector3 band_diff = dir_new % band_dirs[start];
 
-	if (start >= atoms_of_spline_points_.size()) return;
-			
-	////////////////////////////////////////////////////////////
-	// calculate normal vector r to direction vector dir, with length of radius
-	////////////////////////////////////////////////////////////
-	Vector3 n = Vector3(0,1,0);
-	Vector3 r = dir % n;
-	if (Maths::isZero(r.getSquareLength())) 
-	{ 
-		r = dir % n;
-		if (Maths::isZero(r.getSquareLength())) 
-		{
-			n = Vector3(0,0,1);
-			r = dir % n;
-		}
-	}
-	r.normalize();
-	r *= ribbon_radius_;
+	if (Maths::isZero(band_diff.getSquareLength())) band_diff = getNormal(dir_new);
+
+	band_diff.normalize();
+	band_diff *= (ribbon_width_ / 2.0);
 
 	////////////////////////////////////////////////////////////
 	// initialise a first set of points in a circle around the start position
 	////////////////////////////////////////////////////////////
 	const Position middle = (Position)(slides / 2.0);
+	Vector3 x = band_diff *= ribbon_radius_;
+	
 	vector<Vector3> new_points;
 	new_points.resize(slides);
-	Vector3 x = r;
 	new_points[0] = x;
 	new_points[middle] = -x;
 
 	Matrix4x4 m;
-	m.setRotation(slides_angle, n % r);
+	m.setRotation(slides_angle, dir_new);
 	// second half of points can be calculated by negating first half
 	for (Position i= 1; i < middle; i++)
 	{
@@ -893,75 +1093,113 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 	Mesh* mesh1 = new Mesh(); // the two tubes
 	Mesh* mesh2 = new Mesh(); // connection between tubes 1
 	Mesh* mesh3 = new Mesh(); // connection between tubes 2
-	if (atoms_of_spline_points_[start] != 0)
+
+	Position astart = start;
+	if (atoms_of_points_.size() > start + 1)
 	{
-		mesh1->setComposite(atoms_of_spline_points_[start]->getParent());
-		mesh2->setComposite(atoms_of_spline_points_[start]->getParent());
+		astart += interpolation_steps_;
+	}
+
+	if (atoms_of_points_[start] != 0)
+	{
+		mesh1->setComposite(atoms_of_points_[start]->getParent());
+ 		mesh2->setComposite(atoms_of_points_[start]->getParent());
+
 		if (!use_two_colors_)
 		{
-			mesh3->setComposite(atoms_of_spline_points_[start]->getParent());
+			mesh3->setComposite(atoms_of_points_[start]->getParent());
 		}
 		else
 		{
 			mesh3->setComposite(&composite_to_be_ignored_for_colorprocessors_);
 		}
 	}
-	geometric_objects_.push_back(mesh1);
-	geometric_objects_.push_back(mesh2);
+
+ 	geometric_objects_.push_back(mesh1);
+ 	geometric_objects_.push_back(mesh2);
 	geometric_objects_.push_back(mesh3);
 
-	// distance vector between the two connections
-	Vector3 diff = r.normalize() * 0.1;
+	// insert connection between tubes
+	mesh2->vertex.push_back(last_point + band_diff);
+	mesh2->vertex.push_back(last_point + band_diff);
+	mesh2->normal.push_back(band_diff);
+	mesh2->normal.push_back(band_diff);
 	
 	// insert connection between tubes
-	mesh2->vertex.push_back(last_point + tube_diff + diff);
-	mesh2->vertex.push_back(last_point - tube_diff + diff);
-	Vector3 vn(-(dir % helix_dir));
-	mesh2->normal.push_back(vn);
-	mesh2->normal.push_back(vn);
-	
-	// insert connection between tubes
-	mesh3->vertex.push_back(last_point + tube_diff - diff);
-	mesh3->vertex.push_back(last_point - tube_diff - diff);
-	mesh3->normal.push_back(-vn);
-	mesh3->normal.push_back(-vn);
-
+	mesh3->vertex.push_back(last_point - band_diff);
+	mesh3->vertex.push_back(last_point - band_diff);
+	mesh3->normal.push_back(-band_diff);
+	mesh3->normal.push_back(-band_diff);
 
 	for (Position p = 0; p < slides; p++)
 	{
-		mesh1->vertex.push_back(last_point + tube_diff + new_points[p]);
-		mesh1->vertex.push_back(last_point - tube_diff + new_points[p]);
+		mesh1->vertex.push_back(last_point + new_points[p]);
+		mesh1->vertex.push_back(last_point + new_points[p]);
 		mesh1->normal.push_back(new_points[p]);
 		mesh1->normal.push_back(new_points[p]);
 	}
 	
 	// same data structures for faster access
 	Mesh::Triangle t;
-	Size s_old = 0;  // start position of the last points of the mesh1 vertices
+	
+	// start position of the last points of the mesh 1 and 2 vertices
+	Size s_old = 0;  
 
 	//------------------------------------------------------>
-	// iterate over all spline_points_
+	// iterate over all points_
 	//------------------------------------------------------>
 	for (Position p = start; p < end - 1; p++)
 	{
-		// faster access to the current spline point
-		const Vector3 point = spline_points_[p];
+		////////////////////////////////////////////////////////////
+		// first calculate all needed values:
+		////////////////////////////////////////////////////////////
 		
-		// new direction vector: new point - last point
-		const Vector3 dir_new = point - last_point;
+		// faster access to the current spline point
+		const Vector3 point = points_[p];
+		
+		// new direction vector
+		dir_new = point - last_point;
 
-		// new normal vector
-		Vector3 r_new = r - (
-							 (dir_new.x * r.x       + dir_new.y *       r.y + dir_new.z *       r.z)  /
-							 (dir_new.x * dir_new.x + dir_new.y * dir_new.y + dir_new.z * dir_new.z) 
-							 * dir_new);
-		r_new.normalize();
-		r_new *= ribbon_radius_;
+		// distance between the two tubes
+		if (p < start + 10)
+		{
+			tube_diff += helix_step;
+		}
+		else if (p > end - 11)
+		{
+			tube_diff -= helix_step;
+		}
 
+		// vector to span a band
+		const Vector3 band_dir = band_dirs[p] * tube_diff;
+
+		// normal vector in "height" direction
+		band_diff = band_dir % dir_new;
+
+		if (Maths::isZero(dir_new.getSquareLength()) ||
+		    Maths::isZero(band_diff.getSquareLength()))
+		{
+			last_point = point;
+			continue;
+		}
+	
+		// distance between upper and lower side of bands
+		band_diff.normalize();
+		band_diff *= -ribbon_radius_;
+
+		/**
+		// for debugging:
+		Line* line = new Line();
+		line->setVertex1(point);
+		line->setVertex2(point + r_new);
+		geometric_objects_.push_back(line);
+		*/
+	
 		////////////////////////////////////////////////////////////
 		// rotate all points of the circle according to new normal
 		m.setRotation(slides_angle, dir_new);
-		x = r_new;
+
+		Vector3 x = band_diff ;
 		new_points[0] = x;
 
 		// second half of points can be calculated by negating first half
@@ -973,11 +1211,24 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 			new_points[i + middle] = -x;
 		}
 
+		// prevent problems with SS coloring
+		if (p <= start + interpolation_steps_ / 2 &&
+				astart < atoms_of_points_.size())
+		{
+			const Composite* c = atoms_of_points_[astart]->getParent();
+			mesh1->setComposite(c);
+			mesh2->setComposite(c);
+			if (!use_two_colors_)
+			{
+				mesh3->setComposite(c);
+			}
+		}
+
 		////////////////////////////////////////////////////////////
 		// create two new meshes if we have a different residue
 		////////////////////////////////////////////////////////////
-		if (atoms_of_spline_points_[p] != 0 &&
-				mesh1->getComposite() != atoms_of_spline_points_[p]->getParent())
+		if (atoms_of_points_[p] != 0 &&
+				mesh1->getComposite() != atoms_of_points_[p]->getParent())
 		{
 			const Mesh* old_mesh1 = mesh1;
 			mesh1 = new Mesh();
@@ -1010,13 +1261,13 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 			geometric_objects_.push_back(mesh2);
 			geometric_objects_.push_back(mesh3);
 
-			if (atoms_of_spline_points_[p] != 0)
+			if (atoms_of_points_[p] != 0)
 			{
-				mesh1->setComposite(atoms_of_spline_points_[p]->getParent());
-				mesh2->setComposite(atoms_of_spline_points_[p]->getParent());
+				mesh1->setComposite(atoms_of_points_[p]->getParent());
+				mesh2->setComposite(atoms_of_points_[p]->getParent());
 				if (!use_two_colors_)
 				{
-					mesh3->setComposite(atoms_of_spline_points_[p]->getParent());
+					mesh3->setComposite(atoms_of_points_[p]->getParent());
 				}
 				else
 				{
@@ -1030,24 +1281,12 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		////////////////////////////////////////////////////////////
 		// insert connection between tubes
 		////////////////////////////////////////////////////////////
-		if (p < start + 10)
-		{
-			tube_diff += helix_step;
-		}
-		else if (p > end - 12)
-		{
-			tube_diff -= helix_step;
-		}
-
-		// distance between the two bands
 
 		// first band
-		Vector3 vn(-(dir_new % helix_dir));
-		Vector3 diff = vn.normalize() * -0.1;
-		mesh2->vertex.push_back(point + tube_diff + diff);
-		mesh2->normal.push_back(vn);
-		mesh2->vertex.push_back(point - tube_diff + diff);
-		mesh2->normal.push_back(vn);
+		mesh2->vertex.push_back(point + band_dir + band_diff);
+		mesh2->normal.push_back(-band_diff);
+		mesh2->vertex.push_back(point - band_dir + band_diff);
+		mesh2->normal.push_back(-band_diff);
 
 		const Size sn = mesh2->vertex.size() - 1;
 		t.v1 = sn - 1;
@@ -1061,10 +1300,10 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		mesh2->triangle.push_back(t);
 		
 		// second band
-		mesh3->vertex.push_back(point + tube_diff - diff);
-		mesh3->normal.push_back(vn);
-		mesh3->vertex.push_back(point - tube_diff - diff);
-		mesh3->normal.push_back(vn);
+		mesh3->vertex.push_back(point + band_dir - band_diff);
+		mesh3->normal.push_back(-band_diff);
+		mesh3->vertex.push_back(point - band_dir - band_diff);
+		mesh3->normal.push_back(-band_diff);
 
 		t.v1 = sn - 1;
 		t.v2 = sn;
@@ -1075,7 +1314,6 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		t.v2 = sn - 2;
 		t.v3 = sn - 3;
 		mesh3->triangle.push_back(t);
-
 
 		////////////////////////////////////////////////////////////
 		// insert the points of the two new circles
@@ -1088,7 +1326,7 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		//------------------------------------------------------>
 		for (Position point_pos = 0; point_pos < slides ; point_pos++)
 		{
-			mesh1->vertex.push_back(point + tube_diff + new_points[point_pos]);
+			mesh1->vertex.push_back(point + band_dir + new_points[point_pos]);
 			mesh1->normal.push_back(new_points[point_pos]);
 
 			t.v1 = s_old;			// last lower
@@ -1104,7 +1342,7 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 			s_old++;
 			s_new++;
 
-			mesh1->vertex.push_back(point - tube_diff + new_points[point_pos]);
+			mesh1->vertex.push_back(point - band_dir + new_points[point_pos]);
 			mesh1->normal.push_back(new_points[point_pos]);
 
 			t.v1 = s_old;			// last lower
@@ -1121,7 +1359,6 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 			s_new++;
 		}
 
-		r = r_new;
 		last_point = point;
 	}
 }
@@ -1144,6 +1381,7 @@ void AddCartoonModel::calculateComplementaryBases_(const Composite& composite)
 				((*rit).getName() != "A" &&
 				 (*rit).getName() != "C" &&
 				 (*rit).getName() != "G" &&
+				 (*rit).getName() != "U" &&
 				 (*rit).getName() != "T"))
 		{
 			continue;
@@ -1176,7 +1414,7 @@ void AddCartoonModel::calculateComplementaryBases_(const Composite& composite)
 		for (; rit2 != chain2_residues.end(); rit2++)
 		{
 			if (((*rit1).getName() == "A" && 
-				 ((**rit2).getName() != "T" || (**rit2).getName() != "U")) ||
+				 ((**rit2).getName() != "T" && (**rit2).getName() != "U")) ||
 					((*rit1).getName() == "C" && (**rit2).getName() != "G") ||
 					((*rit1).getName() == "G" && (**rit2).getName() != "C") ||
 					((*rit1).getName() == "T" && (**rit2).getName() != "A") ||
@@ -1201,8 +1439,12 @@ void AddCartoonModel::calculateComplementaryBases_(const Composite& composite)
 			complementary_bases_[found_partner]  = &*rit1;
 			chain2_residues.erase(found_partner);
 		}
+		else
+		{
+		}
 	}
 }
+
 
 void AddCartoonModel::createTriangle_(Mesh& mesh, const Atom& a1, const Atom& a2, const Atom& a3,
 																									const Atom* sa1, const Atom* sa2, const Atom* sa3)
@@ -1219,7 +1461,9 @@ void AddCartoonModel::createTriangle_(Mesh& mesh, const Atom& a1, const Atom& a2
 	Vector3 v1 = p1 - p2;
 	Vector3 v2 = p3 - p2;
 	Vector3 normal = v1 % v2;
-	normal.normalize();
+
+	if (!Maths::isZero(normal.getSquareLength())) normal.normalize();
+
 	normal *= -DNA_base_radius_;
 
 	vertices.push_back(p1 + normal);
@@ -1296,10 +1540,12 @@ void AddCartoonModel::createTriangle_(Mesh& mesh, const Atom& a1, const Atom& a2
 }
 
 
-void AddCartoonModel::drawWatsonCrickModel_(const SecondaryStructure& ss)
-	throw()
+void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 {
-	vector<Vector3>::iterator old_spline_point = spline_points_.begin();
+	SecondaryStructure dummy_ss;
+	const SecondaryStructure& ss = *splines_[first].atom->getAncestor(dummy_ss);
+
+	vector<Vector3>::iterator old_spline_point = points_.begin();
 	Position nr_of_residues = ss.countResidues();
 	for (Position pos = 0; pos < nr_of_residues; pos++)
 	{
@@ -1308,9 +1554,8 @@ void AddCartoonModel::drawWatsonCrickModel_(const SecondaryStructure& ss)
 		mesh->setComposite(r);
 		geometric_objects_.push_back(mesh);
 
-		Vector3 connection_point;
-		Atom* atoms[9];
-		for (Position p = 0; p < 9; p++) atoms[p] = 0;
+		Atom* connection_atom = 0;
+		Atom* atoms[11];
 
 		vector<Atom*> hbond_atoms;
 
@@ -1333,7 +1578,7 @@ void AddCartoonModel::drawWatsonCrickModel_(const SecondaryStructure& ss)
 				hbond_atoms.push_back(atoms[10]);
 			}
 
-			connection_point = atoms[0]->getPosition();
+			connection_atom = atoms[0];
 			createTriangle_(*mesh, *atoms[1], *atoms[0], *atoms[8], atoms[1], atoms[0], atoms[8]); 	// C4,N9,C8
 			createTriangle_(*mesh, *atoms[6], *atoms[1], *atoms[8], 0, 0, 0); 										 	// C5,C4,C8
 			createTriangle_(*mesh, *atoms[6], *atoms[7], *atoms[8], atoms[6], atoms[7], atoms[8]); 	// C5,N7,C8
@@ -1354,7 +1599,7 @@ void AddCartoonModel::drawWatsonCrickModel_(const SecondaryStructure& ss)
 			String atom_names[9] = {"N1", "C2", "N3", "C4", "C5", "C6", "N4", "O2", ""};
 			if (!assignNucleotideAtoms_(*r, 8, atom_names, atoms)) continue;
 
-			connection_point = atoms[0]->getPosition();
+			connection_atom = atoms[0];
 			createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[3], atoms[1], atoms[2], atoms[3]); 	// C2,N3,C4
 			createTriangle_(*mesh, *atoms[0], *atoms[1], *atoms[3], atoms[0], atoms[1], 0); 			  // N1,C2,C4
 			createTriangle_(*mesh, *atoms[0], *atoms[3], *atoms[4], atoms[3], atoms[4], 0); 				// N1,C4,C5
@@ -1369,7 +1614,7 @@ void AddCartoonModel::drawWatsonCrickModel_(const SecondaryStructure& ss)
 			String atom_names[9] = {"C2", "N3", "C4", "C5", "C6", "N1", "O4", "", ""};
 			if (!assignNucleotideAtoms_(*r, 7, atom_names, atoms)) continue;
 
-			connection_point = atoms[5]->getPosition();
+			connection_atom = atoms[5];
 			createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[3], atoms[1], atoms[2], atoms[3]); 	// N3,C4,C5
 			createTriangle_(*mesh, *atoms[0], *atoms[1], *atoms[3], atoms[0], atoms[1], 0); 			  // C2,N3,C5
 			createTriangle_(*mesh, *atoms[0], *atoms[3], *atoms[4], atoms[3], atoms[4], 0); 				// C2,C5,C6
@@ -1383,7 +1628,7 @@ void AddCartoonModel::drawWatsonCrickModel_(const SecondaryStructure& ss)
 			String atom_names[9] = {"C2", "N3", "C4", "C5", "C6", "N1", "O4", "O2", ""};
 			if (!assignNucleotideAtoms_(*r, 7, atom_names, atoms)) continue;
 
-			connection_point = atoms[5]->getPosition();
+			connection_atom = atoms[5];
 			createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[3], atoms[1], atoms[2], atoms[3]); 	// N3,C4,C5
 			createTriangle_(*mesh, *atoms[0], *atoms[1], *atoms[3], atoms[0], atoms[1], 0); 			  // C2,N3,C5
 			createTriangle_(*mesh, *atoms[0], *atoms[3], *atoms[4], atoms[3], atoms[4], 0); 				// C2,C5,C6
@@ -1397,36 +1642,147 @@ void AddCartoonModel::drawWatsonCrickModel_(const SecondaryStructure& ss)
 			continue;
 		}
 
+		
 		// --------------------------------------------
-		// draw connection to backbone
+		// draw ribose
 		// --------------------------------------------
-		float distance = 256;
-		vector<Vector3>::iterator sit = old_spline_point;
-		for (; sit != spline_points_.end(); sit++)
+
+		String atom_names[9] = {"C1*", "C2*", "C3*", "C4*", "O4*", "", "", "", ""};
+		if (!assignNucleotideAtoms_(*r, 5, atom_names, atoms)) continue;
+
+		atoms[5] = atoms[0];
+
+		// calculate middle point
+		Vector3 middle;
+		
+		for (Position p = 0; p < 5; p++)
 		{
-			float new_distance = ((*sit) - connection_point).getSquareLength();
+			middle += atoms[p]->getPosition();
+		}
+
+		middle /= 5.0;
+		
+		/// create an array with the position of the pentagram
+		Vector3 pos[6];
+		pos[2] = atoms[2]->getPosition();
+		pos[3] = atoms[3]->getPosition();
+
+		Vector3 c3_c4 = atoms[3]->getPosition() - atoms[2]->getPosition();
+		
+		Vector3 axis((atoms[2]->getPosition() - middle) % c3_c4);
+
+		Angle angle = Angle(72.0, false);
+		Matrix4x4 m1;
+		m1.setRotation(angle, axis);
+
+		Matrix4x4 m2;
+		m2.setRotation(-angle, axis);
+
+		// calculate Position of C2 point
+		Vector3 c3_c2 = -(m2 * c3_c4);
+
+		pos[1] = atoms[2]->getPosition() + c3_c2;
+
+		// calculate Position of O4 point
+		Vector3 c4_o4 = -(m1 * -c3_c4);
+
+		pos[4] = atoms[3]->getPosition() + c4_o4;
+
+		// calculate Position of C1 point
+		Vector3 o4_c1 = m1 * (pos[4] - atoms[3]->getPosition());
+
+		pos[0] = pos[4] + o4_c1;
+
+		// first one again
+		pos[5] = pos[0];
+
+		for (Position p = 0; p < 5; p++)
+		{
+			drawRiboseAtoms_(atoms[p], atoms[p + 1], pos[p], pos[p + 1]);
+		}
+
+		
+		TwoColoredTube* tube = new TwoColoredTube;
+		tube->setVertex1(pos[0]);
+		tube->setVertex2(connection_atom->getPosition());
+		tube->setComposite(atoms[0]->getBond(*connection_atom));
+		tube->setRadius(DNA_base_radius_);
+		geometric_objects_.push_back(tube);
+
+		// draw triangles
+		
+		if (Maths::isZero(axis.getSquareLength())) axis = Vector3(1,0,0);
+
+		axis.normalize();
+		axis *= DNA_base_radius_;
+
+		mesh = new Mesh;
+		mesh->setComposite(atoms[0]->getParent());
+		geometric_objects_.push_back(mesh);
+
+		Surface::Triangle t;
+
+		mesh->vertex.push_back(middle - axis);
+		mesh->vertex.push_back(middle + axis);
+
+		mesh->vertex.push_back(pos[0] - axis);
+		mesh->vertex.push_back(pos[0] + axis);
+
+		for (Position p = 0; p < 6; p++)
+		{
+			mesh->vertex.push_back(pos[p] - axis);
+			mesh->vertex.push_back(pos[p] + axis);
+
+			const Size n = mesh->vertex.size();
+			
+			t.v1 = 0;
+			t.v2 = n - 4;
+			t.v3 = n - 2;
+			mesh->triangle.push_back(t);
+
+			t.v1 = 1;
+			t.v2 = n - 3;
+			t.v3 = n - 1;
+			mesh->triangle.push_back(t);
+		}
+
+		for (Position p = 0; p < mesh->vertex.size(); p++)
+		{
+			mesh->normal.push_back(axis);
+		}
+
+		// --------------------------------------------
+		// draw connection to backbone from C3*-Atom
+		// --------------------------------------------
+		// search if we have a spline point near the atom
+		const Vector3& c3pos = atoms[2]->getPosition();
+		Vector3 spline_pos;
+		float distance = 26;
+		vector<Vector3>::iterator sit = old_spline_point;
+		for (; sit != points_.end(); sit++)
+		{
+			float new_distance = ((*sit) - c3pos).getSquareLength();
 			if (new_distance < distance)
 			{
 				distance = new_distance;
-				old_spline_point = sit;
+				spline_pos = *sit;
 			}
 		}
 
-		if (distance < 256)
+		if (distance < 26)
 		{
 			Tube* tube = new Tube;
 			tube->setComposite(r);
-			tube->setVertex1(connection_point);
-			tube->setVertex2(*old_spline_point);
+			tube->setVertex1(c3pos);
+			tube->setVertex2(spline_pos);
 			tube->setRadius(DNA_base_radius_);
 			geometric_objects_.push_back(tube);
 		}
-		else
-		{
-			Log.error() << "Could not draw connection to backbone of DNA in " 
-									<< __FILE__ << " " << __LINE__ << std::endl;
-		}
 
+
+		//////////////////////////////////////////////////////////////////
+		// draw hydrogen bonds and bonds between the two acids of one pair
+		//////////////////////////////////////////////////////////////////
 		for (Position p = 0; p < hbond_atoms.size(); p++)
 		{
 			Atom* a1 = hbond_atoms[p];
@@ -1471,10 +1827,36 @@ void AddCartoonModel::drawWatsonCrickModel_(const SecondaryStructure& ss)
 	}
 }
 
+void AddCartoonModel::drawRiboseAtoms_(const Atom* atom1, const Atom* atom2, const Vector3& v1, const Vector3& v2)
+{
+	const Bond* bond = atom1->getBond(*atom2);
+	if (bond == 0)
+	{
+	  BALLVIEW_DEBUG
+		return;
+	}
+
+	TwoColoredTube* tube= new TwoColoredTube;
+	tube->setVertex2(v1);
+	tube->setVertex1(v2);
+	tube->setRadius(DNA_base_radius_);
+	tube->setComposite(bond);
+	geometric_objects_.push_back(tube);
+
+	Sphere* s = new Sphere;
+	s->setComposite(atom1);
+	s->setPosition(v1);
+	s->setRadius(DNA_base_radius_);
+	geometric_objects_.push_back(s);
+}
+
+
 bool AddCartoonModel::assignNucleotideAtoms_(Residue& r, Size nr_atoms, 
 																						 String atom_names[9], Atom* atoms[9])
 	throw()
 {
+	for (Position p = 0; p < 9; p++) atoms[p] = 0;
+
 	AtomIterator it;
 	BALL_FOREACH_ATOM(r, it)
 	{
@@ -1501,31 +1883,25 @@ bool AddCartoonModel::assignNucleotideAtoms_(Residue& r, Size nr_atoms,
 	return !error;
 }
 
-void AddCartoonModel::drawDNA_(SecondaryStructure& ss)
-	throw()
+
+void AddCartoonModel::buildDNA_(Position first, Position)
 {
-	tube_radius_ = DNA_helix_radius_;
-	buildGraphicalRepresentation_();
+	SecondaryStructure dummy_ss;
+	const SecondaryStructure& ss = *splines_[first].atom->getAncestor(dummy_ss);
 
-	if (!draw_DNA_as_ladder_)
-	{
-		drawWatsonCrickModel_(ss);
-		return;
-	}
-
-	HashMap<const Residue*, Atom*> base_atoms;
+	HashMap<const Residue*, const Atom*> base_atoms;
 
 	Position start = ss_to_spline_start_[&ss];
 	for (Position p = start; p < start + ss_nr_splines_[&ss]; p++)
 	{
-		Atom* atom = (Atom*) spline_vector_[p].getAtom();
-		base_atoms[(Residue*)atom->getParent()] = atom;
+		const Atom* atom = (Atom*) splines_[p].atom;
+		base_atoms[(const Residue*)atom->getParent()] = atom;
 	}
 
-	ResidueIterator rit;
+	ResidueConstIterator rit;
 	for (rit = ss.beginResidue(); +rit; ++rit)
 	{
-		Residue* r = &*rit;
+		const Residue* r = &*rit;
 
 		// prevent double drawing for complementary bases
 		if (complementary_bases_.has(r) &&
@@ -1534,13 +1910,13 @@ void AddCartoonModel::drawDNA_(SecondaryStructure& ss)
 			continue;
 		}
 
-		Atom* base_atom = base_atoms[r];
+		const Atom* base_atom = base_atoms[r];
 		if (base_atom == 0) 
 		{
 			continue;
 		}
 
-		AtomIterator ait;
+		AtomConstIterator ait;
 
 		// ================ draw unpaired bases ===============
 		if (!complementary_bases_.has(r))
@@ -1554,7 +1930,7 @@ void AddCartoonModel::drawDNA_(SecondaryStructure& ss)
 			else if (r->getName() == "C") atom_name = "C4";
 			else if (r->getName() == "T") atom_name = "N3";
 				
-			Atom* end_atom = 0;
+			const Atom* end_atom = 0;
 			BALL_FOREACH_ATOM(*r, ait)
 			{
 				if (ait->getName() == atom_name)
@@ -1571,7 +1947,7 @@ void AddCartoonModel::drawDNA_(SecondaryStructure& ss)
 			tube->setVertex2(end_atom->getPosition());
 			tube->setComposite(r);
 			tube->setRadius(DNA_ladder_radius_);
-			geometric_objects_.push_back(tube);
+ 			geometric_objects_.push_back(tube);
 
 			Sphere* sphere1 = new Sphere;
 			sphere1->setPosition(end_atom->getPosition());
@@ -1579,12 +1955,17 @@ void AddCartoonModel::drawDNA_(SecondaryStructure& ss)
 			sphere1->setComposite(r);
 			geometric_objects_.push_back(sphere1);
 
+			Circle3 c(base_atom->getPosition(), -(end_atom->getPosition() - base_atom->getPosition()), DNA_ladder_radius_);
+			Disc* disc = new Disc(c);
+			disc->setComposite(r);
+			geometric_objects_.push_back(disc);
+
 			continue;
 		}
 
 		// ================ draw paired bases ===============
-		Residue* partner = complementary_bases_[r];
-		Atom* partner_base = 0;
+		const Residue* partner = complementary_bases_[r];
+		const Atom* partner_base = 0;
 		BALL_FOREACH_ATOM(*partner, ait)
 		{
 			if (ait->getName() == "P") 
@@ -1639,7 +2020,32 @@ void AddCartoonModel::drawDNA_(SecondaryStructure& ss)
 		sphere2->setRadius(DNA_ladder_radius_);
 		sphere2->setComposite(partner);
 		geometric_objects_.push_back(sphere2);
+
+
+		Circle3 c(base_atom->getPosition(), v, DNA_ladder_radius_);
+		Disc* disc = new Disc(c);
+		disc->setComposite(r);
+		geometric_objects_.push_back(disc);
+
+		Circle3 c2(partner_base->getPosition(), -v, DNA_ladder_radius_);
+		disc = new Disc(c2);
+		disc->setComposite(partner);
+		geometric_objects_.push_back(disc);
 	}
+}
+
+bool AddCartoonModel::createGeometricObjects()
+	throw()
+{
+	AddBackboneModel::createGeometricObjects();
+	backbone_model_.createGeometricObjects();
+	List<GeometricObject*>::iterator it = backbone_model_.getGeometricObjects().begin();
+	for (;it != backbone_model_.getGeometricObjects().end(); it++)
+	{
+		getGeometricObjects().push_back(*it);
+	}
+	backbone_model_.getGeometricObjects().clear();
+	return true;
 }
 
 

@@ -1,7 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: proteinMapper.C,v 1.9 2002/12/12 10:17:21 oliver Exp $
+// $Id: proteinMapper.C,v 1.9.10.1 2006/02/14 15:02:12 amoll Exp $
+//
+// Author:
+//   Oliver Kohlbacher
+//
 
 //========================================================================
 // protein mapper example
@@ -68,25 +72,25 @@ int main(int argc, char** argv)
 
 	map<String, Position> type_map;
 	type_map["ALA"] = 0;
-	type_map["GLY"] = 1;
-	type_map["VAL"] = 2;
-	type_map["LEU"] = 3;
-	type_map["ILE"] = 4;
-	type_map["SER"] = 5;
-	type_map["CYS"] = 6;
-	type_map["THR"] = 7;
-	type_map["MET"] = 8;
-	type_map["PHE"] = 9;
-	type_map["TYR"] = 10;
-	type_map["TRP"] = 11;
-	type_map["PRO"] = 12;
-	type_map["HIS"] = 13;
-	type_map["LYS"] = 14;
-	type_map["ARG"] = 15;
-	type_map["ASP"] = 16;
-	type_map["GLU"] = 17;
-	type_map["ASN"] = 18;
-	type_map["GLN"] = 19;
+	type_map["GLY"] = 0;
+	type_map["VAL"] = 0;
+	type_map["LEU"] = 0;
+	type_map["ILE"] = 0;
+	type_map["SER"] = 0;
+	type_map["CYS"] = 0;
+	type_map["THR"] = 0;
+	type_map["MET"] = 0;
+	type_map["PHE"] = 0;
+	type_map["TYR"] = 0;
+	type_map["TRP"] = 0;
+	type_map["PRO"] = 0;
+	type_map["HIS"] = 0;
+	type_map["LYS"] = 0;
+	type_map["ARG"] = 0;
+	type_map["ASP"] = 0;
+	type_map["GLU"] = 0;
+	type_map["ASN"] = 0;
+	type_map["GLN"] = 0;
 
 
 	// define two proteins

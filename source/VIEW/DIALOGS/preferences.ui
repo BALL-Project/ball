@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>730</width>
-            <height>450</height>
+            <width>780</width>
+            <height>470</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -22,14 +22,14 @@
     </property>
     <property name="minimumSize">
         <size>
-            <width>730</width>
-            <height>450</height>
+            <width>780</width>
+            <height>470</height>
         </size>
     </property>
     <property name="maximumSize">
         <size>
-            <width>730</width>
-            <height>450</height>
+            <width>7800</width>
+            <height>470</height>
         </size>
     </property>
     <property name="caption">
@@ -38,36 +38,6 @@
     <property name="sizeGripEnabled">
         <bool>false</bool>
     </property>
-    <widget class="QWidgetStack">
-        <property name="name">
-            <cstring>widget_stack</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>235</x>
-                <y>6</y>
-                <width>493</width>
-                <height>400</height>
-            </rect>
-        </property>
-        <property name="frameShape">
-            <enum>NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-            <enum>Plain</enum>
-        </property>
-        <property name="lineWidth">
-            <number>0</number>
-        </property>
-        <widget class="QWidget">
-            <property name="name">
-                <cstring>WStackPage</cstring>
-            </property>
-            <attribute name="id">
-                <number>0</number>
-            </attribute>
-        </widget>
-    </widget>
     <widget class="QListView">
         <column>
             <property name="text">
@@ -88,108 +58,182 @@
                 <x>0</x>
                 <y>2</y>
                 <width>230</width>
-                <height>442</height>
+                <height>460</height>
             </rect>
         </property>
         <property name="rootIsDecorated">
             <bool>true</bool>
         </property>
     </widget>
-    <widget class="QPushButton">
+    <widget class="QWidgetStack">
         <property name="name">
-            <cstring>ok_button</cstring>
+            <cstring>widget_stack</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>281</x>
-                <y>412</y>
-                <width>145</width>
-                <height>30</height>
+                <x>235</x>
+                <y>6</y>
+                <width>540</width>
+                <height>420</height>
             </rect>
         </property>
-        <property name="minimumSize">
-            <size>
-                <width>110</width>
-                <height>30</height>
-            </size>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
         </property>
-        <property name="text">
-            <string>&amp;Apply</string>
+        <property name="frameShadow">
+            <enum>Plain</enum>
         </property>
-        <property name="accel">
-            <string>Alt+A</string>
+        <property name="lineWidth">
+            <number>0</number>
         </property>
-        <property name="autoDefault">
-            <bool>true</bool>
-        </property>
-        <property name="default">
-            <bool>true</bool>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Apply new settings</string>
-        </property>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>WStackPage</cstring>
+            </property>
+            <attribute name="id">
+                <number>0</number>
+            </attribute>
+        </widget>
     </widget>
-    <widget class="QPushButton">
+    <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>cancel_button</cstring>
+            <cstring>layout2</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>432</x>
-                <y>412</y>
-                <width>127</width>
-                <height>30</height>
+                <x>240</x>
+                <y>430</y>
+                <width>540</width>
+                <height>32</height>
             </rect>
         </property>
-        <property name="minimumSize">
-            <size>
-                <width>100</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>&amp;Cancel</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-        <property name="autoDefault">
-            <bool>true</bool>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Discard changes</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>defaults_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>565</x>
-                <y>412</y>
-                <width>126</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>100</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>&amp;Defaults</string>
-        </property>
-        <property name="accel">
-            <string>Alt+D</string>
-        </property>
-        <property name="autoDefault">
-            <bool>true</bool>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Set settings to default values</string>
-        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>ok_button</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>110</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>32767</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>O&amp;K</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+K</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Apply new settings</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>cancel_button</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>100</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>32767</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>&amp;Cancel</string>
+                </property>
+                <property name="accel">
+                    <string></string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Discard changes</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>defaults_button</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>100</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>32767</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>&amp;Defaults</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+D</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Set settings to default values</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>help_button</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>100</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>32767</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>&amp;Help</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+H</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Set settings to default values</string>
+                </property>
+            </widget>
+        </hbox>
     </widget>
 </widget>
 <connections>
@@ -211,6 +255,12 @@
         <receiver>PreferencesData</receiver>
         <slot>entrySelected(QListViewItem*)</slot>
     </connection>
+    <connection>
+        <sender>help_button</sender>
+        <signal>clicked()</signal>
+        <receiver>PreferencesData</receiver>
+        <slot>showHelp()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
@@ -218,7 +268,10 @@
 <slots>
     <slot>entrySelected(QListViewItem*)</slot>
     <slot>setDefaultValues()</slot>
+    <slot>showHelp()</slot>
+    <slot>applyPreferences()</slot>
+    <slot>cancelPreferences()</slot>
 </slots>
-<exportmacro>BALL_EXPORT</exportmacro>
+<exportmacro>BALL_VIEW_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

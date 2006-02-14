@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.h,v 1.7 2004/12/13 22:43:59 amoll Exp $
+// $Id: compositeManager.h,v 1.7.8.1 2006/02/14 15:01:41 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
 #define BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
@@ -13,6 +13,7 @@
 namespace BALL
 {
 	class Composite;
+	class System;
 
 	namespace VIEW
 	{
@@ -23,7 +24,7 @@ namespace BALL
 				When the CompositeManager is destroyed, all inserted Composites are deleted.
 				\ingroup ViewKernelOther
 		*/
-		class BALL_EXPORT CompositeManager
+		class BALL_VIEW_EXPORT CompositeManager
 		{
 			public:
 			/**	@name	Typedefs for STL compliance
@@ -74,10 +75,18 @@ namespace BALL
 			*/
 			//@{
 
-			/// Test if the CompositeManager has the Composite itself or one of its ancestors.
-			bool has(const Composite& composite) const
+			/** Test if the CompositeManager has the Composite itself or one of its ancestors.
+			 		This method also works if the Composite might have been deleted, but it is quite slow O(n) with n = number of all Composites !
+			*/
+			bool has(const Composite* composite) const
 				throw();
-			
+
+			/** Test if the CompositeManager has the Composite itself as root entry (no search for childs or descendents).
+			 		Quite Fast with O(log n) with n = number of roots (Systems).
+			*/
+			bool hasRoot(const Composite* composite) const
+				throw();
+
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
@@ -92,9 +101,8 @@ namespace BALL
 
 			/** Remove a Composite.
 			 		The Composite and its descendents will be destroyed if to_delete is true
-			 		\return true if the composite could be removed
 			*/
-			bool remove(Composite& composite, bool to_delete = true)
+			void remove(Composite& composite, bool to_delete = true)
 				throw();
 
 			/** Return the number of inserted Composites

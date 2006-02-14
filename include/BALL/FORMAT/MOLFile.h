@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.h,v 1.13 2003/08/26 08:04:13 oliver Exp $
+// $Id: MOLFile.h,v 1.13.8.1 2006/02/14 15:00:49 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_MOLFILE_H
@@ -26,7 +26,7 @@ namespace BALL
 			
     	\ingroup  StructureFormats
 	*/
-	class MOLFile
+	class BALL_EXPORT MOLFile
 		: public GenericMolFile
 	{
 		public:
@@ -45,7 +45,7 @@ namespace BALL
 				@see PropertyManager::setProperty
 				@see PropertyManager::getProperty
 		*/
-		struct Property
+		BALL_EXPORT struct Property
 		{
 			///
 			static const String ATOM_MASS_DIFFERENCE;
@@ -75,7 +75,7 @@ namespace BALL
 		};
 
 		///
-	  class CountsStruct
+	  class BALL_EXPORT CountsStruct
 		{
 			public:
 			Size    number_of_atoms;
@@ -91,7 +91,7 @@ namespace BALL
 		};
 
 		///
-		class AtomStruct
+		class BALL_EXPORT AtomStruct
 		{
 			public:
 			Vector3		position;
@@ -111,7 +111,7 @@ namespace BALL
 		};
 
 		///
-		class BondStruct
+		class BALL_EXPORT BondStruct
 		{
 			public:
 			Position	first_atom;
@@ -173,6 +173,9 @@ namespace BALL
 		virtual Molecule* read()
 			throw(Exception::ParseError);
 			
+		///
+		const MOLFile& operator = (const MOLFile& file) throw();
+
 		//@}
 
 		protected:

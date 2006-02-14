@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyAtomList.sip,v 1.5 2003/12/18 19:03:20 oliver Exp $
+// $Id: pyAtomList.sip,v 1.5.8.1 2006/02/14 15:02:44 amoll Exp $
 //
 
 %MappedType PyAtomList
@@ -40,6 +40,11 @@
 	// Convert a Python list of Atom instances to an AtomList object on the
 	// heap.
  
+	if (sipIsErr == NULL)
+	{
+		return PyList_Check(sipPy);
+	}
+
 	PyAtomList *atom_list = new PyAtomList;
  
 	for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)

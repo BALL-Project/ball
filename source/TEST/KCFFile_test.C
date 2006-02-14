@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: KCFFile_test.C,v 1.2 2005/03/14 21:38:39 oliver Exp $
+// $Id: KCFFile_test.C,v 1.2.4.1 2006/02/14 15:03:06 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(KCFFile, "$Id: KCFFile_test.C,v 1.2 2005/03/14 21:38:39 oliver Exp $")
+START_TEST(KCFFile, "$Id: KCFFile_test.C,v 1.2.4.1 2006/02/14 15:03:06 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -82,69 +82,59 @@ CHECK(bool write(const System& system) throw(File::CannotWrite))
 
 	a1->setName("A1");
 	a1->setElement(PTE[Element::N]);
+	a1->setTypeName("N1a");
 	a1->setCharge(0.5);
 	a1->setPosition(Vector3(0.1, 0.2, 0.3));
 
 	a2->setName("A2");
 	a2->setElement(PTE[Element::O]);
 	a2->setCharge(-0.5);
+	a2->setTypeName("O2");
 	a2->setPosition(Vector3(0.5, 0.6, 0.7));
 	
 	a1->createBond(*a2);
 	a1->getBond(*a2)->setOrder(Bond::ORDER__DOUBLE);
 	
-
 	String filename;
 	NEW_TMP_FILE(filename)
 	KCFFile f(filename, std::ios::out);
 	f.write(S);
 	f.close();
 	
-	TEST_FILE_REGEXP(filename.c_str(), "data/KCFFile_test2kcf")
+	TEST_FILE_REGEXP(filename.c_str(), "data/KCFFile_test2.kcf")
 
 	KCFFile f2("KCFFile_test.C", std::ios::in);
 	TEST_EXCEPTION(File::CannotWrite, f2.write(S))
+
+	// Make sure we can read that stuff back again and get the same result
+	KCFFile f3(filename);
+	System S2;
+	f3 >> S2;
+	f3.close();
+
+	TEST_EQUAL(S2.countAtoms(), S.countAtoms())
+	TEST_EQUAL(S2.countMolecules(), S.countMolecules())
+	TEST_EQUAL(S2.countBonds(), S.countBonds())
+
+	AtomConstIterator ai1(S.beginAtom());
+	AtomConstIterator ai2(S2.beginAtom());
+	for (; +ai1 && +ai2; ++ai1, ++ai2)
+	{
+		TEST_REAL_EQUAL(ai2->getPosition().x, ai1->getPosition().x)
+		TEST_REAL_EQUAL(ai2->getPosition().y, ai1->getPosition().y)
+		TEST_REAL_EQUAL(ai2->getPosition().z, 0.0) // z-coordinates are not stored!
+		TEST_EQUAL(ai2->getTypeName(), ai1->getTypeName())
+		TEST_EQUAL(ai2->getElement(), ai1->getElement())
+	}
 RESULT
 
-
-CHECK([EXTRA]KCFFile::KCFFile& operator >> (System& system))
-  KCFFile f("data/KCFFile_test1.kcf");
-	System S;
-	f >> S;
-	f.close();
-	TEST_EQUAL(S.countAtoms(), 23)
-	TEST_EQUAL(S.countBonds(), 26)
-	TEST_EQUAL(S.countMolecules(), 1)
-
-	KCFFile f2("data/KCFFile_test3.kcf");
-	S.destroy();
-	f2 >> S;
-	TEST_EQUAL(S.countAtoms(), 49)
-	TEST_EQUAL(S.countBonds(), 52)
-	TEST_EQUAL(S.countMolecules(), 1)
-	ABORT_IF(S.countAtoms() == 0)
-	Atom& atom = *S.beginAtom();
-	TEST_EQUAL(atom.getElement(), PTE[Element::C])
-	TEST_REAL_EQUAL(atom.getPosition().x, -2.6970)
-	TEST_REAL_EQUAL(atom.getPosition().y, -1.2710)
-	TEST_REAL_EQUAL(atom.getPosition().z,  1.4370)
-
-	// check whether we handle file with only 
-	// 48 columns in the atom lines correctly
-	KCFFile f3("data/KCFFile_test4.kcf");
-	S.destroy();
-	f3 >> S;
-	TEST_EQUAL(S.countAtoms(), 23)
-	TEST_EQUAL(S.countBonds(), 26)
-	TEST_EQUAL(S.countMolecules(), 1)
-RESULT
 
 CHECK(Molecule* read() throw(Exception::ParseError))
   KCFFile f("data/KCFFile_test1.kcf");
 	Molecule* m = f.read();
 	f.close();
-	TEST_EQUAL(m->countAtoms(), 23)
-	TEST_EQUAL(m->countBonds(), 26)
+	TEST_EQUAL(m->countAtoms(), 31)
+	TEST_EQUAL(m->countBonds(), 33)
 	delete m;
 RESULT
 
@@ -160,11 +150,13 @@ m->insert(*a2);
 
 a1->setName("A1");
 a1->setElement(PTE[Element::N]);
+a1->setTypeName("N1a");
 a1->setCharge(0.5);
 a1->setPosition(Vector3(0.1, 0.2, 0.3));
 
 a2->setName("A2");
 a2->setElement(PTE[Element::O]);
+a2->setTypeName("O2");
 a2->setCharge(-0.5);
 a2->setPosition(Vector3(0.5, 0.6, 0.7));
 
@@ -200,15 +192,6 @@ CHECK(KCFFile(const KCFFile& file) throw(Exception::FileNotFound))
   KCFFile f("data/KCFFile_test1.kcf");
 	KCFFile f2(f);
 	TEST_EQUAL(f2.getName(), "data/KCFFile_test1.kcf")
-RESULT
-
-CHECK([EXTRA]bool read(System& system) throw(Exception::ParseError))
-	KCFFile f("data/KCFFile_test5.kcf");
-	System system;
-	f.read(system);
-	TEST_EQUAL(system.countAtoms(), 30)
-	TEST_EQUAL(system.countBonds(), 32)
-	ABORT_IF(system.countAtoms() == 0)
 RESULT
 
 /////////////////////////////////////////////////////////////

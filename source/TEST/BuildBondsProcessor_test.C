@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BuildBondsProcessor_test.C,v 1.5 2005/03/08 17:19:15 bertsch Exp $
+// $Id: BuildBondsProcessor_test.C,v 1.5.4.1 2006/02/14 15:03:03 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: BuildBondsProcessor_test.C,v 1.5 2005/03/08 17:19:15 bertsch Exp $")
+START_TEST(Fragment, "$Id: BuildBondsProcessor_test.C,v 1.5.4.1 2006/02/14 15:03:03 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -38,6 +38,7 @@ CHECK(BuildBondsProcessor(const String& filename))
 	bbp = new BuildBondsProcessor("bond_lengths/bond_lengths.db");
 	TEST_NOT_EQUAL(bbp,0)
 	TEST_EXCEPTION(Exception::FileNotFound, BuildBondsProcessor("file_does_not_exist"))
+	delete bbp;
 RESULT
 
 CHECK(operator() (AtomContainer& ac))

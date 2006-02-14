@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.28 2005/02/06 20:57:05 oliver Exp $
+// $Id: colorProcessor.h,v 1.28.6.1 2006/02/14 15:01:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -51,10 +51,12 @@ namespace BALL
 		Representation.
 		\ingroup  ViewModels
 */
-class BALL_EXPORT ColorProcessor
+class BALL_VIEW_EXPORT ColorProcessor
 	: public UnaryProcessor<GeometricObject*>
 {
 	public:
+
+	BALL_CREATE(ColorProcessor)
 	
 	/**	@name	Type definitions
 	*/
@@ -108,6 +110,10 @@ class BALL_EXPORT ColorProcessor
 	/** Assignment
 	*/
 	void set(const ColorProcessor& color_calculator)
+		throw();
+
+	///
+	virtual bool start()
 		throw();
 
 	/** Assignment operator.
@@ -166,11 +172,11 @@ class BALL_EXPORT ColorProcessor
 	/** Set the pointer to the CompositeSet.
 			This method is called by Representation::setColorProcessor and Representation::update.
 	*/
-	void setComposites(const CompositeSet* composites)
+	void setComposites(const List<const Composite*>* composites)
 		throw();
 
-	/// Return a pointer to the CompositeSet.
-	const CompositeSet* getComposites()
+	/// Return a pointer to the Composites.
+	const List<const Composite*>* getComposites()
 		throw() { return composites_;}
 
 	///
@@ -184,6 +190,10 @@ class BALL_EXPORT ColorProcessor
 	///
 	float getAdditionalGridDistance() const
 		throw() { return additional_grid_distance_;}
+
+	///
+	AtomGrid& getAtomGrid() 
+		throw() { return atom_grid_;}
 
 	//@} 
 	/**	@name	debuggers and diagnostics 
@@ -202,14 +212,12 @@ class BALL_EXPORT ColorProcessor
 	///
 	void setModelType(ModelType type) {model_type_ = type;}
 
-	protected:
-	
 	//_ Create the threedimensional grid from the CompositeSet, or a given Composite 
-	virtual void createAtomGrid_(const Composite* from_mesh = 0)
+	virtual void createAtomGrid(const Composite* from_mesh = 0)
 		throw();
 
-	//_ Colorize the mesh with the computed grid.
-	virtual void colorMeshFromGrid_(Mesh& mesh)
+	///
+	const Atom* getClosestItem(const Vector3& v) const
 		throw();
 
 	//@} 
@@ -219,7 +227,8 @@ class BALL_EXPORT ColorProcessor
 
 	protected:
 
-	const Atom* getClosestItem_(const Vector3& v) const
+	//_ Colorize the mesh with the computed grid.
+	virtual void colorMeshFromGrid_(Mesh& mesh)
 		throw();
 
 	bool  			update_always_needed_;
@@ -229,7 +238,7 @@ class BALL_EXPORT ColorProcessor
 	ColorRGBA		selection_color_;
 	Size 				transparency_;
 
-	const 			CompositeSet* composites_;
+	const 			List<const Composite*>* composites_;
 
 	AtomGrid 		atom_grid_;
 	ModelType   model_type_;
@@ -242,16 +251,51 @@ class BALL_EXPORT ColorProcessor
 /** Base class for ColorProcessors, that interpolate between two values
 		\ingroup  ViewModels
 */
-class InterpolateColorProcessor
+class BALL_VIEW_EXPORT InterpolateColorProcessor
 	: public ColorProcessor
 {
 	public: 
 
 	///
-	InterpolateColorProcessor();
+	enum Mode
+	{
+		///
+		USE_OUTSIDE_COLOR = 0,
+
+		///
+		DEFAULT_COLOR_FOR_OUTSIDE_COLORS,
+
+		///
+		NO_OUTSIDE_COLORS
+	};
+		
+
+	BALL_CREATE(InterpolateColorProcessor)
 
 	///
-	virtual bool start();
+	InterpolateColorProcessor();
+	
+	///
+	InterpolateColorProcessor(const InterpolateColorProcessor& pro);
+
+	///
+	virtual bool start()
+		throw();
+
+	///
+	void setMode(Mode mode) { mode_ = mode;}
+
+	///
+	Mode getMode() const { return mode_;}
+
+	///
+	vector<ColorRGBA>& getColors() throw() { return colors_;}
+	
+	///
+	const vector<ColorRGBA>& getColors() const throw() { return colors_;}
+
+	///
+	void setColors(const vector<ColorRGBA>& colors) throw() { colors_ = colors;}
 
 	///
 	void setMinColor(const ColorRGBA& color)
@@ -268,38 +312,18 @@ class InterpolateColorProcessor
 	///
 	const ColorRGBA& getMaxColor() const
 		throw();
-	
-	///
-	void setMinMinColor(const ColorRGBA& color)
-		throw();
 
 	///
-	void setMaxMaxColor(const ColorRGBA& color)
-		throw();
+	void setMaxValue(float value) throw() {max_value_ = value;}
 
 	///
-	const ColorRGBA& getMinMinColor() const
-		throw();
-	
-	///
-	const ColorRGBA& getMaxMaxColor() const
-		throw();
+	float getMaxValue() const throw() { return max_value_;}
 
 	///
-	void setMaxValue(float value)
-		throw();
+	void setMinValue(float value) throw() { min_value_ = value;}
 
 	///
-	float getMaxValue() const
-		throw();
-
-	///
-	void setMinValue(float value)
-		throw();
-
-	///
-	float getMinValue() const
-		throw();
+	float getMinValue() const throw() { return min_value_;}
 
 	/** Interpolate a color between the given colors.
 			To be overloaded in derived classes.
@@ -307,19 +331,22 @@ class InterpolateColorProcessor
 	virtual void interpolateColor(float value, ColorRGBA& color_to_be_set)
 		throw();
 
-	/** Set the transparency.
-	*/
-	virtual void setTransparency(Size value)
-		throw();
-
 	protected:
 
+	// out of range colors
 	ColorRGBA min_color_,
-						max_color_,
-						min_min_color_,
-						max_max_color_;
+						max_color_;
+
+	// standard colors
+	vector<ColorRGBA> colors_;
+
+	Mode 			mode_;
+
 	float 		max_value_;
 	float 		min_value_;
+	
+	// value distance between two colors
+	float 		x_;
 };
 
 } } // namespaces

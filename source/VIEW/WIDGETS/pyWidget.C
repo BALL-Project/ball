@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.44 2004/11/15 02:07:04 amoll Exp $
+// $Id: pyWidget.C,v 1.44.8.1 2006/02/14 15:03:54 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -10,7 +10,6 @@
 #include <BALL/VIEW/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/DIALOGS/pythonSettings.h>
-#include <BALL/VIEW/DIALOGS/pythonHotkeys.h>
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/FORMAT/lineBasedFile.h>
@@ -18,6 +17,8 @@
 #include <qscrollbar.h>
 #include <qfiledialog.h>
 #include <qapplication.h>
+#include <qdragobject.h>
+#include <qwidgetstack.h>
 
 // currently doesnt work right
 //#undef BALL_QT_HAS_THREADS
@@ -136,17 +137,16 @@ namespace BALL
 		}
 
 
-		void PyWidgetData::stopInterpreter()
-		{
-			PyInterpreter::finalize();
-		}
-
-
 		void PyWidgetData::startInterpreter()
 		{
 			stop_script_ = false;
 			// initialize the interpreter
 			PyInterpreter::initialize();
+
+			if (!PyInterpreter::isValid())
+			{
+				return;
+			}
 
 			// print the PyBALL version and clear
 			// the widget's contents in case of a restart
@@ -235,7 +235,7 @@ namespace BALL
 		}
 
 
-		bool PyWidgetData::parseLine_(String line)
+		bool PyWidgetData::parseLine_(String line, bool silent)
 		{
 			if (!Py_IsInitialized())
 			{
@@ -255,17 +255,25 @@ namespace BALL
 			if (line == "quit" || line == "quit()")
 			{
 				stop_script_ = true;
-				stopInterpreter();
+				PyInterpreter::finalize();
 				getMainControl()->quit();
 				return true;
 			}
 
 			if (line.hasPrefix("run("))
 			{
+				// This code is probably the worst I've seen in a long, long time...
+				// Needs to be replaced by something integrated with Py language concepts
+				// in the future (e.g. calling run with a variable argument won't work!) -- OK -- 11/2006
 				vector<String> tokens;
-				Size nr = line.split(tokens, String("(\")").c_str());
-				if (nr < 2) return false;
-				((PyWidget*)parent())->run(tokens[1]);
+				Size nr = line.split(tokens, String("(\"')").c_str());
+				if (nr < 2)		
+				{
+					return false;
+				}
+				PyInterpreter::runFile(tokens[1]);
+				appendToHistory_(line);
+				
 				return true;
 			}
 			
@@ -284,7 +292,10 @@ namespace BALL
 						multi_line_text_.append("\n");
 						multi_lines_ = 1;
 						appendToHistory_(line);
-						newPrompt_();
+						if (!silent)
+						{
+							newPrompt_();
+						}
 						return true;
 				}
 
@@ -298,7 +309,10 @@ namespace BALL
 				if (!line.isEmpty())
 				{
 					multi_line_text_ += line + "\n";
-					newPrompt_();
+					if (!silent)
+					{
+						newPrompt_();	
+					}
 					return true;
 				}
 
@@ -347,29 +361,36 @@ namespace BALL
 			}
 			else
 			{
-				for (Position p = 0; p <= multi_lines_ -1; p++) results_.push_back(state);
+				for (Position p = 0; p <= multi_lines_ -1; p++)
+				{
+					results_.push_back(state);
+				}
 			}
 			
 			multi_line_mode_ = false;
 
-			newPrompt_();
+			if (!silent)
+			{
+				newPrompt_();
+			}
 			return ok;
 		}
 
-		void PyWidgetData::runString(String command)
+		bool PyWidgetData::runString(String command)
 		{
 			if (!command.has('\n'))
 			{
-				parseLine_(command);
-				return;
+				return parseLine_(command);
 			}
 
 			vector<String> lines;
 			Size nr = command.split(lines, String('\n').c_str());
 			for (Position p = 0; p < nr; p++)
 			{
-				parseLine_(lines[p]);
+				if (!parseLine_(lines[p])) return false;
 			}
+
+			return true;
 		}
 		
 
@@ -488,30 +509,32 @@ namespace BALL
 		}
 
 
-		void PyWidgetData::runFile(const String& filename)
+		bool PyWidgetData::runFile(const String& filename)
 		{
 			stop_script_ = false;
-			append(String("> running File " + filename + "\n").c_str());
+			append(String("> executing script from " + filename + "\n").c_str());
 			LineBasedFile file;
 			try
 			{
 				file.open(filename);
 			}
-			catch(Exception::GeneralException e)
+			catch	(...)
 			{
 				append(String("> Could not find file " + filename + "\n").c_str());
 				newPrompt_();
-				return;
+				return false;
 			}
 
 			while (file.readLine())
 			{
-				if (!parseLine_(file.getLine()))
+				// Call parse line with 'silent = true' to make sure we do not get prompts
+				// for each line read.
+				if (!parseLine_(file.getLine(), true))
 				{
-					String result_string = "> Error in Line " + String(file.getLineNumber()) + " in file " + filename + "\n";
+					String result_string = "> Error in line " + String(file.getLineNumber()) + " of file " + filename + "\n";
 					append(result_string.c_str());
 					newPrompt_();
-					return;
+					return false;
 				}
 
 				if (stop_script_) 
@@ -520,35 +543,37 @@ namespace BALL
  					((PyWidget*)parent())->setStatusbarText("Aborted script");
 					append("> aborted...");
 					newPrompt_();
-					return;
+					return false;
 				}
 			}
-			append("> finished...");
-			((PyWidget*)parent())->setStatusbarText("finished script");
+			append("> Finished.");
+			((PyWidget*)parent())->setStatusbarText("Finished script.");
 			newPrompt_();
+			return true;
 		}
 
-		void PyWidgetData::scriptDialog()
+		void PyWidget::scriptDialog()
 		{
-			PyWidget* p = (PyWidget*) parent();
-			// no throw specifier because of that #$%@* moc
+			if (working_dir_ == "") working_dir_ = getWorkingDir();
+
 			QString s = QFileDialog::getOpenFileName(
-										p->getWorkingDir().c_str(),
+										working_dir_.c_str(),
 										"Python Scripts(*.py)",
-										p->getMainControl(),
+										getMainControl(),
 										"Run Python Script",
-										"Choose a file" );
+										"Choose a Python script" );
 
 		 	if (s == QString::null) return;
-			p->setWorkingDirFromFilename_(s.ascii());
+			setWorkingDirFromFilename_(s.ascii());
+			working_dir_ = getWorkingDir();
 
-			runFile(s.ascii());
+			run(s.ascii());
 		}
 
 		void PyWidgetData::exportHistory()
 		{
 			PyWidget* p = (PyWidget*) parent();
-			QString s = QFileDialog::getOpenFileName(
+			QString s = QFileDialog::getSaveFileName(
 										p->getWorkingDir().c_str(),
 										"",
 										p->getMainControl(),
@@ -575,11 +600,6 @@ namespace BALL
 			file.close();
 		}
 
-		void PyWidgetData::cut()
-		{
-			QTextEdit::cut();
-		}
-
 		void PyWidgetData::clear()
 		{
 			QTextEdit::clear();
@@ -598,12 +618,28 @@ namespace BALL
 
 			QTextEdit::paste();
 		}
+
+
+		void PyWidgetData::contentsDragEnterEvent(QDragEnterEvent * e)
+		{
+			e->accept(QTextDrag::canDecode(e));
+		}
+
+		void PyWidgetData::contentsDropEvent(QDropEvent *e)
+		{
+			VIEW::processDropEvent(e);
+		}
+
 // ######################################################################################################
 
 		PyWidget::PyWidget(QWidget *parent, const char *name)
 			throw()
 			: DockWidget(parent, name),
-				text_edit_(new PyWidgetData(this))
+				text_edit_(new PyWidgetData(this)),
+				working_dir_(""),
+				valid_(false),
+				started_startup_script_(false),
+				last_id_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new PyWidget " << this << std::endl;
@@ -620,12 +656,30 @@ namespace BALL
 		void PyWidget::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
-			main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", text_edit_, SLOT(scriptDialog()));
-			main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
-			main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
+//   			insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
 
 			DockWidget::initializeWidget(main_control);
+			registerWidgetForHelpSystem(this, "pythonInterpreter.html");
+
+			Index id1 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", this , SLOT(scriptDialog()));
+			Index id2 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
+			Index id3 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
+
+			text_edit_->startInterpreter();
+
+			valid_ = PyInterpreter::isValid();
+	
+			if (!valid_)
+			{
+				menuBar()->setItemEnabled(id1, false);
+				menuBar()->setItemEnabled(id2, false);
+				menuBar()->setItemEnabled(id3, false);
+				text_edit_->setText("No Python support available:");
+				text_edit_->runString("import BALL");
+				text_edit_->setEnabled(false);
+				setStatusbarText("No Python support available! (See PyWidget)", true);
+				return;
+			}
 		}
 
 
@@ -633,58 +687,9 @@ namespace BALL
 			throw()
 		{
 			text_edit_->abortScript();
-			stopInterpreter();
-			main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
-			main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", text_edit_, SLOT(scriptDialog()));
-			main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
-			main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
+			PyInterpreter::finalize();
 
 			DockWidget::finalizeWidget(main_control);
-		}
-
-
-		void PyWidget::fetchPreferences(INIFile& inifile)
-			throw()
-		{
-			DockWidget::fetchPreferences(inifile);
-
-			for (Position p = 0; true; p++)
-			{
-				if (!inifile.hasEntry("PYTHON", "Hotkey" + String(p))) break;
-
-				Hotkey hotkey;
-				if (!hotkey.set(inifile.getValue("PYTHON", "Hotkey" + String(p)))) continue;
-
-				insertHotkey(hotkey);
-			}
-
-			python_hotkeys_->setContent(hotkeys_);
-
-			if (!inifile.hasEntry("PYTHON", "StartupScript")) return;
-
-			text_edit_->startup_script_ =	inifile.getValue("PYTHON", "StartupScript");
-			text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
-			if (text_edit_->startup_script_ != "") text_edit_->runFile(text_edit_->startup_script_);
-		}
-
-
-		void PyWidget::writePreferences(INIFile& inifile)
-			throw()
-		{
-			inifile.appendSection("PYTHON");
-			inifile.insertValue("PYTHON", "StartupScript", text_edit_->startup_script_);
-
-			DockWidget::writePreferences(inifile);
-
-			List<Hotkey>::iterator it = hotkeys_.begin();
-			for (Position p = 0; it != hotkeys_.end(); it++)
-			{
-				String data;
-				(*it).get(data);
-				inifile.insertValue("PYTHON", "Hotkey" + String(p), data);
-				p++;
-			}
-
 		}
 
 
@@ -692,10 +697,8 @@ namespace BALL
 			throw()
 		{
 			text_edit_->python_settings_= new PythonSettings();
-			text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
 			preferences.insertEntry(text_edit_->python_settings_);
-			python_hotkeys_ = new PythonHotkeys();
-			preferences.insertEntry(python_hotkeys_);
+			preferences_ = &preferences;
 		}
 
 		void PyWidget::finalizePreferencesTab(Preferences &preferences)
@@ -706,40 +709,114 @@ namespace BALL
 				preferences.removeEntry(text_edit_->python_settings_);
 				text_edit_->python_settings_ = 0;
 			}
-
-			if (python_hotkeys_ != 0)
-			{
-				preferences.removeEntry(python_hotkeys_);
-				python_hotkeys_ = 0;
-			}
 		}
 
 		void PyWidget::applyPreferences()
 			throw()
 		{
-			if (text_edit_->python_settings_ == 0) return;
-			text_edit_->startup_script_ = text_edit_->python_settings_->getFilename();
+			DockWidget::applyPreferences();
 
-			hotkeys_ = (python_hotkeys_->getContent());
-		}
-
-		void PyWidget::cancelPreferences()
-			throw()
-		{
-			if (text_edit_->python_settings_ != 0)
+			if (text_edit_->python_settings_ == 0)
 			{
-				text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
+				return;	
 			}
+
+ 			hotkeys_ = (text_edit_->python_settings_->getContent());
+
+			QPopupMenu* menu = getMainControl()->initPopupMenu(MainControl::USER);
+			menu->clear();
+			disconnect(menu, SIGNAL(highlighted(int)), this, SLOT(activatedMenuItem_(int)));
+			connect(menu, SIGNAL(highlighted(int)), this, SLOT(activatedMenuItem_(int)));
+
+			List<Hotkey>::Iterator it = hotkeys_.begin();
+			for (; it != hotkeys_.end(); it++)
+			{
+				String entry = (*it).action;
+				if (entry.size() > 35)
+				{ 
+					entry.truncate(32);
+					entry += "...";
+				}
+
+ 				insertMenuEntry(MainControl::USER, entry.c_str(), this, SLOT(hotkeyItem()));
+				setMenuHint("Perform a user defined action per Python interface");
+				setMenuHelp("pythonInterpreter.html#create_hotkeys");
+			}
+
+			getMainControl()->insertPopupMenuSeparator(MainControl::USER);
+ 			insertMenuEntry(MainControl::USER, "Modify", this, SLOT(modifyHotkeys()));
+			setMenuHint("Manage user defined Python commands");
+			setMenuHelp("pythonInterpreter.html#create_hotkeys");
+
+			/////////////////////////////////////////
+			// startup script
+			/////////////////////////////////////////
+			if (started_startup_script_ || !isValid())
+			{
+				return;
+			}
+
+			started_startup_script_ = true;
+
+			String startup = getDataPath() + "startup.py";
+			if (!text_edit_->runFile(startup))
+			{
+				Log.error() << "Could not find startup script. Please set the correct path to the data path!" << std::endl;
+				Log.error() << "To do so set the environment variable BALL_DATA_PATH or BALLVIEW_DATA_PATH." << std::endl;
+			}
+			
+			String user_startup = text_edit_->python_settings_->getFilename();
+			if (user_startup == "") 
+			{
+				return;	
+			}
+
+			text_edit_->runFile(user_startup);
 		}
 
-		void PyWidget::startInterpreter()
+		void PyWidget::modifyHotkeys()
 		{
-			text_edit_->startInterpreter();
+ 			preferences_->showEntry(text_edit_->python_settings_->widget_stack->widget(1));
+			preferences_->show();
 		}
 
-		void PyWidget::stopInterpreter()
+		void PyWidget::activatedMenuItem_(int id)
 		{
-			text_edit_->stopInterpreter();
+			last_id_ = id;
+		}
+
+		void PyWidget::hotkeyItem()
+		{
+			if (last_id_ == 0) 
+			{
+				BALLVIEW_DEBUG;
+				return;
+			}
+
+			QMenuItem* data = menuBar()->findItem(MainControl::USER);
+			QPopupMenu* menu = data->popup();
+			Index hotkey_num = -1;
+			for (Position p= 0; p < hotkeys_.size(); p++)
+			{
+				if (last_id_ == menu->idAt(p))
+				{
+					hotkey_num = p;
+				}
+			}
+
+			if (hotkey_num == -1) 
+			{
+				BALLVIEW_DEBUG;
+				return;
+			}
+
+			List<Hotkey>::iterator it = hotkeys_.begin();
+			for (Position p = 1; p <= (Position)hotkey_num; p++)
+			{
+				it++;
+			}
+
+			text_edit_->runString((*it).action);
 		}
 
 		void PyWidgetData::abortScript()
@@ -785,6 +862,15 @@ namespace BALL
 		void PyWidget::reactTo(const QKeyEvent& e) 
 			throw() 
 		{
+			// doesnt work, no idea yet why:
+			/*
+			if (getMainControl()->compositesAreLocked() ||
+					getMainControl()->getPrimitiveManager().updateRunning())
+			{
+				return;
+			}
+			*/
+
 			List<Hotkey>::iterator it = hotkeys_.begin();
 			for (; it != hotkeys_.end(); it++)
 			{
@@ -794,6 +880,17 @@ namespace BALL
 					return;
 				}
 			}
+		}
+
+		bool PyWidget::run(const String& filename) throw() 
+		{
+			last_script_ = filename;
+			return text_edit_->runFile(filename);
+		}
+			
+		bool PyWidget::runAgain()
+		{
+			return run(last_script_);
 		}
 
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.43 2005/02/18 13:13:29 amoll Exp $
+// $Id: energyMinimizer.h,v 1.43.4.1 2006/02/14 15:01:09 amoll Exp $
 //
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
@@ -26,7 +26,7 @@ namespace BALL
 	 
       \ingroup  MolmecEnergyMinimizer
 	*/
-	class EnergyMinimizer
+	class BALL_EXPORT EnergyMinimizer
 	{
 		public:
 
@@ -36,7 +36,7 @@ namespace BALL
 
 		/**   Option names
 		*/
-		struct Option
+		struct BALL_EXPORT Option
 		{
 			/** Max number of iterations
 			*/
@@ -74,7 +74,7 @@ namespace BALL
 
 		}; 
 
-		struct Default
+		struct BALL_EXPORT Default
 		{
 			/** Max number of iterations
 			*/

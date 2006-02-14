@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.h,v 1.5 2004/07/14 12:40:33 amoll Exp $
+// $Id: glDisplayList.h,v 1.5.8.1 2006/02/14 15:01:49 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
 #define BALL_VIEW_RENDERING_GLDISPLAYLIST_H
@@ -28,9 +28,11 @@ namespace BALL
 		defintion of display lists for further information concerning display lists.
 		\ingroup ViewRendering
 */
-class BALL_EXPORT GLDisplayList
+class BALL_VIEW_EXPORT GLDisplayList
 {
 	public:
+
+	BALL_CREATE(GLDisplayList)
 
 	/**	@name	Type Definitions.
 	*/
@@ -63,7 +65,7 @@ class BALL_EXPORT GLDisplayList
 			defined inside another definition of a display list.
 			\see         GeneralException			
 	*/
-	class NestedDisplayList:	public Exception::GeneralException
+	class BALL_VIEW_EXPORT NestedDisplayList:	public Exception::GeneralException
 	{
 		public:
 
@@ -76,7 +78,7 @@ class BALL_EXPORT GLDisplayList
 			allocated but there is no more memory available.
 			\see         GeneralException			
 	*/
-	class NoDisplayListAvailable:	public Exception::GeneralException
+	class BALL_VIEW_EXPORT NoDisplayListAvailable:	public Exception::GeneralException
 	{
 		public:
 
@@ -89,7 +91,7 @@ class BALL_EXPORT GLDisplayList
 			is tried to be redefined without being destroyed before.
 			\see         GeneralException			
 	*/
-	class DisplayListRedeclaration:	public Exception::GeneralException
+	class BALL_VIEW_EXPORT DisplayListRedeclaration:	public Exception::GeneralException
 	{
 		public:
 

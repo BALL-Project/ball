@@ -1,11 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.12 2003/08/26 08:04:08 oliver Exp $
+// $Id: predicate.h,v 1.12.8.1 2006/02/14 15:00:43 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_PREDICATE_H
 #define BALL_CONCEPT_PREDICATE_H
+
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
 
 #include <functional>
 
@@ -27,13 +31,12 @@ namespace BALL
 		: public unary_function<T, bool> 
 	{
 		public:
+		///
+		virtual ~UnaryPredicate() {}
 
 		///
 		virtual bool operator() (const T& /* x */) const
-			throw()
-		{
-			return true;
-		}
+			throw();
 	};
 
 	/**	Generic Binary Predicate Class
@@ -46,12 +49,25 @@ namespace BALL
 
 		///
 		virtual bool operator() (const T1& x, const T2& y) const
-			throw()
-		{
-			return true;
-		}
+			throw();
+
+		///
+    virtual ~BinaryPredicate() {}
 	};
 
+	template <typename T> 
+	bool UnaryPredicate<T>::operator() (const T& /* x */) const
+		throw()
+	{
+		return true;
+	}
+
+	template <typename T1, typename T2> 
+	bool BinaryPredicate<T1, T2>::operator() (const T1&, const T2&) const
+		throw()
+	{
+		return true;
+	}
 	//@}
 } // namespace BALL
 

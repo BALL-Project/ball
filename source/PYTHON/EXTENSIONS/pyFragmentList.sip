@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyFragmentList.sip,v 1.5 2003/12/18 19:03:20 oliver Exp $
+// $Id: pyFragmentList.sip,v 1.5.8.1 2006/02/14 15:02:46 amoll Exp $
 //
 
 %MappedType PyFragmentList
@@ -38,6 +38,11 @@
 %ConvertToTypeCode
 	// Convert a Python list of Fragment instances to an FragmentList object on the
 	// heap.
+ 
+	if (sipIsErr == NULL)
+	{
+		return PyList_Check(sipPy);
+	}
  
 	PyFragmentList *fragment_list = new PyFragmentList;
  

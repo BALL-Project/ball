@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.C,v 1.13 2003/08/29 15:37:03 amoll Exp $
+// $Id: colorUnit.C,v 1.13.10.1 2006/02/14 15:03:23 amoll Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/colorUnit.h>
@@ -57,7 +57,7 @@ namespace BALL
 		{
 			if ((s < 0) || (s > 255))
 			{
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, (float) s);
 			}
 
 			value_ = (float)s / (float)255;
@@ -68,7 +68,7 @@ namespace BALL
 		{
 			if (us > 255)
       {
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, us);
 			}
 
 			value_ = (float)us / (float)255;
@@ -79,7 +79,7 @@ namespace BALL
 		{
 			if ((i < 0) || (i > 255))
       {
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, i);
 			}
 
 			value_ = (float)i / (float)255;
@@ -90,7 +90,7 @@ namespace BALL
 		{
 			if (ui > 255)
       {
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, ui);
 			}
 
 			value_ = (float)ui / (float)255;
@@ -101,7 +101,7 @@ namespace BALL
 		{
 			if ((l < 0) || (l > 255))
       {
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, l);
 			}
 
 			value_ = (float)l / (float)255;
@@ -112,7 +112,7 @@ namespace BALL
 		{
 			if (ul > 255)
       {
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, ul);
 			}
  
 			value_ = (float)ul / (float)255;
@@ -123,7 +123,7 @@ namespace BALL
 		{
 			if ((f < 0.0) || (f > 1.0))
       {
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, f);
 			}
 
 			value_ = f;
@@ -134,7 +134,7 @@ namespace BALL
 		{
 			if ((d < 0.0) || (d > 1.0))
       {
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, d);
 			}
 
 			value_ = (float)d;
@@ -238,7 +238,7 @@ namespace BALL
 		{
 			if ((s < 0) || (s > 255))
 			{
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, s);
 			}
 
 			value_ = (float)s / (float)255;
@@ -263,7 +263,7 @@ namespace BALL
 		{
 			if (us > 255)
       {
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, us);
 			}
 
 			value_ = (float)us / (float)255;
@@ -288,7 +288,7 @@ namespace BALL
 		{
 			if ((i < 0) || (i > 255))
 			{
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, i);
 			}
 
 			value_ = (float)i / (float)255;
@@ -313,7 +313,7 @@ namespace BALL
 		{
 			if (ui > 255)
       {
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, ui);
 			}
 
 			value_ = (float)ui / (float)255;
@@ -338,7 +338,7 @@ namespace BALL
 		{
 			if ((l < 0) || (l > 255))
       {
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, l);
 			}
 
 			value_ = (float)l / (float)255;
@@ -363,7 +363,7 @@ namespace BALL
 		{
 			if (ul > 255)
       {
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, ul);
 			}
 
 			value_ = (float)ul / (float)255;
@@ -388,7 +388,7 @@ namespace BALL
 		{
 			if ((f < 0.0) || (f > 1.0))
       {
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, f);
 			}
 
 			value_ = f;
@@ -413,7 +413,7 @@ namespace BALL
 		{
 			if ((d < 0.0) || (d > 1.0))
       {
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, d);
 			}
 
 			value_ = (float)d;
@@ -477,7 +477,7 @@ namespace BALL
 
 			if (strlen(char_ptr) != 2)
 			{
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, strlen(char_ptr));
 			}
 
 			char c = char_ptr[0];

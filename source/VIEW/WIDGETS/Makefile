@@ -1,3 +1,12 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.22.8.1 2006/02/14 15:03:51 amoll Exp $
+#
+# Author:
+#   Oliver Kohlbacher
+#
+
 DIRECTORY=VIEW/WIDGETS
 
 # Where the headers of the derived classes reside
@@ -19,7 +28,9 @@ CPP_SOURCES=\
 	scene.C\
 	canvasWidget.C\
 	regularData2DWidget.C\
-	regularData1DWidget.C
+	regularData1DWidget.C\
+	dockingController.C\
+	helpViewer.C
 
 
 PYTHON_CPP_SOURCES=\
@@ -36,15 +47,17 @@ MOC_SOURCES=\
 	scene_moc.C\
 	canvasWidget_moc.C\
 	regularData1DWidget_moc.C\
-	regularData2DWidget_moc.C
+	regularData2DWidget_moc.C\
+	dockingController_moc.C\
+	helpViewer_moc.C
 
 PYTHON_MOC_SOURCES=\
 	pyWidget_moc.C
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
-BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
+BALL_INCLUDES+=$(PYTHON_INCLUDES)
 
 depend: $(MOC_SOURCES)
 
@@ -83,4 +96,10 @@ canvasWidget_moc.C:	$(HEADER_DIR)/canvasWidget.h
 
 datasetControl_moc.C:	$(HEADER_DIR)/datasetControl.h
 	$(MOC) $(HEADER_DIR)/datasetControl.h -o $@
+
+helpViewer_moc.C:	$(HEADER_DIR)/helpViewer.h
+	$(MOC) $(HEADER_DIR)/helpViewer.h -o $@
+
+dockingController_moc.C:	$(HEADER_DIR)/dockingController.h
+	$(MOC) $(HEADER_DIR)/dockingController.h -o $@
 

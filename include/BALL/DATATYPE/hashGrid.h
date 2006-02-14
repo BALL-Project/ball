@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.44 2005/01/31 14:44:17 amoll Exp $
+// $Id: hashGrid.h,v 1.44.6.1 2006/02/14 15:00:45 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_HASHGRID_H
@@ -252,6 +252,8 @@ namespace BALL
 
 			BALL_CREATE_DEEP(BoxIteratorTraits)
 
+			virtual ~BoxIteratorTraits() throw () {}
+
 			BoxIteratorTraits()
 				throw()
 				:	bound_(0),
@@ -433,11 +435,13 @@ namespace BALL
 
 		typedef DataItem* DataIteratorPosition;
 		
-		class DataIteratorTraits
+	class DataIteratorTraits
 		{
 			public:
 
 			BALL_CREATE_DEEP(DataIteratorTraits)
+
+				virtual ~DataIteratorTraits() throw() {}
 
 			DataIteratorTraits()
 				throw()
@@ -1041,7 +1045,7 @@ namespace BALL
 			
 	*/
 	template <typename Item>
-	class HashGrid3
+class HashGrid3
 	{
 		public:
 
@@ -1308,6 +1312,8 @@ namespace BALL
 			public:
 
 			BALL_CREATE_DEEP(BoxIteratorTraits)
+
+			virtual ~BoxIteratorTraits() throw() {}
 
 			BoxIteratorTraits()
 				throw()

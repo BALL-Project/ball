@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.14 2005/02/23 12:55:22 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.14.4.1 2006/02/14 15:01:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
@@ -32,9 +32,11 @@ namespace BALL
 				documentation. 
 				\ingroup  ViewModels
 		*/
-		class BALL_EXPORT AddBallAndStickModel: public AtomBondModelBaseProcessor
+		class BALL_VIEW_EXPORT AddBallAndStickModel: public AtomBondModelBaseProcessor
 		{
 			public:
+
+			BALL_CREATE(AddBallAndStickModel)
 
 			/**	@name	Constructors and Destructors
 			*/	
@@ -106,12 +108,6 @@ namespace BALL
 			/** Inspection of the radius of the ball-component.
 			*/
 			float getBallRadius() const
-				throw();
-
-			/** Copy the radius of the ball-component to real.
-					\param  radius the real receiving the radius of the ball-component
-			*/
-			void getBallRadius(float& radius)
 				throw();
 
 			/** Change the radius of the stick-component.

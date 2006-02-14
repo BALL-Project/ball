@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyResidueList.sip,v 1.5 2003/12/18 19:03:21 oliver Exp $
+// $Id: pyResidueList.sip,v 1.5.8.1 2006/02/14 15:02:48 amoll Exp $
 //
 
 %MappedType PyResidueList
@@ -40,6 +40,11 @@
 %ConvertToTypeCode
 	// Convert a Python list of Residue instances to an ResidueList object on the
 	// heap.
+ 
+	if (sipIsErr == NULL)
+	{
+		return PyList_Check(sipPy);
+	}
  
 	PyResidueList *residue_list = new PyResidueList;
  

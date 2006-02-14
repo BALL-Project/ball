@@ -10,6 +10,10 @@
  #include <BALL/DATATYPE/regularData3D.h>
 #endif
 
+#ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
+ #include <BALL/VIEW/DATATYPE/colorRGBA.h>
+#endif
+
 namespace BALL
 {
  namespace VIEW
@@ -19,7 +23,7 @@ namespace BALL
 /** Dialog for creating contour surfaces from RegularData3D
     \ingroup  ViewDialogs
  */
-class BALL_EXPORT ContourSurfaceDialog 
+class BALL_VIEW_EXPORT ContourSurfaceDialog 
 	: public ContourSurfaceDialogData
 { 
     Q_OBJECT
@@ -31,11 +35,14 @@ class BALL_EXPORT ContourSurfaceDialog
     RegularData3D* getGrid();
     double getThreshold() const;
 		void setDatasetControl(DatasetControl* control) {control_ = control;}
+		ColorRGBA getColor();
+
 	public slots:
 		virtual bool exec();
 
 	protected slots: 
 		virtual void valuesChanged();
+		virtual void chooseColor();
 	
 	private:
 		RegularData3D* grid_;

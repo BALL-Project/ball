@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.13 2005/02/06 20:57:06 oliver Exp $
+// $Id: surfaceModel.h,v 1.13.6.1 2006/02/14 15:01:46 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_SURFACEMODEL_H
@@ -31,10 +31,12 @@ namespace BALL
 				\see     SurfaceProcessor
 				\ingroup  ViewModels
 		*/
-		class BALL_EXPORT AddSurfaceModel
+		class BALL_VIEW_EXPORT AddSurfaceModel
 			: public ModelProcessor
 		{
 			public:
+
+			BALL_CREATE(AddSurfaceModel)
 
 			/**	@name	Constructors and Destructor
 			*/	

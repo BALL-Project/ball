@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Skeleton_test.C,v 1.4 2003/06/19 10:45:53 oliver Exp $
+// $Id: Skeleton_test.C,v 1.4.8.1 2006/02/14 15:03:10 amoll Exp $
+//
+// Author:
+//   Oliver Kohlbacher
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Skeleton_test.C,v 1.4 2003/06/19 10:45:53 oliver Exp $")
+START_TEST(class_name, "$Id: Skeleton_test.C,v 1.4.8.1 2006/02/14 15:03:10 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

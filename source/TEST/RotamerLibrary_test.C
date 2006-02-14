@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RotamerLibrary_test.C,v 1.9 2004/05/27 19:50:01 oliver Exp $
+// $Id: RotamerLibrary_test.C,v 1.9.6.1 2006/02/14 15:03:10 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.9 2004/05/27 19:50:01 oliver Exp $")
+START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.9.6.1 2006/02/14 15:03:10 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -209,15 +209,31 @@ CHECK(RotamerLibrary::~RotamerLibrary())
 RESULT
 
 CHECK(RotamerLibrary::RotamerLibrary(const String& filename, const FragmentDB& fragment_db))
-	// ???
+	RotamerLibrary rl("rotamers/bbind99.Aug.lib", frag_db);
+	TEST_EQUAL(rl.getNumberOfVariants(), 75)
+	TEST_EQUAL(rl.isValid(), true)
+	TEST_EXCEPTION(Exception::FileNotFound, RotamerLibrary rl2("rotamers/does_not_exist.asdfg", frag_db))
 RESULT
 
 CHECK(RotamerLibrary::RotamerLibrary(const RotamerLibrary& rotamer_library))	
-	// ????
+	RotamerLibrary rl("rotamers/bbind99.Aug.lib", frag_db);
+	RotamerLibrary rl2(rl);
+	TEST_EQUAL(rl2.getNumberOfVariants(), 75)
+	TEST_EQUAL(rl2.isValid(), true)
+	// Make sure the old stuff hasn't changed
+	TEST_EQUAL(rl.getNumberOfVariants(), 75)
+	TEST_EQUAL(rl.isValid(), true)
 RESULT
 
-CHECK(const RotamerLibrary& RotamerLibrary::operator = (const RotamerLibrary& rotamer_library))
-	// ???
+CHECK(RotamerLibrary& RotamerLibrary::operator = (const RotamerLibrary& rotamer_library))
+	RotamerLibrary rl("rotamers/bbind99.Aug.lib", frag_db);
+	RotamerLibrary rl2;
+	rl2 = rl;
+	TEST_EQUAL(rl2.getNumberOfVariants(), 75)
+	TEST_EQUAL(rl2.isValid(), true)
+	// Make sure the old stuff hasn't changed
+	TEST_EQUAL(rl.getNumberOfVariants(), 75)
+	TEST_EQUAL(rl.isValid(), true)
 RESULT
 
 CHECK(bool RotamerLibrary::readSQWRLLibraryFile(const String& filename, const FragmentDB& fragment_db))

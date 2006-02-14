@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.49 2004/12/27 17:05:51 amoll Exp $
+// $Id: exception.h,v 1.49.6.1 2006/02/14 15:00:39 amoll Exp $
 //
    
 #ifndef BALL_COMMON_EXCEPTION_H
@@ -50,13 +50,10 @@ namespace BALL
 				dbx or gdb) you can then create a stack traceback.  To create a
 				core dump, you should set the environment variable <tt>
 				BALL_DUMP_CORE</tt> to any (non empty) value.
-				 \par
-				
-				 \par
 		\ingroup Common
 		*/
 		
-		class GeneralException 
+		class BALL_EXPORT GeneralException 
 			:	public std::exception
 		{
 			public:
@@ -128,7 +125,7 @@ namespace BALL
 				@param	index the value of the index causing the problem
 				@param	size	smallest value allowed for index
 		*/
-		class IndexUnderflow 
+		class BALL_EXPORT IndexUnderflow 
 			: public GeneralException
 		{
 			public:
@@ -150,7 +147,7 @@ namespace BALL
 				insufficient.
 				@param	size the size causing the problem
 		*/
-		class SizeUnderflow 
+		class BALL_EXPORT SizeUnderflow 
 			: public GeneralException
 		{
 			public:
@@ -170,7 +167,7 @@ namespace BALL
 				@param	index the value of the index causing the problem
 				@param	size	largest value allowed for index
 		*/
-		class IndexOverflow 
+		class BALL_EXPORT IndexOverflow 
 			: public GeneralException
 		{
 			public:
@@ -186,11 +183,11 @@ namespace BALL
 		/**	Invalid range.
 				Use this exception to indicate a general range problems.
 		*/
-		class InvalidRange 
+		class BALL_EXPORT InvalidRange 
 			: public GeneralException
 		{
 			public:
-			InvalidRange(const char* file, int line)
+			InvalidRange(const char* file, int line, float value)
 				throw();
 		};
 
@@ -201,7 +198,7 @@ namespace BALL
 				requested size. 
 				@param	size the size causing the problem
 		*/
-		class InvalidSize 
+		class BALL_EXPORT InvalidSize 
 			: public GeneralException
 		{
 			public:
@@ -218,7 +215,7 @@ namespace BALL
 				Use this exception to indicate that a given value is out of a
 				defined range, i. e. not within the domain of a function.
 		*/
-		class OutOfRange 
+		class BALL_EXPORT OutOfRange 
 			: public GeneralException
 		{
 			public:
@@ -231,7 +228,7 @@ namespace BALL
 				one type to another. It is thrown, if a conversion from ascii to
 				numeric formats or vice versa failed.
 		*/
-		class InvalidFormat 
+		class BALL_EXPORT InvalidFormat 
 			: public GeneralException
 		{
 			public:
@@ -251,7 +248,7 @@ namespace BALL
 				itself. In general these operations are self assignments or related
 				methods.
 		*/
-		class IllegalSelfOperation
+		class BALL_EXPORT IllegalSelfOperation
 			: public GeneralException
 		{
 			public:
@@ -263,7 +260,7 @@ namespace BALL
 				Use this exception to indicate a failure due to an argument not
 				containing a pointer to a valid object, but a null pointer.
 		*/
-		class NullPointer 
+		class BALL_EXPORT NullPointer 
 			: public GeneralException
 		{
 			public:
@@ -274,7 +271,7 @@ namespace BALL
 		/**	Invalid iterator.
 				The iterator on which an operation should be performed was invalid.
 		*/
-		class InvalidIterator
+		class BALL_EXPORT InvalidIterator
 			: public GeneralException
 		{
 			public:
@@ -286,7 +283,7 @@ namespace BALL
 				The iterators could not be assigned because they are bound to
 				different containers.
 		*/
-		class IncompatibleIterators
+		class BALL_EXPORT IncompatibleIterators
 			: public GeneralException
 		{
 			public:
@@ -300,7 +297,7 @@ namespace BALL
 				instead of the default constructor, identification of the concerned
 				source will get <b>  much </b> easier!
 		*/
-		class NotImplemented
+		class BALL_EXPORT NotImplemented
 			: public GeneralException
 		{
 			public:
@@ -312,7 +309,7 @@ namespace BALL
 				This exception is thrown to indicate that an illegal tree operation
 				i.e. node->setLeftChild(node) was requested.
 		*/
-		class IllegalTreeOperation
+		class BALL_EXPORT IllegalTreeOperation
 			: public GeneralException
 		{
 			public:
@@ -326,7 +323,7 @@ namespace BALL
 				@param	size	the number of bytes that should have been allocated
 				@see GlobalException::newHandler
 		*/
-		class OutOfMemory
+		class BALL_EXPORT OutOfMemory
 			: public GeneralException, public std::bad_alloc
 		{
 			public:
@@ -342,7 +339,7 @@ namespace BALL
 
 		/**	Buffer overflow exception.	
 		*/
-		class BufferOverflow 
+		class BALL_EXPORT BufferOverflow 
 			: public GeneralException
 		{
 			public:
@@ -352,7 +349,7 @@ namespace BALL
 
 		/**	Division by zero error.
 		*/
-		class DivisionByZero 
+		class BALL_EXPORT DivisionByZero 
 			: public GeneralException
 		{
 			public:
@@ -362,7 +359,7 @@ namespace BALL
 
 		/**	Out of grid error.
 		*/
-		class OutOfGrid 
+		class BALL_EXPORT OutOfGrid 
 			: public GeneralException
 		{
 			public:
@@ -373,7 +370,7 @@ namespace BALL
 		/**	File not found.
 				A given file could not be found.
 		*/
-		class FileNotFound 
+		class BALL_EXPORT FileNotFound 
 			: public GeneralException
 		{
 			public:
@@ -392,7 +389,7 @@ namespace BALL
 		/**	Invalid Position.
 				A given position in three dimensional is invalid.
 		*/
-		class IllegalPosition 
+		class BALL_EXPORT IllegalPosition 
 			: public GeneralException
 		{
 			public:
@@ -403,7 +400,7 @@ namespace BALL
 		/**	Parse Error.
 				A given expression could not be parsed.
 		*/
-		class ParseError
+		class BALL_EXPORT ParseError
 			: public GeneralException
 		{
 			public:
@@ -416,7 +413,7 @@ namespace BALL
 		/**	Precondition failed.
 				A precondition (as defined by BALL_PRECONDITION_EXCEPTION) has failed.
 		*/
-		class Precondition
+		class BALL_EXPORT Precondition
 			: public GeneralException
 		{
 			public:
@@ -427,7 +424,7 @@ namespace BALL
 		/**	Postcondition failed.
 				A postcondition (as defined by BALL_POSTCONDITION_EXCEPTION) has failed.
 		*/
-		class Postcondition
+		class BALL_EXPORT Postcondition
 			: public GeneralException
 		{
 			public:
@@ -436,7 +433,7 @@ namespace BALL
 		};
 
 		/// Exception to be thrown if an invalid option is given
-		class InvalidOption: public Exception::GeneralException
+		class BALL_EXPORT InvalidOption: public Exception::GeneralException
 		{
 			public:
 
@@ -446,18 +443,26 @@ namespace BALL
 		};
 		
 		/// Exception to be thrown if too many errors occur, e.g. in ForceField
-		class TooManyErrors: public Exception::GeneralException
+		class BALL_EXPORT TooManyErrors
+			: public Exception::GeneralException
 		{
 			public:
-
-				///
-				TooManyErrors(const char* file, int line)
-					throw();
+			///
+			TooManyErrors(const char* file, int line)	throw();
+		};
+		 
+		/// Exception to be thrown if too many bonds for one atom
+		class BALL_EXPORT TooManyBonds
+			: public Exception::GeneralException
+		{
+			public:
+			///
+			TooManyBonds(const char* file, int line, const String& error) throw();
 		};
 
-		/**
+		/** Class handling uncaught exception globally.
 		*/
-		class GlobalExceptionHandler
+		class BALL_EXPORT GlobalExceptionHandler
 		{
 			public:
 			/**	@name	Constructors
@@ -480,36 +485,26 @@ namespace BALL
 					<tt>bad_alloc</tt> (the default behaviour defined in the ANSI C++ 
 					standard).
 			*/
-			GlobalExceptionHandler()
-				throw();
+			GlobalExceptionHandler() throw();
 			//@}
 			
 			/**	@name	Accessors
 			*/
 			//@{
 				
-			/**
-			*/
-			static void setName(const String& name)
-				throw();
+			/// Assign the name of the exception. This should agree with the class name.
+			static void setName(const String& name)	throw();
 				
-			/**
-			*/
-			static void setMessage(const String& message)
-				throw();
+			/// Set the error message
+			static void setMessage(const String& message) throw();
 
-			/**
-			*/
-			static void setLine(int line)
-				throw();
+			/// Set the line number the exception was thrown. Should be set to __LINE__ in most cases.
+			static void setLine(int line)	throw();
 
-			/**
-			*/
-			static void setFile(const String& file)
-				throw();
+			/// The source file name where the exception was thrown
+			static void setFile(const String& file)	throw();
 
-			/**
-			*/
+			/// Set all exception attributes
 			static void set
 				(const String& file, int line, 
 				 const String& name, const String& message)
@@ -519,12 +514,10 @@ namespace BALL
 			protected:
 
 			/// The BALL replacement for terminate
-			static void terminate()
-				throw();
+			static void terminate()	throw();
 
 			/// The BALL new handler
-			static void newHandler()
-				throw(Exception::OutOfMemory);
+			static void newHandler() throw(Exception::OutOfMemory);
 
 			static std::string file_;
 			static int				 line_;
@@ -534,7 +527,7 @@ namespace BALL
 
 		/**	Global static instance of GlobalExceptionHandler
 		*/
-		extern GlobalExceptionHandler globalHandler;
+		BALL_EXPORT extern GlobalExceptionHandler globalHandler;
 
 	}
 		/**	Output operator for exceptions.
@@ -555,6 +548,7 @@ namespace BALL
 				\endverbatim
 				 \ingroup Common
 		*/
+		BALL_EXPORT
 		std::ostream& operator << (std::ostream& os, const Exception::GeneralException& e);
 	
 } // namespace BALL

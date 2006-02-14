@@ -1,17 +1,22 @@
-# $Id: Makefile,v 1.6 2001/07/31 00:46:49 oliver Exp $
-# Makefile for Finite Difference Poisson-Boltzmann Application
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.6.14.1 2006/02/14 15:02:05 amoll Exp $
+#
+# Author:
+#   Oliver Kohlbacher
 #
 
+DIRECTORY=APPLICATIONS/PB
 
 EXECUTABLE=PB
-DIRECTORY=APPLICATIONS/PB
 
 all:	$(EXECUTABLE)
 
 clean:	default_clean
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies
 
 # remove the library specific flags
 # and replace them by the aplication specific

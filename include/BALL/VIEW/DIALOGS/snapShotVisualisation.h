@@ -19,7 +19,7 @@ namespace BALL
 		@see SnapShot
 		\ingroup ViewDialogs
 */
-class BALL_EXPORT SnapshotVisualisationDialog 
+class BALL_VIEW_EXPORT SnapshotVisualisationDialog 
 	: public SnapshotVisualisationDialogData, 
 		public ModularWidget
 {

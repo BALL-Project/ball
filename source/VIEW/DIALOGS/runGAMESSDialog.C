@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: runGAMESSDialog.C,v 1.2 2005/10/05 10:09:37 anhi Exp $
+// $Id: runGAMESSDialog.C,v 1.2.6.1 2006/02/14 15:03:40 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/runGAMESSDialog.h>

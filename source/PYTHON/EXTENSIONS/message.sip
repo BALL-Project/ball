@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.sip,v 1.9 2004/12/19 13:34:28 amoll Exp $
+// $Id: message.sip,v 1.9.6.1 2006/02/14 15:02:41 amoll Exp $
 //
 
 class Message
@@ -13,8 +13,9 @@ class Message
 %End
   public:
 
-	Message();
-	Message(const Message& /message/);
+	Message() throw();
+	Message(const Message& /message/) throw();
+//  virtual ~Message() throw();
 	// void setSender(const void* object);
 	// const void* getSender() const;
 	// void setDeletable(bool flag = true);
@@ -46,16 +47,20 @@ class CompositeMessage
 		NEW_MOLECULE
 	};
 
-	CompositeMessage();
-	CompositeMessage(const Composite& /composite/, CompositeMessageType /type/);
-	CompositeMessage(const CompositeMessage& /message/);
-	~CompositeMessage();
-	void setComposite(const Composite& /composite/);
-	Composite* getComposite() const;
-	void setCompositeName(const String& /name/);
-	const String& getCompositeName() const;
-	void setType(CompositeMessageType /type/);
-	CompositeMessageType getType() const;
+	CompositeMessage() throw();
+	CompositeMessage(const Composite& , CompositeMessageType , bool = true) throw();
+	CompositeMessage(const CompositeMessage& /message/) throw();
+	//virtual ~CompositeMessage() throw();
+	void setComposite(const Composite& /composite/) throw();
+	Composite* getComposite() const throw();
+	void setCompositeName(const String& /name/) throw();
+	const String& getCompositeName() const throw();
+	void setType(CompositeMessageType /type/) throw();
+	CompositeMessageType getType() const throw();
+	void setUpdateRepresentations(bool) throw(); 
+	bool updateRepresentations() const throw();
+	void setShowSelectionInfos(bool) throw();
+	bool showSelectionInfos() throw();
 };
 
 
@@ -77,11 +82,15 @@ class SceneMessage
 		REDRAW,
 		UPDATE_CAMERA,
 		REMOVE_COORDINATE_SYSTEM,
-		EXPORT_PNG
+		EXPORT_PNG,
+		EXPORT_POVRAY,
+		ENTER_ROTATE_MODE,
+		ENTER_PICKING_MODE,
+		ENTER_MOVE_MODE
 	};
-	SceneMessage(SceneMessageType) throw();
+	SceneMessage(SceneMessageType = UNDEFINED) throw();
 	SceneMessage(const SceneMessage&) throw();
-	~SceneMessage() throw();
+	//virtual ~SceneMessage() throw();
 	
 	void setType(SceneMessageType) throw();
 	SceneMessageType getType() const throw();
@@ -104,9 +113,10 @@ class GenericSelectionMessage
 
 	GenericSelectionMessage() throw();
 	GenericSelectionMessage(const GenericSelectionMessage& ) throw();
-	~GenericSelectionMessage() throw();
+	//virtual ~GenericSelectionMessage() throw();
 	void setSelection(const PyCompositeList&) throw();
 	PyCompositeList getSelection() const throw();
+	
 };
 
 
@@ -135,6 +145,9 @@ class NewSelectionMessage
 
 	public:
 	NewSelectionMessage() throw();
+	bool openItems() throw();
+	void setOpenItems(bool) throw();
+
 };
 
 
@@ -149,7 +162,7 @@ class GeometricObjectSelectionMessage
 
 	public:
 	GeometricObjectSelectionMessage() throw();
-	~GeometricObjectSelectionMessage() throw();
+	//virtual ~GeometricObjectSelectionMessage() throw();
 	void setSelection(const GeometricObjectList& ) throw();
 	const GeometricObjectList& getSelection() const throw();
 	void setSelected(bool ) throw();
@@ -174,10 +187,14 @@ class RepresentationMessage
 		ADD = 0,
 		REMOVE,
 		UPDATE,
-		SELECTED
+		SELECTED,
+		STARTED_UPDATE,
+		FINISHED_UPDATE,
+		ADD_TO_GEOMETRIC_CONTROL
 	};
 
 	RepresentationMessage() throw();
+	//virtual ~RepresentationMessage() throw();
 	RepresentationMessage(Representation& , RepresentationMessageType ) throw();
 	void setRepresentation(Representation& ) throw();
 	Representation* getRepresentation() throw();
@@ -206,7 +223,7 @@ class MolecularTaskMessage
 		CREATE_DISTANCE_GRID
 	};
 
-	MolecularTaskMessage(MolecularTaskMessageType ) throw();
+	MolecularTaskMessage(MolecularTaskMessageType = UNDEFINED) throw();
 	void setType(MolecularTaskMessageType) throw();
 	MolecularTaskMessageType getType() const throw();
 };
@@ -240,7 +257,7 @@ class CreateRepresentationMessage
 		CreateRepresentationMessage(const PyCompositeList&, 
 																ModelType , 
 																ColoringMethod ) throw();   
-		PyCompositeList getComposites() const throw();
+		//const PyCompositeList& getComposites() const throw();
 		ModelType getModelType() const throw();
 		ColoringMethod getColoringMethod() const throw();
 };
@@ -259,6 +276,19 @@ class NewTrajectoryMessage
 		NewTrajectoryMessage() throw();
 		void setTrajectoryFile(TrajectoryFile&) throw();
 		TrajectoryFile* getTrajectoryFile() throw();
+};
+	
+class DeselectControlsMessage
+	: Message
+{
+%TypeHeaderCode
+	#include <BALL/VIEW/KERNEL/message.h>
+	using namespace BALL;
+	using namespace BALL::VIEW;
+%End
+
+	public:
+		DeselectControlsMessage();
 };
 
 

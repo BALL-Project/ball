@@ -15,7 +15,7 @@
 	<node>Bonds
 		<node>1<value>C CH3 s</value></node>
 		<node>2<value>C O d</value></node>
-		<node>3<value>C OXT a</value></node>
+		<node>3<value>C OXT s</value></node>
 		<node>4<value>CH3 1HH3 s</value></node>
 		<node>5<value>CH3 2HH3 s</value></node>
 		<node>6<value>CH3 3HH3 s</value></node>

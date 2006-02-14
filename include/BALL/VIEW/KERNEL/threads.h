@@ -27,6 +27,8 @@ namespace BALL
 	class EnergyMinimizer;
 	class MolecularDynamics;
 	class Composite;
+	class DockingAlgorithm;
+	class ConformationSet;
 
 namespace VIEW
 {
@@ -49,7 +51,7 @@ namespace VIEW
 			If you dont pay attention to these rules, dont wonder if BALLView freezes
 			or crashes!
 	*/
-	class BALL_EXPORT BALLThread
+	class BALL_VIEW_EXPORT BALLThread
 		: public QThread
 	{
 		public:
@@ -97,7 +99,7 @@ namespace VIEW
 	 		The result can either be stored in a file or in a stringstream.
 			This is the default, if no filename is given.
 	*/
-	class FetchHTMLThread
+	class BALL_VIEW_EXPORT FetchHTMLThread
 		: public BALLThread
 	{
 		public:
@@ -111,6 +113,9 @@ namespace VIEW
 
 			///
 			virtual void run();
+
+			///
+			virtual void abort() { tcp_.abort();}
 
 			///
 			void setFilename(const String& file_name) { file_name_ = file_name;}
@@ -132,7 +137,7 @@ namespace VIEW
 	};
 	
 	///
-	class CalculateFDPBThread
+	class BALL_VIEW_EXPORT CalculateFDPBThread
 		: public BALLThread
 	{
 		public:
@@ -154,7 +159,7 @@ namespace VIEW
 
 
 	///
-	class UpdateRepresentationThread
+	class BALL_VIEW_EXPORT UpdateRepresentationThread
 		: public BALLThread
 	{
 		public:
@@ -184,7 +189,7 @@ namespace VIEW
 			main thread to delete the simulation thread, otherwise there will be 
 			a memory leak.
 	*/
-	class BALL_EXPORT SimulationThread
+	class BALL_VIEW_EXPORT SimulationThread
 		: public BALLThread
 	{
 		public:
@@ -216,7 +221,7 @@ namespace VIEW
 
 
 		/// Thread for EnergyMinimization
-		class BALL_EXPORT EnergyMinimizerThread
+		class BALL_VIEW_EXPORT EnergyMinimizerThread
 			: public SimulationThread
 		{
 			public:
@@ -239,7 +244,7 @@ namespace VIEW
 
 
 		/// Thread for MDSimulation
-		class BALL_EXPORT MDSimulationThread
+		class BALL_VIEW_EXPORT MDSimulationThread
 			: public SimulationThread
 		{
 			public:
@@ -274,7 +279,7 @@ namespace VIEW
 				It notifies the MainControl, that the thread for simulations has finished and can be deleted.
 				This should only be used internaly.
 		*/
-		class BALL_EXPORT SimulationThreadFinished
+		class BALL_VIEW_EXPORT SimulationThreadFinished
 			: public QCustomEvent
 		{
 			public:
@@ -283,7 +288,7 @@ namespace VIEW
 		};
 
 		///
-		class BALL_EXPORT UpdateCompositeEvent
+		class BALL_VIEW_EXPORT UpdateCompositeEvent
 			: public QCustomEvent
 		{
 			public:
@@ -303,7 +308,7 @@ namespace VIEW
 		};
 		
 		///
-		class BALL_EXPORT FinishedRepresentionUpdateEvent
+		class BALL_VIEW_EXPORT FinishedRepresentionUpdateEvent
 			: public QCustomEvent
 		{
 			public:
@@ -313,6 +318,87 @@ namespace VIEW
 				{}
 		};
 
+		/// Thread for Docking
+		class BALL_EXPORT DockingThread
+			: public BALLThread
+		{
+			public:
+				///
+				DockingThread()
+					throw();
+				
+				/** Copy constructor.
+					*/
+				DockingThread(const DockingThread& dock_thread)
+					throw();
+					
+				///
+				virtual ~DockingThread()
+					throw();
+				
+				/**  Assignment operator
+				 */
+				const DockingThread& operator =(const DockingThread& dock_thread)
+					throw();
+					
+				///
+				void setDockingAlgorithm(DockingAlgorithm* dock_alg)
+					throw();
+					
+				///
+				virtual void run()
+					throw(Exception::NullPointer);
+					
+			protected:
+				DockingAlgorithm* dock_alg_;
+		};
+
+
+		///
+		class BALL_EXPORT DockingFinishedEvent
+			: public QCustomEvent
+		{
+			public:
+				
+				///
+				DockingFinishedEvent()
+					:QCustomEvent(DOCKING_FINISHED_EVENT),
+					 conformation_set_(0)
+				{}
+
+				///
+				DockingFinishedEvent(bool abort)
+					:QCustomEvent(DOCKING_FINISHED_EVENT),
+					 conformation_set_(0)
+				{
+				 	abort_ = abort;
+				}
+				 
+				///
+				void setConformationSet(const ConformationSet* conformation_set)
+				{
+					conformation_set_ = conformation_set;
+				}
+				
+				//
+				const ConformationSet* getConformationSet() const
+				{
+					return conformation_set_;
+				}
+				
+				///
+				bool wasAborted()
+				{
+		 			return abort_;
+				}
+				
+				protected:
+
+				/// this conformation set is deleted in DockResult
+				const ConformationSet* conformation_set_;
+				bool abort_;
+		};
+		
 	}
 }
 #endif //BALL_QT_HAS_THREADS

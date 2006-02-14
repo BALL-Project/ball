@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: labelModel.C,v 1.3 2005/12/23 17:03:34 amoll Exp $
+// $Id: labelModel.C,v 1.3.6.1 2006/02/14 15:03:47 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/labelModel.h>

@@ -3,7 +3,7 @@
 #include <BALL/STRUCTURE/DOCKING/dockResult.h>
 ///////////////////////////
 
-START_TEST(DockResult, "$Id: DockResult_test.C,v 1.1 2006/02/01 13:05:02 leonhardt Exp $")
+START_TEST(DockResult, "$Id: DockResult_test.C,v 1.1.4.1 2006/02/14 15:03:05 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.23 2005/02/06 09:44:53 oliver Exp $
+// $Id: global.h,v 1.23.6.1 2006/02/14 15:00:39 amoll Exp $
 //
 
 #ifndef BALL_COMMON_GLOBAL_H
@@ -39,8 +39,14 @@
 #	else
 #		define BALL_EXPORT __declspec(dllimport)
 #	endif
+#	ifdef BALL_VIEW_BUILD_DLL
+#		define BALL_VIEW_EXPORT __declspec(dllexport)
+#	else
+#		define BALL_VIEW_EXPORT __declspec(dllimport)
+#	endif
 #else
 # define BALL_EXPORT
+# define BALL_VIEW_EXPORT
 #endif
 
 namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.11 2004/02/26 08:41:47 anhi Exp $
+// $Id: logView.h,v 1.11.10.1 2006/02/14 15:01:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -29,10 +29,6 @@
 # include <qtextedit.h>
 #endif
 
-#ifndef BALL_CONCEPT_NOTIFICATION_h
-# include <BALL/CONCEPT/notification.h>
-#endif
-
 #ifndef BALL_VIEW_WIDGETS_DOCKWIDGET_H
 #	include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
@@ -41,6 +37,21 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		class DragLogView
+			: public QTextEdit
+		{
+			Q_OBJECT
+
+			public:
+
+			DragLogView(QWidget* parent);
+
+			public slots:
+			virtual void contentsDragEnterEvent(QDragEnterEvent* e);
+			virtual void contentsDragLeaveEvent(QDragLeaveEvent* e);
+			virtual void contentsDropEvent(QDropEvent* e);
+		};
+
 		/** LogView class.
 				The class LogView records all messages sent to the  \link BALL::LogStream Log \endlink  object and
 				displays them as a text history. The class is derived from 
@@ -52,9 +63,9 @@ namespace BALL
 				record and show all messages sent to the \link BALL::LogStream Log \endlink object.
 				\ingroup ViewWidgets
 		*/
-		class BALL_EXPORT LogView
+		class BALL_VIEW_EXPORT LogView
 			: public DockWidget,
-			  public NotificationTarget<LogStreamNotifier>
+			  public LogStreamNotifier
 		{
 			Q_OBJECT
 
@@ -77,6 +88,7 @@ namespace BALL
 				throw();
 
 			/** Copy constructor.
+				 	Only for Python Interface
 					The text of <b> view</b> will be copied into this logView.
 			*/
 			LogView(const LogView& view)
@@ -112,14 +124,12 @@ namespace BALL
 					\param   source the notification source
 					\return  bool returns always <tt>true</tt>
 			*/
-			virtual bool onNotify(LogStreamNotifier &source)
-				throw();
+			void logNotify();
 
 			private:
 
-			QTextEdit* text_edit_;
 
-			std::stringstream strstream_;
+			QTextEdit* text_edit_;
 
 			bool output_running_;
 		};

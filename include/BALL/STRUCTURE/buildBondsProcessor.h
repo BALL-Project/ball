@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.h,v 1.8 2005/03/14 16:20:59 amoll Exp $
+// $Id: buildBondsProcessor.h,v 1.8.4.1 2006/02/14 15:01:23 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_BUILDBONDSPROCESSOR_H
@@ -39,7 +39,7 @@ namespace BALL
 
 	/**	Bond creation processor
 	*/
-	class BuildBondsProcessor 
+	class BALL_EXPORT BuildBondsProcessor 
 		: public UnaryProcessor<AtomContainer> 
 	{
 
@@ -49,7 +49,7 @@ namespace BALL
 			*/
 			//@{
 			/// Option names
-			struct Option
+			struct BALL_EXPORT Option
 			{
 				/** Name to the file where the bonds lengths, max and
 				 *  min bond lengths are stored in.
@@ -80,7 +80,7 @@ namespace BALL
 			};
 
 			/// Default values for options
-			struct Default
+			struct BALL_EXPORT Default
 			{
 				/// default file name for the bond lengths
 				static const char* BONDLENGTHS_FILENAME;
@@ -149,6 +149,10 @@ namespace BALL
 			//@{
 			/// options
 			Options options;
+
+			/** reset the options to default values
+			*/
+			void setDefaultOptions();
 			//@}
 			
 		protected:

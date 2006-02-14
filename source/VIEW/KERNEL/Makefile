@@ -1,9 +1,19 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.21.8.1 2006/02/14 15:03:42 amoll Exp $
+#
+# Author:
+#   Oliver Kohlbacher
+#
+
 DIRECTORY=VIEW/KERNEL
 
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
   client.C\
+  clippingPlane.C\
 	common.C\
   compositeManager.C\
   connectionObject.C\
@@ -26,9 +36,7 @@ MOC_SOURCES=\
 	mainControl_moc.C
 
 include ../../common.mak
-include .Dependencies
-
-BALL_INCLUDES=$(VIEW_INCLUDES)
+-include .Dependencies
 
 mainControl_moc.C:  $(BALL_PATH)/include/BALL/VIEW/KERNEL/mainControl.h
 	$(MOC) $(BALL_PATH)/include/BALL/VIEW/KERNEL/mainControl.h -o mainControl_moc.C

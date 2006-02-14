@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: files.C,v 1.9 2003/12/01 07:35:10 oliver Exp $
+// $Id: files.C,v 1.9.8.1 2006/02/14 15:02:00 amoll Exp $
 //
 
 #include <BALL/FORMAT/PDBFile.h>
@@ -200,6 +200,17 @@ void checkStructures()
 		}
 	}
 }
+
+void readOptionFile(const String& filename)
+{
+	Options o;
+	o.readOptionFile(filename);
+	amber.options = o;
+	cout << "Options:" << endl
+       << "--------" << endl;
+	amber.options.dump(cout);
+}
+
 
 void singlePoint()
 {

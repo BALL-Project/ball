@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GAMESSLogFile.C,v 1.2 2005/10/05 10:08:20 anhi Exp $
+// $Id: GAMESSLogFile.C,v 1.2.6.1 2006/02/14 15:02:19 amoll Exp $
 //
 
 #include <BALL/FORMAT/GAMESSLogFile.h>

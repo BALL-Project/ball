@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.34 2005/02/07 20:32:41 amoll Exp $
+// $Id: colorProcessor.C,v 1.34.6.1 2006/02/14 15:03:46 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -34,9 +34,15 @@ namespace BALL
 		ColorProcessor::ColorProcessor(const ColorProcessor& cp)
 			throw()
 			:	UnaryProcessor<GeometricObject*>(cp),
+				update_always_needed_(cp.update_always_needed_),
 				default_color_(cp.default_color_),
 				selection_color_(cp.selection_color_),
-				transparency_(0)
+				transparency_(cp.transparency_),
+				composites_(cp.composites_),
+				atom_grid_(cp.atom_grid_),
+				model_type_(cp.model_type_),
+				last_composite_of_grid_(cp.last_composite_of_grid_),
+				additional_grid_distance_(cp.additional_grid_distance_)
 		{
 		}
 
@@ -63,10 +69,15 @@ namespace BALL
 		void ColorProcessor::set(const ColorProcessor& cp)
 			throw()
 		{
+			update_always_needed_ = cp.update_always_needed_;
 			default_color_ = cp.default_color_;
-			composites_ = cp.composites_;
-			transparency_ = cp.transparency_;
 			selection_color_ = cp.selection_color_;
+			transparency_ = cp.transparency_;
+			composites_ = cp.composites_;
+			atom_grid_ = cp.atom_grid_;
+			model_type_ = cp.model_type_;
+			last_composite_of_grid_ = cp.last_composite_of_grid_;
+			additional_grid_distance_ = cp.additional_grid_distance_;
 		}
 
 
@@ -96,21 +107,22 @@ namespace BALL
 		{
 			const Composite* composite = object->getComposite();
 
+			/// ------------- meshes ----------------------------
 			Mesh* const mesh = dynamic_cast<Mesh*>(object);
 			if (mesh != 0)
 			{
-				mesh->colorList.clear();
+				mesh->colors.clear();
 				if (composite == &composite_to_be_ignored_for_colorprocessors_ ||
 						composites_ == 0)
 				{
-					mesh->colorList.push_back(default_color_);
+					mesh->colors.push_back(default_color_);
 					return Processor::CONTINUE;
 				}
 
 				if (composite == 0 ||
 						composite != last_composite_of_grid_)
 				{
-					createAtomGrid_(composite);
+					createAtomGrid(composite);
 				}
 
 				colorMeshFromGrid_(*mesh);
@@ -119,6 +131,7 @@ namespace BALL
 
 			ColorExtension2* const two_colored = dynamic_cast<ColorExtension2*>(object);
 
+			/// ------------- custom objects ----------------------------
 			if (composite == 0 ||
 					composite == &composite_to_be_ignored_for_colorprocessors_)
 			{
@@ -130,6 +143,7 @@ namespace BALL
 				return Processor::CONTINUE;
 			}
 
+			/// ------------- single colored objects ----------------------------
 			if (two_colored == 0)
 			{
 				if (composite->isSelected())
@@ -143,8 +157,11 @@ namespace BALL
 				return Processor::CONTINUE;
 			}
 
-			// ok, we have a two colored object
+			/// ------------- two colored objects ----------------------------
 			const Bond* const bond = dynamic_cast<const Bond*>(composite);
+
+
+			/// ------------- bonds  ----------------------------
 			if (bond != 0)
 			{
 				const Atom* atom = bond->getFirstAtom();
@@ -167,6 +184,7 @@ namespace BALL
 					two_colored->setColor2(selection_color_);
 				}
 			}
+			/// ------------- non bonds  ----------------------------
 			else
 			{
 				if (composite->isSelected())
@@ -184,7 +202,7 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void ColorProcessor::createAtomGrid_(const Composite* from_mesh)
+		void ColorProcessor::createAtomGrid(const Composite* from_mesh)
 			throw()
 		{
 			atom_grid_.clear();
@@ -197,7 +215,7 @@ namespace BALL
 
 			if (from_mesh == 0)
 			{
-				CompositeSet::ConstIterator it = composites_->begin();
+				List<const Composite*>::const_iterator it = composites_->begin();
 				for(; it != composites_->end(); it++)
 				{
 					if (RTTI::isKindOf<AtomContainer>(**it))
@@ -260,14 +278,15 @@ namespace BALL
 			{
 				float memory = SysInfo::getAvailableMemory();
 				// if we can not calculate available memory, use around 60 MB for the grid
-				if (memory == -1) memory = 100000000;
+				if (memory == -1) memory = 10000000;
 				memory *= 0.6;
-				float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing((LongIndex)memory, diagonal + Vector3(2 * additional_grid_distance_));
+				float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing((LongIndex)memory, diagonal + 
+																																						Vector3(2 * (additional_grid_distance_ + 15.0)));
 				if (min_spacing > grid_spacing) grid_spacing = min_spacing;
 			}
 			
-			atom_grid_ = AtomGrid(boxp.getLower() - Vector3(additional_grid_distance_),
-														diagonal + Vector3(2 * additional_grid_distance_),
+			atom_grid_ = AtomGrid(boxp.getLower() - Vector3(additional_grid_distance_ + 15.0),
+														diagonal + Vector3(2 * additional_grid_distance_ + 15.0),
 														grid_spacing); 
 		 
 			for (lit = atoms.begin(); lit != atoms.end(); lit++)
@@ -283,32 +302,32 @@ namespace BALL
 		{
 			if (atom_grid_.isEmpty()) return;
 			
-			mesh.colorList.resize(mesh.vertex.size());
+			mesh.colors.resize(mesh.vertex.size());
 			
 			for (Position p = 0; p < mesh.vertex.size(); p++)
 			{
 				// make sure we found an atom
-				const Atom* atom = getClosestItem_(mesh.vertex[p]);
+				const Atom* atom = getClosestItem(mesh.vertex[p]);
 
 				if (atom == 0)
 				{
- 					mesh.colorList[p] = default_color_;
+					mesh.colors[p] = default_color_;
 				}
 				else
 				{
 					if (atom->isSelected())
 					{
-						mesh.colorList[p] = selection_color_;
+						mesh.colors[p] = selection_color_;
 					}
 					else
 					{
- 						getColor(*atom, mesh.colorList[p]);
+						getColor(*atom, mesh.colors[p]);
 					}
 				}
 			}
 		}
 
-		void ColorProcessor::setComposites(const CompositeSet* composites)
+		void ColorProcessor::setComposites(const List<const Composite*>* composites)
 			throw() 
 		{ 
 			composites_ = composites;
@@ -349,7 +368,7 @@ namespace BALL
 		}
 
 
-		const Atom* ColorProcessor::getClosestItem_(const Vector3& point) const
+		const Atom* ColorProcessor::getClosestItem(const Vector3& point) const
 			throw()
 		{
 			const HashGridBox3<const Atom*>* box = atom_grid_.getBox(point);
@@ -404,28 +423,67 @@ namespace BALL
 			return *item;
 		}
 
+		bool ColorProcessor::start()
+			throw()
+		{
+			selection_color_ = BALL_SELECTED_COLOR;
+			selection_color_.setAlpha(255 - transparency_);
+			return (getComposites() != 0);
+		}
 
 		//////////////////////////////////////////////////////////////////////
 		InterpolateColorProcessor::InterpolateColorProcessor()
 			: ColorProcessor(),
-				min_color_(ColorRGBA(0,0,1.0)),
-				max_color_(ColorRGBA(1.0,1.0,0)),
-				min_min_color_(ColorRGBA(1.0,1.0,1.0)),
-				max_max_color_(ColorRGBA(1.0,0.0,0)),
+				min_color_(ColorRGBA(1.0,1.0,1.0)),
+				max_color_(ColorRGBA(1.0,0.0,0)),
+				mode_(NO_OUTSIDE_COLORS),
 				max_value_(1),
 				min_value_(0)
 		{
 			default_color_ = ColorRGBA(1.0,1.0,1.0);
 		}
 
-		void InterpolateColorProcessor::setTransparency(Size value)
-			throw() 
-		{ 
-			ColorProcessor::setTransparency(value);
-			min_color_.setAlpha(255 - value);
-			max_color_.setAlpha(255 - value);
-			min_min_color_.setAlpha(255 - value);
-			max_max_color_.setAlpha(255 - value);
+
+		InterpolateColorProcessor::InterpolateColorProcessor(const InterpolateColorProcessor& pro)
+			: ColorProcessor(pro)
+		{
+		}
+
+		
+		bool InterpolateColorProcessor::start()
+			throw()
+		{
+			if (!ColorProcessor::start()) return false;
+
+			if (colors_.size() < 2 ||
+					max_value_ <= min_value_)
+			{
+				return false;
+			}
+
+			x_ = (max_value_ - min_value_) / (colors_.size() - 1);
+
+			min_color_.setAlpha(255 - transparency_);
+			max_color_.setAlpha(255 - transparency_);
+			default_color_.setAlpha(255 - transparency_);
+
+			for (Position p = 0; p < colors_.size(); p++)
+			{
+				colors_[p].setAlpha(255 - transparency_);
+			}
+
+			if (mode_ == NO_OUTSIDE_COLORS)
+			{
+				min_color_ = colors_[0];
+				max_color_ = colors_[colors_.size() - 1];
+			}
+			else if (mode_ == DEFAULT_COLOR_FOR_OUTSIDE_COLORS)
+			{
+				min_color_ = default_color_;
+				max_color_ = default_color_;
+			}
+
+			return true;
 		}
 
 		void InterpolateColorProcessor::interpolateColor(float value, ColorRGBA& color_to_be_set)
@@ -433,30 +491,33 @@ namespace BALL
 		{
 			if (value < min_value_)
 			{
-				color_to_be_set.set(min_min_color_);
+				color_to_be_set.set(min_color_);
 				return;
 			}
 			
 			if (value > max_value_) 
 			{
-				max_max_color_.set(max_max_color_);
+				color_to_be_set.set(max_color_);
 				return;
 			}
 
-			float red1   = min_color_.getRed();
-			float green1 = min_color_.getGreen();
-			float blue1  = min_color_.getBlue();
+			const Position z1 = (Position)floor((value - min_value_)/ x_);
+ 			const Position z2 = (Position)ceil((value - min_value_)/ x_);
 
-			float red2   = max_color_.getRed();
-			float green2 = max_color_.getGreen();
-			float blue2  = max_color_.getBlue();
+			const float& red1   = colors_[z1].getRed();
+			const float& green1 = colors_[z1].getGreen();
+			const float& blue1  = colors_[z1].getBlue();
 
-			value -= min_value_;
+			const float red2   = (float) colors_[z2].getRed()   - (float) colors_[z1].getRed();
+			const float green2 = (float) colors_[z2].getGreen() - (float) colors_[z1].getGreen();
+			const float blue2  = (float) colors_[z2].getBlue()  - (float) colors_[z1].getBlue();
 
-			color_to_be_set.set(red1 + (value * (red2 - red1)) 			/ max_value_,
-													 green1 + (value * (green2 - green1))	/ max_value_,
-													 blue1 + (value * (blue2 - blue1)) 		/ max_value_,
-													 255 - transparency_);
+			const float dz1 = (value - min_value_ - ((float)z1) * x_) / x_;
+
+			color_to_be_set.set(red1   + dz1 * red2,
+													green1 + dz1 * green2,
+													blue1  + dz1 * blue2,
+													255 - transparency_);
 		}
 
 		void InterpolateColorProcessor::setMinColor(const ColorRGBA& color)
@@ -481,65 +542,6 @@ namespace BALL
 			throw()
 		{
 			return max_color_;
-		}
-
-		float InterpolateColorProcessor::getMaxValue() const
-			throw()
-		{
-			return max_value_;
-		}
-
-		void InterpolateColorProcessor::setMaxValue(float value)
-			throw()
-		{
-			max_value_ = value;
-		}
-
-		float InterpolateColorProcessor::getMinValue() const
-			throw()
-		{
-			return min_value_;
-		}
-
-		void InterpolateColorProcessor::setMinValue(float value)
-			throw()
-		{
-			min_value_ = value;
-		}
-
-		void InterpolateColorProcessor::setMinMinColor(const ColorRGBA& color)
-			throw()
-		{
-			min_min_color_ = color;
-		}
-
-		void InterpolateColorProcessor::setMaxMaxColor(const ColorRGBA& color)
-			throw()
-		{
-			max_max_color_ = color;
-		}
-
-		const ColorRGBA& InterpolateColorProcessor::getMinMinColor() const
-			throw()
-		{
-			return min_min_color_;
-		}
-
-		const ColorRGBA& InterpolateColorProcessor::getMaxMaxColor() const
-			throw()
-		{
-			return max_max_color_;
-		}
-
-		bool InterpolateColorProcessor::start()
-		{
-			min_min_color_.setAlpha(255 - transparency_);
-			min_color_.setAlpha(255 - transparency_);
-			max_max_color_.setAlpha(255 - transparency_);
-			max_color_.setAlpha(255 - transparency_);
-			default_color_.setAlpha(255 - transparency_);
-
-			return true;
 		}
 
 	} // namespace VIEW

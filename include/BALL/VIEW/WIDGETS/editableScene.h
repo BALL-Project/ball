@@ -39,7 +39,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		class BALL_EXPORT EditableScene
+		class BALL_VIEW_EXPORT EditableScene
 			: public Scene
 			{
 				Q_OBJECT //macro for QT-Messages
@@ -51,7 +51,7 @@ namespace BALL
 						// nested class
 						// This class represents a single edit operation and stores its type and
 						// parameters. This can be used to implement undo functionality.
-						class BALL_EXPORT EditOperation
+						class BALL_VIEW_EXPORT EditOperation
 						{
 							public:
 

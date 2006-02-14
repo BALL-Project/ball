@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.29 2005/02/06 20:57:05 oliver Exp $
+// $Id: cartoonModel.h,v 1.29.6.1 2006/02/14 15:01:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -29,10 +29,12 @@ namespace BALL
 				documentation.
 				\ingroup  ViewModels
 		*/
-		class BALL_EXPORT AddCartoonModel
+		class BALL_VIEW_EXPORT AddCartoonModel
 			: public AddBackboneModel
 		{
 			public:
+
+			BALL_CREATE(AddCartoonModel)
 
 			/**	@name	Constructors and Destructors
 			*/	
@@ -58,11 +60,6 @@ namespace BALL
 			*/ 
 			//@{
 		
-			/** 
-			*/
-			virtual bool createGeometricObjects()
-				throw();
-			
 			/**	Operator method.
 					This method iterates over each Composite object reachable in the 
 					Composite tree. If a Composite is of kind Atom and has the
@@ -76,16 +73,6 @@ namespace BALL
 			/**	@name	debuggers and diagnostics 
 			*/ 
 			//@{
-
-			/** Internal value dump.
-					Dump the current state to 
-					the output ostream <tt>s</tt> with dumping depth <tt>depth</tt>.
-					Calls ModelProcessor::dump.
-					\param   s output stream where to output the state 
-					\param   depth the dumping depth
-			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
 
 			///
 			void setHelixRadius(float radius)
@@ -104,12 +91,20 @@ namespace BALL
 				throw() { return arrow_width_;}
 
 			///
-			void setArrowHeight(float heigth)
-				throw() { arrow_height_ = heigth;}
+			void setStrandHeight(float heigth)
+				throw() { strand_height_ = heigth;}
 
 			///
-			float getArrowHeight() const
-				throw() { return arrow_height_;}
+			float getStrandHeight() const
+				throw() { return strand_height_;}
+			
+			///
+			void setStrandWidth(float w)
+				throw() { strand_width_ = w;}
+
+			///
+			float getStrandWidth() const
+				throw() { return strand_width_;}
 
 			///
 			void setDNABaseRadius(float r)
@@ -159,6 +154,10 @@ namespace BALL
 			bool twoColorsEnabled() const
 				throw() {return use_two_colors_;}
 
+			///
+			virtual bool createGeometricObjects()
+				throw();
+
 			//@}
 
 			protected:
@@ -168,32 +167,19 @@ namespace BALL
 				throw();
 
 			//_ collect the atoms, for which the spline points will be calculated
-			virtual void collectAtoms_(SecondaryStructure& ss)
-				throw();
+			virtual void collectAtoms_(SecondaryStructure& ss);
 
-			//_ wrapper for collectAtoms_(SecondaryStructure)
-			virtual void collectAtoms_(Chain& chain)
-				throw();
+			void buildGraphicalRepresentation_(Position start, Position end, Position type);
 
-			void drawHelix_(SecondaryStructure& ss)
-				throw();
+			void buildHelix_(Position start, Position end);
 
-			void drawStrand_(SecondaryStructure& ss)
-				throw();
+			void buildStrand_(Position start, Position end);
 
-			void drawTube_(SecondaryStructure& ss)
-				throw();
+			void buildDNA_(Position start, Position end);
 
-			void drawDNA_(SecondaryStructure& ss)
-				throw();
+			void buildWatsonCrickModel_(Position start, Position end);
 
-			void drawWatsonCrickModel_(const SecondaryStructure& ss)
-				throw();
-
-			void drawRibbon_(Size start, Size end)
-				throw();
-
-			void computeSpline_();
+			void buildRibbon_(Position start, Position end);
 
 			void insertTriangle_(Position v1, Position v2, Position v3, Mesh& mesh);
 			void drawStrand_(const Vector3& start,
@@ -212,11 +198,20 @@ namespace BALL
 			bool assignNucleotideAtoms_(Residue& r, Size nr_atoms, String atom_names[10], Atom* atoms[10])
 				throw();
 
+			void drawRiboseAtoms_(const Atom* atom1, const Atom* atom2, const Vector3& v1, const Vector3& v2);
+
+			virtual void drawPart_(Position pos);
+			Position getType_(const Residue& residue);
+
 			Composite* last_chain_;
+			SecondaryStructure* current_ss_;
+			bool 			 have_single_residues_;
+			AddBackboneModel backbone_model_;
 
 			float helix_radius_;
 			float arrow_width_;
-			float arrow_height_;
+			float strand_width_;
+			float strand_height_;
 			float DNA_helix_radius_;
 			float DNA_ladder_radius_;
 			float DNA_base_radius_;
@@ -227,9 +222,9 @@ namespace BALL
 			bool  draw_ribbon_;
 			bool  use_two_colors_;
 
-			HashMap<Residue*, Residue*> complementary_bases_;
-			HashMap<SecondaryStructure*, Position> ss_to_spline_start_;
-			HashMap<SecondaryStructure*, Position> ss_nr_splines_;
+			HashMap<const Residue*, const Residue*> complementary_bases_;
+			HashMap<const SecondaryStructure*, Position> ss_to_spline_start_;
+			HashMap<const SecondaryStructure*, Position> ss_nr_splines_;
 
 			bool no_ss_;
 	};

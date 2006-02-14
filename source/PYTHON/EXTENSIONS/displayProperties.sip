@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.sip,v 1.5.6.1 2005/04/18 13:34:10 amoll Exp $
+// $Id: displayProperties.sip,v 1.5.6.2 2006/02/14 15:02:37 amoll Exp $
 //
 
 class DisplayProperties
-	: Embeddable
+	: ModularWidget
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -13,41 +13,41 @@ class DisplayProperties
 	using namespace BALL::VIEW;
 %End
   public:
-//  BALL_EMBEDDABLE(DisplayProperties);
 
 // methods implemented by the BALL_EMBEDDED macro
 static Size countInstances();
 static DisplayProperties* getInstance(Position /index/);
 
 //  DisplayProperties(QWidget *parent, const char*);
-  void selectModel(int);
-//  void show();
-  void apply();
-//  void applyPreferences(Preferences&) throw();
+//	DisplayProperties(const DisplayProperties&)
+~DisplayProperties() throw();
+//  void onNotify(Message *message) throw();
+//  void initializeWidget(MainControl&) throw();
+//  void initializePreferencesTab(Preferences &preferences) throw();
+//  void finalizePreferencesTab(Preferences &preferences) throw();
+//  void applyPreferences() throw();
 //  void checkMenu(MainControl&) throw();
-  void coloringOptionsPressed();
   void createRepresentationMode();
-//  void defaultPreferences(Preferences&) throw();
+  void modifyRepresentationMode(Representation*);
+	Representation* createRepresentation(const PyCompositeList);
+	bool getSettingsFromString(const String&) throw();
+	void enableCreationForNewMolecules(bool) throw();
+//  void show();
+  void selectModel(int);
+  void selectMode(int);
+  void selectColoringMethod(int);
+	void setSurfaceDrawingPrecision(float);
+	void setDrawingPrecision(int);
+	void setTransparency(int);
+	void setCustomColor(const ColorRGBA&);
+  void apply();
   void editColor();
   void editSelectionColor();
-//  void fetchPreferences(INIFile &inifile) throw();
-//  void finalizePreferencesTab(Preferences &preferences) throw();
-//  void finalizeWidget(MainControl&) throw();
-//  void initializePreferencesTab(Preferences &preferences) throw();
-//  void initializeWidget(MainControl&) throw();
+  void coloringOptionsPressed();
   void modelOptionsPressed();
-  void modifyRepresentationMode(Representation*);
-//  void onNotify(Message *message) throw();
   void precisionBoxChanged(int);
-  void precisionSliderChanged();
-  void selectColoringMethod(int);
-  void selectMode(int);
-	void setDrawingPrecision(int);
-	void setSurfaceDrawingPrecision(float);
-//  void setRepresentation(Representation*) throw();
 //  void transparencySliderChanged();
-//  void writePreferences(INIFile &inifile) throw();
-	void enableCreationForNewMolecules(bool) throw();
-	void setTransparency(int);
-  ~DisplayProperties() throw();
+  void precisionSliderChanged();
+	void coloringUpdatesChanged();
+	void modelUpdatesChanged();
 };

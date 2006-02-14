@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Directory_test.C,v 1.16 2004/12/07 15:28:15 amoll Exp $
+// $Id: Directory_test.C,v 1.16.6.1 2006/02/14 15:03:04 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -15,30 +15,33 @@
 #	define getcwd(a, b) _getcwd(a, b)
 #endif
 
-
-
-START_TEST(Directory, "$Id: Directory_test.C,v 1.16 2004/12/07 15:28:15 amoll Exp $")
-
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
-
 using namespace BALL;
 
 String PS = FileSystem::PATH_SEPARATOR;
-Directory* dd;
 String test_dir;
-char buffer[10000];
-CHECK([EXTRA]prerequisites)
-	::getcwd(buffer, Directory::MAX_PATH_LENGTH);
-	test_dir = buffer;
-	#ifdef BALL_PLATFORM_WINDOWS
-		test_dir += "\\data\\Directory_test";
-	#else
-		test_dir += "/data/Directory_test";
-	#endif
-	TEST_EQUAL(::chdir(test_dir.c_str()), 0)
-	::getcwd(buffer, Directory::MAX_PATH_LENGTH);
-	test_dir = buffer;
+
+bool cleanup()
+{
+	if (test_dir == "")
+	{
+		char buffer[10000];
+		::getcwd(buffer, Directory::MAX_PATH_LENGTH);
+		test_dir = buffer;
+		#ifdef BALL_PLATFORM_WINDOWS
+			test_dir += "\\data\\Directory_test";
+		#else
+			test_dir += "/data/Directory_test";
+		#endif
+
+		::chdir(test_dir.c_str());
+	}
+
+	if (::chdir(test_dir.c_str()) != 0)
+	{
+		Log.error() << "Could not chdir to test dir!" << std::endl;
+	}
 
 	Directory d(test_dir + PS + "dir_a" + PS + "dir_c");
 
@@ -46,20 +49,47 @@ CHECK([EXTRA]prerequisites)
 	d.remove("test1" + PS + "test2");
 	d.remove("test1" + PS + "test3");
 	d.remove("test1" + PS + "test4");
+	d.remove("test1");
 
 	d.remove("test2" + PS + "test1");
 	d.remove("test2" + PS + "test2");
 	d.remove("test2" + PS + "test3");
 	d.remove("test2" + PS + "test4");
-	
-	d.remove("test1");
 	d.remove("test2");
+	
+	//d.remove("test1" + PS + "test2");
+	d.remove("test3" + PS + "test1");
+	d.remove("test3" + PS + "test2");
+	d.remove("test3" + PS + "test3");
+	d.remove("test3" + PS + "test4");
 	d.remove("test3");
-	TEST_EQUAL(d.has("test1"), false)
-	TEST_EQUAL(d.has("test2"), false)
-	TEST_EQUAL(d.has("test3"), false)
+
+	if (d.has("test1") ||
+			d.has("test2") ||
+			d.has("test3"))
+	{
+				return false;
+
+	}
+
+	return true;
+}
+
+
+START_TEST(Directory, "$Id: Directory_test.C,v 1.16.6.1 2006/02/14 15:03:04 amoll Exp $")
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+using namespace BALL;
+
+CHECK([EXTRA]prerequisites)
+	bool ok = cleanup();
+	TEST_EQUAL(ok, true)
 RESULT
 
+Directory* dd = 0;
+char buffer[10000];
 
 CHECK(Directory())
 	dd = new Directory();
@@ -179,10 +209,10 @@ CHECK(bool create(String path, const mode_t& mode = 0777))
 	::chdir(test_dir.c_str());
 	Directory d1("dir_a" + PS + "dir_c"+ PS, true);
 	TEST_EQUAL(d1.isValid(), true)
-	d1.remove("test1");
-	d1.remove("test2");
-	d1.remove("test3");
-	TEST_EQUAL(d1.has("test1"), false)
+
+	bool ok = cleanup();
+	TEST_EQUAL(ok, true)
+
 	bool result = d1.create("test1");
 	TEST_EQUAL(result, true)
 	TEST_EQUAL(d.setCurrent(test_dir), true)
@@ -193,13 +223,15 @@ CHECK(bool create(String path, const mode_t& mode = 0777))
 	TEST_EQUAL(d.setCurrent(test_dir), true)
 	Directory d3;
 	TEST_EQUAL(d3.create(test_dir + PS +"dir_a" + PS + "dir_c" + PS + "test3"), true)
-	d3.remove(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test3");
-	d3.remove(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test2");
-	d3.remove(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
+
+	ok = cleanup();
+	TEST_EQUAL(ok, true)
 RESULT
 
 CHECK(bool getNextEntry(String& entry))
-	::chdir(String(test_dir + PS + "dir_a" + PS + "dir_c").c_str());
+	bool ok = cleanup();
+	TEST_EQUAL(ok, true)	
+
 	Directory d1(".", true);
 	TEST_EQUAL(d1.isValid(), true)
 	d1.create("test1");
@@ -208,70 +240,100 @@ CHECK(bool getNextEntry(String& entry))
 	Directory d2("test1");
 	String s;	
 	
+	// On some systems, the order (or even the presence!) of "." and ".." is not clear.
+	// To avoid this, we just skip these entries. These are properties of the
+	// Filesystem, not the Directory.
 	bool result = d2.getNextEntry(s);
+	STATUS("getNextEntry : " << result << " = " << s)
 	TEST_EQUAL(result, true)
-	TEST_EQUAL(s, ".");
-	
-	result = d2.getNextEntry(s);
-	TEST_EQUAL(result, true)
- 	TEST_EQUAL(s, "..")
-	
-	result = d2.getNextEntry(s);
-	TEST_EQUAL(s, "test2");
-	TEST_EQUAL(result, true)
-	result = d2.getNextEntry(s);
-	
-	TEST_EQUAL(result, false)
-	d1.remove("test1" + PS + "test2");
-	d1.remove("test1");
+	bool found_test2 = false;
+	while (result == true)
+	{
+		if ((s != ".") && (s != ".."))
+		{
+			TEST_EQUAL(s, "test2")
+			found_test2 = true;
+		}
+	  result = d2.getNextEntry(s);
+	  STATUS("getNextEntry : " << result << " = " << s)
+	}
+	TEST_EQUAL(found_test2, true)
+
+	ok = cleanup();
+	TEST_EQUAL(ok, true)	
 RESULT
 
 CHECK(Size countItems())
+{
 	Directory d0(test_dir + PS + "dir_a" + PS + "dir_c");
 	d0.create("test1");
+
 	Directory d1(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
 	d1.create("test1");
 	d1.create("test2");
 	d1.create("test3");
 	d1.create("test4");
 	TEST_EQUAL(d1.countItems(), 4)
+}
+	bool ok = cleanup();
+	TEST_EQUAL(ok, true)
 RESULT
 
+
 CHECK(Size countFiles())
+	Directory d(test_dir + PS + "dir_a" + PS + "dir_c");
+	TEST_EQUAL(d.countFiles(), 2)
+	
+	bool result = d.create("test1");
+	TEST_EQUAL(result, true)
+
 	Directory d1(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
 	TEST_EQUAL(d1.countFiles(), 0)
 RESULT
 
+
 CHECK(Size countDirectories())
+{
+	bool ok = cleanup();
+	TEST_EQUAL(ok, true)
+
+	Directory d(test_dir + PS + "dir_a" + PS + "dir_c");
+	TEST_EQUAL(d.countFiles(), 2)
+	
+	bool result = d.create("test1");
+	TEST_EQUAL(result, true)
+
 	Directory d0(test_dir + PS + "dir_a" + PS + "dir_c");
-	Size nr_of_subdirs = 2;
-	if (!d0.has("CVS"))
+	Size nr_of_subdirs = 1;
+	if (d0.has("CVS"))
 	{
-		nr_of_subdirs --;
+		nr_of_subdirs ++;
 	}
 	TEST_EQUAL(d0.countDirectories(), nr_of_subdirs)
 	Directory d1(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
-	TEST_EQUAL(d1.countDirectories(), 4)
-	d1.remove("test2");
-	d1.remove("test3");
-	d1.remove("test4");
-	d1.remove("test1");
+	TEST_EQUAL(d1.countDirectories(), 0)
+}
+	bool ok = cleanup();
+	TEST_EQUAL(ok, true)
 RESULT
 
 CHECK(bool remove(String old_path))
 	Directory d;
-	::chdir(test_dir.c_str());
+	d.setCurrent(test_dir);
 	Directory d1("dir_a" + PS + "dir_c" + PS, true);
 	d1.create("test1");
 	TEST_EQUAL(d1.isValid(), true)
 	bool result = d1.remove("test1");
 	TEST_EQUAL(result, true)
 	TEST_EQUAL(d1.remove("xxxx"), false)
-	d.setCurrent(test_dir);
 RESULT
 
 CHECK(bool rename(String old_path, String new_path))
+	bool ok = cleanup();
+	TEST_EQUAL(ok, true)
+
 	Directory d;
+	d.setCurrent(test_dir);
 	Directory d1("dir_a" + PS + "dir_c", true);
 	TEST_EQUAL(d1.isValid(), true)
 	bool result = d1.create("test1");
@@ -309,9 +371,9 @@ CHECK(bool getFirstEntry(String& entry))
 	d0.create("test1");
 
 	TEST_EQUAL(d0.getFirstEntry(s), true)
-	TEST_EQUAL(s, ".");
+	TEST_EQUAL((s == ".") || (s == "..") || (s == "test1"), true)
 	TEST_EQUAL(d0.getFirstEntry(s), true)
-	TEST_EQUAL(s, ".");
+	TEST_EQUAL((s == ".") || (s == "..") || (s == "test1"), true)
 	d0.remove("test1");
 RESULT
 

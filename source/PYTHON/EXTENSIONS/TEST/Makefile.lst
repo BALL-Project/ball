@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.2 2005/12/23 17:03:02 amoll Exp $
+# $Id: Makefile.lst,v 1.2.6.1 2006/02/14 15:02:54 amoll Exp $
 #
 EXEEXT=.py
 

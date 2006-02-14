@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timeStamp.h,v 1.23 2003/08/26 08:04:09 oliver Exp $
+// $Id: timeStamp.h,v 1.23.8.1 2006/02/14 15:00:44 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
@@ -24,15 +24,9 @@
 #endif
 
 #include <iostream>
-#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
-#	include <windows.h>
-#	include <sys/timeb.h>
-#endif
 
 namespace BALL 
 {
-
-//	class PersistenceManager;
 
 	/**	Time class.
 			Used to store a point of time.
@@ -42,7 +36,7 @@ namespace BALL
 			
 			\ingroup ConceptsMiscellaneous
 	*/
-	class PreciseTime
+	class BALL_EXPORT PreciseTime
 	{
 
 		public:
@@ -191,7 +185,7 @@ namespace BALL
 			<b>Interface:</b> <tt>Storable</tt>	 \par
 			
 	*/
-	class TimeStamp
+	class BALL_EXPORT TimeStamp
 	{
 		public:
 
@@ -314,11 +308,13 @@ namespace BALL
 
 	/**	Print the contents of a PreciseTime object to a stream.
 	*/
+	BALL_EXPORT
 	std::ostream& operator << (std::ostream& os, const PreciseTime& time)
 		throw();
 
 	/**	Print the contents of a TimeStamp object to a stream.
 	*/
+	BALL_EXPORT
 	std::ostream& operator << (std::ostream& os, const TimeStamp& stamp)
 		throw();
 

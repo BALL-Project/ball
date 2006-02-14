@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TRRFile.h,v 1.12 2003/08/26 08:04:14 oliver Exp $
+// $Id: TRRFile.h,v 1.12.8.1 2006/02/14 15:00:51 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_TRRFILE_H
@@ -13,15 +13,17 @@
 
 namespace BALL
 {
-	/** TRR Trajectory file format. This class enables BALL to read and write
-			TRR	files. The format stems from the gromacs molecular dynamics
-			program. This format is portable.	 \par
-			In a TRR-file, each timestep is preceded by a header. The header
-			is handled by the nested TRRHeader class.  \par
+	/** TRR Trajectory file format. 
+			This class enables BALL to read and write GROMACS 
+			TRR	files. This format is portable.	 
+			\par
+			In a TRR file, each timestep is preceded by a header. The header
+			is handled by the nested TRRHeader class.  
+			\par
 			
     	\ingroup  MDFormats
 	*/
-	class TRRFile
+	class BALL_EXPORT TRRFile
 	  :	public TrajectoryFile
 	{
 
@@ -37,32 +39,23 @@ namespace BALL
 				The header consists of several records that are stored sequentially.  \par
 				
 		*/
-		class TRRHeader
+		class BALL_EXPORT TRRHeader
 		{
 
 			public: 
 
-			/** Magic number for the TRR format. This must be equal to 1993.
-			 */
+			/// Magic number for the TRR format. This must be equal to 1993.
 			Size        MAGIC;
-
-			/** The version number of the TRR format.
-			 */
+			/// The version number of the TRR format
 			Size        VERSION;
-
-			/** The length of the title string.
-			 */
+			/// The length of the title string
 			Size        title_string_length;
-
-			/** The title string.
-			 */
+			/// The title string
 			String      title_string;
-
 			/** This record is called ir_size. I don't know what this is used for.
 					We don't need it.
 			*/
 			Size        ir_size;
-
 			/** This record is called e_size. I don't know what this is used for.
 					We don't need it.
 			*/
@@ -168,85 +161,70 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		TRRFile()
-			throw();
+		TRRFile() throw();
 
 		/// Copy constructor
-		TRRFile(const TRRFile& file)
-			throw(Exception::FileNotFound);
+		TRRFile(const TRRFile& file) throw(Exception::FileNotFound);
 
-		/// Detailed constructor
-		TRRFile(const String& name, File::OpenMode open_mode = std::ios::in)
-			throw();
+		/// Construct and open a file
+		TRRFile(const String& name, File::OpenMode open_mode = std::ios::in) throw();
 
 		/// Destructor
-		virtual ~TRRFile()
-			throw();
-
+		virtual ~TRRFile() throw();
 		//@}
+
 		/** @name Assignment
 		*/
 		//@{
 
 		/// Assignment operator
-		const TRRFile& operator = (const TRRFile& file)
-			throw();
+		const TRRFile& operator = (const TRRFile& file) throw();
 
 		/// Clear method
-		virtual void clear()
-			throw();
-
+		virtual void clear() throw();
 		//@}
+
 		/** @name Predicates
 		*/
 		//@{
 
 		/// Equality operator
-		bool operator == (const TRRFile& file) const
-			throw();
-
+		bool operator == (const TRRFile& file) const throw();
 		//@}
+
 		/// @name Public methods for file handling
 		//@{
 
-		/** Initialize the file for usage.
-		 */
-		virtual bool init()
-			throw();
+		/// Initialize the file for usage
+		virtual bool init() throw();
 
 		/** Writes the next header that shall preceed the next
 				data block.
 				@param header the TRRHeader we want to write
 				@return true, if a header could be written, false ow.
 		*/
-		virtual bool writeNextHeader(const TRRHeader header)
-			throw();
+		virtual bool writeNextHeader(const TRRHeader& header) throw();
 
 		/** Reads the next header preceding the next data block.
 				@param header a buffer for result delivery
 				@return true, if a header could be read, false ow.
 		*/
-		virtual bool readNextHeader(TRRHeader& header)
-			throw();
+		virtual bool readNextHeader(TRRHeader& header) throw();
 		
 		/** Append a SnapShot to an existing file
 				@param snapshot the SnapShot we want to store
 				@return true, if writing was successful
 		*/
-		virtual bool append(const SnapShot& snapshot)
-			throw();
+		virtual bool append(const SnapShot& snapshot) throw();
 
 		/** Read the next snapshot from the file
 				@param snapshot a buffer for result delivery
- 				@return true, if a snapshot could be read, false ow.
+ 				@return true, if a snapshot could be read, false otherwise.
 		*/
-		virtual bool read(SnapShot& snapshot)
-			throw();
+		virtual bool read(SnapShot& snapshot) throw();
 
-		/** Read the whole file into a SnapShotManager
-		*/
-		virtual TRRFile& operator >> (SnapShotManager& ssm)
-			throw();
+		/// Read the whole file into a SnapShotManager
+		virtual TRRFile& operator >> (SnapShotManager& ssm) throw();
 		
 		/**
 		*/
@@ -259,52 +237,40 @@ namespace BALL
 		//@{
 
 		///
-		bool hasVelocities() const
-			throw();
+		bool hasVelocities() const throw();
 
 		///
-		void setVelocityStorage(const bool storage)
-			throw();
+		void setVelocityStorage(bool storage)	throw();
 
 		///
-		bool hasForces() const
-			throw();
+		bool hasForces() const throw();
 
 		///
-		void setForceStorage(const bool storage)
-			throw();
+		void setForceStorage(bool storage) throw();
 
 		///
-		Size getPrecision() const
-			throw();
+		Size getPrecision() const throw();
 
 		///
-		bool setPrecision(const Size precision)
-			throw();
+		bool setPrecision(const Size precision) throw();
 
 		///
-		float getTimestep() const
-			throw();
+		float getTimestep() const	throw();
 
 		///
-		void setTimestep(const float timestep)
-			throw();
+		void setTimestep(float timestep) throw();
 
 		///
-		Vector3 getBoundingBoxX() const
-			throw();
+		Vector3 getBoundingBoxX() const	throw();
 
 		///
-		Vector3 getBoundingBoxY() const
-			throw();
+		Vector3 getBoundingBoxY() const	throw();
 
 		///
-		Vector3 getBoundingBoxZ() const
-			throw();
+		Vector3 getBoundingBoxZ() const	throw();
 
 		///
-		void setBoundingBox(const Vector3 box[3])
-			throw();
+		void setBoundingBox(const Vector3& x, const Vector3& y, const Vector3& z) throw();
 
 		//@}
 

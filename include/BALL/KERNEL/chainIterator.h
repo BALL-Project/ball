@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chainIterator.h,v 1.20 2003/08/26 08:04:17 oliver Exp $
+// $Id: chainIterator.h,v 1.20.8.1 2006/02/14 15:00:55 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_CHAINITERATOR_H
@@ -25,7 +25,7 @@ namespace BALL
 			
     	\ingroup  KernelIterators
 	*/
-	class ChainIteratorTraits
+	class BALL_EXPORT ChainIteratorTraits
 		: public CompositeIteratorTraits
 	{
 

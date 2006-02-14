@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.C,v 1.26 2005/03/02 09:46:06 oliver Exp $
+// $Id: stageSettings.C,v 1.26.4.1 2006/02/14 15:03:41 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
@@ -22,15 +22,35 @@ namespace BALL
 	{
 
 		StageSettings::StageSettings( QWidget* parent,  const char* name, WFlags fl )
-			: StageSettingsData(parent, name, fl),
-				PreferencesEntry()
+			: StageSettingsData(parent, name, fl)
 		{
 			stage_ = ((Scene*) parent)->getStage();
 			if (stage_ == 0) return;
 			scene_ = (Scene*) parent;
 			updateFromStage();
 
-			insertEntry(this, "Display");
+			registerWidgetForHelpSystem_(widget_stack->widget(2), "tips.html#3D");
+
+			setDefaultValues_();
+			setINIFileSectionName("STAGE");
+
+			registerObject_(color_sample);
+			registerObject_(animation_smoothness);
+			registerObject_(coordinate_button);
+			registerObject_(show_lights_);
+			registerObject_(enable_fog);
+			registerObject_(fog_slider);
+			registerObject_(popup_names);
+			registerWidgetForHelpSystem_(popup_names, "scene.html#popup_atoms");
+
+			registerObject_(slider_);
+			registerObject_(wheel_slider_);
+
+			registerObject_(eye_distance_slider);
+			registerObject_(focal_distance_slider);
+			registerObject_(swap_sss_button);
+
+			setWidgetStackName("Display");
 			setWidgetStack(widget_stack);
 		}
 
@@ -72,6 +92,11 @@ namespace BALL
 			Scene::setMouseSensitivity(slider_->value() + 1);
 			Scene::setMouseWheelSensitivity(wheel_slider_->value() + 1);
 
+			if (Scene::getInstance(0) != 0)
+			{
+				Scene::getInstance(0)->setPopupInfosEnabled(popup_names->isChecked());
+			}
+
 			stage_->setEyeDistance((float)(eye_distance_slider->value() / 10.0));
 			stage_->setFocalDistance((float)(eye_distance_slider->value()));
 
@@ -89,7 +114,6 @@ namespace BALL
 			Scene::setShowLightSources(show_lights_->isChecked());
 			Scene::setAnimationSmoothness(((float)animation_smoothness->value()) / 10.0);
 
-			/* ?????
 			// use vertex buffers ?
 			bool use_buffer = use_vertex_buffers->isChecked();
 			GLRenderer& renderer = ((Scene*)Scene::getInstance(0))->getGLRenderer();
@@ -109,37 +133,25 @@ namespace BALL
 			}
 
 			renderer.enableVertexBuffers(use_buffer);
-			*/ // ?????
 		}
 
 
-		void StageSettings::setDefaultValues(bool all)
-			throw()
+		void StageSettings::setDefaultValues_()
 		{
-			Position current = widget_stack->id(widget_stack->visibleWidget());
-			if (all || current == 0)
-			{
-				color_sample->setBackgroundColor(black);
-				animation_smoothness->setValue(25);
-				coordinate_button->setChecked(false);
-				show_lights_->setChecked(false);
+			color_sample->setBackgroundColor(black);
+			animation_smoothness->setValue(25);
+			coordinate_button->setChecked(false);
+			show_lights_->setChecked(false);
+			enable_fog->setChecked(false);
+			fog_slider->setValue(200);
+			popup_names->setChecked(false);
 
-				enable_fog->setChecked(false);
-				fog_slider->setValue(200);
-			}
+			slider_->setValue(5);
+			wheel_slider_->setValue(5);
 
-			if (all || current == 1)
-			{
-				slider_->setValue(5);
-				wheel_slider_->setValue(5);
-			}
-
-			if (all || current == 2)
-			{
-				eye_distance_slider->setValue(20);
-				focal_distance_slider->setValue(40);
-				swap_sss_button->setChecked(false);
-			}
+			eye_distance_slider->setValue(20);
+			focal_distance_slider->setValue(40);
+			swap_sss_button->setChecked(false);
 
 			/**
 			if (use_vertex_buffers->isEnabled())
@@ -212,5 +224,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL

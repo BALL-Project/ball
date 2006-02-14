@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftModule.h,v 1.17 2003/08/26 08:04:45 oliver Exp $
+// $Id: shiftModule.h,v 1.17.8.1 2006/02/14 15:01:14 amoll Exp $
 //
 
 #ifndef BALL_NMR_SHIFTMODULE_H
@@ -42,7 +42,7 @@ namespace BALL
 			properties can be reset to zero by applying a  \link ClearShiftProcessor ClearShiftProcessor \endlink .  \par
 	\ingroup ShiftModel
 	*/
-	class ShiftModule 
+	class BALL_EXPORT ShiftModule 
 		: public UnaryProcessor<Composite>
 	{
 		public:	

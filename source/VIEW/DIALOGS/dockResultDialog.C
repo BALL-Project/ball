@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.4 2006/02/01 13:08:17 leonhardt Exp $
+// $Id: dockResultDialog.C,v 1.4.4.1 2006/02/14 15:03:31 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockResultDialog.h>

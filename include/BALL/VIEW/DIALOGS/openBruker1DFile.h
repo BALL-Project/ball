@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker1DFile.h,v 1.7 2004/02/26 08:41:35 anhi Exp $
+// $Id: openBruker1DFile.h,v 1.7.10.1 2006/02/14 15:01:38 amoll Exp $
 
 #ifndef BALL_VIEW_DIALOGS_OPENBRUKER1DFILE_H
 #define BALL_VIEW_DIALOGS_OPENBRUKER1DFILE_H
@@ -27,7 +27,7 @@ namespace BALL
 		/** Interface to select and open spectra stored in the bruker file format.
     		\ingroup  ViewDialogs
 		*/
-		class BALL_EXPORT OpenBruker1DFile
+		class BALL_VIEW_EXPORT OpenBruker1DFile
 			: public QWidget,
 				public ModularWidget
 		{
@@ -55,20 +55,11 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
 
-			/** Remove the dialog.
-					This method is called by the dialog's destructor.
-					It reverses all actions performed in 
-					initializeWidget (remove menu entries and connections).
-			*/
-			virtual void finalizeWidget(MainControl& main_control)
-				throw();
-
-
-			protected slots:
+			public slots:
 
 			/** Open the bruker1DFile.
 			 */
-			virtual void openFile_()
+			virtual void openFile()
 				throw();
 
 		};

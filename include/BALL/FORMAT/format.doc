@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: format.doc,v 1.13 2004/02/18 23:24:04 oliver Exp $
+// $Id: format.doc,v 1.13.8.1 2006/02/14 15:00:52 amoll Exp $
 //
 
 /** \defgroup Format File Formats
 		\ingroup Modeling
 		BALL supports a number of different file formats and offers 
-		a set of classes do read and write thos formats.
+		a set of classes do read and write those formats.
 		Some of these classes provide interfaces for the format
 		classes, e.g. \link BALL::GenericMolFile GenericMolFile \endlink, which implements a
 		generic interface for molecular file formats. Others

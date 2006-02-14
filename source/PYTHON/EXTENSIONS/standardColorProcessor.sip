@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.sip,v 1.2 2005/01/14 00:26:22 amoll Exp $
+// $Id: standardColorProcessor.sip,v 1.2.6.1 2006/02/14 15:02:50 amoll Exp $
 //
 
-class AtomChargeColorProcessor
+class ElementColorProcessor
   : ColorProcessor
 {
 %TypeHeaderCode
@@ -12,16 +12,111 @@ class AtomChargeColorProcessor
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End
+	public:
+
+	ElementColorProcessor() throw();
+	void setTransparency(Size) throw();
+	virtual void getColor(const Composite&, ColorRGBA&);
+  //HashMap<Position, ColorRGBA> & getColorMap();
+  //constHashMap<Position, ColorRGBA> & getColorMap() const;
+};
+
+class ResidueNumberColorProcessor
+  : ColorProcessor
+{
+%TypeHeaderCode
+	#include <BALL/VIEW/MODELS/standardColorProcessor.h>
+	using namespace BALL;
+	using namespace BALL::VIEW;
+%End
+	public:
+
+  ResidueNumberColorProcessor() throw();
+	void getColor(const Composite&, ColorRGBA&);
+  void setFirstColor(const ColorRGBA&);
+  void setLastColor(const ColorRGBA&);
+  void setMiddleColor(const ColorRGBA&);
+	const ColorRGBA& getFirstColor() const;
+  const ColorRGBA& getMiddleColor() const;
+  const ColorRGBA& getLastColor() const;
+  virtual bool start() throw();
+};
+
+class PositionColorProcessor
+	: ColorProcessor
+{
+
+%TypeHeaderCode
+	#include <BALL/VIEW/MODELS/standardColorProcessor.h>
+	using namespace BALL;
+	using namespace BALL::VIEW;
+%End
+	public:
+
+			PositionColorProcessor();
+			virtual void getColor(const Composite&, ColorRGBA&);
+			//void setColors(const vector<ColorRGBA>&);
+			//vector<ColorRGBA>& getColors();
+			//const vector<ColorRGBA>& getColors() const;
+			bool start() throw();
+};
+
+class ChainColorProcessor
+  : PositionColorProcessor
+{
+%TypeHeaderCode
+	#include <BALL/VIEW/MODELS/standardColorProcessor.h>
+	using namespace BALL;
+	using namespace BALL::VIEW;
+%End
+	public:
+
+  ChainColorProcessor();
+};
+
+class MoleculeColorProcessor
+  : PositionColorProcessor
+{
+%TypeHeaderCode
+	#include <BALL/VIEW/MODELS/standardColorProcessor.h>
+	using namespace BALL;
+	using namespace BALL::VIEW;
+%End
+	public:
+
+  MoleculeColorProcessor();
+};
+
+class ResidueNameColorProcessor
+  : ColorProcessor
+{
+%TypeHeaderCode
+	#include <BALL/VIEW/MODELS/standardColorProcessor.h>
+	using namespace BALL;
+	using namespace BALL::VIEW;
+%End
+	public:
+
+  ResidueNameColorProcessor() throw();
+	void setTransparency(Size) throw();
+	virtual void getColor(const Composite&, ColorRGBA&);
+  //StringHashMap<ColorRGBA> & getColorMap();
+  //constStringHashMap<ColorRGBA> & getColorMap() const;
+};
+
+class AtomChargeColorProcessor
+  : InterpolateColorProcessor
+{
+%TypeHeaderCode
+	#include <BALL/VIEW/MODELS/standardColorProcessor.h>
+	using namespace BALL;
+
+	using namespace BALL::VIEW;
+%End
   public:
   AtomChargeColorProcessor() throw();
   AtomChargeColorProcessor(const AtomChargeColorProcessor&) throw();
-	void getColor(const Composite&, ColorRGBA&);
-  const ColorRGBA& getNegativeColor() const throw();
-  const ColorRGBA& getPositiveColor() const throw();
-  const ColorRGBA& getNeutralColor() const throw();
-  void setNegativeColor(const ColorRGBA&) throw();
-  void setNeutralColor(const ColorRGBA&) throw();
-  void setPositiveColor(const ColorRGBA&) throw();
+	virtual void getColor(const Composite&, ColorRGBA&);
 };
 
 
@@ -37,19 +132,20 @@ class AtomDistanceColorProcessor
 
   AtomDistanceColorProcessor() throw();
   AtomDistanceColorProcessor(const AtomDistanceColorProcessor&) throw();
-	void getColor(const Composite&, ColorRGBA&);
   void setDistance(float) throw();
   float getDistance() const throw();
-  void setMaxDistanceColor(const ColorRGBA&) throw();
   void setNullDistanceColor(const ColorRGBA&) throw();
-  const ColorRGBA& getMaxDistanceColor() const throw();
   const ColorRGBA& getNullDistanceColor() const throw();
-  void addAtom(const Atom&);
+  void setMaxDistanceColor(const ColorRGBA&) throw();
+  const ColorRGBA& getMaxDistanceColor() const throw();
   void calculateDistances() throw();
-  bool finish() throw();
+  virtual void addAtom(const Atom&);
+  virtual bool finish() throw();
+	virtual void getColor(const Composite&, ColorRGBA&);
+	bool showSelected();
+	void setShowSelected(bool);
 	//Processor::Result operator() (GeometricObject*&) throw();
 };
-
   
 class CustomColorProcessor
   : ColorProcessor
@@ -62,25 +158,23 @@ class CustomColorProcessor
 	public:
 
 	CustomColorProcessor();
+	//virtual Processor::Result operator() (GeometricObject*&);
 };
 
-
-class ElementColorProcessor
-  : ColorProcessor
+class TemperatureFactorColorProcessor
+  : InterpolateColorProcessor
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/MODELS/standardColorProcessor.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End
+
 	public:
 
-	ElementColorProcessor() throw();
-	void getColor(const Composite&, ColorRGBA&);
-  //HashMap<Position, ColorRGBA> & getColorMap();
-  //constHashMap<Position, ColorRGBA> & getColorMap() const;
+  TemperatureFactorColorProcessor();
+	virtual void getColor(const Composite&, ColorRGBA&);
 };
-
 
 class OccupancyColorProcessor
   : ColorProcessor
@@ -93,12 +187,11 @@ class OccupancyColorProcessor
 	public:
 
   OccupancyColorProcessor();
-	void getColor(const Composite&, ColorRGBA&);
+	virtual void getColor(const Composite&, ColorRGBA&);
 };
 
-  
-class ResidueNameColorProcessor
-  : ColorProcessor
+class ForceColorProcessor
+	: InterpolateColorProcessor
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -106,51 +199,10 @@ class ResidueNameColorProcessor
 	using namespace BALL::VIEW;
 %End
 	public:
-
-  ResidueNameColorProcessor() throw();
-	void getColor(const Composite&, ColorRGBA&);
-  //StringHashMap<ColorRGBA> & getColorMap();
-  //constStringHashMap<ColorRGBA> & getColorMap() const;
+			
+	ForceColorProcessor();
+	virtual void getColor(const Composite&, ColorRGBA&);
 };
-
-
-class ResidueNumberColorProcessor
-  : ColorProcessor
-{
-%TypeHeaderCode
-	#include <BALL/VIEW/MODELS/standardColorProcessor.h>
-	using namespace BALL;
-	using namespace BALL::VIEW;
-%End
-	public:
-
-  ResidueNumberColorProcessor() throw();
-	void getColor(const Composite&, ColorRGBA&);
-  const ColorRGBA& getFirstColor() const;
-  const ColorRGBA& getMiddleColor() const;
-  const ColorRGBA& getLastColor() const;
-  void setFirstColor(const ColorRGBA&);
-  void setLastColor(const ColorRGBA&);
-  void setMiddleColor(const ColorRGBA&);
-  bool start() throw();
-};
-
-
-class TemperatureFactorColorProcessor
-  : ColorProcessor
-{
-%TypeHeaderCode
-	#include <BALL/VIEW/MODELS/standardColorProcessor.h>
-	using namespace BALL;
-	using namespace BALL::VIEW;
-%End
-
-	public:
-
-  TemperatureFactorColorProcessor();
-	void getColor(const Composite&, ColorRGBA&);
-};
-
 
 class SecondaryStructureColorProcessor
   : ColorProcessor
@@ -161,7 +213,8 @@ class SecondaryStructureColorProcessor
 	using namespace BALL::VIEW;
 %End
 
-	SecondaryStructureColorProcessor();
+	SecondaryStructureColorProcessor(); 
+	virtual void getColor(const Composite&, ColorRGBA&);
   const ColorRGBA& getCoilColor() const throw();
   const ColorRGBA& getHelixColor() const throw();
   const ColorRGBA& getStrandColor() const throw();
@@ -170,4 +223,32 @@ class SecondaryStructureColorProcessor
   void setHelixColor(const ColorRGBA&) throw();
   void setStrandColor(const ColorRGBA&) throw();
   void setTurnColor(const ColorRGBA&) throw();
+};
+
+
+class ResidueTypeColorProcessor
+	: ColorProcessor
+{
+%TypeHeaderCode
+	#include <BALL/VIEW/MODELS/standardColorProcessor.h>
+	using namespace BALL;
+	using namespace BALL::VIEW;
+%End
+
+	ResidueTypeColorProcessor();
+	virtual void getColor(const Composite&, ColorRGBA&);
+
+	void setBasicColor(const ColorRGBA&) throw();
+	void setAcidicColor(const ColorRGBA& ) throw();
+	void setPolarColor(const ColorRGBA& ) throw();
+	void setHydrophobicColor(const ColorRGBA& ) throw();
+	void setAromaticColor(const ColorRGBA& ) throw();
+	void setOtherColor(const ColorRGBA& ) throw();
+	const ColorRGBA& getBasicColor() const throw();
+	const ColorRGBA& getAcidicColor() const throw();
+	const ColorRGBA& getPolarColor() const throw();
+	const ColorRGBA& getHydrophobicColor() const throw();
+	const ColorRGBA& getAromaticColor() const throw();
+	const ColorRGBA& getOtherColor() const throw();
+	void setTransparency(Size ) throw();
 };

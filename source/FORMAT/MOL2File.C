@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.C,v 1.24.4.1 2005/03/21 14:00:33 amoll Exp $
+// $Id: MOL2File.C,v 1.24.4.2 2006/02/14 15:02:20 amoll Exp $
 //
 
 #include <BALL/FORMAT/MOL2File.h>
@@ -789,10 +789,30 @@ namespace BALL
 		if (atom.countBonds() > 1)
 		{
 			name = name + ".";
-			name = name + atom.countBonds();
+			name = name + String(atom.countBonds());
 		}
 		
 		return name;
+	}
+
+	const MOL2File& MOL2File::operator = (const MOL2File& file)
+		throw()
+	{
+		atoms_		     = file.atoms_;
+		bonds_		     = file.bonds_;
+		sets_          = file.sets_;
+		substructures_ = file.substructures_;
+		molecule_			 = file.molecule_;
+
+		number_of_lines_ = file.number_of_lines_;
+		for (int i=0; i<4096; i++)
+		{
+			buffer_[i] = file.buffer_[i];
+		}
+		line_ = file.line_;
+	
+		GenericMolFile::operator = (file);
+		return *this;
 	}
 
 } // namespace BALL

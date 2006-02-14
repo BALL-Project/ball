@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.16 2005/02/23 12:55:23 amoll Exp $
+// $Id: modelProcessor.h,v 1.16.4.1 2006/02/14 15:01:46 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
@@ -36,11 +36,13 @@ namespace BALL
 				\endverbatim
 				\ingroup  ViewModels
 		*/
-		class BALL_EXPORT ModelProcessor
+		class BALL_VIEW_EXPORT ModelProcessor
 			: public UnaryProcessor<Composite>,
 				public PropertyManager
 		{
 			public:
+
+				BALL_CREATE(ModelProcessor)
 				
 				///
 				typedef List<GeometricObject*> GeometricObjectList;
@@ -86,19 +88,19 @@ namespace BALL
 				
 				///
 				void setDrawingPrecision(Index precision)
-					throw() { drawing_precision_ = precision;}
+					throw();
 
 				///
 				Index getDrawingPrecision() const
-					throw() { return drawing_precision_;}
+					throw();
 
 				///
 				void setSurfaceDrawingPrecision(float precision)
-					throw() { surface_drawing_precision_ = precision;}
+					throw();
 
 				///
 				float getSurfaceDrawingPrecision() const
-					throw() { return surface_drawing_precision_;}
+					throw();
 
 				/** Method to create geometric objects.
 				 		This method is called in Representation::update() after

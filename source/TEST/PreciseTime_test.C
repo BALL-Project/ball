@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PreciseTime_test.C,v 1.10 2002/12/17 16:40:43 oliver Exp $
+// $Id: PreciseTime_test.C,v 1.10.10.1 2006/02/14 15:03:09 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.10 2002/12/17 16:40:43 oliver Exp $")
+START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.10.10.1 2006/02/14 15:03:09 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ using namespace std;
 #define BUSY_WAIT \
 	double x = 0.0;  for (int i = 0; i < 200000; i++, x += rand());
 
-PreciseTime* t_ptr;
+PreciseTime* t_ptr = 0;
 CHECK(PreciseTime::PreciseTime())
 	t_ptr = new PreciseTime;
 	TEST_NOT_EQUAL(t_ptr, 0)
