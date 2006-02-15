@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.10 2006/02/14 22:15:42 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.11 2006/02/15 13:17:54 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -181,6 +181,12 @@ namespace BALL
 						Atom::Type type_a3 = atoms[2]->getType();
 						Atom::Type type_a4 = atoms[3]->getType();
 
+						Log.info() << "MMFF94 Torsion: Searching parameters for type " << this_torsion.type << "   "
+								<< atoms[0]->getFullName() << " " << atoms[1]->getFullName() << " " 
+								<< atoms[2]->getFullName() << " " << atoms[3]->getFullName() << "  " 
+								<< atoms[0]->getType() << " " << atoms[1]->getType() << " " 
+								<< atoms[2]->getType() << " " << atoms[3]->getType() << " " << std::endl;
+
 						// check for parameters in a step down procedure
 						bool found = false;
 						for (Position p = 1; p < 5 && !found; p++)
@@ -355,8 +361,8 @@ Log.error() << "# " << atoms[0]->getName() << " "
 		as.push_back(atoms[1]);
 		as.push_back(atoms[2]);
 
-		if (!mmff->areInOneAromaticRing(as) &&
-				bond2->getOrder() == Bond::ORDER__SINGLE)
+		if (bond2->getOrder() == Bond::ORDER__SINGLE &&
+				!mmff->areInOneAromaticRing(as))
 		{
 			if (bond2->hasProperty("MMFF94SBMB")) return 1;
 
