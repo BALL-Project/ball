@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.33 2006/02/13 23:59:32 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.34 2006/02/15 14:38:53 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -526,8 +526,6 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare, long& wron
 		}
 
 
-if (type_ok) continue;
-
 		found_torsions.insert(found);
 
 		if (ok) continue;
@@ -539,7 +537,7 @@ if (type_ok) continue;
 								<< t.atom1->type << " " << t.atom2->type << " " << t.atom3->type << " " << t.atom4->type
 								<< " got type " << t.type << " was " << type[found] << std::endl
 								<< "got " << t.v1 << " " << t.v2 << " " << t.v3 << std::endl
-								<< "was " << type[found] << " v " << v1[found] << " " << v2[found] << " " << v3[found] << std::endl;
+								<< "was " << v1[found] << " " << v2[found] << " " << v3[found] << std::endl;
 	}
 
 	for (Position p = 0; p < atoms1.size(); p++)

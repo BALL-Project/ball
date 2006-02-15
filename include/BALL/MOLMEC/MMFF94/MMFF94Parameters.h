@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.18 2006/02/12 15:04:22 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.19 2006/02/15 14:38:45 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -440,6 +440,7 @@ namespace BALL
 
 		/// parameters 
 		TorsionsMap parameters_;
+		mutable TorsionsMap buffered_parameters_;
 
 		bool is_initialized_;
 	};

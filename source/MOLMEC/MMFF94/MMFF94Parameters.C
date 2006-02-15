@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.32 2006/02/13 01:34:54 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.33 2006/02/15 14:38:40 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -115,6 +115,8 @@ namespace BALL
 
 	Index MMFF94AtomTypeEquivalences::getEquivalence(Position original, Position number) const
 	{
+		if (number == 0) return original;
+
 		if (original >= equivalences_.size() || !exists_[original] ||
 				number < 1 || number > 4) 
 		{
@@ -460,15 +462,14 @@ namespace BALL
 	bool MMFF94BendParameters::getParameters(Position bond_type,
 			Position atom_type1, Position atom_type2, Position atom_type3, double& ka, double& angle) const
 	{
+#ifdef BALL_DEBUG_MMFF
+		Log.info() << "MMFF94 Bend getParameters "    <<  atom_type1 << " " << atom_type2 << " " << atom_type3 << std::endl;
+#endif
 		// take the standard value
 		BendMap::ConstIterator it = parameters_.find(
 				getIndex_(bond_type, atom_type1, atom_type2, atom_type3));
 
-		if (it == parameters_.end())
-		{
-			return false;
-		}
-
+		if (it == parameters_.end()) return false;
 
 		ka = it->second.first;
 		angle = it->second.second;
@@ -792,13 +793,32 @@ Log.info() << "MMFF94 StretchBend: from row: " << atom1.getName() << " " << atom
 #ifdef BALL_DEBUG_MMFF
 		Log.info() << at1 << " " << at2 << " " << at3 << " " << at4  << std::endl;
 #endif
-		TorsionsMap::ConstIterator it = parameters_.find(index);
+
+		// first we try a buffer for previous hits to speed up things a bit
+		// this will prevent searching for combinations further down the step by step approach
+		TorsionsMap::ConstIterator it = buffered_parameters_.find(index);
+	
+		// did we succeed in a direct hit?
+		if (it != buffered_parameters_.end())
+		{
+			const vector<double>& v = (*it).second;
+			v1 = v[0];
+			v2 = v[1];
+			v3 = v[2];
+			return true;
+		}
+
+		it = parameters_.find(index);
 		if (it == parameters_.end()) return false;
+
 		const vector<double>& v = (*it).second;
 
 		v1 = v[0];
 		v2 = v[1];
 		v3 = v[2];
+
+		// buffer this result 
+		buffered_parameters_[index] = v;
 
 		return true;
 	}

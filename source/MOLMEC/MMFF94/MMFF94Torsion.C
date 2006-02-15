@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.12 2006/02/15 14:10:35 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.13 2006/02/15 14:38:40 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -181,28 +181,25 @@ namespace BALL
 						Atom::Type type_a3 = atoms[2]->getType();
 						Atom::Type type_a4 = atoms[3]->getType();
 
+#ifdef BALL_DEBUG_MMFF
 						Log.info() << "MMFF94 Torsion: Searching parameters for type " << this_torsion.type << "   "
 								<< atoms[0]->getFullName() << " " << atoms[1]->getFullName() << " " 
 								<< atoms[2]->getFullName() << " " << atoms[3]->getFullName() << "  " 
 								<< atoms[0]->getType() << " " << atoms[1]->getType() << " " 
 								<< atoms[2]->getType() << " " << atoms[3]->getType() << " " << std::endl;
+#endif
 
 						// check for parameters in a step down procedure
-						Position ic[] = { 0, 1, 2, 4, 4};
-						Position lc[] = { 0, 1, 4, 2, 4};
+						Position ic[] = { 0, 1, 2, 4, 4}; // equivalence values for atom type i
+						Position lc[] = { 0, 1, 4, 2, 4}; // equivalence values for atom type l
 
-//        .         1,2,3,5,5,
-//        .         1,2,5,3,5/
 						bool found = false;
-						for (Position p = 0; p < 6 && !found; p++)
+						for (Position p = 0; p < 5 && !found; p++)
 						{
-							Position di = ic[p];
-							Position dl = lc[p];
-
 							found = parameters_.getParameters(this_torsion.type, 
-																		equivalences.getEquivalence(type_a1, di),
+																		equivalences.getEquivalence(type_a1, ic[p]),
 																		type_a2, type_a3,
-																		equivalences.getEquivalence(type_a4, dl),
+																		equivalences.getEquivalence(type_a4, lc[p]),
 																		this_torsion.v1, this_torsion.v2, this_torsion.v3);
 						
 							if (found) break;
@@ -223,6 +220,8 @@ namespace BALL
 								<< atoms[2]->getFullName() << " " << atoms[3]->getFullName() << "  " 
 								<< atoms[0]->getType() << " " << atoms[1]->getType() << " " 
 								<< atoms[2]->getType() << " " << atoms[3]->getType() << " " << std::endl;
+
+							continue;
 						}
 
 						// do nothing if all three constants are zeros:
@@ -342,7 +341,7 @@ namespace BALL
 		const Bond* bond2 = atoms[1]->getBond(*atoms[2]);
 		const Bond* bond3 = atoms[2]->getBond(*atoms[3]);
 
-#ifdef BALL_DEBUG_TEST
+#ifdef BALL_DEBUG_MMFF
 Log.error() << "# " << atoms[0]->getName() << " " 
 										<< atoms[1]->getName() << " "
 										<< atoms[2]->getName() << " "
