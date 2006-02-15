@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.34 2006/02/15 14:38:53 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.35 2006/02/15 15:41:23 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -466,10 +466,21 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare, long& wron
 	mmff.updateEnergy();
 	MMFF94Torsion* comp= (MMFF94Torsion*) mmff.getComponent("MMFF94 Torsion");
 
-	if (comp->getTorsions().size() != atoms4.size())
+	Size empty_torsions = 0;
+	for (Position p = 0; p < v1.size(); p++)
+	{
+		if (v1[p] == 0.0 && 
+				v2[p] == 0.0 &&
+				v3[p] == 0.0)
+		{
+			empty_torsions ++;
+		}
+	}
+
+	if (comp->getTorsions().size() != atoms4.size() - empty_torsions)
 	{
 		Log.error() << "Not all torsions found " << filename << " got "
-								<< comp->getTorsions().size() << " was " << atoms4.size()<< std::endl;
+								<< comp->getTorsions().size() << " was " << atoms4.size() - empty_torsions << std::endl;
 	}
 
 	HashSet<Position> found_torsions;
@@ -510,6 +521,8 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare, long& wron
 			continue;
 		}
 
+		found_torsions.insert(found);
+
 		bool ok = (BALL_REAL_EQUAL(t.v1 , v1[found], 0.0001) &&
 						   BALL_REAL_EQUAL(t.v2 , v2[found], 0.0001) &&
 						   BALL_REAL_EQUAL(t.v3 , v3[found], 0.0001))
@@ -525,8 +538,7 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare, long& wron
 			ok = false;
 		}
 
-
-		found_torsions.insert(found);
+		ok &= isOk(t.energy, energy[found]);
 
 		if (ok) continue;
 
@@ -536,8 +548,8 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare, long& wron
 								<< t.atom3->ptr->getName() << " " << t.atom4->ptr->getName() << "   "
 								<< t.atom1->type << " " << t.atom2->type << " " << t.atom3->type << " " << t.atom4->type
 								<< " got type " << t.type << " was " << type[found] << std::endl
-								<< "got " << t.v1 << " " << t.v2 << " " << t.v3 << std::endl
-								<< "was " << v1[found] << " " << v2[found] << " " << v3[found] << std::endl;
+								<< "got " << t.v1 << " " << t.v2 << " " << t.v3 << " angle " << t.angle << "   E: " << t.energy<< std::endl
+								<< "was " << v1[found] << " " << v2[found] << " " << v3[found] << " angle " << angle[found] << "   E: " << energy[found] << std::endl;
 	}
 
 	for (Position p = 0; p < atoms1.size(); p++)
@@ -553,11 +565,11 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare, long& wron
 
 	vector<double> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
 
-	double s_plus_b = results[4];
+	double e = results[7];
 
-	if (!isOk(mmff.getEnergy(), s_plus_b))
+	if (!isOk(mmff.getEnergy(), e))
 	{
-		Log.error() << filename << "   " << s_plus_b << "  " << mmff.getEnergy() << std::endl;
+		Log.error() << filename << "   " << mmff.getEnergy() << "   " << e << std::endl;
 		return false;
 	}
 
@@ -613,6 +625,7 @@ int runtests(const vector<String>& filenames)
 		{
 		}
 
+/*
 		Log.info() << "Got rings: " << mmff.getRings().size()  << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		for (Position p = 0; p < mmff.getRings().size(); p++)
 		{
@@ -623,6 +636,7 @@ int runtests(const vector<String>& filenames)
 			}
 			Log.info() << std::endl;
 		}
+*/
 
 		bool wrong_rings = false;
 		if (mmff.getRings().size() < nr_rings)

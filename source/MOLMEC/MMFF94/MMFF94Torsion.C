@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.13 2006/02/15 14:38:40 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.14 2006/02/15 15:41:36 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -14,6 +14,8 @@
 #include <BALL/SYSTEM/path.h>
 
 #include <algorithm>
+
+#define BALL_DEBUG_TEST
 
 using namespace std;
 
@@ -251,7 +253,6 @@ namespace BALL
 	// calculates the current energy of this component
 	double MMFF94Torsion::updateEnergy() 
 	{
-		/*
 		double cosphi;
 
 		Vector3	a21;
@@ -262,16 +263,17 @@ namespace BALL
 
 		energy_ = 0;
 
-		vector<SingleMMFF94Torsion>::const_iterator it = torsion_.begin(); 
+		vector<Torsion>::const_iterator it = torsions_.begin(); 
 
 		bool use_selection = getForceField()->getUseSelection();
 
-		for (; it != torsion_.end(); it++) 
+		for (; it != torsions_.end(); it++) 
 		{
 			if (!use_selection ||
-					(use_selection  &&
-					(it->atom1->ptr->isSelected() || it->atom2->ptr->isSelected() 
-					 || it->atom3->ptr->isSelected() || it->atom4->ptr->isSelected())))
+					(it->atom1->ptr->isSelected() || 
+					 it->atom2->ptr->isSelected() || 
+					 it->atom3->ptr->isSelected() || 
+					 it->atom4->ptr->isSelected()))
 			{
 				a21 = it->atom1->position - it->atom2->position;
 				a23 = it->atom3->position - it->atom2->position;
@@ -299,11 +301,22 @@ namespace BALL
 						cosphi = -1.0;
 					}
 
-//   					energy_ += it->V * (1 + cos(it->f * acos(cosphi) - it->phase));
+					const double phi = acos(cosphi);
+
+					const double e = 0.5 * (it->v1 * (1.0 + cosphi) +
+																	it->v2 * (1.0 - cos(phi * 2.0)) +
+																	it->v3 * (1.0 + cos(phi * 3.0)));
+
+					energy_ += e;
+
+#ifdef BALL_DEBUG_TEST
+					(*(Torsion*)&*it).energy = e;
+					(*(Torsion*)&*it).angle = phi * (double)180.0 / Constants::PI;
+#endif
 				}
 			}
 		}
-*/
+
 		return energy_;
 	}
 
