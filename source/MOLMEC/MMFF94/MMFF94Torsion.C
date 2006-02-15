@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.14 2006/02/15 15:41:36 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.15 2006/02/15 17:09:27 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -210,6 +210,9 @@ namespace BALL
 						if (!found)
 						{
 							// ???? heuristics
+							const MMFF94AtomTypeData& atj = atom_types[aj.getType()];
+							const MMFF94AtomTypeData& atk = atom_types[aj.getType()];
+
 							//
 							// didnt found torsion parameters
 							getForceField()->getUnassignedAtoms().insert(atoms[0]);
@@ -397,6 +400,139 @@ Log.error() << "# " << atoms[0]->getName() << " "
 
 		// default value: 0
 		return 0;
+	}
+
+
+	double MMFF94Torsion::getU_(const Atom& a)
+	{
+		const Position e = a.getElement().getAtomicNumber();
+		if (e > 5  && e <  9) return 2.0;   // C N O
+		if (e > 13 && e < 17) return 1.25;  // Si P S
+		return -1;
+	}
+
+	double MMFF94Torsion::getV_(const Atom& a)
+	{
+		const Position e = a.getElement().getAtomicNumber();
+		if (e == 6) return 2.12;   // C
+		if (e == 7) return 1.50;   // N
+		if (e == 8) return 0.20;   // O
+		if (e == 14) return 1.22;  // Si
+		if (e == 15) return 2.40;  // P
+		if (e == 16) return 0.49;  // S
+		return -1;
+	}
+
+	bool MMFF94Torsion::calculateHeuristicB_(const Atom& aj, const Atom& ak, 
+																					 const MMFF94AtomTypeData& atj, const MMFF94AtomTypeData& atk, double& result)
+	{
+		// both atom types must be aromatic
+		if (!atj.arom || ! atk.arom) return false;
+
+		vector<Atom*> av;
+		av.push_back((Atom*) &aj);
+		av.push_back((Atom*) &ak);
+
+		// both atoms must be in one aromatic ring
+		if (!mmff->areInOneAromaticRing(av)) return false;
+
+		const double uj = getU_(aj);
+		const double uk = getU_(ak);
+		if (uj == -1 || uk == -1) return false;
+
+		double beta = 6;
+
+		// one trivalent and one tetravalent?
+		if (atj.val * atk.val == 12) beta = 3;
+
+		double l = 0.5;
+
+		// one atom can contribute a pi lone pair
+		if (atj.pilp || atk.pilp) l = 0.3;
+
+		// equation 21
+		result = beta * l * pow(uj * uk, -0.5);
+		return true;
+	}
+
+	bool MMFF94Torsion::calculateHeuristicC_(const Atom& aj, const Atom& ak,
+																					 const MMFF94AtomTypeData& atj, const MMFF94AtomTypeData& atk, double& result)
+	{
+		const Bond& bond = *aj.getBond(ak);
+		if (!bond.getOrder() == Bond::ORDER__DOUBLE) return false;
+
+		const double uj = getU_(aj);
+		const double uk = getU_(ak);
+		if (uj == -1 || uk == -1) return false;
+
+		const double beta = 6.0;
+
+		double l = 1;
+
+		if (atj.mltb != 2 || atk.mltb != 2) l = 0.4;
+
+		// equation 21
+		result = beta * l * pow(uj * uk, -0.5);
+		return true;
+	}
+
+	bool MMFF94Torsion::calculateHeuristicD_(const Atom& aj, const Atom& ak,
+																					 const MMFF94AtomTypeData& atj, const MMFF94AtomTypeData& atk, double& result, bool must_be_tetra)
+	{
+		// both atoms must be tetrcoordinate?
+		if (must_be_tetra && atj.crd * atk.cdr != 16) return false;
+		const double vj = getV_(aj);
+		const double vk = getV_(ak);
+		if (vj == -1 || vk == -1) return false;
+
+		// equation 22
+		// (crd(j) - 1) * (crd(k) - 1) = 9
+		result = pow(vj * vk, -0.5) / 9.0;
+	}
+
+	bool MMFF94Torsion::calculateHeuristicE_(const Atom& aj, const Atom& ak,
+																					 const MMFF94AtomTypeData& atj, const MMFF94AtomTypeData& atk, double& result, bool& zero)
+	{
+		if (atj.crd != 4) return false;
+
+		if (atk.crd == 3 && 
+				(atk.val == 4 || atk.val == 34 | atk.mltb))
+		{
+			zero = true;
+			return true;
+		}
+
+		if (atk.crd == 2 &&
+				(atk.val == 3 || atk.mltb))
+		{
+			zero = true;
+			return true;
+		}
+
+		return calculateHeuristicD_(aj, ak, atj, atk, result, false);
+	}
+
+
+	bool MMFF94Torsion::calculateHeuristicF_(const Atom& aj, const Atom& ak,
+																					 const MMFF94AtomTypeData& atj, const MMFF94AtomTypeData& atk, double& result, bool& zero)
+	{
+		if (atk.crd != 4) return false;
+
+		if (atj.crd == 3 && 
+				(atj.val == 4 || atj.val == 34 | atj.mltb))
+		{
+			zero = true;
+			return true;
+		}
+
+		if (atj.crd == 2 &&
+				(atj.val == 3 || atj.mltb))
+		{
+			zero = true;
+			return true;
+		}
+
+		return calculateHeuristicD_(aj, ak, atj, atk, result, false);
 	}
 
 
