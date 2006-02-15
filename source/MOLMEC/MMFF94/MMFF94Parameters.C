@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.33 2006/02/15 14:38:40 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.34 2006/02/15 17:23:59 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -131,7 +131,7 @@ namespace BALL
 	///////////////////////////////////////////////////////////
 	
 
-	MMFF94AtomTypeData::MMFF94AtomTypeData()
+	MMFF94AtomType::MMFF94AtomType()
 		: aspec(0),
 			crd(0),
 			val(0),

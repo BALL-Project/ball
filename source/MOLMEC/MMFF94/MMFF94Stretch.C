@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.20 2006/02/10 14:40:32 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.21 2006/02/15 17:23:59 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -258,7 +258,7 @@ namespace BALL
 		}
 
 		const MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
-		const vector<MMFF94AtomTypeData>& atom_types = mmff->getAtomTypes();
+		const vector<MMFF94AtomType>& atom_types = mmff->getAtomTypes();
 
 		Position b1 = atom_types[t1].mltb;
 		Position b2 = atom_types[t2].mltb;

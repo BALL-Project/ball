@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.15 2006/02/15 17:09:27 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.16 2006/02/15 17:24:00 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -93,7 +93,7 @@ namespace BALL
 		torsions_.clear();
 
 		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
-		const vector<MMFF94AtomTypeData>& atom_types = mmff->getAtomTypes();
+		const vector<MMFF94AtomType>& atom_types = mmff->getAtomTypes();
 		const MMFF94AtomTypeEquivalences& equivalences = mmff->getEquivalences();
 
 		// calculate the torsions
@@ -210,8 +210,8 @@ namespace BALL
 						if (!found)
 						{
 							// ???? heuristics
-							const MMFF94AtomTypeData& atj = atom_types[aj.getType()];
-							const MMFF94AtomTypeData& atk = atom_types[aj.getType()];
+//   							const MMFF94AtomType& atj = atom_types[aj.getType()];
+//   							const MMFF94AtomType& atk = atom_types[aj.getType()];
 
 							//
 							// didnt found torsion parameters
@@ -403,17 +403,15 @@ Log.error() << "# " << atoms[0]->getName() << " "
 	}
 
 
-	double MMFF94Torsion::getU_(const Atom& a)
+	double MMFF94Torsion::getU_(Position e)
 	{
-		const Position e = a.getElement().getAtomicNumber();
 		if (e > 5  && e <  9) return 2.0;   // C N O
 		if (e > 13 && e < 17) return 1.25;  // Si P S
 		return -1;
 	}
 
-	double MMFF94Torsion::getV_(const Atom& a)
+	double MMFF94Torsion::getV_(Position e)
 	{
-		const Position e = a.getElement().getAtomicNumber();
 		if (e == 6) return 2.12;   // C
 		if (e == 7) return 1.50;   // N
 		if (e == 8) return 0.20;   // O
@@ -424,7 +422,7 @@ Log.error() << "# " << atoms[0]->getName() << " "
 	}
 
 	bool MMFF94Torsion::calculateHeuristicB_(const Atom& aj, const Atom& ak, 
-																					 const MMFF94AtomTypeData& atj, const MMFF94AtomTypeData& atk, double& result)
+																					 const MMFF94AtomType& atj, const MMFF94AtomType& atk, double& result)
 	{
 		// both atom types must be aromatic
 		if (!atj.arom || ! atk.arom) return false;
@@ -434,10 +432,13 @@ Log.error() << "# " << atoms[0]->getName() << " "
 		av.push_back((Atom*) &ak);
 
 		// both atoms must be in one aromatic ring
+		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
 		if (!mmff->areInOneAromaticRing(av)) return false;
 
-		const double uj = getU_(aj);
-		const double uk = getU_(ak);
+		const Position ej = aj.getElement().getAtomicNumber();
+		const Position ek = ak.getElement().getAtomicNumber();
+		const double uj = getU_(ej);
+		const double uk = getU_(ek);
 		if (uj == -1 || uk == -1) return false;
 
 		double beta = 6;
@@ -456,13 +457,15 @@ Log.error() << "# " << atoms[0]->getName() << " "
 	}
 
 	bool MMFF94Torsion::calculateHeuristicC_(const Atom& aj, const Atom& ak,
-																					 const MMFF94AtomTypeData& atj, const MMFF94AtomTypeData& atk, double& result)
+																					 const MMFF94AtomType& atj, const MMFF94AtomType& atk, double& result)
 	{
 		const Bond& bond = *aj.getBond(ak);
 		if (!bond.getOrder() == Bond::ORDER__DOUBLE) return false;
 
-		const double uj = getU_(aj);
-		const double uk = getU_(ak);
+		const Position ej = aj.getElement().getAtomicNumber();
+		const Position ek = ak.getElement().getAtomicNumber();
+		const double uj = getU_(ej);
+		const double uk = getU_(ek);
 		if (uj == -1 || uk == -1) return false;
 
 		const double beta = 6.0;
@@ -476,22 +479,24 @@ Log.error() << "# " << atoms[0]->getName() << " "
 		return true;
 	}
 
-	bool MMFF94Torsion::calculateHeuristicD_(const Atom& aj, const Atom& ak,
-																					 const MMFF94AtomTypeData& atj, const MMFF94AtomTypeData& atk, double& result, bool must_be_tetra)
+	bool MMFF94Torsion::calculateHeuristicD_(Position anj, Position ank,
+																					 const MMFF94AtomType& atj, const MMFF94AtomType& atk, double& result, bool must_be_tetra)
 	{
 		// both atoms must be tetrcoordinate?
-		if (must_be_tetra && atj.crd * atk.cdr != 16) return false;
-		const double vj = getV_(aj);
-		const double vk = getV_(ak);
+		if (must_be_tetra && atj.crd * atk.crd != 16) return false;
+		const double vj = getV_(anj);
+		const double vk = getV_(ank);
 		if (vj == -1 || vk == -1) return false;
 
 		// equation 22
 		// (crd(j) - 1) * (crd(k) - 1) = 9
 		result = pow(vj * vk, -0.5) / 9.0;
+
+		return true;
 	}
 
-	bool MMFF94Torsion::calculateHeuristicE_(const Atom& aj, const Atom& ak,
-																					 const MMFF94AtomTypeData& atj, const MMFF94AtomTypeData& atk, double& result, bool& zero)
+	bool MMFF94Torsion::calculateHeuristicE_(Position anj, Position ank,
+																					 const MMFF94AtomType& atj, const MMFF94AtomType& atk, double& result, bool& zero)
 	{
 		if (atj.crd != 4) return false;
 
@@ -509,12 +514,12 @@ Log.error() << "# " << atoms[0]->getName() << " "
 			return true;
 		}
 
-		return calculateHeuristicD_(aj, ak, atj, atk, result, false);
+		return calculateHeuristicD_(anj, ank, atj, atk, result, false);
 	}
 
 
-	bool MMFF94Torsion::calculateHeuristicF_(const Atom& aj, const Atom& ak,
-																					 const MMFF94AtomTypeData& atj, const MMFF94AtomTypeData& atk, double& result, bool& zero)
+	bool MMFF94Torsion::calculateHeuristicF_(Position anj, Position ank,
+																					 const MMFF94AtomType& atj, const MMFF94AtomType& atk, double& result, bool& zero)
 	{
 		if (atk.crd != 4) return false;
 
@@ -532,7 +537,7 @@ Log.error() << "# " << atoms[0]->getName() << " "
 			return true;
 		}
 
-		return calculateHeuristicD_(aj, ak, atj, atk, result, false);
+		return calculateHeuristicD_(anj, ank, atj, atk, result, false);
 	}
 
 

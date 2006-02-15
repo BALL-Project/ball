@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.26 2006/02/11 22:29:40 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.27 2006/02/15 17:23:59 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -99,7 +99,7 @@ namespace BALL
 		Bend this_bend;
 
 		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
-		const vector<MMFF94AtomTypeData>& atom_types = mmff->getAtomTypes();
+		const vector<MMFF94AtomType>& atom_types = mmff->getAtomTypes();
 		const MMFF94AtomTypeEquivalences& equivalences = mmff->getEquivalences();
 
 		vector<Atom*>::const_iterator	atom_it = mmff->getAtoms().begin();
@@ -381,7 +381,7 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 	double MMFF94Bend::calculateEmpericalReferenceAngle(Atom& atom1, Atom& atom2, Atom& atom3) const
 	{
 		const MMFF94& mmff = *dynamic_cast<MMFF94*>(getForceField());
-		const vector<MMFF94AtomTypeData>& atd = mmff.getAtomTypes();
+		const vector<MMFF94AtomType>& atd = mmff.getAtomTypes();
 
 		vector<Atom*> atoms;
 		atoms.push_back(&atom1);
@@ -391,7 +391,7 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 		if (mmff.areInOneRing(atoms, 3)) return 60;
 		if (mmff.areInOneRing(atoms, 4)) return 90;
 
-		const MMFF94AtomTypeData& aj = atd[atom2.getType()];
+		const MMFF94AtomType& aj = atd[atom2.getType()];
 		if (aj.crd == 4) return 109.45;
 		if (aj.crd == 2)
 		{

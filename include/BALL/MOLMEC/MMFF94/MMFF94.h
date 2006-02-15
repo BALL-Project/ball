@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.2.9 2006/02/09 22:58:08 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.2.10 2006/02/15 17:24:04 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -186,7 +186,7 @@ namespace BALL
 		bool assignMMFF94BondType(Bond& bond) const;
 
 		///
-		const vector<MMFF94AtomTypeData>& getAtomTypes() const { return atom_types_.getAtomTypes();}
+		const vector<MMFF94AtomType>& getAtomTypes() const { return atom_types_.getAtomTypes();}
 
 		///
  		const MMFF94StretchParameters& getStretchParameters() const { return bond_parameters_;}

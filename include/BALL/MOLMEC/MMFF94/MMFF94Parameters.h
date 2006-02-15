@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.19 2006/02/15 14:38:45 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.20 2006/02/15 17:24:04 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -73,10 +73,10 @@ namespace BALL
 
 	/** Class to store the values of an atom type from MMFFPROP.PAR
 	*/
-	struct MMFF94AtomTypeData
+	struct MMFF94AtomType
 	{
 		///
-		MMFF94AtomTypeData();
+		MMFF94AtomType();
 
 		/// atomic number;
 		Position aspec;
@@ -126,14 +126,14 @@ namespace BALL
 		bool readParameters(const String& filename);
 		
 		///
-		const vector<MMFF94AtomTypeData>& getAtomTypes() const { return data_;}
+		const vector<MMFF94AtomType>& getAtomTypes() const { return data_;}
 
 		///
 		bool isInitialized() { return is_initialized_;}
 
 		protected:
 
-		vector<MMFF94AtomTypeData> data_;
+		vector<MMFF94AtomType> data_;
 
 		bool is_initialized_;
 	};
