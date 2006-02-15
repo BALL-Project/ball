@@ -1,4 +1,6 @@
-// TODO: Why does XDRManager fail for Options???
+// TODO: - Why does XDRManager fail for Options???
+// 			 - The distribute / combine / accept methods for TVector currently just cast
+// 			   TVector3<float> -> float[3]. This is _not_ portable...
 #include <BALL/SYSTEM/MPISupport.h>
 
 #include <BALL/KERNEL/system.h>
@@ -1157,36 +1159,20 @@ namespace BALL
 	void MPISupport::combineDatapoints(const std::vector<TVector3<float> >& our_share)
 		throw(Exception::OutOfMemory)
 	{
-		// Create the data array
-		float* buffer = (float*)malloc(our_share.size()*3*sizeof(float));
-		if (buffer == 0)
-			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*3*sizeof(float)));
-
-		// distribute it
-		combineDatapoints(buffer, our_share.size(), mpi_Vector3_float_type_);
-
-		// and free the buffer
-		free(buffer);
+		// distribute the data
+		combineDatapoints(&our_share[0], our_share.size(), mpi_Vector3_float_type_);
 	}
 
 	template <>
 	void MPISupport::acceptCombinedDatapoints(std::vector<TVector3<float> >& combined_set, 
 																						std::vector<TVector3<float> >& our_share)
 	{
-		// Create the data array
-		float* buffer = (float*)malloc(our_share.size()*3*sizeof(float));
-		if (buffer == 0)
-			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*3*sizeof(float)));
-
-		// distribute it
+		// distribute and accept 
 		Size numpoints;
-		float *result = (float*) acceptCombinedDatapoints(buffer, our_share.size(), numpoints, mpi_Vector3_float_type_);
+		float *result = (float*) acceptCombinedDatapoints(&our_share[0], our_share.size(), numpoints, mpi_Vector3_float_type_);
 
 		if (result == 0)
 			throw(Exception::OutOfMemory(__FILE__, __LINE__, numpoints*3*sizeof(float)));
-
-		// free the input buffer
-		delete[](buffer);
 
 		// and create the output vector
 		combined_set.resize(numpoints);
@@ -1202,36 +1188,20 @@ namespace BALL
 	void MPISupport::combineDatapoints(const std::vector<TVector3<double> >& our_share)
 		throw(Exception::OutOfMemory)
 	{
-		// Create the data array
-		double* buffer = (double*)malloc(our_share.size()*3*sizeof(double));
-		if (buffer == 0)
-			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*3*sizeof(double)));
-
-		// distribute it
-		combineDatapoints(buffer, our_share.size(), mpi_Vector3_double_type_);
-
-		// and free the buffer
-		free(buffer);
+		// distribute the data
+		combineDatapoints(&our_share[0], our_share.size(), mpi_Vector3_double_type_);
 	}
 
 	template <>
 	void MPISupport::acceptCombinedDatapoints(std::vector<TVector3<double> >& combined_set, 
 																						std::vector<TVector3<double> >& our_share)
 	{
-		// Create the data array
-		double* buffer = (double*)malloc(our_share.size()*3*sizeof(double));
-		if (buffer == 0)
-			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*3*sizeof(double)));
-
-		// distribute it
+		// distribute the data
 		Size numpoints;
-		double *result = (double*) acceptCombinedDatapoints(buffer, our_share.size(), numpoints, mpi_Vector3_double_type_);
+		double *result = (double*) acceptCombinedDatapoints(&our_share[0], our_share.size(), numpoints, mpi_Vector3_double_type_);
 
 		if (result == 0)
 			throw(Exception::OutOfMemory(__FILE__, __LINE__, numpoints*3*sizeof(double)));
-
-		// free the input buffer
-		delete[](buffer);
 
 		// and create the output vector
 		combined_set.resize(numpoints);
@@ -1247,36 +1217,20 @@ namespace BALL
 	void MPISupport::combineDatapoints(const std::vector<float>& our_share)
 		throw(Exception::OutOfMemory)
 	{
-		// Create the data array
-		float* buffer = (float*)malloc(our_share.size()*sizeof(float));
-		if (buffer == 0)
-			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*3*sizeof(float)));
-
-		// distribute it
-		combineDatapoints(buffer, our_share.size(), MPI_FLOAT);
-
-		// and free the buffer
-		free(buffer);
+		// distribute the data 
+		combineDatapoints(&our_share[0], our_share.size(), MPI_FLOAT);
 	}
 
 	template <>
 	void MPISupport::acceptCombinedDatapoints(std::vector<float>& combined_set, 
 																						std::vector<float>& our_share)
 	{
-		// Create the data array
-		float* buffer = (float*)malloc(our_share.size()*sizeof(float));
-		if (buffer == 0)
-			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*sizeof(float)));
-
-		// distribute it
+		// distribute the data
 		Size numpoints;
-		float *result = (float*) acceptCombinedDatapoints(buffer, our_share.size(), numpoints, MPI_FLOAT);
+		float *result = (float*) acceptCombinedDatapoints(&our_share[0], our_share.size(), numpoints, MPI_FLOAT);
 
 		if (result == 0)
 			throw(Exception::OutOfMemory(__FILE__, __LINE__, numpoints*sizeof(float)));
-
-		// free the input buffer
-		delete[](buffer);
 
 		// and create the output vector
 		combined_set.resize(numpoints);
@@ -1292,36 +1246,20 @@ namespace BALL
 	void MPISupport::combineDatapoints(const std::vector<double>& our_share)
 		throw(Exception::OutOfMemory)
 	{
-		// Create the data array
-		double* buffer = (double*)malloc(our_share.size()*sizeof(double));
-		if (buffer == 0)
-			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*3*sizeof(double)));
-
-		// distribute it
-		combineDatapoints(buffer, our_share.size(), MPI_DOUBLE);
-
-		// and free the buffer
-		free(buffer);
+		// distribute the data
+		combineDatapoints(&our_share[0], our_share.size(), MPI_DOUBLE);
 	}
 
 	template <>
 	void MPISupport::acceptCombinedDatapoints(std::vector<double>& combined_set, 
 																						std::vector<double>& our_share)
 	{
-		// Create the data array
-		double* buffer = (double*)malloc(our_share.size()*sizeof(double));
-		if (buffer == 0)
-			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*sizeof(double)));
-
-		// distribute it
+		// distribute the data
 		Size numpoints;
-		double *result = (double*) acceptCombinedDatapoints(buffer, our_share.size(), numpoints, MPI_DOUBLE);
+		double *result = (double*) acceptCombinedDatapoints(&our_share[0], our_share.size(), numpoints, MPI_DOUBLE);
 
 		if (result == 0)
 			throw(Exception::OutOfMemory(__FILE__, __LINE__, numpoints*sizeof(double)));
-
-		// free the input buffer
-		delete[](buffer);
 
 		// and create the output vector
 		combined_set.resize(numpoints);
@@ -1337,37 +1275,21 @@ namespace BALL
 	void MPISupport::combineDatapoints(const std::vector<int>& our_share)
 		throw(Exception::OutOfMemory)
 	{
-		// Create the data array
-		int* buffer = (int*)malloc(our_share.size()*sizeof(int));
-		if (buffer == 0)
-			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*3*sizeof(int)));
-
-		// distribute it
-		combineDatapoints(buffer, our_share.size(), MPI_INT);
-
-		// and free the buffer
-		free(buffer);
+		// distribute the data
+		combineDatapoints(&our_share[0], our_share.size(), MPI_INT);
 	}
 
 	template <>
 	void MPISupport::acceptCombinedDatapoints(std::vector<int>& combined_set, 
 																						std::vector<int>& our_share)
 	{
-		// Create the data array
-		int* buffer = (int*)malloc(our_share.size()*sizeof(int));
-		if (buffer == 0)
-			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*sizeof(int)));
-
-		// distribute it
+		// distribute the data
 		Size numpoints;
-		int *result = (int*) acceptCombinedDatapoints(buffer, our_share.size(), numpoints, MPI_INT);
+		int *result = (int*) acceptCombinedDatapoints(&our_share[0], our_share.size(), numpoints, MPI_INT);
 
 		if (result == 0)
 			throw(Exception::OutOfMemory(__FILE__, __LINE__, numpoints*sizeof(int)));
-
-		// free the input buffer
-		delete[](buffer);
-
+		
 		// and create the output vector
 		combined_set.resize(numpoints);
 
