@@ -200,7 +200,7 @@ namespace BALL
 		return O;
 	}
 
-	Size MPISupport::distributeDatapoints(const void* input, int size, void* our_data, MPI_Datatype datatype)
+	void* MPISupport::distributeDatapoints(const void* input, int size, Size &numpoints, MPI_Datatype datatype)
 		throw()
 	{
 		/** Distribute our rank to all processes **/
@@ -232,13 +232,15 @@ namespace BALL
 			current_stride += datapoints_per_process[i];
 		}
 
+		numpoints = datapoints_per_process[rank_];
+
 		/** Distribute the data **/
 		int data_size;
 		MPI_Type_size(datatype, &data_size);
-printf("Master: %d\n", datapoints_per_process[rank_]*data_size);
-		our_data = (void*) malloc(datapoints_per_process[rank_]*data_size);
+
+		void* our_data = (void*) malloc(datapoints_per_process[rank_]*data_size);
 		if (our_data == 0)
-			return datapoints_per_process[rank_];
+			return 0;
 
 		void* inputp = const_cast<void*>(input);
 		MPI_Scatterv(inputp, 		&datapoints_per_process[0],     &stride[0], datatype,
@@ -246,10 +248,10 @@ printf("Master: %d\n", datapoints_per_process[rank_]*data_size);
 								 rank_,      default_communicator_);
 
 		/** And return our own share of it... **/
-		return datapoints_per_process[rank_];
+		return our_data;
 	}
 
-	Size MPISupport::acceptDatapoints(void* our_data, MPI_Datatype datatype)
+	void* MPISupport::acceptDatapoints(Size& numpoints, MPI_Datatype datatype)
 		throw()
 	{
 		/** Wait for the source rank... **/
@@ -280,14 +282,15 @@ printf("Master: %d\n", datapoints_per_process[rank_]*data_size);
 
 			current_stride += datapoints_per_process[i];
 		}
+		numpoints = datapoints_per_process[rank_];
 
 		/** Allocate enough data **/
 		int data_size;
 		MPI_Type_size(datatype, &data_size);
 
-		our_data = (void*) malloc(datapoints_per_process[rank_]*data_size);
+		void* our_data = (void*) malloc(datapoints_per_process[rank_]*data_size);
 		if (our_data == 0)
-			return datapoints_per_process[rank_];
+			return 0;
 
 		/** Accept our part of the datapoints **/
 		MPI_Scatterv(0, 		    &datapoints_per_process[0],     &stride[0], datatype,
@@ -295,8 +298,9 @@ printf("Master: %d\n", datapoints_per_process[rank_]*data_size);
 								 source,     default_communicator_);
 
 		/** And return it... **/
-		return datapoints_per_process[rank_];
+		return our_data;
 	}
+
 	
 	void MPISupport::sendPersistenceStream_(const ostringstream& stream, TAGS tag, bool broadcast, int receiver)
 		throw()
@@ -432,6 +436,1014 @@ printf("Master: %d\n", datapoints_per_process[rank_]*data_size);
 
 		MPI_Type_commit(&mpi_Vector3_float_type_);
 		MPI_Type_commit(&mpi_Vector3_double_type_);
+	}
+
+	template <>
+	signed char MPISupport::getSum(signed char& local_value)
+		throw()
+	{
+		signed char result;
+		MPI_Reduce(&local_value, &result, 1, MPI_CHAR, MPI_SUM, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	signed short int MPISupport::getSum(signed short int& local_value)
+		throw()
+	{
+		signed short int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_SHORT, MPI_SUM, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	signed int MPISupport::getSum(signed int& local_value)
+		throw()
+	{
+		signed int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_INT, MPI_SUM, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	signed long int MPISupport::getSum(signed long int& local_value)
+		throw()
+	{
+		signed long int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_LONG, MPI_SUM, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	unsigned char MPISupport::getSum(unsigned char& local_value)
+		throw()
+	{
+		unsigned char result;
+		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_CHAR, MPI_SUM, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	unsigned short MPISupport::getSum(unsigned short& local_value)
+		throw()
+	{
+		unsigned short result;
+		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_SHORT, MPI_SUM, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	unsigned int MPISupport::getSum(unsigned int& local_value)
+		throw()
+	{
+		unsigned int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED, MPI_SUM, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	unsigned long int MPISupport::getSum(unsigned long int& local_value)
+		throw()
+	{
+		unsigned long int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_LONG, MPI_SUM, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	float MPISupport::getSum(float& local_value)
+		throw()
+	{
+		float result;
+		MPI_Reduce(&local_value, &result, 1, MPI_FLOAT, MPI_SUM, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	double MPISupport::getSum(double& local_value)
+		throw()
+	{
+		double result;
+		MPI_Reduce(&local_value, &result, 1, MPI_DOUBLE, MPI_SUM, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	long double MPISupport::getSum(long double& local_value)
+		throw()
+	{
+		long double result;
+		MPI_Reduce(&local_value, &result, 1, MPI_LONG_DOUBLE, MPI_SUM, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	signed char MPISupport::getProduct(signed char& local_value)
+		throw()
+	{
+		signed char result;
+		MPI_Reduce(&local_value, &result, 1, MPI_CHAR, MPI_PROD, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	signed short int MPISupport::getProduct(signed short int& local_value)
+		throw()
+	{
+		signed short int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_SHORT, MPI_PROD, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	signed int MPISupport::getProduct(signed int& local_value)
+		throw()
+	{
+		signed int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_INT, MPI_PROD, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	signed long int MPISupport::getProduct(signed long int& local_value)
+		throw()
+	{
+		signed long int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_LONG, MPI_PROD, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	unsigned char MPISupport::getProduct(unsigned char& local_value)
+		throw()
+	{
+		unsigned char result;
+		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_CHAR, MPI_PROD, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	unsigned short MPISupport::getProduct(unsigned short& local_value)
+		throw()
+	{
+		unsigned short result;
+		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_SHORT, MPI_PROD, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	unsigned int MPISupport::getProduct(unsigned int& local_value)
+		throw()
+	{
+		unsigned int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED, MPI_PROD, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	unsigned long int MPISupport::getProduct(unsigned long int& local_value)
+		throw()
+	{
+		unsigned long int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_LONG, MPI_PROD, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	float MPISupport::getProduct(float& local_value)
+		throw()
+	{
+		float result;
+		MPI_Reduce(&local_value, &result, 1, MPI_FLOAT, MPI_PROD, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	double MPISupport::getProduct(double& local_value)
+		throw()
+	{
+		double result;
+		MPI_Reduce(&local_value, &result, 1, MPI_DOUBLE, MPI_PROD, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	long double MPISupport::getProduct(long double& local_value)
+		throw()
+	{
+		long double result;
+		MPI_Reduce(&local_value, &result, 1, MPI_LONG_DOUBLE, MPI_PROD, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	signed char MPISupport::getMaximum(signed char& local_value)
+		throw()
+	{
+		signed char result;
+		MPI_Reduce(&local_value, &result, 1, MPI_CHAR, MPI_MAX, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	signed short int MPISupport::getMaximum(signed short int& local_value)
+		throw()
+	{
+		signed short int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_SHORT, MPI_MAX, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	signed int MPISupport::getMaximum(signed int& local_value)
+		throw()
+	{
+		signed int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_INT, MPI_MAX, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	signed long int MPISupport::getMaximum(signed long int& local_value)
+		throw()
+	{
+		signed long int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_LONG, MPI_MAX, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	unsigned char MPISupport::getMaximum(unsigned char& local_value)
+		throw()
+	{
+		unsigned char result;
+		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_CHAR, MPI_MAX, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	unsigned short MPISupport::getMaximum(unsigned short& local_value)
+		throw()
+	{
+		unsigned short result;
+		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_SHORT, MPI_MAX, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	unsigned int MPISupport::getMaximum(unsigned int& local_value)
+		throw()
+	{
+		unsigned int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED, MPI_MAX, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	unsigned long int MPISupport::getMaximum(unsigned long int& local_value)
+		throw()
+	{
+		unsigned long int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_LONG, MPI_MAX, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	float MPISupport::getMaximum(float& local_value)
+		throw()
+	{
+		float result;
+		MPI_Reduce(&local_value, &result, 1, MPI_FLOAT, MPI_MAX, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	double MPISupport::getMaximum(double& local_value)
+		throw()
+	{
+		double result;
+		MPI_Reduce(&local_value, &result, 1, MPI_DOUBLE, MPI_MAX, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	long double MPISupport::getMaximum(long double& local_value)
+		throw()
+	{
+		long double result;
+		MPI_Reduce(&local_value, &result, 1, MPI_LONG_DOUBLE, MPI_MAX, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	signed char MPISupport::getMinimum(signed char& local_value)
+		throw()
+	{
+		signed char result;
+		MPI_Reduce(&local_value, &result, 1, MPI_CHAR, MPI_MIN, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	signed short int MPISupport::getMinimum(signed short int& local_value)
+		throw()
+	{
+		signed short int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_SHORT, MPI_MIN, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	signed int MPISupport::getMinimum(signed int& local_value)
+		throw()
+	{
+		signed int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_INT, MPI_MIN, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	signed long int MPISupport::getMinimum(signed long int& local_value)
+		throw()
+	{
+		signed long int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_LONG, MPI_MIN, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	unsigned char MPISupport::getMinimum(unsigned char& local_value)
+		throw()
+	{
+		unsigned char result;
+		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_CHAR, MPI_MIN, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	unsigned short MPISupport::getMinimum(unsigned short& local_value)
+		throw()
+	{
+		unsigned short result;
+		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_SHORT, MPI_MIN, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	unsigned int MPISupport::getMinimum(unsigned int& local_value)
+		throw()
+	{
+		unsigned int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED, MPI_MIN, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	unsigned long int MPISupport::getMinimum(unsigned long int& local_value)
+		throw()
+	{
+		unsigned long int result;
+		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_LONG, MPI_MIN, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	float MPISupport::getMinimum(float& local_value)
+		throw()
+	{
+		float result;
+		MPI_Reduce(&local_value, &result, 1, MPI_FLOAT, MPI_MIN, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	double MPISupport::getMinimum(double& local_value)
+		throw()
+	{
+		double result;
+		MPI_Reduce(&local_value, &result, 1, MPI_DOUBLE, MPI_MIN, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	long double MPISupport::getMinimum(long double& local_value)
+		throw()
+	{
+		long double result;
+		MPI_Reduce(&local_value, &result, 1, MPI_LONG_DOUBLE, MPI_MIN, 0, default_communicator_);
+
+		/** Note: the value of result is undefined if rank_ != 0 **/
+		return result;
+	}
+
+	template <>
+	void MPISupport::distributeDatapoints(const std::vector<TVector3<float> >& input,
+																					    std::vector<TVector3<float> >& our_share)
+		throw(Exception::OutOfMemory)
+	{
+		// We'll need to take care of the pointers passed around...
+		Size num_points;
+		float* our_data = (float*) distributeDatapoints(&input[0], input.size(), num_points, mpi_Vector3_float_type_);
+
+		if (our_data == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, num_points*3*sizeof(float)));
+
+		// create the output vector
+		our_share.resize(num_points);
+
+		for (Size i=0; i<num_points; i++)
+		{
+			our_share[i].set(our_data[3*i], our_data[3*i+1], our_data[3*i+2]);
+		}
+
+		free(our_data);
+	}
+
+	template <>
+	void MPISupport::acceptDatapoints(std::vector<TVector3<float> >& our_share)
+		throw(Exception::OutOfMemory)
+	{
+		// We'll need to take care of the pointers passed around...
+		Size num_points;
+		float* our_data = (float*) acceptDatapoints(num_points, mpi_Vector3_float_type_);
+
+		if (our_data == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, num_points*3*sizeof(float)));
+
+		// create the output vector
+		our_share.resize(num_points);
+
+		for (Size i=0; i<num_points; i++)
+		{
+			our_share[i].set(our_data[3*i], our_data[3*i+1], our_data[3*i+2]);
+		}
+
+		free(our_data);
+	}
+
+	template <>
+	void MPISupport::distributeDatapoints(const std::vector<TVector3<double> >& input,
+																					    std::vector<TVector3<double> >& our_share)
+		throw(Exception::OutOfMemory)
+	{
+		// We'll need to take care of the pointers passed around...
+		Size num_points;
+		double* our_data = (double*) distributeDatapoints(&input[0], input.size(), num_points, mpi_Vector3_double_type_);
+
+		if (our_data == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, num_points*3*sizeof(double)));
+
+		// create the output vector
+		our_share.resize(num_points);
+
+		for (Size i=0; i<num_points; i++)
+		{
+			our_share[i].set(our_data[3*i], our_data[3*i+1], our_data[3*i+2]);
+		}
+
+		free(our_data);
+	}
+
+	template <>
+	void MPISupport::acceptDatapoints(std::vector<TVector3<double> >& our_share)
+		throw(Exception::OutOfMemory)
+	{
+		// We'll need to take care of the pointers passed around...
+		Size num_points;
+		double* our_data = (double*) acceptDatapoints(num_points, mpi_Vector3_double_type_);
+
+		if (our_data == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, num_points*3*sizeof(double)));
+
+		// create the output vector
+		our_share.resize(num_points);
+
+		for (Size i=0; i<num_points; i++)
+		{
+			our_share[i].set(our_data[3*i], our_data[3*i+1], our_data[3*i+2]);
+		}
+
+		free(our_data);
+	}
+
+	template <>
+	void MPISupport::distributeDatapoints(const std::vector<float>& input,
+																					    std::vector<float>& our_share)
+		throw(Exception::OutOfMemory)
+	{
+		// We'll need to take care of the pointers passed around...
+		Size num_points;
+		float* our_data = (float*) distributeDatapoints(&input[0], input.size(), num_points, MPI_FLOAT);
+
+		if (our_data == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, num_points*sizeof(float)));
+
+		// create the output vector
+		// TODO: is this copying necessary?
+		our_share.resize(num_points);
+
+		for (Size i=0; i<num_points; i++)
+		{
+			our_share[i] = our_data[i];
+		}
+
+		free(our_data);
+	}
+
+	template <>
+	void MPISupport::acceptDatapoints(std::vector<float>& our_share)
+		throw(Exception::OutOfMemory)
+	{
+		// We'll need to take care of the pointers passed around...
+		Size num_points;
+		float* our_data = (float*) acceptDatapoints(num_points, MPI_FLOAT);
+
+		if (our_data == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, num_points*sizeof(float)));
+
+		// create the output vector
+		// TODO: is this copying necessary?
+		our_share.resize(num_points);
+
+		for (Size i=0; i<num_points; i++)
+		{
+			our_share[i] = our_data[i];
+		}
+
+		free(our_data);
+	}
+
+	template <>
+	void MPISupport::distributeDatapoints(const std::vector<double>& input,
+																					    std::vector<double>& our_share)
+		throw(Exception::OutOfMemory)
+	{
+		// We'll need to take care of the pointers passed around...
+		Size num_points;
+		double* our_data = (double*) distributeDatapoints(&input[0], input.size(), num_points, MPI_DOUBLE);
+
+		if (our_data == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, num_points*sizeof(double)));
+
+		// create the output vector
+		// TODO: is this copying necessary?
+		our_share.resize(num_points);
+
+		for (Size i=0; i<num_points; i++)
+		{
+			our_share[i] = our_data[i];
+		}
+
+		free(our_data);
+	}
+
+	template <>
+	void MPISupport::acceptDatapoints(std::vector<double>& our_share)
+		throw(Exception::OutOfMemory)
+	{
+		// We'll need to take care of the pointers passed around...
+		Size num_points;
+		double* our_data = (double*) acceptDatapoints(num_points, MPI_DOUBLE);
+
+		if (our_data == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, num_points*sizeof(double)));
+
+		// create the output vector
+		// TODO: is this copying necessary?
+		our_share.resize(num_points);
+
+		for (Size i=0; i<num_points; i++)
+		{
+			our_share[i] = our_data[i];
+		}
+
+		free(our_data);
+	}
+
+	template <>
+	void MPISupport::distributeDatapoints(const std::vector<int>& input,
+																					    std::vector<int>& our_share)
+		throw(Exception::OutOfMemory)
+	{
+		// We'll need to take care of the pointers passed around...
+		Size num_points;
+		int* our_data = (int*) distributeDatapoints(&input[0], input.size(), num_points, MPI_INT);
+
+		if (our_data == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, num_points*sizeof(int)));
+
+		// create the output vector
+		// TODO: is this copying necessary?
+		our_share.resize(num_points);
+
+		for (Size i=0; i<num_points; i++)
+		{
+			our_share[i] = our_data[i];
+		}
+
+		free(our_data);
+	}
+
+	template <>
+	void MPISupport::acceptDatapoints(std::vector<int>& our_share)
+		throw(Exception::OutOfMemory)
+	{
+		// We'll need to take care of the pointers passed around...
+		Size num_points;
+		int* our_data = (int*) acceptDatapoints(num_points, MPI_INT);
+
+		if (our_data == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, num_points*sizeof(int)));
+
+		// create the output vector
+		// TODO: is this copying necessary?
+		our_share.resize(num_points);
+
+		for (Size i=0; i<num_points; i++)
+		{
+			our_share[i] = our_data[i];
+		}
+
+		free(our_data);
+	}
+
+	template <>
+	void MPISupport::combineDatapoints(const std::vector<TVector3<float> >& our_share)
+		throw(Exception::OutOfMemory)
+	{
+		// Create the data array
+		float* buffer = (float*)malloc(our_share.size()*3*sizeof(float));
+		if (buffer == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*3*sizeof(float)));
+
+		// distribute it
+		combineDatapoints(buffer, our_share.size(), mpi_Vector3_float_type_);
+
+		// and free the buffer
+		free(buffer);
+	}
+
+	template <>
+	void MPISupport::acceptCombinedDatapoints(std::vector<TVector3<float> >& combined_set, 
+																						std::vector<TVector3<float> >& our_share)
+	{
+		// Create the data array
+		float* buffer = (float*)malloc(our_share.size()*3*sizeof(float));
+		if (buffer == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*3*sizeof(float)));
+
+		// distribute it
+		Size numpoints;
+		float *result = (float*) acceptCombinedDatapoints(buffer, our_share.size(), numpoints, mpi_Vector3_float_type_);
+
+		if (result == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, numpoints*3*sizeof(float)));
+
+		// free the input buffer
+		delete[](buffer);
+
+		// and create the output vector
+		combined_set.resize(numpoints);
+
+		for (Size i=0; i<numpoints; i++)
+			combined_set[i].set(result[3*i], result[3*i+1], result[3*i+2]);
+
+		// free the result buffer
+		free(result);
+	}
+
+	template <>
+	void MPISupport::combineDatapoints(const std::vector<TVector3<double> >& our_share)
+		throw(Exception::OutOfMemory)
+	{
+		// Create the data array
+		double* buffer = (double*)malloc(our_share.size()*3*sizeof(double));
+		if (buffer == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*3*sizeof(double)));
+
+		// distribute it
+		combineDatapoints(buffer, our_share.size(), mpi_Vector3_double_type_);
+
+		// and free the buffer
+		free(buffer);
+	}
+
+	template <>
+	void MPISupport::acceptCombinedDatapoints(std::vector<TVector3<double> >& combined_set, 
+																						std::vector<TVector3<double> >& our_share)
+	{
+		// Create the data array
+		double* buffer = (double*)malloc(our_share.size()*3*sizeof(double));
+		if (buffer == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*3*sizeof(double)));
+
+		// distribute it
+		Size numpoints;
+		double *result = (double*) acceptCombinedDatapoints(buffer, our_share.size(), numpoints, mpi_Vector3_double_type_);
+
+		if (result == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, numpoints*3*sizeof(double)));
+
+		// free the input buffer
+		delete[](buffer);
+
+		// and create the output vector
+		combined_set.resize(numpoints);
+
+		for (Size i=0; i<numpoints; i++)
+			combined_set[i].set(result[3*i], result[3*i+1], result[3*i+2]);
+
+		// free the result buffer
+		free(result);
+	}
+
+	template <>
+	void MPISupport::combineDatapoints(const std::vector<float>& our_share)
+		throw(Exception::OutOfMemory)
+	{
+		// Create the data array
+		float* buffer = (float*)malloc(our_share.size()*sizeof(float));
+		if (buffer == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*3*sizeof(float)));
+
+		// distribute it
+		combineDatapoints(buffer, our_share.size(), MPI_FLOAT);
+
+		// and free the buffer
+		free(buffer);
+	}
+
+	template <>
+	void MPISupport::acceptCombinedDatapoints(std::vector<float>& combined_set, 
+																						std::vector<float>& our_share)
+	{
+		// Create the data array
+		float* buffer = (float*)malloc(our_share.size()*sizeof(float));
+		if (buffer == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*sizeof(float)));
+
+		// distribute it
+		Size numpoints;
+		float *result = (float*) acceptCombinedDatapoints(buffer, our_share.size(), numpoints, MPI_FLOAT);
+
+		if (result == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, numpoints*sizeof(float)));
+
+		// free the input buffer
+		delete[](buffer);
+
+		// and create the output vector
+		combined_set.resize(numpoints);
+
+		for (Size i=0; i<numpoints; i++)
+			combined_set[i] = result[i];
+
+		// free the result buffer
+		free(result);
+	}
+
+	template <>
+	void MPISupport::combineDatapoints(const std::vector<double>& our_share)
+		throw(Exception::OutOfMemory)
+	{
+		// Create the data array
+		double* buffer = (double*)malloc(our_share.size()*sizeof(double));
+		if (buffer == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*3*sizeof(double)));
+
+		// distribute it
+		combineDatapoints(buffer, our_share.size(), MPI_DOUBLE);
+
+		// and free the buffer
+		free(buffer);
+	}
+
+	template <>
+	void MPISupport::acceptCombinedDatapoints(std::vector<double>& combined_set, 
+																						std::vector<double>& our_share)
+	{
+		// Create the data array
+		double* buffer = (double*)malloc(our_share.size()*sizeof(double));
+		if (buffer == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*sizeof(double)));
+
+		// distribute it
+		Size numpoints;
+		double *result = (double*) acceptCombinedDatapoints(buffer, our_share.size(), numpoints, MPI_DOUBLE);
+
+		if (result == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, numpoints*sizeof(double)));
+
+		// free the input buffer
+		delete[](buffer);
+
+		// and create the output vector
+		combined_set.resize(numpoints);
+
+		for (Size i=0; i<numpoints; i++)
+			combined_set[i] = result[i];
+
+		// free the result buffer
+		free(result);
+	}
+
+	template <>
+	void MPISupport::combineDatapoints(const std::vector<int>& our_share)
+		throw(Exception::OutOfMemory)
+	{
+		// Create the data array
+		int* buffer = (int*)malloc(our_share.size()*sizeof(int));
+		if (buffer == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*3*sizeof(int)));
+
+		// distribute it
+		combineDatapoints(buffer, our_share.size(), MPI_INT);
+
+		// and free the buffer
+		free(buffer);
+	}
+
+	template <>
+	void MPISupport::acceptCombinedDatapoints(std::vector<int>& combined_set, 
+																						std::vector<int>& our_share)
+	{
+		// Create the data array
+		int* buffer = (int*)malloc(our_share.size()*sizeof(int));
+		if (buffer == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, our_share.size()*sizeof(int)));
+
+		// distribute it
+		Size numpoints;
+		int *result = (int*) acceptCombinedDatapoints(buffer, our_share.size(), numpoints, MPI_INT);
+
+		if (result == 0)
+			throw(Exception::OutOfMemory(__FILE__, __LINE__, numpoints*sizeof(int)));
+
+		// free the input buffer
+		delete[](buffer);
+
+		// and create the output vector
+		combined_set.resize(numpoints);
+
+		for (Size i=0; i<numpoints; i++)
+			combined_set[i] = result[i];
+
+		// free the result buffer
+		free(result);
+	}
+
+	/** Note: combineDatapoints and acceptCombinedDatapoints need to be placed _under_ the
+	 *  definition of getSum<int>
+	 */
+	void MPISupport::combineDatapoints(const void* input, int size, MPI_Datatype datatype)
+		throw()
+	{
+		/** Wait for the source rank... **/
+		MPI_Status status;
+
+		int source;
+		MPI_Recv(&source, 1, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, default_communicator_, &status);
+
+		// The master needs to know the total number of points. So we'll sum all size - values up
+		getSum(size);
+
+		// Gathering is simple for us: we just need to send our own data...
+		MPI_Gatherv(const_cast<void*>(input), size, datatype, 0, 0, 0, datatype, source, default_communicator_);
+	}	
+
+	void* MPISupport::acceptCombinedDatapoints(const void* input, int size, Size& numpoints, MPI_Datatype datatype)
+		throw()
+	{
+		/** Distribute our rank to all processes **/
+		for (int i=0; i<comm_size_; i++)
+		{
+			if (i != rank_)
+				MPI_Send(&rank_, 1, MPI_INT, i, 0, default_communicator_);
+		}
+
+		/** Compute the number of data points to receive from each process **/
+		/** For this we need the number of points in total which we sum up over the communicator **/
+		numpoints = getSum(size);
+
+		std::vector<int> datapoints_per_process(comm_size_);
+		std::vector<int> stride(comm_size_);
+
+		int base_size = (int)floor(numpoints / comm_size_);
+		int remainder = numpoints % comm_size_;
+		int current_stride = 0;
+
+		for (int i=0; i<comm_size_; i++)
+		{
+			datapoints_per_process[i] = base_size;
+			stride[i]									= current_stride;
+
+			if (i < remainder)
+				datapoints_per_process[i]++;
+
+			current_stride += datapoints_per_process[i];
+		}
+
+		/** Create the array to store the data **/
+		int data_size;
+		MPI_Type_size(datatype, &data_size);
+
+		void* gathered_data = (void*) malloc(numpoints*data_size);
+		if (gathered_data == 0)
+			return 0;
+
+		/** And finally, we can gather everything together... **/
+		MPI_Gatherv(const_cast<void*>(input), size, datatype,
+							  gathered_data, &datapoints_per_process[0], &stride[0],
+						 		datatype, rank_, default_communicator_);
+
+		/** And return it... **/
+		return gathered_data;
 	}
 
 }

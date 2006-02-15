@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MPISupport.h,v 1.1.2.1 2006/02/13 20:38:59 anhi Exp $
+// $Id: MPISupport.h,v 1.1.2.2 2006/02/15 21:34:46 anhi Exp $
 //
 
 #ifndef BALL_SYSTEM_MPISUPPORT_H
@@ -196,25 +196,63 @@ namespace BALL
 			void acceptDatapoints(std::vector<valuetype>& our_share)
 				throw(Exception::OutOfMemory);
 
+			/** Combine datapoints from all processes of the communicator.
+			 *  Exactly one process has to accept the data by calling 
+			 *  acceptCombinedDatapoints instead of combineDatapoints.
+			 **/
+			template <typename valuetype>
+			void combineDatapoints(const std::vector<valuetype>& our_share)
+				throw(Exception::OutOfMemory);
+
+			/** Accept datapoints that are combined from all processes of the
+			 *  communicator. This function
+			 *  assumes that the sizes provided by each process are compatible to
+			 *  those that would have resulted from a call to distributeDatapoints.
+			 */
+			template <typename valuetype>
+			void acceptCombinedDatapoints(std::vector<valuetype>& combined_set, std::vector<valuetype>& our_share)
+				throw(Exception::OutOfMemory);
+
 			/** Distribute input of type datatype as evenly as possible over the
-			 *  processes in the communicator. Returns the number of datapoints
-			 *  the sender itself has to process. The points themselves are stored
-			 *  in our_data. Note that _all_ processes in the
+			 *  processes in the communicator. Returns the datapoints
+			 *  the sender itself has to process. The number of points to process
+			 *  is stored in numpoints. Note that _all_ processes in the
 			 *  communicator have to call acceptDatapoints.
 			 *  The caller has to ensure that the returned array is free()'d.
 			 *  If memory allocation fails, 0 is returned.
 			 */
-			Size distributeDatapoints(const void* input, int size, void* our_data, MPI_Datatype datatype)
+			void* distributeDatapoints(const void* input, int size, Size& numpoints, MPI_Datatype datatype)
 				throw();
 
 			/** Accept datapoints that are distributed by some source in the
 			 *  communicator. The caller has to ensure that the array is free()'d.
-			 *  If memory allocation fails, 0 is returned, otherwise the number of
-			 *  points we need to process.
+			 *  If memory allocation fails, 0 is returned. The number of
+			 *  points we need to process is stored in numpoints.
 			 */
-			Size acceptDatapoints(void* our_data, MPI_Datatype datatype)
+			void* acceptDatapoints(Size& numpoints, MPI_Datatype datatype)
 				throw();
-			
+
+			/** Combine distributed data from all processes in the communicator. 
+			 *  Note that _all but one_ of the processes in the
+			 *  communicator have to call combineDatapoints, while exactly one has
+			 *  to call acceptCombinedDatapoints.
+			 */
+			void combineDatapoints(const void* input, int size, MPI_Datatype datatype)
+				throw();
+
+			/** Combine distributed data from all processes in the communicator 
+			 *  and return the result. The array input contains our own share
+			 *  of the data we need to combine. The number of points gathered 
+			 *  is stored in numpoints. Note that _all other_ processes in the
+			 *  communicator have to call combineDatapoints. Also, this function
+			 *  assumes that the sizes provided by each process are compatible to
+			 *  those that would have resulted from a call to distributeDatapoints.
+			 *  The caller has to ensure that the returned array is free()'d.
+			 *  If memory allocation fails, 0 is returned.
+			 */
+			void* acceptCombinedDatapoints(const void* input, int size, Size& numpoints, MPI_Datatype datatype)
+				throw();
+
 			/** Spawn new processes.
 			 *  This function allows the current instance to spawn new processes
 			 *  that can communicate via MPI. The spawned processes are assigned
@@ -324,534 +362,7 @@ namespace BALL
 			MPI_Datatype  mpi_Vector3_float_type_;
 			MPI_Datatype  mpi_Vector3_double_type_;
 	};
-
-	template <>
-	signed char MPISupport::getSum(signed char& local_value)
-		throw()
-	{
-		signed char result;
-		MPI_Reduce(&local_value, &result, 1, MPI_CHAR, MPI_SUM, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	signed short int MPISupport::getSum(signed short int& local_value)
-		throw()
-	{
-		signed short int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_SHORT, MPI_SUM, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	signed int MPISupport::getSum(signed int& local_value)
-		throw()
-	{
-		signed int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_INT, MPI_SUM, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	signed long int MPISupport::getSum(signed long int& local_value)
-		throw()
-	{
-		signed long int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_LONG, MPI_SUM, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	unsigned char MPISupport::getSum(unsigned char& local_value)
-		throw()
-	{
-		unsigned char result;
-		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_CHAR, MPI_SUM, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	unsigned short MPISupport::getSum(unsigned short& local_value)
-		throw()
-	{
-		unsigned short result;
-		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_SHORT, MPI_SUM, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	unsigned int MPISupport::getSum(unsigned int& local_value)
-		throw()
-	{
-		unsigned int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED, MPI_SUM, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	unsigned long int MPISupport::getSum(unsigned long int& local_value)
-		throw()
-	{
-		unsigned long int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_LONG, MPI_SUM, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	float MPISupport::getSum(float& local_value)
-		throw()
-	{
-		float result;
-		MPI_Reduce(&local_value, &result, 1, MPI_FLOAT, MPI_SUM, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	double MPISupport::getSum(double& local_value)
-		throw()
-	{
-		double result;
-		MPI_Reduce(&local_value, &result, 1, MPI_DOUBLE, MPI_SUM, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	long double MPISupport::getSum(long double& local_value)
-		throw()
-	{
-		long double result;
-		MPI_Reduce(&local_value, &result, 1, MPI_LONG_DOUBLE, MPI_SUM, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	signed char MPISupport::getProduct(signed char& local_value)
-		throw()
-	{
-		signed char result;
-		MPI_Reduce(&local_value, &result, 1, MPI_CHAR, MPI_PROD, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	signed short int MPISupport::getProduct(signed short int& local_value)
-		throw()
-	{
-		signed short int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_SHORT, MPI_PROD, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	signed int MPISupport::getProduct(signed int& local_value)
-		throw()
-	{
-		signed int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_INT, MPI_PROD, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	signed long int MPISupport::getProduct(signed long int& local_value)
-		throw()
-	{
-		signed long int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_LONG, MPI_PROD, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	unsigned char MPISupport::getProduct(unsigned char& local_value)
-		throw()
-	{
-		unsigned char result;
-		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_CHAR, MPI_PROD, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	unsigned short MPISupport::getProduct(unsigned short& local_value)
-		throw()
-	{
-		unsigned short result;
-		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_SHORT, MPI_PROD, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	unsigned int MPISupport::getProduct(unsigned int& local_value)
-		throw()
-	{
-		unsigned int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED, MPI_PROD, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	unsigned long int MPISupport::getProduct(unsigned long int& local_value)
-		throw()
-	{
-		unsigned long int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_LONG, MPI_PROD, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	float MPISupport::getProduct(float& local_value)
-		throw()
-	{
-		float result;
-		MPI_Reduce(&local_value, &result, 1, MPI_FLOAT, MPI_PROD, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	double MPISupport::getProduct(double& local_value)
-		throw()
-	{
-		double result;
-		MPI_Reduce(&local_value, &result, 1, MPI_DOUBLE, MPI_PROD, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	long double MPISupport::getProduct(long double& local_value)
-		throw()
-	{
-		long double result;
-		MPI_Reduce(&local_value, &result, 1, MPI_LONG_DOUBLE, MPI_PROD, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	signed char MPISupport::getMaximum(signed char& local_value)
-		throw()
-	{
-		signed char result;
-		MPI_Reduce(&local_value, &result, 1, MPI_CHAR, MPI_MAX, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	signed short int MPISupport::getMaximum(signed short int& local_value)
-		throw()
-	{
-		signed short int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_SHORT, MPI_MAX, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	signed int MPISupport::getMaximum(signed int& local_value)
-		throw()
-	{
-		signed int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_INT, MPI_MAX, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	signed long int MPISupport::getMaximum(signed long int& local_value)
-		throw()
-	{
-		signed long int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_LONG, MPI_MAX, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	unsigned char MPISupport::getMaximum(unsigned char& local_value)
-		throw()
-	{
-		unsigned char result;
-		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_CHAR, MPI_MAX, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	unsigned short MPISupport::getMaximum(unsigned short& local_value)
-		throw()
-	{
-		unsigned short result;
-		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_SHORT, MPI_MAX, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	unsigned int MPISupport::getMaximum(unsigned int& local_value)
-		throw()
-	{
-		unsigned int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED, MPI_MAX, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	unsigned long int MPISupport::getMaximum(unsigned long int& local_value)
-		throw()
-	{
-		unsigned long int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_LONG, MPI_MAX, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	float MPISupport::getMaximum(float& local_value)
-		throw()
-	{
-		float result;
-		MPI_Reduce(&local_value, &result, 1, MPI_FLOAT, MPI_MAX, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	double MPISupport::getMaximum(double& local_value)
-		throw()
-	{
-		double result;
-		MPI_Reduce(&local_value, &result, 1, MPI_DOUBLE, MPI_MAX, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	long double MPISupport::getMaximum(long double& local_value)
-		throw()
-	{
-		long double result;
-		MPI_Reduce(&local_value, &result, 1, MPI_LONG_DOUBLE, MPI_MAX, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	signed char MPISupport::getMinimum(signed char& local_value)
-		throw()
-	{
-		signed char result;
-		MPI_Reduce(&local_value, &result, 1, MPI_CHAR, MPI_MIN, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	signed short int MPISupport::getMinimum(signed short int& local_value)
-		throw()
-	{
-		signed short int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_SHORT, MPI_MIN, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	signed int MPISupport::getMinimum(signed int& local_value)
-		throw()
-	{
-		signed int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_INT, MPI_MIN, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	signed long int MPISupport::getMinimum(signed long int& local_value)
-		throw()
-	{
-		signed long int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_LONG, MPI_MIN, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	unsigned char MPISupport::getMinimum(unsigned char& local_value)
-		throw()
-	{
-		unsigned char result;
-		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_CHAR, MPI_MIN, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	unsigned short MPISupport::getMinimum(unsigned short& local_value)
-		throw()
-	{
-		unsigned short result;
-		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_SHORT, MPI_MIN, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	unsigned int MPISupport::getMinimum(unsigned int& local_value)
-		throw()
-	{
-		unsigned int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED, MPI_MIN, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	unsigned long int MPISupport::getMinimum(unsigned long int& local_value)
-		throw()
-	{
-		unsigned long int result;
-		MPI_Reduce(&local_value, &result, 1, MPI_UNSIGNED_LONG, MPI_MIN, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	float MPISupport::getMinimum(float& local_value)
-		throw()
-	{
-		float result;
-		MPI_Reduce(&local_value, &result, 1, MPI_FLOAT, MPI_MIN, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	double MPISupport::getMinimum(double& local_value)
-		throw()
-	{
-		double result;
-		MPI_Reduce(&local_value, &result, 1, MPI_DOUBLE, MPI_MIN, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	long double MPISupport::getMinimum(long double& local_value)
-		throw()
-	{
-		long double result;
-		MPI_Reduce(&local_value, &result, 1, MPI_LONG_DOUBLE, MPI_MIN, 0, default_communicator_);
-
-		/** Note: the value of result is undefined if rank_ != 0 **/
-		return result;
-	}
-
-	template <>
-	void MPISupport::distributeDatapoints(const std::vector<TVector3<float> >& input,
-																					    std::vector<TVector3<float> >& our_share)
-		throw(Exception::OutOfMemory)
-	{
-		// We'll need to take care of the pointers passed around...
-		float* our_data = 0;
-		Size num_points = distributeDatapoints(&input[0], input.size(), our_data, mpi_Vector3_float_type_);
-
-		if (our_data == 0)
-			throw(Exception::OutOfMemory(__FILE__, __LINE__, num_points*3*sizeof(float)));
-
-		// create the output vector
-		our_share.resize(num_points);
-
-		for (Size i=0; i<num_points; i++)
-		{
-			our_share[i].set(our_data[3*i], our_data[3*i+1], our_data[3*i+2]);
-		}
-
-		free(our_data);
-	}
-
-	template <>
-	void MPISupport::acceptDatapoints(std::vector<TVector3<float> >& our_share)
-		throw(Exception::OutOfMemory)
-	{
-		// We'll need to take care of the pointers passed around...
-		float* our_data = 0;
-		Size num_points = acceptDatapoints(our_data, mpi_Vector3_float_type_);
-
-		if (our_data == 0)
-			throw(Exception::OutOfMemory(__FILE__, __LINE__, num_points*3*sizeof(float)));
-
-		// create the output vector
-		our_share.resize(num_points);
-
-		for (Size i=0; i<num_points; i++)
-		{
-			our_share[i].set(our_data[3*i], our_data[3*i+1], our_data[3*i+2]);
-		}
-
-		free(our_data);
-	}
 }
 #endif
+
+
