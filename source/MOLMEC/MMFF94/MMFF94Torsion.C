@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.11 2006/02/15 13:17:54 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.12 2006/02/15 14:10:35 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -188,25 +188,24 @@ namespace BALL
 								<< atoms[2]->getType() << " " << atoms[3]->getType() << " " << std::endl;
 
 						// check for parameters in a step down procedure
+						Position ic[] = { 0, 1, 2, 4, 4};
+						Position lc[] = { 0, 1, 4, 2, 4};
+
+//        .         1,2,3,5,5,
+//        .         1,2,5,3,5/
 						bool found = false;
-						for (Position p = 1; p < 5 && !found; p++)
+						for (Position p = 0; p < 6 && !found; p++)
 						{
-							for (Position i = 0; i < 3; i++)
-							{
-								Position di = p;
-								Position dl = p;
+							Position di = ic[p];
+							Position dl = lc[p];
 
-								if 			(i == 1) di ++;
-								else if (i == 2) dl ++;
-
-								found = parameters_.getParameters(this_torsion.type, 
-																				equivalences.getEquivalence(type_a1, di),
-																				type_a2, type_a3,
-																				equivalences.getEquivalence(type_a4, dl),
-																				this_torsion.v1, this_torsion.v2, this_torsion.v3);
-								
-								if (found) break;
-							}
+							found = parameters_.getParameters(this_torsion.type, 
+																		equivalences.getEquivalence(type_a1, di),
+																		type_a2, type_a3,
+																		equivalences.getEquivalence(type_a4, dl),
+																		this_torsion.v1, this_torsion.v2, this_torsion.v3);
+						
+							if (found) break;
 						}
 
 						if (!found)
