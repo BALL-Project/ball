@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.h,v 1.1.2.4 2006/02/15 17:24:04 amoll Exp $
+// $Id: MMFF94Torsion.h,v 1.1.2.5 2006/02/15 23:09:36 amoll Exp $
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -113,16 +113,7 @@ namespace BALL
 
 		double getU_(Position e);
 		double getV_(Position e);
-		bool calculateHeuristicB_(const Atom& aj, const Atom& ak, const MMFF94AtomType& atj, const MMFF94AtomType& atk, double& result);
-		bool calculateHeuristicC_(const Atom& aj, const Atom& ak, const MMFF94AtomType& atj, const MMFF94AtomType& atk, double& result);
-		// ej and ek are atomic numbers
-		bool calculateHeuristicD_(Position ej, Position ek,
-															const MMFF94AtomType& atj, const MMFF94AtomType& atk, double& result, bool must_be_tetra = true);
-		// if zero is set to true after call: use zero parameter
-		bool calculateHeuristicE_(Position ej, Position ek,
-															const MMFF94AtomType& atj, const MMFF94AtomType& atk, double& result, bool& zero);
-		bool calculateHeuristicF_(Position ej, Position ek,
-															const MMFF94AtomType& atj, const MMFF94AtomType& atk, double& result, bool& zero);
+		bool calculateHeuristic_(const Atom& aj, const Atom& ak, double& v1, double& v2, double& v3);
 
 		vector<Torsion> torsions_;
 		MMFF94TorsionParameters parameters_;

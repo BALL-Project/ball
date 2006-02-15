@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.16 2006/02/15 17:24:00 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.17 2006/02/15 23:09:20 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -209,24 +209,23 @@ namespace BALL
 
 						if (!found)
 						{
-							// ???? heuristics
-//   							const MMFF94AtomType& atj = atom_types[aj.getType()];
-//   							const MMFF94AtomType& atk = atom_types[aj.getType()];
+							if (!calculateHeuristic_(*atoms[1], *atoms[2], this_torsion.v1, this_torsion.v2, this_torsion.v3))
+							{
+								//
+								// didnt found torsion parameters
+								getForceField()->getUnassignedAtoms().insert(atoms[0]);
+								getForceField()->getUnassignedAtoms().insert(atoms[1]);
+								getForceField()->getUnassignedAtoms().insert(atoms[2]);
+								getForceField()->getUnassignedAtoms().insert(atoms[3]);
 
-							//
-							// didnt found torsion parameters
-							getForceField()->getUnassignedAtoms().insert(atoms[0]);
-							getForceField()->getUnassignedAtoms().insert(atoms[1]);
-							getForceField()->getUnassignedAtoms().insert(atoms[2]);
-							getForceField()->getUnassignedAtoms().insert(atoms[3]);
+								getForceField()->error() << "MMFF94 Torsion: Could not find parameters for type " << this_torsion.type << "   "
+									<< atoms[0]->getFullName() << " " << atoms[1]->getFullName() << " " 
+									<< atoms[2]->getFullName() << " " << atoms[3]->getFullName() << "  " 
+									<< atoms[0]->getType() << " " << atoms[1]->getType() << " " 
+									<< atoms[2]->getType() << " " << atoms[3]->getType() << " " << std::endl;
 
-							getForceField()->error() << "MMFF94 Torsion: Could not find parameters for type " << this_torsion.type << "   "
-								<< atoms[0]->getFullName() << " " << atoms[1]->getFullName() << " " 
-								<< atoms[2]->getFullName() << " " << atoms[3]->getFullName() << "  " 
-								<< atoms[0]->getType() << " " << atoms[1]->getType() << " " 
-								<< atoms[2]->getType() << " " << atoms[3]->getType() << " " << std::endl;
-
-							continue;
+								continue;
+							}
 						}
 
 						// do nothing if all three constants are zeros:
@@ -421,124 +420,217 @@ Log.error() << "# " << atoms[0]->getName() << " "
 		return -1;
 	}
 
-	bool MMFF94Torsion::calculateHeuristicB_(const Atom& aj, const Atom& ak, 
-																					 const MMFF94AtomType& atj, const MMFF94AtomType& atk, double& result)
+	bool MMFF94Torsion::calculateHeuristic_(const Atom& aj, const Atom& ak, double& v1, double& v2, double& v3)
 	{
-		// both atom types must be aromatic
-		if (!atj.arom || ! atk.arom) return false;
-
-		vector<Atom*> av;
-		av.push_back((Atom*) &aj);
-		av.push_back((Atom*) &ak);
-
-		// both atoms must be in one aromatic ring
 		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
-		if (!mmff->areInOneAromaticRing(av)) return false;
+		const vector<MMFF94AtomType>& atom_types = mmff->getAtomTypes();
+
+		v1 = v2 = v3 = 0.0;
+
+		const Index tj = aj.getType();
+		const Index tk = ak.getType();
+
+		if (tj == -1 || tk == -1) return false;
+		
+		const MMFF94AtomType& atj = atom_types[tj];
+		const MMFF94AtomType& atk = atom_types[tk];
+
+		////////////////////////////////////////////
+		// rule a) linear?
+		////////////////////////////////////////////
+		if (atj.lin || atk.lin) return true;
 
 		const Position ej = aj.getElement().getAtomicNumber();
 		const Position ek = ak.getElement().getAtomicNumber();
 		const double uj = getU_(ej);
 		const double uk = getU_(ek);
-		if (uj == -1 || uk == -1) return false;
+		const double vj = getV_(ej);
+		const double vk = getV_(ek);
 
 		double beta = 6;
 
-		// one trivalent and one tetravalent?
-		if (atj.val * atk.val == 12) beta = 3;
+		////////////////////////////////////////////
+		// rule b) both atom types are aromatic
+		////////////////////////////////////////////
+		if (atj.arom && atk.arom)
+		{
+			vector<Atom*> av;
+			av.push_back((Atom*) &aj);
+			av.push_back((Atom*) &ak);
 
-		double l = 0.5;
+			// both atoms must be in one aromatic ring
+			if (mmff->areInOneAromaticRing(av))
+			{
+				if (uj == -1 || uk == -1) return false;
 
-		// one atom can contribute a pi lone pair
-		if (atj.pilp || atk.pilp) l = 0.3;
+				// one trivalent and one tetravalent?
+				if (atj.val * atk.val == 12) beta = 3;
 
-		// equation 21
-		result = beta * l * pow(uj * uk, -0.5);
-		return true;
-	}
+				double l = 0.5;
 
-	bool MMFF94Torsion::calculateHeuristicC_(const Atom& aj, const Atom& ak,
-																					 const MMFF94AtomType& atj, const MMFF94AtomType& atk, double& result)
-	{
+				// one atom can contribute a pi lone pair
+				if (atj.pilp || atk.pilp) l = 0.3;
+
+				// equation 21
+				v2 = beta * l * pow(uj * uk, -0.5);
+				return true;
+			}
+		}
+
 		const Bond& bond = *aj.getBond(ak);
-		if (!bond.getOrder() == Bond::ORDER__DOUBLE) return false;
+		Position bond_order = bond.getOrder();
+			
+		////////////////////////////////////////////
+		// rule c)
+		////////////////////////////////////////////
+		if (bond_order == Bond::ORDER__DOUBLE)
+		{
+			if (uj == -1 || uk == -1) return false;
 
-		const Position ej = aj.getElement().getAtomicNumber();
-		const Position ek = ak.getElement().getAtomicNumber();
-		const double uj = getU_(ej);
-		const double uk = getU_(ek);
-		if (uj == -1 || uk == -1) return false;
+			double l = 1;
 
-		const double beta = 6.0;
+			if (atj.mltb != 2 || atk.mltb != 2) l = 0.4;
 
-		double l = 1;
+			// equation 21
+			v1 = beta * l * pow(uj * uk, -0.5);
+			return true;
+		}
+	
+		////////////////////////////////////////////
+		// rule d) both atoms must be tetrcoordinate
+		////////////////////////////////////////////
+		if (atj.crd * atk.crd == 16)
+		{
+			if (vj == -1 || vk == -1) return false;
+			// equation 22
+			v3 = pow(vj * vk, -0.5) / 9.0;
+			return true;
+		}
 
-		if (atj.mltb != 2 || atk.mltb != 2) l = 0.4;
+		////////////////////////////////////////////
+		// rule e) j tetravalent
+		////////////////////////////////////////////
+		if (atj.crd == 4)
+		{
+			if (atk.crd == 3  &&  (atk.val == 4 || atk.val == 34 | atk.mltb))
+			{
+				return true; // zero values
+			}
 
-		// equation 21
-		result = beta * l * pow(uj * uk, -0.5);
-		return true;
-	}
+			if (atk.crd == 2  &&  (atk.val == 3 || atk.mltb))
+			{
+				return true; // zero values
+			}
 
-	bool MMFF94Torsion::calculateHeuristicD_(Position anj, Position ank,
-																					 const MMFF94AtomType& atj, const MMFF94AtomType& atk, double& result, bool must_be_tetra)
-	{
-		// both atoms must be tetrcoordinate?
-		if (must_be_tetra && atj.crd * atk.crd != 16) return false;
-		const double vj = getV_(anj);
-		const double vk = getV_(ank);
-		if (vj == -1 || vk == -1) return false;
+			if (vj == -1 || vk == -1) return false;
+			// equation 22
+			v3 = pow(vj * vk, -0.5) / 9.0;
+			return true;
+		}
+
+		////////////////////////////////////////////
+		// rule f) k tetravalent
+		////////////////////////////////////////////
+		if (atk.crd == 4)
+		{
+			if (atj.crd == 3  &&  (atj.val == 4 || atj.val == 34 | atj.mltb))
+			{
+				return true; // zero values
+			}
+
+			if (atj.crd == 2  &&  (atj.val == 3 || atj.mltb))
+			{
+				return true; // zero values
+			}
+
+			if (vj == -1 || vk == -1) return false;
+			// equation 22
+			v3 = pow(vj * vk, -0.5) / 9.0;
+			return true;
+		}
+
+		////////////////////////////////////////////
+		// rule g) k trivalent
+		////////////////////////////////////////////
+		if ((bond_order == Bond::ORDER__SINGLE && atj.mltb && atk.mltb) ||
+				(atj.pilp && atk.mltb) ||
+				(atk.pilp && atj.mltb))
+		{
+			if (atj.pilp && atk.pilp)
+			{
+				return true; // zero values
+			}
+
+			if (uk == -1 || uj == -1) return false;
+
+			double l = 0.15;
+
+			if (atj.pilp && atk.mltb)
+			{
+				if (atj.mltb) 
+				{
+					l = 0.5;
+				}
+				else
+				{
+					if (aj.getElement().getPeriod() == 2 &&
+							ak.getElement().getPeriod() == 2)
+					{
+						l = 0.3;
+					}
+				}
+			}
+			else if (atk.pilp && atj.mltb)
+			{
+				if (atk.mltb) 
+				{
+					l = 0.5;
+				}
+				else
+				{
+					if (aj.getElement().getPeriod() == 2 &&
+							ak.getElement().getPeriod() == 2)
+					{
+						l = 0.3;
+					}
+				}
+			}
+			// strongly delocalized "single" bond between non-carbons:
+			else if ((atj.mltb || atk.mltb) && (ej != 6  || ek != 6))
+			{
+				l = 0.4;
+			}
+			else 
+			{
+				// default value
+			}
+
+			// equation 21
+			v2 = beta * l * pow(uj * uk, -0.5);
+			return true;
+		}
+
+		///////////////////////////////////////////////
+		// rule h) saturated centers, at most trivalent
+		///////////////////////////////////////////////
+		// both atoms are either oxygen or sulfur?
+		if ((ej == 8 || ej == 16) && (ek == 8 || ek == 16))
+		{
+		 	Size es = ej + ek;
+
+			double ws = 4.0;						// both oxygen
+			if      (es == 24) ws = 16; // one oxygen, one sulfour
+			else if (es == 32) ws = 64; // both sulfur
+
+			v2 = - pow(ws, -0.5);
+		}
 
 		// equation 22
-		// (crd(j) - 1) * (crd(k) - 1) = 9
-		result = pow(vj * vk, -0.5) / 9.0;
+		if (vk == -1 || vj == -1) return false;
 
+		const double n = (atj.crd - 1) * (atk.crd - 1);
+		v3 = pow(vj*vk, -0.5) / n;
 		return true;
 	}
-
-	bool MMFF94Torsion::calculateHeuristicE_(Position anj, Position ank,
-																					 const MMFF94AtomType& atj, const MMFF94AtomType& atk, double& result, bool& zero)
-	{
-		if (atj.crd != 4) return false;
-
-		if (atk.crd == 3 && 
-				(atk.val == 4 || atk.val == 34 | atk.mltb))
-		{
-			zero = true;
-			return true;
-		}
-
-		if (atk.crd == 2 &&
-				(atk.val == 3 || atk.mltb))
-		{
-			zero = true;
-			return true;
-		}
-
-		return calculateHeuristicD_(anj, ank, atj, atk, result, false);
-	}
-
-
-	bool MMFF94Torsion::calculateHeuristicF_(Position anj, Position ank,
-																					 const MMFF94AtomType& atj, const MMFF94AtomType& atk, double& result, bool& zero)
-	{
-		if (atk.crd != 4) return false;
-
-		if (atj.crd == 3 && 
-				(atj.val == 4 || atj.val == 34 | atj.mltb))
-		{
-			zero = true;
-			return true;
-		}
-
-		if (atj.crd == 2 &&
-				(atj.val == 3 || atj.mltb))
-		{
-			zero = true;
-			return true;
-		}
-
-		return calculateHeuristicD_(anj, ank, atj, atk, result, false);
-	}
-
 
 } // namespace BALL
