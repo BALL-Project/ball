@@ -9,7 +9,8 @@ CPP_SOURCES=\
 	MMFF94Stretch.C\
 	MMFF94StretchBend.C\
 	MMFF94Torsion.C\
-	MMFF94Parameters.C
+	MMFF94Parameters.C\
+	MMFF94OutOfPlaneBend.C
 
 include ../../common.mak
 include .Dependencies

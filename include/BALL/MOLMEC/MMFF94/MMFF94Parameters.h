@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.20 2006/02/15 17:24:04 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.21 2006/02/16 15:44:22 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -444,6 +444,63 @@ namespace BALL
 
 		bool is_initialized_;
 	};
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+	/**	MMFF94 parameters for out of plane bending (see MMFFOOR.PAR)
+      \ingroup  MMFF94
+	*/
+	class MMFF94PlaneParameters
+	{
+		public:
+
+		/// Map with the force constant 
+		typedef HashMap<String, double> PlaneMap;
+
+		BALL_CREATE(MMFF94PlaneParameters)
+
+		///	Default constructor.
+		MMFF94PlaneParameters();
+
+		///	Destructor.
+		virtual ~MMFF94PlaneParameters();
+
+		/// Assignment operator
+		const MMFF94PlaneParameters& operator = (const MMFF94PlaneParameters& param)
+			throw();
+
+		/**	Clear method
+		*/
+		virtual void clear()
+			throw();
+
+		///
+		bool isInitialized() { return is_initialized_;}
+
+		///
+		bool getParameters(Index at1, Index at2, Index at3, Index at4, double& v) const;
+
+		/// read parameters for torsions
+		bool readParameters(const String& filename)
+			throw(Exception::FileNotFound);
+		
+		//@}
+
+		protected:
+
+		String getIndex_(Position atom_type1, 
+										 Position atom_type2, 
+										 Position atom_type3,
+										 Position atom_type4) const;
+
+		/// parameters 
+		PlaneMap parameters_;
+		mutable PlaneMap buffered_parameters_;
+
+		bool is_initialized_;
+	};
+
 
 
 } // namespace BALL

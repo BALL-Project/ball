@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.36 2006/02/16 14:19:44 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.37 2006/02/16 15:44:25 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -21,7 +21,7 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
-//   #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
 
 #include <math.h>
 
@@ -115,7 +115,7 @@ void enableOneComponent(const String& comp, MMFF94& mmff)
 bool isOk(double value, double reference, double max_difference = 100)// max 1 percent difference
 {
 	double diff = fabs(value - reference);
-	double diff_max = fabs(reference / 50.0); 
+	double diff_max = fabs(reference / max_difference); 
 
 	return diff < diff_max || diff < 0.001;
 }
@@ -587,6 +587,122 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare, long& wron
 	return true;
 }
 
+///////////////////////////////////////////////////////////
+bool testPlanes(MMFF94& mmff, const String& filename, bool compare)
+{
+	String full_file_name = (dir +FileSystem::PATH_SEPARATOR + filename + ".planes");
+	LineBasedFile infile;
+
+	// some molecules dont have planes
+	try
+	{
+		infile.open(full_file_name);
+	}
+	catch(...)
+	{
+		return true;
+	}
+
+	vector<String> atoms1, atoms2, atoms3, atoms4;
+	vector<double>  energy, angle, k;
+	while (infile.readLine())
+	{
+		vector<String> fields;
+		if (infile.getLine().split(fields) < 7)
+		{
+			Log.error() << "Problem: " << __FILE__ << __LINE__ << std::endl;
+			continue;
+		}
+
+		atoms1.push_back(fields[0]);
+		atoms2.push_back(fields[1]);
+		atoms3.push_back(fields[2]);
+		atoms4.push_back(fields[3]);
+		angle.push_back(fields[4].toFloat());
+		energy.push_back(fields[5].toFloat());
+		k.push_back(fields[6].toFloat());
+	}
+
+	enableOneComponent("MMFF94 OutOfPlaneBend", mmff);
+	mmff.updateEnergy();
+	MMFF94OutOfPlaneBend* comp= (MMFF94OutOfPlaneBend*) mmff.getComponent("MMFF94 OutOfPlaneBend");
+
+	Size empty = 0;
+	for (Position p = 0; p < k.size(); p++)
+	{
+		if (k[p] == 0.0) empty ++;
+	}
+
+	if (comp->getOutOfPlaneBends().size() != atoms4.size() - empty)
+	{
+		Log.error() << "Not all planes found " << filename << " got "
+								<< comp->getOutOfPlaneBends().size() << " was " << atoms4.size() - empty << std::endl;
+	}
+
+	HashSet<Position> found_planes;
+
+	for (Position poss = 0; poss < comp->getOutOfPlaneBends().size(); poss++)
+	{
+		const MMFF94OutOfPlaneBend::OutOfPlaneBend& t = comp->getOutOfPlaneBends()[poss];
+
+		String n1 = t.i->ptr->getName();
+		String n2 = t.j->ptr->getName();
+		String n3 = t.k->ptr->getName();
+		String n4 = t.l->ptr->getName();
+
+		bool found = false;
+
+		for (Position as = 0; as < atoms1.size(); as++)
+		{
+			if (atoms2[as] != n2) continue;
+
+			HashSet<String> set;
+			set.insert(atoms1[as]);
+			set.insert(atoms2[as]);
+			set.insert(atoms3[as]);
+
+			if (!set.has(n1) || !set.has(n2) || !set.has(n3)) continue;
+
+			found = as;
+			break;
+		}
+
+		if (!found)
+		{
+			Log.error() << "Could not find [plane] " << n1 << " " << n2 << " " << n3 << " " << n4 << std::endl;
+			continue;
+		}
+
+
+		if (BALL_REAL_EQUAL(t.k_oop, k[found], 0.0001) &&
+				isOk(t.angle, angle[found]) &&
+				isOk(t.energy, energy[found]))
+		{
+			continue;
+		}
+
+		Log.error() << std::endl
+								<< "Problem Plane:   " << filename << " "
+								<< n1 << " " << n2 << " " << n3 << " " << n4
+								<< t.i->type << " " << t.j->type << " " << t.k->type << " " << t.l->type << std::endl
+								<< "got " << t.k_oop << " angle " << t.angle << "   E: " << t.energy<< std::endl
+								<< "was " << k[found] << " angle " << angle[found] << "   E: " << energy[found] << std::endl;
+	}
+
+	if (!compare) return true;
+
+	vector<double> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
+
+	double e = results[3];
+
+	if (!isOk(mmff.getEnergy(), e))
+	{
+		Log.error() << filename << "   " << mmff.getEnergy() << "   " << e << std::endl;
+		return false;
+	}
+
+	return true;
+}
 
 int runtests(const vector<String>& filenames)
 {
@@ -673,7 +789,8 @@ int runtests(const vector<String>& filenames)
 //    		result &= testStretch(mmff, filenames[pos], true);
 //       result &= testBend(mmff, filenames[pos], true);
 //    		result &= testStretchBend(mmff, filenames[pos], true);
-    		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
+//       		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
+ 		result &= testPlanes(mmff, filenames[pos], true);
 
 		if (result) ok++;
 		else if (!wrong_rings) not_ok.push_back(filenames[pos]);

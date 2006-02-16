@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.27 2006/02/15 17:23:59 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.28 2006/02/16 15:44:17 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -227,7 +227,7 @@ namespace BALL
 		TVector3<double> v1, v2;
 		vector<Bend>::iterator bend_it = bends_.begin();
 
-		const double radian_to_degree = (double)180.0 / Constants::PI;
+//   		const double radian_to_degree = (double)180.0 / Constants::PI;
 		const double degree_to_radian= Constants::PI / (double)180.0;
 
 		// -0.007 degree^-1

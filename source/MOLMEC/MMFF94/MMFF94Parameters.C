@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.34 2006/02/15 17:23:59 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.35 2006/02/16 15:44:18 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -757,130 +757,240 @@ Log.info() << "MMFF94 StretchBend: from row: " << atom1.getName() << " " << atom
 					 r3;
 	}
 
-	///////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
-	MMFF94TorsionParameters::MMFF94TorsionParameters()
-		: is_initialized_(false)
-	{
-	}
+MMFF94TorsionParameters::MMFF94TorsionParameters()
+	: is_initialized_(false)
+{
+}
 
-	MMFF94TorsionParameters::~MMFF94TorsionParameters()
-	{
-		clear();
-	}
-	
-	void MMFF94TorsionParameters::clear()
-		throw()
-	{
-		parameters_.clear();
-	}
-	
-	const MMFF94TorsionParameters& MMFF94TorsionParameters::operator 
-		= (const MMFF94TorsionParameters& param)
-		throw()
-	{
-		parameters_ = param.parameters_;
-		return *this;
-	}
+MMFF94TorsionParameters::~MMFF94TorsionParameters()
+{
+	clear();
+}
 
-	bool MMFF94TorsionParameters::getParameters(Position torsion_type,
-			Index at1, Index at2, Index at3, Index at4,
-			double& v1, double& v2, double& v3) const
-	{
-		const String index = getIndex_(torsion_type, at1, at2, at3, at4);
+void MMFF94TorsionParameters::clear()
+	throw()
+{
+	parameters_.clear();
+}
+
+const MMFF94TorsionParameters& MMFF94TorsionParameters::operator 
+	= (const MMFF94TorsionParameters& param)
+	throw()
+{
+	parameters_ = param.parameters_;
+	return *this;
+}
+
+bool MMFF94TorsionParameters::getParameters(Position torsion_type,
+		Index at1, Index at2, Index at3, Index at4,
+		double& v1, double& v2, double& v3) const
+{
+	const String index = getIndex_(torsion_type, at1, at2, at3, at4);
 
 #ifdef BALL_DEBUG_MMFF
-		Log.info() << at1 << " " << at2 << " " << at3 << " " << at4  << std::endl;
+	Log.info() << at1 << " " << at2 << " " << at3 << " " << at4  << std::endl;
 #endif
 
-		// first we try a buffer for previous hits to speed up things a bit
-		// this will prevent searching for combinations further down the step by step approach
-		TorsionsMap::ConstIterator it = buffered_parameters_.find(index);
-	
-		// did we succeed in a direct hit?
-		if (it != buffered_parameters_.end())
-		{
-			const vector<double>& v = (*it).second;
-			v1 = v[0];
-			v2 = v[1];
-			v3 = v[2];
-			return true;
-		}
+	// first we try a buffer for previous hits to speed up things a bit
+	// this will prevent searching for combinations further down the step by step approach
+	TorsionsMap::ConstIterator it = buffered_parameters_.find(index);
 
-		it = parameters_.find(index);
-		if (it == parameters_.end()) return false;
-
+	// did we succeed in a direct hit?
+	if (it != buffered_parameters_.end())
+	{
 		const vector<double>& v = (*it).second;
-
 		v1 = v[0];
 		v2 = v[1];
 		v3 = v[2];
-
-		// buffer this result 
-		buffered_parameters_[index] = v;
-
 		return true;
 	}
 
-	bool MMFF94TorsionParameters::readParameters(const String& filename)
-		throw(Exception::FileNotFound)
+	it = parameters_.find(index);
+	if (it == parameters_.end()) return false;
+
+	const vector<double>& v = (*it).second;
+
+	v1 = v[0];
+	v2 = v[1];
+	v3 = v[2];
+
+	// buffer this result 
+	buffered_parameters_[index] = v;
+
+	return true;
+}
+
+bool MMFF94TorsionParameters::readParameters(const String& filename)
+	throw(Exception::FileNotFound)
+{
+	parameters_.clear();
+
+	LineBasedFile infile(filename);
+	vector<String> fields;
+
+	try
 	{
-		parameters_.clear();
-
-		LineBasedFile infile(filename);
-		vector<String> fields;
-
-		try
+		while (infile.readLine())
 		{
-			while (infile.readLine())
+			// comments
+			if (infile.getLine().hasPrefix("*") || infile.getLine().hasPrefix("$")) 
 			{
-				// comments
-				if (infile.getLine().hasPrefix("*") || infile.getLine().hasPrefix("$")) 
-				{
-					continue;
-				}
-				
-				if (infile.getLine().split(fields) < 9)
-				{
-					Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
-										  << filename << " Not 9 fields in one line " 
-											<< infile.getLine() << std::endl;
-					return false;
-				}
-
-				const Position type = fields[0].toUnsignedInt();
-				const Position atom_type1 = fields[1].toUnsignedInt();
-				const Position atom_type2 = fields[2].toUnsignedInt();
-				const Position atom_type3 = fields[3].toUnsignedInt();
-				const Position atom_type4 = fields[4].toUnsignedInt();
-				const String index = getIndex_(type, atom_type1, atom_type2, atom_type3, atom_type4);
-
-				parameters_[index] = vector<double>();
-				parameters_[index].push_back(fields[5].toDouble());
-				parameters_[index].push_back(fields[6].toDouble());
-				parameters_[index].push_back(fields[7].toDouble());
+				continue;
 			}
-		}
-		catch(...)
-		{
-			Log.error() << "Error while parsing line " << infile.readLine() << std::endl;
-			Log.error() << " in File " << filename << std::endl;
-			infile.close();
-			return false;
-		}
+			
+			if (infile.getLine().split(fields) < 9)
+			{
+				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+										<< filename << " Not 9 fields in one line " 
+										<< infile.getLine() << std::endl;
+				return false;
+			}
 
+			const Position type = fields[0].toUnsignedInt();
+			const Position atom_type1 = fields[1].toUnsignedInt();
+			const Position atom_type2 = fields[2].toUnsignedInt();
+			const Position atom_type3 = fields[3].toUnsignedInt();
+			const Position atom_type4 = fields[4].toUnsignedInt();
+			const String index = getIndex_(type, atom_type1, atom_type2, atom_type3, atom_type4);
+
+			parameters_[index] = vector<double>();
+			parameters_[index].push_back(fields[5].toDouble());
+			parameters_[index].push_back(fields[6].toDouble());
+			parameters_[index].push_back(fields[7].toDouble());
+		}
+	}
+	catch(...)
+	{
+		Log.error() << "Error while parsing line " << infile.readLine() << std::endl;
+		Log.error() << " in File " << filename << std::endl;
 		infile.close();
+		return false;
+	}
 
-		is_initialized_ = true;
+	infile.close();
+
+	is_initialized_ = true;
+	return true;
+}
+
+String MMFF94TorsionParameters::getIndex_(Position type,
+							Position at1, Position at2, Position at3, Position at4) const
+{ 
+	return String(type) + '|' + String(at1) + '|' + String(at2) + '|' + String(at3) + '|' + String(at4);
+}
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+MMFF94PlaneParameters::MMFF94PlaneParameters()
+	: is_initialized_(false)
+{
+}
+
+MMFF94PlaneParameters::~MMFF94PlaneParameters()
+{
+	clear();
+}
+
+void MMFF94PlaneParameters::clear()
+	throw()
+{
+	parameters_.clear();
+}
+
+const MMFF94PlaneParameters& MMFF94PlaneParameters::operator = (const MMFF94PlaneParameters& param)
+	throw()
+{
+	parameters_ = param.parameters_;
+	return *this;
+}
+
+bool MMFF94PlaneParameters::getParameters(Index at1, Index at2, Index at3, Index at4, double& v) const
+{
+	const String index = getIndex_(at1, at2, at3, at4);
+
+#ifdef BALL_DEBUG_MMFF
+	Log.info() << at1 << " " << at2 << " " << at3 << " " << at4  << std::endl;
+#endif
+
+	// first we try a buffer for previous hits to speed up things a bit
+	// this will prevent searching for combinations further down the step by step approach
+	PlaneMap::ConstIterator it = buffered_parameters_.find(index);
+
+	// did we succeed in a direct hit?
+	if (it != buffered_parameters_.end())
+	{
+		v = (*it).second;
 		return true;
 	}
 
-	String MMFF94TorsionParameters::getIndex_(Position type,
-								Position at1, Position at2, Position at3, Position at4) const
-	{ 
-		return String(type) + '|' + String(at1) + '|' + String(at2) + '|' + String(at3) + '|' + String(at4);
+	it = parameters_.find(index);
+	if (it == parameters_.end()) return false;
+
+	v = (*it).second;
+
+	// buffer this result 
+	buffered_parameters_[index] = v;
+
+	return true;
+}
+
+bool MMFF94PlaneParameters::readParameters(const String& filename)
+	throw(Exception::FileNotFound)
+{
+	parameters_.clear();
+
+	LineBasedFile infile(filename);
+	vector<String> fields;
+
+	try
+	{
+		while (infile.readLine())
+		{
+			// comments
+			if (infile.getLine().hasPrefix("*") || infile.getLine().hasPrefix("$")) 
+			{
+				continue;
+			}
+			
+			if (infile.getLine().split(fields) < 6)
+			{
+				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+										<< filename << " Not 6 fields in one line " 
+										<< infile.getLine() << std::endl;
+				return false;
+			}
+
+			const Position atom_type1 = fields[0].toUnsignedInt();
+			const Position atom_type2 = fields[1].toUnsignedInt();
+			const Position atom_type3 = fields[2].toUnsignedInt();
+			const Position atom_type4 = fields[3].toUnsignedInt();
+			const String index = getIndex_(atom_type1, atom_type2, atom_type3, atom_type4);
+
+			parameters_[index] = fields[4].toDouble();
+		}
 	}
+	catch(...)
+	{
+		Log.error() << "Error while parsing line " << infile.readLine() << std::endl;
+		Log.error() << " in File " << filename << std::endl;
+		infile.close();
+		return false;
+	}
+
+	infile.close();
+
+	is_initialized_ = true;
+	return true;
+}
+
+String MMFF94PlaneParameters::getIndex_(Position at1, Position at2, Position at3, Position at4) const
+{ 
+	return String(at1) + '|' + String(at2) + '|' + String(at3) + '|' + String(at4);
+}
 
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.2.2 2006/02/02 15:58:38 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.2.3 2006/02/16 15:44:18 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -14,6 +14,7 @@
 #include <math.h>
 
 //     #define BALL_DEBUG_MMFF
+#define BALL_MMFF94_TEST
 
 using namespace std;
 
@@ -57,7 +58,8 @@ namespace BALL
 	bool MMFF94OutOfPlaneBend::setup()
 		throw(Exception::TooManyErrors)
 	{
-		if (getForceField() == 0) 
+		if (getForceField() == 0 ||
+				dynamic_cast<MMFF94*>(getForceField()) == 0) 
 		{
 			Log.error() << "MMFF94OutOfPlaneBend::setup(): component not bound to force field" << endl;
 			return false;
@@ -76,14 +78,15 @@ namespace BALL
 			parameters_.readParameters(filename);
 		}
 
-		oop_bends_.clear();
+		bends_.clear();
 
 		bool use_selection = getForceField()->getUseSelection();
 
 		// a working instance to put the current values in and push it back
 		OutOfPlaneBend this_bend;
 
- 		const MMFF94AtomTypeEquivalences& equiv= ((MMFF94*)getForceField())->getEquivalences();
+		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
+		const MMFF94AtomTypeEquivalences& equiv = mmff->getEquivalences();
 
 		vector<Atom*>::const_iterator	atom_it = getForceField()->getAtoms().begin();
 		Atom::BondIterator bond_it;
@@ -97,14 +100,14 @@ namespace BALL
 			Size nr_hydrogen_bonds = 0;
 			for (bond_it = (*atom_it)->beginBond(); +bond_it; ++bond_it)
 			{
-				if (it2->getType() == Bond::TYPE__HYDROGEN) nr_hydrogen_bonds++;
+				if (bond_it->getType() == Bond::TYPE__HYDROGEN) nr_hydrogen_bonds++;
 			}
 
 			if (nr_bonds - nr_hydrogen_bonds != 3) continue;
 
 			vector<Atom*> partners;
 
-			Atom& central_atom = *atom_it;
+			Atom& central_atom = **atom_it;
 
 			for (bond_it = central_atom.beginBond(); +bond_it; ++bond_it)
 			{
@@ -127,7 +130,7 @@ namespace BALL
 
 
 			this_bend.i= &Atom::getAttributes()[partners[0]->getIndex()];
-			this_bend.j= &Atom::getAttributes()[central_atom->getIndex()];
+			this_bend.j= &Atom::getAttributes()[central_atom.getIndex()];
 			this_bend.k= &Atom::getAttributes()[partners[1]->getIndex()];
 			this_bend.l= &Atom::getAttributes()[partners[2]->getIndex()];
 
@@ -138,51 +141,35 @@ namespace BALL
 
 			// check for parameters in a step down procedure
 			// we ignore the step 1-1-1, as it is currently superflous
-			
-			// full parameters
-			if (parameters_.getParameters(this_bend.k_oop, type_i, type_j, type_k, type_l))
-					|| // 2-2-2-2
-					parameters_.getParameters(this_bend.k_oop, 
-																		equiv.getEquivalence(type_i, 2),
-																		equiv.getEquivalence(type_j, 2),
-																		equiv.getEquivalence(type_k, 2),
-																		equiv.getEquivalence(type_l, 2))
-					|| // 3-2-3-3
-					parameters_.getParameters(this_bend.k_oop, 
-																		equiv.getEquivalence(type_i, 3),
-																		equiv.getEquivalence(type_j, 2),
-																		equiv.getEquivalence(type_k, 3),
-																		equiv.getEquivalence(type_l, 3))
-					|| // 4-2-4-4
-					parameters_.getParameters(this_bend.k_oop, 
-																		equiv.getEquivalence(type_i, 4),
-																		equiv.getEquivalence(type_j, 2),
-																		equiv.getEquivalence(type_k, 4),
-																		equiv.getEquivalence(type_l, 4))
-					|| // 0-2-0-0 = full wildcard matching
-					parameters_.getParameters(this_bend.k_oop, 0, equiv.getEquivalence(type_j, 2), 0, 0);
-
+			bool found = false;
+			for (Position p = 0; p < 5 && ! found; p++)
 			{
-				bends_.push_back(bend);
-				continue;
+				if (parameters_.getParameters(equiv.getEquivalence(type_i, p),
+																			type_j,
+																			equiv.getEquivalence(type_k, p),
+																			equiv.getEquivalence(type_l, p),
+																			this_bend.k_oop))
+				{
+					bends_.push_back(this_bend);
+					found = true;
+				}
 			}
 
-			// complain if nothing was found
-			getForceField()->error() << "MMFF94OutOfPlaneBend::setup: cannot find OutOfPlaneBend parameters for atom types:"
-															 << central_atom->getType() << " "
-															 << partners[0]->getType() << " "
-															 << partners[1]->getType() << " "
-															 << partners[2]->getType() << " "
-															 << " (atoms are: " << 
-															 << this_bend.j->ptr->getFullName() << "/" 
-															 << this_bend.i->ptr->getFullName() << "/" 
-															 << this_bend.k->ptr->getFullName() << "/" 
-															 << this_bend.l->ptr->getFullName() << ")" << endl;
+			if (!found)
+			{
+				// complain if nothing was found
+				getForceField()->error() << "MMFF94OutOfPlaneBend::setup: cannot find parameters for atom types:"
+																 << central_atom.getType() << " " << partners[0]->getType() << " "
+																 << partners[1]->getType() << " " << partners[2]->getType() << " "
+																 << " (atoms are: "
+																 << central_atom.getFullName() << "/" << partners[0]->getFullName() << "/" 
+																 << partners[1]->getFullName() << "/" << partners[2]->getFullName() << ")" << endl;
 
-			getForceField()->getUnassignedAtoms().insert(partners[0]);
-			getForceField()->getUnassignedAtoms().insert(partners[1]);
-			getForceField()->getUnassignedAtoms().insert(partners[2]);
-			getForceField()->getUnassignedAtoms().insert(&central_atom);
+				getForceField()->getUnassignedAtoms().insert(partners[0]);
+				getForceField()->getUnassignedAtoms().insert(partners[1]);
+				getForceField()->getUnassignedAtoms().insert(partners[2]);
+				getForceField()->getUnassignedAtoms().insert(&central_atom);
+			}
 		}
 
 		// everything went well
@@ -197,10 +184,36 @@ namespace BALL
 		vector<OutOfPlaneBend>::iterator bend_it = bends_.begin();
 
 		double radian_to_degree = 180.0 / Constants::PI;
-		double degree_to_radian= Constants::PI / 180;
 
 		for (; bend_it != bends_.end(); ++bend_it) 
 		{
+			OutOfPlaneBend& b = *bend_it;
+			const Vector3& vi = b.i->position;
+			const Vector3& vj = b.j->position;
+			const Vector3& vk = b.k->position;
+			const Vector3& vl = b.l->position;
+
+			const TVector3<double> ij(vj.x - vi.x, vj.y - vi.y, vj.z - vi.z);
+			const TVector3<double> kj(vj.x - vk.x, vj.y - vk.y, vj.z - vk.z);
+			const TVector3<double> lj(vj.x - vl.x, vj.y - vl.y, vj.z - vl.z);
+			// the normal of the plane i,j,k
+			const TVector3<double> n = ij % kj;
+
+			// Maybe a degenerated plane or angle?
+			double length_product = n.getSquareLength() * lj.getSquareLength();
+			if (Maths::isZero(length_product)) continue;
+
+			double intersection_angle = asin(Maths::abs(n * lj) / sqrt(length_product));
+
+			// we need the angle in degrees!
+			intersection_angle *= radian_to_degree;
+
+			const double e = K0 * b.k_oop * intersection_angle * intersection_angle;
+#ifdef BALL_MMFF94_TEST
+			b.energy = e;
+			b.angle = intersection_angle;
+#endif
+			energy_ += e;
 		}
 		
 		return energy_;

@@ -1,10 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.h,v 1.1.2.2 2006/02/02 15:58:29 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.h,v 1.1.2.3 2006/02/16 15:44:22 amoll Exp $
 //
-
-// Molecular Mechanics: MMFF94 force field, bond stretch component
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94OUTOFPLANEBEND_H
 #define BALL_MOLMEC_MMFF94_MMFF94OUTOFPLANEBEND_H
@@ -27,7 +25,7 @@
 
 namespace BALL 
 {
-	/**	MMFF94 bond stretch component
+	/**	MMFF94 Out of plane component
     	\ingroup  MMFF94
 	*/
 	class MMFF94OutOfPlaneBend 
@@ -35,72 +33,47 @@ namespace BALL
 	{
 		public:
 
-		/// see MMFFANG.PAR
 		struct OutOfPlaneBend
 		{
-			Atom::StaticAtomAttributes*	i;
-			Atom::StaticAtomAttributes*	j;
-			Atom::StaticAtomAttributes*	k;
-			Atom::StaticAtomAttributes*	l;
+			Atom::StaticAtomAttributes *i, *j, *k, *l;
 			double k_oop;
-			double energy;  // debug
+			// debug
+			double energy;  
+			double angle;
 		};
 
 		BALL_CREATE(MMFF94OutOfPlaneBend)
 
-		/** @name	Constructors and Destructors	
-		*/
-		//@{ 
-
-		/**	Default constructor.
-		*/
+		///	Default constructor.
 		MMFF94OutOfPlaneBend();
 
-		/**	Constructor.
-		*/
+		///	Constructor.
 		MMFF94OutOfPlaneBend(ForceField& force_field);
 
-		/**	Copy constructor
-		*/
+		///	Copy constructor
 		MMFF94OutOfPlaneBend(const MMFF94OutOfPlaneBend& to_copy);
 
-		/**	Destructor.
-		*/
+		///	Destructor.
 		virtual ~MMFF94OutOfPlaneBend();
 
-		//@}
-		/**	@name	Setup Methods	
-		*/
-		//@{
-
-		/**	Setup method.
-		*/
+		///	Setup method.
 		virtual bool setup()
 			throw(Exception::TooManyErrors);
 
-		//@}
-		/**	@name	Accessors	
-		*/
-		//@{
-
-		/**	Calculates and returns the component's energy.
-		*/
+		///	Calculates and returns the component's energy.
 		virtual double updateEnergy();
 
-		/**	Calculates and returns the component's forces.
-		*/
+		///	Calculates and returns the component's forces.
 		virtual void updateForces();
 
 		///
 		const vector<OutOfPlaneBend>& getOutOfPlaneBends() const { return bends_;}
-		//@}
 
 		private:
-
 		vector<OutOfPlaneBend> bends_;
-		MMFF94OutOfPlaneBendParameters parameters_;
-	 
+		MMFF94PlaneParameters parameters_;
 	};
+
 } // namespace BALL
 
-#endif // BALL_MOLMEC_MMFF94_MMFF94OutOfPlaneBend_H
+#endif // BALL_MOLMEC_MMFF94_MMFF94OUTOFPLANEBEND_H

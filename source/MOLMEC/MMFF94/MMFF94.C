@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.26 2006/02/14 16:38:13 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.27 2006/02/16 15:44:17 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -14,6 +14,7 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/QSAR/aromaticityProcessor.h>
 
@@ -87,6 +88,7 @@ namespace BALL
  		insertComponent(new MMFF94StretchBend(*this));
  		insertComponent(new MMFF94Torsion(*this));
  		insertComponent(new MMFF94NonBonded(*this));
+ 		insertComponent(new MMFF94OutOfPlaneBend(*this));
 	}
  
 	// copy constructor  
