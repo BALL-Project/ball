@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.h,v 1.1.2.5 2006/02/15 23:09:36 amoll Exp $
+// $Id: MMFF94Torsion.h,v 1.1.2.6 2006/02/16 14:19:57 amoll Exp $
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -41,13 +41,15 @@ namespace BALL
 			Torsion();
 
 			Index type;
-			double angle;
 			Atom::StaticAtomAttributes*	atom1;
 			Atom::StaticAtomAttributes*	atom2;
 			Atom::StaticAtomAttributes*	atom3;
 			Atom::StaticAtomAttributes*	atom4;
-			double energy;  // debug
 			double v1, v2, v3;
+			// for debugging:
+			double energy; 
+			double angle;
+			bool heuristic;
 		};
 
 		/**	@name	Type Definitions	

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.35 2006/02/15 15:41:23 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.36 2006/02/16 14:19:44 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -523,13 +523,24 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare, long& wron
 
 		found_torsions.insert(found);
 
-		bool ok = (BALL_REAL_EQUAL(t.v1 , v1[found], 0.0001) &&
-						   BALL_REAL_EQUAL(t.v2 , v2[found], 0.0001) &&
-						   BALL_REAL_EQUAL(t.v3 , v3[found], 0.0001))
-							||
-							(BALL_REAL_EQUAL(t.v3 , v1[found], 0.0001) &&
-						 	 BALL_REAL_EQUAL(t.v2 , v2[found], 0.0001) &&
-						 	 BALL_REAL_EQUAL(t.v1 , v3[found], 0.0001));
+		bool ok; 
+		
+		if (!t.heuristic)
+		{
+			ok = (BALL_REAL_EQUAL(t.v1 , v1[found], 0.0001) &&
+						BALL_REAL_EQUAL(t.v2 , v2[found], 0.0001) &&
+						BALL_REAL_EQUAL(t.v3 , v3[found], 0.0001))
+					||
+					 (BALL_REAL_EQUAL(t.v3 , v1[found], 0.0001) &&
+						BALL_REAL_EQUAL(t.v2 , v2[found], 0.0001) &&
+						BALL_REAL_EQUAL(t.v1 , v3[found], 0.0001));
+		}
+		else
+		{
+			ok = isOk(t.v1, v1[found]) &&
+					 isOk(t.v2, v2[found]) &&	
+					 isOk(t.v3, v3[found]);
+		}
 
 		bool type_ok = (t.type == (Index)type[found]);
 		if (!type_ok)

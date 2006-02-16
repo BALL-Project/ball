@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.18 2006/02/16 14:11:31 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.19 2006/02/16 14:19:52 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -24,15 +24,16 @@ namespace BALL
 
 	MMFF94Torsion::Torsion::Torsion()
 		: type(-1),
-			angle(0),
 			atom1(0),
 			atom2(0),
 			atom3(0),
 			atom4(0),
-			energy(0),
 			v1(-1),
 			v2(-1),
-			v3(-1)
+			v3(-1),
+			energy(0),
+			angle(0),
+			heuristic(0)
 	{
 	}
 
@@ -207,6 +208,7 @@ namespace BALL
 							if (found) break;
 						}
 
+						this_torsion.heuristic = !found;
 
 						if (!found)
 						{
