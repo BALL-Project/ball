@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.17 2006/02/15 23:09:20 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.18 2006/02/16 14:11:31 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -207,6 +207,7 @@ namespace BALL
 							if (found) break;
 						}
 
+
 						if (!found)
 						{
 							if (!calculateHeuristic_(*atoms[1], *atoms[2], this_torsion.v1, this_torsion.v2, this_torsion.v3))
@@ -404,19 +405,36 @@ Log.error() << "# " << atoms[0]->getName() << " "
 
 	double MMFF94Torsion::getU_(Position e)
 	{
+		// values taken from paper IV
 		if (e > 5  && e <  9) return 2.0;   // C N O
 		if (e > 13 && e < 17) return 1.25;  // Si P S
+		
+		// values taken from the CHARMM implementation:
+		if (e > 31 && e < 35) return 0.7; 
+		if (e > 49 && e < 53) return 0.2; 
+		if (e < 86) return 0.1; 
 		return -1;
 	}
 
 	double MMFF94Torsion::getV_(Position e)
 	{
+		// values taken from paper IV
 		if (e == 6) return 2.12;   // C
 		if (e == 7) return 1.50;   // N
 		if (e == 8) return 0.20;   // O
 		if (e == 14) return 1.22;  // Si
 		if (e == 15) return 2.40;  // P
 		if (e == 16) return 0.49;  // S
+
+		// values taken from the CHARMM implementation:
+		if (e == 32) return 0.7;  // GE
+		if (e == 33) return 1.5;  // As
+		if (e == 34) return 0.34; // Se
+		if (e == 50) return 0.2;  // Sn
+		if (e == 51) return 1.1;  // Sb
+		if (e == 52) return 0.3;  // Te
+		if (e  < 86) return 0.3; 
+
 		return -1;
 	}
 
@@ -446,53 +464,52 @@ Log.error() << "# " << atoms[0]->getName() << " "
 		const double uk = getU_(ek);
 		const double vj = getV_(ej);
 		const double vk = getV_(ek);
-
+		// n in equation 22:
+		const double n = (atj.crd - 1) * (atk.crd - 1);
+		// beta in equation 21:
 		double beta = 6;
 
 		////////////////////////////////////////////
 		// rule b) both atom types are aromatic
 		////////////////////////////////////////////
-		if (atj.arom && atk.arom)
+		vector<Atom*> av;
+		av.push_back((Atom*) &aj);
+		av.push_back((Atom*) &ak);
+
+		// both atoms must be in one aromatic ring
+		if (mmff->areInOneAromaticRing(av))
 		{
-			vector<Atom*> av;
-			av.push_back((Atom*) &aj);
-			av.push_back((Atom*) &ak);
+			if (uj == -1 || uk == -1) return false;
 
-			// both atoms must be in one aromatic ring
-			if (mmff->areInOneAromaticRing(av))
-			{
-				if (uj == -1 || uk == -1) return false;
+			// one trivalent and one tetravalent?
+			if (atj.val * atk.val == 12) beta = 3;
 
-				// one trivalent and one tetravalent?
-				if (atj.val * atk.val == 12) beta = 3;
+			double l = 0.5;
 
-				double l = 0.5;
+			// one atom can contribute a pi lone pair
+			if (atj.pilp || atk.pilp) l = 0.3;
 
-				// one atom can contribute a pi lone pair
-				if (atj.pilp || atk.pilp) l = 0.3;
-
-				// equation 21
-				v2 = beta * l * pow(uj * uk, -0.5);
-				return true;
-			}
+			// equation 21
+			v2 = beta * l * sqrt(uj * uk);
+			return true;
 		}
 
+		////////////////////////////////////////////
+		// rule c) double bond
+		////////////////////////////////////////////
 		const Bond& bond = *aj.getBond(ak);
 		Position bond_order = bond.getOrder();
 			
-		////////////////////////////////////////////
-		// rule c)
-		////////////////////////////////////////////
 		if (bond_order == Bond::ORDER__DOUBLE)
 		{
 			if (uj == -1 || uk == -1) return false;
 
-			double l = 1;
+			double l = 0.4;
 
-			if (atj.mltb != 2 || atk.mltb != 2) l = 0.4;
+			if (atj.mltb * atk.mltb == 4) l = 1;
 
 			// equation 21
-			v1 = beta * l * pow(uj * uk, -0.5);
+			v2 = beta * l * sqrt(uj * uk);
 			return true;
 		}
 	
@@ -503,7 +520,7 @@ Log.error() << "# " << atoms[0]->getName() << " "
 		{
 			if (vj == -1 || vk == -1) return false;
 			// equation 22
-			v3 = pow(vj * vk, -0.5) / 9.0;
+			v3 = sqrt(vj * vk) / n;
 			return true;
 		}
 
@@ -524,7 +541,7 @@ Log.error() << "# " << atoms[0]->getName() << " "
 
 			if (vj == -1 || vk == -1) return false;
 			// equation 22
-			v3 = pow(vj * vk, -0.5) / 9.0;
+			v3 = sqrt(vj * vk) / n;
 			return true;
 		}
 
@@ -545,7 +562,7 @@ Log.error() << "# " << atoms[0]->getName() << " "
 
 			if (vj == -1 || vk == -1) return false;
 			// equation 22
-			v3 = pow(vj * vk, -0.5) / 9.0;
+			v3 = sqrt(vj * vk) / n;
 			return true;
 		}
 
@@ -602,11 +619,11 @@ Log.error() << "# " << atoms[0]->getName() << " "
 			}
 			else 
 			{
-				// default value
+				// default l value
 			}
 
 			// equation 21
-			v2 = beta * l * pow(uj * uk, -0.5);
+			v2 = beta * l * sqrt(uj * uk);
 			return true;
 		}
 
@@ -616,20 +633,19 @@ Log.error() << "# " << atoms[0]->getName() << " "
 		// both atoms are either oxygen or sulfur?
 		if ((ej == 8 || ej == 16) && (ek == 8 || ek == 16))
 		{
-		 	Size es = ej + ek;
+		 	const Size es = ej + ek;
 
-			double ws = 4.0;						// both oxygen
-			if      (es == 24) ws = 16; // one oxygen, one sulfour
-			else if (es == 32) ws = 64; // both sulfur
+			v2 = -2;										// both oxygen
+			if      (es == 24) v2 = -4; // one oxygen, one sulfur
+			else if (es == 32) v2 = -8; // both sulfur
 
-			v2 = - pow(ws, -0.5);
+			return true;
 		}
 
 		// equation 22
 		if (vk == -1 || vj == -1) return false;
 
-		const double n = (atj.crd - 1) * (atk.crd - 1);
-		v3 = pow(vj*vk, -0.5) / n;
+		v3 = sqrt(vj * vk) / n;
 		return true;
 	}
 
