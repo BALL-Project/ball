@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.2.3 2006/02/16 15:44:18 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.2.4 2006/02/16 16:10:03 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -88,6 +88,9 @@ namespace BALL
 		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
 		const MMFF94AtomTypeEquivalences& equiv = mmff->getEquivalences();
 
+		vector<Position> tp;
+		tp.resize(3);
+
 		vector<Atom*>::const_iterator	atom_it = getForceField()->getAtoms().begin();
 		Atom::BondIterator bond_it;
 		for ( ; atom_it != getForceField()->getAtoms().end(); ++atom_it) 
@@ -134,20 +137,22 @@ namespace BALL
 			this_bend.k= &Atom::getAttributes()[partners[1]->getIndex()];
 			this_bend.l= &Atom::getAttributes()[partners[2]->getIndex()];
 
-			Position type_i = partners[0]->getType();
 			Position type_j = central_atom.getType();
-			Position type_k = partners[1]->getType();
-			Position type_l = partners[2]->getType();
+
+			tp[0] = partners[0]->getType();
+			tp[1] = partners[1]->getType();
+			tp[2] = partners[2]->getType();
+			sort(tp.begin(), tp.end());
 
 			// check for parameters in a step down procedure
 			// we ignore the step 1-1-1, as it is currently superflous
 			bool found = false;
 			for (Position p = 0; p < 5 && ! found; p++)
 			{
-				if (parameters_.getParameters(equiv.getEquivalence(type_i, p),
+				if (parameters_.getParameters(equiv.getEquivalence(tp[0], p),
 																			type_j,
-																			equiv.getEquivalence(type_k, p),
-																			equiv.getEquivalence(type_l, p),
+																			equiv.getEquivalence(tp[1], p),
+																			equiv.getEquivalence(tp[2], p),
 																			this_bend.k_oop))
 				{
 					bends_.push_back(this_bend);

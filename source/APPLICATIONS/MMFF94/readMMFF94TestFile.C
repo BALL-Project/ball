@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.37 2006/02/16 15:44:25 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.38 2006/02/16 16:09:59 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -683,7 +683,7 @@ bool testPlanes(MMFF94& mmff, const String& filename, bool compare)
 
 		Log.error() << std::endl
 								<< "Problem Plane:   " << filename << " "
-								<< n1 << " " << n2 << " " << n3 << " " << n4
+								<< n1 << " " << n2 << " " << n3 << " " << n4 << "   "
 								<< t.i->type << " " << t.j->type << " " << t.k->type << " " << t.l->type << std::endl
 								<< "got " << t.k_oop << " angle " << t.angle << "   E: " << t.energy<< std::endl
 								<< "was " << k[found] << " angle " << angle[found] << "   E: " << energy[found] << std::endl;
