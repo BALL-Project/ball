@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.38 2006/02/16 16:09:59 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.39 2006/02/16 19:15:51 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -633,10 +633,10 @@ bool testPlanes(MMFF94& mmff, const String& filename, bool compare)
 		if (k[p] == 0.0) empty ++;
 	}
 
-	if (comp->getOutOfPlaneBends().size() != atoms4.size() - empty)
+	if (comp->getOutOfPlaneBends().size() * 3 != atoms4.size() - empty)
 	{
 		Log.error() << "Not all planes found " << filename << " got "
-								<< comp->getOutOfPlaneBends().size() << " was " << atoms4.size() - empty << std::endl;
+								<< comp->getOutOfPlaneBends().size() * 3 << " was " << atoms4.size() - empty << std::endl;
 	}
 
 	HashSet<Position> found_planes;
@@ -650,7 +650,7 @@ bool testPlanes(MMFF94& mmff, const String& filename, bool compare)
 		String n3 = t.k->ptr->getName();
 		String n4 = t.l->ptr->getName();
 
-		bool found = false;
+		Index found = -1;
 
 		for (Position as = 0; as < atoms1.size(); as++)
 		{
@@ -667,19 +667,14 @@ bool testPlanes(MMFF94& mmff, const String& filename, bool compare)
 			break;
 		}
 
-		if (!found)
+		if (found == -1)
 		{
 			Log.error() << "Could not find [plane] " << n1 << " " << n2 << " " << n3 << " " << n4 << std::endl;
 			continue;
 		}
 
 
-		if (BALL_REAL_EQUAL(t.k_oop, k[found], 0.0001) &&
-				isOk(t.angle, angle[found]) &&
-				isOk(t.energy, energy[found]))
-		{
-			continue;
-		}
+		if (BALL_REAL_EQUAL(t.k_oop, k[found], 0.0001)) continue;
 
 		Log.error() << std::endl
 								<< "Problem Plane:   " << filename << " "
@@ -729,7 +724,6 @@ int runtests(const vector<String>& filenames)
 			mmff.getComponent(p)->setEnabled(true);
 		}
 
-//   		mmff.getComponent("MMFF94 Torsion")->setEnabled(false);
 		if (!mmff.setup(*system))
 		{
 			Log.error() << "Setup failed for " << full_file_name << std::endl;

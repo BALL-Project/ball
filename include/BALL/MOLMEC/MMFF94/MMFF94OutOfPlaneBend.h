@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.h,v 1.1.2.3 2006/02/16 15:44:22 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.h,v 1.1.2.4 2006/02/16 19:16:39 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94OUTOFPLANEBEND_H
@@ -39,7 +39,6 @@ namespace BALL
 			double k_oop;
 			// debug
 			double energy;  
-			double angle;
 		};
 
 		BALL_CREATE(MMFF94OutOfPlaneBend)

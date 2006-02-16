@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.2.4 2006/02/16 16:10:03 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.2.5 2006/02/16 19:16:33 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -70,10 +70,7 @@ namespace BALL
 			Path    path;
 			String  filename(path.find("MMFF94/MMFFOOP.PAR"));
 
-			if (filename == "") 
-			{
-				throw Exception::FileNotFound(__FILE__, __LINE__, filename);
-			}
+			if (filename == "") throw Exception::FileNotFound(__FILE__, __LINE__, "[empty]");
 
 			parameters_.readParameters(filename);
 		}
@@ -96,7 +93,7 @@ namespace BALL
 		for ( ; atom_it != getForceField()->getAtoms().end(); ++atom_it) 
 		{
 			// search for tricoordinate centers (atoms with three bonds)
-			const Size nr_bonds = (*atom_it)->countBonds();
+			Size nr_bonds = (*atom_it)->countBonds();
 			if (nr_bonds < 3) continue;
 
 			// count hydrogen bonds
@@ -109,7 +106,6 @@ namespace BALL
 			if (nr_bonds - nr_hydrogen_bonds != 3) continue;
 
 			vector<Atom*> partners;
-
 			Atom& central_atom = **atom_it;
 
 			for (bond_it = central_atom.beginBond(); +bond_it; ++bond_it)
@@ -155,7 +151,8 @@ namespace BALL
 																			equiv.getEquivalence(tp[2], p),
 																			this_bend.k_oop))
 				{
-					bends_.push_back(this_bend);
+					// we ignore OOP bends with a zero as force constant
+					if (this_bend.k_oop != 0.0) bends_.push_back(this_bend);
 					found = true;
 				}
 			}
@@ -190,6 +187,11 @@ namespace BALL
 
 		double radian_to_degree = 180.0 / Constants::PI;
 
+		// the three vectors from the three partners to the center atom
+		TVector3<double> vs[3];
+		// the normals of the 3 plane 
+		TVector3<double> ns[3];
+
 		for (; bend_it != bends_.end(); ++bend_it) 
 		{
 			OutOfPlaneBend& b = *bend_it;
@@ -198,29 +200,34 @@ namespace BALL
 			const Vector3& vk = b.k->position;
 			const Vector3& vl = b.l->position;
 
-			const TVector3<double> ij(vj.x - vi.x, vj.y - vi.y, vj.z - vi.z);
-			const TVector3<double> kj(vj.x - vk.x, vj.y - vk.y, vj.z - vk.z);
-			const TVector3<double> lj(vj.x - vl.x, vj.y - vl.y, vj.z - vl.z);
-			// the normal of the plane i,j,k
-			const TVector3<double> n = ij % kj;
+			vs[0].set(vj.x - vi.x, vj.y - vi.y, vj.z - vi.z);
+			vs[1].set(vj.x - vk.x, vj.y - vk.y, vj.z - vk.z);
+			vs[2].set(vj.x - vl.x, vj.y - vl.y, vj.z - vl.z);
 
-			// Maybe a degenerated plane or angle?
-			double length_product = n.getSquareLength() * lj.getSquareLength();
-			if (Maths::isZero(length_product)) continue;
+			ns[0].set(vs[1] % vs[2]);
+			ns[1].set(vs[0] % vs[2]);
+			ns[2].set(vs[0] % vs[1]);
 
-			double intersection_angle = asin(Maths::abs(n * lj) / sqrt(length_product));
+			double e = 0.0;
+			const double k = K0 * b.k_oop;
 
-			// we need the angle in degrees!
-			intersection_angle *= radian_to_degree;
+			for (Position p = 0; p < 3; p++)
+			{
+				// Maybe a degenerated plane or angle?
+				double length_product = vs[p].getSquareLength() * ns[p].getSquareLength();
+				if (Maths::isZero(length_product)) continue;
+				double intersection_angle = asin(Maths::abs(ns[p] * vs[p]) / sqrt(length_product));
+				// we need the angle in degrees!
+				intersection_angle *= radian_to_degree;
+				e += k * intersection_angle * intersection_angle;
+			}
 
-			const double e = K0 * b.k_oop * intersection_angle * intersection_angle;
+			energy_ += e;
 #ifdef BALL_MMFF94_TEST
 			b.energy = e;
-			b.angle = intersection_angle;
 #endif
-			energy_ += e;
 		}
-		
+
 		return energy_;
 	}
 
