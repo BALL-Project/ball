@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MPISupport.h,v 1.1.2.2 2006/02/15 21:34:46 anhi Exp $
+// $Id: MPISupport.h,v 1.1.2.3 2006/02/16 00:26:05 anhi Exp $
 //
 
 #ifndef BALL_SYSTEM_MPISUPPORT_H
@@ -205,9 +205,7 @@ namespace BALL
 				throw(Exception::OutOfMemory);
 
 			/** Accept datapoints that are combined from all processes of the
-			 *  communicator. This function
-			 *  assumes that the sizes provided by each process are compatible to
-			 *  those that would have resulted from a call to distributeDatapoints.
+			 *  communicator. 
 			 */
 			template <typename valuetype>
 			void acceptCombinedDatapoints(std::vector<valuetype>& combined_set, std::vector<valuetype>& our_share)
@@ -244,9 +242,7 @@ namespace BALL
 			 *  and return the result. The array input contains our own share
 			 *  of the data we need to combine. The number of points gathered 
 			 *  is stored in numpoints. Note that _all other_ processes in the
-			 *  communicator have to call combineDatapoints. Also, this function
-			 *  assumes that the sizes provided by each process are compatible to
-			 *  those that would have resulted from a call to distributeDatapoints.
+			 *  communicator have to call combineDatapoints. 
 			 *  The caller has to ensure that the returned array is free()'d.
 			 *  If memory allocation fails, 0 is returned.
 			 */

@@ -26,6 +26,14 @@
 #include <BALL/COMMON/exception.h>
 #include <BALL/DATATYPE/string.h>
 
+// MPI-TEST!
+#define BALL_HAS_MPI_SUPPORT true
+//#undef BALL_HAS_MPI_SUPPORT
+
+#ifdef BALL_HAS_MPI_SUPPORT
+#	include <BALL/SYSTEM/MPISupport.h>
+#endif
+
 using namespace std;
 
 namespace BALL
@@ -50,6 +58,7 @@ namespace BALL
 	const String GeometricFit::Option::DEG_PSI = "deg_psi";
 	const String GeometricFit::Option::PENALTY_STATIC = "penalty_static";
 	const String GeometricFit::Option::PENALTY_MOBILE = "penalty_mobile";
+	const String GeometricFit::Option::NUMBER_OF_PROCESSES = "number_of_processes";
 	
 	const float		GeometricFit::Default::NEAR_RADIUS  = 1.8;
 	const float		GeometricFit::Default::GRID_SPACING  = 1.0;
@@ -71,6 +80,7 @@ namespace BALL
 	const float 	GeometricFit::Default::DEG_PSI = 20.0;
 	const int			GeometricFit::Default::PENALTY_STATIC = -15;
 	const int			GeometricFit::Default::PENALTY_MOBILE = 1;
+	const int			GeometricFit::Default::NUMBER_OF_PROCESSES = 1;
 	
 	
   GeometricFit::GeometricFit()
@@ -98,6 +108,7 @@ namespace BALL
 		options.setDefaultReal(Option::DEG_PSI, Default::DEG_PSI);
 		options.setDefaultInteger(Option::PENALTY_STATIC, Default::PENALTY_STATIC);
 		options.setDefaultInteger(Option::PENALTY_MOBILE, Default::PENALTY_MOBILE);
+		options.setDefaultInteger(Option::NUMBER_OF_PROCESSES, Default::NUMBER_OF_PROCESSES);
 		
     radius_a_ = 0.0;
     radius_b_ = 0.0;
@@ -135,6 +146,7 @@ namespace BALL
 		options.setDefaultReal(Option::DEG_PSI, Default::DEG_PSI);
 		options.setDefaultInteger(Option::PENALTY_STATIC, Default::PENALTY_STATIC);
 		options.setDefaultInteger(Option::PENALTY_MOBILE, Default::PENALTY_MOBILE);
+		options.setDefaultInteger(Option::NUMBER_OF_PROCESSES, Default::NUMBER_OF_PROCESSES);
 		
 		setup(system1, system2);
 	}
@@ -1191,35 +1203,6 @@ namespace BALL
 		// calculate all the rotation angles
 		RotationAngles_ rotAng;
 
-		/*if(options.has("phi_min") && options.has("phi_max") && options.has("deg_phi") &&
-			 options.has("theta_min") && options.has("theta_max") && options.has("deg_theta") &&
-			 options.has("psi_min") && options.has("psi_max") && options.has("deg_psi") )
-		{
-			if(    rotAng.generateSomeAngles( (float)options.getReal(Option::DEG_PHI), 
-																				(float)options.getReal(Option::DEG_PSI),
-																				(float)options.getReal(Option::DEG_THETA),
-																				(float)options.getReal(Option::PHI_MIN),
-																				(float)options.getReal(Option::PHI_MAX),
-																				(float)options.getReal(Option::PSI_MIN),
-																				(float)options.getReal(Option::PSI_MAX),
-																				(float)options.getReal(Option::THETA_MIN),
-																				(float)options.getReal(Option::THETA_MAX) ) == false
-					|| rotAng.getRotationNum() == 0 )
-			{
-    		Log.error() << "Bad degree interval!" << endl;
-     		exit(1);
-   		}
-		}
-		else
-		{
-			if(    rotAng.generateAllAngles( (int)options.getReal(Option::DEGREE_INTERVAL) ) == false
-					|| rotAng.getRotationNum() == 0 )
-			{
-    		Log.error() << "Bad degree interval!" << endl;
-     		exit(1);
-   		}
-		}	*/
-
 		if(     rotAng.generateSomeAngles( (float)options.getReal(Option::DEG_PHI), 
 																			 (float)options.getReal(Option::DEG_PSI),
 																			 (float)options.getReal(Option::DEG_THETA),
@@ -1245,6 +1228,42 @@ namespace BALL
     Timer loop_timer;
 		loop_timer.start();
 
+		std::vector<int> our_phi   = rotAng.phi_;
+		std::vector<int> our_theta = rotAng.theta_;
+		std::vector<int> our_psi   = rotAng.psi_;
+
+/** This code distributes the data for the slaves in the case of a parallel computation **/
+#ifdef BALL_HAS_MPI_SUPPORT
+		int numprocs = options.getInteger(Option::NUMBER_OF_PROCESSES);
+
+		MPISupport mpi;
+		if (numprocs > 1)
+		{
+			int argc = 0;
+			char **argv = 0;
+			mpi.init(argc, argv);
+
+			// spawn the desired number of processes
+			numprocs = mpi.spawn("/home/andreas/DEVELOP/geometricFit_slave.sh", argv, numprocs) + 1;
+			if (verbosity > 1)
+				Log.info() << "Master process has spawned " << numprocs -1 << " slaves" << std::endl;
+
+			// Distribute the options
+			mpi.sendOptions(options);
+
+			// and the systems
+			mpi.sendSystem(system1_);
+			mpi.sendSystem(system2_);
+
+			// now scatter the angles.
+			mpi.distributeDatapoints(rotAng.phi_,   our_phi);
+			mpi.distributeDatapoints(rotAng.theta_, our_theta);
+			mpi.distributeDatapoints(rotAng.psi_,   our_psi);
+
+			rotation_num = our_phi.size();
+		}
+#endif	
+
 		// TODO: Use a vector
 		Peak_* top_n_peaks = new Peak_[options.getInteger(Option::TOP_N)];
 		double phi, theta, psi; // phi: around x axis, 
@@ -1257,9 +1276,11 @@ namespace BALL
 			/**while (pause_)
 			{ pause(10); };
 			   **/
-			phi   = rotAng.getXAng(current_round_);
-			theta = rotAng.getYAng(current_round_);
-			psi   = rotAng.getZAng(current_round_);
+			phi   =   our_phi[current_round_];
+			theta = our_theta[current_round_];
+			psi   =   our_psi[current_round_]; 
+;
+
       loop_timer.reset();
 			if (verbosity > 10)
 			{
@@ -1346,7 +1367,281 @@ namespace BALL
 		{
 			cout << "CPU time needed for docking: " << overall_timer.getCPUTime() << endl;
 		}
+
+		// At this point we'll need to gather the data from the slaves in the case of a
+		// parallel computation
+#ifdef BALL_HAS_MPI_SUPPORT
+		printf("Numprocs %d\n", numprocs);
+		if (numprocs > 1)
+		{
+			// this is _not_ particularly clever, but well... it's a start... ;-)
+		printf("Numprocs %d\n", numprocs);
+			// TODO: find a nicer way for this stuff
+			std::vector<double>  values;
+			std::vector<Vector3> translations;
+			std::vector<Vector3> rotations;
+
+			std::multiset<Peak_>::iterator it = peak_set_.begin();
+			for (; it!=peak_set_.end(); it++)
+			{
+				values.push_back(it->value);
+				translations.push_back(it->translation);
+				rotations.push_back(it->orientation);
+			}
+			
+			// gather the stuff
+			std::vector<double>  all_values;
+			std::vector<Vector3> all_translations;
+			std::vector<Vector3> all_rotations;
+
+			mpi.acceptCombinedDatapoints(all_values, values);
+			mpi.acceptCombinedDatapoints(all_translations, translations);
+			mpi.acceptCombinedDatapoints(all_rotations, rotations);
+
+			// and put it in the peak set
+			peak_set_.clear();
+			for (Size i=0; i<all_values.size(); i++)
+			{
+				Peak_ p;
+				p.value 			= all_values[i];
+				p.translation = all_translations[i];
+				p.orientation = all_rotations[i];
+
+				peak_set_.insert(p);
+			}
+		}
+#endif // BALL_HAS_MPI_SUPPORT
 	}
+
+	/** MPI-Test!!! **/
+#ifdef BALL_HAS_MPI_SUPPORT
+	/** This is the main loop of the geometric fit algorithm for the slaves of a parallel run **/
+	void GeometricFit::MPI_Slave_start(int argc, char**argv)
+	{
+		MPISupport mpi(argc, argv);
+		Log.info() << "Process " << mpi.getRank() << "just woke up... " << std::endl;
+
+		/** To perform some useful work, we need from our parent:
+		 * 		- The options
+		 * 		- The Systems
+		 * 		- Our part of the angle vector
+		 */
+		DockingAlgorithm::start();
+		Options *O = mpi.receiveOptions();
+		options = *O;
+		delete(O);
+
+		System *S = mpi.receiveSystem();
+		system1_.set(*S, true);
+		delete(S);
+
+		S = mpi.receiveSystem();
+		system2_.set(*S, true);
+		delete(S);
+
+		/** Now receive the angles **/
+		std::vector<int> our_phi, our_theta, our_psi;
+		mpi.acceptDatapoints(our_phi);
+		mpi.acceptDatapoints(our_theta);
+		mpi.acceptDatapoints(our_psi);
+
+		int rotation_num = our_phi.size();
+		int total_round = our_phi.size();
+
+		Timer loop_timer;
+		loop_timer.start();
+
+		/** Now we can start our part of the loop... **/
+		DockingAlgorithm::start();
+
+		int verbosity = options.getInteger(Option::VERBOSITY);
+
+		Timer overall_timer;
+		Timer detailed_timer;
+
+		overall_timer.start();
+		detailed_timer.start();
+
+		initGridSizes_();
+
+		if (verbosity > 5)
+		{
+			Log << "Time used to init grid sizes for A: " << detailed_timer.getCPUTime() << endl;
+		}
+		detailed_timer.reset();
+
+		initFFTGrid_( GeometricFit::PROTEIN_A );
+		initFFTGrid_( GeometricFit::PROTEIN_B );
+
+		if (verbosity > 5)
+		{
+			Log << "Time used to init FFT Grid A & B: " << detailed_timer.getCPUTime() << endl;
+		}
+		detailed_timer.reset();
+
+		doPreTranslation_( GeometricFit::PROTEIN_A );
+
+		detailed_timer.reset();
+		makeFFTGrid_( GeometricFit::PROTEIN_A );
+
+		if (verbosity > 5)
+		{
+			Log << "Time used to make FFT Grid A: " << detailed_timer.getCPUTime() << endl;
+		}
+
+		detailed_timer.reset();
+		FFT_grid_a_->doFFT();
+
+		if (verbosity > 5)
+		{
+			Log << "Time used to do FFT on FFT Grid A: " << detailed_timer.getCPUTime() << endl;
+		}
+
+		detailed_timer.reset();
+		calcConjugate_( GeometricFit::PROTEIN_A );
+
+		if (verbosity > 5)
+		{
+			Log << "Time used to calc conjugate on FFT Grid A: " << detailed_timer.getCPUTime() << endl;
+		} 
+
+		// since we put the mass center at origin
+		// we can do pre-translation of b before all loops.
+		doPreTranslation_( GeometricFit::PROTEIN_B );
+
+		// remove old rubbish in peak_set_
+		peak_set_.clear();
+
+		// note: the backuped systems are systems after pre-translation.
+		system_backup_a_ = system1_;  // after pre-translation
+		system_backup_b_ = system2_;  // after pre-translation
+
+		// TODO: Use a vector
+		Peak_* top_n_peaks = new Peak_[options.getInteger(Option::TOP_N)];
+		double phi, theta, psi; // phi: around x axis, 
+		// theta: around y axis, 
+		// psi: around z axis;
+		for (current_round_ = 0; (current_round_ < rotation_num) && !abort_; current_round_++)
+		{
+			// TODO: we should check if pause_ is true and sleep than for a given time
+
+			/**while (pause_)
+				{ pause(10); };
+			 **/
+			phi   =   our_phi[current_round_];
+			theta = our_theta[current_round_];
+			psi   =   our_psi[current_round_]; 
+
+			loop_timer.reset();
+			if (verbosity > 10)
+			{
+				Log << "rotation = " << phi << ";" << theta << ";" << psi << endl;
+			}
+
+			system2_ = system_backup_b_;
+
+			detailed_timer.reset();
+			changeProteinOrientation_( system2_, Vector3( phi, theta, psi ) );
+
+			if (verbosity > 10)
+			{
+				Log << "Time used to rotate protein: " << detailed_timer.getCPUTime() << endl;
+			}
+
+			detailed_timer.reset();
+			makeFFTGrid_( GeometricFit::PROTEIN_B );  
+
+			if (verbosity > 10)
+			{
+				Log << "Time used to make FFT Grid B: " << detailed_timer.getCPUTime() << endl;
+			}
+
+			detailed_timer.reset();
+			FFT_grid_b_->doFFT();
+
+			if (verbosity > 10)
+			{
+				Log << "Time used to do FFT on FFT Grid B: " << detailed_timer.getCPUTime() << endl;
+			}
+
+			detailed_timer.reset();
+			FFTGridMulti_();
+
+			if (verbosity > 10)
+			{
+				Log << "Time used to multiply FFT grid A and B: " << detailed_timer.getCPUTime() << endl;
+			}
+
+			detailed_timer.reset();	
+
+			// we have put the product of the two FFT_grid into FFT_grid_b_
+			FFT_grid_b_->doiFFT();
+
+			if (verbosity > 10)
+			{
+				Log << "Time used to do iFFT on product grid: " << detailed_timer.getCPUTime() << endl;
+			}
+
+			detailed_timer.reset();
+
+			// find out the peak value 
+			getGlobalPeak_(top_n_peaks);
+
+			if (verbosity > 10)
+			{
+				Log << "Time used to find out peaks: " << detailed_timer.getCPUTime() << endl;
+			}
+
+			detailed_timer.reset();
+
+			int top_n = options.getInteger(Option::TOP_N);
+
+			for(int j = 0; j < top_n; j++)
+			{
+				Peak_ temp_p = top_n_peaks[j];
+				Vector3 pp = temp_p.translation;
+				temp_p.translation = getSeparation_(pp);
+				temp_p.orientation = Vector3(phi, theta, psi);
+
+				peak_set_.insert(temp_p);
+			}
+		}
+
+		if( top_n_peaks != NULL )
+		{
+			delete [] top_n_peaks;
+			top_n_peaks = NULL;
+		}
+
+		if (verbosity > 5)
+		{
+			cout << "CPU time needed for docking: " << overall_timer.getCPUTime() << endl;
+		}
+
+		/** Now we'll have to gather the stuff together again... **/
+		// this is _not_ particularly clever, but well... it's a start... ;-)
+		// TODO: find a nicer way for this stuff
+		std::vector<double>  values;
+		std::vector<Vector3> translations;
+		std::vector<Vector3> rotations;
+	
+		// gather the stuff
+		std::multiset<Peak_>::iterator it = peak_set_.begin();
+		for (; it!=peak_set_.end(); it++)
+		{
+			values.push_back(it->value);
+			translations.push_back(it->translation);
+			rotations.push_back(it->orientation);
+		}
+
+		// gather the stuff
+		mpi.combineDatapoints(values);
+		mpi.combineDatapoints(translations);
+		mpi.combineDatapoints(rotations);
+
+		// that's it... we're done
+	}
+#endif
 
   /** Return the overall docking progress as a percentage
 	 */

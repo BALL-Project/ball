@@ -60,7 +60,12 @@ namespace BALL
 	MPISupport::~MPISupport()
 	{
 		if (finalize_on_destruct_)
-			MPI_Finalize();
+		{
+			int is_initialized;
+			MPI_Initialized(&is_initialized);
+			if (is_initialized)
+				MPI_Finalize();
+		}
 	}
 
 	Index MPISupport::getRank()
@@ -1300,9 +1305,6 @@ namespace BALL
 		free(result);
 	}
 
-	/** Note: combineDatapoints and acceptCombinedDatapoints need to be placed _under_ the
-	 *  definition of getSum<int>
-	 */
 	void MPISupport::combineDatapoints(const void* input, int size, MPI_Datatype datatype)
 		throw()
 	{
@@ -1312,9 +1314,10 @@ namespace BALL
 		int source;
 		MPI_Recv(&source, 1, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, default_communicator_, &status);
 
-		// The master needs to know the total number of points. So we'll sum all size - values up
-		getSum(size);
-
+		// This might not always be the most efficient idea, but we will just gather all sizes
+		// of all subarrays so gathering is easy for the master
+		MPI_Gather(&size, 1, MPI_INT, 0, 0, MPI_INT, source, default_communicator_);
+		
 		// Gathering is simple for us: we just need to send our own data...
 		MPI_Gatherv(const_cast<void*>(input), size, datatype, 0, 0, 0, datatype, source, default_communicator_);
 	}	
@@ -1329,33 +1332,30 @@ namespace BALL
 				MPI_Send(&rank_, 1, MPI_INT, i, 0, default_communicator_);
 		}
 
-		/** Compute the number of data points to receive from each process **/
-		/** For this we need the number of points in total which we sum up over the communicator **/
-		numpoints = getSum(size);
-
+		/** Instead of computing the strides and sizes ourselves, we gather
+		 *  them from the slaves.
+		 */
 		std::vector<int> datapoints_per_process(comm_size_);
 		std::vector<int> stride(comm_size_);
 
-		int base_size = (int)floor(numpoints / comm_size_);
-		int remainder = numpoints % comm_size_;
-		int current_stride = 0;
+		MPI_Gather(&size, 1, MPI_INT, &datapoints_per_process[0], 1, MPI_INT, rank_, default_communicator_);
 
+		// Compute the strides
+		int current_stride = 0;
 		for (int i=0; i<comm_size_; i++)
 		{
-			datapoints_per_process[i] = base_size;
-			stride[i]									= current_stride;
-
-			if (i < remainder)
-				datapoints_per_process[i]++;
-
+			stride[i] = current_stride;
 			current_stride += datapoints_per_process[i];
 		}
+
+		// current_stride now holds the number of datapoints
+		numpoints = current_stride;
 
 		/** Create the array to store the data **/
 		int data_size;
 		MPI_Type_size(datatype, &data_size);
 
-		void* gathered_data = (void*) malloc(numpoints*data_size);
+		void* gathered_data = (void*) malloc(current_stride*data_size);
 		if (gathered_data == 0)
 			return 0;
 
