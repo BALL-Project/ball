@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.33.4.2 2006/02/14 15:02:57 amoll Exp $
+# $Id: Makefile,v 1.33.4.3 2006/02/17 19:38:42 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -150,6 +150,7 @@ smartsParserLexer.o: smartsParserLexer.C smartsParserParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
 
 smartsParserParser.o: smartsParserParser.C
-	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
+	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@ || \
+	../config/fixbison smartsParserParser.C
 
 dummy:
