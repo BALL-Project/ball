@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.2.6 2006/02/17 02:05:57 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.2.7 2006/02/17 15:46:42 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -155,6 +155,7 @@ namespace BALL
 				getForceField()->getUnassignedAtoms().insert(partners[1]);
 				getForceField()->getUnassignedAtoms().insert(partners[2]);
 				getForceField()->getUnassignedAtoms().insert(&central_atom);
+				continue;
 			}
 
 			// we ignore OOP bends with a zero as force constant
