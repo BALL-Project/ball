@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.2.10 2006/02/11 22:29:40 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.2.11 2006/02/17 02:05:58 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -14,6 +14,7 @@
 #include <BALL/SYSTEM/path.h>
 
 //      #define BALL_DEBUG_MMFF
+#define BALL_MMFF_TEST
 
 using namespace std;
 
@@ -64,6 +65,9 @@ namespace BALL
 			return false;
 		}
 
+		// obtain the Stretch and Bend data from the MMFF94 force field
+		MMFF94& mmff = *(MMFF94*)getForceField();
+
 		if (!parameters_.isInitialized())
 		{
 			Path    path;
@@ -73,13 +77,14 @@ namespace BALL
 			if (filename1 == "") throw Exception::FileNotFound(__FILE__, __LINE__, filename1);
 			if (filename2 == "") throw Exception::FileNotFound(__FILE__, __LINE__, filename2);
 
-			parameters_.readParameters(filename1, filename2);
+			const MMFF94AtomTypeEquivalences& equivalences = mmff.getEquivalences();
+			parameters_.setEquivalences(equivalences);
+			parameters_.readParameters(filename1);
+			parameters_.readEmpericalParameters(filename2);
 		}
 
 		stretch_bends_.clear();
 		
-		// obtain the Stretch and Bend data from the MMFF94 force field
-		MMFF94& mmff = *(MMFF94*)getForceField();
 		const MMFF94Stretch& stretch = *(MMFF94Stretch*)mmff.getComponent("MMFF94 Stretch");
 		const MMFF94Bend& bend = 			 *(MMFF94Bend*)   mmff.getComponent("MMFF94 Bend");
 
@@ -165,11 +170,6 @@ namespace BALL
 				continue;
 			}
 
-/*
-Log.info() << sb.atom1->ptr->getName() << " " << sb.atom2->ptr->getName() << " "<< sb.atom3->ptr->getName() << " "  
-					 << sb.atom1->type << " " << sb.atom2->type << " " << sb.atom3->type << " :"
-					 << sb.kba_ijk << " " << sb.kba_kji << " " << sbtijk << std::endl;
-*/
 			// we are done for this bend
 			stretch_bends_.push_back(sb);
 		}

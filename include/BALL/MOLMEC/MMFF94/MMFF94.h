@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.2.10 2006/02/15 17:24:04 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.2.11 2006/02/17 02:05:42 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -21,20 +21,12 @@
 #	include <BALL/KERNEL/system.h>
 #endif
 
-#ifndef BALL_COMMON_EXCEPTION_H
-# include <BALL/COMMON/exception.h>
-#endif
-
 #ifndef BALL_MOLMEC_MMFF94_MMFF94PARAMETERS_H
 # include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
 #endif
 
 #ifndef BALL_DATATYPE_HASHSET_H
 # include <BALL/DATATYPE/hashSet.h>
-#endif
-
-#ifndef BALL_KERNEL_STANDARDPREDICATES_H
- # include <BALL/KERNEL/standardPredicates.h>
 #endif
 
 #include <vector>
@@ -46,7 +38,7 @@ namespace BALL
 	/**	MMFF94 force field class.
       \ingroup  MMFF94
 	*/
-	class MMFF94 
+	class BALL_EXPORT MMFF94 
 		: public ForceField
 	{
 		public:
@@ -211,17 +203,15 @@ namespace BALL
 		void collectRings_();
 			
 		String											folder_;
-		MMFF94AtomTypesContainer 		atom_types_;
+		MMFF94AtomTypes 						atom_types_;
 		MMFF94StretchParameters 		bond_parameters_;
 		MMFF94AtomTypeEquivalences  equivalences_;
 		vector<HashSet<Atom*> > 		rings_;
 		vector<HashSet<Atom*> > 		aromatic_rings_;
 		bool												parameters_initialized_;
 		vector<Bond*> 							bonds_;
-
-		Sp2HybridizedPredicate isSp2_;
-		SpHybridizedPredicate  isSp_;
 	};
+
 } // namespace BALL
 
 #endif // BALL_MOLMEC_MMFF94_H

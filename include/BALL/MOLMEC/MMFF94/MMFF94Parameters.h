@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.21 2006/02/16 15:44:22 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.22 2006/02/17 02:05:43 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -17,26 +17,71 @@
 # include <BALL/DATATYPE/hashMap.h>
 #endif 
 
-#ifndef BALL_KERNEL_BOND_H
-# include <BALL/KERNEL/bond.h>
-#endif
-
 using namespace std;
 
 namespace BALL 
 {
 
-	class MMFF94;
+	class Atom;
 
 	Position getMMFF94Index(Position atom_type1, Position atom_type2);
 
 	/// hold the maximum number of MMFF94 atom types + 1 (wildcard)
 	extern Size MMFF94_number_atom_types;
+	
+	class MMFF94AtomTypeEquivalences;
+
+/////////////////////////////////////////////////////////////////////////////
+	/**	MMFF94 component parameters base class
+      \ingroup  MMFF94
+	*/
+	class BALL_EXPORT MMFF94ParametersBase
+	{
+		public:
+
+		BALL_CREATE(MMFF94ParametersBase)
+
+		///	Default constructor.
+		MMFF94ParametersBase();
+
+		///	Destructor.
+		virtual ~MMFF94ParametersBase() {};
+
+		///	Assignment operator
+		const MMFF94ParametersBase& operator = (const MMFF94ParametersBase&)
+			throw() {return *this;};
+
+		///	Clear method
+		virtual void clear()
+			throw();
+
+		///
+		bool isInitialized() { return is_initialized_;}
+
+		///
+		bool readParameters(const String& filename)
+			throw(Exception::FileNotFound);
+
+		///
+		void setEquivalences(const MMFF94AtomTypeEquivalences& equi) { equiv_ = &equi;}
+		
+		protected:
+
+		virtual bool setup_(const vector<vector<String> >&) { return true;};
+
+		bool is_initialized_;
+
+		// nr of needed fields in parameter files
+		Size number_expected_fields_;
+		const MMFF94AtomTypeEquivalences* equiv_;
+	};
+
 
 	/**	MMFF94 equivalences for atom types (see MMFFDEF.PAR)
       \ingroup  MMFF94
 	*/
-	class MMFF94AtomTypeEquivalences
+	class BALL_EXPORT MMFF94AtomTypeEquivalences:
+		public MMFF94ParametersBase
 	{
 		public: 
 
@@ -50,7 +95,8 @@ namespace BALL
 		~MMFF94AtomTypeEquivalences();
 		
 		///
-		bool readParameters(const String& filename);
+		void clear()
+			throw();
 
 		/** Get an equivalence atom type for the given atom type.
 		 		@param number between 1 and 4, 4 is the most general equivalence
@@ -58,22 +104,17 @@ namespace BALL
 		*/
 		Index getEquivalence(Position original, Position number) const;
 
-		///
-		bool isInitialized() { return is_initialized_;}
-
 		protected:
 
+		virtual bool setup_(const vector<vector<String> >&);
 		vector<vector<Position> > equivalences_;
 		vector<String> 	 names_;
 		vector<bool> 	 	 exists_;
-
-		bool is_initialized_;
 	};
 	
 
-	/** Class to store the values of an atom type from MMFFPROP.PAR
-	*/
-	struct MMFF94AtomType
+	/// Class to store the values of an atom type from MMFFPROP.PAR
+	struct BALL_EXPORT MMFF94AtomType
 	{
 		///
 		MMFF94AtomType();
@@ -106,45 +147,40 @@ namespace BALL
 	};
 
 
+///////////////////////////////////////////////////////////////////////////
 	/**	MMFF94 parameters for atom types (see MMFFPROP.PAR)
       \ingroup  MMFF94
 	*/
-	class MMFF94AtomTypesContainer
+	class BALL_EXPORT MMFF94AtomTypes:
+		public MMFF94ParametersBase
 	{
 		public:
 
 		///
-		MMFF94AtomTypesContainer();
+		MMFF94AtomTypes();
 
 		///
-		MMFF94AtomTypesContainer(const MMFF94AtomTypesContainer& to_copy);
+		MMFF94AtomTypes(const MMFF94AtomTypes& to_copy);
 
 		///
-		~MMFF94AtomTypesContainer();
+		~MMFF94AtomTypes() {};
 
-		///
-		bool readParameters(const String& filename);
-		
 		///
 		const vector<MMFF94AtomType>& getAtomTypes() const { return data_;}
 
-		///
-		bool isInitialized() { return is_initialized_;}
-
 		protected:
 
+		virtual bool setup_(const vector<vector<String> >&);
 		vector<MMFF94AtomType> data_;
-
-		bool is_initialized_;
 	};
 
-
-	/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 	
 	/**	MMFF94 parameters for bond stretching (see MMFFBOND.PAR)
       \ingroup  MMFF94
 	*/
-	class MMFF94StretchParameters
+	class BALL_EXPORT MMFF94StretchParameters:
+		public MMFF94ParametersBase
 	{
 		public:
 
@@ -192,15 +228,8 @@ namespace BALL
 			throw();
 
 		///
-		bool isInitialized() { return is_initialized_;}
+		StretchMap::ConstIterator getParameters(Position type1, Position type2) const;
 
-		///
-		StretchMap::ConstIterator getParameters(const Bond& bond) const;
-
-		///
-		bool readParameters(const String& filename)
-			throw(Exception::FileNotFound);
-		
 		///
 		bool readEmpericalParameters(const String& filename);
 
@@ -210,21 +239,17 @@ namespace BALL
 		///
 		const EmpericalStretchMap& getEmpericalParameters() const { return emperical_parameters_;}
 
-		///
-		void setMMFF94(const MMFF94& mmff) { mmff_ = &mmff;}
-
 		static double radii[];
 		static double electronegatives[];
 
 		protected:
 
+		virtual bool setup_(const vector<vector<String> >&);
+
 		/// standard parameters 
 		StretchMap parameters_;
+		mutable StretchMap buffered_parameters_;
 		EmpericalStretchMap emperical_parameters_;
-		
-		bool is_initialized_;
-
-		const MMFF94* mmff_;
 	};
 
 ///////////////////////////////////////////////////////////////////////////
@@ -232,217 +257,148 @@ namespace BALL
 	/**	MMFF94 parameters for bond bending (see MMFFANG.PAR)
       \ingroup  MMFF94
 	*/
-	class MMFF94BendParameters
+	class BALL_EXPORT MMFF94BendParameters
+		: public MMFF94ParametersBase
 	{
 		public:
 
 		/// Map with the force constant and reference angle
 		typedef HashMap<Position, pair<double, double> > BendMap;
 
-		/**	@name Constant Definitions
-		*/
-		//@{
-
 		BALL_CREATE(MMFF94BendParameters)
 
-		/**	Default constructor.
-		*/
+		///	Default constructor.
 		MMFF94BendParameters();
 
-		/**	Destructor.
-		*/
+		///	Destructor.
 		virtual ~MMFF94BendParameters();
 
-		//@}
-		/**	@name Assignment
-		*/
-		//@{
-
-		/**	Assignment operator
-		*/
+		///	Assignment operator
 		const MMFF94BendParameters& operator = (const MMFF94BendParameters& param)
 			throw();
 
-		/**	Clear method
-		*/
+		///	Clear method
 		virtual void clear()
 			throw();
 
 		///
-		bool isInitialized() { return is_initialized_;}
-
-		///
 		bool getParameters(Position bend_type,
-											 Position atom_type1, 
-											 Position atom_type2, 
-											 Position atom_type3, double& ka, double& angle) const;
-
-		///
-		bool readParameters(const String& filename)
-			throw(Exception::FileNotFound);
-		
-		//@}
+											 Position atom_type1, Position atom_type2, Position atom_type3, 
+											 double& ka, double& angle) const;
 
 		protected:
 
-		Position getIndex_(Position bend_type,
-											 Position atom_type1, 
-											 Position atom_type2, 
-											 Position atom_type3) const;
+		virtual bool setup_(const vector<vector<String> >&);
+
+		Position getIndex_(Position bend_type, Position atom_type1, Position atom_type2, Position atom_type3) const;
 
 		/// parameters 
 		BendMap parameters_;
-
-		bool is_initialized_;
+		mutable BendMap buffered_parameters_;
 	};
 
 
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
 
-	
 	/**	MMFF94 parameters for stretch-bend interactions (see MMFFSTBN.PAR)
       \ingroup  MMFF94
 	*/
-	class MMFF94StretchBendParameters
+	class BALL_EXPORT MMFF94StretchBendParameters
+		: public MMFF94ParametersBase
 	{
 		public:
 
 		/// Map with the force constant and reference angle
 		typedef HashMap<Position, pair<double, double> > StretchBendMap;
 
-		/**	@name Constant Definitions
-		*/
-		//@{
-
 		BALL_CREATE(MMFF94StretchBendParameters)
 
-		/**	Default constructor.
-		*/
+		///	Default constructor.
 		MMFF94StretchBendParameters();
 
-		/**	Destructor.
-		*/
+		///	Destructor.
 		virtual ~MMFF94StretchBendParameters();
 
-		//@}
-		/**	@name Assignment
-		*/
-		//@{
-
-		/**	Assignment operator
-		*/
+		///	Assignment operator
 		const MMFF94StretchBendParameters& operator = (const MMFF94StretchBendParameters& param)
 			throw();
 
-		/**	Clear method
-		*/
+		///	Clear method
 		virtual void clear()
 			throw();
 
 		///
-		bool isInitialized() { return is_initialized_;}
-
-		///
-		bool getParameters(Position stretch_bend_type,
-											 const Atom& atom1, 
-											 const Atom& atom2, 
-											 const Atom& atom3, 
+		bool getParameters(Position stretch_bend_type, const Atom& atom1, const Atom& atom2, const Atom& atom3, 
 											 double& kba_ijk, double& kba_kji) const;
 
 		/// read parameters for stretch-bends and for assignment by periodic table row
-		bool readParameters(const String& filename, const String& by_row_filename)
+		bool readEmpericalParameters(const String& by_row_filename)
 			throw(Exception::FileNotFound);
 		
 		//@}
 
 		protected:
 
+		virtual bool setup_(const vector<vector<String> >&);
+
 		Position getIndex_(Position stretch_bend_type,
-											 Position atom_type1, 
-											 Position atom_type2, 
-											 Position atom_type3) const;
+											 Position atom_type1, Position atom_type2, Position atom_type3) const; 
 
 		Position getIndexByRow_(Position r1, Position r2, Position r3) const;
 
 		/// parameters 
 		StretchBendMap parameters_;
+		mutable StretchBendMap buffered_parameters_;
 		StretchBendMap parameters_by_row_;
-
-		bool is_initialized_;
 	};
 
-
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
-
 	
 	/**	MMFF94 parameters for torsions (see MMFFTOR.PAR)
       \ingroup  MMFF94
 	*/
-	class MMFF94TorsionParameters
+	class BALL_EXPORT MMFF94TorsionParameters
+		: public MMFF94ParametersBase
 	{
 		public:
 
 		/// Map with the force constant and reference angle
 		typedef HashMap<String, vector<double> > TorsionsMap;
 
-		/**	@name Constant Definitions
-		*/
-		//@{
-
 		BALL_CREATE(MMFF94TorsionParameters)
 
-		/**	Default constructor.
-		*/
+		///	Default constructor.
 		MMFF94TorsionParameters();
 
-		/**	Destructor.
-		*/
+		///	Destructor.
 		virtual ~MMFF94TorsionParameters();
 
-		//@}
-		/**	@name Assignment
-		*/
-		//@{
-
-		/**	Assignment operator
-		*/
+		///	Assignment operator
 		const MMFF94TorsionParameters& operator = (const MMFF94TorsionParameters& param)
 			throw();
 
-		/**	Clear method
-		*/
+		///	Clear method
 		virtual void clear()
 			throw();
-
-		///
-		bool isInitialized() { return is_initialized_;}
 
 		///
 		bool getParameters(Position type_index,
 											 Index at1, Index at2, Index at3, Index at4,
 											 double& v1, double& v2, double& v3) const;
 
-		/// read parameters for torsions
-		bool readParameters(const String& filename)
-			throw(Exception::FileNotFound);
-		
-		//@}
-
 		protected:
 
-		String getIndex_(Position type,
-											 Position atom_type1, 
-											 Position atom_type2, 
-											 Position atom_type3,
-											 Position atom_type4) const;
+		virtual bool setup_(const vector<vector<String> >&);
+
+		String getIndex_(Position type, Position atom_type1, Position atom_type2, Position atom_type3, Position atom_type4) const;
 
 		/// parameters 
 		TorsionsMap parameters_;
 		mutable TorsionsMap buffered_parameters_;
-
-		bool is_initialized_;
+		static Position ic_[5];
+		static Position lc_[5];
 	};
 
 ////////////////////////////////////////////////////////////////////
@@ -451,7 +407,8 @@ namespace BALL
 	/**	MMFF94 parameters for out of plane bending (see MMFFOOR.PAR)
       \ingroup  MMFF94
 	*/
-	class MMFF94PlaneParameters
+	class BALL_EXPORT MMFF94PlaneParameters
+		: public MMFF94ParametersBase
 	{
 		public:
 
@@ -470,35 +427,22 @@ namespace BALL
 		const MMFF94PlaneParameters& operator = (const MMFF94PlaneParameters& param)
 			throw();
 
-		/**	Clear method
-		*/
+		///	Clear method
 		virtual void clear()
 			throw();
 
 		///
-		bool isInitialized() { return is_initialized_;}
-
-		///
 		bool getParameters(Index at1, Index at2, Index at3, Index at4, double& v) const;
-
-		/// read parameters for torsions
-		bool readParameters(const String& filename)
-			throw(Exception::FileNotFound);
-		
-		//@}
 
 		protected:
 
-		String getIndex_(Position atom_type1, 
-										 Position atom_type2, 
-										 Position atom_type3,
-										 Position atom_type4) const;
+		virtual bool setup_(const vector<vector<String> >&);
+
+		String getIndex_(Position atom_type1, Position atom_type2, Position atom_type3, Position atom_type4) const;
 
 		/// parameters 
 		PlaneMap parameters_;
 		mutable PlaneMap buffered_parameters_;
-
-		bool is_initialized_;
 	};
 
 

@@ -1,17 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.h,v 1.1.2.10 2006/02/03 15:19:22 amoll Exp $
+// $Id: MMFF94Bend.h,v 1.1.2.11 2006/02/17 02:05:43 amoll Exp $
 //
-
-// Molecular Mechanics: MMFF94 force field, bond stretch component
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94BEND_H
 #define BALL_MOLMEC_MMFF94_MMFF94BEND_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELDCOMPONENT_H
 #	include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
@@ -30,13 +24,13 @@ namespace BALL
 	/**	MMFF94 bond stretch component
     	\ingroup  MMFF94
 	*/
-	class MMFF94Bend 
+	class BALL_EXPORT MMFF94Bend 
 		: public ForceFieldComponent
 	{
 		public:
 
 		/// see MMFFANG.PAR
-		struct Bend
+		struct BALL_EXPORT Bend
 		{
 			Bend();
 

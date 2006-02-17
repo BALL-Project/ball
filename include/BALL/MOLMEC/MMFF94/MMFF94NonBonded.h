@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.h,v 1.1.2.2 2006/02/02 15:58:29 amoll Exp $
+// $Id: MMFF94NonBonded.h,v 1.1.2.3 2006/02/17 02:05:43 amoll Exp $
 //
 
 // Molecular Mechanics: MMFF94 force field, non-bonded component
@@ -27,7 +27,7 @@ namespace BALL
 			
     	\ingroup  MMFF94
 	*/
-	class MMFF94NonBonded 
+	class BALL_EXPORT MMFF94NonBonded 
 		: public ForceFieldComponent
 	{
 		public:

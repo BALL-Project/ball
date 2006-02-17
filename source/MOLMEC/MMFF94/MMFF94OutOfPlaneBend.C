@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.2.5 2006/02/16 19:16:33 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.2.6 2006/02/17 02:05:57 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -65,6 +65,8 @@ namespace BALL
 			return false;
 		}
 
+		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
+
 		if (!parameters_.isInitialized())
 		{
 			Path    path;
@@ -72,6 +74,8 @@ namespace BALL
 
 			if (filename == "") throw Exception::FileNotFound(__FILE__, __LINE__, "[empty]");
 
+			const MMFF94AtomTypeEquivalences& equiv = mmff->getEquivalences();
+			parameters_.setEquivalences(equiv);
 			parameters_.readParameters(filename);
 		}
 
@@ -81,9 +85,6 @@ namespace BALL
 
 		// a working instance to put the current values in and push it back
 		OutOfPlaneBend this_bend;
-
-		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
-		const MMFF94AtomTypeEquivalences& equiv = mmff->getEquivalences();
 
 		vector<Position> tp;
 		tp.resize(3);
@@ -133,45 +134,31 @@ namespace BALL
 			this_bend.k= &Atom::getAttributes()[partners[1]->getIndex()];
 			this_bend.l= &Atom::getAttributes()[partners[2]->getIndex()];
 
-			Position type_j = central_atom.getType();
+			const Position type_j = central_atom.getType();
 
-			tp[0] = partners[0]->getType();
-			tp[1] = partners[1]->getType();
-			tp[2] = partners[2]->getType();
-			sort(tp.begin(), tp.end());
+			Position tp0 = partners[0]->getType();
+			Position tp1 = partners[1]->getType();
+			Position tp2 = partners[2]->getType();
 
 			// check for parameters in a step down procedure
-			// we ignore the step 1-1-1, as it is currently superflous
-			bool found = false;
-			for (Position p = 0; p < 5 && ! found; p++)
-			{
-				if (parameters_.getParameters(equiv.getEquivalence(tp[0], p),
-																			type_j,
-																			equiv.getEquivalence(tp[1], p),
-																			equiv.getEquivalence(tp[2], p),
-																			this_bend.k_oop))
-				{
-					// we ignore OOP bends with a zero as force constant
-					if (this_bend.k_oop != 0.0) bends_.push_back(this_bend);
-					found = true;
-				}
-			}
+			bool found = parameters_.getParameters(tp0, type_j, tp1, tp2, this_bend.k_oop);
 
 			if (!found)
 			{
 				// complain if nothing was found
 				getForceField()->error() << "MMFF94OutOfPlaneBend::setup: cannot find parameters for atom types:"
-																 << central_atom.getType() << " " << partners[0]->getType() << " "
-																 << partners[1]->getType() << " " << partners[2]->getType() << " "
-																 << " (atoms are: "
-																 << central_atom.getFullName() << "/" << partners[0]->getFullName() << "/" 
-																 << partners[1]->getFullName() << "/" << partners[2]->getFullName() << ")" << endl;
+																 << tp0 << " " << type_j << " " << tp1 << " " << tp2 << " (atoms are: "
+																 << central_atom.getFullName() << " " << partners[0]->getFullName() << " " 
+																 << partners[1]->getFullName() << " " << partners[2]->getFullName() << ")" << endl;
 
 				getForceField()->getUnassignedAtoms().insert(partners[0]);
 				getForceField()->getUnassignedAtoms().insert(partners[1]);
 				getForceField()->getUnassignedAtoms().insert(partners[2]);
 				getForceField()->getUnassignedAtoms().insert(&central_atom);
 			}
+
+			// we ignore OOP bends with a zero as force constant
+			if (this_bend.k_oop != 0.0) bends_.push_back(this_bend);
 		}
 
 		// everything went well

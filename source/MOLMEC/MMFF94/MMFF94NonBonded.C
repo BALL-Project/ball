@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.2.2 2006/02/02 15:58:38 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.2.3 2006/02/17 02:05:57 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -146,9 +146,6 @@ namespace BALL
 		// clear vector of non-bonded atom pairs
 		clear();
  
-		// Set the options for the non-bonded atom pairs
-		Options& options = getForceField()->options;
-
 		// when using periodic boundary conditions, all
 		// cutoffs must be smaller than the smallest linear extension of
 		// the box - we use the minimum image convention!

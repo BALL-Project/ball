@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.19 2006/02/16 14:19:52 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.20 2006/02/17 02:05:58 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -78,6 +78,8 @@ namespace BALL
 			return false;
 		}
 
+		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
+
 		if (!parameters_.isInitialized())
 		{
 			Path    path;
@@ -88,14 +90,14 @@ namespace BALL
 				throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 			}
 
+			const MMFF94AtomTypeEquivalences& equivalences = mmff->getEquivalences();
+			parameters_.setEquivalences(equivalences);
 			parameters_.readParameters(filename);
 		}
 
 		torsions_.clear();
 
-		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
 		const vector<MMFF94AtomType>& atom_types = mmff->getAtomTypes();
-		const MMFF94AtomTypeEquivalences& equivalences = mmff->getEquivalences();
 
 		// calculate the torsions
 		vector<Atom*>::const_iterator atom_it = getForceField()->getAtoms().begin();
@@ -192,21 +194,9 @@ namespace BALL
 								<< atoms[2]->getType() << " " << atoms[3]->getType() << " " << std::endl;
 #endif
 
-						// check for parameters in a step down procedure
-						Position ic[] = { 0, 1, 2, 4, 4}; // equivalence values for atom type i
-						Position lc[] = { 0, 1, 4, 2, 4}; // equivalence values for atom type l
-
-						bool found = false;
-						for (Position p = 0; p < 5 && !found; p++)
-						{
-							found = parameters_.getParameters(this_torsion.type, 
-																		equivalences.getEquivalence(type_a1, ic[p]),
-																		type_a2, type_a3,
-																		equivalences.getEquivalence(type_a4, lc[p]),
-																		this_torsion.v1, this_torsion.v2, this_torsion.v3);
+						bool found = parameters_.getParameters(this_torsion.type, type_a1, type_a2, type_a3, type_a4,
+																									 this_torsion.v1, this_torsion.v2, this_torsion.v3);
 						
-							if (found) break;
-						}
 
 						this_torsion.heuristic = !found;
 

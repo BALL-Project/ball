@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.21 2006/02/15 17:23:59 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.22 2006/02/17 02:05:58 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -85,11 +85,11 @@ namespace BALL
 		vector<Bond*>::const_iterator bond_it = bonds.begin();
 		for (; bond_it != bonds.end(); bond_it++)
 		{
-			stretch_it = parameters_->getParameters(**bond_it);
-			
 			Atom& atom1 = *(Atom*)(*bond_it)->getFirstAtom();
 			Atom& atom2 = *(Atom*)(*bond_it)->getSecondAtom();
 
+			stretch_it = parameters_->getParameters(atom1.getType(), atom2.getType());
+			
 			const bool is_sbmb = (**bond_it).hasProperty("MMFF94SBMB");
 			dummy_stretch.sbmb = is_sbmb;
 			dummy_stretch.atom1 = &atom1; 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.27 2006/02/16 15:44:17 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.28 2006/02/17 02:05:56 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -161,9 +161,9 @@ namespace BALL
 		{
 			String prefix = folder + FileSystem::PATH_SEPARATOR;
 			atom_types_.readParameters(prefix + "MMFFPROP.PAR");
+			equivalences_.readParameters(prefix + "MMFFDEF.PAR");
 			bond_parameters_.readParameters(prefix + "MMFFBOND.PAR");
 			bond_parameters_.readEmpericalParameters(prefix + "MMFFBNDK.PAR");
-			equivalences_.readParameters(prefix + "MMFFDEF.PAR");
 			parameters_initialized_ = true;
 		}
 
@@ -281,8 +281,9 @@ namespace BALL
 
 	bool MMFF94::assignMMFF94BondType(Bond& bond) const
 	{
-		const MMFF94StretchParameters::StretchMap::ConstIterator it 
-			= bond_parameters_.getParameters(bond);
+		MMFF94StretchParameters::StretchMap::ConstIterator it;
+		it = bond_parameters_.getParameters(bond.getFirstAtom()->getType(),
+																				bond.getSecondAtom()->getType());
 
 		if (!+it) return false;
 

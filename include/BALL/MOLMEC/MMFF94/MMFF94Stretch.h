@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.h,v 1.1.2.14 2006/02/02 23:53:01 amoll Exp $ 
+// $Id: MMFF94Stretch.h,v 1.1.2.15 2006/02/17 02:05:44 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -26,7 +26,7 @@ namespace BALL
 	/**	MMFF94 bond stretch component
     	\ingroup  MMFF94
 	*/
-	class MMFF94Stretch 
+	class BALL_EXPORT MMFF94Stretch 
 		: public ForceFieldComponent
 	{
 		public:
@@ -36,7 +36,7 @@ namespace BALL
 		//@{
 		
 		///
-		struct Stretch
+		struct BALL_EXPORT Stretch
 		{
 			Atom* atom1;
 			Atom* atom2;

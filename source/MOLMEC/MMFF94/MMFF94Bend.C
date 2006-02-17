@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.28 2006/02/16 15:44:17 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.29 2006/02/17 02:05:56 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -78,6 +78,8 @@ namespace BALL
 			return false;
 		}
 
+		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
+
 		if (!parameters_.isInitialized())
 		{
 			Path    path;
@@ -88,6 +90,8 @@ namespace BALL
 				throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 			}
 
+			const MMFF94AtomTypeEquivalences& equivalences = mmff->getEquivalences();
+			parameters_.setEquivalences(equivalences);
 			parameters_.readParameters(filename);
 		}
 
@@ -98,9 +102,7 @@ namespace BALL
 		// a working instance to put the current values in and push it back
 		Bend this_bend;
 
-		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
 		const vector<MMFF94AtomType>& atom_types = mmff->getAtomTypes();
-		const MMFF94AtomTypeEquivalences& equivalences = mmff->getEquivalences();
 
 		vector<Atom*>::const_iterator	atom_it = mmff->getAtoms().begin();
 		Atom::BondIterator it1;
@@ -123,9 +125,7 @@ namespace BALL
 					Atom& atom2 = *this_bend.atom2->ptr;
 					Atom& atom3 = *this_bend.atom3->ptr;
 
-					if (use_selection && (!atom1.isSelected() ||
-																!atom2.isSelected() ||
-																!atom3.isSelected()))
+					if (use_selection && (!atom1.isSelected() || !atom2.isSelected() || !atom3.isSelected()))
 					{
 						continue;
 					}
@@ -136,38 +136,11 @@ namespace BALL
 
 					this_bend.ATIJK = getBendType(*it1, *it2, atom1, atom2, atom3);
 
-					// check for parameters in a step down procedure
-					// full parameters
 					if (parameters_.getParameters(this_bend.ATIJK, 
 																			  atom_type_a1, 
 																				atom_type_a2, 
 																				atom_type_a3, 
-																				this_bend.ka, this_bend.theta0)
-						// we ignore the step 1-1-1, as it is currently superflous
-						|| // 2-1-2
-						parameters_.getParameters(this_bend.ATIJK, 
-																			equivalences.getEquivalence(atom_type_a1, 2),
-																			equivalences.getEquivalence(atom_type_a2, 1),
-																			equivalences.getEquivalence(atom_type_a3, 2),
-																			this_bend.ka, this_bend.theta0)
-						|| // 3-1-3
-						parameters_.getParameters(this_bend.ATIJK, 
-																			equivalences.getEquivalence(atom_type_a1, 3),
-																			equivalences.getEquivalence(atom_type_a2, 1),
-																			equivalences.getEquivalence(atom_type_a3, 3),
-																			this_bend.ka, this_bend.theta0)
-						|| // 4-1-4
-						parameters_.getParameters(this_bend.ATIJK, 
-																			equivalences.getEquivalence(atom_type_a1, 4),
-																			equivalences.getEquivalence(atom_type_a2, 1),
-																			equivalences.getEquivalence(atom_type_a3, 4),
-																			this_bend.ka, this_bend.theta0)
-						|| // try full wildcard matching
-						parameters_.getParameters(this_bend.ATIJK, 
-																			0,
-																			equivalences.getEquivalence(atom_type_a2, 1),
-																			0,
-																			this_bend.ka, this_bend.theta0))
+																				this_bend.ka, this_bend.theta0))
 					{
 						this_bend.is_linear = atom_types[atom_type_a2].lin;
 

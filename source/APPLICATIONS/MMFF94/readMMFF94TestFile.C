@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.39 2006/02/16 19:15:51 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.40 2006/02/17 02:05:32 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -337,7 +337,7 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 		vector<String> fields;
 		if (infile.getLine().split(fields) < 8)
 		{
-			Log.error() << "Problem: " << __FILE__ << __LINE__ << std::endl;
+			Log.error() << "Problem: " << __FILE__ << " " << __LINE__ << std::endl;
 			continue;
 		}
 
@@ -680,8 +680,8 @@ bool testPlanes(MMFF94& mmff, const String& filename, bool compare)
 								<< "Problem Plane:   " << filename << " "
 								<< n1 << " " << n2 << " " << n3 << " " << n4 << "   "
 								<< t.i->type << " " << t.j->type << " " << t.k->type << " " << t.l->type << std::endl
-								<< "got " << t.k_oop << " angle " << t.angle << "   E: " << t.energy<< std::endl
-								<< "was " << k[found] << " angle " << angle[found] << "   E: " << energy[found] << std::endl;
+								<< "got " << t.k_oop << t.energy<< std::endl
+								<< "was " << k[found] << "   E: " << energy[found] << std::endl;
 	}
 
 	if (!compare) return true;
@@ -780,10 +780,10 @@ int runtests(const vector<String>& filenames)
 			Log.info() << "We have unassigned atoms: " << mmff.getUnassignedAtoms().size() << std::endl;
 		}
 
-//    		result &= testStretch(mmff, filenames[pos], true);
-//       result &= testBend(mmff, filenames[pos], true);
-//    		result &= testStretchBend(mmff, filenames[pos], true);
-//       		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
+ 		result &= testStretch(mmff, filenames[pos], true);
+    result &= testBend(mmff, filenames[pos], true);
+ 		result &= testStretchBend(mmff, filenames[pos], true);
+ 		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
  		result &= testPlanes(mmff, filenames[pos], true);
 
 		if (result) ok++;
@@ -831,24 +831,6 @@ vector<String> getTestFiles()
 
 	return results;
 }
-
-int bla()
-{
-	MMFF94StretchBendParameters sb_param;
-	Path    path;
-	String  filename1(path.find("MMFF94/MMFFSTBN.PAR"));
-	String  filename2(path.find("MMFF94/MMFFDFSB.PAR"));
-	sb_param.readParameters(filename1, filename2);
-
-	Atom a1, a2, a3;
-	a1.setType(7);
-	a2.setType(3);
-	a3.setType(37);
-	double k1, k2;
-	Log.info() << sb_param.getParameters(2, a1, a2, a3, k1, k2) << " " << k1 << " " << k2 << std::endl;
-	return 1;
-}
-
 
 int main(int argc, char** argv)
 {
