@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.37 2006/02/18 16:37:22 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.38 2006/02/18 18:35:28 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -1000,8 +1000,102 @@ bool MMFF94VDWParameters::setup_(const vector<vector<String> >& lines)
 		return false;
 	}
 
+	rs_.resize(MMFF94_number_atom_types);
+
+	for (Position p = 0; p < MMFF94_number_atom_types; p++)
+	{
+		rs_[p] = -1;
+	}
+
+	rij_.resize(MMFF94_number_atom_types * MMFF94_number_atom_types);
+	eij_.resize(MMFF94_number_atom_types * MMFF94_number_atom_types);
+	rij_7_.resize(MMFF94_number_atom_types * MMFF94_number_atom_types);
+	calculated_.resize(MMFF94_number_atom_types * MMFF94_number_atom_types);
+
+	for (Position p = 0; p < MMFF94_number_atom_types; p++)
+	{
+		calculated_[p] = false;
+	}
+
 	return true;
 }
 
+double MMFF94VDWParameters::getR(Position t) const
+{
+	// first try buffered value
+	if (rs_[t] > 0) return rs_[t];
+
+	VDWMap::ConstIterator it = parameters_.find(t);
+	if (!+it) return -1;
+
+	const double r = it->second.ai * pow(it->second.alpha_i, 0.25);
+	rs_[t] = r;
+	return r;
+}
+
+bool MMFF94VDWParameters::getParameters(Position at1, Position at2, double& rij, double& rij_7, double& eij) const
+{
+	const Position index = at1 * MMFF94_number_atom_types + at2;
+
+	// first try buffered value
+	if (calculated_[index]) 
+	{
+		rij = rij_[index];
+		rij_7 = rij_7_[index];
+		eij = eij_[index];
+		return true;
+	}
+
+	const double ri = getR(at1);
+	
+	// 2 identical atom types? 
+	if (at1 == at2) return ri;
+	
+	const double rj = getR(at2);
+
+	// no parameters for one of the two types?
+	if (ri < 0 || rj < 0) return -1;
+
+	// equation 4
+	const double l = (ri - rj) / (ri + rj);
+
+	// zero pointers are catched above
+	const VDWEntry& e1 = *getParameters(at1);
+	const VDWEntry& e2 = *getParameters(at2);
+
+	// equation 3
+	// either one of both is a donor?
+	if (e1.donor_acceptor == 1 || e2.donor_acceptor == 1)
+	{
+		rij = 0.5 * (ri + rj);
+	}
+	else
+	{
+		// 0.5 * (1 + B) = 0.6      (B == 0.2) (beta = 12)
+		rij = 0.6 * (ri + rj) * (1 - exp(-12 * l * l));
+	}
+
+	// equation 5, upper part
+	const double up = 181.16 * e1.gi * e2.gi * e1.alpha_i * e2.alpha_i;
+
+	// equation 5, lower part
+	const double lo = sqrt(e1.alpha_i / e1.ni) + sqrt(e2.alpha_i / e2.ni);
+
+	// equation 5
+	eij = (up / lo) / pow(rij, 6);
+
+	if (e1.donor_acceptor * e2.donor_acceptor == 2)
+	{
+		rij *= 0.8;
+		eij *= 0.5;
+	}
+
+	rij_[index] = rij;
+	rij_7_[index] = pow(rij, 7);
+	eij_[index] = eij;
+	calculated_[index] = true;
+
+	return true;
+}
 
 } // namespace BALL

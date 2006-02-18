@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.23 2006/02/18 16:37:32 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.24 2006/02/18 18:35:38 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -487,12 +487,30 @@ namespace BALL
 		///
 		const VDWEntry* getParameters(Index at) const;
 
+		///
+		double getR(Position atom_type) const;
+
+		///
+		bool getParameters(Position at1, Position at2, double& rij, double& rij_7_, double& eij) const;
+
 		protected:
 
 		virtual bool setup_(const vector<vector<String> >&);
 
 		/// parameters 
 		VDWMap parameters_;
+
+		// R star ii for all individual atom types
+		mutable vector<double> rs_;
+
+		// R star ij for pairs of atom types
+		mutable vector<double> rij_;
+		// R star ij ^ 7 for pairs of atom types
+		mutable vector<double> rij_7_;
+		// R star ij and for pairs of atom types
+		mutable vector<double> eij_;
+		// bools if indivual value was already calculated
+		mutable vector<bool> 	 calculated_;
 	};
 
 
