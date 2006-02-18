@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.22 2006/02/17 02:05:43 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.23 2006/02/18 16:37:32 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -444,6 +444,57 @@ namespace BALL
 		PlaneMap parameters_;
 		mutable PlaneMap buffered_parameters_;
 	};
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+	/**	MMFF94 parameters for VDW (see MMFFVDW.PAR)
+      \ingroup  MMFF94
+	*/
+	class BALL_EXPORT MMFF94VDWParameters
+		: public MMFF94ParametersBase
+	{
+		public:
+
+		struct VDWEntry
+		{
+			double alpha_i;
+			double ni;
+			double ai;
+			double gi;
+			short  donor_acceptor;
+		};
+
+		/// Map with the force constant 
+		typedef HashMap<Position, VDWEntry> VDWMap;
+
+		BALL_CREATE(MMFF94VDWParameters)
+
+		///	Default constructor.
+		MMFF94VDWParameters();
+
+		///	Destructor.
+		virtual ~MMFF94VDWParameters();
+
+		/// Assignment operator
+		const MMFF94VDWParameters& operator = (const MMFF94VDWParameters& param)
+			throw();
+
+		///	Clear method
+		virtual void clear()
+			throw();
+
+		///
+		const VDWEntry* getParameters(Index at) const;
+
+		protected:
+
+		virtual bool setup_(const vector<vector<String> >&);
+
+		/// parameters 
+		VDWMap parameters_;
+	};
+
 
 
 

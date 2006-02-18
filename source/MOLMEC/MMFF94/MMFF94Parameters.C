@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.36 2006/02/17 02:05:57 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.37 2006/02/18 16:37:22 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -934,6 +934,73 @@ Log.error() << at1 << " " << at2 << " " << at3 << " " << at4 << std::endl;
 #endif
 
 	return String(vs[0]) + '|' + String(at2) + '|' + String(vs[1]) + '|' + String(vs[2]);
+}
+
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+MMFF94VDWParameters::MMFF94VDWParameters()
+	: MMFF94ParametersBase()
+{
+	number_expected_fields_ = 6;
+}
+
+MMFF94VDWParameters::~MMFF94VDWParameters()
+{
+	clear();
+}
+
+void MMFF94VDWParameters::clear()
+	throw()
+{
+	parameters_.clear();
+}
+
+const MMFF94VDWParameters& MMFF94VDWParameters::operator = (const MMFF94VDWParameters& param)
+	throw()
+{
+	parameters_ = param.parameters_;
+	return *this;
+}
+
+const MMFF94VDWParameters::VDWEntry* MMFF94VDWParameters::getParameters(Index at) const
+{
+	VDWMap::ConstIterator it = parameters_.find(at);
+
+	if (!+it) return 0;
+
+	return &it->second;
+}
+
+bool MMFF94VDWParameters::setup_(const vector<vector<String> >& lines)
+{
+	parameters_.clear();
+
+	try
+	{
+		for (Position p = 0; p < lines.size(); p++)
+		{
+			const vector<String>& fields = lines[p];
+
+			parameters_[fields[0].toUnsignedInt()] = VDWEntry();
+			VDWEntry& e = parameters_[parameters_.size() - 1];
+
+			e.alpha_i = fields[1].toDouble();
+			e.ni = fields[2].toDouble();
+			e.ai = fields[3].toDouble();
+			e.gi = fields[4].toDouble();
+			if      (fields[p] == "-") e.donor_acceptor = 0;
+			else if (fields[p] == "D") e.donor_acceptor = 1;
+			else if (fields[p] == "A") e.donor_acceptor = 2;
+		}
+	}
+	catch(...)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 
