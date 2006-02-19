@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.40 2006/02/17 02:05:32 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.41 2006/02/19 00:36:46 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -699,6 +699,14 @@ bool testPlanes(MMFF94& mmff, const String& filename, bool compare)
 	return true;
 }
 
+///////////////////////////////////////////////////////////
+bool testNonBonded(MMFF94& mmff, const String& filename, bool compare)
+{
+	enableOneComponent("MMFF94 NonBonded", mmff);
+	mmff.updateEnergy();
+	return true;
+}
+
 int runtests(const vector<String>& filenames)
 {
 	MMFF94 mmff;
@@ -780,11 +788,12 @@ int runtests(const vector<String>& filenames)
 			Log.info() << "We have unassigned atoms: " << mmff.getUnassignedAtoms().size() << std::endl;
 		}
 
- 		result &= testStretch(mmff, filenames[pos], true);
-    result &= testBend(mmff, filenames[pos], true);
- 		result &= testStretchBend(mmff, filenames[pos], true);
- 		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
- 		result &= testPlanes(mmff, filenames[pos], true);
+//    		result &= testStretch(mmff, filenames[pos], true);
+//       result &= testBend(mmff, filenames[pos], true);
+//    		result &= testStretchBend(mmff, filenames[pos], true);
+//    		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
+//    		result &= testPlanes(mmff, filenames[pos], true);
+ 		result &= testNonBonded(mmff, filenames[pos], true);
 
 		if (result) ok++;
 		else if (!wrong_rings) not_ok.push_back(filenames[pos]);

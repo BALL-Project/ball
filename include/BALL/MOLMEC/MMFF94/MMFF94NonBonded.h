@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.h,v 1.1.2.4 2006/02/18 16:37:32 amoll Exp $
+// $Id: MMFF94NonBonded.h,v 1.1.2.5 2006/02/19 00:37:04 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_NONBONDED_H
@@ -114,10 +114,14 @@ namespace BALL
         {\tt BRUTE\_FORCE}: brute force: all against all\\
         {\tt HASH\_GRID}: box grid
     */
+		ForceField::PairVector atom_pair_vector_;
+		vector<double> eijs_;
+		vector<double> rijs_;
+		vector<double> rijs_7_;
     MolmecSupport::PairListAlgorithmType  algorithm_type_;
 		double cut_off_;
 		vector<Atom*> non_bonded_;
-		MMFF94VDWParameters vdw_parameters_;
+		MMFF94VDWParameters parameters_;
 
 		//_@}
 

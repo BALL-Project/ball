@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.38 2006/02/18 18:35:28 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.39 2006/02/19 00:36:55 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -990,9 +990,9 @@ bool MMFF94VDWParameters::setup_(const vector<vector<String> >& lines)
 			e.ni = fields[2].toDouble();
 			e.ai = fields[3].toDouble();
 			e.gi = fields[4].toDouble();
-			if      (fields[p] == "-") e.donor_acceptor = 0;
-			else if (fields[p] == "D") e.donor_acceptor = 1;
-			else if (fields[p] == "A") e.donor_acceptor = 2;
+			if      (fields[5] == "-") e.donor_acceptor = 0;
+			else if (fields[5] == "D") e.donor_acceptor = 1;
+			else if (fields[5] == "A") e.donor_acceptor = 2;
 		}
 	}
 	catch(...)

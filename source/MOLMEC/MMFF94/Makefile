@@ -5,7 +5,6 @@ THISLIB=$(LIBNAME)
 CPP_SOURCES=\
 	MMFF94.C\
 	MMFF94Bend.C\
-	MMFF94NonBonded.C\
 	MMFF94Stretch.C\
 	MMFF94StretchBend.C\
 	MMFF94Torsion.C\

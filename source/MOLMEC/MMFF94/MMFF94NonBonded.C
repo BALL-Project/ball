@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.2.4 2006/02/18 16:37:22 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.2.5 2006/02/19 00:36:55 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -110,10 +110,11 @@ namespace BALL
 		}
 
 		// Calculate all non bonded atom pairs
-		ForceField::PairVector atom_pair_vector;
+
+		cut_off_ = 100;
 
 		MolmecSupport::calculateNonBondedAtomPairs
-			(atom_pair_vector, getForceField()->getAtoms(), 
+			(atom_pair_vector_, getForceField()->getAtoms(), 
 			 getForceField()->periodic_boundary.getBox(),
 			 cut_off_, force_field_->periodic_boundary.isEnabled(), 
 			 algorithm_type_);
@@ -121,8 +122,19 @@ namespace BALL
 		if (getForceField()->getSystem()->containsSelection())
 		{
 			// eliminate all those pairs where none of the two atoms is selected
-			Size number_of_selected_pairs = MolmecSupport::sortNonBondedAtomPairsAfterSelection(atom_pair_vector);
-			atom_pair_vector.resize(number_of_selected_pairs);
+			Size number_of_selected_pairs = MolmecSupport::sortNonBondedAtomPairsAfterSelection(atom_pair_vector_);
+			atom_pair_vector_.resize(number_of_selected_pairs);
+		}
+
+		eijs_.resize(atom_pair_vector_.size());
+		rijs_.resize(atom_pair_vector_.size());
+		rijs_7_.resize(atom_pair_vector_.size());
+
+		for (Position p = 0; p < atom_pair_vector_.size(); p++)
+		{
+			parameters_.getParameters(atom_pair_vector_[p].first->getType(),
+																atom_pair_vector_[p].second->getType(),
+																rijs_[p], rijs_7_[p], eijs_[p]);
 		}
 	}
 
@@ -157,14 +169,14 @@ namespace BALL
 			}
 		}
 				
-		if (!vdw_parameters_.isInitialized())
+		if (!parameters_.isInitialized())
 		{
 			Path    path;
 			String  filename(path.find("MMFF94/MMFFVDW.PAR"));
 
 			if (filename == "") throw Exception::FileNotFound(__FILE__, __LINE__, "[empty]");
 
-			vdw_parameters_.readParameters(filename);
+			parameters_.readParameters(filename);
 		}
 
 		// Determine the most efficient way to calculate all non bonded atom pairs
@@ -180,6 +192,37 @@ namespace BALL
 	double MMFF94NonBonded::updateEnergy()
 		throw()
 	{
+
+		energy_ = 0;
+		vdw_energy_ = 0;
+
+		for (Position p = 0; p < atom_pair_vector_.size(); p++)
+		{
+			double d = (atom_pair_vector_[p].first->getPosition() - 
+									atom_pair_vector_[p].second->getPosition()).getSquareLength();
+
+			if (Maths::isZero(p)) continue;
+
+			d = sqrt(p);
+
+			const double& rij = rijs_[p];
+			const double& eij = eijs_[p];
+			const double& rij7 = rijs_7_[p];
+
+			const double first = eij * pow( 1.07 * rij / (d + 0.07 * rij), 7);
+
+			const double sec = (1.12 * rij7 / ( rij7 + 0.12 * rij7)) - 2;
+
+			vdw_energy_ += first * sec;
+
+			Log.info() << "VDW " << atom_pair_vector_[p].first->getName() << " " 
+													 << atom_pair_vector_[p].second->getName() << " e " 
+													 << eij << " r " << rij << " "
+													 << first * sec << std::endl;
+		}
+
+		energy_ += vdw_energy_;
+
 		return energy_; 
   } 
 	
