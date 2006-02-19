@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.16 2006/02/01 13:01:55 leonhardt Exp $
+# $Id: Makefile,v 1.16.2.1 2006/02/19 14:44:48 anhi Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -13,6 +13,7 @@ include ../../common.mak
 
 default: all
 
+LDFLAGS+= -L/usr/lib/lam/lib/ -llam -llammpi++ -lpthread
 
 
 EXECUTABLES = $(FFT_SOURCES)\
