@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.2.5 2006/02/19 00:36:55 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.2.6 2006/02/19 22:38:12 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -203,7 +203,7 @@ namespace BALL
 
 			if (Maths::isZero(p)) continue;
 
-			d = sqrt(p);
+			d = sqrt(d);
 
 			const double& rij = rijs_[p];
 			const double& eij = eijs_[p];
@@ -211,14 +211,16 @@ namespace BALL
 
 			const double first = eij * pow( 1.07 * rij / (d + 0.07 * rij), 7);
 
-			const double sec = (1.12 * rij7 / ( rij7 + 0.12 * rij7)) - 2;
+			const double sec = ((1.12 * rij7) / ( pow(d, 7) + 0.12 * rij7))  - 2;
 
 			vdw_energy_ += first * sec;
 
 			Log.info() << "VDW " << atom_pair_vector_[p].first->getName() << " " 
 													 << atom_pair_vector_[p].second->getName() << " e " 
 													 << eij << " r " << rij << " "
-													 << first * sec << std::endl;
+													 << first * sec 
+													 << " " << first << " " << sec << " " << d
+													 << std::endl;
 		}
 
 		energy_ += vdw_energy_;

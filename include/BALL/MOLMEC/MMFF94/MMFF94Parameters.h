@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.24 2006/02/18 18:35:38 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.25 2006/02/19 22:38:21 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -463,10 +463,8 @@ namespace BALL
 			double ai;
 			double gi;
 			short  donor_acceptor;
+			bool   valid;
 		};
-
-		/// Map with the force constant 
-		typedef HashMap<Position, VDWEntry> VDWMap;
 
 		BALL_CREATE(MMFF94VDWParameters)
 
@@ -485,7 +483,7 @@ namespace BALL
 			throw();
 
 		///
-		const VDWEntry* getParameters(Index at) const;
+		const VDWEntry& getParameters(Index at) const;
 
 		///
 		double getR(Position atom_type) const;
@@ -498,7 +496,7 @@ namespace BALL
 		virtual bool setup_(const vector<vector<String> >&);
 
 		/// parameters 
-		VDWMap parameters_;
+		vector<VDWEntry> parameters_;
 
 		// R star ii for all individual atom types
 		mutable vector<double> rs_;
