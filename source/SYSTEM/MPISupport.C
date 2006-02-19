@@ -224,7 +224,7 @@ namespace BALL
 		std::vector<int> datapoints_per_process(comm_size_);
 		std::vector<int> stride(comm_size_);
 
-		int base_size = (int)floor(size / comm_size_);
+		int base_size = (int)floor(size / (float)comm_size_);
 		int remainder = size % comm_size_;
 		int current_stride = 0;
 
@@ -275,7 +275,7 @@ namespace BALL
 		std::vector<int> datapoints_per_process(comm_size_);
 		std::vector<int> stride(comm_size_);
 
-		int base_size = (int)floor(size / comm_size_);
+		int base_size = (int)floor(size / (float)comm_size_);
 		int remainder = size % comm_size_;
 		int current_stride = 0;
 
