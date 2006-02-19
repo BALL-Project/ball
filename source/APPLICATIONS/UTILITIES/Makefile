@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.16.2.1 2006/02/19 14:44:48 anhi Exp $
+# $Id: Makefile,v 1.16.2.2 2006/02/19 14:56:57 anhi Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -30,7 +30,7 @@ EXECUTABLES = $(FFT_SOURCES)\
 	solvent_accessibility
 
 ifeq ($(BALL_HAS_FFTW),true)
-	EXECUTABLES+=rigid_docking
+	EXECUTABLES+=rigid_docking geometricFit_slave
 endif
 
 # default target
