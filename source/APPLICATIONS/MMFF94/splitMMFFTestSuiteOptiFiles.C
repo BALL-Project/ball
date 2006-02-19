@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.11 2006/02/13 11:43:05 amoll Exp $
+// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.12 2006/02/19 23:01:47 amoll Exp $
 //
 // A small program for spliting the Optimol log file from the MMFF94 test suite
 // into smaller files, which are better to handle for parsing 
@@ -292,6 +292,28 @@ int main(int argc, char** argv)
 								<< std::endl;
 			}
 		}
+		/// non bonded
+		else if (infile.getLine() == "     ATOM  PAIR           R       VDW      EREP    EATTR      EQ     R*    EPS")
+		{
+			File outfile(dir + FileSystem::PATH_SEPARATOR + file_name + ".nonbonded", std::ios::out);
+
+			infile.readLine();
+			while (infile.readLine() && infile.getLine() != "")
+			{
+				vector<String> fields;
+				infile.getLine().split(fields);
+
+				if (fields.size() < 11) break;
+
+     		// ATOMPAIR           R       VDW      EREP    EATTR      EQ     R*    EPS
+				outfile << fields[0] << " " << fields[2] << " " 
+								<< fields[4] << " " << fields[5] << " " 
+								<< fields[6] << " " << fields[7] << " "
+								<< fields[8] << " " << fields[9] << " "
+								<< fields[10] << std::endl;
+			}
+		}
+
 	}
 
 	return 0;
