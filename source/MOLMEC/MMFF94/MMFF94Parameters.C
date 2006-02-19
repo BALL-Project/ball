@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.39 2006/02/19 00:36:55 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.40 2006/02/19 21:52:32 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -964,18 +964,21 @@ const MMFF94VDWParameters& MMFF94VDWParameters::operator = (const MMFF94VDWParam
 	return *this;
 }
 
-const MMFF94VDWParameters::VDWEntry* MMFF94VDWParameters::getParameters(Index at) const
+const MMFF94VDWParameters::VDWEntry& MMFF94VDWParameters::getParameters(Index at) const
 {
-	VDWMap::ConstIterator it = parameters_.find(at);
-
-	if (!+it) return 0;
-
-	return &it->second;
+	if (at > (Index) MMFF94_number_atom_types || at < 0) return parameters_[0];
+	return parameters_[at];
 }
 
 bool MMFF94VDWParameters::setup_(const vector<vector<String> >& lines)
 {
 	parameters_.clear();
+	parameters_.resize(MMFF94_number_atom_types);
+
+	for (Position p = 0; p < MMFF94_number_atom_types; p++)
+	{
+		parameters_[p].valid = false;
+	}
 
 	try
 	{
@@ -983,13 +986,15 @@ bool MMFF94VDWParameters::setup_(const vector<vector<String> >& lines)
 		{
 			const vector<String>& fields = lines[p];
 
-			parameters_[fields[0].toUnsignedInt()] = VDWEntry();
-			VDWEntry& e = parameters_[parameters_.size() - 1];
+			Position type = fields[0].toUnsignedInt();
+			parameters_[type] = VDWEntry();
+			VDWEntry& e = parameters_[type];
 
 			e.alpha_i = fields[1].toDouble();
 			e.ni = fields[2].toDouble();
 			e.ai = fields[3].toDouble();
 			e.gi = fields[4].toDouble();
+			e.valid = true;
 			if      (fields[5] == "-") e.donor_acceptor = 0;
 			else if (fields[5] == "D") e.donor_acceptor = 1;
 			else if (fields[5] == "A") e.donor_acceptor = 2;
@@ -1007,12 +1012,13 @@ bool MMFF94VDWParameters::setup_(const vector<vector<String> >& lines)
 		rs_[p] = -1;
 	}
 
-	rij_.resize(MMFF94_number_atom_types * MMFF94_number_atom_types);
-	eij_.resize(MMFF94_number_atom_types * MMFF94_number_atom_types);
-	rij_7_.resize(MMFF94_number_atom_types * MMFF94_number_atom_types);
-	calculated_.resize(MMFF94_number_atom_types * MMFF94_number_atom_types);
+	const Size max = MMFF94_number_atom_types * MMFF94_number_atom_types;
+	rij_.resize(max);
+	eij_.resize(max);
+	rij_7_.resize(max);
+	calculated_.resize(max);
 
-	for (Position p = 0; p < MMFF94_number_atom_types; p++)
+	for (Position p = 0; p < max; p++)
 	{
 		calculated_[p] = false;
 	}
@@ -1025,11 +1031,12 @@ double MMFF94VDWParameters::getR(Position t) const
 	// first try buffered value
 	if (rs_[t] > 0) return rs_[t];
 
-	VDWMap::ConstIterator it = parameters_.find(t);
-	if (!+it) return -1;
+	const VDWEntry& entry = parameters_[t];
+	if (!entry.valid) return -1;
 
-	const double r = it->second.ai * pow(it->second.alpha_i, 0.25);
+	const double r = entry.ai * pow(entry.alpha_i, 0.25);
 	rs_[t] = r;
+Log.error() << "#~~#   6 "  << t << " " << rs_[t]           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	return r;
 }
 
@@ -1060,8 +1067,8 @@ bool MMFF94VDWParameters::getParameters(Position at1, Position at2, double& rij,
 	const double l = (ri - rj) / (ri + rj);
 
 	// zero pointers are catched above
-	const VDWEntry& e1 = *getParameters(at1);
-	const VDWEntry& e2 = *getParameters(at2);
+	const VDWEntry& e1 = getParameters(at1);
+	const VDWEntry& e2 = getParameters(at2);
 
 	// equation 3
 	// either one of both is a donor?
@@ -1071,8 +1078,7 @@ bool MMFF94VDWParameters::getParameters(Position at1, Position at2, double& rij,
 	}
 	else
 	{
-		// 0.5 * (1 + B) = 0.6      (B == 0.2) (beta = 12)
-		rij = 0.6 * (ri + rj) * (1 - exp(-12 * l * l));
+		rij = 0.5 * (ri + rj) * (1 + 0.2 * (1 - exp(-12 * l * l)));
 	}
 
 	// equation 5, upper part
