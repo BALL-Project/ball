@@ -1279,7 +1279,6 @@ namespace BALL
 			phi   =   our_phi[current_round_];
 			theta = our_theta[current_round_];
 			psi   =   our_psi[current_round_]; 
-;
 
       loop_timer.reset();
 			if (verbosity > 10)
@@ -1371,11 +1370,9 @@ namespace BALL
 		// At this point we'll need to gather the data from the slaves in the case of a
 		// parallel computation
 #ifdef BALL_HAS_MPI_SUPPORT
-		printf("Numprocs %d\n", numprocs);
 		if (numprocs > 1)
 		{
 			// this is _not_ particularly clever, but well... it's a start... ;-)
-		printf("Numprocs %d\n", numprocs);
 			// TODO: find a nicer way for this stuff
 			std::vector<double>  values;
 			std::vector<Vector3> translations;
@@ -1908,7 +1905,8 @@ namespace BALL
 
 				}
 
-		ang_num_ --;
+		// TODO: Why should we decrement ang_num_ again???
+		//ang_num_ --;
 
 		return true;
 	}	
