@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.41 2006/02/19 00:36:46 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.42 2006/02/20 00:23:40 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -22,6 +22,7 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
 
 #include <math.h>
 
@@ -702,8 +703,97 @@ bool testPlanes(MMFF94& mmff, const String& filename, bool compare)
 ///////////////////////////////////////////////////////////
 bool testNonBonded(MMFF94& mmff, const String& filename, bool compare)
 {
+	String full_file_name = (dir +FileSystem::PATH_SEPARATOR + filename + ".nonbonded");
+	LineBasedFile infile;
+
+	// some molecules dont have planes
+	try
+	{
+		infile.open(full_file_name);
+	}
+	catch(...)
+	{
+		return true;
+	}
+
+  // ATOMPAIR           R       VDW      EREP    EATTR      EQ     R*    EPS
+	vector<String> atoms1, atoms2;
+	vector<double>  d, e_vdw, e_rep, e_attr, e_q, rij, eps;
+	while (infile.readLine())
+	{
+		vector<String> fields;
+		if (infile.getLine().split(fields) < 9)
+		{
+			Log.error() << "Problem: " << __FILE__ << __LINE__ << std::endl;
+			continue;
+		}
+
+		atoms1.push_back(fields[0]);
+		atoms2.push_back(fields[1]);
+		d.push_back(fields[2].toFloat());
+		e_vdw.push_back(fields[3].toFloat());
+		e_rep.push_back(fields[4].toFloat());
+		e_attr.push_back(fields[5].toFloat());
+		e_q.push_back(fields[6].toFloat());
+		rij.push_back(fields[7].toFloat());
+		eps.push_back(fields[8].toFloat());
+	}
+
 	enableOneComponent("MMFF94 NonBonded", mmff);
 	mmff.updateEnergy();
+	MMFF94NonBonded* comp= (MMFF94NonBonded*) mmff.getComponent("MMFF94 NonBonded");
+
+ 	const ForceField::PairVector& pv = comp->getAtomPairs();
+	const vector<double>& my_eijs = comp->getEIJs();
+	const vector<double>& my_rijs = comp->getRIJs();
+	const vector<double>& my_vdw = comp->getVDWEnergies();
+
+	for (Position as = 0; as < atoms1.size(); as++)
+	{
+		bool found = false;
+		Position poss = 0;
+		for (; poss < pv.size(); poss++)
+		{
+			if ((atoms2[as] == pv[poss].second->getName() &&
+					 atoms1[as] == pv[poss].first->getName()) 
+					||
+					 atoms1[as] == pv[poss].second->getName() &&
+					 atoms2[as] == pv[poss].first->getName())
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if (!found)
+		{
+			Log.error() << "Could not find VDW pair " << atoms1[as] << " " << atoms2[as] << std::endl;
+			continue;
+		}
+
+		if (!isOk(my_eijs[poss], eps[as]) ||
+				!isOk(my_rijs[poss], rij[as]))
+//   				!isOk(my_vdw[poss], e_vdw[as]))
+		{
+			Log.error() << "Problem NB:   " << filename << " "
+									<< atoms1[as] << " " << atoms2[as] << std::endl
+									<< "got e " << my_eijs[poss] << " r " << my_rijs[poss] << "   " << my_vdw[poss] << std::endl
+									<< "was e " << eps[as] << " r " << rij[as] << "   " << e_vdw[as] << std::endl;
+		}
+	}
+
+	if (!compare) return true;
+
+	vector<double> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
+
+	double e = results[10];
+
+	if (!isOk(comp->getVDWEnergy(), e))
+	{
+		Log.error() << filename << "   " << comp->getVDWEnergy() << "   " << e << std::endl;
+		return false;
+	}
+
 	return true;
 }
 

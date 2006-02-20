@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.2.7 2006/02/20 00:11:38 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.2.8 2006/02/20 00:23:26 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -218,12 +218,14 @@ namespace BALL
 
 			vdw_energy_ += first * sec;
 
+#ifdef BALL_MMFF94_DEBUG
 			Log.info() << "VDW " << atom_pair_vector_[p].first->getName() << " " 
 													 << atom_pair_vector_[p].second->getName() << " e " 
 													 << eij << " r " << rij << " "
 													 << first * sec 
 													 << " " << first << " " << sec << " " << d
 													 << std::endl;
+#endif
 #ifdef BALL_MMFF94_TEST
 			VDW_energies_[p] = first * sec;
 #endif
