@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.h,v 1.1.2.5 2006/02/19 00:37:04 amoll Exp $
+// $Id: MMFF94NonBonded.h,v 1.1.2.6 2006/02/20 00:11:47 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_NONBONDED_H
@@ -100,6 +100,24 @@ namespace BALL
 			determineMethodOfAtomPairGeneration()
 			throw();
 
+		///
+		const ForceField::PairVector& getAtomPairs() const { return atom_pair_vector_;}
+
+		///
+		const vector<double>& getEIJs() const { return eijs_;}
+
+		///
+		const vector<double>& getRIJs() const { return rijs_;}
+
+		///
+		const vector<double>& getVDWEnergies() const { return VDW_energies_;}
+
+		///
+		double getVDWEnergy() const { return vdw_energy_;}
+
+		///
+		double getESEnergy() const { return electrostatic_energy_;}
+
 		protected:
 
 		//_	Value of the electrostatic energy
@@ -118,6 +136,7 @@ namespace BALL
 		vector<double> eijs_;
 		vector<double> rijs_;
 		vector<double> rijs_7_;
+		vector<double> VDW_energies_;
     MolmecSupport::PairListAlgorithmType  algorithm_type_;
 		double cut_off_;
 		vector<Atom*> non_bonded_;

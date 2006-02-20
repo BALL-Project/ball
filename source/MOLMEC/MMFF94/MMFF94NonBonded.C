@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.2.6 2006/02/19 22:38:12 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.2.7 2006/02/20 00:11:38 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -12,8 +12,7 @@
 
 using namespace std;
 
-// define a macro for the square function
-#define SQR(x) ((x) * (x))
+#define BALL_MMFF94_TEST
 
 namespace BALL 
 {
@@ -111,7 +110,7 @@ namespace BALL
 
 		// Calculate all non bonded atom pairs
 
-		cut_off_ = 100;
+		cut_off_ = 10;
 
 		MolmecSupport::calculateNonBondedAtomPairs
 			(atom_pair_vector_, getForceField()->getAtoms(), 
@@ -129,6 +128,10 @@ namespace BALL
 		eijs_.resize(atom_pair_vector_.size());
 		rijs_.resize(atom_pair_vector_.size());
 		rijs_7_.resize(atom_pair_vector_.size());
+
+#ifdef BALL_MMFF94_TEST
+		VDW_energies_.resize(atom_pair_vector_.size());
+#endif
 
 		for (Position p = 0; p < atom_pair_vector_.size(); p++)
 		{
@@ -221,6 +224,9 @@ namespace BALL
 													 << first * sec 
 													 << " " << first << " " << sec << " " << d
 													 << std::endl;
+#ifdef BALL_MMFF94_TEST
+			VDW_energies_[p] = first * sec;
+#endif
 		}
 
 		energy_ += vdw_energy_;
