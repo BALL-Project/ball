@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.40 2006/02/19 21:52:32 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.41 2006/02/20 18:36:24 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -1054,10 +1054,6 @@ bool MMFF94VDWParameters::getParameters(Position at1, Position at2, double& rij,
 	}
 
 	const double ri = getR(at1);
-	
-	// 2 identical atom types? 
-	if (at1 == at2) return ri;
-	
 	const double rj = getR(at2);
 
 	// no parameters for one of the two types?
@@ -1069,16 +1065,24 @@ bool MMFF94VDWParameters::getParameters(Position at1, Position at2, double& rij,
 	// zero pointers are catched above
 	const VDWEntry& e1 = getParameters(at1);
 	const VDWEntry& e2 = getParameters(at2);
-
-	// equation 3
-	// either one of both is a donor?
-	if (e1.donor_acceptor == 1 || e2.donor_acceptor == 1)
+	
+	// 2 identical atom types? 
+	if (at1 != at2) 
 	{
-		rij = 0.5 * (ri + rj);
+		// equation 3
+		// either one of both is a donor?
+		if (e1.donor_acceptor == 1 || e2.donor_acceptor == 1)
+		{
+			rij = 0.5 * (ri + rj);
+		}
+		else
+		{
+			rij = 0.5 * (ri + rj) * (1 + 0.2 * (1 - exp(-12 * l * l)));
+		}
 	}
 	else
 	{
-		rij = 0.5 * (ri + rj) * (1 + 0.2 * (1 - exp(-12 * l * l)));
+		rij = ri;
 	}
 
 	// equation 5, upper part
@@ -1090,7 +1094,8 @@ bool MMFF94VDWParameters::getParameters(Position at1, Position at2, double& rij,
 	// equation 5
 	eij = (up / lo) / pow(rij, 6);
 
-	if (e1.donor_acceptor * e2.donor_acceptor == 2)
+	if (at1 != at2 &&
+			e1.donor_acceptor * e2.donor_acceptor == 2)
 	{
 		rij *= 0.8;
 		eij *= 0.5;
