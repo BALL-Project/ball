@@ -1,4 +1,4 @@
-// $Id: vanDerWaals.h,v 1.1 2005/11/21 19:27:06 anker Exp $
+// $Id: vanDerWaals.h,v 1.2 2006/02/21 16:20:05 anker Exp $
 // Molecular Mechanics: SLICK force field, modified van-der-Waals term
 
 #ifndef BALL_SCORING_COMPONENTS_VANDERWAALS_H
@@ -21,8 +21,37 @@ namespace BALL
 
 		public:
 
+		///
+		enum CalculationMethod
+		{
+			/// Full Lennard-Jones 6-12 potential
+			CALCULATION__FULL_LJ_POTENTIAL,
+
+			/// Softened Lennard-Jones 6-12 potential (simple cut)
+			CALCULATION__SOFTENED_LJ_POTENTIAL_SIMPLE,
+
+			/// Softened Lennard-Jones 6-12 potential (more sophisticated) (Not
+			/// yet implemented)
+			CALCULATION__SOFTENED_LJ_POTENTIAL_SOFT
+
+		};
+
+
+		///
 		struct Option
 		{
+
+			///
+			static const String VDW_METHOD;
+
+			/// 
+			static const String VDW_CUT_ON;
+
+			/// 
+			static const String VDW_CUT_OFF;
+
+			///
+			static const String VDW_SOFTENING_LIMIT;
 
 			///
 			static const String LENNARD_JONES_FILE;
@@ -32,6 +61,18 @@ namespace BALL
 
 		struct Default
 		{
+
+			///
+			static const Size VDW_METHOD;
+
+			///
+			static const float VDW_CUT_ON;
+
+			///
+			static const float VDW_CUT_OFF;
+
+			///
+			static const float VDW_SOFTENING_LIMIT;
 
 			///
 			static const String LENNARD_JONES_FILE;
@@ -85,6 +126,21 @@ namespace BALL
 
 
 		private:
+
+		//_
+		Size calculation_method_;
+
+		//_
+		float cut_on_vdw_;
+
+		//_
+		float cut_off_vdw_;
+
+		//_
+		float scaling_vdw_1_4_;
+
+		//_
+		float softening_limit_;
 
 		//_
 		double calculateVDWEnergy_(const AtomVector& atom_vector)
