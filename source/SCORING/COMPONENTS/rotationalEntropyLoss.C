@@ -1,20 +1,14 @@
-// $Id: rotation.C,v 1.1 2005/11/21 19:27:12 anker Exp $
+// $Id: rotationalEntropyLoss.C,v 1.1 2006/02/21 16:13:12 anker Exp $
 // Molecular Mechanics: SLICK rotational entropy loss
 
+#include <BALL/SCORING/COMPONENTS/rotationalEntropyLoss.h>
+#include <BALL/SCORING/TYPES/fresnoTypes.h>
 #include <BALL/KERNEL/standardPredicates.h>
 #include <BALL/KERNEL/atomIterator.h>
 #include <BALL/KERNEL/bondIterator.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/PTE.h>
-
 #include <BALL/STRUCTURE/geometricProperties.h>
-
-#include <BALL/MOLMEC/COMMON/forceField.h>
-#include <BALL/MOLMEC/COMMON/support.h>
-
-#include <BALL/MOLMEC/SLICK/slick.h>
-#include <BALL/MOLMEC/SLICK/slickRotation.h>
-
 #include <BALL/DATATYPE/stringHashMap.h>
 
 #include <BALL/SYSTEM/timer.h>
@@ -24,9 +18,33 @@ using namespace std;
 namespace BALL
 {
 
-	SlickRotation::SlickRotation()
+
+	const char* RotationalEntropyLoss::Option::ROT_BIND_OFFSET 
+		= "rot_bind_offset";
+	const char* RotationalEntropyLoss::Option::ROT_GRID_SPACING 
+		= "rot_grid_spacing";
+	const char* RotationalEntropyLoss::Option::ROT_ALGORITHM 
+		= "rot_algorithm";
+	const char* RotationalEntropyLoss::Option::ROT_METHOD 
+		= "rot_method";
+	const char* RotationalEntropyLoss::Option::VERBOSITY
+		= "verbosity";
+
+	const float RotationalEntropyLoss::Default::ROT_BIND_OFFSET 
+		= 0.5;
+	const float RotationalEntropyLoss::Default::ROT_GRID_SPACING 
+		= 5.0;
+	const Size RotationalEntropyLoss::Default::ROT_ALGORITHM 
+		= RotationalEntropyLoss::ALGORITHM__GUESS;
+	const Size RotationalEntropyLoss::Default::ROT_METHOD
+		= RotationalEntropyLoss::CALCULATION__ORIGINAL;
+	const Size RotationalEntropyLoss::Default::VERBOSITY
+		= 0;
+
+
+	RotationalEntropyLoss::RotationalEntropyLoss()
 		throw()
-		:	ForceFieldComponent(),
+		:	ScoringComponent(),
 			rotatable_bonds_(),
 			glycosidic_bonds_(),
 			N_rot_(0),
@@ -36,19 +54,18 @@ namespace BALL
 			grid_(0),
 			grid_spacing_(0.0),
 			receptor_(0),
-			factor_(0.0f),
 			bind_distance_offset_(0.0f),
 			calculation_method_(0),
 			fresno_types_(0)
 	{
 		// set component name
-		setName("SLICK RotationalEntropyLoss");
+		setName("RotationalEntropyLoss");
 	}
 
 
-	SlickRotation::SlickRotation(ForceField& force_field)
+	RotationalEntropyLoss::RotationalEntropyLoss(ScoringFunction& sf)
 		throw()
-		:	ForceFieldComponent(force_field),
+		:	ScoringComponent(sf),
 			rotatable_bonds_(),
 			glycosidic_bonds_(),
 			N_rot_(0),
@@ -58,7 +75,6 @@ namespace BALL
 			grid_(0),
 			grid_spacing_(0.0),
 			receptor_(0),
-			factor_(0.0f),
 			bind_distance_offset_(0.0f),
 			calculation_method_(0),
 			fresno_types_(0)
@@ -68,9 +84,9 @@ namespace BALL
 	}
 
 
-	SlickRotation::SlickRotation(const SlickRotation& fr)
+	RotationalEntropyLoss::RotationalEntropyLoss(const RotationalEntropyLoss& fr)
 		throw()
-		:	ForceFieldComponent(fr),
+		:	ScoringComponent(fr),
 			rotatable_bonds_(fr.rotatable_bonds_),
 			glycosidic_bonds_(fr.glycosidic_bonds_),
 			N_rot_(fr.N_rot_),
@@ -80,7 +96,6 @@ namespace BALL
 			grid_(fr.grid_),
 			grid_spacing_(fr.grid_spacing_),
 			receptor_(fr.receptor_),
-			factor_(fr.factor_),
 			bind_distance_offset_(fr.bind_distance_offset_),
 			calculation_method_(fr.calculation_method_),
 			fresno_types_(fr.fresno_types_)
@@ -88,14 +103,14 @@ namespace BALL
 	}
 
 
-	SlickRotation::~SlickRotation()
+	RotationalEntropyLoss::~RotationalEntropyLoss()
 		throw()
 	{
 		clear();
 	}
 
 
-	void SlickRotation::clear()
+	void RotationalEntropyLoss::clear()
 		throw()
 	{
 		rotatable_bonds_.clear();
@@ -116,36 +131,34 @@ namespace BALL
 		// system.
 		receptor_ = 0;
 		// ????? Set to default.
-		factor_ = 0.0f;
-		// ????? Set to default.
 		bind_distance_offset_ = 0.0f;
 		// ????? Set to default.
 		calculation_method_ = 0;
 		// We cannot delete the fresno types from the force field.
-		fresno_types_ = 0;
+		fresno_types_.clear();
 		// ?????
-		// ForceFieldComponent does not comply with the OCI
-		// ForceFieldComponent::clear();
+		// ScoringComponent does not comply with the OCI
+		// ScoringComponent::clear();
 	}
 
 
-	bool SlickRotation::setup()
+	bool RotationalEntropyLoss::setup()
 		throw()
 	{
 
 		Timer timer;
 		timer.start();
 
-		ForceField* force_field = getForceField();
+		ScoringFunction* force_field = getScoringFunction();
 		if (force_field == 0)
 		{
-			Log.error() << "SlickRotation::setup(): "
+			Log.error() << "RotationalEntropyLoss::setup(): "
 				<< "component not bound to force field." << endl;
 			return false;
 		}
 
-		SlickFF* fff = dynamic_cast<SlickFF*>(force_field);
-		fresno_types_ = &(fff->getFresnoTypes());
+		FresnoTypes fresno_types_class(*this);
+		fresno_types_ = fresno_types_class.getTypeMap();
 
 		// clear the vector of lipophilic interactions
 		rotatable_bonds_.clear();
@@ -176,29 +189,25 @@ namespace BALL
 
 		Options& options = force_field->options;
 
-		factor_
-			= options.setDefaultReal(SlickFF::Option::ROT,
-					SlickFF::Default::ROT);
-
 		grid_spacing_ 
-			= options.setDefaultReal(SlickFF::Option::ROT_GRID_SPACING,
-					SlickFF::Default::ROT_GRID_SPACING);
+			= options.setDefaultReal(RotationalEntropyLoss::Option::ROT_GRID_SPACING,
+					RotationalEntropyLoss::Default::ROT_GRID_SPACING);
 
 		bind_distance_offset_
-			= options.setDefaultReal(SlickFF::Option::ROT_BIND_OFFSET,
-					SlickFF::Default::ROT_BIND_OFFSET);
+			= options.setDefaultReal(RotationalEntropyLoss::Option::ROT_BIND_OFFSET,
+					RotationalEntropyLoss::Default::ROT_BIND_OFFSET);
 
 		algorithm_type_
-			= options.setDefaultInteger(SlickFF::Option::ROT_ALGORITHM,
-					SlickFF::Default::ROT_ALGORITHM);
+			= options.setDefaultInteger(RotationalEntropyLoss::Option::ROT_ALGORITHM,
+					RotationalEntropyLoss::Default::ROT_ALGORITHM);
 
 		calculation_method_ 
-			= options.setDefaultInteger(SlickFF::Option::ROT_METHOD,
-					SlickFF::Default::ROT_METHOD);
+			= options.setDefaultInteger(RotationalEntropyLoss::Option::ROT_METHOD,
+					RotationalEntropyLoss::Default::ROT_METHOD);
 
 		Size verbosity
-			= options.setDefaultInteger(SlickFF::Option::VERBOSITY,
-					SlickFF::Default::VERBOSITY);
+			= options.setDefaultInteger(RotationalEntropyLoss::Option::VERBOSITY,
+					RotationalEntropyLoss::Default::VERBOSITY);
 
 		// What do we calculate here?
 		if (verbosity >= 1)
@@ -533,12 +542,12 @@ namespace BALL
 
 			case CALCULATION__BOEHM:
 				// Boehm's term is constant.
-				energy_ = N_rot_;
+				score_ = N_rot_;
 				break;
 
 			case CALCULATION__GLYCOSIDIC_BONDS:
 				// The number of glycosidic bonds is constant.
-				energy_ = glycosidic_bonds_.size();
+				score_ = glycosidic_bonds_.size();
 				break;
 
 			case CALCULATION__FROZEN_GLYCOSIDIC_BONDS:
@@ -552,7 +561,7 @@ namespace BALL
 
 		if (verbosity >= 9)
 		{
-			Log.info() << "SlickRotation setup statistics:" << endl;
+			Log.info() << "RotationalEntropyLoss setup statistics:" << endl;
 			Log.info() << "Found " << rotatable_bonds_.size() 
 				<< " rotatable bonds" << endl << endl;
 			Log.info() << "Found " << glycosidic_bonds_.size() 
@@ -560,7 +569,7 @@ namespace BALL
 		}
 
 		timer.stop();
-		Log.info() << "SlickRotation::setup(): " 
+		Log.info() << "RotationalEntropyLoss::setup(): " 
 			<< timer.getCPUTime() << " s" << std::endl;
 
 		return true;
@@ -568,7 +577,7 @@ namespace BALL
 	}
 
 
-	double SlickRotation::updateEnergy()
+	double RotationalEntropyLoss::calculateScore()
 		throw()
 	{
 
@@ -577,8 +586,7 @@ namespace BALL
 
 		// how loud  will we cry?
 		Size verbosity
-			= getForceField()->options.setDefaultInteger(SlickFF::Option::VERBOSITY,
-					SlickFF::Default::VERBOSITY);
+			= getScoringFunction()->options.getInteger(Option::VERBOSITY);
 
 		switch (calculation_method_)
 		{
@@ -589,13 +597,13 @@ namespace BALL
 				// if there aren't any rotatable bonds we cannot freeze them.
 				if (N_rot_ == 0)
 				{
-					energy_ = 0.0;
-					return energy_;
+					score_ = 0.0;
+					return score_;
 				}
 				else
 				{
 
-					energy_ = 0.0;
+					score_ = 0.0;
 					float val;
 
 					updateFrozenBonds_();
@@ -612,53 +620,52 @@ namespace BALL
 							}
 							if (calculation_method_ == CALCULATION__ORIGINAL)
 							{
-								energy_ += val;
+								score_ += val;
 							}
 							else
 							{
 								if (glycosidic_bonds_.has(rotatable_bonds_[i]))
 								{
-									energy_ += val;
+									score_ += val;
 								}
 							}
 						}
 					}
 
-					energy_ *= (1 - 1/N_rot_);
-					energy_ += 1.0;
-					energy_ = factor_ * energy_;
+					score_ *= (1 - 1/N_rot_);
+					score_ += 1.0;
 
 				}
 
 				break;
 
 			case CALCULATION__BOEHM:
-				// We already stored the number of bonds in energy_, so we don't
+				// We already stored the number of bonds in score_, so we don't
 				// need to do anything here.
 				// PARANOIA
-				energy_ = N_rot_;
+				score_ = N_rot_;
 				// /PARANOIA
 				break;
 
 			case CALCULATION__GLYCOSIDIC_BONDS:
-				// We already stored the number of bonds in energy_, so we don't
+				// We already stored the number of bonds in score_, so we don't
 				// need to do anything here.
 				// PARANOIA
-				energy_ = glycosidic_bonds_.size();
+				score_ = glycosidic_bonds_.size();
 				// /PARANOIA
 				break;
 
 			case CALCULATION__FROZEN_GLYCOSIDIC_BONDS:
 				// Update frozen bonds...
 				updateFrozenBonds_();
-				energy_ = 0;
+				score_ = 0;
 				// ...and count them.
 				for (Size i = 0; i < rotatable_bonds_.size(); ++i)
 				{
 					if ((is_frozen_[i] == true) 
 						&& (glycosidic_bonds_.has(rotatable_bonds_[i])))
 					{
-						energy_ += 1;
+						score_ += 1;
 					}
 				}
 				break;
@@ -667,24 +674,19 @@ namespace BALL
 
 		if (verbosity > 0)
 		{
-			Log.info() << "ROT: energy is " << energy_ << endl;
+			Log.info() << "ROT: energy is " << score_ << endl;
 		}
 
 		timer.stop();
-		Log.info() << "SlickRotation::updateEnergy(): "
+		Log.info() << "RotationalEntropyLoss::updateEnergy(): "
 			<< timer.getCPUTime() << " s" << std::endl;
 
-		return(energy_);
+		return(score_);
 
 	}
 
 
-	void SlickRotation::updateForces()
-		throw()
-	{
-	}
-
-	void SlickRotation::cycleDFS_(const Atom* atom,
+	void RotationalEntropyLoss::cycleDFS_(const Atom* atom,
 			HashSet<const Atom*>& visited,
 			HashSet<const Bond*>& tree,
 			stack<const Bond*>& possible_cycle_bonds,
@@ -811,7 +813,7 @@ namespace BALL
 	}
 
 
-	void SlickRotation::heavyAtomsDFS_(const Atom* atom, const Bond* bond,
+	void RotationalEntropyLoss::heavyAtomsDFS_(const Atom* atom, const Bond* bond,
 			HashSet<const Atom*>& visited,
 			int& heavy_atom_count, int& nonlip_heavy_atom_count)
 		throw()
@@ -825,7 +827,7 @@ namespace BALL
 		{
 			heavy_atom_count++;
 
-			if ((*fresno_types_)[atom] != SlickFF::LIPOPHILIC)
+			if ((fresno_types_)[atom] != FresnoTypes::LIPOPHILIC)
 			{
 				nonlip_heavy_atom_count++;
 			}
@@ -851,7 +853,7 @@ namespace BALL
 	}	
 
 
-	void SlickRotation::updateFrozenBonds_()
+	void RotationalEntropyLoss::updateFrozenBonds_()
 		throw()
 	{
 		HashSet<const Atom*> visited;
@@ -887,13 +889,13 @@ namespace BALL
 	}
 
 
-	bool SlickRotation::frozenBondsDFS_(const Atom* atom, 
+	bool RotationalEntropyLoss::frozenBondsDFS_(const Atom* atom, 
 			HashSet<const Atom*>& visited)
 		throw()
 	{
 
 		Size verbosity 
-			= getForceField()->options.getInteger(SlickFF::Option::VERBOSITY);
+			= getScoringFunction()->options.getInteger(Option::VERBOSITY);
 
 		// mark this atom as visited
 		visited.insert(atom);
@@ -910,7 +912,7 @@ namespace BALL
 
 		if (box == 0)
 		{
-			Log.error() << "SlickRotation::updateFrozenBonds_(): "
+			Log.error() << "RotationalEntropyLoss::updateFrozenBonds_(): "
 				<< "got an empty box for position " << position << endl;
 		}
 		else
