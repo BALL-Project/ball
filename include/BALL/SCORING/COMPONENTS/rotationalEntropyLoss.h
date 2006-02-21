@@ -1,4 +1,4 @@
-// $Id: rotation.h,v 1.1 2005/11/21 19:27:06 anker Exp $
+// $Id: rotationalEntropyLoss.h,v 1.1 2006/02/21 16:18:30 anker Exp $
 // Molecular Mechanics: SLICK force field, rotational entropy loss
 
 #ifndef BALL_MOLMEC_SLICK_SLICKROTATION_H
@@ -6,7 +6,7 @@
 
 #include <stack>
 
-#include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
+#include <BALL/SCORING/COMMON/scoringComponent.h>
 #include <BALL/DATATYPE/hashSet.h>
 #include <BALL/DATATYPE/hashGrid.h>
 
@@ -14,10 +14,10 @@ namespace BALL
 {
 
 	/** SLICK rotational entropy loss contrbution
-			{\bf Definition:} \URL{BALL/MOLMEC/SLICK/slickRotation.h}
+			{\bf Definition:} \URL{BALL/SCORING/COMPONENTS/rotationalEntropyLoss.h}
 	*/
-	class SlickRotation
-		:	public ForceFieldComponent
+	class RotationalEntropyLoss
+		:	public ScoringComponent
 	{
 
 		public:
@@ -48,29 +48,81 @@ namespace BALL
 			CALCULATION__GLYCOSIDIC_CONTRIBUTION = 5
 		};
 
-			/// 
+		/**	Option names
+		*/
+		struct Option
+		{
+			/**
+			*/
+			static const char* ROT_BIND_OFFSET;
+
+			/**
+			*/
+			static const char* ROT_GRID_SPACING;
+
+			/**
+			*/
+			static const char* ROT_ALGORITHM;
+
+			/**
+			*/
+			static const char* ROT_METHOD;
+
+			/**
+			*/
+			static const char* VERBOSITY;
+
+		};
+
+		/** Default values for SLICK options.
+		*/
+		struct Default
+		{
+
+			/**
+			*/
+			static const float ROT_BIND_OFFSET;
+
+			/**
+			*/
+			static const float ROT_GRID_SPACING;
+
+			/**
+			*/
+			static const Size ROT_ALGORITHM;
+
+			/**
+			*/
+			static const Size ROT_METHOD;
+
+			/**
+			*/
+			static const Size VERBOSITY;
+
+		};
+
 		/** @name	Constructors and Destructors	
 		*/
 		//@{ 
 
 		/**	Default constructor.
 		*/
-		SlickRotation()
+		RotationalEntropyLoss()
 			throw();
 
 		/**	Constructor.
 		*/
-		SlickRotation(ForceField& force_field)
+		RotationalEntropyLoss(ScoringFunction& sf)
 			throw();
 
 		/**	Copy constructor
 		*/
-		SlickRotation(const SlickRotation& fr)
+		RotationalEntropyLoss(const RotationalEntropyLoss& fr)
 			throw();
 
 		/**	Destructor.
 		*/
-		virtual ~SlickRotation()
+		virtual ~RotationalEntropyLoss()
 			throw();
 
 		//@}
@@ -80,7 +132,7 @@ namespace BALL
 
 		/** Assignment.
 		*/
-		const SlickRotation& operator = (const SlickRotation& fr)
+		const RotationalEntropyLoss& operator = (const RotationalEntropyLoss& fr)
 			throw();
 
 		/** Clear method.
@@ -93,7 +145,7 @@ namespace BALL
 		*/
 		//@{
 
-		bool operator == (const SlickRotation& fr) const
+		bool operator == (const RotationalEntropyLoss& fr) const
 			throw();
 
 		//@}
@@ -113,12 +165,7 @@ namespace BALL
 
 		/**	Calculates and returns the component's energy.
 		*/
-		virtual double updateEnergy()
-			throw();
-
-		/**	Calculates and returns the component's forces.
-		*/
-		virtual void updateForces()
+		virtual double calculateScore()
 			throw();
 
 		//@}
@@ -166,10 +213,6 @@ namespace BALL
 		Molecule* receptor_;
 
 		/*_
-		*/
-		double factor_;
-
-		/*_
 		 */
 		float bind_distance_offset_;
 
@@ -179,7 +222,7 @@ namespace BALL
 
 		/*_ The fresno atom types that are stored in the fresno force field
 		*/
-		const HashMap<const Atom*, short>* fresno_types_;
+		HashMap<const Atom*, Size> fresno_types_;
 
 		/*_ A simple DFS algorithm for identifying rings (i. e. cycles) of the
 				molecule.
