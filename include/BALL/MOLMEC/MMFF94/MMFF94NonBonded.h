@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.h,v 1.1.2.6 2006/02/20 00:11:47 amoll Exp $
+// $Id: MMFF94NonBonded.h,v 1.1.2.7 2006/02/21 16:02:36 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_NONBONDED_H
@@ -29,12 +29,20 @@ namespace BALL
 	{
 		public:
 
-			/*
-		struct VDWPair
+		struct NonBondedPairData
 		{
-			Atom::StaticAtomAttributes* atom1;
-			Atom::StaticAtomAttributes* atom2;
-			*/
+			NonBondedPairData();
+
+			double eij;
+			double rij;
+			double rij_7;
+			double VDW_energy; // for debugging
+			// for electrostatics:
+			bool 	 is_1_4;		 
+			double qi;
+			double qj;
+			double ES_energy;  // for debugging
+		};
 
 
 		BALL_CREATE(MMFF94NonBonded)
@@ -104,13 +112,7 @@ namespace BALL
 		const ForceField::PairVector& getAtomPairs() const { return atom_pair_vector_;}
 
 		///
-		const vector<double>& getEIJs() const { return eijs_;}
-
-		///
-		const vector<double>& getRIJs() const { return rijs_;}
-
-		///
-		const vector<double>& getVDWEnergies() const { return VDW_energies_;}
+		const vector<NonBondedPairData>& getNonBondedData() const { return non_bonded_data_;}
 
 		///
 		double getVDWEnergy() const { return vdw_energy_;}
@@ -132,18 +134,11 @@ namespace BALL
         {\tt BRUTE\_FORCE}: brute force: all against all\\
         {\tt HASH\_GRID}: box grid
     */
-		ForceField::PairVector atom_pair_vector_;
-		vector<double> eijs_;
-		vector<double> rijs_;
-		vector<double> rijs_7_;
-		vector<double> VDW_energies_;
+		ForceField::PairVector 								atom_pair_vector_;
+		vector<NonBondedPairData> 						non_bonded_data_;
     MolmecSupport::PairListAlgorithmType  algorithm_type_;
-		double cut_off_;
-		vector<Atom*> non_bonded_;
-		MMFF94VDWParameters parameters_;
-
-		//_@}
-
+		double 																cut_off_;
+		MMFF94VDWParameters 									parameters_;
 	};
 } // namespace BALL
 

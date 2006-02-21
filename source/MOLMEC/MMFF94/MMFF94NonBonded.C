@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.2.9 2006/02/20 22:32:56 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.2.10 2006/02/21 16:02:32 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -17,11 +17,23 @@ using namespace std;
 namespace BALL 
 {
 
+	MMFF94NonBonded::NonBondedPairData::NonBondedPairData()
+		: eij(0),
+			rij(0),
+			rij_7(0),
+			VDW_energy(0),
+			is_1_4(false),
+			qi(0),
+			qj(0),
+			ES_energy(0)
+	{
+	}
+
 	MMFF94NonBonded::MMFF94NonBonded()
 		throw()
 		:	ForceFieldComponent(),
 			algorithm_type_(MolmecSupport::BRUTE_FORCE),
-			cut_off_(10);
+			cut_off_(10)
 	{	
 		setName("MMFF94 NonBonded");
 	}
@@ -30,7 +42,7 @@ namespace BALL
 		throw()
 		:	ForceFieldComponent(force_field),
 			algorithm_type_(MolmecSupport::BRUTE_FORCE),
-			cut_off_(10);
+			cut_off_(10)
 	{
 		setName("MMFF94 NonBonded");
 	}
@@ -115,27 +127,19 @@ namespace BALL
 			atom_pair_vector_.resize(number_of_selected_pairs);
 		}
 
-		eijs_.resize(atom_pair_vector_.size());
-		rijs_.resize(atom_pair_vector_.size());
-		rijs_7_.resize(atom_pair_vector_.size());
-
-		// collect all 1-4 nonbonded pairs
-		interactions_1_4_.clear();
-
-#ifdef BALL_MMFF94_TEST
-		VDW_energies_.resize(atom_pair_vector_.size());
-#endif
+		non_bonded_data_.resize(atom_pair_vector_.size());
 
 		for (Position p = 0; p < atom_pair_vector_.size(); p++)
 		{
 			Atom* const atom1 = atom_pair_vector_[p].first;
 			Atom* const atom2 = atom_pair_vector_[p].second;
 
-			if (atom1->isVicinal(*atom2)) interactions_1_4_.insert(p);
+			NonBondedPairData& data = non_bonded_data_[p];
 
-			parameters_.getParameters(atom1->getType(),
-																atom2->getType(),
-																rijs_[p], rijs_7_[p], eijs_[p]);
+			data.is_1_4 = atom1->isVicinal(*atom2);
+
+			parameters_.getParameters(atom1->getType(), atom2->getType(),
+																data.rij, data.rij_7, data.eij);
 
 #ifdef BALL_MMFF94_DEBUG
 			Log.info() << "NB pair " << atom1->getName() << " " << atom2->getName() << std::endl;
@@ -205,29 +209,24 @@ namespace BALL
 									atom_pair_vector_[p].second->getPosition()).getSquareLength();
 
 			if (Maths::isZero(d)) continue;
-
 			d = sqrt(d);
 
-			const double& rij = rijs_[p];
-			const double& eij = eijs_[p];
-			const double& rij7 = rijs_7_[p];
+			NonBondedPairData& data = non_bonded_data_[p];
 
-			const double first = eij * pow( 1.07 * rij / (d + 0.07 * rij), 7);
+			const double first = data.eij * pow( 1.07 * data.rij / (d + 0.07 * data.rij), 7);
 
-			const double sec = ((1.12 * rij7) / ( pow(d, 7) + 0.12 * rij7))  - 2;
+			const double sec = ((1.12 * data.rij_7) / (pow(d, 7) + 0.12 * data.rij_7))  - 2;
 
-			vdw_energy_ += first * sec;
+			const double e = first * sec;
+			vdw_energy_ += e;
 
+#ifdef BALL_MMFF94_TEST
+			data.VDW_energy = e;
+#endif
 #ifdef BALL_MMFF94_DEBUG
 			Log.info() << "VDW " << atom_pair_vector_[p].first->getName() << " " 
 													 << atom_pair_vector_[p].second->getName() << " e " 
-													 << eij << " r " << rij << " "
-													 << first * sec 
-													 << " " << first << " " << sec << " " << d
-													 << std::endl;
-#endif
-#ifdef BALL_MMFF94_TEST
-			VDW_energies_[p] = first * sec;
+													 << data.eij << " r " << data.rij << " E " << e << " d " << d << std::endl;
 #endif
 		}
 
