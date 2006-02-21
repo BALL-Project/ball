@@ -1,22 +1,62 @@
-// $Id: buriedPolar.h,v 1.1 2005/11/21 19:27:04 anker Exp $
+// $Id: buriedPolar.h,v 1.2 2006/02/21 16:19:32 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
-#ifndef BALL_MOLMEC_SLICK_FRESNOBURIEDPOLAR_H
-#define BALL_MOLMEC_SLICK_FRESNOBURIEDPOLAR_H
+#ifndef BALL_SCORING_COMPONENTS_FRESNOBURIEDPOLAR_H
+#define BALL_SCORING_COMPONENTS_FRESNOBURIEDPOLAR_H
 
-#include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
+#include <BALL/SCORING/COMMON/scoringComponent.h>
 
 namespace BALL
 {
 
-	/** Fresno lipophilic component.
-			{\bf Definition:} \URL{BALL/MOLMEC/SLICK/fresnoBuriedPolar.h}
+	/** Fresno buried polar component.
+			{\bf Definition:} \URL{BALL/SCORING/COMPONENTS/buriedPolar.h}
 	*/
-	class FresnoBuriedPolar
-		:	public ForceFieldComponent
+	class BuriedPolar
+		:	public ScoringComponent
 	{
 
 		public:
+
+		/**	Option names
+		*/
+		struct Option
+		{
+
+			/**
+			*/
+			static const char* BP_R1_OFFSET;
+
+			/**
+			*/
+			static const char* BP_R2_OFFSET;
+
+			/**
+			*/
+			static const char* VERBOSITY;
+
+		};
+
+		/** Default values for SLICK options.
+		*/
+		struct Default
+		{
+
+			/**
+			*/
+			static const float BP_R1_OFFSET;
+
+			/**
+			*/
+			static const float BP_R2_OFFSET;
+
+			/**
+			*/
+			static const Size VERBOSITY;
+
+		};
+
+
 
 		/** @name	Constructors and Destructors	
 		*/
@@ -24,22 +64,22 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		FresnoBuriedPolar()
+		BuriedPolar()
 			throw();
 
 		/**	Constructor.
 		*/
-		FresnoBuriedPolar(ForceField& force_field)
+		BuriedPolar(ScoringFunction& sf)
 			throw();
 
 		/**	Copy constructor
 		*/
-		FresnoBuriedPolar(const FresnoBuriedPolar& fhb)
+		BuriedPolar(const BuriedPolar& bp)
 			throw();
 
 		/**	Destructor.
 		*/
-		virtual ~FresnoBuriedPolar()
+		virtual ~BuriedPolar()
 			throw();
 
 		//@}
@@ -49,7 +89,7 @@ namespace BALL
 
 		/** Assignment.
 		*/
-		const FresnoBuriedPolar& operator = (const FresnoBuriedPolar& fhb)
+		const BuriedPolar& operator = (const BuriedPolar& bp)
 			throw();
 
 		/** Clear method.
@@ -62,7 +102,7 @@ namespace BALL
 		*/
 		//@{
 
-		bool operator == (const FresnoBuriedPolar& fhb) const
+		bool operator == (const BuriedPolar& bp) const
 			throw();
 
 		//@}
@@ -82,12 +122,7 @@ namespace BALL
 
 		/**	Calculates and returns the component's energy.
 		*/
-		virtual double updateEnergy()
-			throw();
-
-		/**	Calculates and returns the component's forces.
-		*/
-		virtual void updateForces()
+		virtual double calculateScore()
 			throw();
 
 		//@}
@@ -116,4 +151,4 @@ namespace BALL
 
 } // namespace BALL
 
-#endif // BALL_MOLMEC_SLICK_FRESNOBURIEDPOLAR_H
+#endif // BALL_SCORING_COMPONENTS_FRESNOBURIEDPOLAR_H

@@ -1,22 +1,60 @@
-// $Id: lipophilic.h,v 1.1 2005/11/21 19:27:05 anker Exp $
+// $Id: lipophilic.h,v 1.2 2006/02/21 16:19:32 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
-#ifndef BALL_MOLMEC_SLICK_FRESNOLIPOPHILIC_H
-#define BALL_MOLMEC_SLICK_FRESNOLIPOPHILIC_H
+#ifndef BALL_SCORING_COMPONENTS_LIPOPHILIC_H
+#define BALL_SCORING_COMPONENTS_LIPOPHILIC_H
 
-#include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
+#include <BALL/SCORING/COMMON/scoringComponent.h>
 
 namespace BALL
 {
 
 	/** Fresno lipophilic component.
-			{\bf Definition:} \URL{BALL/MOLMEC/SLICK/fresnoLipophilic.h}
+			{\bf Definition:} \URL{BALL/SCORING/COMMON/scoringComponent.h}
 	*/
-	class FresnoLipophilic
-		:	public ForceFieldComponent
+	class Lipophilic
+		:	public ScoringComponent
 	{
 
 		public:
+
+		/**	Option names
+		*/
+		struct Option
+		{
+			/**
+			*/
+			static const char* LIPO_R1_OFFSET;
+
+			/**
+			*/
+			static const char* LIPO_R2_OFFSET;
+
+			/**
+			*/
+			static const char* VERBOSITY;
+
+		};
+
+		/** Default values for SLICK options.
+		*/
+		struct Default
+		{
+
+			/**
+			*/
+			static const float LIPO_R1_OFFSET;
+
+			/**
+			*/
+			static const float LIPO_R2_OFFSET;
+
+			/**
+			*/
+			static const Size VERBOSITY;
+
+		};
+
 
 		/** @name	Constructors and Destructors	
 		*/
@@ -24,22 +62,22 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		FresnoLipophilic()
+		Lipophilic()
 			throw();
 
 		/**	Constructor.
 		*/
-		FresnoLipophilic(ForceField& force_field)
+		Lipophilic(ScoringFunction& sf)
 			throw();
 
 		/**	Copy constructor
 		*/
-		FresnoLipophilic(const FresnoLipophilic& fhb)
+		Lipophilic(const Lipophilic& li)
 			throw();
 
 		/**	Destructor.
 		*/
-		virtual ~FresnoLipophilic()
+		virtual ~Lipophilic()
 			throw();
 
 		//@}
@@ -49,7 +87,7 @@ namespace BALL
 
 		/** Assignment.
 		*/
-		const FresnoLipophilic& operator = (const FresnoLipophilic& fhb)
+		const Lipophilic& operator = (const Lipophilic& li)
 			throw();
 
 		/** Clear method.
@@ -62,7 +100,7 @@ namespace BALL
 		*/
 		//@{
 
-		bool operator == (const FresnoLipophilic& fhb) const
+		bool operator == (const Lipophilic& li) const
 			throw();
 
 		//@}
@@ -82,12 +120,7 @@ namespace BALL
 
 		/**	Calculates and returns the component's energy.
 		*/
-		virtual double updateEnergy()
-			throw();
-
-		/**	Calculates and returns the component's forces.
-		*/
-		virtual void updateForces()
+		virtual double calculateScore()
 			throw();
 
 		//@}
@@ -97,10 +130,6 @@ namespace BALL
 		/*_
 		*/
 		std::vector< std::pair<const Atom*, const Atom*> > possible_lipophilic_interactions_;
-
-		/*_
-		*/
-		double factor_;
 
 		/*_ This length will be added to the sum of the van-der-Waals radii for
 				obtaining the lower bound of the scoring function.
@@ -116,4 +145,4 @@ namespace BALL
 
 } // namespace BALL
 
-#endif // BALL_MOLMEC_SLICK_FRESNOLIPOPHILIC_H
+#endif // BALL_SCORING_COMPONENTS_LIPOPHILIC_H

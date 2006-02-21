@@ -1,26 +1,95 @@
-// $Id: hydrogenBond.h,v 1.1 2005/11/21 19:27:04 anker Exp $
+// $Id: hydrogenBond.h,v 1.2 2006/02/21 16:19:32 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
-#ifndef BALL_MOLMEC_SLICK_FRESNOHYDROGENBOND_H
-#define BALL_MOLMEC_SLICK_FRESNOHYDROGENBOND_H
+#ifndef BALL_SCORING_COMPONENTS_HYDROGENBOND_H
+#define BALL_SCORING_COMPONENTS_HYDROGENBOND_H
 
-#ifndef BALL_MOLMEC_COMMON_FORCEFIELDCOMPONENT_H
-#	include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
-#endif
+#include <BALL/SCORING/COMMON/scoringComponent.h>
+#include <BALL/SCORING/COMMON/scoringFunction.h>
+#include <BALL/DATATYPE/options.h>
 
 namespace BALL
 {
 
 	/** Fresno Hydrogen Bond component.
-			{\bf Definition:} \URL{BALL/MOLMEC/SLICK/fresnoHydrogenBond.h}
+			{\bf Definition:} \URL{BALL/SCORING/COMPONENTS/hydrogenBond.h}
 	*/
-	class FresnoHydrogenBond
-		:	public ForceFieldComponent
+	class HydrogenBond
+		:	public ScoringComponent
 	{
 
 		public:
 
-		BALL_CREATE(FresnoHydrogenBond)
+
+		struct Option
+		{
+			/**
+			*/
+			static const char* HB_IDEAL_LENGTH;
+
+			/**
+			*/
+			static const char* HB_IDEAL_ANGLE;
+
+			/**
+			*/
+			static const char* HB_DIST_LOWER;
+
+			/**
+			*/
+			static const char* HB_DIST_UPPER;
+
+			/**
+			*/
+			static const char* HB_ANG_LOWER;
+
+			/**
+			*/
+			static const char* HB_ANG_UPPER;
+
+			/**
+			*/
+			static const char* VERBOSITY;
+		};
+
+		/** Default values for SLICK options.
+		*/
+		struct Default
+		{
+			/**
+			*/
+			static const float HB_IDEAL_LENGTH;
+
+			/**
+			*/
+			static const float HB_IDEAL_ANGLE;
+
+			/**
+			*/
+			static const float HB_DIST_LOWER;
+
+			/**
+			*/
+			static const float HB_DIST_UPPER;
+
+			/**
+			*/
+			static const float HB_ANG_LOWER;
+
+			/**
+			*/
+			static const float HB_ANG_UPPER;
+
+			/**
+			*/
+			static const Size VERBOSITY;
+
+		};
+
+
+
+
+		BALL_CREATE(HydrogenBond)
 
 		/** @name	Constructors and Destructors	
 		*/
@@ -28,22 +97,27 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		FresnoHydrogenBond()
+		HydrogenBond()
 			throw();
 
 		/**	Constructor.
 		*/
-		FresnoHydrogenBond(ForceField& force_field)
+		HydrogenBond(ScoringFunction& sf)
+			throw();
+
+		/**	Constructor.
+		*/
+		HydrogenBond(ScoringComponent& sc)
 			throw();
 
 		/**	Copy constructor
 		*/
-		FresnoHydrogenBond(const FresnoHydrogenBond& fhb)
+		HydrogenBond(const HydrogenBond& fhb)
 			throw();
 
 		/**	Destructor.
 		*/
-		virtual ~FresnoHydrogenBond()
+		virtual ~HydrogenBond()
 			throw();
 
 		//@}
@@ -53,7 +127,7 @@ namespace BALL
 
 		/** Assignment.
 		*/
-		const FresnoHydrogenBond& operator = (const FresnoHydrogenBond& fhb)
+		const HydrogenBond& operator = (const HydrogenBond& fhb)
 			throw();
 
 		/** Clear method.
@@ -66,7 +140,7 @@ namespace BALL
 		*/
 		//@{
 
-		bool operator == (const FresnoHydrogenBond& fhb) const
+		bool operator == (const HydrogenBond& fhb) const
 			throw();
 
 		//@}
@@ -84,14 +158,9 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Calculates and returns the component's energy.
+		/**	
 		*/
-		virtual double updateEnergy()
-			throw();
-
-		/**	Calculates and returns the component's forces.
-		*/
-		virtual void updateForces()
+		virtual double calculateScore()
 			throw();
 
 		//@}
@@ -146,4 +215,4 @@ namespace BALL
 
 } // namespace BALL
 
-#endif // BALL_MOLMEC_SLICK_FRESNOHYDROGENBOND_H
+#endif // BALL_SCORING_COMPONENTS_HYDROGENBOND_H
