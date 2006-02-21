@@ -1,11 +1,7 @@
-// $Id: metal.C,v 1.1 2005/11/21 19:27:11 anker Exp $
+// $Id: metal.C,v 1.2 2006/02/21 16:16:24 anker Exp $
 // 
 
-#include <BALL/MOLMEC/COMMON/forceField.h>
-#include <BALL/MOLMEC/COMMON/support.h>
-
-#include <BALL/MOLMEC/SLICK/slick.h>
-#include <BALL/MOLMEC/SLICK/chemScoreMetal.h>
+#include <BALL/SCORING/COMPONENTS/metal.h>
 
 using namespace std;
 
