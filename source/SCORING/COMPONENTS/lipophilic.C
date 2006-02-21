@@ -1,11 +1,8 @@
-// $Id: lipophilic.C,v 1.1 2005/11/21 19:27:10 anker Exp $
-// Molecular Mechanics: Fresno force field, lipophilic component
+// $Id: lipophilic.C,v 1.2 2006/02/21 16:14:19 anker Exp $
+// lipophilic component
 
-#include <BALL/MOLMEC/COMMON/forceField.h>
-#include <BALL/MOLMEC/COMMON/support.h>
-
-#include <BALL/MOLMEC/SLICK/slick.h>
-#include <BALL/MOLMEC/SLICK/fresnoLipophilic.h>
+#include <BALL/SCORING/COMPONENTS/lipophilic.h>
+#include <BALL/SCORING/TYPES/fresnoTypes.h>
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -20,9 +17,18 @@ using namespace std;
 namespace BALL
 {
 
-	FresnoLipophilic::FresnoLipophilic()
+	const char* Lipophilic::Option::LIPO_R1_OFFSET = "lipo_r1_offset";
+	const char* Lipophilic::Option::LIPO_R2_OFFSET = "lipo_r2_offset";
+	const char* Lipophilic::Option::VERBOSITY = "verbosity";
+
+	const float Lipophilic::Default::LIPO_R1_OFFSET = 0.5;
+	const float Lipophilic::Default::LIPO_R2_OFFSET = 3.0;
+	const Size Lipophilic::Default::VERBOSITY = 0;
+
+
+	Lipophilic::Lipophilic()
 		throw()
-		:	ForceFieldComponent(),
+		:	ScoringComponent(),
 			possible_lipophilic_interactions_(),
 			r1_offset_(0.0),
 			r2_offset_(0.0)
@@ -32,9 +38,9 @@ namespace BALL
 	}
 
 
-	FresnoLipophilic::FresnoLipophilic(ForceField& force_field)
+	Lipophilic::Lipophilic(ScoringFunction& sf)
 		throw()
-		:	ForceFieldComponent(force_field),
+		:	ScoringComponent(sf),
 			possible_lipophilic_interactions_(),
 			r1_offset_(0.0),
 			r2_offset_(0.0)
@@ -44,9 +50,9 @@ namespace BALL
 	}
 
 
-	FresnoLipophilic::FresnoLipophilic(const FresnoLipophilic& fl)
+	Lipophilic::Lipophilic(const Lipophilic& fl)
 		throw()
-		:	ForceFieldComponent(fl),
+		:	ScoringComponent(fl),
 			possible_lipophilic_interactions_(fl.possible_lipophilic_interactions_),
 			r1_offset_(fl.r1_offset_),
 			r2_offset_(fl.r2_offset_)
@@ -54,35 +60,35 @@ namespace BALL
 	}
 
 
-	FresnoLipophilic::~FresnoLipophilic()
+	Lipophilic::~Lipophilic()
 		throw()
 	{
 		clear();
 	}
 
 
-	void FresnoLipophilic::clear()
+	void Lipophilic::clear()
 		throw()
 	{
 		possible_lipophilic_interactions_.clear();
 		r1_offset_ = 0.0;
 		r2_offset_ = 0.0;
 		// ?????
-		// ForceFieldComponent does not comply with the OCI
-		// ForceFieldComponent::clear();
+		// ScoringComponent does not comply with the OCI
+		// ScoringComponent::clear();
 	}
 
 
-	bool FresnoLipophilic::setup()
+	bool Lipophilic::setup()
 		throw()
 	{
 		Timer timer;
 		timer.start();
 
-		ForceField* force_field = getForceField();
-		if (force_field == 0)
+		ScoringFunction* sf = getScoringFunction();
+		if (sf == 0)
 		{
-			Log.error() << "FresnoLipophilic::setup(): "
+			Log.error() << "Lipophilic::setup(): "
 				<< "component not bound to force field." << endl;
 			return false;
 		}
@@ -94,24 +100,22 @@ namespace BALL
 		// we should check whether force_field is a SlickFF, because we need
 		// the fresno types
 
-		System* system = force_field->getSystem();
-		SlickFF* fff = dynamic_cast<SlickFF*>(force_field);
-    Options& options = force_field->options;
+		System* system = sf->getSystem();
+    Options& options = sf->options;
 
-		factor_
-			= options.setDefaultReal(SlickFF::Option::LIPO,
-					SlickFF::Default::LIPO);
 		r1_offset_
-			= options.setDefaultReal(SlickFF::Option::LIPO_R1_OFFSET,
-					SlickFF::Default::LIPO_R1_OFFSET);
+			= options.setDefaultReal(Lipophilic::Option::LIPO_R1_OFFSET,
+					Lipophilic::Default::LIPO_R1_OFFSET);
 		r2_offset_
-			= options.setDefaultReal(SlickFF::Option::LIPO_R2_OFFSET,
-					SlickFF::Default::LIPO_R2_OFFSET);
+			= options.setDefaultReal(Lipophilic::Option::LIPO_R2_OFFSET,
+					Lipophilic::Default::LIPO_R2_OFFSET);
 		Size verbosity 
-			= options.setDefaultInteger(SlickFF::Option::VERBOSITY,
-					SlickFF::Default::VERBOSITY);
+			= options.setDefaultInteger(Lipophilic::Option::VERBOSITY,
+					Lipophilic::Default::VERBOSITY);
 
-		const HashMap<const Atom*, short>& fresno_types = fff->getFresnoTypes();
+		FresnoTypes fresno_types_class(*this);
+		const HashMap<const Atom*, Size>& fresno_types 
+			= fresno_types_class.getTypeMap();
 
 		// quadratic run time. not nice.
 
@@ -129,12 +133,12 @@ namespace BALL
 			if (fresno_types.has(&*A_it))
 			{
 				type_A = fresno_types[&*A_it];
-				if (type_A == SlickFF::LIPOPHILIC)
+				if (type_A == FresnoTypes::LIPOPHILIC)
 				{
 					for (B_it = B->beginAtom(); +B_it; ++B_it)
 					{
 						type_B = fresno_types[&*B_it];
-						if (type_B == SlickFF::LIPOPHILIC)
+						if (type_B == FresnoTypes::LIPOPHILIC)
 						{
 							possible_lipophilic_interactions_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
 							if (verbosity >= 90)
@@ -154,13 +158,13 @@ namespace BALL
 
 		if (verbosity > 8)
 		{
-			Log.info() << "FresnoLipophilic setup statistics:" << endl;
+			Log.info() << "Lipophilic setup statistics:" << endl;
 			Log.info() << "Found " << possible_lipophilic_interactions_.size() 
 				<< " possible lipophilic interactions" << endl << endl;
 		}
 
 		timer.stop();
-		Log.info() << "FresnoLipophilic::setup(): " 
+		Log.info() << "Lipophilic::setup(): " 
 			<< timer.getCPUTime() << std::endl;
 
 		return(true);
@@ -168,7 +172,7 @@ namespace BALL
 	}
 
 
-	double FresnoLipophilic::updateEnergy()
+	double Lipophilic::calculateScore()
 		throw()
 	{
 
@@ -180,9 +184,9 @@ namespace BALL
 #endif
 
 		Size verbosity 
-			= getForceField()->options.getInteger(SlickFF::Option::VERBOSITY);
+			= getScoringFunction()->options.getInteger(Option::VERBOSITY);
 
-		energy_ = 0.0;
+		score_ = 0.0;
 		float val = 0.0;
 		float distance;
 		float R1;
@@ -211,18 +215,20 @@ namespace BALL
 			{
 				// we could possibly speed up the next step by using the fact that the
 				// difference between R1 and R2 is constant
-				val = ((SlickFF*)getForceField())->base_function->calculate(distance, R1, R2);
+				val = getScoringFunction()->getBaseFunction()->calculate(distance, R1, R2);
 				if (verbosity >= 0)
 				{
 					Log.info() << "LI: " << val << " "
 						<< atom1->getFullName() << " " 
-						<< ((SlickFF*)getForceField())->getFresnoTypeString(atom1);
+						<< endl;
+//						<< ((SlickFF*)getForceField())->getFresnoTypeString(atom1);
 					if (atom1->getResidue() != 0)
 					{
 						Log.info() << "[" << atom1->getResidue()->getID() << "]";
 					}
 					Log.info() << "..." << atom2->getFullName() << " "
-						<< ((SlickFF*)getForceField())->getFresnoTypeString(atom2);
+						<< endl;
+//						<< ((SlickFF*)getForceField())->getFresnoTypeString(atom2);
 					if (atom2->getResidue() != 0)
 					{
 						Log.info() << "[" << atom2->getResidue()->getID() << "]";
@@ -251,7 +257,7 @@ namespace BALL
 #endif
 
 				
-				energy_ += val;
+				score_ += val;
 			}
 		}
 
@@ -261,25 +267,16 @@ namespace BALL
 		debug_file.close();
 #endif
 
-		energy_ = factor_ * energy_;
-
 		if (verbosity > 0)
 		{
-			Log.info() << "LIPO: energy is " << energy_ << endl;
+			Log.info() << "LIPO: energy is " << score_ << endl;
 		}
 
 		timer.stop();
-		Log.info() << "FresnoLipophilic::updateEnergy(): "
+		Log.info() << "Lipophilic::updateEnergy(): "
 			<< timer.getCPUTime() << " s" << std::endl;
 
-		return(energy_);
+		return(score_);
 	}
-
-
-	void FresnoLipophilic::updateForces()
-		throw()
-	{
-	}
-
 
 }

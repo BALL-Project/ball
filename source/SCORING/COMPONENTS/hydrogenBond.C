@@ -1,13 +1,12 @@
-// $Id: hydrogenBond.C,v 1.1 2005/11/21 19:27:10 anker Exp $
-// Molecular Mechanics: Fresno force field, hydrogen bond component
+// $Id: hydrogenBond.C,v 1.2 2006/02/21 16:14:19 anker Exp $
+// hydrogen bond component
 
-#include <BALL/MOLMEC/COMMON/forceField.h>
+#include <BALL/SCORING/COMPONENTS/hydrogenBond.h>
+#include <BALL/SCORING/TYPES/fresnoTypes.h>
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/bond.h>
-
-#include <BALL/MOLMEC/SLICK/slick.h>
-#include <BALL/MOLMEC/SLICK/fresnoHydrogenBond.h>
+#include <BALL/DATATYPE/hashMap.h>
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -22,46 +21,63 @@ using namespace std;
 namespace BALL
 {
 
-	FresnoHydrogenBond::FresnoHydrogenBond()
+	const char* HydrogenBond::Option::HB_IDEAL_LENGTH = "hb_ideal_length";
+	const char* HydrogenBond::Option::HB_IDEAL_ANGLE = "hb_ideal_angle";
+	const char* HydrogenBond::Option::HB_DIST_LOWER = "hb_dist_lower";
+	const char* HydrogenBond::Option::HB_DIST_UPPER = "hb_dist_upper";
+	const char* HydrogenBond::Option::HB_ANG_LOWER = "hb_ang_lower";
+	const char* HydrogenBond::Option::HB_ANG_UPPER = "hb_ang_upper";
+	const char* HydrogenBond::Option::VERBOSITY = "verbosity";
+
+	const float HydrogenBond::Default::HB_IDEAL_LENGTH = 1.85;
+	const float HydrogenBond::Default::HB_IDEAL_ANGLE = 180;
+	const float HydrogenBond::Default::HB_DIST_LOWER = 0.25;
+	const float HydrogenBond::Default::HB_DIST_UPPER = 0.65;
+	const float HydrogenBond::Default::HB_ANG_LOWER = 30;
+	const float HydrogenBond::Default::HB_ANG_UPPER = 80;
+	const Size HydrogenBond::Default::VERBOSITY = 0;
+
+
+	HydrogenBond::HydrogenBond()
 		throw()
-		:	ForceFieldComponent(),
+		:	ScoringComponent(),
 			possible_hydrogen_bonds_()
 	{
 		// set component name
-		setName("Fresno HydrogenBond");
+		setName("SLICK HydrogenBond");
 	}
 
 
-	FresnoHydrogenBond::FresnoHydrogenBond(ForceField& force_field)
+	HydrogenBond::HydrogenBond(ScoringFunction& sf)
 		throw()
-		:	ForceFieldComponent(force_field),
+		:	ScoringComponent(sf),
 			possible_hydrogen_bonds_()
 	{
 		// set component name
-		setName("Fresno HydrogenBond");
+		setName("SLICK HydrogenBond");
 	}
 
 
-	FresnoHydrogenBond::FresnoHydrogenBond(const FresnoHydrogenBond& fhb)
+	HydrogenBond::HydrogenBond(const HydrogenBond& hb)
 		throw()
-		:	ForceFieldComponent(fhb),
-			possible_hydrogen_bonds_(fhb.possible_hydrogen_bonds_),
-			h_bond_distance_lower_(fhb.h_bond_distance_lower_),
-			h_bond_distance_upper_(fhb.h_bond_distance_upper_),
-			h_bond_angle_lower_(fhb.h_bond_angle_lower_),
-			h_bond_angle_upper_(fhb.h_bond_angle_upper_)
+		:	ScoringComponent(hb),
+			possible_hydrogen_bonds_(hb.possible_hydrogen_bonds_),
+			h_bond_distance_lower_(hb.h_bond_distance_lower_),
+			h_bond_distance_upper_(hb.h_bond_distance_upper_),
+			h_bond_angle_lower_(hb.h_bond_angle_lower_),
+			h_bond_angle_upper_(hb.h_bond_angle_upper_)
 	{
 	}
 
 
-	FresnoHydrogenBond::~FresnoHydrogenBond()
+	HydrogenBond::~HydrogenBond()
 		throw()
 	{
 		clear();
 	}
 
 
-	void FresnoHydrogenBond::clear()
+	void HydrogenBond::clear()
 		throw()
 	{
 		possible_hydrogen_bonds_.clear();
@@ -70,65 +86,57 @@ namespace BALL
 		h_bond_angle_lower_ = 0.0;
 		h_bond_angle_upper_ = 0.0;
 		// ?????
-		// ForceFieldComponent does not comply to the OCI
-		// ForceFieldComponent::clear();
+		// ScoringComponent does not comply to the OCI
+		// ScoringComponent::clear();
 	}
 
 
-	bool FresnoHydrogenBond::setup()
+	bool HydrogenBond::setup()
 		throw()
 	{
 
 		Timer timer;
 		timer.start();
 
-		ForceField* force_field = getForceField();
-		if (force_field == 0)
+		ScoringFunction* scoring_function = getScoringFunction();
+		if (scoring_function == 0)
 		{
-			Log.error() << "FresnoHydrogenBond::setup(): "
-				<< "component not bound to force field." << endl;
+			Log.error() << "HydrogenBond::setup(): "
+				<< "component not bound to scoring function." << endl;
 			return false;
 		}
 
 		// clear the vector of possible hydrogen bonds
 		possible_hydrogen_bonds_.clear();
 
-		// ?????
-		// we should check whether force_field is a SlickFF, because we need
-		// the fresno types
+		System* system = getScoringFunction()->getSystem();
+    Options& options = getScoringFunction()->options;
 
-		System* system = force_field->getSystem();
-
-		SlickFF* fff = dynamic_cast<SlickFF*>(force_field);
-
-    Options& options = force_field->options;
-
-		factor_ 
-			= options.setDefaultReal(SlickFF::Option::HB,
-					SlickFF::Default::HB);
 		ideal_hbond_length_ 
-			= options.setDefaultReal(SlickFF::Option::HB_IDEAL_LENGTH,
-					SlickFF::Default::HB_IDEAL_LENGTH);
+			= options.setDefaultReal(HydrogenBond::Option::HB_IDEAL_LENGTH,
+					HydrogenBond::Default::HB_IDEAL_LENGTH);
 		ideal_hbond_angle_
-			= options.setDefaultReal(SlickFF::Option::HB_IDEAL_ANGLE,
-					SlickFF::Default::HB_IDEAL_ANGLE);
+			= options.setDefaultReal(HydrogenBond::Option::HB_IDEAL_ANGLE,
+					HydrogenBond::Default::HB_IDEAL_ANGLE);
 		h_bond_distance_lower_
-			= options.setDefaultReal(SlickFF::Option::HB_DIST_LOWER,
-					SlickFF::Default::HB_DIST_LOWER);
+			= options.setDefaultReal(HydrogenBond::Option::HB_DIST_LOWER,
+					HydrogenBond::Default::HB_DIST_LOWER);
 		h_bond_distance_upper_
-			= options.setDefaultReal(SlickFF::Option::HB_DIST_UPPER,
-					SlickFF::Default::HB_DIST_UPPER);
+			= options.setDefaultReal(HydrogenBond::Option::HB_DIST_UPPER,
+					HydrogenBond::Default::HB_DIST_UPPER);
 		h_bond_angle_lower_
-			= options.setDefaultReal(SlickFF::Option::HB_ANG_LOWER,
-					SlickFF::Default::HB_ANG_LOWER);
+			= options.setDefaultReal(HydrogenBond::Option::HB_ANG_LOWER,
+					HydrogenBond::Default::HB_ANG_LOWER);
 		h_bond_angle_upper_
-			= options.setDefaultReal(SlickFF::Option::HB_ANG_UPPER,
-					SlickFF::Default::HB_ANG_UPPER);
+			= options.setDefaultReal(HydrogenBond::Option::HB_ANG_UPPER,
+					HydrogenBond::Default::HB_ANG_UPPER);
 		Size verbosity
-			= options.setDefaultInteger(SlickFF::Option::VERBOSITY,
-					SlickFF::Default::VERBOSITY);
+			= options.setDefaultInteger(HydrogenBond::Option::VERBOSITY,
+					HydrogenBond::Default::VERBOSITY);
 
-		const HashMap<const Atom*, short>& fresno_types = fff->getFresnoTypes();
+		FresnoTypes fresno_types_class(*this);
+		const HashMap<const Atom*, Size>& fresno_types 
+			= fresno_types_class.getTypeMap();
 
 		// two times quadratic run time. not nice.
 
@@ -142,14 +150,14 @@ namespace BALL
 		{
 			if (fresno_types.has(&*A_it))
 			{
-				if (fresno_types[&*A_it] == SlickFF::HBOND_HYDROGEN)
+				if (fresno_types[&*A_it] == FresnoTypes::HBOND_HYDROGEN)
 				{
 					for (B_it = B->beginAtom(); +B_it; ++B_it)
 					{
 						if (fresno_types.has(&*B_it))
 						{
-							if ((fresno_types[&*B_it] == SlickFF::HBOND_ACCEPTOR_DONOR)
-									|| (fresno_types[&*B_it] == SlickFF::HBOND_ACCEPTOR))
+							if ((fresno_types[&*B_it] == FresnoTypes::HBOND_ACCEPTOR_DONOR)
+									|| (fresno_types[&*B_it] == FresnoTypes::HBOND_ACCEPTOR))
 							{
 								possible_hydrogen_bonds_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
 								if (verbosity >= 90)
@@ -174,14 +182,14 @@ namespace BALL
 		{
 			if (fresno_types.has(&*B_it))
 			{
-				if (fresno_types[&*B_it] == SlickFF::HBOND_HYDROGEN)
+				if (fresno_types[&*B_it] == FresnoTypes::HBOND_HYDROGEN)
 				{
 					for (A_it = A->beginAtom(); +A_it; ++A_it)
 					{
 						if (fresno_types.has(&*A_it))
 						{
-							if ((fresno_types[&*A_it] == SlickFF::HBOND_ACCEPTOR_DONOR)
-									|| (fresno_types[&*A_it] == SlickFF::HBOND_ACCEPTOR))
+							if ((fresno_types[&*A_it] == FresnoTypes::HBOND_ACCEPTOR_DONOR)
+									|| (fresno_types[&*A_it] == FresnoTypes::HBOND_ACCEPTOR))
 							{
 								possible_hydrogen_bonds_.push_back(pair<const Atom*, const Atom*>(&*B_it, &*A_it));
 								if (verbosity >= 90)
@@ -203,13 +211,13 @@ namespace BALL
 
 		if (verbosity > 8)
 		{
-			Log.info() << "FresnoHydrogenBond setup statistics:" << endl;
+			Log.info() << "HydrogenBond setup statistics:" << endl;
 			Log.info() << "Found " << possible_hydrogen_bonds_.size() 
 				<< " possible hydrogen bonds" << endl << endl;
 		}
 
 		timer.stop();
-		Log.info() << "FresnoHydrogenBond::setup(): "
+		Log.info() << "HydrogenBond::setup(): "
 			<< timer.getCPUTime() << " s" << std::endl;
 
 		return(true);
@@ -217,7 +225,7 @@ namespace BALL
 	}
 
 
-	double FresnoHydrogenBond::updateEnergy()
+	double HydrogenBond::calculateScore()
 		throw()
 	{
 
@@ -229,9 +237,9 @@ namespace BALL
 #endif
 
 		Size verbosity 
-			= getForceField()->options.getInteger(SlickFF::Option::VERBOSITY);
+			= getScoringFunction()->options.getInteger(Option::VERBOSITY);
 
-		energy_ = 0.0;
+		score_ = 0.0;
 		float val = 0.0;
 		float distance;
 		float angle;
@@ -263,7 +271,7 @@ namespace BALL
 			{
 				// calculate g1
 
-				val = ((SlickFF*)getForceField())->base_function->calculate(distance,
+				val = getScoringFunction()->getBaseFunction()->calculate(distance,
 						h_bond_distance_lower_, h_bond_distance_upper_);
 
 				// calculate the angle of the hbond. It is necessary to find out
@@ -280,7 +288,7 @@ namespace BALL
 				// PARANOIA
 				else
 				{
-					cerr << "FresnoHydrogenBond::updateEnergy(): "
+					cerr << "HydrogenBond::updateEnergy(): "
 						<< "black magic: hydrogen bond without hydrogens:" << endl
 						<< hydrogen->getFullName() << ":" << acceptor->getFullName()
 						<< endl;
@@ -294,7 +302,7 @@ namespace BALL
 				// if angle is too large, skip the rest
 				if (angle <= h_bond_angle_upper_)
 				{
-					val *= ((SlickFF*)getForceField())->base_function->calculate(angle,
+					val *= getScoringFunction()->getBaseFunction()->calculate(angle,
 							h_bond_angle_lower_, h_bond_angle_upper_);
 #ifdef DEBUG
 					Atom* atom_ptr_H = new Atom();
@@ -346,16 +354,14 @@ namespace BALL
 							<< ", delta phi " << angle << ")"
 							<< endl;
 					}
-					energy_ += val;
+					score_ += val;
 				}
 			}
 		}
 
-		energy_ = factor_ * energy_;
-
 		if (verbosity > 0)
 		{
-			Log.info() << "HB: energy is " << energy_ << endl;
+			Log.info() << "HB: energy is " << score_ << endl;
 		}
 		
 #ifdef DEBUG
@@ -365,17 +371,10 @@ namespace BALL
 #endif
 
 		timer.stop();
-		Log.info() << "FresnoHydrogenBond::updateEnergy(): "
+		Log.info() << "HydrogenBond::updateEnergy(): "
 			<< timer.getCPUTime() << " s" << std::endl;
 
-		return(energy_);
+		return(score_);
 	}
-
-
-	void FresnoHydrogenBond::updateForces()
-		throw()
-	{
-	}
-
 
 }

@@ -1,11 +1,8 @@
-// $Id: buriedPolar.C,v 1.1 2005/11/21 19:27:10 anker Exp $
+// $Id: buriedPolar.C,v 1.2 2006/02/21 16:14:19 anker Exp $
 // Molecular Mechanics: Fresno force field, buried polar component
 
-#include <BALL/MOLMEC/COMMON/forceField.h>
-#include <BALL/MOLMEC/COMMON/support.h>
-
-#include <BALL/MOLMEC/SLICK/slick.h>
-#include <BALL/MOLMEC/SLICK/fresnoBuriedPolar.h>
+#include <BALL/SCORING/COMPONENTS/buriedPolar.h>
+#include <BALL/SCORING/TYPES/fresnoTypes.h>
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -20,9 +17,9 @@ using namespace std;
 namespace BALL
 {
 
-	FresnoBuriedPolar::FresnoBuriedPolar()
+	BuriedPolar::BuriedPolar()
 		throw()
-		:	ForceFieldComponent(),
+		:	ScoringComponent(),
 			possible_buried_polar_interactions_(),
 			r1_offset_(0.0),
 			r2_offset_(0.0)
@@ -32,9 +29,9 @@ namespace BALL
 	}
 
 
-	FresnoBuriedPolar::FresnoBuriedPolar(ForceField& force_field)
+	BuriedPolar::BuriedPolar(ScoringFunction& sf)
 		throw()
-		:	ForceFieldComponent(force_field),
+		:	ScoringComponent(sf),
 			possible_buried_polar_interactions_(),
 			r1_offset_(0.0),
 			r2_offset_(0.0)
@@ -44,45 +41,45 @@ namespace BALL
 	}
 
 
-	FresnoBuriedPolar::FresnoBuriedPolar(const FresnoBuriedPolar& fl)
+	BuriedPolar::BuriedPolar(const BuriedPolar& bp)
 		throw()
-		:	ForceFieldComponent(fl),
-			possible_buried_polar_interactions_(fl.possible_buried_polar_interactions_),
-			r1_offset_(fl.r1_offset_),
-			r2_offset_(fl.r2_offset_)
+		:	ScoringComponent(bp),
+			possible_buried_polar_interactions_(bp.possible_buried_polar_interactions_),
+			r1_offset_(bp.r1_offset_),
+			r2_offset_(bp.r2_offset_)
 	{
 	}
 
 
-	FresnoBuriedPolar::~FresnoBuriedPolar()
+	BuriedPolar::~BuriedPolar()
 		throw()
 	{
 		clear();
 	}
 
 
-	void FresnoBuriedPolar::clear()
+	void BuriedPolar::clear()
 		throw()
 	{
 		possible_buried_polar_interactions_.clear();
 		r1_offset_ = 0.0;
 		r2_offset_ = 0.0;
 		// ?????
-		// ForceFieldComponent does not comply with the OCI
-		// ForceFieldComponent::clear();
+		// ScoringComponent does not comply with the OCI
+		// ScoringComponent::clear();
 	}
 
 
-	bool FresnoBuriedPolar::setup()
+	bool BuriedPolar::setup()
 		throw()
 	{
 		Timer timer;
 		timer.start();
 
-		ForceField* force_field = getForceField();
-		if (force_field == 0)
+		ScoringFunction* sf = getScoringFunction();
+		if (sf == 0)
 		{
-			Log.error() << "FresnoBuriedPolar::setup(): "
+			Log.error() << "BuriedPolar::setup(): "
 				<< "component not bound to force field." << endl;
 			return false;
 		}
@@ -94,26 +91,27 @@ namespace BALL
 		// we should check whether force_field is a SlickFF, because we need
 		// the fresno types
 
-		System* system = force_field->getSystem();
+		System* system = getScoringFunction()->getSystem();
+		if (system == 0)
+		{
+			return(false);
+		}
 
-		SlickFF* fff = dynamic_cast<SlickFF*>(force_field);
+    Options& options = getScoringFunction()->options;
 
-    Options& options = force_field->options;
-
-		factor_
-			= options.setDefaultReal(SlickFF::Option::BP,
-					SlickFF::Default::BP);
 		r1_offset_
-			= options.setDefaultReal(SlickFF::Option::BP_R1_OFFSET,
-					SlickFF::Default::BP_R1_OFFSET);
+			= options.setDefaultReal(BuriedPolar::Option::BP_R1_OFFSET,
+					BuriedPolar::Default::BP_R1_OFFSET);
 		r2_offset_
-			= options.setDefaultReal(SlickFF::Option::BP_R2_OFFSET,
-					SlickFF::Default::BP_R2_OFFSET);
+			= options.setDefaultReal(BuriedPolar::Option::BP_R2_OFFSET,
+					BuriedPolar::Default::BP_R2_OFFSET);
 		Size verbosity
-			= options.setDefaultInteger(SlickFF::Option::VERBOSITY,
-					SlickFF::Default::VERBOSITY);
+			= options.setDefaultInteger(BuriedPolar::Option::VERBOSITY,
+					BuriedPolar::Default::VERBOSITY);
 
-		const HashMap<const Atom*, short>& fresno_types = fff->getFresnoTypes();
+		FresnoTypes fresno_types_class(*this);
+		const HashMap<const Atom*, Size>& fresno_types 
+			= fresno_types_class.getTypeMap();
 
 		// quadratic run time. not nice.
 
@@ -132,18 +130,18 @@ namespace BALL
 			for (B_it = B->beginAtom(); +B_it; ++B_it)
 			{
 				type_B = fresno_types[&*B_it];
-				if ((((type_B == SlickFF::POLAR)
-								|| (type_B == SlickFF::HBOND_ACCEPTOR)
-								|| (type_B == SlickFF::HBOND_DONOR)
-								|| (type_B == SlickFF::HBOND_ACCEPTOR_DONOR)
-								|| (type_B == SlickFF::HBOND_HYDROGEN))
-							&& (type_A == SlickFF::LIPOPHILIC))
-						|| ((type_B == SlickFF::LIPOPHILIC)
-							&& ((type_A == SlickFF::POLAR)
-								|| (type_A == SlickFF::HBOND_ACCEPTOR)
-								|| (type_A == SlickFF::HBOND_DONOR)
-								|| (type_A == SlickFF::HBOND_ACCEPTOR_DONOR)
-								|| (type_A == SlickFF::HBOND_HYDROGEN))))
+				if ((((type_B == FresnoTypes::POLAR)
+								|| (type_B == FresnoTypes::HBOND_ACCEPTOR)
+								|| (type_B == FresnoTypes::HBOND_DONOR)
+								|| (type_B == FresnoTypes::HBOND_ACCEPTOR_DONOR)
+								|| (type_B == FresnoTypes::HBOND_HYDROGEN))
+							&& (type_A == FresnoTypes::LIPOPHILIC))
+						|| ((type_B == FresnoTypes::LIPOPHILIC)
+							&& ((type_A == FresnoTypes::POLAR)
+								|| (type_A == FresnoTypes::HBOND_ACCEPTOR)
+								|| (type_A == FresnoTypes::HBOND_DONOR)
+								|| (type_A == FresnoTypes::HBOND_ACCEPTOR_DONOR)
+								|| (type_A == FresnoTypes::HBOND_HYDROGEN))))
 				{
 					possible_buried_polar_interactions_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
 					if (verbosity >= 90)
@@ -161,13 +159,13 @@ namespace BALL
 
 		if (verbosity > 8)
 		{
-			Log.info() << "FresnoBuriedPolar setup statistics:" << endl;
+			Log.info() << "BuriedPolar setup statistics:" << endl;
 			Log.info() << "Found " << possible_buried_polar_interactions_.size() 
 				<< " possible buried polar interactions" << endl << endl;
 		}
 
 		timer.stop();
-		Log.info() << "FresnoBuriedPolar::setup(): " << timer.getCPUTime() << " s"
+		Log.info() << "BuriedPolar::setup(): " << timer.getCPUTime() << " s"
 			<< std::endl;
 
 		return(true);
@@ -175,7 +173,7 @@ namespace BALL
 	}
 
 
-	double FresnoBuriedPolar::updateEnergy()
+	double BuriedPolar::calculateScore()
 		throw()
 	{
 
@@ -187,9 +185,9 @@ namespace BALL
 #endif
 
 		Size verbosity
-			= getForceField()->options.getInteger(SlickFF::Option::VERBOSITY);
+			= getScoringFunction()->options.getInteger(Option::VERBOSITY);
 
-		energy_ = 0.0;
+		score_ = 0.0;
 		float val = 0.0;
 		float distance;
 		float R1;
@@ -217,19 +215,21 @@ namespace BALL
 			{
 				// we could possibly speed up the next step by using the fact that the
 				// difference between R1 and R2 is constant
-				val = ((SlickFF*)getForceField())->base_function->calculate(distance, R1, R2);
+				val = getScoringFunction()->getBaseFunction()->calculate(distance, R1, R2);
 
 				if (verbosity >= 0)
 				{
 					Log.info() << "BP: " << val << " "
 						<< atom1->getFullName() << " " 
-						<< ((SlickFF*)getForceField())->getFresnoTypeString(atom1);
+						<< endl;
+//						<< fresno_types_class.getFresnoTypeString(atom1);
 					if (atom1->getResidue() != 0)
 					{
 						Log.info() << "[" << atom1->getResidue()->getID() << "]";
 					}
 					Log.info() << "..." << atom2->getFullName() << " "
-						<< ((SlickFF*)getForceField())->getFresnoTypeString(atom2);
+						<< endl;
+//						<< fresno_types_class.getFresnoTypeString(atom2);
 					if (atom2->getResidue() != 0)
 					{
 						Log.info() << "[" << atom2->getResidue()->getID() << "]";
@@ -256,7 +256,7 @@ namespace BALL
 				debug_molecule.insert(*atom_ptr_L1);
 				debug_molecule.insert(*atom_ptr_L2);
 #endif
-				energy_ += val;
+				score_ += val;
 			}
 		}
 
@@ -266,26 +266,17 @@ namespace BALL
 		debug_file.close();
 #endif
 
-		energy_ = factor_ * energy_;
-
 		if (verbosity > 0)
 		{
-			Log.info() << "BP: energy is " << energy_ << endl;
+			Log.info() << "BP: energy is " << score_ << endl;
 		}
 
 		timer.stop();
-		Log.info() << "FresnoBuriedPolar::updateEnergy(): " 
+		Log.info() << "BuriedPolar::updateEnergy(): " 
 			<< timer.getCPUTime() << " s" << std::endl;
 
-		return energy_;
+		return score_;
 
 	}
-
-
-	void FresnoBuriedPolar::updateForces()
-		throw()
-	{
-	}
-
 
 }
