@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: generalizedBornCase.C,v 1.1 2005/11/21 19:38:38 anker Exp $
+// $Id: generalizedBornCase.C,v 1.2 2006/02/21 16:07:10 anker Exp $
 
 #include <BALL/SOLVATION/generalizedBornCase.h>
 // #include "generalizedBornCase.h"
@@ -38,7 +38,7 @@ namespace BALL
 	const float GeneralizedBornModel::Default::RHO_0 = 0.09f;
 	const float GeneralizedBornModel::Default::DC_SOLVENT = 80.0f;
 	const float GeneralizedBornModel::Default::DC_SOLUTE = 2.0f;
-	const String GeneralizedBornModel::Default::FILENAME = "gb_scaling.ini";
+	const String GeneralizedBornModel::Default::FILENAME = "solvation/gb_scaling.ini";
 
 	/*
 	const Size GeneralizedBornModel::Default::VERBOSITY = 10;
