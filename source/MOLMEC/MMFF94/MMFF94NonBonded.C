@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.2.10 2006/02/21 16:02:32 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.2.11 2006/02/21 21:06:51 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -138,8 +138,7 @@ namespace BALL
 
 			data.is_1_4 = atom1->isVicinal(*atom2);
 
-			parameters_.getParameters(atom1->getType(), atom2->getType(),
-																data.rij, data.rij_7, data.eij);
+			vdw_parameters_.getParameters(atom1->getType(), atom2->getType(), data.rij, data.rij_7, data.eij);
 
 #ifdef BALL_MMFF94_DEBUG
 			Log.info() << "NB pair " << atom1->getName() << " " << atom2->getName() << std::endl;
@@ -178,18 +177,50 @@ namespace BALL
 			}
 		}
 				
-		if (!parameters_.isInitialized())
+		if (!vdw_parameters_.isInitialized())
 		{
 			Path    path;
+
 			String  filename(path.find("MMFF94/MMFFVDW.PAR"));
+			if (filename == "") throw Exception::FileNotFound(__FILE__, __LINE__, "MMFFVDW.PAR");
+			vdw_parameters_.readParameters(filename);
 
-			if (filename == "") throw Exception::FileNotFound(__FILE__, __LINE__, "[empty]");
+			filename = path.find("MMFF94/MMFFCHG.PAR");
+			if (filename == "") throw Exception::FileNotFound(__FILE__, __LINE__, "MMFFCHG.PAR");
+			es_parameters_.readParameters(filename);
 
-			parameters_.readParameters(filename);
+			filename = path.find("MMFF94/MMFFPBCI.PAR");
+			if (filename == "") throw Exception::FileNotFound(__FILE__, __LINE__, "MMFFPBCI.PAR");
+			es_parameters_.readEmpericalParameters(filename);
 		}
 
 		// Determine the most efficient way to calculate all non bonded atom pairs
 		algorithm_type_ = determineMethodOfAtomPairGeneration();
+
+		charge_map_.clear();
+
+		vector<Atom*>::const_iterator	ait = getForceField()->getAtoms().begin();
+		for (; ait != getForceField()->getAtoms().begin(); ++ait)
+		{
+			Atom* const atom1 = *ait;
+			double charge = atom1->getCharge();
+
+			AtomBondIterator bit = atom1->beginBond();
+			for (; +bit; ++bit)
+			{
+				const Atom* const atom2 = bit->getPartner(*atom1);
+				Position bt = bit->hasProperty("MMFF94SBMB"); // ????
+				const double pcharge = es_parameters_.getPartialCharge(atom1->getType(), atom2->getType(), bt);
+				if (pcharge == -99) 
+				{
+					getForceField()->getUnassignedAtoms().insert(atom1);
+					getForceField()->getUnassignedAtoms().insert(atom2);
+					getForceField()->error() << "MMFF94 NonBonded: Could not assign partial charges for " 
+																	 << atom1->getName() << " " << atom2->getName() << std::endl;
+				}
+				charge += pcharge;
+			}
+		}
 
 		update();
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.26 2006/02/21 16:29:59 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.27 2006/02/21 21:07:03 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -523,14 +523,6 @@ namespace BALL
 	{
 		public:
 
-		struct ESEntry
-		{
-			ESEntry();
-			double qi;
-			double qj;
-			bool   calculated;
-		};
-
 		BALL_CREATE(MMFF94ESParameters)
 
 		///	Default constructor.
@@ -547,8 +539,11 @@ namespace BALL
 		virtual void clear()
 			throw();
 
-		///
-		bool getParameters(Position at1, Position at2, Position bt, double& qi, double& qj) const;
+		/** Get the parital charge increment for the two atom types and the bond type.
+		 		The increment is for the atom with atom type at1.
+				99 is return if no increment could be calculated.
+		*/
+		double getPartialCharge(Position at1, Position at2, Position bt) const;
 		
 		///
 		bool readEmpericalParameters(const String& filename)
@@ -560,8 +555,8 @@ namespace BALL
 		Position getIndex_(Position at1, Position at2, Position bt) const;
 
 		/// parameters 
-		vector<ESEntry> parameters_;
-		HashMap<Position, pair<double, double> > emperical_parameters_;
+		vector<double> parameters_;
+		vector<pair<double, double> > emperical_parameters_;
 	};
 
 

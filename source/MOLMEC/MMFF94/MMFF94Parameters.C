@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.42 2006/02/21 16:29:54 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.43 2006/02/21 21:06:51 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -1111,13 +1111,6 @@ bool MMFF94VDWParameters::getParameters(Position at1, Position at2, double& rij,
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 
-MMFF94ESParameters::ESEntry::ESEntry()
-	: qi(0),
-		qj(0),
-		calculated(0)
-{
-}
-
 MMFF94ESParameters::MMFF94ESParameters()
 	: MMFF94ParametersBase()
 {
@@ -1149,22 +1142,21 @@ bool MMFF94ESParameters::setup_(const vector<vector<String> >& lines)
 	parameters_.clear();
 	parameters_.resize(MMFF94_number_atom_types * MMFF94_number_atom_types * 2);
 
+	for (Position p = 0; p < MMFF94_number_atom_types * MMFF94_number_atom_types * 2; p++)
+	{
+		parameters_[p] = 99;
+	}
+
 	try
 	{
 		for (Position p = 0; p < lines.size(); p++)
 		{
 			const vector<String>& fields = lines[p];
 
-			Position btype = fields[0].toUnsignedInt();
-			Position at1 = fields[1].toUnsignedInt();
-			Position at2 = fields[2].toUnsignedInt();
-			Position index = at1 * at2 * btype;
-			parameters_[index] = ESEntry();
-			ESEntry& e = parameters_[index];
-
-			e.qj = fields[3].toDouble();
-			e.qi = -fields[3].toDouble();
-			e.calculated = true;
+			const Position btype = fields[0].toUnsignedInt();
+			const Position at1 = fields[1].toUnsignedInt();
+			const Position at2 = fields[2].toUnsignedInt();
+			parameters_[getIndex_(at1, at2, btype)] = fields[3].toDouble();
 		}
 	}
 	catch(...)
@@ -1177,13 +1169,82 @@ bool MMFF94ESParameters::setup_(const vector<vector<String> >& lines)
 
 Position MMFF94ESParameters::getIndex_(Position at1, Position at2, Position bt) const
 {
+	if (at1 > at2)
+	{
+		Position tmp = at1;
+		at1 = at2;
+		at2 = tmp;
+	}
+
 	return at1 * at2 + bt * MMFF94_number_atom_types * MMFF94_number_atom_types;
 }
 
-bool MMFF94ESParameters::getParameters(Position at1, Position at2, Position bt, double& qi, double& qj) const
+double MMFF94ESParameters::getPartialCharge(Position at1, Position at2, Position bt) const
 {
 	const Position index = getIndex_(at1, at2, bt);
+
+	if (index > parameters_.size()) return 99;
+
+	double r;
+
+	if (at1 > at2)
+	{
+		r = -parameters_[index];
+	}
+	else
+	{
+		r = parameters_[index];
+	}
+
+	if (r == -99) r = 99;
+
+	return r;
 }
 
+bool MMFF94ESParameters::readEmpericalParameters(const String& filename)
+	throw(Exception::FileNotFound)
+{
+	emperical_parameters_.resize(MMFF94_number_atom_types);
+
+	for (Position p = 0; p < MMFF94_number_atom_types; p++)
+	{
+		emperical_parameters_[p].first = 99;
+	}
+
+	LineBasedFile infile(filename);
+	vector<String> fields;
+
+	try
+	{
+		while (infile.readLine())
+		{
+			// comments
+			if (infile.getLine().hasPrefix("*") || infile.getLine().hasPrefix("$")) 
+			{
+				continue;
+			}
+			
+			if (infile.getLine().split(fields) < 4)
+			{
+				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+										<< filename << " Not 4 fields in one line " 
+										<< infile.getLine() << std::endl;
+				return false;
+			}
+
+			const Position t = fields[0].toUnsignedInt();
+			const double pb = fields[1].toDouble();
+			const double fc = fields[2].toDouble();
+			emperical_parameters_[t].first = pb;
+			emperical_parameters_[t].second = fc;
+		}
+	}
+	catch(...)
+	{
+		return false;
+	}
+
+	return true;
+}
 
 } // namespace BALL

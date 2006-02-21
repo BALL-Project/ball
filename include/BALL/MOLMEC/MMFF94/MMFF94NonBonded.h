@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.h,v 1.1.2.7 2006/02/21 16:02:36 amoll Exp $
+// $Id: MMFF94NonBonded.h,v 1.1.2.8 2006/02/21 21:07:02 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_NONBONDED_H
@@ -138,7 +138,9 @@ namespace BALL
 		vector<NonBondedPairData> 						non_bonded_data_;
     MolmecSupport::PairListAlgorithmType  algorithm_type_;
 		double 																cut_off_;
-		MMFF94VDWParameters 									parameters_;
+		MMFF94VDWParameters 									vdw_parameters_;
+		MMFF94ESParameters 										es_parameters_;
+		HashMap<Atom*, double>								charge_map_;
 	};
 } // namespace BALL
 
