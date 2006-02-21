@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.22 2003/08/26 09:18:26 oliver Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.23 2006/02/21 16:07:47 anker Exp $
 //
 
 #include <BALL/SYSTEM/path.h>
@@ -615,7 +615,7 @@ namespace BALL
 			vector< pair<Vector3, Surface> >& surface_map, 
 			const char* surface_file) throw()
 	{
-		// HIER WIRD NICHTS, ABER AUCH GAR NICHTS GEPRšFT!!!
+		// HIER WIRD NICHTS, ABER AUCH GAR NICHTS GEPRÜFT!!!
 		surface_map.clear();
 
 		String tag;
