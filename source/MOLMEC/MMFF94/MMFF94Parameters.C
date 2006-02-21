@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.41 2006/02/20 18:36:24 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.42 2006/02/21 16:29:54 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -1036,7 +1036,6 @@ double MMFF94VDWParameters::getR(Position t) const
 
 	const double r = entry.ai * pow(entry.alpha_i, 0.25);
 	rs_[t] = r;
-Log.error() << "#~~#   6 "  << t << " " << rs_[t]           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	return r;
 }
 
@@ -1108,5 +1107,83 @@ bool MMFF94VDWParameters::getParameters(Position at1, Position at2, double& rij,
 
 	return true;
 }
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+MMFF94ESParameters::ESEntry::ESEntry()
+	: qi(0),
+		qj(0),
+		calculated(0)
+{
+}
+
+MMFF94ESParameters::MMFF94ESParameters()
+	: MMFF94ParametersBase()
+{
+	number_expected_fields_ = 4;
+}
+
+MMFF94ESParameters::~MMFF94ESParameters()
+{
+	clear();
+}
+
+void MMFF94ESParameters::clear()
+	throw()
+{
+	parameters_.clear();
+	emperical_parameters_.clear();
+}
+
+const MMFF94ESParameters& MMFF94ESParameters::operator = (const MMFF94ESParameters& param)
+	throw()
+{
+	parameters_ = param.parameters_;
+	emperical_parameters_ = param.emperical_parameters_;
+	return *this;
+}
+
+bool MMFF94ESParameters::setup_(const vector<vector<String> >& lines)
+{
+	parameters_.clear();
+	parameters_.resize(MMFF94_number_atom_types * MMFF94_number_atom_types * 2);
+
+	try
+	{
+		for (Position p = 0; p < lines.size(); p++)
+		{
+			const vector<String>& fields = lines[p];
+
+			Position btype = fields[0].toUnsignedInt();
+			Position at1 = fields[1].toUnsignedInt();
+			Position at2 = fields[2].toUnsignedInt();
+			Position index = at1 * at2 * btype;
+			parameters_[index] = ESEntry();
+			ESEntry& e = parameters_[index];
+
+			e.qj = fields[3].toDouble();
+			e.qi = -fields[3].toDouble();
+			e.calculated = true;
+		}
+	}
+	catch(...)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+Position MMFF94ESParameters::getIndex_(Position at1, Position at2, Position bt) const
+{
+	return at1 * at2 + bt * MMFF94_number_atom_types * MMFF94_number_atom_types;
+}
+
+bool MMFF94ESParameters::getParameters(Position at1, Position at2, Position bt, double& qi, double& qj) const
+{
+	const Position index = getIndex_(at1, at2, bt);
+}
+
 
 } // namespace BALL

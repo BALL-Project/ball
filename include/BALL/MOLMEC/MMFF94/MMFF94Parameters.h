@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.25 2006/02/19 22:38:21 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.26 2006/02/21 16:29:59 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -512,6 +512,57 @@ namespace BALL
 	};
 
 
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+	/**	MMFF94 parameters for partial charges for electrostatics (see MMFFCHG.PAR MMFFPBCI.PAR)
+      \ingroup  MMFF94
+	*/
+	class BALL_EXPORT MMFF94ESParameters
+		: public MMFF94ParametersBase
+	{
+		public:
+
+		struct ESEntry
+		{
+			ESEntry();
+			double qi;
+			double qj;
+			bool   calculated;
+		};
+
+		BALL_CREATE(MMFF94ESParameters)
+
+		///	Default constructor.
+		MMFF94ESParameters();
+
+		///	Destructor.
+		virtual ~MMFF94ESParameters();
+
+		/// Assignment operator
+		const MMFF94ESParameters& operator = (const MMFF94ESParameters& param)
+			throw();
+
+		///	Clear method
+		virtual void clear()
+			throw();
+
+		///
+		bool getParameters(Position at1, Position at2, Position bt, double& qi, double& qj) const;
+		
+		///
+		bool readEmpericalParameters(const String& filename)
+			throw(Exception::FileNotFound);
+
+		protected:
+
+		virtual bool setup_(const vector<vector<String> >&);
+		Position getIndex_(Position at1, Position at2, Position bt) const;
+
+		/// parameters 
+		vector<ESEntry> parameters_;
+		HashMap<Position, pair<double, double> > emperical_parameters_;
+	};
 
 
 } // namespace BALL

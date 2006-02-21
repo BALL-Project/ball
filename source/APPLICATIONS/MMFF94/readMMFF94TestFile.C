@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.42 2006/02/20 00:23:40 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.43 2006/02/21 16:30:03 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -744,9 +744,6 @@ bool testNonBonded(MMFF94& mmff, const String& filename, bool compare)
 	MMFF94NonBonded* comp= (MMFF94NonBonded*) mmff.getComponent("MMFF94 NonBonded");
 
  	const ForceField::PairVector& pv = comp->getAtomPairs();
-	const vector<double>& my_eijs = comp->getEIJs();
-	const vector<double>& my_rijs = comp->getRIJs();
-	const vector<double>& my_vdw = comp->getVDWEnergies();
 
 	for (Position as = 0; as < atoms1.size(); as++)
 	{
@@ -771,13 +768,15 @@ bool testNonBonded(MMFF94& mmff, const String& filename, bool compare)
 			continue;
 		}
 
-		if (!isOk(my_eijs[poss], eps[as]) ||
-				!isOk(my_rijs[poss], rij[as]))
-//   				!isOk(my_vdw[poss], e_vdw[as]))
+ 		const MMFF94NonBonded::NonBondedPairData& data = comp->getNonBondedData()[poss];
+
+		if (!isOk(data.eij, eps[as]) ||
+				!isOk(data.rij, rij[as]) ||
+				!isOk(data.VDW_energy, e_vdw[as]))
 		{
 			Log.error() << "Problem NB:   " << filename << " "
 									<< atoms1[as] << " " << atoms2[as] << std::endl
-									<< "got e " << my_eijs[poss] << " r " << my_rijs[poss] << "   " << my_vdw[poss] << std::endl
+									<< "got e " << data.eij << " r " << data.rij << "   " << data.VDW_energy << std::endl
 									<< "was e " << eps[as] << " r " << rij[as] << "   " << e_vdw[as] << std::endl;
 		}
 	}
