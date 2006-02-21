@@ -1,7 +1,7 @@
-// $Id: slickEnergy.h,v 1.1 2006/02/09 16:13:36 anker Exp $
+// $Id: slickEnergy.h,v 1.2 2006/02/21 16:21:28 anker Exp $
 
-#ifndef BALL_SCORING_FUNCTIONS_SLICK_H
-#define BALL_SCORING_FUNCTIONS_SLICK_H
+#ifndef BALL_SCORING_FUNCTIONS_SLICKENERGY_H
+#define BALL_SCORING_FUNCTIONS_SLICKENERGY_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -21,10 +21,10 @@
 
 namespace BALL 
 {
-	/** SLICK scoring function
-			{\bf Definition:} \URL{BALL/SCORING/FUNCTIONS/slick.h}
+	/** SLICKEnergy scoring function
+			{\bf Definition:} \URL{BALL/SCORING/FUNCTIONS/slickEnergy.h}
 	*/
-	class SLICK
+	class SLICKEnergy
 		: public ScoringFunction
 	{
 
@@ -44,11 +44,15 @@ namespace BALL
 
 			/**
 			*/
-			static const char* VDW;
+			static const char* CHPI;
 
 			/**
 			*/
-			static const char* CHPI;
+			static const char* HB;
+
+			/**
+			*/
+			static const char* VDW;
 
 			/**
 			*/
@@ -61,7 +65,7 @@ namespace BALL
 		};
 
 
-		/** Default values for SLICK options.
+		/** Default values for SLICKEnergy options.
 		*/
 		struct Default
 		{
@@ -71,11 +75,15 @@ namespace BALL
 
 			/**
 			*/
-			static const float VDW;
+			static const float CHPI;
 
 			/**
 			*/
-			static const float CHPI;
+			static const float HB;
+
+			/**
+			*/
+			static const float VDW;
 
 			/**
 			*/
@@ -94,33 +102,33 @@ namespace BALL
 		*/
 		//@{
 
-		BALL_CREATE(SLICK)
+		BALL_CREATE(SLICKEnergy)
 
 		/**	Default constructor.
 		*/
-		SLICK()
+		SLICKEnergy()
 			throw();
 
-		/** Construct a SLICK with a system and pointers to protein and
+		/** Construct a SLICKEnergy with a system and pointers to protein and
 				ligand
 		*/
-		SLICK(System& system, Molecule& protein, Molecule& ligand)
+		SLICKEnergy(System& system, Molecule& protein, Molecule& ligand)
 			throw();
 
-		/** Construct a SLICK with a system and options.
+		/** Construct a SLICKEnergy with a system and options.
 		*/
-		SLICK(System& system, Molecule& protein, Molecule& ligand,
+		SLICKEnergy(System& system, Molecule& protein, Molecule& ligand,
 				const Options& options)
 			throw();
 
 		/**	Copy constructor
 		*/
-		SLICK(const SLICK& slick)
+		SLICKEnergy(const SLICKEnergy& slick)
 			throw();
 
 		/** Destructor
 		*/
-		virtual ~SLICK()
+		virtual ~SLICKEnergy()
 			throw();
 
 		//@}
@@ -130,7 +138,7 @@ namespace BALL
 
 		/**	Assignment operator.
 		*/
-		const SLICK& operator = (const SLICK& slick)
+		const SLICKEnergy& operator = (const SLICKEnergy& slick)
 			throw();
 
 		/** Clear method.
@@ -149,18 +157,23 @@ namespace BALL
 			throw();
 
 		//@}
-		/**	@name Accessors specific to the SLICK scoring function
+		/**	@name Accessors specific to the SLICKEnergy scoring function
 		*/
 		//@{
 
 		/**
 		*/
-		double getVDWScore() const
+		double getCHPIScore() const
 			throw();
 
 		/**
 		*/
-		double getCHPIScore() const
+		double getHydrogenBondScore() const
+			throw();
+
+		/**
+		*/
+		double getVDWScore() const
 			throw();
 
 		/**
@@ -186,4 +199,4 @@ namespace BALL
 
 } // namespace BALL
 
-#endif // BALL_SCORING_FUNCTIONS_SLICK_H
+#endif // BALL_SCORING_FUNCTIONS_SLICKENERGY_H
