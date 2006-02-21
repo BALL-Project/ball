@@ -1,5 +1,5 @@
 # MOLMEC/Makefile
-# $Id: Makefile,v 1.1 2005/11/21 19:27:07 anker Exp $
+# $Id: Makefile,v 1.2 2006/02/21 16:25:49 anker Exp $
 #
 include ../config.mak
 
@@ -10,7 +10,8 @@ THISLIB=$(LIBNAME)
 DIRS=\
 	COMMON\
 	COMPONENTS\
-	FUNCTIONS
+	FUNCTIONS\
+	TYPES
 
 default:	dirs
 
