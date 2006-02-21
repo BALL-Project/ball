@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaals.C,v 1.1 2005/11/21 19:27:12 anker Exp $
+// $Id: vanDerWaals.C,v 1.2 2006/02/21 16:15:12 anker Exp $
 
 
 #include <BALL/common.h>
@@ -26,8 +26,22 @@ namespace BALL
 {
 
 
+	const String VanDerWaals::Option::VDW_METHOD = "van_der_Waals_method";
+	const String VanDerWaals::Option::VDW_CUT_ON = "van_der_Waals_cut_on";
+	const String VanDerWaals::Option::VDW_CUT_OFF = "van_der_Waals_cut_off";
+	const String VanDerWaals::Option::VDW_SOFTENING_LIMIT 
+		= "van_der_Waals_softening_limit";
 	const String VanDerWaals::Option::LENNARD_JONES_FILE = "lennard_jones_file";
-	const String VanDerWaals::Default::LENNARD_JONES_FILE = "Amber/amber94gly.ini";
+
+
+	const Size VanDerWaals::Default::VDW_METHOD 
+		= CALCULATION__FULL_LJ_POTENTIAL;
+	const float VanDerWaals::Default::VDW_CUT_ON = 13.0f;
+	const float VanDerWaals::Default::VDW_CUT_OFF = 15.0f;
+	// This option is only in effect if the method supports it
+	const float VanDerWaals::Default::VDW_SOFTENING_LIMIT = 5.0f;
+	const String VanDerWaals::Default::LENNARD_JONES_FILE 
+		= "Amber/amber94gly.ini";
 
 
 	VanDerWaals::VanDerWaals()
@@ -103,8 +117,22 @@ namespace BALL
 
 		Options& options = getScoringFunction()->options;
 
-		String lj_file_name = options.setDefault(VanDerWaals::Option::LENNARD_JONES_FILE,
-				VanDerWaals::Default::LENNARD_JONES_FILE);
+		String lj_file_name 
+			= options.setDefault(VanDerWaals::Option::LENNARD_JONES_FILE,
+					VanDerWaals::Default::LENNARD_JONES_FILE);
+		calculation_method_
+			= options.setDefaultInteger(VanDerWaals::Option::VDW_METHOD,
+					VanDerWaals::Default::VDW_METHOD);
+		cut_off_vdw_
+			= options.setDefaultReal(VanDerWaals::Option::VDW_CUT_OFF,
+					VanDerWaals::Default::VDW_CUT_OFF);
+		cut_on_vdw_
+			= options.setDefaultReal(VanDerWaals::Option::VDW_CUT_ON,
+					VanDerWaals::Default::VDW_CUT_ON);
+		scaling_vdw_1_4_ = 2.0;
+		softening_limit_
+			= options.setDefaultReal(VanDerWaals::Option::VDW_SOFTENING_LIMIT,
+					VanDerWaals::Default::VDW_SOFTENING_LIMIT);
 
 		Path path;
 		String tmp = path.find(lj_file_name);
@@ -326,21 +354,23 @@ type_atom2);
 	}
 
 
-	// This is the softened version of the Lennard-Jones potential.
+	// This is the standard version of the Lennard-Jones potential.
 	//
 	// BALL_TPL_ARG_INLINE float vdwSixTwelve(float inverse_square_distance,
 	float vdwSixTwelve(float inverse_square_distance,
-			float A, float B)
+			float A, float B, float /* limit */)
 	{
 		register float inv_dist_6(inverse_square_distance 
 				* inverse_square_distance * inverse_square_distance);
 
 #ifdef DEBUG
+		/*
 		std::cout << "S: ir6 = " << inv_dist_6 
 			<< ", dist = " << sqrt(1.0f/inverse_square_distance)
 			<< ", lim = " << pow(A/B, 1.0f/6.0f)
 			<< ", A = " << A << ", B = " << B
 			<< std::endl;
+			*/
 		float e = (inv_dist_6 * (inv_dist_6 * A - B));
 		std::cout << "e = " << e << std::endl;
 		if (fabs(e) > 100.0f)
@@ -350,19 +380,46 @@ type_atom2);
 
 #endif
 
-		if (sqrt(1.0f/inverse_square_distance) >= pow(A/B, 1.0f/6.0f))
+		return (inv_dist_6 * (inv_dist_6 * A - B)); 
+	}
+
+
+	// This is the simple softened version of the Lennard-Jones potential.
+	// This function will simply return a constant (defined by
+	// softening_limit) if the energy should rise above that constant value.
+	//
+	// BALL_TPL_ARG_INLINE float vdwSixTwelve(float inverse_square_distance,
+	BALL_TPL_ARG_INLINE float vdwSixTwelveSoftSimple(float inverse_square_distance,
+			float A, float B, float limit)
+	{
+		register float inv_dist_6(inverse_square_distance 
+				* inverse_square_distance * inverse_square_distance);
+
+#ifdef DEBUG
+		/*
+		std::cout << "S: ir6 = " << inv_dist_6 
+			<< ", dist = " << sqrt(1.0f/inverse_square_distance)
+			<< ", lim = " << pow(A/B, 1.0f/6.0f)
+			<< ", A = " << A << ", B = " << B
+			<< std::endl;
+		*/
+		float e = (inv_dist_6 * (inv_dist_6 * A - B));
+		std::cout << "e = " << e << std::endl;
+		if (fabs(e) > 100.0f)
 		{
-			return (inv_dist_6 * (inv_dist_6 * A - B)); 
+			std::cout << "ACHTUNG!" << std::endl;
 		}
-		else
-		{
-			return(0.0f);
-		}
+
+#endif
+
+		float energy = inv_dist_6 * (inv_dist_6 * A - B); 
+		if (energy > limit) energy = limit;
+		return (energy);
 	}
 
 
   BALL_TPL_ARG_INLINE float vdwTenTwelve(float inverse_square_distance,
-			float A, float B)
+			float A, float B, float /* limit */)
 	{
 		register float inv_dist_10 = inverse_square_distance *
 			inverse_square_distance;
@@ -371,14 +428,28 @@ type_atom2);
 	}
 
 
-	typedef float (*VdwEnergyFunction) (float square_dist, float A, float B);
+  BALL_TPL_ARG_INLINE float vdwTenTwelveSoftSimple(float inverse_square_distance,
+			float A, float B, float limit)
+	{
+		register float inv_dist_10 = inverse_square_distance *
+			inverse_square_distance;
+		inv_dist_10 *= inv_dist_10 * inverse_square_distance;
+		float energy = inv_dist_10 * (inverse_square_distance * A - B);
+		if (energy > limit) energy = limit;
+		return(energy);
+	}
+
+
+	typedef float (*VdwEnergyFunction) (float square_dist, float A, float B,
+			float limit);
 	typedef float (*SwitchingFunction) (double square_distance, 
 			const SwitchingCutOnOff& cutoffs);
 
 	template <VdwEnergyFunction VdwEnergy, SwitchingFunction Switch>
 	BALL_INLINE void AmberVDWEnergy
 		(LennardJones::Data* ptr, LennardJones::Data* end_ptr, 
-		double& vdw_energy, const SwitchingCutOnOff& switching_vdw)
+		double& vdw_energy, const SwitchingCutOnOff& switching_vdw,
+		float softening_limit)
 	{
 		// iterate over all pairs
 		for (; ptr != end_ptr; ++ptr)
@@ -388,7 +459,8 @@ type_atom2);
 			double inverse_square_distance(1.0 / square_distance);
 
 			vdw_energy += VdwEnergy(inverse_square_distance, ptr->values.A,
-					ptr->values.B) * Switch(square_distance, switching_vdw);
+					ptr->values.B, softening_limit) 
+				* Switch(square_distance, switching_vdw);
 		}
 	}
 
@@ -432,12 +504,8 @@ type_atom2);
 		// Size no_unassigned_atoms = createNonBondedList_(atom_pair_vector);
 		createNonBondedList_(atom_pair_vector);
 
-		double cut_off_vdw = 15.0;
-		double cut_on_vdw = 13.0;
-		double scaling_vdw_1_4 = 2.0;
-
-		double cut_off_vdw_2 = SQR(cut_off_vdw);
-		double cut_on_vdw_2 = SQR(cut_on_vdw);
+		double cut_off_vdw_2 = SQR(cut_off_vdw_);
+		double cut_on_vdw_2 = SQR(cut_on_vdw_);
 		double inverse_distance_off_on_vdw_3 = cut_off_vdw_2 - cut_on_vdw_2;
 		inverse_distance_off_on_vdw_3 *= SQR(inverse_distance_off_on_vdw_3);
 
@@ -450,24 +518,50 @@ type_atom2);
 
 		// ??? Disabled switching for the moment, because there seems to some
 		// error. Using s/noSwitch/cubicSwitch/ will turn it on again.
+		if (calculation_method_ == CALCULATION__FULL_LJ_POTENTIAL)
+		{
 		AmberVDWEnergy<vdwSixTwelve, noSwitch> 
 			(&non_bonded_[0], 
 			 &non_bonded_[number_of_1_4_],
-			 vdw_energy_1_4, cutoffs_vdw);
+			 vdw_energy_1_4, cutoffs_vdw, softening_limit_);
 		AmberVDWEnergy<vdwSixTwelve, noSwitch>
 			(&non_bonded_[number_of_1_4_], 
 			 &non_bonded_[non_bonded_.size() - number_of_h_bonds_],
-			 vdw_energy, cutoffs_vdw);
+			 vdw_energy, cutoffs_vdw, softening_limit_);
 		AmberVDWEnergy<vdwTenTwelve, noSwitch>
 			(&non_bonded_[non_bonded_.size() - number_of_h_bonds_],
 			 &non_bonded_[non_bonded_.size()],
-			 hbond_energy, cutoffs_vdw);
+			 hbond_energy, cutoffs_vdw, softening_limit_);
+		}
+		else 
+		{
+			if (calculation_method_ == CALCULATION__SOFTENED_LJ_POTENTIAL_SIMPLE)
+			{
+				AmberVDWEnergy<vdwSixTwelveSoftSimple, noSwitch> 
+					(&non_bonded_[0], 
+					 &non_bonded_[number_of_1_4_],
+					 vdw_energy_1_4, cutoffs_vdw, softening_limit_);
+				AmberVDWEnergy<vdwSixTwelveSoftSimple, noSwitch>
+					(&non_bonded_[number_of_1_4_], 
+					 &non_bonded_[non_bonded_.size() - number_of_h_bonds_],
+					 vdw_energy, cutoffs_vdw, softening_limit_);
+				AmberVDWEnergy<vdwTenTwelveSoftSimple, noSwitch>
+					(&non_bonded_[non_bonded_.size() - number_of_h_bonds_],
+					 &non_bonded_[non_bonded_.size()],
+					 hbond_energy, cutoffs_vdw, softening_limit_);
+			}
+			else
+			{
+				Log.error() << "Unknown calculation method for VDW model" 
+					<< std::endl;
+			}
+		}
 		
-		double energy = scaling_vdw_1_4 * vdw_energy_1_4 + vdw_energy 
+		double energy = scaling_vdw_1_4_ * vdw_energy_1_4 + vdw_energy 
 			+ hbond_energy;
 
 #ifdef DEBUG
-		std::cout << "S: " << scaling_vdw_1_4 * vdw_energy_1_4 << " + " 
+		std::cout << "S: " << scaling_vdw_1_4_ * vdw_energy_1_4 << " + " 
 			<< vdw_energy << " + " << hbond_energy << " = " << energy << std::endl;
 #endif
 
