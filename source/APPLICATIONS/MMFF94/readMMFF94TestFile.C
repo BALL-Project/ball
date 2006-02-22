@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.43 2006/02/21 16:30:03 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.44 2006/02/22 14:08:48 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -79,7 +79,7 @@ System* readTestFile(String filename)
 
 		Position pos = name_to_pos[ait->getName()];
 		ait->setType(types[pos]);
-		ait->setCharge(charges[pos]);
+		ait->setCharge(fcharges[pos]);
 	}
 
 	return system;
