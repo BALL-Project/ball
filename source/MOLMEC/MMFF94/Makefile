@@ -10,6 +10,7 @@ CPP_SOURCES=\
 	MMFF94Torsion.C\
 	MMFF94Parameters.C\
 	MMFF94OutOfPlaneBend.C\
+	MMFF94Processors.C\
 	MMFF94NonBonded.C
 
 include ../../common.mak

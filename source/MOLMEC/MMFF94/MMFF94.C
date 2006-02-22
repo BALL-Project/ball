@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.28 2006/02/17 02:05:56 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.29 2006/02/22 17:52:00 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -15,6 +15,7 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/QSAR/aromaticityProcessor.h>
 
@@ -156,6 +157,10 @@ namespace BALL
 
 		collectBonds_();
 		collectRings_();
+
+		MMFF94ChargeProcessor cp;
+		cp.setAromaticRings(aromatic_rings_);
+		system_->apply(cp);
 
 		if (!parameters_initialized_)
 		{

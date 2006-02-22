@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.44 2006/02/22 14:08:48 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.45 2006/02/22 17:51:45 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -16,6 +16,7 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -79,7 +80,7 @@ System* readTestFile(String filename)
 
 		Position pos = name_to_pos[ait->getName()];
 		ait->setType(types[pos]);
-		ait->setCharge(fcharges[pos]);
+		ait->setRadius(fcharges[pos]);
 	}
 
 	return system;
@@ -796,6 +797,48 @@ bool testNonBonded(MMFF94& mmff, const String& filename, bool compare)
 	return true;
 }
 
+void testPCharge(System& system, String filename)
+{
+	AtomIterator ait = system.beginAtom();
+	for (; +ait; ++ait)
+	{
+		float f = ait->getCharge();
+		if (f != ait->getRadius())
+		{
+			Log.error() << "P! " << filename << " " << ait->getName() << " " << f << " " << ait->getRadius()<< std::endl;
+		}
+	}
+
+		/*
+		if (f == 0.0) continue;
+
+//   		if (ait->getElement().getSymbol() != "N") continue;
+
+		bool found = false;
+		AtomBondIterator bit = ait->beginBond();
+		for (; +bit; ++bit)
+		{
+			if (bit->hasProperty("MMFF94SBMB"))
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if (!found) 
+		{
+			Log.error() << "Problem " << filename << " " << ait->getName() << std::endl;
+		}
+		else
+		{
+Log.error() << "#~~#   4 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+		}
+	}
+	*/
+}
+
+
+
 int runtests(const vector<String>& filenames)
 {
 	MMFF94 mmff;
@@ -882,7 +925,9 @@ int runtests(const vector<String>& filenames)
 //    		result &= testStretchBend(mmff, filenames[pos], true);
 //    		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
 //    		result &= testPlanes(mmff, filenames[pos], true);
- 		result &= testNonBonded(mmff, filenames[pos], true);
+//    		result &= testNonBonded(mmff, filenames[pos], true);
+
+		testPCharge(*system, filenames[pos]);
 
 		if (result) ok++;
 		else if (!wrong_rings) not_ok.push_back(filenames[pos]);
