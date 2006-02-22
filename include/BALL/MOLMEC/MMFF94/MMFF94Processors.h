@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.2.1 2006/02/22 17:52:12 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.2.2 2006/02/22 23:09:38 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -20,6 +20,8 @@
 namespace BALL 
 {
 	using std::vector;
+
+	class MMFF94ESParameters;
 
 	/**	Assign MMFF94 Charges
       \ingroup  MMFF94
@@ -47,9 +49,9 @@ namespace BALL
 		///
 		virtual void clear()
 			throw();
-
+		
 		///
-		virtual bool finish();
+		virtual bool start();
 
 		///
 		virtual Processor::Result operator () (Atom& atom);
@@ -61,13 +63,12 @@ namespace BALL
 		const HashSet<Atom*>& getUnassigedAtoms() { return unassigned_atoms_;}
 
 		///
-		void setAromaticRings(const vector<HashSet<Atom*> >& rings) { aromatic_rings_ = rings;}
+		void setESParameters(const MMFF94ESParameters& es) { es_parameters_ = &es; }
 
 		protected:
 
-		HashSet<Atom*> unassigned_atoms_;
-		vector<Atom*>  atoms_;
-		vector<HashSet<Atom*> > 		aromatic_rings_;
+		HashSet<Atom*> 							unassigned_atoms_;
+		const MMFF94ESParameters* 	es_parameters_;
 	};
 
 } // namespace BALL

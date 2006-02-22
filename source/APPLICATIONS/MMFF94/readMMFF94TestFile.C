@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.45 2006/02/22 17:51:45 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.46 2006/02/22 23:09:36 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -80,6 +80,7 @@ System* readTestFile(String filename)
 
 		Position pos = name_to_pos[ait->getName()];
 		ait->setType(types[pos]);
+		ait->setCharge(fcharges[pos]);
 		ait->setRadius(fcharges[pos]);
 	}
 
@@ -925,9 +926,9 @@ int runtests(const vector<String>& filenames)
 //    		result &= testStretchBend(mmff, filenames[pos], true);
 //    		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
 //    		result &= testPlanes(mmff, filenames[pos], true);
-//    		result &= testNonBonded(mmff, filenames[pos], true);
+ 		result &= testNonBonded(mmff, filenames[pos], true);
 
-		testPCharge(*system, filenames[pos]);
+//   		testPCharge(*system, filenames[pos]);
 
 		if (result) ok++;
 		else if (!wrong_rings) not_ok.push_back(filenames[pos]);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.2.11 2006/02/21 21:06:51 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.2.12 2006/02/22 23:09:28 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -192,6 +192,8 @@ namespace BALL
 			filename = path.find("MMFF94/MMFFPBCI.PAR");
 			if (filename == "") throw Exception::FileNotFound(__FILE__, __LINE__, "MMFFPBCI.PAR");
 			es_parameters_.readEmpericalParameters(filename);
+
+			charge_processor_.setESParameters(es_parameters_);
 		}
 
 		// Determine the most efficient way to calculate all non bonded atom pairs
@@ -199,28 +201,7 @@ namespace BALL
 
 		charge_map_.clear();
 
-		vector<Atom*>::const_iterator	ait = getForceField()->getAtoms().begin();
-		for (; ait != getForceField()->getAtoms().begin(); ++ait)
-		{
-			Atom* const atom1 = *ait;
-			double charge = atom1->getCharge();
-
-			AtomBondIterator bit = atom1->beginBond();
-			for (; +bit; ++bit)
-			{
-				const Atom* const atom2 = bit->getPartner(*atom1);
-				Position bt = bit->hasProperty("MMFF94SBMB"); // ????
-				const double pcharge = es_parameters_.getPartialCharge(atom1->getType(), atom2->getType(), bt);
-				if (pcharge == -99) 
-				{
-					getForceField()->getUnassignedAtoms().insert(atom1);
-					getForceField()->getUnassignedAtoms().insert(atom2);
-					getForceField()->error() << "MMFF94 NonBonded: Could not assign partial charges for " 
-																	 << atom1->getName() << " " << atom2->getName() << std::endl;
-				}
-				charge += pcharge;
-			}
-		}
+		getForceField()->getSystem()->apply(charge_processor_);
 
 		update();
 

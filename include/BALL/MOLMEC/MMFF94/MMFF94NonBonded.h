@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.h,v 1.1.2.8 2006/02/21 21:07:02 amoll Exp $
+// $Id: MMFF94NonBonded.h,v 1.1.2.9 2006/02/22 23:09:37 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_NONBONDED_H
@@ -17,6 +17,10 @@
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94PARAMETERS_H
 #	include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
+#endif
+
+#ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
+# include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
 #endif
 
 namespace BALL 
@@ -141,6 +145,7 @@ namespace BALL
 		MMFF94VDWParameters 									vdw_parameters_;
 		MMFF94ESParameters 										es_parameters_;
 		HashMap<Atom*, double>								charge_map_;
+		MMFF94ChargeProcessor 								charge_processor_;
 	};
 } // namespace BALL
 
