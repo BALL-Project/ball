@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.27 2006/02/21 21:07:03 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.28 2006/02/23 23:29:38 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -30,6 +30,8 @@ namespace BALL
 	extern Size MMFF94_number_atom_types;
 	
 	class MMFF94AtomTypeEquivalences;
+
+#define MMFF94_INVALID_VALUE 99.0
 
 /////////////////////////////////////////////////////////////////////////////
 	/**	MMFF94 component parameters base class
@@ -549,14 +551,19 @@ namespace BALL
 		bool readEmpericalParameters(const String& filename)
 			throw(Exception::FileNotFound);
 
+		///
+		double getPhi(Index atom_type) const;
+
+		///
+		double getPBCI(Index atom_type) const;
+
 		protected:
 
 		virtual bool setup_(const vector<vector<String> >&);
 		Position getIndex_(Position at1, Position at2, Position bt) const;
 
 		/// parameters 
-		vector<double> parameters_;
-		vector<pair<double, double> > emperical_parameters_;
+		vector<double> parameters_, phis_, pbcis_;
 	};
 
 

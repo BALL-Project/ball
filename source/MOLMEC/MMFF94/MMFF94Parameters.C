@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.44 2006/02/23 15:42:27 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.45 2006/02/23 23:29:27 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -1126,14 +1126,16 @@ void MMFF94ESParameters::clear()
 	throw()
 {
 	parameters_.clear();
-	emperical_parameters_.clear();
+	phis_.clear();
+	pbcis_.clear();
 }
 
 const MMFF94ESParameters& MMFF94ESParameters::operator = (const MMFF94ESParameters& param)
 	throw()
 {
 	parameters_ = param.parameters_;
-	emperical_parameters_ = param.emperical_parameters_;
+	pbcis_ 			= param.pbcis_;
+	phis_ 			= param.phis_;
 	return *this;
 }
 
@@ -1144,7 +1146,7 @@ bool MMFF94ESParameters::setup_(const vector<vector<String> >& lines)
 
 	for (Position p = 0; p < MMFF94_number_atom_types * MMFF94_number_atom_types * 2; p++)
 	{
-		parameters_[p] = 99;
+		parameters_[p] = MMFF94_INVALID_VALUE;
 	}
 
 	try
@@ -1178,11 +1180,11 @@ double MMFF94ESParameters::getPartialCharge(Position at1, Position at2, Position
 
 	const Position index = getIndex_(at1, at2, bt);
 
-	if (index > parameters_.size()) return 99;
+	if (index > parameters_.size()) return MMFF94_INVALID_VALUE;
 
 	const double r = parameters_[index];
 
-	if (r == 99)
+	if (r == MMFF94_INVALID_VALUE)
 	{
 		Log.error() << "No ES parameters: "  << bt << " " << at1 << " " << at2 << std::endl;
 	}
@@ -1194,11 +1196,13 @@ double MMFF94ESParameters::getPartialCharge(Position at1, Position at2, Position
 bool MMFF94ESParameters::readEmpericalParameters(const String& filename)
 	throw(Exception::FileNotFound)
 {
-	emperical_parameters_.resize(MMFF94_number_atom_types);
+	phis_.resize(MMFF94_number_atom_types);
+	pbcis_.resize(MMFF94_number_atom_types);
 
 	for (Position p = 0; p < MMFF94_number_atom_types; p++)
 	{
-		emperical_parameters_[p].first = 99;
+		phis_[p] = MMFF94_INVALID_VALUE;
+		pbcis_[p] = MMFF94_INVALID_VALUE;
 	}
 
 	LineBasedFile infile(filename);
@@ -1222,11 +1226,9 @@ bool MMFF94ESParameters::readEmpericalParameters(const String& filename)
 				return false;
 			}
 
-			const Position t = fields[0].toUnsignedInt();
-			const double pb = fields[1].toDouble();
-			const double fc = fields[2].toDouble();
-			emperical_parameters_[t].first = pb;
-			emperical_parameters_[t].second = fc;
+			const Position t = fields[1].toUnsignedInt();
+			pbcis_[t] = fields[2].toDouble();
+			phis_[t] = fields[3].toDouble();
 		}
 	}
 	catch(...)
@@ -1236,5 +1238,20 @@ bool MMFF94ESParameters::readEmpericalParameters(const String& filename)
 
 	return true;
 }
+
+double MMFF94ESParameters::getPhi(Index atom_type) const
+{
+	if (atom_type < 1 || atom_type > (Index) MMFF94_number_atom_types - 1) return MMFF94_INVALID_VALUE;
+
+	return phis_[atom_type];
+}
+
+double MMFF94ESParameters::getPBCI(Index atom_type) const
+{
+	if (atom_type < 1 || atom_type > (Index) MMFF94_number_atom_types - 1) return MMFF94_INVALID_VALUE;
+
+	return pbcis_[atom_type];
+}
+
 
 } // namespace BALL

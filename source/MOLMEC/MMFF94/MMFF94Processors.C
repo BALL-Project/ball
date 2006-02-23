@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.4 2006/02/23 16:19:15 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.5 2006/02/23 23:29:27 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -57,10 +57,28 @@ bool MMFF94ChargeProcessor::finish()
 	for (Position p = 0; p < atoms_.size(); p++)
 	{
 		Atom& atom = *atoms_[p];
-		if (atom.getCharge() >= 0) continue;
 
-		float c = atom.getCharge() / 2.0;
-		atom.setCharge(c);
+		// ?????????
+		float charge = atom.getVelocity().x;
+		atom.setCharge(charge);
+		//////////////////
+
+		if (charge >= 0.0 || atom.countBonds() == 0) 
+		{
+			continue;
+		}
+
+		float phi = es_parameters_->getPhi(atom.getType());
+
+		if (phi == MMFF94_INVALID_VALUE) 
+		{
+			unassigned_atoms_.insert(&atom);
+			continue;
+		}
+
+		float c = charge * 0.5;
+		float d = charge - c;
+		atom.setCharge(d);
 
 		c /= (float) atom.countBonds();
 
@@ -92,7 +110,7 @@ bool MMFF94ChargeProcessor::finish()
 		Atom& atom = *atoms_[p];
 	
 		double charge = atom.getCharge();
-	Log.error() << "#~~#   7 "   << atom.getName() << " " << charge         ;
+//   	Log.error() << "#~~#   7 "   << atom.getName() << " " << charge         ;
 		AtomBondIterator bit = atom.beginBond();
 		Index at1 = atom.getType();
 		for (; +bit; ++bit)
@@ -105,18 +123,18 @@ bool MMFF94ChargeProcessor::finish()
 			if (at1 < at2) pcharge = - es_parameters_->getPartialCharge(at1, at2, bt);
 			else           pcharge =   es_parameters_->getPartialCharge(at2, at1, bt);
 
-			if (fabs(pcharge) == 99) 
+			if (fabs(pcharge) == MMFF94_INVALID_VALUE) 
 			{
 				unassigned_atoms_.insert(&atom);
 				unassigned_atoms_.insert((Atom*)atom2);
 				continue;
 			}
-	Log.error() << " " << atom2->getName() << " " << pcharge;
+//   	Log.error() << " " << atom2->getName() << " " << pcharge;
 			charge += pcharge;
 		}
 
 		atom.setCharge(charge);
-		Log.error() << "      :  "    << charge         << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+//   		Log.error() << "      :  "    << charge         << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	}
 	
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.47 2006/02/23 20:14:40 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.48 2006/02/23 23:29:16 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -80,8 +80,11 @@ System* readTestFile(String filename)
 
 		Position pos = name_to_pos[ait->getName()];
 		ait->setType(types[pos]);
-		ait->setCharge(fcharges[pos]);
-		ait->setRadius(fcharges[pos]);
+		Vector3 v;
+		v.x = fcharges[pos];
+		ait->setVelocity(v);
+//    		ait->setCharge(fcharges[pos]);
+		ait->setRadius(charges[pos]);
 	}
 
 	return system;
@@ -805,6 +808,20 @@ bool testNonBonded(MMFF94& mmff, const String& filename, bool compare)
 
 	e = results[11];
 
+	double x = 0;
+	for (Position p = 0; p < e_q.size(); p++)
+	{
+		x += e_q[p];
+	}
+
+	/*
+	if (!isOk(x, e))
+	{
+Log.error() << "#~~#   1 -------------------"  << x << " " << e           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+	}
+	*/
+		
+
 	if (!isOk(comp->getESEnergy(), e))
 	{
 		Log.error() << filename << " ES  " << comp->getESEnergy() << "   " << e << std::endl;
@@ -815,44 +832,21 @@ bool testNonBonded(MMFF94& mmff, const String& filename, bool compare)
 	return true;
 }
 
-void testPCharge(System& system, String filename)
+bool testCharge(System& system, String filename)
 {
+	bool ok = true;
 	AtomIterator ait = system.beginAtom();
 	for (; +ait; ++ait)
 	{
 		float f = ait->getCharge();
-		if (f != ait->getRadius())
+		if (!isOk(f,ait->getRadius()))
 		{
-			Log.error() << "P! " << filename << " " << ait->getName() << " " << f << " " << ait->getRadius()<< std::endl;
+			ok = false;
+			Log.error() << "C! " << filename << " " << ait->getName() << " " << f << " " << ait->getRadius()<< std::endl;
 		}
 	}
 
-		/*
-		if (f == 0.0) continue;
-
-//   		if (ait->getElement().getSymbol() != "N") continue;
-
-		bool found = false;
-		AtomBondIterator bit = ait->beginBond();
-		for (; +bit; ++bit)
-		{
-			if (bit->hasProperty("MMFF94SBMB"))
-			{
-				found = true;
-				break;
-			}
-		}
-
-		if (!found) 
-		{
-			Log.error() << "Problem " << filename << " " << ait->getName() << std::endl;
-		}
-		else
-		{
-Log.error() << "#~~#   4 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-		}
-	}
-	*/
+	return ok;
 }
 
 
@@ -945,7 +939,7 @@ int runtests(const vector<String>& filenames)
 //    		result &= testPlanes(mmff, filenames[pos], true);
  		result &= testNonBonded(mmff, filenames[pos], true);
 
-//   		testPCharge(*system, filenames[pos]);
+ 		result &= testCharge(*system, filenames[pos]);
 
 		if (result) ok++;
 		else if (!wrong_rings) not_ok.push_back(filenames[pos]);

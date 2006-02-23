@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.2.13 2006/02/23 15:42:27 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.2.14 2006/02/23 23:29:26 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -241,7 +241,12 @@ namespace BALL
 			double d = (atom_pair_vector_[p].first->getPosition() - 
 									atom_pair_vector_[p].second->getPosition()).getSquareLength();
 
-			if (Maths::isZero(d)) continue;
+			if (Maths::isZero(d)) 
+			{
+				getForceField()->error() << "Error: Bond with lenght 0!" << std::endl;
+				continue;
+			}
+
 			d = sqrt(d);
 
 			NonBondedPairData& data = non_bonded_data_[p];
@@ -257,7 +262,6 @@ namespace BALL
 
 			if (data.is_1_4) 
 			{
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				es *= 0.75;
 			}
 
@@ -268,11 +272,11 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 			data.vdw_energy = e;
 			data.es_energy = es;
 #endif
+#ifdef BALL_MMFF94_DEBUG
 			Log.info() << "ES " << atom_pair_vector_[p].first->getName() << " " 
 													<< atom_pair_vector_[p].second->getName() << " qi " 
 													<< data.qi << " qj " << data.qj 
 													<< " Ees " << es << "  d " << d << std::endl;
-#ifdef BALL_MMFF94_DEBUG
 			Log.info() << "VDW " << atom_pair_vector_[p].first->getName() << " " 
 													 << atom_pair_vector_[p].second->getName() << " e " 
 													 << data.eij << " r " << data.rij << " Evdw " << e << " d " 
