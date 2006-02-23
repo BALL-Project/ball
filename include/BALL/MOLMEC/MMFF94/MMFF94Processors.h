@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.2.3 2006/02/23 15:42:31 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.2.4 2006/02/23 16:19:19 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -54,6 +54,9 @@ namespace BALL
 		virtual bool start();
 
 		///
+		virtual bool finish();
+
+		///
 		virtual Processor::Result operator () (Atom& atom);
 
 		///
@@ -67,6 +70,7 @@ namespace BALL
 
 		protected:
 
+		vector<Atom*> 							atoms_;
 		HashSet<Atom*> 							unassigned_atoms_;
 		const MMFF94ESParameters* 	es_parameters_;
 	};
