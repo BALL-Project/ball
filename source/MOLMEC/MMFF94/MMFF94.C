@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.30 2006/02/22 23:09:28 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.31 2006/02/23 15:42:26 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -225,7 +225,7 @@ namespace BALL
 			const MMFF94NonBonded* nonbonded_component = dynamic_cast<const MMFF94NonBonded*>(component);
 			if (nonbonded_component != 0)
 			{
-				return nonbonded_component->getVdwEnergy();
+				return nonbonded_component->getVDWEnergy();
 			}
 		}
 
@@ -240,7 +240,7 @@ namespace BALL
 			const MMFF94NonBonded* nonbonded_component = dynamic_cast<const MMFF94NonBonded*>(component);
 			if (nonbonded_component != 0)
 			{
-				return nonbonded_component->getElectrostaticEnergy();
+				return nonbonded_component->getESEnergy();
 			}
 		}
 

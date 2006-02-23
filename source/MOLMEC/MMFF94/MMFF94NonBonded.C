@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.2.12 2006/02/22 23:09:28 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.2.13 2006/02/23 15:42:27 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -21,11 +21,11 @@ namespace BALL
 		: eij(0),
 			rij(0),
 			rij_7(0),
-			VDW_energy(0),
+			vdw_energy(0),
 			is_1_4(false),
 			qi(0),
 			qj(0),
-			ES_energy(0)
+			es_energy(0)
 	{
 	}
 
@@ -33,7 +33,9 @@ namespace BALL
 		throw()
 		:	ForceFieldComponent(),
 			algorithm_type_(MolmecSupport::BRUTE_FORCE),
-			cut_off_(10)
+			cut_off_(10),
+			dc_(1),
+			n_(1)
 	{	
 		setName("MMFF94 NonBonded");
 	}
@@ -42,7 +44,9 @@ namespace BALL
 		throw()
 		:	ForceFieldComponent(force_field),
 			algorithm_type_(MolmecSupport::BRUTE_FORCE),
-			cut_off_(10)
+			cut_off_(10),
+			dc_(1),
+			n_(1)
 	{
 		setName("MMFF94 NonBonded");
 	}
@@ -50,7 +54,9 @@ namespace BALL
 	MMFF94NonBonded::MMFF94NonBonded(const MMFF94NonBonded& component)
 		throw()
 		:	ForceFieldComponent(component),
-			algorithm_type_(component.algorithm_type_)
+			algorithm_type_(component.algorithm_type_),
+			dc_(component.dc_),
+			n_(component.n_)
 	{
 	}
 
@@ -82,6 +88,8 @@ namespace BALL
 	bool MMFF94NonBonded::operator == (const MMFF94NonBonded& anb)
 		throw()
 	{
+		dc_ = anb.dc_;
+		n_  = anb.n_;
 		return (this == &anb);
 	}
 
@@ -137,6 +145,8 @@ namespace BALL
 			NonBondedPairData& data = non_bonded_data_[p];
 
 			data.is_1_4 = atom1->isVicinal(*atom2);
+			data.qi = atom1->getCharge();
+			data.qj = atom2->getCharge();
 
 			vdw_parameters_.getParameters(atom1->getType(), atom2->getType(), data.rij, data.rij_7, data.eij);
 
@@ -203,6 +213,16 @@ namespace BALL
 
 		getForceField()->getSystem()->apply(charge_processor_);
 
+		if (charge_processor_.getUnassignedAtoms().size() > 0)
+		{
+			getForceField()->error() << "Could not assign partial charges for all atoms" << std::endl;
+			HashSet<Atom*>::ConstIterator it = charge_processor_.getUnassignedAtoms().begin();
+			for (;+it; ++it)
+			{
+				getForceField()->getUnassignedAtoms().insert(*it);
+			}
+		}
+
 		update();
 
 		return true;
@@ -212,8 +232,9 @@ namespace BALL
 	double MMFF94NonBonded::updateEnergy()
 		throw()
 	{
-		energy_ = 0;
+		energy_ 		= 0;
 		vdw_energy_ = 0;
+		es_energy_  = 0;
 
 		for (Position p = 0; p < atom_pair_vector_.size(); p++)
 		{
@@ -232,17 +253,34 @@ namespace BALL
 			const double e = first * sec;
 			vdw_energy_ += e;
 
+			double es = 332.0716 * data.qi * data.qj / (dc_ * pow(d + 0.05, n_));
+
+			if (data.is_1_4) 
+			{
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+				es *= 0.75;
+			}
+
+			es_energy_ += es;
+
+
 #ifdef BALL_MMFF94_TEST
-			data.VDW_energy = e;
+			data.vdw_energy = e;
+			data.es_energy = es;
 #endif
+			Log.info() << "ES " << atom_pair_vector_[p].first->getName() << " " 
+													<< atom_pair_vector_[p].second->getName() << " qi " 
+													<< data.qi << " qj " << data.qj 
+													<< " Ees " << es << "  d " << d << std::endl;
 #ifdef BALL_MMFF94_DEBUG
 			Log.info() << "VDW " << atom_pair_vector_[p].first->getName() << " " 
 													 << atom_pair_vector_[p].second->getName() << " e " 
-													 << data.eij << " r " << data.rij << " E " << e << " d " << d << std::endl;
+													 << data.eij << " r " << data.rij << " Evdw " << e << " d " 
+													 << d << std::endl;
 #endif
 		}
 
-		energy_ += vdw_energy_;
+		energy_ += vdw_energy_ + es_energy_;
 
 		return energy_; 
   } 
@@ -256,18 +294,5 @@ namespace BALL
 			return;
 		}
 	} 
-
 	
-	double MMFF94NonBonded::getElectrostaticEnergy() const
-		throw()
-	{
-		return electrostatic_energy_;
-	}
-
-	double MMFF94NonBonded::getVdwEnergy() const
-		throw()
-	{
-		return vdw_energy_;
-	}
-
 } // namespace BALL

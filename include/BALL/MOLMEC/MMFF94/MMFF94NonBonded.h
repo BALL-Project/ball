@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.h,v 1.1.2.9 2006/02/22 23:09:37 amoll Exp $
+// $Id: MMFF94NonBonded.h,v 1.1.2.10 2006/02/23 15:42:31 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_NONBONDED_H
@@ -40,12 +40,12 @@ namespace BALL
 			double eij;
 			double rij;
 			double rij_7;
-			double VDW_energy; // for debugging
+			double vdw_energy; // for debugging
 			// for electrostatics:
 			bool 	 is_1_4;		 
 			double qi;
 			double qj;
-			double ES_energy;  // for debugging
+			double es_energy;  // for debugging
 		};
 
 
@@ -99,14 +99,6 @@ namespace BALL
 		virtual void update()
 			throw(Exception::TooManyErrors);
 
-		///	Return the electrostatic energy.
-		virtual double getElectrostaticEnergy() const
-			throw();
-
-		///	Return the Van-der-Waals energy.
-		virtual double getVdwEnergy() const
-			throw();
-
 		///	Computes the most efficient way to calculate the non-bonded atom pairs
 		virtual MolmecSupport::PairListAlgorithmType
 			determineMethodOfAtomPairGeneration()
@@ -122,12 +114,12 @@ namespace BALL
 		double getVDWEnergy() const { return vdw_energy_;}
 
 		///
-		double getESEnergy() const { return electrostatic_energy_;}
+		double getESEnergy() const { return es_energy_;}
 
 		protected:
 
 		//_	Value of the electrostatic energy
-		double	electrostatic_energy_;
+		double	es_energy_;
 
 		//_	Value of the vdw energy
 		double	vdw_energy_;
@@ -146,6 +138,10 @@ namespace BALL
 		MMFF94ESParameters 										es_parameters_;
 		HashMap<Atom*, double>								charge_map_;
 		MMFF94ChargeProcessor 								charge_processor_;
+		// dielectric constant
+		double 																dc_; 
+		// dielectric model exponent
+		double 																n_;
 	};
 } // namespace BALL
 

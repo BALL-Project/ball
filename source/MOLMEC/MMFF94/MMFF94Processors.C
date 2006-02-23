@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.2 2006/02/22 23:09:28 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.3 2006/02/23 15:42:27 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -47,27 +47,38 @@ Processor::Result MMFF94ChargeProcessor::operator () (Atom& atom)
 	// ???????? partial charge
 	
 	double charge = atom.getCharge();
+Log.error() << "#~~#   7 "   << atom.getName() << " " << charge         ;
 	AtomBondIterator bit = atom.beginBond();
+	Index at1 = atom.getType();
 	for (; +bit; ++bit)
 	{
 		const Atom* const atom2 = bit->getPartner(atom);
+		Index at2 = atom2->getType();
 		Position bt = bit->hasProperty("MMFF94SBMB"); // ????
-		const double pcharge = es_parameters_->getPartialCharge(atom.getType(), atom2->getType(), bt);
-		if (pcharge == -99) 
+		double pcharge;
+		
+		if (at1 < at2) pcharge = - es_parameters_->getPartialCharge(at1, at2, bt);
+		else           pcharge =   es_parameters_->getPartialCharge(at2, at1, bt);
+
+		if (fabs(pcharge) == 99) 
 		{
 			unassigned_atoms_.insert(&atom);
 			unassigned_atoms_.insert((Atom*)atom2);
+			continue;
 		}
+Log.error() << " " << atom2->getName() << " " << pcharge;
 		charge += pcharge;
 	}
 
 	atom.setCharge(charge);
+Log.error() << "      :  "    << charge         << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 	return Processor::CONTINUE;
 }
 
 bool MMFF94ChargeProcessor::start()
 {
+	unassigned_atoms_.clear();
 	return es_parameters_ != 0;
 }
 

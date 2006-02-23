@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.43 2006/02/21 21:06:51 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.44 2006/02/23 15:42:27 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -1169,35 +1169,25 @@ bool MMFF94ESParameters::setup_(const vector<vector<String> >& lines)
 
 Position MMFF94ESParameters::getIndex_(Position at1, Position at2, Position bt) const
 {
-	if (at1 > at2)
-	{
-		Position tmp = at1;
-		at1 = at2;
-		at2 = tmp;
-	}
-
-	return at1 * at2 + bt * MMFF94_number_atom_types * MMFF94_number_atom_types;
+	return at1 * MMFF94_number_atom_types + at2 + bt * MMFF94_number_atom_types * MMFF94_number_atom_types;
 }
 
 double MMFF94ESParameters::getPartialCharge(Position at1, Position at2, Position bt) const
 {
+	if (at1 == at2) return 0;
+
 	const Position index = getIndex_(at1, at2, bt);
 
 	if (index > parameters_.size()) return 99;
 
-	double r;
+	const double r = parameters_[index];
 
-	if (at1 > at2)
+	if (r == 99)
 	{
-		r = -parameters_[index];
-	}
-	else
-	{
-		r = parameters_[index];
+		Log.error() << "No ES parameters: "  << bt << " " << at1 << " " << at2 << std::endl;
 	}
 
-	if (r == -99) r = 99;
-
+//   	Log.error() << "ES "  << bt << " " << at1 << " " << at2 << " r " << r << std::endl;
 	return r;
 }
 

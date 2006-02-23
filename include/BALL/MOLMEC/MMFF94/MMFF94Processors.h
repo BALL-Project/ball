@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.2.2 2006/02/22 23:09:38 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.2.3 2006/02/23 15:42:31 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -60,7 +60,7 @@ namespace BALL
 		void assignFormalCharge(Atom& atom);
 		
 		///
-		const HashSet<Atom*>& getUnassigedAtoms() { return unassigned_atoms_;}
+		const HashSet<Atom*>& getUnassignedAtoms() { return unassigned_atoms_;}
 
 		///
 		void setESParameters(const MMFF94ESParameters& es) { es_parameters_ = &es; }
