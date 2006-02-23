@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.46 2006/02/22 23:09:36 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.47 2006/02/23 20:14:40 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -774,12 +774,20 @@ bool testNonBonded(MMFF94& mmff, const String& filename, bool compare)
 
 		if (!isOk(data.eij, eps[as]) ||
 				!isOk(data.rij, rij[as]) ||
-				!isOk(data.VDW_energy, e_vdw[as]))
+				!isOk(data.vdw_energy, e_vdw[as]))
 		{
-			Log.error() << "Problem NB:   " << filename << " "
+			Log.error() << "Problem NB VDW:   " << filename << " "
 									<< atoms1[as] << " " << atoms2[as] << std::endl
-									<< "got e " << data.eij << " r " << data.rij << "   " << data.VDW_energy << std::endl
+									<< "got e " << data.eij << " r " << data.rij << "   " << data.vdw_energy << std::endl
 									<< "was e " << eps[as] << " r " << rij[as] << "   " << e_vdw[as] << std::endl;
+		}
+
+		if (!isOk(data.es_energy, e_q[as]))
+		{
+			Log.error() << "Problem NB ES:   " << filename << " "
+									<< atoms1[as] << " " << atoms2[as] << std::endl
+									<< "got E " << data.es_energy << std::endl
+									<< "was E " << e_q[as] << std::endl;
 		}
 	}
 
@@ -791,9 +799,18 @@ bool testNonBonded(MMFF94& mmff, const String& filename, bool compare)
 
 	if (!isOk(comp->getVDWEnergy(), e))
 	{
-		Log.error() << filename << "   " << comp->getVDWEnergy() << "   " << e << std::endl;
+		Log.error() << filename << " VDW  " << comp->getVDWEnergy() << "   " << e << std::endl;
 		return false;
 	}
+
+	e = results[11];
+
+	if (!isOk(comp->getESEnergy(), e))
+	{
+		Log.error() << filename << " ES  " << comp->getESEnergy() << "   " << e << std::endl;
+		return false;
+	}
+
 
 	return true;
 }
