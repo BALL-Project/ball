@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: slickEnergy.C,v 1.1 2006/02/21 16:27:17 anker Exp $
+// $Id: slickEnergy.C,v 1.2 2006/02/24 14:20:35 anker Exp $
 
 #include <BALL/SCORING/FUNCTIONS/slickEnergy.h>
 #include <BALL/SCORING/COMPONENTS/CHPI.h>
@@ -28,15 +28,15 @@ namespace BALL
 	const char* SLICKEnergy::Option::POLAR = "polar_coefficient";
 
 	// Parameters for the new function containing HB contributions.
-	// Calibration for the complete set. [anker 2006/02/21]
+	// Calibration for the complete set. [anker 2006/02/24]
 	// Calibration set: 1j4u 5cna 1gic 1qdo 1qdc 1ona 1dgl 1axz 1ax0 1ax1
 	// 1ax2 2bqp 1bqp 1qf3 2pel 1ehh 1en2 1k7u
-	const float SLICKEnergy::Default::CONST    = -3.04303892;
-	const float SLICKEnergy::Default::HB       = -1.18389617;
-	const float SLICKEnergy::Default::CHPI     = -0.97534598;
-	const float SLICKEnergy::Default::VDW      =  0.02562972;
-	const float SLICKEnergy::Default::NONPOLAR =  0.48077471;
-	const float SLICKEnergy::Default::POLAR    = -0.15589680;
+	const float SLICKEnergy::Default::CONST    = -2.70722038;
+	const float SLICKEnergy::Default::HB       = -1.31258320;
+	const float SLICKEnergy::Default::CHPI     = -0.74188312;
+	const float SLICKEnergy::Default::VDW      =  0.02207132;
+	const float SLICKEnergy::Default::NONPOLAR =  0.49981964;
+	const float SLICKEnergy::Default::POLAR    = -0.12498055;
 
 	SLICKEnergy::SLICKEnergy()
 		throw()
