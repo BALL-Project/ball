@@ -1,4 +1,4 @@
-// $Id: buriedPolar.C,v 1.2 2006/02/21 16:14:19 anker Exp $
+// $Id: buriedPolar.C,v 1.3 2006/02/24 11:49:33 anker Exp $
 // Molecular Mechanics: Fresno force field, buried polar component
 
 #include <BALL/SCORING/COMPONENTS/buriedPolar.h>
@@ -16,6 +16,14 @@ using namespace std;
 
 namespace BALL
 {
+
+	const char* BuriedPolar::Option::BP_R1_OFFSET = "bp_r1_offset";
+	const char* BuriedPolar::Option::BP_R2_OFFSET = "bp_r2_offset";
+	const char* BuriedPolar::Option::VERBOSITY = "verbosity";
+
+	const float BuriedPolar::Default::BP_R1_OFFSET = 0.5;
+	const float BuriedPolar::Default::BP_R2_OFFSET = 3.0;
+	const Size BuriedPolar::Default::VERBOSITY = 0;
 
 	BuriedPolar::BuriedPolar()
 		throw()
