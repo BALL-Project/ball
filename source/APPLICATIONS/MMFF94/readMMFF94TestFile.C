@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.49 2006/02/24 13:50:28 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.50 2006/02/24 16:20:16 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -24,6 +24,7 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
 
 #include <math.h>
 
@@ -79,7 +80,8 @@ System* readTestFile(String filename)
 		}
 
 		Position pos = name_to_pos[ait->getName()];
-		ait->setType(types[pos]);
+//   		ait->setType(types[pos]);
+		ait->setProperty("Type", types[pos]);
 		Vector3 v;
 		v.x = fcharges[pos];
 		ait->setVelocity(v);
@@ -836,6 +838,38 @@ bool testCharge(System& system, String filename)
 }
 
 
+HashSet<Index> all_types;
+HashSet<Index> wrong_types_set;
+vector<String> wrong_names;
+vector<String> wrong_file_names;
+
+bool testType(System& system, String filename)
+{
+	AtomTyper typer;
+	typer.setup(Path().find("MMFF94/TYPES.PAR"));
+	typer.assignTo(system);
+
+	bool ok = true;
+	AtomIterator ait = system.beginAtom();
+	for (; +ait; ++ait)
+	{
+		Index org_type = ait->getProperty("Type").getInt();
+		all_types.insert(org_type);
+		if (wrong_types_set.has(org_type)) continue;
+
+		Index our_type = ait->getType();
+		if (org_type == our_type) continue;
+	
+		wrong_types_set.insert(org_type);
+
+		ok = false;
+		Log.error() << "Type! " << filename << " " << ait->getName() << " " << org_type << " " << our_type << std::endl;
+	}
+
+	return ok;
+}
+
+
 
 int runtests(const vector<String>& filenames)
 {
@@ -856,7 +890,7 @@ int runtests(const vector<String>& filenames)
 			Log.error() << "Could not read mol2 file " << full_file_name << std::endl;
 			return -1;
 		}
-
+/*
 		for (Position p = 0; p < mmff.countComponents(); p++)
 		{
 			mmff.getComponent(p)->setEnabled(true);
@@ -884,19 +918,6 @@ int runtests(const vector<String>& filenames)
 		{
 		}
 
-/*
-		Log.info() << "Got rings: " << mmff.getRings().size()  << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-		for (Position p = 0; p < mmff.getRings().size(); p++)
-		{
-			HashSet<Atom*>::ConstIterator it = mmff.getRings()[p].begin();
-			for (; +it; ++it)
-			{
-				Log.info() << (**it).getName() << " ";
-			}
-			Log.info() << std::endl;
-		}
-*/
-
 		bool wrong_rings = false;
 		if (mmff.getRings().size() < nr_rings)
 		{
@@ -917,18 +938,18 @@ int runtests(const vector<String>& filenames)
 		{
 			Log.info() << "We have unassigned atoms: " << mmff.getUnassignedAtoms().size() << std::endl;
 		}
-
+*/
+ 		testType(*system, filenames[pos]);
 //    		result &= testStretch(mmff, filenames[pos], true);
 //       result &= testBend(mmff, filenames[pos], true);
 //    		result &= testStretchBend(mmff, filenames[pos], true);
 //    		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
 //    		result &= testPlanes(mmff, filenames[pos], true);
- 		result &= testNonBonded(mmff, filenames[pos], true);
+//    		result &= testNonBonded(mmff, filenames[pos], true);
+//    		result &= testCharge(*system, filenames[pos]);
 
- 		result &= testCharge(*system, filenames[pos]);
-
-		if (result) ok++;
-		else if (!wrong_rings) not_ok.push_back(filenames[pos]);
+//   		if (result) ok++;
+//   		else if (!wrong_rings) not_ok.push_back(filenames[pos]);
 	}
 
 	Log.info() << "Tested " << filenames.size() << " files, " << ok << " files ok" << std::endl;
@@ -955,6 +976,8 @@ int runtests(const vector<String>& filenames)
 	Log.info() << std::endl;
 
 	Log.info() << "Wrong torsion types: " << wrong_torsion_types << std::endl;
+
+	Log.info() << "Types: Ok " << all_types.size() - wrong_types_set.size() << " False: " << wrong_types_set.size() << std::endl;
 		
 	return 0;
 }

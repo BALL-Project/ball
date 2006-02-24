@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.2.4 2006/02/23 16:19:19 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.2.5 2006/02/24 16:20:09 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -22,6 +22,51 @@ namespace BALL
 	using std::vector;
 
 	class MMFF94ESParameters;
+	class Molecule;
+	class System;
+
+	///
+	class BALL_EXPORT AtomTyper
+	{
+		public:
+
+		BALL_CREATE(AtomTyper)
+
+		///
+		AtomTyper();
+
+		///
+		AtomTyper(const AtomTyper& t);
+
+		///
+		bool setup(const String& filename);
+		
+		///
+		void assignTo(System& s);
+
+		///
+		void assignTo(Molecule& mol);
+
+		protected:
+		
+		/** To be overloaded in derived classes 
+				to add support for additional properties e.g. charges
+		*/
+		virtual void assignSpecificValues_(Atom&) {};
+
+		/** To be overloaded in derived classes 
+				to add support for additional properties e.g. charges
+		*/
+		virtual bool specificSetup_() { return true;}
+
+		vector<String> 		names_;
+		vector<String> 		rules_;
+		vector<Index> 		types_;
+		// entries in the file for specificSetup_() :
+		vector<vector<String> > fields_;
+		// number for fields per line in the config file
+		Size 							number_expected_fields_;
+	};
 
 	/**	Assign MMFF94 Charges
       \ingroup  MMFF94

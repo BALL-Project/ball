@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.5 2006/02/23 23:29:27 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.6 2006/02/24 16:20:13 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -9,6 +9,10 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/FORMAT/lineBasedFile.h>
+#include <BALL/STRUCTURE/smartsMatcher.h>
 
 //    #define BALL_DEBUG_MMFF
 #define BALL_DEBUG_TEST
@@ -17,6 +21,122 @@ using namespace std;
 
 namespace BALL 
 {
+
+AtomTyper::AtomTyper()
+	: number_expected_fields_(4)
+{
+}
+
+AtomTyper::AtomTyper(const AtomTyper& t)
+{
+	names_ = t.names_;
+	rules_ = t.rules_;
+	types_ = t.types_;
+}
+		
+bool AtomTyper::setup(const String& filename)
+{
+	LineBasedFile infile(filename);
+
+	vector<vector<String> > lines;
+
+	vector<String> fields;
+	
+	while (infile.readLine())
+	{
+		const String line = infile.getLine();
+
+		// comments and empty lines
+		if (line == "" || line[0] == '*') continue;
+		
+		if (line.split(fields, "|") < number_expected_fields_)
+		{
+			continue;
+			/*
+			Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+									<< filename << " Not enough fields in one line " 
+									<< line << std::endl;
+			return false;
+			*/
+		}
+
+		lines.push_back(vector<String>());
+
+		const Position pos = lines.size() - 1;
+		vector<String>& vs = lines[pos];
+		vs.resize(number_expected_fields_);
+
+		for (Position p = 0; p < number_expected_fields_; p++)
+		{
+			fields[p].trim(" ");
+			vs[p] = fields[p];
+		}
+
+		if (fields[3] == "") continue;
+
+		names_.push_back(fields[1]);
+		types_.push_back(fields[2].toInt());
+		rules_.push_back(fields[3]);
+	}
+
+	if (!specificSetup_()) 
+	{
+		Log.error() << "Error while parsing line in File " << filename << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+void AtomTyper::assignTo(System& s)
+{
+	MoleculeIterator mit = s.beginMolecule();
+	for (;+mit; ++mit)
+	{
+		assignTo(*mit);
+	}
+}
+
+void AtomTyper::assignTo(Molecule& mol)
+{
+	AtomIterator ait = mol.beginAtom();
+	for(; +ait; ++ait)
+	{
+		ait->setType(-1);
+	}
+
+	SmartsMatcher sm;
+
+	for (Position rule = 0; rule < types_.size(); rule++)
+	{
+		try
+		{
+			vector<HashSet<const Atom*> > result = sm.match(mol, rules_[rule]);
+			if (result.size() == 0) continue;
+			for (Position pos = 0; pos < result.size(); pos++)
+			{
+				HashSet<const Atom*>& set = result[pos];
+				if (set.size() != 0) 
+				{
+					Log.error() << "Problem in " << __FILE__ << " " << __LINE__ << std::endl;
+					continue;
+				}
+
+				Atom& atom = *(Atom*)*set.begin();
+			
+				atom.setType(types_[rule]);
+				assignSpecificValues_(atom);
+			}
+		}
+		catch(Exception::ParseError e)
+		{
+			Log.error() << e << std::endl;
+		}
+	}
+}
+
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
 
 MMFF94ChargeProcessor::MMFF94ChargeProcessor()
 	:	UnaryProcessor<Atom>(),
