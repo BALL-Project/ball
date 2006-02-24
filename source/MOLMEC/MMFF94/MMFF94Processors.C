@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.6 2006/02/24 16:20:13 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.7 2006/02/24 19:59:51 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -116,15 +116,16 @@ void AtomTyper::assignTo(Molecule& mol)
 			for (Position pos = 0; pos < result.size(); pos++)
 			{
 				HashSet<const Atom*>& set = result[pos];
-				if (set.size() != 0) 
+				if (set.size() != 1) 
 				{
-					Log.error() << "Problem in " << __FILE__ << " " << __LINE__ << std::endl;
+					Log.error() << "Problem with smarts expr " << rules_[rule]  << " in " << __FILE__ << " " << __LINE__ << std::endl;
 					continue;
 				}
 
 				Atom& atom = *(Atom*)*set.begin();
 			
 				atom.setType(types_[rule]);
+				atom.setTypeName(names_[rule]);
 				assignSpecificValues_(atom);
 			}
 		}
