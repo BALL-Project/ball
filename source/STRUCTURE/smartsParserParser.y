@@ -122,6 +122,7 @@ smarts:
 	|	smarts '.' smarts // dot disconnection
 		{
 			SmartsParser::state.current_parser->setRoot($1);
+			SmartsParser::state.current_parser->setComponentGrouping(true);
 			SmartsParser::SPBond* b = new SmartsParser::SPBond(SmartsParser::SPBond::NOT_NECESSARILY_CONNECTED);
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
 			SmartsParser::state.current_parser->addEdge(e);
@@ -717,6 +718,10 @@ unbraced_atom_symbol:
 			$$ = new SmartsParser::SPAtom("*");
 		}
 	|	atomic_number
+		{
+			$$ = new SmartsParser::SPAtom($1);
+		}
+	| TK_ATOM
 		{
 			$$ = new SmartsParser::SPAtom($1);
 		}
