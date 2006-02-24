@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.48 2006/02/23 23:29:16 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.49 2006/02/24 13:50:28 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -807,20 +807,6 @@ bool testNonBonded(MMFF94& mmff, const String& filename, bool compare)
 	}
 
 	e = results[11];
-
-	double x = 0;
-	for (Position p = 0; p < e_q.size(); p++)
-	{
-		x += e_q[p];
-	}
-
-	/*
-	if (!isOk(x, e))
-	{
-Log.error() << "#~~#   1 -------------------"  << x << " " << e           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-	}
-	*/
-		
 
 	if (!isOk(comp->getESEnergy(), e))
 	{

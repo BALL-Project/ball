@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.45 2006/02/23 23:29:27 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.46 2006/02/24 13:50:28 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -1182,14 +1182,29 @@ double MMFF94ESParameters::getPartialCharge(Position at1, Position at2, Position
 
 	if (index > parameters_.size()) return MMFF94_INVALID_VALUE;
 
-	const double r = parameters_[index];
+	double r = parameters_[index];
+
+	if (r != MMFF94_INVALID_VALUE) return r;
+
+	///////////////////////////
+	// heuristic value:
+	///////////////////////////
+	double p1 = getPBCI(at1);
+	double p2 = getPBCI(at2);
+
+	if (p1 != MMFF94_INVALID_VALUE &&
+			p2 != MMFF94_INVALID_VALUE)
+	{
+		r = p2 - p1;
+	}
 
 	if (r == MMFF94_INVALID_VALUE)
 	{
 		Log.error() << "No ES parameters: "  << bt << " " << at1 << " " << at2 << std::endl;
 	}
 
-//   	Log.error() << "ES "  << bt << " " << at1 << " " << at2 << " r " << r << std::endl;
+//    	Log.error() << "ES "  << bt << " " << at1 << " " << at2 << " r " << r << std::endl;
+
 	return r;
 }
 

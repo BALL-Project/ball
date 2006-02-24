@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.2.14 2006/02/23 23:29:26 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.2.15 2006/02/24 13:50:27 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -33,7 +33,7 @@ namespace BALL
 		throw()
 		:	ForceFieldComponent(),
 			algorithm_type_(MolmecSupport::BRUTE_FORCE),
-			cut_off_(10),
+			cut_off_(20),
 			dc_(1),
 			n_(1)
 	{	
@@ -44,7 +44,7 @@ namespace BALL
 		throw()
 		:	ForceFieldComponent(force_field),
 			algorithm_type_(MolmecSupport::BRUTE_FORCE),
-			cut_off_(10),
+			cut_off_(20),
 			dc_(1),
 			n_(1)
 	{

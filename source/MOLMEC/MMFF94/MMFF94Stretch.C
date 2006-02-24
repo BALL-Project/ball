@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.22 2006/02/17 02:05:58 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.23 2006/02/24 13:50:28 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -201,9 +201,11 @@ namespace BALL
 
 			const double a(143.9325 / 2  * r0);
 
+			const double dd = delta * delta;
+
 			double force = -(2 * a * delta + 
-											 3 * a * CUBIC_STRENGTH_CONSTANT * delta * delta + 
-											 4 * a * KCS * delta * delta);
+											 3 * a * CUBIC_STRENGTH_CONSTANT * dd + 
+											 4 * a * KCS * dd * delta );
 
 			direction.normalize();
 			direction *= force;
