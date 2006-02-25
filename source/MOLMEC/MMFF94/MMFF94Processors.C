@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.7 2006/02/24 19:59:51 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.8 2006/02/25 17:15:15 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -59,6 +59,8 @@ bool AtomTyper::setup(const String& filename)
 			return false;
 			*/
 		}
+
+//   if (rules_.size() > 0 && fields[2] == rules_[rules_.size() - 1]) continue;
 
 		lines.push_back(vector<String>());
 

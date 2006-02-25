@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.h,v 1.6.4.1 2006/02/14 15:01:26 amoll Exp $
+// $Id: smartsParser.h,v 1.6.4.2 2006/02/25 17:18:11 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMARTES_PARSER_H
@@ -373,6 +373,10 @@ namespace BALL
 
 		bool isRecursive() const { return recursive_; }
 
+		void setComponentGrouping(bool component_grouping) { component_grouping_ = component_grouping; }
+
+		bool hasComponentGrouping() const { return component_grouping_; }
+
 		struct State
 		{
 			Size					char_count;
@@ -401,6 +405,8 @@ namespace BALL
 			bool needs_SSSR_;
 
 			bool recursive_;
+
+			bool component_grouping_;
 
 			static vector<HashSet<const Atom*> >* sssr_;
 

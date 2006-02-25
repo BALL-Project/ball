@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smilesParser.h,v 1.13.8.1 2006/02/14 15:01:26 amoll Exp $
+// $Id: smilesParser.h,v 1.13.8.2 2006/02/25 17:18:11 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMILES_PARSER_H

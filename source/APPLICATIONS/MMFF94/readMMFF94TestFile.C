@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.50 2006/02/24 16:20:16 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.51 2006/02/25 17:15:12 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -86,6 +86,8 @@ System* readTestFile(String filename)
 		v.x = fcharges[pos];
 		ait->setVelocity(v);
 //    		ait->setCharge(fcharges[pos]);
+		ait->setCharge(charges[pos]);
+		ait->setFormalCharge((Index)fcharges[pos]);
 		ait->setRadius(charges[pos]);
 	}
 
@@ -840,8 +842,15 @@ bool testCharge(System& system, String filename)
 
 HashSet<Index> all_types;
 HashSet<Index> wrong_types_set;
+HashSet<Index> occured_types;
 vector<String> wrong_names;
 vector<String> wrong_file_names;
+vector<String> occured_file_names;
+
+vector<Size> numbers;
+
+Size wrong_types;
+Size right_types;
 
 bool testType(System& system, String filename)
 {
@@ -854,16 +863,29 @@ bool testType(System& system, String filename)
 	for (; +ait; ++ait)
 	{
 		Index org_type = ait->getProperty("Type").getInt();
+		occured_file_names[(Position)org_type] = filename;
 		all_types.insert(org_type);
-		if (wrong_types_set.has(org_type)) continue;
-
 		Index our_type = ait->getType();
-		if (org_type == our_type) continue;
+		if (our_type > 0) numbers[our_type] ++;
+		if (wrong_types_set.has(org_type)) 
+		{
+			wrong_types++;
+			continue;
+		}
+
+		if (org_type == our_type) 
+		{
+			right_types++;
+			continue;
+		}
 	
+		wrong_types++;
 		wrong_types_set.insert(org_type);
 
 		ok = false;
-		Log.error() << "Type! " << filename << " " << ait->getName() << " " << org_type << " " << our_type << std::endl;
+		Log.error() << "Type! " << filename << " " 
+								<< ait->getName() << " was " << org_type << " <->" 
+								<< our_type << " " << ait->getTypeName() << std::endl;
 	}
 
 	return ok;
@@ -978,6 +1000,22 @@ int runtests(const vector<String>& filenames)
 	Log.info() << "Wrong torsion types: " << wrong_torsion_types << std::endl;
 
 	Log.info() << "Types: Ok " << all_types.size() - wrong_types_set.size() << " False: " << wrong_types_set.size() << std::endl;
+	Log.info() << "Right types: " << right_types << "  wrong " << wrong_types << std::endl;
+
+	for (Position p = 0; p < 100; p++)
+	{
+		if (numbers[p] != 0)
+		{
+			Log.info() << "T " << p << " " << numbers[p] << std::endl;
+		}
+	}
+
+	Log.info() << std::endl << "-----------------------------------------------" << std::endl;
+
+	for (Position p = 0; p < 100; p++)
+	{
+		Log.info() << "TO " << p << " " << occured_file_names[p] << std::endl;
+	}
 		
 	return 0;
 }
@@ -1016,5 +1054,13 @@ int main(int argc, char** argv)
    files.push_back(argv[2]);
 	}
 
+	wrong_types = 0;
+	right_types = 0;
+	numbers.resize(100);
+	occured_file_names.resize(100);
+	for (Position p = 0; p < 100; p++)
+	{
+		numbers[p] = 0;
+	}
 	return runtests(files);
 }

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.2.5 2006/02/24 16:20:09 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.2.6 2006/02/25 17:17:52 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -37,6 +37,9 @@ namespace BALL
 
 		///
 		AtomTyper(const AtomTyper& t);
+
+		///
+		virtual ~AtomTyper() {};
 
 		///
 		bool setup(const String& filename);
