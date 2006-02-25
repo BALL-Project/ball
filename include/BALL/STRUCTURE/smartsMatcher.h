@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.h,v 1.5 2006/01/26 11:58:54 oliver Exp $
+// $Id: smartsMatcher.h,v 1.6 2006/02/25 16:10:28 bertsch Exp $
 //
 // Author:
 //   Andreas Bertsch
@@ -54,7 +54,13 @@ namespace BALL
 
 			/// assignment operator
 			SmartsMatcher& operator = (const SmartsMatcher& matcher);
-			
+
+			/// sets an SSSR which is used instead of doing an ring perception
+			void setSSSR(const std::vector<std::vector<Atom*> >& sssr);
+
+			/// this function is used to cause the matcher to do an ring perception if needed (do not use the set SSSR any more)
+			void unsetSSSR();
+
 		protected:
 
 			/// little helper struct for the recursive matching algorithm
@@ -100,7 +106,7 @@ namespace BALL
 			};
 			
 			/// method for evaluation of ring edges, after the the smarts tree is matched to molcule
-			bool evaluateRingEdges_(const HashSet<const Atom*>& matching, const HashMap<const SPNode*, const Atom*>& mapping);
+			bool evaluateRingEdges_(const HashSet<const Atom*>& matching, const HashMap<const SPNode*, const Atom*>& mapping, const String& smarts);
 			
 			/// method for the evaluation of a pseudo-tree
 			void evaluate_(	RecStruct_& rs, SPNode* start_node, const Atom* start_atom);
@@ -113,6 +119,12 @@ namespace BALL
 
 			/// matches from the recurive part
 			HashMap<SPNode*, std::vector<HashSet<const Atom*> > > rec_matches_;
+
+			/// user SSSR set?
+			bool has_user_sssr_;
+
+			/// user sssr
+			std::vector<std::vector<Atom*> > sssr_;
 	};
   
 } // namespace BALL
