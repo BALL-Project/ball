@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99 2005/12/23 17:03:38 amoll Exp $
+// $Id: molecularControl.C,v 1.100 2006/02/25 16:51:11 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -11,6 +11,7 @@
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
 #include <BALL/VIEW/DIALOGS/bondProperties.h>
 #include <BALL/KERNEL/system.h>
+#include <BALL/STRUCTURE/smartsMatcher.h>
 #include <BALL/KERNEL/selector.h>
 #include <qmenubar.h>
 #include <qpushbutton.h> 
@@ -103,6 +104,7 @@ namespace BALL
 					selected_(),
 					information_(),
 					selector_edit_(new QComboBox(this)),
+					smarts_edit_(new QComboBox(this)),
 					context_menu_(this),
 					model_menu_(this),
 					edit_menu_(this),
@@ -121,6 +123,13 @@ namespace BALL
 
 			QVBoxLayout* layout2 = new QVBoxLayout();
 			getLayout()->addLayout(layout2);
+
+			smarts_edit_->resize(90, 45);
+			smarts_edit_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
+			smarts_edit_->setAutoCompletion(true);
+			smarts_edit_->setDuplicatesEnabled(false);
+			smarts_edit_->setEditable(true);
+			layout2->addWidget(smarts_edit_);
 
 			selector_edit_->resize(90, 45);
 			selector_edit_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
@@ -1346,6 +1355,7 @@ namespace BALL
 			}
 
 			connect(selector_edit_->lineEdit(), SIGNAL(returnPressed()), this, SLOT(applySelector()));
+			connect(smarts_edit_->lineEdit(), SIGNAL(returnPressed()), this, SLOT(applySMARTSSelector()));
 		}
 
 		void MolecularControl::writePreferences(INIFile& inifile)
@@ -1378,6 +1388,57 @@ namespace BALL
 			DockWidget::writePreferences(inifile);
 		}
 
+		Size MolecularControl::applySMARTSSelector()
+		{
+			if (parentWidget() == 0) return 0;
+			if (smarts_edit_->currentText() == "")
+			{
+				getMainControl()->clearSelection();
+				return 0;
+			}
+
+			SmartsMatcher s;
+
+			HashSet<Composite*> roots;
+			Size nr_of_matches = 0;
+
+			CompositeManager::CompositeIterator it = getMainControl()->getCompositeManager().begin();
+			for(; it != getMainControl()->getCompositeManager().end(); it++)
+			{
+				MoleculeIterator mit = ((System*)*it)->beginMolecule();
+				for (;+mit; ++mit)
+				{
+					std::vector<HashSet<const Atom*> > matches = s.match(*mit, smarts_edit_->currentText().ascii());
+					nr_of_matches += matches.size();
+					for (Position p = 0; p < matches.size(); p++)
+					{
+						HashSet<const Atom*>& set = matches[p];
+						HashSet<const Atom*>::Iterator sit = set.begin();
+						for (;+sit; ++sit)
+						{
+							Atom& a = (*(Atom*)*sit);
+							a.setSelected(true);
+							roots.insert(&a.getRoot());
+						}
+					}
+				}
+			}
+
+			HashSet<Composite*>::Iterator sit = roots.begin();
+			for (; sit != roots.end(); sit++)
+			{
+				getMainControl()->updateRepresentationsOf(**sit, true, true);
+			}
+
+			NewSelectionMessage* nm = new NewSelectionMessage;
+			nm->setOpenItems(true);
+			getMainControl()->sendMessage(*nm);
+
+			setStatusbarText(String(nr_of_matches) + "Matches");
+			listview->setFocus();
+
+			return nr_of_matches;
+		}
 
 	} // namespace VIEW
 } // namespace BALL
