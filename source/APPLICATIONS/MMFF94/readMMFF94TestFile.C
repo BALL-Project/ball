@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.51 2006/02/25 17:15:12 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.52 2006/02/25 22:44:56 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -42,10 +42,9 @@ System* readTestFile(String filename)
 	filename = filename.getSubstring(0, filename.size() - 4);
 	filename += "atoms";
 
-	vector<String> atoms, names, symbols;
+	vector<String> atoms, names, symbols, fields;
 	vector<double> charges, fcharges;
 	vector<short> types;
-	vector<String> fields;
 
 	HashMap<String, Position> name_to_pos;
 	Position pos = 0;
@@ -61,6 +60,7 @@ System* readTestFile(String filename)
 
 		atoms.push_back(fields[0]);
 		types.push_back(fields[2].toUnsignedShort());
+		symbols.push_back(fields[3]);
 		charges.push_back(fields[4].toFloat());
 		fcharges.push_back(fields[5].toFloat());
 
@@ -82,6 +82,7 @@ System* readTestFile(String filename)
 		Position pos = name_to_pos[ait->getName()];
 //   		ait->setType(types[pos]);
 		ait->setProperty("Type", types[pos]);
+		ait->setProperty("TypeName", symbols[pos]);
 		Vector3 v;
 		v.x = fcharges[pos];
 		ait->setVelocity(v);
@@ -840,17 +841,11 @@ bool testCharge(System& system, String filename)
 }
 
 
-HashSet<Index> all_types;
-HashSet<Index> wrong_types_set;
-HashSet<Index> occured_types;
-vector<String> wrong_names;
-vector<String> wrong_file_names;
-vector<String> occured_file_names;
+Size all_atoms;
 
-vector<Size> numbers;
+HashSet<String> type_errors;
 
 Size wrong_types;
-Size right_types;
 
 bool testType(System& system, String filename)
 {
@@ -862,30 +857,26 @@ bool testType(System& system, String filename)
 	AtomIterator ait = system.beginAtom();
 	for (; +ait; ++ait)
 	{
-		Index org_type = ait->getProperty("Type").getInt();
-		occured_file_names[(Position)org_type] = filename;
-		all_types.insert(org_type);
-		Index our_type = ait->getType();
-		if (our_type > 0) numbers[our_type] ++;
-		if (wrong_types_set.has(org_type)) 
-		{
-			wrong_types++;
-			continue;
-		}
+		Atom& a = *ait;
+		String org_symbol = a.getProperty("TypeName").getString();
+		String our_symbol = a.getTypeName();
 
-		if (org_type == our_type) 
+		if (org_symbol == our_symbol) 
 		{
-			right_types++;
+			all_atoms++;
 			continue;
 		}
 	
 		wrong_types++;
-		wrong_types_set.insert(org_type);
+
+		String out(org_symbol + " <-> " + our_symbol);
+		if (type_errors.has(out)) continue;
+
+		type_errors.insert(out);
 
 		ok = false;
-		Log.error() << "Type! " << filename << " " 
-								<< ait->getName() << " was " << org_type << " <->" 
-								<< our_type << " " << ait->getTypeName() << std::endl;
+		Log.error() << "Type! " << filename << " " << a.getName() << "  was " << String(a.getProperty("Type").getInt()) 
+								<< " " << out << " " << String(a.getType()) << std::endl;
 	}
 
 	return ok;
@@ -904,7 +895,7 @@ int runtests(const vector<String>& filenames)
 	long wrong_torsion_types = 0;
 	for (Position pos = 0; pos < filenames.size(); pos++)
 	{
-		Log.info() << "> " << filenames[pos] << std::endl;
+//   		Log.info() << "> " << filenames[pos] << std::endl;
 		String full_file_name(dir +FileSystem::PATH_SEPARATOR + filenames[pos] + ".mol2");
 		System* system = readTestFile(full_file_name);
 		if (system == 0)
@@ -999,24 +990,8 @@ int runtests(const vector<String>& filenames)
 
 	Log.info() << "Wrong torsion types: " << wrong_torsion_types << std::endl;
 
-	Log.info() << "Types: Ok " << all_types.size() - wrong_types_set.size() << " False: " << wrong_types_set.size() << std::endl;
-	Log.info() << "Right types: " << right_types << "  wrong " << wrong_types << std::endl;
+	Log.info() << "Types: Ok " << all_atoms - type_errors.size() << " False: " << type_errors.size() << std::endl;
 
-	for (Position p = 0; p < 100; p++)
-	{
-		if (numbers[p] != 0)
-		{
-			Log.info() << "T " << p << " " << numbers[p] << std::endl;
-		}
-	}
-
-	Log.info() << std::endl << "-----------------------------------------------" << std::endl;
-
-	for (Position p = 0; p < 100; p++)
-	{
-		Log.info() << "TO " << p << " " << occured_file_names[p] << std::endl;
-	}
-		
 	return 0;
 }
 
@@ -1055,12 +1030,6 @@ int main(int argc, char** argv)
 	}
 
 	wrong_types = 0;
-	right_types = 0;
-	numbers.resize(100);
-	occured_file_names.resize(100);
-	for (Position p = 0; p < 100; p++)
-	{
-		numbers[p] = 0;
-	}
+	all_atoms = 0;
 	return runtests(files);
 }
