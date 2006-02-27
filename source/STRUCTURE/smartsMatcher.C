@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.C,v 1.6 2006/02/25 16:10:28 bertsch Exp $
+// $Id: smartsMatcher.C,v 1.7 2006/02/27 22:48:49 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/smartsMatcher.h>
@@ -279,6 +279,14 @@ namespace BALL
 							if (!first->isBoundTo(*second))
 							{
 								return false;
+							}
+							else
+							{
+								// TODO correct?!? only aromatic and single ring closure bonds are allowed?
+								if (first->getBond(*second)->getOrder() != Bond::ORDER__SINGLE && first->getBond(*second)->getOrder() != Bond::ORDER__AROMATIC)
+								{
+									return false;
+								}
 							}
 						}
 					}
