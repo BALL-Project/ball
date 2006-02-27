@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.C,v 1.6.4.1 2006/02/14 15:03:00 amoll Exp $
+// $Id: smartsParser.C,v 1.6.4.2 2006/02/27 12:27:27 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/smartsParser.h>
@@ -324,6 +324,7 @@ namespace BALL
 
 	Size SmartsParser::SPAtom::getNumberOfImplicitHydrogens(const Atom* atom) const
 	{
+		// TODO charges?
 		return getDefaultValence(atom) - countRealValences(atom);
 	}
 
@@ -596,6 +597,7 @@ namespace BALL
 				{
 					return false;
 				}
+				continue;
 			}
 			if (property_name == "NotAromatic")
 			{
@@ -823,6 +825,7 @@ namespace BALL
 	SmartsParser::SmartsParser()
 		:	needs_SSSR_(false),
 			recursive_(false),
+			component_grouping_(false),
 			root_((SPNode*)0)
 	{
 	}
@@ -830,6 +833,7 @@ namespace BALL
 	SmartsParser::SmartsParser(const SmartsParser& parser)
 		:	needs_SSSR_(parser.needs_SSSR_),
 			recursive_(parser.recursive_),
+			component_grouping_(parser.component_grouping_),
 			root_(parser.root_)
 	{
 		// TODO new states!
@@ -881,6 +885,7 @@ namespace BALL
 		}
 		needs_SSSR_ = false;
 		recursive_ = false;
+		component_grouping_ = false;
 		component_no_ = 0;
 		rec_edges_.clear();
 	}
