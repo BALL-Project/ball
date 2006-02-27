@@ -633,6 +633,7 @@ atom_property:
 	|	ring_size
 		{
 			$$ = new NamedProperty("InRingSize", Size($1));
+			SmartsParser::state.current_parser->setNeedsSSSR(true);
 		}
 	|	valence
 		{
