@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.C,v 1.7 2006/02/25 16:10:28 bertsch Exp $
+// $Id: smartsParser.C,v 1.8 2006/02/27 12:26:04 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/smartsParser.h>
@@ -597,6 +597,7 @@ namespace BALL
 				{
 					return false;
 				}
+				continue;
 			}
 			if (property_name == "NotAromatic")
 			{
