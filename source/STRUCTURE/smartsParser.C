@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.C,v 1.6.4.2 2006/02/27 12:27:27 amoll Exp $
+// $Id: smartsParser.C,v 1.6.4.3 2006/02/27 19:01:26 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/smartsParser.h>
@@ -223,14 +223,17 @@ namespace BALL
 			{
 				s = PTE[symbol.toUnsignedInt()].getSymbol();
 			}
-			if (islower(symbol[0]))
-			{
-				s.toUpper(0, 1);
-				setProperty("Aromatic", true);
-			}
 			else
 			{
-				setProperty("Aliphatic", true);
+				if (islower(symbol[0]))
+				{
+					s.toUpper(0, 1);
+					setProperty("Aromatic", true);
+				}
+				else
+				{
+					setProperty("Aliphatic", true);
+				}
 			}
 			setProperty("Symbol", s);
 #ifdef SMARTS_PARSER_DEBUG
@@ -645,6 +648,7 @@ namespace BALL
 			// in ring of size
 			if (property_name == "InRingSize")
 			{
+				
 				if (!atom->getProperty("InRing").getBool())
 				{
 					return false;
