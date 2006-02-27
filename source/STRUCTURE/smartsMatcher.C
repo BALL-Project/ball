@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.C,v 1.5.4.1 2006/02/14 15:02:59 amoll Exp $
+// $Id: smartsMatcher.C,v 1.5.4.2 2006/02/27 23:07:18 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/smartsMatcher.h>
@@ -22,10 +22,12 @@ using namespace std;
 namespace BALL
 {
 	SmartsMatcher::SmartsMatcher()
+		: has_user_sssr_(false)
 	{
 	}
 
-	SmartsMatcher::SmartsMatcher(const SmartsMatcher& /*matcher*/)
+	SmartsMatcher::SmartsMatcher(const SmartsMatcher& matcher)
+		: has_user_sssr_(matcher.has_user_sssr_)
 	{
 	}
 
@@ -37,7 +39,19 @@ namespace BALL
 	{
 		return *this;
 	}
-	
+
+	void SmartsMatcher::setSSSR(const vector<vector<Atom*> >& sssr)
+	{
+		sssr_ = sssr;
+		has_user_sssr_ = true;
+	}
+
+	void SmartsMatcher::unsetSSSR()
+	{
+		sssr_.clear();
+		has_user_sssr_ = false;
+	}
+
 	vector<HashSet<const Atom*> > SmartsMatcher::match(Molecule& molecule, const String& smarts) 
 		throw(Exception::ParseError)
 	{
@@ -54,17 +68,29 @@ namespace BALL
 
 		if (parser.getNeedsSSSR())
 		{
-			RingPerceptionProcessor rpp;
-			std::vector<std::vector<Atom*> > sssr;
-			rpp.calculateSSSR(sssr, molecule);
-			parser.setSSSR(sssr);
+			if (!has_user_sssr_)
+			{
+				RingPerceptionProcessor rpp;
+				std::vector<std::vector<Atom*> > sssr;
+				rpp.calculateSSSR(sssr, molecule);
+				parser.setSSSR(sssr);
+			}
+			else
+			{
+				parser.setSSSR(sssr_);
+			}
+		}
+
+		if (parser.hasComponentGrouping())
+		{
+			// TODO
+			// all SPNodes have an member ComponentGroupNumber which is set -1 if it
+			// is not set, and and non-negative integer if set.
 		}
 
 		rec_matches_.clear();
 		if (parser.isRecursive())
 		{
-			//rec_matches_.clear();
-		
 			// collect all recursive environments of the tree
 			stack<SPNode*> rec_nodes;
 			HashSet<SPNode*> tree_nodes = parser.getNodes();
@@ -80,7 +106,6 @@ namespace BALL
 			cerr << "rec nodes: " << rec_nodes.size() << endl;
 			#endif
 		
-			//HashMap<SPNode*, vector<HashSet<const Atom*> > > rec_matches;
 			while (rec_nodes.size() != 0)
 			{
 				vector<HashSet<const Atom*> > tmp;
@@ -92,20 +117,14 @@ namespace BALL
 					{
 						for (Size i = 0; i != rs.matched_atoms.size(); ++i)
 						{
-							//cerr << "eval" << endl;
-							if (evaluateRingEdges_(rs.matched_atoms[i], rs.mapped_atoms[i]))
+							if (evaluateRingEdges_(rs.matched_atoms[i], rs.mapped_atoms[i], smarts))
 							{
 								tmp.push_back(rs.matched_atoms[i]);
 							}
-							//cerr << "eval ring edges" << endl;
 						}
 					}
 				}
-				//cerr << "size of tmp=" << tmp.size() << endl;
-
-				// TODO reduce the multiple matches to unique ones
-
-				
+				// TODO reduce the multiple matches to unique ones, good speedup
 				if (rec_nodes.top()->getNot())
 				{
 					//cerr << "not" << endl;
@@ -117,7 +136,6 @@ namespace BALL
 							non_match.insert(*it);
 						}
 					}
-					//cerr << "non_match.size()=" << non_match.size() << endl;
 					
 					HashSet<const Atom*> tmp_match;
 					for (AtomConstIterator it=molecule.beginAtom(); +it; ++it)
@@ -125,7 +143,6 @@ namespace BALL
 						if (!non_match.has(&*it))
 						{
 							tmp_match.insert(&*it);
-							//cerr << it->getName();
 						}
 					}
 					rec_matches_[rec_nodes.top()].push_back(tmp_match);
@@ -152,11 +169,9 @@ namespace BALL
 				}
 				cerr << endl;
 			}
-			#endif
-			
-			
-			//cerr << "recursive smarts not implemented yet" << endl;
+			#endif			
 		}
+
 		//else
 		//{
 			// TODO: better selection heuristic, most discriminating part should be choosen first
@@ -175,7 +190,7 @@ namespace BALL
 						#ifdef SMARTS_MATCHER_DEBUG
 						cerr << "size of matchings[" << i << "]: " << rs.matched_atoms[i].size() << ", size of mappings[" << i << "]: " << rs.mapped_atoms[i].size() << endl;
 						#endif
-						if (evaluateRingEdges_(rs.matched_atoms[i], rs.mapped_atoms[i]))
+						if (evaluateRingEdges_(rs.matched_atoms[i], rs.mapped_atoms[i], smarts))
 						{
 							matches.push_back(rs.matched_atoms[i]);
 						}
@@ -234,7 +249,7 @@ namespace BALL
 		return matches;
 	}
 
-	bool SmartsMatcher::evaluateRingEdges_(	const HashSet<const Atom*>& match, const HashMap<const SPNode*, const Atom*>& mapping)
+	bool SmartsMatcher::evaluateRingEdges_(	const HashSet<const Atom*>& match, const HashMap<const SPNode*, const Atom*>& mapping, const String& smarts)
 	{
 		#ifdef SMARTS_MATCHER_DEBUG
 		cerr << "bool SmartsMatcher::evaluateRingEdges_( const HashSet<const Atom*>& match, const HashMap<const SPNode*, const Atom*>& mapping)" << endl;
@@ -247,7 +262,7 @@ namespace BALL
 			{
 				if (it->second.size()%2 != 0)
 				{
-					throw Exception::ParseError(__FILE__, __LINE__, "wrong number of bond indices", String(it->first));
+					throw Exception::ParseError(__FILE__, __LINE__, "wrong number of ring bond indices (was "+String(it->first)+"): "+smarts, "");
 				}
 				for (Size i=0; i!=it->second.size(); i+=2)
 				{
@@ -264,6 +279,14 @@ namespace BALL
 							if (!first->isBoundTo(*second))
 							{
 								return false;
+							}
+							else
+							{
+								// TODO correct?!? only aromatic and single ring closure bonds are allowed?
+								if (first->getBond(*second)->getOrder() != Bond::ORDER__SINGLE && first->getBond(*second)->getOrder() != Bond::ORDER__AROMATIC)
+								{
+									return false;
+								}
 							}
 						}
 					}
