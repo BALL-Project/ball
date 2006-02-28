@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.2.6 2006/02/25 17:17:52 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.2.7 2006/02/28 09:44:09 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -45,13 +45,13 @@ namespace BALL
 		bool setup(const String& filename);
 		
 		///
-		void assignTo(System& s);
-
-		///
-		void assignTo(Molecule& mol);
+		virtual void assignTo(System& s);
 
 		protected:
 		
+		///
+		void assignTo(Molecule& mol);
+
 		/** To be overloaded in derived classes 
 				to add support for additional properties e.g. charges
 		*/
@@ -70,6 +70,30 @@ namespace BALL
 		// number for fields per line in the config file
 		Size 							number_expected_fields_;
 	};
+	
+	///
+	class BALL_EXPORT MMFF94AtomTyper
+		: public AtomTyper
+	{
+		public:
+
+		BALL_CREATE(MMFF94AtomTyper)
+
+		///
+		MMFF94AtomTyper();
+
+		///
+		MMFF94AtomTyper(const MMFF94AtomTyper& t);
+
+		///
+		virtual ~MMFF94AtomTyper() {};
+
+		///
+		virtual void assignTo(System& s);
+
+		protected:
+	};
+		
 
 	/**	Assign MMFF94 Charges
       \ingroup  MMFF94

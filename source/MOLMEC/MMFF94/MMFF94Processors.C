@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.8 2006/02/25 17:15:15 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.9 2006/02/28 09:43:53 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -13,6 +13,8 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/STRUCTURE/smartsMatcher.h>
+#include <BALL/QSAR/aromaticityProcessor.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
 
 //    #define BALL_DEBUG_MMFF
 #define BALL_DEBUG_TEST
@@ -136,6 +138,66 @@ void AtomTyper::assignTo(Molecule& mol)
 			Log.error() << e << std::endl;
 		}
 	}
+}
+
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+
+MMFF94AtomTyper::MMFF94AtomTyper()
+{
+//   	number_expected_fields_ = 5;
+}
+
+MMFF94AtomTyper::MMFF94AtomTyper(const MMFF94AtomTyper& t)
+	: AtomTyper(t)
+{
+}
+
+void MMFF94AtomTyper::assignTo(System& s)
+{
+	AtomIterator ait = s.beginAtom();
+	for (; +ait; ++ait)
+	{
+		ait->setProperty("IsAromatic", false);
+	}
+
+	vector<vector<Atom*> > rings;
+
+	RingPerceptionProcessor rpp;
+	rpp.calculateSSSR(rings, s);
+
+	AromaticityProcessor ap;
+	ap.aromatizeSimple(rings);
+	
+	for (Position r = 0; r < rings.size(); r++)
+	{
+		const vector<Atom*>& ring = rings[r];
+
+		HashSet<Atom*> ring_atoms;
+		for (Position a = 0; a < ring.size(); a++)
+		{
+			ring_atoms.insert(ring[a]);
+		}
+
+		HashSet<Atom*>::Iterator ait = ring_atoms.begin();
+		for (; +ait; ++ait)
+		{
+			Atom& atom = **ait;
+			atom.setProperty("IsAromatic", true); 
+			/*
+			AtomBondIterator bit = atom.beginBond();
+			for (; +bit; ++bit)
+			{
+				if (ring_atoms.has(bit->getPartner(atom)))
+				{
+					bit->setOrder(Bond::ORDER__AROMATIC);
+				}
+			}
+			*/
+		}
+	}
+
+	AtomTyper::assignTo(s);
 }
 
 /////////////////////////////////////////////////////

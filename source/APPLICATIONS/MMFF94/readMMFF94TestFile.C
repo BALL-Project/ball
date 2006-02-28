@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.52 2006/02/25 22:44:56 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.53 2006/02/28 09:44:19 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -847,10 +847,8 @@ HashSet<String> type_errors;
 
 Size wrong_types;
 
-bool testType(System& system, String filename)
+bool testType(System& system, String filename, AtomTyper& typer)
 {
-	AtomTyper typer;
-	typer.setup(Path().find("MMFF94/TYPES.PAR"));
 	typer.assignTo(system);
 
 	bool ok = true;
@@ -861,7 +859,8 @@ bool testType(System& system, String filename)
 		String org_symbol = a.getProperty("TypeName").getString();
 		String our_symbol = a.getTypeName();
 
-		if (org_symbol == our_symbol) 
+//   		if (org_symbol == our_symbol) 
+		if (a.getProperty("Type").getInt() == a.getType()) 
 		{
 			all_atoms++;
 			continue;
@@ -886,6 +885,9 @@ bool testType(System& system, String filename)
 
 int runtests(const vector<String>& filenames)
 {
+	MMFF94AtomTyper typer;
+	typer.setup(Path().find("MMFF94/TYPES.PAR"));
+
 	MMFF94 mmff;
 
 	vector<String> not_ok;
@@ -952,7 +954,7 @@ int runtests(const vector<String>& filenames)
 			Log.info() << "We have unassigned atoms: " << mmff.getUnassignedAtoms().size() << std::endl;
 		}
 */
- 		testType(*system, filenames[pos]);
+ 		testType(*system, filenames[pos], typer);
 //    		result &= testStretch(mmff, filenames[pos], true);
 //       result &= testBend(mmff, filenames[pos], true);
 //    		result &= testStretchBend(mmff, filenames[pos], true);
