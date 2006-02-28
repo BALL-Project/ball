@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.100 2006/02/25 16:51:11 amoll Exp $
+// $Id: molecularControl.C,v 1.101 2006/02/28 09:44:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -1402,26 +1402,34 @@ namespace BALL
 			HashSet<Composite*> roots;
 			Size nr_of_matches = 0;
 
-			CompositeManager::CompositeIterator it = getMainControl()->getCompositeManager().begin();
-			for(; it != getMainControl()->getCompositeManager().end(); it++)
+			try
 			{
-				MoleculeIterator mit = ((System*)*it)->beginMolecule();
-				for (;+mit; ++mit)
+				CompositeManager::CompositeIterator it = getMainControl()->getCompositeManager().begin();
+				for(; it != getMainControl()->getCompositeManager().end(); it++)
 				{
-					std::vector<HashSet<const Atom*> > matches = s.match(*mit, smarts_edit_->currentText().ascii());
-					nr_of_matches += matches.size();
-					for (Position p = 0; p < matches.size(); p++)
+					MoleculeIterator mit = ((System*)*it)->beginMolecule();
+					for (;+mit; ++mit)
 					{
-						HashSet<const Atom*>& set = matches[p];
-						HashSet<const Atom*>::Iterator sit = set.begin();
-						for (;+sit; ++sit)
+						std::vector<HashSet<const Atom*> > matches = s.match(*mit, smarts_edit_->currentText().ascii());
+						nr_of_matches += matches.size();
+						for (Position p = 0; p < matches.size(); p++)
 						{
-							Atom& a = (*(Atom*)*sit);
-							a.setSelected(true);
-							roots.insert(&a.getRoot());
+							HashSet<const Atom*>& set = matches[p];
+							HashSet<const Atom*>::Iterator sit = set.begin();
+							for (;+sit; ++sit)
+							{
+								Atom& a = (*(Atom*)*sit);
+								a.setSelected(true);
+								roots.insert(&a.getRoot());
+							}
 						}
 					}
 				}
+			}
+			catch(...)
+			{
+				setStatusbarText("Invalid Expression!", true);
+				return 0;
 			}
 
 			HashSet<Composite*>::Iterator sit = roots.begin();
