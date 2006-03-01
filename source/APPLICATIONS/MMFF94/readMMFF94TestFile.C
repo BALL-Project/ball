@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.54 2006/03/01 18:12:42 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.55 2006/03/01 21:15:40 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -25,6 +25,7 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
+#include <BALL/STRUCTURE/smartsMatcher.h>
 
 #include <math.h>
 
@@ -1031,9 +1032,76 @@ vector<String> getTestFiles()
 	return results;
 }
 
+int expressionTest(vector<String>& filenames, String expr, Index type)
+{
+	Size errors = 0;
+	SmartsMatcher sm;
+	for (Position pos = 0; pos < filenames.size(); pos++)
+	{
+		String filename(filenames[pos]);
+		String full_file_name(dir +FileSystem::PATH_SEPARATOR + filenames[pos] + ".mol2");
+		System* system = readTestFile(full_file_name);
+		if (system == 0)
+		{
+			Log.error() << "Could not read mol2 file " << full_file_name << std::endl;
+			return -1;
+		}
+		
+		HashSet<String> names_set;
+		AtomIterator ait = system->beginAtom();
+		for (; +ait; ++ait)
+		{
+			if (ait->getProperty("Type").getInt() == type)
+			{
+				names_set.insert(ait->getName());
+			}
+		}
+
+		vector<HashSet<const Atom*> > result = sm.match(*system->getMolecule(0), expr);
+
+		if (result.size() == 0) continue;
+		for (Position pos = 0; pos < result.size(); pos++)
+		{
+			HashSet<const Atom*>& set = result[pos];
+			if (set.size() != 1) 
+			{
+				Log.error() << "Problem with smarts expr " << expr  << " in " << __FILE__ << " " << __LINE__ << std::endl;
+				continue;
+			}
+
+			Atom& atom = *(Atom*)*set.begin();
+
+			String org_type(atom.getProperty("Type").getInt());
+		
+			if (org_type < type)
+			{
+				errors ++;
+				Log.error() << filename << "  " << atom.getName() << "  " << org_type << std::endl;
+				continue;
+			}
+			else
+			{
+				if (org_type == type) names_set.erase(atom.getName());
+			}
+		}
+
+		HashSet<String>::Iterator it = names_set.begin();
+		for (; +it; ++it)
+		{
+			errors ++;
+			Log.error() << filename << "  " << *it << "  ###### " << std::endl;
+		}
+	}
+
+
+	Log.error() << "Errors:  " << errors << std::endl;
+
+	return 0;
+}
+
 int main(int argc, char** argv)
 {
-	if (argc != 3)
+	if (argc < 3)
 	{
 		Log.error() << "Usage: readMMFF94TestFile <dir with extracted test files> <all|system name>" << std::endl;
 		return 1;
@@ -1054,5 +1122,30 @@ int main(int argc, char** argv)
 	wrong_types = 0;
 	all_atoms = 0;
 	type_errors = 0;
+
+	if (argc == 4)
+	{
+		LineBasedFile lf(Path().find("MMFF94/TYPES.PAR"));
+		String type(argv[3]);
+		String expr;
+		while(lf.readLine())
+		{
+			String line = lf.getLine();
+			if (line.hasPrefix("*")) continue;
+
+			if (line.hasSubstring(type))
+			{
+				vector<String> fields;
+				line.split(fields, "|");
+				expr = fields[3];
+				expr.trim();
+				break;
+			}
+		}
+
+		Log.info() << expr << std::endl;
+		return expressionTest(files, expr, type.toInt());
+	}
+
 	return runtests(files);
 }
