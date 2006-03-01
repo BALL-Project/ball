@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.9 2006/02/28 09:43:53 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.10 2006/03/01 18:12:42 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -49,7 +49,7 @@ bool AtomTyper::setup(const String& filename)
 		const String line = infile.getLine();
 
 		// comments and empty lines
-		if (line == "" || line[0] == '*') continue;
+		if (line.size() < 2 || line[0] == '*') continue;
 		
 		if (line.split(fields, "|") < number_expected_fields_)
 		{
@@ -153,6 +153,71 @@ MMFF94AtomTyper::MMFF94AtomTyper(const MMFF94AtomTyper& t)
 {
 }
 
+bool MMFF94AtomTyper::setupHydrogenTypes(const String& filename)
+{
+	LineBasedFile infile(filename);
+
+	vector<String> fields;
+	
+	while (infile.readLine())
+	{
+		const String line = infile.getLine();
+
+		// comments and empty lines
+		if (line.size() < 2 || line[0] == '*') continue;
+		
+		if (line.split(fields) < 2)
+		{
+			continue;
+			Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+									<< filename << " Not enough fields in one line " 
+									<< line << std::endl;
+			return false;
+		}
+
+		type_to_htype_[fields[0]] = fields[1];
+	}
+
+	return true;
+}
+
+bool MMFF94AtomTyper::setupSymbolsToTypes(const String& filename)
+{
+	LineBasedFile infile(filename);
+
+	vector<String> fields;
+	
+	while (infile.readLine())
+	{
+		const String line = infile.getLine();
+
+		// comments and empty lines
+		if (line.size() < 2 || line[0] == '*') continue;
+		
+		if (line.split(fields) < 2)
+		{
+			Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+									<< filename << " Not enough fields in one line " 
+									<< line << std::endl;
+			return false;
+		}
+
+		try
+		{
+			id_to_type_[fields[0]] = fields[1].toUnsignedInt();
+		}
+		catch(...)
+		{
+			Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+									<< filename << " " << line << std::endl;
+			return false;
+		}
+	}
+
+	return true;
+}
+
+
 void MMFF94AtomTyper::assignTo(System& s)
 {
 	AtomIterator ait = s.beginAtom();
@@ -198,6 +263,27 @@ void MMFF94AtomTyper::assignTo(System& s)
 	}
 
 	AtomTyper::assignTo(s);
+
+	ait = s.beginAtom();
+	for (; +ait; ++ait)
+	{
+		if (ait->getElement().getSymbol() != "H" ||
+				ait->countBonds() != 1)
+		{
+			continue;
+		}
+
+		Bond& bond = *ait->getBond(0);
+		const Atom& partner = *bond.getPartner(*ait);
+
+		const String key = partner.getTypeName();
+		if (!type_to_htype_.has(key)) continue;
+		String htype = type_to_htype_[key];
+		ait->setTypeName(htype);
+
+		if (!id_to_type_.has(htype)) continue;
+		ait->setType(id_to_type_[htype]);
+	}
 }
 
 /////////////////////////////////////////////////////

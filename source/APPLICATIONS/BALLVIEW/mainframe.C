@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.55.4.1 2006/02/14 15:02:03 amoll Exp $
+// $Id: mainframe.C,v 1.55.4.2 2006/03/01 18:12:41 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -21,6 +21,8 @@
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
+#include <BALL/VIEW/PRIMITIVES/simpleBox.h>
+#include <BALL/VIEW/KERNEL/clippingPlane.h>
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
 
@@ -372,6 +374,68 @@ namespace BALL
 
 	void Mainframe::about()
 	{
+		
+		Vector3 u = Vector3(-5, 70, -5);
+		Vector3 l = Vector3(30, 70, 30);
+		for (Position p = 0; p < 14; p++)
+		{
+			Representation* rep = new Representation();
+			rep->setTransparency(230);
+			SimpleBox* b = new SimpleBox;
+			b->setColor(ColorRGBA(255,255,000, 120));
+			
+			b->a = u;
+			b->b = l + (Vector3(0,0.2,0));
+			l+= Vector3(0, 3, 0);
+			u+= Vector3(0, 3, 0);
+			rep->insert(*b);
+			insert(*rep);
+			update(*rep);
+		}
+		
+		
+
+		/*
+		setMultithreading(false);
+		Representation* r = *getPrimitiveManager().getRepresentations().begin();
+ 		Vector3 u = Vector3(-5, 70, -5);
+ 		Vector3 l = Vector3(30, 70, 30);
+		vector<Representation*> reps;
+		for (Position p = 0; p < 7; p++)
+		{
+			Representation* rep = (Representation*)r->create(true);
+			insert(*rep);
+//   			update(*rep);
+			reps.push_back(rep);
+
+			ClippingPlane* p1 = new ClippingPlane;
+			p1->getRepresentations().insert(rep);
+			p1->setPoint(u + (l-u) / 2.0);
+			p1->setNormal(Vector3(0, 1,0));
+			p1->setActive(true);
+			getPrimitiveManager().insertClippingPlane(p1);
+
+			ClippingPlane* p2 = new ClippingPlane;
+			p2->getRepresentations().insert(rep);
+			p2->setPoint(u + (l-u) /2.0 + Vector3(0, 0.4, 0));
+			p2->setNormal(Vector3(0, -1,0));
+			p2->setActive(true);
+			getPrimitiveManager().insertClippingPlane(p2);
+
+			l+= Vector3(0, 1.5, 0);
+			u+= Vector3(0, 1.5, 0);
+		}
+
+		remove(*r);
+		setMultithreading(true);
+
+		for (Position p = 0; p < reps.size(); p++)
+		{
+//   			update(*reps[p]);
+		}
+		*/
+			
+		return;
 		// Display about dialog
 		AboutDialog about;
 		QString version = QString("QT ") + qVersion();

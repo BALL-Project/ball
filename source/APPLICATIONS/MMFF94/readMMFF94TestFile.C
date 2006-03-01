@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.53 2006/02/28 09:44:19 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.54 2006/03/01 18:12:42 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -843,9 +843,10 @@ bool testCharge(System& system, String filename)
 
 Size all_atoms;
 
-HashSet<String> type_errors;
+HashSet<String> type_errors_bigger;
+HashSet<String> type_errors_lower;
 
-Size wrong_types;
+Size wrong_types, type_errors;
 
 bool testType(System& system, String filename, AtomTyper& typer)
 {
@@ -858,20 +859,36 @@ bool testType(System& system, String filename, AtomTyper& typer)
 		Atom& a = *ait;
 		String org_symbol = a.getProperty("TypeName").getString();
 		String our_symbol = a.getTypeName();
+		all_atoms++;
 
 //   		if (org_symbol == our_symbol) 
-		if (a.getProperty("Type").getInt() == a.getType()) 
+		Index org_type = a.getProperty("Type").getInt();
+		if (org_type == a.getType()) continue;
+
+		if (a.getElement().getSymbol() == "H")
 		{
-			all_atoms++;
-			continue;
+			Bond& bond = *a.getBond(0);
+			Atom& a2 = *bond.getPartner(a);
+			if (a2.getType() != a2.getProperty("Type").getInt()) continue;
+		}
+
+		type_errors++;
+
+		if (org_type < a.getType()) 
+		{
+			if (type_errors_bigger.has(a.getType())) continue;
+			type_errors_bigger.insert(a.getType());
+		}
+		else
+		{
+			if (type_errors_lower.has(org_type)) continue;
+			type_errors_lower.insert(org_type);
 		}
 	
-		wrong_types++;
 
 		String out(org_symbol + " <-> " + our_symbol);
-		if (type_errors.has(out)) continue;
 
-		type_errors.insert(out);
+		wrong_types++;
 
 		ok = false;
 		Log.error() << "Type! " << filename << " " << a.getName() << "  was " << String(a.getProperty("Type").getInt()) 
@@ -887,6 +904,8 @@ int runtests(const vector<String>& filenames)
 {
 	MMFF94AtomTyper typer;
 	typer.setup(Path().find("MMFF94/TYPES.PAR"));
+	typer.setupHydrogenTypes(Path().find("MMFF94/MMFFHDEF.PAR"));
+	typer.setupSymbolsToTypes(Path().find("MMFF94/MFFSYMB.PAR"));
 
 	MMFF94 mmff;
 
@@ -992,7 +1011,8 @@ int runtests(const vector<String>& filenames)
 
 	Log.info() << "Wrong torsion types: " << wrong_torsion_types << std::endl;
 
-	Log.info() << "Types: Ok " << all_atoms - type_errors.size() << " False: " << type_errors.size() << std::endl;
+	Log.info() << "Types: Ok " << all_atoms - type_errors << " False: " << type_errors << " cat: " 
+							<< type_errors_lower.size() + type_errors_bigger.size() << std::endl;
 
 	return 0;
 }
@@ -1033,5 +1053,6 @@ int main(int argc, char** argv)
 
 	wrong_types = 0;
 	all_atoms = 0;
+	type_errors = 0;
 	return runtests(files);
 }

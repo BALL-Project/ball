@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.2.7 2006/02/28 09:44:09 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.2.8 2006/03/01 18:12:41 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -13,6 +13,10 @@
 
 #ifndef BALL_DATATYPE_HASHSET_H
 # include <BALL/DATATYPE/hashSet.h>
+#endif
+
+#ifndef BALL_DATATYPE_STRINGHASHMAP_H
+# include <BALL/DATATYPE/stringHashMap.h>
 #endif
 
 #include <vector>
@@ -91,7 +95,16 @@ namespace BALL
 		///
 		virtual void assignTo(System& s);
 
+		/// Read the hydrogen matching from MMFFHDEF.PAR
+		virtual bool setupHydrogenTypes(const String& filename);
+
+		/// Read the matching from ID to numerical type from MFFSYMB.PAR
+		virtual bool setupSymbolsToTypes(const String& filename);
+
 		protected:
+
+		StringHashMap<String> type_to_htype_;
+		StringHashMap<Position> id_to_type_;
 	};
 		
 
