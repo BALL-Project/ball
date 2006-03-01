@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.5 2006/02/01 13:07:41 leonhardt Exp $
+// $Id: dockingController.C,v 1.6 2006/03/01 19:21:55 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -26,8 +26,8 @@
 #include <BALL/FORMAT/INIFile.h>
 
 #ifdef BALL_HAS_FFTW
-#include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
-#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
+#	include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
+#	include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 #endif
 
 #ifdef BALL_QT_HAS_THREADS
@@ -36,8 +36,8 @@
 
 #include <qmessagebox.h>
 #include <qcombobox.h>
-//#define BALL_VIEW_DEBUG
-//#undef BALL_QT_HAS_THREADS
+// #define BALL_VIEW_DEBUG
+// #undef BALL_QT_HAS_THREADS
 using namespace std;
 
 namespace BALL
@@ -47,8 +47,7 @@ namespace BALL
 
 		DockingController::DockingController(QWidget* parent, const char* name)
 			throw()
-			:	QWidget(parent, name),
-				ModularWidget(name),
+			:	GenericControl(parent, name),
 				dock_dialog_(this),
 				dock_alg_(0),
 				progress_dialog_(0)
@@ -57,13 +56,13 @@ namespace BALL
 				Log.info() << "New DockingController " << this << std::endl;
 			#endif
 			registerWidget(this);
+			hide();
 		}
 
 		// Copy constructor.
 		DockingController::DockingController(const DockingController& dock_controller)
 			throw()
-			: QWidget(),
-				ModularWidget(dock_controller),
+			: GenericControl(dock_controller),
 				dock_dialog_(),
 				dock_alg_(dock_controller.dock_alg_),
 				progress_dialog_(dock_controller.progress_dialog_),

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60 2006/01/04 16:28:17 amoll Exp $
+// $Id: mainframe.C,v 1.61 2006/03/01 19:21:55 oliver Exp $
 //
 
 #include "mainframe.h"
@@ -78,10 +78,9 @@ namespace BALL
 		// ---------------------
 		// Logstream setup -----
 		// ---------------------
-//		Lo g.remove(std::cout);
-// 		Log.remove(std::cerr);
+		Log.remove(std::cout);
+		Log.remove(std::cerr);
 		setLoggingFilename("BALLView.log");
-		setAcceptDrops(true);
 
 		CHECK_PTR(new MolecularControl(		this, "Structures"));
 		CHECK_PTR(new GeometricControl(		this, "Representations"));
@@ -93,13 +92,13 @@ namespace BALL
 		CHECK_PTR(new MolecularStructure(	this, "MolecularStructure"));
 		CHECK_PTR(new HelpViewer(					this, "Documentation"));
 		CHECK_PTR(new LogView(						this, "Logs"));
-
 		CHECK_PTR(new DockingController(this, "DockingController"));
 
 		Scene::stereoBufferSupportTest();
 		scene_ = new Scene(this, "3D View");
 		CHECK_PTR(scene_);
 		setCentralWidget(scene_);
+		setAcceptDrops(true);
 
 		// setup the VIEW server
 		Server* server = new Server(this);
