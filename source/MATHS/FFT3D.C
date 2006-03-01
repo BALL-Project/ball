@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.C,v 1.7.10.1 2006/03/01 19:01:00 anhi Exp $
+// $Id: FFT3D.C,v 1.7.10.2 2006/03/01 19:04:24 anhi Exp $
 //
 
 #include <BALL/MATHS/FFT3D.h>
@@ -73,7 +73,7 @@ namespace BALL
 	template <>
 	TFFT3D<DoubleTraits>::TFFT3D(Size ldnX, Size ldnY, Size ldnZ, double stepPhysX, double stepPhysY, double stepPhysZ, Vector3 origin, bool inFourierSpace)
 		throw()
-		: TRegularData3D<Complex>(TRegularData3D<Complex>::IndexType((ldnX), (ldnY), (ldnZ)), -origin, Vector3((((ldnX)-1)*stepPhysX_),(((ldnY)-1)*stepPhysY_),(((ldnZ)-1)*stepPhysZ_))),
+		: TRegularData3D<Complex>(TRegularData3D<Complex>::IndexType((ldnX), (ldnY), (ldnZ)), -origin, Vector3((((ldnX)-1)*stepPhysX),(((ldnY)-1)*stepPhysY),(((ldnZ)-1)*stepPhysZ))),
 		  lengthX_(ldnX),
 			lengthY_(ldnY),
 			lengthZ_(ldnZ),
