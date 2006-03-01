@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.55 2006/03/01 21:15:40 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.56 2006/03/01 21:40:29 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -1034,6 +1034,8 @@ vector<String> getTestFiles()
 
 int expressionTest(vector<String>& filenames, String expr, Index type)
 {
+	HashSet<String> wrong_files;
+
 	Size errors = 0;
 	SmartsMatcher sm;
 	for (Position pos = 0; pos < filenames.size(); pos++)
@@ -1071,12 +1073,13 @@ int expressionTest(vector<String>& filenames, String expr, Index type)
 
 			Atom& atom = *(Atom*)*set.begin();
 
-			String org_type(atom.getProperty("Type").getInt());
+			Index org_type = atom.getProperty("Type").getInt();
 		
 			if (org_type < type)
 			{
 				errors ++;
 				Log.error() << filename << "  " << atom.getName() << "  " << org_type << std::endl;
+				wrong_files.insert(filename);
 				continue;
 			}
 			else
@@ -1090,11 +1093,21 @@ int expressionTest(vector<String>& filenames, String expr, Index type)
 		{
 			errors ++;
 			Log.error() << filename << "  " << *it << "  ###### " << std::endl;
+			wrong_files.insert(filename);
 		}
 	}
 
 
 	Log.error() << "Errors:  " << errors << std::endl;
+
+	Log.info () << std::endl;
+	HashSet<String>::Iterator sit = wrong_files.begin();
+	for (; +sit; ++sit)
+	{
+		Log.info() << "test/" << *sit << ".mol2  ";
+	}
+
+	Log.info() << std::endl;
 
 	return 0;
 }
