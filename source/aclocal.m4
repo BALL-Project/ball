@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.87 2006/01/27 14:47:27 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.88 2006/03/01 08:58:56 oliver Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -299,16 +299,16 @@ dnl
 AC_DEFUN(CF_CHECK_ECHO,[
 AC_MSG_CHECKING(whether echo accepts -e)
 if `/bin/sh -c "echo -e \"\n\"" >/dev/null 2>&1` ; then
-if test "`/bin/sh -c echo -e 2>&1`" = "" -a "`/bin/sh -c echo -e OK`" = "OK" ; then
-ECHO_COMMAND="echo -e"
-AC_MSG_RESULT(yes)	
+	if test "`/bin/sh -c echo -e 2>&1`" = "" -a "`/bin/sh -c echo -e OK`" = "OK" ; then
+		ECHO_COMMAND="echo -e"
+		AC_MSG_RESULT(yes)	
+	else
+		ECHO_COMMAND="echo"
+		AC_MSG_RESULT(no)	
+	fi
 else
-ECHO_COMMAND="echo"
-AC_MSG_RESULT(no)	
-fi
-else
-ECHO_COMMAND="echo"
-AC_MSG_RESULT(no)
+	ECHO_COMMAND="echo"
+	AC_MSG_RESULT(no)
 fi
 AC_SUBST(ECHO_COMMAND)
 ])
@@ -320,12 +320,12 @@ dnl   (needed to find headers in a certain path like GL/libgl.h
 dnl
 AC_DEFUN(CF_CHECK_FIND,[
 if test "${FIND}" != "no" ; then
-RESULT=`${FIND} KERNEL -path . -print 2>&1`
-if test "${RESULT}" != "" ; then     dnl    did get an error message ... bad.
-FIND_KNOWS_PATH=false
-else
-FIND_KNOWS_PATH=true
-fi
+	RESULT=`${FIND} KERNEL -path . -print 2>&1`
+	if test "${RESULT}" != "" ; then     dnl    did get an error message ... bad.
+		FIND_KNOWS_PATH=false
+	else
+		FIND_KNOWS_PATH=true
+	fi
 fi
 ])
 
@@ -350,112 +350,112 @@ dnl		default...
 BINFMT="${OS}"
 
 if test "$OS" = SunOS ; then
-if test "$OSMAJOR" = 5 ; then
-OS=Solaris
-ARCHITECTURE=`${UNAME} -p`
-BINFMT="${OS}-${OSREV}-${ARCHITECTURE}"
-else
-OS=SunOS
-fi
+	if test "$OSMAJOR" = 5 ; then
+		OS=Solaris
+		ARCHITECTURE=`${UNAME} -p`
+		BINFMT="${OS}-${OSREV}-${ARCHITECTURE}"
+	else
+		OS=SunOS
+	fi
 fi
 
 if test "$OS" = Linux ; then
-PROCESSOR=`${UNAME} -m`
-ARCHITECTURE=unknown
-if test "${PROCESSOR}" = sparc -o "${PROCESSOR}" = SPARC ; then
-ARCHITECTURE=sparc
-BINFMT=Linux-sparc
-fi
-if test `echo $PROCESSOR|${CUT} -c1` = i ; then
-ARCHITECTURE=i386
-BINFMT=Linux-i386
-fi
-if test `echo $PROCESSOR` = alpha ; then
-ARCHITECTURE=alpha
-BINFMT=Linux-alpha
-fi
-if test `echo $PROCESSOR` = x86_64 ; then
-ARCHITECTURE=x86_64
-BINFMT=Linux-x86_64
-fi
-if test "${ARCHITECTURE}" = "unknown" -a "${PROJECT[]_IGNORE_ARCH}" = ""; then
-AC_MSG_RESULT(OS: ${OS} / hardware: ${PROCESSOR})
-AC_MSG_RESULT(Sorry - this architecture is currently not supported...)
-CF_ERROR
-fi
+	PROCESSOR=`${UNAME} -m`
+	ARCHITECTURE=unknown
+	if test "${PROCESSOR}" = sparc -o "${PROCESSOR}" = SPARC ; then
+		ARCHITECTURE=sparc
+		BINFMT=Linux-sparc
+	fi
+	if test `echo $PROCESSOR|${CUT} -c1` = i ; then
+		ARCHITECTURE=i386
+		BINFMT=Linux-i386
+	fi
+	if test `echo $PROCESSOR` = alpha ; then
+		ARCHITECTURE=alpha
+		BINFMT=Linux-alpha
+	fi
+	if test `echo $PROCESSOR` = x86_64 ; then
+		ARCHITECTURE=x86_64
+		BINFMT=Linux-x86_64
+	fi
+	if test "${ARCHITECTURE}" = "unknown" -a "${PROJECT[]_IGNORE_ARCH}" = ""; then
+		AC_MSG_RESULT(OS: ${OS} / hardware: ${PROCESSOR})
+		AC_MSG_RESULT(Sorry - this architecture is currently not supported...)
+		CF_ERROR
+	fi
 fi
 
 if test "${OS}" = IRIX64 ; then
-OS=IRIX
+	OS=IRIX
 fi
 
 if test "${OS}" = IRIX ; then
-BINFMT=IRIX-${OSREV}
+	BINFMT=IRIX-${OSREV}
 fi
 
 if test "${OS}" = OSF1 ; then
-BINFMT="OSF1-${OSREV}"
-PROCESSOR=`${UNAME} -m`
-ARCHITECTURE=unknown
-if test `echo $PROCESSOR` = alpha ; then
-ARCHITECTURE=alpha
-fi
+	BINFMT="OSF1-${OSREV}"
+	PROCESSOR=`${UNAME} -m`
+	ARCHITECTURE=unknown
+	if test `echo $PROCESSOR` = alpha ; then
+		ARCHITECTURE=alpha
+	fi
 fi
 
 if test "${OS}" = Darwin ; then
-BINFMT="Darwin-${OSREV}"
-PROCESSOR=`${UNAME} -p`
-ARCHITECTURE=`${UNAME} -m`
+	BINFMT="Darwin-${OSREV}"
+	PROCESSOR=`${UNAME} -p`
+	ARCHITECTURE=`${UNAME} -m`
 fi
 
 if test "`echo $OS | ${CUT} -d_ -f1`" = "CYGWIN" ; then
-OS="CYGWIN"
-PROJECT[]_NO_XDR=true
+	OS="CYGWIN"
+	PROJECT[]_NO_XDR=true
 fi
 
 if test "$OS" != Linux -a "$OS" != Solaris -a "$OS" != IRIX \
--a  "$OS" != OSF1 -a "$OS" != FreeBSD -a "$OS" != "CYGWIN" \
--a "${OS}" != Darwin -a "${PROJECT[]_IGNORE_ARCH}" = "" ; then
-AC_MSG_RESULT(Sorry - your OS ($OS) is currently not supported...)
-CF_ERROR
+	-a  "$OS" != OSF1 -a "$OS" != FreeBSD -a "$OS" != "CYGWIN" \
+	-a "${OS}" != Darwin -a "${PROJECT[]_IGNORE_ARCH}" = "" ; then
+	AC_MSG_RESULT(Sorry - your OS ($OS) is currently not supported...)
+	CF_ERROR
 fi
 
 dnl
 dnl 	create OS defines in config.h:
 dnl
 if test "${OS}" = Linux ; then
-AC_DEFINE(PROJECT[]_OS_LINUX,LINUX)
+	AC_DEFINE(PROJECT[]_OS_LINUX,LINUX)
 fi
 if test "${OS}" = Solaris ; then
-AC_DEFINE(PROJECT[]_OS_SOLARIS,SOLARIS)
+	AC_DEFINE(PROJECT[]_OS_SOLARIS,SOLARIS)
 fi
 if test "${OS}" = IRIX ; then
-AC_DEFINE(PROJECT[]_OS_IRIX,IRIX)
+	AC_DEFINE(PROJECT[]_OS_IRIX,IRIX)
 fi
 if test "${OS}" = OSF1 ; then
-AC_DEFINE(PROJECT[]_OS_OSF1,OSF1)
+	AC_DEFINE(PROJECT[]_OS_OSF1,OSF1)
 fi
 if test "${OS}" = FreeBSD ; then
-AC_DEFINE(PROJECT[]_OS_FREEBSD,FREEBSD)
+	AC_DEFINE(PROJECT[]_OS_FREEBSD,FREEBSD)
 fi
 if test "${OS}" = Darwin ; then
-AC_DEFINE(PROJECT[]_OS_DARWIN,DARWIN)
+	AC_DEFINE(PROJECT[]_OS_DARWIN,DARWIN)
 fi
 
 dnl
 dnl		create ARCHITECTURE defines
 dnl
 if test "$ARCHITECTURE" = sparc ; then
-AC_DEFINE(PROJECT[]_ARCH_SPARC,SPARC)
+	AC_DEFINE(PROJECT[]_ARCH_SPARC,SPARC)
 fi
 if test "$ARCHITECTURE" = i386 ; then
-AC_DEFINE(PROJECT[]_ARCH_I386,I386)
+	AC_DEFINE(PROJECT[]_ARCH_I386,I386)
 fi
 if test "$ARCHITECTURE" = mips ; then
-AC_DEFINE(PROJECT[]_ARCH_MIPS,MIPS)
+	AC_DEFINE(PROJECT[]_ARCH_MIPS,MIPS)
 fi
 if test "$ARCHITECTURE" = alpha ; then
-AC_DEFINE(PROJECT[]_ARCH_ALPHA,ALPHA)
+	AC_DEFINE(PROJECT[]_ARCH_ALPHA,ALPHA)
 fi
 
 AC_MSG_RESULT($OS $OSREV (BINFMT=$BINFMT))
@@ -465,13 +465,13 @@ dnl	some definitions the depend solely on the OS
 dnl
 SHARED_LIB_SUFFIX=so
 if test "${OS}" = HP-UX ; then
-SHARED_LIB_SUFFIX=sl
+	SHARED_LIB_SUFFIX=sl
 fi
 if test "${OS}" = Darwin ; then
-SHARED_LIB_SUFFIX=dylib
+	SHARED_LIB_SUFFIX=dylib
 fi
 if test "${OS}" = CYGWIN ; then
-SHARED_LIB_SUFFIX=dll
+	SHARED_LIB_SUFFIX=dll
 fi
 AC_SUBST(SHARED_LIB_SUFFIX)
 ])
@@ -488,10 +488,10 @@ dnl   CC (at least releases 5.0 and below) is not usable.
 AC_DEFUN(CF_SEARCH_CXX,[
 CXX_NAME=""
 case "${OS}" in
-Solaris )		CXX_SEARCH_ORDER="g++ CC ";;
-IRIX ) 			CXX_SEARCH_ORDER="CC g++ ";;
-OSF1 )			CXX_SEARCH_ORDER="cxx CC g++ ";;
-* ) 				CXX_SEARCH_ORDER="g++ CC cxx ";;
+	Solaris )		CXX_SEARCH_ORDER="g++ CC ";;
+	IRIX ) 			CXX_SEARCH_ORDER="CC g++ ";;
+	OSF1 )			CXX_SEARCH_ORDER="cxx CC g++ ";;
+	* ) 				CXX_SEARCH_ORDER="g++ CC cxx ";;
 esac
 
 dnl
@@ -499,49 +499,49 @@ dnl   Search for the C++ compiler
 dnl
 AC_MSG_CHECKING(searching for C++ compiler)
 if test "${CXX}" != "" ; then
-if test -x "${CXX}" ; then
-AC_MSG_RESULT(from the command line: ${CXX})
+	if test -x "${CXX}" ; then
+		AC_MSG_RESULT(from the command line: ${CXX})
+	else
+		AC_PATH_PROG(CXXPATH,${CXX},no)
+		if test "${CXXPATH}" = no ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Cannot find ${CXX}. Please add it to your PATH)
+			AC_MSG_RESULT(or specify an absolute path in configure.)
+			CF_ERROR
+		else
+			CXX=${CXXPATH}
+		fi
+	fi
 else
-AC_PATH_PROG(CXXPATH,${CXX},no)
-if test "${CXXPATH}" = no ; then
-AC_MSG_RESULT()
-AC_MSG_RESULT(Cannot find ${CXX}. Please add it to your PATH)
-AC_MSG_RESULT(or specify an absolute path in configure.)
-CF_ERROR
-else
-CXX=${CXXPATH}
-fi
-fi
-else
-AC_MSG_RESULT()
-CXXPATH=""
-while test "${CXXPATH}" = "" ; do
-CXX=`echo ${CXX_SEARCH_ORDER}|${CUT} -d\  -f1`
-if test _`echo ${CXX} | ${TR} -d " "`_ = __ ; then
-CXXPATH="END"
-fi
-if test "${CXXPATH}" != "END" ; then
-AC_PATH_PROG(CXXPATH,${CXX},no)
-if test "${CXXPATH}" = no ; then
+	AC_MSG_RESULT()
 	CXXPATH=""
-	unset ac_cv_path_CXXPATH
-else
-	CXX=${CXXPATH}
-fi
-fi
+	while test "${CXXPATH}" = "" ; do
+	CXX=`echo ${CXX_SEARCH_ORDER}|${CUT} -d\  -f1`
+	if test _`echo ${CXX} | ${TR} -d " "`_ = __ ; then
+		CXXPATH="END"
+	fi
+	if test "${CXXPATH}" != "END" ; then
+		AC_PATH_PROG(CXXPATH,${CXX},no)
+		if test "${CXXPATH}" = no ; then
+			CXXPATH=""
+			unset ac_cv_path_CXXPATH
+		else
+			CXX=${CXXPATH}
+		fi
+	fi
 
-CXX_SEARCH_ORDER=`echo "${CXX_SEARCH_ORDER} " |${CUT} -d\  -f2-`
-done
+	CXX_SEARCH_ORDER=`echo "${CXX_SEARCH_ORDER} " |${CUT} -d\  -f2-`
+	done
 
-if test "${CXXPATH}" = "end" ; then
-AC_MSG_RESULT()
-AC_MSG_RESULT(Could not find a C++ compiler. Please change the settings)
-AC_MSG_RESULT(of your PATH environment variable (using setenv export))
-AC_MSG_RESULT(or specify an absolute path in configure by setting the variable)
-AC_MSG_RESULT(CXX=<pathname> or specify the compiler by passing the option)
-AC_MSG_RESULT(--with-compiler=<compiler> to configure.)
-CF_ERROR
-fi
+	if test "${CXXPATH}" = "end" ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Could not find a C++ compiler. Please change the settings)
+		AC_MSG_RESULT(of your PATH environment variable (using setenv export))
+		AC_MSG_RESULT(or specify an absolute path in configure by setting the variable)
+		AC_MSG_RESULT(CXX=<pathname> or specify the compiler by passing the option)
+		AC_MSG_RESULT(--with-compiler=<compiler> to configure.)
+		CF_ERROR
+	fi
 fi
 
 dnl
@@ -552,17 +552,17 @@ dnl   reside in)
 dnl
 
 if test "${CXX_PATH}" = "" ; then
-if test "${CXX}" = "" ; then
-CXX_NAME=unknown
+	if test "${CXX}" = "" ; then
+		CXX_NAME=unknown
+	else
+		CXX_NAME="${CXX}"
+	fi
 else
-CXX_NAME="${CXX}"
-fi
-else
-CXX_NAME="${CXX_PATH}"
+	CXX_NAME="${CXX_PATH}"
 fi
 
 while test "`echo ${CXX_NAME}|  ${GREP} /`" != "" ; do
-CXX_NAME=`echo ${CXX_NAME} |  ${CUT} -d/ -f2-`
+	CXX_NAME=`echo ${CXX_NAME} |  ${CUT} -d/ -f2-`
 done
 ])
 
@@ -575,13 +575,13 @@ AC_DEFUN(CF_DIGEST_CXX_VERSION,[
 CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
 CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.]//g" | wc -c`
 if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
-CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
+	CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
 fi
 if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
-CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+	CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
 fi
 if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
-CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
+	CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
 fi
 AC_DEFINE_UNQUOTED(PROJECT[]_COMPILER_VERSION_MAJOR, ${CXX_VERSION_1})
 AC_DEFINE_UNQUOTED(PROJECT[]_COMPILER_VERSION_MINOR, ${CXX_VERSION_2})
@@ -3270,8 +3270,13 @@ AC_DEFUN(CF_VIEW_QT_EXECUTABLES, [
 		fi
 	fi
 ])
-dnl Try to identify the X11 libraries to link against
 
+dnl  Try to identify whether SQL support has been compiled into QT
+AC_DEFUN(CF_VIEW_QT_SQL, [
+	dnl ????
+])
+
+dnl Try to identify the X11 libraries to link against
 AC_DEFUN(CF_VIEW_X_LINK_TEST, [
 
 	dnl  
@@ -3411,6 +3416,9 @@ if test "${USE_VIEW}" = true ; then
 
 	dnl Check for QT executables required to build the dialogs (MOC, UIC)
 	CF_VIEW_QT_EXECUTABLES
+
+	dnl Check for special features, e.g. SQL drivers
+	CF_VIEW_QT_SQL
 
 	AC_DEFINE(PROJECT[]_HAS_VIEW,)
 	LIBVIEW="libVIEW.a"

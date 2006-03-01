@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface_test.C,v 1.1 2006/01/24 09:58:29 oliver Exp $
+// $Id: DBInterface_test.C,v 1.2 2006/03/01 08:58:58 oliver Exp $
 //
 // Author:
 //  Oliver Kohlbacher
@@ -32,7 +32,7 @@
 
 ///////////////////////////
 
-START_TEST(DBInterface, "$Id: DBInterface_test.C,v 1.1 2006/01/24 09:58:29 oliver Exp $")
+START_TEST(DBInterface, "$Id: DBInterface_test.C,v 1.2 2006/03/01 08:58:58 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ RESULT
 String filename = DBInterface::BALL_DEFAULT_DBRCFILE;
 FileSystem::canonizePath(filename);
 bool have_access = true;
-if (File::isReadable(filename))
+if (File::isAccessible(filename) && File::isReadable(filename))
 {
 	INIFile rc(filename);
 	rc.read();
