@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.2.8 2006/03/01 18:12:41 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.2.9 2006/03/02 16:38:08 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -103,8 +103,8 @@ namespace BALL
 
 		protected:
 
-		StringHashMap<String> type_to_htype_;
-		StringHashMap<Position> id_to_type_;
+		StringHashMap<String> partner_type_to_htype_;
+		StringHashMap<Position> H_id_to_type_;
 	};
 		
 

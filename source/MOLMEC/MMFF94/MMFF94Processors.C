@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.10 2006/03/01 18:12:42 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.11 2006/03/02 16:38:09 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -175,7 +175,7 @@ bool MMFF94AtomTyper::setupHydrogenTypes(const String& filename)
 			return false;
 		}
 
-		type_to_htype_[fields[0]] = fields[1];
+		partner_type_to_htype_[fields[0]] = fields[1];
 	}
 
 	return true;
@@ -204,7 +204,7 @@ bool MMFF94AtomTyper::setupSymbolsToTypes(const String& filename)
 
 		try
 		{
-			id_to_type_[fields[0]] = fields[1].toUnsignedInt();
+			H_id_to_type_[fields[0]] = fields[1].toUnsignedInt();
 		}
 		catch(...)
 		{
@@ -238,32 +238,127 @@ void MMFF94AtomTyper::assignTo(System& s)
 	{
 		const vector<Atom*>& ring = rings[r];
 
-		HashSet<Atom*> ring_atoms;
 		for (Position a = 0; a < ring.size(); a++)
 		{
-			ring_atoms.insert(ring[a]);
-		}
-
-		HashSet<Atom*>::Iterator ait = ring_atoms.begin();
-		for (; +ait; ++ait)
-		{
-			Atom& atom = **ait;
+			Atom& atom = *(Atom*)ring[a];
 			atom.setProperty("IsAromatic", true); 
-			/*
-			AtomBondIterator bit = atom.beginBond();
-			for (; +bit; ++bit)
-			{
-				if (ring_atoms.has(bit->getPartner(atom)))
-				{
-					bit->setOrder(Bond::ORDER__AROMATIC);
-				}
-			}
-			*/
 		}
 	}
 
 	AtomTyper::assignTo(s);
 
+	// assign heterocyclic 5 ring members:
+	// e.g. C5A C5B N5A N5B
+	
+	// iterate over all rings
+	for (Position r = 0; r < rings.size(); r++)
+	{
+		vector<Atom*>& ring = rings[r];
+		if (ring.size() != 5) continue;
+
+		HashSet<Atom*> ring_atoms;
+
+		for (Position p = 0; p < 5; p++)
+		{
+			ring_atoms.insert(ring[p]);
+		}
+
+		HashSet<Atom*> hetero_atoms;
+
+		for (Position p = 0; p < 5; p++)
+		{
+			if (ring[p]->getElement().getSymbol() != "C" &&
+			    ring[p]->getElement().getSymbol() != "N") 
+			{
+				hetero_atoms.insert(ring[p]);
+			}
+			else if (ring[p]->getElement().getSymbol() == "N")
+			{
+				Size nr_val = 0;
+				AtomBondIterator bit = ring[p]->beginBond();
+				for (; +bit; ++bit)
+				{
+					Atom& partner = *bit->getPartner(*ring[p]);
+					if (ring_atoms.has(&partner))
+					{
+						nr_val += bit->getOrder();
+					}
+				}
+
+				if (nr_val < 3)
+				{
+					hetero_atoms.insert(ring[p]);
+				}
+			}
+		}
+
+		if (hetero_atoms.size() == 0) continue;
+
+		for (Position p = 0; p < 5; p++)
+		{
+			Atom& atom = *ring[p];
+
+//   			if (atom.getTypeName() == "NPYL") continue;
+
+			String element = atom.getElement().getSymbol();
+			if (element != "N" && element != "C") continue;
+			if (atom.getType() > 66) continue;
+
+			bool alpha = false;
+
+			AtomBondIterator bit = atom.beginBond();
+			for (; +bit; ++bit)
+			{
+				Atom& partner = *bit->getPartner(atom);
+				if (hetero_atoms.has(&partner))
+				{
+					alpha = true;
+					break;
+				}
+			}
+
+			String type_name;
+			Position type;
+
+			if (alpha)
+			{
+				if (element == "C") { type = 63; type_name = "C5A";}
+				else                { type = 65; type_name = "N5A";}
+			}
+			else
+			{
+				if (element == "C") { type = 64; type_name = "C5B";}
+				else                { type = 66; type_name = "N5B";}
+			}
+
+			if (type_name == "N5B")
+			{
+				bool NPYL = false;
+				AtomBondIterator bit = atom.beginBond();
+				for (; +bit; ++bit)
+				{
+					Atom& partner = *bit->getPartner(atom);
+					if (!ring_atoms.has(&partner))
+					{
+						if (partner.getElement().getSymbol() == "C")
+						{
+							NPYL = true;
+							break;
+						}
+					}
+				}
+
+				if (NPYL) continue;
+			}
+
+			atom.setTypeName(type_name);
+			atom.setType(type);
+
+		} // all atoms in one ring
+	} // all rings: done
+
+	////////////////////////////////////////////////////////////////
+	// assign Hydrogen atom types according to their binding partner
 	ait = s.beginAtom();
 	for (; +ait; ++ait)
 	{
@@ -277,12 +372,21 @@ void MMFF94AtomTyper::assignTo(System& s)
 		const Atom& partner = *bond.getPartner(*ait);
 
 		const String key = partner.getTypeName();
-		if (!type_to_htype_.has(key)) continue;
-		String htype = type_to_htype_[key];
-		ait->setTypeName(htype);
+		if (!partner_type_to_htype_.has(key)) continue;
 
-		if (!id_to_type_.has(htype)) continue;
-		ait->setType(id_to_type_[htype]);
+		String H_type_name = partner_type_to_htype_[key];
+		if (!H_id_to_type_.has(H_type_name)) continue;
+
+		Position H_nr = H_id_to_type_[H_type_name];
+
+		if (ait->getType() != -1 && ait->getType() != 29)
+		{
+Log.error() << "#~~#   2 " << ait->getType() << " " << H_nr            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+		}
+		if (ait->getType() > (Index) H_nr) continue;
+
+		ait->setTypeName(H_type_name);
+		ait->setType(H_nr);
 	}
 }
 

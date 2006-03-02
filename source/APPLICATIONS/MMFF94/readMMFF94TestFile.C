@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.57 2006/03/02 00:39:13 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.58 2006/03/02 16:38:09 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -864,7 +864,6 @@ bool testType(System& system, String filename, AtomTyper& typer)
 		String our_symbol = a.getTypeName();
 		all_atoms++;
 
-//   		if (org_symbol == our_symbol) 
 		Index org_type = a.getProperty("Type").getInt();
 		if (org_type == a.getType()) continue;
 
@@ -879,12 +878,12 @@ bool testType(System& system, String filename, AtomTyper& typer)
 
 		if (org_type < a.getType()) 
 		{
-			if (type_errors_bigger.has(a.getType())) continue;
+//   			if (type_errors_bigger.has(a.getType())) continue;
 			type_errors_bigger.insert(a.getType());
 		}
 		else
 		{
-			if (type_errors_lower.has(org_type)) continue;
+//   			if (type_errors_lower.has(org_type)) continue;
 			type_errors_lower.insert(org_type);
 		}
 	
@@ -895,7 +894,7 @@ bool testType(System& system, String filename, AtomTyper& typer)
 
 		ok = false;
 		Log.error() << "Type! " << filename << " " << a.getName() << "  was " << String(a.getProperty("Type").getInt()) 
-								<< " " << out << " " << String(a.getType()) << std::endl;
+								<< " " << out << " " << String(a.getType()) << " "  << std::endl;
 	}
 
 	return ok;
@@ -1098,7 +1097,7 @@ int expressionTest(vector<String>& filenames, String expr, Index type, String ty
 			if (org_type < type)
 			{
 				errors ++;
-				Log.error() << filename << "  " << atom.getName() << "  " << org_type << std::endl;
+				Log.error() << filename << "  " << atom.getName() << "  " << org_type << " " << atom.getProperty("TypeName").getString()<< std::endl;
 				wrong_files.insert(filename);
 				continue;
 			}
