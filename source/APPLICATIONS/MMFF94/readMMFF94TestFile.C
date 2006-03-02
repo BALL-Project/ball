@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.56 2006/03/01 21:40:29 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.57 2006/03/02 00:39:13 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -26,6 +26,8 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
 #include <BALL/STRUCTURE/smartsMatcher.h>
+#include <BALL/QSAR/aromaticityProcessor.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
 
 #include <math.h>
 
@@ -1032,9 +1034,10 @@ vector<String> getTestFiles()
 	return results;
 }
 
-int expressionTest(vector<String>& filenames, String expr, Index type)
+int expressionTest(vector<String>& filenames, String expr, Index type, String type_name)
 {
 	HashSet<String> wrong_files;
+	HashSet<String> correct;
 
 	Size errors = 0;
 	SmartsMatcher sm;
@@ -1049,19 +1052,36 @@ int expressionTest(vector<String>& filenames, String expr, Index type)
 			return -1;
 		}
 		
+		vector<vector<Atom*> > rings;
+		RingPerceptionProcessor rpp;
+		rpp.calculateSSSR(rings, *system);
+		AromaticityProcessor ap;
+		ap.aromatizeSimple(rings);
+		
+		for (Position r = 0; r < rings.size(); r++)
+		{
+			const vector<Atom*>& ring = rings[r];
+
+			for (Position a = 0; a < ring.size(); a++)
+			{
+				Atom& atom = *ring[a];
+				atom.setProperty("IsAromatic", true); 
+			}
+		}
+
 		HashSet<String> names_set;
 		AtomIterator ait = system->beginAtom();
 		for (; +ait; ++ait)
 		{
 			if (ait->getProperty("Type").getInt() == type)
 			{
+				if (type_name != (String)ait->getProperty("TypeName").getString()) continue;
 				names_set.insert(ait->getName());
 			}
 		}
 
 		vector<HashSet<const Atom*> > result = sm.match(*system->getMolecule(0), expr);
 
-		if (result.size() == 0) continue;
 		for (Position pos = 0; pos < result.size(); pos++)
 		{
 			HashSet<const Atom*>& set = result[pos];
@@ -1074,7 +1094,7 @@ int expressionTest(vector<String>& filenames, String expr, Index type)
 			Atom& atom = *(Atom*)*set.begin();
 
 			Index org_type = atom.getProperty("Type").getInt();
-		
+
 			if (org_type < type)
 			{
 				errors ++;
@@ -1139,17 +1159,21 @@ int main(int argc, char** argv)
 	if (argc == 4)
 	{
 		LineBasedFile lf(Path().find("MMFF94/TYPES.PAR"));
-		String type(argv[3]);
+		String type_name(argv[3]);
 		String expr;
+		String type;
 		while(lf.readLine())
 		{
 			String line = lf.getLine();
 			if (line.hasPrefix("*")) continue;
 
-			if (line.hasSubstring(type))
+			vector<String> fields;
+			line.split(fields, "|");
+			fields[1].trim();
+			if (fields[1] == type_name)
 			{
-				vector<String> fields;
-				line.split(fields, "|");
+				fields[2].trim();
+				type = fields[2];
 				expr = fields[3];
 				expr.trim();
 				break;
@@ -1157,7 +1181,7 @@ int main(int argc, char** argv)
 		}
 
 		Log.info() << expr << std::endl;
-		return expressionTest(files, expr, type.toInt());
+		return expressionTest(files, expr, type.toInt(), type_name);
 	}
 
 	return runtests(files);
