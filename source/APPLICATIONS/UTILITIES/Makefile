@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.16.2.2 2006/02/19 14:56:57 anhi Exp $
+# $Id: Makefile,v 1.16.2.3 2006/03/02 18:52:58 anhi Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -13,8 +13,8 @@ include ../../common.mak
 
 default: all
 
-LDFLAGS+= -L/usr/lib/lam/lib/ -llam -llammpi++ -lpthread
-
+LDFLAGS+= -L/opt/misc/openmpi-1.0/lib -lmpi
+CXX=mpiCC
 
 EXECUTABLES = $(FFT_SOURCES)\
 	add_hydrogens\
@@ -47,6 +47,7 @@ OBJECTS=$(EXECUTABLES:=.o)
 # and replace them by the application specific
 # flags
 LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
+ADD_CXXFLAGS=-I/opt/misc/openmpi-1.0/include -I/opt/misc/openmpi-1.0/include/openmpi/ompi
 
 .o:
 	$(CXX) $(CXXFLAGS) $*.o $(LDFLAGS) -o $@ $(LIBS)

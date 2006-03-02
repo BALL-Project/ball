@@ -1244,7 +1244,7 @@ namespace BALL
 			mpi.init(argc, argv);
 
 			// spawn the desired number of processes
-			numprocs = mpi.spawn("/home/andreas/DEVELOP/geometricFit_slave.sh", argv, numprocs) + 1;
+			numprocs = mpi.spawn("/home/AH/anhi/DEVELOP/geometricFit_slave.sh", argv, numprocs) + 1;
 			if (verbosity > 1)
 				Log.info() << "Master process has spawned " << numprocs -1 << " slaves" << std::endl;
 
@@ -1269,6 +1269,7 @@ namespace BALL
 		double phi, theta, psi; // phi: around x axis, 
 														// theta: around y axis, 
                             // psi: around z axis;
+std::cout << "I have " << rotation_num << " rotations" << std::endl;
 		for (current_round_ = 0; (current_round_ < rotation_num) && !abort_; current_round_++)
 		{
 			// TODO: we should check if pause_ is true and sleep than for a given time
@@ -1386,6 +1387,7 @@ namespace BALL
 				rotations.push_back(it->orientation);
 			}
 			
+			//TEST!
 			// gather the stuff
 			std::vector<double>  all_values;
 			std::vector<Vector3> all_translations;
@@ -1417,13 +1419,12 @@ namespace BALL
 	{
 		MPISupport mpi(argc, argv);
 		Log.info() << "Process " << mpi.getRank() << "just woke up... " << std::endl;
-
+		
 		/** To perform some useful work, we need from our parent:
 		 * 		- The options
 		 * 		- The Systems
 		 * 		- Our part of the angle vector
 		 */
-		DockingAlgorithm::start();
 		Options *O = mpi.receiveOptions();
 		options = *O;
 		delete(O);
@@ -1448,7 +1449,7 @@ namespace BALL
 		Timer loop_timer;
 		loop_timer.start();
 
-		/** Now we can start our part of the loop... **/
+		// Now we can start our part of the loop...
 		DockingAlgorithm::start();
 
 		int verbosity = options.getInteger(Option::VERBOSITY);
@@ -1522,9 +1523,8 @@ namespace BALL
 		{
 			// TODO: we should check if pause_ is true and sleep than for a given time
 
-			/**while (pause_)
-				{ pause(10); };
-			 **/
+			//while (pause_) { pause(10); };
+
 			phi   =   our_phi[current_round_];
 			theta = our_theta[current_round_];
 			psi   =   our_psi[current_round_]; 
@@ -1616,6 +1616,7 @@ namespace BALL
 		}
 
 		/** Now we'll have to gather the stuff together again... **/
+		
 		// this is _not_ particularly clever, but well... it's a start... ;-)
 		// TODO: find a nicer way for this stuff
 		std::vector<double>  values;
@@ -1635,7 +1636,6 @@ namespace BALL
 		mpi.combineDatapoints(values);
 		mpi.combineDatapoints(translations);
 		mpi.combineDatapoints(rotations);
-
 		// that's it... we're done
 	}
 #endif
@@ -1705,7 +1705,7 @@ namespace BALL
 		// iterate over all peaks
 		int count = 0;
 		multiset<class Peak_>::iterator it = peak_set_.begin();
-		
+std::cout << 	"I have " << peak_set_.size() << " peaks...\n";
 		int verbosity = options.getInteger(Option::VERBOSITY);
 		for (; (it != peak_set_.end()) && (count < total_number); it++)
 		{

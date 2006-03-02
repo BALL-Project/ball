@@ -45,10 +45,11 @@ namespace BALL
 			MPI_Comm_get_parent(&parent); 
 			if (parent != MPI_COMM_NULL)
 			{
-				default_communicator_ = parent;
-				
+				if (default_communicator_ != MPI_COMM_WORLD)
+					MPI_Comm_free(&default_communicator_);
 				// now change to the new communicator
 				MPI_Intercomm_merge(parent, true, &default_communicator_);
+				MPI_Comm_free(&parent);
 			}
 		}
 		
@@ -63,6 +64,9 @@ namespace BALL
 		{
 			int is_initialized;
 			MPI_Initialized(&is_initialized);
+			if (default_communicator_ != MPI_COMM_WORLD)
+				MPI_Comm_free(&default_communicator_);
+
 			if (is_initialized)
 				MPI_Finalize();
 		}
@@ -135,10 +139,13 @@ namespace BALL
 			MPI_Comm_get_parent(&parent); 
 			if (parent != MPI_COMM_NULL)
 			{
-				default_communicator_ = parent;
+				if (default_communicator_ != MPI_COMM_WORLD)
+					MPI_Comm_free(&default_communicator_);
 				
 				// now change to the new communicator
 				MPI_Intercomm_merge(parent, true, &default_communicator_);
+
+			  MPI_Comm_free(&parent);
 			}
 		}
 		
@@ -309,7 +316,7 @@ namespace BALL
 	}
 
 	
-	void MPISupport::sendPersistenceStream_(const ostringstream& stream, TAGS tag, bool broadcast, int receiver)
+	void MPISupport::sendPersistenceStream_(const ostringstream& stream, int tag, bool broadcast, int receiver)
 		throw()
 	{
 		// should we broadcast or send directed?
@@ -341,7 +348,7 @@ namespace BALL
 		}
 	}
 
-	void MPISupport::receivePersistenceStream_(std::istringstream& in, TAGS tag, bool broadcast, int source)
+	void MPISupport::receivePersistenceStream_(std::istringstream& in, int tag, bool broadcast, int source)
 		throw()
 	{
 		std::vector<char> streambuf;
@@ -392,7 +399,7 @@ namespace BALL
 	}
 
 #ifdef BALL_HAS_MPI2_SUPPORT
-	Size MPISupport::spawn(const String& command, char *argv[], Size wanted_number_of_processes)
+	Size MPISupport::spawn(const String& command, char *argv[], Size wanted_number_of_processes, bool merge_communicator)
 		throw()
 	{
 		/** Should we use MPI_UNIVERSE to find a sensible number of processes? **/
@@ -423,12 +430,19 @@ namespace BALL
 				number_spawned++;
 		}
 
-		// now change to the new communicator
-		MPI_Intercomm_merge(new_communicator_, true, &default_communicator_);
+		if (merge_communicator)
+		{
+			// now change to the new communicator
+			if (default_communicator_ != MPI_COMM_WORLD)
+				MPI_Comm_free(&default_communicator_);
 
-		// Update size and rank
-		MPI_Comm_size(default_communicator_, &comm_size_);
-		MPI_Comm_rank(default_communicator_, &rank_);
+			MPI_Intercomm_merge(new_communicator_, true, &default_communicator_);
+			MPI_Comm_free(&new_communicator_);
+
+			// Update size and rank
+			MPI_Comm_size(default_communicator_, &comm_size_);
+			MPI_Comm_rank(default_communicator_, &rank_);
+		}
 
 		// and return
 		return number_spawned;
@@ -935,8 +949,27 @@ namespace BALL
 		throw(Exception::OutOfMemory)
 	{
 		// We'll need to take care of the pointers passed around...
-		Size num_points;
-		float* our_data = (float*) distributeDatapoints(&input[0], input.size(), num_points, mpi_Vector3_float_type_);
+		float* our_data = 0;
+		Size   num_points;
+		
+		// Vector3 does _not_ guarantee a sensible memory alignment. So let's test this first...
+		if (sizeof(TVector3<float>) == 3*sizeof(float))
+			our_data = (float*) distributeDatapoints(&input[0], input.size(), num_points, mpi_Vector3_float_type_);
+		else
+		{
+			// we need to provide a buffer and copy the input
+			float* input_buffer = new float[3*input.size()];
+			for (Size i=0; i<input.size(); i++)
+			{
+				input_buffer[3*i]   = input[i].x;
+				input_buffer[3*i+1] = input[i].y;
+				input_buffer[3*i+2] = input[i].z;
+			}
+			our_data = (float*) distributeDatapoints(input_buffer, input.size(), num_points, mpi_Vector3_float_type_);
+
+			// and free the buffer
+			delete[](input_buffer);
+		}
 
 		if (our_data == 0)
 			throw(Exception::OutOfMemory(__FILE__, __LINE__, num_points*3*sizeof(float)));
@@ -980,8 +1013,27 @@ namespace BALL
 		throw(Exception::OutOfMemory)
 	{
 		// We'll need to take care of the pointers passed around...
-		Size num_points;
-		double* our_data = (double*) distributeDatapoints(&input[0], input.size(), num_points, mpi_Vector3_double_type_);
+		double* our_data = 0;
+		Size 		num_points;
+
+		// Vector3 does _not_ guarantee a sensible memory alignment. So let's test this first...
+		if (sizeof(TVector3<double>) == 3*sizeof(double))
+			our_data = (double*) distributeDatapoints(&input[0], input.size(), num_points, mpi_Vector3_double_type_);
+		else
+		{
+			// we need to provide a buffer and copy the input
+			double* input_buffer = new double[3*input.size()];
+			for (Size i=0; i<input.size(); i++)
+			{
+				input_buffer[3*i]   = input[i].x;
+				input_buffer[3*i+1] = input[i].y;
+				input_buffer[3*i+2] = input[i].z;
+			}
+			our_data = (double*) distributeDatapoints(input_buffer, input.size(), num_points, mpi_Vector3_double_type_);
+
+			// and free the buffer
+			delete[](input_buffer);
+		}
 
 		if (our_data == 0)
 			throw(Exception::OutOfMemory(__FILE__, __LINE__, num_points*3*sizeof(double)));

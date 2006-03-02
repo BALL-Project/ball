@@ -17,4 +17,4 @@ include ../common.mak
 -include .Dependencies
 
 #workaround!
-ADD_CXXFLAGS=-I/usr/include/lam
+ADD_CXXFLAGS=-I/opt/misc/openmpi-1.0/include/openmpi/ompi -I/opt/misc/openmpi-1.0/include/

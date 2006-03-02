@@ -16,3 +16,5 @@ CPP_SOURCES= \
 
 include ../../common.mak
 include .Dependencies
+
+ADD_CXXFLAGS=-I/opt/misc/openmpi-1.0/include -I/opt/misc/openmpi-1.0/include/openmpi/ompi

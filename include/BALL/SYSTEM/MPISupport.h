@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MPISupport.h,v 1.1.2.3 2006/02/16 00:26:05 anhi Exp $
+// $Id: MPISupport.h,v 1.1.2.4 2006/03/02 18:52:57 anhi Exp $
 //
 
 #ifndef BALL_SYSTEM_MPISUPPORT_H
@@ -282,7 +282,7 @@ namespace BALL
 			 *  \return The number of processes that were succesfully spawned 
 		 	 */
 #ifdef BALL_HAS_MPI2_SUPPORT
-			Size spawn(const String& command, char *argv[], Size wanted_number_of_processes = 0)
+			Size spawn(const String& command, char *argv[], Size wanted_number_of_processes = 0, bool merge_communicator = true)
 				throw();
 #endif
 			
@@ -339,14 +339,14 @@ namespace BALL
 			 *  containing a persistence stream over the communicator.
 			 */
 			void sendPersistenceStream_(const std::ostringstream& stream, 
-																	TAGS tag = MPI_ANY_TAG, bool broadcast = true, int receiver = 0)
+																	int tag = MPI_ANY_TAG, bool broadcast = true, int receiver = 0)
 				throw();
 			
 			/** Helper function for receiving BALL - objects: receives a string
 			 *  containing a persistence stream from the communicator and stores
 			 *  it in the istream
 			 */
-			void receivePersistenceStream_(std::istringstream& in, TAGS tag = MPI_ANY_TAG, 
+			void receivePersistenceStream_(std::istringstream& in, int tag = MPI_ANY_TAG, 
 										 							   bool broadcast = true, int source = 0)
 				throw();	
 

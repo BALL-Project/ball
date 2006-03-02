@@ -252,8 +252,8 @@ namespace BALL
 					vector<int> psi_;
 
 				private:
+					int ang_num_;
 					int max_rotation_;
-					int  ang_num_;
 			};
 
       // PROTEIN_A is the static protein, i.e., the bigger one;
