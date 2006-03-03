@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.12 2006/03/03 01:34:43 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.13 2006/03/03 14:53:16 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -220,20 +220,21 @@ bool MMFF94AtomTyper::setupSymbolsToTypes(const String& filename)
 
 void MMFF94AtomTyper::assignTo(System& s)
 {
+	// delete any previous marks about the aromaticity:
 	AtomIterator ait = s.beginAtom();
 	for (; +ait; ++ait)
 	{
 		ait->setProperty("IsAromatic", false);
 	}
 
+	// collect all aromatic rings:
 	vector<vector<Atom*> > rings;
-
 	RingPerceptionProcessor rpp;
 	rpp.calculateSSSR(rings, s);
-
 	AromaticityProcessor ap;
 	ap.aromatizeSimple(rings);
 	
+	// Mark the aromatic atoms:
 	for (Position r = 0; r < rings.size(); r++)
 	{
 		const vector<Atom*>& ring = rings[r];
@@ -245,71 +246,98 @@ void MMFF94AtomTyper::assignTo(System& s)
 		}
 	}
 
+	// assign the atom types of all atoms which are not 
+	// member of a heteroaromatic ring per SMARTS rules
 	AtomTyper::assignTo(s);
 
-	// assign heterocyclic 5 ring members:
-	// e.g. C5A C5B N5A N5B N5M
+	///////////////////////////////////////////////////
+	// assign heterocyclic 5 ring members types:
+	// e.g. C5A C5B N5A N5B C5
+	//////////////////////////////////////////////////
 	
 	// iterate over all rings
 	for (Position r = 0; r < rings.size(); r++)
 	{
 		vector<Atom*>& ring = rings[r];
+
+		// we are only interested in rings of 5 atoms
 		if (ring.size() != 5) continue;
 
+		// put all atoms of the ring in a hashset
 		HashSet<Atom*> ring_atoms;
-
 		for (Position p = 0; p < 5; p++)
 		{
 			ring_atoms.insert(ring[p]);
 		}
 
 		HashSet<Atom*> hetero_atoms;
-		HashSet<Atom*> N5Ms;
+		HashSet<Atom*> tetra_Ns;
 
-		for (Position p = 0; p < 5; p++)
-		{
-			if (ring[p]->getElement().getSymbol() != "C" &&
-			    ring[p]->getElement().getSymbol() != "N") 
-			{
-				hetero_atoms.insert(ring[p]);
-			}
-			else if (ring[p]->getElement().getSymbol() == "N")
-			{
-				Size nr_val = 0;
-				AtomBondIterator bit = ring[p]->beginBond();
-				for (; +bit; ++bit)
-				{
-					Atom& partner = *bit->getPartner(*ring[p]);
-					if (ring_atoms.has(&partner))
-					{
-						nr_val += bit->getOrder();
-					}
-				}
+		// collect some informations about the hetero atoms and nitrogens with 4 valence electrons
 
-				if (nr_val < 3)
-				{
-					hetero_atoms.insert(ring[p]);
-				}
+		bool hetero_2 = false;
 
-				if (ring[p]->countBonds() == 2) 
-				{
-					N5Ms.insert(ring[p]);
-				}
-			}
-		}
-
- 		if (hetero_atoms.size() == 0) continue;
+		bool charged_nitrogen = false;
 
 		for (Position p = 0; p < 5; p++)
 		{
 			Atom& atom = *ring[p];
+ 			String element = atom.getElement().getSymbol();
+			if (element != "C" && element != "N") 
+			{
+				hetero_atoms.insert(&atom);
+				hetero_2 = true;
+			}
+			else if (element == "N")
+			{
+				// count number of valence electrons:
+				Size nr_val = 0;
+				// count number of valence electrons in ring:
+				Size nr_val_in_ring = 0;
+				AtomBondIterator bit = atom.beginBond();
+				for (; +bit; ++bit)
+				{
+					nr_val += bit->getOrder();
 
-//   			if (atom.getTypeName() == "NPYL") continue;
+					Atom& partner = *bit->getPartner(atom);
+					if (ring_atoms.has(&partner))
+					{
+						nr_val_in_ring += bit->getOrder();
+					}
+				}
+
+				// Nitrogen atoms are counted as hetero atoms if they provide only 2 valence electrons to the ring
+				if (nr_val_in_ring < 3)
+				{
+					hetero_atoms.insert(&atom);
+				}
+
+				// collect nitrogen with 4 valence electrons and positive charge
+				if (nr_val == 4)
+				{
+					tetra_Ns.insert(&atom);
+				}
+
+				if (nr_val != 3) charged_nitrogen = true;
+			}
+		}
+
+		// we are only interested in hetero rings
+ 		if (hetero_atoms.size() == 0) continue;
+
+		// iterate over all atoms of a ring:
+		for (Position p = 0; p < 5; p++)
+		{
+			Atom& atom = *ring[p];
 
 			String element = atom.getElement().getSymbol();
+			
+			// only care for nitrogen and carbon atoms which dont have a more specific type
+			// than we could assign here:
 			if (element != "N" && element != "C") continue;
 			if (atom.getType() > 66) continue;
 
+			// is an atom in alpha position (directly connected to a hetero atom)?
 			bool alpha = false;
 
 			AtomBondIterator bit = atom.beginBond();
@@ -326,6 +354,7 @@ void MMFF94AtomTyper::assignTo(System& s)
 			String type_name;
 			Position type;
 
+			// assign basic types according to element and position in ring:
 			if (alpha)
 			{
 				if (element == "C") { type = 63; type_name = "C5A";}
@@ -338,44 +367,70 @@ void MMFF94AtomTyper::assignTo(System& s)
 			}
 
 			
+			//////////////////////////////////////////////////
+			// now care for more specific rules of some types:
+			//////////////////////////////////////////////////
+
+			// N5B can not be assigned if the atom has a connection to a non ring atom
+			// in this case its a NPYL type and stays so
 			if (type_name == "N5B")
 			{
 				bool NPYL = false;
 				AtomBondIterator bit = atom.beginBond();
 				for (; +bit; ++bit)
 				{
-					Atom& partner = *bit->getPartner(atom);
-					if (!ring_atoms.has(&partner))
+					if (!ring_atoms.has(bit->getPartner(atom)))
 					{
-//   						if (partner.getElement().getSymbol() == "C")
-						{
-							NPYL = true;
-							break;
-						}
+						NPYL = true;
+						break;
 					}
 				}
 
 				if (NPYL) continue;
 			}
-			
+			else if (element == "C") // && !hetero_2)
+			{
+				// Carbons can be C5:
+				// 1. in ring with an charged Nitrogen and
+								// 2. not in a double bond with it
+				/*
+				if (tetra_Ns.size() == 1)
+				{
+					bool C5 = true;
+					AtomBondIterator bit = atom.beginBond();
+					for (; +bit; ++bit)
+					{
+						if (bit->getOrder() == Bond::ORDER__DOUBLE)
+						{
+							if (bit->getPartner(atom) == *tetra_Ns.begin())
+							{
+								C5 = false;
+							}
+						}
+					}
+
+					if (C5)
+					{
+						type_name = "C5";
+						type = 78;
+					}
+				}
+				*/
+				if (charged_nitrogen)
+				{
+					type_name = "C5";
+					type = 78;
+				}
+
+			}
+
+			// now assign the ring atom type:
+			if (atom.getType() > (Index)type) continue;
 
 			atom.setTypeName(type_name);
 			atom.setType(type);
 
 		} // all atoms in one ring
-
-		/*
-		if (N5Ms.size() > 1)
-		{
-			HashSet<Atom*>::Iterator it = N5Ms.begin();
-			for (; +it; ++it)
-			{
-				(*it)->setTypeName("N5M");
-				(*it)->setType(76);
-			}
-		}
-		*/
-
 	} // all rings: done
 
 	////////////////////////////////////////////////////////////////
