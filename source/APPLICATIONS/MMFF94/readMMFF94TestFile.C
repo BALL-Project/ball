@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.58 2006/03/02 16:38:09 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.59 2006/03/03 00:43:40 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -35,6 +35,51 @@ using namespace std;
 using namespace BALL;
 
 String dir;
+
+void readCharges(vector<String>& filenames)
+{
+	HashMap<String, float> charge_map;
+
+	for (Position p = 0; p < filenames.size(); p++)
+	{
+		vector<String> atoms, names, symbols, fields;
+		vector<double> charges, fcharges;
+		vector<short> types;
+
+		LineBasedFile infile(dir + "/" + filenames[p]+".atoms");
+		while (infile.readLine())
+		{
+			if (infile.getLine().split(fields) != 6)
+			{
+				Log.error() << "Error in " << filenames[p] << " Not 6 fields in one line " << infile.getLine() << std::endl;
+			}
+
+//   			types.push_back(fields[2].toUnsignedShort());
+			String symbol = fields[3];
+//   			charges.push_back(fields[4].toFloat());
+			float charge = fields[5].toFloat();
+
+			if (charge_map.has(fields[3]))
+			{
+				if (charge_map[fields[3]] != charge)
+				{
+					Log.error() << "# " <<   symbol    << "   " << charge_map[fields[3]] << "   " << charge << std::endl;
+				}
+			}
+			else
+			{
+				charge_map[symbol] = charge;
+			}
+		}
+	}
+
+	HashMap<String, float>::Iterator it = charge_map.begin();
+	for (; +it; ++it)
+	{
+		Log.info() << it->first << "   " << it->second << std::endl;
+	}
+}
+
 
 System* readTestFile(String filename)
 {
@@ -1150,6 +1195,9 @@ int main(int argc, char** argv)
 	{
    files.push_back(argv[2]);
 	}
+
+//   readCharges(files);
+//   return 0;
 
 	wrong_types = 0;
 	all_atoms = 0;
