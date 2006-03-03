@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.11 2006/03/02 16:38:09 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.12 2006/03/03 01:34:43 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -248,7 +248,7 @@ void MMFF94AtomTyper::assignTo(System& s)
 	AtomTyper::assignTo(s);
 
 	// assign heterocyclic 5 ring members:
-	// e.g. C5A C5B N5A N5B
+	// e.g. C5A C5B N5A N5B N5M
 	
 	// iterate over all rings
 	for (Position r = 0; r < rings.size(); r++)
@@ -264,6 +264,7 @@ void MMFF94AtomTyper::assignTo(System& s)
 		}
 
 		HashSet<Atom*> hetero_atoms;
+		HashSet<Atom*> N5Ms;
 
 		for (Position p = 0; p < 5; p++)
 		{
@@ -289,10 +290,15 @@ void MMFF94AtomTyper::assignTo(System& s)
 				{
 					hetero_atoms.insert(ring[p]);
 				}
+
+				if (ring[p]->countBonds() == 2) 
+				{
+					N5Ms.insert(ring[p]);
+				}
 			}
 		}
 
-		if (hetero_atoms.size() == 0) continue;
+ 		if (hetero_atoms.size() == 0) continue;
 
 		for (Position p = 0; p < 5; p++)
 		{
@@ -331,6 +337,7 @@ void MMFF94AtomTyper::assignTo(System& s)
 				else                { type = 66; type_name = "N5B";}
 			}
 
+			
 			if (type_name == "N5B")
 			{
 				bool NPYL = false;
@@ -340,7 +347,7 @@ void MMFF94AtomTyper::assignTo(System& s)
 					Atom& partner = *bit->getPartner(atom);
 					if (!ring_atoms.has(&partner))
 					{
-						if (partner.getElement().getSymbol() == "C")
+//   						if (partner.getElement().getSymbol() == "C")
 						{
 							NPYL = true;
 							break;
@@ -350,11 +357,25 @@ void MMFF94AtomTyper::assignTo(System& s)
 
 				if (NPYL) continue;
 			}
+			
 
 			atom.setTypeName(type_name);
 			atom.setType(type);
 
 		} // all atoms in one ring
+
+		/*
+		if (N5Ms.size() > 1)
+		{
+			HashSet<Atom*>::Iterator it = N5Ms.begin();
+			for (; +it; ++it)
+			{
+				(*it)->setTypeName("N5M");
+				(*it)->setType(76);
+			}
+		}
+		*/
+
 	} // all rings: done
 
 	////////////////////////////////////////////////////////////////
