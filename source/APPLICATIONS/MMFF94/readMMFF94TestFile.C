@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.59 2006/03/03 00:43:40 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.60 2006/03/06 17:05:51 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -953,6 +953,10 @@ int runtests(const vector<String>& filenames)
 	typer.setup(Path().find("MMFF94/TYPES.PAR"));
 	typer.setupHydrogenTypes(Path().find("MMFF94/MMFFHDEF.PAR"));
 	typer.setupSymbolsToTypes(Path().find("MMFF94/MFFSYMB.PAR"));
+	typer.setupAromaticTypes(Path().find("MMFF94/MMFFAROM.PAR"));
+	MMFF94AtomTypes types;
+	types.readParameters(Path().find("MMFF94/MMFFPROP.PAR"));
+	typer.collectHeteroAtomTypes(types);
 
 	MMFF94 mmff;
 

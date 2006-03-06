@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.14 2006/03/06 01:15:41 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.15 2006/03/06 17:05:35 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -181,6 +181,138 @@ bool MMFF94AtomTyper::setupHydrogenTypes(const String& filename)
 	return true;
 }
 
+bool MMFF94AtomTyper::setupAromaticTypes(const String& filename)
+{
+	aromatic_types_5_.clear();
+	aromatic_types_5_map_.clear();
+	cation_atoms_.clear();
+
+	LineBasedFile infile(filename);
+
+	vector<String> fields;
+	
+	while (infile.readLine())
+	{
+		String line;
+		try
+		{
+			line = infile.getLine();
+
+			// comments and empty lines
+			if (line.size() < 2 || line[0] == '*') continue;
+			
+			if (line.split(fields) < 7)
+			{
+				continue;
+				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+										<< filename << " Not enough fields in one line " 
+										<< line << std::endl;
+				return false;
+			}
+
+			AromaticType type;
+			type.old_type = fields[0];
+			type.new_type = fields[1];
+			type.atomic_number = fields[2].toUnsignedInt();
+			type.ring_size = fields[3].toUnsignedInt();
+			type.L5 = fields[4].toUnsignedInt();
+			type.cation = fields[5].toBool();
+			type.anion = fields[6].toBool();
+
+			if (type.ring_size == 5)
+			{
+				aromatic_types_5_.push_back(type);
+				String key = type.old_type + "|" + String(type.L5);
+				aromatic_types_5_map_[key] = aromatic_types_5_.size() - 1;
+
+				if (type.cation)
+				{
+					cation_atoms_.insert(type.old_type);
+				}
+			}
+		}
+		catch(...)
+		{
+				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+										<< filename << " Not enough fields in one line " 
+										<< line << std::endl;
+				return false;
+		}
+	}
+
+	return true;
+}
+
+
+bool MMFF94AtomTyper::assignAromaticType_5_(Atom& atom, Position L5, bool anion, bool cation)
+{
+	String old_type = atom.getTypeName();
+	String key = old_type + "|" + String(L5);
+
+	// try full match
+	HashMap<String, Position>::ConstIterator it = aromatic_types_5_map_.find(key);
+	if (+it)
+	{
+		const AromaticType& type = aromatic_types_5_[it->second];
+		bool found = true;
+		if  (cation && !type.cation) 
+		{
+			found = false;
+		}
+		else if (anion  && !type.anion)  
+		{
+			found = false;
+		}
+
+		if (found)
+		{
+			atom.setTypeName(type.new_type);
+			atom.setType(id_to_type_[type.new_type]);
+			return true;
+		}
+	}
+
+	const Position element = atom.getElement().getAtomicNumber();
+	
+	String new_type;
+
+	// carbon
+	if (element == 6) 
+	{
+		if      (L5 == 2) new_type = "C5A";
+		else if (L5 == 3) new_type = "C5B";
+		else if (L5 == 4) new_type = "C5";
+	}
+	// nitrogen
+	else if (element == 7)
+	{
+		if      (L5 == 1) new_type = "NPYL";
+		if      (L5 == 2) new_type = "N5A";
+		else if (L5 == 3) new_type = "N5B";
+		else if (L5 == 4) new_type = "N5";
+	}
+	// oxygen
+	else if (element == 8)
+	{
+		if (L5 == 1) new_type = "OFUR";
+	}
+	// sulfur
+	else if (element == 16)
+	{
+		if (L5 == 1) new_type = "STHI";
+	}
+	else
+	{
+		Log.error() << "Problem: No valid MMFF94 Type was assigned for " << atom.getFullName() << " " << atom.getTypeName() << std::endl;
+		return false;
+	}
+
+	atom.setTypeName(new_type);
+	atom.setType(id_to_type_[new_type]);
+
+	return true;
+}
+
 bool MMFF94AtomTyper::setupSymbolsToTypes(const String& filename)
 {
 	LineBasedFile infile(filename);
@@ -204,7 +336,7 @@ bool MMFF94AtomTyper::setupSymbolsToTypes(const String& filename)
 
 		try
 		{
-			H_id_to_type_[fields[0]] = fields[1].toUnsignedInt();
+			id_to_type_[fields[0]] = fields[1].toUnsignedInt();
 		}
 		catch(...)
 		{
@@ -217,6 +349,30 @@ bool MMFF94AtomTyper::setupSymbolsToTypes(const String& filename)
 	return true;
 }
 
+
+
+void MMFF94AtomTyper::collectHeteroAtomTypes(const MMFF94AtomTypes& atom_types)
+{
+	hetero_atom_types_.clear();
+	const vector<MMFF94AtomType>& types = atom_types.getAtomTypes();
+	for (Position p = 0; p < types.size(); p++)
+	{
+		const MMFF94AtomType& type = types[p];
+		if (type.aspec == 7 &&
+				type.crd == 3   &&
+				type.val == 3)
+		{
+			hetero_atom_types_.insert(p);
+			continue;
+		}
+		if ((type.aspec == 8  || type.aspec == 16) &&
+				type.crd == 2   &&
+				type.val == 2)
+		{
+			hetero_atom_types_.insert(p);
+		}
+	}
+}
 
 void MMFF94AtomTyper::assignTo(System& s)
 {
@@ -275,13 +431,22 @@ void MMFF94AtomTyper::assignTo(System& s)
 
 		// collect some informations about the hetero atoms and charged atoms
 		Atom* hetero_atom = 0;
-		Atom* kation_atom = 0;
+		Atom* cation_atom = 0;
 		Atom* anion_atom = 0;
 
 		for (Position p = 0; p < 5; p++)
 		{
 			Atom& atom = *ring[p];
  			String element = atom.getElement().getSymbol();
+			if ((element != "C" && element != "N") ||
+					hetero_atom_types_.has(atom.getType()))
+			{
+				hetero_atom = &atom;
+			}
+
+			if (cation_atoms_.has(atom.getTypeName())) cation_atom = &atom;
+
+			/*
 			if (element != "C" && element != "N") 
 			{
 				hetero_atom = (&atom);
@@ -289,21 +454,28 @@ void MMFF94AtomTyper::assignTo(System& s)
 			else if (element == "N")
 			{
 				if (atom.countBonds() == 3) hetero_atom = &atom;
-			}
 
-			if (atom.getTypeName().hasSuffix("+")) 
-			{
-Log.error() << "#~~#   1 "   << atom.getTypeName()          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-				kation_atom = &atom;
+//   				if (cation_atoms_.has(atom.getTypeName())) 
+				Size val = 0;
+				AtomBondIterator bit = atom.beginBond();
+				for (;+bit;++bit) val += bit->getOrder();
+				if (val == 4)
+				{
+	Log.error() << "#~~#   cat "   << atom.getTypeName()          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+					cation_atom = &atom;
+				}
 			}
+				*/
 			if (atom.getTypeName() == "NM" || atom.getTypeName() == "N5M") anion_atom = &atom;
 		}
 
-		bool charged = kation_atom || anion_atom;
+		bool charged = hetero_atom == 0 && (cation_atom || anion_atom);
+
+		Atom* charged_atom = cation_atom;
+		if (charged_atom == 0) charged_atom = anion_atom;
 
 		Atom* atom_x = hetero_atom;
-		if (atom_x == 0) atom_x = kation_atom;
-		if (atom_x == 0) atom_x = anion_atom;
+		if (atom_x == 0) atom_x = charged_atom;
 
 		// we are only interested in hetero rings and charged rings
 		// no hetero atom and no charged atom? Then continue to next ring
@@ -317,65 +489,30 @@ Log.error() << "#~~#   1 "   << atom.getTypeName()          << " "  << __FILE__ 
 		{
 			Atom& atom = *ring[p];
 
-			String element = atom.getElement().getSymbol();
-			
-			// only care for nitrogen and carbon atoms which dont have a more specific type
-			// than we could assign here:
-			if (element != "N" && element != "C") continue;
-			if (atom.getType() > 66) continue;
+			Position L5 = 0;
 
-			// is an atom in alpha position (directly connected to a hetero atom)?
-			bool alpha = !charged && atom.isBoundTo(*atom_x);
-			
-			String type_name;
-			Position type;
-
-			// assign basic types according to element and position in ring:
-			if (charged)
+			if (hetero_atom == &atom)
 			{
-continue;
-				if (element == "C") { type = 78; type_name = "C5";}
-				else                { type = 79; type_name = "N5";}
+				L5 = 1;
 			}
-			else if (alpha)
+			else if (charged)
 			{
-				if (element == "C") { type = 63; type_name = "C5A";}
-				else                { type = 65; type_name = "N5A";}
+				L5 = 4;
 			}
+			// is this atom in alpha position (directly connected to a hetero atom)?
+			else if (atom.isBoundTo(*atom_x))
+			{
+				L5 = 2;
+			}
+			// beta position
 			else
 			{
-				if (element == "C") { type = 64; type_name = "C5B";}
-				else                { type = 66; type_name = "N5B";}
+				L5 = 3;
 			}
 
-			//////////////////////////////////////////////////
-			// now care for more specific rules of some types:
-			//////////////////////////////////////////////////
-
-			// N5B can not be assigned if the atom has a connection to a non ring atom
-			// in this case its a NPYL type and stays so
-			if (type_name == "N5B")
-			{
-				bool NPYL = false;
-				AtomBondIterator bit = atom.beginBond();
-				for (; +bit; ++bit)
-				{
-					if (!ring_atoms.has(bit->getPartner(atom)))
-					{
-						NPYL = true;
-						break;
-					}
-				}
-
-				if (NPYL) continue;
-			}
-
-			// now assign the ring atom type:
-			if (atom.getType() > (Index)type) continue;
-
-			atom.setTypeName(type_name);
-			atom.setType(type);
-
+Log.error() << "#~~#   3 "  << atom.getName() << " " << atom.getTypeName() << "  " << L5           << "   ";
+			assignAromaticType_5_(atom, L5, anion_atom != 0, cation_atom != 0);
+Log.error() << atom.getTypeName()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		} // all atoms in one ring
 	} // all rings: done
 
@@ -397,9 +534,9 @@ continue;
 		if (!partner_type_to_htype_.has(key)) continue;
 
 		String H_type_name = partner_type_to_htype_[key];
-		if (!H_id_to_type_.has(H_type_name)) continue;
+		if (!id_to_type_.has(H_type_name)) continue;
 
-		Position H_nr = H_id_to_type_[H_type_name];
+		Position H_nr = id_to_type_[H_type_name];
 
 		if (ait->getType() != -1 && ait->getType() != 29)
 		{

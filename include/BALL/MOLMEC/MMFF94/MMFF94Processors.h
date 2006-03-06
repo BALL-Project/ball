@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.2.9 2006/03/02 16:38:08 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.2.10 2006/03/06 17:05:40 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -81,6 +81,17 @@ namespace BALL
 	{
 		public:
 
+		struct AromaticType
+		{
+			String old_type;
+			String new_type;
+			Position atomic_number;
+			Size 		 ring_size;
+			Position L5;
+			bool     cation;
+			bool     anion;
+		};
+
 		BALL_CREATE(MMFF94AtomTyper)
 
 		///
@@ -100,11 +111,24 @@ namespace BALL
 
 		/// Read the matching from ID to numerical type from MFFSYMB.PAR
 		virtual bool setupSymbolsToTypes(const String& filename);
+		
+		/// Read the matching from general ID to ID in aromatic rings
+		virtual bool setupAromaticTypes(const String& filename);
+
+		///
+		void collectHeteroAtomTypes(const MMFF94AtomTypes& atom_types);
 
 		protected:
 
-		StringHashMap<String> partner_type_to_htype_;
-		StringHashMap<Position> H_id_to_type_;
+		bool assignAromaticType_5_(Atom& atom, Position L5, bool anion, bool cation);
+
+		StringHashMap<String> 		partner_type_to_htype_;
+		StringHashMap<Position> 	id_to_type_;
+		vector<AromaticType>    	aromatic_types_5_;
+		HashMap<String, Position> aromatic_types_5_map_;
+		HashSet<String> 					cation_atoms_;
+		MMFF94AtomTypes* 					atom_types_;
+		HashSet<Position> 				hetero_atom_types_;
 	};
 		
 
