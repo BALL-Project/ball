@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.15 2006/03/06 17:05:35 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.16 2006/03/06 22:40:25 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -246,6 +246,8 @@ bool MMFF94AtomTyper::setupAromaticTypes(const String& filename)
 
 bool MMFF94AtomTyper::assignAromaticType_5_(Atom& atom, Position L5, bool anion, bool cation)
 {
+	if (anion && atom.getTypeName() == "N5M") return true;
+
 	String old_type = atom.getTypeName();
 	String key = old_type + "|" + String(L5);
 
@@ -446,26 +448,6 @@ void MMFF94AtomTyper::assignTo(System& s)
 
 			if (cation_atoms_.has(atom.getTypeName())) cation_atom = &atom;
 
-			/*
-			if (element != "C" && element != "N") 
-			{
-				hetero_atom = (&atom);
-			}
-			else if (element == "N")
-			{
-				if (atom.countBonds() == 3) hetero_atom = &atom;
-
-//   				if (cation_atoms_.has(atom.getTypeName())) 
-				Size val = 0;
-				AtomBondIterator bit = atom.beginBond();
-				for (;+bit;++bit) val += bit->getOrder();
-				if (val == 4)
-				{
-	Log.error() << "#~~#   cat "   << atom.getTypeName()          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-					cation_atom = &atom;
-				}
-			}
-				*/
 			if (atom.getTypeName() == "NM" || atom.getTypeName() == "N5M") anion_atom = &atom;
 		}
 
@@ -510,9 +492,9 @@ void MMFF94AtomTyper::assignTo(System& s)
 				L5 = 3;
 			}
 
-Log.error() << "#~~#   3 "  << atom.getName() << " " << atom.getTypeName() << "  " << L5           << "   ";
+//   Log.error() << "#~~#   3 "  << atom.getName() << " " << atom.getTypeName() << "  " << L5           << "   ";
 			assignAromaticType_5_(atom, L5, anion_atom != 0, cation_atom != 0);
-Log.error() << atom.getTypeName()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+//   Log.error() << atom.getTypeName()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		} // all atoms in one ring
 	} // all rings: done
 
@@ -538,10 +520,6 @@ Log.error() << atom.getTypeName()            << " "  << __FILE__ << "  " << __LI
 
 		Position H_nr = id_to_type_[H_type_name];
 
-		if (ait->getType() != -1 && ait->getType() != 29)
-		{
-Log.error() << "#~~#   2 " << ait->getType() << " " << H_nr            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-		}
 		if (ait->getType() > (Index) H_nr) continue;
 
 		ait->setTypeName(H_type_name);
