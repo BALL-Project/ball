@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.2.10 2006/03/06 17:05:40 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.2.11 2006/03/07 00:00:15 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -83,11 +83,8 @@ namespace BALL
 
 		struct AromaticType
 		{
-			String old_type;
 			String new_type;
 			Position atomic_number;
-			Size 		 ring_size;
-			Position L5;
 			bool     cation;
 			bool     anion;
 		};
@@ -124,8 +121,7 @@ namespace BALL
 
 		StringHashMap<String> 		partner_type_to_htype_;
 		StringHashMap<Position> 	id_to_type_;
-		vector<AromaticType>    	aromatic_types_5_;
-		HashMap<String, Position> aromatic_types_5_map_;
+		HashMap<String, AromaticType> aromatic_types_5_map_;
 		HashSet<String> 					cation_atoms_;
 		MMFF94AtomTypes* 					atom_types_;
 		HashSet<Position> 				hetero_atom_types_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.16 2006/03/06 22:40:25 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.17 2006/03/07 00:00:05 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -183,12 +183,10 @@ bool MMFF94AtomTyper::setupHydrogenTypes(const String& filename)
 
 bool MMFF94AtomTyper::setupAromaticTypes(const String& filename)
 {
-	aromatic_types_5_.clear();
 	aromatic_types_5_map_.clear();
 	cation_atoms_.clear();
 
 	LineBasedFile infile(filename);
-
 	vector<String> fields;
 	
 	while (infile.readLine())
@@ -211,24 +209,21 @@ bool MMFF94AtomTyper::setupAromaticTypes(const String& filename)
 			}
 
 			AromaticType type;
-			type.old_type = fields[0];
+			
+			const String old_type = fields[0];
+			if (old_type.hasSuffix("*")) continue;
+			
 			type.new_type = fields[1];
-			type.atomic_number = fields[2].toUnsignedInt();
-			type.ring_size = fields[3].toUnsignedInt();
-			type.L5 = fields[4].toUnsignedInt();
+			const Size ring_size = fields[3].toUnsignedInt();
+			const String L5 = fields[4].toUnsignedInt();
 			type.cation = fields[5].toBool();
 			type.anion = fields[6].toBool();
 
-			if (type.ring_size == 5)
+			if (ring_size == 5)
 			{
-				aromatic_types_5_.push_back(type);
-				String key = type.old_type + "|" + String(type.L5);
-				aromatic_types_5_map_[key] = aromatic_types_5_.size() - 1;
+				aromatic_types_5_map_[old_type + "|" + L5] = type;
 
-				if (type.cation)
-				{
-					cation_atoms_.insert(type.old_type);
-				}
+				if (type.cation) cation_atoms_.insert(old_type);
 			}
 		}
 		catch(...)
@@ -246,22 +241,24 @@ bool MMFF94AtomTyper::setupAromaticTypes(const String& filename)
 
 bool MMFF94AtomTyper::assignAromaticType_5_(Atom& atom, Position L5, bool anion, bool cation)
 {
-	if (anion && atom.getTypeName() == "N5M") return true;
-
 	String old_type = atom.getTypeName();
+
+	if (anion && old_type == "N5M") return true;
+
 	String key = old_type + "|" + String(L5);
 
+Log.error() << "#~~#   6 "   << key          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	// try full match
-	HashMap<String, Position>::ConstIterator it = aromatic_types_5_map_.find(key);
+	HashMap<String, AromaticType>::ConstIterator it = aromatic_types_5_map_.find(key);
 	if (+it)
 	{
-		const AromaticType& type = aromatic_types_5_[it->second];
+		const AromaticType& type = it->second;
 		bool found = true;
 		if  (cation && !type.cation) 
 		{
 			found = false;
 		}
-		else if (anion  && !type.anion)  
+		else if (anion && !type.anion)  
 		{
 			found = false;
 		}
@@ -318,7 +315,6 @@ bool MMFF94AtomTyper::assignAromaticType_5_(Atom& atom, Position L5, bool anion,
 bool MMFF94AtomTyper::setupSymbolsToTypes(const String& filename)
 {
 	LineBasedFile infile(filename);
-
 	vector<String> fields;
 	
 	while (infile.readLine())
@@ -352,11 +348,11 @@ bool MMFF94AtomTyper::setupSymbolsToTypes(const String& filename)
 }
 
 
-
 void MMFF94AtomTyper::collectHeteroAtomTypes(const MMFF94AtomTypes& atom_types)
 {
 	hetero_atom_types_.clear();
 	const vector<MMFF94AtomType>& types = atom_types.getAtomTypes();
+
 	for (Position p = 0; p < types.size(); p++)
 	{
 		const MMFF94AtomType& type = types[p];
@@ -375,6 +371,7 @@ void MMFF94AtomTyper::collectHeteroAtomTypes(const MMFF94AtomTypes& atom_types)
 		}
 	}
 }
+
 
 void MMFF94AtomTyper::assignTo(System& s)
 {
@@ -418,6 +415,18 @@ void MMFF94AtomTyper::assignTo(System& s)
 	{
 		vector<Atom*>& ring = rings[r];
 
+		if (ring.size() == 6)
+		{
+			for (Position p = 0; p < 6; p++)
+			{
+				if (ring[p]->getTypeName() == "CNN+")
+				{
+					ring[p]->setTypeName("CB");
+					ring[p]->setType(37);
+				}
+			}
+		}
+
 		// we are only interested in rings of 5 atoms
 		if (ring.size() != 5) continue;
 
@@ -428,13 +437,11 @@ void MMFF94AtomTyper::assignTo(System& s)
 			ring_atoms.insert(ring[p]);
 		}
 
-		HashSet<Atom*> hetero_atoms;
-		HashSet<Atom*> tetra_Ns;
-
 		// collect some informations about the hetero atoms and charged atoms
 		Atom* hetero_atom = 0;
 		Atom* cation_atom = 0;
 		Atom* anion_atom = 0;
+Log.error() << "#~~#   5 an "  << anion_atom << "  c " << cation_atom           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 		for (Position p = 0; p < 5; p++)
 		{
@@ -492,14 +499,15 @@ void MMFF94AtomTyper::assignTo(System& s)
 				L5 = 3;
 			}
 
-//   Log.error() << "#~~#   3 "  << atom.getName() << " " << atom.getTypeName() << "  " << L5           << "   ";
+  Log.error() << "#~~#   3 "  << atom.getName() << " " << atom.getTypeName() << "  " << L5           << "   ";
 			assignAromaticType_5_(atom, L5, anion_atom != 0, cation_atom != 0);
-//   Log.error() << atom.getTypeName()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+  Log.error() << atom.getTypeName()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		} // all atoms in one ring
 	} // all rings: done
 
 	////////////////////////////////////////////////////////////////
 	// assign Hydrogen atom types according to their binding partner
+	////////////////////////////////////////////////////////////////
 	ait = s.beginAtom();
 	for (; +ait; ++ait)
 	{
