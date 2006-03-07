@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.31 2006/02/23 15:42:26 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.32 2006/03/07 16:01:33 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -165,8 +165,41 @@ namespace BALL
 			bond_parameters_.readParameters(prefix + "MMFFBOND.PAR");
 			bond_parameters_.readEmpericalParameters(prefix + "MMFFBNDK.PAR");
 			parameters_initialized_ = true;
+
+			es_parameters_.readParameters(prefix + "MMFFCHG.PAR");
+			es_parameters_.readEmpericalParameters(prefix + "MMFFPBCI.PAR");
+
+			atom_typer_.setup(prefix + "TYPES.PAR");
+			atom_typer_.setupHydrogenTypes(prefix + "MMFFHDEF.PAR");
+			atom_typer_.setupSymbolsToTypes(prefix + "MFFSYMB.PAR");
+			atom_typer_.setupAromaticTypes(prefix + "MMFFAROM.PAR");
+			atom_typer_.collectHeteroAtomTypes(atom_types_);
+
+			charge_processor_.setup(prefix + "CHARGES.PAR");
+			charge_processor_.setESParameters(es_parameters_);
 		}
 
+		/////////////////////////////////////////////////////////
+		// types 
+		atom_typer_.setAromaticRings(getAromaticRings());
+		atom_typer_.assignTo(*system_);
+
+		/////////////////////////////////////////////////////////
+		// charge
+		charge_processor_.setAromaticRings(getAromaticRings());
+		getSystem()->apply(charge_processor_);
+
+		if (charge_processor_.getUnassignedAtoms().size() > 0)
+		{
+			error() << "Could not assign partial charges for all atoms" << std::endl;
+			HashSet<Atom*>::ConstIterator it = charge_processor_.getUnassignedAtoms().begin();
+			for (;+it; ++it)
+			{
+				getUnassignedAtoms().insert(*it);
+			}
+		}
+
+		/////////////////////////////////////////////////////////
 		assignBondTypes_();
 
 		return true;

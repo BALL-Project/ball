@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.2.11 2006/02/17 02:05:42 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.2.12 2006/03/07 16:01:37 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -23,6 +23,10 @@
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94PARAMETERS_H
 # include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
+#endif
+
+#ifndef BALL_MOLMEC_MMFF94_MMFF94PROCESSORS_H
+# include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
 #endif
 
 #ifndef BALL_DATATYPE_HASHSET_H
@@ -206,10 +210,13 @@ namespace BALL
 		MMFF94AtomTypes 						atom_types_;
 		MMFF94StretchParameters 		bond_parameters_;
 		MMFF94AtomTypeEquivalences  equivalences_;
+		MMFF94ESParameters 					es_parameters_;
 		vector<HashSet<Atom*> > 		rings_;
 		vector<HashSet<Atom*> > 		aromatic_rings_;
 		bool												parameters_initialized_;
 		vector<Bond*> 							bonds_;
+		MMFF94AtomTyper 						atom_typer_;
+		MMFF94ChargeProcessor 			charge_processor_;
 	};
 
 } // namespace BALL

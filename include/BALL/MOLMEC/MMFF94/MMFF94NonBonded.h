@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.h,v 1.1.2.10 2006/02/23 15:42:31 amoll Exp $
+// $Id: MMFF94NonBonded.h,v 1.1.2.11 2006/03/07 16:01:37 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_NONBONDED_H
@@ -135,9 +135,6 @@ namespace BALL
     MolmecSupport::PairListAlgorithmType  algorithm_type_;
 		double 																cut_off_;
 		MMFF94VDWParameters 									vdw_parameters_;
-		MMFF94ESParameters 										es_parameters_;
-		HashMap<Atom*, double>								charge_map_;
-		MMFF94ChargeProcessor 								charge_processor_;
 		// dielectric constant
 		double 																dc_; 
 		// dielectric model exponent

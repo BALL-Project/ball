@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.2.15 2006/02/24 13:50:27 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.2.16 2006/03/07 16:01:33 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -194,34 +194,10 @@ namespace BALL
 			String  filename(path.find("MMFF94/MMFFVDW.PAR"));
 			if (filename == "") throw Exception::FileNotFound(__FILE__, __LINE__, "MMFFVDW.PAR");
 			vdw_parameters_.readParameters(filename);
-
-			filename = path.find("MMFF94/MMFFCHG.PAR");
-			if (filename == "") throw Exception::FileNotFound(__FILE__, __LINE__, "MMFFCHG.PAR");
-			es_parameters_.readParameters(filename);
-
-			filename = path.find("MMFF94/MMFFPBCI.PAR");
-			if (filename == "") throw Exception::FileNotFound(__FILE__, __LINE__, "MMFFPBCI.PAR");
-			es_parameters_.readEmpericalParameters(filename);
-
-			charge_processor_.setESParameters(es_parameters_);
 		}
 
 		// Determine the most efficient way to calculate all non bonded atom pairs
 		algorithm_type_ = determineMethodOfAtomPairGeneration();
-
-		charge_map_.clear();
-
-		getForceField()->getSystem()->apply(charge_processor_);
-
-		if (charge_processor_.getUnassignedAtoms().size() > 0)
-		{
-			getForceField()->error() << "Could not assign partial charges for all atoms" << std::endl;
-			HashSet<Atom*>::ConstIterator it = charge_processor_.getUnassignedAtoms().begin();
-			for (;+it; ++it)
-			{
-				getForceField()->getUnassignedAtoms().insert(*it);
-			}
-		}
 
 		update();
 

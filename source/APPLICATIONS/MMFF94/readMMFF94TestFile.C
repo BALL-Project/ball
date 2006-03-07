@@ -1,11 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.60 2006/03/06 17:05:51 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.61 2006/03/07 16:01:40 amoll Exp $
 //
-// A small program for adding hydrogens to a PDB file (which usually comes
-// without hydrogen information) and minimizing all hydrogens by means of a
-// conjugate gradient minimizer.
+// test program for the MMFF94 implementation
 
 #include <BALL/common.h>
 
@@ -131,12 +129,12 @@ System* readTestFile(String filename)
 //   		ait->setType(types[pos]);
 		ait->setProperty("Type", types[pos]);
 		ait->setProperty("TypeName", symbols[pos]);
-		Vector3 v;
-		v.x = fcharges[pos];
-		ait->setVelocity(v);
+//   		Vector3 v;
+//   		v.x = fcharges[pos];
+//   		ait->setVelocity(v);
 //    		ait->setCharge(fcharges[pos]);
-		ait->setCharge(charges[pos]);
-		ait->setFormalCharge((Index)fcharges[pos]);
+//   		ait->setCharge(charges[pos]);
+//   		ait->setFormalCharge((Index)fcharges[pos]);
 		ait->setRadius(charges[pos]);
 	}
 
@@ -881,7 +879,7 @@ bool testCharge(System& system, String filename)
 		if (!isOk(f,ait->getRadius()))
 		{
 			ok = false;
-			Log.error() << "C! " << filename << " " << ait->getName() << " " << f << " " << ait->getRadius()<< std::endl;
+			Log.error() << "C! " << filename << " " << ait->getName() << " " << ait->getTypeName() << " " << f << " " << ait->getRadius()<< std::endl;
 		}
 	}
 
@@ -968,6 +966,7 @@ int runtests(const vector<String>& filenames)
 	for (Position pos = 0; pos < filenames.size(); pos++)
 	{
 //   		Log.info() << "> " << filenames[pos] << std::endl;
+		bool result = true;
 		String full_file_name(dir +FileSystem::PATH_SEPARATOR + filenames[pos] + ".mol2");
 		System* system = readTestFile(full_file_name);
 		if (system == 0)
@@ -975,7 +974,7 @@ int runtests(const vector<String>& filenames)
 			Log.error() << "Could not read mol2 file " << full_file_name << std::endl;
 			return -1;
 		}
-/*
+
 		for (Position p = 0; p < mmff.countComponents(); p++)
 		{
 			mmff.getComponent(p)->setEnabled(true);
@@ -987,6 +986,7 @@ int runtests(const vector<String>& filenames)
 			return -1;
 		}
 
+		/*
 		Size nr_rings = 0;
 		Size nr_aromatic_rings = 0;
 		
@@ -1018,23 +1018,23 @@ int runtests(const vector<String>& filenames)
 			wrong_rings = true;
 		}
 
-		bool result = mmff.getUnassignedAtoms().size() == 0;
+		result = mmff.getUnassignedAtoms().size() == 0;
 		if (!result)
 		{
 			Log.info() << "We have unassigned atoms: " << mmff.getUnassignedAtoms().size() << std::endl;
 		}
 */
- 		testType(*system, filenames[pos], typer);
+//    		testType(*system, filenames[pos], typer);
 //    		result &= testStretch(mmff, filenames[pos], true);
 //       result &= testBend(mmff, filenames[pos], true);
 //    		result &= testStretchBend(mmff, filenames[pos], true);
 //    		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
 //    		result &= testPlanes(mmff, filenames[pos], true);
 //    		result &= testNonBonded(mmff, filenames[pos], true);
-//    		result &= testCharge(*system, filenames[pos]);
+    		result &= testCharge(*system, filenames[pos]);
 
-//   		if (result) ok++;
-//   		else if (!wrong_rings) not_ok.push_back(filenames[pos]);
+ 		if (result) ok++;
+//    		else if (!wrong_rings) not_ok.push_back(filenames[pos]);
 	}
 
 	Log.info() << "Tested " << filenames.size() << " files, " << ok << " files ok" << std::endl;

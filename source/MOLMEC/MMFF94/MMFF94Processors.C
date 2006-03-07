@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.17 2006/03/07 00:00:05 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.18 2006/03/07 16:01:33 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -247,7 +247,7 @@ bool MMFF94AtomTyper::assignAromaticType_5_(Atom& atom, Position L5, bool anion,
 
 	String key = old_type + "|" + String(L5);
 
-Log.error() << "#~~#   6 "   << key          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+//   Log.error() << "#~~#   6 "   << key          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	// try full match
 	HashMap<String, AromaticType>::ConstIterator it = aromatic_types_5_map_.find(key);
 	if (+it)
@@ -382,21 +382,15 @@ void MMFF94AtomTyper::assignTo(System& s)
 		ait->setProperty("IsAromatic", false);
 	}
 
-	// collect all aromatic rings:
-	vector<vector<Atom*> > rings;
-	RingPerceptionProcessor rpp;
-	rpp.calculateSSSR(rings, s);
-	AromaticityProcessor ap;
-	ap.aromatizeSimple(rings);
-	
 	// Mark the aromatic atoms:
-	for (Position r = 0; r < rings.size(); r++)
+	for (Position r = 0; r < aromatic_rings_.size(); r++)
 	{
-		const vector<Atom*>& ring = rings[r];
+		const HashSet<Atom*>& ring = aromatic_rings_[r];
 
-		for (Position a = 0; a < ring.size(); a++)
+		HashSet<Atom*>::ConstIterator ait = ring.begin();
+		for (; +ait; ++ait)
 		{
-			Atom& atom = *(Atom*)ring[a];
+			Atom& atom = **ait;
 			atom.setProperty("IsAromatic", true); 
 		}
 	}
@@ -411,41 +405,38 @@ void MMFF94AtomTyper::assignTo(System& s)
 	//////////////////////////////////////////////////
 	
 	// iterate over all rings
-	for (Position r = 0; r < rings.size(); r++)
+	for (Position r = 0; r < aromatic_rings_.size(); r++)
 	{
-		vector<Atom*>& ring = rings[r];
+		const HashSet<Atom*>& ring_atoms = aromatic_rings_[r];
+		HashSet<Atom*>::ConstIterator ait;
 
-		if (ring.size() == 6)
+		if (ring_atoms.size() == 6)
 		{
-			for (Position p = 0; p < 6; p++)
+			ait = ring_atoms.begin();
+			for (; +ait; ++ait)
 			{
-				if (ring[p]->getTypeName() == "CNN+")
+				Atom& atom = **ait;
+				if (atom.getTypeName() == "CNN+")
 				{
-					ring[p]->setTypeName("CB");
-					ring[p]->setType(37);
+					atom.setTypeName("CB");
+					atom.setType(37);
 				}
 			}
 		}
 
 		// we are only interested in rings of 5 atoms
-		if (ring.size() != 5) continue;
-
-		// put all atoms of the ring in a hashset
-		HashSet<Atom*> ring_atoms;
-		for (Position p = 0; p < 5; p++)
-		{
-			ring_atoms.insert(ring[p]);
-		}
+		if (ring_atoms.size() != 5) continue;
 
 		// collect some informations about the hetero atoms and charged atoms
 		Atom* hetero_atom = 0;
 		Atom* cation_atom = 0;
 		Atom* anion_atom = 0;
-Log.error() << "#~~#   5 an "  << anion_atom << "  c " << cation_atom           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+//   Log.error() << "#~~#   5 an "  << anion_atom << "  c " << cation_atom           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
-		for (Position p = 0; p < 5; p++)
+		ait = ring_atoms.begin();
+		for (; +ait; ++ait)
 		{
-			Atom& atom = *ring[p];
+			Atom& atom = **ait;
  			String element = atom.getElement().getSymbol();
 			if ((element != "C" && element != "N") ||
 					hetero_atom_types_.has(atom.getType()))
@@ -474,9 +465,10 @@ Log.error() << "#~~#   5 an "  << anion_atom << "  c " << cation_atom           
 		}
 		
 		// iterate over all atoms of this ring:
-		for (Position p = 0; p < 5; p++)
+		ait = ring_atoms.begin();
+		for (; +ait; ++ait)
 		{
-			Atom& atom = *ring[p];
+			Atom& atom = **ait;
 
 			Position L5 = 0;
 
@@ -499,9 +491,9 @@ Log.error() << "#~~#   5 an "  << anion_atom << "  c " << cation_atom           
 				L5 = 3;
 			}
 
-  Log.error() << "#~~#   3 "  << atom.getName() << " " << atom.getTypeName() << "  " << L5           << "   ";
+//     Log.error() << "#~~#   3 "  << atom.getName() << " " << atom.getTypeName() << "  " << L5           << "   ";
 			assignAromaticType_5_(atom, L5, anion_atom != 0, cation_atom != 0);
-  Log.error() << atom.getTypeName()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+//     Log.error() << atom.getTypeName()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		} // all atoms in one ring
 	} // all rings: done
 
@@ -550,9 +542,42 @@ MMFF94ChargeProcessor::MMFF94ChargeProcessor(const MMFF94ChargeProcessor& p)
 {
 }
 
+void MMFF94ChargeProcessor::setup(const String& filename)
+{
+	clear();
+	LineBasedFile infile(filename);
+	vector<String> fields;
+	
+	while (infile.readLine())
+	{
+		const String line = infile.getLine();
+
+		// comments and empty lines
+		if (line.size() < 2 || line[0] == '*') continue;
+		
+		if (line.split(fields) < 2)
+		{
+			Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+									<< filename << " Not enough fields in one line " 
+									<< line << std::endl;
+			return;
+		}
+
+		if (fields[1] == "*")
+		{
+			rule_types_.insert(fields[0]);
+			continue;
+		}
+
+		types_to_charges_[fields[0]] = fields[1].toFloat();
+	}
+}
+		
 void MMFF94ChargeProcessor::clear()
 	throw()
 {
+	types_to_charges_.clear();
+	rule_types_.clear();
 }
 
 const MMFF94ChargeProcessor& MMFF94ChargeProcessor::operator = (const MMFF94ChargeProcessor&)
@@ -568,9 +593,132 @@ Processor::Result MMFF94ChargeProcessor::operator () (Atom& atom)
 	return Processor::CONTINUE;
 }
 
+void MMFF94ChargeProcessor::assignPartialCharges_()
+{
+	HashMap<String, float>::ConstIterator it;
+
+	vector<vector<Atom*> > N5Ms;
+	vector<vector<Atom*> > NIMs;
+
+	N5Ms.resize(aromatic_rings_.size());
+	NIMs.resize(aromatic_rings_.size());
+
+	for (Position p = 0; p < atoms_.size(); p++)
+	{
+		Atom& atom = *atoms_[p];
+
+		String type = atom.getTypeName();
+
+		// rule_types_ has all types which need a more 
+		// sophisticated rule for assigning the partial charge
+		if (!rule_types_.has(type))
+		{
+			// ok, this is a triavial case:
+			// if we dont find this type it has no charge
+			// otherwise take it from the parameter file
+			it = types_to_charges_.find(type);
+
+			if (!+it)
+			{
+				atom.setCharge(0);
+			}
+			else
+			{
+				atom.setCharge(it->second);
+//   				Log.info() << "Charge "  << atom.getName() << " " << atom.getTypeName() << "  " << atom.getCharge() << std::endl;
+			}
+
+			continue;
+		}
+
+		if (type == "N5M") 
+		{
+			for (Position r = 0; r < aromatic_rings_.size(); r++)
+			{
+				if (aromatic_rings_[r].has(&atom))
+				{
+					N5Ms[r].push_back(&atom);
+					break;
+				}
+			}
+			continue;
+		}
+
+		if (type == "NIM+") 
+		{
+			for (Position r = 0; r < aromatic_rings_.size(); r++)
+			{
+				if (aromatic_rings_[r].has(&atom))
+				{
+					NIMs[r].push_back(&atom);
+					break;
+				}
+			}
+			continue;
+		}
+
+		if (type == "O2S")
+		{
+			/// ????
+			continue;
+		}
+
+		if (type == "SM")
+		{
+			/// ????
+			continue;
+		}
+	}
+
+
+	// distribute the negative charge of N5M atoms over the aromatic ring
+	for (Position r = 0; r < N5Ms.size(); r++)
+	{
+		if (N5Ms[r].size() == 0) continue;
+	
+		float charge = -1.0 / (float) N5Ms[r].size();
+
+		for (Position a = 0; a < N5Ms[r].size(); a++)
+		{
+			N5Ms[r][a]->setCharge(charge);
+		}
+	}
+
+	// distribute the positiive charge of NIM+ atoms over the aromatic ring and 
+	// neighbouring NGD+ atoms
+	for (Position r = 0; r < NIMs.size(); r++)
+	{
+		if (NIMs[r].size() == 0) continue;
+
+		Size nr_NGD = 0;
+
+		// count nr of NGD+ atoms bound to this ring
+		HashSet<Atom*>::Iterator ait = aromatic_rings_[r].begin();
+		for (; +ait; ++ait)
+		{
+			AtomBondIterator bit = (*ait)->beginBond();
+			for (; +bit; ++bit)
+			{
+				if (bit->getPartner(**ait)->getTypeName() == "NGD+") nr_NGD++;
+			}
+		}
+	
+		float charge = 1.0 / (float) (NIMs[r].size() + nr_NGD);
+
+		// charge for the NGD+ atoms is already set, 
+		// now care for the NIM+ atoms:
+		for (Position a = 0; a < NIMs[r].size(); a++)
+		{
+			NIMs[r][a]->setCharge(charge);
+		}
+	}
+
+
+}
+
 bool MMFF94ChargeProcessor::finish()
 {
-	// ???????? partial charge
+	assignPartialCharges_();
 	
 	HashMap<Atom*, float> charges;
 
@@ -579,11 +727,12 @@ bool MMFF94ChargeProcessor::finish()
 		Atom& atom = *atoms_[p];
 
 		// ?????????
-		float charge = atom.getVelocity().x;
-		atom.setCharge(charge);
+//   		float charge = atom.getVelocity().x;
+//   		atom.setCharge(charge);
 		//////////////////
 
-		if (charge >= 0.0 || atom.countBonds() == 0) 
+//   		if (charge >= 0.0 || atom.countBonds() == 0) 
+		if (atom.countBonds() == 0) 
 		{
 			continue;
 		}
@@ -596,6 +745,7 @@ bool MMFF94ChargeProcessor::finish()
 			continue;
 		}
 
+		float charge = atom.getCharge();
 		float c = charge * 0.5;
 		float d = charge - c;
 		atom.setCharge(d);

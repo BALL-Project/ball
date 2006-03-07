@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.2.7 2006/02/17 15:46:42 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.2.8 2006/03/07 16:01:33 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -136,9 +136,9 @@ namespace BALL
 
 			const Position type_j = central_atom.getType();
 
-			Position tp0 = partners[0]->getType();
-			Position tp1 = partners[1]->getType();
-			Position tp2 = partners[2]->getType();
+			Index tp0 = partners[0]->getType();
+			Index tp1 = partners[1]->getType();
+			Index tp2 = partners[2]->getType();
 
 			// check for parameters in a step down procedure
 			bool found = parameters_.getParameters(tp0, type_j, tp1, tp2, this_bend.k_oop);
