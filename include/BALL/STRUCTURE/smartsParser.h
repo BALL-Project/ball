@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.h,v 1.6.4.2 2006/02/25 17:18:11 amoll Exp $
+// $Id: smartsParser.h,v 1.6.4.3 2006/03/07 10:36:07 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMARTES_PARSER_H

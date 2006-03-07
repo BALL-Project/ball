@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.C,v 1.6.4.3 2006/02/27 19:01:26 amoll Exp $
+// $Id: smartsParser.C,v 1.6.4.4 2006/03/07 10:36:28 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/smartsParser.h>
@@ -123,6 +123,9 @@ namespace BALL
 
 	bool SmartsParser::SPBond::equals(const Bond* bond) const
 	{
+#ifdef SMARTS_PARSER_DEBUG
+		cerr << "bool SmartsParser::SPBond::equals(const Bond* " << bond << ") const" <<endl;
+#endif
 		// TODO - Z/E isomer types
 		// TODO errors in error log
 		
@@ -334,7 +337,7 @@ namespace BALL
 	bool SmartsParser::SPAtom::equals(const Atom * atom) const
 	{
 		#ifdef SMARTS_PARSER_DEBUG
-		cerr << "bool SmartsParser::SPAtom::equals(const Atom * atom " << atom << ") const (this=" << this << ", #properties="<< countProperties() << ")" << endl;
+		cerr << "bool SmartsParser::SPAtom::equals(const Atom * atom " << atom->getName() << ") const (this=" << this << ", #properties="<< countProperties() << ")" << endl;
 		#endif
 
 		bool isnot(false);
@@ -346,7 +349,7 @@ namespace BALL
 		for (Size i=0; i!=countProperties(); ++i)
 		{
 			#ifdef SMARTS_PARSER_DEBUG
-			cerr << getNamedProperty(i).getName() << "\t";
+			cerr << getNamedProperty(i).getName() << "\t" << getNamedProperty(i).getString() << endl;
 			#endif
 			String property_name = getNamedProperty(i).getName();
 			NamedProperty p = getNamedProperty(i);

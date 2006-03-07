@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.h,v 1.5.4.2 2006/02/27 23:08:51 amoll Exp $
+// $Id: smartsMatcher.h,v 1.5.4.3 2006/03/07 10:36:06 amoll Exp $
 //
 // Author:
 //   Andreas Bertsch
@@ -103,6 +103,9 @@ namespace BALL
 	
 					/// assignment operator
 					RecStruct_& operator = (const RecStruct_& rec_struct);
+
+					// dump (for debugging)
+					void dump(const String& name, Size depth_ = 0);
 			};
 			
 			/// method for evaluation of ring edges, after the the smarts tree is matched to molcule
@@ -125,6 +128,9 @@ namespace BALL
 
 			/// user sssr
 			std::vector<std::vector<Atom*> > sssr_;
+
+			// debug output depth
+			Size depth_;
 	};
   
 } // namespace BALL
