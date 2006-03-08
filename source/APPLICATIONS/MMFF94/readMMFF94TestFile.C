@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.61 2006/03/07 16:01:40 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.62 2006/03/08 19:03:48 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -129,6 +129,7 @@ System* readTestFile(String filename)
 //   		ait->setType(types[pos]);
 		ait->setProperty("Type", types[pos]);
 		ait->setProperty("TypeName", symbols[pos]);
+		ait->setProperty("OriginalInitialCharge", fcharges[pos]);
 //   		Vector3 v;
 //   		v.x = fcharges[pos];
 //   		ait->setVelocity(v);
@@ -875,11 +876,27 @@ bool testCharge(System& system, String filename)
 	AtomIterator ait = system.beginAtom();
 	for (; +ait; ++ait)
 	{
+		// we only compare correctly assigned atom types
+		if (ait->getType() != ait->getProperty("Type").getInt())
+		{
+			continue;
+		}
+
+		float icharge = ait->getProperty("InitialCharge").getFloat();
+		float oicharge = ait->getProperty("OriginalInitialCharge").getFloat();
+		if (!isOk(icharge, oicharge))
+		{
+			ok = false;
+			Log.error() << "IC! " << filename << " " << ait->getName() << " " << ait->getTypeName() << " " 
+									<< icharge << " " << oicharge << std::endl;
+			continue;
+		}
 		float f = ait->getCharge();
 		if (!isOk(f,ait->getRadius()))
 		{
 			ok = false;
-			Log.error() << "C! " << filename << " " << ait->getName() << " " << ait->getTypeName() << " " << f << " " << ait->getRadius()<< std::endl;
+			Log.error() << "C!  " << filename << " " << ait->getName() << " " << ait->getTypeName() << " " 
+									<< f << " " << ait->getRadius()<< std::endl;
 		}
 	}
 

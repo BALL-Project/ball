@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.18 2006/03/07 16:01:33 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.19 2006/03/08 19:03:35 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -607,6 +607,9 @@ void MMFF94ChargeProcessor::assignPartialCharges_()
 	{
 		Atom& atom = *atoms_[p];
 
+		// make sure we overwrite all charges
+		atom.setCharge(0);
+
 		String type = atom.getTypeName();
 
 		// rule_types_ has all types which need a more 
@@ -618,14 +621,9 @@ void MMFF94ChargeProcessor::assignPartialCharges_()
 			// otherwise take it from the parameter file
 			it = types_to_charges_.find(type);
 
-			if (!+it)
-			{
-				atom.setCharge(0);
-			}
-			else
+			if (+it)
 			{
 				atom.setCharge(it->second);
-//   				Log.info() << "Charge "  << atom.getName() << " " << atom.getTypeName() << "  " << atom.getCharge() << std::endl;
 			}
 
 			continue;
@@ -725,13 +723,12 @@ bool MMFF94ChargeProcessor::finish()
 	for (Position p = 0; p < atoms_.size(); p++)
 	{
 		Atom& atom = *atoms_[p];
+//   	  Log.info() << "Intial Charge "  << atom.getName() << " " << atom.getTypeName() << "  " << atom.getCharge() << std::endl;
 
-		// ?????????
-//   		float charge = atom.getVelocity().x;
-//   		atom.setCharge(charge);
-		//////////////////
+//   #ifdef BALL_MMFF94_TEST
+		atom.setProperty("InitialCharge", atom.getCharge());
+//   #endif
 
-//   		if (charge >= 0.0 || atom.countBonds() == 0) 
 		if (atom.countBonds() == 0) 
 		{
 			continue;
@@ -745,11 +742,14 @@ bool MMFF94ChargeProcessor::finish()
 			continue;
 		}
 
+		if (phi == 0) continue;
+
 		float charge = atom.getCharge();
-		float c = charge * 0.5;
+		float c = charge * phi;
 		float d = charge - c;
 		atom.setCharge(d);
 
+Log.info() << "Intial Charge "  << atom.getName() << " " << atom.getTypeName() << "  " << atom.getCharge() << std::endl;
 		c /= (float) atom.countBonds();
 
 		AtomBondIterator bit = atom.beginBond();

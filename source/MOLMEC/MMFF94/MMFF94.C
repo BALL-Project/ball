@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.32 2006/03/07 16:01:33 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.33 2006/03/08 19:03:35 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -180,12 +180,16 @@ namespace BALL
 		}
 
 		/////////////////////////////////////////////////////////
-		// types 
+		// atom types 
 		atom_typer_.setAromaticRings(getAromaticRings());
 		atom_typer_.assignTo(*system_);
 
 		/////////////////////////////////////////////////////////
-		// charge
+		// bond types
+		assignBondTypes_();
+
+		/////////////////////////////////////////////////////////
+		// atom charges
 		charge_processor_.setAromaticRings(getAromaticRings());
 		getSystem()->apply(charge_processor_);
 
@@ -198,9 +202,6 @@ namespace BALL
 				getUnassignedAtoms().insert(*it);
 			}
 		}
-
-		/////////////////////////////////////////////////////////
-		assignBondTypes_();
 
 		return true;
 	}
