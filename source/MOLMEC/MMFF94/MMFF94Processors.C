@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.21 2006/03/09 10:10:31 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.22 2006/03/09 16:07:31 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -663,7 +663,26 @@ void MMFF94ChargeProcessor::assignPartialCharges_()
 
 		if (type == "SM")
 		{
-			/// ????
+			// the single bonded sulfur shares its charge if its partner also 
+			// has an oxygen bonded, which has only one valence electron
+			bool share = false;
+
+			Atom& partner = *atom.getBond(0)->getPartner(atom);
+			AtomBondIterator bit = partner.beginBond();
+			for (; +bit; ++bit)
+			{
+				Atom& partner2 = *bit->getPartner(partner);
+				if (partner2.getElement().getSymbol() == "O" &&
+						partner2.countBonds() == 1 &&
+						partner2.getBond(0)->getOrder() == Bond::ORDER__SINGLE)
+				{
+					share = true;
+				}
+			}
+
+			if (!share) atom.setCharge(-1);
+			else        atom.setCharge(-0.5);
+
 			continue;
 		}
 	}
@@ -714,10 +733,9 @@ void MMFF94ChargeProcessor::assignPartialCharges_()
 		{
 			NIMs[r][a]->setCharge(charge);
 		}
-	}
-
-
+	} // NIM+ type atoms
 }
+
 
 bool MMFF94ChargeProcessor::finish()
 {
@@ -725,6 +743,7 @@ bool MMFF94ChargeProcessor::finish()
 	
 	HashMap<Atom*, float> charges;
 
+	// distribute initial charges to neighbouring atoms
 	for (Position p = 0; p < atoms_.size(); p++)
 	{
 		Atom& atom = *atoms_[p];
@@ -734,10 +753,10 @@ bool MMFF94ChargeProcessor::finish()
 		atom.setProperty("InitialCharge", atom.getCharge());
 //   #endif
 
-		const Size nr_bonds = atom.countBonds();
+ 		const Size nr_bonds = atom.countBonds();
 
-		// we are only interested in bonded atoms
-		// single atoms dont have a charge to distribute...
+		// only care for bonded atoms:
+		// others cant distribute charge
 		if (nr_bonds == 0) continue;
 
 		float phi = es_parameters_->getPhi(atom.getType());
@@ -750,31 +769,32 @@ bool MMFF94ChargeProcessor::finish()
 
 		if (phi == 0) continue;
 
-		// charge to distribute to each bonded partner
-		float c = atom.getCharge() * phi;
-		
-		// rest charge on this atom
-		atom.setCharge((1 - nr_bonds) * phi * atom.getCharge());
+		float charge = atom.getCharge();
+		float c = charge * phi;
+		atom.setCharge((1 - (float)nr_bonds * phi) * atom.getCharge());
 
 //      Log.info() << "Intial Charge1 "  << atom.getName() << " " << atom.getTypeName() << "  " << atom.getCharge() << std::endl;
 
+		// iterate over the bonds and distribute the charge c to each partner atom
+		HashMap<Atom*, float>::Iterator hit;
 		AtomBondIterator bit = atom.beginBond();
 		for (; +bit; ++bit)
 		{
 			Atom* atom2 = (Atom*)bit->getPartner(atom);
-			if (!charges.has(atom2))
+			hit = charges.find(atom2);
+			if (+hit)
 			{
-				charges[atom2] = c;
+				hit->second += c;
 			}
 			else
 			{
-				charges[atom2] += c;
+				charges[atom2] = c;
 			}
 		}
 //      Log.info() << "Intial Charge2 "  << atom.getName() << " " << atom.getTypeName() << "  " << atom.getCharge() << std::endl;
 	}
 
-	// add up all distributed charges to the rest charges
+	// now add up all charges
 	HashMap<Atom*, float>::Iterator cit = charges.begin();
 	for (; +cit; ++cit)
 	{
@@ -784,14 +804,15 @@ bool MMFF94ChargeProcessor::finish()
 	}
 
 
-	// now to the partial bond charges:
+	////////////////////////////////////////////////////////
+	// bond partial charges
 	for (Position p = 0; p < atoms_.size(); p++)
 	{
 		Atom& atom = *atoms_[p];
+	
 		double charge = atom.getCharge();
-		Index at1 = atom.getType();
-
 		AtomBondIterator bit = atom.beginBond();
+		Index at1 = atom.getType();
 		for (; +bit; ++bit)
 		{
 			const Atom* const atom2 = bit->getPartner(atom);
@@ -808,6 +829,7 @@ bool MMFF94ChargeProcessor::finish()
 				unassigned_atoms_.insert((Atom*)atom2);
 				continue;
 			}
+
 			charge += pcharge;
 		}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.62 2006/03/08 19:03:48 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.63 2006/03/09 16:06:51 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -913,7 +913,7 @@ Size wrong_types, type_errors;
 
 bool testType(System& system, String filename, AtomTyper& typer)
 {
-	typer.assignTo(system);
+//   	typer.assignTo(system);
 
 	bool ok = true;
 	AtomIterator ait = system.beginAtom();
@@ -925,7 +925,8 @@ bool testType(System& system, String filename, AtomTyper& typer)
 		all_atoms++;
 
 		Index org_type = a.getProperty("Type").getInt();
-		if (org_type == a.getType()) continue;
+//   		if (org_type == a.getType()) continue;
+		if (org_symbol == our_symbol) continue;
 
 		if (a.getElement().getSymbol() == "H")
 		{
@@ -1041,7 +1042,7 @@ int runtests(const vector<String>& filenames)
 			Log.info() << "We have unassigned atoms: " << mmff.getUnassignedAtoms().size() << std::endl;
 		}
 */
-//    		testType(*system, filenames[pos], typer);
+   		testType(*system, filenames[pos], typer);
 //    		result &= testStretch(mmff, filenames[pos], true);
 //       result &= testBend(mmff, filenames[pos], true);
 //    		result &= testStretchBend(mmff, filenames[pos], true);
