@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.19 2006/03/08 19:03:35 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.20 2006/03/09 00:58:49 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -688,7 +688,7 @@ void MMFF94ChargeProcessor::assignPartialCharges_()
 	{
 		if (NIMs[r].size() == 0) continue;
 
-		Size nr_NGD = 0;
+		Size nr_partner = 0;
 
 		// count nr of NGD+ atoms bound to this ring
 		HashSet<Atom*>::Iterator ait = aromatic_rings_[r].begin();
@@ -697,13 +697,18 @@ void MMFF94ChargeProcessor::assignPartialCharges_()
 			AtomBondIterator bit = (*ait)->beginBond();
 			for (; +bit; ++bit)
 			{
-				if (bit->getPartner(**ait)->getTypeName() == "NGD+") nr_NGD++;
+				const String& partner_type = bit->getPartner(**ait)->getTypeName();
+				if (partner_type == "NGD+" ||
+						partner_type == "NCN+") 
+				{
+					nr_partner++;
+				}
 			}
 		}
 	
-		float charge = 1.0 / (float) (NIMs[r].size() + nr_NGD);
+		float charge = 1.0 / (float) (NIMs[r].size() + nr_partner);
 
-		// charge for the NGD+ atoms is already set, 
+		// charge for the partner N atoms is already set, 
 		// now care for the NIM+ atoms:
 		for (Position a = 0; a < NIMs[r].size(); a++)
 		{
@@ -747,10 +752,10 @@ bool MMFF94ChargeProcessor::finish()
 		float charge = atom.getCharge();
 		float c = charge * phi;
 		float d = charge - c;
-		atom.setCharge(d);
+		atom.setCharge((1 - atom.countBonds() * phi) * atom.getCharge());
 
-Log.info() << "Intial Charge "  << atom.getName() << " " << atom.getTypeName() << "  " << atom.getCharge() << std::endl;
-		c /= (float) atom.countBonds();
+//      Log.info() << "Intial Charge1 "  << atom.getName() << " " << atom.getTypeName() << "  " << atom.getCharge() << std::endl;
+//   		c /= (float) atom.countBonds();
 
 		AtomBondIterator bit = atom.beginBond();
 		for (; +bit; ++bit)
@@ -765,13 +770,16 @@ Log.info() << "Intial Charge "  << atom.getName() << " " << atom.getTypeName() <
 				charges[atom2] += c;
 			}
 		}
+//      Log.info() << "Intial Charge2 "  << atom.getName() << " " << atom.getTypeName() << "  " << atom.getCharge() << std::endl;
 	}
 
 	HashMap<Atom*, float>::Iterator cit = charges.begin();
 	for (; +cit; ++cit)
 	{
 		Atom& atom = *cit->first;
+		float phi = es_parameters_->getPhi(atom.getType());
 		atom.setCharge(atom.getCharge() + cit->second);
+//      Log.info() << "Intial Charge3 "  << atom.getName() << " " << atom.getTypeName() << "  " << atom.getCharge() << std::endl;
 	}
 
 
@@ -804,6 +812,7 @@ Log.info() << "Intial Charge "  << atom.getName() << " " << atom.getTypeName() <
 		}
 
 		atom.setCharge(charge);
+//      Log.info() << "Intial Charge4 "  << atom.getName() << " " << atom.getTypeName() << "  " << atom.getCharge() << std::endl;
 //   		Log.error() << "      :  "    << charge         << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	}
 	
