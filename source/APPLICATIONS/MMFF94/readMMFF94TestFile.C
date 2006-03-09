@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.63 2006/03/09 16:06:51 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.64 2006/03/09 23:06:14 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -135,7 +135,7 @@ System* readTestFile(String filename)
 //   		ait->setVelocity(v);
 //    		ait->setCharge(fcharges[pos]);
 //   		ait->setCharge(charges[pos]);
-//   		ait->setFormalCharge((Index)fcharges[pos]);
+ 		ait->setFormalCharge((Index)fcharges[pos]);
 		ait->setRadius(charges[pos]);
 	}
 

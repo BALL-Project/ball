@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.22 2006/03/09 16:07:31 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.23 2006/03/09 23:06:10 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -289,6 +289,45 @@ bool MMFF94AtomTyper::assignAromaticType_5_(Atom& atom, Position L5, bool anion,
 		if      (L5 == 2) new_type = "N5A";
 		else if (L5 == 3) new_type = "N5B";
 		else if (L5 == 4) new_type = "N5";
+
+		// single bonded oxide as partner?
+		bool oxide = false;
+
+		// nr valence electrons
+		Size val = 0;
+
+		AtomBondIterator bit = atom.beginBond();
+		for (; +bit; ++bit)
+		{
+			val += bit->getOrder();
+			Atom& partner = *bit->getPartner(atom);
+			if (partner.getElement().getSymbol() == "O" &&
+					partner.countBonds() == 1)
+			{
+				oxide = true;
+			}
+		}
+
+		// if this is a nitrogen with 4 valence electrons,
+		// we have special types:
+		if (val == 4)
+		{
+			if (oxide)
+			{
+				if (new_type.size() == 3)
+				{
+					new_type += "X"; // N5AX N5BX
+				}
+				else
+				{
+					new_type += "OX"; // N5OX
+				}
+			}
+			else
+			{
+				new_type += "+"; // N5A+ N5B+
+			}
+		}
 	}
 	// oxygen
 	else if (element == 8)
@@ -659,6 +698,21 @@ void MMFF94ChargeProcessor::assignPartialCharges_()
 		{
 			/// ????
 			continue;
+		}
+
+		if (type == "NR%")
+		{
+			AtomBondIterator bit = atom.beginBond();
+			for (; +bit; ++bit)
+			{
+				if (bit->getOrder() == Bond::ORDER__TRIPLE)
+				{
+					if (bit->getPartner(atom)->getElement().getSymbol() == "N")
+					{
+						atom.setCharge(1);
+					}
+				}
+			}
 		}
 
 		if (type == "SM")
