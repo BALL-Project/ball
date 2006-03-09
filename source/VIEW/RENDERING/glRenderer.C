@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.67.4.1 2006/02/14 15:03:50 amoll Exp $
+// $Id: glRenderer.C,v 1.67.4.2 2006/03/09 12:39:58 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -813,17 +813,7 @@ namespace BALL
 
 			translateVector3_(tube.getVertex1());
 
-			// dont rotate if we have to draw in z-axis direction
-			const bool to_rotate = !Maths::isZero(rotation_axis.getSquareLength());
-
-			if (to_rotate)
-			{
-				rotateVector3Angle_(rotation_axis, angle);
-			}
-			else
-			{
-				translateVector3_(result / 2.0);
-			}
+			rotateVector3Angle_(rotation_axis, angle);
 
 			glScalef((GLfloat)tube.getRadius(),
 							 (GLfloat)tube.getRadius(),
@@ -835,14 +825,7 @@ namespace BALL
 			glPushMatrix();
 			translateVector3_(tube.getMiddleVertex());
 
-			if (to_rotate)
-			{
-				rotateVector3Angle_(rotation_axis, angle);
-			}
-			else
-			{
-				translateVector3_(result / 2.0);
-			}
+			rotateVector3Angle_(rotation_axis, angle);
 
 			glScalef((GLfloat)tube.getRadius(),
 							 (GLfloat)tube.getRadius(),
