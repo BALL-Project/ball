@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.33 2006/03/08 19:03:35 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.34 2006/03/10 09:55:26 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -179,10 +179,12 @@ namespace BALL
 			charge_processor_.setESParameters(es_parameters_);
 		}
 
+Log.error() << "#~~#   3 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		/////////////////////////////////////////////////////////
 		// atom types 
 		atom_typer_.setAromaticRings(getAromaticRings());
 		atom_typer_.assignTo(*system_);
+Log.error() << "#~~#   5 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 		/////////////////////////////////////////////////////////
 		// bond types
@@ -455,6 +457,7 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 		rings_.clear();
 		vector<vector<Atom*> > rings;
 
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		RingPerceptionProcessor rpp;
 		rpp.calculateSSSR(rings, *getSystem());
 
@@ -502,6 +505,7 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 			aromatic_rings_.push_back(set);
 		}
 
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 #ifdef BALL_DEBUG_MMFF
 		Log.info() << "MMFF94: Found " << rings_.size() << " rings: ";
 		for (Position pos = 0; pos < rings_.size(); pos++)

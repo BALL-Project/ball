@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.64 2006/03/09 23:06:14 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.65 2006/03/10 09:55:29 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -13,6 +13,7 @@
 #include <BALL/SYSTEM/fileSystem.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/FORMAT/MOL2File.h>
+#include <BALL/FORMAT/PDBFile.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94.h>
@@ -1053,6 +1054,7 @@ int runtests(const vector<String>& filenames)
 
  		if (result) ok++;
 //    		else if (!wrong_rings) not_ok.push_back(filenames[pos]);
+		delete system;
 	}
 
 	Log.info() << "Tested " << filenames.size() << " files, " << ok << " files ok" << std::endl;
@@ -1212,6 +1214,19 @@ int main(int argc, char** argv)
 	if (String(argv[2]) == "all")
 	{
    files = getTestFiles();
+	}
+	else if (String(argv[2]) == "bpti")
+	{
+		MMFF94 mmff;
+
+		PDBFile pdb("../BALLVIEW/bpti2.pdb");
+		System system;
+		pdb >> system;
+Log.error() << "#~~#   2 "  << system.countAtoms()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+		mmff.setup(system);
+Log.error() << "#~~#   3 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
+		return true;
 	}
 	else
 	{
