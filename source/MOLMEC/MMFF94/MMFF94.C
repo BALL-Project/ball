@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.34 2006/03/10 09:55:26 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.35 2006/03/11 13:49:37 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -179,12 +179,25 @@ namespace BALL
 			charge_processor_.setESParameters(es_parameters_);
 		}
 
-Log.error() << "#~~#   3 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		/////////////////////////////////////////////////////////
 		// atom types 
 		atom_typer_.setAromaticRings(getAromaticRings());
 		atom_typer_.assignTo(*system_);
-Log.error() << "#~~#   5 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
+		// for future use mark the invalid atoms:
+		for (Position p = 0; p < atoms_.size() ; p++)
+		{
+			if (!checkAtomType(*atoms_[p]))
+			{
+				atoms_[p]->setType(0);
+				atoms_[p]->setTypeName("Any");
+			}
+		}
+
+		if (unassigned_atoms_.size() > 0)
+		{
+			error() << "Could not assign atom types for " << unassigned_atoms_.size() << " atoms." << std::endl;
+		}
 
 		/////////////////////////////////////////////////////////
 		// bond types
@@ -457,7 +470,6 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 		rings_.clear();
 		vector<vector<Atom*> > rings;
 
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		RingPerceptionProcessor rpp;
 		rpp.calculateSSSR(rings, *getSystem());
 
@@ -505,7 +517,6 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 			aromatic_rings_.push_back(set);
 		}
 
-Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 #ifdef BALL_DEBUG_MMFF
 		Log.info() << "MMFF94: Found " << rings_.size() << " rings: ";
 		for (Position pos = 0; pos < rings_.size(); pos++)
@@ -568,5 +579,22 @@ Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<<
 		return false;
 	}
 
+	bool MMFF94::checkAtomType(Atom& atom)
+	{
+		const Index atom_type = atom.getType();
+
+		if (atom_type < 1 || 
+				atom_type > (Index) MMFF94_number_atom_types - 1  ||
+ 				!atom_types_.getAtomTypes()[atom_type].valid)
+		{
+			if (unassigned_atoms_.has(&atom)) return false;
+
+			unassigned_atoms_.insert(&atom);
+			error() << "Invalid atom type: " << atom.getFullName() << " " << atom_type << std::endl;
+			return false;
+		}
+
+		return true;
+	}
 
 } // namespace BALL

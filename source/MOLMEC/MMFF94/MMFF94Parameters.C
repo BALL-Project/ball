@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.46 2006/02/24 13:50:28 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.47 2006/03/11 13:49:37 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -185,7 +185,8 @@ MMFF94AtomType::MMFF94AtomType()
 		mltb(0),
 		arom(0),
 		lin(0),
-		sbmb(0)
+		sbmb(0),
+		valid(false)
 {
 }
 
@@ -224,6 +225,7 @@ bool MMFF94AtomTypes::setup_(const vector<vector<String> >& lines)
 			data_[pos].arom 	= fields[6].toUnsignedInt();
 			data_[pos].lin 		= fields[7].toUnsignedInt();
 			data_[pos].sbmb 	= fields[8].toUnsignedInt();
+			data_[pos].valid  = true;
 		}
 	}
 	catch(...)
@@ -1171,6 +1173,7 @@ bool MMFF94ESParameters::setup_(const vector<vector<String> >& lines)
 
 Position MMFF94ESParameters::getIndex_(Position at1, Position at2, Position bt) const
 {
+	if (bt > 1) bt = 1;
 	return at1 * MMFF94_number_atom_types + at2 + bt * MMFF94_number_atom_types * MMFF94_number_atom_types;
 }
 

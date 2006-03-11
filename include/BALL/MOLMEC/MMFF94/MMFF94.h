@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.2.12 2006/03/07 16:01:37 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.2.13 2006/03/11 13:49:47 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -195,6 +195,11 @@ namespace BALL
 		
 		///
 		bool areInOneAromaticRing(const vector<Atom*>& v, Size ring_size = 0) const;
+
+		/** Check wheter the atoms type is valid.
+		 		If not, add it to unassigned atoms.
+		*/
+		bool checkAtomType(Atom& atom);
 
 		//@}
 

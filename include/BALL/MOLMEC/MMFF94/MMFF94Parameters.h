@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.28 2006/02/23 23:29:38 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.29 2006/03/11 13:49:48 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -146,6 +146,9 @@ namespace BALL
 
 		/// can have a delocalized single bond
 		bool sbmb;
+
+		/// Is this a valid MMFF94 atom type?
+		bool valid;
 	};
 
 
