@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.65 2006/03/10 09:55:29 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.66 2006/03/13 01:21:07 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -1172,7 +1172,22 @@ int expressionTest(vector<String>& filenames, String expr, Index type, String ty
 			}
 			else
 			{
-				if (org_type == type) names_set.erase(atom.getName());
+				if (org_type == type) 
+				{
+					names_set.erase(atom.getName());
+
+					if (atom.getProperty("TypeName").getString() == atom.getTypeName())
+					{
+						continue;
+					}
+
+					errors ++;
+					if (atom.getTypeName() != type_name)
+					{
+						Log.error() << filename << "  " << atom.getName() << "  " << org_type << " " << atom.getProperty("TypeName").getString() << " " << atom.getTypeName() << std::endl;
+					}
+					wrong_files.insert(filename);
+				}
 			}
 		}
 
