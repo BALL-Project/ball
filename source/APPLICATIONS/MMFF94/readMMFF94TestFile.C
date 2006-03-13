@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.66 2006/03/13 01:21:07 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.67 2006/03/13 09:53:19 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -1162,33 +1162,17 @@ int expressionTest(vector<String>& filenames, String expr, Index type, String ty
 			Atom& atom = *(Atom*)*set.begin();
 
 			Index org_type = atom.getProperty("Type").getInt();
+			names_set.erase(atom.getName());
 
-			if (org_type < type)
+			if (org_type > type ||
+			    atom.getProperty("TypeName").getString() == type_name)
 			{
-				errors ++;
-				Log.error() << filename << "  " << atom.getName() << "  " << org_type << " " << atom.getProperty("TypeName").getString()<< std::endl;
-				wrong_files.insert(filename);
 				continue;
 			}
-			else
-			{
-				if (org_type == type) 
-				{
-					names_set.erase(atom.getName());
 
-					if (atom.getProperty("TypeName").getString() == atom.getTypeName())
-					{
-						continue;
-					}
-
-					errors ++;
-					if (atom.getTypeName() != type_name)
-					{
-						Log.error() << filename << "  " << atom.getName() << "  " << org_type << " " << atom.getProperty("TypeName").getString() << " " << atom.getTypeName() << std::endl;
-					}
-					wrong_files.insert(filename);
-				}
-			}
+			errors ++;
+			Log.error() << filename << "  " << atom.getName() << "  " << org_type << " " << atom.getProperty("TypeName").getString()<< std::endl;
+			wrong_files.insert(filename);
 		}
 
 		HashSet<String>::Iterator it = names_set.begin();
