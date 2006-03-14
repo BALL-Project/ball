@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileDetails.C,v 1.13 2006/01/17 18:59:06 oliver Exp $
+// $Id: PDBFileDetails.C,v 1.14 2006/03/14 12:14:40 amoll Exp $
 //
 
 // This file contains the more or less implementation specific portion of PDBFile.
@@ -1264,6 +1264,14 @@ namespace BALL
 			if (atom_info.current_residue != 0)
 			{
 				strncpy(atom_info.residue_name, atom_info.current_residue->getName().c_str(), 4);
+				try
+				{
+					atom_info.residue_id = atom_info.current_residue->getID().toInt();
+				}
+				catch(...)
+				{
+				}
+				atom_info.residue_insertion_code = atom_info.current_residue->getInsertionCode();
 			}
 			if ((atom_info.current_chain != 0) && (atom_info.current_chain->getName() != ""))
 			{
