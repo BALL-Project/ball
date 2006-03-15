@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.11 2006/02/01 14:15:08 amoll Exp $
+// $Id: scene.C,v 1.174.2.12 2006/03/15 22:00:14 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -17,6 +17,7 @@
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
 
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
+#include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
@@ -24,6 +25,7 @@
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/disc.h>
+#include <BALL/VIEW/PRIMITIVES/line.h>
 
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/MATHS/quaternion.h>
@@ -921,38 +923,83 @@ namespace BALL
 		}
 
 
-		void Scene::createCoordinateSystem_()
+		void Scene::createCoordinateSystem()
 			throw()
 		{
 			RepresentationManager& pm = getMainControl()->getRepresentationManager();
 
 			Representation* rp = pm.createRepresentation();
-			ColorRGBA red(255,0,0,120);
-			ColorRGBA yellow(255,255,0,120);
-			ColorRGBA color = red;
+			rp->setTransparency(90);
 
-			for (Position p = 0; p <= 990; p+=10)
+			const Camera& s = getStage()->getCamera();
+
+			float size = 100;
+
+			Vector3 v = s.getViewVector();
+			v.normalize();
+			
+			Vector3 p = s.getViewPoint() + (v * 25) - (s.getLookUpVector()* 5);
+
+			Vector3 x = -v + s.getRightVector();
+			x.normalize();
+			Vector3 y = -v - s.getRightVector();
+			y.normalize();
+
+			Vector3 z = -(x % y);
+
+			Box* xp = new Box(p, x * size, z * size, 0.05);
+			Box* yp = new Box(p, y * size, z * size, 0.05);
+			Box* zp = new Box(p, x * size, y * size, 0.05);
+
+			ColorRGBA color(0,255,190,130);
+			xp->setColor(color);
+			yp->setColor(color);
+			zp->setColor(color);
+
+			rp->insert(*xp);
+			rp->insert(*yp);
+ 			rp->insert(*zp);
+
+			ColorRGBA color2(0,255,255,160);
+
+			Vector3 p1[6], p2[6];
+			p1[0].set(x); p2[0].set(z);
+			p1[1].set(y); p2[1].set(z);
+			p1[2].set(x); p2[2].set(y);
+
+			for (Position i = 0; i <= size; i+=1)
 			{
-				if (color == red) color = yellow;
-				else 							color = red;
+				for (Position j = 0; j < 6; j++)
+				{
+					Line* line1 = new Line();
+					line1->setVertex1(p + p1[j] * i);
+					line1->setVertex2(p + p1[j] * i + p2[j] * size);
+					line1->setColor(color);
+					rp->insert(*line1);
 
-				SimpleBox* box = new SimpleBox;
-				box->a.set(p,0,0);
-				box->b.set((p+10),2,2);
-				box->setColor(color);
-				rp->insert(*box);
+					Line* line2 = new Line();
+					line2->setVertex1(p + p2[j] * i);
+					line2->setVertex2(p + p2[j] * i + p1[j] * size);
+					line2->setColor(color);
+					rp->insert(*line2);
+				}
+			}
 
-				box = new SimpleBox;
-				box->a.set(0,p,0);
-				box->b.set(2,p+10,2);
-				box->setColor(color);
-				rp->insert(*box);
 
-				box = new SimpleBox;
-				box->a.set(0,0,p);
-				box->b.set(2,2,p+10);
-				box->setColor(color);
-				rp->insert(*box);
+			for (Position i = 0; i <= size; i+=10)
+			{
+				for (Position j = 0; j < 6; j++)
+				{
+					Line* line1 = new Line();
+					line1->setVertex1(p + p1[j] * i);
+					line1->setVertex2(p + p1[j] * i + p2[j] * size);
+					rp->insert(*line1);
+
+					Line* line2 = new Line();
+					line2->setVertex1(p + p2[j] * i);
+					line2->setVertex2(p + p2[j] * i + p1[j] * size);
+					rp->insert(*line2);
+				}
 			}
 
 			Label* labelx = new Label;
@@ -1128,7 +1175,7 @@ namespace BALL
 			}
 			else if (!showed_coordinate && stage_->coordinateSystemEnabled()) 
 			{
-				createCoordinateSystem_();
+				createCoordinateSystem();
 			}
 
 			material_settings_->apply();
@@ -1274,6 +1321,9 @@ namespace BALL
 			setMinimumSize(10, 10);
 
 			main_control.initPopupMenu(MainControl::DISPLAY);
+
+			insertMenuEntry(MainControl::DISPLAY, "Show Coordinate System", this, SLOT(createCoordinateSystem()));
+			setMenuHint("Show a coordinate system");
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 			rotate_action_ =	insertMenuEntry(

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.8 2006/02/01 14:15:07 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.9 2006/03/15 22:00:14 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -469,6 +469,9 @@ namespace BALL
 			setMenuHint("Add an OpenGL Clipping Plane to the Scene");
 			setMenuHelp("geometricControl.html#clipping_planes");
 
+			menu_coordinate_ = insertMenuEntry(MainControl::DISPLAY, 
+																		"New Coordinate System", this, SLOT(createCoordinateSystem()));   
+
 			registerForHelpSystem(this, "geometricControl.html");
 		}
 
@@ -738,6 +741,10 @@ namespace BALL
 				plane->setActive(!plane->isActive());
 				getMainControl()->redrawAllRepresentations();
 			}
+		}
+
+		void GeometricControl::createCoordinateSystem()
+		{
 		}
 
 	} // namespace VIEW

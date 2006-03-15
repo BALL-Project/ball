@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.27.2.3 2006/02/01 14:14:51 amoll Exp $
+// $Id: geometricControl.h,v 1.27.2.4 2006/03/15 22:00:24 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -181,6 +181,9 @@ namespace BALL
 
 			/// 
 			void duplicateRepresentation();
+
+			///
+			void createCoordinateSystem();
 			
 		  protected slots:
 			
@@ -238,7 +241,7 @@ namespace BALL
 			bool creating_representations_;
 			bool ignore_change_;
 
-			QAction* menu_clipping_plane_;
+			QAction* menu_clipping_plane_, *menu_coordinate_;
 		};
 		
 } } // namespaces
