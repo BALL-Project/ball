@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.C,v 1.16.2.3 2006/02/01 13:23:46 amoll Exp $
+// $Id: mainControlPreferences.C,v 1.16.2.4 2006/03/15 15:40:36 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
@@ -25,6 +25,17 @@ MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name
 	setObjectName(name);
 	setINIFileSectionName("GENERAL");
 	style_box_->addItems(QStyleFactory::keys());
+	QString prefered_style = "Plastique";
+#ifdef BALL_PLATFORM_WINDOWS
+	prefered_style = "WindowsXP";
+#endif
+#ifdef BALL_PLATFORM_MAC
+	prefered_style = "Macintosh style";
+#endif
+
+	Index pos = style_box_->findText(prefered_style);
+	if (pos != -1) style_box_->setCurrentIndex(pos);
+
 	registerObject_(style_box_);
 	registerObject_(logging_to_file);
 
