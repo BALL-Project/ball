@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.43.2.2 2006/02/01 13:23:38 amoll Exp $
+// $Id: displayProperties.h,v 1.43.2.3 2006/03/15 23:31:37 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -264,9 +264,6 @@ namespace BALL
 			
 			//_
 			virtual void applyColoringSettings_(Representation& rep);
-
-			//_
-			bool isNotBusy_();
 
 			protected slots:
 			//_

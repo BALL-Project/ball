@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76.2.5 2006/02/01 14:14:49 amoll Exp $
+// $Id: mainControl.h,v 1.76.2.6 2006/03/15 23:29:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -697,6 +697,9 @@ namespace BALL
 			/// See above
 			void setMultithreading(bool state)
 				throw() { multi_threading_mode_ = state;}
+
+			///
+			bool isBusy() const;
 
 			//@}
 			/**	@name	Debugging and Diagnostics
