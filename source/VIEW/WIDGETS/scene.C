@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.12 2006/03/15 22:00:14 amoll Exp $
+// $Id: scene.C,v 1.174.2.13 2006/03/15 23:06:12 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -951,7 +951,7 @@ namespace BALL
 			Box* yp = new Box(p, y * size, z * size, 0.05);
 			Box* zp = new Box(p, x * size, y * size, 0.05);
 
-			ColorRGBA color(0,255,190,130);
+			ColorRGBA color(0,255,190,180);
 			xp->setColor(color);
 			yp->setColor(color);
 			zp->setColor(color);
@@ -1002,24 +1002,33 @@ namespace BALL
 				}
 			}
 
-			Label* labelx = new Label;
-			labelx->setText("x-axis");
-			labelx->setColor(ColorRGBA(0,0,1.0,0));
-			labelx->setVertex(10,0,-2);
-			rp->insert(*labelx);
+			ColorRGBA color3(0,255,255,200);
+			for (Position xi = 10; xi <= size; xi += 10)
+			{
+				for (Position yi = 10; yi <= size; yi += 10)
+				{
+					Vector3 point1(p + x * xi + y * yi);
+					Label* label1 = new Label();
+					label1->setVertex(point1);
+					label1->setColor(color3);
+					label1->setText(String(xi) + "," + String(yi));
+					rp->insert(*label1);
 
-			Label* labely = new Label;
-			labely->setText("y-axis");
-			labely->setColor(ColorRGBA(0,0,1.0,0));
-			labely->setVertex(-2,10,0);
-			rp->insert(*labely);
+					Vector3 point2(p + x * xi + z * yi);
+					Label* label2 = new Label();
+					label2->setVertex(point2);
+					label2->setColor(color3);
+					label2->setText(String(xi) + "," + String(yi));
+					rp->insert(*label2);
 
-
-			Label* labelz = new Label;
-			labelz->setText("z-axis");
-			labelz->setColor(ColorRGBA(0,0,1.0,0));
-			labelz->setVertex(0,-2,10);
-			rp->insert(*labelz);
+					Vector3 point3(p + y * xi + z * yi);
+					Label* label3 = new Label();
+					label3->setVertex(point3);
+					label3->setColor(color3);
+					label3->setText(String(xi) + "," + String(yi));
+					rp->insert(*label3);
+				}
+			}
 
 			rp->setProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM);
 
