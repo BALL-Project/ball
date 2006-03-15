@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.4 2006/02/01 14:14:51 amoll Exp $
+// $Id: scene.h,v 1.66.2.5 2006/03/15 22:00:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -495,6 +495,9 @@ namespace BALL
 	
 			public slots:
 
+			void createCoordinateSystem()
+				throw();
+
 			/// Export PNG image and return the filename
 			String exportPNG();
 
@@ -708,9 +711,6 @@ namespace BALL
 			void readLights_(const INIFile& inifile) 
 				throw();
 
-			void createCoordinateSystem_()
-				throw();
-
 			inline float getXDiff_();
 			inline float getYDiff_();
 			inline Vector3 getTranslationVector_(const Vector3& v);
@@ -726,6 +726,7 @@ namespace BALL
 			QAction *no_stereo_action_, *active_stereo_action_, *dual_stereo_action_;
 			QAction *record_animation_action_, *start_animation_action_, *clear_animation_action_, *cancel_animation_action_;
 			QAction *animation_export_POV_action_, *animation_export_PNG_action_, *animation_repeat_action_;
+			QAction *create_coordinate_system_;
 			
 			Vector3 system_origin_;
 

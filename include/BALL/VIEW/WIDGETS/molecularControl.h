@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.50.2.4 2006/02/01 13:23:42 amoll Exp $
+// $Id: molecularControl.h,v 1.50.2.5 2006/03/15 22:00:24 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -171,6 +171,9 @@ class BALL_VIEW_EXPORT MolecularControl
 	*/
 	Size applySelector(const String& expression)
 		throw();
+
+	///
+	Size applySMARTSSelector();
 
 	///
 	void writePreferences(INIFile& inifile)
@@ -427,7 +430,7 @@ class BALL_VIEW_EXPORT MolecularControl
 	
 	MolecularInformation 		information_;
 	
-	QComboBox* 							selector_edit_;
+	QComboBox* 							selector_edit_, *smarts_edit_;
 
 	// the context menus
 	QMenu 							context_menu_, 
