@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.29 2006/02/17 02:05:56 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.30 2006/03/16 14:11:52 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -36,6 +36,9 @@ namespace BALL
 
 	/// 0.043844 / 2
 	#define K0 0.021922
+	
+	// -0.007 degree^-1
+	#define K1 -0.007
 
 	// default constructor
 	MMFF94Bend::MMFF94Bend()
@@ -203,9 +206,6 @@ namespace BALL
 //   		const double radian_to_degree = (double)180.0 / Constants::PI;
 		const double degree_to_radian= Constants::PI / (double)180.0;
 
-		// -0.007 degree^-1
-		const volatile double k1 = -0.007;
-
 		for (; bend_it != bends_.end(); ++bend_it) 
 		{
 			const Vector3& a1 = bend_it->atom1->position;
@@ -263,7 +263,7 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 			else
 			{
 				theta -= theta0;
-				energy = K0 * ka * theta * theta * (1.0 + k1 * theta);
+				energy = K0 * ka * theta * theta * (1.0 + K1 * theta);
 			}
 
 			bend_it->delta_theta = theta;
@@ -284,6 +284,106 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 	// calculates and adds its forces to the current forces of the force field
 	void MMFF94Bend::updateForces()
 	{
+		if ((getForceField() == 0) || (getForceField()->getSystem() == 0))
+		{
+			return;
+		}
+
+		bool use_selection = getForceField()->getUseSelection();
+		for (Size i = 0; i < bends_.size(); i++) 
+		{
+			if ((use_selection == false) 
+					|| bends_[i].atom1->ptr->isSelected() 
+					|| bends_[i].atom2->ptr->isSelected() 
+					|| bends_[i].atom3->ptr->isSelected())
+			{
+
+				// Calculate the vector between atom1 and atom2,
+				// test if the vector has length larger than 0 and normalize it
+
+				Vector3 v1 = bends_[i].atom1->position - bends_[i].atom2->position;
+				Vector3 v2 = bends_[i].atom3->position - bends_[i].atom2->position;
+				double length = v1.getLength();
+
+				if (length == 0) continue;
+				double inverse_length_v1 = 1.0 / length;
+				v1 *= inverse_length_v1 ;
+
+				// Calculate the vector between atom3 and atom2,
+				// test if the vector has length larger than 0 and normalize it
+
+				length = v2.getLength();
+				if (length == 0.0) continue;
+				double inverse_length_v2 = 1/length;
+				v2 *= inverse_length_v2;
+
+				// Calculate the cos of theta and then theta
+				double costheta = v1 * v2;
+				double theta;
+				if (costheta > 1.0) 
+				{
+					theta = 0.0;
+				}
+				else if (costheta < -1.0) 
+				{
+					theta = Constants::PI;
+				}
+				else 
+				{
+					theta = acos(costheta);
+				}
+
+				// unit conversion: kJ/(mol A) -> N
+				// kJ -> J: 1e3
+				// A -> m : 1e10
+				// J/mol -> mol: Avogadro
+				const float& delta = bends_[i].delta_theta;
+				double factor = -K0 * bends_[i].ka * (2 * delta * + 3 * K1 * delta * delta);
+
+				// Calculate the cross product of v1 and v2, test if it has length unequal 0,
+				// and normalize it.
+
+				Vector3 cross = v1 % v2;
+				if ((length = cross.getLength()) != 0) 
+				{
+					cross *= (1.0 / length);
+				} 
+				else 
+				{
+					continue;
+				}
+
+				Vector3 n1 = v1 % cross;
+				Vector3 n2 = v2 % cross; 
+				n1 *= factor * inverse_length_v1;
+				n2 *= factor * inverse_length_v2;
+
+				if (use_selection == false)
+				{
+					bends_[i].atom1->force -= n1;
+					bends_[i].atom2->force += n1;
+					bends_[i].atom2->force -= n2;
+					bends_[i].atom3->force += n2;
+				} 
+				else 
+				{
+					if (bends_[i].atom1->ptr->isSelected()) 
+					{
+						bends_[i].atom1->force -= n1;
+					}
+	
+					if (bends_[i].atom2->ptr->isSelected())
+					{
+						bends_[i].atom2->force += n1;
+						bends_[i].atom2->force -= n2;
+					}
+					if (bends_[i].atom3->ptr->isSelected())
+					{
+						bends_[i].atom3->force += n2;
+					}
+				}
+			}
+		}
 	}
 
 	Position MMFF94Bend::getBendType(const Bond& bond1, const Bond& bond2,
