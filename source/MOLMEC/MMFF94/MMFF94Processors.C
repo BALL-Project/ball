@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.2.23 2006/03/09 23:06:10 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.2.24 2006/03/16 16:52:34 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -103,19 +103,26 @@ void AtomTyper::assignTo(System& s)
 
 void AtomTyper::assignTo(Molecule& mol)
 {
+	HashSet<const Atom*> atoms;
 	AtomIterator ait = mol.beginAtom();
 	for(; +ait; ++ait)
 	{
 		ait->setType(-1);
+
+//   		if (ait->getElement().getSymbol() != "H") 
+		atoms.insert(&*ait);
 	}
 
 	SmartsMatcher sm;
 
-	for (Position rule = 0; rule < types_.size(); rule++)
+//    	for (Index rule = (Index)types_.size() - 1; rule >= 0; rule--)
+ 	for (Index rule = 0; rule < (Index)types_.size(); rule++)
 	{
 		try
 		{
-			vector<HashSet<const Atom*> > result = sm.match(mol, rules_[rule]);
+			vector<HashSet<const Atom*> > result;
+ 			sm.match(result, mol, rules_[rule]);
+//    			sm.match(result, mol, rules_[rule], atoms);
 			if (result.size() == 0) continue;
 			for (Position pos = 0; pos < result.size(); pos++)
 			{
@@ -131,6 +138,7 @@ void AtomTyper::assignTo(Molecule& mol)
 				atom.setType(types_[rule]);
 				atom.setTypeName(names_[rule]);
 				assignSpecificValues_(atom);
+ 				atoms.erase(&atom);
 			}
 		}
 		catch(Exception::ParseError e)
@@ -243,6 +251,7 @@ bool MMFF94AtomTyper::assignAromaticType_5_(Atom& atom, Position L5, bool anion,
 {
 	String old_type = atom.getTypeName();
 
+//   Log.error() << "#~~#   1 "  << atom.getName() << " " << old_type           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	if (anion && old_type == "N5M") return true;
 
 	String key = old_type + "|" + String(L5);
@@ -480,6 +489,7 @@ void MMFF94AtomTyper::assignTo(System& s)
 			if ((element != "C" && element != "N") ||
 					hetero_atom_types_.has(atom.getType()))
 			{
+//   Log.error() << "#~~#   2 "  << atom.getFullName()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				hetero_atom = &atom;
 			}
 
@@ -498,10 +508,7 @@ void MMFF94AtomTyper::assignTo(System& s)
 
 		// we are only interested in hetero rings and charged rings
 		// no hetero atom and no charged atom? Then continue to next ring
-		if (atom_x == 0)
-		{
-			continue;
-		}
+		if (atom_x == 0) continue;
 		
 		// iterate over all atoms of this ring:
 		ait = ring_atoms.begin();

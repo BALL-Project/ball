@@ -182,4 +182,11 @@ def createStickModel():
 	dp.setTransparency(0)
 	dp.apply()
 
+def printAtomForces():
+	s = getMolecularControlSelection()
+	print "Atom forces for highlighted Items:"
+	for r in s:
+		for a in atoms(r):
+			print "Atom "+str(str(a.getFullName())+" : "+str(a.getForce()))
+
 

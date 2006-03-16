@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96.4.2 2006/02/25 16:42:16 amoll Exp $
+// $Id: molecularControl.C,v 1.96.4.3 2006/03/16 16:52:36 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -1215,7 +1215,8 @@ namespace BALL
 				MoleculeIterator mit = ((System*)*it)->beginMolecule();
 				for (;+mit; ++mit)
 				{
-					std::vector<HashSet<const Atom*> > matches = s.match(*mit, smarts_edit_->currentText().ascii());
+					std::vector<HashSet<const Atom*> > matches;
+					s.match(matches, *mit, smarts_edit_->currentText().ascii());
 					nr_of_matches += matches.size();
 					for (Position p = 0; p < matches.size(); p++)
 					{

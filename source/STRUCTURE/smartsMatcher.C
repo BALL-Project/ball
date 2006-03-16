@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.C,v 1.5.4.3 2006/03/07 10:36:27 amoll Exp $
+// $Id: smartsMatcher.C,v 1.5.4.4 2006/03/16 16:52:35 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/smartsMatcher.h>
@@ -56,7 +56,19 @@ namespace BALL
 		has_user_sssr_ = false;
 	}
 
-	vector<HashSet<const Atom*> > SmartsMatcher::match(Molecule& molecule, const String& smarts) 
+	void SmartsMatcher::match(vector<HashSet<const Atom*> >& matches, Molecule& molecule, const String& smarts)
+		throw(Exception::ParseError)
+	{
+		HashSet<const Atom*> start_atoms;
+		for (AtomConstIterator it = molecule.beginAtom(); +it; ++it)
+		{
+			start_atoms.insert(&*it);
+		}
+		match(matches, molecule, smarts, start_atoms);
+		return;
+	}
+
+	void SmartsMatcher::match(vector<HashSet<const Atom*> >& matches, Molecule& molecule, const String& smarts, const HashSet<const Atom*>& start_atoms)
 		throw(Exception::ParseError)
 	{
 		// TODO:
@@ -64,8 +76,11 @@ namespace BALL
 		//  - component level grouping, connected components of the molecule graph
 		//  - chirality (backends not implemented yet; only matches when properties would be set)
 		//  - nested recursive SMARTS (i.e. [$([$(CC)],[$(C)])], why need this? )
+	
+		//vector<HashSet<const Atom*> > matches;
+
+		rec_matches_.clear();
 		
-		vector<HashSet<const Atom*> > matches;
 		SmartsParser parser;
 		parser.parse(smarts);
 		SmartsParser::SPNode* root = parser.getRoot();
@@ -92,7 +107,6 @@ namespace BALL
 			// is not set, and and non-negative integer if set.
 		}
 
-		rec_matches_.clear();
 		if (parser.isRecursive())
 		{
 			// collect all recursive environments of the tree
@@ -113,10 +127,11 @@ namespace BALL
 			while (rec_nodes.size() != 0)
 			{
 				vector<HashSet<const Atom*> > tmp;
-				for (AtomConstIterator it=molecule.beginAtom(); +it; ++it)
+				//for (AtomConstIterator it=molecule.beginAtom(); +it; ++it)
+				for (HashSet<const Atom*>::ConstIterator it = start_atoms.begin(); +it; ++it)
 				{
 					RecStruct_ rs;
-					evaluate_(rs, rec_nodes.top(), &*it);
+					evaluate_(rs, rec_nodes.top(), *it);
 					if (rs.matched_atoms.size() != 0)
 					{
 						for (Size i = 0; i != rs.matched_atoms.size(); ++i)
@@ -142,11 +157,12 @@ namespace BALL
 					}
 					
 					HashSet<const Atom*> tmp_match;
-					for (AtomConstIterator it=molecule.beginAtom(); +it; ++it)
+					//for (AtomConstIterator it=molecule.beginAtom(); +it; ++it)
+					for (HashSet<const Atom*>::ConstIterator it = start_atoms.begin(); +it; ++it)
 					{
-						if (!non_match.has(&*it))
+						if (!non_match.has(*it))
 						{
-							tmp_match.insert(&*it);
+							tmp_match.insert(*it);
 						}
 					}
 					rec_matches_[rec_nodes.top()].push_back(tmp_match);
@@ -180,10 +196,11 @@ namespace BALL
 		//{
 			// TODO: better selection heuristic, most discriminating part should be choosen first
 			// 
-			for (AtomConstIterator it=molecule.beginAtom(); +it; ++it)
+			//for (AtomConstIterator it=molecule.beginAtom(); +it; ++it)
+			for (HashSet<const Atom*>::ConstIterator it = start_atoms.begin(); +it; ++it)
 			{
 				RecStruct_ rs;
-				evaluate_(rs, root, &*it);
+				evaluate_(rs, root, *it);
 				#ifdef SMARTS_MATCHER_DEBUG
 				cerr << "SM: found " << rs.matched_atoms.size() << " matchings without considering ring edges" << endl;
 				#endif
@@ -250,7 +267,8 @@ namespace BALL
 		}
 #endif
 
-		return matches;
+		//return matches;
+		return;
 	}
 
 	bool SmartsMatcher::evaluateRingEdges_(	const HashSet<const Atom*>& match, const HashMap<const SPNode*, const Atom*>& mapping, const String& smarts)
@@ -353,6 +371,8 @@ namespace BALL
 							new_rs.visited_edges.push_back(visited_edges);
 							HashSet<const Bond*> visited_bonds;
 							new_rs.visited_bonds.push_back(visited_bonds);
+							// TODO
+
 						}
 					
 						for (Size i = 0; i != rs.matched_atoms.size(); ++i)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.h,v 1.5.4.3 2006/03/07 10:36:06 amoll Exp $
+// $Id: smartsMatcher.h,v 1.5.4.4 2006/03/16 16:52:32 amoll Exp $
 //
 // Author:
 //   Andreas Bertsch
@@ -45,7 +45,11 @@ namespace BALL
 			SmartsMatcher(const SmartsMatcher& matcher);
 
 			/// method to match a SMARTS pattern given as a string to given molecule
-			std::vector<HashSet<const Atom*> > match(Molecule& mol, const String& smarts)
+			void match(std::vector<HashSet<const Atom*> >& matches, Molecule& mol, const String& smarts)
+				throw(Exception::ParseError);
+
+			/// method to match a SMARTS pattern given as a string to given molcule. The atoms which will be used for starting matching are given in atoms
+			void match(std::vector<HashSet<const Atom*> >& matches, Molecule& mol, const String& smarts, const HashSet<const Atom*>& atoms)
 				throw(Exception::ParseError);
 
 			/// destructor
@@ -61,6 +65,9 @@ namespace BALL
 			/// this function is used to cause the matcher to do an ring perception if needed (do not use the set SSSR any more)
 			void unsetSSSR();
 
+			/// test if the given SMARTS was valid (call after .match)
+			bool isValid() const;
+		
 		protected:
 
 			/// little helper struct for the recursive matching algorithm
@@ -91,6 +98,9 @@ namespace BALL
 	
 					/// holds the visited edges of the smarts tree
 					std::vector<HashSet<const SPEdge*> > visited_edges;
+	
+					/// holds the first mapped node/atom
+					//std::vector<std::pair<const SPNode*, const Atom*> > first_matches;
 	
 					/// adds the content of the given struct
 					void add(const RecStruct_& rec_struct);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.67 2006/03/13 09:53:19 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.68 2006/03/16 16:52:33 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -14,6 +14,7 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/FORMAT/PDBFile.h>
+#include <BALL/FORMAT/HINFile.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94.h>
@@ -1218,13 +1219,72 @@ int main(int argc, char** argv)
 	{
 		MMFF94 mmff;
 
-		PDBFile pdb("../BALLVIEW/bpti2.pdb");
+		HINFile pdb("../BALLVIEW/bpti.hin");
 		System system;
 		pdb >> system;
-Log.error() << "#~~#   2 "  << system.countAtoms()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-		mmff.setup(system);
-Log.error() << "#~~#   3 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+ 		mmff.setup(system);
 
+	SmartsMatcher sm;
+	vector<HashSet<const Atom*> > result = sm.match(*system.getMolecule(0), "[O;$(O=#6)]");
+Log.error() << "#~~#   4 " << result.size()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+		/*
+Log.error() << "#~~#   3 "  << system.countAtoms()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+		///
+		vector<vector<Atom*> > rings;
+		RingPerceptionProcessor rpp;
+		rpp.calculateSSSR(rings, system);
+
+Log.error() << "#~~#   2 "  << rings.size()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
+		vector<HashSet<Atom*> > 		rings_;
+		vector<HashSet<Atom*> > 		aromatic_rings_;
+		for (Position i = 0; i < rings.size(); i++)
+		{
+			// all 3er and 4er rings are copied below
+ 			if (rings[i].size() == 3 || rings[i].size() == 4) continue;
+
+			HashSet<Atom*> set;
+			for (Position j = 0; j < rings[i].size(); j++)
+			{
+				set.insert(rings[i][j]);
+			}
+			rings_.push_back(set);
+		}
+
+		vector<vector<Atom*> > rings2 = rpp.getAllSmallRings();
+
+		// copy 3er and 4er rings
+		for (Position i = 0; i < rings2.size(); i++)
+		{
+			HashSet<Atom*> set;
+			for (Position j = 0; j < rings2[i].size(); j++)
+			{
+				set.insert(rings2[i][j]);
+			}
+			rings_.push_back(set);
+		}
+
+
+		///////////////////////////////////////
+		/// calculate all aromatic rings in the molecule
+		aromatic_rings_.clear();
+
+		AromaticityProcessor ap;
+		ap.aromatizeSimple(rings);
+	
+		for (Position i = 0; i < rings.size(); i ++)
+		{
+			HashSet<Atom*> set;
+			for (Position j = 0; j < rings[i].size(); j++)
+			{
+				set.insert(rings[i][j]);
+			}
+			aromatic_rings_.push_back(set);
+		}
+
+Log.error() << "#~~#   1 "  << rings_.size() << std::endl;
+Log.error() << "#~~#   2 "  << aromatic_rings_.size() << std::endl;
+*/
 		return true;
 	}
 	else

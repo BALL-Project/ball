@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.25.4.1 2006/02/14 15:01:53 amoll Exp $
+// $Id: molecularStructure.h,v 1.25.4.2 2006/03/16 16:52:33 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -38,6 +38,11 @@
 #ifndef BALL_MOLMEC_CHARMM_CHARMM_H
 # include <BALL/MOLMEC/CHARMM/charmm.h>
 #endif
+
+#ifndef BALL_MOLMEC_MMFF94_MMFF94_H
+# include <BALL/MOLMEC/MMFF94/MMFF94.h>
+#endif
+
 
 #include <qwidget.h>
 
@@ -295,6 +300,7 @@ namespace BALL
 
 			AmberFF 										amber_;
 			CharmmFF										charmm_;
+			MMFF94  										mmff_;
 			AmberConfigurationDialog    amber_dialog_;
 			CharmmConfigurationDialog 	charmm_dialog_;
 			MinimizationDialog 					minimization_dialog_;

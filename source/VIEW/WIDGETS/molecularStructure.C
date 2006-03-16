@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.86.4.1 2006/02/14 15:03:53 amoll Exp $
+// $Id: molecularStructure.C,v 1.86.4.2 2006/03/16 16:52:37 amoll Exp $
 //
 // Author:
 //   Andreas Moll
@@ -814,7 +814,8 @@ namespace BALL
 		{
 			return ((use_amber_) ? 
 						reinterpret_cast<ForceField&>(amber_) : 
-						reinterpret_cast<ForceField&>(charmm_));
+						reinterpret_cast<ForceField&>(mmff_));
+//   						reinterpret_cast<ForceField&>(charmm_));
 		}
 
 		void MolecularStructure::fetchPreferences(INIFile& inifile)
@@ -904,6 +905,7 @@ namespace BALL
 			setStatusbarText("Setting up force field...", true);
 			ForceField& ff = getForceField();
 
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			bool ok = false;
 			try
 			{
@@ -937,6 +939,7 @@ namespace BALL
 
 			// Compute the single point energy and print the result to Log and the status bar.
 			ff.updateEnergy();
+			ff.updateForces();
 			Log.info() << ff.getResults() << std::endl;
 			setStatusbarText("Total energy: " + String(ff.getEnergy()) + " kJ/mol.", true);
 		}
@@ -1167,8 +1170,6 @@ namespace BALL
 			{
 			}
 			
-			ff.updateEnergy();
-
 			// CHARMM setup may delete atoms (converted to united atoms!),
 			// so we have to make sure the rest of the world realizes something might have changed.
 			if (!use_amber_)

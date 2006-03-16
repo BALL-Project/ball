@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.23 2006/02/24 13:50:28 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.24 2006/03/16 16:52:34 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -210,7 +210,10 @@ namespace BALL
 			direction.normalize();
 			direction *= force;
 
+Log.error() << "#~~#   1 " << stretch_[i].atom1->getForce()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << "#~~#   4 " << stretch_[i].atom1->getFullName() << " "   << direction           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			stretch_[i].atom1->getForce()-= direction;
+Log.error() << "#~~#   x " << stretch_[i].atom1->getForce()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			stretch_[i].atom2->getForce()+= direction;
 		}                                                                                                          
 	}
