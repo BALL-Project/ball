@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.3 2006/02/01 14:15:08 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.4 2006/03/16 00:09:35 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -440,7 +440,7 @@ namespace BALL
 			bool selected = (number_of_selected_objects != 0);
 			bool one_item = (number_of_selected_objects == 1);
 			bool one_system = (getMainControl()->getSelectedSystem() != 0);
-			bool composites_muteable = !main_control.compositesAreLocked();
+			bool composites_muteable = !main_control.isBusy();
 
 	// 		menuBar()->setItemEnabled(assign_charges_id_, one_system && composites_muteable);
 
@@ -476,7 +476,7 @@ namespace BALL
 //   			calculate_ramachandran_->setEnabled((number_of_selected_objects == 1) &&
 //   							RTTI::isKindOf<Protein>(**getMainControl()->getMolecularControlSelection().begin()));
 			
-			menu_FPDB_->setEnabled( !getMainControl()->compositesAreLocked() && 
+			menu_FPDB_->setEnabled( !getMainControl()->isBusy() && 
 																						 (getMainControl()->getSelectedSystem() != 0));
 		}
 
@@ -944,7 +944,7 @@ namespace BALL
 		void MolecularStructure::runMinimization()
 		{
 			// Make sure we run one instance of a simulation at a time only.
-			if (getMainControl()->compositesAreLocked())
+			if (getMainControl()->isBusy())
 			{
 				Log.error() << "Simulation already running or still rendering!" << std::endl;
 				return;
@@ -1114,7 +1114,7 @@ namespace BALL
 		void MolecularStructure::MDSimulation(bool show_dialog)
 		{
 			// Make sure we run just one instance at a time.
-			if (getMainControl()->compositesAreLocked())
+			if (getMainControl()->isBusy())
 			{
 				Log.error() << "Simulation already running or still rendering!" << std::endl;
 				return;

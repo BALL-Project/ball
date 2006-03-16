@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.13 2006/03/15 23:06:12 amoll Exp $
+// $Id: scene.C,v 1.174.2.14 2006/03/16 00:09:36 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1429,19 +1429,20 @@ namespace BALL
 			registerForHelpSystem(this, "scene.html");
 		}
 
-		void Scene::checkMenu(MainControl& /*main_control*/)
+		void Scene::checkMenu(MainControl& main_control)
 			throw()
 		{
+			bool busy = main_control.isBusy();
 			rotate_action_->setChecked(current_mode_ == ROTATE__MODE);
 			picking_action_->setChecked(current_mode_ == PICKING__MODE);
-			picking_action_->setEnabled(!getMainControl()->compositesAreLocked());
-			move_action_->setEnabled(!getMainControl()->compositesAreLocked());
+			picking_action_->setEnabled(!busy);
+			move_action_->setEnabled(!busy);
 
 			bool animation_running = (animation_thread_ != 0 && animation_thread_->isRunning());
 			
 			start_animation_action_->setEnabled(
 																animation_points_.size() > 0 && 
-																!getMainControl()->compositesAreLocked() &&
+																!busy &&
 																!animation_running);
 			
 			clear_animation_action_->setEnabled(
@@ -1733,9 +1734,7 @@ namespace BALL
 
 		void Scene::timerSignal_()
 		{
-			if (mouse_button_is_pressed_ ||
-					getMainControl()->compositesAreLocked() ||
-					getMainControl()->getRepresentationManager().updateRunning())
+			if (mouse_button_is_pressed_ || getMainControl()->isBusy())
 			{
 				return;
 			}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.4.2.3 2006/02/01 13:23:47 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.4.2.4 2006/03/16 00:09:33 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -211,11 +211,7 @@ namespace BALL
 
 			// prevent freezing, if clicking on representation, while
 			// an other is still rendering
-			if (getMainControl()->compositesAreLocked() || 
-					getMainControl()->updateOfRepresentationRunning())
-			{
-				return;
-			}
+			if (getMainControl()->isBusy()) return;
 
 			if (grids->count() == 0 || grids->currentIndex() == -1)
 			{
@@ -358,9 +354,8 @@ namespace BALL
 		bool ModifySurfaceDialog::colorByGrid_()
 		{
 			if (grid_ == 0 ||
-					getMainControl()->compositesAreLocked() ||
 					rep_ == 0 ||
-					getMainControl()->updateOfRepresentationRunning())
+					getMainControl()->isBusy())
 			{
 				setStatusbarText("Could not color surface, maybe because an other thread is still running?", true);
 				return false;

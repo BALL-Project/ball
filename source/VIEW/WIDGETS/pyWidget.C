@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.18 2006/02/01 14:15:08 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.19 2006/03/16 00:09:36 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -339,15 +339,6 @@ namespace BALL
 		void PyWidget::reactTo(const QKeyEvent& e) 
 			throw() 
 		{
-			// doesnt work, no idea yet why:
-			/*
-			if (getMainControl()->compositesAreLocked() ||
-					getMainControl()->getRepresentationManager().updateRunning())
-			{
-				return;
-			}
-			*/
-
 			if (e.key() == Qt::Key_F1 &&
  					e.modifiers() == Qt::ShiftModifier)
 			{
@@ -751,6 +742,8 @@ namespace BALL
 
 		bool PyWidget::runString(String command)
 		{
+			if (getMainControl()->isBusy()) return false;
+
 			if (!command.has('\n'))
 			{
 				return parseLine_(command);

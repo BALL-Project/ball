@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.5 2006/02/01 13:23:50 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.6 2006/03/16 00:09:34 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -102,7 +102,7 @@ namespace BALL
 			open_trajectory_id_->setEnabled(main_control.getSelectedSystem());
 			if (getSelectedItems().size() > 0) main_control.setDeleteEntryEnabled(true);
 
-			menu_cs_->setEnabled(!getMainControl()->compositesAreLocked() && item_to_grid3_.size() > 0);
+			menu_cs_->setEnabled(!getMainControl()->isBusy() && item_to_grid3_.size() > 0);
 		}
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.7 2006/02/01 14:15:06 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.8 2006/03/16 00:09:33 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1901,6 +1901,13 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 		rep_label_->setText(QString(c));
+	}
+
+	bool MainControl::isBusy() const
+	{
+		if (composites_locked_ || primitive_manager_.updateRunning()) return true;
+
+		return false;
 	}
 		
 

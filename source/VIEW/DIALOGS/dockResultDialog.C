@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.3.2.7 2006/02/01 13:23:46 amoll Exp $
+// $Id: dockResultDialog.C,v 1.3.2.8 2006/03/16 00:09:32 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockResultDialog.h>
@@ -160,8 +160,7 @@ namespace BALL
 		void DockResultDialog::show()
 		{
 			MainControl* main_control = VIEW::getMainControl();
-			if (!main_control ||
-					main_control->compositesAreLocked())
+			if (!main_control || main_control->isBusy())
 			{
 				BALLVIEW_DEBUG;
 				return;

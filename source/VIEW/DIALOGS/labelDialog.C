@@ -219,11 +219,10 @@ void LabelDialog::textChanged()
 	apply_button_->setEnabled(text_box->currentText() != "");
 }
 
-void LabelDialog::checkMenu(MainControl&)
+void LabelDialog::checkMenu(MainControl& main_control)
 	throw()
 {
-	id_->setEnabled(getMainControl()->getMolecularControlSelection().size() > 0 &&
-									!getMainControl()->compositesAreLocked());
+	id_->setEnabled(main_control.getMolecularControlSelection().size() > 0 && !main_control.isBusy());
 }
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.4 2006/02/01 14:15:07 amoll Exp $
+// $Id: dockingController.C,v 1.4.2.5 2006/03/16 00:09:34 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -183,7 +183,7 @@ namespace BALL
 			throw()
 		{
 			// if composites are locked disable menu entry "Docking"
-			if (main_control.compositesAreLocked())
+			if (main_control.isBusy())
 			{
 				action_->setEnabled(false);
 				return;
@@ -223,7 +223,7 @@ namespace BALL
 			throw()
 		{
 			// Make sure we run just one instance at a time.
-			if (getMainControl()->compositesAreLocked())
+			if (getMainControl()->isBusy())
 			{
 				Log.error() << "Docking already running! " << __FILE__ << " " << __LINE__ << std::endl;
 				return;

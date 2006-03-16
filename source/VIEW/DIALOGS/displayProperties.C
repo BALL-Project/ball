@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.3 2006/02/01 14:15:04 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.4 2006/03/16 00:09:31 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -166,7 +166,7 @@ void DisplayProperties::finalizePreferencesTab(Preferences &preferences)
 void DisplayProperties::checkMenu(MainControl& main_control)
 	throw()
 {
-	bool busy = !isNotBusy_();
+	bool busy = main_control.isBusy();
 
 	if (busy)
 	{
@@ -224,7 +224,7 @@ void DisplayProperties::modifyRepresentationMode(Representation* rep)
 
 	if (rep_ == 0 || 
 			rep->getModelType() >= MODEL_LABEL ||
-			!isNotBusy_())
+			getMainControl()->isBusy())
 	{
 		return;
 	}
@@ -394,12 +394,6 @@ void DisplayProperties::onNotify(Message *message)
 		createRepresentationMode();
 		createRepresentation(crm->getComposites());
 	}
-}
-
-bool DisplayProperties::isNotBusy_()
-{
-	return !getMainControl()->compositesAreLocked() &&
-					!getMainControl()->getRepresentationManager().updateRunning();
 }
 
 void DisplayProperties::apply()
@@ -613,7 +607,7 @@ Representation* DisplayProperties::createRepresentation(const List<Composite*>& 
 	create_button->setEnabled(false);
 	modify_button->setEnabled(false);
 	rep_->update(rebuild_representation);
-	modify_button->setEnabled(isNotBusy_());
+	modify_button->setEnabled(!getMainControl()->isBusy());
 
 	changed_selection_color_ = false;
 

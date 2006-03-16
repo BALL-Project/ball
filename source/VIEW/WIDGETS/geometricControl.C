@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.9 2006/03/15 22:00:14 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.10 2006/03/16 00:09:35 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -329,8 +329,7 @@ namespace BALL
 
 		void GeometricControl::showGuestContextMenu(const QPoint& pos)
 		{
-			if (getMainControl()->compositesAreLocked() ||
-					getMainControl()->getRepresentationManager().updateRunning()) 
+			if (getMainControl()->isBusy())
 			{
 				setStatusbarText("No changes to representations allowed, while simulation is running or creating new representations!", true);
 				return;
@@ -439,16 +438,13 @@ namespace BALL
 		void GeometricControl::checkMenu(MainControl& main_control)
 			throw()
 		{
-			if (!main_control.compositesAreLocked() &&
-					!main_control.updateOfRepresentationRunning() &&
-					getSelectedItems().size() > 0)
+			bool busy = main_control.isBusy();
+			if (!busy && getSelectedItems().size() > 0)
 			{
 				main_control.setDeleteEntryEnabled(true);
 			}
 
-			menu_clipping_plane_->setEnabled(
-										!main_control.compositesAreLocked() &&
-										!main_control.updateOfRepresentationRunning());
+			menu_clipping_plane_->setEnabled(!busy);
 		}
 
 		void GeometricControl::focusRepresentation()
@@ -468,9 +464,6 @@ namespace BALL
 																		"New Clipping Plane", this, SLOT(createNewClippingPlane()));   
 			setMenuHint("Add an OpenGL Clipping Plane to the Scene");
 			setMenuHelp("geometricControl.html#clipping_planes");
-
-			menu_coordinate_ = insertMenuEntry(MainControl::DISPLAY, 
-																		"New Coordinate System", this, SLOT(createCoordinateSystem()));   
 
 			registerForHelpSystem(this, "geometricControl.html");
 		}
@@ -710,7 +703,7 @@ namespace BALL
 
 			bool checked = (item->checkState(0) == Qt::Checked);
 
-			if (getMainControl()->compositesAreLocked())
+			if (getMainControl()->isBusy())
 			{
 				ignore_change_ = true;
 
@@ -741,10 +734,6 @@ namespace BALL
 				plane->setActive(!plane->isActive());
 				getMainControl()->redrawAllRepresentations();
 			}
-		}
-
-		void GeometricControl::createCoordinateSystem()
-		{
 		}
 
 	} // namespace VIEW

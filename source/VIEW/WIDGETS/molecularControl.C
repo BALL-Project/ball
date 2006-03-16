@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.10 2006/03/15 22:00:14 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.11 2006/03/16 00:09:35 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -65,14 +65,6 @@ namespace BALL
 			listview->headerItem()->setSizeHint(1, QSize(20, 60));
  			lay->addWidget(listview,0, 0, 1, -1);
 
-			selector_edit_ = new QComboBox(this);
-			selector_edit_->setAutoCompletion(true);
-			selector_edit_->setDuplicatesEnabled(false);
-			selector_edit_->setEditable(true);
-			selector_edit_->resize(100, 25);
-			selector_edit_->setMinimumSize(50,25);
-			lay->addWidget(selector_edit_,1, 0, 1, -1);
-
 			smarts_edit_ = new QComboBox(this);
 			smarts_edit_->setAutoCompletion(true);
 			smarts_edit_->setDuplicatesEnabled(false);
@@ -81,13 +73,21 @@ namespace BALL
 			smarts_edit_->setMinimumSize(50,25);
 			lay->addWidget(smarts_edit_,1, 0, 1, -1);
 
+			selector_edit_ = new QComboBox(this);
+			selector_edit_->setAutoCompletion(true);
+			selector_edit_->setDuplicatesEnabled(false);
+			selector_edit_->setEditable(true);
+			selector_edit_->resize(100, 25);
+			selector_edit_->setMinimumSize(50,25);
+			lay->addWidget(selector_edit_,2, 0, 1, -1);
+
 			QPushButton* clear_button = new QPushButton(this);
 			clear_button->resize(60, 25);
 			clear_button->setMinimumSize(40, 25);
 			clear_button->setText("Clear");
 			connect(clear_button, SIGNAL(clicked()), this, SLOT(clearSelector()));
  			clear_button->setToolTip("Clear the selection.");
-			lay->addWidget(clear_button,2, 0);
+			lay->addWidget(clear_button,3, 0);
 
 			QPushButton* help_button = new QPushButton(this);
 			help_button->resize(60, 25);
@@ -95,7 +95,7 @@ namespace BALL
 			help_button->setText("Help");
 			connect(help_button, SIGNAL(clicked()), this, SLOT(showSelectorHelp()));
 			help_button->setToolTip("Show a help dialog.");
-			lay->addWidget(help_button,2, 1);
+			lay->addWidget(help_button,3, 1);
 
 			QPushButton* select_button = new QPushButton(this);
 			select_button->resize(60, 25);
@@ -104,7 +104,7 @@ namespace BALL
 			select_button->setMinimumSize(40, 25);
 			connect(select_button, SIGNAL(clicked()), this, SLOT(applySelector()));
 			select_button->setToolTip("Apply the current expression.");
-			lay->addWidget(select_button,2, 2);
+			lay->addWidget(select_button,3, 2);
 
 			buildContextMenu_();
 			resize(200,400);
@@ -126,8 +126,7 @@ namespace BALL
 			throw()
 		{
 			String hint;
-			bool busy = main_control.compositesAreLocked() ||
-									main_control.updateOfRepresentationRunning();
+			bool busy = main_control.isBusy();
 
 			// prevent changes to composites while simulations are running
 			
@@ -158,7 +157,7 @@ namespace BALL
 					hint = "One item must be selected to paste into.";
 				else if (copy_list_.size() == 0)
 					hint = "No copied/cuted object.";
-				else if (main_control.compositesAreLocked())
+				else if (main_control.isBusy())
 					hint = "Simulation running, cant paste meanwhile";
 				else
 					hint = "Update of Representation running, cant paste meanwhile";
@@ -170,7 +169,7 @@ namespace BALL
 			// clearClipboard
 			// enable only if copy_list_ not empty
 			bool copy_list_filled = (copy_list_.size() > 0);
-			clipboard_id_->setEnabled(copy_list_filled && !main_control.compositesAreLocked());
+			clipboard_id_->setEnabled(copy_list_filled && !main_control.isBusy());
 			if (clipboard_id_->isEnabled())
 			{
 				hint = "No item copied/cuted or simulation running";
@@ -395,7 +394,7 @@ namespace BALL
 		void MolecularControl::updateContextMenu(Composite& composite)
 			throw()
 		{
-			bool composites_muteable = !getMainControl()->compositesAreLocked();
+			bool composites_muteable = !getMainControl()->isBusy();
 
 			bool one_item = (getSelection().size() == 1);
 
@@ -513,8 +512,7 @@ namespace BALL
 
 		void MolecularControl::showGuestContextMenu(const QPoint& pos)
 		{
-			if (getMainControl()->compositesAreLocked() ||
-					getMainControl()->getRepresentationManager().updateRunning()) 
+			if (getMainControl()->isBusy())
 			{
 				setStatusbarText("No changes allowed, while simulation is running or creating new representations!", true);
 				return;
@@ -751,7 +749,7 @@ namespace BALL
 
 		void MolecularControl::cut()
 		{
-			if (getMainControl()->compositesAreLocked()) return;
+			if (getMainControl()->isBusy()) return;
 
 			// delete old composites in copy list
 			if (!was_delete_) clearClipboard();
@@ -788,7 +786,7 @@ namespace BALL
 
 		void MolecularControl::copy()
 		{
-			if (getMainControl()->compositesAreLocked()) return;
+			if (getMainControl()->isBusy()) return;
 
 			const List<Composite*> selection = getSelection();
 			if (selection.size() == 0) return;
@@ -809,7 +807,7 @@ namespace BALL
 
 		void MolecularControl::paste()
 		{
-			if (getMainControl()->compositesAreLocked()) return;
+			if (getMainControl()->isBusy()) return;
 
 			if (copy_list_.size() == 0) return;
 
@@ -1294,7 +1292,7 @@ namespace BALL
 			if (ignore_checked_changes_) return;
 			bool checked = (item->checkState(1) == Qt::Checked);
 
-			if (getMainControl()->compositesAreLocked())
+			if (getMainControl()->isBusy())
 			{
 				if (checked) item->setCheckState(1, Qt::Unchecked);
 				else 				 item->setCheckState(1, Qt::Checked);

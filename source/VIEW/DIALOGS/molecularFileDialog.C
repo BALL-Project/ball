@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.32.2.2 2006/02/01 13:23:47 amoll Exp $$
+// $Id: molecularFileDialog.C,v 1.32.2.3 2006/03/16 00:09:33 amoll Exp $$
 //
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -521,7 +521,7 @@ namespace BALL
 			throw()
 		{
 			save_id_->setEnabled(getMainControl()->getSelectedSystem() && 
-													!getMainControl()->compositesAreLocked());
+													!getMainControl()->isBusy());
 		}
 
 
