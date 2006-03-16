@@ -10,6 +10,7 @@ Added:
 - Python widget has ability to show help entry for actual BALL Python command
 - BALLView has menu entries for user defined Python Hotkeys
 - Further Python example scripts
+- SMARTS support
 - Added indicator for update of representations in statusbar
 - Busy mouse cursor while update of representations
 
@@ -22,6 +23,8 @@ Fixed:
 - Faster picking mode
 - Improved layout of LabelDialog
 - Indicator in statusbar for Server and Simulation was missing
+- Now setting sensible default styles on the individual platforms
+- Improved coordinate system
 
 Known problems:
 - Molecular Control Selection: Child->Parent doesnt always gets selected
