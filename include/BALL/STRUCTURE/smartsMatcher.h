@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.h,v 1.8 2006/03/15 22:42:41 bertsch Exp $
+// $Id: smartsMatcher.h,v 1.9 2006/03/17 17:16:30 bertsch Exp $
 //
 // Author:
 //   Andreas Bertsch
@@ -100,7 +100,7 @@ namespace BALL
 					std::vector<HashSet<const SPEdge*> > visited_edges;
 	
 					/// holds the first mapped node/atom
-					//std::vector<std::pair<const SPNode*, const Atom*> > first_matches;
+					std::vector<std::pair<const SPNode*, const Atom*> > first_matches;
 	
 					/// adds the content of the given struct
 					void add(const RecStruct_& rec_struct);

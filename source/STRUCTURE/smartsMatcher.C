@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.C,v 1.9 2006/03/15 22:42:41 bertsch Exp $
+// $Id: smartsMatcher.C,v 1.10 2006/03/17 17:16:31 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/smartsMatcher.h>
@@ -18,8 +18,6 @@ using namespace std;
 
 #define REC_DEBUG
 #undef REC_DEBUG
-
-#define BALL_DUMP_CORE 1
 
 namespace BALL
 {
@@ -138,11 +136,15 @@ namespace BALL
 						{
 							if (evaluateRingEdges_(rs.matched_atoms[i], rs.mapped_atoms[i], smarts))
 							{
-								tmp.push_back(rs.matched_atoms[i]);
+								//tmp.push_back(rs.matched_atoms[i]);
+								HashSet<const Atom*> hm_tmp;
+								hm_tmp.insert(rs.first_matches[i].second);
+								tmp.push_back(hm_tmp);
 							}
 						}
 					}
 				}
+				
 				// TODO reduce the multiple matches to unique ones, good speedup
 				if (rec_nodes.top()->getNot())
 				{
@@ -348,6 +350,7 @@ namespace BALL
 
 		if (start_node->isRecursive())
 		{
+			//cerr << "node ist recursive " << endl;
 			// if rec_matches does _not_ has the node, we are in the pre phase
 			// (collecting all rec environment matches)
 			if (rec_matches_.has(start_node)) 
@@ -366,6 +369,7 @@ namespace BALL
 							new_rs.visited_atoms.push_back(matched_atoms);
 							HashMap<const SPNode*, const Atom*> mapped_atoms;
 							mapped_atoms[start_node] = start_atom;
+							new_rs.first_matches.push_back(make_pair<const SPNode*, const Atom*>(start_node, start_atom));
 							new_rs.mapped_atoms.push_back(mapped_atoms);
 							HashSet<const SPEdge*> visited_edges;
 							new_rs.visited_edges.push_back(visited_edges);
@@ -487,7 +491,7 @@ namespace BALL
 		if (start_node->isInternal())
 		{
 			#ifdef SMARTS_MATCHER_DEBUG
-			//cerr << String('\t', depth_) << "node is internal" << endl;
+			cerr << String('\t', depth_) << "node is internal" << endl;
 			#endif
 			// both edges must be set
 			SPEdge* first_edge = start_node->getFirstEdge();
@@ -656,6 +660,7 @@ namespace BALL
 		// normal mode		
 		if (!start_node->isInternal() || consider_as_noninternal)
 		{
+			
 			RecStruct_ new_rs = rs;
 			if (consider_as_noninternal || start_node->getSPAtom()->equals(start_atom))
 			{
@@ -668,13 +673,13 @@ namespace BALL
 					}
 
 					//cerr << "size of matched atoms: " << result_rs.matched_atoms.size() << endl;
-					
+				
 					// prepare the matches
 					new_rs = result_rs;
 					result_rs.clear();
 				}
 
-				//cerr << "size of matched atoms: " << result_rs.matched_atoms.size() << " " << new_rs.matched_atoms.size() << endl;
+				//cerr << "size of matched atoms: " << result_rs.matched_atoms.size() << " " << new_rs.matched_atoms.size() << " " << new_rs.first_matches.size() << endl;
 				
 				// first matched node?
 				if (new_rs.matched_atoms.size() == 0)
@@ -691,6 +696,7 @@ namespace BALL
 					HashMap<const SPNode*, const Atom*> mapped_atom;
 					mapped_atom[start_node] = start_atom;
 					new_rs.mapped_atoms.push_back(mapped_atom);
+					new_rs.first_matches.push_back(make_pair<const SPNode*, const Atom*>(start_node, start_atom));
 					new_rs.visited_atoms.push_back(matched_atom);
 					HashSet<const Bond*> visited_bond;
 					new_rs.visited_bonds.push_back(visited_bond);
@@ -704,7 +710,7 @@ namespace BALL
 					{
 						// just add the node and atom to the results 
 						#ifdef SMARTS_MATCHER_DEBUG
-						//cerr << String('\t', depth_) << "leaf node, i=" << i << ", " << new_rs.matched_atoms.size() << endl;
+						//cerr << String('\t', depth_) << "leaf node, i=" << i << ", " << new_rs.matched_atoms.size() << " (size of first matches = " << new_rs.first_matches.size() << ", size of mapped atoms = " << new_rs.mapped_atoms.size() << ")" <<endl;
 						#endif
 						result_rs.add(new_rs, i);
 						result_rs.matched_atoms[result_rs.matched_atoms.size()-1].insert(start_atom);
@@ -717,6 +723,7 @@ namespace BALL
 						}
 						
 						//cerr << String('\t', depth_) << "size of new result rs: " << result_rs.matched_atoms.size() << endl;
+
 						continue;
 					}
 					
@@ -738,8 +745,12 @@ namespace BALL
 									first_new_rs.visited_atoms[0].insert(start_atom);
 									first_new_rs.visited_bonds[0].insert(&*bit);
 									first_new_rs.visited_edges[0].insert(*eit);
+									//if (first_new_rs.mapped_atoms[0].size() == 1)
+									//{
+									//	first_new_rs.first_matches.push_back(make_pair<const SPNode*, const Atom*>(start_node, start_atom));
+									//}
 									#ifdef SMARTS_MATCHER_DEBUG
-									//cerr << String('\t', depth_) << "calling eval edge, size of result_matched_atoms: " << result_rs.matched_atoms.size() << endl;
+									//cerr << String('\t', depth_) << "calling eval edge, size of result_matched_atoms: " << result_rs.matched_atoms.size() << "(size of first matched=" << first_new_rs.first_matches.size() << endl;
 									first_new_rs.dump("K", depth_);
 									#endif
 									if (evaluate_edge_(first_new_rs, *eit, start_atom, &*bit))
@@ -939,7 +950,7 @@ namespace BALL
 		}
 
 #ifdef SMARTS_MATCHER_DEBUG
-		cerr << String('\t', depth_) << "internal edge handled: " << endl;
+		//cerr << String('\t', depth_) << "internal edge handled: " << endl;
 		result_rs.dump("", depth_);
 #endif
 		
@@ -976,6 +987,7 @@ namespace BALL
 							new_rs.visited_edges[0].insert(start_edge);
 						}
 #ifdef SMARTS_MATCHER_DEBUG
+						cerr << "size of first matches = " << new_rs.first_matches.size() << endl;
 						new_rs.dump("T", depth_);
 #endif
 						if (evaluate_node_(new_rs, start_edge->getSecondSPNode(), partner))
@@ -1007,7 +1019,8 @@ namespace BALL
 			mapped_atoms(rec_struct.mapped_atoms),
 			visited_atoms(rec_struct.visited_atoms),
 			visited_bonds(rec_struct.visited_bonds),
-			visited_edges(rec_struct.visited_edges)
+			visited_edges(rec_struct.visited_edges),
+			first_matches(rec_struct.first_matches)
 	{
 	}
 
@@ -1037,6 +1050,10 @@ namespace BALL
 		{
 			visited_edges.push_back(*it);
 		}
+		for (vector<pair<const SPNode*, const Atom*> >::const_iterator it = rec_struct.first_matches.begin(); it != rec_struct.first_matches.end(); ++it)
+		{
+			first_matches.push_back(*it);
+		}
 		return;
 	}
 
@@ -1047,6 +1064,7 @@ namespace BALL
 		visited_atoms.push_back(rec_struct.visited_atoms[i]);
 		visited_bonds.push_back(rec_struct.visited_bonds[i]);
 		visited_edges.push_back(rec_struct.visited_edges[i]);
+		first_matches.push_back(rec_struct.first_matches[i]);
 		return;
 	}
 
@@ -1057,6 +1075,7 @@ namespace BALL
 		visited_atoms.clear();
 		visited_bonds.clear();
 		visited_edges.clear();
+		first_matches.clear();
 		return;
 	}
 
@@ -1067,6 +1086,7 @@ namespace BALL
 		visited_atoms = rec_struct.visited_atoms;
 		visited_bonds = rec_struct.visited_bonds;
 		visited_edges = rec_struct.visited_edges;
+		first_matches = rec_struct.first_matches;
 		return *this;
 	}
 

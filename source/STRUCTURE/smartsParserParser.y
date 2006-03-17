@@ -219,6 +219,7 @@ sp_edge:
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
 			SmartsParser::state.current_parser->addEdge(e);
 			e->setSPBond($1);
+			SmartsParser::state.current_parser->setNeedsSSSR(true);
 			$$ = e;
 		}
 	|	'!' ring_bond
@@ -226,7 +227,8 @@ sp_edge:
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
 			SmartsParser::state.current_parser->addEdge(e);
 			e->setSPBond($2);
-			e->setNot(true);
+			SmartsParser::state.current_parser->setNeedsSSSR(true);
+			$2->setNot(true);
 			$$ = e;
 		}
 	|	sp_edge ';' sp_edge
@@ -256,7 +258,7 @@ sp_edge:
 			e->setInternal(true);
 			e->setFirstSPEdge($1);
 			e->setSecondSPEdge($3);
-			e->setLogicalOperator(SmartsParser::OR);
+			e->setLogicalOperator(SmartsParser::AND);
 			$$ = e;
 		}
 /*	|	sp_edge '!' ring_bond
