@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.h,v 1.17.2.1 2006/01/13 15:35:28 amoll Exp $
+// $Id: preferences.h,v 1.17.2.2 2006/03/17 15:42:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
@@ -142,9 +142,6 @@ namespace BALL
 
 			///
 			void showHelp();
-
-			///
-			void workaround();
 
 			protected:
 
