@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.9 2006/03/17 13:22:49 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.10 2006/03/17 15:08:11 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -231,7 +231,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			statusBar()->addPermanentWidget(rep_label_, false );
 			rep_label_nr_ = 0;
 
-			render_timer_.start(100);
+			render_timer_.start(200);
 
 			simulation_icon_ = new QLabel(statusBar());
 			simulation_icon_->setMaximumSize(14,20);
@@ -408,7 +408,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				(*it)->initializePreferencesTab(*preferences_dialog_);
 			}
 
-			preferences_dialog_->workaround();
 			preferences_dialog_->showEntry(main_control_preferences_);
 
 			// own menu entries
@@ -1398,9 +1397,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			checkMenus();
 
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			if (state)
 			{
-				QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+				QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
 				simulation_icon_->show();
 			}
 			else
@@ -1880,7 +1880,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			if (!composites_locked_)
 			{
-				QApplication::restoreOverrideCursor();
+				QCursor* cursor = QApplication::overrideCursor();
+				if (cursor != 0 &&
+						cursor->shape() == Qt::BusyCursor)
+				{
+					QApplication::restoreOverrideCursor();
+				}
 			}
 			rep_label_->setText("");
 			return;
@@ -1898,7 +1903,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			rep_label_nr_ = 1;
 		}
 
-		QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+		QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
 
 		rep_label_->setText(QString(c));
 	}
