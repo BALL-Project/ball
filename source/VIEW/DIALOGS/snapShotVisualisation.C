@@ -44,6 +44,9 @@ SnapshotVisualisationDialog::SnapshotVisualisationDialog(QWidget* parent, const 
 	connect( rockLoopButton, SIGNAL( clicked() ), this, SLOT( checkRock() ) );
 	connect( noLoopButton, SIGNAL( clicked() ), this, SLOT( checkNoLoop() ) );
 
+	animateButton->setEnabled(true);
+	cancelButton->setEnabled(false);
+
 	setObjectName(name);
 	tmp_.setNum(1);
 	ModularWidget::registerWidget(this);
@@ -113,17 +116,17 @@ void SnapshotVisualisationDialog::lastSnapshotClicked()
 
 void SnapshotVisualisationDialog::animateClicked()
 {
+	cancel_ = false;
 	error_ = false;
 	Size tempo = getEndSnapshot();
 	Size speed = animationSpeedSlider->value();
 	bool forward = true;
-	QProgressDialog progress("SnapShot Visualisation", "Abort Animation", 0, tempo, 0);
+	animateButton->setEnabled(false);
+	cancelButton->setEnabled(true);
 	
 	for (Size i = getStartSnapshot(); 
-			 i < tempo && !error_ && !progress.wasCanceled(); )
+			 i < tempo && !error_ && !cancel_; )
 	{
-		progress.setValue(i);
-			
 		setWindowTitle((String("CurrentSnapshot: ") + String(i)).c_str());
 		snapShotSlider->setValue(i);
 		update_();
@@ -198,6 +201,8 @@ void SnapshotVisualisationDialog::animateClicked()
 	}
 	
 	setWindowTitle("Snapshot Visualisation");
+	animateButton->setEnabled(true);
+	cancelButton->setEnabled(false);
 }
 
 
@@ -384,6 +389,12 @@ void SnapshotVisualisationDialog::checkRock()
 	if(!rockLoopButton->isChecked()) rockLoopButton->setChecked(true);
 	noLoopButton->setChecked(false);
 	forwardLoopButton->setChecked(false);
+}
+
+void SnapshotVisualisationDialog::close()
+{
+	cancel_ = true;
+	QDialog::close();
 }
 
 } } // namespace

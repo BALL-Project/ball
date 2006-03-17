@@ -48,6 +48,9 @@ class BALL_VIEW_EXPORT SnapshotVisualisationDialog
 
 	public slots:
 
+	///
+	void close();
+
 	///Function to select the analogous Snapshot
 	virtual void firstSnapshotClicked();
 	
@@ -107,6 +110,7 @@ class BALL_VIEW_EXPORT SnapshotVisualisationDialog
 	QString 					tmp_;
   SnapShotManager* 	snap_shot_manager_;
 	bool 							error_;
+	bool 							cancel_;
 };
 
 } } // namespaces
