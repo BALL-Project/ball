@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.C,v 1.1.2.2 2006/02/01 14:15:06 amoll Exp $
+// $Id: representationManager.C,v 1.1.2.3 2006/03/17 17:53:07 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representationManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -420,105 +420,18 @@ void RepresentationManager::restoreRepresentations(const INIFile& in, const vect
 
 	if (dp == 0) return;
 
+	for (Position p = 0; p < 9999999; p++)
+	{
+		// stop condition
+		if (!in.hasEntry("BALLVIEW_PROJECT", "Representation" + String(p))) break;
+
+		String data_string = in.getValue("BALLVIEW_PROJECT", "Representation" + String(p));
+
+		dp->createRepresentation(data_string, new_systems);
+	}
+
 	try
 	{
-		for (Position p = 0; p < 9999999; p++)
-		{
-			// stop condition
-			if (!in.hasEntry("BALLVIEW_PROJECT", "Representation" + String(p))) break;
-
-			String data_string = in.getValue("BALLVIEW_PROJECT", "Representation" + String(p));
-
-			vector<String> string_vector;
-			Size split_size;
-
-			// Representation0=1;3 2 2 6.500000 0 0 [2]|Color|H
-			// 								 ^ 																	System Number
-			// 								         ^            							Model Settings
-			// 								         							 ^            Composites numbers
-			// 								         							     ^        Custom Color
-			// 								         							     			^   Hidden Flag
-
-			// split off information of system number
-			split_size = data_string.split(string_vector, ";");
-			Position system_pos = string_vector[0].toUnsignedInt();
-
-			// split off between representation settings and composite numbers
-			data_string = string_vector[1];
-			vector<String> string_vector2;
-			data_string.split(string_vector2, "[]");
-			data_string = string_vector2[0];
-
-			if (!dp->getSettingsFromString(data_string))
-			{
-				BALLVIEW_DEBUG;
-				Log.error() << "data_string " << std::endl;
-				continue;
-			}
-
-			// Composites id's per number
-			data_string = string_vector2[1];
-			data_string.split(string_vector2, ",");
-			HashSet<Position> hash_set;
-			for (Position p = 0; p < string_vector2.size(); p++)
-			{
-				hash_set.insert(string_vector2[p].toUnsignedInt());
-			}
-
-			if (system_pos >= new_systems.size())
-			{
-				Log.error() << "Error while reading project file, invalid structure for Representation! Aborting..." << std::endl;
-				continue;
-			}
-
-			// custom color
-			data_string = string_vector[1];
-			if (data_string.has('|'))
-			{
-				data_string.split(string_vector2, "|");
-				ColorRGBA color;
-				color = string_vector2[1];
-				dp->setCustomColor(color);
-			}
-
-			// to select the composites for the new Representation:
-			// send a ControlSelectionMessage, on which the DisplayProperties will work
-			Composite* composite = (Composite*) new_systems[system_pos];
-			ControlSelectionMessage* msg = new ControlSelectionMessage();
-			Position current = 0;
-
-			Composite::CompositeIterator ccit = composite->beginComposite();
-			for (; +ccit; ++ccit)
-			{
-				if (hash_set.has(current)) msg->getSelection().push_back(&*ccit);
-				current++;
-			}
-
-			if (hash_set.size() == 0)
-			{
-				BALLVIEW_DEBUG;
-				continue;
-			}
-
-			getMainControl()->sendMessage(*msg);
-		
-			Representation* rep = 0;
-			dp->apply();
-			rep = dp->getRepresentation();
-			if (rep == 0)
-			{
-				BALLVIEW_DEBUG;
-				continue;
-			}
-
-			// is representation hidden?
-			if (string_vector2.size() == 3 && string_vector2[2].has('H'))
-			{
-				rep->setHidden(true);
-				rep->update(false);
-			}
-		}
-
 		// create a vector with all Representations to access per numeric id
 		vector<const Representation*> representations;
 

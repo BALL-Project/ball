@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.43.2.3 2006/03/15 23:31:37 amoll Exp $
+// $Id: displayProperties.h,v 1.43.2.4 2006/03/17 17:52:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -142,6 +142,9 @@ namespace BALL
 			bool getSettingsFromString(const String& data)
 				throw();
 
+			///
+			void createRepresentation(String data_string, const vector<const Composite*>& new_systems);
+
 			/// Set if Representations are automaticaly created for new Molecules
 			void enableCreationForNewMolecules(bool state) 
 				throw() { create_representations_for_new_molecules_ = state;}
@@ -154,8 +157,9 @@ namespace BALL
 					Called by onNotify() after receiving CompositeMessage::NEW_MOLECULE and by apply().
 					To insert a new type of model, this is the only method in DisplayProperties you have to
 					change (See also VIEW/KERNEL/common.h).
+					@param hidden set to true will prevent that the representations model is created right now
 			*/
-			virtual Representation* createRepresentation(const List<Composite*>& composites);
+			virtual Representation* createRepresentation(const List<Composite*>& composites, bool hidden = false);
 	
 			public slots:
 					
@@ -271,6 +275,8 @@ namespace BALL
 
 			protected:
 			
+			void applyTo_(Representation* rep);
+
 			// --------------------------------------------------------------------------------
 			// attributs
 			// --------------------------------------------------------------------------------

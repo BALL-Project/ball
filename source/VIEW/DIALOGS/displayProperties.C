@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.4 2006/03/16 00:09:31 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.5 2006/03/17 17:53:06 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -280,7 +280,8 @@ void DisplayProperties::selectMode(int index)
 {
 	if (index > VIEW::DRAWING_MODE_SOLID)
 	{
-		throw(Exception::InvalidOption(__FILE__, __LINE__, index));
+		BALLVIEW_DEBUG
+		return;
 	}
 
 	// enable usage from python
@@ -295,7 +296,8 @@ void DisplayProperties::selectColoringMethod(int index)
 {
 	if (index > COLORING_CUSTOM)
 	{
-		throw(Exception::InvalidOption(__FILE__, __LINE__, index));
+		BALLVIEW_DEBUG
+		return;
 	}
 
 	// enable usage from python
@@ -412,7 +414,19 @@ void DisplayProperties::apply()
 		getMainControl()->getRepresentationManager().rebuildAllRepresentations();
 	}
 
-	createRepresentation(getMainControl()->getMolecularControlSelection());
+	create_button->setEnabled(false);
+	modify_button->setEnabled(false);
+
+	if (rep_ == 0)
+	{
+		createRepresentation(getMainControl()->getMolecularControlSelection());
+	}
+	else
+	{
+		applyTo_(rep_);
+	}
+
+	modify_button->setEnabled(!getMainControl()->isBusy());
 }
 
 
@@ -480,84 +494,70 @@ void DisplayProperties::applyColoringSettings_(Representation& rep)
 }
 
 
-Representation* DisplayProperties::createRepresentation(const List<Composite*>& composites)
+Representation* DisplayProperties::createRepresentation(const List<Composite*>& composites, bool hidden)
 {
-	if (composites.size() > 0) rep_ = 0;
+	// create a new Representation
+	rep_ = new Representation();
+	applyColoringSettings_(*rep_);
+	applyModelSettings_(*rep_);
 
-	bool rebuild_representation = false;
-	bool new_representation = (rep_ == 0);
+	// stupid, but must be: create a List with const Composites!
+	List<const Composite*> temp_composites;
+	List<Composite*>::ConstIterator it = composites.begin();
+	for (; it != composites.end(); it++)
+	{
+		temp_composites.push_back(*it);
+	}
+	rep_->setComposites(temp_composites);
 
-	if (new_representation && composites.size() == 0) return 0;
+	// this is not straight forward, but we have to prevent a second rendering run in the Scene...
+	// the insertion into the RepresentationManager is needed to allow the Representation::update
+	getMainControl()->getRepresentationManager().insert(*rep_, false);
+		
+	Representation* repx = rep_;
+	// now we can add the Representation to the GeometricControl
+	notify_(new RepresentationMessage(*rep_, RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL));
 
-	if (rep_ != 0 && rep_->getModelProcessor() == 0) return 0;
+	rep_ = repx;
+
+	// no refocus, if a this is not the only Representation
+	if ((getMainControl()->getRepresentationManager().getRepresentations().size() < 2))
+	{
+		CompositeMessage* ccmessage = new CompositeMessage;
+		ccmessage->setComposite(**composites.begin());
+		ccmessage->setType(CompositeMessage::CENTER_CAMERA);
+		notify_(ccmessage);
+	}
+
+	if (hidden) return rep_;
+
+	rep_->update(true);
+	
+	return rep_;
+}
+
+
+void DisplayProperties::applyTo_(Representation* rep)
+{
+	rep_ = rep;
 
 	ModelType mt = (ModelType) model_type_combobox->currentIndex();
 	DrawingPrecision dp = (DrawingPrecision)precision_combobox->currentIndex();
 
-	if (new_representation)
+	bool 	rebuild_representation = rep_->getModelType() != mt  | 
+																 advanced_options_modified_  |
+																 changed_selection_color_;
+
+	if (custom_precision_button->isChecked())
 	{
-		// create a new Representation
-		rep_ = new Representation(mt, dp, (DrawingMode)mode_combobox->currentIndex());
-		rebuild_representation = true;
-
-		if (isSurfaceModel(mt))
-		{
-			if (custom_precision_button->isChecked())
-			{
-				rep_->setSurfaceDrawingPrecision((float)precision_slider->value() / 10.0);
-			}
-			else
-			{
-				rep_->setSurfaceDrawingPrecision(SurfaceDrawingPrecisions[dp]);
-			}
-		}
-
-		// stupid, but must be: create a List with const Composites!
-		List<const Composite*> temp_composites;
-		List<Composite*>::ConstIterator it = composites.begin();
-		for (; it != composites.end(); it++)
-		{
-			temp_composites.push_back(*it);
-		}
-		rep_->setComposites(temp_composites);
-
-		// this is not straight forward, but we have to prevent a second rendering run in the Scene...
-		// the insertion into the RepresentationManager is needed to allow the Representation::update
-		getMainControl()->getRepresentationManager().insert(*rep_, false);
-		
-		Representation* repx = rep_;
-		// now we can add the Representation to the GeometricControl
-		notify_(new RepresentationMessage(*rep_, RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL));
-
-		rep_ = repx;
-
-		// no refocus, if a this is not the only Representation
-		if ((getMainControl()->getRepresentationManager().getRepresentations().size() < 2) && 
-				composites.size() > 0)
-		{
-			CompositeMessage* ccmessage = new CompositeMessage;
-			ccmessage->setComposite(**composites.begin());
-			ccmessage->setType(CompositeMessage::CENTER_CAMERA);
-			notify_(ccmessage);
-		}
+		// workaround, didnt work right otherwise: (just let it this way)
+		rebuild_representation |= 
+			(String(rep_->getSurfaceDrawingPrecision()) != 
+			 String(((float)precision_slider->value() / 10.0)));
 	}
 	else
 	{
-		rebuild_representation = rep_->getModelType() != mt  | 
-														 advanced_options_modified_  |
-														 changed_selection_color_;
-
-		if (custom_precision_button->isChecked())
-		{
-			// workaround, didnt work right otherwise: (just let it this way)
-			rebuild_representation |= 
-				(String(rep_->getSurfaceDrawingPrecision()) != 
-				 String(((float)precision_slider->value() / 10.0)));
-		}
-		else
-		{
-			rebuild_representation |= (rep_->getDrawingPrecision() != dp);
-		}
+		rebuild_representation |= (rep_->getDrawingPrecision() != dp);
 	}
 
 	Size transparency = (Size)(transparency_slider->value() * 2.55);
@@ -566,10 +566,16 @@ Representation* DisplayProperties::createRepresentation(const List<Composite*>& 
 	{
 		applyColoringSettings_(*rep_);
 	}
+	
+	if (rebuild_representation && model_updates_enabled->isChecked())
+	{
+		applyModelSettings_(*rep_);
+		advanced_options_modified_ = false;
+	}
 	else
 	{
-		if (rep_->getTransparency() != transparency &&
-				!model_updates_enabled->isChecked())
+		if (!coloring_updates_enabled->isChecked() &&
+		    rep_->getTransparency() != transparency)
 		{
 			Representation::GeometricObjectList::iterator it = rep_->getGeometricObjects().begin();
 			for (; it != rep_->getGeometricObjects().end(); it++)
@@ -591,27 +597,14 @@ Representation* DisplayProperties::createRepresentation(const List<Composite*>& 
 		}
 	}
 
-	if (rebuild_representation && model_updates_enabled->isChecked())
-	{
-		applyModelSettings_(*rep_);
-		advanced_options_modified_ = false;
-	}
-
-	rep_->setDrawingMode((DrawingMode)  mode_combobox->currentIndex());
-
-	rep_->setTransparency(transparency);
-
 	rep_->enableModelUpdate(model_updates_enabled->isChecked());
 	rep_->enableColoringUpdate(coloring_updates_enabled->isChecked());
+	applyColoringSettings_(*rep_);
+	applyModelSettings_(*rep_);
 
-	create_button->setEnabled(false);
-	modify_button->setEnabled(false);
 	rep_->update(rebuild_representation);
-	modify_button->setEnabled(!getMainControl()->isBusy());
 
 	changed_selection_color_ = false;
-
-	return rep_;
 }
 
 
@@ -760,6 +753,7 @@ bool DisplayProperties::getSettingsFromString(const String& data)
 		setSurfaceDrawingPrecision(fields[3].toFloat());
 		selectColoringMethod(fields[4].toUnsignedInt());
 		setTransparency((Position)(fields[5].toFloat() / 2.55));
+Log.error() << "#~~#   4 "  << (Position)(fields[5].toFloat() / 2.55)          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		return true;
 	}
 	catch(...)
@@ -767,6 +761,86 @@ bool DisplayProperties::getSettingsFromString(const String& data)
 	}
 
 	return false;
+}
+
+void DisplayProperties::createRepresentation(String data_string, const vector<const Composite*>& new_systems)
+{
+	try
+	{
+		vector<String> string_vector;
+
+		// Representation0=1;3 2 2 6.500000 0 0 [2]|Color|H
+		// 								 ^ 																	System Number
+		// 								         ^            							Model Settings
+		// 								         							 ^            Composites numbers
+		// 								         							     ^        Custom Color
+		// 								         							     			^   Hidden Flag
+
+		// split off information of system number
+		Size split_size = data_string.split(string_vector, ";");
+		Position system_pos = string_vector[0].toUnsignedInt();
+
+		// split off between representation settings and composite numbers
+		data_string = string_vector[1];
+		vector<String> string_vector2;
+		data_string.split(string_vector2, "[]");
+		data_string = string_vector2[0];
+
+		// Composites id's per number
+		data_string = string_vector2[1];
+		data_string.split(string_vector2, ",");
+		HashSet<Position> hash_set;
+		for (Position p = 0; p < string_vector2.size(); p++)
+		{
+			hash_set.insert(string_vector2[p].toUnsignedInt());
+		}
+
+		if (hash_set.size() == 0)
+		{
+			BALLVIEW_DEBUG;
+			return;
+		}
+
+		if (system_pos >= new_systems.size())
+		{
+			Log.error() << "Error while reading project file, invalid structure for Representation! Aborting..." << std::endl;
+			return;
+		}
+
+		// custom color
+		data_string = string_vector[1];
+		if (data_string.has('|'))
+		{
+			data_string.split(string_vector2, "|");
+			ColorRGBA color;
+			color = string_vector2[1];
+			setCustomColor(color);
+		}
+
+		Composite* composite = (Composite*) new_systems[system_pos];
+
+		Position current = 0;
+		List<Composite*> c_list;
+		Composite::CompositeIterator ccit = composite->beginComposite();
+		for (; +ccit; ++ccit)
+		{
+			if (hash_set.has(current)) c_list.push_back(&*ccit);
+			current++;
+		}
+
+		if (!getSettingsFromString(data_string))
+		{
+			BALLVIEW_DEBUG;
+			Log.error() << "data_string " << std::endl;
+			return;
+		}
+
+		bool hidden = (string_vector2.size() == 3 && string_vector2[2].has('H'));
+		createRepresentation(c_list, hidden);
+	}
+	catch(...)
+	{
+	}
 }
 
 
