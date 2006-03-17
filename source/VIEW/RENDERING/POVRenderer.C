@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.22.2.1 2006/02/01 14:15:07 amoll Exp $
+// $Id: POVRenderer.C,v 1.22.2.2 2006/03/17 14:21:47 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -308,8 +308,8 @@ namespace BALL
 				}
 			}
 			
-			// Add some global blurb for radiosity support
-			out << "global_settings { radiosity { brightness 0.6 } }" << endl;
+			// Add some global blurb for radiosity support and max trace level
+			out << "global_settings { max_trace_level 99 radiosity { brightness 0.6 } }" << endl;
 
 			// Set the background color
 			out << "background { " << POVColorRGBA(stage_->getBackgroundColor()) << " }" << endl << endl;
