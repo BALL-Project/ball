@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.11 2006/03/17 13:39:05 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.12 2006/03/17 15:42:38 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -126,6 +126,7 @@ namespace BALL
 
 			if (changed_content)
 			{
+				ignore_change_ = true;
 				item->setText(0, new_text1.c_str());
 				item->setText(1, new_text2.c_str());
 				item->setText(2, new_text3.c_str());
@@ -133,9 +134,12 @@ namespace BALL
 
 			if (rep.isHidden() == (item->checkState(0) == Qt::Checked))
 			{
+				ignore_change_ = true;
 				if (rep.isHidden()) item->setCheckState(0, Qt::Unchecked);
 				else 							  item->setCheckState(0, Qt::Checked);
 			}
+
+			ignore_change_ = false;
 		}
 
 
@@ -697,8 +701,10 @@ namespace BALL
 		{
 		}
 
-		void GeometricControl::onItemClicked(QTreeWidgetItem* item)
+		void GeometricControl::onItemClicked(QTreeWidgetItem* item, int col)
 		{
+			if (col != 0) return;
+
 			if (ignore_change_) 
 			{
 				ignore_change_ = false;

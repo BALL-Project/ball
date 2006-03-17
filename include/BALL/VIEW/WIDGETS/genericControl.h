@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.h,v 1.14.2.3 2006/03/17 15:42:29 amoll Exp $
+// $Id: genericControl.h,v 1.14.2.4 2006/03/17 15:45:34 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
 #define BALL_VIEW_WIDGETS_GENERICCONTROL_H
@@ -114,7 +114,7 @@ namespace BALL
 			*/
  			virtual void updateSelection();
 
-			virtual void onItemClicked(QTreeWidgetItem*, int col) {};
+			virtual void onItemClicked(QTreeWidgetItem*, int) {};
 			
 		  protected:
 

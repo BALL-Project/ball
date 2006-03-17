@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.19.2.2 2006/02/01 13:23:48 amoll Exp $
+// $Id: preferences.C,v 1.19.2.3 2006/03/17 15:42:37 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -177,14 +177,10 @@ namespace BALL
 
 			// set the listview entry 
 			QTreeWidgetItem* item = widget_to_item_[child];
+			entries_listview->setCurrentItem(item);
 			entries_listview->setItemSelected(item, true);
+		
 			if (item->parent() != 0) entries_listview->setItemExpanded(item->parent(), true);
-
-			// workaround for damn QT 4.1!
-			for (Index p = 0; p < widget_stack->count(); p++)
-			{
-				widget_stack->widget(p)->hide();
-			}
 
 			// is the child a direct child of the stacked widget?
 			if (widget_stack->indexOf(child) != -1)
@@ -250,7 +246,10 @@ namespace BALL
 			}
 			else
 			{
-				item_to_entry_[item->parent()]->restoreDefaultValues();
+				if (item_to_entry_.has(item->parent()))
+				{
+					item_to_entry_[item->parent()]->restoreDefaultValues();
+				}
 			}
 		}
 
@@ -295,18 +294,6 @@ namespace BALL
 			{
 				(**it).storeValues();
 			}
-		}
-
-		void Preferences::workaround()
-		{
-			HashMap<QTreeWidgetItem*, QWidget*>::Iterator it = item_to_widget_.begin();
-			for (; +it; ++it)
-			{
-				entries_listview->setItemSelected((*it).first, false);
-			}
-
-//   			entries_listview->setItemSelected((*item_to_widget_.begin()).first, true);
-//   			showEntry(widget_stack->widget(0));
 		}
 
 	} // namespace VIEW

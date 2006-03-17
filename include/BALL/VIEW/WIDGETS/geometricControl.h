@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.27.2.5 2006/03/15 22:01:28 amoll Exp $
+// $Id: geometricControl.h,v 1.27.2.6 2006/03/17 15:42:29 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -205,7 +205,7 @@ namespace BALL
 			
 		  protected slots:
 
-			virtual void onItemClicked(QTreeWidgetItem* item);
+			virtual void onItemClicked(QTreeWidgetItem* item, int col);
 			void showGuestContextMenu(const QPoint& pos);
 
 		  protected:

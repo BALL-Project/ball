@@ -257,6 +257,7 @@ namespace BALL
 			/////////////////////////////////////////////
 			if (ignore_event_)
 			{
+Log.error() << "#~~#   3 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				if (e->type() == QEvent::MouseButtonRelease)
 				{
 					ignore_event_ = false;
@@ -302,6 +303,7 @@ namespace BALL
 				return false;
 			}
 
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			/////////////////////////////////////////////
 			// exit whats this mode with right mouse click
 			/////////////////////////////////////////////
