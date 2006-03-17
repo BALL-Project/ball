@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.8 2006/03/16 00:09:33 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.9 2006/03/17 13:22:49 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1693,7 +1693,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 	void MainControl::loadBALLViewProjectFile(const String& filename)
 		throw()
 	{
-		if (getRepresentationManager().updateRunning()) 
+		if (isBusy())
 		{
 			setStatusbarText("Could not load project file, while update is running!", true);
 			return; 

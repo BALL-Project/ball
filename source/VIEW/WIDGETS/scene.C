@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.14 2006/03/16 00:09:36 amoll Exp $
+// $Id: scene.C,v 1.174.2.15 2006/03/17 13:22:50 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1077,13 +1077,12 @@ namespace BALL
 			throw()
 		{
 			ModularWidget::writePreferences(inifile);
+			inifile.insertValue("WINDOWS", getIdentifier() + "::on", String(true));
 
 			inifile.appendSection("EXPORT");
 			inifile.insertValue("EXPORT", "POVNR", String(pov_nr_));
 			inifile.insertValue("EXPORT", "PNGNR", String(screenshot_nr_));
 			writeLights_(inifile);
-
-			inifile.insertValue("WINDOWS", "Scene::on", String(isVisible()));
 
 			if (inifile.hasSection("BALLVIEW_PROJECT"))
 			{
@@ -1104,11 +1103,6 @@ namespace BALL
 			if (inifile.hasEntry("EXPORT", "PNGNR"))
 			{
 				screenshot_nr_ = inifile.getValue("EXPORT", "PNGNR").toUnsignedInt();
-			}
-
-			if (inifile.hasEntry("WINDOWS", "Scene::on"))
-			{
-				setVisible(inifile.getValue("WINDOWS", "Scene::on").toUnsignedInt());
 			}
 
 			readLights_(inifile);

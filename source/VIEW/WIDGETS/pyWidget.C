@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.19 2006/03/16 00:09:36 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.20 2006/03/17 13:22:50 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -128,7 +128,8 @@ namespace BALL
 				valid_(false),
 				started_startup_script_(false),
 				thread_(0),
-				stop_script_(false)
+				stop_script_(false),
+				running_(false)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new PyWidget " << this << std::endl;
@@ -744,19 +745,29 @@ namespace BALL
 		{
 			if (getMainControl()->isBusy()) return false;
 
+			if (running_) return false;
+
+			running_ = true;
+			bool result;
+
 			if (!command.has('\n'))
 			{
-				return parseLine_(command);
+				result = parseLine_(command);
 			}
-
-			vector<String> lines;
-			Size nr = command.split(lines, String('\n').c_str());
-			for (Position p = 0; p < nr; p++)
+			else
 			{
-				if (!parseLine_(lines[p])) return false;
+				vector<String> lines;
+				Size nr = command.split(lines, String('\n').c_str());
+				for (Position p = 0; p < nr; p++)
+				{
+					if (!parseLine_(lines[p])) result = false;
+					break;
+				}
 			}
 
-			return true;
+			running_ = false;
+
+			return result;
 		}
 		
 

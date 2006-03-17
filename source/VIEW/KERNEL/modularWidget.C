@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.24.2.4 2006/03/17 13:12:23 amoll Exp $
+// $Id: modularWidget.C,v 1.24.2.5 2006/03/17 13:22:49 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -147,9 +147,7 @@ namespace BALL
 
 			if (window_menu_entry_ != 0)
 			{
-//   				inifile.insertValue("WINDOWS", getIdentifier() + "::on", String(window_menu_entry_->isChecked()));
-				// workaround for QT4 and the Scene
-				inifile.insertValue("WINDOWS", getIdentifier() + "::on", String(true));
+ 				inifile.insertValue("WINDOWS", getIdentifier() + "::on", String(window_menu_entry_->isChecked()));
 			}
 
 			inifile.insertValue("WINDOWS", getIdentifier() + "::x", String(widget->x()));
