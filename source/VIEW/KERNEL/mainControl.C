@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.10 2006/03/17 15:08:11 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.11 2006/03/17 20:39:21 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1397,7 +1397,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			checkMenus();
 
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			if (state)
 			{
 				QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
