@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.12 2006/03/17 15:42:38 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.13 2006/03/17 16:05:29 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -87,9 +87,6 @@ namespace BALL
 				return;
 			}
 			generateListViewItem_(rep);
-
-			// update the view
-			listview->update();
 		}
 
 		void GeometricControl::removeRepresentation(Representation& rep)
@@ -278,8 +275,13 @@ namespace BALL
 
 			representation_to_item_[&rep] = new_item;
 			item_to_representation_[new_item] = &rep;
-			
-			if (!rep.isHidden()) new_item->setCheckState(0, Qt::Checked);
+
+			new_item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
+			ignore_change_ = true;
+			new_item->setCheckState(0, Qt::Checked);
+			ignore_change_ = true;
+			if (rep.isHidden()) new_item->setCheckState(0, Qt::Unchecked);
+			ignore_change_ = false;
 			
 			listview->setItemSelected(new_item, true);
  			deselectOtherControls_();
@@ -648,7 +650,7 @@ namespace BALL
 					sl << "ClippingPlane";
 					if (plane->isHidden()) sl << "[hidden]";
 					QTreeWidgetItem* new_item = new QTreeWidgetItem(listview, sl);
-					new_item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
+					new_item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
 
 					ignore_change_ = true;
 					new_item->setCheckState(0, Qt::Checked);
