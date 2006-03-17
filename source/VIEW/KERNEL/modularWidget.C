@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.24.2.3 2006/02/01 13:23:49 amoll Exp $
+// $Id: modularWidget.C,v 1.24.2.4 2006/03/17 13:12:23 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -120,12 +120,18 @@ namespace BALL
 			QWidget* widget= dynamic_cast<QWidget*>(this);
 			if (!widget) return;
 
+			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on"))
+			{
+				widget->setVisible(inifile.getValue("WINDOWS", getIdentifier() + "::on").toBool());
+			}
+
 			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::x"))
 			{
-				widget->move(inifile.getValue("WINDOWS", getIdentifier() + "::x").toUnsignedInt(),
-										 inifile.getValue("WINDOWS", getIdentifier() + "::y").toUnsignedInt());
-				widget->resize(inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt(),
-											 inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt());
+				Position x = inifile.getValue("WINDOWS", getIdentifier() + "::x").toUnsignedInt();
+				Position y = inifile.getValue("WINDOWS", getIdentifier() + "::y").toUnsignedInt();
+				Position w = inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt();
+				Position h = inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt();
+				widget->setGeometry(QRect(x,y,w,h));
 			} 
 
 			PreferencesEntry* entry = dynamic_cast<PreferencesEntry*>(this);
@@ -141,8 +147,9 @@ namespace BALL
 
 			if (window_menu_entry_ != 0)
 			{
-				inifile.insertValue("WINDOWS", getIdentifier() + "::on", 
-					String(window_menu_entry_->isChecked()));
+//   				inifile.insertValue("WINDOWS", getIdentifier() + "::on", String(window_menu_entry_->isChecked()));
+				// workaround for QT4 and the Scene
+				inifile.insertValue("WINDOWS", getIdentifier() + "::on", String(true));
 			}
 
 			inifile.insertValue("WINDOWS", getIdentifier() + "::x", String(widget->x()));
