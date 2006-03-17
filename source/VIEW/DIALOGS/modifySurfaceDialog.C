@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.4.2.4 2006/03/16 00:09:33 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.4.2.5 2006/03/17 14:31:48 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -49,7 +49,7 @@ namespace BALL
 			// signals and slots connections
 			connect( apply_button, SIGNAL( clicked() ), this, SLOT( applyPressed() ) );
 			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( cancelPressed() ) );
-			connect( surface_tab, SIGNAL( selected(const QString&) ), this, SLOT( tabChanged() ) );
+			connect( surface_tab, SIGNAL( currentChanged(int) ), this, SLOT( tabChanged() ) );
 			connect( autoscale, SIGNAL( clicked() ), this, SLOT( autoScalePressed() ) );
 			connect( grids, SIGNAL( activated(int) ), this, SLOT( gridSelected() ) );
 			connect( alpha_button_grid, SIGNAL( toogled(bool) ), this, SLOT( gridTransparencyChanged() ) );
