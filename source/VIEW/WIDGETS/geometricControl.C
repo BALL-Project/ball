@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.10 2006/03/16 00:09:35 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.11 2006/03/17 13:39:05 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -197,7 +197,11 @@ namespace BALL
 			throw()
 		{
 			QList<QTreeWidgetItem*> il = getSelectedItems();
-			if (il.size() == 0) return;
+			if (il.size() == 0)
+			{
+				context_menu_.clear();
+				return;
+			}
 
 			Representation* rep = 0;
 			ClippingPlane* plane = 0;
