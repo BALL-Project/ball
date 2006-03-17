@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.C,v 1.10 2006/03/17 17:16:31 bertsch Exp $
+// $Id: smartsMatcher.C,v 1.11 2006/03/17 18:11:41 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/smartsMatcher.h>
@@ -144,8 +144,19 @@ namespace BALL
 						}
 					}
 				}
+				// eliminate double hits 
 				
-				// TODO reduce the multiple matches to unique ones, good speedup
+				vector<HashSet<const Atom*> > tmp2;
+				HashSet<const Atom*> rec_atoms;
+				for (vector<HashSet<const Atom*> >::const_iterator it = tmp.begin(); it != tmp.end(); ++it)
+				{
+					if (!rec_atoms.has(*it->begin()))
+					{
+						rec_atoms.insert(*it->begin());
+						tmp2.push_back(*it);
+					}					
+				}
+				tmp = tmp2;
 				if (rec_nodes.top()->getNot())
 				{
 					//cerr << "not" << endl;
