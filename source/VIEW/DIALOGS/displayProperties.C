@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.6 2006/03/17 20:39:20 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.7 2006/03/18 23:54:03 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -754,7 +754,6 @@ bool DisplayProperties::getSettingsFromString(const String& data)
 		setSurfaceDrawingPrecision(fields[3].toFloat());
 		selectColoringMethod(fields[4].toUnsignedInt());
 		setTransparency((Position)(fields[5].toFloat() / 2.55));
-Log.error() << "#~~#   4 "  << (Position)(fields[5].toFloat() / 2.55)          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		return true;
 	}
 	catch(...)

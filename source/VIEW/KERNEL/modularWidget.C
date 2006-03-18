@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.24.2.5 2006/03/17 13:22:49 amoll Exp $
+// $Id: modularWidget.C,v 1.24.2.6 2006/03/18 23:53:18 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -131,7 +131,7 @@ namespace BALL
 				Position y = inifile.getValue("WINDOWS", getIdentifier() + "::y").toUnsignedInt();
 				Position w = inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt();
 				Position h = inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt();
-				widget->setGeometry(QRect(x,y,w,h));
+				if (x > 0 && y > 0) widget->setGeometry(QRect(x,y,w,h));
 			} 
 
 			PreferencesEntry* entry = dynamic_cast<PreferencesEntry*>(this);
