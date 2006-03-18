@@ -49,10 +49,12 @@ flex_bison:
 	echo running flex and bison
 	$(FLEX) -PExpressionParser -o"$(SDIR)\KERNEL\expressionParserLexer.C" $(SDIR)\KERNEL\expressionParserLexer.l
 	$(FLEX) -PSmilesParser -o"$(SDIR)\STRUCTURE\smilesParserLexer.C" $(SDIR)\STRUCTURE\smilesParserLexer.l
+	$(FLEX) -PSmartsParser -o"$(SDIR)\STRUCTURE\smartsParserLexer.C" $(SDIR)\STRUCTURE\smartsParserLexer.l
 	$(FLEX) -PparsedFunction -o"$(SDIR)\MATHS\parsedFunctionLexer.C" $(SDIR)\MATHS\parsedFunctionLexer.l
 	$(BISON) -y -p ExpressionParser -d $(SDIR)\KERNEL\expressionParserParser.y -o $(SDIR)\KERNEL\expressionParserParser.C
 	$(BISON)  -y -p parsedFunction -d $(SDIR)\MATHS\parsedFunctionParser.y -o $(SDIR)\MATHS\parsedFunctionParser.C
 	$(BISON)  -y -p SmilesParser -d $(SDIR)\STRUCTURE\smilesParserParser.y -o $(SDIR)\STRUCTURE\smilesParserParser.C
+	$(BISON)  -y -p SmartsParser -d $(SDIR)\STRUCTURE\smartsParserParser.y -o $(SDIR)\STRUCTURE\smartsParserParser.C
 	echo ------------------------
 	echo compiling
 	echo ------------------------

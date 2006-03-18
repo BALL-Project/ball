@@ -60,8 +60,7 @@ libVIEW.obj\
 ..\..\..\source\VIEW\KERNEL\moleculeObjectCreator.obj\
 ..\..\..\source\VIEW\KERNEL\objectCreator.obj\
 ..\..\..\source\VIEW\KERNEL\preferencesEntry.obj\
-..\..\..\source\VIEW\KERNEL\primitiveManager.obj\
-..\..\..\source\VIEW\KERNEL\QTTimer.obj\
+..\..\..\source\VIEW\KERNEL\representationManager.obj\
 ..\..\..\source\VIEW\KERNEL\representation.obj\
 ..\..\..\source\VIEW\KERNEL\server.obj\
 ..\..\..\source\VIEW\KERNEL\stage.obj\

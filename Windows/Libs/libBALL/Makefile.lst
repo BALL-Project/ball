@@ -6,10 +6,10 @@ OBJS = \
 libBALL.obj\
 ..\..\..\source\KERNEL\expressionParserLexer.obj\
 ..\..\..\source\MATHS\parsedFunctionLexer.obj\
-..\..\..\source\STRUCTURE\smilesParserLexer.obj\
+..\..\..\source\STRUCTURE\smilesParserLexer.obj ..\..\..\source\STRUCTURE\smilesParserParser.obj\
+..\..\..\source\STRUCTURE\smartsParser.obj ..\..\..\source\STRUCTURE\smartsParserLexer.obj ..\..\..\source\STRUCTURE\smartsParserParser.obj ..\..\..\source\STRUCTURE\smartsMatcher.obj\
 ..\..\..\source\KERNEL\expressionParserParser.obj\
 ..\..\..\source\MATHS\parsedFunctionParser.obj\
-..\..\..\source\STRUCTURE\smilesParserParser.obj\
 ..\..\..\source\COMMON\constants.obj\
 ..\..\..\source\COMMON\exception.obj\
 ..\..\..\source\COMMON\hash.obj\
