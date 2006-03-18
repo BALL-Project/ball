@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.47.8.1 2006/01/27 14:50:25 amoll Exp $
+// $Id: support.C,v 1.47.8.2 2006/03/18 22:52:08 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/support.h>
+#include <BALL/MATHS/common.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/system.h>
@@ -164,9 +165,9 @@ namespace BALL
 					for (Position j = i + 1; j < atom_vector.size(); j++) 
 					{
 						difference = position_i - atom_vector[j]->getPosition();
-						difference.x = difference.x - period_x * rint(difference.x * inverse_period_x);
-						difference.y = difference.y - period_y * rint(difference.y * inverse_period_y);
-						difference.z = difference.z - period_z * rint(difference.z * inverse_period_z);
+						difference.x = difference.x - period_x * Maths::rint(difference.x * inverse_period_x);
+						difference.y = difference.y - period_y * Maths::rint(difference.y * inverse_period_y);
+						difference.z = difference.z - period_z * Maths::rint(difference.z * inverse_period_z);
 
 						// Remove 1-2 and 1-3 pairs!
 						if ((difference.getSquareLength() < squared_distance) 
@@ -757,9 +758,9 @@ Log.error() << "calculateNonBondedAtomPairs time: " << String(t.getClockTime()) 
 		void calculateMinimumImage
 			(Vector3& distance,	const Vector3& period)
 		{
-			distance.x = distance.x - period.x * rint(distance.x / period.x);
-			distance.y = distance.y - period.y * rint(distance.y / period.y);
-			distance.z = distance.z - period.z * rint(distance.z / period.z);
+			distance.x = distance.x - period.x * Maths::rint(distance.x / period.x);
+			distance.y = distance.y - period.y * Maths::rint(distance.y / period.y);
+			distance.z = distance.z - period.z * Maths::rint(distance.z / period.z);
 		}
 
 	}	// namespace MolmecSupport
