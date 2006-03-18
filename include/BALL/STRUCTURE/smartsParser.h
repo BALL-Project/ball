@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.h,v 1.5 2005/10/11 16:03:44 bertsch Exp $
+// $Id: smartsParser.h,v 1.5.2.1 2006/03/18 23:20:21 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMARTES_PARSER_H
@@ -39,7 +39,7 @@ namespace BALL
 
 	/** @name	\brief SMARTS Parser.
 	*/
-	class SmartsParser
+	class BALL_EXPORT SmartsParser
 	{
 		public:
 
