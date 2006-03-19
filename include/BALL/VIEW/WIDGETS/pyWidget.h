@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.10 2006/03/17 13:22:58 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.11 2006/03/19 14:31:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -25,6 +25,7 @@
 #include <QtGui/QDropEvent>
 #include <QtGui/QLineEdit>
 #include <QtGui/QComboBox>
+#include <QtGui/QSyntaxHighlighter>
 #include <QtCore/QStringList>
 
 #include <QtCore/qthread.h>
@@ -40,6 +41,30 @@ namespace BALL
 		class Preferences;
 
 		class RunPythonThread;
+
+		class BALL_VIEW_EXPORT PythonHighlighter
+			: public QSyntaxHighlighter
+		{
+			public:
+
+			PythonHighlighter();
+
+			~PythonHighlighter() {};
+
+			void compilePattern();
+			void highlightBlock(const QString& text);
+
+			QStringList python_keywords;
+			QStringList BALL_keywords;
+			QTextCharFormat my_class_format;
+			QTextCharFormat python_format;
+			QTextCharFormat string_format;
+			QTextCharFormat comment_format;
+			vector<QRegExp> python_patterns;
+			vector<QRegExp> BALL_patterns;
+			QRegExp 				string_pattern;
+			QRegExp 				comment_pattern;
+		};
 
 		class BALL_VIEW_EXPORT RunPythonThread
 			: public QThread
@@ -290,6 +315,7 @@ namespace BALL
 			bool keyPressed(QKeyEvent* e);
 
 			QTextEdit* 				text_edit_;
+			PythonHighlighter highlighter_;
 			MyLineEdit* 			line_edit_;
 			QComboBox* 				combo_box_;
 			List<Hotkey> 			hotkeys_;

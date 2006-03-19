@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.20 2006/03/17 13:22:50 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.21 2006/03/19 14:31:02 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -31,6 +31,92 @@ namespace BALL
 	namespace VIEW
 	{
 
+
+PythonHighlighter::PythonHighlighter()
+	:QSyntaxHighlighter((QTextDocument*)0)
+{
+	python_keywords 	<< "and" << "assert" << "break" << "class" << "continue" << "def"
+										<< "del" << "elif" << "else" << "except" << "exec" << "finally"
+										<< "for" << "from" << "global" << "if" << "import" << "in"
+										<< "is" << "lambda" << "not" << "or" << "pass" << "print" << "raise"
+										<< "return" << "try" << "while" << "yield";
+	
+ 	my_class_format.setForeground(Qt::darkBlue);
+ 	my_class_format.setFontWeight(QFont::Bold);
+
+	python_format.setForeground(Qt::darkRed);
+ 	python_format.setFontWeight(QFont::Bold);
+
+	string_format.setForeground(QColor(255,127,80));
+	comment_format.setForeground(Qt::darkGreen);
+}
+
+void PythonHighlighter::compilePattern()
+{
+	python_patterns.clear();
+	QString delim("\\b");
+	QStringList::iterator lit = python_keywords.begin();
+	for (; lit != python_keywords.end(); lit++)
+	{
+		python_patterns.push_back(QRegExp(delim + *lit + delim));
+	}
+
+	BALL_patterns.clear();
+	lit = BALL_keywords.begin();
+	for (; lit != BALL_keywords.end(); lit++)
+	{
+		BALL_patterns.push_back(QRegExp(delim + *lit + delim));
+	}
+
+	string_pattern  = QRegExp("\".*\"");
+	comment_pattern = QRegExp("#.*");
+}
+
+void PythonHighlighter::highlightBlock(const QString& text)
+{
+	if (text.startsWith(">")) return;
+
+	for (Position p = 0; p < python_patterns.size(); p++)
+	{
+		const QRegExp& expression = python_patterns[p];
+		Index index = text.indexOf(expression);
+		while (index >= 0) 
+		{
+			int length = expression.matchedLength();
+			setFormat(index, length, python_format);
+			index = text.indexOf(expression, index + length);
+		}
+	}
+
+	for (Position p = 0; p < BALL_patterns.size(); p++)
+	{
+		const QRegExp& expression = BALL_patterns[p];
+		Index index = text.indexOf(expression);
+		while (index >= 0) 
+		{
+			int length = expression.matchedLength();
+			setFormat(index, length, my_class_format);
+			index = text.indexOf(expression, index + length);
+		}
+	}
+
+	Index index = text.indexOf(string_pattern);
+	while (index >= 0) 
+	{
+		int length = string_pattern.matchedLength();
+		setFormat(index, length, string_format);
+		index = text.indexOf(string_pattern, index + length);
+	}
+
+	index = text.indexOf(comment_pattern);
+	while (index >= 0) 
+	{
+		int length = comment_pattern.matchedLength();
+		setFormat(index, length, comment_format);
+		index = text.indexOf(comment_pattern, index + length);
+	}
+
+}
 
 #ifdef BALL_QT_HAS_THREADS
 		RunPythonThread::RunPythonThread()
@@ -155,6 +241,9 @@ namespace BALL
 			combo_box_->hide();
 
 			default_visible_ = false;
+			QFont font = text_edit_->document()->defaultFont();
+			font.setPointSize(12);
+			text_edit_->document()->setDefaultFont(font);
 			registerWidget(this);
 		}
 
@@ -825,6 +914,21 @@ namespace BALL
 			multi_line_mode_ = false;
 			newPrompt_();
 			history_position_ = 0;
+
+			bool state;
+			runCommand_("import BALL", state);
+			String result = runCommand_("dir(BALL)", state);
+			vector<String> sv;
+			result.split(sv, "[,\'] ");
+
+			for (Position p = 0; p < sv.size(); p++)
+			{
+				if (sv[p].hasPrefix("__")) continue;
+				highlighter_.BALL_keywords << sv[p].c_str();
+			}
+
+			highlighter_.compilePattern();
+			highlighter_.setDocument(text_edit_->document());
 		}
 
 		void PyWidget::showCompletion()
@@ -946,6 +1050,7 @@ namespace BALL
 
 		void PyWidget::showDocumentation()
 		{
+Log.error() << "#~~#   7 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			getClassAndMember_();
 			showClassDocu(class_, member_);
 		}
