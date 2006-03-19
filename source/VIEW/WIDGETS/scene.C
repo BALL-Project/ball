@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.15 2006/03/17 13:22:50 amoll Exp $
+// $Id: scene.C,v 1.174.2.16 2006/03/19 18:42:43 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1332,15 +1332,18 @@ namespace BALL
 			rotate_action_ =	insertMenuEntry(
 					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), Qt::CTRL+Qt::Key_R);
 			setMenuHint("Switch to rotate/zoom mode");
+			rotate_action_->setCheckable(true);
 
 			picking_action_ = insertMenuEntry( MainControl::DISPLAY, "&Picking Mode", 
 													this, SLOT(pickingMode_()), Qt::CTRL+Qt::Key_P);
 			setMenuHint("Switch to picking mode, e.g. to identify singe atoms or groups");
 			setMenuHelp("scene.html#identify_atoms");
+			picking_action_->setCheckable(true);
 
 			move_action_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()));
 			setMenuHint("Move selected items");
 			setMenuHelp("molecularControl.html#move_molecule");
+			move_action_->setCheckable(true);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
@@ -1348,14 +1351,17 @@ namespace BALL
  					MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
 			no_stereo_action_->setChecked(true);
 			setMenuHelp("tips.html#3D");
+			no_stereo_action_->setCheckable(true);
 
 			active_stereo_action_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()));
 			setMenuHelp("tips.html#3D");
+			active_stereo_action_->setCheckable(true);
 
 			dual_stereo_action_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "Side by Side", this, SLOT(enterDualStereo()));
 			setMenuHelp("tips.html#3D");
+			dual_stereo_action_->setCheckable(true);
 
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
 											SLOT(showViewPoint_()), Qt::CTRL+Qt::Key_W);
@@ -1386,6 +1392,7 @@ namespace BALL
 															SLOT(recordAnimationClicked()));
 			setMenuHint("Record an animation for later processing");
 			setMenuHelp(help_url);
+			record_animation_action_->setCheckable(true);
 			
 			clear_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, 
 															SLOT(clearRecordedAnimation()));
@@ -1407,14 +1414,17 @@ namespace BALL
 			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", 
 																	this, SLOT(animationExportPNGClicked()));
 			setMenuHelp(help_url);
+			animation_export_PNG_action_->setCheckable(true);
 
 			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", 
 																	this, SLOT(animationExportPOVClicked()));
 			setMenuHelp(help_url);
+			animation_export_POV_action_->setCheckable(true);
 
 			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
 																	SLOT(animationRepeatClicked()));
 			setMenuHelp(help_url);
+			animation_repeat_action_->setCheckable(true);
 
 			setCursor(QCursor(Qt::SizeAllCursor));
 
@@ -2176,11 +2186,12 @@ namespace BALL
 		{
 			gl_renderer_.setStereoMode(GLRenderer::ACTIVE_STEREO);
 			last_pos_ = pos();
-			hide();
+//   			hide();
 			showNormal();  // needed on windows
-//   			reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
+//    			setParent(NULL);
 			showFullScreen();
-			show();
+//   			show();
+			setGeometry(qApp->desktop()->geometry());
 
 			no_stereo_action_->setChecked(false);
 			active_stereo_action_->setChecked(true);
@@ -2249,6 +2260,7 @@ namespace BALL
 		void Scene::recordAnimationClicked()
 			throw()
 		{
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			record_animation_action_->setChecked(!record_animation_action_->isChecked());
 		}
 

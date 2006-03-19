@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.11 2006/03/19 14:31:13 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.12 2006/03/19 18:42:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -25,6 +25,7 @@
 #include <QtGui/QDropEvent>
 #include <QtGui/QLineEdit>
 #include <QtGui/QComboBox>
+#include <QtGui/QMenu>
 #include <QtGui/QSyntaxHighlighter>
 #include <QtCore/QStringList>
 
@@ -233,6 +234,9 @@ namespace BALL
 			public slots:
 
 			//
+			void showContextMenu(const QPoint& point);
+
+			//
 			void showCompletion();
 		
 			//
@@ -264,10 +268,11 @@ namespace BALL
 
 			virtual bool completionSelected_();
 
+			virtual void showHelp_();
 
 			protected:
 
-			bool getClassAndMember_();
+			bool getClassAndMember_(String toc);
 
 			void setError_(bool state);
 
@@ -341,6 +346,7 @@ namespace BALL
 			String 						member_;
 			Position 					intend_;
 			bool 							running_;
+			QMenu 						menu_;
 		};
 
 	} // namespaces	

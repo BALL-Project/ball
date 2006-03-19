@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.21 2006/03/19 14:31:02 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.22 2006/03/19 18:42:42 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -224,6 +224,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			text_edit_->setLineWrapMode(QTextEdit::WidgetWidth);
 			text_edit_->setReadOnly(true);
 			text_edit_->setTabStopWidth((Position)(text_edit_->tabStopWidth() / 2.0));
+			text_edit_->setContextMenuPolicy(Qt::CustomContextMenu);
 			setGuest(*text_edit_);
 
 			line_edit_ = new MyLineEdit(this);
@@ -236,6 +237,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
  			lay->addWidget(line_edit_,1, 0, 1, 1);
  			lay->addWidget(combo_box_,1, 1, 1, 1);
 			connect(line_edit_, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
+			connect(text_edit_, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showContextMenu(const QPoint&)));
 			connect(combo_box_, SIGNAL(activated(int)), this, SLOT(completionSelected_()));
 
 			combo_box_->hide();
@@ -933,7 +935,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 		void PyWidget::showCompletion()
 		{
-			if (!getClassAndMember_()) return;
+			if (!getClassAndMember_(getCurrentLine())) return;
 
 			QStringList sl;
 
@@ -1039,7 +1041,18 @@ void PythonHighlighter::highlightBlock(const QString& text)
 							FileSystem::PATH_SEPARATOR;
 
 			Directory dir(dirp);
-			String doc = String("classBALL_1_1") + classname + "-members.htm";
+			String doc("classBALL_1_1");
+			if (classname.size() > 0)
+			{
+				doc += classname;
+			}
+			else
+			{
+				doc += member;
+			}
+
+			doc += "-members.htm";
+
 			if (!dir.has(doc)) 
 			{
 				return;
@@ -1050,21 +1063,19 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 		void PyWidget::showDocumentation()
 		{
-Log.error() << "#~~#   7 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-			getClassAndMember_();
+			getClassAndMember_(getCurrentLine());
 			showClassDocu(class_, member_);
 		}
 
-		bool PyWidget::getClassAndMember_()
+		bool PyWidget::getClassAndMember_(String toc)
 		{
-			String toc = getCurrentLine();
 			if (toc == "") return false;
 
 			vector<String> sv;
 			// find last parameter or command
 			//
 			// ??? count opening and closing brackets, if opening > closing...
-			toc.split(sv, ", +-=");
+			toc.split(sv, ", +-=():#");
 			toc = sv[sv.size() - 1];
 
 			bool global = !toc.has('.');
@@ -1110,6 +1121,43 @@ Log.error() << "#~~#   7 "             << " "  << __FILE__ << "  " << __LINE__<<
 			member_ = complete_prefix;
 
 			return true;
+		}
+
+		void PyWidget::showContextMenu(const QPoint& point)
+		{
+			menu_.clear();
+
+			QTextCursor cursor_pos = text_edit_->cursorForPosition(point);
+		
+			const Position pos = cursor_pos.position() - cursor_pos.block().position();
+			String text = ascii(cursor_pos.block().text());
+			String string = text.getSubstring(0, pos); 
+			String delim(". )=:,+"); 
+			for (Position i = pos; i < text.size(); i++)
+			{
+				if (delim.has(text[i])) break;
+				string += text[i];
+			}
+
+			getClassAndMember_(string);
+
+			String key;
+
+			if (class_ != "") key = class_+ "." + member_;
+			else key = member_;
+
+			QAction* action1 = menu_.addAction("Copy", text_edit_, SLOT(copy()));
+			String entry("Help for: ");
+			entry += key;
+			QAction* action2 = menu_.addAction(entry.c_str(), this, SLOT(showHelp_()));
+			if (key == "") action2->setEnabled(false);
+
+			menu_.popup(mapToGlobal(point));
+		}
+
+		void PyWidget::showHelp_()
+		{
+			showClassDocu(class_, member_);
 		}
 
 	} // namespace VIEW
