@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.C,v 1.4 2005/10/11 16:03:44 bertsch Exp $
+// $Id: smartsMatcher.C,v 1.4.2.1 2006/03/19 00:02:13 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/smartsMatcher.h>
@@ -30,7 +30,7 @@ namespace BALL
 	{
 	}
 
-	SmartsMatcher::SmartsMatcher& SmartsMatcher::operator = (const SmartsMatcher& /*matcher*/)
+	SmartsMatcher& SmartsMatcher::operator = (const SmartsMatcher& /*matcher*/)
 	{
 		return *this;
 	}
