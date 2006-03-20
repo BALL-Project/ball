@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.17 2006/03/20 21:41:20 amoll Exp $
+// $Id: scene.C,v 1.174.2.18 2006/03/20 22:31:46 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1195,10 +1195,7 @@ namespace BALL
 				glEnable(GL_FOG);
 
 				ColorRGBA co = stage_->getBackgroundColor();
-				GLfloat color[4] = {(float) co.getRed(),
-														(float) co.getGreen(),
-														(float) co.getBlue(), 
-														1.0};
+				GLfloat color[4] = {(float) co.getRed(), (float) co.getGreen(), (float) co.getBlue(), 1.0};
 				glFogfv(GL_FOG_COLOR, color);
 
 				glFogf(GL_FOG_START, 2.0);
@@ -1732,7 +1729,7 @@ namespace BALL
 
 		void Scene::initTimer()
 		{
-//   			timer_.start(500); // ?????????????? currently doesnt work with QT 4.1
+//    			timer_.start(500); // ?????????????? currently doesnt work with QT 4.1
 		}
 
 		void Scene::timerSignal_()
@@ -1743,6 +1740,7 @@ namespace BALL
 			}
 
 			QPoint point = QCursor::pos();
+			point = mapFromGlobal(point);
 
 			if (!rect().contains(point)) return;
 
