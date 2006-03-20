@@ -45,7 +45,7 @@ def quit():
 	getMainControl().quit()
 
 def run(file):
- getPyWidget().runFile(file)
+	getPyWidget().runFile(file)
 
 def openFile(file):
 	return MolecularFileDialog.getInstance(0).openFile(file)
