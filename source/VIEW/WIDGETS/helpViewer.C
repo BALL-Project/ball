@@ -120,7 +120,7 @@ namespace BALL
 
 		void HelpViewer::showHelp(const String& url, String entry)
 		{
-			QUrl qurl = QUrl((base_dir_ + url).c_str());
+			QUrl qurl = QUrl::fromLocalFile((base_dir_ + url).c_str());
  			browser_->setSource(qurl);
 
  			QTextCursor ct = browser_->textCursor();
@@ -166,7 +166,7 @@ namespace BALL
 		void HelpViewer::setDefaultPage(const String& url)
 		{
 			default_page_ = url;
-			QUrl qurl((base_dir_ + url).c_str());
+			QUrl qurl = QUrl::fromLocalFile((base_dir_ + url).c_str());
 			browser_->setSource(qurl);
 		}
 
@@ -184,9 +184,9 @@ namespace BALL
 		{
 			if (dir == "") return;
 
-			base_dir_ = dir;
+ 			base_dir_ = dir;
 
-			QUrl qurl((dir + default_page_).c_str());
+			QUrl qurl = QUrl::fromLocalFile((base_dir_ + default_page_).c_str());
 			browser_->setSource(qurl);
 		}
 
@@ -257,7 +257,6 @@ namespace BALL
 			/////////////////////////////////////////////
 			if (ignore_event_)
 			{
-Log.error() << "#~~#   3 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				if (e->type() == QEvent::MouseButtonRelease)
 				{
 					ignore_event_ = false;
@@ -303,7 +302,6 @@ Log.error() << "#~~#   3 "             << " "  << __FILE__ << "  " << __LINE__<<
 				return false;
 			}
 
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			/////////////////////////////////////////////
 			// exit whats this mode with right mouse click
 			/////////////////////////////////////////////
