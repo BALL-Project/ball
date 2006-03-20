@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.16 2006/03/19 18:42:43 amoll Exp $
+// $Id: scene.C,v 1.174.2.17 2006/03/20 21:41:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1325,7 +1325,8 @@ namespace BALL
 
 			main_control.initPopupMenu(MainControl::DISPLAY);
 
-			insertMenuEntry(MainControl::DISPLAY, "Show Coordinate System", this, SLOT(createCoordinateSystem()));
+			create_coordinate_system_ = 
+				insertMenuEntry(MainControl::DISPLAY, "Show Coordinate System", this, SLOT(createCoordinateSystem()));
 			setMenuHint("Show a coordinate system");
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
@@ -1388,8 +1389,7 @@ namespace BALL
 			// ======================== ANIMATION ===============================================
 			String help_url = "tips.html#animations";
 
-			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 
-															SLOT(recordAnimationClicked()));
+			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 0);
 			setMenuHint("Record an animation for later processing");
 			setMenuHelp(help_url);
 			record_animation_action_->setCheckable(true);
@@ -1411,18 +1411,15 @@ namespace BALL
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
-			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", 
-																	this, SLOT(animationExportPNGClicked()));
+			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", this, 0);
 			setMenuHelp(help_url);
 			animation_export_PNG_action_->setCheckable(true);
 
-			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", 
-																	this, SLOT(animationExportPOVClicked()));
+			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", this, 0);
 			setMenuHelp(help_url);
 			animation_export_POV_action_->setCheckable(true);
 
-			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
-																	SLOT(animationRepeatClicked()));
+			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 0);
 			setMenuHelp(help_url);
 			animation_repeat_action_->setCheckable(true);
 
@@ -1441,6 +1438,8 @@ namespace BALL
 			picking_action_->setChecked(current_mode_ == PICKING__MODE);
 			picking_action_->setEnabled(!busy);
 			move_action_->setEnabled(!busy);
+
+			create_coordinate_system_->setEnabled(!busy);
 
 			bool animation_running = (animation_thread_ != 0 && animation_thread_->isRunning());
 			
@@ -2257,13 +2256,6 @@ namespace BALL
 			stop_animation_ = true;
 		}
 
-		void Scene::recordAnimationClicked()
-			throw()
-		{
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-			record_animation_action_->setChecked(!record_animation_action_->isChecked());
-		}
-
 		void Scene::animate_()
 			throw()
 		{
@@ -2337,24 +2329,6 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 			animation_export_PNG_action_->setEnabled(true);
 			clear_animation_action_->setEnabled(true);
 			unlockComposites();
-		}
-
-		void Scene::animationRepeatClicked()
-			throw()
-		{
-			animation_repeat_action_->setChecked(!animation_repeat_action_->isChecked());
-		}
-
-		void Scene::animationExportPOVClicked()
-			throw()
-		{
-			animation_export_POV_action_->setChecked(!animation_export_POV_action_->isChecked());
-		}
-
-		void Scene::animationExportPNGClicked()
-			throw()
-		{
-			animation_export_PNG_action_->setChecked(!animation_export_PNG_action_->isChecked());
 		}
 
 		void Scene::switchToLastMode()

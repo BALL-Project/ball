@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.5 2006/03/15 22:00:25 amoll Exp $
+// $Id: scene.h,v 1.66.2.6 2006/03/20 21:39:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -541,22 +541,6 @@ namespace BALL
 				throw();
 
 			///
-			void recordAnimationClicked()
-				throw();
-
-			///
-			void animationRepeatClicked()
-				throw();
-
-			///
-			void animationExportPOVClicked()
-				throw();
-
-			///
-			void animationExportPNGClicked()
-				throw();
-
-			///
 			void switchToLastMode()
 				throw();
 
@@ -756,9 +740,7 @@ namespace BALL
 			static float animation_smoothness_;
 
 			LightSettings* light_settings_;
-
 			StageSettings* stage_settings_;
-
 			MaterialSettings* material_settings_;
 
 			// nr of last png file export
