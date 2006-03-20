@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.22 2006/03/19 18:42:42 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.23 2006/03/20 20:48:37 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -223,7 +223,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			text_edit_ = new QTextEdit(this);
 			text_edit_->setLineWrapMode(QTextEdit::WidgetWidth);
 			text_edit_->setReadOnly(true);
-			text_edit_->setTabStopWidth((Position)(text_edit_->tabStopWidth() / 2.0));
+			text_edit_->setTabStopWidth((Position)(text_edit_->tabStopWidth() / 4.0));
 			text_edit_->setContextMenuPolicy(Qt::CustomContextMenu);
 			setGuest(*text_edit_);
 
@@ -702,10 +702,9 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				multi_line_text_.append("\n");
 				multi_lines_ = 1;
 
+				appendToHistory_(line);
 				if (!silent)
 				{
-					appendToHistory_(line);
-					appendText(line);
 					intend_ = 1;
 					newPrompt_();
 				}
@@ -761,16 +760,17 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			{
 				if (line.isEmpty()) return true;
 
+				appendText(line);
 				if (testMultilineStart_(line, silent)) return true;
 
 				multi_lines_ = 0;
-				appendText(line);
 				appendToHistory_(line);
 			}
 			else // Multiline mode
 			{
 				multi_lines_ += 1;
 
+				appendText(line);
 				if (!line.isEmpty())
 				{
 					if (line[line.size() - 1] == ':')
@@ -779,10 +779,9 @@ void PythonHighlighter::highlightBlock(const QString& text)
 					}
 
 					multi_line_text_ += line + "\n";
+					appendToHistory_(line);
 					if (!silent)
 					{
-						appendToHistory_(line);
-						appendText(line);
 						newPrompt_();	
 					}
 					return true;
