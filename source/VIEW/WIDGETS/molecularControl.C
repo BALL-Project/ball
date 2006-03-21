@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.12 2006/03/21 14:03:12 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.13 2006/03/21 15:12:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -1184,6 +1184,7 @@ namespace BALL
 			throw()
 		{
 			listview->setUpdatesEnabled(false);
+			collapseAll();
 
 			HashMap<QTreeWidgetItem*, Composite*>::Iterator it = item_to_composite_.begin();
 			for (; +it; ++it)
@@ -1203,12 +1204,11 @@ namespace BALL
 				}
 				else
 				{
-					listview->collapseItem(item);
 					listview->setItemSelected(item, false);
 				}
 					
 			}
-			listview->setUpdatesEnabled(true);
+ 			listview->setUpdatesEnabled(true);
 		}
 
 		void MolecularControl::switchShowSecondaryStructure()
