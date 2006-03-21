@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.20 2006/03/21 00:47:01 amoll Exp $
+// $Id: scene.C,v 1.174.2.21 2006/03/21 14:35:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1016,6 +1016,7 @@ namespace BALL
 				}
 			}
 
+			/*
 			ColorRGBA color3(0,255,255,200);
 			for (Position xi = 10; xi <= size; xi += 10)
 			{
@@ -1043,6 +1044,7 @@ namespace BALL
 					rp->insert(*label3);
 				}
 			}
+			*/
 
 			rp->setProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM);
 
