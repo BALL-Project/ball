@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.19 2006/03/21 00:24:41 amoll Exp $
+// $Id: scene.C,v 1.174.2.20 2006/03/21 00:47:01 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -342,10 +342,15 @@ namespace BALL
 
 			if (info_string_ != "")
 			{
-				ColorRGBA c = stage_->getBackgroundColor().getInverseColor();
-				gl_renderer_.setColorRGBA_(c);
+				ColorRGBA c1 = stage_->getBackgroundColor();
+				ColorRGBA c2 = c1.getInverseColor();
 				QFont font;
 				font.setPixelSize(16);
+				font.setBold(true);
+				gl_renderer_.setColorRGBA_(c1);
+				renderText(info_point_.x() + 1, info_point_.y() + 1, info_string_.c_str(), font);
+				renderText(info_point_.x() - 1, info_point_.y() - 1, info_string_.c_str(), font);
+				gl_renderer_.setColorRGBA_(c2);
 				renderText(info_point_.x(), info_point_.y(), info_string_.c_str(), font);
 			}
 		}
