@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.11 2006/03/16 00:09:35 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.12 2006/03/21 14:03:12 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -1287,7 +1287,7 @@ namespace BALL
 			DockWidget::writePreferences(inifile);
 		}
 
-		void MolecularControl::onItemClicked(QTreeWidgetItem* item)
+		void MolecularControl::onItemClicked(QTreeWidgetItem* item, int)
 		{
 			if (ignore_checked_changes_) return;
 			bool checked = (item->checkState(1) == Qt::Checked);

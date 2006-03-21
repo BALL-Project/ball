@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.50.2.6 2006/03/16 00:24:04 amoll Exp $
+// $Id: molecularControl.h,v 1.50.2.7 2006/03/21 14:03:08 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -326,7 +326,7 @@ class BALL_VIEW_EXPORT MolecularControl
 	void createRepresentation_();
 
 	//
-	void onItemClicked(QTreeWidgetItem* item);
+	void onItemClicked(QTreeWidgetItem* item, int);
 
 	protected:
 
