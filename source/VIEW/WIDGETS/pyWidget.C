@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.23 2006/03/20 20:48:37 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.24 2006/03/21 16:27:07 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -748,12 +748,17 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				return false;
 			}
 
+			line.trimRight();
+
 			// check for comments
 			String temp(line);
 			temp.trim();
-			if (temp.hasPrefix("#")) return true;
 
-			line.trimRight();
+			if (temp.hasPrefix("#")) 
+			{
+				appendText(line);
+				return true;
+			}
 
 			// singe <-> multi line mode
 			if (!multi_line_mode_)
