@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.7 2006/02/01 14:47:04 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.8 2006/03/21 15:32:19 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -211,12 +211,16 @@ namespace BALL
 		{
 			// This call is needed because showFullScreen won't work
 			// correctly if the widget already considers itself to be fullscreen.
+			last_size_ = size();
+			last_point_ = pos();
 			showNormal();	
 			showFullScreen();
 		}
 		else
 		{
 			showNormal();
+			resize(last_size_.width(), last_size_.height());
+			move(last_point_);
 		}
 		fullscreen_ = !fullscreen_;
 	}
