@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.6 2006/03/20 21:39:47 amoll Exp $
+// $Id: scene.h,v 1.66.2.7 2006/03/21 00:26:59 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -766,6 +766,8 @@ namespace BALL
 			PreciseTime time_;
 			float last_fps_;
 			float zoom_factor_;
+			QPoint info_point_;
+			String info_string_;
 		};
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.18 2006/03/20 22:31:46 amoll Exp $
+// $Id: scene.C,v 1.174.2.19 2006/03/21 00:24:41 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -339,6 +339,15 @@ namespace BALL
 
 			// cannot call update here, because it calls updateGL
    		renderView_(DISPLAY_LISTS_RENDERING);
+
+			if (info_string_ != "")
+			{
+				ColorRGBA c = stage_->getBackgroundColor().getInverseColor();
+				gl_renderer_.setColorRGBA_(c);
+				QFont font;
+				font.setPixelSize(16);
+				renderText(info_point_.x(), info_point_.y(), info_string_.c_str(), font);
+			}
 		}
 
 		void Scene::resizeGL(int width, int height)
@@ -1729,23 +1738,25 @@ namespace BALL
 
 		void Scene::initTimer()
 		{
-//    			timer_.start(500); // ?????????????? currently doesnt work with QT 4.1
+ 			timer_.start(500); // ?????????????? currently doesnt work with QT 4.1
 		}
 
 		void Scene::timerSignal_()
 		{
+			info_string_ = "";
+
 			if (mouse_button_is_pressed_ || getMainControl()->isBusy())
 			{
 				return;
 			}
 
-			QPoint point = QCursor::pos();
-			point = mapFromGlobal(point);
+			info_point_ = QCursor::pos();
+			info_point_ = mapFromGlobal(info_point_);
 
-			if (!rect().contains(point)) return;
+			if (!rect().contains(info_point_)) return;
 
-			Position pos_x = point.x();
-			Position pos_y = point.y();
+			Position pos_x = info_point_.x();
+			Position pos_y = info_point_.y();
 
 			// if the mouse was at on other position 500 ms before, store position and abort
 
@@ -1783,12 +1794,15 @@ namespace BALL
 			String string;
 			MolecularInformation info;
 
+			GeometricObject* object = 0;
 			List<GeometricObject*>::Iterator git = objects.begin();
 			for (; git != objects.end(); git++)
 			{
 				// do we have a composite?
 				Composite* composite = (Composite*) (**git).getComposite();
 				if (composite == 0) continue;
+
+				object = *git;
 
 				info.visit(*composite);
 				String this_string(info.getName());
@@ -1807,6 +1821,8 @@ namespace BALL
 
 			if (string == "") return;
 
+			info_string_ = string;
+
 			String string2 = String("Object at cursor is ") + string;
 
 			if (getMainControl()->getStatusbarText() == string2) return;
@@ -1816,17 +1832,8 @@ namespace BALL
 			QPoint diff(20, 20);
 			if (pos_x > (Position) width() / 2) diff.setX(-20);
 			if (pos_y > (Position) height() / 2) diff.setY(-20);
-			point += diff;
-
-			QPainter painter(this);
-//   				painter.setBackgroundMode(Qt::OpaqueMode);
-				painter.setBackgroundMode(Qt::TransparentMode);
-//   				painter.setBackground(QBrush(getStage()->getBackgroundColor().getInverseColor().getQColor()));
-				painter.setPen(getStage()->getBackgroundColor().getQColor());
-				painter.drawText(point, string.c_str());
-			painter.end();
-
-			show_info_ = false;
+			info_point_ += diff;
+			updateGL();
 		}
 
 
