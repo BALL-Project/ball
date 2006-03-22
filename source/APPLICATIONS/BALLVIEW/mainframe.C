@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.9 2006/03/22 16:07:04 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.10 2006/03/22 16:17:40 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -477,10 +477,13 @@ inline Vector3 grad(const RegularData3D& data, const Vector3& pos,
 		{
 			Vector3 point = atom.getPosition();
 			Vector3 diff(drand48(), drand48(), drand48());
+			if (drand48() > 0.5) diff.x *= -1;
+			if (drand48() > 0.5) diff.y *= -1;
+			if (drand48() > 0.5) diff.z *= -1;
 			diff.normalize();
 			point += diff;
 
-			float h = 0.4;
+			float h = 0.3;
 			RegularData3D::CoordinateType spacing = data.getSpacing();
 			RegularData3D::IndexType         size = data.getSize();
 			Vector3 k1, k2, k3, k4;
@@ -510,7 +513,6 @@ inline Vector3 grad(const RegularData3D& data, const Vector3& pos,
 				point+=(k1+k2*2+k3*2+k4) * 1./6.;
 
 				line->vertices.push_back(point);
-				ColorRGBA color = 
 				line->colors.push_back(table.map(data(point)));
 			}
 
