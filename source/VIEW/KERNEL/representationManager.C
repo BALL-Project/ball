@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.C,v 1.1.2.3 2006/03/17 17:53:07 amoll Exp $
+// $Id: representationManager.C,v 1.1.2.4 2006/03/22 11:36:59 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representationManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -652,7 +652,6 @@ void RepresentationManager::finishedUpdate_(Representation* rep)
 	if (!beeing_updated_.has(rep))
 	{
 		BALLVIEW_DEBUG
-		return;
 	}
 #endif
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.21 2006/03/21 14:35:19 amoll Exp $
+// $Id: scene.C,v 1.174.2.22 2006/03/22 11:37:14 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1348,8 +1348,7 @@ namespace BALL
 			setMenuHint("Switch to rotate/zoom mode");
 			rotate_action_->setCheckable(true);
 
-			picking_action_ = insertMenuEntry( MainControl::DISPLAY, "&Picking Mode", 
-													this, SLOT(pickingMode_()), Qt::CTRL+Qt::Key_P);
+			picking_action_ = insertMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), Qt::CTRL+Qt::Key_P);
 			setMenuHint("Switch to picking mode, e.g. to identify singe atoms or groups");
 			setMenuHelp("scene.html#identify_atoms");
 			picking_action_->setCheckable(true);
@@ -1361,8 +1360,7 @@ namespace BALL
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-			no_stereo_action_ = insertMenuEntry (
- 					MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
+			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
 			no_stereo_action_->setChecked(true);
 			setMenuHelp("tips.html#3D");
 			no_stereo_action_->setCheckable(true);
@@ -1377,12 +1375,10 @@ namespace BALL
 			setMenuHelp("tips.html#3D");
 			dual_stereo_action_->setCheckable(true);
 
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
-											SLOT(showViewPoint_()), Qt::CTRL+Qt::Key_W);
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), Qt::CTRL+Qt::Key_W);
 			setMenuHint("Print the coordinates of the current viewpoint");
 
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, 
-											SLOT(setViewPoint_()), Qt::CTRL+Qt::Key_N);
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, SLOT(setViewPoint_()), Qt::CTRL+Qt::Key_N);
 			setMenuHint("Move the viewpoint to the given coordinates");
 
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()));
@@ -1394,8 +1390,7 @@ namespace BALL
 //   			insertMenuEntry(MainControl::FILE_EXPORT, "VRML...", this, SLOT(showExportVRMLDialog()));
 //   			setMenuHint("Export a VRML file from the Scene");
 
-			window_menu_entry_ = 
-				insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
+			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 			window_menu_entry_->setCheckable(true);
 			setMenuHelp("scene.html");
 
@@ -1413,12 +1408,10 @@ namespace BALL
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
-			start_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, 
-															SLOT(startAnimation()));
+			start_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, SLOT(startAnimation()));
 			setMenuHelp(help_url);
 
-			cancel_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, 
-															SLOT(stopAnimation()));
+			cancel_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, SLOT(stopAnimation()));
 			cancel_animation_action_->setEnabled(false);
 			setMenuHelp(help_url);
 
@@ -1461,8 +1454,7 @@ namespace BALL
 																!busy &&
 																!animation_running);
 			
-			clear_animation_action_->setEnabled(
-					animation_points_.size() > 0 && !animation_running);
+			clear_animation_action_->setEnabled(animation_points_.size() > 0 && !animation_running);
 
 			window_menu_entry_->setChecked(isVisible());
 		}
