@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.4 2006/03/09 12:42:46 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.5 2006/03/22 16:06:49 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -20,6 +20,7 @@
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
+#include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
 
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/KERNEL/atom.h>
@@ -220,6 +221,33 @@ namespace BALL
 			createSpheres_();
 			createTubes_();
 			createBoxes_();
+
+			// display list for illuminated lines
+			generateIlluminationTexture_(0.1, 0.3, 0.6, 0.5);
+			line_list_.clear();
+			glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+			glGenTextures(1, &line_texture_bind_);
+			glBindTexture(GL_TEXTURE_2D, line_texture_bind_); 
+			glTexImage2D(GL_TEXTURE_2D, 0, 4, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, line_tex_);
+
+			line_list_.useCompileMode();
+			line_list_.startDefinition();
+
+      glBindTexture(GL_TEXTURE_2D, line_texture_bind_);
+      
+      glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP );
+      glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP );
+      glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+      glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+      glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+      glEnable( GL_TEXTURE_2D );
+
+      // glEnable( GL_LINE_SMOOTH );
+      glEnable( GL_BLEND );
+      glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );    
+      // glHint( GL_LINE_SMOOTH_HINT, GL_DONT_CARE );
+
+			line_list_.endDefinition();
 
 			return true;
 		}
@@ -623,6 +651,58 @@ namespace BALL
 			glEnable(GL_LIGHTING);
 		}
 
+		void GLRenderer::renderIlluminatedLine_(const IlluminatedLine& line)
+			throw()
+		{
+			initDrawingOthers_();
+
+			glDisable(GL_LIGHTING);
+
+			// TEST!!! this should use a light source. currently we use a headlight
+ 			Vector3 view_vector = stage_->getCamera().getViewVector();
+			view_vector.normalize();
+ 			Vector3 light_source = view_vector;
+//    			Vector3 light_source = stage_->getCamera().getRightVector();
+
+			// This should be definitely done somewhere else...
+			GLint current_matrix_mode;
+		 	glGetIntegerv(GL_MATRIX_MODE, &current_matrix_mode);
+
+			glMatrixMode(GL_TEXTURE);
+			GLfloat matrix[16];
+
+			for (Size i=0; i<16; i++)
+				matrix[i] = 0.;
+
+//			matrix[0] = 0.5 * light_source.x; matrix[1] = 0.5 * light_source.y; matrix[2] = 0.5 * light_source.z; matrix[3] = 1.;
+//			matrix[4] = 0.5 * view_vector.x;  matrix[5] = 0.5 * view_vector.y;  matrix[6] = 0.5 * view_vector.z;  matrix[7] = 1.;
+			matrix[0] = 0.5 * light_source.x; matrix[4] = 0.5 * light_source.y; matrix[8] = 0.5 * light_source.z; matrix[12] = 1.;
+			matrix[1] = 0.5 * view_vector.x;  matrix[5] = 0.5 * view_vector.y;  matrix[9] = 0.5 * view_vector.z;  matrix[13] = 1.;
+
+			matrix[15] = 2.;
+
+			glLoadMatrixf(matrix);
+			glMatrixMode(current_matrix_mode);
+
+			line_list_.draw();
+
+			const std::vector<Vector3>& vertices = line.vertices;
+			const std::vector<Vector3>& tangents = line.tangents;
+			const std::vector<ColorRGBA>& colors = line.colors;
+
+			glBegin(GL_LINE_STRIP);
+
+			for (Position i = 0; i < vertices.size(); i++)
+			{
+				setColorRGBA_(colors[i]);
+ 				glTexCoord3f(tangents[i].x, tangents[i].y, tangents[i].z);
+				vertexVector3_(vertices[i]);
+			}
+
+			glEnd();
+			
+			glDisable(GL_TEXTURE_2D);
+		}
 
 		void GLRenderer::renderLabel_(const Label& label)
 			throw()
@@ -1698,6 +1778,52 @@ namespace BALL
 			}
 
 			glFrustum(-2.0 * x_scale_, 2.0 * x_scale_, -2.0 * y_scale_, 2.0 * y_scale_, 1.5, 600);
+		}
+
+		void GLRenderer::generateIlluminationTexture_(float ka, float kd, float kr, float shininess)
+		{
+			const int TEXTURE_SIZE = 128;  // including border
+			enum { R = 0, G = 1, B = 2, A = 3 };
+
+			assert( 0. <= ka && ka <= 1. );
+			assert( 0. <= kd && kd <= 1. );
+			assert( 0. <= kr && kr <= 1. );
+			float k = ka + kd + kr;
+			assert( 0. <= k  &&  k <= 1. );
+
+			Index i = 0;
+			Index j = 0;
+			for( i = 0; i < TEXTURE_SIZE; ++i )
+			{
+				for( j = 0; j < TEXTURE_SIZE; ++j )
+				{
+					float x = ( (float) j + 1. ) / (TEXTURE_SIZE + 1.);
+					float y = ( (float) i + 1. ) / (TEXTURE_SIZE + 1.);
+
+					float LT = 2. * x - 1.;
+					float VT = 2. * y - 1.;
+
+					float intensity = 0.;
+					intensity += ka;
+					intensity += kd * sqrt( 1. - LT*LT );
+					intensity += kr * pow( fabs( LT*VT - sqrt( 1. - LT*LT ) * sqrt( 1. - VT*VT ) ), shininess * 255. );
+
+					if( intensity < 0. || 1. < intensity )
+					{
+						if( intensity < 0. ) intensity = 0.;
+						if( 1. < intensity ) intensity = 1.;
+					}
+					assert( 0. <= intensity && intensity <= 1. );
+
+					Index c = (Index)(intensity * 255);
+					assert( 0 <= c && c <= 255 );
+
+					line_tex_[i][j][R] = (GLubyte) c;
+					line_tex_[i][j][G] = (GLubyte) c;
+					line_tex_[i][j][B] = (GLubyte) c;
+					line_tex_[i][j][A] = 127;
+				}
+			}
 		}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

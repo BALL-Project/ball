@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.h,v 1.11 2005/12/23 17:02:21 amoll Exp $
+// $Id: renderer.h,v 1.11.2.1 2006/03/22 16:06:51 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_RENDERER_H
 #define BALL_VIEW_RENDERING_RENDERER_H
@@ -19,6 +19,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class Line;
+		class IlluminatedLine;
 		class Tube;
 		class Mesh;
 		class Label;
@@ -142,6 +143,10 @@ namespace BALL
 			/// Render a line
 			virtual void renderLine_(const Line& /*line*/)
 				throw() {Log.error() << "renderLine_ not implemented in derived Renderer class" << std::endl;}
+			
+			/// Render an illuminated line
+			virtual void renderIlluminatedLine_(const IlluminatedLine& /*line*/)
+				throw() {Log.error() << "renderIlluminatedLine_ not implemented in derived Renderer class" << std::endl;}
 
 			/// Render a surface mesh
 			virtual void renderMesh_(const Mesh& /*mesh*/)

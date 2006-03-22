@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36.2.1 2006/01/17 13:45:24 amoll Exp $
+// $Id: glRenderer.h,v 1.36.2.2 2006/03/22 16:06:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -293,6 +293,10 @@ namespace BALL
 			virtual void renderLine_(const Line& /*line*/)
 				throw();
 
+			/// Render an illuminated line
+			virtual void renderIlluminatedLine_(const IlluminatedLine& line)
+				throw();
+
 			///
 			virtual void renderMesh_(const Mesh& /*mesh*/)
 				throw();
@@ -409,6 +413,9 @@ namespace BALL
 
 			void initGLU_(DrawingMode mode);
 
+			//_
+			void generateIlluminationTexture_(float ka, float kd, float kr, float shininess);
+
 			Scene* 								scene_;
 
 			///
@@ -427,7 +434,9 @@ namespace BALL
 			GLDisplayList* 				GL_tubes_list_;
 			GLDisplayList* 				GL_boxes_list_;
 			GLDisplayList* 				sphere_list_;
-
+			GLDisplayList  				line_list_;
+			GLuint 								line_texture_bind_;
+			GLubyte  							line_tex_[128][128][4];
 			/* static array of vertices for sphere dots */
 			static const float sphere_vertices_[12][3];
 			static const int 		sphere_indices_[20][3];

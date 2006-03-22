@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.5.2.1 2006/01/31 10:34:57 oliver Exp $
+# $Id: Makefile,v 1.5.2.2 2006/03/22 16:06:44 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -13,6 +13,7 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	label.C\
+	illuminatedLine.C\
 	line.C\
 	mesh.C\
 	point.C\

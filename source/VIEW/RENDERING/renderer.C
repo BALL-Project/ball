@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.C,v 1.12 2005/12/23 17:03:36 amoll Exp $
+// $Id: renderer.C,v 1.12.2.1 2006/03/22 16:06:49 amoll Exp $
 
 #include <BALL/VIEW/RENDERING/renderer.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
+#include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/point.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
@@ -83,6 +84,7 @@ namespace BALL
 			else if (RTTI::isKindOf<Box>(*object))  					renderBox_(*(const   		 			 					 Box*) object);
 			else if (RTTI::isKindOf<SimpleBox>(*object))  		renderSimpleBox_(*(const   		 		 SimpleBox*) object);
 			else if (RTTI::isKindOf<Label>(*object))  	 			renderLabel_(*(const   				 				 Label*) object);
+			else if (RTTI::isKindOf<IlluminatedLine>(*object)) renderIlluminatedLine_(*(const   			IlluminatedLine*) object);
 			// ... add more types of GeometricObjects here
 			else
 			{

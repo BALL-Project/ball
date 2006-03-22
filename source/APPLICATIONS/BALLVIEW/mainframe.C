@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.8 2006/03/21 15:32:19 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.9 2006/03/22 16:07:04 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -22,6 +22,8 @@
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
+
+#include <BALL/VIEW/DATATYPE/colorMap.h>
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
 
@@ -45,6 +47,10 @@
 #include <QtGui/QFileDialog>
 
 #include <sstream>
+
+#include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
+
+using namespace std;
 
 namespace BALL
 {
@@ -389,8 +395,212 @@ namespace BALL
 		save_project_action_->setEnabled(!composites_locked_);
 	}
 
+
+inline Vector3 grad(const RegularData3D& data, const Vector3& pos, 
+										const RegularData3D::CoordinateType& spacing,
+										const RegularData3D::IndexType& size)
+{
+	Vector3 grad; 
+	RegularData3D::IndexType index = data.getClosestIndex(pos);
+	RegularData3D::IndexType next  = index, last = index;
+	float factor = 1.;
+	if (index.x == 0)
+	{
+		// onlx forward difference possible
+		next.x++;
+	} 
+	else if (index.x == spacing.x-1) {
+		// onlx backward difference possible
+		last.x--;
+	}	
+	else {
+		// mid point formula
+		next.x++;
+		last.x--;
+		factor = 0.5;
+	}
+
+	grad.x = factor * spacing.x * (data[next] - data[last]);
+	factor = 1.; next = index; last = index;
+
+
+	if (index.y == 0)
+	{
+		// only forward difference possible
+		next.y++;
+	} 
+	else if (index.y == spacing.y-1) {
+		// only backward difference possible
+		last.y--;
+	}	
+	else {
+		// mid point formula
+		next.y++;
+		last.y--;
+		factor = 0.5;
+	}
+
+	grad.y = factor * spacing.y * (data[next] - data[last]);
+	factor = 1.; next = index; last = index;
+
+	if (index.z == 0)
+	{
+		// only forward difference possible
+		next.z++;
+	} 
+	else if (index.z == spacing.z-1) {
+		// only backward difference possible
+		last.z--;
+	}	
+	else {
+		// mid point formula
+		next.z++;
+		last.z--;
+		factor = 0.5;
+	}
+
+	grad.z = factor * spacing.z * (data[next] - data[last]);
+
+	return grad;
+}
+
 	void Mainframe::about()
 	{
+		DatasetControl& dc = *DatasetControl::getInstance(0);
+		RegularData3D& data = *((dc.get3DGrids()).begin())->first;
+
+		System& system = (*(System*)*composite_manager_.begin());
+		Atom& atom = *system.beginAtom();
+
+		Representation* rep = new Representation;
+		for (Position p = 0; p < 100; p++)
+		{
+			Vector3 point = atom.getPosition();
+			Vector3 diff(drand48(), drand48(), drand48());
+			diff.normalize();
+			point += diff;
+
+			float h = 0.4;
+			RegularData3D::CoordinateType spacing = data.getSpacing();
+			RegularData3D::IndexType         size = data.getSize();
+			Vector3 k1, k2, k3, k4;
+
+			ColorMap table;
+			ColorRGBA colors[3];
+			colors[0] = ColorRGBA(1.0,0,0);
+			colors[1] = ColorRGBA(.5,.0,5);
+			colors[2] = ColorRGBA(.0,0,1.0);
+			table.setRange(-1.5, 1.5);
+			table.setBaseColors(colors,3);
+			table.setNumberOfColors(100);
+			IlluminatedLine* line = new IlluminatedLine;
+			// and iterate for a while
+			for (int i=0; i<5000; i++)
+			{
+				if (!data.isInside(point)) break;
+				Vector3 v = grad(data, point, spacing, size);
+			
+				line->tangents.push_back(v);
+
+				k1 = h*grad(data, point, spacing, size);
+				k2 = h*grad(data, point+k1*0.5, spacing, size);
+				k3 = h*grad(data, point+k2*0.5, spacing, size);
+				k4 = h*grad(data, point+k3, spacing, size);
+
+				point+=(k1+k2*2+k3*2+k4) * 1./6.;
+
+				line->vertices.push_back(point);
+				ColorRGBA color = 
+				line->colors.push_back(table.map(data(point)));
+			}
+
+			rep->insert(*line);
+		}
+
+		insert(*rep);
+		update(*rep);
+
+	return;
+
+//   	Representation* rep = new Representation;
+	String filename("/local/amoll/velocity.dat");
+	std::FILE* file;
+	file = fopen(filename.c_str(), "rb");
+	if (file == NULL)
+	{
+		cerr << "Error while opening data file '" << filename << "'." << endl;
+		return;
+	}
+
+	cout << "Reading data from '" << filename << "'." << endl;
+
+	Size lineCount;
+	// Get the number of polylines.
+	fread(&lineCount, sizeof(int), 1, file);
+	cout << "Preparing to read " << lineCount << " polylines..." << flush;
+
+	// Get the size of each polyline.
+	int* vertCount = new int[lineCount];
+	fread(vertCount, sizeof(int), lineCount, file);
+
+	int totalSize = 0;
+	for (int i = 0; i < lineCount; i++)
+	{
+		totalSize += vertCount[i];
+	}
+
+	// Read the vertices.
+	float* vertices = new float[3 * totalSize];
+	fread(vertices, sizeof(float), 3 * totalSize, file);
+
+	float* colors = 0;
+	// Read the colors.
+	colors = new float[4 * totalSize];
+	fread(colors, sizeof(float), 4 * totalSize, file);
+
+	int vpos = 0;
+	int cpos = 0;
+	for (Position l = 0; l < lineCount; l++)
+	{
+		IlluminatedLine* line = new IlluminatedLine;
+		line->vertices.resize(vertCount[l]);
+		line->tangents.resize(vertCount[l]);
+ 		line->colors.resize(vertCount[l]);
+		for (Position v = 0; v < vertCount[l]; v++)
+		{
+			(*line).vertices[v].set(vertices[vpos],
+														vertices[vpos+1],
+														vertices[vpos+2]);
+			vpos += 3;
+
+			(*line).colors[v].set(colors[cpos],
+													colors[cpos+1],
+													colors[cpos+2],
+													colors[cpos+3]);
+			cpos += 4;
+		}
+
+		for (Position v = 0; v < vertCount[l] - 1; v++)
+		{
+			(*line).tangents[v] = (*line).vertices[v+1] - (*line).vertices[v];
+		}
+
+		(*line).tangents[vertCount[l] -1] = (*line).tangents[vertCount[l] -2];
+
+
+		rep->insert(*line);
+	}
+
+	delete vertices;
+	delete colors;
+
+	cout << totalSize << " vertices have been read in." << endl;
+
+	fclose(file);
+	insert(*rep);
+	update(*rep);
+	return;
+
 		// Display about dialog
 		QDialog w;
  		Ui_AboutDialog about;
