@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.11 2006/03/17 20:39:21 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.12 2006/03/22 16:58:05 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -434,7 +434,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			if (preferences_dialog_ != 0 &&
 					preferences_dialog_->hasPages())
 			{
-				preferences_action_->setChecked(preferences_dialog_->isVisible());			
+				preferences_action_->setEnabled(!isBusy());
 			}
 
 			// overridden in Controls
@@ -736,6 +736,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 		void MainControl::applyPreferencesClicked_()
 		{
+			if (isBusy()) 
+			{
+				setStatusbarText("Cant apply preferences while beeing busy!", true);
+				return;
+			}
+
 			preferences_dialog_->close();
 			setPreferencesEnabled_(false);
 			applyPreferences();
@@ -1875,6 +1881,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 	void MainControl::updateRepLabel_()
 	{
+		setPreferencesEnabled_(!isBusy());
+
 		if (!primitive_manager_.updateRunning()) 
 		{
 			if (!composites_locked_)
