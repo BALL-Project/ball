@@ -2,17 +2,20 @@
 
 Added docking code.
 Ported BALLView from QT 3.X to 4.1.
+Improved Python support.
 
 Added:
+- Docking interface
 - Widget for overview of atom values (e.g. atom type, charge)
 - Added BALL documentation widget in BALLView
-- Python widget now supports completion
-- Python widget has ability to show help entry for actual BALL Python command
-- BALLView has menu entries for user defined Python Hotkeys
+- Python widget supports completion
+- Python widget support for context sensitive help for BALL Python commands
+- Python widget supports Syntax Highlighting
+- BALLView has menu entries for user defined Python script hotkeys
 - Further Python example scripts
 - SMARTS support
-- Added indicator for update of representations in statusbar
-- Busy mouse cursor while update of representations
+- Improved feedback for users: e.g. Busy mouse cursor and statusbar entries
+- Added improved coordinate system
 
 Fixed:
 - Major code overhaul of the whole VIEW framework
@@ -22,18 +25,16 @@ Fixed:
 - Label rendering now supports antialiased fonts
 - Improved multithreading
 - Faster picking mode
-- Improved layout of LabelDialog
-- Indicator in statusbar for Server and Simulation was missing
+- Polished layout for some dialogs
+- Indicator in statusbar for Server and simulations was missing
 - Sensible default styles on the individual platforms
-- Improved coordinate system
+- Renamed classes: PrimitiveManager -> RepresentationManager
 
 Known problems:
 - Molecular Control Selection: Child->Parent doesnt always gets selected
-- Popup Labels for infos in Scene dont work because of problems of QPainter with QGLWidget
 - RegularData widgets currently dont work (QT 4.1 does not yet have CanvasWidgets)
 - HelpViewer has problems with HTML layout (QT problem)
-- HelpViewer segfaults when clicking on link which is highlighted (QT problem)
-
+- Stereo Viewing currently doesnt work because of QT stupidity
 
 1.1.1:
 
