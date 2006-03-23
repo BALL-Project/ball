@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.7 2006/03/18 23:54:03 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.8 2006/03/23 14:29:27 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -777,7 +777,7 @@ void DisplayProperties::createRepresentation(String data_string, const vector<co
 		// 								         							     			^   Hidden Flag
 
 		// split off information of system number
-		Size split_size = data_string.split(string_vector, ";");
+		data_string.split(string_vector, ";");
 		Position system_pos = string_vector[0].toUnsignedInt();
 
 		// split off between representation settings and composite numbers
