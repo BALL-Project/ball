@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.23.2.3 2006/02/01 13:23:46 amoll Exp $
+// $Id: lightSettings.C,v 1.23.2.4 2006/03/23 14:22:35 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -29,15 +29,16 @@ LightSettings::LightSettings(QWidget* parent, const char* name, Qt::WFlags fl)
 	setObjectName(name);
 	
 	// signals and slots connections
-	connect( lights_list, SIGNAL( selectionChanged() ), this, SLOT( lightSelected() ) );
-	connect( ambient, SIGNAL( stateChanged(int) ), this, SLOT( typeSelected() ) );
-	connect( point, SIGNAL( stateChanged(int) ), this, SLOT( typeSelected() ) );
-	connect( directional, SIGNAL( stateChanged(int) ), this, SLOT( typeSelected() ) );
+	connect( lights_list, SIGNAL( itemSelectionChanged() ), this, SLOT( lightSelected() ) );
+	connect( ambient, SIGNAL( clicked() ), this, SLOT( typeSelected() ) );
+	connect( point, SIGNAL( clicked() ), this, SLOT( typeSelected() ) );
+	connect( directional, SIGNAL( clicked() ), this, SLOT( typeSelected() ) );
 	connect( intensity, SIGNAL( valueChanged(int) ), this, SLOT( intensityChanged() ) );
 	connect( color_button, SIGNAL( clicked() ), this, SLOT( colorPressed() ) );
 	connect( add_lights_button, SIGNAL( clicked() ), this, SLOT( addLightPressed() ) );
 	connect( remove_lights_button, SIGNAL( clicked() ), this, SLOT( removeLightPressed() ) );
-	connect( not_relative, SIGNAL( stateChanged(int) ), this, SLOT( positionTypeChanged() ) );
+	connect( not_relative, SIGNAL( clicked() ), this, SLOT( positionTypeChanged() ) );
+	connect( relative, SIGNAL( clicked() ), this, SLOT( positionTypeChanged() ) );
 
 	if (parent == 0 || !RTTI::isKindOf<Scene>(*parent)) 
 	{
@@ -70,6 +71,11 @@ void LightSettings::updateFromStage()
 	}
 
 	update();
+
+	if (lights_.size() > 0)
+	{
+		lights_list->setCurrentRow(0);
+	}
 }
 
 
@@ -413,7 +419,10 @@ Vector3 LightSettings::getDirection_()
 
 Index LightSettings::getCurrentLightNumber_() const
 {
-	return lights_list->row(lights_list->currentItem());
+	QList<QListWidgetItem*> items = lights_list->selectedItems();
+	if (items.size() == 0) return -1;
+	return lights_list->row(*items.begin());
+	return lights_list->currentRow();
 }
 
 void LightSettings::restoreValues(bool)
