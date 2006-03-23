@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.C,v 1.1.2.4 2006/03/22 11:36:59 amoll Exp $
+// $Id: representationManager.C,v 1.1.2.5 2006/03/23 16:18:32 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representationManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -587,7 +587,10 @@ void RepresentationManager::finishedRendering(Representation* rep)
 
 Representation* RepresentationManager::popRepresentationToUpdate()
 {
-	if (!render_mutex_.tryLock()) return 0;
+	// ??? does this help?
+	if (to_update_.size() == 0) return 0;
+
+ 	if (!render_mutex_.tryLock()) return 0;
 
 	if (!update_mutex_.tryLock())
 	{
@@ -612,7 +615,7 @@ Representation* RepresentationManager::popRepresentationToUpdate()
 		to_update_.erase(rep);
 	}
 
-	render_mutex_.unlock();
+ 	render_mutex_.unlock();
 	update_mutex_.unlock();
 
 	return rep;
