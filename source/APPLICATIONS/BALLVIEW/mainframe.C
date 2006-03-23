@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.10 2006/03/22 16:17:40 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.11 2006/03/23 12:49:15 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -394,8 +394,6 @@ namespace BALL
 		MainControl::checkMenus();
 		save_project_action_->setEnabled(!composites_locked_);
 	}
-
-
 inline Vector3 grad(const RegularData3D& data, const Vector3& pos, 
 										const RegularData3D::CoordinateType& spacing,
 										const RegularData3D::IndexType& size)
@@ -409,7 +407,7 @@ inline Vector3 grad(const RegularData3D& data, const Vector3& pos,
 		// onlx forward difference possible
 		next.x++;
 	} 
-	else if (index.x == spacing.x-1) {
+	else if (index.x == size.x-1) {
 		// onlx backward difference possible
 		last.x--;
 	}	
@@ -429,7 +427,7 @@ inline Vector3 grad(const RegularData3D& data, const Vector3& pos,
 		// only forward difference possible
 		next.y++;
 	} 
-	else if (index.y == spacing.y-1) {
+	else if (index.y == size.y-1) {
 		// only backward difference possible
 		last.y--;
 	}	
@@ -448,7 +446,7 @@ inline Vector3 grad(const RegularData3D& data, const Vector3& pos,
 		// only forward difference possible
 		next.z++;
 	} 
-	else if (index.z == spacing.z-1) {
+	else if (index.z == size.z-1) {
 		// only backward difference possible
 		last.z--;
 	}	
@@ -464,6 +462,107 @@ inline Vector3 grad(const RegularData3D& data, const Vector3& pos,
 	return grad;
 }
 
+inline void calculatePoints(RegularData3D& data, Vector3 point, vector<Vector3>& points)
+{
+	points.clear();
+
+	float h = 0.1;
+	RegularData3D::CoordinateType spacing = data.getSpacing();
+	RegularData3D::IndexType         size = data.getSize();
+	Vector3 k1, k2, k3, k4;
+	float error_estimate;
+
+	float min_spacing = std::min(std::min(spacing.x, spacing.y), spacing.z);
+	float rho = 0.9; // chose sensible values
+//   	float lower_limit = min_spacing * 0.12;
+   	float lower_limit = min_spacing * 0.01;
+	float tolerance = 1.0;
+	float h_max = min_spacing * 2;
+	int   number_of_interpolants = 5;
+	Vector3 rk_estimate;
+	Vector3 interpolation_s, interpolation_ua, interpolation_ub, interpolation_va, interpolation_vb;
+	Vector3 interpolated_point;
+
+	Vector3 grad_current = grad(data, point, spacing, size);
+	Vector3 grad_old     = grad_current;
+
+	// Runge - Kutta of order 4 with adaptive step size and
+	// error control
+	for (int i=0; i<500; i++)
+	{
+//   		std::cout << "Grad: " << grad_current << " pot " << data(point) << " ";
+
+		k1 = h*grad_current;
+		k2 = h*grad(data, point+k1*0.5, spacing, size);
+		k3 = h*grad(data, point+k2*0.5, spacing, size);
+		k4 = h*grad(data, point+k3, spacing, size);
+
+		rk_estimate = (k1+k2*2+k3*2+k4) * 1./6.;
+		grad_old = grad_current;
+		grad_current = grad(data, point+rk_estimate, spacing, size);
+		
+		// cubic Hermite interpolation of the resulting field line
+		// between the old and the new point
+		interpolation_s = Vector3(0.);
+
+		for (int j=0; j<number_of_interpolants; j++)
+		{
+			interpolation_s += Vector3(1. / (number_of_interpolants+1.));
+		
+			interpolation_va.x = interpolation_s.x*pow(1.-interpolation_s.x, 2);
+			interpolation_va.y = interpolation_s.y*pow(1.-interpolation_s.y, 2);
+			interpolation_va.z = interpolation_s.z*pow(1.-interpolation_s.z, 2);
+
+			interpolation_vb.x = -pow(interpolation_s.x,2)*(1-interpolation_s.x);
+			interpolation_vb.y = -pow(interpolation_s.y,2)*(1-interpolation_s.y);
+			interpolation_vb.z = -pow(interpolation_s.z,2)*(1-interpolation_s.z);
+
+			interpolation_ua.x = (1+2.*interpolation_s.x)*pow(1-interpolation_s.x, 2);
+			interpolation_ua.y = (1+2.*interpolation_s.y)*pow(1-interpolation_s.y, 2);
+			interpolation_ua.z = (1+2.*interpolation_s.z)*pow(1-interpolation_s.z, 2);
+
+			interpolation_ub.x = (3-2.*interpolation_s.x)*pow(interpolation_s.x, 2);
+			interpolation_ub.y = (3-2.*interpolation_s.y)*pow(interpolation_s.y, 2);
+			interpolation_ub.z = (3-2.*interpolation_s.z)*pow(interpolation_s.z, 2);
+
+			interpolated_point.x =  	point.x * interpolation_ua.x	
+															+ (point.x+rk_estimate.x) * interpolation_ub.x
+															+ rk_estimate.x * (  grad_old.x*interpolation_va.x
+																									+grad_current.x*interpolation_vb.x);
+			interpolated_point.y =  	point.y * interpolation_ua.y	
+															+ (point.y+rk_estimate.y) * interpolation_ub.y
+															+ rk_estimate.y * (  grad_old.y*interpolation_va.y
+																									+grad_current.y*interpolation_vb.y);
+
+			interpolated_point.z =  	point.z * interpolation_ua.z	
+															+ (point.z+rk_estimate.z) * interpolation_ub.z
+															+ rk_estimate.z * (  grad_old.z*interpolation_va.z
+																									+grad_current.z*interpolation_vb.z);
+
+			points.push_back(interpolated_point);
+//   			std::cout << "Interpolation " << j << " value " << interpolated_point << " ";
+		}
+
+		point += rk_estimate;
+
+		error_estimate = ((k4-h*grad(data, point, spacing, size)) * 1./6.).getLength();
+
+		// update h using the error estimate
+		float h_new = h * pow(rho*tolerance / error_estimate, 1./5.);
+//   		std::cout << " error: " << error_estimate << " " << h_new << " step " << rk_estimate.getLength() << " point ";
+		if (error_estimate > tolerance) h = h_new;
+		else h = std::min(h_new, h_max);
+
+		if ((h < lower_limit) || (rk_estimate.getLength() < lower_limit))
+		{
+//   			std::cout << std::endl << "Aborting field line computation..." << std::endl;
+			break;
+		}
+//   		std::cout << point <<  " h " << h << std::endl;
+	}
+}
+
+
 	void Mainframe::about()
 	{
 		DatasetControl& dc = *DatasetControl::getInstance(0);
@@ -473,6 +572,57 @@ inline Vector3 grad(const RegularData3D& data, const Vector3& pos,
 		Atom& atom = *system.beginAtom();
 
 		Representation* rep = new Representation;
+		rep->setTransparency(90);
+
+		ColorMap table;
+		ColorRGBA colors[3];
+		colors[0] = ColorRGBA(1.0, 0.0, 0.0, 1.0);
+		colors[1] = ColorRGBA(0.5, 0.0, 0.5, 0.2);
+		colors[2] = ColorRGBA(0.0, 0.0, 1.0, 1.0);
+		table.setRange(-1.5, 1.5);
+		table.setBaseColors(colors,3);
+		table.setNumberOfColors(100);
+		table.setAlphaBlending(true);
+		table.createMap();
+
+		for (Position p = 0; p < 1000; p++)
+		{
+			Vector3 point = atom.getPosition();
+			Vector3 diff(drand48(), drand48(), drand48());
+			if (drand48() > 0.5) diff.x *= -1;
+			if (drand48() > 0.5) diff.y *= -1;
+			if (drand48() > 0.5) diff.z *= -1;
+			diff.normalize();
+			diff *= 0.4;
+			point += diff;
+
+			IlluminatedLine* line = new IlluminatedLine;
+			vector<Vector3>& points = line->vertices;
+			calculatePoints(data, point, points);
+
+			const Size nrp = points.size();
+			line->tangents.resize(nrp);
+			line->colors.resize(nrp);
+
+			for (Position v = 0; v < nrp - 1; v++)
+			{
+				(*line).tangents[v] = points[v+1] - points[v];
+			}
+			(*line).tangents[nrp -1] = (*line).tangents[nrp -2];
+
+			for (Position v = 0; v < nrp; v++)
+			{
+				(*line).colors[v] = table.map(data(points[v]));
+
+			}
+
+
+			rep->insert(*line);
+		}
+
+		insert(*rep);
+		update(*rep);
+/*
 		for (Position p = 0; p < 100; p++)
 		{
 			Vector3 point = atom.getPosition();
@@ -519,11 +669,14 @@ inline Vector3 grad(const RegularData3D& data, const Vector3& pos,
 			rep->insert(*line);
 		}
 
+
 		insert(*rep);
 		update(*rep);
+*/
 
 	return;
 
+	/*
 //   	Representation* rep = new Representation;
 	String filename("/local/amoll/velocity.dat");
 	std::FILE* file;
@@ -602,6 +755,7 @@ inline Vector3 grad(const RegularData3D& data, const Vector3& pos,
 	insert(*rep);
 	update(*rep);
 	return;
+	*/
 
 		// Display about dialog
 		QDialog w;
