@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.5 2006/03/22 16:06:49 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.6 2006/03/23 14:12:54 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -661,7 +661,8 @@ namespace BALL
 			// TEST!!! this should use a light source. currently we use a headlight
  			Vector3 view_vector = stage_->getCamera().getViewVector();
 			view_vector.normalize();
- 			Vector3 light_source = view_vector;
+ 			Vector3 light_source = view_vector - stage_->getCamera().getLookUpVector();;
+			light_source.normalize();
 //    			Vector3 light_source = stage_->getCamera().getRightVector();
 
 			// This should be definitely done somewhere else...
