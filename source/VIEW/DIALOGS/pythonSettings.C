@@ -288,7 +288,7 @@ bool HotkeyTable::setValue(const String& value)
 		Size nr2 = fields[p].split(fields2, "°");
 		if (nr2 != 3)
 		{
-			BALLVIEW_DEBUG;
+//   			BALLVIEW_DEBUG;
 			continue;
 		}
 
