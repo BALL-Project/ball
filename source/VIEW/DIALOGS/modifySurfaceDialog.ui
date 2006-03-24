@@ -27,22 +27,6 @@
   <property name="windowTitle" >
    <string>Modify Surface</string>
   </property>
-  <widget class="QLabel" name="TextLabel1_2" >
-   <property name="geometry" >
-    <rect>
-     <x>-8</x>
-     <y>176</y>
-     <width>62</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>alpha</string>
-   </property>
-   <property name="alignment" >
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-   </property>
-  </widget>
   <widget class="QPushButton" name="apply_button" >
    <property name="enabled" >
     <bool>false</bool>
@@ -131,7 +115,7 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>1</y>
+     <y>0</y>
      <width>537</width>
      <height>303</height>
     </rect>
@@ -2209,6 +2193,22 @@
        </widget>
       </item>
      </layout>
+    </widget>
+    <widget class="QLabel" name="TextLabel1_2" >
+     <property name="geometry" >
+      <rect>
+       <x>0</x>
+       <y>150</y>
+       <width>62</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>alpha</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="by_color" >
