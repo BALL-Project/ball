@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.11 2006/03/23 12:49:15 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.12 2006/03/24 12:47:45 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -166,12 +166,10 @@ namespace BALL
 		// Menu ------------------------------------------------------------------------
 //   		menuBar()->setSeparator(QMenuBar::InWindowsStyle);
 
-//   		#ifdef BALL_QT_HAS_THREADS
-			stop_simulation_action_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
-											SLOT(stopSimulation()), Qt::ALT+Qt::Key_C);
-			insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
-			setMenuHint(stop_simulation_action_, "Abort a running simulation thread");
-//   		#endif
+		stop_simulation_action_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
+										SLOT(stopSimulation()), Qt::ALT+Qt::Key_C);
+		insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
+		setMenuHint(stop_simulation_action_, "Abort a running simulation thread");
 
 		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
 
@@ -585,7 +583,7 @@ inline void calculatePoints(RegularData3D& data, Vector3 point, vector<Vector3>&
 		table.setAlphaBlending(true);
 		table.createMap();
 
-		for (Position p = 0; p < 1000; p++)
+		for (Position p = 0; p < 500; p++)
 		{
 			Vector3 point = atom.getPosition();
 			Vector3 diff(drand48(), drand48(), drand48());

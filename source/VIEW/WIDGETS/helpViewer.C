@@ -118,9 +118,19 @@ namespace BALL
 			showHelp(default_page_);
 		}
 
-		void HelpViewer::showHelp(const String& url, String entry)
+		void HelpViewer::showHelp(const String& org_url, String entry)
 		{
+			String url = org_url;
+			String fragment;
+
+			if (url.has('#'))
+			{
+				url = url.before("#");
+				fragment = org_url.after("#");
+			}
+
 			QUrl qurl = QUrl::fromLocalFile((base_dir_ + url).c_str());
+			if (fragment != "") qurl.setFragment(fragment.c_str());
  			browser_->setSource(qurl);
 
  			QTextCursor ct = browser_->textCursor();
