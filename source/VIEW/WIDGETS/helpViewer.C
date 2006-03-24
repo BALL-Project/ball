@@ -8,6 +8,7 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/SYSTEM/path.h>
+#include <BALL/FORMAT/lineBasedFile.h>
 
 #include <QtGui/QMenu>
 #include <QtGui/QMouseEvent>
@@ -169,8 +170,53 @@ namespace BALL
 			if (!RTTI::isKindOf<ShowHelpMessage>(*message)) return;
 
 			ShowHelpMessage* msg = RTTI::castTo<ShowHelpMessage>(*message);
-			if (msg->getProject() != project_) return;
-			showHelp(msg->getURL(), msg->getEntry());
+			bool classname = false;
+			String project = msg->getProject();
+			String url = msg->getURL();
+
+			if (project.hasSuffix(" class"))
+			{
+				classname = true;
+				project = project.before(" ");
+			}
+			if (project != project_) return;
+
+			if (classname)
+			{
+				showDocumentationFor(url, msg->getEntry());
+				return;
+			}
+
+			showHelp(url, msg->getEntry());
+		}
+
+		void HelpViewer::showDocumentationFor(const String& classname, const String& member)
+		{
+			if (classes_to_files_.size() == 0) collectClasses_();
+
+			if (!classes_to_files_.has(classname)) return;
+
+			showHelp(classes_to_files_[classname], member);
+		}
+
+		void HelpViewer::collectClasses_()
+		{
+			classes_to_files_.clear();
+			
+			String dir = getDataPath();
+			dir += 	String("..") + 
+							FileSystem::PATH_SEPARATOR + 
+							"doc" + 
+							FileSystem::PATH_SEPARATOR;
+
+			LineBasedFile file(dir + "classes");
+			vector<String> fields;
+			while (file.readLine())
+			{
+				const String& line = file.getLine();
+				line.split(fields, " ");
+				classes_to_files_[fields[0]] = fields[1];
+			}
 		}
 
 		void HelpViewer::setDefaultPage(const String& url)

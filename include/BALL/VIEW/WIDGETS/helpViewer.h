@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.2.2.4 2006/02/01 13:23:42 amoll Exp $
+// $Id: helpViewer.h,v 1.2.2.5 2006/03/24 14:02:34 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -121,6 +121,9 @@ namespace BALL
 
 			///
 			void setWhatsThisEnabled(bool state) { whats_this_ = state;}
+
+			///
+			void showDocumentationFor(const String& classname, const String& member);
 					
 			public slots:
 
@@ -138,6 +141,8 @@ namespace BALL
 		
 			protected:
 
+			void collectClasses_();
+
 			String 					project_;
 			String 					default_page_;
 			String 					base_dir_;
@@ -147,6 +152,7 @@ namespace BALL
 			bool 						whats_this_;
 
 			HashMap<const QObject*, String> docu_entries_;
+			HashMap<String, String> classes_to_files_;
 		};
   	
 } } // namespaces
