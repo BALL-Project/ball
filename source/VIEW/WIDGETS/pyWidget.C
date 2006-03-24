@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.24 2006/03/21 16:27:07 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.25 2006/03/24 15:03:05 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -929,7 +929,9 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 			for (Position p = 0; p < sv.size(); p++)
 			{
-				if (sv[p].hasPrefix("__")) continue;
+				// no Python special commands and only classes (begin with capital letter)
+				if (sv[p][0] < 65 || sv[p][0] > 90) continue;
+
 				highlighter_.BALL_keywords << sv[p].c_str();
 			}
 
@@ -1035,34 +1037,15 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			return true;
 		}
 
-		void PyWidget::showClassDocu(const String& classname, const String& member)
+		void PyWidget::showClassDocu(String classname, String member)
 		{
-			String dirp = getDataPath() + ("..") + 
-							FileSystem::PATH_SEPARATOR + 
-							"doc" + 
-							FileSystem::PATH_SEPARATOR +
-							"BALL" +
-							FileSystem::PATH_SEPARATOR;
-
-			Directory dir(dirp);
-			String doc("classBALL_1_1");
-			if (classname.size() > 0)
+			if (classname == "")
 			{
-				doc += classname;
-			}
-			else
-			{
-				doc += member;
+				classname = member;
+				member = "";
 			}
 
-			doc += "-members.htm";
-
-			if (!dir.has(doc)) 
-			{
-				return;
-			}
-
-			notify_(new ShowHelpMessage(doc, "BALL", member));
+			notify_(new ShowHelpMessage(classname, "BALL class", member));
 		}
 
 		void PyWidget::showDocumentation()
@@ -1136,7 +1119,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			const Position pos = cursor_pos.position() - cursor_pos.block().position();
 			String text = ascii(cursor_pos.block().text());
 			String string = text.getSubstring(0, pos); 
-			String delim(". )=:,+"); 
+			String delim(". )=:,+\""); 
 			for (Position i = pos; i < text.size(); i++)
 			{
 				if (delim.has(text[i])) break;
