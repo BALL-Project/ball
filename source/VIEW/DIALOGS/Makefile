@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.53.2.5 2006/02/01 13:23:44 amoll Exp $
+# $Id: Makefile,v 1.53.2.6 2006/03/25 10:46:39 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -91,38 +91,38 @@ MOC_SOURCES=\
 #	openBruker1DFile_moc.C\
 #	openBruker2DFile_moc.C\
 
-UIC_SOURCES=$(FFT_DEPENDENT_UIC_SOURCES)\
-	amberConfigurationDialog.ui\
-	atomOverview.ui\
-	bondProperties.ui\
-	charmmConfigurationDialog.ui\
-	clippingDialog.ui\
-	coloringSettingsDialog.ui\
-	contourSurfaceDialog.ui\
-	compositeProperties.ui\
-	contourSurfaceDialog.ui\
-	downloadPDBFile.ui\
-	displayProperties.ui\
-	FDPBDialog.ui\
-	labelDialog.ui\
-	lightSettings.ui\
-	mainControlPreferences.ui\
-	materialSettings.ui\
-	minimizationDialog.ui\
-	modelSettingsDialog.ui\
-	modifySurfaceDialog.ui\
-	molecularDynamicsDialog.ui\
-	networkPreferences.ui\
-	parsedFunctionDialog.ui\
-	peptideDialog.ui\
-	preferences.ui\
-	pythonSettings.ui\
-	setCamera.ui\
-	snapShotVisualisation.ui\
-	stageSettings.ui\
-	dockDialog.ui\
-	dockProgressDialog.ui\
-	dockResultDialog.ui
+UIC_SOURCES=\
+	amberConfigurationDialogData.C\
+	atomOverviewData.C\
+	bondPropertiesData.C\
+	charmmConfigurationDialogData.C\
+	clippingDialogData.C\
+	coloringSettingsDialogData.C\
+	contourSurfaceDialogData.C\
+	compositePropertiesData.C\
+	contourSurfaceDialogData.C\
+	downloadPDBFileData.C\
+	displayPropertiesData.C\
+	FDPBDialogData.C\
+	labelDialogData.C\
+	lightSettingsData.C\
+	mainControlPreferencesData.C\
+	materialSettingsData.C\
+	minimizationDialogData.C\
+	modelSettingsDialogData.C\
+	modifySurfaceDialogData.C\
+	molecularDynamicsDialogData.C\
+	networkPreferencesData.C\
+	parsedFunctionDialogData.C\
+	peptideDialogData.C\
+	preferencesData.C\
+	pythonSettingsData.C\
+	setCameraData.C\
+	snapShotVisualisationData.C\
+	stageSettingsData.C\
+	dockDialogData.C\
+	dockProgressDialogData.C\
+	dockResultDialogData.C
 
 ifeq ($(BALL_HAS_FFTW),true)
 	CPP_SOURCES+=geometricFitDialog.C geometricFitDialogData.C
@@ -149,7 +149,7 @@ openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
 openBruker2DFile_moc.C: $(HEADER_DIR)/openBruker2DFile.h
 	$(MOC) $(HEADER_DIR)/openBruker2DFile.h -o $@
 
-depend: $(UIC_HDR) $(MOC_SOURCES)
+depend: $(UIC_HDR) $(MOC_SOURCES) $(UIC_SOURCES)
 
 default_clean: clean_uic
 
