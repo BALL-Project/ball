@@ -1,7 +1,6 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-
 #ifndef BALL_STRUCTURE_DOCKING_DOCKRESULT_H
 #define BALL_STRUCTURE_DOCKING_DOCKRESULT_H
 
@@ -19,8 +18,11 @@ namespace BALL
 		 *  the used algorithm and its options,
 		 * 	the conformation set which was produced by the algorithm
 		 *	and the scores, names and options of all scoring functions that were used for the ranking / reranking.
+		 *  On the one hand it allows to recieve the scores of a certain scoring, 
+		 *  on the other hand it can return scores sorted by another scoring. 
+		 *  This offers a simple way to compare the different scores with each other
 		 */
-		class BALL_EXPORT DockResult
+		class DockResult
 		{
 			public:
 					
@@ -91,20 +93,37 @@ namespace BALL
 				ConformationSet* getConformationSet()
 					throw();
 				
-				/** Returns the scores of \link DockResult::scorings_ scorings_ \endlink i.
-				*/
-				const vector<float>& getScores(Position i) const
-					throw();
+				/*  Sets scoring flag by which all scores are sorted displayed
+						a negative index corresponds to sorting by snapshot index
+				 */
+				 void sortBy(Index scoring_index)
+					throw(Exception::IndexOverflow);
 					
-				/** Returns the name of scoring function of \link DockResult::scorings_ scorings_ \endlink i.
+				/*  Get the number of the scoring by which all scores are sorted displayed
+				 */
+				const Index isSortedBy() const
+					throw();
+				
+				/** Returns score i of the scoring j in respect of the current sorting 
+				 *  indicated by the flag \link DockResult::sorted_by_ sorted_by_ \endlink.
+				 */
+				float operator()(Position i, Position j)
+					throw(Exception::IndexOverflow);
+				
+				/** Returns the scores of \link DockResult::Scoring_ scoring \endlink i.
+				*/
+				const vector<ConformationSet::Conformation> getScores(Position i) const
+					throw(Exception::IndexOverflow);
+					
+				/** Returns the name of scoring function of \link DockResult::Scoring_ scoring \endlink i.
 				*/
 				const String& getScoringName(Position i) const
-					throw();
+					throw(Exception::IndexOverflow);
 					
-				/** Returns the scoring function options of \link DockResult::scorings_ scorings_ \endlink i.
+				/** Returns the scoring function options of \link DockResult::Scoring_ scoring \endlink i.
 				*/
 				const Options& getScoringOptions(Position i) const
-					throw();
+					throw(Exception::IndexOverflow);
 					
 				/** Returns the number of scorings.
 				*/
@@ -116,13 +135,13 @@ namespace BALL
 				 *  @param			options options of the scoring function
 				 *  @param			scores scores calculated by the scoring function
 				*/
-				void addScoring(const String& name, const Options& options, const vector<float>& scores)
+				void addScoring(const String& name, const Options& options, vector<ConformationSet::Conformation> scores)
 					throw();
 					
 				/** Deletes Scoring_ i of vector \link DockResult::scorings_ scorings_ \endlink.
 				*/
 				void deleteScoring(Position i)
-					throw();
+					throw(Exception::IndexOverflow);
 				
 				//@}	
 					
@@ -201,7 +220,7 @@ namespace BALL
 						
 						/** Constructor
 						*/
-						Scoring_(const String& name, const Options& options, const vector<float>& scores) throw();
+						Scoring_(const String& name, const Options& options, const vector<float>& scores, const vector<Index>& snapshot_order) throw();
 						
 						/** Destructor
 						*/
@@ -212,16 +231,45 @@ namespace BALL
 						const Scoring_& operator =(const Scoring_& scoring)
 							throw();
 						
-						/** name of scoring function
+						/** Name of scoring function
 						*/
 						String name_;
 						/** options of scoring function
 						*/
 						Options options_;
-						/** Vector of scores.
-							* In this vector score i belongs to the conformation with snapshot number i.
+						/** Vector of scores
+							* The score at position i belongs to the snapshot i
 						*/
 						vector<float> scores_;
+						/** Vector of snapshot indices 
+							* The indices are sorted by their scores
+						 */
+						vector<Index> snapshot_order_;
+				};
+				
+				/**
+				* Nested class in DockResult.
+				* This class is needed for the sorting of the vector of Conformations 
+				* in \link DockResult::addScoring addScoring(const String& name, const Options& options, const vector<ConformationSet::Conformation>& scores)\endlink.
+				* The vector should be sorted by the score values.
+				*/
+				class Compare_
+				{
+					public:
+
+						/** Default constructor
+						*/
+						Compare_() throw();
+
+						/** Destructor
+						*/
+						~Compare_() throw();
+
+						/** Operator ()
+						*/
+						//bool operator() (const std::pair<Index, float>& a, const std::pair<Index, float>& b) const
+						bool operator() (const ConformationSet::Conformation& a, const ConformationSet::Conformation& b) const
+							throw();
 				};
 				
 				/** Name of docking algorithm
@@ -234,9 +282,14 @@ namespace BALL
 				*/
 				ConformationSet* conformation_set_;
 				/** Vector contains name, options and scores of each scoring function.
-				 *	The scores of each scoring are sorted by snapshot number.
+				 *	The scores of each scoring are sorted.
 				 */
 				vector<Scoring_> scorings_;
+				/** Flag that indicated by which scoring all scorings are sorted
+						-1 corresponds to a sorting by snapshot index
+						It is needed for the operator(i,j)
+				 */
+				Index sorted_by_;
 		};
 		
 		std::ostream& operator <<(std::ostream& out, const DockResult& dock_res)
