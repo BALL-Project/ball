@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.h,v 1.7 2006/02/24 17:57:59 bertsch Exp $
+// $Id: smartsParser.h,v 1.8 2006/03/26 13:27:14 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMARTES_PARSER_H
@@ -39,7 +39,7 @@ namespace BALL
 
 	/** @name	\brief SMARTS Parser.
 	*/
-	class SmartsParser
+	class BALL_EXPORT SmartsParser
 	{
 		public:
 
@@ -94,7 +94,7 @@ namespace BALL
 		//typedef std::pair<ChiralClass, Position> ChiralDef;
 
 		class SPAtom;
-		class SPBond 
+		class BALL_EXPORT SPBond 
 /*			:	public Bond*/
 		{
 			public:
@@ -135,7 +135,7 @@ namespace BALL
 				bool not_;
 		};
 		
-		class SPAtom
+		class BALL_EXPORT SPAtom
 	/*		:	public Atom */
 			: public PropertyManager
 		{
@@ -201,7 +201,7 @@ namespace BALL
 	
 		class SPNode;
 
-		class SPEdge
+		class BALL_EXPORT SPEdge
 		{
 			public:
 				SPEdge();
@@ -244,7 +244,7 @@ namespace BALL
 				LogicalOperator log_op_;
 		};
 	
-		class SPNode
+		class BALL_EXPORT SPNode
 		{
 			public:
 		
@@ -384,7 +384,7 @@ namespace BALL
 			const char*		buffer;
 		};
 		
-		static State state;
+		BALL_EXPORT static State state;
 
 		void setNextComponentNumberToSubTree(SPNode* spnode);
 

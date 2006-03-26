@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.h,v 1.9 2006/03/17 17:16:30 bertsch Exp $
+// $Id: smartsMatcher.h,v 1.10 2006/03/26 13:27:14 bertsch Exp $
 //
 // Author:
 //   Andreas Bertsch
@@ -25,7 +25,7 @@ namespace BALL
 
 	/** @name	\brief SMARTS Matcher
 	*/
-	class SmartsMatcher
+	class BALL_EXPORT SmartsMatcher
 	{
 		public: 
 			
