@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.14 2006/03/27 14:54:49 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.15 2006/03/27 14:55:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -25,7 +25,6 @@
 #include <QtGui/QDropEvent>
 #include <QtGui/QLineEdit>
 #include <QtGui/QComboBox>
-#include <QtGui/QMenu>
 #include <QtGui/QSyntaxHighlighter>
 #include <QtCore/QStringList>
 
