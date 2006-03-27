@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.34 2005/12/23 17:01:42 amoll Exp $ 
+// $Id: regularData3D.h,v 1.34.4.1 2006/03/27 12:08:43 anhi Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -874,7 +874,7 @@ namespace BALL
 		while (z >= (size_.z - 1)) z--;
 
 		Position Nx = size_.x;
-		Position Nxy = size_.z * Nx;
+		Position Nxy = size_.y * Nx;
 		Position l = x + Nx * y + Nxy * z;
 		TVector3<double> r_0(origin_.x + x * spacing_.x,
 												 origin_.y + y * spacing_.y,
