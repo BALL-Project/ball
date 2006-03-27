@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.53.2.6 2006/03/25 10:46:39 oliver Exp $
+# $Id: Makefile,v 1.53.2.7 2006/03/27 13:09:26 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -149,7 +149,7 @@ openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
 openBruker2DFile_moc.C: $(HEADER_DIR)/openBruker2DFile.h
 	$(MOC) $(HEADER_DIR)/openBruker2DFile.h -o $@
 
-depend: $(UIC_HDR) $(MOC_SOURCES) $(UIC_SOURCES)
+depend: $(UIC_HDR) $(MOC_SOURCES)
 
 default_clean: clean_uic
 
