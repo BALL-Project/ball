@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.12 2006/03/24 12:47:45 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.13 2006/03/27 12:57:16 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -392,117 +392,131 @@ namespace BALL
 		MainControl::checkMenus();
 		save_project_action_->setEnabled(!composites_locked_);
 	}
-inline Vector3 grad(const RegularData3D& data, const Vector3& pos, 
-										const RegularData3D::CoordinateType& spacing,
-										const RegularData3D::IndexType& size)
+
+void createGradientGrid(const RegularData3D& potential, TRegularData3D<Vector3>& gradient_grid )
 {
-	Vector3 grad; 
-	RegularData3D::IndexType index = data.getClosestIndex(pos);
-	RegularData3D::IndexType next  = index, last = index;
-	float factor = 1.;
-	if (index.x == 0)
+	RegularData3D::CoordinateType spacing = potential.getSpacing();
+	RegularData3D::IndexType         size = potential.getSize();
+	
+	gradient_grid = TRegularData3D<Vector3>(potential.getOrigin(), potential.getDimension(), spacing);
+	TRegularData3D<Vector3>::IndexType index;
+
+	for (index.x = 0; index.x < size.x; index.x++)
 	{
-		// onlx forward difference possible
-		next.x++;
-	} 
-	else if (index.x == size.x-1) {
-		// onlx backward difference possible
-		last.x--;
-	}	
-	else {
-		// mid point formula
-		next.x++;
-		last.x--;
-		factor = 0.5;
+		for (index.y = 0; index.y < size.y; index.y++)
+		{
+			for (index.z = 0; index.z < size.z; index.z++)
+			{
+				// This is a stupid way to do this... the whole gradient computation should
+				// be moved to this loop
+				RegularData3D::IndexType next, last;
+
+				next.x = index.x; next.y = index.y; next.z = index.z;
+				last = next;
+
+				float factor = 1.;
+				if (index.x == 0)
+				{
+					// onlx forward difference possible
+					next.x++;
+				} 
+				else if (index.x == size.x-1) {
+					// onlx backward difference possible
+					last.x--;
+				}	
+				else {
+					// mid point formula
+					next.x++;
+					last.x--;
+					factor = 0.5;
+				}
+
+				gradient_grid[index].x = factor * spacing.x * (potential[next] - potential[last]);
+				factor = 1.; next.x = index.x; next.y = index.y; next.z = index.z; last = next;
+
+				if (index.y == 0)
+				{
+					// only forward difference possible
+					next.y++;
+				} 
+				else if (index.y == size.y-1) {
+					// only backward difference possible
+					last.y--;
+				}	
+				else {
+					// mid point formula
+					next.y++;
+					last.y--;
+					factor = 0.5;
+				}
+
+				gradient_grid[index].y = factor * spacing.y * (potential[next] - potential[last]);
+				factor = 1.; next.x = index.x; next.y = index.y; next.z = index.z; last = next;
+
+				if (index.z == 0)
+				{
+					// only forward difference possible
+					next.z++;
+				} 
+				else if (index.z == size.z-1) {
+					// only backward difference possible
+					last.z--;
+				}	
+				else {
+					// mid point formula
+					next.z++;
+					last.z--;
+					factor = 0.5;
+				}
+
+				gradient_grid[index].z = factor * spacing.z * (potential[next] - potential[last]);
+			}
+		}
 	}
-
-	grad.x = factor * spacing.x * (data[next] - data[last]);
-	factor = 1.; next = index; last = index;
-
-
-	if (index.y == 0)
-	{
-		// only forward difference possible
-		next.y++;
-	} 
-	else if (index.y == size.y-1) {
-		// only backward difference possible
-		last.y--;
-	}	
-	else {
-		// mid point formula
-		next.y++;
-		last.y--;
-		factor = 0.5;
-	}
-
-	grad.y = factor * spacing.y * (data[next] - data[last]);
-	factor = 1.; next = index; last = index;
-
-	if (index.z == 0)
-	{
-		// only forward difference possible
-		next.z++;
-	} 
-	else if (index.z == size.z-1) {
-		// only backward difference possible
-		last.z--;
-	}	
-	else {
-		// mid point formula
-		next.z++;
-		last.z--;
-		factor = 0.5;
-	}
-
-	grad.z = factor * spacing.z * (data[next] - data[last]);
-
-	return grad;
 }
 
-inline void calculatePoints(RegularData3D& data, Vector3 point, vector<Vector3>& points)
+inline void calculatePoints(TRegularData3D<Vector3>& gradient_grid, Vector3 point, vector<Vector3>& points)
 {
 	points.clear();
 
 	float h = 0.1;
-	RegularData3D::CoordinateType spacing = data.getSpacing();
-	RegularData3D::IndexType         size = data.getSize();
+	RegularData3D::CoordinateType 			spacing = gradient_grid.getSpacing();
+	TRegularData3D<Vector3>::IndexType  size 		= gradient_grid.getSize();
 	Vector3 k1, k2, k3, k4;
 	float error_estimate;
 
 	float min_spacing = std::min(std::min(spacing.x, spacing.y), spacing.z);
 	float rho = 0.9; // chose sensible values
-//   	float lower_limit = min_spacing * 0.12;
-   	float lower_limit = min_spacing * 0.01;
+	float lower_limit = min_spacing * 0.01;
 	float tolerance = 1.0;
 	float h_max = min_spacing * 2;
-	int   number_of_interpolants = 5;
+	int   number_of_interpolants = 2;
 	Vector3 rk_estimate;
 	Vector3 interpolation_s, interpolation_ua, interpolation_ub, interpolation_va, interpolation_vb;
 	Vector3 interpolated_point;
 
-	Vector3 grad_current = grad(data, point, spacing, size);
+	Vector3 grad_current = gradient_grid(point);
 	Vector3 grad_old     = grad_current;
 
 	// Runge - Kutta of order 4 with adaptive step size and
 	// error control
-	for (int i=0; i<500; i++)
+	for (int i=0; i<1500; i++)
 	{
-//   		std::cout << "Grad: " << grad_current << " pot " << data(point) << " ";
-
 		k1 = h*grad_current;
-		k2 = h*grad(data, point+k1*0.5, spacing, size);
-		k3 = h*grad(data, point+k2*0.5, spacing, size);
-		k4 = h*grad(data, point+k3, spacing, size);
+		k2 = h*gradient_grid(point+k1*0.5);
+		k3 = h*gradient_grid(point+k2*0.5);
+		k4 = h*gradient_grid(point+k3);
 
 		rk_estimate = (k1+k2*2+k3*2+k4) * 1./6.;
 		grad_old = grad_current;
-		grad_current = grad(data, point+rk_estimate, spacing, size);
+		grad_current = gradient_grid(point+rk_estimate);
 		
 		// cubic Hermite interpolation of the resulting field line
 		// between the old and the new point
 		interpolation_s = Vector3(0.);
 
+		Size nr_bak = number_of_interpolants ;
+//   		if (i == 0) number_of_interpolants = 0;
 		for (int j=0; j<number_of_interpolants; j++)
 		{
 			interpolation_s += Vector3(1. / (number_of_interpolants+1.));
@@ -538,25 +552,23 @@ inline void calculatePoints(RegularData3D& data, Vector3 point, vector<Vector3>&
 																									+grad_current.z*interpolation_vb.z);
 
 			points.push_back(interpolated_point);
-//   			std::cout << "Interpolation " << j << " value " << interpolated_point << " ";
 		}
+		number_of_interpolants = nr_bak;
 
+//   points.push_back(point);
 		point += rk_estimate;
 
-		error_estimate = ((k4-h*grad(data, point, spacing, size)) * 1./6.).getLength();
+		error_estimate = ((k4-h*gradient_grid(point)) * 1./6.).getLength();
 
 		// update h using the error estimate
 		float h_new = h * pow(rho*tolerance / error_estimate, 1./5.);
-//   		std::cout << " error: " << error_estimate << " " << h_new << " step " << rk_estimate.getLength() << " point ";
 		if (error_estimate > tolerance) h = h_new;
 		else h = std::min(h_new, h_max);
 
 		if ((h < lower_limit) || (rk_estimate.getLength() < lower_limit))
 		{
-//   			std::cout << std::endl << "Aborting field line computation..." << std::endl;
 			break;
 		}
-//   		std::cout << point <<  " h " << h << std::endl;
 	}
 }
 
@@ -565,6 +577,8 @@ inline void calculatePoints(RegularData3D& data, Vector3 point, vector<Vector3>&
 	{
 		DatasetControl& dc = *DatasetControl::getInstance(0);
 		RegularData3D& data = *((dc.get3DGrids()).begin())->first;
+		TRegularData3D<Vector3> grid_data;
+		createGradientGrid(data, grid_data);
 
 		System& system = (*(System*)*composite_manager_.begin());
 		Atom& atom = *system.beginAtom();
@@ -596,7 +610,7 @@ inline void calculatePoints(RegularData3D& data, Vector3 point, vector<Vector3>&
 
 			IlluminatedLine* line = new IlluminatedLine;
 			vector<Vector3>& points = line->vertices;
-			calculatePoints(data, point, points);
+			calculatePoints(grid_data, point, points);
 
 			const Size nrp = points.size();
 			line->tangents.resize(nrp);
