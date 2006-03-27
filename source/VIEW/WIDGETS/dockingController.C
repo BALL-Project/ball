@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.5 2006/03/16 00:09:34 amoll Exp $
+// $Id: dockingController.C,v 1.4.2.6 2006/03/27 14:53:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -392,13 +392,7 @@ namespace BALL
 			// sort vector ranked_conformations by snapshot numbers
 			sort(ranked_conformations.begin(), ranked_conformations.end());
 			
-			vector<float> scores;
-			for (Position i = 0; i < ranked_conformations.size(); i++)
-			{
-				scores.push_back(ranked_conformations[i].second);
-			}
-
-			dock_res->addScoring(ascii(dock_dialog_.scoring_functions->currentText()), dock_dialog_.getScoringOptions(), scores);
+			dock_res->addScoring(ascii(dock_dialog_.scoring_functions->currentText()), dock_dialog_.getScoringOptions(), ranked_conformations);
 
 			// add docked system to BALLView structures
 			const SnapShot& best_result = (*conformation_set)[0];

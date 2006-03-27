@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.12 2006/03/22 16:58:05 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.13 2006/03/27 14:53:58 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -231,7 +231,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			statusBar()->addPermanentWidget(rep_label_, false );
 			rep_label_nr_ = 0;
 
-			render_timer_.start(200);
+			render_timer_.start(100);
 
 			simulation_icon_ = new QLabel(statusBar());
 			simulation_icon_->setMaximumSize(14,20);

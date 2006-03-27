@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.C,v 1.1.2.5 2006/03/23 16:18:32 amoll Exp $
+// $Id: representationManager.C,v 1.1.2.6 2006/03/27 14:53:58 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representationManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -21,7 +21,7 @@
 
 #include <QtGui/qapplication.h>
 
-#define BALL_VIEW_DEBUG
+//   #define BALL_VIEW_DEBUG
 
 namespace BALL
 {

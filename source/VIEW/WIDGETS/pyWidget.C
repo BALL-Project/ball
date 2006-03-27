@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.26 2006/03/27 13:24:10 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.27 2006/03/27 14:53:59 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -260,8 +260,8 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			registerForHelpSystem(this, "pythonInterpreter.html");
 
 			QAction* id1 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", this , SLOT(scriptDialog()));
-			QAction* id2 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
-			QAction* id3 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
+			QAction* id2 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", this, SLOT(abortScript()));
+			QAction* id3 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", this, SLOT(exportHistory()));
 
 			startInterpreter();
 
@@ -702,9 +702,9 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				multi_line_text_.append("\n");
 				multi_lines_ = 1;
 
-				appendToHistory_(line);
 				if (!silent)
 				{
+					appendToHistory_(line);
 					intend_ = 1;
 					newPrompt_();
 				}
@@ -769,7 +769,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				if (testMultilineStart_(line, silent)) return true;
 
 				multi_lines_ = 0;
-				appendToHistory_(line);
+				if (!silent) appendToHistory_(line);
 			}
 			else // Multiline mode
 			{
@@ -784,9 +784,9 @@ void PythonHighlighter::highlightBlock(const QString& text)
 					}
 
 					multi_line_text_ += line + "\n";
-					appendToHistory_(line);
 					if (!silent)
 					{
+						appendToHistory_(line);
 						newPrompt_();	
 					}
 					return true;
@@ -1112,8 +1112,14 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 		void PyWidget::showContextMenu(const QPoint& point)
 		{
-			menu_.clear();
+			QMenu menu;
 
+			// "copy" action
+			QAction* action1 = menu.addAction("Copy", text_edit_, SLOT(copy()));
+ 			action1->setEnabled(text_edit_->textCursor().hasSelection());
+
+			/////////////////////////////////////////////////////////////////////
+			// "Help for" action
 			QTextCursor cursor_pos = text_edit_->cursorForPosition(point);
 		
 			const Position pos = cursor_pos.position() - cursor_pos.block().position();
@@ -1133,13 +1139,12 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			if (class_ != "") key = class_+ "." + member_;
 			else key = member_;
 
-			QAction* action1 = menu_.addAction("Copy", text_edit_, SLOT(copy()));
 			String entry("Help for: ");
 			entry += key;
-			QAction* action2 = menu_.addAction(entry.c_str(), this, SLOT(showHelp_()));
+			QAction* action2 = menu.addAction(entry.c_str(), this, SLOT(showHelp_()));
 			if (key == "") action2->setEnabled(false);
 
-			menu_.popup(mapToGlobal(point));
+			menu.exec(mapToGlobal(point));
 		}
 
 		void PyWidget::showHelp_()

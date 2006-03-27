@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.3.2.8 2006/03/16 00:09:32 amoll Exp $
+// $Id: dockResultDialog.C,v 1.3.2.9 2006/03/27 14:53:57 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockResultDialog.h>
@@ -190,11 +190,11 @@ namespace BALL
 				result_table->setHorizontalHeaderItem(i + 1, new QTableWidgetItem(dock_res_->getScoringName(i).c_str()));
 				// the scores in the vector are sorted by snapshot number!
 				// the score with snapshot number i is at position i in the vector
-				vector<float> scores = dock_res_->getScores(i);
+				vector<ConformationSet::Conformation> scores = dock_res_->getScores(i);
 				for(Position j = 0; j < scores.size(); j++)
 				{
 					QString s;
-					result_table->setItem(j, i + 1, new QTableWidgetItem(s.setNum(scores[j])));
+					result_table->setItem(j, i + 1, new QTableWidgetItem(s.setNum(scores[j].second)));
 				}
 			}
 			
@@ -319,12 +319,7 @@ namespace BALL
 			sort(ranked_conformations.begin(), ranked_conformations.end());
 			
 			// add a new scoring to dock_res_; we need the name, options and score vector of the scoring function
-			vector<float> scores;
-			for (Position i = 0; i < ranked_conformations.size(); i++)
-			{
-				scores.push_back(ranked_conformations[i].second);
-			}
-			dock_res_->addScoring(ascii(scoring_functions->currentText()), scoring_options, scores);
+			dock_res_->addScoring(ascii(scoring_functions->currentText()), scoring_options, ranked_conformations);
 			
 			// before filling the table with a new score column, sort table by snapshot number
 			// because the scores in the vector are also sorted by them
@@ -337,10 +332,10 @@ namespace BALL
  			result_table->horizontalHeaderItem(num_column)->setText(scoring_functions->currentText());
 			
 			// fill new column
-			for (Position i = 0; i < scores.size(); i++)
+			for (Position i = 0; i < ranked_conformations.size(); i++)
 			{
 				QString s;
-				result_table->setItem(i, num_column, new QTableWidgetItem(s.setNum(scores[i])));
+				result_table->setItem(i, num_column, new QTableWidgetItem(s.setNum(ranked_conformations[i].second)));
 			}
 			
 			// sort by new column
