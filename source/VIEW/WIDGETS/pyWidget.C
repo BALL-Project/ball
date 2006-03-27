@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.25 2006/03/24 15:03:05 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.26 2006/03/27 13:24:10 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -491,12 +491,12 @@ void PythonHighlighter::highlightBlock(const QString& text)
  			text_edit_->setUpdatesEnabled(true);
 		}
 
-		void PyWidget::contentsDragEnterEvent(QDragEnterEvent * e)
+		void PyWidget::contentsDragEnterEvent(QDragEnterEvent* )
 		{
 //   			e->accept(Q3TextDrag::canDecode(e));
 		}
 
-		void PyWidget::contentsDropEvent(QDropEvent *e)
+		void PyWidget::contentsDropEvent(QDropEvent*)
 		{
 //   			VIEW::processDropEvent(e);
 		}
