@@ -78,7 +78,8 @@ CompositeProperties::CompositeProperties(Composite* composite, QWidget* parent,
 		element_box->addItem(element.getSymbol().c_str());
 	}
 
-	element_box->setCurrentIndex(atom->getElement().getAtomicNumber() - 1);
+	String symb = atom->getElement().getSymbol();
+	element_box->setCurrentIndex(element_box->findText(symb.c_str()));
 }
 
 String CompositeProperties::getString_(float data) const
