@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.7 2006/03/28 13:55:03 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.8 2006/03/28 15:33:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -893,16 +893,15 @@ namespace BALL
 		table.setAlphaBlending(true);
 		table.createMap();
 
+		vector<Vector3> start_diffs = createSphere(2);
+
 		AtomIterator ait = ac->beginAtom();
 		for (; +ait; ++ait)
 		{
-			for (Position p = 0; p < 50; p++)
+			for (Position p = 0; p < start_diffs.size(); p++)
 			{
 				Vector3 point = ait->getPosition();
-				Vector3 diff(drand48(), drand48(), drand48());
-				if (drand48() > 0.5) diff.x *= -1;
-				if (drand48() > 0.5) diff.y *= -1;
-				if (drand48() > 0.5) diff.z *= -1;
+				Vector3 diff = start_diffs[p];
 				diff.normalize();
 				diff *= 0.4;
 				point += diff;

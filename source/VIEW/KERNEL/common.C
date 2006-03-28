@@ -477,7 +477,7 @@ namespace BALL
 		/** Uses the de-Casteljou algorithm to evalute a cubic Hermite interpolation
 		 *  polynomial at interpolated_values.size() equidistant values.
 		 */
-		inline void cubicInterpolation(const Vector3& a, const Vector3& b,
+		void cubicInterpolation(const Vector3& a, const Vector3& b,
 																	 const Vector3& tangent_a, const Vector3& tangent_b,
 																	 std::vector<Vector3>& interpolated_values)
 		{
@@ -504,6 +504,80 @@ namespace BALL
 				interpolated_values[i] = (bezier[8] - bezier[7]) * evaluation_point + bezier[7];
 				i++;
 			}	
+		}
+
+		#define SPHERE_X .525731112119133606
+		#define SPHERE_Z .850650808352039932
+
+		float icosaeder_vertices[12][3] =
+		{
+			{-SPHERE_X, 0.0, SPHERE_Z},
+			{ SPHERE_X, 0.0, SPHERE_Z},
+			{-SPHERE_X, 0.0,-SPHERE_Z},
+			{ SPHERE_X, 0.0,-SPHERE_Z},
+			{ 0.0, SPHERE_Z, SPHERE_X},
+			{ 0.0, SPHERE_Z,-SPHERE_X},
+			{ 0.0,-SPHERE_Z, SPHERE_X},
+			{ 0.0,-SPHERE_Z,-SPHERE_X},
+			{ SPHERE_Z, SPHERE_X, 0.0},
+			{-SPHERE_Z, SPHERE_X, 0.0},
+			{ SPHERE_Z,-SPHERE_X, 0.0},
+			{-SPHERE_Z,-SPHERE_X, 0.0}
+		};
+
+		Position icosaeder_indices[20][3] =
+		{
+			{ 0, 4, 1}, { 0, 9, 4}, { 9, 5, 4}, { 4, 5, 8}, { 4, 8, 1},
+			{ 8,10, 1}, { 8, 3,10}, { 5, 3, 8}, { 5, 2, 3}, { 2, 7, 3},
+			{ 7,10, 3}, { 7, 6,10}, { 7,11, 6}, {11, 0, 6}, { 0, 1, 6},
+			{ 6, 1,10}, { 9, 0,11}, { 9,11, 2}, { 9, 2, 5}, { 7, 2,11}
+		};
+
+		void subdivideTriangle(vector<Vector3>& results, Vector3& v1, Vector3& v2, Vector3& v3, Size precision)
+			throw()
+		{
+			if (precision == 0)
+			{
+				Vector3 result = v1 + v2 + v3;
+				result.normalize();
+				results.push_back(result);
+				return;
+			}
+
+			Vector3 v12 = v1 + v2;
+			Vector3 v23 = v2 + v3;
+			Vector3 v31 = v3 + v1;
+			
+			v12.normalize();
+			v23.normalize();
+			v31.normalize();
+
+			subdivideTriangle(results, v1, v12, v31, precision - 1);
+			subdivideTriangle(results, v2, v23, v12, precision - 1);
+			subdivideTriangle(results, v3, v31, v23, precision - 1);
+			subdivideTriangle(results, v12, v23, v31, precision - 1);
+		}
+
+		vector<Vector3> createSphere(Size precision)
+		{
+			vector<Vector3> results;
+			for (int i = 0; i < 20; ++i)
+			{
+				Vector3 v1(icosaeder_vertices[icosaeder_indices[i][0]][0],
+									 icosaeder_vertices[icosaeder_indices[i][0]][1],
+									 icosaeder_vertices[icosaeder_indices[i][0]][2]);
+				
+				Vector3 v2(icosaeder_vertices[icosaeder_indices[i][1]][0],
+									 icosaeder_vertices[icosaeder_indices[i][1]][1],
+									 icosaeder_vertices[icosaeder_indices[i][1]][2]);
+				
+				Vector3 v3(icosaeder_vertices[icosaeder_indices[i][2]][0],
+									 icosaeder_vertices[icosaeder_indices[i][2]][1],
+									 icosaeder_vertices[icosaeder_indices[i][2]][2]);
+				
+				subdivideTriangle(results, v1, v2, v3, precision);
+			}
+			return results;
 		}
 
 	} // namespace VIEW

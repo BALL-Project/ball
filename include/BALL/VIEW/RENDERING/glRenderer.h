@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36.2.2 2006/03/22 16:06:51 amoll Exp $
+// $Id: glRenderer.h,v 1.36.2.3 2006/03/28 15:34:00 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -437,9 +437,6 @@ namespace BALL
 			GLDisplayList  				line_list_;
 			GLuint 								line_texture_bind_;
 			GLubyte  							line_tex_[128][128][4];
-			/* static array of vertices for sphere dots */
-			static const float sphere_vertices_[12][3];
-			static const int 		sphere_indices_[20][3];
 
 			// naming of geometric objects
 			typedef HashMap<const GeometricObject*, Name> NameHashMap;

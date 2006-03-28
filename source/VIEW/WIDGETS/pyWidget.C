@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.27 2006/03/27 14:53:59 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.28 2006/03/28 15:33:52 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -215,7 +215,8 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				started_startup_script_(false),
 				thread_(0),
 				stop_script_(false),
-				running_(false)
+				running_(false),
+				silent_(false)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new PyWidget " << this << std::endl;
@@ -503,6 +504,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 		void PyWidget::exportHistory()
 		{
+Log.error() << "#~~#   2 " << history_.size() << " " << results_.size()          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			QString s = QFileDialog::getSaveFileName(
 										0, "Export History",
 										getWorkingDir().c_str(), "");
@@ -521,6 +523,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 					
 			for (Position p = 0; p < history_.size(); p++)
 			{
+Log.error() << "#~~#   2 " << history_[p] << " " << results_[p]            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				if (results_[p]) file << history_[p] << std::endl;
 			}
 
@@ -579,27 +582,30 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				return false;
 			}
 
+			// no prompts!
+			silent_ = true;
+
 			while (file.readLine())
 			{
-				// Call parse line with 'silent = true' to make sure we do not get prompts
-				// for each line read.
-				if (!parseLine_(file.getLine(), true))
+				if (!parseLine_(file.getLine()) || stop_script_)
 				{
-					String result_string = "> Error in line " + String(file.getLineNumber()) + " of file " + filename + "\n";
-					appendText(result_string.c_str());
-					newPrompt_();
-					return false;
-				}
-
-				if (stop_script_) 
-				{
-					stop_script_ = false;
- 					setStatusbarText("Aborted script");
-					appendText("> aborted...");
+					if (stop_script_)
+					{
+						setStatusbarText("Aborted script");
+						appendText("> aborted...");
+					}
+					else
+					{
+						String result_string = "> Error in line " + String(file.getLineNumber()) + " of file " + filename + "\n";
+						appendText(result_string.c_str());
+					}
+					silent_ = false;
 					newPrompt_();
 					return false;
 				}
 			}
+
+			silent_ = false;
 			appendText("> Finished.");
 			setStatusbarText("Finished script.");
 			newPrompt_();
@@ -639,6 +645,8 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 		void PyWidget::newPrompt_()
 		{
+			if (silent_) return;
+
 			line_edit_->setText("");
 
 			// intend
@@ -688,7 +696,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			return true;
 		} 
 
-		bool PyWidget::testMultilineStart_(const String& line, bool silent)
+		bool PyWidget::testMultilineStart_(const String& line)
 		{
 			if (line.hasSuffix(":")&&
 					(line.hasPrefix("for ") 		|| 
@@ -702,12 +710,9 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				multi_line_text_.append("\n");
 				multi_lines_ = 1;
 
-				if (!silent)
-				{
-					appendToHistory_(line);
-					intend_ = 1;
-					newPrompt_();
-				}
+				appendToHistory_(line);
+				intend_ = 1;
+				newPrompt_();
 
 				return true;
 			}
@@ -740,7 +745,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 		}
 
 
-		bool PyWidget::parseLine_(String line, bool silent)
+		bool PyWidget::parseLine_(String line)
 		{
 			if (!Py_IsInitialized())
 			{
@@ -766,10 +771,10 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				if (line.isEmpty()) return true;
 
 				appendText(line);
-				if (testMultilineStart_(line, silent)) return true;
+				if (testMultilineStart_(line)) return true;
 
 				multi_lines_ = 0;
-				if (!silent) appendToHistory_(line);
+				appendToHistory_(line);
 			}
 			else // Multiline mode
 			{
@@ -784,11 +789,8 @@ void PythonHighlighter::highlightBlock(const QString& text)
 					}
 
 					multi_line_text_ += line + "\n";
-					if (!silent)
-					{
-						appendToHistory_(line);
-						newPrompt_();	
-					}
+					appendToHistory_(line);
+					newPrompt_();	
 					return true;
 				}
 
@@ -807,7 +809,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 				setError_(!state);
 
-				if (!silent | !state)
+				if (!state)
 				{
 					appendText(result.c_str());
 				}
@@ -817,7 +819,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 			multi_line_mode_ = false;
 
-			if (silent) return state;
+			if (silent_) return state;
 				
 			if (!multi_line_mode_)
 			{
@@ -868,6 +870,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 		void PyWidget::appendToHistory_(const String& line)
 		{
+			if (silent_) return;
 			history_.push_back(line);
 			history_position_ = history_.size();
 		}

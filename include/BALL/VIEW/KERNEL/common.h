@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.40.2.3 2006/03/28 12:28:16 amoll Exp $
+// $Id: common.h,v 1.40.2.4 2006/03/28 15:33:59 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -437,9 +437,20 @@ namespace BALL
 		/** Uses the de-Casteljou algorithm to evalute a cubic Hermite interpolation
 		 *  polynomial at interpolated_values.size() equidistant values.
 		 */
-		BALL_VIEW_EXPORT inline void cubicInterpolation(const Vector3& a, const Vector3& b,
+		BALL_VIEW_EXPORT void cubicInterpolation(const Vector3& a, const Vector3& b,
 																	 const Vector3& tangent_a, const Vector3& tangent_b,
 																	 std::vector<Vector3>& interpolated_values);
+
+		//////////////////////////////////////////////////////////////////////////////
+		/// Code to refine a icosaeder:
+		extern float 		icosaeder_vertices[12][3];
+		extern Position icosaeder_indices[20][3];
+
+		BALL_VIEW_EXPORT void subdivideTriangle(vector<Vector3>& results, Vector3& v1, Vector3& v2, Vector3& v3, Size precision)
+			throw();
+
+		BALL_VIEW_EXPORT vector<Vector3> createSphere(Size precision);
+
 		//@}
 
 	} // namespace VIEW

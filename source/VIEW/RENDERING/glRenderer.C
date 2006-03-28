@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.6 2006/03/23 14:12:54 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.7 2006/03/28 15:33:52 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1160,83 +1160,18 @@ namespace BALL
 		}
 
 
-		// ======================== data for dotted spheres =======================
-		#		define BALL_OPENGL_SPHERE_X .525731112119133606
-		#		define BALL_OPENGL_SPHERE_Z .850650808352039932
-
-		const float GLRenderer::sphere_vertices_[12][3] =
-		{
-			{-BALL_OPENGL_SPHERE_X, 0.0, BALL_OPENGL_SPHERE_Z},
-			{ BALL_OPENGL_SPHERE_X, 0.0, BALL_OPENGL_SPHERE_Z},
-			{-BALL_OPENGL_SPHERE_X, 0.0,-BALL_OPENGL_SPHERE_Z},
-			{ BALL_OPENGL_SPHERE_X, 0.0,-BALL_OPENGL_SPHERE_Z},
-			{ 0.0, BALL_OPENGL_SPHERE_Z, BALL_OPENGL_SPHERE_X},
-			{ 0.0, BALL_OPENGL_SPHERE_Z,-BALL_OPENGL_SPHERE_X},
-			{ 0.0,-BALL_OPENGL_SPHERE_Z, BALL_OPENGL_SPHERE_X},
-			{ 0.0,-BALL_OPENGL_SPHERE_Z,-BALL_OPENGL_SPHERE_X},
-			{ BALL_OPENGL_SPHERE_Z, BALL_OPENGL_SPHERE_X, 0.0},
-			{-BALL_OPENGL_SPHERE_Z, BALL_OPENGL_SPHERE_X, 0.0},
-			{ BALL_OPENGL_SPHERE_Z,-BALL_OPENGL_SPHERE_X, 0.0},
-			{-BALL_OPENGL_SPHERE_Z,-BALL_OPENGL_SPHERE_X, 0.0}
-		};
-
-		const int GLRenderer::sphere_indices_[20][3] =
-		{
-			{ 0, 4, 1}, { 0, 9, 4}, { 9, 5, 4}, { 4, 5, 8}, { 4, 8, 1},
-			{ 8,10, 1}, { 8, 3,10}, { 5, 3, 8}, { 5, 2, 3}, { 2, 7, 3},
-			{ 7,10, 3}, { 7, 6,10}, { 7,11, 6}, {11, 0, 6}, { 0, 1, 6},
-			{ 6, 1,10}, { 9, 0,11}, { 9,11, 2}, { 9, 2, 5}, { 7, 2,11}
-		};
-
-
 		void GLRenderer::createDottedSphere_(int precision)
 			throw()
 		{
 			glBegin(GL_POINTS);
 
-			for (int i = 0; i < 20; ++i)
+			vector<Vector3> results = createSphere((Size)precision);
+			for (Position p = 0; p < results.size(); p++)
 			{
-				Vector3 v1(sphere_vertices_[sphere_indices_[i][0]][0],
-									 sphere_vertices_[sphere_indices_[i][0]][1],
-									 sphere_vertices_[sphere_indices_[i][0]][2]);
-				
-				Vector3 v2(sphere_vertices_[sphere_indices_[i][1]][0],
-									 sphere_vertices_[sphere_indices_[i][1]][1],
-									 sphere_vertices_[sphere_indices_[i][1]][2]);
-				
-				Vector3 v3(sphere_vertices_[sphere_indices_[i][2]][0],
-									 sphere_vertices_[sphere_indices_[i][2]][1],
-									 sphere_vertices_[sphere_indices_[i][2]][2]);
-				
-				subdivideTriangle_(v1, v2, v3, precision);
+				vertexVector3_(results[p]);
 			}
 
 			glEnd();
-		}
-
-		void GLRenderer::subdivideTriangle_(Vector3& v1, Vector3& v2, Vector3& v3, int precision)
-			throw()
-		{
-			if (precision == 0)
-			{
-				Vector3 result = v1 + v2 + v3;
-				result.normalize();
-				vertexVector3_(result);
-				return;
-			}
-
-			Vector3 v12 = v1 + v2;
-			Vector3 v23 = v2 + v3;
-			Vector3 v31 = v3 + v1;
-			
-			v12.normalize();
-			v23.normalize();
-			v31.normalize();
-
-			subdivideTriangle_(v1, v12, v31, precision - 1);
-			subdivideTriangle_(v2, v23, v12, precision - 1);
-			subdivideTriangle_(v3, v31, v23, precision - 1);
-			subdivideTriangle_(v12, v23, v31, precision - 1);
 		}
 
 
