@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.8 2006/03/23 14:29:27 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.9 2006/03/28 15:47:52 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -454,6 +454,8 @@ void DisplayProperties::applyModelSettings_(Representation& rep)
 		rep.setModelProcessor(model_settings_->createModelProcessor(current_type));
 		rep.setModelType((ModelType)model_type_combobox->currentIndex());
 	}
+
+	rep.setDrawingMode((DrawingMode)mode_combobox->currentIndex());
 
 	if (custom_precision_button->isChecked())
 	{
