@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.13 2006/03/27 12:57:16 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.14 2006/03/28 11:38:46 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -393,7 +393,7 @@ namespace BALL
 		save_project_action_->setEnabled(!composites_locked_);
 	}
 
-void createGradientGrid(const RegularData3D& potential, TRegularData3D<Vector3>& gradient_grid )
+void createGradientGrid(const RegularData3D& potential, TRegularData3D<Vector3>& gradient_grid)
 {
 	RegularData3D::CoordinateType spacing = potential.getSpacing();
 	RegularData3D::IndexType         size = potential.getSize();
@@ -475,13 +475,44 @@ void createGradientGrid(const RegularData3D& potential, TRegularData3D<Vector3>&
 	}
 }
 
+/** Uses the de-Casteljou algorithm to evalute a cubic Hermite interpolation
+ *  polynomial at interpolated_values.size() equidistant values.
+ */
+inline void cubicInterpolation(const Vector3& a, const Vector3& b,
+															 const Vector3& tangent_a, const Vector3& tangent_b,
+															 std::vector<Vector3>& interpolated_values)
+{
+	// compute the Bezier points
+	Vector3 bezier[9];
+	bezier[0] = a;
+	bezier[3] = b;
+	bezier[1] = a + tangent_a / 3.;
+	bezier[2] = b - tangent_b / 3.;
+
+	// compute the step size
+	float step_size = 1./(interpolated_values.size()+1);
+	Index i = 0;
+
+	for (float evaluation_point = step_size; evaluation_point < 1.; evaluation_point += step_size)
+	{
+		bezier[4] = (bezier[1] - bezier[0]) * evaluation_point + bezier[0];
+		bezier[5] = (bezier[2] - bezier[1]) * evaluation_point + bezier[1];
+		bezier[6] = (bezier[3] - bezier[2]) * evaluation_point + bezier[2];
+
+		bezier[7] = (bezier[5] - bezier[4]) * evaluation_point + bezier[4];
+		bezier[8] = (bezier[6] - bezier[5]) * evaluation_point + bezier[5];
+
+		interpolated_values[i] = (bezier[8] - bezier[7]) * evaluation_point + bezier[7];
+		i++;
+	}	
+}
+
 inline void calculatePoints(TRegularData3D<Vector3>& gradient_grid, Vector3 point, vector<Vector3>& points)
 {
 	points.clear();
 
 	float h = 0.1;
-	RegularData3D::CoordinateType 			spacing = gradient_grid.getSpacing();
-	TRegularData3D<Vector3>::IndexType  size 		= gradient_grid.getSize();
+	RegularData3D::CoordinateType spacing = gradient_grid.getSpacing();
 	Vector3 k1, k2, k3, k4;
 	float error_estimate;
 
@@ -490,17 +521,20 @@ inline void calculatePoints(TRegularData3D<Vector3>& gradient_grid, Vector3 poin
 	float lower_limit = min_spacing * 0.01;
 	float tolerance = 1.0;
 	float h_max = min_spacing * 2;
-	int   number_of_interpolants = 2;
+	
+	// use 5 interpolation points
+	std::vector<Vector3> interpolated_values(5);
+
 	Vector3 rk_estimate;
-	Vector3 interpolation_s, interpolation_ua, interpolation_ub, interpolation_va, interpolation_vb;
-	Vector3 interpolated_point;
+
+//	Vector3 grad_current = grad(data, point, spacing, size);
 
 	Vector3 grad_current = gradient_grid(point);
 	Vector3 grad_old     = grad_current;
 
 	// Runge - Kutta of order 4 with adaptive step size and
 	// error control
-	for (int i=0; i<1500; i++)
+	for (int i=0; i<500; i++)
 	{
 		k1 = h*grad_current;
 		k2 = h*gradient_grid(point+k1*0.5);
@@ -511,64 +545,31 @@ inline void calculatePoints(TRegularData3D<Vector3>& gradient_grid, Vector3 poin
 		grad_old = grad_current;
 		grad_current = gradient_grid(point+rk_estimate);
 		
-		// cubic Hermite interpolation of the resulting field line
-		// between the old and the new point
-		interpolation_s = Vector3(0.);
+		cubicInterpolation(point, point+rk_estimate, grad_old, grad_current, interpolated_values);	
 
-		Size nr_bak = number_of_interpolants ;
-//   		if (i == 0) number_of_interpolants = 0;
-		for (int j=0; j<number_of_interpolants; j++)
+		points.push_back(point);
+
+		for (Position p = 0; p < interpolated_values.size(); p++)
 		{
-			interpolation_s += Vector3(1. / (number_of_interpolants+1.));
-		
-			interpolation_va.x = interpolation_s.x*pow(1.-interpolation_s.x, 2);
-			interpolation_va.y = interpolation_s.y*pow(1.-interpolation_s.y, 2);
-			interpolation_va.z = interpolation_s.z*pow(1.-interpolation_s.z, 2);
-
-			interpolation_vb.x = -pow(interpolation_s.x,2)*(1-interpolation_s.x);
-			interpolation_vb.y = -pow(interpolation_s.y,2)*(1-interpolation_s.y);
-			interpolation_vb.z = -pow(interpolation_s.z,2)*(1-interpolation_s.z);
-
-			interpolation_ua.x = (1+2.*interpolation_s.x)*pow(1-interpolation_s.x, 2);
-			interpolation_ua.y = (1+2.*interpolation_s.y)*pow(1-interpolation_s.y, 2);
-			interpolation_ua.z = (1+2.*interpolation_s.z)*pow(1-interpolation_s.z, 2);
-
-			interpolation_ub.x = (3-2.*interpolation_s.x)*pow(interpolation_s.x, 2);
-			interpolation_ub.y = (3-2.*interpolation_s.y)*pow(interpolation_s.y, 2);
-			interpolation_ub.z = (3-2.*interpolation_s.z)*pow(interpolation_s.z, 2);
-
-			interpolated_point.x =  	point.x * interpolation_ua.x	
-															+ (point.x+rk_estimate.x) * interpolation_ub.x
-															+ rk_estimate.x * (  grad_old.x*interpolation_va.x
-																									+grad_current.x*interpolation_vb.x);
-			interpolated_point.y =  	point.y * interpolation_ua.y	
-															+ (point.y+rk_estimate.y) * interpolation_ub.y
-															+ rk_estimate.y * (  grad_old.y*interpolation_va.y
-																									+grad_current.y*interpolation_vb.y);
-
-			interpolated_point.z =  	point.z * interpolation_ua.z	
-															+ (point.z+rk_estimate.z) * interpolation_ub.z
-															+ rk_estimate.z * (  grad_old.z*interpolation_va.z
-																									+grad_current.z*interpolation_vb.z);
-
-			points.push_back(interpolated_point);
+			points.push_back(interpolated_values[p]);
 		}
-		number_of_interpolants = nr_bak;
 
-//   points.push_back(point);
 		point += rk_estimate;
 
 		error_estimate = ((k4-h*gradient_grid(point)) * 1./6.).getLength();
 
 		// update h using the error estimate
 		float h_new = h * pow(rho*tolerance / error_estimate, 1./5.);
-		if (error_estimate > tolerance) h = h_new;
-		else h = std::min(h_new, h_max);
+		if (error_estimate > tolerance)
+			h = h_new;
+		else
+			h = std::min(h_new, h_max);
 
 		if ((h < lower_limit) || (rk_estimate.getLength() < lower_limit))
 		{
 			break;
 		}
+
 	}
 }
 
@@ -624,7 +625,8 @@ inline void calculatePoints(TRegularData3D<Vector3>& gradient_grid, Vector3 poin
 
 			for (Position v = 0; v < nrp; v++)
 			{
-				(*line).colors[v] = table.map(data(points[v]));
+//   				(*line).colors[v] = table.map(data(points[v]));
+				(*line).colors[v] = ColorRGBA(1.0,0,0);
 
 			}
 
