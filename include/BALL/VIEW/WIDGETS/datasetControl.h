@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.2 2006/02/01 13:23:41 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.3 2006/03/28 13:55:05 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -56,9 +56,7 @@ namespace BALL
 
 			BALL_EMBEDDABLE(DatasetControl,GenericControl)
 
-			/**	@name	Constructors and Destructors
-			*/	
-			//@{
+			typedef TRegularData3D<Vector3> GradientGrid;
 
 			/** Default Constructor.
 					Calls registerWidget().
@@ -73,11 +71,6 @@ namespace BALL
 			*/
 			virtual ~DatasetControl()
 				throw();
-
-			//@} 
-			/**	@name	Accessors: inspectors and mutators 
-			*/ 
-			//@{
 
 			/// Overload this method to react to further messages
 			virtual void onNotify(Message *message)
@@ -98,11 +91,11 @@ namespace BALL
 			///
 			List<std::pair<RegularData3D*, String> > get3DGrids()
 				throw();
+			
+			///
+			List<GradientGrid*> getGradientGrids()
+				throw();
 
-			//@}
-			/** @name Public slots 
-			*/ 
-			//@{
 			public slots:
 				
 			///
@@ -119,6 +112,12 @@ namespace BALL
 
 			///
 			void add3DGrid() throw();
+			
+			///
+			void addGradientGrid() throw();
+
+			///
+			void createGradientGrid() throw();
 
 			///
 			void addDockResult() throw();
@@ -129,15 +128,12 @@ namespace BALL
 			/// Overloaded from GenericControl, calls cut
 			virtual void deleteCurrentItems() throw() {deleteItems_();}
 
-			//@} 
-			/** @name Protected members 
-			*/ 
-			//@{
 		  protected slots:
 
 			// overload this method to add furter data types
 			virtual bool deleteItem_(QTreeWidgetItem& item);
 			virtual void showGuestContextMenu(const QPoint& pos);
+			void visualiseFieldLines_();
 
 
 			void showDockResult_();
@@ -153,8 +149,6 @@ namespace BALL
 			String chooseGridFileForSave_() throw();
 			String chooseGridFileForOpen_() throw();
 	
-			//@}
-
 		  protected:
 			
 			void insertDockResult_(DockResult* file, System& system)
@@ -179,6 +173,9 @@ namespace BALL
 			void insertGrid_(RegularData3D* file, System* system, const String& name)
 				throw();
 
+			void insertGradient_(GradientGrid* file, System* system, const String& name)
+				throw();
+
 			QTreeWidgetItem* createListViewItem_(System* system, const String& name, const String& type)
 				throw();
 			
@@ -186,6 +183,9 @@ namespace BALL
 				throw();
 
 			void insertContextMenuEntry_(const QString & text, const char* member);
+
+			inline void calculateLinePoints_(const TRegularData3D<Vector3>& gradient_grid, 
+																			 Vector3 point, vector<Vector3>& points);
 
 			QMenu 									 			context_menu_;
 
@@ -197,12 +197,13 @@ namespace BALL
 			HashMap<QTreeWidgetItem*	, RegularData2D*>   					item_to_grid2_;
 			HashMap<QTreeWidgetItem*	, RegularData3D*>   					item_to_grid3_;
 			HashMap<QTreeWidgetItem*	, DockResult*>								item_to_dock_result_;
+			HashMap<QTreeWidgetItem*	, GradientGrid*>							item_to_gradients_;
 			// insert new HashMaps like above for new data type objects.
 			
 			HashMap<Composite*      , HashSet<QTreeWidgetItem*> > 	composite_to_items_;
 			HashMap<QTreeWidgetItem*  , Composite*>  								item_to_composite_;
 
-			QAction* menu_cs_, *open_trajectory_id_;
+			QAction* menu_cs_, *open_trajectory_id_, *open_gradient_id_;
 		};
 		
 } } // namespaces

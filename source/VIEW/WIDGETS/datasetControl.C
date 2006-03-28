@@ -1,12 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.6 2006/03/16 00:09:34 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.7 2006/03/28 13:55:03 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/DATATYPE/colorMap.h>
+#include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
 
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
@@ -40,11 +42,8 @@ namespace BALL
 		#endif
 			listview->setColumnCount(3);
 			listview->headerItem()->setText(0, "Name");
-//   			listview->horizontalHeaderItem(0)->setSizeHint(120);
 			listview->headerItem()->setText(1, "from");
-//   			listview->horizontalHeaderItem(1)->setSizeHint(60);
 			listview->headerItem()->setText(2, "Type");
-//   			listview->horizontalHeaderItem(2)->setSizeHint(60);
 			default_visible_ = false;
 			connect(listview, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
 			setMinimumSize(50,50);
@@ -82,6 +81,9 @@ namespace BALL
 			insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()));
 			setMenuHint("Open a 3D data grid");
 
+			open_gradient_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Gradient Grid", this, SLOT(addGradientGrid()));
+			setMenuHint("Open a gradient grid");
+
 			insertMenuEntry(MainControl::FILE_OPEN, "Dock Result", this, SLOT(addDockResult()));
 			setMenuHint("Open a dock result file");
 
@@ -99,7 +101,9 @@ namespace BALL
 		void DatasetControl::checkMenu(MainControl& main_control)
 			throw()
 		{
-			open_trajectory_id_->setEnabled(main_control.getSelectedSystem());
+			bool system = main_control.getSelectedSystem();
+			open_trajectory_id_->setEnabled(system);
+			open_gradient_id_->setEnabled(system);
 			if (getSelectedItems().size() > 0) main_control.setDeleteEntryEnabled(true);
 
 			menu_cs_->setEnabled(!getMainControl()->isBusy() && item_to_grid3_.size() > 0);
@@ -301,6 +305,15 @@ namespace BALL
 				delete ssm;
 				setStatusbarText("deleted 3D grid");
 			}
+			else if (item_to_gradients_.has(&item))
+			{
+				GradientGrid* grid = item_to_gradients_[&item];
+
+				item_to_gradients_.erase(&item);
+				delete grid;
+				setStatusbarText("deleted gradient grid");
+			}
+
 			else
 			{
 				return false;
@@ -331,6 +344,7 @@ namespace BALL
 				insertContextMenuEntry_("Save Trajectories", SLOT(saveDockTrajectories_()));
 				insertContextMenuEntry_("Save Dock Result", SLOT(saveDockResult_()));
 				insertContextMenuEntry_("Show Dock Result", SLOT(showDockResult_()));
+				return;
 			}
 			
 			if (item_to_grid1_.has(context_item_) ||
@@ -345,7 +359,14 @@ namespace BALL
 				else
 				{
 					insertContextMenuEntry_("ContourSurface", SLOT(computeIsoContourSurface()));
+					insertContextMenuEntry_("Create gradient grid", SLOT(createGradientGrid()));
 				}
+			}
+
+			if (item_to_gradients_.has(context_item_))
+			{
+				insertContextMenuEntry_("Save", SLOT(saveGrid_()));
+				insertContextMenuEntry_("Visualise field lines", SLOT(visualiseFieldLines_()));
 			}
 		}
 
@@ -504,9 +525,13 @@ namespace BALL
 			String filename = chooseGridFileForOpen_();
 			if (filename == "") return;
 
+			System* system = 0;
+			List<Composite*>& sel = getMainControl()->getMolecularControlSelection();
+			if (sel.size() != 0) system = dynamic_cast<System*>(*sel.begin());
+
 			RegularData3D* dat = new RegularData3D;
 			(*dat).binaryRead(filename);
-			insertGrid_(dat, 0, filename);
+			insertGrid_(dat, system, filename);
 			RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::NEW);
 			msg->setData(*dat);
 			msg->setCompositeName(filename);
@@ -597,6 +622,10 @@ namespace BALL
 			else if (item_to_grid3_.has(context_item_))
 			{
 				item_to_grid3_[context_item_]->binaryWrite(filename);
+			}
+			else if (item_to_gradients_.has(context_item_))
+			{
+				item_to_gradients_[context_item_]->binaryWrite(filename);
 			}
 
 			setStatusbarText("Grid successfully written...");
@@ -835,6 +864,269 @@ namespace BALL
 		createContextMenu_();
 		context_menu_.exec(mapToGlobal(pos));
 	}
+
+	/////////////////////////////////////////////////////////////////////////
+	//  GRADIENT GRIDS:
+	/////////////////////////////////////////////////////////////////////////
+
+	void DatasetControl::visualiseFieldLines_()
+	{
+		const GradientGrid& grid = *item_to_gradients_[context_item_];
+
+		AtomContainer* ac = (AtomContainer*) item_to_composite_[context_item_];
+		if (ac == 0) 
+		{
+			setStatusbarText("No System available for this gradient grid, aborting field line calculation!", true);
+			return;
+		}
+
+		Representation* rep = new Representation;
+ 		rep->setTransparency(90);
+		ColorMap table;
+		ColorRGBA colors[3];
+		colors[0] = ColorRGBA(1.0, 0.0, 0.0, 1.0);
+		colors[1] = ColorRGBA(0.5, 0.0, 0.5, 0.2);
+		colors[2] = ColorRGBA(0.0, 0.0, 1.0, 1.0);
+		table.setRange(-1.5, 1.5);
+		table.setBaseColors(colors,3);
+		table.setNumberOfColors(100);
+		table.setAlphaBlending(true);
+		table.createMap();
+
+		AtomIterator ait = ac->beginAtom();
+		for (; +ait; ++ait)
+		{
+			for (Position p = 0; p < 50; p++)
+			{
+				Vector3 point = ait->getPosition();
+				Vector3 diff(drand48(), drand48(), drand48());
+				if (drand48() > 0.5) diff.x *= -1;
+				if (drand48() > 0.5) diff.y *= -1;
+				if (drand48() > 0.5) diff.z *= -1;
+				diff.normalize();
+				diff *= 0.4;
+				point += diff;
+
+				IlluminatedLine* line = new IlluminatedLine;
+				vector<Vector3>& points = line->vertices;
+				calculateLinePoints_(grid, point, points);
+
+				const Size nrp = points.size();
+				line->tangents.resize(nrp);
+				line->colors.resize(nrp);
+
+				for (Position v = 0; v < nrp - 1; v++)
+				{
+					(*line).tangents[v] = points[v+1] - points[v];
+				}
+				(*line).tangents[nrp -1] = (*line).tangents[nrp -2];
+
+				for (Position v = 0; v < nrp; v++)
+				{
+	 				(*line).colors[v] = table.map(grid(points[v]).getLength());
+				}
+
+				rep->insert(*line);
+			}
+		}
+
+		getMainControl()->insert(*rep);
+		getMainControl()->update(*rep);
+	}
+
+	void DatasetControl::createGradientGrid()
+		throw()
+	{
+		RegularData3D& potential = *item_to_grid3_[context_item_];
+		System* system = 0;
+		if (item_to_composite_.has(context_item_) && 
+				item_to_composite_[context_item_] != 0)
+		{
+			system = dynamic_cast<System*>(item_to_composite_[context_item_]);
+		}
+
+		RegularData3D::CoordinateType spacing = potential.getSpacing();
+		RegularData3D::IndexType         size = potential.getSize();
+
+		GradientGrid* grid_ptr = new GradientGrid(potential.getOrigin(), potential.getDimension(), spacing);
+		GradientGrid& gradient_grid = *grid_ptr;
+
+		TRegularData3D<Vector3>::IndexType index;
+
+		for (index.x = 0; index.x < size.x; index.x++)
+		{
+			for (index.y = 0; index.y < size.y; index.y++)
+			{
+				for (index.z = 0; index.z < size.z; index.z++)
+				{
+					// This is a stupid way to do this... the whole gradient computation should
+					// be moved to this loop
+					RegularData3D::IndexType next, last;
+
+					next.x = index.x; next.y = index.y; next.z = index.z;
+					last = next;
+
+					float factor = 1.;
+					if (index.x == 0)
+					{
+						// onlx forward difference possible
+						next.x++;
+					} 
+					else if (index.x == size.x-1) {
+						// onlx backward difference possible
+						last.x--;
+					}	
+					else {
+						// mid point formula
+						next.x++;
+						last.x--;
+						factor = 0.5;
+					}
+
+					gradient_grid[index].x = factor * spacing.x * (potential[next] - potential[last]);
+					factor = 1.; next.x = index.x; next.y = index.y; next.z = index.z; last = next;
+
+					if (index.y == 0)
+					{
+						// only forward difference possible
+						next.y++;
+					} 
+					else if (index.y == size.y-1) {
+						// only backward difference possible
+						last.y--;
+					}	
+					else {
+						// mid point formula
+						next.y++;
+						last.y--;
+						factor = 0.5;
+					}
+
+					gradient_grid[index].y = factor * spacing.y * (potential[next] - potential[last]);
+					factor = 1.; next.x = index.x; next.y = index.y; next.z = index.z; last = next;
+
+					if (index.z == 0)
+					{
+						// only forward difference possible
+						next.z++;
+					} 
+					else if (index.z == size.z-1) {
+						// only backward difference possible
+						last.z--;
+					}	
+					else {
+						// mid point formula
+						next.z++;
+						last.z--;
+						factor = 0.5;
+					}
+
+					gradient_grid[index].z = factor * spacing.z * (potential[next] - potential[last]);
+				}
+			}
+		}
+
+		QTreeWidgetItem* item = createListViewItem_(system, "Gradient Grid", "Gradient Grid");
+		item_to_gradients_[item] = grid_ptr;
+		item_to_composite_[item] = system;
+	}
+
+	void DatasetControl::addGradientGrid()
+		throw()
+	{
+		List<Composite*>& sel = getMainControl()->getMolecularControlSelection();
+		if (sel.size() == 0) return;
+		System* system = dynamic_cast<System*>(*sel.begin());
+		if (!system) return;
+
+		String filename = chooseGridFileForOpen_();
+		if (filename == "") return;
+
+		GradientGrid* dat = new GradientGrid;
+		(*dat).binaryRead(filename);
+
+		QTreeWidgetItem* item = createListViewItem_(system, filename, "Gradient Grid");
+		item_to_gradients_[item] = dat;
+		item_to_composite_[item] = system;
+	}
+
+	inline void DatasetControl::calculateLinePoints_(const TRegularData3D<Vector3>& gradient_grid, 
+																									 Vector3 point, vector<Vector3>& points)
+	{
+		points.clear();
+
+		float h = 0.1;
+		RegularData3D::CoordinateType spacing = gradient_grid.getSpacing();
+		Vector3 k1, k2, k3, k4;
+		float error_estimate;
+
+		float min_spacing = std::min(std::min(spacing.x, spacing.y), spacing.z);
+		float rho = 0.9; // chose sensible values
+		float lower_limit = min_spacing * 0.01;
+		float tolerance = 1.0;
+		float h_max = min_spacing * 2;
+		
+		// use 5 interpolation points
+		std::vector<Vector3> interpolated_values(5);
+
+		Vector3 rk_estimate;
+
+		Vector3 grad_current = gradient_grid(point);
+		Vector3 grad_old     = grad_current;
+
+		// Runge - Kutta of order 4 with adaptive step size and
+		// error control
+		for (int i=0; i<500; i++)
+		{
+			k1 = h*grad_current;
+			k2 = h*gradient_grid(point+k1*0.5);
+			k3 = h*gradient_grid(point+k2*0.5);
+			k4 = h*gradient_grid(point+k3);
+
+			rk_estimate = (k1+k2*2+k3*2+k4) * 1./6.;
+			grad_old = grad_current;
+			grad_current = gradient_grid(point+rk_estimate);
+			
+			cubicInterpolation(point, point+rk_estimate, grad_old, grad_current, interpolated_values);	
+
+			points.push_back(point);
+
+			for (Position p = 0; p < interpolated_values.size(); p++)
+			{
+				points.push_back(interpolated_values[p]);
+			}
+
+			point += rk_estimate;
+
+			error_estimate = ((k4-h*gradient_grid(point)) * 1./6.).getLength();
+
+			// update h using the error estimate
+			float h_new = h * pow(rho*tolerance / error_estimate, 1./5.);
+			if (error_estimate > tolerance)
+				h = h_new;
+			else
+				h = std::min(h_new, h_max);
+
+			if ((h < lower_limit) || (rk_estimate.getLength() < lower_limit))
+			{
+				break;
+			}
+		} // iteration over points
+	}
+
+
+	List<DatasetControl::GradientGrid*> DatasetControl::getGradientGrids()
+		throw()
+	{
+		List<GradientGrid*> grids;
+		HashMap<QTreeWidgetItem*, GradientGrid*>::Iterator it = item_to_gradients_.begin();
+		for (; +it; ++it)
+		{
+			grids.push_back(it->second);
+		}
+		return grids;
+	}
+
 
 	} // namespace VIEW
 } // namespace BALL
