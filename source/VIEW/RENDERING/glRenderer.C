@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.7 2006/03/28 15:33:52 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.8 2006/03/28 19:42:56 anhi Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -223,7 +223,7 @@ namespace BALL
 			createBoxes_();
 
 			// display list for illuminated lines
-			generateIlluminationTexture_(0.1, 0.3, 0.6, 0.5);
+			generateIlluminationTexture_(0.1, 0.3, 0.599, 0.5);
 			line_list_.clear();
 			glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
 			glGenTextures(1, &line_texture_bind_);

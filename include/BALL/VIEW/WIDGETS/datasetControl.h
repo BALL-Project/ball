@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.3 2006/03/28 13:55:05 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.4 2006/03/28 19:43:28 anhi Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -185,7 +185,7 @@ namespace BALL
 			void insertContextMenuEntry_(const QString & text, const char* member);
 
 			inline void calculateLinePoints_(const TRegularData3D<Vector3>& gradient_grid, 
-																			 Vector3 point, vector<Vector3>& points);
+																			 Vector3 point, vector<Vector3>& points, float factor = 1.);
 
 			QMenu 									 			context_menu_;
 

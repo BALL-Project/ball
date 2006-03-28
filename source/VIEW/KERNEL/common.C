@@ -477,16 +477,19 @@ namespace BALL
 		/** Uses the de-Casteljou algorithm to evalute a cubic Hermite interpolation
 		 *  polynomial at interpolated_values.size() equidistant values.
 		 */
-		void cubicInterpolation(const Vector3& a, const Vector3& b,
-																	 const Vector3& tangent_a, const Vector3& tangent_b,
-																	 std::vector<Vector3>& interpolated_values)
+	  void cubicInterpolation(const Vector3& a, const Vector3& b,
+													  const Vector3& tangent_a, const Vector3& tangent_b,
+														std::vector<Vector3>& interpolated_values)
 		{
 			// compute the Bezier points
 			Vector3 bezier[9];
 			bezier[0] = a;
 			bezier[3] = b;
-			bezier[1] = a + tangent_a / 3.;
-			bezier[2] = b - tangent_b / 3.;
+
+			float interval_length_2 = (b-a).getSquareLength();
+
+			bezier[1] = a + tangent_a *interval_length_2 / ((tangent_a * (b-a)) * 3.);
+			bezier[2] = b - tangent_b *interval_length_2 / ((tangent_b * (b-a)) * 3.);
 
 			// compute the step size
 			float step_size = 1./(interpolated_values.size()+1);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.8 2006/03/28 15:33:52 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.9 2006/03/28 19:42:57 anhi Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -871,7 +871,8 @@ namespace BALL
 
 	void DatasetControl::visualiseFieldLines_()
 	{
-		const GradientGrid& grid = *item_to_gradients_[context_item_];
+		const GradientGrid&   grid      = *item_to_gradients_[context_item_];
+		const RegularData3D*  potential =  item_to_grid3_[context_item_];
 
 		AtomContainer* ac = (AtomContainer*) item_to_composite_[context_item_];
 		if (ac == 0) 
@@ -883,17 +884,49 @@ namespace BALL
 		Representation* rep = new Representation;
  		rep->setTransparency(90);
 		ColorMap table;
-		ColorRGBA colors[3];
-		colors[0] = ColorRGBA(1.0, 0.0, 0.0, 1.0);
-		colors[1] = ColorRGBA(0.5, 0.0, 0.5, 0.2);
-		colors[2] = ColorRGBA(0.0, 0.0, 1.0, 1.0);
-		table.setRange(-1.5, 1.5);
-		table.setBaseColors(colors,3);
+		ColorRGBA colors[5];
+		colors[0] = ColorRGBA(0.0, 0.0, 1.0, 1.0);
+		colors[1] = ColorRGBA(0.0, 0.3, 0.7, 0.4);
+		colors[2] = ColorRGBA(0.0, 1.0, 0.0, 0.2);
+		colors[3] = ColorRGBA(0.7, 0.3, 0.0, 0.4);
+		colors[4] = ColorRGBA(1.0, 0.0, 0.0, 1.0);
+
+		// if we have a potential grid, use it to color the field lines
+		float min_value, max_value;
+		if (potential != 0)
+		{
+			// find min and max values
+			min_value = max_value = (*potential)[0];
+
+			for (Position i = 1; i < potential->size(); i++)
+			{
+				min_value = std::min(min_value, (*potential)[0]);
+				max_value = std::max(max_value, (*potential)[0]);
+			}
+			std::cout << "min " << min_value << " max " << max_value << std::endl;
+			min_value = -0.4; max_value = 0.4;
+		}
+		else
+		{
+			// we'll use the tangent length to color the field
+			min_value = 0;
+			max_value = grid[0].getLength();
+
+			for (Position i = 1; i < grid.size(); i++)
+			{
+				max_value = std::max(max_value, grid[i].getLength());
+			}
+		}
+
+		table.setRange(min_value, max_value);
+
+		table.setBaseColors(colors,5);
+		table.setMinMaxColors(colors[0], colors[4]);
 		table.setNumberOfColors(100);
 		table.setAlphaBlending(true);
 		table.createMap();
 
-		vector<Vector3> start_diffs = createSphere(2);
+		vector<Vector3> start_diffs = createSphere(1);
 
 		AtomIterator ait = ac->beginAtom();
 		for (; +ait; ++ait)
@@ -908,24 +941,29 @@ namespace BALL
 
 				IlluminatedLine* line = new IlluminatedLine;
 				vector<Vector3>& points = line->vertices;
-				calculateLinePoints_(grid, point, points);
 
-				const Size nrp = points.size();
-				line->tangents.resize(nrp);
-				line->colors.resize(nrp);
-
-				for (Position v = 0; v < nrp - 1; v++)
+				for (int backwards = 0; backwards < 1; backwards++)
 				{
-					(*line).tangents[v] = points[v+1] - points[v];
-				}
-				(*line).tangents[nrp -1] = (*line).tangents[nrp -2];
+					calculateLinePoints_(grid, point, points, (backwards==0) ? 1. : -1.);
 
-				for (Position v = 0; v < nrp; v++)
-				{
-	 				(*line).colors[v] = table.map(grid(points[v]).getLength());
-				}
+					const Size nrp = points.size();
+					line->tangents.resize(nrp);
+					line->colors.resize(nrp);
 
-				rep->insert(*line);
+					for (Position v = 0; v < nrp - 1; v++)
+					{
+						(*line).tangents[v] = points[v+1] - points[v];
+					}
+					(*line).tangents[nrp -1] = (*line).tangents[nrp -2];
+
+					for (Position v = 0; v < nrp; v++)
+					{
+						float color_value = (potential != 0) ? (*potential)(points[v]) : grid(points[v]).getLength();
+						(*line).colors[v] = table.map(color_value);
+					}
+
+					rep->insert(*line);
+				}
 			}
 		}
 
@@ -958,8 +996,6 @@ namespace BALL
 			{
 				for (index.z = 0; index.z < size.z; index.z++)
 				{
-					// This is a stupid way to do this... the whole gradient computation should
-					// be moved to this loop
 					RegularData3D::IndexType next, last;
 
 					next.x = index.x; next.y = index.y; next.z = index.z;
@@ -1028,6 +1064,9 @@ namespace BALL
 		QTreeWidgetItem* item = createListViewItem_(system, "Gradient Grid", "Gradient Grid");
 		item_to_gradients_[item] = grid_ptr;
 		item_to_composite_[item] = system;
+
+		// this does currently not work for gradient grids that are read in
+		item_to_grid3_[item]     = &potential;
 	}
 
 	void DatasetControl::addGradientGrid()
@@ -1049,45 +1088,121 @@ namespace BALL
 		item_to_composite_[item] = system;
 	}
 
+	/** Compute a field line using a Runge-Kutta of fourth order with adaptive step
+	 *  size control. factor can be used to iterate _against_ the gradient, i.e. backwards in time.
+	 */
 	inline void DatasetControl::calculateLinePoints_(const TRegularData3D<Vector3>& gradient_grid, 
-																									 Vector3 point, vector<Vector3>& points)
+																									 Vector3 point, vector<Vector3>& points,
+																									 float factor)
 	{
 		points.clear();
 
-		float h = 0.1;
-		RegularData3D::CoordinateType spacing = gradient_grid.getSpacing();
-		Vector3 k1, k2, k3, k4;
-		float error_estimate;
+		TRegularData3D<Vector3>::CoordinateType spacing = gradient_grid.getSpacing();
+		TRegularData3D<Vector3>::IndexType         size = gradient_grid.getSize();
+		Vector3 k1, k2, k3, k4, k5, k6;
+		Vector3 		p2, p3, p4, p5, p6;
+		Vector3 error_estimate_vector;
+		Vector3 scaling;
+		float error_estimate = 0.;
 
 		float min_spacing = std::min(std::min(spacing.x, spacing.y), spacing.z);
 		float rho = 0.9; // chose sensible values
-		float lower_limit = min_spacing * 0.01;
-		float tolerance = 1.0;
-		float h_max = min_spacing * 2;
-		
+		float lower_limit = min_spacing * 0.001;
+		float tolerance = 1e-6;
+		float h = min_spacing * 0.1;
+
 		// use 5 interpolation points
 		std::vector<Vector3> interpolated_values(5);
 
 		Vector3 rk_estimate;
 
-		Vector3 grad_current = gradient_grid(point);
+		//	Vector3 grad_current = grad(data, point, spacing, size);
+
+		Vector3 grad_current = gradient_grid(point) * factor;
 		Vector3 grad_old     = grad_current;
 
 		// Runge - Kutta of order 4 with adaptive step size and
-		// error control
-		for (int i=0; i<500; i++)
+		// error control as described in Schwarz: "Numerische Mathematik"
+		// with step size control taken from Numerical Recipes
+		for (int i=0; i<10000; i++)
 		{
-			k1 = h*grad_current;
-			k2 = h*gradient_grid(point+k1*0.5);
-			k3 = h*gradient_grid(point+k2*0.5);
-			k4 = h*gradient_grid(point+k3);
+			// compute scaling values for the step size computation (see Numerical Recipes)
+			scaling.x = fabs(point.x) + fabs(grad_current.x*h) + 1e-30;
+			scaling.y = fabs(point.y) + fabs(grad_current.y*h) + 1e-30;
+			scaling.z = fabs(point.z) + fabs(grad_current.z*h) + 1e-30;
 
-			rk_estimate = (k1+k2*2+k3*2+k4) * 1./6.;
+			// repeat the Runge-Kutta until the step size is either accepted or completely rejected
+			bool accepted = false;
+
+			while (!accepted)
+			{
+				try
+				{
+					k1 = h*grad_current;
+
+					p2 = point + k1*2./9.;
+					k2 = h*gradient_grid.getInterpolatedValue(p2)*factor;
+
+					p3 = point + k1*1./12. + k2*1./4.;
+					k3 = h*gradient_grid.getInterpolatedValue(p3)*factor;
+
+					p4 = point + k1*69./128. - k2*243./128. + k3*135./64.;
+					k4 = h*gradient_grid.getInterpolatedValue(p4)*factor;
+
+					p5 = point - k1*17./12. + k2*27./4. - k3*27./5.+ k4*16./15.;
+					k5 = h*gradient_grid.getInterpolatedValue(p5)*factor;
+
+					p6 = point + k1*65./432. - k2*5./16. + k3 * 13./16. + k4*4./27. + k5*5./144.;
+					k6 = h*gradient_grid.getInterpolatedValue(p6)*factor;
+
+					// let's see if the steps have become that small that we don't proceed at all...
+					if (p6 == point)
+					{
+						return;
+					}
+
+					rk_estimate = (k1 / 9. + k3 * 9./20. + k4*16./45. + k5 / 12.);
+
+					error_estimate_vector = (-k1*2. + k3*9. - k4*64. - k5*15. + k6*72.) / 300.;
+					error_estimate = std::max(fabs(error_estimate_vector.x/scaling.x), 
+												 	 std::max(fabs(error_estimate_vector.y/scaling.y), 
+														 				fabs(error_estimate_vector.z/scaling.z)));
+
+					error_estimate /= tolerance;
+
+					if (error_estimate > 1.0)
+					{
+						// update h using the error estimate
+						double h_new = h * rho * pow(error_estimate, -0.25);
+
+						h = (h >= 0) ? std::max(h_new, 0.1*h) : std::min(h_new, 0.1*h);
+					}
+					else 
+					{
+						accepted = true;
+					}
+				} catch (...)
+				{
+					h /= 2.;
+					// horrible heuristic... :-)
+					if (fabs(h) < 1e-10)
+					{
+						std::cout << "step size too small... aborting..." << std::endl;
+						return;
+					}
+				}
+			}
+
+			// compute a step size for the next step (the magic numbers are taken from Numerical Recipes)
+			if (error_estimate > 1.89e-4)
+				h = rho * h * pow(error_estimate, -0.2);
+			else
+				h = 5.*h;
+
 			grad_old = grad_current;
-			grad_current = gradient_grid(point+rk_estimate);
-			
-			cubicInterpolation(point, point+rk_estimate, grad_old, grad_current, interpolated_values);	
+			grad_current = gradient_grid(point+rk_estimate)*factor;
 
+			cubicInterpolation(point, point+rk_estimate, grad_old, grad_current, interpolated_values);	
 			points.push_back(point);
 
 			for (Position p = 0; p < interpolated_values.size(); p++)
@@ -1097,23 +1212,13 @@ namespace BALL
 
 			point += rk_estimate;
 
-			error_estimate = ((k4-h*gradient_grid(point)) * 1./6.).getLength();
-
-			// update h using the error estimate
-			float h_new = h * pow(rho*tolerance / error_estimate, 1./5.);
-			if (error_estimate > tolerance)
-				h = h_new;
-			else
-				h = std::min(h_new, h_max);
-
-			if ((h < lower_limit) || (rk_estimate.getLength() < lower_limit))
+			if (rk_estimate.getLength() < lower_limit)
 			{
 				break;
 			}
-		} // iteration over points
+		}
 	}
-
-
+	
 	List<DatasetControl::GradientGrid*> DatasetControl::getGradientGrids()
 		throw()
 	{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.14 2006/03/28 11:38:46 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.15 2006/03/28 19:42:56 anhi Exp $
 //
 
 #include "mainframe.h"
@@ -129,7 +129,7 @@ namespace BALL
 		DemoTutorialDialog* demo = new DemoTutorialDialog(this, "BALLViewDemo");
 
 		#ifdef BALL_PYTHON_SUPPORT
- 			addDockWidget(Qt::BottomDockWidgetArea, new PyWidget(this, "Python Interpreter"));
+// 			addDockWidget(Qt::BottomDockWidgetArea, new PyWidget(this, "Python Interpreter"));
 		#endif
 
 		// ---------------------
@@ -393,190 +393,9 @@ namespace BALL
 		save_project_action_->setEnabled(!composites_locked_);
 	}
 
-void createGradientGrid(const RegularData3D& potential, TRegularData3D<Vector3>& gradient_grid)
-{
-	RegularData3D::CoordinateType spacing = potential.getSpacing();
-	RegularData3D::IndexType         size = potential.getSize();
-	
-	gradient_grid = TRegularData3D<Vector3>(potential.getOrigin(), potential.getDimension(), spacing);
-	TRegularData3D<Vector3>::IndexType index;
-
-	for (index.x = 0; index.x < size.x; index.x++)
-	{
-		for (index.y = 0; index.y < size.y; index.y++)
-		{
-			for (index.z = 0; index.z < size.z; index.z++)
-			{
-				// This is a stupid way to do this... the whole gradient computation should
-				// be moved to this loop
-				RegularData3D::IndexType next, last;
-
-				next.x = index.x; next.y = index.y; next.z = index.z;
-				last = next;
-
-				float factor = 1.;
-				if (index.x == 0)
-				{
-					// onlx forward difference possible
-					next.x++;
-				} 
-				else if (index.x == size.x-1) {
-					// onlx backward difference possible
-					last.x--;
-				}	
-				else {
-					// mid point formula
-					next.x++;
-					last.x--;
-					factor = 0.5;
-				}
-
-				gradient_grid[index].x = factor * spacing.x * (potential[next] - potential[last]);
-				factor = 1.; next.x = index.x; next.y = index.y; next.z = index.z; last = next;
-
-				if (index.y == 0)
-				{
-					// only forward difference possible
-					next.y++;
-				} 
-				else if (index.y == size.y-1) {
-					// only backward difference possible
-					last.y--;
-				}	
-				else {
-					// mid point formula
-					next.y++;
-					last.y--;
-					factor = 0.5;
-				}
-
-				gradient_grid[index].y = factor * spacing.y * (potential[next] - potential[last]);
-				factor = 1.; next.x = index.x; next.y = index.y; next.z = index.z; last = next;
-
-				if (index.z == 0)
-				{
-					// only forward difference possible
-					next.z++;
-				} 
-				else if (index.z == size.z-1) {
-					// only backward difference possible
-					last.z--;
-				}	
-				else {
-					// mid point formula
-					next.z++;
-					last.z--;
-					factor = 0.5;
-				}
-
-				gradient_grid[index].z = factor * spacing.z * (potential[next] - potential[last]);
-			}
-		}
-	}
-}
-
-/** Uses the de-Casteljou algorithm to evalute a cubic Hermite interpolation
- *  polynomial at interpolated_values.size() equidistant values.
- */
-inline void cubicInterpolation(const Vector3& a, const Vector3& b,
-															 const Vector3& tangent_a, const Vector3& tangent_b,
-															 std::vector<Vector3>& interpolated_values)
-{
-	// compute the Bezier points
-	Vector3 bezier[9];
-	bezier[0] = a;
-	bezier[3] = b;
-	bezier[1] = a + tangent_a / 3.;
-	bezier[2] = b - tangent_b / 3.;
-
-	// compute the step size
-	float step_size = 1./(interpolated_values.size()+1);
-	Index i = 0;
-
-	for (float evaluation_point = step_size; evaluation_point < 1.; evaluation_point += step_size)
-	{
-		bezier[4] = (bezier[1] - bezier[0]) * evaluation_point + bezier[0];
-		bezier[5] = (bezier[2] - bezier[1]) * evaluation_point + bezier[1];
-		bezier[6] = (bezier[3] - bezier[2]) * evaluation_point + bezier[2];
-
-		bezier[7] = (bezier[5] - bezier[4]) * evaluation_point + bezier[4];
-		bezier[8] = (bezier[6] - bezier[5]) * evaluation_point + bezier[5];
-
-		interpolated_values[i] = (bezier[8] - bezier[7]) * evaluation_point + bezier[7];
-		i++;
-	}	
-}
-
-inline void calculatePoints(TRegularData3D<Vector3>& gradient_grid, Vector3 point, vector<Vector3>& points)
-{
-	points.clear();
-
-	float h = 0.1;
-	RegularData3D::CoordinateType spacing = gradient_grid.getSpacing();
-	Vector3 k1, k2, k3, k4;
-	float error_estimate;
-
-	float min_spacing = std::min(std::min(spacing.x, spacing.y), spacing.z);
-	float rho = 0.9; // chose sensible values
-	float lower_limit = min_spacing * 0.01;
-	float tolerance = 1.0;
-	float h_max = min_spacing * 2;
-	
-	// use 5 interpolation points
-	std::vector<Vector3> interpolated_values(5);
-
-	Vector3 rk_estimate;
-
-//	Vector3 grad_current = grad(data, point, spacing, size);
-
-	Vector3 grad_current = gradient_grid(point);
-	Vector3 grad_old     = grad_current;
-
-	// Runge - Kutta of order 4 with adaptive step size and
-	// error control
-	for (int i=0; i<500; i++)
-	{
-		k1 = h*grad_current;
-		k2 = h*gradient_grid(point+k1*0.5);
-		k3 = h*gradient_grid(point+k2*0.5);
-		k4 = h*gradient_grid(point+k3);
-
-		rk_estimate = (k1+k2*2+k3*2+k4) * 1./6.;
-		grad_old = grad_current;
-		grad_current = gradient_grid(point+rk_estimate);
-		
-		cubicInterpolation(point, point+rk_estimate, grad_old, grad_current, interpolated_values);	
-
-		points.push_back(point);
-
-		for (Position p = 0; p < interpolated_values.size(); p++)
-		{
-			points.push_back(interpolated_values[p]);
-		}
-
-		point += rk_estimate;
-
-		error_estimate = ((k4-h*gradient_grid(point)) * 1./6.).getLength();
-
-		// update h using the error estimate
-		float h_new = h * pow(rho*tolerance / error_estimate, 1./5.);
-		if (error_estimate > tolerance)
-			h = h_new;
-		else
-			h = std::min(h_new, h_max);
-
-		if ((h < lower_limit) || (rk_estimate.getLength() < lower_limit))
-		{
-			break;
-		}
-
-	}
-}
-
-
 	void Mainframe::about()
 	{
-		DatasetControl& dc = *DatasetControl::getInstance(0);
+	/*	DatasetControl& dc = *DatasetControl::getInstance(0);
 		RegularData3D& data = *((dc.get3DGrids()).begin())->first;
 		TRegularData3D<Vector3> grid_data;
 		createGradientGrid(data, grid_data);
@@ -633,56 +452,6 @@ inline void calculatePoints(TRegularData3D<Vector3>& gradient_grid, Vector3 poin
 
 			rep->insert(*line);
 		}
-
-		insert(*rep);
-		update(*rep);
-/*
-		for (Position p = 0; p < 100; p++)
-		{
-			Vector3 point = atom.getPosition();
-			Vector3 diff(drand48(), drand48(), drand48());
-			if (drand48() > 0.5) diff.x *= -1;
-			if (drand48() > 0.5) diff.y *= -1;
-			if (drand48() > 0.5) diff.z *= -1;
-			diff.normalize();
-			point += diff;
-
-			float h = 0.3;
-			RegularData3D::CoordinateType spacing = data.getSpacing();
-			RegularData3D::IndexType         size = data.getSize();
-			Vector3 k1, k2, k3, k4;
-
-			ColorMap table;
-			ColorRGBA colors[3];
-			colors[0] = ColorRGBA(1.0,0,0);
-			colors[1] = ColorRGBA(.5,.0,5);
-			colors[2] = ColorRGBA(.0,0,1.0);
-			table.setRange(-1.5, 1.5);
-			table.setBaseColors(colors,3);
-			table.setNumberOfColors(100);
-			IlluminatedLine* line = new IlluminatedLine;
-			// and iterate for a while
-			for (int i=0; i<5000; i++)
-			{
-				if (!data.isInside(point)) break;
-				Vector3 v = grad(data, point, spacing, size);
-			
-				line->tangents.push_back(v);
-
-				k1 = h*grad(data, point, spacing, size);
-				k2 = h*grad(data, point+k1*0.5, spacing, size);
-				k3 = h*grad(data, point+k2*0.5, spacing, size);
-				k4 = h*grad(data, point+k3, spacing, size);
-
-				point+=(k1+k2*2+k3*2+k4) * 1./6.;
-
-				line->vertices.push_back(point);
-				line->colors.push_back(table.map(data(point)));
-			}
-
-			rep->insert(*line);
-		}
-
 
 		insert(*rep);
 		update(*rep);
