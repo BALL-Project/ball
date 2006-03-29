@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.15 2006/03/28 19:42:56 anhi Exp $
+// $Id: mainframe.C,v 1.60.2.16 2006/03/29 07:39:07 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -395,70 +395,6 @@ namespace BALL
 
 	void Mainframe::about()
 	{
-	/*	DatasetControl& dc = *DatasetControl::getInstance(0);
-		RegularData3D& data = *((dc.get3DGrids()).begin())->first;
-		TRegularData3D<Vector3> grid_data;
-		createGradientGrid(data, grid_data);
-
-		System& system = (*(System*)*composite_manager_.begin());
-		Atom& atom = *system.beginAtom();
-
-		Representation* rep = new Representation;
-		rep->setTransparency(90);
-
-		ColorMap table;
-		ColorRGBA colors[3];
-		colors[0] = ColorRGBA(1.0, 0.0, 0.0, 1.0);
-		colors[1] = ColorRGBA(0.5, 0.0, 0.5, 0.2);
-		colors[2] = ColorRGBA(0.0, 0.0, 1.0, 1.0);
-		table.setRange(-1.5, 1.5);
-		table.setBaseColors(colors,3);
-		table.setNumberOfColors(100);
-		table.setAlphaBlending(true);
-		table.createMap();
-
-		for (Position p = 0; p < 500; p++)
-		{
-			Vector3 point = atom.getPosition();
-			Vector3 diff(drand48(), drand48(), drand48());
-			if (drand48() > 0.5) diff.x *= -1;
-			if (drand48() > 0.5) diff.y *= -1;
-			if (drand48() > 0.5) diff.z *= -1;
-			diff.normalize();
-			diff *= 0.4;
-			point += diff;
-
-			IlluminatedLine* line = new IlluminatedLine;
-			vector<Vector3>& points = line->vertices;
-			calculatePoints(grid_data, point, points);
-
-			const Size nrp = points.size();
-			line->tangents.resize(nrp);
-			line->colors.resize(nrp);
-
-			for (Position v = 0; v < nrp - 1; v++)
-			{
-				(*line).tangents[v] = points[v+1] - points[v];
-			}
-			(*line).tangents[nrp -1] = (*line).tangents[nrp -2];
-
-			for (Position v = 0; v < nrp; v++)
-			{
-//   				(*line).colors[v] = table.map(data(points[v]));
-				(*line).colors[v] = ColorRGBA(1.0,0,0);
-
-			}
-
-
-			rep->insert(*line);
-		}
-
-		insert(*rep);
-		update(*rep);
-*/
-
-	return;
-
 	/*
 //   	Representation* rep = new Representation;
 	String filename("/local/amoll/velocity.dat");
