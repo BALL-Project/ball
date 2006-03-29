@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMap.C,v 1.2 2005/12/23 17:03:21 amoll Exp $
+// $Id: colorMap.C,v 1.2.2.1 2006/03/29 13:12:42 amoll Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/colorMap.h>
@@ -151,14 +151,12 @@ namespace BALL
 				
 			// we won't *reduce* the number of colors, so if we should, we just return
 			Size old_number_of_colors = size();
-			if (color_number_ < old_number_of_colors)
-			{
-				return old_number_of_colors;
-			}
+			if (old_number_of_colors > color_number_) return old_number_of_colors;
 			
 			// we will build the color Map in a temporary vector which we
 			// will later copy into our own dataset
-			vector<ColorRGBA> new_Map(color_number_);
+			vector<ColorRGBA> new_map;
+			new_map.reserve(color_number_);
 
 			// how many colors do we have to put between two of the old ones?
 			Index number_of_interpolation_steps = (Index)floor(
@@ -167,48 +165,36 @@ namespace BALL
 			// adjust the number of colors so that there are no remainders after the interpolation
 			color_number_ = old_number_of_colors + (number_of_interpolation_steps*(old_number_of_colors-1));
 			
-			ColorRGBA col1, col2;
-			double pos; // had to use double here, instead of float...
 			
 			for (Size i=0; i< old_number_of_colors-1; i++)
 			{
-				col1 = (*this)[i];
-				col2 = (*this)[i+1];
+				const ColorRGBA& col1 = (*this)[i];
+				const ColorRGBA& col2 = (*this)[i+1];
 
-				new_Map[i*(number_of_interpolation_steps+1)] = col1;
+				new_map.push_back(col1);
 				
 				for (Index j=1; j<=number_of_interpolation_steps; j++)
 				{
-					pos = (float)j/(float)(number_of_interpolation_steps+1);
-					new_Map[(i*(number_of_interpolation_steps+1))+j].setRed(
-							pos*(float)col2.getRed() + (1.-pos)*(float)col1.getRed());
-					new_Map[(i*(number_of_interpolation_steps+1))+j].setGreen(
-							pos*(float)col2.getGreen() + (1.-pos)*(float)col1.getGreen());
-					new_Map[(i*(number_of_interpolation_steps+1))+j].setBlue(
-							pos*(float)col2.getBlue() + (1.-pos)*(float)col1.getBlue());
+					double pos = (double)j/(double)(number_of_interpolation_steps+1);
+					new_map.push_back(ColorRGBA(pos*(float)col2.getRed() + (1.-pos)*(float)col1.getRed(),
+																			pos*(float)col2.getGreen() + (1.-pos)*(float)col1.getGreen(),
+																			pos*(float)col2.getBlue() + (1.-pos)*(float)col1.getBlue()));
 
 					if (alpha_blending_)
 					{
-						new_Map[(i*(number_of_interpolation_steps+1))+j].setAlpha(
-								pos*(float)col2.getAlpha() + (1.-pos)*(float)col1.getAlpha());
+						new_map[new_map.size() - 1].setAlpha(pos*(float)col2.getAlpha() + (1.-pos)*(float)col1.getBlue());
 					}
 				}
 			}
 			
-			new_Map[color_number_-1] = (*this)[old_number_of_colors-1]; 
+			new_map.push_back((*this)[old_number_of_colors-1]); 
 
 			// This can probably done much faster...
-			(*this).resize(new_Map.size());
+			(*this).resize(new_map.size());
 
-			copy(new_Map.begin(), new_Map.end(), (*this).begin());
+			copy(new_map.begin(), new_map.end(), (*this).begin());
 		
-			// fix an off-by-one error:
-			// the last color doesnt get set when the number of colors is even
-			if (color_number_ != size())
-			{
-				(*this)[size()-1] = (*this)[size()-2];
-			}
-			return color_number_;
+			return new_map.size();
 		}
 		
 		void ColorMap::setMinMaxColors(ColorRGBA min, ColorRGBA max)
