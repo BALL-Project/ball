@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMap.C,v 1.2.2.5 2006/03/29 18:37:26 anhi Exp $
+// $Id: colorMap.C,v 1.2.2.6 2006/03/29 18:40:47 anhi Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/colorMap.h>
@@ -167,7 +167,7 @@ namespace BALL
 			if (interpolation_boundaries_.size() != old_number_of_colors)
 			{
 				// nope. we just create them evenly distributed
-				interpolation_boundaries_.resize(old_number_of_colors);
+				interpolation_boundaries_.reserve(old_number_of_colors);
 				float step_size = 1./(old_number_of_colors - 1.);
 				float step = 0;
 				for (Size i =0; i<old_number_of_colors; i++)
