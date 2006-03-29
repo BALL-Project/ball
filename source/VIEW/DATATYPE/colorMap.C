@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMap.C,v 1.2.2.1 2006/03/29 13:12:42 amoll Exp $
+// $Id: colorMap.C,v 1.2.2.2 2006/03/29 13:55:19 amoll Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/colorMap.h>
+#include <BALL/MATHS/common.h>
 
 using namespace std;
 
@@ -160,7 +161,7 @@ namespace BALL
 
 			// how many colors do we have to put between two of the old ones?
 			Index number_of_interpolation_steps = (Index)floor(
-					(double)(color_number_ - old_number_of_colors) / (old_number_of_colors - 1));
+					(float)(color_number_ - old_number_of_colors) / (old_number_of_colors - 1));
 	
 			// adjust the number of colors so that there are no remainders after the interpolation
 			color_number_ = old_number_of_colors + (number_of_interpolation_steps*(old_number_of_colors-1));
@@ -175,15 +176,30 @@ namespace BALL
 				
 				for (Index j=1; j<=number_of_interpolation_steps; j++)
 				{
-					double pos = (double)j/(double)(number_of_interpolation_steps+1);
-					new_map.push_back(ColorRGBA(pos*(float)col2.getRed() + (1.-pos)*(float)col1.getRed(),
-																			pos*(float)col2.getGreen() + (1.-pos)*(float)col1.getGreen(),
-																			pos*(float)col2.getBlue() + (1.-pos)*(float)col1.getBlue()));
+					float pos = (float)j/(float)(number_of_interpolation_steps+1);
 
-					if (alpha_blending_)
+					float red = pos*(float)col2.getRed() + (1.-pos)*(float)col1.getRed();
+					float green = pos*(float)col2.getGreen() + (1.-pos)*(float)col1.getGreen();
+					float blue = pos*(float)col2.getBlue() + (1.-pos)*(float)col1.getBlue();
+					float alpha = 1.0;
+
+					// damn precision! normalize between 0 and 1 to prevent exception from color unit
+					red = Maths::min((float)1., red);
+					green = Maths::min((float)1., green);
+					blue = Maths::min((float)1., blue);
+
+					red = Maths::max((float)0., red);
+					green = Maths::max((float)0., green);
+					blue = Maths::max((float)0., blue);
+
+					if (alpha_blending_) 
 					{
-						new_map[new_map.size() - 1].setAlpha(pos*(float)col2.getAlpha() + (1.-pos)*(float)col1.getBlue());
+						alpha = pos*(float)col2.getAlpha() + (1.-pos)*(float)col1.getAlpha();
+						alpha = min((float)1., alpha);
+						alpha = max((float)0., alpha);
 					}
+
+					new_map.push_back(ColorRGBA(red, green, blue, alpha));
 				}
 			}
 			
@@ -191,7 +207,6 @@ namespace BALL
 
 			// This can probably done much faster...
 			(*this).resize(new_map.size());
-
 			copy(new_map.begin(), new_map.end(), (*this).begin());
 		
 			return new_map.size();
