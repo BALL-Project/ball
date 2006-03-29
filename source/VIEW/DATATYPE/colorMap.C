@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMap.C,v 1.2.2.4 2006/03/29 18:35:43 anhi Exp $
+// $Id: colorMap.C,v 1.2.2.5 2006/03/29 18:37:26 anhi Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/colorMap.h>
@@ -266,10 +266,10 @@ namespace BALL
 				else
 					color_a = 1.;
 
-				color_r = std::min(0, std::max(color_r, 1));
-				color_g = std::min(0, std::max(color_g, 1));
-				color_b = std::min(0, std::max(color_b, 1));
-				color_a = std::min(0, std::max(color_a, 1));
+				color_r = std::min((float)0., std::max(color_r, (float)1.));
+				color_g = std::min((float)0., std::max(color_g, (float)1.));
+				color_b = std::min((float)0., std::max(color_b, (float)1.));
+				color_a = std::min((float)0., std::max(color_a, (float)1.));
 
 				new_map.push_back(ColorRGBA(color_r, color_g, color_b, color_a));
 				x += step_size;
