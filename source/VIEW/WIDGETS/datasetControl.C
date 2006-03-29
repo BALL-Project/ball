@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.9 2006/03/28 19:42:57 anhi Exp $
+// $Id: datasetControl.C,v 1.46.2.10 2006/03/29 14:25:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -872,7 +872,8 @@ namespace BALL
 	void DatasetControl::visualiseFieldLines_()
 	{
 		const GradientGrid&   grid      = *item_to_gradients_[context_item_];
-		const RegularData3D*  potential =  item_to_grid3_[context_item_];
+		const RegularData3D*  potential =  0;
+		if (get3DGrids().size() > 0) potential = (*get3DGrids().begin()).first;
 
 		AtomContainer* ac = (AtomContainer*) item_to_composite_[context_item_];
 		if (ac == 0) 
@@ -884,27 +885,31 @@ namespace BALL
 		Representation* rep = new Representation;
  		rep->setTransparency(90);
 		ColorMap table;
-		ColorRGBA colors[5];
+		ColorRGBA colors[3];
 		colors[0] = ColorRGBA(0.0, 0.0, 1.0, 1.0);
-		colors[1] = ColorRGBA(0.0, 0.3, 0.7, 0.4);
-		colors[2] = ColorRGBA(0.0, 1.0, 0.0, 0.2);
-		colors[3] = ColorRGBA(0.7, 0.3, 0.0, 0.4);
-		colors[4] = ColorRGBA(1.0, 0.0, 0.0, 1.0);
+//   		colors[1] = ColorRGBA(0.0, 0.3, 0.7, 0.4);
+//   		colors[2] = ColorRGBA(0.0, 1.0, 0.0, 0.2);
+//   		colors[3] = ColorRGBA(0.7, 0.3, 0.0, 0.4);
+//   		colors[4] = ColorRGBA(1.0, 0.0, 0.0, 1.0);
+		colors[1] = ColorRGBA(0.0, 1.0, 0.0, 0.3);
+		colors[2] = ColorRGBA(1.0, 0.0, 0.0, 1.0);
 
 		// if we have a potential grid, use it to color the field lines
 		float min_value, max_value;
 		if (potential != 0)
 		{
+			/*
 			// find min and max values
 			min_value = max_value = (*potential)[0];
 
 			for (Position i = 1; i < potential->size(); i++)
 			{
-				min_value = std::min(min_value, (*potential)[0]);
-				max_value = std::max(max_value, (*potential)[0]);
+				min_value = std::min(min_value, (*potential)[i]);
+				max_value = std::max(max_value, (*potential)[i]);
 			}
 			std::cout << "min " << min_value << " max " << max_value << std::endl;
-			min_value = -0.4; max_value = 0.4;
+			*/
+ 			min_value = -0.4; max_value = 0.4;
 		}
 		else
 		{
@@ -920,8 +925,8 @@ namespace BALL
 
 		table.setRange(min_value, max_value);
 
-		table.setBaseColors(colors,5);
-		table.setMinMaxColors(colors[0], colors[4]);
+		table.setBaseColors(colors,3);
+		table.setMinMaxColors(colors[0], colors[2]);
 		table.setNumberOfColors(100);
 		table.setAlphaBlending(true);
 		table.createMap();
