@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.53.2.7 2006/03/27 13:09:26 amoll Exp $
+# $Id: Makefile,v 1.53.2.8 2006/03/30 12:30:21 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -33,6 +33,7 @@ CPP_SOURCES=\
 	dockResultDialog.C\
 	downloadPDBFile.C\
 	displayProperties.C\
+	fieldLinesDialog.C\
 	FDPBDialog.C\
 	labelDialog.C\
 	lightSettings.C\
@@ -64,7 +65,6 @@ MOC_SOURCES=\
 	charmmConfigurationDialog_moc.C\
 	clippingDialog_moc.C\
 	coloringSettingsDialog_moc.C\
-	modifySurfaceDialog_moc.C\
 	contourSurfaceDialog_moc.C\
 	dockDialog_moc.C\
 	dockProgressDialog_moc.C\
@@ -72,11 +72,13 @@ MOC_SOURCES=\
 	downloadPDBFile_moc.C\
 	displayProperties_moc.C\
 	FDPBDialog_moc.C\
+	fieldLinesDialog_moc.C\
 	labelDialog_moc.C\
 	lightSettings_moc.C\
 	mainControlPreferences_moc.C\
 	materialSettings_moc.C\
 	modelSettingsDialog_moc.C\
+	modifySurfaceDialog_moc.C\
 	molecularFileDialog_moc.C\
 	molecularDynamicsDialog_moc.C\
 	networkPreferences_moc.C\
@@ -104,6 +106,7 @@ UIC_SOURCES=\
 	downloadPDBFileData.C\
 	displayPropertiesData.C\
 	FDPBDialogData.C\
+	fieldLinesDialogData.C\
 	labelDialogData.C\
 	lightSettingsData.C\
 	mainControlPreferencesData.C\

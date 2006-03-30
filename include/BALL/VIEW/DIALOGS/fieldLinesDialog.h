@@ -1,0 +1,54 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id:
+
+#ifndef BALL_VIEW_DIALOGS_LABELDIALOG_H
+#define BALL_VIEW_DIALOGS_LABELDIALOG_H
+
+#include <BALL/VIEW/UIC/fieldLinesDialogData.h>
+
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
+
+namespace BALL
+{
+	namespace VIEW
+	{
+		/**	Dialog for creating field lines.
+    		\ingroup  ViewDialogs
+		*/
+		class BALL_VIEW_EXPORT FieldLinesDialog 
+			: public QDialog,
+				public Ui::FieldLinesDialogData
+		{
+			Q_OBJECT
+				
+			public:
+			
+			/** Default Constructor.
+			*/
+			FieldLinesDialog(QWidget *parent = NULL, const char *name = NULL )
+				throw();
+
+			/** Destructor.
+			*/
+			virtual ~FieldLinesDialog()
+				throw();
+
+			float getTolerance();
+			Size getInterpolationSteps();
+			Size getMaxSteps();
+			Size getIcosaederInterplationSteps();
+			float getAtomsDistance();
+
+			public slots:
+
+			void accept();
+		};
+
+} } // namespaces
+
+#endif // BALL_VIEW_DIALOGS_LABELDIALOG_H

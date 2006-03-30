@@ -69,13 +69,22 @@ CompositeProperties::CompositeProperties(Composite* composite, QWidget* parent,
 													getString_(atom->getVelocity().y) + String("|") +
 													getString_(atom->getVelocity().z) + String(")")).c_str());
 
+	vector<String> elements;
 	Element element;
+
 	for (Position nr = 0; ; nr++) 
 	{
 		element = PTE.getElement(nr);
 		if (element == Element::UNKNOWN) break;
 
-		element_box->addItem(element.getSymbol().c_str());
+		elements.push_back(element.getSymbol());
+	}
+
+	sort(elements.begin(), elements.end());
+
+	for (Position nr = 0; nr < elements.size(); nr++)
+	{
+		element_box->addItem(elements[nr].c_str());
 	}
 
 	String symb = atom->getElement().getSymbol();
