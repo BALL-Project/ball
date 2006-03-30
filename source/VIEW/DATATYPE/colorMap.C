@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMap.C,v 1.2.2.6 2006/03/29 18:40:47 anhi Exp $
+// $Id: colorMap.C,v 1.2.2.7 2006/03/30 09:04:39 anhi Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/colorMap.h>
@@ -166,13 +166,13 @@ namespace BALL
 			// let's see if we are given the vector of interpolation points to use 
 			if (interpolation_boundaries_.size() != old_number_of_colors)
 			{
+				interpolation_boundaries_.clear();
 				// nope. we just create them evenly distributed
-				interpolation_boundaries_.reserve(old_number_of_colors);
 				float step_size = 1./(old_number_of_colors - 1.);
 				float step = 0;
 				for (Size i =0; i<old_number_of_colors; i++)
 				{
-					interpolation_boundaries_.push_back(Vector4(std::max(step, (float)1.)));
+					interpolation_boundaries_.push_back(Vector4(std::min(step, (float)1.)));
 					step += step_size;
 				}
 			}
@@ -195,13 +195,13 @@ namespace BALL
 			new_map.push_back((*this)[0]);
 			for (Size i=1; i < color_number_ - 1; i++)
 			{
-				if (x >= interpolation_boundaries_[current_bound_x+1].x)
+				if (x > interpolation_boundaries_[current_bound_x+1].x)
 					current_bound_x++;
-				if (x >= interpolation_boundaries_[current_bound_y+1].y)
+				if (x > interpolation_boundaries_[current_bound_y+1].y)
 					current_bound_y++;
-				if (x >= interpolation_boundaries_[current_bound_z+1].z)
+				if (x > interpolation_boundaries_[current_bound_z+1].z)
 					current_bound_z++;
-				if (x >= interpolation_boundaries_[current_bound_a+1].h)
+				if (x > interpolation_boundaries_[current_bound_a+1].h)
 					current_bound_a++;
 
 
@@ -266,10 +266,10 @@ namespace BALL
 				else
 					color_a = 1.;
 
-				color_r = std::min((float)0., std::max(color_r, (float)1.));
-				color_g = std::min((float)0., std::max(color_g, (float)1.));
-				color_b = std::min((float)0., std::max(color_b, (float)1.));
-				color_a = std::min((float)0., std::max(color_a, (float)1.));
+				color_r = std::max((float)0., std::min(color_r, (float)1.));
+				color_g = std::max((float)0., std::min(color_g, (float)1.));
+				color_b = std::max((float)0., std::min(color_b, (float)1.));
+				color_a = std::max((float)0., std::min(color_a, (float)1.));
 
 				new_map.push_back(ColorRGBA(color_r, color_g, color_b, color_a));
 				x += step_size;
