@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.27.2.6 2006/03/17 15:42:29 amoll Exp $
+// $Id: geometricControl.h,v 1.27.2.7 2006/03/30 14:26:59 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -27,7 +27,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class Representation;
-		class ModifySurfaceDialog;
+		class ModifyRepresentationDialog;
 		class ClippingPlane;
 		class TransformationMessage;
 
@@ -233,7 +233,7 @@ namespace BALL
  			HashMap<QTreeWidgetItem*, Representation*> item_to_representation_;
  			HashMap<QTreeWidgetItem*, ClippingPlane*> item_to_plane_;
 
-			ModifySurfaceDialog* 	modify_surface_dialog_;
+			ModifyRepresentationDialog* 	modify_rep_dialog_;
 
 			bool creating_representations_;
 			bool ignore_change_;

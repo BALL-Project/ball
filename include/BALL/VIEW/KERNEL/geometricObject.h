@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.39 2005/12/23 17:02:14 amoll Exp $
+// $Id: geometricObject.h,v 1.39.2.1 2006/03/30 14:26:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -10,6 +10,11 @@
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 #	include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
+
+#ifndef BALL_MATHS_VECTOR3_H
+#	include <BALL/MATHS/vector3.h>
+#endif
+
 
 namespace BALL
 {
@@ -162,6 +167,8 @@ namespace BALL
 			bool operator < (const GeometricObject& object) const
 				throw() { return this < &object;}
 
+			// Method to get all vertices from a geometric object
+			virtual void getVertices(std::vector<Vector3>&) const {};
 
 			//@}
 

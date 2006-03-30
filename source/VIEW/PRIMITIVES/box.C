@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box.C,v 1.4 2003/08/29 15:37:59 amoll Exp $
+// $Id: box.C,v 1.4.12.1 2006/03/30 14:26:45 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/box.h>
 
@@ -86,6 +86,13 @@ namespace BALL
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
+
+		void Box::getVertices(vector<Vector3>& vertices) const
+		{
+			vertices.push_back(point_);
+			vertices.push_back(point_ + right_vector_ * width_ + height_vector_ * height_);
+		}
+
 
 	} // namespace VIEW
 } // namespace BALL

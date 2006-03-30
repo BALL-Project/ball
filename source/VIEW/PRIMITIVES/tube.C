@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.C,v 1.7 2005/07/16 21:00:50 oliver Exp $
+// $Id: tube.C,v 1.7.2.1 2006/03/30 14:26:46 amoll Exp $
 //
 
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -92,6 +92,12 @@ namespace BALL
 			s << "radius : " << radius_ << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
+		}
+
+		void Tube::getVertices(vector<Vector3>& vertices) const
+		{
+			vertices.push_back(getVertex1());
+			vertices.push_back(getVertex2());
 		}
 
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.C,v 1.6 2005/12/23 17:03:35 amoll Exp $
+// $Id: mesh.C,v 1.6.2.1 2006/03/30 14:26:45 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 
@@ -88,6 +88,15 @@ namespace BALL
 			//colors.dump();
 			
 			BALL_DUMP_STREAM_SUFFIX(s);
+		}
+
+		void Mesh::getVertices(vector<Vector3>& vertices) const
+		{
+			vertices.reserve(vertices.size() + vertex.size());
+			for (Position p = 0; p < vertex.size(); p++)
+			{
+				vertices.push_back(vertex[p]);
+			}
 		}
 
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: illuminatedLine.C,v 1.1.2.1 2006/03/22 16:06:40 amoll Exp $
+// $Id: illuminatedLine.C,v 1.1.2.2 2006/03/30 14:26:45 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
 
@@ -69,6 +69,15 @@ namespace BALL
 			GeometricObject::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
+		}
+
+		void IlluminatedLine::getVertices(vector<Vector3>& vert) const
+		{
+			vert.reserve(vertices.size() + vert.size());
+			for (Position p = 0; p < vertices.size(); p++)
+			{
+				vert.push_back(vertices[p]);
+			}
 		}
 
 	} // namespace VIEW

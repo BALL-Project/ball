@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: illuminatedLine.h,v 1.1.2.1 2006/03/22 16:06:32 amoll Exp $
+// $Id: illuminatedLine.h,v 1.1.2.2 2006/03/30 14:26:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIVES_ILLUMINATEDLINE_H
@@ -84,6 +84,10 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
+			
+			// Method to get all vertices from a geometric object
+			virtual void getVertices(vector<Vector3>& vertices) const;
+
 
 			vector<Vector3> tangents;
 			vector<Vector3> vertices;

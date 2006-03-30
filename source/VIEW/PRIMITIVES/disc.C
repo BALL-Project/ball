@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: disc.C,v 1.4 2003/08/29 15:37:59 amoll Exp $
+// $Id: disc.C,v 1.4.12.1 2006/03/30 14:26:45 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/disc.h>
 
@@ -97,6 +97,11 @@ namespace BALL
 			: GeometricObject(),
 				Circle3(circle)
 		{}
+
+		void Disc::getVertices(vector<Vector3>& vertices) const
+		{
+			vertices.push_back(n);
+		}
 
 	} // namespace VIEW
 } // namespace BALL

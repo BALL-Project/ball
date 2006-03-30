@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.C,v 1.4 2003/08/29 15:38:00 amoll Exp $
+// $Id: point.C,v 1.4.12.1 2006/03/30 14:26:46 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/point.h>
 
@@ -82,6 +82,11 @@ namespace BALL
 			Vertex::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
+		}
+
+		void Point::getVertices(vector<Vector3>& vertices) const
+		{
+			vertices.push_back(getVertex());
 		}
 
 	} // namespace VIEW

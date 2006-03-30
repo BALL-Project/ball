@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox.h,v 1.8 2005/12/23 17:02:19 amoll Exp $
+// $Id: simpleBox.h,v 1.8.2.1 2006/03/30 14:26:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_SIMPLEBOX_H
@@ -116,12 +116,14 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
 				throw();
+			
+			// Method to get all vertices from a geometric object
+			virtual void getVertices(vector<Vector3>& vertices) const;
 
 			//@}
 		};
   
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_PRIMITIV_SIMPLEBOX_H

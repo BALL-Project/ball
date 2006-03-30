@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.8 2006/03/28 19:42:56 anhi Exp $
+// $Id: glRenderer.C,v 1.71.2.9 2006/03/30 14:26:47 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -693,9 +693,11 @@ namespace BALL
 
 			glBegin(GL_LINE_STRIP);
 
+			if (colors.size() > 0) setColorRGBA_(colors[0]);
+
 			for (Position i = 0; i < vertices.size(); i++)
 			{
-				setColorRGBA_(colors[i]);
+				if (colors.size() > 1) setColorRGBA_(colors[i]);
  				glTexCoord3f(tangents[i].x, tangents[i].y, tangents[i].z);
 				vertexVector3_(vertices[i]);
 			}

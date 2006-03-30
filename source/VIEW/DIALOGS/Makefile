@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.53.2.8 2006/03/30 12:30:21 amoll Exp $
+# $Id: Makefile,v 1.53.2.9 2006/03/30 14:26:43 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -41,7 +41,7 @@ CPP_SOURCES=\
 	materialSettings.C\
 	minimizationDialog.C\
 	modelSettingsDialog.C\
-	modifySurfaceDialog.C\
+	modifyRepresentationDialog.C\
 	molecularDynamicsDialog.C\
 	molecularFileDialog.C\
 	networkPreferences.C\
@@ -78,7 +78,7 @@ MOC_SOURCES=\
 	mainControlPreferences_moc.C\
 	materialSettings_moc.C\
 	modelSettingsDialog_moc.C\
-	modifySurfaceDialog_moc.C\
+	modifyRepresentationDialog_moc.C\
 	molecularFileDialog_moc.C\
 	molecularDynamicsDialog_moc.C\
 	networkPreferences_moc.C\
@@ -113,7 +113,7 @@ UIC_SOURCES=\
 	materialSettingsData.C\
 	minimizationDialogData.C\
 	modelSettingsDialogData.C\
-	modifySurfaceDialogData.C\
+	modifyRepresentationDialogData.C\
 	molecularDynamicsDialogData.C\
 	networkPreferencesData.C\
 	parsedFunctionDialogData.C\

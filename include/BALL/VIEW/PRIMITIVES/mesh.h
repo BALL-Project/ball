@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.9 2005/12/23 17:02:19 amoll Exp $
+// $Id: mesh.h,v 1.9.2.1 2006/03/30 14:26:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
@@ -115,6 +115,9 @@ namespace BALL
 
 			///
 			vector<ColorRGBA>& getColors() { return colors;}
+			
+			// Method to get all vertices from a geometric object
+			virtual void getVertices(vector<Vector3>& vertices) const;
 
 			//@}
 			/** @name Attributes

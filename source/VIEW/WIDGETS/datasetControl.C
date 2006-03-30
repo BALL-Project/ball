@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.11 2006/03/30 12:45:36 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.12 2006/03/30 14:26:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -917,7 +917,6 @@ namespace BALL
 
 					const Size nrp = points.size();
 					line->tangents.resize(nrp);
-					line->colors.resize(nrp);
 
 					for (Position v = 0; v < nrp - 1; v++)
 					{
@@ -925,10 +924,7 @@ namespace BALL
 					}
 					(*line).tangents[nrp -1] = (*line).tangents[nrp -2];
 
-					for (Position v = 0; v < nrp; v++)
-					{
-						(*line).colors[v] = ColorRGBA(0.,0.,1.);
-					}
+					(*line).colors.push_back(ColorRGBA(0.,0.,1.));
 
 					rep->insert(*line);
 				}

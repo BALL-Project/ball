@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.h,v 1.1.2.1 2006/03/30 12:54:58 amoll Exp $
+// $Id: modifyRepresentationDialog.h,v 1.1.2.2 2006/03/30 14:26:55 amoll Exp $
 //
 
-#ifndef BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
-#define BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_MODIFYSURFACEDIALOG_H
+#define BALL_VIEW_DIALOGS_MODIFYSURFACEDIALOG_H
 
 #include <BALL/VIEW/UIC/modifyRepresentationDialogData.h>
 
@@ -132,9 +132,9 @@ namespace BALL
 
 			ColorRGBA	 	selected_color, min_min_color, min_color, mid_color, max_color, max_max_color;	
 
-			Mesh* mesh_;		
 			Representation* rep_;
 			List<RegularData3D*> grid_list_;
+			vector<Vector3> vertices_;
 		};
 
 	} // namespace VIEW

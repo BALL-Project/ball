@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.13 2006/03/17 16:05:29 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.14 2006/03/30 14:26:48 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -13,7 +13,7 @@
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
-#include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
+#include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 #include <BALL/VIEW/DIALOGS/clippingDialog.h>
 
 #include <QtGui/qmenubar.h>
@@ -35,7 +35,7 @@ namespace BALL
 				context_menu_(this),
 				clipping_plane_context_menu_(this),
 				context_representation_(0),
-				modify_surface_dialog_(new ModifySurfaceDialog(this, "ModifySurfaceDialog")),
+				modify_rep_dialog_(new ModifyRepresentationDialog(this, "ModifyRepresentationDialog")),
 				creating_representations_(false),
 				ignore_change_(false)
 		{
@@ -218,7 +218,7 @@ namespace BALL
 			actions.push_back(context_menu_.addAction("Duplicate", this, SLOT(duplicateRepresentation())));
  			actions.push_back(context_menu_.addAction("Select Atoms", this, SLOT(selectAtoms())));
 			actions.push_back(context_menu_.addAction("Modify Model", this, SLOT(modifyRepresentation_())));	
- 			actions.push_back(context_menu_.addAction("Modify Surface", modify_surface_dialog_, SLOT(show())));	
+ 			actions.push_back(context_menu_.addAction("Modify Representation", modify_rep_dialog_, SLOT(show())));	
 			context_menu_.addSeparator();
 			actions.push_back(context_menu_.addMenu(&clipping_plane_context_menu_));
 			actions[6]->setText("Clipping Plane");
@@ -250,15 +250,7 @@ namespace BALL
 				actions[4]->setEnabled(false);
 			}
 
-			// surfaces
-			if (!isSurfaceModel(rep->getModelType()))
-			{
-				actions[5]->setEnabled(false);
-			}
-			else
-			{
-				modify_surface_dialog_->setRepresentation(rep);
-			}
+			modify_rep_dialog_->setRepresentation(rep);
 		}
 
 		void GeometricControl::generateListViewItem_(Representation& rep)
@@ -385,7 +377,7 @@ namespace BALL
 			// less to type...
 			Representation* rep = context_representation_;
 
-			modify_surface_dialog_->setRepresentation(rep);
+			modify_rep_dialog_->setRepresentation(rep);
 			notify_(new RepresentationMessage(*rep, RepresentationMessage::SELECTED));
 
 			if (rep == 0 || !getMainControl()->getRepresentationManager().has(*rep)) 

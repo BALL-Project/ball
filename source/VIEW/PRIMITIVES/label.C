@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.C,v 1.10 2005/07/16 21:00:50 oliver Exp $
+// $Id: label.C,v 1.10.2.1 2006/03/30 14:26:45 amoll Exp $
 //
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
@@ -179,14 +179,15 @@ namespace BALL
 						result += atom->getTypeName();
 					}
 				}
-
-
-
 			} // for
 
 			return result;
 		} // getExpandedText
+
+		void Label::getVertices(vector<Vector3>& vertices) const
+		{
+			vertices.push_back(getVertex());
+		}
 			
 	} // namespace VIEW
-
 } // namespace BALL
