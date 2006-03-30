@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.10 2006/03/29 14:25:26 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.11 2006/03/30 12:45:36 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -12,6 +12,7 @@
 
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
+#include <BALL/VIEW/DIALOGS/fieldLinesDialog.h>
 
 //   #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
 //   #include <BALL/VIEW/WIDGETS/regularData2DWidget.h>
@@ -494,9 +495,11 @@ namespace BALL
 			String filename = chooseGridFileForOpen_();
 			if (filename == "") return;
 
+			System* system = getMainControl()->getSelectedSystem();
+
 			RegularData1D* dat = new RegularData1D;
 			(*dat).binaryRead(filename);
-			insertGrid_(dat, 0, filename);
+			insertGrid_(dat, system, filename);
 			RegularData1DMessage* msg = new RegularData1DMessage(RegularData1DMessage::NEW);
 			msg->setData(*dat);
 			msg->setCompositeName(filename);
@@ -509,9 +512,11 @@ namespace BALL
 			String filename = chooseGridFileForOpen_();
 			if (filename == "") return;
 
+			System* system = getMainControl()->getSelectedSystem();
+
 			RegularData2D* dat = new RegularData2D;
 			(*dat).binaryRead(filename);
-			insertGrid_(dat, 0, filename);
+			insertGrid_(dat, system, filename);
 			RegularData2DMessage* msg = new RegularData2DMessage(RegularData2DMessage::NEW);
 			msg->setData(*dat);
 			msg->setCompositeName(filename);
@@ -525,9 +530,7 @@ namespace BALL
 			String filename = chooseGridFileForOpen_();
 			if (filename == "") return;
 
-			System* system = 0;
-			List<Composite*>& sel = getMainControl()->getMolecularControlSelection();
-			if (sel.size() != 0) system = dynamic_cast<System*>(*sel.begin());
+			System* system = getMainControl()->getSelectedSystem();
 
 			RegularData3D* dat = new RegularData3D;
 			(*dat).binaryRead(filename);
@@ -543,6 +546,7 @@ namespace BALL
 		{
 			QTreeWidgetItem* item = createListViewItem_(system, name, "1D Grid");
 			item_to_grid1_[item] = data;
+			item_to_composite_[item] = system;
 		}
 
 		void DatasetControl::insertGrid_(RegularData2D* data, System* system, const String& name)
@@ -550,6 +554,7 @@ namespace BALL
 		{
 			QTreeWidgetItem* item = createListViewItem_(system, name, "2D Grid");
 			item_to_grid2_[item] = data;
+			item_to_composite_[item] = system;
 		}
 
 		void DatasetControl::insertGrid_(RegularData3D* data, System* system, const String& name)
@@ -557,6 +562,7 @@ namespace BALL
 		{
 			QTreeWidgetItem* item = createListViewItem_(system, name, "3D Grid");
 			item_to_grid3_[item] = data;
+			item_to_composite_[item] = system;
 		}
 
 
@@ -871,9 +877,16 @@ namespace BALL
 
 	void DatasetControl::visualiseFieldLines_()
 	{
+		FieldLinesDialog dialog;
+		if (!dialog.exec()) return;
+
+		float tolerance = dialog.getTolerance();
+		float atom_distance = dialog.getAtomsDistance();
+		Size  icosaeder_steps = dialog.getIcosaederInterplationSteps();
+		Size  max_steps = dialog.getMaxSteps();
+		Size  interpolation_steps = dialog.getInterpolationSteps();
+
 		const GradientGrid&   grid      = *item_to_gradients_[context_item_];
-		const RegularData3D*  potential =  0;
-		if (get3DGrids().size() > 0) potential = (*get3DGrids().begin()).first;
 
 		AtomContainer* ac = (AtomContainer*) item_to_composite_[context_item_];
 		if (ac == 0) 
@@ -882,74 +895,25 @@ namespace BALL
 			return;
 		}
 
+		vector<Vector3> start_diffs = createSphere(icosaeder_steps - 1);
+
 		Representation* rep = new Representation;
- 		rep->setTransparency(90);
-		ColorMap table;
-		ColorRGBA colors[3];
-		colors[0] = ColorRGBA(0.0, 0.0, 1.0, 1.0);
-//   		colors[1] = ColorRGBA(0.0, 0.3, 0.7, 0.4);
-//   		colors[2] = ColorRGBA(0.0, 1.0, 0.0, 0.2);
-//   		colors[3] = ColorRGBA(0.7, 0.3, 0.0, 0.4);
-//   		colors[4] = ColorRGBA(1.0, 0.0, 0.0, 1.0);
-		colors[1] = ColorRGBA(0.0, 1.0, 0.0, 0.3);
-		colors[2] = ColorRGBA(1.0, 0.0, 0.0, 1.0);
-
-		// if we have a potential grid, use it to color the field lines
-		float min_value, max_value;
-		if (potential != 0)
-		{
-			/*
-			// find min and max values
-			min_value = max_value = (*potential)[0];
-
-			for (Position i = 1; i < potential->size(); i++)
-			{
-				min_value = std::min(min_value, (*potential)[i]);
-				max_value = std::max(max_value, (*potential)[i]);
-			}
-			std::cout << "min " << min_value << " max " << max_value << std::endl;
-			*/
- 			min_value = -0.4; max_value = 0.4;
-		}
-		else
-		{
-			// we'll use the tangent length to color the field
-			min_value = 0;
-			max_value = grid[0].getLength();
-
-			for (Position i = 1; i < grid.size(); i++)
-			{
-				max_value = std::max(max_value, grid[i].getLength());
-			}
-		}
-
-		table.setRange(min_value, max_value);
-
-		table.setBaseColors(colors,3);
-		table.setMinMaxColors(colors[0], colors[2]);
-		table.setNumberOfColors(100);
-		table.setAlphaBlending(true);
-		table.createMap();
-
-		vector<Vector3> start_diffs = createSphere(1);
 
 		AtomIterator ait = ac->beginAtom();
 		for (; +ait; ++ait)
 		{
 			for (Position p = 0; p < start_diffs.size(); p++)
 			{
-				Vector3 point = ait->getPosition();
-				Vector3 diff = start_diffs[p];
-				diff.normalize();
-				diff *= 0.4;
-				point += diff;
+				const Vector3& point = ait->getPosition();
+				const Vector3& diff = start_diffs[p];
 
 				IlluminatedLine* line = new IlluminatedLine;
 				vector<Vector3>& points = line->vertices;
 
 				for (int backwards = 0; backwards < 1; backwards++)
 				{
-					calculateLinePoints_(grid, point, points, (backwards==0) ? 1. : -1.);
+					calculateLinePoints_(grid, point + diff * atom_distance, points, (backwards==0) ? 1. : -1.,
+															 tolerance, max_steps, interpolation_steps);
 
 					const Size nrp = points.size();
 					line->tangents.resize(nrp);
@@ -963,8 +927,7 @@ namespace BALL
 
 					for (Position v = 0; v < nrp; v++)
 					{
-						float color_value = (potential != 0) ? (*potential)(points[v]) : grid(points[v]).getLength();
-						(*line).colors[v] = table.map(color_value);
+						(*line).colors[v] = ColorRGBA(0.,0.,1.);
 					}
 
 					rep->insert(*line);
@@ -1069,9 +1032,6 @@ namespace BALL
 		QTreeWidgetItem* item = createListViewItem_(system, "Gradient Grid", "Gradient Grid");
 		item_to_gradients_[item] = grid_ptr;
 		item_to_composite_[item] = system;
-
-		// this does currently not work for gradient grids that are read in
-		item_to_grid3_[item]     = &potential;
 	}
 
 	void DatasetControl::addGradientGrid()
@@ -1098,7 +1058,8 @@ namespace BALL
 	 */
 	inline void DatasetControl::calculateLinePoints_(const TRegularData3D<Vector3>& gradient_grid, 
 																									 Vector3 point, vector<Vector3>& points,
-																									 float factor)
+																									 float factor, 
+																									 float tolerance, Size max_steps, Size interpolation_steps) 
 	{
 		points.clear();
 
@@ -1113,15 +1074,12 @@ namespace BALL
 		float min_spacing = std::min(std::min(spacing.x, spacing.y), spacing.z);
 		float rho = 0.9; // chose sensible values
 		float lower_limit = min_spacing * 0.001;
-		float tolerance = 1e-6;
 		float h = min_spacing * 0.1;
 
-		// use 5 interpolation points
-		std::vector<Vector3> interpolated_values(5);
+		// use interpolation_steps interpolation points
+		std::vector<Vector3> interpolated_values(interpolation_steps);
 
 		Vector3 rk_estimate;
-
-		//	Vector3 grad_current = grad(data, point, spacing, size);
 
 		Vector3 grad_current = gradient_grid(point) * factor;
 		Vector3 grad_old     = grad_current;
@@ -1129,7 +1087,7 @@ namespace BALL
 		// Runge - Kutta of order 4 with adaptive step size and
 		// error control as described in Schwarz: "Numerische Mathematik"
 		// with step size control taken from Numerical Recipes
-		for (int i=0; i<10000; i++)
+		for (Size i = 0; i < max_steps; i++)
 		{
 			// compute scaling values for the step size computation (see Numerical Recipes)
 			scaling.x = fabs(point.x) + fabs(grad_current.x*h) + 1e-30;
@@ -1199,10 +1157,8 @@ namespace BALL
 			}
 
 			// compute a step size for the next step (the magic numbers are taken from Numerical Recipes)
-			if (error_estimate > 1.89e-4)
-				h = rho * h * pow(error_estimate, -0.2);
-			else
-				h = 5.*h;
+			if (error_estimate > 1.89e-4) h = rho * h * pow(error_estimate, -0.2);
+			else 												  h = 5.*h;
 
 			grad_old = grad_current;
 			grad_current = gradient_grid(point+rk_estimate)*factor;
@@ -1217,10 +1173,7 @@ namespace BALL
 
 			point += rk_estimate;
 
-			if (rk_estimate.getLength() < lower_limit)
-			{
-				break;
-			}
+			if (rk_estimate.getLength() < lower_limit) break;
 		}
 	}
 	
