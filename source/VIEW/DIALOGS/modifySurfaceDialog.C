@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.4.2.6 2006/03/24 12:29:41 amoll Exp $
+// $Id: modifySurfaceDialog.C,v 1.4.2.7 2006/03/30 09:04:18 anhi Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -245,19 +245,19 @@ namespace BALL
 		{
 			if (grid_ == 0) return;
 
-			min_value_  = 0;
-			max_value_  = 0;
+			min_value_  = grid_->getInterpolatedValue(mesh_->vertex[0]);
+			max_value_  = grid_->getInterpolatedValue(mesh_->vertex[0]);
 			mid_value_  = 0;
 
-			float extr = 0;
-			float value = 0;
+			float value;
 
 			try
 			{
-				for(Position p = 0; p < mesh_->vertex.size(); p++)
+				for(Position p = 1; p < mesh_->vertex.size(); p++)
 				{
-					value = fabs(grid_->getInterpolatedValue(mesh_->vertex[p]));
-					if (value > extr) extr = value;
+					value = grid_->getInterpolatedValue(mesh_->vertex[p]);
+					min_value_ = std::min(min_value_, value);
+					max_value_ = std::max(max_value_, value);
 				}
 			}
 			catch(Exception::OutOfGrid)
@@ -266,8 +266,7 @@ namespace BALL
 				return;
 			}
 
-			min_value_  = -extr;
-			max_value_  = +extr;
+			mid_value_ = (max_value_ - min_value_) * 0.5;
 
 			apply_button->setEnabled(true);
 			autoscale->setEnabled(true);
@@ -382,42 +381,36 @@ namespace BALL
 
 			// now do the colorizing stuff...
 			mesh_->colors.resize(mesh_->vertex.size());
-			ColorRGBA list[2];
 
+			ColorRGBA list[3];
 			list[0] = min_color;
 			list[1] = mid_color;
+			list[2] = max_color;
+			
+			float min_value = ascii(min_box->text()).toFloat();
+			float mid_value = ascii(mid_box->text()).toFloat();
+			float max_value = ascii(max_box->text()).toFloat();
 
-			ColorMap lower_table(list, 2);
-			lower_table.setMinMaxColors(min_min_color, max_max_color);
-			lower_table.setAlphaBlending(true);
-			lower_table.setNumberOfColors(levels_box->value()/2);
-			lower_table.setRange(ascii(min_box->text()).toFloat(), ascii(mid_box->text()).toFloat());
-			lower_table.createMap();
+			ColorMap cm(list, 3);
+			cm.setMinMaxColors(min_min_color, max_max_color);
+			cm.setAlphaBlending(true);
+			cm.setNumberOfColors(levels_box->value());
+			cm.setRange(min_value, max_value);
 
-			list[0] = mid_color;
-			list[1] = max_color;
-
-			ColorMap upper_table(list, 2);
-			upper_table.setMinMaxColors(min_min_color, max_max_color);
-			upper_table.setAlphaBlending(true);
-			upper_table.setNumberOfColors(levels_box->value()/2);
-			upper_table.setRange(ascii(mid_box->text()).toFloat(), ascii(max_box->text()).toFloat());
-			upper_table.createMap();
+			std::vector<Vector4> interpolation_points(3);
+			interpolation_points[0] = Vector4(0.);
+			interpolation_points[1] = Vector4( (mid_value - min_value) / (max_value - min_value));
+			interpolation_points[2] = Vector4(1.);
+			
+			cm.setInterpolationBoundaries(interpolation_points);
+			cm.createMap();
 
 			try 
 			{
-				const float mid_value = ascii(mid_box->text()).toFloat();
 				for (Position i = 0; i < mesh_->colors.size(); i++)
 				{
 					const float grid_value = grid_->getInterpolatedValue(mesh_->vertex[i]);
-					if (grid_value <= mid_value)
-					{
-						mesh_->colors[i].set(lower_table.map(grid_value));
-					}
-					else
-					{
-						mesh_->colors[i].set(upper_table.map(grid_value));
-					}
+					mesh_->colors[i].set(cm.map(grid_value));
 				}
 			}	
 			catch (Exception::OutOfGrid)
