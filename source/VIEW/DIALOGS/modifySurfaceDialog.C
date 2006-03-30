@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.C,v 1.4.2.8 2006/03/30 09:12:30 anhi Exp $
+// $Id: modifySurfaceDialog.C,v 1.4.2.9 2006/03/30 09:17:55 anhi Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
@@ -266,7 +266,7 @@ namespace BALL
 				return;
 			}
 
-			mid_value_ = (max_value_ - min_value_) * 0.5 + min_value;
+			mid_value_ = (max_value_ - min_value_) * 0.5 + min_value_;
 
 			apply_button->setEnabled(true);
 			autoscale->setEnabled(true);
