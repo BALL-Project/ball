@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.13 2006/03/31 15:07:16 anhi Exp $
+// $Id: datasetControl.C,v 1.46.2.14 2006/03/31 16:42:15 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -9,6 +9,7 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
 #include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
+#include <BALL/VIEW/PRIMITIVES/point.h>
 
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
@@ -83,10 +84,11 @@ namespace BALL
 			insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()));
 			setMenuHint("Open a 3D data grid");
 
+			open_gradient_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Vector Grid", this, SLOT(addVectorGrid()));
+
 			insertMenuEntry(MainControl::FILE_OPEN, "DSN6 electron density map", this, SLOT(addDSN6Grid()));
 			setMenuHint("Open an electron density file in DSN6 format (e.g. .omap files)" );
 
-			open_gradient_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Gradient Grid", this, SLOT(addGradientGrid()));
 			setMenuHint("Open a gradient grid");
 
 			insertMenuEntry(MainControl::FILE_OPEN, "Dock Result", this, SLOT(addDockResult()));
@@ -312,7 +314,7 @@ namespace BALL
 			}
 			else if (item_to_gradients_.has(&item))
 			{
-				GradientGrid* grid = item_to_gradients_[&item];
+				VectorGrid* grid = item_to_gradients_[&item];
 
 				item_to_gradients_.erase(&item);
 				delete grid;
@@ -364,7 +366,7 @@ namespace BALL
 				else
 				{
 					insertContextMenuEntry_("ContourSurface", SLOT(computeIsoContourSurface()));
-					insertContextMenuEntry_("Create gradient grid", SLOT(createGradientGrid()));
+					insertContextMenuEntry_("Create gradient grid", SLOT(createVectorGrid()));
 				}
 			}
 
@@ -906,61 +908,151 @@ namespace BALL
 		FieldLinesDialog dialog;
 		if (!dialog.exec()) return;
 
-		float tolerance = dialog.getTolerance();
-		float atom_distance = dialog.getAtomsDistance();
-		Size  icosaeder_steps = dialog.getIcosaederInterplationSteps();
-		Size  max_steps = dialog.getMaxSteps();
-		Size  interpolation_steps = dialog.getInterpolationSteps();
+		tolerance_ = dialog.getTolerance();
+		atom_distance_ = dialog.getAtomsDistance();
+		icosaeder_steps_ = dialog.getIcosaederInterplationSteps();
+		max_steps_ = dialog.getMaxSteps();
+		interpolation_steps_ = dialog.getInterpolationSteps();
 
-		const GradientGrid&   grid      = *item_to_gradients_[context_item_];
-
+		vector_grid_ = item_to_gradients_[context_item_];
+    		bool use_atoms = false; //????
+// 		bool use_atoms = true;
+		Size nr_lines = 100;
+		RegularData3D* potential_grid = (*get3DGrids().begin()).first;
+		
 		AtomContainer* ac = (AtomContainer*) item_to_composite_[context_item_];
-		if (ac == 0) 
+		if (use_atoms && ac == 0) 
 		{
 			setStatusbarText("No System available for this gradient grid, aborting field line calculation!", true);
 			return;
 		}
 
-		vector<Vector3> start_diffs = createSphere(icosaeder_steps - 1);
-
-		Representation* rep = new Representation;
-		AtomIterator ait = ac->beginAtom();
-		for (; +ait; ++ait)
+		if (use_atoms)
 		{
-			for (Position p = 0; p < start_diffs.size(); p++)
+			// seed points from spheres around atoms:
+			vector<Vector3> start_diffs = createSphere(icosaeder_steps_ - 1);
+			AtomIterator ait = ac->beginAtom();
+			for (; +ait; ++ait)
 			{
-				const Vector3& point = ait->getPosition();
-				const Vector3& diff = start_diffs[p];
-
-				IlluminatedLine* line = new IlluminatedLine;
-				vector<Vector3>& points = line->vertices;
-
-				for (int backwards = 0; backwards < 1; backwards++)
+				for (Position p = 0; p < start_diffs.size(); p++)
 				{
-					calculateLinePoints_(grid, point + diff * atom_distance, points, (backwards==0) ? 1. : -1.,
-															 tolerance, max_steps, interpolation_steps);
-
-					const Size nrp = points.size();
-					line->tangents.resize(nrp);
-
-					for (Position v = 0; v < nrp - 1; v++)
-					{
-						(*line).tangents[v] = points[v+1] - points[v];
-					}
-					(*line).tangents[nrp -1] = (*line).tangents[nrp -2];
-
-					(*line).colors.push_back(ColorRGBA(0.,0.,1.));
-
-					rep->insert(*line);
+					const Vector3& point = ait->getPosition();
+					const Vector3& diff = start_diffs[p];
+					createFieldLine_(point + diff * atom_distance_, *rep);
 				}
 			}
+		}
+		else
+		{
+			// method from "Fast Display of Illuminated Field Lines"
+			// from Stalling, Zöckler, Hege; 1997
+			// Monte Carlo Approach in relation to potential strenght at the individual points
+			Vector3 origin = vector_grid_->getOrigin();
+			Vector3 dimension = vector_grid_->getDimension();
+			VectorGrid::IndexType size = vector_grid_->getSize();
+
+			Size sx = (Size)(size.x / 3.0 + 1);
+			Size sy = (Size)(size.y / 3.0 + 1);
+			Size sz = (Size)(size.z / 3.0 + 1);
+			RegularData3D::IndexType st(sx, sy, sz);
+
+			Vector3 diff = Vector3(0.1, 0.1, 0.1);
+			RegularData3D grid(st, origin - diff, vector_grid_->getDimension() + diff * 2);
+			const Size new_grid_size = sx * sy * sz;
+			for (Position p = 0; p < new_grid_size; p++)
+			{
+				grid[p] = 0;
+			}
+			
+			const vector<float>& values =  potential_grid->getData();
+			for (Position p = 0; p < values.size(); p++)
+			{
+				grid.getClosestValue((potential_grid->getCoordinates(p))) += values[p];
+			}
+
+			const vector<float>& values2 =  grid.getData();
+			vector<float> normalized_values;
+
+			calculateHistogramEqualization(values2, normalized_values);
+
+			float current = 0;
+			for (Position p = 0; p < normalized_values.size(); p++)
+			{
+				current += normalized_values[p];
+				normalized_values[p] = current;
+			}
+
+			const float spacing = vector_grid_->getSpacing().x / 2.0;
+			const float half_spacing = spacing / 2.0;
+			Vector3 s2 = grid.getSpacing() / 2.0;
+			
+			for (Position p = 0; p < nr_lines; p++)
+			{
+				float x = drand48();
+				x *= current;
+				for (Position i = 0; i < normalized_values.size(); i++)
+				{
+					if (normalized_values[i] > x)
+					{
+						Vector3 point = grid.getCoordinates(i);
+						point.x += drand48() * spacing - half_spacing;
+						point.y += drand48() * spacing - half_spacing;
+						point.z += drand48() * spacing - half_spacing;
+						try
+						{
+							vector_grid_->getClosestValue(point);
+							createFieldLine_(point, *rep);
+							Point* p = new Point();
+							p->setVertex(point);
+							rep->insert(*p);
+							break;
+						}
+						catch(...)
+						{
+						}
+					}
+					else if (p == normalized_values.size() -1)
+					{
+					}
+				} // search point
+			} // all lines
 		}
 
 		getMainControl()->insert(*rep);
 		getMainControl()->update(*rep);
 	}
 
-	void DatasetControl::createGradientGrid()
+	void DatasetControl::createFieldLine_(const Vector3& point, Representation& rep)
+	{
+		IlluminatedLine* line = new IlluminatedLine;
+		vector<Vector3>& points = line->vertices;
+
+		for (int backwards = 0; backwards < 1; backwards++)
+		{
+			calculateLinePoints_(point, points, (backwards==0) ? 1. : -1.);
+
+			const Size nrp = points.size();
+			if (points.size() < 2)
+			{
+				delete line;
+				return;
+			}
+
+			line->tangents.resize(nrp);
+
+			for (Position v = 0; v < nrp - 1; v++)
+			{
+				(*line).tangents[v] = points[v+1] - points[v];
+			}
+			(*line).tangents[nrp -1] = (*line).tangents[nrp -2];
+
+			(*line).colors.push_back(ColorRGBA(0.,0.,1.));
+		}
+
+		rep.insert(*line);
+	}
+
+	void DatasetControl::createVectorGrid()
 		throw()
 	{
 		RegularData3D& potential = *item_to_grid3_[context_item_];
@@ -974,8 +1066,8 @@ namespace BALL
 		RegularData3D::CoordinateType spacing = potential.getSpacing();
 		RegularData3D::IndexType         size = potential.getSize();
 
-		GradientGrid* grid_ptr = new GradientGrid(potential.getOrigin(), potential.getDimension(), spacing);
-		GradientGrid& gradient_grid = *grid_ptr;
+		VectorGrid* grid_ptr = new VectorGrid(potential.getOrigin(), potential.getDimension(), spacing);
+		VectorGrid& gradient_grid = *grid_ptr;
 
 		TRegularData3D<Vector3>::IndexType index;
 
@@ -1050,12 +1142,12 @@ namespace BALL
 			}
 		}
 
-		QTreeWidgetItem* item = createListViewItem_(system, "Gradient Grid", "Gradient Grid");
+		QTreeWidgetItem* item = createListViewItem_(system, "Vector Grid", "Vector Grid");
 		item_to_gradients_[item] = grid_ptr;
 		item_to_composite_[item] = system;
 	}
 
-	void DatasetControl::addGradientGrid()
+	void DatasetControl::addVectorGrid()
 		throw()
 	{
 		List<Composite*>& sel = getMainControl()->getMolecularControlSelection();
@@ -1066,10 +1158,10 @@ namespace BALL
 		String filename = chooseGridFileForOpen_();
 		if (filename == "") return;
 
-		GradientGrid* dat = new GradientGrid;
+		VectorGrid* dat = new VectorGrid;
 		(*dat).binaryRead(filename);
 
-		QTreeWidgetItem* item = createListViewItem_(system, filename, "Gradient Grid");
+		QTreeWidgetItem* item = createListViewItem_(system, filename, "Vector Grid");
 		item_to_gradients_[item] = dat;
 		item_to_composite_[item] = system;
 	}
@@ -1077,12 +1169,11 @@ namespace BALL
 	/** Compute a field line using a Runge-Kutta of fourth order with adaptive step
 	 *  size control. factor can be used to iterate _against_ the gradient, i.e. backwards in time.
 	 */
-	inline void DatasetControl::calculateLinePoints_(const TRegularData3D<Vector3>& gradient_grid, 
-																									 Vector3 point, vector<Vector3>& points,
-																									 float factor, 
-																									 float tolerance, Size max_steps, Size interpolation_steps) 
+	inline void DatasetControl::calculateLinePoints_(Vector3 point, vector<Vector3>& points, float factor)
 	{
 		points.clear();
+
+		VectorGrid& gradient_grid = *vector_grid_;
 
 		TRegularData3D<Vector3>::CoordinateType spacing = gradient_grid.getSpacing();
 		TRegularData3D<Vector3>::IndexType         size = gradient_grid.getSize();
@@ -1094,11 +1185,11 @@ namespace BALL
 
 		float min_spacing = std::min(std::min(spacing.x, spacing.y), spacing.z);
 		float rho = 0.9; // chose sensible values
-		float lower_limit = min_spacing * 0.001;
-		float h = min_spacing * 0.1;
+		float lower_limit = min_spacing * 0.0001;
+		float h = min_spacing;// * 0.1;
 
 		// use interpolation_steps interpolation points
-		std::vector<Vector3> interpolated_values(interpolation_steps);
+		std::vector<Vector3> interpolated_values(interpolation_steps_);
 
 		Vector3 rk_estimate;
 
@@ -1108,7 +1199,7 @@ namespace BALL
 		// Runge - Kutta of order 4 with adaptive step size and
 		// error control as described in Schwarz: "Numerische Mathematik"
 		// with step size control taken from Numerical Recipes
-		for (Size i = 0; i < max_steps; i++)
+		for (Size i = 0; i < max_steps_; i++)
 		{
 			// compute scaling values for the step size computation (see Numerical Recipes)
 			scaling.x = fabs(point.x) + fabs(grad_current.x*h) + 1e-30;
@@ -1152,7 +1243,7 @@ namespace BALL
 												 	 std::max(fabs(error_estimate_vector.y/scaling.y), 
 														 				fabs(error_estimate_vector.z/scaling.z)));
 
-					error_estimate /= tolerance;
+					error_estimate /= tolerance_;
 
 					if (error_estimate > 1.0)
 					{
@@ -1165,13 +1256,12 @@ namespace BALL
 					{
 						accepted = true;
 					}
-				} catch (...)
+				} catch (Exception::OutOfGrid e)
 				{
 					h /= 2.;
 					// horrible heuristic... :-)
 					if (fabs(h) < 1e-10)
 					{
-						std::cout << "step size too small... aborting..." << std::endl;
 						return;
 					}
 				}
@@ -1198,11 +1288,11 @@ namespace BALL
 		}
 	}
 	
-	List<DatasetControl::GradientGrid*> DatasetControl::getGradientGrids()
+	List<DatasetControl::VectorGrid*> DatasetControl::getVectorGrids()
 		throw()
 	{
-		List<GradientGrid*> grids;
-		HashMap<QTreeWidgetItem*, GradientGrid*>::Iterator it = item_to_gradients_.begin();
+		List<VectorGrid*> grids;
+		HashMap<QTreeWidgetItem*, VectorGrid*>::Iterator it = item_to_gradients_.begin();
 		for (; +it; ++it)
 		{
 			grids.push_back(it->second);

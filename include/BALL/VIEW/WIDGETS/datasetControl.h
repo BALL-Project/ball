@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.5 2006/03/30 12:45:41 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.6 2006/03/31 16:40:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -40,6 +40,7 @@ namespace BALL
 	{
 		class SnapshotVisualisationDialog;
 		class ContourSurfaceDialog;
+		class Representation;
 
 		/**	DatasetControl is a widget to manipulate Trajectories and RegularData instances.
 		 		To add further datatypes, derive from this class and add further HashMaps for types
@@ -56,7 +57,7 @@ namespace BALL
 
 			BALL_EMBEDDABLE(DatasetControl,GenericControl)
 
-			typedef TRegularData3D<Vector3> GradientGrid;
+			typedef TRegularData3D<Vector3> VectorGrid;
 
 			/** Default Constructor.
 					Calls registerWidget().
@@ -93,7 +94,7 @@ namespace BALL
 				throw();
 			
 			///
-			List<GradientGrid*> getGradientGrids()
+			List<VectorGrid*> getVectorGrids()
 				throw();
 
 			public slots:
@@ -114,10 +115,10 @@ namespace BALL
 			void add3DGrid() throw();
 			
 			///
-			void addGradientGrid() throw();
+			void addVectorGrid() throw();
 
 			///
-			void createGradientGrid() throw();
+			void createVectorGrid() throw();
 
 			///
 			void addDockResult() throw();
@@ -173,7 +174,7 @@ namespace BALL
 			void insertGrid_(RegularData3D* file, System* system, const String& name)
 				throw();
 
-			void insertGradient_(GradientGrid* file, System* system, const String& name)
+			void insertVector_(VectorGrid* file, System* system, const String& name)
 				throw();
 
 			QTreeWidgetItem* createListViewItem_(System* system, const String& name, const String& type)
@@ -184,10 +185,9 @@ namespace BALL
 
 			void insertContextMenuEntry_(const QString & text, const char* member);
 
-			inline void calculateLinePoints_(const TRegularData3D<Vector3>& gradient_grid, 
-																			 Vector3 point, vector<Vector3>& points, float factor = 1.,
-																			 float tolerance = 0.000001 , Size max_steps = 10000, 
-																			 Size interpolation_steps = 5);
+			void createFieldLine_(const Vector3& point, Representation& rep);
+
+			inline void calculateLinePoints_(Vector3 point, vector<Vector3>& points, float factor = 1.);
 
 			QMenu 									 			context_menu_;
 
@@ -199,13 +199,21 @@ namespace BALL
 			HashMap<QTreeWidgetItem*	, RegularData2D*>   					item_to_grid2_;
 			HashMap<QTreeWidgetItem*	, RegularData3D*>   					item_to_grid3_;
 			HashMap<QTreeWidgetItem*	, DockResult*>								item_to_dock_result_;
-			HashMap<QTreeWidgetItem*	, GradientGrid*>							item_to_gradients_;
+			HashMap<QTreeWidgetItem*	, VectorGrid*>							item_to_gradients_;
 			// insert new HashMaps like above for new data type objects.
 			
 			HashMap<Composite*      , HashSet<QTreeWidgetItem*> > 	composite_to_items_;
 			HashMap<QTreeWidgetItem*  , Composite*>  								item_to_composite_;
 
 			QAction* menu_cs_, *open_trajectory_id_, *open_gradient_id_;
+
+			// Variables to calculate Vector Grids
+			VectorGrid*  vector_grid_;
+			float tolerance_;
+			Size max_steps_;
+			Size interpolation_steps_;
+			Size icosaeder_steps_;
+			float atom_distance_;
 		};
 		
 } } // namespaces
