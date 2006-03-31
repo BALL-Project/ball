@@ -12,7 +12,7 @@
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
-#include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
+#include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -366,7 +366,7 @@ void DemoTutorialDialog::nextStepDemo_()
 
 		Representation* rep = *getMainControl()->getRepresentationManager().begin();
 
-		ModifySurfaceDialog* cdialog = ModifySurfaceDialog::getInstance(0);
+		ModifyRepresentationDialog* cdialog = ModifyRepresentationDialog::getInstance(0);
 		cdialog->setRepresentation(rep);
 		cdialog->setGrid(grid_);
 		cdialog->setMinValue(-0.7);

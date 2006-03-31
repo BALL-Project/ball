@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.16 2006/03/29 07:39:07 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.17 2006/03/31 21:14:32 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -46,6 +46,7 @@
 #include <QtGui/QKeyEvent>
 #include <QtGui/QFileDialog>
 
+#include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <sstream>
 
 #include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
@@ -129,7 +130,7 @@ namespace BALL
 		DemoTutorialDialog* demo = new DemoTutorialDialog(this, "BALLViewDemo");
 
 		#ifdef BALL_PYTHON_SUPPORT
-// 			addDockWidget(Qt::BottomDockWidgetArea, new PyWidget(this, "Python Interpreter"));
+			addDockWidget(Qt::BottomDockWidgetArea, new PyWidget(this, "Python Interpreter"));
 		#endif
 
 		// ---------------------
@@ -395,6 +396,48 @@ namespace BALL
 
 	void Mainframe::about()
 	{
+		ColorMap table;
+		ColorRGBA colors[3];
+		colors[0] = ColorRGBA(0.0, 0.0, 1.0, 1.0);
+//   		colors[1] = ColorRGBA(0.0, 0.3, 0.7, 0.4);
+		colors[1] = ColorRGBA(0.0, 1.0, 0.0, 0.0);
+//   		colors[2] = ColorRGBA(0.0, 1.0, 0.0, 0.2);
+//   		colors[3] = ColorRGBA(0.7, 0.3, 0.0, 0.4);
+		colors[2] = ColorRGBA(1.0, 0.0, 0.0, 1.0);
+
+		table.setRange(-100, 100);
+		table.setBaseColors(colors,3);
+		table.setMinMaxColors(colors[0], colors[4]);
+		table.setNumberOfColors(100);
+		table.setAlphaBlending(true);
+		table.createMap();
+
+		Representation* rep = new Representation;
+		for (Index p = -100; p < 100; p+=2)
+		{
+			Tube* tube = new Tube;
+			tube->setVertex1(Vector3(p,0,0));
+			tube->setVertex2(Vector3(p+2,0,0));
+			tube->setRadius(10);
+			tube->setColor(table.map(p));
+			rep->insert(*tube);
+		}
+
+		for (Index p = 0; p < table.size(); p++)
+		{
+			Tube* tube = new Tube;
+			tube->setVertex1(Vector3(p,20,0));
+			tube->setVertex2(Vector3(p+2,20,0));
+			tube->setRadius(10);
+			tube->setColor(table[p]);
+			rep->insert(*tube);
+Log.error() << "#~~#   1 " << table[p]            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+		}
+
+
+		insert(*rep);
+		update(*rep);
+
 	/*
 //   	Representation* rep = new Representation;
 	String filename("/local/amoll/velocity.dat");
