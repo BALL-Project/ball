@@ -583,5 +583,24 @@ namespace BALL
 			return results;
 		}
 
+		void calculateHistogramEqualization(const vector<float>& values, vector<float>& normalized_values)
+		{
+			normalized_values.resize(values.size());
+
+			float size = (float) values.size();
+
+			for (Position p = 0; p < values.size(); p++)
+			{
+				Size lower = 0;
+				const float& this_value = values[p];
+				for (Position i = 0; i < values.size(); i++)
+				{
+					if (values[i] < this_value) lower++;
+				}
+
+				normalized_values[p] = (float)lower / size;
+			}
+		}
+
 	} // namespace VIEW
 } //namespace BALL
