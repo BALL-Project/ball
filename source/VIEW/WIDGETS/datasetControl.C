@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.12 2006/03/30 14:26:47 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.13 2006/03/31 15:07:16 anhi Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -21,6 +21,7 @@
 #include <BALL/VIEW/PRIMITIVES/line.h>
 
 #include <BALL/FORMAT/DCDFile.h>
+#include <BALL/FORMAT/DSN6File.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/STRUCTURE/DOCKING/dockResult.h>
@@ -81,6 +82,9 @@ namespace BALL
 
 			insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()));
 			setMenuHint("Open a 3D data grid");
+
+			insertMenuEntry(MainControl::FILE_OPEN, "DSN6 electron density map", this, SLOT(addDSN6Grid()));
+			setMenuHint("Open an electron density file in DSN6 format (e.g. .omap files)" );
 
 			open_gradient_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Gradient Grid", this, SLOT(addGradientGrid()));
 			setMenuHint("Open a gradient grid");
@@ -541,6 +545,28 @@ namespace BALL
 			notify_(msg);
 		}
 
+		void DatasetControl::addDSN6Grid()
+			throw()
+		{
+			String filename = chooseGridFileForOpen_();
+			if (filename == "") return;
+
+			System* system = 0;
+			List<Composite*>& sel = getMainControl()->getMolecularControlSelection();
+			if (sel.size() != 0) system = dynamic_cast<System*>(*sel.begin());
+
+			RegularData3D* dat = new RegularData3D;
+			DSN6File infile(filename, std::ios::in|std::ios::binary);
+			infile.read(*dat);
+			infile.close();
+
+			insertGrid_(dat, system, filename);
+			RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::NEW);
+			msg->setData(*dat);
+			msg->setCompositeName(filename);
+			notify_(msg);
+		}
+		
 		void DatasetControl::insertGrid_(RegularData1D* data, System* system, const String& name)
 			throw()
 		{
@@ -898,7 +924,6 @@ namespace BALL
 		vector<Vector3> start_diffs = createSphere(icosaeder_steps - 1);
 
 		Representation* rep = new Representation;
-
 		AtomIterator ait = ac->beginAtom();
 		for (; +ait; ++ait)
 		{
