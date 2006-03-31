@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.21.2.2 2006/02/01 13:23:43 amoll Exp $
+# $Id: Makefile,v 1.21.2.3 2006/03/31 14:24:37 anhi Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -26,6 +26,7 @@ CPP_SOURCES=\
 	bruker1DFile.C\
 	bruker2DFile.C\
 	DCDFile.C\
+	DSN6File.C\
 	genericMolFile.C\
 	HINFile.C\
 	INIFile.C\
