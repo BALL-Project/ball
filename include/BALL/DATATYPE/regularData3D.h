@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.34.2.1 2006/03/27 12:30:00 amoll Exp $ 
+// $Id: regularData3D.h,v 1.34.2.2 2006/03/31 21:06:07 amoll Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -175,6 +175,9 @@ namespace BALL
     BALL_INLINE size_type max_size() const throw() { return data_.max_size(); }
     BALL_INLINE void swap(TRegularData3D<ValueType>& grid) { std::swap(*this, grid); }
 
+
+		/// Get the full data
+		const vector<ValueType>& getData() const;
 
     /** Return a nonmutable reference to a specific data element.
         This is the range checking version of <tt>operator []</tt>.
@@ -709,6 +712,12 @@ namespace BALL
     return data_[pos];
 	}
 
+  template <class ValueType>
+  BALL_INLINE
+  const vector<ValueType>& TRegularData3D<ValueType>::getData() const
+  {
+    return data_;
+	}
 
 	template <typename ValueType>
   BALL_INLINE
