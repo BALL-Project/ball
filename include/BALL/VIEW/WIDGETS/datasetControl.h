@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.6 2006/03/31 16:40:55 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.7 2006/03/31 16:45:27 anhi Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -114,6 +114,9 @@ namespace BALL
 			///
 			void add3DGrid() throw();
 			
+			///
+			void addDSN6Grid() throw();
+
 			///
 			void addVectorGrid() throw();
 
