@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.14 2006/03/31 16:42:15 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.15 2006/04/01 10:28:13 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -10,6 +10,7 @@
 #include <BALL/VIEW/DATATYPE/colorMap.h>
 #include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
 #include <BALL/VIEW/PRIMITIVES/point.h>
+#include <BALL/VIEW/PRIMITIVES/sphere.h>
 
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
@@ -176,7 +177,6 @@ namespace BALL
 		void DatasetControl::insertComposite_(Composite* composite, QTreeWidgetItem* item)
 			throw()
 		{
-//   			listview->triggerUpdate();
 			item_to_composite_[item] = composite;
 			if (composite_to_items_.has(composite))
 			{
@@ -913,11 +913,10 @@ namespace BALL
 		icosaeder_steps_ = dialog.getIcosaederInterplationSteps();
 		max_steps_ = dialog.getMaxSteps();
 		interpolation_steps_ = dialog.getInterpolationSteps();
+   	bool use_atoms = !dialog.getSeedMode();
+		Size monte_carlo_nr_lines = dialog.getMonteCarloNumberLines();
 
 		vector_grid_ = item_to_gradients_[context_item_];
-    		bool use_atoms = false; //????
-// 		bool use_atoms = true;
-		Size nr_lines = 100;
 		RegularData3D* potential_grid = (*get3DGrids().begin()).first;
 		
 		AtomContainer* ac = (AtomContainer*) item_to_composite_[context_item_];
@@ -926,6 +925,8 @@ namespace BALL
 			setStatusbarText("No System available for this gradient grid, aborting field line calculation!", true);
 			return;
 		}
+
+		Representation* rep = new Representation();
 
 		if (use_atoms)
 		{
@@ -945,7 +946,7 @@ namespace BALL
 		else
 		{
 			// method from "Fast Display of Illuminated Field Lines"
-			// from Stalling, Zöckler, Hege; 1997
+			// from Stalling, Zaeckler, Hege; 1997
 			// Monte Carlo Approach in relation to potential strenght at the individual points
 			Vector3 origin = vector_grid_->getOrigin();
 			Vector3 dimension = vector_grid_->getDimension();
@@ -956,24 +957,24 @@ namespace BALL
 			Size sz = (Size)(size.z / 3.0 + 1);
 			RegularData3D::IndexType st(sx, sy, sz);
 
-			Vector3 diff = Vector3(0.1, 0.1, 0.1);
-			RegularData3D grid(st, origin - diff, vector_grid_->getDimension() + diff * 2);
+			Vector3 diff = Vector3(0.000001);
+			RegularData3D new_grid(st, origin - diff, vector_grid_->getDimension() + diff * 2);
 			const Size new_grid_size = sx * sy * sz;
 			for (Position p = 0; p < new_grid_size; p++)
 			{
-				grid[p] = 0;
+				new_grid[p] = 0;
 			}
 			
 			const vector<float>& values =  potential_grid->getData();
 			for (Position p = 0; p < values.size(); p++)
 			{
-				grid.getClosestValue((potential_grid->getCoordinates(p))) += values[p];
+				new_grid.getClosestValue((vector_grid_->getCoordinates(p))) += values[p];
 			}
 
-			const vector<float>& values2 =  grid.getData();
+			const vector<float>& values2 =  new_grid.getData();
 			vector<float> normalized_values;
 
-			calculateHistogramEqualization(values2, normalized_values);
+			calculateHistogramEqualization(values2, normalized_values, true);
 
 			float current = 0;
 			for (Position p = 0; p < normalized_values.size(); p++)
@@ -982,11 +983,11 @@ namespace BALL
 				normalized_values[p] = current;
 			}
 
-			const float spacing = vector_grid_->getSpacing().x / 2.0;
-			const float half_spacing = spacing / 2.0;
-			Vector3 s2 = grid.getSpacing() / 2.0;
+			const Vector3 spacing = vector_grid_->getSpacing();
+			const Vector3 half_spacing(vector_grid_->getSpacing() / 2.0);
 			
-			for (Position p = 0; p < nr_lines; p++)
+			Size errors = 0;
+			for (Position p = 0; p < monte_carlo_nr_lines; p++)
 			{
 				float x = drand48();
 				x *= current;
@@ -994,28 +995,34 @@ namespace BALL
 				{
 					if (normalized_values[i] > x)
 					{
-						Vector3 point = grid.getCoordinates(i);
-						point.x += drand48() * spacing - half_spacing;
-						point.y += drand48() * spacing - half_spacing;
-						point.z += drand48() * spacing - half_spacing;
+						Vector3 point = new_grid.getCoordinates(i);
+						point += half_spacing;
+						point += Vector3((drand48() - 0.5) * spacing.x,
+														 (drand48() - 0.5) * spacing.y,
+														 (drand48() - 0.5) * spacing.z);
 						try
 						{
 							vector_grid_->getClosestValue(point);
 							createFieldLine_(point, *rep);
-							Point* p = new Point();
-							p->setVertex(point);
+							/*
+							Sphere* p = new Sphere();
+							p->setPosition(point);
+							p->setRadius(0.05);
+							p->setColor(ColorRGBA(0.,0.1,0));
 							rep->insert(*p);
+							*/
 							break;
 						}
 						catch(...)
 						{
+							errors ++;
+							p--;
+							break;
 						}
-					}
-					else if (p == normalized_values.size() -1)
-					{
 					}
 				} // search point
 			} // all lines
+Log.error() << "#~~#   9 " << errors            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		}
 
 		getMainControl()->insert(*rep);

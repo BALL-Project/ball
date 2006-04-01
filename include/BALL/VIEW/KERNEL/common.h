@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.40.2.5 2006/03/31 12:08:47 amoll Exp $
+// $Id: common.h,v 1.40.2.6 2006/04/01 10:28:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -451,7 +451,7 @@ namespace BALL
 
 		BALL_VIEW_EXPORT vector<Vector3> createSphere(Size precision);
 
-		BALL_VIEW_EXPORT void calculateHistogramEqualization(const vector<float>& values, vector<float>& normalized_values);
+		BALL_VIEW_EXPORT void calculateHistogramEqualization(const vector<float>& values, vector<float>& normalized_values, bool use_absolute_values = false);
 
 		//@}
 

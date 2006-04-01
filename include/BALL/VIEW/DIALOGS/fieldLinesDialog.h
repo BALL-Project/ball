@@ -38,6 +38,8 @@ namespace BALL
 			virtual ~FieldLinesDialog()
 				throw();
 
+			Position getSeedMode();
+			Size getMonteCarloNumberLines();
 			float getTolerance();
 			Size getInterpolationSteps();
 			Size getMaxSteps();

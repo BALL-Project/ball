@@ -583,22 +583,51 @@ namespace BALL
 			return results;
 		}
 
-		void calculateHistogramEqualization(const vector<float>& values, vector<float>& normalized_values)
+		void calculateHistogramEqualization(const vector<float>& values, 
+																				vector<float>& normalized_values, 
+																				bool use_absolute_values)
 		{
-			normalized_values.resize(values.size());
-
+			vector<float> sorted;
 			float size = (float) values.size();
+			normalized_values.resize((Size)size);
 
-			for (Position p = 0; p < values.size(); p++)
+			if (!use_absolute_values)
 			{
-				Size lower = 0;
-				const float& this_value = values[p];
-				for (Position i = 0; i < values.size(); i++)
-				{
-					if (values[i] < this_value) lower++;
-				}
+				sorted = values;
+				sort(sorted.begin(), sorted.end());
 
-				normalized_values[p] = (float)lower / size;
+				Position x = 0;
+				for (Position p = 0; p < size; p++)
+				{
+					while (values[p] > sorted[x] && x < (Size)size)
+					{
+						x++;
+					}
+				
+					normalized_values[p] = (float)x / size;
+				}
+				return;
+			}
+			else
+			{
+				vector<float> temp(values);
+				for (Position p = 0; p < size; p++)
+				{
+					temp[p] = BALL_ABS(temp[p]);
+				}
+				sorted = temp;
+				sort(sorted.begin(), sorted.end());
+
+				Position x = 0;
+				for (Position p = 0; p < size; p++)
+				{
+					while (temp[p] > sorted[x] && x < (Size)size)
+					{
+						x++;
+					}
+				
+					normalized_values[p] = (float)x / size;
+				}
 			}
 		}
 

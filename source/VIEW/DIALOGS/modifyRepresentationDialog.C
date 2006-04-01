@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.C,v 1.1.2.1 2006/03/31 20:23:24 amoll Exp $
+// $Id: modifyRepresentationDialog.C,v 1.1.2.2 2006/04/01 10:28:13 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
@@ -450,9 +450,10 @@ namespace BALL
 			cm.createMap();
 
 			Representation::GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
-			try 
+			bool error = false;
+			for (; git != rep_->getGeometricObjects().end(); ++git)
 			{
-				for (; git != rep_->getGeometricObjects().end(); ++git)
+				try 
 				{
 					Mesh* mesh = dynamic_cast<Mesh*>(*git);
 
@@ -477,12 +478,16 @@ namespace BALL
 						}
 						continue;
 					}
-				}	
-			}
-			catch (Exception::OutOfGrid)
+				}
+				catch (Exception::OutOfGrid)
+				{
+					error = true;
+				}
+			}	 // all geometric objects
+			
+			if (error)
 			{
 				setStatusbarText("Error! There is a point contained in the surface that is not inside the grid!", true);
-				return false;
 			}
 
 			rep_->setTransparency(0);

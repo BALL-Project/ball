@@ -79,5 +79,14 @@ void FieldLinesDialog::accept()
 	QDialog::accept();
 }
 
+Position FieldLinesDialog::getSeedMode()
+{
+	return seed_mode_tab_widget->currentIndex();
+}
+
+Size FieldLinesDialog::getMonteCarloNumberLines()
+{
+	return monte_carlo_number_lines->value();
+}
 		
 } } // namespaces
