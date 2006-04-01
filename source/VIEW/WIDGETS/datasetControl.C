@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.16 2006/04/01 10:54:25 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.17 2006/04/01 15:15:17 anhi Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -913,8 +913,10 @@ namespace BALL
 		icosaeder_steps_ = dialog.getIcosaederInterplationSteps();
 		max_steps_ = dialog.getMaxSteps();
 		interpolation_steps_ = dialog.getInterpolationSteps();
-   	bool use_atoms = !dialog.getSeedMode();
-		Size monte_carlo_nr_lines = dialog.getMonteCarloNumberLines();
+
+		// 
+   	bool use_atoms = false; // !dialog.getSeedMode();
+		Size monte_carlo_nr_lines = 100;//dialog.getMonteCarloNumberLines();
 
 		vector_grid_ = item_to_gradients_[context_item_];
 		RegularData3D* potential_grid = (*get3DGrids().begin()).first;
@@ -1030,11 +1032,11 @@ namespace BALL
 
 	void DatasetControl::createFieldLine_(const Vector3& point, Representation& rep)
 	{
-		IlluminatedLine* line = new IlluminatedLine;
-		vector<Vector3>& points = line->vertices;
-
-		for (int backwards = 0; backwards < 1; backwards++)
+		for (int backwards = 0; backwards < 2; backwards++)
 		{
+			IlluminatedLine* line = new IlluminatedLine;
+			vector<Vector3>& points = line->vertices;
+
 			calculateLinePoints_(point, points, (backwards==0) ? 1. : -1.);
 
 			const Size nrp = points.size();
@@ -1053,9 +1055,9 @@ namespace BALL
 			(*line).tangents[nrp -1] = (*line).tangents[nrp -2];
 
 			(*line).colors.push_back(ColorRGBA(0.,0.,1.));
-		}
 
-		rep.insert(*line);
+			rep.insert(*line);
+		}
 	}
 
 	void DatasetControl::createVectorGrid()
@@ -1201,7 +1203,7 @@ namespace BALL
 
 		Vector3 grad_current = gradient_grid(point) * factor;
 		Vector3 grad_old     = grad_current;
-
+		
 		// Runge - Kutta of order 4 with adaptive step size and
 		// error control as described in Schwarz: "Numerische Mathematik"
 		// with step size control taken from Numerical Recipes
@@ -1220,7 +1222,7 @@ namespace BALL
 				try
 				{
 					k1 = h*grad_current;
-
+					
 					p2 = point + k1*2./9.;
 					k2 = h*gradient_grid.getInterpolatedValue(p2)*factor;
 
