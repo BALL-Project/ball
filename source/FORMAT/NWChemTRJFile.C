@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NWChemTRJFile.C,v 1.1.2.1 2006/03/26 13:43:24 anhi Exp $
+// $Id: NWChemTRJFile.C,v 1.1.2.2 2006/04/01 15:27:13 anhi Exp $
 //
 
 #include <BALL/FORMAT/NWChemTRJFile.h>
@@ -336,9 +336,10 @@ namespace BALL
 		// the remainder of the line contains the number of solvent molecules, the
 		// number of atoms per solvent, and the number of solute atoms to read. if
 		// these don't match the ones from the header we bail out.
+
 		Size solvent_mol_number  = String(current_line_.getSubstring(9,10)).trim().toUnsignedInt();
 		Size solvent_atom_number = String(current_line_.getSubstring(19,10)).trim().toUnsignedInt();
-		Size solute_atom_number  = String(current_line_.getSubstring(29,10)).trim().toUnsignedInt();
+		Size solute_atom_number  = String(current_line_.getSubstring(29, String::EndPos)).trim().toUnsignedInt();
 
 		if (!(   (solvent_mol_number  == number_of_solvent_molecules_)
 					 &&(solvent_atom_number == number_of_atoms_per_solvent_)
@@ -365,6 +366,8 @@ namespace BALL
 
 		for (; current_atom<solvent_atoms; current_atom++)
 		{
+			current_line_.getline(*this, '\n');
+
 			x = current_line_.getSubstring(0,8); y = current_line_.getSubstring(8,8); z = current_line_.getSubstring(16,8);
 			pos.x = x.trim().toFloat()*10; pos.y = y.trim().toFloat()*10; pos.z = z.trim().toFloat()*10;
 			
@@ -382,8 +385,10 @@ namespace BALL
 		}	
 
 		// now read the solute positions and velocities
-		for (; current_atom < solute_atom_number; current_atom++)
+		for (; current_atom < solute_atom_number + solvent_atoms; current_atom++)
 		{
+			current_line_.getline(*this, '\n');
+
 			x = current_line_.getSubstring(0,8); y = current_line_.getSubstring(8,8); z = current_line_.getSubstring(16,8);
 			pos.x = x.trim().toFloat()*10; pos.y = y.trim().toFloat()*10; pos.z = z.trim().toFloat()*10;
 			
@@ -399,7 +404,7 @@ namespace BALL
 				velocities[current_atom] = pos; 
 			}
 		}
-
+		
 		// save the stuff in a snapshot
 		snapshot.setNumberOfAtoms(total_atom_number);
 		snapshot.setAtomPositions(positions);
