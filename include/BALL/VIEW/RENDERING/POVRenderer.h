@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.12 2005/12/23 17:02:20 amoll Exp $
+// $Id: POVRenderer.h,v 1.12.2.1 2006/04/01 11:08:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -160,6 +160,10 @@ namespace BALL
 
 			// do nothing
 			void renderLabel_(const Label&)
+				throw();
+			
+			/// Render an illuminated line
+			virtual void renderIlluminatedLine_(const IlluminatedLine& line)
 				throw();
 
 			//@}
