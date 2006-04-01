@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.15 2006/04/01 10:28:13 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.16 2006/04/01 10:54:25 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -952,9 +952,9 @@ namespace BALL
 			Vector3 dimension = vector_grid_->getDimension();
 			VectorGrid::IndexType size = vector_grid_->getSize();
 
-			Size sx = (Size)(size.x / 3.0 + 1);
-			Size sy = (Size)(size.y / 3.0 + 1);
-			Size sz = (Size)(size.z / 3.0 + 1);
+			Size sx = (Size)(size.x / 2.0 + 1);
+			Size sy = (Size)(size.y / 2.0 + 1);
+			Size sz = (Size)(size.z / 2.0 + 1);
 			RegularData3D::IndexType st(sx, sy, sz);
 
 			Vector3 diff = Vector3(0.000001);
@@ -968,13 +968,13 @@ namespace BALL
 			const vector<float>& values =  potential_grid->getData();
 			for (Position p = 0; p < values.size(); p++)
 			{
-				new_grid.getClosestValue((vector_grid_->getCoordinates(p))) += values[p];
+				new_grid.getClosestValue((vector_grid_->getCoordinates(p))) += BALL_ABS(values[p]);
 			}
 
 			const vector<float>& values2 =  new_grid.getData();
 			vector<float> normalized_values;
 
-			calculateHistogramEqualization(values2, normalized_values, true);
+			calculateHistogramEqualization(values2, normalized_values);
 
 			float current = 0;
 			for (Position p = 0; p < normalized_values.size(); p++)
@@ -1022,7 +1022,6 @@ namespace BALL
 					}
 				} // search point
 			} // all lines
-Log.error() << "#~~#   9 " << errors            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		}
 
 		getMainControl()->insert(*rep);
