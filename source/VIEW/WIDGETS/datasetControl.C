@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.17 2006/04/01 15:15:17 anhi Exp $
+// $Id: datasetControl.C,v 1.46.2.18 2006/04/01 21:46:27 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -914,14 +914,19 @@ namespace BALL
 		max_steps_ = dialog.getMaxSteps();
 		interpolation_steps_ = dialog.getInterpolationSteps();
 
-		// 
-   	bool use_atoms = false; // !dialog.getSeedMode();
-		Size monte_carlo_nr_lines = 100;//dialog.getMonteCarloNumberLines();
+   	bool use_atoms = !dialog.getSeedMode();
+		Size monte_carlo_nr_lines = dialog.getMonteCarloNumberLines();
 
 		vector_grid_ = item_to_gradients_[context_item_];
 		RegularData3D* potential_grid = (*get3DGrids().begin()).first;
 		
 		AtomContainer* ac = (AtomContainer*) item_to_composite_[context_item_];
+		if (ac == 0)
+		{
+			const CompositeManager& cm = getMainControl()->getCompositeManager();
+			if (+cm.begin()) ac = (AtomContainer*) *cm.begin();
+		}
+
 		if (use_atoms && ac == 0) 
 		{
 			setStatusbarText("No System available for this gradient grid, aborting field line calculation!", true);
@@ -985,8 +990,7 @@ namespace BALL
 				normalized_values[p] = current;
 			}
 
-			const Vector3 spacing = vector_grid_->getSpacing();
-			const Vector3 half_spacing(vector_grid_->getSpacing() / 2.0);
+			const Vector3 spacing = new_grid.getSpacing();
 			
 			Size errors = 0;
 			for (Position p = 0; p < monte_carlo_nr_lines; p++)
@@ -998,7 +1002,6 @@ namespace BALL
 					if (normalized_values[i] > x)
 					{
 						Vector3 point = new_grid.getCoordinates(i);
-						point += half_spacing;
 						point += Vector3((drand48() - 0.5) * spacing.x,
 														 (drand48() - 0.5) * spacing.y,
 														 (drand48() - 0.5) * spacing.z);
@@ -1006,6 +1009,7 @@ namespace BALL
 						{
 							vector_grid_->getClosestValue(point);
 							createFieldLine_(point, *rep);
+							
 							/*
 							Sphere* p = new Sphere();
 							p->setPosition(point);
@@ -1013,6 +1017,7 @@ namespace BALL
 							p->setColor(ColorRGBA(0.,0.1,0));
 							rep->insert(*p);
 							*/
+							
 							break;
 						}
 						catch(...)
@@ -1032,12 +1037,12 @@ namespace BALL
 
 	void DatasetControl::createFieldLine_(const Vector3& point, Representation& rep)
 	{
-		for (int backwards = 0; backwards < 2; backwards++)
-		{
-			IlluminatedLine* line = new IlluminatedLine;
-			vector<Vector3>& points = line->vertices;
+		IlluminatedLine* line = new IlluminatedLine;
+		vector<Vector3>& points = line->vertices;
 
-			calculateLinePoints_(point, points, (backwards==0) ? 1. : -1.);
+		for (Size backwards = 0; backwards < 2; backwards++)
+		{
+			calculateLinePoints_(point, points, (backwards == 0) ? 1. : -1.);
 
 			const Size nrp = points.size();
 			if (points.size() < 2)
@@ -1053,11 +1058,10 @@ namespace BALL
 				(*line).tangents[v] = points[v+1] - points[v];
 			}
 			(*line).tangents[nrp -1] = (*line).tangents[nrp -2];
-
-			(*line).colors.push_back(ColorRGBA(0.,0.,1.));
-
-			rep.insert(*line);
 		}
+
+		(*line).colors.push_back(ColorRGBA(0.,0.,1.));
+		rep.insert(*line);
 	}
 
 	void DatasetControl::createVectorGrid()
@@ -1179,8 +1183,6 @@ namespace BALL
 	 */
 	inline void DatasetControl::calculateLinePoints_(Vector3 point, vector<Vector3>& points, float factor)
 	{
-		points.clear();
-
 		VectorGrid& gradient_grid = *vector_grid_;
 
 		TRegularData3D<Vector3>::CoordinateType spacing = gradient_grid.getSpacing();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.C,v 1.1.2.2 2006/04/01 10:28:13 amoll Exp $
+// $Id: modifyRepresentationDialog.C,v 1.1.2.3 2006/04/01 21:46:26 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
@@ -229,17 +229,12 @@ namespace BALL
 			}
 			
 			grid_ = *it;
-			calculateValues_();
 		}
 
 		void ModifyRepresentationDialog::setGrid(RegularData3D* grid)
 			throw()
 		{
 			grid_ = grid;
-			if (grid_ != 0 && rep_ != 0)
-			{
-				calculateValues_();
-			}
 		}
 
 		void ModifyRepresentationDialog::calculateValues_()

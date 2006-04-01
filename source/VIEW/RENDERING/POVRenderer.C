@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.22.2.2 2006/03/17 14:21:47 amoll Exp $
+// $Id: POVRenderer.C,v 1.22.2.3 2006/04/01 21:46:26 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -359,6 +359,19 @@ namespace BALL
 			out << "#macro TubeT(Position1, Position2, Radius, Color)" << endl;
 			out << "cylinder { Position1, Position2, Radius pigment { Color } finish { BALLFinishTubeTransp } }" << endl;
 			out << "#end" << endl << endl;
+
+			out << "// open Tube" << endl;
+			out << "#macro OT(Position1, Radius, Color)" << endl;
+			out << "cylinder { last_position, Position1, Radius open pigment { Color } finish { BALLFinishTubeSolid } }" << endl;
+			out << "#define last_position = Position1" << endl;
+			
+			out << "#end" << endl << endl;
+
+			out << "// open Tube transparent" << endl;
+			out << "#macro OTT(Position1, Position2, Radius, Color)" << endl;
+			out << "cylinder { Position1, Position2, Radius open pigment { Color } finish { BALLFinishTubeTransp } }" << endl;
+			out << "#end" << endl << endl;
+
 
 			out << "#macro Wire(Position1, Position2, Position3, Color1, Color2, Color3)" << endl;
 			out << "cylinder { Position1, Position2, BALL_WIRE_RADIUS pigment { Color1 } finish { BALLFinishWire} }" << endl;
@@ -861,6 +874,33 @@ namespace BALL
 			out << label.getVertex().y << ", ";
 			out << label.getVertex().z << " ";
 			out << " > }" << std::endl;
+		}
+
+		void POVRenderer::renderIlluminatedLine_(const IlluminatedLine& line)
+			throw()
+		{
+			/*
+			std::ostream& out = *outfile_;
+
+			out << "sphere_sweep {"
+
+ 			const vector<Vector3> vertices = line.getVertices();
+ 			const vector<ColorRGBA> colors = line.getColors();
+			bool multi_color = colors.size() > 1;
+			for (Position p = 0; p < vertices.size() -1; p++)
+			{
+				String p1 = POVVector3(line.getVertex1());
+				String p2 = POVVector3(line.getVertex2());
+
+			if (p1 == p2) return;
+
+			if ((Size) color.getAlpha() == 255) out << "OT(";
+			else 																out << "OTT(";
+
+		  out << p1 << ", " << p2 << ", "
+					<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
+					<< getColorIndex_(color) << ")" << endl;
+			*/
 		}
 
 	} // namespaces
