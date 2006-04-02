@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.22.2.4 2006/04/02 01:41:20 amoll Exp $
+// $Id: POVRenderer.C,v 1.22.2.5 2006/04/02 16:07:51 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -85,7 +85,6 @@ namespace BALL
 
 			representations_.clear();
 			color_map_.clear();
-			color_vector_.clear();
 		}
 
 		void POVRenderer::setFileName(const String& name)
@@ -152,7 +151,6 @@ namespace BALL
 			output += trimFloatValue_(input.y) + ", ";
 			output += trimFloatValue_(input.z);
 			output += ">";
-
 			return output;
 		}
 
@@ -185,7 +183,7 @@ namespace BALL
 			wireframes_.clear();
 			representations_.clear();
 			color_map_.clear();
-			color_vector_.clear();
+			color_strings_.clear();
 
 			std::ostream& out = *outfile_;
 
@@ -397,7 +395,6 @@ namespace BALL
 #end\n\
 		" << endl << endl;
 
-
 			return true;
 		}
 
@@ -406,19 +403,19 @@ namespace BALL
 		{
 			std::ostream& out = *outfile_;
 
-			for (Position p = 0; p < color_vector_.size(); p++)
+			// write all colors
+			ColorMap::ConstIterator cit = color_map_.begin();
+			for (; +cit; ++cit)
 			{
-				out << "#declare c" << p << " = " << POVColorRGBA(*color_vector_[p]) << ";" << endl;
+				out << "#declare c" << cit->second << " = " << POVColorRGBA(ColorRGBA(cit->first)) << ";" << endl;
 			}
 
 			out << endl;
 			
-
+			// write data for all Representations in an own union
 			vector<const Representation*>::iterator rit = representations_.begin();
-
 			for (; rit != representations_.end(); rit++)
 			{
-				
 				// now begin the CSG union containing all the geometric objects of this rep
 				out << "union {" << endl;
 
@@ -444,7 +441,6 @@ namespace BALL
 
 					if (plane.getRepresentations().has((Representation*)*rit))
 					{
-
 						out << "  clipped_by{" << endl
 										 << "   plane{< -"  // negate normal vector
 										 << plane.getNormal().x << ", -" 
@@ -719,39 +715,40 @@ namespace BALL
 			/////////////////////////////////////////////////
 			// calculate a hashset of all colors in the mesh
 			/////////////////////////////////////////////////
-			ColorMap colors;
-			vector<const ColorRGBA*> color_vector;
-			String color_string;
-			for (Position i = 0; i < mesh.colors.size(); i++)
-			{
-				mesh.colors[i].get(color_string);
-				if (!colors.has(color_string))
-				{
-					colors.insert(ColorMap::ValueType(color_string, colors.size()));
-					color_vector.push_back(&mesh.colors[i]);
-				}
-			}
+			
+      ColorMap colors;
+      vector<const ColorRGBA*> color_vector;
+      String color_string;
+      for (Position i = 0; i < mesh.colors.size(); i++)
+      {
+        mesh.colors[i].get(color_string);
+        if (!colors.has(color_string))
+        {
+          colors.insert(ColorMap::ValueType(color_string, colors.size()));
+          color_vector.push_back(&mesh.colors[i]);
+        }
+      }
 
 			// write colors of vertices ---->
 			out << "\t\ttexture_list{" << endl;
-			out << "\t\t\t" << colors.size() + 1<< ","<< endl;
+			out << "\t\t\t" << colors.size()<< ","<< endl;
 
-			ColorRGBA temp_color;
-			for (Position p = 0; p < color_vector.size(); p++)
+			for (Position p = 0; p < colors.size(); p++)
 			{
-   			temp_color.set((*color_vector[p]));
-				out << "texture { pigment { " << getColorIndex_(temp_color) << " }"
-						<< " finish { BALLFinishMesh } }," << endl;
+				out << "texture { pigment { " << getColorIndex_(*color_vector[p]) << " }"
+						<< " finish { BALLFinishMesh } }";
+
+				if (p < colors.size() - 1) out << ",";
+
+				out << endl;
 			}
 
-			out << "texture { pigment { " << getColorIndex_(temp_color) << " }"
-					<< " finish { BALLFinishMesh } }" << endl;
 			out << "\t\t}" << endl;
 			
 			// write vertex indices ---->
 			out << "\t\tface_indices {" << endl;
 			out << "\t\t\t" << mesh.triangle.size() << ","<<  endl;
-			if (colors.size() == 1)
+			if (mesh.colors.size() == 1)
 			{
 				out << "\t\t\t";
 				for (Position i = 0; i < mesh.triangle.size(); i++)
@@ -816,29 +813,20 @@ namespace BALL
 					 it != representation.getGeometricObjects().end();
 					 it++)
 			{
-				if (!RTTI::isKindOf<Mesh>(**it))
-				{
-					storeColor_(**it);
-				}
-				else
-				{
-					if (representation.getDrawingMode() == DRAWING_MODE_WIREFRAME)
-					{
-						wireframes_.insert((Mesh*) *it);
-					}
+				getColors(**it, color_strings_);
 
-					Mesh& mesh = *dynamic_cast<Mesh*>(*it);
-					String color_string;
-					for (Position i = 0; i < mesh.colors.size(); i++)
-					{
-						mesh.colors[i].get(color_string);
-						if (!color_map_.has(color_string))
-						{
-							color_map_.insert(ColorMap::ValueType(color_string, color_map_.size()));
-							color_vector_.push_back(&mesh.colors[i]);
-						}
-					}
+				if (representation.getDrawingMode() == DRAWING_MODE_WIREFRAME)
+				{
+					wireframes_.insert((Mesh*) *it);
 				}
+			}
+
+			Position p = 0;
+			HashSet<String>::ConstIterator cit = color_strings_.begin();
+			for (; +cit; ++cit)
+			{
+				color_map_.insert(ColorMap::ValueType(*cit, p));
+				p++;
 			}
 
 			representations_.push_back(&representation);
@@ -846,28 +834,10 @@ namespace BALL
 			return true;
 		}
 
-		void POVRenderer::storeColor_(const GeometricObject& object)
-		{
-			String color_string;
-			getColor_(object).get(color_string);
-			if (!color_map_.has(color_string))
-			{
-				color_map_.insert(ColorMap::ValueType(color_string, color_map_.size()));
-				color_vector_.push_back(&getColor_(object));
-			}
-		}
-
 		String POVRenderer::getColorIndex_(const ColorRGBA& color)
 		{
 			String color_temp;
 			color.get(color_temp);
-#ifdef BALL_VIEW_DEBUG
-			if (!color_map_.has(color_temp))
-			{
-				BALLVIEW_DEBUG
-				return "";
-			}
-#endif
 
 			return String("c") + String(color_map_[color_temp]);
 		}
@@ -897,17 +867,6 @@ namespace BALL
 		void POVRenderer::renderIlluminatedLine_(const IlluminatedLine& line)
 			throw()
 		{
-			String color_string;
-			for (Position i = 0; i < line.colors.size(); i++)
-			{
-				line.colors[i].get(color_string);
-				if (!color_map_.has(color_string))
-				{
-					color_map_.insert(ColorMap::ValueType(color_string, color_map_.size()));
-					color_vector_.push_back(&line.colors[i]);
-				}
-			}
-
 			std::ostream& out = *outfile_;
 
 			String last;

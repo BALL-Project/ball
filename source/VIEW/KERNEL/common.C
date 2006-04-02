@@ -2,12 +2,14 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
+#include <BALL/VIEW/DATATYPE/colorExtension2.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/point.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
+#include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
 
 #include <BALL/SYSTEM/directory.h>
 #include <BALL/SYSTEM/file.h>
@@ -629,6 +631,45 @@ namespace BALL
 					normalized_values[p] = (float)x / size;
 				}
 			}
+		}
+
+		void getColors(const GeometricObject& object, HashSet<String>& colors)
+		{
+			String c;
+			object.getColor().get(c);
+			colors.insert(c);
+
+			if (RTTI::isKindOf<ColorExtension2>(object))
+			{
+				(dynamic_cast<const ColorExtension2*>(&object))->getColor2().get(c);
+				colors.insert(c);
+				return;
+			}
+
+			if (RTTI::isKindOf<Mesh>(object))
+			{
+				const Mesh& mesh = *dynamic_cast<const Mesh*>(&object);
+				for (Position p = 0; p < mesh.colors.size(); p++)
+				{
+					mesh.colors[p].get(c);
+					colors.insert(c);
+				}
+				return;
+			}
+
+			if (RTTI::isKindOf<IlluminatedLine>(object))
+			{
+				const IlluminatedLine& line = *dynamic_cast<const IlluminatedLine*>(&object);
+				for (Position p = 0; p < line.colors.size(); p++)
+				{
+					line.colors[p].get(c);
+					colors.insert(c);
+				}
+				return;
+			}
+
+
+
 		}
 
 	} // namespace VIEW

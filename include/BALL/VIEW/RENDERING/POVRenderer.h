@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.12.2.1 2006/04/01 11:08:47 amoll Exp $
+// $Id: POVRenderer.h,v 1.12.2.2 2006/04/02 16:08:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -170,9 +170,10 @@ namespace BALL
 
 			protected:
 
+				const ColorRGBA& getColor_(const GeometricObject& object);
+			
 				std::ostream* outfile_;
 				String trimFloatValue_(float value);
-				const ColorRGBA& getColor_(const GeometricObject& object);
 				void storeColor_(const GeometricObject& object);
 				String getColorIndex_(const ColorRGBA& color);
 
@@ -181,11 +182,11 @@ namespace BALL
 				vector<ClippingPlane*> clipping_planes_;
 				bool human_readable_;
 
-				typedef HashMap<String, Position> ColorMap;
+				typedef HashMap<String, Size> ColorMap;
 				ColorMap color_map_;
-				vector<const ColorRGBA*> color_vector_;
 				vector<const Representation*> representations_;
 				HashSet<const Mesh*> wireframes_;
+				HashSet<String> color_strings_;
 				String font_file_;
 				double m_[12];
 		};

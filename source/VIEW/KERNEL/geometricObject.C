@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.C,v 1.25 2005/12/23 17:03:31 amoll Exp $
+// $Id: geometricObject.C,v 1.25.2.1 2006/04/02 16:07:51 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
@@ -79,6 +79,6 @@ namespace BALL
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
-				
+
 	} // namespace VIEW
 } // namespace BALL

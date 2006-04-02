@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.40.2.6 2006/04/01 10:28:27 amoll Exp $
+// $Id: common.h,v 1.40.2.7 2006/04/02 16:08:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -452,6 +452,9 @@ namespace BALL
 		BALL_VIEW_EXPORT vector<Vector3> createSphere(Size precision);
 
 		BALL_VIEW_EXPORT void calculateHistogramEqualization(const vector<float>& values, vector<float>& normalized_values, bool use_absolute_values = false);
+
+		BALL_VIEW_EXPORT void getColors(const GeometricObject& object, HashSet<String>& colors);
+		
 
 		//@}
 
