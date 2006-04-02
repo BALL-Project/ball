@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.22.2.3 2006/04/01 21:46:26 amoll Exp $
+// $Id: POVRenderer.C,v 1.22.2.4 2006/04/02 01:41:20 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -23,6 +23,7 @@
 #include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
 
 
 using std::endl;
@@ -378,6 +379,23 @@ namespace BALL
 			out << "cylinder { Position2, Position3, BALL_WIRE_RADIUS pigment { Color2 } finish { BALLFinishWire} }" << endl;
 			out << "cylinder { Position3, Position1, BALL_WIRE_RADIUS pigment { Color3 } finish { BALLFinishWire} }" << endl;
 			out << "#end" << endl << endl;
+
+			out << "\n\
+#macro ILine(Size, Points, Colors)\n\
+  #local colors = array[Size]\n\
+  #local colors = Colors\n\
+  #local points = array[Size]\n\
+  #local points = Points\n\
+  #local Index = 1;\n\
+  #local point = points[0];\n\
+  #while(Index < Size - 1)\n\
+		cylinder { point, points[Index], BALL_LINE_RADIUS open pigment { colors[Index] } finish { BALLFinishTubeSolid } }\n\
+		#declare point = (points[Index] + points[Index+1]) / 2.0;\n\
+		cylinder { points[Index], point, BALL_LINE_RADIUS open pigment { colors[Index] } finish { BALLFinishTubeSolid } }\n\
+		#declare Index = Index + 1;\n\
+  #end\n\
+#end\n\
+		" << endl << endl;
 
 
 			return true;
@@ -879,28 +897,54 @@ namespace BALL
 		void POVRenderer::renderIlluminatedLine_(const IlluminatedLine& line)
 			throw()
 		{
-			/*
+			String color_string;
+			for (Position i = 0; i < line.colors.size(); i++)
+			{
+				line.colors[i].get(color_string);
+				if (!color_map_.has(color_string))
+				{
+					color_map_.insert(ColorMap::ValueType(color_string, color_map_.size()));
+					color_vector_.push_back(&line.colors[i]);
+				}
+			}
+
 			std::ostream& out = *outfile_;
 
-			out << "sphere_sweep {"
-
- 			const vector<Vector3> vertices = line.getVertices();
- 			const vector<ColorRGBA> colors = line.getColors();
-			bool multi_color = colors.size() > 1;
-			for (Position p = 0; p < vertices.size() -1; p++)
+			String last;
+			HashSet<Position> used;
+			vector<String> vertices;
+			for (Position i = 0; i < line.vertices.size(); i++)
 			{
-				String p1 = POVVector3(line.getVertex1());
-				String p2 = POVVector3(line.getVertex2());
+				String now = POVVector3(line.vertices[i]);
+				if (last == now) continue;
+				last = now;
+				vertices.push_back(now);
+			}
 
-			if (p1 == p2) return;
+			out << "#declare vertices = array[" << String(vertices.size()) << "] { ";
+			for (Position i = 0; i < vertices.size(); i++)
+			{
+				out << vertices[i] << " ";
+				if (i != vertices.size() - 1) out << ", ";
+			}
 
-			if ((Size) color.getAlpha() == 255) out << "OT(";
-			else 																out << "OTT(";
+			out << " } " << endl; 
 
-		  out << p1 << ", " << p2 << ", "
-					<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
-					<< getColorIndex_(color) << ")" << endl;
-			*/
+			out << "#declare colors = array[" << String(vertices.size()) << "] { ";
+			bool multi_colors = true;
+			if (line.colors.size() == 1) multi_colors = false;
+			for (Position i = 0; i < vertices.size(); i++)
+			{
+				if (used.has(i)) continue;
+
+				if (multi_colors) out << getColorIndex_(line.colors[i]);
+				else              out << getColorIndex_(line.colors[0]);
+
+				if (i != vertices.size() - 1) out << ", ";
+			}
+
+			out << " } " << endl; 
+			out << "ILine(" << String(vertices.size()) << ", vertices, colors)" << endl;
 		}
 
 	} // namespaces
