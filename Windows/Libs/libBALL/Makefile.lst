@@ -65,6 +65,8 @@ libBALL.obj\
 ..\..\..\source\FORMAT\PDBFileGeneral.obj\
 ..\..\..\source\FORMAT\PDBInfo.obj\
 ..\..\..\source\FORMAT\PDBRecords.obj\
+..\..\..\source\FORMAT\DSN6File.obj\
+#..\..\..\source\FORMAT\GAMESSLogFile.obj ..\..\..\source\FORMAT\GAMESSDatFile.obj\
 ..\..\..\source\FORMAT\resourceFile.obj\
 ..\..\..\source\FORMAT\SDFile.obj\
 ..\..\..\source\FORMAT\trajectoryFile.obj\
@@ -109,6 +111,7 @@ libBALL.obj\
 ..\..\..\source\MATHS\piecewisePolynomial.obj\
 ..\..\..\source\MATHS\plane3.obj\
 ..\..\..\source\MATHS\quaternion.obj\
+..\..\..\source\MATHS\randomNumberGenerator.obj\
 ..\..\..\source\MATHS\simpleBox3.obj\
 ..\..\..\source\MATHS\sphere3.obj\
 ..\..\..\source\MATHS\surface.obj\
@@ -240,11 +243,6 @@ libBALL.obj\
 ..\..\..\source\STRUCTURE\solventExcludedSurface.obj\
 ..\..\..\source\STRUCTURE\structureMapper.obj\
 ..\..\..\source\STRUCTURE\surfaceProcessor.obj\
-..\..\..\source\STRUCTURE\triangle.obj\
-..\..\..\source\STRUCTURE\triangleEdge.obj\
-..\..\..\source\STRUCTURE\trianglePoint.obj\
-..\..\..\source\STRUCTURE\triangulatedSAS.obj\
-..\..\..\source\STRUCTURE\triangulatedSES.obj\
-..\..\..\source\STRUCTURE\triangulatedSurface.obj\
+..\..\..\source\STRUCTURE\triangle.obj ..\..\..\source\STRUCTURE\triangleEdge.obj ..\..\..\source\STRUCTURE\trianglePoint.obj ..\..\..\source\STRUCTURE\triangulatedSAS.obj ..\..\..\source\STRUCTURE\triangulatedSES.obj ..\..\..\source\STRUCTURE\triangulatedSurface.obj\
 ..\..\..\source\STRUCTURE\UCK.obj ..\..\..\source\STRUCTURE\DOCKING\amberEvaluation.obj ..\..\..\source\STRUCTURE\DOCKING\dockResult.obj ..\..\..\source\STRUCTURE\DOCKING\energeticEvaluation.obj ..\..\..\source\STRUCTURE\DOCKING\geometricFit.obj ..\..\..\source\STRUCTURE\DOCKING\conformationSet.obj ..\..\..\source\STRUCTURE\DOCKING\dockingAlgorithm.obj ..\..\..\source\STRUCTURE\DOCKING\forceFieldEvaluation.obj ..\..\..\source\STRUCTURE\DOCKING\randomEvaluation.obj ..\..\..\source\SYSTEM\directory.obj ..\..\..\source\SYSTEM\file.obj ..\..\..\source\SYSTEM\fileSystem.obj ..\..\..\source\SYSTEM\path.obj ..\..\..\source\SYSTEM\socket.obj ..\..\..\source\SYSTEM\sysinfo.obj ..\..\..\source\SYSTEM\TCPTransfer.obj ..\..\..\source\SYSTEM\timer.obj
 #stupid WINDOWS: no more than 255 lines!

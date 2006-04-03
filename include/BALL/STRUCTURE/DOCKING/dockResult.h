@@ -22,7 +22,7 @@ namespace BALL
 		 *  on the other hand it can return scores sorted by another scoring. 
 		 *  This offers a simple way to compare the different scores with each other
 		 */
-		class DockResult
+		class BALL_EXPORT DockResult
 		{
 			public:
 					

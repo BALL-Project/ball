@@ -25,6 +25,7 @@ libVIEW.obj\
 ..\..\..\source\VIEW\DIALOGS\geometricFitDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\downloadPDBFile.obj\
 #..\..\..\source\VIEW\DIALOGS\editOperationDialog.obj\
+..\..\..\source\VIEW\DIALOGS\fieldLinesDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\FDPBDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\labelDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\lightSettings.obj\
@@ -32,7 +33,7 @@ libVIEW.obj\
 ..\..\..\source\VIEW\DIALOGS\materialSettings.obj\
 ..\..\..\source\VIEW\DIALOGS\minimizationDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\modelSettingsDialog.obj\
-..\..\..\source\VIEW\DIALOGS\modifySurfaceDialog.obj\
+..\..\..\source\VIEW\DIALOGS\modifyRepresentationDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\molecularDynamicsDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\molecularFileDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\networkPreferences.obj\
@@ -80,6 +81,7 @@ libVIEW.obj\
 ..\..\..\source\VIEW\MODELS\vanDerWaalsModel.obj\
 ..\..\..\source\VIEW\PRIMITIVES\box.obj\
 ..\..\..\source\VIEW\PRIMITIVES\disc.obj\
+..\..\..\source\VIEW\PRIMITIVES\illuminatedLine.obj\
 ..\..\..\source\VIEW\PRIMITIVES\label.obj\
 ..\..\..\source\VIEW\PRIMITIVES\line.obj\
 ..\..\..\source\VIEW\PRIMITIVES\mesh.obj\
@@ -127,6 +129,7 @@ mocfiles\dockResultDialog_moc.obj\
 mocfiles\geometricFitDialog_moc.obj\
 mocfiles\downloadPDBFile_moc.obj\
 #mocfiles\editOperationDialog_moc.obj\
+mocfiles\fieldLinesDialog_moc.obj\
 mocfiles\FDPBDialog_moc.obj\
 mocfiles\labelDialog_moc.obj\
 mocfiles\lightSettings_moc.obj\
@@ -134,7 +137,7 @@ mocfiles\mainControlPreferences_moc.obj\
 mocfiles\materialSettings_moc.obj\
 mocfiles\minimizationDialog_moc.obj\
 mocfiles\modelSettingsDialog_moc.obj\
-mocfiles\modifySurfaceDialog_moc.obj\
+mocfiles\modifyRepresentationDialog_moc.obj\
 mocfiles\molecularDynamicsDialog_moc.obj\
 mocfiles\molecularFileDialog_moc.obj\
 mocfiles\networkPreferences_moc.obj\
@@ -180,6 +183,7 @@ UICS = \
 ..\..\..\source\VIEW\DIALOGS\displayProperties.myui\
 ..\..\..\source\VIEW\DIALOGS\downloadPDBFile.myui\
 #..\..\..\source\VIEW\DIALOGS\editOperationDialog.myui\
+..\..\..\source\VIEW\DIALOGS\fieldLinesDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\FDPBDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\labelDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\lightSettings.myui\
@@ -187,7 +191,7 @@ UICS = \
 ..\..\..\source\VIEW\DIALOGS\materialSettings.myui\
 ..\..\..\source\VIEW\DIALOGS\minimizationDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\modelSettingsDialog.myui\
-..\..\..\source\VIEW\DIALOGS\modifySurfaceDialog.myui\
+..\..\..\source\VIEW\DIALOGS\modifyRepresentationDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\molecularDynamicsDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\networkPreferences.myui\
 ..\..\..\source\VIEW\DIALOGS\parsedFunctionDialog.myui\

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.17 2006/03/31 21:14:32 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.18 2006/04/03 14:44:19 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -396,129 +396,6 @@ namespace BALL
 
 	void Mainframe::about()
 	{
-		ColorMap table;
-		ColorRGBA colors[3];
-		colors[0] = ColorRGBA(0.0, 0.0, 1.0, 1.0);
-//   		colors[1] = ColorRGBA(0.0, 0.3, 0.7, 0.4);
-		colors[1] = ColorRGBA(0.0, 1.0, 0.0, 0.0);
-//   		colors[2] = ColorRGBA(0.0, 1.0, 0.0, 0.2);
-//   		colors[3] = ColorRGBA(0.7, 0.3, 0.0, 0.4);
-		colors[2] = ColorRGBA(1.0, 0.0, 0.0, 1.0);
-
-		table.setRange(-100, 100);
-		table.setBaseColors(colors,3);
-		table.setMinMaxColors(colors[0], colors[4]);
-		table.setNumberOfColors(100);
-		table.setAlphaBlending(true);
-		table.createMap();
-
-		Representation* rep = new Representation;
-		for (Index p = -100; p < 100; p+=2)
-		{
-			Tube* tube = new Tube;
-			tube->setVertex1(Vector3(p,0,0));
-			tube->setVertex2(Vector3(p+2,0,0));
-			tube->setRadius(10);
-			tube->setColor(table.map(p));
-			rep->insert(*tube);
-		}
-
-		for (Index p = 0; p < table.size(); p++)
-		{
-			Tube* tube = new Tube;
-			tube->setVertex1(Vector3(p,20,0));
-			tube->setVertex2(Vector3(p+2,20,0));
-			tube->setRadius(10);
-			tube->setColor(table[p]);
-			rep->insert(*tube);
-Log.error() << "#~~#   1 " << table[p]            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-		}
-
-
-		insert(*rep);
-		update(*rep);
-
-	/*
-//   	Representation* rep = new Representation;
-	String filename("/local/amoll/velocity.dat");
-	std::FILE* file;
-	file = fopen(filename.c_str(), "rb");
-	if (file == NULL)
-	{
-		cerr << "Error while opening data file '" << filename << "'." << endl;
-		return;
-	}
-
-	cout << "Reading data from '" << filename << "'." << endl;
-
-	Size lineCount;
-	// Get the number of polylines.
-	fread(&lineCount, sizeof(int), 1, file);
-	cout << "Preparing to read " << lineCount << " polylines..." << flush;
-
-	// Get the size of each polyline.
-	int* vertCount = new int[lineCount];
-	fread(vertCount, sizeof(int), lineCount, file);
-
-	int totalSize = 0;
-	for (int i = 0; i < lineCount; i++)
-	{
-		totalSize += vertCount[i];
-	}
-
-	// Read the vertices.
-	float* vertices = new float[3 * totalSize];
-	fread(vertices, sizeof(float), 3 * totalSize, file);
-
-	float* colors = 0;
-	// Read the colors.
-	colors = new float[4 * totalSize];
-	fread(colors, sizeof(float), 4 * totalSize, file);
-
-	int vpos = 0;
-	int cpos = 0;
-	for (Position l = 0; l < lineCount; l++)
-	{
-		IlluminatedLine* line = new IlluminatedLine;
-		line->vertices.resize(vertCount[l]);
-		line->tangents.resize(vertCount[l]);
- 		line->colors.resize(vertCount[l]);
-		for (Position v = 0; v < vertCount[l]; v++)
-		{
-			(*line).vertices[v].set(vertices[vpos],
-														vertices[vpos+1],
-														vertices[vpos+2]);
-			vpos += 3;
-
-			(*line).colors[v].set(colors[cpos],
-													colors[cpos+1],
-													colors[cpos+2],
-													colors[cpos+3]);
-			cpos += 4;
-		}
-
-		for (Position v = 0; v < vertCount[l] - 1; v++)
-		{
-			(*line).tangents[v] = (*line).vertices[v+1] - (*line).vertices[v];
-		}
-
-		(*line).tangents[vertCount[l] -1] = (*line).tangents[vertCount[l] -2];
-
-
-		rep->insert(*line);
-	}
-
-	delete vertices;
-	delete colors;
-
-	cout << totalSize << " vertices have been read in." << endl;
-
-	fclose(file);
-	insert(*rep);
-	update(*rep);
-	return;
-	*/
-
 		// Display about dialog
 		QDialog w;
  		Ui_AboutDialog about;

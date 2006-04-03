@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.9 2006/03/30 14:26:47 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.10 2006/04/03 14:44:20 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1723,11 +1723,11 @@ namespace BALL
 			const int TEXTURE_SIZE = 128;  // including border
 			enum { R = 0, G = 1, B = 2, A = 3 };
 
-			assert( 0. <= ka && ka <= 1. );
-			assert( 0. <= kd && kd <= 1. );
-			assert( 0. <= kr && kr <= 1. );
+//   			assert( 0. <= ka && ka <= 1. );
+//   			assert( 0. <= kd && kd <= 1. );
+//   			assert( 0. <= kr && kr <= 1. );
 			float k = ka + kd + kr;
-			assert( 0. <= k  &&  k <= 1. );
+//   			assert( 0. <= k  &&  k <= 1. );
 
 			Index i = 0;
 			Index j = 0;
@@ -1751,10 +1751,10 @@ namespace BALL
 						if( intensity < 0. ) intensity = 0.;
 						if( 1. < intensity ) intensity = 1.;
 					}
-					assert( 0. <= intensity && intensity <= 1. );
+//   					assert( 0. <= intensity && intensity <= 1. );
 
 					Index c = (Index)(intensity * 255);
-					assert( 0 <= c && c <= 255 );
+//   					assert( 0 <= c && c <= 255 );
 
 					line_tex_[i][j][R] = (GLubyte) c;
 					line_tex_[i][j][G] = (GLubyte) c;

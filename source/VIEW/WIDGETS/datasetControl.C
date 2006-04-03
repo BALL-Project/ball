@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.20 2006/04/03 14:19:02 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.21 2006/04/03 14:44:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -1256,7 +1256,7 @@ namespace BALL
 					if (error_estimate > 1.0)
 					{
 						// update h using the error estimate
-						double h_new = h * rho * pow(error_estimate, -0.25);
+						double h_new = h * rho * pow((double)error_estimate, (double)-0.25);
 
 						h = (h >= 0) ? std::max(h_new, 0.1*h) : std::min(h_new, 0.1*h);
 					}
@@ -1276,7 +1276,7 @@ namespace BALL
 			}
 
 			// compute a step size for the next step (the magic numbers are taken from Numerical Recipes)
-			if (error_estimate > 1.89e-4) h = rho * h * pow(error_estimate, -0.2);
+			if (error_estimate > 1.89e-4) h = rho * h * pow((double)error_estimate, (double)-0.2);
 			else 												  h = 5.*h;
 
 			grad_old = grad_current;
