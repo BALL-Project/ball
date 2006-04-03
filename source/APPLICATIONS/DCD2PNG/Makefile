@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.4.2.1 2006/01/31 10:34:54 oliver Exp $
+# $Id: Makefile,v 1.4.2.2 2006/04/03 09:10:07 amoll Exp $
 #
 # Author:
 #   Andreas Moll
@@ -27,7 +27,7 @@ MOC_SOURCES=\
 	mainframe_moc.C
 	
 DCD2PNG:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES)
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_LIBS) $(PYTHON_LIBS)
 
 depend: $(MOC_SOURCES)
 

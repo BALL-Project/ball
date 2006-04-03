@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.1 2004/12/13 13:38:35 amoll Exp $
+// $Id: mainframe.h,v 1.1.8.1 2006/04/03 09:10:08 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_DCD2PNG_MAINFRAME_H
@@ -39,7 +39,7 @@
 # include <BALL/VIEW/WIDGETS/molecularControl.h>
 #endif
 
-#include <qwidget.h>
+#include <QtGui/qwidget.h>
 
 namespace BALL
 {
