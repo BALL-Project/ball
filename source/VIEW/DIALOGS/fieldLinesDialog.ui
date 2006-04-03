@@ -99,13 +99,13 @@
       <item row="2" column="1" >
        <widget class="QSpinBox" name="interpolation_steps" >
         <property name="maximum" >
-         <number>7</number>
+         <number>6</number>
         </property>
         <property name="minimum" >
-         <number>2</number>
+         <number>1</number>
         </property>
         <property name="value" >
-         <number>5</number>
+         <number>2</number>
         </property>
        </widget>
       </item>
