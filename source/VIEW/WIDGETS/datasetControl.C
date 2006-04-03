@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.18 2006/04/01 21:46:27 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.19 2006/04/03 11:43:53 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -1037,11 +1037,11 @@ namespace BALL
 
 	void DatasetControl::createFieldLine_(const Vector3& point, Representation& rep)
 	{
-		IlluminatedLine* line = new IlluminatedLine;
-		vector<Vector3>& points = line->vertices;
-
 		for (Size backwards = 0; backwards < 2; backwards++)
 		{
+			IlluminatedLine* line = new IlluminatedLine;
+			vector<Vector3>& points = line->vertices;
+
 			calculateLinePoints_(point, points, (backwards == 0) ? 1. : -1.);
 
 			const Size nrp = points.size();
@@ -1058,10 +1058,10 @@ namespace BALL
 				(*line).tangents[v] = points[v+1] - points[v];
 			}
 			(*line).tangents[nrp -1] = (*line).tangents[nrp -2];
-		}
 
-		(*line).colors.push_back(ColorRGBA(0.,0.,1.));
-		rep.insert(*line);
+			(*line).colors.push_back(ColorRGBA(0.,0.,1.));
+			rep.insert(*line);
+		}
 	}
 
 	void DatasetControl::createVectorGrid()
