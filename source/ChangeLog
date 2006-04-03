@@ -6,11 +6,13 @@ Improved Python support.
 
 Added:
 - Docking interface
+- Support for field lines and vector grids
+- Support for DSN6 electron densitiy files
 - Widget for overview of atom values (e.g. atom type, charge)
 - Added BALL documentation widget in BALLView
 - Python widget supports completion
-- Python widget support for context sensitive help for BALL Python commands
 - Python widget supports Syntax Highlighting
+- Python widget support for context sensitive help for BALL Python commands
 - BALLView has menu entries for user defined Python script hotkeys
 - Further Python example scripts
 - SMARTS support
@@ -34,7 +36,7 @@ Known problems:
 - Molecular Control Selection: Child->Parent doesnt always gets selected
 - RegularData widgets currently dont work (QT 4.1 does not yet have CanvasWidgets)
 - HelpViewer has problems with HTML layout (QT problem)
-- Stereo Viewing currently doesnt work because of QT stupidity
+- Stereo Viewing doesnt work because of QT stupidity
 
 1.1.1:
 
