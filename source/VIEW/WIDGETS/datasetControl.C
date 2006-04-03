@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.19 2006/04/03 11:43:53 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.20 2006/04/03 14:19:02 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -27,6 +27,7 @@
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/STRUCTURE/DOCKING/dockResult.h>
+#include <BALL/MATHS/randomNumberGenerator.h>
 
 #include <QtGui/QFileDialog>
 
@@ -553,9 +554,7 @@ namespace BALL
 			String filename = chooseGridFileForOpen_();
 			if (filename == "") return;
 
-			System* system = 0;
-			List<Composite*>& sel = getMainControl()->getMolecularControlSelection();
-			if (sel.size() != 0) system = dynamic_cast<System*>(*sel.begin());
+			System* system = getMainControl()->getSelectedSystem();
 
 			RegularData3D* dat = new RegularData3D;
 			DSN6File infile(filename, std::ios::in|std::ios::binary);
@@ -991,20 +990,21 @@ namespace BALL
 			}
 
 			const Vector3 spacing = new_grid.getSpacing();
+			RandomNumberGenerator ran_gen;
+			ran_gen.setup();
 			
 			Size errors = 0;
 			for (Position p = 0; p < monte_carlo_nr_lines; p++)
 			{
-				float x = drand48();
-				x *= current;
+				float x = ran_gen.randomDouble(0, current);
 				for (Position i = 0; i < normalized_values.size(); i++)
 				{
 					if (normalized_values[i] > x)
 					{
 						Vector3 point = new_grid.getCoordinates(i);
-						point += Vector3((drand48() - 0.5) * spacing.x,
-														 (drand48() - 0.5) * spacing.y,
-														 (drand48() - 0.5) * spacing.z);
+						point += Vector3(ran_gen.randomDouble(-0.5, 0.5) * spacing.x,
+														 ran_gen.randomDouble(-0.5, 0.5) * spacing.y,
+														 ran_gen.randomDouble(-0.5, 0.5) * spacing.z);
 						try
 						{
 							vector_grid_->getClosestValue(point);
@@ -1162,9 +1162,7 @@ namespace BALL
 	void DatasetControl::addVectorGrid()
 		throw()
 	{
-		List<Composite*>& sel = getMainControl()->getMolecularControlSelection();
-		if (sel.size() == 0) return;
-		System* system = dynamic_cast<System*>(*sel.begin());
+		System* system = getMainControl()->getSelectedSystem();
 		if (!system) return;
 
 		String filename = chooseGridFileForOpen_();
