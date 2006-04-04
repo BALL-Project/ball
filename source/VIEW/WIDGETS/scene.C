@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.24 2006/04/04 15:52:03 amoll Exp $
+// $Id: scene.C,v 1.174.2.25 2006/04/04 15:56:35 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -611,7 +611,6 @@ namespace BALL
 
 					if (!cap)
 					{
-//   						gl_renderer_.setup_ = true;
 						render_(rep, mode);
 						continue;
 					}
@@ -635,49 +634,46 @@ namespace BALL
 
   		glEnable(nr + GL_CLIP_PLANE0);
 
-		glClearStencil(0);
-		glClear(GL_STENCIL_BUFFER_BIT);
-		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-		glEnable(GL_STENCIL_TEST);
- 		glStencilFunc(GL_ALWAYS, 0x0, 0xff);
-		glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
-		render_(rep, mode);
+			glClearStencil(0);
+			glClear(GL_STENCIL_BUFFER_BIT);
+			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+			glEnable(GL_STENCIL_TEST);
+			glStencilFunc(GL_ALWAYS, 0x0, 0xff);
+			glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
+			render_(rep, mode);
 
-		glStencilFunc(GL_EQUAL, 0x1, 0xff);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-		gl_renderer_.setColorRGBA_(ColorRGBA(0,1.0,0));
-	
-		const Camera& camera = stage_->getCamera();
-		Vector3 v(camera.getLookAtPosition());
-		Vector3 u(camera.getLookUpVector() * 1000);
-		Vector3 r(camera.getRightVector() *  1000);
-		Vector3 l = camera.getViewVector() / -10;
-
-		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
- 		glStencilFunc(GL_ALWAYS, 0x0, 0xff);
-		glDisable(GL_STENCIL_TEST);
-//   						gl_renderer_.setup_ = true;
-   		render_(rep, mode);
-		glEnable(GL_STENCIL_TEST);
-		for (Position p = 0; p < rep_active_planes.size(); p++)
-		{
-			glDisable(rep_active_planes[p] + GL_CLIP_PLANE0);
-		}
-
- 		glStencilFunc(GL_NOTEQUAL, 0x0, 0xff);
-		gl_renderer_.setColorRGBA_(ColorRGBA(0,1.0,0));
-		glBegin(GL_QUADS);
-		gl_renderer_.vertexVector3_(p - x + y);
-		gl_renderer_.vertexVector3_(p + x + y);
-		gl_renderer_.vertexVector3_(p + x - y);
-		gl_renderer_.vertexVector3_(p - x - y);
-		glEnd();
-
+			glStencilFunc(GL_EQUAL, 0x1, 0xff);
+			glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+			gl_renderer_.setColorRGBA_(ColorRGBA(0,1.0,0));
 		
-		glDisable(GL_STENCIL_TEST);
-				}
+			const Camera& camera = stage_->getCamera();
+			Vector3 v(camera.getLookAtPosition());
+			Vector3 u(camera.getLookUpVector() * 1000);
+			Vector3 r(camera.getRightVector() *  1000);
+			Vector3 l = camera.getViewVector() / -10;
+
+			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+			glStencilFunc(GL_ALWAYS, 0x0, 0xff);
+			glDisable(GL_STENCIL_TEST);
+			render_(rep, mode);
+			glEnable(GL_STENCIL_TEST);
+			for (Position p = 0; p < rep_active_planes.size(); p++)
+			{
+				glDisable(rep_active_planes[p] + GL_CLIP_PLANE0);
 			}
 
+			glStencilFunc(GL_NOTEQUAL, 0x0, 0xff);
+			glBegin(GL_QUADS);
+			gl_renderer_.setColorRGBA_(ColorRGBA(0,1.0,0));
+			gl_renderer_.vertexVector3_(p - x + y);
+			gl_renderer_.vertexVector3_(p + x + y);
+			gl_renderer_.vertexVector3_(p + x - y);
+			gl_renderer_.vertexVector3_(p - x - y);
+			glEnd();
+			
+			glDisable(GL_STENCIL_TEST);
+				}
+			}
 		}
 
 
