@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.21 2006/04/03 14:44:20 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.22 2006/04/04 23:56:06 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -77,18 +77,19 @@ namespace BALL
 														this, SLOT(addTrajectory()));
 			setMenuHint("Open a trajectory file (1 System has to be selected)");
 
-			insertMenuEntry(MainControl::FILE_OPEN, "1D Grid", this, SLOT(add1DGrid()));
+			insertMenuEntry(MainControl::FILE_OPEN_GRID, "1D Grid", this, SLOT(add1DGrid()));
 			setMenuHint("Open a 1D data grid");
 
-			insertMenuEntry(MainControl::FILE_OPEN, "2D Grid", this, SLOT(add2DGrid()));
+			insertMenuEntry(MainControl::FILE_OPEN_GRID, "2D Grid", this, SLOT(add2DGrid()));
 			setMenuHint("Open a 2D data grid");
 
-			insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()));
+			insertMenuEntry(MainControl::FILE_OPEN_GRID, "3D Grid", this, SLOT(add3DGrid()));
 			setMenuHint("Open a 3D data grid");
 
-			open_gradient_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Vector Grid", this, SLOT(addVectorGrid()));
+			open_gradient_id_ = insertMenuEntry(MainControl::FILE_OPEN_GRID, "Vector Grid", this, SLOT(addVectorGrid()));
+			setMenuHint("Open a vector grid for a highlighted System" );
 
-			insertMenuEntry(MainControl::FILE_OPEN, "DSN6 electron density map", this, SLOT(addDSN6Grid()));
+			insertMenuEntry(MainControl::FILE_OPEN_GRID, "DSN6 electron density map", this, SLOT(addDSN6Grid()));
 			setMenuHint("Open an electron density file in DSN6 format (e.g. .omap files)" );
 
 			setMenuHint("Open a gradient grid");
