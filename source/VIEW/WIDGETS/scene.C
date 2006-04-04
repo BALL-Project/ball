@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.26 2006/04/04 22:26:32 amoll Exp $
+// $Id: scene.C,v 1.174.2.27 2006/04/04 23:11:03 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -634,6 +634,8 @@ namespace BALL
 					p = plane.getPoint();
 					x = getNormal(plane.getNormal()) * 400;
 					y = x % plane.getNormal() * 400;
+ 					n = plane.getNormal();
+					n.normalize();
 
 					// fill the stencil buffer
 					glEnable(cap_nr + GL_CLIP_PLANE0);
@@ -666,14 +668,9 @@ namespace BALL
 					if (transparent) gl_renderer_.initTransparent();
 					else 						 gl_renderer_.initSolid();
 
-					gl_renderer_.setColorRGBA_(color);
-					glBegin(GL_QUADS);
-					gl_renderer_.normalVector3_(n);
-					gl_renderer_.vertexVector3_(p - x + y);
-					gl_renderer_.vertexVector3_(p + x + y);
-					gl_renderer_.vertexVector3_(p + x - y);
-					gl_renderer_.vertexVector3_(p - x - y);
-					glEnd();
+					Disc d(Circle3(p, n, 400));
+					d.setColor(color);
+					gl_renderer_.render_(&d);
 					
 					glDisable(GL_STENCIL_TEST);
 				}
