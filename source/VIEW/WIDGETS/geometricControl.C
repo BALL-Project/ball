@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.14 2006/03/30 14:26:48 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.15 2006/04/04 13:13:45 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -230,6 +230,7 @@ namespace BALL
 				{
 					actions[p]->setEnabled(false); 
 				}
+				actions[6]->setEnabled(true);
 				return;
 			}
 
