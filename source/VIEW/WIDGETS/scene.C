@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.23 2006/04/04 15:48:16 amoll Exp $
+// $Id: scene.C,v 1.174.2.24 2006/04/04 15:52:03 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -611,7 +611,7 @@ namespace BALL
 
 					if (!cap)
 					{
-						gl_renderer_.setup_ = true;
+//   						gl_renderer_.setup_ = true;
 						render_(rep, mode);
 						continue;
 					}
@@ -653,13 +653,10 @@ namespace BALL
 		Vector3 r(camera.getRightVector() *  1000);
 		Vector3 l = camera.getViewVector() / -10;
 
-//    		glStencilFunc(GL_NOTEQUAL, 0x0, 0xff);
-//      		render_(rep, mode);
-
 		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
  		glStencilFunc(GL_ALWAYS, 0x0, 0xff);
 		glDisable(GL_STENCIL_TEST);
-						gl_renderer_.setup_ = true;
+//   						gl_renderer_.setup_ = true;
    		render_(rep, mode);
 		glEnable(GL_STENCIL_TEST);
 		for (Position p = 0; p < rep_active_planes.size(); p++)
