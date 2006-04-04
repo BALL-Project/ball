@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clippingPlane.h,v 1.3 2005/12/23 17:02:13 amoll Exp $
+// $Id: clippingPlane.h,v 1.3.2.1 2006/04/04 22:26:44 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_CLIPPING_PLANE_H
@@ -90,6 +90,15 @@ namespace BALL
 			///
 			void flip() { normal_ = -normal_;}
 
+			///
+			static ColorRGBA& getCappingColor() { return capping_color_;}
+
+			///
+			bool cappingEnabled() const { return cap_;}
+
+			///
+			void setCappingEnabled(bool state) { cap_ = state;}
+
 			//@}
 
 			protected:
@@ -99,6 +108,8 @@ namespace BALL
 			Vector3 point_;
 			bool active_;
 			bool hidden_;
+			bool cap_;
+			static ColorRGBA capping_color_;
 		};
 
 	} // namespace VIEW

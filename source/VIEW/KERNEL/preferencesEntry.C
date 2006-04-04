@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.19.2.2 2006/02/01 13:23:49 amoll Exp $
+// $Id: preferencesEntry.C,v 1.19.2.3 2006/04/04 22:26:31 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -9,6 +9,7 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
 #include <QtGui/qslider.h>
+#include <QtGui/qspinbox.h>
 #include <QtGui/qlabel.h>
 #include <QtGui/qcheckbox.h>
 #include <QtGui/qlineedit.h>
@@ -97,6 +98,10 @@ namespace BALL
 			else if (RTTI::isKindOf<QSlider>(*widget))
 			{
 				value = String((dynamic_cast<const QSlider*>(widget))->value());
+			}
+			else if (RTTI::isKindOf<QSpinBox>(*widget))
+			{
+				value = String((dynamic_cast<const QSpinBox*>(widget))->value());
 			}
 			else if (RTTI::isKindOf<QLabel>(*widget))
 			{
@@ -198,6 +203,10 @@ namespace BALL
 				else if (RTTI::isKindOf<QSlider>(*widget))
 				{
 					(dynamic_cast<QSlider*>(widget))->setValue(value.toInt());
+				}
+				else if (RTTI::isKindOf<QSpinBox>(*widget))
+				{
+					(dynamic_cast<QSpinBox*>(widget))->setValue(value.toInt());
 				}
 				else if (RTTI::isKindOf<QLabel>(*widget))
 				{

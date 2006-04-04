@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.C,v 1.30.2.4 2006/02/01 14:15:05 amoll Exp $
+// $Id: stageSettings.C,v 1.30.2.5 2006/04/04 22:26:31 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/clippingPlane.h>
 
 #include <QtGui/qpushbutton.h>
 #include <QtGui/qlabel.h>
@@ -29,6 +30,7 @@ namespace BALL
 			
 			// signals and slots connections
 			connect( color_button, SIGNAL( clicked() ), this, SLOT( colorPressed() ) );
+			connect( capping_color_button, SIGNAL( clicked() ), this, SLOT( cappingColorPressed() ) );
 			connect( eye_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( eyeDistanceChanged() ) );
 			connect( focal_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( focalDistanceChanged() ) );
 			connect( enable_fog, SIGNAL( stateChanged(int) ), this, SLOT( fogStateChanged() ) );
@@ -46,11 +48,12 @@ namespace BALL
 
 			registerObject_(color_sample);
 			registerObject_(animation_smoothness);
-			registerObject_(coordinate_button);
 			registerObject_(show_lights_);
 			registerObject_(enable_fog);
 			registerObject_(fog_slider);
 			registerObject_(popup_names);
+			registerObject_(capping_color);
+			registerObject_(capping_transparency);
 
 			registerObject_(slider_);
 			registerObject_(wheel_slider_);
@@ -69,13 +72,16 @@ namespace BALL
 			chooseColor(color_sample);
 		}
 
+		void StageSettings::cappingColorPressed()
+		{
+			chooseColor(capping_color);
+		}
 
 		void StageSettings::updateFromStage()
 			throw()
 		{
 			if (stage_ == 0) return;
 			setColor(color_sample, stage_->getBackgroundColor());
-			coordinate_button->setChecked(stage_->coordinateSystemEnabled());
 
 			slider_->setValue((int) Scene::getMouseSensitivity() - 1);
 			wheel_slider_->setValue((int) Scene::getMouseWheelSensitivity() - 1);
@@ -85,6 +91,11 @@ namespace BALL
 			fog_slider->setValue((int) (stage_->getFogIntensity()));
 			enable_fog->setChecked(stage_->getFogIntensity() > 0);
 			animation_smoothness->setValue((int) (Scene::getAnimationSmoothness() * 10.0));
+
+			ColorRGBA color = ClippingPlane::getCappingColor();
+			setColor(capping_color, color);
+			capping_transparency->setValue(255 - (int)color.getAlpha());
+
 			eyeDistanceChanged();
 			focalDistanceChanged();
 			getGLSettings();
@@ -96,7 +107,6 @@ namespace BALL
 		{
 			if (stage_ == 0) return;
 			stage_->setBackgroundColor(getColor(color_sample));
-			stage_->showCoordinateSystem(coordinate_button->isChecked());
 
 			Scene::setMouseSensitivity(slider_->value() + 1);
 			Scene::setMouseWheelSensitivity(wheel_slider_->value() + 1);
@@ -122,6 +132,11 @@ namespace BALL
 
 			Scene::setShowLightSources(show_lights_->isChecked());
 			Scene::setAnimationSmoothness(((float)animation_smoothness->value()) / 10.0);
+
+			ColorRGBA color;
+			color = getColor(capping_color);
+			color.setAlpha(255 - capping_transparency->value());
+			ClippingPlane::getCappingColor() = color;
 
 			// use vertex buffers ?
 			bool use_buffer = use_vertex_buffers->isChecked();
@@ -149,7 +164,6 @@ namespace BALL
 		{
 			setColor(color_sample, ColorRGBA(0,0,0));
 			animation_smoothness->setValue(25);
-			coordinate_button->setChecked(false);
 			show_lights_->setChecked(false);
 			enable_fog->setChecked(false);
 			fog_slider->setValue(200);

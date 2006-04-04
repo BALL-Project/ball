@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.h,v 1.15.2.4 2006/03/23 13:35:03 amoll Exp $
+// $Id: stageSettings.h,v 1.15.2.5 2006/04/04 22:26:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_STAGESETTINGS_H
@@ -61,6 +61,9 @@ namespace BALL
 
 			/// Show a QColorDialog to select a new background color for the Scene
 			void colorPressed();
+
+			///
+			void cappingColorPressed();
 
 			private slots:
 				

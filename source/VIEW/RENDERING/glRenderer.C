@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.10 2006/04/03 14:44:20 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.11 2006/04/04 22:26:32 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -80,7 +80,6 @@ namespace BALL
 				name_to_object_(),
 				object_to_name_(),
 				all_names_(1),
-				last_color_(&dummy_color_),
 				stereo_(NO_STEREO),
 				render_mode_(RENDER_MODE_UNDEFINED),
 				use_vertex_buffer_(false),
@@ -115,7 +114,6 @@ namespace BALL
 				delete it->second;
 			}
 			display_lists_.clear();
-			last_color_ = &dummy_color_;
 		}
 
 		bool GLRenderer::init(Scene& scene)
@@ -141,10 +139,6 @@ namespace BALL
 			throw()
 		{
 			Renderer::init(stage, height, width);
-
-			glColor4ub(dummy_color_.getRed(), dummy_color_.getGreen(), 
-								 dummy_color_.getBlue(), dummy_color_.getAlpha());
-			last_color_ = &dummy_color_;
 
 			glFrontFace(GL_CCW);     // selects counterclockwise polygons as front-facing
 			glCullFace(GL_BACK);		 // specify whether front- or back-facing facets can be culled
@@ -458,9 +452,6 @@ namespace BALL
 		bool GLRenderer::render(const Representation& representation, bool for_display_list)
 			throw()
 		{
- 			last_color_ = &dummy_color_;
- 			glColor4ub(dummy_color_.getRed(), dummy_color_.getGreen(), dummy_color_.getBlue(), dummy_color_.getAlpha());
-
 			if (representation.isHidden()) return true;
 
 			if (!representation.isValid())
@@ -974,9 +965,6 @@ namespace BALL
 			initDrawingOthers_();
 			glDisable(GL_LIGHTING);
 			glBegin(GL_LINES);
-			dummy_color_.set(255,255,255,255);
-			last_color_ = &dummy_color_;
-			glColor4ub(dummy_color_.getRed(), dummy_color_.getGreen(), dummy_color_.getBlue(), dummy_color_.getAlpha());
 
 			for (Size index = 0; index < mesh.vertex.size(); ++index)
 			{
@@ -996,13 +984,7 @@ namespace BALL
 			bool multiple_colors = true;
 			if (mesh.colors.size() < mesh.vertex.size())
 			{	
-				if (mesh.colors.size() == 0)
-				{
-					dummy_color_.set(255,255,255,255);
-					last_color_ = &dummy_color_;
-					glColor4ub(dummy_color_.getRed(), dummy_color_.getGreen(), dummy_color_.getBlue(), dummy_color_.getAlpha());
-				}
-				else
+				if (mesh.colors.size() > 0)
 				{
 					setColorRGBA_(mesh.colors[0]);
 				}

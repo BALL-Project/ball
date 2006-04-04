@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.15 2006/04/04 13:13:45 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.16 2006/04/04 22:26:32 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -66,7 +66,8 @@ namespace BALL
 			clipping_plane_context_menu_.addAction("Set to x axis", this, SLOT(setClippingPlaneX()));	
 			clipping_plane_context_menu_.addAction("Set to y axis", this, SLOT(setClippingPlaneY()));	
 			clipping_plane_context_menu_.addAction("Set to z axis", this, SLOT(setClippingPlaneZ()));	
-			clipping_plane_context_menu_.addAction("Select Representations to clip", this, SLOT(selectClipRepresentations()));	
+			clipping_plane_context_menu_.addAction("Clip <-> Cap", this, SLOT(flipClippingCapping()));	
+			clipping_plane_context_menu_.addAction("Select Representations", this, SLOT(selectClipRepresentations()));	
 		}
 
 		GeometricControl::~GeometricControl()
@@ -640,7 +641,14 @@ namespace BALL
 				if (!plane_to_item_.has(plane))
 				{
 					QStringList sl;
-					sl << "ClippingPlane";
+					if (plane->cappingEnabled())
+					{
+						sl << "CappingPlane";
+					}
+					else
+					{
+						sl << "ClippingPlane";
+					}
 					if (plane->isHidden()) sl << "[hidden]";
 					QTreeWidgetItem* new_item = new QTreeWidgetItem(listview, sl);
 					new_item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
@@ -739,6 +747,20 @@ namespace BALL
 				plane->setActive(!plane->isActive());
 				getMainControl()->redrawAllRepresentations();
 			}
+		}
+
+		void GeometricControl::flipClippingCapping()
+		{
+			if (context_plane_ == 0) return;
+
+			bool capping = !context_plane_->cappingEnabled();
+
+			context_plane_->setCappingEnabled(capping);
+			VIEW::getMainControl()->redrawAllRepresentations();
+
+			if (context_item_ == 0) return;
+
+			context_item_->setText(0, capping ? "CappingPlane" : "ClippingPlane");
 		}
 
 	} // namespace VIEW
