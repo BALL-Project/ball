@@ -16,6 +16,7 @@ Added:
 - BALLView has menu entries for user defined Python script hotkeys
 - Further Python example scripts
 - SMARTS support
+- Capping planes
 - Improved feedback for users: e.g. Busy mouse cursor and statusbar entries
 - Added improved coordinate system
 

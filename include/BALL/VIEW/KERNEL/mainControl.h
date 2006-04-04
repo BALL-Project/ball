@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76.2.6 2006/03/15 23:29:20 amoll Exp $
+// $Id: mainControl.h,v 1.76.2.7 2006/04/04 23:48:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -112,6 +112,9 @@ namespace BALL
 
 				/// File menu sub menu open
 				FILE_OPEN,
+
+				/// File menu sub menu open grid
+				FILE_OPEN_GRID,
 
 				/// File menu sub menu import [currently unused]
 				FILE_IMPORT,
