@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.11 2006/04/04 22:26:32 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.12 2006/04/05 11:55:16 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -478,6 +478,7 @@ namespace BALL
 				glEnable(GL_LIGHTING);
 			}
 
+			bool transparent = false;
 			if (representation.hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
 			{
 				initAlwaysFront();
@@ -489,6 +490,20 @@ namespace BALL
 			else
 			{
 				initTransparent();
+				transparent = true;
+				
+				glDepthMask(GL_TRUE);
+ 				glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+				
+				const List<GeometricObject*>& geometric_objects = representation.getGeometricObjects();
+				List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
+				for (; it != geometric_objects.end(); it++)
+				{
+ 					render_(*it);
+				}
+
+ 				glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+				glDepthMask(GL_FALSE);
 			}
 
 			model_type_ = representation.getModelType();
@@ -1708,7 +1723,7 @@ namespace BALL
 //   			assert( 0. <= ka && ka <= 1. );
 //   			assert( 0. <= kd && kd <= 1. );
 //   			assert( 0. <= kr && kr <= 1. );
-			float k = ka + kd + kr;
+//   			float k = ka + kd + kr;
 //   			assert( 0. <= k  &&  k <= 1. );
 
 			Index i = 0;
