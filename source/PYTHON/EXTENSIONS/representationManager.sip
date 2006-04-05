@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.sip,v 1.1.2.2 2006/02/01 14:23:25 amoll Exp $
+// $Id: representationManager.sip,v 1.1.2.3 2006/04/05 11:07:52 amoll Exp $
 //
 
 class RepresentationManager
@@ -39,8 +39,8 @@ class RepresentationManager
   RepresentationList getRepresentationsOf(const Composite&) throw();
 	void rebuildAllRepresentations() throw();
 	//const vector<ClippingPlane*>& getClippingPlanes() const;
-	//bool removeClippingPlane(ClippingPlane*);
-	//void insertClippingPlane(ClippingPlane*);
+	bool removeClippingPlane(ClippingPlane*);
+	void insertClippingPlane(ClippingPlane*);
 	void storeRepresentations(INIFile&);
   //void restoreRepresentations(const INIFile&, const vector<const Composite*>&);
 	void focusRepresentation(const Representation&);
