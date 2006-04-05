@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.9 2006/03/28 15:47:52 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.10 2006/04/05 13:37:58 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -487,9 +487,10 @@ void DisplayProperties::applyColoringSettings_(Representation& rep)
 		rep.setColoringMethod(current_coloring);
 	}
 
-	custom_color_ = (getColor(custom_color_label));
-	custom_color_.setAlpha(255 - (Position)(transparency_slider->value() * 2.55));
-	rep.setTransparency(transparency_slider->value());
+	Size transparency = (Size)((float)transparency_slider->value() * 2.55);
+	custom_color_ = getColor(custom_color_label);
+	custom_color_.setAlpha(255 - transparency);
+	rep.setTransparency(transparency);
 
 	ColorProcessor* cp = rep.getColorProcessor();
 	coloring_settings_->applySettingsTo(*cp);
