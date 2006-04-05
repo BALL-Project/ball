@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.13 2006/04/05 13:42:59 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.14 2006/04/05 14:44:56 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -503,10 +503,6 @@ namespace BALL
 
 			renderRepresentation_(representation, for_display_list);
 
-			if (transparent)
-			{
-				glClear(GL_DEPTH_BUFFER_BIT);
-			}
 			return true;
 		}
 
