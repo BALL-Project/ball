@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.14 2006/04/05 14:44:56 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.15 2006/04/05 14:47:59 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -478,7 +478,6 @@ namespace BALL
 				glEnable(GL_LIGHTING);
 			}
 
-			bool transparent = false;
 			if (representation.hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
 			{
 				initAlwaysFront();
@@ -489,14 +488,14 @@ namespace BALL
 			}
 			else
 			{
-				transparent = true;
+				// prevent artifacts:
+				// first run to fill depth buffer
 				initTransparent();
-				glDisable(GL_BLEND);
 				glDepthMask(GL_TRUE);
  				glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-
 				renderRepresentation_(representation, for_display_list);
 
+				// options for second run 
  				glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 				initTransparent();
 			}
