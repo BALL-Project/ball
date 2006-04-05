@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.12 2006/04/05 11:55:16 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.13 2006/04/05 13:42:59 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -489,23 +489,29 @@ namespace BALL
 			}
 			else
 			{
-				initTransparent();
 				transparent = true;
-				
+				initTransparent();
+				glDisable(GL_BLEND);
 				glDepthMask(GL_TRUE);
  				glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-				
-				const List<GeometricObject*>& geometric_objects = representation.getGeometricObjects();
-				List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
-				for (; it != geometric_objects.end(); it++)
-				{
- 					render_(*it);
-				}
+
+				renderRepresentation_(representation, for_display_list);
 
  				glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-				glDepthMask(GL_FALSE);
+				initTransparent();
 			}
 
+			renderRepresentation_(representation, for_display_list);
+
+			if (transparent)
+			{
+				glClear(GL_DEPTH_BUFFER_BIT);
+			}
+			return true;
+		}
+
+		void GLRenderer::renderRepresentation_(const Representation& representation, bool for_display_list)
+		{
 			model_type_ = representation.getModelType();
 
 			// accelerate things a little by calling getGeometricObjects() only once
@@ -513,7 +519,7 @@ namespace BALL
 			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
 			if (for_display_list)
 			{
-			#ifdef BALL_ENABLE_VERTEX_BUFFER
+				#ifdef BALL_ENABLE_VERTEX_BUFFER
 				if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 				{
 					// draw everything except of meshes, these are put into vertex buffer objects in bufferRepresentation()
@@ -524,8 +530,7 @@ namespace BALL
 				}
 				else
 				{
-			#endif
-				
+				#endif
 					// render everything
 					for (; it != geometric_objects.end(); it++)
 					{
@@ -534,7 +539,6 @@ namespace BALL
 			#ifdef BALL_ENABLE_VERTEX_BUFFER
 				}
 			#endif
-			
 			}
 			else // drawing for picking directly
 			{
@@ -547,7 +551,6 @@ namespace BALL
 			}
 
 			glFlush();
-			return true;
 		}
 
 		void GLRenderer::dump(std::ostream& s, Size depth) const
@@ -928,15 +931,14 @@ namespace BALL
 			}
 			else // draw the triangles solid
 			{
-				if (render_mode_ == RENDER_MODE_SOLID ||
-						model_type_  == MODEL_CARTOON)
+				if (model_type_  == MODEL_CARTOON)
 				{
-					glDisable(GL_CULL_FACE);
-					glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
+ 					glEnable(GL_CULL_FACE);
 				}
 				else
 				{
-					glEnable(GL_CULL_FACE);
+					glDisable(GL_CULL_FACE);
+					glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
 				}
 			}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36.2.4 2006/04/04 22:26:44 amoll Exp $
+// $Id: glRenderer.h,v 1.36.2.5 2006/04/05 13:43:46 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -284,6 +284,8 @@ namespace BALL
 
 			//@}
 			protected:
+
+			void renderRepresentation_(const Representation& representation, bool for_display_list);
 
 			///
 			virtual void renderLabel_(const Label& /*label*/)
