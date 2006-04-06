@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.22 2006/04/04 23:56:06 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.23 2006/04/06 14:51:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -765,6 +765,32 @@ namespace BALL
 			Representation* rep = new Representation();
 			rep->insert(*mesh);
 			rep->setModelType(MODEL_CONTOUR_SURFACE); 
+
+
+			QTreeWidgetItem* item = 0;
+			HashMap<QTreeWidgetItem*	, RegularData3D*>::ConstIterator it = item_to_grid3_.begin();
+			for (; +it; ++it)
+			{
+				if (it->second == surface_dialog_->getGrid())
+				{
+					item = it->first;
+					break;
+				}
+			}
+			
+			if (item != 0)
+			{
+				if (item_to_composite_.has(item))
+				{
+					Composite* composite = item_to_composite_[item];
+					if (composite != 0)
+					{
+						List<const Composite*> composites;
+						composites.push_back(composite);
+						rep->setComposites(composites);
+					}
+				}
+			}
 
 			// Make sure BALLView knows about the new representation.
 			getMainControl()->insert(*rep);
