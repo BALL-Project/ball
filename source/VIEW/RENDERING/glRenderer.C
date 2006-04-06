@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.15 2006/04/05 14:47:59 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.16 2006/04/06 13:05:17 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -173,9 +173,11 @@ namespace BALL
 
 			glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-			glBlendFunc(GL_SRC_ALPHA,  GL_ONE_MINUS_SRC_ALPHA);
+ 			glBlendFunc(GL_SRC_ALPHA,  GL_ONE_MINUS_SRC_ALPHA);
 
-			glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
+			// glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
+			// slower, but better results:
+			glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 
 			// setup all in the stage given lightsources
 			setLights();
@@ -238,7 +240,7 @@ namespace BALL
 
       // glEnable( GL_LINE_SMOOTH );
       glEnable( GL_BLEND );
-      glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );    
+//         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );    
       // glHint( GL_LINE_SMOOTH_HINT, GL_DONT_CARE );
 
 			line_list_.endDefinition();
