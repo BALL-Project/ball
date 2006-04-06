@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.28 2006/03/28 15:33:52 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.29 2006/04/06 23:25:26 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -504,7 +504,6 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 		void PyWidget::exportHistory()
 		{
-Log.error() << "#~~#   2 " << history_.size() << " " << results_.size()          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			QString s = QFileDialog::getSaveFileName(
 										0, "Export History",
 										getWorkingDir().c_str(), "");
@@ -523,7 +522,6 @@ Log.error() << "#~~#   2 " << history_.size() << " " << results_.size()         
 					
 			for (Position p = 0; p < history_.size(); p++)
 			{
-Log.error() << "#~~#   2 " << history_[p] << " " << results_[p]            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				if (results_[p]) file << history_[p] << std::endl;
 			}
 
@@ -809,10 +807,7 @@ Log.error() << "#~~#   2 " << history_[p] << " " << results_[p]            << " 
 
 				setError_(!state);
 
-				if (!state)
-				{
-					appendText(result.c_str());
-				}
+				appendText(result.c_str());
 
 				text_edit_->setTextColor(Qt::black);
 			}
