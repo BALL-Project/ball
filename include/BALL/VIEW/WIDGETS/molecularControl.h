@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.50.2.7 2006/03/21 14:03:08 amoll Exp $
+// $Id: molecularControl.h,v 1.50.2.8 2006/04/07 09:25:54 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -281,7 +281,7 @@ class BALL_VIEW_EXPORT MolecularControl
 			@return Size number of selected atoms
 	*/
 	Size applySelector();
-	
+
 	///
 	Size applySMARTSSelector();
 

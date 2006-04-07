@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.23 2006/04/06 14:51:26 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.24 2006/04/07 09:26:01 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -554,7 +554,11 @@ namespace BALL
 		{
 			String filename = chooseGridFileForOpen_();
 			if (filename == "") return;
+			addDSN6Grid(filename);
+		}
 
+		RegularData3D* DatasetControl::addDSN6Grid(const String& filename)
+		{
 			System* system = getMainControl()->getSelectedSystem();
 
 			RegularData3D* dat = new RegularData3D;
@@ -567,6 +571,8 @@ namespace BALL
 			msg->setData(*dat);
 			msg->setCompositeName(filename);
 			notify_(msg);
+
+			return dat;
 		}
 		
 		void DatasetControl::insertGrid_(RegularData1D* data, System* system, const String& name)
@@ -731,8 +737,15 @@ namespace BALL
 			}
 			if (!surface_dialog_->exec()) return;
 
+			computeIsoContourSurface(
+				*surface_dialog_->getGrid(), surface_dialog_->getColor(), surface_dialog_->getThreshold());
+		}
+
+		void DatasetControl::computeIsoContourSurface(const RegularData3D& grid, const ColorRGBA& color, float value) 
+			throw()
+		{
 			// Create a new contour surface.
-			ContourSurface cs(*surface_dialog_->getGrid(), surface_dialog_->getThreshold());
+			ContourSurface cs(grid, value);
 
 			if (cs.vertex.size() == 0)
 			{
@@ -758,7 +771,7 @@ namespace BALL
 			mesh->normal = cs.normal;
 
 			mesh->colors.clear(); 
-			mesh->colors.push_back(surface_dialog_->getColor());
+			mesh->colors.push_back(color);
 
 			//////////////////////////////////////////////
 			// Create a new representation containing the contour surface.

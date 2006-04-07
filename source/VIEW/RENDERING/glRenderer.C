@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.16 2006/04/06 13:05:17 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.17 2006/04/07 09:26:01 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -663,6 +663,7 @@ namespace BALL
 			initDrawingOthers_();
 
 			glDisable(GL_LIGHTING);
+			/*
 
 			// TEST!!! this should use a light source. currently we use a headlight
  			Vector3 view_vector = stage_->getCamera().getViewVector();
@@ -692,6 +693,7 @@ namespace BALL
 			glMatrixMode(current_matrix_mode);
 
 			line_list_.draw();
+			*/
 
 			const std::vector<Vector3>& vertices = line.vertices;
 			const std::vector<Vector3>& tangents = line.tangents;
@@ -704,13 +706,13 @@ namespace BALL
 			for (Position i = 0; i < vertices.size(); i++)
 			{
 				if (colors.size() > 1) setColorRGBA_(colors[i]);
- 				glTexCoord3f(tangents[i].x, tangents[i].y, tangents[i].z);
+//    				glTexCoord3f(tangents[i].x, tangents[i].y, tangents[i].z);
 				vertexVector3_(vertices[i]);
 			}
 
 			glEnd();
 			
-			glDisable(GL_TEXTURE_2D);
+//   			glDisable(GL_TEXTURE_2D);
 		}
 
 		void GLRenderer::renderLabel_(const Label& label)

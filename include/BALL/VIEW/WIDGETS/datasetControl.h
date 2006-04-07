@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.7 2006/03/31 16:45:27 anhi Exp $
+// $Id: datasetControl.h,v 1.19.2.8 2006/04/07 09:25:54 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -41,6 +41,7 @@ namespace BALL
 		class SnapshotVisualisationDialog;
 		class ContourSurfaceDialog;
 		class Representation;
+		class ColorRGBA;
 
 		/**	DatasetControl is a widget to manipulate Trajectories and RegularData instances.
 		 		To add further datatypes, derive from this class and add further HashMaps for types
@@ -97,10 +98,15 @@ namespace BALL
 			List<VectorGrid*> getVectorGrids()
 				throw();
 
+			RegularData3D* addDSN6Grid(const String& filename);
+
 			public slots:
 				
 			///
 			void computeIsoContourSurface() throw();
+			
+			///
+			void computeIsoContourSurface(const RegularData3D& grid, const ColorRGBA& color, float value) throw();
 
 			///
 			void addTrajectory() throw();

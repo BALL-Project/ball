@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.16 2006/04/04 22:26:32 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.17 2006/04/07 09:26:02 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -761,6 +761,11 @@ namespace BALL
 			if (context_item_ == 0) return;
 
 			context_item_->setText(0, capping ? "CappingPlane" : "ClippingPlane");
+		}
+
+		ModifyRepresentationDialog* GeometricControl::getModifySurfaceDialog()
+		{
+			return modify_rep_dialog_;
 		}
 
 	} // namespace VIEW

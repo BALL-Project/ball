@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.sip,v 1.2 2005/07/03 09:43:25 oliver Exp $
+// $Id: geometricControl.sip,v 1.2.2.1 2006/04/07 09:26:09 amoll Exp $
 //
 
 class GeometricControl
@@ -9,6 +9,7 @@ class GeometricControl
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/WIDGETS/geometricControl.h>
+	#include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End
@@ -35,4 +36,5 @@ class GeometricControl
 	virtual void selectClipRepresentations();
 	void createNewClippingPlane();
 	void duplicateRepresentation();
+	ModifyRepresentationDialog* getModifySurfaceDialog();
 };

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.C,v 1.1.2.3 2006/04/01 21:46:26 amoll Exp $
+// $Id: modifyRepresentationDialog.C,v 1.1.2.4 2006/04/07 09:26:00 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
@@ -37,6 +37,11 @@ namespace BALL
 {
 	 namespace VIEW
 	 {
+
+		ModifyRepresentationDialog(const ModifyRepresentationDialog& dialog)
+			: QDialog(0)
+		{
+		}
 
 		ModifyRepresentationDialog::ModifyRepresentationDialog( QWidget* parent,  const char* name, bool, Qt::WFlags fl )
 			: QDialog(parent, fl),
@@ -104,7 +109,7 @@ namespace BALL
 						return;
 					}
 				}
-				split_();
+				applySplit();
 				return;
 			}
 				
@@ -643,8 +648,10 @@ namespace BALL
 			distance_edit->setEnabled(split_by_distance->isChecked());
 		}
 
-		void ModifyRepresentationDialog::split_()
+		void ModifyRepresentationDialog::applySplit()
 		{
+			if (!rep_) return;
+
 			rep_->enableModelUpdate(false);
 
 			// create a new representation with the subset of the original mesh
@@ -669,6 +676,12 @@ namespace BALL
 			for (; cit != rep_->getComposites().end(); ++cit)
 			{
 				roots.insert(&(*cit)->getRoot());
+			}
+
+			if (roots.size() == 0)
+			{
+				Composite* system = *getMainControl()->getCompositeManager().begin();
+				roots.insert(system);
 			}
 
 			ColorProcessor cp;
@@ -970,6 +983,21 @@ namespace BALL
 				{
 					mesh->colors[p].setAlpha(255 - transparency);
 				}
+			}
+		}
+
+		void ModifyRepresentationDialog::setSplitRadius(float distance)
+		{
+			if (distance == 0)
+			{
+				split_by_distance->setChecked(false);
+				split_by_selection->setChecked(true);
+			}
+			else
+			{
+				split_by_distance->setChecked(true);
+				split_by_selection->setChecked(false);
+				distance_edit->setText(String(distance).c_str());
 			}
 		}
 

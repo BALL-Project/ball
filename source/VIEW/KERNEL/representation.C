@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.66.2.2 2006/02/01 14:15:06 amoll Exp $
+// $Id: representation.C,v 1.66.2.3 2006/04/07 09:26:00 amoll Exp $
 //
 
 
@@ -484,6 +484,24 @@ namespace BALL
 			if (color_processor_ != 0)
 			{
 				color_processor_->setTransparency(transparency_);
+			}
+			else
+			{
+				Size alpha = 255 - transparency_;
+				GeometricObjectList::Iterator it = geometric_objects_.begin();
+				for (; it != geometric_objects_.end(); ++it)
+				{
+					Mesh* mesh = dynamic_cast<Mesh*>(*it);
+					if (mesh)
+					{
+						for (Position p = 0; p < mesh->colors.size(); p++)
+						{
+							mesh->colors[p].setAlpha(alpha);
+						}
+					}
+
+					(**it).getColor().setAlpha(alpha);
+				}
 			}
 
  			changed_color_processor_ = true;

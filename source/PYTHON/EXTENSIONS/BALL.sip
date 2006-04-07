@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.42.2.1 2006/02/01 14:47:05 amoll Exp $
+// $Id: BALL.sip,v 1.42.2.2 2006/04/07 09:26:08 amoll Exp $
 //
 
 /////////////////////////
@@ -342,6 +342,7 @@
 %Include preferences.sip
 %Include displayProperties.sip
 %Include molecularFileDialog.sip
+%Include modifyRepresentationDialog.sip
 
 // VIEW/RENDERER
 %Include renderer.sip

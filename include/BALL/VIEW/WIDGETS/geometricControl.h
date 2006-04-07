@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.27.2.8 2006/04/04 22:26:45 amoll Exp $
+// $Id: geometricControl.h,v 1.27.2.9 2006/04/07 09:25:54 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -184,6 +184,9 @@ namespace BALL
 
 			/// 
 			void duplicateRepresentation();
+
+			///
+			ModifyRepresentationDialog* getModifySurfaceDialog();
 
 		  protected slots:
 			

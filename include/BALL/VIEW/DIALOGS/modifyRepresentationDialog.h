@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.h,v 1.1.2.2 2006/03/30 14:26:55 amoll Exp $
+// $Id: modifyRepresentationDialog.h,v 1.1.2.3 2006/04/07 09:25:53 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODIFYSURFACEDIALOG_H
@@ -80,6 +80,9 @@ namespace BALL
 					
 			///
 			void setMidValue(float value);
+
+			///
+			void setSplitRadius(float distance);
 				
 			public slots:
 			
@@ -95,6 +98,7 @@ namespace BALL
 			void choosePressed();
 			void gridSelected();
 			void show();
+			void applySplit();
 
 			protected slots:
 
@@ -104,6 +108,8 @@ namespace BALL
 			void splitMethodChanged();
 
 			protected:
+
+			ModifyRepresentationDialog(const ModifyRepresentationDialog& dialog);
 
 			typedef HashGrid3<const Atom*>  AtomGrid;
 			typedef HashGridBox3<const Atom*> AtomBox;
@@ -117,7 +123,6 @@ namespace BALL
 			void invalidateGrid_() throw();
 			void invalidateMesh_() throw();
 			void calculateValues_();
-			void split_();
 			void changeDrawingMode_();
 			void checkApplyButton_();
 
