@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.C,v 1.1.2.7 2006/03/31 12:23:34 amoll Exp $
+// $Id: representationManager.C,v 1.1.2.8 2006/04/07 12:19:58 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representationManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -290,9 +290,9 @@ bool RepresentationManager::removeClippingPlane(ClippingPlane* plane)
 		if (*it == plane)
 		{
 			clipping_planes_.erase(it);
-			delete (*it);
 			getMainControl()->sendMessage(*new SyncClippingPlanesMessage());
 			getMainControl()->sendMessage(*new SceneMessage(SceneMessage::REDRAW));
+			delete plane;
 
 			return true;
 		}

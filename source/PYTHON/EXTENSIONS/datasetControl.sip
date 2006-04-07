@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.sip,v 1.3.2.1 2006/04/07 09:26:09 amoll Exp $
+// $Id: datasetControl.sip,v 1.3.2.2 2006/04/07 12:20:20 amoll Exp $
 //
 
 class DatasetControl
@@ -37,7 +37,7 @@ class DatasetControl
 	virtual void deleteCurrentItems() throw();
 
 	void computeIsoContourSurface();
-	void computeIsoContourSurface(const RegularData3D&, const ColorRGBA&, float) throw();
+	bool computeIsoContourSurface(const RegularData3D&, const ColorRGBA&, float) throw();
 	void addDSN6Grid() throw();
 	RegularData3D* addDSN6Grid(const String&);
 };

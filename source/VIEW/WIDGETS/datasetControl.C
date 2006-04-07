@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.25 2006/04/07 10:57:01 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.26 2006/04/07 12:20:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -560,19 +560,25 @@ namespace BALL
 		RegularData3D* DatasetControl::addDSN6Grid(const String& filename)
 		{
 			System* system = getMainControl()->getSelectedSystem();
+			try
+			{
+				DSN6File infile(filename, std::ios::in|std::ios::binary);
+				RegularData3D* dat = new RegularData3D;
+				infile.read(*dat);
+				infile.close();
 
-			RegularData3D* dat = new RegularData3D;
-			DSN6File infile(filename, std::ios::in|std::ios::binary);
-			infile.read(*dat);
-			infile.close();
+				insertGrid_(dat, system, filename);
+				RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::NEW);
+				msg->setData(*dat);
+				msg->setCompositeName(filename);
+				notify_(msg);
 
-			insertGrid_(dat, system, filename);
-			RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::NEW);
-			msg->setData(*dat);
-			msg->setCompositeName(filename);
-			notify_(msg);
-
-			return dat;
+				return dat;
+			}
+			catch(...)
+			{
+				return 0;
+			}
 		}
 		
 		void DatasetControl::insertGrid_(RegularData1D* data, System* system, const String& name)
