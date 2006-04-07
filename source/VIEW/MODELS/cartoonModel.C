@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.60 2005/12/23 17:03:34 amoll Exp $
+// $Id: cartoonModel.C,v 1.60.2.1 2006/04/07 18:26:07 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -1284,18 +1284,18 @@ void AddCartoonModel::buildRibbon_(Size start, Size end)
 
 		// first band
 		mesh2->vertex.push_back(point + band_dir + band_diff);
-		mesh2->normal.push_back(-band_diff);
+		mesh2->normal.push_back(+band_diff);
 		mesh2->vertex.push_back(point - band_dir + band_diff);
-		mesh2->normal.push_back(-band_diff);
+		mesh2->normal.push_back(+band_diff);
 
 		const Size sn = mesh2->vertex.size() - 1;
-		t.v1 = sn - 1;
-		t.v2 = sn;
+		t.v1 = sn;
+		t.v2 = sn - 1;
 		t.v3 = sn - 2;
  		mesh2->triangle.push_back(t);
 
-		t.v1 = sn - 1;
-		t.v2 = sn - 2;
+		t.v1 = sn - 2;
+		t.v2 = sn - 1;
 		t.v3 = sn - 3;
 		mesh2->triangle.push_back(t);
 		
