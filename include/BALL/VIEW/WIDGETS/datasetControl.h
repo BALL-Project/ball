@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.8 2006/04/07 09:25:54 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.9 2006/04/07 10:57:09 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -106,7 +106,7 @@ namespace BALL
 			void computeIsoContourSurface() throw();
 			
 			///
-			void computeIsoContourSurface(const RegularData3D& grid, const ColorRGBA& color, float value) throw();
+			bool computeIsoContourSurface(const RegularData3D& grid, const ColorRGBA& color, float value) throw();
 
 			///
 			void addTrajectory() throw();

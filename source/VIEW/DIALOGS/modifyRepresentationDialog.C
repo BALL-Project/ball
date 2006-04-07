@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.C,v 1.1.2.4 2006/04/07 09:26:00 amoll Exp $
+// $Id: modifyRepresentationDialog.C,v 1.1.2.5 2006/04/07 10:57:01 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
@@ -38,8 +38,9 @@ namespace BALL
 	 namespace VIEW
 	 {
 
-		ModifyRepresentationDialog(const ModifyRepresentationDialog& dialog)
-			: QDialog(0)
+		 ModifyRepresentationDialog::ModifyRepresentationDialog(const ModifyRepresentationDialog& dialog)
+			: QDialog(0),
+				ModularWidget()
 		{
 		}
 
@@ -56,7 +57,7 @@ namespace BALL
 			connect( apply_button, SIGNAL( clicked() ), this, SLOT( applyPressed() ) );
 			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( cancelPressed() ) );
 			connect( surface_tab, SIGNAL( currentChanged(int) ), this, SLOT( tabChanged() ) );
-			connect( autoscale, SIGNAL( clicked() ), this, SLOT( autoScalePressed() ) );
+			connect( autoscale, SIGNAL( clicked() ), this, SLOT( autoScale() ) );
 			connect( grids, SIGNAL( activated(int) ), this, SLOT( gridSelected() ) );
 			connect( alpha_button_grid, SIGNAL( clicked() ), this, SLOT( gridTransparencyChanged() ) );
 			connect( none_button_grid, SIGNAL( clicked() ), this, SLOT( gridTransparencyChanged() ) );
@@ -170,13 +171,6 @@ namespace BALL
 		}
 
 
-		void ModifyRepresentationDialog::autoScalePressed()
-		{
-			min_box->setText(String(min_value_).c_str());
-			mid_box->setText(String(mid_value_).c_str());
-			max_box->setText(String(max_value_).c_str());
-		}
-
 
 		//--------------------- Helper functions ----------------------------------
 		bool ModifyRepresentationDialog::insertGrid_(RegularData3D& grid, const String& name)
@@ -242,7 +236,7 @@ namespace BALL
 			grid_ = grid;
 		}
 
-		void ModifyRepresentationDialog::calculateValues_()
+		void ModifyRepresentationDialog::autoScale()
 		{
 			if (grid_ == 0 || rep_ == 0) return;
 
@@ -265,14 +259,14 @@ namespace BALL
 			}
 			else
 			{
-				min_value_  = grid_->getInterpolatedValue(vertices_[0]);
-				max_value_  = grid_->getInterpolatedValue(vertices_[0]);
-				mid_value_  = 0;
-
-				float value;
-
 				try
 				{
+					min_value_  = grid_->getInterpolatedValue(vertices_[0]);
+					max_value_  = grid_->getInterpolatedValue(vertices_[0]);
+					mid_value_  = 0;
+
+					float value;
+
 					for(Position p = 1; p < vertices_.size(); p++)
 					{
 						value = grid_->getInterpolatedValue(vertices_[p]);
@@ -282,7 +276,7 @@ namespace BALL
 				}
 				catch(Exception::OutOfGrid)
 				{
-					setStatusbarText("Can not color this surface with this grid, the mesh has points outside the grid!");
+					setStatusbarText("Can not color this surface with this grid, the mesh has points outside the grid!", true);
 					return;
 				}
 

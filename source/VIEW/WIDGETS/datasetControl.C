@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.24 2006/04/07 09:26:01 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.25 2006/04/07 10:57:01 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -737,11 +737,14 @@ namespace BALL
 			}
 			if (!surface_dialog_->exec()) return;
 
-			computeIsoContourSurface(
-				*surface_dialog_->getGrid(), surface_dialog_->getColor(), surface_dialog_->getThreshold());
+			if (!computeIsoContourSurface(
+				*surface_dialog_->getGrid(), surface_dialog_->getColor(), surface_dialog_->getThreshold()))
+			{
+				surface_dialog_->exec();
+			}
 		}
 
-		void DatasetControl::computeIsoContourSurface(const RegularData3D& grid, const ColorRGBA& color, float value) 
+		bool DatasetControl::computeIsoContourSurface(const RegularData3D& grid, const ColorRGBA& color, float value) 
 			throw()
 		{
 			// Create a new contour surface.
@@ -750,8 +753,7 @@ namespace BALL
 			if (cs.vertex.size() == 0)
 			{
 				setStatusbarText("Could not calculate ContourSurface, no grid points found for threshold!", true);
-				surface_dialog_->show();
-				return;
+				return false;
 			}
 
 			Mesh* mesh = new Mesh;
@@ -808,6 +810,7 @@ namespace BALL
 			// Make sure BALLView knows about the new representation.
 			getMainControl()->insert(*rep);
 			getMainControl()->update(*rep);
+			return true;
 		}
 
 

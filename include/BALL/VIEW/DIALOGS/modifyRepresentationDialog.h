@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.h,v 1.1.2.3 2006/04/07 09:25:53 amoll Exp $
+// $Id: modifyRepresentationDialog.h,v 1.1.2.4 2006/04/07 10:57:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODIFYSURFACEDIALOG_H
@@ -94,7 +94,7 @@ namespace BALL
 			void minMinPressed();
 			void maxMaxPressed();
 			void tabChanged();		
-			void autoScalePressed();
+			void autoScale();
 			void choosePressed();
 			void gridSelected();
 			void show();
@@ -122,7 +122,6 @@ namespace BALL
 			void getColor_(const ColorRGBA& color, QLabel* label, QSpinBox* box);
 			void invalidateGrid_() throw();
 			void invalidateMesh_() throw();
-			void calculateValues_();
 			void changeDrawingMode_();
 			void checkApplyButton_();
 
