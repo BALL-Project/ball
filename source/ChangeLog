@@ -31,6 +31,7 @@ Fixed:
 - Faster picking mode
 - Polished layout for some dialogs
 - Indicator in statusbar for Server and simulations was missing
+- Added spliting support for Contour Surfaces
 - Sensible default styles on the individual platforms
 - Renamed classes: PrimitiveManager -> RepresentationManager
 

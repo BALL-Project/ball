@@ -1,3 +1,7 @@
+###################### defines: ############################
+true=1
+false=0
+
 ###################### MAIN WIDGETS: #######################
 def getMainControl():
 	return MainControl.getInstance(0)
@@ -41,6 +45,13 @@ def showOnlyScene():
 	getMainControl().processEvents(5000)
 
 ###################### SHORTCUTS: #######################
+def log(to_log):
+	getMainControl().setStatusbarText(to_log, 1)
+	print to_log
+
+def abortScript():
+	getPyWidget().abortScript()
+
 def quit():
 	getMainControl().quit()
 
