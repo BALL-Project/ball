@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.19.2.3 2006/03/17 15:42:37 amoll Exp $
+// $Id: preferences.C,v 1.19.2.4 2006/04/08 10:10:26 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -67,13 +67,16 @@ namespace BALL
 			
 			}
 
-			if (child->getStackPages().size() == 0) return;
-
  			QWidget* widget = dynamic_cast<QWidget*>(child);
 
  			widget->setMinimumSize(widget_stack->width(), widget_stack->height());
  			widget->setMaximumSize(widget_stack->width(), widget_stack->height());
  			widget->resize(widget_stack->width(), widget_stack->height());
+
+			if (child->getStackPages().size() == 0) 
+			{
+				return;
+			}
 
 			PreferencesEntry::StackPages::Iterator it = child->getStackPages().begin();
  			entries_.insert(child);
@@ -87,6 +90,7 @@ namespace BALL
 			if (child->getStackPages().size() == 1)
 			{
 				item_to_widget_[item] = (*it).first;
+				item_to_entry_[item] = child;
 				widget_to_item_[(*it).first] = item;
 				return;
 			}
