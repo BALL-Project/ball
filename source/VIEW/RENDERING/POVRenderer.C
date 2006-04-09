@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.22.2.5 2006/04/02 16:07:51 amoll Exp $
+// $Id: POVRenderer.C,v 1.22.2.6 2006/04/09 16:25:23 anhi Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -209,50 +209,43 @@ namespace BALL
 					}
 					// +QR: highest quiality
 					// +A0.3 : antialiasing
-					// -UV: due to problems with the orthogonality of the camera vectors
 					// +FN: PNG format as the default
 					// +W/+H: width and height, taken from the widget.
 					out << "// povray +I" << infilename 
 							<< " +FN +O" << outfilename << " +Q9 +W" << width_ 
-							<< " +H" << height_ << " -UV +A0.3\n//" << endl;
+							<< " +H" << height_ << " +A0.3\n//" << endl;
 				}
 			}
-			out << "camera {" << std::setprecision(12) << endl
-			    << "\tperspective" << endl
-			    << "\tdirection <0.0, 0.0, -1.0>" << endl
-			    << "\tright " << (double)width_ / (double)height_ << " * x" << endl
-			    << "\tangle 83.0" << endl
-			    << "\ttransform {" << endl
-			    << "\t\tmatrix <" << endl;
+			// matrix for the Projection matrix 	
+			GLdouble projection_matrix[16];
 
- 			GLdouble m[16];	
-			glGetDoublev(GL_MODELVIEW_MATRIX, m);
-			
-			double norm = sqrt(m[0] * m[0] + m[1] * m[1] + m[2] * m[2]);
-			out << "\t\t" << m[0] / norm << ",  " << m[1] / norm << ", " << m[2] / norm << "," << endl;
-			m_[0] = m[0] / norm;
-			m_[1] = m[1] / norm;
-			m_[2] = m[2] / norm;
-			norm = sqrt(m[4] * m[4] + m[5] * m[5] + m[6] * m[6]);
-			out << "\t\t" << m[4] / norm << ",  " << m[5] / norm << ", " << m[6] / norm << "," << endl;
+			// take the Projection matrix	
+			glMatrixMode(GL_PROJECTION);
+			glGetDoublev(GL_PROJECTION_MATRIX, projection_matrix);
 
-			m_[3] = m[4] / norm;
-			m_[4] = m[5] / norm;
-			m_[5] = m[6] / norm;
-			norm = sqrt(m[8] * m[8] + m[9] * m[9] + m[10] * m[10]);
-			out << "\t\t" << m[8] / norm << ",  " << m[9] / norm << ", " << m[10] / norm << "," << endl;
+			// determine the projection variables
+			if(projection_matrix[0]==0. || projection_matrix[5]==0. || projection_matrix[10]==1.)
+			{	
+				Log.error() << "Projection variables equal zero! " << endl;
+				return false;
+			}	
+			float near   = projection_matrix[14]/(projection_matrix[10]-1);
+			float left   = projection_matrix[14]*(projection_matrix[8]-1) / (projection_matrix[0]*(projection_matrix[10]-1));
+			float bottom = projection_matrix[14]*(projection_matrix[9]-1) / (projection_matrix[5]*(projection_matrix[10]-1));
+			float top    = projection_matrix[14]*(projection_matrix[9]+1) / (projection_matrix[5]*(projection_matrix[10]-1));
 
-			m_[6] = m[8] / norm;
-			m_[7] = m[9] / norm;
-			m_[8] = m[10] / norm;
-			out << "\t\t" << m[12] << ",  " << m[13] << ", " << m[14] << endl;
-			m_[9] = m[12];
-			m_[10] = m[13];
-			m_[11] = m[14];
-		  out << "\t\t>" << endl;
-			out << "\tinverse }" << endl;
+			float ratio = left / bottom;
+			Angle fovx(2*atan(ratio*(top-bottom)/(2.*near)));
+
+			out << "camera {" << std::setprecision(12) << endl;
+			out << "\t location " << POVVector3(stage.getCamera().getViewPoint()) << endl;
+			out << "\t up y" << endl;
+			out << "\t right -" << ratio << "*x" << endl;
+			out << "\t angle " << fovx.toDegree() << endl;
+			out << "\t sky " << POVVector3(stage.getCamera().getLookUpVector()) << endl;
+			out << "\t look_at " << POVVector3(stage.getCamera().getLookAtPosition()) << endl;
 			out << "}" << std::setprecision(6) << endl << endl;
-				
+
 			//
 			if (human_readable_)
 			{
