@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.17 2006/04/07 09:26:01 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.18 2006/04/10 11:16:29 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1707,9 +1707,9 @@ namespace BALL
 
 		void GLRenderer::initPerspective()
 		{
-			if (getStereoMode() != GLRenderer::NO_STEREO)
+			if (getStereoMode() == GLRenderer::ACTIVE_STEREO)
 			{
-				Log.error() << "Dont call GLRenderer::initPerspective() in Stereo mode! " << std::endl;
+				//  "Dont call GLRenderer::initPerspective() in Stereo mode! "
 				return;
 			}
 

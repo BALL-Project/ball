@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.28 2006/04/10 00:44:12 amoll Exp $
+// $Id: scene.C,v 1.174.2.29 2006/04/10 11:16:32 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2223,6 +2223,7 @@ namespace BALL
 		void Scene::exitStereo()
 			throw()
 		{
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			gl_renderer_.setStereoMode(GLRenderer::NO_STEREO);
 			gl_renderer_.setSize(width(), height());
 
