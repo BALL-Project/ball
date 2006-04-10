@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.22.2.6 2006/04/09 16:25:23 anhi Exp $
+// $Id: POVRenderer.C,v 1.22.2.7 2006/04/10 12:01:38 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -229,13 +229,13 @@ namespace BALL
 				Log.error() << "Projection variables equal zero! " << endl;
 				return false;
 			}	
-			float near   = projection_matrix[14]/(projection_matrix[10]-1);
+			float nearv   = projection_matrix[14]/(projection_matrix[10]-1);
 			float left   = projection_matrix[14]*(projection_matrix[8]-1) / (projection_matrix[0]*(projection_matrix[10]-1));
 			float bottom = projection_matrix[14]*(projection_matrix[9]-1) / (projection_matrix[5]*(projection_matrix[10]-1));
 			float top    = projection_matrix[14]*(projection_matrix[9]+1) / (projection_matrix[5]*(projection_matrix[10]-1));
 
 			float ratio = left / bottom;
-			Angle fovx(2*atan(ratio*(top-bottom)/(2.*near)));
+			Angle fovx(2*atan(ratio*(top-bottom)/(2.*nearv)));
 
 			out << "camera {" << std::setprecision(12) << endl;
 			out << "\t location " << POVVector3(stage.getCamera().getViewPoint()) << endl;
