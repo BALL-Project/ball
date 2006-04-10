@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.27 2006/04/04 23:11:03 amoll Exp $
+// $Id: scene.C,v 1.174.2.28 2006/04/10 00:44:12 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2231,14 +2231,30 @@ namespace BALL
 			gl_renderer_.initPerspective();
 			glMatrixMode(GL_MODELVIEW);
 
-			hide();
-//   			reparent((QWidget*)getMainControl(), getWFlags() & ~Qt::WType_Mask, last_pos_, false);
-			((QMainWindow*)getMainControl())->setCentralWidget(this);
-			show();
+			setFullScreen(false);
 
 			no_stereo_action_->setChecked(true);
 			active_stereo_action_->setChecked(false);
 			dual_stereo_action_->setChecked(false);
+		}
+
+		void Scene::setFullScreen(bool state)
+		{
+			if (state)
+			{
+				last_state_ = getMainControl()->saveState();
+				showNormal();  // needed on windows
+				setParent(0);
+				showFullScreen();
+				update();
+				return;
+			}
+
+			hide();
+ 			setParent((QWidget*)getMainControl());
+			show();
+			getMainControl()->setCentralWidget(this);
+			getMainControl()->restoreState(last_state_);
 			update();
 		}
 
@@ -2246,36 +2262,22 @@ namespace BALL
 			throw()
 		{
 			gl_renderer_.setStereoMode(GLRenderer::ACTIVE_STEREO);
-			last_pos_ = pos();
-//   			hide();
-			showNormal();  // needed on windows
-//    			setParent(NULL);
-			showFullScreen();
-//   			show();
-			setGeometry(qApp->desktop()->geometry());
+			setFullScreen(true);
 
 			no_stereo_action_->setChecked(false);
 			active_stereo_action_->setChecked(true);
 			dual_stereo_action_->setChecked(false);
-			update();
 		}
 
 		void Scene::enterDualStereo()
 			throw()
 		{
 			gl_renderer_.setStereoMode(GLRenderer::DUAL_VIEW_STEREO);
-			last_pos_ = pos();
-			hide();
-			showNormal();  // needed on windows
-//   			reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
-			showFullScreen();
-			setGeometry(qApp->desktop()->geometry());
-			show();
+			setFullScreen(true);
 
 			no_stereo_action_->setChecked(false);
 			active_stereo_action_->setChecked(false);
 			dual_stereo_action_->setChecked(true);
-			update();
 		}
 
 		void Scene::setCamera(const Camera& camera)

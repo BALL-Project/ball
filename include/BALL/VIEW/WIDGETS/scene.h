@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.7 2006/03/21 00:26:59 amoll Exp $
+// $Id: scene.h,v 1.66.2.8 2006/04/10 00:43:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -596,6 +596,9 @@ namespace BALL
 
 			///
 			const Vector3& getTurnPoint() const { return system_origin_;}
+
+			///
+			void setFullScreen(bool state);
 			
 			protected slots:
 
@@ -768,6 +771,7 @@ namespace BALL
 			float zoom_factor_;
 			QPoint info_point_;
 			String info_string_;
+			QByteArray last_state_;
 		};
 
 
