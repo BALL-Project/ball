@@ -28,6 +28,7 @@ Fixed:
 - Pressing Return in PeptideDialog now applies settings
 - Label rendering now supports antialiased fonts
 - Improved multithreading
+- POVRay camera settings now correspond better to OpenGL viewing volume
 - Faster picking mode
 - Polished layout for some dialogs
 - Indicator in statusbar for Server and simulations was missing
