@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.22.2.7 2006/04/10 12:01:38 amoll Exp $
+// $Id: POVRenderer.C,v 1.22.2.8 2006/04/11 15:05:07 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -319,10 +319,10 @@ namespace BALL
 			float r = 0.1 - ((stage.getShininess() / 128.0) * 0.09);
 			out << "roughness " << r << " ";
 			
-			out << "diffuse " 	<< stage.getDiffuseIntensity() 	/ 2.0 + 0.5 << " ";
+			out << "diffuse " 	<< stage.getDiffuseIntensity() << " ";
 
 			// povray uses an other ambient setting
-			out << "ambient 0.0 }"	 	<< endl;
+			out << "ambient "  << stage.getAmbientIntensity() << " }"	 	<< endl;
 
 			out << "#declare BALLFinishSphereSolid      = BALLFinish" << endl;
 			out << "#declare BALLFinishSphereTransp     = BALLFinish" << endl;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.11.2.4 2006/03/24 13:18:41 amoll Exp $
+// $Id: materialSettings.C,v 1.11.2.5 2006/04/11 15:04:59 amoll Exp $
 // 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
@@ -31,11 +31,6 @@ namespace BALL
 			connect( diffuse_slider, SIGNAL( valueChanged(int) ), this, SLOT( diffuseChanged() ) );
 			connect( shininess_slider, SIGNAL( valueChanged(int) ), this, SLOT( shininessChanged() ) );
 
-			specular_slider->setValue((Index)(0.774 * 10.0));
-			diffuse_slider->setValue((Index)(0.4   	* 10.0));
-			ambient_slider->setValue((Index)(0.25 	* 10.0));
-			shininess_slider->setValue((Index)(76.8 * 10.0));
-
 			registerObject_(specular_slider);
 			registerObject_(diffuse_slider);
 			registerObject_(ambient_slider);
@@ -55,16 +50,9 @@ namespace BALL
 
 			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, stage.getShininess());
 			GLfloat values[4];
-			values[3] = 1.0;
-
 			values[0] = values[1] = values[2] =  stage.getSpecularIntensity();
+			values[3] = 1.0;
 			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  values);
-			
-			values[0] = values[1] = values[2] = stage.getDiffuseIntensity();
-			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   values);
-			
-			values[0] = values[1] = values[2] = stage.getAmbientIntensity();
- 			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   values);
 		}
 
 		void MaterialSettings::ambientChanged()
