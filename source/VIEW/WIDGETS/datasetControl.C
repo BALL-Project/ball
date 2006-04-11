@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.26 2006/04/07 12:20:09 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.27 2006/04/11 19:53:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -792,7 +792,7 @@ namespace BALL
 			HashMap<QTreeWidgetItem*	, RegularData3D*>::ConstIterator it = item_to_grid3_.begin();
 			for (; +it; ++it)
 			{
-				if (it->second == surface_dialog_->getGrid())
+				if (it->second == &grid)
 				{
 					item = it->first;
 					break;
