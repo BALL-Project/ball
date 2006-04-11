@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DSN6File.C,v 1.1.2.1 2006/03/31 14:24:37 anhi Exp $
+// $Id: DSN6File.C,v 1.1.2.2 2006/04/11 14:03:31 anhi Exp $
 //
 
 #include <BALL/FORMAT/DSN6File.h>
@@ -232,6 +232,7 @@ namespace BALL
 	bool DSN6File::read(RegularData3D& density_map)
 		throw()
 	{
+
 		// first read the header
 		if (!readHeader())
 		{
@@ -252,14 +253,14 @@ namespace BALL
 		Size global_index = 0;
 		Size brick_index = 0;
 		char brick[512];
+		unsigned char* brick_pointer;
 
 		RegularData3D::IndexType size;
 		size.x = (Size) extent_.x;
 		size.y = (Size) extent_.y;
 		size.z = (Size) extent_.z;
 		
-		density_map.resize(size);
-		density_map.setOrigin(origin_);
+		density_map = RegularData3D(origin_, xaxis_, yaxis_, zaxis_, size);
 
 		// NOTE: this currently only works for orthogonal maps!!!
 		// TODO: implement a simple volumetric data type. all we need to do currently
@@ -279,6 +280,7 @@ namespace BALL
 					brick_index = 0;
 					// read the next brick
 					std::fstream::read(brick, 512);
+					brick_pointer = (unsigned char*)brick;
 
 					if (gcount() != 512)
 					{
@@ -317,7 +319,7 @@ namespace BALL
 									break;
 								}
 	
-								float brick_value = (float)brick[brick_index];
+								float brick_value = (float)(*(brick_pointer+brick_index));
 								density_map[global_index] = factor * (brick_value - plus_);
 
 								brick_index++;
