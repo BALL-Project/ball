@@ -92,6 +92,9 @@ def getRepresentations():
 def getForceField():
 	return getMolecularStructure().getForceField()
 
+def setCamera(camera):
+	getScene().setCamera(camera)
+
 ###################### HOTKEYS: #######################
 def hideAllRepresentations():
 	for i in range(len(getRepresentations())):
