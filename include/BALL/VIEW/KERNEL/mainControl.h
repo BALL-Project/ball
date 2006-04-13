@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76.2.7 2006/04/04 23:48:11 amoll Exp $
+// $Id: mainControl.h,v 1.76.2.8 2006/04/13 00:04:15 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -412,6 +412,9 @@ namespace BALL
 			
 			/// overloaded from QT for Python Interface
 			virtual void resize (int w, int h );
+
+			///
+			void setContentSize(int w, int h);
 
 			public:
 			

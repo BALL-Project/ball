@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.C,v 1.1.2.5 2006/04/07 10:57:01 amoll Exp $
+// $Id: modifyRepresentationDialog.C,v 1.1.2.6 2006/04/13 00:06:52 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
@@ -38,7 +38,7 @@ namespace BALL
 	 namespace VIEW
 	 {
 
-		 ModifyRepresentationDialog::ModifyRepresentationDialog(const ModifyRepresentationDialog& dialog)
+		 ModifyRepresentationDialog::ModifyRepresentationDialog(const ModifyRepresentationDialog&)
 			: QDialog(0),
 				ModularWidget()
 		{

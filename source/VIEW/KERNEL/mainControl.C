@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.14 2006/04/04 23:56:05 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.15 2006/04/13 00:04:01 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1925,6 +1925,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		return false;
 	}
 		
+	void MainControl::setContentSize(int w, int h)
+	{
+		Size height = menuBar()->height();
+		height += statusBar()->height();
+		resize(w, h + height);
+	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>

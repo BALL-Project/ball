@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.22.2.2 2006/02/01 14:47:07 amoll Exp $
+// $Id: mainControl.sip,v 1.22.2.3 2006/04/13 00:06:19 amoll Exp $
 //
 
 class MainControl
@@ -80,6 +80,7 @@ class MainControl
 	virtual void quit();
 	virtual bool isAboutToQuit();
 	virtual void resize(int, int);
+	void setContentSize(int, int);
 	
 	// static MainControl* getMainControl(const QObject* object) throw();
 	// int insertMenuEntry(int /ID/, const String& /name/, const QObject* /receiver/ = 0, const char* /slot/ = 0, int /accel/ = 0, int /entry_ID/ = -1, String /hint/ = "") throw();
