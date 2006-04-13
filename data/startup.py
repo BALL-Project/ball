@@ -43,9 +43,10 @@ def showOnlyScene():
 	getScene().setVisible(1)
 	getMainControl().processEvents(5000)
 
-def setSceneSize(width, height)
+def setSceneSize(width, height):
 	getMainControl().setContentSize(width, height)
 	showOnlyScene()
+	getScene().update(false)
 
 ###################### SHORTCUTS: #######################
 def log(to_log):
