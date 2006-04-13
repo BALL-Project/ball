@@ -238,6 +238,7 @@ namespace BALL
 		Stage::Stage()
 			throw()
 			: background_color_(),
+				info_color_(0, 0, 255, 255),
 				light_sources_(),
 				camera_(),
 				show_coordinate_system_(false),

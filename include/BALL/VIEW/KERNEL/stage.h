@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.19 2005/12/23 17:02:16 amoll Exp $
+// $Id: stage.h,v 1.19.2.1 2006/04/13 14:13:56 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -432,6 +432,14 @@ namespace BALL
 			/// Set the background color
 			virtual void setBackgroundColor(const ColorRGBA& color)
 				throw() { background_color_ = color;}
+			
+			/// Get the background color
+			virtual const ColorRGBA& getInfoColor() const
+				throw() { return info_color_;}
+
+			/// Set the background color
+			virtual void setInfoColor(const ColorRGBA& color)
+				throw() { info_color_ = color;}
 
 			/// Show coordinate system
 			void showCoordinateSystem(bool state)
@@ -543,6 +551,9 @@ namespace BALL
 
 			//_
 			ColorRGBA 					background_color_;
+
+			//_
+			ColorRGBA 					info_color_;
 
 			//_
 			List<LightSource> 	light_sources_;
