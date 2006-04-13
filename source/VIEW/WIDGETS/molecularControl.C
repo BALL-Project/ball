@@ -1,13 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.13 2006/03/21 15:12:26 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.14 2006/04/13 13:42:11 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/representation.h>
+#include <BALL/VIEW/PRIMITIVES/tube.h>
+#include <BALL/VIEW/PRIMITIVES/sphere.h>
+#include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
 #include <BALL/VIEW/DIALOGS/bondProperties.h>
 #include <BALL/VIEW/DIALOGS/atomOverview.h>
@@ -591,6 +595,8 @@ namespace BALL
 
 			registerForHelpSystem(this, "molecularControl.html");
 			registerForHelpSystem(selector_edit_, "molecularControl.html#regular_expressions"); 
+
+			insertMenuEntry(MainControl::DISPLAY, "Show Distance", this, SLOT(showDistance()));
 		}
 
 
@@ -1380,6 +1386,56 @@ namespace BALL
 			listview->setFocus();
 
 			return nr_of_matches;
+		}
+
+		void MolecularControl::showDistance()
+		{
+			if (getSelection().size() != 2) return;
+
+			List<Composite*>::ConstIterator it = getSelection().begin();
+
+			Atom* a1 = dynamic_cast<Atom*>(*it);
+			it++;
+			Atom* a2 = dynamic_cast<Atom*>(*it);
+			showDistance(a1, a2);
+		}
+
+		void MolecularControl::showDistance(Atom* a1, Atom* a2)
+		{
+			if (!a1 || !a2 || a1 == a2) return;
+			
+			Vector3 pos1 = a1->getPosition();
+			Vector3 pos2 = a2->getPosition();
+			ColorRGBA color(0,0,1.0);
+			Representation* rep = new Representation;
+
+			Sphere* sphere = new Sphere;
+			sphere->setPosition(pos1);
+			sphere->setRadius(0.05);
+			sphere->setColor(color);
+			rep->insert(*sphere);
+
+			sphere = new Sphere;
+			sphere->setPosition(pos2);
+			sphere->setRadius(0.05);
+			sphere->setColor(color);
+			rep->insert(*sphere);
+
+			Tube* tube = new Tube;
+			tube->setRadius(0.05);
+			tube->setVertex1(pos1);
+			tube->setVertex2(pos2);
+			tube->setColor(color);
+			rep->insert(*tube);
+
+			Label* label = new Label;
+			label->setVertex(pos1 + (pos2 - pos1) / 2.);
+			label->setText(String((pos1 - pos2).getLength()));
+			rep->insert(*label);
+
+			rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
+			getMainControl()->insert(*rep);
+			getMainControl()->update(*rep);
 		}
 
 	} // namespace VIEW

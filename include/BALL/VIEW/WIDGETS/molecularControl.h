@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.50.2.8 2006/04/07 09:25:54 amoll Exp $
+// $Id: molecularControl.h,v 1.50.2.9 2006/04/13 13:42:13 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -180,6 +180,8 @@ class BALL_VIEW_EXPORT MolecularControl
 	void fetchPreferences(INIFile& inifile)
 		throw();
 
+	void showDistance(Atom* a1, Atom* a2);
+
 	public slots:
 		
 	//@}
@@ -302,6 +304,9 @@ class BALL_VIEW_EXPORT MolecularControl
 
 	///
 	void showAtomOverviewForSelection();
+
+	///
+	void showDistance();
 	
 	//@} 
 	/** @name Protected members 

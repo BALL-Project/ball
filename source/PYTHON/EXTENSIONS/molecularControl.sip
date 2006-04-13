@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.sip,v 1.12 2005/12/23 17:02:53 amoll Exp $
+// $Id: molecularControl.sip,v 1.12.2.1 2006/04/13 13:42:57 amoll Exp $
 //
 
 class MolecularControl
@@ -37,6 +37,7 @@ class MolecularControl
 	// void writePreferences(INIFile& inifile) throw();
 	// void fetchPreferences(INIFile& inifile) throw();
 
+	void showDistance();
   void createRepresentation();
   void compositeProperties();
   void bondProperties();
