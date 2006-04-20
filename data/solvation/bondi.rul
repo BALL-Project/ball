@@ -1,4 +1,4 @@
-# $Id: bondi.rul,v 1.1 2006/04/20 11:55:41 anker Exp $
+# $Id: bondi.rul,v 1.2 2006/04/20 12:01:42 anker Exp $
 # 
 # Mean "observed" van der Waals radii from Bondi: van der Waals Volumes and
 # Radii, J Phys Chem 68:441-451, 1964
@@ -35,4 +35,29 @@
 
 [RadiusRules:Cl]
 1.75 = true
+
+[RadiusRules:Ar]
+1.88 = true
+
+[RadiusRules:As]
+1.85 = true
+
+[RadiusRules:Se]
+1.90 = true
+
+[RadiusRules:Br]
+1.85 = true
+
+[RadiusRules:Kr]
+2.02 = true
+
+[RadiusRules:Te]
+2.06 = true
+
+[RadiusRules:I]
+1.98 = true
+
+[RadiusRules:Xe]
+2.16 = true
+
 
