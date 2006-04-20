@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.2.13 2006/03/11 13:49:47 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.2.14 2006/04/20 10:55:04 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -134,6 +134,9 @@ namespace BALL
 		/**	Return the angle bend contribution to the total energy
 		*/
 		double getBendEnergy() const;
+
+		///
+		double getStretchBendEnergy() const;
 
 		/**	Return the torsion contribution to the total energy.
 				This energy comprises proper and improper torsions.

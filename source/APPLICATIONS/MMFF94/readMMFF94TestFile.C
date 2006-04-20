@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.68 2006/03/16 16:52:33 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.69 2006/04/20 10:54:16 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -18,9 +18,7 @@
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94.h>
-#include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
-#include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -201,12 +199,12 @@ bool testStretch(MMFF94& mmff, const String& filename, bool compare)
 		kbs.push_back(fields[4].toFloat());
 	}
 
-	enableOneComponent("MMFF94 Stretch", mmff);
+	enableOneComponent("MMFF94 StretchBend", mmff);
 	mmff.updateEnergy();
-	MMFF94Stretch* stretch = (MMFF94Stretch*) mmff.getComponent("MMFF94 Stretch");
+	MMFF94StretchBend* stretch = (MMFF94StretchBend*) mmff.getComponent("MMFF94 StretchBend");
 	for (Position poss = 0; poss < stretch->getStretches().size(); poss++)
 	{
-		const MMFF94Stretch::Stretch& s = stretch->getStretches()[poss];
+		const MMFF94StretchBend::Stretch& s = stretch->getStretches()[poss];
 		bool found = false;
 
 		for (Position poss2 = 0; poss2 < atoms1.size(); poss2++)
@@ -262,9 +260,10 @@ bool testStretch(MMFF94& mmff, const String& filename, bool compare)
 
 	vector<double> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
 
-	if (!isOk(mmff.getEnergy(), results[1]))
+	float e = mmff.getStretchEnergy();
+	if (!isOk(e, results[1]))
 	{
-		Log.error() << filename << "   " << results[1] << "  " << mmff.getEnergy() << std::endl;
+		Log.error() << filename << "   " << results[1] << "  " << e << std::endl;
 		return false;
 	}
 
@@ -296,11 +295,6 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 		energy.push_back(fields[4].toFloat());
 		f_ij.push_back(fields[5].toFloat());
 	}
-
-	// calulatate stretches and bends
-	mmff.getComponent("MMFF94 Stretch")->setEnabled(true);
-	mmff.getComponent("MMFF94 Bend")->setEnabled(true);
-	mmff.updateEnergy();
 
 	enableOneComponent("MMFF94 StretchBend", mmff);
 	mmff.updateEnergy();
@@ -373,9 +367,10 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 
 	double s_plus_b = results[4];
 
-	if (!isOk(mmff.getEnergy(), s_plus_b))
+	float e = mmff.getStretchBendEnergy();
+	if (!isOk(e, s_plus_b))
 	{
-		Log.error() << filename << "   " << s_plus_b << "  " << mmff.getEnergy() << std::endl;
+		Log.error() << filename << "   " << s_plus_b << "  " << e << std::endl;
 		return false;
 	}
 
@@ -411,12 +406,12 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 		ka.push_back(fields[7].toFloat());
 	}
 
-	enableOneComponent("MMFF94 Bend", mmff);
+	enableOneComponent("MMFF94 StretchBend", mmff);
 	mmff.updateEnergy();
-	MMFF94Bend* bend = (MMFF94Bend*) mmff.getComponent("MMFF94 Bend");
+	MMFF94StretchBend* bend = (MMFF94StretchBend*) mmff.getComponent("MMFF94 StretchBend");
 	for (Position poss = 0; poss < bend->getBends().size(); poss++)
 	{
-		const MMFF94Bend::Bend& s = bend->getBends()[poss];
+		const MMFF94StretchBend::Bend& s = bend->getBends()[poss];
 		bool found = false;
 
 		for (Position poss2 = 0; poss2 < atoms1.size(); poss2++)
@@ -473,9 +468,10 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 
 	vector<double> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
 
-	if (!isOk(mmff.getEnergy(), results[2]))
+	float e = mmff.getBendEnergy();
+	if (!isOk(e, results[2]))
 	{
-		Log.error() << filename << "   " << results[2] << "  " << mmff.getEnergy() << std::endl;
+		Log.error() << filename << "   " << results[2] << "  " << e << std::endl;
 		return false;
 	}
 
@@ -1045,13 +1041,13 @@ int runtests(const vector<String>& filenames)
 		}
 */
    		testType(*system, filenames[pos], typer);
-//    		result &= testStretch(mmff, filenames[pos], true);
-//       result &= testBend(mmff, filenames[pos], true);
-//    		result &= testStretchBend(mmff, filenames[pos], true);
+    		result &= testStretch(mmff, filenames[pos], true);
+       result &= testBend(mmff, filenames[pos], true);
+    		result &= testStretchBend(mmff, filenames[pos], true);
 //    		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
 //    		result &= testPlanes(mmff, filenames[pos], true);
 //    		result &= testNonBonded(mmff, filenames[pos], true);
-    		result &= testCharge(*system, filenames[pos]);
+//       		result &= testCharge(*system, filenames[pos]);
 
  		if (result) ok++;
 //    		else if (!wrong_rings) not_ok.push_back(filenames[pos]);
@@ -1149,7 +1145,8 @@ int expressionTest(vector<String>& filenames, String expr, Index type, String ty
 			}
 		}
 
-		vector<HashSet<const Atom*> > result = sm.match(*system->getMolecule(0), expr);
+		vector<HashSet<const Atom*> > result;
+		sm.match(result, *system->getMolecule(0), expr);
 
 		for (Position pos = 0; pos < result.size(); pos++)
 		{
@@ -1225,7 +1222,8 @@ int main(int argc, char** argv)
  		mmff.setup(system);
 
 	SmartsMatcher sm;
-	vector<HashSet<const Atom*> > result = sm.match(*system.getMolecule(0), "[O;$(O=#6)]");
+	vector<HashSet<const Atom*> > result;
+	sm.match(result, *system.getMolecule(0), "[O;$(O=#6)]");
 Log.error() << "#~~#   4 " << result.size()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		/*
 Log.error() << "#~~#   3 "  << system.countAtoms()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;

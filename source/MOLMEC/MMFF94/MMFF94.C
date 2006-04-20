@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.35 2006/03/11 13:49:37 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.36 2006/04/20 10:54:33 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -9,8 +9,6 @@
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/fileSystem.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94.h>
-#include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
-#include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -83,8 +81,6 @@ namespace BALL
 
 	void MMFF94::insertComponents_()
 	{
-    insertComponent(new MMFF94Stretch(*this));
- 		insertComponent(new MMFF94Bend(*this));
  		insertComponent(new MMFF94StretchBend(*this));
  		insertComponent(new MMFF94Torsion(*this));
  		insertComponent(new MMFF94NonBonded(*this));
@@ -229,10 +225,10 @@ namespace BALL
 
 	double MMFF94::getStretchEnergy() const
 	{
-		ForceFieldComponent* component = getComponent("MMFF94 Stretch");
+		ForceFieldComponent* component = getComponent("MMFF94 StretchBend");
 		if (component != 0)
 		{
-			return component->getEnergy();
+			return ((MMFF94StretchBend*)component)->getStretchEnergy();
 		} 
 		else 
 		{
@@ -242,10 +238,23 @@ namespace BALL
 
 	double MMFF94::getBendEnergy() const
 	{
-		ForceFieldComponent* component = getComponent("MMFF94 Bend");
+		ForceFieldComponent* component = getComponent("MMFF94 StretchBend");
 		if (component != 0)
 		{
-			return component->getEnergy();
+			return ((MMFF94StretchBend*)component)->getBendEnergy();
+		} 
+		else 
+		{
+			return 0;
+		}
+	}
+
+	double MMFF94::getStretchBendEnergy() const
+	{
+		ForceFieldComponent* component = getComponent("MMFF94 StretchBend");
+		if (component != 0)
+		{
+			return ((MMFF94StretchBend*)component)->getStretchBendEnergy();
 		} 
 		else 
 		{

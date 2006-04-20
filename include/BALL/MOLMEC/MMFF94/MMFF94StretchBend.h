@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.h,v 1.1.2.5 2006/02/17 02:05:44 amoll Exp $
+// $Id: MMFF94StretchBend.h,v 1.1.2.6 2006/04/20 10:55:05 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94STRETCHBEND_H
@@ -17,6 +17,8 @@
 
 namespace BALL 
 {
+	class MMFF94;
+
 	/**	MMFF94 bond stretch component
     	\ingroup  MMFF94
 	*/
@@ -38,13 +40,41 @@ namespace BALL
 			const double* delta_theta;
 			Index sbtijk; 
 			double energy;
+			Index bend_index1_2;
+			Index bend_index2_3;
 		};
 
-		BALL_CREATE(MMFF94StretchBend)
+		/// see MMFFANG.PAR
+		struct BALL_EXPORT Bend
+		{
+			Bend();
 
-		/** @name	Constructors and Destructors	
-		*/
-		//@{ 
+			double theta0;
+			double delta_theta;
+			double ka;
+			Atom::StaticAtomAttributes*	atom1;
+			Atom::StaticAtomAttributes*	atom2;
+			Atom::StaticAtomAttributes*	atom3;
+			bool is_linear;
+			Position ATIJK;
+			double energy;  // debug
+			bool emperical;
+		};
+		
+		///
+		struct BALL_EXPORT Stretch
+		{
+			Atom* atom1;
+			Atom* atom2;
+			double kb;
+			double r0;
+			double delta_r;
+			bool  sbmb; 
+			bool  emperical;
+		};
+
+
+		BALL_CREATE(MMFF94StretchBend)
 
 		/**	Default constructor.
 		*/
@@ -62,45 +92,100 @@ namespace BALL
 		*/
 		virtual ~MMFF94StretchBend();
 
-		//@}
-		/**	@name	Setup Methods	
-		*/
-		//@{
-
 		/**	Setup method.
 		*/
 		virtual bool setup()
 			throw(Exception::TooManyErrors);
 
-		//@}
-		/**	@name	Accessors	
-		*/
-		//@{
-
-		/**	Calculates and returns the component's energy.
-		*/
+		///	Calculates and returns the component's energy.
 		virtual double updateEnergy();
 
-		/**	Calculates and returns the component's forces.
-		*/
+		///
+		virtual double updateBendEnergy();
+		
+		///
+		virtual double updateStretchEnergy();
+
+		///
+		virtual double updateStretchBendEnergy();
+
+		///
+		double getStretchEnergy() const { return stretch_energy_;}
+
+		///
+		double getBendEnergy() const { return bend_energy_; }
+
+		///
+		double getStretchBendEnergy() const { return stretch_bend_energy_;}
+
+		/// Calculates and returns the component's forces.
 		virtual void updateForces();
 
 		///
-		const vector<StretchBend>& getStretchBends() const { return stretch_bends_;}
-		//@}
+		virtual void updateBendForces();
 
+		///
+		virtual void updateStretchForces();
+
+		///
+		virtual void updateStretchBendForces();
+
+		///
+		const vector<Bend>& getBends() const { return bends_;}
+		
+		///
+		const vector<Stretch>& getStretches() const { return stretches_;}
+
+		///
+		const vector<StretchBend>& getStretchBends() const { return stretch_bends_;}
+		
 		///
 		Index calculateSBTIJK(Position angle_type, 
 													bool bond_type1,
 													bool bond_type2);
+		
+		///
+		Position getBendType(const Bond& bond1, const Bond& bond2,
+										 		 Atom& atom1, Atom& atom2, Atom& atom3) const;
+		
+		/// Bend emperical reference angle
+		double calculateBendEmpericalReferenceAngle(Atom& atom1, Atom& atom2, Atom& atom3) const;
+		
+		/// Bend emperical force constant
+		double calculateBendEmpericalForceConstant(Atom& atom1, Atom& atom2, Atom& atom3, double angle_0) const;
+
+		/// Calculate the radius value per Schomaker-Stevenson Rule
+		double calculateStretchR0(const Bond& bond);
+
+		///
+		double calculateStretchConstant(const Bond& bond, double r0);
+
 		private:
 
+		bool setupBends_();
+		bool setupStretches_();
+		bool setupStretchBends_();
+		
 		void errorOccured_(const String& string, 
 											 const Atom& a1, const Atom& a2, const Atom& a3);
 
+		vector<Bend> bends_;
+		vector<Stretch> stretches_;
 		vector<StretchBend> stretch_bends_;
- 		MMFF94StretchBendParameters parameters_;
-	 
+
+		const MMFF94StretchParameters* stretch_parameters_;
+		MMFF94BendParameters bend_parameters_;
+ 		MMFF94StretchBendParameters sb_parameters_;
+
+		static double bend_z_[];
+		static double bend_c_[];
+		static String bend_elements_[];
+
+		double stretch_energy_;
+		double bend_energy_;
+		double stretch_bend_energy_;
+
+		MMFF94* mmff94_;
 	};
 } // namespace BALL
 
