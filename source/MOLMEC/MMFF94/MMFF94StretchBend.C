@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.2.13 2006/04/21 15:05:09 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.2.14 2006/04/21 15:21:05 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -542,6 +542,8 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		{
 			const StretchBend& sb = stretch_bends_[i];
 			const Bend& bend = bends_[sb.bend_index];
+			const Stretch& stretch1 = stretches_[sb.stretch_i_j];
+			const Stretch& stretch2 = stretches_[sb.stretch_j_k];
 
 			if (use_selection &&
 					!bend.atom1->isSelected() &&
@@ -551,13 +553,15 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 				continue;
 			}
 
-			double factor = (double)STRETCH_BEND_K0 * 
-											(sb.kba_ijk * stretches_[sb.stretch_i_j].delta_r +
-											 sb.kba_kji * stretches_[sb.stretch_j_k].delta_r)
-										 	 * bend.delta_theta;
+			double bend_factor = (double)STRETCH_BEND_K0 * 
+														(sb.kba_ijk * stretches_[sb.stretch_i_j].delta_r +
+														 sb.kba_kji * stretches_[sb.stretch_j_k].delta_r);
+
+			double stretch_factor1 = STRETCH_BEND_K0 * sb.kba_ijk;
+			double stretch_factor2 = STRETCH_BEND_K0 * sb.kba_kji;
 			
-			const Vector3 n1 = bend.n1 * factor;
-			const Vector3 n2 = bend.n2 * factor;
+			const Vector3 n1 = bend.n1 * bend_factor;
+			const Vector3 n2 = bend.n2 * bend_factor;
 
 			if (!use_selection)
 			{
@@ -565,22 +569,30 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 				bend.atom2->getForce() += n1;
 				bend.atom2->getForce() -= n2;
 				bend.atom3->getForce() += n2;
+				bend.atom1->getForce()-= stretch1.n * stretch_factor1;
+				bend.atom2->getForce()+= stretch1.n * stretch_factor1;
+				bend.atom2->getForce()+= stretch2.n * stretch_factor2;
+				bend.atom3->getForce()+= stretch2.n * stretch_factor2;
 			} 
 			else 
 			{
 				if (bend.atom1->isSelected()) 
 				{
 					bend.atom1->getForce() -= n1;
+					bend.atom1->getForce()-= stretch1.n * stretch_factor1;
 				}
 
 				if (bend.atom2->isSelected())
 				{
 					bend.atom2->getForce() += n1;
 					bend.atom2->getForce() -= n2;
+					bend.atom2->getForce()+= stretch1.n * stretch_factor1;
+					bend.atom2->getForce()+= stretch2.n * stretch_factor2;
 				}
 				if (bend.atom3->isSelected())
 				{
 					bend.atom3->getForce() += n2;
+					bend.atom3->getForce()+= stretch2.n * stretch_factor2;
 				}
 			}
 		}
@@ -709,7 +721,6 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 			// Calculate the cross product of v1 and v2, test if it has length unequal 0,
 			// and normalize it.
-
 			Vector3 cross = v1 % v2;
 			if ((length = cross.getLength()) != 0) 
 			{
@@ -958,6 +969,7 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 											 4 * a * STRETCH_KCS * dd * delta );
 
 			direction.normalize();
+			stretches_[i].n = direction;
 			direction *= force;
 
 			stretches_[i].atom1->getForce()-= direction;
