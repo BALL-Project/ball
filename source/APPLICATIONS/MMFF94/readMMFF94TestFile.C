@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.69 2006/04/20 10:54:16 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.70 2006/04/21 15:05:01 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -52,9 +52,7 @@ void readCharges(vector<String>& filenames)
 				Log.error() << "Error in " << filenames[p] << " Not 6 fields in one line " << infile.getLine() << std::endl;
 			}
 
-//   			types.push_back(fields[2].toUnsignedShort());
 			String symbol = fields[3];
-//   			charges.push_back(fields[4].toFloat());
 			float charge = fields[5].toFloat();
 
 			if (charge_map.has(fields[3]))
@@ -126,15 +124,10 @@ System* readTestFile(String filename)
 		}
 
 		Position pos = name_to_pos[ait->getName()];
-//   		ait->setType(types[pos]);
+ait->setType(types[pos]); // <---------------------------------
 		ait->setProperty("Type", types[pos]);
 		ait->setProperty("TypeName", symbols[pos]);
 		ait->setProperty("OriginalInitialCharge", fcharges[pos]);
-//   		Vector3 v;
-//   		v.x = fcharges[pos];
-//   		ait->setVelocity(v);
-//    		ait->setCharge(fcharges[pos]);
-//   		ait->setCharge(charges[pos]);
  		ait->setFormalCharge((Index)fcharges[pos]);
 		ait->setRadius(charges[pos]);
 	}
@@ -303,6 +296,7 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 	for (Position poss = 0; poss < comp->getStretchBends().size(); poss++)
 	{
 		const MMFF94StretchBend::StretchBend& s = comp->getStretchBends()[poss];
+		const MMFF94StretchBend::Bend& b = comp->getBends()[s.bend_index];
 
 		vector<double> constants, constants_ours;
 		constants_ours.push_back(s.kba_kji);
@@ -313,13 +307,13 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 		Position found = 0;
 		for (Position poss2 = 0; poss2 < atoms1.size(); poss2++)
 		{
-			if (atoms2[poss2] != s.atom2->ptr->getName()) continue;
+			if (atoms2[poss2] != b.atom2->getName()) continue;
 
-			if ((atoms1[poss2] == s.atom1->ptr->getName() &&
-					 atoms3[poss2] == s.atom3->ptr->getName()) 
+			if ((atoms1[poss2] == b.atom1->getName() &&
+					 atoms3[poss2] == b.atom3->getName()) 
 					||
-			   (atoms3[poss2] == s.atom1->ptr->getName() &&
-					atoms1[poss2] == s.atom3->ptr->getName()))
+			   (atoms3[poss2] == b.atom1->getName() &&
+					atoms1[poss2] == b.atom3->getName()))
 			{
 				energy1 += energy[poss2];
 				constants.push_back(f_ij[poss2]);
@@ -341,11 +335,11 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 			bool ok2 = BALL_REAL_EQUAL(constants[1], constants_ours[0], 0.0001) &&
 								 BALL_REAL_EQUAL(constants[0], constants_ours[1], 0.0001); 
 
-			if ((!ok1 && !ok2) || !isOk(s.energy, energy1, 50))
+			if ((!ok1 && !ok2) || !isOk(s.energy, energy1, 30))
 			{
 				Log.error() << std::endl
 										<< "Problem StretchBend:   " << filename << "   " 
-										<< s.atom1->ptr->getName() << " " << s.atom2->ptr->getName() << " " << s.atom3->ptr->getName()  << std::endl
+										<< b.atom1->getName() << " " << b.atom2->getName() << " " << b.atom3->getName()  << std::endl
 										<< "got " << s.sbtijk << "  " << constants_ours[0] << " " << constants_ours[1] << "   " << s.energy << std::endl
 										<< "was " << sbtijk << "  " << constants[0] << " " << constants[1]  << "   " << energy1 << std::endl;
 			}
@@ -353,11 +347,10 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 			break;
 		}
 		
-		if (found < 2 && s.energy != 0.0)  
+		if (found < 1 && s.energy != 0.0)  
 		{
- 			Log.error() << "Could not find atoms [sb] " << s.atom1->ptr->getName() << " "	
-																							    << s.atom2->ptr->getName() << " "
-																									<< s.atom3->ptr->getName() << " " << found << std::endl;
+ 			Log.error() << "Could not find atoms [sb] " << filename << " " 
+									<< b.atom1->getName() << " "	<< b.atom2->getName() << " " << b.atom3->getName() << " " << found << std::endl;
 		}
 	}
 
@@ -368,7 +361,7 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 	double s_plus_b = results[4];
 
 	float e = mmff.getStretchBendEnergy();
-	if (!isOk(e, s_plus_b))
+	if (!isOk(e, s_plus_b, 40))
 	{
 		Log.error() << filename << "   " << s_plus_b << "  " << e << std::endl;
 		return false;
@@ -416,13 +409,13 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 
 		for (Position poss2 = 0; poss2 < atoms1.size(); poss2++)
 		{
-			if ((atoms1[poss2] != s.atom1->ptr->getName() ||
-					atoms2[poss2] != s.atom2->ptr->getName() ||
-					atoms3[poss2] != s.atom3->ptr->getName()) 
+			if ((atoms1[poss2] != s.atom1->getName() ||
+					atoms2[poss2] != s.atom2->getName() ||
+					atoms3[poss2] != s.atom3->getName()) 
 					&&
-			    (atoms3[poss2] != s.atom1->ptr->getName() ||
-					atoms2[poss2] != s.atom2->ptr->getName() ||
-					atoms1[poss2] != s.atom3->ptr->getName()))
+			    (atoms3[poss2] != s.atom1->getName() ||
+					atoms2[poss2] != s.atom2->getName() ||
+					atoms1[poss2] != s.atom3->getName()))
 
 			{
 				continue;
@@ -446,8 +439,8 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 
 			Log.error() << std::endl
 									<< "Problem Bend:   " << filename << "    emperical? "  << s.emperical << "   "
-									<< s.atom1->ptr->getName() << " " << s.atom2->ptr->getName() 
-									<< " " << s.atom3->ptr->getName()  << std::endl
+									<< s.atom1->getName() << " " << s.atom2->getName() 
+									<< " " << s.atom3->getName()  << std::endl
 									<< "got delta " << s.delta_theta << "  theta " << s.theta0 << " ka " << s.ka << "  ATIJK " << s.ATIJK << "  ENERGY " << s.energy << std::endl
 									<< "was delta " << delta[poss2] << " theta " <<  theta0[poss2] << " ka " << ka[poss2] << "  ATIJK " << type[poss2] << "  ENERGY " << energy[poss2]
 										<< std::endl;
@@ -458,9 +451,8 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 		
 		if (!found) 
 		{
- 			Log.error() << "Could not find atoms [b] " << s.atom1->ptr->getName() << " "	
-																							    << s.atom2->ptr->getName() << " "
-																									<< s.atom3->ptr->getName() << " " << std::endl;
+ 			Log.error() << "Could not find atoms [b] "
+									<< s.atom1->getName() << " "	<< s.atom2->getName() << " " << s.atom3->getName() << " " << std::endl;
 		}
 	}
 
@@ -1040,9 +1032,9 @@ int runtests(const vector<String>& filenames)
 			Log.info() << "We have unassigned atoms: " << mmff.getUnassignedAtoms().size() << std::endl;
 		}
 */
-   		testType(*system, filenames[pos], typer);
-    		result &= testStretch(mmff, filenames[pos], true);
-       result &= testBend(mmff, filenames[pos], true);
+//      		testType(*system, filenames[pos], typer);
+//       		result &= testStretch(mmff, filenames[pos], true);
+//          result &= testBend(mmff, filenames[pos], true);
     		result &= testStretchBend(mmff, filenames[pos], true);
 //    		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
 //    		result &= testPlanes(mmff, filenames[pos], true);

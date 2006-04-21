@@ -1,11 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.2.12 2006/04/20 10:54:33 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.2.13 2006/04/21 15:05:09 amoll Exp $
 //
 
-#include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
-#include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94.h>
 #include <BALL/KERNEL/bond.h>
@@ -123,8 +121,9 @@ namespace BALL
 		}
 
 		bool ok = true;
-		ok &= setupBends_();
+		// this order is important!
 		ok &= setupStretches_();
+		ok &= setupBends_();
 		ok &= setupStretchBends_();
 		return ok;
 	}
@@ -132,9 +131,6 @@ namespace BALL
 	bool MMFF94StretchBend::setupBends_()
 	{
 		bends_.clear();
-
-		// a working instance to put the current values in and push it back
-		Bend this_bend;
 
 		const vector<MMFF94AtomType>& atom_types = mmff94_->getAtomTypes();
 		bool use_selection = getForceField()->getUseSelection();
@@ -152,24 +148,36 @@ namespace BALL
 				{
 					if (it1->getType() == Bond::TYPE__HYDROGEN) continue; // Skip H-Bonds;
 
-					this_bend.atom1 = &Atom::getAttributes()[it2->getPartner(**atom_it)->getIndex()];
-					this_bend.atom2 = &Atom::getAttributes()[(*atom_it)->getIndex()];
-					this_bend.atom3 = &Atom::getAttributes()[it1->getPartner(**atom_it)->getIndex()];
+					// a working instance to put the current values in and push it back
+					Bend this_bend;
 
-					Atom& atom1 = *this_bend.atom1->ptr;
-					Atom& atom2 = *this_bend.atom2->ptr;
-					Atom& atom3 = *this_bend.atom3->ptr;
+					this_bend.atom1 = it2->getPartner(**atom_it);
+					this_bend.atom2 = (*atom_it);
+					this_bend.atom3 = it1->getPartner(**atom_it);
+
+					// make sure atom type is lower for atom1 than for atom3
+					if (this_bend.atom1->getType() > this_bend.atom3->getType())
+					{
+						Atom* temp = this_bend.atom1;
+						this_bend.atom1 = this_bend.atom3;
+						this_bend.atom3 = temp;
+					}
+
+					Atom& atom1 = *this_bend.atom1;
+					Atom& atom2 = *this_bend.atom2;
+					Atom& atom3 = *this_bend.atom3;
 
 					if (use_selection && (!atom1.isSelected() || !atom2.isSelected() || !atom3.isSelected()))
 					{
 						continue;
 					}
 
-					Atom::Type atom_type_a1 = this_bend.atom1->type;
-					Atom::Type atom_type_a2 = this_bend.atom2->type;
-					Atom::Type atom_type_a3 = this_bend.atom3->type;
+					Atom::Type atom_type_a1 = atom1.getType();
+					Atom::Type atom_type_a2 = atom2.getType();
+					Atom::Type atom_type_a3 = atom3.getType();
 
 					this_bend.ATIJK = getBendType(*it1, *it2, atom1, atom2, atom3);
+					this_bend.is_linear = atom_types[atom_type_a2].lin;
 
 					if (bend_parameters_.getParameters(this_bend.ATIJK, 
 																			  atom_type_a1, 
@@ -177,37 +185,32 @@ namespace BALL
 																				atom_type_a3, 
 																				this_bend.ka, this_bend.theta0))
 					{
-						this_bend.is_linear = atom_types[atom_type_a2].lin;
-
 						// sometimes the ka values are lacking, try the emperical rule
-						if (this_bend.ka == 0.0)
+						if (this_bend.ka == 0)
 						{
 							this_bend.ka = calculateBendEmpericalForceConstant(atom1, atom2, atom3, this_bend.theta0);
 							this_bend.emperical = true;
 						}
 
-						if (this_bend.ka > 0.0)
+						if (this_bend.ka > 0)
 						{
-							// store the bend parameters otherwise
+							// if we have a valid constant: store the bend parameters and we are done for this bend
 							bends_.push_back(this_bend);
 							continue;
 						}
 					}
 
 					// ok we will try the emperical rule
-					double ra = calculateBendEmpericalReferenceAngle(atom1, atom2, atom3);
-					double ka = calculateBendEmpericalForceConstant(atom1, atom2, atom3, ra);
+					this_bend.emperical = true;
+					this_bend.theta0 = calculateBendEmpericalReferenceAngle(atom1, atom2, atom3);
+					this_bend.ka = calculateBendEmpericalForceConstant(atom1, atom2, atom3, this_bend.theta0);
 
-					if (ra != -1 && ka != -1)
+					if (this_bend.ka != -1)
 					{
-						this_bend.ka = ka;
-						this_bend.theta0 = ra;
 						bends_.push_back(this_bend);
-						this_bend.emperical = true;
 						continue;
 					}
 
-					
 					// complain if nothing was found
 					mmff94_->error() << "MMFF94StretchBend::setup: cannot find bend parameters for atom types:"
 												<< atom_type_a1 << "-" << atom_type_a2 << "-" << atom_type_a3 
@@ -305,6 +308,7 @@ namespace BALL
 	bool MMFF94StretchBend::setupStretchBends_()
 	{
 		stretch_bends_.clear();
+
 		// build up a lookup table for the stretch data
 		HashMap<long, Position> stretch_map;
 		for (Position stretch_pos = 0; stretch_pos < stretches_.size(); stretch_pos++)
@@ -318,40 +322,27 @@ namespace BALL
 		// a working instance to put the current values in and push it back
 		StretchBend sb;
 
-		// get all needed data from the stretches and bends
-		
 		// iterator on the stretch search results
 		HashMap<long, Position>::Iterator stretch_it1, stretch_it2;
 		
 		// iterate over all bends and look for the corresponding bends in the lookup table
 		for (Position bend_pos = 0; bend_pos < bends_.size(); bend_pos++)
 		{
+			// citation from original paper:
 			// "Currently, stretch-bend interactions are omitted when the 
 			// i-j-k interaction corresponds to a linear bond angle."
 			if (bends_[bend_pos].is_linear) continue;
 
-			sb.delta_theta = &bends_[bend_pos].delta_theta;
-			sb.atom1 = 			  bends_[bend_pos].atom1;
-			sb.atom2 = 			  bends_[bend_pos].atom2;
-			sb.atom3 = 			  bends_[bend_pos].atom3;
+			const Bend& bend = bends_[bend_pos];
 
-			// make sure calculateSBTIJK gets the sbmb in the right order:
-			// pair with the smaller atom type partner first !
-			if (sb.atom1->type > sb.atom3->type)
-			{
-				Atom::StaticAtomAttributes*	temp = sb.atom1;
-				sb.atom1 = sb.atom3;
-				sb.atom3 = temp;
-			}
-			
-			Atom* a1 = sb.atom1->ptr;
-			Atom* a2 = sb.atom2->ptr;
-			Atom* a3 = sb.atom3->ptr;
+			sb.bend_index = bend_pos;
 
-			// find the i->j stretch
+			Atom* a1 = bend.atom1;
+			Atom* a2 = bend.atom2;
+			Atom* a3 = bend.atom3;
+
+			// find the i->j and j->k stretch
 			stretch_it1 = stretch_map.find((long) a1 * (long) a2);
-			
-			// find the j->k stretch
 			stretch_it2 = stretch_map.find((long) a2 * (long) a3);
 
 			if (!+stretch_it1 || !+stretch_it2)
@@ -360,18 +351,15 @@ namespace BALL
 				continue;
 			}
 
-			const Position pos1 = stretch_it1->second;
-			const Position pos2 = stretch_it2->second;
+			sb.stretch_i_j = stretch_it1->second;
+			sb.stretch_j_k = stretch_it2->second;
 
-			// store deltas for the stretches
-			sb.delta_r_ij = &stretches_[pos1].delta_r;
-			sb.delta_r_kj = &stretches_[pos2].delta_r;
+			const Stretch& stretch_i_j = stretches_[sb.stretch_i_j];
+			const Stretch& stretch_j_k = stretches_[sb.stretch_j_k];
 
-			sb.sbtijk = calculateSBTIJK(bends_[bend_pos].ATIJK, 
-																	stretches_[pos1].sbmb,
-																	stretches_[pos2].sbmb);
+			sb.sbtijk = calculateSBTIJK(bends_[sb.bend_index].ATIJK, stretch_i_j.sbmb, stretch_j_k.sbmb);
 
-			if (sb.sbtijk == 2 && sb.atom1->type == sb.atom3->type)
+			if (sb.sbtijk == 2 && a1->getType() == a3->getType())
 			{
 				sb.sbtijk = 1;
 			}
@@ -417,9 +405,10 @@ namespace BALL
 
 		for (; bend_it != bends_.end(); ++bend_it) 
 		{
-			const Vector3& a1 = bend_it->atom1->position;
-			const Vector3& a2 = bend_it->atom2->position;
-			const Vector3& a3 = bend_it->atom3->position;
+			Bend& bend = *bend_it;
+			const Vector3& a1 = bend.atom1->getPosition();
+			const Vector3& a2 = bend.atom2->getPosition();
+			const Vector3& a3 = bend.atom3->getPosition();
 
 			v1.set(a1.x - a2.x, a1.y - a2.y, a1.z - a2.z);
 			v2.set(a3.x - a2.x, a3.y - a2.y, a3.z - a2.z);
@@ -451,18 +440,18 @@ namespace BALL
 			const double& theta0 = bend_it->theta0;
 
 #ifdef BALL_DEBUG_MMFF
-Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " " 
-											<< bend_it->atom2->ptr->getName() << " " 
-											<< bend_it->atom3->ptr->getName() << " " 
-											<< bend_it->atom1->type << " "
-											<< bend_it->atom2->type << " "
-											<< bend_it->atom3->type << " "
+Log.info() << "Bend " << bend.atom1->getName() << " " 
+											<< bend.atom2->getName() << " " 
+											<< bend.atom3->getName() << " " 
+											<< bend.atom1->getType() << " "
+											<< bend.atom2->getType() << " "
+											<< bend.atom3->getType() << " "
 											<< "ATIJK: " << bend_it->ATIJK << "  T: "
 											<< theta << "  T0: " << theta0 << " ka " << ka << std::endl;
 #endif
 
 			double energy;
-			if (bend_it->is_linear)
+			if (bend.is_linear)
 			{ 
 				energy = BEND_KX * ka * (1.0 + cos(theta * degree_to_radian));
 
@@ -475,9 +464,8 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 				energy = BEND_K0 * ka * theta * theta * (1.0 + BEND_K1 * theta);
 			}
 
-			bend_it->delta_theta = theta;
-
-			bend_it->energy = energy;
+			bend.delta_theta = theta;
+			bend.energy = energy;
 
 #ifdef BALL_DEBUG_MMFF
 	Log.info() << "  E: "<< energy << std::endl;
@@ -499,27 +487,27 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 		for (Size i = 0; i < stretch_bends_.size(); i++)
 		{
 			StretchBend& sb = stretch_bends_[i];
-			double energy = (double)STRETCH_BEND_K0 * (sb.kba_ijk * (*sb.delta_r_ij) +
-													  				sb.kba_kji * (*sb.delta_r_kj)) 
-										 	   					* (*sb.delta_theta);
-   #ifdef BALL_DEBUG_MMFF
+			const Bend& bend = bends_[sb.bend_index];
+			sb.energy = (double)STRETCH_BEND_K0 * (sb.kba_ijk * stretches_[sb.stretch_i_j].delta_r +
+													  				sb.kba_kji * stretches_[sb.stretch_j_k].delta_r) *
+										 	   					  bend.delta_theta;
+      #ifdef BALL_DEBUG_MMFF
 			Log.info() << "MMFF94 SB "  
-				<< sb.atom1->ptr->getName() << " "
-				<< sb.atom2->ptr->getName() << " "
-				<< sb.atom3->ptr->getName() << " "
-				<< sb.atom1->type << " "
-				<< sb.atom2->type << " "
-				<< sb.atom3->type << " :"
+				<< bend.atom1->getName() << " "
+				<< bend.atom2->getName() << " "
+				<< bend.atom3->getName() << " "
+				<< bend.atom1->getType() << " "
+				<< bend.atom2->getType() << " "
+				<< bend.atom3->getType() << " : "
 				<< sb.kba_ijk << " " 
 				<< sb.kba_kji  << " r_ij: " 
-				<< *sb.delta_r_ij << " r_ik: " 
-				<< *sb.delta_r_kj << " d: " 
-				<< *sb.delta_theta<< "      " 
-				<< energy << std::endl;
-   #endif
+				<< stretches_[sb.stretch_i_j].delta_r << " r_ik: " 
+				<< stretches_[sb.stretch_j_k].delta_r << " d: " 
+				<< bends_[sb.bend_index].delta_theta  << "      " 
+				<< sb.energy << std::endl;
+      #endif
 
-			sb.energy = energy;
-			stretch_bend_energy_ += energy;
+			stretch_bend_energy_ += sb.energy;
 		}
 
 		return stretch_bend_energy_;
@@ -548,6 +536,54 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 
 	void MMFF94StretchBend::updateStretchBendForces()
 	{
+		bool use_selection = mmff94_->getUseSelection();
+
+		for (Size i = 0; i < stretch_bends_.size(); i++)
+		{
+			const StretchBend& sb = stretch_bends_[i];
+			const Bend& bend = bends_[sb.bend_index];
+
+			if (use_selection &&
+					!bend.atom1->isSelected() &&
+					!bend.atom2->isSelected() &&
+					!bend.atom3->isSelected())
+			{
+				continue;
+			}
+
+			double factor = (double)STRETCH_BEND_K0 * 
+											(sb.kba_ijk * stretches_[sb.stretch_i_j].delta_r +
+											 sb.kba_kji * stretches_[sb.stretch_j_k].delta_r)
+										 	 * bend.delta_theta;
+			
+			const Vector3 n1 = bend.n1 * factor;
+			const Vector3 n2 = bend.n2 * factor;
+
+			if (!use_selection)
+			{
+				bend.atom1->getForce() -= n1;
+				bend.atom2->getForce() += n1;
+				bend.atom2->getForce() -= n2;
+				bend.atom3->getForce() += n2;
+			} 
+			else 
+			{
+				if (bend.atom1->isSelected()) 
+				{
+					bend.atom1->getForce() -= n1;
+				}
+
+				if (bend.atom2->isSelected())
+				{
+					bend.atom2->getForce() += n1;
+					bend.atom2->getForce() -= n2;
+				}
+				if (bend.atom3->isSelected())
+				{
+					bend.atom3->getForce() += n2;
+				}
+			}
+		}
 	}
 
 	/* "The stretch-bend types are defined in terms of the constituent bond types BTIJ 
@@ -610,104 +646,107 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 		bool use_selection = mmff94_->getUseSelection();
 		for (Size i = 0; i < bends_.size(); i++) 
 		{
-			if ((use_selection == false) 
-					|| bends_[i].atom1->ptr->isSelected() 
-					|| bends_[i].atom2->ptr->isSelected() 
-					|| bends_[i].atom3->ptr->isSelected())
+			Bend& bend = bends_[i];
+
+			if (use_selection &&
+					!bend.atom1->isSelected() &&
+					!bend.atom2->isSelected() &&
+					!bend.atom3->isSelected())
 			{
+				continue;
+			}
 
-				// Calculate the vector between atom1 and atom2,
-				// test if the vector has length larger than 0 and normalize it
+			// Calculate the vector between atom1 and atom2,
+			// test if the vector has length larger than 0 and normalize it
 
-				Vector3 v1 = bends_[i].atom1->position - bends_[i].atom2->position;
-				Vector3 v2 = bends_[i].atom3->position - bends_[i].atom2->position;
-				double length = v1.getLength();
+			Vector3 v1 = bend.atom1->getPosition() - bend.atom2->getPosition();
+			Vector3 v2 = bend.atom3->getPosition() - bend.atom2->getPosition();
+			double length = v1.getLength();
 
-				if (length == 0) continue;
-				double inverse_length_v1 = 1.0 / length;
-				v1 *= inverse_length_v1 ;
+			if (length == 0) continue;
+			double inverse_length_v1 = 1.0 / length;
+			v1 *= inverse_length_v1 ;
 
-				// Calculate the vector between atom3 and atom2,
-				// test if the vector has length larger than 0 and normalize it
+			// Calculate the vector between atom3 and atom2,
+			// test if the vector has length larger than 0 and normalize it
 
-				length = v2.getLength();
-				if (length == 0.0) continue;
-				double inverse_length_v2 = 1/length;
-				v2 *= inverse_length_v2;
+			length = v2.getLength();
+			if (length == 0.0) continue;
+			double inverse_length_v2 = 1/length;
+			v2 *= inverse_length_v2;
 
-				// Calculate the cos of theta and then theta
-				double costheta = v1 * v2;
-				double theta;
-				if (costheta > 1.0) 
+			// Calculate the cos of theta and then theta
+			double costheta = v1 * v2;
+			double theta;
+			if (costheta > 1.0) 
+			{
+				theta = 0.0;
+			}
+			else if (costheta < -1.0) 
+			{
+				theta = Constants::PI;
+			}
+			else 
+			{
+				theta = acos(costheta);
+			}
+
+			// unit conversion: kJ/(mol A) -> N
+			// kJ -> J: 1e3
+			// A -> m : 1e10
+			// J/mol -> mol: Avogadro
+			const float& delta = bend.delta_theta;
+			double factor;
+			
+			if (!bend.is_linear) 
+			{
+				factor = -BEND_K0 * bend.ka * (2 * delta * + 3 * BEND_K1 * delta * delta);
+			}
+			else
+			{
+				factor = -BEND_KX * bend.ka * sin(bends_[i].theta0 * DEGREE_TO_RADIAN);
+			}
+
+			// Calculate the cross product of v1 and v2, test if it has length unequal 0,
+			// and normalize it.
+
+			Vector3 cross = v1 % v2;
+			if ((length = cross.getLength()) != 0) 
+			{
+				cross *= (1.0 / length);
+			} 
+			else 
+			{
+				continue;
+			}
+
+			bend.n1 = (v1 % cross) * inverse_length_v1;
+			bend.n2 = (v2 % cross) * inverse_length_v2;
+			const Vector3 n1 = bend.n1 * factor;
+			const Vector3 n2 = bend.n2 * factor;
+
+			if (!use_selection)
+			{
+				bend.atom1->getForce() -= n1;
+				bend.atom2->getForce() += n1;
+				bend.atom2->getForce() -= n2;
+				bend.atom3->getForce() += n2;
+			} 
+			else 
+			{
+				if (bend.atom1->isSelected()) 
 				{
-					theta = 0.0;
+					bend.atom1->getForce() -= n1;
 				}
-				else if (costheta < -1.0) 
-				{
-					theta = Constants::PI;
-				}
-				else 
-				{
-					theta = acos(costheta);
-				}
 
-				// unit conversion: kJ/(mol A) -> N
-				// kJ -> J: 1e3
-				// A -> m : 1e10
-				// J/mol -> mol: Avogadro
-				const float& delta = bends_[i].delta_theta;
-				double factor;
-				
-				if (!bends_[i].is_linear) 
+				if (bend.atom2->isSelected())
 				{
-					factor = -BEND_K0 * bends_[i].ka * (2 * delta * + 3 * BEND_K1 * delta * delta);
+					bend.atom2->getForce() += n1;
+					bend.atom2->getForce() -= n2;
 				}
-				else
+				if (bend.atom3->isSelected())
 				{
-					factor = -BEND_KX * bends_[i].ka * sin(bends_[i].theta0 * DEGREE_TO_RADIAN);
-				}
-
-				// Calculate the cross product of v1 and v2, test if it has length unequal 0,
-				// and normalize it.
-
-				Vector3 cross = v1 % v2;
-				if ((length = cross.getLength()) != 0) 
-				{
-					cross *= (1.0 / length);
-				} 
-				else 
-				{
-					continue;
-				}
-
-				Vector3 n1 = v1 % cross;
-				Vector3 n2 = v2 % cross; 
-				n1 *= factor * inverse_length_v1;
-				n2 *= factor * inverse_length_v2;
-
-				if (use_selection == false)
-				{
-					bends_[i].atom1->force -= n1;
-					bends_[i].atom2->force += n1;
-					bends_[i].atom2->force -= n2;
-					bends_[i].atom3->force += n2;
-				} 
-				else 
-				{
-					if (bends_[i].atom1->ptr->isSelected()) 
-					{
-						bends_[i].atom1->force -= n1;
-					}
-	
-					if (bends_[i].atom2->ptr->isSelected())
-					{
-						bends_[i].atom2->force += n1;
-						bends_[i].atom2->force -= n2;
-					}
-					if (bends_[i].atom3->ptr->isSelected())
-					{
-						bends_[i].atom3->force += n2;
-					}
+					bend.atom3->getForce() += n2;
 				}
 			}
 		}

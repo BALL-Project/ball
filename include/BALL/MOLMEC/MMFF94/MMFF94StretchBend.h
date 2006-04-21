@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.h,v 1.1.2.6 2006/04/20 10:55:05 amoll Exp $
+// $Id: MMFF94StretchBend.h,v 1.1.2.7 2006/04/21 15:05:14 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94STRETCHBEND_H
@@ -31,17 +31,10 @@ namespace BALL
 		{
 			double kba_ijk;
 			double kba_kji;
-			Atom::StaticAtomAttributes*	atom1;
-			Atom::StaticAtomAttributes*	atom2;
-			Atom::StaticAtomAttributes*	atom3;
-			// debug:
-			const double* delta_r_ij;
-			const double* delta_r_kj;
-			const double* delta_theta;
+			double energy; // debug
 			Index sbtijk; 
-			double energy;
-			Index bend_index1_2;
-			Index bend_index2_3;
+			Index stretch_i_j, stretch_j_k;
+			Index bend_index;
 		};
 
 		/// see MMFFANG.PAR
@@ -52,13 +45,14 @@ namespace BALL
 			double theta0;
 			double delta_theta;
 			double ka;
-			Atom::StaticAtomAttributes*	atom1;
-			Atom::StaticAtomAttributes*	atom2;
-			Atom::StaticAtomAttributes*	atom3;
+			Atom*	atom1;
+			Atom*	atom2;
+			Atom*	atom3;
 			bool is_linear;
 			Position ATIJK;
 			double energy;  // debug
-			bool emperical;
+			bool emperical; // debug
+			Vector3 n1, n2;
 		};
 		
 		///

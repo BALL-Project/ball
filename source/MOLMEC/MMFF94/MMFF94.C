@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.36 2006/04/20 10:54:33 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.37 2006/04/21 15:05:09 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -177,6 +177,7 @@ namespace BALL
 
 		/////////////////////////////////////////////////////////
 		// atom types 
+		/*
 		atom_typer_.setAromaticRings(getAromaticRings());
 		atom_typer_.assignTo(*system_);
 
@@ -194,6 +195,7 @@ namespace BALL
 		{
 			error() << "Could not assign atom types for " << unassigned_atoms_.size() << " atoms." << std::endl;
 		}
+		*/
 
 		/////////////////////////////////////////////////////////
 		// bond types
