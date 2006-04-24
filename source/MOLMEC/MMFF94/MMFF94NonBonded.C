@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.2.16 2006/03/07 16:01:33 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.2.17 2006/04/24 13:41:50 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -269,10 +269,17 @@ namespace BALL
 	void MMFF94NonBonded::updateForces()
 		throw()
 	{
-		if (getForceField() == 0)
+		for (Size i = 0 ; i < non_bonded_data_.size(); i++)
 		{
-			return;
-		}
+			Vector3 direction(stretches_[i].atom1->getPosition() - stretches_[i].atom2->getPosition());
+			direction.normalize();
+
+			float factor = 0;
+			Vector3 force = direction * factor;
+
+			stretches_[i].atom1->getForce() -= force;
+			stretches_[i].atom2->getForce() += force;
+		}                                                                                                          
 	} 
 	
 } // namespace BALL

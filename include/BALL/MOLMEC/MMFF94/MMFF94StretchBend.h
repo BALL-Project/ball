@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.h,v 1.1.2.7 2006/04/21 15:05:14 amoll Exp $
+// $Id: MMFF94StretchBend.h,v 1.1.2.8 2006/04/24 13:41:57 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94STRETCHBEND_H
@@ -65,6 +65,7 @@ namespace BALL
 			double delta_r;
 			bool  sbmb; 
 			bool  emperical;
+			Vector3 n;
 		};
 
 

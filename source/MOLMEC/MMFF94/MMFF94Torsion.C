@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.20 2006/02/17 02:05:58 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.21 2006/04/24 13:41:50 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -318,7 +318,91 @@ namespace BALL
 	// calculates and adds its forces to the current forces of the force field
 	void MMFF94Torsion::updateForces()
 	{
-//   		bool use_selection = getForceField()->getUseSelection();
+		double cosphi;
+
+		Vector3	ab;	// vector from atom2 to atom1
+		Vector3 cb;	// vector from atom2 to atom3
+		Vector3 dc;	// vector from atom3 to atom4
+
+		bool use_selection = getForceField()->getUseSelection();
+
+		for (Position t = 0; t < torsions_.size(); t++)
+		{
+			Atom& a1 = *torsions_[t].atom1->ptr;
+			Atom& a2 = *torsions_[t].atom2->ptr;
+			Atom& a3 = *torsions_[t].atom3->ptr;
+			Atom& a4 = *torsions_[t].atom4->ptr;
+
+			if (use_selection &&
+					!a1.isSelected() &&
+					!a2.isSelected() &&
+					!a3.isSelected() &&
+					!a4.isSelected())
+			{
+				continue;
+			}
+
+			ab = a1.getPosition() - a2.getPosition();
+			const double length_ab = ab.getLength();
+			Vector3 ba = a2.getPosition() - a1.getPosition();
+			cb = a3.getPosition() - a2.getPosition();
+			const double length_cb = cb.getLength();
+			dc = a4.getPosition() - a3.getPosition();
+			const double length_dc = dc.getLength();
+
+			if (length_ab != 0 && length_cb != 0 && length_dc != 0) 
+			{
+				const Vector3  t = ba % cb;   // cross product of cb and ba
+				const Vector3  u = cb % dc;   // cross product of cb and dc
+
+				const double length_t2 = t.getSquareLength();
+				const double length_u2 = u.getSquareLength();
+
+				const double length_t = sqrt(length_t2);
+				const double length_u = sqrt(length_u2);
+
+				if (length_t != 0 && length_u != 0) 
+				{
+					cosphi = (t * u) / (length_t * length_u);
+
+					if (cosphi > 1.0)
+					{
+						cosphi = 1.0;
+					}
+					if (cosphi < -1.0)
+					{
+						cosphi = -1.0;
+					}
+
+					double direction = (t % u) * cb;
+					float factor = 0; // ??????
+					if (direction > 0.0)
+					{
+						factor *= -1;
+					}
+
+					const Vector3 ca = a3.getPosition() - a1.getPosition();
+					const Vector3 db = a4.getPosition() - a2.getPosition();
+					const Vector3 dt =   (float)(factor / (length_t2 * cb.getLength())) * (t % cb);
+					const Vector3 du = - (float)(factor / (length_u2 * cb.getLength())) * (u % cb);
+
+					if (!use_selection)
+					{
+						a1.getForce() += dt % cb;
+						a2.getForce() += ca % dt + du % dc;
+						a3.getForce() += dt % ba + db % du;
+						a4.getForce() += du % cb; 
+					} 
+					else 
+					{
+						if (a1.isSelected()) a1.getForce() += dt % cb;
+						if (a2.isSelected()) a2.getForce() += ca % dt + du % dc;
+						if (a3.isSelected()) a3.getForce() += dt % ba + db % du;
+						if (a4.isSelected()) a4.getForce() += du % cb; 
+					}
+				}
+			}
+		}
 	}
 
 
