@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.14 2006/04/13 13:42:11 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.15 2006/04/24 15:32:04 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -15,6 +15,7 @@
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
 #include <BALL/VIEW/DIALOGS/bondProperties.h>
 #include <BALL/VIEW/DIALOGS/atomOverview.h>
+#include <BALL/MATHS/analyticalGeometry.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
 
@@ -597,6 +598,7 @@ namespace BALL
 			registerForHelpSystem(selector_edit_, "molecularControl.html#regular_expressions"); 
 
 			insertMenuEntry(MainControl::DISPLAY, "Show Distance", this, SLOT(showDistance()));
+			insertMenuEntry(MainControl::DISPLAY, "Show Angle", this, SLOT(showAngle()));
 		}
 
 
@@ -1407,6 +1409,12 @@ namespace BALL
 			Vector3 pos1 = a1->getPosition();
 			Vector3 pos2 = a2->getPosition();
 			ColorRGBA color(0,0,1.0);
+			Scene* scene = Scene::getInstance(0);
+			if (scene != 0)
+			{
+				color = scene->getStage()->getInfoColor();
+			}
+
 			Representation* rep = new Representation;
 
 			Sphere* sphere = new Sphere;
@@ -1431,6 +1439,102 @@ namespace BALL
 			Label* label = new Label;
 			label->setVertex(pos1 + (pos2 - pos1) / 2.);
 			label->setText(String((pos1 - pos2).getLength()));
+			rep->insert(*label);
+
+			rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
+			getMainControl()->insert(*rep);
+			getMainControl()->update(*rep);
+		}
+
+		void MolecularControl::showAngle()
+		{
+			List<Composite*>::ConstIterator it = getSelection().begin();
+
+			vector<Atom*> atoms;
+
+			for (; it != getSelection().end(); it++)
+			{
+				Atom* a = dynamic_cast<Atom*>(*it);
+				if (a != 0) atoms.push_back(a);
+			}
+
+			if (atoms.size() < 3 || atoms.size() > 4) return;
+
+			if (atoms.size() == 3) atoms.push_back(0);
+
+			showAngle(atoms[0], atoms[1], atoms[2], atoms[3]);
+		}
+
+		void MolecularControl::showAngle(Atom* a1, Atom* a2, Atom* a3, Atom* a4)
+		{
+			if (!a1 || !a2 || !a3) return;
+			
+			Vector3 pos1 = a1->getPosition();
+			Vector3 pos2 = a2->getPosition();
+			Vector3 pos3 = a3->getPosition();
+
+			Vector3 v1,v2,v3;
+			try
+			{
+				v1 = pos1 - pos2;
+				v2 = pos3 - pos2;
+				v1.normalize();
+				v2.normalize();
+				v3 = v1 + v2;
+				v3 /= 4.;
+			}
+			catch(...)
+			{
+				return;
+			}
+
+			ColorRGBA color(0,0,1.0);
+			Scene* scene = Scene::getInstance(0);
+			if (scene != 0)
+			{
+				color = scene->getStage()->getInfoColor();
+			}
+
+			Representation* rep = new Representation;
+
+			Sphere* sphere = new Sphere;
+			sphere->setPosition(pos1);
+			sphere->setRadius(0.05);
+			sphere->setColor(color);
+			rep->insert(*sphere);
+
+			sphere = new Sphere;
+			sphere->setPosition(pos2);
+			sphere->setRadius(0.05);
+			sphere->setColor(color);
+			rep->insert(*sphere);
+
+			sphere = new Sphere;
+			sphere->setPosition(pos3);
+			sphere->setRadius(0.05);
+			sphere->setColor(color);
+			rep->insert(*sphere);
+
+			Tube* tube = new Tube;
+			tube->setRadius(0.05);
+			tube->setVertex1(pos1);
+			tube->setVertex2(pos2);
+			tube->setColor(color);
+			rep->insert(*tube);
+
+			tube = new Tube;
+			tube->setRadius(0.05);
+			tube->setVertex1(pos2);
+			tube->setVertex2(pos3);
+			tube->setColor(color);
+			rep->insert(*tube);
+
+			Angle angle;
+			GetAngle(v1, v2, angle);
+			Label* label = new Label;
+			Vector3 v = pos2 + v3;
+			label->setVertex(v);
+			label->setText(String(angle.toDegree()));
 			rep->insert(*label);
 
 			rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
