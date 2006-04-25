@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36.2.5 2006/04/05 13:43:46 amoll Exp $
+// $Id: glRenderer.h,v 1.36.2.6 2006/04/25 16:25:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -31,6 +31,8 @@
 # include <BALL/VIEW/RENDERING/glDisplayList.h>
 #endif
 
+#include <BALL/DATATYPE/regularData3D.h>
+
 class QFont;
 
 namespace BALL
@@ -43,6 +45,7 @@ namespace BALL
 		class GLDisplayList;
 		class Scene;
 		class MeshBuffer;
+		class ColorMap;
 
 		/** GLRenderer
 		 		Renderer which provides hardware accelerated OPENGL rendering.
@@ -224,6 +227,8 @@ namespace BALL
 			bool hasDisplayListFor(const Representation& rep) const
 				throw();
 			
+			void renderVolume(const RegularData3D& grid, const ColorMap& map);
+
 			///
 			void setStereoMode(StereoMode state)
 				throw();
@@ -396,6 +401,10 @@ namespace BALL
 			//_
 			void translateVector3_(const Vector3& v)
 				throw();
+			
+			//_
+			void texCoordVector3_(const Vector3& v)
+				throw() { glTexCoord3f(v.x, v.y, v.z); }
 
 			//_
 			void scaleVector3_(const Vector3& v)
@@ -417,6 +426,9 @@ namespace BALL
 
 			//_
 			void generateIlluminationTexture_(float ka, float kd, float kr, float shininess);
+
+			Position getTextureIndex_(Position x, Position y, Position z, Size width, Size height);
+			Vector3 getGridIndex_(const RegularData3D& grid, const Vector3& point);
 
 			Scene* 								scene_;
 
@@ -465,6 +477,7 @@ namespace BALL
 			bool 										drawed_other_object_;
 			bool 										drawed_mesh_;
 			GLUquadricObj*  GLU_quadric_obj_;
+			GLubyte*								texels;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

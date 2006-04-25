@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.5 2006/04/13 13:53:44 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.6 2006/04/25 16:25:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -564,7 +564,7 @@ namespace BALL
 
 			S.apply(bs);
 
-			RegularData3D* regdat = new RegularData3D(RegularData3D::IndexType(150), 
+			RegularData3D* regdat = new RegularData3D(RegularData3D::IndexType(64), 
 																								bs.getLower()-Vector3(20,20,20), 
 																								bs.getUpper()-bs.getLower()+Vector3(40,40,40));
 

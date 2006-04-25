@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.18 2006/04/10 11:16:29 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.19 2006/04/25 16:25:53 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
+#include <BALL/VIEW/DATATYPE/colorMap.h>
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
@@ -28,6 +29,19 @@
 #include <QtGui/qpixmap.h>
 #include <QtGui/qpainter.h>
 #include <QtGui/qimage.h>
+
+#ifdef _WINDOWS
+// Header Files For Windows
+ #define WINDOWS_LEAN_AND_MEAN
+ #include <windows.h>
+ #include <wingdi.h>	
+#else
+ #define GLX_GLXEXT_PROTOTYPES // required for Mesa-like implementations
+ #include <GL/gl.h>
+ #include <GL/glx.h>
+ #include <GL/glext.h>
+#endif
+
 
 #ifdef BALL_ENABLE_VERTEX_BUFFER
  #include <BALL/VIEW/RENDERING/vertexBuffer.h>
@@ -244,6 +258,8 @@ namespace BALL
       // glHint( GL_LINE_SMOOTH_HINT, GL_DONT_CARE );
 
 			line_list_.endDefinition();
+
+			texels = 0;
 
 			return true;
 		}
@@ -1761,6 +1777,125 @@ namespace BALL
 				}
 			}
 		}
+
+#define BYTES_PER_TEXEL 4
+
+	Position GLRenderer::getTextureIndex_(Position x, Position y, Position z, Size width, Size height)
+	{
+//   		return BYTES_PER_TEXEL * width * height * x +
+//   						BYTES_PER_TEXEL * (y * width + z);
+//   		return width * height *  BYTES_PER_TEXEL * z +
+//   					 y * BYTES_PER_TEXEL * width + 
+//   					 x * BYTES_PER_TEXEL;
+		return BYTES_PER_TEXEL * (x * width + y) +
+					 BYTES_PER_TEXEL * width * height * z;
+	}
+
+	void GLRenderer::renderVolume(const RegularData3D& grid, const ColorMap& map)
+	{
+		RegularData3D::CoordinateType tex_dim = grid.getDimension();
+		RegularData3D::IndexType tex_size = grid.getSize();
+		RegularData3D::CoordinateType spacing = grid.getSpacing();
+		Vector3 origin = grid.getOrigin();
+
+		if (texels == 0)
+		{
+			// Generate The Texture
+			texels = new GLubyte[tex_size.x * tex_size.y * tex_size.z * BYTES_PER_TEXEL];
+			for (Position x = 0; x < tex_size.x; x++)
+			{
+				for (Position y = 0; y < tex_size.y; y++)
+				{
+					for (Position z = 0; z < tex_size.z; z++)
+					{
+						float value = grid.getData(RegularData3D::IndexType(x,y,z));
+						ColorRGBA c = map.map(value);
+						Position i = getTextureIndex_(x,y,z, tex_size.x, tex_size.y);
+						texels[i + 0] = (unsigned char)c.getRed();
+						texels[i + 1] = (unsigned char)c.getGreen();
+						texels[i + 2] = (unsigned char)c.getBlue();
+						texels[i + 3] = 255;//(unsigned char)c.getAlpha();
+					}
+				}
+			}
+		}
+
+#define getExtendedProcAddress glXGetProcAddressARB
+		void (* glTexImage3D)(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid *pixels) = 
+			 (void (*)(GLenum , GLint , GLint , GLsizei , GLsizei , GLsizei , GLint , GLenum , GLenum , const GLvoid *))getExtendedProcAddress((const GLubyte*)"glTexImage3D");
+
+		if (glTexImage3D == 0) return;
+
+
+		unsigned int texname;
+
+		// request 1 texture name from OpenGL
+		glGenTextures(1, &texname);	
+		// tell OpenGL we're going to be setting up the texture name it gave us	
+		glBindTexture(GL_TEXTURE_3D, texname);	
+		// when this texture needs to be shrunk to fit on small polygons, use linear interpolation of the texels to determine the color
+		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		// when this texture needs to be magnified to fit on a big polygon, use linear interpolation of the texels to determine the color
+		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, tex_size.x, tex_size.y, tex_size.z, 0, GL_RGBA, GL_UNSIGNED_BYTE, texels);
+		// we want the texture to repeat over the S axis, so if we specify coordinates out of range we still get textured.
+//   		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		// same as above for T axis
+//   		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		// same as above for R axis
+//   		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+		// this is a 3d texture, level 0 (max detail), GL should store it in RGB8 format, its WIDTHxHEIGHTxDEPTH in size, 
+		// it doesnt have a border, we're giving it to GL in RGB format as a series of unsigned bytes, and texels is where the texel data is.
+
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+ 		tex_size.x --;
+ 		tex_size.y --;
+ 		tex_size.z --;
+		Vector3 o = grid.getCoordinates(RegularData3D::IndexType(0,0, (Position)(tex_size.z / 2.0)));
+		Vector3 x = grid.getCoordinates(RegularData3D::IndexType(tex_size.x,0, (Position)(tex_size.z / 2.0)));
+		Vector3 xy = grid.getCoordinates(RegularData3D::IndexType(tex_size.x ,tex_size.y, (Position)(tex_size.z / 2.0)));
+		Vector3 y = grid.getCoordinates(RegularData3D::IndexType(0,tex_size.y, (Position)(tex_size.z / 2.0)));
+
+		Vector3 z = grid.getCoordinates(RegularData3D::IndexType(0,0,1)) - origin;
+		z.normalize();
+
+		initDrawingOthers_();
+    glEnable(GL_TEXTURE_3D);
+		glBegin(GL_QUADS);
+//   		setColorRGBA_(ColorRGBA(1.0,0,0));
+		normalVector3_(-z);
+
+//     		texCoordVector3_(getGridIndex_(grid, origin));
+		texCoordVector3_(Vector3(0,0,0.5));
+		vertexVector3_(o);
+//     		texCoordVector3_(getGridIndex_(grid, y));
+		texCoordVector3_(Vector3(0,1,0.5));
+		vertexVector3_(y);
+//      		texCoordVector3_(getGridIndex_(grid, xy));
+		texCoordVector3_(Vector3(1,1,0.5));
+		vertexVector3_(xy);
+//      		texCoordVector3_(getGridIndex_(grid, x));
+		texCoordVector3_(Vector3(1,0,0.5));
+		vertexVector3_(x);
+
+		glEnd();	
+		glBindTexture(GL_TEXTURE_3D, 0);	
+//    		glDisable(GL_TEXTURE_3D);
+		glDeleteTextures(1, &texname);
+	}
+
+	Vector3 GLRenderer::getGridIndex_(const RegularData3D& grid, const Vector3& point)
+	{
+		RegularData3D::IndexType i = grid.getClosestIndex(point);
+		Vector3 v = grid.getCoordinates(i);
+		v -= grid.getOrigin();
+		v /= grid.getSpacing().x;
+Log.error() << "#~~#   13 " << v            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+		return v;
+	}
+
+
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/RENDERING/glRenderer.iC>

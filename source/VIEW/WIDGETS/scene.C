@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.29 2006/04/10 11:16:32 amoll Exp $
+// $Id: scene.C,v 1.174.2.30 2006/04/25 16:25:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -39,6 +39,9 @@
 #include <QtGui/qapplication.h>
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QFileDialog>
+
+#include <BALL/VIEW/WIDGETS/datasetControl.h>
+#include <BALL/VIEW/DATATYPE/colorMap.h>
 
 //         #define BALL_BENCHMARKING
 
@@ -552,6 +555,25 @@ namespace BALL
 				}
 			}
 			// -------------------------------------------------------------------
+			
+
+			DatasetControl& dc = *DatasetControl::getInstance(0);
+			List<std::pair<RegularData3D*, String> > grids = dc.get3DGrids();
+			ColorMap map;
+			map.setRange(0, 50);
+			ColorRGBA colors[3];
+			colors[0] = ColorRGBA(1.0, 0, 0);
+			colors[1] = ColorRGBA(.0, 1.0, 0);
+			colors[2] = ColorRGBA(.0, 0, 1.0);
+			map.setBaseColors(colors, 3);
+			map.setNumberOfColors(255);
+			map.createMap();
+			if (grids.size() > 0)
+			{
+				const RegularData3D& grid = *(*grids.begin()).first;
+				gl_renderer_.renderVolume(grid, map);
+			}
+
 			
 			// we draw all the representations in different runs, 
 			// 1. normal reps
@@ -2223,7 +2245,6 @@ namespace BALL
 		void Scene::exitStereo()
 			throw()
 		{
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			gl_renderer_.setStereoMode(GLRenderer::NO_STEREO);
 			gl_renderer_.setSize(width(), height());
 
