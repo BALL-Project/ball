@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.6.2.1 2006/02/01 13:23:50 amoll Exp $
+// $Id: vertexBuffer.C,v 1.6.2.2 2006/04/25 23:42:19 amoll Exp $
 
 #include <BALL/CONFIG/config.h>
 // prevent typedef clash under Linux
@@ -71,20 +71,10 @@ namespace BALL
 		{
 			if (glGenBuffersARB != 0) return true;
 			// obtain gl method pointers
-		#ifdef _WINDOWS
-				glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) wglGetProcAddress("glGenBuffersARB");
-				glBindBufferARB = (PFNGLBINDBUFFERARBPROC) wglGetProcAddress("glBindBufferARB");
-				glBufferDataARB = (PFNGLBUFFERDATAARBPROC) wglGetProcAddress("glBufferDataARB");
-				glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) wglGetProcAddress("glDeleteBuffersARB");
-		#else
-			#ifdef GLX_ARB_get_proc_address
-				glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) glXGetProcAddressARB((const GLubyte*)"glGenBuffersARB");
-				glBindBufferARB = (PFNGLBINDBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*)"glBindBufferARB");
-				glBufferDataARB = (PFNGLBUFFERDATAARBPROC) glXGetProcAddressARB((const GLubyte*)"glBufferDataARB");
-				glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) glXGetProcAddressARB((const GLubyte*)"glDeleteBuffersARB");
-			#endif
-		#endif
-
+			glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) gl_renderer_->getFunctionPointer("glGenBuffersARB");
+			glBindBufferARB = (PFNGLBINDBUFFERARBPROC) gl_renderer_->getFunctionPointer("glBindBufferARB");
+			glBufferDataARB = (PFNGLBUFFERDATAARBPROC) gl_renderer_->getFunctionPointer("glBufferDataARB");
+			glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) gl_renderer_->getFunctionPointer("glDeleteBuffersARB");
 			return (glGenBuffersARB != 0);
 		}
 

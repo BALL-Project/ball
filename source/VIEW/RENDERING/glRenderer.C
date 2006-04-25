@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.19 2006/04/25 16:25:53 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.20 2006/04/25 23:42:19 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -30,7 +30,7 @@
 #include <QtGui/qpainter.h>
 #include <QtGui/qimage.h>
 
-#ifdef _WINDOWS
+#ifdef BALL_PLATFORM_WINDOWS
 // Header Files For Windows
  #define WINDOWS_LEAN_AND_MEAN
  #include <windows.h>
@@ -1820,35 +1820,22 @@ namespace BALL
 			}
 		}
 
-#define getExtendedProcAddress glXGetProcAddressARB
-		void (* glTexImage3D)(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid *pixels) = 
-			 (void (*)(GLenum , GLint , GLint , GLsizei , GLsizei , GLsizei , GLint , GLenum , GLenum , const GLvoid *))getExtendedProcAddress((const GLubyte*)"glTexImage3D");
-
+		typedef void (APIENTRY* PROC) (GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, 
+																	 GLint, GLenum, GLenum, const GLvoid*);
+		PROC glTexImage3D = (PROC) getFunctionPointer("glTexImage3D");
 		if (glTexImage3D == 0) return;
 
-
 		unsigned int texname;
-
-		// request 1 texture name from OpenGL
 		glGenTextures(1, &texname);	
-		// tell OpenGL we're going to be setting up the texture name it gave us	
 		glBindTexture(GL_TEXTURE_3D, texname);	
-		// when this texture needs to be shrunk to fit on small polygons, use linear interpolation of the texels to determine the color
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		// when this texture needs to be magnified to fit on a big polygon, use linear interpolation of the texels to determine the color
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, tex_size.x, tex_size.y, tex_size.z, 0, GL_RGBA, GL_UNSIGNED_BYTE, texels);
-		// we want the texture to repeat over the S axis, so if we specify coordinates out of range we still get textured.
-//   		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		// same as above for T axis
-//   		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		// same as above for R axis
-//   		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-		// this is a 3d texture, level 0 (max detail), GL should store it in RGB8 format, its WIDTHxHEIGHTxDEPTH in size, 
-		// it doesnt have a border, we're giving it to GL in RGB format as a series of unsigned bytes, and texels is where the texel data is.
-
+   	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+   	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+   	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+		glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, tex_size.x, tex_size.y, tex_size.z, 0, GL_RGBA, GL_UNSIGNED_BYTE, texels);
+
  		tex_size.x --;
  		tex_size.y --;
  		tex_size.z --;
@@ -1863,7 +1850,6 @@ namespace BALL
 		initDrawingOthers_();
     glEnable(GL_TEXTURE_3D);
 		glBegin(GL_QUADS);
-//   		setColorRGBA_(ColorRGBA(1.0,0,0));
 		normalVector3_(-z);
 
 //     		texCoordVector3_(getGridIndex_(grid, origin));
@@ -1881,7 +1867,6 @@ namespace BALL
 
 		glEnd();	
 		glBindTexture(GL_TEXTURE_3D, 0);	
-//    		glDisable(GL_TEXTURE_3D);
 		glDeleteTextures(1, &texname);
 	}
 
@@ -1891,10 +1876,22 @@ namespace BALL
 		Vector3 v = grid.getCoordinates(i);
 		v -= grid.getOrigin();
 		v /= grid.getSpacing().x;
-Log.error() << "#~~#   13 " << v            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		return v;
 	}
 
+	GLFuncPtr GLRenderer::getFunctionPointer(const String& name)
+  {
+		GLFuncPtr func = 0;
+		#ifdef BALL_PLATFORM_WINDOWS
+				func = wglGetProcAddress(name.c_str());
+		#else
+			#ifdef GLX_ARB_get_proc_address
+				func = glXGetProcAddressARB((const GLubyte*)name.c_str());
+			#endif
+		#endif
+
+		return func;
+  }
 
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

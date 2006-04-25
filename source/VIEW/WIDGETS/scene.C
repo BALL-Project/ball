@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.30 2006/04/25 16:25:54 amoll Exp $
+// $Id: scene.C,v 1.174.2.31 2006/04/25 23:42:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -559,18 +559,28 @@ namespace BALL
 
 			DatasetControl& dc = *DatasetControl::getInstance(0);
 			List<std::pair<RegularData3D*, String> > grids = dc.get3DGrids();
-			ColorMap map;
-			map.setRange(0, 50);
-			ColorRGBA colors[3];
-			colors[0] = ColorRGBA(1.0, 0, 0);
-			colors[1] = ColorRGBA(.0, 1.0, 0);
-			colors[2] = ColorRGBA(.0, 0, 1.0);
-			map.setBaseColors(colors, 3);
-			map.setNumberOfColors(255);
-			map.createMap();
 			if (grids.size() > 0)
 			{
+				ColorMap map;
+				ColorRGBA colors[3];
+				colors[0] = ColorRGBA(1.0, 0, 0);
+				colors[1] = ColorRGBA(.0, 1.0, 0);
+				colors[2] = ColorRGBA(.0, 0, 1.0);
+				map.setBaseColors(colors, 3);
+				map.setNumberOfColors(255);
+
 				const RegularData3D& grid = *(*grids.begin()).first;
+				const vector<float>& values = grid.getData();
+				float min = values[0];
+				float max = values[0];
+				for (Position p = 1; p < values.size(); p++)
+				{
+					if (values[p] < min) min = values[p];
+					if (values[p] > max) max = values[p];
+				}
+
+				map.setRange(min, max);
+				map.createMap();
 				gl_renderer_.renderVolume(grid, map);
 			}
 
