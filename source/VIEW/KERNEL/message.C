@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.32.2.3 2006/01/19 14:31:34 amoll Exp $
+// $Id: message.C,v 1.32.2.4 2006/04/26 13:33:17 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -426,6 +426,7 @@ DockingFinishedMessage::~DockingFinishedMessage()
 		Log.error() << "Destructing " << this << "DockingFinishedMessage" << std::endl;
 	#endif
 }
+
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/message.iC>

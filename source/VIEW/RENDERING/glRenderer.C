@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.20 2006/04/25 23:42:19 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.21 2006/04/26 13:33:18 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -22,6 +22,7 @@
 #include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
+#include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/KERNEL/atom.h>
@@ -53,6 +54,8 @@ using namespace std;
 //   #define BALL_VIEW_DEBUG
 //   #define BALL_BENCHMARKING
 //   #define BALL_ENABLE_VERTEX_BUFFER
+
+#define BYTES_PER_TEXEL 4
 
 namespace BALL
 {
@@ -258,8 +261,6 @@ namespace BALL
       // glHint( GL_LINE_SMOOTH_HINT, GL_DONT_CARE );
 
 			line_list_.endDefinition();
-
-			texels = 0;
 
 			return true;
 		}
@@ -1778,55 +1779,87 @@ namespace BALL
 			}
 		}
 
-#define BYTES_PER_TEXEL 4
-
 	Position GLRenderer::getTextureIndex_(Position x, Position y, Position z, Size width, Size height)
 	{
-//   		return BYTES_PER_TEXEL * width * height * x +
-//   						BYTES_PER_TEXEL * (y * width + z);
-//   		return width * height *  BYTES_PER_TEXEL * z +
-//   					 y * BYTES_PER_TEXEL * width + 
-//   					 x * BYTES_PER_TEXEL;
 		return BYTES_PER_TEXEL * (x * width + y) +
 					 BYTES_PER_TEXEL * width * height * z;
 	}
 
-	void GLRenderer::renderVolume(const RegularData3D& grid, const ColorMap& map)
+	Position GLRenderer::createTextureFromGrid(const RegularData3D& grid, const ColorMap& map)
 	{
-		RegularData3D::CoordinateType tex_dim = grid.getDimension();
-		RegularData3D::IndexType tex_size = grid.getSize();
-		RegularData3D::CoordinateType spacing = grid.getSpacing();
-		Vector3 origin = grid.getOrigin();
+		// check if glTexImage3D is available:
+		typedef void (APIENTRY* PROC) (GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, 
+																	 GLint, GLenum, GLenum, const GLvoid*);
+		PROC glTexImage3D = (PROC) getFunctionPointer("glTexImage3D");
+		if (glTexImage3D == 0) return 0;
 
-		if (texels == 0)
+		RegularData3D::IndexType tex_size = grid.getSize();
+
+		// Generate The Texture
+		GLubyte* texels = new GLubyte[tex_size.x * tex_size.y * tex_size.z * BYTES_PER_TEXEL];
+		for (Position x = 0; x < tex_size.x; x++)
 		{
-			// Generate The Texture
-			texels = new GLubyte[tex_size.x * tex_size.y * tex_size.z * BYTES_PER_TEXEL];
-			for (Position x = 0; x < tex_size.x; x++)
+			for (Position y = 0; y < tex_size.y; y++)
 			{
-				for (Position y = 0; y < tex_size.y; y++)
+				for (Position z = 0; z < tex_size.z; z++)
 				{
-					for (Position z = 0; z < tex_size.z; z++)
-					{
-						float value = grid.getData(RegularData3D::IndexType(x,y,z));
-						ColorRGBA c = map.map(value);
-						Position i = getTextureIndex_(x,y,z, tex_size.x, tex_size.y);
-						texels[i + 0] = (unsigned char)c.getRed();
-						texels[i + 1] = (unsigned char)c.getGreen();
-						texels[i + 2] = (unsigned char)c.getBlue();
-						texels[i + 3] = 255;//(unsigned char)c.getAlpha();
-					}
+					const ColorRGBA& c = map.map(grid.getData(RegularData3D::IndexType(x,y,z)));
+					const Position i = getTextureIndex_(x,y,z, tex_size.x, tex_size.y);
+					texels[i + 0] = (unsigned char)c.getRed();
+					texels[i + 1] = (unsigned char)c.getGreen();
+					texels[i + 2] = (unsigned char)c.getBlue();
+					texels[i + 3] = (unsigned char)c.getAlpha();
 				}
 			}
 		}
 
-		typedef void (APIENTRY* PROC) (GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, 
-																	 GLint, GLenum, GLenum, const GLvoid*);
-		PROC glTexImage3D = (PROC) getFunctionPointer("glTexImage3D");
-		if (glTexImage3D == 0) return;
-
-		unsigned int texname;
+		Position texname;
 		glGenTextures(1, &texname);	
+		glBindTexture(GL_TEXTURE_3D, texname);	
+		glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, tex_size.x, tex_size.y, tex_size.z, 0, GL_RGBA, GL_UNSIGNED_BYTE, texels);
+		glBindTexture(GL_TEXTURE_3D, 0);	
+		grid_to_texture_[&grid] = texname;
+		return texname;
+	}
+
+	Vector3 GLRenderer::getGridIndex_(const RegularData3D& grid, const Vector3& point)
+	{
+		RegularData3D::IndexType i = grid.getClosestIndex(point);
+		Vector3 v = grid.getCoordinates(i);
+		v -= grid.getOrigin();
+		v /= grid.getSpacing().x;
+		return v;
+	}
+
+	GLFuncPtr GLRenderer::getFunctionPointer(const String& name)
+  {
+		GLFuncPtr func = 0;
+		#ifdef BALL_PLATFORM_WINDOWS
+				func = wglGetProcAddress(name.c_str());
+		#else
+			#ifdef GLX_ARB_get_proc_address
+				func = glXGetProcAddressARB((const GLubyte*)name.c_str());
+			#endif
+		#endif
+
+		return func;
+  }
+
+	void GLRenderer::removeTextureFor_(const RegularData3D& grid)
+	{
+		if (!grid_to_texture_.has(&grid)) return;
+		glDeleteTextures(1, &grid_to_texture_[&grid]);
+		grid_to_texture_.erase(&grid);
+	}
+
+	void GLRenderer::renderGridSlice_(const GridSlice& slice)
+		throw()
+	{
+		Position texname = slice.getTexture();
+		if (texname == 0 || slice.getGrid() == 0) return;
+
+		const RegularData3D& grid = *slice.getGrid();
+
 		glBindTexture(GL_TEXTURE_3D, texname);	
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -1834,8 +1867,11 @@ namespace BALL
    	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
    	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-		glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, tex_size.x, tex_size.y, tex_size.z, 0, GL_RGBA, GL_UNSIGNED_BYTE, texels);
 
+		RegularData3D::CoordinateType tex_dim = grid.getDimension();
+		RegularData3D::IndexType tex_size = grid.getSize();
+		RegularData3D::CoordinateType spacing = grid.getSpacing();
+		Vector3 origin = grid.getOrigin();
  		tex_size.x --;
  		tex_size.y --;
  		tex_size.z --;
@@ -1867,32 +1903,20 @@ namespace BALL
 
 		glEnd();	
 		glBindTexture(GL_TEXTURE_3D, 0);	
-		glDeleteTextures(1, &texname);
 	}
 
-	Vector3 GLRenderer::getGridIndex_(const RegularData3D& grid, const Vector3& point)
+	GridSlice* GLRenderer::createTexturedGridPlane(const RegularData3D& grid, Position texname,
+																								 const Vector3& point, const Vector3& normal)
 	{
-		RegularData3D::IndexType i = grid.getClosestIndex(point);
-		Vector3 v = grid.getCoordinates(i);
-		v -= grid.getOrigin();
-		v /= grid.getSpacing().x;
-		return v;
+		GridSlice* slice = new GridSlice;
+		slice->setGrid(&grid);
+		slice->setTexture(texname);
+		slice->setPoint(point);
+		Vector3 n = normal;
+		n.normalize();
+		slice->setNormal(n);
+		return slice;
 	}
-
-	GLFuncPtr GLRenderer::getFunctionPointer(const String& name)
-  {
-		GLFuncPtr func = 0;
-		#ifdef BALL_PLATFORM_WINDOWS
-				func = wglGetProcAddress(name.c_str());
-		#else
-			#ifdef GLX_ARB_get_proc_address
-				func = glXGetProcAddressARB((const GLubyte*)name.c_str());
-			#endif
-		#endif
-
-		return func;
-  }
-
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/RENDERING/glRenderer.iC>

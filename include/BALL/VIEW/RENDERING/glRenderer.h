@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36.2.7 2006/04/25 23:42:33 amoll Exp $
+// $Id: glRenderer.h,v 1.36.2.8 2006/04/26 13:33:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -233,7 +233,7 @@ namespace BALL
 			bool hasDisplayListFor(const Representation& rep) const
 				throw();
 			
-			void renderVolume(const RegularData3D& grid, const ColorMap& map);
+//   			void renderVolume(const RegularData3D& grid, const ColorMap& map);
 
 			///
 			void setStereoMode(StereoMode state)
@@ -358,6 +358,10 @@ namespace BALL
 			///
 			virtual void renderClippingPlane_(const ClippingPlane& plane)
 				throw();
+			
+			/// Render a grid slice
+			virtual void renderGridSlice_(const GridSlice& slice)
+				throw();
 
 			//_
 			void setColor4ub_(const GeometricObject& object)
@@ -438,6 +442,10 @@ namespace BALL
 
 			Position getTextureIndex_(Position x, Position y, Position z, Size width, Size height);
 			Vector3 getGridIndex_(const RegularData3D& grid, const Vector3& point);
+			GridSlice* createTexturedGridPlane(const RegularData3D& grid, Position texname,
+																				 const Vector3& point, const Vector3& normal);
+			Position createTextureFromGrid(const RegularData3D& grid, const ColorMap& map);
+			void removeTextureFor_(const RegularData3D& grid);
 
 			Scene* 								scene_;
 
@@ -486,7 +494,7 @@ namespace BALL
 			bool 										drawed_other_object_;
 			bool 										drawed_mesh_;
 			GLUquadricObj*  GLU_quadric_obj_;
-			GLubyte*								texels;
+			HashMap<const RegularData3D*, Position> grid_to_texture_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

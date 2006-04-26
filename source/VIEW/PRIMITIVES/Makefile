@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.5.2.2 2006/03/22 16:06:44 amoll Exp $
+# $Id: Makefile,v 1.5.2.3 2006/04/26 13:33:18 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -19,6 +19,7 @@ CPP_SOURCES=\
 	point.C\
 	box.C\
 	disc.C\
+	gridVisualisation.C\
 	simpleBox.C\
 	sphere.C\
 	tube.C\

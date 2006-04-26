@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.h,v 1.11.2.1 2006/03/22 16:06:51 amoll Exp $
+// $Id: renderer.h,v 1.11.2.2 2006/04/26 13:33:08 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_RENDERER_H
 #define BALL_VIEW_RENDERING_RENDERER_H
@@ -32,6 +32,7 @@ namespace BALL
 		class TwoColoredTube;
 		class Stage;
 		class ClippingPlane;
+		class GridSlice;
 
 		/** Renderer is just a generic base class.
 		 		Derived classes are GLRenderer and POVRenderer.
@@ -183,6 +184,10 @@ namespace BALL
 			/// Render a tube with two colors
 			virtual void renderTwoColoredTube_(const TwoColoredTube& /*two_colored_tube*/)
 				throw() {Log.error() << "renderTwoColoredTube_ not implemented in derived Renderer class" << std::endl;}
+			
+			/// Render a grid slice
+			virtual void renderGridSlice_(const GridSlice&)
+				throw() {Log.error() << "renderGridSlcie_ not implemented in derived Renderer class" << std::endl;}
 
 			//@}
 			

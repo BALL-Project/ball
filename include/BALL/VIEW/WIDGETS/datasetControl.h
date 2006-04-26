@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.9 2006/04/07 10:57:09 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.10 2006/04/26 13:33:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -135,6 +135,12 @@ namespace BALL
 			///
 			void updateSelection() throw();
 
+			///
+			void createGridSlice() throw();
+
+			///
+			void createGridVolume() throw();
+
 			/// Overloaded from GenericControl, calls cut
 			virtual void deleteCurrentItems() throw() {deleteItems_();}
 
@@ -215,6 +221,7 @@ namespace BALL
 			HashMap<QTreeWidgetItem*  , Composite*>  								item_to_composite_;
 
 			QAction* menu_cs_, *open_trajectory_id_, *open_gradient_id_;
+			QAction* grid_slice_, * grid_volume_;
 
 			// Variables to calculate Vector Grids
 			VectorGrid*  vector_grid_;

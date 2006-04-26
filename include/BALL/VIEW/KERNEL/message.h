@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.69.2.6 2006/01/27 00:39:32 amoll Exp $
+// $Id: message.h,v 1.69.2.7 2006/04/26 13:33:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -740,7 +740,11 @@ class BALL_VIEW_EXPORT RegularDataMessage
 			///
 			UPDATE,
 			///
-			SELECTED
+			SELECTED,
+			///
+			VISUALISE_SLICE,
+			///
+			VISUALISE_VOLUME
 		};
 
 		RegularDataMessage()
@@ -1039,7 +1043,6 @@ class BALL_VIEW_EXPORT DockingFinishedMessage
 		const ConformationSet* conformation_set_;
 		bool abort_;
 };
-
 
 //@}
 

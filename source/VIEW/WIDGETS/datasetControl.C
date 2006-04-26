@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.27 2006/04/11 19:53:08 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.28 2006/04/26 13:33:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -101,6 +101,12 @@ namespace BALL
 																							SLOT(computeIsoContourSurface()), Qt::CTRL+Qt::Key_U);
 			setMenuHint("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.");
 			setMenuHelp("datasetControl.html#isocontour_surfaces");
+
+			grid_slice_ = insertMenuEntry(MainControl::TOOLS, "Grid Slice", this, SLOT(createGridSlice()));
+			setMenuHint("Visualise a moveable plane in the grid");
+
+			grid_volume_ = insertMenuEntry(MainControl::TOOLS, "Grid Volume", this, SLOT(createGridVolume()));
+			setMenuHint("Visualise a grid per volume rendering");
 
 			GenericControl::initializeWidget(main_control);
 
@@ -1355,6 +1361,23 @@ namespace BALL
 			grids.push_back(it->second);
 		}
 		return grids;
+	}
+
+	void DatasetControl::createGridVolume()
+		throw()
+	{
+	}
+
+	void DatasetControl::createGridSlice()
+		throw()
+	{
+		getSelectedItems();
+		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
+
+		RegularData3D* ssm = item_to_grid3_[context_item_];
+		RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::VISUALISE_SLICE);
+		msg->setData(*ssm);
+		notify_(msg);
 	}
 
 

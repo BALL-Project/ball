@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.31 2006/04/25 23:42:20 amoll Exp $
+// $Id: scene.C,v 1.174.2.32 2006/04/26 13:33:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -42,6 +42,7 @@
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
+#include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 
 //         #define BALL_BENCHMARKING
 
@@ -261,6 +262,73 @@ namespace BALL
 
 				content_changed_ = true;
 
+				update(false);
+				return;
+			}
+
+			if (RTTI::isKindOf<RegularData3DMessage>(*message))
+			{
+				RegularData3DMessage* rm = RTTI::castTo<RegularData3DMessage>(*message);
+				const RegularData3D& grid = *rm->getData();
+				switch (rm->getType())
+				{
+					case RegularData3DMessage::VISUALISE_SLICE:
+					{
+						Position texname = 0;
+
+						if (!gl_renderer_.grid_to_texture_.has(&grid))
+						{
+							// to be moved somewhere else:
+							ColorMap map;
+							ColorRGBA colors[3];
+							colors[0] = ColorRGBA(1.0, 0, 0);
+							colors[1] = ColorRGBA(.0, 1.0, 0);
+							colors[2] = ColorRGBA(.0, 0, 1.0);
+							map.setBaseColors(colors, 3);
+							map.setNumberOfColors(255);
+							const vector<float>& values = grid.getData();
+							float min = values[0];
+							float max = values[0];
+							for (Position p = 1; p < values.size(); p++)
+							{
+								if (values[p] < min) min = values[p];
+								if (values[p] > max) max = values[p];
+							}
+							map.setRange(min, max);
+							map.createMap();
+
+							texname = gl_renderer_.createTextureFromGrid(grid, map);
+						}
+						else
+						{
+							texname = gl_renderer_.grid_to_texture_[&grid];
+						}
+
+						Position i_2 = (Position)(grid.getData().size() / 2.0);
+						Vector3 point = grid.getCoordinates(i_2);
+						Vector3 normal = getStage()->getCamera().getViewVector();
+
+						GridSlice* slice = gl_renderer_.createTexturedGridPlane(grid, texname, point, normal);
+						Representation* rep = new Representation();
+						rep->insert(*slice);
+						getMainControl()->insert(*rep);
+						getMainControl()->update(*rep);
+						return;
+					}
+
+					case RegularData3DMessage::VISUALISE_VOLUME:
+						break;
+
+					case RegularData3DMessage::UPDATE:
+					case RegularData3DMessage::REMOVE:
+						gl_renderer_.removeTextureFor_(grid);
+						break;
+
+					default:
+						return;
+				}
+
+				content_changed_ = true;
 				update(false);
 				return;
 			}
@@ -556,34 +624,6 @@ namespace BALL
 			}
 			// -------------------------------------------------------------------
 			
-
-			DatasetControl& dc = *DatasetControl::getInstance(0);
-			List<std::pair<RegularData3D*, String> > grids = dc.get3DGrids();
-			if (grids.size() > 0)
-			{
-				ColorMap map;
-				ColorRGBA colors[3];
-				colors[0] = ColorRGBA(1.0, 0, 0);
-				colors[1] = ColorRGBA(.0, 1.0, 0);
-				colors[2] = ColorRGBA(.0, 0, 1.0);
-				map.setBaseColors(colors, 3);
-				map.setNumberOfColors(255);
-
-				const RegularData3D& grid = *(*grids.begin()).first;
-				const vector<float>& values = grid.getData();
-				float min = values[0];
-				float max = values[0];
-				for (Position p = 1; p < values.size(); p++)
-				{
-					if (values[p] < min) min = values[p];
-					if (values[p] > max) max = values[p];
-				}
-
-				map.setRange(min, max);
-				map.createMap();
-				gl_renderer_.renderVolume(grid, map);
-			}
-
 			
 			// we draw all the representations in different runs, 
 			// 1. normal reps
