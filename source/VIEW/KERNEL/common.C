@@ -56,6 +56,10 @@ namespace BALL
 					return "SAS";
 				case MODEL_CONTOUR_SURFACE:
 					return "Contour Surface";
+				case MODEL_GRID_SLICE:
+					return "Grid Slice";
+				case MODEL_GRID_VOLUME:
+					return "Grid Volume";
 				case MODEL_BACKBONE:
 					return "Backbone";
 				case MODEL_CARTOON:
@@ -255,11 +259,7 @@ namespace BALL
 			throw()
 		{
 			MainControl* mc = 0;
-//   			#ifdef BALL_PLATFORM_WINDOWS
-//   				mc = dynamic_cast<MainControl*>(qApp->mainWidget());
-//   			#else
-				mc = MainControl::getInstance(0);
-//   			#endif
+			mc = MainControl::getInstance(0);
 
 			#ifdef BALL_VIEW_DEBUG
 				if (mc == 0)
@@ -667,9 +667,6 @@ namespace BALL
 				}
 				return;
 			}
-
-
-
 		}
 
 	} // namespace VIEW

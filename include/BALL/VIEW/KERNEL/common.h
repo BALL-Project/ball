@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.40.2.7 2006/04/02 16:08:01 amoll Exp $
+// $Id: common.h,v 1.40.2.8 2006/04/26 12:33:15 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -211,6 +211,12 @@ namespace BALL
 
 			/// defines the property for the model: contour surface
 			MODEL_CONTOUR_SURFACE,
+
+			///
+			MODEL_GRID_SLICE,
+
+			///
+			MODEL_GRID_VOLUME,
 
 			/// unkown property
 			MODEL_UNKNOWN
