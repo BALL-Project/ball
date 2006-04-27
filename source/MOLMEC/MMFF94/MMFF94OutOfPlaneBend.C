@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.2.9 2006/04/24 13:41:50 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.2.10 2006/04/27 12:11:39 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -233,10 +233,11 @@ namespace BALL
 
 		for (Position t = 0; t < bends_.size(); t++)
 		{
-			Atom& a1 = *bends_[t].i->ptr;
-			Atom& a2 = *bends_[t].j->ptr;
-			Atom& a3 = *bends_[t].k->ptr;
-			Atom& a4 = *bends_[t].l->ptr;
+			const OutOfPlaneBend& bend = bends_[t];
+			Atom& a1 = *bend.i->ptr;
+			Atom& a2 = *bend.j->ptr;
+			Atom& a3 = *bend.k->ptr;
+			Atom& a4 = *bend.l->ptr;
 
 			if (use_selection &&
 					!a1.isSelected() &&
@@ -280,7 +281,7 @@ namespace BALL
 					}
 
 					double direction = (t % u) * cb;
-					float factor = 0; // ??????
+					float factor = K0 * bend.k_oop * acos(cosphi); 
 					if (direction > 0.0)
 					{
 						factor *= -1;

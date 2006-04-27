@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.2.21 2006/04/24 13:41:50 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.2.22 2006/04/27 12:11:39 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -328,10 +328,11 @@ namespace BALL
 
 		for (Position t = 0; t < torsions_.size(); t++)
 		{
-			Atom& a1 = *torsions_[t].atom1->ptr;
-			Atom& a2 = *torsions_[t].atom2->ptr;
-			Atom& a3 = *torsions_[t].atom3->ptr;
-			Atom& a4 = *torsions_[t].atom4->ptr;
+			const Torsion& torsion = torsions_[t];
+			Atom& a1 = *torsion.atom1->ptr;
+			Atom& a2 = *torsion.atom2->ptr;
+			Atom& a3 = *torsion.atom3->ptr;
+			Atom& a4 = *torsion.atom4->ptr;
 
 			if (use_selection &&
 					!a1.isSelected() &&
@@ -374,8 +375,12 @@ namespace BALL
 						cosphi = -1.0;
 					}
 
+					float phi = acos(cosphi);
+
 					double direction = (t % u) * cb;
-					float factor = 0; // ??????
+					float factor = 0.5 * (- torsion.v1 * sin(phi) + 
+																2 * torsion.v2 * sin(2 * phi) +
+																3 * torsion.v3 * sin(3 * phi));
 					if (direction > 0.0)
 					{
 						factor *= -1;

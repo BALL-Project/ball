@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.2.17 2006/04/24 13:41:50 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.2.18 2006/04/27 12:11:39 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -271,14 +271,17 @@ namespace BALL
 	{
 		for (Size i = 0 ; i < non_bonded_data_.size(); i++)
 		{
-			Vector3 direction(stretches_[i].atom1->getPosition() - stretches_[i].atom2->getPosition());
+			Atom& a1 = *atom_pair_vector_[i].first;
+			Atom& a2 = *atom_pair_vector_[i].second;
+			const NonBondedPairData& nbd = non_bonded_data_[i];
+			Vector3 direction(a1.getPosition() - a2.getPosition());
 			direction.normalize();
 
 			float factor = 0;
 			Vector3 force = direction * factor;
 
-			stretches_[i].atom1->getForce() -= force;
-			stretches_[i].atom2->getForce() += force;
+			a1.getForce() -= force;
+			a2.getForce() += force;
 		}                                                                                                          
 	} 
 	
