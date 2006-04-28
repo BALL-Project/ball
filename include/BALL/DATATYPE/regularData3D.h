@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.34.2.3 2006/04/11 14:03:02 anhi Exp $ 
+// $Id: regularData3D.h,v 1.34.2.4 2006/04/28 19:07:58 amoll Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -842,9 +842,9 @@ namespace BALL
 		{
 			// compute A^-1 * pos and see whether the indices are part of the grid
 			CoordinateType ri = mapInverse_(r);
-			ri.x = round(ri.x);
-			ri.y = round(ri.y);
-			ri.z = round(ri.z);
+			ri.x = Maths::round(ri.x);
+			ri.y = Maths::round(ri.y);
+			ri.z = Maths::round(ri.z);
 			
 			return !(	  (ri.x < 0) || (ri.y < 0) || (ri.z < 0)
 							 || (ri.x >= size_.x) || (ri.y >= size_.y) || (ri.z >= size_.z) );
@@ -1137,9 +1137,9 @@ namespace BALL
 		else
 		{
 			Vector3 pos = mapInverse_(r);
-			position.x = (Position) round(pos.x);
-			position.y = (Position) round(pos.y);
-			position.z = (Position) round(pos.z);
+			position.x = (Position) Maths::round(pos.x);
+			position.y = (Position) Maths::round(pos.y);
+			position.z = (Position) Maths::round(pos.z);
 		}
 			
     return position;
@@ -1196,9 +1196,9 @@ namespace BALL
 		else
 		{
 			static Vector3 pos = mapInverse_(r);
-			position.x = (Position) round(pos.x);
-			position.y = (Position) round(pos.y);
-			position.z = (Position) round(pos.z);
+			position.x = (Position) Maths::round(pos.x);
+			position.y = (Position) Maths::round(pos.y);
+			position.z = (Position) Maths::round(pos.z);
 		}
 
 		return operator [] (position);
@@ -1226,9 +1226,9 @@ namespace BALL
 		else
 		{
 			static Vector3 pos = mapInverse_(r);
-			position.x = (Position) round(pos.x);
-			position.y = (Position) round(pos.y);
-			position.z = (Position) round(pos.z);
+			position.x = (Position) Maths::round(pos.x);
+			position.y = (Position) Maths::round(pos.y);
+			position.z = (Position) Maths::round(pos.z);
 		}
 
 
