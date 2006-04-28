@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.32 2006/04/26 13:33:19 amoll Exp $
+// $Id: scene.C,v 1.174.2.33 2006/04/28 20:45:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -276,8 +276,10 @@ namespace BALL
 					{
 						Position texname = 0;
 
+Log.error() << "#~~#   14 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 						if (!gl_renderer_.grid_to_texture_.has(&grid))
 						{
+Log.error() << "#~~#   13 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 							// to be moved somewhere else:
 							ColorMap map;
 							ColorRGBA colors[3];
@@ -297,17 +299,21 @@ namespace BALL
 							map.setRange(min, max);
 							map.createMap();
 
+Log.error() << "#~~#   9 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 							texname = gl_renderer_.createTextureFromGrid(grid, map);
 						}
 						else
 						{
+Log.error() << "#~~#   10 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 							texname = gl_renderer_.grid_to_texture_[&grid];
 						}
 
+Log.error() << "#~~#   11 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 						Position i_2 = (Position)(grid.getData().size() / 2.0);
 						Vector3 point = grid.getCoordinates(i_2);
 						Vector3 normal = getStage()->getCamera().getViewVector();
 
+Log.error() << "#~~#   12 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 						GridSlice* slice = gl_renderer_.createTexturedGridPlane(grid, texname, point, normal);
 						Representation* rep = new Representation();
 						rep->insert(*slice);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36.2.8 2006/04/26 13:33:08 amoll Exp $
+// $Id: glRenderer.h,v 1.36.2.9 2006/04/28 20:45:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -25,6 +25,10 @@
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 # include <BALL/VIEW/KERNEL/stage.h>
+#endif
+
+#ifdef BALL_PLATFORM_WINDOWS
+# include <GL/glew.h>
 #endif
 
 #ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H

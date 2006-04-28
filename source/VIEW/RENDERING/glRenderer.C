@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.21 2006/04/26 13:33:18 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.22 2006/04/28 20:45:18 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -31,16 +31,16 @@
 #include <QtGui/qpainter.h>
 #include <QtGui/qimage.h>
 
-#ifdef BALL_PLATFORM_WINDOWS
-// Header Files For Windows
- #define WINDOWS_LEAN_AND_MEAN
- #include <windows.h>
- #include <wingdi.h>	
-#else
+#ifndef BALL_PLATFORM_WINDOWS
  #define GLX_GLXEXT_PROTOTYPES // required for Mesa-like implementations
  #include <GL/gl.h>
  #include <GL/glx.h>
  #include <GL/glext.h>
+ #ifndef GL_TEXTURE_3D
+  #define GL_TEXTURE_3D 0x806F
+  #define GL_TEXTURE_WRAP_R 0x8072
+	#define GL_TEXTURE_3D_EXT 0x806F
+ #endif
 #endif
 
 
@@ -156,6 +156,9 @@ namespace BALL
 			throw()
 		{
 			Renderer::init(stage, height, width);
+#ifdef BALL_PLATFORM_WINDOWS
+			glewInit();
+#endif
 
 			glFrontFace(GL_CCW);     // selects counterclockwise polygons as front-facing
 			glCullFace(GL_BACK);		 // specify whether front- or back-facing facets can be culled
@@ -1787,12 +1790,20 @@ namespace BALL
 
 	Position GLRenderer::createTextureFromGrid(const RegularData3D& grid, const ColorMap& map)
 	{
+Log.error() << "#~~#   6 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+		Position texname;
+
 		// check if glTexImage3D is available:
+#ifndef BALL_PLATFORM_WINDOWS
 		typedef void (APIENTRY* PROC) (GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, 
 																	 GLint, GLenum, GLenum, const GLvoid*);
 		PROC glTexImage3D = (PROC) getFunctionPointer("glTexImage3D");
 		if (glTexImage3D == 0) return 0;
+#endif
+Log.error() << "#~~#   7 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
+#ifdef GL_TEXTURE_3D
+Log.error() << "#~~#   8 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		RegularData3D::IndexType tex_size = grid.getSize();
 
 		// Generate The Texture
@@ -1813,12 +1824,17 @@ namespace BALL
 			}
 		}
 
-		Position texname;
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		glGenTextures(1, &texname);	
 		glBindTexture(GL_TEXTURE_3D, texname);	
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, tex_size.x, tex_size.y, tex_size.z, 0, GL_RGBA, GL_UNSIGNED_BYTE, texels);
+Log.error() << "#~~#   3 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		glBindTexture(GL_TEXTURE_3D, 0);	
+Log.error() << "#~~#   4 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		grid_to_texture_[&grid] = texname;
+Log.error() << "#~~#   5 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+#endif
 		return texname;
 	}
 
@@ -1835,7 +1851,8 @@ namespace BALL
   {
 		GLFuncPtr func = 0;
 		#ifdef BALL_PLATFORM_WINDOWS
-				func = wglGetProcAddress(name.c_str());
+//   				func = wglGetProcAddress(name.c_str());
+			return 0;
 		#else
 			#ifdef GLX_ARB_get_proc_address
 				func = glXGetProcAddressARB((const GLubyte*)name.c_str());
