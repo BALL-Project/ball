@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.34.2.4 2006/04/28 19:07:58 amoll Exp $ 
+// $Id: regularData3D.h,v 1.34.2.5 2006/04/28 19:32:41 amoll Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -13,6 +13,10 @@
 
 #ifndef BALL_SYSTEM_FILE_H
 #	include <BALL/SYSTEM/file.h>
+#endif
+
+#ifndef BALL_MATHS_COMMON_H
+# include <BALL/MATHS/common.h>
 #endif
 
 #include <iostream>
