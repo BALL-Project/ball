@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.83.2.4 2006/02/01 13:53:02 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.83.2.5 2006/04/29 16:07:24 amoll Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -2829,6 +2829,20 @@ if test ${VIEW_PLATFORM} = OpenGL ; then
 		VIEW_INCLUDES="${VIEW_INCLUDES} -I${OPENGL_INCPATH}"
 	fi
 fi
+
+AC_MSG_CHECKING(for GLEW library)
+CF_FIND_LIB(GLEW_LIBPATH,libGLEW)
+if test "${GLEW_LIBPATH}" = "" ; then
+	AC_MSG_RESULT((not found!))
+	AC_MSG_RESULT()
+	AC_MSG_RESULT(GLEW lib not found)
+else
+	AC_MSG_RESULT((${GLEW_LIBPATH}))
+	AC_DEFINE(PROJECT[]_USE_GLEW,)
+	OPENGL_LIBOPTS="${OPENGL_LIBOPTS} -lGLEW"
+	GLEW_LIBOPTS="-lGLEW"
+	OPENGL_LIBPATH="${OPENGL_LIBPATH} -L${GLEW_LIBPATH}"
+fi
 ])
 
 
@@ -2952,10 +2966,10 @@ dnl Make sure we can link against OpenGL or Mesa
 AC_DEFUN(CF_VIEW_OPENGL_LINK_TEST, [
 	if test "${VIEW_PLATFORM}" = OpenGL ; then
 		if test "${OPENGL_LIBPATH}" != "/usr/lib" -a "${OPENGL_LIBPATH}" != "" ; then
-			OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL"
+			OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL -L${GLEW_LIBPATH} ${GLEW_LIBOPTS}"
 		else
 			OPENGL_LIBPATH=""
-			OPENGL_LIBOPTS="-lGLU -lGL"
+			OPENGL_LIBOPTS="-lGLU -lGL ${GLEW_LIBOPTS}"
 		fi
 
 		dnl make sure we have OpenGL libs and no Mesa libs!
@@ -3037,7 +3051,7 @@ AC_DEFUN(CF_VIEW_OPENGL_LINK_TEST, [
 			CF_ERROR
 		else
 			AC_MSG_RESULT(yes)
-			OPENGL_LIBOPTS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS}"
+			OPENGL_LIBOPTS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${GLEW_LIBOPTS}"
 		fi
 	fi
 ])
