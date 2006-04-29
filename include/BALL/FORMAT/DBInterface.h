@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.h,v 1.6 2006/02/07 12:35:25 oliver Exp $
+// $Id: DBInterface.h,v 1.7 2006/04/29 08:08:16 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -141,7 +141,7 @@ namespace BALL
 		void setTopology(ID topology, const System& system);
 
 		/// Return IDs of all conformations for a given topology
-		IDVector getConformationList(ID structure);
+		IDVector getConformationList(ID topology_od);
 		/// Return IDs of all conformations for a given topology created with a specific method
 		IDVector getConformationList(ID topology_id, ID method_id);
 		/// Assign a specific conformation to an existing topology

@@ -1,7 +1,7 @@
-dnl -*- Mode: C++; tab-width: 1; -*-
+/dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.88 2006/03/01 08:58:56 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.89 2006/04/29 08:08:16 oliver Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
