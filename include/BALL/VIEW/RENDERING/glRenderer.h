@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36.2.9 2006/04/28 20:45:28 amoll Exp $
+// $Id: glRenderer.h,v 1.36.2.10 2006/04/29 16:16:35 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -27,7 +27,7 @@
 # include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
-#ifdef BALL_PLATFORM_WINDOWS
+#ifdef BALL_USE_GLEW
 # include <GL/glew.h>
 #endif
 
@@ -50,8 +50,6 @@ namespace BALL
 #define BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS 1000000
 	namespace VIEW
 	{
-		typedef void(APIENTRY* GLFuncPtr)(void);
-
 		class GLDisplayList;
 		class Scene;
 		class MeshBuffer;
@@ -283,9 +281,6 @@ namespace BALL
 
 			///
 			vector<String> getExtensions();
-
-			/// Get a ptr to an OpenGL function
-			GLFuncPtr getFunctionPointer(const String& name);
 
 			///
 			bool enableVertexBuffers(bool state)
