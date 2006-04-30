@@ -25,7 +25,7 @@
     </rect>
    </property>
    <property name="currentIndex" >
-    <number>0</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="Main" >
     <widget class="QGroupBox" name="groupBox1_2_3_2" >
@@ -736,25 +736,6 @@
     </widget>
    </widget>
    <widget class="QWidget" name="OpenGL" >
-    <widget class="QCheckBox" name="use_vertex_buffers" >
-     <property name="geometry" >
-      <rect>
-       <x>10</x>
-       <y>350</y>
-       <width>462</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="toolTip" >
-      <string>Select to use OpenGL vertex buffer. Results in greater performance.</string>
-     </property>
-     <property name="text" >
-      <string>Use OpenGL Vertex Buffer Objects (experimental!)</string>
-     </property>
-     <property name="checked" >
-      <bool>true</bool>
-     </property>
-    </widget>
     <widget class="QListWidget" name="extensions_list" >
      <property name="geometry" >
       <rect>
@@ -887,6 +868,25 @@
        </widget>
       </item>
      </layout>
+    </widget>
+    <widget class="QCheckBox" name="use_vertex_buffers" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>350</y>
+       <width>462</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="toolTip" >
+      <string>Select to use OpenGL vertex buffer. Results in greater performance.</string>
+     </property>
+     <property name="text" >
+      <string>Use OpenGL Vertex Buffer Objects</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
     </widget>
    </widget>
   </widget>

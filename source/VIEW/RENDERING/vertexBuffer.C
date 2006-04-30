@@ -1,85 +1,30 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.6.2.2 2006/04/25 23:42:19 amoll Exp $
+// $Id: vertexBuffer.C,v 1.6.2.3 2006/04/30 13:03:00 amoll Exp $
 
 #include <BALL/CONFIG/config.h>
-// prevent typedef clash under Linux
-#ifdef BALL_ENABLE_VERTEX_BUFFER
+#ifdef BALL_USE_GLEW
 
-#define QT_CLEAN_NAMESPACE
-#include <QtGui/qgl.h>
+#include <GL/glew.h>
 
-#ifdef _WINDOWS
-// Header Files For Windows
- #define WINDOWS_LEAN_AND_MEAN
- #include <windows.h>
- #include <wingdi.h>	
-#else
- #define GLX_GLXEXT_PROTOTYPES // required for Mesa-like implementations
- #include <GL/gl.h>
- #include <GL/glx.h>
- #include <GL/glext.h>
-#endif
-
-#include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #include <BALL/VIEW/RENDERING/glRenderer.h>
+#include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/KERNEL/common.h>
-
-#ifndef APIENTRY
-#define APIENTRY
-#endif
-#ifndef APIENTRYP
-#define APIENTRYP APIENTRY *
-#endif
-
-#ifndef GLAPI
-#define GLAPI extern
-#endif
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-	// declare gl methods pointer
-	GLAPI void glBindBuffer (GLenum, GLuint);
-	GLAPI void glDeleteBuffers (GLsizei, const GLuint *);
-	GLAPI void glGenBuffers (GLsizei, GLuint *);
-	GLAPI void glBufferData (GLenum, GLsizei*, const GLvoid *, GLenum);
-	GLAPI GLvoid* APIENTRY glMapBuffer (GLenum, GLenum);
-	GLAPI GLboolean APIENTRY glUnmapBuffer (GLenum);
-
-	// VBO Extension Definitions, From glext.h
- #define GL_ARRAY_BUFFER_ARB 0x8892
- #define GL_STATIC_DRAW_ARB 0x88E4
- #define GL_ELEMENT_ARRAY_BUFFER_ARB  0x8893
-
-	typedef void (APIENTRY * PFNGLBINDBUFFERARBPROC) (GLenum target, GLuint buffer);
-	typedef void (APIENTRY * PFNGLDELETEBUFFERSARBPROC) (GLsizei n, const GLuint *buffers);
-	typedef void (APIENTRY * PFNGLGENBUFFERSARBPROC) (GLsizei n, GLuint *buffers);
-	typedef void (APIENTRY * PFNGLBUFFERDATAARBPROC) (GLenum target, int size, const GLvoid *data, GLenum usage);
-
-	// VBO Extension Function Pointers
-	PFNGLGENBUFFERSARBPROC glGenBuffersARB = NULL;					// VBO Name Generation Procedure
-	PFNGLBINDBUFFERARBPROC glBindBufferARB = NULL;					// VBO Bind Procedure
-	PFNGLBUFFERDATAARBPROC glBufferDataARB = NULL;					// VBO Data Loading Procedure
-	PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB = NULL;			// VBO Deletion Procedure
+		GLRenderer* MeshBuffer::gl_renderer_ = 0;
 
 		bool MeshBuffer::initGL()
 		{
-			if (glGenBuffersARB != 0) return true;
-			// obtain gl method pointers
-			glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) gl_renderer_->getFunctionPointer("glGenBuffersARB");
-			glBindBufferARB = (PFNGLBINDBUFFERARBPROC) gl_renderer_->getFunctionPointer("glBindBufferARB");
-			glBufferDataARB = (PFNGLBUFFERDATAARBPROC) gl_renderer_->getFunctionPointer("glBufferDataARB");
-			glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) gl_renderer_->getFunctionPointer("glDeleteBuffersARB");
-			return (glGenBuffersARB != 0);
+			return gl_renderer_ != 0 &&
+					gl_renderer_->isExtensionSupported("GL_ARB_vertex_buffer_object");
 		}
-
-
-		GLRenderer* MeshBuffer::gl_renderer_ = 0;
 
 		MeshBuffer::MeshBuffer()
 		: mesh_(0),
@@ -304,7 +249,5 @@ namespace BALL
 		}
 
 	} 
-
 }
-
 #endif

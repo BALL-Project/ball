@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.C,v 1.30.2.5 2006/04/04 22:26:31 amoll Exp $
+// $Id: stageSettings.C,v 1.30.2.6 2006/04/30 13:01:49 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
@@ -47,6 +47,7 @@ namespace BALL
 			setINIFileSectionName("STAGE");
 
 			registerObject_(color_sample);
+			registerObject_(use_vertex_buffers);
 			registerObject_(animation_smoothness);
 			registerObject_(show_lights_);
 			registerObject_(enable_fog);
@@ -176,12 +177,10 @@ namespace BALL
 			focal_distance_slider->setValue(40);
 			swap_sss_button->setChecked(false);
 
-			/**
 			if (use_vertex_buffers->isEnabled())
 			{
 				use_vertex_buffers->setChecked(true);
 			}
-			*/ // ?????
 		}
 
 		void StageSettings::eyeDistanceChanged()

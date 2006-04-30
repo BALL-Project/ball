@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.24 2006/04/30 11:06:12 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.25 2006/04/30 13:02:59 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -38,7 +38,7 @@
  #include <GL/glext.h>
 #endif
 
-#ifdef BALL_ENABLE_VERTEX_BUFFER
+#ifdef BALL_USE_GLEW
  #include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #endif
 
@@ -46,7 +46,6 @@ using namespace std;
 
 //   #define BALL_VIEW_DEBUG
 //   #define BALL_BENCHMARKING
-//   #define BALL_ENABLE_VERTEX_BUFFER
 
 #define BYTES_PER_TEXEL 4
 
@@ -390,13 +389,10 @@ namespace BALL
 		{
 			if (rep.getGeometricObjects().size() == 0) return;
 
-		#ifdef BALL_ENABLE_VERTEX_BUFFER
 			if (vertexBuffersEnabled())
 			{
 				clearVertexBuffersFor(*(Representation*)&rep);
 			}
-		#endif
-			
 
 			DisplayListHashMap::Iterator hit = display_lists_.find(&rep);
 			if (hit == display_lists_.end()) return;
@@ -431,7 +427,7 @@ namespace BALL
 			
 			display_list->endDefinition();
 
-		#ifdef BALL_ENABLE_VERTEX_BUFFER
+		#ifdef BALL_USE_GLEW
 			clearVertexBuffersFor(*(Representation*)&rep);
 			
 			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
@@ -529,7 +525,6 @@ namespace BALL
 			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
 			if (for_display_list)
 			{
-				#ifdef BALL_ENABLE_VERTEX_BUFFER
 				if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 				{
 					// draw everything except of meshes, these are put into vertex buffer objects in bufferRepresentation()
@@ -540,15 +535,12 @@ namespace BALL
 				}
 				else
 				{
-				#endif
 					// render everything
 					for (; it != geometric_objects.end(); it++)
 					{
 						render_(*it);
 					}
-			#ifdef BALL_ENABLE_VERTEX_BUFFER
 				}
-			#endif
 			}
 			else // drawing for picking directly
 			{
@@ -1571,8 +1563,9 @@ namespace BALL
 		bool GLRenderer::enableVertexBuffers(bool state)
 			throw()
 		{
-		
-		#ifdef BALL_ENABLE_VERTEX_BUFFER
+		#ifndef BALL_USE_GLEW
+			return false;
+		#else
 			if (!isExtensionSupported("GL_ARB_vertex_buffer_object")) 
 			{
 				use_vertex_buffer_ = false;
@@ -1585,21 +1578,17 @@ namespace BALL
 				else       Log.info() << "Disabling Vertex Buffer" << std::endl;
 			}
 			use_vertex_buffer_ = state;
-		#else
-			use_vertex_buffer_ = false;
-		#endif
 
-		#ifdef BALL_ENABLE_VERTEX_BUFFER
 			if (use_vertex_buffer_) MeshBuffer::initGL();
-		#endif
 
 			return true;
+		#endif
 		}
 
 		void GLRenderer::clearVertexBuffersFor(Representation& rep)
 			throw()
 		{
-		#ifdef BALL_ENABLE_VERTEX_BUFFER
+		#ifdef BALL_USE_GLEW
 			MeshBufferHashMap::Iterator vit = rep_to_buffers_.find(&rep);
 			if (vit == rep_to_buffers_.end()) return;
 
@@ -1620,7 +1609,7 @@ namespace BALL
 		{
 			if (rep.isHidden()) return;
 
-		#ifdef BALL_ENABLE_VERTEX_BUFFER
+		#ifdef BALL_USE_GLEW
 			// if we have vertex buffers for this Representation, draw them
 			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 			{
@@ -1665,7 +1654,7 @@ namespace BALL
 		bool GLRenderer::vertexBuffersSupported() const
 			throw()
 		{
-		#ifdef BALL_ENABLE_VERTEX_BUFFER
+		#ifdef BALL_USE_GLEW
 			return isExtensionSupported("GL_ARB_vertex_buffer_object");
 		#else
 			return false;
@@ -1791,7 +1780,6 @@ namespace BALL
 		}
 
 #ifdef BALL_USE_GLEW
-#ifdef GL_TEXTURE_3D
 		RegularData3D::IndexType tex_size = grid.getSize();
 
 		// Generate The Texture
@@ -1818,7 +1806,6 @@ namespace BALL
 		glBindTexture(GL_TEXTURE_3D, 0);	
 		grid_to_texture_[&grid] = texname;
 		delete[] texels;
-#endif
 #endif
 		return texname;
 	}
