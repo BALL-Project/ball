@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.23 2006/04/29 16:16:25 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.24 2006/04/30 11:06:12 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1783,7 +1783,12 @@ namespace BALL
 
 	Position GLRenderer::createTextureFromGrid(const RegularData3D& grid, const ColorMap& map)
 	{
-		Position texname;
+		Position texname = 0;
+
+		if (!isExtensionSupported("GL_EXT_texture3D"))
+		{
+			return texname;
+		}
 
 #ifdef BALL_USE_GLEW
 #ifdef GL_TEXTURE_3D
@@ -1812,6 +1817,7 @@ namespace BALL
 		glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, tex_size.x, tex_size.y, tex_size.z, 0, GL_RGBA, GL_UNSIGNED_BYTE, texels);
 		glBindTexture(GL_TEXTURE_3D, 0);	
 		grid_to_texture_[&grid] = texname;
+		delete[] texels;
 #endif
 #endif
 		return texname;
@@ -1837,7 +1843,11 @@ namespace BALL
 		throw()
 	{
 		Position texname = slice.getTexture();
-		if (texname == 0 || slice.getGrid() == 0) return;
+		if (texname == 0 || slice.getGrid() == 0) 
+		{
+			scene_->setStatusbarText("Graphics card does not support 3D textures", true);
+			return;
+		}
 
 		const RegularData3D& grid = *slice.getGrid();
 
