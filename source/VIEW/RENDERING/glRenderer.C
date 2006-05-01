@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.26 2006/05/01 20:47:10 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.27 2006/05/01 23:40:56 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1901,12 +1901,13 @@ namespace BALL
 		GridVolume* vol = new GridVolume;
 		vol->setGrid(&grid);
 		vol->setTexture(texname);
-		vol->slices = 32;
+		vol->slices = 3;
 		Vector3 origin = grid.getOrigin();
 		RegularData3D::IndexType s = grid.getSize();
 		vol->x = grid.getCoordinates(RegularData3D::IndexType(s.x-1,0,0)) - origin;
 		vol->y = grid.getCoordinates(RegularData3D::IndexType(0,s.y-1,0)) - origin;
 		vol->z = grid.getCoordinates(RegularData3D::IndexType(0,0,s.z-1)) - origin;
+		vol->origin = origin;
 		return vol;
 	}
 
@@ -1934,8 +1935,8 @@ namespace BALL
     glEnable(GL_TEXTURE_3D);
 
 		glPushMatrix();
-    float M[16];
-    glGetFloatv(GL_MODELVIEW_MATRIX,M);
+//       float M[16];
+//       glGetFloatv(GL_MODELVIEW_MATRIX,M);
 	
 		float xPlane[4];
 		float yPlane[4];
@@ -1963,48 +1964,61 @@ namespace BALL
 		glEnable(GL_TEXTURE_GEN_T);
 		glEnable(GL_TEXTURE_GEN_R);
 
-		static double clip[6][4] = {{ -1.0,  0.0,  0.0, dimension[0]/2.0 },
-																{ 1.0,  0.0,  0.0, dimension[0]/2.0 },
-																{ 0.0, -1.0,  0.0, dimension[1]/2.0 },
-																{ 0.0,  1.0,  0.0, dimension[1]/2.0 },
-																{ 0.0,  0.0, -1.0, dimension[2]/2.0 },
-																{ 0.0,  0.0,  1.0, dimension[2]/2.0 } };
+		double clip[6][4] = {{ -1.0,  0.0,  0.0, dimension[0]/2.0 },
+												 { 1.0,  0.0,  0.0, dimension[0]/2.0 },
+												 { 0.0, -1.0,  0.0, dimension[1]/2.0 },
+												 { 0.0,  1.0,  0.0, dimension[1]/2.0 },
+												 { 0.0,  0.0, -1.0, dimension[2]/2.0 },
+												 { 0.0,  0.0,  1.0, dimension[2]/2.0 } };
 
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		Vector3 origin = vol.origin;
-		glTranslatef(origin.x, origin.y, origin.z);
+//   		glMatrixMode(GL_MODELVIEW);
+//   		glLoadIdentity();
+
+//   		GLfloat matrix[16];
+//   		for (Size i = 0; i < 16; i++) matrix[i] = 0.;
+
+		Vector3 diagonalv = vol.x + vol.y + vol.z;
+//   		translateVector3_(vol.origin);
+//   		scaleVector3_(diagonalv);
+//   		glLoadMatrixf(matrix);
 
 		Index clip0 = GL_CLIP_PLANE0;
 
 		for (Index plane  = clip0; plane < clip0 + 6; plane++)
 		{
 			glClipPlane(plane ,clip[plane - clip0]);
-			glEnable(plane);
+//    			glEnable(plane);
 		}
 		
 		glEnable(GL_TEXTURE_3D);
 
-		Vector3 diagonalv = vol.x + vol.y + vol.z;
+//   		glLoadIdentity();
 		float diagonal = diagonalv.getLength();
-		double z = -diagonal/2.0;
-		float step = diagonal/vol.slices;
+		float step = diagonal / vol.slices;
+		Vector3 origin = vol.origin;
+		Vector3 o  = origin;
+		Vector3 x  = o + vol.x;
+		Vector3 xy = x + vol.y;
+		Vector3 y  = o + vol.y;
+		Vector3 z  = vol.z / (float) vol.slices;
 		for (Position i = 0; i < vol.slices; ++i) 
 		{
 			glBegin(GL_QUADS);
-				glVertex3f(-diagonal / 2.0, -diagonal / 2.0, z);
-				glVertex3f(+diagonal / 2.0, -diagonal / 2.0, z);
-				glVertex3f(+diagonal / 2.0, +diagonal / 2.0, z);
-				glVertex3f(-diagonal / 2.0, +diagonal / 2.0, z);
+				vertexVector3_(o);
+				vertexVector3_(x);
+				vertexVector3_(xy);
+				vertexVector3_(y);
 			glEnd();	
-			z += step;
+			o  += z;
+			x  += z;
+			y  += z;
+			xy += z;
 		}
 			
-		glMatrixMode(GL_MODELVIEW);	
-		glLoadMatrixf(M);
+//   		glMatrixMode(GL_MODELVIEW);	
 		glDisable(GL_TEXTURE_3D);
 
-		for (Index plane  = clip0; plane < clip0 + 6; plane++)
+		for (Index plane = clip0; plane < clip0 + 6; plane++)
 		{
 			glDisable(plane);
 		}
