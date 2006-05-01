@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.28 2006/04/26 13:33:19 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.29 2006/05/01 20:47:11 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -1366,6 +1366,14 @@ namespace BALL
 	void DatasetControl::createGridVolume()
 		throw()
 	{
+		getSelectedItems();
+		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
+
+		RegularData3D* ssm = item_to_grid3_[context_item_];
+		RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::VISUALISE_VOLUME);
+		msg->setData(*ssm);
+		notify_(msg);
+
 	}
 
 	void DatasetControl::createGridSlice()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualisation.C,v 1.1.2.1 2006/04/27 12:17:22 amoll Exp $
+// $Id: gridVisualisation.C,v 1.1.2.2 2006/05/01 20:47:10 amoll Exp $
 //
 
 #include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
@@ -37,6 +37,11 @@ namespace BALL
 			normal_ = plane.normal_;
 			point_  = plane.point_;
 			return *this;
+		}
+
+		GridVolume::GridVolume()
+			: GridSlice()
+		{
 		}
 
 

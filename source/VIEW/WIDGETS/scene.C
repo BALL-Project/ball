@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.34 2006/04/29 15:08:20 amoll Exp $
+// $Id: scene.C,v 1.174.2.35 2006/05/01 20:47:11 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -273,6 +273,7 @@ namespace BALL
 				switch (rm->getType())
 				{
 					case RegularData3DMessage::VISUALISE_SLICE:
+					case RegularData3DMessage::VISUALISE_VOLUME:
 					{
 						Position texname = 0;
 
@@ -281,11 +282,12 @@ namespace BALL
 							// to be moved somewhere else:
 							ColorMap map;
 							ColorRGBA colors[3];
-							colors[0] = ColorRGBA(1.0, 0, 0);
-							colors[1] = ColorRGBA(.0, 1.0, 0);
-							colors[2] = ColorRGBA(.0, 0, 1.0);
+							colors[0] = ColorRGBA(1.0, 0, 0, 0.9);
+							colors[1] = ColorRGBA(.0, 1.0, 0, 0.2);
+							colors[2] = ColorRGBA(.0, 0, 1.0, 0.9);
 							map.setBaseColors(colors, 3);
 							map.setNumberOfColors(255);
+							map.setAlphaBlending(true);
 							const vector<float>& values = grid.getData();
 							float min = values[0];
 							float max = values[0];
@@ -308,16 +310,24 @@ namespace BALL
 						Vector3 point = grid.getCoordinates(i_2);
 						Vector3 normal = getStage()->getCamera().getViewVector();
 
-						GridSlice* slice = gl_renderer_.createTexturedGridPlane(grid, texname, point, normal);
 						Representation* rep = new Representation();
-						rep->insert(*slice);
+
+						if (rm->getType() == 
+									(int) RegularData3DMessage::VISUALISE_SLICE)
+						{
+							GridSlice* slice = gl_renderer_.createTexturedGridPlane(grid, texname, point, normal);
+							rep->insert(*slice);
+						}
+						else
+						{
+							GridVolume* vol = gl_renderer_.createVolume(grid, texname);
+							rep->insert(*vol);
+							rep->setTransparency(128);
+						}
 						getMainControl()->insert(*rep);
 						getMainControl()->update(*rep);
 						return;
 					}
-
-					case RegularData3DMessage::VISUALISE_VOLUME:
-						break;
 
 					case RegularData3DMessage::UPDATE:
 					case RegularData3DMessage::REMOVE:

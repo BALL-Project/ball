@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36.2.10 2006/04/29 16:16:35 amoll Exp $
+// $Id: glRenderer.h,v 1.36.2.11 2006/05/01 20:46:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -362,6 +362,10 @@ namespace BALL
 			virtual void renderGridSlice_(const GridSlice& slice)
 				throw();
 
+			/// Render a grid slice
+			virtual void renderGridVolume_(const GridVolume& volume)
+				throw();
+
 			//_
 			void setColor4ub_(const GeometricObject& object)
 				throw();
@@ -441,8 +445,8 @@ namespace BALL
 
 			Position getTextureIndex_(Position x, Position y, Position z, Size width, Size height);
 			Vector3 getGridIndex_(const RegularData3D& grid, const Vector3& point);
-			GridSlice* createTexturedGridPlane(const RegularData3D& grid, Position texname,
-																				 const Vector3& point, const Vector3& normal);
+			GridSlice* createTexturedGridPlane(const RegularData3D& grid, Position texname, const Vector3& point, const Vector3& normal);
+			GridVolume* createVolume(const RegularData3D& grid, Position texname);
 			Position createTextureFromGrid(const RegularData3D& grid, const ColorMap& map);
 			void removeTextureFor_(const RegularData3D& grid);
 

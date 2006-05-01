@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.h,v 1.11.2.2 2006/04/26 13:33:08 amoll Exp $
+// $Id: renderer.h,v 1.11.2.3 2006/05/01 20:46:56 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_RENDERER_H
 #define BALL_VIEW_RENDERING_RENDERER_H
@@ -33,6 +33,7 @@ namespace BALL
 		class Stage;
 		class ClippingPlane;
 		class GridSlice;
+		class GridVolume;
 
 		/** Renderer is just a generic base class.
 		 		Derived classes are GLRenderer and POVRenderer.
@@ -187,8 +188,11 @@ namespace BALL
 			
 			/// Render a grid slice
 			virtual void renderGridSlice_(const GridSlice&)
-				throw() {Log.error() << "renderGridSlcie_ not implemented in derived Renderer class" << std::endl;}
+				throw() {Log.error() << "renderGridSlice_ not implemented in derived Renderer class" << std::endl;}
 
+			/// Render a grid volume
+			virtual void renderGridVolume_(const GridVolume&)
+				throw() {Log.error() << "renderGridVolume__ not implemented in derived Renderer class" << std::endl;}
 			//@}
 			
 			//_

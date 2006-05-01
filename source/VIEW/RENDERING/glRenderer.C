@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.25 2006/04/30 13:02:59 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.26 2006/05/01 20:47:10 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1895,6 +1895,128 @@ namespace BALL
 		slice->setNormal(n);
 		return slice;
 	}
+
+	GridVolume* GLRenderer::createVolume(const RegularData3D& grid, Position texname)
+	{
+		GridVolume* vol = new GridVolume;
+		vol->setGrid(&grid);
+		vol->setTexture(texname);
+		vol->slices = 32;
+		Vector3 origin = grid.getOrigin();
+		RegularData3D::IndexType s = grid.getSize();
+		vol->x = grid.getCoordinates(RegularData3D::IndexType(s.x-1,0,0)) - origin;
+		vol->y = grid.getCoordinates(RegularData3D::IndexType(0,s.y-1,0)) - origin;
+		vol->z = grid.getCoordinates(RegularData3D::IndexType(0,0,s.z-1)) - origin;
+		return vol;
+	}
+
+	void GLRenderer::renderGridVolume_(const GridVolume& vol)
+		throw()
+	{
+		Position texname = vol.getTexture();
+		if (texname == 0 || vol.getGrid() == 0) 
+		{
+			scene_->setStatusbarText("Graphics card does not support 3D textures", true);
+			return;
+		}
+
+		const RegularData3D& grid = *vol.getGrid();
+
+		glBindTexture(GL_TEXTURE_3D, texname);	
+		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+   	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+   	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+		initDrawingOthers_();
+    glEnable(GL_TEXTURE_3D);
+
+		glPushMatrix();
+    float M[16];
+    glGetFloatv(GL_MODELVIEW_MATRIX,M);
+	
+		float xPlane[4];
+		float yPlane[4];
+		float zPlane[4];
+
+		float texTrans[3];
+		texTrans[0] = texTrans[1] + texTrans[2];
+
+		float dimension[3];
+		dimension[0] = vol.x.getLength();
+		dimension[1] = vol.y.getLength();
+		dimension[2] = vol.z.getLength();
+
+		xPlane[0]=1.0/dimension[0]; xPlane[1]=0; xPlane[2]=0; xPlane[3]=0.5+texTrans[0];
+		yPlane[0]=0; yPlane[1]=1.0/dimension[0]; yPlane[2]=0; yPlane[3]=0.5+texTrans[1];
+		zPlane[0]=0; zPlane[1]=0; zPlane[2]=1.0/dimension[0]; zPlane[3]=0.5+texTrans[2];
+		
+		glTexGenf(GL_S,GL_TEXTURE_GEN_MODE,GL_EYE_LINEAR);
+		glTexGenf(GL_T,GL_TEXTURE_GEN_MODE,GL_EYE_LINEAR);
+		glTexGenf(GL_R,GL_TEXTURE_GEN_MODE,GL_EYE_LINEAR);
+		glTexGenfv(GL_S,GL_EYE_PLANE,xPlane);
+		glTexGenfv(GL_T,GL_EYE_PLANE,yPlane);
+		glTexGenfv(GL_R,GL_EYE_PLANE,zPlane);
+		glEnable(GL_TEXTURE_GEN_S);
+		glEnable(GL_TEXTURE_GEN_T);
+		glEnable(GL_TEXTURE_GEN_R);
+
+		static double clip[6][4] = {{ -1.0,  0.0,  0.0, dimension[0]/2.0 },
+																{ 1.0,  0.0,  0.0, dimension[0]/2.0 },
+																{ 0.0, -1.0,  0.0, dimension[1]/2.0 },
+																{ 0.0,  1.0,  0.0, dimension[1]/2.0 },
+																{ 0.0,  0.0, -1.0, dimension[2]/2.0 },
+																{ 0.0,  0.0,  1.0, dimension[2]/2.0 } };
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		Vector3 origin = vol.origin;
+		glTranslatef(origin.x, origin.y, origin.z);
+
+		Index clip0 = GL_CLIP_PLANE0;
+
+		for (Index plane  = clip0; plane < clip0 + 6; plane++)
+		{
+			glClipPlane(plane ,clip[plane - clip0]);
+			glEnable(plane);
+		}
+		
+		glEnable(GL_TEXTURE_3D);
+
+		Vector3 diagonalv = vol.x + vol.y + vol.z;
+		float diagonal = diagonalv.getLength();
+		double z = -diagonal/2.0;
+		float step = diagonal/vol.slices;
+		for (Position i = 0; i < vol.slices; ++i) 
+		{
+			glBegin(GL_QUADS);
+				glVertex3f(-diagonal / 2.0, -diagonal / 2.0, z);
+				glVertex3f(+diagonal / 2.0, -diagonal / 2.0, z);
+				glVertex3f(+diagonal / 2.0, +diagonal / 2.0, z);
+				glVertex3f(-diagonal / 2.0, +diagonal / 2.0, z);
+			glEnd();	
+			z += step;
+		}
+			
+		glMatrixMode(GL_MODELVIEW);	
+		glLoadMatrixf(M);
+		glDisable(GL_TEXTURE_3D);
+
+		for (Index plane  = clip0; plane < clip0 + 6; plane++)
+		{
+			glDisable(plane);
+		}
+
+		glDisable(GL_TEXTURE_GEN_S);
+		glDisable(GL_TEXTURE_GEN_T);
+		glDisable(GL_TEXTURE_GEN_R);
+
+		glBindTexture(GL_TEXTURE_3D, 0);	
+		glPopMatrix();
+	}
+
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/RENDERING/glRenderer.iC>

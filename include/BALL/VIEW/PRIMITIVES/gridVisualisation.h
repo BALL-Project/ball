@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualisation.h,v 1.1.2.1 2006/04/27 12:17:37 amoll Exp $
+// $Id: gridVisualisation.h,v 1.1.2.2 2006/05/01 20:46:56 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_PRIMITIV_GRIDSLICE_H
@@ -84,6 +84,25 @@ namespace BALL
 			Position texture_;
 			const RegularData3D* grid_;
 		};
+
+		class BALL_VIEW_EXPORT GridVolume
+			: public GridSlice
+		{
+			public:
+
+			BALL_CREATE(GridVolume)
+
+			GridVolume();
+
+			public:
+
+			Vector3 origin, x,y,z;
+
+			Size slices;
+
+ 		};
+
+
 
 	} // namespace VIEW
 } // namespace BALL
