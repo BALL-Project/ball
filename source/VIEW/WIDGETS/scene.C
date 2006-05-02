@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.36 2006/05/02 00:02:37 amoll Exp $
+// $Id: scene.C,v 1.174.2.37 2006/05/02 14:10:15 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -283,10 +283,10 @@ namespace BALL
 							ColorMap map;
 							ColorRGBA colors[3];
 							colors[0] = ColorRGBA(1.0, 0, 0, 0.2);
-							colors[1] = ColorRGBA(.0, 1.0, 0, 0.02);
+							colors[1] = ColorRGBA(.0, 1.0, 0, 0.01);
 							colors[2] = ColorRGBA(.0, 0, 1.0, 0.2);
 							map.setBaseColors(colors, 3);
-							map.setNumberOfColors(255);
+							map.setNumberOfColors(512);
 							map.setAlphaBlending(true);
 							const vector<float>& values = grid.getData();
 							float min = values[0];
@@ -322,8 +322,9 @@ namespace BALL
 						{
 							GridVolume* vol = gl_renderer_.createVolume(grid, texname);
 							rep->insert(*vol);
-							rep->setTransparency(256);
+							rep->setTransparency(512);
 							rep->setProperty("DONT_CLIP");
+							rep->setProperty("RENDER_DIRECT");
 						}
 						getMainControl()->insert(*rep);
 						getMainControl()->update(*rep);
@@ -764,7 +765,8 @@ namespace BALL
 		void Scene::render_(const Representation& repr, RenderMode mode)
 			throw()
 		{
-			if (mode == DISPLAY_LISTS_RENDERING)
+			if (mode == DISPLAY_LISTS_RENDERING &&
+					!repr.hasProperty("RENDER_DIRECT"))
 			{
 				gl_renderer_.drawBuffered(repr);
 				return;
