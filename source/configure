@@ -880,6 +880,8 @@ Optional Packages:
   --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL
   --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL
   --with-mesa             use MESA instead of OpenGL
+  --with-glew-incl=DIR    GLEW header files are in DIR
+  --with-glew-libs=DIR    GLEW libraries are in DIR
   --with-python=EXE       enable Python support and use Python executable in EXE
   --with-python-incl=DIR  Python includes (Python.h) is in DIR
   --with-python-libs=DIR  Python library (libpython*.a) is in DIR
@@ -1497,6 +1499,7 @@ if test "${with_xdr+set}" = set; then
 fi;
 
 
+
 # Check whether --with-qt or --without-qt was given.
 if test "${with_qt+set}" = set; then
   withval="$with_qt"
@@ -1548,6 +1551,18 @@ fi;
 # Check whether --with-mesa or --without-mesa was given.
 if test "${with_mesa+set}" = set; then
   withval="$with_mesa"
+
+fi;
+
+# Check whether --with-glew-incl or --without-glew-incl was given.
+if test "${with_glew_incl+set}" = set; then
+  withval="$with_glew_incl"
+
+fi;
+
+# Check whether --with-glew-libs or --without-glew-libs was given.
+if test "${with_glew_libs+set}" = set; then
+  withval="$with_glew_libs"
 
 fi;
 
@@ -1715,6 +1730,14 @@ else
 	USE_THREADSAFE_QT=false
 	QT_MT_SUFFIX=""
 fi
+
+if test "$with_glew_incl" != "" ; then
+	GLEW_INCPATH=$with_glew_incl
+fi
+if test "$with_glew_libs" != "" ; then
+	GLEW_LIBPATH=$with_glew_libs
+fi
+
 if test "$with_opengl_incl" != "" ; then
 	OPENGL_INCPATH=$with_opengl_incl
 fi
@@ -18802,7 +18825,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <X11/Xlib.h>
+#include <X11/Intrinsic.h>
 _ACEOF
 if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
   (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
@@ -18829,7 +18852,7 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
   for ac_dir in $ac_x_header_dirs; do
-  if test -r "$ac_dir/X11/Xlib.h"; then
+  if test -r "$ac_dir/X11/Intrinsic.h"; then
     ac_x_includes=$ac_dir
     break
   fi
@@ -18843,18 +18866,18 @@ if test "$ac_x_libraries" = no; then
   # See if we find them without any special options.
   # Don't add to $LIBS permanently.
   ac_save_LIBS=$LIBS
-  LIBS="-lX11 $LIBS"
+  LIBS="-lXt $LIBS"
   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <X11/Xlib.h>
+#include <X11/Intrinsic.h>
 int
 main ()
 {
-XrmInitialize ()
+XtMalloc (0)
   ;
   return 0;
 }
@@ -18892,7 +18915,7 @@ for ac_dir in `echo "$ac_x_includes $ac_x_header_dirs" | sed s/include/lib/g`
 do
   # Don't even attempt the hair of trying to link an X program!
   for ac_extension in a so sl; do
-    if test -r $ac_dir/libX11.$ac_extension; then
+    if test -r $ac_dir/libXt.$ac_extension; then
       ac_x_libraries=$ac_dir
       break 2
     fi
@@ -19550,10 +19573,10 @@ echo $ECHO_N "checking for GLEW library... $ECHO_C" >&6
 		_LIBS=${GLEW_LIBPATH}
 	fi
 
-	if test "" = "" ; then
+	if test "${GLEW_LIBPATH}" = "" ; then
 		_LIBDIRS="/usr/lib /opt/lib /usr/local/lib"
 	else
-		_LIBDIRS=""
+		_LIBDIRS="${GLEW_LIBPATH}"
 	fi
 
 	if test "${_LIBS}" = "" ; then
@@ -19587,8 +19610,8 @@ echo $ECHO_N "checking for GLEW library... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" -a "${FIND}" != "-" ; then
-		if test "${_LIBS}" = "" -a "" != ""; then
-			for i in  /dev/null; do
+		if test "${_LIBS}" = "" -a "${GLEW_LIBPATH}" != ""; then
+			for i in ${GLEW_LIBPATH} /dev/null; do
 				if test "${_LIBS}" = "" ; then
 					_TMP=`${FIND} $i -name "libGLEW.*" -print 2>/dev/null`
 					for j in ${_TMP} ; do
@@ -19632,14 +19655,190 @@ echo "${ECHO_T}GLEW lib not found" >&6
 else
 	echo "$as_me:$LINENO: result: (${GLEW_LIBPATH})" >&5
 echo "${ECHO_T}(${GLEW_LIBPATH})" >&6
-	cat >>confdefs.h <<\_ACEOF
+fi
+
+echo "$as_me:$LINENO: checking for GLEW headers" >&5
+echo $ECHO_N "checking for GLEW headers... $ECHO_C" >&6
+
+	_INCLUDES=
+
+		if test "${GLEW_INCPATH}" != "" ; then
+	_INCLUDES=${GLEW_INCPATH}
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /usr/include /opt/include ${GLEW_INCPATH} ; do
+			if test -f "$i/glew.h" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /usr/*/include /opt/*/include ; do
+			if test -f "$i/glew.h" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /opt/*/*/include /usr/*/*/include /usr/local/*/*/include ; do
+			if test -f "$i/glew.h" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" -a "${FIND}" != "-" ; then
+		if test "${FIND_KNOWS_PATH}" = false ; then
+			FIND_OPT="-name"
+			_TMP_FIND_NAME="glew.h"
+			while test _`${EGREP} / $_TMP_FIND_NAME`_ != __ ; do
+				_TMP_FIND_NAME=`echo ${_TMP_FIND_NAME}|${CUT} -d/ -f2-`
+			done
+
+			FIND_ARG="\*${_TMP_FIND_NAME}\*"
+		else
+			FIND_OPT="-path"
+			FIND_ARG="\*glew.h\*"
+		fi
+
+		_TMP=`${FIND} /usr ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+		for j in ${_TMP} ; do
+			if test "${_INCLUDES}" = "" ; then
+				_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+			fi
+		done
+
+		if test "${_INCLUDES}" = "" ; then
+			_TMP=`${FIND} /opt ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_INCLUDES}" = "" ; then
+					_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+				fi
+			done
+		fi
+
+		if test "${_INCLUDES}" = "" -a "${GLEW_INCPATH}" != ""; then
+			for i in ${GLEW_INCPATH} /dev/null ; do
+				_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+				for j in ${_TMP} ; do
+					if test "${_INCLUDES}" = "" ; then
+						_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+					fi
+				done
+			done
+		fi
+	fi
+
+	GLEW_INCPATH="${_INCLUDES}"
+
+
+if test "${GLEW_INCPATH}" = "" ; then
+
+	_INCLUDES=
+
+		if test "${GLEW_INCPATH}" != "" ; then
+	_INCLUDES=${GLEW_INCPATH}
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /usr/include /opt/include ${GLEW_INCPATH} ; do
+			if test -f "$i/GL/glew.h" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /usr/*/include /opt/*/include ; do
+			if test -f "$i/GL/glew.h" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /opt/*/*/include /usr/*/*/include /usr/local/*/*/include ; do
+			if test -f "$i/GL/glew.h" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" -a "${FIND}" != "-" ; then
+		if test "${FIND_KNOWS_PATH}" = false ; then
+			FIND_OPT="-name"
+			_TMP_FIND_NAME="GL/glew.h"
+			while test _`${EGREP} / $_TMP_FIND_NAME`_ != __ ; do
+				_TMP_FIND_NAME=`echo ${_TMP_FIND_NAME}|${CUT} -d/ -f2-`
+			done
+
+			FIND_ARG="\*${_TMP_FIND_NAME}\*"
+		else
+			FIND_OPT="-path"
+			FIND_ARG="\*GL/glew.h\*"
+		fi
+
+		_TMP=`${FIND} /usr ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+		for j in ${_TMP} ; do
+			if test "${_INCLUDES}" = "" ; then
+				_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+			fi
+		done
+
+		if test "${_INCLUDES}" = "" ; then
+			_TMP=`${FIND} /opt ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_INCLUDES}" = "" ; then
+					_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+				fi
+			done
+		fi
+
+		if test "${_INCLUDES}" = "" -a "${GLEW_INCPATH}" != ""; then
+			for i in ${GLEW_INCPATH} /dev/null ; do
+				_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+				for j in ${_TMP} ; do
+					if test "${_INCLUDES}" = "" ; then
+						_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+					fi
+				done
+			done
+		fi
+	fi
+
+	GLEW_INCPATH="${_INCLUDES}"
+
+fi
+
+if test "${GLEW_INCPATH}" = "" ; then
+	echo "$as_me:$LINENO: result: (not found!)" >&5
+echo "${ECHO_T}(not found!)" >&6
+	echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+	echo "$as_me:$LINENO: result: GLEW headers not found" >&5
+echo "${ECHO_T}GLEW headers not found" >&6
+else
+	if test "${GLEW_LIBPATH}" != "" ; then
+		echo "$as_me:$LINENO: result: (${GLEW_INCPATH})" >&5
+echo "${ECHO_T}(${GLEW_INCPATH})" >&6
+		cat >>confdefs.h <<\_ACEOF
 #define BALL_USE_GLEW
 _ACEOF
 
-	OPENGL_LIBOPTS="${OPENGL_LIBOPTS} -lGLEW"
-	GLEW_LIBOPTS="-lGLEW"
-	OPENGL_LIBPATH="${OPENGL_LIBPATH} -L${GLEW_LIBPATH}"
+
+		OPENGL_LIBOPTS="${OPENGL_LIBOPTS} -lGLEW"
+		GLEW_LIBOPTS="-lGLEW"
+		OPENGL_LIBPATH="${OPENGL_LIBPATH} -L${GLEW_LIBPATH}"
+
+		if test "${GLEW_INCPATH}" != /usr/include/GL && test "${GLEW_INCPATH}" != "" ; then
+			VIEW_INCLUDES="${VIEW_INCLUDES} -I${GLEW_INCPATH}"
+		fi
+	fi
 fi
+
 
 
 
