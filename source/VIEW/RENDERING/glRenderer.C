@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.29 2006/05/02 13:52:04 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.30 2006/05/02 13:53:27 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1935,28 +1935,11 @@ namespace BALL
 		initDrawingOthers_();
     glEnable(GL_TEXTURE_3D);
 
-		glPushMatrix();
-	
-		float dimension[3];
-		dimension[0] = vol.x.getLength();
-		dimension[1] = vol.y.getLength();
-		dimension[2] = vol.z.getLength();
-
-		Vector3 nx = vol.y + vol.z;
-		Vector3 ny = vol.x + vol.z;
-		Vector3 nz = vol.y + vol.x;
-		nx.normalize();
-		ny.normalize();
-		nz.normalize();
-
 		Vector3 origin = vol.origin;
-
 		Vector3 diagonalv = vol.x + vol.y + vol.z;
-		
-		glEnable(GL_TEXTURE_3D);
-
 		float diagonal = diagonalv.getLength();
 		float step = diagonal / vol.slices;
+		
 		Vector3 o  = origin;
 		Vector3 x  = o + vol.x;
 		Vector3 xy = x + vol.y;
@@ -1982,7 +1965,6 @@ namespace BALL
 		glEnd();	
 			
 		glBindTexture(GL_TEXTURE_3D, 0);	
-		glPopMatrix();
 	}
 
 
