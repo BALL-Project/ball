@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.27 2006/05/01 23:40:56 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.28 2006/05/02 00:02:36 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -499,15 +499,18 @@ namespace BALL
 			}
 			else
 			{
-				// prevent artifacts:
-				// first run to fill depth buffer
-				initTransparent();
-				glDepthMask(GL_TRUE);
- 				glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-				renderRepresentation_(representation, for_display_list);
+				if (!representation.hasProperty("DONT_CLIP"))
+				{
+					// prevent artifacts:
+					// first run to fill depth buffer
+					initTransparent();
+					glDepthMask(GL_TRUE);
+					glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+					renderRepresentation_(representation, for_display_list);
 
-				// options for second run 
- 				glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+					// options for second run 
+					glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+				}
 				initTransparent();
 			}
 
@@ -1901,7 +1904,7 @@ namespace BALL
 		GridVolume* vol = new GridVolume;
 		vol->setGrid(&grid);
 		vol->setTexture(texname);
-		vol->slices = 3;
+		vol->slices = 32;
 		Vector3 origin = grid.getOrigin();
 		RegularData3D::IndexType s = grid.getSize();
 		vol->x = grid.getCoordinates(RegularData3D::IndexType(s.x-1,0,0)) - origin;

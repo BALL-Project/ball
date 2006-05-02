@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.35 2006/05/01 20:47:11 amoll Exp $
+// $Id: scene.C,v 1.174.2.36 2006/05/02 00:02:37 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -282,9 +282,9 @@ namespace BALL
 							// to be moved somewhere else:
 							ColorMap map;
 							ColorRGBA colors[3];
-							colors[0] = ColorRGBA(1.0, 0, 0, 0.9);
-							colors[1] = ColorRGBA(.0, 1.0, 0, 0.2);
-							colors[2] = ColorRGBA(.0, 0, 1.0, 0.9);
+							colors[0] = ColorRGBA(1.0, 0, 0, 0.2);
+							colors[1] = ColorRGBA(.0, 1.0, 0, 0.02);
+							colors[2] = ColorRGBA(.0, 0, 1.0, 0.2);
 							map.setBaseColors(colors, 3);
 							map.setNumberOfColors(255);
 							map.setAlphaBlending(true);
@@ -322,7 +322,8 @@ namespace BALL
 						{
 							GridVolume* vol = gl_renderer_.createVolume(grid, texname);
 							rep->insert(*vol);
-							rep->setTransparency(128);
+							rep->setTransparency(256);
+							rep->setProperty("DONT_CLIP");
 						}
 						getMainControl()->insert(*rep);
 						getMainControl()->update(*rep);
