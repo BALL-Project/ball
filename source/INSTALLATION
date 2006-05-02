@@ -57,6 +57,9 @@ External software and libraries:
     - Python support for most BALL classes is disabled by default as it
       requires SIP, a wrapper generator.
 
+		- GLEW (OpenGL Extension Wrangler Library) enables usage of advanced
+			OpenGL features like e.g. vertex buffers.
+
   The functionality provided by these libraries is not essential for
   BALL, however if you desire one of these features, have a look at
   Section 2.7 of this document for detailed installation instructions.
@@ -127,7 +130,11 @@ options.  An complete list of these options can also be obtained by executing
                           If no libraries with these names are found, configure looks for
                           libGLU and libGL.
                           This switch also add X11 libraries when trying to link agains the Mesa
-                          libraries.
+													libraries.
+
+  --with-glew-incl=DIR  GLEW header files are in DIR/GL
+
+  --with-glew-libs=DIR  GLEW libraries are in DIR
 
   --without-libxnet       use libsocket/libnsl for linking rather than libxnet 
                           this option is useful if some of your libraries (e.g. X11 libs)
@@ -269,7 +276,6 @@ FFTW Support
     --with-fftw-lib=DIR     (libfftw is in DIR)
   and
     --with-fftw-incl=DIR    (fftw includes are in DIR).
-	
 
 Python Support
   To enable the Python bindings of BALL you need QT support
@@ -288,5 +294,14 @@ Python Support
   a dynamic library, which can be installed into the library
   directory through "make install".
 
+GLEW
+  The OpenGL Extension Wrangler Library is feely available from
+  http://glew.sourceforge.net/
+	To enable the GLEW support, call configure with the options
+  --with-glew-incl=DIR  GLEW header files are in DIR/GL
+  --with-glew-libs=DIR  GLEW libraries are in DIR
+	This is only needed, if the headers and libs are not located at
+	the platform's standard locations.
+
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.18 2005/12/23 17:02:24 amoll Exp $
+document revision: $Id: INSTALLATION,v 1.18.2.1 2006/05/02 12:32:37 amoll Exp $

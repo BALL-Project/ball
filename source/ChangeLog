@@ -5,8 +5,10 @@ Ported BALLView from QT 3.X to 4.1.
 Improved Python support.
 
 Added:
+- Useage of GLEW (OpenGL Extension Wrangler Library)
 - Docking interface
 - Support for field lines and vector grids
+- Volume Rendering and colored planes for e.g. electrostatics
 - Support for DSN6 electron densitiy files
 - Widget for overview of atom values (e.g. atom type, charge)
 - Added BALL documentation widget in BALLView

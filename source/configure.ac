@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.32.2.1 2006/01/31 10:34:53 oliver Exp $
+dnl $Id: configure.ac,v 1.32.2.2 2006/05/02 12:32:37 amoll Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -62,6 +62,7 @@ AC_ARG_WITH(dynarflags,        [  --with-dynarflags=FLAGS add FLAGS to the flags
 AC_ARG_WITH(libxnet,           [  --without-libxnet       use -lsocket -lnsl rather than -lxnet (under Solaris)])
 AC_ARG_WITH(xdr,               [  --without-xdr           no RPC/XDR headers available - do not build portable binary persistence support])
 
+
 dnl  ** QT/X11 **
 AC_ARG_WITH(qt,                [  --with-qt=QTDIR         QT is installed in QTDIR. Prefer this over the following options.])
 AC_ARG_WITH(qt-incl,           [  --with-qt-incl=DIR      QT header files are in DIR])
@@ -72,6 +73,9 @@ AC_ARG_WITH(uic,               [  --with-uic=UIC          use UIC as the absolut
 AC_ARG_WITH(opengl-incl,       [  --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL])
 AC_ARG_WITH(opengl-libs,       [  --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL])
 AC_ARG_WITH(mesa,              [  --with-mesa             use MESA instead of OpenGL])
+dnl  ** GLEW **
+AC_ARG_WITH(glew-incl,         [  --with-glew-incl=DIR    GLEW header files are in DIR])
+AC_ARG_WITH(glew-libs,         [  --with-glew-libs=DIR    GLEW libraries are in DIR])
 
 dnl ** Python support **
 AC_ARG_ENABLE(python,          [  --enable-python         enable Python support and search for executable])
@@ -156,6 +160,14 @@ else
 	USE_THREADSAFE_QT=false
 	QT_MT_SUFFIX=""
 fi
+
+if test "$with_glew_incl" != "" ; then
+	GLEW_INCPATH=$with_glew_incl
+fi
+if test "$with_glew_libs" != "" ; then
+	GLEW_LIBPATH=$with_glew_libs
+fi
+
 if test "$with_opengl_incl" != "" ; then
 	OPENGL_INCPATH=$with_opengl_incl
 fi

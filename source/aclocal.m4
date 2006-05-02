@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.83.2.5 2006/04/29 16:07:24 amoll Exp $
+dnl		$Id: aclocal.m4,v 1.83.2.6 2006/05/02 12:32:37 amoll Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -2831,19 +2831,43 @@ if test ${VIEW_PLATFORM} = OpenGL ; then
 fi
 
 AC_MSG_CHECKING(for GLEW library)
-CF_FIND_LIB(GLEW_LIBPATH,libGLEW)
+CF_FIND_LIB(GLEW_LIBPATH,libGLEW, ${GLEW_LIBPATH})
 if test "${GLEW_LIBPATH}" = "" ; then
 	AC_MSG_RESULT((not found!))
 	AC_MSG_RESULT()
 	AC_MSG_RESULT(GLEW lib not found)
 else
 	AC_MSG_RESULT((${GLEW_LIBPATH}))
-	AC_DEFINE(PROJECT[]_USE_GLEW,)
-	OPENGL_LIBOPTS="${OPENGL_LIBOPTS} -lGLEW"
-	GLEW_LIBOPTS="-lGLEW"
-	OPENGL_LIBPATH="${OPENGL_LIBPATH} -L${GLEW_LIBPATH}"
 fi
+
+AC_MSG_CHECKING(for GLEW headers)
+CF_FIND_HEADER(GLEW_INCPATH,glew.h, ${GLEW_INCPATH})
+
+if test "${GLEW_INCPATH}" = "" ; then
+CF_FIND_HEADER(GLEW_INCPATH,GL/glew.h, ${GLEW_INCPATH})
+fi
+
+if test "${GLEW_INCPATH}" = "" ; then
+	AC_MSG_RESULT((not found!))
+	AC_MSG_RESULT()
+	AC_MSG_RESULT(GLEW headers not found)
+else
+	if test "${GLEW_LIBPATH}" != "" ; then
+		AC_MSG_RESULT((${GLEW_INCPATH}))
+		AC_DEFINE(PROJECT[]_USE_GLEW,)
+
+		OPENGL_LIBOPTS="${OPENGL_LIBOPTS} -lGLEW"
+		GLEW_LIBOPTS="-lGLEW"
+		OPENGL_LIBPATH="${OPENGL_LIBPATH} -L${GLEW_LIBPATH}"
+
+		if test "${GLEW_INCPATH}" != /usr/include/GL && test "${GLEW_INCPATH}" != "" ; then
+			VIEW_INCLUDES="${VIEW_INCLUDES} -I${GLEW_INCPATH}"
+		fi
+	fi
+fi
+
 ])
+dnl end of opengl tests
 
 
 AC_DEFUN(CF_VIEW_QT_BASICS, [
