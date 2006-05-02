@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.28 2006/05/02 00:02:36 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.29 2006/05/02 13:52:04 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1816,9 +1816,11 @@ namespace BALL
 	Vector3 GLRenderer::getGridIndex_(const RegularData3D& grid, const Vector3& point)
 	{
 		RegularData3D::IndexType i = grid.getClosestIndex(point);
-		Vector3 v = grid.getCoordinates(i);
-		v -= grid.getOrigin();
-		v /= grid.getSpacing().x;
+		RegularData3D::IndexType s = grid.getSize();
+		Vector3 v(i.x, i.y, i.z);
+		v.x /= (float) s.x;
+		v.y /= (float) s.y;
+		v.z /= (float) s.z;
 		return v;
 	}
 
@@ -1869,17 +1871,13 @@ namespace BALL
 		glBegin(GL_QUADS);
 		normalVector3_(-z);
 
-//     		texCoordVector3_(getGridIndex_(grid, origin));
-		texCoordVector3_(Vector3(0,0,0.5));
+ 		texCoordVector3_(getGridIndex_(grid, o));
 		vertexVector3_(o);
-//     		texCoordVector3_(getGridIndex_(grid, y));
-		texCoordVector3_(Vector3(0,1,0.5));
+ 		texCoordVector3_(getGridIndex_(grid, y));
 		vertexVector3_(y);
-//      		texCoordVector3_(getGridIndex_(grid, xy));
-		texCoordVector3_(Vector3(1,1,0.5));
+ 		texCoordVector3_(getGridIndex_(grid, xy));
 		vertexVector3_(xy);
-//      		texCoordVector3_(getGridIndex_(grid, x));
-		texCoordVector3_(Vector3(1,0,0.5));
+ 		texCoordVector3_(getGridIndex_(grid, x));
 		vertexVector3_(x);
 
 		glEnd();	
@@ -1938,98 +1936,51 @@ namespace BALL
     glEnable(GL_TEXTURE_3D);
 
 		glPushMatrix();
-//       float M[16];
-//       glGetFloatv(GL_MODELVIEW_MATRIX,M);
 	
-		float xPlane[4];
-		float yPlane[4];
-		float zPlane[4];
-
-		float texTrans[3];
-		texTrans[0] = texTrans[1] + texTrans[2];
-
 		float dimension[3];
 		dimension[0] = vol.x.getLength();
 		dimension[1] = vol.y.getLength();
 		dimension[2] = vol.z.getLength();
 
-		xPlane[0]=1.0/dimension[0]; xPlane[1]=0; xPlane[2]=0; xPlane[3]=0.5+texTrans[0];
-		yPlane[0]=0; yPlane[1]=1.0/dimension[0]; yPlane[2]=0; yPlane[3]=0.5+texTrans[1];
-		zPlane[0]=0; zPlane[1]=0; zPlane[2]=1.0/dimension[0]; zPlane[3]=0.5+texTrans[2];
-		
-		glTexGenf(GL_S,GL_TEXTURE_GEN_MODE,GL_EYE_LINEAR);
-		glTexGenf(GL_T,GL_TEXTURE_GEN_MODE,GL_EYE_LINEAR);
-		glTexGenf(GL_R,GL_TEXTURE_GEN_MODE,GL_EYE_LINEAR);
-		glTexGenfv(GL_S,GL_EYE_PLANE,xPlane);
-		glTexGenfv(GL_T,GL_EYE_PLANE,yPlane);
-		glTexGenfv(GL_R,GL_EYE_PLANE,zPlane);
-		glEnable(GL_TEXTURE_GEN_S);
-		glEnable(GL_TEXTURE_GEN_T);
-		glEnable(GL_TEXTURE_GEN_R);
+		Vector3 nx = vol.y + vol.z;
+		Vector3 ny = vol.x + vol.z;
+		Vector3 nz = vol.y + vol.x;
+		nx.normalize();
+		ny.normalize();
+		nz.normalize();
 
-		double clip[6][4] = {{ -1.0,  0.0,  0.0, dimension[0]/2.0 },
-												 { 1.0,  0.0,  0.0, dimension[0]/2.0 },
-												 { 0.0, -1.0,  0.0, dimension[1]/2.0 },
-												 { 0.0,  1.0,  0.0, dimension[1]/2.0 },
-												 { 0.0,  0.0, -1.0, dimension[2]/2.0 },
-												 { 0.0,  0.0,  1.0, dimension[2]/2.0 } };
-
-//   		glMatrixMode(GL_MODELVIEW);
-//   		glLoadIdentity();
-
-//   		GLfloat matrix[16];
-//   		for (Size i = 0; i < 16; i++) matrix[i] = 0.;
+		Vector3 origin = vol.origin;
 
 		Vector3 diagonalv = vol.x + vol.y + vol.z;
-//   		translateVector3_(vol.origin);
-//   		scaleVector3_(diagonalv);
-//   		glLoadMatrixf(matrix);
-
-		Index clip0 = GL_CLIP_PLANE0;
-
-		for (Index plane  = clip0; plane < clip0 + 6; plane++)
-		{
-			glClipPlane(plane ,clip[plane - clip0]);
-//    			glEnable(plane);
-		}
 		
 		glEnable(GL_TEXTURE_3D);
 
-//   		glLoadIdentity();
 		float diagonal = diagonalv.getLength();
 		float step = diagonal / vol.slices;
-		Vector3 origin = vol.origin;
 		Vector3 o  = origin;
 		Vector3 x  = o + vol.x;
 		Vector3 xy = x + vol.y;
 		Vector3 y  = o + vol.y;
 		Vector3 z  = vol.z / (float) vol.slices;
-		for (Position i = 0; i < vol.slices; ++i) 
+		glBegin(GL_QUADS);
+		normalVector3_(-z);
+		for (Position i = 0; i <= vol.slices; ++i) 
 		{
-			glBegin(GL_QUADS);
-				vertexVector3_(o);
-				vertexVector3_(x);
-				vertexVector3_(xy);
-				vertexVector3_(y);
-			glEnd();	
+     	texCoordVector3_(getGridIndex_(grid, o));
+			vertexVector3_(o);
+     	texCoordVector3_(getGridIndex_(grid, x));
+			vertexVector3_(x);
+     	texCoordVector3_(getGridIndex_(grid, xy));
+			vertexVector3_(xy);
+     	texCoordVector3_(getGridIndex_(grid, y));
+			vertexVector3_(y);
 			o  += z;
 			x  += z;
 			y  += z;
 			xy += z;
 		}
+		glEnd();	
 			
-//   		glMatrixMode(GL_MODELVIEW);	
-		glDisable(GL_TEXTURE_3D);
-
-		for (Index plane = clip0; plane < clip0 + 6; plane++)
-		{
-			glDisable(plane);
-		}
-
-		glDisable(GL_TEXTURE_GEN_S);
-		glDisable(GL_TEXTURE_GEN_T);
-		glDisable(GL_TEXTURE_GEN_R);
-
 		glBindTexture(GL_TEXTURE_3D, 0);	
 		glPopMatrix();
 	}
