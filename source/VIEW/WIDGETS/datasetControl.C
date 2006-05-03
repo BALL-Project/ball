@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.34 2006/05/03 18:00:24 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.35 2006/05/03 20:28:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -403,12 +403,12 @@ namespace BALL
 				}
 				else
 				{
-					insertContextMenuEntry_("Render Slice", SLOT((createGridSlice())));
-					insertContextMenuEntry_("Render Volume", SLOT((createGridVolume())));
+					insertContextMenuEntry_("Render Slice", SLOT(createGridSlice()));
+					insertContextMenuEntry_("Render Volume", SLOT(createGridVolume()));
 					insertContextMenuEntry_("Render Contour Surface", SLOT(computeIsoContourSurface()));
-					insertContextMenuEntry_("Resize for Rendering", SLOT((resizeGrid())));
+					insertContextMenuEntry_("Resize for Rendering", SLOT(resizeGrid()));
 					context_menu_.addSeparator();
-					insertContextMenuEntry_("Calculate Histogram", SLOT((createHistogramGrid())));
+					insertContextMenuEntry_("Calculate Histogram", SLOT(createHistogramGrid()));
 					insertContextMenuEntry_("Create Gradient Grid", SLOT(createVectorGrid()));
 				}
 			}
@@ -1400,7 +1400,6 @@ namespace BALL
 	void DatasetControl::createGridVolume()
 		throw()
 	{
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		getSelectedItems();
 		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
 
@@ -1428,7 +1427,6 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 	void DatasetControl::createGridSlice()
 		throw()
 	{
-Log.error() << "#~~#   3 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		getSelectedItems();
 		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
 
@@ -1464,7 +1462,6 @@ Log.error() << "#~~#   3 "             << " "  << __FILE__ << "  " << __LINE__<<
 	void DatasetControl::resizeGrid()
 		throw()
 	{
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		getSelectedItems();
 		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
 
@@ -1536,7 +1533,6 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 	void DatasetControl::createHistogramGrid()
 		throw()
 	{
-Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		getSelectedItems();
 		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
 
@@ -1550,8 +1546,6 @@ Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<<
 
 		insertGrid_(new_grid, (System*)item_to_composite_[context_item_], "normalized grid");
 	}
-
-
 
 	} // namespace VIEW
 } // namespace BALL
