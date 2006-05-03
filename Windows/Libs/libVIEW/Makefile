@@ -38,5 +38,5 @@ clean:
 	cd "$(MAKEDIR)"
 	$(MYDEL)   $(TARGETDIR)\*.*  mocfiles\*.*
 
-libVIEW.dll:  $(UICS) $(MOCS) $(OBJS) 
-	$(LINKDLL) /OUT:$(TARGETDIR)\libVIEW.dll 
+libVIEW.dll:  $(UICS) $(MOCS) $(OBJS)
+	$(LINKDLL)  /SUBSYSTEM:WINDOWS /OUT:$(TARGETDIR)\libVIEW.dll 

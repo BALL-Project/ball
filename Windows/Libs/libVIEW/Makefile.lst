@@ -88,8 +88,8 @@ libVIEW.obj\
 ..\..\..\source\VIEW\PRIMITIVES\simpleBox.obj\
 ..\..\..\source\VIEW\PRIMITIVES\sphere.obj\
 ..\..\..\source\VIEW\PRIMITIVES\tube.obj\
-..\..\..\source\VIEW\PRIMITIVES\twoColoredLine.obj\
-..\..\..\source\VIEW\PRIMITIVES\twoColoredTube.obj\
+..\..\..\source\VIEW\PRIMITIVES\twoColoredLine.obj ..\..\..\source\VIEW\PRIMITIVES\twoColoredTube.obj\
+..\..\..\source\VIEW\PRIMITIVES\gridVisualisation.obj\
 ..\..\..\source\VIEW\RENDERING\glDisplayList.obj\
 ..\..\..\source\VIEW\RENDERING\glRenderer.obj\
 ..\..\..\source\VIEW\RENDERING\POVRenderer.obj\
@@ -100,8 +100,7 @@ libVIEW.obj\
 ..\..\..\source\VIEW\WIDGETS\datasetControl.obj\
 ..\..\..\source\VIEW\WIDGETS\dockWidget.obj\
 ..\..\..\source\VIEW\WIDGETS\dockingController.obj\
-#..\..\..\source\VIEW\WIDGETS\editableScene.obj\
-#..\..\..\source\VIEW\WIDGETS\editFunctions.obj\
+#..\..\..\source\VIEW\WIDGETS\editableScene.obj ..\..\..\source\VIEW\WIDGETS\editFunctions.obj\
 ..\..\..\source\VIEW\WIDGETS\genericControl.obj\
 ..\..\..\source\VIEW\WIDGETS\geometricControl.obj\
 ..\..\..\source\VIEW\WIDGETS\helpViewer.obj\
@@ -109,8 +108,7 @@ libVIEW.obj\
 ..\..\..\source\VIEW\WIDGETS\molecularControl.obj\
 ..\..\..\source\VIEW\WIDGETS\molecularStructure.obj\
 ..\..\..\source\VIEW\WIDGETS\pyWidget.obj\
-#..\..\..\source\VIEW\WIDGETS\regularData1DWidget.obj\
-#..\..\..\source\VIEW\WIDGETS\regularData2DWidget.obj\
+#..\..\..\source\VIEW\WIDGETS\regularData1DWidget.obj ..\..\..\source\VIEW\WIDGETS\regularData2DWidget.obj\
 ..\..\..\source\VIEW\WIDGETS\scene.obj\
 mocfiles\amberConfigurationDialog_moc.obj\
 mocfiles\bondProperties_moc.obj\
@@ -160,11 +158,9 @@ mocfiles\logView_moc.obj\
 mocfiles\molecularControl_moc.obj\
 mocfiles\molecularStructure_moc.obj\
 mocfiles\pyWidget_moc.obj\
-#mocfiles\regularData1DWidget_moc.obj\
-#mocfiles\regularData2DWidget_moc.obj\
+#mocfiles\regularData1DWidget_moc.obj mocfiles\regularData2DWidget_moc.obj\
 mocfiles\scene_moc.obj\
-#mocfiles\openBruker1DFile_moc.obj\
-#mocfiles\openBruker2DFile_moc.obj
+#mocfiles\openBruker1DFile_moc.obj mocfiles\openBruker2DFile_moc.obj
 
 UICS = \
 ..\..\..\source\VIEW\DIALOGS\amberConfigurationDialog.myui\
