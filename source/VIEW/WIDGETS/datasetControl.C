@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.31 2006/05/03 14:59:41 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.32 2006/05/03 15:15:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -97,24 +97,33 @@ namespace BALL
 			insertMenuEntry(MainControl::FILE_OPEN, "Dock Result", this, SLOT(addDockResult()));
 			setMenuHint("Open a dock result file");
 
-			menu_cs_ = insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  
+			// calculations:
+
+			grid_historgram_ = insertMenuEntry(MainControl::TOOLS_GRID, "Grid Histogram", this, SLOT(createHistogramGrid()));
+			setMenuHint("Create a new grid with a histogram equalization");
+
+			grid_resize_ = insertMenuEntry(MainControl::TOOLS_GRID, "Resize", this, SLOT(resizeGrid()));
+			setMenuHint("Resize a grid for rendering");
+
+			main_control.insertPopupMenuSeparator(MainControl::TOOLS_GRID);
+
+			// visualisations:
+			grid_slice_ = insertMenuEntry(MainControl::TOOLS_GRID, "Render Slice", this, SLOT(createGridSlice()));
+			setMenuHint("Visualise a moveable plane in the grid");
+
+			grid_volume_ = insertMenuEntry(MainControl::TOOLS_GRID, "Render Volume", this, SLOT(createGridVolume()));
+			setMenuHint("Visualise a grid per volume rendering");
+			GenericControl::initializeWidget(main_control);
+
+			menu_cs_ = insertMenuEntry(MainControl::TOOLS_GRID, "Render Contour S&urface", this,  
 																							SLOT(computeIsoContourSurface()), Qt::CTRL+Qt::Key_U);
 			setMenuHint("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.");
 			setMenuHelp("datasetControl.html#isocontour_surfaces");
 
-			grid_slice_ = insertMenuEntry(MainControl::TOOLS, "Grid Slice", this, SLOT(createGridSlice()));
-			setMenuHint("Visualise a moveable plane in the grid");
+			insertMenuEntry(MainControl::TOOLS_GRID, "Render Field Lines", this,  SLOT(visualiseFieldLines_()));
+			setMenuHint("Visualise a grid per field lines");
 
-			grid_volume_ = insertMenuEntry(MainControl::TOOLS, "Grid Volume", this, SLOT(createGridVolume()));
-			setMenuHint("Visualise a grid per volume rendering");
-
-			grid_resize_ = insertMenuEntry(MainControl::TOOLS, "Grid Resize", this, SLOT(resizeGrid()));
-			setMenuHint("Resize a grid for rendering");
-
-			grid_historgram_ = insertMenuEntry(MainControl::TOOLS, "Grid Histogram", this, SLOT(createHistogramGrid()));
-			setMenuHint("Create a new grid with a histogram equalization");
-
-			GenericControl::initializeWidget(main_control);
+			main_control.insertPopupMenuSeparator(MainControl::TOOLS_GRID);
 
 			registerForHelpSystem(this, "datasetControl.html");
 		}

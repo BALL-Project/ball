@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.6 2006/04/25 16:25:54 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.7 2006/05/03 15:15:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -136,13 +136,11 @@ namespace BALL
 																		SLOT(calculateHBonds()), Qt::ALT+Qt::Key_N);
 			setMenuHint("To assign H-bonds, one System has to be selected.");
 
-			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
-
-			menu_FPDB_ = insertMenuEntry(MainControl::TOOLS , "FDPB Electrostatics", this, 
+			menu_FPDB_ = insertMenuEntry(MainControl::TOOLS_GRID , "FDPB Electrostatics", this, 
 																		SLOT(calculateFDPB()));
 			setMenuHint("Calculate the Electrostatics with FDPB, if one System selected.");
 				
-			create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS, 
+			create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS_GRID, 
 																					"&Distance Grid", this, SLOT(createGridFromDistance()));
 			setMenuHint("Create a grid with the distance to the geometric center of a structure.");
 			setMenuHelp("tips.html#distance_grids");

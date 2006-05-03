@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.15 2006/04/13 00:04:01 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.16 2006/05/03 15:15:53 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -301,7 +301,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					menu = initPopupMenu(FILE)->addMenu("&Open");
 					break;
 				case FILE_OPEN_GRID:
-					menu = initPopupMenu(FILE_OPEN)->addMenu("&Grid");
+					menu = initPopupMenu(FILE_OPEN)->addMenu("&Grids");
 					break;
 				case FILE_IMPORT:
 					menu = initPopupMenu(FILE)->addMenu("&Import");
@@ -338,6 +338,9 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					break;
 				case TOOLS_PYTHON:
 					menu = initPopupMenu(TOOLS)->addMenu("&Python");
+					break;
+				case TOOLS_GRID:
+					menu = initPopupMenu(TOOLS)->addMenu("&Grid");
 					break;
 				case WINDOWS:
 					menu = menuBar()->addMenu("&Windows");
