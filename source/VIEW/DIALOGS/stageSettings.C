@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.C,v 1.30.2.6 2006/04/30 13:01:49 amoll Exp $
+// $Id: stageSettings.C,v 1.30.2.7 2006/05/03 22:07:37 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
@@ -143,7 +143,8 @@ namespace BALL
 			bool use_buffer = use_vertex_buffers->isChecked();
 			GLRenderer& renderer = ((Scene*)Scene::getInstance(0))->getGLRenderer();
 
-			if (use_buffer != renderer.vertexBuffersEnabled())
+			if (use_buffer != renderer.vertexBuffersEnabled() && 
+					getMainControl()->getRepresentationManager().getNumberOfRepresentations() > 0)
 			{
 				getMainControl()->setStatusbarText("Because of change in usage of vertex buffer, all Representations have to be deleted!", true);
 				// remove representations

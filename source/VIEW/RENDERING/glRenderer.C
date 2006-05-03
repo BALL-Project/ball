@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.34 2006/05/03 21:32:28 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.35 2006/05/03 22:07:38 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1949,9 +1949,6 @@ namespace BALL
     glEnable(GL_TEXTURE_3D);
 
 		Vector3 origin = vol.origin;
-		Vector3 diagonalv = vol.x + vol.y + vol.z;
-		float diagonal = diagonalv.getLength();
-		float step = diagonal / vol.slices;
 
 		float epsilon = 0.0001;
 		Vector3 xd = vol.x;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.13 2006/05/03 15:43:27 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.14 2006/05/03 22:07:48 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -204,7 +204,7 @@ namespace BALL
 			void insertComposite_(Composite* composite, QTreeWidgetItem* item)
 				throw();
 
-			void insertContextMenuEntry_(const QString & text, const char* member);
+			void insertContextMenuEntry_(const QString & text, const char* member, bool enabled = true);
 
 			void createFieldLine_(const Vector3& point, Representation& rep);
 

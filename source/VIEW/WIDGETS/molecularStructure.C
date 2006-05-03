@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.7 2006/05/03 15:15:54 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.8 2006/05/03 22:07:38 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -136,7 +136,7 @@ namespace BALL
 																		SLOT(calculateHBonds()), Qt::ALT+Qt::Key_N);
 			setMenuHint("To assign H-bonds, one System has to be selected.");
 
-			menu_FPDB_ = insertMenuEntry(MainControl::TOOLS_GRID , "FDPB Electrostatics", this, 
+			menu_FPDB_ = insertMenuEntry(MainControl::TOOLS , "FDPB Electrostatics", this, 
 																		SLOT(calculateFDPB()));
 			setMenuHint("Calculate the Electrostatics with FDPB, if one System selected.");
 				

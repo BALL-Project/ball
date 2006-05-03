@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.36 2006/05/03 21:32:28 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.37 2006/05/03 22:07:38 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -101,7 +101,7 @@ namespace BALL
 			grid_histogram_ = insertMenuEntry(MainControl::TOOLS_GRID, "Calculate Histogram", this, SLOT(createHistogramGrid()));
 			setMenuHint("Create a new grid with a histogram equalization");
 
-			grid_resize_ = insertMenuEntry(MainControl::TOOLS_GRID, "Resize", this, SLOT(resizeGrid()));
+			grid_resize_ = insertMenuEntry(MainControl::TOOLS_GRID, "Resize for Rendering", this, SLOT(resizeGrid()));
 			setMenuHint("Resize a grid for rendering");
 
 			main_control.insertPopupMenuSeparator(MainControl::TOOLS_GRID);
@@ -131,6 +131,8 @@ namespace BALL
 		void DatasetControl::checkMenu(MainControl& main_control)
 			throw()
 		{
+			getSelectedItems();
+
 			bool system = main_control.getSelectedSystem();
 			open_trajectory_id_->setEnabled(system);
 			open_gradient_id_->setEnabled(system);
@@ -138,17 +140,20 @@ namespace BALL
 			if (selected) main_control.setDeleteEntryEnabled(true);
 
 			bool grid_selected = selected && 
-													 item_to_grid3_[context_item_] != 0 && 
+													 item_to_grid3_.has(context_item_) != 0 && 
 													 !getMainControl()->isBusy();
 
 			menu_cs_->setEnabled(grid_selected);
-			grid_slice_->setEnabled(grid_selected);
-			grid_volume_->setEnabled(grid_selected);
 			grid_resize_->setEnabled(grid_selected);
 			grid_histogram_->setEnabled(grid_selected);
 
+			bool power_2_grid = grid_selected && 
+													isGridPowerOfTwo_(*item_to_grid3_[context_item_]);
+			grid_slice_->setEnabled(power_2_grid);
+			grid_volume_->setEnabled(power_2_grid);
+
 			bool vector_grid_selected = selected && 
-													 item_to_gradients_[context_item_] != 0 && 
+													 item_to_gradients_.has(context_item_) && 
 													 !getMainControl()->isBusy();
 
 			grid_field_lines_->setEnabled(vector_grid_selected);
@@ -403,8 +408,9 @@ namespace BALL
 				}
 				else
 				{
-					insertContextMenuEntry_("Render Slice", SLOT(createGridSlice()));
-					insertContextMenuEntry_("Render Volume", SLOT(createGridVolume()));
+					bool power_2_grid = isGridPowerOfTwo_(*item_to_grid3_[context_item_]);
+					insertContextMenuEntry_("Render Slice", SLOT(createGridSlice()), power_2_grid);
+					insertContextMenuEntry_("Render Volume", SLOT(createGridVolume()), power_2_grid);
 					insertContextMenuEntry_("Render Contour Surface", SLOT(computeIsoContourSurface()));
 					insertContextMenuEntry_("Resize for Rendering", SLOT(resizeGrid()));
 					context_menu_.addSeparator();
@@ -421,9 +427,11 @@ namespace BALL
 			}
 		}
 
-		void DatasetControl::insertContextMenuEntry_(const QString & text, const char* member)
+		void DatasetControl::insertContextMenuEntry_(const QString & text, const char* member, 
+																								 bool enabled)
 		{
 			QAction* menu_entry_pos = context_menu_.addAction(text, this, member);
+			menu_entry_pos->setEnabled(enabled);
 			if (getSelectedItems().size() > 1) menu_entry_pos->setEnabled(false);
 		}
 
@@ -994,6 +1002,9 @@ namespace BALL
 
 	void DatasetControl::visualiseFieldLines_()
 	{
+		getSelectedItems();
+		if (context_item_ == 0 || !item_to_gradients_.has(context_item_)) return;
+
 		FieldLinesDialog dialog;
 		if (!dialog.exec()) return;
 
