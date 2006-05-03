@@ -592,7 +592,7 @@ namespace BALL
 			vector<float> sorted;
 			float size = (float) values.size();
 			normalized_values.resize((Size)size);
-			HashMap<float, float> map;
+ 			std::map<float, float> map;
 
 			if (!use_absolute_values)
 			{
