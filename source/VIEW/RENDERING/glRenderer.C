@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.30 2006/05/02 13:53:27 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.32 2006/05/03 13:24:37 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1853,7 +1853,6 @@ namespace BALL
 
 		RegularData3D::CoordinateType tex_dim = grid.getDimension();
 		RegularData3D::IndexType tex_size = grid.getSize();
-		RegularData3D::CoordinateType spacing = grid.getSpacing();
 		Vector3 origin = grid.getOrigin();
  		tex_size.x --;
  		tex_size.y --;
@@ -1947,21 +1946,31 @@ namespace BALL
 		Vector3 z  = vol.z / (float) vol.slices;
 		glBegin(GL_QUADS);
 		normalVector3_(-z);
-		for (Position i = 0; i <= vol.slices; ++i) 
+
+		try
 		{
-     	texCoordVector3_(getGridIndex_(grid, o));
-			vertexVector3_(o);
-     	texCoordVector3_(getGridIndex_(grid, x));
-			vertexVector3_(x);
-     	texCoordVector3_(getGridIndex_(grid, xy));
-			vertexVector3_(xy);
-     	texCoordVector3_(getGridIndex_(grid, y));
-			vertexVector3_(y);
-			o  += z;
-			x  += z;
-			y  += z;
-			xy += z;
+			Vector3 o1, x1, xy1, y1, z1;
+			for (Position i = 0; i <= vol.slices; ++i) 
+			{
+				o1 = o + z * i;
+				x1 = x + z * i;
+				y1 = y + z * i;
+				xy1 = xy + z * i;
+				texCoordVector3_(getGridIndex_(grid, o1));
+				vertexVector3_(o1);
+				texCoordVector3_(getGridIndex_(grid, x1));
+				vertexVector3_(x1);
+				texCoordVector3_(getGridIndex_(grid, xy1));
+				vertexVector3_(xy1);
+				texCoordVector3_(getGridIndex_(grid, y1));
+				vertexVector3_(y1);
+				}
 		}
+		catch(...)
+		{
+			BALLVIEW_DEBUG
+		}
+
 		glEnd();	
 			
 		glBindTexture(GL_TEXTURE_3D, 0);	

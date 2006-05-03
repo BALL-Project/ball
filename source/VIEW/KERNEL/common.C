@@ -592,23 +592,12 @@ namespace BALL
 			vector<float> sorted;
 			float size = (float) values.size();
 			normalized_values.resize((Size)size);
+			HashMap<float, float> map;
 
 			if (!use_absolute_values)
 			{
 				sorted = values;
 				sort(sorted.begin(), sorted.end());
-
-				Position x = 0;
-				for (Position p = 0; p < size; p++)
-				{
-					while (values[p] > sorted[x] && x < (Size)size)
-					{
-						x++;
-					}
-				
-					normalized_values[p] = (float)x / size;
-				}
-				return;
 			}
 			else
 			{
@@ -619,17 +608,16 @@ namespace BALL
 				}
 				sorted = temp;
 				sort(sorted.begin(), sorted.end());
+			}
 
-				Position x = 0;
-				for (Position p = 0; p < size; p++)
-				{
-					while (temp[p] > sorted[x] && x < (Size)size)
-					{
-						x++;
-					}
-				
-					normalized_values[p] = (float)x / size;
-				}
+			for (Position p = 0; p < size; p++)
+			{
+				map[sorted[p]] = p / size;
+			}
+
+			for (Position p = 0; p < size; p++)
+			{
+				normalized_values[p] = map[values[p]];
 			}
 		}
 

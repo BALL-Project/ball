@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.10 2006/04/26 13:33:08 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.11 2006/05/03 13:24:46 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -141,6 +141,12 @@ namespace BALL
 			///
 			void createGridVolume() throw();
 
+			///
+			void resizeGrid() throw();
+
+			///
+			void createHistogramGrid() throw();
+
 			/// Overloaded from GenericControl, calls cut
 			virtual void deleteCurrentItems() throw() {deleteItems_();}
 
@@ -204,6 +210,8 @@ namespace BALL
 
 			inline void calculateLinePoints_(Vector3 point, vector<Vector3>& points, float factor = 1.);
 
+			Size getNextPowerOfTwo_(Size in);
+
 			QMenu 									 			context_menu_;
 
 			SnapshotVisualisationDialog* 	dialog_;
@@ -214,14 +222,14 @@ namespace BALL
 			HashMap<QTreeWidgetItem*	, RegularData2D*>   					item_to_grid2_;
 			HashMap<QTreeWidgetItem*	, RegularData3D*>   					item_to_grid3_;
 			HashMap<QTreeWidgetItem*	, DockResult*>								item_to_dock_result_;
-			HashMap<QTreeWidgetItem*	, VectorGrid*>							item_to_gradients_;
+			HashMap<QTreeWidgetItem*	, VectorGrid*>								item_to_gradients_;
 			// insert new HashMaps like above for new data type objects.
 			
 			HashMap<Composite*      , HashSet<QTreeWidgetItem*> > 	composite_to_items_;
 			HashMap<QTreeWidgetItem*  , Composite*>  								item_to_composite_;
 
 			QAction* menu_cs_, *open_trajectory_id_, *open_gradient_id_;
-			QAction* grid_slice_, * grid_volume_;
+			QAction* grid_slice_, * grid_volume_, * grid_resize_, *grid_historgram_;
 
 			// Variables to calculate Vector Grids
 			VectorGrid*  vector_grid_;

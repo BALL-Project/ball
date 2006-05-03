@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.37 2006/05/02 14:10:15 amoll Exp $
+// $Id: scene.C,v 1.174.2.38 2006/05/03 13:24:38 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -298,6 +298,8 @@ namespace BALL
 							}
 							map.setRange(min, max);
 							map.createMap();
+							Log.info() << "Creating coloring for grid, min value = " << min 
+												 << " max = " << max << std::endl;
 
 							texname = gl_renderer_.createTextureFromGrid(grid, map);
 						}
@@ -661,8 +663,9 @@ namespace BALL
 					if (run == 0)
 					{
 						// render all "normal" (non always front and non transparent models)
-						if (rep.getTransparency() != 0 ||
-								rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
+						if (!rep.hasProperty("DONT_CLIP") && (
+								rep.getTransparency() != 0 ||
+								rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT)))
 						{
 							continue;
 						}
@@ -670,7 +673,8 @@ namespace BALL
 					else if (run == 1)
 					{
 						// render all transparent models
-						if (rep.getTransparency() == 0 ||
+						if (rep.hasProperty("DONT_CLIP") ||
+								rep.getTransparency() == 0 ||
 								rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
 						{
 							continue;

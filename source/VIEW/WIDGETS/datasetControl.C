@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.29 2006/05/01 20:47:11 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.30 2006/05/03 13:24:38 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -108,6 +108,12 @@ namespace BALL
 			grid_volume_ = insertMenuEntry(MainControl::TOOLS, "Grid Volume", this, SLOT(createGridVolume()));
 			setMenuHint("Visualise a grid per volume rendering");
 
+			grid_resize_ = insertMenuEntry(MainControl::TOOLS, "Grid Resize", this, SLOT(resizeGrid()));
+			setMenuHint("Resize a grid for rendering");
+
+			grid_historgram_ = insertMenuEntry(MainControl::TOOLS, "Grid Histogram", this, SLOT(createHistogramGrid()));
+			setMenuHint("Create a new grid with a histogram equalization");
+
 			GenericControl::initializeWidget(main_control);
 
 			registerForHelpSystem(this, "datasetControl.html");
@@ -120,9 +126,18 @@ namespace BALL
 			bool system = main_control.getSelectedSystem();
 			open_trajectory_id_->setEnabled(system);
 			open_gradient_id_->setEnabled(system);
-			if (getSelectedItems().size() > 0) main_control.setDeleteEntryEnabled(true);
+			bool selected = getSelectedItems().size() > 0;
+			if (selected) main_control.setDeleteEntryEnabled(true);
 
-			menu_cs_->setEnabled(!getMainControl()->isBusy() && item_to_grid3_.size() > 0);
+			bool grid_selected = selected && 
+													 item_to_grid3_[context_item_] != 0 && 
+													 !getMainControl()->isBusy();
+
+			menu_cs_->setEnabled(grid_selected);
+			grid_slice_->setEnabled(grid_selected);
+			grid_volume_->setEnabled(grid_selected);
+			grid_resize_->setEnabled(grid_selected);
+			grid_historgram_->setEnabled(grid_selected);
 		}
 
 
@@ -1387,6 +1402,106 @@ namespace BALL
 		msg->setData(*ssm);
 		notify_(msg);
 	}
+
+	Size DatasetControl::getNextPowerOfTwo_(Size in)
+	{
+		Size test = 2;
+		while (test < in)
+		{
+			test = test * 2;
+		}
+
+		return test;
+	}
+
+	void DatasetControl::resizeGrid()
+		throw()
+	{
+		getSelectedItems();
+		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
+
+		RegularData3D& grid = *item_to_grid3_[context_item_];
+		RegularData3D::IndexType size = grid.getSize();
+		RegularData3D::IndexType new_size;
+		new_size.x = getNextPowerOfTwo_(size.x);
+		new_size.y = getNextPowerOfTwo_(size.y);
+		new_size.z = getNextPowerOfTwo_(size.z);
+		if (new_size.x == size.x &&
+				new_size.y == size.y &&
+				new_size.z == size.z)
+		{
+			setStatusbarText("Grid does not need to be resized!", true);
+			return;
+		}
+
+		// make sure new grid is a tiny little bit smaller to prevent problems
+		// with getInterpolatedValue
+		Vector3 origin = grid.getOrigin();
+		Vector3 dim = grid.getDimension();
+		Vector3 epsilon = dim;
+		epsilon.normalize();
+		epsilon *= 0.0001;
+		origin += epsilon;
+		dim -= epsilon * 2.0;
+
+		RegularData3D* grid_ptr = 0;
+		try
+		{
+			grid_ptr = new RegularData3D(new_size, origin, dim);
+		}
+		catch(...)
+		{
+		}
+
+		if (grid_ptr == 0)
+		{
+			setStatusbarText("Not enough memory to resize grid!", true);
+			return;
+		}
+
+		RegularData3D& new_grid = *grid_ptr;
+
+		bool problem = false;
+		Size s = new_grid.getData().size();
+		for (Position i = 0; i < s; i++)
+		{
+			const Vector3& v = new_grid.getCoordinates(i);
+			try
+			{
+				new_grid[i] = grid.getInterpolatedValue(v);
+			}
+			catch(...)
+			{
+				problem = true;
+			}
+		}
+		
+		insertGrid_(grid_ptr, (System*)item_to_composite_[context_item_], "resized grid");
+
+		// should not happen:
+		if (problem)
+		{
+			setStatusbarText("Grid may be inaccurate!", true);
+		}
+	}
+
+	void DatasetControl::createHistogramGrid()
+		throw()
+	{
+		getSelectedItems();
+		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
+
+		RegularData3D& grid = *item_to_grid3_[context_item_];
+
+ 		RegularData3D* new_grid = new RegularData3D(grid);
+
+		vector<float>& normalized =  *(vector<float>*)&new_grid->getData();
+
+		calculateHistogramEqualization(grid.getData(), normalized);
+
+		insertGrid_(new_grid, (System*)item_to_composite_[context_item_], "normalized grid");
+	}
+
 
 
 	} // namespace VIEW
