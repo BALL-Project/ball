@@ -153,6 +153,7 @@ sipBALLMesh.obj \
 sipBALLMessage.obj \
 sipBALLMicroCanonicalMD.obj \
 sipBALLModelProcessor.obj \
+sipBALLModifyRepresentationDialog.obj \
 sipBALLModularWidget.obj \
 sipBALLMOL2File.obj \
 sipBALLMolecularControl.obj \

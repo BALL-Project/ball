@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.22.2.3 2006/04/13 00:06:19 amoll Exp $
+// $Id: mainControl.sip,v 1.22.2.4 2006/05/03 20:13:32 amoll Exp $
 //
 
 class MainControl
@@ -17,6 +17,7 @@ class MainControl
 	// Q_OBJECT
 	public:
 	// typedef List<CompositeDescriptor *>::iterator DescriptorIterator;
+	/*
 	enum PopUpID
 	{
 		FILE = 10001,
@@ -38,6 +39,7 @@ class MainControl
 		USER = 10700,
 		HELP = 10800
 	};
+	*/
 	//MainControl(QWidget* parent = 0, const char* name = 0, String inifile = ".BALL.preferences") throw();
 	MainControl(const MainControl&) throw();
 	~MainControl() throw();
