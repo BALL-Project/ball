@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.C,v 1.1.2.6 2006/04/13 00:06:52 amoll Exp $
+// $Id: modifyRepresentationDialog.C,v 1.1.2.7 2006/05/03 14:59:40 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
@@ -259,25 +259,40 @@ namespace BALL
 			}
 			else
 			{
+				bool error = false;
+
 				try
 				{
 					min_value_  = grid_->getInterpolatedValue(vertices_[0]);
 					max_value_  = grid_->getInterpolatedValue(vertices_[0]);
-					mid_value_  = 0;
+				}
+				catch(...)
+				{
+					min_value_ = FLT_MAX;
+					max_value_ = FLT_MIN;
+					error = true;
+				}
 
-					float value;
+				mid_value_  = 0;
+				float value;
 
-					for(Position p = 1; p < vertices_.size(); p++)
+				for(Position p = 1; p < vertices_.size(); p++)
+				{
+					try
 					{
 						value = grid_->getInterpolatedValue(vertices_[p]);
 						min_value_ = std::min(min_value_, value);
 						max_value_ = std::max(max_value_, value);
 					}
+					catch(...)
+					{
+						error = true;
+					}
 				}
-				catch(Exception::OutOfGrid)
+
+				if (error)
 				{
-					setStatusbarText("Can not color this surface with this grid, the mesh has points outside the grid!", true);
-					return;
+					setStatusbarText("Warning the geometric object has points outside the grid!", true);
 				}
 
 				mid_value_ = (max_value_ - min_value_) * 0.5 + min_value_;

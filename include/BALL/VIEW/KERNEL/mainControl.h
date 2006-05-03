@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76.2.8 2006/04/13 00:04:15 amoll Exp $
+// $Id: mainControl.h,v 1.76.2.9 2006/05/03 15:02:54 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -149,8 +149,8 @@ namespace BALL
 				/// Tools menu
 				TOOLS = 10500,
 
-				/// Create grid submenu in Tools
-				TOOLS_CREATE_GRID,
+				/// Grid submenu in Tools
+				TOOLS_GRID,
 
 				/// Python submenu in Tools
 				TOOLS_PYTHON,

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.11 2006/05/03 13:24:46 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.12 2006/05/03 14:59:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -192,7 +192,7 @@ namespace BALL
 			void insertGrid_(RegularData2D* file, System* system, const String& name)
 				throw();
 		
-			void insertGrid_(RegularData3D* file, System* system, const String& name)
+			void insertGrid_(RegularData3D* file, System* system, const String& name, bool send_message = true)
 				throw();
 
 			void insertVector_(VectorGrid* file, System* system, const String& name)

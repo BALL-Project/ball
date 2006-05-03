@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.30 2006/05/03 13:24:38 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.31 2006/05/03 14:59:41 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -238,7 +238,7 @@ namespace BALL
 				if (RTTI::isKindOf<RegularData3DMessage>(*message))
 				{
 					RegularData3DMessage* ntm = RTTI::castTo<RegularData3DMessage>(*message);
-					insertGrid_(ntm->getData(), (System*)ntm->getComposite(), ntm->getCompositeName());
+					insertGrid_(ntm->getData(), (System*)ntm->getComposite(), ntm->getCompositeName(), false);
 					return;
 				}
 			}
@@ -564,10 +564,6 @@ namespace BALL
 			RegularData3D* dat = new RegularData3D;
 			(*dat).binaryRead(filename);
 			insertGrid_(dat, system, filename);
-			RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::NEW);
-			msg->setData(*dat);
-			msg->setCompositeName(filename);
-			notify_(msg);
 		}
 
 		void DatasetControl::addDSN6Grid()
@@ -589,11 +585,6 @@ namespace BALL
 				infile.close();
 
 				insertGrid_(dat, system, filename);
-				RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::NEW);
-				msg->setData(*dat);
-				msg->setCompositeName(filename);
-				notify_(msg);
-
 				return dat;
 			}
 			catch(...)
@@ -618,12 +609,20 @@ namespace BALL
 			item_to_composite_[item] = system;
 		}
 
-		void DatasetControl::insertGrid_(RegularData3D* data, System* system, const String& name)
+		void DatasetControl::insertGrid_(RegularData3D* data, System* system, const String& name, bool send_message)
 			throw()
 		{
 			QTreeWidgetItem* item = createListViewItem_(system, name, "3D Grid");
 			item_to_grid3_[item] = data;
 			item_to_composite_[item] = system;
+
+			if (!send_message) return;
+
+			RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::NEW);
+			msg->setData(*data);
+			if (system != 0) msg->setComposite(*system);
+			msg->setCompositeName(name);
+			notify_(msg);
 		}
 
 
@@ -1385,6 +1384,20 @@ namespace BALL
 		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
 
 		RegularData3D* ssm = item_to_grid3_[context_item_];
+
+		RegularData3D::IndexType size = ssm->getSize();
+		RegularData3D::IndexType new_size;
+		new_size.x = getNextPowerOfTwo_(size.x);
+		new_size.y = getNextPowerOfTwo_(size.y);
+		new_size.z = getNextPowerOfTwo_(size.z);
+		if (new_size.x != size.x ||
+				new_size.y != size.y ||
+				new_size.z != size.z)
+		{
+			setStatusbarText("Grid sizes are not potentials of 2! Please resize the grid.", true);
+			return;
+		}
+
 		RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::VISUALISE_VOLUME);
 		msg->setData(*ssm);
 		notify_(msg);
