@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.39 2006/05/03 14:59:41 amoll Exp $
+// $Id: scene.C,v 1.174.2.40 2006/05/03 21:32:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -282,9 +282,9 @@ namespace BALL
 							// to be moved somewhere else:
 							ColorMap map;
 							ColorRGBA colors[3];
-							colors[0] = ColorRGBA(1.0, 0, 0, 0.1);
-							colors[1] = ColorRGBA(1.0, .0, 1.0, 0.01);
-							colors[2] = ColorRGBA(.0, 0, 1.0, 0.1);
+							colors[0] = ColorRGBA(1.0, 0.0, 0.0, 0.1);
+							colors[1] = ColorRGBA(1.0, 1.0, 0.0, 0.01);
+							colors[2] = ColorRGBA(0.0, 0.0, 1.0, 0.1);
 							map.setBaseColors(colors, 3);
 							map.setNumberOfColors(512);
 							map.setAlphaBlending(true);

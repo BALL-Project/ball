@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.35 2006/05/03 20:28:07 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.36 2006/05/03 21:32:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -411,6 +411,7 @@ namespace BALL
 					insertContextMenuEntry_("Calculate Histogram", SLOT(createHistogramGrid()));
 					insertContextMenuEntry_("Create Gradient Grid", SLOT(createVectorGrid()));
 				}
+				return;
 			}
 
 			if (item_to_gradients_.has(context_item_))

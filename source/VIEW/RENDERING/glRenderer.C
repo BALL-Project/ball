@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.33 2006/05/03 13:31:47 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.34 2006/05/03 21:32:28 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1952,11 +1952,30 @@ namespace BALL
 		Vector3 diagonalv = vol.x + vol.y + vol.z;
 		float diagonal = diagonalv.getLength();
 		float step = diagonal / vol.slices;
+
+		float epsilon = 0.0001;
+		Vector3 xd = vol.x;
+		Vector3 xt = xd;
+		xt.normalize();
+		xt *= epsilon;
+		xd -= xt * 2.0;
 		
-		Vector3 o  = origin;
-		Vector3 x  = o + vol.x;
-		Vector3 xy = x + vol.y;
-		Vector3 y  = o + vol.y;
+		Vector3 yd = vol.y;
+		Vector3 yt = yd;
+		yt.normalize();
+		yt *= epsilon;
+		yd -= yt * 2.0;
+		
+		Vector3 zd = vol.z;
+		Vector3 zt = zd;
+		zt.normalize();
+		zt *= epsilon;
+		zd -= zt * 2.0;
+	
+		Vector3 o  = origin + xt + yt;
+		Vector3 x  = o + xd;
+		Vector3 xy = x + yd;
+		Vector3 y  = o + yd;
 		Vector3 z  = vol.z / (float) vol.slices;
 		glBegin(GL_QUADS);
 		normalVector3_(-z);
@@ -1978,7 +1997,7 @@ namespace BALL
 				vertexVector3_(xy1);
 				texCoordVector3_(getGridIndex_(grid, y1));
 				vertexVector3_(y1);
-				}
+			}
 		}
 		catch(...)
 		{
