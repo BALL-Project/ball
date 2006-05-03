@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.33 2006/05/03 15:43:22 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.34 2006/05/03 18:00:24 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -21,7 +21,6 @@
 
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
-
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/FORMAT/DSN6File.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
@@ -1401,6 +1400,7 @@ namespace BALL
 	void DatasetControl::createGridVolume()
 		throw()
 	{
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		getSelectedItems();
 		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
 
@@ -1428,6 +1428,7 @@ namespace BALL
 	void DatasetControl::createGridSlice()
 		throw()
 	{
+Log.error() << "#~~#   3 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		getSelectedItems();
 		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
 
@@ -1448,7 +1449,7 @@ namespace BALL
 		return test;
 	}
 
-	bool DatasetControl::isGridPowerOfTwo_(const RegularData3D& grid)
+	bool DatasetControl::isGridPowerOfTwo_(const RegularData3D& grid) const
 	{
 		RegularData3D::IndexType size = grid.getSize();
 		RegularData3D::IndexType new_size;
@@ -1463,6 +1464,7 @@ namespace BALL
 	void DatasetControl::resizeGrid()
 		throw()
 	{
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		getSelectedItems();
 		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
 
@@ -1534,6 +1536,7 @@ namespace BALL
 	void DatasetControl::createHistogramGrid()
 		throw()
 	{
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		getSelectedItems();
 		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
 
