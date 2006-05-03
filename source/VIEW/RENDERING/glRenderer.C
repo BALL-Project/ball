@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.32 2006/05/03 13:24:37 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.33 2006/05/03 13:31:47 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1868,6 +1868,8 @@ namespace BALL
 		initDrawingOthers_();
     glEnable(GL_TEXTURE_3D);
 		glBegin(GL_QUADS);
+
+		// render one side
 		normalVector3_(-z);
 
  		texCoordVector3_(getGridIndex_(grid, o));
@@ -1878,6 +1880,18 @@ namespace BALL
 		vertexVector3_(xy);
  		texCoordVector3_(getGridIndex_(grid, x));
 		vertexVector3_(x);
+
+		// render opposite side
+		normalVector3_(z);
+
+ 		texCoordVector3_(getGridIndex_(grid, x));
+		vertexVector3_(x);
+ 		texCoordVector3_(getGridIndex_(grid, xy));
+		vertexVector3_(xy);
+ 		texCoordVector3_(getGridIndex_(grid, y));
+		vertexVector3_(y);
+ 		texCoordVector3_(getGridIndex_(grid, o));
+		vertexVector3_(o);
 
 		glEnd();	
 		glBindTexture(GL_TEXTURE_3D, 0);	
