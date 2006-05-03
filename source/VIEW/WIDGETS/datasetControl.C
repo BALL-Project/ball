@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.32 2006/05/03 15:15:54 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.33 2006/05/03 15:43:22 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -99,7 +99,7 @@ namespace BALL
 
 			// calculations:
 
-			grid_historgram_ = insertMenuEntry(MainControl::TOOLS_GRID, "Grid Histogram", this, SLOT(createHistogramGrid()));
+			grid_histogram_ = insertMenuEntry(MainControl::TOOLS_GRID, "Calculate Histogram", this, SLOT(createHistogramGrid()));
 			setMenuHint("Create a new grid with a histogram equalization");
 
 			grid_resize_ = insertMenuEntry(MainControl::TOOLS_GRID, "Resize", this, SLOT(resizeGrid()));
@@ -120,7 +120,7 @@ namespace BALL
 			setMenuHint("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.");
 			setMenuHelp("datasetControl.html#isocontour_surfaces");
 
-			insertMenuEntry(MainControl::TOOLS_GRID, "Render Field Lines", this,  SLOT(visualiseFieldLines_()));
+			grid_field_lines_ = insertMenuEntry(MainControl::TOOLS_GRID, "Render Field Lines", this,  SLOT(visualiseFieldLines_()));
 			setMenuHint("Visualise a grid per field lines");
 
 			main_control.insertPopupMenuSeparator(MainControl::TOOLS_GRID);
@@ -146,7 +146,13 @@ namespace BALL
 			grid_slice_->setEnabled(grid_selected);
 			grid_volume_->setEnabled(grid_selected);
 			grid_resize_->setEnabled(grid_selected);
-			grid_historgram_->setEnabled(grid_selected);
+			grid_histogram_->setEnabled(grid_selected);
+
+			bool vector_grid_selected = selected && 
+													 item_to_gradients_[context_item_] != 0 && 
+													 !getMainControl()->isBusy();
+
+			grid_field_lines_->setEnabled(vector_grid_selected);
 		}
 
 
@@ -391,21 +397,27 @@ namespace BALL
 					item_to_grid3_.has(context_item_))
 			{
 				insertContextMenuEntry_("Save", SLOT(saveGrid_()));
+				context_menu_.addSeparator();
 				if (!item_to_grid3_.has(context_item_))
 				{
 					insertContextMenuEntry_("Visualise", SLOT(visualiseGrid_()));
 				}
 				else
 				{
-					insertContextMenuEntry_("ContourSurface", SLOT(computeIsoContourSurface()));
-					insertContextMenuEntry_("Create gradient grid", SLOT(createVectorGrid()));
+					insertContextMenuEntry_("Render Slice", SLOT((createGridSlice())));
+					insertContextMenuEntry_("Render Volume", SLOT((createGridVolume())));
+					insertContextMenuEntry_("Render Contour Surface", SLOT(computeIsoContourSurface()));
+					insertContextMenuEntry_("Resize for Rendering", SLOT((resizeGrid())));
+					context_menu_.addSeparator();
+					insertContextMenuEntry_("Calculate Histogram", SLOT((createHistogramGrid())));
+					insertContextMenuEntry_("Create Gradient Grid", SLOT(createVectorGrid()));
 				}
 			}
 
 			if (item_to_gradients_.has(context_item_))
 			{
 				insertContextMenuEntry_("Save", SLOT(saveGrid_()));
-				insertContextMenuEntry_("Visualise field lines", SLOT(visualiseFieldLines_()));
+				insertContextMenuEntry_("Visualise Field Lines", SLOT(visualiseFieldLines_()));
 			}
 		}
 
@@ -1425,7 +1437,7 @@ namespace BALL
 		notify_(msg);
 	}
 
-	Size DatasetControl::getNextPowerOfTwo_(Size in)
+	Size DatasetControl::getNextPowerOfTwo_(Size in) const
 	{
 		Size test = 2;
 		while (test < in)
@@ -1434,6 +1446,18 @@ namespace BALL
 		}
 
 		return test;
+	}
+
+	bool DatasetControl::isGridPowerOfTwo_(const RegularData3D& grid)
+	{
+		RegularData3D::IndexType size = grid.getSize();
+		RegularData3D::IndexType new_size;
+		new_size.x = getNextPowerOfTwo_(size.x);
+		new_size.y = getNextPowerOfTwo_(size.y);
+		new_size.z = getNextPowerOfTwo_(size.z);
+		return (new_size.x == size.x &&
+						new_size.y == size.y &&
+						new_size.z == size.z);
 	}
 
 	void DatasetControl::resizeGrid()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.12 2006/05/03 14:59:30 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.13 2006/05/03 15:43:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -210,7 +210,9 @@ namespace BALL
 
 			inline void calculateLinePoints_(Vector3 point, vector<Vector3>& points, float factor = 1.);
 
-			Size getNextPowerOfTwo_(Size in);
+			Size getNextPowerOfTwo_(Size in) const;
+
+			bool isGridPowerOfTwo_(const RegularData3D& grid) const;
 
 			QMenu 									 			context_menu_;
 
@@ -229,7 +231,7 @@ namespace BALL
 			HashMap<QTreeWidgetItem*  , Composite*>  								item_to_composite_;
 
 			QAction* menu_cs_, *open_trajectory_id_, *open_gradient_id_;
-			QAction* grid_slice_, * grid_volume_, * grid_resize_, *grid_historgram_;
+			QAction* grid_slice_, * grid_volume_, * grid_resize_, *grid_histogram_, *grid_field_lines_;
 
 			// Variables to calculate Vector Grids
 			VectorGrid*  vector_grid_;

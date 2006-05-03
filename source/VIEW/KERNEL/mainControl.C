@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.16 2006/05/03 15:15:53 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.17 2006/05/03 15:43:21 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -340,7 +340,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					menu = initPopupMenu(TOOLS)->addMenu("&Python");
 					break;
 				case TOOLS_GRID:
-					menu = initPopupMenu(TOOLS)->addMenu("&Grid");
+					menu = initPopupMenu(TOOLS)->addMenu("&Grids");
 					break;
 				case WINDOWS:
 					menu = menuBar()->addMenu("&Windows");
