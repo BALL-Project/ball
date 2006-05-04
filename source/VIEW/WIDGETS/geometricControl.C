@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.17 2006/04/07 09:26:02 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.18 2006/05/04 15:58:29 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -21,6 +21,7 @@
 
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/analyticalGeometry.h>
+#include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 
 using std::endl;
 
@@ -535,10 +536,22 @@ namespace BALL
 			bool changed = false;
 			for (; it != items.end(); it++)
 			{
-				ClippingPlane* plane = item_to_plane_[*it];
-				if (plane == 0) continue;
+				ClippingPlane* plane = 0;
+				GridSlice* slice = 0;
+				Vector3 n;
 
-				Vector3 n(plane->getNormal());
+				if (item_to_plane_.has(*it)) plane = item_to_plane_[*it];
+
+				if (plane == 0)
+				{
+					if (!item_to_representation_.has(*it)) continue;
+					const Representation* rep = item_to_representation_[*it];
+					if (rep->getModelType() != MODEL_GRID_SLICE) continue;
+					slice = (GridSlice*) *rep->getGeometricObjects().begin();
+				}
+
+				if (plane != 0) n = plane->getNormal();
+				else            n = slice->getNormal();
 
 				if (m.m14 == 0 && m.m24 == 0 && m.m34 == 0)
 				{
@@ -550,12 +563,14 @@ namespace BALL
 						v.normalize();
 					}
 
-					plane->setNormal(v);
+					if (plane != 0) plane->setNormal(v);
+					else            slice->setNormal(v);
 				}
 				else
 				{
 					Vector3 t(-m.m14, -m.m24, -m.m34);
-					plane->setPoint(plane->getPoint() - t);
+					if (plane != 0) plane->setPoint(plane->getPoint() - t);
+					else            slice->setPoint(slice->getPoint() - t);
 				}
 
 				changed = true;
