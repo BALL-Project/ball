@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.35 2006/05/03 22:07:38 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.36 2006/05/04 12:07:34 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
@@ -387,6 +388,8 @@ namespace BALL
 		void GLRenderer::removeRepresentation(const Representation& rep)
 			throw()
 		{
+			if (!getMainControl()->getRepresentationManager().has(rep)) return;
+
 			if (rep.getGeometricObjects().size() == 0) return;
 
 			if (vertexBuffersEnabled())
@@ -1857,41 +1860,54 @@ namespace BALL
  		tex_size.x --;
  		tex_size.y --;
  		tex_size.z --;
-		Vector3 o = grid.getCoordinates(RegularData3D::IndexType(0,0, (Position)(tex_size.z / 2.0)));
-		Vector3 x = grid.getCoordinates(RegularData3D::IndexType(tex_size.x,0, (Position)(tex_size.z / 2.0)));
-		Vector3 xy = grid.getCoordinates(RegularData3D::IndexType(tex_size.x ,tex_size.y, (Position)(tex_size.z / 2.0)));
-		Vector3 y = grid.getCoordinates(RegularData3D::IndexType(0,tex_size.y, (Position)(tex_size.z / 2.0)));
 
-		Vector3 z = grid.getCoordinates(RegularData3D::IndexType(0,0,1)) - origin;
-		z.normalize();
+		Vector3 o,x,y,xy,z;
+		try
+		{
+			o = grid.getCoordinates(RegularData3D::IndexType(0,0, (Position)(tex_size.z / 2.0)));
+			x = grid.getCoordinates(RegularData3D::IndexType(tex_size.x,0, (Position)(tex_size.z / 2.0)));
+			xy = grid.getCoordinates(RegularData3D::IndexType(tex_size.x ,tex_size.y, (Position)(tex_size.z / 2.0)));
+			y = grid.getCoordinates(RegularData3D::IndexType(0,tex_size.y, (Position)(tex_size.z / 2.0)));
+			z = grid.getCoordinates(RegularData3D::IndexType(0,0,1)) - origin;
+			z.normalize();
+		}
+		catch(...)
+		{
+		}
 
 		initDrawingOthers_();
-    glEnable(GL_TEXTURE_3D);
+		glEnable(GL_TEXTURE_3D);
 		glBegin(GL_QUADS);
 
 		// render one side
 		normalVector3_(-z);
 
- 		texCoordVector3_(getGridIndex_(grid, o));
-		vertexVector3_(o);
- 		texCoordVector3_(getGridIndex_(grid, y));
-		vertexVector3_(y);
- 		texCoordVector3_(getGridIndex_(grid, xy));
-		vertexVector3_(xy);
- 		texCoordVector3_(getGridIndex_(grid, x));
-		vertexVector3_(x);
+		try
+		{
+			texCoordVector3_(getGridIndex_(grid, o));
+			vertexVector3_(o);
+			texCoordVector3_(getGridIndex_(grid, y));
+			vertexVector3_(y);
+			texCoordVector3_(getGridIndex_(grid, xy));
+			vertexVector3_(xy);
+			texCoordVector3_(getGridIndex_(grid, x));
+			vertexVector3_(x);
 
-		// render opposite side
-		normalVector3_(z);
+			// render opposite side
+			normalVector3_(z);
 
- 		texCoordVector3_(getGridIndex_(grid, x));
-		vertexVector3_(x);
- 		texCoordVector3_(getGridIndex_(grid, xy));
-		vertexVector3_(xy);
- 		texCoordVector3_(getGridIndex_(grid, y));
-		vertexVector3_(y);
- 		texCoordVector3_(getGridIndex_(grid, o));
-		vertexVector3_(o);
+			texCoordVector3_(getGridIndex_(grid, x));
+			vertexVector3_(x);
+			texCoordVector3_(getGridIndex_(grid, xy));
+			vertexVector3_(xy);
+			texCoordVector3_(getGridIndex_(grid, y));
+			vertexVector3_(y);
+			texCoordVector3_(getGridIndex_(grid, o));
+		 	vertexVector3_(o);
+		}
+		catch(...)
+		{
+		}
 
 		glEnd();	
 		glBindTexture(GL_TEXTURE_3D, 0);	
@@ -1915,7 +1931,7 @@ namespace BALL
 		GridVolume* vol = new GridVolume;
 		vol->setGrid(&grid);
 		vol->setTexture(texname);
-		vol->slices = 32;
+		vol->slices = 124;
 		Vector3 origin = grid.getOrigin();
 		RegularData3D::IndexType s = grid.getSize();
 		vol->x = grid.getCoordinates(RegularData3D::IndexType(s.x-1,0,0)) - origin;
