@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.37 2006/05/04 15:22:09 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.38 2006/05/04 17:08:29 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1928,70 +1928,104 @@ void texCoord(const GridVolume& vol, const Vector3& in)
  		tex_size.y --;
  		tex_size.z --;
 
+		Vector3 n = slice.getNormal();
 		Vector3 o,x,y,xy,z;
-		try
-		{
-			o = grid.getCoordinates(RegularData3D::IndexType(0,0, (Position)(tex_size.z / 2.0)));
-			x = grid.getCoordinates(RegularData3D::IndexType(tex_size.x,0, (Position)(tex_size.z / 2.0)));
-			xy = grid.getCoordinates(RegularData3D::IndexType(tex_size.x ,tex_size.y, (Position)(tex_size.z / 2.0)));
-			y = grid.getCoordinates(RegularData3D::IndexType(0,tex_size.y, (Position)(tex_size.z / 2.0)));
-			z = grid.getCoordinates(RegularData3D::IndexType(0,0,1)) - origin;
-			z.normalize();
-		}
-		catch(...)
-		{
-		}
+		float max = 200;
 
+		Vector3 v1 = getNormal(n);
+		Vector3 v2 = v1 % n;
+
+		v1.normalize();
+		v2.normalize();
+		v1 *= max;
+		v2 *= max;
+
+		o = slice.getPoint() - v1 - v2;
+		v1 *= 2.0;
+		v2 *= 2.0;
+	
 		initDrawingOthers_();
 		glEnable(GL_TEXTURE_3D);
 		initTex(grid);
+
+		x = slice.x;
+		x.normalize();
+		y = slice.y;
+		y.normalize();
+		z = slice.z;
+		z.normalize();
+
+		double planes[6][4];
+
+		float d = x * (-origin);
+		planes[0][0] = x.x; planes[0][1] = x.y; planes[0][2] = x.z; planes[0][3] = d;
+		d = y * (-origin);
+		planes[1][0] = y.x; planes[1][1] = y.y; planes[1][2] = y.z; planes[1][3] = d;
+		d = z * (-origin);
+		planes[2][0] = z.x; planes[2][1] = z.y; planes[2][2] = z.z; planes[2][3] = d;
+
+		Vector3 e = origin + slice.x + slice.y + slice.z;
+		d = -x * (-e);
+		planes[3][0] = x.x; planes[3][1] = x.y; planes[3][2] = x.z; planes[3][3] = d;
+		d = -y * (-e);
+		planes[4][0] = y.x; planes[4][1] = y.y; planes[4][2] = y.z; planes[4][3] = d;
+		d = -z * (-e);
+		planes[5][0] = z.x; planes[5][1] = z.y; planes[5][2] = z.z; planes[5][3] = d;
+
+		for (Position plane = GL_CLIP_PLANE0; plane < GL_CLIP_PLANE0 + 5; plane++)
+		{
+			glClipPlane(plane, &planes[plane - GL_CLIP_PLANE0][0]);
+			glEnable(plane);
+		}
+
 		glBegin(GL_QUADS);
-
 		// render one side
-		normalVector3_(-z);
-
+		normalVector3_(-slice.getNormal());
+		vertexVector3_(o);
+		vertexVector3_(o + v1);
+		vertexVector3_(o + v1 + v2);
+		vertexVector3_(o + v2);
 		
-		try
-		{
-//   			texCoordVector3_(getGridIndex_(grid, o));
-			vertexVector3_(o);
-//   			texCoordVector3_(getGridIndex_(grid, y));
-			vertexVector3_(y);
-//   			texCoordVector3_(getGridIndex_(grid, xy));
-			vertexVector3_(xy);
-//   			texCoordVector3_(getGridIndex_(grid, x));
-			vertexVector3_(x);
-
-			// render opposite side
-			normalVector3_(z);
-
-//   			texCoordVector3_(getGridIndex_(grid, x));
-			vertexVector3_(x);
-//   			texCoordVector3_(getGridIndex_(grid, xy));
-			vertexVector3_(xy);
-//   			texCoordVector3_(getGridIndex_(grid, y));
-			vertexVector3_(y);
-//   			texCoordVector3_(getGridIndex_(grid, o));
-		 	vertexVector3_(o);
-		}
-		catch(...)
-		{
-		}
-
+		// render other side
+		normalVector3_(slice.getNormal());
+		vertexVector3_(o + v2);
+		vertexVector3_(o + v1 + v2);
+		vertexVector3_(o + v1);
+		vertexVector3_(o);
 		glEnd();	
+
+		for (Position plane = GL_CLIP_PLANE0; plane < GL_CLIP_PLANE0 + 6; plane++)
+		{
+			glDisable(plane);
+		}
+
 		glBindTexture(GL_TEXTURE_3D, 0);	
 	}
 
-	GridSlice* GLRenderer::createTexturedGridPlane(const RegularData3D& grid, Position texname,
-																								 const Vector3& point, const Vector3& normal)
+	void initGridObject_(GridSlice& slice, const RegularData3D& grid)
 	{
+		slice.setGrid(&grid);
+		Vector3 origin = grid.getOrigin();
+		RegularData3D::IndexType s = grid.getSize();
+		slice.x = grid.getCoordinates(RegularData3D::IndexType(s.x-1,0,0)) - origin;
+		slice.y = grid.getCoordinates(RegularData3D::IndexType(0,s.y-1,0)) - origin;
+		slice.z = grid.getCoordinates(RegularData3D::IndexType(0,0,s.z-1)) - origin;
+		slice.origin = origin;
+	}
+
+
+	GridSlice* GLRenderer::createTexturedGridPlane(const RegularData3D& grid, Position texname)
+	{
+		Vector3 normal = scene_->getStage()->getCamera().getViewVector();
+		normal.normalize();
+
 		GridSlice* slice = new GridSlice;
-		slice->setGrid(&grid);
 		slice->setTexture(texname);
+		slice->setNormal(normal);
+		initGridObject_(*slice, grid);
+
+		Vector3 point = slice->origin + (slice->x + slice->y + slice->z) / 2.0;
 		slice->setPoint(point);
-		Vector3 n = normal;
-		n.normalize();
-		slice->setNormal(n);
 		return slice;
 	}
 
@@ -2001,12 +2035,7 @@ void texCoord(const GridVolume& vol, const Vector3& in)
 		vol->setGrid(&grid);
 		vol->setTexture(texname);
 		vol->slices = 124;
-		Vector3 origin = grid.getOrigin();
-		RegularData3D::IndexType s = grid.getSize();
-		vol->x = grid.getCoordinates(RegularData3D::IndexType(s.x-1,0,0)) - origin;
-		vol->y = grid.getCoordinates(RegularData3D::IndexType(0,s.y-1,0)) - origin;
-		vol->z = grid.getCoordinates(RegularData3D::IndexType(0,0,s.z-1)) - origin;
-		vol->origin = origin;
+		initGridObject_(*vol, grid);
 		return vol;
 	}
 
@@ -2035,7 +2064,7 @@ void texCoord(const GridVolume& vol, const Vector3& in)
 
 		Vector3 origin = vol.origin;
 
-		float epsilon = 0.0001;
+ 		float epsilon = 0.0001;
 		Vector3 xd = vol.x;
 		Vector3 xt = xd;
 		xt.normalize();

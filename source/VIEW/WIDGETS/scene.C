@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.43 2006/05/04 12:39:29 amoll Exp $
+// $Id: scene.C,v 1.174.2.44 2006/05/04 17:08:30 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -308,15 +308,11 @@ namespace BALL
 							texname = gl_renderer_.grid_to_texture_[&grid];
 						}
 
-						Position i_2 = (Position)(grid.getData().size() / 2.0);
-						Vector3 point = grid.getCoordinates(i_2);
-						Vector3 normal = getStage()->getCamera().getViewVector();
-
 						Representation* rep = new Representation();
 
 						if (rm->getType() == (Size) RegularData3DMessage::VISUALISE_SLICE)
 						{
-							GridSlice* slice = gl_renderer_.createTexturedGridPlane(grid, texname, point, normal);
+							GridSlice* slice = gl_renderer_.createTexturedGridPlane(grid, texname);
 							rep->insert(*slice);
 							rep->setModelType(MODEL_GRID_SLICE);
 						}
@@ -326,9 +322,10 @@ namespace BALL
 							rep->insert(*vol);
 							rep->setTransparency(64);
 							rep->setProperty("DONT_CLIP");
-							rep->setProperty("RENDER_DIRECT");
 							rep->setModelType(MODEL_GRID_VOLUME);
 						}
+
+						rep->setProperty("RENDER_DIRECT");
 						getMainControl()->insert(*rep);
 						getMainControl()->update(*rep);
 						return;

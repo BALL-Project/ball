@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualisation.h,v 1.1.2.2 2006/05/01 20:46:56 amoll Exp $
+// $Id: gridVisualisation.h,v 1.1.2.3 2006/05/04 17:08:37 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_PRIMITIV_GRIDSLICE_H
@@ -76,6 +76,8 @@ namespace BALL
 			///
 			void setTexture(Position texture) { texture_ = texture;}
 
+			Vector3 origin, x,y,z;
+
 			protected:
 
 			Vector3 normal_;
@@ -95,8 +97,6 @@ namespace BALL
 			GridVolume();
 
 			public:
-
-			Vector3 origin, x,y,z;
 
 			Size slices;
 
