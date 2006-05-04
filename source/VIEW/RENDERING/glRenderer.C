@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.38 2006/05/04 17:08:29 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.39 2006/05/04 21:02:51 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1922,11 +1922,7 @@ void texCoord(const GridVolume& vol, const Vector3& in)
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 		RegularData3D::CoordinateType tex_dim = grid.getDimension();
-		RegularData3D::IndexType tex_size = grid.getSize();
 		Vector3 origin = grid.getOrigin();
- 		tex_size.x --;
- 		tex_size.y --;
- 		tex_size.z --;
 
 		Vector3 n = slice.getNormal();
 		Vector3 o,x,y,xy,z;
@@ -1964,15 +1960,16 @@ void texCoord(const GridVolume& vol, const Vector3& in)
 		d = z * (-origin);
 		planes[2][0] = z.x; planes[2][1] = z.y; planes[2][2] = z.z; planes[2][3] = d;
 
-		Vector3 e = origin + slice.x + slice.y + slice.z;
+//   		Vector3 e = origin + slice.x + slice.y + slice.z;
+		Vector3 e = origin + tex_dim;
 		d = -x * (-e);
-		planes[3][0] = x.x; planes[3][1] = x.y; planes[3][2] = x.z; planes[3][3] = d;
+		planes[3][0] = -x.x; planes[3][1] = -x.y; planes[3][2] = -x.z; planes[3][3] = d;
 		d = -y * (-e);
-		planes[4][0] = y.x; planes[4][1] = y.y; planes[4][2] = y.z; planes[4][3] = d;
+		planes[4][0] = -y.x; planes[4][1] = -y.y; planes[4][2] = -y.z; planes[4][3] = d;
 		d = -z * (-e);
-		planes[5][0] = z.x; planes[5][1] = z.y; planes[5][2] = z.z; planes[5][3] = d;
+		planes[5][0] = -z.x; planes[5][1] = -z.y; planes[5][2] = -z.z; planes[5][3] = d;
 
-		for (Position plane = GL_CLIP_PLANE0; plane < GL_CLIP_PLANE0 + 5; plane++)
+		for (Position plane = GL_CLIP_PLANE0 + 0; plane < GL_CLIP_PLANE0 + 6; plane++)
 		{
 			glClipPlane(plane, &planes[plane - GL_CLIP_PLANE0][0]);
 			glEnable(plane);

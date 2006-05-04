@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.44 2006/05/04 17:08:30 amoll Exp $
+// $Id: scene.C,v 1.174.2.45 2006/05/04 21:02:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -285,6 +285,12 @@ namespace BALL
 							colors[0] = ColorRGBA(1.0, 0.0, 0.0, 0.1);
 							colors[1] = ColorRGBA(1.0, 1.0, 0.0, 0.01);
 							colors[2] = ColorRGBA(0.0, 0.0, 1.0, 0.1);
+							if (rm->getType() == (Size) RegularData3DMessage::VISUALISE_SLICE)
+							{
+								colors[0].setAlpha(0.8);
+								colors[1].setAlpha(0.5);
+								colors[2].setAlpha(0.8);
+							}
 							map.setBaseColors(colors, 3);
 							map.setNumberOfColors(512);
 							map.setAlphaBlending(true);
