@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.40 2006/05/03 21:32:28 amoll Exp $
+// $Id: scene.C,v 1.174.2.41 2006/05/04 11:21:12 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -319,6 +319,7 @@ namespace BALL
 						{
 							GridSlice* slice = gl_renderer_.createTexturedGridPlane(grid, texname, point, normal);
 							rep->insert(*slice);
+							rep->setModelType(MODEL_GRID_SLICE);
 						}
 						else
 						{
@@ -327,6 +328,7 @@ namespace BALL
 							rep->setTransparency(512);
 							rep->setProperty("DONT_CLIP");
 							rep->setProperty("RENDER_DIRECT");
+							rep->setModelType(MODEL_GRID_VOLUME);
 						}
 						getMainControl()->insert(*rep);
 						getMainControl()->update(*rep);

@@ -108,9 +108,9 @@ namespace BALL
 				case COLORING_CUSTOM:
 					return "custom";
 				case COLORING_UNKNOWN:
-					return "Unknown";
+					return "unknown";
 			}
-			return "Unknown";
+			return "unknown";
 		}
 
 

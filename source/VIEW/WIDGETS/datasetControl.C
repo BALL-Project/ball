@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.37 2006/05/03 22:07:38 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.38 2006/05/04 11:21:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -11,6 +11,7 @@
 #include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
 #include <BALL/VIEW/PRIMITIVES/point.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
+#include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
@@ -345,6 +346,32 @@ namespace BALL
 			else if (item_to_grid3_.has(&item))
 			{
 				RegularData3D* ssm = item_to_grid3_[&item];
+
+				// remove all reps which are slices or volumes for this grid
+				List<Representation*> reps = getMainControl()->getRepresentationManager().getRepresentations();
+				List<Representation*>::iterator it = reps.begin();
+				for (; it != reps.end(); it++)
+				{
+					if ((**it).getModelType() != MODEL_GRID_VOLUME &&
+							(**it).getModelType() != MODEL_GRID_SLICE)
+					{
+						continue;
+					}
+
+					const List<GeometricObject*>& objects = (**it).getGeometricObjects();
+					List<GeometricObject*>::ConstIterator cit = objects.begin();
+					for (; cit != objects.end(); ++cit)
+					{
+						const GridSlice* slice = dynamic_cast<GridSlice*>(*cit);
+						if (slice == 0) continue;
+
+						if (slice->getGrid() == ssm)
+						{
+							getMainControl()->remove(**it);
+							break;
+						}
+					}
+				}
 
 				RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::REMOVE);
 				msg->setData(*ssm);
