@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.36 2006/05/04 12:07:34 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.37 2006/05/04 15:22:09 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -31,6 +31,9 @@
 #include <QtGui/qpixmap.h>
 #include <QtGui/qpainter.h>
 #include <QtGui/qimage.h>
+
+#include <BALL/MATHS/plane3.h>
+#include <BALL/MATHS/analyticalGeometry.h>
 
 #ifndef BALL_USE_GLEW
  #define GLX_GLXEXT_PROTOTYPES // required for Mesa-like implementations
@@ -1834,6 +1837,70 @@ namespace BALL
 		grid_to_texture_.erase(&grid);
 	}
 
+void initTex(const RegularData3D& grid)
+{
+	const Vector3& origin = grid.getOrigin();
+	Vector3 xd = grid.getCoordinates(RegularData3D::IndexType(1,0,0)) - origin;
+	xd.normalize();
+	Vector3 yd = grid.getCoordinates(RegularData3D::IndexType(0,1,0)) - origin;
+	yd.normalize();
+	Vector3 zd = grid.getCoordinates(RegularData3D::IndexType(0,0,1)) - origin;
+	zd.normalize();
+
+	float xp[4], yp[4], zp[4], d;
+	Vector3 n;
+
+	n = zd;
+	d = n * (-origin);
+	xp[0] = n.x; xp[1] = n.y; xp[2] = n.z; xp[3] = d;
+
+	n = xd;
+	d = n * (-origin);
+	yp[0] = n.x; yp[1] = n.y; yp[2] = n.z; yp[3] = d;
+
+	n = yd;
+	d = n * (-origin);
+	zp[0] = n.x; zp[1] = n.y; zp[2] = n.z; zp[3] = d;
+
+  glTexGenf(GL_S,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
+  glTexGenf(GL_T,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
+  glTexGenf(GL_R,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
+  glTexGenfv(GL_S,GL_OBJECT_PLANE, xp);
+  glTexGenfv(GL_T,GL_OBJECT_PLANE, yp);
+  glTexGenfv(GL_R,GL_OBJECT_PLANE, zp);
+  glEnable(GL_TEXTURE_GEN_S);
+  glEnable(GL_TEXTURE_GEN_T);
+  glEnable(GL_TEXTURE_GEN_R);
+
+	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
+	const Vector3 dim = grid.getDimension();
+	glScaled((double)1.0 / (double) dim.x, 
+					 (double)1.0 / (double) dim.y,
+					 (double)1.0 / (double) dim.z);
+	glMatrixMode(GL_MODELVIEW);
+}
+
+void texCoord(const GridVolume& vol, const Vector3& in)
+{
+	const Vector3& origin = vol.origin;
+	Plane3 px(origin, vol.z);
+	Plane3 py(origin, vol.x);
+	Plane3 pz(origin, vol.y);
+
+	float xl = vol.x.getLength();
+	float yl = vol.y.getLength();
+	float zl = vol.z.getLength();
+
+
+	float xd = GetDistance(in, px) / xl;
+	float yd = GetDistance(in, py) / yl;
+	float zd = GetDistance(in, pz) / zl;
+
+	glTexCoord3f(xd, yd, zd);
+}
+
+
 	void GLRenderer::renderGridSlice_(const GridSlice& slice)
 		throw()
 	{
@@ -1877,32 +1944,34 @@ namespace BALL
 
 		initDrawingOthers_();
 		glEnable(GL_TEXTURE_3D);
+		initTex(grid);
 		glBegin(GL_QUADS);
 
 		// render one side
 		normalVector3_(-z);
 
+		
 		try
 		{
-			texCoordVector3_(getGridIndex_(grid, o));
+//   			texCoordVector3_(getGridIndex_(grid, o));
 			vertexVector3_(o);
-			texCoordVector3_(getGridIndex_(grid, y));
+//   			texCoordVector3_(getGridIndex_(grid, y));
 			vertexVector3_(y);
-			texCoordVector3_(getGridIndex_(grid, xy));
+//   			texCoordVector3_(getGridIndex_(grid, xy));
 			vertexVector3_(xy);
-			texCoordVector3_(getGridIndex_(grid, x));
+//   			texCoordVector3_(getGridIndex_(grid, x));
 			vertexVector3_(x);
 
 			// render opposite side
 			normalVector3_(z);
 
-			texCoordVector3_(getGridIndex_(grid, x));
+//   			texCoordVector3_(getGridIndex_(grid, x));
 			vertexVector3_(x);
-			texCoordVector3_(getGridIndex_(grid, xy));
+//   			texCoordVector3_(getGridIndex_(grid, xy));
 			vertexVector3_(xy);
-			texCoordVector3_(getGridIndex_(grid, y));
+//   			texCoordVector3_(getGridIndex_(grid, y));
 			vertexVector3_(y);
-			texCoordVector3_(getGridIndex_(grid, o));
+//   			texCoordVector3_(getGridIndex_(grid, o));
 		 	vertexVector3_(o);
 		}
 		catch(...)
@@ -1990,6 +2059,8 @@ namespace BALL
 		Vector3 xy = x + yd;
 		Vector3 y  = o + yd;
 		Vector3 z  = vol.z / (float) vol.slices;
+
+  		initTex(grid);
 		glBegin(GL_QUADS);
 		normalVector3_(-z);
 
@@ -2002,13 +2073,17 @@ namespace BALL
 				x1 = x + z * i;
 				y1 = y + z * i;
 				xy1 = xy + z * i;
-				texCoordVector3_(getGridIndex_(grid, o1));
+//   				texCoord(vol, o1);
+//        				texCoordVector3_(getGridIndex_(grid, o1));
 				vertexVector3_(o1);
-				texCoordVector3_(getGridIndex_(grid, x1));
+//   				texCoord(vol, o1);
+//      				texCoordVector3_(getGridIndex_(grid, x1));
 				vertexVector3_(x1);
-				texCoordVector3_(getGridIndex_(grid, xy1));
+//   				texCoord(vol, xy1);
+//      				texCoordVector3_(getGridIndex_(grid, xy1));
 				vertexVector3_(xy1);
-				texCoordVector3_(getGridIndex_(grid, y1));
+//   				texCoord(vol, y1);
+//      				texCoordVector3_(getGridIndex_(grid, y1));
 				vertexVector3_(y1);
 			}
 		}
@@ -2020,6 +2095,7 @@ namespace BALL
 		glEnd();	
 			
 		glBindTexture(GL_TEXTURE_3D, 0);	
+//   		glPopMatrix();
 	}
 
 
