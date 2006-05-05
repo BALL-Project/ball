@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.39 2006/05/04 21:02:51 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.40 2006/05/05 13:20:42 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1926,7 +1926,9 @@ void texCoord(const GridVolume& vol, const Vector3& in)
 
 		Vector3 n = slice.getNormal();
 		Vector3 o,x,y,xy,z;
-		float max = 200;
+		float max = slice.x.getLength();
+		max = BALL_MAX(max, slice.y.getLength());
+		max = BALL_MAX(max, slice.z.getLength());
 
 		Vector3 v1 = getNormal(n);
 		Vector3 v2 = v1 % n;
@@ -2086,7 +2088,7 @@ void texCoord(const GridVolume& vol, const Vector3& in)
 		Vector3 y  = o + yd;
 		Vector3 z  = vol.z / (float) vol.slices;
 
-  		initTex(grid);
+  	initTex(grid);
 		glBegin(GL_QUADS);
 		normalVector3_(-z);
 
@@ -2099,17 +2101,9 @@ void texCoord(const GridVolume& vol, const Vector3& in)
 				x1 = x + z * i;
 				y1 = y + z * i;
 				xy1 = xy + z * i;
-//   				texCoord(vol, o1);
-//        				texCoordVector3_(getGridIndex_(grid, o1));
 				vertexVector3_(o1);
-//   				texCoord(vol, o1);
-//      				texCoordVector3_(getGridIndex_(grid, x1));
 				vertexVector3_(x1);
-//   				texCoord(vol, xy1);
-//      				texCoordVector3_(getGridIndex_(grid, xy1));
 				vertexVector3_(xy1);
-//   				texCoord(vol, y1);
-//      				texCoordVector3_(getGridIndex_(grid, y1));
 				vertexVector3_(y1);
 			}
 		}
@@ -2119,9 +2113,7 @@ void texCoord(const GridVolume& vol, const Vector3& in)
 		}
 
 		glEnd();	
-			
 		glBindTexture(GL_TEXTURE_3D, 0);	
-//   		glPopMatrix();
 	}
 
 
