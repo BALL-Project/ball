@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualisation.C,v 1.1.2.2 2006/05/01 20:47:10 amoll Exp $
+// $Id: gridVisualisation.C,v 1.1.2.3 2006/05/05 14:35:52 amoll Exp $
 //
 
 #include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
@@ -10,19 +10,18 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		GridSlice::GridSlice()
+		GridVisualisation::GridVisualisation()
 			throw()
 				: GeometricObject(),
 				  normal_(Vector3(1.)),
 					point_(),
-					double_(false),
 					texture_(0),
 					grid_(0)
 		{
 		}
 
 					
-		GridSlice::GridSlice(const GridSlice& rp)
+		GridVisualisation::GridVisualisation(const GridVisualisation& rp)
 			throw()
 				: GeometricObject(rp),
 					normal_(rp.normal_),
@@ -31,17 +30,12 @@ namespace BALL
 		}
 
 
-		const GridSlice& GridSlice::operator = (const GridSlice& plane)
+		const GridVisualisation& GridVisualisation::operator = (const GridVisualisation& plane)
 			throw()
 		{
 			normal_ = plane.normal_;
 			point_  = plane.point_;
 			return *this;
-		}
-
-		GridVolume::GridVolume()
-			: GridSlice()
-		{
 		}
 
 

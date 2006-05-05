@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualisation.h,v 1.1.2.3 2006/05/04 17:08:37 amoll Exp $
+// $Id: gridVisualisation.h,v 1.1.2.4 2006/05/05 14:35:59 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_PRIMITIV_GRIDSLICE_H
@@ -19,31 +19,31 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		/** GridSlice 
+		/** GridVisualisation 
 				\ingroup ViewKernelGeometricPrimitives
 		*/
-		class BALL_VIEW_EXPORT GridSlice
+		class BALL_VIEW_EXPORT GridVisualisation
 			: public GeometricObject
 		{
 			public:
 
-			BALL_CREATE(GridSlice)
+			BALL_CREATE(GridVisualisation)
 
 			///
-			GridSlice()
+			GridVisualisation()
 				throw();
 
 			///
-			GridSlice(const GridSlice& plane)
+			GridVisualisation(const GridVisualisation& plane)
 				throw();
 
 			/** Destructor
 			*/
-			virtual ~GridSlice()
+			virtual ~GridVisualisation()
 				throw() {};
 
 			///
-			const GridSlice& operator = (const GridSlice& plane)
+			const GridVisualisation& operator = (const GridVisualisation& plane)
 				throw();
 			
 			///
@@ -59,12 +59,6 @@ namespace BALL
 			void setPoint(const Vector3& v) { point_ = v;}
 
 			///
-			bool doubleSided() const { return double_;}
-
-			///
-			void setDoubleSidedEnabled(bool state) { double_ = state;}
-
-			///
 			void setGrid(const RegularData3D* grid) { grid_ = grid;}
 
 			///
@@ -77,32 +71,16 @@ namespace BALL
 			void setTexture(Position texture) { texture_ = texture;}
 
 			Vector3 origin, x,y,z;
+			float max_dim;
+			Size slices;
 
 			protected:
 
 			Vector3 normal_;
 			Vector3 point_;
-			bool double_;
 			Position texture_;
 			const RegularData3D* grid_;
 		};
-
-		class BALL_VIEW_EXPORT GridVolume
-			: public GridSlice
-		{
-			public:
-
-			BALL_CREATE(GridVolume)
-
-			GridVolume();
-
-			public:
-
-			Size slices;
-
- 		};
-
-
 
 	} // namespace VIEW
 } // namespace BALL

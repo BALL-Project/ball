@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.45 2006/05/04 21:02:52 amoll Exp $
+// $Id: scene.C,v 1.174.2.46 2006/05/05 14:35:53 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -318,13 +318,13 @@ namespace BALL
 
 						if (rm->getType() == (Size) RegularData3DMessage::VISUALISE_SLICE)
 						{
-							GridSlice* slice = gl_renderer_.createTexturedGridPlane(grid, texname);
+							GridVisualisation * slice = gl_renderer_.createTexturedGridPlane(grid, texname);
 							rep->insert(*slice);
 							rep->setModelType(MODEL_GRID_SLICE);
 						}
 						else
 						{
-							GridVolume* vol = gl_renderer_.createVolume(grid, texname);
+							GridVisualisation * vol = gl_renderer_.createVolume(grid, texname);
 							rep->insert(*vol);
 							rep->setTransparency(64);
 							rep->setProperty("DONT_CLIP");

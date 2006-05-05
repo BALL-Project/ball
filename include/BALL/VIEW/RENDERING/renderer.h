@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.h,v 1.11.2.3 2006/05/01 20:46:56 amoll Exp $
+// $Id: renderer.h,v 1.11.2.4 2006/05/05 14:36:00 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_RENDERER_H
 #define BALL_VIEW_RENDERING_RENDERER_H
@@ -32,8 +32,7 @@ namespace BALL
 		class TwoColoredTube;
 		class Stage;
 		class ClippingPlane;
-		class GridSlice;
-		class GridVolume;
+		class GridVisualisation;
 
 		/** Renderer is just a generic base class.
 		 		Derived classes are GLRenderer and POVRenderer.
@@ -186,13 +185,9 @@ namespace BALL
 			virtual void renderTwoColoredTube_(const TwoColoredTube& /*two_colored_tube*/)
 				throw() {Log.error() << "renderTwoColoredTube_ not implemented in derived Renderer class" << std::endl;}
 			
-			/// Render a grid slice
-			virtual void renderGridSlice_(const GridSlice&)
-				throw() {Log.error() << "renderGridSlice_ not implemented in derived Renderer class" << std::endl;}
-
-			/// Render a grid volume
-			virtual void renderGridVolume_(const GridVolume&)
-				throw() {Log.error() << "renderGridVolume__ not implemented in derived Renderer class" << std::endl;}
+			/// Render a grid
+			virtual void renderGridVisualisation_(const GridVisualisation&)
+				throw() {Log.error() << "renderGridVisualisation_ not implemented in derived Renderer class" << std::endl;}
 			//@}
 			
 			//_

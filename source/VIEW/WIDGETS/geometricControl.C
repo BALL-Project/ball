@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.18 2006/05/04 15:58:29 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.19 2006/05/05 14:35:53 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -537,7 +537,7 @@ namespace BALL
 			for (; it != items.end(); it++)
 			{
 				ClippingPlane* plane = 0;
-				GridSlice* slice = 0;
+				GridVisualisation* slice = 0;
 				Vector3 n;
 
 				if (item_to_plane_.has(*it)) plane = item_to_plane_[*it];
@@ -547,7 +547,8 @@ namespace BALL
 					if (!item_to_representation_.has(*it)) continue;
 					const Representation* rep = item_to_representation_[*it];
 					if (rep->getModelType() != MODEL_GRID_SLICE) continue;
-					slice = (GridSlice*) *rep->getGeometricObjects().begin();
+					slice = (GridVisualisation*) *rep->getGeometricObjects().begin();
+					if (slice->slices > 1) continue;
 				}
 
 				if (plane != 0) n = plane->getNormal();
