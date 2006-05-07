@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.42 2006/05/07 21:04:46 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.43 2006/05/07 21:30:19 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1837,88 +1837,44 @@ namespace BALL
 		grid_to_texture_.erase(&grid);
 	}
 
-void initTex(const RegularData3D& grid)
-{
-	const Vector3& origin = grid.getOrigin();
-	Vector3 xd = grid.getCoordinates(RegularData3D::IndexType(1,0,0)) - origin;
-	xd.normalize();
-	Vector3 yd = grid.getCoordinates(RegularData3D::IndexType(0,1,0)) - origin;
-	yd.normalize();
-	Vector3 zd = grid.getCoordinates(RegularData3D::IndexType(0,0,1)) - origin;
-	zd.normalize();
-
-	float xp[4], yp[4], zp[4], d;
-	Vector3 n;
-
-	n = zd;
-	d = n * (-origin);
-	xp[0] = n.x; xp[1] = n.y; xp[2] = n.z; xp[3] = d;
-
-	n = xd;
-	d = n * (-origin);
-	yp[0] = n.x; yp[1] = n.y; yp[2] = n.z; yp[3] = d;
-
-	n = yd;
-	d = n * (-origin);
-	zp[0] = n.x; zp[1] = n.y; zp[2] = n.z; zp[3] = d;
-
-  glTexGenf(GL_S,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
-  glTexGenf(GL_T,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
-  glTexGenf(GL_R,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
-  glTexGenfv(GL_S,GL_OBJECT_PLANE, xp);
-  glTexGenfv(GL_T,GL_OBJECT_PLANE, yp);
-  glTexGenfv(GL_R,GL_OBJECT_PLANE, zp);
-  glEnable(GL_TEXTURE_GEN_S);
-  glEnable(GL_TEXTURE_GEN_T);
-  glEnable(GL_TEXTURE_GEN_R);
-
-	glMatrixMode(GL_TEXTURE);
-	glLoadIdentity();
-	const Vector3 dim = grid.getDimension();
-	glScaled((double)1.0 / (double) dim.x, 
-					 (double)1.0 / (double) dim.y,
-					 (double)1.0 / (double) dim.z);
-	glMatrixMode(GL_MODELVIEW);
-}
-
-void setupGridClipPlanes_(const GridVisualisation& slice)
-{
-	Vector3 origin = slice.origin;
-	double planes[6][4];
-
-	Vector3 x,y,z;
-	x = slice.x;
-	x.normalize();
-	y = slice.y;
-	y.normalize();
-	z = slice.z;
-	z.normalize();
-
-
-	float d = x * (-origin);
-	planes[0][0] = x.x; planes[0][1] = x.y; planes[0][2] = x.z; planes[0][3] = d;
-	d = y * (-origin);
-	planes[1][0] = y.x; planes[1][1] = y.y; planes[1][2] = y.z; planes[1][3] = d;
-	d = z * (-origin);
-	planes[2][0] = z.x; planes[2][1] = z.y; planes[2][2] = z.z; planes[2][3] = d;
-
-	Vector3 e = origin + slice.x + slice.y + slice.z;
-	d = -x * (-e);
-	planes[3][0] = -x.x; planes[3][1] = -x.y; planes[3][2] = -x.z; planes[3][3] = d;
-	d = -y * (-e);
-	planes[4][0] = -y.x; planes[4][1] = -y.y; planes[4][2] = -y.z; planes[4][3] = d;
-	d = -z * (-e);
-	planes[5][0] = -z.x; planes[5][1] = -z.y; planes[5][2] = -z.z; planes[5][3] = d;
-
-	for (Position plane = GL_CLIP_PLANE0 + 0; plane < GL_CLIP_PLANE0 + 6; plane++)
+	void GLRenderer::setupGridClipPlanes_(const GridVisualisation& slice)
 	{
-		glClipPlane(plane, &planes[plane - GL_CLIP_PLANE0][0]);
-		glEnable(plane);
+		Vector3 origin = slice.origin;
+		double planes[6][4];
+
+		Vector3 x,y,z;
+		x = slice.x;
+		x.normalize();
+		y = slice.y;
+		y.normalize();
+		z = slice.z;
+		z.normalize();
+
+
+		float d = x * (-origin);
+		planes[0][0] = x.x; planes[0][1] = x.y; planes[0][2] = x.z; planes[0][3] = d;
+		d = y * (-origin);
+		planes[1][0] = y.x; planes[1][1] = y.y; planes[1][2] = y.z; planes[1][3] = d;
+		d = z * (-origin);
+		planes[2][0] = z.x; planes[2][1] = z.y; planes[2][2] = z.z; planes[2][3] = d;
+
+		Vector3 e = origin + slice.x + slice.y + slice.z;
+		d = -x * (-e);
+		planes[3][0] = -x.x; planes[3][1] = -x.y; planes[3][2] = -x.z; planes[3][3] = d;
+		d = -y * (-e);
+		planes[4][0] = -y.x; planes[4][1] = -y.y; planes[4][2] = -y.z; planes[4][3] = d;
+		d = -z * (-e);
+		planes[5][0] = -z.x; planes[5][1] = -z.y; planes[5][2] = -z.z; planes[5][3] = d;
+
+		for (Position plane = GL_CLIP_PLANE0 + 0; plane < GL_CLIP_PLANE0 + 6; plane++)
+		{
+			glClipPlane(plane, &planes[plane - GL_CLIP_PLANE0][0]);
+			glEnable(plane);
+		}
 	}
-}
 
 
-	void initGridObject_(GridVisualisation& slice, const RegularData3D& grid)
+	void GLRenderer::initGridObject_(GridVisualisation& slice, const RegularData3D& grid)
 	{
 		slice.setGrid(&grid);
 		Vector3 origin = grid.getOrigin();
@@ -1965,13 +1921,11 @@ void setupGridClipPlanes_(const GridVisualisation& slice)
 		throw()
 	{
 		Position texname = vol.getTexture();
-		if (texname == 0 || vol.getGrid() == 0) 
+		if (texname == 0) 
 		{
 			scene_->setStatusbarText("Graphics card does not support 3D textures", true);
 			return;
 		}
-
-		const RegularData3D& grid = *vol.getGrid();
 
 		glBindTexture(GL_TEXTURE_3D, texname);	
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -1982,33 +1936,73 @@ void setupGridClipPlanes_(const GridVisualisation& slice)
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 		initDrawingOthers_();
-    glEnable(GL_TEXTURE_3D);
+ 		setupGridClipPlanes_(vol);
 
-//    		setupGridClipPlanes_(vol);
-  	initTex(grid);
+		///// init the texture: automated texture coordinate generation
+		// normalized vectors in grids directions:
+		Vector3 xd = vol.x;
+		xd.normalize();
+		Vector3 yd = vol.y;
+		yd.normalize();
+		Vector3 zd = vol.z;
+		zd.normalize();
+		const Vector3 origin = vol.origin;
+
+		// plane vectors and distance for texture coordinates:
+		float xp[4], yp[4], zp[4], d;
+		Vector3 n;
+
+		n = zd;
+		d = n * (-origin);
+		xp[0] = n.x; xp[1] = n.y; xp[2] = n.z; xp[3] = d;
+
+		n = xd;
+		d = n * (-origin);
+		yp[0] = n.x; yp[1] = n.y; yp[2] = n.z; yp[3] = d;
+
+		n = yd;
+		d = n * (-origin);
+		zp[0] = n.x; zp[1] = n.y; zp[2] = n.z; zp[3] = d;
+
+    glEnable(GL_TEXTURE_3D);
+		glTexGenf(GL_S,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
+		glTexGenf(GL_T,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
+		glTexGenf(GL_R,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
+		glTexGenfv(GL_S,GL_OBJECT_PLANE, xp);
+		glTexGenfv(GL_T,GL_OBJECT_PLANE, yp);
+		glTexGenfv(GL_R,GL_OBJECT_PLANE, zp);
+		glEnable(GL_TEXTURE_GEN_S);
+		glEnable(GL_TEXTURE_GEN_T);
+		glEnable(GL_TEXTURE_GEN_R);
+
+		// stretch the texture accordingly
+		glMatrixMode(GL_TEXTURE);
+		glLoadIdentity();
+		const Vector3 dim = vol.x + vol.y + vol.z;
+		glScaled((double)1.0 / (double) dim.x, 
+						 (double)1.0 / (double) dim.y,
+						 (double)1.0 / (double) dim.z);
+		glMatrixMode(GL_MODELVIEW);
+
 		glBegin(GL_QUADS);
 
-
-		Vector3 origin = vol.origin;
-		Vector3 n = vol.getNormal();
-		Vector3 v1 = getNormal(n);
-		Vector3 v2 = v1 % n;
-
-		v1.normalize();
-		v2.normalize();
-		v1 *= vol.max_dim * 2.0;
-		v2 *= vol.max_dim * 2.0;
-
+		// render this as one slice
 		if (vol.slices == 1)
 		{
+			Vector3 n = vol.getNormal();
+			Vector3 v1 = getNormal(n);
+			Vector3 v2 = v1 % n;
+
+			v1.normalize();
+			v2.normalize();
+			v1 *= vol.max_dim * 2.0;
+			v2 *= vol.max_dim * 2.0;
+
 			Vector3 o = vol.getPoint() - v1 - v2;
 
 			v1 *= 2.0;
 			v2 *= 2.0;
 		
-			initTex(grid);
-
-			glBegin(GL_QUADS);
 			// render one side
 			normalVector3_(-vol.getNormal());
 			vertexVector3_(o);
@@ -2025,15 +2019,15 @@ void setupGridClipPlanes_(const GridVisualisation& slice)
 		}
 		else
 		{
-			Vector3 vv = scene_->getStage()->getCamera().getViewVector();
-			Vector3 origin = vol.origin;
+			// volume rendering
+			const Vector3 vv = scene_->getStage()->getCamera().getViewVector();
 
 			Vector3 normals[3];
-			Vector3 vectors[3];
 			normals[0] = vol.x;
 			normals[1] = vol.y;
 			normals[2] = vol.z;
 
+			// calculate the angles between vv and the axes of the grid
 			Angle angles[3], aangles[3];
 
 			for (Position i = 0; i < 3; i++) 
@@ -2055,7 +2049,8 @@ void setupGridClipPlanes_(const GridVisualisation& slice)
 				}
 			}
 
-			// collect the vectors: 3. vector is the axis in view vector direction
+			// order the axes: 3. vector is the axis nearest to view vector direction
+			Vector3 vectors[3];
 			Position v = 0;
 			for (Position i = 0; i < 3; i++)
 			{
@@ -2069,28 +2064,36 @@ void setupGridClipPlanes_(const GridVisualisation& slice)
 					vectors[2] = normals[i];
 				}
 			}
+
+			// order of layers: depends on direction of normal to view vector direction
+			Vector3 diff;
+			if (aangles[min] > angles[min])
+			{
+				vectors[2] *= -1;
+				diff = -vectors[2];
+			}
 			
+			// normal and start points
 			vectors[2] /= (float)vol.slices;
-			Vector3 o  = origin;
+			Vector3 o  = origin + diff;
 			Vector3 x  = o + vectors[0];
 			Vector3 xy = x + vectors[1];
 			Vector3 y  = o + vectors[1];
 
 			for (Position i = 0; i <= vol.slices; ++i) 
 			{
+				// always render two sides:
 				normalVector3_(vectors[2]);
 				vertexVector3_(y);
 				vertexVector3_(xy);
 				vertexVector3_(x);
 				vertexVector3_(o);
 
-				/*
 				normalVector3_(-vectors[2]);
 				vertexVector3_(o);
 				vertexVector3_(x);
 				vertexVector3_(xy);
 				vertexVector3_(y);
-				*/
 
 				o  += vectors[2];
 				x  += vectors[2];
@@ -2099,12 +2102,17 @@ void setupGridClipPlanes_(const GridVisualisation& slice)
 			}
 		}
 
+		// cleanup:
 		glEnd();	
 
 		for (Position plane = GL_CLIP_PLANE0; plane < GL_CLIP_PLANE0 + 6; plane++)
 		{
 			glDisable(plane);
 		}
+
+		glDisable(GL_TEXTURE_GEN_S);
+		glDisable(GL_TEXTURE_GEN_T);
+		glDisable(GL_TEXTURE_GEN_R);
 		glBindTexture(GL_TEXTURE_3D, 0);	
 	}
 

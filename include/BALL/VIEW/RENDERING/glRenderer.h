@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36.2.13 2006/05/05 14:36:00 amoll Exp $
+// $Id: glRenderer.h,v 1.36.2.14 2006/05/07 21:30:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -445,6 +445,8 @@ namespace BALL
 			GridVisualisation* createVolume(const RegularData3D& grid, Position texname);
 			Position createTextureFromGrid(const RegularData3D& grid, const ColorMap& map);
 			void removeTextureFor_(const RegularData3D& grid);
+			void initGridObject_(GridVisualisation& slice, const RegularData3D& grid);
+			void setupGridClipPlanes_(const GridVisualisation& slice);
 
 			Scene* 								scene_;
 
