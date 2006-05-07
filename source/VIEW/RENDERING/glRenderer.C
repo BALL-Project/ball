@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.41 2006/05/05 14:35:52 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.42 2006/05/07 21:04:46 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1984,7 +1984,7 @@ void setupGridClipPlanes_(const GridVisualisation& slice)
 		initDrawingOthers_();
     glEnable(GL_TEXTURE_3D);
 
- 		setupGridClipPlanes_(vol);
+//    		setupGridClipPlanes_(vol);
   	initTex(grid);
 		glBegin(GL_QUADS);
 
@@ -2025,64 +2025,77 @@ void setupGridClipPlanes_(const GridVisualisation& slice)
 		}
 		else
 		{
-			Vector3 vv = scene_->getStage()->getCamera().getViewPoint();
+			Vector3 vv = scene_->getStage()->getCamera().getViewVector();
 			Vector3 origin = vol.origin;
 
-			// calculate the grid corner nearest to the viewpoint
-			float dist_square = FLT_MAX;
-			float new_dist_square;
-			Vector3 nearest = origin;
-			for (Position p = 0; p < 4; p ++)
+			Vector3 normals[3];
+			Vector3 vectors[3];
+			normals[0] = vol.x;
+			normals[1] = vol.y;
+			normals[2] = vol.z;
+
+			Angle angles[3], aangles[3];
+
+			for (Position i = 0; i < 3; i++) 
 			{
-				Vector3 point = origin;
+				angles[i] = normals[i].getAngle(vv);
+				aangles[i] = (-normals[i]).getAngle(vv);
+			}
 
-				if (p == 1 || p == 2) point += vol.x;
-				if (p == 2 || p == 3) point += vol.y;
-
-				new_dist_square = (point - vv).getSquareLength();
-				if (new_dist_square < dist_square)
+			Angle min_angle(angles[0]);
+			Position min = 0;
+			for (Position i = 0; i < 3; i++) 
+			{
+				if (angles[i] < min_angle ||
+						aangles[i] < min_angle)
 				{
-					dist_square = new_dist_square;
-					nearest = point;
-				}
-
-				point += vol.z;
-
-				new_dist_square = (point - vv).getSquareLength();
-				if (new_dist_square < dist_square)
-				{
-					dist_square = new_dist_square;
-					nearest = point;
+					min = i;
+					if (aangles[i] < angles[i]) min_angle = aangles[i];
+					else                        min_angle = angles[i];
 				}
 			}
 
-			Vector3 n = nearest - vv;
-			n.normalize();
-			Vector3 normal(-n);
-			Vector3 v1 = getNormal(n);
-			Vector3 v2 = n % v1;
-			v1 *= vol.max_dim * 2.0;
-			v2 *= vol.max_dim * 2.0;
+			// collect the vectors: 3. vector is the axis in view vector direction
+			Position v = 0;
+			for (Position i = 0; i < 3; i++)
+			{
+				if (i != min)
+				{
+					vectors[v] = normals[i];
+					v++;
+				}
+				else
+				{
+					vectors[2] = normals[i];
+				}
+			}
+			
+			vectors[2] /= (float)vol.slices;
+			Vector3 o  = origin;
+			Vector3 x  = o + vectors[0];
+			Vector3 xy = x + vectors[1];
+			Vector3 y  = o + vectors[1];
 
-			n *= vol.max_dim / (float) vol.slices;
-
-			Vector3 o  = nearest - v1 - v2;
-			Vector3 x  = o + v1 * 2.0;
-			Vector3 xy = x + v2 * 2.0;
-			Vector3 y  = o + v2 * 2.0;
-
-			normalVector3_(normal);
 			for (Position i = 0; i <= vol.slices; ++i) 
 			{
+				normalVector3_(vectors[2]);
 				vertexVector3_(y);
 				vertexVector3_(xy);
 				vertexVector3_(x);
 				vertexVector3_(o);
 
-				o  += n;
-				x  += n;
-				xy += n;
-				y  += n;
+				/*
+				normalVector3_(-vectors[2]);
+				vertexVector3_(o);
+				vertexVector3_(x);
+				vertexVector3_(xy);
+				vertexVector3_(y);
+				*/
+
+				o  += vectors[2];
+				x  += vectors[2];
+				xy += vectors[2];
+				y  += vectors[2];
 			}
 		}
 
