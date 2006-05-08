@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.29 2006/04/06 23:25:26 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.30 2006/05/08 22:57:27 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -472,6 +472,8 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 		void PyWidget::appendText(const String& t)
 		{
+			if (full_silent_) return;
+
 			String text = t; 
 			if (!text.size() || text[text.size() - 1] != '\n')
 			{
@@ -583,6 +585,8 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			// no prompts!
 			silent_ = true;
 
+			full_silent_ = filename.hasSubstring("startup");
+
 			while (file.readLine())
 			{
 				if (!parseLine_(file.getLine()) || stop_script_)
@@ -598,12 +602,14 @@ void PythonHighlighter::highlightBlock(const QString& text)
 						appendText(result_string.c_str());
 					}
 					silent_ = false;
+					full_silent_ = false;
 					newPrompt_();
 					return false;
 				}
 			}
 
 			silent_ = false;
+			full_silent_ = false;
 			appendText("> Finished.");
 			setStatusbarText("Finished script.");
 			newPrompt_();

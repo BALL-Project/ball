@@ -137,6 +137,7 @@ def removeWater():
 	setMultithreading(0)
 	if getMolecularControl().applySelector("residue(HOH)") == 0:
 		return
+	getMolecularControl().highlightSelection()
 	getMolecularControl().cut()
 	for i in range(len(getSystems())):
 		getMainControl().update(getSystem(i), 1)

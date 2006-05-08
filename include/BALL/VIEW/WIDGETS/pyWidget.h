@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.16 2006/03/28 15:34:00 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.17 2006/05/08 22:57:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -346,6 +346,7 @@ namespace BALL
 			Position 					intend_;
 			bool 							running_;
 			bool 							silent_;
+			bool 							full_silent_;
 		};
 
 	} // namespaces	
