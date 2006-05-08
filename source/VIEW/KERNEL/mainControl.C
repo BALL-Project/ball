@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.17 2006/05/03 15:43:21 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.18 2006/05/08 23:29:44 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -817,6 +817,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		void MainControl::writePreferences(INIFile &inifile)
 			throw()
 		{
+			inifile.appendSection("MAIN");
+			VersionInfo version;
+			String version_string(version.getMajorRevision());
+			version_string += "." + version.getMinorRevision();
+			inifile.insertValue("MAIN", "Version", version_string);
+
 			// the main window position
 			inifile.appendSection("WINDOWS");
 			inifile.insertValue("WINDOWS", "Main::x", String(x()));

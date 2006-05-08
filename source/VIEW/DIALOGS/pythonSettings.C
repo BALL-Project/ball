@@ -224,6 +224,7 @@ void HotkeyTable::setContent(const List<Hotkey>& hotkeys)
 			case (Position)Qt::ControlModifier: s = "Ctrl"; break;
 			default:
 				Log.error() << "Invalid button state for Hotkey" << std::endl;
+				return;
 		}
 
 		insertRow(p);
