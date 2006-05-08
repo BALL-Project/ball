@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.40.2.8 2006/04/26 12:33:15 amoll Exp $
+// $Id: common.h,v 1.40.2.9 2006/05/08 20:11:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -217,6 +217,9 @@ namespace BALL
 
 			///
 			MODEL_GRID_VOLUME,
+
+			///
+			MODEL_FIELD_LINES,
 
 			/// unkown property
 			MODEL_UNKNOWN
