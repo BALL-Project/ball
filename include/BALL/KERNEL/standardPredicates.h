@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.52 2005/10/23 12:02:20 oliver Exp $
+// $Id: standardPredicates.h,v 1.52.2.1 2006/05/08 22:48:06 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
@@ -21,6 +21,14 @@
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #	include <BALL/KERNEL/expression.h>
+#endif
+
+#ifndef BALL_STRUCTURE_SMARTSMATCHER_H
+# include <BALL/STRUCTURE/smartsMatcher.h>
+#endif
+
+#ifndef BALL_QSAR_AROMATICITYPROCESSOR_H
+# include <BALL/QSAR/aromaticityProcessor.h>
 #endif
 
 namespace BALL 
@@ -954,6 +962,44 @@ namespace BALL
 			std::vector<const Atom*> ring_atoms_;
 
 	};
+
+	/** Predicate for using smarts
+	 */
+	class BALL_EXPORT SMARTSPredicate
+		:	public ExpressionPredicate
+	{
+		public:
+
+		///
+		SMARTSPredicate()
+			throw();
+
+		///
+		SMARTSPredicate(const SMARTSPredicate& pred)
+			throw();
+
+		///
+		~SMARTSPredicate()
+			throw();
+	
+		BALL_CREATE(SMARTSPredicate)
+
+		/** 
+				@param atom the atom to test
+				@return true, if the predicate is true, false otherwise
+		*/
+		virtual bool operator () (const Atom& atom) const
+			throw();
+
+ 		mutable SmartsMatcher matcher_;
+		mutable Molecule* last_molecule_;
+		mutable AromaticityProcessor arom_proc_;
+		// when was the aromaticity lastly calculated for a given molecule:
+		static HashMap<Molecule*, TimeStamp> call_time_map_;
+		static Molecule dummy_molecule_;
+		mutable HashSet<Atom*> matches_;
+	};
+
 
 	//@}	
 } // namespace BALL

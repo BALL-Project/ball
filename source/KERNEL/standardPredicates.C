@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.58 2004/11/17 22:25:05 anker Exp $
+// $Id: standardPredicates.C,v 1.58.8.1 2006/05/08 22:48:21 amoll Exp $
 //
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -1805,6 +1805,67 @@ namespace BALL
 		return ring_atoms_;
 	}
 
+	/////////////////////////////////////////////////////////////////
+	
+	HashMap<Molecule*, TimeStamp> SMARTSPredicate::call_time_map_;
+	Molecule SMARTSPredicate::dummy_molecule_;
+
+	SMARTSPredicate::SMARTSPredicate()
+		throw()
+		: ExpressionPredicate(),
+			last_molecule_(0)
+	{
+	}
+
+	SMARTSPredicate::SMARTSPredicate(const SMARTSPredicate& pred)
+		throw()
+		: ExpressionPredicate(pred),
+			last_molecule_(0)
+	{
+	}
+
+	SMARTSPredicate::~SMARTSPredicate()
+		throw()
+	{
+	}
+
+	bool SMARTSPredicate::operator () (const Atom& atom) const
+		throw()
+	{
+		Molecule* mol = (Molecule*) atom.getAncestor(dummy_molecule_);
+		if (mol == 0) return false;
+		if (last_molecule_ == mol)
+ 		{
+			return matches_.has((Atom*)&atom);
+ 		}
+
+		HashMap<Molecule*, TimeStamp>::Iterator it = call_time_map_.find(mol);
+		if (!+it || it->second.isOlderThan(mol->getModificationTime()))
+		{
+			mol->apply(arom_proc_);
+			TimeStamp stamp;
+			stamp.stamp();
+			call_time_map_[mol] = stamp;
+		}
+
+		matches_.clear();
+		last_molecule_ = mol;
+		vector<HashSet<const Atom*> > result;
+
+		// will have to be adapted:
+		result = matcher_.match(*mol, argument_);
+
+		for (Position p = 0; p < result.size(); p++)
+		{
+			HashSet<const Atom*>::ConstIterator it = result[p].begin();
+			for (; +it; ++it)
+			{
+				matches_.insert((Atom*)*it);
+			}
+		}
+
+		return matches_.has((Atom*)&atom);
+	}
 
 
 } // namespace BALL
