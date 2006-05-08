@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.39 2006/05/08 12:46:37 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.40 2006/05/08 21:00:06 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -99,7 +99,7 @@ namespace BALL
 
 			// calculations:
 
-			grid_histogram_ = insertMenuEntry(MainControl::TOOLS_GRID, "Calculate Histogram", this, SLOT(createHistogramGrid()));
+			grid_histogram_ = insertMenuEntry(MainControl::TOOLS_GRID, "Calculate normalized Grid", this, SLOT(createHistogramGrid()));
 			setMenuHint("Create a new grid with a histogram equalization");
 
 			grid_resize_ = insertMenuEntry(MainControl::TOOLS_GRID, "Resize for Rendering", this, SLOT(resizeGrid()));
@@ -441,7 +441,7 @@ namespace BALL
 					insertContextMenuEntry_("Render Contour Surface", SLOT(computeIsoContourSurface()));
 					insertContextMenuEntry_("Resize for Rendering", SLOT(resizeGrid()));
 					context_menu_.addSeparator();
-					insertContextMenuEntry_("Calculate Histogram", SLOT(createHistogramGrid()));
+					insertContextMenuEntry_("Create normalized Grid", SLOT(createHistogramGrid()));
 					insertContextMenuEntry_("Create Gradient Grid", SLOT(createVectorGrid()));
 				}
 				return;
@@ -1061,6 +1061,7 @@ namespace BALL
 		}
 
 		Representation* rep = new Representation();
+		rep->setModelType(MODEL_FIELD_LINES);
 
 		if (use_atoms)
 		{
@@ -1282,7 +1283,8 @@ namespace BALL
 			}
 		}
 
-		QTreeWidgetItem* item = createListViewItem_(system, "Vector Grid", "Vector Grid");
+		String text = String("Vector Grid") + ascii(context_item_->text(0));;
+		QTreeWidgetItem* item = createListViewItem_(system, text, "Vector Grid");
 		item_to_gradients_[item] = grid_ptr;
 		item_to_composite_[item] = system;
 	}
@@ -1560,7 +1562,8 @@ namespace BALL
 			}
 		}
 		
-		insertGrid_(grid_ptr, (System*)item_to_composite_[context_item_], "resized grid");
+		String text = String("resized ") + ascii(context_item_->text(0));;
+		insertGrid_(grid_ptr, (System*)item_to_composite_[context_item_], text);
 
 		// should not happen:
 		if (problem)
@@ -1583,7 +1586,8 @@ namespace BALL
 
 		calculateHistogramEqualization(grid.getData(), normalized);
 
-		insertGrid_(new_grid, (System*)item_to_composite_[context_item_], "normalized grid");
+		String text = String("normalized ") + ascii(context_item_->text(0));;
+		insertGrid_(new_grid, (System*)item_to_composite_[context_item_], text);
 	}
 
 	} // namespace VIEW

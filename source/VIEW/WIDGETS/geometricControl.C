@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.19 2006/05/05 14:35:53 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.20 2006/05/08 21:00:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -62,7 +62,6 @@ namespace BALL
 			registerWidget(this);
 
 			clipping_plane_context_menu_.addAction("Hide/Show", this, SLOT(hideShowClippingPlane()));
-			clipping_plane_context_menu_.addAction("Move", this, SLOT(moveClippingPlane()));
 			clipping_plane_context_menu_.addAction("Flip", this, SLOT(flipClippingPlane()));	
 			clipping_plane_context_menu_.addAction("Set to x axis", this, SLOT(setClippingPlaneX()));	
 			clipping_plane_context_menu_.addAction("Set to y axis", this, SLOT(setClippingPlaneY()));	
@@ -214,13 +213,15 @@ namespace BALL
 
 			context_menu_.clear();
 			vector<QAction*> actions;
+			context_menu_actions_.clear();
 
-			actions.push_back(context_menu_.addAction("Delete", this, SLOT(deleteCurrentItems())));
-			actions.push_back(context_menu_.addAction("Focus", this, SLOT(focusRepresentation())));
-			actions.push_back(context_menu_.addAction("Duplicate", this, SLOT(duplicateRepresentation())));
- 			actions.push_back(context_menu_.addAction("Select Atoms", this, SLOT(selectAtoms())));
-			actions.push_back(context_menu_.addAction("Modify Model", this, SLOT(modifyRepresentation_())));	
- 			actions.push_back(context_menu_.addAction("Modify Representation", modify_rep_dialog_, SLOT(show())));	
+			addItem_("Delete", SLOT(deleteCurrentItems()));
+			addItem_("Focus", SLOT(focusRepresentation()));
+			addItem_("Duplicate", SLOT(duplicateRepresentation()));
+ 			addItem_("Select Atoms", SLOT(selectAtoms()));
+			addItem_("Modify Model", SLOT(modifyRepresentation_()));	
+ 			addItem_("Modify Representation", SLOT(show()), modify_rep_dialog_);	
+			addItem_("Move", SLOT(enterMoveMode()));
 			context_menu_.addSeparator();
 			actions.push_back(context_menu_.addMenu(&clipping_plane_context_menu_));
 			actions[6]->setText("Clipping Plane");
@@ -233,15 +234,17 @@ namespace BALL
 					actions[p]->setEnabled(false); 
 				}
 				actions[6]->setEnabled(true);
+				actions[7]->setEnabled(true);
 				return;
 			}
 
 			// representations ->
-			actions[6]->setEnabled(false);
+			actions[6]->setEnabled(rep->getModelType() == MODEL_GRID_SLICE);
+			actions[7]->setEnabled(false);
 
 			if (getSelectedItems().size() != 1)
 			{
-				for (Position p = 1; p < 6; p++)
+				for (Position p = 1; p < 7; p++)
 				{
 					actions[p]->setEnabled(false); 
 				}
@@ -254,6 +257,13 @@ namespace BALL
 			}
 
 			modify_rep_dialog_->setRepresentation(rep);
+		}
+
+		void GeometricControl::addItem_(const String& text, const char* member, QWidget* widget)
+		{
+			if (widget == 0) widget = this;
+			context_menu_actions_.push_back(
+					context_menu_.addAction(text.c_str(), widget, member));
 		}
 
 		void GeometricControl::generateListViewItem_(Representation& rep)
@@ -473,7 +483,7 @@ namespace BALL
 			registerForHelpSystem(this, "geometricControl.html");
 		}
 
-		void GeometricControl::moveClippingPlane()
+		void GeometricControl::enterMoveMode()
 		{
 			getMainControl()->clearSelection();
 

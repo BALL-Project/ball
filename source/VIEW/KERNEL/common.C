@@ -60,6 +60,8 @@ namespace BALL
 					return "Grid Slice";
 				case MODEL_GRID_VOLUME:
 					return "Grid Volume";
+				case MODEL_FIELD_LINES:
+					return "Field Lines";
 				case MODEL_BACKBONE:
 					return "Backbone";
 				case MODEL_CARTOON:

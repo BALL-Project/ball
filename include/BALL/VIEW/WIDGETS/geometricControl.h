@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.27.2.9 2006/04/07 09:25:54 amoll Exp $
+// $Id: geometricControl.h,v 1.27.2.10 2006/05/08 21:00:15 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -156,7 +156,7 @@ namespace BALL
 			virtual void focusRepresentation();
 
 			///
-			virtual void moveClippingPlane();
+			virtual void enterMoveMode();
 			
 			///
 			virtual void flipClippingCapping();
@@ -215,6 +215,8 @@ namespace BALL
 			void showGuestContextMenu(const QPoint& pos);
 
 		  protected:
+
+			void addItem_(const String& text, const char* member, QWidget* widget = 0);
 			
 			// only for Python Interface
 			GeometricControl(const GeometricControl& control) throw();
@@ -245,6 +247,7 @@ namespace BALL
 			bool ignore_change_;
 
 			QAction* menu_clipping_plane_;
+			vector<QAction*> context_menu_actions_;
 		};
 		
 } } // namespaces

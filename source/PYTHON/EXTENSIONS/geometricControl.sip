@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.sip,v 1.2.2.1 2006/04/07 09:26:09 amoll Exp $
+// $Id: geometricControl.sip,v 1.2.2.2 2006/05/08 21:00:25 amoll Exp $
 //
 
 class GeometricControl
@@ -27,7 +27,7 @@ class GeometricControl
 //	virtual void selectedRepresentation(Representation& representation, bool state);
 	virtual void updateSelection();
 	virtual void focusRepresentation();
-	virtual void moveClippingPlane();
+	virtual void enterMoveMode();
 	virtual void flipClippingPlane();
 	virtual void setClippingPlaneX();
 	virtual void setClippingPlaneY();
