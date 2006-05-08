@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.38 2006/05/04 11:21:09 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.39 2006/05/08 12:46:37 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -362,7 +362,7 @@ namespace BALL
 					List<GeometricObject*>::ConstIterator cit = objects.begin();
 					for (; cit != objects.end(); ++cit)
 					{
-						const GridSlice* slice = dynamic_cast<GridSlice*>(*cit);
+						const GridVisualisation* slice = dynamic_cast<GridVisualisation*>(*cit);
 						if (slice == 0) continue;
 
 						if (slice->getGrid() == ssm)
