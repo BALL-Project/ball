@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: add_hydrogens.C,v 1.8 2006/01/03 18:09:45 anhi Exp $
+// $Id: add_hydrogens.C,v 1.9 2006/05/08 07:44:36 anker Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -66,8 +66,19 @@ int main(int argc, char** argv)
 		Path path;
 		String tmp = path.find(argv[3]);
 		if (tmp == "") tmp = argv[3];
+		// DEBUG
+		cout << tmp << endl;
+		// /DEBUG
 		amber_ff.options.set(AmberFF::Option::FILENAME, tmp);
 	}
+	// DEBUG
+	AtomIterator it = system.beginAtom();
+	for (; +it; ++it) 
+	{
+		cout << it->getFullName() << " " << it->getType() << " " 
+			<< it->getTypeName() << endl;
+	}
+	// /DEBUG
 	amber_ff.setup(system);
 	cout << "done." << endl;
 	cout << "Selecting H atoms..." << endl;
@@ -75,6 +86,8 @@ int main(int argc, char** argv)
 	system.apply(h_select);
 	cout << "done." << endl;
 	cout << "Starting minimizer: " << endl << endl;
+	SteepestDescentMinimizer sdm(amber_ff);
+	sdm.minimize(1000);
 	ConjugateGradientMinimizer cgm(amber_ff);
 	cgm.minimize(1000);
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clip_protein_around_ligand.C,v 1.9 2006/01/03 18:09:45 anhi Exp $
+// $Id: clip_protein_around_ligand.C,v 1.10 2006/05/08 07:44:36 anker Exp $
 //
 // A program for extracting a parts of a protein around a ligand.
 // The output are XYZFiles because we use this program for creating AMSOL
@@ -21,6 +21,7 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
+#include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 #include <BALL/MOLMEC/COMMON/typenameRuleProcessor.h>
 #include <BALL/MOLMEC/COMMON/chargeRuleProcessor.h>
@@ -38,6 +39,7 @@ void usage(const String& name)
 		<< "of the protein will be structurally optimised by employing an AMBER" << endl << endl
 		<< "forcefield." << endl
 		<< "  -p <FILE>    use FILE as receptor (PDB format)" << endl
+		<< "  -P <FILE>    use FILE as receptor (HIN format)" << endl
 		<< "  -l <FILE>    use FILE as ligand (PDB format)" << endl
 		<< "  -L <FILE>    use FILE as ligand (HIN format)" << endl
 		<< "  -c <CUTOFF>  use CUTOFF (default: 8 A)" << endl
@@ -95,7 +97,8 @@ Size count_heavy_atoms(const AtomContainer& container)
 	return count;
 }
 
-Residue* transform_residue_to_cap(PDBAtom& atom, FragmentDB& fragment_db)
+Residue* transform_residue_to_cap(PDBAtom& atom, FragmentDB& fragment_db,
+		list<Atom*>& reconstructed_atoms)
 {
 
 	// define a proper name for reconstruction of the end cap
@@ -159,13 +162,8 @@ Residue* transform_residue_to_cap(PDBAtom& atom, FragmentDB& fragment_db)
 	new_residue->apply(fragment_db.build_bonds);
 	new_residue->apply(fragment_db.normalize_names);
 
-	// Select all reconstructed atoms for subsequent optimisation
-	list<Atom*> reconstructed_atoms = reconstruct.getInsertedAtoms();
-	list<Atom*>::iterator it = reconstructed_atoms.begin();
-	for (; it != reconstructed_atoms.end(); ++it)
-	{
-		(*it)->select();
-	}
+	// save all reconstructed atoms for subsequent optimisation
+	reconstructed_atoms = reconstruct.getInsertedAtoms();
 
 	return(new_residue);
 }
@@ -202,6 +200,7 @@ int main(int argc, char** argv)
 	Size max_atoms = 0;
 	Size max_heavy_atoms = 0;
 
+	bool use_hin_protein = false;
 	bool use_hin_ligand = false;
 
 	for (int i = 1; i < argc; i++)
@@ -249,6 +248,11 @@ int main(int argc, char** argv)
 				protein_file_name = argv[++i];
 				break;
 
+			case 'P':
+				use_hin_protein = true;
+				protein_file_name = argv[++i];
+				break;
+
 			case 'l':
 				use_hin_ligand = false;
 				ligand_file_name = argv[++i];
@@ -283,16 +287,28 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	// now load the molecules 
-	System protein;
-	PDBFile protein_file(protein_file_name);
-	protein_file >> protein;
-	protein_file.close();
-
 	Log.info() << "Initializing fragment database." << endl;
 	FragmentDB db("");
-	Log.info() << "Building bonds (protein)." << endl;
-	protein.apply(db.build_bonds);
+
+	// now load the molecules 
+	System protein;
+
+	if (use_hin_protein == true)
+	{
+		HINFile protein_file(protein_file_name);
+		protein_file >> protein;
+		protein_file.close();
+	}
+	else
+	{
+		PDBFile protein_file(protein_file_name);
+		protein_file >> protein;
+		protein_file.close();
+
+		Log.info() << "Building bonds (protein)." << endl;
+		protein.apply(db.build_bonds);
+	}
+
 	Log.info() << "Normalizing names (protein)." << endl;
 	protein.apply(db.normalize_names);
 
@@ -505,6 +521,7 @@ int main(int argc, char** argv)
 	Index current_ID = 0;
 
 	ReconstructFragmentProcessor reconstruct(db);
+	list<Atom*> reconstructed_atoms;
 
 	// iterate over all chains
 	for (; +chain_it; ++chain_it)
@@ -532,11 +549,11 @@ int main(int argc, char** argv)
 					}
 
 					// Select all reconstructed atoms for subsequent optimisation
-					list<Atom*> reconstructed_atoms = reconstruct.getInsertedAtoms();
-					list<Atom*>::iterator it = reconstructed_atoms.begin();
-					for (; it != reconstructed_atoms.end(); ++it)
+					list<Atom*> tmp_list = reconstruct.getInsertedAtoms();
+					list<Atom*>::iterator it = tmp_list.begin();
+					for (; it != tmp_list.end(); ++it)
 					{
-						(*it)->select();
+						reconstructed_atoms.push_back(*it);
 					}
 
 				}
@@ -580,7 +597,13 @@ int main(int argc, char** argv)
 							// ...and transform it into a cap.
 							cout << "Transforming " << tmp_res_it->getFullName() << ":"
 								<< tmp_res_it->getID() << " into ACE-N" << endl;
-							tmp_res = transform_residue_to_cap(*atom_it, db);
+							list<Atom*> tmp_list;
+							tmp_res = transform_residue_to_cap(*atom_it, db, tmp_list);
+							list<Atom*>::iterator it = tmp_list.begin();
+							for (; it != tmp_list.end(); ++it)
+							{
+								reconstructed_atoms.push_back(*it);
+							}
 							tmp_res->setID(String(current_ID - 1));
 							chain->insert(*tmp_res);
 						}
@@ -617,7 +640,13 @@ int main(int argc, char** argv)
 						{
 							cout << "Transforming " << res_it->getFullName() << ":"
 								<< res_it->getID() << " into NME-C" << endl;
-							tmp_res = transform_residue_to_cap(*atom_it, db);
+							list<Atom*> tmp_list;
+							tmp_res = transform_residue_to_cap(*atom_it, db, tmp_list);
+							list<Atom*>::iterator it = tmp_list.begin();
+							for (; it != tmp_list.end(); ++it)
+							{
+								reconstructed_atoms.push_back(*it);
+							}
 							tmp_res->setID(String(current_ID + 1));
 							chain->insert(*tmp_res);
 						}
@@ -631,9 +660,6 @@ int main(int argc, char** argv)
 		}
 	}
 
-	ResidueChecker check(db);
-	cut_protein->apply(check);
-
 	System system;
 	system.insert(*cut_protein);
 	system.apply(db.build_bonds);
@@ -642,19 +668,27 @@ int main(int argc, char** argv)
 	intermediate << system;
 	intermediate.close();
 
+	File dumpfile("intermediate.dump", File::OUT);
+	system.dump(dumpfile);
+	dumpfile.close();
+
 	Path path;
 
 	cout << endl;
-	cout << "Assigning charges (protein)." << endl;
-	String charge_rule_file_name("/home/staff/anker/Interlec20/fresno/PARSE.rul.modified");
-	String tmp = path.find(charge_rule_file_name);
-	if (tmp != "") charge_rule_file_name = tmp;
 
-	INIFile charge_ini(charge_rule_file_name);
-	charge_ini.read();
-	ChargeRuleProcessor charge_rules(charge_ini);
-	cut_protein->apply(charge_rules);
+	String parameter_file_name("Amber/amber94gly.ini");
+	// String parameter_file_name("Amber/amber96.ini");
+	String tmp = path.find(parameter_file_name);
+	if (tmp == "") tmp = parameter_file_name;
 
+	Log.info() << "Initializing force field" << endl;
+	AmberFF amber_ff;
+	amber_ff.options.set(AmberFF::Option::FILENAME, tmp);
+	amber_ff.options.setBool(AmberFF::Option::OVERWRITE_TYPENAMES, true);
+	amber_ff.options.setBool(AmberFF::Option::OVERWRITE_CHARGES, true);
+	amber_ff.setup(system);
+
+	// Print out charges
 	for (res_it = cut_protein->beginResidue(); +res_it; ++res_it)
 	{
 		float c = get_residue_charge(*res_it);
@@ -665,24 +699,36 @@ int main(int argc, char** argv)
 
 	cout << "CHARGE=" << round(charge) << endl;
 
-	String parameter_file_name("Amber/amber94gly.ini");
-	tmp = path.find(parameter_file_name);
-	if (tmp == "") tmp = parameter_file_name;
+	ResidueChecker check(db);
+	cut_protein->apply(check);
 
-	Log.info() << "Initializing force field" << endl;
-	AmberFF amber_ff;
-	amber_ff.options.set(AmberFF::Option::FILENAME, tmp);
-	amber_ff.setup(system);
+	// Now select all those atoms that have been inserted into the system in
+	// order to keep the rest of the protein rigid.
+	list<Atom*>::iterator list_it = reconstructed_atoms.begin();
+	for (; list_it != reconstructed_atoms.end(); ++list_it)
+	{
+		(*list_it)->select();
+	}
+
+	dumpfile.open("before_minimization.dump", File::OUT);
+	system.dump(dumpfile);
+	dumpfile.close();
 
 	PDBFile before_minimization("before_minimization.pdb", std::ios::out);
 	before_minimization << system;
 
 	Log.info() << "Starting minimizer: " << endl << endl;
+	SteepestDescentMinimizer sdm(amber_ff);
+	sdm.minimize(100);
 	ConjugateGradientMinimizer cgm(amber_ff);
 	cgm.minimize(1000);
 
 	PDBFile cut_protein_file("cut_protein_file.pdb", std::ios::out);
 	cut_protein_file << system;
+
+	dumpfile.open("after_minimization.dump", File::OUT);
+	system.dump(dumpfile);
+	dumpfile.close();
 
 	tmp_res = new Residue;
 	tmp_res->setName("LIG");
