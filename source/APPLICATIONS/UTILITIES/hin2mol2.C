@@ -1,4 +1,4 @@
-// $Id: hin2mol2.C,v 1.1 2006/05/08 07:44:36 anker Exp $
+// $Id: hin2mol2.C,v 1.2 2006/05/08 07:49:58 anker Exp $
 //
 // A very simple utility for converting HyperChem files into MOL2 files
 
@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 	MOL2File mol2_file(outfile_name, ios::out);
 	mol2_file << system;
 	mol2_file.close();
-	cout << "Wrote HyperChem file " << outfile_name << endl;
+	cout << "Wrote MOL2 file " << outfile_name << endl;
 
 	return(0);
 }
