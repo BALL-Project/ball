@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clip_protein_around_ligand.C,v 1.10 2006/05/08 07:44:36 anker Exp $
+// $Id: clip_protein_around_ligand.C,v 1.11 2006/05/08 07:48:16 anker Exp $
 //
 // A program for extracting a parts of a protein around a ligand.
 // The output are XYZFiles because we use this program for creating AMSOL
@@ -383,7 +383,7 @@ int main(int argc, char** argv)
 		atoms = ligand.countAtoms() + 12;
 		heavy_atoms = count_heavy_atoms(ligand) + 4;
 		// DEBUG
-		Log.info() << "init: a: " << atoms << ", h: " << heavy_atoms << endl;
+		//Log.info() << "init: a: " << atoms << ", h: " << heavy_atoms << endl;
 		// /DEBUG
 
 		res_it = protein.beginResidue();
@@ -411,7 +411,7 @@ int main(int argc, char** argv)
 								atoms += 12;
 								heavy_atoms += 4;
 								// DEBUG
-								Log.info() << "caps: a: " << atoms << ", h: " << heavy_atoms << endl;
+								//Log.info() << "caps: a: " << atoms << ", h: " << heavy_atoms << endl;
 								// /DEBUG
 							}
 
@@ -423,7 +423,7 @@ int main(int argc, char** argv)
 								atoms -= 6;
 								heavy_atoms -= 2;
 								// DEBUG
-								Log.info() << "term: a: " << atoms << ", h: " << heavy_atoms << endl;
+								//Log.info() << "term: a: " << atoms << ", h: " << heavy_atoms << endl;
 								// /DEBUG
 							}
 
@@ -432,8 +432,8 @@ int main(int argc, char** argv)
 							atoms += res_it->countAtoms();
 							heavy_atoms += count_heavy_atoms(*res_it);
 							// DEBUG
-							Log.info() << "res:  a: " << atoms << ", h: " << heavy_atoms 
-								<< " (" << res_it->getFullName() << ":"
+							//Log.info() << "res:  a: " << atoms << ", h: " << heavy_atoms 
+							//	<< " (" << res_it->getFullName() << ":"
 								<< res_it->getID() << ")" << endl;
 							// /DEBUG
 							if (atoms > max_atoms || heavy_atoms > max_heavy_atoms)
@@ -457,9 +457,9 @@ int main(int argc, char** argv)
 								atoms += tmp_res_it->countAtoms();
 								heavy_atoms += count_heavy_atoms(*tmp_res_it);
 								// DEBUG
-								Log.info() << "gap:  a: " << atoms << ", h: " << heavy_atoms 
-									<< " (" << tmp_res_it->getFullName() << ":"
-									<< tmp_res_it->getID() << ")" << endl;
+								//Log.info() << "gap:  a: " << atoms << ", h: " << heavy_atoms 
+								//	<< " (" << tmp_res_it->getFullName() << ":"
+								//	<< tmp_res_it->getID() << ")" << endl;
 								// /DEBUG
 								if (atoms > max_atoms || heavy_atoms > max_heavy_atoms)
 								{
