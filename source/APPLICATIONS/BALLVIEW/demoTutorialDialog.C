@@ -52,6 +52,8 @@ DemoTutorialDialog::DemoTutorialDialog(QWidget* parent, const char* name)
 	// register the widget with the MainControl
  	ModularWidget::registerWidget(this);
 	hide();
+	connect(next_button, SIGNAL(clicked()), this, SLOT(nextStepClicked()));
+	connect(cancel_button, SIGNAL(clicked()), this, SLOT(hide()));
 }
 
 DemoTutorialDialog::~DemoTutorialDialog()
@@ -177,6 +179,7 @@ void DemoTutorialDialog::show()
 
 	text_browser->setSource(QUrl(String(prefix_ + "01.html").c_str()));
 
+	QDialog::show();
 	resize(270, 500);
 	raise();
 }
@@ -290,7 +293,8 @@ void DemoTutorialDialog::nextStepDemo_()
 	}
 
 	MolecularStructure* ms = MolecularStructure::getInstance(0);
-	bool disable_button = true;
+
+	next_button->setEnabled(current_step_ >= 15);
 
 	// remove representations
 	RepresentationManager& pm = getMainControl()->getRepresentationManager();
@@ -344,7 +348,7 @@ void DemoTutorialDialog::nextStepDemo_()
 
 		List<Composite*> composites;
 		composites.push_back(*getMainControl()->getCompositeManager().getComposites().begin());
-//   		MolecularControl::getInstance(0)->highlight(composites); ???????????????
+ 		MolecularControl::getInstance(0)->highlight(composites);
 
 		ms->chooseAmberFF();
 		ms->getMDSimulationDialog().setTimeStep(0.001);
@@ -355,7 +359,6 @@ void DemoTutorialDialog::nextStepDemo_()
 	{
 		ms->calculateFDPB();
 		ms->getFDPBDialog()->okPressed();
-		disable_button = false;
 	}
 	else if (current_step_ == 16) // SES colored 
 	{
@@ -376,8 +379,6 @@ void DemoTutorialDialog::nextStepDemo_()
 		rep->setColorProcessor(0);
 
  		getMainControl()->sendMessage(*new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS));
-
-		disable_button = false;
 	}
 	else if (current_step_ == 17)
 	{
@@ -421,10 +422,7 @@ void DemoTutorialDialog::nextStepDemo_()
    	notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT));
 
 		// last entry: we are done
-		disable_button = false;
 	}
-
-	next_button->setEnabled(!disable_button);
 }
 
 void DemoTutorialDialog::showTutorial()
