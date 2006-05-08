@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.20 2006/05/08 21:00:07 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.21 2006/05/08 21:55:40 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -212,7 +212,6 @@ namespace BALL
 			else if (item_to_plane_.has(context_item_))     plane = item_to_plane_[context_item_]; 
 
 			context_menu_.clear();
-			vector<QAction*> actions;
 			context_menu_actions_.clear();
 
 			addItem_("Delete", SLOT(deleteCurrentItems()));
@@ -223,37 +222,37 @@ namespace BALL
  			addItem_("Modify Representation", SLOT(show()), modify_rep_dialog_);	
 			addItem_("Move", SLOT(enterMoveMode()));
 			context_menu_.addSeparator();
-			actions.push_back(context_menu_.addMenu(&clipping_plane_context_menu_));
-			actions[6]->setText("Clipping Plane");
+			context_menu_actions_.push_back(context_menu_.addMenu(&clipping_plane_context_menu_));
+			context_menu_actions_[7]->setText("Clipping Plane");
 
 			// planes ->
 			if (plane != 0)
 			{
 				for (Position p = 1; p < 6; p++)
 				{
-					actions[p]->setEnabled(false); 
+					context_menu_actions_[p]->setEnabled(false); 
 				}
-				actions[6]->setEnabled(true);
-				actions[7]->setEnabled(true);
+				context_menu_actions_[6]->setEnabled(true);
+				context_menu_actions_[7]->setEnabled(true);
 				return;
 			}
 
 			// representations ->
-			actions[6]->setEnabled(rep->getModelType() == MODEL_GRID_SLICE);
-			actions[7]->setEnabled(false);
+			context_menu_actions_[6]->setEnabled(rep->getModelType() == MODEL_GRID_SLICE);
+			context_menu_actions_[7]->setEnabled(false);
 
 			if (getSelectedItems().size() != 1)
 			{
 				for (Position p = 1; p < 7; p++)
 				{
-					actions[p]->setEnabled(false); 
+					context_menu_actions_[p]->setEnabled(false); 
 				}
 			}
 
 			// not modifyable
 			if (rep->getModelType() >= MODEL_LABEL)
 			{
-				actions[4]->setEnabled(false);
+				context_menu_actions_[4]->setEnabled(false);
 			}
 
 			modify_rep_dialog_->setRepresentation(rep);

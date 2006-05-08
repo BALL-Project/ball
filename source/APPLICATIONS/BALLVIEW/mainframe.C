@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.18 2006/04/03 14:44:19 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.19 2006/05/08 21:56:28 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -29,6 +29,8 @@
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/COMMON/version.h>
+
+//   #undef BALL_PYTHON_SUPPORT
 
 #ifdef BALL_PYTHON_SUPPORT
   #	include <BALL/VIEW/WIDGETS/pyWidget.h>
@@ -326,6 +328,11 @@ namespace BALL
 		{
 			Scene::getInstance(0)->switchToLastMode();
 			return;
+		}
+
+		if (e->key() == Qt::Key_Delete)
+		{
+			deleteClicked();
 		}
 
 		if (e->key() == Qt::Key_Enter) 

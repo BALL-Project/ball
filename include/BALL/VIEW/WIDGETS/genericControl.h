@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.h,v 1.14.2.4 2006/03/17 15:45:34 amoll Exp $
+// $Id: genericControl.h,v 1.14.2.5 2006/05/08 21:55:30 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
 #define BALL_VIEW_WIDGETS_GENERICCONTROL_H
@@ -100,13 +100,12 @@ namespace BALL
 
 			public slots:
 			
-			/// Called by MyListView, if del is pressed
+			/// Called by if del is pressed
  			virtual void deleteCurrentItems()
  				throw() {};
 
-			
 		  protected slots:
-			
+
  			virtual void deselectOtherControls_();
 
 			/*_ Call deselectOtherControls_ if a selection exists.

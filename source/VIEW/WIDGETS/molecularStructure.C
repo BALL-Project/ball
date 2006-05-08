@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.8 2006/05/03 22:07:38 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.9 2006/05/08 21:55:40 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -104,9 +104,11 @@ namespace BALL
 			getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 
 			amber_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Amber", this, SLOT(chooseAmberFF()));
+			amber_ff_id_->setCheckable(true);
 			setMenuHint("Use Amber Force Field");
 			
 			charmm_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Charmm", this, SLOT(chooseCharmmFF()));
+			charmm_ff_id_->setCheckable(true);
 			setMenuHint("Use Charmm Force Field");
 
 			setup_ff_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Options", this, 

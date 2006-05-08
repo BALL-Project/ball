@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.17.2.4 2006/03/17 15:42:38 amoll Exp $
+// $Id: genericControl.C,v 1.17.2.5 2006/05/08 21:55:39 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
@@ -98,7 +98,6 @@ namespace BALL
 
 			delete item;
 		}
-
 
 	} // namespace VIEW
 } // namespace BALL
