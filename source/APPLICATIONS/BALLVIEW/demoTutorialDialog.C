@@ -177,7 +177,8 @@ void DemoTutorialDialog::show()
 		initTutorial_();
 	}
 
-	text_browser->setSource(QUrl(String(prefix_ + "01.html").c_str()));
+	QUrl qurl = QUrl::fromLocalFile((prefix_ + "01.html").c_str());
+	text_browser->setSource(qurl);
 
 	QDialog::show();
 	resize(270, 500);
@@ -250,7 +251,8 @@ void DemoTutorialDialog::nextStepClicked()
 
 	id = prefix_ + id + ".html";
 
-	text_browser->setSource(QUrl(id.c_str())); 
+	QUrl qurl = QUrl::fromLocalFile(id.c_str());
+	text_browser->setSource(qurl);
 	next_button->setEnabled(false);
 
 	current_step_ ++;

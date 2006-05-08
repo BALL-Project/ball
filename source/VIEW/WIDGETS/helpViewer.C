@@ -104,7 +104,7 @@ namespace BALL
 			throw()
 		{
 			DockWidget::initializeWidget(main_control);
-			insertMenuEntry(MainControl::HELP, project_ + " Docu", this, SLOT(showHelp()));
+			insertMenuEntry(MainControl::HELP, project_ + " Documentation", this, SLOT(showHelp()));
 			if (whats_this_)
 			{
 				insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(enterWhatsThisMode()));	
