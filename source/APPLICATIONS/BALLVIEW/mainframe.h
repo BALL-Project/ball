@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.16.2.3 2006/03/21 15:32:22 amoll Exp $
+// $Id: mainframe.h,v 1.16.2.4 2006/05/09 09:34:47 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -60,6 +60,9 @@ namespace BALL
 
 		// Help menu
 		void about();
+
+		///
+		void howToCite();
 
 		/** Open a file.
 				Calls MolecularFileDialog::openFile

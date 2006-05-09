@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.C,v 1.34.2.4 2006/02/01 14:19:48 amoll Exp $
+// $Id: downloadPDBFile.C,v 1.34.2.5 2006/05/09 09:30:21 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
@@ -120,8 +120,9 @@ bool DownloadPDBFile::threadedDownload_(const String& url)
 		}
 		else
 		{
-			setStatusbarText(String("Failed to download file, ErrorCode ") + 
-											 String(thread_->getTCPTransfer().getStatusCode()), true);
+			setStatusbarText(String("Failed to download file, an ") + 
+											 thread_->getTCPTransfer().getErrorCode() + " + occured. " +
+											 "Maybe you need a proxy?" , true);
 		}
 		error_ = true;
 		return false;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.19 2006/05/08 21:56:28 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.20 2006/05/09 09:34:47 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -165,6 +165,7 @@ namespace BALL
 		insertMenuEntry(MainControl::HELP, "Tutorial", demo, SLOT(showTutorial()));
 		insertPopupMenuSeparator(MainControl::HELP);
 		insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()));
+		insertMenuEntry(MainControl::HELP, "How to cite", this, SLOT(howToCite()));
 
 		// Menu ------------------------------------------------------------------------
 //   		menuBar()->setSeparator(QMenuBar::InWindowsStyle);
@@ -399,6 +400,11 @@ namespace BALL
 	{
 		MainControl::checkMenus();
 		save_project_action_->setEnabled(!composites_locked_);
+	}
+
+	void Mainframe::howToCite()
+	{
+		HelpViewer::getInstance(1)->showHelp("tips.html", "cite");
 	}
 
 	void Mainframe::about()
