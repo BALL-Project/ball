@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.39 2005/12/23 17:03:06 amoll Exp $
+// $Id: TCPTransfer.C,v 1.39.2.1 2006/05/09 09:30:17 amoll Exp $
 //
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
@@ -855,6 +855,32 @@ namespace BALL
 	bool TCPTransfer::usingProxy() const
 	{
 		return proxy_address_ != "" && proxy_port_    != 0;
+	}
+
+	String TCPTransfer::getErrorCode() const
+		throw()
+	{
+		switch(status_)
+		{
+			case OK: return "No Error";
+			case GETHOSTBYNAME__ERROR: return "HostByName Error";
+			case SOCKET__ERROR: return "Socket Error";
+			case CONNECT__ERROR: return "Connect Error";
+			case RECV__ERROR: return "Receive Error";
+			case OUTOFMEMORY__ERROR: return "OutOfMemory Error";
+			case BODY__ERROR: return "Body Error";
+			case UNKNOWN__ERROR: return "Unknown Error";
+			case ADDRESS__ERROR: return "Address Error";
+			case UNINITIALIZED__ERROR: return "Unitialized Error";
+			case TRANSFER__ERROR: return "Transfer Error";
+			case SEND__ERROR: return "Send Error";
+			case PORT__ERROR: return "Port Error";
+			case UNKNOWN_PROTOCOL__ERROR: return "UnknownProtocol Error";
+			case LOGON__ERROR: return "Logon Error";
+			case PROXY__ERROR: return "Proxy Error";
+			case FILENOTFOUND__ERROR: return "FileNotFound Error";
+		}
+		return "Unknown Error";
 	}
 
 } // namespace BALL

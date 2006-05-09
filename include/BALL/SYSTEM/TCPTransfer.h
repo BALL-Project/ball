@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.26 2005/12/23 17:02:06 amoll Exp $
+// $Id: TCPTransfer.h,v 1.26.2.1 2006/05/09 09:29:26 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
@@ -166,6 +166,10 @@ namespace BALL
 			{
 				return status_;
 			}
+
+			/// 
+			String getErrorCode() const
+				throw();
 				
 			/// Return the amount of received bytes.
 			Position getReceivedBytes() const
