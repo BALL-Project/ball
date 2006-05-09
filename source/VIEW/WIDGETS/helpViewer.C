@@ -142,7 +142,13 @@ namespace BALL
  			}
 
 			if (entry != "") browser_->find(entry.c_str(), QTextDocument::FindCaseSensitively);
-			show();
+
+			if (!isVisible())
+			{
+				show();
+				setFloating(true);
+				showMaximized();
+			}
 		}
 
 		void HelpViewer::onNotify(Message *message)
