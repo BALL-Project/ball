@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.58.8.1 2006/05/08 22:48:21 amoll Exp $
+// $Id: standardPredicates.C,v 1.58.8.2 2006/05/09 15:27:57 amoll Exp $
 //
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -1853,7 +1853,15 @@ namespace BALL
 		vector<HashSet<const Atom*> > result;
 
 		// will have to be adapted:
-		result = matcher_.match(*mol, argument_);
+		try
+		{
+			result = matcher_.match(*mol, argument_);
+		}
+		catch(...)
+		{
+			Log.error() << "Problem in SMARTS expression: " << argument_ << std::endl;
+			return false;
+		}
 
 		for (Position p = 0; p < result.size(); p++)
 		{
