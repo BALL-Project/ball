@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.15 2006/04/24 15:32:04 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.16 2006/05/09 15:48:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -18,8 +18,6 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
-
-#include <BALL/STRUCTURE/smartsMatcher.h>
 
 #include <QtGui/qpushbutton.h> 
 #include <QtGui/qlineedit.h> 
@@ -46,7 +44,6 @@ namespace BALL
 					selected_(),
 					information_(),
 					selector_edit_(0),
-					smarts_edit_(0),
 					context_menu_(this),
 					model_menu_(this),
 					edit_menu_(this),
@@ -69,14 +66,6 @@ namespace BALL
 			listview->headerItem()->setSizeHint(0, QSize(20, 120));
 			listview->headerItem()->setSizeHint(1, QSize(20, 60));
  			lay->addWidget(listview,0, 0, 1, -1);
-
-			smarts_edit_ = new QComboBox(this);
-			smarts_edit_->setAutoCompletion(true);
-			smarts_edit_->setDuplicatesEnabled(false);
-			smarts_edit_->setEditable(true);
-			smarts_edit_->resize(100, 25);
-			smarts_edit_->setMinimumSize(50,25);
-			lay->addWidget(smarts_edit_,1, 0, 1, -1);
 
 			selector_edit_ = new QComboBox(this);
 			selector_edit_->setAutoCompletion(true);
@@ -1056,6 +1045,11 @@ namespace BALL
 				setStatusbarText(String("Invalid expression ") + e.getMessage(), true);
 				return 0;
 			}
+			catch(Exception::GeneralException e)
+			{
+				setStatusbarText(e.getMessage(), true);
+				return 0;
+			}
 
 			HashSet<Composite*> roots;
 			Size nr_of_atoms = 0;
@@ -1262,7 +1256,6 @@ namespace BALL
 			}
 
 			connect(selector_edit_->lineEdit(), SIGNAL(returnPressed()), this, SLOT(applySelector()));
-			connect(smarts_edit_->lineEdit(), SIGNAL(returnPressed()), this, SLOT(applySMARTSSelector()));
 		}
 
 		void MolecularControl::writePreferences(INIFile& inifile)
@@ -1328,66 +1321,6 @@ namespace BALL
 			ao.showOnlySelection(true);
 			ao.setParent(dynamic_cast<AtomContainer*>(item_to_composite_[context_item_]));
 			ao.exec();
-		}
-
-		Size MolecularControl::applySMARTSSelector()
-		{
-			if (parentWidget() == 0) return 0;
-			if (smarts_edit_->currentText() == "")
-			{
-				getMainControl()->clearSelection();
-				return 0;
-			}
-
-			SmartsMatcher s;
-
-			HashSet<Composite*> roots;
-			Size nr_of_matches = 0;
-
-			try
-			{
-				CompositeManager::CompositeIterator it = getMainControl()->getCompositeManager().begin();
-				for(; it != getMainControl()->getCompositeManager().end(); it++)
-				{
-					MoleculeIterator mit = ((System*)*it)->beginMolecule();
-					for (;+mit; ++mit)
-					{
-						std::vector<HashSet<const Atom*> > matches = s.match(*mit, ascii(smarts_edit_->currentText()));
-						nr_of_matches += matches.size();
-						for (Position p = 0; p < matches.size(); p++)
-						{
-							HashSet<const Atom*>& set = matches[p];
-							HashSet<const Atom*>::Iterator sit = set.begin();
-							for (;+sit; ++sit)
-							{
-								Atom& a = (*(Atom*)*sit);
-								a.setSelected(true);
-								roots.insert(&a.getRoot());
-							}
-						}
-					}
-				}
-			}
-			catch(...)
-			{
-				setStatusbarText("Invalid Expression!", true);
-				return 0;
-			}
-
-			HashSet<Composite*>::Iterator sit = roots.begin();
-			for (; sit != roots.end(); sit++)
-			{
-				getMainControl()->updateRepresentationsOf(**sit, true, true);
-			}
-
-			NewSelectionMessage* nm = new NewSelectionMessage;
-			nm->setOpenItems(true);
-			getMainControl()->sendMessage(*nm);
-
-			setStatusbarText(String(nr_of_matches) + "Matches");
-			listview->setFocus();
-
-			return nr_of_matches;
 		}
 
 		void MolecularControl::showDistance()
