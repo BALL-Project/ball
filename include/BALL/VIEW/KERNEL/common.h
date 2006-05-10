@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.40.2.10 2006/05/10 14:20:40 amoll Exp $
+// $Id: common.h,v 1.40.2.11 2006/05/10 14:35:06 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -133,7 +133,7 @@ namespace BALL
 		};
 
 		/// Number of drawing modes
-		#define BALL_VIEW_MAXIMAL_DRAWING_MODE 3
+		#define BALL_VIEW_MAXIMAL_DRAWING_MODE 4
 
 		/// Enumeration for Drawing Precisions.
 		enum DrawingPrecision

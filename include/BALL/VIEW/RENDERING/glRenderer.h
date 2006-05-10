@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36.2.14 2006/05/07 21:30:10 amoll Exp $
+// $Id: glRenderer.h,v 1.36.2.15 2006/05/10 14:30:29 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -447,6 +447,8 @@ namespace BALL
 			void removeTextureFor_(const RegularData3D& grid);
 			void initGridObject_(GridVisualisation& slice, const RegularData3D& grid);
 			void setupGridClipPlanes_(const GridVisualisation& slice);
+			inline void paintTex_(const Vector3& x1, const Vector3& x2, const Vector3& x3, const Vector3& x4, const Vector3& n, 	
+														const RegularData3D& grid);
 
 			Scene* 								scene_;
 
@@ -496,6 +498,7 @@ namespace BALL
 			bool 										drawed_mesh_;
 			GLUquadricObj*  GLU_quadric_obj_;
 			HashMap<const RegularData3D*, Position> grid_to_texture_;
+			Position cel_texture_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

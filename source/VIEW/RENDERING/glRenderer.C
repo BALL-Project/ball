@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.43 2006/05/07 21:30:19 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.44 2006/05/10 14:30:39 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -260,6 +260,24 @@ namespace BALL
       // glHint( GL_LINE_SMOOTH_HINT, GL_DONT_CARE );
 
 			line_list_.endDefinition();
+
+			float shader[32] = { 0.2, 0.2, 0.2, 0.2, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+
+			float cel_shader_data[32][3];
+
+			for (Position p = 0; p < 32; p++)
+			{
+				cel_shader_data[p][0] = shader[p];
+				cel_shader_data[p][1] = shader[p];
+				cel_shader_data[p][2] = shader[p];
+			}
+
+			glGenTextures (1, &cel_texture_);		
+			glBindTexture (GL_TEXTURE_1D, cel_texture_);	
+			glTexParameteri (GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	
+			glTexParameteri (GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexImage1D (GL_TEXTURE_1D, 0, GL_RGB, 32, 0, GL_RGB , GL_FLOAT, cel_shader_data);
+			glBindTexture (GL_TEXTURE_1D, 0);	
 
 			return true;
 		}
@@ -1084,7 +1102,7 @@ namespace BALL
 				}
 			}
 			///////////////////////////////////////////////////////////////////
-			else 				// draw the triangles solid
+			else if (drawing_mode_ == DRAWING_MODE_SOLID)				// draw the triangles solid
 			{
 				glBegin(GL_TRIANGLES);
 
@@ -1127,6 +1145,75 @@ namespace BALL
 
 				glEnd();
 			}
+			else 		// draw the triangles per cel shading
+			{
+				glDisable(GL_LIGHTING);
+				float m[16];
+				glGetFloatv (GL_MODELVIEW_MATRIX, m);
+				glBegin(GL_TRIANGLES);
+				glEnable (GL_TEXTURE_1D);						
+				glBindTexture (GL_TEXTURE_1D, cel_texture_);	
+
+				Matrix4x4 matrix(m);
+
+				vector<float> tex_values;
+				Vector3 v;
+				Vector3 vv = scene_->getStage()->getCamera().getViewVector();
+				vv.normalize();
+				float value;
+				for (Position p = 0; p < mesh.normal.size(); p++)
+				{
+					v = matrix * mesh.normal[p];
+					if (!Maths::isZero(v.getSquareLength())) v.normalize();
+					value = v * vv;
+					if (value < 0.) value = 0.;
+					tex_values.push_back(value);
+				}
+
+				Size nr_triangles = mesh.triangle.size();
+
+				for (Size index = 0; index < nr_triangles; ++index)
+				{
+					Position p = mesh.triangle[index].v1;
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					glTexCoord1f (tex_values[p]);
+					vertexVector3_(mesh.vertex[p]);
+
+					p = mesh.triangle[index].v2;
+					glTexCoord1f (tex_values[p]);
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					vertexVector3_(mesh.vertex[p]);
+
+					p = mesh.triangle[index].v3;
+					glTexCoord1f (tex_values[p]);
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					vertexVector3_(mesh.vertex[p]);
+				}
+
+				glEnd();
+				glDisable(GL_TEXTURE_1D);
+				glEnable(GL_BLEND);												// Enable Blending
+				glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);		// Set The Blend Mode
+				glPolygonMode(GL_BACK, GL_LINE);						// Draw Backfacing Polygons As Wireframes
+				glLineWidth(5);														// Set The Line Width
+				glCullFace(GL_FRONT);											// Don't Draw Any Front-Facing Polygons
+				glDepthFunc(GL_LEQUAL);										// Change The Depth Mode 
+				setColorRGBA_(ColorRGBA(0.,0.,0.,0.5));
+				glBegin (GL_TRIANGLES);											// Tell OpenGL What We Want To Draw
+
+				for (Size index = 0; index < nr_triangles; ++index)
+				{
+					vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
+					vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
+					vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+				}
+
+				glEnd ();													// Tell OpenGL We've Finished
+				glDepthFunc(GL_LESS);							// Reset The Depth-Testing Mode
+				glCullFace(GL_BACK);							// Reset The Face To Be Culled 
+				glPolygonMode (GL_BACK, GL_FILL);	// Reset Back-Facing Polygon Drawing Mode
+				glDisable(GL_BLEND);							// Disable Blending
+			}
 		}
 
 
@@ -1136,7 +1223,7 @@ namespace BALL
 			{
 				gluQuadricDrawStyle(GLU_quadric_obj_, GLU_LINE);
 			}
-			else if (mode == DRAWING_MODE_SOLID)
+			else if (mode >= DRAWING_MODE_SOLID)
 			{
 				gluQuadricDrawStyle(GLU_quadric_obj_, GLU_FILL);
 			}

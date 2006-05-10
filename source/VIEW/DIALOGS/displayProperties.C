@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.10 2006/04/05 13:37:58 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.11 2006/05/10 14:30:37 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -278,7 +278,7 @@ void DisplayProperties::selectModel(int index)
 
 void DisplayProperties::selectMode(int index)
 {
-	if (index > VIEW::DRAWING_MODE_SOLID)
+	if (index > VIEW::DRAWING_MODE_TOON)
 	{
 		BALLVIEW_DEBUG
 		return;
