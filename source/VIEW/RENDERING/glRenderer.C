@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.44 2006/05/10 14:30:39 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.45 2006/05/10 14:49:54 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1044,20 +1044,10 @@ namespace BALL
 			{
 				glBegin(GL_POINTS);
 
-				if (!multiple_colors)
+				for (Size index = 0; index < mesh.vertex.size(); ++index)
 				{
-					for (Size index = 0; index < mesh.vertex.size(); ++index)
-					{
-						vertexVector3_(mesh.vertex[index]);
-					}
-				}
-				else
-				{
-					for (Size index = 0; index < mesh.vertex.size(); ++index)
-					{
-						setColorRGBA_(mesh.colors[index]);
-						vertexVector3_(mesh.vertex[index]);
-					}
+					if (multiple_colors) setColorRGBA_(mesh.colors[index]);
+					vertexVector3_(mesh.vertex[index]);
 				}
 
 				glEnd();
@@ -1066,39 +1056,22 @@ namespace BALL
 			else if (drawing_mode_ == DRAWING_MODE_WIREFRAME)
 			{
 				Size nr_triangles = mesh.triangle.size();
-				
-				if (!multiple_colors)
+				for (Size index = 0; index < nr_triangles; ++index)
 				{
-					for (Size index = 0; index < nr_triangles; ++index)
-					{
-						glBegin(GL_LINE_STRIP);
-						normalVector3_(normal_vector_);
+					glBegin(GL_LINE_STRIP);
+					
+					normalVector3_(normal_vector_);
 
-						vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
-						vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
-						vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
-						glEnd();
-					}
-				}
-				else
-				{
-					for (Size index = 0; index < nr_triangles; ++index)
-					{
-						glBegin(GL_LINE_STRIP);
-						
-						normalVector3_(normal_vector_);
+					if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v1]);
+					vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
 
-						setColorRGBA_(mesh.colors[mesh.triangle[index].v1]);
-						vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
+					if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v2]);
+					vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
 
-						setColorRGBA_(mesh.colors[mesh.triangle[index].v2]);
-						vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
-
-						setColorRGBA_(mesh.colors[mesh.triangle[index].v3]);
-						vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
-						
-						glEnd();
-					}
+					if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v3]);
+					vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+					
+					glEnd();
 				}
 			}
 			///////////////////////////////////////////////////////////////////
@@ -1108,39 +1081,22 @@ namespace BALL
 
 				Size nr_triangles = mesh.triangle.size();
 
-				if (!multiple_colors)
+				for (Size index = 0; index < nr_triangles; ++index)
 				{
-					for (Size index = 0; index < nr_triangles; ++index)
-					{
-						normalVector3_(mesh.normal[mesh.triangle[index].v1]);
-						vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
+					Position p = mesh.triangle[index].v1;
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					normalVector3_(mesh.normal[p]);
+					vertexVector3_(mesh.vertex[p]);
 
-						normalVector3_(mesh.normal[mesh.triangle[index].v2]);
-						vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
+					p = mesh.triangle[index].v2;
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					normalVector3_(mesh.normal[p]);
+					vertexVector3_(mesh.vertex[p]);
 
-						normalVector3_(mesh.normal[mesh.triangle[index].v3]);
-						vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
-					}
-				}
-				else
-				{
-					for (Size index = 0; index < nr_triangles; ++index)
-					{
-						Position p = mesh.triangle[index].v1;
-						setColorRGBA_(mesh.colors[p]);
-						normalVector3_(  mesh.normal[p]);
-						vertexVector3_(  mesh.vertex[p]);
-
-						p = mesh.triangle[index].v2;
-						setColorRGBA_(mesh.colors[p]);
-						normalVector3_(  mesh.normal[p]);
-						vertexVector3_(  mesh.vertex[p]);
-
-						p = mesh.triangle[index].v3;
-						setColorRGBA_(mesh.colors[p]);
-						normalVector3_(  mesh.normal[p]);
-						vertexVector3_(  mesh.vertex[p]);
-					}
+					p = mesh.triangle[index].v3;
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					normalVector3_(mesh.normal[p]);
+					vertexVector3_(mesh.vertex[p]);
 				}
 
 				glEnd();
@@ -1149,10 +1105,10 @@ namespace BALL
 			{
 				glDisable(GL_LIGHTING);
 				float m[16];
-				glGetFloatv (GL_MODELVIEW_MATRIX, m);
+				glGetFloatv(GL_MODELVIEW_MATRIX, m);
 				glBegin(GL_TRIANGLES);
-				glEnable (GL_TEXTURE_1D);						
-				glBindTexture (GL_TEXTURE_1D, cel_texture_);	
+				glEnable(GL_TEXTURE_1D);						
+				glBindTexture(GL_TEXTURE_1D, cel_texture_);	
 
 				Matrix4x4 matrix(m);
 
@@ -1192,14 +1148,14 @@ namespace BALL
 
 				glEnd();
 				glDisable(GL_TEXTURE_1D);
-				glEnable(GL_BLEND);												// Enable Blending
+				glEnable(GL_BLEND);																	// Enable Blending
 				glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);		// Set The Blend Mode
-				glPolygonMode(GL_BACK, GL_LINE);						// Draw Backfacing Polygons As Wireframes
-				glLineWidth(5);														// Set The Line Width
-				glCullFace(GL_FRONT);											// Don't Draw Any Front-Facing Polygons
-				glDepthFunc(GL_LEQUAL);										// Change The Depth Mode 
+				glPolygonMode(GL_BACK, GL_LINE);										// Draw Backfacing Polygons As Wireframes
+				glLineWidth(5);																			// Set The Line Width
+				glCullFace(GL_FRONT);																// Don't Draw Any Front-Facing Polygons
+				glDepthFunc(GL_LEQUAL);															// Change The Depth Mode 
 				setColorRGBA_(ColorRGBA(0.,0.,0.,0.5));
-				glBegin (GL_TRIANGLES);											// Tell OpenGL What We Want To Draw
+				glBegin (GL_TRIANGLES);															// Tell OpenGL What We Want To Draw
 
 				for (Size index = 0; index < nr_triangles; ++index)
 				{
@@ -1245,7 +1201,7 @@ namespace BALL
 			Position slices[4] = {6, 14, 24, 64};
 			Position stacks[4] = {4, 8, 16, 64};
 
-			for (Position mode = DRAWING_MODE_DOTS; mode <= DRAWING_MODE_SOLID; mode++)
+			for (Position mode = DRAWING_MODE_DOTS; mode < BALL_VIEW_MAXIMAL_DRAWING_MODE; mode++)
 			{
 				initGLU_((DrawingMode)mode);
 
@@ -1283,7 +1239,7 @@ namespace BALL
 
 			Position slices[4] = {6, 10, 20, 64};
 
-			for (Position mode = DRAWING_MODE_DOTS; mode <= DRAWING_MODE_SOLID; mode++)
+			for (Position mode = DRAWING_MODE_DOTS; mode < BALL_VIEW_MAXIMAL_DRAWING_MODE; mode++)
 			{
 				initGLU_((DrawingMode)mode);
 
