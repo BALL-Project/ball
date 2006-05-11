@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: view-common.sip,v 1.6 2005/12/23 17:03:00 amoll Exp $
+// $Id: view-common.sip,v 1.6.2.1 2006/05/11 14:17:32 amoll Exp $
 //
 
 %ModuleHeaderCode 
@@ -34,7 +34,8 @@ enum DrawingMode
 {
 	DRAWING_MODE_DOTS = 0,
 	DRAWING_MODE_WIREFRAME,
-	DRAWING_MODE_SOLID
+	DRAWING_MODE_SOLID,
+	DRAWING_MODE_TOON
 };
 
 enum DrawingPrecision
