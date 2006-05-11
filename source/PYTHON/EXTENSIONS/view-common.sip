@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: view-common.sip,v 1.6.2.1 2006/05/11 14:17:32 amoll Exp $
+// $Id: view-common.sip,v 1.6.2.2 2006/05/11 14:18:32 amoll Exp $
 //
 
 %ModuleHeaderCode 
@@ -60,7 +60,10 @@ enum ModelType
 	MODEL_HBONDS,
   MODEL_FORCES,
 	MODEL_LABEL,
-	MODEL_CONTOUR_SURFACE
+	MODEL_CONTOUR_SURFACE,
+	MODEL_GRID_SLICE,
+	MODEL_GRID_VOLUME,
+	MODEL_FIELD_LINES
 };
 
 enum ColoringMethod
