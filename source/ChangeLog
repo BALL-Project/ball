@@ -19,6 +19,7 @@ Added:
 - Further Python example scripts
 - Improved rendering of transparent surfaces
 - SMARTS support
+- Toon Drawing Mode for OpenGL 
 - Capping planes
 - Improved feedback for users: e.g. Busy mouse cursor and statusbar entries
 - Added improved coordinate system
