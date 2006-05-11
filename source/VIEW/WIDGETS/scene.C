@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.46 2006/05/05 14:35:53 amoll Exp $
+// $Id: scene.C,v 1.174.2.47 2006/05/11 13:49:33 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -774,7 +774,8 @@ namespace BALL
 			throw()
 		{
 			if (mode == DISPLAY_LISTS_RENDERING &&
-					!repr.hasProperty("RENDER_DIRECT"))
+					!repr.hasProperty("RENDER_DIRECT") && 
+					repr.getDrawingMode() != DRAWING_MODE_TOON)
 			{
 				gl_renderer_.drawBuffered(repr);
 				return;
