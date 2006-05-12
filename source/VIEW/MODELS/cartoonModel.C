@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.60.2.2 2006/05/12 08:36:02 amoll Exp $
+// $Id: cartoonModel.C,v 1.60.2.3 2006/05/12 08:50:19 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -1483,13 +1483,13 @@ void AddCartoonModel::createTriangle_(Mesh& mesh, const Atom& a1, const Atom& a2
 	vertices.push_back(p1 - normal);
 	vertices.push_back(p2 - normal);
 	vertices.push_back(p3 - normal);
-	normals.push_back(normal);
-	normals.push_back(normal);
-	normals.push_back(normal);
+	normals.push_back(-normal);
+	normals.push_back(-normal);
+	normals.push_back(-normal);
 
-	t.v1 = vertices.size() - 3;
+	t.v3 = vertices.size() - 3;
 	t.v2 = vertices.size() - 2;
-	t.v3 = vertices.size() - 1;
+	t.v1 = vertices.size() - 1;
 	triangles.push_back(t);
 
 	if (sa1 == 0) return;
@@ -1725,13 +1725,13 @@ void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 
 		mesh->vertex.push_back(middle - axis);
 		mesh->vertex.push_back(middle + axis);
-			mesh->normal.push_back(-axis);
-			mesh->normal.push_back(axis);
+		mesh->normal.push_back(-axis);
+		mesh->normal.push_back(axis);
 
 		mesh->vertex.push_back(pos[0] - axis);
 		mesh->vertex.push_back(pos[0] + axis);
-			mesh->normal.push_back(-axis);
-			mesh->normal.push_back(axis);
+		mesh->normal.push_back(-axis);
+		mesh->normal.push_back(axis);
 
 		for (Position p = 0; p < 6; p++)
 		{
