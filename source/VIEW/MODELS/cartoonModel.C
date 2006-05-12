@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.60.2.3 2006/05/12 08:50:19 amoll Exp $
+// $Id: cartoonModel.C,v 1.60.2.4 2006/05/12 09:00:35 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -22,6 +22,7 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/protein.h>
+#include <BALL/KERNEL/PTE.h>
 
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -1802,13 +1803,16 @@ void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 				}
 				else
 				{
-					if (a1->getName() == "N3" ||
-							(a1->getName() == "N1" && r->getName() == "G"))
+					Atom* a2 = (*bit).getPartner(*a1);
+
+ 					if (a1->getElement().getSymbol() == "H" ||
+ 					    a2->getElement().getSymbol() == "H" ||
+					    a1->getName() == "N3" ||
+							a1->getName() == "N1" && r->getName() == "G")
 					{
 						continue;
 					}
 					
-					Atom* a2 = (*bit).getPartner(*a1);
 					Sphere* s = new Sphere;
 					s->setComposite(a1);
 					s->setPosition(a1->getPosition());

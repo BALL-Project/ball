@@ -111,6 +111,9 @@
           <height>40</height>
          </size>
         </property>
+        <property name="toolTip" >
+         <string>Label Color</string>
+        </property>
         <property name="autoFillBackground" >
          <bool>true</bool>
         </property>
@@ -180,6 +183,9 @@
           <strikeout>false</strikeout>
          </font>
         </property>
+        <property name="toolTip" >
+         <string>Font Preview</string>
+        </property>
         <property name="frameShape" >
          <enum>QFrame::Panel</enum>
         </property>
@@ -210,6 +216,9 @@
           <height>28</height>
          </size>
         </property>
+        <property name="toolTip" >
+         <string>Select the font</string>
+        </property>
         <property name="text" >
          <string>Select</string>
         </property>
@@ -236,7 +245,7 @@
       </size>
      </property>
      <property name="toolTip" >
-      <string>Close window and create label</string>
+      <string>Add the label(s) for all highlighted items in the list of molecules</string>
      </property>
      <property name="text" >
       <string>&amp;Apply</string>

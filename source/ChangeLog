@@ -36,6 +36,7 @@ Fixed:
 - Polished layout for some dialogs
 - Indicator in statusbar for Server and simulations was missing
 - Added spliting support for Contour Surfaces
+- Some flaws in the Cartoon Model
 - Sensible default styles on the individual platforms
 - Renamed classes: PrimitiveManager -> RepresentationManager
 
