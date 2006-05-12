@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.47 2006/05/12 00:30:03 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.48 2006/05/12 12:47:56 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1138,6 +1138,9 @@ namespace BALL
 				vector<float> tex_values;
 				tex_values.reserve(mesh.normal.size());
  				Vector3 vv = -scene_->getStage()->getCamera().getViewVector() ;
+				vv.normalize();
+				vv += scene_->getStage()->getCamera().getLookUpVector() / 3.0;
+				vv += scene_->getStage()->getCamera().getRightVector() / 3.0;
 				vv.normalize();
 
 				Vector3 v;
