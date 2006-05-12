@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.46 2006/05/11 13:46:09 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.47 2006/05/12 00:30:03 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1045,6 +1045,8 @@ namespace BALL
 				multiple_colors = false;
 			}
 
+			Size nr_triangles = mesh.triangle.size();
+
 			///////////////////////////////////////////////////////////////////
 			if (drawing_mode_ == DRAWING_MODE_DOTS)
 			{
@@ -1059,7 +1061,6 @@ namespace BALL
 			///////////////////////////////////////////////////////////////////
 			else if (drawing_mode_ == DRAWING_MODE_WIREFRAME)
 			{
-				Size nr_triangles = mesh.triangle.size();
 				for (Size index = 0; index < nr_triangles; ++index)
 				{
 					glBegin(GL_LINE_STRIP);
@@ -1081,8 +1082,6 @@ namespace BALL
 			///////////////////////////////////////////////////////////////////
 			else if (drawing_mode_ == DRAWING_MODE_SOLID)				// draw the triangles solid
 			{
-				Size nr_triangles = mesh.triangle.size();
-
 				glBegin(GL_TRIANGLES);
 				for (Size index = 0; index < nr_triangles; ++index)
 				{
@@ -1106,8 +1105,6 @@ namespace BALL
 			else 		// draw the triangles per cel shading
 			{	
 				// a part of this code stems from http://nehe.gamedev.net lesson 37
-				Size nr_triangles = mesh.triangle.size();
-
 				glPolygonMode(GL_BACK, GL_LINE);										// Draw Backfacing Polygons As Wireframes
 				glLineWidth(5);																			// Set The Line Width
 				glEnable(GL_CULL_FACE);
