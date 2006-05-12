@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.60.2.1 2006/04/07 18:26:07 amoll Exp $
+// $Id: cartoonModel.C,v 1.60.2.2 2006/05/12 08:36:02 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -1698,6 +1698,7 @@ void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 
 		for (Position p = 0; p < 5; p++)
 		{
+			// render outside of ribose, mesh is done below
 			drawRiboseAtoms_(atoms[p], atoms[p + 1], pos[p], pos[p + 1]);
 		}
 
@@ -1724,31 +1725,32 @@ void AddCartoonModel::buildWatsonCrickModel_(Position first, Position)
 
 		mesh->vertex.push_back(middle - axis);
 		mesh->vertex.push_back(middle + axis);
+			mesh->normal.push_back(-axis);
+			mesh->normal.push_back(axis);
 
 		mesh->vertex.push_back(pos[0] - axis);
 		mesh->vertex.push_back(pos[0] + axis);
+			mesh->normal.push_back(-axis);
+			mesh->normal.push_back(axis);
 
 		for (Position p = 0; p < 6; p++)
 		{
 			mesh->vertex.push_back(pos[p] - axis);
 			mesh->vertex.push_back(pos[p] + axis);
+			mesh->normal.push_back(-axis);
+			mesh->normal.push_back(axis);
 
 			const Size n = mesh->vertex.size();
 			
-			t.v1 = 0;
+			t.v3 = 0;
 			t.v2 = n - 4;
-			t.v3 = n - 2;
+			t.v1 = n - 2;
 			mesh->triangle.push_back(t);
 
 			t.v1 = 1;
 			t.v2 = n - 3;
 			t.v3 = n - 1;
-			mesh->triangle.push_back(t);
-		}
-
-		for (Position p = 0; p < mesh->vertex.size(); p++)
-		{
-			mesh->normal.push_back(axis);
+ 			mesh->triangle.push_back(t);
 		}
 
 		// --------------------------------------------
