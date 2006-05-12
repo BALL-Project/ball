@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.17 2006/05/11 14:01:44 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.18 2006/05/12 00:03:15 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -731,11 +731,16 @@ namespace BALL
 			HashSet<Composite*>::ConstIterator sit = selection.begin();
 			for (; +sit; ++sit)
 			{
+				if (!composite_to_item_.has(*sit)) continue;
 				composite_to_item_[*sit]->setCheckState(1, Qt::Checked);
 				Composite::ChildCompositeIterator cit = (**sit).beginChildComposite();
+				HashMap<Composite*, QTreeWidgetItem*>::Iterator fit;
 				for (; +cit; ++cit)
 				{
-					composite_to_item_[&*cit]->setCheckState(1, Qt::Checked);
+					fit = composite_to_item_.find(&*cit);
+					if (!+fit) continue;
+					
+					fit->second->setCheckState(1, Qt::Checked);
 				}
 			}
 
