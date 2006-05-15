@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.21.2.2 2006/05/15 19:55:07 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.21.2.3 2006/05/15 20:06:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -109,9 +109,6 @@ namespace BALL
 					This method takes a System and saves it into a molecular file, selected from a QFileDialog.
 			 */
 			virtual bool writeFile();
-
-			///
-			virtual System* openFile();
 
 			///
 			System* openPDBFile();
