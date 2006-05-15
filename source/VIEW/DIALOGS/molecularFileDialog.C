@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.32.2.3 2006/03/16 00:09:33 amoll Exp $$
+// $Id: molecularFileDialog.C,v 1.32.2.4 2006/05/15 21:10:09 amoll Exp $$
 //
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -58,6 +58,13 @@ namespace BALL
 
 			connect(main_control.initPopupMenu(MainControl::FILE), SIGNAL(aboutToShow()), 
 							this, SLOT(checkMenuEntries()));
+			types_menu_ = getMainControl()->initPopupMenu(MainControl::FILE_OPEN)
+					->addMenu("Structure...");
+			types_menu_->addAction("PDB", this, SLOT(openPDBFile()));
+			types_menu_->addAction("HIN", this, SLOT(openHINFile()));
+			types_menu_->addAction("MOL", this, SLOT(openMOLFile()));
+			types_menu_->addAction("MOL2", this, SLOT(openMOL2File()));
+			types_menu_->addAction("SD", this, SLOT(openSDFile()));
 		}
 		
 		void MolecularFileDialog::readFiles()
@@ -520,8 +527,9 @@ namespace BALL
 		void MolecularFileDialog::checkMenuEntries()
 			throw()
 		{
-			save_id_->setEnabled(getMainControl()->getSelectedSystem() && 
-													!getMainControl()->isBusy());
+			bool busy = getMainControl()->isBusy();
+			save_id_->setEnabled(getMainControl()->getSelectedSystem() && !busy);
+			types_menu_->setEnabled(!busy);
 		}
 
 
@@ -530,5 +538,61 @@ namespace BALL
 			: QWidget(),
 				ModularWidget(mfd)
 		{}
+
+		System* MolecularFileDialog::openFile_(String type)
+		{
+			QStringList files = QFileDialog::getOpenFileNames(
+													0,
+													"Choose a molecular file to open",
+													getWorkingDir().c_str(),
+													"*.*");
+
+			System* system = 0;
+ 		  for (QStringList::Iterator it = files.begin(); it != files.end(); ++it) 
+			{
+				vector<String> fields;
+				String seperators(FileSystem::PATH_SEPARATOR);
+				// workaround on windows: QT returns the filename in linux style
+				// but I am not sure, if this will stay this way.
+#ifdef BALL_PLATFORM_WINDOWS
+				 seperators += "/";
+#endif
+				String file = ascii(*it);
+				Position p = file.split(fields, seperators.c_str()) -1;
+				String filename = fields[p];				
+				setWorkingDirFromFilename_(file);
+
+				// construct a name for the system(the filename without the dir path)
+				system = openFile(file, type, filename);
+			}
+
+			return system;
+		}
+
+		System* MolecularFileDialog::openPDBFile()
+		{
+			return openFile_("PDB");
+ 		} 
+
+		System* MolecularFileDialog::openHINFile()
+		{
+			return openFile_("HIN");
+		}
+
+		System* MolecularFileDialog::openMOLFile()
+		{
+			return openFile_("MOL");
+		}
+
+		System* MolecularFileDialog::openMOL2File()
+		{
+			return openFile_("MOL2");
+		}
+
+		System* MolecularFileDialog::openSDFile()
+ 		{
+			return openFile_("SDF");
+		}
+
 
 } } //namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.21.2.3 2006/05/15 20:06:17 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.21.2.4 2006/05/15 21:10:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -118,6 +118,9 @@ namespace BALL
 
 			///
 			System* openMOLFile();
+
+			///
+			System* openMOL2File();
 
 			///
 			System* openSDFile();
