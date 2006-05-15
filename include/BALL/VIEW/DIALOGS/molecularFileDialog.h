@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.21.2.1 2006/01/13 15:35:27 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.21.2.2 2006/05/15 19:55:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -14,6 +14,8 @@
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
+
+class QMenu;
 
 namespace BALL
 {
@@ -108,6 +110,21 @@ namespace BALL
 			 */
 			virtual bool writeFile();
 
+			///
+			virtual System* openFile();
+
+			///
+			System* openPDBFile();
+
+			///
+			System* openHINFile();
+
+			///
+			System* openMOLFile();
+
+			///
+			System* openSDFile();
+
 			/** Read a PDB file
 			 */
 			System* readPDBFile(String filename, String system_name)
@@ -174,6 +191,8 @@ namespace BALL
 			bool finish_(const String& filename, const String& system_name, System* system)
 				throw();
 
+			System* openFile_(String type);
+
 			enum FileFormats
 			{
 				PDB_FILE = 0,
@@ -184,6 +203,8 @@ namespace BALL
 			};
 
 			QAction* save_id_, *open_id_;
+			String file_format_;
+			QMenu* types_menu_;
 		};
 
 	} // namespace VIEW
