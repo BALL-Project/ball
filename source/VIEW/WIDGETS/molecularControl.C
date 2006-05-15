@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.21 2006/05/15 14:34:14 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.22 2006/05/15 15:10:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -1221,6 +1221,7 @@ namespace BALL
 					
 			}
  			listview->setUpdatesEnabled(true);
+			listview->update();
 		}
 
 		void MolecularControl::switchShowSecondaryStructure()

@@ -72,6 +72,8 @@ namespace BALL
 					return "Forces";
 				case MODEL_LABEL:
 					return "Label";
+				case MODEL_INFORMATIONS:
+					return "Informations";
 				case MODEL_UNKNOWN:
 					return "Unknown";
 			}
