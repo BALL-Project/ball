@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.58.8.2 2006/05/09 15:27:57 amoll Exp $
+// $Id: standardPredicates.C,v 1.58.8.3 2006/05/15 12:24:35 amoll Exp $
 //
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -1842,6 +1842,7 @@ namespace BALL
 		HashMap<Molecule*, TimeStamp>::Iterator it = call_time_map_.find(mol);
 		if (!+it || it->second.isOlderThan(mol->getModificationTime()))
 		{
+			mol->apply(ring_proc_);
 			mol->apply(arom_proc_);
 			TimeStamp stamp;
 			stamp.stamp();
@@ -1852,10 +1853,9 @@ namespace BALL
 		last_molecule_ = mol;
 		vector<HashSet<const Atom*> > result;
 
-		// will have to be adapted:
 		try
 		{
-			result = matcher_.match(*mol, argument_);
+			matcher_.match(result, *mol, argument_);
 		}
 		catch(...)
 		{
