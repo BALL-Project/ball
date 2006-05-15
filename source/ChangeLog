@@ -26,6 +26,7 @@ Added:
 
 Fixed:
 - Major code overhaul of the whole VIEW framework
+- Ability to open molecular files without proper extensions in BALLView
 - Improved Python Bindings
 - Commands run() and quit() in BALL Python are now Python conform (e.g. can be used in user scripts)
 - Pressing Return in PeptideDialog now applies settings
