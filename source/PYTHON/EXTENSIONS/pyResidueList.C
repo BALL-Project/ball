@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyResidueList.C,v 1.2.12.1 2006/05/15 23:18:42 amoll Exp $
+// $Id: pyResidueList.C,v 1.2.12.2 2006/05/15 23:26:25 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -39,7 +39,6 @@ namespace BALL
 		// clear the old contents of the list
 		clear();
 
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		// iterate over all residues
 		AtomContainerConstIterator it = fragment.beginAtomContainer();
 
@@ -52,6 +51,5 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
         push_back(const_cast<Residue*>(residue));
 			}
 		}
-Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	}
 }
