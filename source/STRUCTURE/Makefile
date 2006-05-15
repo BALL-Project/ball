@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.43.2.3 2006/02/01 13:23:44 amoll Exp $
+# $Id: Makefile,v 1.43.2.4 2006/05/15 12:24:38 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -26,6 +26,7 @@ SMARTS_SOURCES=\
 
 CPP_SOURCES=\
 	analyticalSES.C\
+  atomBijection.C\
 	buildBondsProcessor.C\
 	connolly.C\
 	defaultProcessors.C\

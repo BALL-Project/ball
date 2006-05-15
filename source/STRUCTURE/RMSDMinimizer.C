@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RMSDMinimizer.C,v 1.4 2006/01/27 20:57:46 oliver Exp $
+// $Id: RMSDMinimizer.C,v 1.4.6.1 2006/05/15 12:24:39 amoll Exp $
 //
 // Compute RMSD-optimal transformation for two structures
 // Coutsalis et al, J. Comput. Chem., 25(15), 1849 (2004)

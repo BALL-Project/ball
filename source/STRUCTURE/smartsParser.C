@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.C,v 1.5 2005/10/11 16:03:44 bertsch Exp $
+// $Id: smartsParser.C,v 1.5.2.1 2006/05/15 12:24:39 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/smartsParser.h>
@@ -10,7 +10,7 @@
 
 #include <algorithm>
 #include <sstream>
-
+#include <stack>
 
 #define SMARTS_PARSER_DEBUG
 #undef  SMARTS_PARSER_DEBUG
@@ -36,7 +36,8 @@ namespace BALL
 			log_op_(SmartsParser::NOOP),
 			first_edge_((SPEdge*)0),
 			second_edge_((SPEdge*)0),
-			sp_atom_((SPAtom*)0)
+			sp_atom_((SPAtom*)0),
+			component_no_(-1)
 	{
 	}
 
@@ -48,7 +49,8 @@ namespace BALL
 			log_op_(SmartsParser::NOOP),
 			first_edge_((SPEdge*)0),
 			second_edge_((SPEdge*)0),
-			sp_atom_(atom)
+			sp_atom_(atom),
+			component_no_(-1)
 	{
 		#ifdef SMARTS_PARSER_DEBUG
 		cerr << "SmartsParser::SPNode::SPNode(SPAtom* " << atom << "), this=" << this << endl;
@@ -63,7 +65,8 @@ namespace BALL
 			log_op_(log_op),
 			first_edge_(new SmartsParser::SPEdge()),
 			second_edge_(new SmartsParser::SPEdge()),
-			sp_atom_((SPAtom*)0)
+			sp_atom_((SPAtom*)0),
+			component_no_(-1)
 	{
 		first_edge_->setFirstSPNode(this);
 		first_edge_->setSecondSPNode(first);
@@ -75,6 +78,15 @@ namespace BALL
 
 	SmartsParser::SPNode::~SPNode()
 	{
+	}
+
+	void SmartsParser::SPNode::setRecursive(bool recursive)
+	{
+		for (EdgeIterator it = begin(); it != end(); ++it)
+		{
+			SmartsParser::state.current_parser->addRecursiveEdge(*it);
+		}
+		recursive_ = recursive;
 	}
 
 	/* 
@@ -111,6 +123,9 @@ namespace BALL
 
 	bool SmartsParser::SPBond::equals(const Bond* bond) const
 	{
+#ifdef SMARTS_PARSER_DEBUG
+		cerr << "bool SmartsParser::SPBond::equals(const Bond* " << bond << ") const" <<endl;
+#endif
 		// TODO - Z/E isomer types
 		// TODO errors in error log
 		
@@ -211,14 +226,17 @@ namespace BALL
 			{
 				s = PTE[symbol.toUnsignedInt()].getSymbol();
 			}
-			if (islower(symbol[0]))
-			{
-				s.toUpper(0, 1);
-				setProperty("Aromatic", true);
-			}
 			else
 			{
-				setProperty("Aliphatic", true);
+				if (islower(symbol[0]))
+				{
+					s.toUpper(0, 1);
+					setProperty("Aromatic", true);
+				}
+				else
+				{
+					setProperty("Aliphatic", true);
+				}
 			}
 			setProperty("Symbol", s);
 #ifdef SMARTS_PARSER_DEBUG
@@ -312,16 +330,15 @@ namespace BALL
 
 	Size SmartsParser::SPAtom::getNumberOfImplicitHydrogens(const Atom* atom) const
 	{
+		// TODO charges?
 		return getDefaultValence(atom) - countRealValences(atom);
 	}
 
 	bool SmartsParser::SPAtom::equals(const Atom * atom) const
 	{
 		#ifdef SMARTS_PARSER_DEBUG
-		cerr << "bool SmartsParser::SPAtom::equals(const Atom * atom " << atom << ") const (this=" << this << ", #properties="<< countProperties() << ")" << endl;
+		cerr << "bool SmartsParser::SPAtom::equals(const Atom * atom " << atom->getName() << ") const (this=" << this << ", #properties="<< countProperties() << ")" << endl;
 		#endif
-		// TODO 
-		// all chirality options!
 
 		bool isnot(false);
 		if (hasProperty("Not"))
@@ -332,7 +349,7 @@ namespace BALL
 		for (Size i=0; i!=countProperties(); ++i)
 		{
 			#ifdef SMARTS_PARSER_DEBUG
-			cerr << getNamedProperty(i).getName() << "\t";
+			cerr << getNamedProperty(i).getName() << "\t" << getNamedProperty(i).getString() << endl;
 			#endif
 			String property_name = getNamedProperty(i).getName();
 			NamedProperty p = getNamedProperty(i);
@@ -379,10 +396,6 @@ namespace BALL
 			if (property_name == "InNumRings" || property_name == "NotInNumRings")
 			{
 				Size ring_count(0);
-				//cerr << "SP: TODO InNumRings" << endl;
-				//return false;
-				
-				//cerr << SmartsParser::sssr_ << endl;
 				for (vector<HashSet<const Atom*> >::const_iterator it = SmartsParser::sssr_->begin(); it != SmartsParser::sssr_->end(); ++it)
 				{
 					if (it->has(atom))
@@ -415,7 +428,7 @@ namespace BALL
 						}
 					}
 				}
-				//cerr << "SP: ring_count=" << ring_count << endl;
+				
 				if (property_name == "InNumRings")
 				{
 					if (ring_count != p.getUnsignedInt())
@@ -590,6 +603,7 @@ namespace BALL
 				{
 					return false;
 				}
+				continue;
 			}
 			if (property_name == "NotAromatic")
 			{
@@ -669,12 +683,21 @@ namespace BALL
 			}
 
 			// degree, not degree
+			// all explicit connections, no H is counted (correct? TODO)
 			if (property_name == "Degree")
 			{
 				#ifdef SMARTS_PARSER_DEBUG
 				cerr << atom->countBonds() << " " << p.getUnsignedInt() << endl;
 				#endif
-				if (atom->countBonds() != p.getUnsignedInt())
+				Size bond_count(0);
+				for (Atom::BondConstIterator bit = atom->beginBond(); +bit; ++bit)
+				{
+					if (bit->getPartner(*atom)->getElement() != PTE[Element::H])
+					{
+						++bond_count;
+					}
+				}
+				if (/*atom->countBonds()*/bond_count != p.getUnsignedInt())
 				{
 					return false;
 				}
@@ -682,7 +705,15 @@ namespace BALL
 			}
 			if (property_name == "NotDegree")
 			{
-				if (atom->countBonds() == p.getUnsignedInt())
+				Size bond_count(0);
+				for (Atom::BondConstIterator bit = atom->beginBond(); +bit; ++bit)
+				{
+					if (bit->getPartner(*atom)->getElement() != PTE[Element::H])
+					{
+						++bond_count;
+					}
+				}
+				if (/*atom->countBonds()*/bond_count == p.getUnsignedInt())
 				{
 					return false;
 				}
@@ -721,6 +752,33 @@ namespace BALL
 					return false;
 				}
 				continue;
+			}
+
+			if (property_name == "Chirality" || property_name == "NotChirality")
+			{
+				// so far BALL has no Code to set the chirality,
+				// hence all definitiones will fail here (except *_OR_UNSPECIFIED)
+				SmartsParser::ChiralClass chiral_class = (SmartsParser::ChiralClass)p.getUnsignedInt();
+				switch (chiral_class)
+				{
+					case CW_DEFAULT_OR_UNSPECIFIED:
+					case CCW_DEFAULT_OR_UNSPECIFIED:
+					case CW_TH_OR_UNSPECIFIED:
+					case CCW_TH_OR_UNSPECIFIED:
+					case CW_AL_OR_UNSPECIFIED:
+					case CCW_AL_OR_UNSPECIFIED:
+					case CW_SP_OR_UNSPECIFIED:
+					case CCW_SP_OR_UNSPECIFIED:
+					case CW_OH_OR_UNSPECIFIED:
+					case CCW_OH_OR_UNSPECIFIED:
+					case CW_TB_OR_UNSPECIFIED:
+					case CCW_TB_OR_UNSPECIFIED:
+					case CHIRAL_CLASS_UNSPECIFIED:
+						continue;
+						break;
+					default:
+						return false;
+				}
 			}
 
 			cerr << "SP: unknown property: " << property_name << endl;	
@@ -773,6 +831,7 @@ namespace BALL
 	SmartsParser::SmartsParser()
 		:	needs_SSSR_(false),
 			recursive_(false),
+			component_grouping_(false),
 			root_((SPNode*)0)
 	{
 	}
@@ -780,6 +839,7 @@ namespace BALL
 	SmartsParser::SmartsParser(const SmartsParser& parser)
 		:	needs_SSSR_(parser.needs_SSSR_),
 			recursive_(parser.recursive_),
+			component_grouping_(parser.component_grouping_),
 			root_(parser.root_)
 	{
 		// TODO new states!
@@ -821,6 +881,19 @@ namespace BALL
 			delete *it;
 		}
 		edges_.clear();
+
+		ring_connections_.clear();
+		root_ = 0;
+		if (sssr_ != 0)
+		{
+			sssr_->clear();
+			sssr_ = 0;
+		}
+		needs_SSSR_ = false;
+		recursive_ = false;
+		component_grouping_ = false;
+		component_no_ = 0;
+		rec_edges_.clear();
 	}
 
 	void SmartsParser::parse(const String& s)
@@ -956,7 +1029,7 @@ namespace BALL
 		//cerr << node << " " << node->countEdges() << endl;
 		if (node->isInternal())
 		{
-			cerr << String('\t', depth) << "node (internal): " << node << endl;
+			cerr << String('\t', depth) << "node (internal): " << node << "[recursive=" << node->isRecursive() << "]" << endl;
 			dumpTreeRecursive_(node->getFirstEdge(), depth + 1);
 			if (node->getLogicalOperator() == AND_LOW) cerr << String('\t', depth) << "AND_LOW" << endl;
 			if (node->getLogicalOperator() == AND) cerr << String('\t', depth) << "AND" << endl;
@@ -977,7 +1050,7 @@ namespace BALL
 				{
 					cerr << ", Symbol=" << node->getSPAtom()->getProperty("Symbol").getString();
 				}
-				cerr << ") " << node << endl;
+				cerr << ") " << node << "[recursive=" << node->isRecursive() << "]" << endl;
 			}
 			Size count(1);
 			for (SPNode::EdgeIterator eit = node->begin(); eit != node->end(); ++eit, ++count)
@@ -1022,4 +1095,31 @@ namespace BALL
 			}
 		}
 	}
+
+	void SmartsParser::setNextComponentNumberToSubTree(SPNode* spnode)
+	{
+		component_no_++;
+		stack<SPNode*> nodes;
+		nodes.push(spnode);
+		while (nodes.size() != 0)
+		{
+			//cerr << count++ << ". node ";
+			SPNode* node = nodes.top();
+			node->setComponentNumber(component_no_);
+			nodes.pop();
+			if (node->getFirstEdge() != 0 && node->getFirstEdge()->getSecondSPNode() != 0)
+			{
+				nodes.push(node->getFirstEdge()->getSecondSPNode());
+			}
+			if (node->getSecondEdge() != 0 && node->getSecondEdge()->getSecondSPNode() != 0)
+			{
+				nodes.push(node->getSecondEdge()->getSecondSPNode());
+			}
+			for (SPNode::EdgeIterator it = node->begin(); it != node->end(); ++it)
+			{
+				nodes.push((*it)->getSecondSPNode());
+			}
+		}
+	}
+	
 } // namespace BALL
