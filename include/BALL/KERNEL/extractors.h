@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.h,v 1.1 2006/01/26 11:58:54 oliver Exp $
+// $Id: extractors.h,v 1.1.6.1 2006/05/15 12:24:28 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher

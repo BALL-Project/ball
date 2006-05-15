@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.52.2.1 2006/05/08 22:48:06 amoll Exp $
+// $Id: standardPredicates.h,v 1.52.2.2 2006/05/15 12:19:50 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
@@ -29,6 +29,10 @@
 
 #ifndef BALL_QSAR_AROMATICITYPROCESSOR_H
 # include <BALL/QSAR/aromaticityProcessor.h>
+#endif
+
+#ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
+# include <BALL/QSAR/ringPerceptionProcessor.h>
 #endif
 
 namespace BALL 
@@ -994,6 +998,7 @@ namespace BALL
  		mutable SmartsMatcher matcher_;
 		mutable Molecule* last_molecule_;
 		mutable AromaticityProcessor arom_proc_;
+		mutable RingPerceptionProcessor ring_proc_;
 		// when was the aromaticity lastly calculated for a given molecule:
 		static HashMap<Molecule*, TimeStamp> call_time_map_;
 		static Molecule dummy_molecule_;

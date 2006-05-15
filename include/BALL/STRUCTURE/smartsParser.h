@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.h,v 1.5.2.1 2006/03/18 23:20:21 amoll Exp $
+// $Id: smartsParser.h,v 1.5.2.2 2006/05/15 12:20:11 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMARTES_PARSER_H
@@ -45,21 +45,42 @@ namespace BALL
 
 		enum ZEIsomerType
 		{
-			ANY_ZE,
+			ANY_ZE = 1,
 			NONE,
 			Z,
 			E
 		};
 
+		// chiral class definitions CW = clock wise, CCW = counter clock wise
 		enum ChiralClass
 		{
-			CHIRAL_ANY,
+			CHIRAL_CLASS_UNSPECIFIED = 1,
 	    NONCHIRAL,
-			TH,
-			AL,
-			SP,
-			TB,
-			OH
+			NONCHIRAL_OR_UNSPECIFIED,
+			CW_DEFAULT, // TH
+			CW_DEFAULT_OR_UNSPECIFIED,
+			CCW_DEFAULT, // TH
+			CCW_DEFAULT_OR_UNSPECIFIED,
+			CW_TH, // tetrahdral
+			CW_TH_OR_UNSPECIFIED,
+			CCW_TH,
+			CCW_TH_OR_UNSPECIFIED,
+			CW_AL, // allene-like
+			CW_AL_OR_UNSPECIFIED,
+			CCW_AL, 
+			CCW_AL_OR_UNSPECIFIED,
+			CW_SP, // square planar
+			CW_SP_OR_UNSPECIFIED,
+			CCW_SP,
+			CCW_SP_OR_UNSPECIFIED,
+			CW_TB, //trigonal bipyramidal
+			CW_TB_OR_UNSPECIFIED,
+			CCW_TB,
+			CCW_TB_OR_UNSPECIFIED,
+			CW_OH, // octahedral
+			CW_OH_OR_UNSPECIFIED,
+			CCW_OH,
+			CCW_OH_OR_UNSPECIFIED
 		};
 
 		enum LogicalOperator
@@ -70,10 +91,10 @@ namespace BALL
 			NOOP
 		};
 
-		typedef std::pair<ChiralClass, Position> ChiralDef;
+		//typedef std::pair<ChiralClass, Position> ChiralDef;
 
 		class SPAtom;
-		class SPBond 
+		class BALL_EXPORT SPBond 
 /*			:	public Bond*/
 		{
 			public:
@@ -114,7 +135,7 @@ namespace BALL
 				bool not_;
 		};
 		
-		class SPAtom
+		class BALL_EXPORT SPAtom
 	/*		:	public Atom */
 			: public PropertyManager
 		{
@@ -164,15 +185,15 @@ namespace BALL
 				Size countRealValences(const Atom* atom) const;
 				Size getNumberOfImplicitHydrogens(const Atom* atom) const;
 
-				ChiralDef getChirality() const { return chirality_; }
-				void setChirality(const ChiralDef& chirality) { chirality_ = chirality; }
+				//ChiralDef getChirality() const { return chirality_; }
+				//void setChirality(const ChiralDef& chirality) { chirality_ = chirality; }
 			
 				// returns true if the local properties of the atoms match
 				bool equals(const Atom* atom) const;
 				
 			protected:
 			
-				ChiralDef chirality_;
+				//ChiralDef chirality_;
 				Atom* atom_;
 				void init_();
 		};
@@ -180,7 +201,7 @@ namespace BALL
 	
 		class SPNode;
 
-		class SPEdge
+		class BALL_EXPORT SPEdge
 		{
 			public:
 				SPEdge();
@@ -223,7 +244,7 @@ namespace BALL
 				LogicalOperator log_op_;
 		};
 	
-		class SPNode
+		class BALL_EXPORT SPNode
 		{
 			public:
 		
@@ -239,8 +260,18 @@ namespace BALL
 				void setInternal(bool internal) { internal_ = internal; }
 				
 				bool isRecursive() const { return recursive_; }
-				void setRecursive(bool recursive) { recursive_ = recursive; }
-				
+				void setRecursive(bool recursive); 
+				/*{ 
+					for (EdgeIterator it = begin(); it != end(); ++it)
+					{
+						rec_edges_.insert(*it);
+					}
+					recursive_ = recursive; 
+				}*/
+			
+				void setComponentNumber(int no) { component_no_ = no; }
+				Size getComponentNumber() { return component_no_; }
+			
 				SPAtom* getSPAtom() const { return sp_atom_; }
 				void setSPAtom(SPAtom* sp_atom) { sp_atom_ = sp_atom; }
 		
@@ -282,6 +313,7 @@ namespace BALL
 				SPEdge* first_edge_;
 				SPEdge* second_edge_;
 				SPAtom* sp_atom_;
+				int component_no_;
 		};
 
 	
@@ -341,6 +373,10 @@ namespace BALL
 
 		bool isRecursive() const { return recursive_; }
 
+		void setComponentGrouping(bool component_grouping) { component_grouping_ = component_grouping; }
+
+		bool hasComponentGrouping() const { return component_grouping_; }
+
 		struct State
 		{
 			Size					char_count;
@@ -348,13 +384,29 @@ namespace BALL
 			const char*		buffer;
 		};
 		
-		static State state;
+		BALL_EXPORT static State state;
+
+		void setNextComponentNumberToSubTree(SPNode* spnode);
+
+		const HashSet<SPNode*>& getNodes() const { return nodes_; }
+
+		const HashSet<SPEdge*>& getEdges() const { return edges_; }
+
+		void addEdge(SPEdge* edge) { edges_.insert(edge); }
+
+		void addNode(SPNode* node) { nodes_.insert(node); }
+
+		bool hasRecursiveEdge(SPEdge* edge) const { return rec_edges_.has(edge); }
+
+		void addRecursiveEdge(SPEdge* edge) { rec_edges_.insert(edge); }
 
 		protected:
 
 			bool needs_SSSR_;
 
 			bool recursive_;
+
+			bool component_grouping_;
 
 			static vector<HashSet<const Atom*> >* sssr_;
 
@@ -369,8 +421,12 @@ namespace BALL
 			HashSet<SPEdge*> edges_;
 			
 			HashSet<SPNode*> nodes_;
-			
+
+			HashSet<SPEdge*> rec_edges_;
+
 			SPNode* root_;
+
+			int component_no_;
 	};
   
 } // namespace BALL

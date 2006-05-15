@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.74 2005/12/23 17:01:47 amoll Exp $
+// $Id: atom.h,v 1.74.2.1 2006/05/15 12:24:28 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -145,7 +145,11 @@ namespace BALL
 				// Add the residue ID
 				ADD_RESIDUE_ID,
 				// Add the residue ID and the residue extension
-				ADD_VARIANT_EXTENSIONS_AND_ID
+				ADD_VARIANT_EXTENSIONS_AND_ID,
+				// Add the chain ID and the residue ID 
+				ADD_CHAIN_RESIDUE_ID,
+				// Add the chain ID and the residue ID 
+				ADD_VARIANT_EXTENSIONS_AND_CHAIN_RESIDUE_ID
 			};
 
 			//@}  

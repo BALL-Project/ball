@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.h,v 1.26 2005/12/23 17:02:05 amoll Exp $
+// $Id: structureMapper.h,v 1.26.2.1 2006/05/15 12:20:11 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -35,6 +35,10 @@
 #	include <BALL/MATHS/matrix44.h>
 #endif
 
+#ifndef BALL_STRUCTURE_ATOMBIJECTION_H
+#	include <BALL/STRUCTURE/atomBijection.h>
+#endif
+
 #include <vector>
 #include <map>
 
@@ -49,14 +53,6 @@ namespace BALL
 	{
 		public:
 
-		/** A struct for representing an atom pair of the mapping.
-		*/
-		typedef std::pair<Atom*, Atom*> AtomPairType;
-		
-		/*_	The list representing a bijection between	selected atoms of A and B
-		*/
-		typedef std::vector<AtomPairType>	AtomBijection;
-		
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -98,7 +94,7 @@ namespace BALL
 
 		/**	Calculates a bijection to map two arrays of fragments onto each other.
 		*/
-		StructureMapper::AtomBijection calculateFragmentBijection
+		AtomBijection calculateFragmentBijection
 			(const vector<Fragment*>& A, const vector<Fragment*>& B);
 
 		/**	Maps two fragments onto each other
@@ -149,7 +145,6 @@ namespace BALL
 			
 		Size countFragments_(const AtomContainer& composite) const;
 		
-
 		/*_	The first of two composites - the "original" 
 		*/
 		AtomContainer*	A_;
@@ -161,7 +156,7 @@ namespace BALL
 		/*_	The current atom bijection.
 				Required for the caclulation of the RMSD.
 		*/
-		StructureMapper::AtomBijection bijection_;
+		AtomBijection bijection_;
 		
 		/*_	The rmsd of the last mapping executed 
 		*/
