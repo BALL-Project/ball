@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileDetails.C,v 1.12 2005/12/23 17:02:39 amoll Exp $
+// $Id: PDBFileDetails.C,v 1.12.2.1 2006/05/15 23:18:39 amoll Exp $
 //
 
 // This file contains the more or less implementation specific portion of PDBFile.
@@ -1144,7 +1144,8 @@ namespace BALL
 		writeBookKeepingSection_(structure, info);
 	}
 	
-	void PDBFile::updateAdditionalAtomInfo_(const PDB::Structure::AtomEntry& atom, PDB::AdditionalAtomInfo& aai)
+	void PDBFile::updateAdditionalAtomInfo_
+		(const PDB::Structure::AtomEntry& atom, PDB::AdditionalAtomInfo& aai)
 	{
 		if (atom.chain != aai.current_chain)
 		{
@@ -1170,20 +1171,20 @@ namespace BALL
 			if (atom.residue != 0)
 			{
 				strncpy(aai.residue_name, atom.residue->getName().c_str(), 4);
+				if (atom.residue->getID().toInt() == 0)
+				{
+					aai.residue_id++;
+				}
+				else
+				{
+					aai.residue_id = atom.residue->getID().toInt();
+				}
+				aai.residue_insertion_code = atom.residue->getInsertionCode();
 			}
 			else
 			{
 				strncpy(aai.residue_name, "UNK", 4);
 			}
-			if (atom.residue->getID().toInt() == 0)
-			{
-				aai.residue_id++;
-			}
-			else
-			{
-				aai.residue_id = atom.residue->getID().toInt();
-			}
-			aai.residue_insertion_code = atom.residue->getInsertionCode();
 		}
 	}
 
@@ -1263,6 +1264,14 @@ namespace BALL
 			if (atom_info.current_residue != 0)
 			{
 				strncpy(atom_info.residue_name, atom_info.current_residue->getName().c_str(), 4);
+				try
+				{
+					atom_info.residue_id = atom_info.current_residue->getID().toInt();
+				}
+				catch(...)
+				{
+				}
+				atom_info.residue_insertion_code = atom_info.current_residue->getInsertionCode();
 			}
 			if ((atom_info.current_chain != 0) && (atom_info.current_chain->getName() != ""))
 			{

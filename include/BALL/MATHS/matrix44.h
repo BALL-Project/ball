@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.h,v 1.54 2005/10/12 12:46:19 anhi Exp $
+// $Id: matrix44.h,v 1.54.2.1 2006/05/15 23:18:32 amoll Exp $
 //
 
 #ifndef BALL_MATHS_MATRIX44_H
@@ -274,42 +274,36 @@ namespace BALL
 				Get the sum of the diagonal elements (m11 + m22 + m33 + m44).
 				@return T the trace
 		*/
-		T getTrace() const
-			throw();
+		T getTrace() const throw();
 
 		/** Create a zero matrix.
 				A new matrix object is created and all elements set to 0.
 		*/
-		static const TMatrix4x4& getZero()
-			throw();
+		static const TMatrix4x4& getZero() throw();
 
 		/** Create an identity matrix.
 				A new matrix object is created and all elements but the diagonal are 
 				set to zero. The diagonal elements are set to 1.
 		*/
-		static const TMatrix4x4& getIdentity()
-			throw();
+		static const TMatrix4x4& getIdentity() throw();
 
 		/** Set to an identity matrix.
 				m11, m22, m33, m44 = 1;
 				the other cells have the value 0;
 		*/
-		void setIdentity()
-			throw();
+		void setIdentity() throw();
 
 		/** Set the diagonal elements to the given value.
 				All other elements are set to 0.
 				@param T the value to fill with (default: 1)
 		*/
-		void set(const T& t = (T)1)
-			throw();
+		void set(const T& t = (T)1)	throw();
 
 		/** Mirror the Matrix at the diagonal.
 				All values are swaped by the mirrored value.
 				(I.e. m12 <=> m21 , m13 <=> m31 , ...)
 		*/
-		void transpose()
-			throw();
+		void transpose() throw();
 
 		/** Get a row of the matrix.
 				@param row the number of the row (0-3)
@@ -349,14 +343,12 @@ namespace BALL
 				@param m the matrix to compare with
 				@return bool, <b>true</b> if all components are equal, <b>false</b> otherwise
 		*/
-		bool isEqual(const TMatrix4x4& m) const
-			throw();
+		bool isEqual(const TMatrix4x4& m) const throw();
 
 		/** Get the diagonal of the matrix.
 				@return TVector4 the diagonal
 		*/
-		TVector4<T> getDiagonal() const
-			throw();
+		TVector4<T> getDiagonal() const throw();
 		
 		/** Access operator of a cell.
 				@param row the number of the row (0-3)
@@ -393,59 +385,51 @@ namespace BALL
 
 		/**	Positive sign.
 		*/
-		TMatrix4x4 operator + () const
-			throw();
+		TMatrix4x4 operator + () const throw();
 
 		/**	Negative sign.
 		*/
-		TMatrix4x4 operator - () const
-			throw();
+		TMatrix4x4 operator - () const throw();
 
 		/** Addition operator.
 				Adds another matrix to this matrix and return the result.
 				@param m the matrix to add
 				@return TMatrix4x4 the result
 		*/
-		TMatrix4x4 operator + (const TMatrix4x4& m) const
-			throw();
+		TMatrix4x4 operator + (const TMatrix4x4& m) const	throw();
 
 		/** Addition operator.
 				Adds another matrix to this matrix.
 				@param m the matrix to add
 				@return TMatrix4x4&, {\em *this}
 		*/
-		TMatrix4x4& operator += (const TMatrix4x4& m)
-			throw();
+		TMatrix4x4& operator += (const TMatrix4x4& m)	throw();
 
 		/** Subtraction operator.
 				Subtract another matrix from this matrix and return the result
 				@param m the matrix to subtract
 				@return TMatrix4x4 the result
 		*/
-		TMatrix4x4 operator - (const TMatrix4x4& m) const
-			throw();
+		TMatrix4x4 operator - (const TMatrix4x4& m) const throw();
 
 		/** Subtraction operator.
 				Subtract another matrix from this matrix.
 				@param m the matrix to subtract
 				@return TMatrix4x4&, {\em *this}
 		*/
-		TMatrix4x4& operator -= (const TMatrix4x4& m)
-			throw();
+		TMatrix4x4& operator -= (const TMatrix4x4& m) throw();
 
 		/**	Multiply by a scalar.
 				Operator for multiplying every cell value with a scalar value.
 				@return TMatrix4x4 the result
 		*/
-		TMatrix4x4 operator * (const T& scalar) const
-			throw();
+		TMatrix4x4 operator * (const T& scalar) const	throw();
 
 		/**	Multiply by a scalar.
 				Operator for multiplying every cell value with a scalar value.
 				@return TMatrix4x4&, {\em *this}
 		*/
-		TMatrix4x4& operator *= (const T& scalar)
-			throw();
+		TMatrix4x4& operator *= (const T& scalar)	throw();
 
 		/**	Divide by a scalar.
 				Operator for dividing every cell value by a scalar value.
@@ -466,20 +450,17 @@ namespace BALL
 		/**	Multiply two matrices.
 				@return TMatrix4x4 the result
 		*/
-		TMatrix4x4 operator * (const TMatrix4x4& m) const
-			throw();
+		TMatrix4x4 operator * (const TMatrix4x4& m) const	throw();
 
 		/**	Multiply two matrices
 				@return TMatrix4x4&, {\em *this}
 		*/
-		TMatrix4x4& operator *= (const TMatrix4x4& m)
-			throw();
+		TMatrix4x4& operator *= (const TMatrix4x4& m)	throw();
 
 		/**	Multiplication by an instance of type <b>  TVector4 </b>.
 				@return TMatrix4x4&, {\em *this}
 		*/
-		TVector4<T> operator * (const TVector4<T>& vector) const
-			throw();
+		TVector4<T> operator * (const TVector4<T>& vector) const throw();
 
 		/**	Invert the matrix.
 				Tests if the matrix can be inverted.
@@ -487,127 +468,107 @@ namespace BALL
 				@param inverse is assigned the inverse matrix 
 				@return bool true if the inverse matrix could be calculated, otherwise false.
 		*/
-		bool invert(TMatrix4x4& inverse) const
-			throw();
+		bool invert(TMatrix4x4& inverse) const throw();
 
 		/**	Invert the matrix.
 				Tests if the matrix can be inverted.
 				If this is possible, the result is stored in the matrix.
 				@return bool true if the inverse matrix could be calculated, otherwise false.
 		*/
-		bool invert()
-			throw();
+		bool invert() throw();
 
-		
 		/**	Compute the determinant.
 				@return T the determinant.
 		*/
-		T getDeterminant() const
-			throw();
+		T getDeterminant() const throw();
 
 		/**	Translate the matrix.
 				@param x the x-component of the translation
 				@param y the y-component of the translation
 				@param z the z-component of the translation
 		*/
-		void translate(const T &x, const T &y, const T &z)
-			throw();
+		void translate(const T &x, const T &y, const T &z) throw();
 
 		/**	Translate the matrix.
 				@param v the vector to translate with
 		*/
-		void translate(const TVector3<T>& v)
-			throw();
+		void translate(const TVector3<T>& v) throw();
 
 		/**	Set the matrix to a translation matrix.
 				@param x the x-component of the translation
 				@param y the y-component of the translation
 				@param z the z-component of the translation
 		*/
-		void setTranslation(const T& x, const T& y, const T& z)
-			throw();
+		void setTranslation(const T& x, const T& y, const T& z) throw();
 
 		/**	Set the matrix to a translation matrix.
 				@param v the vector to translate with
 		*/
-		void setTranslation(const TVector3<T>& v)
-			throw();
+		void setTranslation(const TVector3<T>& v)	throw();
 
 		/**	Scale the matrix.
 				@param x_scale the x scale factor
 				@param y_scale the y scale factor
 				@param z_scale the z scale factor
 		*/
-		void scale(const T& x_scale, const T& y_scale, const T& z_scale)
-			throw();
+		void scale(const T& x_scale, const T& y_scale, const T& z_scale) throw();
 
 		/**	Scale the matrix.
 				@param scale the scale factor
 		*/
-		void scale(const T& scale)
-			throw();
+		void scale(const T& scale) throw();
 
 		/**	Scale the matrix.
 				@param v the vector with the scale factor
 		*/
-		void scale(const TVector3<T>& v)
-			throw();
+		void scale(const TVector3<T>& v) throw();
 
 		/**	Set the matrix to a scalation matrix.
 				@param x_scale the x scale factor
 				@param y_scale the y scale factor
 				@param z_scale the z scale factor
 		*/
-		void setScale(const T& x_scale, const T& y_scale, const T& z_scale)
-			throw();
+		void setScale(const T& x_scale, const T& y_scale, const T& z_scale)	throw();
 
 		/**	Set the matrix to a scalation matrix.
 				@param scale the scale factor
 		*/
-		void setScale(const T& scale)
-			throw();
+		void setScale(const T& scale)	throw();
 
 		/**	Set the matrix to a scalation matrix.
 				@param v the vector with the scale factor
 		*/
-		void setScale(const TVector3<T>& v)
-			throw();
+		void setScale(const TVector3<T>& v)	throw();
 
 		/**	Rotate the matrix around the x axis.
 				@param phi the rotation angle
 		*/
-		void rotateX(const TAngle<T>& phi)
-			throw();
+		void rotateX(const TAngle<T>& phi) throw();
 
 		/**	Set the matrix to a x rotation matrix.
 				@param phi the rotation angle
 		*/
-		void setRotationX(const TAngle<T>& phi)
-			throw();
+		void setRotationX(const TAngle<T>& phi)	throw();
 
 		/**	Rotate the matrix around the y axis.
 				@param phi the rotation angle
 		*/
-		void rotateY(const TAngle<T>& phi)
-			throw();
+		void rotateY(const TAngle<T>& phi) throw();
 
 		/**	Set the matrix to a y rotation matrix.
 				@param phi the rotation angle
 		*/
-		void setRotationY(const TAngle<T>& phi)
-			throw();
+		void setRotationY(const TAngle<T>& phi) throw();
 
 		/**	Rotate the matrix around the z axis.
 				@param phi the rotation angle
 		*/
-		void rotateZ(const TAngle<T>& phi)
-			throw();
+		void rotateZ(const TAngle<T>& phi) throw();
 
 		/**	Set the matrix to a z rotation matrix.
 				@param phi the rotation angle
 		*/
-		void setRotationZ(const TAngle<T>& phi)
-			throw();
+		void setRotationZ(const TAngle<T>& phi)	throw();
 
 		/** Rotate the matrix around a given axis.
 				@param phi the rotation angle
@@ -615,22 +576,19 @@ namespace BALL
 				@param axis_y the y component of the axis
 				@param axis_z the z component of the axis
 		*/
-		void rotate(const TAngle<T>& phi, const T& axis_x, const T& axis_y, const T& axis_z)
-			throw();
+		void rotate(const TAngle<T>& phi, const T& axis_x, const T& axis_y, const T& axis_z) throw();
 
 		/** Rotate the matrix around a given axis.
 				@param phi the rotation angle
 				@param axis the axis vector
 		*/
-		void rotate(const TAngle<T>& phi, const TVector3<T>& axis)
-			throw();
+		void rotate(const TAngle<T>& phi, const TVector3<T>& axis) throw();
 
 		/** Rotate the matrix around a given axis.
 				@param phi the rotation angle
 				@param axis the axis vector, the fourth component of the vector is ignored
 		*/
-		void rotate(const TAngle<T>& phi, const TVector4<T>& axis)
-			throw();
+		void rotate(const TAngle<T>& phi, const TVector4<T>& axis) throw();
 
 		/**	Set the matrix to a rotation matrix.
 				@param phi the rotation angle
@@ -638,24 +596,21 @@ namespace BALL
 				@param axis_y the y component of the axis
 				@param axis_z the z component of the axis				
 		*/
-		void setRotation(const TAngle<T>& phi, const T& axis_x, const T& axis_y, const T& axis_z)
-			throw();
+		void setRotation(const TAngle<T>& phi, const T& axis_x, const T& axis_y, const T& axis_z) throw();
 
 		/**	Set the matrix to a rotation matrix.
 				@param phi the rotation angle
 				@param axis the axis vector
 		*/
-		void setRotation(const TAngle<T>& phi, const TVector3<T>& axis)
-			throw();
+		void setRotation(const TAngle<T>& phi, const TVector3<T>& axis)	throw();
 
 		/**	Set the matrix to a rotation matrix.
 				@param phi the rotation angle
 				@param axis the axis vector, the fourth component of the vector is ignored
 		*/
-		void setRotation(const TAngle<T>& phi, const TVector4<T>& axis)
-			throw();
-
+		void setRotation(const TAngle<T>& phi, const TVector4<T>& axis)	throw();
 		//@}
+
 		/**	@name	Predicates
 		*/
 		//@{
@@ -665,62 +620,53 @@ namespace BALL
 				 \link isEqual isEqual \endlink 
 				@return bool, <b>true</b> if all components are equal, <b>false</b> otherwise
 		*/
-		bool operator == (const TMatrix4x4& m) const
-			throw(); 
+		bool operator == (const TMatrix4x4& m) const throw(); 
 
 		/**	Inequality operator.
 				Instead of this operator isEqual should be used.
 				 \link isEqual isEqual \endlink 
 				@return bool, <b>true</b> if the two TMatrix4x4 differ in at least one component, <b>false</b> otherwise
 		*/
-		bool operator != (const TMatrix4x4& m) const
-			throw();
+		bool operator != (const TMatrix4x4& m) const throw();
 
 		/** Test whether this matrix is an identity matrix.
 				(I.e. m11, m22, m33, m44 = 1 and the other cells have the value 0)
 				@return bool, <b>true</b> if identity matrix, <b>false</b> otherwise
 		*/
-		bool isIdentity() const
-			throw();
+		bool isIdentity() const	throw();
 
 		/** Test whether this matrix is regular.
 				@return bool, <b>true</b> if (Determinant != 0), <b>false</b> otherwise
 		*/
-		bool isRegular() const
-			throw();
+		bool isRegular() const throw();
 
 		/** Test whether this matrix is singular.
 				@return bool, <b>true</b> if (Determinant == 0), <b>false</b> otherwise
 		*/
-		bool isSingular() const
-			throw();
+		bool isSingular() const	throw();
 
 		/** Test whether this matrix is symmetric.
 				(m12 = m21, m31 = m13, ...)
 				@return bool, <b>true</b> if symmatric, <b>false</b> otherwise
 		*/
-		bool isSymmetric() const
-			throw();
+		bool isSymmetric() const throw();
 
 		/** Test whether the lower triangular is zero.
 				@return bool, <b>true</b> if (m12 = m13 = m14 = m23 = m24 = m34 = 0), <b>false</b> otherwise
 		*/
-		bool isLowerTriangular() const
-			throw();
+		bool isLowerTriangular() const throw();
 
 		/** Test whether the upper triangular is zero.
 				@return bool, <b>true</b> if (m21 = m31 = m32 = m41 = m42 = m43 = 0), <b>false</b> otherwise
 		*/
-		bool isUpperTriangular() const
-			throw();
+		bool isUpperTriangular() const throw();
 
 		/** Test whether all cells but the diagonal are zero.
 				@return bool, <b>true</b> or <b>false</b>
 		*/
-		bool isDiagonal() const
-			throw();
-
+		bool isDiagonal() const throw();
 		//@}
+
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
@@ -729,8 +675,7 @@ namespace BALL
 				Always returns true.
 				@return bool <b>true</b>
 		*/
-		bool isValid() const
-			throw();
+		bool isValid() const throw();
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
@@ -738,76 +683,59 @@ namespace BALL
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/
-		void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
-
+		void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 		//@}
+
 		/**	@name	Attributes
 		*/
 		//@{
 
-		/**	1st cell in the 1st row
-		*/
+		///	1st cell in the 1st row
 		T m11;
 
-		/**	2nd cell in the 1st row
-		*/
+		/// 2nd cell in the 1st row
 		T m12;
 
-		/**	3rd cell in the 1st row
-		*/
+		///	3rd cell in the 1st row
 		T m13;
 
-		/**	4th cell in the 1st row
-		*/
+		///	4th cell in the 1st row
 		T m14;
 
-		/**	1st cell in the 2nd row
-		*/
+		///	1st cell in the 2nd row
 		T m21;
 
-		/**	2nd cell in the 2nd row
-		*/
+		///	2nd cell in the 2nd row
 		T m22;
 
-		/**	3rd cell in the 2nd row
-		*/
+		///	3rd cell in the 2nd row
 		T m23;
 
-		/**	4th cell in the 2nd row
-		*/
+		///	4th cell in the 2nd row
 		T m24;
 
-		/**	1st cell in the 3rd row
-		*/
+		///	1st cell in the 3rd row
 		T m31;
 
-		/**	2nd cell in the 3rd row
-		*/
+		///	2nd cell in the 3rd row
 		T m32;
 
-		/**	3rd cell in the 3rd row
-		*/
+		///	3rd cell in the 3rd row
 		T m33;
 
-		/**	4th cell in the 3rd row
-		*/
+		///	4th cell in the 3rd row
 		T m34;
 
-		/**	1st cell in the 4th row
-		*/
+		///	1st cell in the 4th row
 		T m41;
 
-		/**	2nd cell in the 4th row
-		*/
+		///	2nd cell in the 4th row
 		T m42;
 
-		/**	3rd cell in the 4th row
-		*/
+		///	3rd cell in the 4th row
 		T m43;
 
-		/**	4th cell in the 4th row
-		*/
+		///	4th cell in the 4th row
 		T m44;
 		//@}
 
@@ -818,22 +746,10 @@ namespace BALL
 		{
 			T **ptr = (T **)comp_ptr_;
 
-			*ptr++ = &m11;
-			*ptr++ = &m12;
-			*ptr++ = &m13;
-			*ptr++ = &m14;
-			*ptr++ = &m21;
-			*ptr++ = &m22;
-			*ptr++ = &m23;
-			*ptr++ = &m24;
-			*ptr++ = &m31;
-			*ptr++ = &m32;
-			*ptr++ = &m33;
-			*ptr++ = &m34;
-			*ptr++ = &m41;
-			*ptr++ = &m42;
-			*ptr++ = &m43;
-			*ptr   = &m44;
+			*ptr++ = &m11; *ptr++ = &m12; *ptr++ = &m13; *ptr++ = &m14;
+			*ptr++ = &m21; *ptr++ = &m22;	*ptr++ = &m23; *ptr++ = &m24;
+			*ptr++ = &m31; *ptr++ = &m32; *ptr++ = &m33; *ptr++ = &m34;
+			*ptr++ = &m41; *ptr++ = &m42;	*ptr++ = &m43; *ptr   = &m44;
 		}
 
 		// pointers to the components of the matrix 
@@ -861,22 +777,10 @@ namespace BALL
 			throw Exception::NullPointer(__FILE__, __LINE__);
 		}
 		
-		m11 = *ptr++; 
-		m12 = *ptr++; 
-		m13 = *ptr++; 
-		m14 = *ptr++; 
-		m21 = *ptr++; 
-		m22 = *ptr++; 
-		m23 = *ptr++; 
-		m24 = *ptr++; 
-		m31 = *ptr++; 
-		m32 = *ptr++; 
-		m33 = *ptr++; 
-		m34 = *ptr++; 
-		m41 = *ptr++; 
-		m42 = *ptr++; 
-		m43 = *ptr++; 
-		m44 = *ptr; 
+		m11 = *ptr++; m12 = *ptr++; m13 = *ptr++; m14 = *ptr++; 
+		m21 = *ptr++; m22 = *ptr++; m23 = *ptr++; m24 = *ptr++; 
+		m31 = *ptr++; m32 = *ptr++; m33 = *ptr++; m34 = *ptr++; 
+		m41 = *ptr++; m42 = *ptr++; m43 = *ptr++; m44 = *ptr; 
 
 		initializeComponentPointers_();
 	}
@@ -892,22 +796,10 @@ namespace BALL
 		
 		const T *ptr = *array_ptr;
 			
-		m11 = *ptr++; 
-		m12 = *ptr++; 
-		m13 = *ptr++; 
-		m14 = *ptr++; 
-		m21 = *ptr++; 
-		m22 = *ptr++; 
-		m23 = *ptr++; 
-		m24 = *ptr++; 
-		m31 = *ptr++; 
-		m32 = *ptr++; 
-		m33 = *ptr++; 
-		m34 = *ptr++; 
-		m41 = *ptr++; 
-		m42 = *ptr++; 
-		m43 = *ptr++; 
-		m44 = *ptr; 
+		m11 = *ptr++; m12 = *ptr++; m13 = *ptr++; m14 = *ptr++; 
+		m21 = *ptr++; m22 = *ptr++; m23 = *ptr++; m24 = *ptr++; 
+		m31 = *ptr++; m32 = *ptr++; m33 = *ptr++; m34 = *ptr++; 
+		m41 = *ptr++; m42 = *ptr++; m43 = *ptr++; m44 = *ptr; 
 
 		initializeComponentPointers_();
 	}
@@ -968,22 +860,10 @@ namespace BALL
 			throw Exception::NullPointer(__FILE__, __LINE__);
 		}
 
-		m11 = *ptr++; 
-		m12 = *ptr++; 
-		m13 = *ptr++; 
-		m14 = *ptr++; 
-		m21 = *ptr++; 
-		m22 = *ptr++; 
-		m23 = *ptr++; 
-		m24 = *ptr++; 
-		m31 = *ptr++; 
-		m32 = *ptr++; 
-		m33 = *ptr++; 
-		m34 = *ptr++; 
-		m41 = *ptr++; 
-		m42 = *ptr++; 
-		m43 = *ptr++; 
-		m44 = *ptr; 
+		m11 = *ptr++; m12 = *ptr++; m13 = *ptr++; m14 = *ptr++; 
+		m21 = *ptr++; m22 = *ptr++; m23 = *ptr++; m24 = *ptr++; 
+		m31 = *ptr++; m32 = *ptr++; m33 = *ptr++; m34 = *ptr++; 
+		m41 = *ptr++; m42 = *ptr++; m43 = *ptr++; m44 = *ptr; 
 	}
 
 	template <typename T>
@@ -997,44 +877,20 @@ namespace BALL
  		
 		const T *ptr = *array_ptr;
 
-		m11 = *ptr++; 
-		m12 = *ptr++; 
-		m13 = *ptr++; 
-		m14 = *ptr++; 
-		m21 = *ptr++; 
-		m22 = *ptr++; 
-		m23 = *ptr++; 
-		m24 = *ptr++; 
-		m31 = *ptr++; 
-		m32 = *ptr++; 
-		m33 = *ptr++; 
-		m34 = *ptr++; 
-		m41 = *ptr++; 
-		m42 = *ptr++; 
-		m43 = *ptr++; 
-		m44 = *ptr; 
+		m11 = *ptr++; m12 = *ptr++; m13 = *ptr++; m14 = *ptr++; 
+		m21 = *ptr++; m22 = *ptr++; m23 = *ptr++; m24 = *ptr++; 
+		m31 = *ptr++; m32 = *ptr++; m33 = *ptr++; m34 = *ptr++; 
+		m41 = *ptr++; m42 = *ptr++; m43 = *ptr++; m44 = *ptr; 
 	}
 
 	template <typename T>
 	void TMatrix4x4<T>::set(const TMatrix4x4<T>& m)
 		throw()
 	{
-		m11 = m.m11; 
-		m12 = m.m12;
-		m13 = m.m13; 
-		m14 = m.m14; 
-		m21 = m.m21; 
-		m22 = m.m22; 
-		m23 = m.m23; 
-		m24 = m.m24; 
-		m31 = m.m31; 
-		m32 = m.m32; 
-		m33 = m.m33; 
-		m34 = m.m34; 
-		m41 = m.m41; 
-		m42 = m.m42; 
-		m43 = m.m43; 
-		m44 = m.m44;
+		m11 = m.m11; m12 = m.m12; m13 = m.m13; m14 = m.m14; 
+		m21 = m.m21; m22 = m.m22; m23 = m.m23; m24 = m.m24; 
+		m31 = m.m31; m32 = m.m32; m33 = m.m33; m34 = m.m34; 
+		m41 = m.m41; m42 = m.m42; m43 = m.m43; m44 = m.m44;
 	}
 
 	template <typename T>
@@ -1043,22 +899,10 @@ namespace BALL
 		 const TVector4<T>& col3, const TVector4<T>& col4)
 		throw()
 	{
-		m11 = col1.x; 
-		m12 = col1.y; 
-		m13 = col1.z; 
-		m14 = col1.h; 
-		m21 = col2.x; 
-		m22 = col2.y; 
-		m23 = col2.z; 
-		m24 = col2.h; 
-		m31 = col3.x; 
-		m32 = col3.y; 
-		m33 = col3.z; 
-		m34 = col3.h; 
-		m41 = col4.x; 
-		m42 = col4.y; 
-		m43 = col4.z; 
-		m44 = col4.h;
+		m11 = col1.x; m12 = col1.y; m13 = col1.z; m14 = col1.h; 
+		m21 = col2.x; m22 = col2.y; m23 = col2.z; m24 = col2.h; 
+		m31 = col3.x; m32 = col3.y; m33 = col3.z; m34 = col3.h; 
+		m41 = col4.x; m42 = col4.y; m43 = col4.z; m44 = col4.h;
 	}
 
 	template <typename T>
@@ -1069,22 +913,10 @@ namespace BALL
 		 const T& c41, const T& c42, const T& c43, const T& c44)
 		throw()
 	{
-		m11 = c11;
-		m12 = c12;
-		m13 = c13;
-		m14 = c14;
-		m21 = c21;
-		m22 = c22;
-		m23 = c23;
-		m24 = c24;
-		m31 = c31;
-		m32 = c32;
-		m33 = c33;
-		m34 = c34;
-		m41 = c41;
-		m42 = c42;
-		m43 = c43;
-		m44 = c44;
+		m11 = c11; m12 = c12;	m13 = c13; m14 = c14;
+		m21 = c21; m22 = c22;	m23 = c23; m24 = c24;
+		m31 = c31; m32 = c32; m33 = c33; m34 = c34;
+		m41 = c41; m42 = c42; m43 = c43; m44 = c44;
 	}
 
 	template <typename T>
@@ -1123,22 +955,10 @@ namespace BALL
       throw Exception::NullPointer(__FILE__, __LINE__);
 		}
 
-		*ptr++ = m11; 
-		*ptr++ = m12; 
-		*ptr++ = m13; 
-		*ptr++ = m14; 
-		*ptr++ = m21; 
-		*ptr++ = m22; 
-		*ptr++ = m23; 
-		*ptr++ = m24; 
-		*ptr++ = m31; 
-		*ptr++ = m32; 
-		*ptr++ = m33; 
-		*ptr++ = m34; 
-		*ptr++ = m41; 
-		*ptr++ = m42; 
-		*ptr++ = m43; 
-		*ptr   = m44; 
+		*ptr++ = m11; *ptr++ = m12; *ptr++ = m13; *ptr++ = m14; 
+		*ptr++ = m21; *ptr++ = m22; *ptr++ = m23; *ptr++ = m24; 
+		*ptr++ = m31; *ptr++ = m32; *ptr++ = m33; *ptr++ = m34; 
+		*ptr++ = m41; *ptr++ = m42; *ptr++ = m43; *ptr   = m44; 
 	}
 
 	template <typename T>
@@ -1152,22 +972,10 @@ namespace BALL
  
 		T *ptr = *array_ptr;
 
-		*ptr++ = m11; 
-		*ptr++ = m12; 
-		*ptr++ = m13; 
-		*ptr++ = m14; 
-		*ptr++ = m21; 
-		*ptr++ = m22; 
-		*ptr++ = m23; 
-		*ptr++ = m24; 
-		*ptr++ = m31; 
-		*ptr++ = m32; 
-		*ptr++ = m33; 
-		*ptr++ = m34; 
-		*ptr++ = m41; 
-		*ptr++ = m42; 
-		*ptr++ = m43; 
-		*ptr   = m44; 
+		*ptr++ = m11; *ptr++ = m12; *ptr++ = m13; *ptr++ = m14; 
+		*ptr++ = m21; *ptr++ = m22; *ptr++ = m23; *ptr++ = m24; 
+		*ptr++ = m31; *ptr++ = m32; *ptr++ = m33; *ptr++ = m34; 
+		*ptr++ = m41; *ptr++ = m42; *ptr++ = m43; *ptr   = m44; 
 	}
 
 	template <typename T>
@@ -1183,22 +991,10 @@ namespace BALL
 		 TVector4<T>& col3, TVector4<T>& col4) const
 		throw()
 	{
-		col1.x = m11; 
-		col1.y = m12; 
-		col1.z = m13; 
-		col1.h = m14; 
-		col2.x = m21; 
-		col2.y = m22; 
-		col2.z = m23; 
-		col2.h = m24; 
-		col3.x = m31; 
-		col3.y = m32; 
-		col3.z = m33; 
-		col3.h = m34; 
-		col4.x = m41; 
-		col4.y = m42; 
-		col4.z = m43; 
-		col4.h = m44;
+		col1.x = m11; col1.y = m12; col1.z = m13; col1.h = m14; 
+		col2.x = m21; col2.y = m22; col2.z = m23; col2.h = m24; 
+		col3.x = m31; col3.y = m32; col3.z = m33; col3.h = m34; 
+		col4.x = m41; col4.y = m42; col4.z = m43; col4.h = m44;
 	}
 
 	template <typename T>
@@ -1209,22 +1005,10 @@ namespace BALL
 		 T& c41, T& c42, T& c43, T& c44) const
 		throw()
 	{
-		c11 = m11;
-		c12 = m12;
-		c13 = m13;
-		c14 = m14;
-		c21 = m21;
-		c22 = m22;
-		c23 = m23;
-		c24 = m24;
-		c31 = m31;
-		c32 = m32;
-		c33 = m33;
-		c34 = m34;
-		c41 = m41;
-		c42 = m42;
-		c43 = m43;
-		c44 = m44;
+		c11 = m11; c12 = m12;	c13 = m13; c14 = m14;
+		c21 = m21; c22 = m22;	c23 = m23; c24 = m24;
+		c31 = m31; c32 = m32; c33 = m33; c34 = m34;
+		c41 = m41; c42 = m42; c43 = m43; c44 = m44;
 	}
 
 	template <typename T>

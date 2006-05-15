@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.68.2.1 2006/05/15 12:24:39 amoll Exp $
+// $Id: fragmentDB.C,v 1.68.2.2 2006/05/15 23:18:44 amoll Exp $
+//
+// Author:
+//   Oliver Kohlbacher
 //
 // Author:
 //   Oliver Kohlbacher

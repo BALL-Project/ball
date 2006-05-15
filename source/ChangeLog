@@ -1,9 +1,5 @@
 1.2 nonpublic:
 
-Added docking code.
-Ported BALLView from QT 3.X to 4.1.
-Improved Python support.
-
 Added:
 - Useage of GLEW (OpenGL Extension Wrangler Library)
 - Docking interface
@@ -23,6 +19,25 @@ Added:
 - Capping planes
 - Improved feedback for users: e.g. Busy mouse cursor and statusbar entries
 - Added improved coordinate system
+- Protein-protein docking code based on Fourier correlation (requires FFTW library)
+- Protein-ligand docking code based on a genetic algorithm (similar to AutoDock)
+- An interactive user interface for the two docking algorithms
+- Small molecule database interface (FORMAT/DBInterface) allows the 
+  storage and retrieval of small molecules and their conformations in
+  a relational database
+- Quaternion RMSD optimizer (STRUCTURE/RMSDMinimizer) calculates the optimal 
+  transformation for a point set, similar to the Kabsch algorithm. An implementation 
+  of the paper by Coutsalies et al., J. Comput. Chem. 25(15), 189 (2004)
+- A major rewrite of the code for molecule superposition
+- A SMARTS matcher
+- An interface to GAMESS (to allow quantum mechanics calculations from BALL)
+- BALLView has menu entries for user defined Python Hotkeys
+- Further Python example scripts
+
+Changed:
+- Build process now requires GNU make for conditional compiling
+- common.mak has been broken down into targets.mak and rules.mak
+- configure now checks for the correct version of QT
 
 Fixed:
 - Major code overhaul of the whole VIEW framework
@@ -40,6 +55,7 @@ Fixed:
 - Some flaws in the Cartoon Model
 - Sensible default styles on the individual platforms
 - Renamed classes: PrimitiveManager -> RepresentationManager
+- Return pressed in PeptideDialog now applies settings
 
 Known problems:
 - Molecular Control Selection: Child->Parent doesnt always gets selected
@@ -49,7 +65,7 @@ Known problems:
 
 1.1.1:
 
-The version 1.1.1 finaly brings full Python, DLL and nmake Makefile support under Windows.
+The version 1.1.1 finally brings full Python, DLL and nmake Makefile support under Windows.
 Furthermore there is a large number of prominent fixes (especialy for g++ 4.x) 
 and some new functionality for BALLView.
 

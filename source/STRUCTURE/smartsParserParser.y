@@ -155,7 +155,7 @@ node_expression:
 		}
 	|	sp_node node_expression
 		{
-			SmartsParser::SPBond* b = new SmartsParser::SPBond(SmartsParser::SPBond::SINGLE);
+			SmartsParser::SPBond* b = new SmartsParser::SPBond(SmartsParser::SPBond::SINGLE_OR_AROMATIC);
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
 			SmartsParser::state.current_parser->addEdge(e);
 			e->setSPBond(b);
@@ -182,7 +182,7 @@ sp_node:
 		{
 			SmartsParser::SPEdge* e = new SmartsParser::SPEdge();
 			SmartsParser::state.current_parser->addEdge(e);
-			SmartsParser::SPBond* b = new SmartsParser::SPBond(SmartsParser::SPBond::SINGLE);
+			SmartsParser::SPBond* b = new SmartsParser::SPBond(SmartsParser::SPBond::SINGLE_OR_AROMATIC);
 			e->setSPBond(b);
 			e->setFirstSPNode($1);
 			e->setSecondSPNode($3);

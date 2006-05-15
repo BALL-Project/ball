@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.h,v 1.17 2004/02/23 17:26:03 anhi Exp $
+// $Id: extractors.h,v 1.17.10.1 2006/05/15 23:18:33 amoll Exp $
+//
+// Author:
+//   Oliver Kohlbacher
 //
 
 #ifndef BALL_PYTHON_EXTRACTORS_H

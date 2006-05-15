@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface_test.C,v 1.2 2006/03/01 08:58:58 oliver Exp $
+// $Id: DBInterface_test.C,v 1.2.2.1 2006/05/15 23:18:46 amoll Exp $
 //
 // Author:
 //  Oliver Kohlbacher
@@ -32,7 +32,7 @@
 
 ///////////////////////////
 
-START_TEST(DBInterface, "$Id: DBInterface_test.C,v 1.2 2006/03/01 08:58:58 oliver Exp $")
+START_TEST(DBInterface, "$Id: DBInterface_test.C,v 1.2.2.1 2006/05/15 23:18:46 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

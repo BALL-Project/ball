@@ -1,4 +1,4 @@
-# $Id: bondi-vdw.rul,v 1.1 2006/04/25 12:33:20 anker Exp $
+# $Id: bondi-vdw.rul,v 1.1.2.1 2006/05/15 23:18:31 amoll Exp $
 # 
 # Van der Waals radii from Bondi: van der Waals Volumes and
 # Radii, J Phys Chem 68:441-451, 1964

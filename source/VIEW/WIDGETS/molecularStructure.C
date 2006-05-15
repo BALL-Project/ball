@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.11 2006/05/15 12:46:09 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.12 2006/05/15 23:18:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>

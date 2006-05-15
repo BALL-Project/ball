@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StructureMapper_test.C,v 1.12 2005/01/04 13:27:19 oliver Exp $
+// $Id: StructureMapper_test.C,v 1.12.8.1 2006/05/15 23:18:48 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 #include <BALL/FORMAT/PDBFile.h>
 #include <vector>
 
-START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.12 2005/01/04 13:27:19 oliver Exp $")
+START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.12.8.1 2006/05/15 23:18:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -295,7 +295,7 @@ CHECK(void calculateDefaultBijection())
 		TEST_EQUAL(sm.getBijection().size(), 4)
 		ABORT_IF(sm.getBijection().size() != 4)
 
-		const StructureMapper::AtomBijection& b = sm.getBijection();
+		const AtomBijection& b = sm.getBijection();
 		TEST_EQUAL(b[0].first->getFullName(), b[0].second->getFullName())
 		TEST_NOT_EQUAL(b[0].first, b[0].second)
 		TEST_EQUAL(b[1].first->getFullName(), b[1].second->getFullName())
@@ -352,7 +352,7 @@ CHECK(void calculateDefaultBijection())
 		TEST_EQUAL(sm.getBijection().size(), 4)
 		ABORT_IF(sm.getBijection().size() != 4)
 
-		const StructureMapper::AtomBijection& b = sm.getBijection();
+		const AtomBijection& b = sm.getBijection();
 		TEST_EQUAL(b[0].first->getName(), b[0].second->getName())
 		TEST_NOT_EQUAL(b[0].first->getFullName(), b[0].second->getFullName())
 		TEST_NOT_EQUAL(b[0].first, b[0].second)
@@ -402,7 +402,7 @@ CHECK(void calculateDefaultBijection())
 		TEST_EQUAL(sm.getBijection().size(), 4)
 		ABORT_IF(sm.getBijection().size() != 4)
 
-		const StructureMapper::AtomBijection& b = sm.getBijection();
+		const AtomBijection& b = sm.getBijection();
 		TEST_EQUAL(b[0].first->getName(), "A1")
 		TEST_EQUAL(b[0].second->getName(), "B4")
 		TEST_EQUAL(b[1].first->getName(), "A2")

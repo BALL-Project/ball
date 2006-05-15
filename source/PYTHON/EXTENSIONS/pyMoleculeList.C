@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyMoleculeList.C,v 1.3 2004/09/22 21:07:05 oliver Exp $
+// $Id: pyMoleculeList.C,v 1.3.8.1 2006/05/15 23:18:41 amoll Exp $
+//
+// Author:
+//   Oliver Kohlbacher
 //
 
 #include <BALL/PYTHON/pyMoleculeList.h>

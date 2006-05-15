@@ -1,12 +1,6 @@
 #
-# $Id: Makefile.lst,v 1.26.2.1 2006/02/01 17:16:23 oliver Exp $
+# $Id: Makefile.lst,v 1.26.2.2 2006/05/15 23:18:47 amoll Exp $
 #
-
-XDR_DEPENDENT_EXECUTABLES = \
-$(PREFIX)XDRPersistenceManager_test$(EXEEXT)
-
-VIEW_DEPENDENT_EXECUTABLES=\
-$(PREFIX)ColorRGBA_test$(EXEEXT)
 
 EXECUTABLES_BASIC = \
 $(PREFIX)ClassTest_test$(EXEEXT)\
@@ -139,7 +133,8 @@ $(PREFIX)ForEach_test$(EXEEXT)\
 $(PREFIX)GlobalKernel_test$(EXEEXT)\
 $(PREFIX)CompositeIteratorTraits_test$(EXEEXT)\
 $(PREFIX)AtomIterator_test$(EXEEXT)\
-$(PREFIX)AtomBondIteratorTraits_test$(EXEEXT)
+$(PREFIX)AtomBondIteratorTraits_test$(EXEEXT)\
+$(PREFIX)Extractors_test$(EXEEXT)
 
 
 EXECUTABLES_MOLMEC = \
@@ -218,13 +213,17 @@ $(PREFIX)ReconstructFragmentProcessor_test$(EXEEXT)\
 $(PREFIX)ResidueChecker_test$(EXEEXT)\
 $(PREFIX)RotamerLibrary_test$(EXEEXT)\
 $(PREFIX)SmilesParser_test$(EXEEXT)\
+$(PREFIX)AtomBijection_test$(EXEEXT)\
+$(PREFIX)SmartsParser_test$(EXEEXT)\
+$(PREFIX)SmartsMatcher_test$(EXEEXT)\
 $(PREFIX)StructureMapper_test$(EXEEXT)\
 $(PREFIX)TransformationProcessor_test$(EXEEXT)\
 $(PREFIX)TranslationProcessor_test$(EXEEXT)\
 $(PREFIX)SurfaceProcessor_test$(EXEEXT)\
 $(PREFIX)SecondaryStructureProcessor_test$(EXEEXT)\
 $(PREFIX)UCK_test$(EXEEXT)\
-$(PREFIX)BuildBondsProcessor_test$(EXEEXT)
+$(PREFIX)BuildBondsProcessor_test$(EXEEXT)\
+$(PREFIX)DockResult_test$(EXEEXT)
 
 EXECUTABLES_SOLVATION = \
 $(PREFIX)PoissonBoltzmann_test$(EXEEXT)\
@@ -254,3 +253,12 @@ $(PREFIX)SimpleBase_test$(EXEEXT)\
 $(PREFIX)SimpleDescriptors_test$(EXEEXT)\
 $(PREFIX)SurfaceBase_test$(EXEEXT)\
 $(PREFIX)SurfaceDescriptors_test$(EXEEXT)
+
+XDR_DEPENDENT_EXECUTABLES = \
+$(PREFIX)XDRPersistenceManager_test$(EXEEXT)
+
+VIEW_DEPENDENT_EXECUTABLES= \
+$(PREFIX)DBInterface_test$(EXEEXT)
+
+GSL_DEPENDENT_EXECUTABLES= \
+$(PREFIX)RMSDMinimizer_test$(EXEEXT)

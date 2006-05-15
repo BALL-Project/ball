@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.35.2.1 2006/01/31 10:34:55 oliver Exp $
+# $Id: Makefile,v 1.35.2.2 2006/05/15 23:18:40 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -39,7 +39,7 @@ CXXFLAGS += $(SIPFLAGS)
 ADD_INCLUDES=$(PYTHON_INCLUDES) $(SIP_INCLUDES)
  
 PYBALL_SOURCES = \
-	extractors.C \
+	extractors.C\
 	pyBALLSipHelper.C\
 	pyCompositeList.C\
 	pyRepresentationList.C\

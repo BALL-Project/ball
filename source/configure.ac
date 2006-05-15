@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.32.2.2 2006/05/02 12:32:37 amoll Exp $
+dnl $Id: configure.ac,v 1.32.2.3 2006/05/15 23:18:35 amoll Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher

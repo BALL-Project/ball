@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.h,v 1.1 2005/11/06 19:36:33 oliver Exp $
+// $Id: DBInterface.h,v 1.1.2.1 2006/05/15 23:18:32 amoll Exp $
+//
+// Author:
+//   Oliver Kohlbacher
 //
 
 #ifndef BALL_FORMAT_DBINTERFACE_H
@@ -18,11 +21,26 @@
 namespace BALL
 {
 
-	/** A simplified interface to a small molecule structure database.
+	/** A simple interface to a small molecule structure database.
+			The database allows the storage of molecular structures in an SQL database.
+			The structure includes the independent storage of the molecule's topology (i.e.
+      atoms and bonds) and a number of geometries (conformations, i.e. atom coordinates).
+			\par
+			The interface has currently been tested with MySQL 4, however it should be easy to
+			port it to other databases. In order to create a database, please have a look at
+			source/APPLICATIONS/DB. There are SQL scripts provided to create an empty database
+			as well as code examples importing structures into the database and extracting structures
+			from there again.
+			\par 
+			The database interface also requires an activated database interface in QT.
+			If you did not install the QT database drivers, please recompile QT with the appropriate
+			options (see QT documentation for details). Using the database support without the
+			enabling the visualization component of BALL is not possible at this time.
 	*/
 	class DBInterface
 	{
 		public:
+		
 		class InvalidQuery
 			:	public Exception::GeneralException
 		{
@@ -66,10 +84,19 @@ namespace BALL
 		/// A vector of database IDs
 		typedef std::vector<ID> IDVector;
 
-		/** Describes a method for conformation generation.
+		/** Description of a method for conformation generation.
 				First: name of the method used, second: the paramters used.
 		*/
 		typedef std::pair<String, String> ConformationMethod;
+
+		/** Description of a method for charge generation.
+				First: name of the method used, second: the paramters used.
+		*/
+		typedef std::pair<String, String> ChargeMethod;
+		//@}
+
+		/**	@name Constants */
+		//@{
 
 		/// Database status codes
 		enum ErrorCodes
@@ -77,11 +104,6 @@ namespace BALL
 			NO_ERROR,
 			NO_CONNECTION // the database was not connected/initialized (good() = false)
 		};
-
-		//@}
-
-		/**	@name Constants */
-		//@{
 
 		/// The file containing the login credentials used by connect()
 		static const String BALL_DEFAULT_DBRCFILE;
@@ -119,11 +141,14 @@ namespace BALL
 		void setTopology(ID topology, const System& system);
 
 		/// Return IDs of all conformations for a given topology
-		IDVector getConformationList(ID structure);
+		IDVector getConformationList(ID topology_od);
 		/// Return IDs of all conformations for a given topology created with a specific method
 		IDVector getConformationList(ID topology_id, ID method_id);
 		/// Assign a specific conformation to an existing topology
 		void loadConformation(const ID conformation, System& system);
+
+		/// Store the current conformation with energy
+		ID storeConformation(ID topology_id, ID method_id, const System& system,double energy);
 		/// Store the current conformation 
 		ID storeConformation(ID topology, ID method_ID, const System& system);
 
@@ -135,10 +160,20 @@ namespace BALL
 		ID getConformationMethod(const String& method, const String& parameters);
 		/// Create a new conformation generation method and return its database ID
 		ID newConformationMethod(const String& method, const String& parameters);
-		//@}
 				
-		/**	@name Debugging and diagnostics */
-		//@{
+		/// Store a set of assigned atom charges
+		ID storeCharges(ID topology_id, ID method_id, const System& system);
+		/// Assign a specific set of atom charges
+		void loadCharges(const ID charge_id, System& system);
+		/// 
+		IDVector getChargeMethods();
+		///
+		ChargeMethod getChargeMethod(DBInterface::ID method_id);
+		///
+		ID getChargeMethod(const String& method, const String& parameters);
+		///
+		ID newChargeMethod(const String& method, const String& parameters);
+
 		///
 		ErrorCode getError() const { return error_; }
 		///
@@ -161,17 +196,16 @@ namespace BALL
 			 const String& database_name = "structures", const String& host = "diclofenac.informatik.uni-tuebingen.de",
 			 Size port = 3306, const String& driver = "QMYSQL3");
 
-
 		/** Connect to the database using the default login settings.
 				The default settings for a user are stored in $HOME/.ballrc.
 				Make sure this file is readable for *YOU ONLY* (e.g. by "chmod 600 ~/.ballrc").
 				The file adheres to the format definition of an \link INIFile INIFile \endlink.
 				The keywords recognized can be seen from the example below:
 				\verbatim
-					[BALLStructureDatabase]
+					[StructureDatabase]
 					user=oliver
 					password=mypassword
-					database=structures
+					database=STRUCTURES
 					host=diclofenac.informatik.uni-tuebingen.de
 					port=3306
 					driver=QMYSQL3
@@ -206,6 +240,11 @@ namespace BALL
 		/// Skip to the next result of the last query (if it exists)
 		bool next() { return query_->next(); }
 
+		/** Return a vector of IDs, if the last query produced just IDs.
+				This will call next() until all records have been extracted.
+		*/
+		IDVector extractIDs();
+
 		/// Skip to the previous result of the last query (if it exists)
 		bool prev() { return query_->prev(); }
 
@@ -238,9 +277,24 @@ namespace BALL
 
 		protected:	
 
+		/// Assign the coordinates from the XDR-encoded bytearray to the system
+		static void assignCoordinates_(System& system, const QByteArray& data);
+		/// Extract the coordinates from the system and XDR-encode them as a byte array.
+		static void extractCoordinates_(const System& system, QByteArray& data);
+		/// Assign the charges from the XDR-encoded bytearray to the system
+		static void assignCharges_(System& system, const QByteArray& data);
+		/// Extract the coordinates from the system and XDR-encode them as a byte array.
+		static void extractCharges_(const System& system, QByteArray& data);
+		///
+		static void encodeArray_(const std::vector<float>& v, QByteArray& a);
+		///
+		static void decodeArray_(const QByteArray& a, std::vector<float>& v);
+
 		// Database conection
 		ErrorCode				error_;
+		///
 		QSqlDatabase*		db_;
+		///
 		QSqlQuery*			query_;
 		
 		// Connection details

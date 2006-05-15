@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.sip,v 1.4 2003/11/01 09:27:36 oliver Exp $
+// $Id: INIFile.sip,v 1.4.10.1 2006/05/15 23:18:39 amoll Exp $
 //
 
 
@@ -61,6 +61,7 @@ class INIFile
 
 	String getValue(const String& /section/, const String& /key/) const;
 
+	bool insertValue(const String& /section/, const String& /key/, const String& /value/);
 	bool setValue(const String& /section/, const String& /key/, const String& /value/);
 	bool operator == (const INIFile& /inifile/) const;
 	// bool isValid(const LineIterator& it) const;

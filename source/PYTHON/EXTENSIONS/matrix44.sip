@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.sip,v 1.8 2004/09/22 21:07:05 oliver Exp $
+// $Id: matrix44.sip,v 1.8.8.1 2006/05/15 23:18:41 amoll Exp $
 //
 
 class Matrix4x4
@@ -70,9 +70,22 @@ class Matrix4x4
 
   // float operator () (Position /row/, Position /col/) const;
   // float operator [] (Position /index/) const;
- float operator [] (Position /index/) /Numeric/;
+ float operator [] (Position /index/) /Numeric,NonLazy/;
 %MethodCode
-	sipRes = sipCpp->operator [] (*a0);
+	try
+	{
+		sipRes = sipCpp->operator [] (*a0);
+	}
+	catch (IndexOverflow& e)
+	{
+		PyErr_SetString(PyExc_IndexError, "index overflow in Matrix4x4. Max. index is 15!");
+		sipIsErr = 1;
+	}
+%End
+
+	int __len__ ();
+%MethodCode
+  sipRes = 16;
 %End
 
   // ???? Matrix4x4 operator + () const;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.C,v 1.5.2.1 2006/05/15 12:24:39 amoll Exp $
+// $Id: smartsParser.C,v 1.5.2.2 2006/05/15 23:18:44 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/smartsParser.h>
@@ -164,6 +164,12 @@ namespace BALL
 				{
 					matches = true;
 					cerr << "chiral bond definitions are not implemented yet" << endl;
+				}
+				break;
+			case SINGLE_OR_AROMATIC:
+				if (bond->getOrder() == Bond::ORDER__SINGLE || bond->getOrder() == Bond::ORDER__AROMATIC)
+				{
+					matches = true;
 				}
 				break;
 			case DOUBLE:

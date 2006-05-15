@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.h,v 1.5.2.2 2006/05/15 12:20:11 amoll Exp $
+// $Id: smartsParser.h,v 1.5.2.3 2006/05/15 23:18:33 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMARTES_PARSER_H
@@ -106,6 +106,7 @@ namespace BALL
 					SINGLE_UP_OR_ANY,
 					SINGLE_DOWN,
 					SINGLE_DOWN_OR_ANY,
+					SINGLE_OR_AROMATIC,
 					AROMATIC,
 					DOUBLE,
 					TRIPLE,

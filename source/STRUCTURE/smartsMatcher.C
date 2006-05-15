@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.C,v 1.4.2.4 2006/05/15 14:22:51 amoll Exp $
+// $Id: smartsMatcher.C,v 1.4.2.5 2006/05/15 23:18:44 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/smartsMatcher.h>

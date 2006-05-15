@@ -1,7 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.18 2006/05/08 23:29:44 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.19 2006/05/15 23:18:51 amoll Exp $
+//
+// Author:
+//   Heiko Klein
+//   Andreas Moll
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>

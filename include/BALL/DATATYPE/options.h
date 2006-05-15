@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.h,v 1.25 2005/12/23 17:01:42 amoll Exp $
+// $Id: options.h,v 1.25.2.1 2006/05/15 23:18:32 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_OPTIONS_H
@@ -21,6 +21,10 @@
 
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
+#endif
+
+#ifndef BALL_CONCEPT_PERSISTENTOBJECT_H
+#	include <BALL/CONCEPT/persistentObject.h>
 #endif
 
 namespace BALL 
@@ -316,6 +320,23 @@ namespace BALL
 					@see readOptionFile
 		*/		
 		bool writeOptionFile(const String& filename) const throw();
+
+		/**	Persistent stream writing.
+				This method writes the strings using the <tt>writePrimitive</tt> method
+				of the PersistenceManager.
+				@param pm the persistence manager
+		*/
+		void write(PersistenceManager& pm) const
+			throw();
+
+		/** Persistent stream reading.
+				This method reads from the
+				persistent stream using the <tt>readPrimitive</tt> method
+				of the PersistenceManager.
+				@param pm the persistence manager
+		*/
+		bool read(PersistenceManager& pm)
+			throw();
 
 		/// Equality operator
 		bool operator == (const Options& option) const throw();

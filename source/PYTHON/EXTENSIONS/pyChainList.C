@@ -1,7 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyChainList.C,v 1.2 2002/02/27 12:23:58 sturm Exp $
+// $Id: pyChainList.C,v 1.2.12.1 2006/05/15 23:18:41 amoll Exp $
+//
+// Author:
+//   Oliver Kohlbacher
+//
 
 #include <BALL/PYTHON/pyChainList.h>
 #include <BALL/KERNEL/chain.h>

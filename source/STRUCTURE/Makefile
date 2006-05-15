@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.43.2.4 2006/05/15 12:24:38 amoll Exp $
+# $Id: Makefile,v 1.43.2.5 2006/05/15 23:18:44 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -26,7 +26,7 @@ SMARTS_SOURCES=\
 
 CPP_SOURCES=\
 	analyticalSES.C\
-  atomBijection.C\
+	atomBijection.C\
 	buildBondsProcessor.C\
 	connolly.C\
 	defaultProcessors.C\
@@ -77,7 +77,6 @@ CPP_SOURCES=\
 	triangulatedSES.C\
 	triangulatedSurface.C\
 	UCK.C
-#	atomBijection.C\
 
 SMILES_PARSER_PREFIX=SmilesParser
 SMARTS_PARSER_PREFIX=SmartsParser

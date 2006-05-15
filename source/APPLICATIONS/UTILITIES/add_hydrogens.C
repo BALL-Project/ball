@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: add_hydrogens.C,v 1.8 2006/01/03 18:09:45 anhi Exp $
+// $Id: add_hydrogens.C,v 1.8.2.1 2006/05/15 23:18:37 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -75,6 +75,8 @@ int main(int argc, char** argv)
 	system.apply(h_select);
 	cout << "done." << endl;
 	cout << "Starting minimizer: " << endl << endl;
+	SteepestDescentMinimizer sdm(amber_ff);
+	sdm.minimize(1000);
 	ConjugateGradientMinimizer cgm(amber_ff);
 	cgm.minimize(1000);
 

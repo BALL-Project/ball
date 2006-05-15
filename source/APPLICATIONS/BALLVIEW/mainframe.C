@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.20 2006/05/09 09:34:47 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.21 2006/05/15 23:18:36 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -92,8 +92,8 @@ namespace BALL
 		// ---------------------
 		// Logstream setup -----
 		// ---------------------
-//		Lo g.remove(std::cout);
-// 		Log.remove(std::cerr);
+		Log.remove(std::cout);
+		Log.remove(std::cerr);
 		setLoggingFilename("BALLView.log");
 
  		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, "Structures"));
@@ -122,6 +122,7 @@ namespace BALL
 		Scene::stereoBufferSupportTest();
 		scene_ = new Scene(this, "3D View");
 		setCentralWidget(scene_);
+		setAcceptDrops(true);
 
 		// setup the VIEW server
 		Server* server = new Server(this);

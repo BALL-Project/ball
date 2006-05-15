@@ -1,7 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.61 2005/12/23 17:01:40 amoll Exp $
+// $Id: composite.h,v 1.61.2.1 2006/05/15 23:18:32 amoll Exp $
+//
+// Author:
+//   Nicolas Boghossian
+//   Oliver Kohlbacher
 //
 
 #ifndef BALL_CONCEPT_COMPOSITE_H

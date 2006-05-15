@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.22 2006/05/15 15:10:59 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.23 2006/05/15 23:18:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>

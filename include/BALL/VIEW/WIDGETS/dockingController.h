@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.3 2006/02/01 13:23:41 amoll Exp $
+// $Id: dockingController.h,v 1.1.2.4 2006/05/15 23:18:34 amoll Exp $
 //
 
 #ifndef BALL_WIDGETS_DOCKINGCONTROLLER_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>
+#endif
+
+#ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
+# include <BALL/VIEW/WIDGETS/genericControl.h>
 #endif
 
 #ifndef BALL_VIEW_DIALOGS_DOCKDIALOG_H

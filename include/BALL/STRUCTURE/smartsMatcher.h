@@ -1,10 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.h,v 1.3.2.2 2006/05/15 12:20:11 amoll Exp $
-//
-// Author:
-//   Andreas Bertsch
+// $Id: smartsMatcher.h,v 1.3.2.3 2006/05/15 23:18:33 amoll Exp $
 //
 // Author:
 //   Andreas Bertsch
