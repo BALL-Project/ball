@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.20 2006/05/15 11:51:33 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.21 2006/05/15 14:34:14 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -98,6 +98,7 @@ namespace BALL
 			select_button->setDefault(true);
 			select_button->setMinimumSize(40, 25);
 			connect(select_button, SIGNAL(clicked()), this, SLOT(applySelector()));
+			connect(selector_edit_->lineEdit(), SIGNAL(returnPressed()), this, SLOT(applySelector()));
 			select_button->setToolTip("Apply the current expression.");
 			lay->addWidget(select_button,3, 2);
 
@@ -1063,7 +1064,7 @@ namespace BALL
 			Size nr_of_atoms = 0;
 
 			CompositeManager::CompositeIterator it = getMainControl()->getCompositeManager().begin();
-			for(; it != getMainControl()->getCompositeManager().end(); it++)
+			for(; +it; it++)
 			{
 				try
 				{
@@ -1072,6 +1073,7 @@ namespace BALL
 				catch(Exception::GeneralException e)
 				{
 					setStatusbarText(String("Invalid expression ") + e.getMessage(), true);
+					return 0;
 				}
 
 				List<Atom*>::Iterator ait = s.getSelectedAtoms().begin();
@@ -1262,8 +1264,6 @@ namespace BALL
 					selector_edit_->addItem(fields[p].c_str());
 				}
 			}
-
-			connect(selector_edit_->lineEdit(), SIGNAL(returnPressed()), this, SLOT(applySelector()));
 		}
 
 		void MolecularControl::writePreferences(INIFile& inifile)
