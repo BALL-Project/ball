@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.10 2006/05/15 12:32:56 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.11 2006/05/15 12:46:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -602,29 +602,21 @@ namespace BALL
 		{
 			if (getMainControl()->getMolecularControlSelection().size() != 2)
 			{
+				setStatusbarText("Not 2 atom containers highlighted", true);
 				return;
 			}
 
-			AtomContainer* a1 = 0;
-			AtomContainer* a2 = 0;
+			List<Composite*>::Iterator sit = getMainControl()->getMolecularControlSelection().begin();
 
-			List<Composite*>::Iterator it = getMainControl()->getMolecularControlSelection().begin();
-			
-			if (!RTTI::isKindOf<AtomContainer>(**it)) 
+			AtomContainer* a1 = dynamic_cast<AtomContainer*>(*sit);
+			sit++;
+			AtomContainer* a2 = dynamic_cast<AtomContainer*>(*sit);
+		
+			if (!a1 || !a2)
 			{
 				setStatusbarText("Exact two AtomContainers have to be selected", true);
 				return;
 			}
-
-			a1 = (AtomContainer*) *it;
-			it++;
-			if (!RTTI::isKindOf<AtomContainer>(**it)) 
-			{
-				setStatusbarText("Exact two AtomContainers have to be selected", true);
-				return;
-			}
-			
-			a2 = (AtomContainer*) *it;
 
 			if (a1->isRelatedWith(*a2))
 			{
@@ -645,20 +637,18 @@ namespace BALL
 
 			String rmsd_text("Calcuted RMSD: " + String(rmsd) + " A.");
 
-			/*
 			a1->deselect();
 			a2->deselect();
 
-			if (sm.getBijection().size() == a1->countAtoms() &&
-			    sm.getBijection().size() == a2->countAtoms())
+			Size max_atoms = BALL_MAX(a1->countAtoms(), a2->countAtoms());
+
+			if (ab.size() == max_atoms)
 			{
 				setStatusbarText(rmsd_text + ". All atoms could be matched.", true);
 				return;
 			}
 
-			Index not_matched = max(a1->countAtoms() - sm.getBijection().size(), 
-															a2->countAtoms() - sm.getBijection().size());
-			rmsd_text += "  WARNING: " + String(not_matched) + " atoms were not mapped and are now selected";
+			rmsd_text += "  WARNING: " + String(max_atoms - ab.size()) + " atoms were not mapped and are now selected";
 			setStatusbarText(rmsd_text, true);
 
 			HashSet<Atom*> atom_set;
@@ -674,12 +664,24 @@ namespace BALL
 				atom_set.insert(&*ait);
 			}
 
+			AtomBijection::PairVector::iterator pit = ab.begin();
+			for(; pit != ab.end(); pit++)
+			{
+				atom_set.erase(pit->first);
+				atom_set.erase(pit->second);
+			}
+
+			HashSet<Atom*>::Iterator hit = atom_set.begin();
+			for (; +hit; ++hit)
+			{
+				(**hit).select();
+			}
+
 			getMainControl()->updateRepresentationsOf(*a1, true);
 			getMainControl()->updateRepresentationsOf(*a2, true);
 
 			NewSelectionMessage* new_message = new NewSelectionMessage;
 			notify_(new_message);
-			*/
 		}
 
 		void MolecularStructure::mapProteins()
