@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.9 2006/05/08 21:55:40 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.10 2006/05/15 12:32:56 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -639,13 +639,16 @@ namespace BALL
 				return;
 			}
 
+			AtomBijection ab;
+			ab.assignByName(*a1, *a2);
+			float rmsd = ab.calculateRMSD();
+
+			String rmsd_text("Calcuted RMSD: " + String(rmsd) + " A.");
+
+			/*
 			a1->deselect();
 			a2->deselect();
 
-			StructureMapper sm(*a1, *a2);
-			double	rmsd = sm.calculateRMSD();
-
-			String rmsd_text("Calcuted RMSD: " + String(rmsd) + " A.");
 			if (sm.getBijection().size() == a1->countAtoms() &&
 			    sm.getBijection().size() == a2->countAtoms())
 			{
@@ -671,28 +674,12 @@ namespace BALL
 				atom_set.insert(&*ait);
 			}
 
-			StructureMapper::AtomBijection& ab = 
-				(StructureMapper::AtomBijection&) sm.getBijection();
-
-			StructureMapper::AtomBijection::iterator ab_it= ab.begin();
-			for (; ab_it != ab.end(); ++ab_it)
-			{
-				atom_set.erase(ab_it->first);
-				atom_set.erase(ab_it->second);
-			}
-
-			HashSet<Atom*>::Iterator hit = atom_set.begin();
-			for (; +hit; ++hit)
-			{
-				(*hit)->select();
-				getMainControl()->getSelection().insert(*hit);
-			}
-
 			getMainControl()->updateRepresentationsOf(*a1, true);
 			getMainControl()->updateRepresentationsOf(*a2, true);
 
 			NewSelectionMessage* new_message = new NewSelectionMessage;
 			notify_(new_message);
+			*/
 		}
 
 		void MolecularStructure::mapProteins()
