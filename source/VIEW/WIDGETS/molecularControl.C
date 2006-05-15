@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.19 2006/05/15 11:49:08 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.20 2006/05/15 11:51:33 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -588,7 +588,9 @@ namespace BALL
 			registerForHelpSystem(selector_edit_, "molecularControl.html#regular_expressions"); 
 
 			insertMenuEntry(MainControl::DISPLAY, "Show Distance", this, SLOT(showDistance()));
+			setMenuHint("Render a label for the distance between two highlighted atoms");
 			insertMenuEntry(MainControl::DISPLAY, "Show Angle", this, SLOT(showAngle()));
+			setMenuHint("Render a label for the angle between three highlighted atoms");
 		}
 
 
