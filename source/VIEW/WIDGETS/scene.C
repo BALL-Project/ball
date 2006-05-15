@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.47 2006/05/11 13:49:33 amoll Exp $
+// $Id: scene.C,v 1.174.2.48 2006/05/15 14:55:48 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2189,6 +2189,7 @@ namespace BALL
 			String start = String(screenshot_nr_) + ".vrml";
 			screenshot_nr_ ++;
 			QFileDialog fd(0, "Export to a VRML file", getMainControl()->getWorkingDir().c_str(), "*.vrml");
+			fd.setAcceptMode(QFileDialog::AcceptSave);
 			fd.selectFile(start.c_str());
 			fd.setFileMode(QFileDialog::AnyFile);
 			if (fd.exec() != QDialog::Accepted ||
@@ -2232,6 +2233,7 @@ namespace BALL
 			screenshot_nr_ ++;
 			QFileDialog fd(0, "Export a screenshot to a PNG file", getMainControl()->getWorkingDir().c_str(),
 										 "*.png");
+			fd.setAcceptMode(QFileDialog::AcceptSave);
 			fd.selectFile(start.c_str());
 			fd.setFileMode(QFileDialog::AnyFile);
 			if (fd.exec() != QDialog::Accepted ||
