@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.18 2006/05/12 00:03:15 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.19 2006/05/15 11:49:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -69,6 +69,7 @@ namespace BALL
 
 			selector_edit_ = new QComboBox(this);
 			selector_edit_->setAutoCompletion(true);
+			selector_edit_->setAutoCompletionCaseSensitivity(Qt::CaseSensitive);
 			selector_edit_->setDuplicatesEnabled(false);
 			selector_edit_->setEditable(true);
 			selector_edit_->resize(100, 25);
