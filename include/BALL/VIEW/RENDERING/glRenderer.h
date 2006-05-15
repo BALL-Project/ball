@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36.2.15 2006/05/10 14:30:29 amoll Exp $
+// $Id: glRenderer.h,v 1.36.2.16 2006/05/15 13:40:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -498,7 +498,7 @@ namespace BALL
 			bool 										drawed_mesh_;
 			GLUquadricObj*  GLU_quadric_obj_;
 			HashMap<const RegularData3D*, Position> grid_to_texture_;
-			Position cel_texture_;
+			GLuint       						cel_texture_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
