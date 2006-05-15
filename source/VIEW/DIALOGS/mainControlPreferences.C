@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.C,v 1.16.2.4 2006/03/15 15:40:36 amoll Exp $
+// $Id: mainControlPreferences.C,v 1.16.2.5 2006/05/15 14:15:30 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
@@ -29,7 +29,7 @@ MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name
 #ifdef BALL_PLATFORM_WINDOWS
 	prefered_style = "WindowsXP";
 #endif
-#ifdef BALL_PLATFORM_MAC
+#ifdef BALL_OS_DARWIN
 	prefered_style = "Macintosh style";
 #endif
 
