@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.h,v 1.5.2.3 2006/05/15 23:18:33 amoll Exp $
+// $Id: smartsParser.h,v 1.5.2.4 2006/05/16 12:39:30 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMARTES_PARSER_H
@@ -33,6 +33,9 @@
 
 #include <utility>
 #include <vector>
+
+// needed for MSVC:
+#undef CW_DEFAULT
 
 namespace BALL 
 {
@@ -385,7 +388,7 @@ namespace BALL
 			const char*		buffer;
 		};
 		
-		BALL_EXPORT static State state;
+		static State state;
 
 		void setNextComponentNumberToSubTree(SPNode* spnode);
 
