@@ -76,10 +76,9 @@ libBALL.obj\
 ..\..\..\source\KERNEL\atomContainer.obj\
 ..\..\..\source\KERNEL\bond.obj\
 ..\..\..\source\KERNEL\chain.obj\
-..\..\..\source\KERNEL\expression.obj\
-..\..\..\source\KERNEL\expressionParser.obj\
-..\..\..\source\KERNEL\expressionPredicate.obj\
-..\..\..\source\KERNEL\expressionTree.obj\
+..\..\..\source\KERNEL\expression.obj ..\..\..\source\KERNEL\expressionParser.obj\
+..\..\..\source\KERNEL\expressionPredicate.obj ..\..\..\source\KERNEL\expressionTree.obj\
+..\..\..\source\KERNEL\extractors.obj\
 ..\..\..\source\KERNEL\fragment.obj\
 ..\..\..\source\KERNEL\global.obj\
 ..\..\..\source\KERNEL\molecule.obj\
@@ -205,6 +204,7 @@ libBALL.obj\
 ..\..\..\source\SOLVATION\solventDescriptor.obj\
 ..\..\..\source\SOLVATION\solventParameter.obj\
 ..\..\..\source\SOLVATION\uhligCavFreeEnergyProcessor.obj\
+..\..\..\source\STRUCTURE\atomBijection.obj\
 ..\..\..\source\STRUCTURE\analyticalSES.obj\
 ..\..\..\source\STRUCTURE\buildBondsProcessor.obj\
 ..\..\..\source\STRUCTURE\connolly.obj\
