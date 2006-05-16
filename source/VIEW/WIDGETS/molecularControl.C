@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.24 2006/05/16 23:03:20 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.25 2006/05/16 23:15:46 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -415,7 +415,7 @@ namespace BALL
 		void MolecularControl::compositeProperties()
 		{
 			CompositeProperties as(context_composite_, this);
-			as.exec();
+			if (!as.exec()) return;
 
 			CompositeMessage* message = new CompositeMessage(
 					*context_composite_, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);

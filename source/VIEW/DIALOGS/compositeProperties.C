@@ -23,7 +23,7 @@ CompositeProperties::CompositeProperties(Composite* composite, QWidget* parent,
 	
   // signals and slots connections
   connect( ok_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
-  connect( cancel_button, SIGNAL( clicked() ), this, SLOT( close() ) );
+  connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
 
 	setObjectName(name);
 	if (RTTI::isKindOf<AtomContainer>(*composite))
