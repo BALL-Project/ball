@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.26.2.2 2006/05/15 23:18:47 amoll Exp $
+# $Id: Makefile.lst,v 1.26.2.3 2006/05/16 06:24:49 amoll Exp $
 #
 
 EXECUTABLES_BASIC = \
@@ -258,7 +258,7 @@ XDR_DEPENDENT_EXECUTABLES = \
 $(PREFIX)XDRPersistenceManager_test$(EXEEXT)
 
 VIEW_DEPENDENT_EXECUTABLES= \
-$(PREFIX)DBInterface_test$(EXEEXT)
+#$(PREFIX)DBInterface_test$(EXEEXT)
 
 GSL_DEPENDENT_EXECUTABLES= \
 $(PREFIX)RMSDMinimizer_test$(EXEEXT)
