@@ -1,4 +1,4 @@
-// $Id: hydrogenBond.C,v 1.2 2006/02/21 16:14:19 anker Exp $
+// $Id: hydrogenBond.C,v 1.3 2006/05/17 12:50:46 anker Exp $
 // hydrogen bond component
 
 #include <BALL/SCORING/COMPONENTS/hydrogenBond.h>
@@ -10,7 +10,7 @@
 
 #include <BALL/SYSTEM/timer.h>
 
-#define DEBUG 1
+// #define DEBUG 1
 
 #ifdef DEBUG
 #include <BALL/FORMAT/HINFile.h>
@@ -109,7 +109,6 @@ namespace BALL
 		// clear the vector of possible hydrogen bonds
 		possible_hydrogen_bonds_.clear();
 
-		System* system = getScoringFunction()->getSystem();
     Options& options = getScoringFunction()->options;
 
 		ideal_hbond_length_ 
@@ -134,14 +133,17 @@ namespace BALL
 			= options.setDefaultInteger(HydrogenBond::Option::VERBOSITY,
 					HydrogenBond::Default::VERBOSITY);
 
+		verbosity = 100;
+
 		FresnoTypes fresno_types_class(*this);
-		const HashMap<const Atom*, Size>& fresno_types 
-			= fresno_types_class.getTypeMap();
+		// const HashMap<const Atom*, Size>& fresno_types 
+		//	= fresno_types_class.getTypeMap();
+		fresno_types = fresno_types_class.getTypeMap();
 
 		// two times quadratic run time. not nice.
 
-		Molecule* A = system->getMolecule(0);
-		Molecule* B = system->getMolecule(1);
+		Molecule* A = getScoringFunction()->getReceptor();
+		Molecule* B = getScoringFunction()->getLigand();
 
 		AtomConstIterator A_it = A->beginAtom();
 		AtomConstIterator B_it;
@@ -222,6 +224,13 @@ namespace BALL
 
 		return(true);
 
+	}
+
+
+	const HashMap<const Atom*, Size>& HydrogenBond::getFresnoTypes()
+		throw()
+	{
+		return(fresno_types);
 	}
 
 
@@ -331,8 +340,8 @@ namespace BALL
 					debug_molecule.insert(*atom_ptr_donor);
 #endif
 
-					// Print all single energy cotributions
-					if (verbosity >= 0)
+					// Print all single energy contributions
+					if (verbosity >= 100)
 					{
 						Atom* donor = it->first->getBond(0)->getPartner(*it->first);
 						Log.info() << "HB: " << val << " " 
@@ -371,8 +380,10 @@ namespace BALL
 #endif
 
 		timer.stop();
+#ifdef DEBUG
 		Log.info() << "HydrogenBond::updateEnergy(): "
 			<< timer.getCPUTime() << " s" << std::endl;
+#endif
 
 		return(score_);
 	}
