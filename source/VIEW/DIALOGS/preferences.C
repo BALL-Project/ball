@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.19.2.4 2006/04/08 10:10:26 amoll Exp $
+// $Id: preferences.C,v 1.19.2.5 2006/05/17 15:00:35 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -275,10 +275,16 @@ namespace BALL
 			if (sel.size() == 0) return;
 			QTreeWidgetItem* item =  *sel.begin();
 
-			HelpViewer* hv = HelpViewer::getInstance(0);
-			if (hv != 0)
+			Position i = 0;
+			while (true)
 			{
+				HelpViewer* hv = HelpViewer::getInstance(i);
+				if (hv == 0) return;
+
+				i++;
+				if (hv->getProject() != "BALLView") continue;
 				hv->showHelpFor(item_to_widget_[item]);
+				break;
 			}
 		}
 
