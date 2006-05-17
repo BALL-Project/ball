@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.48 2006/05/15 14:55:48 amoll Exp $
+// $Id: scene.C,v 1.174.2.49 2006/05/17 00:05:58 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -282,9 +282,9 @@ namespace BALL
 							// to be moved somewhere else:
 							ColorMap map;
 							ColorRGBA colors[3];
-							colors[0] = ColorRGBA(1.0, 0.0, 0.0, 0.1);
+							colors[0] = ColorRGBA(1.0, 0.0, 0.0, 0.05);
 							colors[1] = ColorRGBA(1.0, 1.0, 0.0, 0.01);
-							colors[2] = ColorRGBA(0.0, 0.0, 1.0, 0.1);
+							colors[2] = ColorRGBA(0.0, 0.0, 1.0, 0.05);
 							if (rm->getType() == (Size) RegularData3DMessage::VISUALISE_SLICE)
 							{
 								colors[0].setAlpha(0.8);
