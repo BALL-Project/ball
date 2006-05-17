@@ -1,5 +1,6 @@
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/FORMAT/trajectoryFile.h>
@@ -152,6 +153,8 @@ void SnapshotVisualisationDialog::animateClicked()
 			if (!snap_shot_manager_->applyNextSnapShot()) break;
 		}
 
+		MainControl* mc = getMainControl();
+
 		if (forward)
 		{
 			if (speed >= tempo - i)
@@ -160,6 +163,11 @@ void SnapshotVisualisationDialog::animateClicked()
 				setWindowTitle((String("CurrentSnapshot: ") + String(i)).c_str());
 				snapShotSlider->setValue(i);
 				update_();
+
+				while (mc->isBusy())
+ 				{
+					QApplication::processEvents();
+ 				}
 				
 				if (export_PNG->isChecked())
 				{
