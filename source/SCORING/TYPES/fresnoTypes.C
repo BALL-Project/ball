@@ -27,8 +27,11 @@ namespace BALL
 				return(false);
 			}
 
-			System* system = scoring_component_->getScoringFunction()->getSystem();
-			if (system == 0)
+			Molecule* receptor 
+				= scoring_component_->getScoringFunction()->getReceptor();
+			Molecule* ligand 
+				= scoring_component_->getScoringFunction()->getLigand();
+			if ((receptor == 0) || (ligand == 0))
 			{
 				// DEBUG
 				std::cerr << "No system found." << std::endl;
@@ -36,10 +39,22 @@ namespace BALL
 				return(false);
 			}
 
-			AtomIterator atom_it = system->beginAtom();
-			for (; +atom_it; ++atom_it)
+			vector<Atom*> atom_vector;
+			AtomIterator store_it = receptor->beginAtom();
+			for (; +store_it; ++store_it)
 			{
-				type_map_.insert(std::pair<Atom*, Size>(&*atom_it, FresnoTypes::UNKNOWN));
+				atom_vector.push_back(&*store_it);
+			}
+			store_it = ligand->beginAtom();
+			for (; +store_it; ++store_it)
+			{
+				atom_vector.push_back(&*store_it);
+			}
+
+			vector<Atom*>::iterator atom_it = atom_vector.begin();
+			for (; atom_it != atom_vector.end(); ++atom_it)
+			{
+				type_map_.insert(std::pair<Atom*, Size>(*atom_it, FresnoTypes::UNKNOWN));
 			}
 
 			HashMap<const Atom*, Size>::Iterator it = type_map_.begin();
@@ -136,89 +151,73 @@ namespace BALL
 					}
 				}
 				else
-			{
-				if (symbol == "H")
 				{
-					connectedTo.setArgument("(O)");
-					if (connectedTo(*atom))
+					if (symbol == "H")
 					{
-						it->second = FresnoTypes::HBOND_HYDROGEN;
-						++hyd_counter;
-						if (verbosity >= 90) 
-						{
-							Log.info() << it->first->getFullName() << ": HYD" << std::endl;
-						}
-					}
-					connectedTo.setArgument("(N)");
-					if (connectedTo(*atom))
-					{
-						it->second = FresnoTypes::HBOND_HYDROGEN;
-						++hyd_counter;
-						if (verbosity >= 90) 
-						{
-							Log.info() << it->first->getFullName() << ": HYD" << std::endl;
-						}
-					}
-				}
-				else
-				{
-					if (symbol == "O")
-					{
-						connectedTo.setArgument("(H)");
+						connectedTo.setArgument("(O)");
 						if (connectedTo(*atom))
 						{
-							if (assignment_type == FresnoTypes::ASSIGNMENT__ELDRIDGE)
+							it->second = FresnoTypes::HBOND_HYDROGEN;
+							++hyd_counter;
+							if (verbosity >= 90) 
 							{
-								it->second = FresnoTypes::HBOND_ACCEPTOR_DONOR;
-								++acc_don_counter;
-								if (verbosity >= 90)
-								{
-									Log.info() << it->first->getFullName() << ": DON" << std::endl;
-								}
+								Log.info() << it->first->getFullName() << ": HYD" << std::endl;
 							}
 						}
-						else
+						connectedTo.setArgument("(N)");
+						if (connectedTo(*atom))
 						{
-							it->second = FresnoTypes::HBOND_ACCEPTOR;
-							++acc_counter;
-							if (verbosity >= 90)
+							it->second = FresnoTypes::HBOND_HYDROGEN;
+							++hyd_counter;
+							if (verbosity >= 90) 
 							{
-								Log.info() << it->first->getFullName() << ": ACC" << std::endl;
+								Log.info() << it->first->getFullName() << ": HYD" << std::endl;
 							}
 						}
 					}
 					else
 					{
-						if ((symbol == "Fl") || (symbol == "P"))
+						if (symbol == "O")
 						{
-							it->second = FresnoTypes::POLAR;
-							if (verbosity >= 90)
+							connectedTo.setArgument("(H)");
+							if (connectedTo(*atom))
 							{
-								Log.info() << it->first->getFullName() << ": POL" << std::endl;
-							}
-							++polar_counter;
-						}
-						else
-						{
-							if (symbol == "S")
-							{
-								if (atom->countBonds() == 1)
+								if (assignment_type == FresnoTypes::ASSIGNMENT__ELDRIDGE)
 								{
-									it->second = FresnoTypes::POLAR;
+									it->second = FresnoTypes::HBOND_ACCEPTOR_DONOR;
+									++acc_don_counter;
 									if (verbosity >= 90)
 									{
-										Log.info() << it->first->getFullName() << ": POL" << std::endl;
+										Log.info() << it->first->getFullName() << ": DON" << std::endl;
 									}
-									++polar_counter;
 								}
 							}
 							else
 							{
-								if (symbol == "C")
+								it->second = FresnoTypes::HBOND_ACCEPTOR;
+								++acc_counter;
+								if (verbosity >= 90)
 								{
-									// ????? nitrile/carbonyl
-									connectedTo.setArgument("(=O)");
-									if (connectedTo(*atom))
+									Log.info() << it->first->getFullName() << ": ACC" << std::endl;
+								}
+							}
+						}
+						else
+						{
+							if ((symbol == "Fl") || (symbol == "P"))
+							{
+								it->second = FresnoTypes::POLAR;
+								if (verbosity >= 90)
+								{
+									Log.info() << it->first->getFullName() << ": POL" << std::endl;
+								}
+								++polar_counter;
+							}
+							else
+							{
+								if (symbol == "S")
+								{
+									if (atom->countBonds() == 1)
 									{
 										it->second = FresnoTypes::POLAR;
 										if (verbosity >= 90)
@@ -227,9 +226,13 @@ namespace BALL
 										}
 										++polar_counter;
 									}
-									else
+								}
+								else
+								{
+									if (symbol == "C")
 									{
-										connectedTo.setArgument("(#N)");
+										// ????? nitrile/carbonyl
+										connectedTo.setArgument("(=O)");
 										if (connectedTo(*atom))
 										{
 											it->second = FresnoTypes::POLAR;
@@ -239,31 +242,44 @@ namespace BALL
 											}
 											++polar_counter;
 										}
-									}
-								}
-								else
-								{
-									if ((symbol == "Cl")
-											|| (symbol == "Br")
-											|| (symbol == "I"))
-									{
-										if (atom->getCharge() == 0.0)
-										{
-											it->second = FresnoTypes::LIPOPHILIC;
-											if (verbosity >= 90)
-											{
-												Log.info() << it->first->getFullName() << ": LIP" << std::endl;
-											}
-											++lipo_counter;
-										}
 										else
 										{
-											it->second = FresnoTypes::HBOND_ACCEPTOR;
-											if (verbosity >= 90)
+											connectedTo.setArgument("(#N)");
+											if (connectedTo(*atom))
 											{
-												Log.info() << it->first->getFullName() << ": ACC" << std::endl;
+												it->second = FresnoTypes::POLAR;
+												if (verbosity >= 90)
+												{
+													Log.info() << it->first->getFullName() << ": POL" << std::endl;
+												}
+												++polar_counter;
 											}
-											++acc_counter;
+										}
+									}
+									else
+									{
+										if ((symbol == "Cl")
+												|| (symbol == "Br")
+												|| (symbol == "I"))
+										{
+											if (atom->getCharge() == 0.0)
+											{
+												it->second = FresnoTypes::LIPOPHILIC;
+												if (verbosity >= 90)
+												{
+													Log.info() << it->first->getFullName() << ": LIP" << std::endl;
+												}
+												++lipo_counter;
+											}
+											else
+											{
+												it->second = FresnoTypes::HBOND_ACCEPTOR;
+												if (verbosity >= 90)
+												{
+													Log.info() << it->first->getFullName() << ": ACC" << std::endl;
+												}
+												++acc_counter;
+											}
 										}
 									}
 								}
@@ -271,7 +287,6 @@ namespace BALL
 						}
 					}
 				}
-			}
 		}
 
 		if (verbosity > 8)
@@ -285,7 +300,7 @@ namespace BALL
 			Log.info() << "polar atoms:             " << polar_counter << std::endl;
 			Log.info() << "metal atoms:             " << metal_counter << std::endl;
 			Log.info() << "remaining atoms:         " 
-				<< system->countAtoms() - lipo_counter - acc_counter 
+				<< ligand->countAtoms() + receptor->countAtoms() - lipo_counter - acc_counter 
 				- acc_don_counter - donor_counter - polar_counter - hyd_counter
 				- metal_counter
 				<< std::endl << std::endl;
@@ -438,7 +453,7 @@ namespace BALL
 			Log.info() << "polar atoms:             " << polar_counter << std::endl;
 			Log.info() << "metal atoms:             " << metal_counter << std::endl;
 			Log.info() << "remaining atoms:         " 
-				<< system->countAtoms() - lipo_counter - acc_counter 
+				<< ligand->countAtoms() + receptor->countAtoms() - lipo_counter - acc_counter 
 				- acc_don_counter - donor_counter - polar_counter - hyd_counter
 				- metal_counter
 				<< std::endl << std::endl;
@@ -515,7 +530,7 @@ namespace BALL
 			Log.info() << "polar atoms:             " << polar_counter << std::endl;
 			Log.info() << "metal atoms:             " << metal_counter << std::endl;
 			Log.info() << "remaining atoms:         " 
-				<< system->countAtoms() - lipo_counter - acc_counter 
+				<< ligand->countAtoms() + receptor->countAtoms() - lipo_counter - acc_counter 
 				- acc_don_counter - donor_counter - polar_counter - hyd_counter
 				- metal_counter
 				<< std::endl << std::endl;
