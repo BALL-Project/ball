@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.C,v 1.1.2.8 2006/04/07 12:19:58 amoll Exp $
+// $Id: representationManager.C,v 1.1.2.9 2006/05/17 11:36:46 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representationManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -35,8 +35,8 @@ RepresentationManager::RepresentationManager(MainControl* mc)
 		thread_(new UpdateRepresentationThread()),
 		main_control_(mc)
 {
-	thread_->start(QThread::LowPriority);
 	thread_->setMainControl(mc);
+	thread_->start(QThread::LowPriority);
 }
 
 RepresentationManager::~RepresentationManager()

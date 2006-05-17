@@ -45,8 +45,9 @@ namespace VIEW
 			3. Especially dont call the refresh methods for the Scene or 
 				 GL-methods. Use updateScene_() instead.
 			4. Overload the run method to insert the multithreaded code.
-			5. Before running a thread, lock the composites with ModularWidget::lockComposites().
-			6. After running a thread, unlock them with ModularWidget::unlockComposites().
+			5. Call setMainControl() before running the thread
+			6. Before running a thread, lock the composites with ModularWidget::lockComposites().
+			7. After running a thread, unlock them with ModularWidget::unlockComposites().
 			If you dont pay attention to these rules, dont wonder if BALLView freezes
 			or crashes!
 	*/
