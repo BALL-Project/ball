@@ -1,4 +1,4 @@
-// $Id: hydrogenBond.h,v 1.2 2006/02/21 16:19:32 anker Exp $
+// $Id: hydrogenBond.h,v 1.3 2006/05/17 12:49:15 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #ifndef BALL_SCORING_COMPONENTS_HYDROGENBOND_H
@@ -163,6 +163,8 @@ namespace BALL
 		virtual double calculateScore()
 			throw();
 
+		const HashMap<const Atom*, Size>& getFresnoTypes()
+			throw();
 		//@}
 
 		private:
@@ -210,6 +212,11 @@ namespace BALL
 		/*_ The ideal hbond angle.
 		*/
 		double ideal_hbond_angle_;
+
+		/*_ 
+		*/
+		HashMap<const Atom*, Size> fresno_types;
+
 
 	};
 
