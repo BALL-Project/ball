@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.25 2006/05/16 23:15:46 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.26 2006/05/17 11:23:12 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -1303,10 +1303,12 @@ namespace BALL
 
 			if (getMainControl()->isBusy())
 			{
+				ignore_checked_changes_ = true;
 				if (checked) item->setCheckState(1, Qt::Unchecked);
 				else 				 item->setCheckState(1, Qt::Checked);
 
 				VIEW::getMainControl()->setStatusbarText("Cannot select items now!", true);
+				ignore_checked_changes_ = false;
 				return;
 			}
 
