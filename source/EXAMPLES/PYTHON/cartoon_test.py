@@ -1,4 +1,5 @@
 # call this with "python -u cartoon_test.py | tee output.txt"
+# not to be used in BALLView!
 import os
 import shutil
 
