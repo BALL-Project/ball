@@ -78,7 +78,7 @@ libBALL.obj\
 ..\..\..\source\KERNEL\chain.obj\
 ..\..\..\source\KERNEL\expression.obj ..\..\..\source\KERNEL\expressionParser.obj\
 ..\..\..\source\KERNEL\expressionPredicate.obj ..\..\..\source\KERNEL\expressionTree.obj\
-..\..\..\source\KERNEL\extractors.obj\
+#..\..\..\source\KERNEL\extractors.obj\
 ..\..\..\source\KERNEL\fragment.obj\
 ..\..\..\source\KERNEL\global.obj\
 ..\..\..\source\KERNEL\molecule.obj\
