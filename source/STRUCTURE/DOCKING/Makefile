@@ -12,7 +12,29 @@ CPP_SOURCES= \
 	forceFieldEvaluation.C\
 	amberEvaluation.C\
 	randomEvaluation.C\
-	$(FFT_DEPENDENT_SOURCES)
+	$(FFT_DEPENDENT_SOURCES)\
+	geneticMating.C\
+  genericMapping.C\
+  genericEvolutionaryAlgorithm.C\
+  genericPoolUpdater.C\
+  quaternionGene.C\
+  genericGene.C\
+  doubleGene.C\
+  geneticPool.C\
+  selectionStrategy.C\
+  rankWeighting.C\
+  energyGrid.C\
+  rotateBonds.C\
+  dockMapping.C\
+  geneticMutation.C\
+  standardPoolUpdater.C\
+  geneticIndividual.C\
+  geneticAlgorithm.C\
+  evolutionaryDocking.C\
+  rotateBond.C\
+  assignGridTypes.C\
+  convert.C
+
 
 include ../../common.mak
 include .Dependencies
