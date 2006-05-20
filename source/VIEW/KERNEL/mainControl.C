@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.19 2006/05/15 23:18:51 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.20 2006/05/20 09:34:21 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -1933,9 +1933,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 	bool MainControl::isBusy() const
 	{
-		if (composites_locked_ || primitive_manager_.updateRunning()) return true;
-
-		return false;
+		return (composites_locked_ || primitive_manager_.updateRunning());
 	}
 		
 	void MainControl::setContentSize(int w, int h)
