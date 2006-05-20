@@ -12,6 +12,9 @@
 #include <QtGui/qradiobutton.h>
 #include <QtGui/QProgressDialog>
 
+#ifdef BALL_PLATFORM_WINDOWS
+ #include <windows.h>
+#endif
 namespace BALL
 {
 	namespace VIEW
@@ -153,8 +156,6 @@ void SnapshotVisualisationDialog::animateClicked()
 			if (!snap_shot_manager_->applyNextSnapShot()) break;
 		}
 
-		MainControl* mc = getMainControl();
-
 		if (forward)
 		{
 			if (speed >= tempo - i)
@@ -164,11 +165,6 @@ void SnapshotVisualisationDialog::animateClicked()
 				snapShotSlider->setValue(i);
 				update_();
 
-				while (mc->isBusy())
- 				{
-					QApplication::processEvents();
- 				}
-				
 				if (export_PNG->isChecked())
 				{
 					notify_(new SceneMessage(SceneMessage::EXPORT_PNG));
@@ -304,6 +300,17 @@ void SnapshotVisualisationDialog::update_()
   currentSnapshot->setText(tmp_);
 	update();
 	notify_(new CompositeMessage(*snap_shot_manager_->getSystem(), CompositeMessage::CHANGED_COMPOSITE));
+	MainControl* mc = getMainControl();
+	while (mc->isBusy())
+	{
+		QApplication::processEvents();
+#ifdef BALL_PLATFORM_WINDOWS
+		MainControl* mc = getMainControl();
+ 		Sleep(10);
+#else
+		nanoSleep(10);
+#endif
+	}
 }
 
 void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_manager)  

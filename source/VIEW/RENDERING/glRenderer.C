@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.49 2006/05/17 17:06:39 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.50 2006/05/20 13:14:45 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -545,6 +545,7 @@ namespace BALL
 			}
 
 			renderRepresentation_(representation, for_display_list);
+			glFlush();
 
 			return true;
 		}

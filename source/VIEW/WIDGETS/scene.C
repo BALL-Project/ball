@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.50 2006/05/17 14:38:22 amoll Exp $
+// $Id: scene.C,v 1.174.2.51 2006/05/20 13:16:21 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -250,6 +250,7 @@ namespace BALL
 				{
 					case RepresentationMessage::UPDATE:
 						gl_renderer_.bufferRepresentation(*rep);
+						getMainControl()->getRepresentationManager().finishedRendering(rep);
 						break;
 
 					case RepresentationMessage::REMOVE:

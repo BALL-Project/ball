@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.h,v 1.1.2.3 2006/02/01 14:14:50 amoll Exp $
+// $Id: representationManager.h,v 1.1.2.4 2006/05/20 13:15:41 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATIONMANAGER_H
 #define  BALL_VIEW_KERNEL_REPRESENTATIONMANAGER_H
@@ -228,15 +228,12 @@ namespace BALL
 			RepresentationList representations_;
 			
 			HashSet<Representation*> beeing_rendered_;
-
 			HashSet<Representation*> beeing_updated_;
-
 			HashSet<Representation*> to_update_;
 
 			vector<ClippingPlane*> clipping_planes_;
 			
 			UpdateRepresentationThread* thread_;
-			QMutex 											render_mutex_;
 			QMutex 											update_mutex_;
 
 			MainControl* 	main_control_;
