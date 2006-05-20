@@ -308,7 +308,7 @@ void SnapshotVisualisationDialog::update_()
 		MainControl* mc = getMainControl();
  		Sleep(10);
 #else
-		nanoSleep(10);
+		usleep(10);
 #endif
 	}
 }
