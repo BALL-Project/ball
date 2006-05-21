@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: defaultProcessors.h,v 1.16 2005/12/23 17:02:03 amoll Exp $
+// $Id: defaultProcessors.h,v 1.17 2006/05/21 18:23:01 anker Exp $
 //
 
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
@@ -91,7 +91,7 @@ namespace BALL
 
 		/** Applicator method
 		 *  The full names of all atoms in the container are compared to the
-		 *  atomnames form the file. For all matching atoms, the radii from the
+		 *  atomnames from the file. For all matching atoms, the radii from the
 		 *  file are set.
 		 *  If for an atom from the container no matching atom from the file can be found,
 		 *  a warning is displayed and the number of errors increases.
@@ -106,7 +106,7 @@ namespace BALL
 		 */
 		virtual Processor::Result operator()(Atom& atom);
 
-		/**	Set the filename to read the charges from.
+		/**	Set the filename to read the radii from.
 		 *  If the file can not be found in the actual path, FileNotFound is thrown.
 		 */
 		void setFilename(const String& filename)
@@ -121,7 +121,7 @@ namespace BALL
 		Size 	getNumberOfAssignments();
 
 		/**	Return the number of unassignable atoms.
-		 * 	Only the atoms form the container, which cannot be matched, count as errors.
+		 * 	Only the atoms from the container, which cannot be matched, count as errors.
 		 * 	The unmatched atoms from the file dont care.
 		 */
 		Size 	getNumberOfErrors();
