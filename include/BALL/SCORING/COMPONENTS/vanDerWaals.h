@@ -1,4 +1,4 @@
-// $Id: vanDerWaals.h,v 1.2 2006/02/21 16:20:05 anker Exp $
+// $Id: vanDerWaals.h,v 1.3 2006/05/21 17:35:26 anker Exp $
 // Molecular Mechanics: SLICK force field, modified van-der-Waals term
 
 #ifndef BALL_SCORING_COMPONENTS_VANDERWAALS_H
@@ -30,9 +30,8 @@ namespace BALL
 			/// Softened Lennard-Jones 6-12 potential (simple cut)
 			CALCULATION__SOFTENED_LJ_POTENTIAL_SIMPLE,
 
-			/// Softened Lennard-Jones 6-12 potential (more sophisticated) (Not
-			/// yet implemented)
-			CALCULATION__SOFTENED_LJ_POTENTIAL_SOFT
+			/// Log-Softened Lennard-Jones 6-12 potential
+			CALCULATION__SOFTENED_LJ_POTENTIAL_LOG
 
 		};
 
@@ -40,6 +39,9 @@ namespace BALL
 		///
 		struct Option
 		{
+
+			///
+			static const String VERBOSITY;
 
 			///
 			static const String VDW_METHOD;
@@ -61,6 +63,9 @@ namespace BALL
 
 		struct Default
 		{
+
+			///
+			static const Size VERBOSITY;
 
 			///
 			static const Size VDW_METHOD;
@@ -128,6 +133,15 @@ namespace BALL
 		private:
 
 		//_
+		System vdw_system_;
+
+		//_
+		Molecule* vdw_receptor_;
+
+		//_
+		Molecule* vdw_ligand_;
+
+		//_
 		Size calculation_method_;
 
 		//_
@@ -149,6 +163,9 @@ namespace BALL
 		//_
 		Size createNonBondedList_(const ForceField::PairVector& atom_pair_vector)
 			throw();
+
+		//_ Verbosity of the code
+		Size verbosity_;
 
 	};
 

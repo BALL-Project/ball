@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaals.C,v 1.2 2006/02/21 16:15:12 anker Exp $
+// $Id: vanDerWaals.C,v 1.3 2006/05/21 17:35:25 anker Exp $
 
 
 #include <BALL/common.h>
@@ -26,6 +26,7 @@ namespace BALL
 {
 
 
+	const String VanDerWaals::Option::VERBOSITY = "verbosity";
 	const String VanDerWaals::Option::VDW_METHOD = "van_der_Waals_method";
 	const String VanDerWaals::Option::VDW_CUT_ON = "van_der_Waals_cut_on";
 	const String VanDerWaals::Option::VDW_CUT_OFF = "van_der_Waals_cut_off";
@@ -34,6 +35,7 @@ namespace BALL
 	const String VanDerWaals::Option::LENNARD_JONES_FILE = "lennard_jones_file";
 
 
+	const Size VanDerWaals::Default::VERBOSITY = 0;
 	const Size VanDerWaals::Default::VDW_METHOD 
 		= CALCULATION__FULL_LJ_POTENTIAL;
 	const float VanDerWaals::Default::VDW_CUT_ON = 13.0f;
@@ -110,13 +112,15 @@ namespace BALL
 		if (getScoringFunction()->getReceptor() == 0
 				|| getScoringFunction()->getLigand() == 0)
 		{
-			Log.error() << "VanDerWaals::setup(): Receptor or ligand mising"
+			Log.error() << "VanDerWaals::setup(): Receptor or ligand missing"
 				<< std::endl;
 			return(false);
 		}
 
 		Options& options = getScoringFunction()->options;
 
+		// Set the options for this component from the options stored in the
+		// ScoringFunction
 		String lj_file_name 
 			= options.setDefault(VanDerWaals::Option::LENNARD_JONES_FILE,
 					VanDerWaals::Default::LENNARD_JONES_FILE);
@@ -133,27 +137,42 @@ namespace BALL
 		softening_limit_
 			= options.setDefaultReal(VanDerWaals::Option::VDW_SOFTENING_LIMIT,
 					VanDerWaals::Default::VDW_SOFTENING_LIMIT);
+		verbosity_ = options.setDefaultInteger(VanDerWaals::Option::VERBOSITY,
+				VanDerWaals::Default::VERBOSITY);
 
+		// Copy Receptor and ligand into a system for later reference
+		vdw_receptor_ 
+			= new Molecule(*(getScoringFunction()->getReceptor()), true);
+		vdw_system_.insert(*vdw_receptor_);
+		vdw_ligand_
+			= new Molecule(*(getScoringFunction()->getLigand()), true);
+		vdw_system_.insert(*vdw_ligand_);
+		
+		// Find the parameter file
 		Path path;
 		String tmp = path.find(lj_file_name);
 		if (tmp != "") lj_file_name = tmp;
 
+		// Read parameters and initialise them
 		ForceFieldParameters parameters(lj_file_name);
 		parameters.init();
 
 		tmp = path.find("Amber/amber94.types");
 		if (tmp == "") tmp = "Amber/amber94.types";
 		AssignTypeNameProcessor assign_type_names(tmp, false);
-		getScoringFunction()->getSystem()->apply(assign_type_names);
+		vdw_system_.apply(assign_type_names);
 
 		AssignTypeProcessor type_proc(parameters.getAtomTypes());
-		getScoringFunction()->getSystem()->apply(type_proc);
+		vdw_system_.apply(type_proc);
 
 		Templates templates;
 		templates.extractSection(parameters, "ChargesAndTypeNames");
-		templates.assign(*(getScoringFunction()->getSystem()), true, false);
+		// Assign force field parameters without overwriting existing types
+		templates.assign(vdw_system_, true, false);
 
-		HashSet<const Atom*>::ConstIterator unassigned_it = type_proc.getUnassignedAtoms().begin();
+		// Save unassigned atoms for creating meaningful error reports
+		HashSet<const Atom*>::ConstIterator unassigned_it 
+			= type_proc.getUnassignedAtoms().begin();
 		for (; unassigned_it != type_proc.getUnassignedAtoms().end();
 				unassigned_it++)
 		{
@@ -165,13 +184,14 @@ namespace BALL
 			= templates.getUnassignedAtoms().begin();
 		for (; unassigned_it != templates.getUnassignedAtoms().end(); unassigned_it++)
 		{
-#ifdef DEBUGDEFUNCT
-			std::cout << "VanDerWaals::setup(): unassigned atom " 
-				<< (*unassigned_it)->getFullName() << " with type "
-				<< (*unassigned_it)->getTypeName() 
-				<<  " (" << (*unassigned_it)->getType() << ")"
-				<< std::endl;
-#endif
+			if (verbosity_ > 1)
+			{
+				Log.warn() << "VanDerWaals::setup(): unassigned atom " 
+					<< (*unassigned_it)->getFullName() << " with type "
+					<< (*unassigned_it)->getTypeName() 
+					<<  " (" << (*unassigned_it)->getType() << ")"
+					<< std::endl;
+			}
 			getScoringFunction()->getUnassignedAtoms().insert(*unassigned_it);
 		}
 
@@ -187,17 +207,17 @@ namespace BALL
 			return(false);
 		}
 
-#ifdef DEBUGDEFUNCT
-		AtomIterator it = getScoringFunction()->getSystem()->beginAtom();
-		for (; +it; ++it)
+		if (verbosity_ > 20)
 		{
-			// std::cout << "VanDerWaals::setup(): type of " 
-			std::cout << "type of " 
-				<< it->getFullName() << " is "
-				<< it->getTypeName() <<  " (" << it->getType() << ")"
-				<< std::endl;
+			AtomIterator it = vdw_system_.beginAtom();
+			for (; +it; ++it)
+			{
+				Log.info() << "type of " 
+					<< it->getFullName() << " is "
+					<< it->getTypeName() <<  " (" << it->getType() << ")"
+					<< std::endl;
+			}
 		}
-#endif
 
 		return(true);
 	}
@@ -413,7 +433,44 @@ type_atom2);
 #endif
 
 		float energy = inv_dist_6 * (inv_dist_6 * A - B); 
+		//  if (energy > limit) energy = limit;
 		if (energy > limit) energy = limit;
+		return (energy);
+	}
+
+	// This is the somewhat more sophisitcated softened version of the
+	// Lennard-Jones potential.
+	// If the energy contribution of one atom pair is above the softening
+	// limit, it returns the value of softening limit plus the logarithm of
+	// the energy.
+	//
+	// BALL_TPL_ARG_INLINE float vdwSixTwelve(float inverse_square_distance,
+	BALL_TPL_ARG_INLINE float vdwSixTwelveSoftLog(float inverse_square_distance,
+			float A, float B, float limit)
+	{
+		register float inv_dist_6(inverse_square_distance 
+				* inverse_square_distance * inverse_square_distance);
+
+#ifdef DEBUG
+		/*
+		std::cout << "S: ir6 = " << inv_dist_6 
+			<< ", dist = " << sqrt(1.0f/inverse_square_distance)
+			<< ", lim = " << pow(A/B, 1.0f/6.0f)
+			<< ", A = " << A << ", B = " << B
+			<< std::endl;
+		*/
+		float e = (inv_dist_6 * (inv_dist_6 * A - B));
+		std::cout << "e = " << e << std::endl;
+		if (fabs(e) > 100.0f)
+		{
+			std::cout << "ACHTUNG!" << std::endl;
+		}
+
+#endif
+
+		float energy = inv_dist_6 * (inv_dist_6 * A - B); 
+		//  if (energy > limit) energy = limit;
+		if (energy > limit) energy = limit + log(energy);
 		return (energy);
 	}
 
@@ -436,6 +493,18 @@ type_atom2);
 		inv_dist_10 *= inv_dist_10 * inverse_square_distance;
 		float energy = inv_dist_10 * (inverse_square_distance * A - B);
 		if (energy > limit) energy = limit;
+		return(energy);
+	}
+
+
+  BALL_TPL_ARG_INLINE float vdwTenTwelveSoftLog(float inverse_square_distance,
+			float A, float B, float limit)
+	{
+		register float inv_dist_10 = inverse_square_distance *
+			inverse_square_distance;
+		inv_dist_10 *= inv_dist_10 * inverse_square_distance;
+		float energy = inv_dist_10 * (inverse_square_distance * A - B);
+		if (energy > limit) energy = limit + log(energy);
 		return(energy);
 	}
 
@@ -552,8 +621,26 @@ type_atom2);
 			}
 			else
 			{
-				Log.error() << "Unknown calculation method for VDW model" 
-					<< std::endl;
+				if (calculation_method_ == CALCULATION__SOFTENED_LJ_POTENTIAL_LOG)
+				{
+					AmberVDWEnergy<vdwSixTwelveSoftLog, noSwitch> 
+						(&non_bonded_[0], 
+						 &non_bonded_[number_of_1_4_],
+						 vdw_energy_1_4, cutoffs_vdw, softening_limit_);
+					AmberVDWEnergy<vdwSixTwelveSoftLog, noSwitch>
+						(&non_bonded_[number_of_1_4_], 
+						 &non_bonded_[non_bonded_.size() - number_of_h_bonds_],
+						 vdw_energy, cutoffs_vdw, softening_limit_);
+					AmberVDWEnergy<vdwTenTwelveSoftLog, noSwitch>
+						(&non_bonded_[non_bonded_.size() - number_of_h_bonds_],
+						 &non_bonded_[non_bonded_.size()],
+						 hbond_energy, cutoffs_vdw, softening_limit_);
+				}
+				else
+				{
+					Log.error() << "Unknown calculation method for VDW model" 
+						<< std::endl;
+				}
 			}
 		}
 		
@@ -579,46 +666,50 @@ type_atom2);
 		// Collect atoms
 		AtomVector atom_vector;
 
-		AtomIterator it = getScoringFunction()->getSystem()->beginAtom();
+		AtomIterator it = vdw_system_.beginAtom();
 		for (; +it; ++it) atom_vector.push_back(&*it);
 
 		double complex_energy = calculateVDWEnergy_(atom_vector);
-#ifdef DEBUG
-		std::cout << "COMPLEX " << complex_energy << std::endl;
-#endif
+		if (verbosity_ > 1)
+		{
+			std::cout << "VDW energy of complex: " << complex_energy << std::endl;
+		}
 
 		// Receptor:
 
 		// Collect atoms
 		atom_vector.clear();
 
-		it = getScoringFunction()->getReceptor()->beginAtom();
+		it = vdw_receptor_->beginAtom();
 		for (; +it; ++it) atom_vector.push_back(&*it);
 
 		double receptor_energy = calculateVDWEnergy_(atom_vector);
-#ifdef DEBUG
-		std::cout << "RECEPTOR " << receptor_energy << std::endl;
-#endif
+		if (verbosity_ > 1)
+		{
+			Log.info() << "VDW energy of receptor: " << receptor_energy << std::endl;
+		}
 		
 		// Ligand:
 
 		// Collect atoms
 		atom_vector.clear();
 
-		it = getScoringFunction()->getLigand()->beginAtom();
+		it = vdw_ligand_->beginAtom();
 		for (; +it; ++it) atom_vector.push_back(&*it);
 
 		double ligand_energy = calculateVDWEnergy_(atom_vector);
-#ifdef DEBUG
-		std::cout << "LIGAND " << ligand_energy << std::endl;
-#endif
+		if (verbosity_ > 1)
+		{
+			Log.info() << "VDW energy of ligand: " << ligand_energy << std::endl;
+		}
 
 		score_ = complex_energy - (receptor_energy + ligand_energy);
 
-#ifdef DEBUG
-		std::cout << "VanDerWaals::calculateScore(): score_ is " 
-			<< score_ << std::endl;
-#endif
+		if (verbosity_ > 1)
+		{
+			Log.info() << "VanDerWaals::calculateScore(): score_ is " 
+				<< score_ << std::endl;
+		}
 
 		return(score_);
 	}
