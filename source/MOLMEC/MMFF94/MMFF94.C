@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.4.1 2006/05/21 22:26:08 amoll Exp $
+// $Id: MMFF94.C,v 1.1.4.2 2006/05/21 23:37:00 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -24,7 +24,18 @@ using namespace std;
 namespace BALL 
 {
 	const char* MMFF94::Option::FOLDER = "folder";
+	const char* MMFF94::Option::ASSIGN_CHARGES = "assign_charges"; 
+	const char* MMFF94::Option::ASSIGN_TYPENAMES = "assign_type_names"; 
+	const char* MMFF94::Option::ASSIGN_TYPES = "assign_types"; 
+	const char* MMFF94::Option::OVERWRITE_CHARGES = "overwrite_non-zero_charges"; 
+	const char* MMFF94::Option::OVERWRITE_TYPENAMES = "overwrite_non-empty_typenames"; 
+
 	const char* MMFF94::Default::FOLDER = "MMFF94";
+	const bool MMFF94::Default::ASSIGN_CHARGES = true; 
+	const bool MMFF94::Default::ASSIGN_TYPENAMES = true; 
+	const bool MMFF94::Default::ASSIGN_TYPES = true; 
+	const bool MMFF94::Default::OVERWRITE_CHARGES = true; 
+	const bool MMFF94::Default::OVERWRITE_TYPENAMES = true; 
 
 	// Default constructor
 	MMFF94::MMFF94() 
@@ -124,10 +135,7 @@ namespace BALL
 		throw(Exception::TooManyErrors)
 	{
 		// check whether the system is assigned
-		if (getSystem() == 0)
-		{
-			return false;
-		}
+		if (getSystem() == 0) return false;
  
 		// check whether the parameter file name
 		// is set in the options
@@ -140,6 +148,9 @@ namespace BALL
 		{
 			options[Option::FOLDER] = folder_;
 		}
+
+		options.setDefaultBool(Option::ASSIGN_CHARGES, Default::ASSIGN_CHARGES);
+		options.setDefaultBool(Option::ASSIGN_TYPES, Default::ASSIGN_TYPES);
 
 		// open parameter file
 		Path    path;
@@ -177,25 +188,30 @@ namespace BALL
 
 		/////////////////////////////////////////////////////////
 		// atom types 
-		/*
-		atom_typer_.setAromaticRings(getAromaticRings());
-		atom_typer_.assignTo(*system_);
+		
+		bool assign_types = options.getBool(Option::ASSIGN_TYPES);
 
-		// for future use mark the invalid atoms:
-		for (Position p = 0; p < atoms_.size() ; p++)
-		{
-			if (!checkAtomType(*atoms_[p]))
+		if (assign_types)
+ 		{
+			atom_typer_.setAromaticRings(getAromaticRings());
+			atom_typer_.assignTo(*system_);
+
+			// for future use mark the invalid atoms:
+			for (Position p = 0; p < atoms_.size() ; p++)
 			{
-				atoms_[p]->setType(0);
-				atoms_[p]->setTypeName("Any");
+				if (!checkAtomType(*atoms_[p]))
+				{
+					atoms_[p]->setType(0);
+					atoms_[p]->setTypeName("Any");
+				}
+			}
+
+			if (unassigned_atoms_.size() > 0)
+			{
+				error() << "Could not assign atom types for " << unassigned_atoms_.size() << " atoms." << std::endl;
 			}
 		}
-
-		if (unassigned_atoms_.size() > 0)
-		{
-			error() << "Could not assign atom types for " << unassigned_atoms_.size() << " atoms." << std::endl;
-		}
-		*/
+			
 
 		/////////////////////////////////////////////////////////
 		// bond types
@@ -203,16 +219,20 @@ namespace BALL
 
 		/////////////////////////////////////////////////////////
 		// atom charges
-		charge_processor_.setAromaticRings(getAromaticRings());
-		getSystem()->apply(charge_processor_);
-
-		if (charge_processor_.getUnassignedAtoms().size() > 0)
+		bool assign_charges = options.getBool(Option::ASSIGN_CHARGES);
+		if (assign_charges)
 		{
-			error() << "Could not assign partial charges for all atoms" << std::endl;
-			HashSet<Atom*>::ConstIterator it = charge_processor_.getUnassignedAtoms().begin();
-			for (;+it; ++it)
+			charge_processor_.setAromaticRings(getAromaticRings());
+			getSystem()->apply(charge_processor_);
+
+			if (charge_processor_.getUnassignedAtoms().size() > 0)
 			{
-				getUnassignedAtoms().insert(*it);
+				error() << "Could not assign partial charges for all atoms" << std::endl;
+				HashSet<Atom*>::ConstIterator it = charge_processor_.getUnassignedAtoms().begin();
+				for (;+it; ++it)
+				{
+					getUnassignedAtoms().insert(*it);
+				}
 			}
 		}
 

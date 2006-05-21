@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.4.1 2006/05/21 22:27:15 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.4.2 2006/05/21 23:37:13 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -53,27 +53,66 @@ namespace BALL
 
 		/**	Option names
 		*/
-		struct Option
+		struct BALL_EXPORT Option
 		{
-			/**	The parameter file name (@see Default::FILENAME)
+			/**	The parameters folder
 			*/
 			static const char* FOLDER;
+
+			/**	automatically assign charges to the system (during setup)
+			*/
+			static const char* ASSIGN_CHARGES;
+
+			/**	automatically assign type names to the system (during setup)
+			*/
+			static const char* ASSIGN_TYPENAMES;
+
+			/**	automatically assign types to the system's atoms (during setup)
+			*/
+			static const char* ASSIGN_TYPES;
+
+			/**	during charge assignment, overwrite even non-zero charges
+			*/
+			static const char* OVERWRITE_CHARGES;
+
+			/**	during charge assignment, overwrite even non-empty type names
+			*/
+			static const char* OVERWRITE_TYPENAMES;
 		};
 
 		/** Default values for MMFF94 options.
 		*/
-		struct Default
+		struct BALL_EXPORT Default
 		{
-			/**	Default filename for the parameter file (@see Option::FILENAME).
+			/**	Default folder name for parameters (MMFF94)
 			*/
 			static const char* FOLDER;
+
+			/**	automatically assign charges to the system (during setup)
+			*/
+			static const bool ASSIGN_CHARGES;
+
+			/**	automatically assign type names to the system (during setup)
+			*/
+			static const bool ASSIGN_TYPENAMES;
+
+			/**	automatically assign types to the system's atoms (during setup)
+			*/
+			static const bool ASSIGN_TYPES;
+
+			/**	during charge assignment, overwrite even non-zero charges
+			*/
+			static const bool OVERWRITE_CHARGES;
+
+			/**	during charge assignment, overwrite even non-empty type names
+			*/
+			static const bool OVERWRITE_TYPENAMES;
 		};
 
 		//@}
 		/** @name	Constructors and Destructor
 		*/
 		//@{
-
 
 		BALL_CREATE(MMFF94)
 
