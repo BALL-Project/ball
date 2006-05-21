@@ -1,4 +1,4 @@
-// $Id: rotationalEntropyLoss.C,v 1.1 2006/02/21 16:13:12 anker Exp $
+// $Id: rotationalEntropyLoss.C,v 1.2 2006/05/21 18:15:29 anker Exp $
 // Molecular Mechanics: SLICK rotational entropy loss
 
 #include <BALL/SCORING/COMPONENTS/rotationalEntropyLoss.h>
@@ -172,20 +172,14 @@ namespace BALL
 			grid_->clear();
 		}
 
-		// ?????
-		// if we make the system pointer const, we can't apply()...
-		// const System* system = force_field->getSystem();
-		System* system = force_field->getSystem();
-
-		// quadratic run time. not nice.
-
-		// see above
-		receptor_ = &*system->beginProtein();
-		const Molecule* ligand = system->getMolecule(0);
-		if (ligand == receptor_) ligand = system->getMolecule(1);
+		receptor_ = getScoringFunction()->getReceptor();
+		ligand_ = getScoringFunction()->getLigand();
+		System system;
+		system.insert(*receptor_);
+		system.insert(*ligand_);
 		
 		BoundingBoxProcessor bb_proc;
-		system->apply(bb_proc);
+		system.apply(bb_proc);
 
 		Options& options = force_field->options;
 
@@ -244,7 +238,7 @@ namespace BALL
 			 bb_proc.getUpper() - bb_proc.getLower() + Vector3(1.0),
 			 grid_spacing_);
 
-		AtomConstIterator atom_it = system->beginAtom();
+		AtomConstIterator atom_it = system.beginAtom();
 		for (; +atom_it; ++atom_it)
 		{
 			grid_->insert(atom_it->getPosition(), &*atom_it);
@@ -288,7 +282,7 @@ namespace BALL
 		HashSet<const Bond*> cycle_bonds;
 		int cycle_count = 0;
 
-		const Atom* atom1 = &*ligand->beginAtom();
+		const Atom* atom1 = &*ligand_->beginAtom();
 		const Atom* atom2;
 
 		// initialize the hash map

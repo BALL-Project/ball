@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scoringFunction.C,v 1.1 2005/11/21 19:27:09 anker Exp $
+// $Id: scoringFunction.C,v 1.2 2006/05/21 18:15:29 anker Exp $
 
 #include <BALL/SCORING/COMMON/scoringFunction.h>
 #include <BALL/SCORING/COMMON/linearBaseFunction.h>
@@ -24,7 +24,6 @@ namespace BALL
 	ScoringFunction::ScoringFunction()
 		throw()
 		:	options(),
-			system_(0),
 			molecule1_(0),
 			molecule2_(0),
 			name_(""),
@@ -43,7 +42,6 @@ namespace BALL
 	ScoringFunction::ScoringFunction(const ScoringFunction& sf)
 		throw()
 		:	options(),
-			system_(sf.system_),
 			molecule1_(sf.molecule1_),
 			molecule2_(sf.molecule2_),
 			name_(sf.name_),
@@ -62,49 +60,10 @@ namespace BALL
 	}
 
 
-	ScoringFunction::ScoringFunction(System& system)
-		throw()
-		:	options(),
-			system_(&system),
-			molecule1_(0),
-			molecule2_(0),
-			name_(""),
-			score_(0.0),
-			intercept_(0.0),
-			base_function_(0),
-			components_(),
-			unassigned_atoms_(),
-			max_number_of_errors_(0),
-			number_of_errors_(0)
-	{
-		setup();
-	}
-
-
-	ScoringFunction::ScoringFunction(System& system, const Options& options)
+	ScoringFunction::ScoringFunction(Molecule& receptor, Molecule& ligand,
+			const Options& options)
 		throw()
 		:	options(options),
-			system_(&system),
-			molecule1_(0),
-			molecule2_(0),
-			name_(""),
-			score_(0.0),
-			intercept_(0.0),
-			base_function_(0),
-			components_(),
-			unassigned_atoms_(),
-			max_number_of_errors_(0),
-			number_of_errors_(0)
-	{
-		setup();
-	}
-
-
-	ScoringFunction::ScoringFunction(System& system, Molecule& receptor,
-			Molecule& ligand, const Options& options)
-		throw()
-		:	options(options),
-			system_(&system),
 			molecule1_(&receptor),
 			molecule2_(&ligand),
 			name_(""),
@@ -134,7 +93,6 @@ namespace BALL
 
 		// Don't delete the system or the molecules, that's not the job of a
 		// scoring function
-		system_ = 0;
 		molecule1_ = 0;
 		molecule2_ = 0;
 
@@ -161,7 +119,6 @@ namespace BALL
 		throw()
 	{
 		options = sf.options;
-		system_ = sf.system_;
 		name_ = sf.name_;
 		score_ = sf.score_;
 		intercept_ = sf.intercept_;
@@ -249,22 +206,19 @@ namespace BALL
 	}
 
 
-	bool ScoringFunction::setup(System& system, Molecule& receptor,
-			Molecule& ligand)
+	bool ScoringFunction::setup(Molecule& receptor, Molecule& ligand)
 		throw()
 	{
-		setSystem(system);
 		setReceptor(receptor);
 		setLigand(ligand);
 		return(setup());
 	}
 
 
-	bool ScoringFunction::setup(System& system, Molecule& receptor,
-			Molecule& ligand, const Options& opt)
+	bool ScoringFunction::setup(Molecule& receptor, Molecule& ligand,
+			const Options& opt)
 		throw()
 	{
-		setSystem(system);
 		setReceptor(receptor);
 		setLigand(ligand);
 		options = opt;
@@ -294,23 +248,6 @@ namespace BALL
 	}
 
 	
-	void ScoringFunction::setSystem(System& system)
-		throw()
-	{
-		// Note: This method does NOT set up the scoring function. In order to
-		// have a up-to-date version of the scoring function in memory, you
-		// have to call setup() yourself.
-		system_ = &system;
-	}
-
-
-	System* ScoringFunction::getSystem() const
-		throw()
-	{
-		return(system_);
-	}
-
-
 	void ScoringFunction::setFirstMolecule(Molecule& molecule)
 		throw()
 	{

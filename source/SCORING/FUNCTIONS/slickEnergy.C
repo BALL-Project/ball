@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: slickEnergy.C,v 1.3 2006/05/21 17:30:23 anker Exp $
+// $Id: slickEnergy.C,v 1.4 2006/05/21 18:15:29 anker Exp $
 
 #include <BALL/SCORING/FUNCTIONS/slickEnergy.h>
 #include <BALL/SCORING/COMPONENTS/CHPI.h>
@@ -59,11 +59,10 @@ namespace BALL
 	}
 
 
-	SLICKEnergy::SLICKEnergy(System& system, Molecule& protein, Molecule& ligand)
+	SLICKEnergy::SLICKEnergy(Molecule& protein, Molecule& ligand)
 		throw()
 		:	ScoringFunction()
 	{
-		setSystem(system);
 		setReceptor(protein);
 		setLigand(ligand);
 
@@ -75,18 +74,17 @@ namespace BALL
 
     if (!result)
     {
-			Log.error() << "SLICKEnergy::SLICKEnergy(System&, Molecule&, Molecule&): "
+			Log.error() << "SLICKEnergy::SLICKEnergy(Molecule&, Molecule&): "
 				<< "Setup of scoring function failed! " << std::endl;
 		}
 	}
 
 
-	SLICKEnergy::SLICKEnergy(System& system, Molecule& protein, Molecule& ligand,
+	SLICKEnergy::SLICKEnergy(Molecule& protein, Molecule& ligand,
 			const Options& new_options)
 		throw()
 		:	ScoringFunction()
 	{
-		setSystem(system);
 		setReceptor(protein);
 		setLigand(ligand);
 
@@ -95,11 +93,11 @@ namespace BALL
 
 		options = new_options;
 
-		bool result = setup(system, protein, ligand);
+		bool result = setup(protein, ligand);
 
     if (!result)
     {
-			Log.error() << "SLICKEnergy::SLICKEnergy(System&, Molecule&, Molecule&, const Options&): "
+			Log.error() << "SLICKEnergy::SLICKEnergy(Molecule&, Molecule&, const Options&): "
 				<< "Setup of scoring function failed! " << std::endl;
 		}
 	}
@@ -130,45 +128,16 @@ namespace BALL
 		throw()
 	{
 
-		Size verbosity
-			= options.setDefaultInteger(ScoringFunction::Option::VERBOSITY,
-					ScoringFunction::Default::VERBOSITY);
-		
 		options.set(NonpolarSolvation::Option::NONPOLAR_METHOD,
 				NonpolarSolvation::CALCULATION__PCM);
 
 		options.setInteger(PolarSolvation::Option::POLAR_METHOD,
 				PolarSolvation::CALCULATION__FULL_CYCLE_FOCUSED);
-		// GB 
-		// options.setBool(PolarSolvation::Option::POLAR_GB, true);
 
 		options.setInteger(VanDerWaals::Option::VDW_METHOD, 
 				VanDerWaals::CALCULATION__SOFTENED_LJ_POTENTIAL_LOG);
+
 		options.setReal(VanDerWaals::Option::VDW_SOFTENING_LIMIT, 5.0f);
-
-		// Flag for activating GB calculations. Bad results for finding binding
-		// pockets, so commented out here
-		// 
-		// options.setBool(PolarSolvation::Option::POLAR_GB,
-		//		true);
-
-		// check whether the system is assigned
-		System* system = getSystem();
-		if (system == 0)
-		{
-			Log.error() << "SLICKEnergy::specificSetup(): "
-				<< "No system assigned, aborting" << std::endl;
-			return false;
-		}
-
-		// check whether we have two molecules
-		if (system->countMolecules() != 2)
-		{
-			Log.error() << "SLICKEnergy::specificSetup(): "
-				<< "SLICKEnergy is only defined for systems with 2 molecules, aborting" 
-				<< std::endl;
-			return false;
-		}
 
 		// Now extract options from options table and set the coefficients of
 		// the components accordingly.

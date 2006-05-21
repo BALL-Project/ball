@@ -1,4 +1,4 @@
-// $Id: slickEnergy.h,v 1.3 2006/05/21 17:37:56 anker Exp $
+// $Id: slickEnergy.h,v 1.4 2006/05/21 18:15:28 anker Exp $
 
 #ifndef BALL_SCORING_FUNCTIONS_SLICKENERGY_H
 #define BALL_SCORING_FUNCTIONS_SLICKENERGY_H
@@ -112,12 +112,12 @@ namespace BALL
 		/** Construct a SLICKEnergy with a system and pointers to protein and
 				ligand
 		*/
-		SLICKEnergy(System& system, Molecule& protein, Molecule& ligand)
+		SLICKEnergy(Molecule& protein, Molecule& ligand)
 			throw();
 
 		/** Construct a SLICKEnergy with a system and options.
 		*/
-		SLICKEnergy(System& system, Molecule& protein, Molecule& ligand,
+		SLICKEnergy(Molecule& protein, Molecule& ligand,
 				const Options& options)
 			throw();
 

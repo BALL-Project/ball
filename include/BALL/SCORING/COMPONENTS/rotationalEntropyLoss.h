@@ -1,4 +1,4 @@
-// $Id: rotationalEntropyLoss.h,v 1.1 2006/02/21 16:18:30 anker Exp $
+// $Id: rotationalEntropyLoss.h,v 1.2 2006/05/21 18:15:28 anker Exp $
 // Molecular Mechanics: SLICK force field, rotational entropy loss
 
 #ifndef BALL_MOLMEC_SLICK_SLICKROTATION_H
@@ -211,6 +211,10 @@ namespace BALL
 		/*_
 		 */
 		Molecule* receptor_;
+
+		/*_
+		 */
+		Molecule* ligand_;
 
 		/*_
 		 */

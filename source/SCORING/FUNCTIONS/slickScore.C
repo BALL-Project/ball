@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: slickScore.C,v 1.2 2006/05/21 17:31:09 anker Exp $
+// $Id: slickScore.C,v 1.3 2006/05/21 18:15:29 anker Exp $
 
 #include <BALL/SCORING/FUNCTIONS/slickScore.h>
 #include <BALL/SCORING/COMPONENTS/vanDerWaals.h>
@@ -43,11 +43,10 @@ namespace BALL
 	}
 
 
-	SLICKScore::SLICKScore(System& system, Molecule& protein, Molecule& ligand)
+	SLICKScore::SLICKScore(Molecule& protein, Molecule& ligand)
 		throw()
 		:	ScoringFunction()
 	{
-		setSystem(system);
 		setReceptor(protein);
 		setLigand(ligand);
 
@@ -59,18 +58,17 @@ namespace BALL
 
     if (!result)
     {
-			Log.error() << "SLICKScore::SLICKScore(System&, Molecule&, Molecule&): "
+			Log.error() << "SLICKScore::SLICKScore(Molecule&, Molecule&): "
 				<< "Setup of scoring function failed! " << std::endl;
 		}
 	}
 
 
-	SLICKScore::SLICKScore(System& system, Molecule& protein, Molecule& ligand,
+	SLICKScore::SLICKScore(Molecule& protein, Molecule& ligand,
 			const Options& new_options)
 		throw()
 		:	ScoringFunction()
 	{
-		setSystem(system);
 		setReceptor(protein);
 		setLigand(ligand);
 
@@ -79,11 +77,11 @@ namespace BALL
 
 		options = new_options;
 
-		bool result = setup(system, protein, ligand);
+		bool result = setup(protein, ligand);
 
     if (!result)
     {
-			Log.error() << "SLICKScore::SLICKScore(System&, Molecule&, Molecule&, const Options&): "
+			Log.error() << "SLICKScore::SLICKScore(Molecule&, Molecule&, const Options&): "
 				<< "Setup of scoring function failed! " << std::endl;
 		}
 	}
@@ -114,10 +112,6 @@ namespace BALL
 		throw()
 	{
 
-		Size verbosity
-			= options.setDefaultInteger(ScoringFunction::Option::VERBOSITY,
-					ScoringFunction::Default::VERBOSITY);
-		
 		// Set VDW to use a cut repulsive potential with a limit of 5 kJ/mol
 		// per interaction
 		options.setInteger(VanDerWaals::Option::VDW_METHOD, 
@@ -127,24 +121,6 @@ namespace BALL
 		// Use simple (and fast) Coulomb interactions for the scoring
 		options.setInteger(PolarSolvation::Option::POLAR_METHOD,
 				PolarSolvation::CALCULATION__COULOMB);
-		
-		// check whether the system is assigned
-		System* system = getSystem();
-		if (system == 0)
-		{
-			Log.error() << "SLICKScore::specificSetup(): "
-				<< "No system assigned, aborting" << std::endl;
-			return false;
-		}
-
-		// check whether we have two molecules
-		if (system->countMolecules() != 2)
-		{
-			Log.error() << "SLICKScore::specificSetup(): "
-				<< "SLICKScore is only defined for systems with 2 molecules, aborting" 
-				<< std::endl;
-			return false;
-		}
 
 		// Now extract options from options table and set the coefficients of
 		// the components accordingly.

@@ -1,4 +1,4 @@
-// $Id: slickScore.h,v 1.1 2006/02/21 16:20:53 anker Exp $
+// $Id: slickScore.h,v 1.2 2006/05/21 18:15:29 anker Exp $
 
 #ifndef BALL_SCORING_FUNCTIONS_SLICKSCORE_H
 #define BALL_SCORING_FUNCTIONS_SLICKSCORE_H
@@ -102,15 +102,15 @@ namespace BALL
 		SLICKScore()
 			throw();
 
-		/** Construct a SLICKScore with a system and pointers to protein and
+		/** Construct a SLICKScore with pointers to protein and
 				ligand
 		*/
-		SLICKScore(System& system, Molecule& protein, Molecule& ligand)
+		SLICKScore(Molecule& protein, Molecule& ligand)
 			throw();
 
-		/** Construct a SLICKScore with a system and options.
+		/** Construct a SLICKScore with options.
 		*/
-		SLICKScore(System& system, Molecule& protein, Molecule& ligand,
+		SLICKScore(Molecule& protein, Molecule& ligand,
 				const Options& options)
 			throw();
 

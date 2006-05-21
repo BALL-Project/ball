@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scoringFunction.h,v 1.1 2005/11/21 19:27:03 anker Exp $
+// $Id: scoringFunction.h,v 1.2 2006/05/21 18:15:28 anker Exp $
 
 #ifndef BALL_SCORING_COMMON_SCORINGFUNCTION_H
 #define BALL_SCORING_COMMON_SCORINGFUNCTION_H
@@ -58,15 +58,11 @@ namespace BALL
 			throw();
 
 		///
-		ScoringFunction(System& system)
+		ScoringFunction(Molecule& receptor, Molecule& ligand)
 			throw();
 
 		///
-		ScoringFunction(System& system, const Options& options)
-			throw();
-
-		///
-		ScoringFunction(System& system, Molecule& receptor, Molecule& ligand,
+		ScoringFunction(Molecule& receptor, Molecule& ligand,
 				const Options& options)
 			throw();
 
@@ -87,12 +83,11 @@ namespace BALL
 			throw();
 
 		/// 
-		bool setup(System& system, Molecule& receptor, Molecule& ligand)
+		bool setup(Molecule& receptor, Molecule& ligand)
 			throw();
 
 		/// 
-		bool setup(System& system, Molecule& receptor, Molecule& ligand,
-				const Options& options)
+		bool setup(Molecule& receptor, Molecule& ligand, const Options& options)
 			throw();
 
 		///
@@ -105,14 +100,6 @@ namespace BALL
 
 		///
 		Size getMaximumNumberOfErrors() const
-			throw();
-
-		///
-		void setSystem(System& system) 
-			throw();
-
-		///
-		System* getSystem() const
 			throw();
 
 		///
@@ -247,9 +234,6 @@ namespace BALL
 
 
 		protected:
-
-		//_ A system containing the molecules for scoring
-		System* system_;
 
 		/*_ The first molecule of the complex, being the receptor in
 				receptor/ligand complexes
