@@ -1,0 +1,9 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: MMFF94.doc,v 1.1.4.1 2006/05/21 22:27:15 amoll Exp $
+//
+
+/**	\defgroup MMFF94	MMFF94 Force Field.
+		\ingroup Molmec	
+ */
