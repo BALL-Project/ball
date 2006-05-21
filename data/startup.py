@@ -121,7 +121,7 @@ def setMultithreading(mode):
 	getMainControl().setMultithreading(mode)
 
 def runScript(filename):
-	getPyWidget().run(filename)
+	getPyWidget().runFile(filename)
 
 def runScriptAgain():
 	getPyWidget().runAgain()
