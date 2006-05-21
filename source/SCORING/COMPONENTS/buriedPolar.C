@@ -1,4 +1,4 @@
-// $Id: buriedPolar.C,v 1.3 2006/02/24 11:49:33 anker Exp $
+// $Id: buriedPolar.C,v 1.4 2006/05/21 17:38:39 anker Exp $
 // Molecular Mechanics: Fresno force field, buried polar component
 
 #include <BALL/SCORING/COMPONENTS/buriedPolar.h>
@@ -19,10 +19,13 @@ namespace BALL
 
 	const char* BuriedPolar::Option::BP_R1_OFFSET = "bp_r1_offset";
 	const char* BuriedPolar::Option::BP_R2_OFFSET = "bp_r2_offset";
+	const char* BuriedPolar::Option::CREATE_INTERACTIONS_FILE
+		= "BP_create_interactions_file";
 	const char* BuriedPolar::Option::VERBOSITY = "verbosity";
 
 	const float BuriedPolar::Default::BP_R1_OFFSET = 0.5;
 	const float BuriedPolar::Default::BP_R2_OFFSET = 3.0;
+	const bool BuriedPolar::Default::CREATE_INTERACTIONS_FILE = false;
 	const Size BuriedPolar::Default::VERBOSITY = 0;
 
 	BuriedPolar::BuriedPolar()
@@ -95,16 +98,6 @@ namespace BALL
 		// clear the vector of buried polar interactions
 		possible_buried_polar_interactions_.clear();
 
-		// ?????
-		// we should check whether force_field is a SlickFF, because we need
-		// the fresno types
-
-		System* system = getScoringFunction()->getSystem();
-		if (system == 0)
-		{
-			return(false);
-		}
-
     Options& options = getScoringFunction()->options;
 
 		r1_offset_
@@ -113,7 +106,10 @@ namespace BALL
 		r2_offset_
 			= options.setDefaultReal(BuriedPolar::Option::BP_R2_OFFSET,
 					BuriedPolar::Default::BP_R2_OFFSET);
-		Size verbosity
+		write_interactions_file_ 
+			= options.setDefaultBool(BuriedPolar::Option::CREATE_INTERACTIONS_FILE,
+					BuriedPolar::Default::CREATE_INTERACTIONS_FILE);
+		verbosity_
 			= options.setDefaultInteger(BuriedPolar::Option::VERBOSITY,
 					BuriedPolar::Default::VERBOSITY);
 
@@ -123,8 +119,8 @@ namespace BALL
 
 		// quadratic run time. not nice.
 
-		Molecule* A = system->getMolecule(0);
-		Molecule* B = system->getMolecule(1);
+		Molecule* A = getScoringFunction()->getReceptor();
+		Molecule* B = getScoringFunction()->getLigand();
 
 		AtomConstIterator A_it = A->beginAtom();
 		AtomConstIterator B_it;
@@ -152,7 +148,7 @@ namespace BALL
 								|| (type_A == FresnoTypes::HBOND_HYDROGEN))))
 				{
 					possible_buried_polar_interactions_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
-					if (verbosity >= 90)
+					if (verbosity_ >= 10)
 					{
 						Log.info() << "found possible buried polar int.: " 
 							<< A_it->getFullName() << "..." << B_it->getFullName()
@@ -165,7 +161,7 @@ namespace BALL
 			}
 		}
 
-		if (verbosity > 8)
+		if (verbosity_ > 2)
 		{
 			Log.info() << "BuriedPolar setup statistics:" << endl;
 			Log.info() << "Found " << possible_buried_polar_interactions_.size() 
@@ -188,12 +184,7 @@ namespace BALL
 		Timer timer;
 		timer.start();
 
-#ifdef DEBUG
-		Molecule debug_molecule;
-#endif
-
-		Size verbosity
-			= getScoringFunction()->options.getInteger(Option::VERBOSITY);
+		Molecule interactions_molecule;
 
 		score_ = 0.0;
 		float val = 0.0;
@@ -225,7 +216,7 @@ namespace BALL
 				// difference between R1 and R2 is constant
 				val = getScoringFunction()->getBaseFunction()->calculate(distance, R1, R2);
 
-				if (verbosity >= 0)
+				if (verbosity_ >= 1)
 				{
 					Log.info() << "BP: " << val << " "
 						<< atom1->getFullName() << " " 
@@ -246,35 +237,37 @@ namespace BALL
 						<< ", R2 " << R2 << ")" << endl;
 				}
 
-#ifdef DEBUG
-				Atom* atom_ptr_L1 = new Atom();
-				atom_ptr_L1->setElement(atom1->getElement());
-				atom_ptr_L1->setName("L1");
-				atom_ptr_L1->setPosition(atom1->getPosition());
-				atom_ptr_L1->setCharge(val);
+				if (write_interactions_file_ == true)
+				{
+					Atom* atom_ptr_L1 = new Atom();
+					atom_ptr_L1->setElement(atom1->getElement());
+					atom_ptr_L1->setName("L1");
+					atom_ptr_L1->setPosition(atom1->getPosition());
+					atom_ptr_L1->setCharge(val);
 
-				Atom* atom_ptr_L2 = new Atom();
-				atom_ptr_L2->setElement(atom2->getElement());
-				atom_ptr_L2->setName("L2");
-				atom_ptr_L2->setPosition(atom2->getPosition());
-				atom_ptr_L2->setCharge(val);
+					Atom* atom_ptr_L2 = new Atom();
+					atom_ptr_L2->setElement(atom2->getElement());
+					atom_ptr_L2->setName("L2");
+					atom_ptr_L2->setPosition(atom2->getPosition());
+					atom_ptr_L2->setCharge(val);
 
-				atom_ptr_L1->createBond(*atom_ptr_L2);
+					atom_ptr_L1->createBond(*atom_ptr_L2);
 
-				debug_molecule.insert(*atom_ptr_L1);
-				debug_molecule.insert(*atom_ptr_L2);
-#endif
+					interactions_molecule.insert(*atom_ptr_L1);
+					interactions_molecule.insert(*atom_ptr_L2);
+				}
 				score_ += val;
 			}
 		}
 
-#ifdef DEBUG
-		HINFile debug_file("BP_debug.hin", std::ios::out);
-		debug_file << debug_molecule;
-		debug_file.close();
-#endif
+		if (write_interactions_file_ == true)
+		{
+			HINFile debug_file("BP_debug.hin", std::ios::out);
+			debug_file << interactions_molecule;
+			debug_file.close();
+		}
 
-		if (verbosity > 0)
+		if (verbosity_ > 0)
 		{
 			Log.info() << "BP: energy is " << score_ << endl;
 		}

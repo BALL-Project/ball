@@ -1,16 +1,10 @@
-// $Id: lipophilic.C,v 1.2 2006/02/21 16:14:19 anker Exp $
+// $Id: lipophilic.C,v 1.3 2006/05/21 17:38:40 anker Exp $
 // lipophilic component
 
 #include <BALL/SCORING/COMPONENTS/lipophilic.h>
 #include <BALL/SCORING/TYPES/fresnoTypes.h>
-
 #include <BALL/SYSTEM/timer.h>
-
-#define DEBUG 1
-
-#ifdef DEBUG
 #include <BALL/FORMAT/HINFile.h>
-#endif
 
 using namespace std;
 
@@ -19,10 +13,13 @@ namespace BALL
 
 	const char* Lipophilic::Option::LIPO_R1_OFFSET = "lipo_r1_offset";
 	const char* Lipophilic::Option::LIPO_R2_OFFSET = "lipo_r2_offset";
+	const char* Lipophilic::Option::CREATE_INTERACTIONS_FILE 
+		= "LIPO_create_interactions_file"; 
 	const char* Lipophilic::Option::VERBOSITY = "verbosity";
 
 	const float Lipophilic::Default::LIPO_R1_OFFSET = 0.5;
 	const float Lipophilic::Default::LIPO_R2_OFFSET = 3.0;
+	const bool Lipophilic::Default::CREATE_INTERACTIONS_FILE = false;
 	const Size Lipophilic::Default::VERBOSITY = 0;
 
 
@@ -96,11 +93,6 @@ namespace BALL
 		// clear the vector of lipophilic interactions
 		possible_lipophilic_interactions_.clear();
 
-		// ?????
-		// we should check whether force_field is a SlickFF, because we need
-		// the fresno types
-
-		System* system = sf->getSystem();
     Options& options = sf->options;
 
 		r1_offset_
@@ -109,7 +101,10 @@ namespace BALL
 		r2_offset_
 			= options.setDefaultReal(Lipophilic::Option::LIPO_R2_OFFSET,
 					Lipophilic::Default::LIPO_R2_OFFSET);
-		Size verbosity 
+		write_interactions_file_
+			= options.setDefaultBool(Lipophilic::Option::CREATE_INTERACTIONS_FILE,
+					Lipophilic::Default::CREATE_INTERACTIONS_FILE);
+		verbosity_
 			= options.setDefaultInteger(Lipophilic::Option::VERBOSITY,
 					Lipophilic::Default::VERBOSITY);
 
@@ -119,8 +114,8 @@ namespace BALL
 
 		// quadratic run time. not nice.
 
-		Molecule* A = system->getMolecule(0);
-		Molecule* B = system->getMolecule(1);
+		Molecule* A = getScoringFunction()->getReceptor();
+		Molecule* B = getScoringFunction()->getLigand();
 
 		AtomConstIterator A_it = A->beginAtom();
 		AtomConstIterator B_it;
@@ -141,7 +136,7 @@ namespace BALL
 						if (type_B == FresnoTypes::LIPOPHILIC)
 						{
 							possible_lipophilic_interactions_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
-							if (verbosity >= 90)
+							if (verbosity_ >= 10)
 							{
 								Log.info() << "found possible lipophilic int.: " 
 									<< A_it->getFullName() << "..." << B_it->getFullName()
@@ -156,7 +151,7 @@ namespace BALL
 			}
 		}
 
-		if (verbosity > 8)
+		if (verbosity_ > 2)
 		{
 			Log.info() << "Lipophilic setup statistics:" << endl;
 			Log.info() << "Found " << possible_lipophilic_interactions_.size() 
@@ -179,12 +174,7 @@ namespace BALL
 		Timer timer;
 		timer.start();
 
-#ifdef DEBUG
-		Molecule debug_molecule;
-#endif
-
-		Size verbosity 
-			= getScoringFunction()->options.getInteger(Option::VERBOSITY);
+		Molecule interactions_molecule;
 
 		score_ = 0.0;
 		float val = 0.0;
@@ -216,7 +206,7 @@ namespace BALL
 				// we could possibly speed up the next step by using the fact that the
 				// difference between R1 and R2 is constant
 				val = getScoringFunction()->getBaseFunction()->calculate(distance, R1, R2);
-				if (verbosity >= 0)
+				if (verbosity_ >= 1)
 				{
 					Log.info() << "LI: " << val << " "
 						<< atom1->getFullName() << " " 
@@ -237,44 +227,49 @@ namespace BALL
 						<< ", R2 " << R2 << ")" << endl;
 				}
 
-#ifdef DEBUG
-				Atom* atom_ptr_L1 = new Atom();
-				atom_ptr_L1->setElement(atom1->getElement());
-				atom_ptr_L1->setName("L1");
-				atom_ptr_L1->setPosition(atom1->getPosition());
-				atom_ptr_L1->setCharge(val);
+				if (write_interactions_file_ == true)
+				{
+					Atom* atom_ptr_L1 = new Atom();
+					atom_ptr_L1->setElement(atom1->getElement());
+					atom_ptr_L1->setName("L1");
+					atom_ptr_L1->setPosition(atom1->getPosition());
+					atom_ptr_L1->setCharge(val);
 
-				Atom* atom_ptr_L2 = new Atom();
-				atom_ptr_L2->setElement(atom2->getElement());
-				atom_ptr_L2->setName("L2");
-				atom_ptr_L2->setPosition(atom2->getPosition());
-				atom_ptr_L2->setCharge(val);
+					Atom* atom_ptr_L2 = new Atom();
+					atom_ptr_L2->setElement(atom2->getElement());
+					atom_ptr_L2->setName("L2");
+					atom_ptr_L2->setPosition(atom2->getPosition());
+					atom_ptr_L2->setCharge(val);
 
-				atom_ptr_L1->createBond(*atom_ptr_L2);
+					atom_ptr_L1->createBond(*atom_ptr_L2);
 
-				debug_molecule.insert(*atom_ptr_L1);
-				debug_molecule.insert(*atom_ptr_L2);
-#endif
-
+					interactions_molecule.insert(*atom_ptr_L1);
+					interactions_molecule.insert(*atom_ptr_L2);
+				}
 				
 				score_ += val;
 			}
 		}
 
-#ifdef DEBUG
-		HINFile debug_file("LIPO_debug.hin", std::ios::out);
-		debug_file << debug_molecule;
-		debug_file.close();
-#endif
+		if (write_interactions_file_ == true)
+		{
+			HINFile debug_file("LIPO_debug.hin", std::ios::out);
+			debug_file << interactions_molecule;
+			debug_file.close();
+		}
 
-		if (verbosity > 0)
+		if (verbosity_ > 0)
 		{
 			Log.info() << "LIPO: energy is " << score_ << endl;
 		}
 
 		timer.stop();
-		Log.info() << "Lipophilic::updateEnergy(): "
-			<< timer.getCPUTime() << " s" << std::endl;
+
+		if (verbosity_ > 1)
+		{
+			Log.info() << "Lipophilic::updateEnergy(): "
+				<< timer.getCPUTime() << " s" << std::endl;
+		}
 
 		return(score_);
 	}

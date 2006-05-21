@@ -1,4 +1,4 @@
-// $Id: buriedPolar.h,v 1.2 2006/02/21 16:19:32 anker Exp $
+// $Id: buriedPolar.h,v 1.3 2006/05/21 17:38:39 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #ifndef BALL_SCORING_COMPONENTS_FRESNOBURIEDPOLAR_H
@@ -33,6 +33,10 @@ namespace BALL
 
 			/**
 			*/
+			static const char* CREATE_INTERACTIONS_FILE;
+
+			/**
+			*/
 			static const char* VERBOSITY;
 
 		};
@@ -49,6 +53,10 @@ namespace BALL
 			/**
 			*/
 			static const float BP_R2_OFFSET;
+
+			/**
+			*/
+			static const bool CREATE_INTERACTIONS_FILE;
 
 			/**
 			*/
@@ -146,6 +154,22 @@ namespace BALL
 				constant to the lower bound.
 		*/
 		double r2_offset_;
+
+		// The following two variables are only necessary if the buried polar
+		// component is meant to assign its own radii. They are unused at the
+		// moment.
+
+		///
+		Molecule* bp_receptor_;
+
+		///
+		Molecule* bp_ligand_;
+
+		///
+		bool write_interactions_file_;
+
+		///
+		Size verbosity_;
 
 	};
 
