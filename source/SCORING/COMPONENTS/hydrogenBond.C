@@ -1,4 +1,4 @@
-// $Id: hydrogenBond.C,v 1.3 2006/05/17 12:50:46 anker Exp $
+// $Id: hydrogenBond.C,v 1.4 2006/05/21 17:32:10 anker Exp $
 // hydrogen bond component
 
 #include <BALL/SCORING/COMPONENTS/hydrogenBond.h>
@@ -15,8 +15,6 @@
 #ifdef DEBUG
 #include <BALL/FORMAT/HINFile.h>
 #endif
-
-using namespace std;
 
 namespace BALL
 {
@@ -102,7 +100,7 @@ namespace BALL
 		if (scoring_function == 0)
 		{
 			Log.error() << "HydrogenBond::setup(): "
-				<< "component not bound to scoring function." << endl;
+				<< "component not bound to scoring function." << std::endl;
 			return false;
 		}
 
@@ -133,8 +131,6 @@ namespace BALL
 			= options.setDefaultInteger(HydrogenBond::Option::VERBOSITY,
 					HydrogenBond::Default::VERBOSITY);
 
-		verbosity = 100;
-
 		FresnoTypes fresno_types_class(*this);
 		// const HashMap<const Atom*, Size>& fresno_types 
 		//	= fresno_types_class.getTypeMap();
@@ -161,7 +157,7 @@ namespace BALL
 							if ((fresno_types[&*B_it] == FresnoTypes::HBOND_ACCEPTOR_DONOR)
 									|| (fresno_types[&*B_it] == FresnoTypes::HBOND_ACCEPTOR))
 							{
-								possible_hydrogen_bonds_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
+								possible_hydrogen_bonds_.push_back(std::pair<const Atom*, const Atom*>(&*A_it, &*B_it));
 								if (verbosity >= 90)
 								{
 									Log.info() << "found possible HB: " 
@@ -171,7 +167,7 @@ namespace BALL
 										<< " (length: " 
 										<< (A_it->getPosition() - B_it->getPosition()).getLength() 
 										<< " A) " 
-										<< endl;
+										<< std::endl;
 								}
 							}
 						}
@@ -193,7 +189,7 @@ namespace BALL
 							if ((fresno_types[&*A_it] == FresnoTypes::HBOND_ACCEPTOR_DONOR)
 									|| (fresno_types[&*A_it] == FresnoTypes::HBOND_ACCEPTOR))
 							{
-								possible_hydrogen_bonds_.push_back(pair<const Atom*, const Atom*>(&*B_it, &*A_it));
+								possible_hydrogen_bonds_.push_back(std::pair<const Atom*, const Atom*>(&*B_it, &*A_it));
 								if (verbosity >= 90)
 								{
 									Log.info() << "found possible HB: " 
@@ -202,7 +198,7 @@ namespace BALL
 										<< " (length: " 
 										<< (B_it->getPosition() - A_it->getPosition()).getLength() 
 										<< " A) " 
-										<< endl;
+										<< std::endl;
 								}
 							}
 						}
@@ -213,9 +209,9 @@ namespace BALL
 
 		if (verbosity > 8)
 		{
-			Log.info() << "HydrogenBond setup statistics:" << endl;
+			Log.info() << "HydrogenBond setup statistics:" << std::endl;
 			Log.info() << "Found " << possible_hydrogen_bonds_.size() 
-				<< " possible hydrogen bonds" << endl << endl;
+				<< " possible hydrogen bonds" << std::endl << std::endl;
 		}
 
 		timer.stop();
@@ -257,8 +253,8 @@ namespace BALL
 		Vector3 h_bond;
 		Vector3 h_connection;
 
-		// iterate over all possible hydrogen bond pairs
-		::vector< pair<const Atom*, const Atom*> >::const_iterator it;
+		// iterate over all possible hydrogen bond std::pairs
+		::vector< std::pair<const Atom*, const Atom*> >::const_iterator it;
 		for (it = possible_hydrogen_bonds_.begin();
 			it != possible_hydrogen_bonds_.end();
 			++it)
@@ -297,10 +293,10 @@ namespace BALL
 				// PARANOIA
 				else
 				{
-					cerr << "HydrogenBond::updateEnergy(): "
-						<< "black magic: hydrogen bond without hydrogens:" << endl
+					Log.error() << "HydrogenBond::updateEnergy(): "
+						<< "black magic: hydrogen bond without hydrogens:" << std::endl
 						<< hydrogen->getFullName() << ":" << acceptor->getFullName()
-						<< endl;
+						<< std::endl;
 					continue;
 				}
 				// /PARANOIA
@@ -361,7 +357,7 @@ namespace BALL
 						}
 						Log.info() << " (delta d " << distance
 							<< ", delta phi " << angle << ")"
-							<< endl;
+							<< std::endl;
 					}
 					score_ += val;
 				}
@@ -370,7 +366,7 @@ namespace BALL
 
 		if (verbosity > 0)
 		{
-			Log.info() << "HB: energy is " << score_ << endl;
+			Log.info() << "HB: energy is " << score_ << std::endl;
 		}
 		
 #ifdef DEBUG
