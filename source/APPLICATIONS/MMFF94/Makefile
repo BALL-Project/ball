@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.1.4.1 2006/05/21 22:33:49 amoll Exp $
+# $Id: Makefile,v 1.1.4.2 2006/05/21 22:46:36 amoll Exp $
 # Makefile for BALL utilities
 #
 
@@ -13,17 +13,12 @@ EXECUTABLES = \
 # default target
 all:	$(EXECUTABLES)
 
+include ../../common.mak
+-include .Dependencies
+
 # required for clean and depend
 CPP_SOURCES=$(EXECUTABLES:=.C)
 OBJECTS=$(EXECUTABLES:=.o)
-
-include ../../common.mak
-include .Dependencies
-
-# remove the library specific flags
-# and replace them by the application specific
-# flags
-LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
 
 .o:
 	$(CXX) $(CXXFLAGS) $*.o $(LDFLAGS) -o $@ $(LIBS)
