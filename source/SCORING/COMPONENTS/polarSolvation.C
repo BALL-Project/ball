@@ -1,4 +1,4 @@
-// $Id: polarSolvation.C,v 1.1 2005/11/21 19:27:11 anker Exp $
+// $Id: polarSolvation.C,v 1.2 2006/05/21 17:49:46 anker Exp $
 
 #include <BALL/SCORING/COMPONENTS/polarSolvation.h>
 
@@ -33,6 +33,14 @@ namespace BALL
 		= "verbosity";
 	const char* PolarSolvation::Option::GB_SCALING_FILE
 		= "gb_scaling_file";
+	const char* PolarSolvation::Option::POLAR_OVERWRITE_RADII
+		= "polar_overwrite_radii";
+	const char* PolarSolvation::Option::POLAR_OVERWRITE_CHARGES
+		= "polar_overwrite_charges";
+	const char* PolarSolvation::Option::POLAR_RADIUS_RULES
+		= "polar_radius_rules";
+	const char* PolarSolvation::Option::POLAR_CHARGE_RULES
+		= "polar_charge_rules";
 
 	//
 	const Size PolarSolvation::Default::POLAR_METHOD 
@@ -46,9 +54,17 @@ namespace BALL
 	const bool PolarSolvation::Default::UNITE_ATOMS 
 		= false;
 	const Size PolarSolvation::Default::VERBOSITY 
-		= 0;
+		= 10;
 	const String PolarSolvation::Default::GB_SCALING_FILE
 		= "gb_scaling.ini";
+	const bool PolarSolvation::Default::POLAR_OVERWRITE_RADII
+		= true;
+	const bool PolarSolvation::Default::POLAR_OVERWRITE_CHARGES
+		= true;
+	const String PolarSolvation::Default::POLAR_RADIUS_RULES
+		= "solvation/PARSE+ions.rul";
+	const String PolarSolvation::Default::POLAR_CHARGE_RULES
+		= "solvation/PARSE+ions.rul";
 
 
 	PolarSolvation::PolarSolvation()
@@ -159,6 +175,8 @@ namespace BALL
 			= options.setDefaultInteger(PolarSolvation::Option::VERBOSITY,
 					PolarSolvation::Default::VERBOSITY);
 
+		verbosity_ = 4;
+
 		averaging_
 			= options.setDefaultInteger(PolarSolvation::Option::POLAR_AVG,
 					PolarSolvation::Default::POLAR_AVG);
@@ -227,22 +245,35 @@ namespace BALL
 			}
 		}
 
-		// ????? 
-		// Does Molecule:::operator = () really copy? What about the constructor? 
-		// we need local copies of the molecules
+		// Get the molecules from the scoring function
 		desolv_protein_ = Molecule(*getScoringFunction()->getReceptor(), true);
+		desolv_ligand_ = Molecule(*getScoringFunction()->getLigand(), true);
+
 		if (unite_atoms_ == true)
 		{
 			uniteAtoms_(desolv_protein_);
-		}
-
-		desolv_ligand_ = Molecule(*getScoringFunction()->getLigand(), true);
-		if (unite_atoms_ == true)
-		{
 			uniteAtoms_(desolv_ligand_);
 		}
 
-		// declare a system and some more or less globally needed variables
+		timer.stop();
+		if (verbosity_ > 1)
+		{
+			Log.info() << "PolarSolvation::setup(): " 
+				<< timer.getCPUTime() << " s" << std::endl;
+		}
+
+		return(true);
+
+	}
+
+
+	double PolarSolvation::calculateScore()
+		throw()
+	{
+
+		// we need local copies of the molecules
+
+		// initialize 
 		score_ = 0.0;
 
 		// initialize all those necessary PB options
@@ -310,19 +341,10 @@ namespace BALL
 				result = computeEnergyDifference_(system, dG_reac_system);
 				if (result == false) return false;
 
-#ifdef DEBUG
-				Log.info() << "AB " << dG_reac_system << std::endl;
-#endif
-
 				system.clear();
 				system.insert(*((Molecule*)(desolv_protein_.create(true))));
 				result = computeEnergyDifference_(system, dG_reac_protein);
 				if (result == false) return false;
-
-#ifdef DEBUG
-				Log.info() << "A " << dG_reac_protein << std::endl;
-#endif
-
 
 			}
 
@@ -389,11 +411,6 @@ namespace BALL
 			{
 				result = computeEnergyDifference_(system, dG_reac_ligand);
 				if (result == false) return false;
-				
-#ifdef DEBUG
-				Log.info() << "B " << dG_reac_ligand << std::endl;
-#endif
-
 			}
 
 			score_ = dG_reac_system - dG_reac_protein - dG_reac_ligand;
@@ -490,23 +507,7 @@ namespace BALL
 						result = computeFullCycle_(cut_system, cut_protein, cut_ligand,
 								tmp_energy);
 						if (result == false) return false;
-
-#ifdef DEBUG
-						/*
-						Log.info() << "DEBUG: " << tmp_energy << endl;
-						result = computeFullCycle_(cut_system, cut_protein, cut_ligand, 
-								tmp_energy);
-						if (result == false) return false;
-						Log.info() << "DEBUG: " << tmp_energy << endl;
-						result = computeFullCycle_(cut_system, cut_protein, cut_ligand, 
-								tmp_energy);
-						if (result == false) return false;
-						Log.info() << "DEBUG: " << tmp_energy << endl;
-						*/
-#endif
-
 						score_ = tmp_energy;
-
 					}
 					else
 					{
@@ -594,23 +595,7 @@ namespace BALL
 			}
 		}
 
-		timer.stop();
-		if (verbosity_ > 1)
-		{
-			Log.info() << "PolarSolvation::setup(): " 
-				<< timer.getCPUTime() << " s" << std::endl;
-		}
-
-		return(true);
-
-	}
-
-
-	double PolarSolvation::calculateScore()
-		throw()
-	{
-
-		if (verbosity_ > 1)
+		if (verbosity_ > 0)
 		{
 			Log.info() << "Polar solvation: energy is " 
 				<< score_ << endl;
@@ -727,12 +712,6 @@ namespace BALL
 
 					potential *= Constants::NA * 1e-3;
 				}
-
-#ifdef DEBUG
-				// std::cout << "phi(" << atom_it->getFullName() << ") = " << potential 
-				// 	<< " charge  = " << atom_it->getCharge() 
-				// 	<< " dg = " << charge * potential << std::endl;
-#endif
 
 				dGint += charge * potential;
 			}
@@ -919,7 +898,7 @@ namespace BALL
 		float ddGsolv = dGes_B_cav_A - dGes_B + dGes_A_cav_B - dGes_A;
 		float dGele = ddGsolv + ((dGint_AB + dGint_BA) / 2.0);
 
-		if (verbosity_ > 1)
+		if (verbosity_ > 0)
 		{
 			Log.info() << "dGes_A = " << dGes_A << endl;
 			Log.info() << "dGes_B = " << dGes_B << endl;

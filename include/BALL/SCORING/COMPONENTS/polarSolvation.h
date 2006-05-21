@@ -1,4 +1,4 @@
-// $Id: polarSolvation.h,v 1.1 2005/11/21 19:27:06 anker Exp $
+// $Id: polarSolvation.h,v 1.2 2006/05/21 17:49:46 anker Exp $
 
 #ifndef BALL_SCORING_COMPONENTS_POLARSOLVATION_H
 #define BALL_SCORING_COMPONENTS_POLARSOLVATION_H
@@ -109,6 +109,22 @@ namespace BALL
 			*/
 			static const char* VERBOSITY;
 
+			/**
+			*/
+			static const char* POLAR_OVERWRITE_RADII;
+
+			/**
+			*/
+			static const char* POLAR_OVERWRITE_CHARGES;
+
+			/**
+			*/
+			static const char* POLAR_RADIUS_RULES;
+
+			/**
+			*/
+			static const char* POLAR_CHARGE_RULES;
+
 		};
 
 
@@ -142,6 +158,22 @@ namespace BALL
 			/**
 			*/
 			static const Size VERBOSITY;
+
+			/**
+			*/
+			static const bool POLAR_OVERWRITE_RADII;
+
+			/**
+			*/
+			static const bool POLAR_OVERWRITE_CHARGES;
+
+			/**
+			*/
+			static const String POLAR_RADIUS_RULES;
+
+			/**
+			*/
+			static const String POLAR_CHARGE_RULES;
 
 		};
 
