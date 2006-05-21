@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CHPI.C,v 1.1 2005/11/21 19:27:09 anker Exp $
+// $Id: CHPI.C,v 1.2 2006/05/21 17:17:27 anker Exp $
 
 // CH---pi interaction for the SLICK energy function
 
@@ -15,8 +15,7 @@
 
 #include <BALL/SYSTEM/timer.h>
 
-// #define DEBUG 1
-// #define STATISTICS 1
+#define DEBUG 1
 
 #ifdef DEBUG
 #include <BALL/FORMAT/HINFile.h>
@@ -163,7 +162,8 @@ namespace BALL
 	}
 
 
-	const String CHPI::Option::VERBOSITY = "verbosity";
+	const String CHPI::Option::VERBOSITY 
+		= "verbosity";
 	const String CHPI::Option::CX_DISTANCE_UPPER 
 		= "CX_distance_upper";
 	const String CHPI::Option::CHX_ANGLE_LOWER 
@@ -172,23 +172,25 @@ namespace BALL
 		= "HX_projected_distance_lower";
 	const String CHPI::Option::HX_PROJECTED_DISTANCE_UPPER
 		= "HX_projected_distance_upper";
+	const String CHPI::Option::DISTANCE_TOLERANCE
+		= "distance_tolerance";
+	const String CHPI::Option::ANGLE_TOLERANCE
+		= "angle_tolerance";
+	const String CHPI::Option::LIMIT
+		= "CHPI_sigmoid_limit";
+	const String CHPI::Option::CREATE_INTERACTION_FILE
+		= "CHPI_create_interaction_file";
 
 	const Size CHPI::Default::VERBOSITY = 0;
-#ifndef STATISTICS
 	const float CHPI::Default::CX_DISTANCE_UPPER = 4.5f;
 	const float CHPI::Default::CHX_ANGLE_LOWER = 110.0f;
-	const float CHPI::Default::HX_PROJECTED_DISTANCE_LOWER
-		= 0.7f;
-	const float CHPI::Default::HX_PROJECTED_DISTANCE_UPPER
-		= 1.7f;
-#else
-	const float CHPI::Default::CX_DISTANCE_UPPER = 5.5f;
-	const float CHPI::Default::CHX_ANGLE_LOWER = 100.0f;
-	const float CHPI::Default::HX_PROJECTED_DISTANCE_LOWER
-		= 0.0f;
-	const float CHPI::Default::HX_PROJECTED_DISTANCE_UPPER
-		= 2.2f;
-#endif
+	const float CHPI::Default::HX_PROJECTED_DISTANCE_LOWER = 0.7f;
+	const float CHPI::Default::HX_PROJECTED_DISTANCE_UPPER = 1.7f;
+	const float CHPI::Default::DISTANCE_TOLERANCE = 0.25f;
+	const float CHPI::Default::ANGLE_TOLERANCE = 25.0f;
+	const float CHPI::Default::LIMIT = 0.01f;
+	const bool CHPI::Default::CREATE_INTERACTION_FILE = true;
+		
 
 
 	// Default constructor
@@ -277,7 +279,9 @@ namespace BALL
 		clear();
 
 		// Set all paramters
-		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
+		options = getScoringFunction()->options;
+		options.setDefaultInteger(Option::VERBOSITY, 
+				Default::VERBOSITY);
 		options.setDefaultReal(Option::CX_DISTANCE_UPPER,
 				Default::CX_DISTANCE_UPPER);
 		options.setDefaultReal(Option::CHX_ANGLE_LOWER,
@@ -286,27 +290,41 @@ namespace BALL
 				Default::HX_PROJECTED_DISTANCE_LOWER);
 		options.setDefaultReal(Option::HX_PROJECTED_DISTANCE_UPPER,
 				Default::HX_PROJECTED_DISTANCE_UPPER);
+		options.setDefaultReal(Option::DISTANCE_TOLERANCE,
+				Default::DISTANCE_TOLERANCE);
+		options.setDefaultReal(Option::ANGLE_TOLERANCE,
+				Default::ANGLE_TOLERANCE);
+		options.setDefaultReal(Option::LIMIT,
+				Default::LIMIT);
+		options.setDefaultBool(Option::CREATE_INTERACTION_FILE,
+				Default::CREATE_INTERACTION_FILE);
 
-		CX_distance_upper_ = options.getReal(Option::CX_DISTANCE_UPPER);
-		CHX_angle_lower_ = options.getReal(Option::CHX_ANGLE_LOWER);
+		CX_distance_upper_ 
+			= options.getReal(Option::CX_DISTANCE_UPPER);
+		CHX_angle_lower_ 
+			= options.getReal(Option::CHX_ANGLE_LOWER);
 		HX_projected_distance_lower_ 
 			= options.getReal(Option::HX_PROJECTED_DISTANCE_LOWER);
 		HX_projected_distance_upper_ 
 			= options.getReal(Option::HX_PROJECTED_DISTANCE_UPPER);
 
-		// ??? The following values are hardcoded.
 		// The distance tolerance for creating smooth scores in interaction
 		// estimation (in units of Angstrom). This is just half of the
 		// tolerance, so double this value in order to get the full tolerance
 		// width.
-		distance_tolerance_ = 0.25f;
+		distance_tolerance_ = options.getReal(Option::DISTANCE_TOLERANCE);
 		// The angular tolerance in units of degrees
-		angle_tolerance_ = 20.0f;
+		angle_tolerance_ = options.getReal(Option::ANGLE_TOLERANCE);
 		// The cutoff limit for stacking scoring terms
-		limit_ = 0.01;
+		limit_ = options.getReal(Option::LIMIT);
 
-		// read the protein and the ligand 
-		// of which the binding sites have to be found 
+		// Will we write a HIN file containing the interactions?
+		write_interactions_file_ 
+			= options.getBool(Option::CREATE_INTERACTION_FILE);
+		// How loud will we cry?
+		verbosity_ = options.getInteger(Option::VERBOSITY);
+
+		// Get the receptor from the scoring function
 		const Protein& protein 
 			= (const Protein&)*(scoring_function)->getReceptor();
 
@@ -408,18 +426,13 @@ namespace BALL
 		// The following piece of code only works for simple sugars, i. e.
 		// those wihtout aromatic side chains and only aliphatic carbons. 
 
-#ifndef STATISTICS
 		const Molecule& ligand = *(scoring_function->getLigand());
-#else
-		const System& ligand = *(scoring_function->getSystem());
-#endif
 
 		AtomConstIterator lig_it(ligand.beginAtom());
 		for (; +lig_it; ++lig_it) 
 		{ 
-			if ((lig_it->getElement() == PTE[Element::C]))
-			// TEMPORARY!
-			//	&& (lig_it->countBonds() == 4))
+			if ((lig_it->getElement() == PTE[Element::C])
+				&& (lig_it->countBonds() == 4))
 			{	
 				// The aliphatic C-Atom of this putative interaction
 				const Atom* aliphatic_C = &*lig_it;
@@ -455,10 +468,12 @@ namespace BALL
 		}
 		
 		timer.stop();
-#ifdef DEBUG
-		Log.info() << "CHPI::setup(): "
-			<< timer.getCPUTime() << " s" << std::endl;
-#endif
+		
+		if (verbosity_ > 9)
+		{
+			Log.info() << "CHPI::setup(): "
+				<< timer.getCPUTime() << " s" << std::endl;
+		}
 
 		return(true);
 	}
@@ -471,9 +486,9 @@ namespace BALL
 		Timer timer;
 		timer.start();
 
-#ifdef DEBUG
-		Molecule debug_molecule;
-#endif
+		// A pseudomolecule for every CHPI interaction is saved in this
+		// molecule and written to disk, if the user wants it
+		Molecule interactions_molecule;
 
 		// Reset the energy value.
 		score_ = 0.0f;
@@ -493,6 +508,7 @@ namespace BALL
 		// Iterate over all possible interactions
 		vector< pair<const AromaticRing*, const CHGroup*> >::const_iterator 
 			inter_it;
+
 		for (inter_it = possible_interactions_.begin(); 
 				inter_it != possible_interactions_.end(); ++inter_it)
 		{
@@ -508,18 +524,10 @@ namespace BALL
 				= getScoringFunction()->getBaseFunction()->calculate(distance,
 						CX_distance_upper_ - distance_tolerance_,
 						CX_distance_upper_ + distance_tolerance_);
-#ifdef DEBUG
-			Log.info() << "CX_score = " << CX_score << " (" << limit_ << ")"
-				<< std::endl;
-#endif
 
-			// 
 			if (CX_score > limit_)
 			{
-#ifdef DEBUG
-					Log.info() << "distance C --- x: " 
-						<< (ring_centre - C_atom).getLength() << endl;
-#endif
+
 				// Check angle (C, H, X)
 				const Vector3& H_atom = inter_it->second->getHAtom()->getPosition();
 				const Vector3& C_atom = inter_it->second->getCAtom()->getPosition();
@@ -535,15 +543,11 @@ namespace BALL
 					= getScoringFunction()->getBaseFunction()->calculate(angle_CHX,
 							CHX_angle_lower_ + angle_tolerance_,
 							CHX_angle_lower_ - angle_tolerance_);
-#ifdef DEBUG
-				Log.info() << "CHX_score = " << CHX_score << std::endl;
-#endif // DEBUG
 
-				if (angle_CHX >= CHX_angle_lower_)
+				// if (angle_CHX >= CHX_angle_lower_)
+				if (CHX_score > limit_)
 				{
-#ifdef DEBUG
-					Log.info() << "angle (C, H, X):  " << angle_CHX << endl;
-#endif
+
 					const Vector3& normal = inter_it->first->getNormalVector();
 					// Check the projected distance
 					float projected_distance_XH 
@@ -570,46 +574,60 @@ namespace BALL
 						float e = 1.0f / 3.0f * (CX_score + CHX_score + HX_score);
 						// Found an interaction, count it.
 
-#ifdef DEBUG
-						Atom* atom_ptr_H = new Atom();
-						atom_ptr_H->setElement(PTE[Element::Fe]);
-						atom_ptr_H->setName("H");
-						atom_ptr_H->setPosition(H_atom);
-						atom_ptr_H->setCharge(e);
+						if (verbosity_ > 9)
+						{
+							Log.info() << inter_it->first->getRing()[0]->getResidue()->getFullName()
+								<< ":" << inter_it->first->getRing()[0]->getResidue()->getID()
+								<< " --- "
+								<< inter_it->second->getCAtom()->getResidue()->getFullName() 
+								<< ":"
+								<< inter_it->second->getCAtom()->getResidue()->getID() 
+								<< std::endl;
+							Log.info() << "CX:  " << CX_score << "(" << distance << " A)"
+								<< std::endl;
+							Log.info() << "CHX: " << CHX_score << "(" << angle_CHX 
+								<< " deg)" << std::endl;
+							Log.info() << "HpX: " << HX_score << "(" 
+								<< projected_distance_XH << " A)" << std::endl << std::endl;
+							Log.info() << "Score: " << e << std::endl;
+						}
 
-						Atom* atom_ptr_X = new Atom();
-						atom_ptr_X->setElement(PTE[Element::Fe]);
-						atom_ptr_X->setName("X");
-						atom_ptr_X->setPosition(ring_centre);
-						atom_ptr_X->setCharge(0.0f);
+						if (write_interactions_file_ == true)
+						{
+							Atom* atom_ptr_H = new Atom();
+							atom_ptr_H->setElement(PTE[Element::Fe]);
+							atom_ptr_H->setName("H");
+							atom_ptr_H->setPosition(H_atom);
+							atom_ptr_H->setCharge(e);
 
-						Atom* atom_ptr_N = new Atom();
-						atom_ptr_N->setElement(PTE[Element::S]);
-						atom_ptr_N->setName("N");
-						atom_ptr_N->setPosition(ring_centre + normal);
-						atom_ptr_N->setCharge(-1.0f);
+							Atom* atom_ptr_X = new Atom();
+							atom_ptr_X->setElement(PTE[Element::Fe]);
+							atom_ptr_X->setName("X");
+							atom_ptr_X->setPosition(ring_centre);
+							atom_ptr_X->setCharge(0.0f);
 
-						Atom* atom_ptr_L = new Atom();
-						atom_ptr_L->setElement(PTE[Element::K]);
-						atom_ptr_L->setName("L");
-						atom_ptr_L->setPosition(ring_centre + (-HX * normal) * normal);
-						atom_ptr_L->setCharge(e);
+							Atom* atom_ptr_N = new Atom();
+							atom_ptr_N->setElement(PTE[Element::S]);
+							atom_ptr_N->setName("N");
+							atom_ptr_N->setPosition(ring_centre + normal);
+							atom_ptr_N->setCharge(-1.0f);
 
-						atom_ptr_H->createBond(*atom_ptr_L);
-						atom_ptr_X->createBond(*atom_ptr_N);
-						atom_ptr_X->createBond(*atom_ptr_L);
+							Atom* atom_ptr_L = new Atom();
+							atom_ptr_L->setElement(PTE[Element::K]);
+							atom_ptr_L->setName("L");
+							atom_ptr_L->setPosition(ring_centre + (-HX * normal) * normal);
+							atom_ptr_L->setCharge(e);
 
-						debug_molecule.insert(*atom_ptr_H);
-						debug_molecule.insert(*atom_ptr_X);
-						debug_molecule.insert(*atom_ptr_N);
-						debug_molecule.insert(*atom_ptr_L);
-#endif
-#ifdef STATISTICS
-						Log.info() << "STATISTICS:\t" 
-							<< (ring_centre - C_atom).getLength() << "\t"
-							<< angle_CHX << "\t"
-							<< projected_distance_XH << endl;
-#endif
+							atom_ptr_H->createBond(*atom_ptr_L);
+							atom_ptr_X->createBond(*atom_ptr_N);
+							atom_ptr_X->createBond(*atom_ptr_L);
+
+							interactions_molecule.insert(*atom_ptr_H);
+							interactions_molecule.insert(*atom_ptr_X);
+							interactions_molecule.insert(*atom_ptr_N);
+							interactions_molecule.insert(*atom_ptr_L);
+						}
+
 						score_ += e;
 					}
 				}
@@ -618,15 +636,19 @@ namespace BALL
 
 		timer.stop();
 
-#ifdef DEBUG
-		Log.info() << "CHPI::updateEnergy(): "
-			<< timer.getCPUTime() << " s" << std::endl;
-		Log.info() << "CHPI: energy is " << score_ << endl;
-		HINFile debug_file("CHPI_debug.hin", std::ios::out);
-		debug_file << debug_molecule;
-		debug_file.close();
-#endif
+		if (verbosity_ > 9)
+		{
+			Log.info() << "CHPI::updateEnergy(): "
+				<< timer.getCPUTime() << " s" << std::endl;
+			Log.info() << "CHPI: energy is " << score_ << endl;
+		}
 
+		if (write_interactions_file_ == true)
+		{
+			HINFile interactions_file("CHPI_interactions.hin", std::ios::out);
+			interactions_file << interactions_molecule;
+			interactions_file.close();
+		}
 
 		return(score_);
 	}
