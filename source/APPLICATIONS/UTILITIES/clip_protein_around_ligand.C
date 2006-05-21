@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clip_protein_around_ligand.C,v 1.11 2006/05/08 07:48:16 anker Exp $
+// $Id: clip_protein_around_ligand.C,v 1.12 2006/05/21 17:14:34 anker Exp $
 //
 // A program for extracting a parts of a protein around a ligand.
 // The output are XYZFiles because we use this program for creating AMSOL
@@ -434,7 +434,7 @@ int main(int argc, char** argv)
 							// DEBUG
 							//Log.info() << "res:  a: " << atoms << ", h: " << heavy_atoms 
 							//	<< " (" << res_it->getFullName() << ":"
-								<< res_it->getID() << ")" << endl;
+							//	<< res_it->getID() << ")" << endl;
 							// /DEBUG
 							if (atoms > max_atoms || heavy_atoms > max_heavy_atoms)
 							{
@@ -668,7 +668,7 @@ int main(int argc, char** argv)
 	intermediate << system;
 	intermediate.close();
 
-	File dumpfile("intermediate.dump", File::OUT);
+	File dumpfile("intermediate.dump", std::ios::out);
 	system.dump(dumpfile);
 	dumpfile.close();
 
@@ -710,7 +710,7 @@ int main(int argc, char** argv)
 		(*list_it)->select();
 	}
 
-	dumpfile.open("before_minimization.dump", File::OUT);
+	dumpfile.open("before_minimization.dump", std::ios::out);
 	system.dump(dumpfile);
 	dumpfile.close();
 
@@ -726,7 +726,7 @@ int main(int argc, char** argv)
 	PDBFile cut_protein_file("cut_protein_file.pdb", std::ios::out);
 	cut_protein_file << system;
 
-	dumpfile.open("after_minimization.dump", File::OUT);
+	dumpfile.open("after_minimization.dump", std::ios::out);
 	system.dump(dumpfile);
 	dumpfile.close();
 
