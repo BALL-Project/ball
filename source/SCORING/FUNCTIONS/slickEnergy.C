@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: slickEnergy.C,v 1.2 2006/02/24 14:20:35 anker Exp $
+// $Id: slickEnergy.C,v 1.3 2006/05/21 17:30:23 anker Exp $
 
 #include <BALL/SCORING/FUNCTIONS/slickEnergy.h>
 #include <BALL/SCORING/COMPONENTS/CHPI.h>
@@ -31,12 +31,24 @@ namespace BALL
 	// Calibration for the complete set. [anker 2006/02/24]
 	// Calibration set: 1j4u 5cna 1gic 1qdo 1qdc 1ona 1dgl 1axz 1ax0 1ax1
 	// 1ax2 2bqp 1bqp 1qf3 2pel 1ehh 1en2 1k7u
-	const float SLICKEnergy::Default::CONST    = -2.70722038;
-	const float SLICKEnergy::Default::HB       = -1.31258320;
-	const float SLICKEnergy::Default::CHPI     = -0.74188312;
-	const float SLICKEnergy::Default::VDW      =  0.02207132;
-	const float SLICKEnergy::Default::NONPOLAR =  0.49981964;
-	const float SLICKEnergy::Default::POLAR    = -0.12498055;
+	// const float SLICKEnergy::Default::CONST    = -2.70722038;
+	// const float SLICKEnergy::Default::HB       = -1.31258320;
+	// const float SLICKEnergy::Default::CHPI     = -0.74188312;
+	// const float SLICKEnergy::Default::VDW      =  0.02207132;
+	// const float SLICKEnergy::Default::NONPOLAR =  0.49981964;
+	// const float SLICKEnergy::Default::POLAR    = -0.12498055;
+
+
+	// Parameters for the whole calibration set, this time with Bondi
+	// observed mean radii in the nonpolar term and the log-softened VDW
+	// component
+	// [anker 2006/04/26]
+	const float SLICKEnergy::Default::CONST    = -5.23774531;
+	const float SLICKEnergy::Default::HB       = -0.09077441;
+	const float SLICKEnergy::Default::CHPI     = -0.50244683;
+	const float SLICKEnergy::Default::VDW      =  0.01559796;
+	const float SLICKEnergy::Default::NONPOLAR =  0.36638941;
+	const float SLICKEnergy::Default::POLAR    = -0.10725374;
 
 	SLICKEnergy::SLICKEnergy()
 		throw()
@@ -127,10 +139,12 @@ namespace BALL
 
 		options.setInteger(PolarSolvation::Option::POLAR_METHOD,
 				PolarSolvation::CALCULATION__FULL_CYCLE_FOCUSED);
+		// GB 
+		// options.setBool(PolarSolvation::Option::POLAR_GB, true);
 
 		options.setInteger(VanDerWaals::Option::VDW_METHOD, 
-				VanDerWaals::CALCULATION__SOFTENED_LJ_POTENTIAL_SIMPLE);
-		options.setReal(VanDerWaals::Option::VDW_SOFTENING_LIMIT, 0.0f);
+				VanDerWaals::CALCULATION__SOFTENED_LJ_POTENTIAL_LOG);
+		options.setReal(VanDerWaals::Option::VDW_SOFTENING_LIMIT, 5.0f);
 
 		// Flag for activating GB calculations. Bad results for finding binding
 		// pockets, so commented out here
