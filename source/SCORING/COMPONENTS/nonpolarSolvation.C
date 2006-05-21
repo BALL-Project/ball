@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nonpolarSolvation.C,v 1.2 2006/05/21 17:33:47 anker Exp $
+// $Id: nonpolarSolvation.C,v 1.3 2006/05/21 17:51:41 anker Exp $
 
 #include <BALL/SCORING/COMPONENTS/nonpolarSolvation.h>
 #include <BALL/KERNEL/standardPredicates.h>
@@ -215,7 +215,6 @@ namespace BALL
 			= options.setDefaultBool(NonpolarSolvation::Option::NONPOLAR_OVERWRITE_RADII,
 					NonpolarSolvation::Default::NONPOLAR_OVERWRITE_RADII);
 
-
 		String tmp;
 		if (overwrite_radii == true)
 		{
@@ -225,7 +224,6 @@ namespace BALL
 			cout << filename << endl;
 			Path path;
 			tmp = path.find(filename);
-			cout << tmp << endl;
 			if (tmp == "") tmp = filename;
 			if (verbosity_ > 0)
 			{
@@ -233,7 +231,6 @@ namespace BALL
 					<< std::endl;
 			}
 		}
-		cout << tmp << endl;
 		INIFile radius_rule_ini(tmp);
 		radius_rule_ini.read();
 		RadiusRuleProcessor radius_rules(radius_rule_ini);
