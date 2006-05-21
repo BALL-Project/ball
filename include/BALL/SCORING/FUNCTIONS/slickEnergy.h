@@ -1,4 +1,4 @@
-// $Id: slickEnergy.h,v 1.2 2006/02/21 16:21:28 anker Exp $
+// $Id: slickEnergy.h,v 1.3 2006/05/21 17:37:56 anker Exp $
 
 #ifndef BALL_SCORING_FUNCTIONS_SLICKENERGY_H
 #define BALL_SCORING_FUNCTIONS_SLICKENERGY_H
@@ -7,7 +7,7 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
+#ifndef BALL_MOLMEC_COMMON_SCORING_FUNCTION_H
 #	include <BALL/SCORING/COMMON/scoringFunction.h>
 #endif
 
