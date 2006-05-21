@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: slickScore.C,v 1.1 2006/02/21 16:11:54 anker Exp $
+// $Id: slickScore.C,v 1.2 2006/05/21 17:31:09 anker Exp $
 
 #include <BALL/SCORING/FUNCTIONS/slickScore.h>
 #include <BALL/SCORING/COMPONENTS/vanDerWaals.h>
@@ -32,7 +32,7 @@ namespace BALL
 	const float SLICKScore::Default::HB       = -2.0f;
 	const float SLICKScore::Default::CHPI     = -2.0f;
 	const float SLICKScore::Default::VDW      =  0.1f;
-	const float SLICKScore::Default::POLAR    =  0.1f;
+	const float SLICKScore::Default::POLAR    =  0.05f;
 
 	SLICKScore::SLICKScore()
 		throw()
@@ -121,7 +121,7 @@ namespace BALL
 		// Set VDW to use a cut repulsive potential with a limit of 5 kJ/mol
 		// per interaction
 		options.setInteger(VanDerWaals::Option::VDW_METHOD, 
-				VanDerWaals::CALCULATION__SOFTENED_LJ_POTENTIAL_SIMPLE);
+				VanDerWaals::CALCULATION__SOFTENED_LJ_POTENTIAL_LOG);
 		options.setReal(VanDerWaals::Option::VDW_SOFTENING_LIMIT, 5.0f);
 
 		// Use simple (and fast) Coulomb interactions for the scoring
