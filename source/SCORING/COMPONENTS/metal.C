@@ -1,4 +1,4 @@
-// $Id: metal.C,v 1.2 2006/02/21 16:16:24 anker Exp $
+// $Id: metal.C,v 1.3 2006/05/21 17:50:08 anker Exp $
 // 
 
 #include <BALL/SCORING/COMPONENTS/metal.h>
@@ -8,9 +8,20 @@ using namespace std;
 namespace BALL
 {
 
+	const char* ChemScoreMetal::Option::METAL_R1_OFFSET = "metal_r1_offset";
+	const char* ChemScoreMetal::Option::METAL_R2_OFFSET = "metalbp_r2_offset";
+	const char* ChemScoreMetal::Option::CREATE_INTERACTIONS_FILE
+		= "metal_create_interactions_file";
+	const char* ChemScoreMetal::Option::VERBOSITY = "verbosity";
+
+	const float ChemScoreMetal::Default::METAL_R1_OFFSET = 0.5;
+	const float ChemScoreMetal::Default::METAL_R2_OFFSET = 3.0;
+	const bool ChemScoreMetal::Default::CREATE_INTERACTIONS_FILE = false;
+	const Size ChemScoreMetal::Default::VERBOSITY = 0;
+
 	ChemScoreMetal::ChemScoreMetal()
 		throw()
-		:	ForceFieldComponent(),
+		:	ScoringComponent()
 			possible_metal_interactions_(),
 			r1_(0.0),
 			r2_(0.0)
@@ -20,9 +31,9 @@ namespace BALL
 	}
 
 
-	ChemScoreMetal::ChemScoreMetal(ForceField& force_field)
+	ChemScoreMetal::ChemScoreMetal(ScoringFunction& sf)
 		throw()
-		:	ForceFieldComponent(force_field),
+		:	ScoringComponent(sf),
 			possible_metal_interactions_(),
 			r1_(0.0),
 			r2_(0.0)
@@ -34,7 +45,7 @@ namespace BALL
 
 	ChemScoreMetal::ChemScoreMetal(const ChemScoreMetal& csm)
 		throw()
-		:	ForceFieldComponent(csm),
+		:	ScoringComponent(csm),
 			possible_metal_interactions_(csm.possible_metal_interactions_),
 			r1_(csm.r1_),
 			r2_(csm.r2_)
@@ -55,57 +66,36 @@ namespace BALL
 		possible_metal_interactions_.clear();
 		r1_ = 0.0;
 		r2_ = 0.0;
-		// ?????
-		// ForceFieldComponent does not comply with the OCI
-		// ForceFieldComponent::clear();
 	}
 
 
 	bool ChemScoreMetal::setup()
 		throw()
 	{
-		ForceField* force_field = getForceField();
-		if (force_field == 0)
-		{
-			Log.error() << "ChemScoreMetal::setup(): "
-				<< "component not bound to force field." << endl;
-			return false;
-		}
-
 		// clear the vector of buried polar interactions
 		possible_metal_interactions_.clear();
-
-		// ?????
-		// we should check whether force_field is a SlickFF, because we need
-		// the fresno types
-
-		System* system = force_field->getSystem();
-
-		SlickFF* fff = dynamic_cast<SlickFF*>(force_field);
-
     Options& options = force_field->options;
 
-		factor_
-			= options.setDefaultReal(SlickFF::Option::METAL,
-					SlickFF::Default::METAL);
 		r1_
-			= options.setDefaultReal(SlickFF::Option::METAL_R1,
-					SlickFF::Default::METAL_R1);
+			= options.setDefaultReal(ChemScoreMetal::Option::METAL_R1_OFFSET
+					ChemScoreMetal::Default::METAL_R1_OFFSET);
 		r2_
-			= options.setDefaultReal(SlickFF::Option::METAL_R2,
-					SlickFF::Default::METAL_R2);
+			= options.setDefaultReal(ChemScoreMetal::Option::METAL_R2_OFFSET
+					ChemScoreMetal::Default::METAL_R2_OFFSET);
+		write_interactions_file 
+			= options.setDefaultBool(ChemScoreMetal::Option::CREATE_INTERACTIONS_FILE
+					ChemScoreMetal::Default::CREATE_INTERACTIONS_FILE);
+		verbosity_
+			= options.setDefaultInteger(ChemScoreMetal::Option::VERBOSITY,
+					ChemScoreMetal::Default::VERBOSITY);
 
-		Size verbosity 
-			= options.setDefaultInteger(SlickFF::Option::VERBOSITY,
-					SlickFF::Default::VERBOSITY);
-
-		const HashMap<const Atom*, short>& fresno_types = fff->getFresnoTypes();
+		FresnoTypes fresno_types_class(*this);
+		fresno_types = fresno_types_class.getTypeMap();
 
 		// quadratic run time. not nice.
 
-		const Molecule* receptor = &*system->beginProtein();
-		const Molecule* ligand = system->getMolecule(0);
-		if (ligand == receptor) ligand = system->getMolecule(1);
+		const Molecule* receptor = getScoringFunction()->getReceptor();
+		const Molecule* ligand = getScoringFunction()->getLigand();
 
 		AtomConstIterator rec_it = receptor->beginAtom();
 		AtomConstIterator lig_it;
@@ -146,7 +136,7 @@ namespace BALL
 			// /PARANOIA
 		}
 
-		if (verbosity >= 90)
+		if (verbosity_ >= 90)
 		{
 			Log.info() << "ChemScoreMetal setup statistics:" << endl;
 			Log.info() << "Found " << possible_metal_interactions_.size() 
