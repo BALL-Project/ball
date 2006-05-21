@@ -1,4 +1,4 @@
-// $Id: CHPI.h,v 1.1 2005/11/21 19:27:04 anker Exp $ 
+// $Id: CHPI.h,v 1.2 2006/05/21 17:15:51 anker Exp $ 
 // Molecular Mechanics: SLICK force field, CH---pi interaction
 
 #ifndef BALL_SCORING_COMPONENTS_CHPI_H
@@ -160,6 +160,18 @@ namespace BALL
 				///
 				static const String HX_PROJECTED_DISTANCE_UPPER;
 
+				///
+				static const String DISTANCE_TOLERANCE;
+
+				///
+				static const String ANGLE_TOLERANCE;
+
+				///
+				static const String LIMIT;
+
+				///
+				static const String CREATE_INTERACTION_FILE;
+
 			};
 
 
@@ -180,6 +192,18 @@ namespace BALL
 
 				///
 				static const float HX_PROJECTED_DISTANCE_UPPER;
+
+				///
+				static const float DISTANCE_TOLERANCE;
+
+				///
+				static const float ANGLE_TOLERANCE;
+
+				///
+				static const float LIMIT;
+
+				///
+				static const bool CREATE_INTERACTION_FILE;
 
 			};
 
@@ -279,6 +303,13 @@ namespace BALL
 			//_ A limit for ignoring interactions that have only very small
 			//_ scores
 			float limit_;
+
+			//_ Verbosity of the code
+			Size verbosity_;
+
+			//_ Flag for writing HIN file containing pseudomolecules for the CHPI
+			//_ interactions found in the system
+			bool write_interactions_file_;
 
 	};
 
