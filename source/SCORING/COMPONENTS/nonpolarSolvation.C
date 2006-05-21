@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nonpolarSolvation.C,v 1.1 2005/11/21 19:27:11 anker Exp $
+// $Id: nonpolarSolvation.C,v 1.2 2006/05/21 17:33:47 anker Exp $
 
 #include <BALL/SCORING/COMPONENTS/nonpolarSolvation.h>
 #include <BALL/KERNEL/standardPredicates.h>
@@ -10,6 +10,9 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/DATATYPE/hashMap.h>
 #include <BALL/KERNEL/atomIterator.h>
+#include <BALL/MOLMEC/COMMON/radiusRuleProcessor.h>
+#include <BALL/SYSTEM/path.h>
+#include <BALL/DATATYPE/string.h>
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -37,6 +40,12 @@ namespace BALL
 		= "lj_param_file";
 	const char* NonpolarSolvation::Option::ATOM_TYPE_FILE 
 		= "atom_types_file";
+	const char* NonpolarSolvation::Option::NONPOLAR_OVERWRITE_RADII 
+		= "nonpolar_overwrite_radii";
+	const char* NonpolarSolvation::Option::NONPOLAR_RADIUS_RULES 
+		= "nonpolar_radius_rules";
+	const char* NonpolarSolvation::Option::NONPOLAR_RADIUS_SCALING 
+		= "nonpolar_radius_scaling";
 	
 	// Define the default values
 	const float NonpolarSolvation::Default::PROBE_RADIUS 
@@ -57,6 +66,12 @@ namespace BALL
 		= "Amber/amber94.ini";
 	const String NonpolarSolvation::Default::ATOM_TYPE_FILE 
 		= "Amber/amber94.types";
+	const bool NonpolarSolvation::Default::NONPOLAR_OVERWRITE_RADII 
+		= false;
+	const String NonpolarSolvation::Default::NONPOLAR_RADIUS_RULES 
+		= "solvation/bondi.rul";
+	const float NonpolarSolvation::Default::NONPOLAR_RADIUS_SCALING 
+		= 1.0f;
 
 
 	NonpolarSolvation::NonpolarSolvation()
@@ -196,6 +211,90 @@ namespace BALL
 			= options.setDefault(NonpolarSolvation::Option::ATOM_TYPE_FILE,
 					NonpolarSolvation::Default::ATOM_TYPE_FILE);
 
+		bool overwrite_radii 
+			= options.setDefaultBool(NonpolarSolvation::Option::NONPOLAR_OVERWRITE_RADII,
+					NonpolarSolvation::Default::NONPOLAR_OVERWRITE_RADII);
+
+
+		String tmp;
+		if (overwrite_radii == true)
+		{
+			String filename 
+				= options.setDefault(NonpolarSolvation::Option::NONPOLAR_RADIUS_RULES,
+						NonpolarSolvation::Default::NONPOLAR_RADIUS_RULES);
+			cout << filename << endl;
+			Path path;
+			tmp = path.find(filename);
+			cout << tmp << endl;
+			if (tmp == "") tmp = filename;
+			if (verbosity_ > 0)
+			{
+				Log.info() << "NonpolarSolvation: using radius rule file " << tmp
+					<< std::endl;
+			}
+		}
+		cout << tmp << endl;
+		INIFile radius_rule_ini(tmp);
+		radius_rule_ini.read();
+		RadiusRuleProcessor radius_rules(radius_rule_ini);
+
+		System protein_system;
+		Molecule* protein = new Molecule(*(getScoringFunction()->getReceptor()), true);
+		if (overwrite_radii == true) 
+		{
+			protein->apply(radius_rules);
+		}
+
+		float scaling_factor = options.setDefaultReal(NonpolarSolvation::Option::NONPOLAR_RADIUS_SCALING, NonpolarSolvation::Default::NONPOLAR_RADIUS_SCALING);
+
+		if (scaling_factor != 1.0f)
+		{
+			AtomIterator scale_it = protein->beginAtom();
+			for (; +scale_it; ++scale_it)
+			{
+				scale_it->setRadius(scaling_factor * scale_it->getRadius());
+				// PARANOIA
+				if (scale_it->getRadius() < 0.1)
+				{
+					std::cout << "Found radius < 0.1: " << scale_it->getFullName() 
+						<< std::endl;
+				}
+				// PARANOIA
+			}
+		}
+
+		Molecule* protein_copy = new Molecule(*protein, true);
+		receptor_.insert(*protein);
+		complex_.insert(*protein_copy);
+
+		System ligand_system;
+		Molecule* ligand = new Molecule(*(getScoringFunction()->getLigand()), true);
+		if (overwrite_radii == true) 
+		{
+			ligand->apply(radius_rules);
+		}
+
+		if (scaling_factor != 1.0f)
+		{
+			cout << "Scaling nonpolar radii by " << scaling_factor << endl;
+			AtomIterator scale_it = ligand->beginAtom();
+			for (; +scale_it; ++scale_it)
+			{
+				scale_it->setRadius(scaling_factor * scale_it->getRadius());
+				// PARANOIA
+				if (scale_it->getRadius() < 0.1)
+				{
+					std::cout << "Found radius < 0.1: " << scale_it->getFullName() 
+						<< std::endl;
+				}
+				// PARANOIA
+			}
+		}
+
+		Molecule* ligand_copy = new Molecule(*ligand, true);
+		ligand_.insert(*ligand);
+		complex_.insert(*ligand_copy);
+
 		if (verbosity_ > 1)
 		{
 			switch(calculation_method_)
@@ -297,23 +396,13 @@ namespace BALL
 		// ScoringFunction::get*() should be non-zero if setup() was
 		// successful, so we don't check for NULL pointers here.
 
-		System protein_system;
-		Molecule* protein = getScoringFunction()->getReceptor();
-		protein_system.insert(*(new Molecule(*protein, true)));
-
-		System ligand_system;
-		Molecule* ligand = getScoringFunction()->getLigand();
-		ligand_system.insert(*(new Molecule(*ligand, true)));
-
-		System* complex_system = getScoringFunction()->getSystem();
-
-		protein_system.apply(*processor_);
+		receptor_.apply(*processor_);
 		dG_protein = processor_->getEnergy();
 
-		ligand_system.apply(*processor_);
+		ligand_.apply(*processor_);
 		dG_ligand = processor_->getEnergy();
 
-		complex_system->apply(*processor_);
+		complex_.apply(*processor_);
 		dG_complex = processor_->getEnergy();
 
 		score_ = dG_complex - (dG_protein + dG_ligand);

@@ -1,4 +1,4 @@
-// $Id: nonpolarSolvation.h,v 1.1 2005/11/21 19:27:05 anker Exp $
+// $Id: nonpolarSolvation.h,v 1.2 2006/05/21 17:33:47 anker Exp $
 
 #ifndef BALL_SCORING_COMPONENTS_NONPOLAR_H
 #define BALL_SCORING_COMPONENTS_NONPOLAR_H
@@ -94,6 +94,18 @@ namespace BALL
 			*/
 			static const char* ATOM_TYPE_FILE;
 
+			/**
+			*/
+			static const char* NONPOLAR_OVERWRITE_RADII;
+
+			/**
+			*/
+			static const char* NONPOLAR_RADIUS_RULES;
+
+			/**
+			*/
+			static const char* NONPOLAR_RADIUS_SCALING;
+
 		};
 
 		
@@ -141,6 +153,18 @@ namespace BALL
 			/**
 			*/
 			static const String ATOM_TYPE_FILE;
+
+			/**
+			*/
+			static const bool NONPOLAR_OVERWRITE_RADII;
+
+			/**
+			*/
+			static const String NONPOLAR_RADIUS_RULES;
+
+			/**
+			*/
+			static const float NONPOLAR_RADIUS_SCALING;
 
 		};
 
@@ -215,6 +239,18 @@ namespace BALL
 		//@}
 
 		private:
+
+		/*_
+		*/
+		System receptor_;
+
+		/*_
+		*/
+		System ligand_;
+
+		/*_
+		*/
+		System complex_;
 
 		/*_
 		*/
