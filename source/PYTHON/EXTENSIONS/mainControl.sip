@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.22.2.5 2006/05/22 06:40:23 amoll Exp $
+// $Id: mainControl.sip,v 1.22.2.6 2006/05/22 09:38:29 amoll Exp $
 //
 
 class MainControl
@@ -116,7 +116,7 @@ class MainControl
 	bool updateOfRepresentationRunning() throw();
 	bool stopedSimulation();
 	bool isBusy();
-	bool wait();
+	void wait();
 	//bool setSimulationThread(SimulationThread*) throw();
 	//SimulationThread* getSimulationThread() throw();
 	
