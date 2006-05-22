@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.2 2006/05/22 15:58:50 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.3 2006/05/22 23:12:17 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -418,6 +418,8 @@ void MMFF94AtomTyper::collectHeteroAtomTypes(const MMFF94AtomTypes& atom_types)
 			hetero_atom_types_.insert(p);
 		}
 	}
+
+	hetero_atom_types_.erase(10);
 }
 
 
@@ -490,7 +492,7 @@ void MMFF94AtomTyper::assignTo(System& s)
 			if ((element != "C" && element != "N") ||
 					hetero_atom_types_.has(atom.getType()))
 			{
-//   Log.error() << "#~~#   2 "  << atom.getFullName()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+//      Log.error() << "#~~#   2 "  << atom.getFullName() << " " << atom.getType()          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				hetero_atom = &atom;
 			}
 
@@ -538,9 +540,9 @@ void MMFF94AtomTyper::assignTo(System& s)
 				L5 = 3;
 			}
 
-//     Log.error() << "#~~#   3 "  << atom.getName() << " " << atom.getTypeName() << "  " << L5           << "   ";
+//        Log.error() << "#~~#   3 "  << atom.getName() << " " << atom.getTypeName() << "  " << L5           << "   ";
 			assignAromaticType_5_(atom, L5, anion_atom != 0, cation_atom != 0);
-//     Log.error() << atom.getTypeName()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+//       Log.error() << atom.getTypeName()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		} // all atoms in one ring
 	} // all rings: done
 
