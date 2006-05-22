@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.22 2006/05/22 09:55:30 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.23 2006/05/22 09:56:43 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -34,6 +34,7 @@
 #include <BALL/SYSTEM/directory.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/SYSTEM/timer.h>
+#include <BALL/SYSTEM/systemCalls.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 
 #include <QtGui/qstatusbar.h>  // statusbar
