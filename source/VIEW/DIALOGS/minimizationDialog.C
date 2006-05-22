@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: minimizationDialog.C,v 1.4.2.3 2006/05/22 12:59:22 amoll Exp $
+// $Id: minimizationDialog.C,v 1.4.2.4 2006/05/22 13:41:36 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/minimizationDialog.h>
@@ -32,9 +32,6 @@ namespace BALL
 			connect( start_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
 			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
 			connect( advanced_button, SIGNAL( clicked() ), this, SLOT( advancedOptions() ) );
-			connect( useAmberRadioButton, SIGNAL( clicked() ), this, SLOT( useAmberFF() ) );
-			connect( useCharmmRadioButton, SIGNAL( clicked() ), this, SLOT( useCharmmFF() ) );
-
 
 			registerObject_(max_iterations_lineedit);
 			registerObject_(energy_difference_lineedit);

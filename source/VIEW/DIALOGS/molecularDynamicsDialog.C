@@ -38,8 +38,6 @@ MolecularDynamicsDialog::MolecularDynamicsDialog(QWidget* parent, const char* na
 	connect( timestep_linedit, SIGNAL( textChanged(const QString&) ), this, SLOT( timeChanged() ) );
 	connect( enable_dcd, SIGNAL( clicked() ), this, SLOT( enableDCDFileSelected() ) );
 	connect( advanced_button, SIGNAL( clicked() ), this, SLOT( advancedOptions() ) );
-	connect( useAmberRadioButton, SIGNAL( clicked() ), this, SLOT( useAmberFF() ) );
-	connect( useCharmmRadioButton, SIGNAL( clicked() ), this, SLOT( useCharmmFF() ) );
 	connect( browse_button, SIGNAL( clicked() ), this, SLOT( chooseDCDFile() ) );
 
 	registerObject_(temperature_lineedit);
@@ -155,11 +153,13 @@ Size MolecularDynamicsDialog::getStepsBetweenRefreshs() const
 
 void MolecularDynamicsDialog::advancedOptions()
 {
-	if(useAmberRadioButton->isChecked())
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+	if (useAmberRadioButton->isChecked())
 	{
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		if (amber_dialog_ != 0) amber_dialog_->exec();
 	}
-	else
+	else if (useCharmmRadioButton->isChecked())
 	{
 		if (charmm_dialog_ != 0) charmm_dialog_->exec();
 	}
