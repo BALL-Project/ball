@@ -1,4 +1,4 @@
-* |  SYMBOL |  TYPE  |    RULE   |   FORMAL CHARGE
+* |  SYMBOL |  TYPE  |    RULE  
   |  CR     |   1    |   [#6X4]
   |  CSP2   |   2    |   [#6X3]
   |  C=C    |   2    |   [$([#6]=[#6])]

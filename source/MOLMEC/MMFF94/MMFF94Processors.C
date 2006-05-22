@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.1 2006/05/21 22:26:10 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.2 2006/05/22 15:58:50 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -134,7 +134,6 @@ void AtomTyper::assignTo(Molecule& mol)
 				}
 
 				Atom& atom = *(Atom*)*set.begin();
-			
 				atom.setType(types_[rule]);
 				atom.setTypeName(names_[rule]);
 				assignSpecificValues_(atom);
@@ -153,7 +152,6 @@ void AtomTyper::assignTo(Molecule& mol)
 
 MMFF94AtomTyper::MMFF94AtomTyper()
 {
-//   	number_expected_fields_ = 5;
 }
 
 MMFF94AtomTyper::MMFF94AtomTyper(const MMFF94AtomTyper& t)
@@ -189,6 +187,7 @@ bool MMFF94AtomTyper::setupHydrogenTypes(const String& filename)
 	return true;
 }
 
+// read MMFFAROM.PAR to map normal to aromatic types
 bool MMFF94AtomTyper::setupAromaticTypes(const String& filename)
 {
 	aromatic_types_5_map_.clear();
@@ -219,6 +218,7 @@ bool MMFF94AtomTyper::setupAromaticTypes(const String& filename)
 			AromaticType type;
 			
 			const String old_type = fields[0];
+			// special threatment for some of the 5 ring heteroaromatic types later:
 			if (old_type.hasSuffix("*")) continue;
 			
 			type.new_type = fields[1];
@@ -458,6 +458,7 @@ void MMFF94AtomTyper::assignTo(System& s)
 		const HashSet<Atom*>& ring_atoms = aromatic_rings_[r];
 		HashSet<Atom*>::ConstIterator ait;
 
+		// in aromatic 6 ring systems make CB out of CNN+
 		if (ring_atoms.size() == 6)
 		{
 			ait = ring_atoms.begin();
@@ -472,7 +473,7 @@ void MMFF94AtomTyper::assignTo(System& s)
 			}
 		}
 
-		// we are only interested in rings of 5 atoms
+		// we are new only interested in rings of 5 atoms
 		if (ring_atoms.size() != 5) continue;
 
 		// collect some informations about the hetero atoms and charged atoms
