@@ -79,14 +79,11 @@ namespace BALL
 				*/
 				void setCharmmDialog(CharmmConfigurationDialog* charmm_dialog);
 				
-				/// Use the AMBER force field
-				void useAmberFF();
+				/// Select the forcefield, nr are the enum values in MolecularStructure
+				void selectForceField(Position nr);
 				
-				/// Use the CHARMM force field
-				void useCharmmFF();
-				
-				/// Are we using the AMBER force field?
-				bool getUseAmber();
+				/// Return the ID of the selected forcefield (see enum values in MolecularStructure)
+				Position selectedForceField() const;
 				
 				private:
 				AmberConfigurationDialog* amber_dialog_;

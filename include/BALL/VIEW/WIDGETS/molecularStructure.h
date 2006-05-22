@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.28.2.2 2006/02/01 13:23:42 amoll Exp $
+// $Id: molecularStructure.h,v 1.28.2.3 2006/05/22 12:59:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -38,6 +38,11 @@
 #ifndef BALL_MOLMEC_CHARMM_CHARMM_H
 # include <BALL/MOLMEC/CHARMM/charmm.h>
 #endif
+
+#ifndef BALL_MOLMEC_MMFF94_MMFF94
+# include <BALL/MOLMEC/MMFF94/MMFF94.h>
+#endif
+
 
 #include <QtGui/qwidget.h>
 
@@ -77,6 +82,18 @@ namespace BALL
 
 			BALL_EMBEDDABLE(MolecularStructure, ModularWidget)
 
+			///
+			enum
+			{
+				///
+				AMBER_FF = 0,
+
+				///
+				CHARMM_FF,
+
+				///
+				MMFF94_FF
+			};
 			
 			/**	@name	Constructors
 			*/	
@@ -256,6 +273,12 @@ namespace BALL
 			/// Slot for a menu entry to select the CHARMM force field
 			void chooseCharmmFF();
 				
+			/// Slot for a menu entry to select the MMFF94 force field
+			void chooseMMFF94();
+
+			/// 
+			void chooseForceField(Position nr);
+
 			/// Show a dialog to setup the currently selected force field
 			void setupForceField();
 
@@ -287,19 +310,20 @@ namespace BALL
 			QAction* calculate_hbonds_id_;
 			QAction* amber_ff_id_;
 			QAction* charmm_ff_id_;
+			QAction* mmff94_id_;
 			QAction* setup_ff_;
 			QAction* calculate_ramachandran_;
 			QAction* menu_FPDB_;
 
-			bool use_amber_;
-
 			AmberFF 										amber_;
 			CharmmFF										charmm_;
+			MMFF94 											mmff_;
 			AmberConfigurationDialog    amber_dialog_;
 			CharmmConfigurationDialog 	charmm_dialog_;
 			MinimizationDialog 					minimization_dialog_;
 			MolecularDynamicsDialog 		md_dialog_;
 			FDPBDialog* 								fdpb_dialog_;
+			Position 										force_field_id_;
 		};
 
 	} // namespace VIEW

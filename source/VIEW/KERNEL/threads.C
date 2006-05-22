@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.41.2.3 2006/02/01 14:15:06 amoll Exp $
+// $Id: threads.C,v 1.41.2.4 2006/05/22 12:59:24 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -46,13 +46,11 @@ namespace BALL
 
 		void BALLThread::waitForUpdateOfRepresentations_()
 		{
-//   Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			RepresentationManager& pm = main_control_->getRepresentationManager();
 			while (pm.updateRunning())
 			{
 				msleep(50);
 			}
-//   Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		}
 
 		void BALLThread::updateScene_()

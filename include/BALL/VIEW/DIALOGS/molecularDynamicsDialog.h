@@ -77,16 +77,14 @@ class BALL_VIEW_EXPORT MolecularDynamicsDialog
 		
 		///
 		void setCharmmDialog(CharmmConfigurationDialog* charmm_dialog);
+	 	
 		
-		///
-		void useAmberFF();
+		/// Select the forcefield, nr are the enum values in MolecularStructure
+		void selectForceField(Position nr);
 		
-		///
-		void useCharmmFF();
-		
-		///
-		bool getUseAmber();
-
+		/// Return the ID of the selected forcefield (see enum values in MolecularStructure)
+		Position selectedForceField() const;
+				
 		///
 		void chooseDCDFile();
 	

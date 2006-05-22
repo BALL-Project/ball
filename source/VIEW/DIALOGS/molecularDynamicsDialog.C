@@ -175,23 +175,6 @@ void MolecularDynamicsDialog::setCharmmDialog(CharmmConfigurationDialog* dialog)
 	charmm_dialog_ = dialog;
 }
 
-void MolecularDynamicsDialog::useAmberFF()
-{
-	useAmberRadioButton->setChecked(true);
-	useCharmmRadioButton->setChecked(false);
-}
-
-void MolecularDynamicsDialog::useCharmmFF()
-{
-	useCharmmRadioButton->setChecked(true);
-	useAmberRadioButton->setChecked(false);
-}
-
-bool MolecularDynamicsDialog::getUseAmber()
-{
-	return useAmberRadioButton->isChecked();
-}
-
 void MolecularDynamicsDialog::chooseDCDFile()
 {
 	QString result = QFileDialog::getSaveFileName(0, "Choose a DCDFile",
@@ -199,4 +182,24 @@ void MolecularDynamicsDialog::chooseDCDFile()
 	if (result != "") dcd_file_edit->setText(result);
 }
 
+void MolecularDynamicsDialog::selectForceField(Position nr)
+{
+	if 			(nr == 0) useAmberRadioButton->setChecked(Qt::Checked);
+	else if (nr == 1) useCharmmRadioButton->setChecked(Qt::Checked);
+	else if (nr == 2) useMMFF94RadioButton->setChecked(Qt::Checked);
+	else
+	{
+		BALLVIEW_DEBUG
+	}
+}
+
+Position MolecularDynamicsDialog::selectedForceField() const
+{
+	if 			(useAmberRadioButton->isChecked())  return 0;
+	else if (useCharmmRadioButton->isChecked()) return 1;
+	else if (useMMFF94RadioButton->isChecked()) return 2;
+
+	return 0;
+}
+	
 }} //namespaces
