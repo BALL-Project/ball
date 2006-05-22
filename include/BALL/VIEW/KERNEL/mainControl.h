@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76.2.10 2006/05/15 23:18:34 amoll Exp $
+// $Id: mainControl.h,v 1.76.2.11 2006/05/22 06:40:41 amoll Exp $
 //
 // Author:
 //   Andreas Moll
@@ -710,6 +710,9 @@ namespace BALL
 
 			///
 			bool isBusy() const;
+
+			/// Wait until the MainControl is not busy anymore
+			void wait();
 
 			//@}
 			/**	@name	Debugging and Diagnostics

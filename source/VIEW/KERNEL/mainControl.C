@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.20 2006/05/20 09:34:21 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.21 2006/05/22 06:40:52 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -1941,6 +1941,15 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		Size height = menuBar()->height();
 		height += statusBar()->height();
 		resize(w, h + height);
+	}
+
+	void MainControl::wait()
+ 	{
+		while (isBusy())
+		{
+			QApplication::processEvents();
+			sleep(10);
+		}
 	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
