@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.4.1 2006/05/21 22:33:49 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.4.2 2006/05/22 14:08:00 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -903,7 +903,7 @@ Size wrong_types, type_errors;
 
 bool testType(System& system, String filename, AtomTyper& typer)
 {
-//   	typer.assignTo(system);
+//    	typer.assignTo(system);
 
 	bool ok = true;
 	AtomIterator ait = system.beginAtom();
@@ -988,6 +988,7 @@ int runtests(const vector<String>& filenames)
 			mmff.getComponent(p)->setEnabled(true);
 		}
 
+		
 		if (!mmff.setup(*system))
 		{
 			Log.error() << "Setup failed for " << full_file_name << std::endl;
@@ -1032,10 +1033,10 @@ int runtests(const vector<String>& filenames)
 			Log.info() << "We have unassigned atoms: " << mmff.getUnassignedAtoms().size() << std::endl;
 		}
 */
-//      		testType(*system, filenames[pos], typer);
+      		testType(*system, filenames[pos], typer);
 //       		result &= testStretch(mmff, filenames[pos], true);
 //          result &= testBend(mmff, filenames[pos], true);
-    		result &= testStretchBend(mmff, filenames[pos], true);
+//       		result &= testStretchBend(mmff, filenames[pos], true);
 //    		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
 //    		result &= testPlanes(mmff, filenames[pos], true);
 //    		result &= testNonBonded(mmff, filenames[pos], true);
