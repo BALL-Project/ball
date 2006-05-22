@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.31 2006/05/22 06:40:10 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.32 2006/05/22 11:49:56 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -826,7 +826,10 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 			if (silent_) 
 			{
-				if (new_command.size()) parseLine_(new_command);
+				if (new_command.size()) 
+				{
+					return state && parseLine_(new_command);
+				}
 				return state;
 			}
 				
@@ -842,6 +845,10 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				}
 			}
 
+			if (new_command.size()) 
+			{
+				parseLine_(new_command);
+			}
 			newPrompt_();
 			return state;
 		}
