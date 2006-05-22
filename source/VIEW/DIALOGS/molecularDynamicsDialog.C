@@ -153,10 +153,8 @@ Size MolecularDynamicsDialog::getStepsBetweenRefreshs() const
 
 void MolecularDynamicsDialog::advancedOptions()
 {
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	if (useAmberRadioButton->isChecked())
 	{
-Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		if (amber_dialog_ != 0) amber_dialog_->exec();
 	}
 	else if (useCharmmRadioButton->isChecked())

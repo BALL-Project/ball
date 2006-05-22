@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: minimizationDialog.C,v 1.4.2.4 2006/05/22 13:41:36 amoll Exp $
+// $Id: minimizationDialog.C,v 1.4.2.5 2006/05/22 13:43:11 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/minimizationDialog.h>
@@ -128,11 +128,11 @@ namespace BALL
 
 		void MinimizationDialog::advancedOptions()
 		{
-			if(useAmberRadioButton->isChecked())
+			if (useAmberRadioButton->isChecked())
 			{
 				if (amber_dialog_ != 0) amber_dialog_->exec();
 			}
-			else
+			else if (useCharmmRadioButton->isChecked())
 			{
 				if (charmm_dialog_ != 0) charmm_dialog_->exec();
 			}
