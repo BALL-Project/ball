@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.4.2 2006/05/21 23:37:13 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.4.3 2006/05/23 15:56:48 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -249,6 +249,7 @@ namespace BALL
 
 		void insertComponents_();
 
+		void transformAromaticBonds_();
 		void collectBonds_();
 		void assignBondTypes_();
 		void collectRings_();

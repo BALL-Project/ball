@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.4.2 2006/05/21 23:37:00 amoll Exp $
+// $Id: MMFF94.C,v 1.1.4.3 2006/05/23 15:56:46 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -163,6 +163,7 @@ namespace BALL
 
 		collectBonds_();
 		collectRings_();
+		transformAromaticBonds_();
 
 		if (!parameters_initialized_)
 		{
@@ -484,9 +485,88 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 		}
 	}
 
+	void MMFF94::transformAromaticBonds_()
+	{
+		HashSet<Bond*> xbonds;
+		typedef HashMap<Atom*, Size> AtomMap;
+		AtomMap atom_map;
+		AtomMap::Iterator it;
+
+		// collect all unspecified and aromatic bonds
+		vector<Bond*>::iterator bit = bonds_.begin();
+		for (; bit != bonds_.end(); bit++)
+		{
+			if ((**bit).getOrder() < Bond::ORDER__SINGLE ||
+					(**bit).getOrder() > Bond::ORDER__QUADRUPLE)
+			{
+				xbonds.insert(*bit);
+				Atom* atom1 = (Atom*)(**bit).getFirstAtom();
+				Atom* atom2 = (Atom*)(**bit).getFirstAtom();
+				it = atom_map.find(atom1);
+				if (+it)
+				{
+					it->second ++;
+				}
+				else
+				{
+					atom_map[atom1] = 1;
+				}
+
+				it = atom_map.find(atom2);
+				if (+it)
+				{
+					it->second ++;
+				}
+				else
+				{
+					atom_map[atom2] = 1;
+				}
+			}
+		}
+
+		// if an atom has two aromatic bonds, make one a single and one a double bond
+		vector<Bond*> bonds;
+		it = atom_map.begin();
+		for (; +it; ++it)
+		{
+			if (it->second < 2) continue;
+
+			// collect the aromatic bonds of one atom
+			bonds.clear();
+			AtomBondIterator abit = it->first->beginBond();
+			for (; +abit; ++abit)
+			{
+				if (abit->getOrder() == Bond::ORDER__AROMATIC)
+				{
+					bonds.push_back(&*abit);
+				}
+			}
+
+			// set the new bond orders
+			Position p = 0;
+			Index i = -1;
+			for (; p < bonds.size(); p++)
+			{
+				if (i == -1) bonds[p]->setOrder(Bond::ORDER__SINGLE);
+				else 				 bonds[p]->setOrder(Bond::ORDER__DOUBLE);
+				i *= -1;
+				xbonds.erase(bonds[p]);
+			}
+		}
+
+		// set all remaining bonds to single bonds
+		HashSet<Bond*>::Iterator hit = xbonds.begin();
+		for (; +hit; ++hit)
+		{
+			(**hit).setOrder(Bond::ORDER__SINGLE);
+		}
+	}
+
+
 	void MMFF94::assignBondTypes_()
 	{
 		vector<Bond*>::iterator bit = bonds_.begin();
+		bit = bonds_.begin();
 		for (; bit != bonds_.end(); bit++)
 		{
 			assignMMFF94BondType(**bit);
