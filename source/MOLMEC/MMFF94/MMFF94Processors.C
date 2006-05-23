@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.3 2006/05/22 23:12:17 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.4 2006/05/23 09:49:08 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -419,6 +419,9 @@ void MMFF94AtomTyper::collectHeteroAtomTypes(const MMFF94AtomTypes& atom_types)
 		}
 	}
 
+	// remove type nr 10, because it causes trouble in
+	// 5 ring hetero systems with multiple Nitrogen atoms
+	// there it would get L1 type along with type nr 39
 	hetero_atom_types_.erase(10);
 }
 
