@@ -286,8 +286,8 @@ namespace BALL
 			res->setProperty(Residue::PROPERTY__AMINO_ACID);
 
 			// create the bonds
-			nitrogen->createBond(*carbona);
-			carbona->createBond(*carbon);
+			nitrogen->createBond(*carbona)->setOrder(Bond::ORDER__SINGLE);
+			carbona->createBond(*carbon)->setOrder(Bond::ORDER__SINGLE);
 
 			return res;
 		}
@@ -304,7 +304,7 @@ namespace BALL
 			Vector3 rot_axis;    // axis  for the torsion angle
 
 			//set C-N-bond 
-			pcarbon->createBond(*pnitrogen_n);
+			pcarbon->createBond(*pnitrogen_n)->setOrder(Bond::ORDER__SINGLE);;
 			
 			
 			//  --------------  move N into  0|0|0   
@@ -581,7 +581,7 @@ namespace BALL
 
 				newpos = newpos * BOND_LENGTH_N_H + pnitrogen_n->getPosition();
 				phydrogen->setPosition(newpos);
-				phydrogen->createBond(*pnitrogen_n);
+				phydrogen->createBond(*pnitrogen_n)->setOrder(Bond::ORDER__SINGLE);;
 				resnew.insert(*phydrogen);
 			}
 			return;
