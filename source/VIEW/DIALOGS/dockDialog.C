@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.6 2006/02/01 13:23:45 amoll Exp $
+// $Id: dockDialog.C,v 1.5.2.6.2.1 2006/05/24 17:51:53 leonhardt Exp $
 //
 
 #include <QtGui/qpushbutton.h>
@@ -29,6 +29,10 @@
 #include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 #include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
 #endif
+
+#include <BALL/VIEW/DIALOGS/evolutionDockingDialog.h>
+//#include "../../STRUCTURE/DOCKING/evolutionaryDocking.h"
+
 
 
 //#define BALL_VIEW_DEBUG
@@ -257,6 +261,9 @@ namespace BALL
 			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
 			addAlgorithm("Geometric Fit", DockingController::GEOMETRIC_FIT, geo_fit);
 #endif
+			EvolutionDockingDialog* ev_dock = new EvolutionDockingDialog(this);
+			addAlgorithm("Evolutionary Docking", DockingController::EVOLUTION_DOCKING, ev_dock);
+
 			
 			//build HashMap for scoring function advanced option dialogs
 			//make sure the order of added scoring functions is consistent to the enum order
@@ -444,6 +451,10 @@ namespace BALL
 					GeometricFitDialog* dialog = RTTI::castTo<GeometricFitDialog>(*(algorithm_dialogs_[index]));
 					dialog->getOptions(algorithm_opt_);
 #endif
+					break;
+				case DockingController::EVOLUTION_DOCKING:
+					EvolutionDockingDialog* dialog = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[index]));
+					dialog->getOptions(algorithm_opt_);
 					break;
 			}
 			
@@ -835,6 +846,13 @@ namespace BALL
 						gfd->exec();
 #endif
 						break;
+					case DockingController::EVOLUTION_DOCKING:
+						{
+							EvolutionDockingDialog* evd = dynamic_cast<EvolutionDockingDialog*> (algorithm_dialogs_[index]);
+							evd->isRedock(is_redock_);
+							evd->exec();
+							break;
+						}
 				}
 			}
 		}
