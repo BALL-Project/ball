@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.23 2006/05/22 09:56:43 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.24 2006/05/24 11:16:14 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -1949,7 +1949,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		while (isBusy())
 		{
 			QApplication::processEvents();
-			BALL_SLEEP(10);
+			sleepFor(10);
 		}
 	}
 

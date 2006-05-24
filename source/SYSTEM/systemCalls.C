@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: systemCalls.C,v 1.1.2.2 2006/05/22 09:56:32 amoll Exp $
+// $Id: systemCalls.C,v 1.1.2.3 2006/05/24 11:15:43 amoll Exp $
 
 #include <BALL/SYSTEM/systemCalls.h>
 
@@ -11,7 +11,7 @@
 
 namespace BALL
 {
-	void BALL_SLEEP(Size mseconds)
+	void sleepFor(Size mseconds)
 	{
 #ifdef BALL_PLATFORM_WINDOWS
  		Sleep(mseconds);

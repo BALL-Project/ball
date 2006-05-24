@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.4.3 2006/05/23 15:56:46 amoll Exp $
+// $Id: MMFF94.C,v 1.1.4.4 2006/05/24 11:19:05 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -440,19 +440,7 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 
 	bool MMFF94::isInOneAromaticRing(const Bond& bond) const
 	{
-		Atom* atom1 = (Atom*) bond.getFirstAtom();
-		Atom* atom2 = (Atom*) bond.getSecondAtom();
-
-		for (Position pos = 0; pos < aromatic_rings_.size(); pos++)
-		{
-			if (aromatic_rings_[pos].has(atom1) &&
-					aromatic_rings_[pos].has(atom2))
-			{
-				return true;
-			}
-		}
-		
-		return false;
+		return aromatic_bonds_.has((Bond*)&bond);
 	}
 
 	void MMFF94::collectBonds_()
@@ -496,6 +484,9 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 		vector<Bond*>::iterator bit = bonds_.begin();
 		for (; bit != bonds_.end(); bit++)
 		{
+			// ??? is it ok to let the aromatic ring bonds keep their aromatic type?
+			if (isInOneAromaticRing(**bit)) continue;
+
 			if ((**bit).getOrder() < Bond::ORDER__SINGLE ||
 					(**bit).getOrder() > Bond::ORDER__QUADRUPLE)
 			{
@@ -578,6 +569,7 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 	{
 		///////////////////////////////////////
 		/// calculate all rings in the molecule
+		aromatic_bonds_.clear();
 		rings_.clear();
 		vector<vector<Atom*> > rings;
 
@@ -644,6 +636,23 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 		Log.info() << std::endl;
 #endif
 
+		// store all aromatic bonds
+		for (Position p = 0; p < bonds_.size(); p++)
+		{
+			Bond& bond = *bonds_[p];
+
+			Atom* atom1 = (Atom*) bond.getFirstAtom();
+			Atom* atom2 = (Atom*) bond.getSecondAtom();
+
+			for (Position pos = 0; pos < aromatic_rings_.size(); pos++)
+			{
+				if (aromatic_rings_[pos].has(atom1) &&
+						aromatic_rings_[pos].has(atom2))
+				{
+					aromatic_bonds_.insert(&bond);
+				}
+			}
+		}
 	}
 
 	bool MMFF94::areInOneRing(vector<Atom*> v, Size ring_size) const
