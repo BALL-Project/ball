@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7 2006/05/15 23:18:52 amoll Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.1 2006/05/24 17:53:02 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -30,6 +30,11 @@
 #include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 #endif
 
+#include "../../STRUCTURE/DOCKING/evolutionaryDocking.h"
+#include <BALL/SYSTEM/path.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
+
+
 #include <BALL/VIEW/KERNEL/threads.h>
 
 #include <QtGui/qmessagebox.h>
@@ -56,6 +61,10 @@ namespace BALL
 			#endif
 			registerWidget(this);
 			setObjectName(name);
+			
+			timer_.setSingleShot(true);
+			connect(&timer_, SIGNAL(timeout()), SLOT(updateSystem_()));
+
 			hide();
 		}
 
@@ -213,6 +222,7 @@ namespace BALL
 		// is called when user clicks on menu entry "Docking"
 		void DockingController::startDocking()
 		{
+				Log.error() << "in DockingController::startDocking.\n";
 			// Dialog is called in docking-modus, not in redocking-modus
 			runDocking(false);
 		}
@@ -222,6 +232,8 @@ namespace BALL
 		void DockingController::runDocking(bool is_redock)
 			throw()
 		{
+			Log.error() << "in DockingController::runDocking.\n";
+
 			// Make sure we run just one instance at a time.
 			if (getMainControl()->isBusy())
 			{
@@ -237,7 +249,6 @@ namespace BALL
 			{
 				return;
 			}
-			
 			// check which algorithm is chosen and create a DockingAlgorithm object
 			Index index = dock_dialog_.algorithms->currentIndex();
 			switch(index)
@@ -252,8 +263,16 @@ namespace BALL
 					dock_alg_ =  new GeometricFit();
 #endif
 					break;
+				case EVOLUTION_DOCKING:
+					if(dock_alg_ != 0)
+					{
+						delete dock_alg_;
+						dock_alg_ = NULL;
+					}
+					dock_alg_ =  new EvolutionaryDocking();
+					break;
 			}
-			
+
 			if (!dock_alg_
 					|| !dock_dialog_.getSystem1()
 					|| !dock_dialog_.getSystem2()
@@ -261,9 +280,10 @@ namespace BALL
 			{
 			 	return;
 			}
-			
+
 			// Set up the docking algorithm
 			setStatusbarText("Setting up docking algorithm...", true);
+
 			// keep the larger protein in System A and the smaller one in System B
 			// and setup the algorithm
 			if (dock_dialog_.getSystem1()->countAtoms() < dock_dialog_.getSystem2()->countAtoms())
@@ -274,6 +294,67 @@ namespace BALL
 			{
 				dock_alg_->setup(*(dock_dialog_.getSystem1()), *(dock_dialog_.getSystem2()), dock_dialog_.getAlgorithmOptions());
 			}
+
+		/*	// TEMPORARY switch to test evolutionary docking
+				switch(index)
+			{
+				case GEOMETRIC_FIT:
+					// keep the larger protein in System A and the smaller one in System B
+					// and setup the algorithm
+					if (dock_dialog_.getSystem1()->countAtoms() < dock_dialog_.getSystem2()->countAtoms())
+					{
+						dock_alg_->setup(*(dock_dialog_.getSystem2()), *(dock_dialog_.getSystem1()), dock_dialog_.getAlgorithmOptions());
+					}
+					else
+					{
+						dock_alg_->setup(*(dock_dialog_.getSystem1()), *(dock_dialog_.getSystem2()), dock_dialog_.getAlgorithmOptions());
+					}
+					break;
+				case EVOLUTION_DOCKING:
+					AmberFF* amber = new AmberFF;
+
+  				System ligand(*(dock_dialog_.getSystem2()));
+  				System sys;
+  
+  				Path path;
+  				String amber94gly = path.find("Amber/amber94gly.ini");
+
+  				amber->options[BALL::AmberFF::Option::FILENAME] = amber94gly;
+  				amber->options[BALL::AmberFF::Option::ASSIGN_CHARGES] = "true";
+  				amber->options[BALL::AmberFF::Option::OVERWRITE_CHARGES] = "false";
+  
+  				ligand.select();  
+  				amber->setup(ligand); 
+  				ligand.deselect();
+  				delete amber;
+
+ 					GeometricCenterProcessor gcp;
+  				ligand.apply(gcp);
+  				Vector3 center = gcp.getCenter();
+
+  				center -= Vector3(1.0,1.0,1.0);
+
+  				Options option;
+  				option.set(EvolutionaryDocking::Option::GRID_FILE,"1A30");
+  				option.set(EvolutionaryDocking::Option::MAX_ITERATIONS,100);
+  				option.set(EvolutionaryDocking::Option::INITIAL_POPULATION,1000);
+  				option.set(EvolutionaryDocking::Option::POPULATION,40);
+  				option.set(EvolutionaryDocking::Option::SURVIVORS,20);
+  				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_X,center.x); 
+  				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Y,center.y); 
+  				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Z,center.z); 
+  
+  				center += Vector3(2.0,2.0,2.0);
+
+  				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_X,center.x); 
+  				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Y,center.y); 
+  				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Z,center.z); 
+				
+					dock_alg_->setup(sys,ligand,option);
+
+					break;
+			}*/
+
 			
 			// ============================= WITH MULTITHREADING ====================================
 			#ifdef BALL_QT_HAS_THREADS
@@ -297,6 +378,15 @@ namespace BALL
 				// function calls DockingThread::run()
 				thread->start();
 				progress_dialog_->show();
+
+				switch(index)
+				{
+					case EVOLUTION_DOCKING:
+						// start timer, true -> it is a single shot
+      			timer_.start(1000);
+						break;
+				}
+				
 			// ============================= WITHOUT MULTITHREADING =================================
 			#else
 				// start docking
@@ -418,6 +508,24 @@ namespace BALL
 			}
 			return true;
 		}
-		
+	
+		void DockingController::updateSystem_()
+		{
+			if(RTTI::isKindOf<EvolutionaryDocking>(*dock_alg_))
+			{
+				EvolutionaryDocking* ed = RTTI::castTo<EvolutionaryDocking>(*dock_alg_);
+				if(ed->redraw())
+				{
+					getMainControl()->update(*(dock_dialog_.getSystem2()), true);
+				}
+			}
+			// if docking has not finished restart timer
+			if (!dock_alg_->hasFinished())
+			{
+			 	timer_.start(1000);
+			}
+
+		}
+
 	} // end of namespace View
 } // end of namespace BALL
