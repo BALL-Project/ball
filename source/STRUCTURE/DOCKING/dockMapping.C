@@ -27,6 +27,8 @@
 #include <string> 
 #include <fstream>
 
+using namespace std;
+
 
 
 namespace BALL
@@ -43,7 +45,8 @@ namespace BALL
 	sys_(dm.sys_),
       	t_origin_(dm.t_origin_),
 	t_extension_(dm.t_extension_),
-	ligand_positions_(dm.ligand_positions_)
+	ligand_positions_(dm.ligand_positions_),
+	redraw_(dm.redraw_)
   {
     if (dm.amber_ != 0) 
       amber_ = new AmberFF(*(dm.amber_));
@@ -88,7 +91,7 @@ namespace BALL
     t_origin_=dm.t_origin_;
     t_extension_=dm.t_extension_;
     ligand_positions_=dm.ligand_positions_;  
-  
+    redraw_ = dm.redraw_;
     
     return *this;
   }
@@ -102,8 +105,12 @@ namespace BALL
 			   Vector3 t_box_lower, 
 			   Vector3 t_box_higher)
   {
-    ligand_ = sys_lig.getMolecule(0);
-
+    redraw_ = false;
+    
+    ligand_ = new Molecule(*(sys_lig.getMolecule(0)));
+    
+    original_ligand_ = sys_lig.getMolecule(0);
+    
     system_backup_b_ = sys_lig;
     
     /** create energy grid 
@@ -127,7 +134,7 @@ namespace BALL
 	if (v1.x < 0 || v1.y < 0 || v1.z < 0 ||
 	    v2.x < 0 || v2.y < 0 || v2.z < 0)
 	  {
-	    Log.error() << "translationbox not in bounded grid" << std::endl;
+	    cerr << "translationbox not in bounded grid" << endl;
 	    exit(1);
 	  }
 	
@@ -205,7 +212,7 @@ namespace BALL
     double energy = amber_->getEnergy()+ eg_->getEnergy(ligand_);
 
 
-    //cout << energy << std::endl;
+    //cout << energy << endl;
   
     restore();
     
@@ -325,8 +332,31 @@ namespace BALL
     for (uint pos = 0; pos < ligand_positions_.size(); pos++)
       (ligand_->getAtom(pos))->setPosition(ligand_positions_[pos]);
   }
+
+  bool DockMapping::redraw()
+  {
+    if (redraw_)
+      {
+	redraw_ = false;
+	return true;
+      }
+    
+    return false;
+  }
   
-  
+
+  void DockMapping::update()
+  {
+    move((*gp_)[0]);
+    
+    for (uint y = 0; y < ligand_->countAtoms(); y++)
+      original_ligand_->getAtom(y)->setPosition(ligand_->getAtom(y)->getPosition());
+    
+    redraw_ = true;
+
+    restore();
+  }
+
   void DockMapping::initIndivid(GeneticIndividual* gi)
   {
     gi->insert(new DoubleGene(rb_->numberBonds()));
@@ -386,7 +416,7 @@ namespace BALL
 
 
 	double d = calculate((*gp_)[x],0);
-	Log.error() << "c:" <<  d<< std::endl;
+	cerr << "c:" <<  d<< endl;
 	
 	move((*gp_)[x]);
 

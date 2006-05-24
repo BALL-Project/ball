@@ -74,13 +74,17 @@ namespace BALL
       
       virtual void initIndivid(GeneticIndividual* gi);
 
+      virtual void update();
+
       ConformationSet getConformationSet(Index total_number);
 
       void setGeneticPool(GeneticPool* pool);
+
+      bool redraw(); 
       
     protected:
  
-      Molecule* ligand_;
+      Molecule* ligand_,* original_ligand_;
       
       System system_backup_a_;
       System system_backup_b_;
@@ -123,6 +127,8 @@ namespace BALL
       void restore();
 
       Options opt_;
+
+      bool redraw_;
     };
 }
   

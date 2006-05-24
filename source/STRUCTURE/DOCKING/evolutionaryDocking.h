@@ -110,6 +110,8 @@ namespace BALL
       // 
       bool hasFinished() const
 	throw();
+
+      bool redraw();
       
       /** Return the translation corresponding to conformation con_num.
        */

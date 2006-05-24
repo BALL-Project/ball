@@ -32,6 +32,8 @@ namespace BALL
       /** calculates the cost for a genotype 
        */
       virtual double calculate(GeneticIndividual* gi, uint i) = 0;
+
+      virtual void update() = 0;
       
       /** pool instance needed
        */

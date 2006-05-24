@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geneticAlgorithm.C,v 1.1.2.1 2006/05/19 14:18:25 leonhardt Exp $
+// $Id: geneticAlgorithm.C,v 1.1.2.2 2006/05/24 17:55:11 leonhardt Exp $
 
 #include <iostream>
 
@@ -124,6 +124,8 @@ namespace BALL
 				/** delete no longer needed individuals
 				 */
 				genetic_pool_->dismiss();
+
+				mapping_->update();
 				
 				/** test for convergence or max number of iterations have been reached
 				 */

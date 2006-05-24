@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyGrid.C,v 1.1.2.1 2006/05/19 14:18:21 leonhardt Exp $
+// $Id: energyGrid.C,v 1.1.2.2 2006/05/24 17:55:10 leonhardt Exp $
 
 
 #include <BALL/KERNEL/system.h>
@@ -15,6 +15,9 @@
 
 #include "convert.h"
 
+
+
+using namespace std;
 
 
 namespace BALL
@@ -66,7 +69,7 @@ namespace BALL
 		
 		/**open file to read elements in the gridfile
 		 */
-		std::ifstream infile((file + ".gr").c_str());
+		ifstream infile((file + ".gr").c_str());
 		
 		/**vector for elements in the gridfile
 		 */
@@ -95,7 +98,7 @@ namespace BALL
 			}
 		else
 			{
-				Log.error() << "can't load grid file: " << file << std::endl;
+				cerr << "can't load grid file" << endl;
 				exit(1);
 			}
 		
@@ -103,12 +106,12 @@ namespace BALL
 		
 		for (AtomConstIterator ai = ligand.beginAtom(); +ai; ++ai)
 			{
-				//Log.info() << ai->getType() << endl;
-				std::map<short,int>::iterator it = elements_.find(gridType(*ai));
+				//cout << ai->getType() << endl;
+				map<short,int>::iterator it = elements_.find(gridType(*ai));
 				
 				if (it == elements_.end())
 					{
-						Log.error() << "grid file doesen't contain type " << gridType(*ai) << std::endl;
+						cerr << "grid file doesen't contain type " << gridType(*ai) << endl;
 						exit(1);
 					}
 			}
@@ -122,21 +125,21 @@ namespace BALL
 			{
 				/** update screen
 				 */
-				Log.info() << "loading gridfile: "<< e + 1 << " of " << elements_.size()+ 1 << " elements" << std::endl; 
+				cout << "loading gridfile: "<< e + 1 << " of " << elements_.size()+ 1 << " elements" << endl; 
 				
 				TRegularData3D<double>* trg = new TRegularData3D<double>;
 				
 				string s = "x";
 				
-				std::ofstream out("aux.trg");
+				ofstream out("aux.trg");
 
 				while (s != "")
 					{
 						getline(infile,s);
-						out << s << std::endl;
+						out << s << endl;
 					}
 					
-				std::fstream infile_b("aux.trg");
+				ifstream infile_b("aux.trg");
 				
 				infile_b >> *trg;
 				

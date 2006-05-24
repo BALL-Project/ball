@@ -132,17 +132,6 @@ namespace BALL
   void EvolutionaryDocking::setup(System& system1, System& system2)
     throw()
   {
-    if (system1.countAtoms() < system2.countAtoms())
-      {
-	system1_ = system1;
-	system2_ = system2;
-      }
-    else
-      {
-	system1_ = system2;
-	system2_ = system1;
-      }
-
     delete dm_;
 
     dm_ = new DockMapping(system2_,
@@ -164,8 +153,8 @@ namespace BALL
     
     if (dm_ == 0)
       {
-	std::cerr << "no mapping class!" << std::endl;
-	exit(0);
+				Log.error() << "no mapping class!" << std::endl;
+				exit(0);
       }
     
     delete ga_;
@@ -202,6 +191,11 @@ namespace BALL
     return (ga_->finished_);
   }
 
+
+  bool EvolutionaryDocking::redraw()
+  {
+    return (dm_->redraw());
+  }
 
   ConformationSet EvolutionaryDocking::getConformationSet(Index total_number)
     throw()
