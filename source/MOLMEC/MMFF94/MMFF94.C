@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.4.4 2006/05/24 11:19:05 amoll Exp $
+// $Id: MMFF94.C,v 1.1.4.5 2006/05/25 20:57:48 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -195,6 +195,7 @@ namespace BALL
 		if (assign_types)
  		{
 			atom_typer_.setAromaticRings(getAromaticRings());
+			atom_typer_.setRings(getRings());
 			atom_typer_.assignTo(*system_);
 
 			// for future use mark the invalid atoms:
@@ -253,10 +254,7 @@ namespace BALL
 		{
 			return ((MMFF94StretchBend*)component)->getStretchEnergy();
 		} 
-		else 
-		{
-			return 0.0;
-		}
+		return 0.0;
 	}
 
 	double MMFF94::getBendEnergy() const
@@ -266,10 +264,7 @@ namespace BALL
 		{
 			return ((MMFF94StretchBend*)component)->getBendEnergy();
 		} 
-		else 
-		{
-			return 0;
-		}
+		return 0;
 	}
 
 	double MMFF94::getStretchBendEnergy() const
@@ -279,23 +274,14 @@ namespace BALL
 		{
 			return ((MMFF94StretchBend*)component)->getStretchBendEnergy();
 		} 
-		else 
-		{
-			return 0;
-		}
+		return 0;
 	}
 
 	double MMFF94::getTorsionEnergy() const
 	{
 		ForceFieldComponent* component = getComponent("MMFF94 Torsion");
-		if (component != 0)
-		{
-			return component->getEnergy();
-		} 
-		else 
-		{
-			return 0;
-		}
+		if (component != 0) return component->getEnergy();
+		return 0;
 	}
 
 	double MMFF94::getVdWEnergy() const
@@ -331,10 +317,7 @@ namespace BALL
 	double MMFF94::getNonbondedEnergy() const
 	{
 		const ForceFieldComponent* component = getComponent("MMFF94 NonBonded");
-		if (component != 0)
-		{
-			return component->getEnergy();
-		}
+		if (component != 0) return component->getEnergy();
 
 		return 0;
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.5 2006/05/25 19:04:27 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.6 2006/05/25 20:57:18 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -38,10 +38,14 @@ AtomTyper::AtomTyper(const AtomTyper& t)
 		
 bool AtomTyper::setup(const String& filename)
 {
+	names_.clear();
+	rules_.clear();
+	types_.clear();
+	element_to_rules_.clear();
+
 	LineBasedFile infile(filename);
 
 	vector<vector<String> > lines;
-
 	vector<String> fields;
 	
 	while (infile.readLine())
@@ -53,16 +57,12 @@ bool AtomTyper::setup(const String& filename)
 		
 		if (line.split(fields, "|") < number_expected_fields_)
 		{
-			continue;
-			/*
 			Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
 									<< filename << " Not enough fields in one line " 
 									<< line << std::endl;
-			return false;
-			*/
+			
+			continue;
 		}
-
-//   if (rules_.size() > 0 && fields[2] == rules_[rules_.size() - 1]) continue;
 
 		lines.push_back(vector<String>());
 
@@ -72,7 +72,7 @@ bool AtomTyper::setup(const String& filename)
 
 		for (Position p = 0; p < number_expected_fields_; p++)
 		{
-			fields[p].trim(" ");
+			fields[p].trim();
 			vs[p] = fields[p];
 		}
 
@@ -81,6 +81,15 @@ bool AtomTyper::setup(const String& filename)
 		names_.push_back(fields[1]);
 		types_.push_back(fields[2].toInt());
 		rules_.push_back(fields[3]);
+
+		// the element for this rule:
+		String element = fields[0];
+		if (element == "") element = "X";
+		if (!element_to_rules_.has(element)) 
+		{
+			element_to_rules_[element] = vector<Position>();
+		}
+		element_to_rules_[element].push_back(rules_.size() - 1);
 	}
 
 	if (!specificSetup_()) 
@@ -103,19 +112,19 @@ void AtomTyper::assignTo(System& s)
 
 void AtomTyper::assignTo(Molecule& mol)
 {
-	HashSet<const Atom*> atoms;
+	atoms_.clear();
+
 	AtomIterator ait = mol.beginAtom();
 	for(; +ait; ++ait)
 	{
 		ait->setType(-1);
 		ait->setTypeName(BALL_ATOM_DEFAULT_TYPE_NAME);
-
- 		if (ait->getElement().getSymbol() != "H") 
-			atoms.insert(&*ait);
+		atoms_.insert(&*ait);
 	}
 
 	SmartsMatcher sm;
 
+	/////////////////////////////////////////////////////////////
 	// Give the SmartsMatcher the smallest set of smallest rings:
 	vector<vector<Atom*> > rings_vector;
 	for (Position p = 0; p < rings_.size(); p++)
@@ -129,34 +138,84 @@ void AtomTyper::assignTo(Molecule& mol)
 	}
  	sm.setSSSR(rings_vector);
 
- 	for (Index rule = (Index)types_.size() - 1; rule >= 0; rule--)
+	/////////////////////////////////////////////////////////////
+	// Next we iterate over all rule sets:
+	HashSet<const Atom*> to_match;
+	HashSet<Atom*>::Iterator atoms_it;
+	HashMap<String, vector<Position> >::Iterator eit = element_to_rules_.begin();
+	for (; +eit; ++eit)
 	{
-		try
-		{
-			vector<HashSet<const Atom*> > result;
- 			sm.match(result, mol, rules_[rule], atoms);
-			if (result.size() == 0) continue;
-			for (Position pos = 0; pos < result.size(); pos++)
-			{
-				HashSet<const Atom*>& set = result[pos];
-				if (set.size() != 1) 
-				{
-					Log.error() << "Problem with smarts expr " << rules_[rule]  << " in " << __FILE__ << " " << __LINE__ << std::endl;
-					continue;
-				}
+		if (atoms_.size() == 0) break;
 
-				Atom& atom = *(Atom*)*set.begin();
-				atom.setType(types_[rule]);
-				atom.setTypeName(names_[rule]);
-				assignSpecificValues_(atom);
- 				atoms.erase(&atom);
+		// the element of this rule set:
+		String element = eit->first;
+		// hetero elements, like ions can share one rule set:
+		bool any_atom = element == "X";
+		
+		// collect all atoms, which have the same element, as the current rule set:
+		to_match.clear();
+		atoms_it = atoms_.begin();
+		for (; +atoms_it; ++atoms_it)
+		{
+			const String& this_element = (**atoms_it).getElement().getSymbol();
+			if (!any_atom) 
+			{
+				// match only the atoms with the correct element for this rule
+				if (this_element == element)
+				{
+					to_match.insert(*atoms_it);
+				}
+			}
+			else
+			{
+				// match all atoms with elements, which share a rule set with other elements
+				if (!element_to_rules_.has(this_element))
+				{
+					to_match.insert(*atoms_it);
+				}
 			}
 		}
-		catch(Exception::ParseError e)
+
+		// if no atoms to be matched: continue to next rule set
+		if (to_match.size() == 0) continue;
+
+		const vector<Position>& rule_numbers = eit->second;
+		for (Index nr = (Index)rule_numbers.size() - 1; nr >= 0; nr--)
 		{
-			Log.error() << e << std::endl;
-		}
-	}
+			/// Match the given rule from the vector to a given set of atoms
+			Position rule = rule_numbers[nr];
+
+			try
+			{
+				vector<HashSet<const Atom*> > result;
+				sm.match(result, mol, rules_[rule], to_match);
+				if (result.size() == 0) continue;
+
+				// iterate over all matched atoms, and set values accordingly:
+				for (Position pos = 0; pos < result.size(); pos++)
+				{
+					HashSet<const Atom*>& set = result[pos];
+					if (set.size() != 1) 
+					{
+						Log.error() << "Problem with smarts expr " << rules_[rule]  << " in " << __FILE__ << " " << __LINE__ << std::endl;
+						continue;
+					}
+
+					Atom& atom = *(Atom*)*set.begin();
+					atom.setType(types_[rule]);
+					atom.setTypeName(names_[rule]);
+					assignSpecificValues_(atom);
+					// erase the atom from the sets of atoms, that are still to be matched
+					to_match.erase(&atom);
+					atoms_.erase(&atom);
+				}
+			}
+			catch(Exception::ParseError e)
+			{
+				Log.error() << e << std::endl;
+			}
+		} // rules for one element
+	} // all element rule sets
 }
 
 /////////////////////////////////////////////////////
@@ -263,12 +322,10 @@ bool MMFF94AtomTyper::assignAromaticType_5_(Atom& atom, Position L5, bool anion,
 {
 	String old_type = atom.getTypeName();
 
-//   Log.error() << "#~~#   1 "  << atom.getName() << " " << old_type           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	if (anion && old_type == "N5M") return true;
 
 	String key = old_type + "|" + String(L5);
 
-//   Log.error() << "#~~#   6 "   << key          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	// try full match
 	HashMap<String, AromaticType>::ConstIterator it = aromatic_types_5_map_.find(key);
 	if (+it)
@@ -497,7 +554,6 @@ void MMFF94AtomTyper::assignTo(System& s)
 		Atom* hetero_atom = 0;
 		Atom* cation_atom = 0;
 		Atom* anion_atom = 0;
-//   Log.error() << "#~~#   5 an "  << anion_atom << "  c " << cation_atom           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 		ait = ring_atoms.begin();
 		for (; +ait; ++ait)
@@ -507,7 +563,6 @@ void MMFF94AtomTyper::assignTo(System& s)
 			if ((element != "C" && element != "N") ||
 					hetero_atom_types_.has(atom.getType()))
 			{
-//      Log.error() << "#~~#   2 "  << atom.getFullName() << " " << atom.getType()          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				hetero_atom = &atom;
 			}
 
@@ -555,7 +610,6 @@ void MMFF94AtomTyper::assignTo(System& s)
 				L5 = 3;
 			}
 
-//        Log.error() << "#~~#   3 "  << atom.getName() << " " << atom.getTypeName() << "  " << L5           << "   ";
 			assignAromaticType_5_(atom, L5, anion_atom != 0, cation_atom != 0);
 //       Log.error() << atom.getTypeName()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		} // all atoms in one ring

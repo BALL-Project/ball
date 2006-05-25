@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.4.2 2006/05/25 19:04:17 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.4.3 2006/05/25 20:57:34 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -57,12 +57,6 @@ namespace BALL
 		///
 		void setRings(const vector<HashSet<Atom*> >& rings) { rings_ = rings;}
 
-		/// Shall Hydrogens also be assigned per SMARTS rule?
-		void setAssignHydrogens(bool state) { assign_hydrogens_ = state;}
-
-		/// Shall Hydrogens also be assigned per SMARTS rule?
-		bool assigningHydrogens() const { return assign_hydrogens_;}
-
 		protected:
 		
 		///
@@ -87,7 +81,8 @@ namespace BALL
 		Size 							number_expected_fields_;
 		vector<HashSet<Atom*> > 		rings_;
 		vector<HashSet<Atom*> > 		aromatic_rings_;
-		bool  assign_hydrogens_;
+		HashMap<String, vector<Position> > element_to_rules_;
+		HashSet<Atom*> atoms_;
 	};
 	
 	///
