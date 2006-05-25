@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.4 2006/05/23 09:49:08 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.5 2006/05/25 19:04:27 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -108,21 +108,33 @@ void AtomTyper::assignTo(Molecule& mol)
 	for(; +ait; ++ait)
 	{
 		ait->setType(-1);
+		ait->setTypeName(BALL_ATOM_DEFAULT_TYPE_NAME);
 
-//   		if (ait->getElement().getSymbol() != "H") 
-		atoms.insert(&*ait);
+ 		if (ait->getElement().getSymbol() != "H") 
+			atoms.insert(&*ait);
 	}
 
 	SmartsMatcher sm;
 
-//    	for (Index rule = (Index)types_.size() - 1; rule >= 0; rule--)
- 	for (Index rule = 0; rule < (Index)types_.size(); rule++)
+	// Give the SmartsMatcher the smallest set of smallest rings:
+	vector<vector<Atom*> > rings_vector;
+	for (Position p = 0; p < rings_.size(); p++)
+	{
+		rings_vector.push_back(vector<Atom*>());
+		HashSet<Atom*>::Iterator it = rings_[p].begin();
+		for (; +it; ++it)
+		{
+			rings_vector[p].push_back(*it);
+		}
+	}
+ 	sm.setSSSR(rings_vector);
+
+ 	for (Index rule = (Index)types_.size() - 1; rule >= 0; rule--)
 	{
 		try
 		{
 			vector<HashSet<const Atom*> > result;
- 			sm.match(result, mol, rules_[rule]);
-//    			sm.match(result, mol, rules_[rule], atoms);
+ 			sm.match(result, mol, rules_[rule], atoms);
 			if (result.size() == 0) continue;
 			for (Position pos = 0; pos < result.size(); pos++)
 			{

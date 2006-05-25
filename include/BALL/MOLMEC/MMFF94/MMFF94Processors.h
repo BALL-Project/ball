@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.4.1 2006/05/21 22:27:17 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.4.2 2006/05/25 19:04:17 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -50,6 +50,18 @@ namespace BALL
 		
 		///
 		virtual void assignTo(System& s);
+		
+		///
+		void setAromaticRings(const vector<HashSet<Atom*> >& rings) { aromatic_rings_ = rings;}
+
+		///
+		void setRings(const vector<HashSet<Atom*> >& rings) { rings_ = rings;}
+
+		/// Shall Hydrogens also be assigned per SMARTS rule?
+		void setAssignHydrogens(bool state) { assign_hydrogens_ = state;}
+
+		/// Shall Hydrogens also be assigned per SMARTS rule?
+		bool assigningHydrogens() const { return assign_hydrogens_;}
 
 		protected:
 		
@@ -73,6 +85,9 @@ namespace BALL
 		vector<vector<String> > fields_;
 		// number for fields per line in the config file
 		Size 							number_expected_fields_;
+		vector<HashSet<Atom*> > 		rings_;
+		vector<HashSet<Atom*> > 		aromatic_rings_;
+		bool  assign_hydrogens_;
 	};
 	
 	///
@@ -115,9 +130,6 @@ namespace BALL
 		///
 		void collectHeteroAtomTypes(const MMFF94AtomTypes& atom_types);
 		
-		///
-		void setAromaticRings(const vector<HashSet<Atom*> >& rings) { aromatic_rings_ = rings;}
-
 		protected:
 
 		bool assignAromaticType_5_(Atom& atom, Position L5, bool anion, bool cation);
@@ -128,7 +140,6 @@ namespace BALL
 		HashSet<String> 					cation_atoms_;
 		MMFF94AtomTypes* 					atom_types_;
 		HashSet<Position> 				hetero_atom_types_;
-		vector<HashSet<Atom*> > 		aromatic_rings_;
 	};
 		
 
