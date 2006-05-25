@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.32 2006/05/22 11:49:56 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.33 2006/05/25 22:17:23 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -768,9 +768,6 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				return true;
 			}
 
-			// does a new command starts immediately after a multiline?
-			String new_command;
-
 			// singe <-> multi line mode
 			if (!multi_line_mode_)
 			{
@@ -787,7 +784,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				multi_lines_ += 1;
 
 				appendText(line);
-				if (!line.isEmpty() && line.isWhitespace(line[0]))
+				if (!line.isEmpty())
 				{
 					if (line[line.size() - 1] == ':')
 					{
@@ -798,11 +795,6 @@ void PythonHighlighter::highlightBlock(const QString& text)
 					appendToHistory_(line);
 					newPrompt_();	
 					return true;
-				}
-
-				if (line.size() && !line.isWhitespace(line[0]))
-				{
-					new_command = line;
 				}
 
 				line = multi_line_text_ + "\n";
@@ -826,10 +818,6 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 			if (silent_) 
 			{
-				if (new_command.size()) 
-				{
-					return state && parseLine_(new_command);
-				}
 				return state;
 			}
 				
@@ -845,10 +833,6 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				}
 			}
 
-			if (new_command.size()) 
-			{
-				parseLine_(new_command);
-			}
 			newPrompt_();
 			return state;
 		}
