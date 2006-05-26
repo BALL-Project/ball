@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.6.2.1 2006/05/24 17:51:53 leonhardt Exp $
+// $Id: dockDialog.C,v 1.5.2.6.2.2 2006/05/26 14:49:15 leonhardt Exp $
 //
 
 #include <QtGui/qpushbutton.h>
@@ -448,53 +448,49 @@ namespace BALL
 			{
 				case DockingController::GEOMETRIC_FIT:
 #ifdef BALL_HAS_FFTW
-					GeometricFitDialog* dialog = RTTI::castTo<GeometricFitDialog>(*(algorithm_dialogs_[index]));
-					dialog->getOptions(algorithm_opt_);
+					GeometricFitDialog* gfd = RTTI::castTo<GeometricFitDialog>(*(algorithm_dialogs_[index]));
+					gfd->getOptions(algorithm_opt_);
+					
+					// options for redocking (euler angles)
+					if(is_redock_)
+					{
+						try
+						{	
+							algorithm_opt_[GeometricFit::Option::PHI_MIN] = ascii(phi_min->text()).toFloat();
+							algorithm_opt_[GeometricFit::Option::PHI_MAX] = ascii(phi_max->text()).toFloat();
+							algorithm_opt_[GeometricFit::Option::DEG_PHI] = ascii(delta_phi->text()).toFloat();
+							algorithm_opt_[GeometricFit::Option::PSI_MIN] = ascii(psi_min->text()).toFloat();
+							algorithm_opt_[GeometricFit::Option::PSI_MAX] = ascii(psi_max->text()).toFloat();
+							algorithm_opt_[GeometricFit::Option::DEG_PSI] = ascii(delta_psi->text()).toFloat();
+							algorithm_opt_[GeometricFit::Option::THETA_MIN] = ascii(theta_min->text()).toFloat();
+							algorithm_opt_[GeometricFit::Option::THETA_MAX] = ascii(theta_max->text()).toFloat();
+							algorithm_opt_[GeometricFit::Option::DEG_THETA] = ascii(delta_theta->text()).toFloat();
+						}
+						catch(Exception::InvalidFormat)
+						{
+							Log.error() << "Conversion from String to float failed: invalid format! " << __FILE__ << " " << __LINE__<< std::endl;
+							return;
+						}
+					}
+					else
+					{
+						algorithm_opt_[GeometricFit::Option::PHI_MIN] = GeometricFit::Default::PHI_MIN;
+						algorithm_opt_[GeometricFit::Option::PHI_MAX] = GeometricFit::Default::PHI_MAX;
+						algorithm_opt_[GeometricFit::Option::DEG_PHI] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
+						algorithm_opt_[GeometricFit::Option::PSI_MIN] = GeometricFit::Default::PSI_MIN;
+						algorithm_opt_[GeometricFit::Option::PSI_MAX] = GeometricFit::Default::PSI_MAX;
+						algorithm_opt_[GeometricFit::Option::DEG_PSI] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
+						algorithm_opt_[GeometricFit::Option::THETA_MIN] = GeometricFit::Default::THETA_MIN;
+						algorithm_opt_[GeometricFit::Option::THETA_MAX] = GeometricFit::Default::THETA_MAX;
+						algorithm_opt_[GeometricFit::Option::DEG_THETA] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
+					}
 #endif
 					break;
 				case DockingController::EVOLUTION_DOCKING:
-					EvolutionDockingDialog* dialog = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[index]));
-					dialog->getOptions(algorithm_opt_);
+					EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[index]));
+					edd->getOptions(algorithm_opt_);
 					break;
 			}
-			
-			// options for redocking (euler angles)
-			if(is_redock_)
-			{
-				try
-					{
-#ifdef BALL_HAS_FFTW	
-						algorithm_opt_[GeometricFit::Option::PHI_MIN] = ascii(phi_min->text()).toFloat();
-						algorithm_opt_[GeometricFit::Option::PHI_MAX] = ascii(phi_max->text()).toFloat();
-						algorithm_opt_[GeometricFit::Option::DEG_PHI] = ascii(delta_phi->text()).toFloat();
-						algorithm_opt_[GeometricFit::Option::PSI_MIN] = ascii(psi_min->text()).toFloat();
-						algorithm_opt_[GeometricFit::Option::PSI_MAX] = ascii(psi_max->text()).toFloat();
-						algorithm_opt_[GeometricFit::Option::DEG_PSI] = ascii(delta_psi->text()).toFloat();
-						algorithm_opt_[GeometricFit::Option::THETA_MIN] = ascii(theta_min->text()).toFloat();
-						algorithm_opt_[GeometricFit::Option::THETA_MAX] = ascii(theta_max->text()).toFloat();
-						algorithm_opt_[GeometricFit::Option::DEG_THETA] = ascii(delta_theta->text()).toFloat();
-#endif
-					}
-				catch(Exception::InvalidFormat)
-					{
-						Log.error() << "Conversion from String to float failed: invalid format! " << __FILE__ << " " << __LINE__<< std::endl;
-						return;
-					}
-			}
-			else
-				{
-#ifdef BALL_HAS_FFTW
-					algorithm_opt_[GeometricFit::Option::PHI_MIN] = GeometricFit::Default::PHI_MIN;
-					algorithm_opt_[GeometricFit::Option::PHI_MAX] = GeometricFit::Default::PHI_MAX;
-					algorithm_opt_[GeometricFit::Option::DEG_PHI] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
-					algorithm_opt_[GeometricFit::Option::PSI_MIN] = GeometricFit::Default::PSI_MIN;
-					algorithm_opt_[GeometricFit::Option::PSI_MAX] = GeometricFit::Default::PSI_MAX;
-					algorithm_opt_[GeometricFit::Option::DEG_PSI] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
-					algorithm_opt_[GeometricFit::Option::THETA_MIN] = GeometricFit::Default::THETA_MIN;
-					algorithm_opt_[GeometricFit::Option::THETA_MAX] = GeometricFit::Default::THETA_MAX;
-					algorithm_opt_[GeometricFit::Option::DEG_THETA] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
-#endif
-				}
 			
 			// options for chosen scoring function
 			index = scoring_functions->currentIndex();

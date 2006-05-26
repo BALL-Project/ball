@@ -2,9 +2,13 @@
 #include <BALL/VIEW/DIALOGS/evolutionDockingDialog.h>
 #include "../../STRUCTURE/DOCKING/evolutionaryDocking.h"
 #include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/SYSTEM/path.h>
+#include <BALL/VIEW/WIDGETS/molecularStructure.h>
 
+#include <QtGui/qlabel.h>
 #include <QtGui/qlineedit.h>
-#include <QtGui/qcombobox.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/QFileDialog>
 
 //#define BALL_VIEW_DEBUG
 
@@ -18,7 +22,7 @@ namespace BALL
 			: QDialog(parent),
 				Ui_EvolutionDockingDialogData(),
 				PreferencesEntry()
-			{
+		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "new EvolutionDockingDialog " << this << std::endl;
 			#endif
@@ -29,7 +33,7 @@ namespace BALL
 				// register QWidgets of Dialog with PreferenceEntry
 				// entries of them will be generated in the INIFile
 				setINIFileSectionName("EVOLUTION_DOCKKING_OPTIONS");
-				registerObject_(parameter_file_edit);
+				registerObject_(grid_filename);
 				registerObject_(trans_box_bottom_x);
 				registerObject_(trans_box_bottom_y);
 				registerObject_(trans_box_bottom_z);
@@ -45,7 +49,14 @@ namespace BALL
 				is_redock_ = false;
 				
 				hide();
+
 				connect(reset_button, SIGNAL(pressed()), this, SLOT(reset()));
+			  connect(grid_radio_button, SIGNAL(clicked()), this, SLOT(enableFileBrowsing()));
+				connect(new_grid_radio_button, SIGNAL(clicked()), this, SLOT(disableFileBrowsing()));
+				connect(browse_button, SIGNAL(clicked()), this, SLOT(browseGridFile()));
+				//connect( amber_radio_button, SIGNAL(clicked()), this, SLOT(useAmberFF()));
+				//connect( charmm_radio_button, SIGNAL(clicked()), this, SLOT(useCharmmFF()));
+				connect(force_field_button, SIGNAL(clicked()), this, SLOT(showForceFieldOptions()));
 			}
 		
 		// Copy constructor.
@@ -57,7 +68,7 @@ namespace BALL
 				has_changed_(ev_dock_dialog.has_changed_),
 				is_redock_(ev_dock_dialog.is_redock_),
 				backup_(ev_dock_dialog.backup_)
-		{}
+			{}
 			
 		// Destructor
 		EvolutionDockingDialog::~EvolutionDockingDialog()
@@ -163,7 +174,7 @@ namespace BALL
 		{
 		  try
 			{
-				options[EvolutionaryDocking::Option::GRID_FILE] = String(ascii(parameter_file_edit->text()));
+				options[EvolutionaryDocking::Option::GRID_FILE] = String(ascii(grid_filename->text()));
 				options[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_X] = ascii(trans_box_bottom_x->text()).toFloat();
 				options[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Y] = ascii(trans_box_bottom_y->text()).toFloat();
 				options[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Z] = ascii(trans_box_bottom_z->text()).toFloat();
@@ -204,8 +215,8 @@ namespace BALL
 		void EvolutionDockingDialog::swapValues_()
 			throw()
 		{
-			QString temp = parameter_file_edit->text();
-			parameter_file_edit->setText(backup_[0]);
+			QString temp = grid_filename->text();
+			grid_filename->setText(backup_[0]);
 			backup_[0] = temp;
 
 			temp = trans_box_bottom_x->text();
@@ -263,6 +274,90 @@ namespace BALL
 			}
 			QDialog::show();
 		}
-	
+
+		/** Is called when radio button for using a created grid is pressed. 
+		 	* It enables the browse button and to corresponding line edit.
+		 	*/
+		void EvolutionDockingDialog::enableFileBrowsing()
+		{
+			browse_button->setEnabled(true);
+			grid_filename->setEnabled(true);
+			filename_label->setEnabled(true);
+		}
+
+		/** Is called when radio button for using a new grid is pressed. 
+		 	* It disables the browse button and to corresponding line edit.
+		 	*/
+		void EvolutionDockingDialog::disableFileBrowsing()
+		{
+			browse_button->setEnabled(false);
+			grid_filename->setEnabled(false);
+			grid_filename->clear();
+			filename_label->setEnabled(false);
+		}
+
+		/** Is called when browse button is pressed. 
+			* It shows a file dialog.
+		 	*/
+		void EvolutionDockingDialog::browseGridFile()
+		{
+			// look up the full path of the grid file
+			Path p;
+			String filename = p.find(ascii(grid_filename->text()));
+
+			if (filename == "")
+			{
+				filename = ascii(grid_filename->text());
+			}
+			QString tmp = filename.c_str();
+			QString result = QFileDialog::getOpenFileName(0, "Select an grid file", tmp, "*.gr", 0);
+			if (!result.isEmpty())
+			{
+				// store the new filename in the lineedit field
+				grid_filename->setText(result);
+			}
+		}
+
+		/** Is called when the amber radio button is pressed. 
+		 	*/
+		void EvolutionDockingDialog::useAmberFF()
+		{
+			amber_radio_button->setChecked(true);
+			charmm_radio_button->setChecked(false);
+		}
+
+		/** Is called when the charmm radio button is pressed. 
+		 	*/
+		void EvolutionDockingDialog::useCharmmFF()
+		{
+			charmm_radio_button->setChecked(true);
+			amber_radio_button->setChecked(false);
+		}
+
+		/** Is called when force field options button is pressed. 
+			* It shows the force field option dialog.
+		 	*/
+		void EvolutionDockingDialog::showForceFieldOptions()
+		{
+			Log.error() << "in show option dialog" << std::endl;
+			MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
+			if (!mol_struct)
+			{
+				Log.error() << "Error while opening force field option dialog! " 
+										<< __FILE__ << " " << __LINE__ << std::endl;
+				return;
+			}
+
+			if(amber_radio_button->isChecked())
+			{
+				mol_struct->getAmberConfigurationDialog().exec();
+			}
+			else
+			{
+				mol_struct->getCharmmConfigurationDialog().exec();
+			}
+		}
+
+
 	} // namespace VIEW
 } // namespace BALL

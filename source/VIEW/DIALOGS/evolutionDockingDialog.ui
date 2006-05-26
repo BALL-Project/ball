@@ -8,12 +8,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>557</width>
+    <width>556</width>
     <height>458</height>
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Dialog</string>
+   <string>Evolutionary Docking Options</string>
   </property>
   <widget class="QGroupBox" name="force_field_group" >
    <property name="geometry" >
@@ -90,7 +90,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="" >
+  <widget class="QWidget" name="layoutWidget" >
    <property name="geometry" >
     <rect>
      <x>9</x>
@@ -210,19 +210,6 @@
     </property>
     <property name="text" >
      <string>relative to ligand</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="abs_trans_radio_button" >
-    <property name="geometry" >
-     <rect>
-      <x>11</x>
-      <y>28</y>
-      <width>158</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>absolute</string>
     </property>
    </widget>
    <widget class="QLabel" name="x_label_2" >
@@ -412,181 +399,20 @@
      <set>Qt::AlignRight</set>
     </property>
    </widget>
-  </widget>
-  <widget class="QGroupBox" name="grid_group" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>539</width>
-     <height>119</height>
-    </rect>
-   </property>
-   <property name="title" >
-    <string>Grid for receptor</string>
-   </property>
-   <widget class="QLabel" name="filename_label" >
-    <property name="enabled" >
-     <bool>false</bool>
-    </property>
-    <property name="geometry" >
-     <rect>
-      <x>11</x>
-      <y>84</y>
-      <width>55</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="minimumSize" >
-     <size>
-      <width>0</width>
-      <height>25</height>
-     </size>
-    </property>
-    <property name="font" >
-     <font>
-      <family>Sans Serif</family>
-      <pointsize>9</pointsize>
-      <weight>50</weight>
-      <italic>false</italic>
-      <bold>false</bold>
-      <underline>false</underline>
-      <strikeout>false</strikeout>
-     </font>
-    </property>
-    <property name="focusPolicy" >
-     <enum>Qt::NoFocus</enum>
-    </property>
-    <property name="lineWidth" >
-     <number>1</number>
-    </property>
-    <property name="text" >
-     <string>Filename</string>
-    </property>
-    <property name="textFormat" >
-     <enum>Qt::AutoText</enum>
-    </property>
-    <property name="alignment" >
-     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="new_grid_radio_button" >
+   <widget class="QRadioButton" name="abs_trans_radio_button" >
     <property name="geometry" >
      <rect>
       <x>11</x>
       <y>28</y>
-      <width>424</width>
+      <width>158</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text" >
-     <string>create new grid</string>
+     <string>absolute</string>
     </property>
     <property name="checked" >
      <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="grid_radio_button" >
-    <property name="geometry" >
-     <rect>
-      <x>11</x>
-      <y>56</y>
-      <width>424</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>use created grid</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="browse_button" >
-    <property name="enabled" >
-     <bool>false</bool>
-    </property>
-    <property name="geometry" >
-     <rect>
-      <x>440</x>
-      <y>80</y>
-      <width>87</width>
-      <height>29</height>
-     </rect>
-    </property>
-    <property name="minimumSize" >
-     <size>
-      <width>50</width>
-      <height>25</height>
-     </size>
-    </property>
-    <property name="font" >
-     <font>
-      <family>Sans Serif</family>
-      <pointsize>9</pointsize>
-      <weight>50</weight>
-      <italic>false</italic>
-      <bold>false</bold>
-      <underline>false</underline>
-      <strikeout>false</strikeout>
-     </font>
-    </property>
-    <property name="focusPolicy" >
-     <enum>Qt::TabFocus</enum>
-    </property>
-    <property name="toolTip" >
-     <string>Browse your computer for amber file</string>
-    </property>
-    <property name="text" >
-     <string>Browse</string>
-    </property>
-    <property name="autoDefault" >
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="parameter_file_edit" >
-    <property name="enabled" >
-     <bool>false</bool>
-    </property>
-    <property name="geometry" >
-     <rect>
-      <x>72</x>
-      <y>84</y>
-      <width>363</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="minimumSize" >
-     <size>
-      <width>150</width>
-      <height>25</height>
-     </size>
-    </property>
-    <property name="font" >
-     <font>
-      <family>Sans Serif</family>
-      <pointsize>9</pointsize>
-      <weight>50</weight>
-      <italic>false</italic>
-      <bold>false</bold>
-      <underline>false</underline>
-      <strikeout>false</strikeout>
-     </font>
-    </property>
-    <property name="focusPolicy" >
-     <enum>Qt::StrongFocus</enum>
-    </property>
-    <property name="text" >
-     <string/>
-    </property>
-    <property name="maxLength" >
-     <number>32767</number>
-    </property>
-    <property name="frame" >
-     <bool>true</bool>
-    </property>
-    <property name="echoMode" >
-     <enum>QLineEdit::Normal</enum>
-    </property>
-    <property name="alignment" >
-     <set>Qt::AlignLeading</set>
     </property>
    </widget>
   </widget>
@@ -678,6 +504,183 @@
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QGroupBox" name="grid_group" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>539</width>
+     <height>119</height>
+    </rect>
+   </property>
+   <property name="title" >
+    <string>Grid for receptor</string>
+   </property>
+   <widget class="QLabel" name="filename_label" >
+    <property name="enabled" >
+     <bool>false</bool>
+    </property>
+    <property name="geometry" >
+     <rect>
+      <x>11</x>
+      <y>84</y>
+      <width>55</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="minimumSize" >
+     <size>
+      <width>0</width>
+      <height>25</height>
+     </size>
+    </property>
+    <property name="font" >
+     <font>
+      <family>Sans Serif</family>
+      <pointsize>9</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+      <underline>false</underline>
+      <strikeout>false</strikeout>
+     </font>
+    </property>
+    <property name="focusPolicy" >
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="lineWidth" >
+     <number>1</number>
+    </property>
+    <property name="text" >
+     <string>Filename</string>
+    </property>
+    <property name="textFormat" >
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="alignment" >
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="grid_radio_button" >
+    <property name="geometry" >
+     <rect>
+      <x>11</x>
+      <y>56</y>
+      <width>424</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>use created grid</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="new_grid_radio_button" >
+    <property name="geometry" >
+     <rect>
+      <x>11</x>
+      <y>28</y>
+      <width>424</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>create new grid</string>
+    </property>
+    <property name="checked" >
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="browse_button" >
+    <property name="enabled" >
+     <bool>false</bool>
+    </property>
+    <property name="geometry" >
+     <rect>
+      <x>440</x>
+      <y>80</y>
+      <width>87</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="minimumSize" >
+     <size>
+      <width>50</width>
+      <height>25</height>
+     </size>
+    </property>
+    <property name="font" >
+     <font>
+      <family>Sans Serif</family>
+      <pointsize>9</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+      <underline>false</underline>
+      <strikeout>false</strikeout>
+     </font>
+    </property>
+    <property name="focusPolicy" >
+     <enum>Qt::TabFocus</enum>
+    </property>
+    <property name="toolTip" >
+     <string>Browse your computer for amber file</string>
+    </property>
+    <property name="text" >
+     <string>Browse</string>
+    </property>
+    <property name="autoDefault" >
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="grid_filename" >
+    <property name="enabled" >
+     <bool>false</bool>
+    </property>
+    <property name="geometry" >
+     <rect>
+      <x>72</x>
+      <y>84</y>
+      <width>363</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="minimumSize" >
+     <size>
+      <width>150</width>
+      <height>25</height>
+     </size>
+    </property>
+    <property name="font" >
+     <font>
+      <family>Sans Serif</family>
+      <pointsize>9</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+      <underline>false</underline>
+      <strikeout>false</strikeout>
+     </font>
+    </property>
+    <property name="focusPolicy" >
+     <enum>Qt::StrongFocus</enum>
+    </property>
+    <property name="text" >
+     <string/>
+    </property>
+    <property name="maxLength" >
+     <number>32767</number>
+    </property>
+    <property name="frame" >
+     <bool>true</bool>
+    </property>
+    <property name="echoMode" >
+     <enum>QLineEdit::Normal</enum>
+    </property>
+    <property name="alignment" >
+     <set>Qt::AlignLeading</set>
+    </property>
+   </widget>
   </widget>
  </widget>
  <pixmapfunction></pixmapfunction>
