@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.4 2006/05/15 23:18:34 amoll Exp $
+// $Id: dockingController.h,v 1.1.2.4.2.1 2006/05/26 14:53:09 leonhardt Exp $
 //
 
 #ifndef BALL_WIDGETS_DOCKINGCONTROLLER_H
@@ -20,6 +20,7 @@
 #endif
 
 #include <QtGui/qwidget.h>
+#include <QtCore/qtimer.h>
 
 namespace BALL
 {
@@ -61,7 +62,7 @@ namespace BALL
 				 *  If you want to add a new docking algorithm extend enumeration 
 				 *	(0 corresponds to <select> item in ComboBox)
 				 */
-				enum Algorithm {GEOMETRIC_FIT = 1};
+				enum Algorithm {GEOMETRIC_FIT = 1, EVOLUTION_DOCKING = 2};
 				
 				/** Enumeration which contains the scoring functions.
 					* The numbering corresponds to the order in the combobox of \link DockingController::dock_dialog_ dock_dialog_ \endlink. 
@@ -167,7 +168,16 @@ namespace BALL
 				 *  Calls \link DockingController::runDocking runDocking(false) \endlink.
 				 */
 				void startDocking();
-				
+			
+			protected slots:
+
+				/** Is called when timer elapses.
+					* Updates the position of the mobile system2. 
+					*/
+				void updateSystem_();
+
+
+
 			protected:
 			
 				/** Applies scoring function which user has chosen.
@@ -181,7 +191,7 @@ namespace BALL
 			 */
 			 bool runScoring_(ConformationSet* conformation_set)
 					throw();
-				
+							
 			private:
 				
 				/** Copy constructor
@@ -206,6 +216,15 @@ namespace BALL
 				/** Menu entry 
 				 */
 				QAction* action_;
+
+				/** Timer to call \link DockingController::updateSystem_ updateSystem_ \endlink regularly while calculation is running.
+					*/
+				QTimer timer_;
+
+				/** Flag for \link DockingController::updateSystem_ updateSystem_ \endlink. 
+					*/
+				bool was_called_;
+
 		};
 	} // end of namespace View
 } // end of namespace BALL

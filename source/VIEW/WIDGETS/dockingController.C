@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.1 2006/05/24 17:53:02 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.2 2006/05/26 14:50:00 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -54,7 +54,8 @@ namespace BALL
 				ModularWidget(name),
 				dock_dialog_(this),
 				dock_alg_(0),
-				progress_dialog_(0)
+				progress_dialog_(0),
+				was_called_(false)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "New DockingController " << this << std::endl;
@@ -75,7 +76,8 @@ namespace BALL
 				ModularWidget(dock_controller),
 				dock_dialog_(),
 				dock_alg_(dock_controller.dock_alg_),
-				progress_dialog_(dock_controller.progress_dialog_)
+				progress_dialog_(dock_controller.progress_dialog_),
+				was_called_(false)
 		{}
 		
 		// Destructor
@@ -109,6 +111,8 @@ namespace BALL
 					delete progress_dialog_;
 				}
 				progress_dialog_ = dock_controller.progress_dialog_;
+				/////////////////////////////////
+				was_called_ = dock_controller.was_called_;
 			}
 			return *this;
 		}
@@ -222,7 +226,6 @@ namespace BALL
 		// is called when user clicks on menu entry "Docking"
 		void DockingController::startDocking()
 		{
-				Log.error() << "in DockingController::startDocking.\n";
 			// Dialog is called in docking-modus, not in redocking-modus
 			runDocking(false);
 		}
@@ -286,16 +289,15 @@ namespace BALL
 
 			// keep the larger protein in System A and the smaller one in System B
 			// and setup the algorithm
-			if (dock_dialog_.getSystem1()->countAtoms() < dock_dialog_.getSystem2()->countAtoms())
+			/*if (dock_dialog_.getSystem1()->countAtoms() < dock_dialog_.getSystem2()->countAtoms())
 			{
 				dock_alg_->setup(*(dock_dialog_.getSystem2()), *(dock_dialog_.getSystem1()), dock_dialog_.getAlgorithmOptions());
 			}
 			else
 			{
 				dock_alg_->setup(*(dock_dialog_.getSystem1()), *(dock_dialog_.getSystem2()), dock_dialog_.getAlgorithmOptions());
-			}
-
-		/*	// TEMPORARY switch to test evolutionary docking
+			}*/
+			// TEMPORARY switch to test evolutionary docking
 				switch(index)
 			{
 				case GEOMETRIC_FIT:
@@ -327,7 +329,6 @@ namespace BALL
   				amber->setup(ligand); 
   				ligand.deselect();
   				delete amber;
-
  					GeometricCenterProcessor gcp;
   				ligand.apply(gcp);
   				Vector3 center = gcp.getCenter();
@@ -349,11 +350,17 @@ namespace BALL
   				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_X,center.x); 
   				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Y,center.y); 
   				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Z,center.z); 
-				
+			
+					Options::ConstIterator it = dock_dialog_.getAlgorithmOptions().begin();
+      		for (; +it; ++it)
+					{
+						Log.error() << it->first << " " << it->second << std::endl;
+					}
+
 					dock_alg_->setup(sys,ligand,option);
 
 					break;
-			}*/
+			}
 
 			
 			// ============================= WITH MULTITHREADING ====================================
@@ -487,11 +494,8 @@ namespace BALL
 			// add docked system to BALLView structures
 			const SnapShot& best_result = (*conformation_set)[0];
 
-			System* docked_system = new System(conformation_set->getSystem());
-			// system is deleted by main control, when it is removed from BallView
 			best_result.applySnapShot(*docked_system);
-			getMainControl()->deselectCompositeRecursive(docked_system, true);
-			getMainControl()->insert(*docked_system);
+			getMainControl()->update(*docked_system,true);
 			
 			// send a DockResultMessage
 			NewDockResultMessage* dock_res_m = new NewDockResultMessage();
@@ -511,14 +515,26 @@ namespace BALL
 	
 		void DockingController::updateSystem_()
 		{
-			if(RTTI::isKindOf<EvolutionaryDocking>(*dock_alg_))
+			Log.error() << "in DockingController::updateSystem_()" << std::endl;
+			if(dock_alg_->systemChanged())
 			{
-				EvolutionaryDocking* ed = RTTI::castTo<EvolutionaryDocking>(*dock_alg_);
-				if(ed->redraw())
+				// if function is called for the first time
+				if(was_called_)
 				{
-					getMainControl()->update(*(dock_dialog_.getSystem2()), true);
+					// system is deleted by main control, when it is removed from BallView
+					System* docked_system = new System(dock_alg->getIntermediateResult());
+					//getMainControl()->deselectCompositeRecursive(docked_system, true);
+					getMainControl()->insert(*docked_system);
+					was_called_ = true;
+				}
+				else
+				{
+					SnapShot sn = takeSnapshot(dock_alg->getIntermediateResult());
+					sn.applySnapShot(*docked_system);
+					getMainControl()->update(*docked_system, true);
 				}
 			}
+			
 			// if docking has not finished restart timer
 			if (!dock_alg_->hasFinished())
 			{
