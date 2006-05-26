@@ -25,6 +25,9 @@ namespace BALL
 	{
 		public:
 
+			DockingAlgorithm()
+				throw();
+			
 			virtual ~DockingAlgorithm() {};
 
 			/** Attributes
@@ -82,8 +85,19 @@ namespace BALL
 
 			/**
 			*/
+			virtual bool systemChanged() const
+				throw() { return system_changed_;}
+
+			/**
+			*/
 			virtual float getProgress() const
 				throw();
+
+			/**
+				*/
+			const System& getIntermediateResult()
+				throw();
+
 
 			/** Return total_conformations putative complexes, ordered
 			 *  according to their rank.
@@ -93,10 +107,15 @@ namespace BALL
 				throw();
 
 		protected:
+
+			virtual const System& getIntermediateResult_()
+				throw();
+
 			System system1_;
 			System system2_;
-			bool   pause_;
-			bool   abort_;
+			bool	pause_;
+			bool  abort_;
+			bool 	system_changed_;
 	};
 
 } // namespace BALL
