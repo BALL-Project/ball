@@ -10,6 +10,12 @@ using namespace std;
 
 namespace BALL
 {
+	DockingAlgorithm::DockingAlgorithm()
+		throw()
+	{
+		system_changed_ = false;
+	}
+
 	void DockingAlgorithm::setup(System& system1, System& system2, Options& new_options)
 		throw()
 	{
@@ -63,6 +69,20 @@ namespace BALL
 	{
 		Log.error() << "This is just an interface definition. Check your dynamic binding" << endl;
 		return 0;
+	}
+
+	const System& DockingAlgorithm::getIntermediateResult()
+		throw()
+	{
+		system_changed_ = false;
+		return getIntermediateResult_();
+	}
+
+	const System& DockingAlgorithm::getIntermediateResult_()
+		throw()
+	{
+		Log.error() << "This is just an interface definition. Check your dynamic binding" << endl;
+		return System();
 	}
 
 	ConformationSet DockingAlgorithm::getConformationSet(Index /*total_conformations*/)

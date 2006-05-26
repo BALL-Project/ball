@@ -45,8 +45,7 @@ namespace BALL
 	sys_(dm.sys_),
       	t_origin_(dm.t_origin_),
 	t_extension_(dm.t_extension_),
-	ligand_positions_(dm.ligand_positions_),
-	redraw_(dm.redraw_)
+	ligand_positions_(dm.ligand_positions_)
   {
     if (dm.amber_ != 0) 
       amber_ = new AmberFF(*(dm.amber_));
@@ -91,7 +90,6 @@ namespace BALL
     t_origin_=dm.t_origin_;
     t_extension_=dm.t_extension_;
     ligand_positions_=dm.ligand_positions_;  
-    redraw_ = dm.redraw_;
     
     return *this;
   }
@@ -105,7 +103,6 @@ namespace BALL
 			   Vector3 t_box_lower, 
 			   Vector3 t_box_higher)
   {
-    redraw_ = false;
     
     ligand_ = new Molecule(*(sys_lig.getMolecule(0)));
     
@@ -333,15 +330,11 @@ namespace BALL
       (ligand_->getAtom(pos))->setPosition(ligand_positions_[pos]);
   }
 
-  bool DockMapping::redraw()
+ 	const System& DockMapping::getIntermediateResult()
+		throw()
   {
-    if (redraw_)
-      {
-	redraw_ = false;
-	return true;
-      }
-    
-    return false;
+		////////////////////////TODO/////////////////
+		return  system_backup_b_;
   }
   
 
@@ -351,8 +344,6 @@ namespace BALL
     
     for (uint y = 0; y < ligand_->countAtoms(); y++)
       original_ligand_->getAtom(y)->setPosition(ligand_->getAtom(y)->getPosition());
-    
-    redraw_ = true;
 
     restore();
   }

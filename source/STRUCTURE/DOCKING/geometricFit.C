@@ -75,7 +75,8 @@ namespace BALL
 	
   GeometricFit::GeometricFit()
     throw()
-    : FFT_grid_a_(0),
+    : DockingAlgorithm(),
+			FFT_grid_a_(0),
       FFT_grid_b_(0)
   {
   	options.setDefaultReal(Option::NEAR_RADIUS, Default::NEAR_RADIUS);
@@ -112,7 +113,8 @@ namespace BALL
 	*/
 	GeometricFit::GeometricFit(System &system1,System &system2)
 		throw()
-  : FFT_grid_a_(0),
+  : DockingAlgorithm(),
+		FFT_grid_a_(0),
     FFT_grid_b_(0) 
 	{
   	options.setDefaultReal(Option::NEAR_RADIUS, Default::NEAR_RADIUS);
@@ -145,7 +147,8 @@ namespace BALL
 	*/
 	GeometricFit::GeometricFit(Options& new_options)
 		throw()
-	: FFT_grid_a_(0),
+	: DockingAlgorithm(),
+		FFT_grid_a_(0),
 		FFT_grid_b_(0)
 	{
 		options = new_options;
@@ -157,6 +160,7 @@ namespace BALL
 	*/
 	GeometricFit::GeometricFit(System &system1, System &system2, Options& new_options)
 		throw()
+	:	DockingAlgorithm()
 	{
 		setup(system1, system2, new_options);
 	}
