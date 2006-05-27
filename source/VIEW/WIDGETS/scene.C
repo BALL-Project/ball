@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.51 2006/05/20 13:16:21 amoll Exp $
+// $Id: scene.C,v 1.174.2.52 2006/05/27 01:15:17 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1867,6 +1867,8 @@ namespace BALL
 			// ============ picking mode ================
 			if (current_mode_ == PICKING__MODE)
 			{
+				x_window_pos_new_ = e->globalX();
+				y_window_pos_new_ = e->globalY();
 				selectObjects_();
 				// update will be done from MolecularControl!
 				need_update_ = false; 			
@@ -1890,7 +1892,7 @@ namespace BALL
 
 		void Scene::initTimer()
 		{
- 			timer_.start(500); // ?????????????? currently doesnt work with QT 4.1
+ 			timer_.start(500);
 		}
 
 		void Scene::timerSignal_()
@@ -2153,33 +2155,15 @@ namespace BALL
 
 		void Scene::selectionPressedMoved_()
 		{
-			Position x[2];
-			Position y[2];
+			Position x0, x1, y0, y1;
 
-			if (x_window_pos_new_ < x_window_pick_pos_first_)
-			{
-				x[0] = x_window_pos_new_;
-				x[1] = x_window_pick_pos_first_;
-			}
-			else
-			{
-				x[0] = x_window_pick_pos_first_;
-				x[1] = x_window_pos_new_;
-			}
+			x0 = BALL_MIN(x_window_pos_new_, x_window_pick_pos_first_);
+			x1 = BALL_MAX(x_window_pos_new_, x_window_pick_pos_first_);
+			y0 = BALL_MIN(y_window_pos_new_, y_window_pick_pos_first_);
+			y1 = BALL_MAX(y_window_pos_new_, y_window_pick_pos_first_);
 
-			if (y_window_pos_new_ < y_window_pick_pos_first_)
-			{
-				y[0] = y_window_pos_new_;
-				y[1] = y_window_pick_pos_first_;
-			}
-			else
-			{
-				y[0] = y_window_pick_pos_first_;
-				y[1] = y_window_pos_new_;
-			}
-
-			QPoint p0 = mapFromGlobal(QPoint(x[0], y[0]));
-			QPoint p1 = mapFromGlobal(QPoint(x[1], y[1]));
+			QPoint p0 = mapFromGlobal(QPoint(x0, y0));
+			QPoint p1 = mapFromGlobal(QPoint(x1, y1));
 
 			rb_->setGeometry(QRect(p0, p1));
 			rb_->show();
