@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.52 2006/05/27 01:15:17 amoll Exp $
+// $Id: scene.C,v 1.174.2.53 2006/05/27 01:42:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -439,10 +439,12 @@ namespace BALL
 				font.setPixelSize(16);
 				font.setBold(true);
 				gl_renderer_.setColorRGBA_(c1);
+				glDisable(GL_LIGHTING);
 				renderText(info_point_.x() + 1, info_point_.y() + 1, info_string_.c_str(), font);
 				renderText(info_point_.x() - 1, info_point_.y() - 1, info_string_.c_str(), font);
 				gl_renderer_.setColorRGBA_(c2);
 				renderText(info_point_.x(), info_point_.y(), info_string_.c_str(), font);
+				glEnable(GL_LIGHTING);
 			}
 		}
 
