@@ -1,4 +1,4 @@
-// $Id: polarSolvation.C,v 1.2 2006/05/21 17:49:46 anker Exp $
+// $Id: polarSolvation.C,v 1.3 2006/05/27 09:05:23 anker Exp $
 
 #include <BALL/SCORING/COMPONENTS/polarSolvation.h>
 
@@ -271,7 +271,23 @@ namespace BALL
 		throw()
 	{
 
-		// we need local copies of the molecules
+		// Because we have local copies, we need to update the atom postition
+		// for our molecules.
+		AtomConstIterator src = getScoringFunction()->getReceptor()->beginAtom();
+		AtomIterator dst = desolv_protein_.beginAtom();
+		// This for-loop assumes that both systems are still of same size and
+		// that atoms are still in the same order. No checking done on this!
+		for (; +src && +dst; ++src, ++dst)
+		{
+			dst->setPosition(src->getPosition());
+		}
+
+		src = getScoringFunction()->getLigand()->beginAtom();
+		dst = desolv_ligand_.beginAtom();
+		for (; +src && +dst; ++src, ++dst)
+		{
+			dst->setPosition(src->getPosition());
+		}
 
 		// initialize 
 		score_ = 0.0;

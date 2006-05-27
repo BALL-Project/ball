@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaals.C,v 1.3 2006/05/21 17:35:25 anker Exp $
+// $Id: vanDerWaals.C,v 1.4 2006/05/27 09:05:23 anker Exp $
 
 
 #include <BALL/common.h>
@@ -661,7 +661,24 @@ type_atom2);
 		throw()
 	{
 
-		// Complex:
+		// Because we have local copies, we need to update the atom postition
+		// for our molecules.
+		AtomConstIterator src = getScoringFunction()->getReceptor()->beginAtom();
+		AtomIterator dst = vdw_receptor_->beginAtom();
+		// This for-loop assumes that both systems are still of same size and
+		// that atoms are still in the same order. No checking done on this!
+		for (; +src && +dst; ++src, ++dst)
+		{
+			dst->setPosition(src->getPosition());
+		}
+
+		src = getScoringFunction()->getLigand()->beginAtom();
+		dst = vdw_ligand_->beginAtom();
+		for (; +src && +dst; ++src, ++dst)
+		{
+			dst->setPosition(src->getPosition());
+		}
+
 
 		// Collect atoms
 		AtomVector atom_vector;

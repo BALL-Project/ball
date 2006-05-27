@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nonpolarSolvation.C,v 1.3 2006/05/21 17:51:41 anker Exp $
+// $Id: nonpolarSolvation.C,v 1.4 2006/05/27 09:05:23 anker Exp $
 
 #include <BALL/SCORING/COMPONENTS/nonpolarSolvation.h>
 #include <BALL/KERNEL/standardPredicates.h>
@@ -392,6 +392,24 @@ namespace BALL
 		// We need local copies of the molecules. The pointers returned by
 		// ScoringFunction::get*() should be non-zero if setup() was
 		// successful, so we don't check for NULL pointers here.
+
+		// Because we have local copies, we need to update the atom postition
+		// for our molecules.
+		AtomConstIterator src = getScoringFunction()->getReceptor()->beginAtom();
+		AtomIterator dst = receptor_.beginAtom();
+		// This for-loop assumes that both systems are still of same size and
+		// that atoms are still in the same order. No checking done on this!
+		for (; +src && +dst; ++src, ++dst)
+		{
+			dst->setPosition(src->getPosition());
+		}
+
+		src = getScoringFunction()->getLigand()->beginAtom();
+		dst = ligand_.beginAtom();
+		for (; +src && +dst; ++src, ++dst)
+		{
+			dst->setPosition(src->getPosition());
+		}
 
 		receptor_.apply(*processor_);
 		dG_protein = processor_->getEnergy();
