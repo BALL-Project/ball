@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: generalizedBornCase.C,v 1.2 2006/02/21 16:07:10 anker Exp $
+// $Id: generalizedBornCase.C,v 1.3 2006/05/27 09:05:40 anker Exp $
 
 #include <BALL/SOLVATION/generalizedBornCase.h>
 // #include "generalizedBornCase.h"
@@ -496,7 +496,7 @@ namespace BALL
 		// have to divide by two like given in the formula 
 		/*
 		  $$
-				W = \frac{1}{2} \frac{1}{\varepsilon_0 \varepsilon_r} 
+				W = \frac{1}{2} \frac{1}{4 \pi \varepsilon_0 \varepsilon_r} 
 					\sum_{i \neq j} \frac{q_i q_j}{r_{ij}}
 			$$
 		*/
