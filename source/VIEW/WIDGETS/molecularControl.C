@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.26 2006/05/17 11:23:12 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.27 2006/05/28 19:27:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -414,17 +414,20 @@ namespace BALL
 
 		void MolecularControl::compositeProperties()
 		{
+			if (context_composite_ == 0) return;
+
 			CompositeProperties as(context_composite_, this);
 			if (!as.exec()) return;
 
-			CompositeMessage* message = new CompositeMessage(
-					*context_composite_, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-			getMainControl()->sendMessage(*message);
+			getMainControl()->update(*context_composite_, true);
 		}
 
 		void MolecularControl::bondProperties()
 		{
+			if (context_composite_ == 0) return;
+
 			Atom* const atom = dynamic_cast<Atom*>(context_composite_);
+			if (atom == 0) return;
 			if (atom->countBonds() == 0) 
 			{
 				setStatusbarText("Atom has no bonds!");
@@ -436,11 +439,13 @@ namespace BALL
 			
 		void MolecularControl::buildBonds()
 		{
+			if (context_composite_ == 0) return;
 			notify_(new MolecularTaskMessage(MolecularTaskMessage::BUILD_BONDS));
 		}
 			
 		void MolecularControl::centerCamera()
 		{
+			if (context_composite_ == 0) return;
 			notify_(new CompositeMessage(*context_composite_, CompositeMessage::CENTER_CAMERA));
 		}
 
@@ -472,6 +477,7 @@ namespace BALL
  			GenericControl::updateSelection();
 
 			selected_.clear();
+			context_composite_ = 0;
 
 			QList<QTreeWidgetItem *> items = getSelectedItems();
 			QList<QTreeWidgetItem *>::iterator it = items.begin();
@@ -489,10 +495,10 @@ namespace BALL
 				selected_.push_back(item_to_composite_[item]);
 			}
 
+			if (selected_.size() > 0) context_composite_ = *selected_.begin();
+
 			if (selected_.size() == 1 && RTTI::isKindOf<System>(**selected_.begin()))
 			{
-				context_composite_ = *selected_.begin();
-
 				bool is_in_move_mode = 
 					(Scene::getInstance(0) != 0) &&
 					(Scene::getInstance(0)->getMode() == Scene::MOVE__MODE);
@@ -755,7 +761,7 @@ namespace BALL
 
 		void MolecularControl::cut()
 		{
-			if (getMainControl()->isBusy()) return;
+			if (getMainControl()->isBusy() || selected_.size() == 0) return;
 
 			// delete old composites in copy list
 			if (!was_delete_) clearClipboard();
@@ -770,9 +776,10 @@ namespace BALL
 			List<Composite*>::Iterator it = selected_.begin();	
 			for (; it != selected_.end(); it++)
 			{
-				if (!(**it).isRoot()) roots.insert(&(**it).getRoot());
+				Composite& c = **it;
+				if (!c.isRoot()) roots.insert(&c.getRoot());
 
-				getMainControl()->remove(**it, was_delete_, false);
+				getMainControl()->remove(c, was_delete_, false);
 
 				if (!was_delete_) copy_list_.push_back(*it);
 			}
@@ -813,7 +820,7 @@ namespace BALL
 
 		void MolecularControl::paste()
 		{
-			if (getMainControl()->isBusy()) return;
+			if (getMainControl()->isBusy() || selected_.size() == 0) return;
 
 			if (copy_list_.size() == 0) return;
 
@@ -1003,7 +1010,11 @@ namespace BALL
 
 		void MolecularControl::countItems()
 		{
-			if (context_item_ == 0) return;
+			if (context_composite_ == 0 ||
+					dynamic_cast<AtomContainer*>(context_composite_) == 0) 
+			{
+				return;
+			}
 
 			AtomContainer& ac = *(AtomContainer*) context_composite_;
 
