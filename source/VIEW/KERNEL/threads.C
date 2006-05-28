@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.41.2.4 2006/05/22 12:59:24 amoll Exp $
+// $Id: threads.C,v 1.41.2.5 2006/05/28 20:00:05 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -83,14 +83,15 @@ namespace BALL
 				output_("Invalid Address " + url_ + " in " + String(__FILE__) + ":" + String(__LINE__), true);
 				return;
 			}
+
+			MainControl* mc = getMainControl();
+			if (mc != 0)
+			{
+				tcp_.setProxy(mc->getProxy(), mc->getProxyPort());
+			}
+
 			try
 			{
-				MainControl* mc = getMainControl();
-				if (mc != 0)
-				{
-					tcp_.setProxy(mc->getProxy(), mc->getProxyPort());
-				}
-
 				if (file_name_ != "")
 				{
 					File f(file_name_, std::ios::out);

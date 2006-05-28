@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.24 2006/05/24 11:16:14 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.25 2006/05/28 20:00:05 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -360,7 +360,11 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					return 0;
 			}
 
-			connect(menu, SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
+			if (!RTTI::isKindOf<QMenu>(*menu->parent()))
+			{
+				connect(menu, SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
+			}
+
 			id_to_menu_[ID] = menu;
 
 			return menu;

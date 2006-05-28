@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.27 2006/05/28 19:27:54 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.28 2006/05/28 20:00:05 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -303,7 +303,6 @@ namespace BALL
 
 		void MolecularControl::buildContextMenu_()
 		{
-
 			// ===============================================================
 			// create representation context menu:
 			// ===============================================================
