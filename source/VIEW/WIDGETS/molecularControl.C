@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.30 2006/05/29 22:34:51 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.31 2006/05/29 23:12:30 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -474,7 +474,6 @@ namespace BALL
 
 		void MolecularControl::updateSelection()
 		{
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
  			GenericControl::updateSelection();
 
 			selected_.clear();
@@ -684,25 +683,11 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 		}
 
 
-		void MolecularControl::invalidateSelection()
-		{
-			//// weg? ??????????????????????
-			QList<QTreeWidgetItem *> items = listview->selectedItems();
-			QList<QTreeWidgetItem *>::iterator it = items.begin();
-
-			for (; it != items.end(); it++);
-			{
-				listview->setItemSelected(*it, false);
-			}
-
-			listview->setUpdatesEnabled(true);
-		}
-
 		// set the highlighting according to the selection in the MainControl
 		void MolecularControl::highlight(const List<Composite*>& selection)
 			throw()
 		{	
-			listview->setUpdatesEnabled(false);
+			enableUpdates_(false);
 			listview->clearSelection();
 
 			List<Composite*>::ConstIterator cit = selection.begin();
@@ -715,8 +700,7 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 				listview->setItemSelected(to_find->second, true);
 			}
 
-			listview->setUpdatesEnabled(true);
-			updateSelection();
+			enableUpdates_(true);
 		}
 
 		// set the checkboxes according to the selection in the MainControl
@@ -764,7 +748,7 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 			// delete old composites in copy list
 			if (!was_delete_) clearClipboard();
 
-			listview->setUpdatesEnabled(false);
+			enableUpdates_(false);
 
 			// remove the selected composites from the tree and from the scene
 			// if !was_delete_, copy them into the copy_list_
@@ -783,15 +767,14 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 			}
 
 			selected_.clear();
-			listview->setUpdatesEnabled(true);
-
-			notify_(new ControlSelectionMessage);
 
 			HashSet<Composite*>::Iterator roots_it = roots.begin();
 			for (; +roots_it; roots_it++)
 			{
 				getMainControl()->update(**roots_it, true);
 			}
+
+			enableUpdates_(true);
 		}
 
 
@@ -1203,7 +1186,7 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 		void MolecularControl::highlightSelection()
 			throw()
 		{
-			listview->setUpdatesEnabled(false);
+			enableUpdates_(false);
 			collapseAll();
 
 			std::map<QTreeWidgetItem*, Composite*>::iterator it = item_to_composite_.begin();
@@ -1226,10 +1209,20 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 				{
 					listview->setItemSelected(item, false);
 				}
-					
 			}
- 			listview->setUpdatesEnabled(true);
+
+			enableUpdates_(true);
+		}
+
+		void MolecularControl::enableUpdates_(bool state)
+		{
+			listview->setUpdatesEnabled(state);
+			disconnect(listview, SIGNAL(itemSelectionChanged()), this, SLOT(updateSelection()));
+			if (!state) return;
+
+			connect(listview, SIGNAL(itemSelectionChanged()), this, SLOT(updateSelection()));
 			listview->update();
+			updateSelection();
 		}
 
 		void MolecularControl::switchShowSecondaryStructure()
