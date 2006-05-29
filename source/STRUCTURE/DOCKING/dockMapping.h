@@ -80,16 +80,20 @@ namespace BALL
 
       void setGeneticPool(GeneticPool* pool);
 
-     	const System& getIntermediateResult()
-				throw();
- 
+      bool redraw(); 
+
+      const System& getIntermediateResult(bool&);
+      
     protected:
  
-	
-      Molecule* ligand_,* original_ligand_;
+      Molecule* ligand_,* original_ligand_,*draw_ligand_;
       
       System system_backup_a_;
       System system_backup_b_;
+
+
+
+      System draw_system_;
 
       /** System to calculate energies
        */
@@ -129,6 +133,8 @@ namespace BALL
       void restore();
 
       Options opt_;
+
+      bool redraw_;
     };
 }
   

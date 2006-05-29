@@ -49,9 +49,8 @@ namespace BALL
 
   EvolutionaryDocking::EvolutionaryDocking()
     throw()
-    :	DockingAlgorithm(),
-			ga_(0),
-     	dm_(0)
+    :ga_(0),
+     dm_(0)
   {
     options.setDefault(Option::GRID_FILE,Default::GRID_FILE);  
     options.setDefaultReal(Option::TRANSLATION_BOX_BOTTOM_X,Default::TRANSLATION_BOX_BOTTOM_X);  
@@ -75,9 +74,8 @@ namespace BALL
   
   EvolutionaryDocking::EvolutionaryDocking(System &system1, System &system2)
     throw()
-    :	DockingAlgorithm(),
-			ga_(0),
-    	dm_(0)
+    :ga_(0),
+    dm_(0)
   {
     options.setDefault(Option::GRID_FILE,Default::GRID_FILE);  
     options.setDefaultReal(Option::TRANSLATION_BOX_BOTTOM_X,Default::TRANSLATION_BOX_BOTTOM_X);  
@@ -103,18 +101,16 @@ namespace BALL
 
   EvolutionaryDocking::EvolutionaryDocking(Options& new_options)
     throw()
-    :	DockingAlgorithm(),
-			ga_(0),
-     	dm_(0)
+    :ga_(0),
+     dm_(0)
   {
     options=new_options;
   }
 
   EvolutionaryDocking::EvolutionaryDocking(System &system1,System &system2 ,Options& new_options)
     throw()
-    :	DockingAlgorithm(),
-			ga_(0),
-     	dm_(0)
+    :ga_(0),
+     dm_(0)
   {
     setup(system1, system2, new_options);
   }
@@ -155,27 +151,28 @@ namespace BALL
   void EvolutionaryDocking::start()
     throw()
   {
-		DockingAlgorithm::start();
+    
+    DockingAlgorithm::start();
     
     if (dm_ == 0)
-    {
-			Log.error() << "no mapping class!" << std::endl;
-			exit(0);
-    }
+      {
+	std::cerr << "no mapping class!" << std::endl;
+	exit(0);
+      }
     
     delete ga_;
 
     ga_ = new GeneticAlgorithm(dm_,
-	 	options.getInteger(Option::POPULATION_NUMBER),
-	 	options.getInteger(Option::MAX_ITERATIONS),
-	 	options.getInteger(Option::INITIAL_POPULATION),
-	 	options.getInteger(Option::POPULATION),
-	 	options.getInteger(Option::SURVIVORS),
-	 	options.getReal(Option::MUTATION_RATE),
-	 	options.getInteger(Option::MUTATION_SAVE),
-	 	options.getInteger(Option::CONV_ITERATIONS),
-	 	options.getReal(Option::CONV_VALUE),
-	 	options.getInteger(Option::CONV_START));
+			       options.getInteger(Option::POPULATION_NUMBER),
+			       options.getInteger(Option::MAX_ITERATIONS),
+			       options.getInteger(Option::INITIAL_POPULATION),
+			       options.getInteger(Option::POPULATION),
+			       options.getInteger(Option::SURVIVORS),
+			       options.getReal(Option::MUTATION_RATE),
+			       options.getInteger(Option::MUTATION_SAVE),
+			       options.getInteger(Option::CONV_ITERATIONS),
+			       options.getReal(Option::CONV_VALUE),
+			       options.getInteger(Option::CONV_START));
      
     ga_->start();
   }
@@ -198,10 +195,9 @@ namespace BALL
   }
 
 
-  const System& EvolutionaryDocking::getIntermediateResult_()
-		throw()
+  bool EvolutionaryDocking::redraw()
   {
-    return (dm_->getIntermediateResult());
+    return (dm_->redraw());
   }
 
   ConformationSet EvolutionaryDocking::getConformationSet(Index total_number)
@@ -223,8 +219,15 @@ namespace BALL
     delete dm_;
   }
   		  
-  
+  const System& EvolutionaryDocking::getIntermediateResult_()
+    throw()
+  {
+    return dm_->getIntermediateResult(system_changed_);
+  }
+    
 }
-
-
   
+
+
+
+

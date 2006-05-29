@@ -67,13 +67,14 @@ namespace BALL
 	float DockingAlgorithm::getProgress() const
 		throw()
 	{
-		Log.error() << "This is just an interface definition. Check your dynamic binding" << endl;
+		Log.error() << "This is just an interface definition. Check your dynamic binding" << std::endl;
 		return 0;
 	}
 
 	const System& DockingAlgorithm::getIntermediateResult()
 		throw()
 	{
+		//System& s = getIntermediateResult_();
 		system_changed_ = false;
 		return getIntermediateResult_();
 	}
@@ -81,7 +82,7 @@ namespace BALL
 	const System& DockingAlgorithm::getIntermediateResult_()
 		throw()
 	{
-		Log.error() << "This is just an interface definition. Check your dynamic binding" << endl;
+		Log.error() << "This is just an interface definition. Check your dynamic binding" << std::endl;
 		return System();
 	}
 

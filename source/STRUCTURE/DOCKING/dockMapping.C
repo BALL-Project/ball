@@ -45,7 +45,8 @@ namespace BALL
 	sys_(dm.sys_),
       	t_origin_(dm.t_origin_),
 	t_extension_(dm.t_extension_),
-	ligand_positions_(dm.ligand_positions_)
+	ligand_positions_(dm.ligand_positions_),
+	redraw_(dm.redraw_)
   {
     if (dm.amber_ != 0) 
       amber_ = new AmberFF(*(dm.amber_));
@@ -90,6 +91,7 @@ namespace BALL
     t_origin_=dm.t_origin_;
     t_extension_=dm.t_extension_;
     ligand_positions_=dm.ligand_positions_;  
+    redraw_ = dm.redraw_;
     
     return *this;
   }
@@ -103,8 +105,10 @@ namespace BALL
 			   Vector3 t_box_lower, 
 			   Vector3 t_box_higher)
   {
+    redraw_ = false;
     
     ligand_ = new Molecule(*(sys_lig.getMolecule(0)));
+    draw_ligand_ = new Molecule(*(sys_lig.getMolecule(0)));
     
     original_ligand_ = sys_lig.getMolecule(0);
     
@@ -114,6 +118,14 @@ namespace BALL
      */
     eg_ = new EnergyGrid(file,system_backup_a_, *ligand_);
     
+    
+    draw_system_ = system_backup_a_;
+    
+    draw_system_.insert(*draw_ligand_);
+
+		//String docking_name = system_ba.getName() + "_" + S2.getName();
+		draw_system_.setName(system_backup_a_.getName() + "_" + system_backup_b_.getName() );
+
     bool bound;
     
     eg_->getGridInfo(t_origin_,t_extension_,bound);
@@ -330,11 +342,15 @@ namespace BALL
       (ligand_->getAtom(pos))->setPosition(ligand_positions_[pos]);
   }
 
- 	const System& DockMapping::getIntermediateResult()
-		throw()
+  bool DockMapping::redraw()
   {
-		////////////////////////TODO/////////////////
-		return  system_backup_b_;
+    if (redraw_)
+      {
+	redraw_ = false;
+	return true;
+      }
+    
+    return false;
   }
   
 
@@ -343,7 +359,8 @@ namespace BALL
     move((*gp_)[0]);
     
     for (uint y = 0; y < ligand_->countAtoms(); y++)
-      original_ligand_->getAtom(y)->setPosition(ligand_->getAtom(y)->getPosition());
+      draw_ligand_->getAtom(y)->setPosition(ligand_->getAtom(y)->getPosition());
+    redraw_ = true;
 
     restore();
   }
@@ -366,15 +383,16 @@ namespace BALL
   ConformationSet DockMapping::getConformationSet(Index total_number)
   {
     
-    System S = system_backup_a_;
-    System S2 = system_backup_b_;
+    //System S = system_backup_a_;
+    //System S2 = system_backup_b_;
     
-    S.splice(S2);
-    String docking_name = S.getName() + "_" + S2.getName();
+    //S.splice(S2);
+    //String docking_name = system_ba.getName() + "_" + S2.getName();
     
-    S.setName(docking_name);
-    ConformationSet rc(S);
-    
+    //S.setName(docking_name);
+  	//ConformationSet rc(S);
+    ConformationSet rc(draw_system_);
+
     System sys_a = system_backup_a_;
     System sys_b = system_backup_b_;
     
@@ -421,4 +439,14 @@ namespace BALL
     
     return rc;
   }
+
+  const System& DockMapping::getIntermediateResult(bool& b)
+  {
+    //b = redraw_;
+
+    if (redraw_) redraw_ = false;
+
+    return draw_system_; 
+  }
+
 }

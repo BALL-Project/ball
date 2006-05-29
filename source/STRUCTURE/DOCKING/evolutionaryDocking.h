@@ -111,7 +111,7 @@ namespace BALL
       bool hasFinished() const
 	throw();
 
-      
+      bool redraw();
       
       /** Return the translation corresponding to conformation con_num.
        */
@@ -137,10 +137,10 @@ namespace BALL
 
 
     protected:
-
-			const System& getIntermediateResult_()
-				throw();
       
+      virtual const System& getIntermediateResult_()
+	throw();
+
       // Free all allocated memory and destroys the options and results
       void destroy_()
 	throw();
