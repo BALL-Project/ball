@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.2 2006/05/26 14:50:00 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.3 2006/05/29 15:55:39 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -316,7 +316,6 @@ namespace BALL
 					AmberFF* amber = new AmberFF;
 
   				System ligand(*(dock_dialog_.getSystem2()));
-  				System sys;
   
   				Path path;
   				String amber94gly = path.find("Amber/amber94gly.ini");
@@ -356,8 +355,11 @@ namespace BALL
 					{
 						Log.error() << it->first << " " << it->second << std::endl;
 					}
+					
+					//System sys;
+					dock_alg_->setup(*(dock_dialog_.getSystem2()),ligand,option);
+					//dock_alg_->setup(sys,ligand,option);
 
-					dock_alg_->setup(sys,ligand,option);
 
 					break;
 			}
@@ -494,14 +496,15 @@ namespace BALL
 			// add docked system to BALLView structures
 			const SnapShot& best_result = (*conformation_set)[0];
 
-			best_result.applySnapShot(*docked_system);
-			getMainControl()->update(*docked_system,true);
+			//best_result.applySnapShot(*docked_system_);
+			getMainControl()->update(*docked_system_,true);
+			//getMainControl()->insert(conformation_set->getSystem());
 			
 			// send a DockResultMessage
 			NewDockResultMessage* dock_res_m = new NewDockResultMessage();
 			// message is deleted by ConnectionObject
 			dock_res_m->setDockResult(*dock_res);
-			dock_res_m->setComposite(*docked_system);
+			dock_res_m->setComposite(*docked_system_);
 			notify_(dock_res_m);
 
 			// delete instance 
@@ -516,24 +519,29 @@ namespace BALL
 		void DockingController::updateSystem_()
 		{
 			Log.error() << "in DockingController::updateSystem_()" << std::endl;
-			if(dock_alg_->systemChanged())
-			{
+			//if(dock_alg_->systemChanged())
+			//{
 				// if function is called for the first time
-				if(was_called_)
+				if(!was_called_)
 				{
+					Log.error() << "was_called_ true" << std::endl;
 					// system is deleted by main control, when it is removed from BallView
-					System* docked_system = new System(dock_alg->getIntermediateResult());
+					docked_system_ = new System(dock_alg_->getIntermediateResult());
 					//getMainControl()->deselectCompositeRecursive(docked_system, true);
-					getMainControl()->insert(*docked_system);
+					getMainControl()->insert(*docked_system_);
+				 //notify_(new CompositeMessage(*docked_system_, CompositeMessage::CENTER_CAMERA));
+
 					was_called_ = true;
 				}
 				else
 				{
-					SnapShot sn = takeSnapshot(dock_alg->getIntermediateResult());
-					sn.applySnapShot(*docked_system);
-					getMainControl()->update(*docked_system, true);
+					Log.error() << "was_called_ false" << std::endl;
+					SnapShot sn;
+					sn.takeSnapShot(dock_alg_->getIntermediateResult());
+					sn.applySnapShot(*docked_system_);
+					getMainControl()->update(*docked_system_, true);
 				}
-			}
+			//}
 			
 			// if docking has not finished restart timer
 			if (!dock_alg_->hasFinished())
