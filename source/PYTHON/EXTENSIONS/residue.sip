@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.sip,v 1.8 2005/02/26 13:22:04 oliver Exp $
+// $Id: residue.sip,v 1.8.6.1 2006/05/29 15:52:44 amoll Exp $
 //
 
 class Residue
@@ -52,6 +52,8 @@ class Residue
   const Chain* getChain() const;
   PDBAtom* getPDBAtom(Position /position/);
   const PDBAtom* getPDBAtom(Position /position/) const;
+	SecondaryStructure* getSecondaryStructure() throw();
+	const SecondaryStructure* getSecondaryStructure() const throw();
   void setID(const String& /id/);
   const String& getID() const;
   void setInsertionCode(char /insertion_code/);
