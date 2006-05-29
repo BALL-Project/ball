@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.29 2006/05/29 09:59:51 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.30 2006/05/29 22:34:51 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -230,8 +230,8 @@ namespace BALL
 					case CompositeMessage::CHANGED_COMPOSITE_HIERARCHY:
 					{
 						List<Composite*> open_items;
-						HashMap<QTreeWidgetItem*, Composite*>::Iterator it = item_to_composite_.begin();
-						for (; +it; ++it)
+						std::map<QTreeWidgetItem*, Composite*>::iterator it = item_to_composite_.begin();
+						for (; it != item_to_composite_.end(); ++it)
 						{
 							if (listview->isItemExpanded((*it).first))
 							{
@@ -243,7 +243,7 @@ namespace BALL
 						addComposite(composite_message->getComposite()->getRoot());
 
 						List<Composite*>::Iterator lit = open_items.begin();
-						HashMap<Composite*, QTreeWidgetItem*>::Iterator to_find;
+						std::map<Composite*, QTreeWidgetItem*>::iterator to_find;
 						for (; lit != open_items.end(); lit++)
 						{
 							to_find = composite_to_item_.find(*lit);
@@ -474,6 +474,7 @@ namespace BALL
 
 		void MolecularControl::updateSelection()
 		{
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
  			GenericControl::updateSelection();
 
 			selected_.clear();
@@ -628,7 +629,7 @@ namespace BALL
 		Size MolecularControl::removeComposite(Composite& composite)
 			throw()
 		{
-			HashMap<Composite*, QTreeWidgetItem*>::Iterator to_find = 
+			std::map<Composite*, QTreeWidgetItem*>::iterator to_find = 
 				composite_to_item_.find(&composite);
 
 			if (to_find == composite_to_item_.end())
@@ -705,18 +706,13 @@ namespace BALL
 			listview->clearSelection();
 
 			List<Composite*>::ConstIterator cit = selection.begin();
+			std::map<Composite*, QTreeWidgetItem*>::iterator to_find;
 			for (; cit != selection.end(); cit++)
 			{
-				if (*cit == 0 || 
-						!composite_to_item_.has(*cit) ||
-						composite_to_item_[*cit] == 0) 
-				{
-		#ifdef BALL_VIEW_DEBUG
-					BALLVIEW_DEBUG
-		#endif
-					continue;
-				}
-				listview->setItemSelected(composite_to_item_[*cit], true);
+				to_find = composite_to_item_.find(*cit);
+				if (to_find == composite_to_item_.end()) continue;
+				
+				listview->setItemSelected(to_find->second, true);
 			}
 
 			listview->setUpdatesEnabled(true);
@@ -730,8 +726,8 @@ namespace BALL
 			if (!force) open = false; // ????????
 
 			ignore_checked_changes_ = true;
-			HashMap<Composite*, QTreeWidgetItem*>::Iterator cit = composite_to_item_.begin();
-			for (; +cit; ++cit)
+			std::map<Composite*, QTreeWidgetItem*>::iterator cit = composite_to_item_.begin();
+			for (; cit != composite_to_item_.end(); ++cit)
 			{
 				QTreeWidgetItem* const item = (*cit).second;
  				item->setCheckState(1, Qt::Unchecked);
@@ -739,16 +735,18 @@ namespace BALL
 
 			const HashSet<Composite*>& selection = getMainControl()->getSelection();
 			HashSet<Composite*>::ConstIterator sit = selection.begin();
+			std::map<Composite*, QTreeWidgetItem*>::iterator to_find;
 			for (; +sit; ++sit)
 			{
-				if (!composite_to_item_.has(*sit)) continue;
-				composite_to_item_[*sit]->setCheckState(1, Qt::Checked);
+				to_find = composite_to_item_.find(*sit);
+				if (to_find == composite_to_item_.end()) continue;
+				to_find->second->setCheckState(1, Qt::Checked);
 				Composite::ChildCompositeIterator cit = (**sit).beginChildComposite();
-				HashMap<Composite*, QTreeWidgetItem*>::Iterator fit;
+				std::map<Composite*, QTreeWidgetItem*>::iterator fit;
 				for (; +cit; ++cit)
 				{
 					fit = composite_to_item_.find(&*cit);
-					if (!+fit) continue;
+					if (fit == composite_to_item_.end()) continue;
 					
 					fit->second->setCheckState(1, Qt::Checked);
 				}
@@ -987,8 +985,8 @@ namespace BALL
 
 		void MolecularControl::collapseAll()
 		{
-			HashMap<QTreeWidgetItem*, Composite*>::Iterator it = item_to_composite_.begin();
-			for (; +it; ++it)
+			std::map<QTreeWidgetItem*, Composite*>::iterator it = item_to_composite_.begin();
+			for (; it != item_to_composite_.end(); ++it)
 			{
 				listview->collapseItem((*it).first);
 			}
@@ -996,8 +994,8 @@ namespace BALL
 
 		void MolecularControl::expandAll()
 		{
-			HashMap<QTreeWidgetItem*, Composite*>::Iterator it = item_to_composite_.begin();
-			for (; +it; ++it)
+			std::map<QTreeWidgetItem*, Composite*>::iterator it = item_to_composite_.begin();
+			for (; it != item_to_composite_.end(); ++it)
 			{
 				listview->expandItem((*it).first);
 			}
@@ -1208,8 +1206,8 @@ namespace BALL
 			listview->setUpdatesEnabled(false);
 			collapseAll();
 
-			HashMap<QTreeWidgetItem*, Composite*>::Iterator it = item_to_composite_.begin();
-			for (; +it; ++it)
+			std::map<QTreeWidgetItem*, Composite*>::iterator it = item_to_composite_.begin();
+			for (; it != item_to_composite_.end(); ++it)
 			{
 				QTreeWidgetItem* item = (*it).first;
 

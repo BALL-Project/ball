@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.50.2.12 2006/05/15 23:18:34 amoll Exp $
+// $Id: molecularControl.h,v 1.50.2.13 2006/05/29 22:35:00 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -454,8 +454,8 @@ class BALL_VIEW_EXPORT MolecularControl
 
 	ModelType 			selected_model_;
 	ColoringMethod  selected_coloring_method_;
-	HashMap<QTreeWidgetItem*, Composite*> item_to_composite_;
-	HashMap<Composite*, QTreeWidgetItem*> composite_to_item_;
+	std::map<QTreeWidgetItem*, Composite*> item_to_composite_;
+	std::map<Composite*, QTreeWidgetItem*> composite_to_item_;
 
 	// let cut know to delete the entries, set by deleteCurrentItems()
 	bool 						was_delete_;
