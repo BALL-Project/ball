@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.28 2006/05/28 20:00:05 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.29 2006/05/29 09:59:51 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -373,6 +373,7 @@ namespace BALL
 			context_menu_.addSeparator();
 			show_ss_id_ = context_menu_.addAction("Show Secondary Structures", this, 
 																						SLOT(switchShowSecondaryStructure()));
+			show_ss_id_->setCheckable(true);
 
 			// ===============================================================
 			// edit context menu:
