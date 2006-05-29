@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.17.2.5 2006/05/08 21:55:39 amoll Exp $
+// $Id: genericControl.C,v 1.17.2.6 2006/05/29 22:06:43 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
@@ -38,8 +38,7 @@ namespace BALL
 		GenericControl::ItemList GenericControl::getSelectedItems()
 			throw()
 		{
-			QList<QTreeWidgetItem*> result;
-			result = listview->selectedItems();
+			QList<QTreeWidgetItem*> result = listview->selectedItems();
 			if (result.size() > 0)
 			{
 				context_item_ = *result.begin();
@@ -59,16 +58,13 @@ namespace BALL
 
 		void GenericControl::updateSelection() 
 		{
-			if (getSelectedItems().size() != 0) deselectOtherControls_();
+			if (getSelectedItems().size() > 0) deselectOtherControls_();
 		}
 
 		void GenericControl::onNotify(Message *message)
 			throw()
 		{
-			if (!RTTI::isKindOf<DeselectControlsMessage>(*message))
-			{
-				return;
-			}
+			if (!RTTI::isKindOf<DeselectControlsMessage>(*message)) return;
 
 			listview->clearSelection();
 		}
