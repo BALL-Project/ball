@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.sip,v 1.9 2004/02/25 10:47:13 oliver Exp $
+// $Id: secondaryStructure.sip,v 1.9.10.1 2006/05/30 16:03:50 amoll Exp $
 //
 
 class SecondaryStructure
@@ -49,11 +49,11 @@ class SecondaryStructure
   const PDBAtom* getPDBAtom(int) const;
   int countResidues() const;
   int countPDBAtoms() const;
-  void prepend(Residue&);
-  void append(Residue&);
-  void insert(Residue&);
-  void insertBefore(Residue&, Composite&);
-  void insertAfter(Residue&, Composite&);
+  void prepend(Residue& /Transfer/);
+  void append(Residue& /Transfer/);
+  void insert(Residue& /Transfer/);
+  void insertBefore(Residue& /Transfer/, Composite&);
+  void insertAfter(Residue& /Transfer/, Composite&);
   bool remove(Residue&);
   void spliceBefore(SecondaryStructure&);
   void spliceAfter(SecondaryStructure&);

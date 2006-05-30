@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.sip,v 1.12.2.1 2006/04/13 13:42:57 amoll Exp $
+// $Id: molecularControl.sip,v 1.12.2.2 2006/05/30 16:03:48 amoll Exp $
 //
 
 class MolecularControl
@@ -47,7 +47,6 @@ class MolecularControl
   void countItems();
   void showFilename();
   void updateSelection();
-  void invalidateSelection();
 	void highlightSelection() throw();
 	void highlight(PyCompositeList) throw();
   void cut();

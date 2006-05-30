@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.sip,v 1.7 2003/11/01 09:27:37 oliver Exp $
+// $Id: chain.sip,v 1.7.10.1 2006/05/30 16:03:47 amoll Exp $
 //
 
 class Chain
@@ -39,17 +39,17 @@ class Chain
   int countSecondaryStructures() const;
   int countResidues() const;
   int countPDBAtoms() const;
-  void prepend(SecondaryStructure&);
-  void append(SecondaryStructure&);
-  void insert(SecondaryStructure&);
-  void insertBefore(SecondaryStructure&, Composite&);
-  void insertAfter(SecondaryStructure&, Composite&);
+  void prepend(SecondaryStructure& /Transfer/);
+  void append(SecondaryStructure& /Transfer/);
+  void insert(SecondaryStructure& /Transfer/);
+  void insertBefore(SecondaryStructure& /Transfer/, Composite&);
+  void insertAfter(SecondaryStructure& /Transfer/, Composite&);
   bool remove(SecondaryStructure&);
-  void prepend(Residue&);
-  void append(Residue&);
-  void insert(Residue&);
-  void insertBefore(Residue&,Composite&);
-  void insertAfter(Residue&, Composite&);
+  void prepend(Residue& /Transfer/);
+  void append(Residue& /Transfer/);
+  void insert(Residue& /Transfer/);
+  void insertBefore(Residue& /Transfer/,Composite&);
+  void insertAfter(Residue& /Transfer/, Composite&);
   bool remove(Residue&);
   void spliceBefore(Chain&);
   void spliceAfter(Chain&);

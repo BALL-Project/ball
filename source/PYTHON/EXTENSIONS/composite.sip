@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.sip,v 1.5 2004/11/17 20:12:12 oliver Exp $
+// $Id: composite.sip,v 1.5.8.1 2006/05/30 16:03:47 amoll Exp $
 //
 
 class Composite
@@ -60,13 +60,13 @@ class Composite
   const Composite* getLastChild() const;
   const PreciseTime& getModificationTime() const throw();
   const PreciseTime& getSelectionTime() const throw();
-  void prependChild(Composite& /composite/);
-  void appendChild(Composite& /composite/);
+  void prependChild(Composite& /Transfer/);
+  void appendChild(Composite& /Transfer/);
   static bool insertParent
    (Composite& /parent/, Composite& /first/, 
     Composite& /last/, bool /destroy_parent/ = true);
-  void insertBefore(Composite& /composite/);
-  void insertAfter(Composite& /composite/);
+  void insertBefore(Composite& /Transfer/);
+  void insertAfter(Composite& /Transfer/);
   void spliceBefore(Composite& /composite/);
   void spliceAfter(Composite& /composite/);
   void splice(Composite& /composite/);
