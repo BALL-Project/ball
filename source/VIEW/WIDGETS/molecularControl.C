@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.31 2006/05/29 23:12:30 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.32 2006/05/30 16:44:45 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -616,9 +616,9 @@ namespace BALL
 			QString name = given_name.c_str();
 
 			// generate ListViewItem and insert it into the ListView
-			ignore_checked_changes_ = true;
+			ignoreCheckChanges_(true);
 			generateListViewItem_(0, composite, &name);
-			ignore_checked_changes_ = false;
+			ignoreCheckChanges_(false);
 
 			// update the view
 			updateSelection();
@@ -709,7 +709,7 @@ namespace BALL
 		{	
 			if (!force) open = false; // ????????
 
-			ignore_checked_changes_ = true;
+			ignoreCheckChanges_(true);
 			std::map<Composite*, QTreeWidgetItem*>::iterator cit = composite_to_item_.begin();
 			for (; cit != composite_to_item_.end(); ++cit)
 			{
@@ -737,7 +737,7 @@ namespace BALL
 			}
 
 			setStatusbarText(String(getMainControl()->getSelection().size()) + " objects selected.");
-			ignore_checked_changes_ = false;
+			ignoreCheckChanges_(false);
 		}
 
 
@@ -1196,14 +1196,7 @@ namespace BALL
 
 				if (item->checkState(1) == Qt::Checked)
 				{
-					listview->expandItem(item);
 					listview->setItemSelected(item, true);
-					QTreeWidgetItem* parent = item->parent();
-					while (parent != 0 && !listview->isItemExpanded(parent))
-					{
-						listview->expandItem(parent);
-						parent = parent->parent();
-					}
 				}
 				else
 				{
@@ -1211,7 +1204,28 @@ namespace BALL
 				}
 			}
 
+			HashSet<Composite*> selection = getMainControl()->getSelection();
+			HashSet<Composite*>::Iterator sit = selection.begin();
+			
+			QTreeWidgetItem* item = 0;
+			for (; +sit; ++sit)
+			{
+				if (composite_to_item_.find(*sit) != composite_to_item_.end())
+				{
+					item = composite_to_item_[*sit];
+					QTreeWidgetItem* parent = item->parent();
+					while (parent != 0 && !listview->isItemExpanded(parent))
+					{
+						listview->expandItem(parent);
+						parent = parent->parent();
+					}
+
+					break;
+				}
+			}
+
 			enableUpdates_(true);
+			if (item != 0) listview->scrollToItem(item);
 		}
 
 		void MolecularControl::enableUpdates_(bool state)
@@ -1223,6 +1237,17 @@ namespace BALL
 			connect(listview, SIGNAL(itemSelectionChanged()), this, SLOT(updateSelection()));
 			listview->update();
 			updateSelection();
+		}
+
+		void MolecularControl::ignoreCheckChanges_(bool state)
+		{
+			ignore_checked_changes_ = state;
+			disconnect(listview, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
+			enableUpdates_(!state);
+
+			if (state) return;
+
+			connect(listview, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
 		}
 
 		void MolecularControl::switchShowSecondaryStructure()
