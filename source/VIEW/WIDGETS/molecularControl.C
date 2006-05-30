@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.33 2006/05/30 17:01:55 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.34 2006/05/30 17:12:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -1188,18 +1188,20 @@ namespace BALL
 		{
 			enableUpdates_(false);
 			collapseAll();
+			listview->clearSelection();
 
-			std::map<QTreeWidgetItem*, Composite*>::iterator it = item_to_composite_.begin();
-			QTreeWidgetItem* item;
-			for (; it != item_to_composite_.end(); ++it)
-			{
-				item = (*it).first;
-				listview->setItemSelected(item, (item->checkState(1) == Qt::Checked));
-			}
-
-			item = 0;
 			HashSet<Composite*> selection = getMainControl()->getSelection();
 			HashSet<Composite*>::Iterator sit = selection.begin();
+			std::map<Composite*, QTreeWidgetItem*>::iterator fit;
+			for (; +sit; ++sit)
+			{
+				fit = composite_to_item_.find(*sit);
+				if (fit == composite_to_item_.end()) continue;
+				listview->setItemSelected(fit->second, true);
+			}
+
+			QTreeWidgetItem* item = 0;
+			sit = selection.begin();
 			for (; +sit; ++sit)
 			{
 				if (composite_to_item_.find(*sit) != composite_to_item_.end())
