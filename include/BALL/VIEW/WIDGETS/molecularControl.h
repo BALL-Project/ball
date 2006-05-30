@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.50.2.13 2006/05/29 22:35:00 amoll Exp $
+// $Id: molecularControl.h,v 1.50.2.14 2006/05/30 15:43:58 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -225,12 +225,6 @@ class BALL_VIEW_EXPORT MolecularControl
 	*/
 	virtual void updateSelection();
 
-	/** Invalidate the selection.
-			All selected items in the tree will be deselected. \par
-			Calls updateSelection().
-	*/
-	void invalidateSelection();
-
 	///
 	void highlightSelection()
 		throw();
@@ -422,6 +416,8 @@ class BALL_VIEW_EXPORT MolecularControl
 
 	//
 	List<QTreeWidgetItem*> getAllItems_();
+
+	void enableUpdates_(bool state);
 	
 	//@} 
 	/** @name Menu entries ids
