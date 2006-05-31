@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.3 2006/05/29 15:55:39 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.4 2006/05/31 12:48:43 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -33,7 +33,7 @@
 #include "../../STRUCTURE/DOCKING/evolutionaryDocking.h"
 #include <BALL/SYSTEM/path.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
-
+#include <BALL/VIEW/MODELS/surfaceModel.h>
 
 #include <BALL/VIEW/KERNEL/threads.h>
 
@@ -336,10 +336,10 @@ namespace BALL
 
   				Options option;
   				option.set(EvolutionaryDocking::Option::GRID_FILE,"1A30");
-  				option.set(EvolutionaryDocking::Option::MAX_ITERATIONS,100);
-  				option.set(EvolutionaryDocking::Option::INITIAL_POPULATION,1000);
-  				option.set(EvolutionaryDocking::Option::POPULATION,40);
-  				option.set(EvolutionaryDocking::Option::SURVIVORS,20);
+  				option.set(EvolutionaryDocking::Option::MAX_ITERATIONS,1000);
+  				option.set(EvolutionaryDocking::Option::INITIAL_POPULATION,10000);
+  				option.set(EvolutionaryDocking::Option::POPULATION,80);
+  				option.set(EvolutionaryDocking::Option::SURVIVORS,40);
   				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_X,center.x); 
   				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Y,center.y); 
   				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Z,center.z); 
@@ -386,7 +386,7 @@ namespace BALL
 				// start thread
 				// function calls DockingThread::run()
 				thread->start();
-				progress_dialog_->show();
+				//progress_dialog_->show();
 
 				switch(index)
 				{
@@ -518,13 +518,13 @@ namespace BALL
 	
 		void DockingController::updateSystem_()
 		{
-			Log.error() << "in DockingController::updateSystem_()" << std::endl;
+			//Log.error() << "in DockingController::updateSystem_()" << std::endl;
 			//if(dock_alg_->systemChanged())
 			//{
 				// if function is called for the first time
 				if(!was_called_)
 				{
-					Log.error() << "was_called_ true" << std::endl;
+					//Log.error() << "was_called_ true" << std::endl;
 					// system is deleted by main control, when it is removed from BallView
 					docked_system_ = new System(dock_alg_->getIntermediateResult());
 					//getMainControl()->deselectCompositeRecursive(docked_system, true);
@@ -535,7 +535,7 @@ namespace BALL
 				}
 				else
 				{
-					Log.error() << "was_called_ false" << std::endl;
+					//Log.error() << "was_called_ false" << std::endl;
 					SnapShot sn;
 					sn.takeSnapShot(dock_alg_->getIntermediateResult());
 					sn.applySnapShot(*docked_system_);
