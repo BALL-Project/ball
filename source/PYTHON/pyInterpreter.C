@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.C,v 1.13.2.1 2006/05/31 13:31:11 amoll Exp $
+// $Id: pyInterpreter.C,v 1.13.2.2 2006/05/31 15:38:06 amoll Exp $
 //
 
 #include <Python.h>
@@ -141,14 +141,14 @@ namespace BALL
 		if (!valid_) return "";
 
 		state = false;
-		if (runSingleString_("OLDSTDOUT = sys.stdout", Py_single_input) == 0) return error_message_;
-		if (runSingleString_("CIO = cStringIO.StringIO()", Py_single_input) == 0) return error_message_;
-		if (runSingleString_("sys.stdout=CIO", Py_single_input) == 0) return error_message_;
-		if (runSingleString_("sys.stderr=CIO", Py_single_input) == 0) return error_message_;
+		if (runSingleString_("CIO = cStringIO.StringIO()", Py_single_input) == 0 ||
+		    runSingleString_("sys.stdout=CIO", Py_single_input) == 0 ||
+		    runSingleString_("sys.stderr=CIO", Py_single_input) == 0) 
+		{
+			return error_message_;
+		}
 		
-		PyErr_Clear();
-		if (runSingleString_(const_cast<char*>(s.c_str()), Py_single_input) == 0) return error_message_;
-		state = true;
+		if (runSingleString_(s, Py_single_input) != 0) state = true;
 
 		// retrieve output
 		PyObject* result = runSingleString_("str(CIO.getvalue())", Py_eval_input);
@@ -158,10 +158,9 @@ namespace BALL
 			PyArg_Parse(result, "s", &buf);
 			return buf;
 		}
-		else
-		{
-			return "";
-		}
+		
+		// should not happen:
+		return "";
 	}
 
 	String PyInterpreter::runFile(const String& filename)
@@ -169,17 +168,18 @@ namespace BALL
 	{
 		if (!valid_) return "";
 
-		if (runSingleString_("OLDSTDOUT = sys.stdout", Py_single_input) == 0) return error_message_;
-		if (runSingleString_("CIO = cStringIO.StringIO()", Py_single_input) == 0) return error_message_;
-		if (runSingleString_("sys.stdout = CIO", Py_single_input) == 0) return error_message_;
-		if (runSingleString_("sys.stderr = CIO", Py_single_input) == 0) return error_message_;
-		PyErr_Clear();
+		if (runSingleString_("CIO = cStringIO.StringIO()", Py_single_input) == 0 ||
+		    runSingleString_("sys.stdout = CIO", Py_single_input) == 0 || 
+		    runSingleString_("sys.stderr = CIO", Py_single_input) == 0) 
+		{
+			return error_message_;
+		}
 		
 		String result_string;
 		LineBasedFile file(filename);
 		while (file.readLine())
 		{
-			if (runSingleString_(const_cast<char*>(file.getLine().c_str()), Py_single_input) == 0) 
+			if (runSingleString_(file.getLine(), Py_single_input) == 0) 
 			{
 				result_string += "Error in Line " + String(file.getLineNumber()) + " in file " + filename;
 				return result_string;
