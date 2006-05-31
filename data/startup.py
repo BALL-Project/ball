@@ -2,6 +2,10 @@
 true=1
 false=0
 
+def printError():
+	import traceback
+	traceback.print_last()
+
 ###################### MAIN WIDGETS: #######################
 def getMainControl():
 	return MainControl.getInstance(0)
