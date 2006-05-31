@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideDialog.C,v 1.11.2.2 2006/02/01 13:23:47 amoll Exp $
+// $Id: peptideDialog.C,v 1.11.2.3 2006/05/31 19:43:16 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>
@@ -44,13 +44,13 @@ namespace BALL
 			connect( tyr, SIGNAL( pressed() ), this, SLOT( tyr_pressed() ) );
 			connect( val, SIGNAL( pressed() ), this, SLOT( val_pressed() ) );
 			connect( close_button, SIGNAL( pressed() ), this, SLOT( close_pressed() ) );
-			connect( alpha, SIGNAL( stateChanged(int) ), this, SLOT( angle_changed() ) );
 			connect( phi, SIGNAL( returnPressed() ), this, SLOT( angle_changed() ) );
 			connect( psi, SIGNAL( returnPressed() ), this, SLOT( angle_changed() ) );
 			connect( omega, SIGNAL( returnPressed() ), this, SLOT( angle_changed() ) );
 			connect( asp, SIGNAL( pressed() ), this, SLOT( asp_pressed() ) );
-			connect( beta, SIGNAL( stateChanged(int) ), this, SLOT( angle_changed() ) );
-			connect( other, SIGNAL( stateChanged(int) ), this, SLOT( angle_changed() ) );
+			connect( alpha, SIGNAL( toggled(bool) ), this, SLOT( angle_changed() ) );
+			connect( beta, SIGNAL( toggled(bool) ), this, SLOT( angle_changed() ) );
+			connect( other, SIGNAL( toggled(bool) ), this, SLOT( angle_changed() ) );
 			connect( sequence, SIGNAL( textChanged(const QString&) ), this, SLOT( insert_seq() ) );
 			connect( cancel_button, SIGNAL( pressed() ), this, SLOT( close() ) );
 

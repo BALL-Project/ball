@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.h,v 1.6.2.1 2006/01/13 15:35:22 amoll Exp $
+// $Id: charmmConfigurationDialog.h,v 1.6.2.2 2006/05/31 19:43:19 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_CHARMMCONFIGURATIONDIALOG_H
@@ -64,11 +64,13 @@ namespace BALL
 			void periodicBoundaryClicked()
 				throw();
 
-			protected:
+			protected slots:
 
 			virtual void resetOptions();
 			
 			virtual void browseParameterFiles();
+
+			protected:
 
 			void setCharmmFF(CharmmFF& charmm)
 				throw();
