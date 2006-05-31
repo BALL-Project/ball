@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.C,v 1.13 2005/12/23 17:02:45 amoll Exp $
+// $Id: pyInterpreter.C,v 1.13.2.1 2006/05/31 13:31:11 amoll Exp $
 //
 
 #include <Python.h>
@@ -30,6 +30,7 @@ namespace BALL
 		PyObject* result = PyRun_String(const_cast<char*>(str.c_str()), mode, context_, context_);
 		if (PyErr_Occurred())
 		{
+			PyErr_Print();
 			PyObject* type;
 			PyObject* value;
 			PyObject* range;
@@ -48,7 +49,6 @@ namespace BALL
 			
 			error_message_ += "\n";
 
-			PyErr_Clear();
 			return 0;
 		}
 		
