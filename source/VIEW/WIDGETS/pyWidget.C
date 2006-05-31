@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.34 2006/05/31 13:31:01 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.35 2006/05/31 15:37:40 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -808,23 +808,15 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			// print results:
 			if (result != "") 
 			{
-				result = "> " + result; 
 				// did an error occur?
 				setError_(!state);
-				if (!state && result.hasSubstring("error message could not be parsed"))
+				if (!state)
 				{
-					// an error occured an we could not parse it!
-					// try to print a backtrace:
-					bool temp_state;
-					String msg = "> ERROR: ";
- 					msg += runCommand_("printError()", temp_state);
-					// if we have no backtrace, print the general error message
-					if (!temp_state) msg = result;
-
-					appendText(msg);
+					appendText(result);
 				}
 				else
 				{
+					result = String("> ") + result;
 					appendText(result);
 				}
 
