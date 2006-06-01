@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.53 2006/05/27 01:42:08 amoll Exp $
+// $Id: scene.C,v 1.174.2.54 2006/06/01 15:15:24 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1247,8 +1247,10 @@ namespace BALL
 		void Scene::writePreferences(INIFile& inifile)
 			throw()
 		{
+			// workaround: otherwise the variable might not get set
+			window_menu_entry_->setChecked(!isHidden());
+
 			ModularWidget::writePreferences(inifile);
-			inifile.insertValue("WINDOWS", getIdentifier() + "::on", String(true));
 
 			inifile.appendSection("EXPORT");
 			inifile.insertValue("EXPORT", "POVNR", String(pov_nr_));
