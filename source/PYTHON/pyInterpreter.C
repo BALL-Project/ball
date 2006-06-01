@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.C,v 1.13.2.2 2006/05/31 15:38:06 amoll Exp $
+// $Id: pyInterpreter.C,v 1.13.2.3 2006/06/01 18:44:12 amoll Exp $
 //
 
 #include <Python.h>
@@ -148,19 +148,17 @@ namespace BALL
 			return error_message_;
 		}
 		
-		if (runSingleString_(s, Py_single_input) != 0) state = true;
+		state = (runSingleString_(s, Py_single_input) != 0);
 
 		// retrieve output
+		char* buf = 0;
 		PyObject* result = runSingleString_("str(CIO.getvalue())", Py_eval_input);
 		if (result != 0)
 		{
-			char* buf;
 			PyArg_Parse(result, "s", &buf);
-			return buf;
 		}
 		
-		// should not happen:
-		return "";
+		return buf;
 	}
 
 	String PyInterpreter::runFile(const String& filename)
