@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.34 2006/05/30 17:12:59 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.35 2006/06/01 12:02:42 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -149,14 +149,10 @@ namespace BALL
 			}
 			else
 			{
-				if (getSelection().size() != 1)
-					hint = "One item must be selected to paste into.";
-				else if (copy_list_.size() == 0)
-					hint = "No copied/cuted object.";
-				else if (main_control.isBusy())
-					hint = "Simulation running, cant paste meanwhile";
-				else
-					hint = "Update of Representation running, cant paste meanwhile";
+				if (getSelection().size() != 1) 	hint = "One item must be selected to paste into.";
+				else if (copy_list_.size() == 0) 	hint = "No copied/cuted object.";
+				else if (main_control.isBusy()) 	hint = "Simulation running, cant paste meanwhile";
+				else 															hint = "Update of Representation running, cant paste meanwhile";
 			}
 			paste_id_->setEnabled(allow_paste);	
 			getMainControl()->setMenuHint(paste_id_, hint);
@@ -193,10 +189,9 @@ namespace BALL
 			deselect_id_->setEnabled(list_filled);	
 			getMainControl()->setMenuHint(deselect_id_, hint);
 
-
+			// enable global delete entry for all GenericControls, if this Control has the selection
 			if (selected_.size() > 0)
 			{
-				// enable global delete entry for all GenericControls, if this Control has the selection
 				getMainControl()->setDeleteEntryEnabled(!busy);
 			}
 		}
@@ -462,8 +457,7 @@ namespace BALL
 			
 			if (ac != 0)
 			{
-				setStatusbarText("Composite is from file  " +
-													ac->getProperty("FROM_FILE").getString());
+				setStatusbarText("Composite is from file  " + ac->getProperty("FROM_FILE").getString());
 			}
 			else
 			{
@@ -575,12 +569,9 @@ namespace BALL
 
 			main_control.insertPopupMenuSeparator(MainControl::EDIT);
 
-			cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Cu&t", this, SLOT(cut()), 
-																						 Qt::CTRL+Qt::Key_X);
-			copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Copy", this, SLOT(copy()), 
-																							Qt::CTRL+Qt::Key_C);
-			paste_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Paste", this, SLOT(paste()), 
-																								Qt::CTRL+Qt::Key_V);
+			cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Cu&t", this, SLOT(cut()), Qt::CTRL+Qt::Key_X);
+			copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Copy", this, SLOT(copy()), Qt::CTRL+Qt::Key_C);
+			paste_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Paste", this, SLOT(paste()), Qt::CTRL+Qt::Key_V);
 
 			main_control.insertDeleteEntry();
 			main_control.insertPopupMenuSeparator(MainControl::EDIT);
@@ -640,6 +631,8 @@ namespace BALL
 
 			nr_items_removed_ = 1;
 			removeRecursive_(to_find->second);
+			context_composite_ = 0;
+			context_item_ = 0;
 			return nr_items_removed_;
 		}
 
