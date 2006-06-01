@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.4.2.1 2006/05/26 14:53:09 leonhardt Exp $
+// $Id: dockingController.h,v 1.1.2.4.2.2 2006/06/01 12:06:43 leonhardt Exp $
 //
 
 #ifndef BALL_WIDGETS_DOCKINGCONTROLLER_H
@@ -224,6 +224,8 @@ namespace BALL
 				/** Flag for \link DockingController::updateSystem_ updateSystem_ \endlink. 
 					*/
 				bool was_called_;
+
+				System* docked_system_;
 
 		};
 	} // end of namespace View
