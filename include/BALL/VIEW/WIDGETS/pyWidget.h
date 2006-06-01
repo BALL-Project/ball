@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.17 2006/05/08 22:57:39 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.18 2006/06/01 18:43:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -229,6 +229,14 @@ namespace BALL
 
 			//
 			void showClassDocu(String classname, String member);
+
+			//
+			virtual void fetchPreferences(INIFile& inifile)
+				throw();
+			
+			//
+			virtual void writePreferences(INIFile& inifile)
+				throw();
 
 			public slots:
 

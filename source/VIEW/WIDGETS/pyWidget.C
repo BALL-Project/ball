@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.35 2006/05/31 15:37:40 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.36 2006/06/01 18:42:51 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -567,8 +567,10 @@ void PythonHighlighter::highlightBlock(const QString& text)
 		bool PyWidget::runFile(const String& filename)
 			throw()
 		{
-			last_script_ = filename;
 			stop_script_ = false;
+			full_silent_ = filename.hasSuffix("startup.py");
+			if (!full_silent_) last_script_ = filename;
+
 			appendText(String("> executing script from " + filename + "\n").c_str());
 			LineBasedFile file;
 			try
@@ -583,37 +585,42 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			}
 
 			// no prompts!
-			silent_ = true;
+ 			silent_ = true;
 
-			full_silent_ = filename.hasSubstring("startup");
-
+			vector<String> lines;
 			while (file.readLine())
 			{
-				if (!parseLine_(file.getLine()) || stop_script_)
+				lines.push_back(file.getLine());
+ 			}
+			lines.push_back("");
+
+			bool aborted = false;
+			for (Position i = 0; i < lines.size() && !aborted; i++)
+			{
+				if (!parseLine_(lines[i]))
 				{
-					if (stop_script_)
-					{
-						setStatusbarText("Aborted script");
-						appendText("> aborted...");
-					}
-					else
-					{
-						String result_string = "> Error in line " + String(file.getLineNumber()) + " of file " + filename + "\n";
-						appendText(result_string.c_str());
-					}
-					silent_ = false;
-					full_silent_ = false;
-					newPrompt_();
-					return false;
+					String result_string = "> Error in line " + String(i + 1) + " of file " + filename + "\n";
+					appendText(result_string.c_str());
+					aborted = true;
+				}
+
+				if (stop_script_)
+				{
+					setStatusbarText("Aborted script", true);
+					appendText("> aborted...");
+					aborted = true;
 				}
 			}
 
 			silent_ = false;
 			full_silent_ = false;
-			appendText("> Finished.");
-			setStatusbarText("Finished script.");
+			if (!aborted)
+			{
+				appendText("> Finished.");
+				setStatusbarText("Finished script.");
+			}
 			newPrompt_();
-			return true;
+			return !aborted;
 		}
 
 		void PyWidget::dump(std::ostream& s, Size depth) const
@@ -1161,6 +1168,24 @@ void PythonHighlighter::highlightBlock(const QString& text)
 		void PyWidget::showHelp_()
 		{
 			showClassDocu(class_, member_);
+		}
+
+		void PyWidget::writePreferences(INIFile& inifile)
+			throw()
+		{
+			ModularWidget::writePreferences(inifile);
+			inifile.appendSection("PYTHON");
+			inifile.insertValue("PYTHON", "last_script", last_script_);
+		}
+
+		void PyWidget::fetchPreferences(INIFile& inifile)
+			throw()
+		{
+			ModularWidget::fetchPreferences(inifile);
+			if (inifile.hasEntry("PYTHON", "last_script"))
+			{
+				last_script_ = inifile.getValue("PYTHON", "last_script");
+ 			}
 		}
 
 	} // namespace VIEW
