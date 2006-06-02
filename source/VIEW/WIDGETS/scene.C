@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.55 2006/06/02 13:55:18 amoll Exp $
+// $Id: scene.C,v 1.174.2.56 2006/06/02 19:25:27 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -475,6 +475,7 @@ namespace BALL
 				gl_renderer_.setColorRGBA_(color);
 				glDisable(GL_LIGHTING);
 				renderText(width() - 100, 20, temp.c_str(), font);
+				glEnable(GL_LIGHTING);
 
 				time_ = PreciseTime::now();
 			}
