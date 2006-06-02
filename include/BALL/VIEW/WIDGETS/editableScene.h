@@ -126,6 +126,9 @@ class BALL_VIEW_EXPORT EditableScene
 	void checkMenu(MainControl& main_control)
 		throw();
 
+	//
+	void showContextMenu(QPoint pos);
+
 	////////////////////////////////////////
 	public slots:
 
@@ -142,6 +145,10 @@ class BALL_VIEW_EXPORT EditableScene
 
 	virtual void atomMode_();
 	virtual void bondMode_();
+	void deleteAtom_();
+	void changeElement_();
+	void deleteBond_();
+	void changeBondOrder_();
 
 	////////////////////////////////////////
 	signals:
@@ -151,6 +158,9 @@ class BALL_VIEW_EXPORT EditableScene
 
 	////////////////////////////////////////
 	protected:
+
+	virtual void onNotify(Message *message)
+		throw();
 
 	/**
 	 * Insert a given Atom in the Scene. Its position is specified by the 2-dim 
@@ -196,6 +206,7 @@ class BALL_VIEW_EXPORT EditableScene
 
 	QAction* atom_id_, *bond_id_;	
 	Atom* current_atom_;
+	Bond* current_bond_;
 
 	Vector3 near_left_bot_;  //TODO:: name in XYZ left_bot_mnear
 	Vector3 near_right_bot_;
@@ -211,7 +222,7 @@ class BALL_VIEW_EXPORT EditableScene
 	int 	 atom_type_;
 
 	//undo stack
-	vector< EditOperation > undo_;
+	vector<EditOperation> undo_;
 };
 
 	}//end of namespace
