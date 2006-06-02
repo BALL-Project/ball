@@ -83,7 +83,7 @@ namespace BALL
 				first_atom_for_bond_(0),
 				atom_limit_(1.5),
 				bond_limit_(2.0),
-				editAtomType_(6),
+				atom_type_(6),
 				undo_()
 		{
 		}
@@ -95,13 +95,12 @@ namespace BALL
 				first_atom_for_bond_(0),
 				atom_limit_(1.5),
 				bond_limit_(2.0),
-				editAtomType_(6),
+				atom_type_(6),
 				undo_()
 		{	
 			registerWidget(this); 
 		}
 
-		// TODO: Was sollte ein Copyconstructor sinnvolles tun?
 		// undo_ is NOT copied, since we would run into trouble with the pointers to atoms and bonds it saves
 		EditableScene::EditableScene(const EditableScene& eScene, QWidget* parent_widget, const char* name , Qt::WFlags w_flags)
 			throw()
@@ -110,7 +109,7 @@ namespace BALL
 				first_atom_for_bond_(eScene.first_atom_for_bond_),
 				atom_limit_(eScene.atom_limit_),
 				bond_limit_(eScene.bond_limit_),
-				editAtomType_(eScene.editAtomType_),
+				atom_type_(eScene.atom_type_),
 				undo_()
 		{
 		}
@@ -150,7 +149,7 @@ namespace BALL
 		void EditableScene::checkMenu(MainControl& main_control)
 			throw()
 		{
-			edit_id_->setChecked(current_mode_ == (Scene::ModeType)EDIT__MODE);
+			edit_id_->setChecked(current_mode_ > PICKING__MODE);
 			Scene::checkMenu(main_control);
 		}
 
@@ -158,12 +157,6 @@ namespace BALL
 		{
 			// start a new mouse_moved cycle
 			mouse_has_moved_ = false;
-
-			//store the old positions of the press Event
-			x_ewindow_bond_pos_first_ = e->x();
-			y_ewindow_bond_pos_first_ = e->y();
-			x_ewindow_bond_pos_second_old_ = e->x();
-			y_ewindow_bond_pos_second_old_ = e->y();
 
 			// we don't have to handle the other modes here:
 			//   if we are in BOND__MODE, a mouse button is already pressed and we have to
@@ -173,18 +166,17 @@ namespace BALL
 			{
 				if (e->button() == Qt::LeftButton)
 				{	
-					// ToDo: Is the representation ok? Can the user see all actual atoms?
-
 					// if no atom is selected
-					PDBAtom* a = new PDBAtom(PTE[editAtomType_], PTE[editAtomType_].getName());
+					PDBAtom* a = new PDBAtom(PTE[atom_type_], PTE[atom_type_].getName());
 					insert_(e->x(), e->y(), *a);		
 					first_atom_for_bond_ = a;
 					current_mode_ = (Scene::ModeType)BOND__MODE;
 					
 					//store the Operation in undo_
 					Vector3 atom_position = a->getPosition();
+					draw_line_ = false;
 					
-					EditOperation eo(a, NULL, "Added atom of type " + PTE[editAtomType_].getName() + " at position (" 
+					EditOperation eo(a, NULL, "Added atom of type " + PTE[atom_type_].getName() + " at position (" 
 													+ String(atom_position.x) + ", "
 													+ String(atom_position.y) + ", "
 													+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
@@ -192,7 +184,7 @@ namespace BALL
 
 					// tell about the new undo operation
 					emit newEditOperation(eo);
-	
+
 					return;
 				}
 
@@ -204,9 +196,7 @@ namespace BALL
 					if (atom)
 					{
 						atom->select(); // later we should open a context menu at this point
-						CompositeMessage *m = new CompositeMessage(*atom, CompositeMessage::SELECTED_COMPOSITE);	
-						
-						notify_(m); 
+						notify_(new CompositeMessage(*atom, CompositeMessage::SELECTED_COMPOSITE));	
 					}
 					else
 					{
@@ -227,23 +217,14 @@ namespace BALL
 				if (e->button() == Qt::MidButton)
 				{
 					//is there an atom in radius <= limit_  Anstroem? 
-					Atom *atom = getClickedAtom_(e->x(), e->y());
+					Atom* atom = getClickedAtom_(e->x(), e->y());
 
 					// if so, start a new bond from this atom
 					if (atom)
 					{
 						first_atom_for_bond_ = atom;
-						current_mode_ =(Scene::ModeType)BOND__MODE;
+						current_mode_ = (Scene::ModeType)BOND__MODE;
 						TVector2<Position> pos = getScreenPosition_(atom->getPosition());
-
-						// start position for the putative bond
-						x_ewindow_bond_pos_first_ = pos.x;
-						y_ewindow_bond_pos_first_ = pos.y;
-
-						// we have to initialize this here, so that the first call of MouseMoveEvent does not
-						// fail when it tries to erase the old bond
-						x_ewindow_bond_pos_second_old_ = pos.x;
-						y_ewindow_bond_pos_second_old_ = pos.y;
 					}
 
 					return;	
@@ -256,102 +237,64 @@ namespace BALL
 
 		void EditableScene::mouseMoveEvent(QMouseEvent *e)
 		{
-			// save the current mouse position for drawing possible bonds as a line
-			// these values are used as endpoints of the line we draw if we are not
-			// currently over an atom
-			x_ewindow_bond_pos_second_new_ = e->x();
-			y_ewindow_bond_pos_second_new_ = e->y();
-
-
 			// ============ bond mode ================
 			if (current_mode_ == (Scene::ModeType)BOND__MODE)
 			{
-				if (e->buttons() == Qt::LeftButton  ||
-						e->buttons() == Qt::MidButton )
+				if (e->buttons() == Qt::LeftButton ||
+						e->buttons() == Qt::MidButton)
 				{
 					mouse_has_moved_ = true;
 
-					//is there an atom nearby the actual mouse position? 
-					Atom *atom = getClickedAtom_(e->x(), e->y());
+					// is there an atom nearby the actual mouse position? 
+					Atom* atom = getClickedAtom_(e->x(), e->y());
 
 					// have we found such an atom? if so, is it different from the one we started with? (self bonds make no sense :-) )
 					if (atom && (atom != first_atom_for_bond_))
 					{
-						TVector2<Position> pos =  getScreenPosition_(atom->getPosition());
-
 						// if we are really close to an atom, the endpoints of the line we draw will be set to
 						// its center, so that the user has a drop in effect for the bonds
-						x_ewindow_bond_pos_second_new_ = pos.x; 
-						y_ewindow_bond_pos_second_new_ = pos.y;
+						atom_pos_ = atom->getPosition();
 					}
-					
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+					else
+					{
+						atom_pos_ = clickedPointOnViewPlane_(e->x(), e->y());
+					}
+
+					draw_line_ = true;
 					//paint the line representing the offered bond
-					QPainter painter(this);
-					painter.setPen(Qt::white);
-					painter.setBackgroundMode(Qt::TransparentMode);
-
-					// this allows to (a) draw or (b) erase, depending if a line was already drawn on 
-					// the same position
-					painter.setCompositionMode(QPainter::CompositionMode_Xor);
-
-					// this erases the old line from the last move event
-					painter.drawLine(
-							(int) (x_ewindow_bond_pos_second_old_) ,  
-							(int) (y_ewindow_bond_pos_second_old_),   
-							(int) (x_ewindow_bond_pos_first_),
-							(int) (y_ewindow_bond_pos_first_));
-
-					// this draws the new line
-					painter.drawLine(
-							(int) (x_ewindow_bond_pos_second_new_) , 
-							(int) (y_ewindow_bond_pos_second_new_), 
-							(int) (x_ewindow_bond_pos_first_),
-							(int) (y_ewindow_bond_pos_first_));
-
-					painter.end();
+					paintGL();
 				}
+
+				return;
 			}
 
-			//tidy up
-			x_ewindow_bond_pos_second_old_ =	x_ewindow_bond_pos_second_new_ ;
-			y_ewindow_bond_pos_second_old_ =	y_ewindow_bond_pos_second_new_ ;
+			if (current_mode_ == (Scene::ModeType)EDIT__MODE) return;
 
-			x_ewindow_bond_pos_second_new_ = e->x();
-			y_ewindow_bond_pos_second_new_ = e->y();
+			Scene::mouseMoveEvent(e);
+		}
 
-			// maybe Scene wants to do anything with this event as well. and if we're not in BOND__MODE, we let it... :-)
-			if (current_mode_ != (Scene::ModeType)BOND__MODE)
-			{
-				Scene::mouseMoveEvent(e);
-			}
+		void EditableScene::paintGL()
+		{
+			Scene::paintGL();
+
+			if (current_mode_ != (Scene::ModeType) BOND__MODE) draw_line_ = false;
+
+			if (!draw_line_ || first_atom_for_bond_ == 0) return;
+
+			glDisable(GL_LIGHTING);
+			gl_renderer_.setColorRGBA_(stage_->getBackgroundColor().getInverseColor());
+
+			glBegin(GL_LINES);
+				gl_renderer_.vertexVector3_(first_atom_for_bond_->getPosition());
+				gl_renderer_.vertexVector3_(atom_pos_);
+			glEnd();
 		}
 
 		void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 		{
-			// save the current position as the new start position
-			x_ewindow_bond_pos_second_new_ = e->x();
-			y_ewindow_bond_pos_second_new_ = e->y();
-
 			// are we in BOND__MODE? 
 			if (current_mode_ == (Scene::ModeType)BOND__MODE)
 			{
-Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-				// delete last symbolic bond line	
-				QPainter painter(this);
-				painter.setPen(Qt::white);
-				painter.setCompositionMode(QPainter::CompositionMode_Xor);
-				painter.setBackgroundMode(Qt::TransparentMode);
-
-				// did we paint a line at all?
-				if (mouse_has_moved_)
-				{
-					painter.drawLine(x_ewindow_bond_pos_second_old_ ,  
-													 y_ewindow_bond_pos_second_old_,   
-													 x_ewindow_bond_pos_first_,
-													 y_ewindow_bond_pos_first_);
-				}
-
 				//is there an atom in radius "limit_" Angstroem?
 				Atom *atom = getClickedAtom_(e->x(), e->y());
 
@@ -383,17 +326,17 @@ Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<<
 				}
 				else // no atom found
 				{
-					//did we find a first atom?
-					if(first_atom_for_bond_!=0)
+					// did we find a first atom?
+					if (first_atom_for_bond_ != 0)
 					{
 						// build a new atom...
-						PDBAtom* a = new PDBAtom(PTE[editAtomType_], PTE[editAtomType_].getName());
+						PDBAtom* a = new PDBAtom(PTE[atom_type_], PTE[atom_type_].getName());
 						insert_(e->x(), e->y(), *a);
 						
 						//store the Operation in undo_
 						Vector3 atom_position = a->getPosition();
 					
-						EditOperation eo(a, NULL, "Added atom of type " + PTE[editAtomType_].getName() + " at position (" 
+						EditOperation eo(a, NULL, "Added atom of type " + PTE[atom_type_].getName() + " at position (" 
 														+ String(atom_position.x) + ", "
 														+ String(atom_position.y) + ", "
 														+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
@@ -454,10 +397,10 @@ Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<<
 
 				// end the mouse_moved cycle
 				mouse_has_moved_ = false;
-				first_atom_for_bond_=0;
+				first_atom_for_bond_ = 0;
 
 				//return to edit mode
-				current_mode_ =(Scene::ModeType)EDIT__MODE;
+				current_mode_ = (Scene::ModeType)EDIT__MODE;
 
 				return;
 			}
@@ -660,12 +603,6 @@ Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<<
 			{
 				CompositeMessage* m = new CompositeMessage(atom_, CompositeMessage::CENTER_CAMERA);
 				notify_(m);
-				
-				//move the mouse to focused position for the draw bond code
-				x_ewindow_bond_pos_first_  = (Position)(width() / 2.);
-				y_ewindow_bond_pos_first_  = (Position)(height() / 2.);
-				x_ewindow_bond_pos_second_old_ = (Position)(width() / 2.);
-				y_ewindow_bond_pos_second_old_ = (Position)(height() / 2.);
 			}
 		}	
 
@@ -710,9 +647,9 @@ Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<<
 			mod_view_mat_.invert(inverse_mod_view_mat_);
 
 			// determine the nearplane vectors
-			near_left_bot_ =Vector3(left_,  bottom_, near_*-1.); //a
-			near_right_bot_=Vector3(right_, bottom_, near_*-1.); //b
-			near_left_top_ =Vector3(left_,  top_,    near_*-1.);  //c	
+			near_left_bot_ = Vector3(left_,  bottom_, near_*-1.); //a
+			near_right_bot_= Vector3(right_, bottom_, near_*-1.); //b
+			near_left_top_ = Vector3(left_,  top_,    near_*-1.); //c	
 
 			near_left_bot_  = inverse_mod_view_mat_*near_left_bot_;
 			near_right_bot_ = inverse_mod_view_mat_*near_right_bot_;
@@ -777,7 +714,6 @@ Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<<
 
 				return pos;
 			}
-
 		}
 
 
@@ -825,13 +761,13 @@ Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<<
 		// Set the element for the next insert operations
 		void EditableScene::setEditElementType(int element_number)
 		{
-			editAtomType_= element_number;
+			atom_type_= element_number;
 		}
 		
 	  // Get the element for the next insert operations
 		int EditableScene::getEditElementType()
 		{
-			return editAtomType_;
+			return atom_type_;
 		}
 
 	}//end of namespace 

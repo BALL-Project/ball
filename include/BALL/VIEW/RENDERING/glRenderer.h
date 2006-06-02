@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36.2.17 2006/05/19 15:47:23 amoll Exp $
+// $Id: glRenderer.h,v 1.36.2.18 2006/06/02 15:21:53 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -273,8 +273,6 @@ namespace BALL
 
 			///
 			void initPerspective();
-
-			protected:
 
 			void renderRepresentation_(const Representation& representation, bool for_display_list);
 
