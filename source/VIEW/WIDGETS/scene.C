@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.56 2006/06/02 19:25:27 amoll Exp $
+// $Id: scene.C,v 1.174.2.57 2006/06/02 23:53:02 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1531,59 +1531,7 @@ namespace BALL
 			create_coordinate_system_ = 
 				insertMenuEntry(MainControl::DISPLAY, "Show Coordinate System", this, SLOT(createCoordinateSystem()));
 			setMenuHint("Show a coordinate system");
-
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
-			rotate_action_ =	insertMenuEntry(
-					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), Qt::CTRL+Qt::Key_R);
-			setMenuHint("Switch to rotate/zoom mode");
-			rotate_action_->setCheckable(true);
-
-			picking_action_ = insertMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), Qt::CTRL+Qt::Key_P);
-			setMenuHint("Switch to picking mode, e.g. to identify singe atoms or groups");
-			setMenuHelp("scene.html#identify_atoms");
-			picking_action_->setCheckable(true);
-
-			move_action_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()));
-			setMenuHint("Move selected items");
-			setMenuHelp("molecularControl.html#move_molecule");
-			move_action_->setCheckable(true);
-
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
-
-			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
-			no_stereo_action_->setChecked(true);
-			setMenuHelp("tips.html#3D");
-			no_stereo_action_->setCheckable(true);
-
-			active_stereo_action_ = insertMenuEntry (
- 					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()));
-			setMenuHelp("tips.html#3D");
-			active_stereo_action_->setCheckable(true);
-
-			dual_stereo_action_ = insertMenuEntry (
- 					MainControl::DISPLAY_STEREO, "Side by Side", this, SLOT(enterDualStereo()));
-			setMenuHelp("tips.html#3D");
-			dual_stereo_action_->setCheckable(true);
-
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), Qt::CTRL+Qt::Key_W);
-			setMenuHint("Print the coordinates of the current viewpoint");
-
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, SLOT(setViewPoint_()), Qt::CTRL+Qt::Key_N);
-			setMenuHint("Move the viewpoint to the given coordinates");
-
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()));
-			setMenuHint("Reset the camera to the orgin (0,0,0)");
-
-			insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, SLOT(showExportPNGDialog()), Qt::ALT + Qt::Key_P);
-			setMenuHint("Export a PNG image file from the Scene");
-
-//   			insertMenuEntry(MainControl::FILE_EXPORT, "VRML...", this, SLOT(showExportVRMLDialog()));
-//   			setMenuHint("Export a VRML file from the Scene");
-
-			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
-			window_menu_entry_->setCheckable(true);
-			setMenuHelp("scene.html");
-
+			
 			// ======================== ANIMATION ===============================================
 			String help_url = "tips.html#animations";
 
@@ -1618,6 +1566,60 @@ namespace BALL
 			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 0);
 			setMenuHelp(help_url);
 			animation_repeat_action_->setCheckable(true);
+
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
+
+			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
+			no_stereo_action_->setChecked(true);
+			setMenuHelp("tips.html#3D");
+			no_stereo_action_->setCheckable(true);
+
+			active_stereo_action_ = insertMenuEntry (
+ 					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()));
+			setMenuHelp("tips.html#3D");
+			active_stereo_action_->setCheckable(true);
+
+			dual_stereo_action_ = insertMenuEntry (
+ 					MainControl::DISPLAY_STEREO, "Side by Side", this, SLOT(enterDualStereo()));
+			setMenuHelp("tips.html#3D");
+			dual_stereo_action_->setCheckable(true);
+
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), Qt::CTRL+Qt::Key_W);
+			setMenuHint("Print the coordinates of the current viewpoint");
+
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, SLOT(setViewPoint_()), Qt::CTRL+Qt::Key_N);
+			setMenuHint("Move the viewpoint to the given coordinates");
+
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()));
+			setMenuHint("Reset the camera to the orgin (0,0,0)");
+
+			insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, SLOT(showExportPNGDialog()), Qt::ALT + Qt::Key_P);
+			setMenuHint("Export a PNG image file from the Scene");
+
+//   			insertMenuEntry(MainControl::FILE_EXPORT, "VRML...", this, SLOT(showExportVRMLDialog()));
+//   			setMenuHint("Export a VRML file from the Scene");
+
+			// ====================================== MODES =====================================
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
+			rotate_action_ =	insertMenuEntry(
+					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), Qt::CTRL+Qt::Key_R);
+			setMenuHint("Switch to rotate/zoom mode");
+			rotate_action_->setCheckable(true);
+
+			picking_action_ = insertMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), Qt::CTRL+Qt::Key_P);
+			setMenuHint("Switch to picking mode, e.g. to identify singe atoms or groups");
+			setMenuHelp("scene.html#identify_atoms");
+			picking_action_->setCheckable(true);
+
+			move_action_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()));
+			setMenuHint("Move selected items");
+			setMenuHelp("molecularControl.html#move_molecule");
+			move_action_->setCheckable(true);
+
+
+			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
+			window_menu_entry_->setCheckable(true);
+			setMenuHelp("scene.html");
 
 			setCursor(QCursor(Qt::SizeAllCursor));
 

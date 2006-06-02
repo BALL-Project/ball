@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.22 2006/05/28 18:54:13 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.23 2006/06/02 23:53:19 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -19,6 +19,7 @@
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/WIDGETS/helpViewer.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
+#include <BALL/VIEW/WIDGETS/editableScene.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -120,7 +121,7 @@ namespace BALL
 		new DockingController(  this, "DockingController");
 
 		Scene::stereoBufferSupportTest();
-		scene_ = new Scene(this, "3D View");
+		scene_ = new EditableScene(this, "3D View");
 		setCentralWidget(scene_);
 		setAcceptDrops(true);
 

@@ -149,6 +149,9 @@ class BALL_VIEW_EXPORT EditableScene
 	void changeElement_();
 	void deleteBond_();
 	void changeBondOrder_();
+	void activatedOrderItem_(QAction* action);
+	void moveAtom_();
+	void atomProperties_();
 
 	////////////////////////////////////////
 	signals:
@@ -219,7 +222,9 @@ class BALL_VIEW_EXPORT EditableScene
 	double atom_limit_;			
 	double bond_limit_;			
 	// element for new atoms
-	int 	 atom_type_;
+	int atom_type_;
+	// order for new bonds
+	int bond_order_;
 
 	//undo stack
 	vector<EditOperation> undo_;
