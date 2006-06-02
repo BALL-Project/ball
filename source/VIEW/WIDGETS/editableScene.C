@@ -292,6 +292,7 @@ namespace BALL
 
 		void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 		{
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			// are we in BOND__MODE? 
 			if (current_mode_ == (Scene::ModeType)BOND__MODE)
 			{
@@ -329,6 +330,7 @@ namespace BALL
 					// did we find a first atom?
 					if (first_atom_for_bond_ != 0)
 					{
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 						// build a new atom...
 						PDBAtom* a = new PDBAtom(PTE[atom_type_], PTE[atom_type_].getName());
 						insert_(e->x(), e->y(), *a);
@@ -557,13 +559,6 @@ namespace BALL
 
 			// now we need to find the AtomContainer into which we will insert the atom.
 			
-			// do we need to refocus after the update? if there was no composite at all before our
-			// insertion, we need to focus since otherwise the camera will not be initialized correctly.
-			// but we will _not_ refocus if the camera position was already valid. this would confuse
-			// the user.
-			bool refocus = (getMainControl()->getCompositeManager().getNumberOfComposites() == 0);
-			//message to update the representation
-	
 			// get all highlighted composites
 			List<Composite*> composite_list = getMainControl()->getMolecularControlSelection(); 
 			List<Composite*>::iterator it = composite_list.begin();
@@ -597,13 +592,6 @@ namespace BALL
 				current_molecule->insert(atom_);
 				getMainControl()->insert(*system);
 			}	
-
-			// do we need to refocus the camera?
-			if (refocus)
-			{
-				CompositeMessage* m = new CompositeMessage(atom_, CompositeMessage::CENTER_CAMERA);
-				notify_(m);
-			}
 		}	
 
 
