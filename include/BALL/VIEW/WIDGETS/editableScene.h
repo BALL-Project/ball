@@ -88,7 +88,7 @@ class BALL_VIEW_EXPORT EditableScene
 	enum EditMode
 	{
 		// inserting atoms
-		EDIT__MODE = PICKING__MODE + 1,
+		ATOM__MODE = PICKING__MODE + 1,
 
 		// drawing new bonds
 		BOND__MODE	
@@ -140,7 +140,7 @@ class BALL_VIEW_EXPORT EditableScene
 	////////////////////////////////////////
 	protected slots:
 
-	virtual void editMode_();
+	virtual void atomMode_();
 	virtual void bondMode_();
 
 	////////////////////////////////////////
@@ -194,22 +194,20 @@ class BALL_VIEW_EXPORT EditableScene
 
 	virtual void paintGL();
 
-	QAction* edit_id_;	
-	Molecule *current_molecule_;	//Do we need them??
-	Atom* first_atom_for_bond_;
+	QAction* atom_id_, *bond_id_;	
+	Atom* current_atom_;
 
 	Vector3 near_left_bot_;  //TODO:: name in XYZ left_bot_mnear
 	Vector3 near_right_bot_;
 	Vector3 near_left_top_;
 
-	Vector3 last_atom_pos_, atom_pos_;
+	Vector3 atom_pos_;
 	bool draw_line_;
 
-	// ???
 	// search range when looking for atoms/bonds (in angstrom)
 	double atom_limit_;			
 	double bond_limit_;			
-	bool   mouse_has_moved_;
+	// element for new atoms
 	int 	 atom_type_;
 
 	//undo stack
