@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.54 2006/06/01 15:15:24 amoll Exp $
+// $Id: scene.C,v 1.174.2.55 2006/06/02 13:55:18 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -119,7 +119,8 @@ namespace BALL
 				animation_thread_(0),
 				stop_animation_(false),
 				content_changed_(true),
-				want_to_use_vertex_buffer_(false)
+				want_to_use_vertex_buffer_(false),
+				show_fps_(false)
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (2) " << this << std::endl;
@@ -430,6 +431,7 @@ namespace BALL
 
 			// cannot call update here, because it calls updateGL
    		renderView_(DISPLAY_LISTS_RENDERING);
+			glFlush();
 
 			if (info_string_ != "")
 			{
@@ -438,13 +440,43 @@ namespace BALL
 				QFont font;
 				font.setPixelSize(16);
 				font.setBold(true);
-				gl_renderer_.setColorRGBA_(c1);
 				glDisable(GL_LIGHTING);
-				renderText(info_point_.x() + 1, info_point_.y() + 1, info_string_.c_str(), font);
-				renderText(info_point_.x() - 1, info_point_.y() - 1, info_string_.c_str(), font);
 				gl_renderer_.setColorRGBA_(c2);
 				renderText(info_point_.x(), info_point_.y(), info_string_.c_str(), font);
 				glEnable(GL_LIGHTING);
+			}
+
+			if (show_fps_)
+			{
+				float ti = 1000000.0 / (PreciseTime::now().getMicroSeconds() - time_.getMicroSeconds());
+
+				if (ti < 0)
+				{
+					time_ = PreciseTime::now();
+					return;
+				}
+
+				float fps = (ti + last_fps_) / 2.;
+				String temp = createFloatString(fps, 1);
+				last_fps_ = fps;
+
+				if (fps < 10.0) temp = String(" ") + temp;
+				if (fps < 100.0) temp = String(" ") + temp;
+
+				if (!temp.has('.')) temp = temp + ".0";
+
+				temp = String("FPS ") + temp;
+
+				ColorRGBA color = getStage()->getBackgroundColor().getInverseColor();
+
+				QFont font;
+				font.setPixelSize(16);
+				font.setBold(true);
+				gl_renderer_.setColorRGBA_(color);
+				glDisable(GL_LIGHTING);
+				renderText(width() - 100, 20, temp.c_str(), font);
+
+				time_ = PreciseTime::now();
 			}
 		}
 
@@ -2553,39 +2585,6 @@ namespace BALL
 		{
  			QGLWidget::updateGL();
 
-#ifdef BALL_BENCHMARKING
-
-			float ti = 100000.0 / (PreciseTime::now().getMicroSeconds() - time_.getMicroSeconds());
-
-			if (ti < 0)
-			{
-				time_ = PreciseTime::now();
-				return;
-			}
-
-			float fps = (ti + last_fps_) / 2.;
-			String temp = createFloatString(fps, 1);
-			last_fps_ = fps;
-
-			if (fps < 10.0) temp = String(" ") + temp;
-
-			if (!temp.has('.')) temp = temp + ".0";
-
-			temp = String("FPS ") + temp;
-
-			QPainter painter(this);
-
-			ColorRGBA color = getStage()->getBackgroundColor().getInverseColor();
-
-			painter.setBackgroundMode(Qt::OpaqueMode);
-			painter.setPen(color.getQColor());
-			painter.setBackgroundColor(getStage()->getBackgroundColor().getQColor());
-
-			QPoint point(width() - 70, 20);
-			painter.drawText(point, temp.c_str(), 0, -1);
-
-			time_ = PreciseTime::now();
-#endif
 		}
 
 	} // namespace VIEW

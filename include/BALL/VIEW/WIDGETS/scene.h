@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.9 2006/04/26 13:33:09 amoll Exp $
+// $Id: scene.h,v 1.66.2.10 2006/06/02 13:55:24 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -661,7 +661,7 @@ namespace BALL
 
 			protected:
 
-			virtual void updateGL();
+			void updateGL();
 
 			void renderView_(RenderMode mode)
 				throw();
@@ -772,6 +772,7 @@ namespace BALL
 			QPoint info_point_;
 			String info_string_;
 			QByteArray last_state_;
+			bool show_fps_;
 		};
 
 
