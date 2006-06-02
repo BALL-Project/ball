@@ -29,13 +29,6 @@
 # include <BALL/MATHS/vector2.h>
 #endif
 
-// has to come after BALL includes to prevent problems with Visual Stuio Net
-#include <QtGui/qgl.h>
-//Added by qt3to4:
-#include <QMouseEvent>
-
-
-
 namespace BALL
 {
 	namespace VIEW
@@ -200,18 +193,17 @@ namespace BALL
 
 
 		protected:
-					Index edit_id_;	
-					System system_; // Do we need them?? 
+					QAction* edit_id_;	
 					Molecule *current_molecule_;	//Do we need them??
 					Atom* first_atom_for_bond_;
 
 					// used for the bond insert algorithm
-					float x_ewindow_bond_pos_first_;
-					float y_ewindow_bond_pos_first_;
-					float x_ewindow_bond_pos_second_new_;
-					float y_ewindow_bond_pos_second_new_;
-					float x_ewindow_bond_pos_second_old_;
-					float y_ewindow_bond_pos_second_old_;
+					Position x_ewindow_bond_pos_first_;
+					Position y_ewindow_bond_pos_first_;
+					Position x_ewindow_bond_pos_second_new_;
+					Position y_ewindow_bond_pos_second_new_;
+					Position x_ewindow_bond_pos_second_old_;
+					Position y_ewindow_bond_pos_second_old_;
 
 					Vector3 near_left_bot_;  //TODO:: name in XYZ left_bot_mnear
 					Vector3 near_right_bot_;

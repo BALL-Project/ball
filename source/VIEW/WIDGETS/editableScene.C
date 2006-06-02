@@ -17,11 +17,8 @@
 #include <BALL/VIEW/KERNEL/compositeManager.h>
 
 #include <QtGui/qpainter.h>
-#include <QtGui/q3popupmenu.h>
 #include <QtGui/qmenubar.h>
 #include <QtGui/qcursor.h>
-//Added by qt3to4:
-#include <QMouseEvent>
 
 #include <BALL/MATHS/vector3.h>
 #include <BALL/MATHS/matrix44.h>
@@ -72,7 +69,7 @@ namespace BALL
 			throw()
 		{
 #ifdef BALL_VIEW_DEBUG
-				Log.info() << "Destructing object EditOperation " << this << " of class EditableScene>" << std::endl;
+				Log.info() << "Destructing object EditOperation " << this << " of class EditOperation>" << std::endl;
 #endif 
 		}
 
@@ -82,8 +79,7 @@ namespace BALL
 		EditableScene::EditableScene()
 			throw()
 			:	Scene(),
-				edit_id_(-1),
-				system_(),
+				edit_id_(0),
 				first_atom_for_bond_(0),
 				atom_limit_(1.5),
 				bond_limit_(2.0),
@@ -95,8 +91,7 @@ namespace BALL
 		EditableScene::EditableScene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 			throw()
 			: Scene(parent_widget, name, w_flags),
-				edit_id_(-1),
-				system_(), 
+				edit_id_(0),
 				first_atom_for_bond_(0),
 				atom_limit_(1.5),
 				bond_limit_(2.0),
@@ -104,7 +99,6 @@ namespace BALL
 				undo_()
 		{	
 			registerWidget(this); 
-			Log.error() << "EditableScene " << dynamic_cast<ModularWidget*>(this) << std::endl;
 		}
 
 		// TODO: Was sollte ein Copyconstructor sinnvolles tun?
@@ -112,8 +106,7 @@ namespace BALL
 		EditableScene::EditableScene(const EditableScene& eScene, QWidget* parent_widget, const char* name , Qt::WFlags w_flags)
 			throw()
 			: Scene(eScene, parent_widget, name, w_flags),
-				edit_id_(-1),
-				system_(eScene.system_),
+				edit_id_(0),
 				first_atom_for_bond_(eScene.first_atom_for_bond_),
 				atom_limit_(eScene.atom_limit_),
 				bond_limit_(eScene.bond_limit_),
@@ -139,28 +132,17 @@ namespace BALL
 		void EditableScene::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
-
-			String hint;
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
-
-			hint = "Switch to edit mode";
-			edit_id_ =	main_control.insertMenuEntry(
-					MainControl::DISPLAY, "&Edit Mode", this, SLOT(editMode_()), Qt::CTRL+Qt::Key_E, -1, hint);
+			edit_id_ =	main_control.insertMenuEntry(MainControl::DISPLAY, "&Edit Mode", this, SLOT(editMode_()), Qt::CTRL+Qt::Key_E);
+			edit_id_->setCheckable(true);
+			setMenuHint("Switch to edit mode");
 
 			Scene::initializeWidget(main_control);
-
-			return;
 		}
 
 
 		void EditableScene::finalizeWidget(MainControl& main_control)
 			throw()
 		{
-			if (current_mode_ == (Scene::ModeType)EDIT__MODE)
-			{
-				main_control.removeMenuEntry(MainControl::DISPLAY, "&Edit Mode", this, SLOT(editMode_()), Qt::CTRL+Qt::Key_E);
-			}
 			Scene::finalizeWidget(main_control);	
 		}
 
@@ -168,7 +150,7 @@ namespace BALL
 		void EditableScene::checkMenu(MainControl& main_control)
 			throw()
 		{
-			menuBar()->setItemChecked(edit_id_,(current_mode_ == (Scene::ModeType)EDIT__MODE));
+			edit_id_->setChecked(current_mode_ == (Scene::ModeType)EDIT__MODE);
 			Scene::checkMenu(main_control);
 		}
 
@@ -189,7 +171,7 @@ namespace BALL
 			//   if we are in any other mode, we let Scene take care of it
 			if (current_mode_ == (Scene::ModeType)EDIT__MODE)
 			{
-				if(e->button() == Qt::LeftButton)
+				if (e->button() == Qt::LeftButton)
 				{	
 					// ToDo: Is the representation ok? Can the user see all actual atoms?
 
@@ -197,7 +179,7 @@ namespace BALL
 					PDBAtom* a = new PDBAtom(PTE[editAtomType_], PTE[editAtomType_].getName());
 					insert_(e->x(), e->y(), *a);		
 					first_atom_for_bond_ = a;
-					current_mode_ =(Scene::ModeType)BOND__MODE;
+					current_mode_ = (Scene::ModeType)BOND__MODE;
 					
 					//store the Operation in undo_
 					Vector3 atom_position = a->getPosition();
@@ -213,7 +195,8 @@ namespace BALL
 	
 					return;
 				}
-				if(e->button() == Qt::RightButton )
+
+				if (e->button() == Qt::RightButton)
 				{
 					// find an atom in a radius of limit_ around the current mouse position
 					Atom *atom = getClickedAtom_(e->x(), e->y());
@@ -228,20 +211,20 @@ namespace BALL
 					else
 					{
 						// try to find a bond
-						Bond *bond = getClickedBond_(e->x(), e->y());
+						Bond* bond = getClickedBond_(e->x(), e->y());
 
 						if (bond)
 						{
 							bond->select();
 							CompositeMessage *m = new CompositeMessage(*bond, CompositeMessage::SELECTED_COMPOSITE);	
-
 							notify_(m); 
 						}
 					}
 
 					return;
 				}
-				if(e->button() == Qt::MidButton)
+
+				if (e->button() == Qt::MidButton)
 				{
 					//is there an atom in radius <= limit_  Anstroem? 
 					Atom *atom = getClickedAtom_(e->x(), e->y());
@@ -251,7 +234,7 @@ namespace BALL
 					{
 						first_atom_for_bond_ = atom;
 						current_mode_ =(Scene::ModeType)BOND__MODE;
-						TVector2<Position> pos =  getScreenPosition_(atom->getPosition());
+						TVector2<Position> pos = getScreenPosition_(atom->getPosition());
 
 						// start position for the putative bond
 						x_ewindow_bond_pos_first_ = pos.x;
@@ -283,9 +266,8 @@ namespace BALL
 			// ============ bond mode ================
 			if (current_mode_ == (Scene::ModeType)BOND__MODE)
 			{
-
-				if (e->state() == Qt::LeftButton  ||
-						e->state() == Qt::MidButton )
+				if (e->buttons() == Qt::LeftButton  ||
+						e->buttons() == Qt::MidButton )
 				{
 					mouse_has_moved_ = true;
 
@@ -303,13 +285,15 @@ namespace BALL
 						y_ewindow_bond_pos_second_new_ = pos.y;
 					}
 					
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 					//paint the line representing the offered bond
 					QPainter painter(this);
 					painter.setPen(Qt::white);
+					painter.setBackgroundMode(Qt::TransparentMode);
 
 					// this allows to (a) draw or (b) erase, depending if a line was already drawn on 
 					// the same position
-					painter.setRasterOp(XorROP);
+					painter.setCompositionMode(QPainter::CompositionMode_Xor);
 
 					// this erases the old line from the last move event
 					painter.drawLine(
@@ -338,10 +322,12 @@ namespace BALL
 
 			// maybe Scene wants to do anything with this event as well. and if we're not in BOND__MODE, we let it... :-)
 			if (current_mode_ != (Scene::ModeType)BOND__MODE)
+			{
 				Scene::mouseMoveEvent(e);
+			}
 		}
 
-		void EditableScene::mouseReleaseEvent(QMouseEvent *e)
+		void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 		{
 			// save the current position as the new start position
 			x_ewindow_bond_pos_second_new_ = e->x();
@@ -350,19 +336,20 @@ namespace BALL
 			// are we in BOND__MODE? 
 			if (current_mode_ == (Scene::ModeType)BOND__MODE)
 			{
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				// delete last symbolic bond line	
 				QPainter painter(this);
 				painter.setPen(Qt::white);
-				painter.setRasterOp(XorROP);
+				painter.setCompositionMode(QPainter::CompositionMode_Xor);
+				painter.setBackgroundMode(Qt::TransparentMode);
 
 				// did we paint a line at all?
 				if (mouse_has_moved_)
 				{
-					painter.drawLine(
-							(int) (x_ewindow_bond_pos_second_old_) ,  
-							(int) (y_ewindow_bond_pos_second_old_),   
-							(int) (x_ewindow_bond_pos_first_),
-							(int) (y_ewindow_bond_pos_first_));
+					painter.drawLine(x_ewindow_bond_pos_second_old_ ,  
+													 y_ewindow_bond_pos_second_old_,   
+													 x_ewindow_bond_pos_first_,
+													 y_ewindow_bond_pos_first_);
 				}
 
 				//is there an atom in radius "limit_" Angstroem?
@@ -384,17 +371,14 @@ namespace BALL
 						//       - if there is already a bond, change it to a double bond
 						Bond* c = new Bond("Bond", *first_atom_for_bond_, *atom, Bond::ORDER__SINGLE);		
 						
-						EditOperation eo( NULL, c, "Added bond of type " , EditOperation::ADDED__BOND);
+						EditOperation eo(0, c, "Added bond of type " , EditOperation::ADDED__BOND);
 						undo_.push_back(eo);
 					
 						// tell about the new undo operation
 						emit newEditOperation(eo);
 
 						//update representation
-						CompositeMessage *m = 0;
-						m = new CompositeMessage(*atom, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
-						
-						notify_(m); 
+						getMainControl()->update(*atom, true);
 					}	
 				}
 				else // no atom found
@@ -427,9 +411,7 @@ namespace BALL
 						//set the bond
 						//update representation
 						// TODO: bond_oder
-						CompositeMessage *m = 0;
 						Bond* c = new Bond("Bond", *first_atom_for_bond_, *a, Bond::ORDER__SINGLE);		
-						m = new CompositeMessage(*a, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
 					
 						String bond_string;
 						int bond_type = c->getOrder();
@@ -456,13 +438,13 @@ namespace BALL
 								break;
 						}
 						
-						EditOperation eo2( NULL, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
+						EditOperation eo2(0, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
 						undo_.push_back(eo2);
 						
 						// tell about the new undo operation
 						emit newEditOperation(eo2);
 
-						notify_(m);
+						getMainControl()->update(*a, true);
 					}
 					else // we did not find a first atom!
 					{	
@@ -499,22 +481,20 @@ namespace BALL
 			CompositeManager& cm = getMainControl()->getCompositeManager();
 			CompositeManager::iterator it = cm.begin();
 
-			float min_dist = numeric_limits<float>::max();
+			float min_dist = FLT_MAX;
 			Atom* min_atom = 0;
 			float dist;
 
 			for (; it != cm.end(); it++)
 			{
 				//check if composite is a system
-				// TODO: do we have to check for Protein, Molecule, Chain, ... or is the System check already sufficient?
 				System* s = dynamic_cast<System*>(*it);
 				if (s == 0) continue;
 
 				Vector3 cam_to_atom;
 				Vector3 cam_to_clickedPoint = clickedPointOnViewPlane_(x, y) - getStage()->getCamera().getViewPoint();
 
-				AtomIterator ai;
-				for(ai=s->beginAtom();+ai;++ai)
+				for (AtomIterator ai = s->beginAtom(); +ai; ++ai)
 				{
 					cam_to_atom = (ai->getPosition() - getStage()->getCamera().getViewPoint());
 
@@ -550,16 +530,13 @@ namespace BALL
 		{
 			//get the AtomContainer
 			CompositeManager& cm = getMainControl()->getCompositeManager();
-			CompositeManager::iterator it = cm.begin();
 
 			Bond* closest = 0;
 			float min_dist = FLT_MAX;
 
-
-			for (; it != cm.end(); it++)
+			for (CompositeManager::iterator it = cm.begin(); +it; it++)
 			{
 				//check if composite is a system
-				// TODO: do we have to check for Protein, Molecule, Chain, ... or is the System check already sufficient?
 				System* s = dynamic_cast<System*>(*it);
 				if (s == 0) continue;
 
@@ -568,19 +545,20 @@ namespace BALL
 				Vector3 cam_to_bond;
 				Vector3 cam_to_clickedPoint = clickedPointOnViewPlane_(x, y) - getStage()->getCamera().getViewPoint();
 
+				Vector3 vp = getStage()->getCamera().getViewPoint();
+
 				// To iterate over all bonds, we have to iterate over all atoms and then over all their bonds
 				// Unfortunately, this counts each bond twice...
 				for (AtomIterator ai = s->beginAtom(); +ai; ++ai)
 				{
-					AtomBondIterator bi;
-					for (bi = ai->beginBond(); +bi; ++bi)
+					for (AtomBondIterator bi = ai->beginBond(); +bi; ++bi)
 					{
 						if (bi->getPartner(*ai) < &*ai) continue;
 
 						// first point the position vector to the first atom of the bond
-						cam_to_bond = (bi->getFirstAtom()->getPosition() - getStage()->getCamera().getViewPoint());
+						cam_to_bond = (bi->getFirstAtom()->getPosition() - vp);
 						// then add 1/2 * the vector pointing from first to second
-						cam_to_bond += (bi->getSecondAtom()->getPosition() - bi->getFirstAtom()->getPosition())*0.5;
+						cam_to_bond += (bi->getSecondAtom()->getPosition() - bi->getFirstAtom()->getPosition()) * 0.5;
 
 						// compute the angle between the rays Cam->Bond and Cam->clicked point
 						Angle	alpha((float)acos(  (cam_to_bond * cam_to_clickedPoint)
@@ -632,7 +610,7 @@ namespace BALL
 			// find the 3D coordinates of screen position (x,y) on the view plane
 			Vector3 point = clickedPointOnViewPlane_(x,y);
 			// move the atom to that position
-			atom_.setPosition( point );
+			atom_.setPosition(point);
 
 			// now we need to find the AtomContainer into which we will insert the atom.
 			
@@ -644,23 +622,23 @@ namespace BALL
 			//message to update the representation
 	
 			// get all highlighted composites
-			List <Composite * > compositeList = getMainControl()->getMolecularControlSelection(); 
-			List <Composite *>::iterator it = compositeList.begin();
+			List<Composite*> composite_list = getMainControl()->getMolecularControlSelection(); 
+			List<Composite*>::iterator it = composite_list.begin();
 			
-			if(compositeList.size() > 1 )
+			if (composite_list.size() > 1 )
 			{
-				Log.error() <<"Please highlight exactly one AtomContainer for insertion of the created atoms!" << endl;
+				setStatusbarText("Please highlight exactly one AtomContainer for insertion of the created atoms!", true);
 				return;
 			}
 		
 			// only one highlighted composite
-			if(compositeList.size() == 1)
+			if (composite_list.size() == 1)
 			{
 				// is it an AtomContainer?
 				AtomContainer* ai = dynamic_cast<AtomContainer*>(*it);
 				if (ai == 0)
 				{
-					Log.error() <<"Please highlight exactly one AtomContainer for insertion of the created atoms!" << endl;
+					setStatusbarText("Please highlight exactly one AtomContainer for insertion of the created atoms!", true);
 					return;
 				}
 
@@ -684,12 +662,11 @@ namespace BALL
 				notify_(m);
 				
 				//move the mouse to focused position for the draw bond code
-				x_ewindow_bond_pos_first_  = width() / 2.;
-				y_ewindow_bond_pos_first_  = height() / 2.;
-				x_ewindow_bond_pos_second_old_ = width() / 2.;
-				y_ewindow_bond_pos_second_old_ = height() / 2.;
+				x_ewindow_bond_pos_first_  = (Position)(width() / 2.);
+				y_ewindow_bond_pos_first_  = (Position)(height() / 2.);
+				x_ewindow_bond_pos_second_old_ = (Position)(width() / 2.);
+				y_ewindow_bond_pos_second_old_ = (Position)(height() / 2.);
 			}
-
 		}	
 
 
@@ -761,8 +738,8 @@ namespace BALL
 			Vector3 look_at = getStage()->getCamera().getLookAtPosition() -  cam ;
 			Vector3 cam_to_atom = vec - cam;
 
-			try {
-
+			try 
+			{
 				if (mapViewplaneToScreen_())
 				{
 					Vector3 la_m_d(near_left_bot_
@@ -807,7 +784,6 @@ namespace BALL
 		// Convert 2D screen coordinate to 3D coordinate on the view plane
 		Vector3 EditableScene::clickedPointOnViewPlane_(int x, int y)
 		{
-
 			// 	Scale variables for Frustum
 			double xs_ = width();
 			double ys_ = height(); 
@@ -849,7 +825,7 @@ namespace BALL
 		// Set the element for the next insert operations
 		void EditableScene::setEditElementType(int element_number)
 		{
-			editAtomType_=element_number;
+			editAtomType_= element_number;
 		}
 		
 	  // Get the element for the next insert operations
