@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.35 2006/06/01 12:02:42 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.36 2006/06/02 15:49:12 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -234,6 +234,16 @@ namespace BALL
 							}
 						}
 
+						List<Composite*> highlighted;
+						it = item_to_composite_.begin();
+						for (; it != item_to_composite_.end(); ++it)
+						{
+							if (listview->isItemSelected((*it).first))
+							{
+								highlighted.push_back((*it).second);
+							}
+						}
+
 						removeComposite(composite_message->getComposite()->getRoot());
 						addComposite(composite_message->getComposite()->getRoot());
 
@@ -245,6 +255,15 @@ namespace BALL
 							if (to_find == composite_to_item_.end()) continue;
 
 							listview->expandItem(to_find->second);
+						}
+
+						lit = highlighted.begin();
+						for (; lit != highlighted.end(); lit++)
+						{
+							to_find = composite_to_item_.find(*lit);
+							if (to_find == composite_to_item_.end()) continue;
+
+							listview->setItemSelected(to_find->second, true);
 						}
 
 						return true;
