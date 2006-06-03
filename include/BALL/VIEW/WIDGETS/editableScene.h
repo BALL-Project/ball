@@ -152,6 +152,7 @@ class BALL_VIEW_EXPORT EditableScene
 	void activatedOrderItem_(QAction* action);
 	void moveAtom_();
 	void atomProperties_();
+	void createMolecule_();
 
 	////////////////////////////////////////
 	signals:

@@ -552,7 +552,7 @@ void EditableScene::bondMode_()
 {
 	last_mode_ = current_mode_;
 	current_mode_ = (Scene::ModeType)BOND__MODE;		
-	setCursor(QCursor(Qt::SizeAllCursor));
+	setCursor(QCursor(Qt::IBeamCursor));
 	//ToDo:: Cursor should look different
 }
 
@@ -562,23 +562,21 @@ void EditableScene::atomMode_()
 {
 	last_mode_ = current_mode_;
 	current_mode_ = (Scene::ModeType)ATOM__MODE;		
-	setCursor(QCursor(Qt::SizeAllCursor));
+	setCursor(QCursor(Qt::UpArrowCursor));
 	//ToDo:: Cursor should look different
 }
 
 // insert an atom at screen positions (x,y) on the view plane
-void EditableScene::insert_(int x, int y, PDBAtom &atom_)
+void EditableScene::insert_(int x, int y, PDBAtom &atom)
 {
 	// find the 3D coordinates of screen position (x,y) on the view plane
-	Vector3 point = clickedPointOnViewPlane_(x,y);
 	// move the atom to that position
-	atom_.setPosition(point);
+	atom.setPosition(clickedPointOnViewPlane_(x,y));
 
 	// now we need to find the AtomContainer into which we will insert the atom.
 	
 	// get all highlighted composites
 	List<Composite*> composite_list = getMainControl()->getMolecularControlSelection(); 
-	List<Composite*>::iterator it = composite_list.begin();
 	
 	if (composite_list.size() > 1 )
 	{
@@ -590,7 +588,7 @@ void EditableScene::insert_(int x, int y, PDBAtom &atom_)
 	if (composite_list.size() == 1)
 	{
 		// is it an AtomContainer?
-		AtomContainer* ai = dynamic_cast<AtomContainer*>(*it);
+		AtomContainer* ai = dynamic_cast<AtomContainer*>(*composite_list.begin());
 		if (ai == 0)
 		{
 			setStatusbarText("Please highlight exactly one AtomContainer for insertion of the created atoms!", true);
@@ -598,15 +596,28 @@ void EditableScene::insert_(int x, int y, PDBAtom &atom_)
 		}
 
 		// Yes? we do not need to create our own system
-		ai->insert(atom_);
+		ai->insert(atom);
 		getMainControl()->update(*ai, true);
 	}
 	else  // more or less than 1 highlighted
 	{
+		HashSet<Composite*> composites = getMainControl()->getCompositeManager().getComposites();
+		if (composites.size() != 0)
+		{
+			System* system = dynamic_cast<System*>(*composites.begin());
+			Molecule* mol = system->getMolecule(0);
+			if (mol != 0)
+ 			{
+				mol->appendChild(atom);
+				getMainControl()->update(*mol, true);
+				return;
+			}
+		}
+		
 		System *system = new System();
 		Molecule* current_molecule = new Molecule();
 		system->insert(*current_molecule);
-		current_molecule->insert(atom_);
+		current_molecule->insert(atom);
 		getMainControl()->insert(*system);
 	}	
 }	
@@ -800,6 +811,8 @@ void EditableScene::showContextMenu(QPoint pos)
 	bond_mode->setChecked(current_mode_ == (Scene::ModeType) BOND__MODE);
 
 	menu.addSeparator();
+	menu.addAction("Create a new molecule", this, SLOT(createMolecule_()));
+	menu.addSeparator();
 
 	if (current_mode_ == (Scene::ModeType) ATOM__MODE)
 	{
@@ -937,6 +950,14 @@ void EditableScene::atomProperties_()
 	if (!as.exec()) return;
 
 	getMainControl()->update(*current_atom_, true);
+}
+
+void EditableScene::createMolecule_()
+{
+	System *system = new System();
+	Molecule* current_molecule = new Molecule();
+	system->insert(*current_molecule);
+	getMainControl()->insert(*system);
 }
 
 	}//end of namespace 
