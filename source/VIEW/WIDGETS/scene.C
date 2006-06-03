@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.57 2006/06/02 23:53:02 amoll Exp $
+// $Id: scene.C,v 1.174.2.58 2006/06/03 10:31:45 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2029,8 +2029,6 @@ namespace BALL
 			updateGL();
 		}
 
-
-#ifndef QT_NO_WHEELEVENT
 		void Scene::wheelEvent(QWheelEvent *qmouse_event)
 		{
 			qmouse_event->accept();
@@ -2039,103 +2037,100 @@ namespace BALL
 			zoomSystem_();
 			y_window_pos_old_ = y_window_pos_new_;
 		}
-#endif
 
 		void Scene::keyPressEvent(QKeyEvent* e)
 		{
-			if (gl_renderer_.getStereoMode() != GLRenderer::NO_STEREO)
+			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO) return;
+
+			if ((e->key() == Qt::Key_Y && e->modifiers() == Qt::AltModifier) ||
+					 e->key() == Qt::Key_Escape)
 			{
-				if ((e->key() == Qt::Key_Y && e->modifiers() == Qt::AltModifier) ||
-						 e->key() == Qt::Key_Escape)
+				exitStereo();
+			}
+
+			// setting of eye and focal distance
+			if (e->key() != Qt::Key_Left  &&
+					e->key() != Qt::Key_Right &&
+					e->key() != Qt::Key_Up    &&
+					e->key() != Qt::Key_Down)
+			{
+				return;
+			}
+
+			// setting of eye distance
+			if (e->key() == Qt::Key_Left ||
+					e->key() == Qt::Key_Right)
+			{
+				float new_distance = stage_->getEyeDistance();
+
+				float modifier;
+				if (e->key() == Qt::Key_Left)
 				{
-					exitStereo();
+					modifier = -0.1;
 				}
-
-				// setting of eye and focal distance
-				if (e->key() != Qt::Key_Left  &&
-						e->key() != Qt::Key_Right &&
-						e->key() != Qt::Key_Up    &&
-						e->key() != Qt::Key_Down)
-				{
-					return;
-				}
-
-				// setting of eye distance
-				if (e->key() == Qt::Key_Left ||
-						e->key() == Qt::Key_Right)
-				{
-					float new_distance = stage_->getEyeDistance();
-
-					float modifier;
-					if (e->key() == Qt::Key_Left)
-					{
-						modifier = -0.1;
-					}
-					else
-					{
-						modifier = +0.1;
-					}
-
-					if (e->modifiers() == Qt::ShiftModifier)
-					{
-						modifier *= 10;
-					}
-
-					new_distance += modifier;
-					
-					// prevent strange values
-					if (new_distance < 0)
-					{
-						new_distance = 0;
-					}
-
-					if (new_distance > 4)
-					{
-						new_distance = 4;
-					}
-
-					stage_->setEyeDistance(new_distance);
-				}
-				// setting of focal distance
 				else
 				{
-					float new_focal_distance = stage_->getFocalDistance();
-
-					float modifier;
-					if (e->key() == Qt::Key_Down)
-					{
-						modifier = -1;
-					}
-					else
-					{
-						modifier = +1;
-					}
-
-					if (e->modifiers() == Qt::ShiftModifier)
-					{
-						modifier *= 10;
-					}
-
-					new_focal_distance += modifier;
-	
-					// prevent strange values
-					if (new_focal_distance < 7)
-					{
-						new_focal_distance = 7;
-					}
-					
-					if (new_focal_distance > 100) 
-					{
-						new_focal_distance = 100;
-					}
-
-					stage_->setFocalDistance(new_focal_distance);
+					modifier = +0.1;
 				}
 
-				stage_settings_->updateFromStage();
+				if (e->modifiers() == Qt::ShiftModifier)
+				{
+					modifier *= 10;
+				}
 
-				updateGL();
+				new_distance += modifier;
+				
+				// prevent strange values
+				if (new_distance < 0)
+				{
+					new_distance = 0;
+				}
+
+				if (new_distance > 4)
+				{
+					new_distance = 4;
+				}
+
+				stage_->setEyeDistance(new_distance);
 			}
+			// setting of focal distance
+			else
+			{
+				float new_focal_distance = stage_->getFocalDistance();
+
+				float modifier;
+				if (e->key() == Qt::Key_Down)
+				{
+					modifier = -1;
+				}
+				else
+				{
+					modifier = +1;
+				}
+
+				if (e->modifiers() == Qt::ShiftModifier)
+				{
+					modifier *= 10;
+				}
+
+				new_focal_distance += modifier;
+
+				// prevent strange values
+				if (new_focal_distance < 7)
+				{
+					new_focal_distance = 7;
+				}
+				
+				if (new_focal_distance > 100) 
+				{
+					new_focal_distance = 100;
+				}
+
+				stage_->setFocalDistance(new_focal_distance);
+			}
+
+			stage_settings_->updateFromStage();
+			updateGL();
 		}
 
 		void Scene::setMode(ModeType mode)

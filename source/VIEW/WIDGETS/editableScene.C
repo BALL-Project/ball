@@ -249,6 +249,44 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 	}
 }
 
+void EditableScene::wheelEvent(QWheelEvent* e)
+{
+	if (current_mode_ < (Scene::ModeType) ATOM__MODE)
+	{
+		Scene::wheelEvent(e);
+		return;
+	}
+
+	e->accept();
+
+	if (isAnimationRunning() || getMainControl()->isBusy()) return;
+
+	Index delta = e->delta();
+	if (delta == 0) return;
+	if (delta > 1) delta = 1;
+	if (delta < -1) delta = -1;
+
+	if (current_mode_ == (Scene::ModeType)BOND__MODE)
+	{
+		QPoint point = mapFromGlobal(QPoint(e->globalX(), e->globalY()));
+		Bond* bond = getClickedBond_(point.x(), point.y());
+		if (bond == 0) return;
+
+		Index order = bond->getOrder();
+		order += delta;
+		order = BALL_MAX((Index)Bond::ORDER__SINGLE, order);
+		order = BALL_MIN((Index)Bond::ORDER__AROMATIC, order);
+		bond->setOrder(order);
+		getMainControl()->update(*(Atom*)bond->getFirstAtom(), true);
+		String txt = "Set bond order to ";
+		txt += getBondOrderString_(order);
+		setStatusbarText(txt, true);
+	}
+	else if (current_mode_ == (Scene::ModeType) ATOM__MODE)
+	{
+	}
+}
+
 void EditableScene::mouseMoveEvent(QMouseEvent *e)
 {
 	if (current_mode_ < (Scene::ModeType) ATOM__MODE)
@@ -351,8 +389,8 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 		// if we didnt find first atom: abort
 		if (!current_atom_) return;
 
-		//is there an atom in radius "limit_" Angstroem?
-		Atom *atom = getClickedAtom_(e->x(), e->y());
+		// is there an atom in radius "limit_" Angstroem?
+		Atom* atom = getClickedAtom_(e->x(), e->y());
 
 		// decide what to do... did we find an atom at all?
 		if (atom)
@@ -410,30 +448,8 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 			//set the bond
 			Bond* c = new Bond("Bond", *current_atom_, *a, bond_order_);		
 		
-			String bond_string;
-			switch (bond_order_)
-			{
-				case Bond::ORDER__SINGLE:
-					bond_string = "single bond";
-					break;
-				case Bond::ORDER__DOUBLE:
-					bond_string = "double bond";
-					break;
-				case Bond::ORDER__TRIPLE:						
-					bond_string = "triple bond";	
-					break;
-				case Bond::ORDER__QUADRUPLE:
-					bond_string = "quadruple bond";	
-					break;
-				case Bond::ORDER__AROMATIC:
-					bond_string = "aromatic bond";	
-					break;
-				default:					
-					bond_string = "unknown";	
-					break;
-			}
-			
 			// tell about the new undo operation
+			String bond_string = getBondOrderString_(bond_order_);
 			EditOperation eo2(0, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
 			undo_.push_back(eo2);
 			emit newEditOperation(eo2);
@@ -443,6 +459,33 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 	}
 }	
 
+String EditableScene::getBondOrderString_(Index order)
+{
+	String bond_string;
+	switch (order)
+	{
+		case Bond::ORDER__SINGLE:
+			bond_string = "single";
+			break;
+		case Bond::ORDER__DOUBLE:
+			bond_string = "double";
+			break;
+		case Bond::ORDER__TRIPLE:						
+			bond_string = "triple";	
+			break;
+		case Bond::ORDER__QUADRUPLE:
+			bond_string = "quadruple";	
+			break;
+		case Bond::ORDER__AROMATIC:
+			bond_string = "aromatic";	
+			break;
+		default:					
+			bond_string = "unknown";	
+			break;
+	}
+	
+	return bond_string;
+}
 
 /// ******************** Helper Functions *************************
 
@@ -966,6 +1009,15 @@ void EditableScene::createMolecule_()
 	Molecule* current_molecule = new Molecule();
 	system->insert(*current_molecule);
 	getMainControl()->insert(*system);
+}
+
+void EditableScene::setMode(ModeType mode)
+	throw()
+{
+	Scene::setMode(mode);
+
+	if 			(mode == (Scene::ModeType) ATOM__MODE) 	atomMode_();
+	else if (mode == (Scene::ModeType) BOND__MODE) pickingMode_();
 }
 
 	}//end of namespace 

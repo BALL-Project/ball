@@ -129,12 +129,17 @@ class BALL_VIEW_EXPORT EditableScene
 	//
 	void showContextMenu(QPoint pos);
 
+	///
+	virtual void setMode(ModeType mode)
+		throw();
+
 	////////////////////////////////////////
 	public slots:
 
 	virtual void mousePressEvent(QMouseEvent* e);
 	virtual void mouseMoveEvent(QMouseEvent *e);
 	virtual void mouseReleaseEvent(QMouseEvent *e);
+	virtual void wheelEvent(QWheelEvent* qmouse_event);
 
 	// slots for communication with PTEDialog
 	void setEditElementType(int element_number);
@@ -207,6 +212,8 @@ class BALL_VIEW_EXPORT EditableScene
 	bool mapViewplaneToScreen_();
 
 	virtual void paintGL();
+
+	String getBondOrderString_(Index order);
 
 	QAction* atom_id_, *bond_id_;	
 	Atom* current_atom_;
