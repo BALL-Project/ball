@@ -164,10 +164,19 @@ void EditableScene::checkMenu(MainControl& main_control)
 
 void EditableScene::mousePressEvent(QMouseEvent* e)
 {
+	if (current_mode_ < (Scene::ModeType) ATOM__MODE)
+	{
+		Scene::mousePressEvent(e);
+		return;
+	}
+
+	if (isAnimationRunning() || getMainControl()->isBusy()) return;
+
 	x_window_pos_old_ = x_window_pos_new_;
 	y_window_pos_old_ = y_window_pos_new_;
 	x_window_pos_new_ = e->x();
 	y_window_pos_new_ = e->y();
+	mouse_button_is_pressed_ = true;
 
 	if (current_mode_ == (Scene::ModeType)ATOM__MODE)
 	{
@@ -238,14 +247,18 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 			showContextMenu(QPoint(e->x(), e->y()));
 		}
 	}
-	else
-	{
-		Scene::mousePressEvent(e);
-	}
 }
 
 void EditableScene::mouseMoveEvent(QMouseEvent *e)
 {
+	if (current_mode_ < (Scene::ModeType) ATOM__MODE)
+	{
+		Scene::mouseMoveEvent(e);
+		return;
+	}
+
+	if (isAnimationRunning() || getMainControl()->isBusy()) return;
+
 	// ============ bond mode ================
 	if (current_mode_ == (Scene::ModeType)BOND__MODE)
 	{
@@ -264,7 +277,7 @@ void EditableScene::mouseMoveEvent(QMouseEvent *e)
 			}
 			else
 			{
-				atom_pos_ = clickedPointOnViewPlane_(e->x(), e->y());
+				atom_pos_ = get3DPosition_(e->x(), e->y());
 			}
 
 			// paint the line representing the offered bond
@@ -289,10 +302,6 @@ void EditableScene::mouseMoveEvent(QMouseEvent *e)
 
 		current_atom_->getPosition() += diff;
 		getMainControl()->update(*current_atom_);
-	}
-	else
-	{
-		Scene::mouseMoveEvent(e);
 	}
 
 	x_window_pos_old_ = x_window_pos_new_;
@@ -323,7 +332,12 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 	if ((int)current_mode_ < (int) ATOM__MODE)
 	{
 		Scene::mouseReleaseEvent(e);
+		return;
 	}
+
+	if (isAnimationRunning() || getMainControl()->isBusy()) return;
+
+	mouse_button_is_pressed_ = false;
 
 	if (current_atom_)
  	{	
@@ -368,7 +382,7 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 		}
 		else // no atom found -> create one
 		{
-			Vector3 new_pos = clickedPointOnViewPlane_(e->x(), e->y());
+			Vector3 new_pos = get3DPosition_(e->x(), e->y());
 			// test if the two atoms would have the same position
 			if (current_atom_->getPosition() == new_pos)
 			{
@@ -394,8 +408,6 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 			emit newEditOperation(eo);
 
 			//set the bond
-			//update representation
-			// TODO: bond_oder
 			Bond* c = new Bond("Bond", *current_atom_, *a, bond_order_);		
 		
 			String bond_string;
@@ -432,7 +444,7 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 }	
 
 
-/** ******************** Helper Functions ************************* **/
+/// ******************** Helper Functions *************************
 
 // Find closest atom to screen position (x,y). If there is none closer than atom_limit_, return NULL
 Atom* EditableScene::getClickedAtom_(int x, int y)
@@ -452,7 +464,7 @@ Atom* EditableScene::getClickedAtom_(int x, int y)
 		if (s == 0) continue;
 
 		Vector3 cam_to_atom;
-		Vector3 cam_to_clickedPoint = clickedPointOnViewPlane_(x, y) - getStage()->getCamera().getViewPoint();
+		Vector3 cam_to_clickedPoint = get3DPosition_(x, y) - getStage()->getCamera().getViewPoint();
 
 		for (AtomIterator ai = s->beginAtom(); +ai; ++ai)
 		{
@@ -475,7 +487,7 @@ Atom* EditableScene::getClickedAtom_(int x, int y)
 		}
 	}
 
-	//is the minimal distance beyond the threshold?
+	// is the minimal distance beyond the threshold?
 	if (min_dist < atom_limit_)
 	{
 		return min_atom;
@@ -488,7 +500,7 @@ Atom* EditableScene::getClickedAtom_(int x, int y)
 // Note: this code is very similar to getClickedAtom. Maybe those two should be united.
 Bond* EditableScene::getClickedBond_(int x, int y)
 {
-	//get the AtomContainer
+	// get the AtomContainer
 	CompositeManager& cm = getMainControl()->getCompositeManager();
 
 	Bond* closest = 0;
@@ -496,14 +508,14 @@ Bond* EditableScene::getClickedBond_(int x, int y)
 
 	for (CompositeManager::iterator it = cm.begin(); +it; it++)
 	{
-		//check if composite is a system
+		// check if composite is a system
 		System* s = dynamic_cast<System*>(*it);
 		if (s == 0) continue;
 
-		//The Composite is a system
+		// The Composite is a system
 		// save the atom and its distance to the click ray
 		Vector3 cam_to_bond;
-		Vector3 cam_to_clickedPoint = clickedPointOnViewPlane_(x, y) - getStage()->getCamera().getViewPoint();
+		Vector3 cam_to_clickedPoint = get3DPosition_(x, y) - getStage()->getCamera().getViewPoint();
 
 		Vector3 vp = getStage()->getCamera().getViewPoint();
 
@@ -538,7 +550,7 @@ Bond* EditableScene::getClickedBond_(int x, int y)
 		}
 	}
 
-	//is the minimal distance beyond the threshold?
+	// is the minimal distance beyond the threshold?
 	if (min_dist < bond_limit_)
 	{
 		return closest;
@@ -571,10 +583,9 @@ void EditableScene::insert_(int x, int y, PDBAtom &atom)
 {
 	// find the 3D coordinates of screen position (x,y) on the view plane
 	// move the atom to that position
-	atom.setPosition(clickedPointOnViewPlane_(x,y));
+	atom.setPosition(get3DPosition_(x,y));
 
 	// now we need to find the AtomContainer into which we will insert the atom.
-	
 	// get all highlighted composites
 	List<Composite*> composite_list = getMainControl()->getMolecularControlSelection(); 
 	
@@ -671,15 +682,12 @@ bool EditableScene::mapViewplaneToScreen_()
 	near_right_bot_ = inverse_mod_view_mat_*near_right_bot_;
 	near_left_top_  = inverse_mod_view_mat_*near_left_top_;
 
-//			std::cout << "\tPROJECTION VARIABLES: " << std::endl;
-//			std::cout << "near:" << near_ << " left:" << left_ << " right:" << right_<< " top:" << top_ << " bottom:" << bottom_ << std::endl;
-
 	return true;
 }
 
 TVector2<Position> EditableScene::getScreenPosition_(Vector3 vec)
 {
-	//find the monitor coordinates of a given vector
+	// find the monitor coordinates of a given vector
 	TVector2<Position> pos ; 
 
 	double xs_ = width();
@@ -696,8 +704,8 @@ TVector2<Position> EditableScene::getScreenPosition_(Vector3 vec)
 		if (mapViewplaneToScreen_())
 		{
 			Vector3 la_m_d(near_left_bot_
-					+( (near_right_bot_ - near_left_bot_)*0.5 )
-					+( (near_left_top_  - near_left_bot_)*0.5 ) - cam);
+					+ (near_right_bot_ - near_left_bot_) * 0.5 
+					+ (near_left_top_  - near_left_bot_) * 0.5 - cam);
 
 			look_at.normalize();
 
@@ -734,7 +742,7 @@ TVector2<Position> EditableScene::getScreenPosition_(Vector3 vec)
 
 
 // Convert 2D screen coordinate to 3D coordinate on the view plane
-Vector3 EditableScene::clickedPointOnViewPlane_(int x, int y)
+Vector3 EditableScene::get3DPosition_(int x, int y)
 {
 	// 	Scale variables for Frustum
 	double xs_ = width();

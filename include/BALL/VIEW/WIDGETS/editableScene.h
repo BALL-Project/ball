@@ -183,7 +183,7 @@ class BALL_VIEW_EXPORT EditableScene
 	 * Given 2-dim Coordinates of Screen, clickedPointOnViewPlane computes the
 	 * appropriate 3-dim Position in Viewing Volume
 	 */
-	Vector3 clickedPointOnViewPlane_(int x, int y);
+	Vector3 get3DPosition_(int x, int y);
 
 	/**
 	 * Given 2-dim Coordinates of Screen, getCLickedAtom_ returns the nearest Atom 
