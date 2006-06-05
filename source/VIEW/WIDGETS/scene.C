@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.58 2006/06/03 10:31:45 amoll Exp $
+// $Id: scene.C,v 1.174.2.59 2006/06/05 20:48:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1124,8 +1124,19 @@ namespace BALL
 			if (update_GL) renderView_(REBUILD_DISPLAY_LISTS);
 		}
 
-
 		void Scene::createCoordinateSystem()
+			throw()
+		{
+			createCoordinateSystem_(false);
+		}
+
+		void Scene::createCoordinateSystemAtOrigin()
+			throw()
+		{
+			createCoordinateSystem_(true);
+		}
+
+		void Scene::createCoordinateSystem_(bool at_origin)
 			throw()
 		{
 			RepresentationManager& pm = getMainControl()->getRepresentationManager();
@@ -1137,102 +1148,96 @@ namespace BALL
 
 			float size = 100;
 
-			Vector3 v = s.getViewVector();
-			v.normalize();
-			
-			Vector3 p = s.getViewPoint() + (v * 25) - (s.getLookUpVector()* 5);
+			Vector3 x,y,z,p;
 
-			Vector3 x = -v + s.getRightVector();
-			x.normalize();
-			Vector3 y = -v - s.getRightVector();
-			y.normalize();
+			if (at_origin)
+			{
+				p = Vector3(0,0,0);
+				x = Vector3(1,0,0);
+				y = Vector3(0,1,0);
+				z = Vector3(0,0,1);
+			}
+			else
+			{
+				Vector3 v = s.getViewVector();
+				v.normalize();
+				
+				p = s.getViewPoint() + (v * 25) - (s.getLookUpVector() * 5.);
 
-			Vector3 z = -(x % y);
+				x = -v + s.getRightVector();
+				x.normalize();
+				y = -v - s.getRightVector();
+				y.normalize();
 
-			Box* xp = new Box(p, x * size, z * size, 0.05);
-			Box* yp = new Box(p, y * size, z * size, 0.05);
-			Box* zp = new Box(p, x * size, y * size, 0.05);
+				z = -(x % y);
+ 			}
 
-			ColorRGBA color(0,255,190,180);
-			xp->setColor(color);
-			yp->setColor(color);
-			zp->setColor(color);
+			float delta = 0.001;
+			Box* xp = new Box(p, x * size, z * size, delta);
+			Box* yp = new Box(p, y * size, z * size, delta);
+			Box* zp = new Box(p, x * size, y * size, delta);
+
+			ColorRGBA bcolor(0,255,190,180);
+			xp->setColor(bcolor);
+			yp->setColor(bcolor);
+			zp->setColor(bcolor);
 
 			rp->insert(*xp);
 			rp->insert(*yp);
  			rp->insert(*zp);
 
-			ColorRGBA color2(0,255,255,160);
+			ColorRGBA color;
+			ColorRGBA color1(0,255,255,160);
+			ColorRGBA color2(0,0,0,230);
 
-			Vector3 p1[6], p2[6];
-			p1[0].set(x); p2[0].set(z);
-			p1[1].set(y); p2[1].set(z);
-			p1[2].set(x); p2[2].set(y);
+			Vector3 p1[3], p2[3], d[3];
+			p1[0].set(x); p2[0].set(z); d[0].set(y * delta);
+			p1[1].set(y); p2[1].set(z); d[1].set(x * delta);
+			p1[2].set(x); p2[2].set(y); d[2].set(z * delta);
 
+			Vector3 px;
 			for (Position i = 0; i <= size; i+=1)
 			{
-				for (Position j = 0; j < 6; j++)
+				if (i % 10 == 0) 
 				{
-					Line* line1 = new Line();
-					line1->setVertex1(p + p1[j] * i);
-					line1->setVertex2(p + p1[j] * i + p2[j] * size);
-					line1->setColor(color);
-					rp->insert(*line1);
+					color = color2;
+				}
+				else
+				{
+					color = color1;
+				}
 
-					Line* line2 = new Line();
-					line2->setVertex1(p + p2[j] * i);
-					line2->setVertex2(p + p2[j] * i + p1[j] * size);
-					line2->setColor(color);
-					rp->insert(*line2);
+				for (Position j = 0; j < 3; j++)
+				{
+					px = p + d[j];
+
+					Line* line = new Line();
+					line->setVertex1(px + p1[j] * i);
+					line->setVertex2(px + p1[j] * i + p2[j] * size);
+					line->setColor(color);
+					rp->insert(*line);
+
+					line = new Line();
+					line->setVertex1(px + p2[j] * i);
+					line->setVertex2(px + p2[j] * i + p1[j] * size);
+					line->setColor(color);
+					rp->insert(*line);
+
+					px = p - d[j];
+
+					line = new Line();
+					line->setVertex1(px + p1[j] * i);
+					line->setVertex2(px + p1[j] * i + p2[j] * size);
+					line->setColor(color);
+					rp->insert(*line);
+
+					line = new Line();
+					line->setVertex1(px + p2[j] * i);
+					line->setVertex2(px + p2[j] * i + p1[j] * size);
+					line->setColor(color);
+					rp->insert(*line);
 				}
 			}
-
-
-			for (Position i = 0; i <= size; i+=10)
-			{
-				for (Position j = 0; j < 6; j++)
-				{
-					Line* line1 = new Line();
-					line1->setVertex1(p + p1[j] * i);
-					line1->setVertex2(p + p1[j] * i + p2[j] * size);
-					rp->insert(*line1);
-
-					Line* line2 = new Line();
-					line2->setVertex1(p + p2[j] * i);
-					line2->setVertex2(p + p2[j] * i + p1[j] * size);
-					rp->insert(*line2);
-				}
-			}
-
-			/*
-			ColorRGBA color3(0,255,255,200);
-			for (Position xi = 10; xi <= size; xi += 10)
-			{
-				for (Position yi = 10; yi <= size; yi += 10)
-				{
-					Vector3 point1(p + x * xi + y * yi);
-					Label* label1 = new Label();
-					label1->setVertex(point1);
-					label1->setColor(color3);
-					label1->setText(String(xi) + "," + String(yi));
-					rp->insert(*label1);
-
-					Vector3 point2(p + x * xi + z * yi);
-					Label* label2 = new Label();
-					label2->setVertex(point2);
-					label2->setColor(color3);
-					label2->setText(String(xi) + "," + String(yi));
-					rp->insert(*label2);
-
-					Vector3 point3(p + y * xi + z * yi);
-					Label* label3 = new Label();
-					label3->setVertex(point3);
-					label3->setColor(color3);
-					label3->setText(String(xi) + "," + String(yi));
-					rp->insert(*label3);
-				}
-			}
-			*/
 
 			rp->setProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM);
 
@@ -1528,9 +1533,11 @@ namespace BALL
 
 			main_control.initPopupMenu(MainControl::DISPLAY);
 
-			create_coordinate_system_ = 
-				insertMenuEntry(MainControl::DISPLAY, "Show Coordinate System", this, SLOT(createCoordinateSystem()));
+			create_coordinate_system_ = getMainControl()->initPopupMenu(MainControl::DISPLAY)->
+				addMenu("Show Coordinate System");
 			setMenuHint("Show a coordinate system");
+			create_coordinate_system_->addAction("at origin", this, SLOT(createCoordinateSystemAtOrigin()));
+			create_coordinate_system_->addAction("here", this, SLOT(createCoordinateSystem()));
 			
 			// ======================== ANIMATION ===============================================
 			String help_url = "tips.html#animations";
