@@ -140,12 +140,15 @@ void EditableScene::initializeWidget(MainControl& main_control)
 	throw()
 {
 	Scene::initializeWidget(main_control);
-	atom_id_ =	main_control.insertMenuEntry(MainControl::DISPLAY, "Set Atoms Mode", this, SLOT(atomMode_()), Qt::CTRL+Qt::Key_E);
+	String help_url("scene.html#editing");
+	atom_id_ = insertMenuEntry(MainControl::DISPLAY, "Set Atoms Mode", this, SLOT(atomMode_()), Qt::CTRL+Qt::Key_E);
 	atom_id_->setCheckable(true);
 	setMenuHint("Create and modify atoms");
-	bond_id_ =	main_control.insertMenuEntry(MainControl::DISPLAY, "Set Bonds Mode", this, SLOT(bondMode_()));
+	setMenuHelp(help_url);
+	bond_id_ = insertMenuEntry(MainControl::DISPLAY, "Set Bonds Mode", this, SLOT(bondMode_()));
 	bond_id_->setCheckable(true);
 	setMenuHint("Create and modify bonds");
+	setMenuHelp(help_url);
 }
 
 
@@ -950,7 +953,7 @@ void EditableScene::showContextMenu(QPoint pos)
 		QMenu* order = new QMenu();
 		QAction* change = menu.addMenu(order);
 		connect(order, SIGNAL(hovered(QAction*)), this, SLOT(activatedOrderItem_(QAction*)));
-		change->setText("Change order");
+		change->setText("Change bond order");
 		order->addAction("Single",    this, SLOT(changeBondOrder_()));
 		order->addAction("Double",    this, SLOT(changeBondOrder_()));
 		order->addAction("Triple",    this, SLOT(changeBondOrder_()));
