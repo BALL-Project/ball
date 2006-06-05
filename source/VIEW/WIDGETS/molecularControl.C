@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.36 2006/06/02 15:49:12 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.37 2006/06/05 18:18:44 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -51,7 +51,8 @@ namespace BALL
 					was_delete_(false),
 					nr_items_removed_(0),
 					show_ss_(false),
-					ignore_checked_changes_(false)
+					ignore_checked_changes_(false),
+					ignore_messages_(false)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new MolecularControl " << this << std::endl;
@@ -216,7 +217,8 @@ namespace BALL
 					case CompositeMessage::REMOVED_COMPOSITE:
 					{
 						removeComposite(*(Composite *)composite_message->getComposite());
-						return false;
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+						return true;
 					}
 					
 					case CompositeMessage::CHANGED_COMPOSITE:
@@ -680,6 +682,7 @@ namespace BALL
 			Log.error() << "MolecularControl " << this << " onNotify " << message << std::endl;
 		#endif
 
+			if (ignore_messages_) return;
 			GenericControl::onNotify(message);
 
 			listview->setUpdatesEnabled(false);
@@ -771,7 +774,14 @@ namespace BALL
 			for (; it != selected_.end(); it++)
 			{
 				Composite& c = **it;
-				if (!c.isRoot()) roots.insert(&c.getRoot());
+				if (!c.isRoot()) 
+				{
+					roots.insert(&c.getRoot());
+				}
+				else
+				{
+					removeComposite(c);
+				}
 
 				getMainControl()->remove(c, was_delete_, false);
 
@@ -784,6 +794,8 @@ namespace BALL
 			for (; +roots_it; roots_it++)
 			{
 				getMainControl()->update(**roots_it, true);
+				removeComposite(**roots_it);
+				addComposite(**roots_it);
 			}
 
 			enableUpdates_(true);
@@ -1236,6 +1248,7 @@ namespace BALL
 
 		void MolecularControl::enableUpdates_(bool state)
 		{
+			ignore_messages_ = !state;
 			listview->setUpdatesEnabled(state);
 			disconnect(listview, SIGNAL(itemSelectionChanged()), this, SLOT(updateSelection()));
 			if (!state) return;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.50.2.15 2006/05/30 16:44:52 amoll Exp $
+// $Id: molecularControl.h,v 1.50.2.16 2006/06/05 18:18:50 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -464,6 +464,7 @@ class BALL_VIEW_EXPORT MolecularControl
 					 *select_action_, *deselect_action_, *count_items_action_, *atom_overview_, *atom_overview_selection_;
 
 	bool ignore_checked_changes_;
+	bool ignore_messages_;
 };
 	
 }} // namespaces
