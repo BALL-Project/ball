@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editSettings.C,v 1.1.2.1 2006/06/05 10:38:42 amoll Exp $
+// $Id: editSettings.C,v 1.1.2.2 2006/06/05 21:29:08 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/editSettings.h>
@@ -30,6 +30,7 @@ EditSettings::EditSettings(QWidget* parent, const char* name, Qt::WFlags fl)
 	registerObject_(only_highlighted);
 
 	setWidgetStackName("Editing");
+	registerWidgetForHelpSystem_(this, "scene.html#editing");
 }
 
 EditSettings::~EditSettings()
