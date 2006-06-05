@@ -752,8 +752,8 @@ TVector2<Position> EditableScene::getScreenPosition_(Vector3 vec)
 {
 	// find the monitor coordinates of a given vector
 	TVector2<Position> pos ; 
-	pos.x = FLT_MAX;
-	pos.y = FLT_MAX;
+	pos.x = INT_MAX;
+	pos.y = INT_MAX;
 
 	double xs_ = width();
 	double ys_ = height(); 

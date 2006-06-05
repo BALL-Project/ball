@@ -128,6 +128,7 @@ mocfiles\dockResultDialog_moc.obj\
 mocfiles\geometricFitDialog_moc.obj\
 mocfiles\downloadPDBFile_moc.obj\
 #mocfiles\editOperationDialog_moc.obj\
+mocfiles\editSettings_moc.obj\
 mocfiles\editableScene_moc.obj\
 mocfiles\fieldLinesDialog_moc.obj\
 mocfiles\FDPBDialog_moc.obj\
