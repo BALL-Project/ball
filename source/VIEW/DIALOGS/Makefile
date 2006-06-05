@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.53.2.11 2006/05/16 13:13:55 amoll Exp $
+# $Id: Makefile,v 1.53.2.12 2006/06/05 10:38:57 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -32,6 +32,7 @@ CPP_SOURCES=\
 	dockProgressDialog.C\
 	dockResultDialog.C\
 	downloadPDBFile.C\
+	editSettings.C\
 	displayProperties.C\
 	fieldLinesDialog.C\
 	FDPBDialog.C\
@@ -70,6 +71,7 @@ MOC_SOURCES=\
 	dockProgressDialog_moc.C\
 	dockResultDialog_moc.C\
 	downloadPDBFile_moc.C\
+ 	editSettings_moc.C\
 	displayProperties_moc.C\
 	FDPBDialog_moc.C\
 	fieldLinesDialog_moc.C\
@@ -105,6 +107,7 @@ UIC_SOURCES=\
 	contourSurfaceDialogData.C\
 	downloadPDBFileData.C\
 	displayPropertiesData.C\
+	editSettingsData.C\
 	FDPBDialogData.C\
 	fieldLinesDialogData.C\
 	labelDialogData.C\

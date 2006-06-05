@@ -16,6 +16,8 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/compositeManager.h>
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
+#include <BALL/VIEW/DIALOGS/editSettings.h>
+#include <BALL/VIEW/DIALOGS/preferences.h>
 
 #include <QtGui/qpainter.h>
 #include <QtGui/qmenubar.h>
@@ -77,17 +79,20 @@ EditableScene::EditOperation::~EditOperation()
 
 //
 //-------------------- EditableScene -----------------------
-//
+
+float EditableScene::atom_limit_ = 1.5;
+float EditableScene::bond_limit_ = 2.0;
+bool EditableScene::only_highlighted_ = true;
+
 EditableScene::EditableScene()
 	throw()
 	:	Scene(),
 		atom_id_(0),
 		bond_id_(0),
 		current_atom_(0),
-		atom_limit_(1.5),
-		bond_limit_(2.0),
 		atom_type_(6),
-		undo_()
+		undo_(),
+		edit_settings_(0)
 {
 }
 
@@ -97,11 +102,10 @@ EditableScene::EditableScene(QWidget* parent_widget, const char* name, Qt::WFlag
 		atom_id_(0),
 		bond_id_(0),
 		current_atom_(0),
-		atom_limit_(1.5),
-		bond_limit_(2.0),
 		atom_type_(6),
 		bond_order_(Bond::ORDER__SINGLE),
-		undo_()
+		undo_(),
+		edit_settings_(0)
 {	
 	registerWidget(this); 
 }
@@ -113,10 +117,8 @@ EditableScene::EditableScene(const EditableScene& eScene, QWidget* parent_widget
 		atom_id_(0),
 		bond_id_(0),
 		current_atom_(eScene.current_atom_),
-		atom_limit_(eScene.atom_limit_),
-		bond_limit_(eScene.bond_limit_),
-		atom_type_(eScene.atom_type_),
-		undo_()
+		undo_(),
+		edit_settings_(0)
 {
 }
 
@@ -488,23 +490,45 @@ String EditableScene::getBondOrderString_(Index order)
 }
 
 /// ******************** Helper Functions *************************
+List<AtomContainer*> EditableScene::getContainers_()
+{
+	List<AtomContainer*> containers;
+	if (only_highlighted_)
+	{
+		List<Composite*> highl = getMainControl()->getMolecularControlSelection();
+		List<Composite*>::Iterator lit = highl.begin();
+		for (; lit != highl.end(); ++lit)
+		{
+			AtomContainer* ac = dynamic_cast<AtomContainer*>(*lit);
+			if (ac != 0) containers.push_back(ac);
+		}
+	}
+	else
+	{
+		HashSet<Composite*> composites = getMainControl()->getCompositeManager().getComposites();
+		HashSet<Composite*>::Iterator sit = composites.begin();
+		for (; +sit; ++sit)
+		{
+			AtomContainer* ac = dynamic_cast<AtomContainer*>(*sit);
+			if (ac != 0) containers.push_back(ac);
+		}
+	}
+
+	return containers;
+}
 
 // Find closest atom to screen position (x,y). If there is none closer than atom_limit_, return NULL
 Atom* EditableScene::getClickedAtom_(int x, int y)
 {
-	//get the AtomContainer
-	CompositeManager& cm = getMainControl()->getCompositeManager();
-	CompositeManager::iterator it = cm.begin();
-
 	float min_dist = FLT_MAX;
 	Atom* min_atom = 0;
 	float dist;
 
-	for (; it != cm.end(); it++)
+	List<AtomContainer*> containers = getContainers_();
+	List<AtomContainer*>::Iterator it = containers.begin();
+	for (; it != containers.end(); it++)
 	{
-		//check if composite is a system
-		System* s = dynamic_cast<System*>(*it);
-		if (s == 0) continue;
+		AtomContainer* s = *it;
 
 		Vector3 cam_to_atom;
 		Vector3 cam_to_clickedPoint = get3DPosition_(x, y) - getStage()->getCamera().getViewPoint();
@@ -543,19 +567,15 @@ Atom* EditableScene::getClickedAtom_(int x, int y)
 // Note: this code is very similar to getClickedAtom. Maybe those two should be united.
 Bond* EditableScene::getClickedBond_(int x, int y)
 {
-	// get the AtomContainer
-	CompositeManager& cm = getMainControl()->getCompositeManager();
-
 	Bond* closest = 0;
 	float min_dist = FLT_MAX;
 
-	for (CompositeManager::iterator it = cm.begin(); +it; it++)
+	List<AtomContainer*> containers = getContainers_();
+	List<AtomContainer*>::Iterator it = containers.begin();
+	for (; it != containers.end(); it++)
 	{
-		// check if composite is a system
-		System* s = dynamic_cast<System*>(*it);
-		if (s == 0) continue;
+		AtomContainer* s = *it;
 
-		// The Composite is a system
 		// save the atom and its distance to the click ray
 		Vector3 cam_to_bond;
 		Vector3 cam_to_clickedPoint = get3DPosition_(x, y) - getStage()->getCamera().getViewPoint();
@@ -1018,6 +1038,35 @@ void EditableScene::setMode(ModeType mode)
 
 	if 			(mode == (Scene::ModeType) ATOM__MODE) 	atomMode_();
 	else if (mode == (Scene::ModeType) BOND__MODE) pickingMode_();
+}
+
+void EditableScene::applyPreferences()
+	throw()
+{
+	Scene::applyPreferences();
+	if (edit_settings_ == 0) return;
+	bond_limit_ = edit_settings_->bond_distance->text().toFloat();
+	atom_limit_ = edit_settings_->atom_distance->text().toFloat();
+	only_highlighted_ = edit_settings_->only_highlighted->isChecked();
+}
+
+void EditableScene::initializePreferencesTab(Preferences& preferences)
+	throw()
+{
+	Scene::initializePreferencesTab(preferences);
+	edit_settings_ = new EditSettings(this);
+	preferences.insertEntry(edit_settings_);
+}
+
+void EditableScene::finalizePreferencesTab(Preferences& preferences)
+	throw()
+{
+	Scene::finalizePreferencesTab(preferences);
+	if (edit_settings_) 
+	{
+		preferences.removeEntry(edit_settings_);
+		edit_settings_ = 0;
+	}
 }
 
 	}//end of namespace 

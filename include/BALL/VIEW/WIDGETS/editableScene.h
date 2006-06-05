@@ -34,6 +34,8 @@ namespace BALL
 	namespace VIEW
 	{
 
+class EditSettings;
+
 class BALL_VIEW_EXPORT EditableScene
 	: public Scene
 {
@@ -126,7 +128,19 @@ class BALL_VIEW_EXPORT EditableScene
 	void checkMenu(MainControl& main_control)
 		throw();
 
-	//
+	///
+	void initializePreferencesTab(Preferences &preferences)
+		throw();
+	
+	///
+	void finalizePreferencesTab(Preferences &preferences)
+		throw();
+
+	///
+	virtual void applyPreferences()
+		throw();
+	
+	///
 	void showContextMenu(QPoint pos);
 
 	///
@@ -215,6 +229,8 @@ class BALL_VIEW_EXPORT EditableScene
 
 	String getBondOrderString_(Index order);
 
+	List<AtomContainer*> getContainers_();
+
 	QAction* atom_id_, *bond_id_;	
 	Atom* current_atom_;
 	Bond* current_bond_;
@@ -227,8 +243,10 @@ class BALL_VIEW_EXPORT EditableScene
 	bool draw_line_;
 
 	// search range when looking for atoms/bonds (in angstrom)
-	double atom_limit_;			
-	double bond_limit_;			
+	static float atom_limit_;			
+	static float bond_limit_;			
+	// pick atoms/bonds only in highlighted AtomContainer?
+	static bool only_highlighted_;
 	// element for new atoms
 	int atom_type_;
 	// order for new bonds
@@ -236,6 +254,7 @@ class BALL_VIEW_EXPORT EditableScene
 
 	//undo stack
 	vector<EditOperation> undo_;
+	EditSettings* edit_settings_;
 };
 
 	}//end of namespace
