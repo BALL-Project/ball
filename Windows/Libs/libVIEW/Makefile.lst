@@ -24,6 +24,7 @@ libVIEW.obj\
 ..\..\..\source\VIEW\DIALOGS\geometricFitDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\downloadPDBFile.obj\
 #..\..\..\source\VIEW\DIALOGS\editOperationDialog.obj\
+..\..\..\source\VIEW\DIALOGS\editSettings.obj\
 ..\..\..\source\VIEW\DIALOGS\fieldLinesDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\FDPBDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\labelDialog.obj\
@@ -110,6 +111,7 @@ libVIEW.obj\
 ..\..\..\source\VIEW\WIDGETS\pyWidget.obj\
 #..\..\..\source\VIEW\WIDGETS\regularData1DWidget.obj ..\..\..\source\VIEW\WIDGETS\regularData2DWidget.obj\
 ..\..\..\source\VIEW\WIDGETS\scene.obj\
+..\..\..\source\VIEW\WIDGETS\editableScene.obj\
 mocfiles\amberConfigurationDialog_moc.obj\
 mocfiles\bondProperties_moc.obj\
 mocfiles\charmmConfigurationDialog_moc.obj\
@@ -126,6 +128,7 @@ mocfiles\dockResultDialog_moc.obj\
 mocfiles\geometricFitDialog_moc.obj\
 mocfiles\downloadPDBFile_moc.obj\
 #mocfiles\editOperationDialog_moc.obj\
+mocfiles\editableScene_moc.obj\
 mocfiles\fieldLinesDialog_moc.obj\
 mocfiles\FDPBDialog_moc.obj\
 mocfiles\labelDialog_moc.obj\
@@ -160,6 +163,7 @@ mocfiles\molecularStructure_moc.obj\
 mocfiles\pyWidget_moc.obj\
 #mocfiles\regularData1DWidget_moc.obj mocfiles\regularData2DWidget_moc.obj\
 mocfiles\scene_moc.obj\
+mocfiles\editableScene_moc.obj\
 #mocfiles\openBruker1DFile_moc.obj mocfiles\openBruker2DFile_moc.obj
 
 UICS = \
@@ -178,6 +182,7 @@ UICS = \
 ..\..\..\source\VIEW\DIALOGS\displayProperties.myui\
 ..\..\..\source\VIEW\DIALOGS\downloadPDBFile.myui\
 #..\..\..\source\VIEW\DIALOGS\editOperationDialog.myui\
+..\..\..\source\VIEW\DIALOGS\editSettings.myui\
 ..\..\..\source\VIEW\DIALOGS\fieldLinesDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\FDPBDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\labelDialog.myui\
@@ -212,6 +217,7 @@ MOCS = \
 ..\..\..\include\BALL\VIEW\WIDGETS\molecularStructure.mymoc\
 ..\..\..\include\BALL\VIEW\WIDGETS\pyWidget.mymoc\
 ..\..\..\include\BALL\VIEW\WIDGETS\scene.mymoc\
+..\..\..\include\BALL\VIEW\WIDGETS\editableScene.mymoc\
 ..\..\..\include\BALL\VIEW\KERNEL\mainControl.mymoc\
 ..\..\..\include\BALL\VIEW\DIALOGS\molecularFileDialog.mymoc\
 ..\..\..\include\BALL\VIEW\DIALOGS\serverPreferences.mymoc

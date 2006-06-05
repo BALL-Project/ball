@@ -752,6 +752,8 @@ TVector2<Position> EditableScene::getScreenPosition_(Vector3 vec)
 {
 	// find the monitor coordinates of a given vector
 	TVector2<Position> pos ; 
+	pos.x = FLT_MAX;
+	pos.y = FLT_MAX;
 
 	double xs_ = width();
 	double ys_ = height(); 
@@ -766,9 +768,8 @@ TVector2<Position> EditableScene::getScreenPosition_(Vector3 vec)
 	{
 		if (mapViewplaneToScreen_())
 		{
-			Vector3 la_m_d(near_left_bot_
-					+ (near_right_bot_ - near_left_bot_) * 0.5 
-					+ (near_left_top_  - near_left_bot_) * 0.5 - cam);
+			Vector3 la_m_d(near_left_bot_ + (near_right_bot_ - near_left_bot_) * 0.5 
+																		+ (near_left_top_  - near_left_bot_) * 0.5 - cam);
 
 			look_at.normalize();
 
@@ -782,25 +783,15 @@ TVector2<Position> EditableScene::getScreenPosition_(Vector3 vec)
 			unsigned int y_mouse = (unsigned int) (screen_top_left_pos_to_proj_atom * ( near_left_bot_ - near_left_top_ ) 
 					/   (( near_left_bot_ - near_left_top_ ).getSquareLength() )  * ys_);
 
-			pos.x=x_mouse;
-			pos.y=y_mouse;
-			return pos;
-		}
-		else
-		{
-			pos.x = std::numeric_limits<unsigned int>::max();
-			pos.y = std::numeric_limits<unsigned int>::max();
-
-			return pos;
+			pos.x = x_mouse;
+			pos.y = y_mouse;
 		}
 	}	
 	catch (...)
 	{
-		pos.x = std::numeric_limits<unsigned int>::max();
-		pos.y = std::numeric_limits<unsigned int>::max();
-
-		return pos;
 	}
+
+	return pos;
 }
 
 
