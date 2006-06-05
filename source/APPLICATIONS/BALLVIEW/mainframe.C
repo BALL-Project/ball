@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.23 2006/06/02 23:53:19 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.24 2006/06/05 21:18:50 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -219,10 +219,19 @@ namespace BALL
 	{
 		if (!fullscreen_)
 		{
+			last_state_ = saveState();
 			// This call is needed because showFullScreen won't work
 			// correctly if the widget already considers itself to be fullscreen.
 			last_size_ = size();
 			last_point_ = pos();
+			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			for (; it != modular_widgets_.end(); ++it)
+			{
+				DockWidget* widget = dynamic_cast<DockWidget*>(*it);
+				if (widget == 0) continue;
+				widget->hide();
+			}
+
 			showNormal();	
 			showFullScreen();
 		}
@@ -231,6 +240,7 @@ namespace BALL
 			showNormal();
 			resize(last_size_.width(), last_size_.height());
 			move(last_point_);
+			restoreState(last_state_);
 		}
 		fullscreen_ = !fullscreen_;
 	}

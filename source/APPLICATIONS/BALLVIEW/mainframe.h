@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.16.2.4 2006/05/09 09:34:47 amoll Exp $
+// $Id: mainframe.h,v 1.16.2.5 2006/06/05 21:19:09 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -80,10 +80,11 @@ namespace BALL
 
 		protected:
 
-		Scene*										scene_;
-		bool 											fullscreen_;
-		QPoint 										last_point_;
-		QSize 										last_size_;
+		Scene*				scene_;
+		bool 					fullscreen_;
+		QPoint 				last_point_;
+		QSize 				last_size_;
+		QByteArray 		last_state_;
 	};
 
 } // namespace BALL
