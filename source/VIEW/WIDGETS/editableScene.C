@@ -1020,6 +1020,12 @@ void EditableScene::createMolecule_()
 	Molecule* current_molecule = new Molecule();
 	system->insert(*current_molecule);
 	getMainControl()->insert(*system);
+
+	ControlSelectionMessage* nsm =  new ControlSelectionMessage();
+	List<Composite*> selection;
+	selection.push_back(current_molecule);
+	nsm->setSelection(selection);
+	notify_(nsm);
 }
 
 void EditableScene::setMode(ModeType mode)
