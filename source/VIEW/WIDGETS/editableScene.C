@@ -186,7 +186,8 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 
 	if (e->button() != Qt::RightButton)
 	{
-		if (getMainControl()->getMolecularControlSelection().size() == 0)
+		if (only_highlighted_ &&
+				getMainControl()->getMolecularControlSelection().size() == 0)
 		{
 			setStatusbarText("Warning: no AtomContainer highlighted", true);
 			return;
