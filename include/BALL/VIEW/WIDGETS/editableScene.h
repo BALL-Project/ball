@@ -231,6 +231,9 @@ class BALL_VIEW_EXPORT EditableScene
 
 	List<AtomContainer*> getContainers_();
 
+	void changeBondOrder_(Index delta);
+	void deselect_();
+
 	QAction* atom_id_, *bond_id_;	
 	Atom* current_atom_;
 	Bond* current_bond_;
@@ -251,6 +254,8 @@ class BALL_VIEW_EXPORT EditableScene
 	int atom_type_;
 	// order for new bonds
 	int bond_order_;
+	Position last_y_;
+	Qt::MouseButtons last_buttons_;
 
 	//undo stack
 	vector<EditOperation> undo_;

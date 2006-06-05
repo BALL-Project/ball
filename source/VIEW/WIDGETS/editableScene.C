@@ -179,6 +179,16 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 	x_window_pos_new_ = e->x();
 	y_window_pos_new_ = e->y();
 	mouse_button_is_pressed_ = true;
+	last_buttons_ = e->buttons();
+
+	if (e->button() != Qt::RightButton)
+	{
+		if (getMainControl()->getMolecularControlSelection().size() == 0)
+		{
+			setStatusbarText("Warning: no AtomContainer highlighted", true);
+			return;
+		}
+	}
 
 	if (current_mode_ == (Scene::ModeType)ATOM__MODE)
 	{
@@ -217,6 +227,10 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 			// we open a context menu at this point
 			showContextMenu(QPoint(e->x(), e->y()));
 		}
+		else
+		{
+			last_y_ = e->y();
+		}
 	}
 	else if (current_mode_ == (Scene::ModeType)BOND__MODE)
 	{
@@ -227,9 +241,11 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 			{
 				current_atom_->select(); 
 				notify_(new CompositeMessage(*current_atom_, CompositeMessage::SELECTED_COMPOSITE));	
+				atom_pos_ = current_atom_->getPosition();
+				draw_line_ = false;
 			}
 		}
-		if (e->button() == Qt::RightButton)
+		else
 		{
 			// try to find a bond
 			Bond* bond = getClickedBond_(e->x(), e->y());
@@ -246,7 +262,10 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 			}
 
 			current_bond_ = bond;
-			showContextMenu(QPoint(e->x(), e->y()));
+			if (e->button() == Qt::RightButton)
+			{
+				showContextMenu(QPoint(e->x(), e->y()));
+			}
 		}
 	}
 }
@@ -270,23 +289,30 @@ void EditableScene::wheelEvent(QWheelEvent* e)
 
 	if (current_mode_ == (Scene::ModeType)BOND__MODE)
 	{
-		QPoint point = mapFromGlobal(QPoint(e->globalX(), e->globalY()));
-		Bond* bond = getClickedBond_(point.x(), point.y());
-		if (bond == 0) return;
-
-		Index order = bond->getOrder();
-		order += delta;
-		order = BALL_MAX((Index)Bond::ORDER__SINGLE, order);
-		order = BALL_MIN((Index)Bond::ORDER__AROMATIC, order);
-		bond->setOrder(order);
-		getMainControl()->update(*(Atom*)bond->getFirstAtom(), true);
-		String txt = "Set bond order to ";
-		txt += getBondOrderString_(order);
-		setStatusbarText(txt, true);
+		QPoint point = mapFromGlobal(QPoint(e->x(), e->y()));
+		current_bond_ = getClickedBond_(point.x(), point.y());
+		changeBondOrder_(delta);
 	}
 	else if (current_mode_ == (Scene::ModeType) ATOM__MODE)
 	{
 	}
+}
+
+void EditableScene::changeBondOrder_(Index delta)
+{
+	if (current_bond_ == 0) return;
+
+	Index order = current_bond_->getOrder();
+	order += delta;
+	order = BALL_MAX((Index)Bond::ORDER__SINGLE, order);
+	order = BALL_MIN((Index)Bond::ORDER__AROMATIC, order);
+	if (current_bond_->getOrder() == order) return;
+
+	current_bond_->setOrder(order);
+	getMainControl()->update(*(Atom*)current_bond_->getFirstAtom(), true);
+	String txt = "Set bond order to ";
+	txt += getBondOrderString_(order);
+	setStatusbarText(txt);
 }
 
 void EditableScene::mouseMoveEvent(QMouseEvent *e)
@@ -302,8 +328,25 @@ void EditableScene::mouseMoveEvent(QMouseEvent *e)
 	// ============ bond mode ================
 	if (current_mode_ == (Scene::ModeType)BOND__MODE)
 	{
-		if (e->buttons() == Qt::LeftButton)
+		if (e->buttons() == Qt::MidButton)
 		{
+			// change the bond order
+			float ydiff = (float)e->y() - (float)last_y_;
+			ydiff /= (float) qApp->desktop()->height();
+
+			Index delta = 0;
+			if (ydiff < -0.05) delta = 1;
+			if (ydiff > 0.05) delta = -1;
+			if (delta != 0) 
+			{
+				changeBondOrder_(delta);
+				last_y_ = e->y();
+			}
+		}
+		else if (e->buttons() == Qt::LeftButton)
+		{
+			// create a new bond
+			//
 			// is there an atom nearby the actual mouse position? 
 			Atom* atom = getClickedAtom_(e->x(), e->y());
 
@@ -375,6 +418,12 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 		return;
 	}
 
+	if (last_buttons_ != Qt::LeftButton) 
+	{
+		deselect_();
+		return;
+	}
+
 	if (isAnimationRunning() || getMainControl()->isBusy()) return;
 
 	mouse_button_is_pressed_ = false;
@@ -389,7 +438,11 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 	if (current_mode_ == (Scene::ModeType)BOND__MODE)
 	{
 		// if we didnt find first atom: abort
-		if (!current_atom_) return;
+		if (!current_atom_) 
+		{
+			deselect_();
+			return;
+		}
 
 		// is there an atom in radius "limit_" Angstroem?
 		Atom* atom = getClickedAtom_(e->x(), e->y());
@@ -406,11 +459,9 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 			else // we found _another_ atom
 			{
 				//set the bond
-				// TODO: - make the bond_order variable. Even better: change order with click on the bond
-				//       - if there is already a bond, change it to a double bond
 				Bond* c = new Bond("Bond", *current_atom_, *atom, Bond::ORDER__SINGLE);		
 				
-				EditOperation eo(0, c, "Added bond of type " , EditOperation::ADDED__BOND);
+				EditOperation eo(0, c, "Added bond of type single" , EditOperation::ADDED__BOND);
 				undo_.push_back(eo);
 			
 				// tell about the new undo operation
@@ -418,6 +469,7 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 
 				//update representation
 				getMainControl()->update(*atom, true);
+				setStatusbarText("Added bond");
 			}	
 		}
 		else // no atom found -> create one
@@ -457,7 +509,10 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 			emit newEditOperation(eo2);
 
 			getMainControl()->update(*a->getParent(), true);
+			setStatusbarText("Added bond and atom");
 		}
+
+		deselect_();
 	}
 }	
 
@@ -910,6 +965,11 @@ void EditableScene::showContextMenu(QPoint pos)
 	if (current_mode_ == MOVE__MODE) return;
 
 	// otherwise deselect all selected items
+	deselect_();
+}
+
+void EditableScene::deselect_()
+{
 	if (current_bond_ != 0 && current_bond_->isSelected())
 	{
 		current_bond_->deselect();
