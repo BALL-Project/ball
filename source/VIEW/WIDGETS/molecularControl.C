@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.38 2006/06/06 16:45:09 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.39 2006/06/06 21:01:30 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -258,14 +258,17 @@ namespace BALL
 							listview->expandItem(to_find->second);
 						}
 
+						list<QTreeWidgetItem*> item_list;
 						lit = highlighted.begin();
 						for (; lit != highlighted.end(); lit++)
 						{
 							to_find = composite_to_item_.find(*lit);
 							if (to_find == composite_to_item_.end()) continue;
 
-							listview->setItemSelected(to_find->second, true);
+							item_list.push_back(to_find->second);
 						}
+
+						listview->selectItems(item_list);
 
 						return true;
 					}
@@ -1216,29 +1219,28 @@ namespace BALL
 			HashSet<Composite*> selection = getMainControl()->getSelection();
 			HashSet<Composite*>::Iterator sit = selection.begin();
 			std::map<Composite*, QTreeWidgetItem*>::iterator fit;
+			list<QTreeWidgetItem*> items;
 			for (; +sit; ++sit)
 			{
 				fit = composite_to_item_.find(*sit);
 				if (fit == composite_to_item_.end()) continue;
-				listview->setItemSelected(fit->second, true);
+				items.push_back(fit->second);
 			}
+			listview->selectItems(items);
 
-			QTreeWidgetItem* item = 0;
-			sit = selection.begin();
-			for (; +sit; ++sit)
+			list<QTreeWidgetItem*>::const_iterator lit = items.begin();
+			QTreeWidgetItem* item = *lit;
+			for (; lit != items.end(); ++lit)
 			{
-				if (composite_to_item_.find(*sit) != composite_to_item_.end())
+				QTreeWidgetItem* parent = (*lit)->parent();
+				while (parent != 0 && !listview->isItemExpanded(parent))
 				{
-					item = composite_to_item_[*sit];
-					QTreeWidgetItem* parent = item->parent();
-					while (parent != 0 && !listview->isItemExpanded(parent))
-					{
-						listview->expandItem(parent);
-						parent = parent->parent();
-					}
-
-					break;
+					listview->expandItem(parent);
+					parent = parent->parent();
 				}
+
+				// maybe to be removed, if to expand all:
+//   				break;
 			}
 
 			enableUpdates_(true);

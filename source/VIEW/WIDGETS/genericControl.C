@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.17.2.6 2006/05/29 22:06:43 amoll Exp $
+// $Id: genericControl.C,v 1.17.2.7 2006/06/06 21:01:30 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
@@ -13,11 +13,30 @@ namespace BALL
 	namespace VIEW
 	{
 
+		TreeWidget::TreeWidget(QWidget* parent)
+			: QTreeWidget(parent)
+		{
+		}
+
+		void TreeWidget::selectItems(const list<QTreeWidgetItem*>& items)
+		{
+			QItemSelection qis;
+			list<QTreeWidgetItem*>::const_iterator cit = items.begin();
+			for (; cit != items.end(); cit++)
+			{
+				QItemSelectionRange qsr(indexFromItem(*cit));
+				qis.push_back(qsr);
+			}
+
+	    selectionModel()->select(qis, QItemSelectionModel::Select
+					                            |QItemSelectionModel::Rows);
+		}
+
 		GenericControl::GenericControl(QWidget* parent, const char* name)
 			throw()
 				:	DockWidget(parent, name),
  					context_item_(0),
-					listview(new QTreeWidget(this))
+					listview(new TreeWidget(this))
 		{
  			setGuest(*listview);	
 			listview->setSelectionMode(QAbstractItemView::ExtendedSelection);

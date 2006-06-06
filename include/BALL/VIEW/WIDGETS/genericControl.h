@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.h,v 1.14.2.5 2006/05/08 21:55:30 amoll Exp $
+// $Id: genericControl.h,v 1.14.2.6 2006/06/06 21:01:27 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
 #define BALL_VIEW_WIDGETS_GENERICCONTROL_H
@@ -19,6 +19,19 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		///
+		class TreeWidget
+			: public QTreeWidget
+		{
+			public:
+
+			///
+			TreeWidget(QWidget* parent = 0);
+
+			///
+			void selectItems(const list<QTreeWidgetItem*>& items);
+		};
+
 		/**	GenericControl is a widget to display the structure of Composite objects. 
 		 		It uses the datastructure QListView from the QT-libary.
 				There are two columns. The <b>Name</b> column and the
@@ -121,7 +134,7 @@ namespace BALL
  				throw();
 
  			QTreeWidgetItem* 			context_item_;
-			QTreeWidget* 					listview;
+			TreeWidget* 					listview;
 			bool 									checkable_;
 		};
 		
