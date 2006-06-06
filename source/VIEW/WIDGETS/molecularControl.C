@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.39 2006/06/06 21:01:30 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.40 2006/06/06 21:50:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -1238,9 +1238,6 @@ namespace BALL
 					listview->expandItem(parent);
 					parent = parent->parent();
 				}
-
-				// maybe to be removed, if to expand all:
-//   				break;
 			}
 
 			enableUpdates_(true);
