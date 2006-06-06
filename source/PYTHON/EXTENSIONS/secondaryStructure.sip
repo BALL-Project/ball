@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.sip,v 1.9 2004/02/25 10:47:13 oliver Exp $
+// $Id: secondaryStructure.sip,v 1.10 2006/06/06 11:31:39 oliver Exp $
 //
 
 class SecondaryStructure
@@ -65,6 +65,12 @@ class SecondaryStructure
 
 
   SIP_PYOBJECT __str__();
+%MethodCode
+	return PyString_FromString(String(String("SecondaryStructure ") + sipCpp->getName() 
+						+ " { " + String(sipCpp->countResidues()) + " residues }").c_str());
+%End
+
+  SIP_PYOBJECT __repr__();
 %MethodCode
 	return PyString_FromString(String(String("SecondaryStructure ") + sipCpp->getName() 
 						+ " { " + String(sipCpp->countResidues()) + " residues }").c_str());
