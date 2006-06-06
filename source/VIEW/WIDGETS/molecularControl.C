@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.37 2006/06/05 18:18:44 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.38 2006/06/06 16:45:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -217,7 +217,6 @@ namespace BALL
 					case CompositeMessage::REMOVED_COMPOSITE:
 					{
 						removeComposite(*(Composite *)composite_message->getComposite());
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 						return true;
 					}
 					
