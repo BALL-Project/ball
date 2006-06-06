@@ -1014,6 +1014,7 @@ void EditableScene::deleteBond_()
 	a2->deselect();
 	notify_(new CompositeMessage(*a1, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY));	
 	notify_(new CompositeMessage(*a2, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY));	
+	current_bond_ = 0;
 }
 
 void EditableScene::changeBondOrder_()
