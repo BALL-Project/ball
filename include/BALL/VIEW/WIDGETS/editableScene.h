@@ -89,11 +89,8 @@ class BALL_VIEW_EXPORT EditableScene
 	///
 	enum EditMode
 	{
-		// inserting atoms
-		ATOM__MODE = PICKING__MODE + 1,
-
-		// drawing new bonds
-		BOND__MODE	
+		// 
+		EDIT__MODE = PICKING__MODE + 1
 	};
 
 	///
@@ -162,8 +159,7 @@ class BALL_VIEW_EXPORT EditableScene
 	////////////////////////////////////////
 	protected slots:
 
-	virtual void atomMode_();
-	virtual void bondMode_();
+	virtual void editMode_();
 	void deleteAtom_();
 	void changeElement_();
 	void deleteBond_();
@@ -234,7 +230,7 @@ class BALL_VIEW_EXPORT EditableScene
 	void changeBondOrder_(Index delta);
 	void deselect_();
 
-	QAction* atom_id_, *bond_id_;	
+	QAction* edit_id_;	
 	Atom* current_atom_;
 	Bond* current_bond_;
 

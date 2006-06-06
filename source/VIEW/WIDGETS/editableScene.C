@@ -1,9 +1,8 @@
-/*    THIS IS EXPERIMENTAL CODE  
- *
- *    WE GIVE NO WARRANTY
- *    
- *    USE AT YOUR OWN RISK!!!!!!
- */
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: editableScene.C,v 1.20.2.20 2006/06/06 22:45:57 amoll Exp $
+//
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
 
@@ -19,7 +18,6 @@
 #include <BALL/VIEW/DIALOGS/editSettings.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 
-#include <QtGui/qpainter.h>
 #include <QtGui/qmenubar.h>
 #include <QtGui/qcursor.h>
 #include <QtGui/QDesktopWidget>
@@ -29,9 +27,6 @@
 #include <BALL/MATHS/angle.h>
 
 using std::endl;
-using std::ostream;
-using std::istream;
-
 
 namespace BALL
 {
@@ -87,8 +82,7 @@ bool EditableScene::only_highlighted_ = true;
 EditableScene::EditableScene()
 	throw()
 	:	Scene(),
-		atom_id_(0),
-		bond_id_(0),
+		edit_id_(0),
 		current_atom_(0),
 		atom_type_(6),
 		undo_(),
@@ -99,8 +93,7 @@ EditableScene::EditableScene()
 EditableScene::EditableScene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 	throw()
 	: Scene(parent_widget, name, w_flags),
-		atom_id_(0),
-		bond_id_(0),
+		edit_id_(0),
 		current_atom_(0),
 		atom_type_(6),
 		bond_order_(Bond::ORDER__SINGLE),
@@ -114,8 +107,7 @@ EditableScene::EditableScene(QWidget* parent_widget, const char* name, Qt::WFlag
 EditableScene::EditableScene(const EditableScene& eScene, QWidget* parent_widget, const char* name , Qt::WFlags w_flags)
 	throw()
 	: Scene(eScene, parent_widget, name, w_flags),
-		atom_id_(0),
-		bond_id_(0),
+		edit_id_(0),
 		current_atom_(eScene.current_atom_),
 		undo_(),
 		edit_settings_(0)
@@ -141,13 +133,9 @@ void EditableScene::initializeWidget(MainControl& main_control)
 {
 	Scene::initializeWidget(main_control);
 	String help_url("scene.html#editing");
-	atom_id_ = insertMenuEntry(MainControl::DISPLAY, "Set Atoms Mode", this, SLOT(atomMode_()), Qt::CTRL+Qt::Key_E);
-	atom_id_->setCheckable(true);
-	setMenuHint("Create and modify atoms");
-	setMenuHelp(help_url);
-	bond_id_ = insertMenuEntry(MainControl::DISPLAY, "Set Bonds Mode", this, SLOT(bondMode_()));
-	bond_id_->setCheckable(true);
-	setMenuHint("Create and modify bonds");
+	edit_id_ = insertMenuEntry(MainControl::DISPLAY, "Edit Mode", this, SLOT(editMode_()), Qt::CTRL+Qt::Key_E);
+	edit_id_->setCheckable(true);
+	setMenuHint("Create and modify atoms and bonds");
 	setMenuHelp(help_url);
 }
 
@@ -162,14 +150,13 @@ void EditableScene::finalizeWidget(MainControl& main_control)
 void EditableScene::checkMenu(MainControl& main_control)
 	throw()
 {
-	atom_id_->setChecked(current_mode_ == (Scene::ModeType)ATOM__MODE);
-	bond_id_->setChecked(current_mode_ == (Scene::ModeType)BOND__MODE);
+	edit_id_->setChecked(current_mode_ == (Scene::ModeType)EDIT__MODE);
 	Scene::checkMenu(main_control);
 }
 
 void EditableScene::mousePressEvent(QMouseEvent* e)
 {
-	if (current_mode_ < (Scene::ModeType) ATOM__MODE)
+	if (current_mode_ < (Scene::ModeType) EDIT__MODE)
 	{
 		Scene::mousePressEvent(e);
 		return;
@@ -194,89 +181,76 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 		}
 	}
 
-	if (current_mode_ == (Scene::ModeType)ATOM__MODE)
-	{
-		if (e->button() == Qt::LeftButton)
-		{	
-			// insert a new atom:
-			PDBAtom* a = new PDBAtom(PTE[atom_type_], PTE[atom_type_].getName());
-			insert_(e->x(), e->y(), *a);		
-			current_atom_ = a;
-			
-			//store the Operation in undo_
-			Vector3 atom_position = a->getPosition();
-			draw_line_ = false;
-			
-			EditOperation eo(a, NULL, "Added atom of type " + PTE[atom_type_].getName() + " at position (" 
-											+ String(atom_position.x) + ", "
-											+ String(atom_position.y) + ", "
-											+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
-			undo_.push_back(eo);
+	if (e->button() == Qt::LeftButton)
+	{	
+		// insert a new atom:
+		PDBAtom* a = new PDBAtom(PTE[atom_type_], PTE[atom_type_].getName());
+		insert_(e->x(), e->y(), *a);		
+		current_atom_ = a;
+		
+		//store the Operation in undo_
+		Vector3 atom_position = a->getPosition();
+		draw_line_ = false;
+		
+		EditOperation eo(a, NULL, "Added atom of type " + PTE[atom_type_].getName() + " at position (" 
+										+ String(atom_position.x) + ", "
+										+ String(atom_position.y) + ", "
+										+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
+		undo_.push_back(eo);
 
-			// tell about the new undo operation
-			emit newEditOperation(eo);
-			return;
-		}
+		// tell about the new undo operation
+		emit newEditOperation(eo);
+		return;
+	}
 
-		// find an atom in a radius of limit_ around the current mouse position
-		current_atom_ = getClickedAtom_(e->x(), e->y());
+	current_atom_ = getClickedAtom_(e->x(), e->y());
+
+	if (e->button() == Qt::MidButton)
+	{	
 		if (current_atom_)
 		{
 			current_atom_->select(); 
 			notify_(new CompositeMessage(*current_atom_, CompositeMessage::SELECTED_COMPOSITE));	
+			atom_pos_ = current_atom_->getPosition();
+			draw_line_ = false;
 		}
 
-		if (e->button() == Qt::RightButton)
-		{	
-			// we open a context menu at this point
-			showContextMenu(QPoint(e->x(), e->y()));
-		}
-		else
-		{
-			last_y_ = e->y();
-		}
+		return;
 	}
-	else if (current_mode_ == (Scene::ModeType)BOND__MODE)
+
+	// find an atom in a radius of limit_ around the current mouse position
+	if (current_atom_)
 	{
-		if (e->button() == Qt::LeftButton)
-		{	
-			current_atom_ = getClickedAtom_(e->x(), e->y());
-			if (current_atom_)
-			{
-				current_atom_->select(); 
-				notify_(new CompositeMessage(*current_atom_, CompositeMessage::SELECTED_COMPOSITE));	
-				atom_pos_ = current_atom_->getPosition();
-				draw_line_ = false;
-			}
-		}
-		else
-		{
-			// try to find a bond
-			Bond* bond = getClickedBond_(e->x(), e->y());
+		current_atom_->select(); 
+		notify_(new CompositeMessage(*current_atom_, CompositeMessage::SELECTED_COMPOSITE));	
+		current_bond_ = 0;
+	}
+	
+	// try to find a bond
+	Bond* bond = getClickedBond_(e->x(), e->y());
 
-			if (bond)
-			{
-				bond->select();
-				Atom* a1 = (Atom*)bond->getFirstAtom();
-				Atom* a2 = (Atom*)bond->getSecondAtom();
-				a1->select();
-				a2->select();
-				notify_(new CompositeMessage(*a1, CompositeMessage::SELECTED_COMPOSITE));	
-				notify_(new CompositeMessage(*a2, CompositeMessage::SELECTED_COMPOSITE));	
-			}
+	if (bond)
+	{
+		bond->select();
+		Atom* a1 = (Atom*)bond->getFirstAtom();
+		Atom* a2 = (Atom*)bond->getSecondAtom();
+		a1->select();
+		a2->select();
+		notify_(new CompositeMessage(*a1, CompositeMessage::SELECTED_COMPOSITE));	
+		notify_(new CompositeMessage(*a2, CompositeMessage::SELECTED_COMPOSITE));	
+		current_bond_ = bond;
+	}
 
-			current_bond_ = bond;
-			if (e->button() == Qt::RightButton)
-			{
-				showContextMenu(QPoint(e->x(), e->y()));
-			}
-		}
+	if (e->button() == Qt::RightButton)
+	{	
+		// we open a context menu at this point
+		showContextMenu(QPoint(e->x(), e->y()));
 	}
 }
 
 void EditableScene::wheelEvent(QWheelEvent* e)
 {
-	if (current_mode_ < (Scene::ModeType) ATOM__MODE)
+	if (current_mode_ < (Scene::ModeType) EDIT__MODE)
 	{
 		Scene::wheelEvent(e);
 		return;
@@ -291,15 +265,8 @@ void EditableScene::wheelEvent(QWheelEvent* e)
 	if (delta > 1) delta = 1;
 	if (delta < -1) delta = -1;
 
-	if (current_mode_ == (Scene::ModeType)BOND__MODE)
-	{
-		QPoint point = mapFromGlobal(QPoint(e->x(), e->y()));
-		current_bond_ = getClickedBond_(point.x(), point.y());
-		changeBondOrder_(delta);
-	}
-	else if (current_mode_ == (Scene::ModeType) ATOM__MODE)
-	{
-	}
+	current_bond_ = getClickedBond_(e->x(), e->y());
+	changeBondOrder_(delta);
 }
 
 void EditableScene::changeBondOrder_(Index delta)
@@ -321,7 +288,7 @@ void EditableScene::changeBondOrder_(Index delta)
 
 void EditableScene::mouseMoveEvent(QMouseEvent *e)
 {
-	if (current_mode_ < (Scene::ModeType) ATOM__MODE)
+	if (current_mode_ < (Scene::ModeType) EDIT__MODE)
 	{
 		Scene::mouseMoveEvent(e);
 		return;
@@ -329,67 +296,27 @@ void EditableScene::mouseMoveEvent(QMouseEvent *e)
 
 	if (isAnimationRunning() || getMainControl()->isBusy()) return;
 
-	// ============ bond mode ================
-	if (current_mode_ == (Scene::ModeType)BOND__MODE)
+	// create a new bond
+	//
+	// is there an atom nearby the actual mouse position? 
+	Atom* atom = getClickedAtom_(e->x(), e->y());
+
+	// have we found such an atom? if so, is it different from the one we started with?
+	// (self bonds make no sense)
+	if (atom && atom != current_atom_)
 	{
-		if (e->buttons() == Qt::MidButton)
-		{
-			// change the bond order
-			float ydiff = (float)e->y() - (float)last_y_;
-			ydiff /= (float) qApp->desktop()->height();
-
-			Index delta = 0;
-			if (ydiff < -0.05) delta = 1;
-			if (ydiff > 0.05) delta = -1;
-			if (delta != 0) 
-			{
-				changeBondOrder_(delta);
-				last_y_ = e->y();
-			}
-		}
-		else if (e->buttons() == Qt::LeftButton)
-		{
-			// create a new bond
-			//
-			// is there an atom nearby the actual mouse position? 
-			Atom* atom = getClickedAtom_(e->x(), e->y());
-
-			// have we found such an atom? if so, is it different from the one we started with?
-			// (self bonds make no sense)
-			if (atom && atom != current_atom_)
-			{
-				// if we are really close to an atom, the endpoints of the line we draw will be set to
-				// its center, so that the user has a drop in effect for the bonds
-				atom_pos_ = atom->getPosition();
-			}
-			else
-			{
-				atom_pos_ = get3DPosition_(e->x(), e->y());
-			}
-
-			// paint the line representing the offered bond
-			draw_line_ = true;
-			update(false);
-		}
+		// if we are really close to an atom, the endpoints of the line we draw will be set to
+		// its center, so that the user has a drop in effect for the bonds
+		atom_pos_ = atom->getPosition();
 	}
-	else if (current_mode_ == (Scene::ModeType)ATOM__MODE) 
+	else
 	{
-		if (current_atom_ == 0 ||
-				e->buttons() != Qt::MidButton)
-		{
-			return;
-		}
-
-		float ydiff = (float)e->y() - (float)y_window_pos_new_;
-		ydiff /= qApp->desktop()->height();
-		ydiff *= mouse_sensitivity_;
-		Vector3 diff = stage_->getCamera().getViewVector();
-		diff.normalize();
-		diff *= ydiff;
-
-		current_atom_->getPosition() += diff;
-		getMainControl()->update(*current_atom_);
+		atom_pos_ = get3DPosition_(e->x(), e->y());
 	}
+
+	// paint the line representing the offered bond
+	draw_line_ = true;
+	update(false);
 
 	x_window_pos_old_ = x_window_pos_new_;
 	y_window_pos_old_ = y_window_pos_new_;
@@ -401,7 +328,11 @@ void EditableScene::paintGL()
 {
 	Scene::paintGL();
 
-	if (current_mode_ != (Scene::ModeType) BOND__MODE) draw_line_ = false;
+	if (current_mode_ != (Scene::ModeType) EDIT__MODE ||
+			last_buttons_ != Qt::MidButton) 
+	{
+		draw_line_ = false;
+	}
 
 	if (!draw_line_ || current_atom_ == 0) return;
 
@@ -416,13 +347,15 @@ void EditableScene::paintGL()
 
 void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 {
-	if ((int)current_mode_ < (int) ATOM__MODE)
+	if ((int)current_mode_ < (int) EDIT__MODE)
 	{
 		Scene::mouseReleaseEvent(e);
 		return;
 	}
 
-	if (last_buttons_ != Qt::LeftButton) 
+	if (last_buttons_ == Qt::LeftButton) return;
+
+	if (last_buttons_ == Qt::RightButton) 
 	{
 		deselect_();
 		return;
@@ -438,86 +371,82 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 		notify_(new CompositeMessage(*current_atom_, CompositeMessage::DESELECTED_COMPOSITE));	
 	}
 
-	// are we in BOND__MODE? 
-	if (current_mode_ == (Scene::ModeType)BOND__MODE)
+	// if we didnt find first atom: abort
+	if (!current_atom_) 
 	{
-		// if we didnt find first atom: abort
-		if (!current_atom_) 
+		deselect_();
+		return;
+	}
+
+	// is there an atom in radius "limit_" Angstroem?
+	Atom* atom = getClickedAtom_(e->x(), e->y());
+
+	// decide what to do... did we find an atom at all?
+	if (atom)
+	{
+		// is it the atom we started with?
+		if (atom == current_atom_)
 		{
-			deselect_();
-			return;
+			// in this case, we assume that the user does not want to set a bond
+			draw_line_ = false;
 		}
-
-		// is there an atom in radius "limit_" Angstroem?
-		Atom* atom = getClickedAtom_(e->x(), e->y());
-
-		// decide what to do... did we find an atom at all?
-		if (atom)
+		else // we found _another_ atom
 		{
-			// is it the atom we started with?
-			if (atom == current_atom_)
-			{
-				// in this case, we assume that the user does not want to set a bond
-				draw_line_ = false;
-			}
-			else // we found _another_ atom
-			{
-				//set the bond
-				Bond* c = new Bond("Bond", *current_atom_, *atom, Bond::ORDER__SINGLE);		
-				
-				EditOperation eo(0, c, "Added bond of type single" , EditOperation::ADDED__BOND);
-				undo_.push_back(eo);
+			//set the bond
+			Bond* c = new Bond("Bond", *current_atom_, *atom, Bond::ORDER__SINGLE);		
 			
-				// tell about the new undo operation
-				emit newEditOperation(eo);
-
-				//update representation
-				getMainControl()->update(*atom, true);
-				setStatusbarText("Added bond");
-			}	
-		}
-		else // no atom found -> create one
-		{
-			Vector3 new_pos = get3DPosition_(e->x(), e->y());
-			// test if the two atoms would have the same position
-			if (current_atom_->getPosition() == new_pos)
-			{
-				setStatusbarText("Aborting, since both atoms would have the same location!", true);
-				return;
-			}
-
-			// build a new atom...
-			PDBAtom* a = new PDBAtom(PTE[atom_type_], PTE[atom_type_].getName());
-			a->setPosition(new_pos);
-			current_atom_->getParent()->appendChild(*a);
-			
-			//store the Operation in undo_
-			Vector3 atom_position = a->getPosition();
-		
-			EditOperation eo(a, NULL, "Added atom of type " + PTE[atom_type_].getName() + " at position (" 
-											+ String(atom_position.x) + ", "
-											+ String(atom_position.y) + ", "
-											+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
+			EditOperation eo(0, c, "Added bond of type single" , EditOperation::ADDED__BOND);
 			undo_.push_back(eo);
-
+		
 			// tell about the new undo operation
 			emit newEditOperation(eo);
 
-			//set the bond
-			Bond* c = new Bond("Bond", *current_atom_, *a, bond_order_);		
-		
-			// tell about the new undo operation
-			String bond_string = getBondOrderString_(bond_order_);
-			EditOperation eo2(0, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
-			undo_.push_back(eo2);
-			emit newEditOperation(eo2);
-
-			getMainControl()->update(*a->getParent(), true);
-			setStatusbarText("Added bond and atom");
+			//update representation
+			getMainControl()->update(*atom, true);
+			setStatusbarText("Added bond");
+		}	
+	}
+	else // no atom found -> create one
+	{
+		Vector3 new_pos = get3DPosition_(e->x(), e->y());
+		// test if the two atoms would have the same position
+		if (current_atom_->getPosition() == new_pos)
+		{
+			setStatusbarText("Aborting, since both atoms would have the same location!", true);
+			return;
 		}
 
-		deselect_();
+		// build a new atom...
+		PDBAtom* a = new PDBAtom(PTE[atom_type_], PTE[atom_type_].getName());
+		a->setPosition(new_pos);
+		current_atom_->getParent()->appendChild(*a);
+		
+		//store the Operation in undo_
+		Vector3 atom_position = a->getPosition();
+	
+		EditOperation eo(a, NULL, "Added atom of type " + PTE[atom_type_].getName() + " at position (" 
+										+ String(atom_position.x) + ", "
+										+ String(atom_position.y) + ", "
+										+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
+		undo_.push_back(eo);
+
+		// tell about the new undo operation
+		emit newEditOperation(eo);
+
+		//set the bond
+		Bond* c = new Bond("Bond", *current_atom_, *a, bond_order_);		
+	
+		// tell about the new undo operation
+		String bond_string = getBondOrderString_(bond_order_);
+		EditOperation eo2(0, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
+		undo_.push_back(eo2);
+		emit newEditOperation(eo2);
+
+		getMainControl()->update(*a->getParent(), true);
+		setStatusbarText("Added bond and atom");
 	}
+
+	deselect_();
 }	
 
 String EditableScene::getBondOrderString_(Index order)
@@ -681,21 +610,11 @@ Bond* EditableScene::getClickedBond_(int x, int y)
 	return 0;
 }
 
-// Slot to change to BOND__MODE
-void EditableScene::bondMode_()
+// Slot to change to EDIT__MODE
+void EditableScene::editMode_()
 {
 	last_mode_ = current_mode_;
-	current_mode_ = (Scene::ModeType)BOND__MODE;		
-	setCursor(QCursor(Qt::IBeamCursor));
-	//ToDo:: Cursor should look different
-}
-
-
-// Slot to change to ATOM__MODE
-void EditableScene::atomMode_()
-{
-	last_mode_ = current_mode_;
-	current_mode_ = (Scene::ModeType)ATOM__MODE;		
+	current_mode_ = (Scene::ModeType)EDIT__MODE;		
 	setCursor(QCursor(Qt::UpArrowCursor));
 	//ToDo:: Cursor should look different
 }
@@ -923,44 +842,40 @@ void EditableScene::showContextMenu(QPoint pos)
 	move_mode->setCheckable(true);
 	move_mode->setChecked(current_mode_ == (Scene::ModeType) MOVE__MODE);
 	
-	QAction* atom_mode = menu.addAction("Atom Mode", this, SLOT(atomMode_()));
-	atom_mode->setCheckable(true);
-	atom_mode->setChecked(current_mode_ == (Scene::ModeType) ATOM__MODE);
-	
-	QAction* bond_mode = menu.addAction("Bond Mode", this, SLOT(bondMode_()));
-	bond_mode->setCheckable(true);
-	bond_mode->setChecked(current_mode_ == (Scene::ModeType) BOND__MODE);
+	QAction* edit_mode = menu.addAction("Edit Mode", this, SLOT(editMode_()));
+	edit_mode->setCheckable(true);
+	edit_mode->setChecked(current_mode_ == (Scene::ModeType) EDIT__MODE);
 
 	menu.addSeparator();
 	menu.addAction("Create a new molecule", this, SLOT(createMolecule_()));
 	menu.addSeparator();
 
-	if (current_mode_ == (Scene::ModeType) ATOM__MODE)
+	if (current_mode_ == (Scene::ModeType) EDIT__MODE)
 	{
-		QAction* properties = menu.addAction("Properties", this, SLOT(atomProperties_()));
+		QAction* properties = menu.addAction("Atom Properties", this, SLOT(atomProperties_()));
 		properties->setEnabled(current_atom_ != 0);
-		QAction* move = menu.addAction("Move", this, SLOT(moveAtom_()));
+		QAction* move = menu.addAction("Move Atom", this, SLOT(moveAtom_()));
 		move->setEnabled(current_atom_ != 0);
 		QAction* change = menu.addAction("Change element", this, SLOT(changeElement_()));
 		change->setEnabled(current_atom_ != 0);
-		QAction* delete_atom = menu.addAction("Delete", this, SLOT(deleteAtom_()));
+		QAction* delete_atom = menu.addAction("Delete Atom", this, SLOT(deleteAtom_()));
 		delete_atom->setEnabled(current_atom_ != 0);
-	}
-	else if (current_mode_ == (Scene::ModeType) BOND__MODE)
-	{
-		QAction* delete_bond = menu.addAction("Delete", this, SLOT(deleteBond_()));
+	
+		menu.addSeparator();
+
+		QAction* delete_bond = menu.addAction("Delete Bond", this, SLOT(deleteBond_()));
 		delete_bond->setEnabled(current_bond_ != 0);
 
 		QMenu* order = new QMenu();
-		QAction* change = menu.addMenu(order);
+		QAction* change_order = menu.addMenu(order);
 		connect(order, SIGNAL(hovered(QAction*)), this, SLOT(activatedOrderItem_(QAction*)));
-		change->setText("Change bond order");
+		change_order->setText("Change bond order");
 		order->addAction("Single",    this, SLOT(changeBondOrder_()));
 		order->addAction("Double",    this, SLOT(changeBondOrder_()));
 		order->addAction("Triple",    this, SLOT(changeBondOrder_()));
 		order->addAction("Quadruple", this, SLOT(changeBondOrder_()));
 		order->addAction("Aromatic",  this, SLOT(changeBondOrder_()));
-		change->setEnabled(current_bond_ != 0);
+		change_order->setEnabled(current_bond_ != 0);
 	}
 
 	menu.exec(mapToGlobal(pos));
@@ -1098,8 +1013,7 @@ void EditableScene::setMode(ModeType mode)
 {
 	Scene::setMode(mode);
 
-	if 			(mode == (Scene::ModeType) ATOM__MODE) 	atomMode_();
-	else if (mode == (Scene::ModeType) BOND__MODE) pickingMode_();
+	if (mode == (Scene::ModeType) EDIT__MODE)	editMode_();
 }
 
 void EditableScene::applyPreferences()
