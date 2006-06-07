@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.23 2006/06/07 16:05:17 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.24 2006/06/07 19:16:23 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -348,7 +348,7 @@ void EditableScene::renderGrid_()
 	const Vector3 x = s.getRightVector();
 	const Vector3 y = s.getLookUpVector();
 	float delta = 0.001;
-	float size = 30;
+	float size = 50;
 
 	gl_renderer_.initTransparent();
 

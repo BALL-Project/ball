@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.60 2006/06/07 15:07:54 amoll Exp $
+// $Id: scene.C,v 1.174.2.61 2006/06/07 19:16:15 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1642,6 +1642,7 @@ namespace BALL
 			rotate_action_->setChecked(current_mode_ == ROTATE__MODE);
 			picking_action_->setChecked(current_mode_ == PICKING__MODE);
 			picking_action_->setEnabled(!busy);
+			move_action_->setChecked(current_mode_ == MOVE__MODE);
 			move_action_->setEnabled(!busy);
 
 			create_coordinate_system_->setEnabled(!busy);
