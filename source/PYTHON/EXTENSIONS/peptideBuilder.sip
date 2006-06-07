@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideBuilder.sip,v 1.1.2.1 2006/06/07 12:35:19 amoll Exp $
+// $Id: peptideBuilder.sip,v 1.1.2.2 2006/06/07 12:47:10 amoll Exp $
 //
 
 class AminoAcidDescriptor
@@ -42,7 +42,10 @@ class AminoAcidDescriptor
 	   
   SIP_PYOBJECT __str__();
 %MethodCode
-	sipRes = PyString_FromString(sipCpp->getType() + " " + String(sipCpp->getPhi()) + " " + sipCpp->getPsi() + " " + sipCpp->getOmega().c_str());
+	sipRes = PyString_FromString((String("{ ") + sipCpp->getType() + " " + 
+			String(sipCpp->getPhi().toDegree()) + " " + 
+			String(sipCpp->getPsi().toDegree()) + " " + 
+			String(sipCpp->getOmega().toDegree()) + " }").c_str());
 %End
 };
 
