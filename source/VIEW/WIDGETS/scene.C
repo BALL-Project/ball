@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.59 2006/06/05 20:48:54 amoll Exp $
+// $Id: scene.C,v 1.174.2.60 2006/06/07 15:07:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2520,18 +2520,7 @@ namespace BALL
 		void Scene::switchToLastMode()
 			throw()
 		{
-			switch (last_mode_)
-			{
- 				case PICKING__MODE: 
-					pickingMode_();
-					break;
- 				case ROTATE__MODE: 
-					rotateMode_();
-					break;
- 				case MOVE__MODE: 
-					moveMode_();
-					break;
-			}
+			setMode(last_mode_);
 		}
 
 		void Scene::dropEvent(QDropEvent* e)

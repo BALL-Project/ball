@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.21 2006/06/07 13:37:20 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.22 2006/06/07 15:07:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -1051,6 +1051,7 @@ void EditableScene::setMode(ModeType mode)
 	Scene::setMode(mode);
 
 	if (mode == (Scene::ModeType) EDIT__MODE)	editMode_();
+	update();
 }
 
 void EditableScene::applyPreferences()
