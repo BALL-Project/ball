@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.22 2006/06/07 15:07:54 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.23 2006/06/07 16:05:17 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -352,7 +352,7 @@ void EditableScene::renderGrid_()
 
 	gl_renderer_.initTransparent();
 
-	Vector3 p = s.getViewPoint() + (v * 13.2) - x * size / 2.0 - y * size / 2.0;
+	Vector3 p = get3DPosition_((Index)(width() / 2.0), (Index)(height() / 2.0)) - x * size / 2.0 - y * size / 2.0;
 	Box xp(p, x * size, y * size, delta);
 	xp.setColor(ColorRGBA(0,255,190,110));
 	gl_renderer_.render_(&xp);
