@@ -109,16 +109,8 @@ class BALL_VIEW_EXPORT EditableScene
 	virtual ~EditableScene()
 		throw();
 
-	/// Explicit default initialization.
-	virtual void clear()
-		throw();
-
 	///
 	void initializeWidget(MainControl& main_control)
-		throw();
-
-	///
-	void finalizeWidget(MainControl& main_control)
 		throw();
 
 	///
@@ -151,6 +143,7 @@ class BALL_VIEW_EXPORT EditableScene
 	virtual void mouseMoveEvent(QMouseEvent *e);
 	virtual void mouseReleaseEvent(QMouseEvent *e);
 	virtual void wheelEvent(QWheelEvent* qmouse_event);
+	void switchShowGrid();
 
 	// slots for communication with PTEDialog
 	void setEditElementType(int element_number);
@@ -223,12 +216,15 @@ class BALL_VIEW_EXPORT EditableScene
 
 	virtual void paintGL();
 
+	void init_();
+
 	String getBondOrderString_(Index order);
 
 	List<AtomContainer*> getContainers_();
 
 	void changeBondOrder_(Index delta);
 	void deselect_();
+	void renderGrid_();
 
 	QAction* edit_id_;	
 	Atom* current_atom_;
@@ -240,6 +236,7 @@ class BALL_VIEW_EXPORT EditableScene
 
 	Vector3 atom_pos_;
 	bool draw_line_;
+	bool draw_grid_;
 
 	// search range when looking for atoms/bonds (in angstrom)
 	static float atom_limit_;			

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.20 2006/06/06 22:45:57 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.21 2006/06/07 13:37:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -17,6 +17,8 @@
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
 #include <BALL/VIEW/DIALOGS/editSettings.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
+#include <BALL/VIEW/PRIMITIVES/box.h>
+#include <BALL/VIEW/PRIMITIVES/line.h>
 
 #include <QtGui/qmenubar.h>
 #include <QtGui/qcursor.h>
@@ -81,37 +83,36 @@ bool EditableScene::only_highlighted_ = true;
 
 EditableScene::EditableScene()
 	throw()
-	:	Scene(),
-		edit_id_(0),
-		current_atom_(0),
-		atom_type_(6),
-		undo_(),
-		edit_settings_(0)
+	:	Scene()
 {
+	init_();
 }
 
 EditableScene::EditableScene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 	throw()
-	: Scene(parent_widget, name, w_flags),
-		edit_id_(0),
-		current_atom_(0),
-		atom_type_(6),
-		bond_order_(Bond::ORDER__SINGLE),
-		undo_(),
-		edit_settings_(0)
+	: Scene(parent_widget, name, w_flags)
 {	
 	registerWidget(this); 
+	init_();
 }
 
 // undo_ is NOT copied, since we would run into trouble with the pointers to atoms and bonds it saves
 EditableScene::EditableScene(const EditableScene& eScene, QWidget* parent_widget, const char* name , Qt::WFlags w_flags)
 	throw()
-	: Scene(eScene, parent_widget, name, w_flags),
-		edit_id_(0),
-		current_atom_(eScene.current_atom_),
-		undo_(),
-		edit_settings_(0)
+	: Scene(eScene, parent_widget, name, w_flags)
 {
+	init_();
+}
+
+void EditableScene::init_()
+{
+	edit_id_ = 0;
+	current_atom_ = 0;
+	atom_type_ = 6;
+	edit_settings_ = 0;
+	bond_order_ = Bond::ORDER__SINGLE;
+	draw_line_ = 0;
+	draw_grid_ = 0;
 }
 
 EditableScene::~EditableScene()
@@ -122,11 +123,6 @@ EditableScene::~EditableScene()
 #endif 
 }
 
-void EditableScene::clear()
-	throw()
-{
-	Scene::clear();
-}
 
 void EditableScene::initializeWidget(MainControl& main_control)
 	throw()
@@ -137,13 +133,6 @@ void EditableScene::initializeWidget(MainControl& main_control)
 	edit_id_->setCheckable(true);
 	setMenuHint("Create and modify atoms and bonds");
 	setMenuHelp(help_url);
-}
-
-
-void EditableScene::finalizeWidget(MainControl& main_control)
-	throw()
-{
-	Scene::finalizeWidget(main_control);	
 }
 
 
@@ -334,6 +323,8 @@ void EditableScene::paintGL()
 		draw_line_ = false;
 	}
 
+	renderGrid_();
+
 	if (!draw_line_ || current_atom_ == 0) return;
 
 	glDisable(GL_LIGHTING);
@@ -343,6 +334,49 @@ void EditableScene::paintGL()
 		gl_renderer_.vertexVector3_(current_atom_->getPosition());
 		gl_renderer_.vertexVector3_(atom_pos_);
 	glEnd();
+
+	glEnable(GL_LIGHTING);
+}
+
+void EditableScene::renderGrid_()
+{
+	if (current_mode_ != (Scene::ModeType) EDIT__MODE || !draw_grid_) return;
+
+	const Camera& s = getStage()->getCamera();
+	Vector3 v = s.getViewVector();
+	v.normalize();
+	const Vector3 x = s.getRightVector();
+	const Vector3 y = s.getLookUpVector();
+	float delta = 0.001;
+	float size = 30;
+
+	gl_renderer_.initTransparent();
+
+	Vector3 p = s.getViewPoint() + (v * 13.2) - x * size / 2.0 - y * size / 2.0;
+	Box xp(p, x * size, y * size, delta);
+	xp.setColor(ColorRGBA(0,255,190,110));
+	gl_renderer_.render_(&xp);
+
+	ColorRGBA color1(255,255,255,255);
+	ColorRGBA color2(0,0,0,230);
+	Line line;
+	p -= v * delta;
+
+	for (Position i = 0; i <= size; i+=1)
+	{
+		if (i % 10 == 0) line.setColor(color2);
+		else  					 line.setColor(color1);
+
+		line.setVertex1(p + x * i);
+		line.setVertex2(p + x * i + y * size);
+		gl_renderer_.render_(&line);
+
+		line.setVertex1(p + y * i);
+		line.setVertex2(p + y * i + x * size);
+		gl_renderer_.render_(&line);
+	}
+
+	gl_renderer_.initSolid();
 }
 
 void EditableScene::mouseReleaseEvent(QMouseEvent* e)
@@ -848,6 +882,9 @@ void EditableScene::showContextMenu(QPoint pos)
 
 	menu.addSeparator();
 	menu.addAction("Create a new molecule", this, SLOT(createMolecule_()));
+	QAction* switch_grid = menu.addAction("Show ruler", this, SLOT(switchShowGrid()));
+	switch_grid->setCheckable(true);
+	switch_grid->setChecked(draw_grid_);
 	menu.addSeparator();
 
 	if (current_mode_ == (Scene::ModeType) EDIT__MODE)
@@ -1043,6 +1080,11 @@ void EditableScene::finalizePreferencesTab(Preferences& preferences)
 		preferences.removeEntry(edit_settings_);
 		edit_settings_ = 0;
 	}
+}
+
+void EditableScene::switchShowGrid()
+{
+	draw_grid_ = !draw_grid_;
 }
 
 	}//end of namespace 
