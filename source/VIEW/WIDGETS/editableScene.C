@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.24 2006/06/07 19:16:23 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.25 2006/06/08 21:27:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -1086,6 +1086,7 @@ void EditableScene::finalizePreferencesTab(Preferences& preferences)
 void EditableScene::switchShowGrid()
 {
 	draw_grid_ = !draw_grid_;
+	update();
 }
 
 	}//end of namespace 
