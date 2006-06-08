@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RingClusterer_test.C,v 1.1 2006/06/06 11:31:43 oliver Exp $
+// $Id: RingClusterer_test.C,v 1.2 2006/06/08 07:30:28 oliver Exp $
 //
 // Author:
 //  Holger Franken
@@ -17,7 +17,7 @@
 
 ///////////////////////////
 
-START_TEST(RingClusterer, "$Id: RingClusterer_test.C,v 1.1 2006/06/06 11:31:43 oliver Exp $")
+START_TEST(RingClusterer, "$Id: RingClusterer_test.C,v 1.2 2006/06/08 07:30:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ infile.close();
 
 for(AtomIterator atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.endAtom(); atom_it++)
 {	
-	atom_it -> setProperty(in_ring);
+	atom_it -> setProperty(SDGenerator::in_ring);
 }
 
 //	call the implementation of  Figueras algorithm 

@@ -1,3 +1,11 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: rsConstructor.h,v 1.2 2006/06/08 07:30:25 oliver Exp $
+//
+// Author:
+//   Holger Franken
+//
 
 #ifndef RSCONSTRUCTOR_H
 #define RSCONSTRUCTOR_H
@@ -12,27 +20,27 @@ using namespace BALL;
 using namespace std;
 
 /**
-	* \brief class, performing the prefabication of ringsystems (i.e. providing them with relative 2D-coordinates)
-	* 
-	*/
+        * \brief class, performing the prefabication of ringsystems (i.e. providing them with relative 2D-coordinates)
+        *
+        */
 class RSConstructor
 {
   public:
 
   typedef RingAnalyser::RingInfo RingInfo;
   /**
-  * \brief Default-Constructor  
+  * \brief Default-Constructor
   */
   RSConstructor();
 
   /**
-  * \brief Destructor  
+  * \brief Destructor
   */
   ~RSConstructor();
 
   /**
-  * \brief constructs a ringsystem, providing the atoms with relative 2D-coordinates, starting in the point of origin 
-  * @param analysed_rings the ringsystem to be constructed 
+  * \brief constructs a ringsystem, providing the atoms with relative 2D-coordinates, starting in the point of origin
+  * @param analysed_rings the ringsystem to be constructed
   * @param i consecutive numbering of the molecule's ringsystems
   */
   void constructRS(vector<RingInfo>& analysed_rings, Size& i);

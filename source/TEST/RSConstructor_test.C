@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSConstructor_test.C,v 1.1 2006/06/06 11:31:42 oliver Exp $
+// $Id: RSConstructor_test.C,v 1.2 2006/06/08 07:30:27 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -15,10 +15,11 @@
 #include <BALL/STRUCTURE/sdGenerator.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/PDBFile.h>
+#include <BALL/FORMAT/MOLFile.h>
 
 ///////////////////////////
 
-START_TEST(RSConstructor, "$Id: RSConstructor_test.C,v 1.1 2006/06/06 11:31:42 oliver Exp $")
+START_TEST(RSConstructor, "$Id: RSConstructor_test.C,v 1.2 2006/06/08 07:30:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -38,7 +39,7 @@ CHECK(RSConstructor())
 RESULT
 
 System molecule_sys;
-PDBFile infile("data/input_RSConstructor_test.pdb");
+PDBFile infile("data/input_RSConstructor_test.mol");
 infile >> molecule_sys;
 infile.close();
 
@@ -46,7 +47,7 @@ infile.close();
 
 for(AtomIterator atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.endAtom(); atom_it++)
 {	
-	atom_it -> setProperty(in_ring);
+	atom_it -> setProperty(SDGenerator::in_ring);
 }
 
 //	get the "smallest set of smallest rings" (SSSR)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ChainBuilder_test.C,v 1.1 2006/06/06 11:31:41 oliver Exp $
+// $Id: ChainBuilder_test.C,v 1.2 2006/06/08 07:30:27 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -12,10 +12,11 @@
 ///////////////////////////
 
 #include <BALL/STRUCTURE/sdGenerator.h>
+#include <BALL/FORMAT/MOLFile.h>
 
 ///////////////////////////
 
-START_TEST(ChainBuilder, "$Id: ChainBuilder_test.C,v 1.1 2006/06/06 11:31:41 oliver Exp $")
+START_TEST(ChainBuilder, "$Id: ChainBuilder_test.C,v 1.2 2006/06/08 07:30:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -47,27 +48,27 @@ CHECK(vector<vector<Atom*> > buildChains(System& molecule_sys))
 		{
 			case 1:
 			{
-				atom_it -> setProperty(core_chain);
+				atom_it -> setProperty(SDGenerator::core_chain);
 				 break;
 			}
 			case 2:
 			{
-				atom_it -> setProperty(core_chain);
+				atom_it -> setProperty(SDGenerator::core_chain);
 				 break;
 			}
 			case 3:
 			{
-				atom_it -> setProperty(core_chain);
+				atom_it -> setProperty(SDGenerator::core_chain);
 				 break;
 			}
 			case 6:
 			{
-				atom_it -> setProperty(core_chain);
+				atom_it -> setProperty(SDGenerator::core_chain);
 				 break;
 			}
 			case 7:
 			{
-				atom_it -> setProperty(core_chain);
+				atom_it -> setProperty(SDGenerator::core_chain);
 				 break;
 			}
 		}

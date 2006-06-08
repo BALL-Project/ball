@@ -1,167 +1,164 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: ringClusterer.C,v 1.2 2006/06/08 07:30:25 oliver Exp $
+//
+// Author:
+//   Holger Franken
+//
 
 #include <BALL/STRUCTURE/ringClusterer.h>
 
 #include <vector>
 
-#include <BALL/KERNEL/system.h>
-#include <BALL/KERNEL/standardPredicates.h>
 #include <BALL/KERNEL/atomContainer.h>
-#include <BALL/STRUCTURE/fragmentDB.h>
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/SYSTEM/path.h>
-#include <BALL/SYSTEM/file.h>
-#include <BALL/MOLMEC/COMMON/assignTypes.h>
-#include <BALL/MOLMEC/PARAMETER/atomTypes.h>
-#include <BALL/FORMAT/parameters.h>
-#include <BALL/CONCEPT/property.h>
-#include <BALL/QSAR/ringPerceptionProcessor.h>
-#include <BALL/MATHS/matrix44.h>
 #include <BALL/STRUCTURE/sdGenerator.h>
+
+
 namespace BALL
 {
 
 
-	RingClusterer::RingClusterer()
-	{}
+        RingClusterer::RingClusterer()
+        {}
 
 
-	RingClusterer::~RingClusterer()
-	{}
+        RingClusterer::~RingClusterer()
+        {}
 
 
-	//	clustering rings Sizeo connected ringsystems
+        //      clustering rings Sizeo connected ringsystems
 
-	vector<vector<vector<Atom*> > > RingClusterer::clusterRings(vector<vector<Atom*> >& rings)
-	{
-		vector<vector<vector<Atom*> > > clustorator;	//	vector that initially contains all rings, each in its own "ringsystem"
-		vector<vector<vector<Atom*> > >::size_type j = 0;
+        vector<vector<vector<Atom*> > > RingClusterer::clusterRings(vector<vector<Atom*> >& rings)
+        {
+                vector<vector<vector<Atom*> > > clustorator;    //      vector that initially contains all rings, each in its own "ringsystem"
+                vector<vector<vector<Atom*> > >::size_type j = 0;
 
-		//	putting all the rings Sizeo the initial ringsystems-vector
-		for(vector<vector<Atom*> >::size_type i = 0; i != rings.size(); i++)
-		{
-			vector<vector<Atom*> > temp;
+                //      putting all the rings Sizeo the initial ringsystems-vector
+                for(vector<vector<Atom*> >::size_type i = 0; i != rings.size(); i++)
+                {
+                        vector<vector<Atom*> > temp;
 
-			temp.push_back(rings[i]);
-			clustorator.push_back(temp);
-			j++;
-		}
+                        temp.push_back(rings[i]);
+                        clustorator.push_back(temp);
+                        j++;
+                }
 
-		bool change = true; //	flag, that indicates, whether the composition of the set of ringsystems has changed during the last run through the loop
+                bool change = true; //  flag, that indicates, whether the composition of the set of ringsystems has changed during the last run through the loop
 
-		while(change)
-		{
-			for(vector<vector<vector<Atom*> > >::size_type i = 0; i != clustorator.size(); i++)
-			{
-				//	if all the atoms in the current ringsystem have been set to invalid, proceed to the next ringsystem
-				bool invalid_ringsys = true;
+                while(change)
+                {
+                        for(vector<vector<vector<Atom*> > >::size_type i = 0; i != clustorator.size(); i++)
+                        {
+                                //      if all the atoms in the current ringsystem have been set to invalid, proceed to the next ringsystem
+                                bool invalid_ringsys = true;
 
-				for(vector<vector<Atom*> >::size_type p = 0; p != clustorator[i].size(); p++)
-				{
-					for(vector<Atom*>::size_type q = 0; q != clustorator[i][p].size(); q++)
-					{
-						if(!(clustorator[i][p][q] -> hasProperty(invalid)))
-						{
-							invalid_ringsys = false;
-							break;
-						}
-					}
-				}
+                                for(vector<vector<Atom*> >::size_type p = 0; p != clustorator[i].size(); p++)
+                                {
+                                        for(vector<Atom*>::size_type q = 0; q != clustorator[i][p].size(); q++)
+                                        {
+                                                if(!(clustorator[i][p][q] -> hasProperty(SDGenerator::invalid)))
+                                                {
+                                                        invalid_ringsys = false;
+                                                        break;
+                                                }
+                                        }
+                                }
 
-				//	otherwise, for every two ringsystems in the initial vector, check, whether they share atoms and if they do put them together into one ringsystem vector
+                                //      otherwise, for every two ringsystems in the initial vector, check, whether they share atoms and if they do put them together into one ringsystem vector
 
-				if(!(invalid_ringsys))	//	only check the remaining valid ringsystems
-				{
-					for(vector<vector<Atom*> >::size_type j = 0; j != clustorator[i].size(); j++) //	check all rings in the ringsystem
-					{
-						for(vector<Atom*>::size_type k = 0; k != clustorator[i][j].size(); k++)	//	check all atoms in each ring
-						{
-							for(vector<vector<vector<Atom*> > >::size_type l = 0; l != clustorator.size(); l++)	// and compare them to all other atoms of all other ringsystms
-							{
-								if(clustorator[i] != clustorator[l]) //	don't compare a ringsystem with itself
-								{
-									for(vector<vector<Atom*> >::size_type m = 0; m != clustorator[l].size(); m++)
-									{
-										if(clustorator[i][j] != clustorator[l][m]) //	don't compare a ring with itself
-										{
-											for(vector<Atom*>::size_type n = 0; n != clustorator[l][m].size(); n++)
-											{
-												bool check_invalid = true;			// do not check invalid atoms
-												for(Size d = 0; d != clustorator[l][m].size(); d++)//
-												{//
-													if(!(clustorator[l][m][d] -> hasProperty(invalid)))//
-													{//
-														check_invalid = false;//
-													}
-												}
-												if(!check_invalid)
-												{
-													//	if the same atom appears in rings of two different ringsystems
-													if(clustorator[i][j][k] == clustorator[l][m][n])
-													{
-														//	append the ring to the first ringsystem
-														clustorator[i].push_back(clustorator[l][m]);
+                                if(!(invalid_ringsys))  //      only check the remaining valid ringsystems
+                                {
+                                        for(vector<vector<Atom*> >::size_type j = 0; j != clustorator[i].size(); j++) //        check all rings in the ringsystem
+                                        {
+                                                for(vector<Atom*>::size_type k = 0; k != clustorator[i][j].size(); k++) //      check all atoms in each ring
+                                                {
+                                                        for(vector<vector<vector<Atom*> > >::size_type l = 0; l != clustorator.size(); l++)     // and compare them to all other atoms of all other ringsystms
+                                                        {
+                                                                if(clustorator[i] != clustorator[l]) // don't compare a ringsystem with itself
+                                                                {
+                                                                        for(vector<vector<Atom*> >::size_type m = 0; m != clustorator[l].size(); m++)
+                                                                        {
+                                                                                if(clustorator[i][j] != clustorator[l][m]) //   don't compare a ring with itself
+                                                                                {
+                                                                                        for(vector<Atom*>::size_type n = 0; n != clustorator[l][m].size(); n++)
+                                                                                        {
+                                                                                                bool check_invalid = true;                      // do not check invalid atoms
+                                                                                                for(Size d = 0; d != clustorator[l][m].size(); d++)//
+                                                                                                {//
+                                                                                                        if(!(clustorator[l][m][d] -> hasProperty(SDGenerator::invalid)))//
+                                                                                                        {//
+                                                                                                                check_invalid = false;//
+                                                                                                        }
+                                                                                                }
+                                                                                                if(!check_invalid)
+                                                                                                {
+                                                                                                        //      if the same atom appears in rings of two different ringsystems
+                                                                                                        if(clustorator[i][j][k] == clustorator[l][m][n])
+                                                                                                        {
+                                                                                                                //      append the ring to the first ringsystem
+                                                                                                                clustorator[i].push_back(clustorator[l][m]);
 
-														//	and set all its atoms to "invalid" in the other one, so that it is not taken Sizeo account any longer
-														for(Size p = 0; p != clustorator[l][m].size(); p++)
-														{
-															clustorator[l][m][p] -> setProperty(invalid);
-														}
-														break;
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			change = false;
-		}
+                                                                                                                //      and set all its atoms to "invalid" in the other one, so that it is not taken Sizeo account any longer
+                                                                                                                for(Size p = 0; p != clustorator[l][m].size(); p++)
+                                                                                                                {
+                                                                                                                        clustorator[l][m][p] -> setProperty(SDGenerator::invalid);
+                                                                                                                }
+                                                                                                                break;
+                                                                                                        }
+                                                                                                }
+                                                                                        }
+                                                                                }
+                                                                        }
+                                                                }
+                                                        }
+                                                }
+                                        }
+                                }
+                        }
+                        change = false;
+                }
 
 
-		// new return-vector, that will contain only the valid ringsystems
-		vector<vector<vector<Atom*> > > ringsystems;
+                // new return-vector, that will contain only the valid ringsystems
+                vector<vector<vector<Atom*> > > ringsystems;
 
-		for(vector<vector<vector<Atom*> > >::size_type i = 0; i != clustorator.size(); i++)
-		{
-			//	if any atom in the current ringsystem has not been set to invalid, the whole ringsystem is valid and put into the return-vector
-			bool invalid_ringsys = true;
-			for(vector<vector<Atom*> >::size_type p = 0; p != clustorator[i].size(); p++)
-			{
-				for(vector<Atom*>::size_type q = 0; q != clustorator[i][p].size(); q++)
-				{
-					if(!(clustorator[i][p][q] -> hasProperty(invalid)))
-					{
-						invalid_ringsys = false;
-						ringsystems.push_back(clustorator[i]);
-						break;
-					}
-				}
-			}
-		}
+                for(vector<vector<vector<Atom*> > >::size_type i = 0; i != clustorator.size(); i++)
+                {
+                        //      if any atom in the current ringsystem has not been set to invalid, the whole ringsystem is valid and put into the return-vector
+                        bool invalid_ringsys = true;
+                        for(vector<vector<Atom*> >::size_type p = 0; p != clustorator[i].size(); p++)
+                        {
+                                for(vector<Atom*>::size_type q = 0; q != clustorator[i][p].size(); q++)
+                                {
+                                        if(!(clustorator[i][p][q] -> hasProperty(SDGenerator::invalid)))
+                                        {
+                                                invalid_ringsys = false;
+                                                ringsystems.push_back(clustorator[i]);
+                                                break;
+                                        }
+                                }
+                        }
+                }
 
-		cout << "\t-*-[RingClusterer]:\t" << ringsystems.size() << " ringsystems found. " << endl << endl;
+                cout << "\t-*-[RingClusterer]:\t" << ringsystems.size() << " ringsystems found. " << endl << endl;
 
-		//	print the ringsystems that were found
+                //      print the ringsystems that were found
 
-		for(vector<vector<vector<Atom*> > >::size_type i = 0; i != ringsystems.size(); i++)
-		{
-			cout << "Ringsystem No. " << i+1 << " :" << endl;
-			for(vector<vector<Atom*> >::size_type j = 0; j != ringsystems[i].size(); j++)
-			{
-				for(vector<Atom*>::size_type k = 0; k != ringsystems[i][j].size(); k++)
-				{
-					cout << "[" << ringsystems[i][j][k] -> getName() << "] " << flush;
-				}
-				cout << endl << "-------------------------" << endl;
-			}
-		}
+                for(vector<vector<vector<Atom*> > >::size_type i = 0; i != ringsystems.size(); i++)
+                {
+                        cout << "Ringsystem No. " << i+1 << " :" << endl;
+                        for(vector<vector<Atom*> >::size_type j = 0; j != ringsystems[i].size(); j++)
+                        {
+                                for(vector<Atom*>::size_type k = 0; k != ringsystems[i][j].size(); k++)
+                                {
+                                        cout << "[" << ringsystems[i][j][k] -> getName() << "] " << flush;
+                                }
+                                cout << endl << "-------------------------" << endl;
+                        }
+                }
 
-		return ringsystems;
-	}
+                return ringsystems;
+        }
 
 } // namespace BALL

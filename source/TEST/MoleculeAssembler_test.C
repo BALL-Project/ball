@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MoleculeAssembler_test.C,v 1.1 2006/06/06 11:31:42 oliver Exp $
+// $Id: MoleculeAssembler_test.C,v 1.2 2006/06/08 07:30:27 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -14,9 +14,12 @@
 #include <BALL/STRUCTURE/moleculeAssembler.h>
 #include <BALL/KERNEL/selector.h>
 
+//#include <BALL/FORMAT/PDBFile.h>
+#include <BALL/FORMAT/MOLFile.h>
+
 ///////////////////////////
 
-START_TEST(MoleculeAssembler, "$Id: MoleculeAssembler_test.C,v 1.1 2006/06/06 11:31:42 oliver Exp $")
+START_TEST(MoleculeAssembler, "$Id: MoleculeAssembler_test.C,v 1.2 2006/06/08 07:30:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -33,7 +36,7 @@ RESULT
 
 SDGenerator sdg;
 System molecule_sys;
-PDBFile infile("data/input_MoleculeAssembler_test.pdb");
+MOLFile infile("data/input_MoleculeAssembler_test.mol");
 infile >> molecule_sys;
 infile.close();
 
@@ -47,134 +50,79 @@ for(AtomIterator atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.end
 {	
 	switch (i)
 	{
-		case 1:
+		case 0:
 		{
-			atom_it -> setProperty(core_chain);
+			atom_it -> setProperty(SDGenerator::core_chain);
 				break;
 		}
-		case 2:
+		case 1:
 		{
-			atom_it -> setProperty(core_chain);
+			atom_it -> setProperty(SDGenerator::core_chain);
 				break;
 		}
 		case 4:
 		{
-			atom_it -> setProperty(core_chain);
-				break;
-		}
-		case 5:
-		{
-			atom_it -> setProperty(in_ring);
+			atom_it -> setProperty(SDGenerator::core_chain);
 				break;
 		}
 		case 6:
 		{
-			atom_it -> setProperty(in_ring);
+			atom_it -> setProperty(SDGenerator::core_chain);
 				break;
 		}
 		case 7:
 		{
-			atom_it -> setProperty(in_ring);
+			atom_it -> setProperty(SDGenerator::core_chain);
 				break;
 		}
 		case 8:
 		{
-			atom_it -> setProperty(in_ring);
+			atom_it -> setProperty(SDGenerator::core_chain);
 				break;
 		}
 		case 9:
 		{
-			atom_it -> setProperty(in_ring);
-				break;
-		}
-		case 10:
-		{
-			atom_it -> setProperty(in_ring);
-				break;
-		}
-		case 11:
-		{
-			atom_it -> setProperty(in_ring);
-				break;
-		}
-		case 12:
-		{
-			atom_it -> setProperty(in_ring);
-				break;
-		}
-		case 13:
-		{
-			atom_it -> setProperty(in_ring);
+			atom_it -> setProperty(SDGenerator::core_chain);
 				break;
 		}
 		case 14:
 		{
-			atom_it -> setProperty(core_chain);
+			atom_it -> setProperty(SDGenerator::in_ring);
 				break;
 		}
 		case 15:
 		{
-			atom_it -> setProperty(core_chain);
+			atom_it -> setProperty(SDGenerator::in_ring);
 				break;
 		}
 		case 16:
 		{
-			atom_it -> setProperty(core_chain);
+			atom_it -> setProperty(SDGenerator::in_ring);
+				break;
+		}
+		case 17:
+		{
+			atom_it -> setProperty(SDGenerator::in_ring);
 				break;
 		}
 		case 18:
 		{
-			atom_it -> setProperty(core_chain);
+			atom_it -> setProperty(SDGenerator::core_chain);
 				break;
 		}
 		case 19:
 		{
-			atom_it -> setProperty(in_ring);
+			atom_it -> setProperty(SDGenerator::core_chain);
 				break;
 		}
 		case 20:
 		{
-			atom_it -> setProperty(in_ring);
+			atom_it -> setProperty(SDGenerator::in_ring);
 				break;
 		}
 		case 21:
 		{
-			atom_it -> setProperty(in_ring);
-				break;
-		}
-		case 22:
-		{
-			atom_it -> setProperty(in_ring);
-				break;
-		}
-		case 23:
-		{
-			atom_it -> setProperty(in_ring);
-				break;
-		}
-		case 24:
-		{
-			atom_it -> setProperty(in_ring);
-				break;
-		}
-		case 26:
-		{
-			atom_it -> setProperty(core_chain);
-				break;
-		}
-		case 27:
-		{
-			atom_it -> setProperty(core_chain);
-				break;
-		}
-		case 28:
-		{
-			atom_it -> setProperty(core_chain);
-				break;
-		}
-		case 29:
-		{
-			atom_it -> setProperty(core_chain);
+			atom_it -> setProperty(SDGenerator::in_ring);
 				break;
 		}
 	}
@@ -213,8 +161,8 @@ for(vector<vector<vector<Atom*> > >::size_type i = 0; i != ringsystems.size(); i
 	{
 		for(vector<Atom*>::size_type k = 0; k != ringsystems[i][j].size(); k++)
 		{
-			ringsystems[i][j][k] -> setProperty(deposited);
-			ringsystems[i][j][k] -> setProperty(pre_assembled);		
+			ringsystems[i][j][k] -> setProperty(SDGenerator::deposited);
+			ringsystems[i][j][k] -> setProperty(SDGenerator::pre_assembled);		
 		}
 	}
 
@@ -247,9 +195,12 @@ CHECK((void assembleMolecule(System& molecule_sys, vector<vector<vector<Atom*> >
 	{
 		mol_2.push_back(&*atom_it_2);
 	}
+	
+	TEST_EQUAL(mol_1.size(), mol_2.size());
 
 	for(Size i = 0; i != mol_1.size(); i++)
 	{
+		TEST_EQUAL(mol_1[i] -> getName(), mol_2[i] -> getName());
 		TEST_REAL_EQUAL(mol_1[i] -> getPosition()[0], mol_2[i] -> getPosition()[0]);
 		TEST_REAL_EQUAL(mol_1[i] -> getPosition()[1], mol_2[i] -> getPosition()[1]);
 	}
