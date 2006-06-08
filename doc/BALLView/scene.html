@@ -175,24 +175,15 @@ The color for selected objects can be changed in the <a href="displayProperties.
 <br>
 <a name="editing"></a><h2 align=center>Editing molecules</h2>
 <div align="justify">
-Since version 1.2 BALLView supports editing of molecules: A user can create and delete atoms and bonds 
-in the 3D view. Furthermore it is possible to change bond orders. For this purposes exit two
-special modes. In both of them the mouse cursor has to be over an atom or bond in the 3D view to perform
-an action.<br>
+Since version 1.2 BALLView supports editing of molecules: The 3D view offers a special mode to 
+create and delete atoms / bonds and change bond orders:
 <br>
-When a user creates a new bond or wants to move an atom, BALLView by default
-only looks for matching atoms in the currently highlighted AtomContainer (e.g. an
-highlighted Molecule or Residue).
-This enable users e.g. to create ligands in their binding pocket, while leaving
-the receptor untouched. To modify this behaviour, the Editing Setting in the 
-Preferences can be used.
-<br>	
 </div>
 <br>
 <center>
 <table width="600" border="1" cellpadding="8">
   <tr> <td align="center" valign="baseline" colspan=2>
-	<b>Atom Mode</b>
+	<b>Edit Mode</b>
 	</td></tr>
   <tr> <td align="center" valign="baseline">
 	Left mouse button click
@@ -200,9 +191,14 @@ Preferences can be used.
 	Create a new atom
 	</td></tr>
   <tr> <td align="center" valign="baseline">
-	Middle button click and drag
+	Middle button and drag
 	</td><td>
-	Move atom in view direction 
+	Create a bond
+	</td></tr>
+  <tr> <td align="center" valign="baseline">
+	Mouse wheel
+	</td><td>
+	Change bond order
 	</td></tr>
   <tr> <td align="center" valign="baseline">
 	Right button
@@ -211,38 +207,19 @@ Preferences can be used.
 	</td></tr>
 </table>
 
-<br>
-<br>
-<table width="600" border="1" cellpadding="8">
-  <tr> <td align="center" valign="baseline" colspan=2>
-	<b>Bond Mode</b>
-	</td></tr>
-  <tr> <td align="center" valign="baseline">
-	Left mouse button click
-	</td><td>
-	Create a new bond 
-	</td></tr>
-  <tr> <td align="center" valign="baseline">
-	Middle button click and drag up or down
-	</td><td>
-	Change bond order
-	</td></tr>
-  <tr> <td align="center" valign="baseline">
-	Mouse wheel
-	</td><td>
-	Change bond order
-  <tr> <td align="center" valign="baseline">
-	Right button
-	</td><td>
-	Context menu
-	</td></tr>
-</table>
 </center>
 <br>
 <p align=justify>
-The left click in bond mode can either create bonds between existing atoms, or if
+The left click in the edit mode can either create bonds between existing atoms, or if
 the mouse button is release while not pointing at an existing atom, a new atom
 is created along with the new bond.<br>
+<br>
+When a user creates a new bond or wants to move an atom, BALLView by default
+only looks for matching atoms in the currently highlighted AtomContainer (e.g. an
+highlighted Molecule or Residue).
+This enable users e.g. to create ligands in their binding pocket, while leaving
+the receptor untouched. To modify this behaviour, the Editing Setting in the 
+Preferences can be used. New atoms are always created in the highlighted AtomContainer.
 
 <hr width=700>
 <h2 align="center"><a href="index.html"><img src="images/left.png" width="58" height="28" align="MIDDLE"></a>
