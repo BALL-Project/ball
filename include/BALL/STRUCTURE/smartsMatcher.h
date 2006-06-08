@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.h,v 1.10 2006/03/26 13:27:14 bertsch Exp $
+// $Id: smartsMatcher.h,v 1.11 2006/06/08 21:36:36 bertsch Exp $
 //
 // Author:
 //   Andreas Bertsch
@@ -10,15 +10,13 @@
 #ifndef BALL_STRUCTURE_SMARTSMATCHER_H
 #define BALL_STRUCTURE_SMARTSMATCHER_H
 
-#ifndef BALL_DATATYPE_HASHSET_H
-# include <BALL/DATATYPE/hashSet.h>
-#endif
-
 #ifndef BALL_STRUCTURE_SMARTSPARSER_H
 # include <BALL/STRUCTURE/smartsParser.h>
 #endif
 
 #include <vector>
+#include <set>
+#include <map>
 
 namespace BALL 
 {
@@ -28,98 +26,218 @@ namespace BALL
 	class BALL_EXPORT SmartsMatcher
 	{
 		public: 
-			
-			typedef SmartsParser::SPNode SPNode;
-			typedef SmartsParser::SPEdge SPEdge;
-			typedef SmartsParser::SPAtom SPAtom;
-			typedef SmartsParser::SPBond SPBond;
-		
+
+			/** @name Typedefs
+			*/
+			//@{
+			typedef std::vector<std::set<const Atom*> > Match;
+			//@}
+
+
 			/**	@name Constructors and Destructors
 			*/
 			//@{
-	
 			/// default constructor
 			SmartsMatcher();
-				
-			/// copy constructor
-			SmartsMatcher(const SmartsMatcher& matcher);
-
-			/// method to match a SMARTS pattern given as a string to given molecule
-			void match(std::vector<HashSet<const Atom*> >& matches, Molecule& mol, const String& smarts)
-				throw(Exception::ParseError);
-
-			/// method to match a SMARTS pattern given as a string to given molcule. The atoms which will be used for starting matching are given in atoms
-			void match(std::vector<HashSet<const Atom*> >& matches, Molecule& mol, const String& smarts, const HashSet<const Atom*>& atoms)
-				throw(Exception::ParseError);
 
 			/// destructor
 			~SmartsMatcher();
 			//@}
 
-			/// assignment operator
-			SmartsMatcher& operator = (const SmartsMatcher& matcher);
+
+			/** @name Accessors
+			*/
+			//@{
+			/// method to match a Smarts pattern given as a string to given molecule
+			void match(Match& matches, Molecule& mol, const String& smarts)
+				throw(Exception::ParseError);
+
+			/// method to match a Smarts pattern given as a string to given molecule. The atoms which will be used for starting matching are given in atoms
+			void match(Match& matches, Molecule& mol, const String& smarts, const std::set<const Atom*>& start_atoms)
+				throw(Exception::ParseError);
+
+			/// method to match several Smarts patterns given as a vector of strings
+			void match(std::vector<Match>& matches, Molecule& mol, const std::vector<String>& smarts)
+				throw(Exception::ParseError);
+
+			/// method to match several Smarts patterns given as a vector of string. The atoms used for start matchings are given in start_atoms
+			void match(std::vector<Match>& matches, Molecule& mol, const std::vector<String>& smarts, const std::set<const Atom*>& start_atoms)
+				throw(Exception::ParseError);
 
 			/// sets an SSSR which is used instead of doing an ring perception
 			void setSSSR(const std::vector<std::vector<Atom*> >& sssr);
 
 			/// this function is used to cause the matcher to do an ring perception if needed (do not use the set SSSR any more)
 			void unsetSSSR();
+			//@}
 
-			/// test if the given SMARTS was valid (call after .match)
-			bool isValid() const;
-		
+
+		private:
+			
+			/// copy constructor
+			SmartsMatcher(const SmartsMatcher& matcher);
+
+			/** @name Operators
+			*/
+			//@{
+			/// assignment operator
+			SmartsMatcher& operator = (const SmartsMatcher& matcher);
+			//@}
+
+
 		protected:
 
-			/// little helper struct for the recursive matching algorithm
-			struct RecStruct_
+			/** @name Typedefs
+			*/
+			//@{
+			typedef SmartsParser::SPNode SPNode;
+			typedef SmartsParser::SPEdge SPEdge;
+			typedef SmartsParser::SPAtom SPAtom;
+			typedef SmartsParser::SPBond SPBond;
+			//@}
+
+			/// core structure of the recursive matching algorithm for the object pool
+			class RecStructCore_
 			{
 				public:
 					
 					/// default constructor
-					RecStruct_();
+					RecStructCore_();
+
+					/// copy constructor
+					RecStructCore_(const RecStructCore_&);
+
+					/// destructor
+					~RecStructCore_();
+
+					/// assignment operator 
+					RecStructCore_& operator = (const RecStructCore_&);
+
+					/// method that deletes all content from the containers
+					void clear();
+			
+					/// container which contains a vector of matched atoms from different matches
+					std::vector<std::set<const Atom*> > matched_atoms;
+
+					/// container which contains a vector of mappings from different matches 
+					std::vector<std::map<const SPNode*, const Atom*> > mapped_atoms;
+
+					/// contains vector of visited atoms of different matches
+					std::vector<std::set<const Atom*> > visited_atoms;
+
+					/// contains vector of visited bonds of different matches
+					std::vector<std::set<const Bond*> > visited_bonds;
+
+					/// contains vector of visited edges of the Smarts tree of different matches
+					std::vector<std::set<const SPEdge*> > visited_edges;
+
+					/// contains the first matched atoms of different matches (needed for recursive Smarts)
+					std::vector<std::pair<const SPNode*, const Atom*> > first_matches;
+			};
+
+			/// class which does the pool operations of the RecStructCore_ pool
+			class RecStructPool_
+			{
+				public:
 					
+					/// default constructors
+					RecStructPool_();
+
+					/// destructor
+					~RecStructPool_();
+
+					/// returns the a free RecStructCore_ of the pool (creates new ones if needed)
+					RecStructCore_* getNextFree();
+
+					/// returns the position of the last RecStructCore_* from getNextFree()
+					Position getLastPosition();
+
+					/// frees the structure at position pos
+					void destroy(Position pos);
+
+				private:
+
+					/// does the resize operation of the pool (creates new ones, but never release them!)
+					void resize_();
+
+					/// copy constructor (declared private as it does not make sense to use it)
+					RecStructPool_(const RecStructPool_&);
+
+					/// assignment operator (declared private as it does not make sense to use it)
+					RecStructPool_& operator = (const RecStructPool_&);
+	
+					/// the pool of the RecStructCore_ structures
+					std::vector<RecStructCore_*> rec_struct_pool_;
+
+					/// the list of the free to use structures, represented as positions in the rec_struct_pool_ vector
+					std::vector<Position> free_list_;
+
+					/// the last position of returned structure from getNextFree()
+					Position last_position_;
+			};
+
+
+			/// a wrapper class which is used as an interface in the matching code to the pool
+			class RecStruct_
+			{
+				private:
+					/// the underlaying core structure which contains the Containers used in this class
+					RecStructCore_* rec_struct_core_;
+			
+				public:
+					
+					/// default constructor
+					RecStruct_();
+
 					/// copy constructor
 					RecStruct_(const RecStruct_& rec_struct);
-	
+
 					/// destructor
-					virtual ~RecStruct_();
-					
-					/// holds the matched atoms molecule
-					std::vector<HashSet<const Atom*> > matched_atoms;
-	
-					/// holds the mapping from SPNodes of the Smarts tree to the atoms of the molecule
-					std::vector<HashMap<const SPNode*, const Atom*> > mapped_atoms;
-	
-					/// holds the visited atoms of the molecule
-					std::vector<HashSet<const Atom*> > visited_atoms;
-	
-					/// holds the visited bonds of the molecule
-					std::vector<HashSet<const Bond*> > visited_bonds;
-	
-					/// holds the visited edges of the smarts tree
-					std::vector<HashSet<const SPEdge*> > visited_edges;
-	
-					/// holds the first mapped node/atom
-					std::vector<std::pair<const SPNode*, const Atom*> > first_matches;
-	
+					~RecStruct_();
+
+					/// assignment operator 
+					RecStruct_& operator = (const RecStruct_&); 
+
+					/// reference to the matched atoms in the core structure
+					std::vector<std::set<const Atom*> >& matched_atoms;
+
+					/// reference to the mapped SPNodes to Atoms in the core structure
+					std::vector<std::map<const SPNode*, const Atom*> >& mapped_atoms;
+
+					/// reference to the visited atoms in the core structure
+					std::vector<std::set<const Atom*> >& visited_atoms;
+
+					/// reference to the visited bonds in the core structure
+					std::vector<std::set<const Bond*> >& visited_bonds;
+
+					/// reference to the visited edges in the core structure
+					std::vector<std::set<const SPEdge*> >& visited_edges;
+
+					/// reference to the first matches in the core structure
+					std::vector<std::pair<const SPNode*, const Atom*> >& first_matches;
+
 					/// adds the content of the given struct
 					void add(const RecStruct_& rec_struct);
-	
+
 					/// adds the the ith part of the content of the given struct
 					void add(const RecStruct_& rec_struct, Size i);
 
 					/// deletes all contents
 					void clear();
-	
-					/// assignment operator
-					RecStruct_& operator = (const RecStruct_& rec_struct);
 
-					// dump (for debugging)
+					/// dumps the contents (for debugging)
 					void dump(const String& name, Size depth_ = 0);
+
+				private:
+				
+					/// position of the RecStructCore_ in the Pool, used for destroy() method 
+					Position pos_;
 			};
-			
+
+			static BALL_EXPORT RecStructPool_* pool_;
+
 			/// method for evaluation of ring edges, after the the smarts tree is matched to molcule
-			bool evaluateRingEdges_(const HashSet<const Atom*>& matching, const HashMap<const SPNode*, const Atom*>& mapping, const String& smarts);
+			bool evaluateRingEdges_(const std::set<const Atom*>& matching, const std::map<const SPNode*, const Atom*>& mapping, const String& smarts);
 			
 			/// method for the evaluation of a pseudo-tree
 			void evaluate_(	RecStruct_& rs, SPNode* start_node, const Atom* start_atom);
@@ -131,7 +249,7 @@ namespace BALL
 			bool evaluate_edge_(RecStruct_& rs, SPEdge* start_node, const Atom* start_atom, const Bond* start_bond);
 
 			/// matches from the recurive part
-			HashMap<SPNode*, std::vector<HashSet<const Atom*> > > rec_matches_;
+			std::map<SPNode*, std::vector<std::set<const Atom*> > > rec_matches_;
 
 			/// user SSSR set?
 			bool has_user_sssr_;
@@ -146,3 +264,4 @@ namespace BALL
 } // namespace BALL
 
 #endif // BALL_STRUCTURE_SMARTSMATCHER_H
+

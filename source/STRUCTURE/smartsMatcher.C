@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.C,v 1.12 2006/03/26 13:27:14 bertsch Exp $
+// $Id: smartsMatcher.C,v 1.13 2006/06/08 21:36:36 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/smartsMatcher.h>
@@ -13,6 +13,9 @@
 
 using namespace std;
 
+#define REC_STRUCT_POOL_GROWTH 0.3
+#define REC_STRUCT_POOL_INITIAL_CAPACITY 10
+
 #define SMARTS_MATCHER_DEBUG
 #undef SMARTS_MATCHER_DEBUG
 
@@ -21,10 +24,13 @@ using namespace std;
 
 namespace BALL
 {
+	SmartsMatcher::RecStructPool_* SmartsMatcher::pool_ = 0;
+
 	SmartsMatcher::SmartsMatcher()
 		: has_user_sssr_(false),
 			depth_(0)
 	{
+		pool_ = new RecStructPool_();
 	}
 
 	SmartsMatcher::SmartsMatcher(const SmartsMatcher& matcher)
@@ -35,6 +41,7 @@ namespace BALL
 
 	SmartsMatcher::~SmartsMatcher()
 	{
+		delete pool_;
 	}
 
 	SmartsMatcher& SmartsMatcher::operator = (const SmartsMatcher& /*matcher*/)
@@ -54,10 +61,33 @@ namespace BALL
 		has_user_sssr_ = false;
 	}
 
-	void SmartsMatcher::match(vector<HashSet<const Atom*> >& matches, Molecule& molecule, const String& smarts)
+	void SmartsMatcher::match(vector<Match>& matches, Molecule& mol, const vector<String>& smarts)
 		throw(Exception::ParseError)
 	{
-		HashSet<const Atom*> start_atoms;
+		// TODO implement clever SSSR handling, benefit from the smarts group
+		for (vector<String>::const_iterator it = smarts.begin(); it != smarts.end(); ++it)
+		{
+			Match m;
+			match(m, mol, *it);
+			matches.push_back(m);
+		}
+	}
+
+	void SmartsMatcher::match(vector<Match>& matches, Molecule& mol, const vector<String>& smarts, const set<const Atom*>& start_atoms)
+		throw(Exception::ParseError)
+	{
+		for (vector<String>::const_iterator it = smarts.begin(); it != smarts.end(); ++it)
+		{
+			Match m;
+			match(m, mol, *it, start_atoms);
+			matches.push_back(m);
+		}
+	}
+
+	void SmartsMatcher::match(Match& matches, Molecule& molecule, const String& smarts)
+		throw(Exception::ParseError)
+	{
+		set<const Atom*> start_atoms;
 		for (AtomConstIterator it = molecule.beginAtom(); +it; ++it)
 		{
 			start_atoms.insert(&*it);
@@ -66,7 +96,7 @@ namespace BALL
 		return;
 	}
 
-	void SmartsMatcher::match(vector<HashSet<const Atom*> >& matches, Molecule& molecule, const String& smarts, const HashSet<const Atom*>& start_atoms)
+	void SmartsMatcher::match(Match& matches, Molecule& molecule, const String& smarts, const set<const Atom*>& start_atoms)
 		throw(Exception::ParseError)
 	{
 		// TODO:
@@ -75,7 +105,7 @@ namespace BALL
 		//  - chirality (backends not implemented yet; only matches when properties would be set)
 		//  - nested recursive SMARTS (i.e. [$([$(CC)],[$(C)])], why need this? )
 	
-		//vector<HashSet<const Atom*> > matches;
+		//vector<set<const Atom*> > matches;
 
 		rec_matches_.clear();
 		
@@ -109,8 +139,8 @@ namespace BALL
 		{
 			// collect all recursive environments of the tree
 			stack<SPNode*> rec_nodes;
-			HashSet<SPNode*> tree_nodes = parser.getNodes();
-			for (HashSet<SPNode*>::Iterator it = tree_nodes.begin(); it != tree_nodes.end(); ++it)
+			set<SPNode*> tree_nodes = parser.getNodes();
+			for (set<SPNode*>::const_iterator it = tree_nodes.begin(); it != tree_nodes.end(); ++it)
 			{
 				if ((*it)->isRecursive())
 				{
@@ -124,9 +154,9 @@ namespace BALL
 		
 			while (rec_nodes.size() != 0)
 			{
-				vector<HashSet<const Atom*> > tmp;
+				vector<set<const Atom*> > tmp;
 				//for (AtomConstIterator it=molecule.beginAtom(); +it; ++it)
-				for (HashSet<const Atom*>::ConstIterator it = start_atoms.begin(); +it; ++it)
+				for (set<const Atom*>::const_iterator it = start_atoms.begin(); it != start_atoms.end(); ++it)
 				{
 					RecStruct_ rs;
 					evaluate_(rs, rec_nodes.top(), *it);
@@ -137,7 +167,7 @@ namespace BALL
 							if (evaluateRingEdges_(rs.matched_atoms[i], rs.mapped_atoms[i], smarts))
 							{
 								//tmp.push_back(rs.matched_atoms[i]);
-								HashSet<const Atom*> hm_tmp;
+								set<const Atom*> hm_tmp;
 								hm_tmp.insert(rs.first_matches[i].second);
 								tmp.push_back(hm_tmp);
 							}
@@ -146,11 +176,11 @@ namespace BALL
 				}
 				// eliminate double hits 
 				
-				vector<HashSet<const Atom*> > tmp2;
-				HashSet<const Atom*> rec_atoms;
-				for (vector<HashSet<const Atom*> >::const_iterator it = tmp.begin(); it != tmp.end(); ++it)
+				vector<set<const Atom*> > tmp2;
+				set<const Atom*> rec_atoms;
+				for (vector<set<const Atom*> >::const_iterator it = tmp.begin(); it != tmp.end(); ++it)
 				{
-					if (!rec_atoms.has(*it->begin()))
+					if (rec_atoms.find(*it->begin()) == rec_atoms.end())
 					{
 						rec_atoms.insert(*it->begin());
 						tmp2.push_back(*it);
@@ -160,20 +190,20 @@ namespace BALL
 				if (rec_nodes.top()->getNot())
 				{
 					//cerr << "not" << endl;
-					HashSet<const Atom*> non_match;
-					for (vector<HashSet<const Atom*> >::const_iterator jt = tmp.begin(); jt != tmp.end(); ++jt)
+					set<const Atom*> non_match;
+					for (vector<set<const Atom*> >::const_iterator jt = tmp.begin(); jt != tmp.end(); ++jt)
 					{
-						for (HashSet<const Atom*>::ConstIterator it = jt->begin(); +it; ++it)
+						for (set<const Atom*>::const_iterator it = jt->begin(); it != jt->end(); ++it)
 						{
 							non_match.insert(*it);
 						}
 					}
 					
-					HashSet<const Atom*> tmp_match;
+					set<const Atom*> tmp_match;
 					//for (AtomConstIterator it=molecule.beginAtom(); +it; ++it)
-					for (HashSet<const Atom*>::ConstIterator it = start_atoms.begin(); +it; ++it)
+					for (set<const Atom*>::const_iterator it = start_atoms.begin(); it != start_atoms.end(); ++it)
 					{
-						if (!non_match.has(*it))
+						if (non_match.find(*it) == non_match.end())
 						{
 							tmp_match.insert(*it);
 						}
@@ -189,13 +219,13 @@ namespace BALL
 
 			#ifdef REC_DEBUG
 			cerr << "#rec env: " << rec_matches_.size() << endl;
-			for (HashMap<SPNode*, vector<HashSet<const Atom*> > >::ConstIterator it = rec_matches_.begin(); +it; ++it)
+			for (map<SPNode*, vector<set<const Atom*> > >::const_iterator it = rec_matches_.begin(); it != rec_matches_.end(); ++it)
 			{
 				cerr << it->second.size() << ": ";
-				for (vector<HashSet<const Atom*> >::const_iterator it1 = it->second.begin(); it1 != it->second.end(); ++it1)
+				for (vector<set<const Atom*> >::const_iterator it1 = it->second.begin(); it1 != it->second.end(); ++it1)
 				{
 					cerr << it1->size() << " ";
-					for (HashSet<const Atom*>::ConstIterator it2 = it1->begin(); +it2; ++it2)
+					for (set<const Atom*>::const_iterator it2 = it1->begin(); it2 != it->end(); ++it2)
 					{
 						cerr << (*it2)->getName() << " ";
 					}
@@ -210,7 +240,7 @@ namespace BALL
 			// TODO: better selection heuristic, most discriminating part should be choosen first
 			// 
 			//for (AtomConstIterator it=molecule.beginAtom(); +it; ++it)
-			for (HashSet<const Atom*>::ConstIterator it = start_atoms.begin(); +it; ++it)
+			for (set<const Atom*>::const_iterator it = start_atoms.begin(); it != start_atoms.end(); ++it)
 			{
 				RecStruct_ rs;
 				evaluate_(rs, root, *it);
@@ -236,19 +266,19 @@ namespace BALL
 		// TODO eliminate double hits while matching, for example CC in alphatic chains, can match C1C2 and C2C1
 		if (matches.size() != 0)
 		{
-			vector<HashSet<const Atom*> > unique_matches;
+			vector<set<const Atom*> > unique_matches;
 			unique_matches.push_back(matches[0]);
-			for (vector<HashSet<const Atom*> >::const_iterator it1 = matches.begin(); it1 != matches.end(); ++it1)
+			for (vector<set<const Atom*> >::const_iterator it1 = matches.begin(); it1 != matches.end(); ++it1)
 			{
 				bool has(false);
-				for (vector<HashSet<const Atom*> >::const_iterator it2 = unique_matches.begin(); it2 != unique_matches.end(); ++it2)
+				for (vector<set<const Atom*> >::const_iterator it2 = unique_matches.begin(); it2 != unique_matches.end(); ++it2)
 				{
 					if (it1->size() == it2->size())
 					{
 						bool equal(true);
-						for (HashSet<const Atom*>::ConstIterator it3 = it1->begin(); it3 != it1->end(); ++it3)
+						for (set<const Atom*>::const_iterator it3 = it1->begin(); it3 != it1->end(); ++it3)
 						{
-							if (!it2->has(*it3))
+							if (it2->find(*it3) == it2->end())
 							{
 								equal = false;
 								break;
@@ -269,10 +299,10 @@ namespace BALL
 		}
 #ifdef SMARTS_MATCHER_DEBUG
 		cerr << "SM: found " << matches.size() << /* " matches from " << matched_atoms.size() << " seeds:" <<*/ endl;
-		for (vector<HashSet<const Atom*> >::const_iterator it=matches.begin(); it!=matches.end(); ++it)
+		for (vector<set<const Atom*> >::const_iterator it=matches.begin(); it!=matches.end(); ++it)
 		{
 			cerr << "> size=" << it->size();
-			for (HashSet<const Atom*>::ConstIterator it1=it->begin(); +it1; ++it1)
+			for (set<const Atom*>::const_iterator it1 = it->begin(); it1 != it->end(); ++it1)
 			{
 				cerr << "\t" << (*it1)->getElement().getSymbol() << "(" << *it1 << ")";
 			}
@@ -284,33 +314,33 @@ namespace BALL
 		return;
 	}
 
-	bool SmartsMatcher::evaluateRingEdges_(	const HashSet<const Atom*>& match, const HashMap<const SPNode*, const Atom*>& mapping, const String& smarts)
+	bool SmartsMatcher::evaluateRingEdges_(const set<const Atom*>& match, const map<const SPNode*, const Atom*>& mapping, const String& smarts)
 	{
 		#ifdef SMARTS_MATCHER_DEBUG
-		cerr << "bool SmartsMatcher::evaluateRingEdges_( const HashSet<const Atom*>& match, const HashMap<const SPNode*, const Atom*>& mapping)" << endl;
-		for (HashMap<const SPNode*, const Atom*>::ConstIterator it = mapping.begin(); +it; ++it)
+		cerr << "bool SmartsMatcher::evaluateRingEdges_( const set<const Atom*>& match, const map<const SPNode*, const Atom*>& mapping)" << endl;
+		for (map<const SPNode*, const Atom*>::const_iterator it = mapping.begin(); it != mapping.end(); ++it)
 		{
 			cerr << it->second->getName() << " ";
 		}
 		cerr << endl;
 		#endif
-		HashMap<Size, vector<SmartsParser::SPNode*> > ring_bonds = SmartsParser::state.current_parser->getRingConnections();
+		const map<Size, vector<SPNode*> >& ring_bonds = SmartsParser::state.current_parser->getRingConnections();
 		if (ring_bonds.size() > 0)
 		{
 		
-			for (HashMap<Size, vector<SmartsParser::SPNode*> >::ConstIterator it=ring_bonds.begin(); +it; ++it)
+			for (map<Size, vector<SPNode*> >::const_iterator it = ring_bonds.begin(); it != ring_bonds.end(); ++it)
 			{
 				if (it->second.size()%2 != 0)
 				{
 					throw Exception::ParseError(__FILE__, __LINE__, "wrong number of ring bond indices (was "+String(it->first)+"): "+smarts, "");
 				}
-				for (Size i=0; i!=it->second.size(); i+=2)
+				for (Size i = 0; i != it->second.size(); i += 2)
 				{
-					if (mapping.has(it->second[i]) && mapping.has(it->second[i+1]))
+					if (mapping.find(it->second[i]) != mapping.end() && mapping.find(it->second[i+1]) != mapping.end())
 					{
-						const Atom* first = mapping[it->second[i]];
-						const Atom* second = mapping[it->second[i+1]];
-						if (!match.has(first) || !match.has(second))
+						const Atom* first = mapping.find(it->second[i])->second;
+						const Atom* second = mapping.find(it->second[i+1])->second;
+						if (match.find(first) == match.end() || match.find(second) == match.end())
 						{
 							return false;
 						}
@@ -330,10 +360,10 @@ namespace BALL
 							}
 						}
 					}
-					else
-					{
+					//else
+					//{
 						//cerr << "rings bonds not within this mapping" << endl;
-					}
+					//}
 				}
 			}
 		}
@@ -357,6 +387,7 @@ namespace BALL
 		#endif
 		// the results are stored in here
 		RecStruct_ result_rs;
+		
 		bool consider_as_noninternal(false);
 
 		if (start_node->isRecursive())
@@ -364,27 +395,27 @@ namespace BALL
 			//cerr << "node ist recursive " << endl;
 			// if rec_matches does _not_ has the node, we are in the pre phase
 			// (collecting all rec environment matches)
-			if (rec_matches_.has(start_node)) 
+			if (rec_matches_.find(start_node) != rec_matches_.end()) 
 			{
 				RecStruct_ new_rs;
-				for (vector<HashSet<const Atom*> >::iterator it = rec_matches_[start_node].begin(); it != rec_matches_[start_node].end(); ++it)
+				for (vector<set<const Atom*> >::iterator it = rec_matches_[start_node].begin(); it != rec_matches_[start_node].end(); ++it)
 				{
-					if (it->has(start_atom))
+					if (it->find(start_atom) != it->end())
 					{
 						//cerr << start_atom->getName() << endl;
 						if (rs.matched_atoms.size() == 0)
 						{
-							HashSet<const Atom*> matched_atoms;
+							set<const Atom*> matched_atoms;
 							matched_atoms.insert(start_atom);
 							new_rs.matched_atoms.push_back(matched_atoms);
 							new_rs.visited_atoms.push_back(matched_atoms);
-							HashMap<const SPNode*, const Atom*> mapped_atoms;
+							map<const SPNode*, const Atom*> mapped_atoms;
 							mapped_atoms[start_node] = start_atom;
 							new_rs.first_matches.push_back(make_pair<const SPNode*, const Atom*>(start_node, start_atom));
 							new_rs.mapped_atoms.push_back(mapped_atoms);
-							HashSet<const SPEdge*> visited_edges;
+							set<const SPEdge*> visited_edges;
 							new_rs.visited_edges.push_back(visited_edges);
-							HashSet<const Bond*> visited_bonds;
+							set<const Bond*> visited_bonds;
 							new_rs.visited_bonds.push_back(visited_bonds);
 							// TODO
 
@@ -406,7 +437,7 @@ namespace BALL
 				
 				// count relevant edges TODO
 				Size rel_edges_count(0);
-				HashSet<SPEdge*> relevant_edges;
+				set<SPEdge*> relevant_edges;
 				for (SmartsParser::SPNode::EdgeIterator eit = start_node->begin(); eit != start_node->end(); ++eit)
 				{
 					if (!SmartsParser::state.current_parser->hasRecursiveEdge(*eit))
@@ -433,11 +464,11 @@ namespace BALL
 				{
 					for (Atom::BondConstIterator bit = start_atom->beginBond(); bit != start_atom->endBond(); ++bit)
           {
-            if (!new_rs.visited_bonds[i].has(&*bit))
+            if (new_rs.visited_bonds[i].find(&*bit) == new_rs.visited_bonds[i].end())
             {
               for (SmartsParser::SPNode::EdgeIterator eit = start_node->begin(); eit != start_node->end(); ++eit)
               {
-                if (!new_rs.visited_edges[i].has(*eit) && relevant_edges.has(*eit))
+                if (new_rs.visited_edges[i].find(*eit) == new_rs.visited_edges[i].end() && relevant_edges.find(*eit) !=  relevant_edges.end())
                 {
 									
                   RecStruct_ first_new_rs;
@@ -494,7 +525,7 @@ namespace BALL
 					}
 				}
 				rs = result_rs;
-				return rs.matched_atoms.size() != 0;
+				return result_rs.matched_atoms.size() != 0;
 			}
 		}
 
@@ -672,7 +703,7 @@ namespace BALL
 		if (!start_node->isInternal() || consider_as_noninternal)
 		{
 			
-			RecStruct_ new_rs = rs;
+			RecStruct_ new_rs(rs);
 			if (consider_as_noninternal || start_node->getSPAtom()->equals(start_atom))
 			{
 				if (consider_as_noninternal)
@@ -701,17 +732,17 @@ namespace BALL
 					//cerr << String('\t', depth_) << "matched_Atoms.size() == 0" << endl;
 					#endif
 					
-					HashSet<const Atom*> matched_atom;
+					set<const Atom*> matched_atom;
 					matched_atom.insert(start_atom);
 					new_rs.matched_atoms.push_back(matched_atom);
-					HashMap<const SPNode*, const Atom*> mapped_atom;
+					map<const SPNode*, const Atom*> mapped_atom;
 					mapped_atom[start_node] = start_atom;
 					new_rs.mapped_atoms.push_back(mapped_atom);
 					new_rs.first_matches.push_back(make_pair<const SPNode*, const Atom*>(start_node, start_atom));
 					new_rs.visited_atoms.push_back(matched_atom);
-					HashSet<const Bond*> visited_bond;
+					set<const Bond*> visited_bond;
 					new_rs.visited_bonds.push_back(visited_bond);
-					HashSet<const SPEdge*> visited_edge;
+					set<const SPEdge*> visited_edge;
 					new_rs.visited_edges.push_back(visited_edge);
 				}
 				for (Size i = 0; i != new_rs.matched_atoms.size(); ++i)
@@ -728,10 +759,10 @@ namespace BALL
 						result_rs.visited_atoms[result_rs.visited_atoms.size()-1].insert(start_atom);
 						result_rs.mapped_atoms[result_rs.mapped_atoms.size()-1][start_node] = start_atom;
 
-						for (HashSet<const Atom*>::ConstIterator it = result_rs.matched_atoms[0].begin(); +it; ++it)
-						{
+						//for (HashSet<const Atom*>::ConstIterator it = result_rs.matched_atoms[0].begin(); it != result_rs.matched_atoms[0].end(); ++it)
+						//{
 							//cerr << (*it)->getName() << " ";
-						}
+						//}
 						
 						//cerr << String('\t', depth_) << "size of new result rs: " << result_rs.matched_atoms.size() << endl;
 
@@ -743,11 +774,11 @@ namespace BALL
 					for (Atom::BondConstIterator bit = start_atom->beginBond(); bit != start_atom->endBond(); ++bit)
 					{
 						//cerr << "Bond: " << &*bit << endl;
-						if (!new_rs.visited_bonds[i].has(&*bit))
+						if (new_rs.visited_bonds[i].find(&*bit) == new_rs.visited_bonds[i].end())
 						{
 							for (SmartsParser::SPNode::EdgeIterator eit = start_node->begin(); eit != start_node->end(); ++eit)
 							{
-								if (!new_rs.visited_edges[i].has(*eit))
+								if (new_rs.visited_edges[i].find(*eit) == new_rs.visited_edges[i].end())
 								{
 									RecStruct_ first_new_rs;
 									first_new_rs.add(new_rs, i);
@@ -806,10 +837,10 @@ namespace BALL
 						}
 					}
 
-					HashSet<SPEdge*> visited_edges;
+					set<SPEdge*> visited_edges;
 					for (SmartsParser::SPNode::EdgeIterator eit = start_node->begin(); eit != start_node->end(); ++eit)
 					{
-						if (new_rs.visited_edges[i].has(*eit))
+						if (new_rs.visited_edges[i].find(*eit) != new_rs.visited_edges[i].end())
 						{
 							matched_edges++;
 							visited_edges.insert(*eit);
@@ -861,12 +892,13 @@ namespace BALL
 		return rs.matched_atoms.size() != 0;
 	}
 	
-	bool SmartsMatcher::evaluate_edge_(	RecStruct_& rs, SPEdge* start_edge, const Atom* start_atom, const Bond* start_bond)
+	bool SmartsMatcher::evaluate_edge_(RecStruct_& rs, SPEdge* start_edge, const Atom* start_atom, const Bond* start_bond)
 	{
 		#ifdef SMARTS_MATCHER_DEBUG
 		cerr << String('\t', depth_++) << "bool SmartsMatcher::evaluate_edge_(start_edge=" << start_edge << ", start_atom=" << start_atom->getName() << ", start_bond=" << start_bond << endl;
 		#endif
 		RecStruct_ result_rs;
+		
 		bool consider_as_non_internal(false);
 				
 		if (start_edge->isInternal())
@@ -986,7 +1018,7 @@ namespace BALL
 				const Atom* partner = start_bond->getPartner(*start_atom);
 				for (Size i = 0; i != rs.matched_atoms.size(); ++i)
 				{
-					if (!rs.matched_atoms[i].has(partner))
+					if (rs.matched_atoms[i].find(partner) == rs.matched_atoms[i].end())
 					{
 						RecStruct_ new_rs;
 						new_rs.add(rs, i);
@@ -1021,11 +1053,13 @@ namespace BALL
 		return rs.matched_atoms.size() != 0;
 	}
 
-	SmartsMatcher::RecStruct_::RecStruct_()
+
+	// rec struct core part
+	SmartsMatcher::RecStructCore_::RecStructCore_()
 	{
 	}
 
-	SmartsMatcher::RecStruct_::RecStruct_(const RecStruct_& rec_struct)
+	SmartsMatcher::RecStructCore_::RecStructCore_(const RecStructCore_& rec_struct)
 		:	matched_atoms(rec_struct.matched_atoms),
 			mapped_atoms(rec_struct.mapped_atoms),
 			visited_atoms(rec_struct.visited_atoms),
@@ -1035,36 +1069,160 @@ namespace BALL
 	{
 	}
 
+	SmartsMatcher::RecStructCore_::~RecStructCore_()
+	{
+	}
+
+	SmartsMatcher::RecStructCore_& SmartsMatcher::RecStructCore_::operator = (const RecStructCore_& rec_struct)
+	{
+		matched_atoms = rec_struct.matched_atoms;
+		mapped_atoms = rec_struct.mapped_atoms;
+		visited_atoms = rec_struct.visited_atoms;
+		visited_bonds = rec_struct.visited_bonds;
+		visited_edges = rec_struct.visited_edges;
+		first_matches = rec_struct.first_matches;
+		return *this;
+	}
+
+	void SmartsMatcher::RecStructCore_::clear()
+	{
+    matched_atoms.clear();
+		mapped_atoms.clear();
+		visited_atoms.clear();
+		visited_bonds.clear();
+		visited_edges.clear();
+		first_matches.clear();
+		return;
+	}
+
+
+	// rec struct pool parts
+	SmartsMatcher::RecStructPool_::RecStructPool_()
+		:	rec_struct_pool_(vector<RecStructCore_*>(REC_STRUCT_POOL_INITIAL_CAPACITY)),
+			last_position_(0)
+	{
+		for (Position p = 0; p != rec_struct_pool_.size(); ++p)
+		{
+			rec_struct_pool_[p] = new RecStructCore_();
+			free_list_.push_back(p);
+		}
+	}
+	
+	SmartsMatcher::RecStructPool_::~RecStructPool_()
+	{
+		for (Position p = 0; p != rec_struct_pool_.size(); ++p)
+		{
+			delete rec_struct_pool_[p];
+		}
+	}
+
+	SmartsMatcher::RecStructCore_* SmartsMatcher::RecStructPool_::getNextFree()
+	{
+		if (free_list_.size() == 0)
+		{
+			resize_();
+		}
+		Position pos(free_list_[free_list_.size()-1]);
+		free_list_.pop_back();
+		last_position_ = pos;
+		return rec_struct_pool_[pos];
+	}
+
+	Position SmartsMatcher::RecStructPool_::getLastPosition()
+	{
+		return last_position_;
+	}
+
+	void SmartsMatcher::RecStructPool_::destroy(Position pos)
+	{
+		// clear the rec_struct_core
+		rec_struct_pool_[pos]->clear();
+		
+		// append the pos to the free_list_
+		free_list_.push_back(pos);
+	}
+
+	void SmartsMatcher::RecStructPool_::resize_()
+	{
+		Size old_size(rec_struct_pool_.size());
+		//cerr << "resize_(): " << old_size << "(new will be=" << old_size + (Size)(old_size * REC_STRUCT_POOL_GROWTH) << ")" << endl;
+		
+		// resize the vector with REC_STRUCT_POOL_GROWTH growthfactor
+		rec_struct_pool_.resize(old_size + (Size)(old_size * REC_STRUCT_POOL_GROWTH));
+
+		for (Position p = old_size; p != rec_struct_pool_.size(); ++p)
+		{
+			rec_struct_pool_[p] = new RecStructCore_();
+			free_list_.push_back(p);
+		}
+		return;
+	}
+
+	// rec struct
+	SmartsMatcher::RecStruct_::RecStruct_()
+		:	rec_struct_core_(pool_->getNextFree()),
+			matched_atoms(rec_struct_core_->matched_atoms),
+			mapped_atoms(rec_struct_core_->mapped_atoms),
+			visited_atoms(rec_struct_core_->visited_atoms),
+			visited_bonds(rec_struct_core_->visited_bonds),
+			visited_edges(rec_struct_core_->visited_edges),
+			first_matches(rec_struct_core_->first_matches),
+			pos_(pool_->getLastPosition())
+	{
+	}
+
+	SmartsMatcher::RecStruct_::RecStruct_(const RecStruct_& rec_struct)
+		:	rec_struct_core_(pool_->getNextFree()),
+			matched_atoms(rec_struct_core_->matched_atoms),
+			mapped_atoms(rec_struct_core_->mapped_atoms),
+			visited_atoms(rec_struct_core_->visited_atoms),
+			visited_bonds(rec_struct_core_->visited_bonds),
+			visited_edges(rec_struct_core_->visited_edges),
+			first_matches(rec_struct_core_->first_matches),
+			pos_(pool_->getLastPosition())
+	{
+		//cerr << "SmartsMatcher::RecStruct_::RecStruct_(const RecStruct_& rec_struct)" << endl;
+		add(rec_struct);
+	}
+
 	SmartsMatcher::RecStruct_::~RecStruct_()
 	{
+		pool_->destroy(pos_);
+	}
+
+	SmartsMatcher::RecStruct_& SmartsMatcher::RecStruct_::operator = (const RecStruct_& rec_struct)
+	{
+		clear();
+		add(rec_struct);
+		return *this;
 	}
 
 	void SmartsMatcher::RecStruct_::add(const RecStruct_& rec_struct)
 	{
-		for (vector<HashSet<const Atom*> >::const_iterator it = rec_struct.matched_atoms.begin(); it != rec_struct.matched_atoms.end(); ++it)
-		{
-			matched_atoms.push_back(*it);
-		}
-		for (vector<HashMap<const SPNode*, const Atom*> >::const_iterator it = rec_struct.mapped_atoms.begin(); it != rec_struct.mapped_atoms.end(); ++it)
-		{
-			mapped_atoms.push_back(*it);
-		}
-		for (vector<HashSet<const Atom*> >::const_iterator it = rec_struct.visited_atoms.begin(); it != rec_struct.visited_atoms.end(); ++it)
-		{
-			visited_atoms.push_back(*it);
-		}
-		for (vector<HashSet<const Bond*> >::const_iterator it = rec_struct.visited_bonds.begin(); it != rec_struct.visited_bonds.end(); ++it)
-		{
-			visited_bonds.push_back(*it);
-		}
-		for (vector<HashSet<const SPEdge*> >::const_iterator it = rec_struct.visited_edges.begin(); it != rec_struct.visited_edges.end(); ++it)
-		{
-			visited_edges.push_back(*it);
-		}
-		for (vector<pair<const SPNode*, const Atom*> >::const_iterator it = rec_struct.first_matches.begin(); it != rec_struct.first_matches.end(); ++it)
-		{
-			first_matches.push_back(*it);
-		}
+    for (vector<set<const Atom*> >::const_iterator it = rec_struct.matched_atoms.begin(); it != rec_struct.matched_atoms.end(); ++it)
+    {
+      matched_atoms.push_back(*it);
+    }
+    for (vector<map<const SPNode*, const Atom*> >::const_iterator it = rec_struct.mapped_atoms.begin(); it != rec_struct.mapped_atoms.end(); ++it)
+    {
+      mapped_atoms.push_back(*it);
+    }
+    for (vector<set<const Atom*> >::const_iterator it = rec_struct.visited_atoms.begin(); it != rec_struct.visited_atoms.end(); ++it)
+    {
+      visited_atoms.push_back(*it);
+    }
+    for (vector<set<const Bond*> >::const_iterator it = rec_struct.visited_bonds.begin(); it != rec_struct.visited_bonds.end(); ++it)
+    {
+      visited_bonds.push_back(*it);
+    }
+    for (vector<set<const SPEdge*> >::const_iterator it = rec_struct.visited_edges.begin(); it != rec_struct.visited_edges.end(); ++it)
+    {
+      visited_edges.push_back(*it);
+    }
+    for (vector<pair<const SPNode*, const Atom*> >::const_iterator it = rec_struct.first_matches.begin(); it != rec_struct.first_matches.end(); ++it)
+    {
+      first_matches.push_back(*it);
+    }
 		return;
 	}
 
@@ -1090,7 +1248,93 @@ namespace BALL
 		return;
 	}
 
-	SmartsMatcher::RecStruct_& SmartsMatcher::RecStruct_::operator = (const RecStruct_& rec_struct)
+	void SmartsMatcher::RecStruct_::dump(const String& name, Size depth)
+	{
+		cerr << String('\t', depth) << name << " " << matched_atoms.size() << " datasets:";
+		for (Size i = 0; i != matched_atoms.size(); ++i)
+		{
+			cerr << " " << i+1 << ". (";
+			for (set<const Atom*>::const_iterator it = matched_atoms[i].begin(); it != matched_atoms[i].end(); ++it)
+			{
+				cerr << (*it)->getName() << ", ";
+			}
+			cerr << ")";
+		}
+		cerr << endl;
+	}
+
+/*
+
+	SmartsMatcher::RecStructOld_::RecStructOld_()
+	{
+	}
+
+	SmartsMatcher::RecStructOld_::RecStructOld_(const RecStructOld_& rec_struct)
+		:	matched_atoms(rec_struct.matched_atoms),
+			mapped_atoms(rec_struct.mapped_atoms),
+			visited_atoms(rec_struct.visited_atoms),
+			visited_bonds(rec_struct.visited_bonds),
+			visited_edges(rec_struct.visited_edges),
+			first_matches(rec_struct.first_matches)
+	{
+	}
+
+	SmartsMatcher::RecStructOld_::~RecStructOld_()
+	{
+	}
+
+	void SmartsMatcher::RecStructOld_::add(const RecStructOld_& rec_struct)
+	{
+		for (vector<set<const Atom*> >::const_iterator it = rec_struct.matched_atoms.begin(); it != rec_struct.matched_atoms.end(); ++it)
+		{
+			matched_atoms.push_back(*it);
+		}
+		for (vector<map<const SPNode*, const Atom*> >::const_iterator it = rec_struct.mapped_atoms.begin(); it != rec_struct.mapped_atoms.end(); ++it)
+		{
+			mapped_atoms.push_back(*it);
+		}
+		for (vector<set<const Atom*> >::const_iterator it = rec_struct.visited_atoms.begin(); it != rec_struct.visited_atoms.end(); ++it)
+		{
+			visited_atoms.push_back(*it);
+		}
+		for (vector<set<const Bond*> >::const_iterator it = rec_struct.visited_bonds.begin(); it != rec_struct.visited_bonds.end(); ++it)
+		{
+			visited_bonds.push_back(*it);
+		}
+		for (vector<set<const SPEdge*> >::const_iterator it = rec_struct.visited_edges.begin(); it != rec_struct.visited_edges.end(); ++it)
+		{
+			visited_edges.push_back(*it);
+		}
+		for (vector<pair<const SPNode*, const Atom*> >::const_iterator it = rec_struct.first_matches.begin(); it != rec_struct.first_matches.end(); ++it)
+		{
+			first_matches.push_back(*it);
+		}
+		return;
+	}
+
+	void SmartsMatcher::RecStructOld_::add(const RecStructOld_& rec_struct, Size i)
+	{
+		matched_atoms.push_back(rec_struct.matched_atoms[i]);
+		mapped_atoms.push_back(rec_struct.mapped_atoms[i]);
+		visited_atoms.push_back(rec_struct.visited_atoms[i]);
+		visited_bonds.push_back(rec_struct.visited_bonds[i]);
+		visited_edges.push_back(rec_struct.visited_edges[i]);
+		first_matches.push_back(rec_struct.first_matches[i]);
+		return;
+	}
+
+	void SmartsMatcher::RecStructOld_::clear()
+	{
+		matched_atoms.clear();
+		mapped_atoms.clear();
+		visited_atoms.clear();
+		visited_bonds.clear();
+		visited_edges.clear();
+		first_matches.clear();
+		return;
+	}
+
+	SmartsMatcher::RecStructOld_& SmartsMatcher::RecStructOld_::operator = (const RecStructOld_& rec_struct)
 	{
 		matched_atoms = rec_struct.matched_atoms;
 		mapped_atoms = rec_struct.mapped_atoms;
@@ -1101,13 +1345,13 @@ namespace BALL
 		return *this;
 	}
 
-	void SmartsMatcher::RecStruct_::dump(const String& name, Size depth)
+	void SmartsMatcher::RecStructOld_::dump(const String& name, Size depth)
 	{
 		cerr << String('\t', depth) << name << " " << matched_atoms.size() << " datasets:";
 		for (Size i = 0; i != matched_atoms.size(); ++i)
 		{
 			cerr << " " << i+1 << ". (";
-			for (HashSet<const Atom*>::ConstIterator it = matched_atoms[i].begin(); +it; ++it)
+			for (set<const Atom*>::const_iterator it = matched_atoms[i].begin(); it != matched_atoms[i].end(); ++it)
 			{
 				cerr << (*it)->getName() << ", ";
 			}
@@ -1115,6 +1359,6 @@ namespace BALL
 		}
 		cerr << endl;
 	}
-	
+*/
 } // namespace BALL
 

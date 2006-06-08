@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.C,v 1.11 2006/05/15 22:27:38 bertsch Exp $
+// $Id: smartsParser.C,v 1.12 2006/06/08 21:36:36 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/smartsParser.h>
@@ -221,11 +221,12 @@ namespace BALL
 
 	SmartsParser::SPAtom::SPAtom(const String& symbol)
 	{
+		//PropertyValue val;
 		#ifdef SMARTS_PARSER_DEBUG
 		cerr << "SmartsParser::SPAtom::SPAtom(" << symbol << "), this=" << this << endl;
 		#endif
-		if (symbol != "*" && symbol != "")
-		{
+		//if (symbol != "")
+		//{
 			String s(symbol);
 			//cerr << "'" << s << "'" << endl;
 			if (symbol.isDigit())
@@ -237,22 +238,23 @@ namespace BALL
 				if (islower(symbol[0]))
 				{
 					s.toUpper(0, 1);
-					setProperty("Aromatic", true);
+					setProperty(AROMATIC, true);
 				}
 				else
 				{
-					setProperty("Aliphatic", true);
+					setProperty(ALIPHATIC, true);
 				}
 			}
-			setProperty("Symbol", s);
+			setProperty(SYMBOL, &PTE[s]);
 #ifdef SMARTS_PARSER_DEBUG
 			cerr << "setting property symbol=" << s << endl;
 #endif
-		}
-		else
-		{
-			setProperty("Symbol", "");
-		}
+		//}
+		//else
+		//{
+			//val.str_value = "";
+			//setProperty(SYMBOL, val);
+		//}
 	}
 	
 	SmartsParser::SPAtom::~SPAtom()
@@ -260,24 +262,6 @@ namespace BALL
 	{
 	}
 	
-	void SmartsParser::SPAtom::addAtomProperty(NamedProperty property) throw(Exception::ParseError)
-	{
-#ifdef SMARTS_PARSER_DEBUG
-		cerr << "void SmartsParser::SPAtom::addAtomProperty(NamedProperty " << property.getName() << ")" << endl;
-#endif
-		if (!hasProperty(property.getName()))
-		{
-			setProperty(property);
-		}
-		else
-		{
-			stringstream s;
-			property.dump(s);
-			throw Exception::ParseError(__FILE__, __LINE__, String(s), "");
-		}
-		return;
-	}
-
 	Size SmartsParser::SPAtom::getDefaultValence(const Atom* atom) const
 	{
 		Size an(0);
@@ -346,17 +330,296 @@ namespace BALL
 		cerr << "bool SmartsParser::SPAtom::equals(const Atom * atom " << atom->getName() << ") const (this=" << this << ", #properties="<< countProperties() << ")" << endl;
 		#endif
 
+		/*
 		bool isnot(false);
-		if (hasProperty("Not"))
+		if (hasProperty(IS_NOT))
 		{
 			isnot = true;
-		}
+		}*/
+	
+		int tmp(0);
+		vector<int> ring_sizes;
 
-		for (Size i=0; i!=countProperties(); ++i)
+		for (map<PropertyType, PropertyValue>::const_iterator it = properties_.begin(); it != properties_.end(); ++it)
 		{
 			#ifdef SMARTS_PARSER_DEBUG
-			cerr << getNamedProperty(i).getName() << "\t" << getNamedProperty(i).getString() << endl;
+			cerr << it->first << "\t" << it->second << endl;
 			#endif
+
+			switch (it->first)
+			{
+				case SYMBOL:
+					if (atom->getElement() != *it->second.element_value)
+					{
+						if (not_properties_.find(SYMBOL) == not_properties_.end())
+						{
+							return false;
+						}
+					}
+					else
+					{
+						if (not_properties_.find(SYMBOL) != not_properties_.end())
+						{
+							return false;
+						}						
+					}
+					break;
+
+				case ISOTOPE:
+					cerr << "SP: isotope not implemented, ignoring" << endl;
+					break;
+					
+				case CHARGE:
+					if (atom->getFormalCharge() != it->second.int_value)
+					{
+						if (not_properties_.find(CHARGE) == not_properties_.end())
+						{
+							return false;
+						}
+					}
+					else
+					{
+						if (not_properties_.find(CHARGE) != not_properties_.end())
+						{
+							return false;
+						}
+					}
+					break;
+					
+				case AROMATIC:
+					if (atom->getProperty("IsAtomatic").getBool())
+					{
+						if (not_properties_.find(AROMATIC) != not_properties_.end())
+						{
+							return false;
+						}
+					}
+					else
+					{
+						if (not_properties_.find(AROMATIC) == not_properties_.end())
+						{
+							return false;
+						}
+					}
+					break;
+					
+				case ALIPHATIC:
+					if (atom->getProperty("IsAtomatic").getBool())
+					{
+						if (not_properties_.find(ALIPHATIC) == not_properties_.end())
+						{
+							return false;
+						}
+					}
+					else
+					{
+						if (not_properties_.find(ALIPHATIC) != not_properties_.end())
+						{
+							return false;
+						}
+					}
+					break;
+					
+				case IN_NUM_RINGS:
+					tmp = 0;
+					for (vector<std::set<const Atom*> >::const_iterator it1 = SmartsParser::sssr_->begin(); it1 != SmartsParser::sssr_->end(); ++it1)
+					{
+						if (it1->find(atom) != it1->end())
+						{
+							++tmp;
+						}
+					}
+					bool not_properties_has(not_properties_.find(IN_NUM_RINGS) != not_properties_.end());
+					if (it->second.int_value == 999)
+					{
+						if (tmp == 0 && !not_properties_has ||
+								tmp != 0 && not_properties_has)
+						{
+							return false;							
+						}
+					}
+					else
+					{
+						if (tmp == it->second.int_value && not_properties_has ||
+								tmp != it->second.int_value && !not_properties_has)
+						{
+							return false;
+						}
+					}
+					break;
+					
+				case IN_RING_SIZE:
+					if (!atom->getProperty("InRing").getBool())
+					{
+						return false;
+					}
+					ring_sizes.clear();
+					for (vector<std::set<const Atom*> >::const_iterator it1 = SmartsParser::sssr_->begin(); it1 != SmartsParser::sssr_->end(); ++it1)
+					{
+						if (it1->find(atom) != it1->end())
+						{
+							ring_sizes.push_back(it1->size());
+						}
+					}
+					if (find(ring_sizes.begin(), ring_sizes.end(), it->second.int_value) != ring_sizes.end())
+					{
+						if (not_properties_.find(IN_RING_SIZE) == not_properties_.end())
+						{
+							return false;
+						}
+					}
+					else
+					{
+						if (not_properties_.find(IN_RING_SIZE) != not_properties_.end())
+						{
+							return false;
+						}
+					}
+					
+					break;
+					
+				case IN_BRACKETS:
+					// TODO what to implement?
+					break;
+					
+				case CONNECTED:
+					if ((int)(atom->countBonds() + getNumberOfImplicitHydrogens(atom)) != it->second.int_value)
+					{
+						if (not_properties_.find(CONNECTED) == not_properties_.end())
+						{
+							return false;
+						}
+					}
+					else
+					{
+						if (not_properties_.find(CONNECTED) != not_properties_.end())
+						{
+							return false;
+						}
+					}
+					break;
+					
+				case EXPLICIT_HYDROGENS:
+					tmp = 0;
+					for (Atom::BondConstIterator bit = atom->beginBond(); +bit; ++bit)
+					{
+						if (bit->getPartner(*atom)->getElement() == PTE[Element::H])
+						{
+							++tmp;
+						}
+					}
+					
+					if (tmp == it->second.int_value)
+					{
+						if (not_properties_.find(EXPLICIT_HYDROGENS) != not_properties_.end())
+						{
+							return false;
+						}							
+					}
+					else
+					{
+						if (not_properties_.find(EXPLICIT_HYDROGENS) == not_properties_.end())
+						{
+							return false;
+						}
+					}
+					break;
+					
+				case VALENCE:
+					if ((int)countRealValences(atom) != it->second.int_value)
+					{
+						if (not_properties_.find(VALENCE) == not_properties_.end())
+						{
+							return false;
+						}
+					}
+					else
+					{
+						if (not_properties_.find(VALENCE) != not_properties_.end())
+						{
+							return false;
+						}
+					}
+					break;
+					
+				case IMPLICIT_HYDROGENS:
+					if ((int)getNumberOfImplicitHydrogens(atom) == it->second.int_value)
+					{
+						if (not_properties_.find(IMPLICIT_HYDROGENS) != not_properties_.end())
+						{
+							return false;
+						}
+					}
+					else
+					{
+						if (not_properties_.find(IMPLICIT_HYDROGENS) == not_properties_.end())
+						{
+							return false;
+						}
+					}
+					break;
+					
+				case DEGREE:
+					tmp = 0;
+					for (Atom::BondConstIterator bit = atom->beginBond(); +bit; ++bit)
+					{
+						if (bit->getPartner(*atom)->getElement() != PTE[Element::H])
+						{
+							++tmp;
+						}
+					}
+					if (tmp == it->second.int_value)
+					{
+						if (not_properties_.find(DEGREE) != not_properties_.end())
+						{
+							return false;
+						}
+					}
+					else
+					{
+						if (not_properties_.find(DEGREE) == not_properties_.end())
+						{
+							return false;
+						}
+					}
+					break;
+					
+				case RING_CONNECTED:
+					tmp = 0;
+					for (Atom::BondConstIterator it1 = atom->beginBond(); +it1; ++it1)
+					{
+						if (it1->getProperty("InRing").getBool())
+						{
+							++tmp;
+						}
+					}
+					if (tmp == it->second.int_value)
+					{
+						if (not_properties_.find(RING_CONNECTED) != not_properties_.end())
+						{
+							return false;
+						}
+					}
+					else
+					{
+						if (not_properties_.find(RING_CONNECTED) == not_properties_.end())
+						{
+							return false;
+						}
+					}
+					break;
+					
+				case CHIRALITY:
+					//cerr << "SP: chirality option not implemented yet" << endl;
+					return false;
+					break;
+					
+				default:
+					cerr << "not nothing about '" << it->first << "'" << endl;
+					break;
+			}
+
+		/*	
 			String property_name = getNamedProperty(i).getName();
 			NamedProperty p = getNamedProperty(i);
 			if (property_name == "Symbol")
@@ -364,11 +627,11 @@ namespace BALL
 				//cerr << p.getString() << endl;
 				String property_value = p.getString();
 				String s(property_value);
-/*				if (property_value.size() > 0 && islower(property_value[i]))
+				if (property_value.size() > 0 && islower(property_value[i]))
 				{
 					addAtomProperty(NamedProperty("Aromatic", true));
 					s.toUpper(0, 1);
-				}*/
+				}
 				if (s.size() > 0 && s != atom->getElement().getSymbol()) // and not not :)
 				{
 					if (!isnot)
@@ -402,9 +665,9 @@ namespace BALL
 			if (property_name == "InNumRings" || property_name == "NotInNumRings")
 			{
 				Size ring_count(0);
-				for (vector<HashSet<const Atom*> >::const_iterator it = SmartsParser::sssr_->begin(); it != SmartsParser::sssr_->end(); ++it)
+				for (vector<std::set<const Atom*> >::const_iterator it = SmartsParser::sssr_->begin(); it != SmartsParser::sssr_->end(); ++it)
 				{
-					if (it->has(atom))
+					if (it->find(atom) != it->end())
 					{
 						++ring_count;
 					}
@@ -597,12 +860,13 @@ namespace BALL
 				{
 					continue;
 				}
-			}
+			}*/
 
 			/*
 			 * Aromatic, NotAromatic
 			 * Aliphatic, NotAliphatic
 			 */
+			 /*
 			if (property_name == "Aromatic")
 			{
 				if (!atom->getProperty("IsAromatic").getBool())
@@ -687,9 +951,10 @@ namespace BALL
 				}
 				continue;
 			}
-
+*/
 			// degree, not degree
 			// all explicit connections, no H is counted (correct? TODO)
+			/*
 			if (property_name == "Degree")
 			{
 				#ifdef SMARTS_PARSER_DEBUG
@@ -703,7 +968,7 @@ namespace BALL
 						++bond_count;
 					}
 				}
-				if (/*atom->countBonds()*/bond_count != p.getUnsignedInt())
+				if (//atom->countBonds()bond_count != p.getUnsignedInt())
 				{
 					return false;
 				}
@@ -719,7 +984,7 @@ namespace BALL
 						++bond_count;
 					}
 				}
-				if (/*atom->countBonds()*/bond_count == p.getUnsignedInt())
+				if (//atom->countBonds()bond_count == p.getUnsignedInt())
 				{
 					return false;
 				}
@@ -788,6 +1053,7 @@ namespace BALL
 			}
 
 			cerr << "SP: unknown property: " << property_name << endl;	
+			*/
 		}
 			
 		#ifdef SMARTS_PARSER_DEBUG
@@ -795,40 +1061,103 @@ namespace BALL
 		#endif
 		return true;
 	}
-	
-	void SmartsParser::SPAtom::init_()
+
+	void SmartsParser::SPAtom::setProperty(PropertyType type, int value)
 	{
-/*		setProperty("Not", false);
-		setProperty("Isotope", Size(0));
-		setProperty("NotIsotope", false);
-		setProperty("Charge", Index(0));
-		setProperty("NotCharge", false);
-		setProperty("Aromatic", false);
-		setProperty("NotAromatic", false);
-		setProperty("Aliphatic", false);
-		setProperty("NotAliphatic", false);
-		setProperty("InNumRings", Size(0));
-		setProperty("NotInNumRings", false);
-		setProperty("InBrackets", false);
-		setProperty("InRingSize", Size(0));
-		setProperty("NotInRingSize", false);
-		setProperty("Connected", Size(0));
-		setProperty("NotConnected", false);
-		setProperty("ExplicitHydrogens", Size(0));
-		setProperty("NotExplicitHydrogens", false);
-		setProperty("ImplicitHydrogens", Size(0));
-		setProperty("NotExplicitHydrogens", false);
-		setProperty("Valence", Size(0));
-		setProperty("NotValence", false);
-		setProperty("Degree", Size(0));
-		setProperty("NotDegree", false);
-		setProperty("RingConnected", Size(0));
-		setProperty("NotRingConnected", false);
-		setProperty("NotChirality", false);
-		setProperty("Symbol", "");
-*/
-		return;
+		PropertyValue p;
+		p.int_value = value;
+		properties_[type] = p;
 	}
+
+	void SmartsParser::SPAtom::setProperty(PropertyType type, bool value)
+	{
+		PropertyValue p;
+		p.bool_value = value;
+		properties_[type] = p;
+	}
+
+	void SmartsParser::SPAtom::setProperty(PropertyType type, const Element* value)
+	{
+		PropertyValue p;
+		p.element_value = value;
+		properties_[type] = p;
+	}
+
+	void SmartsParser::SPAtom::setProperty(PropertyType type, ChiralClass value)
+	{
+		PropertyValue p;
+		p.chiral_class_value = value;
+		properties_[type] = p;
+	}
+
+	void SmartsParser::SPAtom::setProperty(Property p)
+	{
+		properties_[p.getType()] = p.getValue();
+	}
+
+	void SmartsParser::SPAtom::addPropertiesFromSPAtom(SPAtom* atom)
+	{
+		for (map<PropertyType, PropertyValue>::const_iterator it = atom->properties_.begin(); it != atom->properties_.end(); ++it)
+		{
+			properties_[it->first] = it->second;
+		}
+	}
+
+	void SmartsParser::SPAtom::setNotProperty(PropertyType type)
+	{
+		not_properties_.insert(type);
+	}
+
+	bool SmartsParser::SPAtom::hasProperty(PropertyType type) const
+	{
+		return properties_.find(type) != properties_.end();
+	}
+
+	SmartsParser::SPAtom::PropertyValue SmartsParser::SPAtom::getProperty(PropertyType type)
+	{
+		return properties_[type];
+	}
+
+	Size SmartsParser::SPAtom::countProperties() const
+	{
+		return properties_.size();
+	}
+
+	SmartsParser::SPAtom::Property::Property(PropertyType type, int value)
+	{
+		type_ = type;
+		value_.int_value = value;
+	}
+
+	SmartsParser::SPAtom::Property::Property(PropertyType type, bool value)
+	{
+		type_ = type;
+		value_.bool_value = value;
+	}
+
+	SmartsParser::SPAtom::Property::Property(PropertyType type, const Element* value)
+	{
+		type_ = type;
+		value_.element_value = value;
+	}
+
+	SmartsParser::SPAtom::Property::Property(PropertyType type, ChiralClass value)
+	{
+		type_ = type;
+		value_.chiral_class_value = value;
+	}
+
+	SmartsParser::SPAtom::Property::~Property()
+	{
+	}
+
+	void SmartsParser::SPAtom::Property::operator = (const Property& property)
+	{
+		type_ = property.type_;
+		value_ = property.value_;
+	}
+
+	
 	
 	/* 
 	 * Implementation SmartsParser
@@ -859,7 +1188,7 @@ namespace BALL
 	void SmartsParser::clear()
 	{
 		// delete all SPNodes
-		for (HashSet<SPNode*>::Iterator it=nodes_.begin(); +it; ++it)
+		for (set<SPNode*>::iterator it = nodes_.begin(); it != nodes_.end(); ++it)
 		{
 			if (!(*it)->isInternal())
 			{
@@ -874,7 +1203,7 @@ namespace BALL
 		nodes_.clear();
 
 		// delete all SPEdges
-		for (HashSet<SPEdge*>::Iterator it=edges_.begin(); +it; ++it)
+		for (set<SPEdge*>::iterator it = edges_.begin(); it != edges_.end(); ++it)
 		{
 			if (!(*it)->isInternal())
 			{
@@ -939,18 +1268,18 @@ namespace BALL
 		ring_connections_[index].push_back(spnode);
 	}
 
-	HashMap<Size, vector<SmartsParser::SPNode*> > SmartsParser::getRingConnections() const
+	map<Size, vector<SmartsParser::SPNode*> > SmartsParser::getRingConnections() const
 	{
 		return ring_connections_;
 	}
 
 	void SmartsParser::setSSSR(const vector<vector<Atom*> >& new_sssr)
 	{
-		static vector<HashSet<const Atom*> > sssr;
+		static vector<set<const Atom*> > sssr;
 		sssr.clear();
 		for (vector<vector<Atom*> >::const_iterator it1 = new_sssr.begin(); it1 != new_sssr.end(); ++it1)
 		{
-			HashSet<const Atom*> ring;
+			set<const Atom*> ring;
 			for (vector<Atom*>::const_iterator it2 = it1->begin(); it2 != it1->end(); ++it2)
 			{
 				ring.insert(*it2);
@@ -986,7 +1315,7 @@ namespace BALL
 	}
 
 	struct SmartsParser::State SmartsParser::state;
-	vector<HashSet<const Atom*> >* SmartsParser::sssr_ = 0;
+	vector<set<const Atom*> >* SmartsParser::sssr_ = 0;
 	
 	void SmartsParser::dumpTree()
 	{
@@ -1011,10 +1340,10 @@ namespace BALL
 		{
 			if (!consider_as_noninternal)
 			{
-				cerr << "root (#properties=" << root_->getSPAtom()->countNamedProperties();
-				if (root_->getSPAtom()->hasProperty("Symbol"))
+				cerr << "root (#properties=" << root_->getSPAtom()->countProperties();
+				if (root_->getSPAtom()->hasProperty(SPAtom::SYMBOL))
 				{
-					cerr << ", Symbol=" << root_->getSPAtom()->getProperty("Symbol").getString();
+					cerr << ", Symbol=" << root_->getSPAtom()->getProperty(SPAtom::SYMBOL).element_value->getSymbol();
 				}		
 				cerr << ")" << endl;
 			}
@@ -1051,10 +1380,10 @@ namespace BALL
 		{
 			if (!consider_as_noninternal)
 			{
-				cerr << String('\t', depth) << "node (#properties=" << node->getSPAtom()->countNamedProperties();
-				if (node->getSPAtom()->hasProperty("Symbol"))
+				cerr << String('\t', depth) << "node (#properties=" << node->getSPAtom()->countProperties();
+				if (node->getSPAtom()->hasProperty(SPAtom::SYMBOL))
 				{
-					cerr << ", Symbol=" << node->getSPAtom()->getProperty("Symbol").getString();
+					cerr << ", Symbol=" << node->getSPAtom()->getProperty(SPAtom::SYMBOL).element_value->getSymbol();
 				}
 				cerr << ") " << node << "[recursive=" << node->isRecursive() << "]" << endl;
 			}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.h,v 1.9 2006/05/15 22:27:38 bertsch Exp $
+// $Id: smartsParser.h,v 1.10 2006/06/08 21:36:36 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMARTES_PARSER_H
@@ -33,6 +33,8 @@
 
 #include <utility>
 #include <vector>
+#include <map>
+#include <set>
 
 namespace BALL 
 {
@@ -135,12 +137,72 @@ namespace BALL
 				SPBondOrder bond_order_;
 				bool not_;
 		};
-		
+	
+		// TODO union of types used and map from name (as enum) to value of union
+	
 		class BALL_EXPORT SPAtom
 	/*		:	public Atom */
-			: public PropertyManager
+	/*		: public PropertyManager */
 		{
 			public:
+
+				enum PropertyType
+				{
+					ISOTOPE = 1,
+					CHARGE,
+					AROMATIC,
+					ALIPHATIC,
+					IN_NUM_RINGS,
+					IN_RING_SIZE,
+					IN_BRACKETS,
+					CONNECTED,
+					EXPLICIT_HYDROGENS,
+					VALENCE,
+					IMPLICIT_HYDROGENS,
+					DEGREE,
+					RING_CONNECTED,
+					CHIRALITY,
+					SYMBOL
+				};
+
+				union PropertyValue
+				{
+					int int_value;
+					bool bool_value;
+					const Element* element_value;
+					ChiralClass chiral_class_value;
+				};
+
+				struct Property
+				{
+					public:
+					
+						Property(PropertyType type, int value);
+						
+						Property(PropertyType type, bool value);
+						
+						Property(PropertyType type, const Element* value);
+						
+						Property(PropertyType type, ChiralClass value);
+
+						virtual ~Property();
+
+						void operator = (const Property&);
+
+						PropertyType getType() const { return type_; }
+
+						PropertyValue getValue() const { return value_; }
+
+					private:
+						
+						Property();
+						
+						PropertyType type_;
+
+						PropertyValue value_;
+				};
+				
+				//typedef std::pair<PropertyType, PropertyValue> Property;
 
 				/** Common properties are:
 				 *
@@ -180,10 +242,32 @@ namespace BALL
 				SPAtom(const String& symbol);
 				virtual ~SPAtom() throw();
 
-				void addAtomProperty(NamedProperty property) throw(Exception::ParseError);
+				//void addAtomProperty(NamedProperty property) throw(Exception::ParseError);
+
+				void setProperty(PropertyType, int);
+
+				void setProperty(PropertyType, bool);
+
+				void setProperty(PropertyType, const Element*);
+
+				void setProperty(PropertyType, ChiralClass);
+
+				void setProperty(Property);
+
+				void addPropertiesFromSPAtom(SPAtom*);
+
+				void setNotProperty(PropertyType);
+
+				bool hasProperty(PropertyType) const;
+
+				PropertyValue getProperty(PropertyType);
+
+				Size countProperties() const;
 
 				Size getDefaultValence(const Atom* atom) const;
+				
 				Size countRealValences(const Atom* atom) const;
+				
 				Size getNumberOfImplicitHydrogens(const Atom* atom) const;
 
 				//ChiralDef getChirality() const { return chirality_; }
@@ -196,7 +280,11 @@ namespace BALL
 			
 				//ChiralDef chirality_;
 				Atom* atom_;
-				void init_();
+				//void init_();
+
+				std::map<PropertyType, PropertyValue> properties_;
+
+				std::set<PropertyType> not_properties_;
 		};
 
 	
@@ -362,7 +450,7 @@ namespace BALL
 		
 		void addRingConnection(SPNode* spnode, Size index);
 		
-		HashMap<Size, std::vector<SPNode*> > getRingConnections() const;
+		std::map<Size, std::vector<SPNode*> > getRingConnections() const;
 	
 		void setSSSR(const std::vector<std::vector<Atom*> >& sssr);
 
@@ -389,15 +477,15 @@ namespace BALL
 
 		void setNextComponentNumberToSubTree(SPNode* spnode);
 
-		const HashSet<SPNode*>& getNodes() const { return nodes_; }
+		const std::set<SPNode*>& getNodes() const { return nodes_; }
 
-		const HashSet<SPEdge*>& getEdges() const { return edges_; }
+		const std::set<SPEdge*>& getEdges() const { return edges_; }
 
 		void addEdge(SPEdge* edge) { edges_.insert(edge); }
 
 		void addNode(SPNode* node) { nodes_.insert(node); }
 
-		bool hasRecursiveEdge(SPEdge* edge) const { return rec_edges_.has(edge); }
+		bool hasRecursiveEdge(SPEdge* edge) const { return rec_edges_.find(edge) != rec_edges_.end(); }
 
 		void addRecursiveEdge(SPEdge* edge) { rec_edges_.insert(edge); }
 
@@ -409,21 +497,21 @@ namespace BALL
 
 			bool component_grouping_;
 
-			static vector<HashSet<const Atom*> >* sssr_;
+			static vector<std::set<const Atom*> >* sssr_;
 
 			void dumpTreeRecursive_(SPNode* node, Size depth);
 
 			void dumpTreeRecursive_(SPEdge* edge, Size depth);
 			
-			HashMap<Size, std::vector<SPNode*>	> ring_connections_;
+			std::map<Size, std::vector<SPNode*>	> ring_connections_;
 			
 			static SmartsParser*	current_parser_;
 			
-			HashSet<SPEdge*> edges_;
+			std::set<SPEdge*> edges_;
 			
-			HashSet<SPNode*> nodes_;
+			std::set<SPNode*> nodes_;
 
-			HashSet<SPEdge*> rec_edges_;
+			std::set<SPEdge*> rec_edges_;
 
 			SPNode* root_;
 

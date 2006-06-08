@@ -28,7 +28,8 @@ extern void yyerror(char* s);
 	/*SmartsParser::ChiralDef*				chiral;*/
 	SmartsParser::SPBond*						sp_bond;
 	/*SmartsParser::LogicalOperator		logical;*/
-	NamedProperty*									property;
+	/*NamedProperty*									property;*/
+	SmartsParser::SPAtom::Property* 	property;
 }
 
 %token ';' ',' '&' '!' '#' '-' '+' '@'
@@ -459,7 +460,8 @@ log_op:
 unbraced_atom:
 		'!' unbraced_atom_symbol
 		{
-			$2->addAtomProperty(NamedProperty("Not", true));
+			//$2->addAtomProperty(NamedProperty("Not", true));
+			$2->setNotProperty(SmartsParser::SPAtom::SYMBOL);
 			$$ = $2;
 		}
 	|	unbraced_atom_symbol
@@ -469,42 +471,57 @@ unbraced_atom:
 	|	'!' atom_property
 		{
 			$$ = new SmartsParser::SPAtom();
-			$$->addAtomProperty(NamedProperty("Not"+$2->getName(), $2->getUnsignedInt()));
+			//$$->addAtomProperty(NamedProperty("Not"+$2->getName(), $2->getUnsignedInt()));
+			$$->setNotProperty($2->getType());
+			$$->setProperty(*$2);
+			delete $2;
 		}
 	|	atom_property 
 		{
 			$$ = new SmartsParser::SPAtom();
-			$$->addAtomProperty(*$1);
+			//$$->addAtomProperty(*$1);
+			$$->setProperty(*$1);
+			delete $1;
 		}
 	| unbraced_atom atom_property
 		{
-			$1->addAtomProperty(*$2);
+			$1->setProperty(*$2);
 			$$ = $1;
+			delete $2;
 		}
 	| unbraced_atom '!' atom_property
 		{
-			$1->addAtomProperty(NamedProperty("Not"+$3->getName(), $3->getUnsignedInt()));
+			//$1->addAtomProperty(NamedProperty("Not"+$3->getName(), $3->getUnsignedInt()));
+			$1->setProperty(*$3);
+			$1->setNotProperty($3->getType());
+			delete $3;
 			$$ = $1;
 		}
 	|	unbraced_atom '!' pos_charge
 		{
-			$1->addAtomProperty(NamedProperty("NotCharge", Index($3)));
+			//$1->addAtomProperty(NamedProperty("NotCharge", Index($3)));
+			$1->setProperty(SmartsParser::SPAtom::CHARGE, $3);
+			$1->setNotProperty(SmartsParser::SPAtom::CHARGE);
 			$$ = $1;
 		}
 	|	unbraced_atom pos_charge
 		{
-			$1->addAtomProperty(NamedProperty("Charge", Index($2)));
+			//$1->addAtomProperty(NamedProperty("Charge", Index($2)));
+			$1->setProperty(SmartsParser::SPAtom::CHARGE, $2);
 			$$ = $1;
 		}
 	| '!' pos_charge
 		{
-			$$ = new SmartsParser::SPAtom("*");
-			$$->addAtomProperty(NamedProperty("NotCharge", Index($2)));
+			$$ = new SmartsParser::SPAtom();
+			//$$->addAtomProperty(NamedProperty("NotCharge", Index($2)));
+			$$->setProperty(SmartsParser::SPAtom::CHARGE, $2);
+			$$->setNotProperty(SmartsParser::SPAtom::CHARGE);
 		}
 	|	pos_charge
 		{
-			$$ = new SmartsParser::SPAtom("*");
-			$$->addAtomProperty(NamedProperty("Charge", Index($1)));
+			$$ = new SmartsParser::SPAtom();
+			//$$->addAtomProperty(NamedProperty("Charge", Index($1)));
+			$$->setProperty(SmartsParser::SPAtom::CHARGE, $1);
 		}
 	;
 
@@ -515,112 +532,138 @@ atom:
 		}
 	|	'!' atom_symbol
 		{
-			$2->addAtomProperty(NamedProperty("Not", true));
+			//$2->addAtomProperty(NamedProperty("Not", true));
+			$2->setNotProperty(SmartsParser::SPAtom::SYMBOL);
+			
 			$$ = $2;
 		}
 	|	'!' neg_charge
 		{
-			$$ = new SmartsParser::SPAtom("*");
-			$$->addAtomProperty(NamedProperty("NotCharge", Index($2)));
+			$$ = new SmartsParser::SPAtom();
+			//$$->addAtomProperty(NamedProperty("NotCharge", Index($2)));
+			$$->setProperty(SmartsParser::SPAtom::CHARGE, $2);
+			$$->setNotProperty(SmartsParser::SPAtom::CHARGE);
 		}
 	|	neg_charge
 		{
-			$$ = new SmartsParser::SPAtom("*");
-			$$->addAtomProperty(NamedProperty("Charge", Index($1)));
+			$$ = new SmartsParser::SPAtom();
+			//$$->addAtomProperty(NamedProperty("Charge", Index($1)));
+			$$->setProperty(SmartsParser::SPAtom::CHARGE, $1);
 		}
 	|	'!' chirality
 		{
-			//$$ = new SmartsParser::SPAtom("*");
+			//$$ = new SmartsParser::SPAtom();
 			$$ = $2;
 			//$$->setChirality(*$2);
-			$$->addAtomProperty(NamedProperty("NotChirality", true));
+			//$$->addAtomProperty(NamedProperty("NotChirality", true));
+			//$$->setProperty(CHIRALITY, $2);
+			$$->setNotProperty(SmartsParser::SPAtom::CHIRALITY);
 		}
 	|	chirality
 		{
-			//$$ = new SmartsParser::SPAtom("*");
+			//$$ = new SmartsParser::SPAtom();
 			$$ = $1;
 			//$$->setChirality(*$1);
+			//$$->setProperty
 		}
 	| unbraced_atom '!' neg_charge
 		{
-			$1->addAtomProperty(NamedProperty("NotCharge", Index($3)));
+			//$1->addAtomProperty(NamedProperty("NotCharge", Index($3)));
+			$1->setProperty(SmartsParser::SPAtom::CHARGE, $3);
+			$1->setNotProperty(SmartsParser::SPAtom::CHARGE);
 			$$ = $1;
 		}
 	|	unbraced_atom neg_charge
 		{
-			$1->addAtomProperty(NamedProperty("Charge", Index($2)));
+			//$1->addAtomProperty(NamedProperty("Charge", Index($2)));
+			$1->setProperty(SmartsParser::SPAtom::CHARGE, $2);
 			$$ = $1;
 		}
 	| unbraced_atom '!' chirality
 		{
-			$1->addAtomProperty(NamedProperty("NotChirality", true));
+			//$1->addAtomProperty(NamedProperty("NotChirality", true));
 			//$1->setChirality(*$3);
-			for (Size i = 0; i != $3->countProperties(); ++i)
-			{
-				$1->addAtomProperty($3->getNamedProperty(i));
-			}
+			//for (Size i = 0; i != $3->countProperties(); ++i)
+			//{
+			//	$1->addAtomProperty($3->getNamedProperty(i));
+			//}
+			$1->addPropertiesFromSPAtom($3);
+			$1->setNotProperty(SmartsParser::SPAtom::CHIRALITY);
 			delete $3;
 			$$ = $1;
 		}
 	| unbraced_atom chirality
 		{
 			//$1->setChirality(*$2);
-			for (Size i = 0; i != $2->countProperties(); ++i)
-			{
-				$1->addAtomProperty($2->getNamedProperty(i));
-			}
+			//for (Size i = 0; i != $2->countProperties(); ++i)
+			//{
+			//	$1->addAtomProperty($2->getNamedProperty(i));
+			//}
+			$1->addPropertiesFromSPAtom($2);
 			delete $2;
 			$$ = $1;
 		}
 	|	atom atom_property
 		{
-			$1->addAtomProperty(*$2);
+			$1->setProperty(*$2);
+			delete $2;
 			$$ = $1;
 		}
 	|	atom '!' neg_charge
 		{
-			$1->addAtomProperty(NamedProperty("NotCharge", Index($3)));
+			//$1->addAtomProperty(NamedProperty("NotCharge", Index($3)));
+			$1->setProperty(SmartsParser::SPAtom::CHARGE, $3);
+			$1->setNotProperty(SmartsParser::SPAtom::CHARGE);
 			$$ = $1;
 		}
 	|	atom neg_charge
 		{
-			$1->addAtomProperty(NamedProperty("Charge", Index($2)));
+			//$1->addAtomProperty(NamedProperty("Charge", Index($2)));
+			$1->setProperty(SmartsParser::SPAtom::CHARGE, $2);
 			$$ = $1;
 		}
 	|	atom '!' pos_charge
 		{
-			$1->addAtomProperty(NamedProperty("NotCharge", Index($3)));
+			//$1->addAtomProperty(NamedProperty("NotCharge", Index($3)));
+			$1->setProperty(SmartsParser::SPAtom::CHARGE, $3);
+			$1->setNotProperty(SmartsParser::SPAtom::CHARGE);
 			$$ = $1;
 		}
 	|	atom pos_charge
 		{
-			$1->addAtomProperty(NamedProperty("Charge", Index($2)));
+			//$1->addAtomProperty(NamedProperty("Charge", Index($2)));
+			$1->setProperty(SmartsParser::SPAtom::CHARGE, $2);
 			$$ = $1;
 		}
 	|	atom '!' chirality
 		{
 			//$1->setChirality(*$3);
-			$1->addAtomProperty(NamedProperty("NotChirality", true));
-			for (Size i = 0; i != $3->countProperties(); ++i)
-			{
-				$1->addAtomProperty($3->getNamedProperty(i));
-			}
+			//$1->addAtomProperty(NamedProperty("NotChirality", true));
+			$1->setNotProperty(SmartsParser::SPAtom::CHIRALITY);
+			$1->addPropertiesFromSPAtom($3);
+			//for (Size i = 0; i != $3->countProperties(); ++i)
+			//{
+			//	$1->addAtomProperty($3->getNamedProperty(i));
+			//}
 			delete $3;
 			$$ = $1;
 		}
 	|	atom chirality
 		{
 			//$1->setChirality(*$2);
-			for (Size i = 0; i != $2->countProperties(); ++i)
-			{
-				$1->addAtomProperty($2->getNamedProperty(i));
-			}
+			//for (Size i = 0; i != $2->countProperties(); ++i)
+			//{
+			//	$1->addAtomProperty($2->getNamedProperty(i));
+			//}
+			$1->addPropertiesFromSPAtom($2);
 			delete $2;
 			$$ = $1;
 		}
 	|	atom '!' atom_property
 		{
-			$1->addAtomProperty(NamedProperty("Not"+$3->getName(), $3->getUnsignedInt()));
+			//$1->addAtomProperty(NamedProperty("Not"+$3->getName(), $3->getUnsignedInt()));
+			$1->setProperty(*$3);
+			$1->setNotProperty($3->getType());
 			delete $3;
 			$$ = $1;
 		}
@@ -629,75 +672,90 @@ atom:
 atom_property:
 		num_rings
 		{
-			$$ = new NamedProperty("InNumRings", Size($1));
+			$$ = new SmartsParser::SPAtom::Property(SmartsParser::SPAtom::IN_NUM_RINGS, $1);
+			//$$ = new NamedProperty("InNumRings", Size($1));
 			SmartsParser::state.current_parser->setNeedsSSSR(true);
 		}
 	|	ring_size
 		{
-			$$ = new NamedProperty("InRingSize", Size($1));
+			$$ = new SmartsParser::SPAtom::Property(SmartsParser::SPAtom::IN_RING_SIZE, $1);
+			//$$ = new NamedProperty("InRingSize", Size($1));
 			SmartsParser::state.current_parser->setNeedsSSSR(true);
 		}
 	|	valence
 		{
-			$$ = new NamedProperty("Valence", Size($1));
+			$$ = new SmartsParser::SPAtom::Property(SmartsParser::SPAtom::VALENCE, $1);
+			//$$ = new NamedProperty("Valence", Size($1));
 		}
 	|	connected
 		{
-			$$ = new NamedProperty("Connectivity", Size($1));
+			$$ = new SmartsParser::SPAtom::Property(SmartsParser::SPAtom::CONNECTED, $1);
+			//$$ = new NamedProperty("Connectivity", Size($1));
 		}
 	|	implicit_hydrogens
 		{
-			$$ = new NamedProperty("ImplicitHydrogens", Size($1));
+			$$ = new SmartsParser::SPAtom::Property(SmartsParser::SPAtom::IMPLICIT_HYDROGENS, $1);
+			//$$ = new NamedProperty("ImplicitHydrogens", Size($1));
 		}
 	|	explicit_hydrogens
 		{
-			$$ = new NamedProperty("ExplicitHydrogens", Size($1));
+			$$ = new SmartsParser::SPAtom::Property(SmartsParser::SPAtom::EXPLICIT_HYDROGENS, $1);
+			//$$ = new NamedProperty("ExplicitHydrogens", Size($1));
 		}
 	|	degree
 		{
-			$$ = new NamedProperty("Degree", Size($1));
+			$$ = new SmartsParser::SPAtom::Property(SmartsParser::SPAtom::DEGREE, $1);
+			//$$ = new NamedProperty("Degree", Size($1));
 		}
 	|	ring_connected
 		{
-			$$ = new NamedProperty("RingConnected", Size($1));
+			$$ = new SmartsParser::SPAtom::Property(SmartsParser::SPAtom::RING_CONNECTED, $1);
+			//$$ = new NamedProperty("RingConnected", Size($1));
 		}
 	;
 
 atom_symbol:
 		isotope
 		{
-			$$ = new SmartsParser::SPAtom("*");
-			$$->addAtomProperty(NamedProperty("Isotope", Size($1)));
+			$$ = new SmartsParser::SPAtom();
+			//$$->addAtomProperty(NamedProperty("Isotope", Size($1)));
+			$$->setProperty(SmartsParser::SPAtom::ISOTOPE, $1);
 		}
 	|	isotope TK_ORG_SUBSET_ATOM
 		{
 			$$ = new SmartsParser::SPAtom($2);
-			$$->addAtomProperty(NamedProperty("Isotope", Size($1)));
+			//$$->addAtomProperty(NamedProperty("Isotope", Size($1)));
+			$$->setProperty(SmartsParser::SPAtom::ISOTOPE, $1);
 		}
 	|	isotope TK_ATOM
 		{
 			$$ = new SmartsParser::SPAtom($2);
-			$$->addAtomProperty(NamedProperty("Isotope", Size($1)));
+			//$$->addAtomProperty(NamedProperty("Isotope", Size($1)));
+			$$->setProperty(SmartsParser::SPAtom::ISOTOPE, $1);
 		}
 	|	isotope TK_AROMATIC_ATOM
 		{
 			$$ = new SmartsParser::SPAtom($2);
-			$$->addAtomProperty(NamedProperty("Isotope", Size($1)));
+			//$$->addAtomProperty(NamedProperty("Isotope", Size($1)));
+			$$->setProperty(SmartsParser::SPAtom::ISOTOPE, $1);
 		}
 	| isotope TK_ALIPHATIC_ATOM
 		{
 			$$ = new SmartsParser::SPAtom($2);
-			$$->addAtomProperty(NamedProperty("Isotope", Size($1)));
+			//$$->addAtomProperty(NamedProperty("Isotope", Size($1)));
+			$$->setProperty(SmartsParser::SPAtom::ISOTOPE, $1);
 		}
 	|	isotope TK_ANY_ATOM
 		{
-			$$ = new SmartsParser::SPAtom($2);
-			$$->addAtomProperty(NamedProperty("Isotope", Size($1)));
+			$$ = new SmartsParser::SPAtom();
+			//$$->addAtomProperty(NamedProperty("Isotope", Size($1)));
+			$$->setProperty(SmartsParser::SPAtom::ISOTOPE, $1);
 		}
 	|	isotope	atomic_number
 		{
 			$$ = new SmartsParser::SPAtom($2);
-			$$->addAtomProperty(NamedProperty("Isotope", Size($1)));
+			//$$->addAtomProperty(NamedProperty("Isotope", Size($1)));
+			$$->setProperty(SmartsParser::SPAtom::ISOTOPE, $1);
 		}
 	;
 
@@ -708,17 +766,19 @@ unbraced_atom_symbol:
 		}
 	|	TK_AROMATIC_ATOM
 		{
-			$$ = new SmartsParser::SPAtom("*");
-			$$->addAtomProperty(NamedProperty("Aromatic", true));
+			$$ = new SmartsParser::SPAtom();
+			//$$->addAtomProperty(NamedProperty("Aromatic", true));
+			$$->setProperty(SmartsParser::SPAtom::AROMATIC, true);
 		}
 	|	TK_ALIPHATIC_ATOM
 		{
-			$$ = new SmartsParser::SPAtom("*");
-			$$->addAtomProperty(NamedProperty("Aliphatic", true));
+			$$ = new SmartsParser::SPAtom();
+			//$$->addAtomProperty(NamedProperty("Aliphatic", true));
+			$$->setProperty(SmartsParser::SPAtom::ALIPHATIC, true);
 		}
 	|	TK_ANY_ATOM
 		{
-			$$ = new SmartsParser::SPAtom("*");
+			$$ = new SmartsParser::SPAtom();
 		}
 	|	atomic_number
 		{
@@ -863,23 +923,28 @@ chirality:
 		'@' /*%prec PREC_CHIRALITY*/
 		{
 			$$ = new SmartsParser::SPAtom();
-			$$->addAtomProperty(NamedProperty("Chirality", SmartsParser::CCW_DEFAULT));
+			//$$->addAtomProperty(NamedProperty("Chirality", SmartsParser::CCW_DEFAULT));
+			$$->setProperty(SmartsParser::SPAtom::CHIRALITY, SmartsParser::CCW_DEFAULT);
 		}
 	|	'@' '@' /*%prec PREC_CHIRALITY*/
 		{ 
 			$$ = new SmartsParser::SPAtom();
-			$$->addAtomProperty(NamedProperty("Chirality", SmartsParser::CW_DEFAULT));
+			//$$->addAtomProperty(NamedProperty("Chirality", SmartsParser::CW_DEFAULT));
+			$$->setProperty(SmartsParser::SPAtom::CHIRALITY, SmartsParser::CW_DEFAULT);
 		}
 	| '@' '?'
 		{
 			$$ = new SmartsParser::SPAtom();
-			$$->addAtomProperty(NamedProperty("Chirality", SmartsParser::CCW_DEFAULT_OR_UNSPECIFIED));
+			//$$->addAtomProperty(NamedProperty("Chirality", SmartsParser::CCW_DEFAULT_OR_UNSPECIFIED));
+			$$->setProperty(SmartsParser::SPAtom::CHIRALITY, SmartsParser::CCW_DEFAULT_OR_UNSPECIFIED);
 		}
 	| '@' '@' '?' 
 		{
 			$$ = new SmartsParser::SPAtom();
-			$$->addAtomProperty(NamedProperty("Chirality", SmartsParser::CW_DEFAULT_OR_UNSPECIFIED));
+			//$$->addAtomProperty(NamedProperty("Chirality", SmartsParser::CW_DEFAULT_OR_UNSPECIFIED));
+			$$->setProperty(SmartsParser::SPAtom::CHIRALITY, SmartsParser::CW_DEFAULT_OR_UNSPECIFIED);
 		}
+		// TODO
 /*	|	TK_CHIRAL_CLASS_TH TK_ONE_TWO 
 		{
 			$$ = new SmartsParser::ChiralDef(SmartsParser::TH, $2); 
