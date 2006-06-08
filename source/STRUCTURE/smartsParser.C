@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.C,v 1.12 2006/06/08 21:36:36 bertsch Exp $
+// $Id: smartsParser.C,v 1.13 2006/06/08 22:32:29 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/smartsParser.h>
@@ -338,6 +338,7 @@ namespace BALL
 		}*/
 	
 		int tmp(0);
+		bool bool_tmp(false);
 		vector<int> ring_sizes;
 
 		for (map<PropertyType, PropertyValue>::const_iterator it = properties_.begin(); it != properties_.end(); ++it)
@@ -429,19 +430,19 @@ namespace BALL
 							++tmp;
 						}
 					}
-					bool not_properties_has(not_properties_.find(IN_NUM_RINGS) != not_properties_.end());
+					bool_tmp = not_properties_.find(IN_NUM_RINGS) != not_properties_.end();
 					if (it->second.int_value == 999)
 					{
-						if (tmp == 0 && !not_properties_has ||
-								tmp != 0 && not_properties_has)
+						if (tmp == 0 && !bool_tmp ||
+								tmp != 0 && bool_tmp)
 						{
 							return false;							
 						}
 					}
 					else
 					{
-						if (tmp == it->second.int_value && not_properties_has ||
-								tmp != it->second.int_value && !not_properties_has)
+						if (tmp == it->second.int_value && bool_tmp ||
+								tmp != it->second.int_value && !bool_tmp)
 						{
 							return false;
 						}
