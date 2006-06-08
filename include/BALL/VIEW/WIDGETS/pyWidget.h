@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.18 2006/06/01 18:43:20 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.19 2006/06/08 23:36:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -25,6 +25,8 @@
 #include <QtGui/QDropEvent>
 #include <QtGui/QLineEdit>
 #include <QtGui/QComboBox>
+#include <QtGui/QPushButton>
+#include <QtGui/QTabWidget>
 #include <QtGui/QSyntaxHighlighter>
 #include <QtCore/QStringList>
 
@@ -198,6 +200,9 @@ namespace BALL
 			///
 			virtual void applyPreferences()
 				throw();
+			
+			/// Open a dialog to select a script
+			virtual void scriptDialog(bool run = false);
 
 			///
 			bool toAbortScript() throw();
@@ -212,10 +217,7 @@ namespace BALL
 			void reactTo(const QKeyEvent& e) throw();
 
 			/// run a Python script from a given file
-			bool runFile(const String& filename) throw();
-
-			// Rerun the last script again
-			bool runAgain();
+			bool openFile(const String& filename, bool run) throw();
 
 			//
 			bool runString(String command);
@@ -238,6 +240,9 @@ namespace BALL
 			virtual void writePreferences(INIFile& inifile)
 				throw();
 
+			///
+			QString getCurrentScript();
+
 			public slots:
 
 			//
@@ -258,14 +263,23 @@ namespace BALL
 			// Show the docu for the current line
 			void showDocumentation();
 
-			/// Open a dialog to select a start up script
-			virtual void scriptDialog();
+			///
+			void runScript();
+
+			///
+			void loadScript();
+
+			///
+			void saveScript();
+
+			// Rerun the last script again
+			bool runAgain();
 
 			virtual void hotkeyItem();
 
 			virtual void modifyHotkeys();
 
-			void appendText(const String& text);
+			void appendText(const String& text, bool output = false);
 
 			bool getMembers(const String& classname, QStringList& sl, const String& prefix);
 
@@ -309,8 +323,13 @@ namespace BALL
 			//_
 			const char* getPrompt_() const;
 
+			//_
+			bool storeScript_();
+
 			//_ Wrapper for multi and single threading call
 			String runCommand_(const String& command, bool& state);
+
+			void appendText_(QTextEdit* te, String text);
 
 			/**	Replace the line the cursor is in with a line from the history.
 					Used to display text from the history (cursor down/up).
@@ -326,14 +345,15 @@ namespace BALL
 
 			bool keyPressed(QKeyEvent* e);
 
-			QTextEdit* 				text_edit_;
-			PythonHighlighter highlighter_;
+			QTextEdit* 				text_edit_, *script_edit_, *script_output_;
+			QTabWidget* 			tab_widget_;
+			PythonHighlighter highlighter_1_, highlighter_2_, highlighter_3_;
 			MyLineEdit* 			line_edit_;
+			QPushButton* 			run_button_, *load_button_, *save_button_;
 			QComboBox* 				combo_box_;
 			List<Hotkey> 			hotkeys_;
 			// 								we use an own working dir to find Python Scripts
 			String 						working_dir_;
-			String 						last_script_;
 			bool 							valid_;
 			bool 							started_startup_script_;
 			Preferences* 			preferences_;
@@ -349,12 +369,12 @@ namespace BALL
 			RunPythonThread* 	thread_;
 			bool 							stop_script_;
 			Size              complete_prefix_;
-			String 						class_;
-			String 						member_;
+			String 						class_, member_;
 			Position 					intend_;
 			bool 							running_;
-			bool 							silent_;
-			bool 							full_silent_;
+			bool 							silent_, full_silent_;
+			bool 							script_mode_;
+			String 						current_script_;
 		};
 
 	} // namespaces	

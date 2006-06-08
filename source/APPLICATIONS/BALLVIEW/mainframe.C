@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.24 2006/06/05 21:18:50 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.25 2006/06/08 23:37:09 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -263,7 +263,7 @@ namespace BALL
 #ifdef BALL_PYTHON_SUPPORT
 		if (file.hasSuffix(".py"))
 		{
- 			PyWidget::getInstance(0)->runFile(file);
+ 			PyWidget::getInstance(0)->openFile(file, true);
 			return;
 		}
 #endif
