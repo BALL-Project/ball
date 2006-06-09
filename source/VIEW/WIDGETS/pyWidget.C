@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.39 2006/06/09 13:27:00 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.40 2006/06/09 13:38:48 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -250,6 +250,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
  			lay->addWidget(combo_box_,1, 1, 1, 1);
 			connect(line_edit_, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
 			connect(text_edit_, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showContextMenu(const QPoint&)));
+			connect(script_edit_, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showEditContextMenu(const QPoint&)));
 			connect(combo_box_, SIGNAL(activated(int)), this, SLOT(completionSelected_()));
 
 			combo_box_->hide();
@@ -1283,15 +1284,33 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 		void PyWidget::showContextMenu(const QPoint& point)
 		{
+			QTextEdit* text_edit = text_edit_;
+			if (tab_widget_->currentIndex() == 1) text_edit = script_output_;
+
 			QMenu menu;
 
 			// "copy" action
-			QAction* action1 = menu.addAction("Copy", text_edit_, SLOT(copy()));
- 			action1->setEnabled(text_edit_->textCursor().hasSelection());
+			QAction* action1 = menu.addAction("Copy", text_edit, SLOT(copy()));
+ 			action1->setEnabled(text_edit->textCursor().hasSelection());
 
-			/////////////////////////////////////////////////////////////////////
+			createMenuHelpEntry_(&menu, text_edit, point);
+			menu.exec(mapToGlobal(point));
+		}
+
+		void PyWidget::showEditContextMenu(const QPoint& point)
+		{
+			QMenu* menu = script_edit_->createStandardContextMenu();
+
+			createMenuHelpEntry_(menu, script_edit_, point);
+			menu->exec(mapToGlobal(point));
+			delete menu;
+		}
+
+
+		void PyWidget::createMenuHelpEntry_(QMenu* menu, QTextEdit* text_edit, const QPoint& point)
+		{
 			// "Help for" action
-			QTextCursor cursor_pos = text_edit_->cursorForPosition(point);
+			QTextCursor cursor_pos = text_edit->cursorForPosition(point);
 		
 			const Position pos = cursor_pos.position() - cursor_pos.block().position();
 			String text = ascii(cursor_pos.block().text());
@@ -1312,10 +1331,8 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 			String entry("Help for: ");
 			entry += key;
-			QAction* action2 = menu.addAction(entry.c_str(), this, SLOT(showHelp_()));
+			QAction* action2 = menu->addAction(entry.c_str(), this, SLOT(showHelp_()));
 			if (key == "") action2->setEnabled(false);
-
-			menu.exec(mapToGlobal(point));
 		}
 
 		void PyWidget::showHelp_()
