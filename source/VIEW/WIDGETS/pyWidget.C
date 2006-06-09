@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.37 2006/06/08 23:36:56 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.38 2006/06/09 13:12:27 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -23,6 +23,7 @@
 #include <QtGui/QDropEvent>
 #include <QtGui/QTextCursor>
 #include <QtGui/QSplitter>
+#include <QtGui/QPushButton>
 
 // currently doesnt work right
 #undef BALL_QT_HAS_THREADS
@@ -42,14 +43,14 @@ PythonHighlighter::PythonHighlighter()
 										<< "is" << "lambda" << "not" << "or" << "pass" << "print" << "raise"
 										<< "return" << "try" << "while" << "yield";
 	
- 	my_class_format.setForeground(Qt::darkBlue);
+ 	my_class_format.setForeground(QColor("royalblue"));
  	my_class_format.setFontWeight(QFont::Bold);
 
-	python_format.setForeground(Qt::darkRed);
+	python_format.setForeground(QColor("coral"));
  	python_format.setFontWeight(QFont::Bold);
 
 	string_format.setForeground(QColor(255,127,80));
-	comment_format.setForeground(Qt::darkGreen);
+	comment_format.setForeground(QColor("mediumaquamarine"));
 }
 
 void PythonHighlighter::compilePattern()
@@ -235,7 +236,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			text_edit_->setContextMenuPolicy(Qt::CustomContextMenu);
 			QPalette pal = text_edit_->palette();
 			QColor color = pal.color(QPalette::Window);
- 			pal.setColor(QPalette::Base, color.dark(105));
+ 			pal.setColor(QPalette::Base, color.dark(100));
 			text_edit_->setPalette(pal);
 
 			line_edit_ = new MyLineEdit(widget);
@@ -268,27 +269,32 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			splitter->addWidget(script_edit_);
 
 			widget = new QWidget(this);
-			run_button_ = new QPushButton(widget);
-			run_button_->setAutoDefault(true);
-			run_button_->setDefault(true);
-			run_button_->setText("Run");
-			connect(run_button_, SIGNAL(clicked()), this, SLOT(runAgain()));
-			
-			load_button_ = new QPushButton(widget);
-			load_button_->setText("Load");
-			connect(load_button_, SIGNAL(clicked()), this, SLOT(loadScript()));
-		
-			save_button_ = new QPushButton(widget);
-			save_button_->setText("Save as");
-			connect(save_button_, SIGNAL(clicked()), this, SLOT(saveScript()));
+			QPushButton* run_button = new QPushButton(widget);
+			run_button->setAutoDefault(true);
+			run_button->setDefault(true);
+			run_button->setText("Run");
+			connect(run_button, SIGNAL(clicked()), this, SLOT(runAgain()));
+	
+			QPushButton* save_button = new QPushButton(widget);
+			save_button->setText("Save as");
+			connect(save_button, SIGNAL(clicked()), this, SLOT(saveScript()));
 
+			QPushButton* load_button = new QPushButton(widget);
+			load_button->setText("Load");
+			connect(load_button, SIGNAL(clicked()), this, SLOT(loadScript()));
+
+			QPushButton* clear_button = new QPushButton(widget);
+			clear_button->setText("Clear");
+			connect(clear_button, SIGNAL(clicked()), this, SLOT(clearScript()));
+	
 			QHBoxLayout *hlayout = new QHBoxLayout;
 			hlayout->setMargin(2);
-			hlayout->addWidget(run_button_);
-			hlayout->addWidget(load_button_);
-			hlayout->addWidget(save_button_);
-			widget->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+			hlayout->addWidget(run_button);
+			hlayout->addWidget(save_button);
+			hlayout->addWidget(load_button);
+			hlayout->addWidget(clear_button);
 			widget->setLayout(hlayout);
+			widget->setMaximumSize(QSize(22222, save_button->height() + 6)); 
 
 			splitter->addWidget(widget);
 
@@ -304,7 +310,10 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			QFont font = text_edit_->document()->defaultFont();
 			font.setPointSize(12);
 			text_edit_->document()->setDefaultFont(font);
+			script_edit_->document()->setDefaultFont(font);
+			script_output_->document()->setDefaultFont(font);
 			registerWidget(this);
+
 			current_script_ = Directory::getUserHomeDir() + FileSystem::PATH_SEPARATOR + "last_BALL_script.py";
 		}
 
@@ -414,6 +423,8 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				return;
 			}
 
+			String temp = current_script_;
+
 			started_startup_script_ = true;
 
 			String startup = getDataPath() + "startup.py";
@@ -424,12 +435,14 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			}
 			
 			String user_startup = python_settings_->getFilename();
-			if (user_startup == "") 
+			if (user_startup != "") 
 			{
-				return;	
+				openFile(user_startup, true);
 			}
 
-			openFile(user_startup, true);
+			script_edit_->clear();
+			openFile(current_script_, false);
+			appendText("> Ready", false, true);
 		}
 
 		void PyWidget::modifyHotkeys()
@@ -513,14 +526,18 @@ void PythonHighlighter::highlightBlock(const QString& text)
 		bool PyWidget::runAgain()
 		{
 			script_output_->clear();
-			return storeScript_() && openFile(current_script_, true);
+			bool state = storeScript_() && openFile(current_script_, true);
+			String result;
+			if (state) result = "Finished script sucessfully";
+			else 			 result = "Error occured in Script";
+			setStatusbarText(result, true);
 		}
 
 		void PyWidget::setError_(bool state)
 		{
 			QColor color;
 			if (state) color = Qt::red;
-			else 			 color = Qt::blue;
+			else 			 color = QColor("forestgreen");
 
 			QTextEdit* text_edit = text_edit_;
 			if (script_mode_)
@@ -531,7 +548,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			text_edit->setTextColor(color);
 		}
 
-		void PyWidget::appendText(const String& t, bool output)
+		void PyWidget::appendText(const String& t, bool output, bool state_message)
 		{
 			if (full_silent_) return;
 
@@ -547,7 +564,10 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				text_edit = script_output_;
 			}
 
-			if (!output) text_edit->setTextColor(Qt::black);
+			if (!output && !state_message) text_edit->setTextColor(Qt::black);
+			if (state_message) text_edit->setTextColor(Qt::blue);
+
+			script_mode_ = true;
 
 			appendText_(text_edit, text);
  		}
@@ -685,7 +705,8 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			stop_script_ = false;
 			full_silent_ = filename.hasSuffix("startup.py");
 
-			appendText(String("> executing script from " + filename + "\n").c_str(), true);
+			if (run) appendText(String("> executing script from " + filename + "\n").c_str(), false, true);
+			else     appendText(String("> loading script from " + filename + "\n").c_str(), false, true);
 			LineBasedFile file;
 			try
 			{
@@ -741,7 +762,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			full_silent_ = false;
 			if (!aborted)
 			{
-				appendText("> Finished.", true);
+				appendText("> Finished.", false, true);
 				setStatusbarText("Finished script.");
 			}
 			newPrompt_();
@@ -1058,7 +1079,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			// print the BALL version and clear
 			// the widget's contents in case of a restart
 			text_edit_->clear();
-			appendText((String("> BALL ") + VersionInfo::getVersion()).c_str(), true);
+			appendText((String("> BALL ") + VersionInfo::getVersion()).c_str(), false, true);
 
 			// print the first prompt 
 			multi_line_mode_ = false;
@@ -1362,6 +1383,12 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			}
 
 			return true;
+		}
+
+		void PyWidget::clearScript()
+		{
+			script_edit_->clear();
+			script_output_->clear();
 		}
 
 	} // namespace VIEW

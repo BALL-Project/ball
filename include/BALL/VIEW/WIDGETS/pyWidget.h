@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.19 2006/06/08 23:36:51 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.20 2006/06/09 13:12:34 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -25,7 +25,6 @@
 #include <QtGui/QDropEvent>
 #include <QtGui/QLineEdit>
 #include <QtGui/QComboBox>
-#include <QtGui/QPushButton>
 #include <QtGui/QTabWidget>
 #include <QtGui/QSyntaxHighlighter>
 #include <QtCore/QStringList>
@@ -272,6 +271,9 @@ namespace BALL
 			///
 			void saveScript();
 
+			///
+			void clearScript();
+
 			// Rerun the last script again
 			bool runAgain();
 
@@ -279,7 +281,7 @@ namespace BALL
 
 			virtual void modifyHotkeys();
 
-			void appendText(const String& text, bool output = false);
+			void appendText(const String& text, bool output = false, bool state_message = false);
 
 			bool getMembers(const String& classname, QStringList& sl, const String& prefix);
 
@@ -349,7 +351,6 @@ namespace BALL
 			QTabWidget* 			tab_widget_;
 			PythonHighlighter highlighter_1_, highlighter_2_, highlighter_3_;
 			MyLineEdit* 			line_edit_;
-			QPushButton* 			run_button_, *load_button_, *save_button_;
 			QComboBox* 				combo_box_;
 			List<Hotkey> 			hotkeys_;
 			// 								we use an own working dir to find Python Scripts
