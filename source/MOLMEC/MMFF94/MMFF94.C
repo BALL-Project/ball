@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.4.5 2006/05/25 20:57:48 amoll Exp $
+// $Id: MMFF94.C,v 1.1.4.6 2006/06/09 10:11:22 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -336,6 +336,7 @@ namespace BALL
 		+ " - van der Waals     : " +String(getVdWEnergy())+  " kJ/mol\n"
 		+ " - bond stretch      : " +String(getStretchEnergy())+  " kJ/mol\n"
 		+ " - angle bend        : " +String(getBendEnergy())+  " kJ/mol\n" 
+		+ " - strech bend       : " +String(getStretchBendEnergy())+  " kJ/mol\n" 
 		+ " - torsion           : " +String(getTorsionEnergy())+  " kJ/mol\n" 
 		+ "---------------------------------------\n" 
 		+ "  total energy       : " +String(getEnergy()) + " kJ/mol\n";
