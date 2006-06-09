@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.5 2006/06/09 13:54:58 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.6 2006/06/09 16:00:42 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -291,6 +291,18 @@ namespace BALL
 			{
 				Log.error() << it->first << " " << it->second << std::endl;
 			}
+			AmberFF* amber = new AmberFF;
+  		System* ligand = dock_dialog_.getSystem2();
+  		Path path;
+  		String amber94gly = path.find("Amber/amber94gly.ini");
+  		amber->options[BALL::AmberFF::Option::FILENAME] = amber94gly;
+  		amber->options[BALL::AmberFF::Option::ASSIGN_CHARGES] = "true";
+  		amber->options[BALL::AmberFF::Option::OVERWRITE_CHARGES] = "false";
+  		ligand->select();  
+  		amber->setup(*ligand); 
+  		ligand->deselect();
+  		delete amber;
+
 
 			// keep the larger protein in System A and the smaller one in System B
 			// and setup the algorithm
@@ -302,74 +314,7 @@ namespace BALL
 			{
 				dock_alg_->setup(*(dock_dialog_.getSystem1()), *(dock_dialog_.getSystem2()), dock_dialog_.getAlgorithmOptions());
 			}
-			//Log.error() << "nach setup" << std::endl;
-			// TEMPORARY switch to test evolutionary docking
-		/*		switch(index)
-			{
-				case GEOMETRIC_FIT:
-					// keep the larger protein in System A and the smaller one in System B
-					// and setup the algorithm
-					if (dock_dialog_.getSystem1()->countAtoms() < dock_dialog_.getSystem2()->countAtoms())
-					{
-						dock_alg_->setup(*(dock_dialog_.getSystem2()), *(dock_dialog_.getSystem1()), dock_dialog_.getAlgorithmOptions());
-					}
-					else
-					{
-						dock_alg_->setup(*(dock_dialog_.getSystem1()), *(dock_dialog_.getSystem2()), dock_dialog_.getAlgorithmOptions());
-					}
-					break;
-				case EVOLUTION_DOCKING:
-					AmberFF* amber = new AmberFF;
-
-  				System ligand(*(dock_dialog_.getSystem2()));
-  
-  				Path path;
-  				String amber94gly = path.find("Amber/amber94gly.ini");
-
-  				amber->options[BALL::AmberFF::Option::FILENAME] = amber94gly;
-  				amber->options[BALL::AmberFF::Option::ASSIGN_CHARGES] = "true";
-  				amber->options[BALL::AmberFF::Option::OVERWRITE_CHARGES] = "false";
-  
-  				ligand.select();  
-  				amber->setup(ligand); 
-  				ligand.deselect();
-  				delete amber;
- 					GeometricCenterProcessor gcp;
-  				ligand.apply(gcp);
-  				Vector3 center = gcp.getCenter();
-
-  				center -= Vector3(1.0,1.0,1.0);
-
-  				Options option;
-  				option.set(EvolutionaryDocking::Option::GRID_FILE,"1A30");
-  				option.set(EvolutionaryDocking::Option::MAX_ITERATIONS,1000);
-  				option.set(EvolutionaryDocking::Option::INITIAL_POPULATION,10000);
-  				option.set(EvolutionaryDocking::Option::POPULATION,80);
-  				option.set(EvolutionaryDocking::Option::SURVIVORS,40);
-  				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_X,center.x); 
-  				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Y,center.y); 
-  				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Z,center.z); 
-  
-  				center += Vector3(2.0,2.0,2.0);
-
-  				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_X,center.x); 
-  				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Y,center.y); 
-  				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Z,center.z);
-			
-					Options::ConstIterator it = dock_dialog_.getAlgorithmOptions().begin();
-      		for (; +it; ++it)
-					{
-						Log.error() << it->first << " " << it->second << std::endl;
-					}
-					
-					//System sys;
-					dock_alg_->setup(*(dock_dialog_.getSystem2()),ligand,option);
-					//dock_alg_->setup(sys,ligand,option);
-
-
-					break;
-			}*/
-					
+							
 			// ============================= WITH MULTITHREADING ====================================
 			#ifdef BALL_QT_HAS_THREADS
 				if (!(getMainControl()->lockCompositesFor(this))) return;
