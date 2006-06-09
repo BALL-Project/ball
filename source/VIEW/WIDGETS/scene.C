@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.49 2006/05/17 00:05:58 amoll Exp $
+// $Id: scene.C,v 1.174.2.49.2.1 2006/06/09 15:00:34 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -119,7 +119,8 @@ namespace BALL
 				animation_thread_(0),
 				stop_animation_(false),
 				content_changed_(true),
-				want_to_use_vertex_buffer_(false)
+				want_to_use_vertex_buffer_(false),
+				show_fps_(false)
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (2) " << this << std::endl;
@@ -250,6 +251,7 @@ namespace BALL
 				{
 					case RepresentationMessage::UPDATE:
 						gl_renderer_.bufferRepresentation(*rep);
+						getMainControl()->getRepresentationManager().finishedRendering(rep);
 						break;
 
 					case RepresentationMessage::REMOVE:
@@ -283,7 +285,7 @@ namespace BALL
 							ColorMap map;
 							ColorRGBA colors[3];
 							colors[0] = ColorRGBA(1.0, 0.0, 0.0, 0.05);
-							colors[1] = ColorRGBA(1.0, 1.0, 0.0, 0.01);
+							colors[1] = ColorRGBA(1.0, 1.0, 0.0, 0.001);
 							colors[2] = ColorRGBA(0.0, 0.0, 1.0, 0.05);
 							if (rm->getType() == (Size) RegularData3DMessage::VISUALISE_SLICE)
 							{
@@ -429,6 +431,7 @@ namespace BALL
 
 			// cannot call update here, because it calls updateGL
    		renderView_(DISPLAY_LISTS_RENDERING);
+			glFlush();
 
 			if (info_string_ != "")
 			{
@@ -437,11 +440,44 @@ namespace BALL
 				QFont font;
 				font.setPixelSize(16);
 				font.setBold(true);
-				gl_renderer_.setColorRGBA_(c1);
-				renderText(info_point_.x() + 1, info_point_.y() + 1, info_string_.c_str(), font);
-				renderText(info_point_.x() - 1, info_point_.y() - 1, info_string_.c_str(), font);
+				glDisable(GL_LIGHTING);
 				gl_renderer_.setColorRGBA_(c2);
 				renderText(info_point_.x(), info_point_.y(), info_string_.c_str(), font);
+				glEnable(GL_LIGHTING);
+			}
+
+			if (show_fps_)
+			{
+				float ti = 1000000.0 / (PreciseTime::now().getMicroSeconds() - time_.getMicroSeconds());
+
+				if (ti < 0)
+				{
+					time_ = PreciseTime::now();
+					return;
+				}
+
+				float fps = (ti + last_fps_) / 2.;
+				String temp = createFloatString(fps, 1);
+				last_fps_ = fps;
+
+				if (fps < 10.0) temp = String(" ") + temp;
+				if (fps < 100.0) temp = String(" ") + temp;
+
+				if (!temp.has('.')) temp = temp + ".0";
+
+				temp = String("FPS ") + temp;
+
+				ColorRGBA color = getStage()->getBackgroundColor().getInverseColor();
+
+				QFont font;
+				font.setPixelSize(16);
+				font.setBold(true);
+				gl_renderer_.setColorRGBA_(color);
+				glDisable(GL_LIGHTING);
+				renderText(width() - 100, 20, temp.c_str(), font);
+				glEnable(GL_LIGHTING);
+
+				time_ = PreciseTime::now();
 			}
 		}
 
@@ -1088,8 +1124,19 @@ namespace BALL
 			if (update_GL) renderView_(REBUILD_DISPLAY_LISTS);
 		}
 
-
 		void Scene::createCoordinateSystem()
+			throw()
+		{
+			createCoordinateSystem_(false);
+		}
+
+		void Scene::createCoordinateSystemAtOrigin()
+			throw()
+		{
+			createCoordinateSystem_(true);
+		}
+
+		void Scene::createCoordinateSystem_(bool at_origin)
 			throw()
 		{
 			RepresentationManager& pm = getMainControl()->getRepresentationManager();
@@ -1101,102 +1148,96 @@ namespace BALL
 
 			float size = 100;
 
-			Vector3 v = s.getViewVector();
-			v.normalize();
-			
-			Vector3 p = s.getViewPoint() + (v * 25) - (s.getLookUpVector()* 5);
+			Vector3 x,y,z,p;
 
-			Vector3 x = -v + s.getRightVector();
-			x.normalize();
-			Vector3 y = -v - s.getRightVector();
-			y.normalize();
+			if (at_origin)
+			{
+				p = Vector3(0,0,0);
+				x = Vector3(1,0,0);
+				y = Vector3(0,1,0);
+				z = Vector3(0,0,1);
+			}
+			else
+			{
+				Vector3 v = s.getViewVector();
+				v.normalize();
+				
+				p = s.getViewPoint() + (v * 25) - (s.getLookUpVector() * 5.);
 
-			Vector3 z = -(x % y);
+				x = -v + s.getRightVector();
+				x.normalize();
+				y = -v - s.getRightVector();
+				y.normalize();
 
-			Box* xp = new Box(p, x * size, z * size, 0.05);
-			Box* yp = new Box(p, y * size, z * size, 0.05);
-			Box* zp = new Box(p, x * size, y * size, 0.05);
+				z = -(x % y);
+ 			}
 
-			ColorRGBA color(0,255,190,180);
-			xp->setColor(color);
-			yp->setColor(color);
-			zp->setColor(color);
+			float delta = 0.001;
+			Box* xp = new Box(p, x * size, z * size, delta);
+			Box* yp = new Box(p, y * size, z * size, delta);
+			Box* zp = new Box(p, x * size, y * size, delta);
+
+			ColorRGBA bcolor(0,255,190,180);
+			xp->setColor(bcolor);
+			yp->setColor(bcolor);
+			zp->setColor(bcolor);
 
 			rp->insert(*xp);
 			rp->insert(*yp);
  			rp->insert(*zp);
 
-			ColorRGBA color2(0,255,255,160);
+			ColorRGBA color;
+			ColorRGBA color1(0,255,255,160);
+			ColorRGBA color2(0,0,0,230);
 
-			Vector3 p1[6], p2[6];
-			p1[0].set(x); p2[0].set(z);
-			p1[1].set(y); p2[1].set(z);
-			p1[2].set(x); p2[2].set(y);
+			Vector3 p1[3], p2[3], d[3];
+			p1[0].set(x); p2[0].set(z); d[0].set(y * delta);
+			p1[1].set(y); p2[1].set(z); d[1].set(x * delta);
+			p1[2].set(x); p2[2].set(y); d[2].set(z * delta);
 
+			Vector3 px;
 			for (Position i = 0; i <= size; i+=1)
 			{
-				for (Position j = 0; j < 6; j++)
+				if (i % 10 == 0) 
 				{
-					Line* line1 = new Line();
-					line1->setVertex1(p + p1[j] * i);
-					line1->setVertex2(p + p1[j] * i + p2[j] * size);
-					line1->setColor(color);
-					rp->insert(*line1);
+					color = color2;
+				}
+				else
+				{
+					color = color1;
+				}
 
-					Line* line2 = new Line();
-					line2->setVertex1(p + p2[j] * i);
-					line2->setVertex2(p + p2[j] * i + p1[j] * size);
-					line2->setColor(color);
-					rp->insert(*line2);
+				for (Position j = 0; j < 3; j++)
+				{
+					px = p + d[j];
+
+					Line* line = new Line();
+					line->setVertex1(px + p1[j] * i);
+					line->setVertex2(px + p1[j] * i + p2[j] * size);
+					line->setColor(color);
+					rp->insert(*line);
+
+					line = new Line();
+					line->setVertex1(px + p2[j] * i);
+					line->setVertex2(px + p2[j] * i + p1[j] * size);
+					line->setColor(color);
+					rp->insert(*line);
+
+					px = p - d[j];
+
+					line = new Line();
+					line->setVertex1(px + p1[j] * i);
+					line->setVertex2(px + p1[j] * i + p2[j] * size);
+					line->setColor(color);
+					rp->insert(*line);
+
+					line = new Line();
+					line->setVertex1(px + p2[j] * i);
+					line->setVertex2(px + p2[j] * i + p1[j] * size);
+					line->setColor(color);
+					rp->insert(*line);
 				}
 			}
-
-
-			for (Position i = 0; i <= size; i+=10)
-			{
-				for (Position j = 0; j < 6; j++)
-				{
-					Line* line1 = new Line();
-					line1->setVertex1(p + p1[j] * i);
-					line1->setVertex2(p + p1[j] * i + p2[j] * size);
-					rp->insert(*line1);
-
-					Line* line2 = new Line();
-					line2->setVertex1(p + p2[j] * i);
-					line2->setVertex2(p + p2[j] * i + p1[j] * size);
-					rp->insert(*line2);
-				}
-			}
-
-			/*
-			ColorRGBA color3(0,255,255,200);
-			for (Position xi = 10; xi <= size; xi += 10)
-			{
-				for (Position yi = 10; yi <= size; yi += 10)
-				{
-					Vector3 point1(p + x * xi + y * yi);
-					Label* label1 = new Label();
-					label1->setVertex(point1);
-					label1->setColor(color3);
-					label1->setText(String(xi) + "," + String(yi));
-					rp->insert(*label1);
-
-					Vector3 point2(p + x * xi + z * yi);
-					Label* label2 = new Label();
-					label2->setVertex(point2);
-					label2->setColor(color3);
-					label2->setText(String(xi) + "," + String(yi));
-					rp->insert(*label2);
-
-					Vector3 point3(p + y * xi + z * yi);
-					Label* label3 = new Label();
-					label3->setVertex(point3);
-					label3->setColor(color3);
-					label3->setText(String(xi) + "," + String(yi));
-					rp->insert(*label3);
-				}
-			}
-			*/
 
 			rp->setProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM);
 
@@ -1244,8 +1285,10 @@ namespace BALL
 		void Scene::writePreferences(INIFile& inifile)
 			throw()
 		{
+			// workaround: otherwise the variable might not get set
+			window_menu_entry_->setChecked(!isHidden());
+
 			ModularWidget::writePreferences(inifile);
-			inifile.insertValue("WINDOWS", getIdentifier() + "::on", String(true));
 
 			inifile.appendSection("EXPORT");
 			inifile.insertValue("EXPORT", "POVNR", String(pov_nr_));
@@ -1490,62 +1533,12 @@ namespace BALL
 
 			main_control.initPopupMenu(MainControl::DISPLAY);
 
-			create_coordinate_system_ = 
-				insertMenuEntry(MainControl::DISPLAY, "Show Coordinate System", this, SLOT(createCoordinateSystem()));
+			create_coordinate_system_ = getMainControl()->initPopupMenu(MainControl::DISPLAY)->
+				addMenu("Show Coordinate System");
 			setMenuHint("Show a coordinate system");
-
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
-			rotate_action_ =	insertMenuEntry(
-					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), Qt::CTRL+Qt::Key_R);
-			setMenuHint("Switch to rotate/zoom mode");
-			rotate_action_->setCheckable(true);
-
-			picking_action_ = insertMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), Qt::CTRL+Qt::Key_P);
-			setMenuHint("Switch to picking mode, e.g. to identify singe atoms or groups");
-			setMenuHelp("scene.html#identify_atoms");
-			picking_action_->setCheckable(true);
-
-			move_action_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()));
-			setMenuHint("Move selected items");
-			setMenuHelp("molecularControl.html#move_molecule");
-			move_action_->setCheckable(true);
-
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
-
-			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
-			no_stereo_action_->setChecked(true);
-			setMenuHelp("tips.html#3D");
-			no_stereo_action_->setCheckable(true);
-
-			active_stereo_action_ = insertMenuEntry (
- 					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()));
-			setMenuHelp("tips.html#3D");
-			active_stereo_action_->setCheckable(true);
-
-			dual_stereo_action_ = insertMenuEntry (
- 					MainControl::DISPLAY_STEREO, "Side by Side", this, SLOT(enterDualStereo()));
-			setMenuHelp("tips.html#3D");
-			dual_stereo_action_->setCheckable(true);
-
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), Qt::CTRL+Qt::Key_W);
-			setMenuHint("Print the coordinates of the current viewpoint");
-
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, SLOT(setViewPoint_()), Qt::CTRL+Qt::Key_N);
-			setMenuHint("Move the viewpoint to the given coordinates");
-
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()));
-			setMenuHint("Reset the camera to the orgin (0,0,0)");
-
-			insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, SLOT(showExportPNGDialog()), Qt::ALT + Qt::Key_P);
-			setMenuHint("Export a PNG image file from the Scene");
-
-//   			insertMenuEntry(MainControl::FILE_EXPORT, "VRML...", this, SLOT(showExportVRMLDialog()));
-//   			setMenuHint("Export a VRML file from the Scene");
-
-			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
-			window_menu_entry_->setCheckable(true);
-			setMenuHelp("scene.html");
-
+			create_coordinate_system_->addAction("at origin", this, SLOT(createCoordinateSystemAtOrigin()));
+			create_coordinate_system_->addAction("here", this, SLOT(createCoordinateSystem()));
+			
 			// ======================== ANIMATION ===============================================
 			String help_url = "tips.html#animations";
 
@@ -1581,6 +1574,60 @@ namespace BALL
 			setMenuHelp(help_url);
 			animation_repeat_action_->setCheckable(true);
 
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
+
+			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
+			no_stereo_action_->setChecked(true);
+			setMenuHelp("tips.html#3D");
+			no_stereo_action_->setCheckable(true);
+
+			active_stereo_action_ = insertMenuEntry (
+ 					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()));
+			setMenuHelp("tips.html#3D");
+			active_stereo_action_->setCheckable(true);
+
+			dual_stereo_action_ = insertMenuEntry (
+ 					MainControl::DISPLAY_STEREO, "Side by Side", this, SLOT(enterDualStereo()));
+			setMenuHelp("tips.html#3D");
+			dual_stereo_action_->setCheckable(true);
+
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), Qt::CTRL+Qt::Key_W);
+			setMenuHint("Print the coordinates of the current viewpoint");
+
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, SLOT(setViewPoint_()), Qt::CTRL+Qt::Key_N);
+			setMenuHint("Move the viewpoint to the given coordinates");
+
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()));
+			setMenuHint("Reset the camera to the orgin (0,0,0)");
+
+			insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, SLOT(showExportPNGDialog()), Qt::ALT + Qt::Key_P);
+			setMenuHint("Export a PNG image file from the Scene");
+
+//   			insertMenuEntry(MainControl::FILE_EXPORT, "VRML...", this, SLOT(showExportVRMLDialog()));
+//   			setMenuHint("Export a VRML file from the Scene");
+
+			// ====================================== MODES =====================================
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
+			rotate_action_ =	insertMenuEntry(
+					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), Qt::CTRL+Qt::Key_R);
+			setMenuHint("Switch to rotate/zoom mode");
+			rotate_action_->setCheckable(true);
+
+			picking_action_ = insertMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), Qt::CTRL+Qt::Key_P);
+			setMenuHint("Switch to picking mode, e.g. to identify singe atoms or groups");
+			setMenuHelp("scene.html#identify_atoms");
+			picking_action_->setCheckable(true);
+
+			move_action_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()));
+			setMenuHint("Move selected items");
+			setMenuHelp("molecularControl.html#move_molecule");
+			move_action_->setCheckable(true);
+
+
+			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
+			window_menu_entry_->setCheckable(true);
+			setMenuHelp("scene.html");
+
 			setCursor(QCursor(Qt::SizeAllCursor));
 
 			connect(&timer_, SIGNAL(timeout()), this, SLOT(timerSignal_()) );			
@@ -1595,6 +1642,7 @@ namespace BALL
 			rotate_action_->setChecked(current_mode_ == ROTATE__MODE);
 			picking_action_->setChecked(current_mode_ == PICKING__MODE);
 			picking_action_->setEnabled(!busy);
+			move_action_->setChecked(current_mode_ == MOVE__MODE);
 			move_action_->setEnabled(!busy);
 
 			create_coordinate_system_->setEnabled(!busy);
@@ -1866,6 +1914,8 @@ namespace BALL
 			// ============ picking mode ================
 			if (current_mode_ == PICKING__MODE)
 			{
+				x_window_pos_new_ = e->globalX();
+				y_window_pos_new_ = e->globalY();
 				selectObjects_();
 				// update will be done from MolecularControl!
 				need_update_ = false; 			
@@ -1889,7 +1939,7 @@ namespace BALL
 
 		void Scene::initTimer()
 		{
- 			timer_.start(500); // ?????????????? currently doesnt work with QT 4.1
+ 			timer_.start(500);
 		}
 
 		void Scene::timerSignal_()
@@ -1987,8 +2037,6 @@ namespace BALL
 			updateGL();
 		}
 
-
-#ifndef QT_NO_WHEELEVENT
 		void Scene::wheelEvent(QWheelEvent *qmouse_event)
 		{
 			qmouse_event->accept();
@@ -1997,103 +2045,100 @@ namespace BALL
 			zoomSystem_();
 			y_window_pos_old_ = y_window_pos_new_;
 		}
-#endif
 
 		void Scene::keyPressEvent(QKeyEvent* e)
 		{
-			if (gl_renderer_.getStereoMode() != GLRenderer::NO_STEREO)
+			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO) return;
+
+			if ((e->key() == Qt::Key_Y && e->modifiers() == Qt::AltModifier) ||
+					 e->key() == Qt::Key_Escape)
 			{
-				if ((e->key() == Qt::Key_Y && e->modifiers() == Qt::AltModifier) ||
-						 e->key() == Qt::Key_Escape)
+				exitStereo();
+			}
+
+			// setting of eye and focal distance
+			if (e->key() != Qt::Key_Left  &&
+					e->key() != Qt::Key_Right &&
+					e->key() != Qt::Key_Up    &&
+					e->key() != Qt::Key_Down)
+			{
+				return;
+			}
+
+			// setting of eye distance
+			if (e->key() == Qt::Key_Left ||
+					e->key() == Qt::Key_Right)
+			{
+				float new_distance = stage_->getEyeDistance();
+
+				float modifier;
+				if (e->key() == Qt::Key_Left)
 				{
-					exitStereo();
+					modifier = -0.1;
 				}
-
-				// setting of eye and focal distance
-				if (e->key() != Qt::Key_Left  &&
-						e->key() != Qt::Key_Right &&
-						e->key() != Qt::Key_Up    &&
-						e->key() != Qt::Key_Down)
-				{
-					return;
-				}
-
-				// setting of eye distance
-				if (e->key() == Qt::Key_Left ||
-						e->key() == Qt::Key_Right)
-				{
-					float new_distance = stage_->getEyeDistance();
-
-					float modifier;
-					if (e->key() == Qt::Key_Left)
-					{
-						modifier = -0.1;
-					}
-					else
-					{
-						modifier = +0.1;
-					}
-
-					if (e->modifiers() == Qt::ShiftModifier)
-					{
-						modifier *= 10;
-					}
-
-					new_distance += modifier;
-					
-					// prevent strange values
-					if (new_distance < 0)
-					{
-						new_distance = 0;
-					}
-
-					if (new_distance > 4)
-					{
-						new_distance = 4;
-					}
-
-					stage_->setEyeDistance(new_distance);
-				}
-				// setting of focal distance
 				else
 				{
-					float new_focal_distance = stage_->getFocalDistance();
-
-					float modifier;
-					if (e->key() == Qt::Key_Down)
-					{
-						modifier = -1;
-					}
-					else
-					{
-						modifier = +1;
-					}
-
-					if (e->modifiers() == Qt::ShiftModifier)
-					{
-						modifier *= 10;
-					}
-
-					new_focal_distance += modifier;
-	
-					// prevent strange values
-					if (new_focal_distance < 7)
-					{
-						new_focal_distance = 7;
-					}
-					
-					if (new_focal_distance > 100) 
-					{
-						new_focal_distance = 100;
-					}
-
-					stage_->setFocalDistance(new_focal_distance);
+					modifier = +0.1;
 				}
 
-				stage_settings_->updateFromStage();
+				if (e->modifiers() == Qt::ShiftModifier)
+				{
+					modifier *= 10;
+				}
 
-				updateGL();
+				new_distance += modifier;
+				
+				// prevent strange values
+				if (new_distance < 0)
+				{
+					new_distance = 0;
+				}
+
+				if (new_distance > 4)
+				{
+					new_distance = 4;
+				}
+
+				stage_->setEyeDistance(new_distance);
 			}
+			// setting of focal distance
+			else
+			{
+				float new_focal_distance = stage_->getFocalDistance();
+
+				float modifier;
+				if (e->key() == Qt::Key_Down)
+				{
+					modifier = -1;
+				}
+				else
+				{
+					modifier = +1;
+				}
+
+				if (e->modifiers() == Qt::ShiftModifier)
+				{
+					modifier *= 10;
+				}
+
+				new_focal_distance += modifier;
+
+				// prevent strange values
+				if (new_focal_distance < 7)
+				{
+					new_focal_distance = 7;
+				}
+				
+				if (new_focal_distance > 100) 
+				{
+					new_focal_distance = 100;
+				}
+
+				stage_->setFocalDistance(new_focal_distance);
+			}
+
+			stage_settings_->updateFromStage();
+			updateGL();
 		}
 
 		void Scene::setMode(ModeType mode)
@@ -2152,33 +2197,15 @@ namespace BALL
 
 		void Scene::selectionPressedMoved_()
 		{
-			Position x[2];
-			Position y[2];
+			Position x0, x1, y0, y1;
 
-			if (x_window_pos_new_ < x_window_pick_pos_first_)
-			{
-				x[0] = x_window_pos_new_;
-				x[1] = x_window_pick_pos_first_;
-			}
-			else
-			{
-				x[0] = x_window_pick_pos_first_;
-				x[1] = x_window_pos_new_;
-			}
+			x0 = BALL_MIN(x_window_pos_new_, x_window_pick_pos_first_);
+			x1 = BALL_MAX(x_window_pos_new_, x_window_pick_pos_first_);
+			y0 = BALL_MIN(y_window_pos_new_, y_window_pick_pos_first_);
+			y1 = BALL_MAX(y_window_pos_new_, y_window_pick_pos_first_);
 
-			if (y_window_pos_new_ < y_window_pick_pos_first_)
-			{
-				y[0] = y_window_pos_new_;
-				y[1] = y_window_pick_pos_first_;
-			}
-			else
-			{
-				y[0] = y_window_pick_pos_first_;
-				y[1] = y_window_pos_new_;
-			}
-
-			QPoint p0 = mapFromGlobal(QPoint(x[0], y[0]));
-			QPoint p1 = mapFromGlobal(QPoint(x[1], y[1]));
+			QPoint p0 = mapFromGlobal(QPoint(x0, y0));
+			QPoint p1 = mapFromGlobal(QPoint(x1, y1));
 
 			rb_->setGeometry(QRect(p0, p1));
 			rb_->show();
@@ -2494,18 +2521,7 @@ namespace BALL
 		void Scene::switchToLastMode()
 			throw()
 		{
-			switch (last_mode_)
-			{
- 				case PICKING__MODE: 
-					pickingMode_();
-					break;
- 				case ROTATE__MODE: 
-					rotateMode_();
-					break;
- 				case MOVE__MODE: 
-					moveMode_();
-					break;
-			}
+			setMode(last_mode_);
 		}
 
 		void Scene::dropEvent(QDropEvent* e)
@@ -2564,39 +2580,6 @@ namespace BALL
 		{
  			QGLWidget::updateGL();
 
-#ifdef BALL_BENCHMARKING
-
-			float ti = 100000.0 / (PreciseTime::now().getMicroSeconds() - time_.getMicroSeconds());
-
-			if (ti < 0)
-			{
-				time_ = PreciseTime::now();
-				return;
-			}
-
-			float fps = (ti + last_fps_) / 2.;
-			String temp = createFloatString(fps, 1);
-			last_fps_ = fps;
-
-			if (fps < 10.0) temp = String(" ") + temp;
-
-			if (!temp.has('.')) temp = temp + ".0";
-
-			temp = String("FPS ") + temp;
-
-			QPainter painter(this);
-
-			ColorRGBA color = getStage()->getBackgroundColor().getInverseColor();
-
-			painter.setBackgroundMode(Qt::OpaqueMode);
-			painter.setPen(color.getQColor());
-			painter.setBackgroundColor(getStage()->getBackgroundColor().getQColor());
-
-			QPoint point(width() - 70, 20);
-			painter.drawText(point, temp.c_str(), 0, -1);
-
-			time_ = PreciseTime::now();
-#endif
 		}
 
 	} // namespace VIEW

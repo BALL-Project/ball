@@ -334,7 +334,7 @@
      <enum>Qt::StrongFocus</enum>
     </property>
     <property name="currentIndex" >
-     <number>0</number>
+     <number>2</number>
     </property>
     <property name="maxCount" >
      <number>2147483647</number>

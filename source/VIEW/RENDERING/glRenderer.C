@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.48 2006/05/12 12:47:56 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.48.2.1 2006/06/09 15:00:32 leonhardt Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -545,6 +545,7 @@ namespace BALL
 			}
 
 			renderRepresentation_(representation, for_display_list);
+			glFlush();
 
 			return true;
 		}
@@ -1105,8 +1106,9 @@ namespace BALL
 			else 		// draw the triangles per cel shading
 			{	
 				// a part of this code stems from http://nehe.gamedev.net lesson 37
+				glDisable(GL_LIGHTING);
 				glPolygonMode(GL_BACK, GL_LINE);										// Draw Backfacing Polygons As Wireframes
-				glLineWidth(5);																			// Set The Line Width
+				glLineWidth(3);																			// Set The Line Width
 				glEnable(GL_CULL_FACE);
 				glCullFace(GL_FRONT);																// Don't Draw Any Front-Facing Polygons
 				glDepthFunc(GL_LEQUAL);															// Change The Depth Mode 
@@ -1129,7 +1131,6 @@ namespace BALL
 				glLineWidth(1);										// Set The Line Width
 
 				// map the texture so it simulates shadows:
-				glDisable(GL_LIGHTING);
 				glEnable(GL_TEXTURE_1D);						
 				glBindTexture(GL_TEXTURE_1D, cel_texture_);	
  				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);

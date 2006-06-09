@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: view-common.sip,v 1.6.2.2 2006/05/11 14:18:32 amoll Exp $
+// $Id: view-common.sip,v 1.6.2.2.2.1 2006/06/09 15:00:24 leonhardt Exp $
 //
 
 %ModuleHeaderCode 
@@ -109,7 +109,7 @@ MainControl* getMainControl()	throw();
 String createTemporaryFilename() throw();
 Vector3 getNormal(const Vector3&)	throw();
 
-//void logString(const String& data);
+void logString(const String&);
 //QColor chooseColor(QLabel* label);
 //void processDropEvent(QDropEvent* e);
 //void focusCamera(const List<Vector3>& points);

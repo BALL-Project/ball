@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.12 2006/05/15 23:18:52 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.12.2.1 2006/06/09 15:00:34 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -110,6 +110,10 @@ namespace BALL
 			charmm_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Charmm", this, SLOT(chooseCharmmFF()));
 			charmm_ff_id_->setCheckable(true);
 			setMenuHint("Use Charmm Force Field");
+
+			mmff94_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "MMFF94", this, SLOT(chooseMMFF94()));
+			mmff94_id_->setCheckable(true);
+			setMenuHint("Use MMFF94 Force Field");
 
 			setup_ff_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Options", this, 
 												SLOT(setupForceField()));
@@ -800,9 +804,11 @@ namespace BALL
 
 		ForceField& MolecularStructure::getForceField() throw()
 		{
-			return ((use_amber_) ? 
-						reinterpret_cast<ForceField&>(amber_) : 
-						reinterpret_cast<ForceField&>(charmm_));
+			if (force_field_id_ == 0) return reinterpret_cast<ForceField&>(amber_);
+			if (force_field_id_ == 1) return reinterpret_cast<ForceField&>(charmm_);
+			if (force_field_id_ == 2) return reinterpret_cast<ForceField&>(mmff_);
+
+			return reinterpret_cast<ForceField&>(amber_);
 		}
 
 		void MolecularStructure::fetchPreferences(INIFile& inifile)
@@ -812,15 +818,16 @@ namespace BALL
 			md_dialog_.readPreferenceEntries(inifile);
 			amber_dialog_.readPreferenceEntries(inifile);
 			charmm_dialog_.readPreferenceEntries(inifile);
+			chooseForceField(AMBER_FF);
 			if (inifile.hasEntry("FORCEFIELD", "selected"))
 			{
-				if (inifile.getValue("FORCEFIELD", "selected") == "AMBER")
+				try
 				{
-					chooseAmberFF();
+					force_field_id_ = inifile.getValue("FORCEFIELD", "selected").toUnsignedShort();
+					chooseForceField(force_field_id_);
 				}
-				else
+				catch(...)
 				{
-					chooseCharmmFF();
 				}
 			}
 		}
@@ -834,14 +841,7 @@ namespace BALL
 			amber_dialog_.writePreferenceEntries(inifile);
 			charmm_dialog_.writePreferenceEntries(inifile);
 			inifile.appendSection("FORCEFIELD");
-			if (use_amber_)
-			{
-				inifile.insertValue("FORCEFIELD", "selected", "AMBER");
-			}
-			else
-			{
-				inifile.insertValue("FORCEFIELD", "selected", "CHARMM");
-			}
+			inifile.insertValue("FORCEFIELD", "selected", force_field_id_);
 		}
 
 
@@ -909,11 +909,9 @@ namespace BALL
 
 			// CHARMM setup may delete atoms (converted to united atoms!),
 			// so we have to make sure the rest of the world realizes something might have changed.
-			if (!use_amber_)
+			if (force_field_id_ == CHARMM_FF)
 			{
-				CompositeMessage* change_message = 
-					new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-				notify_(change_message);
+				getMainControl()->update(*system, true);
 			}
 
 			if (!ok)
@@ -956,14 +954,7 @@ namespace BALL
 			}
 			// Remember which force field was selected and update the force field's 
 			// settings from the appropriate dialog.
-			if (minimization_dialog_.getUseAmber())
-			{
-				chooseAmberFF();
-			}
-			else
-			{
-				chooseCharmmFF();
-			}
+			chooseForceField(minimization_dialog_.selectedForceField());
 			charmm_dialog_.accept();
 			amber_dialog_.accept();
 
@@ -990,7 +981,7 @@ namespace BALL
 			
 			// CHARMM setup may delete atoms (converted to united atoms!),
 			// so we have to make sure the rest of the world realizes something might have changed.
-			if (!use_amber_)
+			if (force_field_id_ == CHARMM_FF)
 			{
 				getMainControl()->update(*system, true);
 			}
@@ -1125,14 +1116,7 @@ namespace BALL
 			if (show_dialog && !md_dialog_.exec()) return;
 
 			// Get the force field.
-			if (md_dialog_.getUseAmber())
-			{
-				chooseAmberFF();
-			}
-			else
-			{
-				chooseCharmmFF();
-			}
+			chooseForceField(md_dialog_.selectedForceField());
 
 			// set up the force field
 			setStatusbarText("setting up force field...", false);
@@ -1156,7 +1140,7 @@ namespace BALL
 
 			// CHARMM setup may delete atoms (converted to united atoms!),
 			// so we have to make sure the rest of the world realizes something might have changed.
-			if (!use_amber_)
+			if (force_field_id_ == CHARMM_FF)
 			{
 				getMainControl()->update(*system, true);
 			}
@@ -1335,32 +1319,45 @@ namespace BALL
 
 		void MolecularStructure::chooseAmberFF()
 		{
-			use_amber_ = true;
-			charmm_ff_id_->setChecked( false);
-			amber_ff_id_->setChecked( true);
-			md_dialog_.useAmberFF();
-			minimization_dialog_.useAmberFF();
+			chooseForceField(AMBER_FF);
 		}
 		
 		void MolecularStructure::chooseCharmmFF()
 		{
-			use_amber_ = false;
-			amber_ff_id_->setChecked( false);
-			charmm_ff_id_->setChecked( true);
-			md_dialog_.useCharmmFF();
-			minimization_dialog_.useCharmmFF();
+			chooseForceField(CHARMM_FF);
+		}
+
+		void MolecularStructure::chooseMMFF94()
+		{
+			chooseForceField(MMFF94_FF);
+		}
+
+		void MolecularStructure::chooseForceField(Position nr)
+		{
+			if (nr > 2)
+			{
+				Log.error() << "Selected invalid force field!" << std::endl;
+				return;
+			}
+
+			force_field_id_ = nr;
+			
+			amber_ff_id_->setChecked(false);
+			charmm_ff_id_->setChecked(false);
+			mmff94_id_->setChecked(false);
+
+			if (nr == 0) amber_ff_id_->setChecked(true);
+			else if (nr == 1) charmm_ff_id_->setChecked(true);
+			else if (nr == 2) mmff94_id_->setChecked(true);
+
+			md_dialog_.selectForceField(force_field_id_);
+			minimization_dialog_.selectForceField(force_field_id_);
 		}
 
 		void MolecularStructure::setupForceField()
 		{
-			if (use_amber_)
-			{
-				showAmberForceFieldOptions();
-			}
-			else
-			{
-				showCharmmForceFieldOptions();
-			}
+			if (force_field_id_ == AMBER_FF) showAmberForceFieldOptions();
+			else if (force_field_id_ == CHARMM_FF) showCharmmForceFieldOptions();
 		}
 
 

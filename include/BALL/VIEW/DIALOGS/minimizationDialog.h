@@ -66,9 +66,6 @@ namespace BALL
 				///
 				void setUseConjugateGradient(bool use_CG);
 				
-				/// Show an dialog for setting the options of the currently selected force field.
-				void advancedOptions();
-				
 				/** Set the dialog for the AMBER Configuration.
 						Called by MolecularStructure.
 				*/
@@ -79,14 +76,16 @@ namespace BALL
 				*/
 				void setCharmmDialog(CharmmConfigurationDialog* charmm_dialog);
 				
-				/// Use the AMBER force field
-				void useAmberFF();
+				/// Select the forcefield, nr are the enum values in MolecularStructure
+				void selectForceField(Position nr);
 				
-				/// Use the CHARMM force field
-				void useCharmmFF();
+				/// Return the ID of the selected forcefield (see enum values in MolecularStructure)
+				Position selectedForceField() const;
 				
-				/// Are we using the AMBER force field?
-				bool getUseAmber();
+				public slots:
+
+				/// Show an dialog for setting the options of the currently selected force field.
+				void advancedOptions();
 				
 				private:
 				AmberConfigurationDialog* amber_dialog_;

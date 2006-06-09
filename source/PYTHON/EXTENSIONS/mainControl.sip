@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.22.2.4 2006/05/03 20:13:32 amoll Exp $
+// $Id: mainControl.sip,v 1.22.2.4.2.1 2006/06/09 15:00:21 leonhardt Exp $
 //
 
 class MainControl
@@ -115,6 +115,8 @@ class MainControl
 	ModularWidget* getLockingWidget() throw();
 	bool updateOfRepresentationRunning() throw();
 	bool stopedSimulation();
+	bool isBusy();
+	void wait();
 	//bool setSimulationThread(SimulationThread*) throw();
 	//SimulationThread* getSimulationThread() throw();
 	

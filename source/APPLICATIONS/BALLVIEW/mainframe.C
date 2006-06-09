@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.21.2.1 2006/06/09 13:55:12 leonhardt Exp $
+// $Id: mainframe.C,v 1.60.2.21.2.2 2006/06/09 15:00:15 leonhardt Exp $
 //
 
 #include "mainframe.h"
@@ -19,6 +19,7 @@
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/WIDGETS/helpViewer.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
+#include <BALL/VIEW/WIDGETS/editableScene.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -92,8 +93,8 @@ namespace BALL
 		// ---------------------
 		// Logstream setup -----
 		// ---------------------
-		//Log.remove(std::cout);
-		//Log.remove(std::cerr);
+//   		Log.remove(std::cout);
+//   		Log.remove(std::cerr);
 		setLoggingFilename("BALLView.log");
 
  		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, "Structures"));
@@ -120,7 +121,7 @@ namespace BALL
 		new DockingController(  this, "DockingController");
 
 		Scene::stereoBufferSupportTest();
-		scene_ = new Scene(this, "3D View");
+		scene_ = new EditableScene(this, "3D View");
 		setCentralWidget(scene_);
 		setAcceptDrops(true);
 
@@ -218,10 +219,19 @@ namespace BALL
 	{
 		if (!fullscreen_)
 		{
+			last_state_ = saveState();
 			// This call is needed because showFullScreen won't work
 			// correctly if the widget already considers itself to be fullscreen.
 			last_size_ = size();
 			last_point_ = pos();
+			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			for (; it != modular_widgets_.end(); ++it)
+			{
+				DockWidget* widget = dynamic_cast<DockWidget*>(*it);
+				if (widget == 0) continue;
+				widget->hide();
+			}
+
 			showNormal();	
 			showFullScreen();
 		}
@@ -230,6 +240,7 @@ namespace BALL
 			showNormal();
 			resize(last_size_.width(), last_size_.height());
 			move(last_point_);
+			restoreState(last_state_);
 		}
 		fullscreen_ = !fullscreen_;
 	}
@@ -252,7 +263,7 @@ namespace BALL
 #ifdef BALL_PYTHON_SUPPORT
 		if (file.hasSuffix(".py"))
 		{
- 			PyWidget::getInstance(0)->runFile(file);
+ 			PyWidget::getInstance(0)->openFile(file, true);
 			return;
 		}
 #endif

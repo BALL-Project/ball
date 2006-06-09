@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.C,v 1.1.2.9 2006/05/17 11:36:46 amoll Exp $
+// $Id: representationManager.C,v 1.1.2.9.2.1 2006/06/09 15:00:32 leonhardt Exp $
 
 #include <BALL/VIEW/KERNEL/representationManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -516,38 +516,27 @@ void RepresentationManager::focusRepresentation(const Representation& rep)
 
 bool RepresentationManager::isBeeingRendered(const Representation* rep) const
 {
-	QMutex* mutex = (QMutex*) &render_mutex_;
-	mutex->lock();
 	bool result = beeing_rendered_.has((Representation*)rep);
-	mutex->unlock();
 
 	return result;
 }
 
 void RepresentationManager::startedRendering(Representation* rep)
 {
-	render_mutex_.lock();
 	beeing_rendered_.insert(rep);
-	render_mutex_.unlock();
 }
 
 void RepresentationManager::finishedRendering(Representation* rep)
 {
-	render_mutex_.lock();
 	beeing_rendered_.erase(rep);
-	render_mutex_.unlock();
 }
 
 Representation* RepresentationManager::popRepresentationToUpdate()
 {
-	// ??? does this help?
 	if (to_update_.size() == 0) return 0;
-
- 	if (!render_mutex_.tryLock()) return 0;
 
 	if (!update_mutex_.tryLock())
 	{
-		render_mutex_.unlock();
 		return 0;
 	}
 
@@ -564,11 +553,11 @@ Representation* RepresentationManager::popRepresentationToUpdate()
 
 	if (rep != 0) 
 	{
+		beeing_rendered_.insert(rep);
 		beeing_updated_.insert(rep);
 		to_update_.erase(rep);
 	}
 
- 	render_mutex_.unlock();
 	update_mutex_.unlock();
 
 	return rep;
@@ -577,10 +566,7 @@ Representation* RepresentationManager::popRepresentationToUpdate()
 void RepresentationManager::update_(Representation& rep)
 	throw()
 {
-	if (!has(rep))
-	{
-		return;
-	}
+	if (!has(rep)) return;
 
 	if (rep.isHidden()) 
 	{
@@ -625,9 +611,6 @@ void RepresentationManager::finishedUpdate_(Representation* rep)
 	{
 		delete rep;
 	}
-
-
-//   		main_control_->setPreferencesEnabled_(true);
 }
 
 bool RepresentationManager::updateRunning() const
@@ -635,7 +618,7 @@ bool RepresentationManager::updateRunning() const
 {
 	QMutex* mutex = (QMutex*) &update_mutex_;
  	if (!mutex->tryLock()) return true;
-	bool running = beeing_updated_.size();
+	bool running = to_update_.size() > 0 || beeing_updated_.size() > 0 || beeing_rendered_.size() > 0;
  	mutex->unlock();
 	return running;
 }

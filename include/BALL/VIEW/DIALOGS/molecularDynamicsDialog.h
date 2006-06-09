@@ -70,30 +70,28 @@ class BALL_VIEW_EXPORT MolecularDynamicsDialog
 		Size getStepsBetweenRefreshs() const;
 		
 		///
-		void advancedOptions();
-
-		///
 		void setAmberDialog(AmberConfigurationDialog* amber_dialog);
 		
 		///
 		void setCharmmDialog(CharmmConfigurationDialog* charmm_dialog);
+	 	
 		
-		///
-		void useAmberFF();
+		/// Select the forcefield, nr are the enum values in MolecularStructure
+		void selectForceField(Position nr);
 		
-		///
-		void useCharmmFF();
-		
-		///
-		bool getUseAmber();
-
-		///
-		void chooseDCDFile();
-	
+		/// Return the ID of the selected forcefield (see enum values in MolecularStructure)
+		Position selectedForceField() const;
+				
 		protected slots:
 
 		virtual void enableDCDFileSelected();
-
+		
+		///
+		void advancedOptions();
+	
+		///
+		void chooseDCDFile();
+	
 		void timeChanged();
 
 		private:

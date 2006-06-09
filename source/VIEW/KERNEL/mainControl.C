@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.19 2006/05/15 23:18:51 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.19.2.1 2006/06/09 15:00:31 leonhardt Exp $
 //
 // Author:
 //   Heiko Klein
@@ -34,6 +34,7 @@
 #include <BALL/SYSTEM/directory.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/SYSTEM/timer.h>
+#include <BALL/SYSTEM/systemCalls.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 
 #include <QtGui/qstatusbar.h>  // statusbar
@@ -359,7 +360,11 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					return 0;
 			}
 
-			connect(menu, SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
+			if (!RTTI::isKindOf<QMenu>(*menu->parent()))
+			{
+				connect(menu, SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
+			}
+
 			id_to_menu_[ID] = menu;
 
 			return menu;
@@ -835,15 +840,9 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 	 		inifile.insertValue("WINDOWS", "Main::height", String(height()));
 			inifile.insertValue("WINDOWS", "File::working_dir", working_dir_);
 
-			String mys;
 			QByteArray ba = saveState();
-			for (Position p = 0; p < (Position) ba.size(); p++)
-			{
-				mys += String((short) ba.at(p));
-				mys += "|";
-			}
-
-			inifile.insertValue("WINDOWS", "Main::dockwidgets", mys);
+			ba = ba.toBase64();
+			inifile.insertValue("WINDOWS", "Main::dockwidgets", ba.data());
 
 			// finalizes all modular widgets
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
@@ -1242,16 +1241,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				if (!inifile.hasEntry("WINDOWS", "Main::dockwidgets")) return;
 
 				String mys(inifile.getValue("WINDOWS", "Main::dockwidgets"));
-				vector<String> sv;
-				mys.split(sv, "|");
-
-				QByteArray s;
-				s.reserve(sv.size());
-				for (Position p = 0; p < sv.size(); p++)
-				{
-					s.append((char) sv[p].toShort());
-				}
-
+				QByteArray s(mys.c_str());
+				s = s.fromBase64(s);
 				restoreState(s);
 			}
 			catch(...)
@@ -1933,9 +1924,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 	bool MainControl::isBusy() const
 	{
-		if (composites_locked_ || primitive_manager_.updateRunning()) return true;
-
-		return false;
+		return (composites_locked_ || primitive_manager_.updateRunning());
 	}
 		
 	void MainControl::setContentSize(int w, int h)
@@ -1943,6 +1932,15 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		Size height = menuBar()->height();
 		height += statusBar()->height();
 		resize(w, h + height);
+	}
+
+	void MainControl::wait()
+ 	{
+		while (isBusy())
+		{
+			QApplication::processEvents();
+			sleepFor(10);
+		}
 	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

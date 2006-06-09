@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecule.sip,v 1.8 2003/11/15 10:59:06 oliver Exp $
+// $Id: molecule.sip,v 1.8.14.1 2006/06/09 15:00:21 leonhardt Exp $
 //
 
 class Molecule
@@ -26,17 +26,17 @@ class Molecule
   void swap(Molecule&);
   System* getSystem();
   const System* getSystem() const;
-  void prepend(Atom&);
-  void append(Atom&);
-  void insert(Atom&);
-  void insertBefore(Atom&, Composite&);
-  void insertAfter(Atom&, Composite&);
+  void prepend(Atom& /Transfer/);
+  void append(Atom& /Transfer/);
+  void insert(Atom& /Transfer/);
+  void insertBefore(Atom& /Transfer/, Composite&);
+  void insertAfter(Atom& /Transfer/, Composite&);
   bool remove(Atom&);
-  void prepend(AtomContainer&);
-  void append(AtomContainer&);
-  void insert(AtomContainer&);
-  void insertBefore(AtomContainer&, Composite&);
-  void insertAfter(AtomContainer&, Composite&);
+  void prepend(AtomContainer& /Transfer/);
+  void append(AtomContainer& /Transfer/);
+  void insert(AtomContainer& /Transfer/);
+  void insertBefore(AtomContainer& /Transfer/, Composite&);
+  void insertAfter(AtomContainer& /Transfer/, Composite&);
   void spliceBefore(AtomContainer&);
   void spliceAfter(AtomContainer&);
   void splice(AtomContainer&);

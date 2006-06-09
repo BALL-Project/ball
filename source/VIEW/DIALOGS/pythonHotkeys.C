@@ -44,7 +44,7 @@ namespace BALL
 						!RTTI::isKindOf<QComboTableItem>(*table->item(pos, 0))) 
 				{
 					Log.error() << "Problem reading content of PythonHotkeys" << std::endl;
-					continue;
+					return results;
 				}
 
 				Hotkey hotkey;
@@ -66,6 +66,7 @@ namespace BALL
 
 					default:
 						Log.error() << "Problem reading content of PythonHotkeys" << std::endl;
+						return results;
 				}
 
 				ci = ((QComboTableItem*) table->item(pos, 1))->currentItem();
@@ -106,6 +107,7 @@ namespace BALL
 
 					default:
 						Log.error() << "Invalid button state for Hotkey" << std::endl;
+						return;
 				}
 				table->setItem(p, 0,  item) ;
 
@@ -162,5 +164,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL

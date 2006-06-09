@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: minimizationDialog.C,v 1.4.2.2 2006/02/01 13:23:46 amoll Exp $
+// $Id: minimizationDialog.C,v 1.4.2.2.2.1 2006/06/09 15:00:29 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/minimizationDialog.h>
@@ -32,9 +32,6 @@ namespace BALL
 			connect( start_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
 			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
 			connect( advanced_button, SIGNAL( clicked() ), this, SLOT( advancedOptions() ) );
-			connect( useAmberRadioButton, SIGNAL( clicked() ), this, SLOT( useAmberFF() ) );
-			connect( useCharmmRadioButton, SIGNAL( clicked() ), this, SLOT( useCharmmFF() ) );
-
 
 			registerObject_(max_iterations_lineedit);
 			registerObject_(energy_difference_lineedit);
@@ -131,11 +128,11 @@ namespace BALL
 
 		void MinimizationDialog::advancedOptions()
 		{
-			if(useAmberRadioButton->isChecked())
+			if (useAmberRadioButton->isChecked())
 			{
 				if (amber_dialog_ != 0) amber_dialog_->exec();
 			}
-			else
+			else if (useCharmmRadioButton->isChecked())
 			{
 				if (charmm_dialog_ != 0) charmm_dialog_->exec();
 			}
@@ -151,22 +148,25 @@ namespace BALL
 			charmm_dialog_ = dialog;
 		}
 
-		void MinimizationDialog::useAmberFF()
+		void MinimizationDialog::selectForceField(Position nr)
 		{
-			useAmberRadioButton->setChecked(true);
-			useCharmmRadioButton->setChecked(false);
+			if 			(nr == 0) useAmberRadioButton->setChecked(Qt::Checked);
+			else if (nr == 1) useCharmmRadioButton->setChecked(Qt::Checked);
+			else if (nr == 2) useMMFF94RadioButton->setChecked(Qt::Checked);
+			else
+			{
+				BALLVIEW_DEBUG
+			}
 		}
-
-		void MinimizationDialog::useCharmmFF()
+		
+		Position MinimizationDialog::selectedForceField() const
 		{
-			useCharmmRadioButton->setChecked(true);
-			useAmberRadioButton->setChecked(false);
-		}
+			if 			(useAmberRadioButton->isChecked())  return 0;
+			else if (useCharmmRadioButton->isChecked()) return 1;
+			else if (useMMFF94RadioButton->isChecked()) return 2;
 
-		bool MinimizationDialog::getUseAmber()
-		{
-			return useAmberRadioButton->isChecked();
+			return 0;
 		}
-
+	
 	} // namespace VIEW
 } //namespace BALL

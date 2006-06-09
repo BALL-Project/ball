@@ -1,8 +1,9 @@
 #  example script to viualise the movement in a trajectory
 clearAll()
-getDisplayProperties().selectModel(MODEL_LINES)
-getDisplayProperties().selectColoringMethod(COLORING_ELEMENT)
-getDisplayProperties().enableCreationForNewMolecules(1)
+dp = getDisplayProperties()
+dp.selectModel(MODEL_LINES)
+dp.selectColoringMethod(COLORING_ELEMENT)
+dp.enableCreationForNewMolecules(1)
 openFile(Path().find("structures/AlaAla.hin"))
 dcd = DCDFile(Path().find("structures/alaala.dcd"))
 system = getSystem(0)

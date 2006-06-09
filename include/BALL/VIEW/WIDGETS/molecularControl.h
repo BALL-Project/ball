@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.50.2.12 2006/05/15 23:18:34 amoll Exp $
+// $Id: molecularControl.h,v 1.50.2.12.2.1 2006/06/09 15:00:13 leonhardt Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -225,12 +225,6 @@ class BALL_VIEW_EXPORT MolecularControl
 	*/
 	virtual void updateSelection();
 
-	/** Invalidate the selection.
-			All selected items in the tree will be deselected. \par
-			Calls updateSelection().
-	*/
-	void invalidateSelection();
-
 	///
 	void highlightSelection()
 		throw();
@@ -422,6 +416,9 @@ class BALL_VIEW_EXPORT MolecularControl
 
 	//
 	List<QTreeWidgetItem*> getAllItems_();
+
+	void enableUpdates_(bool state);
+	void ignoreCheckChanges_(bool state);
 	
 	//@} 
 	/** @name Menu entries ids
@@ -454,8 +451,8 @@ class BALL_VIEW_EXPORT MolecularControl
 
 	ModelType 			selected_model_;
 	ColoringMethod  selected_coloring_method_;
-	HashMap<QTreeWidgetItem*, Composite*> item_to_composite_;
-	HashMap<Composite*, QTreeWidgetItem*> composite_to_item_;
+	std::map<QTreeWidgetItem*, Composite*> item_to_composite_;
+	std::map<Composite*, QTreeWidgetItem*> composite_to_item_;
 
 	// let cut know to delete the entries, set by deleteCurrentItems()
 	bool 						was_delete_;
@@ -467,6 +464,7 @@ class BALL_VIEW_EXPORT MolecularControl
 					 *select_action_, *deselect_action_, *count_items_action_, *atom_overview_, *atom_overview_selection_;
 
 	bool ignore_checked_changes_;
+	bool ignore_messages_;
 };
 	
 }} // namespaces

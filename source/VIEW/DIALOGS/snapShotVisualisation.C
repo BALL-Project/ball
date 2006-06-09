@@ -1,5 +1,6 @@
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/FORMAT/trajectoryFile.h>
@@ -160,7 +161,7 @@ void SnapshotVisualisationDialog::animateClicked()
 				setWindowTitle((String("CurrentSnapshot: ") + String(i)).c_str());
 				snapShotSlider->setValue(i);
 				update_();
-				
+
 				if (export_PNG->isChecked())
 				{
 					notify_(new SceneMessage(SceneMessage::EXPORT_PNG));
@@ -296,6 +297,8 @@ void SnapshotVisualisationDialog::update_()
   currentSnapshot->setText(tmp_);
 	update();
 	notify_(new CompositeMessage(*snap_shot_manager_->getSystem(), CompositeMessage::CHANGED_COMPOSITE));
+	MainControl* mc = getMainControl();
+	mc->wait();
 }
 
 void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_manager)  

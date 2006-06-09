@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.23.2.4 2006/03/23 14:22:35 amoll Exp $
+// $Id: lightSettings.C,v 1.23.2.4.2.1 2006/06/09 15:00:28 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -63,6 +63,7 @@ LightSettings::LightSettings(QWidget* parent, const char* name, Qt::WFlags fl)
 void LightSettings::updateFromStage()
 	throw()
 {
+	if (stage_ == 0) return;
 	lights_.clear();
 	List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
 	for (; it != stage_->getLightSources().end(); it++)

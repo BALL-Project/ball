@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.2.2.5 2006/03/24 14:02:34 amoll Exp $
+// $Id: helpViewer.h,v 1.2.2.5.2.1 2006/06/09 15:00:13 leonhardt Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -94,6 +94,9 @@ namespace BALL
 
 			///
 			void setProject(const String& project) { project_ = project;}
+
+			///
+			String getProject() const { return project_;}
 			
 			///
 			void setBaseDirectory(const String& dir);

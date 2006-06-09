@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.C,v 1.1.2.7 2006/05/03 14:59:40 amoll Exp $
+// $Id: modifyRepresentationDialog.C,v 1.1.2.7.2.1 2006/06/09 15:00:29 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
@@ -67,7 +67,8 @@ namespace BALL
 			connect( max_button, SIGNAL( clicked() ), this, SLOT( maxPressed() ) );
 			connect( max_max_button, SIGNAL( clicked() ), this, SLOT( maxMaxPressed() ) );
 			connect( choose_button, SIGNAL( clicked() ), this, SLOT( choosePressed() ) );
-			connect( split_group, SIGNAL( clicked(int) ), this, SLOT( splitMethodChanged() ) );
+			connect( split_by_selection, SIGNAL( clicked() ), this, SLOT( splitMethodChanged() ) );
+			connect( split_by_distance, SIGNAL( clicked() ), this, SLOT( splitMethodChanged() ) );
 			connect( transparency_slider, SIGNAL( valueChanged(int) ), this, SLOT( customColorTransparencyChanged() ) );
 			connect( transparency_slider_2, SIGNAL( valueChanged(int) ), this, SLOT( changeDrawingModeTransparencyChanged() ) );
 

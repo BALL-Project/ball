@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.25.2.2 2006/01/31 10:34:58 oliver Exp $
+# $Id: Makefile,v 1.25.2.2.2.1 2006/06/09 15:00:33 leonhardt Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -19,6 +19,7 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	dockWidget.C\
+	editableScene.C\
 	logView.C\
  	genericControl.C\
 	geometricControl.C\
@@ -41,6 +42,7 @@ MOC_SOURCES=\
 	datasetControl_moc.C\
 	dockWidget_moc.C\
 	dockingController_moc.C\
+	editableScene_moc.C\
 	genericControl_moc.C\
 	geometricControl_moc.C\
 	helpViewer_moc.C\
@@ -64,6 +66,9 @@ depend: $(MOC_SOURCES)
 
 dockWidget_moc.C:	$(HEADER_DIR)/dockWidget.h
 	$(MOC) $(HEADER_DIR)/dockWidget.h -o $@
+
+editableScene_moc.C:	$(HEADER_DIR)/editableScene.h
+	$(MOC) $(HEADER_DIR)/editableScene.h -o $@
 
 genericControl_moc.C:	$(HEADER_DIR)/genericControl.h
 	$(MOC) $(HEADER_DIR)/genericControl.h -o $@

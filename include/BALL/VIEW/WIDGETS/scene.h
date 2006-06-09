@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.9 2006/04/26 13:33:09 amoll Exp $
+// $Id: scene.h,v 1.66.2.9.2.1 2006/06/09 15:00:14 leonhardt Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -32,6 +32,7 @@
 
 class QMouseEvent;
 class QRubberBand;
+class QMenu;
 
 namespace BALL
 {
@@ -482,20 +483,23 @@ namespace BALL
 			*/
 			virtual void mouseReleaseEvent(QMouseEvent* qmouse_event);
 
-#ifndef QT_NO_WHEELEVENT
 			/** Catch mouse wheel events and zoom the scene accordingly.
 					\param  e the QT-mouse event (See QT-library for mouse events)
 			*/
 			virtual void wheelEvent(QWheelEvent* qmouse_event);
-#endif
 
 			/// Catch key events
 			void keyPressEvent(QKeyEvent* e);
 
-	
+
 			public slots:
 
+			/// Create an coordinate system at current position
 			void createCoordinateSystem()
+				throw();
+
+			/// Create an coordinate system at origin
+			void createCoordinateSystemAtOrigin()
 				throw();
 
 			/// Export PNG image and return the filename
@@ -661,7 +665,7 @@ namespace BALL
 
 			protected:
 
-			virtual void updateGL();
+			void updateGL();
 
 			void renderView_(RenderMode mode)
 				throw();
@@ -701,7 +705,10 @@ namespace BALL
 			inline float getXDiff_();
 			inline float getYDiff_();
 			inline Vector3 getTranslationVector_(const Vector3& v);
-
+			
+			void createCoordinateSystem_(bool at_origin)
+				throw();
+	
 			//_ state of the scene: picking or rotate mode?
 			ModeType current_mode_;
 
@@ -713,7 +720,7 @@ namespace BALL
 			QAction *no_stereo_action_, *active_stereo_action_, *dual_stereo_action_;
 			QAction *record_animation_action_, *start_animation_action_, *clear_animation_action_, *cancel_animation_action_;
 			QAction *animation_export_POV_action_, *animation_export_PNG_action_, *animation_repeat_action_;
-			QAction *create_coordinate_system_;
+			QMenu* create_coordinate_system_;
 			
 			Vector3 system_origin_;
 
@@ -772,6 +779,7 @@ namespace BALL
 			QPoint info_point_;
 			String info_string_;
 			QByteArray last_state_;
+			bool show_fps_;
 		};
 
 

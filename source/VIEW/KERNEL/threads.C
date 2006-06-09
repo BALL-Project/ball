@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.41.2.3 2006/02/01 14:15:06 amoll Exp $
+// $Id: threads.C,v 1.41.2.3.2.1 2006/06/09 15:00:32 leonhardt Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -46,13 +46,11 @@ namespace BALL
 
 		void BALLThread::waitForUpdateOfRepresentations_()
 		{
-//   Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			RepresentationManager& pm = main_control_->getRepresentationManager();
 			while (pm.updateRunning())
 			{
 				msleep(50);
 			}
-//   Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		}
 
 		void BALLThread::updateScene_()
@@ -85,14 +83,15 @@ namespace BALL
 				output_("Invalid Address " + url_ + " in " + String(__FILE__) + ":" + String(__LINE__), true);
 				return;
 			}
+
+			MainControl* mc = getMainControl();
+			if (mc != 0)
+			{
+				tcp_.setProxy(mc->getProxy(), mc->getProxyPort());
+			}
+
 			try
 			{
-				MainControl* mc = getMainControl();
-				if (mc != 0)
-				{
-					tcp_.setProxy(mc->getProxy(), mc->getProxyPort());
-				}
-
 				if (file_name_ != "")
 				{
 					File f(file_name_, std::ios::out);

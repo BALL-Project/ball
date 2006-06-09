@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.40 2006/05/08 21:00:06 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.40.2.1 2006/06/09 15:00:33 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -50,7 +50,6 @@ namespace BALL
 			listview->headerItem()->setText(1, "from");
 			listview->headerItem()->setText(2, "Type");
 			default_visible_ = false;
-			connect(listview, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
 			setMinimumSize(50,50);
 			resize(50,50);
 			registerWidget(this);
@@ -75,7 +74,7 @@ namespace BALL
 		{
 			open_trajectory_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Trajectory", 
 														this, SLOT(addTrajectory()));
-			setMenuHint("Open a trajectory file (1 System has to be selected)");
+			setMenuHint("Open a trajectory file (1 System has to be highlighted)");
 
 			insertMenuEntry(MainControl::FILE_OPEN_GRID, "1D Grid", this, SLOT(add1DGrid()));
 			setMenuHint("Open a 1D data grid");

@@ -78,7 +78,7 @@ libBALL.obj\
 ..\..\..\source\KERNEL\chain.obj\
 ..\..\..\source\KERNEL\expression.obj ..\..\..\source\KERNEL\expressionParser.obj\
 ..\..\..\source\KERNEL\expressionPredicate.obj ..\..\..\source\KERNEL\expressionTree.obj\
-..\..\..\source\KERNEL\extractors.obj\
+#..\..\..\source\KERNEL\extractors.obj\
 ..\..\..\source\KERNEL\fragment.obj\
 ..\..\..\source\KERNEL\global.obj\
 ..\..\..\source\KERNEL\molecule.obj\
@@ -151,6 +151,7 @@ libBALL.obj\
 ..\..\..\source\MOLMEC\MINIMIZATION\energyMinimizer.obj\
 ..\..\..\source\MOLMEC\MINIMIZATION\lineSearch.obj\
 ..\..\..\source\MOLMEC\MINIMIZATION\steepestDescent.obj\
+..\..\..\source\MOLMEC\MMFF94\MMFF94.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94NonBonded.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94OutOfPlaneBend.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94Parameters.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94Processors.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94StretchBend.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94Torsion.obj\
 ..\..\..\source\MOLMEC\PARAMETER\atomTypes.obj\
 ..\..\..\source\MOLMEC\PARAMETER\charmmEEF1.obj\
 ..\..\..\source\MOLMEC\PARAMETER\cosineTorsion.obj\
@@ -244,5 +245,5 @@ libBALL.obj\
 ..\..\..\source\STRUCTURE\structureMapper.obj\
 ..\..\..\source\STRUCTURE\surfaceProcessor.obj\
 ..\..\..\source\STRUCTURE\triangle.obj ..\..\..\source\STRUCTURE\triangleEdge.obj ..\..\..\source\STRUCTURE\trianglePoint.obj ..\..\..\source\STRUCTURE\triangulatedSAS.obj ..\..\..\source\STRUCTURE\triangulatedSES.obj ..\..\..\source\STRUCTURE\triangulatedSurface.obj\
-..\..\..\source\STRUCTURE\UCK.obj ..\..\..\source\STRUCTURE\DOCKING\amberEvaluation.obj ..\..\..\source\STRUCTURE\DOCKING\dockResult.obj ..\..\..\source\STRUCTURE\DOCKING\energeticEvaluation.obj ..\..\..\source\STRUCTURE\DOCKING\geometricFit.obj ..\..\..\source\STRUCTURE\DOCKING\conformationSet.obj ..\..\..\source\STRUCTURE\DOCKING\dockingAlgorithm.obj ..\..\..\source\STRUCTURE\DOCKING\forceFieldEvaluation.obj ..\..\..\source\STRUCTURE\DOCKING\randomEvaluation.obj ..\..\..\source\SYSTEM\directory.obj ..\..\..\source\SYSTEM\file.obj ..\..\..\source\SYSTEM\fileSystem.obj ..\..\..\source\SYSTEM\path.obj ..\..\..\source\SYSTEM\socket.obj ..\..\..\source\SYSTEM\sysinfo.obj ..\..\..\source\SYSTEM\TCPTransfer.obj ..\..\..\source\SYSTEM\timer.obj
+..\..\..\source\STRUCTURE\UCK.obj ..\..\..\source\STRUCTURE\DOCKING\amberEvaluation.obj ..\..\..\source\STRUCTURE\DOCKING\dockResult.obj ..\..\..\source\STRUCTURE\DOCKING\energeticEvaluation.obj ..\..\..\source\STRUCTURE\DOCKING\geometricFit.obj ..\..\..\source\STRUCTURE\DOCKING\conformationSet.obj ..\..\..\source\STRUCTURE\DOCKING\dockingAlgorithm.obj ..\..\..\source\STRUCTURE\DOCKING\forceFieldEvaluation.obj ..\..\..\source\STRUCTURE\DOCKING\randomEvaluation.obj ..\..\..\source\SYSTEM\directory.obj ..\..\..\source\SYSTEM\file.obj ..\..\..\source\SYSTEM\fileSystem.obj ..\..\..\source\SYSTEM\path.obj ..\..\..\source\SYSTEM\socket.obj ..\..\..\source\SYSTEM\sysinfo.obj ..\..\..\source\SYSTEM\TCPTransfer.obj ..\..\..\source\SYSTEM\timer.obj  ..\..\..\source\SYSTEM\systemCalls.obj
 #stupid WINDOWS: no more than 255 lines!

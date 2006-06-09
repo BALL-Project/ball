@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36.2.16 2006/05/15 13:40:07 amoll Exp $
+// $Id: glRenderer.h,v 1.36.2.16.2.1 2006/06/09 15:00:12 leonhardt Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -106,37 +106,20 @@ namespace BALL
 					throw();
 			};
 
-			/** @name Type Definitions
-			*/
-			//@{
-			
 			/// Typedef for OPENGL names
 			typedef unsigned int Name;
 			
-			//@}
-			/**	@name	Constructors and Destructors
-			*/	
-			//@{
-
-			/** Default Constructor.
-			*/
+			/// Default Constructor.
 			GLRenderer()
 				throw();
 
-			/** Destructor
-			*/
+			/// Destructor
 			virtual ~GLRenderer()
 				throw();
 
-			/** Explicit default initialization.
-			*/
+			/// Explicit default initialization.
 			virtual void clear()
 				throw();
-
-			//@}
-			/**	@name	Accessors: inspectors and mutators 
-			*/
-			//@{		
 
 			///
 			void dump(std::ostream& s, Size depth) const
@@ -183,8 +166,7 @@ namespace BALL
 			///
 			void exitPickingMode();
 
-			/**
-			 */
+			///
 			void setSize(float width, float height)
 				throw();
 
@@ -197,8 +179,7 @@ namespace BALL
 				throw();
 
 			/** Update the camera position with gluLookAt,
-			 		either from a given Camera, or from the default
-					Stage.
+			 		either from a given Camera, or from the default Stage.
 			*/
 			void updateCamera(const Camera* camera = 0)
 				throw();
@@ -235,8 +216,6 @@ namespace BALL
 			bool hasDisplayListFor(const Representation& rep) const
 				throw();
 			
-//   			void renderVolume(const RegularData3D& grid, const ColorMap& map);
-
 			///
 			void setStereoMode(StereoMode state)
 				throw();
@@ -294,9 +273,6 @@ namespace BALL
 
 			///
 			void initPerspective();
-
-			//@}
-			protected:
 
 			void renderRepresentation_(const Representation& representation, bool for_display_list);
 
