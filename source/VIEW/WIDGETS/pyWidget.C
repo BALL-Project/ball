@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.41 2006/06/09 13:42:00 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.42 2006/06/09 15:19:55 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -1300,6 +1300,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 		void PyWidget::showEditContextMenu(const QPoint& point)
 		{
 			QMenu* menu = script_edit_->createStandardContextMenu();
+			menu->addSeparator();
 
 			createMenuHelpEntry_(menu, script_edit_, point);
 			menu->exec(mapToGlobal(point));
