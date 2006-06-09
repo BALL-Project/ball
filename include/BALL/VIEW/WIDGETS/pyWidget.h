@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.20 2006/06/09 13:12:34 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.21 2006/06/09 13:38:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -245,6 +245,9 @@ namespace BALL
 			public slots:
 
 			//
+			void showEditContextMenu(const QPoint& point);
+
+			//
 			void showContextMenu(const QPoint& point);
 
 			//
@@ -346,6 +349,8 @@ namespace BALL
 			virtual void contentsDropEvent(QDropEvent* e);
 
 			bool keyPressed(QKeyEvent* e);
+
+			void createMenuHelpEntry_(QMenu* menu, QTextEdit* text_edit, const QPoint& point);
 
 			QTextEdit* 				text_edit_, *script_edit_, *script_output_;
 			QTabWidget* 			tab_widget_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.40 2006/06/09 13:38:48 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.41 2006/06/09 13:42:00 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -250,7 +250,6 @@ void PythonHighlighter::highlightBlock(const QString& text)
  			lay->addWidget(combo_box_,1, 1, 1, 1);
 			connect(line_edit_, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
 			connect(text_edit_, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showContextMenu(const QPoint&)));
-			connect(script_edit_, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showEditContextMenu(const QPoint&)));
 			connect(combo_box_, SIGNAL(activated(int)), this, SLOT(completionSelected_()));
 
 			combo_box_->hide();
@@ -305,6 +304,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			script_output_->setReadOnly(true);
 			script_output_->setPalette(pal);
 			script_output_->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
+			connect(script_edit_, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showEditContextMenu(const QPoint&)));
 			splitter->addWidget(script_output_);
 
 			default_visible_ = false;
