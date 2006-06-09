@@ -133,14 +133,7 @@ namespace BALL
 				 	*/
 				void browseGridFile();
 
-				/** Is called when the amber radio button is pressed. 
-		 			*/
-				void useAmberFF();
-
-				/** Is called when the charmm radio button is pressed. 
-		 			*/
-				void useCharmmFF();
-
+				
 				/** Is called when force field options button is pressed. 
 					* It shows the force field option dialog.
 					*/

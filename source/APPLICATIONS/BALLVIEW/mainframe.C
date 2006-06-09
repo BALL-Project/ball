@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.21 2006/05/15 23:18:36 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.21.2.1 2006/06/09 13:55:12 leonhardt Exp $
 //
 
 #include "mainframe.h"
@@ -92,8 +92,8 @@ namespace BALL
 		// ---------------------
 		// Logstream setup -----
 		// ---------------------
-		Log.remove(std::cout);
-		Log.remove(std::cerr);
+		//Log.remove(std::cout);
+		//Log.remove(std::cerr);
 		setLoggingFilename("BALLView.log");
 
  		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, "Structures"));

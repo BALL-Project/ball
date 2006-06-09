@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.4 2006/05/31 12:48:43 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.5 2006/06/09 13:54:58 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -286,19 +286,25 @@ namespace BALL
 
 			// Set up the docking algorithm
 			setStatusbarText("Setting up docking algorithm...", true);
+			Options::ConstIterator it = dock_dialog_.getAlgorithmOptions().begin();
+      for (; +it; ++it)
+			{
+				Log.error() << it->first << " " << it->second << std::endl;
+			}
 
 			// keep the larger protein in System A and the smaller one in System B
 			// and setup the algorithm
-			/*if (dock_dialog_.getSystem1()->countAtoms() < dock_dialog_.getSystem2()->countAtoms())
+			if (dock_dialog_.getSystem1()->countAtoms() < dock_dialog_.getSystem2()->countAtoms())
 			{
 				dock_alg_->setup(*(dock_dialog_.getSystem2()), *(dock_dialog_.getSystem1()), dock_dialog_.getAlgorithmOptions());
 			}
 			else
 			{
 				dock_alg_->setup(*(dock_dialog_.getSystem1()), *(dock_dialog_.getSystem2()), dock_dialog_.getAlgorithmOptions());
-			}*/
+			}
+			//Log.error() << "nach setup" << std::endl;
 			// TEMPORARY switch to test evolutionary docking
-				switch(index)
+		/*		switch(index)
 			{
 				case GEOMETRIC_FIT:
 					// keep the larger protein in System A and the smaller one in System B
@@ -348,7 +354,7 @@ namespace BALL
 
   				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_X,center.x); 
   				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Y,center.y); 
-  				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Z,center.z); 
+  				option.set(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Z,center.z);
 			
 					Options::ConstIterator it = dock_dialog_.getAlgorithmOptions().begin();
       		for (; +it; ++it)
@@ -362,9 +368,8 @@ namespace BALL
 
 
 					break;
-			}
-
-			
+			}*/
+					
 			// ============================= WITH MULTITHREADING ====================================
 			#ifdef BALL_QT_HAS_THREADS
 				if (!(getMainControl()->lockCompositesFor(this))) return;

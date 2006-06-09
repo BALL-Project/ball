@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyGrid.C,v 1.1.2.2 2006/05/24 17:55:10 leonhardt Exp $
+// $Id: energyGrid.C,v 1.1.2.3 2006/06/09 13:54:58 leonhardt Exp $
 
 
 #include <BALL/KERNEL/system.h>
@@ -69,14 +69,16 @@ namespace BALL
 		
 		/**open file to read elements in the gridfile
 		 */
-		ifstream infile((file + ".gr").c_str());
+		//ifstream infile((file + ".gr").c_str());
+		ifstream infile((file).c_str());
 		
 		/**vector for elements in the gridfile
 		 */
 		if (infile)
 			{
 				
-				HINFile h_infile((file + ".gr").c_str());
+				//HINFile h_infile((file + ".gr").c_str());
+				HINFile h_infile((file).c_str());
 				h_infile >> receptor;
 				
 				string s;
@@ -116,7 +118,6 @@ namespace BALL
 					}
 			}
 
-		
 		string s;
 		while (s!= "--GRID--")
 			getline(infile,s);
