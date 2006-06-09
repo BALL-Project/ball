@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.6.2.2 2006/05/26 14:49:15 leonhardt Exp $
+// $Id: dockDialog.C,v 1.5.2.6.2.3 2006/06/09 13:51:20 leonhardt Exp $
 //
 
 #include <QtGui/qpushbutton.h>
@@ -24,6 +24,7 @@
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/DATATYPE/options.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 
 #ifdef BALL_HAS_FFTW
 #include <BALL/STRUCTURE/DOCKING/geometricFit.h>
@@ -31,7 +32,7 @@
 #endif
 
 #include <BALL/VIEW/DIALOGS/evolutionDockingDialog.h>
-//#include "../../STRUCTURE/DOCKING/evolutionaryDocking.h"
+#include "../../STRUCTURE/DOCKING/evolutionaryDocking.h"
 
 
 
@@ -799,6 +800,40 @@ namespace BALL
 			{
 				applyProcessors_();
 			}
+
+			// apply preprocessing steps for certain algorithms
+			Index index = algorithms->currentIndex();
+			switch(index)
+				{
+					case DockingController::EVOLUTION_DOCKING:
+						{
+							// if translation box should be relative to the ligand 
+							EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[index]));
+							if(edd->rel_trans_radio_button->isChecked())
+							{
+								GeometricCenterProcessor gcp;
+								if (docking_partner1_->countAtoms() < docking_partner2_->countAtoms())
+								{
+									docking_partner1_->apply(gcp);
+								}
+								else
+								{
+  								docking_partner2_->apply(gcp);
+								}
+								
+								Vector3 center = gcp.getCenter();
+								algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_X] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_X)-center.x;
+								algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Y] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Y)-center.y;
+								algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Z] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Z)-center.z;
+								algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_X] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_X)+center.x;
+								algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Y] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Y)+center.y;
+								algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Z] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Z)+center.z;
+							}
+							break;
+						}
+				}
+
+
 			// set property for the two docking partners
 			// is needed to identify these original partners for redocking
 			AtomContainerIterator it;

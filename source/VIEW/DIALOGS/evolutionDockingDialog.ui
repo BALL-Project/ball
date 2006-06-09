@@ -174,248 +174,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QGroupBox" name="trans_box_group" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>130</y>
-     <width>320</width>
-     <height>217</height>
-    </rect>
-   </property>
-   <property name="title" >
-    <string>Translation box</string>
-   </property>
-   <widget class="QLabel" name="trans_box_botton_label" >
-    <property name="geometry" >
-     <rect>
-      <x>11</x>
-      <y>86</y>
-      <width>199</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>Translation box botton</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="rel_trans_radio_button" >
-    <property name="geometry" >
-     <rect>
-      <x>11</x>
-      <y>57</y>
-      <width>199</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>relative to ligand</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="x_label_2" >
-    <property name="geometry" >
-     <rect>
-      <x>11</x>
-      <y>181</y>
-      <width>16</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>x</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="x_label" >
-    <property name="geometry" >
-     <rect>
-      <x>11</x>
-      <y>118</y>
-      <width>16</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>x</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="y_label" >
-    <property name="geometry" >
-     <rect>
-      <x>100</x>
-      <y>120</y>
-      <width>16</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>y</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="trans_box_bottom_y" >
-    <property name="geometry" >
-     <rect>
-      <x>120</x>
-      <y>120</y>
-      <width>41</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>1.0</string>
-    </property>
-    <property name="alignment" >
-     <set>Qt::AlignRight</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="trans_box_top_label" >
-    <property name="geometry" >
-     <rect>
-      <x>11</x>
-      <y>149</y>
-      <width>199</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>Translation box top</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="y_label_2" >
-    <property name="geometry" >
-     <rect>
-      <x>100</x>
-      <y>180</y>
-      <width>16</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>y</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="z_label" >
-    <property name="geometry" >
-     <rect>
-      <x>190</x>
-      <y>120</y>
-      <width>16</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>z</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="z_label_2" >
-    <property name="geometry" >
-     <rect>
-      <x>190</x>
-      <y>180</y>
-      <width>16</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>z</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="trans_box_bottom_z" >
-    <property name="geometry" >
-     <rect>
-      <x>210</x>
-      <y>120</y>
-      <width>41</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>1.0</string>
-    </property>
-    <property name="alignment" >
-     <set>Qt::AlignRight</set>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="trans_box_bottom_x" >
-    <property name="geometry" >
-     <rect>
-      <x>30</x>
-      <y>120</y>
-      <width>41</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>1.0</string>
-    </property>
-    <property name="alignment" >
-     <set>Qt::AlignRight</set>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="trans_box_top_x" >
-    <property name="geometry" >
-     <rect>
-      <x>30</x>
-      <y>180</y>
-      <width>41</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>2.0</string>
-    </property>
-    <property name="alignment" >
-     <set>Qt::AlignRight</set>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="trans_box_top_y" >
-    <property name="geometry" >
-     <rect>
-      <x>120</x>
-      <y>180</y>
-      <width>41</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>2.0</string>
-    </property>
-    <property name="alignment" >
-     <set>Qt::AlignRight</set>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="trans_box_top_z" >
-    <property name="geometry" >
-     <rect>
-      <x>210</x>
-      <y>180</y>
-      <width>41</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>2.0</string>
-    </property>
-    <property name="alignment" >
-     <set>Qt::AlignRight</set>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="abs_trans_radio_button" >
-    <property name="geometry" >
-     <rect>
-      <x>11</x>
-      <y>28</y>
-      <width>158</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>absolute</string>
-    </property>
-    <property name="checked" >
-     <bool>true</bool>
-    </property>
-   </widget>
-  </widget>
   <widget class="QGroupBox" name="option_group" >
    <property name="geometry" >
     <rect>
@@ -679,6 +437,261 @@
     </property>
     <property name="alignment" >
      <set>Qt::AlignLeading</set>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="trans_box_group" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>130</y>
+     <width>320</width>
+     <height>251</height>
+    </rect>
+   </property>
+   <property name="title" >
+    <string>Translation box</string>
+   </property>
+   <widget class="QLabel" name="trans_box_botton_label" >
+    <property name="geometry" >
+     <rect>
+      <x>11</x>
+      <y>86</y>
+      <width>199</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>Translation box botton</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rel_trans_radio_button" >
+    <property name="geometry" >
+     <rect>
+      <x>11</x>
+      <y>57</y>
+      <width>199</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>relative to ligand</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="x_label_2" >
+    <property name="geometry" >
+     <rect>
+      <x>11</x>
+      <y>181</y>
+      <width>16</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>x</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="x_label" >
+    <property name="geometry" >
+     <rect>
+      <x>11</x>
+      <y>118</y>
+      <width>16</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>x</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="y_label" >
+    <property name="geometry" >
+     <rect>
+      <x>100</x>
+      <y>120</y>
+      <width>16</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>y</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="trans_box_bottom_y" >
+    <property name="geometry" >
+     <rect>
+      <x>120</x>
+      <y>120</y>
+      <width>41</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>1.0</string>
+    </property>
+    <property name="alignment" >
+     <set>Qt::AlignRight</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="trans_box_top_label" >
+    <property name="geometry" >
+     <rect>
+      <x>11</x>
+      <y>149</y>
+      <width>199</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>Translation box top</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="y_label_2" >
+    <property name="geometry" >
+     <rect>
+      <x>100</x>
+      <y>180</y>
+      <width>16</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>y</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="z_label" >
+    <property name="geometry" >
+     <rect>
+      <x>190</x>
+      <y>120</y>
+      <width>16</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>z</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="z_label_2" >
+    <property name="geometry" >
+     <rect>
+      <x>190</x>
+      <y>180</y>
+      <width>16</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>z</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="trans_box_bottom_z" >
+    <property name="geometry" >
+     <rect>
+      <x>210</x>
+      <y>120</y>
+      <width>41</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>1.0</string>
+    </property>
+    <property name="alignment" >
+     <set>Qt::AlignRight</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="trans_box_bottom_x" >
+    <property name="geometry" >
+     <rect>
+      <x>30</x>
+      <y>120</y>
+      <width>41</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>1.0</string>
+    </property>
+    <property name="alignment" >
+     <set>Qt::AlignRight</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="trans_box_top_x" >
+    <property name="geometry" >
+     <rect>
+      <x>30</x>
+      <y>180</y>
+      <width>41</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>2.0</string>
+    </property>
+    <property name="alignment" >
+     <set>Qt::AlignRight</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="trans_box_top_y" >
+    <property name="geometry" >
+     <rect>
+      <x>120</x>
+      <y>180</y>
+      <width>41</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>2.0</string>
+    </property>
+    <property name="alignment" >
+     <set>Qt::AlignRight</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="trans_box_top_z" >
+    <property name="geometry" >
+     <rect>
+      <x>210</x>
+      <y>180</y>
+      <width>41</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>2.0</string>
+    </property>
+    <property name="alignment" >
+     <set>Qt::AlignRight</set>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="abs_trans_radio_button" >
+    <property name="geometry" >
+     <rect>
+      <x>11</x>
+      <y>28</y>
+      <width>158</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>absolute</string>
+    </property>
+    <property name="checked" >
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="visulize_trans_box" >
+    <property name="geometry" >
+     <rect>
+      <x>10</x>
+      <y>220</y>
+      <width>171</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>visualize translation box</string>
     </property>
    </widget>
   </widget>

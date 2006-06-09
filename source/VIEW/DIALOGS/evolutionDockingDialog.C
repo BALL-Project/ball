@@ -54,8 +54,6 @@ namespace BALL
 			  connect(grid_radio_button, SIGNAL(clicked()), this, SLOT(enableFileBrowsing()));
 				connect(new_grid_radio_button, SIGNAL(clicked()), this, SLOT(disableFileBrowsing()));
 				connect(browse_button, SIGNAL(clicked()), this, SLOT(browseGridFile()));
-				//connect( amber_radio_button, SIGNAL(clicked()), this, SLOT(useAmberFF()));
-				//connect( charmm_radio_button, SIGNAL(clicked()), this, SLOT(useCharmmFF()));
 				connect(force_field_button, SIGNAL(clicked()), this, SLOT(showForceFieldOptions()));
 			}
 		
@@ -316,22 +314,6 @@ namespace BALL
 				// store the new filename in the lineedit field
 				grid_filename->setText(result);
 			}
-		}
-
-		/** Is called when the amber radio button is pressed. 
-		 	*/
-		void EvolutionDockingDialog::useAmberFF()
-		{
-			amber_radio_button->setChecked(true);
-			charmm_radio_button->setChecked(false);
-		}
-
-		/** Is called when the charmm radio button is pressed. 
-		 	*/
-		void EvolutionDockingDialog::useCharmmFF()
-		{
-			charmm_radio_button->setChecked(true);
-			amber_radio_button->setChecked(false);
 		}
 
 		/** Is called when force field options button is pressed. 
