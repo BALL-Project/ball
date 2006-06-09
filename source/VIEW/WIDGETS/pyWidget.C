@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.38 2006/06/09 13:12:27 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.39 2006/06/09 13:27:00 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -263,7 +263,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 			script_edit_ = new QTextEdit();
 			script_edit_->setLineWrapMode(QTextEdit::WidgetWidth);
-			script_edit_->setContextMenuPolicy(Qt::CustomContextMenu);
+ 			script_edit_->setContextMenuPolicy(Qt::CustomContextMenu);
 			script_edit_->setTabStopWidth((Position)(text_edit_->tabStopWidth() / 4.0));
 			script_edit_->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
 			splitter->addWidget(script_edit_);
@@ -531,6 +531,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			if (state) result = "Finished script sucessfully";
 			else 			 result = "Error occured in Script";
 			setStatusbarText(result, true);
+			return state;
 		}
 
 		void PyWidget::setError_(bool state)
@@ -566,8 +567,6 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 			if (!output && !state_message) text_edit->setTextColor(Qt::black);
 			if (state_message) text_edit->setTextColor(Qt::blue);
-
-			script_mode_ = true;
 
 			appendText_(text_edit, text);
  		}
@@ -766,7 +765,6 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				setStatusbarText("Finished script.");
 			}
 			newPrompt_();
-			script_mode_ = false;
 			return !aborted;
 		}
 
@@ -1057,10 +1055,12 @@ void PythonHighlighter::highlightBlock(const QString& text)
 		bool PyWidget::returnPressed()
 		{
 			String line = getCurrentLine();
-				
+			
+			script_mode_ = false;
 			parseLine_(line);
 			newPrompt_();
 			history_position_ = history_.size();
+			script_mode_ = true;
 
 			return true;
 		}
@@ -1099,12 +1099,15 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 				highlighter_1_.BALL_keywords << sv[p].c_str();
 				highlighter_2_.BALL_keywords << sv[p].c_str();
+				highlighter_3_.BALL_keywords << sv[p].c_str();
 			}
 
 			highlighter_1_.compilePattern();
 			highlighter_2_.compilePattern();
+			highlighter_3_.compilePattern();
 			highlighter_1_.setDocument(script_edit_->document());
 			highlighter_2_.setDocument(text_edit_->document());
+//   			highlighter_3_.setDocument(script_output_->document());
 		}
 
 		void PyWidget::showCompletion()
