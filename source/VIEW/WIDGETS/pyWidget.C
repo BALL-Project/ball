@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.42 2006/06/09 15:19:55 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.43 2006/06/10 01:38:01 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -16,7 +16,6 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/SYSTEM/directory.h>
 
-#include <QtGui/qscrollbar.h>
 #include <QtGui/QFileDialog>
 #include <QtGui/qapplication.h>
 #include <QtGui/QKeyEvent>
@@ -743,6 +742,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			bool aborted = false;
 			for (Position i = 0; i < lines.size() && !aborted; i++)
 			{
+				current_line_ = i;
 				if (!parseLine_(lines[i]))
 				{
 					String result_string = "> Error in line " + String(i + 1) + " of file " + filename + "\n";
@@ -966,6 +966,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				if (!state)
 				{
 					appendText(result, true);
+					findError_(result);
 				}
 				else
 				{
@@ -1234,7 +1235,8 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			// find last parameter or command
 			//
 			// ??? count opening and closing brackets, if opening > closing...
-			toc.split(sv, ", +-=():#");
+			if (toc.split(sv, ", +-=():#") < 1) return false;
+
 			toc = sv[sv.size() - 1];
 
 			bool global = !toc.has('.');
@@ -1410,6 +1412,54 @@ void PythonHighlighter::highlightBlock(const QString& text)
 		{
 			script_edit_->clear();
 			script_output_->clear();
+		}
+
+		void PyWidget::findError_(String result)
+ 		{
+			if (!script_mode_) return;
+
+			vector<String> lines;
+			result.split(lines, String('\n').c_str());
+
+			String error;
+
+			for (Position p = 0; p < lines.size(); p++)
+			{
+				if (lines[p].hasSuffix("^") && p > 0)
+				{
+					error = lines[p - 1];
+					error.trim();
+					break;
+				}
+
+				if (lines[p].hasSubstring("Error: "))
+				{
+					vector<String> fields;
+					if (lines[p].split(fields, "'") == 3)
+					{
+						error = fields[1];
+						break;
+					}
+				}
+			}
+
+			if (error == "") return;
+
+			QTextDocument* docu = script_edit_->document();
+			QTextCursor cursor(docu->begin());
+
+			QTextCursor end_pos(docu->begin());
+			end_pos.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, current_line_);
+			end_pos.movePosition(QTextCursor::EndOfLine);
+			if (end_pos.atEnd()) return;
+
+			while (!cursor.isNull())
+			{
+				cursor = docu->find(error.c_str(), cursor);
+				if (cursor.isNull()) break;
+ 				if (cursor > end_pos) break;
+				script_edit_->setTextCursor(cursor);
+			}
 		}
 
 	} // namespace VIEW
