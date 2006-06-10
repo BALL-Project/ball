@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.45 2006/06/10 11:05:04 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.46 2006/06/10 12:04:58 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -355,8 +355,8 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			throw()
 		{
 			abortScript();
+			storeScript_();
 			PyInterpreter::finalize();
-
 			DockWidget::finalizeWidget(main_control);
 		}
 
@@ -384,10 +384,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 		{
 			DockWidget::applyPreferences();
 
-			if (python_settings_ == 0)
-			{
-				return;	
-			}
+			if (python_settings_ == 0) return;	
 
  			hotkeys_ = (python_settings_->getContent());
 
@@ -525,6 +522,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 		
 		bool PyWidget::runCurrentScript()
 		{
+			tab_widget_->setCurrentIndex(1);
 			script_output_->clear();
 			bool state = storeScript_() && openFile(current_script_, true);
 			String result;
@@ -959,6 +957,9 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			bool state;
 		  String result = runCommand_(line, state);
 
+			// prevent double output, when running a script:
+			if (line == "runCurrentScript()")  result = "";
+
 			// print results:
 			if (result != "") 
 			{
@@ -976,6 +977,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 				}
 
 				text_edit_->setTextColor(Qt::black);
+				result = "";
 			}
 
 			multi_line_mode_ = false;
