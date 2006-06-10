@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.C,v 1.13.2.4 2006/06/10 11:05:32 amoll Exp $
+// $Id: pyInterpreter.C,v 1.13.2.5 2006/06/10 11:16:40 amoll Exp $
 //
 
 #include <Python.h>
@@ -132,6 +132,7 @@ namespace BALL
 			return;
 		}
 	
+		valid_ = true;
 		// import the BALL module
 		start_log_ += run("from BALL import *", valid_);
 
