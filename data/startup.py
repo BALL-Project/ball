@@ -123,8 +123,8 @@ def setMultithreading(mode):
 def runScript(filename):
 	getPyWidget().runFile(filename)
 
-def runScriptAgain():
-	getPyWidget().runAgain()
+def runCurrentScript():
+	getPyWidget().runCurrentScript()
 
 def quickSave():
 	getMainControl().quickSave()

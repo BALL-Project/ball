@@ -120,8 +120,8 @@ HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
 		keys_ << (String("F") + String(p)).c_str();
 	}
 	
-	// F2 -> runScriptAgain()
-	appendHotkey("None", "F2", "runScriptAgain()");
+	// F2 -> runCurrentScript()
+	appendHotkey("None", "F2", "runCurrentScript()");
 
 	// F3 -> hideAllRepresentations()
 	appendHotkey("None", "F3", "hideAllRepresentations()");
