@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.21 2006/06/09 13:38:51 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.22 2006/06/10 01:42:00 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -352,9 +352,11 @@ namespace BALL
 
 			void createMenuHelpEntry_(QMenu* menu, QTextEdit* text_edit, const QPoint& point);
 
+			void findError_(String result);
+
 			QTextEdit* 				text_edit_, *script_edit_, *script_output_;
 			QTabWidget* 			tab_widget_;
-			PythonHighlighter highlighter_1_, highlighter_2_, highlighter_3_;
+			PythonHighlighter highlighter_1_, highlighter_2_;
 			MyLineEdit* 			line_edit_;
 			QComboBox* 				combo_box_;
 			List<Hotkey> 			hotkeys_;
@@ -364,6 +366,7 @@ namespace BALL
 			bool 							started_startup_script_;
 			Preferences* 			preferences_;
 
+			Position 					current_line_;
 			bool							multi_line_mode_;
 			Size 							multi_lines_;
 			String						multi_line_text_;

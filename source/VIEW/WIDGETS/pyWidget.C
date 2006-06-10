@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.43 2006/06/10 01:38:01 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.44 2006/06/10 01:41:38 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -1101,15 +1101,12 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 				highlighter_1_.BALL_keywords << sv[p].c_str();
 				highlighter_2_.BALL_keywords << sv[p].c_str();
-				highlighter_3_.BALL_keywords << sv[p].c_str();
 			}
 
 			highlighter_1_.compilePattern();
 			highlighter_2_.compilePattern();
-			highlighter_3_.compilePattern();
 			highlighter_1_.setDocument(script_edit_->document());
 			highlighter_2_.setDocument(text_edit_->document());
-//   			highlighter_3_.setDocument(script_output_->document());
 		}
 
 		void PyWidget::showCompletion()
@@ -1414,6 +1411,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			script_output_->clear();
 		}
 
+		// mark the line in a script where an error occured:
 		void PyWidget::findError_(String result)
  		{
 			if (!script_mode_) return;
@@ -1425,6 +1423,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 			for (Position p = 0; p < lines.size(); p++)
 			{
+				// for syntax errors:
 				if (lines[p].hasSuffix("^") && p > 0)
 				{
 					error = lines[p - 1];
@@ -1432,6 +1431,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 					break;
 				}
 
+				// for exceptions:
 				if (lines[p].hasSubstring("Error: "))
 				{
 					vector<String> fields;
@@ -1451,13 +1451,16 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			QTextCursor end_pos(docu->begin());
 			end_pos.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, current_line_);
 			end_pos.movePosition(QTextCursor::EndOfLine);
-			if (end_pos.atEnd()) return;
 
 			while (!cursor.isNull())
 			{
 				cursor = docu->find(error.c_str(), cursor);
-				if (cursor.isNull()) break;
- 				if (cursor > end_pos) break;
+				if (cursor.isNull() ||
+						cursor > end_pos)
+				{
+					break;
+				}
+
 				script_edit_->setTextCursor(cursor);
 			}
 		}
