@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.41 2006/06/06 21:57:33 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.42 2006/06/10 14:07:05 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -1230,7 +1230,7 @@ namespace BALL
 			listview->selectItems(items);
 
 			list<QTreeWidgetItem*>::const_iterator lit = items.begin();
-			QTreeWidgetItem* item = *lit;
+			QTreeWidgetItem* item = 0;
 			for (; lit != items.end(); ++lit)
 			{
 				QTreeWidgetItem* parent = (*lit)->parent();
@@ -1240,6 +1240,8 @@ namespace BALL
 					parent = parent->parent();
 				}
 			}
+
+			if (items.size()) item = *items.begin();
 
 			enableUpdates_(true);
 			if (item != 0) listview->scrollToItem(item);
