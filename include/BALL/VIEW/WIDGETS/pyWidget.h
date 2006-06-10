@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.22 2006/06/10 01:42:00 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.23 2006/06/10 11:05:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -266,19 +266,19 @@ namespace BALL
 			void showDocumentation();
 
 			///
-			void runScript();
+			bool runCurrentScript();
 
 			///
 			void loadScript();
+			
+			///
+			void execScript();
 
 			///
 			void saveScript();
 
 			///
 			void clearScript();
-
-			// Rerun the last script again
-			bool runAgain();
 
 			virtual void hotkeyItem();
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.44 2006/06/10 01:41:38 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.45 2006/06/10 11:05:04 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -272,7 +272,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			run_button->setAutoDefault(true);
 			run_button->setDefault(true);
 			run_button->setText("Run");
-			connect(run_button, SIGNAL(clicked()), this, SLOT(runAgain()));
+			connect(run_button, SIGNAL(clicked()), this, SLOT(runCurrentScript()));
 	
 			QPushButton* save_button = new QPushButton(widget);
 			save_button->setText("Save as");
@@ -327,10 +327,13 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			DockWidget::initializeWidget(main_control);
 			registerForHelpSystem(this, "pythonInterpreter.html");
 
-			QAction* id0 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Load Python Script", this, SLOT(loadScript()));
-			QAction* id1 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", this , SLOT(runScript()));
-			QAction* id2 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", this, SLOT(abortScript()));
-			QAction* id3 = insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", this, SLOT(exportHistory()));
+			insertMenuEntry(MainControl::TOOLS_PYTHON, "Load Python Script", this, SLOT(loadScript()));
+			insertMenuEntry(MainControl::TOOLS_PYTHON, "Save Python Script", this, SLOT(saveScript()));
+			insertMenuEntry(MainControl::TOOLS_PYTHON, "Exec Python Script", this , SLOT(execScript()));
+			insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Current Script", this , SLOT(runCurrentScript()));
+			insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", this, SLOT(abortScript()));
+			insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", this, SLOT(exportHistory()));
+			insertMenuEntry(MainControl::TOOLS_PYTHON, "Clear Editor", this, SLOT(clearScript()));
 
 			startInterpreter();
 
@@ -338,10 +341,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 	
 			if (!valid_)
 			{
-				id0->setEnabled(false);
-				id1->setEnabled(false);
-				id2->setEnabled(false);
-				id3->setEnabled(false);
+				getMainControl()->initPopupMenu(MainControl::TOOLS_PYTHON)->setEnabled(false);
 				appendText("> No Python support available:", true);
 				runString("import BALL");
 				setEnabled(false);
@@ -523,7 +523,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			}
 		}
 		
-		bool PyWidget::runAgain()
+		bool PyWidget::runCurrentScript()
 		{
 			script_output_->clear();
 			bool state = storeScript_() && openFile(current_script_, true);
@@ -681,7 +681,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			openFile(ascii(s), run);
 		}
 
-		void PyWidget::runScript()
+		void PyWidget::execScript()
 		{
 			scriptDialog(true);
 		}
@@ -699,6 +699,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 		bool PyWidget::openFile(const String& filename, bool run)
 			throw()
 		{
+			script_output_->clear();
 			script_edit_->clear();
 			script_mode_ = true;
 			stop_script_ = false;
@@ -1075,6 +1076,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 			if (!PyInterpreter::isValid())
 			{
+				appendText(PyInterpreter::getStartupLog(), false, true);
 				return;
 			}
 
