@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.C,v 1.13.2.3 2006/06/01 18:44:12 amoll Exp $
+// $Id: pyInterpreter.C,v 1.13.2.4 2006/06/10 11:05:32 amoll Exp $
 //
 
 #include <Python.h>
@@ -14,6 +14,7 @@ namespace BALL
 	String error_message_;
 	PyObject* context_;
 
+	String PyInterpreter::start_log_;
 	bool PyInterpreter::valid_ = false;
 
 	PyInterpreter::PyInterpreter()
@@ -73,6 +74,7 @@ namespace BALL
 	void PyInterpreter::initialize()
 	{
 		valid_ = false;
+		start_log_.clear();
 
 		// finalize the interpreter if it is already running
 		if (Py_IsInitialized())
@@ -103,12 +105,15 @@ namespace BALL
 		// import the modules required for the output redirection
 		// and the system stuff
 		runSingleString_("import cStringIO, sys", Py_single_input);
+		start_log_ += error_message_;
 
 		// Add the BALL library path to the Python search path
 		// to make sure Python can find the BALL extensions.
 		runSingleString_("sys.path.append(\"" BALL_PATH "/lib/" BALL_BINFMT "\")", Py_single_input);
+		start_log_ += error_message_;
 #ifdef BALL_OS_DARWIN // Quick hack for Darwin BALLVIew installer // [20050624/OK]
 		runSingleString_("sys.path.append(\"/Library/BALL/Library/Python\")", Py_single_input);
+		start_log_ += error_message_;
 #endif
 
 		// Add additional paths (user-defined) to the end of the search path.
@@ -117,6 +122,7 @@ namespace BALL
 		for (; it != sys_path_.end(); ++it)
 		{
 			runSingleString_("sys.path.append(\"" + *it + "\")", Py_single_input);
+			start_log_ += error_message_;
 		}
 
 		PyObject *sip_module = PyImport_ImportModule("sip");
@@ -127,7 +133,7 @@ namespace BALL
 		}
 	
 		// import the BALL module
-		valid_ = runSingleString_("from BALL import *", Py_single_input);
+		start_log_ += run("from BALL import *", valid_);
 
 		if (!valid_) 
 		{
