@@ -97,7 +97,10 @@ namespace BALL
       
       virtual void setup(System& system1, System& system2)
 	throw();	
-      
+     
+			void setFFOptions(Options& options)
+				throw();
+
       /** Start the main loop of the algorithm.
        */
       void start()
