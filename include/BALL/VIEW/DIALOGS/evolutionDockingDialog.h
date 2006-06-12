@@ -74,6 +74,12 @@ namespace BALL
 				void getOptions(Options& options)
 					throw();
 
+				/** Fills options with values of the force field dialog.
+					*	@param      options the options that are filled
+					*/
+				void getFFOptions(Options& options)
+					throw();
+
 				/** Sets the flags \link EvolutionDockingDialog::is_redock_ is_redock_ \endlink and 
 				  * \link EvolutionDockingDialog::has_changed_ has_changed_ \endlink.
 					*/

@@ -111,6 +111,11 @@ namespace BALL
 				 */
 				Options& getAlgorithmOptions()
 					throw();
+
+				/** Get the force field options for certain algorithms. 
+				 */
+				Options& getAlgorithmFFOptions()
+					throw();
 				
 				/** Get scoring options.
 				 */
@@ -259,6 +264,10 @@ namespace BALL
 				/** Applies processors to the systems.
 				 */
 				bool applyProcessors_() throw();
+
+				/** Applies preprocessing steps for evolutionary docking
+				 */
+				void applyEDPreprocessing_();
 				
 				/** Shows chosen file in the dialog.
 				 */
@@ -330,11 +339,11 @@ namespace BALL
 				/** Pointer to docking partner 2
 				 */
 				System* docking_partner2_;	
-				
+
 				/** Options for the docking algorithm and scoring function
 				 */
-				Options algorithm_opt_, scoring_opt_;
-		
+				Options algorithm_opt_, alg_ff_opt_, scoring_opt_;
+
 				/** Needed to guarantee that both, docking and redocking preferences can be written to INIFile
 					* When we do docking, redocking values are in the vector and when we do redocking, the docking values are in there.
 					* In \link DockDialog::fetchPreferences fetchPreferences \endlink, we read the last redocking values from INIFile in this vector
