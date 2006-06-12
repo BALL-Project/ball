@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.1 2006/06/12 19:59:08 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.2 2006/06/12 20:41:31 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -31,7 +31,7 @@ ForceFieldComponent* enableOneComponent(const String& comp, MMFF94& mmff)
 }
 
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.1 2006/06/12 19:59:08 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.2 2006/06/12 20:41:31 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -117,20 +117,23 @@ CHECK(force test 2: Stretches)
 	// calculate the differential quotient of
 	// the energy and compare it to the force
 	PRECISION(10)
-	for (double d = .0; d <= 1.5; d += 0.01)
+	Vector3 pos = a2.getPosition();
+	for (double d = .0; d <= 0.5; d += 0.01)
 	{
 		// move the atom to the new position
-		a2.getPosition() += Vector3(d, 0.0, 0.0);
+		a2.getPosition() = pos + Vector3(d, 0.0, 0.0);
 
 		// calculate the force
-		sb.updateStretchEnergy();
 		sb.updateStretchForces();
 		double force = a2.getForce().x * Constants::NA / 1e13;
 
 		// translate atom 2 by 0.0001 Angstrom to the left
 		// and to the right to determine the differential quotient
+		sb.updateStretchEnergy();
 		double dE = sb.getStretchEnergy();
-		a2.setPosition(Vector3(d - 0.0001, 0.0, 0.0));
+
+		a2.getPosition() += Vector3(0.0001, 0.0, 0.0);
+		sb.updateStretchEnergy();
 		dE = (sb.getStretchEnergy() - dE) / 0.0001;
 		TEST_REAL_EQUAL(force, dE)
 	}	
