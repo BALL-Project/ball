@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.47 2006/06/11 19:27:16 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.48 2006/06/12 12:08:17 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -231,7 +231,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			text_edit_ = new QTextEdit(widget);
 			text_edit_->setLineWrapMode(QTextEdit::WidgetWidth);
 			text_edit_->setReadOnly(true);
-			text_edit_->setTabStopWidth((Position)(text_edit_->tabStopWidth() / 4.0));
+			text_edit_->setTabStopWidth((Position)(text_edit_->tabStopWidth() / 3.0));
 			text_edit_->setContextMenuPolicy(Qt::CustomContextMenu);
 			QPalette pal = text_edit_->palette();
 			QColor color = pal.color(QPalette::Window);
@@ -263,7 +263,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			script_edit_ = new QTextEdit();
 			script_edit_->setLineWrapMode(QTextEdit::WidgetWidth);
  			script_edit_->setContextMenuPolicy(Qt::CustomContextMenu);
-			script_edit_->setTabStopWidth((Position)(text_edit_->tabStopWidth() / 4.0));
+			script_edit_->setTabStopWidth((Position)(script_edit_->tabStopWidth() / 3.0));
 			script_edit_->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
 			splitter->addWidget(script_edit_);
 
@@ -299,7 +299,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 			script_output_ = new QTextEdit();
 			script_output_->setLineWrapMode(QTextEdit::WidgetWidth);
-			script_output_->setTabStopWidth((Position)(text_edit_->tabStopWidth() / 4.0));
+			script_output_->setTabStopWidth((Position)(script_output_->tabStopWidth() / 3.0));
 			script_output_->setReadOnly(true);
 			script_output_->setPalette(pal);
 			script_output_->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
