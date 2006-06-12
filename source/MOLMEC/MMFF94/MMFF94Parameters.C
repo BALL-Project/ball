@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.4.1 2006/05/21 22:26:09 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.4.2 2006/06/12 22:43:22 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -395,6 +395,7 @@ bool MMFF94StretchParameters::readEmpericalParameters(const String& filename)
 }
 
 
+// see http://www.ccl.net/cca/data/MMFF94/
 double MMFF94StretchParameters::radii[] =
 {
 	 0.33, 0.0,
