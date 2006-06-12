@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.26.2.3 2006/05/16 06:24:49 amoll Exp $
+# $Id: Makefile.lst,v 1.26.2.4 2006/06/12 19:59:12 amoll Exp $
 #
 
 EXECUTABLES_BASIC = \
@@ -133,8 +133,8 @@ $(PREFIX)ForEach_test$(EXEEXT)\
 $(PREFIX)GlobalKernel_test$(EXEEXT)\
 $(PREFIX)CompositeIteratorTraits_test$(EXEEXT)\
 $(PREFIX)AtomIterator_test$(EXEEXT)\
-$(PREFIX)AtomBondIteratorTraits_test$(EXEEXT)\
-$(PREFIX)Extractors_test$(EXEEXT)
+$(PREFIX)AtomBondIteratorTraits_test$(EXEEXT)
+#$(PREFIX)Extractors_test$(EXEEXT)
 
 
 EXECUTABLES_MOLMEC = \
@@ -145,6 +145,7 @@ $(PREFIX)SnapShot_test$(EXEEXT)\
 $(PREFIX)SnapShotManager_test$(EXEEXT)\
 $(PREFIX)ForceField_test$(EXEEXT)\
 $(PREFIX)AmberFF_test$(EXEEXT)\
+$(PREFIX)MMFF94_test$(EXEEXT)\
 $(PREFIX)CharmmFF_test$(EXEEXT)\
 $(PREFIX)EnergyMinimizer_test$(EXEEXT)\
 $(PREFIX)LineSearch_test$(EXEEXT)\
