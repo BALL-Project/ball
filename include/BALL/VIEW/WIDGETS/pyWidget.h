@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.23 2006/06/10 11:05:58 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.24 2006/06/12 15:33:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -38,353 +38,363 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class PythonSettings;
-		class Preferences;
 
-		class RunPythonThread;
+class PythonSettings;
+class Preferences;
 
-		class BALL_VIEW_EXPORT PythonHighlighter
-			: public QSyntaxHighlighter
-		{
-			public:
+class RunPythonThread;
 
-			PythonHighlighter();
+class BALL_VIEW_EXPORT PythonHighlighter
+	: public QSyntaxHighlighter
+{
+	public:
 
-			~PythonHighlighter() {};
+	PythonHighlighter();
 
-			void compilePattern();
-			void highlightBlock(const QString& text);
+	~PythonHighlighter() {};
 
-			QStringList python_keywords;
-			QStringList BALL_keywords;
-			QTextCharFormat my_class_format;
-			QTextCharFormat python_format;
-			QTextCharFormat string_format;
-			QTextCharFormat comment_format;
-			vector<QRegExp> python_patterns;
-			vector<QRegExp> BALL_patterns;
-			QRegExp 				string_pattern;
-			QRegExp 				comment_pattern;
-		};
+	void compilePattern();
+	void highlightBlock(const QString& text);
 
-		class BALL_VIEW_EXPORT RunPythonThread
-			: public QThread
-		{
-			public:
-				RunPythonThread()
-					throw();
+	QStringList python_keywords;
+	QStringList BALL_keywords;
+	QTextCharFormat my_class_format;
+	QTextCharFormat python_format;
+	QTextCharFormat string_format;
+	QTextCharFormat comment_format;
+	vector<QRegExp> python_patterns;
+	vector<QRegExp> BALL_patterns;
+	QRegExp 				string_pattern;
+	QRegExp 				comment_pattern;
+};
 
-				///
-				virtual void run();
-
-				bool state;
-				String input;
-				String output;
-		};
+class BALL_VIEW_EXPORT RunPythonThread
+	: public QThread
+{
+	public:
+		RunPythonThread()
+			throw();
 
 		///
-		struct BALL_VIEW_EXPORT Hotkey
-		{
-			public:
-
-			///
-			bool operator == (const Hotkey& hotkey) const
-				throw();
-
-			///
-			bool operator == (const QKeyEvent& e) const
-				throw();
-
-			/// 
-			const Hotkey& operator = (const Hotkey& s)
-				throw();
-
-			/// Needed for MSVC
-			bool operator < (const Hotkey& key) { return this < &key;}
-
-			///
-			bool set(const String& data) throw();
-
-			///
-			void get(String& data) const throw();
-
-			String 								action;
-			Qt::KeyboardModifiers button_state;
-			Qt::Key 							key;
-		};
-
-		class PyWidget;
-
-		class MyLineEdit
-			: public QLineEdit
-		{
-			public:
-				MyLineEdit(QWidget* parent)
-					: QLineEdit(parent) {};
-
-				void setPyWidget(PyWidget* pw) { pw_ = pw;}
-
-			protected:
-
-				virtual void keyPressEvent(QKeyEvent* event);
-
-				PyWidget* pw_;
-		};
-
-
-
-		/** Python Widget
-		 		This class is a Window for a Python interpreter interface.
-				So it is possible to access all data in the running application in realtime with the script language.
-				PyWidget also has the capablities to run a Python script from a file at startup, or on demand from the user.
-		*/
-		class BALL_VIEW_EXPORT PyWidget
-			: public DockWidget
-		{
-			friend class MyLineEdit;
-
-			Q_OBJECT
-
-			public:
-			
-			BALL_EMBEDDABLE(PyWidget, Embeddable)
-
-			/**	@name	Constructors and Destructors
-			*/
-			//@{
-
-			/** Standard constructor.
-					If the widget is part of a BALL \link MainControl MainControl \endlink widget, 
-					it inserts a menu entry <tt>Tools|Restart Python</tt> into the menu bar.
-					\param parent the parent widget
-					\param name the widget name
-			*/
-			PyWidget(QWidget* parent = 0, const char* name = 0)
-				throw();
-
-			/// only needed for Pyhon Interface
-			PyWidget(const PyWidget& p)
-				throw();
-
-			///
-			~PyWidget()
-				throw();
-			
-			/// Is full Python support available?
-			bool isValid() const 
-				throw() { return valid_;}
-
-			/**	@name	ModularWidget related methods
-			*/
-			//@{
-
-			/**	Setup the menu entries.
-			*/
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
+		virtual void run();
+
+		bool state;
+		String input;
+		String output;
+};
+
+///
+struct BALL_VIEW_EXPORT Hotkey
+{
+	public:
+
+	///
+	bool operator == (const Hotkey& hotkey) const
+		throw();
+
+	///
+	bool operator == (const QKeyEvent& e) const
+		throw();
+
+	/// 
+	const Hotkey& operator = (const Hotkey& s)
+		throw();
+
+	/// Needed for MSVC
+	bool operator < (const Hotkey& key) { return this < &key;}
+
+	///
+	bool set(const String& data) throw();
+
+	///
+	void get(String& data) const throw();
+
+	String 								action;
+	Qt::KeyboardModifiers button_state;
+	Qt::Key 							key;
+};
+
+/** Python Widget
+		This class is a Window for a Python interpreter interface.
+		So it is possible to access all data in the running application in realtime with the script language.
+		PyWidget also has the capablities to run a Python script from a file at startup, or on demand from the user.
+*/
+class BALL_VIEW_EXPORT PyWidget
+	: public DockWidget
+{
+	class MyLineEdit
+		: public QLineEdit
+	{
+		public:
+			MyLineEdit(QWidget* parent)
+				: QLineEdit(parent) {};
+
+			void setPyWidget(PyWidget* pw) { pw_ = pw;}
+
+		protected:
+
+			virtual void keyPressEvent(QKeyEvent* event);
+
+			PyWidget* pw_;
+	};
+
+	class MyTextEdit
+		: public QTextEdit
+	{
+		public:
+			MyTextEdit(QWidget* parent)
+				: QTextEdit(parent) {};
+
+		protected:
+
+			virtual void keyPressEvent(QKeyEvent* event);
+	};
+
+	friend class MyLineEdit;
+
+	Q_OBJECT
+
+	public:
+	
+	BALL_EMBEDDABLE(PyWidget, Embeddable)
+
+	/**	@name	Constructors and Destructors
+	*/
+	//@{
+
+	/** Standard constructor.
+			If the widget is part of a BALL \link MainControl MainControl \endlink widget, 
+			it inserts a menu entry <tt>Tools|Restart Python</tt> into the menu bar.
+			\param parent the parent widget
+			\param name the widget name
+	*/
+	PyWidget(QWidget* parent = 0, const char* name = 0)
+		throw();
+
+	/// only needed for Pyhon Interface
+	PyWidget(const PyWidget& p)
+		throw();
+
+	///
+	~PyWidget()
+		throw();
+	
+	/// Is full Python support available?
+	bool isValid() const 
+		throw() { return valid_;}
+
+	/**	@name	ModularWidget related methods
+	*/
+	//@{
+
+	/**	Setup the menu entries.
+	*/
+	virtual void initializeWidget(MainControl& main_control)
+		throw();
 
-			/**	Remove menu entries.
-			*/
-			virtual void finalizeWidget(MainControl& main_control)
-				throw();
-			
-			///
-			void initializePreferencesTab(Preferences &preferences)
-				throw();
-			
-			///
-			void finalizePreferencesTab(Preferences &preferences)
-				throw();
+	/**	Remove menu entries.
+	*/
+	virtual void finalizeWidget(MainControl& main_control)
+		throw();
+	
+	///
+	void initializePreferencesTab(Preferences &preferences)
+		throw();
+	
+	///
+	void finalizePreferencesTab(Preferences &preferences)
+		throw();
 
-			///
-			virtual void applyPreferences()
-				throw();
-			
-			/// Open a dialog to select a script
-			virtual void scriptDialog(bool run = false);
+	///
+	virtual void applyPreferences()
+		throw();
+	
+	/// Open a dialog to select a script
+	virtual void scriptDialog(bool run = false);
 
-			///
-			bool toAbortScript() throw();
+	///
+	bool toAbortScript() throw();
 
-			///
-			void insertHotkey(const Hotkey& hotkey) throw();
+	///
+	void insertHotkey(const Hotkey& hotkey) throw();
 
-			///
-			void removeHotkey(const Hotkey& hotkey) throw();
+	///
+	void removeHotkey(const Hotkey& hotkey) throw();
 
-			///
-			void reactTo(const QKeyEvent& e) throw();
+	///
+	void reactTo(const QKeyEvent& e) throw();
 
-			/// run a Python script from a given file
-			bool openFile(const String& filename, bool run) throw();
+	/// run a Python script from a given file
+	bool openFile(const String& filename, bool run) throw();
 
-			//
-			bool runString(String command);
+	//
+	bool runString(String command);
 
-			//
-			String getCurrentLine() const;
+	//
+	String getCurrentLine() const;
 
-			//
-			void dump(std::ostream& s, Size depth) const
-				throw();
+	//
+	void dump(std::ostream& s, Size depth) const
+		throw();
 
-			//
-			void showClassDocu(String classname, String member);
+	//
+	void showClassDocu(String classname, String member);
 
-			//
-			virtual void fetchPreferences(INIFile& inifile)
-				throw();
-			
-			//
-			virtual void writePreferences(INIFile& inifile)
-				throw();
+	//
+	virtual void fetchPreferences(INIFile& inifile)
+		throw();
+	
+	//
+	virtual void writePreferences(INIFile& inifile)
+		throw();
 
-			///
-			QString getCurrentScript();
+	///
+	QString getCurrentScript();
 
-			public slots:
+	public slots:
 
-			//
-			void showEditContextMenu(const QPoint& point);
+	//
+	void showEditContextMenu(const QPoint& point);
 
-			//
-			void showContextMenu(const QPoint& point);
+	//
+	void showContextMenu(const QPoint& point);
 
-			//
-			void showCompletion();
-		
-			//
-			void clear() throw();
+	//
+	void showCompletion();
 
-			//
-			void exportHistory();
+	//
+	void clear() throw();
 
-			//
-			void abortScript();
+	//
+	void exportHistory();
 
-			// Show the docu for the current line
-			void showDocumentation();
+	//
+	void abortScript();
 
-			///
-			bool runCurrentScript();
+	// Show the docu for the current line
+	void showDocumentation();
 
-			///
-			void loadScript();
-			
-			///
-			void execScript();
+	///
+	bool runCurrentScript();
 
-			///
-			void saveScript();
+	///
+	void loadScript();
+	
+	///
+	void execScript();
 
-			///
-			void clearScript();
+	///
+	void saveScript();
 
-			virtual void hotkeyItem();
+	///
+	void clearScript();
 
-			virtual void modifyHotkeys();
+	virtual void hotkeyItem();
 
-			void appendText(const String& text, bool output = false, bool state_message = false);
+	virtual void modifyHotkeys();
 
-			bool getMembers(const String& classname, QStringList& sl, const String& prefix);
+	void appendText(const String& text, bool output = false, bool state_message = false);
 
-			protected slots:
+	bool getMembers(const String& classname, QStringList& sl, const String& prefix);
 
-			virtual bool returnPressed();
+	protected slots:
 
-			virtual bool completionSelected_();
+	virtual bool returnPressed();
 
-			virtual void showHelp_();
+	virtual bool completionSelected_();
 
-			protected:
+	virtual void showHelp_();
 
-			bool getClassAndMember_(String toc);
+	protected:
 
-			void setError_(bool state);
+	bool getClassAndMember_(String toc);
 
-			/** Start the interpreter.
-					This method initializes the interpreter if it is not yet running. 
-					An already running interpreter is reinitialized.
-					This method calls <tt>PyInitialize()</tt> to create an interpreter.
-			*/
-			virtual void startInterpreter();
+	void setError_(bool state);
 
-			virtual void paste();
+	/** Start the interpreter.
+			This method initializes the interpreter if it is not yet running. 
+			An already running interpreter is reinitialized.
+			This method calls <tt>PyInitialize()</tt> to create an interpreter.
+	*/
+	virtual void startInterpreter();
 
-			/// Parse a and execute a given string. If silent_ is set to true, no prompts are being printed.
-			bool parseLine_(String line);
+	virtual void paste();
 
-			void appendToHistory_(const String& line);
-			
-			/**	Print prompt.
-					Determine the correct type of prompt and append it 
-					to the current text. The cursor is placed after
-					the prompt and <tt>textChanged</tt> is emitted.
-			*/
-			void newPrompt_();
+	/// Parse a and execute a given string. If silent_ is set to true, no prompts are being printed.
+	bool parseLine_(String line);
 
-			bool testMultilineStart_(const String& line);
+	void appendToHistory_(const String& line);
+	
+	/**	Print prompt.
+			Determine the correct type of prompt and append it 
+			to the current text. The cursor is placed after
+			the prompt and <tt>textChanged</tt> is emitted.
+	*/
+	void newPrompt_();
 
-			//_
-			const char* getPrompt_() const;
+	bool testMultilineStart_(const String& line);
 
-			//_
-			bool storeScript_();
+	//_
+	const char* getPrompt_() const;
 
-			//_ Wrapper for multi and single threading call
-			String runCommand_(const String& command, bool& state);
+	//_
+	bool storeScript_();
 
-			void appendText_(QTextEdit* te, String text);
+	//_ Wrapper for multi and single threading call
+	String runCommand_(const String& command, bool& state);
 
-			/**	Replace the line the cursor is in with a line from the history.
-					Used to display text from the history (cursor down/up).
-					The previous content of the line is stored in
-					<tt>current_line_</tt> if this is the first time the history
-					function is used for this specific line.
-			*/	
-			void retrieveHistoryLine_(Position index);
+	void appendText_(QTextEdit* te, String text);
 
-			virtual void contentsDragEnterEvent(QDragEnterEvent* e);
+	/**	Replace the line the cursor is in with a line from the history.
+			Used to display text from the history (cursor down/up).
+			The previous content of the line is stored in
+			<tt>current_line_</tt> if this is the first time the history
+			function is used for this specific line.
+	*/	
+	void retrieveHistoryLine_(Position index);
 
-			virtual void contentsDropEvent(QDropEvent* e);
+	virtual void contentsDragEnterEvent(QDragEnterEvent* e);
 
-			bool keyPressed(QKeyEvent* e);
+	virtual void contentsDropEvent(QDropEvent* e);
 
-			void createMenuHelpEntry_(QMenu* menu, QTextEdit* text_edit, const QPoint& point);
+	bool keyPressed(QKeyEvent* e);
 
-			void findError_(String result);
+	void createMenuHelpEntry_(QMenu* menu, QTextEdit* text_edit, const QPoint& point);
 
-			QTextEdit* 				text_edit_, *script_edit_, *script_output_;
-			QTabWidget* 			tab_widget_;
-			PythonHighlighter highlighter_1_, highlighter_2_;
-			MyLineEdit* 			line_edit_;
-			QComboBox* 				combo_box_;
-			List<Hotkey> 			hotkeys_;
-			// 								we use an own working dir to find Python Scripts
-			String 						working_dir_;
-			bool 							valid_;
-			bool 							started_startup_script_;
-			Preferences* 			preferences_;
+	void findError_(String result);
 
-			Position 					current_line_;
-			bool							multi_line_mode_;
-			Size 							multi_lines_;
-			String						multi_line_text_;
-			vector<String>		history_;
-			vector<bool> 			results_;
-			Position					history_position_;
-			String 						startup_script_;
-			PythonSettings* 	python_settings_;
-			RunPythonThread* 	thread_;
-			bool 							stop_script_;
-			Size              complete_prefix_;
-			String 						class_, member_;
-			Position 					intend_;
-			bool 							running_;
-			bool 							silent_, full_silent_;
-			bool 							script_mode_;
-			String 						current_script_;
-		};
+	QTextEdit* 				text_edit_, *script_output_;
+	MyTextEdit* 			script_edit_;
+	QTabWidget* 			tab_widget_;
+	PythonHighlighter highlighter_1_, highlighter_2_;
+	MyLineEdit* 			line_edit_;
+	QComboBox* 				combo_box_;
+	List<Hotkey> 			hotkeys_;
+	// 								we use an own working dir to find Python Scripts
+	String 						working_dir_;
+	bool 							valid_;
+	bool 							started_startup_script_;
+	Preferences* 			preferences_;
+
+	Position 					current_line_;
+	bool							multi_line_mode_;
+	Size 							multi_lines_;
+	String						multi_line_text_;
+	vector<String>		history_;
+	vector<bool> 			results_;
+	Position					history_position_;
+	String 						startup_script_;
+	PythonSettings* 	python_settings_;
+	RunPythonThread* 	thread_;
+	bool 							stop_script_;
+	Size              complete_prefix_;
+	String 						class_, member_;
+	Position 					intend_;
+	bool 							running_;
+	bool 							silent_, full_silent_;
+	bool 							script_mode_;
+	String 						current_script_;
+};
 
 	} // namespaces	
 } // namespaces
