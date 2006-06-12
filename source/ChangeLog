@@ -8,6 +8,7 @@ Added:
 - Support for DSN6 electron densitiy files
 - Widget for overview of atom values (e.g. atom type, charge)
 - Added BALL documentation widget in BALLView
+- Python widget now has its own script editor
 - Python widget supports completion
 - Python widget supports Syntax Highlighting
 - Python widget support for context sensitive help for BALL Python commands
