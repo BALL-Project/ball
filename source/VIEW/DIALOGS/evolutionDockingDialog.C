@@ -191,6 +191,35 @@ namespace BALL
 			}
 		  
 		}
+	
+		// Fill options with values of the force field dialog.
+		void EvolutionDockingDialog::getFFOptions(Options& options)
+					throw()
+		{
+			MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
+			if (!mol_struct)
+			{
+				Log.error() << "Error while applying options of AMBER_FF scoring function! " << __FILE__ << " " << __LINE__<< std::endl;
+				return;
+			}
+
+			if(amber_radio_button->isChecked())
+			{
+				AmberConfigurationDialog& dialog =	mol_struct->getAmberConfigurationDialog();
+				AmberFF& ff = mol_struct->getAmberFF();
+				// now the Amber force field gets its options
+				dialog.applyTo(ff);
+				options = ff.options;
+			}
+			else
+			{
+				CharmmConfigurationDialog& dialog = mol_struct->getCharmmConfigurationDialog();
+				CharmmFF& ff = mol_struct->getCharmmFF();
+				// now the Charmm force field gets its options
+				dialog.applyTo(ff);
+				options = ff.options;
+			}
+		}
 		  
 		// Sets the flags 'is_redock_' and 'has_changed_'
 		void EvolutionDockingDialog::isRedock(bool is_redock)
@@ -321,7 +350,6 @@ namespace BALL
 		 	*/
 		void EvolutionDockingDialog::showForceFieldOptions()
 		{
-			Log.error() << "in show option dialog" << std::endl;
 			MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
 			if (!mol_struct)
 			{

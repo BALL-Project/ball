@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.6 2006/06/09 16:00:42 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.7 2006/06/12 17:48:24 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -286,23 +286,12 @@ namespace BALL
 
 			// Set up the docking algorithm
 			setStatusbarText("Setting up docking algorithm...", true);
+			///////////////////////// TEMP ///////////////////////////////
 			Options::ConstIterator it = dock_dialog_.getAlgorithmOptions().begin();
       for (; +it; ++it)
 			{
 				Log.error() << it->first << " " << it->second << std::endl;
 			}
-			AmberFF* amber = new AmberFF;
-  		System* ligand = dock_dialog_.getSystem2();
-  		Path path;
-  		String amber94gly = path.find("Amber/amber94gly.ini");
-  		amber->options[BALL::AmberFF::Option::FILENAME] = amber94gly;
-  		amber->options[BALL::AmberFF::Option::ASSIGN_CHARGES] = "true";
-  		amber->options[BALL::AmberFF::Option::OVERWRITE_CHARGES] = "false";
-  		ligand->select();  
-  		amber->setup(*ligand); 
-  		ligand->deselect();
-  		delete amber;
-
 
 			// keep the larger protein in System A and the smaller one in System B
 			// and setup the algorithm
@@ -313,6 +302,13 @@ namespace BALL
 			else
 			{
 				dock_alg_->setup(*(dock_dialog_.getSystem1()), *(dock_dialog_.getSystem2()), dock_dialog_.getAlgorithmOptions());
+			}
+
+			// set force field options for the ff used in certain algorithms, e.g. evolutionary docking
+			if(RTTI::isKindOf<EvolutionaryDocking>(*dock_alg_))
+			{
+				EvolutionaryDocking* ed = RTTI::castTo<EvolutionaryDocking>(*dock_alg_);
+				//ed->setFFOptions(dock_dialog_.getAlgorithmFFOptions());
 			}
 							
 			// ============================= WITH MULTITHREADING ====================================

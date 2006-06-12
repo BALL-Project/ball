@@ -617,54 +617,6 @@
      <set>Qt::AlignRight</set>
     </property>
    </widget>
-   <widget class="QLineEdit" name="trans_box_top_x" >
-    <property name="geometry" >
-     <rect>
-      <x>30</x>
-      <y>180</y>
-      <width>41</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>2.0</string>
-    </property>
-    <property name="alignment" >
-     <set>Qt::AlignRight</set>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="trans_box_top_y" >
-    <property name="geometry" >
-     <rect>
-      <x>120</x>
-      <y>180</y>
-      <width>41</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>2.0</string>
-    </property>
-    <property name="alignment" >
-     <set>Qt::AlignRight</set>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="trans_box_top_z" >
-    <property name="geometry" >
-     <rect>
-      <x>210</x>
-      <y>180</y>
-      <width>41</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>2.0</string>
-    </property>
-    <property name="alignment" >
-     <set>Qt::AlignRight</set>
-    </property>
-   </widget>
    <widget class="QRadioButton" name="abs_trans_radio_button" >
     <property name="geometry" >
      <rect>
@@ -681,17 +633,52 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QCheckBox" name="visulize_trans_box" >
+   <widget class="QLineEdit" name="trans_box_top_x" >
     <property name="geometry" >
      <rect>
-      <x>10</x>
-      <y>220</y>
-      <width>171</width>
-      <height>22</height>
+      <x>30</x>
+      <y>180</y>
+      <width>41</width>
+      <height>25</height>
      </rect>
     </property>
     <property name="text" >
-     <string>visualize translation box</string>
+     <string>-1.0</string>
+    </property>
+    <property name="alignment" >
+     <set>Qt::AlignRight</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="trans_box_top_y" >
+    <property name="geometry" >
+     <rect>
+      <x>120</x>
+      <y>180</y>
+      <width>41</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>-1.0</string>
+    </property>
+    <property name="alignment" >
+     <set>Qt::AlignRight</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="trans_box_top_z" >
+    <property name="geometry" >
+     <rect>
+      <x>210</x>
+      <y>180</y>
+      <width>41</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>-1.0</string>
+    </property>
+    <property name="alignment" >
+     <set>Qt::AlignRight</set>
     </property>
    </widget>
   </widget>

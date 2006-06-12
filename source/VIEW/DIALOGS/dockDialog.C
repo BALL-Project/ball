@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.6.2.3 2006/06/09 13:51:20 leonhardt Exp $
+// $Id: dockDialog.C,v 1.5.2.6.2.4 2006/06/12 17:48:07 leonhardt Exp $
 //
 
 #include <QtGui/qpushbutton.h>
@@ -117,6 +117,7 @@ namespace BALL
 				docking_partner1_(dock_dialog.docking_partner1_),
 				docking_partner2_(dock_dialog.docking_partner2_),
 				algorithm_opt_(dock_dialog.algorithm_opt_),
+				alg_ff_opt_(dock_dialog.alg_ff_opt_),
 				scoring_opt_(dock_dialog.scoring_opt_),
 				backup_(dock_dialog.backup_),
 				radius_rule_processor_(dock_dialog.radius_rule_processor_),
@@ -165,6 +166,7 @@ namespace BALL
 				docking_partner1_ = dock_dialog.docking_partner1_;
 				docking_partner2_ = dock_dialog.docking_partner2_;
 				algorithm_opt_ = dock_dialog.algorithm_opt_;
+				alg_ff_opt_ = dock_dialog.alg_ff_opt_;
 				scoring_opt_ = dock_dialog.scoring_opt_;
 				backup_ = dock_dialog.backup_;
 				radius_rule_processor_ = dock_dialog.radius_rule_processor_;
@@ -200,7 +202,13 @@ namespace BALL
 		{
 			return algorithm_opt_;
 		}
-					
+
+		Options& DockDialog::getAlgorithmFFOptions()
+			throw()
+		{
+			return alg_ff_opt_;
+		}
+
 		Options& DockDialog::getScoringOptions()
 			throw()
 		{
@@ -490,6 +498,7 @@ namespace BALL
 				case DockingController::EVOLUTION_DOCKING:
 					EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[index]));
 					edd->getOptions(algorithm_opt_);
+					edd->getFFOptions(alg_ff_opt_);
 					break;
 			}
 			
@@ -514,7 +523,33 @@ namespace BALL
 				}
 			}
 		}
-		
+
+		void DockDialog::applyEDPreprocessing_()
+		{
+			// if translation box should be relative to the ligand
+			EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[DockingController::EVOLUTION_DOCKING]));
+			if(edd->rel_trans_radio_button->isChecked())
+			{
+				GeometricCenterProcessor gcp;
+				if (docking_partner1_->countAtoms() < docking_partner2_->countAtoms())
+				{
+					docking_partner1_->apply(gcp);
+				}
+				else
+				{
+  				docking_partner2_->apply(gcp);
+				}
+
+				Vector3 center = gcp.getCenter();
+				algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_X] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_X)+center.x;
+				algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Y] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Y)+center.y;
+				algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Z] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Z)+center.z;
+				algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_X] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_X)+center.x;
+				algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Y] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Y)+center.y;
+				algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Z] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Z)+center.z;
+			}
+		}
+
 		// apply processors to the systems
 		bool DockDialog::applyProcessors_()
 			throw()
@@ -807,28 +842,7 @@ namespace BALL
 				{
 					case DockingController::EVOLUTION_DOCKING:
 						{
-							// if translation box should be relative to the ligand 
-							EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[index]));
-							if(edd->rel_trans_radio_button->isChecked())
-							{
-								GeometricCenterProcessor gcp;
-								if (docking_partner1_->countAtoms() < docking_partner2_->countAtoms())
-								{
-									docking_partner1_->apply(gcp);
-								}
-								else
-								{
-  								docking_partner2_->apply(gcp);
-								}
-								
-								Vector3 center = gcp.getCenter();
-								algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_X] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_X)-center.x;
-								algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Y] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Y)-center.y;
-								algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Z] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Z)-center.z;
-								algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_X] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_X)+center.x;
-								algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Y] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Y)+center.y;
-								algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Z] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Z)+center.z;
-							}
+							applyEDPreprocessing_();
 							break;
 						}
 				}

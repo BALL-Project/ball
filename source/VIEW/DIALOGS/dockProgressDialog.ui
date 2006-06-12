@@ -23,6 +23,9 @@
   <property name="windowTitle" >
    <string>Docking Progress</string>
   </property>
+  <property name="modal" >
+   <bool>true</bool>
+  </property>
   <layout class="QGridLayout" >
    <property name="margin" >
     <number>11</number>
