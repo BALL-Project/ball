@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.49 2006/06/12 15:33:53 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.50 2006/06/13 09:44:11 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -247,10 +247,6 @@ void PyWidget::MyTextEdit::keyPressEvent(QKeyEvent* e)
 PyWidget::PyWidget(QWidget *parent, const char *name)
 	throw()
 	: DockWidget(parent, name),
-		text_edit_(0),
-		line_edit_(0),
-		combo_box_(0),
-		working_dir_(""),
 		valid_(false),
 		started_startup_script_(false),
 		thread_(0),
@@ -261,6 +257,7 @@ PyWidget::PyWidget(QWidget *parent, const char *name)
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new PyWidget " << this << std::endl;
 #endif
+
 	tab_widget_ = new QTabWidget(this);
 	setGuest(*tab_widget_);
 
@@ -272,6 +269,7 @@ PyWidget::PyWidget(QWidget *parent, const char *name)
 	text_edit_->setReadOnly(true);
 	text_edit_->setTabStopWidth((Position)(text_edit_->tabStopWidth() / 3.0));
 	text_edit_->setContextMenuPolicy(Qt::CustomContextMenu);
+	text_edit_->setToolTip("Output for single Python commands");
 	QPalette pal = text_edit_->palette();
 	QColor color = pal.color(QPalette::Window);
 	pal.setColor(QPalette::Base, color.dark(100));
@@ -279,6 +277,7 @@ PyWidget::PyWidget(QWidget *parent, const char *name)
 
 	line_edit_ = new MyLineEdit(widget);
 	line_edit_->setPyWidget(this);
+	line_edit_->setToolTip("Enter a Python command and press return for execution. Cursor right at end of line for completion, Enter or Shift-F1 for documentation.");
 	combo_box_ = new QComboBox(widget);
 
 	QGridLayout* lay = new QGridLayout(widget);
@@ -304,6 +303,7 @@ PyWidget::PyWidget(QWidget *parent, const char *name)
 	script_edit_->setContextMenuPolicy(Qt::CustomContextMenu);
 	script_edit_->setTabStopWidth((Position)(script_edit_->tabStopWidth() / 3.0));
 	script_edit_->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
+	script_edit_->setToolTip("Editor for Python scripts, for blue printed capital words, a BALL documentation entry is available. Press right mouse button for a context menu.");
 	splitter->addWidget(script_edit_);
 
 	widget = new QWidget(this);
@@ -342,6 +342,7 @@ PyWidget::PyWidget(QWidget *parent, const char *name)
 	script_output_->setReadOnly(true);
 	script_output_->setPalette(pal);
 	script_output_->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
+	script_output_->setToolTip("Output of Python scripts");
 	connect(script_edit_, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showEditContextMenu(const QPoint&)));
 	splitter->addWidget(script_output_);
 
