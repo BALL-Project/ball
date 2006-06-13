@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.50 2006/06/13 09:44:11 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.51 2006/06/13 14:59:21 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -204,6 +204,7 @@ void PyWidget::MyLineEdit::keyPressEvent(QKeyEvent* e)
 
 void PyWidget::MyTextEdit::keyPressEvent(QKeyEvent* e) 
 { 
+	setUndoRedoEnabled(true);
 	// if return is pressed: add whitespaces 
 	if (e->key() != Qt::Key_Return)
 	{
@@ -771,6 +772,8 @@ bool PyWidget::openFile(const String& filename, bool run)
 	{
 		appendText_(script_edit_, lines[i] + "\n");
 	}
+
+	script_edit_->setUndoRedoEnabled(false);
 
 	if (!run) 
 	{
@@ -1480,7 +1483,8 @@ void PyWidget::findError_(String result)
 		if (lines[p].hasSubstring("Error: "))
 		{
 			vector<String> fields;
-			if (lines[p].split(fields, "'") == 3)
+			Size nr = lines[p].split(fields, "'");
+			if (nr == 3 || nr == 2)
 			{
 				error = fields[1];
 				break;
@@ -1488,26 +1492,34 @@ void PyWidget::findError_(String result)
 		}
 	}
 
-	if (error == "") return;
-
 	QTextDocument* docu = script_edit_->document();
 	QTextCursor cursor(docu->begin());
 
-	QTextCursor end_pos(docu->begin());
-	end_pos.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, current_line_);
-	end_pos.movePosition(QTextCursor::EndOfLine);
-
-	while (!cursor.isNull())
+	if (error != "") 
 	{
-		cursor = docu->find(error.c_str(), cursor);
-		if (cursor.isNull() ||
-				cursor > end_pos)
+		QTextCursor end_pos(docu->begin());
+		end_pos.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, current_line_);
+		end_pos.movePosition(QTextCursor::EndOfLine);
+
+		while (!cursor.isNull())
 		{
-			break;
+			cursor = docu->find(error.c_str(), cursor);
+			if (cursor.isNull() ||
+					cursor > end_pos)
+			{
+				break;
+			}
+
+			script_edit_->setTextCursor(cursor);
 		}
 
-		script_edit_->setTextCursor(cursor);
+		if (!cursor.isNull()) return;
 	}
+
+	cursor = QTextCursor(docu->begin());
+	cursor.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, current_line_);
+ 	cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+	script_edit_->setTextCursor(cursor);
 }
 
 	} // namespace VIEW
