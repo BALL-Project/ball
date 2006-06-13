@@ -136,5 +136,12 @@ namespace BALL
 			LogStreamNotifier::unregister();
 		}
 
+		void LogView::showGuestContextMenu(const QPoint& pos)
+		{
+			QMenu* menu = text_edit_->createStandardContextMenu();
+			menu->exec(mapToGlobal(pos));
+			delete menu;
+		}
+
 	} // VIEW
 } // namespace BALL
