@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.4.1 2006/05/21 22:26:09 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.4.2 2006/06/14 14:45:40 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -260,7 +260,16 @@ namespace BALL
 #endif
 		}
 
-		energy_ += vdw_energy_ + es_energy_;
+		Options& options = getForceField()->options;
+		if (!options.has(MMFF94::Option::VDW_ENABLED) || options.getBool(MMFF94::Option::VDW_ENABLED))
+		{
+			energy_ += vdw_energy_;
+		}
+
+		if (!options.has(MMFF94::Option::ES_ENABLED) || options.getBool(MMFF94::Option::ES_ENABLED))
+		{
+			energy_ += es_energy_;
+		}
 
 		return energy_; 
   } 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94ConfigurationDialog.C,v 1.1.2.1 2006/06/14 13:09:20 amoll Exp $
+// $Id: MMFF94ConfigurationDialog.C,v 1.1.2.2 2006/06/14 14:46:54 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/MMFF94ConfigurationDialog.h>
@@ -78,10 +78,8 @@ namespace BALL
 
 		void MMFF94ConfigurationDialog::accept()
 		{
-Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			if (mmff_ != 0) 
 			{
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				applyTo(*mmff_);
 			}
 			hide();
@@ -91,8 +89,8 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 
 		String MMFF94ConfigurationDialog::getValue_(const QCheckBox* box) const
 		{
-			if (box->isChecked()) return true;
-			else 									return false;
+			if (box->isChecked()) return "true";
+			else 									return "false";
 		}
 
 		float MMFF94ConfigurationDialog::getValue_(const QLineEdit* edit) const

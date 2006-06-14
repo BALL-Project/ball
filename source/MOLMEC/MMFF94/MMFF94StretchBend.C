@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.1 2006/05/21 22:26:10 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.2 2006/06/14 14:45:40 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -518,18 +518,58 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 	{
 		if (!mmff94_) return;
 
-		updateBendForces();
-		updateStretchForces();
-		updateStretchBendForces();
+		Options& options = mmff94_->options;
+		if (!options.has(MMFF94::Option::BENDS_ENABLED) || options.getBool(MMFF94::Option::STRETCHES_ENABLED))
+		{
+			updateBendForces();
+		}
+
+		if (!options.has(MMFF94::Option::STRETCHES_ENABLED) || options.getBool(MMFF94::Option::STRETCHES_ENABLED))
+		{
+			updateStretchForces();
+		}
+
+		if (!options.has(MMFF94::Option::STRETCHBENDS_ENABLED) || options.getBool(MMFF94::Option::STRETCHBENDS_ENABLED))
+		{
+			updateStretchBendForces();
+		}
 	}
 
 	double MMFF94StretchBend::updateEnergy()
 	{
 		if (!mmff94_) return 0;
 
-		energy_ += updateBendEnergy();
-		energy_ += updateStretchEnergy();
-		energy_ += updateStretchBendEnergy();
+		energy_ = 0;
+ 
+		for (Size i = 0 ; i < stretches_.size(); i++)
+		{
+			const Vector3 direction(stretches_[i].atom1->getPosition() - stretches_[i].atom2->getPosition());
+			double distance = direction.getLength(); 
+			const double delta(distance - (double) stretches_[i].r0);
+			stretches_[i].delta_r = delta;
+		}
+
+		Options& options = mmff94_->options;
+		if (!options.has(MMFF94::Option::BENDS_ENABLED) || options.getBool(MMFF94::Option::BENDS_ENABLED))
+		{
+			energy_ += updateBendEnergy();
+		}
+
+		if (!options.has(MMFF94::Option::STRETCHES_ENABLED) || options.getBool(MMFF94::Option::STRETCHES_ENABLED))
+		{
+			energy_ += updateStretchEnergy();
+		}
+
+		if (!options.has(MMFF94::Option::STRETCHBENDS_ENABLED) || options.getBool(MMFF94::Option::STRETCHBENDS_ENABLED))
+		{
+			// stretchbends need data, that is calculated in the bend section
+			if (options.has(MMFF94::Option::BENDS_ENABLED) && !options.getBool(MMFF94::Option::BENDS_ENABLED))
+			{
+				updateBendEnergy();
+			}
+
+			energy_ += updateStretchBendEnergy();
+		}
 
 		return energy_;
 	}
@@ -930,9 +970,7 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		for (Size i = 0 ; i < stretches_.size(); i++)
 		{
 			const Vector3 direction(stretches_[i].atom1->getPosition() - stretches_[i].atom2->getPosition());
-			double distance = direction.getLength(); 
-			const double delta(distance - (double) stretches_[i].r0);
-			stretches_[i].delta_r = delta;
+			const double delta(stretches_[i].delta_r);
 			const double delta_2(delta * delta);
 
 			double eb_ij = (double) STRETCH_K0 * (double) stretches_[i].kb * delta_2 *

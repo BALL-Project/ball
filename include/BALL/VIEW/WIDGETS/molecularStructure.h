@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.28.2.4 2006/06/14 13:09:45 amoll Exp $
+// $Id: molecularStructure.h,v 1.28.2.5 2006/06/14 14:45:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -304,6 +304,8 @@ namespace BALL
 
 			virtual void addComposite_(Composite& composite, const String& name)
 				throw();
+
+			void applyForceFieldSettings_();
 
 			void selectUnassignedForceFieldAtoms_();
 

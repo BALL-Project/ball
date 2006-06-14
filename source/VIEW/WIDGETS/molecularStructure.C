@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.14 2006/06/14 13:09:40 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.15 2006/06/14 14:45:51 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -159,14 +159,10 @@ namespace BALL
 			// Assign the settings of the configuration dialogs to the 
 			// force fields.
 			amber_dialog_.setAmberFF(amber_);
-			amber_dialog_.accept();
-
 			charmm_dialog_.setCharmmFF(charmm_);
-			charmm_dialog_.accept();
-
 			mmff94_dialog_.setMMFF94(mmff_);
-			mmff94_dialog_.accept();
 
+			applyForceFieldSettings_();
 			// use amber force field by default
 			chooseAmberFF();
 		}
@@ -897,6 +893,13 @@ namespace BALL
 			setStatusbarText(String("Calculated ") + String(hbonds) + " H-bonds", true);
 		}
 
+		void MolecularStructure::applyForceFieldSettings_()
+		{
+			charmm_dialog_.accept();
+			amber_dialog_.accept();
+			mmff94_dialog_.accept();
+		}
+
 		void MolecularStructure::calculateForceFieldEnergy()
 		{
 			System* system = getMainControl()->getSelectedSystem();
@@ -909,6 +912,8 @@ namespace BALL
 			// set up the force field
 			setStatusbarText("Setting up force field...", true);
 			ForceField& ff = getForceField();
+
+			applyForceFieldSettings_();
 
 			bool ok = false;
 			try
@@ -973,9 +978,7 @@ namespace BALL
 			// Remember which force field was selected and update the force field's 
 			// settings from the appropriate dialog.
 			chooseForceField(minimization_dialog_.selectedForceField());
-			charmm_dialog_.accept();
-			amber_dialog_.accept();
-			mmff94_dialog_.accept();
+			applyForceFieldSettings_();
 
 			// Set up the force field.
 			setStatusbarText("setting up force field...", false);
@@ -1136,6 +1139,7 @@ namespace BALL
 
 			// Get the force field.
 			chooseForceField(md_dialog_.selectedForceField());
+			applyForceFieldSettings_();
 
 			// set up the force field
 			setStatusbarText("setting up force field...", false);
