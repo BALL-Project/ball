@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.26 2006/06/01 00:48:27 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.27 2006/06/14 15:14:57 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -1488,8 +1488,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				LogEvent* so = dynamic_cast<LogEvent*>(e);
 				if (so->showOnlyInLogView())
 				{
-					Log.info() << so->getMessage() << std::endl;
+					Log.error() << so->getMessage() << std::endl;
 					return true;
+				}
+				if (!so->isImportant())
+				{
+					Log.error() << so->getMessage() << std::endl;
 				}
  				setStatusbarText(so->getMessage(), so->isImportant());
 				return true;
