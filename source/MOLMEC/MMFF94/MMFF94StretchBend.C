@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.2 2006/06/14 14:45:40 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.3 2006/06/14 16:07:36 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -1010,8 +1010,8 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			stretches_[i].n = direction;
 			direction *= force;
 
-			stretches_[i].atom1->getForce()-= direction;
-			stretches_[i].atom2->getForce()+= direction;
+			stretches_[i].atom1->getForce()+= direction;
+			stretches_[i].atom2->getForce()-= direction;
 		}                                                                                                          
 	}
 
