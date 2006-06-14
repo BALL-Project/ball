@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.16 2006/06/14 15:44:20 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.17 2006/06/14 15:52:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -950,6 +950,7 @@ namespace BALL
 			ff.updateForces();
 			Log.info() << ff.getResults() << std::endl;
 			setStatusbarText("Total energy: " + String(ff.getEnergy()) + " kJ/mol.", true);
+			getMainControl()->update(*system);
 		}
 
 		void MolecularStructure::runMinimization()
