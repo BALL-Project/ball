@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.13 2006/05/22 12:59:25 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.14 2006/06/14 13:09:40 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -163,6 +163,9 @@ namespace BALL
 
 			charmm_dialog_.setCharmmFF(charmm_);
 			charmm_dialog_.accept();
+
+			mmff94_dialog_.setMMFF94(mmff_);
+			mmff94_dialog_.accept();
 
 			// use amber force field by default
 			chooseAmberFF();
@@ -796,10 +799,23 @@ namespace BALL
 			return charmm_dialog_;
 		}
 
+		MMFF94ConfigurationDialog& MolecularStructure::getMMFF94ConfigurationDialog()
+			throw()
+		{
+			return mmff94_dialog_;
+		}
+
+
 		CharmmFF& MolecularStructure::getCharmmFF()
 			throw()
 		{
 			return charmm_;
+		}
+	
+		MMFF94& MolecularStructure::getMMFF94() 
+			throw()
+		{
+			return mmff_;
 		}
 
 		ForceField& MolecularStructure::getForceField() throw()
@@ -818,6 +834,7 @@ namespace BALL
 			md_dialog_.readPreferenceEntries(inifile);
 			amber_dialog_.readPreferenceEntries(inifile);
 			charmm_dialog_.readPreferenceEntries(inifile);
+			mmff94_dialog_.readPreferenceEntries(inifile);
 			chooseForceField(AMBER_FF);
 			if (inifile.hasEntry("FORCEFIELD", "selected"))
 			{
@@ -840,6 +857,7 @@ namespace BALL
 			md_dialog_.writePreferenceEntries(inifile);
 			amber_dialog_.writePreferenceEntries(inifile);
 			charmm_dialog_.writePreferenceEntries(inifile);
+			mmff94_dialog_.writePreferenceEntries(inifile);
 			inifile.appendSection("FORCEFIELD");
 			inifile.insertValue("FORCEFIELD", "selected", force_field_id_);
 		}
@@ -957,6 +975,7 @@ namespace BALL
 			chooseForceField(minimization_dialog_.selectedForceField());
 			charmm_dialog_.accept();
 			amber_dialog_.accept();
+			mmff94_dialog_.accept();
 
 			// Set up the force field.
 			setStatusbarText("setting up force field...", false);
@@ -1317,6 +1336,15 @@ namespace BALL
 			}
 		}
 
+		void MolecularStructure::showMMFF94ForceFieldOptions()
+		{
+			mmff94_dialog_.raise();
+			if (mmff94_dialog_.exec() == QDialog::Accepted)
+			{
+				chooseMMFF94();
+			}
+		}
+
 		void MolecularStructure::chooseAmberFF()
 		{
 			chooseForceField(AMBER_FF);
@@ -1358,6 +1386,7 @@ namespace BALL
 		{
 			if (force_field_id_ == AMBER_FF) showAmberForceFieldOptions();
 			else if (force_field_id_ == CHARMM_FF) showCharmmForceFieldOptions();
+			else if (force_field_id_ == MMFF94_FF) showMMFF94ForceFieldOptions();
 		}
 
 

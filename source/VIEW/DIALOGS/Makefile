@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.53.2.12 2006/06/05 10:38:57 amoll Exp $
+# $Id: Makefile,v 1.53.2.13 2006/06/14 13:09:32 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -45,6 +45,7 @@ CPP_SOURCES=\
 	modifyRepresentationDialog.C\
 	molecularDynamicsDialog.C\
 	molecularFileDialog.C\
+	MMFF94ConfigurationDialog.C\
 	networkPreferences.C\
 	parsedFunctionDialog.C\
 	peptideDialog.C\
@@ -83,6 +84,7 @@ MOC_SOURCES=\
 	modifyRepresentationDialog_moc.C\
 	molecularFileDialog_moc.C\
 	molecularDynamicsDialog_moc.C\
+	MMFF94ConfigurationDialog_moc.C\
 	networkPreferences_moc.C\
 	parsedFunctionDialog_moc.C\
 	peptideDialog_moc.C\
@@ -118,6 +120,7 @@ UIC_SOURCES=\
 	modelSettingsDialogData.C\
 	modifyRepresentationDialogData.C\
 	molecularDynamicsDialogData.C\
+	MMFF94ConfigurationDialogData.C\
 	networkPreferencesData.C\
 	parsedFunctionDialogData.C\
 	peptideDialogData.C\
