@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceModel.C,v 1.11.2.1 2006/06/15 19:00:06 amoll Exp $
+// $Id: forceModel.C,v 1.11.2.2 2006/06/15 19:07:45 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/forceModel.h>
@@ -49,7 +49,6 @@ namespace BALL
 			Atom* atom = dynamic_cast<Atom*>(&composite);
 			if (atom == 0) return Processor::CONTINUE;
 
-			// normalize to A:
 			Vector3 force = atom->getForce() * pow((float)10.0, 8);
 			if (Maths::isZero(force.getSquareLength())) return Processor::CONTINUE;
 			float forcev = log(force.getLength()) * scaling_; 

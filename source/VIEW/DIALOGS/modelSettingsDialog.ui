@@ -37,7 +37,7 @@
     </rect>
    </property>
    <property name="currentIndex" >
-    <number>5</number>
+    <number>7</number>
    </property>
    <widget class="QWidget" name="Stick" >
     <widget class="QFrame" name="frame3" >
@@ -1811,249 +1811,424 @@
     </widget>
    </widget>
    <widget class="QWidget" name="Forces" >
-    <widget class="QFrame" name="frame3_2" >
+    <widget class="QWidget" name="" >
      <property name="geometry" >
       <rect>
-       <x>3</x>
-       <y>3</y>
-       <width>407</width>
-       <height>38</height>
+       <x>0</x>
+       <y>0</y>
+       <width>401</width>
+       <height>171</height>
       </rect>
      </property>
-     <property name="frameShape" >
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow" >
-      <enum>QFrame::Raised</enum>
-     </property>
-     <widget class="QSlider" name="force_scaling_slider" >
-      <property name="geometry" >
-       <rect>
-        <x>218</x>
-        <y>12</y>
-        <width>84</width>
-        <height>21</height>
-       </rect>
+     <layout class="QVBoxLayout" >
+      <property name="margin" >
+       <number>0</number>
       </property>
-      <property name="minimumSize" >
-       <size>
-        <width>84</width>
-        <height>21</height>
-       </size>
+      <property name="spacing" >
+       <number>6</number>
       </property>
-      <property name="maximumSize" >
-       <size>
-        <width>84</width>
-        <height>21</height>
-       </size>
-      </property>
-      <property name="minimum" >
-       <number>1</number>
-      </property>
-      <property name="maximum" >
-       <number>50</number>
-      </property>
-      <property name="value" >
-       <number>10</number>
-      </property>
-      <property name="orientation" >
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="tickInterval" >
-       <number>10</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="textLabel1_2_2_2_3" >
-      <property name="geometry" >
-       <rect>
-        <x>17</x>
-        <y>10</y>
-        <width>190</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>7</hsizetype>
-        <vsizetype>7</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize" >
-       <size>
-        <width>120</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize" >
-       <size>
-        <width>190</width>
-        <height>32767</height>
-       </size>
-      </property>
-      <property name="text" >
-       <string>scaling (exponent)</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="force_scaling_label" >
-      <property name="geometry" >
-       <rect>
-        <x>313</x>
-        <y>10</y>
-        <width>50</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>0</hsizetype>
-        <vsizetype>0</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize" >
-       <size>
-        <width>50</width>
-        <height>25</height>
-       </size>
-      </property>
-      <property name="maximumSize" >
-       <size>
-        <width>35</width>
-        <height>25</height>
-       </size>
-      </property>
-      <property name="text" >
-       <string>99.9</string>
-      </property>
-      <property name="alignment" >
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QFrame" name="frame3_2_2" >
-     <property name="geometry" >
-      <rect>
-       <x>3</x>
-       <y>58</y>
-       <width>404</width>
-       <height>38</height>
-      </rect>
-     </property>
-     <property name="frameShape" >
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow" >
-      <enum>QFrame::Raised</enum>
-     </property>
-     <widget class="QLabel" name="textLabel1_2_2_2_3_4" >
-      <property name="geometry" >
-       <rect>
-        <x>18</x>
-        <y>10</y>
-        <width>190</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>7</hsizetype>
-        <vsizetype>7</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize" >
-       <size>
-        <width>120</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize" >
-       <size>
-        <width>190</width>
-        <height>32767</height>
-       </size>
-      </property>
-      <property name="text" >
-       <string>max length</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="force_max_length_slider" >
-      <property name="geometry" >
-       <rect>
-        <x>219</x>
-        <y>12</y>
-        <width>84</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="minimumSize" >
-       <size>
-        <width>84</width>
-        <height>21</height>
-       </size>
-      </property>
-      <property name="maximumSize" >
-       <size>
-        <width>84</width>
-        <height>21</height>
-       </size>
-      </property>
-      <property name="minimum" >
-       <number>10</number>
-      </property>
-      <property name="maximum" >
-       <number>300</number>
-      </property>
-      <property name="value" >
-       <number>300</number>
-      </property>
-      <property name="orientation" >
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="tickInterval" >
-       <number>70</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="force_max_length_label" >
-      <property name="geometry" >
-       <rect>
-        <x>314</x>
-        <y>10</y>
-        <width>50</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>0</hsizetype>
-        <vsizetype>0</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize" >
-       <size>
-        <width>50</width>
-        <height>25</height>
-       </size>
-      </property>
-      <property name="maximumSize" >
-       <size>
-        <width>35</width>
-        <height>25</height>
-       </size>
-      </property>
-      <property name="text" >
-       <string>99.9</string>
-      </property>
-      <property name="alignment" >
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
+      <item>
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="textLabel1_2_2_2_3_4" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>190</width>
+            <height>32767</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>max length</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="force_max_length_slider" >
+          <property name="minimumSize" >
+           <size>
+            <width>84</width>
+            <height>21</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>84</width>
+            <height>21</height>
+           </size>
+          </property>
+          <property name="minimum" >
+           <number>10</number>
+          </property>
+          <property name="maximum" >
+           <number>300</number>
+          </property>
+          <property name="value" >
+           <number>300</number>
+          </property>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="tickInterval" >
+           <number>70</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="force_max_length_label" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>50</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>35</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>99.9</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="textLabel1_2_2_2_3" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>190</width>
+            <height>32767</height>
+           </size>
+          </property>
+          <property name="toolTip" >
+           <string>Length of the drawn vector is: log(v * 10**8) * scaling  </string>
+          </property>
+          <property name="text" >
+           <string>scaling (exponent)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="force_scaling_slider" >
+          <property name="minimumSize" >
+           <size>
+            <width>84</width>
+            <height>21</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>84</width>
+            <height>21</height>
+           </size>
+          </property>
+          <property name="toolTip" >
+           <string>Length of the drawn vector is: log(v * 10**8) * scaling  </string>
+          </property>
+          <property name="minimum" >
+           <number>1</number>
+          </property>
+          <property name="maximum" >
+           <number>150</number>
+          </property>
+          <property name="value" >
+           <number>10</number>
+          </property>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="tickInterval" >
+           <number>10</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="force_scaling_label" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>50</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>35</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="toolTip" >
+           <string>Length of the drawn vector is: log(v * 10**8) * scaling  </string>
+          </property>
+          <property name="text" >
+           <string>99.9</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="textLabel1_2_2_2_3_5" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>190</width>
+            <height>32767</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>base size</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="force_base_slider" >
+          <property name="minimumSize" >
+           <size>
+            <width>84</width>
+            <height>21</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>84</width>
+            <height>21</height>
+           </size>
+          </property>
+          <property name="minimum" >
+           <number>10</number>
+          </property>
+          <property name="maximum" >
+           <number>300</number>
+          </property>
+          <property name="value" >
+           <number>300</number>
+          </property>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="tickInterval" >
+           <number>70</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="force_base_label" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>50</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>35</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>99.9</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="textLabel1_2_2_2_3_6" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>190</width>
+            <height>32767</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>offset</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="force_offset_slider" >
+          <property name="minimumSize" >
+           <size>
+            <width>84</width>
+            <height>21</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>84</width>
+            <height>21</height>
+           </size>
+          </property>
+          <property name="minimum" >
+           <number>0</number>
+          </property>
+          <property name="maximum" >
+           <number>50</number>
+          </property>
+          <property name="value" >
+           <number>50</number>
+          </property>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="tickInterval" >
+           <number>70</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="force_offset_label" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>50</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>35</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>99.9</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
     </widget>
    </widget>
   </widget>

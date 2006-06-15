@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceModel.h,v 1.5 2005/12/23 17:02:18 amoll Exp $
+// $Id: forceModel.h,v 1.5.2.1 2006/06/15 19:08:14 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_FORCEMODEL_H
@@ -63,6 +63,18 @@ namespace BALL
 			float getMaxLength() const
 				throw() { return max_length_;}
 
+			///
+			void setBaseSize(float size) { base_size_ = size;}
+
+			///
+			float getBaseSize() const { return base_size_;}
+
+			///
+			void setOffset(float off) { offset_ = off;}
+
+			///
+			float getOffset() const { return offset_;}
+
 			//@} 
 			/**	@name Processor specific methods 
 			*/ 
@@ -89,6 +101,8 @@ namespace BALL
 
 			float scaling_;
 			float max_length_;
+			float base_size_;
+			float offset_;
 		};
 
 	} // namespace VIEW
