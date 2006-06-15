@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.37.2.3 2006/02/01 13:23:47 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.37.2.4 2006/06/15 19:18:50 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -48,6 +48,8 @@ namespace BALL
 			connect( cartoon_tube_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonTubeRadiusChanged() ) );
 			connect( force_max_length_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceMaxLengthChanged() ) );
 			connect( force_scaling_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceScalingChanged() ) );
+			connect( force_offset_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceOffsetChanged() ) );
+			connect( force_base_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceBaseChanged() ) );
 			connect( hbonds_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( hbondsRadiusChanged() ) );
 			connect( stick_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( stickRadiusChanged() ) );
 			connect( strand_arrow_width_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonStrandArrowWidthChanged() ) );
@@ -86,6 +88,8 @@ namespace BALL
 			
 			registerObject_(force_scaling_slider);
 			registerObject_(force_max_length_slider);
+			registerObject_(force_base_slider);
+			registerObject_(force_offset_slider);
 
 			registerObject_(hbonds_radius_slider);
 
@@ -212,6 +216,8 @@ namespace BALL
 			{
 				((ForceModel*) &mp)->setMaxLength((float)(getForceMaxLength()) / 10.0);
 				((ForceModel*) &mp)->setScaling((float)(getForceScaling()) / 10.0);
+				((ForceModel*) &mp)->setOffset((float)(getForceOffset()) / 10.0);
+				((ForceModel*) &mp)->setBaseSize((float)(getForceBase()) / 10.0);
 				return;
 			}
 		}
@@ -344,6 +350,8 @@ namespace BALL
 			{
 				setForceScaling(((ForceModel*) &mp)->getScaling());
 				setForceMaxLenght(((ForceModel*) &mp)->getMaxLength());
+				setForceOffset(((ForceModel*) &mp)->getOffset());
+				setForceBase(((ForceModel*) &mp)->getBaseSize());
 				return;
 			}
 		}
