@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.3 2006/06/14 16:07:36 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.4 2006/06/16 12:17:02 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -518,6 +518,8 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 	{
 		if (!mmff94_) return;
 
+		calculateDeltas_();
+		
 		Options& options = mmff94_->options;
 		if (!options.has(MMFF94::Option::BENDS_ENABLED) || options.getBool(MMFF94::Option::STRETCHES_ENABLED))
 		{
@@ -535,20 +537,108 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		}
 	}
 
+	void MMFF94StretchBend::calculateDeltas_()
+	{
+		bool use_selection = mmff94_->getUseSelection();
+
+		for (Size i = 0; i < bends_.size(); i++) 
+		{
+			Bend& bend = bends_[i];
+
+			if (use_selection &&
+					!bend.atom1->isSelected() &&
+					!bend.atom2->isSelected() &&
+					!bend.atom3->isSelected())
+			{
+				continue;
+			}
+
+			// Calculate the vector between atom1 and atom2,
+			// test if the vector has length larger than 0 and normalize it
+
+			Vector3 v1 = bend.atom1->getPosition() - bend.atom2->getPosition();
+			Vector3 v2 = bend.atom3->getPosition() - bend.atom2->getPosition();
+			double length = v1.getLength();
+
+			if (length == 0) continue;
+			double inverse_length_v1 = 1.0 / length;
+			v1 *= inverse_length_v1 ;
+
+			// Calculate the vector between atom3 and atom2,
+			// test if the vector has length larger than 0 and normalize it
+
+			length = v2.getLength();
+			if (length == 0.0) continue;
+			double inverse_length_v2 = 1/length;
+			v2 *= inverse_length_v2;
+
+			// Calculate the cos of theta and then theta
+			double costheta = v1 * v2;
+			double theta;
+			if (costheta > 1.0) 
+			{
+				theta = 0.0;
+			}
+			else if (costheta < -1.0) 
+			{
+				theta = Constants::PI;
+			}
+			else 
+			{
+				theta = acos(costheta);
+			}
+
+			// unit conversion: kJ/(mol A) -> N
+			// kJ -> J: 1e3
+			// A -> m : 1e10
+			// J/mol -> mol: Avogadro
+			bend.delta_theta = theta - bend.theta0;
+			double factor;
+			
+			if (!bend.is_linear) 
+			{
+				factor = -BEND_K0 * bend.ka * (2 * bend.delta_theta * + 3 * BEND_K1 * bend.delta_theta * bend.delta_theta);
+			}
+			else
+			{
+				factor = -BEND_KX * bend.ka * sin(bends_[i].theta0 * DEGREE_TO_RADIAN);
+			}
+
+			// Calculate the cross product of v1 and v2, test if it has length unequal 0,
+			// and normalize it.
+			Vector3 cross = v1 % v2;
+			if ((length = cross.getLength()) != 0) 
+			{
+				cross *= (1.0 / length);
+			} 
+			else 
+			{
+				bend.n1 = Vector3(0.);
+				bend.n2 = Vector3(0.);
+				continue;
+			}
+
+			bend.n1 = (v1 % cross) * inverse_length_v1 * factor;
+			bend.n2 = (v2 % cross) * inverse_length_v2 * factor;
+		}
+
+		// stretches:
+		for (Size i = 0 ; i < stretches_.size(); i++)
+		{
+			const Vector3 direction(stretches_[i].atom1->getPosition() - stretches_[i].atom2->getPosition());
+			const double distance = direction.getLength(); 
+			stretches_[i].delta_r = distance - (double) stretches_[i].r0;
+		}
+	}
+
 	double MMFF94StretchBend::updateEnergy()
 	{
 		if (!mmff94_) return 0;
 
 		energy_ = 0;
- 
-		for (Size i = 0 ; i < stretches_.size(); i++)
-		{
-			const Vector3 direction(stretches_[i].atom1->getPosition() - stretches_[i].atom2->getPosition());
-			double distance = direction.getLength(); 
-			const double delta(distance - (double) stretches_[i].r0);
-			stretches_[i].delta_r = delta;
-		}
 
+		calculateDeltas_();
+ 
 		Options& options = mmff94_->options;
 		if (!options.has(MMFF94::Option::BENDS_ENABLED) || options.getBool(MMFF94::Option::BENDS_ENABLED))
 		{
@@ -700,104 +790,28 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		{
 			Bend& bend = bends_[i];
 
-			if (use_selection &&
-					!bend.atom1->isSelected() &&
-					!bend.atom2->isSelected() &&
-					!bend.atom3->isSelected())
-			{
-				continue;
-			}
-
-			// Calculate the vector between atom1 and atom2,
-			// test if the vector has length larger than 0 and normalize it
-
-			Vector3 v1 = bend.atom1->getPosition() - bend.atom2->getPosition();
-			Vector3 v2 = bend.atom3->getPosition() - bend.atom2->getPosition();
-			double length = v1.getLength();
-
-			if (length == 0) continue;
-			double inverse_length_v1 = 1.0 / length;
-			v1 *= inverse_length_v1 ;
-
-			// Calculate the vector between atom3 and atom2,
-			// test if the vector has length larger than 0 and normalize it
-
-			length = v2.getLength();
-			if (length == 0.0) continue;
-			double inverse_length_v2 = 1/length;
-			v2 *= inverse_length_v2;
-
-			// Calculate the cos of theta and then theta
-			double costheta = v1 * v2;
-			double theta;
-			if (costheta > 1.0) 
-			{
-				theta = 0.0;
-			}
-			else if (costheta < -1.0) 
-			{
-				theta = Constants::PI;
-			}
-			else 
-			{
-				theta = acos(costheta);
-			}
-
-			// unit conversion: kJ/(mol A) -> N
-			// kJ -> J: 1e3
-			// A -> m : 1e10
-			// J/mol -> mol: Avogadro
-			const float& delta = bend.delta_theta;
-			double factor;
-			
-			if (!bend.is_linear) 
-			{
-				factor = -BEND_K0 * bend.ka * (2 * delta * + 3 * BEND_K1 * delta * delta);
-			}
-			else
-			{
-				factor = -BEND_KX * bend.ka * sin(bends_[i].theta0 * DEGREE_TO_RADIAN);
-			}
-
-			// Calculate the cross product of v1 and v2, test if it has length unequal 0,
-			// and normalize it.
-			Vector3 cross = v1 % v2;
-			if ((length = cross.getLength()) != 0) 
-			{
-				cross *= (1.0 / length);
-			} 
-			else 
-			{
-				continue;
-			}
-
-			bend.n1 = (v1 % cross) * inverse_length_v1;
-			bend.n2 = (v2 % cross) * inverse_length_v2;
-			const Vector3 n1 = bend.n1 * factor;
-			const Vector3 n2 = bend.n2 * factor;
-
 			if (!use_selection)
 			{
-				bend.atom1->getForce() -= n1;
-				bend.atom2->getForce() += n1;
-				bend.atom2->getForce() -= n2;
-				bend.atom3->getForce() += n2;
+				bend.atom1->getForce() -= bend.n1;
+				bend.atom2->getForce() += bend.n1;
+				bend.atom2->getForce() -= bend.n2;
+				bend.atom3->getForce() += bend.n2;
 			} 
 			else 
 			{
 				if (bend.atom1->isSelected()) 
 				{
-					bend.atom1->getForce() -= n1;
+					bend.atom1->getForce() -= bend.n1;
 				}
 
 				if (bend.atom2->isSelected())
 				{
-					bend.atom2->getForce() += n1;
-					bend.atom2->getForce() -= n2;
+					bend.atom2->getForce() += bend.n1;
+					bend.atom2->getForce() -= bend.n2;
 				}
 				if (bend.atom3->isSelected())
 				{
-					bend.atom3->getForce() += n2;
+					bend.atom3->getForce() += bend.n2;
 				}
 			}
 		}

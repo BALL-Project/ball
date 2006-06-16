@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.h,v 1.1.4.1 2006/05/21 22:27:17 amoll Exp $
+// $Id: MMFF94StretchBend.h,v 1.1.4.2 2006/06/16 12:17:00 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94STRETCHBEND_H
@@ -157,6 +157,7 @@ namespace BALL
 
 		private:
 
+		void calculateDeltas_();
 		bool setupBends_();
 		bool setupStretches_();
 		bool setupStretchBends_();
