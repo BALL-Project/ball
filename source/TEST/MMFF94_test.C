@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.2 2006/06/12 20:41:31 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.3 2006/06/19 14:35:11 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -31,7 +31,7 @@ ForceFieldComponent* enableOneComponent(const String& comp, MMFF94& mmff)
 }
 
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.2 2006/06/12 20:41:31 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.3 2006/06/19 14:35:11 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -61,7 +61,7 @@ MMFF94 mmff;
 ForceFieldComponent* ffc = enableOneComponent("MMFF94 StretchBend", mmff);
 MMFF94StretchBend& sb = *((MMFF94StretchBend*) ffc);
 
-CHECK(force test 1 Stretches)
+CHECK(force test 1: Stretches)
 	HINFile f("data/MMFF94_test1.hin");	
 	System s;
 	f >> s;
@@ -69,23 +69,30 @@ CHECK(force test 1 Stretches)
 	TEST_EQUAL(s.countAtoms(), 2)
 
 	mmff.setup(s);
-	sb.updateStretchEnergy();
+	mmff.updateEnergy();
 	sb.updateStretchForces();
 
-
-	PRECISION(1e-12)
+	PRECISION(3e-5)
+	// atoms in optimal distance
 	AtomIterator it = s.beginAtom();
-	for (; +it; ++it)
-	{
-		if (it->getName() == "C1")
-		{
-			TEST_REAL_EQUAL(it->getForce().getDistance(Vector3(5.65872e-10,7.01203e-13,-3.2631e-10)), 0)
-		}
-		if (it->getName() == "C2")
-		{
-			TEST_REAL_EQUAL(it->getForce().getDistance(Vector3(-3.76732e-10,2.77556e-17,2.17502e-10)), 0)
-		}
-	}
+	TEST_REAL_EQUAL(it->getForce().getDistance(Vector3(0.)), 0)
+	it->setForce(Vector3(0.));
+	it++;
+	TEST_REAL_EQUAL(it->getForce().getDistance(Vector3(0.)), 0)
+	it->setForce(Vector3(0.));
+
+	// move atom by 0.5 to far away
+	it->setPosition(Vector3(2.646,0,0));
+	mmff.updateEnergy();
+	sb.updateStretchForces();
+
+	it = s.beginAtom();
+	TEST_REAL_EQUAL(it->getForce().getDistance(Vector3(97.0104675293, 0, 0)), 0)
+	it++;
+	TEST_REAL_EQUAL(it->getForce().getDistance(-Vector3(97.0104675293, 0, 0)), 0)
+
+	it->setPosition(Vector3(2.146,0,0));
+// 95.93
 RESULT
 
 CHECK(force test 2: Stretches)
@@ -112,7 +119,7 @@ CHECK(force test 2: Stretches)
 	TEST_REAL_EQUAL(a1.getForce().getLength(), 0)
 	TEST_REAL_EQUAL(a2.getForce().getLength(), 0)
 
-	double force = a2.getForce().x * Constants::NA / 1e13;
+	float delta = sqrt(numeric_limits<float>::epsilon());
 
 	// calculate the differential quotient of
 	// the energy and compare it to the force
@@ -124,17 +131,17 @@ CHECK(force test 2: Stretches)
 		a2.getPosition() = pos + Vector3(d, 0.0, 0.0);
 
 		// calculate the force
-		sb.updateStretchForces();
-		double force = a2.getForce().x * Constants::NA / 1e13;
+		mmff.updateForces();
+		double force = a2.getForce().x;// * Constants::NA / 1e13;
 
 		// translate atom 2 by 0.0001 Angstrom to the left
 		// and to the right to determine the differential quotient
-		sb.updateStretchEnergy();
+		sb.updateEnergy();
 		double dE = sb.getStretchEnergy();
 
-		a2.getPosition() += Vector3(0.0001, 0.0, 0.0);
-		sb.updateStretchEnergy();
-		dE = (sb.getStretchEnergy() - dE) / 0.0001;
+		a2.getPosition() += Vector3(delta, 0.0, 0.0);
+		mmff.updateEnergy();
+		dE = -(sb.getStretchEnergy() - dE) / delta;
 		TEST_REAL_EQUAL(force, dE)
 	}	
 RESULT

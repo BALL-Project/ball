@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.4 2006/06/16 12:17:02 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.5 2006/06/19 14:39:52 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -625,9 +625,11 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		// stretches:
 		for (Size i = 0 ; i < stretches_.size(); i++)
 		{
-			const Vector3 direction(stretches_[i].atom1->getPosition() - stretches_[i].atom2->getPosition());
+			Vector3 direction(stretches_[i].atom1->getPosition() - stretches_[i].atom2->getPosition());
 			const double distance = direction.getLength(); 
 			stretches_[i].delta_r = distance - (double) stretches_[i].r0;
+			direction /= distance;
+			stretches_[i].n = direction;
 		}
 	}
 
@@ -1008,24 +1010,21 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		// iterate over all bonds, update the forces
 		for (Size i = 0 ; i < stretches_.size(); i++)
 		{
-			Vector3 direction(stretches_[i].atom1->getPosition() - stretches_[i].atom2->getPosition());
-			const double r0(stretches_[i].r0);
-			const double delta(direction.getLength() - r0);
+			Stretch& stretch = stretches_[i];
+			const double& delta = stretch.delta_r;
 
-			const double a(STRETCH_K0  * r0);
+			const double a = STRETCH_K0  * stretch.kb * delta;
 
 			const double dd = delta * delta;
 
-			double force = -(2 * a * delta + 
-											 3 * a * STRETCH_CUBIC_STRENGTH_CONSTANT * dd + 
-											 4 * a * STRETCH_KCS * dd * delta );
+			double force = (2 + 
+										  3 * STRETCH_CUBIC_STRENGTH_CONSTANT * delta + 
+										  4 * STRETCH_KCS * dd) * a;
 
-			direction.normalize();
-			stretches_[i].n = direction;
-			direction *= force;
+			const Vector3 direction = stretch.n * force;
 
-			stretches_[i].atom1->getForce()+= direction;
-			stretches_[i].atom2->getForce()-= direction;
+			stretch.atom1->getForce()-= direction;
+			stretch.atom2->getForce()+= direction;
 		}                                                                                                          
 	}
 
