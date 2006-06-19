@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.7 2006/06/19 14:56:39 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.8 2006/06/19 14:57:15 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -43,7 +43,7 @@ namespace BALL
 	// -0.007 degree^-1
 	#define BEND_K1 -0.007
 
-	//
+	// mdyne * A -> kJ / mol
   #define BEND_KX 143.9325 * Constants::JOULE_PER_CAL
 
 	// Constant CS
