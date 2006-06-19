@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.6 2006/06/19 14:50:21 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.7 2006/06/19 14:56:39 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -35,16 +35,16 @@ namespace BALL
 	}
 
 	// Constant 
-	#define STRETCH_BEND_K0 2.51210
+	#define STRETCH_BEND_K0 2.51210 * Constants::JOULE_PER_CAL
 
 	/// 0.043844 / 2
-	#define BEND_K0 0.021922
+	#define BEND_K0 0.021922 * Constants::JOULE_PER_CAL
 	
 	// -0.007 degree^-1
 	#define BEND_K1 -0.007
 
 	//
-  #define BEND_KX 143.9325
+  #define BEND_KX 143.9325 * Constants::JOULE_PER_CAL
 
 	// Constant CS
 	#define STRETCH_CUBIC_STRENGTH_CONSTANT -2.0
