@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.48 2005/12/23 17:01:48 amoll Exp $
+// $Id: angle.h,v 1.48.2.1 2006/06/19 15:06:03 amoll Exp $
 //
 
 #ifndef BALL_MATHS_ANGLE_H
@@ -48,8 +48,7 @@ namespace BALL
 	TAngle<T> operator - (const T& val, const TAngle<T>& angle)
 		throw();
 
-	/**	@name Angle
-	 		Generic Angle Class.
+	/**	Generic Angle Class.
 			Use this class to describe angles. The TAngle class permits the conversion
 			from degree to radians and is the return type of all functions used to calculate
 			angles.
