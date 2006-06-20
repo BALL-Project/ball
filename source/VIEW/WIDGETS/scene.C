@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.61 2006/06/07 19:16:15 amoll Exp $
+// $Id: scene.C,v 1.174.2.62 2006/06/20 21:54:43 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1577,9 +1577,9 @@ namespace BALL
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
 			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
+			no_stereo_action_->setCheckable(true);
 			no_stereo_action_->setChecked(true);
 			setMenuHelp("tips.html#3D");
-			no_stereo_action_->setCheckable(true);
 
 			active_stereo_action_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()));
@@ -2346,6 +2346,12 @@ namespace BALL
 		void Scene::exitStereo()
 			throw()
 		{
+			no_stereo_action_->setChecked(true);
+			active_stereo_action_->setChecked(false);
+			dual_stereo_action_->setChecked(false);
+
+			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO) return;
+
 			gl_renderer_.setStereoMode(GLRenderer::NO_STEREO);
 			gl_renderer_.setSize(width(), height());
 
@@ -2355,10 +2361,6 @@ namespace BALL
 			glMatrixMode(GL_MODELVIEW);
 
 			setFullScreen(false);
-
-			no_stereo_action_->setChecked(true);
-			active_stereo_action_->setChecked(false);
-			dual_stereo_action_->setChecked(false);
 		}
 
 		void Scene::setFullScreen(bool state)
