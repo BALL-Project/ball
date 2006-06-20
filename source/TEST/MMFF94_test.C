@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.3 2006/06/19 14:35:11 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.4 2006/06/20 11:27:16 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,6 +12,7 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
 #include <BALL/FORMAT/HINFile.h>
+#include <BALL/FORMAT/MOL2File.h>
 
 ///////////////////////////
 using namespace BALL;
@@ -31,7 +32,7 @@ ForceFieldComponent* enableOneComponent(const String& comp, MMFF94& mmff)
 }
 
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.3 2006/06/19 14:35:11 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.4 2006/06/20 11:27:16 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -58,6 +59,31 @@ RESULT
 
 
 MMFF94 mmff;
+
+CHECK(forces and energies equal in two consecutive runs)
+	MOL2File f("data/MMFF94_test2.mol");	
+	System s;
+	f >> s;
+	f.close();
+
+	mmff.setup(s);
+	Atom& atom1 = *s.getAtom(0);
+
+	mmff.updateEnergy();
+	mmff.updateForces();
+	Vector3 f1 = atom1.getForce();
+	float energy = mmff.getEnergy();
+	TEST_EQUAL(!Maths::isZero(energy), true)
+	TEST_EQUAL(!Maths::isZero(f1.getSquareLength()), true)
+
+	mmff.updateEnergy();
+	mmff.updateForces();
+	Vector3 f2 = atom1.getForce();
+	float energy2 = mmff.getEnergy();
+	TEST_EQUAL(f1, f2)
+	TEST_REAL_EQUAL(energy, energy2)
+RESULT
+
 ForceFieldComponent* ffc = enableOneComponent("MMFF94 StretchBend", mmff);
 MMFF94StretchBend& sb = *((MMFF94StretchBend*) ffc);
 
@@ -87,12 +113,11 @@ CHECK(force test 1: Stretches)
 	sb.updateStretchForces();
 
 	it = s.beginAtom();
-	TEST_REAL_EQUAL(it->getForce().getDistance(Vector3(97.0104675293, 0, 0)), 0)
+	TEST_REAL_EQUAL(it->getForce().getDistance(Vector3(406.1635825, 0, 0)), 0)
 	it++;
-	TEST_REAL_EQUAL(it->getForce().getDistance(-Vector3(97.0104675293, 0, 0)), 0)
+	TEST_REAL_EQUAL(it->getForce().getDistance(-Vector3(406.1635825, 0, 0)), 0)
 
 	it->setPosition(Vector3(2.146,0,0));
-// 95.93
 RESULT
 
 CHECK(force test 2: Stretches)
