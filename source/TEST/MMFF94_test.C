@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.5 2006/06/20 11:28:19 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.6 2006/06/20 15:49:38 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -32,7 +32,7 @@ ForceFieldComponent* enableOneComponent(const String& comp, MMFF94& mmff)
 }
 
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.5 2006/06/20 11:28:19 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.6 2006/06/20 15:49:38 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -61,7 +61,7 @@ RESULT
 MMFF94 mmff;
 
 CHECK(forces and energies equal in two consecutive runs)
-	MOL2File f("data/MMFF94_test2.mol");	
+	MOL2File f("data/MMFF94_test2.mol2");	
 	System s;
 	f >> s;
 	f.close();
