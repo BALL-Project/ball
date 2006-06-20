@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.37.2.4 2006/06/15 19:18:50 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.37.2.5 2006/06/20 21:44:35 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -214,10 +214,10 @@ namespace BALL
 					
 			if (RTTI::isKindOf<ForceModel>(mp))
 			{
-				((ForceModel*) &mp)->setMaxLength((float)(getForceMaxLength()) / 10.0);
-				((ForceModel*) &mp)->setScaling((float)(getForceScaling()) / 10.0);
-				((ForceModel*) &mp)->setOffset((float)(getForceOffset()) / 10.0);
-				((ForceModel*) &mp)->setBaseSize((float)(getForceBase()) / 10.0);
+				((ForceModel*) &mp)->setMaxLength(getForceMaxLength());
+				((ForceModel*) &mp)->setScaling(getForceScaling());
+				((ForceModel*) &mp)->setOffset(getForceOffset());
+				((ForceModel*) &mp)->setBaseSize(getForceBase());
 				return;
 			}
 		}

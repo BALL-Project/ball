@@ -5,6 +5,7 @@
 #include <BALL/VIEW/DIALOGS/molecularDynamicsDialog.h>
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
+#include <BALL/VIEW/DIALOGS/MMFF94ConfigurationDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/SYSTEM/path.h>
@@ -24,7 +25,8 @@ MolecularDynamicsDialog::MolecularDynamicsDialog(QWidget* parent, const char* na
 	:	QDialog(parent),
 		Ui_MolecularDynamicsDialogData(),
 		amber_dialog_(0),
-		charmm_dialog_(0)
+		charmm_dialog_(0),
+		mmff_dialog_(0)
 {
 	setINIFileSectionName("MDSIMULATION");
 
@@ -161,6 +163,10 @@ void MolecularDynamicsDialog::advancedOptions()
 	{
 		if (charmm_dialog_ != 0) charmm_dialog_->exec();
 	}
+	else if (useMMFF94RadioButton->isChecked())
+	{
+		if (mmff_dialog_ != 0) mmff_dialog_->exec();
+	}
 }
 
 void MolecularDynamicsDialog::setAmberDialog(AmberConfigurationDialog* dialog)
@@ -171,6 +177,11 @@ void MolecularDynamicsDialog::setAmberDialog(AmberConfigurationDialog* dialog)
 void MolecularDynamicsDialog::setCharmmDialog(CharmmConfigurationDialog* dialog)
 {
 	charmm_dialog_ = dialog;
+}
+
+void MolecularDynamicsDialog::setMMFF94Dialog(MMFF94ConfigurationDialog* dialog)
+{
+	mmff_dialog_ = dialog;
 }
 
 void MolecularDynamicsDialog::chooseDCDFile()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.17 2006/06/14 15:52:09 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.18 2006/06/20 21:44:37 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -153,8 +153,10 @@ namespace BALL
 
 			minimization_dialog_.setAmberDialog(&amber_dialog_);
 			minimization_dialog_.setCharmmDialog(&charmm_dialog_);
+			minimization_dialog_.setMMFF94Dialog(&mmff94_dialog_);
 			md_dialog_.setAmberDialog(&amber_dialog_);
 			md_dialog_.setCharmmDialog(&charmm_dialog_);
+			md_dialog_.setMMFF94Dialog(&mmff94_dialog_);
 
 			// Assign the settings of the configuration dialogs to the 
 			// force fields.

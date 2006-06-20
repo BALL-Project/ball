@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceModel.C,v 1.11.2.2 2006/06/15 19:07:45 amoll Exp $
+// $Id: forceModel.C,v 1.11.2.3 2006/06/20 21:44:36 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/forceModel.h>
@@ -19,7 +19,7 @@ namespace BALL
 		ForceModel::ForceModel()
 			throw()
 			: ModelProcessor(),
-				scaling_(11),
+				scaling_(1.1),
 				max_length_(10),
 				base_size_(0.2),
 				offset_(0.2)

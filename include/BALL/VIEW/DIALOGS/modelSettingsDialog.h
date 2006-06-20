@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.24.2.4 2006/06/15 19:18:59 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.24.2.5 2006/06/20 21:44:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -126,7 +126,7 @@ namespace BALL
 
 			///
 			float getForceScaling() const
-				throw() {return getFloatValue_(force_scaling_slider);}
+				throw() { return getFloatValue_(force_scaling_slider);}
 
 			///
 			float getForceBase() const
@@ -205,15 +205,15 @@ namespace BALL
 
 			///
 			void setForceScaling(float value) 
-				throw() { setValue_(force_scaling_slider,value / 10.0);}
+				throw() { setValue_(force_scaling_slider,value);}
 
 			///
 			void setForceOffset(float value) 
-				throw() { setValue_(force_offset_slider ,value / 10.0);}
+				throw() { setValue_(force_offset_slider ,value);}
 
 			///
 			void setForceBase(float value)
-				throw() { setValue_(force_base_slider, value / 10.);}
+				throw() { setValue_(force_base_slider, value);}
 
 			///
 			void setCartoonDNALadderRadius(float value)

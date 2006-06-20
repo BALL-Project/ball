@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: minimizationDialog.C,v 1.4.2.5 2006/05/22 13:43:11 amoll Exp $
+// $Id: minimizationDialog.C,v 1.4.2.6 2006/06/20 21:44:35 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/minimizationDialog.h>
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
+#include <BALL/VIEW/DIALOGS/MMFF94ConfigurationDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/SYSTEM/path.h>
 
@@ -22,7 +23,8 @@ namespace BALL
 			:	QDialog(parent),
 				Ui_MinimizationDialogData(),
 				amber_dialog_(0),
-				charmm_dialog_(0)
+				charmm_dialog_(0),
+				mmff_dialog_(0)
 		{
 			setupUi(this);
 			setObjectName(name);
@@ -136,6 +138,10 @@ namespace BALL
 			{
 				if (charmm_dialog_ != 0) charmm_dialog_->exec();
 			}
+			else if (useMMFF94RadioButton->isChecked())
+			{
+				if (mmff_dialog_ != 0) mmff_dialog_->exec();
+			}
 		}
 
 		void MinimizationDialog::setAmberDialog(AmberConfigurationDialog* dialog)
@@ -148,6 +154,10 @@ namespace BALL
 			charmm_dialog_ = dialog;
 		}
 
+		void MinimizationDialog::setMMFF94Dialog(MMFF94ConfigurationDialog* dialog)
+		{
+			mmff_dialog_ = dialog;
+		}
 		void MinimizationDialog::selectForceField(Position nr)
 		{
 			if 			(nr == 0) useAmberRadioButton->setChecked(Qt::Checked);
