@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.4 2006/06/20 11:27:16 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.5 2006/06/20 11:28:19 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -32,7 +32,7 @@ ForceFieldComponent* enableOneComponent(const String& comp, MMFF94& mmff)
 }
 
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.4 2006/06/20 11:27:16 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.5 2006/06/20 11:28:19 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -76,6 +76,7 @@ CHECK(forces and energies equal in two consecutive runs)
 	TEST_EQUAL(!Maths::isZero(energy), true)
 	TEST_EQUAL(!Maths::isZero(f1.getSquareLength()), true)
 
+	atom1.setForce(Vector3(99.));
 	mmff.updateEnergy();
 	mmff.updateForces();
 	Vector3 f2 = atom1.getForce();
