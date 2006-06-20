@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.8 2006/06/19 14:57:15 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.9 2006/06/20 15:39:32 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -55,6 +55,9 @@ namespace BALL
 	// mdyne * A -> kJ / mol
 	// Constant * 4.1868 * 143.9325 / 2 
 	#define STRETCH_K0 301.3082955
+
+	// Conversion from kJ / (mol A) into Newton
+	#define FORCES_FACTOR 1000 * 10E10 / Constants::AVOGADRO
 
 	#define DEGREE_TO_RADIAN  (Constants::PI / (double)180.0)
 
@@ -407,38 +410,10 @@ namespace BALL
 		for (; bend_it != bends_.end(); ++bend_it) 
 		{
 			Bend& bend = *bend_it;
-			const Vector3& a1 = bend.atom1->getPosition();
-			const Vector3& a2 = bend.atom2->getPosition();
-			const Vector3& a3 = bend.atom3->getPosition();
-
-			v1.set(a1.x - a2.x, a1.y - a2.y, a1.z - a2.z);
-			v2.set(a3.x - a2.x, a3.y - a2.y, a3.z - a2.z);
-		
-			const volatile double square_length = v1.getSquareLength() * v2.getSquareLength();
-
-			if (Maths::isZero(square_length)) continue;
-
-			const volatile double costheta = v1 * v2 / sqrt(square_length);
-			volatile double theta;
-			if (costheta > 1.0) 
-			{	
-				theta = 0.0;
-			}
-			else if (costheta < -1.0) 
-			{
-				theta = Constants::PI;
-			}
-			else 
-			{
-				theta = acos(costheta);
-			}
-
-			// radian to degree
-			theta *= 180.;
-			theta /= Constants::PI;
-
+			
 			const double& ka = bend_it->ka;
-			const double& theta0 = bend_it->theta0;
+			const double& theta = bend_it->theta;
+			const double& delta_theta = bend_it->delta_theta;
 
 #ifdef BALL_DEBUG_MMFF
 Log.info() << "Bend " << bend.atom1->getName() << " " 
@@ -447,25 +422,20 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 											<< bend.atom1->getType() << " "
 											<< bend.atom2->getType() << " "
 											<< bend.atom3->getType() << " "
-											<< "ATIJK: " << bend_it->ATIJK << "  T: "
-											<< theta << "  T0: " << theta0 << " ka " << ka << std::endl;
+											<< "ATIJK: " << bend_it->ATIJK << "  dT: "
+											<< delta_theta << " ka " << ka << std::endl;
 #endif
 
 			double energy;
 			if (bend.is_linear)
 			{ 
 				energy = BEND_KX * ka * (1.0 + cos(theta * degree_to_radian));
-
-				// we needed the absolute angle, now calculate the delta
-				theta -= theta0;
 			}
 			else
 			{
-				theta -= theta0;
-				energy = BEND_K0 * ka * theta * theta * (1.0 + BEND_K1 * theta);
+				energy = BEND_K0 * ka * delta_theta * delta_theta * (1.0 + BEND_K1 * delta_theta);
 			}
 
-			bend.delta_theta = theta;
 			bend.energy = energy;
 
 #ifdef BALL_DEBUG_MMFF
@@ -492,6 +462,7 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			sb.energy = (double)STRETCH_BEND_K0 * (sb.kba_ijk * stretches_[sb.stretch_i_j].delta_r +
 													  				sb.kba_kji * stretches_[sb.stretch_j_k].delta_r) *
 										 	   					  bend.delta_theta;
+
       #ifdef BALL_DEBUG_MMFF
 			Log.info() << "MMFF94 SB "  
 				<< bend.atom1->getName() << " "
@@ -589,11 +560,14 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 				theta = acos(costheta);
 			}
 
-			// unit conversion: kJ/(mol A) -> N
-			// kJ -> J: 1e3
-			// A -> m : 1e10
-			// J/mol -> mol: Avogadro
+			// radian to degree
+			theta *= 180.;
+			theta /= Constants::PI;
+
 			bend.delta_theta = theta - bend.theta0;
+			bend.theta = theta;
+
+			// calculate the bend force vectors, do it here, since they are also needed by the stretchbends
 			double factor;
 			
 			if (!bend.is_linear) 
@@ -619,8 +593,12 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 				continue;
 			}
 
-			bend.n1 = (v1 % cross) * inverse_length_v1 * factor;
-			bend.n2 = (v2 % cross) * inverse_length_v2 * factor;
+			// unit conversion: kJ/(mol A) -> N: FORCES_FACTOR
+			// kJ -> J: 1e3
+			// A -> m : 1e10
+			// J/mol -> mol: Avogadro
+			bend.n1 = (v1 % cross) * inverse_length_v1 * factor * FORCES_FACTOR;
+			bend.n2 = (v2 % cross) * inverse_length_v2 * factor * FORCES_FACTOR;
 		}
 
 		// stretches:
@@ -630,6 +608,8 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			const double distance = direction.getLength(); 
 			stretches_[i].delta_r = distance - (double) stretches_[i].r0;
 			direction /= distance;
+			// unit conversion: kJ/(mol A) -> N: FORCES_FACTOR
+			direction *= FORCES_FACTOR;
 			stretches_[i].n = direction;
 		}
 	}

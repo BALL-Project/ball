@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.1 2006/05/21 22:26:09 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.2 2006/06/20 15:39:32 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -20,6 +20,8 @@ using namespace std;
 
 namespace BALL 
 {
+	// Conversion from kJ / (mol A) into Newton
+	#define FORCES_FACTOR 1000 * 10E10 / Constants::AVOGADRO
 
 	/// 0.043844 / 2
 	#define K0 0.021922
@@ -210,6 +212,8 @@ namespace BALL
 				e += k * intersection_angle * intersection_angle;
 			}
 
+			e *= Constants::JOULE_PER_CAL;
+
 			energy_ += e;
 #ifdef BALL_MMFF94_TEST
 			b.energy = e;
@@ -229,7 +233,7 @@ namespace BALL
 		Vector3 cb;	// vector from atom2 to atom3
 		Vector3 dc;	// vector from atom3 to atom4
 
-		bool use_selection = getForceField()->getUseSelection();
+		bool us = getForceField()->getUseSelection();
 
 		for (Position t = 0; t < bends_.size(); t++)
 		{
@@ -239,11 +243,10 @@ namespace BALL
 			Atom& a3 = *bend.k->ptr;
 			Atom& a4 = *bend.l->ptr;
 
-			if (use_selection &&
-					!a1.isSelected() &&
-					!a2.isSelected() &&
-					!a3.isSelected() &&
-					!a4.isSelected())
+			if (us && !a1.isSelected() &&
+								!a2.isSelected() &&
+								!a3.isSelected() &&
+								!a4.isSelected())
 			{
 				continue;
 			}
@@ -287,25 +290,17 @@ namespace BALL
 						factor *= -1;
 					}
 
+					factor *= FORCES_FACTOR;
+
 					const Vector3 ca = a3.getPosition() - a1.getPosition();
 					const Vector3 db = a4.getPosition() - a2.getPosition();
 					const Vector3 dt =   (float)(factor / (length_t2 * cb.getLength())) * (t % cb);
 					const Vector3 du = - (float)(factor / (length_u2 * cb.getLength())) * (u % cb);
 
-					if (!use_selection)
-					{
-						a1.getForce() += dt % cb;
-						a2.getForce() += ca % dt + du % dc;
-						a3.getForce() += dt % ba + db % du;
-						a4.getForce() += du % cb; 
-					} 
-					else 
-					{
-						if (a1.isSelected()) a1.getForce() += dt % cb;
-						if (a2.isSelected()) a2.getForce() += ca % dt + du % dc;
-						if (a3.isSelected()) a3.getForce() += dt % ba + db % du;
-						if (a4.isSelected()) a4.getForce() += du % cb; 
-					}
+					if (!us || a1.isSelected()) a1.getForce() += dt % cb;
+					if (!us || a2.isSelected()) a2.getForce() += ca % dt + du % dc;
+					if (!us || a3.isSelected()) a3.getForce() += dt % ba + db % du;
+					if (!us || a4.isSelected()) a4.getForce() += du % cb; 
 				}
 			}
 		}

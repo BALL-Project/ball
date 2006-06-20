@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.4.2 2006/05/22 14:08:00 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.4.3 2006/06/20 15:39:45 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -146,7 +146,7 @@ vector<double> getResults(String filename)
 	{
 		vector<String> fields;
 		infile.getLine().split(fields);
-		results.push_back(fields[0].toFloat());
+		results.push_back(fields[0].toFloat() * Constants::JOULE_PER_CAL);
 	}
 
 	return results;
@@ -167,6 +167,8 @@ bool isOk(double value, double reference, double max_difference = 100)// max 1 p
 {
 	double diff = fabs(value - reference);
 	double diff_max = fabs(reference / max_difference); 
+	
+	if (max_difference == 10) return diff < diff_max || diff < 0.005;
 
 	return diff < diff_max || diff < 0.001;
 }
@@ -285,7 +287,7 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 		atoms2.push_back(fields[1]);
 		atoms3.push_back(fields[2]);
 		type.push_back(fields[3].toUnsignedInt());
-		energy.push_back(fields[4].toFloat());
+		energy.push_back(fields[4].toFloat() * Constants::JOULE_PER_CAL);
 		f_ij.push_back(fields[5].toFloat());
 	}
 
@@ -335,7 +337,7 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 			bool ok2 = BALL_REAL_EQUAL(constants[1], constants_ours[0], 0.0001) &&
 								 BALL_REAL_EQUAL(constants[0], constants_ours[1], 0.0001); 
 
-			if ((!ok1 && !ok2) || !isOk(s.energy, energy1, 30))
+			if ((!ok1 && !ok2) || !isOk(s.energy, energy1, 10))
 			{
 				Log.error() << std::endl
 										<< "Problem StretchBend:   " << filename << "   " 
@@ -395,7 +397,7 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 		type.push_back(fields[3].toUnsignedInt());
 		theta0.push_back(fields[4].toFloat());
 		delta.push_back(fields[5].toFloat());
-		energy.push_back(fields[6].toFloat());
+		energy.push_back(fields[6].toFloat() * Constants::JOULE_PER_CAL);
 		ka.push_back(fields[7].toFloat());
 	}
 
@@ -424,7 +426,7 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 			found = true;
 			if (BALL_REAL_EQUAL(s.theta0, theta0[poss2], 0.001) &&
 					BALL_REAL_EQUAL(s.ka, ka[poss2], 0.001) &&
-					isOk(s.energy, energy[poss2]))
+					isOk(s.energy, energy[poss2], 10))
 			{
 				break;
 			}
@@ -432,7 +434,7 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 			if (s.emperical &&
 					isOk(s.theta0, theta0[poss2]) &&
 					isOk(s.ka, ka[poss2]) &&
-					isOk(s.energy, energy[poss2]))
+					isOk(s.energy, energy[poss2], 10))
 			{
 				break;
 			}
@@ -504,7 +506,7 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare, long& wron
 		atoms4.push_back(fields[3]);
 		type.push_back(fields[4].toUnsignedInt());
 		angle.push_back(fields[5].toFloat());
-		energy.push_back(fields[6].toFloat());
+		energy.push_back(fields[6].toFloat() * Constants::JOULE_PER_CAL);
 		v1.push_back(fields[7].toFloat());
 		v2.push_back(fields[8].toFloat());
 		v3.push_back(fields[9].toFloat());
@@ -597,7 +599,7 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare, long& wron
 			ok = false;
 		}
 
-		ok &= isOk(t.energy, energy[found]);
+		ok &= isOk(t.energy, energy[found], 10);
 
 		if (ok) continue;
 
@@ -667,7 +669,7 @@ bool testPlanes(MMFF94& mmff, const String& filename, bool compare)
 		atoms3.push_back(fields[2]);
 		atoms4.push_back(fields[3]);
 		angle.push_back(fields[4].toFloat());
-		energy.push_back(fields[5].toFloat());
+		energy.push_back(fields[5].toFloat() * Constants::JOULE_PER_CAL);
 		k.push_back(fields[6].toFloat());
 	}
 
@@ -778,10 +780,10 @@ bool testNonBonded(MMFF94& mmff, const String& filename, bool compare)
 		atoms1.push_back(fields[0]);
 		atoms2.push_back(fields[1]);
 		d.push_back(fields[2].toFloat());
-		e_vdw.push_back(fields[3].toFloat());
-		e_rep.push_back(fields[4].toFloat());
-		e_attr.push_back(fields[5].toFloat());
-		e_q.push_back(fields[6].toFloat());
+		e_vdw.push_back(fields[3].toFloat() * Constants::JOULE_PER_CAL);
+		e_rep.push_back(fields[4].toFloat() * Constants::JOULE_PER_CAL);
+		e_attr.push_back(fields[5].toFloat() * Constants::JOULE_PER_CAL);
+		e_q.push_back(fields[6].toFloat() * Constants::JOULE_PER_CAL);
 		rij.push_back(fields[7].toFloat());
 		eps.push_back(fields[8].toFloat());
 	}
@@ -819,7 +821,7 @@ bool testNonBonded(MMFF94& mmff, const String& filename, bool compare)
 
 		if (!isOk(data.eij, eps[as]) ||
 				!isOk(data.rij, rij[as]) ||
-				!isOk(data.vdw_energy, e_vdw[as]))
+				!isOk(data.vdw_energy, e_vdw[as], 10))
 		{
 			Log.error() << "Problem NB VDW:   " << filename << " "
 									<< atoms1[as] << " " << atoms2[as] << std::endl
@@ -827,7 +829,7 @@ bool testNonBonded(MMFF94& mmff, const String& filename, bool compare)
 									<< "was e " << eps[as] << " r " << rij[as] << "   " << e_vdw[as] << std::endl;
 		}
 
-		if (!isOk(data.es_energy, e_q[as]))
+		if (!isOk(data.es_energy, e_q[as], 10))
 		{
 			Log.error() << "Problem NB ES:   " << filename << " "
 									<< atoms1[as] << " " << atoms2[as] << std::endl
@@ -1033,14 +1035,14 @@ int runtests(const vector<String>& filenames)
 			Log.info() << "We have unassigned atoms: " << mmff.getUnassignedAtoms().size() << std::endl;
 		}
 */
-      		testType(*system, filenames[pos], typer);
-//       		result &= testStretch(mmff, filenames[pos], true);
-//          result &= testBend(mmff, filenames[pos], true);
-//       		result &= testStretchBend(mmff, filenames[pos], true);
-//    		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
-//    		result &= testPlanes(mmff, filenames[pos], true);
-//    		result &= testNonBonded(mmff, filenames[pos], true);
-//       		result &= testCharge(*system, filenames[pos]);
+    		testType(*system, filenames[pos], typer);
+     		result &= testStretch(mmff, filenames[pos], true);
+        result &= testBend(mmff, filenames[pos], true);
+     		result &= testStretchBend(mmff, filenames[pos], true);
+    		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
+    		result &= testPlanes(mmff, filenames[pos], true);
+    		result &= testNonBonded(mmff, filenames[pos], true);
+//        		result &= testCharge(*system, filenames[pos]);
 
  		if (result) ok++;
 //    		else if (!wrong_rings) not_ok.push_back(filenames[pos]);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.h,v 1.1.4.2 2006/06/16 12:17:00 amoll Exp $
+// $Id: MMFF94StretchBend.h,v 1.1.4.3 2006/06/20 15:39:40 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94STRETCHBEND_H
@@ -44,6 +44,7 @@ namespace BALL
 
 			double theta0;
 			double delta_theta;
+			double theta;
 			double ka;
 			Atom*	atom1;
 			Atom*	atom2;

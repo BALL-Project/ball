@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.4.2 2006/06/14 14:45:40 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.4.3 2006/06/20 15:39:32 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -231,10 +231,10 @@ namespace BALL
 
 			const double sec = ((1.12 * data.rij_7) / (pow(d, 7) + 0.12 * data.rij_7))  - 2;
 
-			const double e = first * sec;
+			const double e = first * sec * Constants::JOULE_PER_CAL;
 			vdw_energy_ += e;
 
-			double es = 332.0716 * data.qi * data.qj / (dc_ * pow(d + 0.05, n_));
+			double es = Constants::JOULE_PER_CAL * 332.0716 * data.qi * data.qj / (dc_ * pow(d + 0.05, n_));
 
 			if (data.is_1_4) 
 			{
@@ -278,6 +278,7 @@ namespace BALL
 	void MMFF94NonBonded::updateForces()
 		throw()
 	{
+		return;
 		for (Size i = 0 ; i < non_bonded_data_.size(); i++)
 		{
 			Atom& a1 = *atom_pair_vector_[i].first;
