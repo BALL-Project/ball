@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.52 2006/06/21 21:41:13 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.53 2006/06/21 23:54:48 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -132,6 +132,44 @@ void PythonHighlighter::highlightBlock(const QString& text)
 			output = PyInterpreter::run(input, state);
 		}
 #endif
+
+Hotkey Hotkey::createHotkey(String modifier, String key, String command, bool& ok)
+{
+	ok = false;
+
+	Hotkey hotkey;
+	hotkey.action = command;
+	if      (modifier == "None" || modifier == "")  hotkey.button_state = Qt::NoModifier;
+	else if (modifier == "Shift") hotkey.button_state = Qt::ShiftModifier;
+	else if (modifier == "Ctrl")  hotkey.button_state = Qt::ControlModifier;
+	else 
+	{
+		return hotkey;
+	}
+
+	if (key.size() != 2 && key.size() != 3)
+	{
+		return hotkey;
+	}
+
+	String skey = key.getSubstring(1, key.size() - 1);
+	Index p = 99;
+	try
+	{
+		p = skey.toUnsignedInt();
+	}
+	catch(...)
+	{
+	}
+
+	if (p < 2 || p > 12) return hotkey;
+	p--;
+
+  hotkey.key = (Qt::Key) (Qt::Key_F1 + p);
+
+	ok = true;
+	return hotkey;
+}
 
 
 const Hotkey& Hotkey::operator = (const Hotkey& hotkey)
@@ -420,22 +458,8 @@ void PyWidget::finalizePreferencesTab(Preferences &preferences)
 	}
 }
 
-void PyWidget::map(String modifier, String key, String command)
+List<Hotkey>::Iterator PyWidget::findKey_(Hotkey& hotkey)
 {
-	Hotkey hotkey;
-	hotkey.action = command;
-	if      (modifier == "None" || modifier == "")  hotkey.button_state = Qt::NoModifier;
-	else if (modifier == "Shift") hotkey.button_state = Qt::ShiftModifier;
-	else if (modifier == "Ctrl")  hotkey.button_state = Qt::ControlModifier;
-	else Log.error() << "Problem mapping key" << std::endl;
-
-	if (key.size() != 2) Log.error() << "Problem mapping key" << std::endl;
-
-	Index p = key[1] - 49;
-  hotkey.key = (Qt::Key) (Qt::Key_F1 + p);
-
-	bool added = false;
-
 	List<Hotkey>::Iterator it = hotkeys_.begin();
 	for (; it != hotkeys_.end(); it++)
 	{
@@ -443,44 +467,48 @@ void PyWidget::map(String modifier, String key, String command)
 		if (this_key.button_state == hotkey.button_state &&
 				this_key.key == hotkey.key)
 		{
-			this_key = hotkey;
-			added = true;
+			return it;
 		}
 	}
 
-	if (!added) hotkeys_.push_back(hotkey);
+	return it;
+}
 
-	applyPreferences();
+void PyWidget::map(String modifier, String key, String command)
+{
+	bool ok;
+	Hotkey hotkey = Hotkey::createHotkey(modifier, key, command, ok);
+
+	if (!ok)
+	{
+		setStatusbarText("Problem mapping key", true);
+		return;
+	}
+
+	List<Hotkey>::Iterator it = findKey_(hotkey);
+	if (it != hotkeys_.end())  *it = hotkey; 
+	else 											 hotkeys_.push_back(hotkey);
+
+	python_settings_->setContent(hotkeys_);
 }
 
 void PyWidget::unmap(String modifier, String key)
 {
-	Hotkey hotkey;
-	if      (modifier == "None" || modifier == "")  hotkey.button_state = Qt::NoModifier;
-	else if (modifier == "Shift") hotkey.button_state = Qt::ShiftModifier;
-	else if (modifier == "Ctrl")  hotkey.button_state = Qt::ControlModifier;
-	else Log.error() << "Problem mapping key" << std::endl;
+	bool ok;
+	Hotkey hotkey = Hotkey::createHotkey(modifier, key, "", ok);
 
-	if (key.size() != 2) Log.error() << "Problem mapping key" << std::endl;
-
-	Index p = key[1] - 49;
-  hotkey.key = (Qt::Key) (Qt::Key_F1 + p);
-
-	List<Hotkey>::Iterator it = hotkeys_.begin();
-	for (; it != hotkeys_.end(); it++)
+	if (!ok)
 	{
-		Hotkey& this_key = *it;
-		if (this_key.button_state == hotkey.button_state &&
-				this_key.key == hotkey.key)
-		{
-			break;
-		}
+		setStatusbarText("Problem unmapping key", true);
+		return;
 	}
 
-	if (it != hotkeys_.end()) hotkeys_.erase(it);
+	List<Hotkey>::Iterator it = findKey_(hotkey);
+  if (it != hotkeys_.end()) hotkeys_.erase(it);
 
-	applyPreferences();
+	python_settings_->setContent(hotkeys_);
 }
+
 
 void PyWidget::applyPreferences()
 	throw()

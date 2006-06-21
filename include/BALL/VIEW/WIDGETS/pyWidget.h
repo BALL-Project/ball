@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.25 2006/06/21 21:41:26 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.26 2006/06/21 23:54:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -87,6 +87,8 @@ class BALL_VIEW_EXPORT RunPythonThread
 struct BALL_VIEW_EXPORT Hotkey
 {
 	public:
+
+	static Hotkey createHotkey(String modifier, String key, String command, bool& ok);
 
 	///
 	bool operator == (const Hotkey& hotkey) const
@@ -371,6 +373,8 @@ class BALL_VIEW_EXPORT PyWidget
 	void createMenuHelpEntry_(QMenu* menu, QTextEdit* text_edit, const QPoint& point);
 
 	void findError_(String result);
+
+	List<Hotkey>::Iterator findKey_(Hotkey& hotkey);
 
 	QTextEdit* 				text_edit_, *script_output_;
 	MyTextEdit* 			script_edit_;
