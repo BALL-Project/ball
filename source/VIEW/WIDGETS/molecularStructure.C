@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.18 2006/06/20 21:44:37 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.19 2006/06/21 22:05:29 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -955,7 +955,7 @@ namespace BALL
 			getMainControl()->update(*system);
 		}
 
-		void MolecularStructure::runMinimization()
+		void MolecularStructure::runMinimization(bool show_dialog)
 		{
 			// Make sure we run one instance of a simulation at a time only.
 			if (getMainControl()->isBusy())
@@ -971,13 +971,16 @@ namespace BALL
 				return;
 			}
 
-			// Execute the minimization dialog
-			// and abort if cancel is clicked or nonsense arguments are given
-			if (!minimization_dialog_.exec() ||
-					(minimization_dialog_.getMaxGradient() == 0.0) ||
-					(minimization_dialog_.getEnergyDifference() == 0.0))
+			if (show_dialog)
 			{
-				return;
+				// Execute the minimization dialog
+				// and abort if cancel is clicked or nonsense arguments are given
+				if (!minimization_dialog_.exec() ||
+						(minimization_dialog_.getMaxGradient() == 0.0) ||
+						(minimization_dialog_.getEnergyDifference() == 0.0))
+				{
+					return;
+				}
 			}
 			// Remember which force field was selected and update the force field's 
 			// settings from the appropriate dialog.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.28.2.5 2006/06/14 14:45:58 amoll Exp $
+// $Id: molecularStructure.h,v 1.28.2.6 2006/06/21 22:05:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -266,7 +266,7 @@ namespace BALL
 			void calculateForceFieldEnergy();
 
 			/// Run a energy minization with the currently selected force field
-			void runMinimization();
+			void runMinimization(bool show_dialog_ = true);
 
 			/// Perfomr a molecular dynamics simulation with the currently selected force field
 			void MDSimulation(bool show_dialog_ = true);

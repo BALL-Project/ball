@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.sip,v 1.3 2005/02/28 17:58:53 amoll Exp $
+// $Id: molecularStructure.sip,v 1.3.6.1 2006/06/21 22:05:46 amoll Exp $
 //
 
 class  MolecularStructure
@@ -41,7 +41,7 @@ class  MolecularStructure
   //void writePreferences(INIFile&) throw();
   void mapProteins();
   //void onNotify(Message*) throw();
-  void runMinimization();
+  void runMinimization(bool);
   void setupForceField();
   void showAmberForceFieldOptions();
   void showCharmmForceFieldOptions();
