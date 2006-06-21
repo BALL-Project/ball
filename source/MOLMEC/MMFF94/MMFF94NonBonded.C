@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.4.3 2006/06/20 15:39:32 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.4.4 2006/06/21 16:29:55 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -278,6 +278,7 @@ namespace BALL
 	void MMFF94NonBonded::updateForces()
 		throw()
 	{
+		// ES: -  332.0716 * qi *qj * n / (D * (R + delta )^n *(R + delta))
 		return;
 		for (Size i = 0 ; i < non_bonded_data_.size(); i++)
 		{
