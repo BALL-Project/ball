@@ -348,7 +348,7 @@ PythonSettings::PythonSettings(QWidget* parent, const char* name)
 
 void PythonSettings::fileSelected()
 {
-	QString s = QFileDialog::getSaveFileName(
+	QString s = QFileDialog::getOpenFileName(
 								0,
 								"Choose a Startup Python Script",
 								getMainControl()->getWorkingDir().c_str(),
