@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.sip,v 1.12.2.4 2006/06/10 11:05:51 amoll Exp $
+// $Id: pyWidget.sip,v 1.12.2.5 2006/06/21 21:40:53 amoll Exp $
 //
 
 class PyWidget
@@ -31,4 +31,6 @@ class PyWidget
 	void execScript();
 	void saveScript();
 	void clearScript();
+	void map(String, String, String);
+	void unmap(String, String);
 }; 

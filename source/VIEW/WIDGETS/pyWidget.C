@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.51 2006/06/13 14:59:21 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.52 2006/06/21 21:41:13 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -418,6 +418,68 @@ void PyWidget::finalizePreferencesTab(Preferences &preferences)
 		preferences.removeEntry(python_settings_);
 		python_settings_ = 0;
 	}
+}
+
+void PyWidget::map(String modifier, String key, String command)
+{
+	Hotkey hotkey;
+	hotkey.action = command;
+	if      (modifier == "None" || modifier == "")  hotkey.button_state = Qt::NoModifier;
+	else if (modifier == "Shift") hotkey.button_state = Qt::ShiftModifier;
+	else if (modifier == "Ctrl")  hotkey.button_state = Qt::ControlModifier;
+	else Log.error() << "Problem mapping key" << std::endl;
+
+	if (key.size() != 2) Log.error() << "Problem mapping key" << std::endl;
+
+	Index p = key[1] - 49;
+  hotkey.key = (Qt::Key) (Qt::Key_F1 + p);
+
+	bool added = false;
+
+	List<Hotkey>::Iterator it = hotkeys_.begin();
+	for (; it != hotkeys_.end(); it++)
+	{
+		Hotkey& this_key = *it;
+		if (this_key.button_state == hotkey.button_state &&
+				this_key.key == hotkey.key)
+		{
+			this_key = hotkey;
+			added = true;
+		}
+	}
+
+	if (!added) hotkeys_.push_back(hotkey);
+
+	applyPreferences();
+}
+
+void PyWidget::unmap(String modifier, String key)
+{
+	Hotkey hotkey;
+	if      (modifier == "None" || modifier == "")  hotkey.button_state = Qt::NoModifier;
+	else if (modifier == "Shift") hotkey.button_state = Qt::ShiftModifier;
+	else if (modifier == "Ctrl")  hotkey.button_state = Qt::ControlModifier;
+	else Log.error() << "Problem mapping key" << std::endl;
+
+	if (key.size() != 2) Log.error() << "Problem mapping key" << std::endl;
+
+	Index p = key[1] - 49;
+  hotkey.key = (Qt::Key) (Qt::Key_F1 + p);
+
+	List<Hotkey>::Iterator it = hotkeys_.begin();
+	for (; it != hotkeys_.end(); it++)
+	{
+		Hotkey& this_key = *it;
+		if (this_key.button_state == hotkey.button_state &&
+				this_key.key == hotkey.key)
+		{
+			break;
+		}
+	}
+
+	if (it != hotkeys_.end()) hotkeys_.erase(it);
+
+	applyPreferences();
 }
 
 void PyWidget::applyPreferences()

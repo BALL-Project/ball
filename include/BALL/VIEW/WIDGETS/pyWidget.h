@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.24 2006/06/12 15:33:57 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.25 2006/06/21 21:41:26 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -214,6 +214,15 @@ class BALL_VIEW_EXPORT PyWidget
 
 	///
 	bool toAbortScript() throw();
+
+	/** Map a key to a command
+	 		Modifier can be: "", Ctrl, Shift
+			Key should be F2 - F12
+	*/
+	void map(String modifier, String key, String command);
+
+	/// see above
+	void unmap(String modifier, String key);
 
 	///
 	void insertHotkey(const Hotkey& hotkey) throw();
