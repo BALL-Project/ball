@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.11 2006/06/22 00:17:19 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.12 2006/06/22 16:35:06 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -57,7 +57,7 @@ namespace BALL
 	#define STRETCH_K0 301.3082955
 
 	// Conversion from kJ / (mol A) into Newton
-	#define FORCES_FACTOR 1000 * 10E10 / Constants::AVOGADRO
+	double FORCES_FACTOR = 1000 * 10E10 / Constants::AVOGADRO;
 
 	#define DEGREE_TO_RADIAN  (Constants::PI / (double)180.0)
 
@@ -543,7 +543,7 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 			// Calculate the vector between atom3 and atom2,
 			double inverse_length_v1 = 1.0 / length1;
-			double inverse_length_v2 = 1.0 /length2;
+			double inverse_length_v2 = 1.0 / length2;
 			v1 *= inverse_length_v1 ;
 			v2 *= inverse_length_v2;
 
@@ -583,25 +583,12 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			bend.delta_theta = theta - bend.theta0;
 			bend.theta = theta;
 
-			// calculate the bend force vectors, do it here, since they are also needed by the stretchbends
-			double factor;
-			
-			if (!bend.is_linear) 
-			{
-				factor = -BEND_K0 * bend.ka * (2 * bend.delta_theta * + 
-																			 3 * BEND_K1 * bend.delta_theta * bend.delta_theta);
-			}
-			else
-			{
-				factor = -BEND_KX * bend.ka * sin(bends_[i].theta0 * DEGREE_TO_RADIAN);
-			}
-
 			// unit conversion: kJ/(mol A) -> N: FORCES_FACTOR
 			// kJ -> J: 1e3
 			// A -> m : 1e10
 			// J/mol -> mol: Avogadro
-			bend.n1 = (v1 % cross) * inverse_length_v1 * factor * FORCES_FACTOR;
-			bend.n2 = (v2 % cross) * inverse_length_v2 * factor * FORCES_FACTOR;
+			bend.n1 = -(v1 % cross) * inverse_length_v1;
+			bend.n2 = (v2 % cross) * inverse_length_v2;
 		}
 
 		// stretches:
@@ -611,8 +598,6 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			const double distance = direction.getLength(); 
 			stretches_[i].delta_r = distance - (double) stretches_[i].r0;
 			direction /= distance;
-			// unit conversion: kJ/(mol A) -> N: FORCES_FACTOR
-			direction *= FORCES_FACTOR;
 			stretches_[i].n = direction;
 		}
 	}
@@ -652,8 +637,7 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 	void MMFF94StretchBend::updateStretchBendForces()
 	{
-		bool use_selection = mmff94_->getUseSelection();
-
+		bool us = mmff94_->getUseSelection();
 		for (Size i = 0; i < stretch_bends_.size(); i++)
 		{
 			const StretchBend& sb = stretch_bends_[i];
@@ -661,10 +645,9 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			const Stretch& stretch1 = stretches_[sb.stretch_i_j];
 			const Stretch& stretch2 = stretches_[sb.stretch_j_k];
 
-			if (use_selection &&
-					!bend.atom1->isSelected() &&
-					!bend.atom2->isSelected() &&
-					!bend.atom3->isSelected())
+			if (us && !bend.atom1->isSelected() &&
+								!bend.atom2->isSelected() &&
+								!bend.atom3->isSelected())
 			{
 				continue;
 			}
@@ -676,40 +659,30 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			double stretch_factor1 = STRETCH_BEND_K0 * sb.kba_ijk;
 			double stretch_factor2 = STRETCH_BEND_K0 * sb.kba_kji;
 			
-			const Vector3 n1 = bend.n1 * bend_factor;
-			const Vector3 n2 = bend.n2 * bend_factor;
+			const Vector3 b1 = bend.n1 * bend_factor * FORCES_FACTOR;
+			const Vector3 b2 = bend.n2 * bend_factor * FORCES_FACTOR;
 
-			if (!use_selection)
-			{
-				bend.atom1->getForce() -= n1;
-				bend.atom2->getForce() += n1;
-				bend.atom2->getForce() -= n2;
-				bend.atom3->getForce() += n2;
-				bend.atom1->getForce()-= stretch1.n * stretch_factor1;
-				bend.atom2->getForce()+= stretch1.n * stretch_factor1;
-				bend.atom2->getForce()+= stretch2.n * stretch_factor2;
-				bend.atom3->getForce()+= stretch2.n * stretch_factor2;
-			} 
-			else 
-			{
-				if (bend.atom1->isSelected()) 
-				{
-					bend.atom1->getForce() -= n1;
-					bend.atom1->getForce()-= stretch1.n * stretch_factor1;
-				}
+			const Vector3 s1 = stretch1.n * stretch_factor1 * FORCES_FACTOR;
+			const Vector3 s2 = stretch2.n * stretch_factor2 * FORCES_FACTOR;
 
-				if (bend.atom2->isSelected())
-				{
-					bend.atom2->getForce() += n1;
-					bend.atom2->getForce() -= n2;
-					bend.atom2->getForce()+= stretch1.n * stretch_factor1;
-					bend.atom2->getForce()+= stretch2.n * stretch_factor2;
-				}
-				if (bend.atom3->isSelected())
-				{
-					bend.atom3->getForce() += n2;
-					bend.atom3->getForce()+= stretch2.n * stretch_factor2;
-				}
+			if (!us || bend.atom1->isSelected()) 
+			{
+				bend.atom1->getForce() += b1;
+				bend.atom1->getForce() += s1;
+			}
+
+			if (!us || bend.atom2->isSelected())
+			{
+				bend.atom2->getForce() -= b1;
+				bend.atom2->getForce() -= s1;
+				bend.atom2->getForce() -= b2;
+				bend.atom2->getForce() -= s2;
+			}
+
+			if (!us || bend.atom3->isSelected())
+			{
+				bend.atom3->getForce() += b2;
+				bend.atom3->getForce() += s2;
 			}
 		}
 	}
@@ -775,14 +748,30 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		for (Size i = 0; i < bends_.size(); i++) 
 		{
 			Bend& bend = bends_[i];
+		
+			// calculate the bend force vectors, do it here, since they are also needed by the stretchbends
+			double factor;
+			
+			if (!bend.is_linear) 
+			{
+				factor = -BEND_K0 * bend.ka * (2 * bend.delta_theta * + 
+																			 3 * BEND_K1 * bend.delta_theta * bend.delta_theta);
+			}
+			else
+			{
+				factor = -BEND_KX * bend.ka * sin(bends_[i].theta0 * DEGREE_TO_RADIAN);
+			}
+			
+			const Vector3 n1 = bend.n1 * factor * FORCES_FACTOR;
+			Vector3 n2 = bend.n2 * factor * FORCES_FACTOR;
 
-			if (!us || bend.atom1->isSelected()) bend.atom1->getForce() -= bend.n1;
-			if (!us || bend.atom3->isSelected()) bend.atom3->getForce() -= bend.n2;
+			if (!us || bend.atom1->isSelected()) bend.atom1->getForce() += n1;
+			if (!us || bend.atom3->isSelected()) bend.atom3->getForce() += n2;
 
 			if (!us || bend.atom2->isSelected())
 			{
-				bend.atom2->getForce() += bend.n1;
-				bend.atom2->getForce() -= bend.n2;
+				bend.atom2->getForce() -= n1;
+				bend.atom2->getForce() -= n2;
 			}
 		}
 	}
@@ -985,7 +974,7 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 			if (fabs(delta) < epsilon) delta = 0.;
 
-			const double a = STRETCH_K0  * stretch.kb * delta;
+			const double a = STRETCH_K0 * stretch.kb * delta;
 
 			const double dd = delta * delta;
 
@@ -993,7 +982,8 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 										  3 * STRETCH_CUBIC_STRENGTH_CONSTANT * delta + 
 										  4 * STRETCH_KCS * dd) * a;
 			
-			const Vector3 direction = stretch.n * force;
+			// unit conversion: kJ/(mol A) -> N: FORCES_FACTOR
+			const Vector3 direction = stretch.n * force * FORCES_FACTOR;
 
 			stretch.atom1->getForce()-= direction;
 			stretch.atom2->getForce()+= direction;

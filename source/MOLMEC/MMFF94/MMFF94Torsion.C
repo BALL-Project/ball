@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.4.2 2006/06/20 15:39:32 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.4.3 2006/06/22 16:35:07 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -382,9 +382,17 @@ namespace BALL
 					float phi = acos(cosphi);
 
 					double direction = (t % u) * cb;
+					/*
 					float factor = 0.5 * (- torsion.v1 * sin(phi) + 
 																2 * torsion.v2 * sin(2 * phi) +
 																3 * torsion.v3 * sin(3 * phi));
+-.5*(D(a))(1+cos(f))*sin(f)+1.0*(D(b))(1-cos(2*f))*sin(2*f)-1.5*(D(c))(1+cos(3*f))*sin(3*f)
+					*/
+
+					double factor = -.5 * torsion.v1 * (1 + cos(phi)) * sin(phi) + 
+						              torsion.v2 * (1. -cos(2. * phi)) * sin(2. * phi)-
+													torsion.v3 * 1.5 * (1. + cos(3. * phi)) * sin(3. * phi);
+
 					if (direction > 0.0)
 					{
 						factor *= -1;
