@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.10 2006/06/21 16:29:56 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.11 2006/06/22 00:17:19 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -493,7 +493,7 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		calculateDeltas_();
 		
 		Options& options = mmff94_->options;
-		if (!options.has(MMFF94::Option::BENDS_ENABLED) || options.getBool(MMFF94::Option::STRETCHES_ENABLED))
+		if (!options.has(MMFF94::Option::BENDS_ENABLED) || options.getBool(MMFF94::Option::BENDS_ENABLED))
 		{
 			updateBendForces();
 		}
@@ -530,19 +530,35 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 			Vector3 v1 = bend.atom1->getPosition() - bend.atom2->getPosition();
 			Vector3 v2 = bend.atom3->getPosition() - bend.atom2->getPosition();
-			double length = v1.getLength();
+			double length1 = v1.getLength();
+			double length2 = v2.getLength();
 
-			if (length == 0) continue;
-			double inverse_length_v1 = 1.0 / length;
-			v1 *= inverse_length_v1 ;
+			// test if the vector has length larger than 0 and normalize it
+			if (length1 == 0. || length2 == 0.) 
+			{
+				bend.n1 = Vector3(0.);
+				bend.n2 = Vector3(0.);
+				continue;
+			}
 
 			// Calculate the vector between atom3 and atom2,
-			// test if the vector has length larger than 0 and normalize it
-
-			length = v2.getLength();
-			if (length == 0.0) continue;
-			double inverse_length_v2 = 1/length;
+			double inverse_length_v1 = 1.0 / length1;
+			double inverse_length_v2 = 1.0 /length2;
+			v1 *= inverse_length_v1 ;
 			v2 *= inverse_length_v2;
+
+			// Calculate the cross product of v1 and v2, test if it has length unequal 0,
+			// and normalize it.
+			Vector3 cross = v1 % v2;
+			double length = cross.getLength();
+			if (length == 0.) 
+			{
+				bend.n1 = Vector3(0.);
+				bend.n2 = Vector3(0.);
+				continue;
+			}
+
+			cross /= length;
 
 			// Calculate the cos of theta and then theta
 			double costheta = v1 * v2;
@@ -572,25 +588,12 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			
 			if (!bend.is_linear) 
 			{
-				factor = -BEND_K0 * bend.ka * (2 * bend.delta_theta * + 3 * BEND_K1 * bend.delta_theta * bend.delta_theta);
+				factor = -BEND_K0 * bend.ka * (2 * bend.delta_theta * + 
+																			 3 * BEND_K1 * bend.delta_theta * bend.delta_theta);
 			}
 			else
 			{
 				factor = -BEND_KX * bend.ka * sin(bends_[i].theta0 * DEGREE_TO_RADIAN);
-			}
-
-			// Calculate the cross product of v1 and v2, test if it has length unequal 0,
-			// and normalize it.
-			Vector3 cross = v1 % v2;
-			if ((length = cross.getLength()) != 0) 
-			{
-				cross *= (1.0 / length);
-			} 
-			else 
-			{
-				bend.n1 = Vector3(0.);
-				bend.n2 = Vector3(0.);
-				continue;
 			}
 
 			// unit conversion: kJ/(mol A) -> N: FORCES_FACTOR
@@ -768,34 +771,18 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 	// calculates and adds its forces to the current forces of the force field
 	void MMFF94StretchBend::updateBendForces()
 	{
-		bool use_selection = mmff94_->getUseSelection();
+		bool us = mmff94_->getUseSelection();
 		for (Size i = 0; i < bends_.size(); i++) 
 		{
 			Bend& bend = bends_[i];
 
-			if (!use_selection)
+			if (!us || bend.atom1->isSelected()) bend.atom1->getForce() -= bend.n1;
+			if (!us || bend.atom3->isSelected()) bend.atom3->getForce() -= bend.n2;
+
+			if (!us || bend.atom2->isSelected())
 			{
-				bend.atom1->getForce() -= bend.n1;
 				bend.atom2->getForce() += bend.n1;
 				bend.atom2->getForce() -= bend.n2;
-				bend.atom3->getForce() += bend.n2;
-			} 
-			else 
-			{
-				if (bend.atom1->isSelected()) 
-				{
-					bend.atom1->getForce() -= bend.n1;
-				}
-
-				if (bend.atom2->isSelected())
-				{
-					bend.atom2->getForce() += bend.n1;
-					bend.atom2->getForce() -= bend.n2;
-				}
-				if (bend.atom3->isSelected())
-				{
-					bend.atom3->getForce() += bend.n2;
-				}
 			}
 		}
 	}
