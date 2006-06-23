@@ -1,12 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94ConfigurationDialog.C,v 1.1.2.2 2006/06/14 14:46:54 amoll Exp $
+// $Id: MMFF94ConfigurationDialog.C,v 1.1.2.3 2006/06/23 01:35:12 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/MMFF94ConfigurationDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
 #include <BALL/SYSTEM/path.h>
 
 #include <QtGui/qlineedit.h>
@@ -102,13 +107,13 @@ namespace BALL
 		void MMFF94ConfigurationDialog::applyTo(MMFF94& mmff)
 			throw()
 		{
-			mmff.options[MMFF94::Option::STRETCHES_ENABLED] = getValue_(stretch_box);
-			mmff.options[MMFF94::Option::BENDS_ENABLED] = getValue_(bends_box);
-			mmff.options[MMFF94::Option::STRETCHBENDS_ENABLED] = getValue_(stretch_bends_box);
-			mmff.options[MMFF94::Option::TORSIONS_ENABLED] = getValue_(torsions_box);
-			mmff.options[MMFF94::Option::OUTOFPLANE_ENABLED] = getValue_(plane_box);
-			mmff.options[MMFF94::Option::VDW_ENABLED] = getValue_(vdw_box);
-			mmff.options[MMFF94::Option::ES_ENABLED] = getValue_(es_box);
+			mmff.options[MMFF94_STRETCHES_ENABLED] = getValue_(stretch_box);
+			mmff.options[MMFF94_BENDS_ENABLED] = getValue_(bends_box);
+			mmff.options[MMFF94_STRETCHBENDS_ENABLED] = getValue_(stretch_bends_box);
+			mmff.options[MMFF94_TORSIONS_ENABLED] = getValue_(torsions_box);
+			mmff.options[MMFF94_OUTOFPLANE_ENABLED] = getValue_(plane_box);
+			mmff.options[MMFF94_VDW_ENABLED] = getValue_(vdw_box);
+			mmff.options[MMFF94_ES_ENABLED] = getValue_(es_box);
 
 			try
 			{

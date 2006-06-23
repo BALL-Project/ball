@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.2 2006/06/20 15:39:32 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.3 2006/06/23 01:35:54 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -68,6 +68,16 @@ namespace BALL
 		}
 
 		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
+
+ 		Options& options = getForceField()->options;
+		if (options.has(MMFF94_OUTOFPLANE_ENABLED) && !options.getBool(MMFF94_OUTOFPLANE_ENABLED))
+		{
+			setEnabled(false);
+			return true;
+		}
+
+		setEnabled(true);
+
 
 		if (!parameters_.isInitialized())
 		{

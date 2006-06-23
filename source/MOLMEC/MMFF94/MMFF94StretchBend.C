@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.12 2006/06/22 16:35:06 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.13 2006/06/23 01:35:54 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -63,7 +63,10 @@ namespace BALL
 
 	// default constructor
 	MMFF94StretchBend::MMFF94StretchBend()
-		:	ForceFieldComponent()
+		:	ForceFieldComponent(),
+			stretch_enabled_(true),
+			bend_enabled_(true),
+			stretchbend_enabled_(true)
 	{	
 		// set component name
 		setName("MMFF94 StretchBend");
@@ -72,7 +75,10 @@ namespace BALL
 
 	// constructor
 	MMFF94StretchBend::MMFF94StretchBend(ForceField& force_field)
-		: ForceFieldComponent(force_field)
+		: ForceFieldComponent(force_field),
+			stretch_enabled_(true),
+			bend_enabled_(true),
+			stretchbend_enabled_(true)
 	{
 		// set component name
 		setName("MMFF94 StretchBend");
@@ -81,7 +87,10 @@ namespace BALL
 
 	// copy constructor
 	MMFF94StretchBend::MMFF94StretchBend(const MMFF94StretchBend&	component)
-		:	ForceFieldComponent(component)
+		:	ForceFieldComponent(component),
+			stretch_enabled_(component.stretch_enabled_),
+			bend_enabled_(component.bend_enabled_),
+			stretchbend_enabled_(component.stretchbend_enabled_)
 	{
 	}
 
@@ -103,6 +112,23 @@ namespace BALL
 
 		// obtain the Stretch and Bend data from the MMFF94 force field
 		mmff94_ = (MMFF94*)getForceField();
+
+ 		Options& options = getForceField()->options;
+		bend_enabled_ = !options.has(MMFF94_BENDS_ENABLED) || options.getBool(MMFF94_BENDS_ENABLED);
+		stretch_enabled_ = !options.has(MMFF94_STRETCHES_ENABLED) || 
+											 options.getBool(MMFF94_STRETCHES_ENABLED);
+		stretchbend_enabled_ = !options.has(MMFF94_STRETCHBENDS_ENABLED) || 
+													 options.getBool(MMFF94_STRETCHBENDS_ENABLED);
+		bool disabled = !bend_enabled_ && !stretchbend_enabled_ && !stretch_enabled_;
+
+		if (disabled)
+		{
+			setEnabled(false);
+			return true;
+		}
+
+		setEnabled(true);
+
 
 		if (!bend_parameters_.isInitialized())
 		{
@@ -452,6 +478,7 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 	// calculates the current energy of this component
 	double MMFF94StretchBend::updateStretchBendEnergy()
 	{
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		// initial energy is zero
 		stretch_bend_energy_ = 0;
 
@@ -492,21 +519,9 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 		calculateDeltas_();
 		
-		Options& options = mmff94_->options;
-		if (!options.has(MMFF94::Option::BENDS_ENABLED) || options.getBool(MMFF94::Option::BENDS_ENABLED))
-		{
-			updateBendForces();
-		}
-
-		if (!options.has(MMFF94::Option::STRETCHES_ENABLED) || options.getBool(MMFF94::Option::STRETCHES_ENABLED))
-		{
-			updateStretchForces();
-		}
-
-		if (!options.has(MMFF94::Option::STRETCHBENDS_ENABLED) || options.getBool(MMFF94::Option::STRETCHBENDS_ENABLED))
-		{
-			updateStretchBendForces();
-		}
+		if (bend_enabled_) 				updateBendForces();
+		if (stretch_enabled_) 		updateStretchForces();
+		if (stretchbend_enabled_) updateStretchBendForces();
 	}
 
 	void MMFF94StretchBend::calculateDeltas_()
@@ -607,30 +622,15 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		if (!mmff94_) return 0;
 
 		energy_ = 0;
+		bend_energy_ = 0;
+		stretch_energy_ = 0;
+		stretch_bend_energy_ = 0;
 
 		calculateDeltas_();
  
-		Options& options = mmff94_->options;
-		if (!options.has(MMFF94::Option::BENDS_ENABLED) || options.getBool(MMFF94::Option::BENDS_ENABLED))
-		{
-			energy_ += updateBendEnergy();
-		}
-
-		if (!options.has(MMFF94::Option::STRETCHES_ENABLED) || options.getBool(MMFF94::Option::STRETCHES_ENABLED))
-		{
-			energy_ += updateStretchEnergy();
-		}
-
-		if (!options.has(MMFF94::Option::STRETCHBENDS_ENABLED) || options.getBool(MMFF94::Option::STRETCHBENDS_ENABLED))
-		{
-			// stretchbends need data, that is calculated in the bend section
-			if (options.has(MMFF94::Option::BENDS_ENABLED) && !options.getBool(MMFF94::Option::BENDS_ENABLED))
-			{
-				updateBendEnergy();
-			}
-
-			energy_ += updateStretchBendEnergy();
-		}
+		if (bend_enabled_) 				energy_ += updateBendEnergy();
+		if (stretch_enabled_) 		energy_ += updateStretchEnergy();
+		if (stretchbend_enabled_) energy_ += updateStretchBendEnergy();
 
 		return energy_;
 	}
@@ -1195,6 +1195,24 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 		double kb = pow(((AIJ - BIJ) / (r0 - BIJ)), 3);
 		return kb;
+	}
+
+	double MMFF94StretchBend::getStretchEnergy() const 
+	{
+		if (!stretch_enabled_) return 0;
+		return stretch_energy_;
+	}
+
+	double MMFF94StretchBend::getBendEnergy() const 
+	{ 
+		if (!bend_enabled_) return 0;
+		return bend_energy_; 
+	}
+
+	double MMFF94StretchBend::getStretchBendEnergy() const 
+	{ 
+		if (!stretchbend_enabled_) return 0;
+		return stretch_bend_energy_;
 	}
 
 

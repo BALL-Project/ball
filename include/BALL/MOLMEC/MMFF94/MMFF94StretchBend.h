@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.h,v 1.1.4.3 2006/06/20 15:39:40 amoll Exp $
+// $Id: MMFF94StretchBend.h,v 1.1.4.4 2006/06/23 01:35:20 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94STRETCHBEND_H
@@ -69,6 +69,14 @@ namespace BALL
 			Vector3 n;
 		};
 
+		/// flag to enable BENDS
+		#define MMFF94_BENDS_ENABLED "enable Bends"
+		
+		/// flag to enable Stretches
+		#define MMFF94_STRETCHES_ENABLED "enable Stretches"
+
+		/// flag to enable StretchBends
+		#define MMFF94_STRETCHBENDS_ENABLED "enable StrechBends"
 
 		BALL_CREATE(MMFF94StretchBend)
 
@@ -106,13 +114,13 @@ namespace BALL
 		virtual double updateStretchBendEnergy();
 
 		///
-		double getStretchEnergy() const { return stretch_energy_;}
+		double getStretchEnergy() const;
 
 		///
-		double getBendEnergy() const { return bend_energy_; }
+		double getBendEnergy() const;
 
 		///
-		double getStretchBendEnergy() const { return stretch_bend_energy_;}
+		double getStretchBendEnergy() const;
 
 		/// Calculates and returns the component's forces.
 		virtual void updateForces();
@@ -183,6 +191,7 @@ namespace BALL
 		double stretch_bend_energy_;
 
 		MMFF94* mmff94_;
+		bool stretch_enabled_, bend_enabled_, stretchbend_enabled_;
 	};
 } // namespace BALL
 

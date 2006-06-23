@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.4.4 2006/06/21 16:29:55 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.4.5 2006/06/23 01:35:53 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -35,7 +35,9 @@ namespace BALL
 			algorithm_type_(MolmecSupport::BRUTE_FORCE),
 			cut_off_(20),
 			dc_(1),
-			n_(1)
+			n_(1),
+			es_enabled_(true),
+			vdw_enabled_(true)
 	{	
 		setName("MMFF94 NonBonded");
 	}
@@ -46,7 +48,9 @@ namespace BALL
 			algorithm_type_(MolmecSupport::BRUTE_FORCE),
 			cut_off_(20),
 			dc_(1),
-			n_(1)
+			n_(1),
+			es_enabled_(true),
+			vdw_enabled_(true)
 	{
 		setName("MMFF94 NonBonded");
 	}
@@ -56,7 +60,9 @@ namespace BALL
 		:	ForceFieldComponent(component),
 			algorithm_type_(component.algorithm_type_),
 			dc_(component.dc_),
-			n_(component.n_)
+			n_(component.n_),
+			es_enabled_(component.es_enabled_),
+			vdw_enabled_(component.vdw_enabled_)
 	{
 	}
 
@@ -169,7 +175,23 @@ namespace BALL
 
 		// clear vector of non-bonded atom pairs
 		clear();
- 
+
+		es_energy_ = 0;
+		vdw_energy_ = 0;
+
+ 		Options& options = getForceField()->options;
+		vdw_enabled_ = !options.has(MMFF94_VDW_ENABLED) || options.getBool(MMFF94_VDW_ENABLED);
+		es_enabled_  = !options.has(MMFF94_ES_ENABLED)  || options.getBool(MMFF94_ES_ENABLED);
+		bool disabled = !vdw_enabled_ && !es_enabled_;
+
+		if (disabled)
+		{
+			setEnabled(false);
+			return true;
+		}
+
+		setEnabled(true);
+
 		// when using periodic boundary conditions, all
 		// cutoffs must be smaller than the smallest linear extension of
 		// the box - we use the minimum image convention!
@@ -260,16 +282,8 @@ namespace BALL
 #endif
 		}
 
-		Options& options = getForceField()->options;
-		if (!options.has(MMFF94::Option::VDW_ENABLED) || options.getBool(MMFF94::Option::VDW_ENABLED))
-		{
-			energy_ += vdw_energy_;
-		}
-
-		if (!options.has(MMFF94::Option::ES_ENABLED) || options.getBool(MMFF94::Option::ES_ENABLED))
-		{
-			energy_ += es_energy_;
-		}
+		if (vdw_enabled_) energy_ += vdw_energy_;
+		if (es_enabled_)  energy_ += es_energy_;
 
 		return energy_; 
   } 
@@ -293,7 +307,20 @@ namespace BALL
 
 			a1.getForce() -= force;
 			a2.getForce() += force;
-		}                                                                                                          
+		}   
 	} 
+
+	double MMFF94NonBonded::getVDWEnergy() const 
+	{ 
+		if (!vdw_enabled_) return 0;
+		return vdw_energy_;
+	}
+
+	double MMFF94NonBonded::getESEnergy() const 
+	{ 
+		if (!es_enabled_) return 0;
+		return es_energy_;
+	}
+
 	
 } // namespace BALL

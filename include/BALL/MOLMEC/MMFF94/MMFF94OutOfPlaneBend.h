@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.h,v 1.1.4.1 2006/05/21 22:27:16 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.h,v 1.1.4.2 2006/06/23 01:35:19 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94OUTOFPLANEBEND_H
@@ -36,6 +36,9 @@ namespace BALL
 			// debug
 			double energy;  
 		};
+
+		/// flag to enable OutOfPlane
+		#define MMFF94_OUTOFPLANE_ENABLED "enable OutOfPlane"
 
 		BALL_CREATE(MMFF94OutOfPlaneBend)
 

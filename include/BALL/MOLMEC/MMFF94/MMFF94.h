@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.4.5 2006/06/14 14:45:45 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.4.6 2006/06/23 01:35:19 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -78,28 +78,6 @@ namespace BALL
 			/**	during charge assignment, overwrite even non-empty type names
 			*/
 			static const char* OVERWRITE_TYPENAMES;
-
-			///
-			static const char* VDW_ENABLED;
-			
-			///
-			static const char* ES_ENABLED;
-			
-			///
-			static const char* STRETCHES_ENABLED;
-			
-			///
-			static const char* BENDS_ENABLED;
-			
-			///
-			static const char* STRETCHBENDS_ENABLED;
-			
-			///
-			static const char* TORSIONS_ENABLED;
-			
-			///
-			static const char* OUTOFPLANE_ENABLED;
-
 		};
 
 		/** Default values for MMFF94 options.
@@ -129,27 +107,6 @@ namespace BALL
 			/**	during charge assignment, overwrite even non-empty type names
 			*/
 			static const bool OVERWRITE_TYPENAMES;
-
-			///
-			static const bool ES_ENABLED;
-
-			///
-			static const bool VDW_ENABLED;
-
-			///
-			static const bool STRETCHES_ENABLED;
-
-			///
-			static const bool BENDS_ENABLED;
-
-			///
-			static const bool STRETCHBENDS_ENABLED;
-
-			///
-			static const bool TORSIONS_ENABLED;
-
-			///
-			static const bool OUTOFPLANE_ENABLED;
 		};
 
 		//@}

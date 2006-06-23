@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.4.7 2006/06/14 14:45:39 amoll Exp $
+// $Id: MMFF94.C,v 1.1.4.8 2006/06/23 01:35:53 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -29,13 +29,6 @@ namespace BALL
 	const char* MMFF94::Option::ASSIGN_TYPES = "assign_types"; 
 	const char* MMFF94::Option::OVERWRITE_CHARGES = "overwrite_non-zero_charges"; 
 	const char* MMFF94::Option::OVERWRITE_TYPENAMES = "overwrite_non-empty_typenames"; 
-	const char* MMFF94::Option::VDW_ENABLED = "enable VDW"; 
-	const char* MMFF94::Option::ES_ENABLED = "enable ES"; 
-	const char* MMFF94::Option::STRETCHES_ENABLED = "enable Stretches"; 
-	const char* MMFF94::Option::BENDS_ENABLED = "enable Bends"; 
-	const char* MMFF94::Option::STRETCHBENDS_ENABLED = "enable StretchBends"; 
-	const char* MMFF94::Option::TORSIONS_ENABLED = "enable Torsions"; 
-	const char* MMFF94::Option::OUTOFPLANE_ENABLED = "enable OutOfPlane"; 
 
 	const char* MMFF94::Default::FOLDER = "MMFF94";
 	const bool MMFF94::Default::ASSIGN_CHARGES = true; 
@@ -43,14 +36,6 @@ namespace BALL
 	const bool MMFF94::Default::ASSIGN_TYPES = true; 
 	const bool MMFF94::Default::OVERWRITE_CHARGES = true; 
 	const bool MMFF94::Default::OVERWRITE_TYPENAMES = true; 
-	const bool MMFF94::Default::VDW_ENABLED = true;
-	const bool MMFF94::Default::ES_ENABLED = true;
-	const bool MMFF94::Default::STRETCHES_ENABLED = true;
-	const bool MMFF94::Default::BENDS_ENABLED = true;
-	const bool MMFF94::Default::STRETCHBENDS_ENABLED = true;
-	const bool MMFF94::Default::TORSIONS_ENABLED = true;
-	const bool MMFF94::Default::OUTOFPLANE_ENABLED = true;
-
 
 	// Default constructor
 	MMFF94::MMFF94() 
@@ -253,14 +238,6 @@ namespace BALL
 			}
 		}
 
-		ForceFieldComponent* component = getComponent("MMFF94 Torsion");
-		bool enable = !options.has(MMFF94::Option::TORSIONS_ENABLED) || options.getBool(MMFF94::Option::TORSIONS_ENABLED);
-		if (component != 0) component->setEnabled(enable);
-
-		component = getComponent("MMFF94 OutOfPlaneBend");
-		enable = !options.has(MMFF94::Option::OUTOFPLANE_ENABLED) || options.getBool(MMFF94::Option::OUTOFPLANE_ENABLED);
-		if (component != 0) component->setEnabled(enable);
-
 		return true;
 	}
 
@@ -372,27 +349,13 @@ namespace BALL
 		String result = String("\n")
 		+ "MMFF94 Energy:\n";
 
-		bool enable = !options.has(MMFF94::Option::BENDS_ENABLED) || options.getBool(MMFF94::Option::BENDS_ENABLED);
-		if (enable) result += String(" - bends             : ") +String(getBendEnergy())+  " kJ/mol\n" ;
-
-		enable = !options.has(MMFF94::Option::STRETCHES_ENABLED) || options.getBool(MMFF94::Option::STRETCHES_ENABLED);
-		if (enable) result += String(" - stretches         : ") +String(getStretchEnergy())+  " kJ/mol\n";
-
-		enable = !options.has(MMFF94::Option::STRETCHBENDS_ENABLED) || options.getBool(MMFF94::Option::STRETCHBENDS_ENABLED);
-		if (enable) result += String(" - stretchbends      : ") +String(getStretchBendEnergy())+  " kJ/mol\n";
-
-		enable = !options.has(MMFF94::Option::OUTOFPLANE_ENABLED) || options.getBool(MMFF94::Option::OUTOFPLANE_ENABLED);
-		if (enable) result += String(" - out of plane      : ") +String(getPlaneEnergy())+  " kJ/mol\n";
-
-		enable = !options.has(MMFF94::Option::TORSIONS_ENABLED) || options.getBool(MMFF94::Option::TORSIONS_ENABLED);
-		if (enable) result += String(" - torsions          : ") +String(getTorsionEnergy())+  " kJ/mol\n";
-
-		enable = !options.has(MMFF94::Option::VDW_ENABLED) || options.getBool(MMFF94::Option::VDW_ENABLED);
-		if (enable) result += String(" - van der Waals     : ") +String(getVdWEnergy())+  " kJ/mol\n";
-
-		enable = !options.has(MMFF94::Option::ES_ENABLED) || options.getBool(MMFF94::Option::ES_ENABLED);
-		if (enable) result += String(" - electrostatics    : ") +String(getESEnergy())+  " kJ/mol\n";
-
+		result += String(" - bends             : ") +String(getBendEnergy())+  " kJ/mol\n" ;
+		result += String(" - stretches         : ") +String(getStretchEnergy())+  " kJ/mol\n";
+		result += String(" - stretchbends      : ") +String(getStretchBendEnergy())+  " kJ/mol\n";
+		result += String(" - out of plane      : ") +String(getPlaneEnergy())+  " kJ/mol\n";
+		result += String(" - torsions          : ") +String(getTorsionEnergy())+  " kJ/mol\n";
+		result += String(" - van der Waals     : ") +String(getVdWEnergy())+  " kJ/mol\n";
+		result += String(" - electrostatics    : ") +String(getESEnergy())+  " kJ/mol\n";
 		result = result + "---------------------------------------\n" 
 										+ "  total energy       : " +String(getEnergy()) + " kJ/mol\n";
 		return result;
