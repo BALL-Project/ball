@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceFieldComponent.C,v 1.12.8.1 2006/05/21 22:25:23 amoll Exp $
+// $Id: forceFieldComponent.C,v 1.12.8.2 2006/06/23 01:34:27 amoll Exp $
 //
 
 
@@ -84,6 +84,7 @@ namespace BALL
 
 	double ForceFieldComponent::getEnergy() const
 	{
+		if (!isEnabled()) return 0.;
 		return energy_;
 	}
 
