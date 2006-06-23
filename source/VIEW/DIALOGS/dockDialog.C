@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.6.2.4 2006/06/12 17:48:07 leonhardt Exp $
+// $Id: dockDialog.C,v 1.5.2.6.2.5 2006/06/23 16:05:40 leonhardt Exp $
 //
 
 #include <QtGui/qpushbutton.h>
@@ -82,6 +82,7 @@ namespace BALL
 			registerObject_(assign_radii);
 			registerObject_(build_bonds);
 			registerObject_(add_hydrogens);
+			inifile_section_name_backup_ = "REDOCKING";
 			
 			// set flag
 			is_redock_ = false;
@@ -120,6 +121,7 @@ namespace BALL
 				alg_ff_opt_(dock_dialog.alg_ff_opt_),
 				scoring_opt_(dock_dialog.scoring_opt_),
 				backup_(dock_dialog.backup_),
+				inifile_section_name_backup_(dock_dialog.inifile_section_name_backup_),
 				radius_rule_processor_(dock_dialog.radius_rule_processor_),
 				charge_rule_processor_(dock_dialog.charge_rule_processor_),
 				radius_processor_(dock_dialog.radius_processor_),
@@ -149,14 +151,13 @@ namespace BALL
 				is_redock_ = dock_dialog.is_redock_;
 				has_changed_ = dock_dialog.has_changed_;
 				// dialogs in hashmaps are dynamically allocated in method initializeWidget()
-				HashMap<int, QDialog*>::Iterator it = algorithm_dialogs_.begin();
-				for (; +it; ++it)
+				for (HashMap<int, DockingAlgorithmDialog*>::Iterator it = algorithm_dialogs_.begin(); +it; ++it)
 				{
 					delete it->second;
 					algorithm_dialogs_.erase(it);
 				}
 				algorithm_dialogs_ = dock_dialog.algorithm_dialogs_;
-				for (it = scoring_dialogs_.begin(); +it; ++it)
+				for (HashMap<int, QDialog*>::Iterator it = scoring_dialogs_.begin(); +it; ++it)
 				{
 					delete it->second;
 					scoring_dialogs_.erase(it);
@@ -169,6 +170,7 @@ namespace BALL
 				alg_ff_opt_ = dock_dialog.alg_ff_opt_;
 				scoring_opt_ = dock_dialog.scoring_opt_;
 				backup_ = dock_dialog.backup_;
+				inifile_section_name_backup_ = dock_dialog.inifile_section_name_backup_;
 				radius_rule_processor_ = dock_dialog.radius_rule_processor_;
 				charge_rule_processor_ = dock_dialog.charge_rule_processor_;
 				radius_processor_ = dock_dialog.radius_processor_;
@@ -231,7 +233,7 @@ namespace BALL
 		}
 		
 		// Adds docking algorithm to Combobox and its advanced option dialogs to HashMap.
-		void DockDialog::addAlgorithm(const QString& name, const int algorithm, QDialog* dialog)
+		void DockDialog::addAlgorithm(const QString& name, const int algorithm, DockingAlgorithmDialog* dialog)
 			throw()
 		{
 			if (dialog)
@@ -300,75 +302,47 @@ namespace BALL
 		{
 			// read preferences of INI-section docking into the QWidget of the dialog
 			PreferencesEntry::readPreferenceEntries(file);
-			// read the redocking values from INIFile into vector backup_
-			// if INIFile has not yet a section REDOCKING, fill backup_ vector with default values 
-			fetchPreferences_(file, "redock_entry_0", "<select>");
-			fetchPreferences_(file, "redock_entry_1", "Default");
-			fetchPreferences_(file, "redock_entry_2", "100");
-			fetchPreferences_(file, "redock_entry_3", "1");
-			
+			// now read redocking options
+			// INIFile has not yet a section redocking, fill backup_ with default values
+			if (!file.hasSection(inifile_section_name_backup_))
+			{
+				backup_ = default_values_;
+			}
+			else
+			{
+				String temp = inifile_section_name_;
+				inifile_section_name_ = inifile_section_name_backup_;
+				PreferencesEntry::readPreferenceEntries(file);
+        inifile_section_name_ = temp;
+			}
+
 			// call this function to check which algorithm / scoring function is the current item in the combobox
 			// and set advanced button enabled if necessary
 			algorithmChosen();
 			scoringFuncChosen();
 			
-			HashMap<int, QDialog*>::Iterator it = algorithm_dialogs_.begin();
+			HashMap<int, DockingAlgorithmDialog*>::Iterator it = algorithm_dialogs_.begin();
 			for (; +it; ++it)
 			{
-#ifdef BALL_HAS_FFTW
-				GeometricFitDialog* dialog = dynamic_cast<GeometricFitDialog*>(it->second);
-				if(dialog)
-				{
-					dialog->fetchPreferences(file);
-				}
-#endif
+				it->second->fetchPreferences(file);
 			}
 		}
-		 
-		// function to read the redocking values from INIFile into vector backup_
-		// if INIFile has not yet a section REDOCKING, fill backup_ vector with default values
-		void DockDialog::fetchPreferences_(INIFile& file, const String& entry, const QString& default_value)
-			throw()
-		{
-			if (!file.hasEntry("REDOCKING", entry))
-			{
-			 	backup_.push_back(default_value);
-			}
-			else
-			{
-				backup_.push_back(QString(file.getValue("REDOCKING", entry).c_str()));
-			}
-		}
-		
+						
 		// Write the preferences to the INIFile.
 		void DockDialog::writePreferences(INIFile& file)
 			throw()
 		{
-			// swap values if dialog is in redocking-modus, because for PreferencesEntry::writePreferenceEntries 
-			// the dialog's widgets has to contain the docking values
-			if (is_redock_)
-			{
-				swapValues_();
-			}
+			// first write the options that are currently in the dialog
 			PreferencesEntry::writePreferenceEntries(file);
+			// now write the options that are in backup_
+	    swapValues_();
+      PreferencesEntry::writePreferenceEntries(file);
+			swapValues_();
 			
-			file.appendSection("REDOCKING");
-			for (Position i = 0; i < backup_.size(); i++)
-			{
-				String entry = String("redock_entry_") + String(i);
-				file.insertValue("REDOCKING", entry, ascii(backup_[i]));
-			}
-			
-			HashMap<int, QDialog*>::Iterator it = algorithm_dialogs_.begin();
+			HashMap<int, DockingAlgorithmDialog*>::Iterator it = algorithm_dialogs_.begin();
 			for (; +it; ++it)
 			{
-#ifdef BALL_HAS_FFTW
-				GeometricFitDialog* dialog = dynamic_cast<GeometricFitDialog*>(it->second);
-				if(dialog)
-				{
-					dialog->writePreferences(file);
-				}
-#endif
+				it->second->writePreferences(file);
 			}
 		}
 		
@@ -453,13 +427,12 @@ namespace BALL
 			}
 			// options for chosen algorithm; options are filled by the corresponding dialog
 			Index index = algorithms->currentIndex();
+      algorithm_dialogs_[index]->getOptions(algorithm_opt_);
 			switch(index)
 			{
 				case DockingController::GEOMETRIC_FIT:
+
 #ifdef BALL_HAS_FFTW
-					GeometricFitDialog* gfd = RTTI::castTo<GeometricFitDialog>(*(algorithm_dialogs_[index]));
-					gfd->getOptions(algorithm_opt_);
-					
 					// options for redocking (euler angles)
 					if(is_redock_)
 					{
@@ -497,7 +470,6 @@ namespace BALL
 					break;
 				case DockingController::EVOLUTION_DOCKING:
 					EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[index]));
-					edd->getOptions(algorithm_opt_);
 					edd->getFFOptions(alg_ff_opt_);
 					break;
 			}
@@ -736,21 +708,13 @@ namespace BALL
 		void DockDialog::swapValues_()
 			throw()
 		{
-			QString temp = algorithms->currentText();
-			algorithms->setCurrentIndex(algorithms->findText(backup_[0]));
-			backup_[0] = temp;
-
-			temp = scoring_functions->currentText();
-			scoring_functions->setCurrentIndex(scoring_functions->findText(backup_[1]));
-			backup_[1] = temp;
-
-			temp = best_num->text();
-			best_num->setText(backup_[2]);
-			backup_[2] = temp;
-
-			temp = verbosity->text();
-			verbosity->setText(backup_[3]);
-			backup_[3] = temp;
+			ValueMap temp = last_values_;
+			String temp_s = inifile_section_name_;
+      restoreValues_(true, backup_);
+			last_values_ = backup_;
+			inifile_section_name_ = inifile_section_name_backup_;
+			backup_ = temp;
+      inifile_section_name_backup_ = temp_s;
 
 			algorithmChosen();
 			scoringFuncChosen();
@@ -859,14 +823,14 @@ namespace BALL
 			{
 				it->setProperty("DOCKING_PARTNER_2");
 			}
-			accept();
 			storeValues();
+   		QDialog::accept();
 		}
 		
 		void DockDialog::cancelPressed()
 		{
 			restoreValues();
-			reject();
+			QDialog::reject();
 		}
 		
 		//
@@ -882,23 +846,8 @@ namespace BALL
 			Index index = algorithms->currentIndex();
 			if (algorithm_dialogs_.has(index))
 			{
-				switch(index)
-				{
-					case DockingController::GEOMETRIC_FIT:
-#ifdef BALL_HAS_FFTW
-						GeometricFitDialog* gfd = dynamic_cast<GeometricFitDialog*> (algorithm_dialogs_[index]);
-						gfd->isRedock(is_redock_);
-						gfd->exec();
-#endif
-						break;
-					case DockingController::EVOLUTION_DOCKING:
-						{
-							EvolutionDockingDialog* evd = dynamic_cast<EvolutionDockingDialog*> (algorithm_dialogs_[index]);
-							evd->isRedock(is_redock_);
-							evd->exec();
-							break;
-						}
-				}
+				algorithm_dialogs_[index]->isRedock(is_redock_);
+				algorithm_dialogs_[index]->exec();
 			}
 		}
 			

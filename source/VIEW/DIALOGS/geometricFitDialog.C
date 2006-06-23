@@ -15,9 +15,8 @@ namespace BALL
 		// Constructor
 		GeometricFitDialog::GeometricFitDialog(QWidget* parent, const char* name)
 			throw()
-			: QDialog(parent),
-				Ui_GeometricFitDialogData(),
-				PreferencesEntry()
+			: Ui_GeometricFitDialogData(),
+				DockingAlgorithmDialog(parent)
 			{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "new GeometricFitDialog " << this << std::endl;
@@ -37,28 +36,21 @@ namespace BALL
 				registerObject_(deg_interval);
 				registerObject_(peak_num);
 				registerObject_(surface_type);
-		
-				// set flag
-				is_redock_ = false;
+		    inifile_section_name_backup_ = "GEOMETRIC_FIT_OPTIONS_REDOCK";
 				
-				hide();
 				connect(reset_button, SIGNAL(pressed()), this, SLOT(reset()));
 			}
 		
 		// Copy constructor.
 		GeometricFitDialog::GeometricFitDialog(const GeometricFitDialog& geo_fit_dialog)
 			throw()
-			: QDialog(),
-				Ui_GeometricFitDialogData(),
-				PreferencesEntry(),
-				has_changed_(geo_fit_dialog.has_changed_),
-				is_redock_(geo_fit_dialog.is_redock_),
-				backup_(geo_fit_dialog.backup_)
+			: Ui_GeometricFitDialogData(),
+		    DockingAlgorithmDialog(geo_fit_dialog)
 		{}
 			
 		// Destructor
 		GeometricFitDialog::~GeometricFitDialog()
-			throw()
+		  throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << this << " of class GeometricFitDialog" << std::endl;
@@ -71,9 +63,7 @@ namespace BALL
 		{
 			if (&geo_fit_dialog != this)
 			{
-				backup_ = geo_fit_dialog.backup_;
-				has_changed_ = geo_fit_dialog.has_changed_;
-				is_redock_ = geo_fit_dialog.is_redock_;
+				DockingAlgorithmDialog::operator=(geo_fit_dialog);
 			}
 			return *this;
 		}
@@ -81,7 +71,7 @@ namespace BALL
 		// Read the preferences from an INIFile
 		// for reading docking preferences call PreferencesEntry::readPreferenceEntries
 		// for reading redocking options call fetchPreferences_
-		void GeometricFitDialog::fetchPreferences(INIFile& file)
+	/*	void GeometricFitDialog::fetchPreferences(INIFile& file)
 					throw()
 		{
 			PreferencesEntry::readPreferenceEntries(file);
@@ -131,26 +121,8 @@ namespace BALL
 				String entry = String("option_entry_") + String(i);
 				file.insertValue("GEOMETRIC_FIT_OPTIONS_REDOCK", entry, ascii(backup_[i]));
 			}
-		}
-
-		// Reset the dialog to the standard values
-		void GeometricFitDialog::reset()
-		{
-			restoreDefaultValues();
-		}
-
-		void GeometricFitDialog::reject()
-		{
-			restoreValues();
-			QDialog::reject();
-		}
-
-		void GeometricFitDialog::accept()
-		{
-			storeValues();
-			QDialog::accept();
-		}
-		
+		}*/
+				
 		// Fill options with values of the dialog.
 		void GeometricFitDialog::getOptions(Options& options)
 					throw()
@@ -183,74 +155,6 @@ namespace BALL
 			{
 			  options[GeometricFit::Option::SURFACE_TYPE] = GeometricFit::FTDOCK;
 			}
-		}
-		  
-		// Sets the flags 'is_redock_' and 'has_changed_'
-		void GeometricFitDialog::isRedock(bool is_redock)
-			throw()
-		{
-			if (is_redock_ == is_redock)
-			{
-			 	has_changed_ = false;
-			}
-			else
-			{
-				has_changed_ = true;
-			 	is_redock_ = is_redock;
-			}
-		}
-		
-		// Swaps the option values between vector backup_ and dialog
-		// Is called in show() if has_changed_ is true
-		// and in writePreferences if is_redock_ is true
-		void GeometricFitDialog::swapValues_()
-			throw()
-		{
-			QString temp = surface_thickness->text();
-			surface_thickness->setText(backup_[0]);
-			backup_[0] = temp;
-
-			temp = grid_spacing->text();
-			grid_spacing->setText(backup_[1]);
-			backup_[1] = temp;
-
-			temp = penalty_static->text();
-			penalty_static->setText(backup_[2]);
-			backup_[2] = temp;
-
-			temp = penalty_mobile->text();
-			penalty_mobile->setText(backup_[3]);
-			backup_[3] = temp;
-
-			temp = near_radius->text();
-			near_radius->setText(backup_[4]);
-			backup_[4] = temp;
-
-			temp = deg_interval->text();
-			deg_interval->setText(backup_[5]);
-			backup_[5] = temp;
-
-			temp = peak_num->text();
-			peak_num->setText(backup_[6]);
-			backup_[6] = temp;
-
-			temp = surface_type->currentText();
-			surface_type->setCurrentIndex(surface_type->findText(backup_[7]));
-			backup_[7] = temp;
-		}
-		
-	// --------------------------------- SLOTS ------------------------------------------------
-	// ----------------------------------------------------------------------------------------
-	
-		// Shows dialog to user.
-		// Calls swapValues_ if we are now doing docking and did redocking before or otherwise
-		void GeometricFitDialog::show()
-		{
-			if (has_changed_)
-			{
-				swapValues_();
-			}
-			QDialog::show();
 		}
 	
 	} // namespace VIEW

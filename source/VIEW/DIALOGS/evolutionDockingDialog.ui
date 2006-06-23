@@ -320,35 +320,6 @@
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
-   <widget class="QRadioButton" name="grid_radio_button" >
-    <property name="geometry" >
-     <rect>
-      <x>11</x>
-      <y>56</y>
-      <width>424</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>use created grid</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="new_grid_radio_button" >
-    <property name="geometry" >
-     <rect>
-      <x>11</x>
-      <y>28</y>
-      <width>424</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>create new grid</string>
-    </property>
-    <property name="checked" >
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QPushButton" name="browse_button" >
     <property name="enabled" >
      <bool>false</bool>
@@ -439,6 +410,35 @@
      <set>Qt::AlignLeading</set>
     </property>
    </widget>
+   <widget class="QRadioButton" name="new_grid_radio_button" >
+    <property name="geometry" >
+     <rect>
+      <x>11</x>
+      <y>28</y>
+      <width>424</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>create new grid</string>
+    </property>
+    <property name="checked" >
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="grid_radio_button" >
+    <property name="geometry" >
+     <rect>
+      <x>11</x>
+      <y>56</y>
+      <width>424</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>use created grid</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QGroupBox" name="trans_box_group" >
    <property name="geometry" >
@@ -463,19 +463,6 @@
     </property>
     <property name="text" >
      <string>Translation box botton</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="rel_trans_radio_button" >
-    <property name="geometry" >
-     <rect>
-      <x>11</x>
-      <y>57</y>
-      <width>199</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>relative to ligand</string>
     </property>
    </widget>
    <widget class="QLabel" name="x_label_2" >
@@ -617,22 +604,6 @@
      <set>Qt::AlignRight</set>
     </property>
    </widget>
-   <widget class="QRadioButton" name="abs_trans_radio_button" >
-    <property name="geometry" >
-     <rect>
-      <x>11</x>
-      <y>28</y>
-      <width>158</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>absolute</string>
-    </property>
-    <property name="checked" >
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="trans_box_top_x" >
     <property name="geometry" >
      <rect>
@@ -681,42 +652,38 @@
      <set>Qt::AlignRight</set>
     </property>
    </widget>
+   <widget class="QRadioButton" name="abs_trans_radio_button" >
+    <property name="geometry" >
+     <rect>
+      <x>11</x>
+      <y>28</y>
+      <width>158</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>absolute</string>
+    </property>
+    <property name="checked" >
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rel_trans_radio_button" >
+    <property name="geometry" >
+     <rect>
+      <x>11</x>
+      <y>57</y>
+      <width>199</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>relative to ligand</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <pixmapfunction></pixmapfunction>
  <resources/>
- <connections>
-  <connection>
-   <sender>ok_button</sender>
-   <signal>clicked()</signal>
-   <receiver>EvolutionDockingDialogData</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>64</x>
-     <y>314</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>275</x>
-     <y>166</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cancel_button</sender>
-   <signal>clicked()</signal>
-   <receiver>EvolutionDockingDialogData</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>204</x>
-     <y>314</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>275</x>
-     <y>166</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

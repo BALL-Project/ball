@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.53.2.11.2.2 2006/06/09 15:00:27 leonhardt Exp $
+# $Id: Makefile,v 1.53.2.11.2.3 2006/06/23 16:05:40 leonhardt Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -28,7 +28,8 @@ CPP_SOURCES=\
 	coloringSettingsDialog.C\
 	compositeProperties.C\
 	clippingDialog.C\
-	dockDialog.C\
+	dockingAlgorithmDialog.C\
+  dockDialog.C\
 	dockProgressDialog.C\
 	dockResultDialog.C\
 	downloadPDBFile.C\

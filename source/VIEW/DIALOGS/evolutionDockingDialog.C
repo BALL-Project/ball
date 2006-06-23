@@ -19,9 +19,8 @@ namespace BALL
 		// Constructor
 		EvolutionDockingDialog::EvolutionDockingDialog(QWidget* parent, const char* name)
 			throw()
-			: QDialog(parent),
-				Ui_EvolutionDockingDialogData(),
-				PreferencesEntry()
+				: Ui_EvolutionDockingDialogData(),
+				  DockingAlgorithmDialog(parent)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "new EvolutionDockingDialog " << this << std::endl;
@@ -33,7 +32,9 @@ namespace BALL
 				// register QWidgets of Dialog with PreferenceEntry
 				// entries of them will be generated in the INIFile
 				setINIFileSectionName("EVOLUTION_DOCKKING_OPTIONS");
+				registerObject_(grid_group);
 				registerObject_(grid_filename);
+				registerObject_(trans_box_group);
 				registerObject_(trans_box_bottom_x);
 				registerObject_(trans_box_bottom_y);
 				registerObject_(trans_box_bottom_z);
@@ -44,12 +45,11 @@ namespace BALL
 				registerObject_(init_population);	
 				registerObject_(population);
 				registerObject_(survivors);
+				registerObject_(force_field_group);
+        inifile_section_name_backup_ = "EVOLUTION_DOCKKING_OPTIONS_REDOCK";
 		
-				// set flag
-				is_redock_ = false;
-				
-				hide();
-
+				connect(cancel_button, SIGNAL(clicked()), this, SLOT(reject()));
+				connect(ok_button, SIGNAL( clicked() ), this, SLOT(accept()));
 				connect(reset_button, SIGNAL(pressed()), this, SLOT(reset()));
 			  connect(grid_radio_button, SIGNAL(clicked()), this, SLOT(enableFileBrowsing()));
 				connect(new_grid_radio_button, SIGNAL(clicked()), this, SLOT(disableFileBrowsing()));
@@ -60,13 +60,9 @@ namespace BALL
 		// Copy constructor.
 		EvolutionDockingDialog::EvolutionDockingDialog(const EvolutionDockingDialog& ev_dock_dialog)
 			throw()
-			: QDialog(),
-				Ui_EvolutionDockingDialogData(),
-				PreferencesEntry(),
-				has_changed_(ev_dock_dialog.has_changed_),
-				is_redock_(ev_dock_dialog.is_redock_),
-				backup_(ev_dock_dialog.backup_)
-			{}
+			: Ui_EvolutionDockingDialogData(),
+        DockingAlgorithmDialog(ev_dock_dialog)
+		{}
 			
 		// Destructor
 		EvolutionDockingDialog::~EvolutionDockingDialog()
@@ -83,9 +79,7 @@ namespace BALL
 		{
 			if (&ev_dock_dialog != this)
 			{
-				backup_ = ev_dock_dialog.backup_;
-				has_changed_ = ev_dock_dialog.has_changed_;
-				is_redock_ = ev_dock_dialog.is_redock_;
+				DockingAlgorithmDialog::operator=(ev_dock_dialog);
 			}
 			return *this;
 		}
@@ -93,18 +87,19 @@ namespace BALL
 		// Read the preferences from an INIFile
 		// for reading docking preferences call PreferencesEntry::readPreferenceEntries
 		// for reading redocking options call fetchPreferences_
-		void EvolutionDockingDialog::fetchPreferences(INIFile& file)
+		/*void EvolutionDockingDialog::fetchPreferences(INIFile& file)
 					throw()
 		{
+			Log.error() << "EvolutionDockingDialog::fetchPreferences" << std::endl;
 			PreferencesEntry::readPreferenceEntries(file);
 			
 			fetchPreferences_(file, "option_entry_0", "");
 			fetchPreferences_(file, "option_entry_1", "1.0");
 			fetchPreferences_(file, "option_entry_2", "1.0");
 			fetchPreferences_(file, "option_entry_3", "1.0");
-			fetchPreferences_(file, "option_entry_4", "2.0");
-			fetchPreferences_(file, "option_entry_5", "2.0");
-			fetchPreferences_(file, "option_entry_6", "2.0");
+			fetchPreferences_(file, "option_entry_4", "-1.0");
+			fetchPreferences_(file, "option_entry_5", "-1.0");
+			fetchPreferences_(file, "option_entry_6", "-1.0");
 			fetchPreferences_(file, "option_entry_7", "100");
 			fetchPreferences_(file, "option_entry_8", "1000");
 			fetchPreferences_(file, "option_entry_9", "40");
@@ -133,6 +128,7 @@ namespace BALL
 		void EvolutionDockingDialog::writePreferences(INIFile& file)
 			throw()
 		{
+			Log.error() << "EvolutionDockingDialog::writePreferences" << std::endl;
 			if (is_redock_)
 			{
 				swapValues_();
@@ -146,25 +142,7 @@ namespace BALL
 				String entry = String("option_entry_") + String(i);
 				file.insertValue("EVOLUTION_DOCKING_OPTIONS_REDOCK", entry, ascii(backup_[i]));
 			}
-		}
-
-		// Reset the dialog to the standard values
-		void EvolutionDockingDialog::reset()
-		{
-			restoreDefaultValues();
-		}
-
-		void EvolutionDockingDialog::reject()
-		{
-			restoreValues();
-			QDialog::reject();
-		}
-
-		void EvolutionDockingDialog::accept()
-		{
-			storeValues();
-			QDialog::accept();
-		}
+		}*/
 		
 		// Fill options with values of the dialog.
 		void EvolutionDockingDialog::getOptions(Options& options)
@@ -221,86 +199,10 @@ namespace BALL
 			}
 		}
 		  
-		// Sets the flags 'is_redock_' and 'has_changed_'
-		void EvolutionDockingDialog::isRedock(bool is_redock)
-			throw()
-		{
-			if (is_redock_ == is_redock)
-			{
-			 	has_changed_ = false;
-			}
-			else
-			{
-				has_changed_ = true;
-			 	is_redock_ = is_redock;
-			}
-		}
-		
-		// Swaps the option values between vector backup_ and dialog
-		// Is called in show() if has_changed_ is true
-		// and in writePreferences if is_redock_ is true
-		void EvolutionDockingDialog::swapValues_()
-			throw()
-		{
-			QString temp = grid_filename->text();
-			grid_filename->setText(backup_[0]);
-			backup_[0] = temp;
-
-			temp = trans_box_bottom_x->text();
-			trans_box_bottom_x->setText(backup_[1]);
-			backup_[1] = temp;
-
-			temp = trans_box_bottom_y->text();
-			trans_box_bottom_y->setText(backup_[2]);
-			backup_[2] = temp;
-
-			temp = trans_box_bottom_z->text();
-			trans_box_bottom_z->setText(backup_[3]);
-			backup_[3] = temp;
-
-			temp = trans_box_top_x->text();
-			trans_box_top_x->setText(backup_[4]);
-			backup_[4] = temp;
-
-			temp = trans_box_top_y->text();
-			trans_box_top_y->setText(backup_[5]);
-			backup_[5] = temp;
-
-			temp = trans_box_top_y->text();
-			trans_box_top_z->setText(backup_[6]);
-			backup_[6] = temp;
-
-			temp = max_iterations->text();
-			max_iterations->setText(backup_[7]);
-			backup_[7] = temp;
-
-			temp = max_iterations->text();
-			init_population->setText(backup_[8]);
-			backup_[8] = temp;
-
-			temp = max_iterations->text();
-			population->setText(backup_[9]);
-			backup_[9] = temp;
-
-			temp = max_iterations->text();
-			survivors->setText(backup_[10]);
-			backup_[10] = temp;
-
-		}
-		
+				
+				
 	// --------------------------------- SLOTS ------------------------------------------------
 	// ----------------------------------------------------------------------------------------
-	
-		// Shows dialog to user.
-		// Calls swapValues_ if we are now doing docking and did redocking before or otherwise
-		void EvolutionDockingDialog::show()
-		{
-			if (has_changed_)
-			{
-				swapValues_();
-			}
-			QDialog::show();
-		}
 
 		/** Is called when radio button for using a created grid is pressed. 
 		 	* It enables the browse button and to corresponding line edit.
@@ -367,7 +269,6 @@ namespace BALL
 				mol_struct->getCharmmConfigurationDialog().exec();
 			}
 		}
-
 
 	} // namespace VIEW
 } // namespace BALL
