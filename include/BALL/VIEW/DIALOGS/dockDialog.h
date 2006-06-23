@@ -5,6 +5,10 @@
 #ifndef BALL_VIEW_DIALOGS_DOCKDIALOG_H
 #define BALL_VIEW_DIALOGS_DOCKDIALOG_H
 
+#ifndef BALL_VIEW_DIALOGS_DOCKINGALGORITHMDIALOG_H
+# include <BALL/VIEW/DIALOGS/dockingAlgorithmDialog.h>
+#endif
+
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY_H
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
@@ -132,8 +136,8 @@ namespace BALL
 				 *	@param      algorithm the value of enum DockingController::Algorithm
 				 *	@param      dialog pointer to an advanced option dialog
 				 */
-				// remark: score_func isn't enum type because we then have cyclic includes of DockDialog and DockingController
-				void addAlgorithm(const QString& name, const int algorithm, QDialog* dialog)
+				// remark: algorithm isn't enum type because we then have cyclic includes of DockDialog and DockingController
+				void addAlgorithm(const QString& name, const int algorithm, DockingAlgorithmDialog* dialog)
 					throw();
 					
 				/** Adds scoring function to combobox and its advanced option dialog to hashmap, if it has such a dialog.
@@ -278,15 +282,6 @@ namespace BALL
 				 */
 				void fillSystemComboboxes_() throw();
 				
-				/** Reads the redocking values from INIFile into vector backup_.
-				 	*	If INIFile has not yet a section <b> REDOCKING </b>, fill vector \link DockDialog::backup_ backup_ \endlink with default values.
-				 	*	@param    	file the INIFile that is read
-					*	@param     	entry key of entry that is read
-					*	@param    	default_value default value
-					* @see				fetchPreferences
-				 */
-				void fetchPreferences_(INIFile& file, const String& entry, const QString& default_value) throw();
-			
 				/** Swaps the option values between vector backup_ and dialog.
 				 *  Is called in \link DockDialog::show show \endlink if \link DockDialog::has_changed_ has_changed_ \endlink is true
 				 *  and in \link DockDialog::writePreferences writePreferences \endlink if \link DockDialog::is_redock_ is_redock_ \endlink is true
@@ -316,7 +311,7 @@ namespace BALL
 				/** key: DockingController::Algorithm
 				 *  value: advanced options dialog
 				 */
-				HashMap<int, QDialog*> algorithm_dialogs_;
+				HashMap<int, DockingAlgorithmDialog*> algorithm_dialogs_;
 				
 				/** key: DockingController::ScoringFunction
 				 *  value: advanced options dialog
@@ -345,11 +340,12 @@ namespace BALL
 				Options algorithm_opt_, alg_ff_opt_, scoring_opt_;
 
 				/** Needed to guarantee that both, docking and redocking preferences can be written to INIFile
-					* When we do docking, redocking values are in the vector and when we do redocking, the docking values are in there.
-					* In \link DockDialog::fetchPreferences fetchPreferences \endlink, we read the last redocking values from INIFile in this vector
-					* and in \link DockDialog::writePreferences writePreferences \endlink, we write the redocking values in INIFile from this vector
+					* When we do docking, redocking values are in the map and when we do redocking, the docking values are in there.
+					* In \link DockDialog::fetchPreferences fetchPreferences \endlink, we read the last redocking values from INIFile in this map
+					* and in \link DockDialog::writePreferences writePreferences \endlink, we write the redocking values in INIFile from this map
 					*/
-				vector<QString> backup_;
+				ValueMap backup_;
+				String inifile_section_name_backup_;
 				
 				/** Processors
 				 */
