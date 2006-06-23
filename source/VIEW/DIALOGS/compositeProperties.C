@@ -137,8 +137,7 @@ void CompositeProperties::accept()
 		residue->setID(ascii(id_edit->text()));
 	}
 	
-	Log.info() << "Values applied." << std::endl;
-	close();
+	QDialog::accept();
 
 	// Sending of messages to update Scene is done in MolecularControl
 }
