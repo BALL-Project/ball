@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.7 2006/06/12 17:48:24 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.8 2006/06/23 16:06:45 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -236,7 +236,6 @@ namespace BALL
 			throw()
 		{
 			Log.error() << "in DockingController::runDocking.\n";
-
 			// Make sure we run just one instance at a time.
 			if (getMainControl()->isBusy())
 			{
@@ -252,6 +251,7 @@ namespace BALL
 			{
 				return;
 			}
+			return;
 			// check which algorithm is chosen and create a DockingAlgorithm object
 			Index index = dock_dialog_.algorithms->currentIndex();
 			switch(index)
@@ -309,6 +309,13 @@ namespace BALL
 			{
 				EvolutionaryDocking* ed = RTTI::castTo<EvolutionaryDocking>(*dock_alg_);
 				//ed->setFFOptions(dock_dialog_.getAlgorithmFFOptions());
+				///////////////////////// TEMP ///////////////////////////////
+			Options::ConstIterator it = dock_dialog_.getAlgorithmFFOptions().begin();
+      for (; +it; ++it)
+			{
+				Log.error() << it->first << " " << it->second << std::endl;
+			}
+
 			}
 							
 			// ============================= WITH MULTITHREADING ====================================
