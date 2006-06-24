@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.C,v 1.1.2.9 2006/06/24 21:38:52 amoll Exp $
+// $Id: modifyRepresentationDialog.C,v 1.1.2.10 2006/06/24 23:53:16 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
@@ -471,9 +471,9 @@ namespace BALL
 			vector<float> values;
 			Representation::GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
 			bool error = false;
-			for (; git != rep_->getGeometricObjects().end(); ++git)
+			try 
 			{
-				try 
+				for (; git != rep_->getGeometricObjects().end(); ++git)
 				{
 					Mesh* mesh = dynamic_cast<Mesh*>(*git);
 
@@ -481,7 +481,7 @@ namespace BALL
 					{
 						values.reserve(values.size() + mesh->vertex.size());
 						mesh->colors.resize(mesh->vertex.size());
-						for (Position i = 0; i < mesh->colors.size(); i++)
+						for (Position i = 0; i < mesh->vertex.size(); i++)
 						{
 							values.push_back(grid_->getInterpolatedValue(mesh->vertex[i]));
 						}
@@ -493,18 +493,18 @@ namespace BALL
 					if (line != 0)
 					{
 						values.reserve(values.size() + line->vertices.size());
-						for (Position i = 0; i < mesh->colors.size(); i++)
+						for (Position i = 0; i < line->vertices.size(); i++)
 						{
 							values.push_back(grid_->getInterpolatedValue(line->vertices[i]));
 							continue;
 						}
 					}
-				}
-				catch (Exception::OutOfGrid)
-				{
-					error = true;
-				}
-			}	 // all geometric objects
+				}	 // all geometric objects
+			}
+			catch (Exception::OutOfGrid)
+			{
+				error = true;
+			}
 
 			if (normalization->checkState() == Qt::Checked)
 			{

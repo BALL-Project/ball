@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.41 2006/05/31 19:59:53 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.42 2006/06/24 23:53:16 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -1044,7 +1044,8 @@ namespace BALL
 		Size monte_carlo_nr_lines = dialog.getMonteCarloNumberLines();
 
 		vector_grid_ = item_to_gradients_[context_item_];
-		RegularData3D* potential_grid = (*get3DGrids().begin()).first;
+		RegularData3D* potential_grid = 0;
+		if (get3DGrids().size()) potential_grid = (*get3DGrids().begin()).first;
 		
 		AtomContainer* ac = (AtomContainer*) item_to_composite_[context_item_];
 		if (ac == 0)
@@ -1082,6 +1083,15 @@ namespace BALL
 			// method from "Fast Display of Illuminated Field Lines"
 			// from Stalling, Zaeckler, Hege; 1997
 			// Monte Carlo Approach in relation to potential strenght at the individual points
+
+			if (potential_grid == 0) 
+			{
+				setStatusbarText("No potential grid loaded, aborting...", true);
+				return;
+			}
+
+			setStatusbarText("Using first 3D grid for density calculation", true);
+
 			Vector3 origin = vector_grid_->getOrigin();
 			Vector3 dimension = vector_grid_->getDimension();
 			VectorGrid::IndexType size = vector_grid_->getSize();
@@ -1091,8 +1101,15 @@ namespace BALL
 			Size sz = (Size)(size.z / 2.0 + 1);
 			RegularData3D::IndexType st(sx, sy, sz);
 
-			Vector3 diff = Vector3(0.000001);
-			RegularData3D new_grid(st, origin - diff, vector_grid_->getDimension() + diff * 2);
+			if (potential_grid->getOrigin() != vector_grid_->getOrigin() ||
+					potential_grid->getDimension() != vector_grid_->getDimension())
+			{
+				setStatusbarText("Potential and vector grid have different sizes, aborting...", true);
+				return;
+			}
+
+			Vector3 diff = Vector3(0.001);
+			RegularData3D new_grid(st, origin - diff, vector_grid_->getDimension() + diff * 2.);
 			const Size new_grid_size = sx * sy * sz;
 			for (Position p = 0; p < new_grid_size; p++)
 			{
@@ -1102,7 +1119,7 @@ namespace BALL
 			const vector<float>& values =  potential_grid->getData();
 			for (Position p = 0; p < values.size(); p++)
 			{
-				new_grid.getClosestValue((vector_grid_->getCoordinates(p))) += BALL_ABS(values[p]);
+				new_grid.getClosestValue((potential_grid->getCoordinates(p))) += BALL_ABS(values[p]);
 			}
 
 			const vector<float>& values2 =  new_grid.getData();
@@ -1139,11 +1156,11 @@ namespace BALL
 							createFieldLine_(point, *rep);
 							
 							/*
-							Sphere* p = new Sphere();
-							p->setPosition(point);
-							p->setRadius(0.05);
-							p->setColor(ColorRGBA(0.,0.1,0));
-							rep->insert(*p);
+							Sphere* s = new Sphere();
+							s->setPosition(point);
+							s->setRadius(0.05);
+							s->setColor(ColorRGBA(0.,0.1,0));
+							rep->insert(*s);
 							*/
 							
 							break;
@@ -1172,12 +1189,27 @@ namespace BALL
 
 			calculateLinePoints_(point, points, (backwards == 0) ? 1. : -1.);
 
-			const Size nrp = points.size();
-			if (points.size() < 2)
+			Index p = 0;
+			try
+			{
+				for (; p < (Index)points.size(); p++)
+				{
+					vector_grid_->getClosestIndex(points[p]);
+				}
+			}
+			catch(...)
+			{
+				p--;
+			}
+
+			if (p < 2)
 			{
 				delete line;
 				return;
 			}
+
+			points.resize(p);
+			const Size nrp = points.size();
 
 			line->tangents.resize(nrp);
 
