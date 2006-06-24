@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.32.2.4 2006/05/15 21:10:09 amoll Exp $$
+// $Id: molecularFileDialog.C,v 1.32.2.5 2006/06/24 18:18:32 amoll Exp $$
 //
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -204,13 +204,13 @@ namespace BALL
 			{
 				result = writeHINFile(filename, system);
 			}
-			else if (filter.hasSubstring("MOL") || filter.hasSubstring("mol"))
-			{
-				result = writeMOLFile(filename, system);
-			}
 			else if (filter.hasSubstring("MOL2") || filter.hasSubstring("mol2"))
 			{
 				result = writeMOL2File(filename, system);
+			}
+			else if (filter.hasSubstring("MOL") || filter.hasSubstring("mol"))
+			{
+				result = writeMOLFile(filename, system);
 			}
 			else if (filter.hasSubstring("SDF") || filter.hasSubstring("sdf"))
 			{
