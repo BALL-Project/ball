@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.C,v 1.1.2.8 2006/05/31 19:43:16 amoll Exp $
+// $Id: modifyRepresentationDialog.C,v 1.1.2.9 2006/06/24 21:38:52 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
@@ -59,8 +59,8 @@ namespace BALL
 			connect( surface_tab, SIGNAL( currentChanged(int) ), this, SLOT( tabChanged() ) );
 			connect( autoscale, SIGNAL( clicked() ), this, SLOT( autoScale() ) );
 			connect( grids, SIGNAL( activated(int) ), this, SLOT( gridSelected() ) );
-			connect( alpha_button_grid, SIGNAL( clicked() ), this, SLOT( gridTransparencyChanged() ) );
-			connect( none_button_grid, SIGNAL( clicked() ), this, SLOT( gridTransparencyChanged() ) );
+			connect( grid_transparency, SIGNAL( stateChanged(int) ), this, SLOT(gridTransparencyChanged()));
+			connect( normalization, SIGNAL( clicked() ), this, SLOT(normalizationChanged()));
 			connect( min_min_button, SIGNAL( clicked() ), this, SLOT( minMinPressed() ) );
 			connect( min_button, SIGNAL( clicked() ), this, SLOT( minPressed() ) );
 			connect( mid_button, SIGNAL( clicked() ), this, SLOT( midPressed() ) );
@@ -74,6 +74,15 @@ namespace BALL
 
 			registerWidget(this);
 			setObjectName(name);
+		}
+
+		void ModifyRepresentationDialog::normalizationChanged()
+		{
+			if (!normalization->checkState() == Qt::Checked) return;
+
+			min_box->setText("0.0");
+			mid_box->setText("0.5");
+			max_box->setText("1.0");
 		}
 
 		ModifyRepresentationDialog::~ModifyRepresentationDialog()
@@ -307,11 +316,11 @@ namespace BALL
 		}
 
 
-		void ModifyRepresentationDialog::setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box, const QRadioButton* rbutton)
+		void ModifyRepresentationDialog::setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box)
 		{
 			color = VIEW::getColor(label);
 
-			if (rbutton->isChecked())
+			if (grid_transparency->checkState() == Qt::Checked)
 			{
 				color.setAlpha(box->value());
 			}
@@ -429,11 +438,11 @@ namespace BALL
 				return false;
 			}
 
-			setColor_(min_min_color, min_min_label, min_min_alpha, alpha_button_grid);
-			setColor_(min_color, min_label, min_alpha, alpha_button_grid);
-			setColor_(mid_color, mid_label, mid_alpha, alpha_button_grid);
-			setColor_(max_color, max_label, max_alpha, alpha_button_grid);
-			setColor_(max_max_color, max_max_label, max_max_alpha, alpha_button_grid);
+			setColor_(min_min_color, min_min_label, min_min_alpha);
+			setColor_(min_color, min_label, min_alpha);
+			setColor_(mid_color, mid_label, mid_alpha);
+			setColor_(max_color, max_label, max_alpha);
+			setColor_(max_max_color, max_max_label, max_max_alpha);
 
 			// now do the colorizing stuff...
 			float min_value = ascii(min_box->text()).toFloat();
@@ -459,6 +468,7 @@ namespace BALL
 			cm.setInterpolationBoundaries(interpolation_points);
 			cm.createMap();
 
+			vector<float> values;
 			Representation::GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
 			bool error = false;
 			for (; git != rep_->getGeometricObjects().end(); ++git)
@@ -469,10 +479,11 @@ namespace BALL
 
 					if (mesh != 0)
 					{
+						values.reserve(values.size() + mesh->vertex.size());
 						mesh->colors.resize(mesh->vertex.size());
 						for (Position i = 0; i < mesh->colors.size(); i++)
 						{
-							mesh->colors[i].set(cm.map(grid_->getInterpolatedValue(mesh->vertex[i])));
+							values.push_back(grid_->getInterpolatedValue(mesh->vertex[i]));
 						}
 						continue;
 					}
@@ -481,17 +492,55 @@ namespace BALL
 
 					if (line != 0)
 					{
-						line->colors.resize(line->vertices.size());
-						for (Position i = 0; i < line->colors.size(); i++)
+						values.reserve(values.size() + line->vertices.size());
+						for (Position i = 0; i < mesh->colors.size(); i++)
 						{
-							line->colors[i].set(cm.map(grid_->getInterpolatedValue(line->vertices[i])));
+							values.push_back(grid_->getInterpolatedValue(line->vertices[i]));
+							continue;
 						}
-						continue;
 					}
 				}
 				catch (Exception::OutOfGrid)
 				{
 					error = true;
+				}
+			}	 // all geometric objects
+
+			if (normalization->checkState() == Qt::Checked)
+			{
+				calculateHistogramEqualization(values, values);
+			}
+			
+			git = rep_->getGeometricObjects().begin();
+			Position p = 0;
+			for (; git != rep_->getGeometricObjects().end(); ++git)
+			{
+				Mesh* mesh = dynamic_cast<Mesh*>(*git);
+
+				if (mesh != 0)
+				{
+					mesh->colors.resize(mesh->vertex.size());
+					for (Position i = 0; i < mesh->colors.size(); i++)
+					{
+						mesh->colors[i].set(cm.map(values[p]));
+						p++;
+						if (p == values.size()) break;
+					}
+					continue;
+				}
+
+				IlluminatedLine* line = dynamic_cast<IlluminatedLine*>(*git);
+
+				if (line != 0)
+				{
+					line->colors.resize(line->vertices.size());
+					for (Position i = 0; i < line->colors.size(); i++)
+					{
+						line->colors[i].set(cm.map(values[p]));
+						p++;
+						if (p == values.size()) break;
+					}
+					continue;
 				}
 			}	 // all geometric objects
 			
@@ -631,11 +680,12 @@ namespace BALL
 
 		void ModifyRepresentationDialog::gridTransparencyChanged()
 		{
-			min_min_alpha->setEnabled(alpha_button_grid->isChecked());
-					min_alpha->setEnabled(alpha_button_grid->isChecked());
-					mid_alpha->setEnabled(alpha_button_grid->isChecked());
-					max_alpha->setEnabled(alpha_button_grid->isChecked());
-			max_max_alpha->setEnabled(alpha_button_grid->isChecked());
+			bool enabled = grid_transparency->checkState() == Qt::Checked;
+			min_min_alpha->setEnabled(enabled);
+					min_alpha->setEnabled(enabled);
+					mid_alpha->setEnabled(enabled);
+					max_alpha->setEnabled(enabled);
+			max_max_alpha->setEnabled(enabled);
 		}
 
 		void ModifyRepresentationDialog::setMinValue(float value)
