@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.4.6 2006/06/24 19:11:00 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.4.7 2006/06/25 01:21:54 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -348,11 +348,11 @@ namespace BALL
 				//    -7 * a^7 = k_vdw
 				const double R_7 = pow(nbd.rij, 7.);
 				const double R_8 = R_7 * nbd.rij;
-				const double R_14 = pow(nbd.rij, 14.);
+				const double R_14 = R_7 * R_7;
 
-				const double r_6 = pow(r, r.);
+				const double r_6 = pow(r, 6.);
 				const double r_7 = r_6 * r;
-				const double r_14 = pow(r, 14.);
+				const double r_14 = r_7 * r_7;
 
 				double vdw_factor = nbd.eij * k_vdw * R_7 * (2. * c * R_7 * r_7 +
 																										 c * R_14 * d -

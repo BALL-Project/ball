@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.62 2006/06/20 21:54:43 amoll Exp $
+// $Id: scene.C,v 1.174.2.63 2006/06/25 01:21:32 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -276,68 +276,8 @@ namespace BALL
 				{
 					case RegularData3DMessage::VISUALISE_SLICE:
 					case RegularData3DMessage::VISUALISE_VOLUME:
-					{
-						Position texname = 0;
-
-						if (!gl_renderer_.grid_to_texture_.has(&grid))
-						{
-							// to be moved somewhere else:
-							ColorMap map;
-							ColorRGBA colors[3];
-							colors[0] = ColorRGBA(1.0, 0.0, 0.0, 0.05);
-							colors[1] = ColorRGBA(1.0, 1.0, 0.0, 0.001);
-							colors[2] = ColorRGBA(0.0, 0.0, 1.0, 0.05);
-							if (rm->getType() == (Size) RegularData3DMessage::VISUALISE_SLICE)
-							{
-								colors[0].setAlpha(0.8);
-								colors[1].setAlpha(0.5);
-								colors[2].setAlpha(0.8);
-							}
-							map.setBaseColors(colors, 3);
-							map.setNumberOfColors(512);
-							map.setAlphaBlending(true);
-							const vector<float>& values = grid.getData();
-							float min = values[0];
-							float max = values[0];
-							for (Position p = 1; p < values.size(); p++)
-							{
-								if (values[p] < min) min = values[p];
-								if (values[p] > max) max = values[p];
-							}
-							map.setRange(min, max);
-							map.createMap();
-							Log.info() << "Creating coloring for grid, min value = " << min 
-												 << " max = " << max << std::endl;
-
-							texname = gl_renderer_.createTextureFromGrid(grid, map);
-						}
-						else
-						{
-							texname = gl_renderer_.grid_to_texture_[&grid];
-						}
-
-						Representation* rep = new Representation();
-
-						if (rm->getType() == (Size) RegularData3DMessage::VISUALISE_SLICE)
-						{
-							GridVisualisation * slice = gl_renderer_.createTexturedGridPlane(grid, texname);
-							rep->insert(*slice);
-							rep->setModelType(MODEL_GRID_SLICE);
-						}
-						else
-						{
-							GridVisualisation * vol = gl_renderer_.createVolume(grid, texname);
-							rep->insert(*vol);
-							rep->setTransparency(64);
-							rep->setProperty("DONT_CLIP");
-							rep->setModelType(MODEL_GRID_VOLUME);
-						}
-
-						rep->setProperty("RENDER_DIRECT");
-						getMainControl()->insert(*rep);
-						getMainControl()->update(*rep);
-						return;
-					}
+						visualizeGrid(*rm->getData(), rm->getType() == (Size) RegularData3DMessage::VISUALISE_SLICE);
+						break;
 
 					case RegularData3DMessage::UPDATE:
 					case RegularData3DMessage::REMOVE:
@@ -409,6 +349,71 @@ namespace BALL
 			}
 		}
 
+
+		void Scene::visualizeGrid(RegularData3D& grid, bool slice)
+
+		{
+			Position texname = 0;
+			bool normalize = 1;
+
+			if (!gl_renderer_.grid_to_texture_.has(&grid))
+			{
+				// to be moved somewhere else:
+				ColorMap map;
+				ColorRGBA colors[3];
+				colors[0] = ColorRGBA(1.0, 0.0, 0.0, 0.09);
+				colors[1] = ColorRGBA(1.0, 1.0, 0.0, 0.00);
+				colors[2] = ColorRGBA(0.0, 0.0, 1.0, 0.09);
+				if (slice)
+				{
+					colors[0].setAlpha(0.8);
+					colors[1].setAlpha(0.5);
+					colors[2].setAlpha(0.8);
+				}
+				map.setBaseColors(colors, 3);
+				map.setNumberOfColors(512);
+				map.setAlphaBlending(true);
+				const vector<float>& values = grid.getData();
+				float min = values[0];
+				float max = values[0];
+				for (Position p = 1; p < values.size(); p++)
+				{
+					if (values[p] < min) min = values[p];
+					if (values[p] > max) max = values[p];
+				}
+ 				map.setRange(min, max);
+				map.createMap();
+				Log.info() << "Creating coloring for grid, min value = " << min 
+									 << " max = " << max << std::endl;
+
+				texname = gl_renderer_.createTextureFromGrid(grid, map);
+			}
+			else
+			{
+				texname = gl_renderer_.grid_to_texture_[&grid];
+			}
+
+			Representation* rep = new Representation();
+
+			if (slice)
+			{
+				GridVisualisation * slice = gl_renderer_.createTexturedGridPlane(grid, texname);
+				rep->insert(*slice);
+				rep->setModelType(MODEL_GRID_SLICE);
+			}
+			else
+			{
+				GridVisualisation * vol = gl_renderer_.createVolume(grid, texname);
+				rep->insert(*vol);
+				rep->setTransparency(64);
+				rep->setProperty("DONT_CLIP");
+				rep->setModelType(MODEL_GRID_VOLUME);
+			}
+
+			rep->setProperty("RENDER_DIRECT");
+			getMainControl()->insert(*rep);
+			getMainControl()->update(*rep);
+		}
 
 		void Scene::initializeGL()
 		{
