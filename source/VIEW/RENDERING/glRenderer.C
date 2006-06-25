@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.50 2006/05/20 13:14:45 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.51 2006/06/25 12:45:25 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1962,7 +1962,7 @@ namespace BALL
 		GridVisualisation* vol = new GridVisualisation;
 		vol->setGrid(&grid);
 		vol->setTexture(texname);
-		vol->slices = 64;
+		vol->slices = 32;
 		initGridObject_(*vol, grid);
 		return vol;
 	}
@@ -2019,9 +2019,9 @@ namespace BALL
 		glTexGenf(GL_S,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
 		glTexGenf(GL_T,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
 		glTexGenf(GL_R,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
-		glTexGenfv(GL_S,GL_OBJECT_PLANE, xp);
+		glTexGenfv(GL_S,GL_OBJECT_PLANE, zp);
 		glTexGenfv(GL_T,GL_OBJECT_PLANE, yp);
-		glTexGenfv(GL_R,GL_OBJECT_PLANE, zp);
+		glTexGenfv(GL_R,GL_OBJECT_PLANE, xp);
 		glEnable(GL_TEXTURE_GEN_S);
 		glEnable(GL_TEXTURE_GEN_T);
 		glEnable(GL_TEXTURE_GEN_R);
