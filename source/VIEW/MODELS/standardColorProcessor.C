@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.56 2005/12/23 17:03:34 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.56.2.1 2006/06/25 12:19:01 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -401,9 +401,9 @@ namespace BALL
 			min_value_ = -1.0;
 			max_value_ =  1.0;
 
-			colors_[0] = "0000FFFF";
+			colors_[0] = "FF0000FF";
 			colors_[1] = "FFFFFFFF";
-			colors_[2] = "FF0000FF";
+			colors_[2] = "0000FFFF";
 
 			update_always_needed_ = true;
 		}
