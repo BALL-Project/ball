@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.12 2006/06/05 21:29:06 amoll Exp $
+// $Id: scene.h,v 1.66.2.13 2006/06/25 12:53:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -604,6 +604,8 @@ namespace BALL
 			///
 			void setFullScreen(bool state);
 			
+			void visualizeGrid(RegularData3D& grid, bool slice);
+
 			protected slots:
 
 			//@}
