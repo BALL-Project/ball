@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.51 2006/06/25 12:45:25 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.52 2006/06/26 21:37:11 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -2035,11 +2035,10 @@ namespace BALL
 						 (double)1.0 / (double) dim.z);
 		glMatrixMode(GL_MODELVIEW);
 
-		glBegin(GL_QUADS);
-
 		// render this as one slice
-		if (vol.slices == 1)
+		if (vol.type == GridVisualisation::PLANE)
 		{
+			glBegin(GL_QUADS);
 			Vector3 n = vol.getNormal();
 			Vector3 v1 = getNormal(n);
 			Vector3 v2 = v1 % n;
@@ -2068,8 +2067,9 @@ namespace BALL
 			vertexVector3_(o + v1);
 			vertexVector3_(o);
 		}
-		else
+		else if (vol.type == GridVisualisation::SLICES)
 		{
+			glBegin(GL_QUADS);
 			// volume rendering
 			const Vector3 vv = scene_->getStage()->getCamera().getViewVector();
 
@@ -2151,6 +2151,19 @@ namespace BALL
 				xy += vectors[2];
 				y  += vectors[2];
 			}
+		}
+		else
+		{
+			glDisable(GL_LIGHTING);
+			glPointSize(2);
+			glBegin(GL_POINTS);
+			for (Position p = 0; p < vol.points.size(); p++)
+			{
+				vertexVector3_(vol.points[p]);
+			}
+			glEnd();
+			glEnable(GL_LIGHTING);
+			glPointSize(1);
 		}
 
 		// cleanup:
