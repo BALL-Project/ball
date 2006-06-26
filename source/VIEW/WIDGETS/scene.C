@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.64 2006/06/26 21:09:40 amoll Exp $
+// $Id: scene.C,v 1.174.2.65 2006/06/26 22:51:24 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -416,6 +416,7 @@ namespace BALL
 			rep->insert(*vol);
 
 			if (false) // ???????????
+//   			if (vol.type == GridVisualisation::SLICES)
 			{
   			rep->setProperty("RENDER_DIRECT");
 				getMainControl()->update(*rep);
@@ -505,7 +506,7 @@ namespace BALL
 				}
 			}
 						
-//   			rep->setTransparency(00);
+ 			rep->setTransparency(00);
  			getMainControl()->update(*rep);
 		}
 
