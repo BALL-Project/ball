@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSConstructor_test.C,v 1.2.2.1 2006/06/26 18:38:55 oliver Exp $
+// $Id: RSConstructor_test.C,v 1.1.2.1 2006/06/26 18:38:48 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(RSConstructor, "$Id: RSConstructor_test.C,v 1.2.2.1 2006/06/26 18:38:55 oliver Exp $")
+START_TEST(RSConstructor, "$Id: RSConstructor_test.C,v 1.1.2.1 2006/06/26 18:38:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDGenerator_test.C,v 1.2 2006/06/08 07:30:28 oliver Exp $
+// $Id: SDGenerator_test.C,v 1.2.2.1 2006/06/26 18:38:56 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -13,28 +13,34 @@
 
 #include <BALL/STRUCTURE/sdGenerator.h>
 #include <BALL/FORMAT/MOLFile.h>
+#include <BALL/FORMAT/PDBFile.h>
 
 ///////////////////////////
 
-START_TEST(SDGenerator, "$Id: SDGenerator_test.C,v 1.2 2006/06/08 07:30:28 oliver Exp $")
+START_TEST(SDGenerator, "$Id: SDGenerator_test.C,v 1.2.2.1 2006/06/26 18:38:56 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-PRECISION(0.0001)
+PRECISION(0.001)
 
 SDGenerator* sdg;
 
 CHECK(SDGenerator())
-  	sdg = new SDGenerator;
+  sdg = new SDGenerator;
 	TEST_NOT_EQUAL(sdg, 0)
 RESULT
 
+CHECK(~SDGenerator())
+  delete sdg;
+RESULT
+
+
 SDGenerator sdg_2;
 System molecule_sys;
-MOLFile infile("data/input_SDGenerator_test.mol");
+PDBFile infile("data/input_SDGenerator_test.pdb");
 infile >> molecule_sys;
 infile.close();
 
@@ -55,44 +61,57 @@ RESULT
 
 for(AtomIterator atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.endAtom(); atom_it++)
 {	
-	atom_it -> setProperty(SDGenerator::in_ring);
+	atom_it -> setProperty(SDGenerator::IN_RING);
 }
 //	get the "smallest set of smallest rings" (SSSR)
 vector<vector<Atom*> > sssr;
 
-//	call the implementation of  Figueras algorithm 
+//	call the implementation of Figueras algorithm 
 RingPerceptionProcessor getRings;
 
 getRings.RingPerceptionProcessor::calculateSSSR(sssr, molecule_sys);
 
 vector<vector<Atom*> > unseq_ringsys = sssr;
-
 CHECK(vector<vector<Atom*> sequenceRings(vector<vector<Atom*> >& ringsystem))
 
 	vector<vector<Atom*> > seq_ringsys = sdg_2.sequenceRings(sssr);
-	
-	TEST_EQUAL(seq_ringsys[0][0],unseq_ringsys[0][0])
-	TEST_EQUAL(seq_ringsys[0][1],unseq_ringsys[0][1])
-	TEST_EQUAL(seq_ringsys[0][2],unseq_ringsys[0][2])
-	TEST_EQUAL(seq_ringsys[0][3],unseq_ringsys[0][3])
-	TEST_EQUAL(seq_ringsys[0][4],unseq_ringsys[0][4])
-	TEST_EQUAL(seq_ringsys[0][5],unseq_ringsys[0][5])
 
+	for(Size i = 0; i != seq_ringsys[0].size(); i++)
+	{
+		if(i > 0 && i < seq_ringsys[0].size())
+		{
+			if(seq_ringsys[0][i-1] == sdg_2.getNeighbours(seq_ringsys[0], seq_ringsys[0][i]).first)
+			{
+				TEST_EQUAL(seq_ringsys[0][i-1], sdg_2.getNeighbours(seq_ringsys[0], seq_ringsys[0][i]).first)
+			}
+			else if(seq_ringsys[0][i-1] == sdg_2.getNeighbours(seq_ringsys[0], seq_ringsys[0][i]).second)
+			{
+				TEST_EQUAL(seq_ringsys[0][i-1], sdg_2.getNeighbours(seq_ringsys[0], seq_ringsys[0][i]).second)
+			}
+			else if(seq_ringsys[0][i+1] = sdg_2.getNeighbours(seq_ringsys[0], seq_ringsys[0][i]).first)
+			{
+				TEST_EQUAL(seq_ringsys[0][i+1], sdg_2.getNeighbours(seq_ringsys[0], seq_ringsys[0][i]).first)
+			}
+			else
+			{	//if none of the previous cases was true, this one must be, otherwise sequenceRings() has failed
+				TEST_EQUAL(seq_ringsys[0][i+1], sdg_2.getNeighbours(seq_ringsys[0], seq_ringsys[0][i]).second)
+			}
+		}
+	}
 
 RESULT
 
 System molecule_sys_2;
-MOLFile infile_2("data/input_SDGenerator_test_2a.mol");
+PDBFile infile_2("data/input_SDGenerator_test_2a.pdb");
 infile_2 >> molecule_sys_2;
 infile.close(); 
 
 System molecule_sys_3;
-MOLFile infile_3("data/input_SDGenerator_test_2b.mol");
+PDBFile infile_3("data/input_SDGenerator_test_2b.pdb");
 infile_3 >> molecule_sys_3;
 infile_3.close(); 
 
 CHECK(void generateSD(System& molecule_sys))
-
 	sdg_2.generateSD(molecule_sys_2);
 	
 	vector<Atom*> mol_1;
@@ -102,26 +121,14 @@ CHECK(void generateSD(System& molecule_sys))
 
 	for(atom_it_1 = molecule_sys_3.beginAtom(); atom_it_1 != molecule_sys_3.endAtom(); atom_it_1++)
 	{
-		mol_1.push_back(&*atom_it_1);
+		for(atom_it_2 = molecule_sys_2.beginAtom(); atom_it_2 != molecule_sys_2.endAtom(); atom_it_2++)
+		{
+			if(atom_it_1 -> getName() == atom_it_2 -> getName())
+			{
+				TEST_REAL_EQUAL(atom_it_1 -> getPosition()[1], atom_it_2 -> getPosition()[1]);
+			}
+		}
 	}
-
-	for(atom_it_2 = molecule_sys_2.beginAtom(); atom_it_2 != molecule_sys_2.endAtom(); atom_it_2++)
-	{
-		mol_2.push_back(&*atom_it_2);
-	}
-
-	for(Size i = 0; i != mol_1.size(); i++)
-	{
-		//TEST_REAL_EQUAL(mol_1[i] -> getPosition()[0], mol_2[i] -> getPosition()[0]);
-		TEST_REAL_EQUAL(mol_1[i] -> getPosition()[1], mol_2[i] -> getPosition()[1]);
-	}
-			
-RESULT
-
-
-CHECK(~SDGenerator())
-
-  	delete sdg;
 
 RESULT
 

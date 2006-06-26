@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.47 2006/01/27 20:57:46 oliver Exp $
+# $Id: Makefile,v 1.47.4.1 2006/06/26 18:38:50 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -28,6 +28,7 @@ CPP_SOURCES=\
 	analyticalSES.C\
 	atomBijection.C\
 	buildBondsProcessor.C\
+	chainBuilder.C\
 	connolly.C\
 	defaultProcessors.C\
 	fragmentDB.C\
@@ -37,6 +38,7 @@ CPP_SOURCES=\
 	graphFace.C\
 	graphVertex.C\
 	HBondProcessor.C\
+	moleculeAssembler.C\
 	molecularGraph.C\
 	numericalSAS.C\
 	peptides.C\
@@ -48,13 +50,17 @@ CPP_SOURCES=\
 	RDFSection.C\
 	reducedSurface.C\
 	residueChecker.C\
+	ringAnalyser.C\
+	ringClusterer.C\
 	rotamerLibrary.C\
+	rsConstructor.C\
 	RSEdge.C\
 	RSFace.C\
 	RSVertex.C\
 	SASEdge.C\
 	SASFace.C\
 	SASVertex.C\
+	sdGenerator.C\
 	SESEdge.C\
 	SESFace.C\
 	SESVertex.C\

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RingAnalyser_test.C,v 1.2.2.1 2006/06/26 18:38:55 oliver Exp $
+// $Id: RingAnalyser_test.C,v 1.1.2.1 2006/06/26 18:38:49 oliver Exp $
 //
 // Author:
 //  Holger Franken
@@ -17,7 +17,7 @@
 
 ///////////////////////////
 
-START_TEST(RingAnalyser, "$Id: RingAnalyser_test.C,v 1.2.2.1 2006/06/26 18:38:55 oliver Exp $")
+START_TEST(RingAnalyser, "$Id: RingAnalyser_test.C,v 1.1.2.1 2006/06/26 18:38:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
