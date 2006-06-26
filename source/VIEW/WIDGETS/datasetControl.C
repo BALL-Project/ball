@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.42 2006/06/24 23:53:16 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.43 2006/06/26 23:26:37 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -1122,57 +1122,20 @@ namespace BALL
 				new_grid.getClosestValue((potential_grid->getCoordinates(p))) += BALL_ABS(values[p]);
 			}
 
-			const vector<float>& values2 =  new_grid.getData();
-			vector<float> normalized_values;
+			vector<Vector3> result_points;
+			calculateRandomPoints(new_grid, monte_carlo_nr_lines, result_points);
 
-			calculateHistogramEqualization(values2, normalized_values);
-
-			float current = 0;
-			for (Position p = 0; p < normalized_values.size(); p++)
-			{
-				current += normalized_values[p];
-				normalized_values[p] = current;
-			}
-
-			const Vector3 spacing = new_grid.getSpacing();
-			RandomNumberGenerator ran_gen;
-			ran_gen.setup();
-			
-			Size errors = 0;
 			for (Position p = 0; p < monte_carlo_nr_lines; p++)
 			{
-				float x = ran_gen.randomDouble(0, current);
-				for (Position i = 0; i < normalized_values.size(); i++)
-				{
-					if (normalized_values[i] > x)
-					{
-						Vector3 point = new_grid.getCoordinates(i);
-						point += Vector3(ran_gen.randomDouble(-0.5, 0.5) * spacing.x,
-														 ran_gen.randomDouble(-0.5, 0.5) * spacing.y,
-														 ran_gen.randomDouble(-0.5, 0.5) * spacing.z);
-						try
-						{
-							vector_grid_->getClosestValue(point);
-							createFieldLine_(point, *rep);
+				createFieldLine_(result_points[p], *rep);
 							
-							/*
-							Sphere* s = new Sphere();
-							s->setPosition(point);
-							s->setRadius(0.05);
-							s->setColor(ColorRGBA(0.,0.1,0));
-							rep->insert(*s);
-							*/
-							
-							break;
-						}
-						catch(...)
-						{
-							errors ++;
-							p--;
-							break;
-						}
-					}
-				} // search point
+				/*
+				Sphere* s = new Sphere();
+				s->setPosition(point);
+				s->setRadius(0.05);
+				s->setColor(ColorRGBA(0.,0.1,0));
+				rep->insert(*s);
+				*/
 			} // all lines
 		}
 
@@ -1615,7 +1578,7 @@ namespace BALL
 
 		vector<float>& normalized =  *(vector<float>*)&new_grid->getData();
 
-		calculateHistogramEqualization(grid.getData(), normalized);
+		calculateHistogramEqualization(grid.getData(), normalized, true);
 
 		String text = String("normalized ") + ascii(context_item_->text(0));;
 		insertGrid_(new_grid, (System*)item_to_composite_[context_item_], text);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.40.2.12 2006/05/15 15:13:57 amoll Exp $
+// $Id: common.h,v 1.40.2.13 2006/06/26 23:26:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -23,6 +23,9 @@
  #include <BALL/DATATYPE/list.h>
 #endif
 
+#ifndef BALL_DATATYPE_REGULARDATA3D_H
+ #include <BALL/DATATYPE/regularData3D.h>
+#endif
 
 #include <QtGui/qcolordialog.h>
 #include <QtGui/QLabel>
@@ -467,6 +470,9 @@ namespace BALL
 		BALL_VIEW_EXPORT vector<Vector3> createSphere(Size precision);
 
 		BALL_VIEW_EXPORT void calculateHistogramEqualization(const vector<float>& values, vector<float>& normalized_values, bool use_absolute_values = false);
+
+		/// calcualte a random set of points, dependening of the field strength of a grid
+		BALL_VIEW_EXPORT void calculateRandomPoints(const RegularData3D& grid, Size nr_points, vector<Vector3>& resulting_points);
 
 		BALL_VIEW_EXPORT void getColors(const GeometricObject& object, HashSet<String>& colors);
 		

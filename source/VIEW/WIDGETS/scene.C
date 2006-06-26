@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.65 2006/06/26 22:51:24 amoll Exp $
+// $Id: scene.C,v 1.174.2.66 2006/06/26 23:26:43 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -43,8 +43,6 @@
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
 #include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
-#include <BALL/MATHS/randomNumberGenerator.h>
-#include <BALL/VIEW/PRIMITIVES/point.h>
 
 //         #define BALL_BENCHMARKING
 
@@ -427,84 +425,8 @@ namespace BALL
 
 			Size nr_points = (Size)(grid.getDimension().getLength() * 1000.);
 
-			RandomNumberGenerator ran_gen;
-			ran_gen.setup();
-
 			vector<Vector3>& points = vol->points;
-			Vector3 point;
-
-			vector<float> normalized_values;
-			calculateHistogramEqualization(grid.getData(), normalized_values, true);
-
-			float current = 0;
-			for (Position p = 0; p < normalized_values.size(); p++)
-			{
-				current += normalized_values[p];
-				normalized_values[p] = current;
-			}
-
-			const Vector3 spacing = grid.getSpacing();
-			Vector3 off = Vector3(spacing.x / 2.0, spacing.y / 2.0, spacing.z / 2.0);
-			float xd  =  spacing.x;
-			float yd  =  spacing.y;
-			float zd  =  spacing.z;
-			float xdm = -xd;
-			float ydm = -yd;
-			float zdm = -zd;
-
-			float x;
-			Index max_max = grid.getData().size();
-			Index hh = (int) (grid.getData().size() / 2.0);
-			Index h, hmin, hmax;
-
-			for (Position i = 0; i < nr_points; i++)
-			{
-				x = ran_gen.randomDouble(0, current);
-
-				try
-				{
-					hmin = 0;
-					hmax = max_max;
-					h = hh;
-
-					while (hmax - hmin > 1)
-					{
-						if (normalized_values[h] < x) 
-						{
-							hmin = h + 1;
-						}
-						else if (normalized_values[h] > x) 
-						{
-							hmax = h - 1;
-						}
-						else
-						{
-							break;
-						}
-
-						h = (Index)((hmax - hmin) / 2.0 + hmin);
-					}
-
-					if (hmax - hmin == 1)
-					{
-						if (normalized_values[hmin] < x) h = hmax;
-						else h = hmin;
-					}
-
-					Vector3 point = grid.getCoordinates(h) + off +
-													Vector3(ran_gen.randomDouble(xdm, xd),
-													        ran_gen.randomDouble(ydm, yd),
-																  ran_gen.randomDouble(zdm, zd));
-
-					grid.getClosestIndex(point);
-
-					points.push_back(point);
-				}
-				catch(...)
-				{
-					i--;
-				}
-			}
+			calculateRandomPoints(grid, nr_points, points);
 						
  			rep->setTransparency(00);
  			getMainControl()->update(*rep);
