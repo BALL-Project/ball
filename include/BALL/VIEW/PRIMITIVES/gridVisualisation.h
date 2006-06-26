@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualisation.h,v 1.1.2.4 2006/05/05 14:35:59 amoll Exp $
+// $Id: gridVisualisation.h,v 1.1.2.5 2006/06/26 21:09:06 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_PRIMITIV_GRIDSLICE_H
@@ -26,6 +26,18 @@ namespace BALL
 			: public GeometricObject
 		{
 			public:
+
+			enum Type
+			{
+				///
+				PLANE,
+
+				///
+				SLICES,
+
+				///
+				DOTS
+			};
 
 			BALL_CREATE(GridVisualisation)
 
@@ -73,6 +85,8 @@ namespace BALL
 			Vector3 origin, x,y,z;
 			float max_dim;
 			Size slices;
+			vector<Vector3> points;
+			Type type;
 
 			protected:
 
