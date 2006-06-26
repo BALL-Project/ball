@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.C,v 1.14 2005/10/23 12:02:30 oliver Exp $
+// $Id: colorUnit.C,v 1.14.2.1 2006/06/26 23:53:49 amoll Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/colorUnit.h>
@@ -77,10 +77,12 @@ namespace BALL
 		ColorUnit::ColorUnit(const int i)
 			throw(Exception::InvalidRange)
 		{
+			/*
 			if ((i < 0) || (i > 255))
       {
 				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, i);
 			}
+			*/
 
 			value_ = (float)i / (float)255;
 		}
@@ -88,10 +90,12 @@ namespace BALL
 		ColorUnit::ColorUnit(const unsigned int ui)
 			throw(Exception::InvalidRange)
 		{
+			/*
 			if (ui > 255)
       {
 				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, ui);
 			}
+			*/
 
 			value_ = (float)ui / (float)255;
 		}
@@ -99,10 +103,12 @@ namespace BALL
 		ColorUnit::ColorUnit(const long l)
 			throw(Exception::InvalidRange)
 		{
+			/*
 			if ((l < 0) || (l > 255))
       {
 				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, l);
 			}
+			*/
 
 			value_ = (float)l / (float)255;
 		}
@@ -110,10 +116,12 @@ namespace BALL
 		ColorUnit::ColorUnit(const unsigned long ul)
 			throw(Exception::InvalidRange)
 		{
+			/*
 			if (ul > 255)
       {
 				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, ul);
 			}
+			*/
  
 			value_ = (float)ul / (float)255;
 		}
@@ -121,10 +129,12 @@ namespace BALL
 		ColorUnit::ColorUnit(const float f)
 			throw(Exception::InvalidRange)
 		{
+			/*
 			if ((f < 0.0) || (f > 1.0))
       {
 				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, f);
 			}
+			*/
 
 			value_ = f;
 		}
@@ -132,10 +142,12 @@ namespace BALL
 		ColorUnit::ColorUnit(const double d)
 			throw(Exception::InvalidRange)
 		{
+			/*
 			if ((d < 0.0) || (d > 1.0))
       {
 				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, d);
 			}
+			*/
 
 			value_ = (float)d;
 		}
@@ -236,10 +248,12 @@ namespace BALL
 		void ColorUnit::set(const short s)
 			throw(Exception::InvalidRange)
 		{
+			/*
 			if ((s < 0) || (s > 255))
 			{
 				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, s);
 			}
+			*/
 
 			value_ = (float)s / (float)255;
 		}
@@ -261,10 +275,12 @@ namespace BALL
 		void ColorUnit::set(const unsigned short us)
 			throw(Exception::InvalidRange)
 		{
+			/*
 			if (us > 255)
       {
 				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, us);
 			}
+			*/
 
 			value_ = (float)us / (float)255;
 		}
@@ -286,10 +302,12 @@ namespace BALL
 		void ColorUnit::set(const int i)
 			throw(Exception::InvalidRange)
 		{
+			/*
 			if ((i < 0) || (i > 255))
 			{
 				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, i);
 			}
+			*/
 
 			value_ = (float)i / (float)255;
 		}
@@ -311,10 +329,12 @@ namespace BALL
 		void ColorUnit::set(const unsigned int ui)
 			throw(Exception::InvalidRange)
 		{
+			/*
 			if (ui > 255)
       {
 				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, ui);
 			}
+			*/
 
 			value_ = (float)ui / (float)255;
 		}
@@ -336,10 +356,12 @@ namespace BALL
 		void ColorUnit::set(const long l)
 			throw(Exception::InvalidRange)
 		{
+			/*
 			if ((l < 0) || (l > 255))
       {
 				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, l);
 			}
+			*/
 
 			value_ = (float)l / (float)255;
 		}
@@ -361,10 +383,12 @@ namespace BALL
 		void ColorUnit::set(const unsigned long ul)
 			throw(Exception::InvalidRange)
 		{
+			/*
 			if (ul > 255)
       {
 				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, ul);
 			}
+			*/
 
 			value_ = (float)ul / (float)255;
 		}
@@ -386,10 +410,12 @@ namespace BALL
 		void ColorUnit::set(const float f)
 			throw(Exception::InvalidRange)
 		{
+			/*
 			if ((f < 0.0) || (f > 1.0))
       {
 				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, f);
 			}
+			*/
 
 			value_ = f;
 		}
@@ -411,10 +437,12 @@ namespace BALL
 		void ColorUnit::set(const double d)
 			throw(Exception::InvalidRange)
 		{
+			/*
 			if ((d < 0.0) || (d > 1.0))
       {
 				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, d);
 			}
+			*/
 
 			value_ = (float)d;
 		}
