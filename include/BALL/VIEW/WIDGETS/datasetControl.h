@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.14 2006/05/03 22:07:48 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.15 2006/06/27 20:36:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -39,6 +39,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class SnapshotVisualisationDialog;
+		class GridVisualisationDialog;
 		class ContourSurfaceDialog;
 		class Representation;
 		class ColorRGBA;
@@ -53,6 +54,8 @@ namespace BALL
 			: public GenericControl
 		{
 			Q_OBJECT
+
+			friend class GridVisualisationDialog;
 
 			public:
 
@@ -100,6 +103,9 @@ namespace BALL
 
 			RegularData3D* addDSN6Grid(const String& filename);
 
+			///
+			RegularData3D* createHistogramGrid(RegularData3D& grid) throw();
+
 			public slots:
 				
 			///
@@ -145,7 +151,7 @@ namespace BALL
 			void resizeGrid() throw();
 
 			///
-			void createHistogramGrid() throw();
+			RegularData3D* createHistogramGrid() throw();
 
 			/// Overloaded from GenericControl, calls cut
 			virtual void deleteCurrentItems() throw() {deleteItems_();}

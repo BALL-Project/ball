@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.43 2006/06/26 23:26:37 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.44 2006/06/27 20:37:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -1566,11 +1566,11 @@ namespace BALL
 		}
 	}
 
-	void DatasetControl::createHistogramGrid()
+	RegularData3D* DatasetControl::createHistogramGrid()
 		throw()
 	{
 		getSelectedItems();
-		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
+		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return 0;
 
 		RegularData3D& grid = *item_to_grid3_[context_item_];
 
@@ -1582,7 +1582,25 @@ namespace BALL
 
 		String text = String("normalized ") + ascii(context_item_->text(0));;
 		insertGrid_(new_grid, (System*)item_to_composite_[context_item_], text);
+		return new_grid;
 	}
 
+
+	RegularData3D* DatasetControl::createHistogramGrid(RegularData3D& grid) throw()
+	{
+		HashMap<QTreeWidgetItem*, RegularData3D*>::Iterator it = item_to_grid3_.begin();
+		for (; +it; ++it)
+		{
+			if (it->second == &grid)
+			{
+				context_item_ = it->first;
+				return createHistogramGrid();
+			}
+		}
+
+		return 0;
+	}
+
+	
 	} // namespace VIEW
 } // namespace BALL
