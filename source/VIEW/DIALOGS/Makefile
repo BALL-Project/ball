@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.53.2.13 2006/06/14 13:09:32 amoll Exp $
+# $Id: Makefile,v 1.53.2.14 2006/06/27 20:47:18 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -36,6 +36,7 @@ CPP_SOURCES=\
 	displayProperties.C\
 	fieldLinesDialog.C\
 	FDPBDialog.C\
+	gridVisualizationDialog.C\
 	labelDialog.C\
 	lightSettings.C\
 	mainControlPreferences.C\
@@ -75,6 +76,7 @@ MOC_SOURCES=\
  	editSettings_moc.C\
 	displayProperties_moc.C\
 	FDPBDialog_moc.C\
+	gridVisualizationDialog_moc.C\
 	fieldLinesDialog_moc.C\
 	labelDialog_moc.C\
 	lightSettings_moc.C\
@@ -112,6 +114,7 @@ UIC_SOURCES=\
 	editSettingsData.C\
 	FDPBDialogData.C\
 	fieldLinesDialogData.C\
+	gridVisualizationDialogData.C\
 	labelDialogData.C\
 	lightSettingsData.C\
 	mainControlPreferencesData.C\
