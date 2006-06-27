@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.3 2006/06/23 01:35:54 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.4 2006/06/27 18:26:18 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -21,7 +21,7 @@ using namespace std;
 namespace BALL 
 {
 	// Conversion from kJ / (mol A) into Newton
-	#define FORCES_FACTOR 1000 * 10E10 / Constants::AVOGADRO
+	const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 
 	/// 0.043844 / 2
 	#define K0 0.021922

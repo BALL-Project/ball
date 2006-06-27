@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.13 2006/06/23 01:35:54 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.14 2006/06/27 18:26:18 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -57,7 +57,7 @@ namespace BALL
 	#define STRETCH_K0 301.3082955
 
 	// Conversion from kJ / (mol A) into Newton
-	double FORCES_FACTOR = 1000 * 10E10 / Constants::AVOGADRO;
+	const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 
 	#define DEGREE_TO_RADIAN  (Constants::PI / (double)180.0)
 
@@ -478,7 +478,6 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 	// calculates the current energy of this component
 	double MMFF94StretchBend::updateStretchBendEnergy()
 	{
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		// initial energy is zero
 		stretch_bend_energy_ = 0;
 
@@ -598,10 +597,6 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 			bend.delta_theta = theta - bend.theta0;
 			bend.theta = theta;
 
-			// unit conversion: kJ/(mol A) -> N: FORCES_FACTOR
-			// kJ -> J: 1e3
-			// A -> m : 1e10
-			// J/mol -> mol: Avogadro
 			bend.n1 = -(v1 % cross) * inverse_length_v1;
 			bend.n2 = (v2 % cross) * inverse_length_v2;
 		}
@@ -754,8 +749,7 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 			
 			if (!bend.is_linear) 
 			{
-				factor = -BEND_K0 * bend.ka * (2 * bend.delta_theta * + 
-																			 3 * BEND_K1 * bend.delta_theta * bend.delta_theta);
+				factor = BEND_K0 * bend.ka * bend.delta_theta * (2. + 3. * BEND_K1 * bend.delta_theta);
 			}
 			else
 			{

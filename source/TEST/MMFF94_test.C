@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.7 2006/06/24 19:20:19 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.8 2006/06/27 18:26:30 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -10,10 +10,12 @@
 
 #include <BALL/MOLMEC/MMFF94/MMFF94.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/MOL2File.h>
+#include <BALL/KERNEL/PTE.h>
 
 ///////////////////////////
 using namespace BALL;
@@ -34,10 +36,11 @@ ForceFieldComponent* enableOneComponent(const String& comp, MMFF94& mmff)
 
 
 // Conversion from kJ / (mol A) into Newton
-double FORCES_FACTOR = 1000 * 10E10 / Constants::AVOGADRO;
+const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.7 2006/06/24 19:20:19 amoll Exp $")
+
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.8 2006/06/27 18:26:30 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -66,21 +69,21 @@ RESULT
 MMFF94 mmff;
 
 CHECK(forces and energies equal in two consecutive runs)
-	HINFile f("data/MMFF94_test1.hin");	
+	MOL2File f("data/MMFF94_test2.mol2");
 	System s;
 	f >> s;
 	f.close();
 
-	TEST_EQUAL(s.countAtoms(), 2)
+	TEST_EQUAL(s.countAtoms(), 10)
 	mmff.setup(s);
-	Atom& atom1 = *s.getAtom(0);
 
 	mmff.updateEnergy();
 	mmff.updateForces();
+	Atom& atom1 = *s.getAtom(0);
 	Vector3 f1 = atom1.getForce();
 	float energy = mmff.getEnergy();
 	TEST_EQUAL(Maths::isZero(energy), false)
-	TEST_EQUAL(Maths::isZero(f1.getSquareLength()), false)
+	TEST_EQUAL(f1.getLength() > 0., true)
 
 	atom1.setForce(Vector3(99.));
 	mmff.updateEnergy();
@@ -142,6 +145,8 @@ CHECK(force test 2: Stretches)
 
 	mmff.setup(s);
 
+	sb.updateEnergy();
+	TEST_REAL_EQUAL(sb.getStretchEnergy(), 0)
 	sb.updateStretchForces();
 	sb.updateStretchEnergy();
 
@@ -228,6 +233,7 @@ CHECK(force test 3: Bends)
 	// calculate the differential quotient of
 	// the energy and compare it to the force
 	Vector3 pos = a3.getPosition();
+/*
 	for (double d = .0; d <= 0.1; d += 0.01)
 	{
 		// move the atom to the new position
@@ -256,8 +262,131 @@ CHECK(force test 3: Bends)
 		dE = (sb.getBendEnergy() - dE) / angle2;
 		TEST_REAL_EQUAL(force, dE * FORCES_FACTOR)
 	}	
+*/
 RESULT
 
+
+CHECK(force test 6: VDW)
+HINFile f("data/MMFF94-vdw.hin");	
+System s;
+f >> s;
+f.close();
+s.deselect();
+TEST_EQUAL(s.countAtoms(), 2)
+
+// create references to the two atoms
+AtomIterator it = s.beginAtom();
+Atom& a1 = *it++;
+Atom& a2 = *it;
+
+mmff.setup(s);
+mmff.updateEnergy();
+mmff.updateForces();
+
+PRECISION(2e-12)
+
+TEST_REAL_EQUAL(a1.getForce().getLength(), 3.7209408887406425E-09)
+TEST_REAL_EQUAL(a2.getForce().getLength(), 3.7209408887406425E-09)
+TEST_REAL_EQUAL(a2.getForce().y, 0)
+TEST_REAL_EQUAL(a2.getForce().z, 0)
+
+TEST_EQUAL(a1.getForce(), -a2.getForce())
+
+float delta = sqrt(numeric_limits<float>::epsilon());
+
+// calculate the differential quotient of
+// the energy and compare it to the force
+PRECISION(2e-12)
+Vector3 pos = a2.getPosition();
+/*
+for (double d = .0; d <= 0.5; d += 0.01)
+{
+	// move the atom to the new position
+	a2.getPosition() = pos + Vector3(d, 0.0, 0.0);
+
+	// calculate the force
+	mmff.updateForces();
+	double force = a2.getForce().x;
+
+	// translate atom 2 by 0.0001 Angstrom to the left
+	// and to the right to determine the differential quotient
+	double e1 = mmff.updateEnergy();
+	a2.getPosition() += Vector3(delta, 0.0, 0.0);
+	double e2 = mmff.updateEnergy();
+
+	double dE = -(e2 - e1) / delta;
+	TEST_REAL_EQUAL(force, dE * FORCES_FACTOR)
+}	
+*/
+RESULT
+
+CHECK(force test 7: ES)
+	HINFile f("data/MMFF94-vdw.hin");	
+	System s;
+	f >> s;
+	f.close();
+	s.deselect();
+	TEST_EQUAL(s.countAtoms(), 2)
+
+	// create references to the two atoms
+	AtomIterator it = s.beginAtom();
+	Atom& a1 = *it++;
+	Atom& a2 = *it;
+
+	mmff.options[MMFF94_VDW_ENABLED] = "false";
+	mmff.setup(s);
+
+	a1.setCharge(0);
+	a2.setCharge(0);
+
+	mmff.updateForces();
+	mmff.updateEnergy();
+
+	PRECISION(2e-12)
+
+	TEST_REAL_EQUAL(mmff.getEnergy(), 0)
+	TEST_REAL_EQUAL(a1.getForce().getLength(), 0)
+	TEST_REAL_EQUAL(a2.getForce().getLength(), 0)
+
+	a1.setFormalCharge(-1);
+	a2.setFormalCharge(2);
+	mmff.setup(s);
+	mmff.updateForces();
+	mmff.updateEnergy();
+Log.error() << "#~~#   1 " << a1.getElement().getSymbol()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+	TEST_REAL_EQUAL(a1.getCharge(), -1)
+	TEST_REAL_EQUAL(a2.getCharge(), 2)
+
+	TEST_REAL_EQUAL(mmff.getEnergy(), 277.817)
+	TEST_REAL_EQUAL(a1.getForce().getLength(), 1)
+	TEST_REAL_EQUAL(a2.getForce().getLength(), 1)
+
+	float delta = sqrt(numeric_limits<float>::epsilon());
+
+	// calculate the differential quotient of
+	// the energy and compare it to the force
+	PRECISION(2e-10)
+	Vector3 pos = a2.getPosition();
+	for (double d = .0; d <= 0.5; d += 0.01)
+	{
+		// move the atom to the new position
+		a2.getPosition() = pos + Vector3(d, 0.0, 0.0);
+
+		// calculate the force
+		mmff.updateForces();
+		double force = a2.getForce().x;
+
+		// translate atom 2 by 0.0001 Angstrom to the left
+		// and to the right to determine the differential quotient
+		sb.updateEnergy();
+		double dE = sb.getStretchEnergy();
+
+		a2.getPosition() += Vector3(delta, 0.0, 0.0);
+		mmff.updateEnergy();
+		dE = -(sb.getStretchEnergy() - dE) / delta;
+		TEST_REAL_EQUAL(force, dE * FORCES_FACTOR)
+	}	
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.4.4 2006/06/23 01:35:55 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.4.5 2006/06/27 18:26:18 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -23,7 +23,8 @@ namespace BALL
 {
 
 	// Conversion from kJ / (mol A) into Newton
-	#define FORCES_FACTOR 1000 * 10E10 / Constants::AVOGADRO
+	const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
+
 
 	#define K_TORSION 0.5 * Constants::JOULE_PER_CAL
 

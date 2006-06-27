@@ -1,0 +1,12 @@
+; HyperChem file created by BALL
+;
+forcefield AMBER
+sys 0
+mol 1
+atom 1 A1 Br BR - 0 0 0 0 0 
+vel 1 0 0 0
+endmol 1
+mol 2
+atom 1 A2 Zn ZINC - 0 2 0 0 0 
+vel 1 0 0 0
+endmol 2
