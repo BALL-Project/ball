@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.15 2006/06/27 20:36:56 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.16 2006/06/28 13:50:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -39,7 +39,6 @@ namespace BALL
 	namespace VIEW
 	{
 		class SnapshotVisualisationDialog;
-		class GridVisualisationDialog;
 		class ContourSurfaceDialog;
 		class Representation;
 		class ColorRGBA;
@@ -54,8 +53,6 @@ namespace BALL
 			: public GenericControl
 		{
 			Q_OBJECT
-
-			friend class GridVisualisationDialog;
 
 			public:
 
@@ -142,10 +139,7 @@ namespace BALL
 			void updateSelection() throw();
 
 			///
-			void createGridSlice() throw();
-
-			///
-			void createGridVolume() throw();
+			void visualizeGrid() throw();
 
 			///
 			void resizeGrid() throw();
@@ -237,7 +231,7 @@ namespace BALL
 			HashMap<QTreeWidgetItem*  , Composite*>  								item_to_composite_;
 
 			QAction* menu_cs_, *open_trajectory_id_, *open_gradient_id_;
-			QAction* grid_slice_, * grid_volume_, * grid_resize_, *grid_histogram_, *grid_field_lines_;
+			QAction* vis_grid_, *grid_resize_, *grid_histogram_, *grid_field_lines_;
 
 			// Variables to calculate Vector Grids
 			VectorGrid*  vector_grid_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36.2.18 2006/06/02 15:21:53 amoll Exp $
+// $Id: glRenderer.h,v 1.36.2.19 2006/06/28 13:50:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -415,16 +415,10 @@ namespace BALL
 			//_
 			void generateIlluminationTexture_(float ka, float kd, float kr, float shininess);
 
-			Position getTextureIndex_(Position x, Position y, Position z, Size width, Size height);
-			Vector3 getGridIndex_(const RegularData3D& grid, const Vector3& point);
-			GridVisualisation* createTexturedGridPlane(const RegularData3D& grid, Position texname);
-			GridVisualisation* createVolume(const RegularData3D& grid, Position texname);
+			inline Position getTextureIndex_(Position x, Position y, Position z, Size width, Size height);
 			Position createTextureFromGrid(const RegularData3D& grid, const ColorMap& map);
 			void removeTextureFor_(const RegularData3D& grid);
-			void initGridObject_(GridVisualisation& slice, const RegularData3D& grid);
 			void setupGridClipPlanes_(const GridVisualisation& slice);
-			inline void paintTex_(const Vector3& x1, const Vector3& x2, const Vector3& x3, const Vector3& x4, const Vector3& n, 	
-														const RegularData3D& grid);
 
 			Scene* 								scene_;
 

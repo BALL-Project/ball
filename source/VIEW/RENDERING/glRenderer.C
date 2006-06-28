@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.52 2006/06/26 21:37:11 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.53 2006/06/28 13:51:02 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1870,17 +1870,6 @@ namespace BALL
 		return texname;
 	}
 
-	Vector3 GLRenderer::getGridIndex_(const RegularData3D& grid, const Vector3& point)
-	{
-		RegularData3D::IndexType i = grid.getClosestIndex(point);
-		RegularData3D::IndexType s = grid.getSize();
-		Vector3 v(i.x, i.y, i.z);
-		v.x /= (float) s.x;
-		v.y /= (float) s.y;
-		v.z /= (float) s.z;
-		return v;
-	}
-
 	void GLRenderer::removeTextureFor_(const RegularData3D& grid)
 	{
 		if (!grid_to_texture_.has(&grid)) return;
@@ -1922,49 +1911,6 @@ namespace BALL
 			glClipPlane(plane, &planes[plane - GL_CLIP_PLANE0][0]);
 			glEnable(plane);
 		}
-	}
-
-
-	void GLRenderer::initGridObject_(GridVisualisation& slice, const RegularData3D& grid)
-	{
-		slice.setGrid(&grid);
-		Vector3 origin = grid.getOrigin();
-		RegularData3D::IndexType s = grid.getSize();
-		slice.x = grid.getCoordinates(RegularData3D::IndexType(s.x-1,0,0)) - origin;
-		slice.y = grid.getCoordinates(RegularData3D::IndexType(0,s.y-1,0)) - origin;
-		slice.z = grid.getCoordinates(RegularData3D::IndexType(0,0,s.z-1)) - origin;
-		slice.origin = origin;
-	
-		slice.max_dim = slice.x.getLength();
-		slice.max_dim = BALL_MAX(slice.max_dim, slice.y.getLength());
-		slice.max_dim = BALL_MAX(slice.max_dim, slice.z.getLength());
-	}
-
-
-	GridVisualisation* GLRenderer::createTexturedGridPlane(const RegularData3D& grid, Position texname)
-	{
-		Vector3 normal = scene_->getStage()->getCamera().getViewVector();
-		normal.normalize();
-
-		GridVisualisation* slice = new GridVisualisation;
-		slice->setTexture(texname);
-		slice->setNormal(normal);
-		initGridObject_(*slice, grid);
-
-		Vector3 point = slice->origin + (slice->x + slice->y + slice->z) / 2.0;
-		slice->setPoint(point);
-		slice->slices = 1;
-		return slice;
-	}
-
-	GridVisualisation* GLRenderer::createVolume(const RegularData3D& grid, Position texname)
-	{
-		GridVisualisation* vol = new GridVisualisation;
-		vol->setGrid(&grid);
-		vol->setTexture(texname);
-		vol->slices = 32;
-		initGridObject_(*vol, grid);
-		return vol;
 	}
 
 

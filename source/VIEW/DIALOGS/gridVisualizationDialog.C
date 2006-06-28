@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualizationDialog.C,v 1.1.2.1 2006/06/27 20:37:21 amoll Exp $
+// $Id: gridVisualizationDialog.C,v 1.1.2.2 2006/06/28 13:50:38 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/gridVisualizationDialog.h>
@@ -11,15 +11,12 @@
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/RENDERING/glRenderer.h>
+#include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 
-#include <BALL/SYSTEM/path.h>
-#include <BALL/SYSTEM/file.h>
 #include <BALL/DATATYPE/regularData3D.h>
-#include <BALL/DATATYPE/hashGrid.h>
-#include <BALL/COMMON/limits.h>
-#include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/forEach.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/SYSTEM/sysinfo.h>
 
 #include <QtGui/qlineedit.h>
@@ -51,8 +48,8 @@ namespace BALL
 			setupUi(this);
 
 			// signals and slots connections
-			connect( apply_button, SIGNAL( clicked() ), this, SLOT( applyPressed() ) );
-			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( cancelPressed() ) );
+			connect( apply_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
+			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
 			connect( autoscale, SIGNAL( clicked() ), this, SLOT( autoScale() ) );
 			connect( grids, SIGNAL( activated(int) ), this, SLOT( gridSelected() ) );
 			connect( transparency, SIGNAL( stateChanged(int) ), this, SLOT(gridTransparencyChanged()));
@@ -62,8 +59,35 @@ namespace BALL
 			connect( mid_button, SIGNAL( clicked() ), this, SLOT( midPressed() ) );
 			connect( max_button, SIGNAL( clicked() ), this, SLOT( maxPressed() ) );
 			connect( max_max_button, SIGNAL( clicked() ), this, SLOT( maxMaxPressed() ) );
+			connect( plane, SIGNAL( toggled(bool) ), this, SLOT(planeSelected()));
+			connect( dots, SIGNAL( toggled(bool) ), this, SLOT(dotsSelected()));
+			connect( volume, SIGNAL( toggled(bool) ), this, SLOT(volumeSelected()));
 
 			setObjectName(name);
+		}
+
+		void GridVisualizationDialog::dotsSelected()
+		{
+			if (dots->isChecked()) return;
+			plane->setChecked(false);
+			volume->setChecked(false);
+			dots->setChecked(true);
+		}
+
+		void GridVisualizationDialog::planeSelected()
+		{
+			if (plane->isChecked()) return;
+			plane->setChecked(true);
+			volume->setChecked(false);
+			dots->setChecked(false);
+		}
+
+		void GridVisualizationDialog::volumeSelected()
+		{
+			if (volume->isChecked()) return;
+			plane->setChecked(false);
+			volume->setChecked(true);
+			dots->setChecked(false);
 		}
 
 		void GridVisualizationDialog::normalizationChanged()
@@ -81,12 +105,6 @@ namespace BALL
 		}
 
 		// ------------------------- SLOTS ------------------------------------------------
-
-		void GridVisualizationDialog::cancelPressed()
-		{
-			hide();
-		}
-
 
 		void GridVisualizationDialog::maxPressed()
 		{
@@ -141,6 +159,8 @@ namespace BALL
 			}
 			
 			grid_ = *it;
+
+			apply_button->setEnabled(true);
 		}
 
 		void GridVisualizationDialog::setGrid(RegularData3D* grid)
@@ -196,7 +216,7 @@ namespace BALL
 			box->setValue(color.getAlpha());
 		}
 
-		bool GridVisualizationDialog::colorByGrid_()
+		void GridVisualizationDialog::accept()
 		{
 			try
 			{
@@ -207,7 +227,7 @@ namespace BALL
 			catch(...)
 			{
 				getMainControl()->setStatusbarText("Invalid value for min, mid or max value!", true);
-				return false;
+				QDialog::accept();
 			}
 
 			setColor_(min_min_color, min_min_label, min_min_alpha);
@@ -258,7 +278,62 @@ namespace BALL
 				trans = 80;
 			}
 
-			return true;
+			const RegularData3D& grid = *grid_;
+
+			GLRenderer& gl = Scene::getInstance(0)->getGLRenderer();
+			Position texname = gl.createTextureFromGrid(grid, cm);
+			if (texname == 0)
+			{
+				reject();
+				return;
+			}
+				
+
+			GridVisualisation& vol = *new GridVisualisation;
+			vol.setGrid(grid_);
+			vol.setTexture(texname);
+			vol.slices = slices_spin->value();
+
+			Vector3 origin = grid.getOrigin();
+			RegularData3D::IndexType s = grid.getSize();
+			vol.x = grid.getCoordinates(RegularData3D::IndexType(s.x-1,0,0)) - origin;
+			vol.y = grid.getCoordinates(RegularData3D::IndexType(0,s.y-1,0)) - origin;
+			vol.z = grid.getCoordinates(RegularData3D::IndexType(0,0,s.z-1)) - origin;
+			vol.origin = origin;
+			vol.max_dim = vol.x.getLength();
+			vol.max_dim = BALL_MAX(vol.max_dim, vol.y.getLength());
+			vol.max_dim = BALL_MAX(vol.max_dim, vol.z.getLength());
+
+			vol.setDotSize(dot_size->value());
+			Representation* rep = new Representation;
+			rep->insert(vol);
+			rep->setTransparency(trans);
+			rep->setModelType(MODEL_GRID_VOLUME);
+
+			if (plane->isChecked()) 
+			{
+				vol.type = GridVisualisation::PLANE; 
+				rep->setProperty("DONT_CLIP");
+				Vector3 point = origin + (vol.x + vol.y + vol.z) / 2.0;
+				vol.setPoint(point);
+				rep->setModelType(MODEL_GRID_SLICE);
+			}
+			else if (dots->isChecked()) 
+			{
+				vol.type = GridVisualisation::DOTS;
+				vector<Vector3>& points = vol.points;
+				calculateRandomPoints(grid, number_dots->value(), points);
+			}
+			else 
+			{
+  			rep->setProperty("RENDER_DIRECT");
+				vol.type = GridVisualisation::SLICES;
+			}
+
+			getMainControl()->insert(*rep);
+			getMainControl()->update(*rep);
+
+			QDialog::accept();
 		}
 
 
@@ -300,7 +375,7 @@ namespace BALL
 			mid_label->setText(String(value).c_str());
 		}
 
-		void GridVisualizationDialog::setGrids(List<std::pair<RegularData3D*, String> >& grid_list)
+		void GridVisualizationDialog::setGrids(List<std::pair<RegularData3D*, String> > grid_list)
 			throw()
 		{
 			grids->clear();
@@ -312,6 +387,5 @@ namespace BALL
 			}
 		}
 		
-
 	} // namespace VIEW
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.66 2006/06/26 23:26:43 amoll Exp $
+// $Id: scene.C,v 1.174.2.67 2006/06/28 13:50:48 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -42,7 +42,6 @@
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
-#include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 
 //         #define BALL_BENCHMARKING
 
@@ -271,17 +270,11 @@ namespace BALL
 			if (RTTI::isKindOf<RegularData3DMessage>(*message))
 			{
 				RegularData3DMessage* rm = RTTI::castTo<RegularData3DMessage>(*message);
-				const RegularData3D& grid = *rm->getData();
 				switch (rm->getType())
 				{
-					case RegularData3DMessage::VISUALISE_SLICE:
-					case RegularData3DMessage::VISUALISE_VOLUME:
-						visualizeGrid(*rm->getData(), rm->getType() == (Size) RegularData3DMessage::VISUALISE_SLICE);
-						break;
-
 					case RegularData3DMessage::UPDATE:
 					case RegularData3DMessage::REMOVE:
-						gl_renderer_.removeTextureFor_(grid);
+						gl_renderer_.removeTextureFor_(*rm->getData());
 						break;
 
 					default:
@@ -349,88 +342,6 @@ namespace BALL
 			}
 		}
 
-
-		void Scene::visualizeGrid(RegularData3D& grid, bool slice)
-
-		{
-			Position texname = 0;
-			bool normalize = 1;
-
-//   			if (!gl_renderer_.grid_to_texture_.has(&grid))
-//   			{
-				// to be moved somewhere else:
-				ColorMap map;
-				ColorRGBA colors[3];
-				colors[0] = ColorRGBA(1.0, 0.0, 0.0, 0.49);
-				colors[1] = ColorRGBA(1.0, 1.0, 0.0, 0.00);
-				colors[2] = ColorRGBA(0.0, 0.0, 1.0, 0.49);
-				if (slice)
-				{
-					colors[0].setAlpha(0.8);
-					colors[1].setAlpha(0.5);
-					colors[2].setAlpha(0.8);
-				}
-				map.setBaseColors(colors, 3);
-				map.setNumberOfColors(512);
-				map.setAlphaBlending(true);
-				const vector<float>& values = grid.getData();
-				float min = values[0];
-				float max = values[0];
-				for (Position p = 1; p < values.size(); p++)
-				{
-					if (values[p] < min) min = values[p];
-					if (values[p] > max) max = values[p];
-				}
-    				map.setRange(min, max);
-//    				map.setRange(-0.1, 0.1);
-				map.createMap();
-				Log.info() << "Creating coloring for grid, min value = " << min 
-									 << " max = " << max << std::endl;
-
-				texname = gl_renderer_.createTextureFromGrid(grid, map);
-//   			}
-//   			else
-//   			{
-//   				texname = gl_renderer_.grid_to_texture_[&grid];
-//   			}
-
-			Representation* rep = new Representation();
- 			getMainControl()->insert(*rep);
-
-			if (slice)
-			{
-				GridVisualisation* slice = gl_renderer_.createTexturedGridPlane(grid, texname);
-				rep->setModelType(MODEL_GRID_SLICE);
-				rep->insert(*slice);
-				getMainControl()->update(*rep);
-				return;
-			}
-		
-			GridVisualisation* vol = gl_renderer_.createVolume(grid, texname);
-			rep->setTransparency(64);
-			rep->setProperty("DONT_CLIP");
-			rep->setModelType(MODEL_GRID_VOLUME);
-			rep->setTransparency(100);
-			rep->insert(*vol);
-
-			if (false) // ???????????
-//   			if (vol.type == GridVisualisation::SLICES)
-			{
-  			rep->setProperty("RENDER_DIRECT");
-				getMainControl()->update(*rep);
-				return;
-			}
-
-			vol->type = GridVisualisation::DOTS;
-
-			Size nr_points = (Size)(grid.getDimension().getLength() * 1000.);
-
-			vector<Vector3>& points = vol->points;
-			calculateRandomPoints(grid, nr_points, points);
-						
- 			rep->setTransparency(00);
- 			getMainControl()->update(*rep);
-		}
 
 		void Scene::initializeGL()
 		{

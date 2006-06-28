@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.44 2006/06/27 20:37:09 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.45 2006/06/28 13:50:27 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -16,6 +16,7 @@
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
 #include <BALL/VIEW/DIALOGS/fieldLinesDialog.h>
+#include <BALL/VIEW/DIALOGS/gridVisualizationDialog.h>
 
 //   #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
 //   #include <BALL/VIEW/WIDGETS/regularData2DWidget.h>
@@ -107,11 +108,9 @@ namespace BALL
 			main_control.insertPopupMenuSeparator(MainControl::TOOLS_GRID);
 
 			// visualisations:
-			grid_slice_ = insertMenuEntry(MainControl::TOOLS_GRID, "Render Slice", this, SLOT(createGridSlice()));
-			setMenuHint("Visualise a moveable plane in the grid");
+			vis_grid_ = insertMenuEntry(MainControl::TOOLS_GRID, "Visualize", this, SLOT(visualizeGrid()));
+			setMenuHint("Visualise a grid");
 
-			grid_volume_ = insertMenuEntry(MainControl::TOOLS_GRID, "Render Volume", this, SLOT(createGridVolume()));
-			setMenuHint("Visualise a grid per volume rendering");
 			GenericControl::initializeWidget(main_control);
 
 			menu_cs_ = insertMenuEntry(MainControl::TOOLS_GRID, "Render Contour S&urface", this,  
@@ -147,10 +146,7 @@ namespace BALL
 			grid_resize_->setEnabled(grid_selected);
 			grid_histogram_->setEnabled(grid_selected);
 
-			bool power_2_grid = grid_selected && 
-													isGridPowerOfTwo_(*item_to_grid3_[context_item_]);
-			grid_slice_->setEnabled(power_2_grid);
-			grid_volume_->setEnabled(power_2_grid);
+			vis_grid_->setEnabled(grid_selected);
 
 			bool vector_grid_selected = selected && 
 													 item_to_gradients_.has(context_item_) && 
@@ -434,9 +430,7 @@ namespace BALL
 				}
 				else
 				{
-					bool power_2_grid = isGridPowerOfTwo_(*item_to_grid3_[context_item_]);
-					insertContextMenuEntry_("Render Slice", SLOT(createGridSlice()), power_2_grid);
-					insertContextMenuEntry_("Render Volume", SLOT(createGridVolume()), power_2_grid);
+					insertContextMenuEntry_("Render Grid", SLOT(visualizeGrid()));
 					insertContextMenuEntry_("Render Contour Surface", SLOT(computeIsoContourSurface()));
 					insertContextMenuEntry_("Resize for Rendering", SLOT(resizeGrid()));
 					context_menu_.addSeparator();
@@ -1432,43 +1426,17 @@ namespace BALL
 		return grids;
 	}
 
-	void DatasetControl::createGridVolume()
+	void DatasetControl::visualizeGrid()
 		throw()
 	{
 		getSelectedItems();
 		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
 
 		RegularData3D* ssm = item_to_grid3_[context_item_];
-
-		RegularData3D::IndexType size = ssm->getSize();
-		RegularData3D::IndexType new_size;
-		new_size.x = getNextPowerOfTwo_(size.x);
-		new_size.y = getNextPowerOfTwo_(size.y);
-		new_size.z = getNextPowerOfTwo_(size.z);
-		if (new_size.x != size.x ||
-				new_size.y != size.y ||
-				new_size.z != size.z)
-		{
-			setStatusbarText("Grid sizes are not potentials of 2! Please resize the grid.", true);
-			return;
-		}
-
-		RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::VISUALISE_VOLUME);
-		msg->setData(*ssm);
-		notify_(msg);
-
-	}
-
-	void DatasetControl::createGridSlice()
-		throw()
-	{
-		getSelectedItems();
-		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
-
-		RegularData3D* ssm = item_to_grid3_[context_item_];
-		RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::VISUALISE_SLICE);
-		msg->setData(*ssm);
-		notify_(msg);
+		GridVisualizationDialog dialog(this);
+		dialog.setGrids(get3DGrids());
+		dialog.setGrid(ssm);
+		dialog.exec();
 	}
 
 	Size DatasetControl::getNextPowerOfTwo_(Size in) const

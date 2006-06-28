@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualizationDialog.h,v 1.1.2.1 2006/06/27 20:37:31 amoll Exp $
+// $Id: gridVisualizationDialog.h,v 1.1.2.2 2006/06/28 13:50:43 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_GRIDVISUALIZATIONDIALOG_H
@@ -13,16 +13,12 @@
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_REPRESENTATION_H
-# include <BALL/VIEW/KERNEL/representation.h>
-#endif
-
 #ifndef BALL_DATATYPE_REGULARDATA3D
 # include <BALL/DATATYPE/regularData3D.h>
 #endif 
 
-#ifndef BALL_DATATYPE_HASHGRID_H
-# include <BALL/DATATYPE/hashGrid.h>
+#ifndef BALL_DATATYPE_LIST_H
+# include <BALL/DATATYPE/list.h>
 #endif
 
 namespace BALL
@@ -52,7 +48,7 @@ namespace BALL
 				throw();
 			
 			///
-			void setGrids(List<std::pair<RegularData3D*, String> >& grids)
+			void setGrids(List<std::pair<RegularData3D*, String> > grids)
 				throw();
 			
 			///
@@ -66,8 +62,7 @@ namespace BALL
 
 			public slots:
 			
-			void applyPressed();
-			void cancelPressed();
+			void accept();
 			void maxPressed();
 			void midPressed();
 			void minPressed();
@@ -81,13 +76,14 @@ namespace BALL
 
 			void gridTransparencyChanged();
 			void normalizationChanged();
+			void dotsSelected();
+			void volumeSelected();
+			void planeSelected();
 
 			protected:
 
 			GridVisualizationDialog(const GridVisualizationDialog& dialog);
 
-			typedef HashGrid3<const Atom*>  AtomGrid;
-			typedef HashGridBox3<const Atom*> AtomBox;
 			bool colorByGrid_();
 			bool insertGrid_(RegularData3D& grid, const String& name);
 			void setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box);
