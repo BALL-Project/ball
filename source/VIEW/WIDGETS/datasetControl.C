@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.45 2006/06/28 13:50:27 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.46 2006/06/29 12:11:41 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -41,7 +41,8 @@ namespace BALL
 			throw()
 			:	GenericControl(parent, name),
 				dialog_(0),
-				surface_dialog_(0)
+				surface_dialog_(0),
+				grid_dialog_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new DatasetControl " << this << std::endl;
@@ -1433,10 +1434,10 @@ namespace BALL
 		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
 
 		RegularData3D* ssm = item_to_grid3_[context_item_];
-		GridVisualizationDialog dialog(this);
-		dialog.setGrids(get3DGrids());
-		dialog.setGrid(ssm);
-		dialog.exec();
+		if (grid_dialog_ == 0) grid_dialog_ = new GridVisualizationDialog(this);
+		grid_dialog_->setGrids(get3DGrids());
+		grid_dialog_->setGrid(ssm);
+		grid_dialog_->exec();
 	}
 
 	Size DatasetControl::getNextPowerOfTwo_(Size in) const
@@ -1450,7 +1451,7 @@ namespace BALL
 		return test;
 	}
 
-	bool DatasetControl::isGridPowerOfTwo_(const RegularData3D& grid) const
+	bool DatasetControl::isGridSizePowerOfTwo(const RegularData3D& grid) const
 	{
 		RegularData3D::IndexType size = grid.getSize();
 		RegularData3D::IndexType new_size;
@@ -1462,11 +1463,11 @@ namespace BALL
 						new_size.z == size.z);
 	}
 
-	void DatasetControl::resizeGrid()
+	RegularData3D* DatasetControl::resizeGrid()
 		throw()
 	{
 		getSelectedItems();
-		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
+		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return 0;
 
 		RegularData3D& grid = *item_to_grid3_[context_item_];
 		RegularData3D::IndexType size = grid.getSize();
@@ -1479,7 +1480,7 @@ namespace BALL
 				new_size.z == size.z)
 		{
 			setStatusbarText("Grid does not need to be resized!", true);
-			return;
+			return 0;
 		}
 
 		// make sure new grid is a tiny little bit smaller to prevent problems
@@ -1504,7 +1505,7 @@ namespace BALL
 		if (grid_ptr == 0)
 		{
 			setStatusbarText("Not enough memory to resize grid!", true);
-			return;
+			return 0;
 		}
 
 		RegularData3D& new_grid = *grid_ptr;
@@ -1532,6 +1533,8 @@ namespace BALL
 		{
 			setStatusbarText("Grid may be inaccurate!", true);
 		}
+
+		return grid_ptr;
 	}
 
 	RegularData3D* DatasetControl::createHistogramGrid()
@@ -1568,6 +1571,22 @@ namespace BALL
 
 		return 0;
 	}
+
+	RegularData3D* DatasetControl::resizeGrid(RegularData3D& grid) throw()
+	{
+		HashMap<QTreeWidgetItem*, RegularData3D*>::Iterator it = item_to_grid3_.begin();
+		for (; +it; ++it)
+		{
+			if (it->second == &grid)
+			{
+				context_item_ = it->first;
+				return resizeGrid();
+			}
+		}
+
+		return 0;
+	}
+
 
 	
 	} // namespace VIEW

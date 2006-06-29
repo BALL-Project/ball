@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.16 2006/06/28 13:50:31 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.17 2006/06/29 12:11:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -41,6 +41,7 @@ namespace BALL
 		class SnapshotVisualisationDialog;
 		class ContourSurfaceDialog;
 		class Representation;
+		class GridVisualizationDialog;
 		class ColorRGBA;
 
 		/**	DatasetControl is a widget to manipulate Trajectories and RegularData instances.
@@ -103,6 +104,11 @@ namespace BALL
 			///
 			RegularData3D* createHistogramGrid(RegularData3D& grid) throw();
 
+			///
+			RegularData3D* resizeGrid(RegularData3D& grid) throw();
+
+			bool isGridSizePowerOfTwo(const RegularData3D& grid) const;
+
 			public slots:
 				
 			///
@@ -142,7 +148,7 @@ namespace BALL
 			void visualizeGrid() throw();
 
 			///
-			void resizeGrid() throw();
+			RegularData3D* resizeGrid() throw();
 
 			///
 			RegularData3D* createHistogramGrid() throw();
@@ -212,12 +218,11 @@ namespace BALL
 
 			Size getNextPowerOfTwo_(Size in) const;
 
-			bool isGridPowerOfTwo_(const RegularData3D& grid) const;
-
 			QMenu 									 			context_menu_;
 
 			SnapshotVisualisationDialog* 	dialog_;
 			ContourSurfaceDialog* 				surface_dialog_;
+			GridVisualizationDialog* 			grid_dialog_;
 
 			HashMap<QTreeWidgetItem*	, SnapShotManager*> 					item_to_trajectory_;
 			HashMap<QTreeWidgetItem*	, RegularData1D*>   					item_to_grid1_;

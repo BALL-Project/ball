@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualizationDialog.C,v 1.1.2.2 2006/06/28 13:50:38 amoll Exp $
+// $Id: gridVisualizationDialog.C,v 1.1.2.3 2006/06/29 12:11:56 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/gridVisualizationDialog.h>
@@ -64,30 +64,40 @@ namespace BALL
 			connect( volume, SIGNAL( toggled(bool) ), this, SLOT(volumeSelected()));
 
 			setObjectName(name);
+			ignore_ = false;
 		}
 
 		void GridVisualizationDialog::dotsSelected()
 		{
-			if (dots->isChecked()) return;
+			if (ignore_) return;
+			ignore_ = true;
 			plane->setChecked(false);
 			volume->setChecked(false);
 			dots->setChecked(true);
+			ignore_ = false;
+			gridTransparencyChanged();
 		}
 
 		void GridVisualizationDialog::planeSelected()
 		{
-			if (plane->isChecked()) return;
+			if (ignore_) return;
+			ignore_ = true;
 			plane->setChecked(true);
 			volume->setChecked(false);
 			dots->setChecked(false);
+			ignore_ = false;
+			gridTransparencyChanged();
 		}
 
 		void GridVisualizationDialog::volumeSelected()
 		{
-			if (volume->isChecked()) return;
+			if (ignore_) return;
+			ignore_ = true;
 			plane->setChecked(false);
 			volume->setChecked(true);
 			dots->setChecked(false);
+			ignore_ = false;
+			gridTransparencyChanged();
 		}
 
 		void GridVisualizationDialog::normalizationChanged()
@@ -218,6 +228,8 @@ namespace BALL
 
 		void GridVisualizationDialog::accept()
 		{
+			QDialog::accept();
+
 			try
 			{
 				ascii(mid_box->text()).toFloat();
@@ -227,7 +239,6 @@ namespace BALL
 			catch(...)
 			{
 				getMainControl()->setStatusbarText("Invalid value for min, mid or max value!", true);
-				QDialog::accept();
 			}
 
 			setColor_(min_min_color, min_min_label, min_min_alpha);
@@ -261,11 +272,19 @@ namespace BALL
 			cm.createMap();
 
 			vector<float> values;
+			DatasetControl* dc = DatasetControl::getInstance(0);
+			if (dc == 0) return;
 
 			if (normalization->checkState() == Qt::Checked)
 			{
-				grid_ = DatasetControl::getInstance(0)->createHistogramGrid(*grid_);
+				grid_ = dc->createHistogramGrid(*grid_);
 			}
+
+			if (!dc->isGridSizePowerOfTwo(*grid_))
+			{
+				grid_ = dc->resizeGrid();
+			}
+			
 
 			Size trans = 0;
 			
@@ -309,6 +328,7 @@ namespace BALL
 			rep->insert(vol);
 			rep->setTransparency(trans);
 			rep->setModelType(MODEL_GRID_VOLUME);
+			gridTransparencyChanged();
 
 			if (plane->isChecked()) 
 			{
@@ -332,8 +352,6 @@ namespace BALL
 
 			getMainControl()->insert(*rep);
 			getMainControl()->update(*rep);
-
-			QDialog::accept();
 		}
 
 

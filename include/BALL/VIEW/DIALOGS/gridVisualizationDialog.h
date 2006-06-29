@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualizationDialog.h,v 1.1.2.2 2006/06/28 13:50:43 amoll Exp $
+// $Id: gridVisualizationDialog.h,v 1.1.2.3 2006/06/29 12:11:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_GRIDVISUALIZATIONDIALOG_H
@@ -99,6 +99,7 @@ namespace BALL
 			ColorRGBA	 	selected_color, min_min_color, min_color, mid_color, max_color, max_max_color;	
 
 			List<RegularData3D*> grid_list_;
+			bool ignore_;
 		};
 
 	} // namespace VIEW
