@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringAnalyser.h,v 1.2 2006/06/08 07:30:24 oliver Exp $
+// $Id: ringAnalyser.h,v 1.3 2006/06/29 20:45:31 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -27,7 +27,7 @@ namespace BALL
 
                 struct RingInfo
                 {
-                        vector<Atom*> ring;
+                        std::vector<Atom*> ring;
                         Size assignment;
                         bool neg_angle;
                 };
@@ -47,7 +47,7 @@ namespace BALL
                 * @param ringsystem the ringsystem
                 * @return a vector of struct RingInfo, containing information about the way each ring is connected to the ringsystem
                 */
-                vector<RingInfo> analyseRings(vector<vector<Atom*> >& ringsystem);
+                std::vector<RingInfo> analyseRings(std::vector<std::vector<Atom*> >& ringsystem);
 
                 /**
                 * \brief helper-function; determines, whether an atom is part of a certain ring
@@ -55,7 +55,7 @@ namespace BALL
                 * @param ring the ring
                 * @return true, if the atom is part of the ring, otherwise returns false
                 */
-                bool isInRing(const Atom* atom, vector<Atom*>& ring);
+                bool isInRing(const Atom* atom, std::vector<Atom*>& ring);
 
         private:
 
@@ -64,7 +64,7 @@ namespace BALL
                 * @param ring the ring, which is to be checked
                 * @return always returns false by now
                 */
-                bool checkRTD(vector<Atom*>& ring);
+                bool checkRTD(std::vector<Atom*>& ring);
 
                 /**
                 * \brief ckecks, if a ring is connected to the ringsystem in fused way, or bridged way
@@ -73,7 +73,7 @@ namespace BALL
                 * @param first_bridged_to_fused flag, determines whether the first (if there is one) bridged-ring of a system has already been found
                 * @return assignment (0 = none, 1 = template, 2 = fused, 3 = bridged, 4 = spiro, 5 = core)
                 */
-                Size checkFusedOrBridged(vector<Atom*>& ring, vector<RingInfo>& ringset, bool& first_bridged_to_fused);
+                Size checkFusedOrBridged(std::vector<Atom*>& ring, std::vector<RingInfo>& ringset, bool& first_bridged_to_fused);
 
                 /**
                 * \brief ckecks, if a ring is connected to the ringsystem in spiro way
@@ -81,7 +81,7 @@ namespace BALL
                 * @param ringset the ringsystem, which is to be checked
                 * @return assignment (0 = none, 1 = template, 2 = fused, 3 = bridged, 4 = spiro, 5 = core
                 */
-                Size checkSpiro(vector<Atom*>& ring, vector<RingInfo>& ringset);
+                Size checkSpiro(std::vector<Atom*>& ring, std::vector<RingInfo>& ringset);
 
 
         };

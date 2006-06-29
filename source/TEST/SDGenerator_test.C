@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDGenerator_test.C,v 1.2 2006/06/08 07:30:28 oliver Exp $
+// $Id: SDGenerator_test.C,v 1.3 2006/06/29 20:45:32 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -16,12 +16,13 @@
 
 ///////////////////////////
 
-START_TEST(SDGenerator, "$Id: SDGenerator_test.C,v 1.2 2006/06/08 07:30:28 oliver Exp $")
+START_TEST(SDGenerator, "$Id: SDGenerator_test.C,v 1.3 2006/06/29 20:45:32 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
 PRECISION(0.0001)
 

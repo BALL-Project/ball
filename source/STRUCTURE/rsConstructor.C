@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rsConstructor.C,v 1.2 2006/06/08 07:30:26 oliver Exp $
+// $Id: rsConstructor.C,v 1.3 2006/06/29 20:45:32 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -13,16 +13,13 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/MATHS/matrix44.h>
 
+using namespace std;
+
 namespace BALL
 {
+	      RSConstructor::RSConstructor() {}
 
-
-        RSConstructor::RSConstructor()
-        {}
-
-
-        RSConstructor::~RSConstructor()
-        {}
+        RSConstructor::~RSConstructor() {}
 
 
         void RSConstructor::buildRegularPolygon(vector<Atom*>& ring, Size& z)

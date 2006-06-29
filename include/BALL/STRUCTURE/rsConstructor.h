@@ -1,24 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rsConstructor.h,v 1.2 2006/06/08 07:30:25 oliver Exp $
+// $Id: rsConstructor.h,v 1.3 2006/06/29 20:45:31 bertsch Exp $
 //
 // Author:
 //   Holger Franken
 //
 
-#ifndef RSCONSTRUCTOR_H
-#define RSCONSTRUCTOR_H
+#ifndef BALL_STRUCTURE_RSCONSTRUCTOR_H
+#define BALL_STRUCTURE_RSCONSTRUCTOR_H
 
 #include <vector>
 #include <BALL/KERNEL/atom.h>
-#include "ringAnalyser.h"
+#include <BALL/STRUCTURE/ringAnalyser.h>
 
-
-
-using namespace BALL;
-using namespace std;
-
+namespace BALL
+{
 /**
         * \brief class, performing the prefabication of ringsystems (i.e. providing them with relative 2D-coordinates)
         *
@@ -43,7 +40,7 @@ class RSConstructor
   * @param analysed_rings the ringsystem to be constructed
   * @param i consecutive numbering of the molecule's ringsystems
   */
-  void constructRS(vector<RingInfo>& analysed_rings, Size& i);
+  void constructRS(std::vector<RingInfo>& analysed_rings, Size& i);
 
 private:
 
@@ -52,35 +49,35 @@ private:
   * @param ring the core ring
   * @param z consecutive numbering of the molecule's ringsystems
   */
-  void buildRegularPolygon(vector<Atom*>& ring, Size& z);
+  void buildRegularPolygon(std::vector<Atom*>& ring, Size& z);
 
   /**
   * \brief attach a fused ring to a (partially) constructed ringsystem
   * @param ring_info the fused ring
   * @param ringsystem the whole ringsystem
   */
-  void attachFused(RingInfo& ring_info, vector<RingInfo>& ringsystem);
+  void attachFused(RingInfo& ring_info, std::vector<RingInfo>& ringsystem);
 
   /**
   * \brief attach a bridged ring to a (partially) constructed ringsystem
   * @param ring_info the bridged ring
   * @param ringsystem the whole ringsystem
   */
-  void attachBridged(vector<Atom*>& ring, vector<RingInfo>& ringsystem);
+  void attachBridged(std::vector<Atom*>& ring, std::vector<RingInfo>& ringsystem);
 
   /**
   * \brief attach a spiro ring to a (partially) constructed ringsystem
   * @param ring_info the spiro ring
   * @param ringsystem the whole ringsystem
   */
-  void attachSpiro(RingInfo& ring_info, vector<RingInfo>& ringsystem);
+  void attachSpiro(RingInfo& ring_info, std::vector<RingInfo>& ringsystem);
 
   /**
   * \brief attach a ring template to a (partially) constructed ringsystem (no functionality yet)
   * @param ring_info the template ring
   * @param ringsystem the whole ringsystem
   */
-  void attachTemplate(vector<Atom*>& ring);
+  void attachTemplate(std::vector<Atom*>& ring);
 
   /**
   * \brief checks, whether an atom has been positioned inside the area of another ring
@@ -91,5 +88,5 @@ private:
   bool inside(Atom*& test_a, vector<Atom*>& ring);
 
 };
-
+}
 #endif

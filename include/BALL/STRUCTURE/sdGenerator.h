@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sdGenerator.h,v 1.2 2006/06/08 07:30:25 oliver Exp $
+// $Id: sdGenerator.h,v 1.3 2006/06/29 20:45:31 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -10,7 +10,6 @@
 
 #ifndef BALL_STRUCTURE_SDGENERATOR_H
 #define BALL_STRUCTURE_SDGENERATOR_H
-
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/atom.h>
@@ -23,6 +22,7 @@
 #include <BALL/STRUCTURE/chainBuilder.h>
 #include <BALL/STRUCTURE/moleculeAssembler.h>
 
+#include <vector>
 
 namespace BALL
 {
@@ -48,7 +48,7 @@ namespace BALL
                 * @param molecule_sys
                 * @return the smallest set of smallest Rings
                 */
-                vector <vector<Atom*> > getSSSR(System& molecule_sys);
+                std::vector<std::vector<Atom*> > getSSSR(System& molecule_sys);
 
 
         public:
@@ -76,14 +76,14 @@ namespace BALL
                 * \param atom   the atom, whos neighbours shall be found
                 * @return atom's neighbours inside of ring
                 */
-                pair<Atom*, Atom*> getNeighbours(vector<Atom*>& ring, Atom*& atom);
+                std::pair<Atom*, Atom*> getNeighbours(std::vector<Atom*>& ring, Atom*& atom);
 
                 /**
                 * \brief Puts the Atoms in each ring of the input ringsystem into the correct order
                 * @param ringsystem
                 * @return the ringsystem with sorted atoms
                 */
-                vector<vector<Atom*> > sequenceRings(vector<vector<Atom*> >& ringsystem);
+                std::vector<std::vector<Atom*> > sequenceRings(std::vector<std::vector<Atom*> >& ringsystem);
                 
 								/**
                 * \brief Properties, used to describe atoms and their status

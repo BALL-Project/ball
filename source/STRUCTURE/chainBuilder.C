@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chainBuilder.C,v 1.2 2006/06/08 07:30:25 oliver Exp $
+// $Id: chainBuilder.C,v 1.3 2006/06/29 20:45:32 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -13,6 +13,7 @@
 #include <BALL/STRUCTURE/sdGenerator.h>
 #include <BALL/STRUCTURE/chainBuilder.h>
 
+using namespace std;
 
 namespace BALL
 {
