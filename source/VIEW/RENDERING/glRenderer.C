@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.53 2006/06/28 13:51:02 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.54 2006/06/29 12:26:21 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1832,14 +1832,12 @@ namespace BALL
 
 	Position GLRenderer::createTextureFromGrid(const RegularData3D& grid, const ColorMap& map)
 	{
+		if (!isExtensionSupported("GL_EXT_texture3D")) return 0;
+
+		// prevent warning and error if not using GLEW:
 		Position texname = 0;
-
-		if (!isExtensionSupported("GL_EXT_texture3D"))
-		{
-			return texname;
-		}
-
 #ifdef BALL_USE_GLEW
+		removeTextureFor_(grid);
 		RegularData3D::IndexType tex_size = grid.getSize();
 
 		// Generate The Texture
