@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualizationDialog.C,v 1.1.2.3 2006/06/29 12:11:56 amoll Exp $
+// $Id: gridVisualizationDialog.C,v 1.1.2.4 2006/06/29 14:37:14 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/gridVisualizationDialog.h>
@@ -177,6 +177,17 @@ namespace BALL
 			throw()
 		{
 			grid_ = grid;
+			if (grid_ == 0) return;
+			resize_needed->setChecked(!DatasetControl::getInstance(0)->isGridSizePowerOfTwo(*grid_));
+
+			Position p = 0;
+			List<RegularData3D*>::Iterator it = grid_list_.begin();
+			for (; it != grid_list_.end(); it++)
+			{
+				if (*it == grid_) break;
+			}
+
+			grids->setCurrentIndex(p);
 		}
 
 		void GridVisualizationDialog::autoScale()
@@ -280,11 +291,14 @@ namespace BALL
 				grid_ = dc->createHistogramGrid(*grid_);
 			}
 
+			if (grid_ == 0) return;
+
 			if (!dc->isGridSizePowerOfTwo(*grid_))
 			{
 				grid_ = dc->resizeGrid();
 			}
 			
+			if (grid_ == 0) return;
 
 			Size trans = 0;
 			
@@ -311,7 +325,6 @@ namespace BALL
 			GridVisualisation& vol = *new GridVisualisation;
 			vol.setGrid(grid_);
 			vol.setTexture(texname);
-			vol.slices = slices_spin->value();
 
 			Vector3 origin = grid.getOrigin();
 			RegularData3D::IndexType s = grid.getSize();
@@ -319,33 +332,35 @@ namespace BALL
 			vol.y = grid.getCoordinates(RegularData3D::IndexType(0,s.y-1,0)) - origin;
 			vol.z = grid.getCoordinates(RegularData3D::IndexType(0,0,s.z-1)) - origin;
 			vol.origin = origin;
-			vol.max_dim = vol.x.getLength();
-			vol.max_dim = BALL_MAX(vol.max_dim, vol.y.getLength());
-			vol.max_dim = BALL_MAX(vol.max_dim, vol.z.getLength());
+			vol.max_dim = BALL_MAX3(vol.x.getLength(), vol.y.getLength(), vol.z.getLength());
+			vol.draw_box = grid_box->isChecked();
 
-			vol.setDotSize(dot_size->value());
 			Representation* rep = new Representation;
 			rep->insert(vol);
 			rep->setTransparency(trans);
 			rep->setModelType(MODEL_GRID_VOLUME);
-			gridTransparencyChanged();
 
 			if (plane->isChecked()) 
 			{
 				vol.type = GridVisualisation::PLANE; 
-				rep->setProperty("DONT_CLIP");
 				Vector3 point = origin + (vol.x + vol.y + vol.z) / 2.0;
 				vol.setPoint(point);
 				rep->setModelType(MODEL_GRID_SLICE);
+				Vector3 normal = Scene::getInstance(0)->getStage()->getCamera().getViewVector();
+		    normal.normalize();
+				vol.setNormal(normal);
 			}
 			else if (dots->isChecked()) 
 			{
+				vol.setDotSize(dot_size->value());
 				vol.type = GridVisualisation::DOTS;
 				vector<Vector3>& points = vol.points;
 				calculateRandomPoints(grid, number_dots->value(), points);
 			}
 			else 
 			{
+				vol.slices = slices_spin->value();
+				rep->setProperty("DONT_CLIP");
   			rep->setProperty("RENDER_DIRECT");
 				vol.type = GridVisualisation::SLICES;
 			}

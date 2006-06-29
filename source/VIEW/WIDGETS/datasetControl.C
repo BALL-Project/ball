@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.46 2006/06/29 12:11:41 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.47 2006/06/29 14:33:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -1549,7 +1549,7 @@ namespace BALL
 
 		vector<float>& normalized =  *(vector<float>*)&new_grid->getData();
 
-		calculateHistogramEqualization(grid.getData(), normalized, true);
+		calculateHistogramEqualization(grid.getData(), normalized, false);
 
 		String text = String("normalized ") + ascii(context_item_->text(0));;
 		insertGrid_(new_grid, (System*)item_to_composite_[context_item_], text);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.54 2006/06/29 12:26:21 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.55 2006/06/29 14:34:17 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -2099,7 +2099,7 @@ namespace BALL
 		else
 		{
 			glDisable(GL_LIGHTING);
-			glPointSize(2);
+			glPointSize(vol.getDotSize());
 			glBegin(GL_POINTS);
 			for (Position p = 0; p < vol.points.size(); p++)
 			{
