@@ -15,8 +15,8 @@ namespace BALL
 		// Constructor
 		GeometricFitDialog::GeometricFitDialog(QWidget* parent, const char* name)
 			throw()
-			: Ui_GeometricFitDialogData(),
-				DockingAlgorithmDialog(parent)
+			:	DockingAlgorithmDialog(parent),
+			  Ui_GeometricFitDialogData()
 			{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "new GeometricFitDialog " << this << std::endl;
@@ -44,8 +44,8 @@ namespace BALL
 		// Copy constructor.
 		GeometricFitDialog::GeometricFitDialog(const GeometricFitDialog& geo_fit_dialog)
 			throw()
-			: Ui_GeometricFitDialogData(),
-		    DockingAlgorithmDialog(geo_fit_dialog)
+			: DockingAlgorithmDialog(geo_fit_dialog),
+			  Ui_GeometricFitDialogData()
 		{}
 			
 		// Destructor

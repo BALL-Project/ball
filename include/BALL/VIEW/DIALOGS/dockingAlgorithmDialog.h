@@ -67,10 +67,10 @@ namespace BALL
 				void isRedock(bool is_redock)
 					throw();
 
-				virtual	void fetchPreferences(INIFile& file)
+				void fetchPreferences(INIFile& file)
 					throw();
 
-				virtual void writePreferences(INIFile& file)
+				void writePreferences(INIFile& file)
 					throw();
 
 			public slots:
@@ -93,11 +93,6 @@ namespace BALL
 				void accept();
 
 			protected:
-				
-				/** Function to read the redocking options from INIFile into vector backup_.
-					*/
-				virtual void fetchPreferences_(INIFile& file, const String& entry, const QString& default_value) 
-					throw() = 0;
 				
 				/** Swaps the option values between backup_ and dialog.
 				 */

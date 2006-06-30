@@ -19,8 +19,8 @@ namespace BALL
 		// Constructor
 		EvolutionDockingDialog::EvolutionDockingDialog(QWidget* parent, const char* name)
 			throw()
-				: Ui_EvolutionDockingDialogData(),
-				  DockingAlgorithmDialog(parent)
+				: DockingAlgorithmDialog(parent),
+					Ui_EvolutionDockingDialogData()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "new EvolutionDockingDialog " << this << std::endl;
@@ -60,8 +60,8 @@ namespace BALL
 		// Copy constructor.
 		EvolutionDockingDialog::EvolutionDockingDialog(const EvolutionDockingDialog& ev_dock_dialog)
 			throw()
-			: Ui_EvolutionDockingDialogData(),
-        DockingAlgorithmDialog(ev_dock_dialog)
+			: DockingAlgorithmDialog(ev_dock_dialog),
+				Ui_EvolutionDockingDialogData()
 		{}
 			
 		// Destructor

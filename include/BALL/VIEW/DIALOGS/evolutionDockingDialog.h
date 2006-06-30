@@ -24,8 +24,8 @@ namespace BALL
 				@see EvolutionaryDocking
 		 */
 		class BALL_VIEW_EXPORT EvolutionDockingDialog : 
-			public Ui_EvolutionDockingDialogData,
-			public DockingAlgorithmDialog
+			public DockingAlgorithmDialog,
+			public Ui_EvolutionDockingDialogData
 		{ 
 			Q_OBJECT
 			
@@ -47,7 +47,14 @@ namespace BALL
 				 */
 				EvolutionDockingDialog(QWidget* parent = 0, const char* name = 0)
 					throw();
-					
+				
+				/** Copy constructor.
+				 	* Remark: Copy contructor is private because it is not completed. 
+					* The copy constuctor of the QT widgets is private and cannot be called.    
+					*/
+				EvolutionDockingDialog(const EvolutionDockingDialog& ev_dock_dialog)
+					throw();
+	
 				/** Destructor.
 				 */
 				virtual ~EvolutionDockingDialog()
@@ -103,15 +110,7 @@ namespace BALL
 					* It shows the force field option dialog.
 					*/
 		   void showForceFieldOptions();
-										
-			private:
 			
-				/** Copy constructor.
-				 	* Remark: Copy contructor is private because it is not completed. 
-					* The copy constuctor of the QT widgets is private and cannot be called.    
-					*/
-				EvolutionDockingDialog(const EvolutionDockingDialog& ev_dock_dialog)
-					throw();
 		};
 		
 } } // Namespaces

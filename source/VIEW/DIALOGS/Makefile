@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.53.2.11.2.3 2006/06/23 16:05:40 leonhardt Exp $
+# $Id: Makefile,v 1.53.2.11.2.4 2006/06/30 11:23:03 leonhardt Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -70,6 +70,7 @@ MOC_SOURCES=\
 	coloringSettingsDialog_moc.C\
 	contourSurfaceDialog_moc.C\
 	dockDialog_moc.C\
+	dockingAlgorithmDialog_moc.C\
 	dockProgressDialog_moc.C\
 	dockResultDialog_moc.C\
 	downloadPDBFile_moc.C\
@@ -158,6 +159,9 @@ openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
 
 openBruker2DFile_moc.C: $(HEADER_DIR)/openBruker2DFile.h
 	$(MOC) $(HEADER_DIR)/openBruker2DFile.h -o $@
+
+dockingAlgorithmDialog_moc.C: $(HEADER_DIR)/dockingAlgorithmDialog.h
+	$(MOC) $(HEADER_DIR)/dockingAlgorithmDialog.h -o $@
 
 depend: $(UIC_HDR) $(MOC_SOURCES)
 

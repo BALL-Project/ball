@@ -95,8 +95,10 @@ namespace BALL
 		void DockingAlgorithmDialog::writePreferences(INIFile& file)
 			throw()
 		{
+			Log.error() << "in DockingAlgorithmDialog::writePreferences" << std::endl;
 			// first write the options that are currently in the dialog
 			PreferencesEntry::writePreferenceEntries(file);
+			Log.error() << "nach PreferencesEntry::writePreferences" << std::endl;
 			// now write the options that are in backup_
 	    swapValues_();
       PreferencesEntry::writePreferenceEntries(file);
