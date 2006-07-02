@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.h,v 1.23 2005/12/23 17:01:55 amoll Exp $
+// $Id: EFShiftProcessor.h,v 1.23.10.1 2006/07/02 16:30:09 anne Exp $
 //
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
@@ -164,7 +164,31 @@ namespace BALL
 				Default is false.
 		*/
 		bool										exclude_residue_field_;
+		
+		/*_	A flag indicating whether effectors in adjacent residues are to be considered.
+				Set this flag by specifying the option {\tt exclude_adjacent_residue_field = true} in 
+				the ElectricFieldShift section of the parameter file.
+				Default is false.
+		*/
+		bool 										exclude_adjacent_residue_field_;
+		
+		/*_	A flag indicating whether carbonyl effectors are to be considered for amid targets.
+				Set this flag by specifying the option {\tt carbonyl_influences_amide_field = false} in 
+				the ElectricFieldShift section of the parameter file.
+				Default is false.
+		*/
+		bool										carbonyl_influences_amide_field_;
+		
+		
+		/*_	A flag indicating whether solvent atoms do act as effectors.
+				Set this flag by specifying the option {\tt exclude exclude_solvent_field = true} in 
+				the ElectricFieldShift section of the parameter file.
+				Default is false.
+		*/
+		bool										exclude_solvent_field_;
 
+
+		
 		/*_	A cut off value for the electric field effect.
 				Any effector that is further away than this cut off is ignored.
 				The distance is read from the option {\tt cut_off} in the 
@@ -172,6 +196,19 @@ namespace BALL
 				This member contains the squared value(!) of the distance.
 		*/
 		float										cut_off2_;
+
+
+		/*_	A factor for switching the charge unit between esu and elementary charges. 
+		 		The unit is read from the option {\tt unit} of the section 
+				<TT>  Charges </TT> from the parameter file.
+				For numeric aspects, in the init() part the esu unit is divided by 
+				the charge_factor_, such that the molecules charges (which are given 
+				by PDB.org in elementary units) can easily be multiplied with. 
+				When computing the shift, the charge_factor is again multiplied with.  
+				Default is 1.0
+		*/
+
+		float  									charge_factor_;
 		
  	};
   

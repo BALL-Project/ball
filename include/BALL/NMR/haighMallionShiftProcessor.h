@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.h,v 1.16 2005/12/23 17:01:56 amoll Exp $
+// $Id: haighMallionShiftProcessor.h,v 1.16.10.1 2006/07/02 16:30:09 anne Exp $
 //
 
 #ifndef BALL_COMMON_H
@@ -48,15 +48,48 @@ namespace BALL
 		*/
 		HaighMallionShiftProcessor();
 		
+		/**	Default copy constructor.
+		*/
+		HaighMallionShiftProcessor(const HaighMallionShiftProcessor& processor);
+
 		/**	Destructor.
 		*/
 		virtual ~HaighMallionShiftProcessor();
 		
+		
+		//@}
+		/**	@name	Accessors
+		*/
+		//@{
+
+		/**	Initialization method.
+		*/
+		virtual void init();
+
+		//@}
+		
+
 		//@}
 		/** @name	Processor specific functions.
 		*/
 		//@{
-				
+		
+		/**	Processor start method.
+				This method clears the targets and effectors lists.
+				It fails if no parameters were assigned.
+				@return bool, <b>false</b> if <tt>parameters_ == 0</tt>
+		*/
+		virtual bool start();
+		
+		
+		/**	Application method
+				Works as a collector:	It stores the systems aromatic rings in 
+				a vector of vectors effectors_ and each target (H, N or C) in 
+				a vector called targets_
+		*/
+		virtual Processor::Result operator () (Composite& atom);
+		
+			
 		/**	Finish method.
 				Here the work is done:
 				The funcion iterates over all systems's protons by iterating through proton_list_.
@@ -78,22 +111,73 @@ namespace BALL
 		*/
 		virtual bool finish();
 
-		/**	Application method
-				Works as a collector:	It stores the systems aromatic rings in 
-				a list called aromat_list_ and each proton in a list called proton_list_
-		*/
-		virtual Processor::Result operator () (Composite& atom);
-
+		
 		//@}
-		/**	@name	Accessors
-		*/
-		//@{
+		
 
-		/**	Initialization method.
+		protected:
+		
+		/*_	A flag indicating whether Hydrogens are effected by all effectors or 
+		 		just by effectors of the same residue.
+				Set this flag by specifying the option {\tt	H_influenced_by_all_effectors = true} in 
+				the HaighMallionRingCurrent section of the parameter file.
+				Default is false.
 		*/
-		virtual void init();
+		bool										H_influenced_by_all_effectors_;
+	
+		/*_	A flag indicating whether HA Hydrogens are effected by all effectors or 
+		 		just by effectors of the same residue.
+				Set this flag by specifying the option {\tt	HA_influenced_by_all_effectors = true} in 
+				the HaighMallionRingCurrent section of the parameter file.
+				Default is false.
+		*/
+		bool										HA_influenced_by_all_effectors_;
 
-		//@}
+		/*_	A fag indicating whether a cutoff for   is used. 
+		 		Set this flag by specifying the option {\tt		use_cut_off = true} in 
+				the HaighMallionRingCurrent section of the parameter file.
+				Default is false.
+		*/
+		bool										use_cut_off_;
+
+
+		/*_	A cut off value for the ring current effect computation via Haigh Mallion.
+		  	Set this flag by specifying the option {\tt		cut_off2 = 15.} in 
+				the HaighMallionRingCurrent section of the parameter file.
+				Default is 15.
+		*/
+		bool										cut_off2_;					
+		
+		/*_	A fag indicating whether all hydrogens are targets. 
+		 		Set this flag by specifying the option {\tt	all_hydrogen_are_targets = true} in 
+				the HaighMallionRingCurrent section of the parameter file.
+				Default is false.
+		*/
+		bool										all_hydrogen_are_targets_;
+
+		/*_	The effector residues stored as a vector of atoms the collected by {\tt operator ()}.
+		*/	
+		std::vector< vector<Atom*> >			effectors_;
+		
+		/*_	The effector names collected from the ini-file by {\tt init ()}.
+		*/
+		std::vector<BALL::String> 				effector_names_;
+		
+		/*_	The intensities of the effecting residues collected from the ini-file by {\tt init ()}.
+		*/
+		std::vector<float>								intensity_factors_;
+		
+		/*_	The ring atom names of the effecting residues collected from the ini-file by {\tt init ()}.
+		*/
+		vector< vector<BALL::String> > 		ring_atoms_;
+		
+		/*_	The targeted atom names collected by {\tt init ()}.
+		*/
+		vector< BALL::String>							target_names_;
+	
+		/*_	The targeted atoms collected by {\tt operator ()}.
+		*/
+		vector<Atom* >										targets_;
 		
 		private:
 		

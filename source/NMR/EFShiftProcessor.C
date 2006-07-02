@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.C,v 1.14 2002/12/20 19:12:58 oliver Exp $
+// $Id: EFShiftProcessor.C,v 1.14.20.1 2006/07/02 16:30:10 anne Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/COMMON/limits.h>
@@ -32,7 +32,11 @@ namespace BALL
 			epsilon2_(processor.epsilon2_),
 			charge_map_(processor.charge_map_),
 			exclude_residue_field_(processor.exclude_residue_field_),
-			cut_off2_(processor.cut_off2_)
+			exclude_adjacent_residue_field_(processor.	exclude_adjacent_residue_field_),
+			carbonyl_influences_amide_field_(processor.carbonyl_influences_amide_field_),
+			exclude_solvent_field_(processor.exclude_solvent_field_),
+			cut_off2_(processor.cut_off2_),
+			charge_factor_(processor.charge_factor_)
 	{
 	}
 	
@@ -44,6 +48,7 @@ namespace BALL
 	void EFShiftProcessor::init()
 		
 	{
+std::cout << "******************* EF-Shift ******************* " << std::endl;
 		// by default, we assume the worst...
 		valid_ = false;
 
@@ -69,6 +74,27 @@ namespace BALL
 		if (parameter_section.options.has("exclude_residue_field"))
 		{
 			exclude_residue_field_ = parameter_section.options.getBool("exclude_residue_field");
+		}
+		
+		// check for the option "exclude_adjacent_field"
+		exclude_adjacent_residue_field_ = false;
+		if (parameter_section.options.has("exclude_adjacent_field"))
+		{
+			exclude_adjacent_residue_field_ = parameter_section.options.getBool("exclude_adjacent_residue_field");
+		}
+		
+		// check for the option "carbonyl_influences_amide_field"
+		carbonyl_influences_amide_field_ = false;
+		if (parameter_section.options.has("carbonyl_influences_amide_field"))
+		{
+			carbonyl_influences_amide_field_ = parameter_section.options.getBool("carbonyl_influences_amide_field");
+		}
+		
+		// check for the option "exclude_solvent_field"
+		exclude_solvent_field_ = false;
+		if (parameter_section.options.has("exclude_solvent_field"))
+		{
+			exclude_solvent_field_ = parameter_section.options.getBool("exclude_solvent_field");
 		}
 
 		// clear the arrays containing the expressions, the parameters, and the charge map
@@ -105,17 +131,17 @@ namespace BALL
 		}
 
 		// default factor is 1.0 - default unit are elementary charges (e0)
-		float charge_factor = 1.0;
+		charge_factor_ = 1.0;
 		if (parameter_section.options.has("unit"))
 		{
 			String unit = parameter_section.options["unit"];
 			if (unit == "e0")
 			{
-				charge_factor = 1.0;
+				charge_factor_ = 1.0;
 			}
 			else if (unit == "ESU")
 			{
-				charge_factor = 1.0 / 4.8;
+				charge_factor_ = 1.0 / 4.8;
 			}
 			else
 			{
@@ -131,7 +157,7 @@ namespace BALL
 			Position charge_column = parameter_section.getColumnIndex("charge");
 			for (Position i = 0; i < parameter_section.getNumberOfKeys(); i++)
 			{
-				charge_map_[parameter_section.getKey(i)] = charge_factor * parameter_section.getValue(i, charge_column).toFloat();
+				charge_map_[parameter_section.getKey(i)] = charge_factor_ * parameter_section.getValue(i, charge_column).toFloat();
 			}
 		}
 
@@ -170,6 +196,43 @@ namespace BALL
 			return true;
 		}
 
+		// if the solvent atoms should not act as sources 
+		if (exclude_solvent_field_)
+		{
+			// we build a new effector list
+			list<Atom*>				tmp_effector_list;
+			
+			list<Atom*>::const_iterator effector_it = effector_list_.begin();
+			for (; effector_it != effector_list_.end(); ++effector_it)
+			{			
+				if ((*effector_it)->getResidue()->getName() != "HOH")
+				{
+					tmp_effector_list.push_back(*effector_it);
+				}
+			}
+			effector_list_  = 	tmp_effector_list;
+		}
+
+		
+//Ausgabe der Effektoren
+std::cout << "********* \n Liste der Effektoren" << std::endl;
+list<Atom*>::const_iterator effector_it = effector_list_.begin();
+for (; effector_it != effector_list_.end(); ++effector_it)
+{			
+	std::cout << (*effector_it)->getFullName() <<"  " << (*effector_it)->getName()  << "  " << (*effector_it)->getType() << "  " << (*effector_it)->getTypeName()<< std::endl; 
+}
+std::cout << "  " << effector_list_.size() << "\n-------------\n";
+
+//Ausgabe der Targets
+std::cout << "********* \n Liste der Targets" << std::endl;
+//list<Bond*>::iterator tbond_it = bond_list_.begin();
+//for (; tbond_it != bond_list_.end(); ++tbond_it)
+//{			
+//	std::cout << (*tbond_it)->getFirstAtom()->getFullName() << "  " << (*tbond_it)->getSecondAtom()->getFullName() << std::endl; 
+//}
+//std::cout << "  " << bond_list_.size() << "\n-------------\n";
+
+
 		// iterate over all bonds
 		list<Bond*>::iterator bond_it = bond_list_.begin();
 		for (; bond_it != bond_list_.end(); ++bond_it)
@@ -206,6 +269,8 @@ namespace BALL
 			
 			if (bond_type != INVALID_POSITION)
 			{
+std::cout <<  first_atom->getFullName() << "  " << second_atom->getFullName()<< std::endl;
+
 				// We found parameters for a bond -- 
 				// calculate the electric field and the induced secondary shift.
 				
@@ -216,19 +281,66 @@ namespace BALL
 				// the electric field 
 				Vector3 E(0.0);
 				
+				bool same_residue;
+				bool adjacent_residues;
+				
 				list<Atom*>::const_iterator effector_it = effector_list_.begin();
+				list<Atom*>::const_iterator next_effector, last_effector;
 				for (; effector_it != effector_list_.end(); ++effector_it)
 				{
-					// Exclude effectors from the same residue (fragment) if 
-					// exclude_residue_field is set (read from options in init()).
-					if (!exclude_residue_field_ || ((*effector_it)->getFragment() != first_atom->getFragment()))
+
+					// Exclude this effector--target combination from consideration if
+					// effector is a cabonyl oxygen (O) and the target is a amid hydrogen (HN)
+					// and carbonyl_influences_amide_field is set (read from options in init()).
+					if (	 carbonyl_influences_amide_field_ && ((*effector_it)->getName() == "O") 
+							&& ( (first_atom->getName() == "HN") || second_atom->getName() == "HN" ) 
+						  )
 					{
+std::cout << first_atom->getName()<< "-->" << second_atom->getName() << "by" << (*effector_it)->getName() << std::endl; 
+						break;
+					}
+					
+					
+					//  Exclude effectors from adjacent residue (fragment) if 
+					//  exclude_adjacent_residue_field is set (read from options in init()). 
+					//  and 
+					// 	Exclude effectors from the same residue (fragment) if 
+					//  exclude_residue_field is set (read from options in init()).
+					
+					//  first test, wheather we have atoms from same residue 
+					same_residue = ((*effector_it)->getFragment() == first_atom->getFragment());
+					
+					//  then test, wheather we have atoms in adjacent residues 
+					adjacent_residues = false;
+
+					next_effector = effector_it;
+					next_effector++;
+
+					last_effector = effector_it;
+					if (effector_it != effector_list_.begin()) 
+						last_effector--;
+					else
+						// we use effector_list_.end() here to simplify 
+						// the case determination in the next line
+						last_effector = effector_list_.end();
+
+					adjacent_residues = (  (    (next_effector != effector_list_.end()) 
+																	 && ((*next_effector)->getFragment() == first_atom->getFragment()))
+															 ||(    (last_effector != effector_list_.end())
+																   && ((*last_effector)->getFragment() == first_atom->getFragment())));
+				
+					// Exclude effectors if flags are set exclude criterion holds   
+					if (    (!exclude_residue_field_					 ||  !same_residue) 
+							 && (!exclude_adjacent_residue_field_  ||  !adjacent_residues) )
+					{
+//std::cout << (*effector_it)->getName()<< "***>" <<first_atom->getName()<< std::endl;
+						
 						Vector3 distance(first_atom_pos - (*effector_it)->getPosition());
 						float square_distance = distance.getSquareLength();
 						if (square_distance <= cut_off2_)
 						{
 							// translate the charge to ESU (from elementary charges)
-							float charge = (*effector_it)->getCharge() * 4.8;
+							float charge = (*effector_it)->getCharge() * 1./charge_factor_; // 4.8;
 							
 							// add to the field
 							E += distance * charge / (distance.getSquareLength() * distance.getLength());
@@ -281,6 +393,7 @@ namespace BALL
 			full_name.substitute(":", " ");
 			if (charge_map_.has(full_name))
 			{
+//std::cout << full_name << "  " <<  charge_map_[full_name] / charge_factor_ << std::endl;
 				atom_ptr->setCharge(charge_map_[full_name]);
 			}
 			else
@@ -289,6 +402,7 @@ namespace BALL
 				full_name = "* " + atom_ptr->getName();
 				if (charge_map_.has(full_name))
 				{
+//std::cout << full_name << "  " <<  charge_map_[full_name] / charge_factor_ << std::endl;
 					atom_ptr->setCharge(charge_map_[full_name]);
 				}
 			}
