@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.h,v 1.16.10.1 2006/07/02 16:30:09 anne Exp $
+// $Id: haighMallionShiftProcessor.h,v 1.16.10.2 2006/07/02 19:39:42 anne Exp $
 //
 
 #ifndef BALL_COMMON_H
@@ -12,8 +12,12 @@
 #	include <BALL/CONCEPT/processor.h>
 #endif
 
-#ifndef BALL_NMR_SHIFT_MODULE_H
+#ifndef BALL_NMR_SHIFTMODULE_H
 #	include<BALL/NMR/shiftModule.h>
+#endif
+
+#ifndef BALL_DATATYPE_STRINGHASHMAP_H
+# include <BALL/DATATYPE/stringHashMap.h>
 #endif
 
 #include <list>
@@ -133,7 +137,7 @@ namespace BALL
 		*/
 		bool										HA_influenced_by_all_effectors_;
 
-		/*_	A fag indicating whether a cutoff for   is used. 
+		/*_	A fag indicating whether a cutoff for the ring current effect is used. 
 		 		Set this flag by specifying the option {\tt		use_cut_off = true} in 
 				the HaighMallionRingCurrent section of the parameter file.
 				Default is false.
@@ -142,11 +146,11 @@ namespace BALL
 
 
 		/*_	A cut off value for the ring current effect computation via Haigh Mallion.
-		  	Set this flag by specifying the option {\tt		cut_off2 = 15.} in 
+		  	Set this flag by specifying the option {\tt		cut_off = 15.} in 
 				the HaighMallionRingCurrent section of the parameter file.
-				Default is 15.
+				Default is 15.*15.
 		*/
-		bool										cut_off2_;					
+		float										cut_off2_;					
 		
 		/*_	A fag indicating whether all hydrogens are targets. 
 		 		Set this flag by specifying the option {\tt	all_hydrogen_are_targets = true} in 
@@ -155,17 +159,39 @@ namespace BALL
 		*/
 		bool										all_hydrogen_are_targets_;
 
+
+		/*_ A flag indicating whether for the computation of the ring current effect
+		 		the target has to be projected onto the effector ring plane or not.
+		 		Set this flag by specifying the option {\tt	project_target_to_ring_plane = true} in 
+				the HaighMallionRingCurrent section of the parameter file.
+				Default is false.
+		 */
+		bool 										project_target_to_ring_plane_;
+
+		/*_ The values of the target nucleus factors F.
+		 */
+		StringHashMap<float>		target_nucleus_factors_;
+
+		/*_ The default value of the target nucleus factors F for hydrogen atoms.
+		 */
+		float										default_hydrogen_target_nucleus_factor_;
+
 		/*_	The effector residues stored as a vector of atoms the collected by {\tt operator ()}.
 		*/	
 		std::vector< vector<Atom*> >			effectors_;
 		
+		/*_	The effector residue types stored as a vector of strings collected by {\tt operator ()}.
+				This is necessary to allow, e.g., TRP1 and TRP2 as two different kinds of rings.
+		*/	
+		std::vector<String>								effector_types_;
+
 		/*_	The effector names collected from the ini-file by {\tt init ()}.
 		*/
 		std::vector<BALL::String> 				effector_names_;
 		
 		/*_	The intensities of the effecting residues collected from the ini-file by {\tt init ()}.
 		*/
-		std::vector<float>								intensity_factors_;
+		StringHashMap<float>							intensity_factors_;
 		
 		/*_	The ring atom names of the effecting residues collected from the ini-file by {\tt init ()}.
 		*/
@@ -178,16 +204,6 @@ namespace BALL
 		/*_	The targeted atoms collected by {\tt operator ()}.
 		*/
 		vector<Atom* >										targets_;
-		
-		private:
-		
-		std::list<Atom*> proton_list_;	
-		std::list<Residue*> aromat_list_;
-		String **asrings_;
-
-		static const float big_loop_radius_;
-		static const float little_loop_radius_;
-		static const float B_;
 	};
   
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.C,v 1.17.18.1 2006/07/02 16:30:10 anne Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.17.18.2 2006/07/02 19:39:43 anne Exp $
 //
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
@@ -15,9 +15,6 @@ namespace BALL
 {
 
   const char* HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT = "RingCurrentShift[HM]";
-
-	const float HaighMallionShiftProcessor::B_ = 5.455e-6;					//Konstante in iBG(r)
-
 	
 	HaighMallionShiftProcessor::HaighMallionShiftProcessor()
 		:	ShiftModule()
@@ -31,7 +28,11 @@ namespace BALL
 			use_cut_off_(processor.use_cut_off_),
 			cut_off2_(processor.cut_off2_),
 			all_hydrogen_are_targets_(processor.all_hydrogen_are_targets_),
+			project_target_to_ring_plane_(processor.project_target_to_ring_plane_),
+			target_nucleus_factors_(processor.target_nucleus_factors_),
+			default_hydrogen_target_nucleus_factor_(processor.default_hydrogen_target_nucleus_factor_),
 			effectors_(processor.effectors_),
+			effector_types_(processor.effector_types_),
 			effector_names_(processor.effector_names_),
 			intensity_factors_(processor.intensity_factors_),
 			ring_atoms_(processor.ring_atoms_),
@@ -95,6 +96,12 @@ std::cout << " ******************* HM-Shift *******************" << std::endl;
 			cut_off2_ *= cut_off2_;
 		}
 
+		//read the project_target_to_ring_plane - option
+		project_target_to_ring_plane_ = false;
+		if (parameter_section.options.has("project_target_to_ring_plane"))
+		{
+			project_target_to_ring_plane_ = parameter_section.options.getBool("project_target_to_ring_plane");
+		}
 
 		// read the effector and target expressions
 		effector_names_.clear();
@@ -109,8 +116,10 @@ std::cout << " ******************* HM-Shift *******************" << std::endl;
 
 		for (Position counter = 0; counter < parameter_section.getNumberOfKeys(); counter++)
 		{
-			effector_names_.push_back(parameter_section.getValue(counter, residue_type_column));
-			intensity_factors_.push_back(parameter_section.getValue(counter, intensity_factor_column).toFloat());
+			String effector_name = parameter_section.getValue(counter, residue_type_column);
+
+			effector_names_.push_back(effector_name);
+			intensity_factors_[effector_name] = (parameter_section.getValue(counter, intensity_factor_column).toFloat());
 			String current_ring_atoms = parameter_section.getValue(counter, ring_atoms_column);
 
 			// read the ring atoms and split the string containing them
@@ -136,13 +145,24 @@ std::cout << " ******************* HM-Shift *******************" << std::endl;
 			all_hydrogen_are_targets_ = parameter_section.options.getBool("all_hydrogens_are_targets");
 		}		
 		
+		//read the default hydrogen target nucleus
+		default_hydrogen_target_nucleus_factor_ = 5.13;
+		if (parameter_section.options.has("default_hydrogen_target_nucleus_factor"))
+		{
+			default_hydrogen_target_nucleus_factor_ = parameter_section.options.getReal("default_hydrogen_target_nucleus_factor");
+		}
+
+		
 		// extract the column indices
 		Position target_names_column = parameter_section.getColumnIndex("name");
+		Position target_nucleus_factor_column = parameter_section.getColumnIndex("target_nucleus_factor");
 
-		// read the ring current targets
+		// read the ring current targets and target nucleus factors
 		for (Position counter = 0; counter < parameter_section.getNumberOfKeys(); counter++)
 		{
-			target_names_.push_back(parameter_section.getValue(counter,  target_names_column));
+			String target_name = parameter_section.getValue(counter,  target_names_column);
+			target_names_.push_back(target_name);
+			target_nucleus_factors_[target_name] = parameter_section.getValue(counter, target_nucleus_factor_column).toFloat();
 		}
 
 		// mark the module as initialized
@@ -156,10 +176,10 @@ for(;effector_names_it != effector_names_.end(); ++effector_names_it)
 	std::cout <<(*effector_names_it) << "  " << std::endl;
 }
 std::cout << "\tintensity_factors" << std::endl;
-vector< float>::const_iterator int_it = intensity_factors_.begin();
+StringHashMap<float>::ConstIterator int_it = intensity_factors_.begin();
 for(;int_it != intensity_factors_.end(); ++int_it)
 {
-	std::cout <<(*int_it) << "  " << std::endl;
+	std::cout <<int_it->first << "  " << int_it->second << std::endl;
 }
 
 std::cout << "\tring_atoms: " << std::endl;
@@ -188,6 +208,15 @@ std::cout << "\tHA_influenced_by_all_effectors_ = " <<	HA_influenced_by_all_effe
 std::cout << "\tuse_cut_off_= " << use_cut_off_<< std::endl;
 std::cout << "\tcut_off2_ = " << cut_off2_ << std::endl;
 std::cout << "\tall_hydrogen_are_targets_ = " << all_hydrogen_are_targets_ << std::endl;
+std::cout << "\tproject_target_to_ring_plane = " << project_target_to_ring_plane_ << std::endl;
+std::cout << "\tdefault_hydrogen_target_nucleus_factor = " << default_hydrogen_target_nucleus_factor_ << std::endl;
+
+std::cout << "\ttarget nucleus factors: " << std::endl;
+StringHashMap<float>::ConstIterator t_it = target_nucleus_factors_.begin();
+for(;+t_it; ++t_it)
+{
+	std::cout <<t_it->first << "  " << t_it->second << std::endl;
+}
 
 	}
 
@@ -236,212 +265,138 @@ for (Position i = 0; i<targets_.size(); i++)
 			return false;
 		}
 		
-		// Berechnung des shifts fuer jedes Proton der liste proton_list
-				
-		// hshift bezeichnet den chemicalshift der durch den gerade abgearbeiteten Ring verursacht wird.
-			
-		// iteriere ueber alle Protonen
-		// fuer jedes Proton iteriere ueber alle Ringe und berechne chemical_shift
-		
-		Vector3 ring_positions[6];
-
-		Size counter = 0;
-		Size number_of_rings = 0;
-		
 		// if there were no effectors or no bonds, return immediately
 		if ((targets_.size() == 0) || (effectors_.size() == 0))
 		{
 			return true;
 		}
 
-		// over all targets
-		for (Position t = 0; t < targets_.size(); t++ )
+		// over all effectors
+		for (Position e = 0; e < effectors_.size(); e++ )
 		{
-			float shift = 0;
-			// over all effectors
-			for (Position e = 0; e < effectors_.size(); e++ )
+			// computation of the ring normal
+			Size ring_size = effectors_[e].size();
+			if (ring_size < 3)
+			{
+				// we cannot compute a ring normal here! continue to the next combination!
+				continue;
+			}	
+				
+			Vector3 ring_normal(0.);
+			Vector3 current_normal;
+			for (Position pos = 0; pos < ring_size; pos++)
+			{
+				const Vector3& left  	 = effectors_[e][(pos + 0) % (ring_size)]->getPosition();
+				const Vector3& middle  = effectors_[e][(pos + 1) % (ring_size)]->getPosition();
+				const Vector3& right   = effectors_[e][(pos + 2) % (ring_size)]->getPosition();
+				
+				current_normal = (middle - right) % (middle - left);   
+
+				if (current_normal.getSquareLength() != 0)
+				{
+					current_normal.normalize();
+					ring_normal += current_normal;
+				}
+			}
+
+			// this should not happen, but who knows... maybe the ring atoms all lie on a straight line?
+			if (ring_normal.getSquareLength() == 0.)
+				continue;
+
+			// normalize the normal vector to unit length
+			ring_normal.normalize(); 
+
+			// and print it
+			std::cout << ring_normal << std::endl;
+
+			// over all targets
+			for (Position t = 0; t < targets_.size(); t++ )
 			{
 				// can H and HA influenced by all effectors or just by effectors of the same residue? 
-				if (    (targets_[t].getName() == "H") 
-						 && (!H_influenced_by_all_effectors_)
-						 && (targets_[t]->getResidue() == effectors_[e][0]->getResidue()))
-				{
-					continue;
-				}
-	
-				if (    (targets_[t].getName() == "HA") 
-						 && (!HA_influenced_by_all_effectors_)
-						 && (targets_[t]->getResidue() == effectors_[e][0]->getResidue()))
-				{
-					continue;
-				}
-	
-				
-			}
-		}
-		
-		/*
-		for (list<Atom*>::iterator proton_iter = proton_list_.begin();
-				 proton_iter != proton_list_.end(); ++proton_iter)
-		{
-			float shift = 0;
-			// for all effectors
-			for (list<Residue*>::iterator arom_iter = aromat_list_.begin();
-					 arom_iter != aromat_list_.end(); ++arom_iter)
-			{
-				// consider the HN and Halpha protons in the same residue only	i
-				//@H_influenced_by_all_effectors=true
-				//@HA_influenced_by_all_effectors=true
-
-				const Residue& residue = *(*arom_iter);
-				if (((*proton_iter)->getResidue() == &residue)
-						&& ((*proton_iter)->getName() != "HA") 
-						&& ((*proton_iter)->getName() != "H"))
+				if (    (targets_[t]->getName() == "H") 
+						&& (!H_influenced_by_all_effectors_)
+						&& (targets_[t]->getResidue() == effectors_[e][0]->getResidue()))
 				{
 					continue;
 				}
 
-				// the intensity factor i in  \delta = i B G(r)
-				// (different for each aromatic residue and relative to benzene = 1.0)
-				float intensity_factor = 1.0;  // effectotr liefert I :-)) 
-
-				if (residue.getName()=="TRP")
+				if (    (targets_[t]->getName() == "HA") 
+						&& (!HA_influenced_by_all_effectors_)
+						&& (targets_[t]->getResidue() == effectors_[e][0]->getResidue()))
 				{
-					counter = 0;
-					number_of_rings = 2;
-					intensity_factor = 1.05;
-				}
-				if (residue.getName()=="PHE")
-				{
-					counter = 1;
-					number_of_rings = 1;
-					intensity_factor = 1.05;
-				}
-				if (residue.getName()=="TYR")
-				{
-					counter = 2; 
-					number_of_rings = 1; 
-					intensity_factor = 0.92;
-				}
-				if (residue.getName()=="HIS")
-				{
-					counter = 3; 
-					number_of_rings = 1; 
-					intensity_factor = 0.43;
+					continue;
 				}
 
-				Position number_of_ring_atoms = 0;
-				Position hilf = 0;
-				while (number_of_rings) // for all rings in the amino acid
+				// project the target atom position onto the ring plane
+				Vector3 atom_projection = 
+						(project_target_to_ring_plane_) ? 	 targets_[t]->getPosition() 
+																							- (targets_[t]->getPosition()*ring_normal)*ring_normal
+																						:    targets_[t]->getPosition();
+
+				if (use_cut_off_)
 				{
-					if ((number_of_rings == 1) && (residue.getName() == "TRP"))	
+					// compute the ring center for the cut_off computation
+					Vector3 center;
+					for (Position pos = 0; pos < ring_size; pos++)
 					{
-						intensity_factor = 1.04;
+						center += effectors_[e][pos]->getPosition();
 					}
+					center /= (double)ring_size;
 
-					//Aufbau von vector_feld
-					for (Position pos = hilf; pos < hilf + 6; pos++ )
-					{
-						if (asrings_[counter][1 + pos] == "NULL")
-						{
-							break;
-						}
+					if (atom_projection.getSquareDistance(center) > cut_off2_)
+						continue;
+				}
 
-						for	(AtomConstIterator atom_iter = residue.beginAtom();
-								+atom_iter; ++atom_iter)
-						{
-							if (asrings_[counter][1 + pos] == atom_iter->getName())
-							{
-								ring_positions[number_of_ring_atoms] = atom_iter->getPosition();
-								number_of_ring_atoms++ ;
-								break;
-							}	
-						}
-					}
-				
-					// ?????: check for missing ring atoms!
-					if (number_of_ring_atoms < 5)
+				// now we can compute the areas of the triangles of adjacent ring atoms with the point atom_projection
+
+				// build each triangle
+				float geometrical_factor = 0;
+
+				for (Position pos = 0; pos < ring_size; pos++ )
+				{
+					// build r_i and r_j=r_{i+1}
+					Vector3 r_i = effectors_[e][(pos + 0) % (ring_size)]->getPosition() - atom_projection;
+					Vector3 r_j = effectors_[e][(pos + 1) % (ring_size)]->getPosition() - atom_projection;
+
+					// orientation with respect to the normal => _algebraic_ areas
+					float orientation = 1.0;
+
+					if (((r_i % r_j) * ring_normal) > 0.) 
+						orientation = -1.0;
+						
+					float area=0.;
+					if (project_target_to_ring_plane_)
 					{
-						Log.error() << "HMSP:finish: could not identify all ring atoms for " 
-								<< residue.getName() << residue.getID() << ": found " << number_of_ring_atoms << endl;
+						area = (r_i % r_j).getLength() / 2.;
 					}
-					else	
+					else
 					{
-						// determine the ring center				
-						Vector3 center;
-						for (Position pos = 0; pos < number_of_ring_atoms; pos++)
-						{
-							center += ring_positions[pos];
-						}
-						center /= (double)number_of_ring_atoms;
+						area = r_i * (r_j % ring_normal) / 2.;
+					}
 					
-						// if the center of the ring is within the cut off,
-						// perform the shift calculation
-						Vector3 nucleus_pos = (*proton_iter)->getPosition();					
-						if (nucleus_pos.getSquareDistance(center) <= cut_off2)
-						{
-							// determine the normal vector of the ring plane
-							Vector3 normal;
-							for (Position pos = 0; pos < number_of_ring_atoms; pos++)
-							{
-								const Vector3& left  = ring_positions[(pos + 0) % (number_of_ring_atoms)];
-								const Vector3& middle  = ring_positions[(pos + 1) % (number_of_ring_atoms)];
-								const Vector3& right = ring_positions[(pos + 2) % (number_of_ring_atoms)];
-								normal += (middle - right) % (middle - left);  
-							}
-							// normalize the normal vector to unit length
-							normal.normalize(); 
-
-							// determine the sign of the normal
-							float normal_sign = 1.0;
-							
-							Vector3 d1 = ring_positions[0] - center;
-							Vector3 d2 = ring_positions[1] - center;
-							Vector3 vp = d1 % d2;
-							if ((vp * normal) > 0.0)
-							{
-								normal_sign = -1.0;
-							}
-							
-							// loop over all ring bonds
-							float sum = 0;
-							for (Position pos = 0; pos < number_of_ring_atoms; pos++ )
-							{
-								// determine the contributions of one ring bond
-								Vector3 r_1 = ring_positions[(pos + 0) % (number_of_ring_atoms)] - nucleus_pos;
-								Vector3 r_2 = ring_positions[(pos + 1) % (number_of_ring_atoms)] - nucleus_pos;
-
-								//
-								//          	<r_1, (r_2 x n)>   /    1              1    \
-								//   value =  ---------------- * |---------   +  ---------|
-								//   	               2           \ |r_1|^3        |r_2|^3 /
-								//
-								float value  = r_1 * (r_2 % normal) * 0.5 * (1.0 / (r_1.getSquareLength() * r_1.getLength()) +  1.0 / (r_2.getSquareLength() * r_2.getLength()));
+					area *= 1.0 / (r_i.getSquareLength() * r_i.getLength()) +  1.0 / (r_j.getSquareLength() * r_j.getLength());
 								
-								// add the contributions of this ring
-								sum += value;
-							}
-
-							// add up all contributions
-							shift +=  intensity_factor * B_ * normal_sign * sum;
-						}
-					}
-
-					number_of_ring_atoms = 0;
-					number_of_rings--;
-					hilf = 6; // fuer den naechsten schleifendurchlauf
+					geometrical_factor += area * orientation;	
 				}
-	
+
+				// add up the contributions of all rings
+
+				float target_nucleus_factor=0.;
+
+				if (target_nucleus_factors_.has(targets_[t]->getName()))
+						target_nucleus_factor = target_nucleus_factors_[targets_[t]->getName()];
+				else if (targets_[t]->getElement() == PTE[Element::H])
+						target_nucleus_factor = default_hydrogen_target_nucleus_factor_;
+
+				float new_rc_shift  = intensity_factors_[effector_types_[e]] * target_nucleus_factor * geometrical_factor;
+				float old_rc_shift = targets_[t]->getProperty(PROPERTY__RING_CURRENT_SHIFT).getFloat();
+				float shift = targets_[t]->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+
+				targets_[t]->setProperty(ShiftModule::PROPERTY__SHIFT, shift+new_rc_shift);
+			  targets_[t]->setProperty(PROPERTY__RING_CURRENT_SHIFT, old_rc_shift+new_rc_shift);			
 			}
-			
-			// Setze Property chemicalshift des gerade bearbeiteten Protons auf den entsprechenden Wert.
-			float hshift = shift * 1e6;
-			shift = (*proton_iter)->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
-			shift += hshift;
-			(*proton_iter)->setProperty(ShiftModule::PROPERTY__SHIFT, shift);
-			(*proton_iter)->setProperty(PROPERTY__RING_CURRENT_SHIFT, hshift);			
 		}
-		*/				
+
 		return true;
 	}
 		
@@ -459,19 +414,31 @@ for (Position i = 0; i<targets_.size(); i++)
 
 			// It is! Check whether its name matches any of our list
 			// of aromatic residue names.
+			//To Think: perhaps it makes sense to use a string hash map for fast lookup 
 			for (Position i = 0; i < effector_names_.size(); i++)
 			{
-				if (effector_names_[i] == residue->getName())
+				// Important Note! We want to allow names like TRP1 and TRP2 to denote the 2 rings
+				// of tryptophane, so we can't test for equality of the name of the effector and the residue!
+				if (effector_names_[i].hasSuffix(residue->getName()))
 				{
-					//insert the entire residue into the effector-vector
-					//To Think: perhaps it makes sense to store just the backbone_ring atoms (like in ring_atoms) 
+					effector_types_.push_back(effector_names_[i]);
+
 					vector <BALL::Atom*> atoms;
-					AtomIterator ai = residue->beginAtom();
-					for (; +ai; ++ai)
+					// to ensure that the atoms are inserted in the correct order (to have adjacent ring
+					// atoms at adjacent positions in the vector), we iterate over all atoms that _should_
+					// be in the ring in the correct order and test whether they _are_ indeed there
+					for (Position j = 0; j < ring_atoms_[i].size(); j++)
 					{
-						atoms.push_back(&*ai);
+						// is the current ring atom contained in the residue?
+						AtomIterator ai = residue->beginAtom();
+						for (; +ai; ++ai)
+						{
+							if (ring_atoms_[i][j] == ai->getName())
+							{
+								atoms.push_back(&*ai);
+							}
+						}
 					}
-					
 					effectors_.push_back(atoms);
 				}
 			}	
