@@ -6,6 +6,7 @@ Added:
 - Support for field lines, vector grids and normalized grids
 - Volume Rendering and colored planes e.g. for electrostatics
 - Support for DSN6 electron densitiy files
+- Abilitiy to create screenshots larger than the screen size
 - Widget for overview of atom values (e.g. atom type, charge)
 - Added BALL documentation widget in BALLView
 - Python widget now has its own script editor

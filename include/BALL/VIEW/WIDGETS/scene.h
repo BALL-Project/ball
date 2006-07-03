@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.14 2006/06/28 13:50:51 amoll Exp $
+// $Id: scene.h,v 1.66.2.15 2006/07/03 12:10:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -430,6 +430,9 @@ namespace BALL
 			///
 			virtual void setVisible(bool state);
 
+			///
+			static void setOffScreenRendering(bool enabled, QSize size = QSize());
+
 			protected:
 
 			//@}
@@ -780,6 +783,8 @@ namespace BALL
 			String info_string_;
 			QByteArray last_state_;
 			bool show_fps_;
+			static bool offscreen_rendering_;
+			static QSize PNG_size_;
 		};
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.67 2006/06/28 13:50:48 amoll Exp $
+// $Id: scene.C,v 1.174.2.68 2006/07/03 12:10:24 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -39,6 +39,7 @@
 #include <QtGui/qapplication.h>
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QFileDialog>
+#include <QtOpenGL/QGLPixelBuffer>
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
@@ -55,6 +56,8 @@ namespace BALL
 
 		Position Scene::screenshot_nr_ = 100000;
 		Position Scene::pov_nr_ = 100000;
+		bool Scene::offscreen_rendering_ = true;
+		QSize Scene::PNG_size_ = QSize(1500,1000);
 
 		// ###############CONSTRUCTORS,DESTRUCTORS,CLEAR###################
 
@@ -2186,9 +2189,6 @@ namespace BALL
 
 		void Scene::showExportPNGDialog()
 		{
-			// first create the image, otherwise we get the dialog into the image!!!
-			QImage image = grabFrameBuffer();
-
 			String start = String(screenshot_nr_) + ".png";
 			screenshot_nr_ ++;
 			QFileDialog fd(0, "Export a screenshot to a PNG file", getMainControl()->getWorkingDir().c_str(),
@@ -2203,21 +2203,41 @@ namespace BALL
 			}
 
 			String file_name = ascii(*fd.selectedFiles().begin());
-			if (!file_name.has('.')) file_name += ".png";
-
-			bool ok = image.save(file_name.c_str(), "PNG");
-
-			setWorkingDirFromFilename_(file_name);
-
-			if (ok) setStatusbarText("Saved PNG to " + file_name);
-			else 		setStatusbarText("Could not save PNG", true);
+			exportPNG(file_name);
 		}
 
 		bool Scene::exportPNG(const String& filename)
 		{
 			makeCurrent();
+			QImage image;
 
-			QImage image = grabFrameBuffer();
+			if (offscreen_rendering_)
+			{
+				glFlush();
+				QGLFormat f = format();
+				f.setSampleBuffers(true);
+				QGLPixelBuffer pbuffer(PNG_size_, f,this );
+				pbuffer.makeCurrent();
+
+				gl_renderer_.init(*this);
+				gl_renderer_.initSolid();
+				gl_renderer_.setSize(PNG_size_.width(), PNG_size_.height());
+				gl_renderer_.updateCamera();
+				gl_renderer_.setLights(true);
+				gl_renderer_.enableVertexBuffers(want_to_use_vertex_buffer_);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+				renderRepresentations_(DIRECT_RENDERING);
+				glFlush();
+				image = pbuffer.toImage();
+				makeCurrent();
+				gl_renderer_.setSize(width(), height());
+				gl_renderer_.updateCamera();
+				gl_renderer_.setLights(true);
+			}
+			else
+			{
+				image = grabFrameBuffer();
+			}
 			bool ok = image.save(filename.c_str(), "PNG");
 
 			setWorkingDirFromFilename_(filename);
@@ -2515,6 +2535,15 @@ namespace BALL
 		{
  			QGLWidget::updateGL();
 
+		}
+
+		void Scene::setOffScreenRendering(bool enabled, QSize size)
+		{
+			offscreen_rendering_ = enabled;
+			if (enabled) 
+			{
+				PNG_size_ = size;
+			}
 		}
 
 	} // namespace VIEW
