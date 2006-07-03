@@ -29,6 +29,10 @@
 # include <BALL/DATATYPE/options.h>
 #endif
 
+#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
+# include <BALL/MOLMEC/COMMON/forceField.h>
+#endif
+
 #include <BALL/VIEW/UIC/dockDialogData.h>
 
 namespace BALL
@@ -74,6 +78,11 @@ namespace BALL
 				DockDialog(QWidget* parent = 0, const char* name = 0)
 					throw();
 					
+				/** Copy constructor.
+					*/
+				DockDialog(const DockDialog& dock_dialog)
+					throw();
+	
 				/** Destructor.
 				 */
 				virtual ~DockDialog()
@@ -118,7 +127,7 @@ namespace BALL
 
 				/** Get the force field options for certain algorithms. 
 				 */
-				Options& getAlgorithmFFOptions()
+				ForceField* getForceField()
 					throw();
 				
 				/** Get scoring options.
@@ -291,13 +300,6 @@ namespace BALL
 				
 			private:
 
-				/** Copy constructor.
-					* Remark: Copy contructor is private because it is not completed. 
-					* The copy constuctor of the QT widgets is private and cannot be called.  
-					*/
-				DockDialog(const DockDialog& dock_dialog)
-					throw();
-			
 				/** Flag which indicates if we do docking or redocking.
 					*/
 				bool is_redock_;
@@ -337,7 +339,9 @@ namespace BALL
 
 				/** Options for the docking algorithm and scoring function
 				 */
-				Options algorithm_opt_, alg_ff_opt_, scoring_opt_;
+				Options algorithm_opt_, scoring_opt_;
+
+				ForceField* ff_;
 
 				/** Needed to guarantee that both, docking and redocking preferences can be written to INIFile
 					* When we do docking, redocking values are in the map and when we do redocking, the docking values are in there.

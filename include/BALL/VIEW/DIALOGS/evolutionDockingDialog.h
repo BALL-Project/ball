@@ -13,6 +13,10 @@
 #include <BALL/DATATYPE/options.h>
 #endif
 
+#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
+# include <BALL/MOLMEC/COMMON/forceField.h>
+#endif
+
 #include <BALL/VIEW/UIC/evolutionDockingDialogData.h>
 
 namespace BALL
@@ -83,12 +87,16 @@ namespace BALL
 				/** Fills options with values of the force field dialog.
 					*	@param      options the options that are filled
 					*/
-				void getFFOptions(Options& options)
+				ForceField* getForceField()
 					throw();
 
 			  //@}
 					
 			public slots:
+
+				/** Shows dialog to user.
+					*/
+				virtual void show();
 				
 				/** Is called when radio button for using a created grid is pressed. 
 				 	* It enables the browse button and to corresponding line edit.
