@@ -83,67 +83,7 @@ namespace BALL
 			}
 			return *this;
 		}
-		
-		// Read the preferences from an INIFile
-		// for reading docking preferences call PreferencesEntry::readPreferenceEntries
-		// for reading redocking options call fetchPreferences_
-		/*void EvolutionDockingDialog::fetchPreferences(INIFile& file)
-					throw()
-		{
-			Log.error() << "EvolutionDockingDialog::fetchPreferences" << std::endl;
-			PreferencesEntry::readPreferenceEntries(file);
-			
-			fetchPreferences_(file, "option_entry_0", "");
-			fetchPreferences_(file, "option_entry_1", "1.0");
-			fetchPreferences_(file, "option_entry_2", "1.0");
-			fetchPreferences_(file, "option_entry_3", "1.0");
-			fetchPreferences_(file, "option_entry_4", "-1.0");
-			fetchPreferences_(file, "option_entry_5", "-1.0");
-			fetchPreferences_(file, "option_entry_6", "-1.0");
-			fetchPreferences_(file, "option_entry_7", "100");
-			fetchPreferences_(file, "option_entry_8", "1000");
-			fetchPreferences_(file, "option_entry_9", "40");
-			fetchPreferences_(file, "option_entry_10", "20");
-		}
-		
-		// function to read the redocking options from INIFile into vector backup_
-		// if INIFile has not yet a section EVOLUTION_DOCKING_OPTIONS_REDOCK, fill backup_ vector with default values
-		void EvolutionDockingDialog::fetchPreferences_(INIFile& file, const String& entry, const QString& default_value)
-			throw()
-		{
-			if (!file.hasEntry("EVOLUTION_DOCKING_OPTIONS_REDOCK", entry))
-			{
-			 	backup_.push_back(default_value);
-			}
-			else
-			{
-				backup_.push_back(QString(file.getValue("EVOLUTION_DOCKING_OPTIONS_REDOCK", entry).c_str()));
-			}
-		}
-		
-		// Write the preferences to an INIFile
-		// If redocking was last action, first swap the option values between backup_ vector and dialog
-		// Calls  PreferencesEntry::writePreferenceEntries for docking preferences
-		// for redocking options: append section and insert the values of backup_ vector as entries
-		void EvolutionDockingDialog::writePreferences(INIFile& file)
-			throw()
-		{
-			Log.error() << "EvolutionDockingDialog::writePreferences" << std::endl;
-			if (is_redock_)
-			{
-				swapValues_();
-			}
-			PreferencesEntry::writePreferenceEntries(file);
-			
-			file.appendSection("EVOLUTION_DOCKING_OPTIONS_REDOCK");
-			
-			for (Position i = 0; i < backup_.size(); i++)
-			{
-				String entry = String("option_entry_") + String(i);
-				file.insertValue("EVOLUTION_DOCKING_OPTIONS_REDOCK", entry, ascii(backup_[i]));
-			}
-		}*/
-		
+				
 		// Fill options with values of the dialog.
 		void EvolutionDockingDialog::getOptions(Options& options)
 					throw()
@@ -171,14 +111,14 @@ namespace BALL
 		}
 	
 		// Fill options with values of the force field dialog.
-		void EvolutionDockingDialog::getFFOptions(Options& options)
+		ForceField* EvolutionDockingDialog::getForceField()
 					throw()
 		{
 			MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
 			if (!mol_struct)
 			{
 				Log.error() << "Error while applying options of AMBER_FF scoring function! " << __FILE__ << " " << __LINE__<< std::endl;
-				return;
+				return NULL;
 			}
 
 			if(amber_radio_button->isChecked())
@@ -187,7 +127,7 @@ namespace BALL
 				AmberFF& ff = mol_struct->getAmberFF();
 				// now the Amber force field gets its options
 				dialog.applyTo(ff);
-				options = ff.options;
+				return &ff;
 			}
 			else
 			{
@@ -195,7 +135,7 @@ namespace BALL
 				CharmmFF& ff = mol_struct->getCharmmFF();
 				// now the Charmm force field gets its options
 				dialog.applyTo(ff);
-				options = ff.options;
+				return &ff;
 			}
 		}
 		  

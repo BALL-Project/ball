@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.6.2.6 2006/06/30 11:23:03 leonhardt Exp $
+// $Id: dockDialog.C,v 1.5.2.6.2.7 2006/07/03 16:18:39 leonhardt Exp $
 //
 
 #include <QtGui/qpushbutton.h>
@@ -48,7 +48,8 @@ namespace BALL
 				Ui_DockDialogData(),
 				PreferencesEntry(),
 				docking_partner1_(0),
-				docking_partner2_(0)
+				docking_partner2_(0),
+				ff_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.info() << "new DockDialog " << this << std::endl;
@@ -118,8 +119,8 @@ namespace BALL
 				docking_partner1_(dock_dialog.docking_partner1_),
 				docking_partner2_(dock_dialog.docking_partner2_),
 				algorithm_opt_(dock_dialog.algorithm_opt_),
-				alg_ff_opt_(dock_dialog.alg_ff_opt_),
 				scoring_opt_(dock_dialog.scoring_opt_),
+				ff_(dock_dialog.ff_),
 				backup_(dock_dialog.backup_),
 				inifile_section_name_backup_(dock_dialog.inifile_section_name_backup_),
 				radius_rule_processor_(dock_dialog.radius_rule_processor_),
@@ -167,8 +168,8 @@ namespace BALL
 				docking_partner1_ = dock_dialog.docking_partner1_;
 				docking_partner2_ = dock_dialog.docking_partner2_;
 				algorithm_opt_ = dock_dialog.algorithm_opt_;
-				alg_ff_opt_ = dock_dialog.alg_ff_opt_;
 				scoring_opt_ = dock_dialog.scoring_opt_;
+      	ff_ = dock_dialog.ff_;
 				backup_ = dock_dialog.backup_;
 				inifile_section_name_backup_ = dock_dialog.inifile_section_name_backup_;
 				radius_rule_processor_ = dock_dialog.radius_rule_processor_;
@@ -205,10 +206,10 @@ namespace BALL
 			return algorithm_opt_;
 		}
 
-		Options& DockDialog::getAlgorithmFFOptions()
+		ForceField* DockDialog::getForceField()
 			throw()
 		{
-			return alg_ff_opt_;
+			return ff_;
 		}
 
 		Options& DockDialog::getScoringOptions()
@@ -302,6 +303,8 @@ namespace BALL
 		{
 			// read preferences of INI-section docking into the QWidget of the dialog
 			PreferencesEntry::readPreferenceEntries(file);
+			// store docking values of the widgets in ValueMap last_values_
+			storeValues();
 			// now read redocking options
 			// INIFile has not yet a section redocking, fill backup_ with default values
 			if (!file.hasSection(inifile_section_name_backup_))
@@ -310,11 +313,18 @@ namespace BALL
 			}
 			else
 			{
-				String temp = inifile_section_name_;
-				inifile_section_name_ = inifile_section_name_backup_;
+				// make a backup of docking options
+				backup_ = last_values_;
+				String s = inifile_section_name_backup_;
+			  inifile_section_name_backup_ = inifile_section_name_;
+				inifile_section_name_ = s;
+				// read redocking values into widgets
 				PreferencesEntry::readPreferenceEntries(file);
-        inifile_section_name_ = temp;
-			}
+				// store redocking values of the widgets in ValueMap last_values_
+				storeValues();
+				// swap, s.t. docking values are in widgets and redockng values are in backup_
+				swapValues_();
+      }
 
 			// call this function to check which algorithm / scoring function is the current item in the combobox
 			// and set advanced button enabled if necessary
@@ -332,26 +342,18 @@ namespace BALL
 		void DockDialog::writePreferences(INIFile& file)
 			throw()
 		{
-			Log.error() << "in DockDialog::writePreferences" << std::endl;
 			// first write the options that are currently in the dialog
 			PreferencesEntry::writePreferenceEntries(file);
-			Log.error() << "nach PreferencesEntry::writePreferences" << std::endl;
 			// now write the options that are in backup_
 	    swapValues_();
-			Log.error() << "nach swapValues_" << std::endl;
       PreferencesEntry::writePreferenceEntries(file);
-			Log.error() << "nach PreferencesEntry::writePreferences" << std::endl;
 			swapValues_();
-			Log.error() << "vor hash map" << std::endl;
 
 			HashMap<int, DockingAlgorithmDialog*>::Iterator it = algorithm_dialogs_.begin();
 			for (; +it; ++it)
 			{
-				Log.error() << "in hash map" << std::endl;
 				it->second->writePreferences(file);
 			}
-			Log.error() << "nach hash map" << std::endl;
-
 		}
 		
 		/// Reset the dialog to the standard values
@@ -478,7 +480,7 @@ namespace BALL
 					break;
 				case DockingController::EVOLUTION_DOCKING:
 					EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[index]));
-					edd->getFFOptions(alg_ff_opt_);
+					ff_ = edd->getForceField();
 					break;
 			}
 			

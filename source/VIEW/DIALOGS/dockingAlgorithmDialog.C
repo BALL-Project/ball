@@ -76,6 +76,8 @@ namespace BALL
 		{
 			// first read the docking options
 			PreferencesEntry::readPreferenceEntries(file);
+			// store docking values of the widgets in ValueMap last_values_
+			storeValues();
 			// now read redocking options
 			// INIFile has not yet a section redocking, fill backup_ with default values
 			if (!file.hasSection(inifile_section_name_backup_))
@@ -84,10 +86,17 @@ namespace BALL
 			}
 			else
 			{
-				String temp = inifile_section_name_;
-				inifile_section_name_ = inifile_section_name_backup_;
+				// make a backup of docking options
+				backup_ = last_values_;
+				String s = inifile_section_name_backup_;
+			  inifile_section_name_backup_ = inifile_section_name_;
+				inifile_section_name_ = s;
+				// read redocking values into widgets
 				PreferencesEntry::readPreferenceEntries(file);
-        inifile_section_name_ = temp;
+				// store redocking values of the widgets in ValueMap last_values_
+				storeValues();
+				// swap, s.t. docking values are in widgets and redockng values are in backup_
+				swapValues_();
 			}
 		}
 
@@ -95,10 +104,8 @@ namespace BALL
 		void DockingAlgorithmDialog::writePreferences(INIFile& file)
 			throw()
 		{
-			Log.error() << "in DockingAlgorithmDialog::writePreferences" << std::endl;
 			// first write the options that are currently in the dialog
 			PreferencesEntry::writePreferenceEntries(file);
-			Log.error() << "nach PreferencesEntry::writePreferences" << std::endl;
 			// now write the options that are in backup_
 	    swapValues_();
       PreferencesEntry::writePreferenceEntries(file);

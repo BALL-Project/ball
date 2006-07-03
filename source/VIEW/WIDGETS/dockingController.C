@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.8 2006/06/23 16:06:45 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.9 2006/07/03 16:18:47 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -308,14 +308,7 @@ namespace BALL
 			if(RTTI::isKindOf<EvolutionaryDocking>(*dock_alg_))
 			{
 				EvolutionaryDocking* ed = RTTI::castTo<EvolutionaryDocking>(*dock_alg_);
-				//ed->setFFOptions(dock_dialog_.getAlgorithmFFOptions());
-				///////////////////////// TEMP ///////////////////////////////
-			Options::ConstIterator it = dock_dialog_.getAlgorithmFFOptions().begin();
-      for (; +it; ++it)
-			{
-				Log.error() << it->first << " " << it->second << std::endl;
-			}
-
+				//ed->setForceField(dock_dialog_.getForceField());
 			}
 							
 			// ============================= WITH MULTITHREADING ====================================

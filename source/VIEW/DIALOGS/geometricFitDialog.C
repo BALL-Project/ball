@@ -68,61 +68,6 @@ namespace BALL
 			return *this;
 		}
 		
-		// Read the preferences from an INIFile
-		// for reading docking preferences call PreferencesEntry::readPreferenceEntries
-		// for reading redocking options call fetchPreferences_
-	/*	void GeometricFitDialog::fetchPreferences(INIFile& file)
-					throw()
-		{
-			PreferencesEntry::readPreferenceEntries(file);
-			
-			fetchPreferences_(file, "option_entry_0", "1.0");
-			fetchPreferences_(file, "option_entry_1", "1.0");
-			fetchPreferences_(file, "option_entry_2", "-15");
-			fetchPreferences_(file, "option_entry_3", "1");
-			fetchPreferences_(file, "option_entry_4", "1.8");
-			fetchPreferences_(file, "option_entry_5", "20");
-			fetchPreferences_(file, "option_entry_6", "3");
-			fetchPreferences_(file, "option_entry_7", "Connolly");
-		}
-		
-		// function to read the redocking options from INIFile into vector backup_
-		// if INIFile has not yet a section GEOMETRIC_FIT_OPTIONS_REDOCK, fill backup_ vector with default values
-		void GeometricFitDialog::fetchPreferences_(INIFile& file, const String& entry, const QString& default_value)
-			throw()
-		{
-			if (!file.hasEntry("GEOMETRIC_FIT_OPTIONS_REDOCK", entry))
-			{
-			 	backup_.push_back(default_value);
-			}
-			else
-			{
-				backup_.push_back(QString(file.getValue("GEOMETRIC_FIT_OPTIONS_REDOCK", entry).c_str()));
-			}
-		}
-		
-		// Write the preferences to an INIFile
-		// If redocking was last action, first swap the option values between backup_ vector and dialog
-		// Calls  PreferencesEntry::writePreferenceEntries for docking preferences
-		// for redocking options: append section and insert the values of backup_ vector as entries
-		void GeometricFitDialog::writePreferences(INIFile& file)
-			throw()
-		{
-			if (is_redock_)
-			{
-				swapValues_();
-			}
-			PreferencesEntry::writePreferenceEntries(file);
-			
-			file.appendSection("GEOMETRIC_FIT_OPTIONS_REDOCK");
-			
-			for (Position i = 0; i < backup_.size(); i++)
-			{
-				String entry = String("option_entry_") + String(i);
-				file.insertValue("GEOMETRIC_FIT_OPTIONS_REDOCK", entry, ascii(backup_[i]));
-			}
-		}*/
-				
 		// Fill options with values of the dialog.
 		void GeometricFitDialog::getOptions(Options& options)
 					throw()
