@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualizationDialog.C,v 1.1.2.4 2006/06/29 14:37:14 amoll Exp $
+// $Id: gridVisualizationDialog.C,v 1.1.2.5 2006/07/03 15:01:15 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/gridVisualizationDialog.h>
@@ -318,6 +318,7 @@ namespace BALL
 			if (texname == 0)
 			{
 				reject();
+				getMainControl()->setStatusbarText("Your computer does not support 3D textures, aborting...", true);
 				return;
 			}
 				
