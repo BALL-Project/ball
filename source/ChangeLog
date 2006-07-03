@@ -35,6 +35,7 @@ Added:
 - An interface to GAMESS (to allow quantum mechanics calculations from BALL)
 - BALLView has menu entries for user defined Python Hotkeys
 - Further Python example scripts
+- Eased installation process under Microsoft Windows
 
 Changed:
 - Build process now requires GNU make for conditional compiling

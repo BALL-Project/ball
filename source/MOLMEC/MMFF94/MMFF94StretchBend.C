@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.14 2006/06/27 18:26:18 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.15 2006/07/03 13:37:30 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -958,7 +958,7 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 	void MMFF94StretchBend::updateStretchForces()
 	{
-		float epsilon =	2 * numeric_limits<float>::epsilon();
+		float epsilon =	0.000000001;
 
 		// iterate over all bonds, update the forces
 		for (Size i = 0 ; i < stretches_.size(); i++)
