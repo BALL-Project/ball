@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.8 2006/06/27 18:26:30 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.9 2006/07/03 16:33:52 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -40,7 +40,7 @@ const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 
 
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.8 2006/06/27 18:26:30 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.9 2006/07/03 16:33:52 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -233,12 +233,13 @@ CHECK(force test 3: Bends)
 	// calculate the differential quotient of
 	// the energy and compare it to the force
 	Vector3 pos = a3.getPosition();
-/*
+
 	for (double d = .0; d <= 0.1; d += 0.01)
 	{
 		// move the atom to the new position
 		a3.getPosition() = pos + Vector3(0., -d, 0.0);
 		Angle angle = v1.getAngle(a3.getPosition() - a2.getPosition());
+Log.error() << "#~~#   1 " << a3.getPosition()  << (angle-angle_0).toDegree()          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 		// calculate the force
 		sb.updateForces();
@@ -260,9 +261,9 @@ CHECK(force test 3: Bends)
 		double angle2 = Angle(v1.getAngle(a3.getPosition() - a2.getPosition()) - angle).toDegree();
 		mmff.updateEnergy();
 		dE = (sb.getBendEnergy() - dE) / angle2;
-		TEST_REAL_EQUAL(force, dE * FORCES_FACTOR)
+//   		TEST_REAL_EQUAL(force, dE * FORCES_FACTOR)
 	}	
-*/
+
 RESULT
 
 
@@ -321,6 +322,7 @@ for (double d = .0; d <= 0.5; d += 0.01)
 RESULT
 
 CHECK(force test 7: ES)
+	MMFF94NonBonded& nb = *(MMFF94NonBonded*)enableOneComponent("MMFF94 NonBonded", mmff);
 	HINFile f("data/MMFF94-vdw.hin");	
 	System s;
 	f >> s;
@@ -378,12 +380,12 @@ Log.error() << "#~~#   1 " << a1.getElement().getSymbol()            << " "  << 
 
 		// translate atom 2 by 0.0001 Angstrom to the left
 		// and to the right to determine the differential quotient
-		sb.updateEnergy();
-		double dE = sb.getStretchEnergy();
+		nb.updateEnergy();
+		double dE = nb.getESEnergy();
 
 		a2.getPosition() += Vector3(delta, 0.0, 0.0);
 		mmff.updateEnergy();
-		dE = -(sb.getStretchEnergy() - dE) / delta;
+		dE = -(nb.getESEnergy() - dE) / delta;
 		TEST_REAL_EQUAL(force, dE * FORCES_FACTOR)
 	}	
 RESULT
