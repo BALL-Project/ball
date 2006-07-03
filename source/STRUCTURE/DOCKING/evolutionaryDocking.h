@@ -13,6 +13,11 @@
 #include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
 #endif
 
+#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
+# include <BALL/MOLMEC/COMMON/forceField.h>
+#endif
+
+
 namespace BALL
 {
   class GeneticAlgorithm;
@@ -98,7 +103,7 @@ namespace BALL
       virtual void setup(System& system1, System& system2)
 	throw();	
      
-			void setFFOptions(Options& options)
+			void setForceField(ForceField* ff)
 				throw();
 
       /** Start the main loop of the algorithm.
@@ -134,9 +139,8 @@ namespace BALL
       //////////////////////////////////////////
       // the member variables
       
-      /**	The options for the algorithm.
-       */
-      Options	options;
+      /**	The force field */
+      ForceField* ff_;
 
 
     protected:
