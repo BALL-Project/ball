@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.9 2006/07/03 16:33:52 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.10 2006/07/03 16:36:12 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -40,7 +40,7 @@ const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 
 
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.9 2006/07/03 16:33:52 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.10 2006/07/03 16:36:12 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -355,7 +355,6 @@ CHECK(force test 7: ES)
 	mmff.setup(s);
 	mmff.updateForces();
 	mmff.updateEnergy();
-Log.error() << "#~~#   1 " << a1.getElement().getSymbol()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	TEST_REAL_EQUAL(a1.getCharge(), -1)
 	TEST_REAL_EQUAL(a2.getCharge(), 2)
 
