@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualizationDialog.C,v 1.1.2.7 2006/07/04 15:56:04 amoll Exp $
+// $Id: gridVisualizationDialog.C,v 1.1.2.8 2006/07/04 16:00:57 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/gridVisualizationDialog.h>
@@ -63,7 +63,6 @@ namespace BALL
 			connect( mode_tab, SIGNAL( currentChanged(int) ), this, SLOT(gridTransparencyChanged()));
 
 			setObjectName(name);
-			ignore_ = false;
 		}
 
 		void GridVisualizationDialog::normalizationChanged()
@@ -213,8 +212,6 @@ namespace BALL
 
 		void GridVisualizationDialog::accept()
 		{
-			QDialog::accept();
-
 			try
 			{
 				ascii(mid_box->text()).toFloat();
@@ -224,7 +221,10 @@ namespace BALL
 			catch(...)
 			{
 				getMainControl()->setStatusbarText("Invalid value for min, mid or max value!", true);
+				return;
 			}
+
+			QDialog::accept();
 
 			setColor_(min_min_color, min_min_label, min_min_alpha);
 			setColor_(min_color, min_label, min_alpha);
@@ -269,7 +269,7 @@ namespace BALL
 
 			if (!dc->isGridSizePowerOfTwo(*grid_))
 			{
-				grid_ = dc->resizeGrid();
+				grid_ = dc->resizeGrid(*grid_);
 			}
 			
 			if (grid_ == 0) return;
