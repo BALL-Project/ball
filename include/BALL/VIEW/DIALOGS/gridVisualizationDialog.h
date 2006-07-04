@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualizationDialog.h,v 1.1.2.3 2006/06/29 12:11:52 amoll Exp $
+// $Id: gridVisualizationDialog.h,v 1.1.2.4 2006/07/04 15:54:05 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_GRIDVISUALIZATIONDIALOG_H
@@ -76,9 +76,6 @@ namespace BALL
 
 			void gridTransparencyChanged();
 			void normalizationChanged();
-			void dotsSelected();
-			void volumeSelected();
-			void planeSelected();
 
 			protected:
 

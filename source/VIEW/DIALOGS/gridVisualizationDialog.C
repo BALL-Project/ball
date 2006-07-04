@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualizationDialog.C,v 1.1.2.5 2006/07/03 15:01:15 amoll Exp $
+// $Id: gridVisualizationDialog.C,v 1.1.2.6 2006/07/04 15:54:00 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/gridVisualizationDialog.h>
@@ -29,6 +29,7 @@
 #include <QtGui/QComboBox>
 #include <QtGui/qslider.h>
 #include <QtGui/qmessagebox.h>
+#include <QtGui/qtabwidget.h>
 
 namespace BALL
 {
@@ -59,50 +60,15 @@ namespace BALL
 			connect( mid_button, SIGNAL( clicked() ), this, SLOT( midPressed() ) );
 			connect( max_button, SIGNAL( clicked() ), this, SLOT( maxPressed() ) );
 			connect( max_max_button, SIGNAL( clicked() ), this, SLOT( maxMaxPressed() ) );
-			connect( plane, SIGNAL( toggled(bool) ), this, SLOT(planeSelected()));
-			connect( dots, SIGNAL( toggled(bool) ), this, SLOT(dotsSelected()));
-			connect( volume, SIGNAL( toggled(bool) ), this, SLOT(volumeSelected()));
+			connect( mode_tab, SIGNAL( currentChanged(int) ), this, SLOT(gridTransparencyChanged()));
 
 			setObjectName(name);
 			ignore_ = false;
 		}
 
-		void GridVisualizationDialog::dotsSelected()
-		{
-			if (ignore_) return;
-			ignore_ = true;
-			plane->setChecked(false);
-			volume->setChecked(false);
-			dots->setChecked(true);
-			ignore_ = false;
-			gridTransparencyChanged();
-		}
-
-		void GridVisualizationDialog::planeSelected()
-		{
-			if (ignore_) return;
-			ignore_ = true;
-			plane->setChecked(true);
-			volume->setChecked(false);
-			dots->setChecked(false);
-			ignore_ = false;
-			gridTransparencyChanged();
-		}
-
-		void GridVisualizationDialog::volumeSelected()
-		{
-			if (ignore_) return;
-			ignore_ = true;
-			plane->setChecked(false);
-			volume->setChecked(true);
-			dots->setChecked(false);
-			ignore_ = false;
-			gridTransparencyChanged();
-		}
-
 		void GridVisualizationDialog::normalizationChanged()
 		{
-			if (!normalization->checkState() == Qt::Checked) return;
+			if (normalization->checkState() != Qt::Checked) return;
 
 			min_box->setText("0.0");
 			mid_box->setText("0.5");
@@ -188,12 +154,20 @@ namespace BALL
 			}
 
 			grids->setCurrentIndex(p);
+			autoScale();
 		}
 
 		void GridVisualizationDialog::autoScale()
 		{
 			if (grid_ == 0) return;
 
+			if (normalization->checkState() == Qt::Checked)
+			{
+				min_box->setText("0.0");
+				mid_box->setText("0.5");
+				max_box->setText("1.0");
+				return;
+			}
 			const vector<float>& values = grid_->getData();
 
 			mid_value_ = 0;
@@ -220,7 +194,7 @@ namespace BALL
 		{
 			color = VIEW::getColor(label);
 
-			if (plane->isChecked() &&
+			if (mode_tab->currentIndex() == 0 &&
 					transparency->checkState() != Qt::Checked)
 			{
 				color.setAlpha(255);
@@ -334,14 +308,14 @@ namespace BALL
 			vol.z = grid.getCoordinates(RegularData3D::IndexType(0,0,s.z-1)) - origin;
 			vol.origin = origin;
 			vol.max_dim = BALL_MAX3(vol.x.getLength(), vol.y.getLength(), vol.z.getLength());
-			vol.draw_box = grid_box->isChecked();
+			vol.draw_box = render_box->isChecked();
 
 			Representation* rep = new Representation;
 			rep->insert(vol);
 			rep->setTransparency(trans);
 			rep->setModelType(MODEL_GRID_VOLUME);
 
-			if (plane->isChecked()) 
+			if (mode_tab->currentIndex() == 0)
 			{
 				vol.type = GridVisualisation::PLANE; 
 				Vector3 point = origin + (vol.x + vol.y + vol.z) / 2.0;
@@ -351,7 +325,7 @@ namespace BALL
 		    normal.normalize();
 				vol.setNormal(normal);
 			}
-			else if (dots->isChecked()) 
+			else if (mode_tab->currentIndex() == 1)
 			{
 				vol.setDotSize(dot_size->value());
 				vol.type = GridVisualisation::DOTS;
@@ -386,7 +360,7 @@ namespace BALL
 
 		void GridVisualizationDialog::gridTransparencyChanged()
 		{
- 			bool enabled = !plane->isChecked() || transparency->checkState() == Qt::Checked;
+ 			bool enabled = mode_tab->currentIndex() != 0 || transparency->checkState() == Qt::Checked;
 			min_min_alpha->setEnabled(enabled);
 					min_alpha->setEnabled(enabled);
 					mid_alpha->setEnabled(enabled);
