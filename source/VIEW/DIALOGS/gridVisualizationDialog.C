@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualizationDialog.C,v 1.1.2.6 2006/07/04 15:54:00 amoll Exp $
+// $Id: gridVisualizationDialog.C,v 1.1.2.7 2006/07/04 15:56:04 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/gridVisualizationDialog.h>
@@ -170,9 +170,9 @@ namespace BALL
 			}
 			const vector<float>& values = grid_->getData();
 
-			mid_value_ = 0;
-			min_value_ = values[0];
-			max_value_ = values[0];
+			float mid_value_ = 0;
+			float min_value_ = values[0];
+			float max_value_ = values[0];
 
 			for (Position p = 1; p < values.size(); p++)
 			{

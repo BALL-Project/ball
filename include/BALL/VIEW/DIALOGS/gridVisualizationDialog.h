@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualizationDialog.h,v 1.1.2.4 2006/07/04 15:54:05 amoll Exp $
+// $Id: gridVisualizationDialog.h,v 1.1.2.5 2006/07/04 15:56:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_GRIDVISUALIZATIONDIALOG_H
@@ -81,22 +81,16 @@ namespace BALL
 
 			GridVisualizationDialog(const GridVisualizationDialog& dialog);
 
-			bool colorByGrid_();
 			bool insertGrid_(RegularData3D& grid, const String& name);
 			void setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box);
 			void getColor_(const ColorRGBA& color, QLabel* label, QSpinBox* box);
 			void checkApplyButton_();
 
 			RegularData3D* grid_;
-			float min_value_;
-			float mid_value_;
-			float max_value_;
-			float square_distance_;
 
-			ColorRGBA	 	selected_color, min_min_color, min_color, mid_color, max_color, max_max_color;	
+			ColorRGBA	 	min_min_color, min_color, mid_color, max_color, max_max_color;	
 
 			List<RegularData3D*> grid_list_;
-			bool ignore_;
 		};
 
 	} // namespace VIEW
