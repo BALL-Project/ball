@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.10 2006/07/03 16:36:12 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.11 2006/07/04 12:25:33 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -37,10 +37,11 @@ ForceFieldComponent* enableOneComponent(const String& comp, MMFF94& mmff)
 
 // Conversion from kJ / (mol A) into Newton
 const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
+const double CHARMM_FORCES_FACTOR = Constants::JOULE_PER_CAL / FORCES_FACTOR;
 
 
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.10 2006/07/03 16:36:12 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.11 2006/07/04 12:25:33 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -358,11 +359,11 @@ CHECK(force test 7: ES)
 	TEST_REAL_EQUAL(a1.getCharge(), -1)
 	TEST_REAL_EQUAL(a2.getCharge(), 2)
 
-	TEST_REAL_EQUAL(mmff.getEnergy(), 277.817)
-	TEST_REAL_EQUAL(a1.getForce().getLength(), 1)
-	TEST_REAL_EQUAL(a2.getForce().getLength(), 1)
+	TEST_REAL_EQUAL(nb.getESEnergy(), -208.72993 * Constants::JOULE_PER_CAL)
+	TEST_REAL_EQUAL(a1.getForce().getLength() * CHARMM_FORCES_FACTOR, 162.57780)
+	TEST_REAL_EQUAL(a2.getForce().getLength() * CHARMM_FORCES_FACTOR, 162.57780)
 
-	float delta = sqrt(numeric_limits<float>::epsilon());
+	float delta = 0.00001;
 
 	// calculate the differential quotient of
 	// the energy and compare it to the force
