@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.6.2.7 2006/07/03 16:18:39 leonhardt Exp $
+// $Id: dockDialog.C,v 1.5.2.6.2.8 2006/07/05 11:08:04 leonhardt Exp $
 //
 
 #include <QtGui/qpushbutton.h>
@@ -271,9 +271,11 @@ namespace BALL
 			//otherwise you get the wrong option dialog for an algorithm
 #ifdef BALL_HAS_FFTW
 			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
+			Log.error() << "New GeoFitDialog: " << geo_fit << std::endl;
 			addAlgorithm("Geometric Fit", DockingController::GEOMETRIC_FIT, geo_fit);
 #endif
 			EvolutionDockingDialog* ev_dock = new EvolutionDockingDialog(this);
+			Log.error() << "New EvDialog: " << ev_dock << std::endl;
 			addAlgorithm("Evolutionary Docking", DockingController::EVOLUTION_DOCKING, ev_dock);
 
 			
@@ -301,6 +303,7 @@ namespace BALL
 		void DockDialog::fetchPreferences(INIFile& file)
 			throw()
 		{
+			Log.error() << "DockDialog::fetchPreferences" << std::endl;
 			// read preferences of INI-section docking into the QWidget of the dialog
 			PreferencesEntry::readPreferenceEntries(file);
 			// store docking values of the widgets in ValueMap last_values_
@@ -330,55 +333,61 @@ namespace BALL
 			// and set advanced button enabled if necessary
 			algorithmChosen();
 			scoringFuncChosen();
-			
-			HashMap<int, DockingAlgorithmDialog*>::Iterator it = algorithm_dialogs_.begin();
+			/*HashMap<int, DockingAlgorithmDialog*>::Iterator it = algorithm_dialogs_.begin();
 			for (; +it; ++it)
 			{
-				it->second->fetchPreferences(file);
+					Log.error() << "AlgorithmDialog " << it->second << std::endl;
+					DockingAlgorithmDialog d(*(it->second));
+					std::cerr << "Blaaaa\n";
+					d.fetchPreferences(file);
+					std::cerr << "Bla2\n";
+					it->second->fetchPreferences(file);
+					std::cerr << "DockDialog::fetchPreferences5" << std::endl;
+				}*/
+					Log.error() << "DockDialog::fetchPreferences6" << std::endl;
 			}
-		}
-						
-		// Write the preferences to the INIFile.
-		void DockDialog::writePreferences(INIFile& file)
-			throw()
-		{
-			// first write the options that are currently in the dialog
-			PreferencesEntry::writePreferenceEntries(file);
-			// now write the options that are in backup_
-	    swapValues_();
-      PreferencesEntry::writePreferenceEntries(file);
-			swapValues_();
+							
+			// Write the preferences to the INIFile.
+			void DockDialog::writePreferences(INIFile& file)
+				throw()
+			{
+				// first write the options that are currently in the dialog
+				PreferencesEntry::writePreferenceEntries(file);
+				// now write the options that are in backup_
+				swapValues_();
+				PreferencesEntry::writePreferenceEntries(file);
+				swapValues_();
 
-			HashMap<int, DockingAlgorithmDialog*>::Iterator it = algorithm_dialogs_.begin();
-			for (; +it; ++it)
-			{
-				it->second->writePreferences(file);
-			}
-		}
-		
-		/// Reset the dialog to the standard values
-		void DockDialog::reset()
-			throw()
-		{
-			if (tab_pages->currentIndex() == 0)
-			{
-				// comboboxes
-				algorithms->setCurrentIndex(0);
-				scoring_functions->setCurrentIndex(0);
-				
-				// buttons
-				alg_advanced_button->setEnabled(false);
-				scoring_advanced_button->setEnabled(false);
-				
-				// options
-				best_num->setText("100");
-				verbosity->setText("1");
-				
-				if(is_redock_)
+			/*	HashMap<int, DockingAlgorithmDialog*>::Iterator it = algorithm_dialogs_.begin();
+				for (; +it; ++it)
 				{
-					// euler angles
-				  phi_min->setText("-15");
-					phi_max->setText("15");
+					it->second->writePreferences(file);
+				}*/
+			}
+			
+			/// Reset the dialog to the standard values
+			void DockDialog::reset()
+				throw()
+			{
+				if (tab_pages->currentIndex() == 0)
+				{
+					// comboboxes
+					algorithms->setCurrentIndex(0);
+					scoring_functions->setCurrentIndex(0);
+					
+					// buttons
+					alg_advanced_button->setEnabled(false);
+					scoring_advanced_button->setEnabled(false);
+					
+					// options
+					best_num->setText("100");
+					verbosity->setText("1");
+					
+					if(is_redock_)
+					{
+						// euler angles
+						phi_min->setText("-15");
+						phi_max->setText("15");
 					delta_phi->setText("3");
 					
 					psi_min->setText("-15");

@@ -74,8 +74,11 @@ namespace BALL
 		void DockingAlgorithmDialog::fetchPreferences(INIFile& file)
 			throw()
 		{
+			std::cerr << "in DockingAlgorithmDialog::fetchPreferences" << std::endl;
+			std::cerr.flush();
 			// first read the docking options
 			PreferencesEntry::readPreferenceEntries(file);
+
 			// store docking values of the widgets in ValueMap last_values_
 			storeValues();
 			// now read redocking options

@@ -101,6 +101,6 @@ namespace BALL
 			  options[GeometricFit::Option::SURFACE_TYPE] = GeometricFit::FTDOCK;
 			}
 		}
-	
+
 	} // namespace VIEW
 } // namespace BALL
