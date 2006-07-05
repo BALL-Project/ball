@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.9 2006/07/03 16:18:47 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.10 2006/07/05 13:16:03 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -235,7 +235,6 @@ namespace BALL
 		void DockingController::runDocking(bool is_redock)
 			throw()
 		{
-			Log.error() << "in DockingController::runDocking.\n";
 			// Make sure we run just one instance at a time.
 			if (getMainControl()->isBusy())
 			{
@@ -251,7 +250,6 @@ namespace BALL
 			{
 				return;
 			}
-			return;
 			// check which algorithm is chosen and create a DockingAlgorithm object
 			Index index = dock_dialog_.algorithms->currentIndex();
 			switch(index)
