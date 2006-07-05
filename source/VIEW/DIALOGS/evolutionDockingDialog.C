@@ -88,14 +88,10 @@ namespace BALL
 		void EvolutionDockingDialog::fetchPreferences(INIFile& file)
 			throw()
 		{
-			Log.error() << " EvolutionDockingDialog::fetchPreferences" << std::endl;
 			DockingAlgorithmDialog::fetchPreferences(file);
-			Log.error() << "1" << std::endl;
 			if(!grid_filename->text().isEmpty())
 			{
-				Log.error() << "2" << std::endl;
-				filename_label->setEnabled(true);
-				Log.error() << "3" << std::endl;
+				enableFileBrowsing();
 			}
 			return;
 		}

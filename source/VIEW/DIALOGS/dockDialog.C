@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.6.2.8 2006/07/05 11:08:04 leonhardt Exp $
+// $Id: dockDialog.C,v 1.5.2.6.2.9 2006/07/05 13:15:17 leonhardt Exp $
 //
 
 #include <QtGui/qpushbutton.h>
@@ -271,11 +271,9 @@ namespace BALL
 			//otherwise you get the wrong option dialog for an algorithm
 #ifdef BALL_HAS_FFTW
 			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
-			Log.error() << "New GeoFitDialog: " << geo_fit << std::endl;
 			addAlgorithm("Geometric Fit", DockingController::GEOMETRIC_FIT, geo_fit);
 #endif
 			EvolutionDockingDialog* ev_dock = new EvolutionDockingDialog(this);
-			Log.error() << "New EvDialog: " << ev_dock << std::endl;
 			addAlgorithm("Evolutionary Docking", DockingController::EVOLUTION_DOCKING, ev_dock);
 
 			
@@ -303,7 +301,6 @@ namespace BALL
 		void DockDialog::fetchPreferences(INIFile& file)
 			throw()
 		{
-			Log.error() << "DockDialog::fetchPreferences" << std::endl;
 			// read preferences of INI-section docking into the QWidget of the dialog
 			PreferencesEntry::readPreferenceEntries(file);
 			// store docking values of the widgets in ValueMap last_values_
@@ -333,18 +330,13 @@ namespace BALL
 			// and set advanced button enabled if necessary
 			algorithmChosen();
 			scoringFuncChosen();
-			/*HashMap<int, DockingAlgorithmDialog*>::Iterator it = algorithm_dialogs_.begin();
+			HashMap<int, DockingAlgorithmDialog*>::Iterator it = algorithm_dialogs_.begin();
 			for (; +it; ++it)
 			{
-					Log.error() << "AlgorithmDialog " << it->second << std::endl;
 					DockingAlgorithmDialog d(*(it->second));
-					std::cerr << "Blaaaa\n";
 					d.fetchPreferences(file);
-					std::cerr << "Bla2\n";
 					it->second->fetchPreferences(file);
-					std::cerr << "DockDialog::fetchPreferences5" << std::endl;
-				}*/
-					Log.error() << "DockDialog::fetchPreferences6" << std::endl;
+				}
 			}
 							
 			// Write the preferences to the INIFile.
@@ -358,11 +350,11 @@ namespace BALL
 				PreferencesEntry::writePreferenceEntries(file);
 				swapValues_();
 
-			/*	HashMap<int, DockingAlgorithmDialog*>::Iterator it = algorithm_dialogs_.begin();
+				HashMap<int, DockingAlgorithmDialog*>::Iterator it = algorithm_dialogs_.begin();
 				for (; +it; ++it)
 				{
 					it->second->writePreferences(file);
-				}*/
+				}
 			}
 			
 			/// Reset the dialog to the standard values
