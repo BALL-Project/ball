@@ -59,7 +59,7 @@ namespace BALL
 				 *	@param      options the options that are filled
 				 */
 				virtual void getOptions(Options& options)
-					throw() = 0;
+					throw() {Log.info() << "blubb" << std::endl;} //= 0;
 
 	      /** Sets the flags \link DockingAlgorithmDialog::is_redock_ is_redock_ \endlink and 
 				  * \link DockingAlgorithmDialog::has_changed_ has_changed_ \endlink.
@@ -67,7 +67,7 @@ namespace BALL
 				void isRedock(bool is_redock)
 					throw();
 
-				void fetchPreferences(INIFile& file)
+				virtual void fetchPreferences(INIFile& file)
 					throw();
 
 				void writePreferences(INIFile& file)

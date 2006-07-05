@@ -90,14 +90,12 @@ namespace BALL
 				ForceField* getForceField()
 					throw();
 
+				void fetchPreferences(INIFile& file)
+					throw();
 			  //@}
 					
 			public slots:
 
-				/** Shows dialog to user.
-					*/
-				virtual void show();
-				
 				/** Is called when radio button for using a created grid is pressed. 
 				 	* It enables the browse button and to corresponding line edit.
 				 	*/
