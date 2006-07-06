@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualizationDialog.C,v 1.1.2.8 2006/07/04 16:00:57 amoll Exp $
+// $Id: gridVisualizationDialog.C,v 1.1.2.9 2006/07/06 00:21:46 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/gridVisualizationDialog.h>
@@ -114,7 +114,6 @@ namespace BALL
 			grids->addItem(name.c_str());
 			if (grid_ == 0) grid_ = &grid;
 
-			gridSelected();
 			return true;
 		}
 
@@ -150,9 +149,11 @@ namespace BALL
 			for (; it != grid_list_.end(); it++)
 			{
 				if (*it == grid_) break;
+				p++;
 			}
 
 			grids->setCurrentIndex(p);
+			gridSelected();
 			autoScale();
 		}
 
@@ -393,6 +394,7 @@ namespace BALL
 			{
 				insertGrid_(*it->first, it->second);
 			}
+			gridSelected();
 		}
 		
 	} // namespace VIEW

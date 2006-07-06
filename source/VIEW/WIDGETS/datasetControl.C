@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.47 2006/06/29 14:33:59 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.48 2006/07/06 00:21:44 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -1466,7 +1466,6 @@ namespace BALL
 	RegularData3D* DatasetControl::resizeGrid()
 		throw()
 	{
-		getSelectedItems();
 		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return 0;
 
 		RegularData3D& grid = *item_to_grid3_[context_item_];
