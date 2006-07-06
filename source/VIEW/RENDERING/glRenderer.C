@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.56 2006/07/05 15:29:19 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.58 2006/07/06 12:30:38 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1938,7 +1938,11 @@ namespace BALL
 			display_lists_index_ = dli;
 		}
 			
+		initDrawingOthers_();
 		glDisable(GL_LIGHTING);
+ 		glDisable(GL_CULL_FACE);
+
+		////////////////////////////////////////////////////////////////////////////////
 		glBindTexture(GL_TEXTURE_3D, texname);	
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -1946,11 +1950,7 @@ namespace BALL
    	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
    	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-		initDrawingOthers_();
 		
-		if (vol.type != GridVisualisation::DOTS) setupGridClipPlanes_(vol);
-
 		///// init the texture: automated texture coordinate generation
 		// normalized vectors in grids directions:
 		Vector3 xd = vol.x;
@@ -1995,12 +1995,11 @@ namespace BALL
 						 (double)1.0 / (double) dim.x,
 						 (double)1.0 / (double) dim.z);
 		glMatrixMode(GL_MODELVIEW);
- 		glDisable(GL_CULL_FACE);
 
 		// render this as one slice
 		if (vol.type == GridVisualisation::PLANE)
 		{
-			glBegin(GL_QUADS);
+		  setupGridClipPlanes_(vol);
 			Vector3 n = vol.getNormal();
 			Vector3 v1 = getNormal(n);
 			Vector3 v2 = v1 % n;
@@ -2015,19 +2014,18 @@ namespace BALL
 			v1 *= 2.0;
 			v2 *= 2.0;
 		
-			// render one side
+			glBegin(GL_QUADS);
 			normalVector3_(-vol.getNormal());
 			vertexVector3_(o);
 			vertexVector3_(o + v1);
 			vertexVector3_(o + v1 + v2);
 			vertexVector3_(o + v2);
-			
-			// render other side
-			normalVector3_(vol.getNormal());
-			vertexVector3_(o + v2);
-			vertexVector3_(o + v1 + v2);
-			vertexVector3_(o + v1);
-			vertexVector3_(o);
+			glEnd();
+
+			for (Position plane = GL_CLIP_PLANE0; plane < GL_CLIP_PLANE0 + 6; plane++)
+			{
+				glDisable(plane);
+			}
 		}
 		else if (vol.type == GridVisualisation::SLICES)
 		{
@@ -2113,6 +2111,7 @@ namespace BALL
 				xy += diff;
 				y  += diff;
 			}
+			glEnd();
 		}
 		else
 		{
@@ -2127,13 +2126,6 @@ namespace BALL
 			glPointSize(1);
 		}
 
-		// cleanup:
-		glEnd();	
-
-		for (Position plane = GL_CLIP_PLANE0; plane < GL_CLIP_PLANE0 + 6; plane++)
-		{
-			glDisable(plane);
-		}
 		glEnable(GL_LIGHTING);
  		glEnable(GL_CULL_FACE);
 
