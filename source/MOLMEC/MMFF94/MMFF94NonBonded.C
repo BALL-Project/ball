@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.4.8 2006/06/27 18:26:17 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.4.9 2006/07/06 15:29:05 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -304,8 +304,11 @@ namespace BALL
 		double a7 = pow(1.07,7.0);
 		double b = 0.07;
 		double c = 1.12;
+		double c2 = c * 2.;
 		double d = 0.12;
+		double d_2_2 = d * d * 2.;
 		double k_vdw = -7.0 * a7;
+		double cb = c * b;
 
 		for (Position p = 0; p < atom_pair_vector_.size(); p++)
 		{
@@ -315,7 +318,8 @@ namespace BALL
 			double r = direction.getSquareLength();
 			if (Maths::isZero(r)) 
 			{
-				getForceField()->error() << "Error: Bond with lenght 0!" << std::endl;
+				getForceField()->error() << "Error: Two atoms at exactly the same position! " 
+																 << a1.getFullName() << " " << a2.getFullName() << std::endl;
 				continue;
 			}
 
@@ -324,16 +328,6 @@ namespace BALL
 			const NonBondedPairData& nbd = non_bonded_data_[p];
 			direction /= r;
 			Vector3 force;
-
-			if (es_enabled_)
-			{
-				// ES: -  332.0716 * qi *qj * n / (D * (R + delta )^n *(R + delta))
-				double es_factor = FORCES_FACTOR * (-ES_CONSTANT * nbd.qi * nbd.qj * n_ / (dc_ * pow(r + 0.05, n_ + 1)));
-				force = direction * es_factor;
-
-				a1.getForce() -= force;
-				a2.getForce() += force;
-			}
 
 			if (vdw_enabled_)
 			{
@@ -347,6 +341,7 @@ namespace BALL
 				//                       ((r + b * R)^8 * (r^7 + d * R^7)^2)
 				//
 				//    -7 * a^7 = k_vdw
+				
 				const double R_7 = pow(nbd.rij, 7.);
 				const double R_8 = R_7 * nbd.rij;
 				const double R_14 = R_7 * R_7;
@@ -355,20 +350,28 @@ namespace BALL
 				const double r_7 = r_6 * r;
 				const double r_14 = r_7 * r_7;
 
-				double vdw_factor = nbd.eij * k_vdw * R_7 * (2. * c * R_7 * r_7 +
+				double vdw_factor = nbd.eij * k_vdw * R_7 * (c2 * R_7 * r_7 +
 																										 c * R_14 * d -
 																										 2. * r_14 -
 																										 4. * r_7 * d * R_7 -
-																										 2 * d * d * R_14 +
-																										 R_8 * c * r_6 * b)
+																										 d_2_2 * R_14 +
+																										 R_8 * r_6 * cb)
 																					/
 																							(pow(r + b * nbd.rij, 8.) * pow(r_7 + d * R_7, 2.)); 
+																							
+				force = direction * vdw_factor * FORCES_FACTOR * Constants::JOULE_PER_CAL;
 
-				vdw_factor *= FORCES_FACTOR;
-				force = direction * vdw_factor;
+				a1.getForce() += force;
+				a2.getForce() -= force;
+			}
 
-				a1.getForce() -= force;
-				a2.getForce() += force;
+			if (es_enabled_)
+			{
+				// ES: -  332.0716 * qi *qj * n / (D * (R + delta )^n *(R + delta))
+				double es_factor = FORCES_FACTOR * (ES_CONSTANT * nbd.qi * nbd.qj * n_ / (dc_ * pow(r + 0.05, n_ + 1)));
+				force = direction * es_factor;
+				a1.getForce() += force;
+				a2.getForce() -= force;
 			}
 		}   
 	} 
