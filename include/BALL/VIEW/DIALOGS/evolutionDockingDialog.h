@@ -17,6 +17,10 @@
 # include <BALL/MOLMEC/COMMON/forceField.h>
 #endif
 
+#ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
+# include <BALL/VIEW/KERNEL/representation.h>
+#endif
+
 #include <BALL/VIEW/UIC/evolutionDockingDialogData.h>
 
 namespace BALL
@@ -90,6 +94,9 @@ namespace BALL
 				ForceField* getForceField()
 					throw();
 
+				void setSystem(System* s)
+					throw();
+
 				void fetchPreferences(INIFile& file)
 					throw();
 			  //@}
@@ -116,7 +123,13 @@ namespace BALL
 					* It shows the force field option dialog.
 					*/
 		   void showForceFieldOptions();
+
+			 void showTranslationBox();
+		
+			private:
 			
+			 Representation* trans_box_rep_;
+			 System* ligand_;
 		};
 		
 } } // Namespaces

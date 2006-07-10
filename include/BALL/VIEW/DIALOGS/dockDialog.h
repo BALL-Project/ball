@@ -280,7 +280,7 @@ namespace BALL
 
 				/** Applies preprocessing steps for evolutionary docking
 				 */
-				void applyEDPreprocessing_();
+				//void applyEDPreprocessing_();
 				
 				/** Shows chosen file in the dialog.
 				 */
