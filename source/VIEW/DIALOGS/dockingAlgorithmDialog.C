@@ -18,6 +18,7 @@ namespace BALL
 				is_redock_ = false;
 				inifile_section_name_backup_ = "";
 
+				//setModal(true);
 				hide();
 		}
 
@@ -68,6 +69,12 @@ namespace BALL
 				has_changed_ = true;
 			 	is_redock_ = is_redock;
 			}
+		}
+
+		void DockingAlgorithmDialog::getOptions(Options& options)
+			throw() 
+		{	
+			Log.error() << "This is just an interface definition. Check your dynamic binding" << std::endl;
 		}
 
 		//Read the preferences from an INIFile

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.6.2.9 2006/07/05 13:15:17 leonhardt Exp $
+// $Id: dockDialog.C,v 1.5.2.6.2.10 2006/07/10 16:43:26 leonhardt Exp $
 //
 
 #include <QtGui/qpushbutton.h>
@@ -24,7 +24,7 @@
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/DATATYPE/options.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
+//#include <BALL/STRUCTURE/geometricProperties.h>
 
 #ifdef BALL_HAS_FFTW
 #include <BALL/STRUCTURE/DOCKING/geometricFit.h>
@@ -88,6 +88,7 @@ namespace BALL
 			// set flag
 			is_redock_ = false;
 			
+			//setModal(true);
 			hide(); 
 
 			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( cancelPressed() ) );
@@ -507,7 +508,7 @@ namespace BALL
 			}
 		}
 
-		void DockDialog::applyEDPreprocessing_()
+/*		void DockDialog::applyEDPreprocessing_()
 		{
 			// if translation box should be relative to the ligand
 			EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[DockingController::EVOLUTION_DOCKING]));
@@ -531,7 +532,7 @@ namespace BALL
 				algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Y] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Y)+center.y;
 				algorithm_opt_[EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Z] = algorithm_opt_.getReal(EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Z)+center.z;
 			}
-		}
+		}*/
 
 		// apply processors to the systems
 		bool DockDialog::applyProcessors_()
@@ -812,7 +813,7 @@ namespace BALL
 			}
 
 			// apply preprocessing steps for certain algorithms
-			Index index = algorithms->currentIndex();
+			/*Index index = algorithms->currentIndex();
 			switch(index)
 				{
 					case DockingController::EVOLUTION_DOCKING:
@@ -820,7 +821,7 @@ namespace BALL
 							applyEDPreprocessing_();
 							break;
 						}
-				}
+				}*/
 
 
 			// set property for the two docking partners
@@ -858,6 +859,21 @@ namespace BALL
 			if (algorithm_dialogs_.has(index))
 			{
 				algorithm_dialogs_[index]->isRedock(is_redock_);
+				if (index == DockingController::EVOLUTION_DOCKING)
+				{
+					if(docking_partner2_ == NULL)
+					{
+						QMessageBox error_message("Error","Please select docking partner 2!", 
+																			QMessageBox::Critical,
+																			QMessageBox::Ok,
+																			QMessageBox::NoButton,
+																			QMessageBox::NoButton);
+					  error_message.exec();
+					  return;
+					}
+					EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[index]));
+					edd->setSystem(docking_partner2_);
+				}
 				algorithm_dialogs_[index]->exec();
 			}
 		}
