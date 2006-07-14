@@ -67,6 +67,8 @@ namespace BALL
 					return "Backbone";
 				case MODEL_CARTOON:
 					return "Cartoon";
+				case MODEL_RIBBON:
+					return "Ribbon";
 				case MODEL_HBONDS:
 					return "H-Bonds";
 				case MODEL_FORCES:
@@ -139,6 +141,7 @@ namespace BALL
 			return (type == MODEL_SE_SURFACE ||
 							type == MODEL_SA_SURFACE ||
 							type == MODEL_BACKBONE 	||
+							type == MODEL_RIBBON 	  ||
 							type == MODEL_FORCES    ||
 							type == MODEL_BALL_AND_STICK||
 							type == MODEL_CARTOON   ||

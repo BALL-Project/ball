@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.40.2.13 2006/06/26 23:26:20 amoll Exp $
+// $Id: common.h,v 1.40.2.14 2006/07/14 07:52:37 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -201,6 +201,9 @@ namespace BALL
 
 			/// defines the property for the model: Cartoon
 			MODEL_CARTOON,
+
+			/// defines the property for the model: Ribbon
+			MODEL_RIBBON,
 
 			/// defines the property for the model: H-Bonds
 			MODEL_HBONDS,
