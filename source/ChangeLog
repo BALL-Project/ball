@@ -18,6 +18,7 @@ Added:
 - Improved rendering of transparent surfaces
 - SMARTS support
 - Toon Drawing Mode for OpenGL 
+- Ribbon model
 - Capping planes
 - Improved feedback for users: e.g. Busy mouse cursor and statusbar entries
 - Added improved coordinate system
@@ -44,6 +45,7 @@ Changed:
 
 Fixed:
 - Major code overhaul of the whole VIEW framework
+- Improved cartoon model
 - Proper error messages in Python interpreter
 - Ability to open molecular files without proper extensions in BALLView
 - Improved Python Bindings
@@ -60,12 +62,12 @@ Fixed:
 - Sensible default styles on the individual platforms
 - Renamed classes: PrimitiveManager -> RepresentationManager
 - Return pressed in PeptideDialog now applies settings
+- Crash when applying invalid boolean expressions in BALLView
 
 Known problems:
 - Molecular Control Selection: Child->Parent doesnt always gets selected
 - RegularData widgets currently dont work (QT 4.1 does not yet have CanvasWidgets)
 - HelpViewer has problems with HTML layout (QT problem)
-- Stereo Viewing doesnt work because of QT stupidity
 
 1.1.1:
 

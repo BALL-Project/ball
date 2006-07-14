@@ -6,7 +6,7 @@ ms = MolecularStructure.getInstance(0)
 setMultithreading(0)
 	
 dp.setTransparency(0)
-dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
+dp.setDrawingPrecision(DRAWING_PRECISION_MEDIUM)
 dp.selectMode(DRAWING_MODE_SOLID)
 dp.selectColoringMethod(COLORING_SECONDARY_STRUCTURE)
 dp.selectModel(MODEL_CARTOON)
