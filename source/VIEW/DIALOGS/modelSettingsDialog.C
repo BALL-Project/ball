@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.37.2.5 2006/06/20 21:44:35 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.37.2.6 2006/07/14 08:30:23 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -185,6 +185,7 @@ namespace BALL
 			if (RTTI::isKindOf<AddCartoonModel>(mp))
 			{
 				AddCartoonModel& cm = *dynamic_cast<AddCartoonModel*>(&mp);
+				/*
 				cm.setTubeRadius(getCartoonTubeRadius());
 				cm.setHelixRadius(getCartoonHelixRadius());
 				cm.setArrowWidth(getCartoonArrowWidth());
@@ -196,6 +197,7 @@ namespace BALL
 				cm.setDNAHelixRadius(getDNAHelixRadius());
 				cm.enableRibbons(ribbons_enabled->isChecked());
 				cm.enableTwoColors(two_colored_ribbons->isChecked());
+				*/
 				return;
 			}
 
@@ -264,6 +266,11 @@ namespace BALL
 					((AddBackboneModel*) model_processor)->setTubeRadius(getTubeRadius());
 					break;
 
+				case MODEL_RIBBON:
+					model_processor = new AddBackboneModel;
+					((AddBackboneModel*) model_processor)->setRibbonMode(true);
+					break;
+
 				case MODEL_CARTOON:
 					model_processor = new AddCartoonModel;
 					break;
@@ -318,6 +325,7 @@ namespace BALL
 			if (RTTI::isKindOf<AddCartoonModel>(mp))
 			{
 				AddCartoonModel& cm = *(AddCartoonModel*)(&mp);
+				/*
 				setCartoonTubeRadius(cm.getTubeRadius());
 				setCartoonHelixRadius(cm.getHelixRadius());
 				setCartoonArrowWidth(cm.getArrowWidth());
@@ -330,6 +338,7 @@ namespace BALL
 				cartoon_dna_wac->setChecked(!cm.drawDNAAsLadderModel());
 				two_colored_ribbons->setChecked(cm.twoColorsEnabled());
 				ribbons_enabled->setChecked(cm.ribbonsEnabled());
+				*/
 				return;
 			}
 
