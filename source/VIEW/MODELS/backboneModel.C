@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.25.2.1 2006/07/13 17:06:58 amoll Exp $
+// $Id: backboneModel.C,v 1.25.2.2 2006/07/15 00:35:34 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -215,6 +215,8 @@ bool AddBackboneModel::collectPositions(vector<Residue*> residues)
 			}
 			*/
 			char found = 0;
+			bool ca_found = false;
+			bool o_found = false;
 
 			// collect CA-Atoms and Os
 			BALL_FOREACH_ATOM(residue, it)
@@ -222,11 +224,13 @@ bool AddBackboneModel::collectPositions(vector<Residue*> residues)
 				if (it->getName() == batom)
 				{
 					backbones.push_back(it->getPosition());
+					ca_found = true;
 					found ++;
 				}
 				else if (it->getName() == "O")
 				{
 					offsets.push_back(it->getPosition());
+					o_found = true;
 					found ++;
 				}
 
@@ -236,6 +240,9 @@ bool AddBackboneModel::collectPositions(vector<Residue*> residues)
 			if (found != 2)
 			{
 				logString(String("Warning: not all atoms found for protein backbone/cartoon model!"));
+				String rname = residue.getFullName() + String(" ") + String(residue.getID());
+				if (!ca_found) logString(String("Could not found CA for ") + rname);
+				if (!o_found)  logString(String("Could not found O for ") + rname);
 				return false;
 			}
 		} // all residues
@@ -687,6 +694,7 @@ void AddBackboneModel::calculateModelParts(Protein& protein)
 			bool ok = collectPositions(connected_residues);
 			connected_residues.clear();
 			if (ok) model_parts_.resize(model_parts_.size() + 1);
+			else model_parts_[model_parts_.size() - 1].clear();
 		}
 
 		this_chain = next_chain;
@@ -1173,25 +1181,27 @@ void AddBackboneModel::interpolate_()
 		}
 		*/
 	
-	
-
 		// assign the points to the individial model parts:
 		for (Position set = 0; set < interpolated_points_.size(); set++)
 		{
 			vector<ModelPart>& parts = model_parts_[set];
+			// end position in interpolated_points_ of last model:
 			Position last = 0;
+			// maximum position in interpolated_points_:
+			Size max = interpolated_points_[set][0].size() - 1;
+			// iterate over all models:
 			for (Position p = 0; p < parts.size(); p++)
 			{
 				ModelPart& part = parts[p];
 				part.first_point = last;
 				last += part.residues.size() * interpolation_steps_;
-				if (last < interpolated_points_[set].size())
+				if (last <= max)
 				{
 					part.last_point = last;
 				}
 				else
 				{
-					part.last_point = last - 1;
+					part.last_point = max;
 				}
 			}
 		}
@@ -1251,7 +1261,10 @@ void AddBackboneModel::refineModelParts_()
 				new_part.first_guide_point = guide_start_offset + part.first_guide_point;
 				new_part.last_guide_point = new_part.first_guide_point + new_part.residues.size() - 1;
 				new_part.first_point = new_part.first_guide_point * interpolation_steps_;
-				new_part.last_point = (new_part.last_guide_point + 1) * interpolation_steps_ - 1;
+				Size max = interpolated_points_[set][0].size() - 1;
+				// for the last point: we make an off by one, so that we get a connection to the next model
+				// but prevent a segfault for the last point in the current set:
+				new_part.last_point = BALL_MIN(max, (new_part.last_guide_point + 1) * interpolation_steps_);
 				new_part.type = part.type;
 
 				new_residues.clear();
