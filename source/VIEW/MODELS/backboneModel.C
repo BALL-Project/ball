@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.25.2.2 2006/07/15 00:35:34 amoll Exp $
+// $Id: backboneModel.C,v 1.25.2.3 2006/07/15 10:48:34 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -540,6 +540,13 @@ void AddBackboneModel::clear_()
 bool AddBackboneModel::createGeometricObjects()
 	throw()
 {
+	if (model_parts_.size() == 0 || 
+			model_parts_.size() != ss_.size() ||
+			guide_points_.size() != model_parts_.size())
+	{
+		return true;
+	}
+	
 	interpolation_steps_ = 7 + 6 * drawing_precision_;
 	refineGuidePoints_();
 	interpolate_();
@@ -637,17 +644,11 @@ void AddBackboneModel::calculateModelParts(Protein& protein)
 			next_chain = 0;
 		}
 
-
-		if (!residue.isAminoAcid()) 
-		{
-			this_chain = next_chain;
-			continue;
-		}
-
 		// this residue connected to next residue?
 		bool connected = false;
 		
-		if (residue_next && next_chain == this_chain)
+		// if not an amino acid or an nucleic acid we will stop anyway here
+		if (residue.isAminoAcid() && residue_next && next_chain == this_chain)
 		{
 			connected = residuesAreConnected_(residue, *residue_next);
 		}
@@ -694,7 +695,10 @@ void AddBackboneModel::calculateModelParts(Protein& protein)
 			bool ok = collectPositions(connected_residues);
 			connected_residues.clear();
 			if (ok) model_parts_.resize(model_parts_.size() + 1);
-			else model_parts_[model_parts_.size() - 1].clear();
+			else 
+			{
+				model_parts_[model_parts_.size() - 1].clear();
+			}
 		}
 
 		this_chain = next_chain;

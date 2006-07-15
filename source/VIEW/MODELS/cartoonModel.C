@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.60.2.5 2006/07/13 17:06:58 amoll Exp $
+// $Id: cartoonModel.C,v 1.60.2.6 2006/07/15 10:48:23 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -99,7 +99,7 @@ void AddCartoonModel::assignModelType(ModelPart& part)
 	
 	Position type = (Position) ss->getType();
 
-	if (type == SecondaryStructure::STRAND && part.residues.size() > 3)
+	if (type == SecondaryStructure::STRAND && part.residues.size() > 1)
 	{
 		part.type = STRAND;
 	}
