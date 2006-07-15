@@ -45,6 +45,8 @@ Changed:
 
 Fixed:
 - Major code overhaul of the whole VIEW framework
+- Crash when applying invalid boolean expressions in BALLView
+- Potential crashes under windows with TCPTransfer
 - Improved cartoon model
 - Proper error messages in Python interpreter
 - Ability to open molecular files without proper extensions in BALLView
@@ -62,7 +64,6 @@ Fixed:
 - Sensible default styles on the individual platforms
 - Renamed classes: PrimitiveManager -> RepresentationManager
 - Return pressed in PeptideDialog now applies settings
-- Crash when applying invalid boolean expressions in BALLView
 
 Known problems:
 - Molecular Control Selection: Child->Parent doesnt always gets selected
