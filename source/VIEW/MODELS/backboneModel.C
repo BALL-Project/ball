@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.25.2.3 2006/07/15 10:48:34 amoll Exp $
+// $Id: backboneModel.C,v 1.25.2.4 2006/07/15 22:28:46 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -542,7 +542,8 @@ bool AddBackboneModel::createGeometricObjects()
 {
 	if (model_parts_.size() == 0 || 
 			model_parts_.size() != ss_.size() ||
-			guide_points_.size() != model_parts_.size())
+			guide_points_.size() != model_parts_.size() ||
+			guide_points_.size() == 0)
 	{
 		return true;
 	}
@@ -552,7 +553,8 @@ bool AddBackboneModel::createGeometricObjects()
 	interpolate_();
 	refineModelParts_();
 
-	if (interpolated_points_.size() != model_parts_.size())
+	if (interpolated_points_.size() != model_parts_.size() ||
+			interpolated_points_[0].size() != number_of_ribbons_)
 	{
 		BALLVIEW_DEBUG
 		return false;
@@ -1106,6 +1108,13 @@ void AddBackboneModel::interpolate_()
 
 	for (Position s = 0; s < guide_points_.size(); s++)
 	{
+		if (guide_points_[s].size() == 0 ||
+				guide_points_[s][0].size() == 0)
+		{
+			BALLVIEW_DEBUG
+			continue;
+		}
+
 		interpolated_points_[s].resize(number_of_ribbons_);
 
 		for (Position ribbon = 0; ribbon < number_of_ribbons_; ribbon++)
@@ -1167,6 +1176,7 @@ void AddBackboneModel::interpolate_()
 				current_point++;
 			}
 		}	
+	} // all sets of guide_points_
 
 		
 		/*
@@ -1185,32 +1195,41 @@ void AddBackboneModel::interpolate_()
 		}
 		*/
 	
-		// assign the points to the individial model parts:
-		for (Position set = 0; set < interpolated_points_.size(); set++)
+	// assign the points to the individial model parts:
+	for (Position set = 0; set < interpolated_points_.size(); set++)
+	{
+		// end position in interpolated_points_ of last model:
+		// maximum position in interpolated_points_:
+		if (interpolated_points_[set].size() == 0 ||
+				interpolated_points_[set][0].size() == 0)
 		{
-			vector<ModelPart>& parts = model_parts_[set];
-			// end position in interpolated_points_ of last model:
-			Position last = 0;
-			// maximum position in interpolated_points_:
-			Size max = interpolated_points_[set][0].size() - 1;
-			// iterate over all models:
-			for (Position p = 0; p < parts.size(); p++)
-			{
-				ModelPart& part = parts[p];
-				part.first_point = last;
-				last += part.residues.size() * interpolation_steps_;
-				if (last <= max)
-				{
-					part.last_point = last;
-				}
-				else
-				{
-					part.last_point = max;
-				}
-			}
+			BALLVIEW_DEBUG
+			logString(String("in set ") + String(set));
+			continue;
 		}
-	}
-}
+
+		Position last = 0;
+		Size max = interpolated_points_[set][0].size() - 1;
+		// the corresponding set of models:
+		vector<ModelPart>& parts = model_parts_[set];
+		// iterate over all models in the current set:
+		for (Position p = 0; p < parts.size(); p++)
+		{
+			ModelPart& part = parts[p];
+			part.first_point = last;
+			last += part.residues.size() * interpolation_steps_;
+			if (last <= max)
+			{
+				part.last_point = last;
+			}
+			else
+			{
+				part.last_point = max;
+			}
+		} // all models in the current set
+	} // all sets of interpolated_points_
+} // interpolate_()
+
 
 void AddBackboneModel::refineModelParts_()
 {
@@ -1272,10 +1291,10 @@ void AddBackboneModel::refineModelParts_()
 				new_part.type = part.type;
 
 				new_residues.clear();
-			}
-		}
-	}
-}
+			} // all residues in one model
+		} // all models
+	} // all sets
+} // refineModelParts_
 
 	} // namespace VIEW
 } // namespace BALL
