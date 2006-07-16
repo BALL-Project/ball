@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.C,v 1.1.2.11 2006/07/16 23:25:02 amoll Exp $
+// $Id: modifyRepresentationDialog.C,v 1.1.2.12 2006/07/16 23:54:09 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
@@ -391,6 +391,8 @@ namespace BALL
 			for (; git != rep_->getGeometricObjects().end(); ++git)
 			{
 				Mesh* mesh = dynamic_cast<Mesh*> (*git);
+
+				if (mesh == 0) continue;
 
 				if (mesh->colors.size() != mesh->vertex.size())
 				{
