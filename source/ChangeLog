@@ -46,6 +46,7 @@ Changed:
 Fixed:
 - Major code overhaul of the whole VIEW framework
 - Crash when applying invalid boolean expressions in BALLView
+- Multiple crashes under Windows, e.g in LogStream, DisplayProperties, TCPTransfer,...
 - Potential crashes under windows with TCPTransfer
 - Improved cartoon model
 - Proper error messages in Python interpreter
