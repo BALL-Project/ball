@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.C,v 1.1.2.10 2006/06/24 23:53:16 amoll Exp $
+// $Id: modifyRepresentationDialog.C,v 1.1.2.11 2006/07/16 23:25:02 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
@@ -690,17 +690,17 @@ namespace BALL
 
 		void ModifyRepresentationDialog::setMinValue(float value)
 		{
-			min_label->setText(String(value).c_str());
+			min_box->setText(String(value).c_str());
 		}
 
 		void ModifyRepresentationDialog::setMaxValue(float value)
 		{
-			max_label->setText(String(value).c_str());
+			max_box->setText(String(value).c_str());
 		}
 
 		void ModifyRepresentationDialog::setMidValue(float value)
 		{
-			mid_label->setText(String(value).c_str());
+			mid_box->setText(String(value).c_str());
 		}
 
 		void ModifyRepresentationDialog::splitMethodChanged()
