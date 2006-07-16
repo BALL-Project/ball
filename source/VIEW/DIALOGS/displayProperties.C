@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.11 2006/05/10 14:30:37 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.12 2006/07/16 11:53:57 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -500,6 +500,12 @@ void DisplayProperties::applyColoringSettings_(Representation& rep)
 
 Representation* DisplayProperties::createRepresentation(const List<Composite*>& composites, bool hidden)
 {
+	if (composites.size() == 0) return 0;
+
+	// workaround for MSVC: crashed otherwise
+	Composite* first_composite = *composites.begin();
+	if (first_composite == 0) return 0 ;
+
 	// create a new Representation
 	rep_ = new Representation();
 	applyColoringSettings_(*rep_);
@@ -527,10 +533,7 @@ Representation* DisplayProperties::createRepresentation(const List<Composite*>& 
 	// no refocus, if a this is not the only Representation
 	if ((getMainControl()->getRepresentationManager().getRepresentations().size() < 2))
 	{
-		CompositeMessage* ccmessage = new CompositeMessage;
-		ccmessage->setComposite(**composites.begin());
-		ccmessage->setType(CompositeMessage::CENTER_CAMERA);
-		notify_(ccmessage);
+		notify_(new CompositeMessage(*first_composite, CompositeMessage::CENTER_CAMERA));
 	}
 
 	if (hidden) return rep_;
