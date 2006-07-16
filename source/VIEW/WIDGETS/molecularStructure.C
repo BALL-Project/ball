@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.19 2006/06/21 22:05:29 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.20 2006/07/16 13:10:27 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -950,7 +950,10 @@ namespace BALL
 			// Compute the single point energy and print the result to Log and the status bar.
 			ff.updateEnergy();
 			ff.updateForces();
-			Log.info() << ff.getResults() << std::endl;
+			ff.getResults();
+			// workaround for MSVC: need to create an string, than log it!
+			String results = ff.getResults();
+			Log.info() << results << std::endl;
 			setStatusbarText("Total energy: " + String(ff.getEnergy()) + " kJ/mol.", true);
 			getMainControl()->update(*system);
 		}
