@@ -276,7 +276,7 @@ void DemoTutorialDialog::nextStepClicked()
 		if (current_step_ == 10)
 		{
 			hide();
-			HelpViewer* hv = HelpViewer::getInstance(0);
+			HelpViewer* hv = HelpViewer::getInstance(1);
 			if (hv == 0) return;
 			hv->showHelp();
 			hv->setFloating(true);
@@ -367,7 +367,13 @@ void DemoTutorialDialog::nextStepDemo_()
 		getMainControl()->setMultithreading(false);
 		notify_(new CreateRepresentationMessage(composites_, MODEL_SE_SURFACE, COLORING_ELEMENT));
 
-		getMainControl()->setMultithreading(false);
+		getMainControl()->setMultithreading(true);
+
+		if (getMainControl()->getRepresentationManager().getNumberOfRepresentations() == 0)
+		{
+			BALLVIEW_DEBUG
+			return;
+		}
 
 		Representation* rep = *getMainControl()->getRepresentationManager().begin();
 
