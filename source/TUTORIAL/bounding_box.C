@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bounding_box.C,v 1.12 2005/12/23 17:03:18 amoll Exp $
+// $Id: bounding_box.C,v 1.12.2.1 2006/07/17 19:42:08 amoll Exp $
 //
 // BALLView tutorial example
 // ------------------------
@@ -18,12 +18,10 @@
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 
-#include <qapplication.h>
+#include <QtGui/qapplication.h>
 
 // include our new processor
 #include "glBoundingBoxModel.h"
-
-#include <qapplication.h>
 
 using namespace BALL;
 using namespace BALL::VIEW;
@@ -161,7 +159,6 @@ int main(int argc, char **argv)
   QApplication application(argc, argv);
 
   MyMainframe mainframe;
-  application.setMainWidget(&mainframe);
 	mainframe.setIdentifier("MAIN");
 	mainframe.registerThis();
   mainframe.show();
