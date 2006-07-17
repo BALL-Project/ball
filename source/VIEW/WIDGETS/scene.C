@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.68 2006/07/03 12:10:24 amoll Exp $
+// $Id: scene.C,v 1.174.2.69 2006/07/17 20:58:32 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2191,19 +2191,16 @@ namespace BALL
 		{
 			String start = String(screenshot_nr_) + ".png";
 			screenshot_nr_ ++;
-			QFileDialog fd(0, "Export a screenshot to a PNG file", getMainControl()->getWorkingDir().c_str(),
-										 "*.png");
-			fd.setAcceptMode(QFileDialog::AcceptSave);
-			fd.selectFile(start.c_str());
-			fd.setFileMode(QFileDialog::AnyFile);
-			if (fd.exec() != QDialog::Accepted ||
-					fd.selectedFiles().size() == 0)
-			{
-				return;
-			}
+			QString qresult = QFileDialog::getSaveFileName(
+												0,
+												"Export POVRay File",
+												(getWorkingDir() + String(FileSystem::PATH_SEPARATOR) + start).c_str(),
+												"*.png");
 
-			String file_name = ascii(*fd.selectedFiles().begin());
-			exportPNG(file_name);
+			if (qresult == QString::null) return;
+
+			String result = ascii(qresult);
+			exportPNG(result);
 		}
 
 		bool Scene::exportPNG(const String& filename)
