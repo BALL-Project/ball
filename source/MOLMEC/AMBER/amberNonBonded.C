@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.C,v 1.35 2005/02/21 21:36:52 oliver Exp $
+// $Id: amberNonBonded.C,v 1.35.6.1 2006/07/17 21:16:03 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
@@ -923,20 +923,20 @@ namespace BALL
 					(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4,
 					 cutoffs_es, cutoffs_vdw);
 				AmberNBEnergy<(ESEnergyFunction)coulomb, (VdwEnergyFunction)vdwSixTwelve, (SwitchingFunction)cubicSwitch >
-					(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size() - number_of_h_bonds_], electrostatic_energy, vdw_energy, 
+					(&non_bonded_[0] + number_of_1_4_, &non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, electrostatic_energy, vdw_energy, 
 					 cutoffs_es, cutoffs_vdw);
 				AmberNBEnergy<(ESEnergyFunction)coulomb, (VdwEnergyFunction)vdwTenTwelve, (SwitchingFunction)cubicSwitch >
-					(&non_bonded_[non_bonded_.size() - number_of_h_bonds_], &non_bonded_[non_bonded_.size()], electrostatic_energy, hbond_energy, 
+					(&non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, &non_bonded_[0] + non_bonded_.size(), electrostatic_energy, hbond_energy, 
 					 cutoffs_es, cutoffs_vdw);
 			#else
 				AmberNBEnergy<coulomb, vdwSixTwelve, cubicSwitch>
-					(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4,
+					(&non_bonded_[0], &non_bonded_[0] + number_of_1_4_, electrostatic_energy_1_4, vdw_energy_1_4,
 					 cutoffs_es, cutoffs_vdw);
 				AmberNBEnergy<coulomb, vdwSixTwelve, cubicSwitch>
-					(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size() - number_of_h_bonds_], electrostatic_energy, vdw_energy, 
+					(&non_bonded_[0] + number_of_1_4_, &non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, electrostatic_energy, vdw_energy, 
 					 cutoffs_es, cutoffs_vdw);
 				AmberNBEnergy<coulomb, vdwTenTwelve, cubicSwitch>
-					(&non_bonded_[non_bonded_.size() - number_of_h_bonds_], &non_bonded_[non_bonded_.size()], electrostatic_energy, hbond_energy, 
+					(&non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, &non_bonded_[0] + non_bonded_.size(), electrostatic_energy, hbond_energy, 
 					 cutoffs_es, cutoffs_vdw);
 			#endif
 		}
@@ -945,23 +945,23 @@ namespace BALL
 			// no periodic boundary, distance-dependent dielectric constant
 			#ifdef BALL_MUST_CAST_TEMPLATE_FUNCTION_ARGS
 				AmberNBEnergy<(ESEnergyFunction)distanceDependentCoulomb, (VdwEnergyFunction)vdwSixTwelve, (SwitchingFunction)cubicSwitch >
-					(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4,
+					(&non_bonded_[0], &non_bonded_[0] + number_of_1_4_, electrostatic_energy_1_4, vdw_energy_1_4,
 					 cutoffs_es, cutoffs_vdw);
 				AmberNBEnergy<(ESEnergyFunction)distanceDependentCoulomb, (VdwEnergyFunction)vdwSixTwelve, (SwitchingFunction)cubicSwitch >
-					(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size() - number_of_h_bonds_], electrostatic_energy, vdw_energy, 
+					(&non_bonded_[0] + number_of_1_4_, &non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, electrostatic_energy, vdw_energy, 
 					 cutoffs_es, cutoffs_vdw);
 				AmberNBEnergy<(ESEnergyFunction)distanceDependentCoulomb, (VdwEnergyFunction)vdwTenTwelve, (SwitchingFunction)cubicSwitch >
-					(&non_bonded_[non_bonded_.size() - number_of_h_bonds_], &non_bonded_[non_bonded_.size()], electrostatic_energy, hbond_energy, 
+					(&non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, &non_bonded_[0] + non_bonded_.size(), electrostatic_energy, hbond_energy, 
 					 cutoffs_es, cutoffs_vdw);
 			#else
 				AmberNBEnergy<distanceDependentCoulomb, vdwSixTwelve, cubicSwitch >
-					(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4,
+					(&non_bonded_[0], &non_bonded_[0] + number_of_1_4_, electrostatic_energy_1_4, vdw_energy_1_4,
 					 cutoffs_es, cutoffs_vdw);
 				AmberNBEnergy<distanceDependentCoulomb, vdwSixTwelve, cubicSwitch >
-					(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size() - number_of_h_bonds_], electrostatic_energy, vdw_energy, 
+					(&non_bonded_[0] + number_of_1_4_, &non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, electrostatic_energy, vdw_energy, 
 					 cutoffs_es, cutoffs_vdw);
 				AmberNBEnergy<distanceDependentCoulomb, vdwTenTwelve, cubicSwitch >
-					(&non_bonded_[non_bonded_.size() - number_of_h_bonds_], &non_bonded_[non_bonded_.size()], electrostatic_energy, hbond_energy, 
+					(&non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, &non_bonded_[0] + non_bonded_.size(), electrostatic_energy, hbond_energy, 
 					 cutoffs_es, cutoffs_vdw);
 			#endif
 		}
@@ -970,23 +970,23 @@ namespace BALL
 			// periodic boundary, constant dielectric
 			#ifdef BALL_MUST_CAST_TEMPLATE_FUNCTION_ARGS
 				AmberNBEnergyPeriodic<(ESEnergyFunction)coulomb, (VdwEnergyFunction)vdwSixTwelve, (SwitchingFunction)cubicSwitch >
-					(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4, 
+					(&non_bonded_[0], &non_bonded_[0] + number_of_1_4_, electrostatic_energy_1_4, vdw_energy_1_4, 
 					 cutoffs_es, cutoffs_vdw, period);
 				AmberNBEnergyPeriodic<(ESEnergyFunction)coulomb, (VdwEnergyFunction)vdwSixTwelve, (SwitchingFunction)cubicSwitch >
-					(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size() - number_of_h_bonds_], electrostatic_energy, vdw_energy, 
+					(&non_bonded_[0] + number_of_1_4_, &non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, electrostatic_energy, vdw_energy, 
 					 cutoffs_es, cutoffs_vdw, period);
 				AmberNBEnergyPeriodic<(ESEnergyFunction)coulomb, (VdwEnergyFunction)vdwTenTwelve, (SwitchingFunction)cubicSwitch >
-					(&non_bonded_[non_bonded_.size() - number_of_h_bonds_], &non_bonded_[non_bonded_.size()], electrostatic_energy, hbond_energy, 
+					(&non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, &non_bonded_[0] + non_bonded_.size(), electrostatic_energy, hbond_energy, 
 					 cutoffs_es, cutoffs_vdw, period);
 			#else
 				AmberNBEnergyPeriodic<coulomb, vdwSixTwelve, cubicSwitch >
-					(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4, 
+					(&non_bonded_[0], &non_bonded_[0] + number_of_1_4_, electrostatic_energy_1_4, vdw_energy_1_4, 
 					 cutoffs_es, cutoffs_vdw, period);
 				AmberNBEnergyPeriodic<coulomb, vdwSixTwelve, cubicSwitch >
-					(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size() - number_of_h_bonds_], electrostatic_energy, vdw_energy, 
+					(&non_bonded_[0] + number_of_1_4_, &non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, electrostatic_energy, vdw_energy, 
 					 cutoffs_es, cutoffs_vdw, period);
 				AmberNBEnergyPeriodic<coulomb, vdwTenTwelve, cubicSwitch >
-					(&non_bonded_[non_bonded_.size() - number_of_h_bonds_], &non_bonded_[non_bonded_.size()], electrostatic_energy, hbond_energy, 
+					(&non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, &non_bonded_[0] + non_bonded_.size(), electrostatic_energy, hbond_energy, 
 					 cutoffs_es, cutoffs_vdw, period);
 			#endif
 		}
@@ -995,23 +995,23 @@ namespace BALL
 			// periodic boundary, distance-dependent dielectric constant
 			#ifdef BALL_MUST_CAST_TEMPLATE_FUNCTION_ARGS
 				AmberNBEnergyPeriodic<(ESEnergyFunction)distanceDependentCoulomb, (VdwEnergyFunction)vdwSixTwelve, (SwitchingFunction)cubicSwitch >
-					(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4, 
+					(&non_bonded_[0], &non_bonded_[0] + number_of_1_4_, electrostatic_energy_1_4, vdw_energy_1_4, 
 					 cutoffs_es, cutoffs_vdw, period);
 				AmberNBEnergyPeriodic<(ESEnergyFunction)distanceDependentCoulomb, (VdwEnergyFunction)vdwSixTwelve, (SwitchingFunction)cubicSwitch >
-					(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size() - number_of_h_bonds_], electrostatic_energy, vdw_energy, 
+					(&non_bonded_[0] + number_of_1_4_, &non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, electrostatic_energy, vdw_energy, 
 					 cutoffs_es, cutoffs_vdw, period);
 				AmberNBEnergyPeriodic<(ESEnergyFunction)distanceDependentCoulomb, (VdwEnergyFunction)vdwTenTwelve, (SwitchingFunction)cubicSwitch >
-					(&non_bonded_[non_bonded_.size() - number_of_h_bonds_], &non_bonded_[non_bonded_.size()], electrostatic_energy, hbond_energy, 
+					(&non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, &non_bonded_[0] + non_bonded_.size(), electrostatic_energy, hbond_energy, 
 					 cutoffs_es, cutoffs_vdw, period);
 			#else
 				AmberNBEnergyPeriodic<distanceDependentCoulomb, vdwSixTwelve, cubicSwitch >
-					(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4, 
+					(&non_bonded_[0], &non_bonded_[0] + number_of_1_4_, electrostatic_energy_1_4, vdw_energy_1_4, 
 					 cutoffs_es, cutoffs_vdw, period);
 				AmberNBEnergyPeriodic<distanceDependentCoulomb, vdwSixTwelve, cubicSwitch >
-					(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size() - number_of_h_bonds_], electrostatic_energy, vdw_energy, 
+					(&non_bonded_[0] + number_of_1_4_, &non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, electrostatic_energy, vdw_energy, 
 					 cutoffs_es, cutoffs_vdw, period);
 				AmberNBEnergyPeriodic<distanceDependentCoulomb, vdwTenTwelve, cubicSwitch >
-					(&non_bonded_[non_bonded_.size() - number_of_h_bonds_], &non_bonded_[non_bonded_.size()], electrostatic_energy, hbond_energy, 
+					(&non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, &non_bonded_[0] + non_bonded_.size(), electrostatic_energy, hbond_energy, 
 					 cutoffs_es, cutoffs_vdw, period);
 			#endif
 		}
