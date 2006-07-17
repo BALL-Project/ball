@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.21 2006/07/16 13:11:08 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.22 2006/07/17 09:28:12 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -126,13 +126,13 @@ namespace BALL
 
 			calculate_RMSD_id_ = insertMenuEntry(MainControl::TOOLS, "&Calculate RMSD", this, 
 													 SLOT(calculateRMSD()));
-			setMenuHint("Highlight two (partial) structures to calculate their RMSD value.");
+			setMenuHint("Highlight two (partial) structures to calculate their RMSD value");
 			
 			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 
 			calculate_ss_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate sec&ondary structure", this,
 																				 SLOT(calculateSecondaryStructure()), Qt::ALT+Qt::Key_O);
-			setMenuHint("Recalculate the secondary structure for a structure.");
+			setMenuHint("Recalculate the secondary structure for a structure");
 
 //   			calculate_ramachandran_ = insertMenuEntry(MainControl::TOOLS, "Ramachandran Plot", this,
 //   																				 SLOT(calculateRamachandranPlot()));
@@ -144,11 +144,11 @@ namespace BALL
 
 			menu_FPDB_ = insertMenuEntry(MainControl::TOOLS , "FDPB Electrostatics", this, 
 																		SLOT(calculateFDPB()));
-			setMenuHint("Calculate the Electrostatics with FDPB, if one System selected.");
+			setMenuHint("Calculate the Electrostatics with FDPB (for one highlighedt System)");
 				
 			create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS_GRID, 
 																					"&Distance Grid", this, SLOT(createGridFromDistance()));
-			setMenuHint("Create a grid with the distance to the geometric center of a structure.");
+			setMenuHint("Create a grid with the distance to the geometric center of a structure");
 			setMenuHelp("tips.html#distance_grids");
 
 			minimization_dialog_.setAmberDialog(&amber_dialog_);
