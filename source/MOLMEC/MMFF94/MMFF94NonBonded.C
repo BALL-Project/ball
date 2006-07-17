@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.4.9 2006/07/06 15:29:05 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.4.10 2006/07/17 12:36:57 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -370,6 +370,8 @@ namespace BALL
 				// ES: -  332.0716 * qi *qj * n / (D * (R + delta )^n *(R + delta))
 				double es_factor = FORCES_FACTOR * (ES_CONSTANT * nbd.qi * nbd.qj * n_ / (dc_ * pow(r + 0.05, n_ + 1)));
 				force = direction * es_factor;
+				// scale 1-4 interactions:
+				if (nbd.is_1_4) force *= 0.75;
 				a1.getForce() += force;
 				a2.getForce() -= force;
 			}
