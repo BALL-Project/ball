@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.56.2.1 2006/06/25 12:19:01 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.56.2.2 2006/07/17 23:13:28 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -258,6 +258,11 @@ namespace BALL
 			}
 		}
 
+		bool ResidueNameColorProcessor::canUseMeshShortcut_(const Composite& composite)
+		{
+			return RTTI::isKindOf<Residue>(composite);
+		}
+
 		void ResidueNameColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
 		{
 			const Residue* residue = dynamic_cast<const Residue*>(&composite);
@@ -290,6 +295,11 @@ namespace BALL
 				last_color_("0000FF"),
 				dummy_residue_()
 		{
+		}
+
+		bool ResidueNumberColorProcessor::canUseMeshShortcut_(const Composite& composite)
+		{
+			return RTTI::isKindOf<Residue>(composite);
 		}
 
 		void ResidueNumberColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
@@ -838,6 +848,12 @@ namespace BALL
 		{
 		}
 
+		bool SecondaryStructureColorProcessor::canUseMeshShortcut_(const Composite& composite)
+		{
+			return RTTI::isKindOf<SecondaryStructure>(composite) ||
+				     composite.getAncestor(dummy_ss_) != 0;
+		}
+
 		void SecondaryStructureColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
 		{
 			const SecondaryStructure* ss = dynamic_cast<const SecondaryStructure*>(&composite);
@@ -944,6 +960,11 @@ namespace BALL
 				other_color_(ColorRGBA(125,125,125)),
 				dummy_residue_()
 		{
+		}
+
+		bool ResidueTypeColorProcessor::canUseMeshShortcut_(const Composite& composite)
+		{
+			return RTTI::isKindOf<Residue>(composite);
 		}
 
 		void ResidueTypeColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
@@ -1186,12 +1207,24 @@ namespace BALL
 		{
 		}
 
+		bool ChainColorProcessor::canUseMeshShortcut_(const Composite& composite)
+		{
+			return RTTI::isKindOf<Chain>(composite) ||
+						 composite.getAncestor(dummy_chain_) != 0;
+		}
+
 
 		////////////////////////////////////////////////////////////////////
 		
 		MoleculeColorProcessor::MoleculeColorProcessor()
 			: PositionColorProcessor()
 		{
+		}
+
+		bool MoleculeColorProcessor::canUseMeshShortcut_(const Composite& composite)
+		{
+			return RTTI::isKindOf<Molecule>(composite) ||
+						 composite.getAncestor(dummy_molecule_) != 0;
 		}
 
 
