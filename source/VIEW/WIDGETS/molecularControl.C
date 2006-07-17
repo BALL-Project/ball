@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.42 2006/06/10 14:07:05 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.43 2006/07/17 20:26:29 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -828,7 +828,7 @@ namespace BALL
 
 		void MolecularControl::paste()
 		{
-			if (getMainControl()->isBusy() || selected_.size() == 0) return;
+			if (getMainControl()->isBusy() || selected_.size() > 1) return;
 
 			if (copy_list_.size() == 0) return;
 
