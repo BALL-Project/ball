@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.12 2006/07/06 15:29:09 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.13 2006/07/17 15:14:54 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -39,14 +39,17 @@ ForceFieldComponent* enableOneComponent(const String& comp, MMFF94& mmff)
 const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 const double CHARMM_FORCES_FACTOR = Constants::JOULE_PER_CAL / FORCES_FACTOR;
 
+// Conversion from N into  kJ / (mol A)
+const double BALL_TO_CHARMM_FORCES = 4.1868E13 * 6.0221415E23;
 
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.12 2006/07/06 15:29:09 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.13 2006/07/17 15:14:54 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 MMFF94* mmffp;
+Log.error() << "#~~#   1 "  << CHARMM_FORCES_FACTOR           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 CHECK(MMFF94())
 	mmffp = new MMFF94();
 	TEST_NOT_EQUAL(mmffp, 0)
@@ -280,11 +283,13 @@ CHECK(force test 6: VDW)
 
 	mmff.options[MMFF94_ES_ENABLED] = "false";
 	mmff.setup(s);
+	MMFF94NonBonded& nb = *(MMFF94NonBonded*)enableOneComponent("MMFF94 NonBonded", mmff);
 	mmff.updateEnergy();
 	mmff.updateForces();
 
 	PRECISION(2e-12)
 
+	/*
 	TEST_REAL_EQUAL(a1.getForce().getLength(), 3.7209408887406425E-09)
 	TEST_REAL_EQUAL(a2.getForce().getLength(), 3.7209408887406425E-09)
 	TEST_REAL_EQUAL(a2.getForce().y, 0)
@@ -315,7 +320,43 @@ CHECK(force test 6: VDW)
 		double dE = -(e2 - e1) / delta;
 		TEST_REAL_EQUAL(force, dE * FORCES_FACTOR)
 	}	
+*/
 
+	MOL2File mol("data/MMFF94-vdw2.mol2");
+	mol >> s;
+	mol.close();
+	mmff.setup(s);
+	enableOneComponent("MMFF94 NonBonded", mmff);
+	mmff.updateForces();
+	PRECISION(2e-12)
+
+	/** original values in CHARMM implmentation (kJ / mol A):
+	    I   DX      DY        DZ
+--------------------------------------------------------------------------------
+   1    0.000    0.000    0.000
+   2   -0.001   -0.011    0.027
+   3    0.000    0.000    0.000
+   4    0.00383389638   0.00304170822  -0.0145154378
+	 5   -0.00262223589   0.00805800434  -0.0127604689
+   5   -0.003    0.008   -0.013
+	*/
+
+	// values obtained in BALLView:
+	Vector3 vs[5];
+	vs[0] = Vector3(0.);
+	vs[1] = Vector3(8.41826337371e-14,-7.71175224373e-13,1.89504878803e-12);
+	vs[2] = Vector3(0.);
+	vs[3] = Vector3(2.66367629993e-13,2.11328784333e-13,-1.00848908217e-12);
+	vs[4] = Vector3(-1.82184996256e-13,5.5984644004e-13,-8.86559760067e-13);
+
+	AtomIterator ait = s.beginAtom();
+	for (Position p = 0; p < 5; p ++)
+	{
+		TEST_REAL_EQUAL(ait->getForce().x , vs[0].x)
+		TEST_REAL_EQUAL(ait->getForce().y , vs[0].y)
+		TEST_REAL_EQUAL(ait->getForce().z , vs[0].z)
+		ait++;
+	}
 RESULT
 
 CHECK(force test 7: ES)
