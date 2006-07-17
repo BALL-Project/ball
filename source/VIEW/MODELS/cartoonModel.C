@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.60.2.6 2006/07/15 10:48:23 amoll Exp $
+// $Id: cartoonModel.C,v 1.60.2.7 2006/07/17 22:10:57 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -88,13 +88,20 @@ void AddCartoonModel::calculateModelParts(Protein& protein)
 
 void AddCartoonModel::assignModelType(ModelPart& part)
 {
+	Residue& residue = *part.residues[0];
+	
+	// is this a chain with nucleic acids?
+	const String name = residue.getName();
+	if (name.size() == 1 &&
+			(name == "A" || name == "C" || name == "G" || name == "T" || name == "U"))
+	{
+		part.type = NUCLEIC_ACID;
+		return;
+	}
+
 	part.type = TUBE;
 
-	Residue& residue = *part.residues[0];
-	const Composite* parent = residue.getParent();
-	if (parent == 0) return;
-
-	const SecondaryStructure* ss = dynamic_cast<const SecondaryStructure*>(parent);
+	const SecondaryStructure* ss = residue.getAncestor(dummy_ss_);
 	if (ss == 0) return;
 	
 	Position type = (Position) ss->getType();
@@ -106,16 +113,6 @@ void AddCartoonModel::assignModelType(ModelPart& part)
 	else if (ss->getType() == SecondaryStructure::HELIX)
 	{
 		part.type = HELIX;
-	}
-	else
-	{
-		// is this a chain with nucleic acids?
-		const String name = residue.getName();
-		if (name.size() == 1 &&
-				(name == "A" || name == "C" || name == "G" || name == "T" || name == "U"))
-		{
-			part.type = NUCLEIC_ACID;
-		}
 	}
 }
 
@@ -648,8 +645,6 @@ void AddCartoonModel::createWatsonCrickModel_(Position set_pos, Position part_po
 		Residue* r = residues[p];
 		if (r->getName().size() != 1) continue;
 		Mesh* mesh;
-//   		mesh->setComposite(r);
-//   		geometric_objects_.push_back(mesh);
 
 		vector<Vector3> positions;
 		Atom* connection_atom = 0;
@@ -728,6 +723,7 @@ void AddCartoonModel::createWatsonCrickModel_(Position set_pos, Position part_po
 		else
 		{
 			// unknown base, abort for this Residue
+			BALLVIEW_DEBUG
 			continue;
 		}
 
