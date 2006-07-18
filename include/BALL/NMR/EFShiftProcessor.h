@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.h,v 1.23.10.1 2006/07/02 16:30:09 anne Exp $
+// $Id: EFShiftProcessor.h,v 1.23.10.2 2006/07/18 18:42:43 anne Exp $
 //
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
@@ -210,6 +210,10 @@ namespace BALL
 
 		float  									charge_factor_;
 		
+		private:
+		void 			printParameters_() throw();
+		void  		printEffectors_() throw();
+		void 			printTargets_() throw();
  	};
   
 } // namespace BALL

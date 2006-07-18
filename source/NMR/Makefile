@@ -6,6 +6,7 @@ CPP_SOURCES=\
 	anisotropyShiftProcessor.C\
 	assignShiftProcessor.C\
 	clearShiftProcessor.C\
+	empiricalHSShiftProcessor.C\
 	EFShiftProcessor.C\
 	experiment.C\
 	HBondShiftProcessor.C\

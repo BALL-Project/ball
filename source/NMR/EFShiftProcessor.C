@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.C,v 1.14.20.1 2006/07/02 16:30:10 anne Exp $
+// $Id: EFShiftProcessor.C,v 1.14.20.2 2006/07/18 18:42:45 anne Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/COMMON/limits.h>
@@ -161,6 +161,8 @@ std::cout << "******************* EF-Shift ******************* " << std::endl;
 			}
 		}
 
+		printParameters_();
+
 		// mark the module as initialized
 		valid_ = true;
 	}
@@ -213,18 +215,19 @@ std::cout << "******************* EF-Shift ******************* " << std::endl;
 			effector_list_  = 	tmp_effector_list;
 		}
 
-		
+		printEffectors_();	
 //Ausgabe der Effektoren
-std::cout << "********* \n Liste der Effektoren" << std::endl;
-list<Atom*>::const_iterator effector_it = effector_list_.begin();
-for (; effector_it != effector_list_.end(); ++effector_it)
-{			
-	std::cout << (*effector_it)->getFullName() <<"  " << (*effector_it)->getName()  << "  " << (*effector_it)->getType() << "  " << (*effector_it)->getTypeName()<< std::endl; 
-}
-std::cout << "  " << effector_list_.size() << "\n-------------\n";
+//std::cout << "********* \n Liste der Effektoren" << std::endl;
+//list<Atom*>::const_iterator effector_it = effector_list_.begin();
+//for (; effector_it != effector_list_.end(); ++effector_it)
+//{			
+//	std::cout << (*effector_it)->getFullName() <<"  " << (*effector_it)->getName()  << "  " << (*effector_it)->getType() << "  " << (*effector_it)->getTypeName()<< std::endl; 
+//}
+//std::cout << "  " << effector_list_.size() << "\n-------------\n";
 
+		printTargets_();
 //Ausgabe der Targets
-std::cout << "********* \n Liste der Targets" << std::endl;
+//std::cout << "********* \n Liste der Targets" << std::endl;
 //list<Bond*>::iterator tbond_it = bond_list_.begin();
 //for (; tbond_it != bond_list_.end(); ++tbond_it)
 //{			
@@ -269,7 +272,7 @@ std::cout << "********* \n Liste der Targets" << std::endl;
 			
 			if (bond_type != INVALID_POSITION)
 			{
-std::cout <<  first_atom->getFullName() << "  " << second_atom->getFullName()<< std::endl;
+//std::cout <<  first_atom->getFullName() << "  " << second_atom->getFullName()<< std::endl;
 
 				// We found parameters for a bond -- 
 				// calculate the electric field and the induced secondary shift.
@@ -296,7 +299,7 @@ std::cout <<  first_atom->getFullName() << "  " << second_atom->getFullName()<< 
 							&& ( (first_atom->getName() == "HN") || second_atom->getName() == "HN" ) 
 						  )
 					{
-std::cout << first_atom->getName()<< "-->" << second_atom->getName() << "by" << (*effector_it)->getName() << std::endl; 
+//std::cout << first_atom->getName()<< "-->" << second_atom->getName() << "by" << (*effector_it)->getName() << std::endl; 
 						break;
 					}
 					
@@ -417,5 +420,47 @@ std::cout << first_atom->getName()<< "-->" << second_atom->getName() << "by" << 
 		
 		return Processor::CONTINUE;
 	}
+
+
+
+	void EFShiftProcessor::printTargets_()
+		throw()
+	{
+		std::cout << "********* \n EF:Liste der Target Bonds" << std::endl;
+		list<Bond*>::iterator tbond_it = bond_list_.begin();
+		for (; tbond_it != bond_list_.end(); ++tbond_it)
+		{			
+			std::cout << (*tbond_it)->getFirstAtom()->getFullName() << "  " << (*tbond_it)->getSecondAtom()->getFullName() << std::endl; 
+		}
+		std::cout << "  " << bond_list_.size() << "\n-------------\n";
+	}
+
+	void EFShiftProcessor::printEffectors_()
+		throw()
+	{
+		std::cout << "********* \n EF:Liste der Effektoren" << std::endl;
+		list<Atom*>::const_iterator effector_it = effector_list_.begin();
+		for (; effector_it != effector_list_.end(); ++effector_it)
+		{			
+			std::cout << (*effector_it)->getFullName() <<"  " << (*effector_it)->getName()  << "  "  << std::endl; 
+							//	<< (*effector_it)->getType() << "  " << std::endl; 
+								//(*effector_it)->getTypeName()<< std::endl; 
+		}
+		std::cout << "  " << effector_list_.size() << "\n-------------\n";
+
+	}
+
+	void	EFShiftProcessor::printParameters_()
+		throw()
+	{
+		std::cout << "********* \n EF:Liste der Parameter" << std::endl;
+		std::cout << "exclude_residue_field  " <<  exclude_residue_field_ << std::endl;
+		std::cout << "exclude_adjacent_residue_field  "	<< exclude_adjacent_residue_field_ << std::endl;
+		std::cout << "carbonyl_influences_amide_field  "	<< carbonyl_influences_amide_field_ << std::endl;
+		std::cout << "exclude_solvent_field  " << exclude_solvent_field_ << std::endl;
+	  std::cout << 	"cut_off" << cut_off2_ << std::endl;
+		std::cout << 	"unit" << (charge_factor_ > 0.9 ? "e0" :"ESU")<< std::endl;
+	}
+
 
 } // namespace BALL
