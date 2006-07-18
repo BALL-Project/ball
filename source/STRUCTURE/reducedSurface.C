@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.C,v 1.9 2003/09/04 15:53:32 aubertin Exp $
+// $Id: reducedSurface.C,v 1.9.10.1 2006/07/18 22:32:43 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/reducedSurface.h>
@@ -1566,12 +1566,10 @@ namespace BALL
 		throw()
 	{
 		bool found = false;
-		HashMap<Position, HashMap<Position, std::list<Index> > >::Iterator
-			n1 = neighbours_of_two_.find(atom1);
+		HashMap<Position, HashMap<Position, std::list<Index> > >::Iterator n1 = neighbours_of_two_.find(atom1);
 		if (n1 != neighbours_of_two_.end())
 		{
-			HashMap<Position, std::list<Index> >::Iterator n2
-					= n1->second.find(atom2);
+			HashMap<Position, std::list<Index> >::Iterator n2 = n1->second.find(atom2);
 			found = (n2 != n1->second.end());
 		}
 		if (found == false)
@@ -1616,14 +1614,14 @@ namespace BALL
 	{
 		neighboursOfTwoAtoms(atom1,atom2);
 		neighboursOfTwoAtoms(atom1,atom3);
-		HashMap<Position, HashMap<Position,std::list<Index> > >::Iterator n1;
-		HashMap<Position, std::list<Index> >::Iterator n2;
-		HashMap<Position, std::list<Index> >::Iterator n3;
-		n1 = neighbours_of_two_.find(atom1);
-		n2 = n1->second.find(atom2);
-		n3 = n1->second.find(atom3);
+		HashMap<Position, HashMap<Position,std::list<Index> > >::Iterator n1
+			= neighbours_of_two_.find(atom1);
+		HashMap<Position, std::list<Index> >::Iterator n2 = n1->second.find(atom2);
+		HashMap<Position, std::list<Index> >::Iterator n3 = n1->second.find(atom3);
+
 		std::list<Index>::iterator i2 = n2->second.begin();
-		std::list<Index>::iterator i3 = n2->second.begin();
+		// fixed by Andreas Moll, 19.7.06: i3 used to work on n2->second.begin()
+		std::list<Index>::iterator i3 = n3->second.begin();
 		while ((i2 != n2->second.end()) && (i3 != n3->second.end()))
 		{
 			if (*i2 == *i3)
