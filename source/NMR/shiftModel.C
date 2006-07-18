@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftModel.C,v 1.18 2005/12/23 17:02:44 amoll Exp $
+// $Id: shiftModel.C,v 1.18.10.1 2006/07/18 18:42:46 anne Exp $
 
 #include <BALL/NMR/shiftModel.h>
 #include <BALL/CONCEPT/factory.h>
@@ -12,6 +12,7 @@
 #include <BALL/NMR/anisotropyShiftProcessor.h>
 #include <BALL/NMR/randomCoilShiftProcessor.h>
 #include <BALL/NMR/HBondShiftProcessor.h>
+#include <BALL/NMR/empiricalHSShiftProcessor.h>
 
 using namespace std;
 
@@ -240,6 +241,7 @@ namespace BALL
 		registerModule("Anisotropy", Factory<AnisotropyShiftProcessor>::createVoid);
 		registerModule("RandomCoil", Factory<RandomCoilShiftProcessor>::createVoid);
 		registerModule("HBond", Factory<HBondShiftProcessor>::createVoid);
+		registerModule("EmpiricalShiftHyperSurfaces", Factory<EmpiricalHSShiftProcessor>::createVoid);
 	}
 
 	Processor::Result ShiftModel::operator () (Composite& composite)

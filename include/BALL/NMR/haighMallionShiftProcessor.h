@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.h,v 1.16.10.2 2006/07/02 19:39:42 anne Exp $
+// $Id: haighMallionShiftProcessor.h,v 1.16.10.3 2006/07/18 18:42:44 anne Exp $
 //
 
 #ifndef BALL_COMMON_H
@@ -178,7 +178,7 @@ namespace BALL
 
 		/*_	The effector residues stored as a vector of atoms the collected by {\tt operator ()}.
 		*/	
-		std::vector< vector<Atom*> >			effectors_;
+		std::vector< std::vector<Atom*> >			effectors_;
 		
 		/*_	The effector residue types stored as a vector of strings collected by {\tt operator ()}.
 				This is necessary to allow, e.g., TRP1 and TRP2 as two different kinds of rings.
@@ -195,15 +195,21 @@ namespace BALL
 		
 		/*_	The ring atom names of the effecting residues collected from the ini-file by {\tt init ()}.
 		*/
-		vector< vector<BALL::String> > 		ring_atoms_;
+		std::vector< std::vector<BALL::String> > 		ring_atoms_;
 		
 		/*_	The targeted atom names collected by {\tt init ()}.
 		*/
-		vector< BALL::String>							target_names_;
+		std::vector< BALL::String>							target_names_;
 	
 		/*_	The targeted atoms collected by {\tt operator ()}.
 		*/
-		vector<Atom* >										targets_;
+		std::vector<Atom* >										targets_;
+	
+		private:
+		void 			printParameters_() throw();
+		void  		printEffectors_() throw();
+		void 			printTargets_() throw();
+
 	};
   
 } // namespace BALL

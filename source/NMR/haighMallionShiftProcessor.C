@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.C,v 1.17.18.2 2006/07/02 19:39:43 anne Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.17.18.3 2006/07/18 18:42:46 anne Exp $
 //
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
@@ -169,7 +169,8 @@ std::cout << " ******************* HM-Shift *******************" << std::endl;
 		valid_ = true;
 		
 // print the parameter set
-std::cout << "\teffector_names" << std::endl;
+		printParameters_();
+/*std::cout << "\teffector_names" << std::endl;
 vector< BALL::String >::const_iterator effector_names_it = effector_names_.begin();
 for(;effector_names_it != effector_names_.end(); ++effector_names_it)
 {
@@ -217,7 +218,7 @@ for(;+t_it; ++t_it)
 {
 	std::cout <<t_it->first << "  " << t_it->second << std::endl;
 }
-
+*/
 	}
 
 	
@@ -240,25 +241,9 @@ std::cout << "-------------- HM-start() --------------- "<< std::endl;
 	bool HaighMallionShiftProcessor::finish()
 		
 	{
-std::cout << "-------------- HM-finish() --------------- "<< std::endl;	
-// ------------------------print the parameter set
-std::cout << "\teffectors: " << std::endl;
-vector< vector<Atom*> >::const_iterator effector_it = effectors_.begin();
-for (;effector_it != effectors_.end(); ++effector_it)
-{
-		for(Position i = 0;i < (*effector_it).size(); i++ )
-		{
-			std::cout << (*effector_it)[i]->getName() << "  ";
-		}
-		std::cout << " " << std::endl;
-}
-std::cout << "\n\ttargets: " << std::endl;
-for (Position i = 0; i<targets_.size(); i++)
-{
-	std::cout << targets_[i]->getName() << std::endl;
-}
-
-//----------------------------end print
+std::cout << "-------------- HM-finish() --------------- "<< std::endl;
+		printEffectors_();
+		printTargets_();
 
 		if (!isValid())
 		{
@@ -466,5 +451,87 @@ for (Position i = 0; i<targets_.size(); i++)
 		return Processor::CONTINUE;
 	
 	}
+
+	void  HaighMallionShiftProcessor::printTargets_()
+		throw()
+	{
+		std::cout << "********* \n HM:Liste der Targets " << std::endl;
+		for (Position i = 0; i<targets_.size(); i++)
+		{
+			std::cout << targets_[i]->getName() << std::endl;
+		}
+
+
+	}
+
+	void  HaighMallionShiftProcessor::printEffectors_()
+		throw()
+	{
+		std::cout << "********* \n HM:Liste der Effectoren " << std::endl;
+		vector< vector<Atom*> >::const_iterator effector_it = effectors_.begin();
+		for (;effector_it != effectors_.end(); ++effector_it)
+		{
+				for(Position i = 0;i < (*effector_it).size(); i++ )
+				{
+					std::cout << (*effector_it)[i]->getName() << "  ";
+				}
+				std::cout << " " << std::endl;
+		}
+	}
+
+	void  HaighMallionShiftProcessor::printParameters_()
+		throw()
+	{
+		std::cout << "********* \n HM:Liste der Parameter " << std::endl;
+		std::cout << "\teffector_names" << std::endl;
+		vector< BALL::String >::const_iterator effector_names_it = effector_names_.begin();
+		for(;effector_names_it != effector_names_.end(); ++effector_names_it)
+		{
+			std::cout <<(*effector_names_it) << "  " << std::endl;
+		}
+		std::cout << "\tintensity_factors" << std::endl;
+		StringHashMap<float>::ConstIterator int_it = intensity_factors_.begin();
+		for(;int_it != intensity_factors_.end(); ++int_it)
+		{
+			std::cout <<int_it->first << "  " << int_it->second << std::endl;
+		}
+
+		std::cout << "\tring_atoms: " << std::endl;
+		vector< vector<BALL::String> >::const_iterator ring_it = ring_atoms_.begin();
+		for(;ring_it != ring_atoms_.end(); ++ring_it)
+		{
+			vector<BALL::String>::const_iterator atom_it = ring_it->begin();
+			for(;atom_it != ring_it->end(); ++atom_it )
+			{
+				std::cout << (*atom_it)<< "  ";
+			}
+			std::cout << " " << std::endl;
+		}
+
+		std::cout << "\ttarget names: " << std::endl;
+		vector< BALL::String >::const_iterator targets_it = target_names_.begin();
+		for(;targets_it != target_names_.end(); ++targets_it)
+		{
+			std::cout <<(*targets_it) << "  " << std::endl;
+		}
+
+
+
+		std::cout << "\tH_influenced_by_all_effectors_= " << H_influenced_by_all_effectors_ << std::endl;
+		std::cout << "\tHA_influenced_by_all_effectors_ = " <<	HA_influenced_by_all_effectors_ << std::endl;
+		std::cout << "\tuse_cut_off_= " << use_cut_off_<< std::endl;
+		std::cout << "\tcut_off2_ = " << cut_off2_ << std::endl;
+		std::cout << "\tall_hydrogen_are_targets_ = " << all_hydrogen_are_targets_ << std::endl;
+		std::cout << "\tproject_target_to_ring_plane = " << project_target_to_ring_plane_ << std::endl;
+		std::cout << "\tdefault_hydrogen_target_nucleus_factor = " << default_hydrogen_target_nucleus_factor_ << std::endl;
+
+		std::cout << "\ttarget nucleus factors: " << std::endl;
+		StringHashMap<float>::ConstIterator t_it = target_nucleus_factors_.begin();
+		for(;t_it!=target_nucleus_factors_.end(); ++t_it)
+		{
+			std::cout <<t_it->first << "  " << t_it->second << std::endl;
+		}
+	}
+
 
 } // namespace BALL
