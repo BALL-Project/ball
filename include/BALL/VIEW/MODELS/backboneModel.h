@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.20.2.1 2006/07/13 17:07:02 amoll Exp $
+// $Id: backboneModel.h,v 1.20.2.2 2006/07/18 22:59:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -118,14 +118,6 @@ namespace BALL
 				throw();
 
 			///
-			void enableTwoColors(bool state)
-				throw() { use_two_colors_ = state;}
-
-			///
-			bool twoColorsEnabled() const
-				throw() {return use_two_colors_;}
-
-			///
 			void setRibbonMode(bool state)
 				throw() {ribbon_mode_ = state;}
 
@@ -158,6 +150,7 @@ namespace BALL
 																  const Vector3& v3, float x, Vector3& result);
 
 			inline bool residuesAreConnected_(Residue& residue1, Residue& residue2);
+
 			//_
 			float tube_radius_;
 
@@ -169,7 +162,6 @@ namespace BALL
 			float ribbon_height_;
 			bool care_for_SS_;
 			bool ribbon_mode_;
-			bool use_two_colors_;
 
 			vector<vector<vector<Vector3> > > guide_points_;
 			vector<vector<vector<Vector3> > > interpolated_points_;

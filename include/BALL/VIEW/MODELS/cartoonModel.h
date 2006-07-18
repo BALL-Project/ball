@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.32.2.1 2006/07/13 17:07:03 amoll Exp $
+// $Id: cartoonModel.h,v 1.32.2.2 2006/07/18 22:59:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -13,17 +13,9 @@
 
 namespace BALL
 {
-	class SecondaryStructure;
-	class AtomContainer;
-	class Residue;
-	class Chain;
-	class Protein;
-
 	namespace VIEW
 	{
-		class Mesh;
-
-//   		typedef AddBackboneModel AddCartoonModel;
+ 		class Mesh;
 
 		/** AddCartoonModel class.
 				The class AddCartoonModel is a model processor that creates a Cartoon model
@@ -141,10 +133,6 @@ namespace BALL
 															 Mesh& mesh);
 
 			void calculateComplementaryBases_(const Composite& composite) throw();
-
-			void createTriangle_(Mesh& mesh, const Atom& a1, const Atom& a2, const Atom& a3,
-																			 const Atom* sa1, const Atom* sa2, const Atom* sa3)
- 				throw();
 
 			bool assignNucleotideAtoms_(Residue& r, Size nr_atoms, String atom_names[10], Atom* atoms[10])
 				throw();

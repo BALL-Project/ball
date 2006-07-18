@@ -1,23 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.25.2.4 2006/07/15 22:28:46 amoll Exp $
+// $Id: backboneModel.C,v 1.25.2.5 2006/07/18 22:59:20 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
-#include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/residue.h>
-#include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
-#include <BALL/MATHS/common.h>
-
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/VIEW/KERNEL/common.h>
-
-#include <algorithm>
 
 using namespace std;
 
@@ -61,7 +55,7 @@ const AddBackboneModel::ModelPart& AddBackboneModel::ModelPart::operator = (cons
 AddBackboneModel::AddBackboneModel()
 	throw()
 	: ModelProcessor(),
-		tube_radius_((float)0.4),
+		tube_radius_(0.4),
 		interpolation_steps_(9),
 		number_of_ribbons_(3),
 		ribbon_width_(1),

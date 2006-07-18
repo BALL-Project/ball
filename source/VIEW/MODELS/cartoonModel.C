@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.60.2.7 2006/07/17 22:10:57 amoll Exp $
+// $Id: cartoonModel.C,v 1.60.2.8 2006/07/18 22:59:20 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -15,13 +15,8 @@
 #include <BALL/VIEW/KERNEL/common.h>
 
 #include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/chain.h>
-#include <BALL/KERNEL/residue.h>
-#include <BALL/KERNEL/secondaryStructure.h>
 #include <BALL/KERNEL/forEach.h>
-#include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/PTE.h>
 
 #include <BALL/MATHS/matrix44.h>
@@ -33,7 +28,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
 		
 AddCartoonModel::AddCartoonModel()
 	throw()
@@ -494,16 +488,21 @@ void AddCartoonModel::calculateComplementaryBases_(const Composite& composite)
 	for (; +rit1; ++rit1)
 	{
 		float distance = 200;
+		if (rit1->getName().size() < 1) continue;
+		char c1 = rit1->getName()[0];
 		Residue* found_partner = 0;
 		HashSet<Residue*>::Iterator rit2 = chain2_residues.begin();
 		for (; rit2 != chain2_residues.end(); rit2++)
 		{
-			if (((*rit1).getName() == "A" && 
-				 ((**rit2).getName() != "T" && (**rit2).getName() != "U")) ||
-					((*rit1).getName() == "C" && (**rit2).getName() != "G") ||
-					((*rit1).getName() == "G" && (**rit2).getName() != "C") ||
-					((*rit1).getName() == "T" && (**rit2).getName() != "A") ||
-					((*rit1).getName() == "U" && (**rit2).getName() != "A"))
+			String name2 = (**rit2).getName().size();
+			if (name2 < 1) continue;
+			char c2 = name2[0];
+
+			if ((c1 == 'A' && c2 != 'T' && c2 != 'U') ||
+				  (c1 == 'C' && c2 != 'G') ||
+					(c1 == 'G' && c2 != 'C') ||
+					(c1 == 'T' && c2 != 'A') ||
+					(c1 == 'U' && c2 != 'A'))
 			{
 				continue;
 			}
@@ -528,102 +527,6 @@ void AddCartoonModel::calculateComplementaryBases_(const Composite& composite)
 		{
 		}
 	}
-}
-
-
-void AddCartoonModel::createTriangle_(Mesh& mesh, const Atom& a1, const Atom& a2, const Atom& a3,
-																									const Atom* sa1, const Atom* sa2, const Atom* sa3)
-	throw()
-{
-	vector<Vector3>& vertices = mesh.vertex;
-	vector<Vector3>& normals  = mesh.normal;
-	vector<Surface::Triangle>& triangles = mesh.triangle;
-
-	Vector3 p1 = a1.getPosition();
-	Vector3 p2 = a2.getPosition();
-	Vector3 p3 = a3.getPosition();
-
-	Vector3 v1 = p1 - p2;
-	Vector3 v2 = p3 - p2;
-	Vector3 normal = v1 % v2;
-
-	if (!Maths::isZero(normal.getSquareLength())) normal.normalize();
-
-	normal *= -DNA_base_radius_;
-
-	vertices.push_back(p1 + normal);
-	vertices.push_back(p2 + normal);
-	vertices.push_back(p3 + normal);
-	normals.push_back(normal);
-	normals.push_back(normal);
-	normals.push_back(normal);
-
-	Surface::Triangle t;
-	t.v1 = vertices.size() - 3;
-	t.v2 = vertices.size() - 2;
-	t.v3 = vertices.size() - 1;
-	triangles.push_back(t);
-
-	// lower side
-	vertices.push_back(p1 - normal);
-	vertices.push_back(p2 - normal);
-	vertices.push_back(p3 - normal);
-	normals.push_back(-normal);
-	normals.push_back(-normal);
-	normals.push_back(-normal);
-
-	t.v3 = vertices.size() - 3;
-	t.v2 = vertices.size() - 2;
-	t.v1 = vertices.size() - 1;
-	triangles.push_back(t);
-
-	if (sa1 == 0) return;
-
-	/*
-	TwoColoredTube* tube = new TwoColoredTube;
-	if (sa1->getBond(*sa2)->getFirstAtom() == sa1)
-	{
-		tube->setVertex1(sa1->getPosition());
-		tube->setVertex2(sa2->getPosition());
-	}
-	else
-	{
-		tube->setVertex1(sa2->getPosition());
-		tube->setVertex2(sa1->getPosition());
-	}
-	tube->setRadius(DNA_base_radius_);
-	tube->setComposite(sa1->getBond(*sa2));
-	geometric_objects_.push_back(tube);
-
-	Sphere* s1 = new Sphere;
-	s1->setPosition(sa1->getPosition());
-	s1->setRadius(DNA_base_radius_);
-	s1->setComposite(sa1);
-	geometric_objects_.push_back(s1);
-
-	s1 = new Sphere;
-	s1->setPosition(sa2->getPosition());
-	s1->setRadius(DNA_base_radius_);
-	s1->setComposite(sa2);
-	geometric_objects_.push_back(s1);
-
-	if (sa3 == 0) return;
-
-	tube = new TwoColoredTube;
-	if (sa2->getBond(*sa3)->getFirstAtom() == sa2)
-	{
-		tube->setVertex1(sa2->getPosition());
-		tube->setVertex2(sa3->getPosition());
-	}
-	else
-	{
-		tube->setVertex1(sa3->getPosition());
-		tube->setVertex2(sa2->getPosition());
-	}
-	tube->setRadius(DNA_base_radius_);
-	tube->setComposite(sa2->getBond(*sa3));
-	geometric_objects_.push_back(tube);
-	*/
 }
 
 
@@ -1357,7 +1260,6 @@ void AddCartoonModel::refineGuidePoints_()
 		} // all ribbons
 	} // all strings of models
 }
-
 
 	} // namespace VIEW
 } // namespace BALL
