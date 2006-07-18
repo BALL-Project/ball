@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.sip,v 1.2 2005/12/23 17:02:48 amoll Exp $
+// $Id: cartoonModel.sip,v 1.2.2.1 2006/07/18 23:35:06 amoll Exp $
 //
 
 class AddCartoonModel 
@@ -37,6 +37,4 @@ class AddCartoonModel
 	bool drawDNAAsLadderModel() throw();
 	void enableRibbons(bool) throw();
 	bool ribbonsEnabled() const throw();
-	void enableTwoColors(bool) throw();
-	bool twoColorsEnabled() const throw();
 };

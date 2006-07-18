@@ -8,19 +8,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>550</width>
+    <width>610</width>
     <height>375</height>
    </rect>
   </property>
   <property name="minimumSize" >
    <size>
-    <width>550</width>
+    <width>610</width>
     <height>375</height>
    </size>
   </property>
   <property name="maximumSize" >
    <size>
-    <width>550</width>
+    <width>610</width>
     <height>375</height>
    </size>
   </property>
@@ -30,14 +30,26 @@
   <widget class="QStackedWidget" name="widget_stack" >
    <property name="geometry" >
     <rect>
-     <x>2</x>
-     <y>5</y>
-     <width>541</width>
-     <height>372</height>
+     <x>0</x>
+     <y>0</y>
+     <width>600</width>
+     <height>275</height>
     </rect>
    </property>
+   <property name="minimumSize" >
+    <size>
+     <width>600</width>
+     <height>16</height>
+    </size>
+   </property>
+   <property name="maximumSize" >
+    <size>
+     <width>600</width>
+     <height>16777215</height>
+    </size>
+   </property>
    <property name="currentIndex" >
-    <number>7</number>
+    <number>5</number>
    </property>
    <widget class="QWidget" name="Stick" >
     <widget class="QFrame" name="frame3" >
@@ -777,1038 +789,1003 @@
     </widget>
    </widget>
    <widget class="QWidget" name="Cartoon" >
-    <widget class="QGroupBox" name="groupBox1" >
-     <property name="geometry" >
-      <rect>
-       <x>274</x>
-       <y>9</y>
-       <width>271</width>
-       <height>351</height>
-      </rect>
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>9</number>
      </property>
-     <property name="title" >
-      <string>DNA/RNA</string>
+     <property name="spacing" >
+      <number>6</number>
      </property>
-     <property name="alignment" >
-      <set>Qt::AlignHCenter</set>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="1" column="0" >
-       <widget class="QGroupBox" name="cartoon_dna_ladder" >
-        <property name="title" >
-         <string>Ladder Model</string>
-        </property>
-        <property name="checkable" >
-         <bool>true</bool>
-        </property>
-        <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2_6" >
-         <property name="geometry" >
-          <rect>
-           <x>10</x>
-           <y>30</y>
-           <width>90</width>
-           <height>19</height>
-          </rect>
-         </property>
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize" >
-          <size>
-           <width>90</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>120</width>
-           <height>32767</height>
-          </size>
-         </property>
-         <property name="text" >
-          <string>base radius</string>
-         </property>
-        </widget>
-        <widget class="QSlider" name="cartoon_dna_ladder_radius_slider" >
-         <property name="geometry" >
-          <rect>
-           <x>100</x>
-           <y>30</y>
-           <width>80</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="minimumSize" >
-          <size>
-           <width>80</width>
-           <height>21</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>80</width>
-           <height>21</height>
-          </size>
-         </property>
-         <property name="minimum" >
-          <number>5</number>
-         </property>
-         <property name="maximum" >
-          <number>15</number>
-         </property>
-         <property name="value" >
-          <number>15</number>
-         </property>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="tickInterval" >
-          <number>12</number>
-         </property>
-        </widget>
-        <widget class="QLabel" name="cartoon_dna_ladder_radius_label" >
-         <property name="geometry" >
-          <rect>
-           <x>190</x>
-           <y>30</y>
-           <width>50</width>
-           <height>25</height>
-          </rect>
-         </property>
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize" >
-          <size>
-           <width>50</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>35</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="text" >
-          <string>99.9</string>
-         </property>
-         <property name="alignment" >
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </widget>
-      </item>
-      <item row="0" column="0" >
-       <widget class="QGroupBox" name="cartoon_dna_wac" >
-        <property name="title" >
-         <string>Base Cartoon</string>
-        </property>
-        <property name="checkable" >
-         <bool>true</bool>
-        </property>
-        <layout class="QGridLayout" >
-         <property name="margin" >
-          <number>3</number>
-         </property>
-         <property name="spacing" >
-          <number>3</number>
-         </property>
-         <item row="1" column="0" >
-          <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize" >
-            <size>
-             <width>90</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>120</width>
-             <height>32767</height>
-            </size>
-           </property>
-           <property name="text" >
-            <string>backbone radius</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1" >
-          <widget class="QSlider" name="cartoon_dna_base_radius_slider" >
-           <property name="minimumSize" >
-            <size>
-             <width>60</width>
-             <height>21</height>
-            </size>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>80</width>
-             <height>21</height>
-            </size>
-           </property>
-           <property name="minimum" >
-            <number>1</number>
-           </property>
-           <property name="maximum" >
-            <number>15</number>
-           </property>
-           <property name="value" >
-            <number>15</number>
-           </property>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="tickInterval" >
-            <number>12</number>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2" >
-          <widget class="QLabel" name="cartoon_dna_base_radius_label" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize" >
-            <size>
-             <width>50</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>35</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="text" >
-            <string>99.9</string>
-           </property>
-           <property name="alignment" >
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0" >
-          <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2_5" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize" >
-            <size>
-             <width>90</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>120</width>
-             <height>32767</height>
-            </size>
-           </property>
-           <property name="text" >
-            <string>base radius</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1" >
-          <widget class="QSlider" name="cartoon_dna_helix_radius_slider" >
-           <property name="minimumSize" >
-            <size>
-             <width>60</width>
-             <height>21</height>
-            </size>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>80</width>
-             <height>21</height>
-            </size>
-           </property>
-           <property name="minimum" >
-            <number>2</number>
-           </property>
-           <property name="maximum" >
-            <number>25</number>
-           </property>
-           <property name="value" >
-            <number>25</number>
-           </property>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="tickInterval" >
-            <number>12</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2" >
-          <widget class="QLabel" name="cartoon_dna_helix_radius_label" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize" >
-            <size>
-             <width>50</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>35</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="text" >
-            <string>99.9</string>
-           </property>
-           <property name="alignment" >
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QGroupBox" name="groupBox2" >
-     <property name="geometry" >
-      <rect>
-       <x>0</x>
-       <y>10</y>
-       <width>262</width>
-       <height>351</height>
-      </rect>
-     </property>
-     <property name="title" >
-      <string>Protein</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignHCenter</set>
-     </property>
-     <widget class="QCheckBox" name="two_colored_ribbons" >
-      <property name="geometry" >
-       <rect>
-        <x>10</x>
-        <y>310</y>
-        <width>220</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text" >
-       <string>ribbons are two-colored</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="ribbons_enabled" >
-      <property name="geometry" >
-       <rect>
-        <x>10</x>
-        <y>280</y>
-        <width>200</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text" >
-       <string>enable ribbons</string>
-      </property>
-     </widget>
-     <widget class="QWidget" name="layoutWidget" >
-      <property name="geometry" >
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>236</width>
-        <height>62</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
+     <item row="0" column="0" >
+      <widget class="QGroupBox" name="groupBox2" >
+       <property name="title" >
+        <string>Protein</string>
        </property>
-       <property name="spacing" >
-        <number>6</number>
+       <property name="alignment" >
+        <set>Qt::AlignHCenter</set>
        </property>
-       <item>
-        <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_4" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>5</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="1" column="0" >
+         <widget class="QGroupBox" name="groupBox3" >
+          <property name="title" >
+           <string>Strand</string>
+          </property>
+          <layout class="QGridLayout" >
+           <property name="margin" >
+            <number>9</number>
            </property>
-           <property name="minimumSize" >
-            <size>
-             <width>90</width>
-             <height>0</height>
-            </size>
+           <property name="spacing" >
+            <number>6</number>
            </property>
-           <property name="maximumSize" >
-            <size>
-             <width>120</width>
-             <height>32767</height>
-            </size>
+           <item row="2" column="1" >
+            <widget class="QSlider" name="strand_height_slider" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>70</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>80</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="toolTip" >
+              <string>Edit arrow wodth</string>
+             </property>
+             <property name="minimum" >
+              <number>1</number>
+             </property>
+             <property name="maximum" >
+              <number>50</number>
+             </property>
+             <property name="value" >
+              <number>25</number>
+             </property>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="tickInterval" >
+              <number>12</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1" >
+            <widget class="QSlider" name="strand_width_slider" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>70</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>80</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="toolTip" >
+              <string>Edit arrow height</string>
+             </property>
+             <property name="minimum" >
+              <number>1</number>
+             </property>
+             <property name="maximum" >
+              <number>25</number>
+             </property>
+             <property name="value" >
+              <number>25</number>
+             </property>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="tickInterval" >
+              <number>12</number>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" colspan="2" >
+            <widget class="QSlider" name="strand_arrow_width_slider" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>70</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>80</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="toolTip" >
+              <string>Edit arrow wodth</string>
+             </property>
+             <property name="minimum" >
+              <number>1</number>
+             </property>
+             <property name="maximum" >
+              <number>50</number>
+             </property>
+             <property name="value" >
+              <number>25</number>
+             </property>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="tickInterval" >
+              <number>12</number>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3" >
+            <widget class="QLabel" name="strand_arrow_width_label" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>50</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>35</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="text" >
+              <string>99.9</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2" colspan="2" >
+            <widget class="QLabel" name="strand_width_label" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>50</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>35</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="text" >
+              <string>99.9</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" >
+            <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_2_2_2_2" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>120</width>
+               <height>32767</height>
+              </size>
+             </property>
+             <property name="text" >
+              <string>Strand width</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0" >
+            <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_2_2_3_2_2" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>120</width>
+               <height>32767</height>
+              </size>
+             </property>
+             <property name="text" >
+              <string>Strand height</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" >
+            <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_2_2_3" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>120</width>
+               <height>32767</height>
+              </size>
+             </property>
+             <property name="text" >
+              <string>Arrow width</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2" colspan="2" >
+            <widget class="QLabel" name="strand_height_label" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>50</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>35</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="text" >
+              <string>99.9</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="2" column="0" >
+         <widget class="QCheckBox" name="ribbons_enabled" >
+          <property name="text" >
+           <string>enable ribbons</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" >
+         <widget class="QWidget" name="layoutWidget" >
+          <layout class="QVBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
            </property>
-           <property name="text" >
-            <string>Tube radius</string>
+           <property name="spacing" >
+            <number>6</number>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSlider" name="cartoon_tube_radius_slider" >
-           <property name="minimumSize" >
-            <size>
-             <width>80</width>
-             <height>21</height>
-            </size>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>80</width>
-             <height>21</height>
-            </size>
-           </property>
-           <property name="toolTip" >
-            <string>Edit the tube radius</string>
-           </property>
-           <property name="minimum" >
-            <number>1</number>
-           </property>
-           <property name="maximum" >
-            <number>25</number>
-           </property>
-           <property name="value" >
-            <number>25</number>
-           </property>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="cartoon_tube_radius_label" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize" >
-            <size>
-             <width>50</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>35</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="text" >
-            <string>99.9</string>
-           </property>
-           <property name="alignment" >
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_2_3" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize" >
-            <size>
-             <width>90</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>120</width>
-             <height>32767</height>
-            </size>
-           </property>
-           <property name="text" >
-            <string>Helix radius</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSlider" name="cartoon_helix_radius_slider" >
-           <property name="minimumSize" >
-            <size>
-             <width>80</width>
-             <height>21</height>
-            </size>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>80</width>
-             <height>21</height>
-            </size>
-           </property>
-           <property name="toolTip" >
-            <string>Edit the helix radius</string>
-           </property>
-           <property name="minimum" >
-            <number>1</number>
-           </property>
-           <property name="maximum" >
-            <number>50</number>
-           </property>
-           <property name="value" >
-            <number>50</number>
-           </property>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="tickInterval" >
-            <number>25</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="cartoon_helix_radius_label" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize" >
-            <size>
-             <width>50</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>35</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="text" >
-            <string>99.9</string>
-           </property>
-           <property name="alignment" >
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QGroupBox" name="groupBox3" >
-      <property name="geometry" >
-       <rect>
-        <x>10</x>
-        <y>100</y>
-        <width>250</width>
-        <height>141</height>
-       </rect>
-      </property>
-      <property name="title" >
-       <string>Strand</string>
-      </property>
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
+           <item>
+            <layout class="QHBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_4" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>0</hsizetype>
+                 <vsizetype>0</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize" >
+                <size>
+                 <width>90</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize" >
+                <size>
+                 <width>120</width>
+                 <height>32767</height>
+                </size>
+               </property>
+               <property name="text" >
+                <string>Tube radius</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSlider" name="cartoon_tube_radius_slider" >
+               <property name="minimumSize" >
+                <size>
+                 <width>80</width>
+                 <height>21</height>
+                </size>
+               </property>
+               <property name="maximumSize" >
+                <size>
+                 <width>80</width>
+                 <height>21</height>
+                </size>
+               </property>
+               <property name="toolTip" >
+                <string>Edit the tube radius</string>
+               </property>
+               <property name="minimum" >
+                <number>1</number>
+               </property>
+               <property name="maximum" >
+                <number>25</number>
+               </property>
+               <property name="value" >
+                <number>25</number>
+               </property>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="cartoon_tube_radius_label" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>0</hsizetype>
+                 <vsizetype>0</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize" >
+                <size>
+                 <width>50</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize" >
+                <size>
+                 <width>35</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text" >
+                <string>99.9</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_2_3" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>0</hsizetype>
+                 <vsizetype>0</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize" >
+                <size>
+                 <width>90</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize" >
+                <size>
+                 <width>120</width>
+                 <height>32767</height>
+                </size>
+               </property>
+               <property name="text" >
+                <string>Helix radius</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSlider" name="cartoon_helix_radius_slider" >
+               <property name="minimumSize" >
+                <size>
+                 <width>80</width>
+                 <height>21</height>
+                </size>
+               </property>
+               <property name="maximumSize" >
+                <size>
+                 <width>80</width>
+                 <height>21</height>
+                </size>
+               </property>
+               <property name="toolTip" >
+                <string>Edit the helix radius</string>
+               </property>
+               <property name="minimum" >
+                <number>1</number>
+               </property>
+               <property name="maximum" >
+                <number>50</number>
+               </property>
+               <property name="value" >
+                <number>50</number>
+               </property>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="tickInterval" >
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="cartoon_helix_radius_label" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>0</hsizetype>
+                 <vsizetype>0</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize" >
+                <size>
+                 <width>50</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize" >
+                <size>
+                 <width>35</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text" >
+                <string>99.9</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QGroupBox" name="groupBox1" >
+       <property name="title" >
+        <string>DNA/RNA</string>
        </property>
-       <property name="spacing" >
-        <number>6</number>
+       <property name="alignment" >
+        <set>Qt::AlignHCenter</set>
        </property>
-       <item row="2" column="1" >
-        <widget class="QSlider" name="strand_height_slider" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize" >
-          <size>
-           <width>70</width>
-           <height>21</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>80</width>
-           <height>21</height>
-          </size>
-         </property>
-         <property name="toolTip" >
-          <string>Edit arrow wodth</string>
-         </property>
-         <property name="minimum" >
-          <number>1</number>
-         </property>
-         <property name="maximum" >
-          <number>50</number>
-         </property>
-         <property name="value" >
-          <number>25</number>
-         </property>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="tickInterval" >
-          <number>12</number>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" >
-        <widget class="QSlider" name="strand_width_slider" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize" >
-          <size>
-           <width>70</width>
-           <height>21</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>80</width>
-           <height>21</height>
-          </size>
-         </property>
-         <property name="toolTip" >
-          <string>Edit arrow height</string>
-         </property>
-         <property name="minimum" >
-          <number>1</number>
-         </property>
-         <property name="maximum" >
-          <number>25</number>
-         </property>
-         <property name="value" >
-          <number>25</number>
-         </property>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="tickInterval" >
-          <number>12</number>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1" colspan="2" >
-        <widget class="QSlider" name="strand_arrow_width_slider" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize" >
-          <size>
-           <width>70</width>
-           <height>21</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>80</width>
-           <height>21</height>
-          </size>
-         </property>
-         <property name="toolTip" >
-          <string>Edit arrow wodth</string>
-         </property>
-         <property name="minimum" >
-          <number>1</number>
-         </property>
-         <property name="maximum" >
-          <number>50</number>
-         </property>
-         <property name="value" >
-          <number>25</number>
-         </property>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="tickInterval" >
-          <number>12</number>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3" >
-        <widget class="QLabel" name="strand_arrow_width_label" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize" >
-          <size>
-           <width>50</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>35</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="text" >
-          <string>99.9</string>
-         </property>
-         <property name="alignment" >
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2" colspan="2" >
-        <widget class="QLabel" name="strand_width_label" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize" >
-          <size>
-           <width>50</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>35</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="text" >
-          <string>99.9</string>
-         </property>
-         <property name="alignment" >
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" >
-        <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_2_2_2_2" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize" >
-          <size>
-           <width>90</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>120</width>
-           <height>32767</height>
-          </size>
-         </property>
-         <property name="text" >
-          <string>Strand width</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" >
-        <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_2_2_3_2_2" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize" >
-          <size>
-           <width>90</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>120</width>
-           <height>32767</height>
-          </size>
-         </property>
-         <property name="text" >
-          <string>Strand height</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" >
-        <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_2_2_3" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize" >
-          <size>
-           <width>90</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>120</width>
-           <height>32767</height>
-          </size>
-         </property>
-         <property name="text" >
-          <string>Arrow width</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2" colspan="2" >
-        <widget class="QLabel" name="strand_height_label" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize" >
-          <size>
-           <width>50</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>35</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="text" >
-          <string>99.9</string>
-         </property>
-         <property name="alignment" >
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>5</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="1" column="0" >
+         <widget class="QGroupBox" name="cartoon_dna_ladder" >
+          <property name="title" >
+           <string>Ladder Model</string>
+          </property>
+          <property name="checkable" >
+           <bool>true</bool>
+          </property>
+          <layout class="QGridLayout" >
+           <property name="margin" >
+            <number>9</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item row="0" column="1" >
+            <widget class="QSlider" name="cartoon_dna_ladder_radius_slider" >
+             <property name="minimumSize" >
+              <size>
+               <width>80</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>80</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="minimum" >
+              <number>5</number>
+             </property>
+             <property name="maximum" >
+              <number>15</number>
+             </property>
+             <property name="value" >
+              <number>15</number>
+             </property>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="tickInterval" >
+              <number>12</number>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2" >
+            <widget class="QLabel" name="cartoon_dna_ladder_radius_label" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>50</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>35</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="text" >
+              <string>99.9</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" >
+            <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2_6" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>120</width>
+               <height>32767</height>
+              </size>
+             </property>
+             <property name="text" >
+              <string>base radius</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="0" >
+         <widget class="QGroupBox" name="cartoon_dna_wac" >
+          <property name="title" >
+           <string>Base Cartoon</string>
+          </property>
+          <property name="checkable" >
+           <bool>true</bool>
+          </property>
+          <layout class="QGridLayout" >
+           <property name="margin" >
+            <number>3</number>
+           </property>
+           <property name="spacing" >
+            <number>3</number>
+           </property>
+           <item row="1" column="0" >
+            <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>120</width>
+               <height>32767</height>
+              </size>
+             </property>
+             <property name="text" >
+              <string>backbone radius</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" >
+            <widget class="QSlider" name="cartoon_dna_base_radius_slider" >
+             <property name="minimumSize" >
+              <size>
+               <width>60</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>80</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="minimum" >
+              <number>1</number>
+             </property>
+             <property name="maximum" >
+              <number>15</number>
+             </property>
+             <property name="value" >
+              <number>15</number>
+             </property>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="tickInterval" >
+              <number>12</number>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2" >
+            <widget class="QLabel" name="cartoon_dna_base_radius_label" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>50</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>35</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="text" >
+              <string>99.9</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" >
+            <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2_5" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>120</width>
+               <height>32767</height>
+              </size>
+             </property>
+             <property name="text" >
+              <string>base radius</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1" >
+            <widget class="QSlider" name="cartoon_dna_helix_radius_slider" >
+             <property name="minimumSize" >
+              <size>
+               <width>60</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>80</width>
+               <height>21</height>
+              </size>
+             </property>
+             <property name="minimum" >
+              <number>2</number>
+             </property>
+             <property name="maximum" >
+              <number>25</number>
+             </property>
+             <property name="value" >
+              <number>25</number>
+             </property>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="tickInterval" >
+              <number>12</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2" >
+            <widget class="QLabel" name="cartoon_dna_helix_radius_label" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>50</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>35</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="text" >
+              <string>99.9</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
    </widget>
    <widget class="QWidget" name="H_Bonds" >
-    <widget class="QFrame" name="frame3_2_3_2_2_2_3_3" >
-     <property name="geometry" >
-      <rect>
-       <x>2</x>
-       <y>1</y>
-       <width>442</width>
-       <height>40</height>
-      </rect>
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>9</number>
      </property>
-     <property name="frameShape" >
-      <enum>QFrame::NoFrame</enum>
+     <property name="spacing" >
+      <number>6</number>
      </property>
-     <property name="frameShadow" >
-      <enum>QFrame::Raised</enum>
-     </property>
-     <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_3_3" >
-      <property name="geometry" >
-       <rect>
-        <x>35</x>
-        <y>12</y>
-        <width>123</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>0</hsizetype>
-        <vsizetype>0</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize" >
-       <size>
-        <width>120</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize" >
-       <size>
-        <width>160</width>
-        <height>32767</height>
-       </size>
-      </property>
-      <property name="text" >
-       <string>cylinder radius</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="hbonds_radius_slider" >
-      <property name="geometry" >
-       <rect>
-        <x>186</x>
-        <y>12</y>
-        <width>84</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="minimumSize" >
-       <size>
-        <width>84</width>
-        <height>21</height>
-       </size>
-      </property>
-      <property name="maximumSize" >
-       <size>
-        <width>84</width>
-        <height>21</height>
-       </size>
-      </property>
-      <property name="minimum" >
-       <number>1</number>
-      </property>
-      <property name="maximum" >
-       <number>25</number>
-      </property>
-      <property name="orientation" >
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="tickInterval" >
-       <number>12</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="hbonds_radius_label" >
-      <property name="geometry" >
-       <rect>
-        <x>298</x>
-        <y>10</y>
-        <width>50</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>0</hsizetype>
-        <vsizetype>0</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize" >
-       <size>
-        <width>50</width>
-        <height>25</height>
-       </size>
-      </property>
-      <property name="maximumSize" >
-       <size>
-        <width>35</width>
-        <height>25</height>
-       </size>
-      </property>
-      <property name="text" >
-       <string>99.9</string>
-      </property>
-      <property name="alignment" >
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </widget>
+     <item row="0" column="0" >
+      <widget class="QFrame" name="frame3_2_3_2_2_2_3_3" >
+       <property name="frameShape" >
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow" >
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QSlider" name="hbonds_radius_slider" >
+        <property name="geometry" >
+         <rect>
+          <x>186</x>
+          <y>12</y>
+          <width>84</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>84</width>
+          <height>21</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>84</width>
+          <height>21</height>
+         </size>
+        </property>
+        <property name="minimum" >
+         <number>1</number>
+        </property>
+        <property name="maximum" >
+         <number>25</number>
+        </property>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="tickInterval" >
+         <number>12</number>
+        </property>
+       </widget>
+       <widget class="QLabel" name="hbonds_radius_label" >
+        <property name="geometry" >
+         <rect>
+          <x>298</x>
+          <y>10</y>
+          <width>50</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>50</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>35</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>99.9</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_3_3" >
+        <property name="geometry" >
+         <rect>
+          <x>35</x>
+          <y>12</y>
+          <width>123</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>120</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>160</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>cylinder radius</string>
+        </property>
+       </widget>
+      </widget>
+     </item>
+    </layout>
    </widget>
    <widget class="QWidget" name="Forces" >
     <widget class="QWidget" name="widget" >
