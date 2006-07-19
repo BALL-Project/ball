@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.37.2.6 2006/07/14 08:30:23 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.37.2.7 2006/07/19 12:45:26 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -84,7 +84,6 @@ namespace BALL
 			registerObject_(cartoon_dna_wac);
 			registerObject_(cartoon_dna_ladder);
 			registerObject_(ribbons_enabled);
-			registerObject_(two_colored_ribbons);
 			
 			registerObject_(force_scaling_slider);
 			registerObject_(force_max_length_slider);
@@ -185,7 +184,6 @@ namespace BALL
 			if (RTTI::isKindOf<AddCartoonModel>(mp))
 			{
 				AddCartoonModel& cm = *dynamic_cast<AddCartoonModel*>(&mp);
-				/*
 				cm.setTubeRadius(getCartoonTubeRadius());
 				cm.setHelixRadius(getCartoonHelixRadius());
 				cm.setArrowWidth(getCartoonArrowWidth());
@@ -196,8 +194,6 @@ namespace BALL
 				cm.setDNABaseRadius(getDNABaseRadius());
 				cm.setDNAHelixRadius(getDNAHelixRadius());
 				cm.enableRibbons(ribbons_enabled->isChecked());
-				cm.enableTwoColors(two_colored_ribbons->isChecked());
-				*/
 				return;
 			}
 
@@ -325,7 +321,6 @@ namespace BALL
 			if (RTTI::isKindOf<AddCartoonModel>(mp))
 			{
 				AddCartoonModel& cm = *(AddCartoonModel*)(&mp);
-				/*
 				setCartoonTubeRadius(cm.getTubeRadius());
 				setCartoonHelixRadius(cm.getHelixRadius());
 				setCartoonArrowWidth(cm.getArrowWidth());
@@ -336,9 +331,7 @@ namespace BALL
 				setCartoonDNABaseRadius(cm.getDNABaseRadius());
 				cartoon_dna_ladder->setChecked(cm.drawDNAAsLadderModel());
 				cartoon_dna_wac->setChecked(!cm.drawDNAAsLadderModel());
-				two_colored_ribbons->setChecked(cm.twoColorsEnabled());
 				ribbons_enabled->setChecked(cm.ribbonsEnabled());
-				*/
 				return;
 			}
 
