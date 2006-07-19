@@ -300,7 +300,9 @@ namespace BALL
 				point = Vector3(x_bottom + center.x, y_bottom + center.y, z_bottom + center.z);
 			}
 
-			if(trans_box_rep_ == NULL)
+			RepresentationManager& pm = getMainControl()->getRepresentationManager();
+
+			if(!pm.has(*trans_box_rep_))
 			{
 				// remark: is deleted by main control
 				trans_box_rep_ = new Representation;
