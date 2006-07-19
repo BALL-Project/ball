@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.6.2.10 2006/07/10 16:43:26 leonhardt Exp $
+// $Id: dockDialog.C,v 1.5.2.6.2.11 2006/07/19 11:53:49 leonhardt Exp $
 //
 
 #include <QtGui/qpushbutton.h>
@@ -731,7 +731,7 @@ namespace BALL
 			algorithmChosen();
 			scoringFuncChosen();
 		}
-		
+
 		
 		// -------------------------------- SLOTS ------------------------------------------------
 		// ---------------------------------------------------------------------------------------
@@ -768,6 +768,7 @@ namespace BALL
 			tab_pages->setCurrentIndex(0);
 			
 			// show dialog to user
+			//QDialog::show();
 			return QDialog::exec();
 		}
 		
@@ -861,9 +862,11 @@ namespace BALL
 				algorithm_dialogs_[index]->isRedock(is_redock_);
 				if (index == DockingController::EVOLUTION_DOCKING)
 				{
-					if(docking_partner2_ == NULL)
+					if ((systems1->currentText() == "<select>") || 
+							(systems2->currentText() == "<select>") || 
+							(systems1->currentText() == systems2->currentText()))
 					{
-						QMessageBox error_message("Error","Please select docking partner 2!", 
+						QMessageBox error_message("Error","Please select two different docking partners!", 
 																			QMessageBox::Critical,
 																			QMessageBox::Ok,
 																			QMessageBox::NoButton,

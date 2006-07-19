@@ -4,7 +4,6 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
-#include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -26,6 +25,7 @@ namespace BALL
 				: DockingAlgorithmDialog(parent),
 					Ui_EvolutionDockingDialogData(),
 					trans_box_rep_(0),
+					trans_box_(0),
 					ligand_(0)
 		{
 			#ifdef BALL_VIEW_DEBUG
@@ -61,7 +61,7 @@ namespace BALL
 				connect(new_grid_radio_button, SIGNAL(clicked()), this, SLOT(disableFileBrowsing()));
 				connect(browse_button, SIGNAL(clicked()), this, SLOT(browseGridFile()));
 				connect(force_field_button, SIGNAL(clicked()), this, SLOT(showForceFieldOptions()));
-				connect(show_trans_box, SIGNAL(clicked()), this, SLOT(showTranslationBox()));
+				connect(trans_box_button, SIGNAL(clicked()), this, SLOT(showTranslationBox()));
 			}
 		
 		// Copy constructor.
@@ -70,6 +70,7 @@ namespace BALL
 			: DockingAlgorithmDialog(ev_dock_dialog),
 				Ui_EvolutionDockingDialogData(),
 				trans_box_rep_(0),
+				trans_box_(0),
 				ligand_(0)
 		{}
 			
@@ -117,7 +118,7 @@ namespace BALL
 				options[EvolutionaryDocking::Option::POPULATION] = ascii(population->text()).toInt();
 				options[EvolutionaryDocking::Option::SURVIVORS] = ascii(survivors->text()).toInt();
 				
-				if(show_trans_box->isChecked())
+				if(abs_trans_radio_button->isChecked())
 				{
 					options[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_X] = ascii(trans_box_bottom_x->text()).toFloat();
 					options[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Y] = ascii(trans_box_bottom_y->text()).toFloat();
@@ -262,59 +263,67 @@ namespace BALL
 		void EvolutionDockingDialog::showTranslationBox()
 		{
 			Log.error() << "in EvolutionDockingDialog::showTranslationBox()" << std::endl;
-			if(show_trans_box->isChecked())
+
+			float x_bottom = ascii(trans_box_bottom_x->text()).toFloat();
+			float y_bottom = ascii(trans_box_bottom_y->text()).toFloat();
+			float z_bottom = ascii(trans_box_bottom_z->text()).toFloat();
+
+			float x_top = ascii(trans_box_top_x->text()).toFloat();
+			float y_top = ascii(trans_box_top_y->text()).toFloat();
+			float z_top = ascii(trans_box_top_z->text()).toFloat();
+
+			Vector3 point, right, height, depth;
+
+			right = Vector3(x_top-x_bottom, 0, 0);
+			height = Vector3(0, y_top-y_bottom, 0);
+			depth = Vector3(0, 0, z_top-z_bottom);
+
+			if (abs_trans_radio_button->isChecked())
 			{
-				trans_box_rep_ = new Representation;
-				trans_box_rep_->setTransparency(90);
-
-				float x_bottom = ascii(trans_box_bottom_x->text()).toFloat();
-				float y_bottom = ascii(trans_box_bottom_y->text()).toFloat();
-				float z_bottom = ascii(trans_box_bottom_z->text()).toFloat();
-
-				float x_top = ascii(trans_box_top_x->text()).toFloat();
-				float y_top = ascii(trans_box_top_y->text()).toFloat();
-				float z_top = ascii(trans_box_top_z->text()).toFloat();
-
-				Vector3 point, right, height, depth;
-
-				right = Vector3(x_top-x_bottom, 0, 0);
-				height = Vector3(0, y_top-y_bottom, 0);
-				depth = Vector3(0, 0, z_top-z_bottom);
-
-				if (abs_trans_radio_button->isChecked())
+				point = Vector3(x_bottom, y_bottom, z_bottom);
+			}
+			else
+			{
+				GeometricCenterProcessor gcp;
+				if (ligand_ == NULL)
 				{
-					point = Vector3(x_bottom, y_bottom, z_bottom);
-				}
-				else
-				{
-					GeometricCenterProcessor gcp;
-					if (ligand_ == NULL)
-					{
-						show_trans_box->setChecked(false);
-						QMessageBox error_message("Error","Please select docking partner 2!", 
+					QMessageBox error_message("Error","Please select docking partner 2!", 
 																		QMessageBox::Critical,
 																		QMessageBox::Ok,
 																		QMessageBox::NoButton,
 																		QMessageBox::NoButton);
-					  error_message.exec();
-					  return;
-					}
-					ligand_->apply(gcp);
-					Vector3 center = gcp.getCenter();
-					point = Vector3(x_bottom + center.x, y_bottom + center.y, z_bottom + center.z);
+					error_message.exec();
+					return;
 				}
+				ligand_->apply(gcp);
+				Vector3 center = gcp.getCenter();
+				point = Vector3(x_bottom + center.x, y_bottom + center.y, z_bottom + center.z);
+			}
 
-				Box* box = new Box(point,right,height,depth.getLength());
+			if(trans_box_rep_ == NULL)
+			{
+				// remark: is deleted by main control
+				trans_box_rep_ = new Representation;
+				trans_box_rep_->setTransparency(90);
+
+				// is deleted if representation is deleted
+				trans_box_ = new Box(point,right,height,depth.getLength());
 				ColorRGBA bcolor(0,255,190,180);
-				box->setColor(bcolor);
-				trans_box_rep_->insert(*box);
+				trans_box_->setColor(bcolor);
+				trans_box_rep_->insert(*trans_box_);
 
 				getMainControl()->insert(*trans_box_rep_);
 				getMainControl()->update(*trans_box_rep_);
 			}
 			else
 			{
-				getMainControl()->remove(*trans_box_rep_);
+				Log.error() << "in update Box" << std::endl;
+				if (trans_box_ == NULL) Log.error() << "Box pointer NULL" << std::endl;
+				trans_box_->setPoint(point);
+				trans_box_->setRightVector(right);
+				trans_box_->setHeightVector(height);
+				trans_box_->setDepth(depth.getLength());
+				getMainControl()->update(*trans_box_rep_);
 			}
 		}
 	} // namespace VIEW

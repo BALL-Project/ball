@@ -21,6 +21,10 @@
 # include <BALL/VIEW/KERNEL/representation.h>
 #endif
 
+#ifndef  BALL_VIEW_PRIMITIVES_BOX_H
+#include <BALL/VIEW/PRIMITIVES/box.h>
+#endif
+
 #include <BALL/VIEW/UIC/evolutionDockingDialogData.h>
 
 namespace BALL
@@ -129,6 +133,7 @@ namespace BALL
 			private:
 			
 			 Representation* trans_box_rep_;
+			 Box* trans_box_;
 			 System* ligand_;
 		};
 		
