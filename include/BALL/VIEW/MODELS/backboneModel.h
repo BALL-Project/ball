@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.20.2.3 2006/07/19 22:31:44 amoll Exp $
+// $Id: backboneModel.h,v 1.20.2.4 2006/07/19 23:05:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -90,6 +90,10 @@ namespace BALL
 			virtual void clear()
 				throw();
 
+			///
+			virtual bool start()
+				throw();
+
 			/**	Operator method.
 					This method iterates over each Composite object reachable in the 
 					Composite tree. If a Composite is of kind Atom and has the
@@ -156,6 +160,7 @@ namespace BALL
 			inline bool residuesAreConnected_(Residue& residue1, Residue& residue2);
 
 			inline void calculateTubePoints_(Vector3 right, Vector3 dir, vector<Vector3>& points);
+			inline void calculateRibbonPoints_(Vector3 xn, Vector3 dir, vector<Vector3>& points);
 
 			//_
 			float tube_radius_;
@@ -183,8 +188,11 @@ namespace BALL
 			vector<vector<Index> > ss_;
 			// temp variables for speedup:
 			Size 				slides_;
+			Position 		middle_slide_;
+			Position 		middle_ribbon_;
 			Angle 			slides_angle_;
 			Matrix4x4 	temp_matrix_;
+			vector<float> xs_, ys_;
 		};
 
 	} // namespace VIEW

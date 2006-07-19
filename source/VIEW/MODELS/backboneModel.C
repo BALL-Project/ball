@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.25.2.6 2006/07/19 22:31:17 amoll Exp $
+// $Id: backboneModel.C,v 1.25.2.7 2006/07/19 23:04:58 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -269,11 +269,10 @@ void AddBackboneModel::dump(std::ostream& s, Size depth) const
 void AddBackboneModel::createTube_(Position set_pos, Position part_pos)
 {
 	ModelPart& part = model_parts_[set_pos][part_pos];			
-	const Position middle_ribbon = (number_of_ribbons_ - 1) /  2;
 	// points on the middle ribbon string
-	vector<Vector3>& points = interpolated_points_[set_pos][middle_ribbon];
+	vector<Vector3>& points = interpolated_points_[set_pos][middle_ribbon_];
 	// points on the neighbouring ribbon string
- 	vector<Vector3>& n_points = interpolated_points_[set_pos][middle_ribbon + 1];
+ 	vector<Vector3>& n_points = interpolated_points_[set_pos][middle_ribbon_ + 1];
 	Position start_pos = part.first_point;
 	Position end_pos = part.last_point;
 
@@ -281,10 +280,6 @@ void AddBackboneModel::createTube_(Position set_pos, Position part_pos)
  	if (end_pos < points.size() - 1) end_pos++;
 
 	vector<Residue*>& residues = part.residues;
-
-	// calculate the number of slides for the circle and the angle in between them
-	slides_ = (Size)(8.0 + drawing_precision_ * 8.0);
-	slides_angle_ = Angle(360.0 / slides_, false);
 
 	// direction vector of the two current spline points
 	Vector3 dir = points[start_pos + 1] - points[start_pos];
@@ -770,11 +765,10 @@ void AddBackboneModel::calculateGuidePoints_()
 void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 {
 	ModelPart& part = model_parts_[set_pos][part_pos];			
-	const Position middle_ribbon = (number_of_ribbons_ - 1) /  2;
 	// points on the middle ribbon string
-	vector<Vector3>& points = interpolated_points_[set_pos][middle_ribbon];
+	vector<Vector3>& points = interpolated_points_[set_pos][middle_ribbon_];
 	// points on the neighbouring ribbon string
-	vector<Vector3>& n_points = interpolated_points_[set_pos][middle_ribbon + 1];
+	vector<Vector3>& n_points = interpolated_points_[set_pos][middle_ribbon_ + 1];
 	Position start_pos = part.first_point;
 	Position end_pos = part.last_point;
 
@@ -794,44 +788,13 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 
 	bool nucleotide = ss_[set_pos][start_pos / interpolation_steps_] == NUCLEIC_ACID_RESIDUE;
 
-	// calculate the number of slides for the circle and the angle in between them
-	Size slides = (Size)(8.0 + drawing_precision_ * 8.0);
-	Angle slides_angle = Angle(360.0 / slides, false);
-
 	// direction vector of the first two spline points
 	Vector3 dir = points[start_pos + 1] - points[start_pos];
-			
-	////////////////////////////////////////////////////////////
 	// calculate normal vector xn: in width direction
-	////////////////////////////////////////////////////////////
  	Vector3 xn = n_points[start_pos] - points[start_pos];
-	if (!Maths::isZero(xn.getSquareLength())) xn.normalize();
 
-	////////////////////////////////////////////////////////////
-	// initialise a first set of points in a circle around the start position
-	////////////////////////////////////////////////////////////
-	const Position middle = (Position)(slides / 2.0);
-	vector<float> xs(slides), ys(slides);
-	Position temp = 0;
-	float step = 4. / slides;
-	for (float i = -1.0; i < 1.0; i+= step)
-	{
-		xs[temp] = i * ribbon_width_;
-		ys[temp] = sqrt((1-i*i / ribbon_width_ * ribbon_width_) * (ribbon_height_ * ribbon_height_));
-
-		xs[temp + middle] = -xs[temp];
-		ys[temp + middle] = -ys[temp];
-		temp++;
-	}
-
-	Vector3 yn = dir % xn;
-	if (!Maths::isZero(yn.getSquareLength())) yn.normalize();
-
-	vector<Vector3> new_points(slides);
-	for (Position p = 0; p < slides; p++)
-	{
-		new_points[p] = xs[p] * xn + ys[p] * yn;
-	}
+	vector<Vector3> new_points(slides_);
+	calculateRibbonPoints_(xn, dir, new_points);
 
 	////////////////////////////////////////////////////////////
 	// create a new mesh with the points and triangles
@@ -841,17 +804,17 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 	mesh->setComposite(residues[0]);
 	geometric_objects_.push_back(mesh);
 
-	Mesh::Triangle t;
 	/////////////////////////////////////////////////
 	// create a cap for the start:
-	t.v3 = slides;
-	for (Position p = 0; p < slides; p++)
+	Mesh::Triangle t;
+	t.v3 = slides_;
+	for (Position p = 0; p < slides_; p++)
 	{
 		mesh->vertex.push_back(points[start_pos] + new_points[p]);
 		mesh->normal.push_back(-dir);
 
 		t.v1 = p;
-		if (p < slides - 1)
+		if (p < slides_- 1)
 		{
 			t.v2 = p + 1;
 		}
@@ -870,7 +833,7 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 
 	////////////////////////////////////////
 	// add first points again
-	for (Position p = 0; p < slides; p++)
+	for (Position p = 0; p < slides_; p++)
 	{
 		mesh->vertex.push_back(points[start_pos] + new_points[p]);
 	}
@@ -878,13 +841,13 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 	///////////////////////////////////////
 	// set the normals:
 	mesh->normal.push_back(-xn);
-	for (Position p = 1; p < middle; p++)
+	for (Position p = 1; p < middle_slide_; p++)
 	{
 		mesh->normal.push_back((new_points[p - 1] - new_points[p + 1]) % dir);
 	}
 
-	Position npos = mesh->normal.size() - middle;
-	for (Position p = npos; p < npos + middle; p++)
+	Position npos = mesh->normal.size() - middle_slide_;
+	for (Position p = npos; p < npos + middle_slide_; p++)
 	{
 		mesh->normal.push_back(- mesh->normal[p]);
 	}
@@ -910,20 +873,7 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 			dir = points[p + 1] - point;
 		}
 
-		xn = n_points[p] - point;
-		if (!Maths::isZero(xn.getSquareLength())) xn.normalize();
-
-		////////////////////////////////////////////////////////////
-		// set the points of the ellipse
-		////////////////////////////////////////////////////////////
-		// normal vector to x normal and direction:
-		Vector3 yn = dir % xn;
-		if (!Maths::isZero(yn.getSquareLength())) yn.normalize();
-
-		for (Position i = 0; i < slides; i++)
-		{
-			new_points[i] = xs[i] * xn + ys[i] * yn;
-		}
+		calculateRibbonPoints_(xn, dir, new_points);
 
 		////////////////////////////////////////////////////////////
 		// create a new mesh if we have a different atom now
@@ -940,7 +890,7 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 
 			// insert the vertices and normals of the last points again into the new mesh
 			const Size old_mesh_size = old_mesh->vertex.size();
-			for (Position point_pos = old_mesh_size - slides;
+			for (Position point_pos = old_mesh_size - slides_;
 										point_pos < old_mesh_size; point_pos++)
 			{
 				mesh->vertex.push_back(old_mesh->vertex[point_pos]);
@@ -959,7 +909,7 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 		//------------------------------------------------------>
 		// iterate over all points of the circle
 		//------------------------------------------------------>
-		for (Position point_pos = 0; point_pos < slides ; point_pos++)
+		for (Position point_pos = 0; point_pos < slides_; point_pos++)
 		{
 			mesh->vertex.push_back(point + new_points[point_pos]);
 
@@ -980,13 +930,13 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 		///////////////////////////////////////
 		// set the normals:
 		mesh->normal.push_back(-xn);
-		for (Position p = 1; p < middle; p++)
+		for (Position p = 1; p < middle_slide_; p++)
 		{
 			mesh->normal.push_back((new_points[p - 1] - new_points[p + 1]) % dir);
 		}
 
-		Position npos = mesh->normal.size() - middle;
-		for (Position p = npos; p < npos + middle; p++)
+		Position npos = mesh->normal.size() - middle_slide_;
+		for (Position p = npos; p < npos + middle_slide_; p++)
 		{
 			mesh->normal.push_back(- mesh->normal[p]);
 		}
@@ -996,14 +946,14 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 	// create a cap for the end:
 	end_pos--;
 	Position start = mesh->vertex.size();
-	t.v3 = start + slides;
-	for (Position p = 0; p < slides; p++)
+	t.v3 = start + slides_;
+	for (Position p = 0; p < slides_; p++)
 	{
 		mesh->vertex.push_back(points[end_pos] + new_points[p]);
 		mesh->normal.push_back(dir);
 
 		t.v2 = start + p;
-		if (p < slides - 1)
+		if (p < slides_- 1)
 		{
 			t.v1 = start + p + 1;
 		}
@@ -1229,23 +1179,64 @@ void AddBackboneModel::refineModelParts_()
 // initialise a first set of points in a circle around the start position
 void AddBackboneModel::calculateTubePoints_(Vector3 right, Vector3 dir, vector<Vector3>& points)
 {
- 	const Position middle = (Position)(slides_/ 2.0);
 	Vector3 x = right - (right * dir) * dir;
 	if (!Maths::isZero(x.getSquareLength())) x.normalize();
  	x *= tube_radius_;
 
 	points[0] = x;
-	points[middle] = -x;
+	points[middle_slide_] = -x;
 
 	temp_matrix_.setRotation(slides_angle_, dir);
 	// second half of points can be calculated by negating first half
-	for (Position i= 1; i < middle; i++)
+	for (Position i= 1; i < middle_slide_; i++)
 	{
 		x = temp_matrix_ * x;
 		points[i] = x;
-		points[i + middle] = -x;
+		points[i + middle_slide_] = -x;
 	}
 }
 	
+
+// set the points of the ellipse
+void AddBackboneModel::calculateRibbonPoints_(Vector3 xn, Vector3 dir, vector<Vector3>& points)
+{
+	if (!Maths::isZero(xn.getSquareLength())) xn.normalize();
+
+	Position temp = 0;
+	float step = 4. / slides_;
+	for (float i = -1.0; i < 1.0; i+= step)
+	{
+		xs_[temp] = i * ribbon_width_;
+		ys_[temp] = sqrt((1-i*i / ribbon_width_ * ribbon_width_) * (ribbon_height_ * ribbon_height_));
+
+		xs_[temp + middle_slide_] = -xs_[temp];
+		ys_[temp + middle_slide_] = -ys_[temp];
+		temp++;
+	}
+
+	Vector3 yn = dir % xn;
+	if (!Maths::isZero(yn.getSquareLength())) yn.normalize();
+
+	for (Position p = 0; p < slides_; p++)
+	{
+		points[p] = xs_[p] * xn + ys_[p] * yn;
+	}
+}
+
+bool AddBackboneModel::start()
+	throw()
+{
+	middle_ribbon_ = (number_of_ribbons_ - 1) /  2;
+	// calculate the number of slides for the circle and the angle in between them
+	slides_ = (Size)(8.0 + drawing_precision_ * 8.0);
+	middle_slide_ = (Position)(slides_/ 2.0);
+	slides_angle_ = Angle(360.0 / slides_, false);
+
+	ys_.resize(slides_);
+	xs_.resize(slides_);
+
+	return ModelProcessor::start();
+}
+
 	} // namespace VIEW
 } // namespace BALL
