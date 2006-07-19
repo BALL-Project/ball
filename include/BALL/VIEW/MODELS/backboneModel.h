@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.20.2.2 2006/07/18 22:59:39 amoll Exp $
+// $Id: backboneModel.h,v 1.20.2.3 2006/07/19 22:31:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -21,6 +21,10 @@
 
 #ifndef BALL_KERNEL_PROTEIN_H
  #include <BALL/KERNEL/protein.h>
+#endif
+
+#ifndef BALL_MATHS_MATRIX44_H
+ #include <BALL/MATHS/matrix44.h>
 #endif
 
 namespace BALL
@@ -151,6 +155,8 @@ namespace BALL
 
 			inline bool residuesAreConnected_(Residue& residue1, Residue& residue2);
 
+			inline void calculateTubePoints_(Vector3 right, Vector3 dir, vector<Vector3>& points);
+
 			//_
 			float tube_radius_;
 
@@ -175,6 +181,10 @@ namespace BALL
 			HashSet<Residue*> residues_to_be_rendered_;
 			Protein* last_protein_;
 			vector<vector<Index> > ss_;
+			// temp variables for speedup:
+			Size 				slides_;
+			Angle 			slides_angle_;
+			Matrix4x4 	temp_matrix_;
 		};
 
 	} // namespace VIEW

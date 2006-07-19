@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.25.2.5 2006/07/18 22:59:20 amoll Exp $
+// $Id: backboneModel.C,v 1.25.2.6 2006/07/19 22:31:17 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -283,8 +283,8 @@ void AddBackboneModel::createTube_(Position set_pos, Position part_pos)
 	vector<Residue*>& residues = part.residues;
 
 	// calculate the number of slides for the circle and the angle in between them
-	Size slides = (Size)(8.0 + drawing_precision_ * 8.0);
-	Angle slides_angle = Angle(360.0 / slides, false);
+	slides_ = (Size)(8.0 + drawing_precision_ * 8.0);
+	slides_angle_ = Angle(360.0 / slides_, false);
 
 	// direction vector of the two current spline points
 	Vector3 dir = points[start_pos + 1] - points[start_pos];
@@ -293,37 +293,8 @@ void AddBackboneModel::createTube_(Position set_pos, Position part_pos)
 	Vector3 right = n_points[start_pos] - points[start_pos];
 	if (!Maths::isZero(right.getSquareLength())) right.normalize();
 			
-	////////////////////////////////////////////////////////////
-	// calculate normal vector r to direction vector dir, with length of radius
-	////////////////////////////////////////////////////////////
-	Vector3 r = right - (right * dir) * dir;
-	if (!Maths::isZero(r.getSquareLength())) r.normalize();
- 	r *= tube_radius_;
-
-	////////////////////////////////////////////////////////////
-	// initialise a first set of points in a circle around the start position
-	////////////////////////////////////////////////////////////
-	const Position middle = (Position)(slides / 2.0);
-	vector<Vector3> new_points;
-	new_points.resize(slides);
-	Vector3 x = r;
-	new_points[0] = x;
-	new_points[middle] = -x;
-
-	Matrix4x4 m;
-	m.setRotation(slides_angle, dir);
-	// second half of points can be calculated by negating first half
-	for (Position i= 1; i < middle; i++)
-	{
-		x = m * x;
-		new_points[i] = x;
-		new_points[i + middle] = -x;
-	}
-	
-	////////////////////////////////////////////////////////////
-	// same data structures for faster access
-	////////////////////////////////////////////////////////////
-	Mesh::Triangle t;
+	vector<Vector3> new_points(slides_);
+	calculateTubePoints_(right, dir, new_points);
 
 	////////////////////////////////////////////////////////////
 	// create a new mesh with the points and triangles
@@ -335,14 +306,15 @@ void AddBackboneModel::createTube_(Position set_pos, Position part_pos)
 
 	/////////////////////////////////////////////////
 	// create a cap for the start:
-	t.v3 = slides;
-	for (Position p = 0; p < slides; p++)
+	Mesh::Triangle t;
+	t.v3 = slides_;
+	for (Position p = 0; p < slides_; p++)
 	{
 		mesh->vertex.push_back(points[start_pos] + new_points[p]);
 		mesh->normal.push_back(-dir);
 
 		t.v2 = p;
-		if (p < slides - 1)
+		if (p < slides_ - 1)
 		{
 			t.v1 = p + 1;
 		}
@@ -365,7 +337,7 @@ void AddBackboneModel::createTube_(Position set_pos, Position part_pos)
 
 	//////////////////////////////////////////////////
 	// add first points again with different normals:
-	for (Position p = 0; p < slides; p++)
+	for (Position p = 0; p < slides_; p++)
 	{
 		mesh->vertex.push_back(points[start_pos] + new_points[p]);
 		mesh->normal.push_back(new_points[p]);
@@ -388,30 +360,7 @@ void AddBackboneModel::createTube_(Position set_pos, Position part_pos)
 			if (!Maths::isZero(dir.getSquareLength())) dir.normalize();
 		
 			Vector3 right = n_points[p] - points[p];
-			if (!Maths::isZero(right.getSquareLength())) right.normalize();
-			r_new = right - (right * dir) * dir;
-
- 			if (!Maths::isZero(r_new.getSquareLength()))
-			{
-				if (!Maths::isZero(r_new.getSquareLength())) r_new.normalize();
- 			}
-			r_new *= tube_radius_;
-			
-			////////////////////////////////////////////////////////////
-			// rotate all points of the circle according to new normal
-			////////////////////////////////////////////////////////////
-			m.setRotation(slides_angle, dir);
-			x = r_new;
-			new_points[0] = x;
-
-			// second half of points can be calculated by negating first half
-			new_points[middle] = -x;
-			for (Position i = 1; i < middle; i++)
-			{
-				x = m * x;
-				new_points[i] = x;
-				new_points[i + middle] = -x;
-			}
+			calculateTubePoints_(right, dir, new_points);
 		}
 
 		////////////////////////////////////////////////////////////
@@ -432,7 +381,7 @@ void AddBackboneModel::createTube_(Position set_pos, Position part_pos)
 
 			// insert the vertices and normals of the last points again into the new mesh
 			const Size old_mesh_size = old_mesh->vertex.size();
-			for (Position point_pos = old_mesh_size - slides;
+			for (Position point_pos = old_mesh_size - slides_;
 										point_pos < old_mesh_size; point_pos++)
 			{
 				mesh->vertex.push_back(old_mesh->vertex[point_pos]);
@@ -451,7 +400,7 @@ void AddBackboneModel::createTube_(Position set_pos, Position part_pos)
 		//------------------------------------------------------>
 		// iterate over all points of the circle
 		//------------------------------------------------------>
-		for (Position point_pos = 0; point_pos < slides ; point_pos++)
+		for (Position point_pos = 0; point_pos < slides_; point_pos++)
 		{
 			mesh->vertex.push_back(point + new_points[point_pos]);
 			mesh->normal.push_back(new_points[point_pos]);
@@ -478,31 +427,17 @@ void AddBackboneModel::createTube_(Position set_pos, Position part_pos)
 	if (!Maths::isZero(dir.getSquareLength())) dir.normalize();
 
 	right = n_points[end_pos] - points[end_pos];
-	if (!Maths::isZero(right.getSquareLength())) right.normalize();
-	x = right - (right * dir) * dir;
-	if (!Maths::isZero(x.getSquareLength())) x.normalize();
-	x *= tube_radius_;
-	new_points[0] = x;
-	new_points[middle] = -x;
-
-	m.setRotation(slides_angle, dir);
-	// second half of points can be calculated by negating first half
-	for (Position i= 1; i < middle; i++)
-	{
-		x = m * x;
-		new_points[i] = x;
-		new_points[i + middle] = -x;
-	}
+	calculateTubePoints_(right, dir, new_points);
 	
 	Position start = mesh->vertex.size();
-	t.v3 = start + slides;
-	for (Position p = 0; p < slides; p++)
+	t.v3 = start + slides_;
+	for (Position p = 0; p < slides_; p++)
 	{
 		mesh->vertex.push_back(points[end_pos] + new_points[p]);
 		mesh->normal.push_back(dir);
 
 		t.v1 = start + p;
-		if (p < slides - 1)
+		if (p < slides_- 1)
 		{
 			t.v2 = start + p + 1;
 		}
@@ -1290,5 +1225,27 @@ void AddBackboneModel::refineModelParts_()
 	} // all sets
 } // refineModelParts_
 
+
+// initialise a first set of points in a circle around the start position
+void AddBackboneModel::calculateTubePoints_(Vector3 right, Vector3 dir, vector<Vector3>& points)
+{
+ 	const Position middle = (Position)(slides_/ 2.0);
+	Vector3 x = right - (right * dir) * dir;
+	if (!Maths::isZero(x.getSquareLength())) x.normalize();
+ 	x *= tube_radius_;
+
+	points[0] = x;
+	points[middle] = -x;
+
+	temp_matrix_.setRotation(slides_angle_, dir);
+	// second half of points can be calculated by negating first half
+	for (Position i= 1; i < middle; i++)
+	{
+		x = temp_matrix_ * x;
+		points[i] = x;
+		points[i + middle] = -x;
+	}
+}
+	
 	} // namespace VIEW
 } // namespace BALL
