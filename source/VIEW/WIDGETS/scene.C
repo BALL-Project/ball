@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.69 2006/07/17 20:58:32 amoll Exp $
+// $Id: scene.C,v 1.174.2.70 2006/07/19 12:34:55 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2214,7 +2214,11 @@ namespace BALL
 				QGLFormat f = format();
 				f.setSampleBuffers(true);
 				QGLPixelBuffer pbuffer(PNG_size_, f,this );
-				pbuffer.makeCurrent();
+				if (!pbuffer.makeCurrent())
+				{
+					setStatusbarText("PBuffer not supported, please use conventional screenshots (see Preferences)", true);
+					return false;
+				}
 
 				gl_renderer_.init(*this);
 				gl_renderer_.initSolid();
