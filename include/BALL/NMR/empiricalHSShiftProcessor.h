@@ -9,6 +9,9 @@
 #	include<BALL/KERNEL/expression.h>
 #endif
 
+# include <set>
+#include <map>
+
 namespace BALL 
 {
 	class Atom;
@@ -128,6 +131,7 @@ namespace BALL
 				class BALL_EXPORT PropertiesForShift_
 				{
 					public:
+						PropertiesForShift_() throw();
 
 						/** current target atom
 						 */
@@ -247,22 +251,31 @@ namespace BALL
 
 				/*_ The target properties used for determine the 
 				 * empirical hypersurface shifts. The properties are collected 
-				 * from the ini-file by {\tt init ()} and are stored
+				 * from the ini-file by {\tt init ()} and are stored per target atom
 				 * in the same order as the target_names.
 				 */
-				std::vector< std::vector<String> >			target_property_names_;
+				std::vector< std::set<String> >			target_property_names_;
 				
-				/*_ The files storing the property-data for computing the
-				 * shift contributions. 
+				/*_ The files storing the property-data-splines for computing the
+				 * shift contributions are stored in a map, whose key is the pair of
+				 * properties, to which the splines belong.
+				 * The maps are stored per target atom in the same order as the target_names.
 				 * The files are specified in the section {\tt EmpiricalShiftHyperSurfaces} 
 				 * of the file {\tt ShiftX.ini} and are collected by {\tt init ()}.
 				 */
-				std::vector< std::vector<String> >			property_files_;
+				std::vector< std::map< std::pair<String, String>, String >	>		property_files_;
 					
 			private:
 					void 			printParameters_() throw();
 					void 			printTargets_() throw();
 					float			getChiAngle_(Residue* residue) throw();
+					float			getChi2Angle_(Residue* residue) throw();
+					void 			setAminoAcid_(Residue* residue, char& property) throw();
+					void 			setSecondaryStructure_(Residue* residue, char& property) throw();
+					float 		getHA_HBondLen_(Residue* residue) throw();
+					float 		getHA2_HBondLen_(Residue* residue) throw();
+					float 		getHN_HBondLen_(Residue* residue) throw();
+
 
 	};//End of class
 } // end of namespace
