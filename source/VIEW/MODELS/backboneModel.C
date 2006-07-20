@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.25.2.10 2006/07/20 21:23:15 amoll Exp $
+// $Id: backboneModel.C,v 1.25.2.11 2006/07/20 21:51:02 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -781,8 +781,14 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 	right.normalize();
  	right = right - (right * dir) * dir;
 
+	float tube_radius_start = tube_radius_;
+	float tube_radius_end   = tube_radius_;
+
+	if (part_pos == 0) tube_radius_start = 0.01;
+	if (part_pos == model_parts_[set_pos].size() - 1) tube_radius_end = 0.01;
+
 	vector<Vector3> new_points(slides_);
-	calculateRibbonEllipse_(tube_radius_, tube_radius_);
+	calculateRibbonEllipse_(tube_radius_start, tube_radius_start);
  	calculateRibbonPoints_(right, dir, new_points);
 
 	////////////////////////////////////////////////////////////
@@ -844,8 +850,11 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 	float ribbon_width = tube_radius_;
 	float ribbon_height = tube_radius_;
 
-	float width_delta = (ribbon_width_ - tube_radius_) / interpolation_steps_ / 2.;
-	float height_delta = (ribbon_height_ - tube_radius_) / interpolation_steps_ / 2.;
+	float i2 = interpolation_steps_ * 2;
+	float width_delta_start = (ribbon_width_ - tube_radius_start) / i2;
+	float width_delta_end   = (ribbon_width_ - tube_radius_end) / i2;
+	float height_delta_start= (ribbon_height_ - tube_radius_start) / i2;
+	float height_delta_end  = (ribbon_height_ - tube_radius_end) / i2;
 	//------------------------------------------------------>
 	// iterate over all points in the spline
 	Position residue_pos = 0;
@@ -861,7 +870,6 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 			dir.normalize();
 		}
 
-		Size i2 = interpolation_steps_ * 2;
 		if (p > start_pos + i2 + 1 && p < end_pos - i2)
 		{
 			ribbon_width = ribbon_width_;
@@ -873,16 +881,16 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 
 			if (p >= end_pos - i2)
 			{
-				ribbon_width -= width_delta;
-				ribbon_height -= height_delta;
-				t2 = (end_pos - p) / (float)interpolation_steps_ / 2.;
+				ribbon_width -= width_delta_end;
+				ribbon_height -= height_delta_end;
+				t2 = (end_pos - p) / i2;
 				t1 = 1. - t2;
 			}
 			else
 			{
-				ribbon_width += width_delta;
-				ribbon_height += height_delta;
-				t1 = (start_pos + 1 + interpolation_steps_ * 2. - p) / (float)interpolation_steps_ / 2.;
+				ribbon_width += width_delta_start;
+				ribbon_height += height_delta_start;
+				t1 = (start_pos + 1 + i2 - p) / i2;
 				t2 = 1. - t1;
 			}
 
@@ -1131,7 +1139,6 @@ void AddBackboneModel::interpolate_()
 
 void AddBackboneModel::refineModelParts_()
 {
-//   	return;
 	vector<vector<ModelPart> > temp_models = model_parts_;
 
 	for (Position set = 0; set < temp_models.size(); set++)
