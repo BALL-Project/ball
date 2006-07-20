@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.25.2.8 2006/07/20 00:07:53 amoll Exp $
+// $Id: backboneModel.C,v 1.25.2.9 2006/07/20 11:59:14 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -794,7 +794,8 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
  	Vector3 xn = n_points[start_pos] - points[start_pos];
 
 	vector<Vector3> new_points(slides_);
- 	calculateRibbonPoints_(xn, dir, new_points, tube_radius_, tube_radius_);
+	calculateRibbonEllipse_(tube_radius_, tube_radius_);
+ 	calculateRibbonPoints_(xn, dir, new_points);
 
 	////////////////////////////////////////////////////////////
 	// create a new mesh with the points and triangles
@@ -883,23 +884,24 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 		{
 			if (p > end_pos - interpolation_steps_ * 2)
 			{
-				calculateRibbonPoints_(xn, dir, new_points, ribbon_width, ribbon_height);
 				ribbon_width -= width_delta;
 				ribbon_height -= height_delta;
 			}
 			else
 			{
-				calculateRibbonPoints_(xn, dir, new_points, ribbon_width_, ribbon_height_);
 				ribbon_width = ribbon_width_;
 				ribbon_height = ribbon_height_;
+				calculateRibbonEllipse_(ribbon_width, ribbon_height);
 			}
 		}
 		else
 		{
-			calculateRibbonPoints_(xn, dir, new_points, ribbon_width, ribbon_height);
 			ribbon_width += width_delta;
 			ribbon_height += height_delta;
+			calculateRibbonEllipse_(ribbon_width, ribbon_height);
 		}
+
+		calculateRibbonPoints_(xn, dir, new_points, ribbon_width, ribbon_height);
 
 		////////////////////////////////////////////////////////////
 		// create a new mesh if we have a different atom now
@@ -1223,12 +1225,8 @@ void AddBackboneModel::calculateTubePoints_(Vector3 right, Vector3 dir, vector<V
 }
 	
 
-// set the points of the ellipse
-void AddBackboneModel::calculateRibbonPoints_(Vector3 xn, Vector3 dir, vector<Vector3>& points, 
-																							float ribbon_width, float ribbon_height)
+void AddBackboneModel::calculateRibbonEllipse_(float ribbon_width, float ribbon_height)
 {
-	if (!Maths::isZero(xn.getSquareLength())) xn.normalize();
-
 	Position temp = 0;
 	float step = 4. / slides_;
 	for (float i = -1.0; i < 1.0; i+= step)
@@ -1240,6 +1238,12 @@ void AddBackboneModel::calculateRibbonPoints_(Vector3 xn, Vector3 dir, vector<Ve
 		ys_[temp + middle_slide_] = -ys_[temp];
 		temp++;
 	}
+}
+
+// set the points of the ellipse
+void AddBackboneModel::calculateRibbonPoints_(Vector3 xn, Vector3 dir, vector<Vector3>& points)
+{
+	if (!Maths::isZero(xn.getSquareLength())) xn.normalize();
 
 	Vector3 yn = dir % xn;
 	if (!Maths::isZero(yn.getSquareLength())) yn.normalize();

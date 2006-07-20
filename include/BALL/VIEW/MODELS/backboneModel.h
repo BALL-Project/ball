@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.20.2.5 2006/07/20 00:07:59 amoll Exp $
+// $Id: backboneModel.h,v 1.20.2.6 2006/07/20 11:59:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -160,8 +160,8 @@ namespace BALL
 			inline bool residuesAreConnected_(Residue& residue1, Residue& residue2);
 
 			inline void calculateTubePoints_(Vector3 right, Vector3 dir, vector<Vector3>& points);
-			inline void calculateRibbonPoints_(Vector3 xn, Vector3 dir, vector<Vector3>& points,
-																				 float ribbon_width, float ribbon_height);
+			inline void calculateRibbonPoints_(Vector3 xn, Vector3 dir, vector<Vector3>& points);
+			inline void calculateRibbonEllipse_(float ribbon_width, float ribbon_height);
 
 			//_
 			float tube_radius_;
