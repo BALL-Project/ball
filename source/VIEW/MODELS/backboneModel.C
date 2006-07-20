@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.25.2.9 2006/07/20 11:59:14 amoll Exp $
+// $Id: backboneModel.C,v 1.25.2.10 2006/07/20 21:23:15 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -326,7 +326,6 @@ void AddBackboneModel::createTube_(Position set_pos, Position part_pos)
 
 	////////////////////////////////////////////////////////////
 	// same data structures for faster access
-	////////////////////////////////////////////////////////////
 	Size s_old = mesh->vertex.size(); // start position of the last points in the meshs vertices
 	Size s_new = 0;  									// start position of the  new points in the meshs vertices
 
@@ -340,27 +339,24 @@ void AddBackboneModel::createTube_(Position set_pos, Position part_pos)
 
 	//------------------------------------------------------>
 	// iterate over the points in the spline
-	//------------------------------------------------------>
 	Position residue_pos = 0;
-	Vector3 r_new;
 	for (Position p = start_pos + 1; p < end_pos; p++)
 	{
 		// faster access to the current spline point
 		const Vector3& point = points[p];
 				
 		// calculate new direction if not at the last point
- 		if (p < end_pos - 1) 
+ 		if (p < points.size() - 1) 
 		{
 			dir = points[p + 1] - point;
 			if (!Maths::isZero(dir.getSquareLength())) dir.normalize();
 		
-			Vector3 right = n_points[p] - points[p];
+			right = n_points[p] - points[p];
 			calculateTubePoints_(right, dir, new_points);
 		}
 
 		////////////////////////////////////////////////////////////
 		// create a new mesh if we have a different atom now
-		////////////////////////////////////////////////////////////
 		if (p % interpolation_steps_ == 0 && p < end_pos - 1)
 		{
 			residue_pos++;
@@ -386,11 +382,9 @@ void AddBackboneModel::createTube_(Position set_pos, Position part_pos)
 			s_old = 0;
 		}
 				
-		////////////////////////////////////////////////////////////
 		// insert only the new points, the old ones are already stored in the mesh
-		////////////////////////////////////////////////////////////
-		// we will add an other point next, so here we do an off by one :)
 		s_new = mesh->vertex.size();
+		// we will add an other point next, so here we do an off by one :)
 
 		//------------------------------------------------------>
 		// iterate over all points of the circle
@@ -771,31 +765,25 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 	vector<Vector3>& n_points = interpolated_points_[set_pos][middle_ribbon_ + 1];
 	Position start_pos = part.first_point;
 	Position end_pos = part.last_point;
+	bool nucleotide = ss_[set_pos][start_pos / interpolation_steps_] == NUCLEIC_ACID_RESIDUE;
 
-	// if we are not at the end of the interpolated points at the end of the modell we can draw the last point
+	// if this end is not the end of the interpolated points we can draw a connection to the next model
 	if (end_pos < points.size() - 1) end_pos++;
 
 	vector<Residue*>& residues = part.residues;
 	
-	if (set_pos >= ss_.size() ||
-			end_pos >= points.size())
-	{
-		Log.error() << "Set: " << set_pos << " ss size: " << ss_.size() << " end pos: " << end_pos << " size " << points.size() << std::endl;
-		BALLVIEW_DEBUG
-		return;
-	}
-
-
-	bool nucleotide = ss_[set_pos][start_pos / interpolation_steps_] == NUCLEIC_ACID_RESIDUE;
-
 	// direction vector of the first two spline points
 	Vector3 dir = points[start_pos + 1] - points[start_pos];
-	// calculate normal vector xn: in width direction
- 	Vector3 xn = n_points[start_pos] - points[start_pos];
+	dir.normalize();
+
+	// calculate normal vector right: in width direction
+ 	Vector3 right = n_points[start_pos] - points[start_pos];
+	right.normalize();
+ 	right = right - (right * dir) * dir;
 
 	vector<Vector3> new_points(slides_);
 	calculateRibbonEllipse_(tube_radius_, tube_radius_);
- 	calculateRibbonPoints_(xn, dir, new_points);
+ 	calculateRibbonPoints_(right, dir, new_points);
 
 	////////////////////////////////////////////////////////////
 	// create a new mesh with the points and triangles
@@ -814,15 +802,10 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 		mesh->vertex.push_back(points[start_pos] + new_points[p]);
 		mesh->normal.push_back(-dir);
 
+		if (p < slides_- 1) t.v2 = p + 1;
+		else  							t.v2 = 0;
+
 		t.v1 = p;
-		if (p < slides_- 1)
-		{
-			t.v2 = p + 1;
-		}
-		else
-		{
-			t.v2 = 0;
-		}
 		mesh->triangle.push_back(t);
 	}
 
@@ -841,7 +824,7 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 
 	///////////////////////////////////////
 	// set the normals:
-	mesh->normal.push_back(-xn);
+	mesh->normal.push_back(-right);
 	for (Position p = 1; p < middle_slide_; p++)
 	{
 		mesh->normal.push_back((new_points[p - 1] - new_points[p + 1]) % dir);
@@ -863,45 +846,53 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 
 	float width_delta = (ribbon_width_ - tube_radius_) / interpolation_steps_ / 2.;
 	float height_delta = (ribbon_height_ - tube_radius_) / interpolation_steps_ / 2.;
-
 	//------------------------------------------------------>
 	// iterate over all points in the spline
-	//------------------------------------------------------>
 	Position residue_pos = 0;
 	for (Position p = start_pos + 1; p < end_pos; p++)
 	{
-		// faster access to the current spline point
 		const Vector3& point = points[p];
-				
- 		Vector3 xn = n_points[p] - point;
-		// new direction vector: new point - last point
- 		if (p < end_pos - 1) 
+		// right vector:
+ 		right = n_points[p] - point;
+ 		if (p < points.size() - 1) 
 		{
+			// new direction vector: new point - last point
 			dir = points[p + 1] - point;
+			dir.normalize();
 		}
 
-		if (p > start_pos + interpolation_steps_ * 2 + 1)
+		Size i2 = interpolation_steps_ * 2;
+		if (p > start_pos + i2 + 1 && p < end_pos - i2)
 		{
-			if (p > end_pos - interpolation_steps_ * 2)
-			{
-				ribbon_width -= width_delta;
-				ribbon_height -= height_delta;
-			}
-			else
-			{
-				ribbon_width = ribbon_width_;
-				ribbon_height = ribbon_height_;
-				calculateRibbonEllipse_(ribbon_width, ribbon_height);
-			}
+			ribbon_width = ribbon_width_;
+			ribbon_height = ribbon_height_;
 		}
 		else
 		{
-			ribbon_width += width_delta;
-			ribbon_height += height_delta;
+			float t1, t2;
+
+			if (p >= end_pos - i2)
+			{
+				ribbon_width -= width_delta;
+				ribbon_height -= height_delta;
+				t2 = (end_pos - p) / (float)interpolation_steps_ / 2.;
+				t1 = 1. - t2;
+			}
+			else
+			{
+				ribbon_width += width_delta;
+				ribbon_height += height_delta;
+				t1 = (start_pos + 1 + interpolation_steps_ * 2. - p) / (float)interpolation_steps_ / 2.;
+				t2 = 1. - t1;
+			}
+
+ 			right.normalize();
+ 			Vector3 r = right - (right * dir) * dir;
+			right = r * t1 + right * t2;
 			calculateRibbonEllipse_(ribbon_width, ribbon_height);
 		}
 
-		calculateRibbonPoints_(xn, dir, new_points, ribbon_width, ribbon_height);
+		calculateRibbonPoints_(right, dir, new_points);
 
 		////////////////////////////////////////////////////////////
 		// create a new mesh if we have a different atom now
@@ -957,7 +948,7 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 
 		///////////////////////////////////////
 		// set the normals:
-		mesh->normal.push_back(-xn);
+		mesh->normal.push_back(-right);
 		for (Position p = 1; p < middle_slide_; p++)
 		{
 			mesh->normal.push_back((new_points[p - 1] - new_points[p + 1]) % dir);
@@ -1241,16 +1232,16 @@ void AddBackboneModel::calculateRibbonEllipse_(float ribbon_width, float ribbon_
 }
 
 // set the points of the ellipse
-void AddBackboneModel::calculateRibbonPoints_(Vector3 xn, Vector3 dir, vector<Vector3>& points)
+void AddBackboneModel::calculateRibbonPoints_(Vector3 right, Vector3 dir, vector<Vector3>& points)
 {
-	if (!Maths::isZero(xn.getSquareLength())) xn.normalize();
+	if (!Maths::isZero(right.getSquareLength())) right.normalize();
 
-	Vector3 yn = dir % xn;
+	Vector3 yn = dir % right;
 	if (!Maths::isZero(yn.getSquareLength())) yn.normalize();
 
 	for (Position p = 0; p < slides_; p++)
 	{
-		points[p] = xs_[p] * xn + ys_[p] * yn;
+		points[p] = xs_[p] * right + ys_[p] * yn;
 	}
 }
 
