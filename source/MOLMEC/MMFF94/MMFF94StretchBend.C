@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.15 2006/07/03 13:37:30 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.16 2006/07/21 11:54:33 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -11,6 +11,7 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
+#include <BALL/COMMON/macros.h>
 
 //      #define BALL_DEBUG_MMFF
 #define BALL_MMFF_TEST
@@ -35,16 +36,19 @@ namespace BALL
 	}
 
 	// Constant 
-	#define STRETCH_BEND_K0 2.51210 * Constants::JOULE_PER_CAL
+	const double STRETCH_BEND_K0 = 2.51210 * Constants::JOULE_PER_CAL;
 
 	/// 0.043844 / 2
-	#define BEND_K0 0.021922 * Constants::JOULE_PER_CAL
+	const double BEND_K0 = 0.021922 * Constants::JOULE_PER_CAL;
+
+	/// for forces:
+	const double BEND_K0_FORCES = BEND_K0 * (180.0 / Constants::PI);
 	
 	// -0.007 degree^-1
 	#define BEND_K1 -0.007
 
 	// mdyne * A -> kJ / mol
-  #define BEND_KX 143.9325 * Constants::JOULE_PER_CAL
+  const double BEND_KX = 143.9325 * Constants::JOULE_PER_CAL;
 
 	// Constant CS
 	#define STRETCH_CUBIC_STRENGTH_CONSTANT -2.0
@@ -580,14 +584,24 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			if (costheta > 1.0) 
 			{
 				theta = 0.0;
+				costheta = 1.;
 			}
 			else if (costheta < -1.0) 
 			{
 				theta = Constants::PI;
+				costheta = -1;
 			}
 			else 
 			{
 				theta = acos(costheta);
+			}
+
+			if (bend.is_linear)
+			{
+				bend.n1 = -(-v2  - v1 * costheta);
+				bend.n2 = -(-v1  - v2 * costheta);
+				bend.n1 *= inverse_length_v1;
+				bend.n2 *= inverse_length_v2;
 			}
 
 			// radian to degree
@@ -597,8 +611,16 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			bend.delta_theta = theta - bend.theta0;
 			bend.theta = theta;
 
-			bend.n1 = -(v1 % cross) * inverse_length_v1;
-			bend.n2 = (v2 % cross) * inverse_length_v2;
+			if (!bend.is_linear)
+			{
+				Vector3 t1 = v1 % cross;
+				t1.normalize();
+				Vector3 t2 = v2 % cross;
+				t2.normalize();
+
+				bend.n1 = -t1 * inverse_length_v1;
+				bend.n2 =  t2 * inverse_length_v2;
+			}
 		}
 
 		// stretches:
@@ -749,11 +771,13 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			
 			if (!bend.is_linear) 
 			{
-				factor = BEND_K0 * bend.ka * bend.delta_theta * (2. + 3. * BEND_K1 * bend.delta_theta);
+				factor = BEND_K0_FORCES * bend.ka * bend.delta_theta * (2. + 3. * BEND_K1 * bend.delta_theta);
 			}
 			else
 			{
-				factor = -BEND_KX * bend.ka * sin(bends_[i].theta0 * DEGREE_TO_RADIAN);
+//   				factor = -BEND_KX * bend.ka * sin(bends_[i].theta0 * DEGREE_TO_RADIAN);
+//   				factor = -BEND_KX * bend.ka * (1 - cos(bends_[i].theta0 * DEGREE_TO_RADIAN));
+				factor = -BEND_KX * bend.ka;
 			}
 			
 			const Vector3 n1 = bend.n1 * factor * FORCES_FACTOR;
