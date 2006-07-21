@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.25.2.11 2006/07/20 21:51:02 amoll Exp $
+// $Id: backboneModel.C,v 1.25.2.12 2006/07/21 14:29:12 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -784,11 +784,16 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 	float tube_radius_start = tube_radius_;
 	float tube_radius_end   = tube_radius_;
 
-	if (part_pos == 0) tube_radius_start = 0.01;
-	if (part_pos == model_parts_[set_pos].size() - 1) tube_radius_end = 0.01;
-
 	vector<Vector3> new_points(slides_);
-	calculateRibbonEllipse_(tube_radius_start, tube_radius_start);
+	if (!nucleotide)
+	{
+		calculateRibbonEllipse_(tube_radius_start, tube_radius_start);
+	}
+	else
+	{
+		calculateRibbonEllipse_(ribbon_width_, ribbon_height_);
+	}
+
  	calculateRibbonPoints_(right, dir, new_points);
 
 	////////////////////////////////////////////////////////////
@@ -870,7 +875,7 @@ void AddBackboneModel::createRibbon_(Position set_pos, Position part_pos)
 			dir.normalize();
 		}
 
-		if (p > start_pos + i2 + 1 && p < end_pos - i2)
+		if (nucleotide || (p > start_pos + i2 + 1 && p < end_pos - i2))
 		{
 			ribbon_width = ribbon_width_;
 			ribbon_height = ribbon_height_;
