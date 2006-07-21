@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.60.2.8 2006/07/18 22:59:20 amoll Exp $
+// $Id: cartoonModel.C,v 1.60.2.9 2006/07/21 14:21:27 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -125,7 +125,7 @@ void AddCartoonModel::createModel_(Position set_pos, Position part_pos)
 	}
 
 	ModelPart& part = model_parts_[set_pos][part_pos];
- 	if (part.type == RIBBON) 
+ 	if (part.type == RIBBON && part.residues.size() > 3) 
 	{
 		createRibbon_(set_pos, part_pos);
 	}
