@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.C,v 1.35.6.1 2006/07/17 21:16:03 amoll Exp $
+// $Id: amberNonBonded.C,v 1.35.6.2 2006/07/22 09:55:39 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
@@ -920,7 +920,7 @@ namespace BALL
 			// no periodic boundary, constant dielectric
 			#ifdef BALL_MUST_CAST_TEMPLATE_FUNCTION_ARGS
 				AmberNBEnergy<(ESEnergyFunction)coulomb, (VdwEnergyFunction)vdwSixTwelve, (SwitchingFunction)cubicSwitch>
-					(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4,
+					(&non_bonded_[0], &non_bonded_[0] + number_of_1_4_, electrostatic_energy_1_4, vdw_energy_1_4,
 					 cutoffs_es, cutoffs_vdw);
 				AmberNBEnergy<(ESEnergyFunction)coulomb, (VdwEnergyFunction)vdwSixTwelve, (SwitchingFunction)cubicSwitch >
 					(&non_bonded_[0] + number_of_1_4_, &non_bonded_[0] + non_bonded_.size() - number_of_h_bonds_, electrostatic_energy, vdw_energy, 

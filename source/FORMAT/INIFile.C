@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.C,v 1.38.2.1 2006/07/16 13:43:37 amoll Exp $
+// $Id: INIFile.C,v 1.38.2.2 2006/07/22 09:54:19 amoll Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -415,8 +415,9 @@ namespace BALL
 			return LineIterator();
 		}
 
-		List<String >::Iterator	line_it(getSection(section_name)->lines_.end());
-		line_it--;
+		SectionIterator sit = getSection(section_name);
+		List<String >::Iterator	line_it(sit->lines_.end());
+		if (sit->lines_.size() > 0) line_it--;
 		return LineIterator(sections_, getSection(section_name), line_it);
 	}
 
