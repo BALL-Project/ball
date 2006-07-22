@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AtomBijection_test.C,v 1.1.6.1 2006/05/15 23:18:46 amoll Exp $
+// $Id: AtomBijection_test.C,v 1.1.6.2 2006/07/22 08:54:41 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -32,7 +32,7 @@ String dumpBijection(AtomBijection& ab)
 }
 
 
-START_TEST(AtomBijection, "$Id: AtomBijection_test.C,v 1.1.6.1 2006/05/15 23:18:46 amoll Exp $")
+START_TEST(AtomBijection, "$Id: AtomBijection_test.C,v 1.1.6.2 2006/07/22 08:54:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -70,7 +70,7 @@ CHECK(double calculateRMSD() const)
 	TEST_EQUAL(rmsd, 2.0);
 	a1.setPosition(Vector3(1.0, 1.0, 1.0));
 	rmsd = ab.calculateRMSD();
-	TEST_EQUAL(rmsd, sqrt(3));
+	TEST_EQUAL(rmsd, sqrt((float)3.));
 RESULT
 
 Molecule benzene;
