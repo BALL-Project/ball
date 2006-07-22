@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.C,v 1.9.10.1 2006/07/18 22:32:43 amoll Exp $
+// $Id: reducedSurface.C,v 1.9.10.2 2006/07/22 09:56:17 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/reducedSurface.h>
@@ -1102,8 +1102,7 @@ namespace BALL
 					}
 					else
 					{
-						std::list< std::pair< Index,TSphere3<double> > >::iterator j;
-						j = candidates.begin();
+						std::list< std::pair< Index,TSphere3<double> > >::iterator j = candidates.begin();
 						while (j != candidates.end())
 						{
 							if (atom_status_[j->first] == STATUS_UNKNOWN)
