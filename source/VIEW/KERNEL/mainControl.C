@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.28 2006/07/23 09:03:56 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.29 2006/07/23 11:14:37 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -221,9 +221,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
 			connect(menuBar(), SIGNAL(hovered(QAction*)), this, SLOT(menuItemHighlighted(QAction*)));
 
-//   			QToolTip::setWakeUpDelay(500);
-//   			QToolTip::setGloballyEnabled(true);
-
 			font.setPointSize(14);
 			rep_label_ = new QLabel(statusBar());
 			rep_label_->setFrameShape(QLabel::NoFrame);
@@ -237,6 +234,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			rep_label_->setText("M");
 			statusBar()->addPermanentWidget(rep_label_, false );
 			rep_label_nr_ = 0;
+			rep_label_delta_ = 32;
+			was_not_busy_ = false;
 
 			render_timer_.start(100);
 
@@ -1895,7 +1894,9 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 	void MainControl::updateRepLabel_()
 	{
-		setPreferencesEnabled_(!isBusy());
+		bool busy = isBusy();
+		if (was_not_busy_ && !busy) return;
+		setPreferencesEnabled_(!busy);
 
 		if (!primitive_manager_.updateRunning()) 
 		{
@@ -1908,25 +1909,23 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					QApplication::restoreOverrideCursor();
 				}
 			}
-			rep_label_->setText("");
+			setTextColor(rep_label_, getColor(rep_label_));
+			was_not_busy_ = true;
 			return;
 		}
 
-		rep_label_nr_ ++;
 		rep_label_->show();
-		char c = '-';
-		if 		   (rep_label_nr_ == 2) c = '\\';
-		else  if (rep_label_nr_ == 3) c = '|';
-		else  if (rep_label_nr_ == 4) c = '/';
-		else  if (rep_label_nr_ == 5) 
+		if (rep_label_nr_ + rep_label_delta_ > 255 || (Index)rep_label_nr_ + rep_label_delta_ < 0) 
 		{
-			c = '-';
-			rep_label_nr_ = 1;
+			rep_label_delta_ *= -1;
 		}
 
-		QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
+		rep_label_nr_ += rep_label_delta_;
 
-		rep_label_->setText(QString(c));
+		setTextColor(rep_label_, ColorRGBA(Size(rep_label_nr_ / 3) ,rep_label_nr_ / 3,(Size)rep_label_nr_));
+
+		QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
+		was_not_busy_ = false;
 	}
 
 	bool MainControl::isBusy() const

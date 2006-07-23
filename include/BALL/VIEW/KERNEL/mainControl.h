@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76.2.12 2006/07/23 09:52:07 amoll Exp $
+// $Id: mainControl.h,v 1.76.2.13 2006/07/23 11:14:33 amoll Exp $
 //
 // Author:
 //   Andreas Moll
@@ -870,6 +870,7 @@ namespace BALL
 			bool 								about_to_quit_;
 			bool 								important_text_in_statusbar_;
 			bool 								was_not_busy_;
+			Index 							rep_label_delta_;
 			QTimer 							timer_;
 			QTimer 							render_timer_;
 			QMutex 							composites_locked_mutex_;
