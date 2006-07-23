@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.27 2006/06/14 15:14:57 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.28 2006/07/23 09:03:56 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -233,6 +233,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			rep_label_->setMinimumSize(20,20);
 			rep_label_->setAlignment(Qt::AlignCenter);
 			rep_label_->hide();
+			rep_label_->setToolTip("update of model running");
+			rep_label_->setText("M");
 			statusBar()->addPermanentWidget(rep_label_, false );
 			rep_label_nr_ = 0;
 
@@ -241,8 +243,9 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			simulation_icon_ = new QLabel(statusBar());
 			simulation_icon_->setMaximumSize(14,20);
 			simulation_icon_->setMinimumSize(14,20);
+			simulation_icon_->setToolTip("simulation running");
+			simulation_icon_->setText("S");
 			statusBar()->addPermanentWidget(simulation_icon_, false );
-//   			QToolTip::add(simulation_icon_, "simulation status");
 			QPixmap icon(simulation_running_xpm_);
 
 			simulation_icon_->setPixmap(icon);

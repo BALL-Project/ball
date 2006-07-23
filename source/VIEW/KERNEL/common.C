@@ -347,6 +347,13 @@ namespace BALL
 			((QLabel*)label)->setPalette(pal);
 		}
 
+		void setTextColor(QLabel* label, const ColorRGBA& color)
+		{
+			QPalette pal(label->palette());
+			pal.setColor(label->foregroundRole(), color.getQColor());
+			((QLabel*)label)->setPalette(pal);
+		}
+
 		QColor chooseColor(QLabel* label)
 		{
 			QColor qcolor;

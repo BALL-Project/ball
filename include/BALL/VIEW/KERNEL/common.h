@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.40.2.14 2006/07/14 07:52:37 amoll Exp $
+// $Id: common.h,v 1.40.2.15 2006/07/23 09:03:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -454,6 +454,9 @@ namespace BALL
 
 		///
 		BALL_VIEW_EXPORT QColor chooseColor(QLabel* label);
+
+		///
+		BALL_VIEW_EXPORT void setTextColor(QLabel* label, const ColorRGBA& color);
 
 		/** Uses the de-Casteljou algorithm to evalute a cubic Hermite interpolation
 		 *  polynomial at interpolated_values.size() equidistant values.
