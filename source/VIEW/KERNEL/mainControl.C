@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.29 2006/07/23 11:14:37 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.30 2006/07/23 22:54:17 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -237,7 +237,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			rep_label_delta_ = 32;
 			was_not_busy_ = false;
 
-			render_timer_.start(100);
+			render_timer_.start(200);
 
 			simulation_icon_ = new QLabel(statusBar());
 			simulation_icon_->setMaximumSize(14,20);
@@ -1178,19 +1178,16 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			important_text_in_statusbar_ = important;
 
-			QPalette pal(message_label_->palette());
-
 			if (important)
 			{
-				pal.setColor(message_label_->foregroundRole(), QColor(255,0,0));
+				setTextColor(message_label_, ColorRGBA(255,0,0));
 				Log.info() << text << std::endl;
 			}
 			else
 			{
-				pal.setColor(message_label_->foregroundRole(), QColor(0,0,0));
+				setTextColor(message_label_, ColorRGBA(0,0,0));
 			}
 
-			message_label_->setPalette(pal);
 			message_label_->setText(text.c_str());
 			timer_.start(6000);
 		}
@@ -1414,12 +1411,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			if (state)
 			{
-				QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
 				simulation_icon_->show();
 			}
 			else
 			{
-				QApplication::restoreOverrideCursor();
 				simulation_icon_->hide();
 			}
 		}
@@ -1898,16 +1893,13 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		if (was_not_busy_ && !busy) return;
 		setPreferencesEnabled_(!busy);
 
-		if (!primitive_manager_.updateRunning()) 
+		if (!busy)
 		{
-			if (!composites_locked_)
+			QCursor* cursor = QApplication::overrideCursor();
+			if (cursor != 0 &&
+					cursor->shape() == Qt::BusyCursor)
 			{
-				QCursor* cursor = QApplication::overrideCursor();
-				if (cursor != 0 &&
-						cursor->shape() == Qt::BusyCursor)
-				{
-					QApplication::restoreOverrideCursor();
-				}
+				QApplication::restoreOverrideCursor();
 			}
 			setTextColor(rep_label_, getColor(rep_label_));
 			was_not_busy_ = true;
@@ -1924,7 +1916,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 		setTextColor(rep_label_, ColorRGBA(Size(rep_label_nr_ / 3) ,rep_label_nr_ / 3,(Size)rep_label_nr_));
 
-		QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
+		QCursor* cursor = QApplication::overrideCursor();
+		{
+			if (cursor == 0) QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
+		}
 		was_not_busy_ = false;
 	}
 
