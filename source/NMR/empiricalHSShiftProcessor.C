@@ -198,6 +198,7 @@ printParameters_();
 					Residue* prev_residue = atom->getAncestor(*residue)->getPrevious(*residue);
 					Residue* next_residue = atom->getAncestor(*residue)->getNext(*residue);
 					
+					// compute all properties needed for this atom type 
 					for (std::set<String>::iterator it = target_property_names_[i].begin();
 					 it != target_property_names_[i].end(); it++)
 					{	
@@ -231,26 +232,34 @@ printParameters_();
 							}else if ((*it) == 	"CHI2-1")
 							{
 								property.prev_chi2_angle = getChi2Angle_(prev_residue);
+							}else if ((*it) == 	"HA1L-1" )
+							{
+								property.prev_HA_HBond_len	= getHA_HBondLen_(prev_residue);
 							}else if ((*it) == 	"HA1-1" )
 							{
-								property.prev_HA_bond_len	= getHA_HBondLen_(prev_residue) ;
-								//property.prev_has_HA_Hbond;
+								property.prev_has_HA_HBond = hasHA_HBond_(prev_residue);
+							}else if ((*it) == 	"HA2L-1" )
+							{
+								property.prev_HA2_HBond_len = getHA2_HBondLen_(prev_residue);
 							}else if ((*it) == 	"HA2-1" )
 							{
-								property.prev_HA2_bond_len = getHA2_HBondLen_(prev_residue);
-								//property.prev_has_HA2_Hbond = ;
-							}else if ((*it) == 	"HN-1" )
+								property.prev_has_HA2_HBond = hasHA2_HBond_(prev_residue);
+							}else if ((*it) == 	"HNL-1" )
 							{
-								//property.prev_HN_bond_len = ;
-								//property.prev_has_HN_Hbond;
+								property.prev_HN_HBond_len =  getHN_HBondLen_(prev_residue);
+							}else if ((*it) == "HN-1" )
+							{
+								property.prev_has_HN_HBond = hasHN_HBond_(prev_residue);
+							}else if ((*it) == 	"OHL-1" )
+							{
+								property.prev_O_HBond_len = getO_HBondLen_(prev_residue);
 							}else if ((*it) == 	"OH-1" )
 							{
-								//property.prev_OH_bond_len = ;
+								property.prev_has_O_HBond = hasO_HBond_(prev_residue);
 							}else if ((*it) == 	"Disulfid-1" )
 							{
-								//property.prev_has_disulfid_bond = ;
+								property.prev_has_disulfid_bond = hasDisulfidBond_(prev_residue) ;
 							}
-
 						}
 
 						if (!next_residue)
@@ -282,24 +291,33 @@ printParameters_();
 							}else if ((*it) == 	"CHI2+1")
 							{
 								property.next_chi2_angle = getChi2Angle_(next_residue);
-							}else if ((*it) == 	"HA1+1" )
+							}else if ((*it) == 	"HA1L+1" )
 							{
-								property.next_HA_bond_len= getHA_HBondLen_(next_residue) ;	
-								//property.next_has_HA_Hbond;
+								property.next_HA_HBond_len = getHA_HBondLen_(next_residue) ;	
+							}else if((*it) == 	"HA1+1")
+							{
+								property.next_has_HA_HBond = hasHA_HBond_(next_residue)  ;
+							}else if ((*it) == 	"HA2L+1" )
+							{
+								property.next_HA2_HBond_len = getHA2_HBondLen_(next_residue);
 							}else if ((*it) == 	"HA2+1" )
 							{
-								property.next_HA2_bond_len = getHA2_HBondLen_(next_residue);
-								//property.next_has_HA2_Hbond;
+								property.next_has_HA2_HBond = hasHA2_HBond_(next_residue);
+							}else if ((*it) == 	"HNL+1" )
+							{
+								property.next_HN_HBond_len = getHN_HBondLen_(next_residue);
 							}else if ((*it) == 	"HN+1" )
 							{
-								//property.next_HN_bond_len = ;
-								//property.next_has_HN_Hbond;
+								property.next_has_HN_HBond = hasHN_HBond_(next_residue);
+							}else if ((*it) == 	"OHL+1" )
+							{
+								property.next_O_HBond_len = getO_HBondLen_(next_residue);
 							}else if ((*it) == 	"OH+1" )
 							{
-								//property.next_has_disulfid_bond = ;
+								property.next_has_O_HBond = hasO_HBond_(next_residue);
 							}else if ((*it) == 	"Disulfid+1" )
 							{
-								//property.next_has_disulfid_bond = ;
+								property.next_has_disulfid_bond =	hasDisulfidBond_(next_residue) ;
 							}
 						}
 
@@ -328,28 +346,36 @@ printParameters_();
 						}else if ((*it) == 	"CHI2")
 						{
 							property.chi2_angle = getChi2Angle_(residue);
+						}else if ((*it) == 	"HA1L" )
+						{
+							property.HA_HBond_len = getHA_HBondLen_(residue); 
 						}else if ((*it) == 	"HA1" )
+						{ 	
+							property.has_HA_HBond = hasHA_HBond_(residue);
+						}else if ((*it) == 	"HA2L" )
 						{
-							property.HA_bond_len = getHA_HBondLen_(residue); 
-							//property.has_HA_Hbond;
+							property.HA2_HBond_len =	getHA2_HBondLen_(residue) ;
 						}else if ((*it) == 	"HA2" )
+						{ 	
+							property.has_HA2_HBond = hasHA2_HBond_(residue);
+						}else if ((*it) == 	"HNL" )
 						{
-							property.HA2_bond_len =	getHA2_HBondLen_(residue) ;
-							//property.has_HA2_Hbond;
+							property.HN_HBond_len = getHN_HBondLen_(residue) ;
 						}else if ((*it) == 	"HN" )
 						{
-							//property.HN_bond_len = ;
-							//property.has_HN_Hbond;
+							property.has_HN_HBond = hasHN_HBond_(residue);
+						}else if ((*it) == 	"OHL" )
+						{
+							property.O_HBond_len = getO_HBondLen_(residue);
 						}else if ((*it) == 	"OH" )
 						{
-							//property.OH_bond_len = ;
-							//property.has_O_Hbond = ;
+							property.has_O_HBond = hasO_HBond_(residue);
 						}else if ((*it) == 	"Disulfid" )
 						{
-							//property.has_disulfid_bond = ;
+							property.has_disulfid_bond =	hasDisulfidBond_(residue) ;
 						}						
-						targets_.push_back(property);
 					} 
+					targets_.push_back(property);
 				}
 			}
 		}	
@@ -387,7 +413,7 @@ printParameters_();
 			throw()
 	{
 		std::cout << "\n EHS:Liste der Targets " << std::endl;
-		std::cout << " atom \t FR \t AA \t SS \t PSI \t PHI \t CHI \t CHI2 \t HA \t HA2 \t HN \t OH \t Disulfid " << std::endl;
+		std::cout << " atom\tFR\tAA\tSS\tPSI\tPHI\tCHI\tCHI2\tHAL\tHA\tHA2L\tHA2\tHNL\tHN\tOHL\tOH\tDisulfid" << std::endl;
 		for (Position i = 0; i < targets_.size(); i++)
 		{
 				PropertiesForShift_  p = targets_[i];
@@ -395,8 +421,9 @@ printParameters_();
 
 				std::cout << p.atom->getName() << "\t" << p.is_first_residue << "\t" << p.amino_acid_type << "\t" 
 									<< p.secondary_structure << "\t" << p.psi_angle << "\t" << p.phi_angle << "\t" << p.chi_angle << "\t" 
-									<< p.chi2_angle << "\t" << p.HA_bond_len << "\t" << 	p.HA2_bond_len<< "\t" << 	p.HN_bond_len << "\t" 
-									<< p.OH_bond_len << "\t" << p.has_disulfid_bond << std::endl;
+									<< p.chi2_angle << "\t" << p.HA_HBond_len << "\t"<< p.has_HA_HBond << "\t"
+									<< p.HA2_HBond_len<< "\t"<< p.has_HA2_HBond<<"\t" << 	p.HN_HBond_len << "\t" << p.has_HN_HBond<<"\t"
+									<< p.O_HBond_len << "\t" << p.has_O_HBond << "\t" << p.has_disulfid_bond << std::endl;
 		}
 	}
 	
@@ -600,25 +627,28 @@ printParameters_();
 	{
 		float len = 0.;
 		Atom* HA = 0;
-		Atom* H = 0;
 		
 		AtomIterator r_it = residue->beginAtom();
 		for (; r_it != residue->endAtom(); ++r_it)
 		{	
 			String name = r_it->getName();
-			if (name == "H")
-			{
-				H = &(*r_it);
-			}
-			else if (name == "HA")
+			if (name == "HA")
 			{
 				HA = &(*r_it);
 			}
 		}
 		
-		if (HA && H)
-			len = (HA->getPosition() - H->getPosition()).getLength();
-			
+		if (HA)
+		{	
+			Atom::BondIterator bi = HA->beginBond();
+			for (;+bi;++bi)
+			{	
+				if(bi->getType() == Bond::TYPE__HYDROGEN);
+				{
+					len = bi->getLength();
+				}
+			}
+		}	
 		return len;
 	}	
 
@@ -628,25 +658,28 @@ printParameters_();
 	{
 		float len = 0.;
 		Atom* HA2 = 0;
-		Atom* H = 0;
 		
 		AtomIterator r_it = residue->beginAtom();
 		for (; r_it != residue->endAtom(); ++r_it)
 		{	
 			String name = r_it->getName();
-			if (name == "H")
-			{
-				H = &(*r_it);
-			}
-			else if (name == "HA2")
+			if (name == "HA2")
 			{
 				HA2 = &(*r_it);
 			}
 		}
 		
-		if (HA2 && H)
-			len = (HA2->getPosition() - H->getPosition()).getLength();
-			
+		if (HA2)
+		{	
+			Atom::BondIterator bi = HA2->beginBond();
+			for (;+bi;++bi)
+			{	
+				if(bi->getType() == Bond::TYPE__HYDROGEN);
+				{
+					len = bi->getLength();
+				}
+			}
+		}	
 		return len;
 	}	
 
@@ -655,28 +688,331 @@ printParameters_();
 	{
 		float len = 0.;
 		Atom* HN = 0;
-		Atom* H = 0;
 		
 		AtomIterator r_it = residue->beginAtom();
 		for (; r_it != residue->endAtom(); ++r_it)
 		{	
 			String name = r_it->getName();
-			if (name == "H")
-			{
-				H = &(*r_it);
-			}
-			else if (name == "HN")
+			if (name == "HN")
 			{
 				HN = &(*r_it);
 			}
 		}
 		
-		if (HN && H)
-			len = (HN->getPosition() - H->getPosition()).getLength();
-			
+		if (HN)
+		{
+			Atom::BondIterator bi = HN->beginBond();
+			for (;+bi;++bi)
+			{	
+				if(bi->getType() == Bond::TYPE__HYDROGEN);
+				{
+					len = bi->getLength();
+				}
+			}
+		}	
 		return len;
 	}	
 
+//TODO!!!!!!!!!!!!!!!!!!!!!!!1
+	float 	EmpiricalHSShiftProcessor::getO_HBondLen_(Residue* residue) 
+		throw()
+	{
+		float len = 0.;
+
+		return len;
+	}
+		
+	bool 		EmpiricalHSShiftProcessor::hasDisulfidBond_(Residue* residue)
+		throw()
+	{
+		bool ret = false;
+		Atom* SG = 0;
+		
+		AtomIterator r_it = residue->beginAtom();
+		for (; r_it != residue->endAtom(); ++r_it)
+		{	
+			String name = r_it->getName();
+			if (name == "SG")
+			{
+				SG = &(*r_it);
+			}
+		}
+		
+		if (SG)
+		{
+			Atom::BondIterator bi = SG->beginBond();
+			for (;+bi;++bi)
+			{	
+				if(bi->getType() == Bond::TYPE__DISULPHIDE_BRIDGE);
+				{
+					ret = true;
+				}
+			}
+		}	
+		return ret; 
+	}
+	
+	bool 		EmpiricalHSShiftProcessor::hasHA_HBond_(Residue* residue) 
+		throw()
+	{		
+		bool ret= false;
+		Atom* HA = 0;
+		
+		AtomIterator r_it = residue->beginAtom();
+		for (; r_it != residue->endAtom(); ++r_it)
+		{	
+			String name = r_it->getName();
+			if (name == "HA")
+			{
+				HA = &(*r_it);
+			}
+		}
+		
+		if (HA)
+		{	
+			Atom::BondIterator bi = HA->beginBond();
+			for (;+bi;++bi)
+			{	
+				if(bi->getType() == Bond::TYPE__HYDROGEN);
+				{
+					ret = true;
+				}
+			}
+		}	
+
+		return ret; 
+	}
+	
+
+	bool 		EmpiricalHSShiftProcessor::hasHA2_HBond_(Residue* residue) 
+		throw()
+	{
+		bool ret = false; 
+		Atom* HA2 = 0;
+		
+		AtomIterator r_it = residue->beginAtom();
+		for (; r_it != residue->endAtom(); ++r_it)
+		{	
+			String name = r_it->getName();
+			if (name == "HA2")
+			{
+				HA2 = &(*r_it);
+			}
+		}
+		
+		if (HA2)
+		{	
+			Atom::BondIterator bi = HA2->beginBond();
+			for (;+bi;++bi)
+			{	
+				if(bi->getType() == Bond::TYPE__HYDROGEN);
+				{
+					ret = true;
+				}
+			}
+		}	
+		return ret;
+	}
+
+	bool 		EmpiricalHSShiftProcessor::hasHN_HBond_(Residue* residue)
+		throw()
+	{
+		bool ret = false;
+		Atom* HN = 0;
+		
+		AtomIterator r_it = residue->beginAtom();
+		for (; r_it != residue->endAtom(); ++r_it)
+		{	
+			String name = r_it->getName();
+			if (name == "HN")
+			{
+				HN = &(*r_it);
+			}
+		}
+		
+		if (HN)
+		{
+			Atom::BondIterator bi = HN->beginBond();
+			for (;+bi;++bi)
+			{	
+				if(bi->getType() == Bond::TYPE__HYDROGEN);
+				{
+					ret = true;	
+				}
+			}
+		}	
+		return ret;
+	}
+
+	bool 		EmpiricalHSShiftProcessor::hasO_HBond_(Residue* residue) 
+		throw()
+	{
+		return false; 
+	}
+
+
+
+
+	void EmpiricalHSShiftProcessor::CubicSpline1D::createSpline(const std::vector<float>& sample_positions, 
+											const std::vector<float>& sample_values)
+	{
+		float p, qn, sig,un;
+		std::vector<float> u;
+
+		sample_positions_ = sample_positions;
+		sample_values_ = sample_values;
+		int n = sample_positions.size();
+
+		//initialize the vectors
+		curvature_.resize(n,0.);
+		u.resize(n,0.); 
+
+		//natural spline
+		curvature_[0] = 0.;        //-0.5;
+		u[0] = 0.0;                // (3.0/(sample_positions[1]-sample_positions[0]))*((sample_values[1]-sample_values[0])/(sample_positions[1]-sample_positions[0])-yp1);
+
+		for (int i=1;i <= n-1;i++) 
+		{
+			//This is the decomposition loop of the tridiagonal algorithm.
+			//curvature_ and u are used for temporary
+			//storage of the decomposed factors.
+			sig=(sample_positions[i]-sample_positions[i-1])/(sample_positions[i+1]-sample_positions[i-1]);
+			p=sig*curvature_[i-1]+2.0;
+			curvature_[i]=(sig-1.0)/p;
+			u[i]=(sample_values[i+1]-sample_values[i])/(sample_positions[i+1]-sample_positions[i]) - (sample_values[i]-sample_values[i-1])/(sample_positions[i]-sample_positions[i-1]);
+			u[i]=(6.0*u[i]/(sample_positions[i+1]-sample_positions[i-1])-sig*u[i-1])/p;
+		}
+
+		// for natural splines 
+		qn = 0.0;
+		un = 0.0; 
+		/*else
+		 * we have a specified first derivative.
+		 qn=0.5;
+		 un=(3.0/(sample_positions[n]-sample_positions[n-1]))*(ypn-(sample_values[n]-sample_values[n-1])/(sample_positions[n]-sample_positions[n-1]));
+		 */
+
+		curvature_[n-1]=(un-qn*u[n-2])/(qn*curvature_[n-2]+1.0);
+
+		//This is the backsubstitution loop of the tridiagonal algorithm.
+		for (int k=n-2;k>=0;k--) 
+		{	
+			curvature_[k]=curvature_[k]*curvature_[k+1]+u[k]; 
+		}	
+		return;	
+	}
+
+	vector<float>& EmpiricalHSShiftProcessor::CubicSpline1D::getCurvature()
+	{
+		std::cout <<"getCurvature" << std::endl;
+		return curvature_;
+	}				
+
+	void EmpiricalHSShiftProcessor::CubicSpline1D::setCurvature(std::vector<float> curvature)
+	{
+		std::cout <<"setCurvature" << std::endl;
+
+		curvature_ = curvature;
+	}
+	
+	void EmpiricalHSShiftProcessor::CubicSpline1D::setValues(std::vector<float> values)
+	{
+		std::cout << "setValues"<< std::endl;
+
+		sample_values_ = values;
+	}
+	
+	void EmpiricalHSShiftProcessor::CubicSpline1D::setPositions(std::vector<float> positions)
+	{
+		std::cout <<"setPositions" << std::endl;
+
+		sample_positions_= positions;
+	}
+
+	float EmpiricalHSShiftProcessor::CubicSpline1D::operator() (float x)
+	{
+		unsigned int n=sample_positions_.size();
+		// is this x position allowed?
+		if ((x < sample_positions_[0]) || (x>sample_positions_[n-1]))
+		{
+			// something _really_ bad happened
+			std::cerr << "invalid x position" << std::endl;
+			return std::numeric_limits<float>::min();
+		}
+
+		// first, we find the indices bracketing the value x. we use bisection here
+		int lower_bound=0, upper_bound=n-1;
+		int index;
+		while (upper_bound - lower_bound > 1) 
+		{
+			index=(upper_bound + lower_bound)/2;
+			if (sample_positions_[index] > x) upper_bound=index;
+			else lower_bound=index;
+		} 
+		float spacing=sample_positions_[upper_bound]-sample_positions_[lower_bound];
+		if (spacing == 0.0)
+		{
+			std::cerr << "Zero length interval" << std::endl;
+			return std::numeric_limits<float>::min();
+		}
+
+		float a = (sample_positions_[upper_bound]-x)/spacing; 
+		float b = (x-sample_positions_[lower_bound])/spacing;
+
+		float result = a*sample_values_[lower_bound]+b*sample_values_[upper_bound]
+			+((a*a*a-a)*curvature_[lower_bound]+(b*b*b-b)*curvature_[upper_bound])*(spacing*spacing)/6.0;
+
+		return result;
+	}
+
+
+	void EmpiricalHSShiftProcessor::CubicSpline2D::createBiCubicSpline(const std::vector<std::vector<float> >& sample_positions_x, 
+																				const std::vector<float>& sample_positions_y, 
+																			  const std::vector<std::vector<float> >& sample_values) 
+	{
+		std::cout <<"createBICubicSpline" << std::endl;
+
+		sample_positions_x_=sample_positions_x;
+		sample_positions_y_=sample_positions_y;
+		int m = sample_positions_x_.size();
+
+		CubicSpline1D cs;
+
+		for (int j = 0; j < m; j++)
+		{
+			// compute a 1Dspline
+			cs.createSpline(sample_positions_x[j], sample_values[j]);
+
+			// store the spline
+			splines_.push_back(cs);	
+		}
+
+	}
+
+	float EmpiricalHSShiftProcessor::CubicSpline2D::operator () (float x, float y)
+	{
+
+		CubicSpline1D cs;
+
+		std::vector<float> positions;
+		std::vector<float> values; 
+
+		// number of rows
+		int n = sample_positions_y_.size();  
+
+		//evaluate the stored help table at position x
+		for (int i = 0; i < n ;i++)
+		{
+			values.push_back(splines_[i](x));
+		}
+
+		// construct a new spline at these positions
+		cs.createSpline(sample_positions_y_, values);
+
+		//evaluate the new spline at position y
+		return cs(y);
+	}
+	
 	EmpiricalHSShiftProcessor::PropertiesForShift_::PropertiesForShift_()
 		throw()
 	{
@@ -687,13 +1023,14 @@ printParameters_();
 		phi_angle = 0.;
 		chi_angle = 0.;
 		chi2_angle = 0.;
-		HA_bond_len	= 0.;	
-		has_HA_Hbond = false; // unknown
-		HA2_bond_len = 0.;
-		has_HA_Hbond = false; // unknown
-		HN_bond_len = 0.;
-		has_HN_Hbond = false;
-		OH_bond_len = 0.;
+		HA_HBond_len	= 0.;	
+		has_HA_HBond = false; // unknown
+		HA2_HBond_len = 0.;
+		has_HA2_HBond = false; // unknown
+		HN_HBond_len = 0.;
+		has_HN_HBond = false;
+		O_HBond_len = 0.;	
+		has_O_HBond = false;
 		has_disulfid_bond = false;
 		prev_is_first_residue = false;
 		prev_amino_acid_type = ' ';
@@ -702,13 +1039,14 @@ printParameters_();
 		prev_phi_angle = 0.;
 		prev_chi_angle = 0.;
 		prev_chi2_angle = 0.;
-		prev_HA_bond_len	= 0.;	
-		prev_has_HA_Hbond = false; // unknown
-		prev_HA2_bond_len = 0.;
-		prev_has_HA_Hbond = false; // unknown
-		prev_HN_bond_len = 0.;
-		prev_has_HN_Hbond = false;
-		prev_OH_bond_len = 0.;
+		prev_HA_HBond_len	= 0.;	
+		prev_has_HA_HBond = false; // unknown
+		prev_HA2_HBond_len = 0.;
+		prev_has_HA_HBond = false; // unknown
+		prev_HN_HBond_len = 0.;
+		prev_has_HN_HBond = false;
+		prev_O_HBond_len = 0.;	
+		prev_has_O_HBond = false;
 		prev_has_disulfid_bond = false;
 		next_is_first_residue = false;
 		next_amino_acid_type = ' ';
@@ -717,13 +1055,14 @@ printParameters_();
 		next_phi_angle = 0.;
 		next_chi_angle = 0.;
 		next_chi2_angle = 0.;
-		next_HA_bond_len	= 0.;	
-		next_has_HA_Hbond = false; // unknown
-		next_HA2_bond_len = 0.;
-		next_has_HA_Hbond = false; // unknown
-		next_HN_bond_len = 0.;
-		next_has_HN_Hbond = false;
-		next_OH_bond_len = 0.;
+		next_HA_HBond_len	= 0.;	
+		next_has_HA_HBond = false; // unknown
+		next_HA2_HBond_len = 0.;
+		next_has_HA_HBond = false; // unknown
+		next_HN_HBond_len = 0.;
+		next_has_HN_HBond = false;
+		next_O_HBond_len = 0.;
+		next_has_O_HBond = false;
 		next_has_disulfid_bond = false;
 	}
 } // namespace BALL
