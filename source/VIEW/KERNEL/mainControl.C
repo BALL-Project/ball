@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.30 2006/07/23 22:54:17 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.31 2006/07/24 07:25:26 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -237,13 +237,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			rep_label_delta_ = 32;
 			was_not_busy_ = false;
 
-			render_timer_.start(200);
+			render_timer_.start(300);
 
 			simulation_icon_ = new QLabel(statusBar());
 			simulation_icon_->setMaximumSize(14,20);
 			simulation_icon_->setMinimumSize(14,20);
 			simulation_icon_->setToolTip("simulation running");
-			simulation_icon_->setText("S");
 			statusBar()->addPermanentWidget(simulation_icon_, false );
 			QPixmap icon(simulation_running_xpm_);
 
