@@ -453,7 +453,6 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 	}
 
 	void  HaighMallionShiftProcessor::printTargets_()
-		throw()
 	{
 		std::cout << "********* \n HM:Liste der Targets " << std::endl;
 		for (Position i = 0; i<targets_.size(); i++)
@@ -465,7 +464,6 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 	}
 
 	void  HaighMallionShiftProcessor::printEffectors_()
-		throw()
 	{
 		std::cout << "********* \n HM:Liste der Effectoren " << std::endl;
 		vector< vector<Atom*> >::const_iterator effector_it = effectors_.begin();
@@ -480,7 +478,6 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 	}
 
 	void  HaighMallionShiftProcessor::printParameters_()
-		throw()
 	{
 		std::cout << "********* \n HM:Liste der Parameter " << std::endl;
 		std::cout << "\teffector_names" << std::endl;

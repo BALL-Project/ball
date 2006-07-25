@@ -206,9 +206,9 @@ namespace BALL
 		std::vector<Atom* >										targets_;
 	
 		private:
-		void 			printParameters_() throw();
-		void  		printEffectors_() throw();
-		void 			printTargets_() throw();
+		void 			printParameters_();
+		void  		printEffectors_();
+		void 			printTargets_();
 
 	};
   

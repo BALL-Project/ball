@@ -210,7 +210,7 @@ printParameters_();
 						}
 						else
 						{
-							if ((*it) == 	"FirstResidue-1" )
+							if ((*it) == 	"FR-1" )
 							{	
 								property.prev_is_first_residue = prev_residue->isTerminal();
 							}
@@ -268,7 +268,7 @@ printParameters_();
 						}
 						else
 						{
-							if ((*it) == 	"FirstResidue+1" )
+							if ((*it) == 	"FR+1" )
 							{	
 								//std::cout << "FirstResidue +1" << (*it)<< std::endl;
 								property.next_is_first_residue = next_residue->isTerminal();
@@ -322,7 +322,7 @@ printParameters_();
 						}
 
 						
-						if ((*it) == "FirstResidue" )
+						if ((*it) == "FR" )
 						{
 		//std::cout << "FirstResidue" << (*it)<< std::endl;
 							property.is_first_residue = residue->isTerminal();
@@ -594,7 +594,12 @@ printParameters_();
 	void EmpiricalHSShiftProcessor::setSecondaryStructure_(Residue* residue, char& property) 
 		throw()
 	{
-		if (residue->getSecondaryStructure()->getType() == SecondaryStructure::COIL)
+		if (residue->getSecondaryStructure() == 0)
+		{
+			property = '?';
+			Log.info() << "No secondary structure available. Consider precomputing !" << std::endl;
+		}
+		else if (residue->getSecondaryStructure()->getType() == SecondaryStructure::COIL)
 		{
 			property = 'C';
 		}else if (residue->getSecondaryStructure()->getType() == SecondaryStructure::HELIX)
