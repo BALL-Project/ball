@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.C,v 1.34.2.6 2006/05/12 13:24:26 amoll Exp $
+// $Id: downloadPDBFile.C,v 1.34.2.7 2006/07/27 00:14:10 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
@@ -138,7 +138,7 @@ void DownloadPDBFile::slotDownload()
 	try
 	{
 		String id = ascii(pdbId->text());
-		String url = "http://pdbbeta.rcsb.org/pdb/displayFile.do?fileFormat=PDB&structureId=";
+		String url = "http://www.rcsb.org/pdb/displayFile.do?fileFormat=PDB&structureId=";
 		url += id;
 		String temp_filename = VIEW::createTemporaryFilename();
 		thread_->setFilename(temp_filename);
