@@ -34,6 +34,58 @@ namespace BALL
 				@see ShiftModule::PROPERTY__SHIFT
 		*/
 		static const char* PROPERTY__EHS_SHIFT;
+	
+		enum PROPERTIES  {
+			FR,
+			AA,
+			SS,
+			PHI,
+			PSI, 
+			CHI,
+			CHI2,
+			HA1L, 
+			HA1,
+			HA2L, 
+			HA2,
+			HNL,
+			HN,
+			OH,
+			OHL,
+			DISULFIDE,
+			FR_N,
+			AA_N,
+			SS_N,
+			PHI_N,
+			PSI_N, 
+			CHI_N,
+			CHI2_N,
+			HA1L_N, 
+			HA1_N,
+			HA2L_N, 
+			HA2_N,
+			HNL_N,
+			HN_N,
+			OH_N,
+			OHL_N,
+			DISULFIDE_N,
+			FR_P,
+			AA_P,
+			SS_P,
+			PHI_P,
+			PSI_P, 
+			CHI_P,
+			CHI2_P,
+			HA1L_P, 
+			HA1_P,
+			HA2L_P, 
+			HA2_P,
+			HNL_P,
+			HN_P,
+			OH_P,
+			OHL_P,
+			DISULFIDE_P
+		};
+			
 		
 		//@}
 		/** @name	Constructors and Destructors.
@@ -130,10 +182,10 @@ namespace BALL
 		
 	/** nested classe for computing Bicubic splines 
  	*/
-		class CubicSpline1D
+		class CubicSpline1D_
 		{
 			public:
-				CubicSpline1D() {};
+				CubicSpline1D_() {};
 
 				void createSpline(const std::vector<float>& sample_positions, 
 						const std::vector<float>& sample_values); // spline
@@ -150,10 +202,10 @@ namespace BALL
 		};
 
 
-		class CubicSpline2D
+		class CubicSpline2D_
 		{
 			public:
-				CubicSpline2D() {};
+				CubicSpline2D_() {};
 
 				//precompute the second derivatives	
 				void createBiCubicSpline(const std::vector<std::vector<float> >& sample_positions_x,
@@ -164,21 +216,56 @@ namespace BALL
 			private :
 				std::vector< std::vector<float> > sample_positions_x_;
 				std::vector<float> sample_positions_y_;
-				std::vector<CubicSpline1D> splines_;
+				std::vector<CubicSpline1D_> splines_;
 		};
 
 
 
-
-
+		/*_ neested class for storing the properties of an atom
+		 */	
 		class BALL_EXPORT PropertiesForShift_
 		{
 			public:
+			
+								
 				PropertiesForShift_() throw();
 
 				/** current target atom
 				 */
 				Atom*				atom;
+
+				/**	 compute for the given atom all properites specified in the property set
+				 **/
+				bool computeProperties_(Atom* atom, std::set<String> properties) 	throw();  
+
+				/** obtain a property. we return a std::pair<float, String> with the property that:
+				 *    the first element is std::numeric_limits<float>::min() if it is a discrete property
+				 *    the second element is the string "invalid" if it is a continuous property
+				 */
+				std::pair<float, String> operator [] (const String& property_name) throw();
+
+
+			protected:
+				std::map<String, float>  properties_real_;  
+				std::map<String, String> properties_string_;
+
+			protected:
+				
+				float			getChiAngle_(Residue* residue) throw();
+				float			getChi2Angle_(Residue* residue) throw();
+				char 			getAminoAcid_(Residue* residue) throw();
+				char 			getSecondaryStructure_(Residue* residue) throw();
+				float 		getHA_HBondLen_(Residue* residue) throw();
+				float 		getHA2_HBondLen_(Residue* residue) throw();
+				float 		getHN_HBondLen_(Residue* residue) throw();
+				float 		getO_HBondLen_(Residue* residue) throw();
+				bool 			hasDisulfidBond_(Residue* residue) throw();
+				bool 			hasHA_HBond_(Residue* residue) throw();
+				bool 			hasHA2_HBond_(Residue* residue) throw();
+				bool 			hasHN_HBond_(Residue* residue) throw();
+				bool 			hasO_HBond_(Residue* residue) throw();
+
+				
 				/**	is the current atom in the first residue of a chain? 
 				 */
 				bool 				is_first_residue;
@@ -284,7 +371,61 @@ namespace BALL
 				bool				hydrogen_bond_status;
 
 		}; // end of nested class
+		
+
+		/*_ neested class for storing the hypersurfaces of a 
+		 * pair of properties. 
+		 **/
+		
+		class ShiftHyperSurface_
+		{
+			public:
+				
+				/**	@name Enums and Constants
+				*/
+				//@{	
+				
+				enum HYPERSURFACE__TYPE{
+				REAL__REAL,
+				REAL__DISCRETE,
+				DISCRETE__REAL,
+				DISCRETE__DISCRETE,
+				CHI__REAL,
+				REAL__CHI,
+				CHI__DISCRETE,
+				DISCRETE__CHI,
+				CHI__CHI
+				};
+
+				/*_  Constructor
+				 */
+				ShiftHyperSurface_() throw();
+				
+				ShiftHyperSurface_(String filename, String atomtype, String firstproperty, String secondproperty) throw();  
+				
+				/** computes the shift of an atom. 
+				 */
+				float operator () (PropertiesForShift_& properties) throw();	
+
+						
+			private:
+				int type_;
+			 	String  first_property_;
+				String  second_property_;
+
+				// temporary variables for the property value detection
+				float float_property_;
+				String string_property_;
+
+				CubicSpline2D_ 															s2d_;
+				std::map<String, CubicSpline1D_ > 					s1d_; 
+				std::map <String, std::map<String, float> > table_;
 					
+		};
+
+
+
+		
 		/*_	The targeted atoms collected by {\tt operator ()}.
 				*/
 				std::vector<PropertiesForShift_> 				targets_;
@@ -292,14 +433,14 @@ namespace BALL
 				/*_ The target types stored as a vector of strings collected from the ini-file
 				 *  by {\tt init ()}.
 				 */
-				std::vector<String>											target_names_;	
+				vector<String>											target_names_;	
 
 				/*_ The target properties used for determine the 
 				 * empirical hypersurface shifts. The properties are collected 
 				 * from the ini-file by {\tt init ()} and are stored per target atom
 				 * in the same order as the target_names.
 				 */
-				std::vector< std::set<String> >			target_property_names_;
+				vector< std::set<String> >			target_property_names_;
 				
 				/*_ The files storing the property-data-splines for computing the
 				 * shift contributions are stored in a map, whose key is the pair of
@@ -308,25 +449,22 @@ namespace BALL
 				 * The files are specified in the section {\tt EmpiricalShiftHyperSurfaces} 
 				 * of the file {\tt ShiftX.ini} and are collected by {\tt init ()}.
 				 */
-				std::vector< std::map< std::pair<String, String>, String >	>		property_files_;
-					
+				vector< std::map< std::pair<String, String>, String >	>		property_files_; 
+			
+				vector< vector< std::pair<String, String> > >  property_pairs_;
+				
+				/*_ The hypersurfaces are precomputed by {\tt init()}
+				 *  and then are stored in this map with key atom_type
+				 *  Each entry itself is a map to with a pair of properties as key 
+				 */
+			
+				std::map<String, std::map <std::pair<String, String>,EmpiricalHSShiftProcessor::ShiftHyperSurface_> > hypersurfaces_;
+				
+				
 			private:
 					void 			printParameters_() throw();
 					void 			printTargets_() throw();
-					float			getChiAngle_(Residue* residue) throw();
-					float			getChi2Angle_(Residue* residue) throw();
-					void 			setAminoAcid_(Residue* residue, char& property) throw();
-					void 			setSecondaryStructure_(Residue* residue, char& property) throw();
-					float 		getHA_HBondLen_(Residue* residue) throw();
-					float 		getHA2_HBondLen_(Residue* residue) throw();
-					float 		getHN_HBondLen_(Residue* residue) throw();
-					float 		getO_HBondLen_(Residue* residue) throw();
-					bool 			hasDisulfidBond_(Residue* residue) throw();
-					bool 			hasHA_HBond_(Residue* residue) throw();
-					bool 			hasHA2_HBond_(Residue* residue) throw();
-					bool 			hasHN_HBond_(Residue* residue) throw();
-					bool 			hasO_HBond_(Residue* residue) throw();
-
+				
 
 
 	};//End of class
