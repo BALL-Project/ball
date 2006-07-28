@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.62 2006/07/28 13:25:41 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.63 2006/07/28 13:30:37 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -251,8 +251,8 @@ namespace BALL
 			glEnable(GL_TEXTURE_1D);
 			glGenTextures(1, &cel_texture_);		
 			glBindTexture(GL_TEXTURE_1D, cel_texture_);	
-			glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	
-			glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	
+			glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB, 32, 0, GL_RGB , GL_FLOAT, cel_shader_data);
 			glBindTexture(GL_TEXTURE_1D, 0);	
 
