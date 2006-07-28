@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.25.2.12 2006/07/21 14:29:12 amoll Exp $
+// $Id: backboneModel.C,v 1.25.2.13 2006/07/28 12:40:41 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -494,6 +494,22 @@ bool AddBackboneModel::createGeometricObjects()
 	}
 
  	clear_();
+
+
+	GeometricObjectList::Iterator it = geometric_objects_.begin();
+	for (; it != geometric_objects_.end(); ++it)
+	{
+		Mesh* mesh = dynamic_cast<Mesh*>(*it);
+		if (mesh == 0) continue;
+
+		vector<Vector3>& normals = mesh->normal;
+		for (Position p = 0; p < normals.size(); p++)
+		{
+			float square_length = normals[p].getSquareLength();
+			if (square_length > 0) normals[p] /= sqrt(square_length);
+		}
+	}
+
 
 	return true;
 }
