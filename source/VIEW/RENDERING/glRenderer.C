@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.60 2006/07/17 00:02:35 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.61 2006/07/28 11:31:43 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1155,6 +1155,9 @@ namespace BALL
   				if (value < 0.) value = 0.;
 					tex_values.push_back(value);
 				}
+
+				// prevent problems with single colored meshes:
+				if (mesh.colors.size() > 0) setColorRGBA_(mesh.colors[0]);
 
 				glBegin(GL_TRIANGLES);
 				for (Size index = 0; index < nr_triangles; ++index)
