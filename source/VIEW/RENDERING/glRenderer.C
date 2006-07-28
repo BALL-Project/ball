@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.63 2006/07/28 13:30:37 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.64 2006/07/28 14:26:12 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -237,6 +237,7 @@ namespace BALL
 
 			//////////////////////////////////////////////////////
 			// toon shader:
+			// first entries: greatest angle between normal and light vector
 			float shader[32] = { 0.2, 0.21, 0.23, 0.25, 0.27, 0.29, 0.31, 0.33, 0.36, 0.39, 0.41, 0.4, 0.44, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
 
 			float cel_shader_data[32][3];
@@ -251,8 +252,6 @@ namespace BALL
 			glEnable(GL_TEXTURE_1D);
 			glGenTextures(1, &cel_texture_);		
 			glBindTexture(GL_TEXTURE_1D, cel_texture_);	
-			glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	
-			glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB, 32, 0, GL_RGB , GL_FLOAT, cel_shader_data);
 			glBindTexture(GL_TEXTURE_1D, 0);	
 
@@ -1137,17 +1136,27 @@ namespace BALL
  				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
  				glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
 
+				// some artefacts when using GL_LINEAR:
+//   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	
+//   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+ 				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	
+ 				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
 				vector<float> tex_values;
 				tex_values.reserve(mesh.normal.size());
  				Vector3 vv = -scene_->getStage()->getCamera().getViewVector() ;
 				vv.normalize();
+				// other light positions possible:
 //    				vv += scene_->getStage()->getCamera().getLookUpVector() / 2.0;
 //    				vv += scene_->getStage()->getCamera().getRightVector() / 2.0;
 //    				vv.normalize();
 
+				float v;
 				for (Position p = 0; p < mesh.normal.size(); p++)
 				{
-					tex_values.push_back(BALL_MAX(mesh.normal[p] * vv, 0.));
+					v = mesh.normal[p] * vv;
+					if (v < 0.) v *= -1.;
+					tex_values.push_back(BALL_MIN(1., v));
 				}
 
 				// prevent problems with single colored meshes:
