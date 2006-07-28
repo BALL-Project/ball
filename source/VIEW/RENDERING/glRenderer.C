@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.61 2006/07/28 11:31:43 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.62 2006/07/28 13:25:41 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -237,7 +237,7 @@ namespace BALL
 
 			//////////////////////////////////////////////////////
 			// toon shader:
-			float shader[32] = { 0.1, 0.2, 0.2, 0.2, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.2, 1.5, 1.7, 1.9 };
+			float shader[32] = { 0.2, 0.21, 0.23, 0.25, 0.27, 0.29, 0.31, 0.33, 0.36, 0.39, 0.41, 0.4, 0.44, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
 
 			float cel_shader_data[32][3];
 
@@ -1141,19 +1141,13 @@ namespace BALL
 				tex_values.reserve(mesh.normal.size());
  				Vector3 vv = -scene_->getStage()->getCamera().getViewVector() ;
 				vv.normalize();
-				vv += scene_->getStage()->getCamera().getLookUpVector() / 3.0;
-				vv += scene_->getStage()->getCamera().getRightVector() / 3.0;
-				vv.normalize();
+//    				vv += scene_->getStage()->getCamera().getLookUpVector() / 2.0;
+//    				vv += scene_->getStage()->getCamera().getRightVector() / 2.0;
+//    				vv.normalize();
 
-				Vector3 v;
-				float value;
 				for (Position p = 0; p < mesh.normal.size(); p++)
 				{
- 					v = mesh.normal[p];
-					if (!Maths::isZero(v.getSquareLength())) v.normalize();
-					value = v * vv;
-  				if (value < 0.) value = 0.;
-					tex_values.push_back(value);
+					tex_values.push_back(BALL_MAX(mesh.normal[p] * vv, 0.));
 				}
 
 				// prevent problems with single colored meshes:
