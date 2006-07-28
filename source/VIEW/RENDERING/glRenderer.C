@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.64 2006/07/28 14:26:12 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.65 2006/07/28 14:29:34 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1155,7 +1155,7 @@ namespace BALL
 				for (Position p = 0; p < mesh.normal.size(); p++)
 				{
 					v = mesh.normal[p] * vv;
-					if (v < 0.) v *= -1.;
+					if (v < 0.) v = 0.;
 					tex_values.push_back(BALL_MIN(1., v));
 				}
 
