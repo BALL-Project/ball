@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.10 2006/07/05 13:16:03 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.11 2006/08/02 15:15:24 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -125,6 +125,7 @@ namespace BALL
 			// first check if user has aborted (re)docking
 			if (RTTI::isKindOf<DockingFinishedMessage>(*message))
 			{
+				setStatusbarText("Docking finished.", true);
 				DockingFinishedMessage* dfm = RTTI::castTo<DockingFinishedMessage>(*message);
 				
 				unlockComposites();
@@ -290,25 +291,41 @@ namespace BALL
 			{
 				Log.error() << it->first << " " << it->second << std::endl;
 			}
-
-			// keep the larger protein in System A and the smaller one in System B
-			// and setup the algorithm
-			if (dock_dialog_.getSystem1()->countAtoms() < dock_dialog_.getSystem2()->countAtoms())
+			Log.error() << "-------------------------------" << std::endl;
+			
+			if(RTTI::isKindOf<EvolutionaryDocking>(*dock_alg_))
 			{
-				dock_alg_->setup(*(dock_dialog_.getSystem2()), *(dock_dialog_.getSystem1()), dock_dialog_.getAlgorithmOptions());
+				it = dock_dialog_.getForceField()->options.begin();
+				for (; +it; ++it)
+				{
+					Log.error() << it->first << " " << it->second << std::endl;
+				}
+				Log.error() << "-------------------------------" << std::endl;
+
+				EvolutionaryDocking* ed = RTTI::castTo<EvolutionaryDocking>(*dock_alg_);
+				QMessageBox error_message("Information","Creating the energy grid may take a while...", 
+																		QMessageBox::Information,
+																		QMessageBox::NoButton,
+																		QMessageBox::NoButton,
+																		QMessageBox::NoButton);
+				error_message.exec();
+				ed->setup(*(dock_dialog_.getSystem1()), *(dock_dialog_.getSystem2()), dock_dialog_.getAlgorithmOptions(),dock_dialog_.getForceField());
+				error_message.close();
 			}
 			else
 			{
-				dock_alg_->setup(*(dock_dialog_.getSystem1()), *(dock_dialog_.getSystem2()), dock_dialog_.getAlgorithmOptions());
+				// keep the larger protein in System A and the smaller one in System B
+				// and setup the algorithm
+				if (dock_dialog_.getSystem1()->countAtoms() < dock_dialog_.getSystem2()->countAtoms())
+				{
+					dock_alg_->setup(*(dock_dialog_.getSystem2()), *(dock_dialog_.getSystem1()), dock_dialog_.getAlgorithmOptions());
+				}
+				else
+				{
+					dock_alg_->setup(*(dock_dialog_.getSystem1()), *(dock_dialog_.getSystem2()), dock_dialog_.getAlgorithmOptions());
+				}
 			}
 
-			// set force field options for the ff used in certain algorithms, e.g. evolutionary docking
-			if(RTTI::isKindOf<EvolutionaryDocking>(*dock_alg_))
-			{
-				EvolutionaryDocking* ed = RTTI::castTo<EvolutionaryDocking>(*dock_alg_);
-				//ed->setForceField(dock_dialog_.getForceField());
-			}
-							
 			// ============================= WITH MULTITHREADING ====================================
 			#ifdef BALL_QT_HAS_THREADS
 				if (!(getMainControl()->lockCompositesFor(this))) return;
@@ -326,19 +343,20 @@ namespace BALL
 																		dock_dialog_.getAlgorithmOptions(),
 																		dock_dialog_.getScoringOptions());
 				progress_dialog_->setDockingAlgorithm(dock_alg_);
-			
+				
+				setStatusbarText("Starting docking...", true);
 				// start thread
 				// function calls DockingThread::run()
 				thread->start();
-				//progress_dialog_->show();
+				progress_dialog_->show();
 
-				switch(index)
+				/*switch(index)
 				{
 					case EVOLUTION_DOCKING:
 						// start timer, true -> it is a single shot
       			timer_.start(1000);
 						break;
-				}
+				}*/
 				
 			// ============================= WITHOUT MULTITHREADING =================================
 			#else
@@ -380,7 +398,6 @@ namespace BALL
 			EnergeticEvaluation* scoring = 0;
 			//check which scoring function is chosen
 			Index index = dock_dialog_.scoring_functions->currentIndex();
-			
 			switch(index)
 			{
 				case DEFAULT:
@@ -403,7 +420,7 @@ namespace BALL
 					scoring = new RandomEvaluation;
 					break;
 			}
-		
+
 			if (!scoring) return false;
 			
 			// apply scoring function; set new scores in the conformation set
@@ -434,16 +451,26 @@ namespace BALL
 		
 			// sort vector ranked_conformations by snapshot numbers
 			sort(ranked_conformations.begin(), ranked_conformations.end());
-			
+
 			dock_res->addScoring(ascii(dock_dialog_.scoring_functions->currentText()), dock_dialog_.getScoringOptions(), ranked_conformations);
 
-			// add docked system to BALLView structures
-			const SnapShot& best_result = (*conformation_set)[0];
+			// add docked system to BALLView structures if no intermediate result was shown during docking run
+			//CompositeManager& composite_manager = getMainControl()->getCompositeManager();
+			//if(!composite_manager.has(&(conformation_set->getSystem())))
+			if(docked_system_ == NULL)
+			{
+				docked_system_ = &conformation_set->getSystem();
+				
+				const SnapShot& best_result = (*conformation_set)[0];
+				best_result.applySnapShot(*docked_system_);
 
-			//best_result.applySnapShot(*docked_system_);
-			getMainControl()->update(*docked_system_,true);
-			//getMainControl()->insert(conformation_set->getSystem());
-			
+				getMainControl()->insert(*docked_system_);
+			}
+			else
+			{
+				getMainControl()->update(*docked_system_,true);
+			}
+
 			// send a DockResultMessage
 			NewDockResultMessage* dock_res_m = new NewDockResultMessage();
 			// message is deleted by ConnectionObject
@@ -492,7 +519,6 @@ namespace BALL
 			{
 			 	timer_.start(1000);
 			}
-
 		}
 
 	} // end of namespace View
