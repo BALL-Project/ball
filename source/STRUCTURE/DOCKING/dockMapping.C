@@ -48,8 +48,6 @@ namespace BALL
 	ligand_positions_(dm.ligand_positions_),
 	redraw_(dm.redraw_)
   {
-    if (dm.amber_ != 0) 
-      amber_ = new AmberFF(*(dm.amber_));
     if (dm.eg_ != 0) 
       eg_ = new EnergyGrid(*(dm.eg_));
     if (dm.rb_ !=0) 
@@ -60,10 +58,11 @@ namespace BALL
   DockMapping::DockMapping(System& sys_lig, 
 			   const String& file,
 			   Vector3 t_box_lower, 
-			   Vector3 t_box_higer)
-    :amber_(0)
+			   Vector3 t_box_higer,
+			   ForceField* ff)
+    :ff_(ff)
   {
-    setup(sys_lig,file,t_box_lower,t_box_higer);
+    setup(sys_lig,file,t_box_lower,t_box_higer,ff);
   }
 
   
@@ -72,9 +71,9 @@ namespace BALL
     if (this == &dm) 
       return *this;
     
-    delete amber_;
-    if (dm.amber_ != 0) 
-      amber_ = new AmberFF(*(dm.amber_));
+    //!!!!!!!!!!!!!!!!!!!
+    // if (dm.amber_ != 0) 
+    //ff_ = new (*(dm.amber_));
     
     delete eg_;
     if (dm.eg_ != 0) 
@@ -103,8 +102,12 @@ namespace BALL
   void DockMapping::setup( System& sys_lig, 
 			   const String& file,
 			   Vector3 t_box_lower, 
-			   Vector3 t_box_higher)
+			   Vector3 t_box_higher,
+			   ForceField* ff)
   {
+    
+    ff_ = ff;
+    
     redraw_ = false;
     
     ligand_ = new Molecule(*(sys_lig.getMolecule(0)));
@@ -163,23 +166,6 @@ namespace BALL
 	t_extension_ += higher;
       }
 
-    /** create new amber ff
-     */
-    delete amber_;
-    amber_ = new AmberFF;
-   
-    Path path;
-    String amber94gly = path.find("Amber/amber94gly.ini");
-    opt_.set(BALL::AmberFF::Option::FILENAME, amber94gly);
-    opt_.set(BALL::AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC,"true");
-    opt_.set(BALL::AmberFF::Option::VDW_CUTON,"9997");
-    opt_.set(BALL::AmberFF::Option::VDW_CUTOFF,"9998");
-    opt_.set(BALL::AmberFF::Option::ELECTROSTATIC_CUTON,"9997");
-    opt_.set(BALL::AmberFF::Option::ELECTROSTATIC_CUTOFF,"9998");
-    opt_.set(BALL::AmberFF::Option::NONBONDED_CUTOFF,"9999");
-    opt_.set(BALL::AmberFF::Option::ASSIGN_CHARGES,"false");
-    opt_.set(BALL::AmberFF::Option::OVERWRITE_CHARGES,"false"); 
-    
     /** create rotable bonds class with ligand
      */
     rb_ = new RotateBonds(*ligand_);
@@ -191,7 +177,7 @@ namespace BALL
     /** setup amber to calculate ligand
      */
     sys_.select();
-    amber_->setup(sys_,opt_);
+    ff_->setup(sys_);
     sys_.deselect();
     ligand_->select();
     
@@ -204,7 +190,6 @@ namespace BALL
   
   DockMapping::~DockMapping()
   {
-    delete amber_;
     delete eg_;
   }
   
@@ -216,9 +201,9 @@ namespace BALL
     /** get conformation energy
      */
     
-    amber_->updateEnergy();
+    ff_->updateEnergy();
         
-    double energy = amber_->getEnergy()+ eg_->getEnergy(ligand_);
+    double energy = ff_->getEnergy()+ eg_->getEnergy(ligand_);
 
 
     //cout << energy << endl;
@@ -408,7 +393,7 @@ namespace BALL
 	/** setup amber to calculate ligand
 	 */
 	sys_.select();
-	amber_->setup(sys_,opt_);
+	ff_->setup(sys_);
 	sys_.deselect();
 	ligand_->select();
 	
@@ -423,15 +408,9 @@ namespace BALL
 	
 	rc.add(calculate((*gp_)[x],0), sys_a);
 
-
 	double d = calculate((*gp_)[x],0);
-	cerr << "c:" <<  d<< endl;
 	
 	move((*gp_)[x]);
-
-	HINFile hf("test.hin",File::out);
-	hf << *ligand_;
-	hf.close();
 
 	restore();
 

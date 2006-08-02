@@ -38,7 +38,8 @@ namespace BALL
       DockMapping(System& sys_lig, 
 		  const String& file,
 		  Vector3 t_box_lower, 
-		  Vector3 t_box_higer);
+		  Vector3 t_box_higer,
+		  ForceField* ff);
 
       
       /** copy constructor
@@ -58,7 +59,8 @@ namespace BALL
       virtual void setup(System& sys_lig, 
 			 const String& file,
 			 Vector3 t_box_lower, 
-			 Vector3 t_box_higer);
+			 Vector3 t_box_higer,
+			 ForceField* ff);
 
       /** clone method
        */ 
@@ -105,7 +107,7 @@ namespace BALL
       
       /**  calculate conformation energy
        */
-      AmberFF* amber_;
+      ForceField* ff_;
       
       /** Vector to restore the position values of the ligand
        */

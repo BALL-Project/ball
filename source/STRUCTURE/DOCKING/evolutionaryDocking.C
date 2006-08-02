@@ -132,11 +132,11 @@ namespace BALL
   void EvolutionaryDocking::setup(System& system1, System& system2)
     throw()
   {
-		system1_ = system1;
-		system2_ = system2;
-
+    system1_ = system1;
+    system2_ = system2;
+    
     delete dm_;
-
+    
     dm_ = new DockMapping(system2_,
 			  options.get(Option::GRID_FILE), 
 			  Vector3(options.getReal(Option::TRANSLATION_BOX_BOTTOM_X), 
@@ -144,7 +144,8 @@ namespace BALL
 				  options.getReal(Option::TRANSLATION_BOX_BOTTOM_Z)),
 			  Vector3(options.getReal(Option::TRANSLATION_BOX_TOP_X), 
 				  options.getReal(Option::TRANSLATION_BOX_TOP_Y),
-				  options.getReal(Option::TRANSLATION_BOX_TOP_Z)));
+				  options.getReal(Option::TRANSLATION_BOX_TOP_Z)),
+			  ff_);
     
   }
   
@@ -225,6 +226,12 @@ namespace BALL
     return dm_->getIntermediateResult(system_changed_);
   }
     
+
+  void EvolutionaryDocking::setForceField(ForceField* ff)
+    throw()
+  {
+    ff_ = ff;
+  }
 }
   
 
