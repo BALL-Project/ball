@@ -107,12 +107,12 @@ namespace BALL
     options=new_options;
   }
 
-  EvolutionaryDocking::EvolutionaryDocking(System &system1,System &system2 ,Options& new_options)
+  EvolutionaryDocking::EvolutionaryDocking(System &system1,System &system2 ,Options& new_options, ForceField* ff)
     throw()
     :ga_(0),
      dm_(0)
   {
-    setup(system1, system2, new_options);
+    setup(system1, system2, new_options, ff);
   }
 
   EvolutionaryDocking::~EvolutionaryDocking()
@@ -121,11 +121,11 @@ namespace BALL
     destroy_();
   }
 
-  void EvolutionaryDocking::setup(System& system1, System& system2, Options& new_options)
+  void EvolutionaryDocking::setup(System& system1, System& system2, Options& new_options, ForceField* ff)
     throw()
   {
     options  = new_options;
-  
+    ff_ = ff;
     setup(system1,system2);
   }
 
@@ -137,6 +137,8 @@ namespace BALL
     
     delete dm_;
     
+		// TODO wenn ff nicht gesetzt, erzeuge ein neues FF (Options?)
+
     dm_ = new DockMapping(system2_,
 			  options.get(Option::GRID_FILE), 
 			  Vector3(options.getReal(Option::TRANSLATION_BOX_BOTTOM_X), 
@@ -227,14 +229,9 @@ namespace BALL
   }
     
 
-  void EvolutionaryDocking::setForceField(ForceField* ff)
+/*  void EvolutionaryDocking::setForceField(ForceField* ff)
     throw()
   {
     ff_ = ff;
-  }
+  }*/
 }
-  
-
-
-
-

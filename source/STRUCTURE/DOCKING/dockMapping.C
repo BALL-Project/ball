@@ -117,10 +117,12 @@ namespace BALL
     
     system_backup_b_ = sys_lig;
     
+		Log.error() << "before create energy grid" << std::endl;
     /** create energy grid 
      */
-    eg_ = new EnergyGrid(file,system_backup_a_, *ligand_);
-    
+    eg_ = new EnergyGrid(file,system_backup_a_, *ligand_);    	
+		Log.error() << "after create energy grid" << std::endl;
+
     
     draw_system_ = system_backup_a_;
     

@@ -89,7 +89,7 @@ namespace BALL
       EvolutionaryDocking(Options& new_options)
 	throw();
 
-      EvolutionaryDocking(System &system1,System &system2 ,Options& new_options)
+      EvolutionaryDocking(System &system1,System &system2 ,Options& new_options, ForceField* ff)
 	throw();
 
       ~EvolutionaryDocking()
@@ -97,14 +97,14 @@ namespace BALL
 
       /** The setup routines.
        */
-      virtual void setup(System& system1, System& system2, Options& new_options)
+      virtual void setup(System& system1, System& system2, Options& new_options, ForceField* ff)
 	throw();
       
       virtual void setup(System& system1, System& system2)
 	throw();	
      
-			void setForceField(ForceField* ff)
-				throw();
+		/*	void setForceField(ForceField* ff)
+				throw();*/
 
       /** Start the main loop of the algorithm.
        */
@@ -138,10 +138,6 @@ namespace BALL
       
       //////////////////////////////////////////
       // the member variables
-      
-      /**	The force field */
-      ForceField* ff_;
-
 
     protected:
       
@@ -155,7 +151,10 @@ namespace BALL
       GeneticAlgorithm* ga_;
 		
       DockMapping* dm_;
-      
+
+			/**	The force field */
+      ForceField* ff_;
+
     };
 }
 
