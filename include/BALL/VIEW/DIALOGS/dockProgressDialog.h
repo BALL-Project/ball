@@ -141,6 +141,12 @@ namespace BALL
 				/** Start time of docking calculations.
 					*/
 				QDateTime start_time_;
+
+				/**  To get a better remaining time estimation average time over five steps
+				  */
+				int remain_time_;
+				int time_step_;
+
 		};
 		
 } } // Namespaces
