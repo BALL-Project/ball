@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.4.2.2 2006/02/01 13:23:45 amoll Exp $
+// $Id: dockProgressDialog.C,v 1.4.2.2.2.1 2006/08/02 15:14:24 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockProgressDialog.h>
@@ -20,7 +20,9 @@ namespace BALL
       throw()
       : QDialog(parent),
 				Ui_DockProgressDialogData(),
-				alg_(0)
+				alg_(0),
+				remain_time_(0),
+				time_step_(1)
     {
 #ifdef BALL_VIEW_DEBUG
       Log.info() << "new DockProgressDialog " << this << std::endl;
@@ -41,7 +43,9 @@ namespace BALL
 				Ui_DockProgressDialogData(),
 				alg_(dock_prog_dialog.alg_),
 				//timer_(dock_prog_dialog.timer_),
-				start_time_(dock_prog_dialog.start_time_)
+				start_time_(dock_prog_dialog.start_time_),
+				remain_time_(dock_prog_dialog.remain_time_),
+				time_step_(dock_prog_dialog.time_step_)
     {}
     
     // Destructor	
@@ -62,6 +66,8 @@ namespace BALL
 	  alg_ = dock_prog_dialog.alg_;
 	  //timer_ = dock_prog_dialog.timer_;           // QTimer::operator=(const QTimer&)' is private !
 	  start_time_ = dock_prog_dialog.start_time_;
+		remain_time_ = dock_prog_dialog.remain_time_;
+		time_step_ = dock_prog_dialog.time_step_;
 	}
       return *this;
     }
@@ -146,7 +152,7 @@ namespace BALL
 				alg_->proceed();    
 			}
     }
-    
+
     //
     void DockProgressDialog::abortClicked()
 		{
@@ -163,35 +169,46 @@ namespace BALL
 			progress_bar->setValue((int)(progress * 100.0));
 			// calculate remaining time
 			int run_time = start_time_.secsTo(QDateTime::currentDateTime());
-			int remain_time, hours, min, sec;
+			int hours, min, sec;
 			QString s;
 			if (progress > 0.01)
 			{
-				remain_time = (int)(((1.0 - progress)/progress) * run_time);
-				hours = remain_time / 3600;
-				min = (remain_time % 3600) / 60;
-				sec = (remain_time % 3600) % 60;
-				QString convert;
-				s.setNum(hours);
-				s.append(":");
-				if (!(min/10))
-				{
-				 	s.append("0");
+				// average over 5 time steps
+				if (time_step_ < 1) 
+				{	
+					Log.error() << "remain_time_" << remain_time_ << std::endl;
+					remain_time_ += (int)(((1.0 - progress)/progress) * run_time);
+					time_step_++;
 				}
-				s.append(convert.setNum(min));
-				s.append(":");
-				if (!(sec/10))
+				else
 				{
-				 	s.append("0");
+					remain_time_ = remain_time_ / time_step_;
+					hours = remain_time_ / 3600;
+					min = (remain_time_ % 3600) / 60;
+					sec = (remain_time_ % 3600) % 60;
+					QString convert;
+					s.setNum(hours);
+					s.append(":");
+					if (!(min/10))
+					{
+				 		s.append("0");
+					}
+					s.append(convert.setNum(min));
+					s.append(":");
+					if (!(sec/10))
+					{
+				 		s.append("0");
+					}
+					s.append(convert.setNum(sec));
+					remaining_time->setText(s);
 				}
-				s.append(convert.setNum(sec));
 			}
 			else
 			{
-			 	s.append("--:--:--");
+			 	s = "--:--:--";
+				remaining_time->setText(s);
 			}
-			remaining_time->setText(s);
-			
+						
 			// if docking has not finished restart timer
 			// remark: dialog is closed by the docking controller since otherwise the time between 
 			// closing the dialog and showing the DockResult in the dataset widget would be too long 
