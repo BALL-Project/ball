@@ -41,7 +41,6 @@ namespace BALL
 		std::cout << "******************* EHS-Shift ******************* " << std::endl;
 		// by default, we assume the worst...
 		valid_ = false;
-std::cout<< "Anfang "<< std::endl;
 
 		// if no parameters are assigned, abort immediately
 		if (parameters_ == 0)
@@ -49,12 +48,10 @@ std::cout<< "Anfang "<< std::endl;
 		std::cout << "return" << std::endl;
 			return;
 		}
-std::cout<< "asldkfjasdf "<< std::endl;
 
 		// check that the parameter file contains the correct section...
 		ParameterSection parameter_section;
 		parameter_section.extractSection(*parameters_, "EmpiricalShiftHyperSurfaces");
-std::cout<< "huhu "<< std::endl;
 
 		// ..and that this section contains the correct column names
 		if (   !parameter_section.hasVariable("name") || !parameter_section.hasVariable("property")
@@ -74,8 +71,6 @@ std::cout<< "huhu "<< std::endl;
 		Position property_column =  parameter_section.getColumnIndex("property");
 		Position file_column =  parameter_section.getColumnIndex("file");
 		
-std::cout<< "HAllo "<< std::endl;
-
 		
 		// insert per (!) target atom type the necessay properties (in a set)
 		// and in a map the property pairs and the corresponding 
@@ -112,7 +107,7 @@ std::cout<< "HAllo "<< std::endl;
 				std::map< std::pair<String, String>, String> empty2;
 				property_files_.push_back(empty2);
 				vector<std::pair<String, String> > empty3;
-				property_pairs_.push_back(empty3);
+				property_pairs_[target_name] = empty3;
 			}
 			
 			// split the string at "/" and store the property_names
@@ -133,7 +128,7 @@ std::cout<< "HAllo "<< std::endl;
 			//store the file name
 			property_files_[index][tuple] =  parameter_section.getValue(counter, file_column);
 			//store the property pair
-			property_pairs_[index].push_back(tuple);
+			property_pairs_[target_name].push_back(tuple);
 
 		}
 
@@ -150,48 +145,14 @@ std::cout<< "HAllo "<< std::endl;
 				String atom_type = target_names_[i];
 				String first_property = (*it).first.first ;
 				String second_property = (*it).first.second;
-			std::cout<< "~~~~" <<(*it).first.first << " " << (*it).first.second  << ":  " <<(*it).second << std::endl;
-				ShiftHyperSurface_ shs( (*it).second, atom_type, 
-															  first_property, second_property); 
+//std::cout<< "~~~~" <<(*it).first.first << " " << (*it).first.second  << ":  " <<(*it).second << std::endl;
+				ShiftHyperSurface_ shs( (*it).second, atom_type, first_property, second_property); 
 																				
-				//insert in the list of
-				//tuple .. 
-				//hypersurfaces_[atom_type]= s
+				//insert in the map of hypersurfaces
+				std::pair<String, String> tuple(first_property, second_property);
+				hypersurfaces_[atom_type][tuple]= shs;
 			}
 		}
-		/*		// find the data file
-				Path p;
-				String filename = p.find( (*it).second) ;// "NMR/splinedata/hat_PSI_DISULFIDE-1.dat");
-				if (filename == "")
-				{
-					Log.info () << "File " <<(*it).second << " could not be found" << std::endl;
-				}
-
-				// read the datafile
-				BALL::File file(filename, std::ios::in);
-				String line;
-				std::vector<BALL::String> fields;
-
-				// read the first line and decide which spline has to be build
-				line.getline(file);
-				line.split(fields, ";");
-				for ( Position i = 0; i < fields.size(); i++)
-				{
-					;
-				}
-				while (file.good())
-				{
-					line.getline(file);
-					line.split(fields, ";");
-					std::cout << fields.size() << std::endl;	
-				}
-			}
-		}
-		//std::vector< std::map< std::pair<String, String>, String >	>		property_files_;
-
-		CubicSpline2D s2d;
-		*/
-
 		
 		// mark the module as initialized
 		valid_ = true;
@@ -224,15 +185,47 @@ std::cout<< "HAllo "<< std::endl;
 			return false;
 		}
 		
-		printParameters_();	
-		printTargets_();
+		//printParameters_();	
+		//printTargets_();
 		
 		// if there were no targets, return immediately
-		if ((targets_.size() == 0))
-		{
+		if (targets_.size() == 0)
+		{	
+			Log.info() << "No targets found in EmpiricalHSShiftProcessor!" << std::endl;
 			return true;
 		}
 		
+		//if there are no hypersurfaces, return immediately
+		if (hypersurfaces_.size() == 0)
+		{
+			Log.info() << "No hypersurfaces created in EmpiricalHSShiftProcessor!" << std::endl;
+			return true; 
+		}
+		
+		float EHS_shift =  0.;
+
+		// for all targets compute the shift
+		for (Position i = 0; i < targets_.size(); i++)
+		{
+			EHS_shift =  0.;
+			
+			PropertiesForShift_  target = targets_[i];
+			String atom_type = target.atom->getName();
+			
+			// for all property pairs of the targets atom type
+			for (Position j = 0; j < property_pairs_[atom_type].size(); j++) 
+			{
+				EHS_shift += hypersurfaces_[atom_type][property_pairs_[atom_type][j]](target);
+			}
+			// set the shift contribution by empiricalHSShiftProcessor
+			target.atom->setProperty(PROPERTY__EHS_SHIFT, EHS_shift);
+			 
+			// add it to the total shift
+			float old_shift = target.atom->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat(); 
+			target.atom->setProperty(ShiftModule::PROPERTY__SHIFT, (old_shift + EHS_shift)); 
+ std::cout << "EHS SHIft: "<< EHS_shift << std::endl;
+		}
+
 		
 		return true;
 	}
@@ -262,247 +255,6 @@ std::cout<< "HAllo "<< std::endl;
 					if( property.computeProperties_(atom, target_property_names_[i]))
 						targets_.push_back(property);
 					
-				/*		
-					property.atom = atom;
-					Residue* residue = atom->getResidue();
-					if (!residue)
-					{
-						continue;
-					}
-					
-					Residue* prev_residue = atom->getAncestor(*residue)->getPrevious(*residue);
-					Residue* next_residue = atom->getAncestor(*residue)->getNext(*residue);
-					
-					// compute all properties needed for this atom type 
-					for (std::set<String>::iterator it = target_property_names_[i].begin();
-					 it != target_property_names_[i].end(); it++)
-					{	
-		//std::cout << "property" << (*it)<< std::endl;
-
-						if (!prev_residue)
-						{
-							continue;
-						}
-						else
-						{
-							if ((*it) == 	"FR_P" )
-							{	
-								//property.prev_is_first_residue = prev_residue->isTerminal();
-								property.properties_string_[(*it)]= (prev_residue->isTerminal() ? "Y": "N");
-							}
-							else if ((*it) == 	"AA_P" )
-							{
-							//	setAminoAcid_(prev_residue, property.prev_amino_acid_type);	
-								property.properties_string_[(*it)]= getAminoAcid_(prev_residue);
-
-							}else if ((*it) == 	"SS_P" )
-							{
-							//	setSecondaryStructure_(prev_residue, property.prev_secondary_structure);	
-								property.properties_string_[(*it)]= getSecondaryStructure_(prev_residue);
-
-							}else if ((*it) == 	"PSI_P")
-							{
-							//	property.prev_psi_angle = prev_residue->getTorsionPsi();	
-								property.properties_real_[(*it)]=prev_residue->getTorsionPsi();	
-							}else if ((*it) == 	"PHI_P")
-							{	
-							//	property.prev_phi_angle = prev_residue->getTorsionPhi();	
-								property.properties_real_[(*it)]= prev_residue->getTorsionPhi();	
-							}else if ((*it) == 	"CHI_P")
-							{
-						//		property.prev_chi_angle = getChiAngle_(prev_residue);	
-								property.properties_real_[(*it)]=getChiAngle_(prev_residue);	
-							}else if ((*it) == 	"CHI2_P")
-							{
-						//		property.prev_chi2_angle = getChi2Angle_(prev_residue);	
-								property.properties_real_[(*it)]=getChi2Angle_(prev_residue);	
-							}else if ((*it) == 	"HA1L_P" )
-							{
-						//		property.prev_HA_HBond_len	= getHA_HBondLen_(prev_residue);	
-								property.properties_real_[(*it)]= getHA_HBondLen_(prev_residue);	
-							}else if ((*it) == 	"HA1_P" )
-							{
-					//			property.prev_has_HA_HBond = hasHA_HBond_(prev_residue);	
-								property.properties_string_[(*it)]= (hasHA_HBond_(prev_residue)? "Y": "N");	
-							}else if ((*it) == 	"HA2L_P" )
-							{
-					//			property.prev_HA2_HBond_len = getHA2_HBondLen_(prev_residue);	
-								property.properties_real_[(*it)]= getHA2_HBondLen_(prev_residue);	
-							}else if ((*it) == 	"HA2_P" )
-							{
-				//				property.prev_has_HA2_HBond = hasHA2_HBond_(prev_residue);
-								property.properties_string_[(*it)]= (hasHA2_HBond_(prev_residue) ? "Y": "N");	
-							}else if ((*it) == 	"HNL_P" )
-							{
-					//			property.prev_HN_HBond_len =  getHN_HBondLen_(prev_residue);	
-								property.properties_real_[(*it)]= getHN_HBondLen_(prev_residue);	
-							}else if ((*it) == "HN_P" )
-							{
-						//		property.prev_has_HN_HBond = hasHN_HBond_(prev_residue);
-								property.properties_string_[(*it)]  = (hasHN_HBond_(prev_residue)? "Y": "N");
-							}else if ((*it) == 	"OHL_P" )
-							{
-					//			property.prev_O_HBond_len = getO_HBondLen_(prev_residue);	
-								property.properties_real_[(*it)] = getO_HBondLen_(prev_residue);	
-							}else if ((*it) == 	"OH_P" )
-							{
-					//			property.prev_has_O_HBond = hasO_HBond_(prev_residue);
-								property.properties_string_[(*it)] = (hasO_HBond_(prev_residue) ? "Y": "N");	
-							}else if ((*it) == 	"DISULFIDE_P" )
-							{
-					//			property.prev_has_disulfid_bond = hasDisulfidBond_(prev_residue);	
-								property.properties_string_[(*it)]= (hasDisulfidBond_(prev_residue)  ? "Y": "N");	
-							}
-						}
-
-						if (!next_residue)
-						{
-							continue;
-						}
-						else
-						{
-							if ((*it) == 	"FR_N" )
-							{	
-								//std::cout << "FirstResidue _N" << (*it)<< std::endl;
-					//			property.next_is_first_residue = next_residue->isTerminal();	
-								property.properties_string_[(*it)]=  (next_residue->isTerminal()? "Y": "N");	
-							}
-							else if ((*it) == 	"AA_N" )
-							{
-							//	setAminoAcid_(next_residue, property.next_amino_acid_type);	
-								property.properties_string_[(*it)]= getAminoAcid_(next_residue);
-							}else if ((*it) == 	"SS_N" )
-							{
-								//setSecondaryStructure_(next_residue, property.next_secondary_structure);	
-								property.properties_string_[(*it)]= getSecondaryStructure_(next_residue);
-
-							}else if ((*it) == 	"PSI_N")
-							{
-						//		property.next_psi_angle = next_residue->getTorsionPsi();	
-								property.properties_real_[(*it)]= next_residue->getTorsionPsi();
-							}else if ((*it) == 	"PHI_N")
-							{	
-						//		property.next_phi_angle = next_residue->getTorsionPhi();	
-								property.properties_real_[(*it)]= next_residue->getTorsionPhi();	
-							}else if ((*it) == 	"CHI_N")
-							{
-					//			property.next_chi_angle = getChiAngle_(next_residue);	
-								property.properties_real_[(*it)]=  getChiAngle_(next_residue);
-							}else if ((*it) == 	"CHI2_N")
-							{
-					//			property.next_chi2_angle = getChi2Angle_(next_residue);	
-								property.properties_real_[(*it)]=  getChi2Angle_(next_residue);	
-							}else if ((*it) == 	"HA1L_N" )
-							{
-				//				property.next_HA_HBond_len = getHA_HBondLen_(next_residue) ;		
-								property.properties_real_[(*it)]= getHA_HBondLen_(next_residue) ;		
-							}else if((*it) == 	"HA1_N")
-							{
-					//			property.next_has_HA_HBond = hasHA_HBond_(next_residue)  ;	
-								property.properties_string_[(*it)]= (hasHA_HBond_(next_residue)? "Y": "N");	
-							}else if ((*it) == 	"HA2L_N" )
-							{
-				//				property.next_HA2_HBond_len = getHA2_HBondLen_(next_residue);	
-								property.properties_real_[(*it)]= getHA2_HBondLen_(next_residue);	
-							}else if ((*it) == 	"HA2_N" )
-							{
-				//				property.next_has_HA2_HBond = hasHA2_HBond_(next_residue);
-								property.properties_string_[(*it)]= (hasHA2_HBond_(next_residue)? "Y": "N");	
-							}else if ((*it) == 	"HNL_N" )
-							{
-				//				property.next_HN_HBond_len = getHN_HBondLen_(next_residue);	
-								property.properties_real_[(*it)]= getHN_HBondLen_(next_residue);
-							}else if ((*it) == 	"HN_N" )
-							{
-				//				property.next_has_HN_HBond = hasHN_HBond_(next_residue);	
-								property.properties_string_[(*it)]= (hasHN_HBond_(next_residue)? "Y": "N");	
-							}else if ((*it) == 	"OHL_N" )
-							{
-				//				property.next_O_HBond_len = getO_HBondLen_(next_residue);	
-								property.properties_real_[(*it)]= getO_HBondLen_(next_residue);	
-							}else if ((*it) == 	"OH_N" )
-							{
-				//				property.next_has_O_HBond = hasO_HBond_(next_residue);	
-								property.properties_string_[(*it)]= (hasO_HBond_(next_residue)? "Y": "N");	
-	
-							}else if ((*it) == 	"DISULFIDE_N" )
-							{
-				//				property.next_has_disulfid_bond =	hasDisulfidBond_(next_residue) ;	
-								property.properties_string_[(*it)]= 	(hasDisulfidBond_(next_residue)? "Y": "N");		
-							}
-						}
-
-						
-						if ((*it) == "FR" )
-						{
-		//std::cout << "FirstResidue" << (*it)<< std::endl;
-				//			property.is_first_residue = residue->isTerminal();	
-							property.properties_string_[(*it)]=  (residue->isTerminal() ? "Y": "N");			
-							//std::cout << "FR" << property.is_first_residue << std::endl;
-						}else if ((*it) == 	"AA" )
-						{	
-							//setAminoAcid_(residue, property.amino_acid_type);	
-							property.properties_string_[(*it)]=  getAminoAcid_(residue);
-						}else if ((*it) == 	"SS" )
-						{
-							//setSecondaryStructure_(residue, property.secondary_structure);	
-							property.properties_string_[(*it)]=  getSecondaryStructure_(residue);
-						}else if ((*it) == 	"PSI")
-						{
-				//			property.psi_angle = residue->getTorsionPsi(); 
-							property.properties_real_[(*it)]= residue->getTorsionPsi();
-						}else if ((*it) == 		"PHI")
-						{		
-				//			property.phi_angle = residue->getTorsionPhi();	
-							property.properties_real_[(*it)]= residue->getTorsionPhi();	
-						}else if ((*it) == 	"CHI")
-						{
-				//			property.chi_angle = 	getChiAngle_(residue);	
-							property.properties_real_[(*it)]= 	getChiAngle_(residue);	
-							//std::cout << "CHI" << property.chi_angle << std::endl;
-						}else if ((*it) == 	"CHI2")
-						{
-				//			property.chi2_angle = getChi2Angle_(residue);	
-							property.properties_real_[(*it)]= getChi2Angle_(residue);	
-						}else if ((*it) == 	"HA1L" )
-						{
-			//				property.HA_HBond_len = getHA_HBondLen_(residue); 	
-							property.properties_real_[(*it)]= getHA_HBondLen_(residue); 	
-						}else if ((*it) == 	"HA1" )
-						{ 	
-			//				property.has_HA_HBond = hasHA_HBond_(residue);	
-							property.properties_string_[(*it)]=( hasHA_HBond_(residue)? "Y": "N");
-						}else if ((*it) == 	"HA2L" )
-						{
-			//				property.HA2_HBond_len =	getHA2_HBondLen_(residue) ;	
-							property.properties_real_[(*it)]= getHA2_HBondLen_(residue) ;	
-						}else if ((*it) == 	"HA2" )
-						{ 	
-			//				property.has_HA2_HBond = hasHA2_HBond_(residue);	
-							property.properties_string_[(*it)]= (hasHA2_HBond_(residue)? "Y": "N");		
-						}else if ((*it) == 	"HNL" )
-						{
-			//				property.HN_HBond_len = getHN_HBondLen_(residue) ;	
-							property.properties_real_[(*it)]= getHN_HBondLen_(residue) ;	
-						}else if ((*it) == 	"HN" )
-						{
-			//				property.has_HN_HBond = hasHN_HBond_(residue);	
-							property.properties_string_[(*it)]=  (hasHN_HBond_(residue)? "Y": "N");		
-						}else if ((*it) == 	"OHL" )
-						{
-			//				property.O_HBond_len = getO_HBondLen_(residue);	
-							property.properties_real_[(*it)]= getO_HBondLen_(residue);	
-						}else if ((*it) == 	"OH" )
-						{
-			//				property.has_O_HBond = hasO_HBond_(residue);	
-							property.properties_string_[(*it)]= (hasO_HBond_(residue)? "Y": "N");		
-						}else if ((*it) == 	"DISULFIDE" )
-						{
-			//				property.has_disulfid_bond =	hasDisulfidBond_(residue) ;	
-							property.properties_string_[(*it)]= (	hasDisulfidBond_(residue)? "Y": "N");			
-						}						
-					}*/ 
-					//targets_.push_back(property);
 				}
 			}
 		}	
@@ -544,20 +296,7 @@ std::cout<< "HAllo "<< std::endl;
 		for (Position i = 0; i < targets_.size(); i++)
 		{
 				PropertiesForShift_  p = targets_[i];
-				//std::cout << "Blubb: " << p.is_first_residue << std::endl;
 
-		//		std::cout << p.atom->getName() << "\t" << p.is_first_residue << "\t" << p.amino_acid_type << "\t" 
-			//						<< p.secondary_structure << "\t" << p.psi_angle << "\t" << p.phi_angle << "\t" << p.chi_angle << "\t" 
-		//							<< p.chi2_angle << "\t" << p.HA_HBond_len << "\t"<< p.has_HA_HBond << "\t"
-	//								<< p.HA2_HBond_len<< "\t"<< p.has_HA2_HBond<<"\t" << 	p.HN_HBond_len << "\t" << p.has_HN_HBond<<"\t"
-	//								<< p.O_HBond_len << "\t" << p.has_O_HBond << "\t" << p.has_disulfid_bond << std::endl;	
-		//		std::cout << p.atom->getName() << "\t" << p.properties_string_["FR"] << "\t" << p.properties_string_["AA"] << "\t" 
-			//						<< p.properties_string_["SS"]<< "\t" << p.properties_real_["PSI"]<< "\t" << p.properties_real_["PHI"]<< "\t" 
-			//						<< p.properties_real_["CHI"]<< "\t" << p.properties_real_["CHI2"]<< "\t"<< p.properties_real_["HA1L"] << "\t"
-			//						<< p.properties_string_["HA1"] << "\t" << p.properties_real_["HA2L"]<< "\t"<< p.properties_string_["HA2"]<<"\t" 
-			//						<< p.properties_real_["HNL"] << "\t" << p.properties_string_["HN"]<<"\t"
-			//						<< p.properties_real_["OHL"] << "\t" << p.properties_string_["OH"] << "\t" 
-			//						<< p.properties_string_["DISULFIDE"]<< std::endl;
 				std::cout << p.atom->getName() << "\t" << p["FR"].second << "\t" << p["AA"].second << "\t" 
 									<< p["SS"].second << "\t" << p["PSI"].first 	 << "\t"    << p["PHI"].first << "\t" 
 									<< p["CHI"].first << "\t" << p["CHI2"].second  << "\t"  << p["HA1L"].first << "\t"
@@ -627,27 +366,27 @@ std::cout<< "HAllo "<< std::endl;
 
 	vector<float>& EmpiricalHSShiftProcessor::CubicSpline1D_::getCurvature()
 	{
-		std::cout <<"getCurvature" << std::endl;
+//	std::cout <<"getCurvature" << std::endl;
 		return curvature_;
 	}				
 
 	void EmpiricalHSShiftProcessor::CubicSpline1D_::setCurvature(std::vector<float> curvature)
 	{
-		std::cout <<"setCurvature" << std::endl;
+//std::cout <<"setCurvature" << std::endl;
 
 		curvature_ = curvature;
 	}
 	
 	void EmpiricalHSShiftProcessor::CubicSpline1D_::setValues(std::vector<float> values)
 	{
-		std::cout << "setValues"<< std::endl;
+//std::cout << "setValues"<< std::endl;
 
 		sample_values_ = values;
 	}
 	
 	void EmpiricalHSShiftProcessor::CubicSpline1D_::setPositions(std::vector<float> positions)
 	{
-		std::cout <<"setPositions" << std::endl;
+//std::cout <<"setPositions" << std::endl;
 
 		sample_positions_= positions;
 	}
@@ -659,8 +398,8 @@ std::cout<< "HAllo "<< std::endl;
 		if ((x < sample_positions_[0]) || (x>sample_positions_[n-1]))
 		{
 			// something _really_ bad happened
-			std::cerr << "invalid x position " << x << std::endl;
-			std::cerr << "(not between "<< sample_positions_[0] << " and "<< sample_positions_[n-1] <<")" << std::endl;
+			std::cerr << "invalid x position : " << x << " not between "<< sample_positions_[0] << " and " 
+								<< sample_positions_[n-1]<< std::endl;
 			return std::numeric_limits<float>::min();
 		}
 
@@ -706,7 +445,7 @@ std::cout<< "HAllo "<< std::endl;
 																				const std::vector<float>& sample_positions_y, 
 																			  const std::vector<std::vector<float> >& sample_values) 
 	{
-		std::cout <<"createBICubicSpline" << std::endl;
+//std::cout <<"createBICubicSpline" << std::endl;
 
 		sample_positions_x_=sample_positions_x;
 		sample_positions_y_=sample_positions_y;
@@ -761,61 +500,11 @@ std::cout<< "HAllo "<< std::endl;
 	EmpiricalHSShiftProcessor::PropertiesForShift_::PropertiesForShift_()
 		throw()
 	{
-		is_first_residue = false;
-		amino_acid_type = ' ';
-		secondary_structure = ' ';
-		psi_angle = 0.;
-		phi_angle = 0.;
-		chi_angle = 0.;
-		chi2_angle = 0.;
-		HA_HBond_len	= 0.;	
-		has_HA_HBond = false; // unknown
-		HA2_HBond_len = 0.;
-		has_HA2_HBond = false; // unknown
-		HN_HBond_len = 0.;
-		has_HN_HBond = false;
-		O_HBond_len = 0.;	
-		has_O_HBond = false;
-		has_disulfid_bond = false;
-		prev_is_first_residue = false;
-		prev_amino_acid_type = ' ';
-		prev_secondary_structure = ' ';
-		prev_psi_angle = 0.;
-		prev_phi_angle = 0.;
-		prev_chi_angle = 0.;
-		prev_chi2_angle = 0.;
-		prev_HA_HBond_len	= 0.;	
-		prev_has_HA_HBond = false; // unknown
-		prev_HA2_HBond_len = 0.;
-		prev_has_HA_HBond = false; // unknown
-		prev_HN_HBond_len = 0.;
-		prev_has_HN_HBond = false;
-		prev_O_HBond_len = 0.;	
-		prev_has_O_HBond = false;
-		prev_has_disulfid_bond = false;
-		next_is_first_residue = false;
-		next_amino_acid_type = ' ';
-		next_secondary_structure = ' ';
-		next_psi_angle = 0.;
-		next_phi_angle = 0.;
-		next_chi_angle = 0.;
-		next_chi2_angle = 0.;
-		next_HA_HBond_len	= 0.;	
-		next_has_HA_HBond = false; // unknown
-		next_HA2_HBond_len = 0.;
-		next_has_HA_HBond = false; // unknown
-		next_HN_HBond_len = 0.;
-		next_has_HN_HBond = false;
-		next_O_HBond_len = 0.;
-		next_has_O_HBond = false;
-		next_has_disulfid_bond = false;
 	}
 	
 	float EmpiricalHSShiftProcessor::PropertiesForShift_::getChiAngle_(Residue* residue) 
 		throw()
 	{
-
-	//std::cout << "getChiAngle " << residue << std::endl;						
 		Atom* N = 0;
 		Atom* CA = 0;
 		Atom* CB = 0;
@@ -963,14 +652,20 @@ std::cout<< "HAllo "<< std::endl;
 		Vector3 c = CB->getPosition();
 		Vector3 d = X->getPosition();
 		
-		return getTorsionAngle(a.x, a.y, a.z, b.x, b.y, b.z, 
-													 c.x, c.y, c.z, d.x, d.y, d.z);
+		float angle = getTorsionAngle(a.x, a.y, a.z, b.x, b.y, b.z, 
+													 c.x, c.y, c.z, d.x, d.y, d.z)*180./M_PI;
+		while (angle < 60.)
+		{
+			angle = angle + 360.;
+		}
+		return angle; 
 	}
 
 	
 	float EmpiricalHSShiftProcessor::PropertiesForShift_::getChi2Angle_(Residue* residue) 
 		throw()
-	{
+	{	
+		Log.info() << "Chi2-angle-computation is not yet implemented !" << std::endl;
 		return 0.;
 	}
 
@@ -1003,7 +698,6 @@ std::cout<< "HAllo "<< std::endl;
 		char ret = ' ';
 		if (residue->isAminoAcid())
 		{
-			//	std::cout << residue->getFullName() << " " << residue->getName() << " " << Peptides::OneLetterCode(residue->getName()) << std::endl;
 			ret = Peptides::OneLetterCode(residue->getName()); 
 		}
 		return ret;
@@ -1574,10 +1268,11 @@ std::cout<< "HAllo "<< std::endl;
 		// the x sample positions
 		line.getline(file);
 		line.split(fields, ";");
-std::cout << "------------------------   ------------------"<< std::endl;
-std::cout << line << std::endl;		
+//std::cout << "------------------------   ------------------"<< std::endl;
+//std::cout << line << std::endl;		
 		if (PropertiesForShift_::isMixed(firstproperty))
-		{std::cout << "chi first property" << std::endl;
+		{
+//std::cout << "chi first property" << std::endl;
 
 			// we have to store the first 3 entries as floats, 
 			// and the second 3 entries as strings
@@ -1594,7 +1289,8 @@ std::cout << line << std::endl;
 			}
 		}
 		else if (PropertiesForShift_::isDiscrete(firstproperty))
-		{std::cout << "discrete  first property" << std::endl;
+		{
+//std::cout << "discrete  first property" << std::endl;
 
 			for (Position i = 0; i < fields.size(); i++)
 			{
@@ -1602,7 +1298,8 @@ std::cout << line << std::endl;
 			}
 		}
 		else
-		{std::cout << "real first property" << std::endl;
+		{
+//std::cout << "real first property" << std::endl;
 
 			for (Position i = 0; i < fields.size(); i++)
 			{	
@@ -1613,9 +1310,10 @@ std::cout << line << std::endl;
 		// the y sample positions
 		line.getline(file);
 		line.split(fields, ";");
-std::cout << line << std::endl;
+//std::cout << line << std::endl;
 		if (PropertiesForShift_::isMixed(secondproperty))
-		{std::cout << "chi second property" << std::endl;
+		{
+//std::cout << "chi second property" << std::endl;
 
 			// we have to store the first 3 entries as floats, 
 			// and the second 3 entries as strings
@@ -1635,14 +1333,15 @@ std::cout << line << std::endl;
 		}
 		else if (PropertiesForShift_::isDiscrete(secondproperty))
 		{
-			std::cout << "discrete second property" << std::endl;
+//std::cout << "discrete second property" << std::endl;
 			for (Position i = 0; i < fields.size(); i++)
 			{
 				string_sample_positions_y.push_back(fields[i]);
 			}
 		}
 		else
-		{std::cout << "real second property" << std::endl;
+		{
+//std::cout << "real second property" << std::endl;
 
 			for (Position i = 0; i < fields.size(); i++)
 			{	
@@ -1651,11 +1350,10 @@ std::cout << line << std::endl;
 		}
 
 		// the sample values
-			
 		line.getline(file);
 		while (file.good())
 		{
-std::cout << line<< std::endl;
+// std::cout << line<< std::endl;
 			line.split(fields, ";");
 			
 			std::vector<float> line_values;	
@@ -1674,7 +1372,7 @@ std::cout << line<< std::endl;
 
 		if (type_ == REAL__REAL)
 		{
-			std::cout << "REAL__REAL" << std::endl;
+//std::cout << "REAL__REAL" << std::endl;
 			// a bicubic spline is stored
 			s2d_.createBiCubicSpline(float_sample_positions_x, float_sample_positions_y, sample_values_2d);
 		//	std::cout << "value at (-170, -160) :" <<  s2d_(float(-170.),float(-160.)) << std::endl;
@@ -1685,7 +1383,7 @@ std::cout << line<< std::endl;
 			// When accessing the data, one has to switch X and Y, 
 			// since for each discrete value a 1D bicubic spline is stored
 			
-			std::cout << "REAL__DISCRETE" << std::endl;
+//std::cout << "REAL__DISCRETE" << std::endl;
 
 			for (Position i = 0; i < sample_values_2d.size(); i ++)
 			{
@@ -1700,7 +1398,7 @@ std::cout << line<< std::endl;
 		}
 		else if (type_ == DISCRETE__REAL)
 		{
-			std::cout << "DISCRETE__REAL" << std::endl;
+//std::cout << "DISCRETE__REAL" << std::endl;
 			//
 			//   !!!!!  C A U T I O N  !!!!! 
 			//
@@ -1727,13 +1425,14 @@ std::cout << line<< std::endl;
 				// store him in the map
 				s1d_[string_sample_positions_x[i]] = s;
 			}
-		//	std::cout << "value at (C, -170) :" <<  s1d_['C'](float(-170.)) << std::endl;
-			// TO DO: diesen Fehler und ähnliche abfangen!!! 
-			//std::cout << "value at (R, -170) :" <<  s1d_['R'](float(-170.)) << std::endl;
+			//	std::cout << "value at (C, -170) :" <<  s1d_['C'](float(-170.)) << std::endl;
+			
+	// TO DO: diesen Fehler und ähnliche abfangen!!! 
+	//std::cout << "value at (R, -170) :" <<  s1d_['R'](float(-170.)) << std::endl;
 		}
 		else if (type_ == DISCRETE__DISCRETE)
 		{
-			std::cout << "DISCRETE__DISCRETE" << std::endl;
+//std::cout << "DISCRETE__DISCRETE" << std::endl;
 
 			for (Position i = 0; i < sample_values_2d.size(); i++)  // y
 			{
@@ -1746,7 +1445,7 @@ std::cout << line<< std::endl;
 		}
 		else if (type_ == CHI__DISCRETE)
 		{
-			std::cout << "CHI__DISCRETE" << std::endl;
+//std::cout << "CHI__DISCRETE" << std::endl;
 			// we have a table like this
 			// 
 			//	     60   180 -60        Unknown  ALA  GLY
@@ -1763,13 +1462,6 @@ std::cout << line<< std::endl;
 			// When accessing the data, one has to switch X and Y, 
 			// since for each discrete value a 1D bicubic spline is stored
 			
-		/*	// we have to split the data sample_positions
-			vector <float> first_float_sample_positions_x;
-			for (Position i  = 0; i< 3 ; i++)
-			{
-				first_float_sample_positions_x.push_back(float_sample_positions_x[i]);
-			}
-			*/
 			// 		we have to split the data
 			vector<vector <float> > first_sample_values_2d(string_sample_positions_y.size());
 			vector<vector <float> > last_sample_values_2d(string_sample_positions_y.size());
@@ -1812,7 +1504,7 @@ std::cout << line<< std::endl;
 		//	std::cout << "value at (GLY, B) :" <<  table_["GLY"]["B"] << std::endl;
 		}else if (type_ == DISCRETE__CHI)
 		{
-			std::cout << "DISCRETE__CHI" << std::endl;
+//std::cout << "DISCRETE__CHI" << std::endl;
 
 			// we are given a table like this
 			// 	 			C   H    B	
@@ -1842,8 +1534,6 @@ std::cout << line<< std::endl;
 				}
 			}	
 
-			std::cout << "hallo" << std::endl;
-			std::cout << "x len" <<string_sample_positions_x.size() << std::endl;
 			// we have to split the data
 			vector<float > first_float_sample_positions_y;
 			for (Position i = 0; i < 3; i++)
@@ -1851,16 +1541,13 @@ std::cout << line<< std::endl;
 				first_float_sample_positions_y.push_back(float_sample_positions_y[i]);
 			}			
 		
-	std::cout << "hallo2" << std::endl;
 			turned_sample_values_2d.size();
-std::cout << "turned_sample_values_2d.size()"<<turned_sample_values_2d.size() << std::endl;
 			for (Position i = 0; i < turned_sample_values_2d.size(); i ++)
 			{
 				// create a 1D bicubic spline
 				CubicSpline1D_ s;
 				s.createSpline(first_float_sample_positions_y, turned_sample_values_2d[i]);
 
-std::cout << string_sample_positions_x[i] << std::endl;	
 				// store him in the map
 				s1d_[string_sample_positions_x[i]] = s;
 			}
@@ -1868,7 +1555,6 @@ std::cout << string_sample_positions_x[i] << std::endl;
 
 			// second part DISCRETE__DISCRETE
 
-			std::cout << "hallo3" << std::endl;
 			for (Position i = 0; i < 3; i++) //x
 			{
 				for (Position j = 0; j < string_sample_positions_x.size(); j++) //y
@@ -1892,7 +1578,7 @@ std::cout << string_sample_positions_x[i] << std::endl;
 			//    - case REAL__REAL
 			//    - and case DISCRETE__REAL 
 			
-			std::cout << "CHI__REAL" << std::endl;
+//std::cout << "CHI__REAL" << std::endl;
 			
 			// we have to split the data
 			vector<vector <float> > first_sample_values_2d(float_sample_positions_y.size());
@@ -1942,7 +1628,7 @@ std::cout << string_sample_positions_x[i] << std::endl;
 		}		
 		else if (type_ == REAL__CHI)
 		{
-			std::cout << "REAL__CHI" << std::endl;
+//std::cout << "REAL__CHI" << std::endl;
 			// We are given a table looking like this
 			//
 			//      -180  . . 0 . . 180
@@ -1993,13 +1679,9 @@ std::cout << string_sample_positions_x[i] << std::endl;
 		else if (type_ == CHI__CHI)
 		{
 			// Fortunately this case does not occure
-			std::cout << "CHI__CHI" << std::endl;
+//std::cout << "CHI__CHI" << std::endl;
 			std::cerr << "The case CHI__CHI is not implemented" <<std::endl; 
 		}
-
-
-		
-		
 	}	
 
 	EmpiricalHSShiftProcessor::ShiftHyperSurface_::~ShiftHyperSurface_() 
@@ -2015,19 +1697,73 @@ std::cout << string_sample_positions_x[i] << std::endl;
 		
 		if (type_ == REAL__REAL)
 		{
-			shift = s2d_( properties[first_property_].first, properties[second_property_].first );
+			shift = s2d_(properties[first_property_].first, properties[second_property_].first);
 		}else if (type_ == REAL__DISCRETE)
 		{
 			shift = s1d_[properties[second_property_].second](properties[first_property_].first);
-									
-		}else {
-		Log.info() << "andere Tabele! " << std::endl;
+		}else if (type_ == DISCRETE__REAL)
+		{
+			shift = s1d_[properties[first_property_].second](properties[second_property_].first);
+		}else if (type_ == DISCRETE__DISCRETE)
+		{
+			shift = table_[properties[first_property_].second][properties[second_property_].second];
+		}else if (type_ == CHI__REAL)
+		{	// we have to decide in which chi--case we are :
+			// 			REAL or DISCRETE ? 
+			if (properties[first_property_].second == "INVALID")
+			{  // case REAL --> REAL__REAL
+				shift = s2d_(properties[first_property_].first, properties[second_property_].first);
+			}else if (properties[first_property_].first == std::numeric_limits<float>::min())
+			{   // case DISCRETE --> DISCRETE__REAL
+				shift = s1d_[properties[first_property_].second](properties[second_property_].first);
+			}else	{
+				std::cerr << first_property_ << " not set!"  << std::endl;
+			}
+		}else if (type_ == REAL__CHI)
+		{	// we have to decide in which chi--case we are :
+			// 			REAL or DISCRETE ? 
+			if (properties[second_property_].second == "INVALID")
+			{  // case REAL --> REAL__REAL
+				shift = s2d_(properties[first_property_].first, properties[second_property_].first);
+			}else if (properties[second_property_].first == std::numeric_limits<float>::min())
+			{  // case DISCRETE --> REAL__DISCRETE
+				shift = s1d_[properties[second_property_].second](properties[first_property_].first);
+			}else {
+				std::cerr << second_property_ << " not set!"  << std::endl;
+			}
+		}else if (type_ == CHI__DISCRETE)
+		{
+			// we have to decide in which chi--case we are :
+			// 			REAL or DISCRETE ? 
+			if (properties[first_property_].second == "INVALID")
+			{  // case REAL --> REAL__DISCRETE
+				shift = s1d_[properties[second_property_].second](properties[first_property_].first);
+			}else if (properties[first_property_].first == std::numeric_limits<float>::min())
+			{   // case DISCRETE --> DISCRETE__DISCRETE
+				shift = table_[properties[first_property_].second][properties[second_property_].second];			
+			}else	{
+				std::cerr << first_property_ << " not set!"  << std::endl;
+			}
+		}else if (type_ == DISCRETE__CHI)
+		{
+			// we have to decide in which chi--case we are :
+			// 			REAL or DISCRETE ? 
+			if (properties[second_property_].second == "INVALID")
+			{  // case REAL --> DISCRETE__REAL
+				shift = s1d_[properties[first_property_].second](properties[second_property_].first);
+			}else if (properties[second_property_].first == std::numeric_limits<float>::min())
+			{  // case DISCRETE --> DISCRETE__DISCRETE
+				shift = table_[properties[first_property_].second][properties[second_property_].second];		
+			}else {
+				std::cerr << second_property_ << " not set!"  << std::endl;
+			}
+		}else if (type_ == CHI__CHI)
+		{ 
+			std::cerr << first_property_ << " not set!"  << std::endl;
+		}else
+		{	
+			std::cerr << "Unknown type of properties! " << std::endl;
 		}
-		// TO DO:
-		//  - Ala -A
-		//  -REAL__DISCRETE xy-> yx
-		
-
 		return shift;
 	} 
 

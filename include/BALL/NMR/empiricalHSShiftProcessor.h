@@ -35,58 +35,6 @@ namespace BALL
 		*/
 		static const char* PROPERTY__EHS_SHIFT;
 	
-		enum PROPERTIES  {
-			FR,
-			AA,
-			SS,
-			PHI,
-			PSI, 
-			CHI,
-			CHI2,
-			HA1L, 
-			HA1,
-			HA2L, 
-			HA2,
-			HNL,
-			HN,
-			OH,
-			OHL,
-			DISULFIDE,
-			FR_N,
-			AA_N,
-			SS_N,
-			PHI_N,
-			PSI_N, 
-			CHI_N,
-			CHI2_N,
-			HA1L_N, 
-			HA1_N,
-			HA2L_N, 
-			HA2_N,
-			HNL_N,
-			HN_N,
-			OH_N,
-			OHL_N,
-			DISULFIDE_N,
-			FR_P,
-			AA_P,
-			SS_P,
-			PHI_P,
-			PSI_P, 
-			CHI_P,
-			CHI2_P,
-			HA1L_P, 
-			HA1_P,
-			HA2L_P, 
-			HA2_P,
-			HNL_P,
-			HN_P,
-			OH_P,
-			OHL_P,
-			DISULFIDE_P
-		};
-			
-		
 		//@}
 		/** @name	Constructors and Destructors.
 		*/
@@ -201,12 +149,16 @@ namespace BALL
 				std::vector<float> curvature_;
 		};
 
-
+//		public: // tO do : rÜCKGÄNGIG
 		class CubicSpline2D_
 		{
 			public:
 				CubicSpline2D_() {};
 
+				// Simple version of spline creation. Assumes that all rows have the same x-positions
+				void createBiCubicSpline(const std::vector<float>& sample_positions_x,
+						const std::vector<float>& sample_positions_y,
+						const std::vector<std::vector<float> >& sample_values); // splie2
 				//precompute the second derivatives	
 				void createBiCubicSpline(const std::vector<std::vector<float> >& sample_positions_x,
 						const std::vector<float>& sample_positions_y,
@@ -219,6 +171,7 @@ namespace BALL
 				std::vector<CubicSpline1D_> splines_;
 		};
 
+	//	protected:	//todO: RÜCKGÄNGIG
 
 
 		/*_ neested class for storing the properties of an atom
@@ -244,6 +197,8 @@ namespace BALL
 				 */
 				std::pair<float, String> operator [] (const String& property_name) throw();
 
+				static bool isDiscrete(String property) throw();
+				static bool isMixed(String property) throw();
 
 			protected:
 				std::map<String, float>  properties_real_;  
@@ -264,112 +219,7 @@ namespace BALL
 				bool 			hasHA2_HBond_(Residue* residue) throw();
 				bool 			hasHN_HBond_(Residue* residue) throw();
 				bool 			hasO_HBond_(Residue* residue) throw();
-
 				
-				/**	is the current atom in the first residue of a chain? 
-				 */
-				bool 				is_first_residue;
-				/** is the atom before in the first residue of a chain? 
-				 */
-				bool				prev_is_first_residue;
-				/**	is the atom behind in the first residue of a chain? 
-				 */
-				bool				next_is_first_residue;
-
-				/** amino acid type of the (previous/following) residue of the atom in degree
-				 */
-				char	amino_acid_type;
-				char	prev_amino_acid_type;
-				char	next_amino_acid_type;
-
-				/** secondary structure of the (previous/following) residue of the atom in degree
-				 */
-				char 	secondary_structure;
-				char  prev_secondary_structure;
-				char 	next_secondary_structure;
-
-				/** psi angle of the (previous/following) residue of the atom in degree
-				 */
-				float				psi_angle;
-				float 			prev_psi_angle;
-				float 			next_psi_angle;
-
-				/** phi angle of the (previous/following) residue of the atom in degree
-				 */
-				float				phi_angle;
-				float				prev_phi_angle;
-				float				next_phi_angle;
-
-				/** chi angle of the (previous/following) residue of the atom in degree
-				 */
-				float				chi_angle;
-				float				prev_chi_angle;
-				float				next_chi_angle;
-
-				/** chi2 angle of the (previous/following) residue of the atom in degree
-				 */
-				float				chi2_angle;
-				float				prev_chi2_angle;
-				float				next_chi2_angle;
-
-				/**	length of the HA-HBond of the (previous/following) residue
-				 */
-				float 			HA_HBond_len;
-				float 			prev_HA_HBond_len;
-				float 			next_HA_HBond_len;
-
-				/**	length of the HA2-HBond of the (previous/following) residue
-				 */
-				float 			HA2_HBond_len;
-				float 			prev_HA2_HBond_len;
-				float 			next_HA2_HBond_len;
-
-				/**	length of the HN-HBond of the (previous/following) residue
-				 */
-				float 			HN_HBond_len;
-				float 			prev_HN_HBond_len;
-				float 			next_HN_HBond_len;
-
-				/**	length of the O-HBond of the (previous/following) residue
-				 */
-				float 			O_HBond_len;
-				float 			prev_O_HBond_len;
-				float 			next_O_HBond_len;
-
-				/**	has the (previous/following) residue a disulfid bond?
-				 */
-				bool 				has_disulfid_bond;
-				bool 				prev_has_disulfid_bond;
-				bool 				next_has_disulfid_bond;
-
-				/**	has the (previous/following) residue a HA-HBond?
-				 */
-				bool 				has_HA_HBond;
-				bool 				prev_has_HA_HBond;
-				bool 				next_has_HA_HBond;
-
-				/**	has the (previous/following) residue a HA2-HBond?
-				 */
-				bool 				has_HA2_HBond;
-				bool 				prev_has_HA2_HBond;
-				bool 				next_has_HA2_HBond;
-
-				/**	has the (previous/following) residue a HN-HBond?
-				 */
-				bool 				has_HN_HBond;
-				bool 				prev_has_HN_HBond;
-				bool 				next_has_HN_HBond;
-
-				/**	has the (previous/following) residue a O-HBond?
-				 */
-				bool 				has_O_HBond;
-				bool 				prev_has_O_HBond;
-				bool 				next_has_O_HBond;
-
-				/** hydrogen bond status
-				 */
-				bool				hydrogen_bond_status;
-
 		}; // end of nested class
 		
 
@@ -401,8 +251,13 @@ namespace BALL
 				 */
 				ShiftHyperSurface_() throw();
 				
-				ShiftHyperSurface_(String filename, String atomtype, String firstproperty, String secondproperty) throw();  
+				ShiftHyperSurface_(String filename, String atomtype, String firstproperty, String secondproperty)
+					throw();  
 				
+				/**	Destructor.
+				*/
+				virtual ~ShiftHyperSurface_() throw();
+
 				/** computes the shift of an atom. 
 				 */
 				float operator () (PropertiesForShift_& properties) throw();	
@@ -418,7 +273,8 @@ namespace BALL
 				String string_property_;
 
 				CubicSpline2D_ 															s2d_;
-				std::map<String, CubicSpline1D_ > 					s1d_; 
+				std::map <String, CubicSpline1D_ > 					s1d_;
+				// access to the table first key x, second key y: 
 				std::map <String, std::map<String, float> > table_;
 					
 		};
@@ -445,13 +301,16 @@ namespace BALL
 				/*_ The files storing the property-data-splines for computing the
 				 * shift contributions are stored in a map, whose key is the pair of
 				 * properties, to which the splines belong.
-				 * The maps are stored per target atom in the same order as the target_names.
+				 * The maps are stored per target atom type in the same order as the target_names.
 				 * The files are specified in the section {\tt EmpiricalShiftHyperSurfaces} 
 				 * of the file {\tt ShiftX.ini} and are collected by {\tt init ()}.
 				 */
 				vector< std::map< std::pair<String, String>, String >	>		property_files_; 
 			
-				vector< vector< std::pair<String, String> > >  property_pairs_;
+				/*_ The property pairs for each atom type are stored in this map.
+				 *  The map is created in {\tt init ()}.
+				 **/
+				std::map< String, vector< std::pair<String, String> > >  property_pairs_;
 				
 				/*_ The hypersurfaces are precomputed by {\tt init()}
 				 *  and then are stored in this map with key atom_type
