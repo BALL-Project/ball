@@ -117,19 +117,38 @@ namespace BALL
     
     system_backup_b_ = sys_lig;
     
-		Log.error() << "before create energy grid" << std::endl;
+    Log.error() << "before create energy grid" << std::endl;
     /** create energy grid 
      */
-    eg_ = new EnergyGrid(file,system_backup_a_, *ligand_);    	
-		Log.error() << "after create energy grid" << std::endl;
 
+    
+    /** create rotable bonds class with ligand
+     */
+    rb_ = new RotateBonds(*ligand_);
+    
+    /** insert ligand to calculate conformation energy
+     */
+    sys_.insert(*ligand_);
+    
+    /** setup amber to calculate ligand
+     */
+    sys_.select();
+    ff_->setup(sys_);
+    sys_.deselect();
+    ligand_->select();
+    
+
+
+    eg_ = new EnergyGrid(file,system_backup_a_, *ligand_);    	
+    Log.error() << "after create energy grid" << std::endl;
+    
     
     draw_system_ = system_backup_a_;
     
     draw_system_.insert(*draw_ligand_);
 
-		//String docking_name = system_ba.getName() + "_" + S2.getName();
-		draw_system_.setName(system_backup_a_.getName() + "_" + system_backup_b_.getName() );
+    //String docking_name = system_ba.getName() + "_" + S2.getName();
+    draw_system_.setName(system_backup_a_.getName() + "_" + system_backup_b_.getName() );
 
     bool bound;
     
@@ -172,16 +191,16 @@ namespace BALL
      */
     rb_ = new RotateBonds(*ligand_);
     
-    /** insert ligand to calculate conformation energy
-     */
-    sys_.insert(*ligand_);
+//     /** insert ligand to calculate conformation energy
+//      */
+//     sys_.insert(*ligand_);
     
-    /** setup amber to calculate ligand
-     */
-    sys_.select();
-    ff_->setup(sys_);
-    sys_.deselect();
-    ligand_->select();
+//     /** setup amber to calculate ligand
+//      */
+//     sys_.select();
+//     ff_->setup(sys_);
+//     sys_.deselect();
+//     ligand_->select();
     
     /** save ligand positions to restore after calculation 
      */
