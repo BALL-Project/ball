@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.13 2006/08/03 11:54:00 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.14 2006/08/03 13:14:13 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -252,7 +252,7 @@ namespace BALL
 				return;
 			}
 			// check which algorithm is chosen and create a DockingAlgorithm object
-			Index index = dock_dialog_.algorithms->currentIndex();
+			Index index = dock_dialog_.algorithms_item_to_enum[dock_dialog_.algorithms->currentText()];
 			switch(index)
 			{
 				case GEOMETRIC_FIT:
@@ -390,7 +390,7 @@ namespace BALL
 		 	// create scoring function object
 			EnergeticEvaluation* scoring = 0;
 			//check which scoring function is chosen
-			Index index = dock_dialog_.scoring_functions->currentIndex();
+			Index index = dock_dialog_.scoring_functions_item_to_enum[dock_dialog_.scoring_functions->currentText()];
 			switch(index)
 			{
 				case DEFAULT:

@@ -35,6 +35,8 @@
 
 #include <BALL/VIEW/UIC/dockDialogData.h>
 
+#include <map>
+
 namespace BALL
 {
 	class INIFile;
@@ -190,7 +192,14 @@ namespace BALL
 				void reset()
 					throw();
 				//@}
+				
 					
+				/**
+				 */
+				std::map<QString,int> algorithms_item_to_enum;
+				std::map<QString,int> scoring_functions_item_to_enum;
+
+
 			public slots:
 	
 				/** Shows and raises the dialog.
@@ -319,7 +328,7 @@ namespace BALL
 				 *  value: advanced options dialog
 				 */
 				HashMap<int, QDialog*> scoring_dialogs_;
-			
+	
 				/** key: DockingController::Algorithm
 				 *  value: vector of scoring functions which can be used with this algorithm
 				 */

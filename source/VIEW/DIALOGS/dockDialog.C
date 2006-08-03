@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.6.2.12 2006/07/19 15:16:49 leonhardt Exp $
+// $Id: dockDialog.C,v 1.5.2.6.2.13 2006/08/03 13:14:08 leonhardt Exp $
 //
 
 #include <QtGui/qpushbutton.h>
@@ -111,6 +111,8 @@ namespace BALL
 			: QDialog(),
 				Ui_DockDialogData(),
 				PreferencesEntry(dock_dialog),
+				algorithms_item_to_enum(dock_dialog.algorithms_item_to_enum),
+				scoring_functions_item_to_enum(dock_dialog.scoring_functions_item_to_enum),
 				is_redock_(dock_dialog.is_redock_),
 				has_changed_(dock_dialog.has_changed_),
 				algorithm_dialogs_(dock_dialog.algorithm_dialogs_),
@@ -149,6 +151,8 @@ namespace BALL
 		{
 			if (&dock_dialog != this)
 			{
+				algorithms_item_to_enum = dock_dialog.algorithms_item_to_enum;
+				scoring_functions_item_to_enum = dock_dialog.scoring_functions_item_to_enum;
 				is_redock_ = dock_dialog.is_redock_;
 				has_changed_ = dock_dialog.has_changed_;
 				// dialogs in hashmaps are dynamically allocated in method initializeWidget()
@@ -243,7 +247,9 @@ namespace BALL
 				algorithm_dialogs_[algorithm] = dialog;
 			}
 			// add to ComboBox
-			algorithms->addItem(name, algorithm);
+			algorithms->addItem(name);
+			// add to enum_map
+			algorithms_item_to_enum[name] = algorithm;
 		}
 		
 		// Adds scoring function to Combobox and its advanced option dialogs to HashMap, if it has such an dialog.
@@ -256,7 +262,9 @@ namespace BALL
 				scoring_dialogs_[score_func] = dialog;
 			}
 			// add to ComboBox
-			scoring_functions->addItem(name, score_func);
+			scoring_functions->addItem(name);
+			// add to enum_map
+			scoring_functions_item_to_enum[name] = score_func;
 		}
 		
 		// is called by DockingController::initializeWidget()
@@ -437,7 +445,7 @@ namespace BALL
 				return;
 			}
 			// options for chosen algorithm; options are filled by the corresponding dialog
-			Index index = algorithms->currentIndex();
+			Index index = algorithms_item_to_enum[algorithms->currentText()];
       algorithm_dialogs_[index]->getOptions(algorithm_opt_);
 			switch(index)
 			{
@@ -486,7 +494,7 @@ namespace BALL
 			}
 			
 			// options for chosen scoring function
-			index = scoring_functions->currentIndex();
+			index = scoring_functions_item_to_enum[scoring_functions->currentText()];
 			switch(index)
 			{
 				case DockingController::AMBER_FF:
@@ -817,7 +825,7 @@ namespace BALL
 		void DockDialog::algAdvancedPressed()
 		{
 			// show corresponding options dialog
-			Index index = algorithms->currentIndex();
+			Index index = algorithms_item_to_enum[algorithms->currentText()];
 			if (algorithm_dialogs_.has(index))
 			{
 				algorithm_dialogs_[index]->isRedock(is_redock_);
@@ -846,7 +854,7 @@ namespace BALL
 		void DockDialog::scoringAdvancedPressed()
 		{
 			// show corresponding options dialog
-			Index index = scoring_functions->currentIndex();
+			Index index = scoring_functions_item_to_enum[scoring_functions->currentText()];
 			if (scoring_dialogs_.has(index))
 			{
 				scoring_dialogs_[index]->exec();
@@ -879,7 +887,7 @@ namespace BALL
 		void DockDialog::scoringFuncChosen()
 		{
 			// if chosen scoring function has advanced options, enable advanced_button
-			Index index = scoring_functions->currentIndex();
+			Index index = scoring_functions_item_to_enum[scoring_functions->currentText()];
 			if (scoring_dialogs_.has(index))
 			{
 				scoring_advanced_button->setEnabled(true);
@@ -894,7 +902,7 @@ namespace BALL
 		void DockDialog::algorithmChosen()
 		{
 			// if chosen algorithm has advanced options
-			Index index = algorithms->currentIndex();
+			Index index = algorithms_item_to_enum[algorithms->currentText()];
 			if (algorithm_dialogs_.has(index))
 			{
 				alg_advanced_button->setEnabled(true);
