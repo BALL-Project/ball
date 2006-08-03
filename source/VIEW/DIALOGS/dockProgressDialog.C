@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.4.2.2.2.1 2006/08/02 15:14:24 leonhardt Exp $
+// $Id: dockProgressDialog.C,v 1.4.2.2.2.2 2006/08/03 14:38:03 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockProgressDialog.h>
@@ -66,7 +66,7 @@ namespace BALL
 	  alg_ = dock_prog_dialog.alg_;
 	  //timer_ = dock_prog_dialog.timer_;           // QTimer::operator=(const QTimer&)' is private !
 	  start_time_ = dock_prog_dialog.start_time_;
-		remain_time_ = dock_prog_dialog.remain_time_;
+		remain_time_ = dock_prog_dialog.remain_time_,
 		time_step_ = dock_prog_dialog.time_step_;
 	}
       return *this;
@@ -169,24 +169,23 @@ namespace BALL
 			progress_bar->setValue((int)(progress * 100.0));
 			// calculate remaining time
 			int run_time = start_time_.secsTo(QDateTime::currentDateTime());
-			int hours, min, sec;
-			QString s;
+			if (progress == 1.0) remaining_time->setText("00:00:00");
+
 			if (progress > 0.01)
 			{
 				// average over 5 time steps
-				if (time_step_ < 1) 
+				if (time_step_ < 5) 
 				{	
-					Log.error() << "remain_time_" << remain_time_ << std::endl;
 					remain_time_ += (int)(((1.0 - progress)/progress) * run_time);
 					time_step_++;
 				}
 				else
 				{
 					remain_time_ = remain_time_ / time_step_;
-					hours = remain_time_ / 3600;
-					min = (remain_time_ % 3600) / 60;
-					sec = (remain_time_ % 3600) % 60;
-					QString convert;
+					int hours = remain_time_ / 3600;
+					int min = (remain_time_ % 3600) / 60;
+					int sec = (remain_time_ % 3600) % 60;
+					QString s,convert;
 					s.setNum(hours);
 					s.append(":");
 					if (!(min/10))
@@ -201,12 +200,15 @@ namespace BALL
 					}
 					s.append(convert.setNum(sec));
 					remaining_time->setText(s);
+
+					// rest avg variables
+					remain_time_ = 0;
+					time_step_ = 1;
 				}
 			}
 			else
 			{
-			 	s = "--:--:--";
-				remaining_time->setText(s);
+				remaining_time->setText("--:--:--");
 			}
 						
 			// if docking has not finished restart timer
