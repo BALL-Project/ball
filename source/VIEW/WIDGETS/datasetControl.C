@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.40.2.1 2006/06/09 15:00:33 leonhardt Exp $
+// $Id: datasetControl.C,v 1.46.2.40.2.2 2006/08/03 11:54:00 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -279,7 +279,6 @@ namespace BALL
 				if (composite_message->getType() != CompositeMessage::REMOVED_COMPOSITE) return;
 				Composite* composite = (Composite *)composite_message->getComposite();
 				if (!composite_to_items_.has(composite)) return;
-
 				// create a copy of the hashset, because it changes
 				HashSet<QTreeWidgetItem*> to_delete = composite_to_items_[composite];
 
@@ -313,6 +312,8 @@ namespace BALL
 			}
 			else if (item_to_dock_result_.has(&item))
 			{
+				Log.error() << "dock result item" << std::endl;
+
 				DockResult* dock_res = item_to_dock_result_[&item];
 				item_to_dock_result_.erase(&item);
 				delete dock_res;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.12 2006/08/03 08:59:42 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.13 2006/08/03 11:54:00 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -448,18 +448,19 @@ namespace BALL
 			dock_res->addScoring(ascii(dock_dialog_.scoring_functions->currentText()), dock_dialog_.getScoringOptions(), ranked_conformations);
 
 			// add docked system to BALLView structures if no intermediate result was shown during docking run
-			//CompositeManager& composite_manager = getMainControl()->getCompositeManager();
+		  //CompositeManager& composite_manager = getMainControl()->getCompositeManager();
 			//if(!composite_manager.has(&(conformation_set->getSystem())))
 			//{
-				docked_system_ = &conformation_set->getSystem();
-				
+				docked_system_ = new System(conformation_set->getSystem());
+				// remark: system is deleted by main control
 				const SnapShot& best_result = (*conformation_set)[0];
 				best_result.applySnapShot(*docked_system_);
-
+				//getMainControl()->deselectCompositeRecursive(docked_system_, true);
 				getMainControl()->insert(*docked_system_);
 			/*}
 			else
 			{
+				Log.error() << "in else" << std::endl;
 				getMainControl()->update(*docked_system_,true);
 			}*/
 
