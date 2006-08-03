@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.41.2.3.2.1 2006/06/09 15:00:32 leonhardt Exp $
+// $Id: threads.C,v 1.41.2.3.2.2 2006/08/03 11:53:03 leonhardt Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -435,8 +435,6 @@ namespace BALL
 					throw Exception::NullPointer(__FILE__, __LINE__);
 				}
 				
-				output_("starting docking...", true);
-
 				dock_alg_->start();
 				
 		 		DockingFinishedEvent* finished = new DockingFinishedEvent(dock_alg_->wasAborted());
@@ -445,8 +443,6 @@ namespace BALL
 				// conformation set is deleted in DockResult
 				finished->setConformationSet(cs);
 				qApp->postEvent(getMainControl(), finished);
-				
-				output_("Docking finished.", true);
 		}
 		
 		// =================================================0
