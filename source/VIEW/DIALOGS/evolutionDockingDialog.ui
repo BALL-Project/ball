@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>516</width>
-    <height>530</height>
+    <width>455</width>
+    <height>506</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -45,94 +45,262 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="3" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
+   <item rowspan="2" row="1" column="0" >
+    <widget class="QGroupBox" name="trans_box_group" >
+     <property name="title" >
+      <string>Translation box</string>
      </property>
-     <property name="sizeHint" >
-      <size>
-       <width>261</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="4" column="0" colspan="2" >
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="ok_button" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>1</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize" >
-        <size>
-         <width>90</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="text" >
-        <string>OK</string>
-       </property>
-       <property name="default" >
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancel_button" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>1</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize" >
-        <size>
-         <width>90</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="text" >
-        <string>Cancel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="reset_button" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>1</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize" >
-        <size>
-         <width>90</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="text" >
-        <string>Reset</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="6" column="0" >
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="x_label_2" >
+          <property name="maximumSize" >
+           <size>
+            <width>6</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>x</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="trans_box_top_x" >
+          <property name="maximumSize" >
+           <size>
+            <width>50</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>1.0</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignRight</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="y_label_2" >
+          <property name="maximumSize" >
+           <size>
+            <width>6</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>y</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="trans_box_top_y" >
+          <property name="maximumSize" >
+           <size>
+            <width>50</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>1.0</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignRight</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="z_label_2" >
+          <property name="maximumSize" >
+           <size>
+            <width>6</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>z</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="trans_box_top_z" >
+          <property name="maximumSize" >
+           <size>
+            <width>50</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>1.0</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignRight</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="4" column="0" >
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="x_label" >
+          <property name="maximumSize" >
+           <size>
+            <width>6</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>x</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="trans_box_bottom_x" >
+          <property name="maximumSize" >
+           <size>
+            <width>50</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>-1.0</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignRight</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="y_label" >
+          <property name="maximumSize" >
+           <size>
+            <width>6</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>y</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="trans_box_bottom_y" >
+          <property name="maximumSize" >
+           <size>
+            <width>50</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>-1.0</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignRight</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="z_label" >
+          <property name="maximumSize" >
+           <size>
+            <width>6</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>z</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="trans_box_bottom_z" >
+          <property name="maximumSize" >
+           <size>
+            <width>50</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>-1.0</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignRight</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="5" column="0" >
+       <widget class="QLabel" name="trans_box_top_label" >
+        <property name="text" >
+         <string>Translation box top</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QLabel" name="trans_box_botton_label" >
+        <property name="text" >
+         <string>Translation box botton</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QRadioButton" name="rel_trans_radio_button" >
+        <property name="text" >
+         <string>relative to ligand</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QRadioButton" name="abs_trans_radio_button" >
+        <property name="text" >
+         <string>absolute</string>
+        </property>
+        <property name="checked" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QRadioButton" name="grid_boundary_radio_button" >
+        <property name="text" >
+         <string>use energy grid boundaries</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0" >
+       <widget class="QPushButton" name="trans_box_button" >
+        <property name="text" >
+         <string>Show translation box</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item row="0" column="0" colspan="2" >
     <widget class="QGroupBox" name="grid_group" >
@@ -283,6 +451,158 @@
      </layout>
     </widget>
    </item>
+   <item row="4" column="0" colspan="2" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="ok_button" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>90</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>OK</string>
+       </property>
+       <property name="default" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancel_button" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>90</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="reset_button" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>90</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>Reset</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item rowspan="2" row="2" column="1" >
+    <widget class="QGroupBox" name="force_field_group" >
+     <property name="title" >
+      <string>Force Field</string>
+     </property>
+     <layout class="QVBoxLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QRadioButton" name="amber_radio_button" >
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>AMBER</string>
+        </property>
+        <property name="shortcut" >
+         <string/>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="charmm_radio_button" >
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>CHARMM</string>
+        </property>
+        <property name="shortcut" >
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="mmff94_radio_button" >
+        <property name="text" >
+         <string>MMFF94</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="force_field_button" >
+        <property name="minimumSize" >
+         <size>
+          <width>170</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="toolTip" >
+         <string>Edit force field options</string>
+        </property>
+        <property name="text" >
+         <string>&amp;Force field options</string>
+        </property>
+        <property name="shortcut" >
+         <string>Alt+F</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="1" column="1" >
     <widget class="QGroupBox" name="option_group" >
      <property name="title" >
@@ -390,272 +710,18 @@
      </layout>
     </widget>
    </item>
-   <item rowspan="2" row="2" column="1" >
-    <widget class="QGroupBox" name="force_field_group" >
-     <property name="title" >
-      <string>Force Field</string>
+   <item row="3" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
      </property>
-     <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item>
-       <widget class="QRadioButton" name="amber_radio_button" >
-        <property name="minimumSize" >
-         <size>
-          <width>0</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>AMBER</string>
-        </property>
-        <property name="shortcut" >
-         <string/>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="charmm_radio_button" >
-        <property name="minimumSize" >
-         <size>
-          <width>0</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>CHARMM</string>
-        </property>
-        <property name="shortcut" >
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="mmff94_radio_button" >
-        <property name="text" >
-         <string>MMFF94</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="force_field_button" >
-        <property name="minimumSize" >
-         <size>
-          <width>170</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="toolTip" >
-         <string>Edit force field options</string>
-        </property>
-        <property name="text" >
-         <string>&amp;Force field options</string>
-        </property>
-        <property name="shortcut" >
-         <string>Alt+F</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item rowspan="2" row="1" column="0" >
-    <widget class="QGroupBox" name="trans_box_group" >
-     <property name="title" >
-      <string>Translation box</string>
+     <property name="sizeHint" >
+      <size>
+       <width>221</width>
+       <height>20</height>
+      </size>
      </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="5" column="5" >
-       <widget class="QLineEdit" name="trans_box_top_z" >
-        <property name="maximumSize" >
-         <size>
-          <width>50</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>-1.0</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight</set>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="5" >
-       <widget class="QLineEdit" name="trans_box_bottom_z" >
-        <property name="maximumSize" >
-         <size>
-          <width>50</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>1.0</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight</set>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="3" >
-       <widget class="QLineEdit" name="trans_box_top_y" >
-        <property name="maximumSize" >
-         <size>
-          <width>50</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>-1.0</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight</set>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3" >
-       <widget class="QLineEdit" name="trans_box_bottom_y" >
-        <property name="maximumSize" >
-         <size>
-          <width>50</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>1.0</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight</set>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1" >
-       <widget class="QLineEdit" name="trans_box_top_x" >
-        <property name="maximumSize" >
-         <size>
-          <width>50</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>-1.0</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight</set>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1" >
-       <widget class="QLineEdit" name="trans_box_bottom_x" >
-        <property name="maximumSize" >
-         <size>
-          <width>50</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>1.0</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="5" >
-       <widget class="QRadioButton" name="rel_trans_radio_button" >
-        <property name="text" >
-         <string>relative to ligand</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0" >
-       <widget class="QLabel" name="x_label_2" >
-        <property name="text" >
-         <string>x</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0" colspan="4" >
-       <widget class="QPushButton" name="trans_box_button" >
-        <property name="text" >
-         <string>Show translation box</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" colspan="4" >
-       <widget class="QRadioButton" name="abs_trans_radio_button" >
-        <property name="text" >
-         <string>absolute</string>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="5" >
-       <widget class="QLabel" name="trans_box_botton_label" >
-        <property name="text" >
-         <string>Translation box botton</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" >
-       <widget class="QLabel" name="x_label" >
-        <property name="text" >
-         <string>x</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0" colspan="5" >
-       <widget class="QLabel" name="trans_box_top_label" >
-        <property name="text" >
-         <string>Translation box top</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="4" >
-       <widget class="QLabel" name="z_label_2" >
-        <property name="text" >
-         <string>z</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="4" >
-       <widget class="QLabel" name="z_label" >
-        <property name="text" >
-         <string>z</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2" >
-       <widget class="QLabel" name="y_label" >
-        <property name="text" >
-         <string>y</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2" >
-       <widget class="QLabel" name="y_label_2" >
-        <property name="text" >
-         <string>y</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
+    </spacer>
    </item>
   </layout>
  </widget>

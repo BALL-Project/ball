@@ -118,6 +118,16 @@ namespace BALL
 				options[EvolutionaryDocking::Option::POPULATION] = ascii(population->text()).toInt();
 				options[EvolutionaryDocking::Option::SURVIVORS] = ascii(survivors->text()).toInt();
 				
+				if(grid_boundary_radio_button->isChecked())
+				{
+					options[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_X] = 0.0;
+					options[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Y] = 0.0;
+					options[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_Z] = 0.0;
+					options[EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_X] = 0.0;
+					options[EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Y] = 0.0;
+					options[EvolutionaryDocking::Option::TRANSLATION_BOX_TOP_Z] = 0.0;
+				}
+
 				if(abs_trans_radio_button->isChecked())
 				{
 					options[EvolutionaryDocking::Option::TRANSLATION_BOX_BOTTOM_X] = ascii(trans_box_bottom_x->text()).toFloat();
@@ -262,7 +272,7 @@ namespace BALL
 
 		void EvolutionDockingDialog::showTranslationBox()
 		{
-			Log.error() << "in EvolutionDockingDialog::showTranslationBox()" << std::endl;
+			if(grid_boundary_radio_button->isChecked()) return;
 
 			float x_bottom = ascii(trans_box_bottom_x->text()).toFloat();
 			float y_bottom = ascii(trans_box_bottom_y->text()).toFloat();
