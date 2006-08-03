@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.11 2006/08/02 15:15:24 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.12 2006/08/03 08:59:42 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -301,16 +301,9 @@ namespace BALL
 					Log.error() << it->first << " " << it->second << std::endl;
 				}
 				Log.error() << "-------------------------------" << std::endl;
-
+				setStatusbarText("Loading energy grid...", true);
 				EvolutionaryDocking* ed = RTTI::castTo<EvolutionaryDocking>(*dock_alg_);
-				QMessageBox error_message("Information","Creating the energy grid may take a while...", 
-																		QMessageBox::Information,
-																		QMessageBox::NoButton,
-																		QMessageBox::NoButton,
-																		QMessageBox::NoButton);
-				error_message.exec();
 				ed->setup(*(dock_dialog_.getSystem1()), *(dock_dialog_.getSystem2()), dock_dialog_.getAlgorithmOptions(),dock_dialog_.getForceField());
-				error_message.close();
 			}
 			else
 			{
@@ -457,19 +450,18 @@ namespace BALL
 			// add docked system to BALLView structures if no intermediate result was shown during docking run
 			//CompositeManager& composite_manager = getMainControl()->getCompositeManager();
 			//if(!composite_manager.has(&(conformation_set->getSystem())))
-			if(docked_system_ == NULL)
-			{
+			//{
 				docked_system_ = &conformation_set->getSystem();
 				
 				const SnapShot& best_result = (*conformation_set)[0];
 				best_result.applySnapShot(*docked_system_);
 
 				getMainControl()->insert(*docked_system_);
-			}
+			/*}
 			else
 			{
 				getMainControl()->update(*docked_system_,true);
-			}
+			}*/
 
 			// send a DockResultMessage
 			NewDockResultMessage* dock_res_m = new NewDockResultMessage();
