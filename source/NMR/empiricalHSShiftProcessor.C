@@ -9,6 +9,8 @@
 #include <set>
 #include <BALL/SYSTEM/path.h>
 
+#define FLOAT_VALUE_NA 3600.
+#define STRING_VALUE_NA '?'
 
 using namespace std;
 
@@ -223,10 +225,11 @@ namespace BALL
 			// add it to the total shift
 			float old_shift = target.atom->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat(); 
 			target.atom->setProperty(ShiftModule::PROPERTY__SHIFT, (old_shift + EHS_shift)); 
- std::cout << "EHS SHIft: "<< EHS_shift << std::endl;
+// std::cout << "EHS SHIft: "<< EHS_shift << std::endl;
 		}
 
-		
+		printTargets_();
+		printParameters_();
 		return true;
 	}
 	
@@ -314,8 +317,30 @@ namespace BALL
 // 
 
 	void EmpiricalHSShiftProcessor::CubicSpline1D_::createSpline(const std::vector<float>& sample_positions, 
-											const std::vector<float>& sample_values)
+											const std::vector<float>& sample_values, bool return_average)
 	{
+		// store the out of bound behaviour flag 
+		return_average_ =  return_average;
+		
+		// do we have reasonable data?
+		if (sample_values.size() != sample_positions.size())
+		{	
+			std::cerr << "CubicSpline1D_::createSpline: number of sample positions != number of sample values" << std::endl;
+			return;
+		}		
+		
+		average_ = 0.;
+		// in case we have too less values or the access-values is out of bound
+		// we want to return the average -> compute the average
+		for (Position i=0; i < sample_values.size(); i++)
+		{
+			average_ += sample_values[i];
+		}
+		average_ /= sample_values.size();
+			
+		//
+		// now we compute the spline
+		// 
 		float p, qn, sig,un;
 		std::vector<float> u;
 
@@ -326,23 +351,23 @@ namespace BALL
 		//initialize the vectors
 		curvature_.resize(n,0.);
 		u.resize(n,0.); 
-
+		
 		//natural spline
 		curvature_[0] = 0.;        //-0.5;
 		u[0] = 0.0;                // (3.0/(sample_positions[1]-sample_positions[0]))*((sample_values[1]-sample_values[0])/(sample_positions[1]-sample_positions[0])-yp1);
 
 		for (int i=1;i < n-1;i++) 
 		{
-
 //			std::cout << "i" <<  i << " " << sample_positions_.size() << " " << sample_values.size() << std::endl;
 			//This is the decomposition loop of the tridiagonal algorithm.
 			//curvature_ and u are used for temporary
 			//storage of the decomposed factors.
-			sig=(sample_positions[i]-sample_positions[i-1])/(sample_positions[i+1]-sample_positions[i-1]);
-			p=sig*curvature_[i-1]+2.0;
-			curvature_[i]=(sig-1.0)/p;
-			u[i]=(sample_values[i+1]-sample_values[i])/(sample_positions[i+1]-sample_positions[i]) - (sample_values[i]-sample_values[i-1])/(sample_positions[i]-sample_positions[i-1]);
-			u[i]=(6.0*u[i]/(sample_positions[i+1]-sample_positions[i-1])-sig*u[i-1])/p;
+			sig = (sample_positions[i]-sample_positions[i-1]) / (sample_positions[i+1]-sample_positions[i-1]);
+			p = sig*curvature_[i-1] + 2.0;
+			curvature_[i] = (sig-1.0)/p;
+			u[i] =  (sample_values[i+1]-sample_values[i]) / (sample_positions[i+1]-sample_positions[i]) 
+				    - (sample_values[i]-sample_values[i-1]) / (sample_positions[i]-sample_positions[i-1]);
+			u[i] =  (6.0*u[i] / (sample_positions[i+1] - sample_positions[i-1]) - sig*u[i-1])/p;
 		}
 
 		// for natural splines 
@@ -354,12 +379,12 @@ namespace BALL
 		 un=(3.0/(sample_positions[n]-sample_positions[n-1]))*(ypn-(sample_values[n]-sample_values[n-1])/(sample_positions[n]-sample_positions[n-1]));
 		 */
 
-		curvature_[n-1]=(un-qn*u[n-2])/(qn*curvature_[n-2]+1.0);
+		curvature_[n-1] = (un-qn*u[n-2])/(qn*curvature_[n-2] + 1.0);
 
 		//This is the backsubstitution loop of the tridiagonal algorithm.
-		for (int k=n-2;k>=0;k--) 
+		for (int k = n-2; k >= 0; k--) 
 		{	
-			curvature_[k]=curvature_[k]*curvature_[k+1]+u[k]; 
+			curvature_[k] = curvature_[k]*curvature_[k+1] + u[k]; 
 		}	
 		return;	
 	}
@@ -373,36 +398,47 @@ namespace BALL
 	void EmpiricalHSShiftProcessor::CubicSpline1D_::setCurvature(std::vector<float> curvature)
 	{
 //std::cout <<"setCurvature" << std::endl;
-
 		curvature_ = curvature;
 	}
 	
 	void EmpiricalHSShiftProcessor::CubicSpline1D_::setValues(std::vector<float> values)
 	{
 //std::cout << "setValues"<< std::endl;
-
 		sample_values_ = values;
 	}
 	
 	void EmpiricalHSShiftProcessor::CubicSpline1D_::setPositions(std::vector<float> positions)
 	{
 //std::cout <<"setPositions" << std::endl;
-
 		sample_positions_= positions;
 	}
 
 	float EmpiricalHSShiftProcessor::CubicSpline1D_::operator() (float x)
 	{
 		unsigned int n=sample_positions_.size();
-		// is this x position allowed?
-		if ((x < sample_positions_[0]) || (x>sample_positions_[n-1]))
+		// is this x position inside the boundaries?
+
+		if ((sample_positions_.size() > 0) && ((x < sample_positions_[0]) || (x>sample_positions_[n-1])))
 		{
 			// something _really_ bad happened
-			std::cerr << "invalid x position : " << x << " not between "<< sample_positions_[0] << " and " 
-								<< sample_positions_[n-1]<< std::endl;
-			return std::numeric_limits<float>::min();
+			if (!return_average_)
+			{
+				std::cerr << "invalid x position : " << x << " not between "<< sample_positions_[0] << " and " 
+									<< sample_positions_[n-1]<< std::endl;
+				return std::numeric_limits<float>::min();
+			}
+			else
+			{
+				return average_;
+			}
 		}
 
+		// Do we have enough points ?
+		if (sample_positions_.size() < 3)
+		{
+			return average_;
+		}
+			
 		// first, we find the indices bracketing the value x. we use bisection here
 		int lower_bound=0, upper_bound=n-1;
 		int index;
@@ -412,6 +448,7 @@ namespace BALL
 			if (sample_positions_[index] > x) upper_bound=index;
 			else lower_bound=index;
 		} 
+		
 		float spacing=sample_positions_[upper_bound]-sample_positions_[lower_bound];
 		if (spacing == 0.0)
 		{
@@ -447,17 +484,18 @@ namespace BALL
 	{
 //std::cout <<"createBICubicSpline" << std::endl;
 
-		sample_positions_x_=sample_positions_x;
-		sample_positions_y_=sample_positions_y;
+		sample_positions_x_ = sample_positions_x;
+		sample_positions_y_ = sample_positions_y;
 		int m = sample_positions_x_.size();
 
-		CubicSpline1D_ cs;
-
+		CubicSpline1D_ cs; 
+		
+		average_ = 0.;
 		for (int j = 0; j < m; j++)
 		{
 			// compute a 1Dspline
-			cs.createSpline(sample_positions_x[j], sample_values[j]);
-
+			cs.createSpline(sample_positions_x[j], sample_values[j], true);
+			average_ += cs.getAverage()/m;
 			// store the spline
 			splines_.push_back(cs);	
 		}
@@ -482,7 +520,11 @@ namespace BALL
 		}
 
 		// construct a new spline at these positions
-		cs.createSpline(sample_positions_y_, values);
+		cs.createSpline(sample_positions_y_, values, true);
+
+		// TEST!
+//		for (Position i=0; i<sample_positions_y_.size(); i++)
+//			std::cout << "last spline BALL: " << sample_positions_y_[i] << " " << values[i] << std::endl;
 
 		//evaluate the new spline at position y
 		return cs(y);
@@ -511,6 +553,14 @@ namespace BALL
 		Atom* X = 0;
 		
 		int num_of_atoms = 0;
+	
+		float angle =  FLOAT_VALUE_NA;
+
+
+		// SHIFTX requires that ALA has no typical CHI - angle
+		if ( 		(residue->getName() == "ALA") 
+				 || (residue->getName() == "GLY" ) )
+			return angle;
 		
 		AtomIterator r_it = residue->beginAtom();
 		for (; r_it != residue->endAtom(); ++r_it)
@@ -534,7 +584,7 @@ namespace BALL
 		if (num_of_atoms != 3)
 		{
 			Log.info() << "Torsion angle of " << residue->getName() << " could not be computed!" << std::endl;
-			return 0.;
+			return FLOAT_VALUE_NA;
 		}
 		
 		// determine the missing atom X
@@ -560,7 +610,7 @@ namespace BALL
 		if (residue_name == "GLY")
 		{ 
 			Log.info() << "Torsion angle of a Glycine could not be computed!" << std::endl;
-			return 0.;
+			return FLOAT_VALUE_NA;
 		}
 		else if (residue_name == "ALA")
 		{
@@ -644,7 +694,7 @@ namespace BALL
 		if (num_of_atoms != 4)
 		{
 			Log.info() << "Torsion angle of " << residue->getName() << " could not be computed!" << std::endl;
-			return 0.;
+			return FLOAT_VALUE_NA;
 
 		}
 		Vector3 a = N->getPosition();
@@ -652,9 +702,9 @@ namespace BALL
 		Vector3 c = CB->getPosition();
 		Vector3 d = X->getPosition();
 		
-		float angle = getTorsionAngle(a.x, a.y, a.z, b.x, b.y, b.z, 
+		angle = getTorsionAngle(a.x, a.y, a.z, b.x, b.y, b.z, 
 													 c.x, c.y, c.z, d.x, d.y, d.z)*180./M_PI;
-		while (angle < 60.)
+		while (angle < 0.)
 		{
 			angle = angle + 360.;
 		}
@@ -665,19 +715,18 @@ namespace BALL
 	float EmpiricalHSShiftProcessor::PropertiesForShift_::getChi2Angle_(Residue* residue) 
 		throw()
 	{	
-		Log.info() << "Chi2-angle-computation is not yet implemented !" << std::endl;
-		return 0.;
+		Log.info() << "Chi2-angle-computation is not yet implemented!" << std::endl;
+		return FLOAT_VALUE_NA;
 	}
 
 	
 	char EmpiricalHSShiftProcessor::PropertiesForShift_::getSecondaryStructure_(Residue* residue) 
 		throw()
 	{
-		char ret = ' ';
+		char ret = STRING_VALUE_NA;
 		if (residue->getSecondaryStructure() == 0)
 		{
-			ret = '?';
-			Log.info() << "No secondary structure available. Consider precomputing !" << std::endl;
+			Log.info() << "No secondary structure available. Consider precomputing!" << std::endl;
 		}
 		else if (residue->getSecondaryStructure()->getType() == SecondaryStructure::COIL)
 		{
@@ -695,7 +744,7 @@ namespace BALL
 	char EmpiricalHSShiftProcessor::PropertiesForShift_::getAminoAcid_(Residue* residue)
 		throw()
 	{	
-		char ret = ' ';
+		char ret = STRING_VALUE_NA;
 		if (residue->isAminoAcid())
 		{
 			ret = Peptides::OneLetterCode(residue->getName()); 
@@ -707,7 +756,7 @@ namespace BALL
 	float EmpiricalHSShiftProcessor::PropertiesForShift_::getHA_HBondLen_(Residue* residue)
 		throw()
 	{
-		float len = 0.;
+		float len = FLOAT_VALUE_NA;
 		Atom* HA = 0;
 		
 		AtomIterator r_it = residue->beginAtom();
@@ -738,7 +787,7 @@ namespace BALL
 	float EmpiricalHSShiftProcessor::PropertiesForShift_::getHA2_HBondLen_(Residue* residue)
 		throw()
 	{
-		float len = 0.;
+		float len = FLOAT_VALUE_NA ;
 		Atom* HA2 = 0;
 		
 		AtomIterator r_it = residue->beginAtom();
@@ -768,14 +817,14 @@ namespace BALL
 	float EmpiricalHSShiftProcessor::PropertiesForShift_::getHN_HBondLen_(Residue* residue)
 		throw()
 	{
-		float len = 0.;
+		float len = FLOAT_VALUE_NA;
 		Atom* HN = 0;
 		
 		AtomIterator r_it = residue->beginAtom();
 		for (; r_it != residue->endAtom(); ++r_it)
 		{	
 			String name = r_it->getName();
-			if (name == "HN")
+			if (name == "H")
 			{
 				HN = &(*r_it);
 			}
@@ -795,12 +844,38 @@ namespace BALL
 		return len;
 	}	
 
-//TODO!!!!!!!!!!!!!!!!!!!!!!!1
+	
 	float 	EmpiricalHSShiftProcessor::PropertiesForShift_::getO_HBondLen_(Residue* residue) 
 		throw()
 	{
-		float len = 0.;
-
+		float len = FLOAT_VALUE_NA;
+		
+		Atom* O = 0;
+		
+		AtomIterator r_it = residue->beginAtom();
+		for (; r_it != residue->endAtom(); ++r_it)
+		{	
+			String name = r_it->getName();
+			if (name == "O")
+			{
+				O = &(*r_it);
+			}
+		}
+		
+		if (O)
+		{
+			Atom::BondIterator bi = O->beginBond();
+			for (;+bi;++bi)
+			{	
+				if(bi->getType() == Bond::TYPE__HYDROGEN);
+				{
+					len = bi->getLength();
+					// TODO: Atom * H = bi-getPartner(O);
+					// len = (O->getPosition() -H.getPosition()).getLength();
+				}
+			}
+		}	
+		
 		return len;
 	}
 		
@@ -896,7 +971,8 @@ namespace BALL
 		return ret;
 	}
 
-	bool 		EmpiricalHSShiftProcessor::PropertiesForShift_::hasHN_HBond_(Residue* residue)
+	
+	bool 	EmpiricalHSShiftProcessor::PropertiesForShift_::hasHN_HBond_(Residue* residue)
 		throw()
 	{
 		bool ret = false;
@@ -906,7 +982,8 @@ namespace BALL
 		for (; r_it != residue->endAtom(); ++r_it)
 		{	
 			String name = r_it->getName();
-			if (name == "HN")
+		// the H atom iuapc named HN is called H in BALL!!! 
+			if (name == "H")
 			{
 				HN = &(*r_it);
 			}
@@ -947,7 +1024,11 @@ namespace BALL
 		Residue* next_residue = atom->getAncestor(*residue)->getNext(*residue);
 
 		// compute all properties needed for this atom type 
-		//for (std::set<String>::iterator it = target_property_names_[i].begin();
+		// NOTE: if a certain property is not available, it gets
+		// 	the value FLOAT_VALUE_NA or STRING_VALUE_NA
+		// 	thus we can evaluate unknown values 
+		// 	by assinging them the average value 
+		// 	( which is the way ShiftX works :-) )
 		for (std::set<String>::iterator it = properties.begin();
 				it != properties.end(); it++)
 		{	
@@ -955,12 +1036,33 @@ namespace BALL
 
 			if (!prev_residue)
 			{
-				return false;
+					properties_real_[("PSI_P")]  = FLOAT_VALUE_NA;
+					properties_real_[("PHI_P")]  = FLOAT_VALUE_NA;
+					properties_real_[("CHI_P")]  = FLOAT_VALUE_NA;
+					properties_real_[("CHI2_P")] = FLOAT_VALUE_NA;	
+					properties_real_[("HA1L_P")] = FLOAT_VALUE_NA;
+					properties_real_[("HA2L_P")] = FLOAT_VALUE_NA;
+					properties_real_[("HNL_P")] = FLOAT_VALUE_NA;	
+					properties_real_[("OHL_P")] = FLOAT_VALUE_NA;
+				
+					properties_string_[("AA_P")] = STRING_VALUE_NA;
+					properties_string_[("SS_P")] = STRING_VALUE_NA; 
+					properties_string_[("HA1_P")] = STRING_VALUE_NA;
+					properties_string_[("HA2_P")] = STRING_VALUE_NA;
+					properties_string_[("HN_P")] = STRING_VALUE_NA;	
+					properties_string_[("OH_P")] = STRING_VALUE_NA;	
+					properties_string_[("DISULFIDE_P")] = STRING_VALUE_NA;	
+					properties_string_[("CHI_P")] = STRING_VALUE_NA;
+
+					properties_string_[("FR")] = 'Y';
+					properties_string_[("FR_P")] = 'N';
+					properties_string_[("FR_N")] = 'N';
 			}
 			else
 			{
 				if ((*it) == 	"FR_P" )
 				{	
+					// TODO: maybe is N-terminal?
 					properties_string_[(*it)]= (prev_residue->isTerminal() ? "Y": "N");
 				}
 				else if ((*it) == 	"AA_P" )
@@ -973,13 +1075,45 @@ namespace BALL
 
 				}else if ((*it) == 	"PSI_P")
 				{
-					properties_real_[(*it)]=prev_residue->getTorsionPsi();	
+					if (prev_residue->hasTorsionPsi())
+					{	
+						properties_real_[(*it)]= prev_residue->getTorsionPsi().toDegree();	
+						if (properties_real_[(*it)] > 180)
+							properties_real_[(*it)] -= 360;
+						else if (properties_real_[(*it)] < -180)
+							properties_real_[(*it)] += 360;
+					}else
+					{	
+						properties_real_[(*it)] = FLOAT_VALUE_NA;
+					}
 				}else if ((*it) == 	"PHI_P")
 				{	
-					properties_real_[(*it)]= prev_residue->getTorsionPhi();	
+					if (prev_residue->hasTorsionPhi())
+					{		
+						properties_real_[(*it)]= prev_residue->getTorsionPhi().toDegree();	
+						if (properties_real_[(*it)] > 180)
+							properties_real_[(*it)] -= 360;
+						else if (properties_real_[(*it)] < -180)
+							properties_real_[(*it)] += 360;
+					}else
+					{
+						properties_real_[(*it)] = FLOAT_VALUE_NA;
+					}
 				}else if ((*it) == 	"CHI_P")
 				{
-					properties_real_[(*it)]=getChiAngle_(prev_residue);	
+					properties_real_[(*it)] = getChiAngle_(prev_residue);	
+					if (properties_real_[(*it)] == FLOAT_VALUE_NA)
+					{
+						if (   (prev_residue->getName() == "ALA") 
+								|| (prev_residue->getName() == "GLY") )
+						{
+							properties_string_[(*it)] = (prev_residue->getName());
+						}
+						else
+						{
+							properties_string_[(*it)] = "Unknown"; 
+						}
+					}						
 				}else if ((*it) == 	"CHI2_P")
 				{
 					properties_real_[(*it)]=getChi2Angle_(prev_residue);	
@@ -1015,12 +1149,33 @@ namespace BALL
 
 			if (!next_residue)
 			{
-				return false;
+					properties_real_[("PSI_N")]  = FLOAT_VALUE_NA;
+					properties_real_[("PHI_N")]  = FLOAT_VALUE_NA;
+					properties_real_[("CHI_N")]  = FLOAT_VALUE_NA;
+					properties_real_[("CHI2_N")] = FLOAT_VALUE_NA;
+					properties_real_[("HA1L_N")] = FLOAT_VALUE_NA;
+					properties_real_[("HA2L_N")] = FLOAT_VALUE_NA;
+					properties_real_[("HNL_N")] = FLOAT_VALUE_NA;	
+					properties_real_[("OHL_N")] = FLOAT_VALUE_NA;
+					
+					properties_string_[("AA_N")] = STRING_VALUE_NA;
+					properties_string_[("SS_N")] = STRING_VALUE_NA; 
+					properties_string_[("HA1_N")] = STRING_VALUE_NA;
+					properties_string_[("HA2_N")] = STRING_VALUE_NA;
+					properties_string_[("HN_N")] = STRING_VALUE_NA;	
+					properties_string_[("OH_N")] = STRING_VALUE_NA;	
+					properties_string_[("DISULFIDE_N")] = STRING_VALUE_NA;
+					properties_string_[("CHI_N")] = STRING_VALUE_NA;	
+
+					properties_string_[("FR_P")] = STRING_VALUE_NA;
+					properties_string_[("FR")]   = STRING_VALUE_NA;
+					properties_string_[("FR_N")] = STRING_VALUE_NA;
 			}
 			else
 			{
 				if ((*it) == 	"FR_N" )
 				{	
+					// TODO: maybe is N-terminal?
 					properties_string_[(*it)]=  (next_residue->isTerminal()? "Y": "N");	
 				}
 				else if ((*it) == 	"AA_N" )
@@ -1032,12 +1187,45 @@ namespace BALL
 
 				}else if ((*it) == 	"PSI_N")
 				{
-					properties_real_[(*it)]= next_residue->getTorsionPsi();
+					if (next_residue->hasTorsionPsi())
+					{	
+						properties_real_[(*it)]= next_residue->getTorsionPsi().toDegree();
+						if (properties_real_[(*it)] > 180)
+							properties_real_[(*it)] -= 360;
+						else if (properties_real_[(*it)] < -180)
+							properties_real_[(*it)] += 360;
+					}else
+					{	
+						properties_real_[("PSI_N")]  = FLOAT_VALUE_NA;
+					}
 				}else if ((*it) == 	"PHI_N")
 				{	
-					properties_real_[(*it)]= next_residue->getTorsionPhi();	
+					if (next_residue->hasTorsionPhi())
+					{	
+						properties_real_[(*it)]= next_residue->getTorsionPhi().toDegree();	
+						if (properties_real_[(*it)] > 180)
+							properties_real_[(*it)] -= 360;
+						else if (properties_real_[(*it)] < -180)
+							properties_real_[(*it)] += 360;	
+					}else
+					{
+						properties_real_[("PHI_N")]  = FLOAT_VALUE_NA;
+					}
 				}else if ((*it) == 	"CHI_N")
 				{
+					properties_real_[(*it)]=  getChiAngle_(next_residue);
+					if (properties_real_[(*it)] == FLOAT_VALUE_NA) 
+					{
+						if (   (next_residue->getName() == "ALA") 
+								|| (next_residue->getName() == "GLY") )
+						{
+							properties_string_[(*it)] = (next_residue->getName());
+						}
+						else
+						{
+							properties_string_[(*it)] = "Unknown"; 
+						}
+					}				
 					properties_real_[(*it)]=  getChiAngle_(next_residue);
 				}else if ((*it) == 	"CHI2_N")
 				{
@@ -1076,6 +1264,7 @@ namespace BALL
 
 			if ((*it) == "FR" )
 			{
+					// TODO: maybe is N-terminal?
 				properties_string_[(*it)]=  (residue->isTerminal() ? "Y": "N");			
 			}else if ((*it) == 	"AA" )
 			{	
@@ -1085,17 +1274,52 @@ namespace BALL
 				properties_string_[(*it)]=  getSecondaryStructure_(residue);
 			}else if ((*it) == 	"PSI")
 			{
-				properties_real_[(*it)]= residue->getTorsionPsi();
+				if (residue->hasTorsionPsi())
+				{	
+					properties_real_[(*it)]= residue->getTorsionPsi().toDegree();
+					if (properties_real_[(*it)] > 180)
+						properties_real_[(*it)] -= 360;
+					else if (properties_real_[(*it)] < -180)
+						properties_real_[(*it)] += 360;
+				}else
+				{	
+					properties_real_[(*it)] = FLOAT_VALUE_NA;
+				}
 			}else if ((*it) == 		"PHI")
 			{		
-				properties_real_[(*it)]= residue->getTorsionPhi();	
-			}else if ((*it) == 	"CHI")
+				if (residue->hasTorsionPhi())
+				{	
+					properties_real_[(*it)]= residue->getTorsionPhi().toDegree();	
+					if (properties_real_[(*it)] > 180)
+						properties_real_[(*it)] -= 360;
+					else if (properties_real_[(*it)] < -180)
+						properties_real_[(*it)] += 360;	
+				}else
+				{
+					properties_real_[(*it)] = FLOAT_VALUE_NA;
+				}
+			}
+			else if ((*it) == 	"CHI")
 			{
 				properties_real_[(*it)]= 	getChiAngle_(residue);	
-			}else if ((*it) == 	"CHI2")
+				if (properties_real_[(*it)] ==  FLOAT_VALUE_NA)
+				{
+					if (   (residue->getName() == "ALA") 
+							|| (residue->getName() == "GLY") )
+					{
+						properties_string_[(*it)] = (residue->getName());
+					}
+					else
+					{
+						properties_string_[(*it)] = "Unknown"; 
+					}
+				}				
+			}
+			else if ((*it) == 	"CHI2")
 			{
 				properties_real_[(*it)]= getChi2Angle_(residue);	
-			}else if ((*it) == 	"HA1L" )
+			}
+			else if ((*it) == 	"HA1L" )
 			{
 				properties_real_[(*it)]= getHA_HBondLen_(residue); 	
 			}else if ((*it) == 	"HA1" )
@@ -1133,7 +1357,7 @@ namespace BALL
 	{
 		if( property.hasSubstring("PSI") || property.hasSubstring("PHI") || 
 				property.hasSubstring("HA2L") || property.hasSubstring("HA1L") || 
-				property.hasSubstring("HNL") || property.hasSubstring("OHL") )
+				property.hasSubstring("HNL") || property.hasSubstring("OHL")|| property.hasSubstring("CHI") )
 			return false;
 		else
 			return true;
@@ -1154,15 +1378,24 @@ namespace BALL
 	std::pair<float, String>  EmpiricalHSShiftProcessor::PropertiesForShift_::operator [] (const String& property_name)
 		throw()
 	{
-		std::pair<float, String> p(std::numeric_limits<float>::min(),"INVALID");
-		if (properties_real_.find(property_name) != properties_real_.end())
+		// initialize the return value 
+		std::pair<float, String> p(FLOAT_VALUE_NA , STRING_VALUE_NA);
+		
+		// special case chi: 
+		// 		can be a string (ALA, GLY) or have an angle (float)
+		if (property_name.hasSubstring("CHI"))
+		{
+			p.first = properties_real_[property_name];	
+			p.second = properties_string_[property_name];
+		}
+		else if (properties_real_.find(property_name) != properties_real_.end())
 		{
 			p.first = properties_real_[property_name];
-		}else if (properties_string_.find(property_name) != properties_string_.end())
+		}
+		else if (properties_string_.find(property_name) != properties_string_.end())
 		{
 			p.second = properties_string_[property_name];
 		}
-			
 		return p;
 	}
 
@@ -1178,8 +1411,6 @@ namespace BALL
 		: type_(),
 			first_property_(),
 			second_property_(),
- 			float_property_(),
-			string_property_(),
 			s2d_(),
 			s1d_(),
 			table_()
@@ -1192,18 +1423,18 @@ namespace BALL
 		:	type_(),
 			first_property_(),
 			second_property_(),
- 			float_property_(),
-			string_property_(),
 			s2d_(),
 			s1d_(),
 			table_()
-	{		
+	{	
+		
+		std::cout << filename <<  std::endl;
 		// find the data file
 		BALL::Path p;
 		String file_name = p.find("NMR/"+filename) ;// "NMR/splinedata/hat_PSI_DISULFIDE-1.dat");
 		if (file_name == "")
 		{
-			Log.info () << "File " << filename << " could not be found" << std::endl;
+			Log.info() << "File " << filename << " could not be found" << std::endl;
 			//ToDO:: Flag for invalid !!!
 			return;
 		}
@@ -1211,504 +1442,720 @@ namespace BALL
 		//set the x property and the y property
 		first_property_  = firstproperty;
 		second_property_ = secondproperty;
+	
+		// set the Hypersurface type
+		setType_(firstproperty, secondproperty);
 		
-		//set the type
-		if(PropertiesForShift_::isMixed(firstproperty))
-		{
-			if (PropertiesForShift_::isMixed(secondproperty))
-				type_ = CHI__CHI;
-			else if (PropertiesForShift_::isDiscrete(secondproperty))
-				type_ = CHI__DISCRETE;
-			else 
-				type_ = CHI__REAL;
-		}		
-		else if (PropertiesForShift_::isDiscrete(firstproperty)) 
-		{
-			if (PropertiesForShift_::isMixed(secondproperty))
-				type_ = DISCRETE__CHI;
-			else if (PropertiesForShift_::isDiscrete(secondproperty))
-				type_ = DISCRETE__DISCRETE;
-			else 
-				type_ = DISCRETE__REAL;
-		} 
-		else 
-		{
-			if (PropertiesForShift_::isMixed(secondproperty))
-				type_ = REAL__CHI;
-			else if (PropertiesForShift_::isDiscrete(secondproperty))
-				type_ = REAL__DISCRETE;
-			else 
-				type_ = REAL__REAL;
-		}
-		
-		// read the datafile
+
+		//
+		// read and store the data
+		//
+
 		BALL::File file(file_name, std::ios::in);
 		String line;
+		String line2;
 		std::vector<BALL::String> fields;
+		std::vector<BALL::String> fields2;
 
-		// store the data
-		//createBiCubicSpline(const std::vector<std::vector<float> >& sample_positions_x,
-		//				const std::vector<float>& sample_positions_y,
-	//					const std::vector<std::vector<float> >& sample_values);	
-	//void createSpline(const std::vector<float>& sample_positions, 
-		//				const std::vector<float>& sample_values); // spline
+		// store the x sample positions
+		vector<vector<float> > float_sample_positions_x;
+		vector<vector<String> > string_sample_positions_x;
+		vector<float>  float_sample_positions_x_1d;
+		vector<String>  string_sample_positions_x_1d;
 
-		// stores in the R_* case the sample positions
-		vector<float> float_sample_positions_x;
-		// stores in the D_* case the string-keys, also used for the string part of the chi sample positions
-		vector<String> string_sample_positions_x;
-		// stores the float y samples positions in case _R 
+		// store the float y samples positions  
 		vector<float>  float_sample_positions_y;
 		vector<String> string_sample_positions_y;
-		
+	
+		// stores the sample values
 		vector<std::vector<float> > sample_values_2d;
-		vector<float> sample_values_1d;
-		vector<float> sample_positions_1d; //??
+
 		
-		// the x sample positions
-		line.getline(file);
-		line.split(fields, ";");
-//std::cout << "------------------------   ------------------"<< std::endl;
-//std::cout << line << std::endl;		
-		if (PropertiesForShift_::isMixed(firstproperty))
-		{
-//std::cout << "chi first property" << std::endl;
+		// if we have no real table 
+		// 
+		if(type_ == SINGLE__REAL)
+		{  
+			// we have a single spline 
+std::cout <<" SINGLE__REAL ; " << first_property_ << "  " << second_property_ << std::endl;
+			// read the points
+			line.getline(file);
+			line.split(fields, ";");
 
-			// we have to store the first 3 entries as floats, 
-			// and the second 3 entries as strings
-			for (Position i = 0; i < 3; i++)
+			for (Position i = 0; i < fields.size(); i++)
+			{	
+				float_sample_positions_x_1d.push_back(fields[i].toFloat());
+			}	
+
+			// read the values
+			if (file.good())
 			{
-				if (fabs(fields[i].toFloat()+60) < 1e-5)
-					float_sample_positions_x.push_back(300.);
+				line.getline(file);
+				line.split(fields, ";");
+
+				for (Position j = 0; j < fields.size(); j++)
+				{	
+					float_sample_positions_y.push_back(fields[j].toFloat());
+				}	
+
+				// store	
+				CubicSpline1D_ s;
+				s.createSpline(float_sample_positions_x_1d, float_sample_positions_y, true);
+for (Position i=0; i<float_sample_positions_y.size(); i++)
+	std::cout << "ANNE: " << float_sample_positions_x_1d[i] << " " << float_sample_positions_y[i] << " " << (s.getCurvature())[i] << std::endl;
+				// store him in the map
+				s1d_[first_property_] = s;
+			}
+			else
+			{
+				std::cerr<< "formaterror in " <<  filename << std::endl;
+			}
+		}
+		else if (type_ == SINGLE__DISCRETE)
+		{  // we have a single table line
+std::cout <<" SINGLE__DISCRETE ; " << first_property_ << "  " << second_property_ << std::endl;
+			// read the points
+			line.getline(file);
+			line.split(fields, ";");
+
+			for (Position i = 0; i < fields.size(); i++)
+			{	
+				string_sample_positions_x_1d.push_back(fields[i]);
+			}	
+
+			// read the values
+			if (file.good())
+			{
+				line.getline(file);
+				line.split(fields, ";");
+
+				if( fields.size()== string_sample_positions_x_1d.size())
+				{	
+					for (Position i = 0; i < fields.size(); i++)
+					{	
+						float_sample_positions_y.push_back(fields[i].toFloat());
+					}	
+					// store
+					for (Position i = 0; i < string_sample_positions_x_1d.size(); i++)  
+					{
+						table_[first_property_][string_sample_positions_x_1d[i]]= float_sample_positions_y[i];
+					}
+				}
 				else
-					float_sample_positions_x.push_back(fields[i].toFloat());
+				{	
+					std::cerr<< "formaterror in " <<  filename << std::endl;
+				}
 			}
-			for (Position i = 0; i < 3; i++)
+			else
 			{
-				string_sample_positions_x.push_back(fields[3+i]);
+				std::cerr<< "formaterror in " <<  filename << std::endl;
 			}
 		}
-		else if (PropertiesForShift_::isDiscrete(firstproperty))
+		else if (type_ == SINGLE__CHI)
 		{
-//std::cout << "discrete  first property" << std::endl;
-
-			for (Position i = 0; i < fields.size(); i++)
-			{
-				string_sample_positions_x.push_back(fields[i]);
-			}
+			std::cerr<< "CHICHI fuer SS not yet implemented"<< std::endl;
 		}
-		else
+		else    //        if we have a normal "table", 
 		{
-//std::cout << "real first property" << std::endl;
-
-			for (Position i = 0; i < fields.size(); i++)
-			{	
-				float_sample_positions_x.push_back(fields[i].toFloat());
-			}
-		}
-		
-		// the y sample positions
-		line.getline(file);
-		line.split(fields, ";");
-//std::cout << line << std::endl;
-		if (PropertiesForShift_::isMixed(secondproperty))
-		{
-//std::cout << "chi second property" << std::endl;
-
-			// we have to store the first 3 entries as floats, 
-			// and the second 3 entries as strings
-			for (Position i = 0; i < 3; i++)
-			{	
-				if (fabs(fields[i].toFloat()+60) < 1e-5)
-					float_sample_positions_y.push_back(300.);
-				else
-					float_sample_positions_y.push_back(fields[i].toFloat());
-			}
-
-			for (Position i = 0; i < 3; i++)
-			{
-				
-				string_sample_positions_y.push_back(fields[3+i]);
-			}
-		}
-		else if (PropertiesForShift_::isDiscrete(secondproperty))
-		{
-//std::cout << "discrete second property" << std::endl;
-			for (Position i = 0; i < fields.size(); i++)
-			{
-				string_sample_positions_y.push_back(fields[i]);
-			}
-		}
-		else
-		{
-//std::cout << "real second property" << std::endl;
-
-			for (Position i = 0; i < fields.size(); i++)
-			{	
-				float_sample_positions_y.push_back(fields[i].toFloat());
-			}
-		}
-
-		// the sample values
-		line.getline(file);
-		while (file.good())
-		{
-// std::cout << line<< std::endl;
+			//  first we read the y sample positions
+			line.getline(file);
 			line.split(fields, ";");
 			
-			std::vector<float> line_values;	
-			
-			for ( Position i = 0; i < fields.size(); i++)
+			/*	if (PropertiesForShift_::isMixed(secondproperty))
 			{
-				line_values.push_back(fields[i].toFloat());
-			}
-			sample_values_2d.push_back(line_values);
-			line.getline(file);
-		}
-	
-		//create 	a 2D bicubic spline, 
-		//				a map of 1D bicubic splines or 
-		//				a lookUpTable (map of map)  
+				std::cout << "chi second property" << std::endl;
 
-		if (type_ == REAL__REAL)
-		{
-//std::cout << "REAL__REAL" << std::endl;
-			// a bicubic spline is stored
-			s2d_.createBiCubicSpline(float_sample_positions_x, float_sample_positions_y, sample_values_2d);
-		//	std::cout << "value at (-170, -160) :" <<  s2d_(float(-170.),float(-160.)) << std::endl;
-		}
-		else if (type_ == REAL__DISCRETE)
-		{
-			// 		!!!!  C A U T I O N !!!! 
-			// When accessing the data, one has to switch X and Y, 
-			// since for each discrete value a 1D bicubic spline is stored
-			
-//std::cout << "REAL__DISCRETE" << std::endl;
-
-			for (Position i = 0; i < sample_values_2d.size(); i ++)
-			{
-				// create a 1D bicubic spline
-				CubicSpline1D_ s;
-				s.createSpline(float_sample_positions_x, sample_values_2d[i]);
-						
-				// store him in the map
-				s1d_[string_sample_positions_y[i]] = s;
+				// we have to store the first 3 entries as floats, 
+				// and the second 3 entries as strings
+				for (Position i = 0; i < 3; i++)
+				{	
+					if (fabs(fields[i].toFloat()+60) < 1e-5)
+						float_sample_positions_y.push_back(300.);
+					else
+						float_sample_positions_y.push_back(fields[i].toFloat());
+				}
+				for (Position i = 0; i < 3; i++)
+				{
+					string_sample_positions_y.push_back(fields[3+i]);
+				}
 			}
-		//	std::cout << "value at (-100., H) :" <<  s1d_['H'](float(-100.)) << std::endl;
-		}
-		else if (type_ == DISCRETE__REAL)
-		{
-//std::cout << "DISCRETE__REAL" << std::endl;
-			//
-			//   !!!!!  C A U T I O N  !!!!! 
-			//
-			// we store for each discrete value a 1D bicubic spline
-			// which means we store the "vertical" splines as "horizontal" splines
-			// such that when acessing one has to switch x and y 
-	
-			// and therefor we have to transpose the sample_values
-			vector <vector <float> > turned_sample_values_2d(string_sample_positions_x.size());
-			for (Position i = 0; i < float_sample_positions_y.size(); i++)
+			else*/ 
+			if (PropertiesForShift_::isDiscrete(secondproperty) 
+					|| (PropertiesForShift_::isMixed(secondproperty)))
 			{
+std::cout << "discrete or chi second property" << std::endl;
+				for (Position i = 0; i < fields.size(); i++)
+				{
+					string_sample_positions_y.push_back(fields[i]);
+				}
+			}
+			else
+			{
+std::cout << "real second property" << std::endl;
+				for (Position i = 0; i < fields.size(); i++)
+				{	
+					float_sample_positions_y.push_back(fields[i].toFloat());
+				}
+			}
+
+			//  we read the sample values in line pairs 
+			// 		of the  x positions and 
+			// 		the corresponding x values
+			line.getline(file); 
+			if (file.good())
+				line2.getline(file);
+			else
+				return;	
+
+			while (file.good())
+			{
+				//std::cout << line << std::endl;std::cout << line2 << std::endl;
+				line.split(fields, ";"); 		// the x points
+				line2.split(fields2, ";"); 	// the x values
+
+				std::vector<float> line_values;	
+				std::vector<float> line_values2;	
+
+				// clear the variables
+				float_sample_positions_x_1d.clear();
+				string_sample_positions_x_1d.clear();
+
+				if (fields.size() != fields2.size())
+				{
+					std::cerr << "number of points is unequal to number of values in file "<< filename << std::endl;
+				}
+				else
+				{	
+					//
+					// handle the x positions : can be chi, real or string
+					//
+					/*if (PropertiesForShift_::isMixed(firstproperty))
+					{
+	std::cout << "chi first property" << std::endl;
+						// we have to store the first 3 entries as floats, 
+						// and the second 3 entries as strings
+						for (Position i = 0; i < 3; i++)
+						{
+							if (fabs(fields[i].toFloat()+60) < 1e-5)
+								float_sample_positions_x_1d.push_back(300.);
+							else
+								float_sample_positions_x_1d.push_back(fields[i].toFloat());
+						}
+						for (Position i = 0; i < 3; i++)
+						{
+							string_sample_positions_x_1d.push_back(fields[3+i]);
+						}
+					}
+					else 
+					*/	
+					if (PropertiesForShift_::isDiscrete(firstproperty))
+					{
+		std::cout << "discrete  first property" << std::endl;
+						for (Position i = 0; i < fields.size(); i++)
+						{
+							string_sample_positions_x_1d.push_back(fields[i]);
+						}
+					}
+					else
+					{
+		std::cout << "real first property" << std::endl;
+						for (Position i = 0; i < fields.size(); i++)
+						{	
+							float_sample_positions_x_1d.push_back(fields[i].toFloat());
+						}
+					}
+
+					// store the new line
+					float_sample_positions_x.push_back(float_sample_positions_x_1d);
+					string_sample_positions_x.push_back(string_sample_positions_x_1d);
+					
+					//
+					// handle the x values
+					// 
+		
+					for (Position i = 0; i < fields.size(); i++)
+					{
+						line_values2.push_back(fields2[i].toFloat());
+					}
+					sample_values_2d.push_back(line_values2);
+				}
+
+				// read the next pair of lines
+				line.getline(file);
+				if (file.good())
+					line2.getline(file);
+				else
+					continue;
+			}
+
+			
+			// we have read the file now
+			// create 	a 2D bicubic spline, 
+			// 	  			a map of 1D bicubic splines or 
+			//	  			a lookUpTable (map of map)  
+ 
+std::cout << "create HS" << std::endl;
+			
+			if (type_ == REAL__REAL)
+			{
+std::cout << "REAL__REAL" << std::endl;
+				// a bicubic spline is stored
+				s2d_.createBiCubicSpline(float_sample_positions_x, float_sample_positions_y, sample_values_2d);
+				//	std::cout << "value at (-170, -160) :" <<  s2d_(float(-170.),float(-160.)) << std::endl;
+			}
+			else if (type_ == REAL__DISCRETE)
+			{
+				// 		!!!!  C A U T I O N !!!! 
+				// When accessing the data, one has to switch X and Y, 
+				// since for each discrete value a 1D bicubic spline is stored
+
+std::cout << "REAL__DISCRETE" << std::endl;
+
+				for (Position i = 0; i < sample_values_2d.size(); i ++)
+				{
+					// create a 1D bicubic spline
+					CubicSpline1D_ s;
+					s.createSpline(float_sample_positions_x[i], sample_values_2d[i], true);
+
+					// store him in the map
+					s1d_[string_sample_positions_y[i]] = s;
+				}
+				//	std::cout << "value at (-100., H) :" <<  s1d_['H'](float(-100.)) << std::endl;
+			}
+			else if (type_ == DISCRETE__REAL)
+			{ 
+std::cout << "DISCRETE__REAL not implemented" << std::endl;
+				/*			//
+				//   !!!!!  C A U T I O N  !!!!! 
+				//
+				// we store for each discrete value a 1D bicubic spline
+				// which means we store the "vertical" splines as "horizontal" splines
+				// such that when acessing one has to switch x and y 
+
+				// and therefor we have to transpose the sample_values
+				vector <vector <float> > turned_sample_values_2d(string_sample_positions_x.size());
+				for (Position i = 0; i < float_sample_positions_y.size(); i++)
+				{
 				for (Position j = 0; j < string_sample_positions_x.size(); j++)
 				{
-					turned_sample_values_2d[j].push_back(sample_values_2d[i][j]);
+				turned_sample_values_2d[j].push_back(sample_values_2d[i][j]);
 				}
-			}		
-			
-			for (Position i = 0; i < turned_sample_values_2d.size(); i ++)
-			{
+				}		
+
+				for (Position i = 0; i < turned_sample_values_2d.size(); i ++)
+				{
 				// create a 1D bicubic spline
 				CubicSpline1D_ s;
 				s.createSpline(float_sample_positions_y, turned_sample_values_2d[i]);
-						
+
 				// store him in the map
 				s1d_[string_sample_positions_x[i]] = s;
-			}
-			//	std::cout << "value at (C, -170) :" <<  s1d_['C'](float(-170.)) << std::endl;
-			
-	// TO DO: diesen Fehler und ähnliche abfangen!!! 
-	//std::cout << "value at (R, -170) :" <<  s1d_['R'](float(-170.)) << std::endl;
-		}
-		else if (type_ == DISCRETE__DISCRETE)
-		{
-//std::cout << "DISCRETE__DISCRETE" << std::endl;
+				}
+				//	std::cout << "value at (C, -170) :" <<  s1d_['C'](float(-170.)) << std::endl;
 
-			for (Position i = 0; i < sample_values_2d.size(); i++)  // y
+				// TO DO: diesen Fehler und ähnliche abfangen!!! 
+				//std::cout << "value at (R, -170) :" <<  s1d_['R'](float(-170.)) << std::endl;
+				 */	}
+			else if (type_ == DISCRETE__DISCRETE)
 			{
-				for (Position j = 0; j < sample_values_2d[i].size(); j++) // x
-				{ 	
-					table_[string_sample_positions_x[j]][string_sample_positions_y[i]]= sample_values_2d[i][j];
-				}
-			}
-		//	std::cout << "value at (A, N) :" <<  table_['A']['N'] << std::endl;
-		}
-		else if (type_ == CHI__DISCRETE)
-		{
-//std::cout << "CHI__DISCRETE" << std::endl;
-			// we have a table like this
-			// 
-			//	     60   180 -60        Unknown  ALA  GLY
-			//	C   								|
-			//									 		|
-			//  H   REAL__DISCRETE  | 	DISCRETE__DISCRETE
-			//   								 		| 			
-			//  B										|
-			//  so we have to store 
-			//     - a map of 1D Bicubic splines (case REAL__DISCRETE)
-			//  	 - and a table (case DISCRETE DISCRETE) 
-			
-			// 		!!!!  Remember: 
-			// When accessing the data, one has to switch X and Y, 
-			// since for each discrete value a 1D bicubic spline is stored
-			
-			// 		we have to split the data
-			vector<vector <float> > first_sample_values_2d(string_sample_positions_y.size());
-			vector<vector <float> > last_sample_values_2d(string_sample_positions_y.size());
-			for (Position i = 0 ; i < string_sample_positions_y.size() ; i++)
+std::cout << "DISCRETE__DISCRETE not implemented" << std::endl;
+				/*
+					 for (Position i = 0; i < sample_values_2d.size(); i++)  // y
+					 {
+					 for (Position j = 0; j < sample_values_2d[i].size(); j++) // x
+					 { 	
+					 table_[string_sample_positions_x[j]][string_sample_positions_y[i]]= sample_values_2d[i][j];
+					 }
+					 }
+				//	std::cout << "value at (A, N) :" <<  table_['A']['N'] << std::endl;
+				 */	}
+			else if (type_ == CHI__DISCRETE)
 			{
+std::cout << "CHI__DISCRETE not implemented" << std::endl;
+				/*	// we have a table like this
+				// 
+				//	     60   180 -60        Unknown  ALA  GLY
+				//	C   								|
+				//									 		|
+				//  H   REAL__DISCRETE  | 	DISCRETE__DISCRETE
+				//   								 		| 			
+				//  B										|
+				//  so we have to store 
+				//     - a map of 1D Bicubic splines (case REAL__DISCRETE)
+				//  	 - and a table (case DISCRETE DISCRETE) 
+
+				// 		!!!!  Remember: 
+				// When accessing the data, one has to switch X and Y, 
+				// since for each discrete value a 1D bicubic spline is stored
+
+				// 		we have to split the data
+				vector<vector <float> > first_sample_values_2d(string_sample_positions_y.size());
+				vector<vector <float> > last_sample_values_2d(string_sample_positions_y.size());
+				for (Position i = 0 ; i < string_sample_positions_y.size() ; i++)
+				{
 				for (Position j = 0; j < 3; j++)
 				{
-					first_sample_values_2d[i].push_back(sample_values_2d[i][j]);
+				first_sample_values_2d[i].push_back(sample_values_2d[i][j]);
 				}
 				for (Position j = 0; j < 3; j++)
 				{
-					last_sample_values_2d[i].push_back(sample_values_2d[i][j+3]);
+				last_sample_values_2d[i].push_back(sample_values_2d[i][j+3]);
 				}
-			}
-			
-			// first case REAL__DISCRETE
-			
-			
-			for (Position i = 0; i < string_sample_positions_y.size(); i ++)
-			{
+				}
+
+				// first case REAL__DISCRETE
+
+
+				for (Position i = 0; i < string_sample_positions_y.size(); i ++)
+				{
 				// create a 1D bicubic spline
 				CubicSpline1D_ s;
 				s.createSpline(float_sample_positions_x, first_sample_values_2d[i]);
-						
+
 				// store him in the map
 				s1d_[string_sample_positions_y[i]] = s;
-			}
-			
-			//std::cout << "value at (300., C) :" <<  s1d_['C'](float(300.)) << std::endl;
-			
-			// second case DISCRETE__DISCRETE
-			
-			for (Position i = 0; i < last_sample_values_2d.size(); i++)  // y
-			{
+				}
+
+				//std::cout << "value at (300., C) :" <<  s1d_['C'](float(300.)) << std::endl;
+
+				// second case DISCRETE__DISCRETE
+
+				for (Position i = 0; i < last_sample_values_2d.size(); i++)  // y
+				{
 				for (Position j = 0; j < last_sample_values_2d[i].size()  ; j++) // x
 				{
-					table_[string_sample_positions_x[j]][string_sample_positions_y[i]] = last_sample_values_2d[i][j];
+				table_[string_sample_positions_x[j]][string_sample_positions_y[i]] = last_sample_values_2d[i][j];
 				}
-			}
-		//	std::cout << "value at (GLY, B) :" <<  table_["GLY"]["B"] << std::endl;
-		}else if (type_ == DISCRETE__CHI)
-		{
-//std::cout << "DISCRETE__CHI" << std::endl;
-
-			// we are given a table like this
-			// 	 			C   H    B	
-			// 60
-			// 180
-			//-60
-			// --------------------------
-			// UNK
-			// ALA
-			// GLY
-
-			// so for the first three lines, we have 
-			// the case DISCRETE__REAL, and for the
-			// last three lines we have the case
-			// DISCRETE__DISCRETE
-			
-			
-			// First part  DISCRETE__REAL
-			
-			// and therefor we have to transpose the sample_values for the first 3 lines
-			vector <vector <float> > turned_sample_values_2d(string_sample_positions_x.size());
-			for (Position i = 0; i < 3; i++)// float_sample_positions_y.size(); i++)
-			{
-				for (Position j = 0; j < string_sample_positions_x.size(); j++)
+				}
+				//	std::cout << "value at (GLY, B) :" <<  table_["GLY"]["B"] << std::endl;
+				 */	}else if (type_ == DISCRETE__CHI)
 				{
+std::cout << "DISCRETE__CHI not implemented" << std::endl;
+					/*
+					// we are given a table like this
+					// 	 			C   H    B	
+					// 60
+					// 180
+					//-60
+					// --------------------------
+					// UNK
+					// ALA
+					// GLY
+
+					// so for the first three lines, we have 
+					// the case DISCRETE__REAL, and for the
+					// last three lines we have the case
+					// DISCRETE__DISCRETE
+
+
+					// First part  DISCRETE__REAL
+
+					// and therefor we have to transpose the sample_values for the first 3 lines
+					vector <vector <float> > turned_sample_values_2d(string_sample_positions_x.size());
+					for (Position i = 0; i < 3; i++)// float_sample_positions_y.size(); i++)
+					{
+					for (Position j = 0; j < string_sample_positions_x.size(); j++)
+					{
 					turned_sample_values_2d[j].push_back(sample_values_2d[i][j]);
-				}
-			}	
+					}
+					}	
 
-			// we have to split the data
-			vector<float > first_float_sample_positions_y;
-			for (Position i = 0; i < 3; i++)
-			{
-				first_float_sample_positions_y.push_back(float_sample_positions_y[i]);
-			}			
-		
-			turned_sample_values_2d.size();
-			for (Position i = 0; i < turned_sample_values_2d.size(); i ++)
-			{
-				// create a 1D bicubic spline
-				CubicSpline1D_ s;
-				s.createSpline(first_float_sample_positions_y, turned_sample_values_2d[i]);
+					// we have to split the data
+					vector<float > first_float_sample_positions_y;
+					for (Position i = 0; i < 3; i++)
+					{
+					first_float_sample_positions_y.push_back(float_sample_positions_y[i]);
+					}			
 
-				// store him in the map
-				s1d_[string_sample_positions_x[i]] = s;
-			}
-			//std::cout << "value at (C, 60) :" <<  s1d_['C'](float(60.)) << std::endl;
+					turned_sample_values_2d.size();
+					for (Position i = 0; i < turned_sample_values_2d.size(); i ++)
+					{
+					// create a 1D bicubic spline
+					CubicSpline1D_ s;
+					s.createSpline(first_float_sample_positions_y, turned_sample_values_2d[i]);
 
-			// second part DISCRETE__DISCRETE
+					// store him in the map
+					s1d_[string_sample_positions_x[i]] = s;
+					}
+					//std::cout << "value at (C, 60) :" <<  s1d_['C'](float(60.)) << std::endl;
 
-			for (Position i = 0; i < 3; i++) //x
-			{
-				for (Position j = 0; j < string_sample_positions_x.size(); j++) //y
-				{	
+					// second part DISCRETE__DISCRETE
+
+					for (Position i = 0; i < 3; i++) //x
+					{
+					for (Position j = 0; j < string_sample_positions_x.size(); j++) //y
+					{	
 					table_[string_sample_positions_x[j]][string_sample_positions_y[i]] = sample_values_2d[i+3][j];	
-				}
-			}
-		//	std::cout << "value at (H, ALA) :" <<  table_['H']["ALA"] << std::endl;
-		}	
-		else if (type_ == CHI__REAL)
-		{
-			// we are given a table like this
-			//
-			//        60  180  300  |  Unknown ALA GLY
-			// - 180								|
-			//  .										|
-			//  0										|
-			//  .										|
-			//  180									|
-			// so again we split into two subtables
-			//    - case REAL__REAL
-			//    - and case DISCRETE__REAL 
-			
-//std::cout << "CHI__REAL" << std::endl;
-			
-			// we have to split the data
-			vector<vector <float> > first_sample_values_2d(float_sample_positions_y.size());
-			vector<vector <float> > last_sample_values_2d(float_sample_positions_y.size());
-			for (Position i = 0 ; i < float_sample_positions_y.size() ; i++)
+					}
+					}
+					//	std::cout << "value at (H, ALA) :" <<  table_['H']["ALA"] << std::endl;
+					 */		}	
+			else if (type_ == CHI__REAL)
 			{
+				// we are given a table like this
+				//
+				//        60  180  300  |  Unknown ALA GLY
+				// - 180								|
+				//  .										|
+				//  0										|
+				//  .										|
+				//  180									|
+				// so again we split into two subtables
+				//    - case REAL__REAL
+				//    - and case DISCRETE__REAL 
+
+std::cout << "CHI__REAL not implemented" << std::endl;
+				/*			
+				// we have to split the data
+				vector<vector <float> > first_sample_values_2d(float_sample_positions_y.size());
+				vector<vector <float> > last_sample_values_2d(float_sample_positions_y.size());
+				for (Position i = 0 ; i < float_sample_positions_y.size() ; i++)
+				{
 				for (Position j = 0; j < 3; j++)
 				{
-					first_sample_values_2d[i].push_back(sample_values_2d[i][j]);
+				first_sample_values_2d[i].push_back(sample_values_2d[i][j]);
 				}
 				for (Position j = 0; j < 3; j++)
 				{
-					last_sample_values_2d[i].push_back(sample_values_2d[i][j+3]);
+				last_sample_values_2d[i].push_back(sample_values_2d[i][j+3]);
 				}
-			}
+				}
 
-			// case REAL__REAL : we store a 2d bicubic spline
-			s2d_.createBiCubicSpline(float_sample_positions_x, float_sample_positions_y, first_sample_values_2d);
-		//	std::cout << "value at ( 300, 180) :" <<  s2d_(float(300),float(180)) << std::endl;
+				// case REAL__REAL : we store a 2d bicubic spline
+				s2d_.createBiCubicSpline(float_sample_positions_x, float_sample_positions_y, first_sample_values_2d);
+				//	std::cout << "value at ( 300, 180) :" <<  s2d_(float(300),float(180)) << std::endl;
 
 
-			// case DISCRETE__REAL 
-			// !! R E M E M B E R !! 
-			// we have to transpose the data in order to store 
-			// for each discrete value a 1D bicubic spline
-			vector <vector <float> > turned_sample_values_2d(string_sample_positions_x.size());
-			for (Position i = 0; i < float_sample_positions_y.size(); i++)
-			{
+				// case DISCRETE__REAL 
+				// !! R E M E M B E R !! 
+				// we have to transpose the data in order to store 
+				// for each discrete value a 1D bicubic spline
+				vector <vector <float> > turned_sample_values_2d(string_sample_positions_x.size());
+				for (Position i = 0; i < float_sample_positions_y.size(); i++)
+				{
 				for (Position j = 0; j < string_sample_positions_x.size(); j++)
 				{
-					turned_sample_values_2d[j].push_back(last_sample_values_2d[i][j]);
+				turned_sample_values_2d[j].push_back(last_sample_values_2d[i][j]);
 				}
-			}
-			
-			for (Position i = 0; i < turned_sample_values_2d.size(); i ++)
-			{
+				}
+
+				for (Position i = 0; i < turned_sample_values_2d.size(); i ++)
+				{
 				// create a 1D bicubic spline
 				CubicSpline1D_ s;
 				s.createSpline(float_sample_positions_y, turned_sample_values_2d[i]);
-						
+
 				// store him in the map
 				s1d_[string_sample_positions_x[i]] = s;
-			}
-		//	std::cout << "value at (Unknown, -180) :" <<  s1d_["Unknown"](float(-180.)) << std::endl;
-
-			
-		}		
-		else if (type_ == REAL__CHI)
-		{
-//std::cout << "REAL__CHI" << std::endl;
-			// We are given a table looking like this
-			//
-			//      -180  . . 0 . . 180
-			// 60
-			// 180
-			// 300
-			// ---------------------------
-			// Unknown
-			// ALA
-			// GLY
-			//
-			// so we have two subtables:
-			//  - REAL__REAL
-			//  - REAL__DISCRETE
-				
-			// we have to split the data
-			vector<vector <float> > first_sample_values_2d(3);
-			vector<vector <float> > last_sample_values_2d(3);
-			for (Position i = 0 ; i < 3; i++) // y
-			{
-				for (Position j = 0; j < float_sample_positions_x.size(); j++)// x 
-				{
-					first_sample_values_2d[i].push_back(sample_values_2d[i][j]);
-					last_sample_values_2d[i].push_back(sample_values_2d[i+3][j]);
 				}
-			}
-			
-			// case REAL__REAL : we store a 2d bicubic spline
-			s2d_.createBiCubicSpline(float_sample_positions_x, float_sample_positions_y, first_sample_values_2d);
-	//		std::cout << "value at ( 180, 300) :" <<  s2d_(float(180),float(300)) << std::endl;
+				//	std::cout << "value at (Unknown, -180) :" <<  s1d_["Unknown"](float(-180.)) << std::endl;
 
-			// case REAL__DISCRETE
-			
-			//   R E M E M B E R : 
-			// when acessing these data, one has to switch the parameter
-			// since for each discrete value a 1D bicubic spline is stored
-			for (Position i = 0; i < last_sample_values_2d.size(); i ++)
+
+				 */		}		
+			else if (type_ == REAL__CHI)
 			{
-				// create a 1D bicubic spline
-				CubicSpline1D_ s;
-				s.createSpline(float_sample_positions_x, last_sample_values_2d[i]);
-						
-				// store him in the map
-				s1d_[string_sample_positions_y[i]] = s;
+				std::cout << "REAL__CHI" << std::endl;
+				// We are given a table looking like this
+				//
+				//      -180  . . 0 . . 180
+				// 60
+				// 180
+				// 300
+				// ---------------------------
+				// Unknown
+				// ALA
+				// GLY
+				//
+				// so we have two subtables:
+				//  - REAL__REAL
+				//  - REAL__DISCRETE
+				//  Since ShiftX treats it different, we
+				//  put both subtables into the map of 1D splines
+
+		/*		// we have to split the data
+				vector<vector <float> > first_sample_values_2d(3);
+				vector<vector <float> > last_sample_values_2d(3);
+				for (Position i = 0 ; i < 3; i++) // y
+				{ 
+					for (Position j = 0; j < float_sample_positions_x[i].size(); j++)// x 
+					{
+						first_sample_values_2d[i].push_back(sample_values_2d[i][j]);
+						last_sample_values_2d[i].push_back(sample_values_2d[i+3][j]);
+					}
+				}
+				
+				// case REAL__REAL : we store a 2d bicubic spline
+				s2d_.createBiCubicSpline(float_sample_positions_x, float_sample_positions_y, first_sample_values_2d);
+				//		std::cout << "value at ( 180, 300) :" <<  s2d_(float(180),float(300)) << std::endl;
+		*/
+				// case REAL__DISCRETE
+
+				//   R E M E M B E R : 
+				// when acessing these data, one has to switch the parameter
+				// since for each discrete value a 1D bicubic spline is stored
+				for (Position i = 0; i < string_sample_positions_y.size(); i ++)
+				{
+					// create a 1D bicubic spline
+					CubicSpline1D_ s;
+					s.createSpline(float_sample_positions_x[i], sample_values_2d[i]);
+					
+					// store him in the map
+					s1d_[string_sample_positions_y[i]] = s;
+				}
+				
+		//	std::cout << "value at (220., Unkown) :" <<  s1d_["Unknown"](float(220.)) << std::endl;
+		//	std::cout << "value at (-500., 360.) :" <<  s1d_["360."](float(-500.)) << std::endl;
+		//	std::cout << "value at (400., 120.) :" <<  s1d_["120."](float(400.)) << std::endl;
 			}
-		//	std::cout << "value at (0., ALA) :" <<  s1d_["ALA"](float(0.)) << std::endl;
+			else if (type_ == CHI__CHI)
+			{
+				// Fortunately this case does not occure
+				std::cout << "CHI__CHI" << std::endl;
+				std::cerr << "The case CHI__CHI is not implemented" <<std::endl; 
+			}
 		}
-		else if (type_ == CHI__CHI)
-		{
-			// Fortunately this case does not occure
-//std::cout << "CHI__CHI" << std::endl;
-			std::cerr << "The case CHI__CHI is not implemented" <<std::endl; 
-		}
-	}	
+	}
 
 	EmpiricalHSShiftProcessor::ShiftHyperSurface_::~ShiftHyperSurface_() 
 		throw() 
 	{
 	}
 
+	void EmpiricalHSShiftProcessor::ShiftHyperSurface_::setType_(String firstproperty, String secondproperty)
+		throw()
+	{
+		if(PropertiesForShift_::isMixed(firstproperty))
+		{
+			if (PropertiesForShift_::isMixed(secondproperty))
+			{	
+				if (firstproperty == secondproperty)
+					type_ = SINGLE__CHI;
+				else
+					type_ = CHI__CHI;
+			}
+			else if (PropertiesForShift_::isDiscrete(secondproperty))
+				type_ = CHI__DISCRETE;
+			else
+			{	
+				std::cout << "CHI REAL gesetzt" << std::endl;
+				type_ = CHI__REAL;
+			}	
+		}		
+		else if (PropertiesForShift_::isDiscrete(firstproperty)) 
+		{
+			if (PropertiesForShift_::isDiscrete(secondproperty))
+			{	
+				if (firstproperty == secondproperty)
+					type_ = SINGLE__DISCRETE;
+				else
+					type_ = DISCRETE__DISCRETE;
+			}
+			else if (PropertiesForShift_::isMixed(secondproperty))
+				type_ = DISCRETE__CHI;
+			else 
+				type_ = DISCRETE__REAL;
+		} 
+		else // first property is real
+		{ 
+			if (PropertiesForShift_::isDiscrete(secondproperty))
+			{
+				type_ = REAL__DISCRETE;
+				std::cout << "REAL gesetzt" << std::endl;
+			}
+			else if (PropertiesForShift_::isMixed(secondproperty))
+			{
 
+				std::cout << "REAL CHI gesetzt" << std::endl;
+				type_ = REAL__CHI;
+			}
+			else
+			{
+				if (firstproperty == secondproperty)
+					type_ = SINGLE__REAL;
+				else
+					type_ = REAL__REAL;
+			}
+		}
+		return;
+	}
+
+
+	
 	float EmpiricalHSShiftProcessor::ShiftHyperSurface_::operator() (EmpiricalHSShiftProcessor::PropertiesForShift_& properties)
 		throw()
 	{
 		float shift = 0.;
 		
-		if (type_ == REAL__REAL)
+		if (type_ == SINGLE__REAL)
+		{  // we have a single spline 
+std::cout <<" operator() SINGLE__REAL ; " << first_property_ << "  " << second_property_ << std::endl;	
+			if (s1d_.find(first_property_) != s1d_.end())
+					shift = s1d_[first_property_](properties[first_property_].first);
+			else
+					shift = 0.;
+			std::cout << properties.atom->getName() << "  " << first_property_ << ":" << second_property_<< " -- " << properties[first_property_].first<< ":" << properties[second_property_].first << " -- " << shift << std::endl;
+		}
+		else if (type_ == SINGLE__DISCRETE)
+		{	
+				// we have a single table line
+std::cout <<" single spline - DISCRETE__DISCRETE ; " << first_property_ << "  " << second_property_ << std::endl;
+				shift = table_[first_property_][properties[second_property_].second];		
+		}
+		else if (type_ == SINGLE__CHI)
 		{
-			shift = s2d_(properties[first_property_].first, properties[second_property_].first);
-		}else if (type_ == REAL__DISCRETE)
+				std::cerr<< "CHI__CHI also Single Chi not yet implemented"<< std::endl;
+		}
+		else if (type_ == REAL__REAL)
+		{		
+			// This simulates SHIFTX behaviour: if only one factor is out of bounds, we return the all-values average
+			if ((properties[first_property_].first == FLOAT_VALUE_NA) || (properties[second_property_].first == FLOAT_VALUE_NA))
+			{
+				shift = s2d_.getAverage();
+			}
+			else 
+				shift = s2d_(properties[first_property_].first, properties[second_property_].first);
+std::cout << properties.atom->getName() << "  " << first_property_ << ":" << second_property_<< " -- " << properties[first_property_].first<< ":" << properties[second_property_].first << " -- " << shift << std::endl;
+		}
+		else if (type_ == REAL__DISCRETE)
 		{
-			shift = s1d_[properties[second_property_].second](properties[first_property_].first);
-		}else if (type_ == DISCRETE__REAL)
+			// This simulates SHIFTX behaviour: if only one factor is out of bounds, we return the all-values average
+			if (   (properties[first_property_].first == FLOAT_VALUE_NA)
+					 ||(properties[second_property_].second == STRING_VALUE_NA) )
+			{
+				shift = 0;
+				std::map<String, CubicSpline1D_>::iterator ci;
+				for (ci=s1d_.begin(); ci!=s1d_.end(); ci++)
+					shift += ci->second.getAverage();
+				shift /= s1d_.size();
+			}
+			else
+				shift = s1d_[properties[second_property_].second](properties[first_property_].first);
+std::cout <<properties.atom->getName() << "  " << first_property_ << ":" << second_property_<< " -- " << properties[first_property_].first<< ":" << properties[second_property_].second << " -- " << shift << std::endl;
+		}
+		else if (type_ == DISCRETE__REAL)
 		{
-			shift = s1d_[properties[first_property_].second](properties[second_property_].first);
-		}else if (type_ == DISCRETE__DISCRETE)
+			// This simulates SHIFTX behaviour: if only one factor is out of bounds, we return the all-values average
+			if (   (properties[second_property_].first == FLOAT_VALUE_NA)
+					 ||(properties[first_property_].second == STRING_VALUE_NA) )
+			{
+				shift = 0;
+				std::map<String, CubicSpline1D_>::iterator ci;
+				for (ci=s1d_.begin(); ci!=s1d_.end(); ci++)
+					shift += ci->second.getAverage();
+				shift /= s1d_.size();
+			}
+			else
+				shift = s1d_[properties[first_property_].second](properties[second_property_].first);
+		}
+		else if (type_ == DISCRETE__DISCRETE)
 		{
 			shift = table_[properties[first_property_].second][properties[second_property_].second];
-		}else if (type_ == CHI__REAL)
-		{	// we have to decide in which chi--case we are :
+		}
+		else if (type_ == CHI__REAL)
+		{	
+			
+			std::cout << "chi__real not yet implemented SFH operatore () " << std::endl;
+			/*
+			// we have to decide in which chi--case we are :
 			// 			REAL or DISCRETE ? 
 			if (properties[first_property_].second == "INVALID")
 			{  // case REAL --> REAL__REAL
@@ -1718,21 +2165,45 @@ namespace BALL
 				shift = s1d_[properties[first_property_].second](properties[second_property_].first);
 			}else	{
 				std::cerr << first_property_ << " not set!"  << std::endl;
-			}
-		}else if (type_ == REAL__CHI)
-		{	// we have to decide in which chi--case we are :
+			}*/
+		}
+		else if (type_ == REAL__CHI)
+		{				
+			// we have to decide in which chi--case we are :
 			// 			REAL or DISCRETE ? 
-			if (properties[second_property_].second == "INVALID")
-			{  // case REAL --> REAL__REAL
-				shift = s2d_(properties[first_property_].first, properties[second_property_].first);
-			}else if (properties[second_property_].first == std::numeric_limits<float>::min())
-			{  // case DISCRETE --> REAL__DISCRETE
+			
+			if (properties[second_property_].first == FLOAT_VALUE_NA) 
+			{  // case DISCRETE --> REAL__DISCRETE 
+				 //  ALA, GLY or Unknown
 				shift = s1d_[properties[second_property_].second](properties[first_property_].first);
-			}else {
+			}
+			else if (properties[second_property_].second == STRING_VALUE_NA)
+			{  // case REAL --> REAL__REAL
+				float chi_value = properties[second_property_].first; 
+				if (chi_value < 120.)
+					shift = s1d_["120."](properties[first_property_].first);
+				else if (chi_value < 240.)
+					shift = s1d_["240."](properties[first_property_].first);
+				else if (chi_value < 360.)
+					shift = s1d_["360."](properties[first_property_].first);
+				else if (chi_value == FLOAT_VALUE_NA)
+					std::cerr<< "something bad happend in PropertiesForShift::operator()" << std::endl;
+			}
+			else if (properties[second_property_].first == FLOAT_VALUE_NA) 
+			{  // case DISCRETE --> REAL__DISCRETE 
+				 //  ALA, GLY or Unknown
+				shift = s1d_[properties[second_property_].second](properties[first_property_].first);
+			}
+			else 
+			{
+				std::cout << "first: "<< (properties[first_property_].first) << " -- second: (" << properties[second_property_].first << "  " <<properties[second_property_].second << ")" << std::endl;
 				std::cerr << second_property_ << " not set!"  << std::endl;
 			}
-		}else if (type_ == CHI__DISCRETE)
-		{
+		}
+		else if (type_ == CHI__DISCRETE)
+		{	
+			std::cout << "chi__discrete not yet implemented SFH operatore () " << std::endl;
+/*
 			// we have to decide in which chi--case we are :
 			// 			REAL or DISCRETE ? 
 			if (properties[first_property_].second == "INVALID")
@@ -1743,9 +2214,12 @@ namespace BALL
 				shift = table_[properties[first_property_].second][properties[second_property_].second];			
 			}else	{
 				std::cerr << first_property_ << " not set!"  << std::endl;
-			}
-		}else if (type_ == DISCRETE__CHI)
+			} */
+		}
+		else if (type_ == DISCRETE__CHI)
 		{
+				std::cout << "discret__chi not yet implemented SFH operatore () " << std::endl;
+/*
 			// we have to decide in which chi--case we are :
 			// 			REAL or DISCRETE ? 
 			if (properties[second_property_].second == "INVALID")
@@ -1756,11 +2230,13 @@ namespace BALL
 				shift = table_[properties[first_property_].second][properties[second_property_].second];		
 			}else {
 				std::cerr << second_property_ << " not set!"  << std::endl;
-			}
-		}else if (type_ == CHI__CHI)
+			} */
+		}
+		else if (type_ == CHI__CHI)
 		{ 
-			std::cerr << first_property_ << " not set!"  << std::endl;
-		}else
+			std::cerr <<  "CHI CHI not set!"  << std::endl;
+		}
+		else
 		{	
 			std::cerr << "Unknown type of properties! " << std::endl;
 		}

@@ -136,17 +136,20 @@ namespace BALL
 				CubicSpline1D_() {};
 
 				void createSpline(const std::vector<float>& sample_positions, 
-						const std::vector<float>& sample_values); // spline
+						const std::vector<float>& sample_values,bool return_average = false); // spline
 				float operator () (float x); // splint
 
 				std::vector<float>& getCurvature();
 				void setCurvature(std::vector<float> curvature);
 				void setValues(std::vector<float> values);
 				void setPositions(std::vector<float> positions);
+				float getAverage() {return average_;}
 			private :
 				std::vector<float> sample_positions_;
 				std::vector<float> sample_values_;
 				std::vector<float> curvature_;
+				bool return_average_;
+			  float average_;
 		};
 
 //		public: // tO do : rÜCKGÄNGIG
@@ -157,18 +160,20 @@ namespace BALL
 
 				// Simple version of spline creation. Assumes that all rows have the same x-positions
 				void createBiCubicSpline(const std::vector<float>& sample_positions_x,
-						const std::vector<float>& sample_positions_y,
-						const std::vector<std::vector<float> >& sample_values); // splie2
+																 const std::vector<float>& sample_positions_y,
+																 const std::vector<std::vector<float> >& sample_values); // splie2
 				//precompute the second derivatives	
 				void createBiCubicSpline(const std::vector<std::vector<float> >& sample_positions_x,
 						const std::vector<float>& sample_positions_y,
 						const std::vector<std::vector<float> >& sample_values); // splie2
 				float operator () (float x, float y); // splin2
-
+				float getAverage() { return average_; };
 			private :
 				std::vector< std::vector<float> > sample_positions_x_;
 				std::vector<float> sample_positions_y_;
 				std::vector<CubicSpline1D_> splines_;
+
+				float average_;
 		};
 
 	//	protected:	//todO: RÜCKGÄNGIG
@@ -244,13 +249,25 @@ namespace BALL
 				REAL__CHI,
 				CHI__DISCRETE,
 				DISCRETE__CHI,
-				CHI__CHI
+				CHI__CHI, 
+				SINGLE__REAL,
+				SINGLE__DISCRETE, 
+				SINGLE__CHI
 				};
 
 				/*_  Constructor
 				 */
 				ShiftHyperSurface_() throw();
-				
+			
+				/*_ Creates a ShiftHyperSurface according to its type (see {\tt HYPERSURFACE__TYPE()} )
+				 *  In the special case that the two properties have the same type, we create just one tableentry in 
+				 *  {\tt table_} or just one spline  { \tt in s1d_ }. 
+				 *  
+				 *  Note: 
+				 *  The spline or value can be accessed 
+				 *  by the {\tt operator () } given __not__ the property-value, but the property name. 
+				 *  
+				 */
 				ShiftHyperSurface_(String filename, String atomtype, String firstproperty, String secondproperty)
 					throw();  
 				
@@ -258,19 +275,18 @@ namespace BALL
 				*/
 				virtual ~ShiftHyperSurface_() throw();
 
-				/** computes the shift of an atom. 
+				/** computes the shift of an atom.  
 				 */
 				float operator () (PropertiesForShift_& properties) throw();	
+				
+				void setType_(String firstproperty, String secondproperty)
+					throw();
 
 						
 			private:
-				int type_;
+				int type_; // Can be REAL__REAL... 
 			 	String  first_property_;
 				String  second_property_;
-
-				// temporary variables for the property value detection
-				float float_property_;
-				String string_property_;
 
 				CubicSpline2D_ 															s2d_;
 				std::map <String, CubicSpline1D_ > 					s1d_;
