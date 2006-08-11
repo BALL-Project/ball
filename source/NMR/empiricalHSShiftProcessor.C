@@ -1647,7 +1647,7 @@ std::cout << "real second property" << std::endl;
 					}
 					else 
 					*/	
-					if (PropertiesForShift_::isDiscrete(firstproperty))
+					if (PropertiesForShift_::isDiscrete(firstproperty) || PropertiesForShift_::isMixed(firstproperty))
 					{
 		std::cout << "discrete  first property" << std::endl;
 						for (Position i = 0; i < fields.size(); i++)
@@ -1755,79 +1755,18 @@ std::cout << "DISCRETE__REAL not implemented" << std::endl;
 				// TO DO: diesen Fehler und ähnliche abfangen!!! 
 				//std::cout << "value at (R, -170) :" <<  s1d_['R'](float(-170.)) << std::endl;
 				 */	}
-			else if (type_ == DISCRETE__DISCRETE)
+			else if ( (type_ == DISCRETE__DISCRETE) || (type_ == CHI__DISCRETE) )
 			{
-std::cout << "DISCRETE__DISCRETE not implemented" << std::endl;
-				/*
-					 for (Position i = 0; i < sample_values_2d.size(); i++)  // y
-					 {
-					 for (Position j = 0; j < sample_values_2d[i].size(); j++) // x
+				for (Position i = 0; i < string_sample_positions_y.size(); i++)  // y
+				{
+					 for (Position j = 0; j < string_sample_positions_x[i].size(); j++) // x
 					 { 	
-					 table_[string_sample_positions_x[j]][string_sample_positions_y[i]]= sample_values_2d[i][j];
+						 table_[string_sample_positions_y[i]][string_sample_positions_x[i][j]]= sample_values_2d[i][j];
 					 }
-					 }
-				//	std::cout << "value at (A, N) :" <<  table_['A']['N'] << std::endl;
-				 */	}
-			else if (type_ == CHI__DISCRETE)
-			{
-std::cout << "CHI__DISCRETE not implemented" << std::endl;
-				/*	// we have a table like this
-				// 
-				//	     60   180 -60        Unknown  ALA  GLY
-				//	C   								|
-				//									 		|
-				//  H   REAL__DISCRETE  | 	DISCRETE__DISCRETE
-				//   								 		| 			
-				//  B										|
-				//  so we have to store 
-				//     - a map of 1D Bicubic splines (case REAL__DISCRETE)
-				//  	 - and a table (case DISCRETE DISCRETE) 
-
-				// 		!!!!  Remember: 
-				// When accessing the data, one has to switch X and Y, 
-				// since for each discrete value a 1D bicubic spline is stored
-
-				// 		we have to split the data
-				vector<vector <float> > first_sample_values_2d(string_sample_positions_y.size());
-				vector<vector <float> > last_sample_values_2d(string_sample_positions_y.size());
-				for (Position i = 0 ; i < string_sample_positions_y.size() ; i++)
-				{
-				for (Position j = 0; j < 3; j++)
-				{
-				first_sample_values_2d[i].push_back(sample_values_2d[i][j]);
 				}
-				for (Position j = 0; j < 3; j++)
-				{
-				last_sample_values_2d[i].push_back(sample_values_2d[i][j+3]);
-				}
-				}
-
-				// first case REAL__DISCRETE
-
-
-				for (Position i = 0; i < string_sample_positions_y.size(); i ++)
-				{
-				// create a 1D bicubic spline
-				CubicSpline1D_ s;
-				s.createSpline(float_sample_positions_x, first_sample_values_2d[i]);
-
-				// store him in the map
-				s1d_[string_sample_positions_y[i]] = s;
-				}
-
-				//std::cout << "value at (300., C) :" <<  s1d_['C'](float(300.)) << std::endl;
-
-				// second case DISCRETE__DISCRETE
-
-				for (Position i = 0; i < last_sample_values_2d.size(); i++)  // y
-				{
-				for (Position j = 0; j < last_sample_values_2d[i].size()  ; j++) // x
-				{
-				table_[string_sample_positions_x[j]][string_sample_positions_y[i]] = last_sample_values_2d[i][j];
-				}
-				}
-				//	std::cout << "value at (GLY, B) :" <<  table_["GLY"]["B"] << std::endl;
-				 */	}else if (type_ == DISCRETE__CHI)
+			//	std::cout << "value at (A, ALA) :" <<  table_["ALA"]['A'] << std::endl;
+			}
+			else if (type_ == DISCRETE__CHI)
 				{
 std::cout << "DISCRETE__CHI not implemented" << std::endl;
 					/*
@@ -2146,7 +2085,7 @@ std::cout <<properties.atom->getName() << "  " << first_property_ << ":" << seco
 			else
 				shift = s1d_[properties[first_property_].second](properties[second_property_].first);
 		}
-		else if (type_ == DISCRETE__DISCRETE)
+		else if (type_ == DISCRETE__DISCRETE) 
 		{
 			shift = table_[properties[first_property_].second][properties[second_property_].second];
 		}
@@ -2189,11 +2128,6 @@ std::cout <<properties.atom->getName() << "  " << first_property_ << ":" << seco
 				else if (chi_value == FLOAT_VALUE_NA)
 					std::cerr<< "something bad happend in PropertiesForShift::operator()" << std::endl;
 			}
-			else if (properties[second_property_].first == FLOAT_VALUE_NA) 
-			{  // case DISCRETE --> REAL__DISCRETE 
-				 //  ALA, GLY or Unknown
-				shift = s1d_[properties[second_property_].second](properties[first_property_].first);
-			}
 			else 
 			{
 				std::cout << "first: "<< (properties[first_property_].first) << " -- second: (" << properties[second_property_].first << "  " <<properties[second_property_].second << ")" << std::endl;
@@ -2202,19 +2136,29 @@ std::cout <<properties.atom->getName() << "  " << first_property_ << ":" << seco
 		}
 		else if (type_ == CHI__DISCRETE)
 		{	
-			std::cout << "chi__discrete not yet implemented SFH operatore () " << std::endl;
-/*
-			// we have to decide in which chi--case we are :
-			// 			REAL or DISCRETE ? 
-			if (properties[first_property_].second == "INVALID")
-			{  // case REAL --> REAL__DISCRETE
-				shift = s1d_[properties[second_property_].second](properties[first_property_].first);
-			}else if (properties[first_property_].first == std::numeric_limits<float>::min())
-			{   // case DISCRETE --> DISCRETE__DISCRETE
-				shift = table_[properties[first_property_].second][properties[second_property_].second];			
-			}else	{
-				std::cerr << first_property_ << " not set!"  << std::endl;
-			} */
+			// ToDO: was passiert, wenn die Table die mitgegebenen keys nicht hat? 
+			
+			if (properties[second_property_].second == STRING_VALUE_NA)
+			{
+				// ToDo: was passiert, wenn der zweite Wert auch nicht gesetzt ist?  
+			}
+			if (properties[first_property_].first == FLOAT_VALUE_NA)
+			{
+				// ALA, GLY or Unknown
+				shift = table_[properties[second_property_].second][properties[first_property_].second];
+			}
+			else
+			{
+				float chi_value = properties[first_property_].first; 
+				if (chi_value < 120.)
+					shift = table_["120."][properties[second_property_].second];
+				else if (chi_value < 240.)
+					shift = table_["240."][properties[second_property_].second];
+				else if (chi_value < 360.)
+					shift = table_["360."][properties[second_property_].second];
+				else if (chi_value == FLOAT_VALUE_NA)
+					std::cerr<< "something bad happend in PropertiesForShift::operator()" << std::endl;
+			}
 		}
 		else if (type_ == DISCRETE__CHI)
 		{
