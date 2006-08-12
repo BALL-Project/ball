@@ -1,32 +1,36 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.19 2005/12/23 17:02:29 amoll Exp $
+// $Id: main.C,v 1.20 2006/08/12 14:45:59 oliver Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
 #include <qapplication.h>
 #include <qmessagebox.h>
+#include <qsplashscreen.h>
 #include <qgl.h>
 
 #include "mainframe.h"
+#include "splash.h"
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/directory.h>
+#include <BALL/COMMON/logStream.h>
 
 #include <iostream>
 
-void myMessageOutput( QtMsgType type, const char *msg )
+void logMessages(QtMsgType type, const char *msg)
 {
-	switch ( type ) {
+	switch (type) 
+	{
 		case QtDebugMsg:
-				fprintf( stderr, "Debug: %s\n", msg );
+				BALL::Log.info() << msg << std::endl;
 				break;
 		case QtWarningMsg:
-				fprintf( stderr, "Warning: %s\n", msg );
+				BALL::Log.warn() << msg << std::endl;
 				break;
 		case QtFatalMsg:
-				fprintf( stderr, "Fatal: %s\n", msg );
-				abort();                    // deliberately core dump
+				BALL::Log.error() << msg << std::endl;
+				abort();                    // deliberately dump core
 	}
 }
 
@@ -38,15 +42,19 @@ void myMessageOutput( QtMsgType type, const char *msg )
 int main(int argc, char **argv)
 {
 #else
-int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
+int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 {
 	int argc = __argc;
 	char** argv = __argv;
 #endif
 
-	qInstallMsgHandler(myMessageOutput);
+	qInstallMsgHandler(logMessages);
 
 	QApplication application(argc, argv);
+
+  QPixmap splash_pm(splash_xpm);
+  QSplashScreen* splash = new QSplashScreen(splash_pm);
+  splash->show();
 
 	// =============== testing for opengl support ======================================
 	if (!QGLFormat::hasOpenGL())
@@ -118,8 +126,11 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 		mainframe.aboutToExit();
 		return 0;
 	}
+	
+	// Remove the splashscreen
+	splash->finish(&mainframe);
+	delete splash;
 
   // Hand over control to the application.
   return application.exec();
 }
-

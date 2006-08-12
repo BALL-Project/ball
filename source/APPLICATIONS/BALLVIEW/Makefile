@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.12 2006/01/26 21:52:45 oliver Exp $
+# $Id: Makefile,v 1.13 2006/08/12 14:45:59 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -27,7 +27,8 @@ CPP_SOURCES=\
 	demoTutorialDialogData.C\
 	icons.C\
 	main.C\
-	mainframe.C
+	mainframe.C\
+	splash.C
 
 MOC_SOURCES=\
 	aboutDialog_moc.C\
