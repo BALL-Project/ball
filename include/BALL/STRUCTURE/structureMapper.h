@@ -1,7 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.h,v 1.27 2006/01/26 11:58:55 oliver Exp $
+// $Id: structureMapper.h,v 1.28 2006/08/15 10:08:50 oliver Exp $
+//
+// Author:
+//   Oliver Kohlbacher
+//   Hans-Peter Lenhof
 //
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -143,8 +147,6 @@ namespace BALL
 
 		protected:
 			
-		Size countFragments_(const AtomContainer& composite) const;
-		
 		/*_	The first of two composites - the "original" 
 		*/
 		AtomContainer*	A_;

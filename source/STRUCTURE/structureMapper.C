@@ -1,7 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.C,v 1.30 2006/01/26 11:58:55 oliver Exp $
+// $Id: structureMapper.C,v 1.31 2006/08/15 10:08:51 oliver Exp $
+//
+// Author:
+//   Oliver Kohlbacher
+//   Hans-Peter Lenhof
 //
 
 #include <BALL/STRUCTURE/structureMapper.h>
@@ -231,25 +235,6 @@ namespace BALL
 			bijection_.assignTrivial(*A_, *B_);
 		}
 	}
-
-	Size StructureMapper::countFragments_(const AtomContainer & ac) const
-	{
-		Size number_of_mol_fragments = 0;
-
-		AtomContainerConstIterator it;
-
-		for (it = ac.beginAtomContainer(); +it; ++it)
-		{
-			if (RTTI::isKindOf<Fragment>(*it))
-			{
-				number_of_mol_fragments++;
-			}
-		}
-
-		return number_of_mol_fragments;
-	}
-
-
 
 	// constructor with the following properties: The transformation maps 
 	// (1) the point(vector3) w1 onto the point v1 and  
