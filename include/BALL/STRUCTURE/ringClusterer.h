@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringClusterer.h,v 1.2 2006/06/08 07:30:24 oliver Exp $
+// $Id: ringClusterer.h,v 1.3 2006/08/15 20:36:56 oliver Exp $
 //
 // Author:
 //   Holger Franken

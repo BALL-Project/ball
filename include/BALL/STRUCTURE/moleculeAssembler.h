@@ -3,7 +3,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeAssembler.h,v 1.2 2006/06/08 07:30:24 oliver Exp $
+// $Id: moleculeAssembler.h,v 1.3 2006/08/15 20:36:55 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -43,6 +43,13 @@ namespace BALL
                 * @param chains the chains of the molecule
                 */
                 void assembleMolecule(System& molecule_sys, vector<vector<vector<Atom*> > >& ringsystems, vector<vector<Atom*> >& chains);
+								
+								/**
+                * \brief        comparator for sorting the ringsystems by their size
+								* @param x ringsystem
+								* @param y ringsystem
+                */
+								static bool compareRingsystems(const vector<vector<Atom*> >& x, const vector<vector<Atom*> >& y);
 
         private:
                 list<Atom*> aq_;

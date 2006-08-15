@@ -2,6 +2,7 @@
 // vi: set ts=2:
 //
 //
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////

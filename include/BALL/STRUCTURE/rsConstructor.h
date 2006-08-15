@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rsConstructor.h,v 1.3 2006/06/29 20:45:31 bertsch Exp $
+// $Id: rsConstructor.h,v 1.4 2006/08/15 20:36:56 oliver Exp $
 //
 // Author:
 //   Holger Franken

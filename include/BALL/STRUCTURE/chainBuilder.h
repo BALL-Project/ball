@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chainBuilder.h,v 1.2 2006/06/08 07:30:24 oliver Exp $
+// $Id: chainBuilder.h,v 1.3 2006/08/15 20:36:55 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -40,6 +40,13 @@ namespace BALL
                 * @return the chains sorted by their length
                 */
                 vector<vector<Atom*> > buildChains(System& molecule_sys);
+
+								/**
+                * \brief        comparator for sorting the chains by their length
+								* @param x chain
+								* @param y chain
+                */
+ 								static bool compareChains(const vector<Atom*>& x, const vector<Atom*>& y);
 
         private:
 

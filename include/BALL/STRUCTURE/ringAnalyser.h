@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringAnalyser.h,v 1.3 2006/06/29 20:45:31 bertsch Exp $
+// $Id: ringAnalyser.h,v 1.4 2006/08/15 20:36:55 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -25,12 +25,24 @@ namespace BALL
         {
                 public:
 
+								enum RingType 
+								{
+												NONE,
+												TEMPLATE,
+												FUSED,
+												BRIDGED,
+												SPIRO,
+												CORE
+								};
+		
+
                 struct RingInfo
                 {
-                        std::vector<Atom*> ring;
-                        Size assignment;
-                        bool neg_angle;
+									vector<Atom*> ring;
+                  RingType assignment;
+                  bool neg_angle;
                 };
+
 
                 /**
                 * \brief Default-Constructor
@@ -73,7 +85,7 @@ namespace BALL
                 * @param first_bridged_to_fused flag, determines whether the first (if there is one) bridged-ring of a system has already been found
                 * @return assignment (0 = none, 1 = template, 2 = fused, 3 = bridged, 4 = spiro, 5 = core)
                 */
-                Size checkFusedOrBridged(std::vector<Atom*>& ring, std::vector<RingInfo>& ringset, bool& first_bridged_to_fused);
+                RingType checkFusedOrBridged(vector<Atom*>& ring, vector<RingInfo>& ringset, bool& first_bridged_to_fused);
 
                 /**
                 * \brief ckecks, if a ring is connected to the ringsystem in spiro way
@@ -81,9 +93,7 @@ namespace BALL
                 * @param ringset the ringsystem, which is to be checked
                 * @return assignment (0 = none, 1 = template, 2 = fused, 3 = bridged, 4 = spiro, 5 = core
                 */
-                Size checkSpiro(std::vector<Atom*>& ring, std::vector<RingInfo>& ringset);
-
-
+                RingType checkSpiro(vector<Atom*>& ring, vector<RingInfo>& ringset);
         };
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sdGenerator.h,v 1.3 2006/06/29 20:45:31 bertsch Exp $
+// $Id: sdGenerator.h,v 1.4 2006/08/15 20:36:56 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -37,6 +37,7 @@ namespace BALL
 
         private:
 
+		
                 /**
                 * \brief Distinguishes between ring-atoms and core-chain-atoms, removes all H-Atoms from the System
                 * @param molecule_sys
@@ -85,30 +86,30 @@ namespace BALL
                 */
                 std::vector<std::vector<Atom*> > sequenceRings(std::vector<std::vector<Atom*> >& ringsystem);
                 
-								/**
+		/**
                 * \brief Properties, used to describe atoms and their status
                 */
-								enum Property 
-								{
-												in_ring,
-												pre_core_chain,
-												core_chain,
-												found,
-												invalid,
-												deposited,
-												firstneighbour,
-												sequenced,
- 												FxAS,
-												edge,
-												built_in_chain,
-												assembled,
-												shifted,
-												pre_assembled,
-												rotated,
-												zig,
-												zag,
-												straight
-								};
+		enum Property 
+		{
+						IN_RING,
+						PRE_CORE_CHAIN,
+						CORE_CHAIN,
+						FOUND,
+						INVALID,
+						DEPOSITED,
+						FIRSTNEIGHBOUR,
+						SEQUENCED,
+						FXAS,
+						EDGE,
+						BUILT_IN_CHAIN,
+						ASSEMBLED,
+						SHIFTED,
+						PRE_ASSEMBLED,
+						ROTATED,
+						ZIG,
+						ZAG,
+						STRAIGHT
+		};
 
         };
 
