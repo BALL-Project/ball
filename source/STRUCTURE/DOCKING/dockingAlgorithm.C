@@ -74,7 +74,6 @@ namespace BALL
 	const System& DockingAlgorithm::getIntermediateResult()
 		throw()
 	{
-		//System& s = getIntermediateResult_();
 		system_changed_ = false;
 		return getIntermediateResult_();
 	}

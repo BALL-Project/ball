@@ -1,19 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geneticPool.C,v 1.1.2.1 2006/05/19 14:18:28 leonhardt Exp $
+// $Id: geneticPool.C,v 1.1.2.3 2006/08/15 14:11:46 leonhardt Exp $
 
 #include <algorithm>
-#include <iostream>
-#include <iostream>
 
 #include "geneticPool.h"
 #include "genericMapping.h"
 #include "geneticIndividual.h"
-
-
-using namespace std;
-
+#include <BALL/common.h>
 
 namespace BALL
 {
@@ -175,8 +170,8 @@ namespace BALL
 	{
 		if (index < 0 || index >= size())
 			{
-				std::cerr << "error while trying to access pool: ";
-				std::cerr << index << " as argument, size of pool is " << size();
+				Log.error() << "error while trying to access pool: ";
+				Log.error() << index << " as argument, size of pool is " << size() << __FILE__ << " " << __LINE__<< std::endl;
 			}
 		
 		return pool_[index];

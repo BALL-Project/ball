@@ -1,8 +1,5 @@
 #include "quaternionGene.h"
-#include <iostream>
 #include <BALL/MATHS/randomNumberGenerator.h>
-
-using namespace std;
 
 
 namespace BALL
@@ -67,8 +64,8 @@ namespace BALL
       }
     else
       {
-	cerr << "mating failed" << endl;
-	exit(1);
+				Log.error() << "mating failed" << __FILE__ << " " << __LINE__<< std::endl;
+				exit(1);
       }
   }      
   

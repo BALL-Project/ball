@@ -2,7 +2,6 @@
 #include "evolutionaryDocking.h"
 #include "geneticAlgorithm.h"
 #include "dockMapping.h"
-#include <iostream>
 
 namespace BALL
 {
@@ -159,8 +158,8 @@ namespace BALL
     
     if (dm_ == 0)
       {
-	std::cerr << "no mapping class!" << std::endl;
-	exit(0);
+				Log.error() << "no mapping class!" << __FILE__ << " " << __LINE__<< std::endl;
+				exit(0);
       }
     
     delete ga_;

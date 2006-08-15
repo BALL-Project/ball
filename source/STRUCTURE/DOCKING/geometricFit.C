@@ -1348,7 +1348,7 @@ namespace BALL
 
 		if (verbosity > 5)
 		{
-			cout << "CPU time needed for docking: " << overall_timer.getCPUTime() << endl;
+			Log.info() << "CPU time needed for docking: " << overall_timer.getCPUTime() << std::endl;
 		}
 	}
 

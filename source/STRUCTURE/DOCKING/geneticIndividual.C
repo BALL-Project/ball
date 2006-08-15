@@ -1,8 +1,5 @@
 #include "geneticIndividual.h"
-
-#include <iostream>
-
-using namespace std;
+#include <BALL/common.h>
 
 namespace BALL
 {
@@ -79,7 +76,7 @@ namespace BALL
     if (i < genes_.size())
       return genes_[i];
     
-    cerr << "access out of range" << endl;
+    Log.error() << "access out of range" << __FILE__ << " " << __LINE__<< std::endl;
     exit(1);
   }
   

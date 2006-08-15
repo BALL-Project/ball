@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyGrid.C,v 1.1.2.3 2006/06/09 13:54:58 leonhardt Exp $
+// $Id: energyGrid.C,v 1.1.2.4 2006/08/15 14:11:45 leonhardt Exp $
 
 
 #include <BALL/KERNEL/system.h>
@@ -14,10 +14,6 @@
 
 
 #include "convert.h"
-
-
-
-using namespace std;
 
 
 namespace BALL
@@ -70,7 +66,7 @@ namespace BALL
 		/**open file to read elements in the gridfile
 		 */
 		//ifstream infile((file + ".gr").c_str());
-		ifstream infile((file).c_str());
+		std::ifstream infile((file).c_str());
 		
 		/**vector for elements in the gridfile
 		 */
@@ -81,7 +77,7 @@ namespace BALL
 				HINFile h_infile((file).c_str());
 				h_infile >> receptor;
 				
-				string s;
+				std::string s;
 				
 				while (s != "--DATA--")
 					getline(infile,s);
@@ -100,7 +96,7 @@ namespace BALL
 			}
 		else
 			{
-				cerr << "can't load grid file" << endl;
+				Log.error() << "can't load grid file" << __FILE__ << " " << __LINE__<< std::endl;
 				exit(1);
 			}
 		
@@ -109,16 +105,16 @@ namespace BALL
 		for (AtomConstIterator ai = ligand.beginAtom(); +ai; ++ai)
 			{
 				//cout << ai->getType() << endl;
-				map<short,int>::iterator it = elements_.find(gridType(*ai));
+				std::map<short,int>::iterator it = elements_.find(gridType(*ai));
 				
 				if (it == elements_.end())
 					{
-						cerr << "grid file doesen't contain type " << gridType(*ai) << endl;
+						Log.error() << "grid file doesen't contain type " << gridType(*ai) << __FILE__ << " " << __LINE__<< std::endl;
 						exit(1);
 					}
 			}
 
-		string s;
+		std::string s;
 		while (s!= "--GRID--")
 			getline(infile,s);
 			
@@ -126,21 +122,21 @@ namespace BALL
 			{
 				/** update screen
 				 */
-				cout << "loading gridfile: "<< e + 1 << " of " << elements_.size()+ 1 << " elements" << endl; 
+				Log.info() << "loading gridfile: "<< e + 1 << " of " << elements_.size()+ 1 << " elements" << std::endl; 
 				
 				TRegularData3D<double>* trg = new TRegularData3D<double>;
 				
-				string s = "x";
+				std::string s = "x";
 				
-				ofstream out("aux.trg");
+				std::ofstream out("aux.trg");
 
 				while (s != "")
 					{
 						getline(infile,s);
-						out << s << endl;
+						out << s << std::endl;
 					}
 					
-				ifstream infile_b("aux.trg");
+				std::ifstream infile_b("aux.trg");
 				
 				infile_b >> *trg;
 				

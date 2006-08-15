@@ -22,14 +22,8 @@
 
 #include "dockMapping.h"
 #include "geneticPool.h"
-
-#include <iostream> 
-#include <string> 
+ 
 #include <fstream>
-
-using namespace std;
-
-
 
 namespace BALL
 {
@@ -117,7 +111,6 @@ namespace BALL
     
     system_backup_b_ = sys_lig;
     
-    Log.error() << "before create energy grid" << std::endl;
     /** create energy grid 
      */
 
@@ -136,12 +129,8 @@ namespace BALL
     ff_->setup(sys_);
     sys_.deselect();
     ligand_->select();
-    
-
 
     eg_ = new EnergyGrid(file,system_backup_a_, *ligand_);    	
-    Log.error() << "after create energy grid" << std::endl;
-    
     
     draw_system_ = system_backup_a_;
     
@@ -167,7 +156,7 @@ namespace BALL
 	if (v1.x < 0 || v1.y < 0 || v1.z < 0 ||
 	    v2.x < 0 || v2.y < 0 || v2.z < 0)
 	  {
-	    cerr << "translationbox not in bounded grid" << endl;
+	    Log.error() << "translationbox not in bounded grid" << __FILE__ << " " << __LINE__<< std::endl;
 	    exit(1);
 	  }
 	
@@ -189,7 +178,7 @@ namespace BALL
 
     /** create rotable bonds class with ligand
      */
-    rb_ = new RotateBonds(*ligand_);
+//    rb_ = new RotateBonds(*ligand_);
     
 //     /** insert ligand to calculate conformation energy
 //      */
