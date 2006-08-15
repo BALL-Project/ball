@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.6.2.13 2006/08/03 13:14:08 leonhardt Exp $
+// $Id: dockDialog.C,v 1.5.2.6.2.14 2006/08/15 09:54:10 leonhardt Exp $
 //
 
 #include <QtGui/qpushbutton.h>
@@ -274,9 +274,6 @@ namespace BALL
 			throw()
 		{
 			//build HashMap for algorithm advanced option dialogs
-			//make sure the order of added algorithms is consistent to the enum order
-			//because the algorithm with enum value i should be at position i in the combobox
-			//otherwise you get the wrong option dialog for an algorithm
 #ifdef BALL_HAS_FFTW
 			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
 			addAlgorithm("Geometric Fit", DockingController::GEOMETRIC_FIT, geo_fit);
@@ -286,9 +283,6 @@ namespace BALL
 
 			
 			//build HashMap for scoring function advanced option dialogs
-			//make sure the order of added scoring functions is consistent to the enum order
-			//because the scoring function with enum value i should be at position i in the Combobox
-			//otherwise you get the wrong option dialog for a scoring function
 			addScoringFunction("Default", DockingController::DEFAULT);
 			MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
 			if (!mol_struct)
@@ -297,12 +291,14 @@ namespace BALL
 										<< __FILE__ << " " << __LINE__ << std::endl;
 				return;
 			}
-			addScoringFunction("Amber Force Field", DockingController::AMBER_FF, &(mol_struct->getAmberConfigurationDialog()));
-			
-			vector<int> sf;
-			sf.push_back(DockingController::DEFAULT);
-			sf.push_back(DockingController::AMBER_FF);
+			addScoringFunction("AMBER Force Field", DockingController::AMBER_FF, &(mol_struct->getAmberConfigurationDialog()));
+		
+			// build HashMap with allowed scoring functions for each algorithm
+			QStringList sf;
+			sf.append("Default");
+			sf.append("AMBER Force Field");
 			allowed_sf_[DockingController::GEOMETRIC_FIT] = sf;
+			allowed_sf_[DockingController::EVOLUTION_DOCKING] = sf;
 		}
 		  
 		// Read the preferences from the INIFile.
@@ -388,15 +384,15 @@ namespace BALL
 						// euler angles
 						phi_min->setText("-15");
 						phi_max->setText("15");
-					delta_phi->setText("3");
+						delta_phi->setText("3");
 					
-					psi_min->setText("-15");
-					psi_max->setText("15");
-					delta_psi->setText("3");
+						psi_min->setText("-15");
+						psi_max->setText("15");
+						delta_psi->setText("3");
 					
-					theta_min->setText("-15");
-					theta_max->setText("15");
-					delta_theta->setText("3");
+						theta_min->setText("-15");
+						theta_max->setText("15");
+						delta_theta->setText("3");
 				}
 				else
 				{
@@ -906,38 +902,20 @@ namespace BALL
 			if (algorithm_dialogs_.has(index))
 			{
 				alg_advanced_button->setEnabled(true);
-				// disable scoring functions which aren't allowed for chosen algorithm
-				for (Index i = 0; i < scoring_functions->count(); i++)
-				{
-					bool found = false;
-					for (Position j = 0; j < allowed_sf_[index].size(); j++)
-					{
-						if (allowed_sf_[index][j] == i)
-						{
-						 	found = true;
-							break;
-						}
-					}
-//   					scoring_functions->listBox()->item(i)->setSelectable(found); ????
-				}
+				// update scoring function combobox
+				// only show scoring functions which are allowed for chosen algorithm
+				scoring_functions->clear();
+				scoring_functions->addItems(allowed_sf_[index]);
 			}
 			else
 			{
 				// current item is <select>
 				alg_advanced_button->setEnabled(false);
-				// enable all scoring functions
-				for (int i = 0; i < scoring_functions->count(); i++)
-				{
-//   					scoring_functions->listBox()->item(i)->setSelectable(true); ????
-				}
+				// show all scoring functions
+				scoring_functions->clear();
+				scoring_functions->addItem("Default");
+				scoring_functions->addItem("AMBER Force Field");
 			}
-			
-			// set default scoring function as current item if the current item isn't an allowed scoring function
-//   			if(!scoring_functions->listBox()->item(scoring_functions->currentIndex())->isSelectable())
-//   			{
-//   				scoring_functions->setCurrentIndex(0);
-//   			}
-			// ?????????
 		}
 		
 		//
